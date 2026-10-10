@@ -97,7 +97,6 @@ export async function findTherapiesDue(
         FROM "TherapySchedule" ts
         WHERE ts."therapyId" = pt.id AND ts.fascia = band.fascia
         ORDER BY ts.time ASC, ts.id ASC
-        LIMIT 1
       ) schedule ON TRUE
       LEFT JOIN LATERAL (
         SELECT r.numero, b.label AS "bedLabel"
@@ -131,8 +130,8 @@ export async function findTherapiesDue(
         AND band.enabled = TRUE
         ${therapyAccessSql(access)}
     ), legacy_administration AS (
-      SELECT DISTINCT ON (ma."patientId", ma."farmacoNome", ma.fascia)
-        ma."patientId", ma."farmacoNome", ma.fascia, ma.stato
+      SELECT DISTINCT ON (ma."patientId", ma."farmacoNome", ma.fascia, ma.ora)
+        ma."patientId", ma."farmacoNome", ma.fascia, ma.ora, ma.stato
       FROM due_therapy due
       JOIN "MedicationAdministration" ma
         ON ma."patientId" = due."patientId"
@@ -140,7 +139,7 @@ export async function findTherapiesDue(
         AND ma.fascia = due.fascia
         AND ma.date = ${date}
         AND ma."therapyId" IS NULL
-      ORDER BY ma."patientId", ma."farmacoNome", ma.fascia, ma.id DESC
+      ORDER BY ma."patientId", ma."farmacoNome", ma.fascia, ma.ora, ma.id DESC
     ), pending AS (
       SELECT
         due.*,
@@ -153,11 +152,13 @@ export async function findTherapiesDue(
         ON modern."therapyId" = due."therapyId"
         AND modern.date = ${date}
         AND modern.fascia = due.fascia
+        AND modern.ora = due."scheduledTime"
       LEFT JOIN legacy_administration legacy
         ON modern.id IS NULL
         AND legacy."patientId" = due."patientId"
         AND legacy."farmacoNome" = due."drugName"
         AND legacy.fascia = due.fascia
+        AND legacy.ora = due."scheduledTime"
       WHERE (COALESCE(modern.stato, legacy.stato) IS NULL
         OR COALESCE(modern.stato, legacy.stato) NOT IN ('erogata', 'non_erogata'))
         AND due."scheduledTime" ~ '^([01][0-9]|2[0-3]):[0-5][0-9]$'

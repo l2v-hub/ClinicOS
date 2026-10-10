@@ -37,7 +37,7 @@ export async function administrationErrorMessage(res: Response): Promise<string>
 
 type SlotKey = Pick<
   TherapyActionInfo,
-  'patientId' | 'therapyId' | 'date' | 'fascia' | 'measuredGlucose'
+  'patientId' | 'therapyId' | 'date' | 'fascia' | 'scheduledTime' | 'measuredGlucose'
 >;
 
 /** Corpo della richiesta: solo la chiave dello slot (nessun farmaco/dose/ora dal client). */
@@ -51,6 +51,7 @@ export function administrationBody(
     therapyId: info.therapyId,
     date: info.date,
     fascia: info.fascia,
+    ...(info.scheduledTime !== undefined ? { scheduledTime: info.scheduledTime } : {}),
     ...(outcome.kind === 'administered' && info.measuredGlucose !== undefined
       ? { measuredGlucose: info.measuredGlucose }
       : {}),

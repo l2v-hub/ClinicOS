@@ -96,34 +96,31 @@ test('AC2: terapia non valida → errore di validazione, senza database', () => 
   );
 });
 
-test("AC2: due orari nella stessa fascia → fascia_conflict con l'elenco dei conflitti", () => {
-  assert.throws(
-    () =>
-      service.prepareDiaryTherapyInput(
+test('distinct same-band times are accepted without losing schedules', () => {
+  const input = service.prepareDiaryTherapyInput(
+    {
+      farmacoNome: 'Ramipril',
+      dataInizio: '2026-09-30',
+      schedules: [
         {
-          farmacoNome: 'Ramipril',
-          dataInizio: '2026-09-30',
-          schedules: [
-            {
-              time: '08:00',
-              quantityNumerator: 1,
-              quantityDenominator: 1,
-              administrationUnit: 'compressa',
-            },
-            {
-              time: '10:00',
-              quantityNumerator: 1,
-              quantityDenominator: 1,
-              administrationUnit: 'compressa',
-            },
-          ],
+          time: '08:00',
+          quantityNumerator: 1,
+          quantityDenominator: 1,
+          administrationUnit: 'compressa',
         },
-        'op',
-      ),
-    (error: unknown) =>
-      error instanceof service.DiaryTherapyInputError &&
-      error.code === 'fascia_conflict' &&
-      error.fasciaConflicts.join('|') === 'mattina: 08:00, 10:00',
+        {
+          time: '10:00',
+          quantityNumerator: 1,
+          quantityDenominator: 1,
+          administrationUnit: 'compressa',
+        },
+      ],
+    },
+    'op',
+  );
+  assert.deepEqual(
+    input.schedules?.map((s) => s.time),
+    ['08:00', '10:00'],
   );
 });
 

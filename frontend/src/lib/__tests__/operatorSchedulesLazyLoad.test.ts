@@ -30,7 +30,7 @@ test('schedule reads are abortable, session-safe and retryable', () => {
   );
   assert.match(
     appSource,
-    /e\.state\.navKey === 'orari-operatori'[\s\S]*e\.state\.prevNavKey !== 'orari-operatori'/,
+    /state\.navKey === 'orari-operatori'[\s\S]*state\.prevNavKey !== 'orari-operatori'/,
   );
   assert.match(scheduleSource, /role="status" aria-live="polite"/);
   assert.match(scheduleSource, /role="alert"/);

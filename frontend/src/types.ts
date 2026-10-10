@@ -1117,6 +1117,7 @@ export interface TherapyAdministration {
 }
 
 export interface TherapyActionInfo {
+  scheduledTime?: string;
   measuredGlucose?: number;
   patientId: string;
   therapyId: string;

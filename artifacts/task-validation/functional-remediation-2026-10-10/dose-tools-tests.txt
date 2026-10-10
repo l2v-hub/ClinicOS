@@ -1,0 +1,63 @@
+✔ distinct same-band doses retain quantity, independent writes and exact summaries (1159.084014ms)
+✔ conditional insulin requires a measured glucose and stores the server-resolved dose (47.984225ms)
+✔ conditional insulin rejects coercible non-number glucose values (30.953256ms)
+✔ therapy confirm persists prescription fields, not spoofed client drug data (31.322939ms)
+✔ therapy confirm rejects a mismatched therapy/patient pair (43.519745ms)
+✔ two same-name prescriptions keep independent administration records (47.711468ms)
+✔ ordinary operators cannot read or mutate another owner patient; managers retain global scope (199.064563ms)
+✔ assistant confirms the selected later dose rather than the first same-band prescription (2.850887ms)
+✔ another pending dose cannot substitute a removed selected hour, even with identical drug and quantity (0.315779ms)
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ A — OSS: only allowed skills and starters; forbidden actions not executable (525.722964ms)
+✔ B — Doctor read: real read skill end to end with the resident context (95.48484ms)
+✔ C — Doctor sensitive write: preview → no write → explicit confirmation → write → audit (607.545753ms)
+✔ D — Cancel: cancelling the preview writes nothing (99.204304ms)
+✔ E — Modify before confirm: payload change invalidates the previous confirmation (314.832338ms)
+✔ QA H1 — resident named in the text (no page resident): multi-turn and confirm complete (174.547968ms)
+✔ F — Unauthorized resident: out-of-scope resident → backend denial everywhere (70.143007ms)
+✔ G — Change resident during a sensitive workflow → invalidated, no write (92.454254ms)
+✔ H — Dynamic revocation by the Administrator → next action denied without restart (131.111265ms)
+✔ I — Backend error: no false success; administration prepared, then confirmed (194.190451ms)
+✔ J — Classic GUI regression: routes and Administrator minimisation (108.583018ms)
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ discovery: GET /skills reflects the policy per role (545.1117ms)
+✔ A — read skill: natural language → skill → authorized read tool → backend → result (272.729613ms)
+✔ B + I — write skill: preview → explicit confirmation → persisted → verified → audit (138.485844ms)
+✔ C — ambiguous or missing target → NEEDS_CLARIFICATION, no write (98.461775ms)
+✔ D — identity without the capability → DENIED, confirmed by the backend (293.222632ms)
+✔ E — multi-turn: structured state across turns, then completion (233.253098ms)
+✔ F — capability revoked during the workflow → policy re-evaluated → DENIED, no write (220.154945ms)
+✔ G — cancellation before confirmation → no write (63.188645ms)
+✔ H — backend failure: no false success; retry does not duplicate the write (203.509593ms)
+✔ J — regression: Phase 1/2 tool surface unchanged for the GUI/Agno path (80.136844ms)
+[ai-gateway] {"requestId":"op-SIM-NURSE-1-skill-5a501b55-1417-40ee-beb4-aa4925d35b9f","userId":"SIM-NURSE-1","tenantId":"clinicos","toolName":"get_patient_therapies","patientIds":["cmv2soino0004l3qpal4j7q9r"],"resultCount":0,"outcome":"empty","at":"2026-10-10T19:36:09.967Z"}
+✔ per-role coverage: every executable skill completes for an intended role (522.304098ms)
+✔ QA H1 — a slow correction racing a confirmation cannot produce a second write (499.618664ms)
+✔ QA M1 — a near-confirmation never replaces the text; «correggi:» does (75.002652ms)
+✔ QA L1 — page context: exactly the verified id, label from server data (83.703205ms)
+✔ Tool Layer addresses both prescribed hours in the same band independently (250.296617ms)
+✔ administration.confirm: GUI parity — route and tool leave identical MedicationAdministration state (112.937191ms)
+✔ administration.confirm: operator cannot administer another owner’s therapy (route 404 ⇔ tool not_found), nothing written (23.384795ms)
+✔ administration.confirm: slot not due (sera) → conflict; malformed body → invalid_input (7.976184ms)
+✔ administration.record_not_administered: persists non_erogata with motivo; cannot downgrade an erogata slot (23.985604ms)
+✔ administration.list_slots: same slots as GET /therapy-slots, scoped to the operator; admin sees all (102.742265ms)
+✔ administration.list_slots_page: same page as GET /therapy-slots/page, scoped to the operator (57.37524ms)
+POST /patients/cmv2soqmy0003o3qpza22fl75/therapies → created id=cmv2soqz8000go3qp9xzw9g8l (0 schedules)
+✔ therapy.create: GUI parity with POST /patients/:id/therapies (server-owned inserting operator) (35.251033ms)
+✔ therapy.create: missing required field → invalid_input (route 400); other owner patient → not_found (13.823479ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 43
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 23579.279578

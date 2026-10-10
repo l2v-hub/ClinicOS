@@ -7,6 +7,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { MotivoNonErogazione, TherapyActionInfo, TherapySlot } from '../../../types';
 import type { CalendarOccurrence } from '../../../lib/patientTherapyCalendar';
+import { uncoveredPrescriptions } from '../../../lib/therapyCompleteness';
 import { API_URL } from '../../../config';
 import { cachedGetJson } from '../../../lib/cachedFetch';
 import { useCan, useCapabilityDecided, useRequiresConfirmation } from '../../../lib/capabilities';
@@ -70,6 +71,7 @@ export function PatientTherapySlotDetail({
   const [sendingRetry, setSendingRetry] = useState<string | null>(null);
   const rootRef = useRef<HTMLElement>(null);
   const ready = state.status === 'ready';
+  const unrepresented = uncoveredPrescriptions(events, ready ? state.time : null, patientId);
   useEffect(() => {
     if (!bringIntoView || !ready) return;
     const frame = window.requestAnimationFrame(() =>
@@ -121,7 +123,7 @@ export function PatientTherapySlotDetail({
   }
 
   async function administerAgain(info: TherapyActionInfo, confirmed: boolean) {
-    const key = `${info.therapyId}|${info.fascia}`;
+    const key = `${info.therapyId}|${info.fascia}|${info.scheduledTime ?? info.ora}`;
     if (sendingRetry) return;
     setSendingRetry(key);
     await record(info, { kind: 'administered' }, confirmed);
@@ -143,18 +145,24 @@ export function PatientTherapySlotDetail({
               date,
               fascia: item.fascia,
               ora: item.a.scheduledTime || time,
+              scheduledTime: item.a.scheduledTime || time,
             })),
         )
       : [];
 
   const headingId = `ptc-detail-${time.replace(':', '')}`;
   function retryButton(info: TherapyActionInfo) {
-    const key = `${info.therapyId}|${info.fascia}`;
+    const key = `${info.therapyId}|${info.fascia}|${info.scheduledTime ?? info.ora}`;
     const administration =
       state.status === 'ready'
         ? state.time?.patients
             .flatMap((group) => group.items)
-            .find((item) => item.a.therapyId === info.therapyId && item.fascia === info.fascia)?.a
+            .find(
+              (item) =>
+                item.a.therapyId === info.therapyId &&
+                item.fascia === info.fascia &&
+                item.a.scheduledTime === (info.scheduledTime ?? info.ora),
+            )?.a
         : null;
     if (administration?.doseMode === 'glucose_scale')
       return (
@@ -209,12 +217,12 @@ export function PatientTherapySlotDetail({
         </h4>
       )}
       <h5 className="patient-therapy-slot-detail__sub">Somministrazione del {formatDay(date)}</h5>
-      {embedded && (state.status !== 'ready' || !state.time) && (
+      {unrepresented.length > 0 && (
         <ul
           className="patient-therapy-slot-detail__prescriptions"
           aria-label="Prescrizioni dell’orario"
         >
-          {events.map((event) => (
+          {unrepresented.map((event) => (
             <li key={event.id} className="giro-drug__info">
               <strong className="giro-drug__name">{event.drugName}</strong>
               <span className="giro-drug__cap">
@@ -222,6 +230,12 @@ export function PatientTherapySlotDetail({
                 {event.strength ? ` — ${event.strength}` : ''} · {event.route}
               </span>
               <PrescriptionDetails event={event} />
+              {ready && (
+                <span className="patient-therapy-slot-detail__prescription">
+                  Prescrizione presente · stato della dose non disponibile. Nessuna somministrazione
+                  registrabile da questa riga.
+                </span>
+              )}
             </li>
           ))}
         </ul>
@@ -241,7 +255,9 @@ export function PatientTherapySlotDetail({
       )}
       {state.status === 'ready' && !state.time && (
         <p className="patient-therapy-slot-detail__msg">
-          Nessuna somministrazione prevista a quest’ora per questa data.
+          {events.length
+            ? 'Le prescrizioni sono mostrate sopra; lo stato delle somministrazioni non è disponibile per questo orario.'
+            : 'Nessuna somministrazione prevista a quest’ora per questa data.'}
         </p>
       )}
       {state.status === 'ready' && state.time && (
@@ -294,7 +310,7 @@ export function PatientTherapySlotDetail({
           {!embedded && missedToday.length > 0 && (
             <ul className="patient-therapy-slot-detail__again" aria-label="Dosi non somministrate">
               {missedToday.map((info) => {
-                const key = `${info.therapyId}|${info.fascia}`;
+                const key = `${info.therapyId}|${info.fascia}|${info.scheduledTime ?? info.ora}`;
                 return (
                   <li key={key}>
                     <span>

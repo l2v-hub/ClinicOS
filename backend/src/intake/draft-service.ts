@@ -1,6 +1,9 @@
 import { prisma } from '../lib/prisma.js';
 import type { DischargeNarrativeDraft } from '../ai/sections/narrative.js';
-import { parseDischargeTherapy } from './parse-discharge-therapy.js';
+import {
+  reconcileLegacyTherapyInventory,
+  therapySourceInventory,
+} from './therapy-source-inventory.js';
 import type { Operator } from '../ai/auth.js';
 import { canAccessOwnedResource } from '../ai/ownership-policy.js';
 import { AiExtractionError } from '../ai/types.js';
@@ -75,7 +78,15 @@ export async function createDraft(opts: CreateDraftOpts = {}) {
 }
 
 export async function getDraft(id: string) {
-  return prisma.patientIntakeDraft.findUnique({ where: { id } });
+  const draft = await prisma.patientIntakeDraft.findUnique({ where: { id } });
+  if (!draft || draft.status !== 'draft' || !draft.importJobId) return draft;
+  const importJob = await prisma.importJob.findUnique({
+    where: { id: draft.importJobId },
+    select: { resultData: true },
+  });
+  return importJob
+    ? { ...draft, data: reconcileLegacyTherapyInventory(object(draft.data), importJob.resultData) }
+    : draft;
 }
 
 export async function patchDraft(id: string, rawPatch: Record<string, unknown>) {
@@ -111,7 +122,7 @@ export async function patchDraft(id: string, rawPatch: Record<string, unknown>) 
         'config',
         'La bozza è già confermata e non può essere modificata',
       );
-    const existingData = (current.data ?? {}) as Record<string, unknown>;
+    let existingData = (current.data ?? {}) as Record<string, unknown>;
     const pageSession = !!existingData._importSource;
     const r = await draftPatchReceipt(tx, current, patch);
     if (r?.previous) return current;
@@ -121,10 +132,12 @@ export async function patchDraft(id: string, rawPatch: Record<string, unknown>) 
       !pageSession && current.importJobId
         ? await tx.importJob.findUnique({
             where: { id: current.importJobId },
-            select: { status: true, manifest: true },
+            select: { status: true, manifest: true, resultData: true },
           })
         : null;
     const linkedPage = !!linkedJob && object(linkedJob.manifest).version === 1;
+    if (linkedJob && !linkedPage)
+      existingData = reconcileLegacyTherapyInventory(existingData, linkedJob.resultData);
     if (linkedPage && patch.expectedDraftVersion === undefined)
       throw new ImportSessionError(
         409,
@@ -218,6 +231,7 @@ export interface SeedDraftFromImportOpts {
 export function buildImportDraftData(
   narrative: DischargeNarrativeDraft,
   rawSections: unknown,
+  structuredExtraction?: unknown,
 ): Record<string, unknown> {
   const seeded: Record<string, unknown> = {};
 
@@ -295,9 +309,12 @@ export function buildImportDraftData(
   //    TherapyFormValue editor and its confirm mapper (therapyFormToInput) — putting a
   //    ParsedTherapyRow there would break confirm. Incomplete lines keep stato 'da_verificare'
   //    (never dropped); the raw text is stashed under _terapiaText for lossless audit.
+  const therapyRows = therapySourceInventory(
+    narrative.therapyText ?? '',
+    object(object(structuredExtraction).cartella).farmaci,
+  );
+  if (therapyRows.length > 0) seeded.terapiaImport = therapyRows;
   if (narrative.therapyText) {
-    const rows = parseDischargeTherapy(narrative.therapyText);
-    if (rows.length > 0) seeded.terapiaImport = rows;
     seeded._terapiaText = narrative.therapyText;
   }
 
@@ -341,7 +358,12 @@ export async function seedDraftFromImport(jobId: string, opts: SeedDraftFromImpo
           : (existing.createdById ?? null) === (opts.createdById ?? null);
         if (!allowed) throw new AiExtractionError('not_found', 'Bozza non trovata');
         if (pageResult) assertDraftSource(object(existing.data), pageResult);
-        return existing;
+        return existing.status === 'draft' && !pageResult
+          ? {
+              ...existing,
+              data: reconcileLegacyTherapyInventory(object(existing.data), job.resultData),
+            }
+          : existing;
       }
 
       const resultData = job.resultData as Record<string, unknown> | null;
@@ -356,6 +378,7 @@ export async function seedDraftFromImport(jobId: string, opts: SeedDraftFromImpo
       const seeded = buildImportDraftData(
         pageResult ? pageDraftNarrative(pageResult) : narrative,
         resultData?._sections ?? null,
+        resultData?._full ?? resultData,
       );
       const data = pageResult ? attachPageDraftSource(seeded, pageResult) : seeded;
       if (pageResult)

@@ -13,7 +13,11 @@
 
 import { Prisma, type PatientDiaryEntry } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
-import { normalizeSchedules, normalizeTherapyDateRange } from '../lib/therapy-dose.js';
+import {
+  InvalidTherapySchedulesError,
+  normalizeSchedules,
+  normalizeTherapyDateRange,
+} from '../lib/therapy-dose.js';
 import {
   createTherapyInTx,
   normalizeGiorniSettimana,
@@ -90,7 +94,7 @@ const H_MM = /^([01]?\d|2[0-3]):([0-5]\d)$/;
  * - `al_bisogno`: `schedules` puo' essere vuoto (non ha orari fissi);
  *   per questi due tipi l'assenza di `schedules` equivale a [] (nessuna fascia inventata);
  * - ogni orario dichiara la sua unita' (altrimenti il default sarebbe "compressa");
- * - due somministrazioni nella stessa fascia, anche allo stesso orario, sono un conflitto.
+ * - orari duplicati sono un conflitto; orari distinti nella stessa fascia sono preservati.
  * Non tocca il database: una terapia non valida non produce nessuna scrittura.
  */
 export function prepareDiaryTherapyInput(
@@ -104,7 +108,21 @@ export function prepareDiaryTherapyInput(
     ...(raw as TherapyCreateInput),
     operatoreInseritore,
   };
-  validateTherapyCreateInput(input);
+  try {
+    validateTherapyCreateInput(input);
+  } catch (error) {
+    if (error instanceof InvalidTherapySchedulesError && error.reason === 'duplicate_time') {
+      const times = (input.schedules as Array<{ time: string }>).map((s) =>
+        s.time.trim().padStart(5, '0'),
+      );
+      throw new DiaryTherapyInputError(
+        error.message,
+        'fascia_conflict',
+        scheduleFasciaConflicts(times),
+      );
+    }
+    throw error;
+  }
 
   const tipo = input.tipo || 'periodica';
   if (tipo === 'una_tantum') {
@@ -146,7 +164,7 @@ export function prepareDiaryTherapyInput(
     const conflicts = scheduleFasciaConflicts(times);
     if (conflicts.length) {
       throw new DiaryTherapyInputError(
-        `Piu' somministrazioni nella stessa fascia: ${conflicts.join('; ')}`,
+        `Orari di somministrazione duplicati: ${conflicts.join('; ')}`,
         'fascia_conflict',
         conflicts,
       );

@@ -12,7 +12,18 @@ const parametersApiSource = readFileSync(
   new URL('../patientParametersPage.ts', import.meta.url),
   'utf8',
 );
-const appCss = readFileSync(new URL('../../App.css', import.meta.url), 'utf8');
+const parameterPanel = readFileSync(
+  new URL('../../components/operator/ParameterEntryPanel.tsx', import.meta.url),
+  'utf8',
+);
+const parameterForm = readFileSync(
+  new URL('../../components/operator/ParameterReadingForm.tsx', import.meta.url),
+  'utf8',
+);
+const parameterCss = readFileSync(
+  new URL('../../components/operator/ParametriVitali.css', import.meta.url),
+  'utf8',
+);
 
 test('App login has no unbounded patient roster state or request', () => {
   assert.doesNotMatch(appSource, /useState<Paziente\[\]>/);
@@ -20,86 +31,61 @@ test('App login has no unbounded patient roster state or request', () => {
   assert.match(appSource, /patients\/clinical-summary\/overview/);
 });
 
-test('multi-patient parameters uses one bounded page instead of cartella fan-out', () => {
+test('multi-patient parameters loads bounded pages without individual chart fan-out and rejects stale responses', () => {
   assert.match(parametersApiSource, /patients\/parameters\/page/);
   assert.match(parametersSource, /limit:\s*25/);
-  assert.doesNotMatch(parametersSource, /Promise\.all/);
-  assert.match(parametersSource, /pageRequestGuard/);
-  assert.match(parametersSource, /guard\.isCurrent\(request\)/);
-  assert.match(parametersSource, /cartellePerPaziente = useMemo/);
-  assert.match(parametersSource, /cartellePerPaziente\.get\(pazienteId\)/);
-  assert.doesNotMatch(parametersSource, /cartelle\.find/);
+  assert.doesNotMatch(parametersSource, /Promise\.all|cartelle\.find|fetchPatientCartella/);
+  assert.match(parametersSource, /version !== generation\.current/);
+  assert.match(parametersSource, /controller\.signal\.aborted/);
+  assert.match(parametersSource, /controller\.abort\(\)/);
+  assert.match(parametersSource, /mergePatientParametersPage/);
 });
 
-test('multi-patient quick entry exposes every action and field to assistive technology', () => {
-  for (const accessibleName of [
-    /aria-label={`PA per \$\{patientName\}`}/,
-    /aria-label={`SpO2 per \$\{patientName\}`}/,
-    /aria-label={`Frequenza cardiaca per \$\{patientName\}`}/,
-    /aria-label={`Temperatura corporea per \$\{patientName\}`}/,
-    /aria-label={`Glicemia DTX per \$\{patientName\}`}/,
-    /aria-label={`Evacuazione per \$\{patientName\}`}/,
-    /aria-label={`Salva parametri per \$\{patientName\}`}/,
-    /aria-label="Cerca paziente per nome, MRN o camera"/,
-  ]) {
-    assert.match(parametersSource, accessibleName);
-  }
-  assert.doesNotMatch(parametersSource, /tabIndex=\{isNoteOpen \? 0 : -1\}/);
+test('selected patient form labels every field and retains the named patient outside filtered results', () => {
+  assert.match(parametersSource, /aria-label="Cerca paziente per nome o camera"/);
+  assert.match(parameterPanel, /aria-label={`Rilevazione di \$\{name\}`}/);
+  assert.match(parameterPanel, /non è nei risultati della ricerca: questa rilevazione resta sua/);
+  assert.match(parameterForm, /htmlFor=\{id\}/);
+  assert.match(parameterForm, /'aria-label': `Nuova rilevazione \$\{field\.label\}`/);
+  assert.match(parametersSource, /outsideResults=\{selectedOutside\}/);
   assert.match(
     parametersSource,
-    /requestAnimationFrame\(\(\) => noteButtonRef\.current\?\.focus\(\)\)/,
+    /onSave=\{\(request\) => save\(selectedItem\.patient\.id, request\)\}/,
   );
 });
 
-test('multi-patient quick entry reuses the ClinicOS form and action design system', () => {
-  assert.match(parametersSource, /className="form-input qe-row__input qe-row__input--wide"/);
-  assert.match(parametersSource, /'form-input qe-row__input'/);
-  assert.match(parametersSource, /'btn-secondary qe-row__note-btn'/);
-  assert.match(parametersSource, /className="btn-success qe-row__save"/);
-  assert.match(parametersSource, /className="form-input qe-row__note-textarea"/);
-  // L'intestazione deriva da PARAMETER_FIELDS ("PA · mmHg", "SpO₂ · %", "TC · °C", …).
-  assert.match(parametersSource, /PARAMETER_FIELDS\.map\(\(field\) =>/);
-  assert.match(parametersSource, /` · \$\{field\.unit\}`/);
-  assert.doesNotMatch(parametersSource, /\{paziente\.lastName\}, \{paziente\.firstName\}/);
-  assert.match(appCss, /\.qe-row__input[\s\S]*font-family: var\(--font-ui\)/);
-  assert.match(appCss, /\.qe-row__input[\s\S]*font-size: 14px/);
-  assert.match(appCss, /\.qe-row__input:focus-visible[\s\S]*box-shadow: var\(--shadow-focus\)/);
+test('both parameter workspaces reuse the shared form and canonical controls with units', () => {
+  assert.match(parametersSource, /<ParameterEntryPanel/);
+  assert.match(parameterPanel, /<ParameterReadingForm/);
+  assert.match(parameterForm, /className: 'form-input'/);
+  assert.match(parameterForm, /className="ds-btn ds-btn--secondary"/);
+  assert.match(parameterForm, /ENTRY_FIELDS\.map/);
+  assert.match(parameterForm, /field\.unit/);
 });
 
-test('a single parameters table is always visible and uses the operational table contract', () => {
-  assert.doesNotMatch(parametersSource, /ClinicalTableSection|cts__/);
-  assert.match(parametersSource, /className="qe-section qe-table-surface"/);
-  assert.match(parametersSource, /Inserimento parametri per \$\{filtrati\.length\} pazienti/);
-  assert.match(appCss, /--operational-table-radius: 12px/);
-  assert.match(
-    appCss,
-    /\.qe-table-surface\s*\{[\s\S]*border-radius: var\(--operational-table-radius\)/,
-  );
-  assert.match(appCss, /\.qe-row\s*\{[\s\S]*min-height: var\(--operational-table-row-min-h\)/);
-  assert.match(appCss, /\.qe-row--header\s*\{[\s\S]*var\(--operational-table-header-h\)/);
-  assert.match(
-    appCss,
-    /\.qe-row__patient:focus-visible\s*\{[\s\S]*outline: 2px solid var\(--blue\)/,
-  );
+test('patient picker is a labelled list separate from the selected patient form', () => {
+  assert.match(parametersSource, /<section className="par-patients" aria-label="Pazienti"/);
+  assert.match(parametersSource, /<ul className="par-plist" aria-busy=\{loading\}/);
+  assert.match(parametersSource, /<ParameterPatientPick/);
+  assert.match(parametersSource, /selected=\{item\.patient\.id === selectedItem\?\.patient\.id\}/);
+  assert.doesNotMatch(parametersSource, /qe-row|qe-table-surface/);
 });
 
-test('multi-patient refresh keeps the previous roster visible and announces progress', () => {
-  assert.match(parametersSource, /function updateRicerca[\s\S]*setLoading\(true\)/);
-  assert.match(parametersSource, /onChange=\{\(e\) => updateRicerca\(e\.target\.value\)\}/);
-  assert.match(parametersSource, /loading && pazienti\.length === 0/);
-  assert.match(parametersSource, /className="qe-list" aria-busy=\{loading\}/);
-  assert.match(parametersSource, /Aggiornamento elenco…/);
-  assert.match(parametersSource, /disabled=\{loadingMore \|\| loading\}/);
+test('multi-patient refresh keeps the roster and draft visible and announces summary progress', () => {
+  assert.match(parametersSource, /setLoading\(itemsRef\.current\.length === 0\)/);
+  assert.match(parametersSource, /Aggiornamento rilevazioni di oggi…/);
+  assert.match(parametersSource, /role="status"/);
+  assert.match(parametersSource, /disabled=\{loading \|\| loadingMore \|\| summaryLoading\}/);
+  assert.match(parametersSource, /draftStore=\{draftStore\}/);
   assert.doesNotMatch(parametersSource, /setItems\(\[\]\)/);
 });
 
-test('multi-patient mobile layout is a labelled two-column card without horizontal scroll', () => {
-  assert.match(parametersSource, /className="qe-row__mobile-label"/);
-  assert.match(parametersSource, /className="qe-section qe-table-surface"/);
-  assert.match(appCss, /@media \(max-width: 768px\)/);
-  assert.match(appCss, /\.qe-table-surface\s*\{\s*overflow-x: hidden/);
-  assert.match(appCss, /grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
-  assert.match(appCss, /\.qe-row__mobile-label\s*\{\s*display: block/);
+test('mobile parameter layout stacks patient list and form and bounds roster height', () => {
+  assert.match(parameterCss, /@media \(max-width: 699px\)/);
+  assert.match(parameterCss, /grid-template-areas: 'list' 'form'/);
+  assert.match(parameterCss, /max-height: 40vh/);
+  assert.match(parameterCss, /overflow-y: auto/);
+  assert.match(parameterForm, /<label[\s\S]*htmlFor=\{id\}/);
 });
 
 test('directory search rejects a stale response even when fetch ignores abort', () => {

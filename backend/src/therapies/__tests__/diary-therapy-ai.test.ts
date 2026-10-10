@@ -121,7 +121,7 @@ test('fascia conflicts are recomputed on AI-proposed times', async () => {
   const { fn } = spy(proposal({ orari: ['08:00', '08:30'] }));
   const r = await previewDiaryTherapy({ text: USER_TEXT, entryDateTime: DAY }, fn);
   assert.deepEqual(r.row.orari, ['08:00', '08:30']);
-  assert.ok(r.fasciaConflicts.length > 0);
+  assert.deepEqual(r.fasciaConflicts, []);
 });
 
 test('prompt asks for JSON, forbids invention and carries the text; kill switch works', () => {

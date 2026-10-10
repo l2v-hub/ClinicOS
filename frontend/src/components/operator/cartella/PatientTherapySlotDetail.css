@@ -70,17 +70,6 @@
   max-width: 250px;
   overflow-wrap: anywhere;
 }
-.patient-therapy-slot-detail--embedded .ds-btn:not(#ds),
-.patient-therapy-slot-detail--embedded .ds-chip:not(#ds) {
-  min-height: var(--ds-control-h);
-  padding: 0 var(--ds-control-px);
-  font-size: var(--ds-control-font);
-  line-height: 20px;
-}
-.patient-therapy-slot-detail--embedded .ds-btn svg {
-  width: var(--ds-icon-size);
-  height: var(--ds-icon-size);
-}
 .patient-therapy-slot-detail--embedded .giro-row__act > .patient-therapy-slot-detail__retry {
   grid-column: 1 / -1;
 }

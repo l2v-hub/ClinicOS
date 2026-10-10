@@ -393,7 +393,7 @@ export function PatientList({
             />
             {ricerca && (
               <button
-                className="search-clear-btn"
+                className="ds-icon-btn search-clear-btn"
                 onClick={() => {
                   setVista(vistaPrimaDellaRicerca ?? 'in_carico');
                   setVistaPrimaDellaRicerca(null);

@@ -1,0 +1,2696 @@
+{
+  "results": [
+    {
+      "name": "anonymous:POST:administration.confirm:/therapy-slots/confirm",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:administration.confirm:/therapy-slots/confirm",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:administration.confirm:/therapy-slots/confirm",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:administration.confirm:/therapy-slots/confirm",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:administration.confirm:/therapy-slots/prn",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:administration.confirm:/therapy-slots/prn",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:administration.confirm:/therapy-slots/prn",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:administration.confirm:/therapy-slots/prn",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:administration.history:/patients/:patientId/medication-administrations",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:administration.history_page:/patients/:patientId/medication-administrations/page",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:administration.list_slots:/therapy-slots",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:administration.list_slots:/therapy-slots/prn",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:administration.list_slots_page:/therapy-slots/page",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:administration.record_not_administered:/therapy-slots/not-administered",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:administration.record_not_administered:/therapy-slots/not-administered",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:administration.record_not_administered:/therapy-slots/not-administered",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:administration.record_not_administered:/therapy-slots/not-administered",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:agnos.catalog:/ai/actions/catalog",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:agnos.execute_command:/ai/actions/execute",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:agnos.execute_command:/ai/actions/execute",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:agnos.plan_command:/ai/actions/plan",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:agnos.plan_command:/ai/actions/plan",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:ai.audit.list:/ai/audit",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:appointments.create:/appointments",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:appointments.create:/appointments",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:appointments.create:/appointments",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:DELETE:appointments.delete:/appointments/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:appointments.delete:/appointments/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:appointments.delete:/appointments/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:appointments.list:/appointments",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:PATCH:appointments.update:/appointments/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:appointments.update:/appointments/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:appointments.update:/appointments/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:assessments.attest:/patients/:patientId/assessments/:id/attestations",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:assessments.attest:/patients/:patientId/assessments/:id/attestations",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:assessments.attest:/patients/:patientId/assessments/:id/attestations",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:assessments.attest:/patients/:patientId/assessments/:id/attestations",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:assessments.catalog:/patients/:patientId/assessments/catalog",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:assessments.create_draft:/patients/:patientId/assessments",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:assessments.create_draft:/patients/:patientId/assessments",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:assessments.create_draft:/patients/:patientId/assessments",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:assessments.create_draft:/patients/:patientId/assessments",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:assessments.current:/patients/:patientId/assessments/current",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:assessments.finalize:/patients/:patientId/assessments/:id/finalize",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:assessments.finalize:/patients/:patientId/assessments/:id/finalize",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:assessments.finalize:/patients/:patientId/assessments/:id/finalize",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:assessments.finalize:/patients/:patientId/assessments/:id/finalize",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:assessments.get:/patients/:patientId/assessments/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:assessments.list:/patients/:patientId/assessments",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:assessments.list_attestations:/patients/:patientId/assessments/:id/attestations",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:assessments.retry_pdf:/patients/:patientId/assessments/:id/pdf/retry",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:assessments.retry_pdf:/patients/:patientId/assessments/:id/pdf/retry",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:assessments.retry_pdf:/patients/:patientId/assessments/:id/pdf/retry",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:assessments.retry_pdf:/patients/:patientId/assessments/:id/pdf/retry",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:PATCH:assessments.update_draft:/patients/:patientId/assessments/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:assessments.update_draft:/patients/:patientId/assessments/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:assessments.update_draft:/patients/:patientId/assessments/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:assessments.update_draft:/patients/:patientId/assessments/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:assistant.query:/ai/assistant/query",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:assistant.query:/ai/assistant/query",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:authz.manage_policy:/authz/policy/versions",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:supervisor:authz.manage_policy:/authz/policy/versions",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:authz.manage_policy:/authz/policy/versions",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:authz.manage_policy:/authz/policy/versions",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:authz.manage_policy:/authz/policy/versions",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:authz.view_policy:/authz/policy",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:clinical_record.get:/patients/:id/cartella",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:PUT:clinical_record.save:/patients/:id/cartella",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:clinical_record.save:/patients/:id/cartella",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:clinical_record.save:/patients/:id/cartella",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:clinical_record.save:/patients/:id/cartella",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:patients.settings:/patients/settings",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:consegne.create:/consegne",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:consegne.create:/consegne",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:DELETE:consegne.delete:/consegne/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:consegne.delete:/consegne/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:consegne.delete:/consegne/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:consegne.list:/consegne",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:consegne.list:/consegne/:id/ack",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:consegne.list:/consegne/:id/ack",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:consegne.overview:/consegne/overview",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:consegne.patient_summary:/consegne/patient-summary",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:consegne.patient_summary:/consegne/patient-summary",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:PUT:consegne.update:/consegne/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:consegne.update:/consegne/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:patients.demo_setup:/patients/demo-setup",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:patients.demo_setup:/patients/demo-setup",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:patients.demo_setup:/patients/demo-setup",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:patients.demo_setup:/patients/demo-setup",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:patients.demo_setup:/patients/demo-setup",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:patients.demo_setup:/patients/demo-setup",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:patients.seed:/patients/seed",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:patients.seed:/patients/seed",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:patients.seed:/patients/seed",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:patients.seed:/patients/seed",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:patients.seed:/patients/seed",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:patients.seed:/patients/seed",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:diary.create:/patients/:patientId/diary",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:diary.create:/patients/:patientId/diary",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:diary.create_with_therapy:/patients/:patientId/diary/with-therapy",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:diary.create_with_therapy:/patients/:patientId/diary/with-therapy",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:diary.create_with_therapy:/patients/:patientId/diary/with-therapy",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:diary.create_with_therapy:/patients/:patientId/diary/with-therapy",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:diary.create_with_therapy:/patients/:patientId/diary/with-therapy",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:DELETE:diary.delete_entry:/patients/:patientId/diary/:entryId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:diary.delete_entry:/patients/:patientId/diary/:entryId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:diary.delete_entry:/patients/:patientId/diary/:entryId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:diary.delete_entry:/patients/:patientId/diary/:entryId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:diary.delete_entry:/patients/:patientId/diary/:entryId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:diary.delete_entry:/patients/:patientId/diary/:entryId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:diary.get_entry:/patients/:patientId/diary/:entryId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:diary.list:/patients/diary-unread-count",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:diary.list:/patients/diary-unread",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:diary.list:/patients/diary-unread-patient-counts",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:diary.list:/patients/:patientId/diary",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:diary.list:/patients/:patientId/diary/:entryId/ack",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:diary.list:/patients/:patientId/diary/:entryId/ack",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:diary.therapy_preview:/patients/:patientId/diary/therapy-preview",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:diary.therapy_preview:/patients/:patientId/diary/therapy-preview",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:diary.therapy_preview:/patients/:patientId/diary/therapy-preview",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:PUT:diary.update_entry:/patients/:patientId/diary/:entryId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:diary.update_entry:/patients/:patientId/diary/:entryId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:diary.update_entry:/patients/:patientId/diary/:entryId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:diary.update_entry:/patients/:patientId/diary/:entryId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:documents.get_content:/patients/:patientId/documents/:documentId/content",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:documents.get_metadata:/patients/:patientId/documents/:documentId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:documents.list:/patients/:patientId/documents",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:PATCH:documents.update_type:/patients/:patientId/documents/:documentId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:documents.update_type:/patients/:patientId/documents/:documentId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:documents.update_type:/patients/:patientId/documents/:documentId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:documents.upload:/patients/:patientId/documents",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:documents.upload:/patients/:patientId/documents",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:documents.upload:/patients/:patientId/documents",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:drugs.reload:/farmaci/ricarica",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:supervisor:drugs.reload:/farmaci/ricarica",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:drugs.reload:/farmaci/ricarica",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:drugs.reload:/farmaci/ricarica",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:drugs.reload:/farmaci/ricarica",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:import_jobs.add_files:/ai/extraction/jobs/:id/files",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:import_jobs.add_files:/ai/extraction/jobs/:id/files",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_jobs.add_files:/ai/extraction/jobs/:id/files",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:import_jobs.cancel:/ai/extraction/jobs/:id/cancel",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:import_jobs.cancel:/ai/extraction/jobs/:id/cancel",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_jobs.cancel:/ai/extraction/jobs/:id/cancel",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:import_jobs.confirm:/ai/extraction/jobs/:id/confirm",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:import_jobs.confirm:/ai/extraction/jobs/:id/confirm",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_jobs.confirm:/ai/extraction/jobs/:id/confirm",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:import_jobs.create:/ai/extraction/jobs",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:import_jobs.create:/ai/extraction/jobs",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_jobs.create:/ai/extraction/jobs",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:import_jobs.get:/ai/extraction/jobs/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:import_jobs.process:/ai/extraction/jobs/:id/process",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:import_jobs.process:/ai/extraction/jobs/:id/process",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_jobs.process:/ai/extraction/jobs/:id/process",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:DELETE:import_jobs.remove_file:/ai/extraction/jobs/:id/files/:docId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:import_jobs.remove_file:/ai/extraction/jobs/:id/files/:docId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_jobs.remove_file:/ai/extraction/jobs/:id/files/:docId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:import_jobs.reopen:/ai/extraction/jobs/:id/reopen",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:import_jobs.reopen:/ai/extraction/jobs/:id/reopen",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_jobs.reopen:/ai/extraction/jobs/:id/reopen",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:import_jobs.reorder:/ai/extraction/jobs/:id/reorder",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:import_jobs.reorder:/ai/extraction/jobs/:id/reorder",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_jobs.reorder:/ai/extraction/jobs/:id/reorder",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:import_jobs.result:/ai/extraction/jobs/:id/result",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:import_jobs.retry:/ai/extraction/jobs/:id/retry",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:import_jobs.retry:/ai/extraction/jobs/:id/retry",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_jobs.retry:/ai/extraction/jobs/:id/retry",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:import_jobs.set_logical_doc:/ai/extraction/jobs/:id/files/:docId/logical",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:import_jobs.set_logical_doc:/ai/extraction/jobs/:id/files/:docId/logical",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_jobs.set_logical_doc:/ai/extraction/jobs/:id/files/:docId/logical",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:import_jobs.sweep:/ai/extraction/jobs/sweep",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:supervisor:import_jobs.sweep:/ai/extraction/jobs/sweep",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:import_jobs.sweep:/ai/extraction/jobs/sweep",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:import_jobs.sweep:/ai/extraction/jobs/sweep",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_jobs.sweep:/ai/extraction/jobs/sweep",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:PUT:import_pages.edit_manifest:/ai/extraction/jobs/:id/manifest",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:import_pages.edit_manifest:/ai/extraction/jobs/:id/manifest",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_pages.edit_manifest:/ai/extraction/jobs/:id/manifest",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:import_pages.file_content:/ai/extraction/jobs/:id/files/:docId/content",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:import_pages.group_pdf:/ai/extraction/jobs/:id/groups/:groupId/pdf",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:import_pages.page_text:/ai/extraction/jobs/:id/pages/:pageId/text",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:DELETE:import_pages.remove_page:/ai/extraction/jobs/:id/pages/:pageId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:import_pages.remove_page:/ai/extraction/jobs/:id/pages/:pageId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_pages.remove_page:/ai/extraction/jobs/:id/pages/:pageId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:import_pages.replace_page:/ai/extraction/jobs/:id/pages/:pageId/replace",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:import_pages.replace_page:/ai/extraction/jobs/:id/pages/:pageId/replace",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_pages.replace_page:/ai/extraction/jobs/:id/pages/:pageId/replace",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:PUT:import_pages.save_review:/ai/extraction/jobs/:id/review",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:import_pages.save_review:/ai/extraction/jobs/:id/review",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:import_pages.save_review:/ai/extraction/jobs/:id/review",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:intake.confirm_draft:/intake/drafts/:id/confirm",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:intake.confirm_draft:/intake/drafts/:id/confirm",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:intake.confirm_draft:/intake/drafts/:id/confirm",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:intake.create_draft:/intake/drafts",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:intake.create_draft:/intake/drafts",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:intake.create_draft:/intake/drafts",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:intake.decide_field_proposal:/intake/drafts/:id/field-proposals/:proposalId/decide",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:intake.decide_field_proposal:/intake/drafts/:id/field-proposals/:proposalId/decide",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:intake.decide_field_proposal:/intake/drafts/:id/field-proposals/:proposalId/decide",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:intake.decide_import_proposal:/intake/drafts/:id/import-proposals/:proposalId/decide",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:intake.decide_import_proposal:/intake/drafts/:id/import-proposals/:proposalId/decide",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:intake.decide_import_proposal:/intake/drafts/:id/import-proposals/:proposalId/decide",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:intake.get_draft:/intake/drafts/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:intake.legacy_apply_letter:/patient-intake/discharge-letter/apply",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:intake.legacy_apply_letter:/patient-intake/discharge-letter/apply",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:intake.legacy_apply_letter:/patient-intake/discharge-letter/apply",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:intake.legacy_apply_letter:/patient-intake/discharge-letter/apply",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:intake.legacy_apply_letter:/patient-intake/discharge-letter/apply",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:intake.legacy_apply_letter:/patient-intake/discharge-letter/apply",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:intake.legacy_extract_letter:/patient-intake/discharge-letter/extract",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:intake.legacy_extract_letter:/patient-intake/discharge-letter/extract",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:intake.legacy_extract_letter:/patient-intake/discharge-letter/extract",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:intake.legacy_extract_letter:/patient-intake/discharge-letter/extract",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:intake.legacy_extract_letter:/patient-intake/discharge-letter/extract",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:intake.legacy_extract_letter:/patient-intake/discharge-letter/extract",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:intake.legacy_list_documents:/patient-intake/documents/:patientId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:intake.legacy_upload_letter:/patient-intake/discharge-letter/upload",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:intake.legacy_upload_letter:/patient-intake/discharge-letter/upload",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:intake.legacy_upload_letter:/patient-intake/discharge-letter/upload",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:intake.legacy_upload_letter:/patient-intake/discharge-letter/upload",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:intake.legacy_upload_letter:/patient-intake/discharge-letter/upload",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:intake.legacy_upload_letter:/patient-intake/discharge-letter/upload",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:intake.link_import_job:/intake/drafts/:id/import-job",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:intake.link_import_job:/intake/drafts/:id/import-job",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:intake.link_import_job:/intake/drafts/:id/import-job",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:intake.list_drafts:/intake/drafts",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:intake.merge_import:/intake/drafts/:id/merge-import",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:intake.merge_import:/intake/drafts/:id/merge-import",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:intake.merge_import:/intake/drafts/:id/merge-import",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:intake.patient_review:/patients/:id/intake-review",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:intake.refresh_import:/intake/drafts/:id/refresh-import",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:intake.refresh_import:/intake/drafts/:id/refresh-import",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:intake.refresh_import:/intake/drafts/:id/refresh-import",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:intake.seed_from_import:/intake/drafts/from-import",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:intake.seed_from_import:/intake/drafts/from-import",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:intake.seed_from_import:/intake/drafts/from-import",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:DELETE:intake.unlink_import_job:/intake/drafts/:id/import-job",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:intake.unlink_import_job:/intake/drafts/:id/import-job",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:intake.unlink_import_job:/intake/drafts/:id/import-job",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:PATCH:intake.update_draft:/intake/drafts/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:intake.update_draft:/intake/drafts/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:intake.update_draft:/intake/drafts/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:narrative.get:/patients/:patientId/narrative-sections/:sectionKey",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:narrative.list:/patients/:patientId/narrative-sections",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:PUT:narrative.save:/patients/:patientId/narrative-sections/:sectionKey",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:narrative.save:/patients/:patientId/narrative-sections/:sectionKey",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:narrative.save:/patients/:patientId/narrative-sections/:sectionKey",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:narrative.save:/patients/:patientId/narrative-sections/:sectionKey",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:narrative.save:/patients/:patientId/narrative-sections/:sectionKey",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:PATCH:narrative.save:/patients/:patientId/narrative-sections/:sectionKey",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:narrative.save:/patients/:patientId/narrative-sections/:sectionKey",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:narrative.save:/patients/:patientId/narrative-sections/:sectionKey",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:narrative.save:/patients/:patientId/narrative-sections/:sectionKey",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:narrative.save:/patients/:patientId/narrative-sections/:sectionKey",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:notes.create:/notes",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:DELETE:notes.delete:/notes/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:oss:notes.delete:/notes/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:notes.list:/notes",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:PUT:notes.update:/notes/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:operators.create:/operators",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:supervisor:operators.create:/operators",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:operators.create:/operators",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:operators.create:/operators",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:operators.create:/operators",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:operators.directory:/operators/directory",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:operators.directory_page:/operators/directory/page",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:operators.directory_schedules:/operators/directory/schedules",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:operators.list:/operators",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:operators.page:/operators/page",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:operators.schedules:/operators/schedules",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:PUT:operators.set_schedule:/operators/:operatorId/schedule",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:doctor:operators.set_schedule:/operators/:operatorId/schedule",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:operators.set_schedule:/operators/:operatorId/schedule",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:operators.set_schedule:/operators/:operatorId/schedule",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:PUT:operators.update:/operators/:operatorId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:supervisor:operators.update:/operators/:operatorId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:operators.update:/operators/:operatorId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:operators.update:/operators/:operatorId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:operators.update:/operators/:operatorId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:parameters.create_reading:/patients/:id/parameter-readings",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:parameters.create_reading:/patients/:id/parameter-readings",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:parameters.list_page:/patients/parameters/page",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:parameters.list_readings:/patients/:id/parameter-readings",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:PATCH:parameters.save_month:/patients/:id/parameters",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:parameters.save_month:/patients/:id/parameters",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:patients.clinical_overview:/patients/clinical-summary/overview",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:patients.clinical_summary:/patients/clinical-summary",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:patients.create:/patients",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:patients.create:/patients",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:patients.create:/patients",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:patients.create:/patients",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:DELETE:patients.delete:/patients/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:patients.delete:/patients/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:patients.delete:/patients/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:patients.delete:/patients/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:patients.delete:/patients/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:patients.delete:/patients/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:patients.get:/patients/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:patients.list_legacy:/patients",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:patients.list_page:/patients/page",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:patients.search:/patients/page/search",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:PATCH:patients.update_demographics:/patients/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:patients.update_demographics:/patients/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:patients.update_demographics:/patients/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:room_assignments.create:/patients/:patientId/room-assignments",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:doctor:room_assignments.create:/patients/:patientId/room-assignments",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:room_assignments.create:/patients/:patientId/room-assignments",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:room_assignments.create:/patients/:patientId/room-assignments",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:DELETE:room_assignments.delete:/patients/:patientId/room-assignments/:assignmentId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:supervisor:room_assignments.delete:/patients/:patientId/room-assignments/:assignmentId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:room_assignments.delete:/patients/:patientId/room-assignments/:assignmentId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:room_assignments.delete:/patients/:patientId/room-assignments/:assignmentId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:room_assignments.delete:/patients/:patientId/room-assignments/:assignmentId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:room_assignments.list:/patients/:patientId/room-assignments",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:PUT:room_assignments.update:/patients/:patientId/room-assignments/:assignmentId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:doctor:room_assignments.update:/patients/:patientId/room-assignments/:assignmentId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:room_assignments.update:/patients/:patientId/room-assignments/:assignmentId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:room_assignments.update:/patients/:patientId/room-assignments/:assignmentId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:rooms.add_bed:/admin/rooms/:roomId/beds",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:supervisor:rooms.add_bed:/admin/rooms/:roomId/beds",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:rooms.add_bed:/admin/rooms/:roomId/beds",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:rooms.add_bed:/admin/rooms/:roomId/beds",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:rooms.add_bed:/admin/rooms/:roomId/beds",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:rooms.available_beds:/admin/beds/available",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:rooms.create:/admin/rooms",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:supervisor:rooms.create:/admin/rooms",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:rooms.create:/admin/rooms",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:rooms.create:/admin/rooms",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:rooms.create:/admin/rooms",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:DELETE:rooms.delete:/admin/rooms/:roomId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:supervisor:rooms.delete:/admin/rooms/:roomId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:rooms.delete:/admin/rooms/:roomId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:rooms.delete:/admin/rooms/:roomId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:rooms.delete:/admin/rooms/:roomId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:DELETE:rooms.delete_bed:/admin/beds/:bedId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:supervisor:rooms.delete_bed:/admin/beds/:bedId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:rooms.delete_bed:/admin/beds/:bedId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:rooms.delete_bed:/admin/beds/:bedId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:rooms.delete_bed:/admin/beds/:bedId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:rooms.get:/admin/rooms/:roomId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:rooms.list:/admin/rooms",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:rooms.list_beds:/admin/rooms/:roomId/beds",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:rooms.occupancy:/admin/rooms/occupancy",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:rooms.patient_room_options:/patients/:patientId/room-options",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:PUT:rooms.update:/admin/rooms/:roomId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:supervisor:rooms.update:/admin/rooms/:roomId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:doctor:rooms.update:/admin/rooms/:roomId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:rooms.update:/admin/rooms/:roomId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:rooms.update:/admin/rooms/:roomId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:PUT:rooms.update_bed:/admin/beds/:bedId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:doctor:rooms.update_bed:/admin/beds/:bedId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:rooms.update_bed:/admin/beds/:bedId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:rooms.update_bed:/admin/beds/:bedId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:roster.get_my_order:/me/roster-order",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:roster.list_contexts:/admin/roster-contexts",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:PATCH:roster.set_context_default:/admin/roster-contexts/:id",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:doctor:roster.set_context_default:/admin/roster-contexts/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:roster.set_context_default:/admin/roster-contexts/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:roster.set_context_default:/admin/roster-contexts/:id",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:PATCH:roster.set_my_order:/me/roster-order",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:POST:therapy.create:/patients/:patientId/therapies",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:therapy.create:/patients/:patientId/therapies",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:therapy.create:/patients/:patientId/therapies",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:therapy.create:/patients/:patientId/therapies",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:therapy.create:/patients/:patientId/therapies",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:DELETE:therapy.delete:/patients/:patientId/therapies/:therapyId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:therapy.delete:/patients/:patientId/therapies/:therapyId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:therapy.delete:/patients/:patientId/therapies/:therapyId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:therapy.delete:/patients/:patientId/therapies/:therapyId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:therapy.delete:/patients/:patientId/therapies/:therapyId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:therapy.list:/patients/:patientId/therapies",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:GET:therapy.list_page:/patients/:patientId/therapies/page",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous:PUT:therapy.update:/patients/:patientId/therapies/:therapyId",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:therapy.update:/patients/:patientId/therapies/:therapyId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:supervisor:therapy.update:/patients/:patientId/therapies/:therapyId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:nurse:therapy.update:/patients/:patientId/therapies/:therapyId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "denied-write:oss:therapy.update:/patients/:patientId/therapies/:therapyId",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:voice.execute:/ai/voice/execute",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:voice.execute:/ai/voice/execute",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:POST:voice.plan:/ai/voice/plan",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "denied-write:admin:voice.plan:/ai/voice/plan",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "anonymous:GET:voice.stt_status:/ai/voice/stt",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "read:admin:patients.list_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:admin:parameters.list_page",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:admin:patients.clinical_overview",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:admin:patients.get",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:admin:clinical_record.get",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:admin:therapy.list_page",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:admin:parameters.list_readings",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:admin:diary.list",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:admin:narrative.list",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:admin:documents.list",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:admin:assessments.catalog",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:admin:consegne.list",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:admin:appointments.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:admin:rooms.occupancy",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:admin:operators.directory_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:patients.list_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:parameters.list_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:patients.clinical_overview",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:patients.get",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:clinical_record.get",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:therapy.list_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:parameters.list_readings",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:diary.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:narrative.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:documents.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:assessments.catalog",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:consegne.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:appointments.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:rooms.occupancy",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:supervisor:operators.directory_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:doctor:patients.list_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:doctor:parameters.list_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:doctor:patients.clinical_overview",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:doctor:patients.get",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:doctor:clinical_record.get",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:doctor:therapy.list_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:doctor:parameters.list_readings",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:doctor:diary.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:doctor:narrative.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:doctor:documents.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:doctor:assessments.catalog",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:doctor:consegne.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:doctor:appointments.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:doctor:rooms.occupancy",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:doctor:operators.directory_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:nurse:patients.list_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:nurse:parameters.list_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:nurse:patients.clinical_overview",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:nurse:patients.get",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:nurse:clinical_record.get",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:nurse:therapy.list_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:nurse:parameters.list_readings",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:nurse:diary.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:nurse:narrative.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:nurse:documents.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:nurse:assessments.catalog",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:nurse:consegne.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:nurse:appointments.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:nurse:rooms.occupancy",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:nurse:operators.directory_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:oss:patients.list_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:oss:parameters.list_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:oss:patients.clinical_overview",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:oss:patients.get",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:oss:clinical_record.get",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:oss:therapy.list_page",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:oss:parameters.list_readings",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:oss:diary.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:oss:narrative.list",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:oss:documents.list",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:oss:assessments.catalog",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:oss:consegne.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:oss:appointments.list",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "read:oss:rooms.occupancy",
+      "pass": true,
+      "detail": 403
+    },
+    {
+      "name": "read:oss:operators.directory_page",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "patient:create/duplicate/reload",
+      "pass": true
+    },
+    {
+      "name": "patient:invalid-calendar-date",
+      "pass": true
+    },
+    {
+      "name": "patient:malformed-email-is-a-client-error",
+      "pass": true
+    },
+    {
+      "name": "patient:invalid-sex:{}",
+      "pass": true
+    },
+    {
+      "name": "patient:invalid-sex:[]",
+      "pass": true
+    },
+    {
+      "name": "patient:invalid-sex:2",
+      "pass": true
+    },
+    {
+      "name": "patient:invalid-email:[]",
+      "pass": true
+    },
+    {
+      "name": "patient:invalid-email:true",
+      "pass": true
+    },
+    {
+      "name": "patient:invalid-email:\"invalid-email\"",
+      "pass": true
+    },
+    {
+      "name": "patient:invalid-address:{}",
+      "pass": true
+    },
+    {
+      "name": "patient:invalid-address:[\"home\"]",
+      "pass": true
+    },
+    {
+      "name": "patient:invalid-emergencyContactName:{}",
+      "pass": true
+    },
+    {
+      "name": "patient:invalid-emergencyContactName:123",
+      "pass": true
+    },
+    {
+      "name": "patient:invalid-emergencyContactPhone:{}",
+      "pass": true
+    },
+    {
+      "name": "patient:invalid-emergencyContactPhone:[\"phone\"]",
+      "pass": true
+    },
+    {
+      "name": "patient:optional-contacts-valid-and-clear",
+      "pass": true
+    },
+    {
+      "name": "parameters:idempotency/changed-replay/persisted-patient",
+      "pass": true
+    },
+    {
+      "name": "parameters:concurrent-same-request",
+      "pass": true
+    },
+    {
+      "name": "narrative:original-immutable/reviewed-edit",
+      "pass": true
+    },
+    {
+      "name": "narrative:explicit-empty-edit",
+      "pass": true
+    },
+    {
+      "name": "therapy:create/authoritative-read/nurse-denied",
+      "pass": true
+    },
+    {
+      "name": "therapy:invalid-weekdays-must-not-become-daily",
+      "pass": true
+    },
+    {
+      "name": "therapy:two-times-in-same-band-preserve-both-doses",
+      "pass": true
+    },
+    {
+      "name": "administration:confirmation/duplicate/actor-authority",
+      "pass": true
+    },
+    {
+      "name": "appointments:concurrent-slot-conflict/update/delete",
+      "pass": true
+    },
+    {
+      "name": "assessment:PAINAD/version-conflict/final-PDF/immutable",
+      "pass": true
+    },
+    {
+      "name": "handover:request-replay/urgency/self-ack/assignee-ack",
+      "pass": true
+    },
+    {
+      "name": "beds:two-patients-concurrent-one-bed",
+      "pass": true
+    },
+    {
+      "name": "assistant:read/policy-denial/preview-cancel-no-write",
+      "pass": true
+    },
+    {
+      "name": "session:tamper/logout/revoked-token",
+      "pass": true
+    }
+  ],
+  "evidence": {
+    "patientId": "cmv2t137l006xbyqpdjdrd0cw",
+    "malformedEmail": {
+      "status": 400,
+      "data": {
+        "error": "Email: deve essere un testo"
+      },
+      "cache": "private, no-store"
+    },
+    "parameterReading": "288486d0-ffa7-454b-a866-a6a9d10a7e77",
+    "emptyNarrative": {
+      "error": "La revisione non può essere vuota: inserisci il testo oppure ripristina il testo originale. Nessuna modifica è stata salvata."
+    },
+    "therapy": {
+      "id": "cmv2t13t3007tbyqpfwq1xwak",
+      "patientId": "cmv2t137l006xbyqpdjdrd0cw",
+      "farmacoNome": "QA Farmaco sintetico",
+      "dosaggio": "500 mg",
+      "viaSomministrazione": "orale",
+      "tipo": "periodica",
+      "stato": "attiva",
+      "dataInizio": "2026-10-10",
+      "dataFine": null,
+      "fasceMattina": true,
+      "fascePranzo": false,
+      "fascePomeriggio": false,
+      "fasceSera": false,
+      "fasceNotte": false,
+      "orarioSpecifico": null,
+      "prescrittore": null,
+      "operatoreInseritore": "Medico 1",
+      "note": null,
+      "dataSomministrazione": null,
+      "orarioSomministrazione": null,
+      "commercialStrengthValue": null,
+      "commercialStrengthUnit": null,
+      "pharmaceuticalForm": null,
+      "allowedFractions": null,
+      "drugPackageRef": null,
+      "giorniSettimana": null,
+      "doseMode": "fixed",
+      "doseProtocol": null,
+      "createdAt": "2026-10-10T19:45:55.335Z",
+      "updatedAt": "2026-10-10T19:45:55.335Z",
+      "schedules": []
+    },
+    "invalidWeekdays": {
+      "status": 400,
+      "data": {
+        "error": "Giorni della settimana non validi: seleziona valori da 1 a 7"
+      },
+      "cache": "private, no-store"
+    },
+    "sameBandSchedules": {
+      "therapy": {
+        "id": "cmv2t13vl007xbyqpg8yji2ww",
+        "patientId": "cmv2t137l006xbyqpdjdrd0cw",
+        "farmacoNome": "QA Two morning doses",
+        "dosaggio": "100 mg compressa",
+        "viaSomministrazione": "orale",
+        "tipo": "periodica",
+        "stato": "attiva",
+        "dataInizio": "2026-10-10",
+        "dataFine": null,
+        "fasceMattina": true,
+        "fascePranzo": false,
+        "fascePomeriggio": false,
+        "fasceSera": false,
+        "fasceNotte": false,
+        "orarioSpecifico": "08:00,10:00",
+        "prescrittore": null,
+        "operatoreInseritore": "Medico 1",
+        "note": null,
+        "dataSomministrazione": null,
+        "orarioSomministrazione": null,
+        "commercialStrengthValue": 100,
+        "commercialStrengthUnit": "mg",
+        "pharmaceuticalForm": "compressa",
+        "allowedFractions": null,
+        "drugPackageRef": null,
+        "giorniSettimana": null,
+        "doseMode": "fixed",
+        "doseProtocol": null,
+        "createdAt": "2026-10-10T19:45:55.425Z",
+        "updatedAt": "2026-10-10T19:45:55.425Z",
+        "schedules": [
+          {
+            "id": "cmv2t13vr007ybyqpiktmls38",
+            "therapyId": "cmv2t13vl007xbyqpg8yji2ww",
+            "time": "08:00",
+            "fascia": "mattina",
+            "quantityNumerator": 1,
+            "quantityDenominator": 1,
+            "administrationUnit": "compressa",
+            "createdAt": "2026-10-10T19:45:55.425Z",
+            "updatedAt": "2026-10-10T19:45:55.425Z"
+          },
+          {
+            "id": "cmv2t13vr007zbyqp4zez1ruv",
+            "therapyId": "cmv2t13vl007xbyqpg8yji2ww",
+            "time": "10:00",
+            "fascia": "mattina",
+            "quantityNumerator": 2,
+            "quantityDenominator": 1,
+            "administrationUnit": "compressa",
+            "createdAt": "2026-10-10T19:45:55.425Z",
+            "updatedAt": "2026-10-10T19:45:55.425Z"
+          }
+        ]
+      },
+      "doses": [
+        {
+          "administrationId": null,
+          "therapyId": "cmv2t13vl007xbyqpg8yji2ww",
+          "drugName": "QA Two morning doses",
+          "dosage": "1 compressa — 100 mg",
+          "quantityLabel": "1 compressa — 100 mg",
+          "route": "orale",
+          "scheduledTime": "08:00",
+          "status": "pending",
+          "administeredAt": null,
+          "administeredBy": null,
+          "notAdministeredReason": null,
+          "doseMode": "fixed",
+          "doseProtocol": null
+        },
+        {
+          "administrationId": null,
+          "therapyId": "cmv2t13vl007xbyqpg8yji2ww",
+          "drugName": "QA Two morning doses",
+          "dosage": "2 compressa — 200 mg",
+          "quantityLabel": "2 compressa — 200 mg",
+          "route": "orale",
+          "scheduledTime": "10:00",
+          "status": "pending",
+          "administeredAt": null,
+          "administeredBy": null,
+          "notAdministeredReason": null,
+          "doseMode": "fixed",
+          "doseProtocol": null
+        }
+      ]
+    },
+    "administration": {
+      "id": "cmv2t13xe0081byqpq9941dh2",
+      "therapyId": "cmv2t13t3007tbyqpfwq1xwak",
+      "patientId": "cmv2t137l006xbyqpdjdrd0cw",
+      "farmacoNome": "QA Farmaco sintetico",
+      "farmacoDose": "500 mg",
+      "farmacoVia": "orale",
+      "date": "2026-10-10",
+      "fascia": "mattina",
+      "ora": "08:00",
+      "stato": "erogata",
+      "operatoreId": "SIM-NURSE-1",
+      "operatoreNome": "Infermiere 1",
+      "confirmedAt": "2026-10-10T19:45:55.490Z",
+      "doseContext": null,
+      "motivo": null,
+      "note": null,
+      "createdAt": "2026-10-10T19:45:55.490Z",
+      "updatedAt": "2026-10-10T19:45:55.490Z"
+    },
+    "assessment": {
+      "assessment": {
+        "id": "3bcf2b19-076c-470a-b19d-c52c77ae38dd",
+        "patientId": "cmv2t137l006xbyqpdjdrd0cw",
+        "status": "final",
+        "version": 3,
+        "assessedAt": "2026-10-10T19:45:55.650Z",
+        "createdAt": "2026-10-10T19:45:55.654Z",
+        "updatedAt": "2026-10-10T19:45:55.767Z",
+        "finalizedAt": "2026-10-10T19:45:55.767Z",
+        "author": {
+          "operatorId": "SIM-NURSE-1",
+          "name": "Infermiere 1"
+        },
+        "predecessorId": null,
+        "correctionReason": null,
+        "correctedById": null,
+        "snapshotSha256": "592f93ffdaa2235e874e79c2f265420f22f78e27fb3f85ce9c16365ac23ce366",
+        "pdf": {
+          "status": "ready",
+          "documentId": "e1ec89d6-a5cc-4179-a8d3-02014b805a0a",
+          "errorCode": null,
+          "retryAvailable": false
+        },
+        "type": "painad",
+        "formVersion": "painad-it-2026-09-22-v1",
+        "answers": {
+          "respiration": 1,
+          "bodyLanguage": 1,
+          "consolability": 0,
+          "facialExpression": 1,
+          "negativeVocalization": 1
+        },
+        "answeredCount": 5,
+        "result": {
+          "total": 4,
+          "band": "moderate",
+          "label": "Dolore moderato"
+        },
+        "finalSnapshot": {
+          "form": {
+            "type": "painad",
+            "version": "painad-it-2026-09-22-v1",
+            "sourceSha256": "2a3c3b2724ed7cc46aa09db715680b0d494a63b587898b45d61c8db8ec73abb1"
+          },
+          "items": [
+            {
+              "id": "respiration",
+              "label": "Respirazione",
+              "score": 1,
+              "description": "Occasionalmente affannosa. Brevi periodi di iperventilazione."
+            },
+            {
+              "id": "negativeVocalization",
+              "label": "Vocalizzazione negativa",
+              "score": 1,
+              "description": "Lamenti o gemiti occasionali. Parlare a bassa voce con tono negativo."
+            },
+            {
+              "id": "facialExpression",
+              "label": "Espressione facciale",
+              "score": 1,
+              "description": "Triste, spaventata, corrucciata, smorfia occasionale."
+            },
+            {
+              "id": "bodyLanguage",
+              "label": "Linguaggio del corpo",
+              "score": 1,
+              "description": "Teso, irrequieto, pacing (camminare avanti e indietro)."
+            },
+            {
+              "id": "consolability",
+              "label": "Consolabilità",
+              "score": 0,
+              "description": "Non necessaria"
+            }
+          ],
+          "author": {
+            "name": "Infermiere 1",
+            "operatorId": "SIM-NURSE-1"
+          },
+          "result": {
+            "band": "moderate",
+            "label": "Dolore moderato",
+            "total": 4
+          },
+          "patient": {
+            "id": "cmv2t137l006xbyqpdjdrd0cw",
+            "lastName": "Rossi QA sintetico",
+            "location": {
+              "bed": null,
+              "asOf": "2026-10-10",
+              "room": null,
+              "source": null,
+              "status": "unassigned"
+            },
+            "firstName": "Mario",
+            "dateOfBirth": "1945-02-19",
+            "codiceFiscale": "RSSMRA45B19H501K"
+          },
+          "createdAt": "2026-10-10T19:45:55.654Z",
+          "assessedAt": "2026-10-10T19:45:55.650Z",
+          "finalizedAt": "2026-10-10T19:45:55.767Z",
+          "predecessor": null,
+          "predecessorId": null,
+          "interpretation": "Dolore moderato (richiede intervento/monitoraggio).",
+          "snapshotVersion": 1,
+          "correctionReason": null
+        }
+      },
+      "requestId": "4a5d73a1-7de5-49d5-a724-c36f1b5ed2be",
+      "replayed": false
+    },
+    "handover": "7bd717fb-631a-4d43-b0be-7747d8fb0eea",
+    "bedRace": [
+      {
+        "status": 201,
+        "id": "cmv2t14tm008mbyqptr7m0u2x"
+      },
+      {
+        "status": 409
+      }
+    ]
+  }
+}

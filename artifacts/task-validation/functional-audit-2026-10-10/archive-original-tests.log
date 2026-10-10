@@ -1,0 +1,29 @@
+▶ archive originals survive confirmation and failures roll back on PostgreSQL
+  ✔ existing patient confirmation archives every source and remains idempotent (135.300692ms)
+  ✔ missing original rolls back existing chart update and prevents confirmed status (32.21037ms)
+  ✖ new intake patient and draft confirmation roll back when a source is unavailable (14.295649ms)
+  ✔ concurrent source copies do not duplicate files (57.637462ms)
+  ✔ legacy apply persists the original in the canonical list and rolls back corrupt bytes (36.185394ms)
+✖ archive originals survive confirmation and failures roll back on PostgreSQL (998.180654ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 4
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11149.902347
+
+✖ failing tests:
+
+test at src/ai/__tests__/patient-archive-persistence-db.test.ts:1:4649
+✖ new intake patient and draft confirmation roll back when a source is unavailable (14.295649ms)
+  Error: importJob TEST-ARCHIVE-516bd5b7-a844-468a-a9e8-b14aca796b08-job-2 has no _narrative in resultData — extraction must complete before seeding a draft
+      at prisma.$transaction.maxWait (/workspace/ClinicOS/backend/src/intake/draft-service.ts:351:15)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Proxy._transactionWithCallback (/workspace/ClinicOS/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:861:18)
+      at async TestContext.<anonymous> (/workspace/ClinicOS/backend/src/ai/__tests__/patient-archive-persistence-db.test.ts:141:25)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/ClinicOS/backend/src/ai/__tests__/patient-archive-persistence-db.test.ts:137:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)

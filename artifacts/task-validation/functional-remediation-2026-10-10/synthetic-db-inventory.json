@@ -1,0 +1,189 @@
+{
+  "at": "2026-10-10T19:53:26.001Z",
+  "host": "127.0.0.1",
+  "database": "clinicos_qa_remediation",
+  "mode": "read-only",
+  "tables": [
+    {
+      "table": "AiAuditEvent",
+      "rows": "1338"
+    },
+    {
+      "table": "Appointment",
+      "rows": "5"
+    },
+    {
+      "table": "AuthzPolicyVersion",
+      "rows": "4"
+    },
+    {
+      "table": "Bed",
+      "rows": "11"
+    },
+    {
+      "table": "Cartella",
+      "rows": "6"
+    },
+    {
+      "table": "ClinicalNote",
+      "rows": "13"
+    },
+    {
+      "table": "ClinicalRecord",
+      "rows": "8"
+    },
+    {
+      "table": "Consegna",
+      "rows": "3"
+    },
+    {
+      "table": "ConsegnaAcknowledgement",
+      "rows": "3"
+    },
+    {
+      "table": "ConsegnaCreationReceipt",
+      "rows": "5"
+    },
+    {
+      "table": "ConsegnaReadReceipt",
+      "rows": "0"
+    },
+    {
+      "table": "DiaryEntryAcknowledgement",
+      "rows": "0"
+    },
+    {
+      "table": "DiaryEntryReadReceipt",
+      "rows": "0"
+    },
+    {
+      "table": "Farmaco",
+      "rows": "0"
+    },
+    {
+      "table": "FarmacoImport",
+      "rows": "0"
+    },
+    {
+      "table": "FarmacoPrincipioAttivo",
+      "rows": "0"
+    },
+    {
+      "table": "ImportAudit",
+      "rows": "6"
+    },
+    {
+      "table": "ImportDocument",
+      "rows": "12"
+    },
+    {
+      "table": "ImportJob",
+      "rows": "6"
+    },
+    {
+      "table": "ImportMutation",
+      "rows": "30"
+    },
+    {
+      "table": "ImportProcessingUnit",
+      "rows": "18"
+    },
+    {
+      "table": "MedicationAdministration",
+      "rows": "3"
+    },
+    {
+      "table": "Nota",
+      "rows": "0"
+    },
+    {
+      "table": "NotaRecipientState",
+      "rows": "0"
+    },
+    {
+      "table": "Operator",
+      "rows": "9"
+    },
+    {
+      "table": "OperatorRosterPreference",
+      "rows": "0"
+    },
+    {
+      "table": "OperatorSchedule",
+      "rows": "0"
+    },
+    {
+      "table": "Patient",
+      "rows": "17"
+    },
+    {
+      "table": "PatientAssessment",
+      "rows": "31"
+    },
+    {
+      "table": "PatientAssessmentAttestation",
+      "rows": "0"
+    },
+    {
+      "table": "PatientDiaryEntry",
+      "rows": "0"
+    },
+    {
+      "table": "PatientDocument",
+      "rows": "49"
+    },
+    {
+      "table": "PatientIntakeDocument",
+      "rows": "0"
+    },
+    {
+      "table": "PatientIntakeDraft",
+      "rows": "6"
+    },
+    {
+      "table": "PatientNarrativeSection",
+      "rows": "63"
+    },
+    {
+      "table": "PatientParameterReading",
+      "rows": "6"
+    },
+    {
+      "table": "PatientRoomAssignment",
+      "rows": "11"
+    },
+    {
+      "table": "PatientTherapy",
+      "rows": "22"
+    },
+    {
+      "table": "PrnAdministration",
+      "rows": "0"
+    },
+    {
+      "table": "Room",
+      "rows": "7"
+    },
+    {
+      "table": "RosterContext",
+      "rows": "6"
+    },
+    {
+      "table": "RosterEpoch",
+      "rows": "1"
+    },
+    {
+      "table": "TherapySchedule",
+      "rows": "6"
+    },
+    {
+      "table": "User",
+      "rows": "9"
+    },
+    {
+      "table": "_prisma_migrations",
+      "rows": "58"
+    }
+  ],
+  "deletionPerformed": false
+}

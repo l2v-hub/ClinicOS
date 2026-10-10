@@ -220,7 +220,7 @@ test('AC2: terapia non valida, voce non valida o conflitto di fascia → 400 sen
       administrationUnit: 'compressa',
     },
     {
-      time: '10:00',
+      time: '08:00',
       quantityNumerator: 1,
       quantityDenominator: 1,
       administrationUnit: 'compressa',
@@ -285,7 +285,7 @@ test('AC2: terapia non valida, voce non valida o conflitto di fascia → 400 sen
   const conflictRes = await post(`${patientAId}/diary/with-therapy`, operatorAId, conflict);
   const conflictJson = (await conflictRes.json()) as { code: string; fasciaConflicts: string[] };
   assert.equal(conflictJson.code, 'fascia_conflict');
-  assert.deepEqual(conflictJson.fasciaConflicts, ['mattina: 08:00, 10:00']);
+  assert.deepEqual(conflictJson.fasciaConflicts, ['mattina: 08:00, 08:00']);
   assert.deepEqual(await counts(patientAId), before);
 });
 

@@ -1,4 +1,4 @@
-// Authoritative administration record for one therapy slot (therapyId/date/fascia).
+// Authoritative administration record for one therapy slot (therapyId/date/fascia/ora).
 //
 // Moved VERBATIM from the POST /therapy-slots/confirm and /therapy-slots/not-administered
 // handlers (routes/therapy.ts) so the route and the Tool Layer share one implementation.
@@ -40,11 +40,11 @@ export async function confirmTherapyAdministration(body: unknown, actor: Operato
         doseContext,
       } = authoritative;
       const existing = await tx.medicationAdministration.findUnique({
-        where: { therapyId_date_fascia: { therapyId, date, fascia } },
+        where: { therapyId_date_fascia_ora: { therapyId, date, fascia, ora } },
       });
       if (existing?.stato === 'erogata') throw new TherapyAlreadyAdministeredError();
       return tx.medicationAdministration.upsert({
-        where: { therapyId_date_fascia: { therapyId, date, fascia } },
+        where: { therapyId_date_fascia_ora: { therapyId, date, fascia, ora } },
         create: {
           therapyId,
           patientId,
@@ -102,12 +102,12 @@ export async function recordTherapyNotAdministered(body: unknown, actor: Operato
         note: noteText,
       } = authoritative;
       const existing = await tx.medicationAdministration.findUnique({
-        where: { therapyId_date_fascia: { therapyId, date, fascia } },
+        where: { therapyId_date_fascia_ora: { therapyId, date, fascia, ora } },
         select: { stato: true },
       });
       if (existing?.stato === 'erogata') throw new TherapyAlreadyAdministeredError();
       return tx.medicationAdministration.upsert({
-        where: { therapyId_date_fascia: { therapyId, date, fascia } },
+        where: { therapyId_date_fascia_ora: { therapyId, date, fascia, ora } },
         create: {
           therapyId,
           patientId,

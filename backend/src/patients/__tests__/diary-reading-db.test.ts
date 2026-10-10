@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { before, after, test } from 'node:test';
+import { before, after, afterEach, test } from 'node:test';
 import { prisma } from '../../lib/prisma.js';
 import {
   call,
@@ -11,6 +11,9 @@ import {
 
 let base: string, close: () => Promise<void>, nurse: Session, doctor: Session, oss: Session;
 const patients: string[] = [];
+afterEach(() => {
+  delete process.env.RESIDENT_SCOPE_CONFIG;
+});
 before(async () => {
   delete process.env.RESIDENT_SCOPE_CONFIG;
   ({ base, close } = await startApp());

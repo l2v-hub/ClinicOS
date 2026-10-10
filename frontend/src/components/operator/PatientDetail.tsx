@@ -2775,7 +2775,7 @@ export function PatientDetail({
         <div className="chart-sections__actions">
           <button
             type="button"
-            className="ds-btn ds-btn--secondary ds-btn--collapsible"
+            className="ds-btn ds-btn--secondary"
             onClick={() => setShowPrintDialog(true)}
             title="Stampa la scheda"
             aria-label="Stampa la scheda"
@@ -2787,7 +2787,7 @@ export function PatientDetail({
           </button>
           <button
             type="button"
-            className="ds-btn ds-btn--secondary ds-btn--collapsible"
+            className="ds-btn ds-btn--secondary"
             onClick={() => setShowInvioPS(true)}
             title="Invio in Pronto Soccorso"
             aria-label="Invio in Pronto Soccorso"

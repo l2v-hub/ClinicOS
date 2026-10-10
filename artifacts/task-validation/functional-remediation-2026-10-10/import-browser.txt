@@ -1,0 +1,6 @@
+req020-desktop: API persistence OK — patient cmv2t3o0v000he5qpp100fhik allergieStatus='paziente_nega'
+req020-desktop: UI-after-reload OK — detail shows 'Paziente nega allergie'
+req020-desktop: created=true consoleErrors=0 httpFailures=0
+req020-tablet: API persistence OK — patient cmv2t5h1l001ce5qpvdxfc6q4 allergieStatus='assenti'
+req020-tablet: UI-after-reload OK — detail shows 'Allergie assenti (verificato)'
+req020-tablet: created=true consoleErrors=0 httpFailures=0

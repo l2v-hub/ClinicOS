@@ -90,6 +90,57 @@ const administration = (therapyId: string, extra: Record<string, unknown> = {}) 
   ...extra,
 });
 
+test('Tool Layer addresses both prescribed hours in the same band independently', async () => {
+  const id = await prescribe(patientId, 'Synthetic multi-hour tool prescription');
+  await prisma.therapySchedule.createMany({
+    data: [
+      {
+        therapyId: id,
+        time: '08:00',
+        fascia: 'mattina',
+        quantityNumerator: 1,
+        quantityDenominator: 1,
+        administrationUnit: 'compressa',
+      },
+      {
+        therapyId: id,
+        time: '10:00',
+        fascia: 'mattina',
+        quantityNumerator: 2,
+        quantityDenominator: 1,
+        administrationUnit: 'compressa',
+      },
+    ],
+  });
+  const ambiguous = await registry.invoke(
+    'administration.confirm',
+    { body: administration(id) },
+    nameless(owner),
+  );
+  assert.equal(ambiguous.ok, false);
+  if (!ambiguous.ok) assert.equal(ambiguous.error.code, 'invalid_input');
+  for (const scheduledTime of ['08:00', '10:00']) {
+    const result = await registry.invoke(
+      'administration.confirm',
+      { body: administration(id, { scheduledTime }) },
+      nameless(owner),
+    );
+    assert.equal(result.ok, true, JSON.stringify(result));
+  }
+  const saved = await prisma.medicationAdministration.findMany({
+    where: { therapyId: id },
+    orderBy: { ora: 'asc' },
+  });
+  assert.deepEqual(
+    saved.map((row) => row.ora),
+    ['08:00', '10:00'],
+  );
+  assert.deepEqual(
+    saved.map((row) => row.farmacoDose),
+    ['1 compressa', '2 compressa'],
+  );
+});
+
 function rowState(row: Record<string, unknown>) {
   const {
     id: _id,
@@ -120,10 +171,24 @@ test('administration.confirm: GUI parity — route and tool leave identical Medi
     assert.equal(viaTool.ok, true, JSON.stringify(viaTool));
 
     const httpRow = await prisma.medicationAdministration.findUniqueOrThrow({
-      where: { therapyId_date_fascia: { therapyId: therapyHttp, date: DAY, fascia: 'mattina' } },
+      where: {
+        therapyId_date_fascia_ora: {
+          therapyId: therapyHttp,
+          date: DAY,
+          fascia: 'mattina',
+          ora: '08:00',
+        },
+      },
     });
     const toolRow = await prisma.medicationAdministration.findUniqueOrThrow({
-      where: { therapyId_date_fascia: { therapyId: therapyTool, date: DAY, fascia: 'mattina' } },
+      where: {
+        therapyId_date_fascia_ora: {
+          therapyId: therapyTool,
+          date: DAY,
+          fascia: 'mattina',
+          ora: '08:00',
+        },
+      },
     });
     assert.equal(toolRow.stato, 'erogata');
     assert.equal(toolRow.operatoreId, owner.operatorId);
@@ -215,7 +280,12 @@ test('administration.record_not_administered: persists non_erogata with motivo; 
   assert.equal(result.ok, true, JSON.stringify(result));
   const row = await prisma.medicationAdministration.findUniqueOrThrow({
     where: {
-      therapyId_date_fascia: { therapyId: therapyTool, date: OTHER_DAY, fascia: 'mattina' },
+      therapyId_date_fascia_ora: {
+        therapyId: therapyTool,
+        date: OTHER_DAY,
+        fascia: 'mattina',
+        ora: '08:00',
+      },
     },
   });
   assert.equal(row.stato, 'non_erogata');
@@ -236,7 +306,14 @@ test('administration.record_not_administered: persists non_erogata with motivo; 
     assert.equal(downgrade.error.message, 'Terapia già erogata: stato non modificabile');
   }
   const still = await prisma.medicationAdministration.findUniqueOrThrow({
-    where: { therapyId_date_fascia: { therapyId: therapyTool, date: DAY, fascia: 'mattina' } },
+    where: {
+      therapyId_date_fascia_ora: {
+        therapyId: therapyTool,
+        date: DAY,
+        fascia: 'mattina',
+        ora: '08:00',
+      },
+    },
   });
   assert.equal(still.stato, 'erogata');
 

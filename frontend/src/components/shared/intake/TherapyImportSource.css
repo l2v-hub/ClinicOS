@@ -1,0 +1,11 @@
+.therapy-import-source {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.therapy-import-source pre {
+  margin: 0;
+  max-width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+}

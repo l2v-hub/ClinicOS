@@ -1,0 +1,1113 @@
+{
+  "results": [
+    {
+      "role": "admin",
+      "name": "navigation:Dashboard",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Dashboard",
+        "Situazione clinica",
+        "Occupazione Struttura",
+        "Carico Operatori",
+        "Riepilogo Agenda Oggi"
+      ],
+      "controls": 15
+    },
+    {
+      "role": "admin",
+      "name": "navigation:Operatori",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Gestione Operatori"
+      ],
+      "controls": 26
+    },
+    {
+      "role": "admin",
+      "name": "navigation:Agenda",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [],
+      "controls": 20
+    },
+    {
+      "role": "admin",
+      "name": "navigation:Posti Letto",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Posti Letto"
+      ],
+      "controls": 42
+    },
+    {
+      "role": "admin",
+      "name": "navigation:Orari",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Orari Operatori"
+      ],
+      "controls": 11
+    },
+    {
+      "role": "admin",
+      "name": "navigation:Ruoli e permessi",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Ruoli e permessi"
+      ],
+      "controls": 40
+    },
+    {
+      "role": "supervisor",
+      "name": "navigation:Dashboard",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Dashboard",
+        "Situazione clinica",
+        "Prossime terapie",
+        "In programma 25",
+        "Da verificare · in ritardo 26",
+        "Occupazione Struttura",
+        "Carico Operatori",
+        "Riepilogo Agenda Oggi"
+      ],
+      "controls": 120
+    },
+    {
+      "role": "supervisor",
+      "name": "navigation:Operatori",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Gestione Operatori"
+      ],
+      "controls": 26
+    },
+    {
+      "role": "supervisor",
+      "name": "navigation:Agenda",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [],
+      "controls": 20
+    },
+    {
+      "role": "supervisor",
+      "name": "navigation:Terapia",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Calendario terapie"
+      ],
+      "controls": 14
+    },
+    {
+      "role": "supervisor",
+      "name": "navigation:Posti Letto",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Posti Letto"
+      ],
+      "controls": 42
+    },
+    {
+      "role": "supervisor",
+      "name": "navigation:Orari",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Orari Operatori"
+      ],
+      "controls": 11
+    },
+    {
+      "role": "supervisor",
+      "name": "navigation:Consegne",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Consegne",
+        "Non confermate",
+        "Pazienti nelle pagine caricate"
+      ],
+      "controls": 2
+    },
+    {
+      "role": "supervisor",
+      "name": "navigation:Ruoli e permessi",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Ruoli e permessi"
+      ],
+      "controls": 40
+    },
+    {
+      "role": "supervisor",
+      "name": "assistant:open",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Ruoli e permessi",
+        "Milo Supporto agentico AI"
+      ],
+      "controls": 83
+    },
+    {
+      "role": "doctor",
+      "name": "navigation:Turno",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Il mio turno",
+        "Adesso",
+        "Scadute · 26 attività",
+        "Da verificare · 10 attività",
+        "Prossimi appuntamenti",
+        "Ultime consegne"
+      ],
+      "controls": 31
+    },
+    {
+      "role": "doctor",
+      "name": "navigation:Pazienti",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Pazienti",
+        "Nuovo ingresso"
+      ],
+      "controls": 36
+    },
+    {
+      "role": "doctor",
+      "name": "navigation:Terapia",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Calendario terapie"
+      ],
+      "controls": 14
+    },
+    {
+      "role": "doctor",
+      "name": "navigation:Parametri",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Parametri vitali",
+        "Bassi, Giorgio"
+      ],
+      "controls": 47
+    },
+    {
+      "role": "doctor",
+      "name": "navigation:Consegne",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Consegne",
+        "Non confermate",
+        "Pazienti nelle pagine caricate"
+      ],
+      "controls": 2
+    },
+    {
+      "role": "doctor",
+      "name": "navigation:Agenda",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Agenda di oggi",
+        "sabato 10 ottobre 2026"
+      ],
+      "controls": 12
+    },
+    {
+      "role": "doctor",
+      "name": "navigation:Farmaci",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Farmaci"
+      ],
+      "controls": 3
+    },
+    {
+      "role": "doctor",
+      "name": "chart:Panoramica",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Ultimi parametri"
+      ],
+      "controls": 28
+    },
+    {
+      "role": "doctor",
+      "name": "chart:Dati di ingresso",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Anagrafica",
+        "Dati di ingresso",
+        "Condizioni iniziali",
+        "Valutazione funzionale",
+        "Documenti e firma"
+      ],
+      "controls": 54
+    },
+    {
+      "role": "doctor",
+      "name": "chart:Clinica",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Testo sorgente — Diagnosi",
+        "Testo sorgente — Allergie",
+        "Patologie note e interventi pregressi",
+        "Note aggiuntive",
+        "Testo sorgente — Anamnesi",
+        "Testo sorgente — Decorso ospedaliero",
+        "Testo sorgente — Consulenze",
+        "Testo sorgente — Diagnostica per immagini",
+        "Testo sorgente — Prestazioni e interventi",
+        "Testo sorgente — Terapia",
+        "Testo sorgente — Consigli e controlli",
+        "Testo sorgente — Contenuto non classificato"
+      ],
+      "controls": 56
+    },
+    {
+      "role": "doctor",
+      "name": "chart:Terapia",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "sabato 10 ottobre 2026"
+      ],
+      "controls": 50
+    },
+    {
+      "role": "doctor",
+      "name": "chart:Parametri",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Nuova rilevazione",
+        "Valori e andamento",
+        "Rilevazioni registrate"
+      ],
+      "controls": 43
+    },
+    {
+      "role": "doctor",
+      "name": "chart:Moduli",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Assistenza e mobilizzazione",
+        "Scale di valutazione"
+      ],
+      "controls": 32
+    },
+    {
+      "role": "doctor",
+      "name": "chart:Documenti",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio"
+      ],
+      "controls": 11
+    },
+    {
+      "role": "doctor",
+      "name": "chart:Dimissione",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Dimissione Infermieristica"
+      ],
+      "controls": 16
+    },
+    {
+      "role": "doctor",
+      "name": "mobile-chart:Panoramica",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Ultimi parametri"
+      ],
+      "controls": 28
+    },
+    {
+      "role": "doctor",
+      "name": "mobile-chart:Dati di ingresso",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Anagrafica",
+        "Dati di ingresso",
+        "Condizioni iniziali",
+        "Valutazione funzionale",
+        "Documenti e firma"
+      ],
+      "controls": 54
+    },
+    {
+      "role": "doctor",
+      "name": "mobile-chart:Clinica",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Testo sorgente — Diagnosi",
+        "Testo sorgente — Allergie",
+        "Patologie note e interventi pregressi",
+        "Note aggiuntive",
+        "Testo sorgente — Anamnesi",
+        "Testo sorgente — Decorso ospedaliero",
+        "Testo sorgente — Consulenze",
+        "Testo sorgente — Diagnostica per immagini",
+        "Testo sorgente — Prestazioni e interventi",
+        "Testo sorgente — Terapia",
+        "Testo sorgente — Consigli e controlli",
+        "Testo sorgente — Contenuto non classificato"
+      ],
+      "controls": 56
+    },
+    {
+      "role": "doctor",
+      "name": "mobile-chart:Terapia",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "sabato 10 ottobre 2026"
+      ],
+      "controls": 50
+    },
+    {
+      "role": "doctor",
+      "name": "mobile-chart:Parametri",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Nuova rilevazione",
+        "Valori e andamento",
+        "Rilevazioni registrate"
+      ],
+      "controls": 43
+    },
+    {
+      "role": "doctor",
+      "name": "mobile-chart:Moduli",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Assistenza e mobilizzazione",
+        "Scale di valutazione"
+      ],
+      "controls": 32
+    },
+    {
+      "role": "doctor",
+      "name": "mobile-chart:Documenti",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Nessun documento"
+      ],
+      "controls": 13
+    },
+    {
+      "role": "doctor",
+      "name": "mobile-chart:Dimissione",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Dimissione Infermieristica"
+      ],
+      "controls": 16
+    },
+    {
+      "role": "doctor",
+      "name": "assistant:open",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Dimissione Infermieristica",
+        "Milo Supporto agentico AI"
+      ],
+      "controls": 53
+    },
+    {
+      "role": "nurse",
+      "name": "navigation:Turno",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Il mio turno",
+        "Adesso",
+        "Scadute · 26 attività",
+        "Da verificare · 10 attività",
+        "Prossimi appuntamenti",
+        "Ultime consegne"
+      ],
+      "controls": 31
+    },
+    {
+      "role": "nurse",
+      "name": "navigation:Pazienti",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Pazienti",
+        "Nuovo ingresso"
+      ],
+      "controls": 37
+    },
+    {
+      "role": "nurse",
+      "name": "navigation:Terapia",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Calendario terapie"
+      ],
+      "controls": 14
+    },
+    {
+      "role": "nurse",
+      "name": "navigation:Parametri",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Parametri vitali",
+        "Bassi, Giorgio"
+      ],
+      "controls": 47
+    },
+    {
+      "role": "nurse",
+      "name": "navigation:Consegne",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Consegne",
+        "Non confermate",
+        "Pazienti nelle pagine caricate"
+      ],
+      "controls": 2
+    },
+    {
+      "role": "nurse",
+      "name": "navigation:Agenda",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Agenda di oggi",
+        "sabato 10 ottobre 2026"
+      ],
+      "controls": 12
+    },
+    {
+      "role": "nurse",
+      "name": "navigation:Farmaci",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Farmaci"
+      ],
+      "controls": 3
+    },
+    {
+      "role": "nurse",
+      "name": "chart:Panoramica",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Ultimi parametri"
+      ],
+      "controls": 28
+    },
+    {
+      "role": "nurse",
+      "name": "chart:Dati di ingresso",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Anagrafica",
+        "Dati di ingresso",
+        "Condizioni iniziali",
+        "Valutazione funzionale",
+        "Documenti e firma"
+      ],
+      "controls": 54
+    },
+    {
+      "role": "nurse",
+      "name": "chart:Clinica",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Testo sorgente — Diagnosi",
+        "Testo sorgente — Allergie",
+        "Patologie note e interventi pregressi",
+        "Note aggiuntive",
+        "Testo sorgente — Anamnesi",
+        "Testo sorgente — Decorso ospedaliero",
+        "Testo sorgente — Consulenze",
+        "Testo sorgente — Diagnostica per immagini",
+        "Testo sorgente — Prestazioni e interventi",
+        "Testo sorgente — Terapia",
+        "Testo sorgente — Consigli e controlli",
+        "Testo sorgente — Contenuto non classificato"
+      ],
+      "controls": 53
+    },
+    {
+      "role": "nurse",
+      "name": "chart:Terapia",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "sabato 10 ottobre 2026"
+      ],
+      "controls": 23
+    },
+    {
+      "role": "nurse",
+      "name": "chart:Parametri",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Nuova rilevazione",
+        "Valori e andamento",
+        "Rilevazioni registrate"
+      ],
+      "controls": 43
+    },
+    {
+      "role": "nurse",
+      "name": "chart:Moduli",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Assistenza e mobilizzazione",
+        "Scale di valutazione"
+      ],
+      "controls": 32
+    },
+    {
+      "role": "nurse",
+      "name": "chart:Documenti",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Nessun documento"
+      ],
+      "controls": 13
+    },
+    {
+      "role": "nurse",
+      "name": "chart:Dimissione",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Dimissione Infermieristica"
+      ],
+      "controls": 16
+    },
+    {
+      "role": "nurse",
+      "name": "module:Compila Medicazioni",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio"
+      ],
+      "controls": 61
+    },
+    {
+      "role": "nurse",
+      "name": "module:Compila Contenzioni",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio"
+      ],
+      "controls": 42
+    },
+    {
+      "role": "nurse",
+      "name": "module:Compila Trasferimenti posturali",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Assistenza e mobilizzazione",
+        "Scale di valutazione"
+      ],
+      "controls": 38
+    },
+    {
+      "role": "nurse",
+      "name": "module:Compila Braden",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio"
+      ],
+      "controls": 41
+    },
+    {
+      "role": "nurse",
+      "name": "module:Compila PAINAD",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Assistenza e mobilizzazione",
+        "Scale di valutazione"
+      ],
+      "controls": 40
+    },
+    {
+      "role": "nurse",
+      "name": "module:Compila Tinetti",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Assistenza e mobilizzazione",
+        "Scale di valutazione"
+      ],
+      "controls": 42
+    },
+    {
+      "role": "nurse",
+      "name": "module:Compila MNA®-SF",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Scala MNA®-SF (Mini Nutritional Assessment Short-Form)",
+        "Storico valutazioni"
+      ],
+      "controls": 49
+    },
+    {
+      "role": "nurse",
+      "name": "module:Compila GDS-15",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Geriatric Depression Scale (GDS-15)",
+        "Storico valutazioni"
+      ],
+      "controls": 55
+    },
+    {
+      "role": "nurse",
+      "name": "module:Compila Indice di Barthel",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "INDICE DI BARTHEL",
+        "Storico valutazioni"
+      ],
+      "controls": 55
+    },
+    {
+      "role": "nurse",
+      "name": "module:Compila UCLA · Sonno-veglia (NPI)",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Scale Cliniche UCLA per il Ritmo Sonno-Veglia",
+        "Storico valutazioni"
+      ],
+      "controls": 39
+    },
+    {
+      "role": "nurse",
+      "name": "mobile-chart:Panoramica",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Ultimi parametri"
+      ],
+      "controls": 28
+    },
+    {
+      "role": "nurse",
+      "name": "mobile-chart:Dati di ingresso",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Anagrafica",
+        "Dati di ingresso",
+        "Condizioni iniziali",
+        "Valutazione funzionale",
+        "Documenti e firma"
+      ],
+      "controls": 54
+    },
+    {
+      "role": "nurse",
+      "name": "mobile-chart:Clinica",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Testo sorgente — Diagnosi",
+        "Testo sorgente — Allergie",
+        "Patologie note e interventi pregressi",
+        "Note aggiuntive",
+        "Testo sorgente — Anamnesi",
+        "Testo sorgente — Decorso ospedaliero",
+        "Testo sorgente — Consulenze",
+        "Testo sorgente — Diagnostica per immagini",
+        "Testo sorgente — Prestazioni e interventi",
+        "Testo sorgente — Terapia",
+        "Testo sorgente — Consigli e controlli",
+        "Testo sorgente — Contenuto non classificato"
+      ],
+      "controls": 53
+    },
+    {
+      "role": "nurse",
+      "name": "mobile-chart:Terapia",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "sabato 10 ottobre 2026"
+      ],
+      "controls": 23
+    },
+    {
+      "role": "nurse",
+      "name": "mobile-chart:Parametri",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Nuova rilevazione",
+        "Valori e andamento",
+        "Rilevazioni registrate"
+      ],
+      "controls": 43
+    },
+    {
+      "role": "nurse",
+      "name": "mobile-chart:Moduli",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Assistenza e mobilizzazione",
+        "Scale di valutazione"
+      ],
+      "controls": 50
+    },
+    {
+      "role": "nurse",
+      "name": "mobile-chart:Documenti",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Nessun documento"
+      ],
+      "controls": 13
+    },
+    {
+      "role": "nurse",
+      "name": "mobile-chart:Dimissione",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Dimissione Infermieristica"
+      ],
+      "controls": 16
+    },
+    {
+      "role": "nurse",
+      "name": "assistant:open",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Dimissione Infermieristica",
+        "Milo Supporto agentico AI"
+      ],
+      "controls": 46
+    },
+    {
+      "role": "oss",
+      "name": "navigation:Turno",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Il mio turno",
+        "Adesso",
+        "Prossimi appuntamenti",
+        "Ultime consegne"
+      ],
+      "controls": 14
+    },
+    {
+      "role": "oss",
+      "name": "navigation:Pazienti",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Pazienti"
+      ],
+      "controls": 26
+    },
+    {
+      "role": "oss",
+      "name": "navigation:Parametri",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Parametri vitali",
+        "Bassi, Giorgio"
+      ],
+      "controls": 47
+    },
+    {
+      "role": "oss",
+      "name": "navigation:Consegne",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Consegne",
+        "Non confermate",
+        "Pazienti nelle pagine caricate"
+      ],
+      "controls": 2
+    },
+    {
+      "role": "oss",
+      "name": "navigation:Agenda",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Agenda di oggi",
+        "sabato 10 ottobre 2026"
+      ],
+      "controls": 12
+    },
+    {
+      "role": "oss",
+      "name": "navigation:Farmaci",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Farmaci"
+      ],
+      "controls": 3
+    },
+    {
+      "role": "oss",
+      "name": "chart:Panoramica",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Ultimi parametri"
+      ],
+      "controls": 25
+    },
+    {
+      "role": "oss",
+      "name": "chart:Dati di ingresso",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Anagrafica",
+        "Dati di ingresso",
+        "Condizioni iniziali",
+        "Valutazione funzionale",
+        "Documenti e firma"
+      ],
+      "controls": 51
+    },
+    {
+      "role": "oss",
+      "name": "chart:Clinica",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Patologie note e interventi pregressi",
+        "Note aggiuntive"
+      ],
+      "controls": 40
+    },
+    {
+      "role": "oss",
+      "name": "chart:Parametri",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Nuova rilevazione",
+        "Valori e andamento",
+        "Rilevazioni registrate"
+      ],
+      "controls": 40
+    },
+    {
+      "role": "oss",
+      "name": "chart:Moduli",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Assistenza e mobilizzazione",
+        "Scale di valutazione"
+      ],
+      "controls": 19
+    },
+    {
+      "role": "oss",
+      "name": "chart:Dimissione",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Dimissione Infermieristica"
+      ],
+      "controls": 13
+    },
+    {
+      "role": "oss",
+      "name": "mobile-chart:Panoramica",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Ultimi parametri"
+      ],
+      "controls": 25
+    },
+    {
+      "role": "oss",
+      "name": "mobile-chart:Dati di ingresso",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Anagrafica",
+        "Dati di ingresso",
+        "Condizioni iniziali",
+        "Valutazione funzionale",
+        "Documenti e firma"
+      ],
+      "controls": 51
+    },
+    {
+      "role": "oss",
+      "name": "mobile-chart:Clinica",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Patologie note e interventi pregressi",
+        "Note aggiuntive"
+      ],
+      "controls": 40
+    },
+    {
+      "role": "oss",
+      "name": "mobile-chart:Parametri",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Nuova rilevazione",
+        "Valori e andamento",
+        "Rilevazioni registrate"
+      ],
+      "controls": 40
+    },
+    {
+      "role": "oss",
+      "name": "mobile-chart:Moduli",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Assistenza e mobilizzazione",
+        "Scale di valutazione"
+      ],
+      "controls": 19
+    },
+    {
+      "role": "oss",
+      "name": "mobile-chart:Dimissione",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Dimissione Infermieristica"
+      ],
+      "controls": 13
+    },
+    {
+      "role": "oss",
+      "name": "assistant:open",
+      "overflow": 0,
+      "alerts": [],
+      "headings": [
+        "Bassi, Giorgio",
+        "Dimissione Infermieristica",
+        "Milo Supporto agentico AI"
+      ],
+      "controls": 35
+    }
+  ],
+  "telemetry": []
+}

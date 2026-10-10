@@ -9,7 +9,7 @@ import {
   fetchPatientClinicalSummary,
   mergePatientPage,
 } from '../../lib/patientPage';
-import { readSessionCache, writeSessionCache } from '../../lib/sessionCache';
+import { readSessionCache, sessionCacheEpoch, writeSessionCache } from '../../lib/sessionCache';
 
 interface PatientListSnapshot {
   patients: Paziente[];
@@ -32,6 +32,7 @@ export async function prefetchPatientListSnapshot(
     headers: HeadersInit;
   },
 ): Promise<void> {
+  const epoch = sessionCacheEpoch();
   const key = SNAPSHOT_PREFIX + JSON.stringify([input.query.trim(), input.sex, input.rosterKey]);
   if (readSessionCache(key)) return;
   try {
@@ -45,19 +46,23 @@ export async function prefetchPatientListSnapshot(
       },
       { headers: input.headers },
     );
-    if (readSessionCache(key)) return;
+    if (epoch !== sessionCacheEpoch() || readSessionCache(key)) return;
     const summary = await fetchPatientClinicalSummary(
       apiUrl,
       page.items.map((p) => p.id),
       { headers: input.headers },
     ).catch(() => [] as ClinicalSummaryEntry[]);
-    if (readSessionCache(key)) return;
-    writeSessionCache<PatientListSnapshot>(key, {
-      patients: page.items,
-      summary,
-      hasMore: page.hasMore,
-      nextCursor: page.nextCursor,
-    });
+    if (epoch !== sessionCacheEpoch() || readSessionCache(key)) return;
+    writeSessionCache<PatientListSnapshot>(
+      key,
+      {
+        patients: page.items,
+        summary,
+        hasMore: page.hasMore,
+        nextCursor: page.nextCursor,
+      },
+      epoch,
+    );
   } catch {
     /* la lista ricarichera' da sola al primo accesso */
   }
@@ -94,6 +99,7 @@ export function usePatientListPage(query: string, sex: 'tutti' | 'M' | 'F') {
   const previousQuery = useRef(query);
 
   const readSummary = useCallback(async (ids: string[], requestId: number, signal: AbortSignal) => {
+    const epoch = sessionCacheEpoch();
     setSummaryLoading(ids.length > 0);
     setSummaryError('');
     try {
@@ -101,17 +107,21 @@ export function usePatientListPage(query: string, sex: 'tutti' | 'M' | 'F') {
         headers: operatorHeaders(),
         signal,
       });
-      if (signal.aborted || requestId !== sequence.current) return;
+      if (signal.aborted || epoch !== sessionCacheEpoch() || requestId !== sequence.current) return;
       const byId = new Map(summaries.current.map((entry) => [entry.patientId, entry]));
       incoming.forEach((entry) => byId.set(entry.patientId, entry));
       summaries.current = [...byId.values()];
       setSummary(summaries.current);
-      writeSessionCache<PatientListSnapshot>(SNAPSHOT_PREFIX + loadedKey.current, {
-        patients: rows.current,
-        summary: summaries.current,
-        hasMore: hasMoreRef.current,
-        nextCursor: nextCursorRef.current,
-      });
+      writeSessionCache<PatientListSnapshot>(
+        SNAPSHOT_PREFIX + loadedKey.current,
+        {
+          patients: rows.current,
+          summary: summaries.current,
+          hasMore: hasMoreRef.current,
+          nextCursor: nextCursorRef.current,
+        },
+        epoch,
+      );
     } catch {
       if (!signal.aborted && requestId === sequence.current) {
         setSummaryError(
@@ -129,6 +139,7 @@ export function usePatientListPage(query: string, sex: 'tutti' | 'M' | 'F') {
       const controller = new AbortController();
       active.current = controller;
       const requestId = ++sequence.current;
+      const epoch = sessionCacheEpoch();
       const key = JSON.stringify([query.trim(), sex, rosterKey]);
       setPageError('');
       setSummaryError('');
@@ -161,7 +172,12 @@ export function usePatientListPage(query: string, sex: 'tutti' | 'M' | 'F') {
           },
           { headers: operatorHeaders(), signal: controller.signal },
         );
-        if (controller.signal.aborted || requestId !== sequence.current) return;
+        if (
+          controller.signal.aborted ||
+          epoch !== sessionCacheEpoch() ||
+          requestId !== sequence.current
+        )
+          return;
         acceptRoster(page.roster);
         rows.current = mergePatientPage(rows.current, page.items, append);
         loadedKey.current = key;
@@ -172,12 +188,16 @@ export function usePatientListPage(query: string, sex: 'tutti' | 'M' | 'F') {
         setNextCursor(page.nextCursor);
         setLoading(false);
         setLoadingMore(false);
-        writeSessionCache<PatientListSnapshot>(SNAPSHOT_PREFIX + key, {
-          patients: rows.current,
-          summary: readSessionCache<PatientListSnapshot>(SNAPSHOT_PREFIX + key)?.summary ?? [],
-          hasMore: page.hasMore,
-          nextCursor: page.nextCursor,
-        });
+        writeSessionCache<PatientListSnapshot>(
+          SNAPSHOT_PREFIX + key,
+          {
+            patients: rows.current,
+            summary: readSessionCache<PatientListSnapshot>(SNAPSHOT_PREFIX + key)?.summary ?? [],
+            hasMore: page.hasMore,
+            nextCursor: page.nextCursor,
+          },
+          epoch,
+        );
         const knownIds = new Set(summaries.current.map((entry) => entry.patientId));
         await readSummary(
           rows.current.filter((p) => !knownIds.has(p.id)).map((p) => p.id),

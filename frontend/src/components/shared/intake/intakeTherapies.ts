@@ -189,6 +189,9 @@ export function buildIntakeTherapyReview(data: Record<string, unknown>, operator
         source === 'import' && typeof (row as DischargeTherapyRow)?.originalText === 'string'
           ? (row as DischargeTherapyRow).originalText
           : '',
+      sourceKind: source === 'import' ? (row as DischargeTherapyRow)?.sourceKind : undefined,
+      structuredSource:
+        source === 'import' ? (row as DischargeTherapyRow)?.structuredSource : undefined,
       input: { ...input, intakeSource: { type: source, index: sourceIndex } },
       excluded: source === 'import' && (row as DischargeTherapyRow)?.excludedFromConfirm === true,
       sourceIndex,

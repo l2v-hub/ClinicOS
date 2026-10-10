@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useId } from 'react';
 import type { Appuntamento, Operatore, Paziente, TipoIntervento } from '../../types';
 import { IcoX, IcoCheck, IcoPlus } from '../../icons';
 import { AccessibleDialogSurface } from './AccessibleDialogSurface';
@@ -51,6 +51,10 @@ export function AppointmentForm({
   operatorId,
   operatoreNome,
 }: AppointmentFormProps) {
+  const formId = useId();
+  const fieldId = (field: string) => `${formId}-appointment-${field}`;
+  const titleId = fieldId('title');
+  const errorId = fieldId('save-error');
   const isEdit = appuntamento !== undefined;
   const [form, setForm] = useState({
     data: appuntamento?.data ?? data,
@@ -151,12 +155,13 @@ export function AppointmentForm({
   return (
     <>
       <AccessibleDialogSurface
-        labelledBy="appointment-dialog-title"
+        labelledBy={titleId}
+        describedBy={saveError ? errorId : undefined}
         onClose={onCancel}
         dismissible={!saving}
       >
         <div className="modal-header">
-          <h3 className="modal-title" id="appointment-dialog-title">
+          <h3 className="modal-title" id={titleId}>
             {isEdit ? 'Modifica Appuntamento' : 'Nuovo Appuntamento'}
           </h3>
           <button
@@ -183,7 +188,7 @@ export function AppointmentForm({
             <div>
               <PatientCombobox
                 key={comboKey}
-                inputId="appointment-patient"
+                inputId={fieldId('patient')}
                 label="Paziente"
                 required
                 helperText="Seleziona un paziente per salvare l’appuntamento. Cerca per nome, cognome o codice fiscale."
@@ -222,8 +227,11 @@ export function AppointmentForm({
             style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))' }}
           >
             <div className="form-field">
-              <label className="form-label">Data</label>
+              <label className="form-label" htmlFor={fieldId('date')}>
+                Data
+              </label>
               <input
+                id={fieldId('date')}
                 className="form-input"
                 type="date"
                 value={form.data}
@@ -231,8 +239,11 @@ export function AppointmentForm({
               />
             </div>
             <div className="form-field">
-              <label className="form-label">Ora</label>
+              <label className="form-label" htmlFor={fieldId('time')}>
+                Ora
+              </label>
               <input
+                id={fieldId('time')}
                 className="form-input"
                 type="time"
                 value={form.ora}
@@ -240,8 +251,11 @@ export function AppointmentForm({
               />
             </div>
             <div className="form-field">
-              <label className="form-label">Durata</label>
+              <label className="form-label" htmlFor={fieldId('duration')}>
+                Durata
+              </label>
               <select
+                id={fieldId('duration')}
                 className="form-select"
                 value={form.durata}
                 onChange={(e) => setForm((f) => ({ ...f, durata: Number(e.target.value) }))}
@@ -254,8 +268,11 @@ export function AppointmentForm({
               </select>
             </div>
             <div className="form-field">
-              <label className="form-label">Tipo intervento</label>
+              <label className="form-label" htmlFor={fieldId('type')}>
+                Tipo intervento
+              </label>
               <select
+                id={fieldId('type')}
                 className="form-select"
                 value={form.tipoIntervento}
                 onChange={(e) =>
@@ -270,8 +287,11 @@ export function AppointmentForm({
               </select>
             </div>
             <div className="form-field">
-              <label className="form-label">Priorità</label>
+              <label className="form-label" htmlFor={fieldId('priority')}>
+                Priorità
+              </label>
               <select
+                id={fieldId('priority')}
                 className="form-select"
                 value={form.priorita}
                 onChange={(e) =>
@@ -284,8 +304,11 @@ export function AppointmentForm({
               </select>
             </div>
             <div className="form-field">
-              <label className="form-label">Operatore</label>
+              <label className="form-label" htmlFor={fieldId('operator')}>
+                Operatore
+              </label>
               <select
+                id={fieldId('operator')}
                 className="form-select"
                 value={form.operatoreId}
                 onChange={(e) => setForm((f) => ({ ...f, operatoreId: e.target.value }))}
@@ -300,8 +323,11 @@ export function AppointmentForm({
               </select>
             </div>
             <div className="form-field">
-              <label className="form-label">Camera (opz.)</label>
+              <label className="form-label" htmlFor={fieldId('room')}>
+                Camera (opz.)
+              </label>
               <input
+                id={fieldId('room')}
                 className="form-input"
                 value={form.cameraId}
                 onChange={(e) => setForm((f) => ({ ...f, cameraId: e.target.value }))}
@@ -309,8 +335,11 @@ export function AppointmentForm({
               />
             </div>
             <div className="form-field">
-              <label className="form-label">Stato</label>
+              <label className="form-label" htmlFor={fieldId('state')}>
+                Stato
+              </label>
               <select
+                id={fieldId('state')}
                 className="form-select"
                 value={form.stato}
                 onChange={(e) =>
@@ -326,8 +355,11 @@ export function AppointmentForm({
           </div>
 
           <div className="form-field">
-            <label className="form-label">Note cliniche</label>
+            <label className="form-label" htmlFor={fieldId('notes')}>
+              Note cliniche
+            </label>
             <textarea
+              id={fieldId('notes')}
               className="form-input"
               rows={3}
               value={form.note}
@@ -352,6 +384,7 @@ export function AppointmentForm({
           {saveError && (
             <p
               className="form-error"
+              id={errorId}
               role="alert"
               style={{ color: 'var(--red, #DC2626)', margin: '0 auto 0 0', fontSize: 13 }}
             >
@@ -363,6 +396,7 @@ export function AppointmentForm({
           </button>
           <button
             className="btn-success"
+            aria-describedby={saveError ? errorId : undefined}
             onClick={() => {
               void salva();
             }}

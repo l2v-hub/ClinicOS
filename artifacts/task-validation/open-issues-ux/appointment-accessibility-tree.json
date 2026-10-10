@@ -1,0 +1,232 @@
+[
+  {
+    "role": "dialog",
+    "name": "Nuovo Appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "heading",
+    "name": "Nuovo Appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Chiudi",
+    "ignored": false
+  },
+  {
+    "role": "Date",
+    "name": "DATA",
+    "ignored": false
+  },
+  {
+    "role": "InputTime",
+    "name": "ORA",
+    "ignored": false
+  },
+  {
+    "role": "combobox",
+    "name": "DURATA",
+    "ignored": false
+  },
+  {
+    "role": "combobox",
+    "name": "TIPO INTERVENTO",
+    "ignored": false
+  },
+  {
+    "role": "combobox",
+    "name": "PRIORITÀ",
+    "ignored": false
+  },
+  {
+    "role": "combobox",
+    "name": "OPERATORE",
+    "ignored": false
+  },
+  {
+    "role": "textbox",
+    "name": "CAMERA (OPZ.)",
+    "ignored": false
+  },
+  {
+    "role": "combobox",
+    "name": "STATO",
+    "ignored": false
+  },
+  {
+    "role": "textbox",
+    "name": "NOTE CLINICHE",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Operatore",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Annulla",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Salva appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Nuovo Appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "DATA",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "ORA",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "DURATA",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "TIPO INTERVENTO",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "PRIORITÀ",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "OPERATORE",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "CAMERA (OPZ.)",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "STATO",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "NOTE CLINICHE",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Operatore",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Annulla",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Salva appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "columnheader",
+    "name": "Ora",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Nuovo Appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "PAZIENTE",
+    "ignored": false
+  },
+  {
+    "role": "combobox",
+    "name": "PAZIENTE",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "DATA",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "ORA",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "DURATA",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "TIPO INTERVENTO",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "PRIORITÀ",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "OPERATORE",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "CAMERA (OPZ.)",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "STATO",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "NOTE CLINICHE",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Annulla",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Salva appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Ora",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "PAZIENTE",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Ora",
+    "ignored": false
+  }
+]

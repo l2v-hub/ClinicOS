@@ -13,6 +13,7 @@ import {
 import { useContext, useId } from 'react';
 import { IntakeAiSourceContext } from './intakeAiOrigin';
 import { therapySourceChip } from './intakeDocumentPages';
+import { TherapyImportSource } from './TherapyImportSource';
 import { therapyFieldFeedback } from '../../operator/cartella/therapyFieldFeedback';
 import {
   TherapyFormFields,
@@ -197,15 +198,7 @@ export function DischargeTherapyReview({
                   pagine e mantieni, correggi o lascia in bozza questa terapia.
                 </p>
               )}
-              {r.originalText && (
-                <blockquote
-                  className="discharge-therapy-review__original"
-                  data-testid="discharge-original-text"
-                >
-                  <span className="discharge-therapy-review__original-label">Dal documento:</span>{' '}
-                  {r.originalText}
-                </blockquote>
-              )}
+              <TherapyImportSource row={r} />
               {forms[i] && !r.excludedFromConfirm && (
                 <div className="ec-modal-add-form">
                   <TherapyFormFields
