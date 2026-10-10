@@ -2,6 +2,7 @@ import './PdfCanvasPreview.css';
 import { useEffect, useRef, useState } from 'react';
 import type { PDFDocumentLoadingTask, PDFDocumentProxy, RenderTask } from 'pdfjs-dist';
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+import { pdfPreviewResources } from '../../lib/pdfPreviewResources';
 
 /** Render original PDF bytes without depending on a browser PDF plugin. */
 export function PdfCanvasPreview({
@@ -38,7 +39,10 @@ export function PdfCanvasPreview({
       engine.GlobalWorkerOptions.workerSrc = workerUrl;
       const data = new Uint8Array(await file.arrayBuffer());
       if (!active) return;
-      loading = engine.getDocument({ data });
+      loading = engine.getDocument({
+        data,
+        ...pdfPreviewResources(workerUrl, window.document.baseURI, engine.version),
+      });
       const document = await loading.promise;
       if (active) setPdf(document);
     })().catch(() => {

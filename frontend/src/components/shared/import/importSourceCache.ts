@@ -1,6 +1,7 @@
 import type { PDFDocumentLoadingTask, PDFDocumentProxy } from 'pdfjs-dist';
 import type { ImportFetch } from './importSessionApi';
 import type { ImportDocument, ImportPage } from './importSessionTypes';
+import { pdfPreviewResources } from '../../../lib/pdfPreviewResources';
 
 /** Originale non scaricato: lo stato HTTP resta disponibile per un messaggio preciso (404, 410…). */
 export class ImportSourceError extends Error {
@@ -134,7 +135,10 @@ export class ImportSourceCache {
         engine.GlobalWorkerOptions.workerSrc = worker.default;
         const bytes = new Uint8Array(await (await this.blob(document)).arrayBuffer());
         this.ensureOpen();
-        const task = engine.getDocument({ data: bytes });
+        const task = engine.getDocument({
+          data: bytes,
+          ...pdfPreviewResources(worker.default, window.document.baseURI, engine.version),
+        });
         const pdf = await task.promise;
         if (this.controller.signal.aborted || (this.retained && !this.retained.has(document.id))) {
           await task.destroy();
