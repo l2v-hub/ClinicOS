@@ -1,0 +1,28 @@
+cwd: C:\w-therapy-qa
+command: node --import tsx --import ./scripts/stub-css-loader.mjs --test backend/src/intake/__tests__/confirm-therapy-validation.test.ts backend/src/intake/__tests__/glucose-review-selection.test.ts
+exit: 0
+(node:25176) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:25176) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ invalid therapy returns indexed 400 before any patient or therapy write (4787.3649ms)
+✔ corrected retry persists precise schedules, actor and weekdays; replay is idempotent (34.0885ms)
+✔ persistence failure rolls back all writes, sanitizes audit, and permits retry (14.2271ms)
+✔ confirmation remains operator-gated and owner-scoped (13.2912ms)
+✔ one imported and three manual therapies persist in order including whole patches (10.6095ms)
+✔ a divided patch in the final row rejects the entire confirmation before writes (7.3586ms)
+(node:41460) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ scale confirmation remains tied to saved reviewed dose rules (8.1783ms)
+✔ conditional mode does not bypass source conflicts or omitted therapy safeguards (1.3862ms)
+✔ blank saved dose must not become a zero-dose prescription by coercion (1.3084ms)
+(node:41460) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6967.6857

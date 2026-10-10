@@ -1,0 +1,74 @@
+(node:39864) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AT-04: the slot detail shows only the current patient at that exact time (3.6461ms)
+✔ AT-04: simultaneous doses share one named button for their hour dialog (13.3194ms)
+(node:39864) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AT-05: administration from the chart is capability-gated and reuses the giro rows (10.3431ms)
+✔ AT-05: recordAdministration posts the slot key to the existing endpoints (22.4827ms)
+✔ AT-05: a refused administration shows the server reason, not a generic error (1.5508ms)
+✔ AT-12: a correctly filled therapy form has no issues (1.6099ms)
+✔ AT-11: invalid fields are reported per field and schedule row, never dropped (0.7781ms)
+✔ AT-11: a server rejection shows its reason instead of «Errore 400» (4.492ms)
+(node:16728) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ keeps every exact time, simultaneous medication and per-dose fraction across a full day (47.4659ms)
+✔ isolates the patient and excludes suspended/concluded prescriptions (0.3353ms)
+✔ date range is inclusive and ISO weekdays are respected (0.8034ms)
+✔ one-time dates and legacy times work independently from the recurring date range (0.7196ms)
+✔ PRN and fascia-only orders remain outside the grid without fabricated times or doses (1.5668ms)
+✔ invalid legacy dates/recurrence stay visible for correction instead of masquerading as empty (0.8199ms)
+✔ mixed invalid times retain valid occurrences and surface the anomaly (0.8326ms)
+✔ calendar date validation/navigation respects civil days, leap years and local midnight (1.7371ms)
+✔ reads all patient-scoped pages with operator headers, without returning a partial page (33.5485ms)
+✔ HTTP failure on a later page discards the whole read and a fresh retry recovers (2.8627ms)
+✔ rejects foreign patient payloads and malformed envelopes, not a false empty calendar (4.6495ms)
+✔ counts, cursor loops and capacity cannot silently truncate the patient regimen (1.4547ms)
+(node:16728) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ timeout aborts the read and a subsequent retry does not share the stalled request (15.604ms)
+✔ cancelled or late ignored-abort responses cannot complete a patient read (0.6709ms)
+(node:18380) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ complete inventory keeps every one of 103 prescriptions, inactive and every regimen included (44.7321ms)
+✔ short terminal page and wrong active/inactive counts never yield a complete inventory (2.7519ms)
+✔ foreign patient and repeated prescription IDs are rejected without displaying prior pages (1.2886ms)
+✔ inactive inventory validates state and zero active count (0.989ms)
+✔ complete inventory does not return page one on a later HTTP failure (1.3227ms)
+✔ complete print read rejects a short terminal response rather than silently omitting a medicine (1.274ms)
+✔ old partial or foreign-patient prefetch snapshots cannot be presented as complete (0.3572ms)
+✔ week keeps PRN applying only later in the week once, without adding scheduled doses (2.3067ms)
+✔ loaded slot missing a prescribed drug retains it as read-only source data, not a fabricated action (16.1534ms)
+(node:18380) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:31116) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ zero doses distinguishes incomplete prescriptions immediately and keeps original reasons (15.7953ms)
+✔ non-prescriber sees clinician reference, never an editor action (0.9474ms)
+✔ authorized edit is tied to the original incomplete therapy (1.0076ms)
+✔ mixed valid and invalid schedules preserve separate counts without claiming total drugs (0.8421ms)
+✔ genuinely empty and week states explain the displayed period without incomplete warning (0.5466ms)
+(node:31116) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ warning precedes grid and parent forwards only permitted existing-prescription edits (16.2917ms)
+✔ incomplete calendar editor never derives hours from bands or missing times (2.6616ms)
+✔ strict editor preserves saved exact/invalid times and quantities for explicit correction (0.3912ms)
+✔ adding a schedule requires an explicit time rather than a default dose hour (2.1097ms)
+(node:43264) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy page loader returns a complete deduplicated clinical list (36.9601ms)
+✔ therapy page loader rejects a repeating cursor instead of looping forever (2.2253ms)
+✔ therapy page loader carries every server filter on the first page (1.3639ms)
+(node:43264) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy plan and emergency print require every page, never a manual partial plan (16.892ms)
+✔ therapy failures are announced and never rendered as empty clinical results (3.1973ms)
+✔ medication administration history follows the bounded opaque cursor feed (1.6329ms)
+ℹ tests 46
+ℹ suites 0
+ℹ pass 46
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1044.8698

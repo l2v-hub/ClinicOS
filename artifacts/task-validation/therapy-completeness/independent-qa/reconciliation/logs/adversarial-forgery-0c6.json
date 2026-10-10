@@ -1,0 +1,17 @@
+{
+  "head": "0c6a7e95c94accd6022b8ca44086cc574aa6bc84",
+  "key": "adversarial",
+  "args": [
+    "--import",
+    "tsx",
+    "--import",
+    "./scripts/stub-css-loader.mjs",
+    "--test",
+    "C:\\w-intake-qa\\artifacts\\task-validation\\therapy-reconciliation-qa/adversarial.test.ts"
+  ],
+  "exit": 1,
+  "timedOut": false,
+  "noRealDatabase": true,
+  "noProviders": true,
+  "at": "2026-10-10T17:50:56.285Z"
+}

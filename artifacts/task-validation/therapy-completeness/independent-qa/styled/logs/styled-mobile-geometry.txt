@@ -1,0 +1,48 @@
+cwd: C:\w-therapy-qa
+command: node node_modules/playwright/cli.js test --config artifacts/task-validation/therapy-completeness-qa/styled/geometry.config.mjs
+exit: 1
+
+Running 1 test using 1 worker
+
+  x  1 artifacts\task-validation\therapy-completeness-qa\styled\native-tests\geometry.spec.mjs:4:1 › canonical mobile PRN button fits the available region without clipping (1.3s)
+
+
+  1) artifacts\task-validation\therapy-completeness-qa\styled\native-tests\geometry.spec.mjs:4:1 › canonical mobile PRN button fits the available region without clipping 
+
+    Error: Canonical PRN control extends outside available mobile region
+
+    expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 329
+    Received:    349.359375
+
+      15 |  writeFileSync(info.outputPath('geometry.json'), JSON.stringify(measure, null, 2));
+      16 |  expect(log.errors).toEqual([]); expect(log.blocked).toEqual([]);
+    > 17 |  expect(measure.button.right, 'Canonical PRN control extends outside available mobile region').toBeLessThanOrEqual(measure.region.right);
+         |                                                                                                ^
+      18 | });
+      19 |
+        at C:\w-therapy-qa\artifacts\task-validation\therapy-completeness-qa\styled\native-tests\geometry.spec.mjs:17:96
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts\task-validation\therapy-completeness-qa\styled\geometry-results\geometry-canonical-mobile--8d588-ble-region-without-clipping\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    artifacts\task-validation\therapy-completeness-qa\styled\geometry-results\geometry-canonical-mobile--8d588-ble-region-without-clipping\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts\task-validation\therapy-completeness-qa\styled\geometry-results\geometry-canonical-mobile--8d588-ble-region-without-clipping\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts\task-validation\therapy-completeness-qa\styled\geometry-results\geometry-canonical-mobile--8d588-ble-region-without-clipping\trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts\task-validation\therapy-completeness-qa\styled\geometry-results\geometry-canonical-mobile--8d588-ble-region-without-clipping\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    artifacts\task-validation\therapy-completeness-qa\styled\native-tests\geometry.spec.mjs:4:1 › canonical mobile PRN button fits the available region without clipping 
+(node:18648) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)

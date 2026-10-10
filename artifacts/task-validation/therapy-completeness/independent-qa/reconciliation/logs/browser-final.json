@@ -1,0 +1,15 @@
+{
+  "head": "89888589ef1fcce8f200899aa07413c8bcb70325",
+  "key": "browser",
+  "args": [
+    "C:\\w-intake-qa\\node_modules\\playwright\\cli.js",
+    "test",
+    "--config",
+    "C:\\w-intake-qa\\artifacts\\task-validation\\therapy-reconciliation-qa/native.config.mjs"
+  ],
+  "exit": 0,
+  "timedOut": false,
+  "noRealDatabase": true,
+  "noProviders": true,
+  "at": "2026-10-10T17:56:01.641Z"
+}

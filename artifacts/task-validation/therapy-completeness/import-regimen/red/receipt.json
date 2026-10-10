@@ -1,0 +1,32 @@
+{
+  "phase": "red",
+  "base": "8490fa9b97bbad159dd758aec6fbde3f7f87ea8f",
+  "sourceDiff": "",
+  "results": [
+    {
+      "name": "backend",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "backend/src/intake/__tests__/therapy-inventory-regimen.test.ts",
+        "backend/src/intake/__tests__/parse-discharge-therapy.test.ts"
+      ],
+      "exit": 1
+    },
+    {
+      "name": "frontend",
+      "args": [
+        "--import",
+        "tsx",
+        "--import",
+        "./scripts/stub-css-loader.mjs",
+        "--test",
+        "frontend/src/components/shared/intake/__tests__/therapyInventoryRegimen.test.ts",
+        "frontend/src/components/shared/intake/__tests__/therapyConfirmation.test.ts",
+        "frontend/src/components/shared/intake/__tests__/glucoseIntake.test.ts"
+      ],
+      "exit": 1
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "head": "0c6a7e95c94accd6022b8ca44086cc574aa6bc84",
+  "key": "security",
+  "args": [
+    "C:\\w-intake-qa\\scripts\\security\\scan-frontend-secrets.mjs",
+    "frontend/src",
+    "frontend/dist",
+    "backend/src/intake/therapy-source-inventory.ts",
+    "C:\\w-intake-qa\\artifacts\\task-validation\\therapy-reconciliation-qa/qa-dist"
+  ],
+  "exit": 0,
+  "timedOut": false,
+  "noRealDatabase": true,
+  "noProviders": true,
+  "at": "2026-10-10T17:51:45.869Z"
+}

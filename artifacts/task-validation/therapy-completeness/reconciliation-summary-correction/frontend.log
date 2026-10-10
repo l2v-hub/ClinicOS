@@ -1,0 +1,50 @@
+(node:15116) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ scale mapping retains review and source metadata without a fixed clinical quantity (23.8745ms)
+✔ scale does not invent a time and invalid protocol still blocks confirmation (3.0176ms)
+✔ summary renders measured-dose protocol rather than technical schedule quantity (39.386ms)
+✔ comparison remains visible when OCR detects zero therapies and source text is escaped (5.5269ms)
+(node:15116) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:43608) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ import confirmation retains fraction, administration unit and weekdays (15.3676ms)
+✔ PO03: operational notes never receive OCR source or class metadata (5.8824ms)
+✔ PO03: reviewed clinical notes and source stay separate across draft reload (2.0788ms)
+✔ PO03: operator-entered source-like wording is preserved without text cleanup (0.4649ms)
+✔ reviewed schedules, dates, weekdays and status survive JSON draft reload (2.6702ms)
+✔ one-off and as-needed reviews keep their type after reload without periodic schedules (1.3148ms)
+✔ missing or ambiguous raw quantities never become a default dose (4.0587ms)
+✔ explicit unit takes priority over form and compound strength stays raw (1.4282ms)
+✔ blank drugs and invalid times stay in the ordered review and cannot confirm (2.1939ms)
+✔ verification renders real manual times and an actionable indexed blocker (30.1359ms)
+✔ liquid and inhaled quantities keep their explicit unit (1.4177ms)
+✔ ambiguous OCR source stays flagged through edits until explicitly reviewed (1.1762ms)
+✔ patch singular/plural and counted form import survive confirmation and reload (1.5397ms)
+✔ AIFA and manual form changes sync matching units but preserve explicit alternatives and quantities (1.5969ms)
+✔ three manual additions and an incomplete row remain alongside imports across draft reload and review (6.3648ms)
+✔ intake keeps complete therapy source available next to manual additions (83.6248ms)
+(node:43608) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:33096) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ explicit PRN survives import, operator review, draft reload and confirmation without fixed doses (26.0736ms)
+(node:33096) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:29144) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ structured-only candidates have no inferred active state, administration dose, time or start date (19.1929ms)
+✔ edits and browser draft reload retain immutable extraction and identity (3.7113ms)
+✔ explicit exclusion retains extracted evidence in draft and summary, not a prescription (3.4588ms)
+✔ same-name different extractions remain separate through review projection and reload (2.0944ms)
+✔ review, proposals and summary render escaped extraction distinctly from verbatim text (41.5149ms)
+(node:29144) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2886.3608

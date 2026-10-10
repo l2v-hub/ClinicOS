@@ -11,7 +11,7 @@
 | Area | Impacted |
 |---|---:|
 | Frontend/UI | yes |
-| Backend/API | no |
+| Backend/API | yes (internal import helpers only; no endpoint changes) |
 | Database/Persistence | no |
 | Agnos AI / Chatbot | no |
 | Voice | no |
@@ -43,7 +43,7 @@ Every assigned prescription remains discoverable in the authoritative complete p
 |---|---:|---|
 | Unit | yes | Cursor completeness, identity/count failures, date-aware PRN and uncovered prescription merging |
 | Integration | yes | Actual plan/calendar/detail components with synthetic transport |
-| API | no | No route/schema contract changes in initial frontend scope; expand contract before any such change |
+| API | yes | Existing draft merge/selection confirmation contract must reject omitted, unreviewed and deferred rows; internal-only tests, no real service writes |
 | Playwright | yes | Before/after desktop/mobile, all medicine values, error/retry/refresh, exact guarded SPA |
 | Persistence after refresh | yes | Re-read synthetic server manifest after reload; no real DB claim for frontend-only stage |
 | Agnos action registry | no | |
@@ -69,5 +69,16 @@ Required evidence:
 Root sole application writer in C:/w-therapy, branch codex/therapy-completeness from exact main30f0b14; primary dirty checkout and prior proof branches preserved. Two read-only investigators share prior app source, no writer/production API access. Native short checkout used after known managed Windows path failure. Browser lane must be serialized; claim a free specific port before launching. Current frontend/API pagination guards and therapy scope must not be weakened; no automatic medical selection, no dose invention and no backend/schema/API/env/provider changes in initial implementation. Import parser stopping at prose is a separate verified gap requiring careful non-prescription safety reconciliation, not blanket promotion of source prose. Existing standing human scoped commit/push/deploy authorization does not permit real-patient tests or claiming completion without all gates. Memory recall/routing failed native embedding allocation; ledger initialized, no repeated installation/restart workaround. Existing issue queue automation remains paused.
 
 ## Gate Status
+
+## Import Reconciliation Extension — 2026-10-10
+
+Standing human instructions explicitly authorize backend corrections when pertinent. Root remains sole application writer; independent QA uses its isolated checkout. This extension is limited to deterministic import parser/row reconciliation and frontend review mapping; no routes, schemas, dependencies, provider/model, configuration or real database changes.
+
+- Preserve #296 non-prescription termination unchanged. Reconcile additional structured extraction items as visible, mandatory-review candidates, never automatically actionable prescriptions. Keep model extraction distinguishable from original document text and preserve source/group/hash/conflict provenance.
+- Account for repeated names with different extracted prescriptions; do not collapse two drugs sharing the same original line on refresh or proposal selection. Legacy rows remain readable. Do not silently overwrite manual/operator-reviewed fields.
+- Strip only anchored numbered-list decoration from parsing, retaining originalText verbatim. Explicit PRN regimen remains al_bisogno through form/save/confirmation; never infer fixed schedules, doses or unrestricted instructions.
+- Add synthetic parser, reconciliation/refresh/conflict/proposal and review/confirmation tests, backend types/build, guarded responsive real-component review screenshots, independent QA and security checks. Whole issue stays PARTIAL until all gaps and mandatory gates pass.
+- Raw combined lines and unclassified narrative remain available for manual comparison; no blanket splitting or conversion of clinical prose. OCR/model extraction cannot certify that every original document medicine was recognized; require source comparison, not an automatic completeness claim.
+- Structured-only candidates have blank state/date/route/schedules until explicit operator review. The shared form accepts an empty state only as an invalid review placeholder; manual defaults remain unchanged. Exact immutable extraction variants, duplicate occurrences and all unknown extracted fields remain accessible through the shared React-escaped evidence component in review/proposals/summary. Legacy *new* seeding is covered; existing legacy drafts are not silently rewritten or retroactively certified.
 
 READY FOR IMPLEMENTATION

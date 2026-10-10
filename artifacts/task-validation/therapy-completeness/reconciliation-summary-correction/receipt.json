@@ -1,0 +1,79 @@
+{
+  "head": "db0de57515c3782bedb472d5406ffce7f50e9f4f",
+  "sourceDiffSha256": "6d53b4b98ed1ae63323bd3b978ceb71878df99bf4413a163e018986f3c318edb",
+  "sourceDiff": "diff --git a/frontend/src/components/shared/intake/IntakeTherapySummary.tsx b/frontend/src/components/shared/intake/IntakeTherapySummary.tsx\nindex 32fda3bf2..3bbf16c20 100644\n--- a/frontend/src/components/shared/intake/IntakeTherapySummary.tsx\n+++ b/frontend/src/components/shared/intake/IntakeTherapySummary.tsx\n@@ -172,9 +172,12 @@ export function IntakeTherapySummary({ therapy: t, busy, onCorrect }: Props) {\n         {Boolean(value('note')) && field('Note', undefined, value('note'))}\n         {(t.originalText || t.structuredSource !== undefined || t.requiresSourceReview) && (\n           <div className=\"intake-therapy-summary__source\">\n-            {t.requiresSourceReview && field('Verifica della fonte', 'sourceReview', 'Confronta con il documento prima di confermare')}\n-            <TherapyImportSource row={t} />\n-            {!t.originalText && t.structuredSource === undefined && field('Testo estratto dalla lettera', 'sourceReview', 'Testo originale non disponibile')}\n+            {field(\n+              t.originalText || t.structuredSource === undefined ? 'Testo estratto dalla lettera' : 'Verifica della fonte estratta',\n+              'sourceReview',\n+              t.originalText || (t.structuredSource === undefined ? 'Testo originale non disponibile' : 'Confronta con il documento prima di confermare'),\n+            )}\n+            <TherapyImportSource row={{ ...t, originalText: '' }} />\n           </div>\n         )}\n       </div>\n",
+  "results": [
+    {
+      "name": "backend",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "backend/src/intake/__tests__/therapy-source-inventory.test.ts",
+        "backend/src/ai/upload/pages/__tests__/draft-merge.test.ts",
+        "backend/src/ai/upload/pages/__tests__/draft-merge-pages.test.ts",
+        "backend/src/intake/__tests__/import-error-specificity.test.ts",
+        "backend/src/intake/__tests__/glucose-review-selection.test.ts"
+      ],
+      "exit": 0,
+      "timedOut": false
+    },
+    {
+      "name": "frontend",
+      "args": [
+        "--import",
+        "tsx",
+        "--import",
+        "./scripts/stub-css-loader.mjs",
+        "--test",
+        "frontend/src/components/shared/intake/__tests__/therapySourceInventory.test.ts",
+        "frontend/src/components/shared/intake/__tests__/therapyInventoryRegimen.test.ts",
+        "frontend/src/components/shared/intake/__tests__/therapyConfirmation.test.ts",
+        "frontend/src/components/shared/intake/__tests__/glucoseIntake.test.ts"
+      ],
+      "exit": 0,
+      "timedOut": false
+    },
+    {
+      "name": "frontend-types",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-b",
+        "frontend/tsconfig.json",
+        "--pretty",
+        "false"
+      ],
+      "exit": 0,
+      "timedOut": false
+    },
+    {
+      "name": "backend-types",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "backend/tsconfig.json",
+        "--noEmit",
+        "--pretty",
+        "false"
+      ],
+      "exit": 0,
+      "timedOut": false
+    },
+    {
+      "name": "frontend-build",
+      "args": [
+        "C:\\w-therapy\\node_modules\\vite\\bin\\vite.js",
+        "build",
+        "--config",
+        "C:\\w-therapy\\frontend\\vite.config.ts",
+        "--outDir",
+        "dist"
+      ],
+      "exit": 0,
+      "timedOut": false
+    }
+  ],
+  "realDatabaseAccess": false,
+  "providerInvoked": false,
+  "at": "2026-10-10T17:50:14.745Z"
+}

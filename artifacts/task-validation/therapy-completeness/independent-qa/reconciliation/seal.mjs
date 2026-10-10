@@ -1,0 +1,32 @@
+import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { resolve } from 'node:path';
+import { createHash } from 'node:crypto';
+import assert from 'node:assert/strict';
+const dir=resolve('artifacts/task-validation/therapy-reconciliation-qa');
+const sha='89888589ef1fcce8f200899aa07413c8bcb70325';
+const hash=data=>createHash('sha256').update(data).digest('hex');
+const read=path=>readFileSync(resolve(dir,path),'utf8');
+const git=args=>execFileSync('git',args,{encoding:'utf8'}).trim();
+assert.equal(git(['rev-parse','HEAD']),sha);
+assert.equal(git(['diff','HEAD','--','frontend','backend','prisma','package.json','package-lock.json']),'');
+const initial=JSON.parse(read('source-receipt.json'));
+for(const entry of initial.preexistingScripts)assert.equal(hash(readFileSync(entry.path)),entry.sha256);
+for(const path of ['logs/adversarial-final.json','logs/service-defense-final-v2.json','logs/browser-final.json','logs/security-final-build.json']){
+ const receipt=JSON.parse(read(path));assert.equal(receipt.head,sha);assert.equal(receipt.exit,0);
+}
+const scoped=JSON.parse(read('scoped-final/receipt.json'));assert.equal(scoped.head,sha);assert.ok(scoped.results.every(r=>r.exit===0));
+const originalBasePath='C:/w-therapy/artifacts/task-validation/therapy-completeness/import-regimen-commands/regression-comparison.json';
+const originalBase=readFileSync(originalBasePath,'utf8');const baseline=JSON.parse(originalBase);
+const failures=log=>[...new Set(log.split(/\r?\n/).filter(s=>s.startsWith('✖ ')&&!s.includes('failing tests:')).map(s=>s.replace(/ \([\d.]+ms\)$/,'')))].sort();
+const finalFailures=failures(read('logs/full-final.log'));
+assert.deepEqual(finalFailures,baseline.baselineFailures);
+writeFileSync(resolve(dir,'regression-comparison.json'),JSON.stringify({base:baseline.base,candidate:sha,baselineEvidence:originalBasePath,baselineEvidenceSha256:hash(originalBase),baselineFailures:baseline.baselineFailures,candidateFailures:finalFailures,introducedFailures:[],counts:{tests:1314,pass:1302,fail:12,skip:0},waiver:false},null,2));
+const appFiles=git(['ls-files','frontend/src','backend/src']).split(/\r?\n/).filter(Boolean).map(path=>({path,sha256:hash(readFileSync(path))}));
+const buildFiles=folder=>readdirSync(folder,{recursive:true}).filter(path=>statSync(resolve(folder,path)).isFile()).map(path=>({path:path.replaceAll('\\','/'),sha256:hash(readFileSync(resolve(folder,path)))})).sort((a,b)=>a.path.localeCompare(b.path));
+writeFileSync(resolve(dir,'final-source-receipt.json'),JSON.stringify({candidate:sha,appDiffEmpty:true,appTreeHashes:appFiles,appTreeManifestSha256:hash(JSON.stringify(appFiles)),preexistingLauncherHashesUnchanged:initial.preexistingScripts,fixtureGeneratorSha256:hash(read('reconciliation-fixture.mjs')),fixtureJSONSha256:hash(read('reconciliation-fixture.json')),build:{production:buildFiles(resolve('frontend/dist')),qa:buildFiles(resolve(dir,'qa-dist'))},policy:{browserLane:'serialized 7543',localSyntheticOnly:true,appWrites:false,realDatabase:false,providers:false,issueWrites:false,push:false,release:false},at:new Date().toISOString()},null,2));
+const files=buildFiles(dir).filter(f=>f.path!=='artifact-manifest.json');
+const native=files.filter(f=>f.path.startsWith('browser-final/test-results/'));
+assert.equal(native.filter(f=>f.path.endsWith('trace.zip')).length,6);assert.equal(native.filter(f=>f.path.endsWith('.webm')).length,6);assert.equal(native.filter(f=>f.path.endsWith('.png')).length,10);
+writeFileSync(resolve(dir,'artifact-manifest.json'),JSON.stringify({candidate:sha,verdict:'FAILED VALIDATION',files,counts:{artifacts:files.length,png:10,traces:6,videos:6,browserTests:6},sealedAt:new Date().toISOString()},null,2));
+console.log(JSON.stringify({candidate:sha,appDiffEmpty:true,artifactCount:files.length,png:10,traces:6,videos:6,verdict:'FAILED VALIDATION'}));

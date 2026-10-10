@@ -1,0 +1,4 @@
+cwd: C:\w-therapy-qa
+command: node scripts/build/copy-assessment-fonts.mjs
+exit: 0
+Assessment PDF fonts and license copied into backend build.

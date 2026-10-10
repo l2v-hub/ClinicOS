@@ -1,0 +1,18 @@
+cwd: C:\w-therapy-qa
+command: node --import tsx --import ./scripts/stub-css-loader.mjs --test artifacts/task-validation/therapy-completeness-qa/import-regimen/independent.test.ts
+exit: 0
+(node:37596) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ QA numbered decoration never promotes decimal doses or consumes source text (12.8918ms)
+✔ QA negative and mixed wording cannot silently produce an automatic PRN regimen (2.8432ms)
+✔ QA PRN fraction and frequency limits survive repeated draft edits without a schedule/default dose (2.2736ms)
+(node:37596) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 754.8128

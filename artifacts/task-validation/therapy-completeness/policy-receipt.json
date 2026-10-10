@@ -1,13 +1,19 @@
 {
-  "applicationCommit": "14a03038f758cf728e563807752da1642dc35fa8",
+  "applicationCommit": "89888589ef1fcce8f200899aa07413c8bcb70325",
   "sourceBase": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
   "authority": "Direct human request to continue GitHub bugs with commit/push and synthetic screenshot evidence; production only after completed acceptance and independent verification",
   "decision": "ALLOW isolated candidate/evidence branch push and clearly labelled partial GitHub comment after privacy seal; DENY production promotion and issue closure while mandatory QA fails",
-  "scope": "Eight frontend files plus task-only synthetic proof; no backend/schema/env/dependency/user-record modifications",
+  "scope": "26 scoped application/test files plus task-only synthetic proof; deterministic inventory/identity/refresh/conflict/legacy-new seeding and escaped review UI. No routes/schema/env/dependency/user-record modifications. Candidate8490 also locally committed already-staged historical14a evidence; publication remains privacy-gated.",
   "independentVerdict": "FAILED VALIDATION",
-  "unresolved": ["12 exact-baseline global test failures", "Import source inventory reconciliation"],
+  "unresolved": ["Final-source independent QA FAILED VALIDATION: full regression1314/1302PASS/12baselineFAIL; no waiver", "Real DB/provider persistence not verified; existing legacy drafts not reconciled retroactively"],
   "productionPatientMutations": 0,
   "automationResumed": false,
   "mainMayBeChanged": false,
   "issue432MayBeClosed": false
+  ,"localReconciliationCommit": {
+    "decision": "ALLOW scoped local application commit after focused67backend/26frontend, types/build and four guarded browser tests PASS",
+    "authority": "Standing direct human sequential-bug implementation and scoped commit authorization; validated import reconciliation task-contract extension",
+    "scope": "Deterministic structured inventory/identity/conflict/legacy-new-seed and protected metadata/originalText; shared escaped review/proposal/summary evidence, invalid blank state placeholder and tests. Summary regression fixed without changing existing test expectations. No routes/schema/env/deps/real-record/provider changes.",
+    "release": "DENY main/production/closure until fresh independent gate and full acceptance; root is sole app writer"
+  }
 }

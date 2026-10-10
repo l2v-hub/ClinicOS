@@ -1,0 +1,20 @@
+(node:18000) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ unknown nested metadata and non-object meaningful values remain distinct immutable evidence (4.1502ms)
+✔ every candidate stays clinically blank even when extraction contains complete apparent regimen (0.7667ms)
+✔ reordered duplicate occurrences cannot collapse on refresh or editable names (1.5523ms)
+✔ selection from different source group cannot authorize identical structured candidate (0.7909ms)
+✔ legacy appended rows cannot forge extraction keys and page rows cannot be swapped (1.0196ms)
+✔ unreviewed, missing, deferred and outdated candidates cannot be confirmed (0.6867ms)
+✔ multiple narrative duplicates and extraction occurrences are all retained without clinical synthesis (6.259ms)
+✔ missing source revalidation resets state but never destroys reviewed or excluded values (0.3839ms)
+(node:18000) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 704.2219

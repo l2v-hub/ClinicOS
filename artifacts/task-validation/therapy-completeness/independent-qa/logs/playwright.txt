@@ -1,0 +1,20 @@
+cwd: C:\w-therapy-qa
+command: node node_modules/playwright/cli.js test --config artifacts/task-validation/therapy-completeness-qa/native.config.mjs
+exit: 0
+
+Running 10 tests using 1 worker
+
+  ok  1 artifacts\task-validation\therapy-completeness-qa\native-tests\complete.spec.mjs:4:3 › desktop: entire stored plan, inactive inventory and reload (4.9s)
+  ok  2 artifacts\task-validation\therapy-completeness-qa\native-tests\complete.spec.mjs:24:3 › desktop: PRN day/week and missing feed prescriptions stay read-only (2.9s)
+  ok  3 artifacts\task-validation\therapy-completeness-qa\native-tests\complete.spec.mjs:4:3 › mobile: entire stored plan, inactive inventory and reload (30.0s)
+  ok  4 artifacts\task-validation\therapy-completeness-qa\native-tests\complete.spec.mjs:24:3 › mobile: PRN day/week and missing feed prescriptions stay read-only (16.4s)
+  ok  5 artifacts\task-validation\therapy-completeness-qa\native-tests\complete.spec.mjs:49:1 › short inventory is an explicit error; retry exposes the full plan (13.3s)
+  ok  6 artifacts\task-validation\therapy-completeness-qa\native-tests\complete.spec.mjs:59:1 › patient switch never publishes a stale first-patient inventory (12.3s)
+  ok  7 artifacts\task-validation\therapy-completeness-qa\native-tests\independent.spec.mjs:4:1 › independent: switch after complete inventory load never exposes previous patient rows (26.3s)
+  ok  8 artifacts\task-validation\therapy-completeness-qa\native-tests\independent.spec.mjs:16:1 › independent: second occurrence of same drug in same fascia stays read-only when feed represents only first (8.2s)
+  ok  9 artifacts\task-validation\therapy-completeness-qa\native-tests\independent.spec.mjs:31:1 › independent: foreign patient hourly feed cannot suppress a scoped prescription (8.6s)
+  ok 10 artifacts\task-validation\therapy-completeness-qa\native-tests\independent.spec.mjs:44:1 › independent: off-date and inactive medicines remain in plan but absent from today calendar actions (8.6s)
+
+  10 passed (2.9m)
+(node:25852) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)

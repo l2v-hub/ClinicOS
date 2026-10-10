@@ -1,0 +1,14 @@
+{
+  "candidate": "89888589ef1fcce8f200899aa07413c8bcb70325",
+  "verdict": "FAILED VALIDATION",
+  "files": 134,
+  "manifestSha256": "bcf7a38158bf278db8d1c829b18fdb5a12cc640d2e63a7f01c381bc26284e0fe",
+  "exactBytesVerified": true,
+  "counts": {
+    "artifacts": 134,
+    "png": 10,
+    "traces": 6,
+    "videos": 6,
+    "browserTests": 6
+  }
+}

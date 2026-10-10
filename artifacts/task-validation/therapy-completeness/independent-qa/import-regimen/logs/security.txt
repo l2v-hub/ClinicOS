@@ -1,0 +1,4 @@
+cwd: C:\w-therapy-qa
+command: node scripts/security/scan-frontend-secrets.mjs frontend/src frontend/dist backend/src/intake/parse-discharge-therapy.ts backend/src/intake/__tests__/therapy-inventory-regimen.test.ts artifacts/task-validation/therapy-completeness-qa/import-regimen-surface.tsx artifacts/task-validation/therapy-completeness-qa/import-regimen/native-tests artifacts/task-validation/therapy-completeness-qa/import-regimen/qa-dist
+exit: 0
+frontend secret scan OK — 0 findings in: frontend/src, frontend/dist, backend/src/intake/parse-discharge-therapy.ts, backend/src/intake/__tests__/therapy-inventory-regimen.test.ts, artifacts/task-validation/therapy-completeness-qa/import-regimen-surface.tsx, artifacts/task-validation/therapy-completeness-qa/import-regimen/native-tests, artifacts/task-validation/therapy-completeness-qa/import-regimen/qa-dist

@@ -1,0 +1,3 @@
+cwd: C:\w-therapy-qa
+command: node node_modules/typescript/bin/tsc --build frontend/tsconfig.json
+exit: 0

@@ -1,0 +1,77 @@
+cwd: C:\w-therapy-qa
+command: node --import tsx --import ./scripts/stub-css-loader.mjs --test frontend/src/lib/__tests__/therapyCompleteness.test.ts frontend/src/lib/__tests__/therapyPages.test.ts frontend/src/lib/__tests__/patientTherapyCalendar.test.ts frontend/src/components/operator/__tests__/patientTherapySlotAndForm.test.ts frontend/src/lib/__tests__/therapyIncompleteSummary.test.ts
+exit: 0
+(node:28220) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AT-04: the slot detail shows only the current patient at that exact time (4.7505ms)
+✔ AT-04: simultaneous doses share one named button for their hour dialog (13.4661ms)
+(node:28220) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AT-05: administration from the chart is capability-gated and reuses the giro rows (21.413ms)
+✔ AT-05: recordAdministration posts the slot key to the existing endpoints (23.3656ms)
+✔ AT-05: a refused administration shows the server reason, not a generic error (1.5531ms)
+✔ AT-12: a correctly filled therapy form has no issues (2.4346ms)
+✔ AT-11: invalid fields are reported per field and schedule row, never dropped (0.7166ms)
+✔ AT-11: a server rejection shows its reason instead of «Errore 400» (4.7413ms)
+(node:29384) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ keeps every exact time, simultaneous medication and per-dose fraction across a full day (27.1712ms)
+✔ isolates the patient and excludes suspended/concluded prescriptions (0.6895ms)
+✔ date range is inclusive and ISO weekdays are respected (1.2746ms)
+✔ one-time dates and legacy times work independently from the recurring date range (0.9515ms)
+✔ PRN and fascia-only orders remain outside the grid without fabricated times or doses (1.4559ms)
+✔ invalid legacy dates/recurrence stay visible for correction instead of masquerading as empty (0.7218ms)
+✔ mixed invalid times retain valid occurrences and surface the anomaly (0.9623ms)
+✔ calendar date validation/navigation respects civil days, leap years and local midnight (1.5704ms)
+✔ reads all patient-scoped pages with operator headers, without returning a partial page (38.8424ms)
+✔ HTTP failure on a later page discards the whole read and a fresh retry recovers (1.8305ms)
+✔ rejects foreign patient payloads and malformed envelopes, not a false empty calendar (4.807ms)
+✔ counts, cursor loops and capacity cannot silently truncate the patient regimen (3.3727ms)
+✔ timeout aborts the read and a subsequent retry does not share the stalled request (10.3983ms)
+✔ cancelled or late ignored-abort responses cannot complete a patient read (0.7178ms)
+(node:29384) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:34520) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ complete inventory keeps every one of 103 prescriptions, inactive and every regimen included (54.8033ms)
+✔ short terminal page and wrong active/inactive counts never yield a complete inventory (5.5947ms)
+✔ foreign patient and repeated prescription IDs are rejected without displaying prior pages (3.5886ms)
+✔ inactive inventory validates state and zero active count (4.5859ms)
+✔ complete inventory does not return page one on a later HTTP failure (4.8414ms)
+✔ complete print read rejects a short terminal response rather than silently omitting a medicine (5.1781ms)
+✔ old partial or foreign-patient prefetch snapshots cannot be presented as complete (1.0391ms)
+✔ week keeps PRN applying only later in the week once, without adding scheduled doses (5.4541ms)
+✔ loaded slot missing a prescribed drug retains it as read-only source data, not a fabricated action (26.1643ms)
+(node:34520) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:35376) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ zero doses distinguishes incomplete prescriptions immediately and keeps original reasons (19.4311ms)
+✔ non-prescriber sees clinician reference, never an editor action (1.033ms)
+✔ authorized edit is tied to the original incomplete therapy (1.238ms)
+✔ mixed valid and invalid schedules preserve separate counts without claiming total drugs (1.018ms)
+✔ genuinely empty and week states explain the displayed period without incomplete warning (0.865ms)
+(node:35376) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ warning precedes grid and parent forwards only permitted existing-prescription edits (26.6296ms)
+✔ incomplete calendar editor never derives hours from bands or missing times (3.4277ms)
+✔ strict editor preserves saved exact/invalid times and quantities for explicit correction (0.6834ms)
+✔ adding a schedule requires an explicit time rather than a default dose hour (3.4542ms)
+(node:30596) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy page loader returns a complete deduplicated clinical list (41.7033ms)
+✔ therapy page loader rejects a repeating cursor instead of looping forever (2.0382ms)
+✔ therapy page loader carries every server filter on the first page (1.4403ms)
+(node:30596) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy plan and emergency print require every page, never a manual partial plan (29.8173ms)
+✔ therapy failures are announced and never rendered as empty clinical results (6.3392ms)
+✔ medication administration history follows the bounded opaque cursor feed (1.8365ms)
+ℹ tests 46
+ℹ suites 0
+ℹ pass 46
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1263.469

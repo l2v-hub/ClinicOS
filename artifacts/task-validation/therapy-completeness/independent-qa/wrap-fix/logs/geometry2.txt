@@ -1,0 +1,12 @@
+cwd: C:\w-therapy-qa
+command: node node_modules/playwright/cli.js test --config artifacts/task-validation/therapy-completeness-qa/wrap-fix/geometry.config.mjs
+exit: 0
+
+Running 2 tests using 1 worker
+
+  ok 1 artifacts\task-validation\therapy-completeness-qa\wrap-fix\native-tests\geometry.spec.mjs:5:1 › mobile390: canonical PRN button fits the available region without clipping (1.8s)
+  ok 2 artifacts\task-validation\therapy-completeness-qa\wrap-fix\native-tests\geometry.spec.mjs:5:1 › desktop1256: canonical PRN button fits the available region without clipping (1.6s)
+
+  2 passed (4.6s)
+(node:44816) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)

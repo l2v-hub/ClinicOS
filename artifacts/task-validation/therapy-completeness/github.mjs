@@ -1,6 +1,14 @@
-import { gh } from 'file:///C:/w-pdf/artifacts/task-validation/pdf-multipage-preview/github.mjs';
-import { writeFileSync, existsSync } from 'node:fs';
+import { writeFileSync, existsSync, readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import assert from 'node:assert/strict';
+export function gh(args) {
+  const configured = JSON.parse(readFileSync('C:/Workspace/ClinicOSHouse/.claude/settings.local.json', 'utf8')).env;
+  const run = spawnSync('gh', args, { encoding: 'utf8', windowsHide: true, maxBuffer: 40e6,
+    env: { ...process.env, GH_TOKEN: configured.GITHUB_TOKEN || configured.GH_TOKEN } });
+  assert.equal(run.status, 0, 'GitHub operation failed safely'); return run.stdout.trim();
+}
+if (process.argv[2] !== 'create') process.exitCode = 0;
+else {
 const path = 'artifacts/task-validation/therapy-completeness/issue.json';
 const title = '[Bug] Completezza farmaci: prescrizioni assegnate e importate non devono scomparire';
 assert.equal(existsSync(path), false, 'Issue receipt already exists');
@@ -24,3 +32,4 @@ const issue=JSON.parse(gh(['api','repos/l2v-hub/ClinicOS/issues/'+number]));
 assert.equal(issue.body,body); assert.equal(issue.state,'open');
 writeFileSync(path,JSON.stringify({number,url,title,body,comments:[],at:new Date().toISOString()},null,2));
 console.log(JSON.stringify({number,url}));
+}

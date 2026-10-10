@@ -1,0 +1,15 @@
+{
+  "head": "89888589ef1fcce8f200899aa07413c8bcb70325",
+  "key": "service",
+  "args": [
+    "--import",
+    "tsx",
+    "--test",
+    "C:\\w-intake-qa\\artifacts\\task-validation\\therapy-reconciliation-qa/service-defense.test.ts"
+  ],
+  "exit": 1,
+  "timedOut": false,
+  "noRealDatabase": true,
+  "noProviders": true,
+  "at": "2026-10-10T17:54:30.352Z"
+}

@@ -1,0 +1,33 @@
+{
+  "sha": "0c6a7e95c94accd6022b8ca44086cc574aa6bc84",
+  "appDiffEmpty": true,
+  "initialStatus": " M run-claude-queue.ps1\n M start-claude-team.ps1\n?? artifacts/task-validation/therapy-reconciliation-qa/\n",
+  "preexistingScripts": [
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "policy": {
+    "mode": "independent-qa",
+    "allowed": [
+      "synthetic tests",
+      "own artifact folder",
+      "loopback 7543"
+    ],
+    "denied": [
+      "app edits",
+      "real DB",
+      "providers",
+      "auth",
+      "issue writes",
+      "commit",
+      "push",
+      "deploy"
+    ]
+  }
+}

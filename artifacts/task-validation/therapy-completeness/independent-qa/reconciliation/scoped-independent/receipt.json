@@ -1,0 +1,79 @@
+{
+  "head": "0c6a7e95c94accd6022b8ca44086cc574aa6bc84",
+  "sourceDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "sourceDiff": "",
+  "results": [
+    {
+      "name": "backend",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "backend/src/intake/__tests__/therapy-source-inventory.test.ts",
+        "backend/src/ai/upload/pages/__tests__/draft-merge.test.ts",
+        "backend/src/ai/upload/pages/__tests__/draft-merge-pages.test.ts",
+        "backend/src/intake/__tests__/import-error-specificity.test.ts",
+        "backend/src/intake/__tests__/glucose-review-selection.test.ts"
+      ],
+      "exit": 0,
+      "timedOut": false
+    },
+    {
+      "name": "frontend",
+      "args": [
+        "--import",
+        "tsx",
+        "--import",
+        "./scripts/stub-css-loader.mjs",
+        "--test",
+        "frontend/src/components/shared/intake/__tests__/therapySourceInventory.test.ts",
+        "frontend/src/components/shared/intake/__tests__/therapyInventoryRegimen.test.ts",
+        "frontend/src/components/shared/intake/__tests__/therapyConfirmation.test.ts",
+        "frontend/src/components/shared/intake/__tests__/glucoseIntake.test.ts"
+      ],
+      "exit": 0,
+      "timedOut": false
+    },
+    {
+      "name": "frontend-types",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-b",
+        "frontend/tsconfig.json",
+        "--pretty",
+        "false"
+      ],
+      "exit": 0,
+      "timedOut": false
+    },
+    {
+      "name": "backend-types",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "backend/tsconfig.json",
+        "--noEmit",
+        "--pretty",
+        "false"
+      ],
+      "exit": 0,
+      "timedOut": false
+    },
+    {
+      "name": "frontend-build",
+      "args": [
+        "C:\\w-intake-qa\\node_modules\\vite\\bin\\vite.js",
+        "build",
+        "--config",
+        "C:\\w-intake-qa\\frontend\\vite.config.ts",
+        "--outDir",
+        "dist"
+      ],
+      "exit": 0,
+      "timedOut": false
+    }
+  ],
+  "realDatabaseAccess": false,
+  "providerInvoked": false,
+  "at": "2026-10-10T17:48:25.785Z"
+}

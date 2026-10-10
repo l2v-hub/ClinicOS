@@ -1,0 +1,192 @@
+{
+  "applicationCommit": "0c6a7e95c94accd6022b8ca44086cc574aa6bc84",
+  "source": [
+    {
+      "path": "backend/src/ai/upload/pages/draft-mutations.ts",
+      "sha256": "4d07686d2d0d9310246e31a66d2226c0b200ee2c296e4401fc99def4d9bc646e"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/draft-source.ts",
+      "sha256": "af33338ce606495ad97188d96fb5c5c9bc956a68a3442e96252fbb8398b1fffc"
+    },
+    {
+      "path": "backend/src/intake/__tests__/therapy-inventory-regimen.test.ts",
+      "sha256": "a73b906456560fcedc5b081f61e3ae27c3f3b97f84fa9fa6bba641b844a59012"
+    },
+    {
+      "path": "backend/src/intake/__tests__/therapy-source-inventory.test.ts",
+      "sha256": "844d6f9de1c5667130b1cceca7f0ada302fe1874f27c62e946adce8a2bbe2e94"
+    },
+    {
+      "path": "backend/src/intake/draft-service.ts",
+      "sha256": "95f59f3ff39a9a28811fd1286d1f74deb3f8bab4c72e49b048a30838f2fba7bb"
+    },
+    {
+      "path": "backend/src/intake/parse-discharge-therapy.ts",
+      "sha256": "48bb8245dd56e4aaf784e4a21c5df1aeaa5fff2cd1ba8cafbc65ec8ab9d08e58"
+    },
+    {
+      "path": "backend/src/intake/therapy-selection.ts",
+      "sha256": "d6719e1d668f7ce153cecadcfce134989d924e0b1f9b74aba8afae0b5f952ee8"
+    },
+    {
+      "path": "backend/src/intake/therapy-source-inventory.ts",
+      "sha256": "8f301c3bd1434814cca559e621391804ea3e832d3c0e116c9667c4c36818f4ed"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+      "sha256": "86943ce17a506d504be21dab89ce752fc06863b3f69bb2d4952ba27bf16cb143"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientTherapySlotDetail.tsx",
+      "sha256": "1869395f3d8dda2b2fea19c677e4438eedd974a8f4ff44fd4b4f3fb8e40f427a"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "sha256": "483673fff5f0740e5fc629f71242a0b4c6c898e0fb63a3184766ed072d843183"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+      "sha256": "b2c948c4c3b79494077f9093ef95168f1ad7fa5e18bfb5eba62f365f63b6e5cf"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/DischargeTherapyReview.tsx",
+      "sha256": "9c09914307f9a8aabea8d6e2f1d97cbd1b92d8c969424e6c0ed0a13fbe0eaffd"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/ImportProposalsReview.tsx",
+      "sha256": "a32845d071bf6bf97082813085839d7c2ece9b740b43bd40da79ed033f9ee8e0"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/IntakeTherapySummary.tsx",
+      "sha256": "0c58b06e6626338585c28c70a1b1b0c5d52aa5be889c8fbd331847ac5893d302"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/TherapyImportSource.css",
+      "sha256": "a9646bcb950ec7526e6529ab320f38f56302abec3db054e34d4c0b5e518a9c36"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/TherapyImportSource.tsx",
+      "sha256": "959df88e20b10c0cd3a45fedb284927221baed1ec204483e44d0f40ac74695a4"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/therapyInventoryRegimen.test.ts",
+      "sha256": "40e64fae47255d4152bc31672d3267acac0ca7f663f61b36588186a7aae9d398"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/therapySourceInventory.test.ts",
+      "sha256": "36d2db12fc01de3cd84bfd1992334aaa7c3d6df5addc66d1d603a482ae1c09f7"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/dischargeTherapy.ts",
+      "sha256": "bda79e9f2ca2bd4a568f40a1d312d946c510d5a74e334f2f23bffc024b059799"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeTherapies.ts",
+      "sha256": "e52c7af78aecdc81c71241c19cf53608cccd1b3f434506d4e0fea2faa0abd609"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyCompleteness.test.ts",
+      "sha256": "1badcc97f15578229e1ac419c0dbfabfe74f2e012701205a4fc598c3b084e1fb"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyPages.test.ts",
+      "sha256": "db50fe92bae37a39f911f4a4692d39fab88b3ef8395c06f075c0d82327d34287"
+    },
+    {
+      "path": "frontend/src/lib/patientTherapyCalendarRead.ts",
+      "sha256": "8df12f3a04a440fe0724c404eafe3fc57948ad2a8d14ef0f14802b3c49819e9c"
+    },
+    {
+      "path": "frontend/src/lib/therapyCompleteness.ts",
+      "sha256": "cd5e77a188dd4d705e9393b1650b477f89d5be5b8dc392e5a9e69acfeec34fda"
+    },
+    {
+      "path": "frontend/src/lib/therapyPages.ts",
+      "sha256": "61658bb0f39a19330eb20e81e916621686795890fea43f54b278e82d0a5c0d57"
+    }
+  ],
+  "results": [
+    {
+      "name": "focused",
+      "cwd": ".",
+      "args": [
+        "--import",
+        "tsx",
+        "--import",
+        "./scripts/stub-css-loader.mjs",
+        "--test",
+        "frontend/src/lib/__tests__/therapyCompleteness.test.ts",
+        "frontend/src/lib/__tests__/therapyPages.test.ts",
+        "frontend/src/lib/__tests__/patientTherapyCalendar.test.ts",
+        "frontend/src/components/operator/__tests__/patientTherapySlotAndForm.test.ts",
+        "frontend/src/lib/__tests__/therapyIncompleteSummary.test.ts"
+      ],
+      "start": "2026-10-10T17:44:51.549Z",
+      "exit": 0,
+      "logSha256": "d15238c39831f217e28ecd61257d73bb7a24c6813ca56f670149c45fbf1dd4f3"
+    },
+    {
+      "name": "types",
+      "cwd": ".",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-b",
+        "frontend"
+      ],
+      "start": "2026-10-10T17:44:52.762Z",
+      "exit": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "backend-types",
+      "cwd": ".",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "backend/tsconfig.json"
+      ],
+      "start": "2026-10-10T17:45:08.245Z",
+      "exit": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "args": [
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--config",
+        "frontend/vite.config.ts",
+        "frontend"
+      ],
+      "start": "2026-10-10T17:45:17.735Z",
+      "exit": 0,
+      "logSha256": "ffac313b2f21ae42b575715f7c9d62fb98b708b19a84a0c4128495854dbcdfd7"
+    },
+    {
+      "name": "full-regression",
+      "cwd": "frontend",
+      "args": [
+        "../scripts/run-node-tests.mjs"
+      ],
+      "start": "2026-10-10T17:45:41.232Z",
+      "exit": 1,
+      "logSha256": "efb7673ed46c60efdf025b679fd188a7525ac82f300f16f46d335057f091209e"
+    },
+    {
+      "name": "import-audit-existing-tests",
+      "cwd": "backend",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "src/intake/__tests__/parse-discharge-therapy.test.ts",
+        "src/intake/__tests__/parse-discharge-therapy-nonrx.test.ts"
+      ],
+      "start": "2026-10-10T17:46:23.666Z",
+      "exit": 0,
+      "logSha256": "a969e817f7470bbdf0a1b95d72ec5c1724ecf693fea860b02989f6b974cec2a4"
+    }
+  ]
+}

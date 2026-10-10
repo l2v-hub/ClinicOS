@@ -1,0 +1,102 @@
+{
+  "syntheticOnly": true,
+  "rows": [
+    {
+      "farmacoNome": "Alfa",
+      "forma": "",
+      "dosaggio": "",
+      "viaSomministrazione": "",
+      "quantita": "",
+      "orari": [],
+      "giorni": [],
+      "dataInizio": "",
+      "classe": "",
+      "note": "",
+      "originalText": "",
+      "stato": "da_verificare",
+      "sourceKind": "structured",
+      "structuredSource": {
+        "nome": "Alfa",
+        "dose": "5 mg",
+        "frequenza": "08:00",
+        "stato": "attivo"
+      },
+      "importRowKey": "aca88c8585a3f65675d36c18a2d8bb19ed03efbf44d44d9bce8f3350a9b965e6"
+    },
+    {
+      "farmacoNome": "Beta",
+      "forma": "",
+      "dosaggio": "",
+      "viaSomministrazione": "",
+      "quantita": "",
+      "orari": [],
+      "giorni": [],
+      "dataInizio": "",
+      "classe": "",
+      "note": "",
+      "originalText": "",
+      "stato": "da_verificare",
+      "sourceKind": "structured",
+      "structuredSource": {
+        "nome": "Beta",
+        "dose": "25 mg",
+        "frequenza": "al bisogno",
+        "stato": "sospeso",
+        "note": "<script>syntheticOnly</script>"
+      },
+      "importRowKey": "5acd669a721fb4f23451f20ecd3738abdeb1acc08ce2fbb479b4e8ec3692d286"
+    },
+    {
+      "farmacoNome": "Beta",
+      "forma": "",
+      "dosaggio": "",
+      "viaSomministrazione": "",
+      "quantita": "",
+      "orari": [],
+      "giorni": [],
+      "dataInizio": "",
+      "classe": "",
+      "note": "",
+      "originalText": "",
+      "stato": "da_verificare",
+      "sourceKind": "structured",
+      "structuredSource": {
+        "nome": "Beta",
+        "dose": "50 mg",
+        "frequenza": "al bisogno",
+        "stato": "sospeso"
+      },
+      "importRowKey": "653a8b010c750fb0d4c07d2a1ac03ed415808ca29072a086a9591fa14ac6bb19"
+    }
+  ],
+  "proposals": [
+    {
+      "id": "synthetic-proposal",
+      "groupId": "g1",
+      "inputHash": "h1",
+      "row": {
+        "farmacoNome": "Beta",
+        "forma": "",
+        "dosaggio": "",
+        "viaSomministrazione": "",
+        "quantita": "",
+        "orari": [],
+        "giorni": [],
+        "dataInizio": "",
+        "classe": "",
+        "note": "",
+        "originalText": "",
+        "stato": "da_verificare",
+        "sourceKind": "structured",
+        "structuredSource": {
+          "nome": "Beta",
+          "dose": "50 mg",
+          "frequenza": "al bisogno",
+          "stato": "sospeso"
+        },
+        "importRowKey": "653a8b010c750fb0d4c07d2a1ac03ed415808ca29072a086a9591fa14ac6bb19"
+      },
+      "status": "pending"
+    }
+  ]
+}

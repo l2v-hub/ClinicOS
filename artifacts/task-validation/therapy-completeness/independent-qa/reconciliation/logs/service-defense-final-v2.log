@@ -1,0 +1,9 @@
+✔ actual patchDraft rejects forged original text before mocked persistence; original evidence and legacy append remain compatible (1583.0884ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5300.3572

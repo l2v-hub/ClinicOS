@@ -1,0 +1,14 @@
+cwd: C:\w-therapy-qa
+command: node node_modules/playwright/cli.js test --config artifacts/task-validation/therapy-completeness-qa/import-regimen/native.config.mjs
+exit: 0
+
+Running 4 tests using 1 worker
+
+  ok 1 artifacts\task-validation\therapy-completeness-qa\import-regimen\native-tests\import-regimen.spec.mjs:4:3 › desktop: numbered name and PRN source survive browser-only draft reload (1.8s)
+  ok 2 artifacts\task-validation\therapy-completeness-qa\import-regimen\native-tests\import-regimen.spec.mjs:4:3 › mobile: numbered name and PRN source survive browser-only draft reload (1.5s)
+  ok 3 artifacts\task-validation\therapy-completeness-qa\import-regimen\native-tests\independent-import.spec.mjs:4:2 › desktop: negative and mixed PRN stay explicit unresolved source, only unmixed positive becomes PRN (1.8s)
+  ok 4 artifacts\task-validation\therapy-completeness-qa\import-regimen\native-tests\independent-import.spec.mjs:4:2 › mobile: negative and mixed PRN stay explicit unresolved source, only unmixed positive becomes PRN (1.7s)
+
+  4 passed (8.2s)
+(node:18756) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)

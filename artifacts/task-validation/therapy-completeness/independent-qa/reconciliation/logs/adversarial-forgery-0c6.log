@@ -1,0 +1,38 @@
+(node:13168) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ unknown nested metadata and non-object meaningful values remain distinct immutable evidence (2.6728ms)
+✔ every candidate stays clinically blank even when extraction contains complete apparent regimen (0.5502ms)
+✔ reordered duplicate occurrences cannot collapse on refresh or editable names (1.1135ms)
+✔ selection from different source group cannot authorize identical structured candidate (0.5708ms)
+✔ legacy appended rows cannot forge extraction keys and page rows cannot be swapped (0.7742ms)
+✖ structured candidate cannot forge verbatim narrative evidence via autosave (0.7595ms)
+✔ unreviewed, missing, deferred and outdated candidates cannot be confirmed (0.5354ms)
+✔ multiple narrative duplicates and extraction occurrences are all retained without clinical synthesis (5.4503ms)
+✔ missing source revalidation resets state but never destroys reviewed or excluded values (0.3853ms)
+(node:13168) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 704.5886
+
+✖ failing tests:
+
+test at artifacts\task-validation\therapy-reconciliation-qa\adversarial.test.ts:2:5376
+✖ structured candidate cannot forge verbatim narrative evidence via autosave (0.7595ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (C:\w-intake-qa\artifacts\task-validation\therapy-reconciliation-qa\adversarial.test.ts:50:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: { code: 'immutable_source' },
+    operator: 'throws',
+    diff: 'simple'
+  }

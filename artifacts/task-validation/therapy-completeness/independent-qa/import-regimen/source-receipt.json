@@ -1,0 +1,125 @@
+{
+  "candidate": "f7052f414ee1f0dbc2fa45d86b66463928c2810d",
+  "previousCandidate": "8490fa9b97bbad159dd758aec6fbde3f7f87ea8f",
+  "base": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
+  "applicationWorkingDiffEmpty": true,
+  "source": [
+    {
+      "path": "backend/src/intake/__tests__/therapy-inventory-regimen.test.ts",
+      "gitBlob": "0dbc2f49d4e3a19c93807c8ed575b488e23d63cc",
+      "sha256": "2d3c9db646c7a56770e5aa7f712153e4c33deb5d27b686d57747bed12bcac2f1"
+    },
+    {
+      "path": "backend/src/intake/parse-discharge-therapy.ts",
+      "gitBlob": "9bc8bbb4809b87c3bd8887bd0237da5a17c69001",
+      "sha256": "ded36bee25ad9913001f0fbc90ac7eabfd1e711e523eb9dc81cec97c6ec9697d"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/therapyInventoryRegimen.test.ts",
+      "gitBlob": "e6434d1bebe960df961793e2663f906a6432013f",
+      "sha256": "cc33513f6d2278f7a5c217a0367c714b38266bb08d074f339cbeb32b8b44c78b"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/dischargeTherapy.ts",
+      "gitBlob": "a9c17c2ef2810e322191007aeb244513a43f40bf",
+      "sha256": "dd2f6166632d6768c6916145c24772070c6c0230c9eb805540ab24318f09847e"
+    }
+  ],
+  "focusedBackend": {
+    "tests": 51,
+    "pass": 51,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "focusedFrontend": {
+    "tests": 21,
+    "pass": 21,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "independentUnit": {
+    "tests": 3,
+    "pass": 3,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "mockedConfirmation": {
+    "tests": 9,
+    "pass": 9,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "frontendFull": {
+    "tests": 1309,
+    "pass": 1297,
+    "fail": 12,
+    "cancelled": 0,
+    "skipped": 0,
+    "failures": [
+      "✖ Assistant classic fallback with a known resident opens that resident section",
+      "✖ a single parameters table is always visible and uses the operational table contract",
+      "✖ multi-patient mobile layout is a labelled two-column card without horizontal scroll",
+      "✖ multi-patient parameters uses one bounded page instead of cartella fan-out",
+      "✖ multi-patient quick entry exposes every action and field to assistive technology",
+      "✖ multi-patient quick entry reuses the ClinicOS form and action design system",
+      "✖ multi-patient refresh keeps the previous roster visible and announces progress",
+      "✖ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance",
+      "✖ only design-system.css decides how a canonical control looks",
+      "✖ schedule reads are abortable, session-safe and retryable",
+      "✖ src\\components\\operator\\__tests__\\assessmentCatalogUi.test.ts",
+      "✖ weekly and monthly views never repeat one-day therapy data across calendar cells"
+    ],
+    "introduced": [],
+    "missingBaseline": [],
+    "comparisonManifestSha256": "2c6877b7bbfba2c770629e3b7f124374a06514be62a2241acbf423a2d683d5a7"
+  },
+  "backendBroad": {
+    "discoveredFiles": 236,
+    "selectedFiles": 193,
+    "excludedFiles": 43,
+    "status": "INCOMPLETE / FAILED ATTEMPT",
+    "reason": "Non-*-db suffix selection is not a non-DB guarantee. Selected integration/auth suites failed and long-lived child processes stalled the runner. Owned run bounded after more than five minutes; no final aggregate counts, no full-backend PASS.",
+    "visibleFailures": [
+      "✖ legacy intake parses its larger compatibility envelope only after privileged auth",
+      "✖ legacy intake rejects payloads above its 8 MiB compatibility limit",
+      "✖ auth/me returns the server-resolved demo identity outside production",
+      "✖ entraConfig fails closed on incomplete configuration (AC5)",
+      "✖ valid token with pre-linked oid resolves the identity (AC1/AC2)",
+      "✖ unlinked oid with matching verified e-mail auto-links once (AC2)",
+      "✖ e-mail match must NOT hijack a user already linked to a different oid (AC2)",
+      "✖ missing / malformed / forged / expired / wrong-issuer / wrong-audience → 401 (AC1/AC4)",
+      "✖ valid token without a mapped user → 403; inactive user → 403 (AC4)",
+      "✖ AC5: AUTH_MODE=entra with incomplete tenant config fails closed (503)",
+      "✖ AC6: in entra mode self-declared X-Operator-*/X-Demo-Patient-Id headers are NOT identity",
+      "✖ AC1-AC3: verified Bearer token authenticates and attaches the mapped operator",
+      "✖ AC4: forged token in entra mode → 401 without enumeration"
+    ],
+    "exit": "4294967295",
+    "databaseTarget": "synthetic loopback port 1 only",
+    "credentialsRemoved": true
+  },
+  "browser": {
+    "pass": 4,
+    "realComponents": true,
+    "canonicalStyles": true,
+    "browserOnlyDraftReload": true,
+    "databasePersistenceVerified": false,
+    "clinicalNetwork": "intercepted synthetic, unknown/mutation blocked"
+  },
+  "build": {
+    "frontendTypes": true,
+    "frontendViteBuild": true,
+    "nodeEnv": "test",
+    "backendTsc": true,
+    "backendRuntimeFonts": true,
+    "prismaGenerateRun": false
+  },
+  "securityFindings": 0,
+  "wholeStructuredImportVerified": false,
+  "verdict": "FAILED VALIDATION",
+  "at": "2026-10-10T17:30:03.869Z"
+}

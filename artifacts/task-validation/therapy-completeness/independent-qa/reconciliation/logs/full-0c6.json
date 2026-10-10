@@ -1,0 +1,12 @@
+{
+  "head": "0c6a7e95c94accd6022b8ca44086cc574aa6bc84",
+  "key": "fullfrontend",
+  "args": [
+    "C:\\w-intake-qa\\scripts\\run-node-tests.mjs"
+  ],
+  "exit": 1,
+  "timedOut": false,
+  "noRealDatabase": true,
+  "noProviders": true,
+  "at": "2026-10-10T17:50:03.260Z"
+}

@@ -1,0 +1,13 @@
+
+Running 6 tests using 1 worker
+
+  ok 1 artifacts\task-validation\therapy-reconciliation-qa\native-tests\reconciliation-adversarial.spec.mjs:4:2 › desktop: partial state edit cannot acknowledge extraction and untouched same-name variant stays blank (2.5s)
+  ok 2 artifacts\task-validation\therapy-reconciliation-qa\native-tests\reconciliation-adversarial.spec.mjs:4:2 › mobile: partial state edit cannot acknowledge extraction and untouched same-name variant stays blank (2.4s)
+  ok 3 artifacts\task-validation\therapy-reconciliation-qa\native-tests\reconciliation.spec.mjs:4:3 › desktop: extracted variants stay visible and require review after browser-only reload (2.2s)
+  ok 4 artifacts\task-validation\therapy-reconciliation-qa\native-tests\reconciliation.spec.mjs:39:3 › desktop: proposals and summary retain escaped extraction evidence, not fabricated source text (1.3s)
+  ok 5 artifacts\task-validation\therapy-reconciliation-qa\native-tests\reconciliation.spec.mjs:4:3 › mobile: extracted variants stay visible and require review after browser-only reload (2.0s)
+  ok 6 artifacts\task-validation\therapy-reconciliation-qa\native-tests\reconciliation.spec.mjs:39:3 › mobile: proposals and summary retain escaped extraction evidence, not fabricated source text (1.2s)
+
+  6 passed (13.5s)
+(node:29464) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)

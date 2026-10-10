@@ -1,0 +1,50 @@
+(node:31616) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ scale mapping retains review and source metadata without a fixed clinical quantity (5.0516ms)
+✔ scale does not invent a time and invalid protocol still blocks confirmation (0.7169ms)
+✔ summary renders measured-dose protocol rather than technical schedule quantity (13.2935ms)
+✔ comparison remains visible when OCR detects zero therapies and source text is escaped (1.5908ms)
+(node:31616) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:44816) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ import confirmation retains fraction, administration unit and weekdays (3.352ms)
+✔ PO03: operational notes never receive OCR source or class metadata (0.4242ms)
+✔ PO03: reviewed clinical notes and source stay separate across draft reload (0.7482ms)
+✔ PO03: operator-entered source-like wording is preserved without text cleanup (0.2325ms)
+✔ reviewed schedules, dates, weekdays and status survive JSON draft reload (1.3642ms)
+✔ one-off and as-needed reviews keep their type after reload without periodic schedules (0.6417ms)
+✔ missing or ambiguous raw quantities never become a default dose (1.3674ms)
+✔ explicit unit takes priority over form and compound strength stays raw (0.3296ms)
+✔ blank drugs and invalid times stay in the ordered review and cannot confirm (0.9988ms)
+✔ verification renders real manual times and an actionable indexed blocker (12.8536ms)
+✔ liquid and inhaled quantities keep their explicit unit (0.4834ms)
+✔ ambiguous OCR source stays flagged through edits until explicitly reviewed (0.5612ms)
+✔ patch singular/plural and counted form import survive confirmation and reload (0.7731ms)
+✔ AIFA and manual form changes sync matching units but preserve explicit alternatives and quantities (0.7621ms)
+✔ three manual additions and an incomplete row remain alongside imports across draft reload and review (2.4196ms)
+✔ intake keeps complete therapy source available next to manual additions (33.3866ms)
+(node:44816) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:27780) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ explicit PRN survives import, operator review, draft reload and confirmation without fixed doses (7.9334ms)
+(node:27780) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:44908) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ structured-only candidates have no inferred active state, administration dose, time or start date (4.5235ms)
+✔ edits and browser draft reload retain immutable extraction and identity (0.7358ms)
+✔ explicit exclusion retains extracted evidence in draft and summary, not a prescription (0.5496ms)
+✔ same-name different extractions remain separate through review projection and reload (0.5914ms)
+✔ review, proposals and summary render escaped extraction distinctly from verbatim text (11.5463ms)
+(node:44908) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 866.7175

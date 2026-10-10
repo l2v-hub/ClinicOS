@@ -1,0 +1,79 @@
+{
+  "head": "db0de57515c3782bedb472d5406ffce7f50e9f4f",
+  "sourceDiffSha256": "2a82ce5f3113a6641b7f6fab2e6e9012776a025b24190129c805503f172831a0",
+  "sourceDiff": "diff --git a/backend/src/ai/upload/pages/draft-mutations.ts b/backend/src/ai/upload/pages/draft-mutations.ts\nindex b91c56d25..5a636faeb 100644\n--- a/backend/src/ai/upload/pages/draft-mutations.ts\n+++ b/backend/src/ai/upload/pages/draft-mutations.ts\n@@ -77,6 +77,14 @@ export function guardPageRows(previous: Json, patch: Json, result: Json | undefi\n   patch.terapiaImport.forEach((value, index) => {\n     const row = object(value),\n       old = object(before[index]);\n+    // Existing import evidence is server-owned. Legacy appended rows have no\n+    // prior source and retain their existing creation path.\n+    if (index < before.length && canonical(row.originalText) !== canonical(old.originalText))\n+      throw new ImportSessionError(\n+        400,\n+        'immutable_source',\n+        'Il testo originale della terapia non può essere modificato',\n+      );\n     for (const key of ['importSource', 'importSources', 'conflictDeferred', 'conflictId',\n       'sourceKind', 'structuredSource', 'structuredOccurrenceKey', 'importRowKey']) {\n       if (canonical(row[key]) !== canonical(old[key]))\ndiff --git a/backend/src/intake/__tests__/therapy-source-inventory.test.ts b/backend/src/intake/__tests__/therapy-source-inventory.test.ts\nindex 500f4279e..e06c69bea 100644\n--- a/backend/src/intake/__tests__/therapy-source-inventory.test.ts\n+++ b/backend/src/intake/__tests__/therapy-source-inventory.test.ts\n@@ -120,11 +120,15 @@ test('a selected conflict from the same group authorizes only its exact extracte\n \n test('server-owned extraction evidence cannot be forged in page or legacy autosave', () => {\n   const rows = therapySourceInventory('', [beta]);\n-  for (const page of [true, false]) for (const key of ['sourceKind', 'structuredSource', 'importRowKey', 'structuredOccurrenceKey']) {\n+  for (const page of [true, false]) for (const key of ['sourceKind', 'structuredSource', 'importRowKey', 'structuredOccurrenceKey', 'originalText']) {\n     const saved = { terapiaImport: rows, ...(page ? { _importSource: {} } : {}) };\n     assert.throws(() => guard(saved, { terapiaImport: [{ ...rows[0], [key]: 'forged' }] }, undefined), { code: 'immutable_source' });\n   }\n   assert.doesNotThrow(() => guard({ terapiaImport: rows }, { terapiaImport: [{ ...rows[0], farmacoNome: 'Reviewed' }] }, undefined));\n+  assert.throws(() => guard({ terapiaImport: [{ originalText: 'Dal documento' }] },\n+    { terapiaImport: [{ originalText: 'Inventato' }] }, undefined), { code: 'immutable_source' });\n+  assert.doesNotThrow(() => guard({ terapiaImport: rows },\n+    { terapiaImport: [...rows, { originalText: 'Nuova voce legacy' }] }, undefined));\n   assert.throws(() => guard({ terapiaImport: [{ originalText: 'legacy' }] },\n     { terapiaImport: [{ originalText: 'legacy', sourceKind: 'structured' }] }, undefined), { code: 'immutable_source' });\n });\ndiff --git a/frontend/src/components/shared/intake/IntakeTherapySummary.tsx b/frontend/src/components/shared/intake/IntakeTherapySummary.tsx\nindex 32fda3bf2..3bbf16c20 100644\n--- a/frontend/src/components/shared/intake/IntakeTherapySummary.tsx\n+++ b/frontend/src/components/shared/intake/IntakeTherapySummary.tsx\n@@ -172,9 +172,12 @@ export function IntakeTherapySummary({ therapy: t, busy, onCorrect }: Props) {\n         {Boolean(value('note')) && field('Note', undefined, value('note'))}\n         {(t.originalText || t.structuredSource !== undefined || t.requiresSourceReview) && (\n           <div className=\"intake-therapy-summary__source\">\n-            {t.requiresSourceReview && field('Verifica della fonte', 'sourceReview', 'Confronta con il documento prima di confermare')}\n-            <TherapyImportSource row={t} />\n-            {!t.originalText && t.structuredSource === undefined && field('Testo estratto dalla lettera', 'sourceReview', 'Testo originale non disponibile')}\n+            {field(\n+              t.originalText || t.structuredSource === undefined ? 'Testo estratto dalla lettera' : 'Verifica della fonte estratta',\n+              'sourceReview',\n+              t.originalText || (t.structuredSource === undefined ? 'Testo originale non disponibile' : 'Confronta con il documento prima di confermare'),\n+            )}\n+            <TherapyImportSource row={{ ...t, originalText: '' }} />\n           </div>\n         )}\n       </div>\n",
+  "results": [
+    {
+      "name": "backend",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "backend/src/intake/__tests__/therapy-source-inventory.test.ts",
+        "backend/src/ai/upload/pages/__tests__/draft-merge.test.ts",
+        "backend/src/ai/upload/pages/__tests__/draft-merge-pages.test.ts",
+        "backend/src/intake/__tests__/import-error-specificity.test.ts",
+        "backend/src/intake/__tests__/glucose-review-selection.test.ts"
+      ],
+      "exit": 0,
+      "timedOut": false
+    },
+    {
+      "name": "frontend",
+      "args": [
+        "--import",
+        "tsx",
+        "--import",
+        "./scripts/stub-css-loader.mjs",
+        "--test",
+        "frontend/src/components/shared/intake/__tests__/therapySourceInventory.test.ts",
+        "frontend/src/components/shared/intake/__tests__/therapyInventoryRegimen.test.ts",
+        "frontend/src/components/shared/intake/__tests__/therapyConfirmation.test.ts",
+        "frontend/src/components/shared/intake/__tests__/glucoseIntake.test.ts"
+      ],
+      "exit": 0,
+      "timedOut": false
+    },
+    {
+      "name": "frontend-types",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-b",
+        "frontend/tsconfig.json",
+        "--pretty",
+        "false"
+      ],
+      "exit": 0,
+      "timedOut": false
+    },
+    {
+      "name": "backend-types",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "backend/tsconfig.json",
+        "--noEmit",
+        "--pretty",
+        "false"
+      ],
+      "exit": 0,
+      "timedOut": false
+    },
+    {
+      "name": "frontend-build",
+      "args": [
+        "C:\\w-therapy\\node_modules\\vite\\bin\\vite.js",
+        "build",
+        "--config",
+        "C:\\w-therapy\\frontend\\vite.config.ts",
+        "--outDir",
+        "dist"
+      ],
+      "exit": 0,
+      "timedOut": false
+    }
+  ],
+  "realDatabaseAccess": false,
+  "providerInvoked": false,
+  "at": "2026-10-10T17:53:00.160Z"
+}

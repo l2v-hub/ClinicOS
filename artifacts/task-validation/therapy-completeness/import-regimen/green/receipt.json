@@ -1,0 +1,32 @@
+{
+  "phase": "green",
+  "base": "8490fa9b97bbad159dd758aec6fbde3f7f87ea8f",
+  "sourceDiff": "diff --git a/backend/src/intake/parse-discharge-therapy.ts b/backend/src/intake/parse-discharge-therapy.ts\nindex 71e46752e..9bc8bbb48 100644\n--- a/backend/src/intake/parse-discharge-therapy.ts\n+++ b/backend/src/intake/parse-discharge-therapy.ts\n@@ -20,6 +20,7 @@ export interface ParsedTherapyRow {\n   note: string; // leftover free text\n   originalText: string; // source line kept verbatim (audit / operator reference)\n   stato: 'ok' | 'da_verificare';\n+  tipo?: 'al_bisogno';\n   doseMode?: 'fixed' | 'glucose_scale';\n   glucoseScale?: Array<{ minMgDl: number; maxMgDl: number | null; units: number }>;\n }\n@@ -293,7 +294,10 @@ function trovaListaOrari(testo: string, collocato: Uint8Array, primoCampoEsplici\n export function parseTherapyLine(line: string): ParsedTherapyRow {\n   const originalText = line.trim();\n   // `originalText` resta verbatim per l'audit; l'estrazione lavora sulla riga senza etichetta.\n-  const testo = withoutInlineTherapyLabel(originalText).replace(PREFISSO_TERAPIA, '');\n+  const testo = withoutInlineTherapyLabel(originalText).replace(PREFISSO_TERAPIA, '')\n+    .replace(/^(?:\\d+[.)]|\\(\\d+\\))\\s+(?=\\p{L})/u, '');\n+  const prn = /\\bal\\s+bisogno\\b/i.test(testo);\n+  const negativePrn = /\\bnon\\b[^.;]*\\bal\\s+bisogno\\b/i.test(testo);\n \n   const collocato = new Uint8Array(testo.length);\n   const marca = (index: number | undefined | null, length: number) => {\n@@ -437,6 +441,8 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {\n     signals >= 2 &&\n     !residuoNumerico &&\n     !negativeInstruction &&\n+    !negativePrn &&\n+    !prn &&\n     glucoseScaleValid &&\n     (doseMode === 'fixed' || orari.length > 0)\n       ? 'ok'\n@@ -455,6 +461,8 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {\n     note,\n     originalText,\n     stato,\n+    ...(prn && !negativePrn && orari.length === 0 && doseMode === 'fixed'\n+      ? { tipo: 'al_bisogno' as const } : {}),\n     doseMode,\n     ...(glucoseScale.length ? { glucoseScale: normalizedGlucoseScale } : {}),\n   };\ndiff --git a/frontend/src/components/shared/intake/dischargeTherapy.ts b/frontend/src/components/shared/intake/dischargeTherapy.ts\nindex 94aa10f61..a9c17c2ef 100644\n--- a/frontend/src/components/shared/intake/dischargeTherapy.ts\n+++ b/frontend/src/components/shared/intake/dischargeTherapy.ts\n@@ -26,6 +26,7 @@ export interface DischargeTherapyRow {\n   note: string;\n   originalText: string;\n   stato: 'ok' | 'da_verificare';\n+  tipo?: 'periodica' | 'una_tantum' | 'al_bisogno';\n   doseMode?: 'fixed' | 'glucose_scale';\n   glucoseScale?: GlucoseDoseRule[];\n   excludedFromConfirm?: boolean;\n@@ -136,6 +137,7 @@ export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormVa\n   const scale = r.doseMode === 'glucose_scale';\n   return {\n     ...emptyTherapyForm(),\n+    ...(r.tipo === 'al_bisogno' ? { tipo: 'al_bisogno' as const } : {}),\n     farmacoNome: (r.farmacoNome || '').trim(),\n     pharmaceuticalForm: forma ?? '',\n     commercialStrengthValue: dose?.value ?? '',\n@@ -150,7 +152,7 @@ export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormVa\n       maxMgDl: rule.maxMgDl === null ? '' : String(rule.maxMgDl),\n       units: String(rule.units),\n     })),\n-    schedules: times.map((time) => ({\n+    schedules: r.tipo === 'al_bisogno' ? [] : times.map((time) => ({\n       time: /^\\d:\\d{2}$/.test(time) ? `0${time}` : time,\n       // Technical schedule metadata only: a scale's administered dose is resolved from glucose.\n       quantityNumerator: scale ? 1 : qty.num,\n@@ -158,7 +160,8 @@ export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormVa\n       administrationUnit: scale ? 'unità' : qty.unit,\n     })),\n     giorniSettimana: Array.isArray(r.giorni) ? r.giorni.map(dayToIso).sort((a, b) => a - b) : [],\n-    note: [r.note?.trim() || '', !dose && r.dosaggio ? `Dosaggio: ${r.dosaggio}` : '']\n+    note: [r.note?.trim() || '', !dose && r.dosaggio ? `Dosaggio: ${r.dosaggio}` : '',\n+      r.tipo === 'al_bisogno' && r.quantita ? `Quantità riportata nel documento: ${r.quantita}` : '']\n       .filter(Boolean)\n       .join(' — '),\n   };\n@@ -178,6 +181,7 @@ export function therapyFormToDischargeRow(\n       ? `${v.commercialStrengthValue} ${v.commercialStrengthUnit}`.trim()\n       : '',\n     viaSomministrazione: v.viaSomministrazione,\n+    tipo: v.tipo,\n     doseMode: v.doseMode ?? 'fixed',\n     glucoseScale:\n       v.doseMode === 'glucose_scale'\n",
+  "results": [
+    {
+      "name": "backend",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "backend/src/intake/__tests__/therapy-inventory-regimen.test.ts",
+        "backend/src/intake/__tests__/parse-discharge-therapy.test.ts"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "frontend",
+      "args": [
+        "--import",
+        "tsx",
+        "--import",
+        "./scripts/stub-css-loader.mjs",
+        "--test",
+        "frontend/src/components/shared/intake/__tests__/therapyInventoryRegimen.test.ts",
+        "frontend/src/components/shared/intake/__tests__/therapyConfirmation.test.ts",
+        "frontend/src/components/shared/intake/__tests__/glucoseIntake.test.ts"
+      ],
+      "exit": 0
+    }
+  ]
+}

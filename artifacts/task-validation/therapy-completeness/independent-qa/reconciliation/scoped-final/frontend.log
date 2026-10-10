@@ -1,0 +1,50 @@
+(node:18980) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ scale mapping retains review and source metadata without a fixed clinical quantity (32.2185ms)
+✔ scale does not invent a time and invalid protocol still blocks confirmation (5.677ms)
+✔ summary renders measured-dose protocol rather than technical schedule quantity (42.7863ms)
+✔ comparison remains visible when OCR detects zero therapies and source text is escaped (3.4784ms)
+(node:18980) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:19380) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ import confirmation retains fraction, administration unit and weekdays (13.1182ms)
+✔ PO03: operational notes never receive OCR source or class metadata (1.63ms)
+✔ PO03: reviewed clinical notes and source stay separate across draft reload (4.3395ms)
+✔ PO03: operator-entered source-like wording is preserved without text cleanup (1.129ms)
+✔ reviewed schedules, dates, weekdays and status survive JSON draft reload (7.2387ms)
+✔ one-off and as-needed reviews keep their type after reload without periodic schedules (5.9063ms)
+✔ missing or ambiguous raw quantities never become a default dose (8.2191ms)
+✔ explicit unit takes priority over form and compound strength stays raw (1.9853ms)
+✔ blank drugs and invalid times stay in the ordered review and cannot confirm (4.9957ms)
+✔ verification renders real manual times and an actionable indexed blocker (65.6186ms)
+✔ liquid and inhaled quantities keep their explicit unit (1.7871ms)
+✔ ambiguous OCR source stays flagged through edits until explicitly reviewed (2.003ms)
+✔ patch singular/plural and counted form import survive confirmation and reload (2.791ms)
+✔ AIFA and manual form changes sync matching units but preserve explicit alternatives and quantities (3.3911ms)
+✔ three manual additions and an incomplete row remain alongside imports across draft reload and review (10.4379ms)
+✔ intake keeps complete therapy source available next to manual additions (199.1892ms)
+(node:19380) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:20208) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ explicit PRN survives import, operator review, draft reload and confirmation without fixed doses (24.4705ms)
+(node:20208) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:32000) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ structured-only candidates have no inferred active state, administration dose, time or start date (24.4131ms)
+✔ edits and browser draft reload retain immutable extraction and identity (3.8299ms)
+✔ explicit exclusion retains extracted evidence in draft and summary, not a prescription (1.9637ms)
+✔ same-name different extractions remain separate through review projection and reload (2.2946ms)
+✔ review, proposals and summary render escaped extraction distinctly from verbatim text (42.8508ms)
+(node:32000) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5936.1768

@@ -1,0 +1,41 @@
+(node:13836) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ scale mapping retains review and source metadata without a fixed clinical quantity (3.928ms)
+✔ scale does not invent a time and invalid protocol still blocks confirmation (0.5196ms)
+✔ summary renders measured-dose protocol rather than technical schedule quantity (6.7593ms)
+✔ comparison remains visible when OCR detects zero therapies and source text is escaped (0.7349ms)
+(node:13836) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:11608) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ import confirmation retains fraction, administration unit and weekdays (4.1339ms)
+✔ PO03: operational notes never receive OCR source or class metadata (0.2771ms)
+✔ PO03: reviewed clinical notes and source stay separate across draft reload (0.5209ms)
+✔ PO03: operator-entered source-like wording is preserved without text cleanup (0.1671ms)
+✔ reviewed schedules, dates, weekdays and status survive JSON draft reload (0.9611ms)
+✔ one-off and as-needed reviews keep their type after reload without periodic schedules (0.4394ms)
+✔ missing or ambiguous raw quantities never become a default dose (0.8846ms)
+✔ explicit unit takes priority over form and compound strength stays raw (0.2392ms)
+✔ blank drugs and invalid times stay in the ordered review and cannot confirm (0.6726ms)
+✔ verification renders real manual times and an actionable indexed blocker (10.1362ms)
+✔ liquid and inhaled quantities keep their explicit unit (0.3956ms)
+✔ ambiguous OCR source stays flagged through edits until explicitly reviewed (0.3961ms)
+✔ patch singular/plural and counted form import survive confirmation and reload (0.5592ms)
+✔ AIFA and manual form changes sync matching units but preserve explicit alternatives and quantities (0.5656ms)
+✔ three manual additions and an incomplete row remain alongside imports across draft reload and review (1.6816ms)
+✔ intake keeps complete therapy source available next to manual additions (28.2277ms)
+(node:11608) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:31260) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ explicit PRN survives import, operator review, draft reload and confirmation without fixed doses (6.6132ms)
+(node:31260) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 780.9159

@@ -1,0 +1,108 @@
+cwd: C:\w-therapy-qa
+command: node --import tsx --import ./scripts/stub-css-loader.mjs --test backend/src/intake/__tests__/confirm-therapy-validation.test.ts backend/src/intake/__tests__/confirm-draft-therapy.test.ts backend/src/intake/__tests__/confirm-draft-guards.test.ts backend/src/intake/__tests__/glucose-review-selection.test.ts
+exit: 1
+(node:13756) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:13756) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✖ confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConflict (328.3755ms)
+✖ C:\w-therapy-qa\backend\src\intake\__tests__\confirm-draft-guards.test.ts (1.1304ms)
+(node:18700) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:18700) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✖ confirmDraft: persists therapies + vitals/pain into Cartella.data (367.2817ms)
+✖ C:\w-therapy-qa\backend\src\intake\__tests__\confirm-draft-therapy.test.ts (0.9249ms)
+(node:26132) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:26132) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ invalid therapy returns indexed 400 before any patient or therapy write (3527.3631ms)
+✔ corrected retry persists precise schedules, actor and weekdays; replay is idempotent (13.2897ms)
+✔ persistence failure rolls back all writes, sanitizes audit, and permits retry (7.5455ms)
+✔ confirmation remains operator-gated and owner-scoped (5.3532ms)
+✔ one imported and three manual therapies persist in order including whole patches (4.5261ms)
+✔ a divided patch in the final row rejects the entire confirmation before writes (3.788ms)
+(node:33348) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ scale confirmation remains tied to saved reviewed dose rules (3.3521ms)
+✔ conditional mode does not bypass source conflicts or omitted therapy safeguards (0.6837ms)
+✔ blank saved dose must not become a zero-dose prescription by coercion (0.617ms)
+(node:33348) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 9
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8565.0281
+
+✖ failing tests:
+
+test at backend\src\intake\__tests__\confirm-draft-guards.test.ts:1:1282
+✖ confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConflict (328.3755ms)
+  PrismaClientKnownRequestError: 
+  Invalid `prisma.user.upsert()` invocation in
+  C:\w-therapy-qa\backend\src\test-support\operator-fixture.ts:4:34
+  
+    1 import { prisma } from '../lib/prisma.js';
+    2 
+    3 export async function createTestOperator(id: string, email: string): Promise<() => Promise<void>> {
+  → 4   const user = await prisma.user.upsert(
+  Can't reach database server at 127.0.0.1:1
+      at vn.handleRequestError (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\@prisma\client\src\runtime\RequestHandler.ts:238:13)
+      at vn.handleAndLogRequestError (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\@prisma\client\src\runtime\RequestHandler.ts:184:12)
+      at vn.request (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\@prisma\client\src\runtime\RequestHandler.ts:153:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async a (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:1014:24)
+      at async createTestOperator (C:\w-therapy-qa\backend\src\test-support\operator-fixture.ts:4:16)
+      at async TestContext.<anonymous> (C:\w-therapy-qa\backend\src\intake\__tests__\confirm-draft-guards.test.ts:19:21)
+      at async TestHook.run (node:internal/test_runner/test:1389:7)
+
+test at backend\src\intake\__tests__\confirm-draft-guards.test.ts:1:493
+✖ C:\w-therapy-qa\backend\src\intake\__tests__\confirm-draft-guards.test.ts (1.1304ms)
+  TypeError: cleanupOperator is not a function
+      at TestContext.<anonymous> (C:\w-therapy-qa\backend\src\intake\__tests__\confirm-draft-guards.test.ts:25:19)
+      at TestHook.runInAsyncScope (node:async_hooks:226:14)
+      at TestHook.run (node:internal/test_runner/test:1382:25)
+      at TestHook.run (node:internal/test_runner/test:1726:18)
+      at TestHook.run (node:internal/util:581:20)
+      at Test.runHook (node:internal/test_runner/test:1269:20)
+      at after (node:internal/test_runner/test:1322:20)
+      at Test.run (node:internal/test_runner/test:1408:13)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+test at backend\src\intake\__tests__\confirm-draft-therapy.test.ts:1:1112
+✖ confirmDraft: persists therapies + vitals/pain into Cartella.data (367.2817ms)
+  PrismaClientKnownRequestError: 
+  Invalid `prisma.user.upsert()` invocation in
+  C:\w-therapy-qa\backend\src\test-support\operator-fixture.ts:4:34
+  
+    1 import { prisma } from '../lib/prisma.js';
+    2 
+    3 export async function createTestOperator(id: string, email: string): Promise<() => Promise<void>> {
+  → 4   const user = await prisma.user.upsert(
+  Can't reach database server at 127.0.0.1:1
+      at vn.handleRequestError (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\@prisma\client\src\runtime\RequestHandler.ts:238:13)
+      at vn.handleAndLogRequestError (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\@prisma\client\src\runtime\RequestHandler.ts:184:12)
+      at vn.request (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\@prisma\client\src\runtime\RequestHandler.ts:153:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async a (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:1014:24)
+      at async createTestOperator (C:\w-therapy-qa\backend\src\test-support\operator-fixture.ts:4:16)
+      at async TestContext.<anonymous> (C:\w-therapy-qa\backend\src\intake\__tests__\confirm-draft-therapy.test.ts:16:21)
+      at async TestHook.run (node:internal/test_runner/test:1389:7)
+
+test at backend\src\intake\__tests__\confirm-draft-therapy.test.ts:1:487
+✖ C:\w-therapy-qa\backend\src\intake\__tests__\confirm-draft-therapy.test.ts (0.9249ms)
+  TypeError: cleanupOperator is not a function
+      at TestContext.<anonymous> (C:\w-therapy-qa\backend\src\intake\__tests__\confirm-draft-therapy.test.ts:22:19)
+      at TestHook.runInAsyncScope (node:async_hooks:226:14)
+      at TestHook.run (node:internal/test_runner/test:1382:25)
+      at TestHook.run (node:internal/test_runner/test:1726:18)
+      at TestHook.run (node:internal/util:581:20)
+      at Test.runHook (node:internal/test_runner/test:1269:20)
+      at after (node:internal/test_runner/test:1322:20)
+      at Test.run (node:internal/test_runner/test:1408:13)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)

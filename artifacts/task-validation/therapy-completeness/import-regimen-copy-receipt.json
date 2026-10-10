@@ -1,0 +1,7 @@
+{
+  "candidate": "f7052f414ee1f0dbc2fa45d86b66463928c2810d",
+  "verdict": "FAILED VALIDATION",
+  "files": 94,
+  "manifestSha256": "28289ce6bc4b8287c952810355abb0a121424ea8a05f712506de831b63484028",
+  "exactBytesVerified": true
+}

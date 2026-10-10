@@ -1,0 +1,29 @@
+{
+  "applicationCommit": "89888589ef1fcce8f200899aa07413c8bcb70325",
+  "baseline": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
+  "logSha256": "0f53995a3adcf960808807cbaa76a8e0e97cb9982421b2b13d44cdf81c144df5",
+  "counts": {
+    "tests": 1314,
+    "pass": 1302,
+    "fail": 12,
+    "skipped": 0
+  },
+  "failures": [
+    "✖ Assistant classic fallback with a known resident opens that resident section",
+    "✖ a single parameters table is always visible and uses the operational table contract",
+    "✖ multi-patient mobile layout is a labelled two-column card without horizontal scroll",
+    "✖ multi-patient parameters uses one bounded page instead of cartella fan-out",
+    "✖ multi-patient quick entry exposes every action and field to assistive technology",
+    "✖ multi-patient quick entry reuses the ClinicOS form and action design system",
+    "✖ multi-patient refresh keeps the previous roster visible and announces progress",
+    "✖ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance",
+    "✖ only design-system.css decides how a canonical control looks",
+    "✖ schedule reads are abortable, session-safe and retryable",
+    "✖ src\\components\\operator\\__tests__\\assessmentCatalogUi.test.ts",
+    "✖ weekly and monthly views never repeat one-day therapy data across calendar cells"
+  ],
+  "introduced": [],
+  "removed": [],
+  "sameFailureNames": true,
+  "mandatoryVerdict": "FAILED VALIDATION; matching baseline does not waive failures"
+}

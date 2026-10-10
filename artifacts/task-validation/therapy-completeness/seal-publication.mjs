@@ -3,9 +3,14 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { inflateRawSync } from 'node:zlib';
-const root='artifacts/task-validation/therapy-completeness', app='14a03038f758cf728e563807752da1642dc35fa8';
+const root='artifacts/task-validation/therapy-completeness', app=process.argv[2];
+assert.ok(/^[a-f0-9]{40}$/.test(app || ''), 'Explicit application commit required');
 const git=args=>{const r=spawnSync('git',args,{encoding:'utf8',windowsHide:true,maxBuffer:10e6});assert.equal(r.status,0);return r.stdout.trim();};
 const paths=git(['ls-files','--',root]).split('\n').filter(p=>p&&!p.endsWith('/publication-manifest.json'));
+assert.equal(git(['diff', '--name-only', app, '--', 'frontend/src', 'backend/src']), '', 'Application source must match candidate');
+// The original independently sealed151 artifacts include their compiled qa-dist evidence.
+// Preserve that historical seal; exclude fresh root build scratch directories from publication.
+assert.ok(paths.every(p=>!p.slice(root.length+1).split('/')[0].endsWith('-dist')), 'Root build scratch directories are not publication artifacts');
 assert.ok(paths.length>20);
 const env=JSON.parse(readFileSync('C:/Workspace/ClinicOSHouse/.claude/settings.local.json','utf8')).env;
 const privateValues=Object.entries(env).filter(([k,v])=>/token|key|secret|password|connection/i.test(k)&&typeof v==='string'&&v.length>=12).map(([,v])=>Buffer.from(v));

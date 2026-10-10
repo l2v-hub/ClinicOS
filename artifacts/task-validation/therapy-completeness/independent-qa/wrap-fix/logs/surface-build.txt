@@ -1,0 +1,40 @@
+cwd: C:\w-therapy-qa
+command: node artifacts/task-validation/therapy-completeness-qa/wrap-fix/serve.mjs
+exit: 0
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 112 modules transformed.
+rendering chunks...
+computing gzip size...
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/pdfjs-6.2.108/LICENSE_PDFJS_JBIG2              0.55 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/pdfjs-6.2.108/LICENSE_QCMS                     1.12 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/pdfjs-6.2.108/LICENSE_PDFJS_OPENJPEG           1.28 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/pdfjs-6.2.108/LICENSE_PDFJS_QCMS               1.28 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/pdfjs-6.2.108/LICENSE_OPENJPEG                 2.11 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/pdfjs-6.2.108/LICENSE_JBIG2                   12.86 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/pdfjs-6.2.108/qcms_bg.wasm                    96.58 kB │ gzip:  36.09 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/pdfjs-6.2.108/jbig2.wasm                     104.85 kB │ gzip:  40.89 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/pdfjs-6.2.108/jbig2_nowasm_fallback.js       145.70 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/pdfjs-6.2.108/openjpeg.wasm                  252.03 kB │ gzip:  83.79 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/pdfjs-6.2.108/openjpeg_nowasm_fallback.js    451.59 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/pdf.worker.min-CHFwMXne.mjs                1,262.39 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/VisoreDocumentoFarmaco-BaEEBIbC.css            3.02 kB │ gzip:   0.90 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/wrap-fix-surface-C8-qudDo.css                325.51 kB │ gzip:  55.34 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/VisoreDocumentoFarmaco-Buq9r83w.js            11.19 kB │ gzip:   4.69 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/pdf-BaqDYfko.js                              427.29 kB │ gzip: 127.39 kB
+artifacts/task-validation/therapy-completeness-qa/wrap-fix/qa-dist/assets/qa-entry.js                                  798.66 kB │ gzip: 240.16 kB
+
+✓ built in 3.31s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[33m[PLUGIN_TIMINGS] [0mYour build spent 93% of 3.3s inside plugin hooks (3.1s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - @rolldown/plugin-babel transform (87%, 2.9s, 79 calls)
+Those rows are 87% of the build; the rest of the 93% is below.
+Not measurable — 1 hook whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - vite:css transform (18 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+

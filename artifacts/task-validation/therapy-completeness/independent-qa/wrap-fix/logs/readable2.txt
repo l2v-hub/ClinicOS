@@ -1,0 +1,12 @@
+cwd: C:\w-therapy-qa
+command: node node_modules/playwright/cli.js test --config artifacts/task-validation/therapy-completeness-qa/wrap-fix/readable.config.mjs
+exit: 0
+
+Running 2 tests using 1 worker
+
+  ok 1 artifacts\task-validation\therapy-completeness-qa\wrap-fix\native-tests\readable.spec.mjs:4:2 › desktop: readable verified late medicines, PRN and missing feed (3.4s)
+  ok 2 artifacts\task-validation\therapy-completeness-qa\wrap-fix\native-tests\readable.spec.mjs:4:2 › mobile: readable verified late medicines, PRN and missing feed (2.3s)
+
+  2 passed (7.0s)
+(node:40992) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
