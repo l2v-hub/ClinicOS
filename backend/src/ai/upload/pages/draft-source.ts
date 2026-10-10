@@ -166,7 +166,7 @@ export function refreshedPageData(existing: Json, result: Json): Json {
     const id = hash([row.importRowKey ?? row.originalText, row.conflictId ?? null]);
     const prior = values(existing._importProposals).find((p) => p.id === id);
     proposals.push(
-      prior ?? {
+      prior ? { ...prior, ...source, row } : {
         id,
         ...source,
         row,

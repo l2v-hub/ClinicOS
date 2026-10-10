@@ -80,6 +80,12 @@ test('refresh retains reviewed values and exclusions, adds new variants once wit
   assert.deepEqual((proposals[0].row as Json).structuredSource, beta);
   const again = refreshedPageData(refreshed, next);
   assert.deepEqual(again._importProposals, proposals);
+  const newer = refreshedPageData(refreshed, result([alfa, beta], '', 'g1', 'h3'));
+  const refreshedProposal = (newer._importProposals as Json[])[0];
+  assert.equal(refreshedProposal.id, proposals[0].id);
+  assert.equal(refreshedProposal.inputHash, 'h3');
+  assert.equal((refreshedProposal.row as Json).importSource && ((refreshedProposal.row as Json).importSource as Json).inputHash, 'h3');
+  assert.equal(refreshedProposal.status, 'pending');
   const added = { ...refreshed, terapiaImport: [...refreshed.terapiaImport as Json[], proposals[0].row] };
   assert.deepEqual(refreshedPageData(added, next)._importProposals, []);
 });
