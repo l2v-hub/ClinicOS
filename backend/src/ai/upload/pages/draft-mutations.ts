@@ -14,6 +14,7 @@ import {
 import { lockJob, receipt, saveReceipt } from './repository.js';
 import { assertCurrentReview, assertDraftSource } from './review.js';
 import { refreshedPageData } from './draft-source.js';
+import { sameTherapySource } from '../../../intake/therapy-source-inventory.js';
 
 export const IMMUTABLE_DRAFT_FIELDS = [
   '_narrative',
@@ -64,9 +65,10 @@ export async function draftPatchReceipt(tx: Tx, draft: PatientIntakeDraft, body:
 }
 
 export function guardPageRows(previous: Json, patch: Json, result: Json | undefined) {
-  if (!previous._importSource || patch.terapiaImport === undefined) return;
+  if (patch.terapiaImport === undefined) return;
   const before = Array.isArray(previous.terapiaImport) ? (previous.terapiaImport as Json[]) : [];
-  if (!Array.isArray(patch.terapiaImport) || patch.terapiaImport.length !== before.length)
+  if (!Array.isArray(patch.terapiaImport) ||
+    (previous._importSource ? patch.terapiaImport.length !== before.length : patch.terapiaImport.length < before.length))
     throw new ImportSessionError(
       400,
       'immutable_source',
@@ -75,7 +77,8 @@ export function guardPageRows(previous: Json, patch: Json, result: Json | undefi
   patch.terapiaImport.forEach((value, index) => {
     const row = object(value),
       old = object(before[index]);
-    for (const key of ['importSource', 'importSources', 'conflictDeferred', 'conflictId']) {
+    for (const key of ['importSource', 'importSources', 'conflictDeferred', 'conflictId',
+      'sourceKind', 'structuredSource', 'structuredOccurrenceKey', 'importRowKey']) {
       if (canonical(row[key]) !== canonical(old[key]))
         throw new ImportSessionError(
           400,
@@ -201,7 +204,7 @@ function mutateDraft(
           'conflict_deferred',
           'La terapia rinviata non può essere aggiunta',
         );
-      if (rows.some((row) => object(row).originalText === object(proposal.row).originalText))
+      if (rows.some((row) => sameTherapySource(object(row), object(proposal.row))))
         throw new ImportSessionError(
           409,
           'proposal_duplicate',

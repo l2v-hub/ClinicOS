@@ -1,5 +1,5 @@
 import type { DischargeNarrativeDraft } from '../../sections/narrative.js';
-import { parseDischargeTherapy } from '../../../intake/parse-discharge-therapy.js';
+import { exactStructuredVariant, representsStructuredItem, sameTherapySource, therapySourceInventory } from '../../../intake/therapy-source-inventory.js';
 import { hash, object, type Json } from './model.js';
 import { importSource } from './review.js';
 import type { Conflict, Decision, GroupResult } from './results.js';
@@ -11,7 +11,7 @@ const normalized = (v: unknown) =>
     .replace(/\s+/g, ' ');
 const values = (v: unknown): Json[] => (Array.isArray(v) ? v.map(object) : []);
 const nameOf = (value: unknown) =>
-  normalized(parseDischargeTherapy(String(value ?? ''))[0]?.farmacoNome);
+  normalized(value);
 
 function selection(result: Json, conflict: Conflict) {
   const decisions = object(result._review).decisions as Decision[];
@@ -74,7 +74,7 @@ export function pageTherapyRows(result: Json): Json[] {
     const groupConflicts = conflicts.filter((c) =>
       c.candidates.some((candidate) => candidate.sources.some((s) => s.groupId === group.groupId)),
     );
-    for (const row of parseDischargeTherapy(group._narrative.therapyText ?? '')) {
+    for (const row of therapySourceInventory(group._narrative.therapyText ?? '', object(group._full.cartella).farmaci)) {
       const matches = groupConflicts.filter(
         (c) =>
           c.field === 'cartella.terapie' ||
@@ -84,9 +84,14 @@ export function pageTherapyRows(result: Json): Json[] {
       );
       // A structured conflict that cannot be tied to a parsed name cannot authorize a prescription.
       const relevant = matches.length ? matches : groupConflicts;
-      const blocked = relevant.find(
-        (c) => !selection(result, c)?.sources.some((s) => s.groupId === group.groupId),
-      );
+      const blocked = relevant.find((c) => {
+        const selected = selection(result, c);
+        return !selected?.sources.some((s) => s.groupId === group.groupId) ||
+          (c.field === 'cartella.farmaci' &&
+            !(row.structuredSource !== undefined
+              ? exactStructuredVariant(row, selected.value)
+              : representsStructuredItem(row, object(selected.value))));
+      });
       const source = { groupId: group.groupId, inputHash: group.inputHash };
       const candidate: Json = {
         ...row,
@@ -138,10 +143,10 @@ export function refreshedPageData(existing: Json, result: Json): Json {
     const source = object(row.importSource);
     if (!source.groupId) return row;
     const sources = values(row.importSources).length ? values(row.importSources) : [source];
-    const now = incoming.find((candidate) => candidate.originalText === row.originalText);
+    const now = incoming.find((candidate) => sameTherapySource(candidate, row));
     const changed =
       sources.some((s) => oldHashes[String(s.groupId)] !== newHashes[String(s.groupId)]) ||
-      Boolean(row.conflictDeferred) !== Boolean(now?.conflictDeferred);
+      !now || Boolean(row.conflictDeferred) !== Boolean(now.conflictDeferred);
     if (!changed) return row;
     return {
       ...row,
@@ -157,8 +162,8 @@ export function refreshedPageData(existing: Json, result: Json): Json {
     const source = object(row.importSource);
     // The raw line is parsed deterministically. Group order must never manufacture
     // a second prescription merely because the primary provenance changed.
-    if (rows.some((old) => old.originalText === row.originalText)) continue;
-    const id = hash([source, row.originalText, row.conflictId ?? null]);
+    if (rows.some((old) => sameTherapySource(old, row))) continue;
+    const id = hash([row.importRowKey ?? row.originalText, row.conflictId ?? null]);
     const prior = values(existing._importProposals).find((p) => p.id === id);
     proposals.push(
       prior ?? {

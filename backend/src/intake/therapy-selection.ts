@@ -182,7 +182,9 @@ export function deferredTherapies(data: Row) {
       route: text(row.viaSomministrazione),
       frequency: Array.isArray(row.giorni) ? row.giorni.map(text).join(', ') : '',
       times: Array.isArray(row.orari) ? row.orari.map(text) : [],
-      notes: text(row.originalText) || text(row.note),
+      notes: text(row.originalText) || (row.structuredSource !== undefined
+        ? `Dati estratti automaticamente — confronta il documento: ${JSON.stringify(row.structuredSource)}`
+        : text(row.note)),
       reason: 'Lasciata in bozza: non prescritta e non programmata',
     }));
 }

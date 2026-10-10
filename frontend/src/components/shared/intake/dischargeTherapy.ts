@@ -38,6 +38,11 @@ export interface DischargeTherapyRow {
   conflictId?: string;
   sourceOutdated?: boolean;
   sourceReviewHash?: string;
+  /** Immutable extraction evidence, distinct from verbatim document text. */
+  sourceKind?: 'structured';
+  structuredSource?: unknown;
+  structuredOccurrenceKey?: string;
+  importRowKey?: string;
 }
 
 export const CODE_TO_FORM_VIA: Record<string, string> = {
@@ -130,6 +135,12 @@ export function parseDosaggio(raw: string) {
 /** Legacy imports leave unknown clinical values blank for explicit correction. */
 export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormValue {
   if (r.reviewedTherapy) return { ...emptyTherapyForm(), ...structuredClone(r.reviewedTherapy) };
+  if (r.sourceKind === 'structured') return {
+    ...emptyTherapyForm(), farmacoNome: r.farmacoNome || '',
+    // A candidate must be explicitly classified, never defaulted to an active therapy.
+    stato: '', viaSomministrazione: '', dataInizio: '',
+    schedules: [], pharmaceuticalForm: '',
+  };
   const forma = mapForma(r.forma);
   const dose = parseDosaggio(r.dosaggio);
   const qty = parseAdministration(r.quantita, forma);

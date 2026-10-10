@@ -1,6 +1,6 @@
 import { prisma } from '../lib/prisma.js';
 import type { DischargeNarrativeDraft } from '../ai/sections/narrative.js';
-import { parseDischargeTherapy } from './parse-discharge-therapy.js';
+import { therapySourceInventory } from './therapy-source-inventory.js';
 import type { Operator } from '../ai/auth.js';
 import { canAccessOwnedResource } from '../ai/ownership-policy.js';
 import { AiExtractionError } from '../ai/types.js';
@@ -218,6 +218,7 @@ export interface SeedDraftFromImportOpts {
 export function buildImportDraftData(
   narrative: DischargeNarrativeDraft,
   rawSections: unknown,
+  structuredExtraction?: unknown,
 ): Record<string, unknown> {
   const seeded: Record<string, unknown> = {};
 
@@ -295,9 +296,9 @@ export function buildImportDraftData(
   //    TherapyFormValue editor and its confirm mapper (therapyFormToInput) — putting a
   //    ParsedTherapyRow there would break confirm. Incomplete lines keep stato 'da_verificare'
   //    (never dropped); the raw text is stashed under _terapiaText for lossless audit.
+  const therapyRows = therapySourceInventory(narrative.therapyText ?? '', object(object(structuredExtraction).cartella).farmaci);
+  if (therapyRows.length > 0) seeded.terapiaImport = therapyRows;
   if (narrative.therapyText) {
-    const rows = parseDischargeTherapy(narrative.therapyText);
-    if (rows.length > 0) seeded.terapiaImport = rows;
     seeded._terapiaText = narrative.therapyText;
   }
 
@@ -356,6 +357,7 @@ export async function seedDraftFromImport(jobId: string, opts: SeedDraftFromImpo
       const seeded = buildImportDraftData(
         pageResult ? pageDraftNarrative(pageResult) : narrative,
         resultData?._sections ?? null,
+        resultData?._full ?? resultData,
       );
       const data = pageResult ? attachPageDraftSource(seeded, pageResult) : seeded;
       if (pageResult)

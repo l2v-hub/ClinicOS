@@ -52,7 +52,7 @@ export interface TherapyFormValue {
   allowedFractions: string[];
   viaSomministrazione: string;
   tipo: 'periodica' | 'una_tantum' | 'al_bisogno';
-  stato: 'attiva' | 'sospesa' | 'conclusa';
+  stato: '' | 'attiva' | 'sospesa' | 'conclusa';
   dataInizio: string;
   dataFine: string;
   schedules: ScheduleRow[];
@@ -353,6 +353,7 @@ export function TherapyFormFields({
               value={value.stato}
               onChange={(e) => update({ stato: e.target.value as TherapyFormValue['stato'] })}
             >
+              {value.stato === '' && <option value="" disabled>— Verifica lo stato —</option>}
               <option value="attiva">Attiva</option>
               <option value="sospesa">Sospesa</option>
               <option value="conclusa">Conclusa</option>
