@@ -1,0 +1,13 @@
+{
+  "decision": "AUTHORIZED SOURCE-BOUND SYNTHETIC EVIDENCE COMMIT/PUSH",
+  "authority": "Direct human authorization; independent/root/compiled/source/deployment verified; GitHub closure separately gated",
+  "applicationCommit": "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+  "parentProof": "04ab62e4817c9dc8ee107e582da30a79c30ca2e1",
+  "branch": "codex/bug-426-room-actions",
+  "scope": "artifacts/task-validation/426-room-actions",
+  "canonicalFiles": 806,
+  "secretChecks": 40638,
+  "zipMembers": 12740,
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-10T00:07:40.100Z"
+}

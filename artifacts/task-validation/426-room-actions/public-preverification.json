@@ -1,0 +1,38 @@
+{
+  "applicationCommit": "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+  "proofCommit": "04ab62e4817c9dc8ee107e582da30a79c30ca2e1",
+  "decision": "PINNED PUBLIC PROOF PREVERIFIED",
+  "canonicalHashesVerified": 802,
+  "images": [
+    {
+      "label": "Letto e camera identificati senza ambiguità",
+      "path": "compiled-online/browser01/screenshots/bed-exact-target.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/04ab62e4817c9dc8ee107e582da30a79c30ca2e1/artifacts/task-validation/426-room-actions/compiled-online/browser01/screenshots/bed-exact-target.png",
+      "http": 200,
+      "sha256": "4bbc4e441b2aaa81dacd14555f8a43c992bdbab1fc23b1b9e8b0c736cc9e8b30"
+    },
+    {
+      "label": "Identificatori lunghi del letto: contesto completo su mobile",
+      "path": "compiled-online/long01/screenshots/independent-mobile-long-context.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/04ab62e4817c9dc8ee107e582da30a79c30ca2e1/artifacts/task-validation/426-room-actions/compiled-online/long01/screenshots/independent-mobile-long-context.png",
+      "http": 200,
+      "sha256": "b44c91289d7b92a022d1efb64c80bbbea945fd35f5cafa15e0c4c29d90ff23ac"
+    },
+    {
+      "label": "Editor camera: nome completo e chiusura visibili su mobile",
+      "path": "compiled-online/room-headers01/screenshots/mobile-long-room-editor.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/04ab62e4817c9dc8ee107e582da30a79c30ca2e1/artifacts/task-validation/426-room-actions/compiled-online/room-headers01/screenshots/mobile-long-room-editor.png",
+      "http": 200,
+      "sha256": "9d4adad666f2a7660e57746bf73e8de7813aae10ca5089b2b18f8e0ea52ea46f"
+    },
+    {
+      "label": "Conferma: messaggio e azioni leggibili, prova senza cancellazione",
+      "path": "compiled-online/header-vertical01/screenshots/mobile-complete-confirmation-context.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/04ab62e4817c9dc8ee107e582da30a79c30ca2e1/artifacts/task-validation/426-room-actions/compiled-online/header-vertical01/screenshots/mobile-complete-confirmation-context.png",
+      "http": 200,
+      "sha256": "8a9863981f8ef0b1d394356a77c1d4ccf8803b7a1568ad4d208e7d936371b8eb"
+    }
+  ],
+  "at": "2026-10-10T00:06:56.914Z",
+  "productionPatientTestMutations": 0
+}

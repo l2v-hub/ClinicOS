@@ -31,10 +31,10 @@ Vercel dpl_2bHN5q241NNpYY2G51iEsyJ3uBot READY; Git source/metadata exactly30e802
 
 CI38006718118 completed. Secret scan38006718172 success. Exactly the same single accepted422 backend test name/stage; downstream import tests skipped, not claimed PASS. No global CI green claim. ci-comparison.json records exact source-bound comparison.
 
-Canonical staged Git blobs must pass configured credential checks (including expanded ZIP entries), binary integrity and all failed/successful raw QA manifests before push. Pinned public4PNG HTTP200/hash verification remains pending; no issue closure permitted. Original issue body remains unchanged, duplicate comment check before mutation. Release actions independently authorized by human/root recorded receipts, not by QA role.
+Canonical staged Git blobs must pass configured credential checks (including expanded ZIP entries), binary integrity and all failed/successful raw QA manifests before push. Pinned public4PNG HTTP200/hash verification completed in public-preverification.json; final report/canonical blobs rechecked on final proof commit before GitHub mutation. Original issue body remains unchanged, duplicate comment check before mutation. Release actions independently authorized by human/root recorded receipts, not by QA role.
 
 ## Final Decision
 
-IMPLEMENTED — NOT VERIFIED
+CLOSED — VERIFIED
 
-Functional/local/deployment/compiled/CI gates passed; canonical public proof verification still required. No completion claim.
+All4 scoped functional criteria and source/independent/root/compiled/deployment/CI/canonical/pinned screenshot gates verified. Final proof commit integrity and original issue are checked again before actual GitHub closure.

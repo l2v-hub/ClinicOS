@@ -1,0 +1,15 @@
+{
+  "decision": "AUTHORIZED FINAL VERIFIED REPORT/CANONICAL PROOF STAGING",
+  "authority": "Explicit human authorization plus completed independent/root/compiled/deployment/CI/public image gates; original issue still open until publisher checks",
+  "applicationCommit": "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+  "priorVerifiedProof": "04ab62e4817c9dc8ee107e582da30a79c30ca2e1",
+  "scope": [
+    "validation-report.md",
+    "public-preverification.json",
+    "check-closure.log",
+    "finalize-proof.mjs",
+    "proof-finalization-policy.json"
+  ],
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-10T00:07:20.908Z"
+}

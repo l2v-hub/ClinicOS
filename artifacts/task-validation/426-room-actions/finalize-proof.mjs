@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+const root='artifacts/task-validation/426-room-actions',read=p=>JSON.parse(readFileSync(root+'/'+p)),app=read('frozen-release-source.json').applicationCommit;
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8',maxBuffer:20e6,windowsHide:true});assert.equal(r.status,0,'Scoped final proof staging failed safely');return r.stdout.trim();};
+assert.equal(git(['diff','--cached','--name-only']),'');const priorProof=git(['rev-parse','HEAD']),pub=read('public-preverification.json');assert.equal(pub.proofCommit,priorProof);assert.equal(pub.applicationCommit,app);assert.equal(pub.images.length,4);assert.ok(pub.images.every(i=>i.http===200));
+const files=['validation-report.md','public-preverification.json','check-closure.log','finalize-proof.mjs','proof-finalization-policy.json'];
+writeFileSync(root+'/proof-finalization-policy.json',JSON.stringify({decision:'AUTHORIZED FINAL VERIFIED REPORT/CANONICAL PROOF STAGING',authority:'Explicit human authorization plus completed independent/root/compiled/deployment/CI/public image gates; original issue still open until publisher checks',applicationCommit:app,priorVerifiedProof:priorProof,scope:files,productionPatientTestMutations:0,at:new Date().toISOString()},null,2));
+const check=spawnSync(process.execPath,['scripts/quality-gate/check-closure.js',root],{encoding:'utf8',windowsHide:true});assert.equal(check.status,0);writeFileSync(root+'/check-closure.log',check.stdout+check.stderr);
+git(['add','-f','--',...files.map(f=>root+'/'+f)]);assert.ok(git(['diff','--cached','--name-only']).split('\n').every(p=>files.some(f=>p===root+'/'+f)));console.log('Final proof staged; privacy/canonical push/public recheck remain required');
