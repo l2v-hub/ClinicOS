@@ -1,0 +1,8 @@
+﻿{
+    "port":  7526,
+    "root":  "C:/w-427",
+    "pid":  16760,
+    "at":  "2026-10-10T00:30:14.2965139Z",
+    "decision":  "AUTHORIZED ROOT OWNED SERVER AFTER INDEPENDENT HANDOFF",
+    "recipe":  "artifacts/task-validation/427-agenda-identity/root-rerun/recipes/qa-server.mjs"
+}

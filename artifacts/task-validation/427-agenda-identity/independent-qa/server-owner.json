@@ -1,0 +1,6 @@
+{
+  "port": 7527,
+  "pid": 16928,
+  "cwd": "C:/w-427-qa",
+  "recipe": "recipes/qa-server.mjs"
+}

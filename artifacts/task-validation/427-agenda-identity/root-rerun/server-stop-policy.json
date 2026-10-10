@@ -1,0 +1,7 @@
+﻿{
+    "port":  7526,
+    "pid":  16760,
+    "verifiedCommand":  "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/427-agenda-identity/root-rerun/recipes/qa-server.mjs ",
+    "at":  "2026-10-10T00:32:16.8366669Z",
+    "decision":  "AUTHORIZED STOP EXACT OWNED QA PID"
+}

@@ -1,0 +1,40 @@
+{
+  "applicationCommit": "7680ec0b25c61de5745f296d91e370b575de9c00",
+  "qaManifestSha256": "e8db13384c0e4cae777a2f7d121055f9a4c3f941a7ffba4cbba1792ed7bb23e3",
+  "records": [
+    {
+      "name": "browser.mjs",
+      "sha256": "3e916d87483ffcb7dec4932a77194f52b21797097f683aa0c554b9548d6061de"
+    },
+    {
+      "name": "commands.mjs",
+      "sha256": "ebb27dfd7f0d95c3183de02c92aee2ca81e62addf2c58199acf8990370ff72a9"
+    },
+    {
+      "name": "qa-server.mjs",
+      "sha256": "dbb4c74cbd86e1db5726d940d3c78c4684cab876ae735e92a7bd7453942b9205"
+    },
+    {
+      "name": "seal.mjs",
+      "sha256": "561e1e8c11fb101421b0b6d75d55c6ba8d05d34cd9d401a322c2c66122617cf6"
+    },
+    {
+      "name": "security.mjs",
+      "sha256": "d5e1a7d1709a7f81091b5cff0e7a0aee7b158adda3aaa268873ab46620b1c5df"
+    },
+    {
+      "name": "source-receipt.mjs",
+      "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+    },
+    {
+      "name": "transport.mjs",
+      "sha256": "bae179ff0be0fe60e06e454b8441adb1a82e043bb34786e23b5e9b1ebfaf6225"
+    },
+    {
+      "name": "values-bounds.mjs",
+      "sha256": "25fa2ab87f0118a4ba99e277e444d87436a06e92f4eaeb32dccdcb8f73a07223"
+    }
+  ],
+  "decision": "AUTHORIZED IDENTICAL ROOT REPLAY; NO APP WRITE",
+  "at": "2026-10-10T00:30:11.811Z"
+}

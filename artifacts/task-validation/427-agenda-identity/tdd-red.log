@@ -1,0 +1,176 @@
+✖ legend explicitly names all four activity states beyond color (16.617ms)
+✖ empty and populated period filters have a real caption and unchanged native counts (2.0199ms)
+✖ operator colors are suppressed only for admin identity, including inline aggregate borders (0.7654ms)
+✖ admin card surfaces match badge/legend semantics without rewriting operator HMI (0.6768ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 518.4562
+
+✖ failing tests:
+
+test at frontend\src\lib\__tests__\agendaIdentity.test.tsx:1:865
+✖ legend explicitly names all four activity states beyond color (16.617ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Stati delle attività/. Input:
+  
+  '<div class="agt-legend"><span class="agt-legend__item"><span class="agt-legend__dot" style="background:#16A37B"></span>Completato</span><span class="agt-legend__item"><span class="agt-legend__dot" style="background:#2F6BED"></span>In corso</span><span class="agt-legend__item"><span class="agt-legend__dot" style="background:#C77700"></span>Programmato</span><span class="agt-legend__item"><span class="agt-legend__dot" style="background:#E5E7EB;border:1px dashed #9DB7D5"></span>Disponibile</span></div>'
+  
+      at TestContext.<anonymous> (C:\w-427\frontend\src\lib\__tests__\agendaIdentity.test.tsx:21:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<div class="agt-legend"><span class="agt-legend__item"><span class="agt-legend__dot" style="background:#16A37B"></span>Completato</span><span class="agt-legend__item"><span class="agt-legend__dot" style="background:#2F6BED"></span>In corso</span><span class="agt-legend__item"><span class="agt-legend__dot" style="background:#C77700"></span>Programmato</span><span class="agt-legend__item"><span class="agt-legend__dot" style="background:#E5E7EB;border:1px dashed #9DB7D5"></span>Disponibile</span></div>',
+    expected: /Stati delle attività/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\agendaIdentity.test.tsx:1:1223
+✖ empty and populated period filters have a real caption and unchanged native counts (2.0199ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Appuntamenti nel periodo selezionato/. Input:
+  
+  '<div class="ds-chip-group" role="group" aria-label="Filtra per stato"><button type="button" class="ds-chip" aria-pressed="true">Tutti gli stati <span class="ds-chip__count">0</span></button><button type="button" class="ds-chip" aria-pressed="false">Programmato</button><button type="button" class="ds-chip" aria-pressed="false">In corso</button><button type="button" class="ds-chip" aria-pressed="false">Completato</button><button type="button" class="ds-chip" aria-pressed="false">Annullato</button></div>'
+  
+      at TestContext.<anonymous> (C:\w-427\frontend\src\lib\__tests__\agendaIdentity.test.tsx:33:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<div class="ds-chip-group" role="group" aria-label="Filtra per stato"><button type="button" class="ds-chip" aria-pressed="true">Tutti gli stati <span class="ds-chip__count">0</span></button><button type="button" class="ds-chip" aria-pressed="false">Programmato</button><button type="button" class="ds-chip" aria-pressed="false">In corso</button><button type="button" class="ds-chip" aria-pressed="false">Completato</button><button type="button" class="ds-chip" aria-pressed="false">Annullato</button></div>',
+    expected: /Appuntamenti nel periodo selezionato/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\agendaIdentity.test.tsx:1:1874
+✖ operator colors are suppressed only for admin identity, including inline aggregate borders (0.7654ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /\.agt-view:not\(\.agt-view--hmi\) \.agt-op-dot\s*\{\s*display: none;/. Input:
+  
+  '/* Agenda — informazione senza tocchi (UX direct-access, 2026-10-03). Condiviso da agenda\r\n' +
+    '   operatore e multi-operatore: nota sempre visibile, stato in parole (non solo colore), nome\r\n' +
+    "   dell'operatore accanto al pallino, mese senza «+N» (la cella cresce). Testo che va a capo. */\r\n" +
+    '.agt-note-inline {\r\n' +
+    '  white-space: pre-wrap;\r\n' +
+    '  overflow-wrap: anywhere;\r\n' +
+    '  font-size: 13px;\r\n' +
+    '  line-height: 18px;\r\n' +
+    '}\r\n' +
+    '.agt-inline-apt {\r\n' +
+    '  flex-wrap: wrap;\r\n' +
+    '  align-items: flex-start;\r\n' +
+    '  row-gap: 2px;\r\n' +
+    '  height: auto;\r\n' +
+    '}\r\n' +
+    '.agt-inline-apt .agt-week-apt__name,\r\n' +
+    '.agt-inline-apt .agt-month-apt__name {\r\n' +
+    '  white-space: normal;\r\n' +
+    '  overflow: visible;\r\n' +
+    '  text-overflow: clip;\r\n' +
+    '  overflow-wrap: anywhere;\r\n' +
+    '}\r\n' +
+    '.agt-inline-meta {\r\n' +
+    '  flex-basis: 100%;\r\n' +
+    '  min-width: 0;\r\n' +
+    '  font-size: 11px;\r\n' +
+    '  line-height: 15px;\r\n' +
+    '  color: var(--text-muted);\r\n' +
+    '  overflow-wrap: anywhere;\r\n' +
+    '}\r\n' +
+    '.agt-inline-meta strong {\r\n' +
+    '  font-weight: 700;\r\n' +
+    '  color: var(--text);\r\n' +
+    '}\r\n' +
+    '/* Mese: la cella mostra tutti gli appuntamenti e cresce in altezza. */\r\n' +
+    '.agt-month-day {\r\n' +
+    '  height: auto;\r\n' +
+    '}\r\n' +
+    '.agt-month-day__apts {\r\n' +
+    '  overflow: visible;\r\n' +
+    '}\r\n'
+  
+      at TestContext.<anonymous> (C:\w-427\frontend\src\lib\__tests__\agendaIdentity.test.tsx:43:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: "/* Agenda — informazione senza tocchi (UX direct-access, 2026-10-03). Condiviso da agenda\r\n   operatore e multi-operatore: nota sempre visibile, stato in parole (non solo colore), nome\r\n   dell'operatore accanto al pallino, mese senza «+N» (la cella cresce). Testo che va a capo. */\r\n.agt-note-inline {\r\n  white-space: pre-wrap;\r\n  overflow-wrap: anywhere;\r\n  font-size: 13px;\r\n  line-height: 18px;\r\n}\r\n.agt-inline-apt {\r\n  flex-wrap: wrap;\r\n  align-items: flex-start;\r\n  row-gap: 2px;\r\n  height: auto;\r\n}\r\n.agt-inline-apt .agt-week-apt__name,\r\n.agt-inline-apt .agt-month-apt__name {\r\n  white-space: normal;\r\n  overflow: visible;\r\n  text-overflow: clip;\r\n  overflow-wrap: anywhere;\r\n}\r\n.agt-inline-meta {\r\n  flex-basis: 100%;\r\n  min-width: 0;\r\n  font-size: 11px;\r\n  line-height: 15px;\r\n  color: var(--text-muted);\r\n  overflow-wrap: anywhere;\r\n}\r\n.agt-inline-meta strong {\r\n  font-weight: 700;\r\n  color: var(--text);\r\n}\r\n/* Mese: la cella mostra tutti gli appuntamenti e cresce in altezza. */\r\n.agt-month-day {\r\n  height: auto;\r\n}\r\n.agt-month-day__apts {\r\n  overflow: visible;\r\n}\r\n",
+    expected: /\.agt-view:not\(\.agt-view--hmi\) \.agt-op-dot\s*\{\s*display: none;/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\agendaIdentity.test.tsx:1:2174
+✖ admin card surfaces match badge/legend semantics without rewriting operator HMI (0.6768ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /\.agt-view:not\(\.agt-view--hmi\) \.agt-apt-card--programmato\s*\{[^}]*background: #fff0cf;/. Input:
+  
+  '/* Agenda — informazione senza tocchi (UX direct-access, 2026-10-03). Condiviso da agenda\r\n' +
+    '   operatore e multi-operatore: nota sempre visibile, stato in parole (non solo colore), nome\r\n' +
+    "   dell'operatore accanto al pallino, mese senza «+N» (la cella cresce). Testo che va a capo. */\r\n" +
+    '.agt-note-inline {\r\n' +
+    '  white-space: pre-wrap;\r\n' +
+    '  overflow-wrap: anywhere;\r\n' +
+    '  font-size: 13px;\r\n' +
+    '  line-height: 18px;\r\n' +
+    '}\r\n' +
+    '.agt-inline-apt {\r\n' +
+    '  flex-wrap: wrap;\r\n' +
+    '  align-items: flex-start;\r\n' +
+    '  row-gap: 2px;\r\n' +
+    '  height: auto;\r\n' +
+    '}\r\n' +
+    '.agt-inline-apt .agt-week-apt__name,\r\n' +
+    '.agt-inline-apt .agt-month-apt__name {\r\n' +
+    '  white-space: normal;\r\n' +
+    '  overflow: visible;\r\n' +
+    '  text-overflow: clip;\r\n' +
+    '  overflow-wrap: anywhere;\r\n' +
+    '}\r\n' +
+    '.agt-inline-meta {\r\n' +
+    '  flex-basis: 100%;\r\n' +
+    '  min-width: 0;\r\n' +
+    '  font-size: 11px;\r\n' +
+    '  line-height: 15px;\r\n' +
+    '  color: var(--text-muted);\r\n' +
+    '  overflow-wrap: anywhere;\r\n' +
+    '}\r\n' +
+    '.agt-inline-meta strong {\r\n' +
+    '  font-weight: 700;\r\n' +
+    '  color: var(--text);\r\n' +
+    '}\r\n' +
+    '/* Mese: la cella mostra tutti gli appuntamenti e cresce in altezza. */\r\n' +
+    '.agt-month-day {\r\n' +
+    '  height: auto;\r\n' +
+    '}\r\n' +
+    '.agt-month-day__apts {\r\n' +
+    '  overflow: visible;\r\n' +
+    '}\r\n'
+  
+      at TestContext.<anonymous> (C:\w-427\frontend\src\lib\__tests__\agendaIdentity.test.tsx:49:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: "/* Agenda — informazione senza tocchi (UX direct-access, 2026-10-03). Condiviso da agenda\r\n   operatore e multi-operatore: nota sempre visibile, stato in parole (non solo colore), nome\r\n   dell'operatore accanto al pallino, mese senza «+N» (la cella cresce). Testo che va a capo. */\r\n.agt-note-inline {\r\n  white-space: pre-wrap;\r\n  overflow-wrap: anywhere;\r\n  font-size: 13px;\r\n  line-height: 18px;\r\n}\r\n.agt-inline-apt {\r\n  flex-wrap: wrap;\r\n  align-items: flex-start;\r\n  row-gap: 2px;\r\n  height: auto;\r\n}\r\n.agt-inline-apt .agt-week-apt__name,\r\n.agt-inline-apt .agt-month-apt__name {\r\n  white-space: normal;\r\n  overflow: visible;\r\n  text-overflow: clip;\r\n  overflow-wrap: anywhere;\r\n}\r\n.agt-inline-meta {\r\n  flex-basis: 100%;\r\n  min-width: 0;\r\n  font-size: 11px;\r\n  line-height: 15px;\r\n  color: var(--text-muted);\r\n  overflow-wrap: anywhere;\r\n}\r\n.agt-inline-meta strong {\r\n  font-weight: 700;\r\n  color: var(--text);\r\n}\r\n/* Mese: la cella mostra tutti gli appuntamenti e cresce in altezza. */\r\n.agt-month-day {\r\n  height: auto;\r\n}\r\n.agt-month-day__apts {\r\n  overflow: visible;\r\n}\r\n",
+    expected: /\.agt-view:not\(\.agt-view--hmi\) \.agt-apt-card--programmato\s*\{[^}]*background: #fff0cf;/,
+    operator: 'match',
+    diff: 'simple'
+  }

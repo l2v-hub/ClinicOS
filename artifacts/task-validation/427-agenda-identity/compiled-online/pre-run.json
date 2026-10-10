@@ -1,0 +1,59 @@
+{
+  "applicationCommit": "7680ec0b25c61de5745f296d91e370b575de9c00",
+  "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-H9FwkGcz.js",
+  "bundleSha256Before": "fa508967b0f79cfd333d02100a5baf7e5a4df18d40bacbf707d14f3eb13e0c9d",
+  "styleAssets": [
+    {
+      "url": "https://clinicos-eosin.vercel.app/assets/index-DC8NTiJ6.css",
+      "sha256": "9fba89f031426d7186d2edeadbb618909139c86032a58bb47ed84a461742d379"
+    }
+  ],
+  "htmlSha256Before": "42872a54f4e10bdd8604e25c928db766384317c4d2e4b92c74065b3fa7e12ad7",
+  "records": [
+    {
+      "recipe": "browser.mjs",
+      "folder": "browser02",
+      "cases": 30,
+      "localFrozenRecipeSha256": "3e916d87483ffcb7dec4932a77194f52b21797097f683aa0c554b9548d6061de",
+      "compiledRecipeSha256": "3e916d87483ffcb7dec4932a77194f52b21797097f683aa0c554b9548d6061de",
+      "changed": "NONE: byte-identical recipe; only APP_URL environment selects deployed compiled static GET transport. Assertions/fixtures/guards unchanged."
+    },
+    {
+      "recipe": "values-bounds.mjs",
+      "folder": "values01",
+      "cases": 6,
+      "localFrozenRecipeSha256": "25fa2ab87f0118a4ba99e277e444d87436a06e92f4eaeb32dccdcb8f73a07223",
+      "compiledRecipeSha256": "25fa2ab87f0118a4ba99e277e444d87436a06e92f4eaeb32dccdcb8f73a07223",
+      "changed": "NONE: byte-identical recipe; only APP_URL environment selects deployed compiled static GET transport. Assertions/fixtures/guards unchanged."
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "commands.mjs",
+      "sha256": "ebb27dfd7f0d95c3183de02c92aee2ca81e62addf2c58199acf8990370ff72a9"
+    },
+    {
+      "name": "qa-server.mjs",
+      "sha256": "dbb4c74cbd86e1db5726d940d3c78c4684cab876ae735e92a7bd7453942b9205"
+    },
+    {
+      "name": "seal.mjs",
+      "sha256": "561e1e8c11fb101421b0b6d75d55c6ba8d05d34cd9d401a322c2c66122617cf6"
+    },
+    {
+      "name": "security.mjs",
+      "sha256": "d5e1a7d1709a7f81091b5cff0e7a0aee7b158adda3aaa268873ab46620b1c5df"
+    },
+    {
+      "name": "source-receipt.mjs",
+      "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+    },
+    {
+      "name": "transport.mjs",
+      "sha256": "bae179ff0be0fe60e06e454b8441adb1a82e043bb34786e23b5e9b1ebfaf6225"
+    }
+  ],
+  "decision": "BYTE-IDENTICAL RECIPES FROZEN BEFORE COMPILED ONLINE READONLY TESTS",
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-10T00:36:50.159Z"
+}

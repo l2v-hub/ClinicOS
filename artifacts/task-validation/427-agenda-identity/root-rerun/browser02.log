@@ -1,0 +1,30 @@
+PASS desktop Giorno mixed states: names/state words/semantic surfaces
+PASS desktop Giorno grayscale retains exact names and all state words
+PASS desktop Settimana mixed states: names/state words/semantic surfaces
+PASS desktop Settimana grayscale retains exact names and all state words
+PASS desktop Mese mixed states: names/state words/semantic surfaces
+PASS desktop Mese grayscale retains exact names and all state words
+PASS desktop native state filter keyboard and toggle reset
+PASS desktop native operator filter preserves names and loaded range
+PASS desktop Giorno empty period explicit hierarchy, operator names not colored
+PASS desktop Settimana empty period explicit hierarchy, operator names not colored
+PASS desktop Mese empty period explicit hierarchy, operator names not colored
+PASS mobile Giorno mixed states: names/state words/semantic surfaces
+PASS mobile Giorno grayscale retains exact names and all state words
+PASS mobile Settimana mixed states: names/state words/semantic surfaces
+PASS mobile Settimana grayscale retains exact names and all state words
+PASS mobile Mese mixed states: names/state words/semantic surfaces
+PASS mobile Mese grayscale retains exact names and all state words
+PASS mobile native state filter keyboard and toggle reset
+PASS mobile native operator filter preserves names and loaded range
+PASS mobile Giorno empty period explicit hierarchy, operator names not colored
+PASS mobile Settimana empty period explicit hierarchy, operator names not colored
+PASS mobile Mese empty period explicit hierarchy, operator names not colored
+PASS 11 operators real palette repeats blue, identity suppressed, mixed same-operator states
+PASS held synthetic GET shows loading rather than invented empty-day claim
+PASS desktop HMI shared caption/count and unchanged day semantic palette
+PASS desktop HMI Settimana shared legend/count and unchanged identity dot
+PASS desktop HMI Mese shared legend/count and unchanged identity dot
+PASS mobile HMI shared caption/count and unchanged day semantic palette
+PASS mobile HMI Settimana shared legend/count and unchanged identity dot
+PASS mobile HMI Mese shared legend/count and unchanged identity dot

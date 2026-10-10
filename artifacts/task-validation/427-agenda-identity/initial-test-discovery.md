@@ -1,0 +1,3 @@
+# Initial recipe correction
+
+First focused SSR/source test used .test.tsx despite containing no JSX. Focused command explicitly ran all4 new cases, but repository full-suite discovery matches only .test.ts. Renamed test to .test.ts before candidate freeze so full regression includes it, without modifying repository runner/config. Initial source-before and commands01 remain historical and are not the frozen-source release receipt. Fresh source/commands02/security02 required after rename. Initial SSR invocation without frontend tsconfig failed React transform; corrected actual frontend tsconfig produced four genuine assertion REDs retained in tdd-red.log before app edits.

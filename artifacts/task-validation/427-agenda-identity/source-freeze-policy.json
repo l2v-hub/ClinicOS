@@ -1,0 +1,15 @@
+{
+  "decision": "AUTHORIZED LOCAL IMMUTABLE CANDIDATE ONLY",
+  "authority": "Human-authorized surgical bug implementation; root local freeze after10focused/types/build/scoped security and full exact12baseline. Browser/independent/production/publication gates PENDING, no release or closure authorized by this receipt.",
+  "base": "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+  "scope": [
+    "frontend/src/components/shared/AgendaLegend.tsx",
+    "frontend/src/components/shared/AgendaStatoFilter.tsx",
+    "frontend/src/components/shared/AgendaInline.css",
+    "frontend/src/lib/__tests__/agendaIdentity.test.ts"
+  ],
+  "sourceSha256": "1ddbf32e62eeeb45f3087dcd76ddaa814de2aebbc8ac6384555ebfcbc1bcbe9d",
+  "sourceFiles": 1540,
+  "at": "2026-10-10T00:21:16.468Z",
+  "excluded": "Dirty main/native launchers/artifacts/blocked candidates"
+}

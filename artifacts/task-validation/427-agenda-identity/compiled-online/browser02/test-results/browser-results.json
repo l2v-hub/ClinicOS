@@ -1,0 +1,1594 @@
+{
+  "applicationCommit": "7680ec0b25c61de5745f296d91e370b575de9c00",
+  "outcomes": [
+    {
+      "name": "desktop Giorno mixed states: names/state words/semantic surfaces",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop Giorno grayscale retains exact names and all state words",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop Settimana mixed states: names/state words/semantic surfaces",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop Settimana grayscale retains exact names and all state words",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop Mese mixed states: names/state words/semantic surfaces",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop Mese grayscale retains exact names and all state words",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native state filter keyboard and toggle reset",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native operator filter preserves names and loaded range",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop Giorno empty period explicit hierarchy, operator names not colored",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop Settimana empty period explicit hierarchy, operator names not colored",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop Mese empty period explicit hierarchy, operator names not colored",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile Giorno mixed states: names/state words/semantic surfaces",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile Giorno grayscale retains exact names and all state words",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile Settimana mixed states: names/state words/semantic surfaces",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile Settimana grayscale retains exact names and all state words",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile Mese mixed states: names/state words/semantic surfaces",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile Mese grayscale retains exact names and all state words",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native state filter keyboard and toggle reset",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native operator filter preserves names and loaded range",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile Giorno empty period explicit hierarchy, operator names not colored",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile Settimana empty period explicit hierarchy, operator names not colored",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile Mese empty period explicit hierarchy, operator names not colored",
+      "status": "PASS"
+    },
+    {
+      "name": "11 operators real palette repeats blue, identity suppressed, mixed same-operator states",
+      "status": "PASS"
+    },
+    {
+      "name": "held synthetic GET shows loading rather than invented empty-day claim",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop HMI shared caption/count and unchanged day semantic palette",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop HMI Settimana shared legend/count and unchanged identity dot",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop HMI Mese shared legend/count and unchanged identity dot",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile HMI shared caption/count and unchanged day semantic palette",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile HMI Settimana shared legend/count and unchanged identity dot",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile HMI Mese shared legend/count and unchanged identity dot",
+      "status": "PASS"
+    }
+  ],
+  "states": [
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedErrors": [],
+      "operator": false,
+      "hold": false,
+      "fail": false,
+      "held": 0
+    },
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedErrors": [],
+      "operator": false,
+      "hold": false,
+      "fail": false,
+      "held": 0
+    },
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedErrors": [],
+      "operator": false,
+      "hold": false,
+      "fail": false,
+      "held": 0
+    },
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedErrors": [],
+      "operator": false,
+      "hold": false,
+      "fail": false,
+      "held": 0
+    },
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedErrors": [],
+      "operator": false,
+      "hold": false,
+      "fail": false,
+      "held": 0
+    },
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedErrors": [],
+      "operator": false,
+      "hold": false,
+      "fail": false,
+      "held": 0
+    },
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedErrors": [],
+      "operator": true,
+      "hold": false,
+      "fail": false,
+      "held": 0
+    },
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedErrors": [],
+      "operator": true,
+      "hold": false,
+      "fail": false,
+      "held": 0
+    }
+  ],
+  "measurements": [
+    {
+      "view": "Giorno",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 0ProgrammatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 4ProgrammatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 1In corsoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 5In corsoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 2CompletatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 6CompletatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 3AnnullatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 7AnnullatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 0ProgrammatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 4ProgrammatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 1In corsoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 5In corsoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 2CompletatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 6CompletatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 3AnnullatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 7AnnullatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Settimana",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "08:00Paziente sintetico 0Sintetico Alfa · Controllo · Programmato"
+    },
+    {
+      "view": "Settimana",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "12:00Paziente sintetico 4Sintetico Beta · Controllo · Programmato"
+    },
+    {
+      "view": "Settimana",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "09:00Paziente sintetico 1Sintetico Alfa · Controllo · In corso"
+    },
+    {
+      "view": "Settimana",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "13:00Paziente sintetico 5Sintetico Gamma · Controllo · In corso"
+    },
+    {
+      "view": "Settimana",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "10:00Paziente sintetico 2Sintetico Alfa · Controllo · Completato"
+    },
+    {
+      "view": "Settimana",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "14:00Paziente sintetico 6Sintetico Delta · Controllo · Completato"
+    },
+    {
+      "view": "Settimana",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "11:00Paziente sintetico 3Sintetico Alfa · Controllo · Annullato"
+    },
+    {
+      "view": "Settimana",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "15:00Paziente sintetico 7Sintetico Delta · Controllo · Annullato"
+    },
+    {
+      "view": "Settimana",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "08:00Paziente sintetico 0Sintetico Alfa · Controllo · Programmato"
+    },
+    {
+      "view": "Settimana",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "12:00Paziente sintetico 4Sintetico Beta · Controllo · Programmato"
+    },
+    {
+      "view": "Settimana",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "09:00Paziente sintetico 1Sintetico Alfa · Controllo · In corso"
+    },
+    {
+      "view": "Settimana",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "13:00Paziente sintetico 5Sintetico Gamma · Controllo · In corso"
+    },
+    {
+      "view": "Settimana",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "10:00Paziente sintetico 2Sintetico Alfa · Controllo · Completato"
+    },
+    {
+      "view": "Settimana",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "14:00Paziente sintetico 6Sintetico Delta · Controllo · Completato"
+    },
+    {
+      "view": "Settimana",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "11:00Paziente sintetico 3Sintetico Alfa · Controllo · Annullato"
+    },
+    {
+      "view": "Settimana",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "15:00Paziente sintetico 7Sintetico Delta · Controllo · Annullato"
+    },
+    {
+      "view": "Mese",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "08:00Paziente sintetico 0Sintetico Alfa · Programmato"
+    },
+    {
+      "view": "Mese",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "12:00Paziente sintetico 4Sintetico Beta · Programmato"
+    },
+    {
+      "view": "Mese",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "09:00Paziente sintetico 1Sintetico Alfa · In corso"
+    },
+    {
+      "view": "Mese",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "13:00Paziente sintetico 5Sintetico Gamma · In corso"
+    },
+    {
+      "view": "Mese",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "10:00Paziente sintetico 2Sintetico Alfa · Completato"
+    },
+    {
+      "view": "Mese",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "14:00Paziente sintetico 6Sintetico Delta · Completato"
+    },
+    {
+      "view": "Mese",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "11:00Paziente sintetico 3Sintetico Alfa · Annullato"
+    },
+    {
+      "view": "Mese",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "15:00Paziente sintetico 7Sintetico Delta · Annullato"
+    },
+    {
+      "view": "Mese",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "08:00Paziente sintetico 0Sintetico Alfa · Programmato"
+    },
+    {
+      "view": "Mese",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "12:00Paziente sintetico 4Sintetico Beta · Programmato"
+    },
+    {
+      "view": "Mese",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "09:00Paziente sintetico 1Sintetico Alfa · In corso"
+    },
+    {
+      "view": "Mese",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "13:00Paziente sintetico 5Sintetico Gamma · In corso"
+    },
+    {
+      "view": "Mese",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "10:00Paziente sintetico 2Sintetico Alfa · Completato"
+    },
+    {
+      "view": "Mese",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "14:00Paziente sintetico 6Sintetico Delta · Completato"
+    },
+    {
+      "view": "Mese",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "11:00Paziente sintetico 3Sintetico Alfa · Annullato"
+    },
+    {
+      "view": "Mese",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "15:00Paziente sintetico 7Sintetico Delta · Annullato"
+    },
+    {
+      "view": "Settimana",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "08:00Paziente sintetico 0Sintetico Alfa · Controllo · Programmato"
+    },
+    {
+      "view": "Settimana",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "09:00Paziente sintetico 1Sintetico Alfa · Controllo · In corso"
+    },
+    {
+      "view": "Settimana",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "10:00Paziente sintetico 2Sintetico Alfa · Controllo · Completato"
+    },
+    {
+      "view": "Settimana",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "11:00Paziente sintetico 3Sintetico Alfa · Controllo · Annullato"
+    },
+    {
+      "view": "Giorno",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 0ProgrammatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 4ProgrammatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 1In corsoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 5In corsoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 2CompletatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 6CompletatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 3AnnullatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 7AnnullatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 0ProgrammatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 4ProgrammatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 1In corsoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 5In corsoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 2CompletatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 6CompletatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 3AnnullatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 7AnnullatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Settimana",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "08:00Paziente sintetico 0Sintetico Alfa · Controllo · Programmato"
+    },
+    {
+      "view": "Settimana",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "12:00Paziente sintetico 4Sintetico Beta · Controllo · Programmato"
+    },
+    {
+      "view": "Settimana",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "09:00Paziente sintetico 1Sintetico Alfa · Controllo · In corso"
+    },
+    {
+      "view": "Settimana",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "13:00Paziente sintetico 5Sintetico Gamma · Controllo · In corso"
+    },
+    {
+      "view": "Settimana",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "10:00Paziente sintetico 2Sintetico Alfa · Controllo · Completato"
+    },
+    {
+      "view": "Settimana",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "14:00Paziente sintetico 6Sintetico Delta · Controllo · Completato"
+    },
+    {
+      "view": "Settimana",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "11:00Paziente sintetico 3Sintetico Alfa · Controllo · Annullato"
+    },
+    {
+      "view": "Settimana",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "15:00Paziente sintetico 7Sintetico Delta · Controllo · Annullato"
+    },
+    {
+      "view": "Settimana",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "08:00Paziente sintetico 0Sintetico Alfa · Controllo · Programmato"
+    },
+    {
+      "view": "Settimana",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "12:00Paziente sintetico 4Sintetico Beta · Controllo · Programmato"
+    },
+    {
+      "view": "Settimana",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "09:00Paziente sintetico 1Sintetico Alfa · Controllo · In corso"
+    },
+    {
+      "view": "Settimana",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "13:00Paziente sintetico 5Sintetico Gamma · Controllo · In corso"
+    },
+    {
+      "view": "Settimana",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "10:00Paziente sintetico 2Sintetico Alfa · Controllo · Completato"
+    },
+    {
+      "view": "Settimana",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "14:00Paziente sintetico 6Sintetico Delta · Controllo · Completato"
+    },
+    {
+      "view": "Settimana",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "11:00Paziente sintetico 3Sintetico Alfa · Controllo · Annullato"
+    },
+    {
+      "view": "Settimana",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "15:00Paziente sintetico 7Sintetico Delta · Controllo · Annullato"
+    },
+    {
+      "view": "Mese",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "08:00Paziente sintetico 0Sintetico Alfa · Programmato"
+    },
+    {
+      "view": "Mese",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "12:00Paziente sintetico 4Sintetico Beta · Programmato"
+    },
+    {
+      "view": "Mese",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "09:00Paziente sintetico 1Sintetico Alfa · In corso"
+    },
+    {
+      "view": "Mese",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "13:00Paziente sintetico 5Sintetico Gamma · In corso"
+    },
+    {
+      "view": "Mese",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "10:00Paziente sintetico 2Sintetico Alfa · Completato"
+    },
+    {
+      "view": "Mese",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "14:00Paziente sintetico 6Sintetico Delta · Completato"
+    },
+    {
+      "view": "Mese",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "11:00Paziente sintetico 3Sintetico Alfa · Annullato"
+    },
+    {
+      "view": "Mese",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "15:00Paziente sintetico 7Sintetico Delta · Annullato"
+    },
+    {
+      "view": "Mese",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "08:00Paziente sintetico 0Sintetico Alfa · Programmato"
+    },
+    {
+      "view": "Mese",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "12:00Paziente sintetico 4Sintetico Beta · Programmato"
+    },
+    {
+      "view": "Mese",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "09:00Paziente sintetico 1Sintetico Alfa · In corso"
+    },
+    {
+      "view": "Mese",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "13:00Paziente sintetico 5Sintetico Gamma · In corso"
+    },
+    {
+      "view": "Mese",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "10:00Paziente sintetico 2Sintetico Alfa · Completato"
+    },
+    {
+      "view": "Mese",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "14:00Paziente sintetico 6Sintetico Delta · Completato"
+    },
+    {
+      "view": "Mese",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "11:00Paziente sintetico 3Sintetico Alfa · Annullato"
+    },
+    {
+      "view": "Mese",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "15:00Paziente sintetico 7Sintetico Delta · Annullato"
+    },
+    {
+      "view": "Settimana",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "0px",
+      "text": "08:00Paziente sintetico 0Sintetico Alfa · Controllo · Programmato"
+    },
+    {
+      "view": "Settimana",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "0px",
+      "text": "09:00Paziente sintetico 1Sintetico Alfa · Controllo · In corso"
+    },
+    {
+      "view": "Settimana",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "0px",
+      "text": "10:00Paziente sintetico 2Sintetico Alfa · Controllo · Completato"
+    },
+    {
+      "view": "Settimana",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "0px",
+      "text": "11:00Paziente sintetico 3Sintetico Alfa · Controllo · Annullato"
+    },
+    {
+      "view": "Giorno",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 0ProgrammatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 4ProgrammatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 1In corsoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 5In corsoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 2CompletatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 6CompletatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 3AnnullatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 7AnnullatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 0ProgrammatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "programmato",
+      "background": "rgb(255, 240, 207)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 4ProgrammatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 1In corsoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "in_corso",
+      "background": "rgb(231, 239, 255)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 5In corsoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 2CompletatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "completato",
+      "background": "rgb(227, 245, 235)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 6CompletatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 3AnnullatoControllo·30 minFixture sintetica QA 427"
+    },
+    {
+      "view": "Giorno",
+      "state": "annullato",
+      "background": "rgb(236, 239, 243)",
+      "leftWidth": "5px",
+      "text": "Paziente sintetico 7AnnullatoControllo·30 minFixture sintetica QA 427"
+    }
+  ],
+  "fixtureTransport": "Actual repository SPA, API interception before wire, static GET only beyond fixture. Grayscale CSS rendering only; no hardware/real-data certification."
+}

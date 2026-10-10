@@ -1,0 +1,26 @@
+(node:19728) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ operator and admin agendas expose the same accessible navigation contract (1.6236ms)
+✔ daily agenda stays task-focused instead of rendering dashboard occupancy metrics (0.9275ms)
+✔ admin daily operator selectors are compact, keyboard-visible native buttons (0.5687ms)
+✔ admin daily grid covers the working day with compact half-hour rows (0.6873ms)
+✔ therapy work is one native action with a prominent non-repeated pending state (0.6727ms)
+✔ daily appointments use strong status surfaces and therapy cards reflow on phones (0.4358ms)
+(node:19728) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:26108) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ legend explicitly names all four activity states beyond color (11.0333ms)
+✔ empty and populated period filters have a real caption and unchanged native counts (2.7363ms)
+✔ operator colors are suppressed only for admin identity, including inline aggregate borders (0.436ms)
+✔ admin card surfaces match badge/legend semantics without rewriting operator HMI (0.6038ms)
+(node:26108) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1036.518

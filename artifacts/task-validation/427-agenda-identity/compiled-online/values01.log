@@ -1,0 +1,6 @@
+PASS desktop Giorno exact values/bounds
+PASS desktop Settimana exact values/bounds
+PASS desktop Mese exact values/bounds
+PASS mobile Giorno exact values/bounds
+PASS mobile Settimana exact values/bounds
+PASS mobile Mese exact values/bounds

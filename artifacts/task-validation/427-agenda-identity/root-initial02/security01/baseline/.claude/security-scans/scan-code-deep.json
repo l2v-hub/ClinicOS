@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-10-10T00:20:06.109Z",
+  "target": "C:\\w-427\\artifacts\\task-validation\\427-agenda-identity\\root-initial02\\security01/baseline",
+  "depth": "deep",
+  "type": "code",
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "total": 0
+  },
+  "findings": []
+}

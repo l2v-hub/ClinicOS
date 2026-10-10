@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
+import {readFileSync,writeFileSync,mkdirSync,existsSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {resolve,dirname} from 'node:path';
+const out=resolve(process.argv[2]);assert.ok(process.argv[2]);assert.equal(existsSync(out),false);mkdirSync(dirname(out),{recursive:true});
+const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+const tracked=git('ls-files','frontend','backend','scripts','package.json','package-lock.json').split('\n').filter(Boolean),untracked=git('ls-files','--others','--exclude-standard','frontend','backend','scripts').split('\n').filter(Boolean);
+const paths=[...new Set([...tracked,...untracked])].sort(),files=paths.map(path=>({path,sha256:createHash('sha256').update(readFileSync(path)).digest('hex')}));
+writeFileSync(out,JSON.stringify({head:git('rev-parse','HEAD'),status:git('status','--porcelain','--','frontend','backend','scripts','package.json','package-lock.json'),untracked,files,sourceSha256:createHash('sha256').update(JSON.stringify(files)).digest('hex')},null,2));console.log('Bound physical application source '+files.length+' files');

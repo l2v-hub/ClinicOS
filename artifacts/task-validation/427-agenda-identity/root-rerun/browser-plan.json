@@ -1,0 +1,4 @@
+[
+  {"recipe":"browser.mjs","folder":"browser02","cases":30},
+  {"recipe":"values-bounds.mjs","folder":"values01","cases":6}
+]

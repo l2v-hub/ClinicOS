@@ -1,0 +1,13 @@
+{
+  "decision": "AUTHORIZED SOURCE-BOUND SYNTHETIC EVIDENCE COMMIT/PUSH",
+  "authority": "Direct human authorization; independent/root/compiled/source/deployment verified; GitHub closure separately gated",
+  "applicationCommit": "7680ec0b25c61de5745f296d91e370b575de9c00",
+  "parentProof": "7680ec0b25c61de5745f296d91e370b575de9c00",
+  "branch": "codex/bug-427-agenda-identity",
+  "scope": "artifacts/task-validation/427-agenda-identity",
+  "canonicalFiles": 355,
+  "secretChecks": 12504,
+  "zipMembers": 3813,
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-10T00:45:11.604Z"
+}

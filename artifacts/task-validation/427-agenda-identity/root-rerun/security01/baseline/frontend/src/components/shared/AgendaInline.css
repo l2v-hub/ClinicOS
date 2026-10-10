@@ -1,0 +1,41 @@
+/* Agenda — informazione senza tocchi (UX direct-access, 2026-10-03). Condiviso da agenda
+   operatore e multi-operatore: nota sempre visibile, stato in parole (non solo colore), nome
+   dell'operatore accanto al pallino, mese senza «+N» (la cella cresce). Testo che va a capo. */
+.agt-note-inline {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  line-height: 18px;
+}
+.agt-inline-apt {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  row-gap: 2px;
+  height: auto;
+}
+.agt-inline-apt .agt-week-apt__name,
+.agt-inline-apt .agt-month-apt__name {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+.agt-inline-meta {
+  flex-basis: 100%;
+  min-width: 0;
+  font-size: 11px;
+  line-height: 15px;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+.agt-inline-meta strong {
+  font-weight: 700;
+  color: var(--text);
+}
+/* Mese: la cella mostra tutti gli appuntamenti e cresce in altezza. */
+.agt-month-day {
+  height: auto;
+}
+.agt-month-day__apts {
+  overflow: visible;
+}

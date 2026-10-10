@@ -1,0 +1,9 @@
+{
+  "action": "Stop exact verified owned server only",
+  "port": 7527,
+  "browserLane": "RELEASED",
+  "date": "2026-10-10T00:28:09.9938149Z",
+  "listenerPid": 16928,
+  "commandLine": "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/427-agenda-identity/independent-qa/recipes/qa-server.mjs",
+  "ownedPid": 16928
+}

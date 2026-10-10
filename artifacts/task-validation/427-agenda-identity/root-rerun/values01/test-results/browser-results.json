@@ -1,0 +1,629 @@
+{
+  "applicationCommit": "7680ec0b25c61de5745f296d91e370b575de9c00",
+  "outcomes": [
+    {
+      "name": "desktop Giorno exact patient/operator/state values and changed hierarchy bounds retained in grayscale",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop Settimana exact patient/operator/state values and changed hierarchy bounds retained in grayscale",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop Mese exact patient/operator/state values and changed hierarchy bounds retained in grayscale",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile Giorno exact patient/operator/state values and changed hierarchy bounds retained in grayscale",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile Settimana exact patient/operator/state values and changed hierarchy bounds retained in grayscale",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile Mese exact patient/operator/state values and changed hierarchy bounds retained in grayscale",
+      "status": "PASS"
+    }
+  ],
+  "states": [
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedErrors": [],
+      "operator": false,
+      "hold": false,
+      "fail": false,
+      "held": 0
+    },
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedErrors": [],
+      "operator": false,
+      "hold": false,
+      "fail": false,
+      "held": 0
+    }
+  ],
+  "measurements": [
+    {
+      "device": "desktop",
+      "view": "Giorno",
+      "text": "Appuntamenti nel periodo selezionato",
+      "x": 120,
+      "right": 329.390625,
+      "width": 209.390625,
+      "client": 209,
+      "scroll": 209
+    },
+    {
+      "device": "desktop",
+      "view": "Giorno",
+      "text": "Stati delle attività",
+      "x": 140,
+      "right": 235,
+      "width": 95,
+      "client": 95,
+      "scroll": 95
+    },
+    {
+      "device": "desktop",
+      "view": "Giorno",
+      "text": "Completato",
+      "x": 251,
+      "right": 323.125,
+      "width": 72.125,
+      "client": 72,
+      "scroll": 72
+    },
+    {
+      "device": "desktop",
+      "view": "Giorno",
+      "text": "In corso",
+      "x": 339.125,
+      "right": 392.765625,
+      "width": 53.640625,
+      "client": 54,
+      "scroll": 54
+    },
+    {
+      "device": "desktop",
+      "view": "Giorno",
+      "text": "Programmato",
+      "x": 408.765625,
+      "right": 490.828125,
+      "width": 82.0625,
+      "client": 82,
+      "scroll": 82
+    },
+    {
+      "device": "desktop",
+      "view": "Giorno",
+      "text": "Annullato",
+      "x": 506.828125,
+      "right": 568.703125,
+      "width": 61.875,
+      "client": 62,
+      "scroll": 62
+    },
+    {
+      "device": "desktop",
+      "view": "Giorno",
+      "text": "Disponibile",
+      "x": 584.703125,
+      "right": 654.109375,
+      "width": 69.40625,
+      "client": 69,
+      "scroll": 69
+    },
+    {
+      "device": "desktop",
+      "view": "Settimana",
+      "text": "Appuntamenti nel periodo selezionato",
+      "x": 120,
+      "right": 329.390625,
+      "width": 209.390625,
+      "client": 209,
+      "scroll": 209
+    },
+    {
+      "device": "desktop",
+      "view": "Settimana",
+      "text": "Stati delle attività",
+      "x": 140,
+      "right": 235,
+      "width": 95,
+      "client": 95,
+      "scroll": 95
+    },
+    {
+      "device": "desktop",
+      "view": "Settimana",
+      "text": "Completato",
+      "x": 251,
+      "right": 323.125,
+      "width": 72.125,
+      "client": 72,
+      "scroll": 72
+    },
+    {
+      "device": "desktop",
+      "view": "Settimana",
+      "text": "In corso",
+      "x": 339.125,
+      "right": 392.765625,
+      "width": 53.640625,
+      "client": 54,
+      "scroll": 54
+    },
+    {
+      "device": "desktop",
+      "view": "Settimana",
+      "text": "Programmato",
+      "x": 408.765625,
+      "right": 490.828125,
+      "width": 82.0625,
+      "client": 82,
+      "scroll": 82
+    },
+    {
+      "device": "desktop",
+      "view": "Settimana",
+      "text": "Annullato",
+      "x": 506.828125,
+      "right": 568.703125,
+      "width": 61.875,
+      "client": 62,
+      "scroll": 62
+    },
+    {
+      "device": "desktop",
+      "view": "Settimana",
+      "text": "Disponibile",
+      "x": 584.703125,
+      "right": 654.109375,
+      "width": 69.40625,
+      "client": 69,
+      "scroll": 69
+    },
+    {
+      "device": "desktop",
+      "view": "Mese",
+      "text": "Appuntamenti nel periodo selezionato",
+      "x": 120,
+      "right": 329.390625,
+      "width": 209.390625,
+      "client": 209,
+      "scroll": 209
+    },
+    {
+      "device": "desktop",
+      "view": "Mese",
+      "text": "Stati delle attività",
+      "x": 140,
+      "right": 235,
+      "width": 95,
+      "client": 95,
+      "scroll": 95
+    },
+    {
+      "device": "desktop",
+      "view": "Mese",
+      "text": "Completato",
+      "x": 251,
+      "right": 323.125,
+      "width": 72.125,
+      "client": 72,
+      "scroll": 72
+    },
+    {
+      "device": "desktop",
+      "view": "Mese",
+      "text": "In corso",
+      "x": 339.125,
+      "right": 392.765625,
+      "width": 53.640625,
+      "client": 54,
+      "scroll": 54
+    },
+    {
+      "device": "desktop",
+      "view": "Mese",
+      "text": "Programmato",
+      "x": 408.765625,
+      "right": 490.828125,
+      "width": 82.0625,
+      "client": 82,
+      "scroll": 82
+    },
+    {
+      "device": "desktop",
+      "view": "Mese",
+      "text": "Annullato",
+      "x": 506.828125,
+      "right": 568.703125,
+      "width": 61.875,
+      "client": 62,
+      "scroll": 62
+    },
+    {
+      "device": "desktop",
+      "view": "Mese",
+      "text": "Disponibile",
+      "x": 584.703125,
+      "right": 654.109375,
+      "width": 69.40625,
+      "client": 69,
+      "scroll": 69
+    },
+    {
+      "device": "mobile",
+      "view": "Giorno",
+      "text": "Appuntamenti nel periodo selezionato",
+      "x": 14,
+      "right": 223.390625,
+      "width": 209.390625,
+      "client": 209,
+      "scroll": 209
+    },
+    {
+      "device": "mobile",
+      "view": "Giorno",
+      "text": "Stati delle attività",
+      "x": 34,
+      "right": 129,
+      "width": 95,
+      "client": 95,
+      "scroll": 95
+    },
+    {
+      "device": "mobile",
+      "view": "Giorno",
+      "text": "Completato",
+      "x": 145,
+      "right": 217.125,
+      "width": 72.125,
+      "client": 72,
+      "scroll": 72
+    },
+    {
+      "device": "mobile",
+      "view": "Giorno",
+      "text": "In corso",
+      "x": 233.125,
+      "right": 286.765625,
+      "width": 53.640625,
+      "client": 54,
+      "scroll": 54
+    },
+    {
+      "device": "mobile",
+      "view": "Giorno",
+      "text": "Programmato",
+      "x": 34,
+      "right": 116.0625,
+      "width": 82.0625,
+      "client": 82,
+      "scroll": 82
+    },
+    {
+      "device": "mobile",
+      "view": "Giorno",
+      "text": "Annullato",
+      "x": 132.0625,
+      "right": 193.9375,
+      "width": 61.875,
+      "client": 62,
+      "scroll": 62
+    },
+    {
+      "device": "mobile",
+      "view": "Giorno",
+      "text": "Disponibile",
+      "x": 209.9375,
+      "right": 279.34375,
+      "width": 69.40625,
+      "client": 69,
+      "scroll": 69
+    },
+    {
+      "device": "mobile",
+      "view": "Settimana",
+      "text": "Appuntamenti nel periodo selezionato",
+      "x": 14,
+      "right": 223.390625,
+      "width": 209.390625,
+      "client": 209,
+      "scroll": 209
+    },
+    {
+      "device": "mobile",
+      "view": "Settimana",
+      "text": "Stati delle attività",
+      "x": 34,
+      "right": 129,
+      "width": 95,
+      "client": 95,
+      "scroll": 95
+    },
+    {
+      "device": "mobile",
+      "view": "Settimana",
+      "text": "Completato",
+      "x": 145,
+      "right": 217.125,
+      "width": 72.125,
+      "client": 72,
+      "scroll": 72
+    },
+    {
+      "device": "mobile",
+      "view": "Settimana",
+      "text": "In corso",
+      "x": 233.125,
+      "right": 286.765625,
+      "width": 53.640625,
+      "client": 54,
+      "scroll": 54
+    },
+    {
+      "device": "mobile",
+      "view": "Settimana",
+      "text": "Programmato",
+      "x": 34,
+      "right": 116.0625,
+      "width": 82.0625,
+      "client": 82,
+      "scroll": 82
+    },
+    {
+      "device": "mobile",
+      "view": "Settimana",
+      "text": "Annullato",
+      "x": 132.0625,
+      "right": 193.9375,
+      "width": 61.875,
+      "client": 62,
+      "scroll": 62
+    },
+    {
+      "device": "mobile",
+      "view": "Settimana",
+      "text": "Disponibile",
+      "x": 209.9375,
+      "right": 279.34375,
+      "width": 69.40625,
+      "client": 69,
+      "scroll": 69
+    },
+    {
+      "device": "mobile",
+      "view": "Mese",
+      "text": "Appuntamenti nel periodo selezionato",
+      "x": 14,
+      "right": 223.390625,
+      "width": 209.390625,
+      "client": 209,
+      "scroll": 209
+    },
+    {
+      "device": "mobile",
+      "view": "Mese",
+      "text": "Stati delle attività",
+      "x": 34,
+      "right": 129,
+      "width": 95,
+      "client": 95,
+      "scroll": 95
+    },
+    {
+      "device": "mobile",
+      "view": "Mese",
+      "text": "Completato",
+      "x": 145,
+      "right": 217.125,
+      "width": 72.125,
+      "client": 72,
+      "scroll": 72
+    },
+    {
+      "device": "mobile",
+      "view": "Mese",
+      "text": "In corso",
+      "x": 233.125,
+      "right": 286.765625,
+      "width": 53.640625,
+      "client": 54,
+      "scroll": 54
+    },
+    {
+      "device": "mobile",
+      "view": "Mese",
+      "text": "Programmato",
+      "x": 34,
+      "right": 116.0625,
+      "width": 82.0625,
+      "client": 82,
+      "scroll": 82
+    },
+    {
+      "device": "mobile",
+      "view": "Mese",
+      "text": "Annullato",
+      "x": 132.0625,
+      "right": 193.9375,
+      "width": 61.875,
+      "client": 62,
+      "scroll": 62
+    },
+    {
+      "device": "mobile",
+      "view": "Mese",
+      "text": "Disponibile",
+      "x": 209.9375,
+      "right": 279.34375,
+      "width": 69.40625,
+      "client": 69,
+      "scroll": 69
+    }
+  ]
+}

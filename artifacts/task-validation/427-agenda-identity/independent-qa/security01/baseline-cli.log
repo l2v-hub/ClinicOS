@@ -1,0 +1,15 @@
+
+Security Scan
+──────────────────────────────────────────────────
+... Scanning C:\w-427-qa\artifacts\task-validation\427-agenda-identity\independent-qa\security01/baseline...                                    Scan complete
+
+No security issues found!
+
++-------------------------------------------- Scan Summary --------------------------------------------+
+| Target: C:\w-427-qa\artifacts\task-validation\427-agenda-identity\independent-qa\security01/baseline |
+| Depth: deep                                                                                          |
+| Type: code                                                                                           |
+|                                                                                                      |
+| Critical: 0  High: 0  Medium: 0  Low: 0                                                              |
+| Total Issues: 0                                                                                      |
++------------------------------------------------------------------------------------------------------+

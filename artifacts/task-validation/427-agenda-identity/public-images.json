@@ -1,0 +1,6 @@
+[
+  {"label":"Agenda giornaliera: identità neutre, quattro stati espliciti","path":"compiled-online/browser02/screenshots/desktop-giorno-mixed.png"},
+  {"label":"Agenda settimanale: operatori e stati distinguibili in scala di grigi","path":"compiled-online/browser02/screenshots/desktop-settimana-grayscale.png"},
+  {"label":"Giornata vuota su telefono: filtri e legenda espliciti","path":"compiled-online/browser02/screenshots/mobile-giorno-empty.png"},
+  {"label":"Vista mese su telefono: testi conservati, limite preesistente di impaginazione stretta","path":"compiled-online/values01/screenshots/mobile-mese-values-bounds.png"}
+]

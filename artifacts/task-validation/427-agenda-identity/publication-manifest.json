@@ -1,0 +1,2154 @@
+{
+  "productionPatientTestMutations": 0,
+  "applicationSourceSha256": "1ddbf32e62eeeb45f3087dcd76ddaa814de2aebbc8ac6384555ebfcbc1bcbe9d",
+  "zipEntriesChecked": 3813,
+  "applicationCommit": "7680ec0b25c61de5745f296d91e370b575de9c00",
+  "exportPolicy": "Independent local manifest immutable, including all declared preliminary failures; each canonical staged Git blob separately verified, only CRLF to LF normalization allowed.",
+  "excluded": [
+    "primary dirty checkout and launchers",
+    "unreleased405/408/410/416 source",
+    "original patient audit photos",
+    "root development failures retained locally; independent failures included immutably"
+  ],
+  "secretChecks": 12507,
+  "files": [
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/adopt-qa.mjs",
+      "sha256": "e6eedaee128f3a20994a25413c3615b13095cbc6eefe3989721ac182f6884894",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e6eedaee128f3a20994a25413c3615b13095cbc6eefe3989721ac182f6884894"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/authorize-release.mjs",
+      "sha256": "3785c35825387d0b1771253e7df6d693b6b60a3fbcdd0f127ab350433fb30dc0",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3785c35825387d0b1771253e7df6d693b6b60a3fbcdd0f127ab350433fb30dc0"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/bind-source.mjs",
+      "sha256": "20bae1a95d387643ee52825f4907a0b664f1f3f864fe57398d41daec211288f9",
+      "exportNormalization": "none",
+      "gitBlobSha256": "20bae1a95d387643ee52825f4907a0b664f1f3f864fe57398d41daec211288f9"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/browser-guards.mjs",
+      "sha256": "0ad512552660721864a0575b56ba8a31b551ea42b744626d60f643754d2dc6d9",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0ad512552660721864a0575b56ba8a31b551ea42b744626d60f643754d2dc6d9"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/canonical-blobs.mjs",
+      "sha256": "19dcb505f0f0ee9fe3ab51e56d1bbc819f477552734b1d0973e1f156cc2c08fe",
+      "exportNormalization": "none",
+      "gitBlobSha256": "19dcb505f0f0ee9fe3ab51e56d1bbc819f477552734b1d0973e1f156cc2c08fe"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/ci-comparison.json",
+      "sha256": "0f29875b4bfced7ce446d541debc5386719dfbbc6d020ab618d8f922c6fec851",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0f29875b4bfced7ce446d541debc5386719dfbbc6d020ab618d8f922c6fec851"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/ci-proof-staging-policy.json",
+      "sha256": "73f16f9860b003dfea1168f4a36ebe2f5fca8a70949b4929ae4beab918edb50d",
+      "exportNormalization": "none",
+      "gitBlobSha256": "73f16f9860b003dfea1168f4a36ebe2f5fca8a70949b4929ae4beab918edb50d"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/ci-receipt.mjs",
+      "sha256": "e25b9d0d150a7cd7e93a22c0d6d7f12fa0e36db625f340b222883ebe8d6cb1cf",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e25b9d0d150a7cd7e93a22c0d6d7f12fa0e36db625f340b222883ebe8d6cb1cf"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/commands.mjs",
+      "sha256": "ebb27dfd7f0d95c3183de02c92aee2ca81e62addf2c58199acf8990370ff72a9",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ebb27dfd7f0d95c3183de02c92aee2ca81e62addf2c58199acf8990370ff72a9"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser-plan.json",
+      "sha256": "388e35a92f80f9be67660da82cca1b4a932c8d2d219c18595218ed3c214ce3a1",
+      "exportNormalization": "none",
+      "gitBlobSha256": "388e35a92f80f9be67660da82cca1b4a932c8d2d219c18595218ed3c214ce3a1"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser-replay-results.json",
+      "sha256": "7a9a6ca5b66291eb6d7d4a8275d291a0a1fec09cde21415ccb1720b872053cc6",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7a9a6ca5b66291eb6d7d4a8275d291a0a1fec09cde21415ccb1720b872053cc6"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02.log",
+      "sha256": "7d9d56915c8d1b9e15f50d1d049eab0c8c03c3c0a5dfbcfde2a8311556e38bed",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7d9d56915c8d1b9e15f50d1d049eab0c8c03c3c0a5dfbcfde2a8311556e38bed"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/playwright-report/index.html",
+      "sha256": "eb456e9974c96e98eb464bd15faf300d907189b6dab8abc7c6cd2eee7aa2d958",
+      "exportNormalization": "none",
+      "gitBlobSha256": "eb456e9974c96e98eb464bd15faf300d907189b6dab8abc7c6cd2eee7aa2d958"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/desktop-giorno-empty.png",
+      "sha256": "d91c7585bbc7cf4c036a4a5c05e3f4c783243844295e214a0806915798ca02ae",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d91c7585bbc7cf4c036a4a5c05e3f4c783243844295e214a0806915798ca02ae"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/desktop-giorno-grayscale.png",
+      "sha256": "7407cd2724ba9072672cf12a361c8faa876c39b39b0244d418b6b3a653d87ff9",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7407cd2724ba9072672cf12a361c8faa876c39b39b0244d418b6b3a653d87ff9"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/desktop-giorno-mixed.png",
+      "sha256": "86692e16720694d612f83d06a8af959350f88a07b56a1f6482156d99c3012222",
+      "exportNormalization": "none",
+      "gitBlobSha256": "86692e16720694d612f83d06a8af959350f88a07b56a1f6482156d99c3012222"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/desktop-hmi-day.png",
+      "sha256": "ba5773669554a4ae089a9fd9e9d95619d715537d961168ec1f6a4ea01c6accc1",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ba5773669554a4ae089a9fd9e9d95619d715537d961168ec1f6a4ea01c6accc1"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/desktop-hmi-mese.png",
+      "sha256": "f5a08f8b9a1d3da85f5f3fe8823c5bea7ae43dfc1a3e82690e3c34a6d36639bd",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f5a08f8b9a1d3da85f5f3fe8823c5bea7ae43dfc1a3e82690e3c34a6d36639bd"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/desktop-hmi-settimana.png",
+      "sha256": "d32ec17e7e40562181019079764089052c49e2394851ac466505fa0c8fd9cabd",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d32ec17e7e40562181019079764089052c49e2394851ac466505fa0c8fd9cabd"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/desktop-mese-empty.png",
+      "sha256": "c278145abd520d66c2c4a7a67652ebcde3638d10e48a35bddddb96d8d932ed8e",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c278145abd520d66c2c4a7a67652ebcde3638d10e48a35bddddb96d8d932ed8e"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/desktop-mese-grayscale.png",
+      "sha256": "07513c79054ac3d822f1e8e91a00c91749c8c3d95f3af8940a787a77c1eb54ee",
+      "exportNormalization": "none",
+      "gitBlobSha256": "07513c79054ac3d822f1e8e91a00c91749c8c3d95f3af8940a787a77c1eb54ee"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/desktop-mese-mixed.png",
+      "sha256": "ad79e8dd5756031f3ee1553ba0b1cf0d9d222806faf149cd19e762124f923e6a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ad79e8dd5756031f3ee1553ba0b1cf0d9d222806faf149cd19e762124f923e6a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/desktop-settimana-empty.png",
+      "sha256": "25aa6c498b78b777337ef4c01d050f013f44bdd9d996e812bae1015d0c1414e4",
+      "exportNormalization": "none",
+      "gitBlobSha256": "25aa6c498b78b777337ef4c01d050f013f44bdd9d996e812bae1015d0c1414e4"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/desktop-settimana-grayscale.png",
+      "sha256": "8a17b6e0006f05415b50e611ab9275b75a46a72a4efa77843e58d7533acf4b4a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8a17b6e0006f05415b50e611ab9275b75a46a72a4efa77843e58d7533acf4b4a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/desktop-settimana-mixed.png",
+      "sha256": "9a76cda902b01e8b37d204362d2347f79493066e143d11eade6af0152b54078a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9a76cda902b01e8b37d204362d2347f79493066e143d11eade6af0152b54078a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/eleven-operators-shared-color.png",
+      "sha256": "a10d5e1549f524e570f28f062b51d9e24489e448bde4bc33f6fe7f80b5362208",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a10d5e1549f524e570f28f062b51d9e24489e448bde4bc33f6fe7f80b5362208"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/loading-hierarchy.png",
+      "sha256": "8bb8e56a58edc8934924ba43a583b3145e9f31e375e5cff9f3e88defed1d1685",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8bb8e56a58edc8934924ba43a583b3145e9f31e375e5cff9f3e88defed1d1685"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/mobile-giorno-empty.png",
+      "sha256": "eee109b592a52447481b82262d57f10ad8d4dc1a545a74364a5d4e23a27253fc",
+      "exportNormalization": "none",
+      "gitBlobSha256": "eee109b592a52447481b82262d57f10ad8d4dc1a545a74364a5d4e23a27253fc"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/mobile-giorno-grayscale.png",
+      "sha256": "7b5e748a10c7dcd9d69f0f209d052539a8b595447f01becbb97395ff9cbd6b3c",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7b5e748a10c7dcd9d69f0f209d052539a8b595447f01becbb97395ff9cbd6b3c"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/mobile-giorno-mixed.png",
+      "sha256": "68ad17719e90e1091466a008dc5b2a42bb60ab25b2c5fd71389cc5802fa99199",
+      "exportNormalization": "none",
+      "gitBlobSha256": "68ad17719e90e1091466a008dc5b2a42bb60ab25b2c5fd71389cc5802fa99199"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/mobile-hmi-day.png",
+      "sha256": "24dfbdace2f66256deec86aba5dcc3e9c01824327c78b3eb21338c7782cc4cfc",
+      "exportNormalization": "none",
+      "gitBlobSha256": "24dfbdace2f66256deec86aba5dcc3e9c01824327c78b3eb21338c7782cc4cfc"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/mobile-hmi-mese.png",
+      "sha256": "28c1aeb0b7618dc531b7d71cafd4f2c905bba937c39528b0596101107df603e3",
+      "exportNormalization": "none",
+      "gitBlobSha256": "28c1aeb0b7618dc531b7d71cafd4f2c905bba937c39528b0596101107df603e3"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/mobile-hmi-settimana.png",
+      "sha256": "ef25d7cce9a22ca0f605c99da93562fb7f85ec2ae240805716077e35c7b1829a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ef25d7cce9a22ca0f605c99da93562fb7f85ec2ae240805716077e35c7b1829a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/mobile-mese-empty.png",
+      "sha256": "bafb9a3fd909e8bcc91543b87c86211e707dc54f320ffbcae0d29ed20f47ad42",
+      "exportNormalization": "none",
+      "gitBlobSha256": "bafb9a3fd909e8bcc91543b87c86211e707dc54f320ffbcae0d29ed20f47ad42"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/mobile-mese-grayscale.png",
+      "sha256": "c581764e472d5098908728f475bf48c93d62b16ffb4bf5dc0bfa4b197710f735",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c581764e472d5098908728f475bf48c93d62b16ffb4bf5dc0bfa4b197710f735"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/mobile-mese-mixed.png",
+      "sha256": "1faa5cd727964f8a4b2a02b11014215f15ab61568977ef020f34bd67df41f701",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1faa5cd727964f8a4b2a02b11014215f15ab61568977ef020f34bd67df41f701"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/mobile-settimana-empty.png",
+      "sha256": "6e321025eaa60f3faa6b871e5b507445d2a112f3674a26a0b2277546d0b625fc",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6e321025eaa60f3faa6b871e5b507445d2a112f3674a26a0b2277546d0b625fc"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/mobile-settimana-grayscale.png",
+      "sha256": "364d493658c5a7d74be8f9bc894e9afde040c6bc459b132040685818ee63bc4a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "364d493658c5a7d74be8f9bc894e9afde040c6bc459b132040685818ee63bc4a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/mobile-settimana-mixed.png",
+      "sha256": "6a1813be49c3ed5ca6ba117689325a2fdad117de13aba72eeafbc657d937e7c5",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6a1813be49c3ed5ca6ba117689325a2fdad117de13aba72eeafbc657d937e7c5"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/test-results/browser-results.json",
+      "sha256": "6f857f224f31c89c35701e2ab357827c313c78178e3ef1117e82438f993aad99",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6f857f224f31c89c35701e2ab357827c313c78178e3ef1117e82438f993aad99"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/trace/desktop-empty.zip",
+      "sha256": "db1ea604edf9ce73643b0dde1155ab040df7a3442ef8d7fb4113a689a5fd20fc",
+      "exportNormalization": "none",
+      "gitBlobSha256": "db1ea604edf9ce73643b0dde1155ab040df7a3442ef8d7fb4113a689a5fd20fc"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/trace/desktop-hmi.zip",
+      "sha256": "acc935b8fe00b5f45302008507b3e8a929b08fd2e71377b913b2ee06344c5a9d",
+      "exportNormalization": "none",
+      "gitBlobSha256": "acc935b8fe00b5f45302008507b3e8a929b08fd2e71377b913b2ee06344c5a9d"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/trace/desktop-mixed.zip",
+      "sha256": "8b991aca5d6f27ce5c26f58152410e20e65333a006b2106b17edfcee43a45796",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8b991aca5d6f27ce5c26f58152410e20e65333a006b2106b17edfcee43a45796"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/trace/loading.zip",
+      "sha256": "a0fc2f41b821d79707aa9bbf37ccb7436635631dc3accb0d7480fbe21410ebd0",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a0fc2f41b821d79707aa9bbf37ccb7436635631dc3accb0d7480fbe21410ebd0"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/trace/mobile-empty.zip",
+      "sha256": "fd5c0104cc3cd740b966bb8b1047c4c9f2d234891f93ec47b1bdda5e5c13f725",
+      "exportNormalization": "none",
+      "gitBlobSha256": "fd5c0104cc3cd740b966bb8b1047c4c9f2d234891f93ec47b1bdda5e5c13f725"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/trace/mobile-hmi.zip",
+      "sha256": "ee79effb7e26830dad3d15a16219449a22897063c7acb81aaf071a624c8b2db0",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ee79effb7e26830dad3d15a16219449a22897063c7acb81aaf071a624c8b2db0"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/trace/mobile-mixed.zip",
+      "sha256": "72be85b8a6f5c9145edc2a6cc8c6f278c6cf783e0fce343b8b2fad27586771cb",
+      "exportNormalization": "none",
+      "gitBlobSha256": "72be85b8a6f5c9145edc2a6cc8c6f278c6cf783e0fce343b8b2fad27586771cb"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/trace/shared-palette.zip",
+      "sha256": "335e5c9663d703812d1e16464a3601b564bf1e99e319e13b29e6ddfa55908384",
+      "exportNormalization": "none",
+      "gitBlobSha256": "335e5c9663d703812d1e16464a3601b564bf1e99e319e13b29e6ddfa55908384"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/video/desktop-empty.webm",
+      "sha256": "c6746ebd7a49df44ec2e3e3c43ab4c8119f7439b997e49285843a95be3c5ee4b",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c6746ebd7a49df44ec2e3e3c43ab4c8119f7439b997e49285843a95be3c5ee4b"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/video/desktop-hmi.webm",
+      "sha256": "5a6825b62165259d5b9961571e672f05f98cf795e4908cb145ee4146466a2484",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5a6825b62165259d5b9961571e672f05f98cf795e4908cb145ee4146466a2484"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/video/desktop-mixed.webm",
+      "sha256": "2fbf2c2f4226b6a146d2b5cd429bac2ae30a41889154f64ebae13dfa48cea917",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2fbf2c2f4226b6a146d2b5cd429bac2ae30a41889154f64ebae13dfa48cea917"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/video/loading.webm",
+      "sha256": "3da068a81a0891c40ead1d9911fc0d9ff62b5934029159671eed493407ea1706",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3da068a81a0891c40ead1d9911fc0d9ff62b5934029159671eed493407ea1706"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/video/mobile-empty.webm",
+      "sha256": "f7a6c68a463a0cd2b68446171e294bb0634055dbe6edfed9453c84bb59836e03",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f7a6c68a463a0cd2b68446171e294bb0634055dbe6edfed9453c84bb59836e03"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/video/mobile-hmi.webm",
+      "sha256": "63097052aff362bc9ccde4a7ea3ce637d5feba649e98438065c2b55265403683",
+      "exportNormalization": "none",
+      "gitBlobSha256": "63097052aff362bc9ccde4a7ea3ce637d5feba649e98438065c2b55265403683"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/video/mobile-mixed.webm",
+      "sha256": "cd9a04db5d2c08e86a4161f0b0907bede14c6dae6c68161bdd349e6bd1bfdf1c",
+      "exportNormalization": "none",
+      "gitBlobSha256": "cd9a04db5d2c08e86a4161f0b0907bede14c6dae6c68161bdd349e6bd1bfdf1c"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/browser02/video/shared-palette.webm",
+      "sha256": "6f869ccbf8f7c2bc7649bb20fb84389bfa855051258858a36605d5bd278a4832",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6f869ccbf8f7c2bc7649bb20fb84389bfa855051258858a36605d5bd278a4832"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/online-receipt.json",
+      "sha256": "e72743d11e3e1fc68254f81e76cc896ba6522dc2024545e9fcdb372b0b4cb9ec",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e72743d11e3e1fc68254f81e76cc896ba6522dc2024545e9fcdb372b0b4cb9ec"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/playwright-report/index.html",
+      "sha256": "6fafb395870f810100125f36297e6f734a4a3e42711f2d12be741bb55d797224",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6fafb395870f810100125f36297e6f734a4a3e42711f2d12be741bb55d797224"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/pre-run.json",
+      "sha256": "0422caf444a30c2defd0c48364429943b1fb28e5b734dc0639b36f1eb7b10a38",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0422caf444a30c2defd0c48364429943b1fb28e5b734dc0639b36f1eb7b10a38"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/recipes/browser.mjs",
+      "sha256": "3e916d87483ffcb7dec4932a77194f52b21797097f683aa0c554b9548d6061de",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3e916d87483ffcb7dec4932a77194f52b21797097f683aa0c554b9548d6061de"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/recipes/commands.mjs",
+      "sha256": "ebb27dfd7f0d95c3183de02c92aee2ca81e62addf2c58199acf8990370ff72a9",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ebb27dfd7f0d95c3183de02c92aee2ca81e62addf2c58199acf8990370ff72a9"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/recipes/qa-server.mjs",
+      "sha256": "dbb4c74cbd86e1db5726d940d3c78c4684cab876ae735e92a7bd7453942b9205",
+      "exportNormalization": "none",
+      "gitBlobSha256": "dbb4c74cbd86e1db5726d940d3c78c4684cab876ae735e92a7bd7453942b9205"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/recipes/seal.mjs",
+      "sha256": "561e1e8c11fb101421b0b6d75d55c6ba8d05d34cd9d401a322c2c66122617cf6",
+      "exportNormalization": "none",
+      "gitBlobSha256": "561e1e8c11fb101421b0b6d75d55c6ba8d05d34cd9d401a322c2c66122617cf6"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/recipes/security.mjs",
+      "sha256": "d5e1a7d1709a7f81091b5cff0e7a0aee7b158adda3aaa268873ab46620b1c5df",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d5e1a7d1709a7f81091b5cff0e7a0aee7b158adda3aaa268873ab46620b1c5df"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/recipes/source-receipt.mjs",
+      "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161",
+      "exportNormalization": "none",
+      "gitBlobSha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/recipes/transport.mjs",
+      "sha256": "bae179ff0be0fe60e06e454b8441adb1a82e043bb34786e23b5e9b1ebfaf6225",
+      "exportNormalization": "none",
+      "gitBlobSha256": "bae179ff0be0fe60e06e454b8441adb1a82e043bb34786e23b5e9b1ebfaf6225"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/recipes/values-bounds.mjs",
+      "sha256": "25fa2ab87f0118a4ba99e277e444d87436a06e92f4eaeb32dccdcb8f73a07223",
+      "exportNormalization": "none",
+      "gitBlobSha256": "25fa2ab87f0118a4ba99e277e444d87436a06e92f4eaeb32dccdcb8f73a07223"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/values01.log",
+      "sha256": "c27a6748336c4d60834a98b24de37b2ca3f3de484edc4cd336f7fba0340511ca",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c27a6748336c4d60834a98b24de37b2ca3f3de484edc4cd336f7fba0340511ca"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/values01/playwright-report/index.html",
+      "sha256": "0105aaa1324bf4425c801be0a97cd4f8efafad46fcb9d9825da324675f5eaaed",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0105aaa1324bf4425c801be0a97cd4f8efafad46fcb9d9825da324675f5eaaed"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/values01/screenshots/desktop-giorno-values-bounds.png",
+      "sha256": "f38f07cf013629320e8207dc16b46bb7ece7416273d07764f1dc1f6e5f23d079",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f38f07cf013629320e8207dc16b46bb7ece7416273d07764f1dc1f6e5f23d079"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/values01/screenshots/desktop-mese-values-bounds.png",
+      "sha256": "84be5864db4255ac1836e4a803c9e35feb24b1d1744487a85d5a6edb5407c3d3",
+      "exportNormalization": "none",
+      "gitBlobSha256": "84be5864db4255ac1836e4a803c9e35feb24b1d1744487a85d5a6edb5407c3d3"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/values01/screenshots/desktop-settimana-values-bounds.png",
+      "sha256": "61d25f930472e1deca3a95d773c3401e3784ee3a1471cc5f885e37a83ae35803",
+      "exportNormalization": "none",
+      "gitBlobSha256": "61d25f930472e1deca3a95d773c3401e3784ee3a1471cc5f885e37a83ae35803"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/values01/screenshots/mobile-giorno-values-bounds.png",
+      "sha256": "7b5e748a10c7dcd9d69f0f209d052539a8b595447f01becbb97395ff9cbd6b3c",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7b5e748a10c7dcd9d69f0f209d052539a8b595447f01becbb97395ff9cbd6b3c"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/values01/screenshots/mobile-mese-values-bounds.png",
+      "sha256": "c581764e472d5098908728f475bf48c93d62b16ffb4bf5dc0bfa4b197710f735",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c581764e472d5098908728f475bf48c93d62b16ffb4bf5dc0bfa4b197710f735"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/values01/screenshots/mobile-settimana-values-bounds.png",
+      "sha256": "364d493658c5a7d74be8f9bc894e9afde040c6bc459b132040685818ee63bc4a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "364d493658c5a7d74be8f9bc894e9afde040c6bc459b132040685818ee63bc4a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/values01/test-results/browser-results.json",
+      "sha256": "9e5f4ea98bbd57bba2c8b825533d79b0e95951a2dd21867e4af388533b08d6f6",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9e5f4ea98bbd57bba2c8b825533d79b0e95951a2dd21867e4af388533b08d6f6"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/values01/trace/desktop.zip",
+      "sha256": "619655fbe81cbe5b21a9a97964e9e81849a47836459e3b386c5336594f0bb9f1",
+      "exportNormalization": "none",
+      "gitBlobSha256": "619655fbe81cbe5b21a9a97964e9e81849a47836459e3b386c5336594f0bb9f1"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/values01/trace/mobile.zip",
+      "sha256": "59fb81f4f200279cea8f1e9ba40e4cc2b103f9ad047691bd195aab4b94f5d4c7",
+      "exportNormalization": "none",
+      "gitBlobSha256": "59fb81f4f200279cea8f1e9ba40e4cc2b103f9ad047691bd195aab4b94f5d4c7"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/values01/video/desktop.webm",
+      "sha256": "afd758fdc8af2c5fdfe85a2ff9c98a482dcefada5bf5f70ab6aac5d1af370766",
+      "exportNormalization": "none",
+      "gitBlobSha256": "afd758fdc8af2c5fdfe85a2ff9c98a482dcefada5bf5f70ab6aac5d1af370766"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/compiled-online/values01/video/mobile.webm",
+      "sha256": "52735835b93b1ced661aa7aeb54e9aa26c2d0aca848bf09da5cb5e782dc24541",
+      "exportNormalization": "none",
+      "gitBlobSha256": "52735835b93b1ced661aa7aeb54e9aa26c2d0aca848bf09da5cb5e782dc24541"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/deployment-receipt.json",
+      "sha256": "a4f8c4b6720bfe86c80cbbb2d147fe0401b17fde5022554fbaafafb69976e252",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a4f8c4b6720bfe86c80cbbb2d147fe0401b17fde5022554fbaafafb69976e252"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/finalize-proof.mjs",
+      "sha256": "3d4a0f36efa7eeb1537fcb08e717e3a0a0ec763933977cac5817b115656ce69e",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3d4a0f36efa7eeb1537fcb08e717e3a0a0ec763933977cac5817b115656ce69e"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/freeze-source.mjs",
+      "sha256": "d2e4bf35c277b424095a94205cb8b254ed233b46a8883c8d9cf5f4aaa0701be8",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d2e4bf35c277b424095a94205cb8b254ed233b46a8883c8d9cf5f4aaa0701be8"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/frozen-source.json",
+      "sha256": "1d4ae240d4f9fc4efbbec83d0c3b403cd99f48b1138799c1f3b959048cf4fcc3",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1d4ae240d4f9fc4efbbec83d0c3b403cd99f48b1138799c1f3b959048cf4fcc3"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser-plan.json",
+      "sha256": "388e35a92f80f9be67660da82cca1b4a932c8d2d219c18595218ed3c214ce3a1",
+      "exportNormalization": "none",
+      "gitBlobSha256": "388e35a92f80f9be67660da82cca1b4a932c8d2d219c18595218ed3c214ce3a1"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/recipes/browser.mjs",
+      "sha256": "3e916d87483ffcb7dec4932a77194f52b21797097f683aa0c554b9548d6061de",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3e916d87483ffcb7dec4932a77194f52b21797097f683aa0c554b9548d6061de"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/recipes/transport.mjs",
+      "sha256": "3f4a307c1ce7d7f28c7ade4bd02e3ec66b27be9d93ff225aec2ab024f5926a84",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3f4a307c1ce7d7f28c7ade4bd02e3ec66b27be9d93ff225aec2ab024f5926a84"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/screenshots/desktop-giorno-empty.png",
+      "sha256": "b6e137ba077f3caf99753b268d1c052b62b8db34e97311d97037e3efe96a4fd1",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b6e137ba077f3caf99753b268d1c052b62b8db34e97311d97037e3efe96a4fd1"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/screenshots/desktop-giorno-grayscale.png",
+      "sha256": "9a5de60184dfb7aabd1225217a96a4e4044b318bb5e4dbc839a494958e06c92f",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9a5de60184dfb7aabd1225217a96a4e4044b318bb5e4dbc839a494958e06c92f"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/screenshots/desktop-giorno-mixed.png",
+      "sha256": "3d1c49d74fa9d3ccd21a807c33573841d675f6178057804c678c31f99ac17749",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3d1c49d74fa9d3ccd21a807c33573841d675f6178057804c678c31f99ac17749"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/screenshots/desktop-mese-empty.png",
+      "sha256": "89ae232ccb2c4d61d7ffcbd2747ac6c95257315c9c7aa3a62c1fbb4cd14684a0",
+      "exportNormalization": "none",
+      "gitBlobSha256": "89ae232ccb2c4d61d7ffcbd2747ac6c95257315c9c7aa3a62c1fbb4cd14684a0"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/screenshots/desktop-mese-grayscale.png",
+      "sha256": "3cee14227e5defa8d0981e030ad8e4a9ef07126f5d073e85afddded20b4cf4aa",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3cee14227e5defa8d0981e030ad8e4a9ef07126f5d073e85afddded20b4cf4aa"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/screenshots/desktop-mese-mixed.png",
+      "sha256": "df84b349bf21002967553ba653ff42e7dac1f87dcf34730ec63421ec74134de0",
+      "exportNormalization": "none",
+      "gitBlobSha256": "df84b349bf21002967553ba653ff42e7dac1f87dcf34730ec63421ec74134de0"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/screenshots/desktop-settimana-empty.png",
+      "sha256": "e617cce5ccfe469cd1eec6fe1cc784860c0b38d2d4dd3e3f07a9431db688b300",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e617cce5ccfe469cd1eec6fe1cc784860c0b38d2d4dd3e3f07a9431db688b300"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/screenshots/desktop-settimana-grayscale.png",
+      "sha256": "6378268e7e4a86d4a751036db17562fe6488a2b84f756ce784099a31059e61f3",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6378268e7e4a86d4a751036db17562fe6488a2b84f756ce784099a31059e61f3"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/screenshots/desktop-settimana-mixed.png",
+      "sha256": "e782b4c513567a96ffb14a93b748b9724247e7e4f9d2cfd10dd9a6a06378c966",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e782b4c513567a96ffb14a93b748b9724247e7e4f9d2cfd10dd9a6a06378c966"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/test-results/failure.json",
+      "sha256": "6340642d1cdad21b763961b1e6202f509c53ebbd7ce66715df81f4cee1a26493",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6340642d1cdad21b763961b1e6202f509c53ebbd7ce66715df81f4cee1a26493"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/trace/desktop-empty.zip",
+      "sha256": "1e00c28b4a3bd48d872c090ef443e3b6bde91e109856c8167e5bdbf4f07e68b5",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1e00c28b4a3bd48d872c090ef443e3b6bde91e109856c8167e5bdbf4f07e68b5"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/trace/desktop-mixed.zip",
+      "sha256": "6b411989b6c467d5f4310f19d148df4ca9bb16f799a1bb1f2571044e9495ba71",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6b411989b6c467d5f4310f19d148df4ca9bb16f799a1bb1f2571044e9495ba71"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/video/desktop-empty.webm",
+      "sha256": "453a727a757a04b788cbaa4bc5bb6be319866e473a3413e4b00133f3c04bbb51",
+      "exportNormalization": "none",
+      "gitBlobSha256": "453a727a757a04b788cbaa4bc5bb6be319866e473a3413e4b00133f3c04bbb51"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/video/desktop-mixed.webm",
+      "sha256": "c5e0359c5678cb2f475e1de2b4cbdd03c2e3ec18a2552350a7068bd0d08dbe60",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c5e0359c5678cb2f475e1de2b4cbdd03c2e3ec18a2552350a7068bd0d08dbe60"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser01/video/page@32ef306186b4b068cc5dc9c5c1d2fef8.webm",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/playwright-report/index.html",
+      "sha256": "eb456e9974c96e98eb464bd15faf300d907189b6dab8abc7c6cd2eee7aa2d958",
+      "exportNormalization": "none",
+      "gitBlobSha256": "eb456e9974c96e98eb464bd15faf300d907189b6dab8abc7c6cd2eee7aa2d958"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/desktop-giorno-empty.png",
+      "sha256": "d5f54321980852256ef7fdf00863f28d5167a0626710f4777d093a5ad8e0a2ab",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d5f54321980852256ef7fdf00863f28d5167a0626710f4777d093a5ad8e0a2ab"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/desktop-giorno-grayscale.png",
+      "sha256": "fac589f1ce45b46e9b46369e2c12a51938eb349f884105292bcd1ed4a7c3cfc5",
+      "exportNormalization": "none",
+      "gitBlobSha256": "fac589f1ce45b46e9b46369e2c12a51938eb349f884105292bcd1ed4a7c3cfc5"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/desktop-giorno-mixed.png",
+      "sha256": "2787ef32eb9cad561e18431950c26b68b0172f8736ee58129fcd264bdfe27bf6",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2787ef32eb9cad561e18431950c26b68b0172f8736ee58129fcd264bdfe27bf6"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/desktop-hmi-day.png",
+      "sha256": "179b1941e70f47dec69741899f0ee7bc1e36a5c2ba240c11c287c1bdf6db7700",
+      "exportNormalization": "none",
+      "gitBlobSha256": "179b1941e70f47dec69741899f0ee7bc1e36a5c2ba240c11c287c1bdf6db7700"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/desktop-hmi-mese.png",
+      "sha256": "44539c141b45d75b46256d2e90b2be43444c6ccca7b20b94facddc82d3d469eb",
+      "exportNormalization": "none",
+      "gitBlobSha256": "44539c141b45d75b46256d2e90b2be43444c6ccca7b20b94facddc82d3d469eb"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/desktop-hmi-settimana.png",
+      "sha256": "c3e5d3cf955c58760391068887b941f1dab7eff1fd36f639a0092623803bf525",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c3e5d3cf955c58760391068887b941f1dab7eff1fd36f639a0092623803bf525"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/desktop-mese-empty.png",
+      "sha256": "6d5bce3b49a2d2e8edd5e935e9a8f21790559d00a70921d38fb87c6229b8073e",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6d5bce3b49a2d2e8edd5e935e9a8f21790559d00a70921d38fb87c6229b8073e"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/desktop-mese-grayscale.png",
+      "sha256": "9b185f3e984917b0b391b57136531e1a5f00cfabc93c24441e22174477f5dc28",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9b185f3e984917b0b391b57136531e1a5f00cfabc93c24441e22174477f5dc28"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/desktop-mese-mixed.png",
+      "sha256": "7b9f7ce0bd9022bd56c4468991dd0b3c63ad38ef4a0c93d1b3109efaf690b643",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7b9f7ce0bd9022bd56c4468991dd0b3c63ad38ef4a0c93d1b3109efaf690b643"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/desktop-settimana-empty.png",
+      "sha256": "df55575cd1088b29feade847642fc2eab752e5872888270e08546cbee55405db",
+      "exportNormalization": "none",
+      "gitBlobSha256": "df55575cd1088b29feade847642fc2eab752e5872888270e08546cbee55405db"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/desktop-settimana-grayscale.png",
+      "sha256": "962a7552744bf928ad80ef4186ec4f5e48df8b5de3f73a05183e3fc5d687c81a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "962a7552744bf928ad80ef4186ec4f5e48df8b5de3f73a05183e3fc5d687c81a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/desktop-settimana-mixed.png",
+      "sha256": "44672b2714105324bff07ff72eeed4c6d3c7303ab6d4c48681b7d2e7487d136b",
+      "exportNormalization": "none",
+      "gitBlobSha256": "44672b2714105324bff07ff72eeed4c6d3c7303ab6d4c48681b7d2e7487d136b"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/eleven-operators-shared-color.png",
+      "sha256": "d2b5b624a4b0413d96e09f99ca595e778d4d0757070713a82518abfa3a706e0f",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d2b5b624a4b0413d96e09f99ca595e778d4d0757070713a82518abfa3a706e0f"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/loading-hierarchy.png",
+      "sha256": "a7da22034199958cb245d5e6ff8ab97d65ccd7995043f2fdd2e79573a8ab0e98",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a7da22034199958cb245d5e6ff8ab97d65ccd7995043f2fdd2e79573a8ab0e98"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/mobile-giorno-empty.png",
+      "sha256": "eee109b592a52447481b82262d57f10ad8d4dc1a545a74364a5d4e23a27253fc",
+      "exportNormalization": "none",
+      "gitBlobSha256": "eee109b592a52447481b82262d57f10ad8d4dc1a545a74364a5d4e23a27253fc"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/mobile-giorno-grayscale.png",
+      "sha256": "7b5e748a10c7dcd9d69f0f209d052539a8b595447f01becbb97395ff9cbd6b3c",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7b5e748a10c7dcd9d69f0f209d052539a8b595447f01becbb97395ff9cbd6b3c"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/mobile-giorno-mixed.png",
+      "sha256": "68ad17719e90e1091466a008dc5b2a42bb60ab25b2c5fd71389cc5802fa99199",
+      "exportNormalization": "none",
+      "gitBlobSha256": "68ad17719e90e1091466a008dc5b2a42bb60ab25b2c5fd71389cc5802fa99199"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/mobile-hmi-day.png",
+      "sha256": "24dfbdace2f66256deec86aba5dcc3e9c01824327c78b3eb21338c7782cc4cfc",
+      "exportNormalization": "none",
+      "gitBlobSha256": "24dfbdace2f66256deec86aba5dcc3e9c01824327c78b3eb21338c7782cc4cfc"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/mobile-hmi-mese.png",
+      "sha256": "28c1aeb0b7618dc531b7d71cafd4f2c905bba937c39528b0596101107df603e3",
+      "exportNormalization": "none",
+      "gitBlobSha256": "28c1aeb0b7618dc531b7d71cafd4f2c905bba937c39528b0596101107df603e3"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/mobile-hmi-settimana.png",
+      "sha256": "ef25d7cce9a22ca0f605c99da93562fb7f85ec2ae240805716077e35c7b1829a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ef25d7cce9a22ca0f605c99da93562fb7f85ec2ae240805716077e35c7b1829a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/mobile-mese-empty.png",
+      "sha256": "bafb9a3fd909e8bcc91543b87c86211e707dc54f320ffbcae0d29ed20f47ad42",
+      "exportNormalization": "none",
+      "gitBlobSha256": "bafb9a3fd909e8bcc91543b87c86211e707dc54f320ffbcae0d29ed20f47ad42"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/mobile-mese-grayscale.png",
+      "sha256": "c581764e472d5098908728f475bf48c93d62b16ffb4bf5dc0bfa4b197710f735",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c581764e472d5098908728f475bf48c93d62b16ffb4bf5dc0bfa4b197710f735"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/mobile-mese-mixed.png",
+      "sha256": "1faa5cd727964f8a4b2a02b11014215f15ab61568977ef020f34bd67df41f701",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1faa5cd727964f8a4b2a02b11014215f15ab61568977ef020f34bd67df41f701"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/mobile-settimana-empty.png",
+      "sha256": "6e321025eaa60f3faa6b871e5b507445d2a112f3674a26a0b2277546d0b625fc",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6e321025eaa60f3faa6b871e5b507445d2a112f3674a26a0b2277546d0b625fc"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/mobile-settimana-grayscale.png",
+      "sha256": "364d493658c5a7d74be8f9bc894e9afde040c6bc459b132040685818ee63bc4a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "364d493658c5a7d74be8f9bc894e9afde040c6bc459b132040685818ee63bc4a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/screenshots/mobile-settimana-mixed.png",
+      "sha256": "6a1813be49c3ed5ca6ba117689325a2fdad117de13aba72eeafbc657d937e7c5",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6a1813be49c3ed5ca6ba117689325a2fdad117de13aba72eeafbc657d937e7c5"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/test-results/browser-results.json",
+      "sha256": "d073189d9cbf61b1170d8238bf363a7c14b629f621e7445ad0d9ebef08b67140",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d073189d9cbf61b1170d8238bf363a7c14b629f621e7445ad0d9ebef08b67140"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/trace/desktop-empty.zip",
+      "sha256": "1fd79338c5b76a1700bfbfa6d271cda36ca48e89812a49f8622247a8431a4219",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1fd79338c5b76a1700bfbfa6d271cda36ca48e89812a49f8622247a8431a4219"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/trace/desktop-hmi.zip",
+      "sha256": "01021f2c3b36464860b333d834ca997cb7486d7d1068e1d45bbd92d13d721355",
+      "exportNormalization": "none",
+      "gitBlobSha256": "01021f2c3b36464860b333d834ca997cb7486d7d1068e1d45bbd92d13d721355"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/trace/desktop-mixed.zip",
+      "sha256": "233e40c24796107a33299a03617cb8f722de2b5a1f215f1f9b3c8295207e8675",
+      "exportNormalization": "none",
+      "gitBlobSha256": "233e40c24796107a33299a03617cb8f722de2b5a1f215f1f9b3c8295207e8675"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/trace/loading.zip",
+      "sha256": "e3d9c19fc280bd8b217a40e81b8a07ad6d95fc7628c199a47a6dcee62430ea38",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3d9c19fc280bd8b217a40e81b8a07ad6d95fc7628c199a47a6dcee62430ea38"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/trace/mobile-empty.zip",
+      "sha256": "de1317627271d25cf6c675b28f43a3d21ccd0b402af53e082b60007694241d8b",
+      "exportNormalization": "none",
+      "gitBlobSha256": "de1317627271d25cf6c675b28f43a3d21ccd0b402af53e082b60007694241d8b"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/trace/mobile-hmi.zip",
+      "sha256": "29c57ce1a72b52ccf884151c9d7e9b762fd6248594ef77d0cded74f7c3f2b44b",
+      "exportNormalization": "none",
+      "gitBlobSha256": "29c57ce1a72b52ccf884151c9d7e9b762fd6248594ef77d0cded74f7c3f2b44b"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/trace/mobile-mixed.zip",
+      "sha256": "a6a42c744cf4e6e3e04112e22329dee4d8d20a4b16efbc3c36da568e0f4aba56",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a6a42c744cf4e6e3e04112e22329dee4d8d20a4b16efbc3c36da568e0f4aba56"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/trace/shared-palette.zip",
+      "sha256": "175d6fe93d6c0e0a39fd7eda41748e03421a77615e4b35bc522d39c1baf63fdb",
+      "exportNormalization": "none",
+      "gitBlobSha256": "175d6fe93d6c0e0a39fd7eda41748e03421a77615e4b35bc522d39c1baf63fdb"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/video/desktop-empty.webm",
+      "sha256": "0be9c2674147ffd9d0f87148eb1f94a22310a1f47151b05b9a5c0226a7f76f23",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0be9c2674147ffd9d0f87148eb1f94a22310a1f47151b05b9a5c0226a7f76f23"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/video/desktop-hmi.webm",
+      "sha256": "55bb0c44718c754f55680aaacde96fc38fbc9d6a2a3b9533664b6b597ed275cb",
+      "exportNormalization": "none",
+      "gitBlobSha256": "55bb0c44718c754f55680aaacde96fc38fbc9d6a2a3b9533664b6b597ed275cb"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/video/desktop-mixed.webm",
+      "sha256": "ffe1fc7483cd18652a221690b9de424334bb4dc1af80d316175e653a54c38789",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ffe1fc7483cd18652a221690b9de424334bb4dc1af80d316175e653a54c38789"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/video/loading.webm",
+      "sha256": "315f289455a1d313c0adfe9f03dd13573c5cadeedf67495d32a808fba145d973",
+      "exportNormalization": "none",
+      "gitBlobSha256": "315f289455a1d313c0adfe9f03dd13573c5cadeedf67495d32a808fba145d973"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/video/mobile-empty.webm",
+      "sha256": "a624079fe1ab9b3910373a5c2f9b530562a599c7fb400cf1645f17554ca7845f",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a624079fe1ab9b3910373a5c2f9b530562a599c7fb400cf1645f17554ca7845f"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/video/mobile-hmi.webm",
+      "sha256": "3f5a23979933cc71d12f4e0d36710aa3db3f9faf87527c0a870efe0c853a9293",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3f5a23979933cc71d12f4e0d36710aa3db3f9faf87527c0a870efe0c853a9293"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/video/mobile-mixed.webm",
+      "sha256": "1fb36fb64b6cab06ac9ccf139bed841db1b2c762e1e4608c54e1dce12939c684",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1fb36fb64b6cab06ac9ccf139bed841db1b2c762e1e4608c54e1dce12939c684"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/browser02/video/shared-palette.webm",
+      "sha256": "f7a66fa9531bd56d7ac753ec683bf87d0b449bc5e693b23c29f2c2dedab47c0b",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f7a66fa9531bd56d7ac753ec683bf87d0b449bc5e693b23c29f2c2dedab47c0b"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/commands.mjs",
+      "sha256": "ebb27dfd7f0d95c3183de02c92aee2ca81e62addf2c58199acf8990370ff72a9",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ebb27dfd7f0d95c3183de02c92aee2ca81e62addf2c58199acf8990370ff72a9"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/commands01/backend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/commands01/command-results.json",
+      "sha256": "8a53444820fe61a0fb9ca2a076542a6822a5c10c3aaf1328cef86c1730cf37fe",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8a53444820fe61a0fb9ca2a076542a6822a5c10c3aaf1328cef86c1730cf37fe"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/commands01/focused.log",
+      "sha256": "6e8f2b28a900994390362689a5cf8b45594f6297a60d480517711ef2dde593d6",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6e8f2b28a900994390362689a5cf8b45594f6297a60d480517711ef2dde593d6"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/commands01/frontend-tsc-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/commands01/frontend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/commands01/full-regression.log",
+      "sha256": "ce908bc40180c23ed58ea7575108b9ddc00eb2e8a42da661404553e2457b2f07",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ce908bc40180c23ed58ea7575108b9ddc00eb2e8a42da661404553e2457b2f07"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/commands01/security-scan.log",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/commands01/vite-build.log",
+      "sha256": "5325ac79f0e0b95e20fa458d4c215fb3ce3734b812d4fda5607c088ee8060c3a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5325ac79f0e0b95e20fa458d4c215fb3ce3734b812d4fda5607c088ee8060c3a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/diff-security-review.md",
+      "sha256": "a17de5ee486fa5a77c290fc7430eecc007878329cfc276672efd897cae842829",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a17de5ee486fa5a77c290fc7430eecc007878329cfc276672efd897cae842829"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/frozen-source.json",
+      "sha256": "1d4ae240d4f9fc4efbbec83d0c3b403cd99f48b1138799c1f3b959048cf4fcc3",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1d4ae240d4f9fc4efbbec83d0c3b403cd99f48b1138799c1f3b959048cf4fcc3"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/lane-handoff.json",
+      "sha256": "55a208db48838c43da3bf175d700b0227cf2844b60267ed3b12b5ed1ec55805f",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "07089514e2e5501b978669ccdd40c2e67cc0ed6e426aa3434c6c588e098a4dd0"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/manifest.json",
+      "sha256": "e8db13384c0e4cae777a2f7d121055f9a4c3f941a7ffba4cbba1792ed7bb23e3",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e8db13384c0e4cae777a2f7d121055f9a4c3f941a7ffba4cbba1792ed7bb23e3"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/navigation-incident.md",
+      "sha256": "dd5668784998dd37c3f7fff07a2486dadd50dc7e6dc3419263b53f7dc66ec249",
+      "exportNormalization": "none",
+      "gitBlobSha256": "dd5668784998dd37c3f7fff07a2486dadd50dc7e6dc3419263b53f7dc66ec249"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/original-issue.json",
+      "sha256": "061a8c507b76dcac6f33af88355570e5a93f793bc36ddfaf183045b2198c82cc",
+      "exportNormalization": "none",
+      "gitBlobSha256": "061a8c507b76dcac6f33af88355570e5a93f793bc36ddfaf183045b2198c82cc"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/qa-assignment-policy.md",
+      "sha256": "fa461ddd5936f0d6eec5a927d65c2cc06da0979562f3288336956fed28086337",
+      "exportNormalization": "none",
+      "gitBlobSha256": "fa461ddd5936f0d6eec5a927d65c2cc06da0979562f3288336956fed28086337"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/recipes/browser.mjs",
+      "sha256": "3e916d87483ffcb7dec4932a77194f52b21797097f683aa0c554b9548d6061de",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3e916d87483ffcb7dec4932a77194f52b21797097f683aa0c554b9548d6061de"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/recipes/commands.mjs",
+      "sha256": "ebb27dfd7f0d95c3183de02c92aee2ca81e62addf2c58199acf8990370ff72a9",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ebb27dfd7f0d95c3183de02c92aee2ca81e62addf2c58199acf8990370ff72a9"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/recipes/qa-server.mjs",
+      "sha256": "dbb4c74cbd86e1db5726d940d3c78c4684cab876ae735e92a7bd7453942b9205",
+      "exportNormalization": "none",
+      "gitBlobSha256": "dbb4c74cbd86e1db5726d940d3c78c4684cab876ae735e92a7bd7453942b9205"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/recipes/seal.mjs",
+      "sha256": "561e1e8c11fb101421b0b6d75d55c6ba8d05d34cd9d401a322c2c66122617cf6",
+      "exportNormalization": "none",
+      "gitBlobSha256": "561e1e8c11fb101421b0b6d75d55c6ba8d05d34cd9d401a322c2c66122617cf6"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/recipes/security.mjs",
+      "sha256": "d5e1a7d1709a7f81091b5cff0e7a0aee7b158adda3aaa268873ab46620b1c5df",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d5e1a7d1709a7f81091b5cff0e7a0aee7b158adda3aaa268873ab46620b1c5df"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/recipes/source-receipt.mjs",
+      "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161",
+      "exportNormalization": "none",
+      "gitBlobSha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/recipes/transport.mjs",
+      "sha256": "bae179ff0be0fe60e06e454b8441adb1a82e043bb34786e23b5e9b1ebfaf6225",
+      "exportNormalization": "none",
+      "gitBlobSha256": "bae179ff0be0fe60e06e454b8441adb1a82e043bb34786e23b5e9b1ebfaf6225"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/recipes/values-bounds.mjs",
+      "sha256": "25fa2ab87f0118a4ba99e277e444d87436a06e92f4eaeb32dccdcb8f73a07223",
+      "exportNormalization": "none",
+      "gitBlobSha256": "25fa2ab87f0118a4ba99e277e444d87436a06e92f4eaeb32dccdcb8f73a07223"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/security.mjs",
+      "sha256": "d5e1a7d1709a7f81091b5cff0e7a0aee7b158adda3aaa268873ab46620b1c5df",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d5e1a7d1709a7f81091b5cff0e7a0aee7b158adda3aaa268873ab46620b1c5df"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/security01/baseline-cli.log",
+      "sha256": "dba90d6ae69422e61d79e1c6ba960116f55fd1ca8bb6347393cf2d58833e81be",
+      "exportNormalization": "none",
+      "gitBlobSha256": "dba90d6ae69422e61d79e1c6ba960116f55fd1ca8bb6347393cf2d58833e81be"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/security01/baseline/.claude/security-scans/scan-code-deep.json",
+      "sha256": "fbd3b04cc558707641fe2f7040cde073f818c6e36389beca191d37b5dfa71e18",
+      "exportNormalization": "none",
+      "gitBlobSha256": "fbd3b04cc558707641fe2f7040cde073f818c6e36389beca191d37b5dfa71e18"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/security01/baseline/frontend/src/components/shared/AgendaInline.css",
+      "sha256": "a01464f94461de4f8acb3c38d2dc6cdbcf994672bcaa4e7d198bbeb25a2aa4d4",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a01464f94461de4f8acb3c38d2dc6cdbcf994672bcaa4e7d198bbeb25a2aa4d4"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/security01/baseline/frontend/src/components/shared/AgendaLegend.tsx",
+      "sha256": "62bc32a86b4b4b7c7c8f5f3a2f2ad890aa107fe2dccc7c019e5b9d3073e17e4c",
+      "exportNormalization": "none",
+      "gitBlobSha256": "62bc32a86b4b4b7c7c8f5f3a2f2ad890aa107fe2dccc7c019e5b9d3073e17e4c"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/security01/baseline/frontend/src/components/shared/AgendaStatoFilter.tsx",
+      "sha256": "2378a28879406a79db4d5559a0a13a7caabd24d31b7398407eed28336d6bdc20",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2378a28879406a79db4d5559a0a13a7caabd24d31b7398407eed28336d6bdc20"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/security01/candidate-cli.log",
+      "sha256": "79b0e18f6137aac2c90a5f57a45e59d12c375893cac1295cab61acbafd3284f0",
+      "exportNormalization": "none",
+      "gitBlobSha256": "79b0e18f6137aac2c90a5f57a45e59d12c375893cac1295cab61acbafd3284f0"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/security01/candidate/.claude/security-scans/scan-code-deep.json",
+      "sha256": "040a1850730cb90d9692fae1a984b627316f28fa832e03fee2899db0f49150a1",
+      "exportNormalization": "none",
+      "gitBlobSha256": "040a1850730cb90d9692fae1a984b627316f28fa832e03fee2899db0f49150a1"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/security01/candidate/frontend/src/components/shared/AgendaInline.css",
+      "sha256": "93a267373425e04aac54221a3ee12658291d38ad6b6d78620334215653cf13f0",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "bb8a0601bf7f65eb062342bed9e825b80689bc994a174d730757b1ae0b44c874"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/security01/candidate/frontend/src/components/shared/AgendaLegend.tsx",
+      "sha256": "ace1da2722300ce9f7533645be2f064e6a2b9087030fe517495890d1de77a0a3",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "76d01c34aac1b395155f2d3af2ac11e97e13a2beea088bc56acc4372d02e421b"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/security01/candidate/frontend/src/components/shared/AgendaStatoFilter.tsx",
+      "sha256": "b94ff253c4f299640fa7a713d9aabe3b6a923196dc082d74bd39eef129832358",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "ed3df1c97b060edcf7592d1695e701f7957d7d3cbb045e3f1e940aed8a4057e3"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/security01/candidate/frontend/src/lib/__tests__/agendaIdentity.test.ts",
+      "sha256": "2dcb70ca50932a8b1ee38fbc32c2d71c87117eed5745d16320a99b46a0fced0d",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "98b04829363215d0097f65594dccc0016998ebe333f002185fb2d7a2c7f7897d"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/security01/comparison.json",
+      "sha256": "90737478026dc9ed29efb505a8294c2409b3641fa654006edd5535fce390fded",
+      "exportNormalization": "none",
+      "gitBlobSha256": "90737478026dc9ed29efb505a8294c2409b3641fa654006edd5535fce390fded"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/server-owner.json",
+      "sha256": "12cbaa0ae2de4f446763e18f75db7845e520dff165474a3df3aeb6c888490d0e",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "12dfb2de130816b6c1c5e2cf552e13faff3c06f889d29f8113dbd8db815a00f4"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/server.stderr.log",
+      "sha256": "76973ef800f9e15c7064322268fef41b0066257aff212eee195c0ca6622cf97c",
+      "exportNormalization": "none",
+      "gitBlobSha256": "76973ef800f9e15c7064322268fef41b0066257aff212eee195c0ca6622cf97c"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/server.stdout.log",
+      "sha256": "166e62cbc6547925526c80237a32754571e381c92142b4923ca5a842c2b74f13",
+      "exportNormalization": "none",
+      "gitBlobSha256": "166e62cbc6547925526c80237a32754571e381c92142b4923ca5a842c2b74f13"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/source-after.json",
+      "sha256": "eed367101463074f118963dd0070d6aaea3d561f2e4c616cb4ea41213065c76b",
+      "exportNormalization": "none",
+      "gitBlobSha256": "eed367101463074f118963dd0070d6aaea3d561f2e4c616cb4ea41213065c76b"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/source-before.json",
+      "sha256": "eed367101463074f118963dd0070d6aaea3d561f2e4c616cb4ea41213065c76b",
+      "exportNormalization": "none",
+      "gitBlobSha256": "eed367101463074f118963dd0070d6aaea3d561f2e4c616cb4ea41213065c76b"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/source-receipt.mjs",
+      "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161",
+      "exportNormalization": "none",
+      "gitBlobSha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/task-contract.md",
+      "sha256": "bef898032cfe59c1ad333a84fa19c40a71a8144acb7550de218ae6e00c6671b0",
+      "exportNormalization": "none",
+      "gitBlobSha256": "bef898032cfe59c1ad333a84fa19c40a71a8144acb7550de218ae6e00c6671b0"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/validation-report.md",
+      "sha256": "6452f7428549b48ac3cdb532f8ebe5fad78d79206589ad28f82f64002b21ee2f",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6452f7428549b48ac3cdb532f8ebe5fad78d79206589ad28f82f64002b21ee2f"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/values01/playwright-report/index.html",
+      "sha256": "0105aaa1324bf4425c801be0a97cd4f8efafad46fcb9d9825da324675f5eaaed",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0105aaa1324bf4425c801be0a97cd4f8efafad46fcb9d9825da324675f5eaaed"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/values01/screenshots/desktop-giorno-values-bounds.png",
+      "sha256": "4b8ec37ca75fada7e0d16ef56130a99666e2eb508e99a62c2356a6468874a643",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4b8ec37ca75fada7e0d16ef56130a99666e2eb508e99a62c2356a6468874a643"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/values01/screenshots/desktop-mese-values-bounds.png",
+      "sha256": "36c3685ef11ad0217de120aed06ca3bf1c1e729f2984f2d3fc93b462490e3766",
+      "exportNormalization": "none",
+      "gitBlobSha256": "36c3685ef11ad0217de120aed06ca3bf1c1e729f2984f2d3fc93b462490e3766"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/values01/screenshots/desktop-settimana-values-bounds.png",
+      "sha256": "a722e9b9848b252e858b66a6b40422d94d41de56af36fef11cf7802f4ddf9e0f",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a722e9b9848b252e858b66a6b40422d94d41de56af36fef11cf7802f4ddf9e0f"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/values01/screenshots/mobile-giorno-values-bounds.png",
+      "sha256": "7b5e748a10c7dcd9d69f0f209d052539a8b595447f01becbb97395ff9cbd6b3c",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7b5e748a10c7dcd9d69f0f209d052539a8b595447f01becbb97395ff9cbd6b3c"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/values01/screenshots/mobile-mese-values-bounds.png",
+      "sha256": "c581764e472d5098908728f475bf48c93d62b16ffb4bf5dc0bfa4b197710f735",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c581764e472d5098908728f475bf48c93d62b16ffb4bf5dc0bfa4b197710f735"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/values01/screenshots/mobile-settimana-values-bounds.png",
+      "sha256": "364d493658c5a7d74be8f9bc894e9afde040c6bc459b132040685818ee63bc4a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "364d493658c5a7d74be8f9bc894e9afde040c6bc459b132040685818ee63bc4a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/values01/test-results/browser-results.json",
+      "sha256": "530d572342b83488e5f801996593e58c101feeb01dcbdc6eddb328f498c9eaac",
+      "exportNormalization": "none",
+      "gitBlobSha256": "530d572342b83488e5f801996593e58c101feeb01dcbdc6eddb328f498c9eaac"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/values01/trace/desktop.zip",
+      "sha256": "cb44afcd9723e4080ffd51c7d00b809252fba51db011d0e816ff9d9a6009c452",
+      "exportNormalization": "none",
+      "gitBlobSha256": "cb44afcd9723e4080ffd51c7d00b809252fba51db011d0e816ff9d9a6009c452"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/values01/trace/mobile.zip",
+      "sha256": "df98e557242ca65c2c1b30cb5d25008e47ef89d823e7b458efd152779510cf2d",
+      "exportNormalization": "none",
+      "gitBlobSha256": "df98e557242ca65c2c1b30cb5d25008e47ef89d823e7b458efd152779510cf2d"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/values01/video/desktop.webm",
+      "sha256": "f2cb05b144bc2ddc9a75114d7d680dad84667722082496b4728b264201b2663c",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f2cb05b144bc2ddc9a75114d7d680dad84667722082496b4728b264201b2663c"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/independent-qa/values01/video/mobile.webm",
+      "sha256": "1944715d5d5251b5e65d11ed19ae4b0d942e73716392b110a3613dde6242d8c7",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1944715d5d5251b5e65d11ed19ae4b0d942e73716392b110a3613dde6242d8c7"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/initial-test-discovery.md",
+      "sha256": "ccb493e654a1977c615f5f71be3e281c942629a01d2d8c5e61c9fed8ede7b83f",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ccb493e654a1977c615f5f71be3e281c942629a01d2d8c5e61c9fed8ede7b83f"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/original-issue.json",
+      "sha256": "061a8c507b76dcac6f33af88355570e5a93f793bc36ddfaf183045b2198c82cc",
+      "exportNormalization": "none",
+      "gitBlobSha256": "061a8c507b76dcac6f33af88355570e5a93f793bc36ddfaf183045b2198c82cc"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/parser-adaptation.md",
+      "sha256": "58a77b883815d19504595377bc1f37d67dd370c05af1bd26557a5f74fd6c7a5b",
+      "exportNormalization": "none",
+      "gitBlobSha256": "58a77b883815d19504595377bc1f37d67dd370c05af1bd26557a5f74fd6c7a5b"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/prepare-compiled.mjs",
+      "sha256": "e16517c8164fc822360c12423c5275b8e79335c34ac3572c92e9c11977656471",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e16517c8164fc822360c12423c5275b8e79335c34ac3572c92e9c11977656471"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/preverify-public.mjs",
+      "sha256": "32f9db07f0eb1a671977d8e30d1983d9b53ab6649778eeca19973e672c907779",
+      "exportNormalization": "none",
+      "gitBlobSha256": "32f9db07f0eb1a671977d8e30d1983d9b53ab6649778eeca19973e672c907779"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/promote-source.mjs",
+      "sha256": "064f81f2036d4282b4b3ac6d812856602029c6522731d165450596205aa05ea1",
+      "exportNormalization": "none",
+      "gitBlobSha256": "064f81f2036d4282b4b3ac6d812856602029c6522731d165450596205aa05ea1"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/proof-staging-policy.json",
+      "sha256": "aa40034eed499a6f0f4bccbbe6d0e4bffc86b89c1df9885016eb4fc52f909745",
+      "exportNormalization": "none",
+      "gitBlobSha256": "aa40034eed499a6f0f4bccbbe6d0e4bffc86b89c1df9885016eb4fc52f909745"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/public-images.json",
+      "sha256": "c036a060c92dd314fe1ace19406c023506ac03f746357a9fe253f2b5802aa342",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c036a060c92dd314fe1ace19406c023506ac03f746357a9fe253f2b5802aa342"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/publication-check.ps1",
+      "sha256": "3eb963b389c26c0afb0e4b56c3271f65c0fb8fef9cfd594e9e94683ff4ecf46d",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3eb963b389c26c0afb0e4b56c3271f65c0fb8fef9cfd594e9e94683ff4ecf46d"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/publish-github.mjs",
+      "sha256": "3b59957c4ca19235f9ea3ade7cc6ec81b4771611be725e48e98806629060174f",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3b59957c4ca19235f9ea3ade7cc6ec81b4771611be725e48e98806629060174f"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/push-proof.mjs",
+      "sha256": "73c019920f046bc18d67d56abfbc30037a527439647d524610086fd8f264b8ac",
+      "exportNormalization": "none",
+      "gitBlobSha256": "73c019920f046bc18d67d56abfbc30037a527439647d524610086fd8f264b8ac"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/qa-assignment-policy.md",
+      "sha256": "fa461ddd5936f0d6eec5a927d65c2cc06da0979562f3288336956fed28086337",
+      "exportNormalization": "none",
+      "gitBlobSha256": "fa461ddd5936f0d6eec5a927d65c2cc06da0979562f3288336956fed28086337"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/release-gate-receipt.json",
+      "sha256": "8e2eeeabf0525987e090c6c6adc3f7d31f05ed3a0e7c159fc1e327eb5da2b1a6",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8e2eeeabf0525987e090c6c6adc3f7d31f05ed3a0e7c159fc1e327eb5da2b1a6"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/release-inspection.mjs",
+      "sha256": "2f7c8365ea2e0f97d9a4c5a45703275d6e12e460f7149f1b3b511824d9565f5c",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2f7c8365ea2e0f97d9a4c5a45703275d6e12e460f7149f1b3b511824d9565f5c"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/report.mjs",
+      "sha256": "9f561814f73286ddfccdf03e0ef58b21e85b01dbbff7d20b13a07850e7d43bfa",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9f561814f73286ddfccdf03e0ef58b21e85b01dbbff7d20b13a07850e7d43bfa"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/commands01/backend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/commands01/command-results.json",
+      "sha256": "8a53444820fe61a0fb9ca2a076542a6822a5c10c3aaf1328cef86c1730cf37fe",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8a53444820fe61a0fb9ca2a076542a6822a5c10c3aaf1328cef86c1730cf37fe"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/commands01/focused.log",
+      "sha256": "45ade26f053e55502d7d2930fbc647c8ade62f555d0f82f87b06e9789aa71da2",
+      "exportNormalization": "none",
+      "gitBlobSha256": "45ade26f053e55502d7d2930fbc647c8ade62f555d0f82f87b06e9789aa71da2"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/commands01/frontend-tsc-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/commands01/frontend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/commands01/full-regression.log",
+      "sha256": "dfed6e483ca15cc9798e42e62e947d9122d66bb396ab1a19c1b72c08d779d509",
+      "exportNormalization": "none",
+      "gitBlobSha256": "dfed6e483ca15cc9798e42e62e947d9122d66bb396ab1a19c1b72c08d779d509"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/commands01/security-scan.log",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/commands01/vite-build.log",
+      "sha256": "5dfd361b3ced3cf927c9a634227290f814b334010b9076e180ef220870c06993",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5dfd361b3ced3cf927c9a634227290f814b334010b9076e180ef220870c06993"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/security01/baseline-cli.log",
+      "sha256": "9dc9777fc300c3014169ddbfdb07555d9f7a0bd2be5f1d025f30aa7a84185a12",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9dc9777fc300c3014169ddbfdb07555d9f7a0bd2be5f1d025f30aa7a84185a12"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/security01/baseline/.claude/security-scans/scan-code-deep.json",
+      "sha256": "2c455b68c7b0bec5d25b400ee7490719ae4874769b05fac9088f29570acfb4c7",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2c455b68c7b0bec5d25b400ee7490719ae4874769b05fac9088f29570acfb4c7"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/security01/baseline/frontend/src/components/shared/AgendaInline.css",
+      "sha256": "a01464f94461de4f8acb3c38d2dc6cdbcf994672bcaa4e7d198bbeb25a2aa4d4",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a01464f94461de4f8acb3c38d2dc6cdbcf994672bcaa4e7d198bbeb25a2aa4d4"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/security01/baseline/frontend/src/components/shared/AgendaLegend.tsx",
+      "sha256": "62bc32a86b4b4b7c7c8f5f3a2f2ad890aa107fe2dccc7c019e5b9d3073e17e4c",
+      "exportNormalization": "none",
+      "gitBlobSha256": "62bc32a86b4b4b7c7c8f5f3a2f2ad890aa107fe2dccc7c019e5b9d3073e17e4c"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/security01/baseline/frontend/src/components/shared/AgendaStatoFilter.tsx",
+      "sha256": "2378a28879406a79db4d5559a0a13a7caabd24d31b7398407eed28336d6bdc20",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2378a28879406a79db4d5559a0a13a7caabd24d31b7398407eed28336d6bdc20"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/security01/candidate-cli.log",
+      "sha256": "23e430345a90d4736385bfd2a6080172b21ef0586ac3710e6e91657569c6310f",
+      "exportNormalization": "none",
+      "gitBlobSha256": "23e430345a90d4736385bfd2a6080172b21ef0586ac3710e6e91657569c6310f"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/security01/candidate/.claude/security-scans/scan-code-deep.json",
+      "sha256": "ed2b2a2102fe65012a57b23bbfc73ae3d8d7c77e7b26c134cd66c5143b29d2fd",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ed2b2a2102fe65012a57b23bbfc73ae3d8d7c77e7b26c134cd66c5143b29d2fd"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/security01/candidate/frontend/src/components/shared/AgendaInline.css",
+      "sha256": "09bcb7557654b4cb6e6109c35f4369ab13f0f5ab9b8b9d45e850fd8715656d89",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "bb8a0601bf7f65eb062342bed9e825b80689bc994a174d730757b1ae0b44c874"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/security01/candidate/frontend/src/components/shared/AgendaLegend.tsx",
+      "sha256": "068b8635e24d53a55503427c63a50fa3a06dcd6dafb2752579fd399ad32573cf",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "76d01c34aac1b395155f2d3af2ac11e97e13a2beea088bc56acc4372d02e421b"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/security01/candidate/frontend/src/components/shared/AgendaStatoFilter.tsx",
+      "sha256": "ed3df1c97b060edcf7592d1695e701f7957d7d3cbb045e3f1e940aed8a4057e3",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ed3df1c97b060edcf7592d1695e701f7957d7d3cbb045e3f1e940aed8a4057e3"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/security01/candidate/frontend/src/lib/__tests__/agendaIdentity.test.ts",
+      "sha256": "98b04829363215d0097f65594dccc0016998ebe333f002185fb2d7a2c7f7897d",
+      "exportNormalization": "none",
+      "gitBlobSha256": "98b04829363215d0097f65594dccc0016998ebe333f002185fb2d7a2c7f7897d"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/security01/comparison.json",
+      "sha256": "90737478026dc9ed29efb505a8294c2409b3641fa654006edd5535fce390fded",
+      "exportNormalization": "none",
+      "gitBlobSha256": "90737478026dc9ed29efb505a8294c2409b3641fa654006edd5535fce390fded"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/source-after.json",
+      "sha256": "60511ee04b7037bc8a70f17dc0db1f11c19aa94cb6931959d96209204335c15f",
+      "exportNormalization": "none",
+      "gitBlobSha256": "60511ee04b7037bc8a70f17dc0db1f11c19aa94cb6931959d96209204335c15f"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-initial02/source-before.json",
+      "sha256": "60511ee04b7037bc8a70f17dc0db1f11c19aa94cb6931959d96209204335c15f",
+      "exportNormalization": "none",
+      "gitBlobSha256": "60511ee04b7037bc8a70f17dc0db1f11c19aa94cb6931959d96209204335c15f"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser-plan.json",
+      "sha256": "388e35a92f80f9be67660da82cca1b4a932c8d2d219c18595218ed3c214ce3a1",
+      "exportNormalization": "none",
+      "gitBlobSha256": "388e35a92f80f9be67660da82cca1b4a932c8d2d219c18595218ed3c214ce3a1"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser-replay-results.json",
+      "sha256": "7a9a6ca5b66291eb6d7d4a8275d291a0a1fec09cde21415ccb1720b872053cc6",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7a9a6ca5b66291eb6d7d4a8275d291a0a1fec09cde21415ccb1720b872053cc6"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02.log",
+      "sha256": "7d9d56915c8d1b9e15f50d1d049eab0c8c03c3c0a5dfbcfde2a8311556e38bed",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7d9d56915c8d1b9e15f50d1d049eab0c8c03c3c0a5dfbcfde2a8311556e38bed"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/playwright-report/index.html",
+      "sha256": "eb456e9974c96e98eb464bd15faf300d907189b6dab8abc7c6cd2eee7aa2d958",
+      "exportNormalization": "none",
+      "gitBlobSha256": "eb456e9974c96e98eb464bd15faf300d907189b6dab8abc7c6cd2eee7aa2d958"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/desktop-giorno-empty.png",
+      "sha256": "60d66ae3ed921bb154e9db36a5e4af2a9a4cf92d7b27bf51e01b0abfeee0b077",
+      "exportNormalization": "none",
+      "gitBlobSha256": "60d66ae3ed921bb154e9db36a5e4af2a9a4cf92d7b27bf51e01b0abfeee0b077"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/desktop-giorno-grayscale.png",
+      "sha256": "5ed7fbc4976c96ac95a653e3b8faa88d26766c3775ec4ba05c6aa54132b26c40",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5ed7fbc4976c96ac95a653e3b8faa88d26766c3775ec4ba05c6aa54132b26c40"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/desktop-giorno-mixed.png",
+      "sha256": "f3a1ce4a053983b1bb911a5a39aa08a6d06c679ecd7d2717a4c907d87310d25a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f3a1ce4a053983b1bb911a5a39aa08a6d06c679ecd7d2717a4c907d87310d25a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/desktop-hmi-day.png",
+      "sha256": "2998424bfaf6dbc1db2286884f68c05efe7ae00d8261ceb75c5d350ab7c47776",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2998424bfaf6dbc1db2286884f68c05efe7ae00d8261ceb75c5d350ab7c47776"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/desktop-hmi-mese.png",
+      "sha256": "aa2f2355836673757b5b46ae62ad9ad9409524322e7304d631de22821fdc8979",
+      "exportNormalization": "none",
+      "gitBlobSha256": "aa2f2355836673757b5b46ae62ad9ad9409524322e7304d631de22821fdc8979"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/desktop-hmi-settimana.png",
+      "sha256": "ad054e8dc462be68747dfbca9356cf6cbb015d881e465305e2beddbd8bbb8be4",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ad054e8dc462be68747dfbca9356cf6cbb015d881e465305e2beddbd8bbb8be4"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/desktop-mese-empty.png",
+      "sha256": "b00eea49c26494651e0e1c3316e8c305bd3c41fa5fed89c6ed8f532b59aed40a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b00eea49c26494651e0e1c3316e8c305bd3c41fa5fed89c6ed8f532b59aed40a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/desktop-mese-grayscale.png",
+      "sha256": "955b386296144c300e45fddf3ccad867fcecc136ab9b090024a14a627162b86d",
+      "exportNormalization": "none",
+      "gitBlobSha256": "955b386296144c300e45fddf3ccad867fcecc136ab9b090024a14a627162b86d"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/desktop-mese-mixed.png",
+      "sha256": "39fcc0305781f5261299b89c8003f9b15acd17f108c8d7270c27457e3976c911",
+      "exportNormalization": "none",
+      "gitBlobSha256": "39fcc0305781f5261299b89c8003f9b15acd17f108c8d7270c27457e3976c911"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/desktop-settimana-empty.png",
+      "sha256": "27010a2edc2e3fdeb120142e314c1707631ae48359261602fbe28d379be1f03f",
+      "exportNormalization": "none",
+      "gitBlobSha256": "27010a2edc2e3fdeb120142e314c1707631ae48359261602fbe28d379be1f03f"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/desktop-settimana-grayscale.png",
+      "sha256": "e2f6bfd93ef32ab3b8644960dc478df6d890d4b716f15c770fde957acfed038d",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e2f6bfd93ef32ab3b8644960dc478df6d890d4b716f15c770fde957acfed038d"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/desktop-settimana-mixed.png",
+      "sha256": "3f6eae52ec4afa32bc12148e87cf8b5ff0fa541110718ba9931ff5aefb493672",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3f6eae52ec4afa32bc12148e87cf8b5ff0fa541110718ba9931ff5aefb493672"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/eleven-operators-shared-color.png",
+      "sha256": "6ab27d17e07cfcda2ff1cd22b6f0626295f192de5e58842d3dbbbf08e2d4c2ba",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6ab27d17e07cfcda2ff1cd22b6f0626295f192de5e58842d3dbbbf08e2d4c2ba"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/loading-hierarchy.png",
+      "sha256": "86a5d261f9b87b0f508c9753405bd17967ebe0860925f462636ad11da2b4f8ae",
+      "exportNormalization": "none",
+      "gitBlobSha256": "86a5d261f9b87b0f508c9753405bd17967ebe0860925f462636ad11da2b4f8ae"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/mobile-giorno-empty.png",
+      "sha256": "eee109b592a52447481b82262d57f10ad8d4dc1a545a74364a5d4e23a27253fc",
+      "exportNormalization": "none",
+      "gitBlobSha256": "eee109b592a52447481b82262d57f10ad8d4dc1a545a74364a5d4e23a27253fc"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/mobile-giorno-grayscale.png",
+      "sha256": "7b5e748a10c7dcd9d69f0f209d052539a8b595447f01becbb97395ff9cbd6b3c",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7b5e748a10c7dcd9d69f0f209d052539a8b595447f01becbb97395ff9cbd6b3c"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/mobile-giorno-mixed.png",
+      "sha256": "68ad17719e90e1091466a008dc5b2a42bb60ab25b2c5fd71389cc5802fa99199",
+      "exportNormalization": "none",
+      "gitBlobSha256": "68ad17719e90e1091466a008dc5b2a42bb60ab25b2c5fd71389cc5802fa99199"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/mobile-hmi-day.png",
+      "sha256": "24dfbdace2f66256deec86aba5dcc3e9c01824327c78b3eb21338c7782cc4cfc",
+      "exportNormalization": "none",
+      "gitBlobSha256": "24dfbdace2f66256deec86aba5dcc3e9c01824327c78b3eb21338c7782cc4cfc"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/mobile-hmi-mese.png",
+      "sha256": "28c1aeb0b7618dc531b7d71cafd4f2c905bba937c39528b0596101107df603e3",
+      "exportNormalization": "none",
+      "gitBlobSha256": "28c1aeb0b7618dc531b7d71cafd4f2c905bba937c39528b0596101107df603e3"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/mobile-hmi-settimana.png",
+      "sha256": "ef25d7cce9a22ca0f605c99da93562fb7f85ec2ae240805716077e35c7b1829a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ef25d7cce9a22ca0f605c99da93562fb7f85ec2ae240805716077e35c7b1829a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/mobile-mese-empty.png",
+      "sha256": "bafb9a3fd909e8bcc91543b87c86211e707dc54f320ffbcae0d29ed20f47ad42",
+      "exportNormalization": "none",
+      "gitBlobSha256": "bafb9a3fd909e8bcc91543b87c86211e707dc54f320ffbcae0d29ed20f47ad42"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/mobile-mese-grayscale.png",
+      "sha256": "c581764e472d5098908728f475bf48c93d62b16ffb4bf5dc0bfa4b197710f735",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c581764e472d5098908728f475bf48c93d62b16ffb4bf5dc0bfa4b197710f735"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/mobile-mese-mixed.png",
+      "sha256": "1faa5cd727964f8a4b2a02b11014215f15ab61568977ef020f34bd67df41f701",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1faa5cd727964f8a4b2a02b11014215f15ab61568977ef020f34bd67df41f701"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/mobile-settimana-empty.png",
+      "sha256": "6e321025eaa60f3faa6b871e5b507445d2a112f3674a26a0b2277546d0b625fc",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6e321025eaa60f3faa6b871e5b507445d2a112f3674a26a0b2277546d0b625fc"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/mobile-settimana-grayscale.png",
+      "sha256": "364d493658c5a7d74be8f9bc894e9afde040c6bc459b132040685818ee63bc4a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "364d493658c5a7d74be8f9bc894e9afde040c6bc459b132040685818ee63bc4a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/screenshots/mobile-settimana-mixed.png",
+      "sha256": "6a1813be49c3ed5ca6ba117689325a2fdad117de13aba72eeafbc657d937e7c5",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6a1813be49c3ed5ca6ba117689325a2fdad117de13aba72eeafbc657d937e7c5"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/test-results/browser-results.json",
+      "sha256": "ac51eda343b72b8db6c8503e5c02298157303d5a934b7bc78c8e570ec961492e",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ac51eda343b72b8db6c8503e5c02298157303d5a934b7bc78c8e570ec961492e"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/trace/desktop-empty.zip",
+      "sha256": "882141b93f8bba42e1448c4dbe604b72f8bbb552215459e8a9a131629ac38039",
+      "exportNormalization": "none",
+      "gitBlobSha256": "882141b93f8bba42e1448c4dbe604b72f8bbb552215459e8a9a131629ac38039"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/trace/desktop-hmi.zip",
+      "sha256": "f3f26d24c70d7f9e82fbad7f75bb39cc3d95247e6aceab5844c6dc596aabcfa1",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f3f26d24c70d7f9e82fbad7f75bb39cc3d95247e6aceab5844c6dc596aabcfa1"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/trace/desktop-mixed.zip",
+      "sha256": "db40f6f9fc348c3f6c7373b540b2391499bad0b8f12ce1adddb9218f5c2fc1f5",
+      "exportNormalization": "none",
+      "gitBlobSha256": "db40f6f9fc348c3f6c7373b540b2391499bad0b8f12ce1adddb9218f5c2fc1f5"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/trace/loading.zip",
+      "sha256": "a6fbc2509bd56d418eb19fbc4d8de7fd6469677dbe3cb1191c1a04732a40b35d",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a6fbc2509bd56d418eb19fbc4d8de7fd6469677dbe3cb1191c1a04732a40b35d"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/trace/mobile-empty.zip",
+      "sha256": "e7c21000ea1a1cfecca19884ee6fe923df9012da4922fba367cc0b64cc0b613f",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e7c21000ea1a1cfecca19884ee6fe923df9012da4922fba367cc0b64cc0b613f"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/trace/mobile-hmi.zip",
+      "sha256": "4aeacb66f6a90d585a5218a463535054c2fe86b08194110db0ec2b135ae0aa37",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4aeacb66f6a90d585a5218a463535054c2fe86b08194110db0ec2b135ae0aa37"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/trace/mobile-mixed.zip",
+      "sha256": "31c2eec942710062cb1ce22d2d2729ddebcf07f923669bfcd00b958020ec25df",
+      "exportNormalization": "none",
+      "gitBlobSha256": "31c2eec942710062cb1ce22d2d2729ddebcf07f923669bfcd00b958020ec25df"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/trace/shared-palette.zip",
+      "sha256": "0b125429f2e8e97d73a574561dae4d17b044b340a0a0fd652c1b3f2d8d588e3b",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0b125429f2e8e97d73a574561dae4d17b044b340a0a0fd652c1b3f2d8d588e3b"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/video/desktop-empty.webm",
+      "sha256": "78a7ab4ad9dc5bcfdb19cef7ba237edc2439ffeb2d138f5dcfa9843cbcc6d021",
+      "exportNormalization": "none",
+      "gitBlobSha256": "78a7ab4ad9dc5bcfdb19cef7ba237edc2439ffeb2d138f5dcfa9843cbcc6d021"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/video/desktop-hmi.webm",
+      "sha256": "924e8c40a533d07cb5e1e0f06797d3254a5a9a83e396c5e6c6526998fd968159",
+      "exportNormalization": "none",
+      "gitBlobSha256": "924e8c40a533d07cb5e1e0f06797d3254a5a9a83e396c5e6c6526998fd968159"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/video/desktop-mixed.webm",
+      "sha256": "1e95af407c4697846148ab2e50ebd9bcc6ae3c1914e5b9ebce7f8609c3f44b03",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1e95af407c4697846148ab2e50ebd9bcc6ae3c1914e5b9ebce7f8609c3f44b03"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/video/loading.webm",
+      "sha256": "067fa73358a72b546ad881cbfaaffd5d1a4e4d3401afd7c6954fd5147fbb4975",
+      "exportNormalization": "none",
+      "gitBlobSha256": "067fa73358a72b546ad881cbfaaffd5d1a4e4d3401afd7c6954fd5147fbb4975"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/video/mobile-empty.webm",
+      "sha256": "f8141513987a791acc5120ca9ca6832070dcfb738596c3b6cba996011e2fe56d",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f8141513987a791acc5120ca9ca6832070dcfb738596c3b6cba996011e2fe56d"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/video/mobile-hmi.webm",
+      "sha256": "1732f8e4a7f19be4236702af116684a386dae573c722a3f8480abc84bb97dd13",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1732f8e4a7f19be4236702af116684a386dae573c722a3f8480abc84bb97dd13"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/video/mobile-mixed.webm",
+      "sha256": "0f97ca1a5a762f31b00101ee37024e0776de79b2c716270188a52c0ff0c1a599",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0f97ca1a5a762f31b00101ee37024e0776de79b2c716270188a52c0ff0c1a599"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/browser02/video/shared-palette.webm",
+      "sha256": "f268d66ec0cd47ac7e1a0ed41ed61eba053800b9f04fb807569b125d80d766fd",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f268d66ec0cd47ac7e1a0ed41ed61eba053800b9f04fb807569b125d80d766fd"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/commands01/backend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/commands01/command-results.json",
+      "sha256": "8a53444820fe61a0fb9ca2a076542a6822a5c10c3aaf1328cef86c1730cf37fe",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8a53444820fe61a0fb9ca2a076542a6822a5c10c3aaf1328cef86c1730cf37fe"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/commands01/focused.log",
+      "sha256": "13445295ab0c452a192b2846401dacebfd80e393bbd4c5002853e4ce563a4857",
+      "exportNormalization": "none",
+      "gitBlobSha256": "13445295ab0c452a192b2846401dacebfd80e393bbd4c5002853e4ce563a4857"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/commands01/frontend-tsc-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/commands01/frontend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/commands01/full-regression.log",
+      "sha256": "80ddabafceb3e5eb3e212f226255bd9d4fce8e29e6b7c1a943a0558b8a04cae1",
+      "exportNormalization": "none",
+      "gitBlobSha256": "80ddabafceb3e5eb3e212f226255bd9d4fce8e29e6b7c1a943a0558b8a04cae1"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/commands01/security-scan.log",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/commands01/vite-build.log",
+      "sha256": "dc8c47ee8108fbbdfb5793fb47de5d807323913b83f6152d9111dfccf64811b5",
+      "exportNormalization": "none",
+      "gitBlobSha256": "dc8c47ee8108fbbdfb5793fb47de5d807323913b83f6152d9111dfccf64811b5"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/pre-run.json",
+      "sha256": "966b72fa7ce860c134e5c2eace6b46ad3248936513e0b2173faa517aa1344b2e",
+      "exportNormalization": "none",
+      "gitBlobSha256": "966b72fa7ce860c134e5c2eace6b46ad3248936513e0b2173faa517aa1344b2e"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/recipes/browser.mjs",
+      "sha256": "3e916d87483ffcb7dec4932a77194f52b21797097f683aa0c554b9548d6061de",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3e916d87483ffcb7dec4932a77194f52b21797097f683aa0c554b9548d6061de"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/recipes/commands.mjs",
+      "sha256": "ebb27dfd7f0d95c3183de02c92aee2ca81e62addf2c58199acf8990370ff72a9",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ebb27dfd7f0d95c3183de02c92aee2ca81e62addf2c58199acf8990370ff72a9"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/recipes/qa-server.mjs",
+      "sha256": "dbb4c74cbd86e1db5726d940d3c78c4684cab876ae735e92a7bd7453942b9205",
+      "exportNormalization": "none",
+      "gitBlobSha256": "dbb4c74cbd86e1db5726d940d3c78c4684cab876ae735e92a7bd7453942b9205"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/recipes/seal.mjs",
+      "sha256": "561e1e8c11fb101421b0b6d75d55c6ba8d05d34cd9d401a322c2c66122617cf6",
+      "exportNormalization": "none",
+      "gitBlobSha256": "561e1e8c11fb101421b0b6d75d55c6ba8d05d34cd9d401a322c2c66122617cf6"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/recipes/security.mjs",
+      "sha256": "d5e1a7d1709a7f81091b5cff0e7a0aee7b158adda3aaa268873ab46620b1c5df",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d5e1a7d1709a7f81091b5cff0e7a0aee7b158adda3aaa268873ab46620b1c5df"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/recipes/source-receipt.mjs",
+      "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161",
+      "exportNormalization": "none",
+      "gitBlobSha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/recipes/transport.mjs",
+      "sha256": "bae179ff0be0fe60e06e454b8441adb1a82e043bb34786e23b5e9b1ebfaf6225",
+      "exportNormalization": "none",
+      "gitBlobSha256": "bae179ff0be0fe60e06e454b8441adb1a82e043bb34786e23b5e9b1ebfaf6225"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/recipes/values-bounds.mjs",
+      "sha256": "25fa2ab87f0118a4ba99e277e444d87436a06e92f4eaeb32dccdcb8f73a07223",
+      "exportNormalization": "none",
+      "gitBlobSha256": "25fa2ab87f0118a4ba99e277e444d87436a06e92f4eaeb32dccdcb8f73a07223"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/security01/baseline-cli.log",
+      "sha256": "621ff406487e395940aeee01b432f7dfb599f7d44e38c590704ebc1db4af14a9",
+      "exportNormalization": "none",
+      "gitBlobSha256": "621ff406487e395940aeee01b432f7dfb599f7d44e38c590704ebc1db4af14a9"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/security01/baseline/.claude/security-scans/scan-code-deep.json",
+      "sha256": "ca3823e368e9d26fd19dbbd2d9b3fdff77e1652ecf96295e31b422e33eeb7d54",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ca3823e368e9d26fd19dbbd2d9b3fdff77e1652ecf96295e31b422e33eeb7d54"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/security01/baseline/frontend/src/components/shared/AgendaInline.css",
+      "sha256": "a01464f94461de4f8acb3c38d2dc6cdbcf994672bcaa4e7d198bbeb25a2aa4d4",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a01464f94461de4f8acb3c38d2dc6cdbcf994672bcaa4e7d198bbeb25a2aa4d4"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/security01/baseline/frontend/src/components/shared/AgendaLegend.tsx",
+      "sha256": "62bc32a86b4b4b7c7c8f5f3a2f2ad890aa107fe2dccc7c019e5b9d3073e17e4c",
+      "exportNormalization": "none",
+      "gitBlobSha256": "62bc32a86b4b4b7c7c8f5f3a2f2ad890aa107fe2dccc7c019e5b9d3073e17e4c"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/security01/baseline/frontend/src/components/shared/AgendaStatoFilter.tsx",
+      "sha256": "2378a28879406a79db4d5559a0a13a7caabd24d31b7398407eed28336d6bdc20",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2378a28879406a79db4d5559a0a13a7caabd24d31b7398407eed28336d6bdc20"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/security01/candidate-cli.log",
+      "sha256": "1c21fcaeb84b7fe57cf652f54a2d5977b2c481c1cf456c6a21edfdb1b7f0fe34",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1c21fcaeb84b7fe57cf652f54a2d5977b2c481c1cf456c6a21edfdb1b7f0fe34"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/security01/candidate/.claude/security-scans/scan-code-deep.json",
+      "sha256": "ff14a0834b9ab271b2e82953b82bd4d34f05940faaa0c6c8cc0a54a753cfcf28",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ff14a0834b9ab271b2e82953b82bd4d34f05940faaa0c6c8cc0a54a753cfcf28"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/security01/candidate/frontend/src/components/shared/AgendaInline.css",
+      "sha256": "09bcb7557654b4cb6e6109c35f4369ab13f0f5ab9b8b9d45e850fd8715656d89",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "bb8a0601bf7f65eb062342bed9e825b80689bc994a174d730757b1ae0b44c874"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/security01/candidate/frontend/src/components/shared/AgendaLegend.tsx",
+      "sha256": "068b8635e24d53a55503427c63a50fa3a06dcd6dafb2752579fd399ad32573cf",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "76d01c34aac1b395155f2d3af2ac11e97e13a2beea088bc56acc4372d02e421b"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/security01/candidate/frontend/src/components/shared/AgendaStatoFilter.tsx",
+      "sha256": "ed3df1c97b060edcf7592d1695e701f7957d7d3cbb045e3f1e940aed8a4057e3",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ed3df1c97b060edcf7592d1695e701f7957d7d3cbb045e3f1e940aed8a4057e3"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/security01/candidate/frontend/src/lib/__tests__/agendaIdentity.test.ts",
+      "sha256": "98b04829363215d0097f65594dccc0016998ebe333f002185fb2d7a2c7f7897d",
+      "exportNormalization": "none",
+      "gitBlobSha256": "98b04829363215d0097f65594dccc0016998ebe333f002185fb2d7a2c7f7897d"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/security01/comparison.json",
+      "sha256": "90737478026dc9ed29efb505a8294c2409b3641fa654006edd5535fce390fded",
+      "exportNormalization": "none",
+      "gitBlobSha256": "90737478026dc9ed29efb505a8294c2409b3641fa654006edd5535fce390fded"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/server-error.log",
+      "sha256": "6b0e271e8ab6614306b83e04f0bcfb3e16234edfe5a126ed287f9dac169263bf",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6b0e271e8ab6614306b83e04f0bcfb3e16234edfe5a126ed287f9dac169263bf"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/server-start.json",
+      "sha256": "9af0ace2a5c42431f681b4b5cece8fb4a0b02f699ef8727c2abdf171e07f7027",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "1cf9066f48b584eb2c148c72e4bca508e13e9814a7c4f1773c91806ba31f2453"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/server-stop-policy.json",
+      "sha256": "d408736e80a5c9094e06bab0cdbe45b7decd5ba2fef5ab7970040c2d67db4fd0",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "fc4e99890f71012f25eba914f1151c89a09cda1c2a578f4381c15bbee7f61c20"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/server-stop.json",
+      "sha256": "adf1abefd6793e472a6e1cf2786643632fe27ad9f51f927c9f3e0bf01a88d7a6",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "ad4be9db9afe30fbf87dc6863558087b628d0cb8d5e23256b7287b4175cef550"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/server.log",
+      "sha256": "1d709ced206f500eb893d21a7547552e27d9d4d5e67e974243a1484d3afc5fa2",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1d709ced206f500eb893d21a7547552e27d9d4d5e67e974243a1484d3afc5fa2"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/source-after-browser.json",
+      "sha256": "2a811afedd68ce9243a6c3ad23aafdba8c3e83cf46e441d5ab7df49ac116d685",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2a811afedd68ce9243a6c3ad23aafdba8c3e83cf46e441d5ab7df49ac116d685"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/source-after.json",
+      "sha256": "2a811afedd68ce9243a6c3ad23aafdba8c3e83cf46e441d5ab7df49ac116d685",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2a811afedd68ce9243a6c3ad23aafdba8c3e83cf46e441d5ab7df49ac116d685"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/source-before.json",
+      "sha256": "2a811afedd68ce9243a6c3ad23aafdba8c3e83cf46e441d5ab7df49ac116d685",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2a811afedd68ce9243a6c3ad23aafdba8c3e83cf46e441d5ab7df49ac116d685"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/source-git-binding.json",
+      "sha256": "7232525bb90214e19228665aa60622dc90b6cf5af20212dea1a42f546b7a995c",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7232525bb90214e19228665aa60622dc90b6cf5af20212dea1a42f546b7a995c"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/values01.log",
+      "sha256": "c27a6748336c4d60834a98b24de37b2ca3f3de484edc4cd336f7fba0340511ca",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c27a6748336c4d60834a98b24de37b2ca3f3de484edc4cd336f7fba0340511ca"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/values01/playwright-report/index.html",
+      "sha256": "0105aaa1324bf4425c801be0a97cd4f8efafad46fcb9d9825da324675f5eaaed",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0105aaa1324bf4425c801be0a97cd4f8efafad46fcb9d9825da324675f5eaaed"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/values01/screenshots/desktop-giorno-values-bounds.png",
+      "sha256": "300227b0cedb271c6ede2a1db401d7643fa6b36654002e58748a1efb80ae2977",
+      "exportNormalization": "none",
+      "gitBlobSha256": "300227b0cedb271c6ede2a1db401d7643fa6b36654002e58748a1efb80ae2977"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/values01/screenshots/desktop-mese-values-bounds.png",
+      "sha256": "a593682984727c9a9eefcbaa5dd78974470a2714cb30c175055102cf129c4db3",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a593682984727c9a9eefcbaa5dd78974470a2714cb30c175055102cf129c4db3"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/values01/screenshots/desktop-settimana-values-bounds.png",
+      "sha256": "be784adc10e7c523e1f11a76b91fd0657b4fb7c466cb46d8ee79a2d4565ff0ae",
+      "exportNormalization": "none",
+      "gitBlobSha256": "be784adc10e7c523e1f11a76b91fd0657b4fb7c466cb46d8ee79a2d4565ff0ae"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/values01/screenshots/mobile-giorno-values-bounds.png",
+      "sha256": "7b5e748a10c7dcd9d69f0f209d052539a8b595447f01becbb97395ff9cbd6b3c",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7b5e748a10c7dcd9d69f0f209d052539a8b595447f01becbb97395ff9cbd6b3c"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/values01/screenshots/mobile-mese-values-bounds.png",
+      "sha256": "c581764e472d5098908728f475bf48c93d62b16ffb4bf5dc0bfa4b197710f735",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c581764e472d5098908728f475bf48c93d62b16ffb4bf5dc0bfa4b197710f735"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/values01/screenshots/mobile-settimana-values-bounds.png",
+      "sha256": "364d493658c5a7d74be8f9bc894e9afde040c6bc459b132040685818ee63bc4a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "364d493658c5a7d74be8f9bc894e9afde040c6bc459b132040685818ee63bc4a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/values01/test-results/browser-results.json",
+      "sha256": "530d572342b83488e5f801996593e58c101feeb01dcbdc6eddb328f498c9eaac",
+      "exportNormalization": "none",
+      "gitBlobSha256": "530d572342b83488e5f801996593e58c101feeb01dcbdc6eddb328f498c9eaac"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/values01/trace/desktop.zip",
+      "sha256": "28cd4ffce2d7583251079e40e629248b44c917f34a4029ef7c265c3eca351299",
+      "exportNormalization": "none",
+      "gitBlobSha256": "28cd4ffce2d7583251079e40e629248b44c917f34a4029ef7c265c3eca351299"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/values01/trace/mobile.zip",
+      "sha256": "15e967fb5e1b585e5fe698fedaea9363be10dc60c0ea9b053e5e3b8badd6c1d5",
+      "exportNormalization": "none",
+      "gitBlobSha256": "15e967fb5e1b585e5fe698fedaea9363be10dc60c0ea9b053e5e3b8badd6c1d5"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/values01/video/desktop.webm",
+      "sha256": "279c96506328056e2a37847ac7cddaf9c90c382e4aec4292e42de3b3dd222251",
+      "exportNormalization": "none",
+      "gitBlobSha256": "279c96506328056e2a37847ac7cddaf9c90c382e4aec4292e42de3b3dd222251"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/root-rerun/values01/video/mobile.webm",
+      "sha256": "667c5fa946b766ed192eb5a4f0a1d81ab62845b45089243b4d18d7ec7a856adf",
+      "exportNormalization": "none",
+      "gitBlobSha256": "667c5fa946b766ed192eb5a4f0a1d81ab62845b45089243b4d18d7ec7a856adf"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/run-plan.mjs",
+      "sha256": "0698c4fc62eb6e195ba318ce77cb852f61af1b1036b5dd173c48ec033282d827",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0698c4fc62eb6e195ba318ce77cb852f61af1b1036b5dd173c48ec033282d827"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/scope-review.md",
+      "sha256": "26e7a7f40b946799b60f3bb552ce991fc5cc913c8167c5b1d86f26cf8ba083f6",
+      "exportNormalization": "none",
+      "gitBlobSha256": "26e7a7f40b946799b60f3bb552ce991fc5cc913c8167c5b1d86f26cf8ba083f6"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/security.mjs",
+      "sha256": "d5e1a7d1709a7f81091b5cff0e7a0aee7b158adda3aaa268873ab46620b1c5df",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d5e1a7d1709a7f81091b5cff0e7a0aee7b158adda3aaa268873ab46620b1c5df"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/source-freeze-policy.json",
+      "sha256": "ee834596e87624098813cf121385d112398ab8059c51b4bcf007c9c090cd4c34",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ee834596e87624098813cf121385d112398ab8059c51b4bcf007c9c090cd4c34"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/source-promotion-policy.json",
+      "sha256": "2ab7a5ae7bf7ee4294d33392ad664d9decdbadd45425e3b41eb7dd9274e56527",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2ab7a5ae7bf7ee4294d33392ad664d9decdbadd45425e3b41eb7dd9274e56527"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/source-promotion-receipt.json",
+      "sha256": "09741a28c2b731443165ce7d174ee0f673b9d1b8a5acfa9d69cb1e772c34d48a",
+      "exportNormalization": "none",
+      "gitBlobSha256": "09741a28c2b731443165ce7d174ee0f673b9d1b8a5acfa9d69cb1e772c34d48a"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/source-receipt.mjs",
+      "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161",
+      "exportNormalization": "none",
+      "gitBlobSha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/stage-ci-proof.mjs",
+      "sha256": "fe64b7e6458fe7f650bb6242eb69054d87accbcf2c2b22acdb57f88bd993acc6",
+      "exportNormalization": "none",
+      "gitBlobSha256": "fe64b7e6458fe7f650bb6242eb69054d87accbcf2c2b22acdb57f88bd993acc6"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/stage-proof.mjs",
+      "sha256": "2b82601ee55750f3f26f8950554df1823410e42e85704c6c9b713d6b72abc943",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2b82601ee55750f3f26f8950554df1823410e42e85704c6c9b713d6b72abc943"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/start-root-server.ps1",
+      "sha256": "42f6d3ff96d32093162cc772ea0d8f0bcf3c75b1171a6d57580a44e3fb2fd3ee",
+      "exportNormalization": "none",
+      "gitBlobSha256": "42f6d3ff96d32093162cc772ea0d8f0bcf3c75b1171a6d57580a44e3fb2fd3ee"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/stop-root-server.ps1",
+      "sha256": "869d826134cf98aa9a3843bcbb42adeb260ab364171183b7e5117c62eb845cb9",
+      "exportNormalization": "none",
+      "gitBlobSha256": "869d826134cf98aa9a3843bcbb42adeb260ab364171183b7e5117c62eb845cb9"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/task-contract.md",
+      "sha256": "bef898032cfe59c1ad333a84fa19c40a71a8144acb7550de218ae6e00c6671b0",
+      "exportNormalization": "none",
+      "gitBlobSha256": "bef898032cfe59c1ad333a84fa19c40a71a8144acb7550de218ae6e00c6671b0"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/tdd-red.log",
+      "sha256": "0f743a53c04f581daae5b0e75f17b05b5d0a5642d060dd9a466df098e29a3ce1",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "b0c385e215fe819cda61711c0a8ce40e015b9a45aec6737c0f84b505e409ad72"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/validation-report.md",
+      "sha256": "2d154a37b8828cfbe7d4c07eba4d476c0308c73bb3123ac341348299ecaeffd2",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2d154a37b8828cfbe7d4c07eba4d476c0308c73bb3123ac341348299ecaeffd2"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/verify-online.mjs",
+      "sha256": "787b0e152d177c0b4d028c82b9a82a6770d141d5bfbf5addaebe3a52312c7975",
+      "exportNormalization": "none",
+      "gitBlobSha256": "787b0e152d177c0b4d028c82b9a82a6770d141d5bfbf5addaebe3a52312c7975"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/visual-review.md",
+      "sha256": "a556f9e39f42330faf6835868d94a9c0bef1caf3639a6149f38bbd066ce6d8f6",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a556f9e39f42330faf6835868d94a9c0bef1caf3639a6149f38bbd066ce6d8f6"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/wait-ci.mjs",
+      "sha256": "24d4813b708a792d1da92eaa9d0b1f455b4be502146aa4d103cd42b9a827bba0",
+      "exportNormalization": "none",
+      "gitBlobSha256": "24d4813b708a792d1da92eaa9d0b1f455b4be502146aa4d103cd42b9a827bba0"
+    },
+    {
+      "path": "artifacts/task-validation/427-agenda-identity/proof-push-policy-7680ec0b25c6.json",
+      "sha256": "19425363e9795f1afa5ee50dd3d6bbc6875682f0caa1cc4820946e2e97bfba11",
+      "gitBlobSha256": "19425363e9795f1afa5ee50dd3d6bbc6875682f0caa1cc4820946e2e97bfba11",
+      "exportNormalization": "none"
+    }
+  ],
+  "decision": "SOURCE-BOUND SYNTHETIC PROOF",
+  "originalIndependentManifestFrozen": true
+}
