@@ -9,6 +9,7 @@ import { operatorHeaders } from '../../../lib/operatorSession';
 import {
   pendingSessionCache,
   readSessionCache,
+  sessionCacheEpoch,
   writeSessionCache,
 } from '../../../lib/sessionCache';
 import { diaryCacheKey, type DiarySnapshot } from '../../../lib/patientTabSnapshots';
@@ -253,6 +254,7 @@ export function DiarioPazienteTab({
         direction?: 'next' | 'previous';
       } = {},
     ) => {
+      const epoch = sessionCacheEpoch();
       const resolvedFilter = (filterBy ?? 'tutti') as DiarioAuthorType | 'tutti';
       const cacheKey = diaryCacheKey(
         pazienteId,
@@ -271,7 +273,12 @@ export function DiarioPazienteTab({
       if (pendingRead) {
         await pendingRead;
         const cached = readSessionCache<DiarySnapshot>(cacheKey);
-        if (cached && !signal.aborted && request === readSequenceRef.current) {
+        if (
+          cached &&
+          !signal.aborted &&
+          epoch === sessionCacheEpoch() &&
+          request === readSequenceRef.current
+        ) {
           setEntries(cached.entries);
           setHasMore(cached.hasMore);
           setNextCursor(cached.nextCursor);
@@ -316,7 +323,11 @@ export function DiarioPazienteTab({
           legacyPageTruncated = legacyEntries.length > DIARY_PAGE_SIZE;
         }
 
-        if (!signal.aborted && request === readSequenceRef.current) {
+        if (
+          !signal.aborted &&
+          epoch === sessionCacheEpoch() &&
+          request === readSequenceRef.current
+        ) {
           setEntries(allEntries);
           if (options.direction === 'next') historyCursors.current.push(currentCursor.current);
           else if (options.direction === 'previous') historyCursors.current.pop();
@@ -326,11 +337,15 @@ export function DiarioPazienteTab({
           setHasMore(pageHasMore);
           setNextCursor(pageNextCursor);
           if (!options.append) {
-            writeSessionCache<DiarySnapshot>(cacheKey, {
-              entries: allEntries,
-              hasMore: pageHasMore,
-              nextCursor: pageNextCursor,
-            });
+            writeSessionCache<DiarySnapshot>(
+              cacheKey,
+              {
+                entries: allEntries,
+                hasMore: pageHasMore,
+                nextCursor: pageNextCursor,
+              },
+              epoch,
+            );
           }
           if (!options.append && legacyPageTruncated) {
             setNotice(
@@ -348,7 +363,11 @@ export function DiarioPazienteTab({
           );
         }
       } finally {
-        if (!signal.aborted && request === readSequenceRef.current) {
+        if (
+          !signal.aborted &&
+          epoch === sessionCacheEpoch() &&
+          request === readSequenceRef.current
+        ) {
           if (options.append) setLoadingMore(false);
           else if (!options.silent) setLoading(false);
         }

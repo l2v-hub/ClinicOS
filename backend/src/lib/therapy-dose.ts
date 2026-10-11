@@ -15,7 +15,10 @@ export interface ScheduleInput {
 export const MAX_THERAPY_SCHEDULES = 32;
 
 export class InvalidTherapySchedulesError extends Error {
-  constructor(message = 'Pianificazione terapia non valida') {
+  constructor(
+    message = 'Pianificazione terapia non valida',
+    readonly reason?: 'duplicate_time',
+  ) {
     super(message);
     this.name = 'InvalidTherapySchedulesError';
   }
@@ -80,6 +83,7 @@ export function assertValidSchedulesInput(raw: unknown): void {
       `Sono consentiti al massimo ${MAX_THERAPY_SCHEDULES} orari per terapia`,
     );
   }
+  const times = new Set<string>();
   for (const item of raw) {
     if (!item || typeof item !== 'object' || Array.isArray(item)) {
       throw new InvalidTherapySchedulesError();
@@ -90,6 +94,13 @@ export function assertValidSchedulesInput(raw: unknown): void {
         'Ogni orario deve usare il formato HH:MM (00:00–23:59)',
       );
     }
+    const time = canonicalScheduleTime(value.time)!;
+    if (times.has(time))
+      throw new InvalidTherapySchedulesError(
+        'Ogni orario deve indicare una sola dose: correggi gli orari duplicati',
+        'duplicate_time',
+      );
+    times.add(time);
     for (const key of ['quantityNumerator', 'quantityDenominator'] as const) {
       if (value[key] === undefined) continue;
       const quantity = Number(value[key]);

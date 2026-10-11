@@ -8,6 +8,7 @@ import {
   optionalFiscalCode,
   optionalPatientPhone,
   patientName,
+  patientOptionalFields,
   PatientIdentityInputError,
 } from '../patients/progressive-identity.js';
 import { patientIntakeReviewRouter } from './patient-intake-review.js';
@@ -996,8 +997,14 @@ router.post('/', async (req, res) => {
   }
 
   let birthDate: Date | null;
+  let optionalFields: ReturnType<typeof patientOptionalFields>;
+  let firstName: string;
+  let lastName: string;
   try {
     birthDate = optionalBirthDate(body.dateOfBirth);
+    optionalFields = patientOptionalFields(body as Record<string, unknown>);
+    firstName = patientName(body.firstName, 'firstName');
+    lastName = patientName(body.lastName, 'lastName');
   } catch (error) {
     res
       .status(400)
@@ -1006,20 +1013,12 @@ router.post('/', async (req, res) => {
   }
   const buildData = (mrn: string) => ({
     medicalRecordNumber: mrn,
-    firstName: body.firstName!.trim(),
-    lastName: body.lastName!.trim(),
+    firstName,
+    lastName,
     dateOfBirth: birthDate,
     codiceFiscale,
-    ...(body.sex !== undefined && { sex: body.sex }),
-    ...(body.email !== undefined && { email: body.email }),
+    ...optionalFields,
     phone: phoneValidation.phone,
-    ...(body.address !== undefined && { address: body.address }),
-    ...(body.emergencyContactName !== undefined && {
-      emergencyContactName: body.emergencyContactName,
-    }),
-    ...(body.emergencyContactPhone !== undefined && {
-      emergencyContactPhone: body.emergencyContactPhone,
-    }),
     // Ownership is authoritative server-side; client-supplied ownership is ignored.
     registeredById: actor.id,
   });
@@ -1080,6 +1079,7 @@ router.patch('/:id', requirePatientScope, async (req, res) => {
   }
 
   try {
+    Object.assign(updates, patientOptionalFields(req.body));
     if (Object.hasOwn(req.body, 'phone')) updates.phone = optionalPatientPhone(req.body.phone);
     if (Object.hasOwn(req.body, 'dateOfBirth'))
       updates.dateOfBirth = optionalBirthDate(req.body.dateOfBirth);

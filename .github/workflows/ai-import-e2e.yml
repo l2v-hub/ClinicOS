@@ -25,6 +25,49 @@ jobs:
           fi
           echo "Secret scan clean."
 
+  frontend-tests:
+    runs-on: ubuntu-latest
+    needs: secret-scan
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - name: Frontend unit and regression tests
+        run: npm test --workspace frontend
+
+  archive-tests:
+    runs-on: ubuntu-latest
+    needs: secret-scan
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: clinicos_sorting
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 10s
+          --health-timeout 5s --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/clinicos_sorting?schema=public
+      AUTH_MODE: demo
+      NODE_ENV: test
+      ARCHIVE_DOCUMENT_DB_TEST: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: node node_modules/prisma/build/index.js migrate deploy --schema=prisma/schema.prisma
+      - run: npm run build:backend
+      - name: Original document archive and intake rollback regression
+        working-directory: backend
+        run: node --import tsx --test src/ai/__tests__/patient-archive-persistence-db.test.ts
+
   gate:
     runs-on: ubuntu-latest
     needs: secret-scan

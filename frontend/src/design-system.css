@@ -61,6 +61,57 @@
     --ds-field-font: 16px;
   }
 }
+/* 44px is a contextual bedside design goal, not a blanket WCAG AA failure rule.
+   The ancestor also contains the portal topbar: patient/room controls inherit
+   one canonical token. Other routes and printed forms keep their metrics. */
+@media screen {
+  .main-area-clean:has(> main > :is(.patient-list-view, .patient-record-view, .rooms-view)) {
+    --ds-control-h: 44px;
+  }
+  .main-area-clean:has(> main > :is(.patient-list-view, .patient-record-view, .rooms-view))
+    .compact-topbar
+    button:focus-visible {
+    outline: var(--ds-focus);
+    outline-offset: 2px;
+  }
+  .patient-list-view .search-wrap:not(#ds) {
+    height: calc(var(--ds-control-h) + 2px);
+    gap: 8px;
+    padding-inline-end: 4px;
+  }
+  .patient-list-view .search-wrap:not(#ds) .search-input {
+    flex: 1;
+    min-width: 0;
+    width: 0;
+    padding-inline-end: 4px;
+  }
+  .patient-list-view .search-input:not(#ds):focus-visible {
+    outline: var(--ds-focus);
+    outline-offset: -3px;
+  }
+  .patient-list-view .search-clear-btn:not(#ds) {
+    position: static;
+  }
+  .patient-list-view .patient-signals button:not(#ds) {
+    min-height: var(--ds-control-h);
+    height: auto;
+    min-width: var(--ds-control-h);
+  }
+  .patient-record-view :is(.inline-edit__value, .inline-edit-row, .inline-edit__btn):not(#ds) {
+    min-height: var(--ds-control-h);
+    min-width: var(--ds-control-h);
+  }
+  .patient-record-view .inline-edit__btn:not(#ds) {
+    width: var(--ds-control-h);
+    height: var(--ds-control-h);
+    flex-shrink: 0;
+  }
+  .patient-record-view
+    :is(.inline-edit__value, .inline-edit-row, .inline-edit__btn):not(#ds):focus-visible {
+    outline: var(--ds-focus);
+    outline-offset: 2px;
+  }
+}
 /* Print layouts keep the pre-existing field metrics. */
 @media print {
   :root {
@@ -281,6 +332,7 @@
 /* ── Pulsante icona ───────────────────────────────────────────────────────────────────────── */
 :is(.ds-icon-btn, .icon-btn):not(#ds) {
   box-sizing: border-box;
+  flex-shrink: 0;
   width: var(--ds-control-h);
   height: var(--ds-control-h);
   min-width: var(--ds-control-h);
@@ -764,4 +816,26 @@ th[aria-sort] .ds-sort:not(#ds) {
   padding-bottom: 8px;
   white-space: normal;
   text-align: center;
+}
+
+@media screen {
+  .handover-workspace :is(.ds-btn, .ds-chip, .btn-primary, .btn-secondary):not(#ds) {
+    height: var(--ds-control-h);
+    min-height: var(--ds-control-h);
+    padding: 0 var(--ds-control-px);
+    font-size: var(--ds-control-font);
+    line-height: 20px;
+  }
+}
+
+.patient-therapy-slot-detail--embedded .ds-btn:not(#ds),
+.patient-therapy-slot-detail--embedded .ds-chip:not(#ds) {
+  min-height: var(--ds-control-h);
+  padding: 0 var(--ds-control-px);
+  font-size: var(--ds-control-font);
+  line-height: 20px;
+}
+.patient-therapy-slot-detail--embedded .ds-btn svg {
+  width: var(--ds-icon-size);
+  height: var(--ds-icon-size);
 }

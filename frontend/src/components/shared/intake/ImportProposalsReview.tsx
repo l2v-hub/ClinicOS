@@ -1,4 +1,5 @@
 import type { DischargeTherapyRow } from './dischargeTherapy';
+import { TherapyImportSource } from './TherapyImportSource';
 export interface ImportProposal {
   id: string;
   groupId: string;
@@ -29,7 +30,7 @@ export function ImportProposalsReview({
       {proposals.map((proposal) => (
         <article className="discharge-therapy-review__item" key={proposal.id}>
           <strong>{proposal.row.farmacoNome || 'Terapia da identificare'}</strong>
-          <blockquote>{proposal.row.originalText}</blockquote>
+          <TherapyImportSource row={proposal.row} />
           {proposal.status === 'pending' ? (
             <div className="discharge-therapy-review__item-head">
               <button

@@ -20,6 +20,7 @@ import {
   type CalendarOccurrence,
 } from '../../../lib/patientTherapyCalendar';
 import { readPatientCalendarTherapies } from '../../../lib/patientTherapyCalendarRead';
+import { asNeededForPeriod } from '../../../lib/therapyCompleteness';
 import { doseStatus, type DoseStatus } from '../../../lib/therapyDoseStatus';
 import { weekDays } from '../../../lib/therapyWeek';
 import { LoadErrorState } from './LoadErrorState';
@@ -86,8 +87,14 @@ export function PatientTherapyCalendar({
   const [open, setOpen] = useState<{ date: string; time: string } | null | undefined>(() =>
     initialOpenTime ? { date: startDate, time: initialOpenTime } : undefined,
   );
-  const [prnOpen, setPrnOpen] = useState<string | null>(null);
-  useEffect(() => { setPrnOpen(null); }, [date, patientId]);
+  const [prnChoice, setPrnChoice] = useState<{
+    patientId: string;
+    date: string;
+    id: string;
+  } | null>(null);
+  const prnOpen =
+    prnChoice?.patientId === patientId && prnChoice.date === date ? prnChoice.id : null;
+  const setPrnOpen = (id: string | null) => setPrnChoice(id ? { patientId, date, id } : null);
   const refreshCalendar = () => {
     invalidateCachedGet(`${API_URL}/therapy-slots`);
     setRevision((value) => value + 1);
@@ -173,16 +180,27 @@ export function PatientTherapyCalendar({
   const daySlots = slots[date];
   const openTime = open?.date === date ? open.time : null;
   const cells: TherapyCalendarCell[] = visibleDays.flatMap((dayDate) => {
-    const events = status === 'ready' ? buildPatientTherapyDay(state.therapies, patientId, dayDate).events : [];
+    const events =
+      status === 'ready' ? buildPatientTherapyDay(state.therapies, patientId, dayDate).events : [];
     return [...new Set(events.map((event) => event.time))].map((time) => {
       const group = events.filter((event) => event.time === time);
       const statuses = group.map((event) => eventStatus(event, dayDate, slots[dayDate], patientId));
       const late = statuses.filter((item) => item?.tone === 'late').length;
-      const done = statuses.filter((item) => item?.tone === 'done' || item?.tone === 'missed').length;
+      const done = statuses.filter(
+        (item) => item?.tone === 'done' || item?.tone === 'missed',
+      ).length;
       const unknown = statuses.some((item) => !item);
-      return { date: dayDate, time, count: group.length,
-        title: group.length === 1 ? group[0].drugName : group.map((event) => event.drugName).join(' · '),
-        detail: unknown ? 'Stato non disponibile' : late ? `${late} in ritardo` : `${done}/${group.length} registrate`,
+      return {
+        date: dayDate,
+        time,
+        count: group.length,
+        title:
+          group.length === 1 ? group[0].drugName : group.map((event) => event.drugName).join(' · '),
+        detail: unknown
+          ? 'Stato non disponibile'
+          : late
+            ? `${late} in ritardo`
+            : `${done}/${group.length} registrate`,
         tone: late ? 'late' : done === group.length ? 'done' : 'due',
         focused: group.some((event) => event.therapyId === focusTherapyId),
       };
@@ -195,24 +213,51 @@ export function PatientTherapyCalendar({
     month: 'long',
     year: 'numeric',
   });
-  const asNeeded = day.unscheduled.filter((item) => item.kind === 'as_needed');
   // Week totals cover the displayed period; each incomplete prescription is counted once.
   // PRN is distinct, and mixed valid/invalid schedules can appear in both groups.
-  const periodDays = visibleDays.map((value) => buildPatientTherapyDay(state.therapies, patientId, value));
-  const incomplete = [...new Map(periodDays.flatMap((value) => value.unscheduled)
-    .filter((item) => item.kind === 'incomplete').map((item) => [item.therapyId, item])).values()];
+  const periodDays = visibleDays.map((value) =>
+    buildPatientTherapyDay(state.therapies, patientId, value),
+  );
+  const asNeeded = asNeededForPeriod(periodDays);
+  const todayAsNeeded = new Set(
+    buildPatientTherapyDay(state.therapies, patientId, today)
+      .unscheduled.filter((item) => item.kind === 'as_needed')
+      .map((item) => item.therapyId),
+  );
+  const incomplete = [
+    ...new Map(
+      periodDays
+        .flatMap((value) => value.unscheduled)
+        .filter((item) => item.kind === 'incomplete')
+        .map((item) => [item.therapyId, item]),
+    ).values(),
+  ];
   const doseCount = cells.reduce((total, cell) => total + cell.count, 0);
   const timeCount = new Set(cells.map((cell) => cell.time)).size;
   const step = view === 'giorno' ? 1 : 7;
 
   return (
-    <section ref={calendarRef} className="patient-therapy-calendar" aria-label="Calendario terapie del paziente">
-      {status === 'ready' && <PatientTherapyScheduleSummary
-        doseCount={doseCount} timeCount={timeCount} incomplete={incomplete} period={view}
-        onEdit={onEditTherapy ? (therapyId) => {
-          const therapy = therapyById.get(therapyId);
-          if (therapy) onEditTherapy(therapy);
-        } : undefined} />}
+    <section
+      ref={calendarRef}
+      className="patient-therapy-calendar"
+      aria-label="Calendario terapie del paziente"
+    >
+      {status === 'ready' && (
+        <PatientTherapyScheduleSummary
+          doseCount={doseCount}
+          timeCount={timeCount}
+          incomplete={incomplete}
+          period={view}
+          onEdit={
+            onEditTherapy
+              ? (therapyId) => {
+                  const therapy = therapyById.get(therapyId);
+                  if (therapy) onEditTherapy(therapy);
+                }
+              : undefined
+          }
+        />
+      )}
       <div className="patient-therapy-calendar__toolbar">
         <DateNav
           isToday={view === 'giorno' ? date === today : weekDays(date).includes(today)}
@@ -262,7 +307,9 @@ export function PatientTherapyCalendar({
 
       <header className="patient-therapy-calendar__heading">
         <h3 className={view === 'giorno' ? undefined : 'is-week'}>
-          {view === 'giorno' ? formattedDate : `Settimana ${weekDays(date)[0]} – ${weekDays(date)[6]}`}
+          {view === 'giorno'
+            ? formattedDate
+            : `Settimana ${weekDays(date)[0]} – ${weekDays(date)[6]}`}
         </h3>
         <p>
           {view === 'giorno'
@@ -282,65 +329,122 @@ export function PatientTherapyCalendar({
           onRetry={refreshCalendar}
         />
       )}
-      {status === 'ready' && <>
-        {daySlots?.status === 'error' && <p role="alert">Stato delle somministrazioni non disponibile: è mostrata solo la programmazione.</p>}
-        <TherapyCalendarGrid days={visibleDays} cells={cells} selected={open}
-          onCreate={onCreate ? (target, time) => { setOpen(null); onCreate(target, time); } : undefined}
-          onOpen={(target, time) => { setDate(target); setView('giorno'); setOpen({ date: target, time }); }} />
-        {openTime && <AccessibleDialogSurface labelledBy={dialogTitle} onClose={() => setOpen(null)}
-          returnFocus={() => calendarRef.current?.querySelector<HTMLElement>(`[data-testid="therapy-calendar-cell"][data-time="${openTime}"]`) ?? null}
-          className="therapy-calendar-dialog therapy-calendar-dialog--patient">
-          <header className="therapy-calendar-dialog__head"><h3 id={dialogTitle}>Terapie delle {openTime}</h3>
-            <button type="button" className="btn-secondary btn-sm" aria-label="Chiudi" data-dialog-initial-focus onClick={() => setOpen(null)}>×</button></header>
-          <PatientTherapySlotDetail embedded key={`${patientId}|${date}|${openTime}`} patientId={patientId} date={date} time={openTime}
-            events={day.events.filter((event) => event.time === openTime)} focusTherapyId={focusTherapyId}
-            onClose={() => setOpen(null)} onRecorded={() => setSlotsRevision((value) => value + 1)} />
-        </AccessibleDialogSurface>}
-        {view === 'giorno' && <>
-          {asNeeded.length > 0 && (
-            <section className="patient-therapy-calendar__unscheduled" aria-label="Al bisogno">
-              <h4>
-                Al bisogno <span>({asNeeded.length})</span>
-              </h4>
-              <ul>
-                {asNeeded.map((item) => {
-                  const therapy = therapyById.get(item.therapyId);
-                  const expanded = prnOpen === item.therapyId;
-                  return (
-                    <li key={item.id}>
-                      <strong>{item.drugName}</strong>
-                      <span>
-                        {item.dose} · {item.route}
-                        {item.prescriber ? ` · Prescr. ${item.prescriber}` : ''}
-                      </span>
-                      {item.note && <p>{item.note}</p>}
-                      {therapy && date === today && (
-                        <button
-                          type="button"
-                          className="ds-btn ds-btn--secondary"
-                          aria-expanded={expanded}
-                          onClick={() => setPrnOpen(expanded ? null : item.therapyId)}
-                        >
-                          {expanded ? 'Chiudi' : 'Somministra al bisogno · dosi di oggi'}
-                        </button>
-                      )}
-                      {therapy && expanded && date === today && (
-                        <div className="ptc-prn-panel">
-                          <TherapyDrugDosePanel
-                            patientId={patientId}
-                            therapy={therapy}
-                            onRecorded={() => setSlotsRevision((value) => value + 1)}
-                          />
-                        </div>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
+      {status === 'ready' && (
+        <>
+          {daySlots?.status === 'error' && (
+            <p role="alert">
+              Stato delle somministrazioni non disponibile: è mostrata solo la programmazione.
+            </p>
           )}
-        </>}
-      </>}
+          <TherapyCalendarGrid
+            days={visibleDays}
+            cells={cells}
+            selected={open}
+            onCreate={
+              onCreate
+                ? (target, time) => {
+                    setOpen(null);
+                    onCreate(target, time);
+                  }
+                : undefined
+            }
+            onOpen={(target, time) => {
+              setDate(target);
+              setView('giorno');
+              setOpen({ date: target, time });
+            }}
+          />
+          {openTime && (
+            <AccessibleDialogSurface
+              labelledBy={dialogTitle}
+              onClose={() => setOpen(null)}
+              returnFocus={() =>
+                calendarRef.current?.querySelector<HTMLElement>(
+                  `[data-testid="therapy-calendar-cell"][data-time="${openTime}"]`,
+                ) ?? null
+              }
+              className="therapy-calendar-dialog therapy-calendar-dialog--patient"
+            >
+              <header className="therapy-calendar-dialog__head">
+                <h3 id={dialogTitle}>Terapie delle {openTime}</h3>
+                <button
+                  type="button"
+                  className="btn-secondary btn-sm"
+                  aria-label="Chiudi"
+                  data-dialog-initial-focus
+                  onClick={() => setOpen(null)}
+                >
+                  ×
+                </button>
+              </header>
+              <PatientTherapySlotDetail
+                embedded
+                key={`${patientId}|${date}|${openTime}`}
+                patientId={patientId}
+                date={date}
+                time={openTime}
+                events={day.events.filter((event) => event.time === openTime)}
+                focusTherapyId={focusTherapyId}
+                onClose={() => setOpen(null)}
+                onRecorded={() => setSlotsRevision((value) => value + 1)}
+              />
+            </AccessibleDialogSurface>
+          )}
+          <>
+            {asNeeded.length > 0 && (
+              <section className="patient-therapy-calendar__unscheduled" aria-label="Al bisogno">
+                <h4>
+                  Al bisogno <span>({asNeeded.length})</span>
+                </h4>
+                {view === 'settimana' && (
+                  <p>
+                    Prescrizioni al bisogno valide nella settimana; le dosi registrabili sono solo
+                    quelle di oggi.
+                  </p>
+                )}
+                <ul>
+                  {asNeeded.map((item) => {
+                    const therapy = therapyById.get(item.therapyId);
+                    const expanded = prnOpen === item.therapyId;
+                    const canShowToday =
+                      (view === 'giorno' ? date === today : visibleDays.includes(today)) &&
+                      todayAsNeeded.has(item.therapyId);
+                    return (
+                      <li key={item.id}>
+                        <strong>{item.drugName}</strong>
+                        <span>
+                          {item.dose} · {item.route}
+                          {item.prescriber ? ` · Prescr. ${item.prescriber}` : ''}
+                        </span>
+                        {item.note && <p>{item.note}</p>}
+                        {therapy && canShowToday && (
+                          <button
+                            type="button"
+                            className="ds-btn ds-btn--secondary ds-btn--wrap"
+                            aria-expanded={expanded}
+                            onClick={() => setPrnOpen(expanded ? null : item.therapyId)}
+                          >
+                            {expanded ? 'Chiudi' : 'Somministra al bisogno · dosi di oggi'}
+                          </button>
+                        )}
+                        {therapy && expanded && canShowToday && (
+                          <div className="ptc-prn-panel">
+                            <TherapyDrugDosePanel
+                              patientId={patientId}
+                              therapy={therapy}
+                              onRecorded={() => setSlotsRevision((value) => value + 1)}
+                            />
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            )}
+          </>
+        </>
+      )}
     </section>
   );
 }

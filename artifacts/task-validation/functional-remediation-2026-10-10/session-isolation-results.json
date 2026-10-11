@@ -1,0 +1,120 @@
+{
+  "patientId": "cmv2t137l006xbyqpdjdrd0cw",
+  "marker": "QA SYNTHETIC narrative for doctor only",
+  "requests": [
+    {
+      "status": 200
+    }
+  ],
+  "authorizedResponse": {
+    "sections": [
+      {
+        "sectionKey": "ALLERGIES",
+        "title": "Allergie",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      },
+      {
+        "sectionKey": "DIAGNOSIS",
+        "title": "Diagnosi",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      },
+      {
+        "sectionKey": "ANAMNESIS",
+        "title": "Anamnesi",
+        "originalText": "Originale sintetico",
+        "reviewedText": "QA SYNTHETIC narrative for doctor only",
+        "displayText": "QA SYNTHETIC narrative for doctor only",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "reviewed"
+      },
+      {
+        "sectionKey": "HOSPITAL_COURSE",
+        "title": "Decorso ospedaliero",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      },
+      {
+        "sectionKey": "CONSULTATIONS",
+        "title": "Consulenze",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      },
+      {
+        "sectionKey": "IMAGING_DIAGNOSTICS",
+        "title": "Diagnostica per immagini",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      },
+      {
+        "sectionKey": "PROCEDURES_AND_INTERVENTIONS",
+        "title": "Prestazioni e interventi",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      },
+      {
+        "sectionKey": "THERAPY",
+        "title": "Terapia",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      },
+      {
+        "sectionKey": "ADVICE_AND_FOLLOW_UP",
+        "title": "Consigli e controlli",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      },
+      {
+        "sectionKey": "UNMAPPED_CONTENT",
+        "title": "Contenuto non classificato",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      }
+    ],
+    "total": 10
+  },
+  "nextRoleNarrativeStatus": 403,
+  "cacheAfterRoleChange": null,
+  "markerInDom": false,
+  "markerElements": 0,
+  "markerVisible": false,
+  "pass": true
+}

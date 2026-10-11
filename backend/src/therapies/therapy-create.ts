@@ -66,10 +66,18 @@ export interface TherapyCreateInput {
  */
 export function normalizeGiorniSettimana(raw: unknown): string | null {
   if (raw == null) return null;
+  if (typeof raw === 'string' && !raw.trim()) return null;
+  if (typeof raw !== 'string' && !Array.isArray(raw)) {
+    throw new TherapyInputError('Giorni della settimana non validi: seleziona valori da 1 a 7');
+  }
   const parts = Array.isArray(raw) ? raw : String(raw).split(',');
-  const days = [
-    ...new Set(parts.map((p) => parseInt(String(p).trim(), 10)).filter((n) => n >= 1 && n <= 7)),
-  ].sort((a, b) => a - b);
+  const tokens = parts.map((p) =>
+    typeof p === 'string' || typeof p === 'number' ? String(p).trim() : '',
+  );
+  if (tokens.some((p) => !/^[1-7]$/.test(p))) {
+    throw new TherapyInputError('Giorni della settimana non validi: seleziona valori da 1 a 7');
+  }
+  const days = [...new Set(tokens.map(Number))].sort((a, b) => a - b);
   return days.length === 0 || days.length === 7 ? null : days.join(',');
 }
 
@@ -116,6 +124,7 @@ export function missingTherapyFieldsMessage(farmacoNome: string, dataInizio: str
 
 export function validateTherapyCreateInput(input: TherapyCreateInput) {
   assertTherapyScalarInput(input as unknown as Record<string, unknown>);
+  normalizeGiorniSettimana(input.giorniSettimana);
   const farmacoNome = typeof input.farmacoNome === 'string' ? input.farmacoNome.trim() : '';
   const dataInizio = typeof input.dataInizio === 'string' ? input.dataInizio : '';
 

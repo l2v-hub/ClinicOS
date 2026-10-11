@@ -141,21 +141,18 @@ test('AC2: unrecognised text leaves every field empty and blocks the confirmatio
   assert.ok(texts.some((t) => /^Da verificare/.test(t)));
 });
 
-test('AC2: two times in the same fascia block the confirmation and suggest two therapies', () => {
+test('distinct times in the same fascia preserve both doses and allow confirmation', () => {
   const p = realPreview('Tachipirina 1000 mg 1 cpr per os ore 8 e 10');
   const form = previewToTherapyForm(p, ENTRY_AT);
   assert.deepEqual(
     form.schedules.map((s) => s.time),
     ['08:00', '10:00'],
   );
-  assert.deepEqual(formFasciaConflicts(form), ['mattina: 08:00, 10:00']);
-  const issues = diaryTherapyIssues(form);
-  assert.equal(issues.length, 1);
-  assert.equal(issues[0].field, 'schedules');
-  assert.match(issues[0].message, /mattina: 08:00, 10:00/);
-  assert.match(issues[0].message, /due terapie/);
-  assert.ok(
-    previewNotices(p, ENTRY_AT).some((n) => n.key === 'fascia' && /due terapie/.test(n.text)),
+  assert.deepEqual(formFasciaConflicts(form), []);
+  assert.deepEqual(diaryTherapyIssues(form), []);
+  assert.equal(
+    previewNotices(p, ENTRY_AT).some((n) => n.key === 'fascia'),
+    false,
   );
   // Correggendo un orario il blocco sparisce.
   const fixed = {
@@ -286,7 +283,7 @@ test('every warning, ambiguity and inference has an Italian text', () => {
 test('fascia conflicts follow the server rule, including the same time repeated', () => {
   assert.deepEqual(scheduleFasciaConflicts(['08:00', '20:00']), []);
   assert.deepEqual(scheduleFasciaConflicts(['8:00', '08:00']), ['mattina: 08:00, 08:00']);
-  assert.deepEqual(scheduleFasciaConflicts(['23:00', '02:00']), ['notte: 02:00, 23:00']);
+  assert.deepEqual(scheduleFasciaConflicts(['23:00', '02:00']), []);
   assert.deepEqual(scheduleFasciaConflicts(['', '08:00']), []);
 });
 
@@ -342,11 +339,11 @@ test('server errors become Italian messages', () => {
   assert.match(
     diaryTherapyErrorMessage(400, {
       code: 'fascia_conflict',
-      fasciaConflicts: ['sera: 18:00, 20:00'],
+      fasciaConflicts: ['sera: 18:00, 18:00'],
     }),
-    /sera: 18:00, 20:00.*due terapie/,
+    /sera: 18:00, 18:00.*duplicati/,
   );
-  assert.match(diaryTherapyErrorMessage(400, { code: 'fascia_conflict' }), /due terapie/);
+  assert.match(diaryTherapyErrorMessage(400, { code: 'fascia_conflict' }), /duplicati/);
   assert.match(diaryTherapyErrorMessage(400, { code: 'schedule_required' }), /orario/);
   assert.match(diaryTherapyErrorMessage(400, { code: 'unit_required' }), /unità/);
   assert.match(

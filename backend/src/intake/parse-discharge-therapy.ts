@@ -20,6 +20,7 @@ export interface ParsedTherapyRow {
   note: string; // leftover free text
   originalText: string; // source line kept verbatim (audit / operator reference)
   stato: 'ok' | 'da_verificare';
+  tipo?: 'al_bisogno';
   doseMode?: 'fixed' | 'glucose_scale';
   glucoseScale?: Array<{ minMgDl: number; maxMgDl: number | null; units: number }>;
   /** Found in the document outside the therapy section: always operator-verified. */
@@ -466,7 +467,11 @@ function trovaListaOrari(testo: string, collocato: Uint8Array, primoCampoEsplici
 export function parseTherapyLine(line: string): ParsedTherapyRow {
   const originalText = line.trim();
   // `originalText` resta verbatim per l'audit; l'estrazione lavora sulla riga senza etichetta.
-  const testo = withoutInlineTherapyLabel(originalText).replace(PREFISSO_TERAPIA, '');
+  const testo = withoutInlineTherapyLabel(originalText)
+    .replace(PREFISSO_TERAPIA, '')
+    .replace(/^(?:\d+[.)]|\(\d+\))\s+(?=\p{L})/u, '');
+  const prn = /\bal\s+bisogno\b/i.test(testo);
+  const negativePrn = /\bnon\b[^.;]*\bal\s+bisogno\b/i.test(testo);
 
   const collocato = new Uint8Array(testo.length);
   const marca = (index: number | undefined | null, length: number) => {
@@ -646,6 +651,8 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
     !/\d\.\d{3}(?!\d)/.test(`${dosaggio} ${quantita}`) &&
     !condizionata &&
     !negativeInstruction &&
+    !negativePrn &&
+    !prn &&
     glucoseScaleValid &&
     (doseMode === 'fixed' || orari.length > 0)
       ? 'ok'
@@ -664,6 +671,9 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
     note,
     originalText,
     stato,
+    ...(prn && !negativePrn && orari.length === 0 && doseMode === 'fixed'
+      ? { tipo: 'al_bisogno' as const }
+      : {}),
     doseMode,
     ...(glucoseScale.length ? { glucoseScale: normalizedGlucoseScale } : {}),
   };

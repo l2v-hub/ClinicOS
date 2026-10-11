@@ -26,6 +26,16 @@ export async function resolve(specifier, context, nextResolve) {
 }
 
 export async function load(url, context, nextLoad) {
+  const assetUrl = new URL(url);
+  if (/^\?url(?:$|[?&])/.test(assetUrl.search)) {
+    // Vite's ?url imports export an asset location; Node must not execute the asset.
+    assetUrl.search = '';
+    return {
+      format: 'module',
+      source: `export default ${JSON.stringify(assetUrl.href)};`,
+      shortCircuit: true,
+    };
+  }
   if (context.format === 'stub-css' || FOGLI_DI_STILE.test(new URL(url).pathname)) {
     return { format: 'module', source: 'export default {};', shortCircuit: true };
   }

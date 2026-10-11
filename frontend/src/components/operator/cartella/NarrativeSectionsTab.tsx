@@ -4,15 +4,22 @@ import { operatorHeaders } from '../../../lib/operatorSession';
 import {
   pendingSessionCache,
   readSessionCache,
+  sessionCacheEpoch,
   writeSessionCache,
 } from '../../../lib/sessionCache';
 import { narrativeCacheKey } from '../../../lib/patientTabSnapshots';
-import {
-  NarrativeClinicalSection,
-} from '../../shared/sections/NarrativeClinicalSection';
+import { NarrativeClinicalSection } from '../../shared/sections/NarrativeClinicalSection';
 import { DocumentSourcePanel } from '../../shared/DocumentSourcePanel';
-import { NarrativeSourceDetail, type NarrativeSectionDTO as SectionDTO } from './NarrativeSourceDetail';
-import { STRUCTURED_CLINICAL_TOPICS, partitionNarrativeSections, type StructuredClinicalTopic } from '../../../lib/clinicalNarrativePresentation';
+import { useCan } from '../../../lib/capabilities';
+import {
+  NarrativeSourceDetail,
+  type NarrativeSectionDTO as SectionDTO,
+} from './NarrativeSourceDetail';
+import {
+  STRUCTURED_CLINICAL_TOPICS,
+  partitionNarrativeSections,
+  type StructuredClinicalTopic,
+} from '../../../lib/clinicalNarrativePresentation';
 
 // Scheda Paziente — narrative clinical sections (REQ-030). Always shows the canonical
 // sections as faithful text blocks (REQ-029 API); editable, originalText never overwritten.
@@ -32,8 +39,13 @@ export function NarrativeSectionsTab({
   renderCurrentTopic,
   refreshVersion,
 }: NarrativeSectionsTabProps) {
+  const canRead = useCan('narrative.list');
+  const canSave = useCan('narrative.save');
+  const canReadDocuments = useCan('documents.list');
   // Sezioni gia' mostrate in sessione per questo paziente: compaiono subito e si rivalidano.
-  const cachedSections = readSessionCache<SectionDTO[]>(narrativeCacheKey(patientId));
+  const cachedSections = canRead
+    ? readSessionCache<SectionDTO[]>(narrativeCacheKey(patientId))
+    : undefined;
   const [sections, setSections] = useState<SectionDTO[]>(() => cachedSections ?? []);
   const [loading, setLoading] = useState(!cachedSections);
   const [error, setError] = useState<string | null>(null);
@@ -57,6 +69,8 @@ export function NarrativeSectionsTab({
   useEffect(() => {
     const controller = new AbortController();
     const sequence = ++loadSequence.current;
+    const epoch = sessionCacheEpoch();
+    if (!canRead) return () => controller.abort();
     void (async () => {
       setLoading(readSessionCache(narrativeCacheKey(patientId)) === undefined);
       setError(null);
@@ -79,10 +93,14 @@ export function NarrativeSectionsTab({
         });
         const data = await r.json();
         if (!r.ok) throw new Error();
-        if (sequence === loadSequence.current) {
+        if (
+          !controller.signal.aborted &&
+          epoch === sessionCacheEpoch() &&
+          sequence === loadSequence.current
+        ) {
           const next: SectionDTO[] = Array.isArray(data.sections) ? data.sections : [];
           setSections(next);
-          writeSessionCache(narrativeCacheKey(patientId), next);
+          writeSessionCache(narrativeCacheKey(patientId), next, epoch);
         }
       } catch (loadError) {
         if (
@@ -98,9 +116,10 @@ export function NarrativeSectionsTab({
     })();
 
     return () => controller.abort();
-  }, [patientId, reloadVersion, refreshVersion]);
+  }, [patientId, reloadVersion, refreshVersion, canRead]);
 
   async function save(sectionKey: string, reviewedText: string) {
+    if (!canSave) throw new Error('Operazione non consentita per il tuo ruolo');
     const requestedPatientId = patientId;
     const sequence = ++saveSequence.current;
     setSavingKey(sectionKey);
@@ -114,7 +133,14 @@ export function NarrativeSectionsTab({
           body: JSON.stringify({ reviewedText }),
         },
       );
-      if (!r.ok) throw new Error(`Salvataggio non riuscito (${r.status})`);
+      if (!r.ok) {
+        const payload = await r.json().catch(() => null);
+        throw new Error(
+          typeof payload?.error === 'string'
+            ? payload.error
+            : `Salvataggio non riuscito (${r.status})`,
+        );
+      }
       const dto = await r.json();
       if (activePatientId.current === requestedPatientId) {
         setSections((prev) =>
@@ -136,7 +162,7 @@ export function NarrativeSectionsTab({
   }
 
   function renderSource(s: SectionDTO, defaultOpen = true) {
-    const ref = (s.sourceReferences ?? []).find(source => source.fileName);
+    const ref = (s.sourceReferences ?? []).find((source) => source.fileName);
     return (
       <NarrativeClinicalSection
         key={s.sectionKey}
@@ -147,54 +173,92 @@ export function NarrativeSectionsTab({
         annotations={s.annotations}
         sources={s.sourceReferences}
         critical={s.reviewStatus === 'conflict'}
-        editable
+        editable={canSave}
         defaultOpen={defaultOpen}
         reviewStatus={s.reviewStatus}
         busy={savingKey === s.sectionKey}
         onSave={(text) => save(s.sectionKey, text)}
-        onCompareSource={ref || (s.originalText || s.displayText || '').trim()
-          ? () => setCompare({ fileName: ref?.fileName, page: ref?.pageFrom,
-              sourceText: s.originalText || s.displayText,
-              title: `Fonte originale — ${s.title}` }) : undefined}
+        onCompareSource={
+          canReadDocuments && (ref || (s.originalText || s.displayText || '').trim())
+            ? () =>
+                setCompare({
+                  fileName: ref?.fileName,
+                  page: ref?.pageFrom,
+                  sourceText: s.originalText || s.displayText,
+                  title: `Fonte originale — ${s.title}`,
+                })
+            : undefined
+        }
       />
     );
   }
-  const { standalone, empty } = partitionNarrativeSections(sections);
+  const visibleSections = canRead ? sections : [];
+  const { standalone, empty } = partitionNarrativeSections(visibleSections);
 
   return (
     <div className="narrative-sections" data-testid="patient-narrative-sections">
-      {loading && <p className="cr-empty" role="status">Caricamento testo sorgente… I dati correnti restano consultabili.</p>}
-      {error && (
+      {canRead && loading && (
+        <p className="cr-empty" role="status">
+          Caricamento testo sorgente… I dati correnti restano consultabili.
+        </p>
+      )}
+      {canRead && error && (
         <div className="alert alert--error" role="alert">
           <span className="alert__text">{error} I dati correnti restano consultabili.</span>
-          <button type="button" className="btn-secondary btn-sm" onClick={() => setReloadVersion(v => v + 1)}>Riprova</button>
+          <button
+            type="button"
+            className="btn-secondary btn-sm"
+            onClick={() => setReloadVersion((v) => v + 1)}
+          >
+            Riprova
+          </button>
         </div>
       )}
-      {saveError && (
+      {canRead && saveError && (
         <div className="alert alert--error" role="alert">
           <span className="alert__text">{saveError}</span>
         </div>
       )}
-      {renderCurrentTopic && STRUCTURED_CLINICAL_TOPICS.map(topic => {
-        const section = sections.find(s => s.sectionKey === topic);
-        const sourceDetail = loading || error || !section
-          ? <p className="srev-source">Testo sorgente non disponibile per questo argomento; non conferma l’assenza clinica.</p>
-          : <NarrativeSourceDetail section={section}>{renderSource(section)}</NarrativeSourceDetail>;
-        return <div key={topic} data-clinical-topic={topic}>{renderCurrentTopic(topic, sourceDetail)}</div>;
-      })}
-      {!loading && !error && (
+      {renderCurrentTopic &&
+        STRUCTURED_CLINICAL_TOPICS.map((topic) => {
+          const section = visibleSections.find((s) => s.sectionKey === topic);
+          const sourceDetail =
+            loading || error || !section ? (
+              <p className="srev-source">
+                Testo sorgente non disponibile per questo argomento; non conferma l’assenza clinica.
+              </p>
+            ) : (
+              <NarrativeSourceDetail section={section}>
+                {renderSource(section)}
+              </NarrativeSourceDetail>
+            );
+          return (
+            <div key={topic} data-clinical-topic={topic}>
+              {renderCurrentTopic(topic, sourceDetail)}
+            </div>
+          );
+        })}
+      {canRead && !loading && !error && (
         <>
-          {(renderCurrentTopic ? standalone : sections.filter(s => !empty.includes(s))).map(s => renderSource(s))}
+          {(renderCurrentTopic ? standalone : sections.filter((s) => !empty.includes(s))).map((s) =>
+            renderSource(s),
+          )}
           {empty.length > 0 && (
             <details className="clinical-source-detail" data-testid="document-absences">
-              <summary>{empty.length} argomenti senza testo sorgente: {empty.map(s => s.title).join(', ')}</summary>
-              <p className="srev-source">Non presente nel documento non significa assente nel paziente. I dati correnti vanno consultati separatamente.</p>
-              {empty.map(s => renderSource(s, false))}
+              <summary>
+                {empty.length} argomenti senza testo sorgente:{' '}
+                {empty.map((s) => s.title).join(', ')}
+              </summary>
+              <p className="srev-source">
+                Non presente nel documento non significa assente nel paziente. I dati correnti vanno
+                consultati separatamente.
+              </p>
+              {empty.map((s) => renderSource(s, false))}
             </details>
           )}
         </>
       )}
-      {compare && (
+      {canRead && canReadDocuments && compare && (
         <DocumentSourcePanel
           patientId={patientId}
           sourceTarget={{ fileName: compare.fileName, page: compare.page }}

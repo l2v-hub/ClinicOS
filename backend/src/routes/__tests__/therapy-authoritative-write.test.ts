@@ -6,6 +6,8 @@ import express from 'express';
 import type { Server } from 'node:http';
 import { prisma } from '../../lib/prisma.js';
 import therapyRouter from '../therapy.js';
+import { buildTherapySlotPage } from '../../therapies/therapy-slots.js';
+import { findTherapiesDue } from '../../therapies/due-therapy-query.js';
 
 let server: Server;
 let base = '';
@@ -86,6 +88,275 @@ before(async () => {
   });
 });
 
+test('distinct same-band doses retain quantity, independent writes and exact summaries', async () => {
+  const multi = await prisma.patientTherapy.create({
+    data: {
+      patientId,
+      farmacoNome: 'Synthetic two-dose prescription',
+      dosaggio: '',
+      tipo: 'periodica',
+      stato: 'attiva',
+      dataInizio: '2033-01-01',
+      fasceMattina: true,
+      viaSomministrazione: 'orale',
+      schedules: {
+        create: [
+          {
+            time: '08:00',
+            fascia: 'mattina',
+            quantityNumerator: 1,
+            quantityDenominator: 1,
+            administrationUnit: 'compressa',
+          },
+          {
+            time: '10:00',
+            fascia: 'mattina',
+            quantityNumerator: 2,
+            quantityDenominator: 1,
+            administrationUnit: 'compressa',
+          },
+        ],
+      },
+    },
+  });
+  const actor = { id: ownerOperatorId, role: 'operatore' as const, name: 'Verified Owner' };
+  const read = () => buildTherapySlotPage(date, { patientIds: [patientId] }, { limit: 100 }, actor);
+  const doses = async () =>
+    (await read()).slots
+      .flatMap((s) => s.patients)
+      .flatMap((p) => p.administrations)
+      .filter((a) => a.therapyId === multi.id);
+  const write = (scheduledTime?: string, endpoint = 'confirm') =>
+    fetch(`${base}/therapy-slots/${endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Operator-Id': ownerOperatorId,
+        'X-Operator-Role': 'operatore',
+      },
+      body: JSON.stringify({
+        patientId,
+        therapyId: multi.id,
+        date,
+        fascia: 'mattina',
+        scheduledTime,
+        farmacoDose: '999 invented units',
+        ...(endpoint === 'not-administered' ? { motivo: 'rifiuto' } : {}),
+      }),
+    });
+  try {
+    const initial = await doses();
+    assert.deepEqual(
+      initial.map((a) => a.scheduledTime),
+      ['08:00', '10:00'],
+    );
+    assert.deepEqual(
+      initial.map((a) => a.quantityLabel),
+      ['1 compressa', '2 compressa'],
+    );
+    assert.equal(
+      (await write()).status,
+      400,
+      'An ambiguous band must require explicit dose selection',
+    );
+    assert.equal((await write('09:00')).status, 409);
+    const due = () =>
+      findTherapiesDue(date, { patientIds: [patientId] }, new Date(`${date}T11:00:00Z`), 15, 50);
+    assert.deepEqual(
+      (await due()).overdue.filter((a) => a.therapyId === multi.id).map((a) => a.scheduledTime),
+      ['08:00', '10:00'],
+    );
+    const before = (await read()).slots.find((s) => s.fascia === 'mattina')!.summary;
+    assert.equal((await write('08:00')).status, 200);
+    const afterFirst = await doses();
+    assert.deepEqual(
+      afterFirst.map((a) => a.status),
+      ['administered', 'pending'],
+    );
+    const firstSummary = (await read()).slots.find((s) => s.fascia === 'mattina')!.summary;
+    assert.equal(firstSummary.pending, before.pending - 1);
+    assert.equal(firstSummary.administered, before.administered + 1);
+    assert.deepEqual(
+      (await due()).overdue.filter((a) => a.therapyId === multi.id).map((a) => a.scheduledTime),
+      ['10:00'],
+    );
+    const responses = await Promise.all([write('10:00'), write('10:00')]);
+    assert.ok(responses.some((response) => response.status === 200));
+    for (const response of responses)
+      assert.ok([200, 409].includes(response.status), await response.text());
+    assert.equal(
+      (await write('10:00')).status,
+      409,
+      'Retry must preserve the already recorded dose',
+    );
+    const records = await prisma.medicationAdministration.findMany({
+      where: { therapyId: multi.id },
+      orderBy: { ora: 'asc' },
+    });
+    assert.equal(records.length, 2);
+    assert.deepEqual(
+      records.map((r) => r.ora),
+      ['08:00', '10:00'],
+    );
+    assert.deepEqual(
+      records.map((r) => r.farmacoDose),
+      ['1 compressa', '2 compressa'],
+    );
+    assert.notEqual(records[0].id, records[1].id);
+    assert.equal((await write('08:00', 'not-administered')).status, 409);
+    assert.deepEqual(
+      (await doses()).map((a) => a.status),
+      ['administered', 'administered'],
+    );
+  } finally {
+    await prisma.patientTherapy.delete({ where: { id: multi.id } });
+  }
+});
+
+test('a given single dose stays given after its time moves within the band (no double dose)', async () => {
+  const single = await prisma.patientTherapy.create({
+    data: {
+      patientId,
+      farmacoNome: 'Synthetic single-dose prescription',
+      dosaggio: '',
+      tipo: 'periodica',
+      stato: 'attiva',
+      dataInizio: '2033-01-01',
+      fasceMattina: true,
+      viaSomministrazione: 'orale',
+      schedules: {
+        create: [
+          {
+            time: '08:00',
+            fascia: 'mattina',
+            quantityNumerator: 1,
+            quantityDenominator: 1,
+            administrationUnit: 'compressa',
+          },
+        ],
+      },
+    },
+  });
+  const actor = { id: ownerOperatorId, role: 'operatore' as const, name: 'Verified Owner' };
+  const read = () => buildTherapySlotPage(date, { patientIds: [patientId] }, { limit: 100 }, actor);
+  const doses = async () =>
+    (await read()).slots
+      .flatMap((s) => s.patients)
+      .flatMap((p) => p.administrations)
+      .filter((a) => a.therapyId === single.id);
+  const write = (scheduledTime: string, endpoint = 'confirm') =>
+    fetch(`${base}/therapy-slots/${endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Operator-Id': ownerOperatorId,
+        'X-Operator-Role': 'operatore',
+      },
+      body: JSON.stringify({
+        patientId,
+        therapyId: single.id,
+        date,
+        fascia: 'mattina',
+        scheduledTime,
+        ...(endpoint === 'not-administered' ? { motivo: 'rifiuto' } : {}),
+      }),
+    });
+  const due = async () =>
+    (
+      await findTherapiesDue(
+        date,
+        { patientIds: [patientId] },
+        new Date(`${date}T11:00:00Z`),
+        15,
+        50,
+      )
+    ).overdue.filter((a) => a.therapyId === single.id);
+  try {
+    assert.equal((await write('08:00')).status, 200);
+    const summaryBefore = (await read()).slots.find((s) => s.fascia === 'mattina')!.summary;
+    // The prescriber moves the same dose to 09:00 on the same day.
+    await prisma.therapySchedule.updateMany({
+      where: { therapyId: single.id },
+      data: { time: '09:00' },
+    });
+    const moved = await doses();
+    assert.deepEqual(
+      moved.map((a) => [a.scheduledTime, a.status]),
+      [['09:00', 'administered']],
+    );
+    assert.deepEqual(await due(), [], 'A given dose must not come back as overdue');
+    const summaryAfter = (await read()).slots.find((s) => s.fascia === 'mattina')!.summary;
+    assert.deepEqual(summaryAfter, summaryBefore);
+    assert.equal((await write('09:00')).status, 409, 'A second confirmation is a double dose');
+    assert.equal((await write('09:00', 'not-administered')).status, 409);
+    const records = await prisma.medicationAdministration.findMany({
+      where: { therapyId: single.id },
+    });
+    assert.equal(records.length, 1);
+    assert.deepEqual([records[0].ora, records[0].stato], ['08:00', 'erogata']);
+  } finally {
+    await prisma.patientTherapy.delete({ where: { id: single.id } });
+  }
+});
+
+test('a single dose recorded as not given and then moved is updated in place, not duplicated', async () => {
+  const single = await prisma.patientTherapy.create({
+    data: {
+      patientId,
+      farmacoNome: 'Synthetic refused dose',
+      dosaggio: '5 mg',
+      tipo: 'periodica',
+      stato: 'attiva',
+      dataInizio: '2033-01-01',
+      fasceSera: true,
+      viaSomministrazione: 'orale',
+      schedules: {
+        create: [
+          {
+            time: '20:00',
+            fascia: 'sera',
+            quantityNumerator: 1,
+            quantityDenominator: 1,
+            administrationUnit: 'compressa',
+          },
+        ],
+      },
+    },
+  });
+  const write = (scheduledTime: string, endpoint = 'confirm') =>
+    fetch(`${base}/therapy-slots/${endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Operator-Id': ownerOperatorId,
+        'X-Operator-Role': 'operatore',
+      },
+      body: JSON.stringify({
+        patientId,
+        therapyId: single.id,
+        date,
+        fascia: 'sera',
+        scheduledTime,
+        ...(endpoint === 'not-administered' ? { motivo: 'rifiuto' } : {}),
+      }),
+    });
+  try {
+    assert.equal((await write('20:00', 'not-administered')).status, 200);
+    await prisma.therapySchedule.updateMany({
+      where: { therapyId: single.id },
+      data: { time: '21:00' },
+    });
+    assert.equal((await write('21:00')).status, 200);
+    const records = await prisma.medicationAdministration.findMany({
+      where: { therapyId: single.id },
+    });
+    assert.equal(records.length, 1);
+    assert.deepEqual([records[0].ora, records[0].stato], ['21:00', 'erogata']);
+  } finally {
+    await prisma.patientTherapy.delete({ where: { id: single.id } });
+  }
+});
+
 test('conditional insulin requires a measured glucose and stores the server-resolved dose', async () => {
   const headers = {
     'Content-Type': 'application/json',
@@ -118,10 +389,11 @@ test('conditional insulin requires a measured glucose and stores the server-reso
   assert.equal(covered.status, 200, await covered.text());
   const stored = await prisma.medicationAdministration.findUniqueOrThrow({
     where: {
-      therapyId_date_fascia: {
+      therapyId_date_fascia_ora: {
         therapyId: glucoseScaleTherapyId,
         date: '2033-04-09',
         fascia: 'pranzo',
+        ora: '12:00',
       },
     },
   });
@@ -183,7 +455,7 @@ test('therapy confirm persists prescription fields, not spoofed client drug data
   });
   assert.equal(response.status, 200, await response.text());
   const stored = await prisma.medicationAdministration.findUniqueOrThrow({
-    where: { therapyId_date_fascia: { therapyId, date, fascia: 'mattina' } },
+    where: { therapyId_date_fascia_ora: { therapyId, date, fascia: 'mattina', ora: '08:00' } },
   });
   assert.equal(stored.patientId, patientId);
   assert.equal(stored.farmacoDose, '10 mg');
@@ -210,7 +482,13 @@ test('therapy confirm rejects a mismatched therapy/patient pair', async () => {
         'X-Operator-Id': ownerOperatorId,
         'X-Operator-Role': 'operatore',
       },
-      body: JSON.stringify({ patientId: other.id, therapyId, date, fascia: 'mattina' }),
+      body: JSON.stringify({
+        patientId: other.id,
+        therapyId,
+        date,
+        fascia: 'mattina',
+        ora: '08:00',
+      }),
     });
     assert.equal(response.status, 404);
   } finally {
@@ -238,7 +516,13 @@ test('two same-name prescriptions keep independent administration records', asyn
       'X-Operator-Id': ownerOperatorId,
       'X-Operator-Role': 'operatore',
     },
-    body: JSON.stringify({ patientId, therapyId: second.id, date, fascia: 'mattina' }),
+    body: JSON.stringify({
+      patientId,
+      therapyId: second.id,
+      date,
+      fascia: 'mattina',
+      ora: '08:00',
+    }),
   });
   assert.equal(response.status, 200, await response.text());
   const rows = await prisma.medicationAdministration.findMany({
@@ -320,7 +604,7 @@ test('ordinary operators cannot read or mutate another owner patient; managers r
     assert.equal(deniedWrite.status, 404);
     assert.equal(
       await prisma.medicationAdministration.count({
-        where: { therapyId: otherTherapyId, date: crossDate, fascia: 'mattina' },
+        where: { therapyId: otherTherapyId, date: crossDate, fascia: 'mattina', ora: '08:00' },
       }),
       0,
     );

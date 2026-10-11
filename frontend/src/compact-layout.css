@@ -119,13 +119,7 @@
     width: var(--ds-icon-size);
     height: var(--ds-icon-size);
   }
-  .handover-workspace :is(.ds-btn, .ds-chip, .btn-primary, .btn-secondary):not(#ds) {
-    height: var(--ds-control-h);
-    min-height: var(--ds-control-h);
-    padding: 0 var(--ds-control-px);
-    font-size: var(--ds-control-font);
-    line-height: 20px;
-  }
+
   .diary-thread--reading .btn-sm:not(#ds) {
     height: var(--ds-control-h);
     min-height: var(--ds-control-h);
@@ -135,5 +129,13 @@
   :is(.am-shortcut, .am-starter, .intake-index__item):not(#ds) {
     min-height: var(--ds-control-h);
     font-size: var(--ds-control-font);
+  }
+}
+/* The mobile topbar can wrap: native focus/scroll must clear its measured height. */
+@media screen and (max-width: 1023px) {
+  .main-area-clean:has(> main > :is(.patient-list-view, .patient-record-view, .rooms-view))
+    main
+    :is(button, input, select, textarea, [tabindex]):not(#ds) {
+    scroll-margin-block-start: calc(var(--ds-topbar-occlusion, var(--topbar-h, 64px)) + 16px);
   }
 }

@@ -7,7 +7,12 @@
 // (patientTabSnapshots.ts): al click il tab si disegna subito e rivalida in background.
 import { API_URL } from '../config';
 import { operatorHeaders } from './operatorSession';
-import { readSessionCache, trackSessionCache, writeSessionCache } from './sessionCache';
+import {
+  readSessionCache,
+  sessionCacheEpoch,
+  trackSessionCache,
+  writeSessionCache,
+} from './sessionCache';
 import {
   assessmentsCacheKey,
   diaryCacheKey,
@@ -21,7 +26,7 @@ import { loadTherapyPage } from './therapyPages';
 import { sessionCan } from './capabilities';
 import { createAssessmentCatalogReader } from './assessments/assessmentCatalog';
 
-const inflight = new Set<string>();
+const inflight = new Map<string, number>();
 
 // Phase 10: ogni lettura anticipata dichiara la capability della sua route; senza, il ruolo
 // riceverebbe solo 403 (e riempirebbe il segnale di audit «operazioni negate»).
@@ -95,20 +100,24 @@ const idle = (fn: () => void) =>
 
 /** Avvia il prefetch dei tab non ancora in cache per il paziente; idempotente. */
 export function prefetchPatientDetailTabs(patientId: string): void {
+  const epoch = sessionCacheEpoch();
   idle(() => {
+    if (epoch !== sessionCacheEpoch()) return;
     for (const task of tasksFor(patientId)) {
       if (!sessionCan(task.capability)) continue;
-      if (readSessionCache(task.key) !== undefined || inflight.has(task.key)) continue;
-      inflight.add(task.key);
+      if (readSessionCache(task.key) !== undefined || inflight.get(task.key) === epoch) continue;
+      inflight.set(task.key, epoch);
       const read = task.read();
-      trackSessionCache(task.key, read);
+      trackSessionCache(task.key, read, epoch);
       read
         .then((value) => {
           if (value !== undefined && readSessionCache(task.key) === undefined)
-            writeSessionCache(task.key, value);
+            writeSessionCache(task.key, value, epoch);
         })
         .catch(() => undefined)
-        .finally(() => inflight.delete(task.key));
+        .finally(() => {
+          if (inflight.get(task.key) === epoch) inflight.delete(task.key);
+        });
     }
   });
 }

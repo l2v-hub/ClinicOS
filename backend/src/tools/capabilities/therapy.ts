@@ -59,6 +59,13 @@ const administrationBody = {
     therapyId: { type: 'string' },
     date: { type: 'string', description: 'YYYY-MM-DD' },
     fascia: { type: 'string', description: 'mattina | pranzo | pomeriggio | sera | notte' },
+    scheduledTime: {
+      type: 'string',
+      pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]$',
+      description:
+        'Orario esatto HH:mm della dose prescritta; obbligatorio quando la fascia contiene più dosi',
+    },
+    measuredGlucose: { type: 'integer', minimum: 10, maximum: 1000 },
   },
 } as const;
 

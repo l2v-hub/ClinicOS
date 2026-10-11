@@ -1,0 +1,99 @@
+[
+  {
+    "number": 433,
+    "title": "[Bug][P1] Due orari terapeutici nella stessa fascia producono una sola dose",
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/433",
+    "labels": [
+      "bug",
+      "therapy",
+      "backend",
+      "priority-p1",
+      "qa-required"
+    ]
+  },
+  {
+    "number": 434,
+    "title": "[Bug][P1] Giorni terapeutici non validi vengono salvati come terapia quotidiana",
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/434",
+    "labels": [
+      "bug",
+      "therapy",
+      "backend",
+      "priority-p1",
+      "qa-required"
+    ]
+  },
+  {
+    "number": 435,
+    "title": "[Bug][P2] Una revisione clinica svuotata viene salvata ma mostra di nuovo il testo originale",
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/435",
+    "labels": [
+      "bug",
+      "clinical-record",
+      "backend",
+      "frontend",
+      "priority-p2",
+      "qa-required"
+    ]
+  },
+  {
+    "number": 436,
+    "title": "[Bug][P2] PATCH paziente con email di tipo errato raggiunge Prisma e restituisce 500",
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/436",
+    "labels": [
+      "bug",
+      "backend",
+      "patient-admission",
+      "priority-p2",
+      "qa-required"
+    ]
+  },
+  {
+    "number": 437,
+    "title": "[Bug][P2] La scheda Clinica OSS richiede narrativa e documenti vietati al ruolo",
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/437",
+    "labels": [
+      "bug",
+      "frontend",
+      "clinical-record",
+      "priority-p2",
+      "qa-required"
+    ]
+  },
+  {
+    "number": 438,
+    "title": "[QA][P2] La fixture del test archivio nuovi ingressi fallisce prima di verificare il rollback",
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/438",
+    "labels": [
+      "bug",
+      "backend",
+      "documents",
+      "import",
+      "priority-p2",
+      "qa-required"
+    ]
+  },
+  {
+    "number": 439,
+    "title": "[QA][P2] La CI delle PR non esegue la suite unitaria frontend",
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/439",
+    "labels": [
+      "enhancement",
+      "frontend",
+      "priority-p2",
+      "qa-required"
+    ]
+  },
+  {
+    "number": 440,
+    "title": "[Bug][P1] Un prefetch tardivo oltre il logout mostra narrativa del medico alla sessione OSS",
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/440",
+    "labels": [
+      "bug",
+      "frontend",
+      "security",
+      "priority-p1",
+      "qa-required"
+    ]
+  }
+]

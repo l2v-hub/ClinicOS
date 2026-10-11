@@ -36,7 +36,7 @@ test('global patient print always opens the selective dialog instead of printing
   assert.doesNotMatch(detail, /window\.print\(\)/);
   assert.match(
     detail,
-    /className="ds-btn ds-btn--secondary ds-btn--collapsible"\s+onClick=\{\(\) => setShowPrintDialog\(true\)\}/,
+    /className="ds-btn ds-btn--secondary"\s+onClick=\{\(\) => setShowPrintDialog\(true\)\}/,
   );
   assert.match(detail, /<PatientRecordPrintDialog/);
 });

@@ -19,6 +19,7 @@ import {
   isTherapyValidationError,
 } from '../../intake/confirm-therapies.js';
 import { validateDraftTherapySelection } from '../../intake/therapy-selection.js';
+import { reconcileLegacyTherapyInventory } from '../../intake/therapy-source-inventory.js';
 import {
   normalizePatientIdentity,
   PatientIdentityInputError,
@@ -250,7 +251,7 @@ async function confirm(
         }
         if (draft && draft.status !== 'draft')
           throw new AiExtractionError('config', 'La bozza non è più confermabile');
-        const draftData = asData(draft?.data);
+        const draftData = reconcileLegacyTherapyInventory(asData(draft?.data), job?.resultData);
         if (pendingFieldProposals(draftData) > 0)
           throw new ImportSessionError(
             409,

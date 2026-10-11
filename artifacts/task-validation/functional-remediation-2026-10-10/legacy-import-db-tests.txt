@@ -1,0 +1,39 @@
+✔ confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConflict (414.298386ms)
+✔ confirmDraft: persists therapies + vitals/pain into Cartella.data (561.68766ms)
+▶ link / unlink (AC2)
+  ✔ owner links an open draft; renews the job; second link on the job is 409 (197.858567ms)
+  ✔ ownership: foreign draft and foreign job are both 404 (34.27647ms)
+  ✔ confirmed, cancelled or legacy jobs, stale versions and closed drafts are refused (87.588451ms)
+  ✔ unlink cancels the session and keeps the values; refused after the final merge (162.049868ms)
+✔ link / unlink (AC2) (687.068666ms)
+▶ merge-import (AC3)
+  ✔ per letter: fills blanks, versioned and idempotent; stale version is 409 (130.302169ms)
+  ✔ per letter ignores units of an outdated input hash (133.254758ms)
+  ✔ final requires the current, fully resolved review (242.450336ms)
+✔ merge-import (AC3) (512.340705ms)
+▶ field proposals, PATCH and confirm (AC3, AC4)
+  ✔ confirm is blocked while a field proposal is pending; decide is versioned + idempotent (179.339175ms)
+  ✔ PATCH ignores the server keys (200) and renews a linked job (195.06536ms)
+✔ field proposals, PATCH and confirm (AC3, AC4) (374.966684ms)
+▶ QA follow-up (A2, idempotency, expiry, keep)
+  ✔ A2: even an admin cannot link documents and a chart of different operators (81.218367ms)
+  ✔ a link on an expired session is refused (42.144479ms)
+  ✔ the same requestId with a different payload is 409 idempotency_conflict (106.997216ms)
+  ✔ 'keep' via HTTP leaves the operator value and closes the proposal (116.898148ms)
+✔ QA follow-up (A2, idempotency, expiry, keep) (347.926485ms)
+✔ seedDraftFromImport: creates draft seeded from narrative (207.26494ms)
+✔ seedDraftFromImport: does NOT seed allergie when allergyStatus is explicitly_absent (18.700672ms)
+✔ seedDraftFromImport: throws when job has no _narrative (12.780054ms)
+✔ isPlausibleAllergenText: rejects a multi-section narrative blob, accepts concise text (0.316123ms)
+✔ deriveAllergens: [] for a blob; one entry per concise allergen otherwise (0.225409ms)
+✔ buildImportDraftData: blob allergiesText does NOT seed a false allergy row (0.178345ms)
+✔ buildImportDraftData: concise multi-allergen text → one row per allergen (0.229645ms)
+✔ buildImportDraftData: therapyText parsed into structured terapia rows (one per drug) (5.891601ms)
+ℹ tests 23
+ℹ suites 4
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21829.574567

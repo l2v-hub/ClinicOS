@@ -201,6 +201,7 @@ export function chartSectionOf(id?: TabId): ChartSection {
 
 /** Solo per le azioni Milo che indicano esplicitamente un paziente; la sidebar è globale. */
 export const PATIENT_SECTION_FOR_WARD_NAV: Readonly<Record<string, TabId>> = {
+  terapie: 'terapia-farmacologica',
   'parametri-multipaziente': 'parametri',
   consegne: 'consegne',
 };

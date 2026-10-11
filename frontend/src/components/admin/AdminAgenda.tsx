@@ -355,6 +355,12 @@ export function AdminAgenda({
       />
 
       <AgendaLegend />
+      {view !== 'giornaliero' && (
+        <p className="empty-state-card" role="status">
+          Le terapie sono disponibili nella vista Giorno. Seleziona un giorno per vedere le sue
+          somministrazioni.
+        </p>
+      )}
 
       {loadingAppuntamenti && <div className="empty-state-card">Caricamento agenda…</div>}
       {!loadingAppuntamenti && appointmentLoadError && (

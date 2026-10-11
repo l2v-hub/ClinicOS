@@ -145,6 +145,7 @@ export function TherapyGiroRows({
       // la fascia del server resta la chiave di registrazione; l'ora è quella della prescrizione
       fascia: item.fascia,
       ora: item.a.scheduledTime || time.ora,
+      scheduledTime: item.a.scheduledTime || time.ora,
     };
   }
 
@@ -212,7 +213,7 @@ export function TherapyGiroRows({
               <ul className="giro-drugs" aria-label={`Farmaci di ${name} delle ${time.ora}`}>
                 {items.map((item) => {
                   const a = item.a;
-                  const key = `${p.patientId}|${a.therapyId}|${item.fascia}`;
+                  const key = `${p.patientId}|${a.therapyId}|${item.fascia}|${a.scheduledTime}`;
                   const doseLabel =
                     a.doseMode === 'glucose_scale' && a.status !== 'administered'
                       ? 'Secondo schema glicemico'

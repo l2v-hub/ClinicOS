@@ -1,0 +1,140 @@
+[
+  {
+    "file": "frontend/src/App.tsx",
+    "baseline": 12,
+    "current": 12,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/admin/AdminAgenda.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/AdessoQueue.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/OperatorAgenda.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/PatientDetail.tsx",
+    "baseline": 4,
+    "current": 4,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/PatientList.tsx",
+    "baseline": 3,
+    "current": 3,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/TurnoAppointments.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/TurnoHandovers.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/__tests__/adessoGrouping410.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/__tests__/therapyCalendarVisualStates.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/__tests__/touchTargets416.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/tabGroups.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/shared/AppointmentForm.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/shared/TherapyCalendarGrid.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/__tests__/appointmentDialogAccessibility.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/__tests__/operatorSchedulesLazyLoad.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/__tests__/patientRecordPrint.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/__tests__/patientRosterGuard.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/adessoQueue.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/entraAuth.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/useBedsideTouchLayout.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  }
+]

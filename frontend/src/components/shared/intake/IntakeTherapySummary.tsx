@@ -3,6 +3,7 @@ import type { TherapyFormValue } from '../../operator/cartella/TherapyFormFields
 import type { ScheduleRow } from '../../operator/cartella/therapyDose';
 import type { TherapyCorrectionTarget } from './intakeTherapyNavigation';
 import type { buildIntakeTherapyReview } from './intakeTherapies';
+import { TherapyImportSource } from './TherapyImportSource';
 import './IntakeTherapySummary.css';
 import { glucoseScaleRows } from '../../operator/cartella/glucoseScale';
 
@@ -169,13 +170,19 @@ export function IntakeTherapySummary({ therapy: t, busy, onCorrect }: Props) {
         )}
         {Boolean(value('prescrittore')) && field('Prescrittore', undefined, value('prescrittore'))}
         {Boolean(value('note')) && field('Note', undefined, value('note'))}
-        {(t.originalText || t.requiresSourceReview) && (
+        {(t.originalText || t.structuredSource !== undefined || t.requiresSourceReview) && (
           <div className="intake-therapy-summary__source">
             {field(
-              'Testo estratto dalla lettera',
+              t.originalText || t.structuredSource === undefined
+                ? 'Testo estratto dalla lettera'
+                : 'Verifica della fonte estratta',
               'sourceReview',
-              t.originalText || 'Testo originale non disponibile',
+              t.originalText ||
+                (t.structuredSource === undefined
+                  ? 'Testo originale non disponibile'
+                  : 'Confronta con il documento prima di confermare'),
             )}
+            <TherapyImportSource row={{ ...t, originalText: '' }} />
           </div>
         )}
       </div>

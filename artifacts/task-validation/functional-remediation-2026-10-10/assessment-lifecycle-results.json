@@ -1,0 +1,60 @@
+{
+  "patientId": "cmv2t137l006xbyqpdjdrd0cw",
+  "results": [
+    {
+      "type": "painad",
+      "pass": true,
+      "assessmentId": "6a939ed2-48ee-4ae0-b826-ea7f437d8b8b",
+      "total": 3,
+      "pdfBytes": 22290,
+      "snapshotSha256": "1a2f7160c14f7b14e5dec436964a5b86fbfca3262a5ca565c25a9abc7c7e462e"
+    },
+    {
+      "type": "postural_transfers",
+      "pass": true,
+      "assessmentId": "87167d28-03e1-4ff6-8ec4-951983b6de28",
+      "pdfBytes": 18166,
+      "snapshotSha256": "41b627572d435322c4a2d4d5cd430b5132f8d402f57118ab8588deb2bbb789e3"
+    },
+    {
+      "type": "tinetti",
+      "pass": true,
+      "assessmentId": "d0da8654-279c-4f8d-9985-8acb7a7bf334",
+      "total": 28,
+      "pdfBytes": 28976,
+      "snapshotSha256": "fca6746dbe5c3cd75b415b3b046676e3c84f5e79a2355af53124a7cdf0d950c1"
+    },
+    {
+      "type": "gds15",
+      "pass": true,
+      "assessmentId": "30f45390-4105-4a97-8ad1-29cc1de379b4",
+      "total": 5,
+      "pdfBytes": 22875,
+      "snapshotSha256": "ddd4ce0762c44c4fbf15ece6e5895321baa6eeebb153705dd61336891aadb5e6"
+    },
+    {
+      "type": "mna",
+      "pass": true,
+      "assessmentId": "56cb2e3e-8e03-42fd-b83f-8a694edbdf6e",
+      "total": 7,
+      "pdfBytes": 23398,
+      "snapshotSha256": "317784810fe08088b11679b1fb0da201b5e7a9fbc27377ca393154304a49c982"
+    },
+    {
+      "type": "barthel",
+      "pass": true,
+      "assessmentId": "1ab972c0-354b-4f60-a4f7-2e23b35afe65",
+      "total": 85,
+      "pdfBytes": 25744,
+      "snapshotSha256": "9de9918f7015815e277ae44d0a2269393458ef3b7a963f3877ad240ac7eded06"
+    },
+    {
+      "type": "ucla_npi_sleep",
+      "pass": true,
+      "assessmentId": "352f6ccc-c4b1-48a8-a71b-7ba732632e52",
+      "total": 6,
+      "pdfBytes": 19922,
+      "snapshotSha256": "cb24bffa8bdc7e93f8e62e02649246c20ca246623737772acc4072db7339d274"
+    }
+  ]
+}

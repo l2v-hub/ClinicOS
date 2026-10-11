@@ -11,9 +11,10 @@ import {
 } from '@azure/msal-browser';
 import { isSimulatorSession, operatorHeaders } from './operatorSession';
 
-const CLIENT_ID = (import.meta.env.VITE_ENTRA_CLIENT_ID as string | undefined)?.trim();
-const TENANT_ID = (import.meta.env.VITE_ENTRA_TENANT_ID as string | undefined)?.trim();
-const API_SCOPE = (import.meta.env.VITE_ENTRA_API_SCOPE as string | undefined)?.trim();
+const env = (import.meta as ImportMeta & { env?: Record<string, unknown> }).env;
+const CLIENT_ID = (env?.VITE_ENTRA_CLIENT_ID as string | undefined)?.trim();
+const TENANT_ID = (env?.VITE_ENTRA_TENANT_ID as string | undefined)?.trim();
+const API_SCOPE = (env?.VITE_ENTRA_API_SCOPE as string | undefined)?.trim();
 
 export function entraEnabled(): boolean {
   return Boolean(CLIENT_ID && TENANT_ID && API_SCOPE);

@@ -9,7 +9,7 @@ import {
   type PatientParametersPageItem,
 } from './patientParametersPage';
 import type { RosterPageOptions } from './rosterOrder';
-import { readSessionCache, writeSessionCache } from './sessionCache';
+import { readSessionCache, sessionCacheEpoch, writeSessionCache } from './sessionCache';
 
 export const parametersCacheKey = (q: string, rosterKey: string, day: string): string =>
   `parameters:${JSON.stringify([q, rosterKey, day])}`;
@@ -18,6 +18,7 @@ export async function prefetchPatientParametersSnapshot(input: {
   rosterKey: string;
   rosterOptions: RosterPageOptions;
 }): Promise<void> {
+  const epoch = sessionCacheEpoch();
   const day = facilityLocalMinute().slice(0, 10);
   const key = parametersCacheKey('', input.rosterKey, day);
   if (readSessionCache(key)) return;
@@ -34,12 +35,12 @@ export async function prefetchPatientParametersSnapshot(input: {
       },
       { headers: operatorHeaders() },
     );
-    if (readSessionCache(key)) return;
+    if (epoch !== sessionCacheEpoch() || readSessionCache(key)) return;
     const items: PatientParametersPageItem[] = page.items.map((item) => ({
       ...item,
       summaryDate: day,
     }));
-    writeSessionCache(key, items);
+    writeSessionCache(key, items, epoch);
   } catch {
     /* la pagina ricarichera' da sola alla prima apertura */
   }

@@ -365,7 +365,7 @@ model MedicationAdministration {
   patient       Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
   therapy       PatientTherapy? @relation(fields: [therapyId], references: [id], onDelete: SetNull)
 
-  @@unique([therapyId, date, fascia])
+  @@unique([therapyId, date, fascia, ora])
   @@index([therapyId, date])
   @@index([date, fascia])
   @@index([date, patientId])
@@ -377,8 +377,8 @@ model MedicationAdministration {
 
 // PRN («al bisogno») administrations (UX cycle 2026-10-03, owner-approved). Separate append-only
 // table: a PRN drug can be given several times a day, so it cannot live under the scheduled
-// one-dose-per-band key of MedicationAdministration (@@unique therapyId/date/fascia), which stays
-// untouched. Drug, dose and route are resolved from the prescription and the time is the server
+// scheduled-dose key of MedicationAdministration (therapyId/date/fascia/ora).
+// Drug, dose and route are resolved from the prescription and the time is the server
 // time; the client sends only therapy, indication and an idempotency key (unique per operator).
 model PrnAdministration {
   id               String          @id @default(cuid())

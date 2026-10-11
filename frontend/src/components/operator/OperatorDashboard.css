@@ -381,3 +381,11 @@ button.turno-appt__who:hover {
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
+
+.turno-card--empty {
+  padding-block: 10px;
+  gap: 6px;
+}
+.turno-card--empty .turno-handovers__hint {
+  margin: 0 0 4px;
+}

@@ -183,7 +183,7 @@ export function previewToTherapyForm(
   };
 }
 
-// ── Fasce (stessa regola del server: una sola somministrazione per fascia) ──────────────────
+// ── Fasce (stessa regola del server: una sola dose per orario) ──────────────────
 
 const FASCE: Array<{ fascia: string; start: number; end: number }> = [
   { fascia: 'mattina', start: 5 * 60, end: 11 * 60 - 1 },
@@ -209,7 +209,7 @@ export function scheduleFasciaConflicts(times: readonly string[]): string[] {
     byFascia.set(fascia, [...(byFascia.get(fascia) ?? []), time]);
   }
   return [...byFascia.entries()]
-    .filter(([, list]) => list.length > 1)
+    .filter(([, list]) => new Set(list).size < list.length)
     .map(([fascia, list]) => `${fascia}: ${[...list].sort().join(', ')}`);
 }
 
@@ -220,7 +220,7 @@ export function formFasciaConflicts(form: TherapyFormValue): string[] {
 }
 
 export function fasciaConflictMessage(conflicts: readonly string[]): string {
-  return `Più somministrazioni nella stessa fascia (${conflicts.join('; ')}): crea due terapie separate, una per ciascun orario`;
+  return `Orari di somministrazione duplicati (${conflicts.join('; ')}): correggi gli orari duplicati`;
 }
 
 // ── Riepilogo dell'anteprima ─────────────────────────────────────────────────────────────────
@@ -413,7 +413,7 @@ export function diaryTherapyErrorMessage(status: number, body: unknown): string 
       : [];
     return conflicts.length
       ? fasciaConflictMessage(conflicts)
-      : 'Più somministrazioni nella stessa fascia: crea due terapie separate, una per ciascun orario';
+      : 'Orari di somministrazione duplicati: correggi gli orari duplicati';
   }
   if (code === 'schedule_required')
     return 'Indica almeno un orario di somministrazione (per la una tantum: data e ora).';

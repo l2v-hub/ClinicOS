@@ -1,7 +1,7 @@
 // Browser happy-path E2E for the AI import flow (REQ-020).
 // Drives the real SPA end-to-end: Nuovo paziente -> multi-upload -> estrazione ->
 // revisione -> "Crea paziente" -> IntakeWorkspace wizard (step 3..5, therapy +
-// demographics acceptance gates, explicit allergy status #265) -> conferma ->
+// demographic validation and therapy review, explicit allergy status #265) -> conferma ->
 // paziente creato -> API persistence check -> UI reload check.
 // Runs at two viewports, capturing screenshots and a Playwright trace per viewport.
 // Requires backend (:3001, AI_PROVIDER=mock + mock runtime) + frontend (:5173) running.
@@ -10,6 +10,8 @@ import { chromium } from 'playwright';
 import { writeFixtures } from './fixtures.mjs';
 import { resolve } from 'node:path';
 import { tmpdir } from 'node:os';
+import { randomInt } from 'node:crypto';
+import CodiceFiscale from 'codice-fiscale-js';
 
 // Overridable for local runs where the default ports are taken by a dev stack;
 // CI uses the defaults (frontend :5173, backend :3001).
@@ -28,8 +30,6 @@ const VIEWPORTS = [
     height: 768,
     allergyStatus: 'paziente_nega',
     allergyLabel: 'Paziente nega allergie',
-    // #294: CF sintetico valido, distinto per viewport (chiave univoca a DB).
-    cf: 'SNTDSK55P09H501W',
   },
   {
     name: 'tablet',
@@ -37,12 +37,30 @@ const VIEWPORTS = [
     height: 768,
     allergyStatus: 'assenti',
     allergyLabel: 'Allergie assenti (verificato)',
-    cf: 'SNTTBL55P09H501B',
   },
-];
+].map((viewport) => {
+  // New synthetic identities per run: never delete a patient to free a hardcoded CF.
+  const day = randomInt(1, 29),
+    month = randomInt(1, 13),
+    year = randomInt(1920, 1966);
+  const dateOfBirth = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  return {
+    ...viewport,
+    dateOfBirth,
+    cf: CodiceFiscale.compute({
+      name: 'E2E',
+      surname: `Sintetico_${viewport.name}`,
+      gender: 'M',
+      day,
+      month,
+      year,
+      birthplace: 'Roma',
+      birthplaceProvincia: 'RM',
+    }),
+  };
+});
 
-// #294: local re-runs against a persistent DB — free the unique CFs first via the
-// test-only delete route (CI DBs are fresh, this is a no-op there).
+// Search is also the independent persistence check after patient creation.
 async function searchPatients(q) {
   const res = await fetch(`${BACKEND}/patients/page/search`, {
     method: 'POST',
@@ -53,21 +71,6 @@ async function searchPatients(q) {
   const page = await res.json();
   if (!Array.isArray(page.items)) throw new Error('Patient search returned an invalid page');
   return page.items;
-}
-async function freeCfs() {
-  try {
-    for (const vp of VIEWPORTS) {
-      for (const p of await searchPatients(vp.cf)) {
-        if (p.codiceFiscale !== vp.cf) continue;
-        await fetch(`${BACKEND}/patients/${p.id}`, {
-          method: 'DELETE',
-          headers: OPERATOR_HEADERS,
-        }).catch(() => {});
-      }
-    }
-  } catch {
-    /* best-effort */
-  }
 }
 
 /** Navigate from the SPA root to the operator patient list. */
@@ -80,8 +83,8 @@ async function gotoPatientList(page) {
   await page.waitForTimeout(900);
 }
 
-await freeCfs();
-const browser = await chromium.launch();
+const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
+const browser = await chromium.launch({ ...(executablePath ? { executablePath } : {}) });
 let failures = 0;
 try {
   for (const [index, vp] of VIEWPORTS.entries()) {
@@ -91,6 +94,15 @@ try {
     const context = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
     await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
     const page = await context.newPage();
+    // Optional local cloud run: use the existing CSS fallback when Google Fonts is
+    // unavailable. CI keeps its normal font requests and all console/HTTP assertions.
+    if (process.env.QA_LOCAL_OFFLINE_FONTS === 'true') {
+      if (!['localhost', '127.0.0.1'].includes(new URL(FRONTEND).hostname))
+        throw new Error('Offline font substitution is restricted to local test stacks');
+      await page.route('https://fonts.googleapis.com/**', (route) =>
+        route.fulfill({ contentType: 'text/css', body: '' }),
+      );
+    }
     page.on('dialog', (d) => d.accept());
     const errors = [];
     page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
@@ -143,7 +155,7 @@ try {
       // Codice fiscale, Indirizzo, Telefono, Email — text inputs: 0=Nome 1=Cognome 2=Sesso 3=CF.
       await demo.locator('input[type=text]').nth(0).fill('E2E'); // Nome
       await demo.locator('input[type=text]').nth(1).fill(lastName); // Cognome (unique per viewport)
-      await demo.locator('input[type=date]').first().fill('1955-09-09'); // Data di nascita
+      await demo.locator('input[type=date]').first().fill(vp.dateOfBirth); // Data di nascita
       await demo.locator('input[type=text]').nth(3).fill(vp.cf); // #294: CF (chiave univoca)
       await page.waitForTimeout(300);
       await page.screenshot({ path: resolve(outDir, `${tag}-3-prefilled.png`) });
@@ -189,10 +201,21 @@ try {
       await page.waitForTimeout(700); // allow the debounced autosave to flush
       await page.screenshot({ path: resolve(outDir, `${tag}-4-step3-clinica.png`) });
 
-      // #235 gate: explicit demographics acceptance (header toggle of the Anagrafica section),
-      // then "Crea paziente" from the section index once nothing required is missing.
-      await page.locator('[data-testid="accept-demographics"]').click();
-      await page.waitForTimeout(700); // allow the debounced autosave to flush
+      // The current intake validates demographics directly and exposes pending document
+      // proposals separately. Verify the handoff retained all identity fields instead of
+      // waiting for the removed demographic-acceptance toggle.
+      const anagrafica = page.getByTestId('intake-section-anagrafica');
+      for (const value of ['E2E', lastName, vp.dateOfBirth, vp.cf]) {
+        if (
+          !(await anagrafica
+            .locator('input')
+            .evaluateAll(
+              (inputs, expected) => inputs.some((input) => input.value === expected),
+              value,
+            ))
+        )
+          throw new Error(`Intake demographic handoff lost ${value}`);
+      }
       await page
         .locator('[data-testid="intake-missing"]', { hasText: 'Pronto per la creazione' })
         .waitFor({ state: 'visible', timeout: 10000 });

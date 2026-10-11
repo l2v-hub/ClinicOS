@@ -1,5 +1,10 @@
 import type { AssessmentCatalogData, AssessmentCatalogReader } from './assessmentCatalog';
-import { pendingSessionCache, readSessionCache, writeSessionCache } from '../sessionCache';
+import {
+  pendingSessionCache,
+  readSessionCache,
+  sessionCacheEpoch,
+  writeSessionCache,
+} from '../sessionCache';
 export interface AssessmentCatalogState {
   status: 'loading' | 'ready' | 'error';
   data: AssessmentCatalogData | null;
@@ -33,6 +38,7 @@ export function createAssessmentCatalogState(reader: AssessmentCatalogReader, ca
       const current = new AbortController();
       controller = current;
       const request = ++generation;
+      const epoch = sessionCacheEpoch();
       if (snapshot.status !== 'ready') publish({ status: 'loading', data: null, error: null });
       try {
         // Lettura anticipata gia' in volo (apertura scheda): si aspetta quella.
@@ -40,18 +46,23 @@ export function createAssessmentCatalogState(reader: AssessmentCatalogReader, ca
         if (pendingRead) {
           await pendingRead;
           const cached = cacheKey ? readSessionCache<AssessmentCatalogData>(cacheKey) : undefined;
-          if (cached && !current.signal.aborted && request === generation) {
+          if (
+            cached &&
+            !current.signal.aborted &&
+            epoch === sessionCacheEpoch() &&
+            request === generation
+          ) {
             publish({ status: 'ready', data: cached, error: null });
             return;
           }
         }
         const data = await reader(current.signal);
-        if (!current.signal.aborted && request === generation) {
-          if (cacheKey) writeSessionCache(cacheKey, data);
+        if (!current.signal.aborted && epoch === sessionCacheEpoch() && request === generation) {
+          if (cacheKey) writeSessionCache(cacheKey, data, epoch);
           publish({ status: 'ready', data, error: null });
         }
       } catch (cause) {
-        if (!current.signal.aborted && request === generation)
+        if (!current.signal.aborted && epoch === sessionCacheEpoch() && request === generation)
           publish({
             status: 'error',
             data: null,

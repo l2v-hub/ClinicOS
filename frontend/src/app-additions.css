@@ -10712,6 +10712,7 @@ textarea.form-input {
    contenuto), azioni Stampa e Invio in PS a destra. */
 .chart-sections {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
   margin: 0 0 24px;
@@ -10722,9 +10723,16 @@ textarea.form-input {
 }
 .chart-sections__actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   flex: none;
   margin-left: auto;
+}
+.patient-record-view .inline-edit-block__value {
+  margin: 0;
+}
+.patient-record-view .inline-edit__actions {
+  gap: 8px;
 }
 
 @media (max-width: 1023px) {

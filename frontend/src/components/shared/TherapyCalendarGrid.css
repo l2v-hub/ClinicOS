@@ -32,6 +32,16 @@
 .therapy-calendar-grid.is-week table {
   min-width: 760px;
 }
+.therapy-calendar-grid thead th.therapy-calendar-grid__today {
+  background: var(--ds-blue-tint, #eef3ff);
+  border-bottom: 2px solid var(--ds-blue-active, #2054b2);
+}
+.therapy-calendar-grid__today-marker {
+  display: block;
+  margin-top: 3px;
+  color: var(--ds-blue-active, #2054b2);
+  font-size: 13px;
+}
 .therapy-calendar-grid__empty {
   display: block;
   min-height: 24px;
@@ -155,19 +165,47 @@
 }
 .therapy-calendar-count {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 36px;
-  min-height: 36px;
-  width: max-content;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  min-width: 0;
+  min-height: 44px;
+  width: 100%;
   max-width: 100%;
-  padding: 4px 8px;
+  padding: 6px;
   border: 1px solid #b9cafa;
   border-radius: 8px;
   background: #eef3ff;
   color: #2054b2;
-  font: 650 14px/20px var(--ds-font);
+  font: 500 12px/17px var(--ds-font);
+  text-align: left;
   cursor: pointer;
+}
+.therapy-calendar-count__summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.therapy-calendar-count__summary strong {
+  font-size: 16px;
+}
+.therapy-calendar-count__symbol {
+  display: inline-flex;
+  justify-content: center;
+  min-width: 16px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.therapy-calendar-count__state {
+  overflow-wrap: anywhere;
+  font-weight: 650;
+}
+.therapy-calendar-count__detail {
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  line-height: 16px;
 }
 .therapy-calendar-count.is-late {
   border-color: #f1b3be;

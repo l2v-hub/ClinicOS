@@ -1,0 +1,25 @@
+{
+  "testedCommit": "155810e33151608954d3c5c23dd81d09df8cad44",
+  "provider": "mock",
+  "localOfflineFonts": true,
+  "viewports": [
+    {
+      "name": "desktop",
+      "created": true,
+      "apiPersistence": true,
+      "allergieStatus": "paziente_nega",
+      "reloadVerified": true,
+      "consoleErrors": 0,
+      "httpFailures": 0
+    },
+    {
+      "name": "tablet",
+      "created": true,
+      "apiPersistence": true,
+      "allergieStatus": "assenti",
+      "reloadVerified": true,
+      "consoleErrors": 0,
+      "httpFailures": 0
+    }
+  ]
+}

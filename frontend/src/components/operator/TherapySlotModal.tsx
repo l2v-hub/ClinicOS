@@ -91,7 +91,8 @@ export function TherapySlotModal({
       route: a.route,
       date,
       fascia: slot.fascia,
-      ora: slot.ora,
+      ora: a.scheduledTime || slot.ora,
+      scheduledTime: a.scheduledTime || slot.ora,
     };
   }
 
@@ -197,10 +198,10 @@ export function TherapySlotModal({
 
                 {/* Drug rows */}
                 {p.administrations.map((a) => {
-                  const key = `${p.patientId}|${a.therapyId}`;
+                  const key = `${p.patientId}|${a.therapyId}|${a.scheduledTime}`;
                   const isPending = pendingKeys.has(key);
                   const identity = { ...p, id: p.patientId };
-                  const actionTarget = `${patientIdentityName(identity)} · ${patientIdentifier(identity)} · ${a.drugName} · ${a.doseMode === 'glucose_scale' && a.status !== 'administered' ? 'Secondo schema glicemico' : a.dosage}`;
+                  const actionTarget = `${patientIdentityName(identity)} · ${patientIdentifier(identity)} · ${a.drugName} · ${a.doseMode === 'glucose_scale' && a.status !== 'administered' ? 'Secondo schema glicemico' : a.dosage} · ${a.scheduledTime}`;
                   return (
                     <div key={key}>
                       <div className="therapy-drug-row">

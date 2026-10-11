@@ -855,9 +855,9 @@ function fasciaConflictsOf(orari: string[]): string[] {
     const fascia = fasciaFromTime(time);
     byFascia.set(fascia, [...(byFascia.get(fascia) ?? []), time]);
   }
-  // Anche lo stesso orario ripetuto e' un conflitto: una sola somministrazione per fascia.
+  // Anche lo stesso orario ripetuto e' un conflitto: una sola dose per orario.
   return [...byFascia.entries()]
-    .filter(([, times]) => times.length > 1)
+    .filter(([, times]) => new Set(times).size < times.length)
     .map(([fascia, times]) => `${fascia}: ${[...times].sort().join(', ')}`);
 }
 

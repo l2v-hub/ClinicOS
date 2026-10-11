@@ -1,6 +1,17 @@
 import { IcoChevronRight, IcoPill } from '../../icons';
 import { useEffect, useRef } from 'react';
+import { facilityLocalDate } from '../../lib/facilityTime';
 import './TherapyCalendarGrid.css';
+
+// Ward aggregate cue, not a uniform per-dose outcome. The visible detail retains mixed states.
+const WARD_STATE: Record<string, { symbol: string; label: string }> = {
+  late: { symbol: '!', label: 'Ritardo / non registrata' },
+  due: { symbol: '○', label: 'Programmata' },
+  future: { symbol: '○', label: 'Programmata' },
+  done: { symbol: '✓', label: 'Somministrate' },
+  missed: { symbol: '×', label: 'Non somministrate presenti' },
+  unknown: { symbol: '?', label: 'Stato da verificare' },
+};
 
 export interface TherapyCalendarCell {
   date: string;
@@ -24,6 +35,7 @@ export function TherapyCalendarGrid({
   selected,
   loadingDays = [],
   errorDays = [],
+  today = facilityLocalDate(),
 }: {
   days: string[];
   cells: TherapyCalendarCell[];
@@ -32,6 +44,7 @@ export function TherapyCalendarGrid({
   selected?: { date: string; time: string; patientId?: string } | null;
   loadingDays?: string[];
   errorDays?: string[];
+  today?: string;
 }) {
   const root = useRef<HTMLDivElement>(null);
   const scrolledDay = useRef<string | null>(null);
@@ -65,12 +78,22 @@ export function TherapyCalendarGrid({
           <tr>
             <th scope="col">Ora</th>
             {days.map((day) => (
-              <th scope="col" key={day}>
-                {new Date(`${day}T12:00:00`).toLocaleDateString('it-IT', {
-                  weekday: 'short',
-                  day: 'numeric',
-                  month: 'short',
-                })}
+              <th
+                scope="col"
+                key={day}
+                className={day === today ? 'therapy-calendar-grid__today' : undefined}
+                aria-current={day === today ? 'date' : undefined}
+              >
+                <span>
+                  {new Date(`${day}T12:00:00`).toLocaleDateString('it-IT', {
+                    weekday: 'short',
+                    day: 'numeric',
+                    month: 'short',
+                  })}
+                </span>
+                {day === today && (
+                  <strong className="therapy-calendar-grid__today-marker">Oggi</strong>
+                )}
               </th>
             ))}
           </tr>
@@ -81,6 +104,10 @@ export function TherapyCalendarGrid({
               <th scope="row">{time}</th>
               {days.map((day) => {
                 const cell = cells.find((item) => item.date === day && item.time === time);
+                const state =
+                  cell?.partial && cell.pendingCount === 0
+                    ? { symbol: '?', label: 'Conteggio incompleto' }
+                    : (WARD_STATE[cell?.tone ?? 'unknown'] ?? WARD_STATE.unknown);
                 return (
                   <td key={day}>
                     {loadingDays.includes(day) ? (
@@ -93,20 +120,29 @@ export function TherapyCalendarGrid({
                         className={`therapy-calendar-count is-${cell.partial && cell.pendingCount === 0 ? 'unknown' : (cell.tone ?? 'unknown')}`}
                         aria-haspopup="dialog"
                         aria-expanded={selected?.date === day && selected.time === time}
-                        aria-label={`${day} ore ${time}: ${cell.partial ? (cell.pendingCount > 0 ? `almeno ${cell.pendingCount} dosi da erogare, conteggio parziale` : 'conteggio da erogare incompleto') : `${cell.pendingCount} dosi da erogare`}. ${cell.title}, ${cell.count} dosi caricate, ${cell.detail}. Apri dettagli`}
+                        aria-label={`${day} ore ${time}: ${state.label}. ${cell.partial ? (cell.pendingCount > 0 ? `almeno ${cell.pendingCount} dosi da erogare, conteggio parziale` : 'conteggio da erogare incompleto') : `${cell.pendingCount} dosi da erogare`}. ${cell.title}, ${cell.count} dosi caricate, ${cell.detail}. Apri dettagli`}
                         title={`${cell.pendingCount} dosi da erogare${cell.partial ? ' nei dettagli caricati; conteggio parziale' : ''}`}
                         data-testid="therapy-calendar-count"
                         data-date={day}
                         data-time={time}
                         onClick={() => onOpen(day, time)}
                       >
-                        <span>
-                          {cell.partial
-                            ? cell.pendingCount > 0
-                              ? `≥${cell.pendingCount}`
-                              : '—'
-                            : cell.pendingCount}
+                        <span className="therapy-calendar-count__summary">
+                          <span className="therapy-calendar-count__symbol" aria-hidden="true">
+                            {state.symbol}
+                          </span>
+                          <strong>
+                            {cell.partial
+                              ? cell.pendingCount > 0
+                                ? `≥${cell.pendingCount}`
+                                : '—'
+                              : cell.pendingCount}
+                          </strong>
+                          <span>da erogare</span>
                         </span>
+                        <span className="therapy-calendar-count__state">{state.label}</span>
+                        <span className="therapy-calendar-count__detail">{cell.detail}</span>
+                        {cell.partial && <small>Elenco parziale</small>}
                       </button>
                     ) : cell ? (
                       <button

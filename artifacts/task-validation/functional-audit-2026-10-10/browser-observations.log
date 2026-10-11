@@ -1,0 +1,131 @@
+{"role":"admin","name":"navigation:Dashboard","overflow":0,"alerts":[]}
+{"role":"admin","name":"navigation:Operatori","overflow":0,"alerts":[]}
+{"role":"admin","name":"navigation:Agenda","overflow":0,"alerts":[]}
+{"role":"admin","name":"navigation:Posti Letto","overflow":0,"alerts":[]}
+{"role":"admin","name":"navigation:Orari","overflow":0,"alerts":[]}
+{"role":"admin","name":"navigation:Ruoli e permessi","overflow":0,"alerts":[]}
+{"role":"supervisor","name":"navigation:Dashboard","overflow":0,"alerts":[]}
+{"role":"supervisor","name":"navigation:Operatori","overflow":0,"alerts":[]}
+{"role":"supervisor","name":"navigation:Agenda","overflow":0,"alerts":[]}
+{"role":"supervisor","name":"navigation:Terapia","overflow":0,"alerts":[]}
+{"role":"supervisor","name":"navigation:Posti Letto","overflow":0,"alerts":[]}
+{"role":"supervisor","name":"navigation:Orari","overflow":0,"alerts":[]}
+{"role":"supervisor","name":"navigation:Consegne","overflow":0,"alerts":[]}
+{"role":"supervisor","name":"navigation:Ruoli e permessi","overflow":0,"alerts":[]}
+{"role":"supervisor","name":"assistant:open","overflow":0,"alerts":[]}
+{"role":"doctor","name":"navigation:Turno","overflow":0,"alerts":[]}
+{"role":"doctor","name":"navigation:Pazienti","overflow":0,"alerts":[]}
+{"role":"doctor","name":"navigation:Terapia","overflow":0,"alerts":[]}
+{"role":"doctor","name":"navigation:Parametri","overflow":0,"alerts":[]}
+{"role":"doctor","name":"navigation:Consegne","overflow":0,"alerts":[]}
+{"role":"doctor","name":"navigation:Agenda","overflow":0,"alerts":[]}
+{"role":"doctor","name":"navigation:Farmaci","overflow":0,"alerts":[]}
+{"role":"doctor","name":"chart:Panoramica","overflow":0,"alerts":[]}
+{"role":"doctor","name":"chart:Dati di ingresso","overflow":0,"alerts":[]}
+{"role":"doctor","name":"chart:Clinica","overflow":0,"alerts":[]}
+{"role":"doctor","name":"chart:Terapia","overflow":0,"alerts":[]}
+{"role":"doctor","name":"chart:Parametri","overflow":0,"alerts":[]}
+{"role":"doctor","name":"chart:Moduli","overflow":0,"alerts":[]}
+{"role":"doctor","name":"chart:Documenti","overflow":0,"alerts":[]}
+{"role":"doctor","name":"chart:Dimissione","overflow":0,"alerts":[]}
+{"role":"doctor","name":"mobile-chart:Panoramica","overflow":0,"alerts":[]}
+{"role":"doctor","name":"mobile-chart:Dati di ingresso","overflow":0,"alerts":[]}
+{"role":"doctor","name":"mobile-chart:Clinica","overflow":0,"alerts":[]}
+{"role":"doctor","name":"mobile-chart:Terapia","overflow":0,"alerts":[]}
+{"role":"doctor","name":"mobile-chart:Parametri","overflow":0,"alerts":[]}
+{"role":"doctor","name":"mobile-chart:Moduli","overflow":0,"alerts":[]}
+{"role":"doctor","name":"mobile-chart:Documenti","overflow":0,"alerts":[]}
+{"role":"doctor","name":"mobile-chart:Dimissione","overflow":0,"alerts":[]}
+{"role":"doctor","name":"assistant:open","overflow":0,"alerts":[]}
+{"role":"nurse","name":"navigation:Turno","overflow":0,"alerts":[]}
+{"role":"nurse","name":"navigation:Pazienti","overflow":0,"alerts":[]}
+{"role":"nurse","name":"navigation:Terapia","overflow":0,"alerts":[]}
+{"role":"nurse","name":"navigation:Parametri","overflow":0,"alerts":[]}
+{"role":"nurse","name":"navigation:Consegne","overflow":0,"alerts":[]}
+{"role":"nurse","name":"navigation:Agenda","overflow":0,"alerts":[]}
+{"role":"nurse","name":"navigation:Farmaci","overflow":0,"alerts":[]}
+{"role":"nurse","name":"chart:Panoramica","overflow":0,"alerts":[]}
+{"role":"nurse","name":"chart:Dati di ingresso","overflow":0,"alerts":[]}
+{"role":"nurse","name":"chart:Clinica","overflow":0,"alerts":[]}
+{"role":"nurse","name":"chart:Terapia","overflow":0,"alerts":[]}
+{"role":"nurse","name":"chart:Parametri","overflow":0,"alerts":[]}
+{"role":"nurse","name":"chart:Moduli","overflow":0,"alerts":[]}
+{"role":"nurse","name":"chart:Documenti","overflow":0,"alerts":[]}
+{"role":"nurse","name":"chart:Dimissione","overflow":0,"alerts":[]}
+{"role":"nurse","name":"module:Compila Medicazioni","overflow":0,"alerts":[]}
+{"role":"nurse","name":"module:Compila Contenzioni","overflow":0,"alerts":[]}
+{"role":"nurse","name":"module:Compila Trasferimenti posturali","overflow":0,"alerts":[]}
+{"role":"nurse","name":"module:Compila Braden","overflow":0,"alerts":[]}
+{"role":"nurse","name":"module:Compila PAINAD","overflow":0,"alerts":[]}
+{"role":"nurse","name":"module:Compila Tinetti","overflow":0,"alerts":[]}
+{"role":"nurse","name":"module:Compila MNA®-SF","overflow":0,"alerts":[]}
+{"role":"nurse","name":"module:Compila GDS-15","overflow":0,"alerts":[]}
+{"role":"nurse","name":"module:Compila Indice di Barthel","overflow":0,"alerts":[]}
+{"role":"nurse","name":"module:Compila UCLA · Sonno-veglia (NPI)","overflow":0,"alerts":[]}
+{"role":"nurse","name":"mobile-chart:Panoramica","overflow":0,"alerts":[]}
+{"role":"nurse","name":"mobile-chart:Dati di ingresso","overflow":0,"alerts":[]}
+{"role":"nurse","name":"mobile-chart:Clinica","overflow":0,"alerts":[]}
+{"role":"nurse","name":"mobile-chart:Terapia","overflow":0,"alerts":[]}
+{"role":"nurse","name":"mobile-chart:Parametri","overflow":0,"alerts":[]}
+{"role":"nurse","name":"mobile-chart:Moduli","overflow":0,"alerts":[]}
+{"role":"nurse","name":"mobile-chart:Documenti","overflow":0,"alerts":[]}
+{"role":"nurse","name":"mobile-chart:Dimissione","overflow":0,"alerts":[]}
+{"role":"nurse","name":"assistant:open","overflow":0,"alerts":[]}
+{"role":"oss","name":"navigation:Turno","overflow":0,"alerts":[]}
+{"role":"oss","name":"navigation:Pazienti","overflow":0,"alerts":[]}
+{"role":"oss","name":"navigation:Parametri","overflow":0,"alerts":[]}
+{"role":"oss","name":"navigation:Consegne","overflow":0,"alerts":[]}
+{"role":"oss","name":"navigation:Agenda","overflow":0,"alerts":[]}
+{"role":"oss","name":"navigation:Farmaci","overflow":0,"alerts":[]}
+{"role":"oss","name":"chart:Panoramica","overflow":0,"alerts":[]}
+{"role":"oss","name":"chart:Dati di ingresso","overflow":0,"alerts":[]}
+{"role":"oss","name":"chart:Clinica","overflow":0,"alerts":["Impossibile caricare le sezioni cliniche. I dati correnti restano consultabili.Riprova","Impossibile caricare gli allegati: l’elenco potrebbe essere incompleto. Riprova allegati"]}
+{"role":"oss","name":"chart:Parametri","overflow":0,"alerts":[]}
+{"role":"oss","name":"chart:Moduli","overflow":0,"alerts":[]}
+{"role":"oss","name":"chart:Dimissione","overflow":0,"alerts":[]}
+{"role":"oss","name":"mobile-chart:Panoramica","overflow":0,"alerts":[]}
+{"role":"oss","name":"mobile-chart:Dati di ingresso","overflow":0,"alerts":[]}
+{"role":"oss","name":"mobile-chart:Clinica","overflow":0,"alerts":["Impossibile caricare le sezioni cliniche. I dati correnti restano consultabili.Riprova","Impossibile caricare gli allegati: l’elenco potrebbe essere incompleto. Riprova allegati"]}
+{"role":"oss","name":"mobile-chart:Parametri","overflow":0,"alerts":[]}
+{"role":"oss","name":"mobile-chart:Moduli","overflow":0,"alerts":[]}
+{"role":"oss","name":"mobile-chart:Dimissione","overflow":0,"alerts":[]}
+{"role":"oss","name":"assistant:open","overflow":0,"alerts":[]}
+{
+  "screens": 92,
+  "failedViews": [
+    {
+      "role": "oss",
+      "name": "chart:Clinica"
+    },
+    {
+      "role": "oss",
+      "name": "mobile-chart:Clinica"
+    }
+  ],
+  "telemetry": [
+    {
+      "role": "oss",
+      "type": "http",
+      "status": 403,
+      "path": "/patients/SEED-PAZ-003/narrative-sections"
+    },
+    {
+      "role": "oss",
+      "type": "http",
+      "status": 403,
+      "path": "/patients/SEED-PAZ-003/documents"
+    },
+    {
+      "role": "oss",
+      "type": "http",
+      "status": 403,
+      "path": "/patients/SEED-PAZ-003/narrative-sections"
+    },
+    {
+      "role": "oss",
+      "type": "http",
+      "status": 403,
+      "path": "/patients/SEED-PAZ-003/documents"
+    }
+  ]
+}

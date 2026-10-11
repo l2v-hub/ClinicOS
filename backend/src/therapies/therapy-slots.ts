@@ -123,17 +123,23 @@ export async function buildTherapySlotExactSummary(
         pt.id,
         pt."patientId",
         pt."farmacoNome",
-        band.fascia
+        band.fascia,
+        COALESCE(schedule.time, band.ora) AS "scheduledTime",
+        (
+          SELECT count(*)::int FROM "TherapySchedule" bs
+          WHERE bs."therapyId" = pt.id AND bs.fascia = band.fascia
+        ) AS "bandDoses"
       FROM "PatientTherapy" pt
       JOIN "Patient" p ON p.id = pt."patientId"
       CROSS JOIN LATERAL (
         VALUES
-          ('mattina', pt."fasceMattina"),
-          ('pranzo', pt."fascePranzo"),
-          ('pomeriggio', pt."fascePomeriggio"),
-          ('sera', pt."fasceSera"),
-          ('notte', pt."fasceNotte")
-      ) AS band(fascia, enabled)
+          ('mattina', '08:00', pt."fasceMattina"),
+          ('pranzo', '12:00', pt."fascePranzo"),
+          ('pomeriggio', '16:00', pt."fascePomeriggio"),
+          ('sera', '20:00', pt."fasceSera"),
+          ('notte', '22:00', pt."fasceNotte")
+      ) AS band(fascia, ora, enabled)
+      LEFT JOIN "TherapySchedule" schedule ON schedule."therapyId" = pt.id AND schedule.fascia = band.fascia
       WHERE pt.stato = 'attiva'
         AND pt.tipo <> 'al_bisogno'
         AND (
@@ -154,10 +160,11 @@ export async function buildTherapySlotExactSummary(
         AND band.enabled = TRUE
         ${therapyAccessSql(access)}
     ), legacy_administration AS (
-      SELECT DISTINCT ON (ma."patientId", ma."farmacoNome", ma.fascia)
+      SELECT DISTINCT ON (ma."patientId", ma."farmacoNome", ma.fascia, ma.ora)
         ma."patientId",
         ma."farmacoNome",
         ma.fascia,
+        ma.ora,
         ma.stato
       FROM due_therapy due
       JOIN "MedicationAdministration" ma
@@ -166,19 +173,27 @@ export async function buildTherapySlotExactSummary(
         AND ma.fascia = due.fascia
         AND ma.date = ${date}
         AND ma."therapyId" IS NULL
-      ORDER BY ma."patientId", ma."farmacoNome", ma.fascia, ma.id DESC
+      ORDER BY ma."patientId", ma."farmacoNome", ma.fascia, ma.ora, ma.id DESC
     ), resolved AS (
       SELECT due.fascia, COALESCE(modern.stato, legacy.stato) AS stato
       FROM due_therapy due
-      LEFT JOIN "MedicationAdministration" modern
-        ON modern."therapyId" = due.id
-        AND modern.date = ${date}
-        AND modern.fascia = due.fascia
+      -- Same rule as the slot detail: ONE prescribed dose in a band = one record whatever its hour.
+      LEFT JOIN LATERAL (
+        SELECT ma.id, ma.stato
+        FROM "MedicationAdministration" ma
+        WHERE ma."therapyId" = due.id
+          AND ma.date = ${date}
+          AND ma.fascia = due.fascia
+          AND (ma.ora = due."scheduledTime" OR due."bandDoses" <= 1)
+        ORDER BY (ma.stato = 'erogata') DESC, (ma.ora = due."scheduledTime") DESC, ma.id ASC
+        LIMIT 1
+      ) modern ON TRUE
       LEFT JOIN legacy_administration legacy
         ON modern.id IS NULL
         AND legacy."patientId" = due."patientId"
         AND legacy."farmacoNome" = due."farmacoNome"
         AND legacy.fascia = due.fascia
+        AND legacy.ora = due."scheduledTime"
     )
     SELECT
       fascia,
@@ -238,6 +253,7 @@ async function buildTherapySlotSourcePage(
       doseProtocol: true,
       schedules: {
         take: MAX_THERAPY_SCHEDULES + 1,
+        orderBy: [{ time: 'asc' }, { id: 'asc' }],
         select: {
           fascia: true,
           time: true,
@@ -310,12 +326,38 @@ async function buildTherapySlotSourcePage(
         administration.fascia,
       );
       return administration.therapyId
-        ? [[`${administration.therapyId}|${administration.fascia}`, administration]]
+        ? [
+            [
+              `${administration.therapyId}|${administration.fascia}${administration.ora === undefined ? '' : '|' + administration.ora}`,
+              administration,
+            ],
+          ]
         : legacyCandidateKeys.has(legacyKey)
-          ? [[legacyKey, administration]]
+          ? [
+              [
+                legacyAdministrationKey(
+                  administration.patientId,
+                  administration.farmacoNome,
+                  administration.fascia,
+                  administration.ora,
+                ),
+                administration,
+              ],
+            ]
           : [];
     }),
   );
+
+  // A band with ONE prescribed dose has one record for the day whatever its hour (the time may
+  // have been moved after the dose was given); `erogata` wins so a given dose never reopens.
+  const bandRecords = new Map<string, (typeof administrations)[0]>();
+  for (const administration of administrations) {
+    if (!administration.therapyId) continue;
+    const key = `${administration.therapyId}|${administration.fascia}`;
+    const held = bandRecords.get(key);
+    if (!held || (held.stato !== 'erogata' && administration.stato === 'erogata'))
+      bandRecords.set(key, administration);
+  }
 
   const slots: TherapySlot[] = FASCE.map((f) => {
     const fasciaTherapies = validTherapies.filter((pt) => pt[f.flagField as FlagField] === true);
@@ -329,60 +371,68 @@ async function buildTherapySlotSourcePage(
       const room = location.room ?? missingLabel;
       const bed = location.bed ?? missingLabel;
 
-      const existing =
-        adminMap.get(`${pt.id}|${f.fascia}`) ??
-        adminMap.get(legacyAdministrationKey(pt.patientId, pt.farmacoNome, f.fascia));
-      let status: SlotAdministration['status'] = 'pending';
-      if (existing?.stato === 'erogata') status = 'administered';
-      if (existing?.stato === 'non_erogata') status = 'not_administered';
+      const schedules = (pt.schedules as ScheduleInput[]).filter((s) => s.fascia === f.fascia);
+      const doses: Array<ScheduleInput | undefined> = schedules.length ? schedules : [undefined];
+      for (const sched of doses) {
+        const time = sched?.time || f.ora;
+        const bandRecord = doses.length === 1 ? bandRecords.get(`${pt.id}|${f.fascia}`) : undefined;
+        const existing =
+          (bandRecord?.stato === 'erogata' ? bandRecord : undefined) ??
+          adminMap.get(`${pt.id}|${f.fascia}|${time}`) ??
+          adminMap.get(legacyAdministrationKey(pt.patientId, pt.farmacoNome, f.fascia, time)) ??
+          (doses.length === 1
+            ? (bandRecord ??
+              adminMap.get(legacyAdministrationKey(pt.patientId, pt.farmacoNome, f.fascia)))
+            : undefined);
+        let status: SlotAdministration['status'] = 'pending';
+        if (existing?.stato === 'erogata') status = 'administered';
+        if (existing?.stato === 'non_erogata') status = 'not_administered';
 
-      // REQ-093: match the structured schedule for this fascia to surface the exact
-      // fractional quantity + mg equivalent and the precise administration time.
-      const sched = (pt.schedules as ScheduleInput[] | undefined)?.find(
-        (s) => s.fascia === f.fascia,
-      );
-      const quantityLabel =
-        existing?.stato === 'erogata' && pt.doseMode === 'glucose_scale'
-          ? (existing.farmacoDose ?? 'Dose registrata')
-          : sched
-            ? pt.doseMode === 'glucose_scale'
-              ? 'Dose da calcolare sulla glicemia'
-              : scheduleDoseLabel(sched, pt.commercialStrengthValue, pt.commercialStrengthUnit)
-            : null;
+        const quantityLabel =
+          existing?.stato === 'erogata' && pt.doseMode === 'glucose_scale'
+            ? (existing.farmacoDose ?? 'Dose registrata')
+            : sched
+              ? pt.doseMode === 'glucose_scale'
+                ? 'Dose da calcolare sulla glicemia'
+                : scheduleDoseLabel(sched, pt.commercialStrengthValue, pt.commercialStrengthUnit)
+              : null;
 
-      const administrationEntry: SlotAdministration = {
-        administrationId: existing?.id ?? null,
-        therapyId: pt.id,
-        drugName: pt.farmacoNome,
-        dosage:
-          existing?.stato === 'erogata'
-            ? (existing.farmacoDose ?? pt.dosaggio)
-            : (quantityLabel ?? pt.dosaggio),
-        quantityLabel,
-        route: pt.viaSomministrazione || 'orale',
-        scheduledTime: sched?.time || f.ora,
-        status,
-        administeredAt: existing?.confirmedAt ? new Date(existing.confirmedAt).toISOString() : null,
-        administeredBy: existing?.operatoreNome ?? null,
-        notAdministeredReason: existing?.motivo ?? null,
-        doseMode: pt.doseMode === 'glucose_scale' ? 'glucose_scale' : 'fixed',
-        doseProtocol: pt.doseProtocol ?? null,
-      };
+        const administrationEntry: SlotAdministration = {
+          administrationId: existing?.id ?? null,
+          therapyId: pt.id,
+          drugName: pt.farmacoNome,
+          dosage:
+            existing?.stato === 'erogata'
+              ? (existing.farmacoDose ?? pt.dosaggio)
+              : (quantityLabel ?? pt.dosaggio),
+          quantityLabel,
+          route: pt.viaSomministrazione || 'orale',
+          scheduledTime: sched?.time || f.ora,
+          status,
+          administeredAt: existing?.confirmedAt
+            ? new Date(existing.confirmedAt).toISOString()
+            : null,
+          administeredBy: existing?.operatoreNome ?? null,
+          notAdministeredReason: existing?.motivo ?? null,
+          doseMode: pt.doseMode === 'glucose_scale' ? 'glucose_scale' : 'fixed',
+          doseProtocol: pt.doseProtocol ?? null,
+        };
 
-      if (!patientMap.has(pt.patientId)) {
-        patientMap.set(pt.patientId, {
-          patientId: pt.patientId,
-          firstName: patient.firstName,
-          lastName: patient.lastName,
-          codiceFiscale: patient.codiceFiscale,
-          dateOfBirth: patient.dateOfBirth,
-          location,
-          room,
-          bed,
-          administrations: [],
-        });
+        if (!patientMap.has(pt.patientId)) {
+          patientMap.set(pt.patientId, {
+            patientId: pt.patientId,
+            firstName: patient.firstName,
+            lastName: patient.lastName,
+            codiceFiscale: patient.codiceFiscale,
+            dateOfBirth: patient.dateOfBirth,
+            location,
+            room,
+            bed,
+            administrations: [],
+          });
+        }
+        patientMap.get(pt.patientId)!.administrations.push(administrationEntry);
       }
-      patientMap.get(pt.patientId)!.administrations.push(administrationEntry);
     }
 
     const patients = Array.from(patientMap.values());

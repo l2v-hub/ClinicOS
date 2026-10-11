@@ -39,8 +39,12 @@ test('therapy reads and writes apply patient scope before loading clinical data'
   );
   assert.equal(route.match(/takeConfirmation\(/g)?.length, 4, 'helper + confirm + not-given + PRN');
   assert.equal(
-    administrationRecord.match(/resolveAuthoritativeTherapy\(tx, input, actor\)/g)?.length,
+    administrationRecord.match(/resolveAuthoritativeTherapy\(tx, input, actor(?:\)|,)/g)?.length,
     2,
+  );
+  assert.match(
+    administrationRecord,
+    /resolveAuthoritativeTherapy\(tx, input, actor, \{\s*requireDoseMeasurement: false/,
   );
   assert.match(writer, /patient:\s*\{ registeredById: actor\.id \}/);
   assert.match(writer, /if \(!therapy\) throw new TherapyNotFoundError/);

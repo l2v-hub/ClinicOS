@@ -11,6 +11,7 @@
 // svuotata al logout (App.handleLogout → clearSessionCache) come cachedFetch.
 
 const store = new Map<string, unknown>();
+let epoch = 0;
 // Letture anticipate ancora in volo per chiave: chi monta nel frattempo aspetta quella invece di
 // aprire una seconda richiesta identica.
 const pending = new Map<string, Promise<unknown>>();
@@ -19,7 +20,13 @@ export function readSessionCache<T>(key: string): T | undefined {
   return store.get(key) as T | undefined;
 }
 
-export function writeSessionCache<T>(key: string, value: T): void {
+/** Capture before asynchronous work, including callbacks queued for browser idle time. */
+export function sessionCacheEpoch(): number {
+  return epoch;
+}
+
+export function writeSessionCache<T>(key: string, value: T, expectedEpoch = epoch): void {
+  if (expectedEpoch !== epoch) return;
   store.set(key, value);
 }
 
@@ -29,12 +36,18 @@ export function invalidateSessionCache(prefix: string): void {
 }
 
 export function clearSessionCache(): void {
+  epoch++;
   store.clear();
   pending.clear();
 }
 
 /** Registra una lettura anticipata in volo per la chiave (rimossa al termine, esito qualsiasi). */
-export function trackSessionCache(key: string, promise: Promise<unknown>): void {
+export function trackSessionCache(
+  key: string,
+  promise: Promise<unknown>,
+  expectedEpoch = epoch,
+): void {
+  if (expectedEpoch !== epoch) return;
   pending.set(key, promise);
   // Gestisce entrambi gli esiti senza creare una catena che rigetta (una lettura fallita non deve
   // diventare una unhandled rejection: chi aspetta ricevera' comunque un pending gia' risolto).

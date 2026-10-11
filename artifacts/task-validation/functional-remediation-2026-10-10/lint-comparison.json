@@ -1,0 +1,218 @@
+[
+  {
+    "file": "frontend/src/App.tsx",
+    "baseline": 12,
+    "current": 12,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/MultiPatientParametri.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/TherapyGiroRows.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/TherapySlotModal.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/__tests__/operationalIdentity.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/__tests__/patientTherapySlotAndForm.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+    "baseline": 2,
+    "current": 1,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/cartella/PatientTherapySlotDetail.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+    "baseline": 4,
+    "current": 4,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+    "baseline": 2,
+    "current": 2,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/cartella/__tests__/diaryTherapy.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/cartella/diaryTherapy.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/usePatientListPage.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/shared/intake/DischargeTherapyReview.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/shared/intake/ImportProposalsReview.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/shared/intake/IntakeTherapySummary.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/shared/intake/TherapyImportSource.tsx",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/shared/intake/__tests__/therapyInventoryRegimen.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/shared/intake/__tests__/therapySourceInventory.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/shared/intake/dischargeTherapy.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/shared/intake/intakeTherapies.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/__tests__/sessionCache.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/__tests__/therapyCompleteness.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/__tests__/therapyPages.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/assessments/assessmentCatalogState.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/patientDetailPrefetch.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/patientParametersPrefetch.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/patientTherapyCalendarRead.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/sessionCache.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/therapyAdministrationWrite.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/therapyCompleteness.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/therapyPages.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/usePatientDocuments.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/types.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  }
+]

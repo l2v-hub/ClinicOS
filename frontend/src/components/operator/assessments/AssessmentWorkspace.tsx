@@ -285,8 +285,8 @@ function AssessmentSession({
         title={definition.title}
         actions={
           canCreate && (
-            <button type="button" className="btn-primary assessment-catalog-icon" aria-label={type === 'painad' ? 'Nuova valutazione PAINAD' : 'Nuova compilazione'} title="Nuova compilazione" onClick={() => create()}>
-              <span aria-hidden="true">＋</span>
+            <button type="button" className="btn-primary" aria-label={type === 'painad' ? 'Nuova valutazione PAINAD' : 'Nuova compilazione'} title="Nuova compilazione" onClick={() => create()}>
+              Nuova compilazione
             </button>
           )
         }

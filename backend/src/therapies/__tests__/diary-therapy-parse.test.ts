@@ -410,10 +410,10 @@ for (const text of [
 
 // ── Orari e conflitti ────────────────────────────────────────────────────────────────────
 
-test('due orari nella stessa fascia (ore 8 e 10) sono un conflitto', () => {
+test('due orari distinti nella stessa fascia restano due dosi', () => {
   const r = parse('Ramipril 5 mg 1 cpr per os ore 8 e 10');
-  assert.deepEqual(r.fasciaConflicts, ['mattina: 08:00, 10:00']);
-  assert.equal(r.row.stato, 'da_verificare');
+  assert.deepEqual(r.fasciaConflicts, []);
+  assert.deepEqual(r.row.orari, ['08:00', '10:00']);
 });
 
 test('lo stesso orario ripetuto è un conflitto', () => {

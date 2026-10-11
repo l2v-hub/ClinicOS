@@ -7,7 +7,7 @@ import { RosterOrderControl } from '../shared/RosterOrderControl';
 import { useRosterOrderContext } from '../shared/RosterOrderContext';
 import { API_URL } from '../../config';
 import { operatorHeaders } from '../../lib/operatorSession';
-import { readSessionCache, writeSessionCache } from '../../lib/sessionCache';
+import { readSessionCache, sessionCacheEpoch, writeSessionCache } from '../../lib/sessionCache';
 import { parametersCacheKey } from '../../lib/patientParametersPrefetch';
 import { facilityLocalMinute } from '../../lib/facilityTime';
 import { fetchPatientPage } from '../../lib/patientPage';
@@ -96,6 +96,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
 
   useEffect(() => {
     const version = ++generation.current;
+    const epoch = sessionCacheEpoch();
     const controller = new AbortController();
     moreController.current?.abort();
     let detailedReady = false;
@@ -160,7 +161,12 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
               signal: controller.signal,
             },
           );
-          if (controller.signal.aborted || version !== generation.current) return;
+          if (
+            controller.signal.aborted ||
+            epoch !== sessionCacheEpoch() ||
+            version !== generation.current
+          )
+            return;
           acceptRoster(page.roster);
           detailedReady = true;
           refreshed = mergePatientParametersPage(
@@ -181,7 +187,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
           cursor = needsMore ? page.nextCursor! : undefined;
         } while (cursor);
         loadedQuery.current = filterKey;
-        writeSessionCache(parametersCacheKey(filters.q ?? '', rosterKey, day), refreshed);
+        writeSessionCache(parametersCacheKey(filters.q ?? '', rosterKey, day), refreshed, epoch);
       })()
         .catch(async (cause) => {
           if (!controller.signal.aborted && version === generation.current) {

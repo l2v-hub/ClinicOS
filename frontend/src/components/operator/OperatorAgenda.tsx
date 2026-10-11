@@ -778,6 +778,13 @@ export function OperatorAgenda({
           operatoreNome={nomeOperatore}
         />
       )}
+
+      {view !== 'giornaliero' && (
+        <p className="empty-state-card" role="status">
+          Le terapie sono disponibili nella vista Giorno. Seleziona un giorno per vedere le sue
+          somministrazioni.
+        </p>
+      )}
       {view === 'giornaliero' && activeSlot && onConfirmTherapy && onNotAdministeredTherapy && (
         <TherapySlotModal
           slot={activeSlot}

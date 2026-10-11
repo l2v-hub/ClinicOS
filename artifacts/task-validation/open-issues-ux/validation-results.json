@@ -1,0 +1,74 @@
+{
+  "base_commit": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
+  "branch": "codex/resolve-open-issues",
+  "frontend": {
+    "command": "npm test --workspace frontend",
+    "tests": 1321,
+    "passed": 1321,
+    "failed": 0,
+    "skipped": 0,
+    "exit_code": 0
+  },
+  "backend": {
+    "command": "npm test --workspace backend",
+    "environment": [
+      "DATABASE_URL: isolated clinicos_test on 127.0.0.1",
+      "AUTH_MODE=demo",
+      "NODE_ENV=test"
+    ],
+    "concurrent_pass": {
+      "tests": 1788,
+      "passed": 1783,
+      "failed": 0,
+      "skipped": 5
+    },
+    "isolated_pass": {
+      "tests": 48,
+      "passed": 48,
+      "failed": 0,
+      "skipped": 0
+    },
+    "total": {
+      "tests": 1836,
+      "passed": 1831,
+      "failed": 0,
+      "skipped": 5
+    },
+    "exit_code": 0,
+    "skip_requirements": [
+      "ARCHIVE_DOCUMENT_DB_TEST with clinicos_sorting database",
+      "BUG428_SYNTHETIC_CLUSTER with dedicated native PostgreSQL cluster"
+    ]
+  },
+  "build": {
+    "command": "npm run build",
+    "frontend": "passed",
+    "backend": "passed",
+    "exit_code": 0
+  },
+  "secret_scan": {
+    "findings": 0,
+    "exit_code": 0
+  },
+  "browser": {
+    "results": "browser-results.json",
+    "page_errors": 0
+  },
+  "lint": {
+    "global": {
+      "errors": 105,
+      "warnings": 16,
+      "status": "pre-existing failures"
+    },
+    "modified_typescript_files": 23,
+    "baseline_findings": 19,
+    "current_findings": 19,
+    "introduced_findings": 0
+  },
+  "unrun": [
+    "Real screen reader",
+    "Physical touch device and gloves",
+    "Intense-light hardware test",
+    "Department agreement on clinical priority rules"
+  ]
+}

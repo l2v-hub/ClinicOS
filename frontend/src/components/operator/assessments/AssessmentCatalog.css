@@ -22,7 +22,6 @@
 .nrs-legacy dd { margin: 4px 0 0; overflow-wrap: anywhere; }
 .nrs-legacy-note { white-space: pre-wrap; overflow-wrap: anywhere; }
 .nrs-print-surface { display: none; }
-.assessment-catalog-icon { width:40px; height:40px; min-width:40px; min-height:40px; padding:0; display:grid; place-items:center; font-size:24px; }
 .assessment-draft-chip { padding:2px 8px; border-radius:20px; width:fit-content; background:var(--amber-bg,#fdf3e2); color:#8a5300; font-size:12px; }
 @media (max-width: 900px) { .assessment-catalog-row { align-items:flex-start; flex-direction:column; } .assessment-catalog-actions { display:flex; } }
 @media (max-width: 768px) {
