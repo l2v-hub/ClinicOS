@@ -85,8 +85,6 @@ export function StepVerifica({
         : 'Dati anagrafici obbligatori',
       ok: missingDemo.length === 0,
     },
-    { label: 'Conferma i dati anagrafici', ok: demoAccepted },
-    { label: 'Conferma la terapia', ok: therapyAccepted },
     ...invalidTherapies.flatMap((t) =>
       t.diagnostics.map((issue) => ({
         label: `Terapia ${t.index}: ${issue.message}`,
@@ -100,7 +98,12 @@ export function StepVerifica({
   return (
     <div className="step-verifica" data-testid="intake-step-5">
       <h3 className="step-verifica__title">Riepilogo</h3>
-      {legacyPainPresent(data) && <p role="status">I dati dolore precedenti restano conservati nella bozza d’ingresso e consultabili nello storico NRS. Non saranno confermati come nuove valutazioni.</p>}
+      {legacyPainPresent(data) && (
+        <p role="status">
+          I dati dolore precedenti restano conservati nella bozza d’ingresso e consultabili nello
+          storico NRS. Non saranno confermati come nuove valutazioni.
+        </p>
+      )}
       <DemographicsStatus value={a} onEdit={onReviewDemographics} busy={busy} />
 
       <section className="step-verifica__section">
@@ -138,17 +141,21 @@ export function StepVerifica({
             ) : null;
           })}
         </dl>
-        {showAcceptance && <label className="step-verifica__accept" data-testid="accept-demographics">
-          <input
-            type="checkbox"
-            checked={demoAccepted}
-            disabled={busy}
-            onChange={(e) =>
-              onUpdateSection('_accepted', { ...accepted, demographics: e.target.checked })
-            }
-          />
-          <span>Confermo i dati anagrafici disponibili; i dati mancanti restano da completare</span>
-        </label>}
+        {showAcceptance && (
+          <label className="step-verifica__accept" data-testid="accept-demographics">
+            <input
+              type="checkbox"
+              checked={demoAccepted}
+              disabled={busy}
+              onChange={(e) =>
+                onUpdateSection('_accepted', { ...accepted, demographics: e.target.checked })
+              }
+            />
+            <span>
+              Confermo i dati anagrafici disponibili; i dati mancanti restano da completare
+            </span>
+          </label>
+        )}
       </section>
 
       {/* #281: recap leggibile — allergie, terapie, anamnesi/diagnosi con i VALORI reali */}
@@ -205,21 +212,23 @@ export function StepVerifica({
         {/* #282: la conferma terapia deve essere sbloccabile QUI — prima viveva solo nello step 3
             (Clinica): chi arrivava al riepilogo senza averla spuntata trovava il bottone "Crea
             paziente" disabilitato senza alcun controllo per rimediare. */}
-        {showAcceptance && <label className="step-verifica__accept" data-testid="accept-therapy-verifica">
-          <input
-            type="checkbox"
-            checked={therapyAccepted}
-            disabled={busy}
-            onChange={(e) =>
-              onUpdateSection('_accepted', { ...accepted, therapy: e.target.checked })
-            }
-          />
-          <span>
-            {therapies.length > 0
-              ? 'Confermo di aver revisionato la terapia'
-              : 'Confermo: nessuna terapia da inserire'}
-          </span>
-        </label>}
+        {showAcceptance && (
+          <label className="step-verifica__accept" data-testid="accept-therapy-verifica">
+            <input
+              type="checkbox"
+              checked={therapyAccepted}
+              disabled={busy}
+              onChange={(e) =>
+                onUpdateSection('_accepted', { ...accepted, therapy: e.target.checked })
+              }
+            />
+            <span>
+              {therapies.length > 0
+                ? 'Confermo di aver revisionato la terapia'
+                : 'Confermo: nessuna terapia da inserire'}
+            </span>
+          </label>
+        )}
         {review.length > 0 && onReviewTherapies && (
           <button
             type="button"
@@ -301,11 +310,13 @@ export function StepVerifica({
 
       {error && <p className="import-modal__error">{error}</p>}
 
-      {showCreate && <div className="step-verifica__actions">
-        <button className="btn-success" onClick={onConfirm} disabled={busy || !canCreate}>
-          <IcoCheck /> {busy ? 'Creazione…' : 'Crea paziente'}
-        </button>
-      </div>}
+      {showCreate && (
+        <div className="step-verifica__actions">
+          <button className="btn-success" onClick={onConfirm} disabled={busy || !canCreate}>
+            <IcoCheck /> {busy ? 'Creazione…' : 'Crea paziente'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

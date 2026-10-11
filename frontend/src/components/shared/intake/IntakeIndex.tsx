@@ -1,4 +1,4 @@
-// Indice della scheda d'ingresso (pagina unica, HMI 1): sezioni con stato, passaggi obbligatori
+// Indice della scheda d'ingresso (pagina unica, HMI 1): sezioni con stato, problemi da risolvere
 // mancanti (ciascuno porta alla sua sezione) e azioni finali.
 import { IcoCheck } from '../../../icons';
 import {
@@ -12,6 +12,7 @@ interface Props {
   sections: Record<IntakeSectionId, IntakeSectionStatus>;
   active: IntakeSectionId;
   missing: IntakeMissingStep[];
+  notes?: IntakeMissingStep[];
   onJump: (id: IntakeSectionId) => void;
   onMissing: (step: IntakeMissingStep) => void;
   busy: boolean;
@@ -56,6 +57,7 @@ export function IntakeIndex({
   sections,
   active,
   missing,
+  notes = [],
   onJump,
   onMissing,
   busy,
@@ -92,7 +94,7 @@ export function IntakeIndex({
         {!ready ? null : n > 0 ? (
           <details className="intake-index__missing" data-testid="intake-missing">
             <summary>
-              Mancano {n} {n === 1 ? 'passaggio obbligatorio' : 'passaggi obbligatori'}
+              Mancano {n} {n === 1 ? 'problema da risolvere' : 'problemi da risolvere'}
             </summary>
             <ul>
               {missing.map((m, i) => (
@@ -113,6 +115,25 @@ export function IntakeIndex({
           <p className="intake-index__ready" data-testid="intake-missing">
             Pronto per la creazione
           </p>
+        )}
+        {ready && notes.length > 0 && (
+          <details className="intake-index__missing" data-testid="intake-notes">
+            <summary>Dati non completi ({notes.length}) · si può creare comunque</summary>
+            <ul>
+              {notes.map((m, i) => (
+                <li key={i}>
+                  <button
+                    type="button"
+                    className="link-btn"
+                    disabled={busy}
+                    onClick={() => onMissing(m)}
+                  >
+                    {m.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </details>
         )}
         {error && (
           <p className="import-modal__error" role="alert">

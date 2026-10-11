@@ -42,7 +42,13 @@ function filled(value: unknown): boolean {
 export function intakeProgress(
   data: Record<string, unknown>,
   options: { moduleSelected?: boolean; proposalUncertain?: boolean } = {},
-): { sections: Record<IntakeSectionId, IntakeSectionStatus>; missing: IntakeMissingStep[] } {
+): {
+  sections: Record<IntakeSectionId, IntakeSectionStatus>;
+  /** Blocca la creazione: valori non validi o decisioni pendenti. */
+  missing: IntakeMissingStep[];
+  /** Non blocca: la scheda si può creare anche con dati incompleti, ma l'operatore lo vede. */
+  notes: IntakeMissingStep[];
+} {
   const anagrafica = (data.anagrafica ?? {}) as Record<string, unknown>;
   const accepted = (data._accepted ?? {}) as { demographics?: boolean; therapy?: boolean };
   const demoErrors = Object.values(intakeDemographicErrors(anagrafica));
@@ -59,8 +65,9 @@ export function intakeProgress(
       label: `Dati anagrafici da correggere: ${demoErrors.join(', ')}`,
       section: 'anagrafica',
     });
+  const notes: IntakeMissingStep[] = [];
   if (accepted.demographics !== true)
-    missing.push({ label: 'Conferma i dati anagrafici', section: 'anagrafica' });
+    notes.push({ label: 'Anagrafica non confermata', section: 'anagrafica' });
   for (const row of invalid)
     for (const issue of row.diagnostics)
       missing.push({
@@ -75,7 +82,17 @@ export function intakeProgress(
     });
   if (options.proposalUncertain)
     missing.push({ label: 'Decisione in attesa di risposta', section: 'terapia' });
-  if (accepted.therapy !== true) missing.push({ label: 'Conferma la terapia', section: 'terapia' });
+  if (accepted.therapy !== true)
+    notes.push({
+      label: review.length ? 'Terapia non confermata' : 'Nessuna terapia inserita',
+      section: 'terapia',
+    });
+  if (!filled(anagrafica.dateOfBirth))
+    notes.push({ label: 'Data di nascita mancante', section: 'anagrafica' });
+  if (!filled(anagrafica.codiceFiscale))
+    notes.push({ label: 'Codice fiscale mancante', section: 'anagrafica' });
+  if (!options.moduleSelected)
+    notes.push({ label: 'Nessun modulo pianificato', section: 'moduli' });
   // Proposte dei documenti sui campi: il backend rifiuta la conferma (409 field_proposals_pending).
   const fieldProposals = pendingFieldProposals(data).length;
   if (fieldProposals > 0)
@@ -86,8 +103,8 @@ export function intakeProgress(
     });
 
   const count = (section: IntakeSectionId) => missing.filter((m) => m.section === section);
-  const anagraficaIssues = count('anagrafica').filter((m) => !m.label.startsWith('Conferma'));
-  const terapiaIssues = count('terapia').filter((m) => !m.label.startsWith('Conferma'));
+  const anagraficaIssues = count('anagrafica');
+  const terapiaIssues = count('terapia');
 
   const sections: Record<IntakeSectionId, IntakeSectionStatus> = {
     anagrafica: anagraficaIssues.length
@@ -108,5 +125,5 @@ export function intakeProgress(
     moduli: options.moduleSelected ? { kind: 'done' } : { kind: 'empty' },
     riepilogo: missing.length ? { kind: 'issues', count: missing.length } : { kind: 'done' },
   };
-  return { sections, missing };
+  return { sections, missing, notes };
 }
