@@ -73,8 +73,15 @@ const ALIASES: Array<{ field: DraftTextField; patterns: RegExp[] }> = [
       /terapia consigliat/,
       /terapia in atto/,
       /\bterapia\b/,
+      /\bterapie\b/,
       /^td\b/,
       /\bt\.d\.\b/,
+      // 2026-10-11: titoli usati dalle lettere al posto di "Terapia" (prima il loro elenco
+      // finiva nella sezione precedente).
+      /^farmaci\b/,
+      /^prescrizion/,
+      /piano terapeutic/,
+      /schema terapeutic/,
     ],
   },
   {
@@ -109,7 +116,8 @@ const MD_HEADING = /^\s{0,3}#{1,6}\s+(.+?)\s*$/;
 // starts a THERAPY block even mid-content and even when the first drug is on the same line. This
 // prevents a combined "Diagnosi e terapia …" heading from bucketing the whole drug list into DIAGNOSI
 // (diagnosi e terapia farmacologica devono restare separate).
-const THERAPY_LABEL = /^(terapi[ae][^:\n]{0,60}|t\.?d\.?)\s*:/i;
+const THERAPY_LABEL =
+  /^(terapi[ae][^:\n]{0,60}|t\.?d\.?|farmaci[^:\n]{0,40}|prescrizion[ei][^:\n]{0,40}|(?:piano|schema) terapeutico[^:\n]{0,40})\s*:/i;
 
 // Quanto lontano dall'inizio del titolo puo' stare la parola chiave della sezione.
 // "Allergie" apre il titolo; in "DUBBIA REAZIONE ALLERGICA AL CEFTAZIDIME" la parola

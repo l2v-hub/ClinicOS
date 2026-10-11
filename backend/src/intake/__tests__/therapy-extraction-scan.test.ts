@@ -318,3 +318,13 @@ test('R2: "4 U glicemia 200-250" è una fascia come "6 U se glicemia 251-300"', 
     { minMgDl: 251, maxMgDl: 300, units: 6 },
   ]);
 });
+
+test('2026-10-11: i titoli "Farmaci in uso:" / "Piano terapeutico" non diventano righe farmaco', () => {
+  const rows = parseDischargeTherapy(
+    'Farmaci in uso:\nRAMIPRIL CPR 5 MG (OS) 1 Cpr ore 08:00\nPiano terapeutico\nLASIX CPR 25 MG (OS) 1 Cpr ore 08:00',
+  );
+  assert.deepEqual(
+    rows.map((r) => r.farmacoNome),
+    ['RAMIPRIL', 'LASIX'],
+  );
+});
