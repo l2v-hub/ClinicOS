@@ -1,5 +1,8 @@
 import type { DischargeNarrativeDraft } from '../../sections/narrative.js';
-import { parseDischargeTherapy } from '../../../intake/parse-discharge-therapy.js';
+import {
+  parseDischargeTherapy,
+  therapyRowsFromNarrative,
+} from '../../../intake/parse-discharge-therapy.js';
 import { hash, object, type Json } from './model.js';
 import { importSource } from './review.js';
 import type { Conflict, Decision, GroupResult } from './results.js';
@@ -74,7 +77,7 @@ export function pageTherapyRows(result: Json): Json[] {
     const groupConflicts = conflicts.filter((c) =>
       c.candidates.some((candidate) => candidate.sources.some((s) => s.groupId === group.groupId)),
     );
-    for (const row of parseDischargeTherapy(group._narrative.therapyText ?? '')) {
+    for (const row of therapyRowsFromNarrative(group._narrative as unknown as Json)) {
       const matches = groupConflicts.filter(
         (c) =>
           c.field === 'cartella.terapie' ||

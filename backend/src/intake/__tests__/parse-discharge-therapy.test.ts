@@ -218,13 +218,14 @@ test('#296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia ter
   );
 });
 
-test('#296 AC2: tutto ciò che segue il terminatore è escluso (anche paragrafi successivi)', () => {
+test('2026-10-11: un farmaco DOPO un paragrafo di prosa resta un farmaco (la prosa è saltata)', () => {
   const rows = parseDischargeTherapy(
     `${FIXTURE}\n\n${PROSE}\n\nAUGMENTIN CPR 875 MG (OS) 1 Cpr ore 09:00`,
   );
-  // Il requisito è esplicito: dopo il primo paragrafo non farmacologico la terapia È terminata.
-  assert.equal(rows.length, 10);
-  assert.ok(!rows.some((r) => r.farmacoNome === 'AUGMENTIN'));
+  // Requisito superato da quello del 2026-10-11: farmaco + dose + periodicità è terapia ovunque.
+  assert.equal(rows.length, 11);
+  assert.equal(rows[10].farmacoNome, 'AUGMENTIN');
+  assert.ok(rows.every((r) => r.farmacoNome !== 'SI' && r.farmacoNome !== 'PROSEGUIRE'));
 });
 
 test('#296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati', () => {

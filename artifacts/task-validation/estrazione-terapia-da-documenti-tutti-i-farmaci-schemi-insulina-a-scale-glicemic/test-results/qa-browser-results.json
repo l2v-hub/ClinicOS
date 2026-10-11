@@ -1,0 +1,166 @@
+{
+  "job": "qa-tx-page-mv3ljogg",
+  "today": "2026-10-11",
+  "results": [
+    {
+      "name": "POST /intake/drafts/from-import hit the real backend (201)",
+      "pass": true,
+      "detail": "201"
+    },
+    {
+      "name": "AC1/AC2 UI shows a therapy row for RAMIPRIL",
+      "pass": true,
+      "detail": "RAMIPRIL,BISOPROLOLO,HUMALOG,ATORVASTATINA,PANTOPRAZOLO,DURANTE"
+    },
+    {
+      "name": "AC1/AC2 UI shows a therapy row for BISOPROLOLO",
+      "pass": true,
+      "detail": "RAMIPRIL,BISOPROLOLO,HUMALOG,ATORVASTATINA,PANTOPRAZOLO,DURANTE"
+    },
+    {
+      "name": "AC1/AC2 UI shows a therapy row for HUMALOG",
+      "pass": true,
+      "detail": "RAMIPRIL,BISOPROLOLO,HUMALOG,ATORVASTATINA,PANTOPRAZOLO,DURANTE"
+    },
+    {
+      "name": "AC1/AC2 UI shows a therapy row for ATORVASTATINA",
+      "pass": true,
+      "detail": "RAMIPRIL,BISOPROLOLO,HUMALOG,ATORVASTATINA,PANTOPRAZOLO,DURANTE"
+    },
+    {
+      "name": "AC1/AC2 UI shows a therapy row for PANTOPRAZOLO",
+      "pass": true,
+      "detail": "RAMIPRIL,BISOPROLOLO,HUMALOG,ATORVASTATINA,PANTOPRAZOLO,DURANTE"
+    },
+    {
+      "name": "AC1/AC2 UI shows a therapy row for FUROSEMIDE",
+      "pass": false,
+      "detail": "RAMIPRIL,BISOPROLOLO,HUMALOG,ATORVASTATINA,PANTOPRAZOLO,DURANTE"
+    },
+    {
+      "name": "AC1 no phantom rows (exactly 6 rows)",
+      "pass": true,
+      "detail": "6"
+    },
+    {
+      "name": "AC1 page-2 drug ATORVASTATINA stato ok",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC1 page-2 drug PANTOPRAZOLO stato ok",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "QA finding: outside-section row farmacoNome (expected FUROSEMIDE)",
+      "pass": false,
+      "detail": "DURANTE"
+    },
+    {
+      "name": "AC2 outside-section row stato da_verificare",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC2 outside-section row shows \"da verificare\" badge",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC2 outside-section note \"Trovata fuori dalla sezione terapia\" visible in the form",
+      "pass": true,
+      "detail": "Trovata fuori dalla sezione terapia · è iniziata terapia con Furosemide al mattino."
+    },
+    {
+      "name": "AC2 outside-section original sentence shown",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC3 insulin row in glucose-scale mode (pressed toggle)",
+      "pass": true,
+      "detail": "Tutti i giorni | Schema glicemico"
+    },
+    {
+      "name": "AC3 seeded insulin glucoseScale == document ranges",
+      "pass": true,
+      "detail": "[{\"units\":0,\"maxMgDl\":149,\"minMgDl\":10},{\"units\":2,\"maxMgDl\":200,\"minMgDl\":150},{\"units\":4,\"maxMgDl\":250,\"minMgDl\":201},{\"units\":6,\"maxMgDl\":null,\"minMgDl\":251}]"
+    },
+    {
+      "name": "AC5 Data inizio = local today (2026-10-11) on all rows",
+      "pass": true,
+      "detail": "[[\"RAMIPRIL\",\"2026-10-11\"],[\"BISOPROLOLO\",\"2026-10-11\"],[\"HUMALOG\",\"2026-10-11\"],[\"ATORVASTATINA\",\"2026-10-11\"],[\"PANTOPRAZOLO\",\"2026-10-11\"],[\"DURANTE\",\"2026-10-11\"]]"
+    },
+    {
+      "name": "AC5 seeded dataInizio (backend, Europe/Rome) = today",
+      "pass": true,
+      "detail": "[\"2026-10-11\",\"2026-10-11\",\"2026-10-11\",\"2026-10-11\",\"2026-10-11\",\"2026-10-11\"]"
+    },
+    {
+      "name": "AC5 Data presa in carico prefilled = 2026-10-11",
+      "pass": true,
+      "detail": "2026-10-11 11:04"
+    },
+    {
+      "name": "AC5 Ora presa in carico prefilled",
+      "pass": true,
+      "detail": "11:04"
+    },
+    {
+      "name": "Crea paziente enabled after deferring the outside row",
+      "pass": true,
+      "detail": "alerts=0"
+    },
+    {
+      "name": "Patient created",
+      "pass": true,
+      "detail": "cmv3lkdjf001lfglpc2e612cs"
+    },
+    {
+      "name": "AC4 PatientTherapy insulin doseMode = glucose_scale",
+      "pass": true,
+      "detail": "glucose_scale"
+    },
+    {
+      "name": "AC4 PatientTherapy insulin doseProtocol.rules == document ranges",
+      "pass": true,
+      "detail": "{\"kind\":\"blood_glucose\",\"rules\":[{\"units\":0,\"maxMgDl\":149,\"minMgDl\":10},{\"units\":2,\"maxMgDl\":200,\"minMgDl\":150},{\"units\":4,\"maxMgDl\":250,\"minMgDl\":201},{\"units\":6,\"maxMgDl\":null,\"minMgDl\":251}],\"doseUnit\":\"unità\",\"measurementUnit\":\"mg/dL\"}"
+    },
+    {
+      "name": "Outside-section row not prescribed (deferred)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "PatientTherapy created for RAMIPRIL",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "PatientTherapy created for BISOPROLOLO",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "PatientTherapy created for ATORVASTATINA",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "PatientTherapy created for PANTOPRAZOLO",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "After reload the therapy view shows HUMALOG",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "After reload the therapy view shows the glucose scale ranges",
+      "pass": false,
+      "detail": ""
+    }
+  ]
+}

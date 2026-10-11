@@ -1,0 +1,39 @@
+PASS  POST /intake/drafts/from-import hit the real backend (201)  → 201
+UI rows: [["RAMIPRIL","ok"],["BISOPROLOLO","ok"],["HUMALOG","ok"],["ATORVASTATINA","ok"],["PANTOPRAZOLO","ok"],["DURANTE","da_verificare"]]
+PASS  AC1/AC2 UI shows a therapy row for RAMIPRIL  → RAMIPRIL,BISOPROLOLO,HUMALOG,ATORVASTATINA,PANTOPRAZOLO,DURANTE
+PASS  AC1/AC2 UI shows a therapy row for BISOPROLOLO  → RAMIPRIL,BISOPROLOLO,HUMALOG,ATORVASTATINA,PANTOPRAZOLO,DURANTE
+PASS  AC1/AC2 UI shows a therapy row for HUMALOG  → RAMIPRIL,BISOPROLOLO,HUMALOG,ATORVASTATINA,PANTOPRAZOLO,DURANTE
+PASS  AC1/AC2 UI shows a therapy row for ATORVASTATINA  → RAMIPRIL,BISOPROLOLO,HUMALOG,ATORVASTATINA,PANTOPRAZOLO,DURANTE
+PASS  AC1/AC2 UI shows a therapy row for PANTOPRAZOLO  → RAMIPRIL,BISOPROLOLO,HUMALOG,ATORVASTATINA,PANTOPRAZOLO,DURANTE
+FAIL  AC1/AC2 UI shows a therapy row for FUROSEMIDE  → RAMIPRIL,BISOPROLOLO,HUMALOG,ATORVASTATINA,PANTOPRAZOLO,DURANTE
+PASS  AC1 no phantom rows (exactly 6 rows)  → 6
+PASS  AC1 page-2 drug ATORVASTATINA stato ok
+PASS  AC1 page-2 drug PANTOPRAZOLO stato ok
+FAIL  QA finding: outside-section row farmacoNome (expected FUROSEMIDE)  → DURANTE
+PASS  AC2 outside-section row stato da_verificare
+PASS  AC2 outside-section row shows "da verificare" badge
+PASS  AC2 outside-section note "Trovata fuori dalla sezione terapia" visible in the form  → Trovata fuori dalla sezione terapia · è iniziata terapia con Furosemide al mattino.
+PASS  AC2 outside-section original sentence shown
+PASS  AC3 insulin row in glucose-scale mode (pressed toggle)  → Tutti i giorni | Schema glicemico
+PASS  AC3 seeded insulin glucoseScale == document ranges  → [{"units":0,"maxMgDl":149,"minMgDl":10},{"units":2,"maxMgDl":200,"minMgDl":150},{"units":4,"maxMgDl":250,"minMgDl":201},{"units":6,"maxMgDl":null,"minMgDl":251}]
+Data inizio: [["RAMIPRIL","2026-10-11"],["BISOPROLOLO","2026-10-11"],["HUMALOG","2026-10-11"],["ATORVASTATINA","2026-10-11"],["PANTOPRAZOLO","2026-10-11"],["DURANTE","2026-10-11"]]
+PASS  AC5 Data inizio = local today (2026-10-11) on all rows  → [["RAMIPRIL","2026-10-11"],["BISOPROLOLO","2026-10-11"],["HUMALOG","2026-10-11"],["ATORVASTATINA","2026-10-11"],["PANTOPRAZOLO","2026-10-11"],["DURANTE","2026-10-11"]]
+PASS  AC5 seeded dataInizio (backend, Europe/Rome) = today  → ["2026-10-11","2026-10-11","2026-10-11","2026-10-11","2026-10-11","2026-10-11"]
+PASS  AC5 Data presa in carico prefilled = 2026-10-11  → 2026-10-11 11:02
+PASS  AC5 Ora presa in carico prefilled  → 11:02
+PASS  Crea paziente enabled after deferring the outside row  → alerts=0
+FAIL  Patient created
+DB therapies: []
+FAIL  AC4 PatientTherapy insulin doseMode = glucose_scale
+FAIL  AC4 PatientTherapy insulin doseProtocol.rules == document ranges
+PASS  Outside-section row not prescribed (deferred)
+FAIL  PatientTherapy created for RAMIPRIL
+FAIL  PatientTherapy created for BISOPROLOLO
+FAIL  PatientTherapy created for ATORVASTATINA
+FAIL  PatientTherapy created for PANTOPRAZOLO
+FAIL  script completed without exception  → locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByText(/QAVerdi/).first()[22m
+
+
+21/31 checks passed
