@@ -449,13 +449,17 @@ test('multi-farmaco AC4: le forme legittime multi-token non regrediscono', () =>
 });
 
 test('AC4: un numero non collocato porta la riga a da_verificare', () => {
-  // 67G/100ML e' una concentrazione che nessun campo strutturato ha raccolto: l'operatore
-  // deve vederla, perche' un numero perso in una prescrizione e' clinicamente rilevante.
+  // 2026-10-11: 67G/100ML e' la concentrazione e diventa il dosaggio; il volume della confezione
+  // (200ML) scavalcato e' un'interpretazione, quindi la riga resta sotto gli occhi dell'operatore.
   const r = parseTherapyLine(
     'LATTULAC*SCIR 200ML 67G/100ML (OS) 1 Dosi ore 08:00 dal 03/07/2026 (Classe )',
   );
-  assert.match(r.note, /67G\/100ML/i);
+  assert.equal(r.dosaggio, '67G/100ML');
   assert.equal(r.stato, 'da_verificare');
+  // Un numero che nessun campo raccoglie resta in note e declassa la riga.
+  const n = parseTherapyLine('RAMIPRIL CPR 5 MG 1 Cpr 37 ore 08:00');
+  assert.match(n.note, /37/);
+  assert.equal(n.stato, 'da_verificare');
 });
 
 test('PO03: the administration list stops before monitoring instructions', () => {

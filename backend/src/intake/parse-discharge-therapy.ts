@@ -45,7 +45,7 @@ const ROUTES = [
 // Bug #274: quantity units — include full Italian words (compressa/e, capsula/e, fiala/e, bustina/e,
 // goccia/gocce, supposta/e) besides the abbreviated forms.
 const UNITS =
-  'Cpr|Cps|Cp|compress[ae]|capsul[ae]|Dosi|Dose|Fl|fial[ae]|Bs|Bust|bustin[ae]|ml|mL|gtt|gocce|goccia|gc|Puff|Supp|suppost[ae]|Cerotti|Cerotto';
+  'Cpr|Cps|Cp|compress[ae]|capsul[ae]|Dosi|Dose|Fl|F|fial[ae]|Bs|Bust|bustin[ae]|ml|mL|gtt|gocce|goccia|gc|Puff|Supp|suppost[ae]|Cerotti|Cerotto';
 const DAYS = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 
 const ROUTE_RE = new RegExp(`\\(\\s*(${ROUTES.join('|')})\\s*\\)`, 'i');
@@ -84,9 +84,20 @@ function trovaVia(text: string): { code: string; index: number; length: number }
 function detectRoute(text: string): string {
   return trovaVia(text)?.code ?? '';
 }
-const QTY_RE = new RegExp(`\\b(\\d+(?:\\/\\d+)?)\\s+(${UNITS})\\b`, 'i');
-const DOSE_RE =
-  /\b(\d+(?:[.,]\d+)?)\s?(MGR|MCG|MG|GR|G|UI|ML)\b(\s?\/\s?\d+(?:[.,]\d+)?\s?(?:UI|ML|MG|MGR|MCG|GR|G))?/i;
+// Il numero non è la coda di un decimale o di una frazione: "0,2 ML" non è la quantità "2 ML".
+const QTY_RE = new RegExp(`(?<![\\d.,/])\\b(\\d+(?:\\/\\d+)?)\\s+(${UNITS})\\b`, 'i');
+// Dosaggi composti restano interi: "10/10 MG", "875 + 125 MG", "5000U/0,2 ML", "0,75MG/ML",
+// "100 UI /ML" (concentrazione senza numero al denominatore).
+// Un numero può avere i separatori delle migliaia ("1.200.000 UI").
+const NUM = String.raw`(?:\d{1,3}(?:\.\d{3})+(?:,\d+)?|\d+(?:[.,]\d+)?)`;
+const DOSE_RE = new RegExp(
+  String.raw`(?<![\d.,/])\b(${NUM}(?:\s?[/+]\s?${NUM})*)\s?(MGR|MCG|MG|GR|G|UI|U|ML)\b(\s?\/\s?(?:${NUM}\s?)?(?:UI|ML|MG|MGR|MCG|GR|G)\b)?`,
+  'i',
+);
+// Unità di insulina somministrate ("10 Ui"), non seguite da "/ML" (che è la concentrazione) e non
+// parte di un intervallo o di una somma ("10-12 UI", "6+6+4 U"): quelle le legge l'operatore.
+const INSULIN_UNITS_RE =
+  /(?<!(?:[\d.,/+\-–~]|\b(?:a|o|e|oppure|fino\s+a|max|massimo|massime|min|minimo|circa))\s*)\b(\d+(?:[.,]\d+)?)\s*(?:U\.?\s?I\.?|UI|U|unit[àa])(?![\p{L}])(?!\s?\/)/giu;
 const DAY_RE = new RegExp(`\\b(${DAYS.join('|')})\\b`, 'g');
 
 // ── Schema insulinico a fasce glicemiche ─────────────────────────────────────
@@ -380,15 +391,50 @@ function talksAboutDrugs(lines: string[]): boolean {
 // parte, e senza toglierla il nome del farmaco diventerebbe "TERAPIA".
 const PREFISSO_TERAPIA = /^(terapi[ae]|tp\.?|td\.?|t\.\s?d\.)\s+(con|a\s+base\s+di)\s+/i;
 
+// Fra i campi e l'orario possono restare sigle e numeri non collocati ("N/ORD", "RM", "1000"),
+// non prosa: una parola con minuscole ("se pressione alta ore 08:00") è un'istruzione, non un
+// elenco di orari. Le sigle tollerate rendono comunque la riga da verificare.
+const SIGLA_RE = /^[\p{Lu}\p{N}/.,*+%-]+$/u;
+function residuoPrimaDi(
+  testo: string,
+  collocato: Uint8Array,
+  fine: number,
+): 'nessuno' | 'sigle' | 'prosa' {
+  let esito: 'nessuno' | 'sigle' = 'nessuno';
+  let parola = '';
+  for (let i = 0; i <= fine; i++) {
+    if (i < fine && !collocato[i] && !/\s/.test(testo[i])) parola += testo[i];
+    else if (parola) {
+      if (/[\p{L}\p{N}]/u.test(parola)) {
+        if (!SIGLA_RE.test(parola)) return 'prosa';
+        esito = 'sigle';
+      }
+      parola = '';
+    }
+  }
+  return esito;
+}
+const ora = (h: string) => (h.includes(':') ? h : `${h}:00`).padStart(5, '0');
+
 /** Only a contiguous list next to mapped prescription fields is an administration schedule.
  *  Clinical prose before or after it stays in notes, including its own clock times/connectors. */
 function trovaListaOrari(testo: string, collocato: Uint8Array, primoCampoEsplicito: number) {
+  // "ORE 8-15-20": tre o più ore separate da trattini sono un elenco, non un intervallo.
+  const elenco = testo.match(
+    /\bore\b\s*:?\s*(\d{1,2}(?::\d{2})?(?:\s*-\s*\d{1,2}(?::\d{2})?){2,})(?![\d:])/i,
+  );
+  if (elenco?.index != null && elenco.index >= primoCampoEsplicito) {
+    const residuo = residuoPrimaDi(testo, collocato, elenco.index);
+    if (residuo === 'prosa') return null;
+    const orari = elenco[1].split(/\s*-\s*/).map(ora);
+    if (orari.every((o) => /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(o)))
+      return { orari, index: elenco.index, length: elenco[0].length, daVerificare: true };
+  }
   const primo = testo.match(/\b(?:alle\s+)?ore\b\s*:?\s*(\d{1,2}:\d{2})\b/i);
   // A name and an inferred form alone do not establish a prescription before the time.
   if (primo?.index == null || primo.index < primoCampoEsplicito) return null;
-  for (let i = 0; i < primo.index; i++) {
-    if (!collocato[i] && /[\p{L}\p{N}]/u.test(testo[i])) return null;
-  }
+  const residuo = residuoPrimaDi(testo, collocato, primo.index);
+  if (residuo === 'prosa') return null;
 
   const orari = [primo[1]];
   let fine = primo.index + primo[0].length;
@@ -405,7 +451,12 @@ function trovaListaOrari(testo: string, collocato: Uint8Array, primoCampoEsplici
     )
   )
     return null;
-  return { orari, index: primo.index, length: fine - primo.index };
+  return {
+    orari,
+    index: primo.index,
+    length: fine - primo.index,
+    daVerificare: residuo === 'sigle',
+  };
 }
 
 /** Parse ONE prescription line into a structured row. Fields are extracted independently, so a
@@ -441,20 +492,51 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
   const viaSomministrazione = via?.code ?? '';
   marca(via?.index, via?.length ?? 0);
 
-  const qtyM = testo.match(QTY_RE);
-  const quantita = qtyM ? `${qtyM[1]} ${qtyM[2]}` : '';
+  let qtyM: RegExpMatchArray | null = testo.match(QTY_RE);
+  let quantita = qtyM ? `${qtyM[1]} ${qtyM[2]}` : '';
   marca(qtyM?.index, qtyM?.[0].length ?? 0);
 
   // Le unità di una fascia glicemica ("150-200: 2 UI") non sono il dosaggio del farmaco.
   const { rules: glucoseScale, spans: glucoseSpans } = findGlucoseRules(testo);
   const inGlucoseSpan = (index: number) =>
     glucoseSpans.some((s) => index >= s.index && index < s.index + s.length);
-  const doseM =
-    [...testo.matchAll(new RegExp(DOSE_RE.source, 'gi'))].find(
-      (m) => m.index != null && !inGlucoseSpan(m.index),
-    ) ?? null;
+  const dosi = [...testo.matchAll(new RegExp(DOSE_RE.source, 'gi'))].filter(
+    (m) => m.index != null && !inGlucoseSpan(m.index),
+  );
+  // Un volume semplice seguito da un altro dosaggio è la confezione ("FL 20ML 0,75MG/ML",
+  // "SCIR 200ML 67G/100ML", "1 FL 10 ML 100 UI/ML"): il dosaggio è quello successivo.
+  const soloVolume = (m: RegExpMatchArray) => /^ml$/i.test(m[2]) && !m[3] && !/[/+]/.test(m[1]);
+  const doseM = dosi.find((m, i) => !(soloVolume(m) && i < dosi.length - 1)) ?? null;
+  // La lettura della confezione è un'interpretazione: la riga la conferma l'operatore.
+  const confezioneScavalcata = doseM !== null && doseM !== dosi[0];
   const dosaggio = doseM ? doseM[0].replace(/\s+/g, ' ').trim() : '';
   marca(doseM?.index, doseM?.[0].length ?? 0);
+  // Insulina con concentrazione ("100 UI /ML 10 Ui"): le unità dopo la concentrazione sono la
+  // quantità somministrata.
+  // Un volume prima della concentrazione è la penna/il flacone ("LANTUS 3 ML 100 UI/ML 10 UI").
+  const volumePenna =
+    qtyM?.index != null &&
+    doseM?.index != null &&
+    /^ml$/i.test(qtyM[2]) &&
+    qtyM.index < doseM.index;
+  let pennaScavalcata = false;
+  if (
+    (!qtyM || volumePenna) &&
+    doseM?.index != null &&
+    /\//.test(doseM[0]) &&
+    /^U/i.test(doseM[2])
+  ) {
+    const dopo = doseM.index + doseM[0].length;
+    const unita = [...testo.matchAll(INSULIN_UNITS_RE)].find(
+      (m) => m.index != null && m.index >= dopo && !inGlucoseSpan(m.index),
+    );
+    if (unita) {
+      pennaScavalcata = volumePenna;
+      qtyM = unita;
+      quantita = `${unita[1]} UI`;
+      marca(unita.index, unita[0].length);
+    }
+  }
   for (const span of glucoseSpans) marca(span.index, span.length);
   const doseMode = glucoseScale.length > 0 ? ('glucose_scale' as const) : ('fixed' as const);
   let normalizedGlucoseScale = glucoseScale;
@@ -494,7 +576,12 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
     dopoNome.search(/[;+]|,(?!\d)/),
   ].filter((i) => i >= 0);
   const taglio = marcatori.length ? Math.min(...marcatori) : dopoNome.length;
-  const paroleForma = [...dopoNome.slice(0, taglio).matchAll(/\S+/g)].slice(0, 3);
+  // Un numero nudo non è una forma ("TACHIPIRINA 1000 1 CP"): resta in note, da verificare.
+  const paroleForma: RegExpMatchArray[] = [];
+  for (const p of dopoNome.slice(0, taglio).matchAll(/\S+/g)) {
+    if (paroleForma.length === 3 || /^\d[\d.,]*$/.test(p[0])) break;
+    paroleForma.push(p);
+  }
   for (const p of paroleForma) marca(nomeGrezzo.length + (p.index ?? 0), p[0].length);
   const forma = paroleForma
     .map((p) => p[0])
@@ -542,10 +629,22 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
   const residuoNumerico = /\d/.test(note);
   // A retained negative instruction is not an affirmed prescription, even with dose/route.
   const negativeInstruction = /^(?:non|nessuna|nessun)\b/i.test(testo);
+  // Sospensione, negazione o condizione in qualunque punto della riga (anche finita in `forma` o
+  // dopo gli orari: "ore 22:00 NON SOMMINISTRARE", "SE AGITAZIONE", "ai pasti"): non è una
+  // prescrizione a orario fisso finché l'operatore non la legge.
+  const condizionata =
+    NOT_CURRENT_RE.test(testo) ||
+    /\b(?:se|solo|non|al\s+bisogno|ai\s+pasti|secondo)\b/i.test(`${note} ${forma}`);
   const stato: ParsedTherapyRow['stato'] =
     farmacoNome &&
     signals >= 2 &&
     !residuoNumerico &&
+    !listaOrari?.daVerificare &&
+    !confezioneScavalcata &&
+    !pennaScavalcata &&
+    // "1.000 MG": il punto delle migliaia letto come decimale darebbe 1 mg — lo conferma l'operatore.
+    !/\d\.\d{3}(?!\d)/.test(`${dosaggio} ${quantita}`) &&
+    !condizionata &&
     !negativeInstruction &&
     glucoseScaleValid &&
     (doseMode === 'fixed' || orari.length > 0)
@@ -583,6 +682,47 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
 const ANNOUNCES_GLUCOSE_SCALE_RE =
   /\b(?:schema|scala|glicemi\w*|stick|dtx|destrostix)\b|\binsulin\w*\b.*(?:[:→]|->)\s*$/i;
 
+// Indicazioni non farmacologiche scritte in coda all'elenco ("DIETA PER DIABETICI", "Controlli
+// periodici di emocromo"): senza dose né quantità non sono farmaci.
+// Elenco stretto: una riga che nomina anche un farmaco ("Monitoraggio glicemico e Humalog
+// secondo schema") resta una riga da verificare.
+const NON_DRUG_LINE_RE = /^(?:controll[oi]|esami|vaccin\w*|fisioterapia)\b/i;
+export function isNonDrugInstruction(line: string): boolean {
+  const testo = ripulisciRiga(line);
+  // "DIETA IPOSODICA 1500 ML/DIE": un volume di dieta non è un farmaco.
+  if (/^dieta\b/i.test(testo)) return true;
+  return NON_DRUG_LINE_RE.test(testo) && !DOSE_RE.test(testo) && !QTY_RE.test(testo);
+}
+
+/** A line carrying any prescription signal: strength, quantity, route, "ore hh:mm" or a glucose
+ *  band. Prose, signatures and measurements without a dose carry none. */
+export function hasPrescriptionSignal(line: string): boolean {
+  const testo = ripulisciRiga(line);
+  return talksAboutDrugs([testo]) || isGlucoseScaleOnlyLine(line);
+}
+
+/** A self-contained prescription line (name + strength or quantity + administration time or
+ *  periodicity): marks a drug list even where no therapy heading announces it. */
+export function looksLikePrescriptionLine(line: string): boolean {
+  const testo = ripulisciRiga(line);
+  if (!testo || isNonPrescription(testo) || NOT_CURRENT_RE.test(testo)) return false;
+  // Il nome apre la riga e tocca quasi subito la dose: "Gentile Collega, ... Ramipril 5 mg/die"
+  // è prosa, "GLICEMIA 150 MG/DL" è una misura.
+  const dose = testo.match(DOSE_RE) ?? testo.match(QTY_RE);
+  if (dose?.index == null) return false;
+  const prima = testo.slice(0, dose.index);
+  if (/,/.test(prima) || prima.trim().split(/\s+/).length > 5) return false;
+  if (/^\s*\/\s*(?:dl|l|h|kg|min)\b/i.test(testo.slice(dose.index + dose[0].length))) return false;
+  const row = parseTherapyLine(testo);
+  const nome = row.farmacoNome.toLowerCase();
+  if (PROSE_WORDS.has(nome) || LAB_WORDS.has(nome)) return false;
+  return (
+    /^[\p{L}]{3,}/u.test(row.farmacoNome) &&
+    Boolean(row.dosaggio || row.quantita) &&
+    (row.orari.length > 0 || row.doseMode === 'glucose_scale' || PERIODICITY_RE.test(testo))
+  );
+}
+
 export function parseDischargeTherapy(text: string): ParsedTherapyRow[] {
   const rows: ParsedTherapyRow[] = [];
   let sawDrugs = false;
@@ -594,6 +734,8 @@ export function parseDischargeTherapy(text: string): ParsedTherapyRow[] {
       continue;
     }
     for (const line of lines) {
+      // Saltata senza interrompere l'elenco: le fasce sotto restano dell'insulina sopra.
+      if (isNonDrugInstruction(line)) continue;
       const last = rows[rows.length - 1];
       if (
         previousWasRow &&
