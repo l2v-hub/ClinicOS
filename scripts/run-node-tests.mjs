@@ -59,6 +59,8 @@ const DATABASE_ISOLATED = [
   'src/roster/__tests__/preferences-db.test.ts',
   'src/patients/__tests__/alphabetical-pages-db.test.ts',
   'src/patients/__tests__/room-filter-db.test.ts',
+  // Assert GLOBAL counts (e.g. unread-diary baseline + N): any concurrent suite that writes diary
+  // entries shifts them. Failed deterministically in CI once new test files changed the schedule.
   'src/patients/__tests__/diary-reading-db.test.ts',
   'src/patients/__tests__/diary-unread-queue-db.test.ts',
 ];

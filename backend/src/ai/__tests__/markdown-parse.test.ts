@@ -223,7 +223,7 @@ test('un titolo in Maiuscolo Iniziale apre la sezione (es. "Terapia Domiciliare 
   assert.ok(d.therapyText.includes('FUROSEMIDE'));
   assert.ok(
     !d.proceduresAndInterventionsText.includes('CORDARONE'),
-    'la terapia non deve piu' + " finire fra le prestazioni",
+    'la terapia non deve piu' + ' finire fra le prestazioni',
   );
 });
 
@@ -244,7 +244,7 @@ test('una frase di contenuto non viene scambiata per intestazione', () => {
 // Trattando il maiuscolo come indizio di titolo, quella riga diventava un'intestazione
 // "allergie" e da li' in poi l'intero referto finiva archiviato sotto le allergie: la
 // sezione diagnosi restava con 22 caratteri (il solo titolo) e le allergie ne avevano 1.429.
-test('una diagnosi in maiuscolo non e\' un titolo di sezione', () => {
+test("una diagnosi in maiuscolo non e' un titolo di sezione", () => {
   const testo =
     'Diagnosi di Dimissione\n\n' +
     'DUBBIA REAZIONE ALLERGICA AL CEFTAZIDIME\n' +
@@ -263,10 +263,37 @@ test('una diagnosi in maiuscolo non e\' un titolo di sezione', () => {
 test('una riga dentro un paragrafo non apre una sezione', () => {
   const testo =
     'Decorso Ospedaliero\n\n' +
-    'La paziente e\' stata ricoverata in reparto\n' +
+    "La paziente e' stata ricoverata in reparto\n" +
     'Terapia diuretica sospesa\n' +
-    'ed e\' stata dimessa in condizioni stabili';
+    "ed e' stata dimessa in condizioni stabili";
   const d = parseNarrativeFromMarkdown(testo);
   assert.ok(d.hospitalCourseText.includes('Terapia diuretica sospesa'));
+  assert.equal(d.therapyText.trim(), '');
+});
+
+test('2026-10-11: "Farmaci", "Prescrizioni", "Piano terapeutico" aprono la sezione terapia', () => {
+  for (const heading of [
+    '## Farmaci',
+    '## Farmaci in uso',
+    '## Prescrizioni alla dimissione',
+    '## Piano terapeutico',
+    'Farmaci:',
+    'Schema terapeutico:',
+  ]) {
+    const d = parseNarrativeFromMarkdown(`## Decorso clinico
+Degenza regolare, paziente stabile.
+${heading}
+Ramipril 5 mg 1 cp al mattino.
+Bisoprololo 2,5 mg 1 cp la sera.`);
+    assert.ok(/ramipril/i.test(d.therapyText), `${heading}: Ramipril in terapia`);
+    assert.ok(/bisoprololo/i.test(d.therapyText), `${heading}: Bisoprololo in terapia`);
+    assert.ok(!/ramipril/i.test(d.hospitalCourseText), `${heading}: non nel decorso`);
+  }
+});
+
+test('2026-10-11: "allergia a farmaci" resta allergia, non sezione terapia', () => {
+  const d = parseNarrativeFromMarkdown(`## Allergie a farmaci
+Penicillina.`);
+  assert.ok(/penicillina/i.test(d.allergiesText));
   assert.equal(d.therapyText.trim(), '');
 });

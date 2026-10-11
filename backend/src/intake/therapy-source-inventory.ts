@@ -1,4 +1,4 @@
-import { parseDischargeTherapy } from './parse-discharge-therapy.js';
+import { parseDischargeTherapy, therapyRowsFromNarrative } from './parse-discharge-therapy.js';
 import { canonical, hash, object, type Json } from '../ai/upload/pages/model.js';
 
 const text = (value: unknown) => (typeof value === 'string' ? value.trim() : '');
@@ -33,7 +33,10 @@ export function representsStructuredItem(row: Json, item: Json): boolean {
  * Every meaningful extraction occurrence is accounted for. Unmatched model objects are
  * review candidates, NEVER newly inferred prescriptions or manufactured verbatim text.
  */
-export function therapySourceInventory(therapyText: string, extracted: unknown): Json[] {
+export function therapySourceInventory(
+  source: string | Record<string, unknown>,
+  extracted: unknown,
+): Json[] {
   const occurrences = new Map<string, number>();
   const keyFor = (kind: string, value: unknown) => {
     const signature = hash([kind, value]);
@@ -41,7 +44,10 @@ export function therapySourceInventory(therapyText: string, extracted: unknown):
     occurrences.set(signature, ordinal + 1);
     return hash([signature, ordinal]);
   };
-  const rows: Json[] = parseDischargeTherapy(therapyText).map((row) => ({
+  // A whole narrative also yields prescriptions written outside the therapy section.
+  const parsed =
+    typeof source === 'string' ? parseDischargeTherapy(source) : therapyRowsFromNarrative(source);
+  const rows: Json[] = parsed.map((row) => ({
     ...row,
     importRowKey: keyFor('narrative', row.originalText),
   }));
@@ -109,7 +115,7 @@ export function reconcileLegacyTherapyInventory(data: Json, result: unknown): Js
   if (data._importSource || Array.isArray(source._groups)) return data;
   const narrative = object(source._narrative);
   const expected = therapySourceInventory(
-    text(narrative.therapyText),
+    narrative,
     object(object(source._full ?? source).cartella).farmaci,
   );
   const held = Array.isArray(data.terapiaImport) ? data.terapiaImport.map(object) : [];

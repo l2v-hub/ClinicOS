@@ -218,13 +218,14 @@ test('#296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia ter
   );
 });
 
-test('#296 AC2: tutto ciò che segue il terminatore è escluso (anche paragrafi successivi)', () => {
+test('2026-10-11: un farmaco DOPO un paragrafo di prosa resta un farmaco (la prosa è saltata)', () => {
   const rows = parseDischargeTherapy(
     `${FIXTURE}\n\n${PROSE}\n\nAUGMENTIN CPR 875 MG (OS) 1 Cpr ore 09:00`,
   );
-  // Il requisito è esplicito: dopo il primo paragrafo non farmacologico la terapia È terminata.
-  assert.equal(rows.length, 10);
-  assert.ok(!rows.some((r) => r.farmacoNome === 'AUGMENTIN'));
+  // Requisito superato da quello del 2026-10-11: farmaco + dose + periodicità è terapia ovunque.
+  assert.equal(rows.length, 11);
+  assert.equal(rows[10].farmacoNome, 'AUGMENTIN');
+  assert.ok(rows.every((r) => r.farmacoNome !== 'SI' && r.farmacoNome !== 'PROSEGUIRE'));
 });
 
 test('#296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati', () => {
@@ -448,13 +449,17 @@ test('multi-farmaco AC4: le forme legittime multi-token non regrediscono', () =>
 });
 
 test('AC4: un numero non collocato porta la riga a da_verificare', () => {
-  // 67G/100ML e' una concentrazione che nessun campo strutturato ha raccolto: l'operatore
-  // deve vederla, perche' un numero perso in una prescrizione e' clinicamente rilevante.
+  // 2026-10-11: 67G/100ML e' la concentrazione e diventa il dosaggio; il volume della confezione
+  // (200ML) scavalcato e' un'interpretazione, quindi la riga resta sotto gli occhi dell'operatore.
   const r = parseTherapyLine(
     'LATTULAC*SCIR 200ML 67G/100ML (OS) 1 Dosi ore 08:00 dal 03/07/2026 (Classe )',
   );
-  assert.match(r.note, /67G\/100ML/i);
+  assert.equal(r.dosaggio, '67G/100ML');
   assert.equal(r.stato, 'da_verificare');
+  // Un numero che nessun campo raccoglie resta in note e declassa la riga.
+  const n = parseTherapyLine('RAMIPRIL CPR 5 MG 1 Cpr 37 ore 08:00');
+  assert.match(n.note, /37/);
+  assert.equal(n.stato, 'da_verificare');
 });
 
 test('PO03: the administration list stops before monitoring instructions', () => {

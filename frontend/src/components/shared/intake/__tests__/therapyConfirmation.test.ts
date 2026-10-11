@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { localIsoDate } from '../../../../lib/appointmentRange';
 import {
   dischargeRowToTherapyInput,
   dischargeRowToTherapyForm,
@@ -138,7 +139,6 @@ test('missing or ambiguous raw quantities never become a default dose', () => {
     { quantita: '' },
     { orari: [] },
     { viaSomministrazione: '' },
-    { dataInizio: '' },
     { giorni: ['incerto'] },
   ]) {
     const input = dischargeRowToTherapyInput({ ...row, ...override });
@@ -154,7 +154,8 @@ test('missing or ambiguous raw quantities never become a default dose', () => {
   assert.equal(empty.schedules[0].time, '');
   assert.equal(empty.schedules[0].quantityNumerator, 0);
   assert.equal(empty.schedules[0].administrationUnit, '');
-  assert.equal(empty.dataInizio, '');
+  // 2026-10-11: senza data nel documento la terapia parte dal giorno di elaborazione.
+  assert.equal(empty.dataInizio, localIsoDate());
 });
 
 test('explicit unit takes priority over form and compound strength stays raw', () => {

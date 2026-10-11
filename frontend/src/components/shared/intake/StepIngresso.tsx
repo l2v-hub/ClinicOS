@@ -3,8 +3,12 @@
 // Modalità ingresso, Motivo ingresso, Operatore responsabile, Note iniziali.
 // No fetches here — the parent IntakeWorkspace owns patchDraft.
 
+import { useEffect, useRef } from 'react';
+import { localIsoDate } from '../../../lib/appointmentRange';
+
+/** Giorno locale di elaborazione (non UTC: fra mezzanotte e le 2 darebbe il giorno prima). */
 function today(): string {
-  return new Date().toISOString().slice(0, 10);
+  return localIsoDate();
 }
 
 function nowTime(): string {
@@ -81,6 +85,20 @@ function NpmField({
 
 export function StepIngresso({ value, onChange }: StepIngressoProps) {
   const f = (key: keyof IngressoData) => field(value, onChange, key);
+
+  // La presa in carico avviene quando si elabora il paziente (creazione, import, foto):
+  // data e ora partono da adesso, una sola volta, e l'operatore può cambiarle.
+  const prefilled = useRef(false);
+  useEffect(() => {
+    if (prefilled.current) return;
+    prefilled.current = true;
+    if (!value.dataPresa || !value.oraPresa)
+      onChange({
+        ...value,
+        dataPresa: value.dataPresa || today(),
+        oraPresa: value.oraPresa || nowTime(),
+      });
+  }, [value, onChange]);
 
   // Default date/time to today/now when the field is first focused and empty
   function handleDateFocus() {

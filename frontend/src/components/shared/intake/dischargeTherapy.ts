@@ -1,5 +1,6 @@
 // Raw OCR fields remain alongside the complete, operator-reviewed form in the draft.
 import { emptyTherapyForm, type TherapyFormValue } from '../../operator/cartella/TherapyFormFields';
+import { localIsoDate } from '../../../lib/appointmentRange';
 import {
   PHARMA_FORMS,
   administrationUnitForForm,
@@ -27,6 +28,8 @@ export interface DischargeTherapyRow {
   originalText: string;
   stato: 'ok' | 'da_verificare';
   tipo?: 'periodica' | 'una_tantum' | 'al_bisogno';
+  /** Trovata nel documento fuori dalla sezione terapia: sempre da verificare. */
+  outsideTherapySection?: boolean;
   doseMode?: 'fixed' | 'glucose_scale';
   glucoseScale?: GlucoseDoseRule[];
   excludedFromConfirm?: boolean;
@@ -94,6 +97,7 @@ const UNIT_ALIASES: Record<string, string> = {
   bust: 'bustina',
   bustina: 'bustina',
   bustine: 'bustina',
+  f: 'fiala',
   fl: 'fiala',
   fiala: 'fiala',
   fiale: 'fiala',
@@ -106,7 +110,13 @@ const UNIT_ALIASES: Record<string, string> = {
   unita: 'unità',
   ui: 'unità',
 };
+// "1.000 MG" o "1.250 MG": punto delle migliaia (1000) o decimale all'inglese (1,25)? Il documento
+// non lo dice, e Number("1.000") darebbe 1. Un numero ambiguo non precompila il campo: resta
+// vuoto e il valore scritto va nelle note, l'operatore lo inserisce. "0.125" non è ambiguo.
+const AMBIGUOUS_THOUSANDS = /(?<![\d.,])[1-9]\d{0,2}(?:\.\d{3})+(?![\d.])/;
+
 function parseAdministration(raw: string, forma: string | null) {
+  if (AMBIGUOUS_THOUSANDS.test(raw || '')) return { num: 0, den: 1, unit: '' };
   const match = (raw || '').trim().match(/^(\d+(?:[.,]\d+)?(?:\s*\/\s*\d+)?)\s*([^\d]*)$/u);
   const qty = match ? parseQuantity(match[1].replace(/\s/g, '')) : null;
   const explicitUnit = match?.[2].trim().toLowerCase().replace(/\.$/, '') ?? '';
@@ -128,6 +138,7 @@ const DOSE_UNIT_MAP: Record<string, string> = {
 };
 export function parseDosaggio(raw: string) {
   // Compound strengths must stay raw: "20mg/ml" is not "20mg".
+  if (AMBIGUOUS_THOUSANDS.test(raw || '')) return null;
   const m = (raw || '').trim().match(/^(\d+(?:[.,]\d+)?)\s*(MGR|MCG|MG|GR|G|UI|ML)$/i);
   return m ? { value: m[1].replace(',', '.'), unit: DOSE_UNIT_MAP[m[2].toUpperCase()] } : null;
 }
@@ -160,7 +171,8 @@ export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormVa
     commercialStrengthUnit: dose?.unit ?? '',
     viaSomministrazione:
       CODE_TO_FORM_VIA[(r.viaSomministrazione || '').toUpperCase()] ?? r.viaSomministrazione ?? '',
-    dataInizio: r.dataInizio?.trim() ?? '',
+    // Senza data nel documento la terapia parte dal giorno in cui la si prende in carico.
+    dataInizio: r.dataInizio?.trim() || localIsoDate(),
     dataSomministrazione: '',
     doseMode: scale ? 'glucose_scale' : 'fixed',
     glucoseScale: (r.glucoseScale ?? []).map((rule) => ({
@@ -184,7 +196,10 @@ export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormVa
       !dose && r.dosaggio ? `Dosaggio: ${r.dosaggio}` : '',
       r.tipo === 'al_bisogno' && r.quantita
         ? `Quantità riportata nel documento: ${r.quantita}`
-        : '',
+        : // Una quantità ambigua non precompila il campo: il valore scritto resta qui, visibile.
+          !scale && AMBIGUOUS_THOUSANDS.test(r.quantita || '')
+          ? `Quantità: ${r.quantita}`
+          : '',
     ]
       .filter(Boolean)
       .join(' — '),

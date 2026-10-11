@@ -1,0 +1,22 @@
+[
+  {
+    "name": "After reload HUMALOG visible",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "After reload scale band 150-200 → 2 visible",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "After reload scale band 201-250 → 4 visible",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "After reload open band >250 / ≥251 → 6 visible",
+    "pass": true,
+    "detail": ""
+  }
+]

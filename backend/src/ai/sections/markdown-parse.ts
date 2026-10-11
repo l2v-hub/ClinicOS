@@ -9,6 +9,10 @@
 import type { DischargeNarrativeDraft } from './narrative.js';
 import { NARRATIVE_SCHEMA_VERSION } from './narrative.js';
 import { isPastHistoryHeading } from '../../intake/clinical-history.js';
+import {
+  hasPrescriptionSignal,
+  looksLikePrescriptionLine,
+} from '../../intake/parse-discharge-therapy.js';
 
 type DraftTextField =
   | 'diagnosisText'
@@ -73,8 +77,15 @@ const ALIASES: Array<{ field: DraftTextField; patterns: RegExp[] }> = [
       /terapia consigliat/,
       /terapia in atto/,
       /\bterapia\b/,
+      /\bterapie\b/,
       /^td\b/,
       /\bt\.d\.\b/,
+      // 2026-10-11: titoli usati dalle lettere al posto di "Terapia" (prima il loro elenco
+      // finiva nella sezione precedente).
+      /^farmaci\b/,
+      /^prescrizion/,
+      /piano terapeutic/,
+      /schema terapeutic/,
     ],
   },
   {
@@ -109,7 +120,8 @@ const MD_HEADING = /^\s{0,3}#{1,6}\s+(.+?)\s*$/;
 // starts a THERAPY block even mid-content and even when the first drug is on the same line. This
 // prevents a combined "Diagnosi e terapia …" heading from bucketing the whole drug list into DIAGNOSI
 // (diagnosi e terapia farmacologica devono restare separate).
-const THERAPY_LABEL = /^(terapi[ae][^:\n]{0,60}|t\.?d\.?)\s*:/i;
+const THERAPY_LABEL =
+  /^(terapi[ae][^:\n]{0,60}|t\.?d\.?|farmaci[^:\n]{0,40}|prescrizion[ei][^:\n]{0,40}|(?:piano|schema) terapeutico[^:\n]{0,40})\s*:/i;
 
 // Quanto lontano dall'inizio del titolo puo' stare la parola chiave della sezione.
 // "Allergie" apre il titolo; in "DUBBIA REAZIONE ALLERGICA AL CEFTAZIDIME" la parola
@@ -165,6 +177,10 @@ export interface ParsedSection {
   text: string;
 }
 
+// Righe in maiuscolo che chiudono una pagina senza essere farmaci.
+const CODA_NON_FARMACO =
+  /^(?:firmat\w*|dirigent\w*|responsabil\w*|direttor\w*|caposala|medico|dott\w*|dr\w*|reparto|pagina|pag\b|tel\w*|fax|email|via|viale|piazza|dieta|controll[oi]|esami)\b/i;
+
 /** Split markdown rawText into canonical sections. Headings are kept in the text. */
 export function parseMarkdownSections(rawText: string): Map<DraftTextField, ParsedSection> {
   const out = new Map<DraftTextField, ParsedSection>();
@@ -183,6 +199,9 @@ export function parseMarkdownSections(rawText: string): Map<DraftTextField, Pars
     buffer = [];
   };
 
+  // Righe prima del primo titolo: intestazione e saluti, ma anche — su una pagina di
+  // continuazione importata da sola — l'elenco dei farmaci rimasto senza titolo.
+  const preambolo: string[] = [];
   // "Titolo, poi le righe, poi un blocco vuoto": una riga vuota (o l'inizio del documento)
   // e' cio' che rende una riga candidata a essere un titolo.
   let precedenteVuota = true;
@@ -204,10 +223,33 @@ export function parseMarkdownSections(rawText: string): Map<DraftTextField, Pars
       buffer.push(line);
     } else if (current) {
       buffer.push(line);
-    }
-    // lines before the first recognised heading are ignored for section mapping (header/intro).
+    } else preambolo.push(line);
   }
   flush();
+  // Il resto del preambolo (intestazione, saluti) non e' mappato su alcuna sezione. Se pero'
+  // contiene prescrizioni complete, da li' in poi e' la terapia che prosegue da un'altra pagina.
+  // L'elenco inizia alla prima prescrizione completa e arriva fino all'ultima riga con un segnale
+  // di prescrizione (dose, quantita', via, orario, fascia glicemica): nel mezzo nulla si perde
+  // (righe vuote, farmaci senza orario, sospesi — da verificare), la coda di prosa o firme resta fuori.
+  const inizio = preambolo.findIndex(looksLikePrescriptionLine);
+  if (inizio >= 0) {
+    let fine = preambolo.length;
+    while (fine > inizio + 1 && !hasPrescriptionSignal(preambolo[fine - 1])) fine--;
+    // Nello stesso paragrafo, un farmaco scritto senza dose ("EUTIROX a digiuno") e' ancora
+    // l'elenco: nome in maiuscolo in apertura, riga corta, non una firma o un'intestazione.
+    while (
+      fine < preambolo.length &&
+      preambolo[fine].trim() &&
+      /^\p{Lu}{3,}\b/u.test(preambolo[fine].trim()) &&
+      preambolo[fine].trim().split(/\s+/).length <= 6 &&
+      !CODA_NON_FARMACO.test(preambolo[fine].trim())
+    )
+      fine++;
+    const elenco = preambolo.slice(inizio, fine).join('\n').trim();
+    const prev = out.get('therapyText');
+    if (prev) prev.text = `${elenco}\n\n${prev.text}`;
+    else out.set('therapyText', { field: 'therapyText', detectedHeading: '', text: elenco });
+  }
   return out;
 }
 

@@ -198,6 +198,15 @@ export function DischargeTherapyReview({
                   pagine e mantieni, correggi o lascia in bozza questa terapia.
                 </p>
               )}
+              {r.outsideTherapySection && (
+                <p
+                  className="discharge-therapy-review__alert"
+                  data-testid="discharge-outside-section"
+                >
+                  Trovata fuori dalla sezione terapia: verifica nel documento che sia una terapia in
+                  corso prima di confermarla.
+                </p>
+              )}
               <TherapyImportSource row={r} />
               {forms[i] && !r.excludedFromConfirm && (
                 <div className="ec-modal-add-form">

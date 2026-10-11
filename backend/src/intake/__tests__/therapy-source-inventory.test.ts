@@ -65,13 +65,35 @@ test('missing narrative or a prose delimiter cannot silently lose a structured m
     'Alfa 5 mg 1 cp ore 8\n\nControlli periodici consigliati\n\nBeta 25 mg 1 cp ore 8',
     [beta],
   );
-  assert.equal(rows.length, 2);
+  // The parser reads past prose (continuation pages), so Beta is also a narrative row; the
+  // extracted variant (stato: sospeso) differs and must still stay visible on its own.
+  assert.equal(rows.length, 3);
   assert.equal(rows[0].farmacoNome, 'ALFA');
-  assert.deepEqual(rows[1].structuredSource, beta);
-  assert.equal(rows[1].originalText, '');
-  assert.equal(rows[1].stato, 'da_verificare');
-  assert.equal(rows[1].quantita, '');
-  assert.deepEqual(rows[1].orari, []);
+  assert.equal(rows[1].farmacoNome, 'BETA');
+  assert.deepEqual(rows[2].structuredSource, beta);
+  assert.equal(rows[2].originalText, '');
+  assert.equal(rows[2].stato, 'da_verificare');
+  assert.equal(rows[2].quantita, '');
+  assert.deepEqual(rows[2].orari, []);
+});
+
+test('a whole narrative adds prescriptions written outside the therapy section, keyed by source', () => {
+  const rows = therapySourceInventory(
+    {
+      therapyText: 'FUROSEMIDE CPR 25 MG (OS) 1 Cpr ore 08:00',
+      adviceAndFollowUpText: 'Proseguire Lansoprazolo 30 mg 1 cps al mattino a digiuno.',
+    },
+    [],
+  );
+  assert.deepEqual(
+    rows.map((r) => [r.farmacoNome, r.outsideTherapySection === true, r.stato]),
+    [
+      ['FUROSEMIDE', false, 'ok'],
+      ['LANSOPRAZOLO', true, 'da_verificare'],
+    ],
+  );
+  assert.ok(rows.every((r) => typeof r.importRowKey === 'string'));
+  assert.notEqual(rows[0].importRowKey, rows[1].importRowKey);
 });
 
 test('only exact unambiguous fields cover an occurrence; variants and extra fields stay visible', () => {

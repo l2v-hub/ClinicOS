@@ -309,14 +309,13 @@ export function buildImportDraftData(
   //    TherapyFormValue editor and its confirm mapper (therapyFormToInput) — putting a
   //    ParsedTherapyRow there would break confirm. Incomplete lines keep stato 'da_verificare'
   //    (never dropped); the raw text is stashed under _terapiaText for lossless audit.
+  //    Prescriptions written outside the therapy section join as da_verificare rows.
   const therapyRows = therapySourceInventory(
-    narrative.therapyText ?? '',
+    narrative as unknown as Record<string, unknown>,
     object(object(structuredExtraction).cartella).farmaci,
   );
   if (therapyRows.length > 0) seeded.terapiaImport = therapyRows;
-  if (narrative.therapyText) {
-    seeded._terapiaText = narrative.therapyText;
-  }
+  if (narrative.therapyText) seeded._terapiaText = narrative.therapyText;
 
   // 6. Lossless provenance — preserved for confirmDraft + compare panel.
   seeded._narrative = narrative;

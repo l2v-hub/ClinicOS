@@ -79,7 +79,7 @@ export function pageTherapyRows(result: Json): Json[] {
       c.candidates.some((candidate) => candidate.sources.some((s) => s.groupId === group.groupId)),
     );
     for (const row of therapySourceInventory(
-      group._narrative.therapyText ?? '',
+      group._narrative as unknown as Record<string, unknown>,
       object(object(group._full).cartella).farmaci,
     )) {
       const matches = groupConflicts.filter(

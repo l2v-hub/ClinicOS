@@ -1,0 +1,422 @@
+(node:1280) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AC5: un farmaco fuori anagrafica e un anomalia da sanare (7.7965ms)
+✔ AC9: senza anomalie il totale e zero e la verifica e completa (4.5383ms)
+✔ AC10: l'anagrafica che non risponde NON produce anomalie (1.2513ms)
+✔ AC10: una risoluzione mancante conta come verifica incompleta, non come anomalia (2.8582ms)
+✔ AC10: anomalie certe e verifica incompleta convivono (1.4145ms)
+✔ AC7: lo stesso farmaco su piu righe conta una anomalia sola (1.1137ms)
+✔ «in anagrafica ma senza documento» non e un anomalia di prescrizione (1.1609ms)
+✔ le righe senza nome farmaco non producono anomalie ne verifiche incomplete (0.894ms)
+✔ le anomalie sono ordinate per nome, cosi la lista non salta fra un render e l altro (84.3221ms)
+✔ il messaggio dell'avviso concorda al singolare e al plurale (3.9243ms)
+(node:1280) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37948) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ compact anomaly message bounds names and declares the omitted count (6.106ms)
+✔ compact anomaly message preserves singular and empty states (1.1208ms)
+(node:37948) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:9784) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ catalog references become backend IDs only, including FI, without patient context (18.8208ms)
+✔ retrieves PDF through backend with cancellation and no credentials (168.7244ms)
+✔ source failures provide a retry message without asserting the PDF exists or reflecting raw errors (3.9448ms)
+(node:9784) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:18824) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AT-07: core priority UX is Normale / Urgente; a stored intermediate value is kept, not converted (13.2239ms)
+✔ AT-06: a new diary note sends no date, no state and no author (2.2157ms)
+✔ diary save errors surface the backend validation reason (201.7396ms)
+✔ diary form source: no «Stato» select and no manual date on the create form (36.0853ms)
+✔ handover composer offers only Normale / Urgente and no «aperta» wording (146.3419ms)
+(node:18824) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:50756) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AC1: "Ramipril 5 mg 1 cpr per os ore 8" becomes RAMIPRIL, 5 mg, 1 compressa, orale, 08:00 (395.255ms)
+✔ AC2: unrecognised text leaves every field empty and blocks the confirmation (35.8785ms)
+✔ AC2: two times in the same fascia block the confirmation and suggest two therapies (9.0082ms)
+✔ compound strengths are never turned into a number: they stay in the notes as written (6.6899ms)
+✔ fractions, written dates and inferred years are kept exactly (9.9472ms)
+✔ weekdays and routes map to the Terapia form values, unknown ones stay empty (2.5185ms)
+✔ al bisogno keeps the quantity readable in the notes and needs no schedule (6.9815ms)
+✔ no entry date → no invented start date (1.3349ms)
+✔ AC3: suspension, administration and change intents have no confirmation and say where to act (14.3489ms)
+✔ every warning, ambiguity and inference has an Italian text (3.4111ms)
+✔ fascia conflicts follow the server rule, including the same time repeated (2.2456ms)
+✔ AC4: same preview version reuses the requestId, any edit mints a new one (7.7634ms)
+✔ generated requestIds are UUIDs accepted by the server (3.7424ms)
+✔ with-therapy body: entry as saved, therapy through the Terapia mapper, no client operator (13.0409ms)
+✔ server errors become Italian messages (3.7644ms)
+✔ diary card link: linked therapy, deleted therapy, ordinary entry (1.516ms)
+✔ preview failure: each cause has its own reason; only 401/403 block the manual form (1.4123ms)
+✔ manual fallback: empty therapy form, diary text in the notes, nothing inferred (2.6425ms)
+✔ partial preview lists what the interpreter did not understand (24.7262ms)
+✔ AI proposal: proposed fields and AI notes are shown, AI outage is explained (7.5705ms)
+(node:50756) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:53728) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ active shared state awaits understanding, author cannot self-confirm (61.2828ms)
+✔ taken receipt names the reader and stores full facility date, never clinical completion (16.9371ms)
+✔ historical missing trace and absent/invalid shared protocol never fabricate a reader (8.2299ms)
+✔ verified none requires no acknowledgement and legacy reads remain personal (11.213ms)
+✔ empty or invalid personal receipts cannot imply a confirmed view (6.5198ms)
+✔ server names are escaped as text (3.1277ms)
+(node:53728) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:41812) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ 423 empty is complete combined archive only, never loading/error or filtered zero (14.5886ms)
+✔ 423 authorized empty has next step and native closed taxonomy disclosure, not management controls (76.7286ms)
+✔ 423 read-only empty explains limitation and actual organizational referent without add action (12.8641ms)
+✔ 423 upload taxonomy retains existing non-assessment types (2.2724ms)
+✔ 423 populated list respects save/classify gates, keeps read/print and escapes document titles (39.2948ms)
+(node:41812) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:33928) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ existing therapy GET → form → PUT preserves exact AIC, notes and prescribed schedule (18.8476ms)
+✔ changing package clears old commercial strength without inferring dose or changing administrations (122.7026ms)
+✔ manual and imported intake JSON preserve explicit package reference through review and payload (10.9844ms)
+✔ free text removes a stale AIC in every payload and does not invent an identity (30.7181ms)
+✔ manually changing formulation detaches the incompatible AIC and tells the operator (73.4394ms)
+✔ selected package renders description, exact formulation and AIC; reload shows saved identity before lookup (10.0922ms)
+(node:33928) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:16388) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ filters preserve original loaded order, exact records and original array without filters (17.014ms)
+✔ form options derive from all loaded raw strings, not a filtered record list (2.9921ms)
+✔ text filters only original denomination and description, never infer from ingredient quantities (2.416ms)
+✔ each accessible document action includes exact full package data and AIC without changing document (2.4754ms)
+✔ FI fallback and missing metadata still name original product and exact AIC (3.2671ms)
+✔ query and criterion change atomically clear filters, clear alone preserves search (1.7932ms)
+(node:16388) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:32708) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ sortEsamiDesc: orders by date descending (most recent first) (127.1258ms)
+✔ sortEsamiDesc: same date ordered by time descending (2.6557ms)
+✔ sortEsamiDesc: records without time come before same-date records with midnight time (2.3715ms)
+✔ sortEsamiDesc: mixed dates and times (2.1003ms)
+✔ sortEsamiDesc: empty array returns empty array (3.1879ms)
+✔ sortEsamiDesc: single record returns unchanged (3.019ms)
+✔ sortEsamiDesc: does not mutate the original array (3.0624ms)
+(node:32708) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:17556) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AC1: preferisce l RCP, il documento destinato al professionista sanitario (14.6842ms)
+✔ AC1: senza RCP ripiega sul foglietto illustrativo (1.2079ms)
+✔ AC3: senza alcun documento non produce link — meglio nessuna icona che una rotta (1.0703ms)
+✔ AC4: i nomi sono deduplicati e normalizzati, una ricerca per farmaco non per riga (5.4648ms)
+✔ AC4: gli spazi interni multipli non generano chiavi diverse (1.4499ms)
+✔ AC4: i nomi vuoti non generano ricerche (1.0562ms)
+✔ l'etichetta accessibile distingue i due documenti e avvisa della nuova scheda (5.9655ms)
+✔ AC5: la chiave di ricerca contiene solo il nome del farmaco (1.4295ms)
+(node:17556) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:26264) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AC7: la chiave esatta distingue due dosaggi dello stesso farmaco (12.277ms)
+✔ AC7: senza dosaggio ripiega su una risoluzione dello stesso farmaco invece di arrendersi (2.7708ms)
+✔ AC7: un dosaggio che non combacia ripiega comunque sul farmaco (1.8817ms)
+✔ AC7: il ripiego regge i nomi con spazi — e il vecchio taglio al primo spazio no (13.338ms)
+✔ AC7: il nome e normalizzato come in anagrafica (maiuscole, spazi ridondanti) (1.6712ms)
+✔ AC7: un farmaco assente resta assente — il ripiego non inventa una risoluzione (2.1694ms)
+✔ AC7: su piu' righe dello stesso farmaco il ripiego e stabile (1.4934ms)
+✔ AC7: mappa vuota — nessuna risoluzione, nessuna eccezione (1.0175ms)
+(node:26264) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:54372) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ validazione schema glicemico: produce protocollo ordinato e conserva i buchi (27.8924ms)
+✔ validazione schema glicemico: segnala intervalli sovrapposti (1.8683ms)
+✔ misurazione deve essere intera e nei limiti anche per una fascia aperta (1.7123ms)
+✔ anteprima rifiuta protocolli con unità o tipo non riconosciuti (0.9398ms)
+(node:54372) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:46516) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ scale form hides fixed quantity, keeps exact schedule and renders prescription preview (170.1716ms)
+✔ saved scale round trips independently of commercial strength and weekday settings (14.5612ms)
+✔ glucose administration requires measurement and never posts a selected dose (10.6048ms)
+✔ modern round renders glucose control for writable scale dose and none for read-only (52.059ms)
+(node:46516) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:19132) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ manual inhaler selection exposes puff while preserving explicit alternatives and quantities (151.0666ms)
+✔ AIFA and OCR recognize explicit inhalers before generic powder and solution forms (14.3265ms)
+✔ nebulizer, nasal and capsule forms are not converted to inhalers or puff by their route (15.9436ms)
+✔ OCR puff quantities and exact inhaler form survive review, payload validation and JSON reload (67.5234ms)
+✔ inhaler OCR only supplies a fallback unit when the quantity did not specify one (3.4702ms)
+✔ manual payload, restored schedules, calendar and administration labels retain puff (17.9244ms)
+(node:19132) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:32108) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:32108) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ continuation reaches more than 12 packages, preserves rows on failure and retries the same cursor (125.1306ms)
+✔ query and criterion changes clear results and ignore late success or failure (27.9334ms)
+✔ short queries and disposed searches neither send nor accept obsolete work (24.0834ms)
+✔ empty scan pages continue; malformed responses remain retryable (88.9798ms)
+✔ cursor requests retain query, criterion and limit without patient information (6.4866ms)
+✔ restore requests exact AIC and rejects another package with the same name (254.0954ms)
+(node:58076) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ monthly parameters sheet has no IP morning/afternoon signature columns (5.7526ms)
+✔ monthly parameters sheet keeps DTX 08/12/18/20 (1.1693ms)
+(node:58076) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:45672) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AC2: raggruppa i frammenti spezzati in una sola intestazione leggibile (29.627ms)
+✔ AC2: le righe sono in ordine di lettura, non di estrazione (6.6594ms)
+✔ AC2: individua 4.1, 4.2 e 4.3 e le delimita alla sezione successiva (11.6293ms)
+✔ AC8: un documento con piu RCP produce un blocco per formulazione (2.4307ms)
+✔ AC8: riconosce l'apertura di un RCP anche se AIFA sbaglia il numero (1.587ms)
+✔ AC2: il titolo prevale sul numero stampato quando i due si contraddicono (21.7513ms)
+✔ AC10: il dosaggio distingue due confezioni della stessa forma (3.9708ms)
+✔ AC10: la forma dell anagrafica trova la denominazione anche se le parole differiscono (1.5457ms)
+✔ AC9: due confezioni ugualmente plausibili non producono una scelta (1.2662ms)
+✔ AC9: un dosaggio che non esiste nel documento non sceglie la forma piu simile (1.6751ms)
+✔ AC9: senza dosaggio ne forma non si tira a indovinare (1.0091ms)
+✔ AC9: con un solo RCP nel documento la scelta e obbligata (0.5942ms)
+(node:45672) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:17448) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ Tinetti balance max is 16 (10.3141ms)
+✔ Tinetti gait max is 12 (1.2667ms)
+✔ Tinetti total max is 28 (1.4748ms)
+✔ Tinetti total min is 0 (0.7799ms)
+✔ Tinetti risk: score 0 -> Alto rischio cadute (1.1015ms)
+✔ Tinetti risk: score 18 -> Alto rischio cadute (0.8419ms)
+✔ Tinetti risk: score 19 -> Rischio moderato (0.8903ms)
+✔ Tinetti risk: score 23 -> Rischio moderato (0.8423ms)
+✔ Tinetti risk: score 24 -> Basso rischio (0.8723ms)
+✔ Tinetti risk: score 28 -> Basso rischio (1.6693ms)
+✔ NRS severity: 0 -> Assente (3.1304ms)
+✔ NRS severity: 1 -> Lieve (1.7ms)
+✔ NRS severity: 3 -> Lieve (0.8164ms)
+✔ NRS severity: 4 -> Moderato (0.5818ms)
+✔ NRS severity: 6 -> Moderato (0.44ms)
+✔ NRS severity: 7 -> Severo (0.7878ms)
+✔ NRS severity: 10 -> Severo (0.8881ms)
+(node:17448) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:7664) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ preview keeps incomplete OCR values visibly incomplete without filling a dose or date (80.6261ms)
+✔ preview follows the therapy type without presenting latent schedules as active instructions (8.2429ms)
+✔ multiple forms have unique labels and radio groups; imported notes and fractions remain exposed (132.9332ms)
+(node:7664) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:43488) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ route options never contain scheduling regimes (8.0014ms)
+✔ legacy regimen route is not selectable or confirmed and remains unchanged for review (610.9014ms)
+✔ selecting every regimen preserves real route and latent schedule draft without PRN active times (41.8654ms)
+✔ changing legacy type does not implicitly fix the recorded ambiguous route (1.1482ms)
+(node:43488) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:55932) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ UX2 W8 needsMyAck / countToSee: only ACTIVE urgencies that this reader (not the author) can take (9.0601ms)
+✔ UX2 W8 trace: «Urgenza presa in carico da X (ruolo) alle hh:mm», older days carry the date (3.9442ms)
+✔ UX2 W8 diary card: «Ho capito» only for a non-author on an active urgency; then only the trace (120.5997ms)
+✔ F8: Modifica / Elimina appear only with the capability the backend enforces (48.0564ms)
+✔ NEWS2: compact label carries time and «da aggiornare»; tile offers «Rileva ora» and wraps (39.9709ms)
+✔ agenda: note inline, status in words, operator name, month without «+N» (16.0167ms)
+✔ topbar subtitle wraps; the single actionable allergy band retains full names (40.5919ms)
+(node:55932) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:57212) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ carries allergieStatus=paziente_nega into the confirmed cartella (8.3341ms)
+✔ carries allergieStatus=assenti into the confirmed cartella (1.7962ms)
+✔ presenti keeps BOTH the status and the allergy list (no data loss) (3.8536ms)
+✔ omits allergieStatus when the operator never selected one (undocumented ≠ false value) (1.7492ms)
+✔ maps every draft section into the confirmed cartella (5.1668ms)
+✔ does not leak wizard-internal keys (_accepted, _narrative, anagrafica) into the cartella (1.3212ms)
+✔ writes the whole Ingresso step into presaInCarico with the chart vocabulary (1.7344ms)
+✔ no Ingresso data means no presaInCarico (nothing is invented) (1.1115ms)
+(node:57212) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:50764) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ scale mapping retains review and source metadata without a fixed clinical quantity (44.5305ms)
+✔ scale does not invent a time and invalid protocol still blocks confirmation (9.1619ms)
+✔ summary renders measured-dose protocol rather than technical schedule quantity (98.0422ms)
+✔ comparison remains visible when OCR detects zero therapies and source text is escaped (10.1165ms)
+(node:50764) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:43612) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ draft writes preserve source authority and carry CAS/version, result identity and authenticated actor (203.7505ms)
+✔ outdated source conflict is distinguishable from duplicate-patient confirmation (4.1479ms)
+✔ changed source keeps complete manual therapy values and still requires explicit re-review (31.5872ms)
+✔ lost CAS response recovers exact saved revision without overwriting concurrent edits (39.0499ms)
+✔ receipt replay returning a newer concurrent version cannot advance a stale editor (5.6498ms)
+✔ autosave recovers uncertain A before writing newer B with the advanced CAS version (10.3318ms)
+✔ autosave validation failure can be corrected without replaying the rejected fields (6.4069ms)
+(node:43612) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:52244) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ le lettere si numerano per sortOrder, non per posizione nel manifest (9.2251ms)
+✔ AC1: chip "L1" dalla lettera g1, "L2" da g2, aprono la loro lettera (9.0969ms)
+✔ AC1: senza job collegato, senza lettere o con lettere sparite il chip resta "AI" (3.2724ms)
+✔ unione finale da più lettere: "L1 + L2", apre la prima (3.3331ms)
+✔ più campi (blocco clinico): le lettere si uniscono (3.3549ms)
+✔ ciclo 3c: con `pages` il chip mostra la pagina, solo se esiste ancora con lo stesso documento (6.0682ms)
+✔ origine non AI o assente: nessuna provenienza (1.7816ms)
+✔ AC2: una scheda per pagina, lettera per lettera, con lo stato del manifest (3.34ms)
+✔ pagina da aprire: quella indicata, poi la prima della lettera, poi la prima (2.4166ms)
+✔ la scheda scelta resta finché esiste; altrimenti la prima (2.6024ms)
+✔ frecce, Home e Fine fra le schede, con giro (1.2599ms)
+✔ pagina spostata in un’altra lettera: lettera ed etichetta dalle pagine, non da groupIds (2.1095ms)
+✔ AC4: originale illeggibile (422): messaggio dedicato e nessun "Riprova" (2.2718ms)
+✔ AC4: pagina non disponibile, messaggi chiari in italiano (1.5254ms)
+(node:52244) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:24556) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ PATCH never carries the server-owned AI keys (_fieldOrigin, _fieldProposals, _aiMerge) (9.9093ms)
+✔ each letter is merged once per (groupId, resultHash); a new result is a new merge (2.8101ms)
+✔ final merge: once, when the review is ready without conflicts; it supersedes letters (1.5884ms)
+✔ polling only with a job, while reading or while a merge is still due (1.2006ms)
+✔ progress: "N/M pagine lette", the AI sentence while reading, M/M at the end (2.4179ms)
+✔ AI fields: only values still equal to what the AI wrote (operator edits drop the style) (4.1135ms)
+✔ field proposals: pending only, in form order; values shown whole, never truncated (3.0442ms)
+✔ create is blocked while field proposals are open, with the reason in the missing list (3.5202ms)
+✔ reloaded draft keeps what the operator is typing and takes the AI values elsewhere (7.1131ms)
+✔ version conflict: reload and repeat once with a fresh request id; skip when already done (6.7733ms)
+✔ job errors become clear Italian messages (cost guard, invalid file, network) (5.7881ms)
+(node:24556) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ draft writes are serialized: a merge waits for the autosave and the next save reads the latest draft (285.5812ms)
+(node:51428) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ autosave excludes immutable source and receipt fields without dropping editable draft content (12.3144ms)
+✔ createDraft POSTs to /intake/drafts (3.5328ms)
+✔ patchDraft PATCHes the draft id (2.1896ms)
+✔ lost confirmation response and refused retry autosave recover the same confirmed patient (4.7929ms)
+✔ failed confirmation remains an error if its draft is still open or cannot be read (6.9029ms)
+(node:51428) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:52012) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ manual reopen and timeout retry reuse one draft; simultaneous initializers create only once (13.7725ms)
+(node:52012) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:49724) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ empty draft: identity missing, optional sections do not require confirmations (16.4574ms)
+✔ four identity fields alone: ready without contacts, clinical sections or confirmations (4.6924ms)
+✔ pending import proposal and uncertain decision block creation under Terapia (2.6383ms)
+✔ an invalid therapy row is a missing step that points to the field to correct (18.5004ms)
+✔ optional sections are done when filled; modules follow the selection (2.0596ms)
+✔ actual prescriptions still require explicit acceptance, deferred ones do not (6.2538ms)
+✔ each missing identity field blocks even when legacy confirmations are true (2.7005ms)
+✔ invalid supplied phone still blocks; omitted phone never does (2.8361ms)
+(node:49724) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:52820) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ confirmation retains original draft pain without creating NRS and preserves separate vital pain values (6.1824ms)
+✔ new intake has no editable NRS section; old pain remains read-only with an accurate confirmation notice (130.1402ms)
+(node:52820) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:44832) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ P10-INT-1: a row deferred for a document conflict offers no «Reincludi» and explains why (60.8376ms)
+✔ P10-INT-1: the documents flow offers the way back to resolve the conflict (5.022ms)
+✔ P10-INT-1: an operator-deferred row (no conflict) can still be re-included (4.2591ms)
+✔ P10-INT-1: the save banner reason is the server 4xx message, never a technical one (1.0582ms)
+✔ P10-INT-3: each imported therapy row opens the photo of its letter (first page) (72.5537ms)
+✔ P10-INT-4: «Dimissione ospedaliera» is a one-tap prescriber, never written without the tap (63.1727ms)
+✔ P10-INT-2: the allergy summary no longer points to a non-existent «tab Diagnosi» (29.12ms)
+✔ P10-INT-5: DTX 20 is part of the monthly sheet history (1.7599ms)
+(node:44832) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39620) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ four identity fields can create patient without optional phone or acceptance flags (60.0183ms)
+✔ missing birth date and fiscal code are actionable and block summary creation (9.3468ms)
+✔ unverified imported therapy still blocks confirmation until explicitly excluded (29.7983ms)
+✔ source mapping preserves original indexes after an excluded row (2.1832ms)
+✔ confirmation persists a full review snapshot without certifying or changing original therapy data (3.6005ms)
+(node:39620) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:45844) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ import confirmation retains fraction, administration unit and weekdays (9.9245ms)
+✔ PO03: operational notes never receive OCR source or class metadata (1.3516ms)
+✔ PO03: reviewed clinical notes and source stay separate across draft reload (2.4487ms)
+✔ PO03: operator-entered source-like wording is preserved without text cleanup (0.8391ms)
+✔ reviewed schedules, dates, weekdays and status survive JSON draft reload (3.9388ms)
+✔ one-off and as-needed reviews keep their type after reload without periodic schedules (2.0862ms)
+✔ missing or ambiguous raw quantities never become a default dose (4.121ms)
+✔ explicit unit takes priority over form and compound strength stays raw (1.0388ms)
+✔ blank drugs and invalid times stay in the ordered review and cannot confirm (3.0996ms)
+✔ verification renders real manual times and an actionable indexed blocker (42.5631ms)
+✔ liquid and inhaled quantities keep their explicit unit (1.8789ms)
+✔ ambiguous OCR source stays flagged through edits until explicitly reviewed (1.8678ms)
+✔ patch singular/plural and counted form import survive confirmation and reload (2.8609ms)
+✔ AIFA and manual form changes sync matching units but preserve explicit alternatives and quantities (8.5767ms)
+✔ three manual additions and an incomplete row remain alongside imports across draft reload and review (11.3139ms)
+✔ intake keeps complete therapy source available next to manual additions (100.7895ms)
+(node:45844) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:14132) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ diagnostics address original source indices despite excluded imports and multiple schedules (11.2897ms)
+✔ invalid drug, dates, route, strength, weekdays and each dose field have described inline errors (45.6314ms)
+✔ a duplicate or invalid second time marks only that time and preserves the other schedule (59.9569ms)
+✔ empty schedules and divided patches expose the correct correction controls (38.5117ms)
+✔ PRN ignores periodic schedules and residual invalid end date/weekdays remain reachable after a type change (21.5663ms)
+✔ one-off data and time blockers identify separate editable fields (11.0141ms)
+✔ summary correction opens the exact manual row through the section registry, even after excluded imports (88.1953ms)
+✔ summary imported source-review action targets the original row and time edits never acknowledge OCR (19.1024ms)
+✔ excluded blockers are absent from correction actions and busy disables remaining actions (2.0379ms)
+(node:14132) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:11136) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ summary displays exact invalid values beside the corresponding field errors without changing the draft (50.4454ms)
+✔ each error opens the original source field and schedule after excluded imports (24.7466ms)
+✔ import source and reviewed values remain separate and malicious text is escaped (14.7431ms)
+✔ one-time therapies show the actual invalid date and time instead of recurring schedules (11.2595ms)
+(node:11136) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:51228) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ appointment range URL always carries an explicit bounded interval (5.4607ms)
+✔ appointment calendar dates use local components instead of UTC conversion (4.6411ms)
+✔ App appointment reads use only the bounded range builder (11.5335ms)
+(node:51228) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:19992) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ the import modal forwards the created patient and module (11.1236ms)
+✔ existing-patient imports forward the target patient id (8.4022ms)
+✔ AIImportStatus and PatientList pass the ids through to App (12.4874ms)
+✔ "Nuovo ingresso" opens the start page, then the shared NewPatientFlow, and lands on the created patient (22.8589ms)
+✔ the appointment form offers the same flow and selects the created patient (20.2835ms)
+(node:19992) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 262
+ℹ suites 0
+ℹ pass 262
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11502.0969
