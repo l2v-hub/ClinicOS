@@ -91,6 +91,7 @@ const UNIT_ALIASES: Record<string, string> = {
   bust: 'bustina',
   bustina: 'bustina',
   bustine: 'bustina',
+  f: 'fiala',
   fl: 'fiala',
   fiala: 'fiala',
   fiale: 'fiala',
@@ -103,7 +104,13 @@ const UNIT_ALIASES: Record<string, string> = {
   unita: 'unità',
   ui: 'unità',
 };
+// "1.000 MG" o "1.250 MG": punto delle migliaia (1000) o decimale all'inglese (1,25)? Il documento
+// non lo dice, e Number("1.000") darebbe 1. Un numero ambiguo non precompila il campo: resta
+// vuoto e il valore scritto va nelle note, l'operatore lo inserisce. "0.125" non è ambiguo.
+const AMBIGUOUS_THOUSANDS = /(?<![\d.,])[1-9]\d{0,2}(?:\.\d{3})+(?![\d.])/;
+
 function parseAdministration(raw: string, forma: string | null) {
+  if (AMBIGUOUS_THOUSANDS.test(raw || '')) return { num: 0, den: 1, unit: '' };
   const match = (raw || '').trim().match(/^(\d+(?:[.,]\d+)?(?:\s*\/\s*\d+)?)\s*([^\d]*)$/u);
   const qty = match ? parseQuantity(match[1].replace(/\s/g, '')) : null;
   const explicitUnit = match?.[2].trim().toLowerCase().replace(/\.$/, '') ?? '';
@@ -125,6 +132,7 @@ const DOSE_UNIT_MAP: Record<string, string> = {
 };
 export function parseDosaggio(raw: string) {
   // Compound strengths must stay raw: "20mg/ml" is not "20mg".
+  if (AMBIGUOUS_THOUSANDS.test(raw || '')) return null;
   const m = (raw || '').trim().match(/^(\d+(?:[.,]\d+)?)\s*(MGR|MCG|MG|GR|G|UI|ML)$/i);
   return m ? { value: m[1].replace(',', '.'), unit: DOSE_UNIT_MAP[m[2].toUpperCase()] } : null;
 }
@@ -162,7 +170,12 @@ export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormVa
       administrationUnit: scale ? 'unità' : qty.unit,
     })),
     giorniSettimana: Array.isArray(r.giorni) ? r.giorni.map(dayToIso).sort((a, b) => a - b) : [],
-    note: [r.note?.trim() || '', !dose && r.dosaggio ? `Dosaggio: ${r.dosaggio}` : '']
+    note: [
+      r.note?.trim() || '',
+      !dose && r.dosaggio ? `Dosaggio: ${r.dosaggio}` : '',
+      // Una quantità ambigua non precompila il campo: il valore scritto resta qui, visibile.
+      !scale && AMBIGUOUS_THOUSANDS.test(r.quantita || '') ? `Quantità: ${r.quantita}` : '',
+    ]
       .filter(Boolean)
       .join(' — '),
   };
