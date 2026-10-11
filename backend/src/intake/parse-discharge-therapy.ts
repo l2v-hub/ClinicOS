@@ -213,7 +213,7 @@ function toIsoDate(dmy: string | undefined): string {
 // Il riconoscimento e' strutturale, non una lista chiusa di varianti — i referti le scrivono
 // tutte diverse, e ogni variante non riconosciuta diventava una riga farmaco fantasma.
 const KEYWORD_TERAPIA =
-  /^(terapi[ae]\b|tp\b\.?|td\b\.?|t\.\s?d\.|home therapy\b|hospital therapy\b)/i;
+  /^(terapi[ae]\b|tp\b\.?|td\b\.?|t\.\s?d\.|home therapy\b|hospital therapy\b|farmaci\b|prescrizion[ei]\b|(?:piano|schema)\s+terapeutico\b)/i;
 
 // Parole ammesse DOPO la keyword in un titolo. Servono a distinguere "Terapia domiciliare"
 // (titolo) da "Terapia con Ramipril per os" (prescrizione): scartare quest'ultima come titolo
@@ -252,6 +252,10 @@ const QUALIFICATORI = new Set([
   'praticata',
   'prescritta',
   'therapy',
+  'uso',
+  'assunti',
+  'prescritti',
+  'consigliati',
 ]);
 
 /** Strip markdown/bullet/bold decorations and the trailing colon from a line. */
