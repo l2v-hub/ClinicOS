@@ -53,17 +53,25 @@ const EPOCH_SENSITIVE = [
   'src/roster/__tests__/preferences-db.test.ts',
   'src/patients/__tests__/alphabetical-pages-db.test.ts',
   'src/patients/__tests__/room-filter-db.test.ts',
+  // Asserts the GLOBAL unread-diary count (baseline + N): any concurrent suite that writes diary
+  // entries shifts it. Failed deterministically in CI once new test files changed the schedule.
+  'src/patients/__tests__/diary-reading-db.test.ts',
 ];
 const isolated = files.filter((f) => EPOCH_SENSITIVE.includes(f));
 const concurrent = files.filter((f) => !EPOCH_SENSITIVE.includes(f));
 const run = (list, extra = []) =>
   list.length === 0
     ? 0
-    : (spawnSync(process.execPath, ['--import', 'tsx', '--import', stubCss, '--test', ...extra, ...list], {
-        stdio: 'inherit',
-        env: childEnv,
-      }).status ?? 1);
+    : (spawnSync(
+        process.execPath,
+        ['--import', 'tsx', '--import', stubCss, '--test', ...extra, ...list],
+        {
+          stdio: 'inherit',
+          env: childEnv,
+        },
+      ).status ?? 1);
 const first = run(concurrent);
-if (isolated.length) console.log(`run-node-tests: isolated pass for ${isolated.length} roster-epoch suite(s)`);
+if (isolated.length)
+  console.log(`run-node-tests: isolated pass for ${isolated.length} roster-epoch suite(s)`);
 const second = run(isolated, ['--test-concurrency=1']);
 process.exit(first || second);
