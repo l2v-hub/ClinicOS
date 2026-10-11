@@ -124,7 +124,11 @@ export async function buildTherapySlotExactSummary(
         pt."patientId",
         pt."farmacoNome",
         band.fascia,
-        COALESCE(schedule.time, band.ora) AS "scheduledTime"
+        COALESCE(schedule.time, band.ora) AS "scheduledTime",
+        (
+          SELECT count(*)::int FROM "TherapySchedule" bs
+          WHERE bs."therapyId" = pt.id AND bs.fascia = band.fascia
+        ) AS "bandDoses"
       FROM "PatientTherapy" pt
       JOIN "Patient" p ON p.id = pt."patientId"
       CROSS JOIN LATERAL (
@@ -173,11 +177,17 @@ export async function buildTherapySlotExactSummary(
     ), resolved AS (
       SELECT due.fascia, COALESCE(modern.stato, legacy.stato) AS stato
       FROM due_therapy due
-      LEFT JOIN "MedicationAdministration" modern
-        ON modern."therapyId" = due.id
-        AND modern.date = ${date}
-        AND modern.fascia = due.fascia
-        AND modern.ora = due."scheduledTime"
+      -- Same rule as the slot detail: ONE prescribed dose in a band = one record whatever its hour.
+      LEFT JOIN LATERAL (
+        SELECT ma.id, ma.stato
+        FROM "MedicationAdministration" ma
+        WHERE ma."therapyId" = due.id
+          AND ma.date = ${date}
+          AND ma.fascia = due.fascia
+          AND (ma.ora = due."scheduledTime" OR due."bandDoses" <= 1)
+        ORDER BY (ma.stato = 'erogata') DESC, (ma.ora = due."scheduledTime") DESC, ma.id ASC
+        LIMIT 1
+      ) modern ON TRUE
       LEFT JOIN legacy_administration legacy
         ON modern.id IS NULL
         AND legacy."patientId" = due."patientId"
@@ -338,6 +348,17 @@ async function buildTherapySlotSourcePage(
     }),
   );
 
+  // A band with ONE prescribed dose has one record for the day whatever its hour (the time may
+  // have been moved after the dose was given); `erogata` wins so a given dose never reopens.
+  const bandRecords = new Map<string, (typeof administrations)[0]>();
+  for (const administration of administrations) {
+    if (!administration.therapyId) continue;
+    const key = `${administration.therapyId}|${administration.fascia}`;
+    const held = bandRecords.get(key);
+    if (!held || (held.stato !== 'erogata' && administration.stato === 'erogata'))
+      bandRecords.set(key, administration);
+  }
+
   const slots: TherapySlot[] = FASCE.map((f) => {
     const fasciaTherapies = validTherapies.filter((pt) => pt[f.flagField as FlagField] === true);
     const patientMap = new Map<string, SlotPatient>();
@@ -354,11 +375,13 @@ async function buildTherapySlotSourcePage(
       const doses: Array<ScheduleInput | undefined> = schedules.length ? schedules : [undefined];
       for (const sched of doses) {
         const time = sched?.time || f.ora;
+        const bandRecord = doses.length === 1 ? bandRecords.get(`${pt.id}|${f.fascia}`) : undefined;
         const existing =
+          (bandRecord?.stato === 'erogata' ? bandRecord : undefined) ??
           adminMap.get(`${pt.id}|${f.fascia}|${time}`) ??
           adminMap.get(legacyAdministrationKey(pt.patientId, pt.farmacoNome, f.fascia, time)) ??
           (doses.length === 1
-            ? (adminMap.get(`${pt.id}|${f.fascia}`) ??
+            ? (bandRecord ??
               adminMap.get(legacyAdministrationKey(pt.patientId, pt.farmacoNome, f.fascia)))
             : undefined);
         let status: SlotAdministration['status'] = 'pending';

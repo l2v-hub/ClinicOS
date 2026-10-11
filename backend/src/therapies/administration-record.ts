@@ -16,6 +16,34 @@ import { parseTherapyAdministrationBody, resolveAuthoritativeTherapy } from './t
 /** The slot already holds an `erogata` record: it can be neither re-confirmed nor downgraded. */
 export class TherapyAlreadyAdministeredError extends Error {}
 
+/**
+ * The record that already represents this dose. A band with ONE prescribed dose has one record
+ * for the day whatever its hour: moving 08:00 to 09:00 after the dose was given must not reopen
+ * it (a second `erogata` would be a double dose). Several doses in a band match by exact hour.
+ */
+async function existingSlotRecord(
+  tx: Prisma.TransactionClient,
+  slot: { therapyId: string; date: string; fascia: string; ora: string; singleBandDose: boolean },
+) {
+  const { therapyId, date, fascia, ora } = slot;
+  if (!slot.singleBandDose)
+    return tx.medicationAdministration.findUnique({
+      where: { therapyId_date_fascia_ora: { therapyId, date, fascia, ora } },
+      select: { id: true, stato: true },
+    });
+  const records = await tx.medicationAdministration.findMany({
+    where: { therapyId, date, fascia },
+    select: { id: true, stato: true, ora: true },
+    orderBy: { id: 'asc' },
+  });
+  return (
+    records.find((r) => r.stato === 'erogata') ??
+    records.find((r) => r.ora === ora) ??
+    records[0] ??
+    null
+  );
+}
+
 export function isConcurrentWriteConflict(error: unknown): boolean {
   return Boolean(
     error && typeof error === 'object' && (error as { code?: string }).code === 'P2034',
@@ -37,15 +65,37 @@ export async function confirmTherapyAdministration(body: unknown, actor: Operato
         date,
         fascia,
         ora,
+        singleBandDose,
         doseContext,
       } = authoritative;
-      const existing = await tx.medicationAdministration.findUnique({
-        where: { therapyId_date_fascia_ora: { therapyId, date, fascia, ora } },
+      const existing = await existingSlotRecord(tx, {
+        therapyId,
+        date,
+        fascia,
+        ora,
+        singleBandDose,
       });
       if (existing?.stato === 'erogata') throw new TherapyAlreadyAdministeredError();
-      return tx.medicationAdministration.upsert({
-        where: { therapyId_date_fascia_ora: { therapyId, date, fascia, ora } },
-        create: {
+      if (existing)
+        return tx.medicationAdministration.update({
+          where: { id: existing.id },
+          data: {
+            patientId,
+            farmacoNome,
+            farmacoDose,
+            farmacoVia,
+            ora,
+            stato: 'erogata',
+            operatoreId: actor.id,
+            operatoreNome: actor.name || actor.id,
+            confirmedAt: new Date(),
+            motivo: null,
+            note: null,
+            doseContext: doseContext ?? Prisma.DbNull,
+          },
+        });
+      return tx.medicationAdministration.create({
+        data: {
           therapyId,
           patientId,
           farmacoNome,
@@ -59,20 +109,6 @@ export async function confirmTherapyAdministration(body: unknown, actor: Operato
           operatoreNome: actor.name || actor.id,
           confirmedAt: new Date(),
           doseContext,
-        },
-        update: {
-          patientId,
-          farmacoNome,
-          farmacoDose,
-          farmacoVia,
-          ora,
-          stato: 'erogata',
-          operatoreId: actor.id,
-          operatoreNome: actor.name || actor.id,
-          confirmedAt: new Date(),
-          motivo: null,
-          note: null,
-          doseContext: doseContext ?? Prisma.DbNull,
         },
       });
     },
@@ -98,17 +134,37 @@ export async function recordTherapyNotAdministered(body: unknown, actor: Operato
         date,
         fascia,
         ora,
+        singleBandDose,
         motivo = '',
         note: noteText,
       } = authoritative;
-      const existing = await tx.medicationAdministration.findUnique({
-        where: { therapyId_date_fascia_ora: { therapyId, date, fascia, ora } },
-        select: { stato: true },
+      const existing = await existingSlotRecord(tx, {
+        therapyId,
+        date,
+        fascia,
+        ora,
+        singleBandDose,
       });
       if (existing?.stato === 'erogata') throw new TherapyAlreadyAdministeredError();
-      return tx.medicationAdministration.upsert({
-        where: { therapyId_date_fascia_ora: { therapyId, date, fascia, ora } },
-        create: {
+      if (existing)
+        return tx.medicationAdministration.update({
+          where: { id: existing.id },
+          data: {
+            patientId,
+            farmacoNome,
+            farmacoDose,
+            farmacoVia,
+            ora,
+            stato: 'non_erogata',
+            motivo,
+            note: noteText || null,
+            operatoreId: actor.id,
+            operatoreNome: actor.name || actor.id,
+            confirmedAt: null,
+          },
+        });
+      return tx.medicationAdministration.create({
+        data: {
           therapyId,
           patientId,
           farmacoNome,
@@ -122,19 +178,6 @@ export async function recordTherapyNotAdministered(body: unknown, actor: Operato
           operatoreNome: actor.name || actor.id,
           motivo,
           note: noteText || null,
-        },
-        update: {
-          patientId,
-          farmacoNome,
-          farmacoDose,
-          farmacoVia,
-          ora,
-          stato: 'non_erogata',
-          motivo,
-          note: noteText || null,
-          operatoreId: actor.id,
-          operatoreNome: actor.name || actor.id,
-          confirmedAt: null,
         },
       });
     },

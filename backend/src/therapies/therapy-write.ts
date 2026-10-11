@@ -87,6 +87,8 @@ export interface AuthoritativeTherapyAdministration extends TherapyAdministratio
   farmacoDose: string;
   farmacoVia: string;
   ora: string;
+  /** One prescribed dose in this band: any record of the band is that dose, whatever its hour. */
+  singleBandDose: boolean;
   doseContext?: {
     kind: 'blood_glucose';
     glucoseMgDl: number;
@@ -298,6 +300,7 @@ export async function resolveAuthoritativeTherapy(
             therapy.dosaggio,
     farmacoVia: therapy.viaSomministrazione || 'orale',
     ora: schedule?.time || FALLBACK_TIMES[input.fascia],
+    singleBandDose: schedules.length <= 1,
     ...(doseContext ? { doseContext } : {}),
   };
 }

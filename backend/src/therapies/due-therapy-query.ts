@@ -73,6 +73,10 @@ export async function findTherapiesDue(
         p."lastName",
         band.fascia,
         COALESCE(schedule.time, band."defaultTime") AS "scheduledTime",
+        (
+          SELECT count(*)::int FROM "TherapySchedule" bs
+          WHERE bs."therapyId" = pt.id AND bs.fascia = band.fascia
+        ) AS "bandDoses",
         schedule."quantityNumerator",
         schedule."quantityDenominator",
         schedule."administrationUnit",
@@ -148,11 +152,18 @@ export async function findTherapiesDue(
           + split_part(due."scheduledTime", ':', 2)::int
         ) AS "scheduledMinutes"
       FROM due_therapy due
-      LEFT JOIN "MedicationAdministration" modern
-        ON modern."therapyId" = due."therapyId"
-        AND modern.date = ${date}
-        AND modern.fascia = due.fascia
-        AND modern.ora = due."scheduledTime"
+      -- A band with ONE prescribed dose has one record for the day whatever its hour (the time
+      -- may have moved after the dose was given); several doses match by exact hour.
+      LEFT JOIN LATERAL (
+        SELECT ma.id, ma.stato
+        FROM "MedicationAdministration" ma
+        WHERE ma."therapyId" = due."therapyId"
+          AND ma.date = ${date}
+          AND ma.fascia = due.fascia
+          AND (ma.ora = due."scheduledTime" OR due."bandDoses" <= 1)
+        ORDER BY (ma.stato = 'erogata') DESC, (ma.ora = due."scheduledTime") DESC, ma.id ASC
+        LIMIT 1
+      ) modern ON TRUE
       LEFT JOIN legacy_administration legacy
         ON modern.id IS NULL
         AND legacy."patientId" = due."patientId"
