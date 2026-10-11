@@ -1,5 +1,6 @@
 // Raw OCR fields remain alongside the complete, operator-reviewed form in the draft.
 import { emptyTherapyForm, type TherapyFormValue } from '../../operator/cartella/TherapyFormFields';
+import { localIsoDate } from '../../../lib/appointmentRange';
 import {
   PHARMA_FORMS,
   administrationUnitForForm,
@@ -26,6 +27,8 @@ export interface DischargeTherapyRow {
   note: string;
   originalText: string;
   stato: 'ok' | 'da_verificare';
+  /** Trovata nel documento fuori dalla sezione terapia: sempre da verificare. */
+  outsideTherapySection?: boolean;
   doseMode?: 'fixed' | 'glucose_scale';
   glucoseScale?: GlucoseDoseRule[];
   excludedFromConfirm?: boolean;
@@ -142,7 +145,8 @@ export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormVa
     commercialStrengthUnit: dose?.unit ?? '',
     viaSomministrazione:
       CODE_TO_FORM_VIA[(r.viaSomministrazione || '').toUpperCase()] ?? r.viaSomministrazione ?? '',
-    dataInizio: r.dataInizio?.trim() ?? '',
+    // Senza data nel documento la terapia parte dal giorno in cui la si prende in carico.
+    dataInizio: r.dataInizio?.trim() || localIsoDate(),
     dataSomministrazione: '',
     doseMode: scale ? 'glucose_scale' : 'fixed',
     glucoseScale: (r.glucoseScale ?? []).map((rule) => ({

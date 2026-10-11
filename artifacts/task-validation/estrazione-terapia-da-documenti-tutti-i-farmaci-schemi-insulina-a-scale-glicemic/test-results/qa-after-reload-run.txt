@@ -1,0 +1,59 @@
+ie: ## ALLERGIE, Nessuna allergia nota
+Gestisci →
+!
+
+Anomalie da sanare su questo paziente — terapie attive di oggi
+
+5 farmaci in terapia non risultano in anagrafica AIFA: ATORVASTATINA, BISOPROLOLO, HUMALOG, PANTOPRAZOLO, RAMIPRIL. Vanno corretti.
+
+Vai alla terapia
+▾
+Terapia Farmacologica
+5 farmaci attivi
+Calendario
+Storico
+Piano terapeutico
+Nuova terapia
+▸ PANTOPRAZOLO
+non in anagrafica
+40 mg compressa · 07:30 1 compressa · orale
+▸ ATORVASTATINA
+non in anagrafica
+20 mg compressa · 22:00 1 compressa · orale
+▾ HUMALOG
+non in anagrafica
+Dose secondo schema glicemico · Schema glicemico · 08:00 · 12:00 · 19:00 · SC
+Anagrafica AIFA
+HUMALOG
+non in anagrafica
+Orari e quantità
+
+Rilevazioni: 08:00, 12:00, 19:00
+
+10–149 mg/dL → 0 unità
+150–200 mg/dL → 2 unità
+201–250 mg/dL → 4 unità
+251–oltre mg/dL → 6 unità
+Tipo
+Periodica
+Inizio
+2026-10-11
+Fine
+—
+Stato
+Attiva
+Note
+secondo schema:
+Modifica
+Sospendi
+Elimina
+▸ BISOPROLOLO
+non in anagrafica
+2.5 mg compressa · 08:00 1 compressa · orale
+▸ RAMIPRIL
+non in anagrafica
+5 mg compressa · 08:00 1 compressa · orale
+PASS  After reload HUMALOG visible
+PASS  After reload scale band 150-200 → 2 visible
+PASS  After reload scale band 201-250 → 4 visible
+PASS  After reload open band >250 / ≥251 → 6 visible

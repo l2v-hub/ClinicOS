@@ -1,6 +1,7 @@
 // Shared utilities for cartella clinica sub-tabs
 import { useWidgetOpen } from '../../shared/WidgetGroup';
 import { SectionToggle } from '../../shared/SectionToggle';
+import { localIsoDate } from '../../../lib/appointmentRange';
 
 export function uid(): string {
   return crypto.randomUUID();
@@ -8,8 +9,9 @@ export function uid(): string {
 export function nowISO(): string {
   return new Date().toISOString();
 }
+/** Giorno locale: `toISOString()` darebbe il giorno prima fra mezzanotte e le 2 in Italia. */
 export function todayStr(): string {
-  return new Date().toISOString().slice(0, 10);
+  return localIsoDate();
 }
 export function nowTime(): string {
   return new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
