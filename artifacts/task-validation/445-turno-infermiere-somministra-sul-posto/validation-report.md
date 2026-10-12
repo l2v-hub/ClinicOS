@@ -50,6 +50,31 @@
 4. Se gli allergeni sono più dei 10 nomi mandati dal server, il blocco aggiunge «+N altre».
 5. Guardia sincrona (`useRef`) contro un secondo «Conferma» nello stesso istante.
 
+### Secondo passaggio QA (FAILED VALIDATION su d86722663)
+
+6. **Bloccante.** Se il server scrive il rifiuto ma la risposta si perde (rete, 5xx dopo il commit),
+   nessuna dose risultava riuscita e la riapertura riproponeva il rifiuto come «Somministrata».
+   Ora:
+   - ogni dose tentata, riuscita o no, resta «in verifica» nella coda: visibile, ma fuori dal
+     conteggio e dal pannello;
+   - torna disponibile solo quando arriva una lettura di `/therapy-slots` **partita dopo** il
+     tentativo (`revisione`/`revisioneLetta` in `useRiepilogoSomministrazioni`;
+     `recordAdministration` invalida già le letture in volo; la revisione si legge da un ref, così un
+     refresh automatico partito durante le scritture non conta);
+   - è il server a dire se la dose è ancora da fare;
+   - nel pannello una dose fallita non si riprova;
+   - senza risposta il messaggio dice «esito incerto», non «non registrata»;
+   - il motivo scelto vive nella coda, quindi un rifiuto non scritto torna ancora rifiutato.
+7. Lo script E2E aspetta davvero il selettore dei ruoli dopo il reload (`isVisible` non attende).
+8. Trovato nella prova dei ruoli: la chip «urgenze da prendere in carico» contava anche le urgenze
+   scritte da chi legge (totale `urgentActive` del server). Ora conta solo
+   `countToTakeCharge(urgentPreview)`, e scrive «Almeno N» quando l'anteprima del server è troncata.
+
+Regressione E2E `scripts/e2e/issue-445-partial-failure.mjs`, 7/7 PASS:
+- S1: 500 sulla prima conferma;
+- S2: rifiuto scritto con risposta persa, il rifiuto resta nel DB e non viene riproposto;
+- S3: rifiuto non scritto, torna con «Rifiutata dal paziente» ancora scelto.
+
 ## Files Changed
 
 - `frontend/src/components/operator/AdessoQueue.tsx`, `AdessoQueue.css` — blocchi dosi, intestazioni orarie, niente nota
@@ -81,10 +106,10 @@
 
 | Test | Result | Evidence |
 |---|---:|---|
-| Unit | PASS | `logs/unit-tests.log` (1353/1353) |
+| Unit | PASS | `logs/unit-tests.log` (1354/1354) |
 | Integration | NA | |
 | API | PASS | endpoint esistenti invariati, chiamati dal browser (`test-results/db-after.json`) |
-| Playwright | PASS | `scripts/e2e/issue-445-turno.mjs` (11/11), `scripts/e2e/issue-445-partial-failure.mjs` (4/4), `logs/playwright-after.log`, `logs/playwright-partial-failure.log`, `trace/turno-1180x820.zip`, `screenshots/` |
+| Playwright | PASS | `scripts/e2e/issue-445-turno.mjs` (11/11), `scripts/e2e/issue-445-partial-failure.mjs` (7/7), `logs/playwright-after.log`, `logs/playwright-partial-failure.log`, `trace/turno-1180x820.zip`, `screenshots/` |
 | Persistence | PASS | righe `MedicationAdministration` nel DB e coda dopo il reload |
 | Agnos AI | NA | |
 | Voice | NA | |
@@ -96,8 +121,8 @@
 Stack locale sintetico: Postgres embedded, DB `uxaudit` (seed dell'audit 11/10), backend
 `AUTH_MODE=demo` con simulatore su :3111, vite su :5211, ruolo Infermiere 1 a 1180×820. Fixture:
 consegna urgente creata via API come Medico 1. Ruoli: `logs/roles-probe.log` e
-`screenshots/ruolo-*.png`. Medico 1 vede 3 blocchi senza «Somministra», OSS 1 e Supervisore 1 non
-hanno blocchi; 0 errori in console.
+`screenshots/ruolo-*.png`. Medico 1 vede i blocchi senza «Somministra» e nessuna chip per le urgenze che ha scritto lui; OSS 1
+vede le urgenze dei colleghi; Supervisore 1 non cambia; 0 errori in console.
 
 ## Logs
 

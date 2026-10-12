@@ -2,28 +2,46 @@
   "pass": true,
   "results": [
     {
-      "id": "R1",
-      "name": "partial failure: the refused dose is written, the failed one is not",
+      "id": "S1a",
+      "name": "refusal written, failed dose not written",
       "result": "PASS",
-      "detail": "[{\"farmacoNome\":\"Metformina\",\"ora\":\"08:00\",\"stato\":\"non_erogata\",\"motivo\":\"rifiutata_paziente\"}]"
+      "detail": "[{\"farmacoNome\":\"Metformina\",\"stato\":\"non_erogata\",\"motivo\":\"rifiutata_paziente\"}]"
     },
     {
-      "id": "R2",
-      "name": "after «Annulla» the block keeps only the dose not yet recorded",
+      "id": "S1b",
+      "name": "reopen lists only the failed dose and sends one write",
       "result": "PASS",
-      "detail": "[\"Ramipril · 1 compressa — 5 mg · orale\"] · Somministra"
+      "detail": "[\"Ramipril · 1 compressa — 5 mg · orale\"] · [\"/therapy-slots/confirm\"]"
     },
     {
-      "id": "R3",
-      "name": "reopen lists one dose and sends one write",
+      "id": "S1c",
+      "name": "refusal never overwritten",
       "result": "PASS",
-      "detail": "rows 1, posts [{\"url\":\"/therapy-slots/confirm\",\"therapyId\":\"cmv43rrmb00013wlp3tpzas2d\"}]"
+      "detail": "[{\"farmacoNome\":\"Metformina\",\"stato\":\"non_erogata\",\"motivo\":\"rifiutata_paziente\"},{\"farmacoNome\":\"Ramipril\",\"stato\":\"erogata\",\"motivo\":null}]"
     },
     {
-      "id": "R4",
-      "name": "the refusal is never overwritten as administered",
+      "id": "S2a",
+      "name": "lost reply says the outcome is uncertain, not «non registrata»",
       "result": "PASS",
-      "detail": "[{\"farmacoNome\":\"Metformina\",\"ora\":\"08:00\",\"stato\":\"non_erogata\",\"motivo\":\"rifiutata_paziente\"},{\"farmacoNome\":\"Ramipril\",\"ora\":\"08:00\",\"stato\":\"erogata\",\"motivo\":null}]"
+      "detail": "Nessuna risposta dal server: esito incerto. La dose resta in verifica finché il server non ne conferma lo stato."
+    },
+    {
+      "id": "S2b",
+      "name": "reopen never proposes the possibly written refusal",
+      "result": "PASS",
+      "detail": "[\"Ramipril · 1 compressa — 5 mg · orale\"] · [\"/therapy-slots/confirm\"]"
+    },
+    {
+      "id": "S2c",
+      "name": "DB keeps the refusal",
+      "result": "PASS",
+      "detail": "[{\"farmacoNome\":\"Metformina\",\"stato\":\"non_erogata\",\"motivo\":\"rifiutata_paziente\"},{\"farmacoNome\":\"Ramipril\",\"stato\":\"erogata\",\"motivo\":null}]"
+    },
+    {
+      "id": "S3",
+      "name": "a refusal that was not written comes back still refused, never as «Somministrata»",
+      "result": "PASS",
+      "detail": "Non somministrata: Rifiutata dal paziente"
     }
   ]
 }

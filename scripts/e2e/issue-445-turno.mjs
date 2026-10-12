@@ -236,7 +236,12 @@ check(
 await page.reload();
 // la sessione del simulatore non sopravvive al reload: si rientra con lo stesso ruolo
 const picker = page.getByRole('button', { name: /Infermiere 1/ }).first();
-if (await picker.isVisible({ timeout: 5000 }).catch(() => false)) await picker.click();
+// isVisible non attende: si aspetta davvero il selettore dei ruoli o la coda, quale arriva prima.
+await Promise.race([
+  picker.waitFor({ timeout: 15000 }),
+  page.waitForSelector('.adesso-queue', { timeout: 15000 }),
+]).catch(() => {});
+if (await picker.isVisible()) await picker.click();
 await page.waitForSelector('.adesso-queue', { timeout: 30000 });
 await page.waitForTimeout(3000);
 const afterReload = await page.evaluate(() =>

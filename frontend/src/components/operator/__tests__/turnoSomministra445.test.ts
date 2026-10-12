@@ -173,15 +173,54 @@ test('445 QA: doses at different times of the same band are separate blocks with
   assert.doesNotMatch(html, />Somministra 2</);
 });
 
-test('445 QA: written doses leave the queue at once and the confirm cannot re-enter', () => {
+test('445 QA: every attempted dose stays «in verifica» until a read that started after it', () => {
   const queue = readFileSync(new URL('../AdessoQueue.tsx', import.meta.url), 'utf8');
   const panel = readFileSync(new URL('../TurnoDosePanel.tsx', import.meta.url), 'utf8');
-  assert.match(queue, /items\.filter\(\(it\) => !recorded\.has\(it\.key\)\)/);
-  assert.match(queue, /onRecorded=\{\(keys\) =>/);
-  assert.match(panel, /if \(written\.length\) onRecorded\(written\)/);
+  const hook = readFileSync(
+    new URL('../cartella/useRiepilogoSomministrazioni.ts', import.meta.url),
+    'utf8',
+  );
+  // il pannello segnala OGNI dose tentata, riuscita o no
+  assert.match(panel, /onAttempted\(pending\.map\(\(d\) => d\.key\)\)/);
+  // una dose fallita non si riprova dal pannello e non dice «non registrata» senza risposta
+  assert.match(panel, /!recorded\.has\(d\.key\) && !errors\[d\.key\]/);
+  assert.match(panel, /esito incerto/);
   assert.match(
     panel,
     /if \(inFlight\.current \|\| pending\.length === 0 \|\| incomplete\) return;/,
   );
   assert.match(panel, /Esclusa: non viene registrata/);
+  // la coda trattiene fino alla lettura successiva e tiene le scelte fuori dal pannello
+  assert.match(queue, /revisioneLetta < hold\[it\.key\]/);
+  assert.match(queue, /latestRevision\.current \+ 1/);
+  assert.match(queue, /const ready = group\.items\.filter\(\(it\) => !held\(it\)\)/);
+  assert.match(queue, /choices=\{choices\}/);
+  // la revisione letta è quella alla quale la lettura è PARTITA
+  assert.match(hook, /readRevision: revision/);
+});
+
+test('445 QA: the urgency chip counts only what the reader can take charge of', async () => {
+  const { buildTurnoChips } = await import('../../../lib/turnoChips');
+  const base = {
+    urgentState: 'ready' as const,
+    critici: 0,
+    clinicalState: 'ready' as const,
+    anomalie: { pazienti: 0, farmaci: 0, fallito: false },
+    onOpenUrgent: () => {},
+    onOpenCritici: () => {},
+    onRetryClinical: () => {},
+    onOpenAnomalie: () => {},
+  };
+  // l'autore di tre urgenze non ha nulla da prendere in carico
+  assert.deepEqual(buildTurnoChips({ ...base, urgentToTakeCharge: 0, urgentAtLeast: false }), []);
+  // anteprima troncata: si dice che è un minimo
+  assert.equal(
+    buildTurnoChips({ ...base, urgentToTakeCharge: 5, urgentAtLeast: true })[0].label,
+    'Almeno 5 urgenze da prendere in carico',
+  );
+  const dashboard = readFileSync(new URL('../OperatorDashboard.tsx', import.meta.url), 'utf8');
+  assert.match(
+    dashboard,
+    /urgentToTakeCharge: consegnaSummary \? countToTakeCharge\(urgenti\) : undefined/,
+  );
 });

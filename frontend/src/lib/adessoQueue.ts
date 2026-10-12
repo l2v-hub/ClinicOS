@@ -2,7 +2,7 @@
 // dai dati che la dashboard ha già (scadenze terapia, consegne urgenti, anomalie farmaci).
 // Nessun dato viene inventato: una consegna senza data o senza ora resta in coda con l'etichetta
 // che dice esattamente cosa si sa.
-import type { Consegna } from '../types';
+import type { Consegna, MotivoNonErogazione } from '../types';
 import { therapyCalendar, therapyTime, type ScadenzaTerapia } from './dashboardTherapies';
 import type { TabId } from '../components/operator/tabGroups';
 import type { PatientTarget } from './patientTarget';
@@ -86,6 +86,13 @@ export interface AdessoDose {
   farmaco: string;
   dose: string;
   via: string;
+}
+
+/** Esito scelto per una dose nel pannello del Turno: null = somministrata. Vive nella coda, non nel
+ *  pannello, così una riapertura non azzera un rifiuto già scelto (#445 QA). */
+export interface TurnoDoseChoice {
+  motivo: MotivoNonErogazione | null;
+  note: string;
 }
 
 /** Durata leggibile senza conti a mente (#445): minuti fino a 90, poi ore, poi giorni. */
