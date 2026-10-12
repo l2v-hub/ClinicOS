@@ -1,7 +1,7 @@
 // «Da leggere» del Turno (#446): helper della coda unica di note e consegne senza conferma.
 import type { PatientLanding } from './patientTargetResolver';
 import { landingOf } from './patientTargetResolver';
-import type { UnreadDiaryEntry, UnreadDiaryPage } from './diaryUnreadQueue';
+import type { UnreadDiaryEntry } from './diaryUnreadQueue';
 import { patientIdentityName } from './patientIdentity';
 import { canTakeCharge } from './urgency';
 
@@ -17,11 +17,7 @@ export function unreadLanding(row: UnreadDiaryEntry): PatientLanding {
 export const unreadName = (row: UnreadDiaryEntry) =>
   row.identity ? patientIdentityName(row.identity) : 'Identità non disponibile';
 
-/** Urgenze che CHI legge può prendere in carico, dalla stessa coda del badge. `atLeast` quando la
- *  coda ha altre pagine: il numero è un minimo e si dice. */
-export function urgentToTakeCharge(page: UnreadDiaryPage | null) {
-  const rows = (page?.entries ?? []).filter(
-    (row) => row.priority === 'urgente' && canTakeCharge(row.urgency),
-  );
-  return { rows, atLeast: page?.hasMore === true };
+/** Urgenze che CHI legge può prendere in carico (mai le proprie: aspettano un collega). */
+export function takeChargeRows(entries: readonly UnreadDiaryEntry[]): UnreadDiaryEntry[] {
+  return entries.filter((row) => row.priority === 'urgente' && canTakeCharge(row.urgency));
 }

@@ -30,7 +30,7 @@ test('operator first view (#445): action chips, then the queue to administer, no
   // La coda non ripete urgenze e farmaci da verificare: stanno nelle chip e in «Da leggere».
   assert.match(dashboard, /urgenti: \[\],\s*anomalie: \[\],/);
   // #446: «Da leggere» e urgenze dalla stessa coda del badge (diario + consegne)
-  assert.match(dashboard, /useUnreadDiaryQueue\(useCan\('diary\.list'\)\)/);
+  assert.match(dashboard, /useUnreadDiaryQueue\(canReadDiary, true\)/);
   assert.doesNotMatch(dashboard, /TurnoHandovers/);
 });
 

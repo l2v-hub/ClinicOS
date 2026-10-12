@@ -42,9 +42,40 @@
   - per il medico niente chip farmaci;
   - la chip urgenze conta dalla coda unica, solo le urgenze altrui.
 
+## Correzioni dopo il QA indipendente (FAILED VALIDATION su 54c2ed242)
+
+1. **Bloccante.** «Letta» compariva sulle note scritte da chi legge: il server risponde 409 e
+   l'errore sostituiva tutta la lista. Ora «Letta» compare solo se `readReceipt.canAcknowledge`; la
+   propria nota dice «Scritta da te: la conferma un collega»; un errore di conferma resta sopra la
+   lista e non la nasconde.
+2. **Bloccante.** Badge e home si separavano: il badge si rilegge anche su focus, cambio di
+   visibilità e ogni 30 s, la coda del Turno no. Ora `useUnreadDiaryQueue(…, live)` usa gli stessi
+   trigger; la pagina Consegne resta com'era.
+3. Le urgenze dopo le prime 20 voci della coda sparivano. Ora `useUnreadUrgencies` sfoglia la coda
+   fino a 5 pagine (100 voci) con gli stessi trigger del badge; oltre, l'avviso «ci possono essere
+   altre urgenze» compare sempre, anche senza urgenze visibili.
+4. Il giro esclude i pazienti dimessi (`statoRicovero` del riepilogo clinico).
+5. Il medico non legge «Nessuna decisione in sospeso» con le urgenze in caricamento, in errore o
+   troncate; un errore delle urgenze si dice anche all'OSS.
+6. L'orario delle urgenze usa `urgencyTime`, con la data se non è oggi.
+7. «Giro completo» solo se il giro è davvero completo; altrimenti «Nessuno da rilevare fra i primi
+   N pazienti».
+8. Ruoli senza `diary.list`: «La coda delle note non è disponibile per il tuo ruolo»; il messaggio
+   di conferma della coda ora si vede.
+
+Nuovi controlli E2E:
+- QA1: note proprie senza «Letta»;
+- QA2: nota di un collega + focus → badge e home salgono insieme;
+- QA3: «Letta» su una nota altrui → nessun errore, badge e home scendono insieme;
+- QA4: urgenze solo nella seconda pagina della coda → arrivano in cima;
+- QA5: paziente dimesso fuori dal giro (0 di 4).
+
+Unit: `turnoRuoli446.test.ts`.
+
 ## Files Changed
 
-- `frontend/src/lib/turnoVariant.ts`, `turnoUnread.ts`, `useGiroParametri.ts` — nuovi
+- `frontend/src/lib/turnoVariant.ts`, `turnoUnread.ts`, `useGiroParametri.ts`, `useUnreadUrgencies.ts` — nuovi
+- `frontend/src/components/operator/useUnreadDiaryQueue.ts` — opzione `live` (stessi trigger del badge)
 - `frontend/src/components/operator/TurnoDaLeggere.tsx`, `TurnoUrgenti.tsx`, `TurnoDecisioni.tsx`, `TurnoGiroParametri.tsx` — nuovi
 - `frontend/src/components/operator/OperatorDashboard.tsx`, `OperatorDashboard.css` — varianti e coda unica
 - `frontend/src/components/operator/TurnoHandovers.tsx` — rimosso (resta il CSS, riusato)
@@ -61,14 +92,14 @@
 | AC2 | PASS | `screenshots/02-oss.png`: urgenze in cima, tutte con «Ho capito»; «Giro parametri di oggi · 0 di 5», primo «Nanni Miriam · prima: parametro critico»; «Rileva» apre la scheda Parametri (`03-oss-rileva.png`) |
 | AC3 | PASS | con elementi in sospeso non compare; con tutte le fonti a zero (stub) compare (`04-oss-niente-in-sospeso.png`); unit `nienteInSospeso` |
 | AC4 | PASS | badge = «Da leggere» per medico (6 = 6), OSS (6 = 6) e infermiere; dopo «Ho capito» entrambi 6 → 5 |
-| AC5 | PASS | infermiere: coda «Adesso» presente, nessuna variante medico/OSS; E2E della #445 rieseguito: 10/10 PASS |
-| AC6 | PASS | tsc + build verdi, unit 1358/1358, Playwright 11/11 per i tre ruoli sullo stesso stato dei dati, 0 errori in console |
+| AC5 | PASS | infermiere: coda «Adesso» presente, nessuna variante medico/OSS; E2E della #445 rieseguito: 10/10 PASS (dopo mezzanotte con l'orologio del browser fissato alle 10:00, `CLOCK=`, perché prima delle 08:00 nessuna dose è in ritardo) |
+| AC6 | PASS | tsc + build verdi, unit 1363/1363, Playwright 16/16 per i tre ruoli sullo stesso stato dei dati (compresi QA1–QA5), 0 errori in console |
 
 ## Test Results
 
 | Test | Result | Evidence |
 |---|---:|---|
-| Unit | PASS | `logs/unit-tests.log` (1358/1358) |
+| Unit | PASS | `logs/unit-tests.log` (1363/1363) |
 | Integration | NA | |
 | API | NA | nessuna modifica backend |
 | Playwright | PASS | `scripts/e2e/issue-446-turno-ruoli.mjs`, `logs/playwright-after.log`, `trace/*.zip`, `screenshots/0*.png` |
@@ -92,8 +123,12 @@ errori.
 
 ## Residual Risks
 
-- La coda è paginata (20 voci): «Da leggere» mostra le prime 5, con il totale del server; le
-  urgenze si contano dalla pagina, con «Altre urgenze nella pagina Consegne» quando ce ne sono altre.
+- La coda è paginata e non filtra per priorità: le urgenze si cercano nelle prime 100 voci; oltre, il
+  Turno avvisa che ce ne possono essere altre. Un filtro per priorità lato server eliminerebbe il
+  limite (modifica di API, non fatta).
+- Prima che arrivi `/auth/me` le capability valgono tutte vere, quindi medico e OSS vedono per un
+  istante il Turno dell'infermiere (comportamento già esistente di `can()`).
+- `useUnreadDiaryQueue.ts` ha 1 errore e 1 warning di lint, già presenti su `main`.
 - «Assistenza da registrare» (OSS) e «I tuoi pazienti» (medico) della tela di design non sono nei
   criteri di accettazione e non sono stati fatti.
 - Il giro conta come «rilevato» un paziente con almeno una lettura oggi; la frequenza per paziente

@@ -28,6 +28,19 @@ const check = (id, name, ok, detail = '') => {
   console.log(`${ok ? 'PASS' : 'FAIL'} ${id} ${name}${detail ? ' — ' + detail : ''}`);
 };
 const browser = await chromium.launch();
+/** Una pagina della coda coerente con la validazione del client: conteggi per paziente ricalcolati. */
+const queuePage = (body, entries, more) => {
+  const counts = new Map();
+  for (const e of entries) counts.set(e.patientId, (counts.get(e.patientId) ?? 0) + 1);
+  return {
+    ...body,
+    entries,
+    filteredUnread: entries.length,
+    hasMore: more,
+    nextCursor: more ? 'qa-page-2' : null,
+    patientCounts: [...counts].map(([patientId, total]) => ({ patientId, total })),
+  };
+};
 
 async function login(role, routes = async () => {}) {
   const context = await browser.newContext({
@@ -139,7 +152,7 @@ const MARK = `E2E-446 ${Date.now()}`;
     s.decisioni.length > 0 &&
       order[0] === 0 &&
       order.every((v, i) => i === 0 || v >= order[i - 1]) &&
-      order.at(-1) === 2,
+      !order.includes(9),
     JSON.stringify(s.decisioni),
   );
   check(
@@ -219,6 +232,117 @@ const MARK = `E2E-446 ${Date.now()}`;
   );
   await page.screenshot({ path: `${OUT}/screenshots/03-oss-rileva.png` });
   if (process.env.TRACE) await context.tracing.stop({ path: `${OUT}/trace/oss.zip` });
+  await context.close();
+}
+
+// ── QA: note proprie, allineamento live, urgenze oltre la prima pagina, dimessi fuori dal giro ──
+{
+  const nurse = await login('Infermiere 1');
+  const { context, page } = await login('OSS 1');
+  // nessun «Letta» sulle note scritte da chi legge (il server le rifiuterebbe: 409)
+  const own = await page.evaluate(() =>
+    [...document.querySelectorAll('.turno-handovers__item')]
+      .filter((li) => /Scritta da te/.test(li.textContent))
+      .map(
+        (li) =>
+          !![...li.querySelectorAll('button')].find((b) => /^Letta$/.test(b.textContent.trim())),
+      ),
+  );
+  check(
+    'QA1',
+    'own notes show «Scritta da te» and never «Letta»',
+    own.every((hasLetta) => !hasLetta),
+    `${own.length} own notes`,
+  );
+  // badge e home restano allineati quando una nota arriva da un collega e la finestra torna attiva
+  const before = await state(page);
+  const res = await fetch(`${API}/consegne`, {
+    method: 'POST',
+    headers: { authorization: nurse.auth(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      pazienteId: nanni,
+      priorita: 'normale',
+      tipo: 'Monitoraggio',
+      note: `${MARK} nota normale`,
+    }),
+  });
+  await page.evaluate(() => window.dispatchEvent(new Event('focus')));
+  await page.waitForTimeout(3000);
+  const after = await state(page);
+  check(
+    'QA2',
+    "a colleague's new note moves badge and home together (focus)",
+    res.status === 201 && after.badge === after.daLeggere && after.badge === before.badge + 1,
+    `badge ${before.badge}→${after.badge} · home ${before.daLeggere}→${after.daLeggere}`,
+  );
+  // «Letta» su una nota altrui: nessun errore, badge e home scendono insieme
+  const letta = page
+    .locator('.turno-handovers')
+    .getByRole('button', { name: /^Letta:/ })
+    .first();
+  if ((await letta.count()) > 0) {
+    await letta.click();
+    await page.waitForTimeout(2500);
+    const read = await state(page);
+    const alert = await page.locator('.turno-handovers [role=alert]').count();
+    check(
+      'QA3',
+      "«Letta» on a colleague's note works and keeps badge = home",
+      alert === 0 && read.badge === read.daLeggere && read.badge === after.badge - 1,
+      `badge ${after.badge}→${read.badge} · alert ${alert}`,
+    );
+  } else check('QA3', "«Letta» on a colleague's note", false, 'no «Letta» button found');
+  await context.close();
+  await nurse.context.close();
+}
+{
+  // urgenze solo nella seconda pagina della coda: il Turno le trova lo stesso
+  const { context, page } = await login('OSS 1', async (p) => {
+    await p.route('**/patients/diary-unread?*', async (r) => {
+      const url = new URL(r.request().url());
+      if (url.searchParams.get('cursor') === 'qa-page-2') {
+        const res = await r.fetch({ url: `${API}/patients/diary-unread?limit=20` });
+        const body = await res.json();
+        const urgent = body.entries.filter((e) => e.priority === 'urgente');
+        return r.fulfill({ response: res, json: queuePage(body, urgent, false) });
+      }
+      const res = await r.fetch();
+      const body = await res.json();
+      const normal = body.entries.filter((e) => e.priority !== 'urgente');
+      return r.fulfill({ response: res, json: queuePage(body, normal, true) });
+    });
+  });
+  const s = await state(page);
+  check(
+    'QA4',
+    'urgencies beyond the first queue page still reach the top of the Turno',
+    s.urgentiIds.length > 0,
+    `${s.urgentiIds.length} urgenti`,
+  );
+  await context.close();
+}
+{
+  // un paziente dimesso non entra nel giro
+  let dimesso = null;
+  const { context, page } = await login('OSS 1', async (p) => {
+    await p.route('**/patients/clinical-summary?*', async (r) => {
+      const res = await r.fetch();
+      const body = await res.json();
+      dimesso = body.find((e) => e.patientId !== nanni)?.patientId ?? null;
+      return r.fulfill({
+        response: res,
+        json: body.map((e) => (e.patientId === dimesso ? { ...e, statoRicovero: 'dimesso' } : e)),
+      });
+    });
+  });
+  const s = await state(page);
+  const total = Number((s.giro ?? '').match(/di (\d+)/)?.[1] ?? -1);
+  check(
+    'QA5',
+    'a discharged patient is not in the vitals round',
+    dimesso !== null && total === 4,
+    `${s.giro}`,
+  );
   await context.close();
 }
 

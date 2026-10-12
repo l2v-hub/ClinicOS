@@ -16,7 +16,7 @@ import { TurnoDecisioni } from './TurnoDecisioni';
 import { TurnoGiroParametri } from './TurnoGiroParametri';
 import { useUnreadDiaryQueue } from './useUnreadDiaryQueue';
 import { nienteInSospeso, turnoVariant } from '../../lib/turnoVariant';
-import { urgentToTakeCharge } from '../../lib/turnoUnread';
+import { useUnreadUrgencies } from '../../lib/useUnreadUrgencies';
 import { useGiroParametri } from '../../lib/useGiroParametri';
 import { buildAdessoQueue } from '../../lib/adessoQueue';
 import { landingOf } from '../../lib/patientTargetResolver';
@@ -93,8 +93,10 @@ export function OperatorDashboard({
   });
   // «Da leggere» e urgenze: la stessa coda del badge Consegne (note di diario e consegne senza
   // conferma), così home e badge contano le stesse cose.
-  const queue = useUnreadDiaryQueue(useCan('diary.list'));
-  const urgentQueue = urgentToTakeCharge(queue.page);
+  const canReadDiary = useCan('diary.list');
+  const queue = useUnreadDiaryQueue(canReadDiary, true);
+  // Urgenze raccolte su più pagine della coda: non spariscono dietro le 20 note più recenti.
+  const urgentQueue = useUnreadUrgencies(canReadDiary);
   const urgentIds = new Set(urgentQueue.rows.map((row) => row.id));
   const giro = useGiroParametri(variant === 'oss');
   const allergie = useTurnoAllergies(
@@ -103,9 +105,9 @@ export function OperatorDashboard({
   const farmaciDaVerificare = anomalie.pazienti.reduce((n, p) => n + p.esito.totale, 0);
   const chips = buildTurnoChips({
     // Solo le urgenze di altri, dalla coda del badge (#445 QA, #446).
-    urgentToTakeCharge: queue.page ? urgentQueue.rows.length : undefined,
+    urgentToTakeCharge: urgentQueue.state === 'ready' ? urgentQueue.rows.length : undefined,
     urgentAtLeast: urgentQueue.atLeast,
-    urgentState: queue.error ? 'error' : queue.page ? 'ready' : 'loading',
+    urgentState: urgentQueue.state,
     critici: clinicalOverview?.critici ?? 0,
     clinicalState: clinicalOverviewState,
     anomalie: {
@@ -204,6 +206,7 @@ export function OperatorDashboard({
         <TurnoUrgenti
           rows={variant === 'oss' ? urgentQueue.rows : []}
           atLeast={urgentQueue.atLeast}
+          state={variant === 'oss' ? urgentQueue.state : 'ready'}
           queue={queue}
           onSelectPaziente={onSelectPaziente}
         />
@@ -219,6 +222,8 @@ export function OperatorDashboard({
         {variant === 'medico' ? (
           <TurnoDecisioni
             urgenti={urgentQueue.rows}
+            urgentiState={urgentQueue.state}
+            urgentiAtLeast={urgentQueue.atLeast}
             queue={queue}
             farmaci={anomalie.pazienti.map((p) => ({
               patientId: p.patientId,
@@ -295,6 +300,7 @@ export function OperatorDashboard({
           />
           <TurnoDaLeggere
             queue={queue}
+            available={canReadDiary}
             exclude={variant === 'infermiere' ? undefined : urgentIds}
             onOpenAll={onOpenConsegneFeed ?? (() => onNavigate('consegne'))}
             onSelectPaziente={onSelectPaziente}

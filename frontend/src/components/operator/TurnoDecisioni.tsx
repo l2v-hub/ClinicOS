@@ -3,7 +3,7 @@ import type { PatientLanding } from '../../lib/patientTargetResolver';
 import { landingOf } from '../../lib/patientTargetResolver';
 import type { UnreadDiaryEntry } from '../../lib/diaryUnreadQueue';
 import { unreadLanding, unreadName } from '../../lib/turnoUnread';
-import { formatFacilityLocalMinute } from '../../lib/facilityTime';
+import { urgencyTime } from '../../lib/urgency';
 import { UnreadAction, type UnreadQueue } from './TurnoDaLeggere';
 
 export interface DecisioneFarmaci {
@@ -19,6 +19,8 @@ export interface DecisioneFarmaci {
  *  come sola informazione. Nessuna azione di somministrazione. */
 export function TurnoDecisioni({
   urgenti,
+  urgentiState,
+  urgentiAtLeast,
   queue,
   farmaci,
   farmaciState,
@@ -27,6 +29,8 @@ export function TurnoDecisioni({
   onOpenLateTherapy,
 }: {
   urgenti: UnreadDiaryEntry[];
+  urgentiState: 'loading' | 'ready' | 'error';
+  urgentiAtLeast: boolean;
   queue: UnreadQueue;
   farmaci: DecisioneFarmaci[];
   farmaciState: 'loading' | 'ready' | 'error';
@@ -50,8 +54,7 @@ export function TurnoDecisioni({
           <li key={row.id} className="turno-decisione is-urgent" data-unread-id={row.id}>
             <div>
               <p className="turno-decisione__kind">
-                Urgente · segnalato alle {formatFacilityLocalMinute(row.entryDateTime).slice(-5)} ·{' '}
-                {row.authorName}
+                Urgente · segnalato {urgencyTime(row.entryDateTime)} · {row.authorName}
               </p>
               <p className="turno-decisione__what">
                 <strong>{unreadName(row)}</strong>
@@ -112,6 +115,20 @@ export function TurnoDecisioni({
             </div>
           </li>
         ))}
+        {urgentiState === 'error' && (
+          <li className="turno-decisione is-warn" role="alert">
+            <p className="turno-decisione__what">
+              Urgenze non disponibili: quelle da prendere in carico potrebbero mancare.
+            </p>
+          </li>
+        )}
+        {urgentiAtLeast && (
+          <li className="turno-decisione is-warn">
+            <p className="turno-decisione__what">
+              Ci possono essere altre urgenze oltre le note lette qui: apri Consegne.
+            </p>
+          </li>
+        )}
         {farmaciState === 'error' && (
           <li className="turno-decisione is-warn" role="alert">
             <p className="turno-decisione__what">
@@ -144,7 +161,7 @@ export function TurnoDecisioni({
           </li>
         )}
       </ol>
-      {count === 0 && farmaciState === 'ready' && (
+      {count === 0 && farmaciState === 'ready' && urgentiState === 'ready' && !urgentiAtLeast && (
         <p className="turno-empty" role="status">
           Nessuna decisione in sospeso.
         </p>

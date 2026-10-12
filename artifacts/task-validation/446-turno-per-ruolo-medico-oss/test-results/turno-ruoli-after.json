@@ -11,7 +11,7 @@
       "id": "AC1b",
       "name": "doctor: decisions first, ordered urgent → therapy to verify → doses (info)",
       "result": "PASS",
-      "detail": "[\"Urgente · segnalato alle 23:51 · Infermiere 1\",\"Terapia da verificare\",\"Terapia da verificare\",\"Dosi non registrate\"]"
+      "detail": "[\"Urgente · segnalato 00:08 · Infermiere 1\",\"Terapia da verificare\",\"Terapia da verificare\"]"
     },
     {
       "id": "AC4-medico",
@@ -54,6 +54,36 @@
       "name": "«Rileva» opens that patient's Parametri",
       "result": "PASS",
       "detail": "active tab: Parametri"
+    },
+    {
+      "id": "QA1",
+      "name": "own notes show «Scritta da te» and never «Letta»",
+      "result": "PASS",
+      "detail": "1 own notes"
+    },
+    {
+      "id": "QA2",
+      "name": "a colleague's new note moves badge and home together (focus)",
+      "result": "PASS",
+      "detail": "badge 5→6 · home 5→6"
+    },
+    {
+      "id": "QA3",
+      "name": "«Letta» on a colleague's note works and keeps badge = home",
+      "result": "PASS",
+      "detail": "badge 6→5 · alert 0"
+    },
+    {
+      "id": "QA4",
+      "name": "urgencies beyond the first queue page still reach the top of the Turno",
+      "result": "PASS",
+      "detail": "4 urgenti"
+    },
+    {
+      "id": "QA5",
+      "name": "a discharged patient is not in the vitals round",
+      "result": "PASS",
+      "detail": "Giro parametri di oggi · 0 di 4"
     },
     {
       "id": "AC3b",

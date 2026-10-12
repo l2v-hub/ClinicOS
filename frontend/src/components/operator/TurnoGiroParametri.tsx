@@ -50,9 +50,13 @@ export function TurnoGiroParametri({
             Riprova
           </button>
         </p>
-      ) : daFare.length === 0 ? (
+      ) : daFare.length === 0 && giro.completo ? (
         <p className="turno-empty" role="status">
           Giro completo: tutti i pazienti hanno parametri rilevati oggi.
+        </p>
+      ) : daFare.length === 0 ? (
+        <p className="turno-empty" role="status">
+          Nessuno da rilevare fra i primi {totale} pazienti: gli altri sono in Parametri.
         </p>
       ) : (
         <ol className="turno-giro__list">

@@ -59,18 +59,25 @@ export function useGiroParametri(enabled: boolean): GiroParametri {
         { headers: operatorHeaders(), signal: controller.signal },
       );
       const critici = new Set(summary.filter((s) => s.hasCriticalVitals).map((s) => s.patientId));
+      // I dimessi non sono nel giro (#446 QA): stesso perimetro del «non dimessi» del sottotitolo.
+      const dimessi = new Set(
+        summary.filter((s) => s.statoRicovero === 'dimesso').map((s) => s.patientId),
+      );
       if (controller.signal.aborted) return;
       setResult({
         state: 'ready',
         completo: !hasMore,
-        pazienti: items.map((i) => ({
-          patientId: i.patient.id,
-          nome: `${i.patient.lastName} ${i.patient.firstName}`.trim(),
-          luogo: i.patient.location !== undefined ? patientLocationLabel(i.patient.location) : null,
-          // solo una lettura dello stesso giorno conta come rilevazione di oggi
-          rilevatoOggi: (i.summaryDate ?? day) === day && (i.cartella.readingCount ?? 0) > 0,
-          critico: critici.has(i.patient.id),
-        })),
+        pazienti: items
+          .filter((i) => !dimessi.has(i.patient.id))
+          .map((i) => ({
+            patientId: i.patient.id,
+            nome: `${i.patient.lastName} ${i.patient.firstName}`.trim(),
+            luogo:
+              i.patient.location !== undefined ? patientLocationLabel(i.patient.location) : null,
+            // solo una lettura dello stesso giorno conta come rilevazione di oggi
+            rilevatoOggi: (i.summaryDate ?? day) === day && (i.cartella.readingCount ?? 0) > 0,
+            critico: critici.has(i.patient.id),
+          })),
       });
     })().catch(() => {
       if (!controller.signal.aborted) setResult({ state: 'error', pazienti: [], completo: false });
