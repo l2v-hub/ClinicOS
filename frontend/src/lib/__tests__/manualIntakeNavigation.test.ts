@@ -9,7 +9,7 @@ const flow = source('../../components/operator/NewPatientFlow.tsx');
 
 test('manual path stays on method route across the actual keyed App page boundary', () => {
   const app = source('../../App.tsx');
-  assert.match(app, /WidgetGroup key=\{`\$\{navKey\}/);
+  assert.match(app, /WidgetGroup\s+key=\{`\$\{navKey\}/);
   const chooser = list.slice(
     list.indexOf('if (newIntake && canIntake)'),
     list.indexOf('className="patient-list-view"'),

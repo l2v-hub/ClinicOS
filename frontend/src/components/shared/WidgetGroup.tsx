@@ -14,8 +14,16 @@ type Entry = { open: boolean; setOpen: (open: boolean) => void };
 type Registry = { register: (id: string, entry: Entry | null) => void };
 const Widgets = createContext<Registry | null>(null);
 
-/** One page control; widgets keep their own state and mounted editors when hidden. */
-export function WidgetGroup({ children }: { children: ReactNode }) {
+/** One page control; widgets keep their own state and mounted editors when hidden.
+ *  `controls={false}` keeps the registry but hides the bulk toggle (patient chart: it would
+ *  appear above the tab bar only on some tabs and move the bar — #448). */
+export function WidgetGroup({
+  children,
+  controls = true,
+}: {
+  children: ReactNode;
+  controls?: boolean;
+}) {
   const [entries, setEntries] = useState<Map<string, Entry>>(() => new Map());
   const register = useCallback((id: string, entry: Entry | null) => {
     setEntries((old) => {
@@ -29,7 +37,7 @@ export function WidgetGroup({ children }: { children: ReactNode }) {
   const expanded = [...entries.values()].some((e) => e.open);
   return (
     <Widgets.Provider value={value}>
-      {entries.size > 1 && (
+      {controls && entries.size > 1 && (
         <div className="widget-group-controls no-print">
           <button
             type="button"

@@ -3517,7 +3517,10 @@ export default function App() {
 
           {/* Page content */}
           <main className="page-content content-panel">
-            <WidgetGroup key={`${navKey}:${pazienteSelezionato?.id ?? ''}`}>
+            <WidgetGroup
+              key={`${navKey}:${pazienteSelezionato?.id ?? ''}`}
+              controls={navKey !== 'dettaglio-paziente'}
+            >
               <TopbarTitleSlot.Provider value={topbarTitleSlot}>
                 <LazyLoadBoundary>
                   <Suspense fallback={<PageLoading />}>
