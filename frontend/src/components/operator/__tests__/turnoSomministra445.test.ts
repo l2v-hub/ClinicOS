@@ -145,3 +145,43 @@ test('445 the panel records through the giro endpoints with the slot key and exp
   // nessun farmaco/dose dal client: solo la chiave dello slot
   assert.doesNotMatch(panel, /farmacoNome|farmacoDose/);
 });
+
+test('445 QA: an allergy list cut at 10 names says how many are missing', () => {
+  const names = Array.from({ length: 10 }, (_, i) => ({ allergene: `A${i}`, gravita: null }));
+  assert.deepEqual(
+    allergyNames({
+      patientId: 'P1',
+      statoRicovero: null,
+      hasCriticalVitals: false,
+      hasHighRisk: false,
+      hasSevereAllergy: true,
+      terapieTotali: 0,
+      terapieCompletate: 0,
+      consegneAperte: 0,
+      allergieCount: 13,
+      allergeni: names,
+    }).at(-1),
+    '+3 altre',
+  );
+});
+
+test('445 QA: doses at different times of the same band are separate blocks with their own time', () => {
+  const html = render([dose('a', { ora: '06:00' }), dose('b', { ora: '08:00' })]);
+  assert.equal((html.match(/adesso-dose__block/g) ?? []).length, 2);
+  assert.match(html, /<strong>06:00<\/strong>/);
+  assert.match(html, /<strong>08:00<\/strong>/);
+  assert.doesNotMatch(html, />Somministra 2</);
+});
+
+test('445 QA: written doses leave the queue at once and the confirm cannot re-enter', () => {
+  const queue = readFileSync(new URL('../AdessoQueue.tsx', import.meta.url), 'utf8');
+  const panel = readFileSync(new URL('../TurnoDosePanel.tsx', import.meta.url), 'utf8');
+  assert.match(queue, /items\.filter\(\(it\) => !recorded\.has\(it\.key\)\)/);
+  assert.match(queue, /onRecorded=\{\(keys\) =>/);
+  assert.match(panel, /if \(written\.length\) onRecorded\(written\)/);
+  assert.match(
+    panel,
+    /if \(inFlight\.current \|\| pending\.length === 0 \|\| incomplete\) return;/,
+  );
+  assert.match(panel, /Esclusa: non viene registrata/);
+});

@@ -1,0 +1,5 @@
+PASS R1 partial failure: the refused dose is written, the failed one is not — [{"farmacoNome":"Metformina","ora":"08:00","stato":"non_erogata","motivo":"rifiutata_paziente"}]
+PASS R2 after «Annulla» the block keeps only the dose not yet recorded — ["Ramipril · 1 compressa — 5 mg · orale"] · Somministra
+PASS R3 reopen lists one dose and sends one write — rows 1, posts [{"url":"/therapy-slots/confirm","therapyId":"cmv43rrmb00013wlp3tpzas2d"}]
+PASS R4 the refusal is never overwritten as administered — [{"farmacoNome":"Metformina","ora":"08:00","stato":"non_erogata","motivo":"rifiutata_paziente"},{"farmacoNome":"Ramipril","ora":"08:00","stato":"erogata","motivo":null}]
+PASS #445 partial failure
