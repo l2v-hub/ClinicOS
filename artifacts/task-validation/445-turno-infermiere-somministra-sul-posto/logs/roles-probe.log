@@ -1,3 +1,3 @@
-Medico 1 {"title":"Il mio turno","somministra":0,"blocks":4,"chips":["1 parametro critico","4 farmaci da far verificare al medico"],"crash":false} console errors: 0 
+Medico 1 {"title":"Il mio turno","somministra":0,"blocks":3,"chips":["1 parametro critico","4 farmaci da far verificare al medico"],"crash":false} console errors: 0 
 OSS 1 {"title":"Il mio turno","somministra":0,"blocks":0,"chips":["3 urgenze da prendere in carico","1 parametro critico"],"crash":false} console errors: 0 
 Supervisore 1 {"title":"Dashboard","somministra":0,"blocks":0,"chips":[],"crash":false} console errors: 0 

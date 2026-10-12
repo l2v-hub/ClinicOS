@@ -6,6 +6,8 @@
 //     of the panel and the DB keeps non_erogata.
 //  S3 the refusal fails without being written (500) → it comes back after the re-read with the
 //     nurse's «Rifiutata dal paziente» still chosen, never as «Somministrata».
+//  S4 a colleague refuses Metformina while the panel is open; after a refresh the open panel marks
+//     it «Stato cambiato» and «Conferma» sends only Ramipril (the colleague's refusal stays).
 // LOCAL synthetic stack only. Usage (repo root):
 //   DATABASE_URL=<local DB> node scripts/e2e/issue-445-partial-failure.mjs <outDir>
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -34,7 +36,7 @@ const check = (id, name, ok, detail = '') => {
 const rowsDb = async () =>
   (
     await db.query(
-      `SELECT "farmacoNome", stato, motivo FROM "MedicationAdministration" WHERE date=$1 AND "patientId"=$2 ORDER BY "farmacoNome"`,
+      `SELECT "farmacoNome", stato, motivo, "therapyId", fascia, ora FROM "MedicationAdministration" WHERE date=$1 AND "patientId"=$2 ORDER BY "farmacoNome"`,
       [today, nanni],
     )
   ).rows;
@@ -115,7 +117,9 @@ const settled = (block) =>
       afterFail[0].motivo === 'rifiutata_paziente',
     JSON.stringify(afterFail),
   );
-  await panelOf(block).getByRole('button', { name: 'Annulla' }).click();
+  await panelOf(block)
+    .getByRole('button', { name: /^(Annulla|Chiudi)$/ })
+    .click();
   await settled(block);
   posts.length = 0;
   await block
@@ -170,7 +174,9 @@ const settled = (block) =>
     /esito incerto/.test(errorText) && !/non è stata registrata/.test(errorText),
     errorText,
   );
-  await panelOf(block).getByRole('button', { name: 'Annulla' }).click();
+  await panelOf(block)
+    .getByRole('button', { name: /^(Annulla|Chiudi)$/ })
+    .click();
   await settled(block);
   posts.length = 0;
   await block
@@ -219,7 +225,9 @@ const settled = (block) =>
     .getByRole('button', { name: /^Conferma/ })
     .click();
   await panelOf(block).locator('.turno-dose-panel__error').first().waitFor({ timeout: 10000 });
-  await panelOf(block).getByRole('button', { name: 'Annulla' }).click();
+  await panelOf(block)
+    .getByRole('button', { name: /^(Annulla|Chiudi)$/ })
+    .click();
   await settled(block);
   await block
     .locator('button', { hasText: /^Somministra/ })
@@ -237,6 +245,77 @@ const settled = (block) =>
     note,
   );
   await page.context().close();
+}
+
+// ── S4: a colleague records Metformina while the panel is open ─────────────────────────────────
+{
+  const { page, posts, block } = await open();
+  let auth = null;
+  const slotBodies = [];
+  page.on('request', (r) => {
+    if (r.headers().authorization) auth = r.headers().authorization;
+  });
+  // chiave dello slot di Metformina: la si legge da una scrittura intercettata e poi annullata
+  await page.route('**/therapy-slots/confirm', (route) => {
+    slotBodies.push(route.request().postDataJSON());
+    return route.fulfill({
+      status: 503,
+      contentType: 'application/json',
+      body: '{"error":"sonda"}',
+    });
+  });
+  await block.locator('button', { hasText: /^Somministra \d+$/ }).click();
+  await panelOf(block).locator('input[type=checkbox]').first().uncheck();
+  await panelOf(block)
+    .getByRole('button', { name: /^Conferma/ })
+    .click();
+  await panelOf(block).locator('.turno-dose-panel__error').first().waitFor({ timeout: 10000 });
+  await page.unroute('**/therapy-slots/confirm');
+  await page.context().close();
+  const key = slotBodies[0];
+  // sessione nuova, pannello aperto; intanto «un collega» rifiuta Metformina dal giro
+  const second = await open();
+  await second.block.locator('button', { hasText: /^Somministra \d+$/ }).click();
+  const before = await panelOf(second.block).locator('.turno-dose-panel__drug').allTextContents();
+  const res = await fetch(
+    `${process.env.API ?? 'http://127.0.0.1:3111'}/therapy-slots/not-administered`,
+    {
+      method: 'POST',
+      headers: { authorization: auth, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...key, motivo: 'rifiutata_paziente', confirmed: true }),
+    },
+  );
+  await second.page.evaluate(() => window.dispatchEvent(new Event('focus')));
+  await second.page.waitForFunction(
+    () => /Stato cambiato/.test(document.querySelector('.turno-dose-panel')?.textContent ?? ''),
+    null,
+    { timeout: 15000 },
+  );
+  await second.page.screenshot({ path: `${OUT}/screenshots/qa-s4-stato-cambiato.png` });
+  const confirmLabel = (
+    await panelOf(second.block)
+      .getByRole('button', { name: /^Conferma/ })
+      .textContent()
+  ).trim();
+  second.posts.length = 0;
+  await panelOf(second.block)
+    .getByRole('button', { name: /^Conferma/ })
+    .click();
+  await second.page.waitForTimeout(2500);
+  const final = await rowsDb();
+  check(
+    'S4',
+    'an open panel never sends a dose a colleague recorded meanwhile',
+    res.status === 200 &&
+      before.length === 2 &&
+      confirmLabel === 'Conferma 1' &&
+      second.posts.length === 1 &&
+      second.posts[0] === '/therapy-slots/confirm' &&
+      final.find((r) => r.farmacoNome === 'Metformina')?.stato === 'non_erogata' &&
+      final.find((r) => r.farmacoNome === 'Ramipril')?.stato === 'erogata',
+    `colleague ${res.status} · ${confirmLabel} · ${JSON.stringify(second.posts)} · ${JSON.stringify(final.map((r) => r.farmacoNome + ':' + r.stato))}`,
+  );
+  await second.page.context().close();
 }
 
 await browser.close();

@@ -183,7 +183,10 @@ test('445 QA: every attempted dose stays «in verifica» until a read that start
   // il pannello segnala OGNI dose tentata, riuscita o no
   assert.match(panel, /onAttempted\(pending\.map\(\(d\) => d\.key\)\)/);
   // una dose fallita non si riprova dal pannello e non dice «non registrata» senza risposta
-  assert.match(panel, /!recorded\.has\(d\.key\) && !errors\[d\.key\]/);
+  assert.match(
+    panel,
+    /const attempted = \(key: string\) => recorded\.has\(key\) \|\| Boolean\(errors\[key\]\)/,
+  );
   assert.match(panel, /esito incerto/);
   assert.match(
     panel,
@@ -195,6 +198,9 @@ test('445 QA: every attempted dose stays «in verifica» until a read that start
   assert.match(queue, /latestRevision\.current \+ 1/);
   assert.match(queue, /const ready = group\.items\.filter\(\(it\) => !held\(it\)\)/);
   assert.match(queue, /choices=\{choices\}/);
+  // pannello aperto: si invia solo ciò che la coda viva dà ancora da fare (#445 QA 3)
+  assert.match(panel, /included\.has\(d\.key\) && liveKeys\.has\(d\.key\) && !attempted\(d\.key\)/);
+  assert.match(panel, /Stato cambiato nel frattempo: non viene registrata/);
   // la revisione letta è quella alla quale la lettura è PARTITA
   assert.match(hook, /readRevision: revision/);
 });

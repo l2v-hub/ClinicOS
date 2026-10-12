@@ -70,10 +70,22 @@
    scritte da chi legge (totale `urgentActive` del server). Ora conta solo
    `countToTakeCharge(urgentPreview)`, e scrive «Almeno N» quando l'anteprima del server è troncata.
 
-Regressione E2E `scripts/e2e/issue-445-partial-failure.mjs`, 7/7 PASS:
+### Terzo passaggio QA (FAILED VALIDATION su 36ff38534)
+
+9. **Bloccante, introdotto dal passaggio precedente.** Il pannello aperto fissava le righe: se un
+   collega registrava una dose dal giro e la coda si rileggeva, il pannello la mostrava ancora
+   spuntata e «Conferma» sovrascriveva il suo rifiuto. Ora restano fisse solo le righe già tentate
+   in questo pannello. Ogni altra dose si invia solo se la coda viva la dà ancora da fare;
+   altrimenti è «Stato cambiato nel frattempo: non viene registrata» (non spuntata, con
+   «Verifica in terapia»).
+10. Dopo un tentativo «Annulla» diventa «Chiudi», e «Conferma 0» non compare più.
+
+Regressione E2E `scripts/e2e/issue-445-partial-failure.mjs`, 8/8 PASS:
 - S1: 500 sulla prima conferma;
-- S2: rifiuto scritto con risposta persa, il rifiuto resta nel DB e non viene riproposto;
-- S3: rifiuto non scritto, torna con «Rifiutata dal paziente» ancora scelto.
+- S2: rifiuto scritto con risposta persa;
+- S3: rifiuto non scritto, torna ancora rifiutato;
+- S4: collega che rifiuta Metformina con il pannello aperto → «Conferma 1», parte solo Ramipril, il
+  rifiuto resta (`screenshots/qa-s4-stato-cambiato.png`).
 
 ## Files Changed
 
@@ -109,7 +121,7 @@ Regressione E2E `scripts/e2e/issue-445-partial-failure.mjs`, 7/7 PASS:
 | Unit | PASS | `logs/unit-tests.log` (1354/1354) |
 | Integration | NA | |
 | API | PASS | endpoint esistenti invariati, chiamati dal browser (`test-results/db-after.json`) |
-| Playwright | PASS | `scripts/e2e/issue-445-turno.mjs` (11/11), `scripts/e2e/issue-445-partial-failure.mjs` (7/7), `logs/playwright-after.log`, `logs/playwright-partial-failure.log`, `trace/turno-1180x820.zip`, `screenshots/` |
+| Playwright | PASS | `scripts/e2e/issue-445-turno.mjs` (11/11), `scripts/e2e/issue-445-partial-failure.mjs` (8/8), `logs/playwright-after.log`, `logs/playwright-partial-failure.log`, `trace/turno-1180x820.zip`, `screenshots/` |
 | Persistence | PASS | righe `MedicationAdministration` nel DB e coda dopo il reload |
 | Agnos AI | NA | |
 | Voice | NA | |
@@ -137,6 +149,11 @@ Console del browser: 0 errori nel percorso Infermiere 1.
 - Il pulsante «Allarmi N» (centro segnalazioni) resta nell'intestazione della coda: è un'azione,
   ma in parte ripete le chip. Da rivedere con la #446.
 - Verifica su stack locale sintetico, non su prod.
+- **Rischio residuo, lo stesso del giro (dal QA):** se il server salva DOPO che il client ha già
+  ricevuto un errore di rete, una lettura intermedia può mostrare la dose ancora da fare. Se il
+  Turno si rimonta, la scelta torna a «Somministrata». La protezione completa richiede idempotenza
+  lato server (`requestId` su `/therapy-slots/confirm` e `/not-administered`, come già su `/prn`):
+  decisione di backend, proposta come issue separata.
 
 ## Final Decision
 

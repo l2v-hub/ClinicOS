@@ -1,8 +1,9 @@
-PASS S1a refusal written, failed dose not written — [{"farmacoNome":"Metformina","stato":"non_erogata","motivo":"rifiutata_paziente"}]
+PASS S1a refusal written, failed dose not written — [{"farmacoNome":"Metformina","stato":"non_erogata","motivo":"rifiutata_paziente","therapyId":"cmv43rrn300033wlp9d0bthz5","fascia":"mattina","ora":"08:00"}]
 PASS S1b reopen lists only the failed dose and sends one write — ["Ramipril · 1 compressa — 5 mg · orale"] · ["/therapy-slots/confirm"]
-PASS S1c refusal never overwritten — [{"farmacoNome":"Metformina","stato":"non_erogata","motivo":"rifiutata_paziente"},{"farmacoNome":"Ramipril","stato":"erogata","motivo":null}]
+PASS S1c refusal never overwritten — [{"farmacoNome":"Metformina","stato":"non_erogata","motivo":"rifiutata_paziente","therapyId":"cmv43rrn300033wlp9d0bthz5","fascia":"mattina","ora":"08:00"},{"farmacoNome":"Ramipril","stato":"erogata","motivo":null,"therapyId":"cmv43rrmb00013wlp3tpzas2d","fascia":"mattina","ora":"08:00"}]
 PASS S2a lost reply says the outcome is uncertain, not «non registrata» — Nessuna risposta dal server: esito incerto. La dose resta in verifica finché il server non ne conferma lo stato.
 PASS S2b reopen never proposes the possibly written refusal — ["Ramipril · 1 compressa — 5 mg · orale"] · ["/therapy-slots/confirm"]
-PASS S2c DB keeps the refusal — [{"farmacoNome":"Metformina","stato":"non_erogata","motivo":"rifiutata_paziente"},{"farmacoNome":"Ramipril","stato":"erogata","motivo":null}]
+PASS S2c DB keeps the refusal — [{"farmacoNome":"Metformina","stato":"non_erogata","motivo":"rifiutata_paziente","therapyId":"cmv43rrn300033wlp9d0bthz5","fascia":"mattina","ora":"08:00"},{"farmacoNome":"Ramipril","stato":"erogata","motivo":null,"therapyId":"cmv43rrmb00013wlp3tpzas2d","fascia":"mattina","ora":"08:00"}]
 PASS S3 a refusal that was not written comes back still refused, never as «Somministrata» — Non somministrata: Rifiutata dal paziente
+PASS S4 an open panel never sends a dose a colleague recorded meanwhile — colleague 200 · Conferma 1 · ["/therapy-slots/confirm"] · ["Metformina:non_erogata","Ramipril:erogata"]
 PASS #445 partial failure
