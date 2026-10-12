@@ -5,61 +5,143 @@
       "viewport": "1180x820",
       "tabs": 8,
       "spread": 0,
+      "placesStable": true,
       "controlsAbove": 0,
       "rows": [
         {
           "tab": "(apertura)",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Panoramica"
+          "active": "Panoramica",
+          "places": "120,78 234,78 371,78 449,78 532,78 630,78 709,78 814,78"
         },
         {
           "tab": "Panoramica",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Panoramica"
+          "active": "Panoramica",
+          "places": "120,78 234,78 371,78 449,78 532,78 630,78 709,78 814,78"
         },
         {
           "tab": "Dati di ingresso",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Dati di ingresso"
+          "active": "Dati di ingresso",
+          "places": "120,78 232,78 371,78 450,78 533,78 630,78 709,78 815,78"
         },
         {
           "tab": "Clinica",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Clinica"
+          "active": "Clinica",
+          "places": "120,78 232,78 369,78 449,78 532,78 630,78 708,78 814,78"
         },
         {
           "tab": "Terapia",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Terapia"
+          "active": "Terapia",
+          "places": "120,78 232,78 369,78 447,78 532,78 629,78 708,78 814,78"
         },
         {
           "tab": "Parametri",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Parametri"
+          "active": "Parametri",
+          "places": "120,78 232,78 369,78 447,78 530,78 630,78 709,78 814,78"
         },
         {
           "tab": "Moduli",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Moduli"
+          "active": "Moduli",
+          "places": "120,78 232,78 369,78 447,78 530,78 628,78 708,78 814,78"
         },
         {
           "tab": "Documenti",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Documenti"
+          "active": "Documenti",
+          "places": "120,78 232,78 369,78 447,78 530,78 628,78 707,78 814,78"
         },
         {
           "tab": "Dimissione",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Dimissione"
+          "active": "Dimissione",
+          "places": "120,78 232,78 369,78 447,78 530,78 628,78 707,78 812,78"
+        }
+      ]
+    },
+    {
+      "viewport": "1024x768",
+      "tabs": 8,
+      "spread": 0,
+      "placesStable": true,
+      "controlsAbove": 0,
+      "rows": [
+        {
+          "tab": "(apertura)",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Panoramica",
+          "places": "120,78 234,78 371,78 449,78 532,78 630,78 709,78 814,78"
+        },
+        {
+          "tab": "Panoramica",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Panoramica",
+          "places": "120,78 234,78 371,78 449,78 532,78 630,78 709,78 814,78"
+        },
+        {
+          "tab": "Dati di ingresso",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Dati di ingresso",
+          "places": "120,78 232,78 371,78 450,78 533,78 630,78 709,78 815,78"
+        },
+        {
+          "tab": "Clinica",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Clinica",
+          "places": "120,78 232,78 369,78 449,78 532,78 630,78 708,78 814,78"
+        },
+        {
+          "tab": "Terapia",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Terapia",
+          "places": "120,78 232,78 369,78 447,78 532,78 629,78 708,78 814,78"
+        },
+        {
+          "tab": "Parametri",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Parametri",
+          "places": "120,78 232,78 369,78 447,78 530,78 630,78 709,78 814,78"
+        },
+        {
+          "tab": "Moduli",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Moduli",
+          "places": "120,78 232,78 369,78 447,78 530,78 628,78 708,78 814,78"
+        },
+        {
+          "tab": "Documenti",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Documenti",
+          "places": "120,78 232,78 369,78 447,78 530,78 628,78 707,78 814,78"
+        },
+        {
+          "tab": "Dimissione",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Dimissione",
+          "places": "120,78 232,78 369,78 447,78 530,78 628,78 707,78 812,78"
         }
       ]
     },
@@ -67,61 +149,71 @@
       "viewport": "768x1024",
       "tabs": 8,
       "spread": 0,
+      "placesStable": true,
       "controlsAbove": 0,
       "rows": [
         {
           "tab": "(apertura)",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Panoramica"
+          "active": "Panoramica",
+          "places": "16,72 130,72 267,72 345,72 428,72 526,72 605,72 16,122"
         },
         {
           "tab": "Panoramica",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Panoramica"
+          "active": "Panoramica",
+          "places": "16,72 130,72 267,72 345,72 428,72 526,72 605,72 16,122"
         },
         {
           "tab": "Dati di ingresso",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Dati di ingresso"
+          "active": "Dati di ingresso",
+          "places": "16,72 128,72 267,72 346,72 429,72 526,72 605,72 16,122"
         },
         {
           "tab": "Clinica",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Clinica"
+          "active": "Clinica",
+          "places": "16,72 128,72 265,72 345,72 428,72 526,72 604,72 16,122"
         },
         {
           "tab": "Terapia",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Terapia"
+          "active": "Terapia",
+          "places": "16,72 128,72 265,72 343,72 428,72 525,72 604,72 16,122"
         },
         {
           "tab": "Parametri",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Parametri"
+          "active": "Parametri",
+          "places": "16,72 128,72 265,72 343,72 426,72 526,72 605,72 16,122"
         },
         {
           "tab": "Moduli",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Moduli"
+          "active": "Moduli",
+          "places": "16,72 128,72 265,72 343,72 426,72 524,72 604,72 16,122"
         },
         {
           "tab": "Documenti",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Documenti"
+          "active": "Documenti",
+          "places": "16,72 128,72 265,72 343,72 426,72 524,72 603,72 16,122"
         },
         {
           "tab": "Dimissione",
           "top": 72,
           "controlsAbove": 0,
-          "active": "Dimissione"
+          "active": "Dimissione",
+          "places": "16,72 128,72 265,72 343,72 426,72 524,72 603,72 16,122"
         }
       ]
     }
@@ -137,6 +229,7 @@
   },
   "consoleErrors": [
     "1180x820: Each child in a list should have a unique \"key\" prop.%s%s See https://react.dev/link/warning-keys for more information. \n\nCheck the render method of `div`.  It was passed a child from AllergiesEditor.",
+    "1024x768: Each child in a list should have a unique \"key\" prop.%s%s See https://react.dev/link/warning-keys for more information. \n\nCheck the render method of `div`.  It was passed a child from AllergiesEditor.",
     "768x1024: Each child in a list should have a unique \"key\" prop.%s%s See https://react.dev/link/warning-keys for more information. \n\nCheck the render method of `div`.  It was passed a child from AllergiesEditor."
   ]
 }
