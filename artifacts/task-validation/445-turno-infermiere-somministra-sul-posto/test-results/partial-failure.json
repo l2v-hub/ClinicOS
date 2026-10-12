@@ -5,7 +5,7 @@
       "id": "S1a",
       "name": "refusal written, failed dose not written",
       "result": "PASS",
-      "detail": "[{\"farmacoNome\":\"Metformina\",\"stato\":\"non_erogata\",\"motivo\":\"rifiutata_paziente\"}]"
+      "detail": "[{\"farmacoNome\":\"Metformina\",\"stato\":\"non_erogata\",\"motivo\":\"rifiutata_paziente\",\"therapyId\":\"cmv43rrn300033wlp9d0bthz5\",\"fascia\":\"mattina\",\"ora\":\"08:00\"}]"
     },
     {
       "id": "S1b",
@@ -17,7 +17,7 @@
       "id": "S1c",
       "name": "refusal never overwritten",
       "result": "PASS",
-      "detail": "[{\"farmacoNome\":\"Metformina\",\"stato\":\"non_erogata\",\"motivo\":\"rifiutata_paziente\"},{\"farmacoNome\":\"Ramipril\",\"stato\":\"erogata\",\"motivo\":null}]"
+      "detail": "[{\"farmacoNome\":\"Metformina\",\"stato\":\"non_erogata\",\"motivo\":\"rifiutata_paziente\",\"therapyId\":\"cmv43rrn300033wlp9d0bthz5\",\"fascia\":\"mattina\",\"ora\":\"08:00\"},{\"farmacoNome\":\"Ramipril\",\"stato\":\"erogata\",\"motivo\":null,\"therapyId\":\"cmv43rrmb00013wlp3tpzas2d\",\"fascia\":\"mattina\",\"ora\":\"08:00\"}]"
     },
     {
       "id": "S2a",
@@ -35,13 +35,19 @@
       "id": "S2c",
       "name": "DB keeps the refusal",
       "result": "PASS",
-      "detail": "[{\"farmacoNome\":\"Metformina\",\"stato\":\"non_erogata\",\"motivo\":\"rifiutata_paziente\"},{\"farmacoNome\":\"Ramipril\",\"stato\":\"erogata\",\"motivo\":null}]"
+      "detail": "[{\"farmacoNome\":\"Metformina\",\"stato\":\"non_erogata\",\"motivo\":\"rifiutata_paziente\",\"therapyId\":\"cmv43rrn300033wlp9d0bthz5\",\"fascia\":\"mattina\",\"ora\":\"08:00\"},{\"farmacoNome\":\"Ramipril\",\"stato\":\"erogata\",\"motivo\":null,\"therapyId\":\"cmv43rrmb00013wlp3tpzas2d\",\"fascia\":\"mattina\",\"ora\":\"08:00\"}]"
     },
     {
       "id": "S3",
       "name": "a refusal that was not written comes back still refused, never as «Somministrata»",
       "result": "PASS",
       "detail": "Non somministrata: Rifiutata dal paziente"
+    },
+    {
+      "id": "S4",
+      "name": "an open panel never sends a dose a colleague recorded meanwhile",
+      "result": "PASS",
+      "detail": "colleague 200 · Conferma 1 · [\"/therapy-slots/confirm\"] · [\"Metformina:non_erogata\",\"Ramipril:erogata\"]"
     }
   ]
 }

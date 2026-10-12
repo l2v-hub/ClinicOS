@@ -27,7 +27,7 @@ function failureText(message: string): string {
  *  Le dosi a scala glicemica richiedono la glicemia: restano fuori e si registrano dalla terapia. */
 export function TurnoDosePanel({
   nome,
-  doses: initialDoses,
+  doses: liveDoses,
   choices,
   onChoice,
   onDone,
@@ -47,11 +47,14 @@ export function TurnoDosePanel({
   onClose: () => void;
   onOpenTherapy: () => void;
 }) {
-  // Le righe restano quelle dell'apertura: l'esito di ciascuna resta visibile anche quando la coda
-  // la toglie perché in verifica.
-  const [doses] = useState(initialDoses);
+  // Righe: quelle dell'apertura più quelle arrivate dopo. Una riga tentata qui resta visibile col
+  // suo esito anche quando la coda la mette in verifica; ogni altra riga si può inviare SOLO se la
+  // coda viva la dà ancora da fare (un collega può averla registrata nel frattempo: #445 QA 3).
+  const [opened] = useState(liveDoses);
+  const liveKeys = new Set(liveDoses.map((d) => d.key));
+  const doses = [...opened, ...liveDoses.filter((d) => !opened.some((o) => o.key === d.key))];
   const [included, setIncluded] = useState(
-    () => new Set(doses.filter((d) => d.dose.doseMode !== 'glucose_scale').map((d) => d.key)),
+    () => new Set(opened.filter((d) => d.dose.doseMode !== 'glucose_scale').map((d) => d.key)),
   );
   const [openReasons, setOpenReasons] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
@@ -61,8 +64,10 @@ export function TurnoDosePanel({
   const [recorded, setRecorded] = useState<Set<string>>(() => new Set());
 
   // Una dose fallita non si riprova da qui: torna in coda solo se il server la dà ancora da fare.
+  const attempted = (key: string) => recorded.has(key) || Boolean(errors[key]);
+  const changed = (key: string) => !attempted(key) && !liveKeys.has(key);
   const pending = doses.filter(
-    (d) => included.has(d.key) && !recorded.has(d.key) && !errors[d.key],
+    (d) => included.has(d.key) && liveKeys.has(d.key) && !attempted(d.key),
   );
   const incomplete = pending.some((d) => {
     const c = choices[d.key];
@@ -119,8 +124,8 @@ export function TurnoDosePanel({
               <label className="turno-dose-panel__check">
                 <input
                   type="checkbox"
-                  checked={included.has(d.key)}
-                  disabled={glucose || sending || done || Boolean(errors[d.key])}
+                  checked={included.has(d.key) && !changed(d.key)}
+                  disabled={glucose || sending || done || Boolean(errors[d.key]) || changed(d.key)}
                   onChange={(e) => {
                     const next = new Set(included);
                     if (e.target.checked) next.add(d.key);
@@ -139,6 +144,13 @@ export function TurnoDosePanel({
                     </span>
                   ) : done ? (
                     <span className="turno-dose-panel__note is-done">Registrata</span>
+                  ) : changed(d.key) ? (
+                    <span className="turno-dose-panel__note is-warn">
+                      Stato cambiato nel frattempo: non viene registrata.{' '}
+                      <button type="button" className="ds-link" onClick={onOpenTherapy}>
+                        Verifica in terapia
+                      </button>
+                    </span>
                   ) : !included.has(d.key) ? (
                     <span className="turno-dose-panel__note">Esclusa: non viene registrata</span>
                   ) : (
@@ -153,7 +165,7 @@ export function TurnoDosePanel({
                   )}
                 </span>
               </label>
-              {!glucose && !done && !errors[d.key] && included.has(d.key) && (
+              {!glucose && !attempted(d.key) && !changed(d.key) && included.has(d.key) && (
                 <button
                   type="button"
                   className="ds-btn ds-btn--secondary turno-dose-panel__more"
@@ -208,16 +220,18 @@ export function TurnoDosePanel({
       </ul>
       <div className="turno-dose-panel__actions">
         <button type="button" className="ds-btn ds-btn--secondary" onClick={onClose}>
-          Annulla
+          {recorded.size || Object.keys(errors).length ? 'Chiudi' : 'Annulla'}
         </button>
-        <button
-          type="button"
-          className="ds-btn ds-btn--primary"
-          disabled={sending || pending.length === 0 || incomplete}
-          onClick={() => void confirm()}
-        >
-          {sending ? 'Registrazione…' : `Conferma ${pending.length}`}
-        </button>
+        {(pending.length > 0 || sending) && (
+          <button
+            type="button"
+            className="ds-btn ds-btn--primary"
+            disabled={sending || incomplete}
+            onClick={() => void confirm()}
+          >
+            {sending ? 'Registrazione…' : `Conferma ${pending.length}`}
+          </button>
+        )}
       </div>
     </div>
   );
