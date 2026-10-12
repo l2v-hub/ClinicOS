@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
-import type { MotivoNonErogazione } from '../../types';
-import type { AdessoDose } from '../../lib/adessoQueue';
+import type { AdessoDose, TurnoDoseChoice } from '../../lib/adessoQueue';
 import { MOTIVI } from '../../lib/therapyGiro';
 import {
   recordAdministration,
@@ -13,7 +12,14 @@ export interface TurnoDose {
   dose: AdessoDose;
 }
 
-type Choice = { motivo: MotivoNonErogazione | null; note: string };
+type Choice = TurnoDoseChoice;
+
+/** Senza risposta il server può aver registrato comunque: non si dice «non registrata». */
+function failureText(message: string): string {
+  return /^Errore di rete/.test(message)
+    ? 'Nessuna risposta dal server: esito incerto. La dose resta in verifica finché il server non ne conferma lo stato.'
+    : `${message} La dose resta in verifica finché il server non ne conferma lo stato.`;
+}
 
 /** «Somministra N» del Turno (#445, decisione del responsabile 12/10/2026): l'elenco delle dosi
  *  sul posto, ognuna visibile e spuntata; «···» registra la mancata somministrazione con i motivi
@@ -21,25 +27,32 @@ type Choice = { motivo: MotivoNonErogazione | null; note: string };
  *  Le dosi a scala glicemica richiedono la glicemia: restano fuori e si registrano dalla terapia. */
 export function TurnoDosePanel({
   nome,
-  doses,
+  doses: initialDoses,
+  choices,
+  onChoice,
   onDone,
-  onRecorded,
+  onAttempted,
   onClose,
   onOpenTherapy,
 }: {
   nome: string;
   doses: TurnoDose[];
+  /** Esiti scelti, tenuti dalla coda: sopravvivono a «Annulla» e alla riapertura. */
+  choices: Record<string, Choice>;
+  onChoice: (key: string, choice: Choice) => void;
   onDone: () => void;
-  /** Dosi registrate (anche se altre sono fallite): la coda le toglie subito e si rilegge, così
-   *  un esito già scritto non può essere riproposto e sovrascritto. */
-  onRecorded: (keys: string[]) => void;
+  /** Ogni dose tentata, riuscita o no: la coda la mette «in verifica» e si rilegge, così un esito
+   *  forse già scritto (risposta persa, 5xx dopo il commit) non viene riproposto e sovrascritto. */
+  onAttempted: (keys: string[]) => void;
   onClose: () => void;
   onOpenTherapy: () => void;
 }) {
+  // Le righe restano quelle dell'apertura: l'esito di ciascuna resta visibile anche quando la coda
+  // la toglie perché in verifica.
+  const [doses] = useState(initialDoses);
   const [included, setIncluded] = useState(
     () => new Set(doses.filter((d) => d.dose.doseMode !== 'glucose_scale').map((d) => d.key)),
   );
-  const [choices, setChoices] = useState<Record<string, Choice>>({});
   const [openReasons, setOpenReasons] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   // Guardia sincrona: due tocchi nello stesso istante non mandano due serie di richieste.
@@ -47,7 +60,10 @@ export function TurnoDosePanel({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [recorded, setRecorded] = useState<Set<string>>(() => new Set());
 
-  const pending = doses.filter((d) => included.has(d.key) && !recorded.has(d.key));
+  // Una dose fallita non si riprova da qui: torna in coda solo se il server la dà ancora da fare.
+  const pending = doses.filter(
+    (d) => included.has(d.key) && !recorded.has(d.key) && !errors[d.key],
+  );
   const incomplete = pending.some((d) => {
     const c = choices[d.key];
     return c?.motivo === 'altro' && !c.note.trim();
@@ -85,8 +101,7 @@ export function TurnoDosePanel({
     setErrors(failed);
     setSending(false);
     inFlight.current = false;
-    const written = [...done].filter((key) => !recorded.has(key));
-    if (written.length) onRecorded(written);
+    onAttempted(pending.map((d) => d.key));
     if (Object.keys(failed).length === 0) onDone();
   }
 
@@ -105,7 +120,7 @@ export function TurnoDosePanel({
                 <input
                   type="checkbox"
                   checked={included.has(d.key)}
-                  disabled={glucose || sending || done}
+                  disabled={glucose || sending || done || Boolean(errors[d.key])}
                   onChange={(e) => {
                     const next = new Set(included);
                     if (e.target.checked) next.add(d.key);
@@ -133,12 +148,12 @@ export function TurnoDosePanel({
                   )}
                   {errors[d.key] && (
                     <span className="turno-dose-panel__error" role="alert">
-                      {errors[d.key]}
+                      {failureText(errors[d.key])}
                     </span>
                   )}
                 </span>
               </label>
-              {!glucose && !done && included.has(d.key) && (
+              {!glucose && !done && !errors[d.key] && included.has(d.key) && (
                 <button
                   type="button"
                   className="ds-btn ds-btn--secondary turno-dose-panel__more"
@@ -157,7 +172,7 @@ export function TurnoDosePanel({
                     className="ds-chip"
                     aria-pressed={!choice?.motivo}
                     onClick={() => {
-                      setChoices({ ...choices, [d.key]: { motivo: null, note: '' } });
+                      onChoice(d.key, { motivo: null, note: '' });
                       setOpenReasons(null);
                     }}
                   >
@@ -170,10 +185,7 @@ export function TurnoDosePanel({
                       className="ds-chip"
                       aria-pressed={choice?.motivo === m.value}
                       onClick={() => {
-                        setChoices({
-                          ...choices,
-                          [d.key]: { motivo: m.value, note: choice?.note ?? '' },
-                        });
+                        onChoice(d.key, { motivo: m.value, note: choice?.note ?? '' });
                         if (m.value !== 'altro') setOpenReasons(null);
                       }}
                     >
@@ -185,12 +197,7 @@ export function TurnoDosePanel({
                       className="form-input"
                       aria-label={`Motivo della mancata somministrazione: ${label}`}
                       value={choice.note}
-                      onChange={(e) =>
-                        setChoices({
-                          ...choices,
-                          [d.key]: { motivo: 'altro', note: e.target.value },
-                        })
-                      }
+                      onChange={(e) => onChoice(d.key, { motivo: 'altro', note: e.target.value })}
                     />
                   )}
                 </div>

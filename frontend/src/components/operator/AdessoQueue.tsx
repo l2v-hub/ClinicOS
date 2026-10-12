@@ -1,10 +1,11 @@
-import { useId, useState, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { IcoArrow } from '../../icons';
 import {
   groupAdessoQueue,
   type AdessoGroup,
   type AdessoItem,
   type AdessoSection,
+  type TurnoDoseChoice,
 } from '../../lib/adessoQueue';
 import type { PatientLanding } from '../../lib/patientTargetResolver';
 import './AdessoQueue.css';
@@ -43,6 +44,9 @@ interface Props {
   canAdminister?: boolean;
   /** Dopo una registrazione dal Turno: rilettura delle scadenze. */
   onAdministered?: () => void;
+  /** Revisione richiesta e revisione dell'ultima lettura riuscita delle scadenze (#445 QA). */
+  revisione?: number;
+  revisioneLetta?: number;
 }
 
 const isDoseGroup = (group: AdessoGroup) =>
@@ -82,14 +86,26 @@ export function AdessoQueue({
   allergie,
   canAdminister = false,
   onAdministered,
+  revisione = 0,
+  revisioneLetta = -1,
 }: Props) {
   const titleId = useId();
   const { open, setOpen, bodyId } = useWidgetOpen();
   const [showAll, setShowAll] = useState(false);
   const [panel, setPanel] = useState<string | null>(null);
-  // Dosi già registrate dal Turno: escono subito dalla coda, senza aspettare la rilettura.
-  const [recorded, setRecorded] = useState<ReadonlySet<string>>(() => new Set());
-  const groups = groupAdessoQueue(items.filter((it) => !recorded.has(it.key)));
+  // Dosi tentate dal Turno (riuscite o no): «in verifica» finché non arriva una lettura partita
+  // dopo il tentativo. Solo il server dice se sono ancora da fare: un esito forse già scritto
+  // (risposta persa) non torna mai spuntato come «Somministrata».
+  const [hold, setHold] = useState<Record<string, number>>({});
+  const [choices, setChoices] = useState<Record<string, TurnoDoseChoice>>({});
+  // Revisione più recente al momento del tentativo (non quella della chiusura del render): un
+  // refresh automatico partito durante le scritture non deve valere come lettura successiva.
+  const latestRevision = useRef(revisione);
+  useEffect(() => {
+    latestRevision.current = revisione;
+  }, [revisione]);
+  const held = (it: AdessoItem) => hold[it.key] !== undefined && revisioneLetta < hold[it.key];
+  const groups = groupAdessoQueue(items);
   // Each category has its own allowance: repeated delays cannot hide new handovers.
   const sections: { key: AdessoSection; title: string }[] = [
     { key: 'scadute', title: 'Scadute' },
@@ -114,7 +130,8 @@ export function AdessoQueue({
    *  fa da intestazione per tutti i pazienti di quella fascia. */
   function renderDoseGroup(group: AdessoGroup, withTime: boolean) {
     const first = group.items[0];
-    const bulk = group.items.filter((it) => it.dose?.doseMode !== 'glucose_scale');
+    const ready = group.items.filter((it) => !held(it));
+    const bulk = ready.filter((it) => it.dose?.doseMode !== 'glucose_scale');
     const open = panel === group.key;
     const openTherapy = () => onSelectPaziente?.(first.nome, first.patientId, first.landing);
     return (
@@ -133,7 +150,10 @@ export function AdessoQueue({
             {allergyLine(allergie?.[first.patientId])}
             <ul className="adesso-dose__drugs">
               {group.items.map((it) => (
-                <li key={it.key}>{it.dettaglio}</li>
+                <li key={it.key}>
+                  {it.dettaglio}
+                  {held(it) && <span className="adesso-dose__held"> · in verifica</span>}
+                </li>
               ))}
             </ul>
           </div>
@@ -166,15 +186,21 @@ export function AdessoQueue({
           {open && (
             <TurnoDosePanel
               nome={first.nome}
-              doses={group.items.map((it) => ({
+              doses={ready.map((it) => ({
                 key: it.key,
                 patientId: it.patientId,
                 dose: it.dose!,
               }))}
               onClose={() => setPanel(null)}
               onOpenTherapy={openTherapy}
-              onRecorded={(keys) => {
-                setRecorded((old) => new Set([...old, ...keys]));
+              choices={choices}
+              onChoice={(key, choice) => setChoices((old) => ({ ...old, [key]: choice }))}
+              onAttempted={(keys) => {
+                // la rilettura chiesta ora avrà revisione + 1: fino ad allora restano in verifica
+                setHold((old) => ({
+                  ...old,
+                  ...Object.fromEntries(keys.map((key) => [key, latestRevision.current + 1])),
+                }));
                 onAdministered?.();
               }}
               onDone={() => setPanel(null)}

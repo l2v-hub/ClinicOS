@@ -25,6 +25,10 @@ export interface RiepilogoSomministrazioni extends DashboardTherapySummary {
   domaniFallito: boolean;
   aggiornamentoInCorso: boolean;
   aggiorna: () => void;
+  /** Revisione richiesta più recente e revisione dell'ultima lettura di oggi riuscita (#445):
+   *  una dose registrata dal Turno resta «in verifica» finché non arriva una lettura partita dopo. */
+  revisione: number;
+  revisioneLetta: number;
 }
 
 interface DayState {
@@ -32,6 +36,8 @@ interface DayState {
   slots: TherapySlot[] | null;
   failed: boolean;
   refreshing: boolean;
+  /** Revisione alla quale è partita la lettura che ha prodotto `slots` (-1 = seme di sessione). */
+  readRevision?: number;
 }
 
 const emptyDay = (date: string): DayState => ({
@@ -94,7 +100,8 @@ export function useRiepilogoSomministrazioni(attivoRichiesto = true): RiepilogoS
       // Rilettura fresca al mount/refresh, con dedup delle richieste già in volo.
       void readDashboardTherapyDay(`${API_URL}/therapy-slots?date=${date}`)
         .then((slots) => {
-          if (!cancelled) setDay({ date, slots, failed: false, refreshing: false });
+          if (!cancelled)
+            setDay({ date, slots, failed: false, refreshing: false, readRevision: revision });
         })
         .catch(() => {
           if (!cancelled) setDay({ date, slots: null, failed: true, refreshing: false });
@@ -118,5 +125,7 @@ export function useRiepilogoSomministrazioni(attivoRichiesto = true): RiepilogoS
     domaniFallito: next.failed,
     aggiornamentoInCorso: attivo && (current.refreshing || next.refreshing),
     aggiorna,
+    revisione: revision,
+    revisioneLetta: current.slots !== null ? (current.readRevision ?? -1) : -1,
   };
 }

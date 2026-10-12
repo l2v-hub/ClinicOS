@@ -9,7 +9,10 @@ export interface TurnoActionChip {
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
 export interface TurnoChipInput {
+  /** Urgenze che CHI legge può prendere in carico (mai le proprie: aspettano un collega). */
   urgentToTakeCharge: number | undefined;
+  /** L'anteprima del server è troncata: il numero è un minimo, e si dice. */
+  urgentAtLeast?: boolean;
   urgentState: 'loading' | 'ready' | 'error';
   critici: number;
   clinicalState: 'loading' | 'ready' | 'error';
@@ -28,7 +31,7 @@ export function buildTurnoChips(input: TurnoChipInput): TurnoActionChip[] {
   else if ((input.urgentToTakeCharge ?? 0) > 0)
     chips.push({
       id: 'urgenze',
-      label: `${plural(input.urgentToTakeCharge ?? 0, 'urgenza', 'urgenze')} da prendere in carico`,
+      label: `${input.urgentAtLeast ? 'Almeno ' : ''}${plural(input.urgentToTakeCharge ?? 0, 'urgenza', 'urgenze')} da prendere in carico`,
       tone: 'crit',
       onOpen: input.onOpenUrgent,
     });

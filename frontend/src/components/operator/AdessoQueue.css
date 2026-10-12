@@ -286,3 +286,7 @@
   gap: 8px;
   padding-top: 8px;
 }
+.adesso-dose__held {
+  color: var(--text-muted);
+  font-style: italic;
+}

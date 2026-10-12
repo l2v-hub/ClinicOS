@@ -90,9 +90,9 @@ export function OperatorDashboard({
   );
   const farmaciDaVerificare = anomalie.pazienti.reduce((n, p) => n + p.esito.totale, 0);
   const chips = buildTurnoChips({
-    urgentToTakeCharge: consegnaSummary
-      ? Math.max(urgentCount ?? 0, countToTakeCharge(urgenti))
-      : undefined,
+    // Solo le urgenze di altri: il totale del server conta anche le proprie (#445 QA).
+    urgentToTakeCharge: consegnaSummary ? countToTakeCharge(urgenti) : undefined,
+    urgentAtLeast: (urgentCount ?? 0) > urgenti.length,
     urgentState: consegneOverviewState,
     critici: clinicalOverview?.critici ?? 0,
     clinicalState: clinicalOverviewState,
@@ -179,6 +179,8 @@ export function OperatorDashboard({
           allergie={allergie}
           canAdminister={canAdminister}
           onAdministered={somministrazioni.aggiorna}
+          revisione={somministrazioni.revisione}
+          revisioneLetta={somministrazioni.revisioneLetta}
           onSelectPaziente={onSelectPaziente}
           onOpenTherapy={onOpenLateTherapy ?? (() => onNavigate('terapie'))}
           onOpenConsegne={() =>
