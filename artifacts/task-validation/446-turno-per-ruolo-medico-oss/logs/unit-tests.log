@@ -1,0 +1,15 @@
+ℹ tests 1363
+ℹ pass 1363
+ℹ fail 0
+✔ operator first view (#445): action chips, then the queue to administer, no counters or notes (2.7912ms)
+✔ handover and vital missing states disclose availability without a misleading empty result (6.5119ms)
+✔ 446 QA: «Letta» only when the reader may confirm; never on the reader's own note (21.2169ms)
+✔ 446 QA: an acknowledgement error keeps the list readable (18.5277ms)
+✔ 446 QA: the «more urgencies» hint stays even when none is visible (2.6587ms)
+✔ 446 QA: the doctor never reads «nothing to decide» while a source is loading or failed (5.9004ms)
+✔ 446 QA: «Giro completo» only when the round really is complete (2.523ms)
+✔ 445 QA: the urgency chip counts only what the reader can take charge of (17.424ms)
+✔ 446 the Turno variant follows capabilities, administration first (2.0364ms)
+✔ 446 «Niente in sospeso» needs every source loaded and empty (0.6197ms)
+✔ 446 the vitals round puts critical patients first, then those not measured, keeping ward order (2.2347ms)
+✔ 446 urgencies to take charge come from the badge queue, never the reader's own (0.7178ms)

@@ -363,7 +363,7 @@ export function AdessoQueue({
           </>
         ) : allReady ? (
           <p className="adesso-queue__empty" role="status">
-            Niente in sospeso adesso.
+            Nessuna dose da somministrare adesso.
           </p>
         ) : null}
 

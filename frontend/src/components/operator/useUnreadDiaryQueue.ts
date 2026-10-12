@@ -10,7 +10,9 @@ import {
   type UnreadDiaryPage,
 } from '../../lib/diaryUnreadQueue';
 
-export function useUnreadDiaryQueue(enabled = true) {
+/** `live`: si rilegge anche al ritorno sulla finestra e ogni 30 s, come il badge Consegne
+ *  (useDiaryUnreadCount), così il Turno e il badge non si separano (#446 QA). */
+export function useUnreadDiaryQueue(enabled = true, live = false) {
   const [page, setPage] = useState<UnreadDiaryPage | null>(null);
   const [loading, setLoading] = useState(true),
     [error, setError] = useState('');
@@ -84,14 +86,27 @@ export function useUnreadDiaryQueue(enabled = true) {
     void read();
     window.addEventListener(DIARY_READING_CHANGED_EVENT, refresh);
     window.addEventListener(URGENCY_ACKNOWLEDGED_EVENT, refresh);
+    const liveRefresh = () => {
+      if (document.visibilityState !== 'hidden' && !mutationPending.current) refresh();
+    };
+    const timer = live ? window.setInterval(liveRefresh, 30_000) : undefined;
+    if (live) {
+      window.addEventListener('focus', liveRefresh);
+      document.addEventListener('visibilitychange', liveRefresh);
+    }
     return () => {
       lifecycle.current = version + 1;
       sequence.current++;
       controller.current?.abort();
       window.removeEventListener(DIARY_READING_CHANGED_EVENT, refresh);
       window.removeEventListener(URGENCY_ACKNOWLEDGED_EVENT, refresh);
+      if (live) {
+        window.clearInterval(timer);
+        window.removeEventListener('focus', liveRefresh);
+        document.removeEventListener('visibilitychange', liveRefresh);
+      }
     };
-  }, [read, enabled]);
+  }, [read, enabled, live]);
   async function acknowledge(row: UnreadDiaryEntry, purpose: 'read' | 'urgency') {
     if (mutationPending.current) return;
     mutationPending.current = true;

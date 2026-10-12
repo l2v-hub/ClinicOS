@@ -1,0 +1,102 @@
+{
+  "pass": true,
+  "results": [
+    {
+      "id": "AC1a",
+      "name": "doctor: no administration buttons and no administration queue",
+      "result": "PASS",
+      "detail": "{\"somministra\":0,\"adesso\":false}"
+    },
+    {
+      "id": "AC1b",
+      "name": "doctor: decisions first, ordered urgent → therapy to verify → doses (info)",
+      "result": "PASS",
+      "detail": "[\"Urgente · segnalato 00:08 · Infermiere 1\",\"Terapia da verificare\",\"Terapia da verificare\"]"
+    },
+    {
+      "id": "AC4-medico",
+      "name": "doctor: sidebar badge equals «Da leggere» total",
+      "result": "PASS",
+      "detail": "badge 6 · da leggere 6"
+    },
+    {
+      "id": "AC2a",
+      "name": "OSS: urgent items not taken in charge are on top, with «Ho capito»",
+      "result": "PASS",
+      "detail": "5 urgenti"
+    },
+    {
+      "id": "AC2b",
+      "name": "OSS: today's vitals round «X di N» with «Rileva», critical first",
+      "result": "PASS",
+      "detail": "Giro parametri di oggi · 0 di 5 · first: Nanni Miriam · Posto letto non assegnato · prima: parametro criticoRileva"
+    },
+    {
+      "id": "AC3a",
+      "name": "OSS: no «Niente in sospeso» while things are pending",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "AC4-oss",
+      "name": "OSS: sidebar badge equals «Da leggere» total; badge items visible on the home",
+      "result": "PASS",
+      "detail": "badge 6 · da leggere 6 · visibili 6"
+    },
+    {
+      "id": "AC4-ack",
+      "name": "after «Ho capito» badge and home move together",
+      "result": "PASS",
+      "detail": "badge 6→5 · da leggere 6→5 · urgenti 5→4"
+    },
+    {
+      "id": "AC2c",
+      "name": "«Rileva» opens that patient's Parametri",
+      "result": "PASS",
+      "detail": "active tab: Parametri"
+    },
+    {
+      "id": "QA1",
+      "name": "own notes show «Scritta da te» and never «Letta»",
+      "result": "PASS",
+      "detail": "1 own notes"
+    },
+    {
+      "id": "QA2",
+      "name": "a colleague's new note moves badge and home together (focus)",
+      "result": "PASS",
+      "detail": "badge 5→6 · home 5→6"
+    },
+    {
+      "id": "QA3",
+      "name": "«Letta» on a colleague's note works and keeps badge = home",
+      "result": "PASS",
+      "detail": "badge 6→5 · alert 0"
+    },
+    {
+      "id": "QA4",
+      "name": "urgencies beyond the first queue page still reach the top of the Turno",
+      "result": "PASS",
+      "detail": "4 urgenti"
+    },
+    {
+      "id": "QA5",
+      "name": "a discharged patient is not in the vitals round",
+      "result": "PASS",
+      "detail": "Giro parametri di oggi · 0 di 4"
+    },
+    {
+      "id": "AC3b",
+      "name": "«Niente in sospeso» only when nothing to read, no critical vitals, round complete",
+      "result": "PASS",
+      "detail": "{\"niente\":true,\"badge\":0,\"giro\":\"Giro parametri di oggi · 5 di 5\"}"
+    },
+    {
+      "id": "AC5",
+      "name": "nurse keeps the #445 Turno (administration queue) and the same «Da leggere» source",
+      "result": "PASS",
+      "detail": "adesso true · badge 5 · da leggere 5"
+    }
+  ],
+  "consoleErrors": []
+}

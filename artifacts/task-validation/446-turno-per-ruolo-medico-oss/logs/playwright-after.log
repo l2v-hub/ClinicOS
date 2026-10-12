@@ -1,0 +1,18 @@
+fixture: urgent consegna by Infermiere 1 → 201
+PASS AC1a doctor: no administration buttons and no administration queue — {"somministra":0,"adesso":false}
+PASS AC1b doctor: decisions first, ordered urgent → therapy to verify → doses (info) — ["Urgente · segnalato 00:08 · Infermiere 1","Terapia da verificare","Terapia da verificare"]
+PASS AC4-medico doctor: sidebar badge equals «Da leggere» total — badge 6 · da leggere 6
+PASS AC2a OSS: urgent items not taken in charge are on top, with «Ho capito» — 5 urgenti
+PASS AC2b OSS: today's vitals round «X di N» with «Rileva», critical first — Giro parametri di oggi · 0 di 5 · first: Nanni Miriam · Posto letto non assegnato · prima: parametro criticoRileva
+PASS AC3a OSS: no «Niente in sospeso» while things are pending
+PASS AC4-oss OSS: sidebar badge equals «Da leggere» total; badge items visible on the home — badge 6 · da leggere 6 · visibili 6
+PASS AC4-ack after «Ho capito» badge and home move together — badge 6→5 · da leggere 6→5 · urgenti 5→4
+PASS AC2c «Rileva» opens that patient's Parametri — active tab: Parametri
+PASS QA1 own notes show «Scritta da te» and never «Letta» — 1 own notes
+PASS QA2 a colleague's new note moves badge and home together (focus) — badge 5→6 · home 5→6
+PASS QA3 «Letta» on a colleague's note works and keeps badge = home — badge 6→5 · alert 0
+PASS QA4 urgencies beyond the first queue page still reach the top of the Turno — 4 urgenti
+PASS QA5 a discharged patient is not in the vitals round — Giro parametri di oggi · 0 di 4
+PASS AC3b «Niente in sospeso» only when nothing to read, no critical vitals, round complete — {"niente":true,"badge":0,"giro":"Giro parametri di oggi · 5 di 5"}
+PASS AC5 nurse keeps the #445 Turno (administration queue) and the same «Da leggere» source — adesso true · badge 5 · da leggere 5
+PASS #446 | console errors: 0
