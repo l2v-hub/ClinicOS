@@ -1,9 +1,12 @@
-ℹ tests 1375
-ℹ pass 1375
+ℹ tests 1377
+ℹ pass 1377
 ℹ fail 0
-✔ automatic stamp freezes once; uncertain retry never re-dates the request (5.7966ms)
-✔ uncertain save keeps fields locked and exposes exact retry, deleted outcome never offers advance (12.3908ms)
-✔ generic workspace defaults to selected Non confermate, not first patient or date restriction (35.7962ms)
-✔ UX2 W8 diary card: «Ho capito» only for a non-author on an active urgency; then only the trace (49.9093ms)
-✔ all priorities describe the explicit reading action; author waits for a colleague (31.8762ms)
-✔ #449: no explanatory guide in the diary or the unread list; one gesture per note (11.2499ms)
+✔ automatic stamp freezes once; uncertain retry never re-dates the request (4.5345ms)
+✔ uncertain save keeps fields locked and exposes exact retry, deleted outcome never offers advance (7.4828ms)
+✔ generic workspace defaults to selected Non confermate, not first patient or date restriction (39.7018ms)
+✔ UX2 W8 diary card: «Ho capito» only for a non-author on an active urgency; then only the trace (38.8579ms)
+✔ #449 one gesture per entry: unread urgency → only «Ho capito»; a read already confirmed stays as a trace (7.085ms)
+✔ #449 the embedded filtered view has no second writing form: the page writes from the top (6.6917ms)
+✔ patient diary requests a bounded first page and follows an opaque cursor (33.4155ms)
+✔ all priorities describe the explicit reading action; author waits for a colleague (32.8117ms)
+✔ #449: no explanatory guide in the diary or the unread list; one gesture per note (10.1518ms)

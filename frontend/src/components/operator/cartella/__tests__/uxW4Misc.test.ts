@@ -201,5 +201,54 @@ test('topbar subtitle wraps; the single actionable allergy band retains full nam
   const detail = readFileSync(new URL('../../PatientDetail.tsx', import.meta.url), 'utf8');
   assert.match(detail, /cr-alert-strip cr-alert-strip--allergie/);
   assert.match(detail, /a\.allergene/);
-  assert.doesNotMatch(detail, /className="patient-allergy-strip"|className="patient-topbar-title__allergy"/);
+  assert.doesNotMatch(
+    detail,
+    /className="patient-allergy-strip"|className="patient-topbar-title__allergy"/,
+  );
+});
+
+test('#449 one gesture per entry: unread urgency → only «Ho capito»; a read already confirmed stays as a trace', () => {
+  setSessionCapabilities(null);
+  const unreadReceipt = { state: 'unread', readBy: null, isAuthor: false, canAcknowledge: true };
+  const readReceipt = {
+    state: 'read',
+    readBy: {
+      operatorName: 'Infermiere 2',
+      operatorRole: 'infermiere',
+      acknowledgedAt: '2026-10-03T06:30:00.000Z',
+      byMe: false,
+    },
+    isAuthor: false,
+    canAcknowledge: false,
+  };
+  const html = renderDiary(
+    [
+      entry({ id: 'a1', urgency: active(), readReceipt: unreadReceipt } as never),
+      entry({ id: 'a2', urgency: active(), readReceipt } as never),
+    ],
+    'p-449',
+  );
+  const card = (id: string) => {
+    const start = html.indexOf(`data-entry-id="${id}"`);
+    const next = html.indexOf('data-entry-id=', start + 5);
+    return html.slice(start, next === -1 ? undefined : next);
+  };
+  const a1 = card('a1');
+  assert.equal((a1.match(/>Ho capito</g) ?? []).length, 1);
+  assert.doesNotMatch(a1, />Letta<|>Conferma lettura</);
+  // lettura già confermata prima del gesto unico: la traccia resta, nessun pulsante di lettura
+  assert.match(card('a2'), /Lettura confermata da Infermiere 2/);
+  assert.doesNotMatch(card('a2'), />Letta</);
+});
+
+test('#449 the embedded filtered view has no second writing form: the page writes from the top', () => {
+  const page = readFileSync(new URL('../../ConsegnePage.tsx', import.meta.url), 'utf8');
+  const embedded = page.slice(
+    page.indexOf('{embedded ? ('),
+    page.indexOf(') : (', page.indexOf('{embedded ? (')),
+  );
+  assert.doesNotMatch(embedded, /\{createAction\}/);
+  const workspace = readFileSync(new URL('../../ConsegneWorkspace.tsx', import.meta.url), 'utf8');
+  assert.match(workspace, /onSaved=\{\(\) => setSent\(\(n\) => n \+ 1\)\}/);
+  assert.match(workspace, /externalVersion=\{sent\}/);
 });

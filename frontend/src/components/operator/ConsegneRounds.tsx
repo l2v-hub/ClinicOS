@@ -21,12 +21,15 @@ export function ConsegneRounds({
   onAdd,
   active,
   initialPatientId,
+  externalVersion = 0,
 }: {
   store: ConsegnaDraftStore;
   operatori: Operatore[];
   onAdd: ConsegnaCreate;
   active: boolean;
   initialPatientId?: string;
+  /** Cresce a ogni consegna inviata dal modulo in cima: il diario sotto si rilegge (#449 QA). */
+  externalVersion?: number;
 }) {
   const [query, setQuery] = useState('');
   const [room, setRoom] = useState('');
@@ -264,7 +267,7 @@ export function ConsegneRounds({
               <div
                 className="handover-rounds__tabs"
                 role="tablist"
-                aria-label="Diario e nuova nota"
+                aria-label="Diario e scrivi consegna"
                 onKeyDown={(event) => {
                   if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
                   if (!canCreate) return;
@@ -316,7 +319,7 @@ export function ConsegneRounds({
                 className="handover-rounds__history"
               >
                 <DiarioPazienteTab
-                  key={`history:${patient.id}:${historyVersion}`}
+                  key={`history:${patient.id}:${historyVersion}:${externalVersion}`}
                   pazienteId={patient.id}
                   operatoreNome=""
                   // un solo «Scrivi consegna» (#449): la scheda sopra, niente doppione qui

@@ -11,7 +11,7 @@
       "id": "AC1",
       "name": "a handover is written and sent from the page in 3 interactions (patient, text, Invia)",
       "result": "PASS",
-      "detail": "POST 1 · DB 05491101-7433-4141-b4a3-f0c9a5ba0554"
+      "detail": "POST 1 · DB 01bde55a-4052-4285-93e4-2feeb65ea4e4"
     },
     {
       "id": "AC3b",
@@ -26,10 +26,16 @@
       "detail": ""
     },
     {
+      "id": "AC1c",
+      "name": "the diary below shows a handover sent from the top form without switching view",
+      "result": "PASS",
+      "detail": "cards 49→50 · new 1"
+    },
+    {
       "id": "AC2a",
       "name": "Consegne page: no card shows more than one confirmation button",
       "result": "PASS",
-      "detail": "[1,1,1,1,0,0,0,1]"
+      "detail": "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1]"
     },
     {
       "id": "AC5b",
@@ -47,7 +53,7 @@
       "id": "AC2b",
       "name": "patient diary: no entry shows more than one confirmation button",
       "result": "PASS",
-      "detail": "[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]"
+      "detail": "[1,1,1,1,1,1,0,1,0,1,1,0,1,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]"
     }
   ],
   "consoleErrors": []

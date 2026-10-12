@@ -748,7 +748,7 @@ export function DiarioPazienteTab({
           )}
         </div>
         <div className="diario-card__author">
-          Segnalata da <strong>{row.authorName}</strong>
+          Scritta da <strong>{row.authorName}</strong>
         </div>
         {editingId === row.id && canEditEntry ? (
           <div
@@ -779,8 +779,13 @@ export function DiarioPazienteTab({
         {renderTherapyLink(row)}
         {/* Un solo gesto per voce (#449): su un'urgenza attiva solo «Ho capito» (UrgencyNotice
             sotto), che il server registra anche come lettura; altrimenti la conferma di lettura.
-            Le voci senza ricevuta di lettura restano al modello precedente, gestito qui. */}
-        {!(isDiaryReadReceipt(row.readReceipt) && isActiveUrgency(row.urgency)) && (
+            Una lettura già confermata resta visibile come traccia, senza pulsante; le voci senza
+            ricevuta di lettura restano al modello precedente, gestito qui. */}
+        {!(
+          isDiaryReadReceipt(row.readReceipt) &&
+          row.readReceipt.state === 'unread' &&
+          isActiveUrgency(row.urgency)
+        ) && (
           <DiaryThreadReceipt
             readReceipt={row.readReceipt}
             urgency={row.urgency}
@@ -884,9 +889,7 @@ export function DiarioPazienteTab({
             }))
           }
         />
-        {locked && (
-          <p className="form-hint">Chiudi l’anteprima prima di modificare la segnalazione.</p>
-        )}
+        {locked && <p className="form-hint">Chiudi l’anteprima prima di modificare la consegna.</p>}
         <div className="cr-inline-form__actions diario-form__actions">
           <button className="btn-secondary btn-sm" onClick={onCancel} disabled={saving}>
             Annulla
@@ -1133,7 +1136,7 @@ export function DiarioPazienteTab({
                   onClick={handleLoadMore}
                   disabled={loadingMore}
                 >
-                  {loadingMore ? 'Caricamento…' : 'Segnalazioni precedenti →'}
+                  {loadingMore ? 'Caricamento…' : 'Consegne precedenti →'}
                 </button>
               </div>
             )}

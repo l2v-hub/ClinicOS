@@ -31,7 +31,9 @@ export function ConsegnaQuickWrite({
   const [query, setQuery] = useState('');
   const roster = useConsegneRoster(query, '', canCreate);
   const [selected, setSelected] = useState<Paziente | null>(null);
-  // Arrivo da una cartella: il paziente è già scelto, anche se non è nella prima pagina.
+  const [presetMissing, setPresetMissing] = useState(false);
+  // Pagina aperta su un paziente (filtro da dashboard o assistente): è già scelto, anche se non è
+  // nella prima pagina dell'elenco.
   useEffect(() => {
     if (!initialPatientId || !canCreate) return;
     const controller = new AbortController();
@@ -42,7 +44,9 @@ export function ConsegnaQuickWrite({
       .then((patient) => {
         if (!controller.signal.aborted && patient) setSelected(patient);
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!controller.signal.aborted) setPresetMissing(true);
+      });
     return () => controller.abort();
   }, [initialPatientId, canCreate]);
   if (!canCreate) return null;
@@ -67,6 +71,7 @@ export function ConsegnaQuickWrite({
           id={`${id}-patient`}
           className="form-select"
           value={selected?.id ?? ''}
+          aria-busy={roster.loading}
           onChange={(event) => {
             setSelected(options.find((p) => p.id === event.target.value) ?? null);
           }}
@@ -89,7 +94,22 @@ export function ConsegnaQuickWrite({
             onChange={(event) => setQuery(event.target.value)}
           />
         )}
-        {roster.error && <p role="alert">{roster.error}</p>}
+        {roster.loading && !roster.items.length && (
+          <span className="consegna-quick__hint" role="status">
+            Elenco in caricamento…
+          </span>
+        )}
+        {roster.error && (
+          <p role="alert">
+            {roster.error}{' '}
+            <button type="button" className="ds-link" onClick={roster.retry}>
+              Riprova
+            </button>
+          </p>
+        )}
+        {presetMissing && !selected && (
+          <p role="status">Il paziente richiesto non è disponibile: sceglilo dall'elenco.</p>
+        )}
       </div>
       {selected ? (
         <ConsegnaComposer
