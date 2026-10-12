@@ -1,0 +1,10 @@
+ℹ tests 1358
+ℹ pass 1358
+ℹ fail 0
+✔ operator first view (#445): action chips, then the queue to administer, no counters or notes (2.7351ms)
+✔ handover and vital missing states disclose availability without a misleading empty result (8.5115ms)
+✔ 445 QA: the urgency chip counts only what the reader can take charge of (8.7004ms)
+✔ 446 the Turno variant follows capabilities, administration first (1.7824ms)
+✔ 446 «Niente in sospeso» needs every source loaded and empty (0.497ms)
+✔ 446 the vitals round puts critical patients first, then those not measured, keeping ward order (1.7732ms)
+✔ 446 urgencies to take charge come from the badge queue, never the reader's own (0.4764ms)

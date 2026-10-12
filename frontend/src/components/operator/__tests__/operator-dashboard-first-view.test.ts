@@ -21,7 +21,7 @@ test('operator first view (#445): action chips, then the queue to administer, no
   assert.ok(notificationIndex > adessoIndex);
   assert.match(dashboard, /<DashboardNotificationCenter\s+compact/);
   assert.match(dashboard, /<TurnoAppointments/);
-  assert.match(dashboard, /<TurnoHandovers/);
+  assert.match(dashboard, /<TurnoDaLeggere/);
   assert.doesNotMatch(dashboard, /OperatorClinicalKpiBand|dashboard-regime-note/);
   assert.doesNotMatch(dashboard, /<TurnoPatients/);
   assert.doesNotMatch(dashboard, /className="stats-grid"/);
@@ -29,8 +29,9 @@ test('operator first view (#445): action chips, then the queue to administer, no
   assert.doesNotMatch(dashboard, /I Miei Pazienti|Appuntamenti Oggi|Consegne Aperte/);
   // La coda non ripete urgenze e farmaci da verificare: stanno nelle chip e in «Da leggere».
   assert.match(dashboard, /urgenti: \[\],\s*anomalie: \[\],/);
-  assert.match(dashboard, /onAcknowledge=\{onAcknowledgeConsegna\}/);
-  assert.match(app, /onAcknowledgeConsegna=\{acknowledgeConsegna\}/);
+  // #446: «Da leggere» e urgenze dalla stessa coda del badge (diario + consegne)
+  assert.match(dashboard, /useUnreadDiaryQueue\(useCan\('diary\.list'\)\)/);
+  assert.doesNotMatch(dashboard, /TurnoHandovers/);
 });
 
 test('management-only props are removed from the operator dashboard contract', () => {

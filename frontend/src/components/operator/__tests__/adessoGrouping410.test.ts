@@ -97,9 +97,9 @@ test('410 dense overdue queue retains exact counts and a new urgent handover in 
   assert.doesNotMatch(html, /Ordine operativo|non una priorità clinica/);
 });
 test('410 empty and incomplete queues remain distinct and all source errors remain visible', () => {
-  assert.match(render([]), /Niente in sospeso adesso/);
+  assert.match(render([]), /Nessuna dose da somministrare adesso/);
   const html = render([], { terapie: 'error', consegne: 'loading', anomalie: 'error' });
-  assert.doesNotMatch(html, /Niente in sospeso adesso/);
+  assert.doesNotMatch(html, /Nessuna dose da somministrare adesso/);
   assert.match(html, /Scadenze terapia non disponibili/);
   assert.match(html, /Consegne urgenti in caricamento/);
   assert.match(html, /Verifica farmaci non riuscita/);

@@ -3742,7 +3742,6 @@ export default function App() {
                             utente={utente}
                             consegneOverview={consegneOverview}
                             consegneOverviewState={consegneOverviewState}
-                            onRetryConsegne={() => void loadConsegneOverview()}
                             agenda={agendaOggi}
                             agendaState={
                               appointmentLoadError
@@ -3760,7 +3759,6 @@ export default function App() {
                             clinicalOverview={clinicalOverview}
                             clinicalOverviewState={clinicalOverviewState}
                             onRetryClinicalOverview={() => void loadClinicalOverview()}
-                            onAcknowledgeConsegna={acknowledgeConsegna}
                           />
                         )}
                         {/* Nuovo ingresso è una voce di navigazione: ricerca e filtri vivono in App;
