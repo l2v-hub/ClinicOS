@@ -249,6 +249,9 @@ test('#449 the embedded filtered view has no second writing form: the page write
   );
   assert.doesNotMatch(embedded, /\{createAction\}/);
   const workspace = readFileSync(new URL('../../ConsegneWorkspace.tsx', import.meta.url), 'utf8');
-  assert.match(workspace, /onSaved=\{\(\) => setSent\(\(n\) => n \+ 1\)\}/);
-  assert.match(workspace, /externalVersion=\{sent\}/);
+  assert.match(workspace, /onSaved=\{\(id\) => setSent/);
+  assert.match(workspace, /sentFrom=\{sent\}/);
+  const rounds = readFileSync(new URL('../../ConsegneRounds.tsx', import.meta.url), 'utf8');
+  // solo il diario dello stesso paziente si rilegge
+  assert.match(rounds, /sentFrom\?\.patientId === patient\.id \? sentFrom\.count : 0/);
 });
