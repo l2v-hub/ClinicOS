@@ -3519,7 +3519,7 @@ export default function App() {
           <main className="page-content content-panel">
             <WidgetGroup
               key={`${navKey}:${pazienteSelezionato?.id ?? ''}`}
-              controls={navKey !== 'dettaglio-paziente'}
+              controls={navKey !== 'dettaglio-paziente' && navKey !== 'operator-dashboard'}
             >
               <TopbarTitleSlot.Provider value={topbarTitleSlot}>
                 <LazyLoadBoundary>
@@ -3760,6 +3760,7 @@ export default function App() {
                             clinicalOverview={clinicalOverview}
                             clinicalOverviewState={clinicalOverviewState}
                             onRetryClinicalOverview={() => void loadClinicalOverview()}
+                            onAcknowledgeConsegna={acknowledgeConsegna}
                           />
                         )}
                         {/* Nuovo ingresso è una voce di navigazione: ricerca e filtri vivono in App;

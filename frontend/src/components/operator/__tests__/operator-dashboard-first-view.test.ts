@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 const dashboard = readFileSync(new URL('../OperatorDashboard.tsx', import.meta.url), 'utf8');
-const kpis = readFileSync(new URL('../OperatorClinicalKpiBand.tsx', import.meta.url), 'utf8');
+import { buildTurnoChips } from '../../../lib/turnoChips';
 const sharedKpis = readFileSync(
   new URL('../../shared/DashboardKpiBand.tsx', import.meta.url),
   'utf8',
@@ -11,21 +11,26 @@ const sharedKpis = readFileSync(
 const styles = readFileSync(new URL('../../shared/DashboardKpiBand.css', import.meta.url), 'utf8');
 const app = readFileSync(new URL('../../../App.tsx', import.meta.url), 'utf8');
 
-test('operator first view (HMI 1 Turno): indicators, then Adesso with the compact notification center', () => {
-  const kpiIndex = dashboard.indexOf('<OperatorClinicalKpiBand');
+test('operator first view (#445): action chips, then the queue to administer, no counters or notes', () => {
+  const chipsIndex = dashboard.indexOf('<TurnoActionChips');
   const adessoIndex = dashboard.indexOf('<AdessoQueue');
   const notificationIndex = dashboard.indexOf('<DashboardNotificationCenter');
 
-  assert.ok(kpiIndex >= 0);
-  assert.ok(adessoIndex > kpiIndex);
+  assert.ok(chipsIndex >= 0);
+  assert.ok(adessoIndex > chipsIndex);
   assert.ok(notificationIndex > adessoIndex);
   assert.match(dashboard, /<DashboardNotificationCenter\s+compact/);
   assert.match(dashboard, /<TurnoAppointments/);
   assert.match(dashboard, /<TurnoHandovers/);
+  assert.doesNotMatch(dashboard, /OperatorClinicalKpiBand|dashboard-regime-note/);
   assert.doesNotMatch(dashboard, /<TurnoPatients/);
   assert.doesNotMatch(dashboard, /className="stats-grid"/);
   assert.doesNotMatch(dashboard, /className="progress-card-grid"/);
   assert.doesNotMatch(dashboard, /I Miei Pazienti|Appuntamenti Oggi|Consegne Aperte/);
+  // La coda non ripete urgenze e farmaci da verificare: stanno nelle chip e in «Da leggere».
+  assert.match(dashboard, /urgenti: \[\],\s*anomalie: \[\],/);
+  assert.match(dashboard, /onAcknowledge=\{onAcknowledgeConsegna\}/);
+  assert.match(app, /onAcknowledgeConsegna=\{acknowledgeConsegna\}/);
 });
 
 test('management-only props are removed from the operator dashboard contract', () => {
@@ -42,23 +47,29 @@ test('HMI 1 Turno: title in the app header, no duplicate Pazienti button (it is 
   assert.doesNotMatch(dashboard, /operator-dashboard__patient-cta/);
 });
 
-test('clinical snapshot uses five native compact value cards', () => {
-  assert.match(kpis, /<DashboardKpiBand/);
-  assert.match(sharedKpis, /type="button"/);
-  assert.equal((kpis.match(/id: '/g) ?? []).length, 5);
-  for (const label of [
-    'Parametri critici',
-    'Rischi elevati',
-    'Allergie gravi',
-    'Terapie in ritardo',
-  ]) {
-    assert.match(kpis, new RegExp(label));
-  }
-  assert.match(kpis, /label: LIST_VIEW_LABEL.in_carico/);
-  assert.match(kpis, /somministrazioni\.inCorso \|\| somministrazioni\.fallito/);
-  assert.match(kpis, /status: loading \? 'Aggiornamento…' : 'Dato non disponibile'/);
-  assert.match(sharedKpis, /\$\{item\.actionLabel\}/);
-  assert.match(kpis, /\$\{somministrazioni\.inRitardo\} su \$\{somministrazioni\.daFare\} da fare/);
+test('chips name only what needs an action and open the exact place', () => {
+  const opened: string[] = [];
+  const chips = buildTurnoChips({
+    urgentToTakeCharge: 1,
+    urgentState: 'ready',
+    critici: 1,
+    clinicalState: 'ready',
+    anomalie: { pazienti: 1, farmaci: 3, fallito: false },
+    onOpenUrgent: () => opened.push('urgenze'),
+    onOpenCritici: () => opened.push('critici'),
+    onRetryClinical: () => opened.push('retry'),
+    onOpenAnomalie: () => opened.push('anomalie'),
+  });
+  assert.deepEqual(
+    chips.map((c) => c.label),
+    [
+      '1 urgenza da prendere in carico',
+      '1 parametro critico',
+      '3 farmaci da far verificare al medico',
+    ],
+  );
+  chips.forEach((c) => c.onOpen?.());
+  assert.deepEqual(opened, ['urgenze', 'critici', 'anomalie']);
 });
 
 test('compact clinical cards stay scoped and responsive without horizontal scrolling', () => {

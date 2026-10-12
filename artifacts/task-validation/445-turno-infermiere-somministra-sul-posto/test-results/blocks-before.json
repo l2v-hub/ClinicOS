@@ -1,0 +1,34 @@
+[
+  {
+    "who": "Galli Nora",
+    "drugs": 1,
+    "buttons": [
+      "Somministra"
+    ],
+    "allergy": "Nessuna allergia registrata"
+  },
+  {
+    "who": "Nanni Miriam",
+    "drugs": 2,
+    "buttons": [
+      "Somministra 2"
+    ],
+    "allergy": "Allergie: Penicillina, Lattice, Acido acetilsalicilico"
+  },
+  {
+    "who": "Nanni Miriam",
+    "drugs": 1,
+    "buttons": [
+      "Somministra"
+    ],
+    "allergy": "Allergie: Penicillina, Lattice, Acido acetilsalicilico"
+  },
+  {
+    "who": "Nanni Miriam",
+    "drugs": 1,
+    "buttons": [
+      "Somministra"
+    ],
+    "allergy": "Allergie: Penicillina, Lattice, Acido acetilsalicilico"
+  }
+]

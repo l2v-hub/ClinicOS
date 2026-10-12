@@ -1,0 +1,2 @@
+npm run build (tsc -b && vite build) — exit 0
+✓ built in 32.98s

@@ -1,0 +1,14 @@
+ℹ tests 1350
+ℹ pass 1350
+ℹ fail 0
+✔ operator first view (#445): action chips, then the queue to administer, no counters or notes (2.8528ms)
+✔ chips name only what needs an action and open the exact place (5.7125ms)
+✔ 445 delays read in minutes up to 90, then hours, then days (2.7203ms)
+✔ 445 doses of one patient in one band are one block with one «Somministra N» (40.6211ms)
+✔ 445 glucose-scale doses are never counted in the bulk action (7.3142ms)
+✔ 445 roles that do not administer see the block without the action; allergy states are explicit (7.8673ms)
+✔ 445 allergy names fall back to the count, never to silence (4.5737ms)
+✔ 445 the panel records through the giro endpoints with the slot key and explicit confirmation (2.2004ms)
+✔ the page-level group hides the bulk toggle on the patient chart and the Turno (14.751ms)
+✔ operator dashboard never presents unavailable clinical metrics as verified zeroes (4.9745ms)
+✔ 411 dashboard copy describes the broad set without changing navigation key (10.9011ms)

@@ -12,10 +12,10 @@ test('WidgetGroup renders the bulk toggle only when controls are enabled', () =>
   assert.match(group, /\{controls && entries\.size > 1 && \(/);
 });
 
-test('the page-level group hides the bulk toggle on the patient chart only', () => {
+test('the page-level group hides the bulk toggle on the patient chart and the Turno', () => {
   const app = source('../../../App.tsx');
   assert.match(
     app,
-    /<WidgetGroup\s+key=\{`\$\{navKey\}[^>]*controls=\{navKey !== 'dettaglio-paziente'\}/,
+    /<WidgetGroup\s+key=\{`\$\{navKey\}[^>]*controls=\{\s*navKey !== 'dettaglio-paziente' && navKey !== 'operator-dashboard'\s*\}/,
   );
 });

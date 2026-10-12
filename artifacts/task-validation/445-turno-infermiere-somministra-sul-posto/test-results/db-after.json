@@ -1,0 +1,49 @@
+{
+  "who": "Nanni Miriam",
+  "patientId": "cmv43rrjx00003wlpyjvp00l2",
+  "writes": [
+    {
+      "url": "/therapy-slots/confirm",
+      "body": {
+        "patientId": "cmv43rrjx00003wlpyjvp00l2",
+        "therapyId": "cmv43rrmb00013wlp3tpzas2d",
+        "date": "2026-10-12",
+        "fascia": "mattina",
+        "scheduledTime": "08:00",
+        "confirmed": true
+      }
+    },
+    {
+      "url": "/therapy-slots/not-administered",
+      "body": {
+        "patientId": "cmv43rrjx00003wlpyjvp00l2",
+        "therapyId": "cmv43rrn300033wlp9d0bthz5",
+        "date": "2026-10-12",
+        "fascia": "mattina",
+        "scheduledTime": "08:00",
+        "motivo": "rifiutata_paziente",
+        "confirmed": true
+      }
+    }
+  ],
+  "rowsDb": [
+    {
+      "therapyId": "cmv43rrmb00013wlp3tpzas2d",
+      "date": "2026-10-12",
+      "fascia": "mattina",
+      "ora": "08:00",
+      "stato": "erogata",
+      "motivo": null,
+      "operatoreNome": "Infermiere 1"
+    },
+    {
+      "therapyId": "cmv43rrn300033wlp9d0bthz5",
+      "date": "2026-10-12",
+      "fascia": "mattina",
+      "ora": "08:00",
+      "stato": "non_erogata",
+      "motivo": "rifiutata_paziente",
+      "operatoreNome": "Infermiere 1"
+    }
+  ]
+}

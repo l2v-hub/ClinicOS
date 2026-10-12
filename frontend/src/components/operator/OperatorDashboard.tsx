@@ -6,11 +6,16 @@ import type { PatientLanding } from '../../lib/patientTargetResolver';
 import type { PatientListEntry } from '../../lib/patientListView';
 import { useRiepilogoSomministrazioni } from './cartella/useRiepilogoSomministrazioni';
 import { DashboardNotificationCenter } from './DashboardNotificationCenter';
-import { OperatorClinicalKpiBand } from './OperatorClinicalKpiBand';
+import { TurnoActionChips } from './TurnoActionChips';
+import { buildTurnoChips } from '../../lib/turnoChips';
 import { AdessoQueue } from './AdessoQueue';
 import { TurnoAppointments } from './TurnoAppointments';
 import { TurnoHandovers } from './TurnoHandovers';
 import { buildAdessoQueue } from '../../lib/adessoQueue';
+import { landingOf } from '../../lib/patientTargetResolver';
+import { useCan } from '../../lib/capabilities';
+import { countToTakeCharge } from '../../lib/urgency';
+import { useTurnoAllergies } from '../../lib/useTurnoAllergies';
 import { buildDashboardNotificationSections } from './buildDashboardNotificationSections';
 import { buildDashboardNotificationCounts } from './dashboardNotificationModel';
 import './OperatorDashboard.css';
@@ -36,6 +41,8 @@ interface OperatorDashboardProps {
   clinicalOverview?: ClinicalOverview | null;
   clinicalOverviewState: 'loading' | 'ready' | 'error';
   onRetryClinicalOverview: () => void;
+  /** «Ho capito» su una consegna urgente direttamente dal Turno (#445). */
+  onAcknowledgeConsegna?: (id: string) => Promise<boolean>;
 }
 
 /** Schermata "Il mio turno" (HMI 1): indicatori, poi a sinistra la coda "Adesso" e a destra
@@ -57,6 +64,7 @@ export function OperatorDashboard({
   clinicalOverview = null,
   clinicalOverviewState,
   onRetryClinicalOverview,
+  onAcknowledgeConsegna,
 }: OperatorDashboardProps) {
   const consegnaSummary = consegneOverview?.summary;
   const urgenti = consegneOverview?.urgentPreview ?? [];
@@ -66,23 +74,56 @@ export function OperatorDashboard({
   // AC8: pazienti con farmaci fuori anagrafica. Stessa richiesta di reparto della lista pazienti.
   const anomalie = useAnomalieReparto();
   const somministrazioni = useRiepilogoSomministrazioni();
-  // Coda "Adesso": stessi dati delle altre viste, in un solo ordine di urgenza.
+  // Coda "Adesso" = da somministrare (#445): urgenze e farmaci da verificare stanno nelle chip in
+  // alto e nella colonna «Da leggere», non una terza volta qui.
   const adesso = buildAdessoQueue({
     now: new Date(),
     scadute: somministrazioni.scadute,
     prossime: somministrazioni.prossime,
     senzaOrario: somministrazioni.senzaOrario,
-    urgenti,
-    anomalie: anomalie.pazienti.map((p) => ({
-      ...p,
-      therapyId: anomalyTherapyId(anomalie, p.patientId),
-    })),
+    urgenti: [],
+    anomalie: [],
+  });
+  const canAdminister = useCan('administration.confirm');
+  const allergie = useTurnoAllergies(
+    adesso.filter((it) => it.kind.startsWith('terapia-')).map((it) => it.patientId),
+  );
+  const farmaciDaVerificare = anomalie.pazienti.reduce((n, p) => n + p.esito.totale, 0);
+  const chips = buildTurnoChips({
+    urgentToTakeCharge: consegnaSummary
+      ? Math.max(urgentCount ?? 0, countToTakeCharge(urgenti))
+      : undefined,
+    urgentState: consegneOverviewState,
+    critici: clinicalOverview?.critici ?? 0,
+    clinicalState: clinicalOverviewState,
+    anomalie: {
+      pazienti: anomalie.pazienti.length,
+      farmaci: farmaciDaVerificare,
+      fallito: anomalie.fallito,
+    },
+    onOpenUrgent: onOpenConsegneAperte ?? (() => onNavigate('consegne')),
+    onOpenCritici: () =>
+      onOpenPatientList
+        ? onOpenPatientList({ signal: 'critici' })
+        : onNavigate('parametri-multipaziente'),
+    onRetryClinical: onRetryClinicalOverview,
+    onOpenAnomalie: () => {
+      const only = anomalie.pazienti.length === 1 ? anomalie.pazienti[0] : null;
+      if (only && onSelectPaziente)
+        onSelectPaziente(
+          only.nome,
+          only.patientId,
+          landingOf({
+            kind: 'drug-anomaly',
+            patientId: only.patientId,
+            therapyId: anomalyTherapyId(anomalie, only.patientId),
+          }),
+        );
+      else if (onOpenPatientList) onOpenPatientList({ signal: 'anomalie' });
+      else onNavigate('pazienti');
+    },
   });
 
-  // Clinical KPIs from the constant-size server aggregate.
-  const critici = clinicalOverview?.critici ?? 0;
-  const rischiAlti = clinicalOverview?.rischiAlti ?? 0;
-  const allergieGravi = clinicalOverview?.allergieGravi ?? 0;
   // Same literal non-discharged predicate as the list; this is not an admission count.
   const pazientiRicoverati = clinicalOverview
     ? Math.max(0, clinicalOverview.totalPatients - clinicalOverview.dimessi)
@@ -125,23 +166,7 @@ export function OperatorDashboard({
     <div className="operator-dashboard turno">
       <PageHeader title="Il mio turno" subtitle={subtitle} />
 
-      <OperatorClinicalKpiBand
-        loading={clinicalOverviewState === 'loading' || somministrazioni.inCorso}
-        clinicalReady={clinicalOverviewReady}
-        critici={critici}
-        rischiAlti={rischiAlti}
-        allergieGravi={allergieGravi}
-        pazientiRicoverati={pazientiRicoverati}
-        somministrazioni={somministrazioni}
-        onOpenParametri={() => onNavigate('parametri-multipaziente')}
-        onOpenPazienti={() => onNavigate('pazienti')}
-        onOpenTherapy={onOpenLateTherapy ?? (() => onNavigate('terapie'))}
-        onOpenPatientList={onOpenPatientList}
-      />
-      <p className="dashboard-regime-note">
-        Non dimessi: pazienti senza dimissione registrata nel tuo perimetro, inclusi Day Hospital,
-        ambulatoriali e regime non disponibile. La lista distingue i singoli regimi.
-      </p>
+      <TurnoActionChips chips={chips} />
 
       <div className="turno-grid">
         <AdessoQueue
@@ -149,8 +174,11 @@ export function OperatorDashboard({
           terapie={
             somministrazioni.fallito ? 'error' : somministrazioni.inCorso ? 'loading' : 'ready'
           }
-          consegne={consegneOverviewState}
-          anomalie={anomalie.fallito ? 'error' : anomalie.inCorso ? 'loading' : 'ready'}
+          consegne="ready"
+          anomalie="ready"
+          allergie={allergie}
+          canAdminister={canAdminister}
+          onAdministered={somministrazioni.aggiorna}
           onSelectPaziente={onSelectPaziente}
           onOpenTherapy={onOpenLateTherapy ?? (() => onNavigate('terapie'))}
           onOpenConsegne={() =>
@@ -188,9 +216,14 @@ export function OperatorDashboard({
             onOpenAgenda={() => onNavigate('agenda-operatore')}
             onSelectPaziente={onSelectPaziente}
           />
-          <TurnoHandovers overview={consegneOverview} state={consegneOverviewState}
+          <TurnoHandovers
+            overview={consegneOverview}
+            state={consegneOverviewState}
             onOpen={onOpenConsegneFeed ?? (() => onNavigate('consegne'))}
-            onRetry={onRetryConsegne} onSelectPaziente={onSelectPaziente} />
+            onRetry={onRetryConsegne}
+            onSelectPaziente={onSelectPaziente}
+            onAcknowledge={onAcknowledgeConsegna}
+          />
         </div>
       </div>
     </div>
