@@ -134,6 +134,25 @@ const MARK = `E2E-449 ${Date.now()}`;
     'history and date filters sit behind «Storico e filtri per data»',
     !filtersVisible && (await page.getByText('Storico e filtri per data').count()) > 0,
   );
+  // QA: con il diario di Nanni aperto sotto, l'invio dal modulo in cima si vede subito
+  await page.locator('.handover-rounds__select', { hasText: 'Nanni' }).first().click();
+  await page.waitForTimeout(2500);
+  const before = await page.locator('.diario-card').count();
+  const MARK2 = `${MARK} bis`;
+  const quick2 = page.locator('section[aria-label="Scrivi una consegna"]');
+  await quick2.locator('select').first().selectOption(nanni);
+  await quick2.locator('textarea').first().fill(`${MARK2} diuresi scarsa`);
+  await quick2.getByRole('button', { name: /^Invia$/ }).click();
+  await page.waitForTimeout(3500);
+  const after = await page.locator('.diario-card').count();
+  const shown = await page.locator('.diario-card', { hasText: MARK2 }).count();
+  await page.screenshot({ path: `${OUT}/screenshots/06-diario-aggiornato.png` });
+  check(
+    'AC1c',
+    'the diary below shows a handover sent from the top form without switching view',
+    shown === 1 && after === before + 1,
+    `cards ${before}→${after} · new ${shown}`,
+  );
   if (process.env.TRACE) await context.tracing.stop({ path: `${OUT}/trace/infermiere.zip` });
   await context.close();
 }
@@ -146,7 +165,7 @@ const MARK = `E2E-449 ${Date.now()}`;
     fullPage: true,
   });
   const perCard = await confirmsPerCard(page, '.consegna-card');
-  const mine = page.locator('.consegna-card', { hasText: MARK });
+  const mine = page.locator('.consegna-card', { hasText: `${MARK} pressione` });
   const identityLines = await page.evaluate(() =>
     [...document.querySelectorAll('.consegna-card')].map((c) => ({
       oneLine: !!c.querySelector('.consegna-card__who'),

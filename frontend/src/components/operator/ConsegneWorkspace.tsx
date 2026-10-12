@@ -27,6 +27,7 @@ function WorkspaceSession({
   const [store] = useState(() => provided ?? createConsegnaDraftStore());
   const [mode, setMode] = useState(entry?.mode ?? 'unread');
   const [patientId, setPatientId] = useState(entry?.query?.patientId);
+  const [sent, setSent] = useState(0);
   useEffect(() => {
     setMode(entry?.mode ?? 'unread');
     setPatientId(entry?.query?.patientId);
@@ -50,6 +51,7 @@ function WorkspaceSession({
         operatori={feed.operatori}
         onAdd={feed.onAdd}
         initialPatientId={entry?.query?.patientId}
+        onSaved={() => setSent((n) => n + 1)}
       />
       <div className="ds-chip-group" role="group" aria-label="Vista consegne">
         <button
@@ -95,6 +97,7 @@ function WorkspaceSession({
           onAdd={feed.onAdd}
           active
           initialPatientId={patientId}
+          externalVersion={sent}
         />
       )}
       {mode === 'feed' && (

@@ -168,7 +168,7 @@ export function ConsegnePage({
       {embedded ? (
         <div className="toolbar" aria-label="Riepilogo consegne">
           <p className="page-header__subtitle">{summaryLabel}</p>
-          {createAction}
+          {/* #449: nella pagina Consegne si scrive dal modulo in cima, non da un secondo modulo */}
         </div>
       ) : (
         <PageHeader

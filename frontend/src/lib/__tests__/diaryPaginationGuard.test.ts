@@ -12,7 +12,7 @@ test('patient diary requests a bounded first page and follows an opaque cursor',
   assert.match(source, /const DIARY_PAGE_SIZE = 50/);
   assert.match(source, /params\.set\('limit', String\(DIARY_PAGE_SIZE\)\)/);
   assert.match(source, /if \(options\.cursor\) params\.set\('cursor', options\.cursor\)/);
-  assert.match(source, /Segnalazioni precedenti/);
+  assert.match(source, /Consegne precedenti/);
   assert.match(source, /legacyEntries\.slice\(0, DIARY_PAGE_SIZE\)/);
   assert.match(source, /hasMore \? 'voci caricate'/);
   assert.match(source, /loadMoreControllerRef\.current\?\.abort\(\)/);
@@ -27,7 +27,10 @@ test('patient diary replaces bounded windows, can return and filters on the serv
   assert.match(source, /params\.set\('to', dateRange\.to\)/);
   assert.ok((source.match(/setRefreshVersion\(\(version\) => version \+ 1\)/g) ?? []).length >= 3);
   assert.match(source, /request === readSequenceRef\.current/);
-  const editor = await readFile(new URL('../../components/operator/ClinicalNoteEditor.tsx', import.meta.url), 'utf8');
+  const editor = await readFile(
+    new URL('../../components/operator/ClinicalNoteEditor.tsx', import.meta.url),
+    'utf8',
+  );
   assert.match(editor, /autore.*registrati automaticamente/);
   assert.doesNotMatch(source, />Nome autore<|>Tipo operatore</);
 });
