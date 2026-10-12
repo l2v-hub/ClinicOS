@@ -1,0 +1,49 @@
+{
+  "backend": {
+    "phases": [
+      {
+        "tests": 1883,
+        "pass": 1878,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 5
+      },
+      {
+        "tests": 48,
+        "pass": 48,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    ],
+    "totals": {
+      "tests": 1931,
+      "pass": 1926,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 5
+    },
+    "log": "retry-backend-verified-2026-10-12.log",
+    "exitCode": 0
+  },
+  "frontend": {
+    "phases": [
+      {
+        "tests": 1379,
+        "pass": 1379,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    ],
+    "totals": {
+      "tests": 1379,
+      "pass": 1379,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "log": "retry-frontend-with-latest-main-2026-10-12.log",
+    "exitCode": 0
+  }
+}

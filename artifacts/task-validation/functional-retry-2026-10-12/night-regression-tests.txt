@@ -1,0 +1,43 @@
+✔ assistant applies verified actor and patient scope before bounds with exact counts (490.785121ms)
+✔ in ritardo = dose pending il cui orario è già passato (1.61237ms)
+✔ esattamente all’orario previsto NON è ancora in ritardo (confronto stretto, come l’UI) (0.236896ms)
+✔ un minuto dopo l’orario previsto è in ritardo (0.307288ms)
+✔ dosi già erogate o marcate non erogate non contano mai come in ritardo (0.154769ms)
+✔ un orario illeggibile non conta come in ritardo (nessun falso allarme) (0.14856ms)
+✔ la finestra limita le dosi "in arrivo": oltre l’orizzonte non sono "adesso" (0.131461ms)
+✔ i ritardi sono ordinati dal più grave, le dosi in arrivo dalla più imminente (0.7589ms)
+✔ minutesFromMidnight accetta ore non zero-paddate e rifiuta il resto (0.176409ms)
+✔ consegna aperta = tutto ciò che non è completata (0.364571ms)
+✔ una consegna completata non è mai scaduta, nemmeno se il termine è passato (0.262325ms)
+✔ senza ora, il termine è l’intera giornata: oggi non è scaduta, ieri sì (0.228618ms)
+✔ con ora esplicita: prima no, esattamente al termine no, dopo sì (0.232556ms)
+✔ una scadenza futura non è scaduta e una data illeggibile non allarma (0.130854ms)
+✔ le consegne si ordinano per priorità e poi per termine più vicino (0.164348ms)
+✔ il nome dell’operatore combacia a meno di maiuscole, accenti e ordine (0.23285ms)
+✔ nessuna consegna viene scartata: chi non combacia finisce in coda, non fuori (0.264828ms)
+✔ senza nome operatore nulla viene promosso, ma nulla viene perso (0.154328ms)
+✔ facility day crosses midnight in Rome before UTC, including the winter year boundary (1.685855ms)
+✔ facility clock follows spring and autumn DST changes without using the host clock (0.383112ms)
+✔ nighttime therapy and handover signals compare local clinical times consistently (0.809976ms)
+✔ nighttime assistant queue uses the clinical day and Rome clock for future and due doses (209.114338ms)
+✔ scheduled request receipts replay each first outcome without changing clinical records (232.159926ms)
+✔ concurrent retries of a scheduled request both return the same single record (67.331694ms)
+✔ a pending-only request cannot overwrite refusal; replay preserves its original snapshot (68.315357ms)
+✔ one-off explicit clocks survive empty flags across feed, summary, assistant and writes (223.234885ms)
+✔ distinct same-band doses retain quantity, independent writes and exact summaries (222.458004ms)
+✔ a given single dose stays given after its time moves within the band (no double dose) (110.195187ms)
+✔ a single dose recorded as not given and then moved is updated in place, not duplicated (36.906386ms)
+✔ conditional insulin requires a measured glucose and stores the server-resolved dose (32.870186ms)
+✔ conditional insulin rejects coercible non-number glucose values (7.622897ms)
+✔ therapy confirm persists prescription fields, not spoofed client drug data (14.974915ms)
+✔ therapy confirm rejects a mismatched therapy/patient pair (20.577297ms)
+✔ two same-name prescriptions keep independent administration records (28.160445ms)
+✔ ordinary operators cannot read or mutate another owner patient; managers retain global scope (94.68499ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 23563.776915

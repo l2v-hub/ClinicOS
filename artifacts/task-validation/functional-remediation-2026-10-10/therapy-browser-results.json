@@ -1,21 +1,21 @@
 {
-  "patientId": "cmv2ttygs000037qpnqi012p9",
+  "patientId": "cmv2t8q9s0000lqqpeehbne4b",
   "results": [
     {
-      "name": "106-prescription-inventory",
+      "name": "105-prescription-inventory",
       "pass": true,
-      "active": 105,
+      "active": 104,
       "requests": [
         "?limit=100&status=tutte",
         "?limit=100&status=attiva",
         "?limit=100&status=tutte",
         "?limit=100&status=attiva",
         "?limit=100&status=tutte",
-        "?limit=100&status=attiva&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTEwVDIwOjA4OjIxLjY3MVoiLCJpZCI6IlFBLWNtdjJ0dHlnczAwMDAzN3FwbnFpMDEycDktMTAyIiwic3RhdHVzIjoiYXR0aXZhIn0",
-        "?limit=100&status=tutte&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTEwVDIwOjA4OjIxLjY3MVoiLCJpZCI6IlFBLWNtdjJ0dHlnczAwMDAzN3FwbnFpMDEycDktMTAzIiwic3RhdHVzIjoidHV0dGUifQ",
+        "?limit=100&status=attiva&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTEwVDE5OjUxOjUxLjg1MFoiLCJpZCI6IlFBLWNtdjJ0OHE5czAwMDBscXFwZWVoYm5lNGItMTAxIiwic3RhdHVzIjoiYXR0aXZhIn0",
+        "?limit=100&status=tutte&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTEwVDE5OjUxOjUxLjg1MFoiLCJpZCI6IlFBLWNtdjJ0OHE5czAwMDBscXFwZWVoYm5lNGItMTAyIiwic3RhdHVzIjoidHV0dGUifQ",
         "?limit=100&status=attiva",
         "?limit=100&status=attiva",
-        "?limit=100&status=attiva&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTEwVDIwOjA4OjIxLjY3MVoiLCJpZCI6IlFBLWNtdjJ0dHlnczAwMDAzN3FwbnFpMDEycDktMTAyIiwic3RhdHVzIjoiYXR0aXZhIn0"
+        "?limit=100&status=attiva&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTEwVDE5OjUxOjUxLjg1MFoiLCJpZCI6IlFBLWNtdjJ0OHE5czAwMDBscXFwZWVoYm5lNGItMTAxIiwic3RhdHVzIjoiYXR0aXZhIn0"
       ]
     },
     {
@@ -33,11 +33,6 @@
     {
       "name": "later-dose-confirmed-first-dose-still-pending",
       "pass": true
-    },
-    {
-      "name": "one-off-explicit-clock-with-empty-flags",
-      "pass": true,
-      "scheduledTime": "11:30"
     },
     {
       "name": "mobile-and-javascript",

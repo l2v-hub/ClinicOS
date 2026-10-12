@@ -1,0 +1,38 @@
+[
+  {
+    "file": "frontend/src/App.tsx",
+    "baseline": 12,
+    "current": 12,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/components/operator/cartella/farmacoRiferimento.ts",
+    "baseline": 1,
+    "current": 1,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/__tests__/scheduledAdministrationRetries.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/__tests__/therapyNavigationGuard.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/__tests__/therapyW2InPlace.test.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  },
+  {
+    "file": "frontend/src/lib/therapyAdministrationWrite.ts",
+    "baseline": 0,
+    "current": 0,
+    "increases": []
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "instant": "2026-10-12T22:30:00.000Z",
+  "facilityDate": "2026-10-13",
+  "assistantDate": "2026-10-12",
+  "facilityTime": "00:30",
+  "prescribedTime": "08:00",
+  "overdue": 1,
+  "dueSoon": 0,
+  "expectedOverdue": 0,
+  "expectedDueSoon": 0,
+  "confirmedDefect": true
+}
