@@ -30,6 +30,15 @@ export function UnreadAction({ row, queue }: { row: UnreadDiaryEntry; queue: Unr
       </button>
     );
   }
+  // «Letta» solo se il server dice che chi legge può confermarla: mai sulle proprie note (#446 QA).
+  if (!row.readReceipt?.canAcknowledge)
+    return (
+      <span className="turno-handovers__waiting">
+        {row.readReceipt?.isAuthor
+          ? 'Scritta da te: la conferma un collega'
+          : 'In attesa di conferma'}
+      </span>
+    );
   return (
     <button
       type="button"
@@ -47,11 +56,14 @@ export function UnreadAction({ row, queue }: { row: UnreadDiaryEntry; queue: Unr
  *  conferma), quindi lo stesso totale; prima le urgenze. */
 export function TurnoDaLeggere({
   queue,
+  available = true,
   exclude,
   onOpenAll,
   onSelectPaziente,
 }: {
   queue: UnreadQueue;
+  /** Il ruolo legge il diario (`diary.list`): senza, la coda non c'è e lo si dice. */
+  available?: boolean;
   /** Voci già mostrate altrove nel Turno (urgenze in cima): non si ripetono. */
   exclude?: ReadonlySet<string>;
   onOpenAll: () => void;
@@ -85,17 +97,30 @@ export function TurnoDaLeggere({
           Tutte <IcoArrow />
         </button>
       </div>
-      {queue.error ? (
+      {queue.notice && (
+        <p className="turno-empty" role="status" aria-live="polite">
+          {queue.notice}
+        </p>
+      )}
+      {/* Un errore di conferma non sostituisce la lista: la si legge ancora (#446 QA). */}
+      {queue.error && (
         <p className="turno-empty turno-empty--error" role="alert">
           {queue.error}
           <button type="button" className="ds-link" onClick={queue.retry}>
             Riprova
           </button>
         </p>
-      ) : queue.loading && !queue.page ? (
+      )}
+      {!available ? (
         <p className="turno-empty" role="status">
-          Aggiornamento…
+          La coda delle note non è disponibile per il tuo ruolo.
         </p>
+      ) : !queue.page ? (
+        queue.loading && (
+          <p className="turno-empty" role="status">
+            Aggiornamento…
+          </p>
+        )
       ) : total === 0 ? (
         <p className="turno-empty" role="status">
           Niente da leggere.

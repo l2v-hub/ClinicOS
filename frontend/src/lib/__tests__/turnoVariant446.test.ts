@@ -3,8 +3,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { nienteInSospeso, ordineGiro, turnoVariant, type GiroPaziente } from '../turnoVariant';
-import { urgentToTakeCharge } from '../turnoUnread';
-import type { UnreadDiaryEntry, UnreadDiaryPage } from '../diaryUnreadQueue';
+import { takeChargeRows } from '../turnoUnread';
+import type { UnreadDiaryEntry } from '../diaryUnreadQueue';
 
 test('446 the Turno variant follows capabilities, administration first', () => {
   assert.equal(
@@ -66,19 +66,13 @@ test("446 urgencies to take charge come from the badge queue, never the reader's
       priority,
       urgency: { state: 'active', canAcknowledge, isAuthor },
     }) as unknown as UnreadDiaryEntry;
-  const page = {
-    entries: [
-      row('1', 'urgente', true, false),
-      row('2', 'urgente', false, true),
-      row('3', 'normale', true, false),
-    ],
-    hasMore: true,
-  } as unknown as UnreadDiaryPage;
-  const result = urgentToTakeCharge(page);
+  const rows = takeChargeRows([
+    row('1', 'urgente', true, false),
+    row('2', 'urgente', false, true),
+    row('3', 'normale', true, false),
+  ]);
   assert.deepEqual(
-    result.rows.map((r) => r.id),
+    rows.map((r) => r.id),
     ['1'],
   );
-  assert.equal(result.atLeast, true);
-  assert.deepEqual(urgentToTakeCharge(null).rows, []);
 });

@@ -67,6 +67,8 @@ const context = await browser.newContext({
   hasTouch: true,
 });
 if (process.env.TRACE) await context.tracing.start({ screenshots: true, snapshots: true });
+// CLOCK=<ISO>: ora del browser fissata (es. dopo mezzanotte nessuna dose è ancora in ritardo).
+if (process.env.CLOCK) await context.clock.setFixedTime(new Date(process.env.CLOCK));
 const page = await context.newPage();
 page.on('console', (m) => {
   if (m.type() === 'error' && !/Failed to load resource/.test(m.text()))
