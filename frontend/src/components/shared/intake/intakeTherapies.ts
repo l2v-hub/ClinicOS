@@ -9,7 +9,13 @@ import { therapyFormToInput } from './therapyFormPayload';
 import { isPatchUnit } from '../../operator/cartella/therapyDose';
 import type { TherapyFieldIssue } from '../../operator/cartella/therapyFieldFeedback';
 import type { IntakeTherapyDiagnostic } from './intakeTherapyNavigation';
-import { glucoseScaleRows, validateGlucoseScaleRows } from '../../operator/cartella/glucoseScale';
+import {
+  GLUCOSE_SCALE_DOSE_UNITS,
+  glucoseScaleDoseUnit,
+  glucoseScaleRows,
+  validateGlucoseScaleRows,
+  type GlucoseScaleDoseUnit,
+} from '../../operator/cartella/glucoseScale';
 import { isTherapyRegimenRoute, THERAPY_ROUTE_REVIEW_MESSAGE } from '../../../lib/therapyRoute';
 
 const hasText = (v: unknown): v is string => typeof v === 'string' && !!v.trim();
@@ -66,11 +72,16 @@ export function therapyInputDiagnostics(input: Record<string, unknown>): Therapy
     add('doseMode', 'Verifica la modalità di dosaggio');
   if (scale) {
     const protocol = input.doseProtocol as Record<string, unknown> | null;
-    if (!protocol || protocol.kind !== 'blood_glucose')
+    if (
+      !protocol ||
+      protocol.kind !== 'blood_glucose' ||
+      (protocol.doseUnit !== undefined &&
+        !GLUCOSE_SCALE_DOSE_UNITS.includes(protocol.doseUnit as GlucoseScaleDoseUnit))
+    )
       add('glucoseScale', 'Inserisci uno schema glicemico valido');
     else
-      validateGlucoseScaleRows(glucoseScaleRows(protocol)).errors.forEach((message) =>
-        add('glucoseScale', message),
+      validateGlucoseScaleRows(glucoseScaleRows(protocol), glucoseScaleDoseUnit(protocol)).errors.forEach(
+        (message) => add('glucoseScale', message),
       );
     if (input.tipo !== 'periodica')
       add('tipo', 'Lo schema glicemico richiede gli orari di rilevazione');

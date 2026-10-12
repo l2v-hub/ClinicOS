@@ -66,8 +66,47 @@ test('conditional dose is resolved from saved protocol, never schedule placehold
     actor,
   );
   assert.equal(resolved.farmacoDose, '6 unità (glicemia 280 mg/dL)');
-  assert.deepEqual(resolved.doseContext, { kind: 'blood_glucose', glucoseMgDl: 280, doseUnits: 6 });
+  assert.deepEqual(resolved.doseContext, {
+    kind: 'blood_glucose',
+    glucoseMgDl: 280,
+    doseUnits: 6,
+    doseUnit: 'unità',
+  });
   assert.equal(resolved.farmacoVia, 'sottocute');
+});
+
+test('pump scale records the rate in ml/h and the band bolus beside it', async () => {
+  const pump = {
+    ...therapy,
+    viaSomministrazione: 'endovena',
+    doseProtocol: {
+      kind: 'blood_glucose',
+      doseUnit: 'ml/h',
+      rules: [
+        { minMgDl: 151, maxMgDl: 200, units: 2 },
+        {
+          minMgDl: 351,
+          maxMgDl: null,
+          units: 6,
+          extraDoses: [{ amount: 6, unit: 'unità', label: 'bolo' }],
+        },
+      ],
+    },
+  };
+  const rate = await resolveAuthoritativeTherapy(
+    txFor(pump),
+    { ...input, measuredGlucose: 180 },
+    actor,
+  );
+  assert.equal(rate.farmacoDose, '2 ml/h (glicemia 180 mg/dL)');
+  assert.equal(rate.doseContext?.doseUnit, 'ml/h');
+  const bolus = await resolveAuthoritativeTherapy(
+    txFor(pump),
+    { ...input, measuredGlucose: 420 },
+    actor,
+  );
+  assert.equal(bolus.farmacoDose, '6 ml/h + 6 unità (bolo) (glicemia 420 mg/dL)');
+  assert.deepEqual(bolus.doseContext?.extraDoses, [{ amount: 6, unit: 'unità', label: 'bolo' }]);
 });
 
 test('missing reading and uncovered interval block administration without fallback dose', async () => {

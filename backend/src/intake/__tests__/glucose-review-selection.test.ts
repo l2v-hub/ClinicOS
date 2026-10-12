@@ -78,3 +78,62 @@ test('blank saved dose must not become a zero-dose prescription by coercion', ()
     /Unità non valide/,
   );
 });
+
+test('pump scale: unit and band extra doses are part of the reviewed prescription', () => {
+  const pumpForm = {
+    ...form,
+    glucoseDoseUnit: 'ml/h',
+    glucoseScale: [
+      { minMgDl: '151', maxMgDl: '200', units: '2' },
+      {
+        minMgDl: '351',
+        maxMgDl: '',
+        units: '6',
+        extraDoses: [{ amount: '6', unit: 'unità', route: '', label: 'bolo' }],
+      },
+    ],
+  };
+  const pumpInput = {
+    ...input,
+    doseProtocol: {
+      kind: 'blood_glucose',
+      doseUnit: 'ml/h',
+      rules: [
+        { minMgDl: 151, maxMgDl: 200, units: 2 },
+        {
+          minMgDl: 351,
+          maxMgDl: null,
+          units: 6,
+          extraDoses: [{ amount: 6, unit: 'unità', label: 'bolo' }],
+        },
+      ],
+    },
+  };
+  assert.doesNotThrow(() => validateDraftTherapySelection({ terapia: [pumpForm] }, [pumpInput]));
+  // Stesse fasce in unità invece che ml/h: non è la prescrizione rivista.
+  assert.throws(
+    () =>
+      validateDraftTherapySelection({ terapia: [pumpForm] }, [
+        { ...pumpInput, doseProtocol: { ...pumpInput.doseProtocol, doseUnit: 'unità' } },
+      ]),
+    /schema glicemico/,
+  );
+  // Il bolo omesso alla conferma non passa.
+  assert.throws(
+    () =>
+      validateDraftTherapySelection({ terapia: [pumpForm] }, [
+        {
+          ...pumpInput,
+          doseProtocol: {
+            ...pumpInput.doseProtocol,
+            rules: pumpInput.doseProtocol.rules.map(({ minMgDl, maxMgDl, units }) => ({
+              minMgDl,
+              maxMgDl,
+              units,
+            })),
+          },
+        },
+      ]),
+    /schema glicemico/,
+  );
+});

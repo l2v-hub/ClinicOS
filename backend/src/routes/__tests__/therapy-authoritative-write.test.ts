@@ -402,6 +402,7 @@ test('conditional insulin requires a measured glucose and stores the server-reso
     kind: 'blood_glucose',
     glucoseMgDl: 280,
     doseUnits: 6,
+    doseUnit: 'unità',
   });
 });
 

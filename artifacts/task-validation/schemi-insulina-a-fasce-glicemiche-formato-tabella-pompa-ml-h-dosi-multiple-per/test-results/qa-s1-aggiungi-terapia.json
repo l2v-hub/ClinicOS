@@ -1,0 +1,78 @@
+{
+  "patientId": "cmv5r8y3j0000f0lpi0bkou7e",
+  "consoleErrors": [],
+  "httpErrors": [],
+  "results": [
+    {
+      "name": "pump mode: primary dose field labelled \"Velocità (ml/h)\"",
+      "pass": true
+    },
+    {
+      "name": "gap warning shown: \"Glicemia 201–249 mg/dL non coperta dallo schema\"",
+      "pass": true
+    },
+    {
+      "name": "editor 1280px: no horizontal page scroll",
+      "pass": true
+    },
+    {
+      "name": "editor 375px: no horizontal page scroll",
+      "pass": true,
+      "scrollWidthVsInner": [
+        375,
+        375
+      ]
+    },
+    {
+      "name": "overlap 190–200: blocking error shown, 0 POST, 0 rows in DB",
+      "pass": true,
+      "saveDisabled": false
+    },
+    {
+      "name": "DB PatientTherapy.doseProtocol: ml/h, 3 bands, extra 6 unità (bolo)",
+      "pass": true,
+      "doseProtocol": {
+        "kind": "blood_glucose",
+        "rules": [
+          {
+            "units": 2,
+            "maxMgDl": 200,
+            "minMgDl": 140
+          },
+          {
+            "units": 3,
+            "maxMgDl": 300,
+            "minMgDl": 250
+          },
+          {
+            "units": 4,
+            "maxMgDl": null,
+            "minMgDl": 301,
+            "extraDoses": [
+              {
+                "unit": "unità",
+                "label": "bolo",
+                "amount": 6
+              }
+            ]
+          }
+        ],
+        "doseUnit": "ml/h",
+        "measurementUnit": "mg/dL"
+      }
+    },
+    {
+      "name": "after reload: saved therapy shows the ml/h scale and the extra dose",
+      "pass": true,
+      "items": [
+        "140–200 mg/dL → 2 ml/h",
+        "250–300 mg/dL → 3 ml/h",
+        "≥301 mg/dL → 4 ml/h + 6 unità (bolo)"
+      ]
+    },
+    {
+      "name": "no console errors, no backend 4xx/5xx",
+      "pass": true
+    }
+  ]
+}

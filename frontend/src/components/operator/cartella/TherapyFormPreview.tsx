@@ -2,6 +2,7 @@ import { useId } from 'react';
 import type { TherapyFormValue } from './TherapyFormFields';
 import { formatFraction } from './therapyDose';
 import { GlucoseScaleSummary } from './GlucoseScaleEditor';
+import { glucoseScaleFormWarnings } from './glucoseScale';
 import { isTherapyRegimenRoute } from '../../../lib/therapyRoute';
 
 const WEEKDAYS = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
@@ -65,7 +66,11 @@ export function TherapyFormPreview({ value }: { value: TherapyFormValue }) {
         </>
       )}
       {value.doseMode === 'glucose_scale' && (
-        <GlucoseScaleSummary rows={value.glucoseScale ?? []} />
+        <GlucoseScaleSummary
+          rows={value.glucoseScale ?? []}
+          doseUnit={value.glucoseDoseUnit ?? 'unità'}
+          warnings={glucoseScaleFormWarnings(value.glucoseScale ?? [])}
+        />
       )}
       {value.tipo === 'una_tantum' && (
         <p>

@@ -1,5 +1,11 @@
 import { useId, useState } from 'react';
-import { doseForGlucose, glucoseScaleRows } from './glucoseScale';
+import {
+  extraDoseLabel,
+  glucoseRuleDoseText,
+  glucoseScaleDoseUnit,
+  glucoseScaleRows,
+  ruleForGlucose,
+} from './glucoseScale';
 import { GlucoseScaleSummary } from './GlucoseScaleEditor';
 
 /** Preview is informational: the server independently resolves and validates the actual dose. */
@@ -12,12 +18,15 @@ export function GlucoseAdministrationControl({
   protocol: unknown;
   target: string;
   sending: boolean;
-  onConfirm: (measuredGlucose: number, units: number) => void;
+  /** `doseText`: primary dose in the scale unit plus every extra dose ("15 unità + 5 unità EV (bolo)"). */
+  onConfirm: (measuredGlucose: number, units: number, doseText: string) => void;
 }) {
   const id = useId();
   const [value, setValue] = useState('');
+  const doseUnit = glucoseScaleDoseUnit(protocol);
   const measured = value.trim() ? Number(value) : null;
-  const units = measured === null ? null : doseForGlucose(protocol, measured);
+  const rule = measured === null ? null : ruleForGlucose(protocol, measured);
+  const units = rule?.units ?? null;
   return (
     <div
       className="therapy-glucose-confirm"
@@ -38,9 +47,17 @@ export function GlucoseAdministrationControl({
         aria-invalid={(measured !== null && units === null) || undefined}
         onChange={(event) => setValue(event.target.value)}
       />
-      {measured !== null && units !== null && (
+      {measured !== null && rule !== null && (
         <span className="therapy-glucose-confirm__dose" role="status">
-          Dose prevista: <strong>{units} unità</strong>
+          Dose prevista:{' '}
+          <strong>
+            {rule.units} {doseUnit}
+          </strong>
+          {(rule.extraDoses ?? []).map((extra, index) => (
+            <span key={index} className="therapy-glucose-confirm__extra">
+              + <strong>{extraDoseLabel(extra)}</strong>
+            </span>
+          ))}
         </span>
       )}
       {measured !== null && units === null && (
@@ -50,7 +67,7 @@ export function GlucoseAdministrationControl({
       )}
       <details>
         <summary>Visualizza schema prescritto</summary>
-        <GlucoseScaleSummary rows={glucoseScaleRows(protocol)} />
+        <GlucoseScaleSummary rows={glucoseScaleRows(protocol)} doseUnit={doseUnit} />
       </details>
       <button
         type="button"
@@ -58,7 +75,8 @@ export function GlucoseAdministrationControl({
         disabled={sending || units === null}
         aria-label={`Conferma somministrazione secondo glicemia: ${target}`}
         onClick={() => {
-          if (measured !== null && units !== null) onConfirm(measured, units);
+          if (measured !== null && rule !== null)
+            onConfirm(measured, rule.units, glucoseRuleDoseText(rule, doseUnit));
         }}
       >
         {sending ? 'Invio…' : 'Conferma somministrazione'}

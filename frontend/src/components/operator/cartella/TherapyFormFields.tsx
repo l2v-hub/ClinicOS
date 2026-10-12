@@ -15,7 +15,7 @@ import { TherapyFormPreview } from './TherapyFormPreview';
 import { therapyFieldFeedback, type TherapyFieldIssue } from './therapyFieldFeedback';
 import './TherapyFormFields.css';
 import { GlucoseScaleEditor } from './GlucoseScaleEditor';
-import type { GlucoseDoseRuleForm } from './glucoseScale';
+import type { GlucoseDoseRuleForm, GlucoseScaleDoseUnit } from './glucoseScale';
 import { isTherapyRegimenRoute, THERAPY_ROUTE_REVIEW_MESSAGE } from '../../../lib/therapyRoute';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -41,6 +41,8 @@ export const VIA_OPTIONS = [
 export interface TherapyFormValue {
   doseMode?: 'fixed' | 'glucose_scale';
   glucoseScale?: GlucoseDoseRuleForm[];
+  /** Unit of the scale's primary dose; missing means 'unità' (protocols saved before ml/h). */
+  glucoseDoseUnit?: GlucoseScaleDoseUnit;
   farmacoNome: string;
   drugPackageRef?: string | null;
   drugPackageDetached?: boolean;
@@ -465,6 +467,8 @@ export function TherapyFormFields({
             <GlucoseScaleEditor
               value={value.glucoseScale ?? []}
               onChange={(glucoseScale) => update({ glucoseScale })}
+              doseUnit={value.glucoseDoseUnit ?? 'unità'}
+              onDoseUnitChange={(glucoseDoseUnit) => update({ glucoseDoseUnit })}
               issues={issues}
             />
           )}
