@@ -77,7 +77,10 @@ try {
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   const pages = [];
+  const pharmacyQueries = [];
+  const emptyCatalog = (await prisma.farmaco.count()) === 0;
   page.on('request', (request) => {
+    if (request.url().includes('/farmaci/cerca?')) pharmacyQueries.push(request.url());
     if (request.url().includes(`/patients/${patient.id}/therapies/page`))
       pages.push(new URL(request.url()).search);
   });
@@ -165,6 +168,14 @@ try {
   );
   await page.screenshot({ path: resolve(out, 'mobile-distinct-doses.png'), fullPage: true });
   assert.deepEqual(errors, []);
+  if (emptyCatalog) {
+    assert.equal(
+      pharmacyQueries.length,
+      0,
+      'An unloaded catalog must not trigger one lookup per prescription',
+    );
+    results.push({ name: 'empty-catalog-no-automatic-name-searches', pass: true });
+  }
   results.push({ name: 'mobile-and-javascript', pass: true });
 } catch (error) {
   results.push({ name: 'browser-flow', pass: false, error: error.message });

@@ -63,6 +63,8 @@ const ACCEPTED_FIELDS = new Set([
   'date',
   'fascia',
   'scheduledTime',
+  'requestId',
+  'expectedStato',
   'motivo',
   'note',
   // Transitional display fields and legacy actor fields are accepted but never trusted.
@@ -81,6 +83,8 @@ export interface TherapyAdministrationInput {
   date: string;
   fascia: keyof typeof FASCIA_FLAGS;
   scheduledTime?: string;
+  requestId?: string;
+  expectedStato?: 'da_erogare';
   motivo?: string;
   note?: string;
   measuredGlucose?: number;
@@ -152,6 +156,11 @@ export function parseTherapyAdministrationBody(
   if (scheduledTime !== undefined && !/^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(scheduledTime))
     throw new TherapyWriteInputError('Orario di somministrazione non valido');
   const motivo = boundedString(body, 'motivo', 200, requireReason);
+  const requestId = boundedString(body, 'requestId', 128);
+  if (requestId !== undefined && !/^[A-Za-z0-9_-]{8,128}$/.test(requestId))
+    throw new TherapyWriteInputError('requestId non valido');
+  if (body.expectedStato !== undefined && body.expectedStato !== 'da_erogare')
+    throw new TherapyWriteInputError('Stato atteso non valido');
   const note = boundedString(body, 'note', 2_000);
   let measuredGlucose: number | undefined;
   if (body.measuredGlucose !== undefined) {
@@ -167,6 +176,8 @@ export function parseTherapyAdministrationBody(
     date,
     fascia: fascia as keyof typeof FASCIA_FLAGS,
     ...(scheduledTime !== undefined ? { scheduledTime } : {}),
+    ...(requestId !== undefined ? { requestId } : {}),
+    ...(body.expectedStato === 'da_erogare' ? { expectedStato: 'da_erogare' as const } : {}),
     motivo,
     note,
     ...(measuredGlucose !== undefined ? { measuredGlucose } : {}),

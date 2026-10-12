@@ -41,8 +41,8 @@ import {
   cartellaWriteData,
 } from './lib/cartellaWriteQueue';
 import { clearCachedGet, invalidateCachedGet } from './lib/cachedFetch';
-import { administrationErrorMessage } from './lib/therapyAdministrationWrite';
-import { clearSessionCache } from './lib/sessionCache';
+import { recordAdministration } from './lib/therapyAdministrationWrite';
+import { clearSessionCache, sessionCacheEpoch } from './lib/sessionCache';
 import { prefetchPatientListSnapshot } from './components/operator/usePatientListPage';
 import { prefetchPatientParametersSnapshot } from './lib/patientParametersPrefetch';
 import { fetchPatientById, fetchPatientPage } from './lib/patientPage';
@@ -3195,28 +3195,13 @@ export default function App() {
   // ── Therapy CRUD (API-persisted with optimistic update) ─────────────────────
 
   async function confirmTherapy(info: TherapyActionInfo) {
+    const epoch = sessionCacheEpoch();
     try {
-      const res = await fetch(`${API_URL}/therapy-slots/confirm`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-        body: JSON.stringify({
-          patientId: info.patientId,
-          farmacoNome: info.drugName,
-          farmacoDose: info.dosage,
-          farmacoVia: info.route,
-          date: info.date,
-          fascia: info.fascia,
-          ora: info.ora,
-          operatoreId: utente?.id ?? '',
-          operatoreNome: utente?.nome ?? '',
-          therapyId: info.therapyId,
-          ...(info.scheduledTime !== undefined ? { scheduledTime: info.scheduledTime } : {}),
-          ...(info.measuredGlucose !== undefined ? { measuredGlucose: info.measuredGlucose } : {}),
-        }),
-      });
+      const result = await recordAdministration(info, { kind: 'administered' });
+      if (epoch !== sessionCacheEpoch()) return;
 
       // Il motivo del server distingue «già erogata» da «non prevista per questo slot» (entrambi 409).
-      showToast(res.ok ? 'Somministrazione confermata' : await administrationErrorMessage(res));
+      showToast(result.ok ? 'Somministrazione confermata' : result.message);
       loadTherapySlots(info.date);
     } catch {
       showToast('Errore di rete');
@@ -3231,28 +3216,16 @@ export default function App() {
     motivo: MotivoNonErogazione,
     noteText: string,
   ) {
+    const epoch = sessionCacheEpoch();
     try {
-      const res = await fetch(`${API_URL}/therapy-slots/not-administered`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-        body: JSON.stringify({
-          patientId: info.patientId,
-          farmacoNome: info.drugName,
-          farmacoDose: info.dosage,
-          farmacoVia: info.route,
-          date: info.date,
-          fascia: info.fascia,
-          ora: info.ora,
-          operatoreId: utente?.id ?? '',
-          operatoreNome: utente?.nome ?? '',
-          therapyId: info.therapyId,
-          ...(info.scheduledTime !== undefined ? { scheduledTime: info.scheduledTime } : {}),
-          motivo,
-          note: noteText,
-        }),
+      const result = await recordAdministration(info, {
+        kind: 'not_administered',
+        motivo,
+        note: noteText,
       });
+      if (epoch !== sessionCacheEpoch()) return;
 
-      showToast(res.ok ? 'Non somministrazione registrata' : await administrationErrorMessage(res));
+      showToast(result.ok ? 'Non somministrazione registrata' : result.message);
       loadTherapySlots(info.date);
     } catch {
       showToast('Errore di rete');

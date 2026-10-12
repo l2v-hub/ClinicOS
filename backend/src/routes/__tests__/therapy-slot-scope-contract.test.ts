@@ -31,11 +31,11 @@ test('therapy reads and writes apply patient scope before loading clinical data'
   // UX 2026-10-03: the body passes through the explicit-confirmation gate (supervisor) first.
   assert.match(
     route,
-    /recordTherapyAdministration\(taken\.body, actor, \{ notAdministered: false \}\)/,
+    /recordTherapyAdministrationResult\(\s*taken\.body,\s*actor,\s*\{\s*notAdministered:\s*false,?\s*\}\s*\)/,
   );
   assert.match(
     route,
-    /recordTherapyAdministration\(taken\.body, actor, \{ notAdministered: true \}\)/,
+    /recordTherapyAdministrationResult\(\s*taken\.body,\s*actor,\s*\{\s*notAdministered:\s*true,?\s*\}\s*\)/,
   );
   assert.equal(route.match(/takeConfirmation\(/g)?.length, 4, 'helper + confirm + not-given + PRN');
   assert.equal(
@@ -48,6 +48,7 @@ test('therapy reads and writes apply patient scope before loading clinical data'
   );
   assert.match(writer, /patient:\s*\{ registeredById: actor\.id \}/);
   assert.match(writer, /if \(!therapy\) throw new TherapyNotFoundError/);
+  assert.match(administrationRecord, /patientIsInOperatorScope\(input\.patientId, actor, tx\)/);
   assert.match(assistant, /findTherapiesDue\([\s\S]*patientIds: ctx\.permittedPatientIds/);
   assert.match(dueQuery, /therapyAccessSql\(access\)/);
   assert.doesNotMatch(assistant, /patients:\s*s\.patients\.filter/);

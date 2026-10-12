@@ -2,12 +2,14 @@
 process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
 import { after, before, test } from 'node:test';
 import assert from 'node:assert/strict';
+import { randomUUID } from 'node:crypto';
 import express from 'express';
 import type { Server } from 'node:http';
 import { prisma } from '../../lib/prisma.js';
 import therapyRouter from '../therapy.js';
 import { buildTherapySlotPage } from '../../therapies/therapy-slots.js';
 import { findTherapiesDue } from '../../therapies/due-therapy-query.js';
+import { dayKey } from '../../ai/assistant/facility-signals.js';
 
 let server: Server;
 let base = '';
@@ -88,13 +90,265 @@ before(async () => {
   });
 });
 
+test('nighttime assistant queue uses the clinical day and Rome clock for future and due doses', async () => {
+  const now = new Date('2026-10-12T22:30:00Z'),
+    clinicalDate = '2026-10-13';
+  const rows = [];
+  try {
+    for (const time of ['08:00', '00:45'])
+      rows.push(
+        await prisma.patientTherapy.create({
+          data: {
+            patientId,
+            farmacoNome: 'Synthetic night ' + time,
+            dosaggio: '1 compressa',
+            tipo: 'una_tantum',
+            dataInizio: clinicalDate,
+            dataSomministrazione: clinicalDate,
+            orarioSomministrazione: time,
+            fasceMattina: false,
+          },
+        }),
+      );
+    const read = (instant: Date) =>
+      findTherapiesDue(dayKey(instant), { patientIds: [patientId] }, instant, 15, 10);
+    const before = await read(now);
+    assert.equal(before.overdueCount, 0);
+    assert.equal(before.dueSoonCount, 1);
+    assert.equal(before.dueSoon[0].scheduledTime, '00:45');
+    assert.equal(before.dueSoon[0].minutesUntil, 15);
+    const later = await read(new Date('2026-10-12T22:46:00Z'));
+    assert.equal(later.overdueCount, 1);
+    assert.equal(later.overdue[0].scheduledTime, '00:45');
+    assert.equal(later.overdue[0].minutesLate, 1);
+    assert.equal(later.dueSoonCount, 0);
+  } finally {
+    await prisma.patientTherapy.deleteMany({ where: { id: { in: rows.map((row) => row.id) } } });
+  }
+});
+
+test('scheduled request receipts replay each first outcome without changing clinical records', async () => {
+  for (const notAdministered of [false, true]) {
+    const therapy = await prisma.patientTherapy.create({
+      data: {
+        patientId,
+        farmacoNome: 'Synthetic replay',
+        dosaggio: '10 mg',
+        dataInizio: date,
+        fasceMattina: true,
+      },
+    });
+    const endpoint = notAdministered ? 'not-administered' : 'confirm';
+    const body = {
+      patientId,
+      therapyId: therapy.id,
+      date,
+      fascia: 'mattina',
+      scheduledTime: '08:00',
+      requestId: randomUUID(),
+      expectedStato: 'da_erogare',
+      ...(notAdministered ? { motivo: 'rifiuto', note: 'Test sintetico' } : {}),
+    };
+    const post = (patch = {}) =>
+      fetch(`${base}/therapy-slots/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Operator-Id': ownerOperatorId,
+          'X-Operator-Role': 'operatore',
+        },
+        body: JSON.stringify({ ...body, ...patch }),
+      });
+    try {
+      const first = await post();
+      assert.equal(first.status, 200, await first.clone().text());
+      const initial = await first.json();
+      const before = await prisma.medicationAdministration.findUniqueOrThrow({
+        where: { id: initial.id },
+      });
+      const second = await post();
+      assert.equal(second.status, 200);
+      assert.equal(second.headers.get('Idempotent-Replayed'), 'true');
+      assert.deepEqual(await second.json(), initial);
+      assert.deepEqual(
+        await prisma.medicationAdministration.findUniqueOrThrow({ where: { id: initial.id } }),
+        before,
+      );
+      assert.equal((await post({ note: 'Richiesta modificata' })).status, 409);
+      assert.equal((await post({ requestId: 'bad' })).status, 400);
+      assert.equal((await post({ expectedStato: 'erogata' })).status, 400);
+      assert.equal(
+        await prisma.medicationAdministration.count({ where: { therapyId: therapy.id } }),
+        1,
+      );
+      assert.equal(
+        await prisma.therapyAdministrationReceipt.count({
+          where: { actorId: ownerOperatorId, requestId: body.requestId },
+        }),
+        1,
+      );
+      await prisma.patient.update({ where: { id: patientId }, data: { registeredById: null } });
+      try {
+        assert.equal((await post()).status, 404, 'Replay must recheck current resident access');
+      } finally {
+        await prisma.patient.update({
+          where: { id: patientId },
+          data: { registeredById: ownerOperatorId },
+        });
+      }
+    } finally {
+      await prisma.therapyAdministrationReceipt.deleteMany({
+        where: { actorId: ownerOperatorId, requestId: body.requestId },
+      });
+      await prisma.medicationAdministration.deleteMany({ where: { therapyId: therapy.id } });
+      await prisma.patientTherapy.delete({ where: { id: therapy.id } });
+    }
+  }
+});
+
+test('concurrent retries of a scheduled request both return the same single record', async () => {
+  const therapy = await prisma.patientTherapy.create({
+    data: {
+      patientId,
+      farmacoNome: 'Synthetic concurrent retry',
+      dosaggio: '10 mg',
+      dataInizio: date,
+      fasceMattina: true,
+    },
+  });
+  const body = {
+    patientId,
+    therapyId: therapy.id,
+    date,
+    fascia: 'mattina',
+    scheduledTime: '08:00',
+    requestId: randomUUID(),
+    expectedStato: 'da_erogare',
+  };
+  const post = () =>
+    fetch(`${base}/therapy-slots/confirm`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Operator-Id': ownerOperatorId,
+        'X-Operator-Role': 'operatore',
+      },
+      body: JSON.stringify(body),
+    });
+  try {
+    const responses = await Promise.all([post(), post()]);
+    assert.deepEqual(
+      responses.map((r) => r.status),
+      [200, 200],
+    );
+    assert.equal(
+      responses.filter((r) => r.headers.get('Idempotent-Replayed') === 'true').length,
+      1,
+    );
+    const records = await Promise.all(responses.map((r) => r.json()));
+    assert.deepEqual(records[0], records[1]);
+    assert.equal(
+      await prisma.medicationAdministration.count({ where: { therapyId: therapy.id } }),
+      1,
+    );
+    assert.equal(
+      await prisma.therapyAdministrationReceipt.count({
+        where: { actorId: ownerOperatorId, requestId: body.requestId },
+      }),
+      1,
+    );
+  } finally {
+    await prisma.therapyAdministrationReceipt.deleteMany({
+      where: { actorId: ownerOperatorId, requestId: body.requestId },
+    });
+    await prisma.medicationAdministration.deleteMany({ where: { therapyId: therapy.id } });
+    await prisma.patientTherapy.delete({ where: { id: therapy.id } });
+  }
+});
+
+test('a pending-only request cannot overwrite refusal; replay preserves its original snapshot', async () => {
+  const therapy = await prisma.patientTherapy.create({
+    data: {
+      patientId,
+      farmacoNome: 'Synthetic refused dose',
+      dosaggio: '10 mg',
+      dataInizio: date,
+      fasceMattina: true,
+    },
+  });
+  const body = {
+    patientId,
+    therapyId: therapy.id,
+    date,
+    fascia: 'mattina',
+    scheduledTime: '08:00',
+    requestId: randomUUID(),
+    expectedStato: 'da_erogare',
+    motivo: 'rifiuto',
+  };
+  const post = (endpoint: string, data: unknown) =>
+    fetch(`${base}/therapy-slots/${endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Operator-Id': ownerOperatorId,
+        'X-Operator-Role': 'operatore',
+      },
+      body: JSON.stringify(data),
+    });
+  try {
+    const refused = await post('not-administered', body);
+    assert.equal(refused.status, 200);
+    const initial = await refused.json();
+    const pending = await post('confirm', { ...body, requestId: randomUUID(), motivo: undefined });
+    assert.equal(pending.status, 409);
+    assert.match((await pending.json()).error, /non è più da erogare/);
+    assert.equal(
+      (await prisma.medicationAdministration.findUniqueOrThrow({ where: { id: initial.id } }))
+        .stato,
+      'non_erogata',
+    );
+    // Existing explicit callers remain compatible; an old receipt must still replay its first reply.
+    const corrected = await post('confirm', {
+      patientId,
+      therapyId: therapy.id,
+      date,
+      fascia: 'mattina',
+      scheduledTime: '08:00',
+    });
+    assert.equal(corrected.status, 200);
+    const before = await prisma.medicationAdministration.findUniqueOrThrow({
+      where: { id: initial.id },
+    });
+    const replay = await post('not-administered', body);
+    assert.equal(replay.status, 200);
+    assert.equal(replay.headers.get('Idempotent-Replayed'), 'true');
+    assert.deepEqual(await replay.json(), initial);
+    assert.deepEqual(
+      await prisma.medicationAdministration.findUniqueOrThrow({ where: { id: initial.id } }),
+      before,
+    );
+    assert.equal(before.stato, 'erogata');
+    assert.equal(
+      await prisma.medicationAdministration.count({ where: { therapyId: therapy.id } }),
+      1,
+    );
+  } finally {
+    await prisma.therapyAdministrationReceipt.deleteMany({
+      where: { actorId: ownerOperatorId, requestId: body.requestId },
+    });
+    await prisma.medicationAdministration.deleteMany({ where: { therapyId: therapy.id } });
+    await prisma.patientTherapy.delete({ where: { id: therapy.id } });
+  }
+});
+
 test('one-off explicit clocks survive empty flags across feed, summary, assistant and writes', async () => {
   const clocks = ['00:15', '08:45', '11:30', '14:20', '18:10'];
   const rows = [];
   const actor = { id: ownerOperatorId, role: 'operatore' as const, name: 'Verified Owner' };
   const read = () => buildTherapySlotPage(date, { patientIds: [patientId] }, { limit: 100 }, actor);
   const due = () =>
-    findTherapiesDue(date, { patientIds: [patientId] }, new Date(`${date}T23:59:00Z`), 15, 50);
+    findTherapiesDue(date, { patientIds: [patientId] }, new Date(`${date}T23:59:00+02:00`), 15, 50);
   const create = (time: string | null) =>
     prisma.patientTherapy.create({
       data: {

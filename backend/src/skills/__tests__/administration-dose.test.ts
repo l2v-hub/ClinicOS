@@ -77,6 +77,8 @@ test('assistant confirms the selected later dose rather than the first same-band
         date: administration.date,
         fascia: 'mattina',
         scheduledTime: '10:00',
+        requestId: `skill-${state.id}`,
+        expectedStato: 'da_erogare',
       },
     },
   ]);

@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
+import { facilityClock } from '../lib/facility-time.js';
 import type { TherapyDueItem } from '../ai/assistant/facility-signals.js';
 import { scheduleDoseLabel } from '../lib/therapy-dose.js';
 import { therapyBandEnabledSql, type TherapyPatientAccess } from './therapy-query.js';
@@ -56,7 +57,7 @@ export async function findTherapiesDue(
 ): Promise<TherapyDueResult> {
   const weekday = new Date(`${date}T00:00:00.000Z`).getUTCDay() || 7;
   const weekdayPattern = `%,${weekday},%`;
-  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  const currentMinutes = facilityClock(now).minutes;
   const boundedWindow = Math.max(0, Math.min(24 * 60, Math.trunc(windowMinutes)));
   const boundedSample = Math.max(1, Math.min(50, Math.trunc(sampleLimit)));
 

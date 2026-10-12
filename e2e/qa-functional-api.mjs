@@ -30,7 +30,12 @@ async function call(session, method, path, body, extra = {}) {
   } catch {
     /* PDF/empty/error text */
   }
-  return { status: r.status, data, cache: r.headers.get('cache-control') };
+  return {
+    status: r.status,
+    data,
+    cache: r.headers.get('cache-control'),
+    replayed: r.headers.get('Idempotent-Replayed'),
+  };
 }
 async function check(name, fn) {
   try {
@@ -398,6 +403,49 @@ if (patientId) {
       prescribedTime: '11:30',
       initial,
       final,
+    };
+  });
+  await check('administration:request-replay/pending-refusal-guard', async () => {
+    const created = await call(doctor, 'POST', `/patients/${patientId}/therapies`, {
+      farmacoNome: 'QA replay and refusal',
+      dataInizio: today,
+      dosaggio: 'Dose sintetica prescritta',
+      fasceMattina: true,
+    });
+    assert.equal(created.status, 201, JSON.stringify(created.data));
+    const body = {
+      patientId,
+      therapyId: created.data.id,
+      date: today,
+      fascia: 'mattina',
+      scheduledTime: '08:00',
+      requestId: randomUUID(),
+      expectedStato: 'da_erogare',
+      motivo: 'rifiutata_paziente',
+    };
+    const first = await call(nurse, 'POST', '/therapy-slots/not-administered', body);
+    assert.equal(first.status, 200, JSON.stringify(first.data));
+    const replay = await call(nurse, 'POST', '/therapy-slots/not-administered', body);
+    assert.equal(replay.status, 200);
+    assert.equal(replay.replayed, 'true');
+    assert.deepEqual(replay.data, first.data);
+    const overwrite = await call(nurse, 'POST', '/therapy-slots/confirm', {
+      ...body,
+      motivo: undefined,
+      requestId: randomUUID(),
+    });
+    assert.equal(overwrite.status, 409);
+    assert.match(overwrite.data.error, /non è più da erogare/);
+    const altered = await call(nurse, 'POST', '/therapy-slots/not-administered', {
+      ...body,
+      note: 'Contenuto modificato',
+    });
+    assert.equal(altered.status, 409);
+    evidence.scheduledReceipt = {
+      first: first.data,
+      replayed: replay.replayed,
+      overwriteStatus: overwrite.status,
+      alteredRequestStatus: altered.status,
     };
   });
   if (therapy)
