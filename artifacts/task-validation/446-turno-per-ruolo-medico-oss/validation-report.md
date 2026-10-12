@@ -129,6 +129,11 @@ errori.
 - Prima che arrivi `/auth/me` le capability valgono tutte vere, quindi medico e OSS vedono per un
   istante il Turno dell'infermiere (comportamento già esistente di `can()`).
 - `useUnreadDiaryQueue.ts` ha 1 errore e 1 warning di lint, già presenti su `main`.
+- Dal secondo passaggio QA (READY FOR QA): un errore di «Ho capito» su una card in cima compare
+  nella card «Da leggere», che a 768 px è in fondo alla pagina; badge e Turno hanno timer da 30 s
+  separati, quindi una nota nuova può risultare sfasata fino al tick o al focus successivo. Il
+  doppio avviso «altre urgenze» per il medico è stato tolto dopo la ricertificazione (una riga:
+  l'avviso in cima solo per l'OSS); unit e E2E #446 rieseguiti verdi.
 - «Assistenza da registrare» (OSS) e «I tuoi pazienti» (medico) della tela di design non sono nei
   criteri di accettazione e non sono stati fatti.
 - Il giro conta come «rilevato» un paziente con almeno una lettura oggi; la frequenza per paziente

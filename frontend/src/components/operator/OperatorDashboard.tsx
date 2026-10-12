@@ -205,7 +205,8 @@ export function OperatorDashboard({
       {variant !== 'infermiere' && (
         <TurnoUrgenti
           rows={variant === 'oss' ? urgentQueue.rows : []}
-          atLeast={urgentQueue.atLeast}
+          // il medico ha urgenze e avviso dentro «Serve una tua decisione»: qui non si ripetono
+          atLeast={variant === 'oss' && urgentQueue.atLeast}
           state={variant === 'oss' ? urgentQueue.state : 'ready'}
           queue={queue}
           onSelectPaziente={onSelectPaziente}
