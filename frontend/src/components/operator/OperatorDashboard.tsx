@@ -10,11 +10,17 @@ import { TurnoActionChips } from './TurnoActionChips';
 import { buildTurnoChips } from '../../lib/turnoChips';
 import { AdessoQueue } from './AdessoQueue';
 import { TurnoAppointments } from './TurnoAppointments';
-import { TurnoHandovers } from './TurnoHandovers';
+import { TurnoDaLeggere } from './TurnoDaLeggere';
+import { TurnoUrgenti } from './TurnoUrgenti';
+import { TurnoDecisioni } from './TurnoDecisioni';
+import { TurnoGiroParametri } from './TurnoGiroParametri';
+import { useUnreadDiaryQueue } from './useUnreadDiaryQueue';
+import { nienteInSospeso, turnoVariant } from '../../lib/turnoVariant';
+import { urgentToTakeCharge } from '../../lib/turnoUnread';
+import { useGiroParametri } from '../../lib/useGiroParametri';
 import { buildAdessoQueue } from '../../lib/adessoQueue';
 import { landingOf } from '../../lib/patientTargetResolver';
 import { useCan } from '../../lib/capabilities';
-import { countToTakeCharge } from '../../lib/urgency';
 import { useTurnoAllergies } from '../../lib/useTurnoAllergies';
 import { buildDashboardNotificationSections } from './buildDashboardNotificationSections';
 import { buildDashboardNotificationCounts } from './dashboardNotificationModel';
@@ -34,15 +40,12 @@ interface OperatorDashboardProps {
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
   onOpenConsegneFeed?: () => void;
-  onRetryConsegne?: () => void;
   onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
   /** Direct access: lista pazienti già filtrata su ciò che una tessera/segnalazione conta. */
   onOpenPatientList?: (entry: PatientListEntry) => void;
   clinicalOverview?: ClinicalOverview | null;
   clinicalOverviewState: 'loading' | 'ready' | 'error';
   onRetryClinicalOverview: () => void;
-  /** «Ho capito» su una consegna urgente direttamente dal Turno (#445). */
-  onAcknowledgeConsegna?: (id: string) => Promise<boolean>;
 }
 
 /** Schermata "Il mio turno" (HMI 1): indicatori, poi a sinistra la coda "Adesso" e a destra
@@ -58,16 +61,13 @@ export function OperatorDashboard({
   onOpenLateTherapy,
   onOpenConsegneAperte,
   onOpenConsegneFeed,
-  onRetryConsegne,
   onSelectPaziente,
   onOpenPatientList,
   clinicalOverview = null,
   clinicalOverviewState,
   onRetryClinicalOverview,
-  onAcknowledgeConsegna,
 }: OperatorDashboardProps) {
   const consegnaSummary = consegneOverview?.summary;
-  const urgenti = consegneOverview?.urgentPreview ?? [];
   const overviewAvailable = consegnaSummary !== undefined;
   // UX2 W8: urgenze da prendere in carico (attive), mai «consegne aperte».
   const urgentCount = consegnaSummary?.urgentActive;
@@ -85,15 +85,27 @@ export function OperatorDashboard({
     anomalie: [],
   });
   const canAdminister = useCan('administration.confirm');
+  // #446: il Turno di chi somministra, di chi prescrive, di chi assiste — decide la capability.
+  const variant = turnoVariant({
+    administer: canAdminister,
+    prescribe: useCan('therapy.create'),
+    recordVitals: useCan('parameters.create_reading'),
+  });
+  // «Da leggere» e urgenze: la stessa coda del badge Consegne (note di diario e consegne senza
+  // conferma), così home e badge contano le stesse cose.
+  const queue = useUnreadDiaryQueue(useCan('diary.list'));
+  const urgentQueue = urgentToTakeCharge(queue.page);
+  const urgentIds = new Set(urgentQueue.rows.map((row) => row.id));
+  const giro = useGiroParametri(variant === 'oss');
   const allergie = useTurnoAllergies(
     adesso.filter((it) => it.kind.startsWith('terapia-')).map((it) => it.patientId),
   );
   const farmaciDaVerificare = anomalie.pazienti.reduce((n, p) => n + p.esito.totale, 0);
   const chips = buildTurnoChips({
-    // Solo le urgenze di altri: il totale del server conta anche le proprie (#445 QA).
-    urgentToTakeCharge: consegnaSummary ? countToTakeCharge(urgenti) : undefined,
-    urgentAtLeast: (urgentCount ?? 0) > urgenti.length,
-    urgentState: consegneOverviewState,
+    // Solo le urgenze di altri, dalla coda del badge (#445 QA, #446).
+    urgentToTakeCharge: queue.page ? urgentQueue.rows.length : undefined,
+    urgentAtLeast: urgentQueue.atLeast,
+    urgentState: queue.error ? 'error' : queue.page ? 'ready' : 'loading',
     critici: clinicalOverview?.critici ?? 0,
     clinicalState: clinicalOverviewState,
     anomalie: {
@@ -124,6 +136,13 @@ export function OperatorDashboard({
     },
   });
 
+  // Le chip non ripetono ciò che la variante mostra già in evidenza.
+  const visibleChips = chips.filter(
+    (chip) =>
+      !(variant !== 'infermiere' && chip.id === 'urgenze') &&
+      !(variant === 'medico' && chip.id === 'farmaci'),
+  );
+
   // Same literal non-discharged predicate as the list; this is not an admission count.
   const pazientiRicoverati = clinicalOverview
     ? Math.max(0, clinicalOverview.totalPatients - clinicalOverview.dimessi)
@@ -153,6 +172,20 @@ export function OperatorDashboard({
     onOpenPatientList,
   });
 
+  // #446 AC3: solo se tutte le fonti sono arrivate e dicono «niente».
+  const sospeso = nienteInSospeso({
+    daLeggere: queue.page ? queue.page.totalUnread : null,
+    critici: clinicalOverviewReady ? clinicalOverview!.critici : null,
+    giro:
+      variant === 'oss' && giro.state === 'ready'
+        ? {
+            fatti: giro.pazienti.filter((p) => p.rilevatoOggi).length,
+            totale: giro.pazienti.length,
+            completo: giro.completo,
+          }
+        : null,
+  });
+
   const subtitle = [
     clinicalOverviewReady
       ? `${pazientiRicoverati} ${pazientiRicoverati === 1 ? 'paziente non dimesso' : 'pazienti non dimessi'}`
@@ -166,50 +199,92 @@ export function OperatorDashboard({
     <div className="operator-dashboard turno">
       <PageHeader title="Il mio turno" subtitle={subtitle} />
 
-      <TurnoActionChips chips={chips} />
+      <TurnoActionChips chips={visibleChips} />
+      {variant !== 'infermiere' && (
+        <TurnoUrgenti
+          rows={variant === 'oss' ? urgentQueue.rows : []}
+          atLeast={urgentQueue.atLeast}
+          queue={queue}
+          onSelectPaziente={onSelectPaziente}
+        />
+      )}
+      {sospeso && (
+        <p className="turno-niente" role="status">
+          Niente in sospeso: nessuna nota da leggere, nessun parametro critico, giro parametri
+          completo.
+        </p>
+      )}
 
       <div className="turno-grid">
-        <AdessoQueue
-          items={adesso}
-          terapie={
-            somministrazioni.fallito ? 'error' : somministrazioni.inCorso ? 'loading' : 'ready'
-          }
-          consegne="ready"
-          anomalie="ready"
-          allergie={allergie}
-          canAdminister={canAdminister}
-          onAdministered={somministrazioni.aggiorna}
-          revisione={somministrazioni.revisione}
-          revisioneLetta={somministrazioni.revisioneLetta}
-          onSelectPaziente={onSelectPaziente}
-          onOpenTherapy={onOpenLateTherapy ?? (() => onNavigate('terapie'))}
-          onOpenConsegne={() =>
-            onOpenConsegneFeed ? onOpenConsegneFeed() : onNavigate('consegne')
-          }
-          onRetryTherapy={somministrazioni.aggiorna}
-          domani={
-            somministrazioni.domaniFallito
-              ? 'error'
-              : somministrazioni.domaniInCorso
-                ? 'loading'
-                : 'ready'
-          }
-          onRefresh={somministrazioni.aggiorna}
-          refreshing={somministrazioni.aggiornamentoInCorso}
-          headerAction={
-            <DashboardNotificationCenter
-              compact
-              counts={notificationCounts}
-              sections={notificationSections}
-              loading={
-                somministrazioni.inCorso ||
-                anomalie.inCorso ||
-                consegneOverviewState === 'loading' ||
-                clinicalOverviewState === 'loading'
-              }
-            />
-          }
-        />
+        {variant === 'medico' ? (
+          <TurnoDecisioni
+            urgenti={urgentQueue.rows}
+            queue={queue}
+            farmaci={anomalie.pazienti.map((p) => ({
+              patientId: p.patientId,
+              nome: p.nome,
+              totale: p.esito.totale,
+              farmaci: (p.esito.anomalie ?? []).map((a) => a.farmacoNome).filter(Boolean),
+              therapyId: anomalyTherapyId(anomalie, p.patientId),
+            }))}
+            farmaciState={anomalie.fallito ? 'error' : anomalie.inCorso ? 'loading' : 'ready'}
+            dosiNonRegistrate={
+              somministrazioni.disponibile && !somministrazioni.fallito && !somministrazioni.inCorso
+                ? { dosi: somministrazioni.inRitardo, pazienti: somministrazioni.ritardi.length }
+                : null
+            }
+            onSelectPaziente={onSelectPaziente}
+            onOpenLateTherapy={onOpenLateTherapy ?? (() => onNavigate('terapie'))}
+          />
+        ) : variant === 'oss' ? (
+          <TurnoGiroParametri
+            giro={giro}
+            onSelectPaziente={onSelectPaziente}
+            onStartGiro={() => onNavigate('parametri-multipaziente')}
+          />
+        ) : (
+          <AdessoQueue
+            items={adesso}
+            terapie={
+              somministrazioni.fallito ? 'error' : somministrazioni.inCorso ? 'loading' : 'ready'
+            }
+            consegne="ready"
+            anomalie="ready"
+            allergie={allergie}
+            canAdminister={canAdminister}
+            onAdministered={somministrazioni.aggiorna}
+            revisione={somministrazioni.revisione}
+            revisioneLetta={somministrazioni.revisioneLetta}
+            onSelectPaziente={onSelectPaziente}
+            onOpenTherapy={onOpenLateTherapy ?? (() => onNavigate('terapie'))}
+            onOpenConsegne={() =>
+              onOpenConsegneFeed ? onOpenConsegneFeed() : onNavigate('consegne')
+            }
+            onRetryTherapy={somministrazioni.aggiorna}
+            domani={
+              somministrazioni.domaniFallito
+                ? 'error'
+                : somministrazioni.domaniInCorso
+                  ? 'loading'
+                  : 'ready'
+            }
+            onRefresh={somministrazioni.aggiorna}
+            refreshing={somministrazioni.aggiornamentoInCorso}
+            headerAction={
+              <DashboardNotificationCenter
+                compact
+                counts={notificationCounts}
+                sections={notificationSections}
+                loading={
+                  somministrazioni.inCorso ||
+                  anomalie.inCorso ||
+                  consegneOverviewState === 'loading' ||
+                  clinicalOverviewState === 'loading'
+                }
+              />
+            }
+          />
+        )}
         <div className="turno-side">
           <TurnoAppointments
             agenda={agenda}
@@ -218,13 +293,11 @@ export function OperatorDashboard({
             onOpenAgenda={() => onNavigate('agenda-operatore')}
             onSelectPaziente={onSelectPaziente}
           />
-          <TurnoHandovers
-            overview={consegneOverview}
-            state={consegneOverviewState}
-            onOpen={onOpenConsegneFeed ?? (() => onNavigate('consegne'))}
-            onRetry={onRetryConsegne}
+          <TurnoDaLeggere
+            queue={queue}
+            exclude={variant === 'infermiere' ? undefined : urgentIds}
+            onOpenAll={onOpenConsegneFeed ?? (() => onNavigate('consegne'))}
             onSelectPaziente={onSelectPaziente}
-            onAcknowledge={onAcknowledgeConsegna}
           />
         </div>
       </div>

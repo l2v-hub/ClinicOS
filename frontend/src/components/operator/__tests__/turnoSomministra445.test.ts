@@ -227,6 +227,7 @@ test('445 QA: the urgency chip counts only what the reader can take charge of', 
   const dashboard = readFileSync(new URL('../OperatorDashboard.tsx', import.meta.url), 'utf8');
   assert.match(
     dashboard,
-    /urgentToTakeCharge: consegnaSummary \? countToTakeCharge\(urgenti\) : undefined/,
+    // #446: dalla stessa coda del badge, solo le urgenze altrui
+    /urgentToTakeCharge: queue\.page \? urgentQueue\.rows\.length : undefined/,
   );
 });

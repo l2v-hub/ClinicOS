@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { AdessoQueue } from '../AdessoQueue';
-import { TurnoHandovers } from '../TurnoHandovers';
+import { TurnoDaLeggere, type UnreadQueue } from '../TurnoDaLeggere';
 import { VitalsOverview } from '../VitalsOverview';
 import { HandoverEntryButton } from '../../shared/HandoverEntryButton';
 import Sidebar from '../../shared/TeamsLikeSidebar';
@@ -80,16 +80,20 @@ test('both shell entries expose exact count; zero hidden; Note absent for both r
   );
 });
 test('handover and vital missing states disclose availability without a misleading empty result', () => {
-  const error = render(
-    React.createElement(TurnoHandovers, {
-      overview: null,
-      state: 'error',
-      onOpen() {},
-      onRetry() {},
-    }),
-  );
-  assert.match(error, /Consegne non disponibili/);
-  assert.doesNotMatch(error, /Nessuna consegna da mostrare/);
+  // #446: «Da leggere» legge la coda del badge; un errore si dice, mai «niente da leggere».
+  const queue = {
+    page: null,
+    loading: false,
+    error: 'Coda delle note non confermate non disponibile.',
+    busy: null,
+    notice: '',
+    acknowledge: async () => {},
+    loadMore() {},
+    retry() {},
+  } as unknown as UnreadQueue;
+  const error = render(React.createElement(TurnoDaLeggere, { queue, onOpenAll() {} }));
+  assert.match(error, /Coda delle note non confermate non disponibile/);
+  assert.doesNotMatch(error, /Niente da leggere/);
   const vitals = render(
     React.createElement(VitalsOverview, {
       readings: [],
