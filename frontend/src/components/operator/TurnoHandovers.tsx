@@ -1,10 +1,10 @@
-import { useId } from 'react';
+import { useId, useState } from 'react';
 import type { ConsegnaOverview } from '../../types';
 import type { PatientLanding } from '../../lib/patientTargetResolver';
 import { landingOf } from '../../lib/patientTargetResolver';
 import { handoverPreview } from '../../lib/handoverPreview';
 import { isConsegnaUrgencyActive } from '../../lib/consegnaUrgency';
-import { urgencyTime, urgencyTraceText } from '../../lib/urgency';
+import { canTakeCharge, urgencyTime, urgencyTraceText } from '../../lib/urgency';
 import { IcoArrow, IcoConsegne } from '../../icons';
 import './TurnoHandovers.css';
 import { useWidgetOpen } from '../shared/WidgetGroup';
@@ -16,10 +16,20 @@ interface Props {
   onOpen: () => void;
   onRetry?: () => void;
   onSelectPaziente?: (nome: string, id?: string, landing?: PatientLanding) => void;
+  /** «Ho capito» sul posto (#445): stesso endpoint della pagina Consegne. */
+  onAcknowledge?: (id: string) => Promise<boolean>;
 }
 
-export function TurnoHandovers({ overview, state, onOpen, onRetry, onSelectPaziente }: Props) {
+export function TurnoHandovers({
+  overview,
+  state,
+  onOpen,
+  onRetry,
+  onSelectPaziente,
+  onAcknowledge,
+}: Props) {
   const titleId = useId();
+  const [acking, setAcking] = useState<string | null>(null);
   const { open, setOpen, bodyId } = useWidgetOpen();
   const items = handoverPreview(overview);
   return (
@@ -32,23 +42,20 @@ export function TurnoHandovers({ overview, state, onOpen, onRetry, onSelectPazie
         <div className="turno-card__title">
           <IcoConsegne />
           <h2 className="turno-h2" id={titleId}>
-            Ultime consegne
+            Da leggere
           </h2>
         </div>
         <button type="button" className="ds-link" onClick={onOpen}>
           Tutte <IcoArrow />
         </button>
         <WidgetToggle
-          title="Ultime consegne"
+          title="Da leggere"
           open={open}
           bodyId={bodyId}
           onToggle={() => setOpen(!open)}
         />
       </div>
       <div id={bodyId} hidden={!open}>
-        <p className="turno-handovers__hint">
-          Selezione delle ultime consegne · prima le urgenze attive
-        </p>
         {state === 'loading' ? (
           <p className="turno-empty" role="status">
             Aggiornamento consegne…
@@ -94,6 +101,21 @@ export function TurnoHandovers({ overview, state, onOpen, onRetry, onSelectPazie
                   {item.note?.trim() && <p className="turno-handovers__text">{item.note}</p>}
                   {item.urgency?.state === 'taken' && (
                     <p className="turno-handovers__trace">{urgencyTraceText(item.urgency)}</p>
+                  )}
+                  {onAcknowledge && canTakeCharge(item.urgency) && (
+                    <button
+                      type="button"
+                      className="ds-btn ds-btn--primary turno-handovers__ack"
+                      disabled={acking === item.id}
+                      aria-label={`Ho capito: ${item.pazienteNome}, ${item.tipo}`}
+                      onClick={async () => {
+                        setAcking(item.id);
+                        await onAcknowledge(item.id);
+                        setAcking(null);
+                      }}
+                    >
+                      {acking === item.id ? 'Registrazione…' : 'Ho capito'}
+                    </button>
                   )}
                   <div className="turno-handovers__bottom">
                     <span>{item.creatoDA}</span>

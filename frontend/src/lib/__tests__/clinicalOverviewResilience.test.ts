@@ -15,10 +15,7 @@ const notificationDetails = readFileSync(
   new URL('../../components/operator/buildDashboardNotificationSections.tsx', import.meta.url),
   'utf8',
 );
-const operatorKpis = readFileSync(
-  new URL('../../components/operator/OperatorClinicalKpiBand.tsx', import.meta.url),
-  'utf8',
-);
+import { buildTurnoChips } from '../turnoChips';
 const sharedKpis = readFileSync(
   new URL('../../components/shared/DashboardKpiBand.tsx', import.meta.url),
   'utf8',
@@ -42,17 +39,32 @@ test('clinical overview owns an abortable retry without reloading unrelated dash
 
 test('operator dashboard never presents unavailable clinical metrics as verified zeroes', () => {
   assert.match(dashboard, /clinicalOverviewState: 'loading' \| 'ready' \| 'error'/);
-  assert.match(operatorKpis, /if \(!ready\)/);
-  assert.match(operatorKpis, /value: '—'/);
   assert.match(notificationDetails, /Riepilogo clinico non disponibile/);
   assert.match(notificationDetails, /tone: 'warning'/);
   assert.match(dashboard, /<DashboardNotificationCenter/);
   assert.match(notificationCenter, /AccessibleDialogSurface/);
   assert.match(notificationDetails, /onClick=\{onRetryClinicalOverview\}/);
-  assert.match(operatorKpis, /<DashboardKpiBand[\s\S]*loading=\{loading\}/);
   assert.match(sharedKpis, /aria-busy=\{loading\}/);
-  assert.match(operatorKpis, /somministrazioni\.inCorso \|\| somministrazioni\.fallito/);
   assert.doesNotMatch(dashboard, /loadingPazienti|totalePazienti/);
+  // #445: chip in cima al Turno — un dato in caricamento non diventa «0», un errore si dice.
+  const base = {
+    urgentToTakeCharge: 0,
+    urgentState: 'ready' as const,
+    critici: 0,
+    clinicalState: 'ready' as const,
+    anomalie: { pazienti: 0, farmaci: 0, fallito: false },
+    onOpenUrgent: () => {},
+    onOpenCritici: () => {},
+    onRetryClinical: () => {},
+    onOpenAnomalie: () => {},
+  };
+  assert.deepEqual(buildTurnoChips(base), []);
+  assert.deepEqual(buildTurnoChips({ ...base, critici: 3, clinicalState: 'loading' }), []);
+  const failed = buildTurnoChips({ ...base, clinicalState: 'error', urgentState: 'error' });
+  assert.deepEqual(
+    failed.map((c) => c.label),
+    ['Urgenze non disponibili', 'Parametri critici non disponibili · Riprova'],
+  );
 });
 
 test('admin dashboard shares the same explicit unavailable-data and recovery contract', () => {

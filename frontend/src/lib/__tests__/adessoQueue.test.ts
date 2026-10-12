@@ -112,7 +112,7 @@ test('time labels say exactly what is known', () => {
     anomalie: [{ patientId: 'a1', nome: 'I', esito: { totale: 2, verificaIncompleta: true } }],
   });
   const tempo = Object.fromEntries(items.map((i) => [i.key, i.tempo]));
-  assert.equal(tempo['terapia:t1'], 'In ritardo di 10 min');
+  assert.equal(tempo['terapia:t1'], 'Non registrata da 10 min');
   assert.equal(tempo['terapia:t2'], 'Adesso');
   assert.equal(tempo['terapia:t3'], 'Tra 15 min');
   assert.equal(tempo['consegna:c1'], `Scaduta alle ${at(-30)}`);

@@ -1,14 +1,26 @@
 import { useId, useState, type ReactNode } from 'react';
 import { IcoArrow } from '../../icons';
-import { groupAdessoQueue, type AdessoItem, type AdessoSection } from '../../lib/adessoQueue';
+import {
+  groupAdessoQueue,
+  type AdessoGroup,
+  type AdessoItem,
+  type AdessoSection,
+} from '../../lib/adessoQueue';
 import type { PatientLanding } from '../../lib/patientTargetResolver';
 import './AdessoQueue.css';
 import { useWidgetOpen } from '../shared/WidgetGroup';
 import { WidgetToggle } from '../shared/WidgetToggle';
+import { TurnoDosePanel } from './TurnoDosePanel';
 
 export const ADESSO_QUEUE_LIMIT = 6;
 
 type SourceState = 'ready' | 'loading' | 'error';
+
+/** Allergie del paziente nel blocco dosi (#445): sempre visibili accanto a «Somministra». */
+export interface TurnoAllergy {
+  state: SourceState;
+  allergeni: string[];
+}
 
 interface Props {
   items: AdessoItem[];
@@ -25,6 +37,30 @@ interface Props {
   refreshing?: boolean;
   /** Azione a destra del titolo (centro segnalazioni). */
   headerAction?: ReactNode;
+  /** Allergie per paziente; assenti = blocco senza riga allergie (ruoli che non la leggono). */
+  allergie?: Record<string, TurnoAllergy>;
+  /** Il ruolo registra somministrazioni: «Somministra N» sul posto (#445). */
+  canAdminister?: boolean;
+  /** Dopo una registrazione dal Turno: rilettura delle scadenze. */
+  onAdministered?: () => void;
+}
+
+const isDoseGroup = (group: AdessoGroup) =>
+  group.items.every(
+    (it) => (it.kind === 'terapia-ritardo' || it.kind === 'terapia-imminente') && it.dose,
+  );
+
+function allergyLine(info: TurnoAllergy | undefined) {
+  if (!info) return null;
+  if (info.state === 'loading')
+    return <span className="adesso-dose__allergy is-muted">Allergie in verifica…</span>;
+  if (info.state === 'error')
+    return <span className="adesso-dose__allergy is-warn">Allergie non disponibili</span>;
+  return info.allergeni.length ? (
+    <span className="adesso-dose__allergy is-crit">Allergie: {info.allergeni.join(', ')}</span>
+  ) : (
+    <span className="adesso-dose__allergy is-muted">Nessuna allergia registrata</span>
+  );
 }
 
 /** Card "Adesso" della schermata Turno (HMI 1): la coda di ciò che va fatto, per urgenza.
@@ -43,10 +79,14 @@ export function AdessoQueue({
   onRefresh,
   refreshing = false,
   headerAction,
+  allergie,
+  canAdminister = false,
+  onAdministered,
 }: Props) {
   const titleId = useId();
   const { open, setOpen, bodyId } = useWidgetOpen();
   const [showAll, setShowAll] = useState(false);
+  const [panel, setPanel] = useState<string | null>(null);
   const groups = groupAdessoQueue(items);
   // Each category has its own allowance: repeated delays cannot hide new handovers.
   const sections: { key: AdessoSection; title: string }[] = [
@@ -67,6 +107,80 @@ export function AdessoQueue({
   const urgenti = items.filter((it) => it.inRitardo).length;
   const consegneUrgenti = items.filter((it) => it.kind.startsWith('consegna-')).length;
   const allReady = terapie === 'ready' && consegne === 'ready' && anomalie === 'ready';
+
+  /** Un blocco per paziente e orario (#445): farmaci, allergie e un solo «Somministra N»; l'orario
+   *  fa da intestazione per tutti i pazienti di quella fascia. */
+  function renderDoseGroup(group: AdessoGroup, withTime: boolean) {
+    const first = group.items[0];
+    const bulk = group.items.filter((it) => it.dose?.doseMode !== 'glucose_scale');
+    const open = panel === group.key;
+    const openTherapy = () => onSelectPaziente?.(first.nome, first.patientId, first.landing);
+    return (
+      <li key={group.key} className="adesso-dose">
+        {withTime && (
+          <p className={`adesso-dose__time${first.inRitardo ? ' is-late' : ''}`}>
+            <strong>{first.ora ?? '—'}</strong> {first.tempo.toLowerCase()}
+          </p>
+        )}
+        <div className={`adesso-dose__block${first.inRitardo ? ' is-late' : ''}`}>
+          <div className="adesso-dose__main">
+            <p className="adesso-dose__who">
+              <strong>{first.nome}</strong>
+              {first.luogo && <span className="adesso-dose__where"> · {first.luogo}</span>}
+            </p>
+            {allergyLine(allergie?.[first.patientId])}
+            <ul className="adesso-dose__drugs">
+              {group.items.map((it) => (
+                <li key={it.key}>{it.dettaglio}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="adesso-dose__actions">
+            {canAdminister && bulk.length > 0 && !open && (
+              <button
+                type="button"
+                className={`ds-btn ${first.inRitardo ? 'ds-btn--primary' : 'ds-btn--secondary'}`}
+                aria-label={
+                  bulk.length > 1
+                    ? `Somministra ${bulk.length} dosi a ${first.nome}`
+                    : `Somministra a ${first.nome}`
+                }
+                onClick={() => setPanel(group.key)}
+              >
+                {bulk.length > 1 ? `Somministra ${bulk.length}` : 'Somministra'}
+              </button>
+            )}
+            {onSelectPaziente && (
+              <button
+                type="button"
+                className="ds-link"
+                aria-label={`Apri la terapia di ${first.nome}`}
+                onClick={openTherapy}
+              >
+                Apri terapia
+              </button>
+            )}
+          </div>
+          {open && (
+            <TurnoDosePanel
+              nome={first.nome}
+              doses={group.items.map((it) => ({
+                key: it.key,
+                patientId: it.patientId,
+                dose: it.dose!,
+              }))}
+              onClose={() => setPanel(null)}
+              onOpenTherapy={openTherapy}
+              onDone={() => {
+                setPanel(null);
+                onAdministered?.();
+              }}
+            />
+          )}
+        </div>
+      </li>
+    );
+  }
 
   return (
     <section className="adesso-queue turno-card" aria-labelledby={titleId}>
@@ -143,10 +257,6 @@ export function AdessoQueue({
 
         {items.length > 0 ? (
           <>
-            <p className="adesso-queue__notice">
-              Ordine operativo: scadute, in scadenza, consegne urgenti, verifiche. Il ritardo indica
-              una scadenza superata, non una priorità clinica.
-            </p>
             {sections.map((section) => {
               const allGroups = groups.filter((group) => group.section === section.key);
               if (!allGroups.length) return null;
@@ -158,8 +268,13 @@ export function AdessoQueue({
                     {section.title} · {count} attività
                   </h3>
                   <ol className="adesso-queue__list">
-                    {visible.map((group) => {
+                    {visible.map((group, index) => {
                       const first = group.items[0];
+                      if (isDoseGroup(group)) {
+                        const prev = visible[index - 1]?.items[0];
+                        const slot = (it?: AdessoItem) => it && `${it.dose?.date}|${it.ora}`;
+                        return renderDoseGroup(group, slot(prev) !== slot(first));
+                      }
                       const rows = group.items.map((it) => (
                         <li
                           key={it.key}

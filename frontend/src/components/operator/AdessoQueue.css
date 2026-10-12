@@ -141,3 +141,148 @@
 .adesso-queue__group > details > .adesso-queue__list {
   padding: 8px;
 }
+
+/* #445: un blocco per paziente e orario, l'orario come intestazione, «Somministra N» sul posto. */
+.adesso-dose {
+  margin-bottom: 8px;
+}
+.adesso-dose__time {
+  margin: 12px 0 6px;
+  font: 500 14px/20px var(--font-ui);
+  color: #1d4fc4;
+}
+.adesso-dose__time strong {
+  font-variant-numeric: tabular-nums;
+  margin-right: 6px;
+}
+.adesso-dose__time.is-late {
+  color: #b42335;
+}
+.adesso-dose__block {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 12px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface, #fff);
+}
+.adesso-dose__block.is-late {
+  border-left: 4px solid #b42335;
+}
+.adesso-dose__main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.adesso-dose__who {
+  margin: 0;
+  font: 400 14px/20px var(--font-ui);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.adesso-dose__who strong {
+  font-weight: 600;
+}
+.adesso-dose__where {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.adesso-dose__allergy {
+  font: 500 13px/18px var(--font-ui);
+}
+.adesso-dose__allergy.is-crit {
+  color: #b42335;
+}
+.adesso-dose__allergy.is-warn {
+  color: #9a5b00;
+}
+.adesso-dose__allergy.is-muted {
+  color: var(--text-muted);
+}
+.adesso-dose__drugs {
+  list-style: none;
+  margin: 2px 0 0;
+  padding: 0;
+  font: 400 14px/20px var(--font-ui);
+  color: var(--text);
+}
+.adesso-dose__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.turno-dose-panel {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+.turno-dose-panel__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.turno-dose-panel__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 8px;
+  align-items: center;
+  padding: 6px 0;
+}
+.turno-dose-panel__check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  cursor: pointer;
+}
+.turno-dose-panel__check input {
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+.turno-dose-panel__check > span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.turno-dose-panel__drug {
+  font: 600 14px/20px var(--font-ui);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.turno-dose-panel__note {
+  font: 400 13px/18px var(--font-ui);
+  color: var(--text-muted);
+}
+.turno-dose-panel__note.is-warn {
+  color: #9a5b00;
+}
+.turno-dose-panel__note.is-done {
+  color: #1f7a3d;
+}
+.turno-dose-panel__error {
+  font: 500 13px/18px var(--font-ui);
+  color: #b42335;
+}
+.turno-dose-panel__more {
+  min-width: 44px;
+}
+.turno-dose-panel__reasons {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-left: 32px;
+}
+.turno-dose-panel__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 8px;
+}

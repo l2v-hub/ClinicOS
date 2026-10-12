@@ -62,3 +62,7 @@
   color: var(--text-muted);
   overflow-wrap: anywhere;
 }
+.turno-handovers__ack {
+  align-self: flex-start;
+  margin-top: 6px;
+}

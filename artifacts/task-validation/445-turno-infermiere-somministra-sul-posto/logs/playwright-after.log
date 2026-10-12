@@ -1,0 +1,12 @@
+fixture: urgent consegna by Medico 1 → 201
+PASS AC5 no counters, notes or bulk toggle above the fold — {"kpiBand":false,"note":false,"bulk":false}
+PASS AC5b top signals are action buttons — 1 urgenza da prendere in carico · 1 parametro critico · 4 farmaci da far verificare al medico
+PASS AC4 no delay shown in minutes beyond 90 — minutes seen: []
+PASS AC1 one block per patient and band with one Somministra N — ["Galli Nora:1:Somministra","Nanni Miriam:2:Somministra 2","Nanni Miriam:1:Somministra","Nanni Miriam:1:Somministra"]
+PASS AC3 allergy state visible in every patient block — ["Nessuna allergia registrata","Allergie: Penicillina, Lattice, Acido acetilsalicilico","Allergie: Penicillina, Lattice, Acido acetilsalicilico","Allergie: Penicillina, Lattice, Acido acetilsalicilico"]
+PASS AC2a panel lists the N doses, all pre-checked — rows 2, checked 2, N 2
+PASS AC2b Conferma records in place (no page change) through the giro endpoints — ["/therapy-slots/confirm","/therapy-slots/not-administered"]
+PASS AC2c DB holds one erogata per confirmed dose and the refused one as non_erogata — ["erogata","non_erogata:rifiutata_paziente"]
+PASS AC2d after reload the recorded doses are gone from the queue — blocks 4 → 3; still: ["Galli Nora","Nanni Miriam","Nanni Miriam"]; before had 4
+PASS AC6 «Ho capito» from the Turno uses /consegne/:id/ack and clears the urgency — /consegne/db218ede-46b0-4318-9fe6-f37bd2cd2058/ack · chip 1 urgenza da prendere in carico → null
+PASS #445 | console errors: 0

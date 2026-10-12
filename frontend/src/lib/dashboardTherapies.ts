@@ -37,6 +37,11 @@ export interface ScadenzaTerapia {
   ora: string | null;
   /** Minuti civili rispetto all'orario di oggi; non una durata assoluta nei cambi DST. */
   minuti: number | null;
+  /** Chiave dello slot per registrare la dose dal Turno (#445): orario previsto come lo manda il
+   *  server e modalità di dose (la scala glicemica richiede la glicemia, quindi non si registra in
+   *  blocco). */
+  scheduledTime?: string;
+  doseMode?: 'fixed' | 'glucose_scale';
 }
 
 export function therapyCalendar(now: Date) {
@@ -121,6 +126,8 @@ export function summarizeDashboardTherapies(
             data,
             ora,
             minuti: time === null ? null : dayOffset * 1440 + time - calendar.minuto,
+            scheduledTime: administration.scheduledTime,
+            doseMode: administration.doseMode,
           };
           if (row.minuti === null) senzaOrario.push(row);
           else if (row.minuti < 0) scadute.push(row);

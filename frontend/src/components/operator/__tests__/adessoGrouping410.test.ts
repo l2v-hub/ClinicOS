@@ -93,7 +93,8 @@ test('410 dense overdue queue retains exact counts and a new urgent handover in 
   assert.match(html, /Nuova consegna urgente/);
   assert.match(html, /Mostra altri 3 gruppi/);
   assert.match(html, /<details><summary>/);
-  assert.match(html, /non una priorità clinica/);
+  // #445: niente testo esplicativo sopra la coda.
+  assert.doesNotMatch(html, /Ordine operativo|non una priorità clinica/);
 });
 test('410 empty and incomplete queues remain distinct and all source errors remain visible', () => {
   assert.match(render([]), /Niente in sospeso adesso/);
@@ -105,9 +106,13 @@ test('410 empty and incomplete queues remain distinct and all source errors rema
 });
 
 test('410 overdue and imminent urgent handovers stay visible outside a large therapy backlog', () => {
-  const late = Array.from({ length: 15 }, (_, index) => item(`late-${index}`, { patientId: `P${index}` }));
-  const handovers = [item('overdue-handover', { kind: 'consegna-scaduta' }),
-    item('imminent-handover', { kind: 'consegna-imminente', inRitardo: false })];
+  const late = Array.from({ length: 15 }, (_, index) =>
+    item(`late-${index}`, { patientId: `P${index}` }),
+  );
+  const handovers = [
+    item('overdue-handover', { kind: 'consegna-scaduta' }),
+    item('imminent-handover', { kind: 'consegna-imminente', inRitardo: false }),
+  ];
   const html = render([...late, ...handovers]);
   assert.match(html, /Consegne urgenti · 2 attività/);
   for (const handover of handovers) assert.ok(html.includes(handover.dettaglio));

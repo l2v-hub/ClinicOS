@@ -73,6 +73,31 @@ export interface AdessoItem {
   urgenza: number;
   /** Direct access: dove «Apri» atterra (dose, consegna o farmaco da sanare), non solo la sezione. */
   landing: Omit<PatientTarget, 'patientId'>;
+  /** Solo le dosi: chiave dello slot e farmaco, per registrarle dal Turno (#445). */
+  dose?: AdessoDose;
+}
+
+export interface AdessoDose {
+  therapyId: string;
+  date: string;
+  fascia: string;
+  scheduledTime?: string;
+  doseMode?: 'fixed' | 'glucose_scale';
+  farmaco: string;
+  dose: string;
+  via: string;
+}
+
+/** Durata leggibile senza conti a mente (#445): minuti fino a 90, poi ore, poi giorni. */
+export function durataUmana(minuti: number): string {
+  const m = Math.max(0, Math.round(minuti));
+  if (m <= 90) return `${m} min`;
+  if (m < 1440) {
+    const ore = Math.round(m / 60);
+    return ore === 1 ? '1 ora' : `${ore} ore`;
+  }
+  const giorni = Math.floor(m / 1440);
+  return giorni === 1 ? '1 giorno' : `${giorni} giorni`;
 }
 
 export interface AnomaliaPazienteRiga {
@@ -242,10 +267,10 @@ function terapiaItem(row: ScadenzaTerapia, kind: AdessoKind): AdessoItem {
     kind === 'terapia-senza-orario'
       ? 'Orario da verificare'
       : kind === 'terapia-ritardo'
-        ? `In ritardo di ${-minuti} min`
+        ? `Non registrata da ${durataUmana(-minuti)}`
         : minuti === 0
           ? 'Adesso'
-          : `Tra ${minuti} min`;
+          : `Tra ${durataUmana(minuti)}`;
   return {
     key: `terapia:${row.id}`,
     kind,
@@ -258,6 +283,16 @@ function terapiaItem(row: ScadenzaTerapia, kind: AdessoKind): AdessoItem {
     inRitardo: kind === 'terapia-ritardo',
     urgenza: kind === 'terapia-senza-orario' ? 0 : -minuti,
     landing: landingOf(doseSignal(row)),
+    dose: {
+      therapyId: row.therapyId,
+      date: row.data,
+      fascia: row.fascia,
+      scheduledTime: row.scheduledTime,
+      doseMode: row.doseMode,
+      farmaco: row.farmaco,
+      dose: row.dose,
+      via: row.via,
+    },
   };
 }
 

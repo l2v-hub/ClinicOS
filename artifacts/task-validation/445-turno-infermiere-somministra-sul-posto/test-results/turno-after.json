@@ -1,0 +1,66 @@
+{
+  "pass": true,
+  "results": [
+    {
+      "id": "AC5",
+      "name": "no counters, notes or bulk toggle above the fold",
+      "result": "PASS",
+      "detail": "{\"kpiBand\":false,\"note\":false,\"bulk\":false}"
+    },
+    {
+      "id": "AC5b",
+      "name": "top signals are action buttons",
+      "result": "PASS",
+      "detail": "1 urgenza da prendere in carico · 1 parametro critico · 4 farmaci da far verificare al medico"
+    },
+    {
+      "id": "AC4",
+      "name": "no delay shown in minutes beyond 90",
+      "result": "PASS",
+      "detail": "minutes seen: []"
+    },
+    {
+      "id": "AC1",
+      "name": "one block per patient and band with one Somministra N",
+      "result": "PASS",
+      "detail": "[\"Galli Nora:1:Somministra\",\"Nanni Miriam:2:Somministra 2\",\"Nanni Miriam:1:Somministra\",\"Nanni Miriam:1:Somministra\"]"
+    },
+    {
+      "id": "AC3",
+      "name": "allergy state visible in every patient block",
+      "result": "PASS",
+      "detail": "[\"Nessuna allergia registrata\",\"Allergie: Penicillina, Lattice, Acido acetilsalicilico\",\"Allergie: Penicillina, Lattice, Acido acetilsalicilico\",\"Allergie: Penicillina, Lattice, Acido acetilsalicilico\"]"
+    },
+    {
+      "id": "AC2a",
+      "name": "panel lists the N doses, all pre-checked",
+      "result": "PASS",
+      "detail": "rows 2, checked 2, N 2"
+    },
+    {
+      "id": "AC2b",
+      "name": "Conferma records in place (no page change) through the giro endpoints",
+      "result": "PASS",
+      "detail": "[\"/therapy-slots/confirm\",\"/therapy-slots/not-administered\"]"
+    },
+    {
+      "id": "AC2c",
+      "name": "DB holds one erogata per confirmed dose and the refused one as non_erogata",
+      "result": "PASS",
+      "detail": "[\"erogata\",\"non_erogata:rifiutata_paziente\"]"
+    },
+    {
+      "id": "AC2d",
+      "name": "after reload the recorded doses are gone from the queue",
+      "result": "PASS",
+      "detail": "blocks 4 → 3; still: [\"Galli Nora\",\"Nanni Miriam\",\"Nanni Miriam\"]; before had 4"
+    },
+    {
+      "id": "AC6",
+      "name": "«Ho capito» from the Turno uses /consegne/:id/ack and clears the urgency",
+      "result": "PASS",
+      "detail": "/consegne/db218ede-46b0-4318-9fe6-f37bd2cd2058/ack · chip 1 urgenza da prendere in carico → null"
+    }
+  ],
+  "consoleErrors": []
+}
