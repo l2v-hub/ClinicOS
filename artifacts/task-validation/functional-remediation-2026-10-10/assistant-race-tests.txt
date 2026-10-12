@@ -1,0 +1,28 @@
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ discovery: GET /skills reflects the policy per role (412.06272ms)
+✔ A — read skill: natural language → skill → authorized read tool → backend → result (169.01435ms)
+✔ B + I — write skill: preview → explicit confirmation → persisted → verified → audit (137.356076ms)
+✔ C — ambiguous or missing target → NEEDS_CLARIFICATION, no write (81.758311ms)
+✔ D — identity without the capability → DENIED, confirmed by the backend (169.279297ms)
+✔ E — multi-turn: structured state across turns, then completion (182.384573ms)
+✔ F — capability revoked during the workflow → policy re-evaluated → DENIED, no write (242.34883ms)
+✔ G — cancellation before confirmation → no write (72.745073ms)
+✔ H — backend failure: no false success; retry does not duplicate the write (249.441897ms)
+✔ J — regression: Phase 1/2 tool surface unchanged for the GUI/Agno path (69.807301ms)
+[ai-gateway] {"requestId":"op-SIM-NURSE-1-skill-e9f13e39-daee-4b43-a517-e03c1b0059da","userId":"SIM-NURSE-1","tenantId":"clinicos","toolName":"get_patient_therapies","patientIds":["cmv2u4qqt0004ztqpsnsa00wr"],"resultCount":0,"outcome":"empty","at":"2026-10-10T20:16:46.211Z"}
+✔ per-role coverage: every executable skill completes for an intended role (632.11364ms)
+✔ QA H1 — a slow correction racing a confirmation cannot produce a second write (76.328757ms)
+✔ QA M1 — a near-confirmation never replaces the text; «correggi:» does (72.891084ms)
+✔ QA L1 — page context: exactly the verified id, label from server data (134.752963ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14031.428106

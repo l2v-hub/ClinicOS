@@ -7,6 +7,7 @@ import {
   type ScheduleInput,
 } from '../lib/therapy-dose.js';
 import { therapyWhereForDate } from './therapy-query.js';
+import { oneTimeSlot, therapyBandEnabled } from './slot-scheduling.js';
 import { hasFacilityPatientScope } from '../patients/patient-scope.js';
 import {
   extraDoseLabel,
@@ -196,6 +197,8 @@ export async function resolveAuthoritativeTherapy(
     },
     select: {
       farmacoNome: true,
+      tipo: true,
+      orarioSomministrazione: true,
       dosaggio: true,
       viaSomministrazione: true,
       giorniSettimana: true,
@@ -209,7 +212,6 @@ export async function resolveAuthoritativeTherapy(
       commercialStrengthValue: true,
       commercialStrengthUnit: true,
       schedules: {
-        where: { fascia: input.fascia },
         take: MAX_THERAPY_SCHEDULES + 1,
         orderBy: [{ time: 'asc' }, { id: 'asc' }],
         select: {
@@ -227,12 +229,14 @@ export async function resolveAuthoritativeTherapy(
     throw new TherapyNotDueError();
   }
   const flag = FASCIA_FLAGS[input.fascia];
-  const schedules = therapy.schedules as ScheduleInput[];
-  if (schedules.length > MAX_THERAPY_SCHEDULES)
+  if (therapy.schedules.length > MAX_THERAPY_SCHEDULES)
     throw new TherapyWriteInputError(
       'Pianificazione oltre il limite: verifica la prescrizione',
       409,
     );
+  const single = oneTimeSlot(therapy);
+  const fallbackTime = single?.time || FALLBACK_TIMES[input.fascia];
+  const schedules = (therapy.schedules as ScheduleInput[]).filter((s) => s.fascia === input.fascia);
   if (!input.scheduledTime && schedules.length > 1)
     throw new TherapyWriteInputError(
       'Seleziona l’orario esatto della dose: questa fascia contiene più somministrazioni',
@@ -249,12 +253,12 @@ export async function resolveAuthoritativeTherapy(
   if (
     input.scheduledTime &&
     ((schedules.length > 0 && !schedule) ||
-      (schedules.length === 0 && input.scheduledTime !== FALLBACK_TIMES[input.fascia]))
+      (schedules.length === 0 && input.scheduledTime !== fallbackTime))
   )
     throw new TherapyNotDueError();
   // The read model creates slots from the fascia flags. A write must be accepted only for an
   // administration the operator could actually see in that same read model.
-  if (!therapy[flag]) throw new TherapyNotDueError();
+  if (!therapyBandEnabled(therapy, input.fascia, therapy[flag])) throw new TherapyNotDueError();
   let conditionalDose: number | null = null;
   let doseContext: AuthoritativeTherapyAdministration['doseContext'];
   if (therapy.doseMode === 'glucose_scale' && options.requireDoseMeasurement !== false) {
@@ -293,7 +297,7 @@ export async function resolveAuthoritativeTherapy(
   }
   return {
     ...input,
-    scheduledTime: schedule?.time || FALLBACK_TIMES[input.fascia],
+    scheduledTime: schedule?.time || fallbackTime,
     farmacoNome: therapy.farmacoNome,
     farmacoDose:
       conditionalDose !== null
@@ -311,7 +315,7 @@ export async function resolveAuthoritativeTherapy(
               )) ||
             therapy.dosaggio,
     farmacoVia: therapy.viaSomministrazione || 'orale',
-    ora: schedule?.time || FALLBACK_TIMES[input.fascia],
+    ora: schedule?.time || fallbackTime,
     singleBandDose: schedules.length <= 1,
     ...(doseContext ? { doseContext } : {}),
   };

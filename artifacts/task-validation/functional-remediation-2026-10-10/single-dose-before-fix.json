@@ -1,0 +1,15 @@
+{
+  "createStatus": 201,
+  "therapyId": "cmv2to0y600aabyqp5u6kjw7g",
+  "prescribedTime": "11:30",
+  "flags": [
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "actualFeedEntries": 0,
+  "expectedFeedEntries": 1,
+  "confirmedDefect": true
+}

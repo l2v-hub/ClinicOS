@@ -3,9 +3,10 @@
 Consultare [il rapporto](../../../docs/qa-functional-remediation-2026-10-10.md) per perimetro, risultati e limiti.
 
 - `validation.json`: conteggi, stato produzione e hash dei sorgenti modificati e delle prove.
-- `api-results.json`: 487 controlli, tutti passati; dati esclusivamente sintetici.
+- `api-results.json`: 488 controlli, tutti passati; dati esclusivamente sintetici.
 - `browser-results.json`: 92 viste e telemetria; nessun errore inatteso raccolto.
-- `therapy-browser-results.json`: inventario completo di 105 prescrizioni e dosi separate.
+- `single-dose-db-tests.txt` e `single-dose-before-fix.json`: regressione una tantum e riproduzione storica prima della correzione.
+- `therapy-browser-results.json`: inventario completo di 106 prescrizioni e dosi separate.
 - `assessment-lifecycle-results.json`: sette moduli, snapshot/scoring/PDF/immutabilità.
 - `session-isolation-results.json`: risposta tardiva oltre logout, cache vuota e OSS negato.
 - `narrative-browser-results.json`: errore su revisione vuota, editor e revisione precedente conservati.

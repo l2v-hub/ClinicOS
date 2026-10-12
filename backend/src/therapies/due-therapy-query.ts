@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 import type { TherapyDueItem } from '../ai/assistant/facility-signals.js';
 import { scheduleDoseLabel } from '../lib/therapy-dose.js';
-import type { TherapyPatientAccess } from './therapy-query.js';
+import { therapyBandEnabledSql, type TherapyPatientAccess } from './therapy-query.js';
 
 interface TherapyDueRow {
   bucket: 'overdue' | 'dueSoon';
@@ -72,7 +72,7 @@ export async function findTherapiesDue(
         p."firstName",
         p."lastName",
         band.fascia,
-        COALESCE(schedule.time, band."defaultTime") AS "scheduledTime",
+        COALESCE(schedule.time, CASE WHEN pt.tipo = 'una_tantum' THEN pt."orarioSomministrazione" END, band."defaultTime") AS "scheduledTime",
         (
           SELECT count(*)::int FROM "TherapySchedule" bs
           WHERE bs."therapyId" = pt.id AND bs.fascia = band.fascia
@@ -131,7 +131,7 @@ export async function findTherapiesDue(
             ',' || regexp_replace(pt."giorniSettimana", '[[:space:]]+', '', 'g') || ','
           ) LIKE ${weekdayPattern}
         )
-        AND band.enabled = TRUE
+        AND ${therapyBandEnabledSql()}
         ${therapyAccessSql(access)}
     ), legacy_administration AS (
       SELECT DISTINCT ON (ma."patientId", ma."farmacoNome", ma.fascia, ma.ora)

@@ -350,6 +350,56 @@ if (patientId) {
     evidence.sameBandSchedules = { therapy: r.data, doses };
     assert.equal(doses.length, 2, 'Two valid morning schedules collapsed into one dose');
   });
+  await check('therapy:one-off-explicit-time-is-administrable', async () => {
+    const created = await call(doctor, 'POST', `/patients/${patientId}/therapies`, {
+      farmacoNome: 'QA one-off clock',
+      dataInizio: today,
+      tipo: 'una_tantum',
+      dosaggio: 'Dose sintetica prescritta',
+      dataSomministrazione: today,
+      orarioSomministrazione: '11:30',
+      schedules: [],
+    });
+    assert.equal(created.status, 201, JSON.stringify(created.data));
+    const read = async () => {
+      const feed = await call(nurse, 'GET', `/therapy-slots?date=${today}`);
+      assert.equal(feed.status, 200, JSON.stringify(feed.data));
+      return (feed.data.slots ?? feed.data)
+        .flatMap((s) => s.patients ?? [])
+        .flatMap((p) => p.administrations ?? [])
+        .filter((a) => a.therapyId === created.data.id);
+    };
+    const initial = await read();
+    assert.equal(initial.length, 1);
+    assert.equal(initial[0].scheduledTime, '11:30');
+    assert.equal(initial[0].dosage, 'Dose sintetica prescritta');
+    const body = {
+      patientId,
+      therapyId: created.data.id,
+      date: today,
+      fascia: 'pranzo',
+      scheduledTime: '11:30',
+    };
+    assert.equal(
+      (await call(nurse, 'POST', '/therapy-slots/confirm', { ...body, scheduledTime: '12:00' }))
+        .status,
+      409,
+    );
+    const confirmed = await call(nurse, 'POST', '/therapy-slots/confirm', body);
+    assert.equal(confirmed.status, 200, JSON.stringify(confirmed.data));
+    assert.equal(confirmed.data.ora, '11:30');
+    assert.equal(confirmed.data.farmacoDose, 'Dose sintetica prescritta');
+    assert.equal((await call(nurse, 'POST', '/therapy-slots/confirm', body)).status, 409);
+    const final = await read();
+    assert.equal(final.length, 1);
+    assert.equal(final[0].status, 'administered');
+    evidence.singleAdministration = {
+      therapyId: created.data.id,
+      prescribedTime: '11:30',
+      initial,
+      final,
+    };
+  });
   if (therapy)
     await check('administration:confirmation/duplicate/actor-authority', async () => {
       const body = {

@@ -1,0 +1,21 @@
+✖ failing tests:
+
+test at src/skills/__tests__/skills-e2e.test.ts:1:19368
+✖ QA H1 — a slow correction racing a confirmation cannot produce a second write (238.920039ms)
+  AssertionError [ERR_ASSERTION]: {"workflowId":"0bdc0cc5-c0a3-4368-b258-1b2ca8f5b87e","status":"NEEDS_CONFIRMATION","skillId":"vitals.record","reply":"Questa conferma si riferisce a un’anteprima non più valida: controlla l’anteprima attuale.","pending":null,"preview":{"previewId":"48f624bf-79be-4a11-a2c3-fc5d917f2270","skillId":"vitals.record","patient":{"id":"cmv2u07s40004krqpol8tchwk","label":"RossiZphrl Mario"},"origin":"ai","actor":{"name":"Infermiere 1","role":"nurse"},"notes":["Autore: operatore corrente (risolto dal server)."],"warnings":[],"confirmable":true,"action":"Registrazione parametri vitali","values":{"Pressione":"130/80","Orario rilevazione":"10/10, 22:13"},"tool":"parameters.create_reading","confirmationClass":"SENSITIVE_WRITE","editable":["values"]},"error":{"code":"preview_stale","message":"Anteprima non più valida"},"interpreter":"deterministic","resident":{"id":"cmv2u07s40004krqpol8tchwk","label":"RossiZphrl Mario"}}
+  + actual - expected
+
+  + 'NEEDS_CONFIRMATION'
+  - 'COMPLETED'
+
+      at TestContext.<anonymous> (/workspace/ClinicOS/backend/src/skills/__tests__/skills-e2e.test.ts:536:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'NEEDS_CONFIRMATION',
+    expected: 'COMPLETED',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -88,6 +88,111 @@ before(async () => {
   });
 });
 
+test('one-off explicit clocks survive empty flags across feed, summary, assistant and writes', async () => {
+  const clocks = ['00:15', '08:45', '11:30', '14:20', '18:10'];
+  const rows = [];
+  const actor = { id: ownerOperatorId, role: 'operatore' as const, name: 'Verified Owner' };
+  const read = () => buildTherapySlotPage(date, { patientIds: [patientId] }, { limit: 100 }, actor);
+  const due = () =>
+    findTherapiesDue(date, { patientIds: [patientId] }, new Date(`${date}T23:59:00Z`), 15, 50);
+  const create = (time: string | null) =>
+    prisma.patientTherapy.create({
+      data: {
+        patientId,
+        farmacoNome: 'Synthetic one-off ' + time,
+        dosaggio: 'Dose sintetica prescritta',
+        tipo: 'una_tantum',
+        stato: 'attiva',
+        dataInizio: date,
+        dataSomministrazione: date,
+        orarioSomministrazione: time,
+        fasceMattina: false,
+        fascePranzo: false,
+        fascePomeriggio: false,
+        fasceSera: false,
+        fasceNotte: false,
+      },
+    });
+  try {
+    for (const time of [...clocks, '99:00', null]) rows.push(await create(time));
+    const conflict = await create('11:30');
+    rows.push(conflict);
+    await prisma.therapySchedule.create({
+      data: {
+        therapyId: conflict.id,
+        time: '12:30',
+        fascia: 'pranzo',
+        quantityNumerator: 2,
+        quantityDenominator: 1,
+        administrationUnit: 'compressa',
+      },
+    });
+    const ids = new Set(rows.map((row) => row.id));
+    const feed = (await read()).slots
+      .flatMap((s) => s.patients.flatMap((p) => p.administrations))
+      .filter((a) => ids.has(a.therapyId));
+    assert.deepEqual(feed.map((a) => a.scheduledTime).sort(), [...clocks].sort());
+    assert.ok(
+      feed.every((a) => a.dosage === 'Dose sintetica prescritta' && a.quantityLabel === null),
+    );
+    const pending = (await due()).overdue.filter((a) => ids.has(a.therapyId));
+    assert.deepEqual(pending.map((a) => a.scheduledTime).sort(), [...clocks].sort());
+    const therapy = rows[2];
+    const body = {
+      patientId,
+      therapyId: therapy.id,
+      date,
+      fascia: 'pranzo',
+      scheduledTime: '11:30',
+      farmacoDose: '999 invented units',
+    };
+    const write = (patch = {}) =>
+      fetch(`${base}/therapy-slots/confirm`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Operator-Id': ownerOperatorId,
+          'X-Operator-Role': 'operatore',
+        },
+        body: JSON.stringify({ ...body, ...patch }),
+      });
+    assert.equal((await write({ scheduledTime: '12:00' })).status, 409);
+    assert.equal((await write({ fascia: 'mattina' })).status, 409);
+    assert.equal((await write({ date: '2033-04-06' })).status, 404);
+    assert.equal(
+      await prisma.medicationAdministration.count({ where: { therapyId: therapy.id } }),
+      0,
+    );
+    const before = (await read()).slots.find((s) => s.fascia === 'pranzo')!.summary;
+    assert.equal((await write()).status, 200);
+    const record = await prisma.medicationAdministration.findFirstOrThrow({
+      where: { therapyId: therapy.id },
+    });
+    assert.equal(record.ora, '11:30');
+    assert.equal(record.farmacoDose, 'Dose sintetica prescritta');
+    assert.equal(record.operatoreId, ownerOperatorId);
+    assert.equal(record.operatoreNome, ownerOperatorId);
+    assert.equal((await write()).status, 409);
+    const after = (await read()).slots.find((s) => s.fascia === 'pranzo')!.summary;
+    assert.equal(after.total, before.total);
+    assert.equal(after.pending, before.pending - 1);
+    assert.equal(after.administered, before.administered + 1);
+    assert.equal(
+      (await due()).overdue.some((a) => a.therapyId === therapy.id),
+      false,
+    );
+    assert.equal(
+      await prisma.medicationAdministration.count({ where: { therapyId: therapy.id } }),
+      1,
+    );
+  } finally {
+    await prisma.medicationAdministration.deleteMany({
+      where: { therapyId: { in: rows.map((row) => row.id) } },
+    });
+    await prisma.patientTherapy.deleteMany({ where: { id: { in: rows.map((row) => row.id) } } });
+  }
+});
+
 test('distinct same-band doses retain quantity, independent writes and exact summaries', async () => {
   const multi = await prisma.patientTherapy.create({
     data: {

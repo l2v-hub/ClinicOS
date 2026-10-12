@@ -40,7 +40,7 @@
       "headings": [
         "Posti Letto"
       ],
-      "controls": 42
+      "controls": 50
     },
     {
       "role": "admin",
@@ -71,13 +71,13 @@
         "Dashboard",
         "Situazione clinica",
         "Prossime terapie",
-        "In programma 25",
-        "Da verificare · in ritardo 26",
+        "In programma 31",
+        "Da verificare · in ritardo 31",
         "Occupazione Struttura",
         "Carico Operatori",
         "Riepilogo Agenda Oggi"
       ],
-      "controls": 120
+      "controls": 142
     },
     {
       "role": "supervisor",
@@ -105,7 +105,7 @@
       "headings": [
         "Calendario terapie"
       ],
-      "controls": 14
+      "controls": 15
     },
     {
       "role": "supervisor",
@@ -115,7 +115,7 @@
       "headings": [
         "Posti Letto"
       ],
-      "controls": 42
+      "controls": 50
     },
     {
       "role": "supervisor",
@@ -168,12 +168,12 @@
       "headings": [
         "Il mio turno",
         "Adesso",
-        "Scadute · 26 attività",
-        "Da verificare · 10 attività",
+        "Scadute · 31 attività",
+        "Da verificare · 12 attività",
         "Prossimi appuntamenti",
         "Ultime consegne"
       ],
-      "controls": 31
+      "controls": 33
     },
     {
       "role": "doctor",
@@ -184,7 +184,7 @@
         "Pazienti",
         "Nuovo ingresso"
       ],
-      "controls": 36
+      "controls": 47
     },
     {
       "role": "doctor",
@@ -194,7 +194,7 @@
       "headings": [
         "Calendario terapie"
       ],
-      "controls": 14
+      "controls": 15
     },
     {
       "role": "doctor",
@@ -205,7 +205,7 @@
         "Parametri vitali",
         "Bassi, Giorgio"
       ],
-      "controls": 47
+      "controls": 56
     },
     {
       "role": "doctor",
@@ -330,9 +330,10 @@
       "overflow": 0,
       "alerts": [],
       "headings": [
-        "Bassi, Giorgio"
+        "Bassi, Giorgio",
+        "Nessun documento"
       ],
-      "controls": 11
+      "controls": 13
     },
     {
       "role": "doctor",
@@ -471,12 +472,12 @@
       "headings": [
         "Il mio turno",
         "Adesso",
-        "Scadute · 26 attività",
-        "Da verificare · 10 attività",
+        "Scadute · 31 attività",
+        "Da verificare · 12 attività",
         "Prossimi appuntamenti",
         "Ultime consegne"
       ],
-      "controls": 31
+      "controls": 33
     },
     {
       "role": "nurse",
@@ -487,7 +488,7 @@
         "Pazienti",
         "Nuovo ingresso"
       ],
-      "controls": 37
+      "controls": 47
     },
     {
       "role": "nurse",
@@ -497,7 +498,7 @@
       "headings": [
         "Calendario terapie"
       ],
-      "controls": 14
+      "controls": 15
     },
     {
       "role": "nurse",
@@ -508,7 +509,7 @@
         "Parametri vitali",
         "Bassi, Giorgio"
       ],
-      "controls": 47
+      "controls": 56
     },
     {
       "role": "nurse",
@@ -710,10 +711,11 @@
       "alerts": [],
       "headings": [
         "Bassi, Giorgio",
-        "Assistenza e mobilizzazione",
-        "Scale di valutazione"
+        "SCALA DI TINETTI",
+        "Storico valutazioni",
+        "Storico precedente · sola lettura"
       ],
-      "controls": 42
+      "controls": 73
     },
     {
       "role": "nurse",
@@ -892,7 +894,7 @@
         "Prossimi appuntamenti",
         "Ultime consegne"
       ],
-      "controls": 14
+      "controls": 16
     },
     {
       "role": "oss",
@@ -902,7 +904,7 @@
       "headings": [
         "Pazienti"
       ],
-      "controls": 26
+      "controls": 34
     },
     {
       "role": "oss",
@@ -913,7 +915,7 @@
         "Parametri vitali",
         "Bassi, Giorgio"
       ],
-      "controls": 47
+      "controls": 56
     },
     {
       "role": "oss",

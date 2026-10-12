@@ -14,13 +14,17 @@ import {
   scheduleDoseLabel,
   type ScheduleInput,
 } from '../lib/therapy-dose.js';
-import { earliestOra } from './slot-scheduling.js';
+import { earliestOra, oneTimeSlot, therapyBandEnabled } from './slot-scheduling.js';
 import {
   findTherapyPageAdministrations,
   legacyAdministrationKey,
 } from './therapy-administration-page.js';
 import { TherapySlotCapacityError } from './therapy-capacity.js';
-import { therapyWhereForAccess, type TherapyPatientAccess } from './therapy-query.js';
+import {
+  therapyWhereForAccess,
+  therapyBandEnabledSql,
+  type TherapyPatientAccess,
+} from './therapy-query.js';
 import {
   loadOperationalIdentities,
   type PatientLocationDto,
@@ -124,7 +128,7 @@ export async function buildTherapySlotExactSummary(
         pt."patientId",
         pt."farmacoNome",
         band.fascia,
-        COALESCE(schedule.time, band.ora) AS "scheduledTime",
+        COALESCE(schedule.time, CASE WHEN pt.tipo = 'una_tantum' THEN pt."orarioSomministrazione" END, band.ora) AS "scheduledTime",
         (
           SELECT count(*)::int FROM "TherapySchedule" bs
           WHERE bs."therapyId" = pt.id AND bs.fascia = band.fascia
@@ -157,7 +161,7 @@ export async function buildTherapySlotExactSummary(
             ',' || regexp_replace(pt."giorniSettimana", '[[:space:]]+', '', 'g') || ','
           ) LIKE ${weekdayPattern}
         )
-        AND band.enabled = TRUE
+        AND ${therapyBandEnabledSql()}
         ${therapyAccessSql(access)}
     ), legacy_administration AS (
       SELECT DISTINCT ON (ma."patientId", ma."farmacoNome", ma.fascia, ma.ora)
@@ -242,6 +246,7 @@ async function buildTherapySlotSourcePage(
       dosaggio: true,
       viaSomministrazione: true,
       tipo: true,
+      orarioSomministrazione: true,
       fasceMattina: true,
       fascePranzo: true,
       fascePomeriggio: true,
@@ -294,7 +299,9 @@ async function buildTherapySlotSourcePage(
 
   const legacyCandidateKeys = new Set(
     validTherapies.flatMap((therapy) =>
-      FASCE.filter((fascia) => therapy[fascia.flagField as FlagField] === true).map((fascia) =>
+      FASCE.filter((fascia) =>
+        therapyBandEnabled(therapy, fascia.fascia, therapy[fascia.flagField as FlagField] === true),
+      ).map((fascia) =>
         legacyAdministrationKey(therapy.patientId, therapy.farmacoNome, fascia.fascia),
       ),
     ),
@@ -312,9 +319,9 @@ async function buildTherapySlotSourcePage(
       therapyId: therapy.id,
       patientId: therapy.patientId,
       drugName: therapy.farmacoNome,
-      fasce: FASCE.filter((fascia) => therapy[fascia.flagField as FlagField] === true).map(
-        ({ fascia }) => fascia,
-      ),
+      fasce: FASCE.filter((fascia) =>
+        therapyBandEnabled(therapy, fascia.fascia, therapy[fascia.flagField as FlagField] === true),
+      ).map(({ fascia }) => fascia),
     })),
     db,
   );
@@ -360,7 +367,9 @@ async function buildTherapySlotSourcePage(
   }
 
   const slots: TherapySlot[] = FASCE.map((f) => {
-    const fasciaTherapies = validTherapies.filter((pt) => pt[f.flagField as FlagField] === true);
+    const fasciaTherapies = validTherapies.filter((pt) =>
+      therapyBandEnabled(pt, f.fascia, pt[f.flagField as FlagField] === true),
+    );
     const patientMap = new Map<string, SlotPatient>();
 
     for (const pt of fasciaTherapies) {
@@ -374,7 +383,7 @@ async function buildTherapySlotSourcePage(
       const schedules = (pt.schedules as ScheduleInput[]).filter((s) => s.fascia === f.fascia);
       const doses: Array<ScheduleInput | undefined> = schedules.length ? schedules : [undefined];
       for (const sched of doses) {
-        const time = sched?.time || f.ora;
+        const time = oneTimeSlot(pt)?.time || sched?.time || f.ora;
         const bandRecord = doses.length === 1 ? bandRecords.get(`${pt.id}|${f.fascia}`) : undefined;
         const existing =
           (bandRecord?.stato === 'erogata' ? bandRecord : undefined) ??
@@ -407,7 +416,7 @@ async function buildTherapySlotSourcePage(
               : (quantityLabel ?? pt.dosaggio),
           quantityLabel,
           route: pt.viaSomministrazione || 'orale',
-          scheduledTime: sched?.time || f.ora,
+          scheduledTime: time,
           status,
           administeredAt: existing?.confirmedAt
             ? new Date(existing.confirmedAt).toISOString()

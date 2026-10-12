@@ -28,19 +28,20 @@ const patient = await prisma.patient.create({
   },
 });
 await prisma.patientTherapy.createMany({
-  data: Array.from({ length: 105 }, (_, i) => ({
+  data: Array.from({ length: 106 }, (_, i) => ({
     id: `QA-${patient.id}-${i}`,
     patientId: patient.id,
     farmacoNome: `QA inventory ${String(i).padStart(3, '0')}`,
     dosaggio: '1 compressa',
     viaSomministrazione: 'orale',
-    tipo: i === 102 ? 'al_bisogno' : i === 104 ? 'una_tantum' : 'periodica',
+    tipo: i === 102 ? 'al_bisogno' : i >= 104 ? 'una_tantum' : 'periodica',
     stato: i === 103 ? 'sospesa' : 'attiva',
     dataInizio: today,
     fasceMattina: i < 101,
     orarioSpecifico: i === 101 ? '10:00' : i < 101 ? '08:00' : null,
-    dataSomministrazione: i === 104 ? tomorrow.toISOString().slice(0, 10) : null,
-    orarioSomministrazione: i === 104 ? '08:00' : null,
+    dataSomministrazione:
+      i === 104 ? tomorrow.toISOString().slice(0, 10) : i === 105 ? today : null,
+    orarioSomministrazione: i === 104 ? '08:00' : i === 105 ? '11:30' : null,
   })),
 });
 await prisma.therapySchedule.createMany({
@@ -86,13 +87,13 @@ try {
   await page.getByRole('tab', { name: 'Terapia', exact: true }).click();
   await page.getByRole('tab', { name: 'Piano terapeutico', exact: true }).click();
   const active = page.getByRole('list', { name: 'Farmaci attivi' });
-  await active.getByRole('button', { name: /^QA inventory 104 / }).waitFor();
-  assert.equal(await active.locator(':scope > li').count(), 104);
+  await active.getByRole('button', { name: /^QA inventory 105 / }).waitFor();
+  assert.equal(await active.locator(':scope > li').count(), 105);
   assert.ok(
     pages.some((query) => query.includes('cursor=')),
     'Live inventory must request later pages',
   );
-  results.push({ name: '105-prescription-inventory', pass: true, active: 104, requests: pages });
+  results.push({ name: '106-prescription-inventory', pass: true, active: 105, requests: pages });
   await page.getByRole('tab', { name: 'Storico', exact: true }).click();
   await page.getByRole('button', { name: 'Prescrizioni sospese/concluse', exact: true }).click();
   await page.getByRole('button', { name: /^QA inventory 103 / }).waitFor();
@@ -137,6 +138,24 @@ try {
   await calendar.locator('button[data-time="08:00"]').click();
   await calendar.getByRole('button', { name: /^Erogata:.*QA inventory 000/ }).waitFor();
   results.push({ name: 'later-dose-confirmed-first-dose-still-pending', pass: true });
+  await page.getByRole('dialog').getByRole('button', { name: 'Chiudi', exact: true }).click();
+  await calendar.locator('button[data-time="11:30"]').click();
+  const oneOffResponse = page.waitForResponse(
+    (response) => response.url() === backend + '/therapy-slots/confirm',
+  );
+  await calendar.getByRole('button', { name: /^Erogata:.*QA inventory 105/ }).click();
+  assert.equal((await oneOffResponse).status(), 200);
+  const oneOff = await prisma.medicationAdministration.findFirstOrThrow({
+    where: { therapyId: `QA-${patient.id}-105` },
+  });
+  assert.equal(oneOff.ora, '11:30');
+  assert.equal(oneOff.fascia, 'pranzo');
+  assert.equal(oneOff.farmacoDose, '1 compressa');
+  results.push({
+    name: 'one-off-explicit-clock-with-empty-flags',
+    pass: true,
+    scheduledTime: oneOff.ora,
+  });
   await page.screenshot({ path: resolve(out, 'desktop-distinct-doses.png'), fullPage: true });
   await page.setViewportSize({ width: 360, height: 900 });
   await page.waitForTimeout(250);
