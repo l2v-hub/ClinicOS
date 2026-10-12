@@ -1,0 +1,142 @@
+{
+  "pass": true,
+  "results": [
+    {
+      "viewport": "1180x820",
+      "tabs": 8,
+      "spread": 0,
+      "controlsAbove": 0,
+      "rows": [
+        {
+          "tab": "(apertura)",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Panoramica"
+        },
+        {
+          "tab": "Panoramica",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Panoramica"
+        },
+        {
+          "tab": "Dati di ingresso",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Dati di ingresso"
+        },
+        {
+          "tab": "Clinica",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Clinica"
+        },
+        {
+          "tab": "Terapia",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Terapia"
+        },
+        {
+          "tab": "Parametri",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Parametri"
+        },
+        {
+          "tab": "Moduli",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Moduli"
+        },
+        {
+          "tab": "Documenti",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Documenti"
+        },
+        {
+          "tab": "Dimissione",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Dimissione"
+        }
+      ]
+    },
+    {
+      "viewport": "768x1024",
+      "tabs": 8,
+      "spread": 0,
+      "controlsAbove": 0,
+      "rows": [
+        {
+          "tab": "(apertura)",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Panoramica"
+        },
+        {
+          "tab": "Panoramica",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Panoramica"
+        },
+        {
+          "tab": "Dati di ingresso",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Dati di ingresso"
+        },
+        {
+          "tab": "Clinica",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Clinica"
+        },
+        {
+          "tab": "Terapia",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Terapia"
+        },
+        {
+          "tab": "Parametri",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Parametri"
+        },
+        {
+          "tab": "Moduli",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Moduli"
+        },
+        {
+          "tab": "Documenti",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Documenti"
+        },
+        {
+          "tab": "Dimissione",
+          "top": 72,
+          "controlsAbove": 0,
+          "active": "Dimissione"
+        }
+      ]
+    }
+  ],
+  "outside": {
+    "Turno": 1,
+    "Pazienti": 0,
+    "Terapia": 0,
+    "Parametri": 0,
+    "Consegne": 0,
+    "Agenda": 0,
+    "Farmaci": 0
+  },
+  "consoleErrors": [
+    "1180x820: Each child in a list should have a unique \"key\" prop.%s%s See https://react.dev/link/warning-keys for more information. \n\nCheck the render method of `div`.  It was passed a child from AllergiesEditor.",
+    "768x1024: Each child in a list should have a unique \"key\" prop.%s%s See https://react.dev/link/warning-keys for more information. \n\nCheck the render method of `div`.  It was passed a child from AllergiesEditor."
+  ]
+}
