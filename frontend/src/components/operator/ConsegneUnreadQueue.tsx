@@ -3,9 +3,10 @@ import type { PatientIdentityData } from '../../lib/patientIdentity';
 import { patientIdentityName } from '../../lib/patientIdentity';
 import { formatFacilityLocalMinute } from '../../lib/facilityTime';
 import { useCan } from '../../lib/capabilities';
-import { PatientIdentity } from '../shared/PatientIdentity';
 import { UrgencyNotice } from '../shared/UrgencyNotice';
-import { DiaryReadingGuide, DiaryThreadReceipt } from './cartella/DiaryThreadReceipt';
+import { DiaryThreadReceipt } from './cartella/DiaryThreadReceipt';
+import { isActiveUrgency } from '../../lib/urgency';
+import { patientLocationLabel } from '../../lib/patientIdentity';
 import { useUnreadDiaryQueue } from './useUnreadDiaryQueue';
 
 export function ConsegneUnreadQueue({
@@ -39,11 +40,6 @@ export function ConsegneUnreadQueue({
       <h2 ref={heading} tabIndex={-1}>
         Non confermate
       </h2>
-      <p>
-        Note di diario e consegne nel tuo perimetro, senza conferma esplicita di un altro operatore.
-        Tutte le date e priorità.
-      </p>
-      <DiaryReadingGuide />
       <p role="status">
         {queue.page
           ? `${queue.page.entries.length} note caricate di ${queue.page.totalUnread} non confermate`
@@ -65,7 +61,11 @@ export function ConsegneUnreadQueue({
                 onClick={() => onPatient(patient)}
               >
                 <span>
-                  <PatientIdentity patient={patient} />
+                  {/* una riga (#449): nome e letto; i dati mancanti stanno in cartella */}
+                  <strong>{patientIdentityName(patient)}</strong>
+                  {patient.location !== undefined && (
+                    <span> · {patientLocationLabel(patient.location)}</span>
+                  )}
                   <span className="handover-rounds__badges">
                     {queue.page!.patientCounts.find((item) => item.patientId === patient.id)
                       ?.total ?? 'Conteggio non disponibile'}{' '}
@@ -112,7 +112,15 @@ export function ConsegneUnreadQueue({
                 <span>Non confermata</span>
                 <span>{row.sourceType === 'consegna' ? 'Consegna' : 'Diario'}</span>
               </div>
-              <PatientIdentity patient={row.identity} fallbackName="Identità non disponibile" />
+              {/* Identità in una riga (#449): nome e posto letto; i dati mancanti stanno in cartella. */}
+              <p className="consegna-card__who">
+                <strong>
+                  {row.identity ? patientIdentityName(row.identity) : 'Identità non disponibile'}
+                </strong>
+                {row.identity?.location !== undefined && (
+                  <span> · {patientLocationLabel(row.identity.location)}</span>
+                )}
+              </p>
               {row.identity && (
                 <button type="button" className="link-btn" onClick={() => onPatient(row.identity!)}>
                   Diario di {patientIdentityName(row.identity)}
@@ -126,16 +134,18 @@ export function ConsegneUnreadQueue({
               </p>
               {row.title && <h3>{row.title}</h3>}
               <p style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{row.content}</p>
-              <DiaryThreadReceipt
-                readReceipt={row.readReceipt}
-                priority={row.priority}
-                subject={`nota del ${formatFacilityLocalMinute(row.entryDateTime)}`}
-                onAcknowledge={() => void queue.acknowledge(row, 'read')}
-                busy={queue.busy === row.id}
-                disabled={
-                  queue.busy !== null || !diary || (row.sourceType === 'consegna' && !handovers)
-                }
-              />
+              {!isActiveUrgency(row.urgency) && (
+                <DiaryThreadReceipt
+                  readReceipt={row.readReceipt}
+                  priority={row.priority}
+                  subject={`nota del ${formatFacilityLocalMinute(row.entryDateTime)}`}
+                  onAcknowledge={() => void queue.acknowledge(row, 'read')}
+                  busy={queue.busy === row.id}
+                  disabled={
+                    queue.busy !== null || !diary || (row.sourceType === 'consegna' && !handovers)
+                  }
+                />
+              )}
               <UrgencyNotice
                 urgency={row.urgency}
                 subject="della nota"

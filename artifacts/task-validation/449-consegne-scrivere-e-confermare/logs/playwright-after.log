@@ -1,0 +1,9 @@
+PASS AC3a no old names on the Consegne page (unread view)
+PASS AC1 a handover is written and sent from the page in 3 interactions (patient, text, Invia) — POST 1 · DB 05491101-7433-4141-b4a3-f0c9a5ba0554
+PASS AC3b no old names in the per-patient view, one «Scrivi consegna» entry point — ok · «Scrivi consegna» ×1
+PASS AC5a history and date filters sit behind «Storico e filtri per data»
+PASS AC2a Consegne page: no card shows more than one confirmation button — [1,1,1,1,0,0,0,1]
+PASS AC5b identity on one line, no repeated registry gaps, no reading guide — [{"oneLine":true,"noisy":false},{"oneLine":true,"noisy":false},{"oneLine":true,"noisy":false},{"oneLine":true,"noisy":false}]
+PASS AC1b the sent handover reaches a colleague's queue with «Letta»
+PASS AC2b patient diary: no entry shows more than one confirmation button — [1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+PASS #449 | console errors: 0

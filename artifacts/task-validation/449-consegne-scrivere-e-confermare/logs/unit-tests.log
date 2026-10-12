@@ -1,0 +1,9 @@
+ℹ tests 1375
+ℹ pass 1375
+ℹ fail 0
+✔ automatic stamp freezes once; uncertain retry never re-dates the request (5.7966ms)
+✔ uncertain save keeps fields locked and exposes exact retry, deleted outcome never offers advance (12.3908ms)
+✔ generic workspace defaults to selected Non confermate, not first patient or date restriction (35.7962ms)
+✔ UX2 W8 diary card: «Ho capito» only for a non-author on an active urgency; then only the trace (49.9093ms)
+✔ all priorities describe the explicit reading action; author waits for a colleague (31.8762ms)
+✔ #449: no explanatory guide in the diary or the unread list; one gesture per note (11.2499ms)

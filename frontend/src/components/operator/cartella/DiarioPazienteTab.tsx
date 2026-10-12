@@ -26,7 +26,7 @@ import { ClinicalNoteEditor } from '../ClinicalNoteEditor';
 import { diaryCreatePayload, diaryWriteErrorMessage } from './diaryEntryPayload';
 import { useCan } from '../../../lib/capabilities';
 import { countToSee, needsMyAck, postDiaryAck } from './diaryAck';
-import { DiaryReadingGuide, DiaryThreadReceipt } from './DiaryThreadReceipt';
+import { DiaryThreadReceipt } from './DiaryThreadReceipt';
 import { UrgencyNotice } from '../../shared/UrgencyNotice';
 import { isActiveUrgency, postUrgencyAck, URGENCY_ACKNOWLEDGED_EVENT } from '../../../lib/urgency';
 import {
@@ -777,18 +777,25 @@ export function DiarioPazienteTab({
           </>
         )}
         {renderTherapyLink(row)}
-        <DiaryThreadReceipt
-          readReceipt={row.readReceipt}
-          urgency={row.urgency}
-          acknowledgements={row.acknowledgements}
-          priority={PRIORITY_LABELS[row.priority].toLowerCase()}
-          onAcknowledge={() => void handleAck(row)}
-          busy={acking === row.id}
-          disabled={
-            acking !== null || !canReadDiary || (row.sourceType === 'consegna' && !canReadHandovers)
-          }
-          subject={`della voce${row.title ? ` «${row.title}»` : ''} del ${fmtDT(row.entryDateTime)}`}
-        />
+        {/* Un solo gesto per voce (#449): su un'urgenza attiva solo «Ho capito» (UrgencyNotice
+            sotto), che il server registra anche come lettura; altrimenti la conferma di lettura.
+            Le voci senza ricevuta di lettura restano al modello precedente, gestito qui. */}
+        {!(isDiaryReadReceipt(row.readReceipt) && isActiveUrgency(row.urgency)) && (
+          <DiaryThreadReceipt
+            readReceipt={row.readReceipt}
+            urgency={row.urgency}
+            acknowledgements={row.acknowledgements}
+            priority={PRIORITY_LABELS[row.priority].toLowerCase()}
+            onAcknowledge={() => void handleAck(row)}
+            busy={acking === row.id}
+            disabled={
+              acking !== null ||
+              !canReadDiary ||
+              (row.sourceType === 'consegna' && !canReadHandovers)
+            }
+            subject={`della voce${row.title ? ` «${row.title}»` : ''} del ${fmtDT(row.entryDateTime)}`}
+          />
+        )}
         {isDiaryReadReceipt(row.readReceipt) && (
           <UrgencyNotice
             urgency={row.urgency}
@@ -1008,55 +1015,61 @@ export function DiarioPazienteTab({
         defaultOpen
         actions={headerActions === undefined ? sectionActions : headerActions}
       >
-        <form
-          className="diario-history-filters"
-          onSubmit={(event) => {
-            event.preventDefault();
-            if (dateDraft.from && dateDraft.to && dateDraft.from > dateDraft.to) return;
-            setLegacyVisible(50);
-            setDateRange({ ...dateDraft });
-          }}
+        {/* Storico e filtri dietro un link (#449): prima le note, poi gli strumenti. */}
+        <details
+          className="diario-history"
+          open={Boolean(dateRange.from || dateRange.to) || historyDepth > 0}
         >
-          <label>
-            Dal{' '}
-            <input
-              className="form-input"
-              type="date"
-              value={dateDraft.from}
-              max={dateDraft.to || undefined}
-              onChange={(e) => setDateDraft((prev) => ({ ...prev, from: e.target.value }))}
-            />
-          </label>
-          <label>
-            Al{' '}
-            <input
-              className="form-input"
-              type="date"
-              value={dateDraft.to}
-              min={dateDraft.from || undefined}
-              onChange={(e) => setDateDraft((prev) => ({ ...prev, to: e.target.value }))}
-            />
-          </label>
-          <button className="ds-btn ds-btn--secondary" type="submit">
-            Filtra storico
-          </button>
-          {(dateRange.from || dateRange.to) && (
-            <button
-              className="ds-link"
-              type="button"
-              onClick={() => {
-                setDateDraft({ from: '', to: '' });
-                setDateRange({ from: '', to: '' });
-              }}
-            >
-              Tutte le date
+          <summary>Storico e filtri per data</summary>
+          <form
+            className="diario-history-filters"
+            onSubmit={(event) => {
+              event.preventDefault();
+              if (dateDraft.from && dateDraft.to && dateDraft.from > dateDraft.to) return;
+              setLegacyVisible(50);
+              setDateRange({ ...dateDraft });
+            }}
+          >
+            <label>
+              Dal{' '}
+              <input
+                className="form-input"
+                type="date"
+                value={dateDraft.from}
+                max={dateDraft.to || undefined}
+                onChange={(e) => setDateDraft((prev) => ({ ...prev, from: e.target.value }))}
+              />
+            </label>
+            <label>
+              Al{' '}
+              <input
+                className="form-input"
+                type="date"
+                value={dateDraft.to}
+                min={dateDraft.from || undefined}
+                onChange={(e) => setDateDraft((prev) => ({ ...prev, to: e.target.value }))}
+              />
+            </label>
+            <button className="ds-btn ds-btn--secondary" type="submit">
+              Filtra storico
             </button>
-          )}
-        </form>
-        <p className="form-hint">
-          Pagina {historyDepth + 1} · fino a 50 segnalazioni, dalla più recente.
-        </p>
-        <DiaryReadingGuide />
+            {(dateRange.from || dateRange.to) && (
+              <button
+                className="ds-link"
+                type="button"
+                onClick={() => {
+                  setDateDraft({ from: '', to: '' });
+                  setDateRange({ from: '', to: '' });
+                }}
+              >
+                Tutte le date
+              </button>
+            )}
+          </form>
+          <p className="form-hint">
+            Pagina {historyDepth + 1} · fino a 50 consegne, dalla più recente.
+          </p>
+        </details>
         {historyDepth > 0 && (
           <button
             type="button"
@@ -1064,7 +1077,7 @@ export function DiarioPazienteTab({
             disabled={loadingMore}
             onClick={handlePreviousPage}
           >
-            ← Segnalazioni più recenti
+            ← Consegne più recenti
           </button>
         )}
         {/* Add form */}

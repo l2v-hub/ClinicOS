@@ -62,7 +62,7 @@ test('composer retains patient-specific draft and identity after remount; permit
   for (const html of [first, again]) {
     assert.match(html, /Bozza solo A/);
     assert.match(html, /RSSMRA80A01H501U/);
-    assert.match(html, /Assegna a|Salva e prossimo/);
+    assert.match(html, /Assegna a|Invia e prossimo paziente/);
   }
   const other = render(
     React.createElement(ConsegnaComposer, {
@@ -112,8 +112,8 @@ test('uncertain save keeps fields locked and exposes exact retry, deleted outcom
       nextAvailable: true,
     }),
   );
-  assert.match(html, /Riprova salvataggio/);
-  assert.match(html, /disabled=""[^>]*>Salva e prossimo/);
+  assert.match(html, /Riprova invio/);
+  assert.match(html, /disabled=""[^>]*>Invia e prossimo paziente/);
   const retry = store.begin(identityPatient.id)!;
   store.finish(retry, {
     kind: 'failed',
@@ -158,6 +158,6 @@ test('both PatientDetail entry points share receipt-backed quick-add and keep th
       draftStore: store,
     }),
   );
-  assert.match(refreshed, /Consegna salvata per Rossi, Mario/);
+  assert.match(refreshed, /Consegna inviata per Rossi, Mario/);
   assert.doesNotMatch(refreshed, /Bozza rapida/);
 });

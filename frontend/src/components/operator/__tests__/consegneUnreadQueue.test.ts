@@ -27,7 +27,8 @@ const props: ConsegneWorkspaceProps = {
 test('generic workspace defaults to selected Non confermate, not first patient or date restriction', () => {
   const html = renderToStaticMarkup(React.createElement(ConsegneWorkspace, props));
   assert.match(html, /aria-pressed="true"[^>]*>Non confermate/);
-  assert.match(html, /diario e consegne/);
+  // #449: scrivere è il primo gesto della pagina
+  assert.match(html, /aria-label="Scrivi una consegna"/);
   assert.match(html, /Per paziente/);
   assert.doesNotMatch(html, /Caricamento pazienti/);
 });

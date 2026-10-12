@@ -40,9 +40,6 @@ export function UrgencyNotice({
           {busy ? 'Registrazione…' : 'Ho capito'}
         </button>
       )}
-      {showButton && (
-        <small>La conferma rimuove l’avviso attivo e conserva la priorità originale nello storico.</small>
-      )}
     </div>
   );
 }

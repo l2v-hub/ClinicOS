@@ -420,3 +420,44 @@
     gap: 8px;
   }
 }
+
+/* #449: «Scrivi una consegna» in cima alla pagina Consegne. */
+.consegna-quick {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface, #fff);
+}
+.consegna-quick__patient {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+.consegna-quick__patient label {
+  font: 600 14px/20px var(--font-ui);
+}
+.consegna-quick__patient .form-select {
+  min-width: min(100%, 320px);
+}
+.consegna-quick__search {
+  max-width: 240px;
+}
+.consegna-quick__hint {
+  margin: 0;
+  color: var(--text-muted);
+  font: 400 14px/20px var(--font-ui);
+}
+.consegna-card__who {
+  margin: 4px 0;
+  font: 400 14px/20px var(--font-ui);
+}
+.diario-history > summary {
+  cursor: pointer;
+  margin: 4px 0 8px;
+  color: var(--blue, #2f6bed);
+  font: 500 14px/20px var(--font-ui);
+}

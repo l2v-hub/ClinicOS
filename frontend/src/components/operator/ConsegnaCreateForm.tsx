@@ -95,7 +95,7 @@ export function ConsegnaCreateForm({
         <div>
           <span className="handover-editor__eyebrow">Passaggio operativo</span>
           <h3 id="new-handover-title" className="op-form-panel__title">
-            Nuova consegna
+            Scrivi una consegna
           </h3>
           <p className="handover-editor__intro">
             Associa il paziente e indica con chiarezza cosa deve fare il prossimo operatore.

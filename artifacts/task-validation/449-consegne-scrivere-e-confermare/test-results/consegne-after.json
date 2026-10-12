@@ -1,0 +1,54 @@
+{
+  "pass": true,
+  "results": [
+    {
+      "id": "AC3a",
+      "name": "no old names on the Consegne page (unread view)",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "AC1",
+      "name": "a handover is written and sent from the page in 3 interactions (patient, text, Invia)",
+      "result": "PASS",
+      "detail": "POST 1 · DB 05491101-7433-4141-b4a3-f0c9a5ba0554"
+    },
+    {
+      "id": "AC3b",
+      "name": "no old names in the per-patient view, one «Scrivi consegna» entry point",
+      "result": "PASS",
+      "detail": "ok · «Scrivi consegna» ×1"
+    },
+    {
+      "id": "AC5a",
+      "name": "history and date filters sit behind «Storico e filtri per data»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "AC2a",
+      "name": "Consegne page: no card shows more than one confirmation button",
+      "result": "PASS",
+      "detail": "[1,1,1,1,0,0,0,1]"
+    },
+    {
+      "id": "AC5b",
+      "name": "identity on one line, no repeated registry gaps, no reading guide",
+      "result": "PASS",
+      "detail": "[{\"oneLine\":true,\"noisy\":false},{\"oneLine\":true,\"noisy\":false},{\"oneLine\":true,\"noisy\":false},{\"oneLine\":true,\"noisy\":false}]"
+    },
+    {
+      "id": "AC1b",
+      "name": "the sent handover reaches a colleague's queue with «Letta»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "AC2b",
+      "name": "patient diary: no entry shows more than one confirmation button",
+      "result": "PASS",
+      "detail": "[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]"
+    }
+  ],
+  "consoleErrors": []
+}

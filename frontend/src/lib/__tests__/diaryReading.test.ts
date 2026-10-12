@@ -7,7 +7,7 @@ import { isDiaryReadReceipt, parseDiaryUnreadCount, postDiaryRead } from '../dia
 import * as DiaryReceipt from '../../components/operator/cartella/DiaryThreadReceipt';
 import Sidebar from '../../components/shared/TeamsLikeSidebar';
 Object.assign(globalThis, { React });
-const { DiaryReadingGuide, DiaryThreadReceipt } = DiaryReceipt;
+const { DiaryThreadReceipt } = DiaryReceipt;
 const unread = { state: 'unread' as const, readBy: null, isAuthor: false, canAcknowledge: true };
 const read = {
   state: 'read' as const,
@@ -33,8 +33,8 @@ test('all priorities describe the explicit reading action; author waits for a co
       }),
     );
     assert.match(html, /Lettura non confermata/);
-    assert.match(html, /aria-label="Conferma lettura: nota sintetica"/);
-    assert.match(html, />Conferma lettura</);
+    assert.match(html, /aria-label="Letta: nota sintetica"/);
+    assert.match(html, />Letta</);
     assert.doesNotMatch(html, /Aprire la nota|intervento clinico/);
   }
   const html = renderToStaticMarkup(
@@ -69,39 +69,60 @@ test('confirmed reading displays identity, role and full facility date; no actio
 });
 
 test('busy and unavailable capability disable the existing reading action without changing its purpose', () => {
-  for (const [busy, disabled] of [[true, false], [false, true]]) {
-    const html = renderToStaticMarkup(React.createElement(DiaryThreadReceipt, {
-      priority: 'urgente', readReceipt: unread, busy, disabled, subject: 'nota', onAcknowledge() {},
-    }));
-    assert.match(html, /aria-label="Conferma lettura: nota" disabled=""/);
-    assert.match(html, busy ? />Registrazione…</ : />Conferma lettura</);
+  for (const [busy, disabled] of [
+    [true, false],
+    [false, true],
+  ]) {
+    const html = renderToStaticMarkup(
+      React.createElement(DiaryThreadReceipt, {
+        priority: 'urgente',
+        readReceipt: unread,
+        busy,
+        disabled,
+        subject: 'nota',
+        onAcknowledge() {},
+      }),
+    );
+    assert.match(html, /aria-label="Letta: nota" disabled=""/);
+    assert.match(html, busy ? />Registrazione…</ : />Letta</);
     assert.doesNotMatch(html, /Ho capito|completata/);
   }
 });
 
 test('server reader and subject are escaped and never render hostile markup', () => {
   const hostile = '<img src=x onerror=alert(1)>';
-  const props = {priority:'normale',busy:false,disabled:false,subject:hostile,onAcknowledge() {}};
-  const confirmed = renderToStaticMarkup(React.createElement(DiaryThreadReceipt, {
-    ...props,readReceipt:{...read,readBy:{...read.readBy,operatorName:hostile}},
-  }));
+  const props = {
+    priority: 'normale',
+    busy: false,
+    disabled: false,
+    subject: hostile,
+    onAcknowledge() {},
+  };
+  const confirmed = renderToStaticMarkup(
+    React.createElement(DiaryThreadReceipt, {
+      ...props,
+      readReceipt: { ...read, readBy: { ...read.readBy, operatorName: hostile } },
+    }),
+  );
   assert.match(confirmed, /Lettura confermata da &lt;img/);
   assert.doesNotMatch(confirmed, /<img/);
-  const action = renderToStaticMarkup(React.createElement(DiaryThreadReceipt,{...props,readReceipt:unread}));
-  assert.match(action, /Conferma lettura: &lt;img/);
+  const action = renderToStaticMarkup(
+    React.createElement(DiaryThreadReceipt, { ...props, readReceipt: unread }),
+  );
+  assert.match(action, /Letta: &lt;img/);
   assert.doesNotMatch(action, /<img/);
 });
 
-test('collapsed contextual guide is shared once per diary or unread list, never in each receipt', () => {
-  const html = renderToStaticMarkup(React.createElement(DiaryReadingGuide));
-  assert.match(html, /<details class="diary-reading-guide"><summary>/);
-  assert.doesNotMatch(html, / open/);
-  assert.match(html, /Aprire la nota non conferma la lettura/);
-  assert.match(html, /non prende in carico/);
-  assert.match(html, /non dichiara completato/);
-  for (const name of ['DiarioPazienteTab.tsx','../ConsegneUnreadQueue.tsx']) {
-    const source=readFileSync(new URL('../../components/operator/cartella/'+name,import.meta.url),'utf8');
-    assert.equal((source.match(/<DiaryReadingGuide\s*\/>/g)||[]).length,1);
+test('#449: no explanatory guide in the diary or the unread list; one gesture per note', () => {
+  assert.equal('DiaryReadingGuide' in DiaryReceipt, false);
+  for (const name of ['DiarioPazienteTab.tsx', '../ConsegneUnreadQueue.tsx']) {
+    const source = readFileSync(
+      new URL('../../components/operator/cartella/' + name, import.meta.url),
+      'utf8',
+    );
+    assert.doesNotMatch(source, /DiaryReadingGuide|Come funziona la conferma/);
+    // la conferma di lettura non si affianca a «Ho capito» su un'urgenza attiva
+    assert.match(source, /isActiveUrgency\(row\.urgency\)/);
   }
 });
 test('unknown or malformed receipts and counts never manufacture an unread number or confirmation', () => {

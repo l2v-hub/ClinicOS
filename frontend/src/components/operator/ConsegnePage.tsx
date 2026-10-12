@@ -145,7 +145,7 @@ export function ConsegnePage({
       aria-controls="nuova-consegna-panel"
       onClick={() => setFormAperto((open) => !open)}
     >
-      <IcoPlus /> Nuova consegna
+      <IcoPlus /> Scrivi una consegna
     </button>
   );
   const card = (c: Consegna) => (

@@ -49,7 +49,9 @@ export function createConsegnaDraftStore() {
         if (rows.length) persistence.storage.setItem(persistence.key, json);
         else persistence.storage.removeItem(persistence.key);
         persistenceError = false;
-      } catch { persistenceError = true; }
+      } catch {
+        persistenceError = true;
+      }
     }
     version++;
     listeners.forEach((listener) => listener());
@@ -79,28 +81,60 @@ export function createConsegnaDraftStore() {
       readFailed = false;
       persistenceError = false;
       try {
-        persistence = { storage: storage ?? window.sessionStorage, key: `clinicos:handover-drafts:v1:${encodeURIComponent(nextScope)}` };
+        persistence = {
+          storage: storage ?? window.sessionStorage,
+          key: `clinicos:handover-drafts:v1:${encodeURIComponent(nextScope)}`,
+        };
         const raw = persistence.storage.getItem(persistence.key);
         const rows: unknown = raw && raw.length <= 1_000_000 ? JSON.parse(raw) : [];
         if (!Array.isArray(rows) || rows.length > 100) throw new Error('Invalid draft storage');
         for (const row of rows) {
           if (!Array.isArray(row) || row.length !== 2) continue;
           const [id, d] = row as [string, ConsegnaDraft];
-          if (typeof id !== 'string' || !/^[A-Za-z0-9_-]{1,128}$/.test(id) || !d?.fields ||
-              typeof d.fields.note !== 'string' || d.fields.note.length > 4000 ||
-              !['normale', 'alta', 'urgente'].includes(d.fields.priorita) ||
-              !Number.isSafeInteger(d.revision) || d.revision < 0) continue;
+          if (
+            typeof id !== 'string' ||
+            !/^[A-Za-z0-9_-]{1,128}$/.test(id) ||
+            !d?.fields ||
+            typeof d.fields.note !== 'string' ||
+            d.fields.note.length > 4000 ||
+            !['normale', 'alta', 'urgente'].includes(d.fields.priorita) ||
+            !Number.isSafeInteger(d.revision) ||
+            d.revision < 0
+          )
+            continue;
           if (d.pending) {
             try {
               createConsegnaRequest(d.pending);
-              if (d.pending.pazienteId !== id || !/^[A-Za-z0-9_-]{1,128}$/.test(d.pending.requestId)) continue;
-            } catch { continue; }
+              if (
+                d.pending.pazienteId !== id ||
+                !/^[A-Za-z0-9_-]{1,128}$/.test(d.pending.requestId)
+              )
+                continue;
+            } catch {
+              continue;
+            }
           }
-          drafts.set(id, { fields: { ...emptyConsegnaFields(), ...d.fields }, revision: d.revision,
-            dirty: true, saving: false, pending: d.pending ? Object.freeze(d.pending) : null,
-            receipt: null, outcome: d.pending ? { kind: 'failed', uncertain: true, code: 'unverified', message: 'Invio interrotto: riprova lo stesso salvataggio.' } : null });
+          drafts.set(id, {
+            fields: { ...emptyConsegnaFields(), ...d.fields },
+            revision: d.revision,
+            dirty: true,
+            saving: false,
+            pending: d.pending ? Object.freeze(d.pending) : null,
+            receipt: null,
+            outcome: d.pending
+              ? {
+                  kind: 'failed',
+                  uncertain: true,
+                  code: 'unverified',
+                  message: 'Invio interrotto: riprova lo stesso salvataggio.',
+                }
+              : null,
+          });
         }
-      } catch { persistenceError = true; readFailed = true; }
+      } catch {
+        persistenceError = true;
+        readFailed = true;
+      }
       version++;
       listeners.forEach((listener) => listener());
     },
@@ -148,7 +182,15 @@ export function createConsegnaDraftStore() {
       if (draft.pending && draft.outcome?.kind === 'failed' && !draft.outcome.uncertain)
         return null;
       try {
-        const request = draft.pending ?? createConsegnaRequest({ ...draft.fields, tipo: 'Segnalazione', scadenza: localIsoDate(), oraScadenza: '', pazienteId: id });
+        const request =
+          draft.pending ??
+          createConsegnaRequest({
+            ...draft.fields,
+            tipo: 'Generale',
+            scadenza: localIsoDate(),
+            oraScadenza: '',
+            pazienteId: id,
+          });
         drafts.set(id, { ...draft, pending: request, saving: true, outcome: null });
         notify();
         return { patientId: id, revision: draft.revision, generation, request };

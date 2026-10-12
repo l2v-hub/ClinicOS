@@ -7,6 +7,7 @@ import { type ConsegnePageProps } from './ConsegnePage';
 import { ConsegneRounds } from './ConsegneRounds';
 import { ConsegnePage } from './ConsegnePage';
 import { ConsegneUnreadQueue } from './ConsegneUnreadQueue';
+import { ConsegnaQuickWrite } from './ConsegnaQuickWrite';
 import './ConsegneRounds.css';
 export interface ConsegneWorkspaceProps extends ConsegnePageProps {
   sessionKey: string;
@@ -42,7 +43,14 @@ function WorkspaceSession({
   );
   return (
     <div className="handover-workspace">
-      <PageHeader title="Consegne" subtitle="Conferme di lettura e diario delle segnalazioni" />
+      <PageHeader title="Consegne" subtitle="Scrivi, leggi e conferma le consegne del reparto" />
+      {/* #449: scrivere è il primo gesto della pagina, senza cambiare vista. */}
+      <ConsegnaQuickWrite
+        store={store}
+        operatori={feed.operatori}
+        onAdd={feed.onAdd}
+        initialPatientId={entry?.query?.patientId}
+      />
       <div className="ds-chip-group" role="group" aria-label="Vista consegne">
         <button
           type="button"
