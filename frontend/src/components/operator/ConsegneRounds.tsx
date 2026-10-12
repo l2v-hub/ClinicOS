@@ -303,7 +303,7 @@ export function ConsegneRounds({
                     tabIndex={view === 'compose' ? 0 : -1}
                     onClick={openComposer}
                   >
-                    <span aria-hidden="true">＋</span> Nuova nota{' '}
+                    <span aria-hidden="true">＋</span> Scrivi consegna{' '}
                     <DraftIndicator store={store} patientId={patient.id} />
                   </button>
                 )}
@@ -319,17 +319,8 @@ export function ConsegneRounds({
                   key={`history:${patient.id}:${historyVersion}`}
                   pazienteId={patient.id}
                   operatoreNome=""
-                  headerActions={
-                    canCreate ? (
-                      <button
-                        type="button"
-                        className="ds-btn ds-btn--secondary"
-                        onClick={openComposer}
-                      >
-                        ＋ Nuova nota
-                      </button>
-                    ) : null
-                  }
+                  // un solo «Scrivi consegna» (#449): la scheda sopra, niente doppione qui
+                  headerActions={null}
                 />
               </div>
               <div

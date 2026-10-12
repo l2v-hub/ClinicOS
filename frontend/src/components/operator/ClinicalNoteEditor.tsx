@@ -35,7 +35,7 @@ export function ClinicalNoteEditor({
         </label>
       )}
       <div className="clinical-note-editor__content">
-        <label htmlFor={`${id}-content`}>Segnalazione</label>
+        <label htmlFor={`${id}-content`}>Consegna</label>
         <textarea
           id={`${id}-content`}
           className="form-input"
@@ -72,7 +72,7 @@ export function ClinicalNoteEditor({
       </div>
       <p id={`${id}-severity-help`} className="form-hint">
         {priority === 'urgente'
-          ? 'Segnalazione urgente: un collega deve confermare «Ho capito».'
+          ? 'Consegna urgente: un collega deve confermare «Ho capito».'
           : historical
             ? 'Gravità storica conservata senza modificarne il significato.'
             : 'Normale: informazione per la continuità assistenziale.'}

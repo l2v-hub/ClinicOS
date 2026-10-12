@@ -14,23 +14,6 @@ const ROLE_LABELS: Record<string, string> = {
   altro: 'Operatore',
 };
 
-/** Shared, optional explanation outside individual notes. Opening it never records a read. */
-export function DiaryReadingGuide() {
-  return (
-    <details className="diary-reading-guide">
-      <summary>Come funziona la conferma di lettura</summary>
-      <p>
-        Aprire la nota non conferma la lettura. «Conferma lettura» registra chi ha confermato e
-        quando; la conferma spetta a un altro operatore, non all’autore della nota.
-      </p>
-      <p>
-        La conferma di lettura non prende in carico l’urgenza e non dichiara completato
-        l’intervento. La presa in carico resta un’azione separata, «Ho capito».
-      </p>
-    </details>
-  );
-}
-
 /** A response belongs to its original diary message. Only server receipts name a reader. */
 export function DiaryThreadReceipt({
   urgency,
@@ -83,11 +66,11 @@ export function DiaryThreadReceipt({
                 <button
                   type="button"
                   className="btn-secondary btn-sm"
-                  aria-label={`Conferma lettura: ${subject}`}
+                  aria-label={`Letta: ${subject}`}
                   disabled={disabled || busy}
                   onClick={onAcknowledge}
                 >
-                  {busy ? 'Registrazione…' : 'Conferma lettura'}
+                  {busy ? 'Registrazione…' : 'Letta'}
                 </button>
               )}
             </>

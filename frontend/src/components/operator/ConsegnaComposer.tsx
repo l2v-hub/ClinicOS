@@ -21,6 +21,7 @@ export function ConsegnaComposer({
   focusRequest = 0,
   onTherapyCreated,
   embedded = false,
+  showNext = true,
 }: {
   patient: Paziente;
   store: ConsegnaDraftStore;
@@ -31,6 +32,8 @@ export function ConsegnaComposer({
   focusRequest?: number;
   onTherapyCreated?: () => void;
   embedded?: boolean;
+  /** «Invia e prossimo paziente» solo nel giro per paziente, non nel modulo in cima (#449). */
+  showNext?: boolean;
 }) {
   const draft = useConsegnaDraft(store, patient.id);
   const canCreate = useCan('consegne.create');
@@ -75,8 +78,8 @@ export function ConsegnaComposer({
   return (
     <section className="handover-rounds__composer" aria-label="Scrivi consegna">
       <div className="ho-card-head">
-        <h3>{embedded ? 'Nuova nota' : `Consegna · ${patientIdentityName(patient)}`}</h3>
-        <span className="ho-cap">{draft.dirty ? 'Bozza non salvata' : 'Nuova consegna'}</span>
+        <h3>{embedded ? 'Scrivi una consegna' : `Consegna · ${patientIdentityName(patient)}`}</h3>
+        {draft.dirty && <span className="ho-cap">Bozza non inviata</span>}
       </div>
       <form
         ref={formRef}
@@ -159,7 +162,7 @@ export function ConsegnaComposer({
             />
           </Suspense>
         )}
-        {therapySaved && <p role="status">Segnalazione e terapia salvate nel diario paziente.</p>}
+        {therapySaved && <p role="status">Consegna e terapia salvate nel diario paziente.</p>}
         <div className="handover-rounds__actions">
           {draft.dirty && (
             <button
@@ -176,27 +179,29 @@ export function ConsegnaComposer({
             className="ds-btn ds-btn--secondary"
             disabled={draft.saving || Boolean(therapyStamp) || blocked || !draft.fields.note.trim()}
           >
-            {draft.saving ? 'Salvataggio…' : draft.pending ? 'Riprova salvataggio' : 'Salva'}
+            {draft.saving ? 'Invio…' : draft.pending ? 'Riprova invio' : 'Invia'}
           </button>
-          <button
-            type="button"
-            className="ds-btn ds-btn--primary"
-            disabled={
-              locked ||
-              blocked ||
-              Boolean(draft.pending) ||
-              !draft.fields.note.trim() ||
-              !nextAvailable
-            }
-            onClick={() => onSave(true)}
-          >
-            Salva e prossimo
-          </button>
+          {showNext && (
+            <button
+              type="button"
+              className="ds-btn ds-btn--primary"
+              disabled={
+                locked ||
+                blocked ||
+                Boolean(draft.pending) ||
+                !draft.fields.note.trim() ||
+                !nextAvailable
+              }
+              onClick={() => onSave(true)}
+            >
+              Invia e prossimo paziente
+            </button>
+          )}
         </div>
         {draft.outcome?.kind === 'failed' && <p role="alert">{draft.outcome.message}</p>}
         {draft.receipt && (
           <p role="status">
-            Consegna salvata per {patient.lastName}, {patient.firstName}.
+            Consegna inviata per {patient.lastName}, {patient.firstName}.
           </p>
         )}
         {message && <p role="status">{message}</p>}
