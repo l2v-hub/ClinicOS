@@ -10742,8 +10742,20 @@ textarea.form-input {
   .chart-sections .top-nav--chips {
     flex-basis: 100%;
   }
+  /* Su tablet le chip vanno a capo invece di scorrere: una chip non si sposta mai sotto il dito
+     cambiando scheda (#448). Una riga scorrevole resta solo sui telefoni. */
+  .chart-sections .top-nav--chips .top-nav__items {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
   .chart-sections__actions {
     margin-left: 0;
+  }
+}
+@media (max-width: 600px) {
+  .chart-sections .top-nav--chips .top-nav__items {
+    flex-wrap: nowrap;
+    overflow-x: auto;
   }
 }
 

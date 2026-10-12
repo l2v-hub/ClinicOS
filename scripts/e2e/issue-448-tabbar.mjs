@@ -41,11 +41,22 @@ const measure = (page) =>
       return r.height > 0 && bar && r.bottom <= bar.getBoundingClientRect().top + 1;
     }).length;
     const active = document.querySelector(`${sel} [role=tab][aria-selected=true]`)?.textContent;
-    return { top, controlsAbove: controls, active: active?.trim() ?? null };
+    // Where every tab sits on screen: the same string on every tab means nothing moves under the
+    // finger, horizontally (scrolling strip) or vertically.
+    const places = bar
+      ? [...bar.querySelectorAll('[role=tab]')]
+          .map((t) => {
+            const r = t.getBoundingClientRect();
+            return `${Math.round(r.left)},${Math.round(r.top)}`;
+          })
+          .join(' ')
+      : null;
+    return { top, controlsAbove: controls, active: active?.trim() ?? null, places };
   }, BAR);
 
 for (const viewport of [
   { width: 1180, height: 820 },
+  { width: 1024, height: 768 },
   { width: 768, height: 1024 },
 ]) {
   const vp = `${viewport.width}x${viewport.height}`;
@@ -74,12 +85,26 @@ for (const viewport of [
     rows.push({ tab: name.trim(), ...m });
     await page.screenshot({ path: `${OUT}/screenshots/${vp}-${String(i).padStart(2, '0')}.png` });
   }
-  const tops = rows.map((r) => r.top).filter((t) => t !== null);
-  const spread = Math.max(...tops) - Math.min(...tops);
+  const tops = rows.map((r) => r.top);
+  const spread = tops.includes(null) ? Infinity : Math.max(...tops) - Math.min(...tops);
+  // ±3 px: the active chip is semibold and a little wider; a chip is 80-130 px wide.
+  const pts = rows.map((r) => (r.places ?? '').split(' ').map((p) => p.split(',').map(Number)));
+  const placesStable =
+    pts.every((p) => p.length === pts[0].length) &&
+    pts.every((p) =>
+      p.every(([x, y], i) => Math.abs(x - pts[0][i][0]) <= 3 && Math.abs(y - pts[0][i][1]) <= 1),
+    );
   const above = rows.reduce((n, r) => n + r.controlsAbove, 0);
-  results.push({ viewport: vp, tabs: rows.length - 1, spread, controlsAbove: above, rows });
+  results.push({
+    viewport: vp,
+    tabs: rows.length - 1,
+    spread,
+    placesStable,
+    controlsAbove: above,
+    rows,
+  });
   console.log(
-    `${vp}: ${rows.length - 1} tabs, bar top spread ${spread}px, controls above bar ${above}`,
+    `${vp}: ${rows.length - 1} tabs, bar top spread ${spread}px, controls above bar ${above}, tabs fixed on screen ${placesStable}`,
   );
   for (const r of rows) console.log(`  ${String(r.top).padStart(4)}  ${r.controlsAbove}  ${r.tab}`);
   // AC3: outside the chart the bulk toggle is untouched — count it on every sidebar page.
@@ -104,7 +129,9 @@ for (const viewport of [
 }
 await browser.close();
 
-const pass = results.every((r) => r.spread <= 1 && r.controlsAbove === 0 && r.tabs >= 8);
+const pass = results.every(
+  (r) => r.spread <= 1 && r.placesStable && r.controlsAbove === 0 && r.tabs >= 8,
+);
 writeFileSync(
   `${OUT}/test-results/tabbar-${process.env.LABEL ?? 'run'}.json`,
   JSON.stringify({ pass, results, outside, consoleErrors }, null, 2),

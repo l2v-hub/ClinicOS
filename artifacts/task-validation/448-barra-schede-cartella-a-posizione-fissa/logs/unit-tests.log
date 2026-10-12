@@ -1,0 +1,6 @@
+ℹ tests 1344
+ℹ pass 1344
+ℹ fail 0
+✔ WidgetGroup renders the bulk toggle only when controls are enabled (3.3513ms)
+✔ the page-level group hides the bulk toggle on the patient chart only (5.198ms)
+✔ manual path stays on method route across the actual keyed App page boundary (4.7601ms)
