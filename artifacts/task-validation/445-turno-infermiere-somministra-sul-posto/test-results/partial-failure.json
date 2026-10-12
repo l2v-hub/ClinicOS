@@ -1,0 +1,29 @@
+{
+  "pass": true,
+  "results": [
+    {
+      "id": "R1",
+      "name": "partial failure: the refused dose is written, the failed one is not",
+      "result": "PASS",
+      "detail": "[{\"farmacoNome\":\"Metformina\",\"ora\":\"08:00\",\"stato\":\"non_erogata\",\"motivo\":\"rifiutata_paziente\"}]"
+    },
+    {
+      "id": "R2",
+      "name": "after «Annulla» the block keeps only the dose not yet recorded",
+      "result": "PASS",
+      "detail": "[\"Ramipril · 1 compressa — 5 mg · orale\"] · Somministra"
+    },
+    {
+      "id": "R3",
+      "name": "reopen lists one dose and sends one write",
+      "result": "PASS",
+      "detail": "rows 1, posts [{\"url\":\"/therapy-slots/confirm\",\"therapyId\":\"cmv43rrmb00013wlp3tpzas2d\"}]"
+    },
+    {
+      "id": "R4",
+      "name": "the refusal is never overwritten as administered",
+      "result": "PASS",
+      "detail": "[{\"farmacoNome\":\"Metformina\",\"ora\":\"08:00\",\"stato\":\"non_erogata\",\"motivo\":\"rifiutata_paziente\"},{\"farmacoNome\":\"Ramipril\",\"ora\":\"08:00\",\"stato\":\"erogata\",\"motivo\":null}]"
+    }
+  ]
+}

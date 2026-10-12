@@ -59,7 +59,7 @@
       "id": "AC6",
       "name": "«Ho capito» from the Turno uses /consegne/:id/ack and clears the urgency",
       "result": "PASS",
-      "detail": "/consegne/db218ede-46b0-4318-9fe6-f37bd2cd2058/ack · chip 1 urgenza da prendere in carico → null"
+      "detail": "/consegne/28f756c9-6e7c-43d2-a7de-847dfcbfd833/ack · chip 1 urgenza da prendere in carico → null"
     }
   ],
   "consoleErrors": []

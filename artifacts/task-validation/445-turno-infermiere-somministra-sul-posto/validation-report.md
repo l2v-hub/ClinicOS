@@ -36,6 +36,20 @@
 - **Ruoli**: «Somministra» solo con la capability `administration.confirm`. Il medico vede i blocchi
   in sola lettura; OSS e supervisore non cambiano.
 
+## Correzioni dopo il QA indipendente (FAILED VALIDATION sul primo commit)
+
+1. **Bloccante, sicurezza clinica.** Dopo un «Conferma» fallito solo in parte, «Annulla» e la
+   riapertura riproponevano la dose già registrata come rifiutata, spuntata come «Somministrata»;
+   il server l'avrebbe sovrascritta in `erogata`. Ora ogni dose scritta esce subito dalla coda
+   (`recorded` in `AdessoQueue`) e la coda si rilegge a ogni scrittura riuscita (`onRecorded`),
+   anche se altre dosi falliscono. Regressione E2E: `scripts/e2e/issue-445-partial-failure.mjs`
+   (R1–R4 PASS, `test-results/partial-failure.json`, `screenshots/qa-0*.png`).
+2. Il raggruppamento usa anche l'orario esatto: dosi delle 06:00 e delle 08:00 della stessa fascia
+   sono blocchi distinti, ognuno con la propria intestazione.
+3. Una dose tolta dalla spunta dice «Esclusa: non viene registrata» e non offre «···».
+4. Se gli allergeni sono più dei 10 nomi mandati dal server, il blocco aggiunge «+N altre».
+5. Guardia sincrona (`useRef`) contro un secondo «Conferma» nello stesso istante.
+
 ## Files Changed
 
 - `frontend/src/components/operator/AdessoQueue.tsx`, `AdessoQueue.css` — blocchi dosi, intestazioni orarie, niente nota
@@ -56,7 +70,7 @@
 | AC | Result | Evidence |
 |---|---:|---|
 | AC1 | PASS | `test-results/blocks-before.json`, `screenshots/01-turno.png`: Nanni 08:00 = 1 blocco, 2 farmaci, «Somministra 2»; nessun blocco ha più di un pulsante |
-| AC2 | PASS | `screenshots/02-pannello.png`, `03-dopo-conferma.png`: 2 righe spuntate, una «Rifiutata dal paziente». Richieste catturate: `/therapy-slots/confirm` + `/therapy-slots/not-administered`, `confirmed: true`, nessun farmaco dal client, URL invariato. DB: `erogata` + `non_erogata:rifiutata_paziente` (`test-results/db-after.json`). Dopo il reload il blocco non torna (4 → 3) |
+| AC2 | PASS | Esito parziale: `test-results/partial-failure.json` (rifiuto mai sovrascritto, riapertura con la sola dose fallita). `screenshots/02-pannello.png`, `03-dopo-conferma.png`: 2 righe spuntate, una «Rifiutata dal paziente». Richieste catturate: `/therapy-slots/confirm` + `/therapy-slots/not-administered`, `confirmed: true`, nessun farmaco dal client, URL invariato. DB: `erogata` + `non_erogata:rifiutata_paziente` (`test-results/db-after.json`). Dopo il reload il blocco non torna (4 → 3) |
 | AC3 | PASS | allergie in tutti e 4 i blocchi (`logs/playwright-after.log`) |
 | AC4 | PASS | nessun «N min» con N > 90 nel Turno; unit `durataUmana` |
 | AC5 | PASS | nessun `.dashboard-kpi-band`, nessuna nota, nessun `.widget-group-controls`; le chip sono pulsanti |
@@ -67,10 +81,10 @@
 
 | Test | Result | Evidence |
 |---|---:|---|
-| Unit | PASS | `logs/unit-tests.log` (1350/1350) |
+| Unit | PASS | `logs/unit-tests.log` (1353/1353) |
 | Integration | NA | |
 | API | PASS | endpoint esistenti invariati, chiamati dal browser (`test-results/db-after.json`) |
-| Playwright | PASS | `scripts/e2e/issue-445-turno.mjs`, `logs/playwright-after.log`, `trace/turno-1180x820.zip`, `screenshots/` |
+| Playwright | PASS | `scripts/e2e/issue-445-turno.mjs` (11/11), `scripts/e2e/issue-445-partial-failure.mjs` (4/4), `logs/playwright-after.log`, `logs/playwright-partial-failure.log`, `trace/turno-1180x820.zip`, `screenshots/` |
 | Persistence | PASS | righe `MedicationAdministration` nel DB e coda dopo il reload |
 | Agnos AI | NA | |
 | Voice | NA | |

@@ -139,7 +139,7 @@ export function adessoSection(item: AdessoItem): AdessoSection {
   return 'verifiche';
 }
 
-/** Raggruppa solo dosi dello stesso paziente, giorno, fascia e stato operativo.
+/** Raggruppa solo dosi dello stesso paziente, giorno, fascia, orario e stato operativo.
  * Mantiene l'ordine ricevuto e ogni singola azione; le consegne restano autonome. */
 export function groupAdessoQueue(items: readonly AdessoItem[]): AdessoGroup[] {
   const groups = new Map<string, AdessoGroup>();
@@ -149,7 +149,9 @@ export function groupAdessoQueue(items: readonly AdessoItem[]): AdessoGroup[] {
     const band = therapy?.fascia || item.ora;
     const key =
       item.kind.startsWith('terapia-') && item.patientId && therapy?.date && band
-        ? JSON.stringify([item.patientId, therapy.date, band, item.kind])
+        ? // #445: anche l'orario esatto — dosi delle 06:00 e delle 08:00 della stessa fascia non
+          // finiscono sotto un'unica intestazione oraria.
+          JSON.stringify([item.patientId, therapy.date, band, item.ora, item.kind])
         : JSON.stringify(['item', item.key]);
     const group = groups.get(key);
     if (group) group.items.push(item);

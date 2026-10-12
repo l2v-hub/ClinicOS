@@ -11,7 +11,11 @@ import { operatorHeaders } from './operatorSession';
 export function allergyNames(entry: ClinicalSummaryEntry | undefined): string[] {
   if (!entry) return [];
   const names = (entry.allergeni ?? []).map((a) => a.allergene.trim()).filter(Boolean);
-  if (names.length) return names;
+  // Il server manda al massimo 10 nomi: se ce ne sono di più si dice quanti mancano.
+  if (names.length)
+    return entry.allergieCount > names.length
+      ? [...names, `+${entry.allergieCount - names.length} altre`]
+      : names;
   return entry.allergieCount > 0
     ? [`${entry.allergieCount} ${entry.allergieCount === 1 ? 'registrata' : 'registrate'}`]
     : [];

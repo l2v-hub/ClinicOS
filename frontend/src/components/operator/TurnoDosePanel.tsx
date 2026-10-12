@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { MotivoNonErogazione } from '../../types';
 import type { AdessoDose } from '../../lib/adessoQueue';
 import { MOTIVI } from '../../lib/therapyGiro';
@@ -23,12 +23,16 @@ export function TurnoDosePanel({
   nome,
   doses,
   onDone,
+  onRecorded,
   onClose,
   onOpenTherapy,
 }: {
   nome: string;
   doses: TurnoDose[];
   onDone: () => void;
+  /** Dosi registrate (anche se altre sono fallite): la coda le toglie subito e si rilegge, così
+   *  un esito già scritto non può essere riproposto e sovrascritto. */
+  onRecorded: (keys: string[]) => void;
   onClose: () => void;
   onOpenTherapy: () => void;
 }) {
@@ -38,6 +42,8 @@ export function TurnoDosePanel({
   const [choices, setChoices] = useState<Record<string, Choice>>({});
   const [openReasons, setOpenReasons] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  // Guardia sincrona: due tocchi nello stesso istante non mandano due serie di richieste.
+  const inFlight = useRef(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [recorded, setRecorded] = useState<Set<string>>(() => new Set());
 
@@ -54,7 +60,8 @@ export function TurnoDosePanel({
   };
 
   async function confirm() {
-    if (sending || pending.length === 0 || incomplete) return;
+    if (inFlight.current || pending.length === 0 || incomplete) return;
+    inFlight.current = true;
     setSending(true);
     const failed: Record<string, string> = {};
     const done = new Set(recorded);
@@ -77,6 +84,9 @@ export function TurnoDosePanel({
     setRecorded(done);
     setErrors(failed);
     setSending(false);
+    inFlight.current = false;
+    const written = [...done].filter((key) => !recorded.has(key));
+    if (written.length) onRecorded(written);
     if (Object.keys(failed).length === 0) onDone();
   }
 
@@ -114,6 +124,8 @@ export function TurnoDosePanel({
                     </span>
                   ) : done ? (
                     <span className="turno-dose-panel__note is-done">Registrata</span>
+                  ) : !included.has(d.key) ? (
+                    <span className="turno-dose-panel__note">Esclusa: non viene registrata</span>
                   ) : (
                     <span className={`turno-dose-panel__note${motivo ? ' is-warn' : ''}`}>
                       {motivo ? `Non somministrata: ${motivo.label}` : 'Somministrata'}
@@ -126,7 +138,7 @@ export function TurnoDosePanel({
                   )}
                 </span>
               </label>
-              {!glucose && !done && (
+              {!glucose && !done && included.has(d.key) && (
                 <button
                   type="button"
                   className="ds-btn ds-btn--secondary turno-dose-panel__more"

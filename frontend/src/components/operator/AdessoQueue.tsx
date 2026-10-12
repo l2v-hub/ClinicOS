@@ -87,7 +87,9 @@ export function AdessoQueue({
   const { open, setOpen, bodyId } = useWidgetOpen();
   const [showAll, setShowAll] = useState(false);
   const [panel, setPanel] = useState<string | null>(null);
-  const groups = groupAdessoQueue(items);
+  // Dosi già registrate dal Turno: escono subito dalla coda, senza aspettare la rilettura.
+  const [recorded, setRecorded] = useState<ReadonlySet<string>>(() => new Set());
+  const groups = groupAdessoQueue(items.filter((it) => !recorded.has(it.key)));
   // Each category has its own allowance: repeated delays cannot hide new handovers.
   const sections: { key: AdessoSection; title: string }[] = [
     { key: 'scadute', title: 'Scadute' },
@@ -171,10 +173,11 @@ export function AdessoQueue({
               }))}
               onClose={() => setPanel(null)}
               onOpenTherapy={openTherapy}
-              onDone={() => {
-                setPanel(null);
+              onRecorded={(keys) => {
+                setRecorded((old) => new Set([...old, ...keys]));
                 onAdministered?.();
               }}
+              onDone={() => setPanel(null)}
             />
           )}
         </div>
