@@ -133,3 +133,46 @@ test('modern round renders glucose control for writable scale dose and none for 
   );
   assert.doesNotMatch(readOnly, /Glicemia rilevata|Conferma somministrazione/);
 });
+
+test('pump scale: editor labels follow the unit and administration shows rate plus extra doses', () => {
+  const pumpRows = [
+    { minMgDl: '151', maxMgDl: '200', units: '2' },
+    {
+      minMgDl: '351',
+      maxMgDl: '',
+      units: '6',
+      extraDoses: [{ amount: '6', unit: 'unità' as const, route: 'EV', label: 'bolo' }],
+    },
+  ];
+  const pumpForm = { ...form, glucoseScale: pumpRows, glucoseDoseUnit: 'ml/h' as const };
+  const html = render(createElement(TherapyFormFields, { value: pumpForm, onChange() {} }));
+  assert.match(html, /Velocità \(ml\/h\)/);
+  assert.match(html, /aria-pressed="true"[^>]*>ml\/h \(pompa\)/);
+  assert.match(html, /Descrizione/);
+  assert.match(html, /role="status"[^>]*>.*Glicemia 201–350 mg\/dL non coperta dallo schema/);
+  const preview = render(createElement(TherapyFormPreview, { value: pumpForm }));
+  assert.match(preview, /151–200 mg\/dL → 2 ml\/h/);
+  assert.match(preview, /≥351 mg\/dL → 6 ml\/h \+ 6 unità EV \(bolo\)/);
+  const payload = formToPayload(pumpForm, 'synthetic-patient', 'synthetic-operator');
+  assert.equal((payload.doseProtocol as { doseUnit: string }).doseUnit, 'ml/h');
+  const saved = {
+    ...payload,
+    id: 'synthetic-therapy',
+    dataInizio: '2026-01-01',
+    dataFine: null,
+    createdAt: '',
+    updatedAt: '',
+  } as unknown as PatientTherapyAPI;
+  const restored = therapyToForm(saved);
+  assert.equal(restored.glucoseDoseUnit, 'ml/h');
+  assert.deepEqual(restored.glucoseScale, [pumpRows[0], pumpRows[1]]);
+  const control = render(
+    createElement(GlucoseAdministrationControl, {
+      protocol: payload.doseProtocol,
+      target: 'Paziente sintetico',
+      sending: false,
+      onConfirm() {},
+    }),
+  );
+  assert.match(control, /≥351 mg\/dL → 6 ml\/h \+ 6 unità EV \(bolo\)/);
+});

@@ -18,7 +18,10 @@ export function therapyFormToInput(
     stato: f.stato,
     doseMode: f.doseMode ?? 'fixed',
     ...(f.doseMode === 'glucose_scale'
-      ? { doseProtocol: validateGlucoseScaleRows(f.glucoseScale ?? []).protocol }
+      ? {
+          doseProtocol: validateGlucoseScaleRows(f.glucoseScale ?? [], f.glucoseDoseUnit)
+            .protocol,
+        }
       : {}),
     ...(f.commercialStrengthValue?.trim()
       ? { commercialStrengthValue: Number(f.commercialStrengthValue) }

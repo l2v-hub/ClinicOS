@@ -10975,6 +10975,69 @@ textarea.form-input {
   font-size: 12px;
 }
 
+.glucose-scale-editor__unit {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.glucose-scale-editor__band {
+  display: grid;
+  gap: 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.glucose-scale-editor__band:last-child {
+  border-bottom: 0;
+}
+
+.glucose-scale-editor__extra {
+  display: grid;
+  grid-template-columns:
+    minmax(80px, 0.8fr) minmax(80px, 0.8fr) minmax(80px, 0.8fr) minmax(110px, 1.2fr)
+    auto;
+  align-items: end;
+  gap: 8px;
+  margin-left: 16px;
+  padding-left: 10px;
+  border-left: 3px solid #c9d8f2;
+}
+
+.glucose-scale-editor__extra label {
+  display: grid;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.glucose-scale-editor__add-extra {
+  justify-self: start;
+}
+
+/* Avvisi non bloccanti (buchi, valori sospetti): ambra, mai il rosso degli errori. */
+.glucose-scale-warnings {
+  margin: 10px 0 0;
+  padding: 10px 12px 10px 28px;
+  border-left: 3px solid var(--c-warning);
+  border-radius: 8px;
+  color: var(--c-warning);
+  background: var(--c-warning-bg);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.discharge-therapy-review__glucose-warnings {
+  margin: 8px 0;
+  font-size: 12px;
+}
+
+.therapy-glucose-confirm__extra {
+  display: block;
+}
+
 .therapy-glucose-confirm {
   display: grid;
   grid-template-columns: minmax(125px, 150px) minmax(170px, auto);
@@ -11083,6 +11146,15 @@ textarea.form-input {
   }
 
   .glucose-scale-editor__row > button {
+    grid-column: 1 / -1;
+  }
+
+  .glucose-scale-editor__extra {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-left: 0;
+  }
+
+  .glucose-scale-editor__extra > button {
     grid-column: 1 / -1;
   }
 

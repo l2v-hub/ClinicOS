@@ -1,0 +1,213 @@
+{
+  "ids": {
+    "tableDraft": "cmv5r9i1v0022yklpzjz3nr7s",
+    "imolaDraft": "cmv5r9n370027yklpzloaq7nj",
+    "patient": "cmv5ra1r2002lyklp4iqpb5g5"
+  },
+  "consoleErrors": [],
+  "httpErrors": [],
+  "results": [
+    {
+      "name": "A/API: draft has ONE glucose_scale row, 9 bands, >350 = 15 U + 5 U EV bolo, da_verificare",
+      "pass": true,
+      "glucoseScale": [
+        {
+          "units": 0,
+          "maxMgDl": 109,
+          "minMgDl": 10
+        },
+        {
+          "units": 2,
+          "maxMgDl": 120,
+          "minMgDl": 111
+        },
+        {
+          "units": 4,
+          "maxMgDl": 140,
+          "minMgDl": 121
+        },
+        {
+          "units": 6,
+          "maxMgDl": 180,
+          "minMgDl": 141
+        },
+        {
+          "units": 7,
+          "maxMgDl": 200,
+          "minMgDl": 181
+        },
+        {
+          "units": 8,
+          "maxMgDl": 250,
+          "minMgDl": 201
+        },
+        {
+          "units": 12,
+          "maxMgDl": 300,
+          "minMgDl": 251
+        },
+        {
+          "units": 14,
+          "maxMgDl": 350,
+          "minMgDl": 301
+        },
+        {
+          "units": 15,
+          "maxMgDl": null,
+          "minMgDl": 351,
+          "extraDoses": [
+            {
+              "unit": "unità",
+              "label": "bolo",
+              "route": "EV",
+              "amount": 5
+            }
+          ]
+        }
+      ],
+      "warnings": [
+        "Glicemia 110 mg/dL non coperta dallo schema"
+      ]
+    },
+    {
+      "name": "A/UI: one row \"1. INSULINA\" da verificare, 9 bands as written, extra 5 unità EV bolo, warning 110 highlighted",
+      "pass": true,
+      "values": [
+        [
+          "10",
+          "109",
+          "0"
+        ],
+        [
+          "111",
+          "120",
+          "2"
+        ],
+        [
+          "121",
+          "140",
+          "4"
+        ],
+        [
+          "141",
+          "180",
+          "6"
+        ],
+        [
+          "181",
+          "200",
+          "7"
+        ],
+        [
+          "201",
+          "250",
+          "8"
+        ],
+        [
+          "251",
+          "300",
+          "12"
+        ],
+        [
+          "301",
+          "350",
+          "14"
+        ],
+        [
+          "351",
+          "",
+          "15"
+        ]
+      ],
+      "warningBackground": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "name": "A/UI: import review no horizontal page scroll at 1280 and 375",
+      "pass": true
+    },
+    {
+      "name": "B/UI: overlap + gap warnings shown, editor blocking error, \"Ho verificato\" disabled",
+      "pass": true
+    },
+    {
+      "name": "B/UI: after reload the overlapping draft still shows the 3 imported bands",
+      "pass": true,
+      "reValues": [
+        [
+          "200",
+          "250",
+          "4"
+        ],
+        [
+          "250",
+          "300",
+          "6"
+        ],
+        [
+          "350",
+          "450",
+          "8"
+        ]
+      ],
+      "savedRowGlucoseScale": null,
+      "savedReviewedTherapyScale": [
+        {
+          "units": "4",
+          "maxMgDl": "250",
+          "minMgDl": "200"
+        },
+        {
+          "units": "6",
+          "maxMgDl": "300",
+          "minMgDl": "250"
+        },
+        {
+          "units": "8",
+          "maxMgDl": "450",
+          "minMgDl": "350"
+        }
+      ]
+    },
+    {
+      "name": "B/API: confirmation of an overlapping scale refused, no patient created",
+      "pass": true,
+      "patchStatus": 200,
+      "confirmStatus": 400,
+      "confirmBody": "{\"error\":\"Terapia 2: Le fasce glicemiche non possono sovrapporsi. Correggi la riga nella sezione Terapia e riprova.\",\"kind\":\"config\"}"
+    },
+    {
+      "name": "B/UI: overlap fixed (251–300) → \"Ho verificato\" enabled and clicked; LANTUS left in draft",
+      "pass": true
+    },
+    {
+      "name": "B/DB: confirmed → PatientTherapy HUMALOG doseProtocol = operator-fixed scale (gap 301–349 kept)",
+      "pass": true,
+      "doseProtocol": {
+        "kind": "blood_glucose",
+        "rules": [
+          {
+            "units": 4,
+            "maxMgDl": 250,
+            "minMgDl": 200
+          },
+          {
+            "units": 6,
+            "maxMgDl": 300,
+            "minMgDl": 251
+          },
+          {
+            "units": 8,
+            "maxMgDl": 450,
+            "minMgDl": 350
+          }
+        ],
+        "doseUnit": "unità",
+        "measurementUnit": "mg/dL"
+      }
+    },
+    {
+      "name": "no console errors, no backend 4xx/5xx in the browser",
+      "pass": true
+    }
+  ]
+}

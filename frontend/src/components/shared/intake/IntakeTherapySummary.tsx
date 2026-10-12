@@ -5,7 +5,11 @@ import type { TherapyCorrectionTarget } from './intakeTherapyNavigation';
 import type { buildIntakeTherapyReview } from './intakeTherapies';
 import { TherapyImportSource } from './TherapyImportSource';
 import './IntakeTherapySummary.css';
-import { glucoseScaleRows } from '../../operator/cartella/glucoseScale';
+import {
+  glucoseRowLabel,
+  glucoseScaleDoseUnit,
+  glucoseScaleRows,
+} from '../../operator/cartella/glucoseScale';
 
 type Review = ReturnType<typeof buildIntakeTherapyReview>[number];
 interface Props {
@@ -102,10 +106,7 @@ export function IntakeTherapySummary({ therapy: t, busy, onCorrect }: Props) {
             'glucoseScale',
             rules.length
               ? rules
-                  .map(
-                    (rule) =>
-                      `${rule.minMgDl}–${rule.maxMgDl || 'oltre'} mg/dL → ${rule.units} unità`,
-                  )
+                  .map((rule) => glucoseRowLabel(rule, glucoseScaleDoseUnit(input.doseProtocol)))
                   .join('; ')
               : 'Schema da completare',
           )}

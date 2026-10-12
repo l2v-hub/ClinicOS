@@ -1,0 +1,8 @@
+=== mixedUnits
+[{"farmacoNome":"INSULINA","stato":"da_verificare","doseMode":"glucose_scale","glucoseDoseUnit":"ml/h","glucoseScale":[{"minMgDl":150,"maxMgDl":200,"units":2},{"minMgDl":201,"maxMgDl":250,"units":3},{"minMgDl":251,"maxMgDl":null,"units":4}],"glucoseScaleWarnings":["Fasce scritte in unità diverse (unità e ml/h): verifica lo schema"]}]
+=== noBoloTwoDoses
+[{"farmacoNome":"INSULINA","stato":"da_verificare","doseMode":"glucose_scale","glucoseDoseUnit":"unità","glucoseScale":[{"minMgDl":150,"maxMgDl":200,"units":2},{"minMgDl":201,"maxMgDl":null,"units":5,"extraDoses":[{"amount":15,"unit":"unità","route":"SC"}]}]}]
+=== ocr10
+[{"farmacoNome":"INSULINA","stato":"da_verificare","doseMode":"glucose_scale","glucoseDoseUnit":"unità","glucoseScale":[{"minMgDl":10,"maxMgDl":120,"units":2},{"minMgDl":121,"maxMgDl":140,"units":4}]}]
+=== pump
+[{"farmacoNome":"INSULINA","stato":"da_verificare","doseMode":"glucose_scale","glucoseDoseUnit":"ml/h","glucoseScale":[{"minMgDl":140,"maxMgDl":150,"units":1},{"minMgDl":151,"maxMgDl":200,"units":2},{"minMgDl":351,"maxMgDl":null,"units":6,"extraDoses":[{"amount":6,"unit":"unità","label":"bolo"}]}],"glucoseScaleWarnings":["Glicemia 201–350 mg/dL non coperta dallo schema"]}]

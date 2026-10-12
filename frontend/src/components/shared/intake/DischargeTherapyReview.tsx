@@ -15,6 +15,7 @@ import { IntakeAiSourceContext } from './intakeAiOrigin';
 import { therapySourceChip } from './intakeDocumentPages';
 import { TherapyImportSource } from './TherapyImportSource';
 import { therapyFieldFeedback } from '../../operator/cartella/therapyFieldFeedback';
+import { GlucoseScaleWarnings } from '../../operator/cartella/GlucoseScaleEditor';
 import {
   TherapyFormFields,
   type TherapyFormValue,
@@ -191,6 +192,15 @@ export function DischargeTherapyReview({
               )}
               {review[i].issues.length > 0 && (
                 <p className="discharge-therapy-review__alert">{review[i].issues.join('; ')}.</p>
+              )}
+              {r.doseMode === 'glucose_scale' && (r.glucoseScaleWarnings?.length ?? 0) > 0 && (
+                <div
+                  className="discharge-therapy-review__glucose-warnings"
+                  data-testid="discharge-glucose-warnings"
+                >
+                  <strong>Schema glicemico nel documento: controlla prima di confermare</strong>
+                  <GlucoseScaleWarnings warnings={r.glucoseScaleWarnings ?? []} />
+                </div>
               )}
               {r.sourceOutdated && (
                 <p className="discharge-therapy-review__alert" role="alert">

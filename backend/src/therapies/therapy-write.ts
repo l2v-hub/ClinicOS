@@ -9,9 +9,12 @@ import {
 import { therapyWhereForDate } from './therapy-query.js';
 import { hasFacilityPatientScope } from '../patients/patient-scope.js';
 import {
-  doseForGlucose,
+  extraDoseLabel,
   InvalidDoseProtocolError,
   normalizeGlucoseScaleProtocol,
+  ruleForGlucose,
+  type GlucoseExtraDose,
+  type GlucoseScaleDoseUnit,
 } from './glucose-scale.js';
 
 export class TherapyWriteInputError extends Error {
@@ -93,6 +96,9 @@ export interface AuthoritativeTherapyAdministration extends TherapyAdministratio
     kind: 'blood_glucose';
     glucoseMgDl: number;
     doseUnits: number;
+    /** Absent on records written before ml/h existed: they are 'unità'. */
+    doseUnit?: GlucoseScaleDoseUnit;
+    extraDoses?: GlucoseExtraDose[];
   };
 }
 
@@ -269,8 +275,9 @@ export async function resolveAuthoritativeTherapy(
       }
       throw error;
     }
-    conditionalDose = doseForGlucose(protocol, input.measuredGlucose);
-    if (conditionalDose === null) {
+    const rule = ruleForGlucose(protocol, input.measuredGlucose);
+    conditionalDose = rule?.units ?? null;
+    if (!rule || conditionalDose === null) {
       throw new TherapyWriteInputError(
         'Glicemia fuori dalle fasce prescritte: verifica la prescrizione prima di somministrare',
         409,
@@ -280,6 +287,8 @@ export async function resolveAuthoritativeTherapy(
       kind: 'blood_glucose',
       glucoseMgDl: input.measuredGlucose,
       doseUnits: conditionalDose,
+      doseUnit: protocol.doseUnit,
+      ...(rule.extraDoses?.length ? { extraDoses: rule.extraDoses } : {}),
     };
   }
   return {
@@ -288,7 +297,10 @@ export async function resolveAuthoritativeTherapy(
     farmacoNome: therapy.farmacoNome,
     farmacoDose:
       conditionalDose !== null
-        ? `${conditionalDose} unità (glicemia ${input.measuredGlucose} mg/dL)`
+        ? [
+            `${conditionalDose} ${doseContext?.doseUnit ?? 'unità'}`,
+            ...(doseContext?.extraDoses ?? []).map(extraDoseLabel),
+          ].join(' + ') + ` (glicemia ${input.measuredGlucose} mg/dL)`
         : therapy.doseMode === 'glucose_scale'
           ? 'Dose non determinata (schema glicemico)'
           : (schedule &&

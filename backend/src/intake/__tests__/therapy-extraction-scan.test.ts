@@ -314,8 +314,8 @@ test('R1: la forma farmaceutica fra nome e dose non diventa il nome', () => {
 
 test('R2: "4 U glicemia 200-250" è una fascia come "6 U se glicemia 251-300"', () => {
   assert.deepEqual(findGlucoseRules('4 U glicemia 200-250, 6 U se glicemia 251-300').rules, [
-    { minMgDl: 200, maxMgDl: 250, units: 4 },
-    { minMgDl: 251, maxMgDl: 300, units: 6 },
+    { minMgDl: 200, maxMgDl: 250, units: 4, unit: 'unità' },
+    { minMgDl: 251, maxMgDl: 300, units: 6, unit: 'unità' },
   ]);
 });
 

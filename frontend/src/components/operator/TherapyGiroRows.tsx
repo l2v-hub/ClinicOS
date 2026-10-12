@@ -294,14 +294,14 @@ export function TherapyGiroRows({
                                 protocol={a.doseProtocol}
                                 target={actionTarget}
                                 sending={isSending}
-                                onConfirm={(measuredGlucose, units) => {
+                                onConfirm={(measuredGlucose, _units, doseText) => {
                                   if (expanded) closeReasons();
                                   const info = { ...buildInfo(p, item), measuredGlucose };
                                   if (requiresConfirmation)
                                     setPendingConfirm({
                                       key,
                                       info,
-                                      label: `${actionTarget} · glicemia ${measuredGlucose} mg/dL · ${units} unità`,
+                                      label: `${actionTarget} · glicemia ${measuredGlucose} mg/dL · ${doseText}`,
                                     });
                                   else administer(key, info, true);
                                 }}

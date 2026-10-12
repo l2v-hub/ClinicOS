@@ -8,7 +8,7 @@ import type { PatientTherapyAPI } from '../../../types';
 import { computeEquivalent, formatFraction, scheduleLabel } from './therapyDose';
 import { schedulesFromTherapy } from './therapyFormRestore';
 import { GlucoseScaleSummary } from './GlucoseScaleEditor';
-import { glucoseScaleRows } from './glucoseScale';
+import { glucoseScaleDoseUnit, glucoseScaleRows } from './glucoseScale';
 
 const WEEKDAYS = ['', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 const TIPO_LABEL: Record<string, string> = {
@@ -57,7 +57,10 @@ function ScheduleDetail({ t }: { t: PatientTherapyAPI }) {
             .map((s) => s.time)
             .join(', ') || 'da indicare'}
         </p>
-        <GlucoseScaleSummary rows={glucoseScaleRows(t.doseProtocol)} />
+        <GlucoseScaleSummary
+          rows={glucoseScaleRows(t.doseProtocol)}
+          doseUnit={glucoseScaleDoseUnit(t.doseProtocol)}
+        />
       </>
     );
   if (t.tipo === 'al_bisogno') return <span>Al bisogno (nessun orario fisso)</span>;

@@ -5,7 +5,15 @@
 // statements are not prescriptions; callers retain the full source text for review.
 // PRIVACY: this module never logs; callers must log only counts/status, not text.
 
-import { normalizeGlucoseScaleProtocol } from '../therapies/glucose-scale.js';
+import {
+  glucoseScaleWarnings,
+  glucoseScaleWarningText,
+  MIN_PLAUSIBLE_GLUCOSE,
+  normalizeGlucoseScaleProtocol,
+  type GlucoseDoseRule,
+  type GlucoseExtraDose,
+  type GlucoseScaleDoseUnit,
+} from '../therapies/glucose-scale.js';
 
 export interface ParsedTherapyRow {
   farmacoNome: string; // drug name (first token), e.g. KEPPRA
@@ -22,7 +30,11 @@ export interface ParsedTherapyRow {
   stato: 'ok' | 'da_verificare';
   tipo?: 'al_bisogno';
   doseMode?: 'fixed' | 'glucose_scale';
-  glucoseScale?: Array<{ minMgDl: number; maxMgDl: number | null; units: number }>;
+  /** Patient-specific bands exactly as written (they may overlap or leave gaps). */
+  glucoseScale?: GlucoseDoseRule[];
+  glucoseDoseUnit?: GlucoseScaleDoseUnit;
+  /** What the operator must check in the written scale; never corrected automatically. */
+  glucoseScaleWarnings?: string[];
   /** Found in the document outside the therapy section: always operator-verified. */
   outsideTherapySection?: boolean;
 }
@@ -104,8 +116,9 @@ const DAY_RE = new RegExp(`\\b(${DAYS.join('|')})\\b`, 'g');
 // ── Schema insulinico a fasce glicemiche ─────────────────────────────────────
 // Ogni paziente ha le sue fasce: si leggono SOLO dal documento, mai valori predefiniti.
 // Forme riconosciute: "4 U se glicemia tra 200-250", "150-200: 2 UI", "da 150 a 200 → 2 U",
-// "> 250: 6 UI", "oltre 300 = 8 U", "< 150: 0 UI" (glicemie in mg/dL).
-const GLU_UNIT = String.raw`(?:U\.?\s?I\.?|UI|U|unit[àa])(?![\p{L}])`;
+// "> 250: 6 UI", "oltre 300 = 8 U", "< 150: 0 UI", in tabella "121-140 4U.I", in pompa
+// "151-200 2 ml/h", con più dosi "> 350 Bolo 5 U.I e.v. + 15 U.I s.c" (glicemie in mg/dL).
+const GLU_UNIT = String.raw`(U\.?\s?I\.?|UI|U|unit[àa]|ml\s*\/\s*h|ml\s*\/\s*ora)(?![\p{L}])`;
 const GLU_AMOUNT = String.raw`(\d+(?:[.,]\d+)?)\s*${GLU_UNIT}`;
 const GLU_RANGE =
   String.raw`(?:(?:da|tra|fra)\s+)?(?<![\d:.,/])(\d{2,4})(?:\s*[-–]\s*|\s+(?:a|e)\s+)(\d{2,4})(?!\d)` +
@@ -123,19 +136,32 @@ const GLU_RANGE_FIRST = new RegExp(
   'giu',
 );
 const MIN_GLUCOSE_MG_DL = 10; // limite inferiore del dominio di misura (glucose-scale.ts)
-// Sotto questa soglia un numero non è una glicemia di riferimento ("10-15 gg", "1-2 cpr").
-const MIN_PLAUSIBLE_GLUCOSE = 40;
 // Altri esami con soglie e unità (eparina secondo aPTT, potassio...): non sono glicemie.
 const OTHER_LAB_RE = /\b(?:aptt|inr|pt|potassi\w*|kaliemi\w*|sodi\w*|eparin\w*)\b/i;
 
-type GlucoseRule = { minMgDl: number; maxMgDl: number | null; units: number };
+/** A band as read: the unit and route its primary dose was written with, and whether its lower
+ *  bound was written as a number (an explicit "10-120" is suspicious, the floor of "< 110" is not). */
+type GlucoseRule = GlucoseDoseRule & {
+  unit: GlucoseScaleDoseUnit;
+  route?: string;
+  writtenMinMgDl?: boolean;
+};
+
+const doseUnitOf = (raw: string): GlucoseScaleDoseUnit => (/ml/i.test(raw) ? 'ml/h' : 'unità');
 
 /** Interval from the RANGE capture groups (closed, "> N" open-ended, "< N" from the domain floor). */
-function glucoseInterval(g: Array<string | undefined>): { min: number; max: number | null } | null {
+function glucoseInterval(
+  g: Array<string | undefined>,
+): { min: number; max: number | null; closed?: boolean } | null {
   const [closedMin, closedMax, upOp, upVal, lowOp, lowVal] = g;
   const values = [closedMin, closedMax, upVal, lowVal].filter(Boolean).map(Number);
-  if (values.some((v) => v < MIN_PLAUSIBLE_GLUCOSE)) return null;
-  if (closedMin && closedMax) return { min: Number(closedMin), max: Number(closedMax) };
+  // Sotto la soglia di plausibilità un numero non è una glicemia ("10-15 gg", "1-2 cpr"), a meno
+  // che l'altro estremo lo sia: "11-120" in tabella è una fascia letta male dall'OCR, si conserva
+  // com'è scritta e diventa un avviso per l'operatore, mai una correzione.
+  if (values.some((v) => v < MIN_GLUCOSE_MG_DL) || Math.max(...values) < MIN_PLAUSIBLE_GLUCOSE)
+    return null;
+  if (closedMin && closedMax)
+    return { min: Number(closedMin), max: Number(closedMax), closed: true };
   if (upOp && upVal) {
     const n = Number(upVal);
     return { min: upOp === '>=' || upOp === '≥' ? n : n + 1, max: null };
@@ -145,6 +171,64 @@ function glucoseInterval(g: Array<string | undefined>): { min: number; max: numb
     return { min: MIN_GLUCOSE_MG_DL, max: lowOp === '<=' || lowOp === '≤' ? n : n - 1 };
   }
   return null;
+}
+
+// Una fascia con più dosi: "> 350 Bolo 5 U.I e.v. + 15 U.I s.c", "> 350 6 ML/H + 6 U.I in bolo".
+// Ogni componente è quantità + unità, al più con la via e "bolo": qualunque altra parola e la riga
+// non è una fascia a più dosi (resta al riconoscimento semplice o al testo da verificare).
+const GLU_MULTI_HEAD = new RegExp(
+  `^\\s*${GLU_LABEL}(?:${GLU_RANGE})\\s*(?:mg\\s*\\/\\s*dl)?\\s*(?:[:=→]|->|=>)?\\s*(.+)$`,
+  'iu',
+);
+const GLU_COMPONENT = new RegExp(
+  `^(?:(bolo)\\s+)?${GLU_AMOUNT}\\s*(?:in\\s+)?(bolo)?\\s*([\\p{L}.\\s]*?)\\s*(?:in\\s+)?(bolo)?$`,
+  'iu',
+);
+const ROUTE_WORDS: Array<[RegExp, string]> = [
+  [/^(?:e\.?\s?v\.?|endoven\w*|in\s+vena)$/i, 'EV'],
+  [/^(?:s\.?\s?c\.?|sottocut\w*)$/i, 'SC'],
+];
+
+type BandDose = GlucoseExtraDose & { bolus: boolean };
+
+const SCALE_TITLE_WORD_RE = /^(?:schema|scala|secondo|glucostix|stick|dtx|destrostix|hgt)$/i;
+const INSULIN_NAME_RE =
+  /\binsulin[ae](?:\s+(?:rapida|ultrarapida|regolare|umana|lispro|aspart|glulisina|basale))?\b/i;
+
+function multiDoseBand(line: string): {
+  length: number;
+  interval: ReturnType<typeof glucoseInterval>;
+  primary: BandDose;
+  extraDoses: GlucoseExtraDose[];
+} | null {
+  const head = line.match(GLU_MULTI_HEAD);
+  const tail = head?.[7] ?? '';
+  if (!head || !/\+|\bbolo\b/i.test(tail)) return null;
+  const doses: BandDose[] = [];
+  for (const part of tail.split('+').map((p) => p.trim().replace(/[,;]+$/, ''))) {
+    const m = part.match(GLU_COMPONENT);
+    if (!m) return null;
+    const routeText = (m[5] ?? '').trim();
+    const route = routeText ? ROUTE_WORDS.find(([re]) => re.test(routeText))?.[1] : undefined;
+    if (routeText && !route) return null;
+    doses.push({
+      amount: Number(m[2]!.replace(',', '.')),
+      unit: doseUnitOf(m[3]!),
+      ...(route ? { route } : {}),
+      bolus: Boolean(m[1] || m[4] || m[6]),
+    });
+  }
+  // La dose principale è la velocità della pompa o la dose non in bolo; le altre la accompagnano.
+  const primary = doses.find((d) => d.unit === 'ml/h') ?? doses.find((d) => !d.bolus) ?? doses[0];
+  if (!primary) return null;
+  return {
+    length: line.length,
+    interval: glucoseInterval(head.slice(1, 7)),
+    primary,
+    extraDoses: doses
+      .filter((d) => d !== primary)
+      .map(({ bolus, ...d }) => ({ ...d, ...(bolus ? { label: 'bolo' } : {}) })),
+  };
 }
 
 /** Every glucose-range → units rule in the text, with the character spans it occupies. */
@@ -160,12 +244,19 @@ export function findGlucoseRules(text: string): {
     length: number,
     interval: ReturnType<typeof glucoseInterval>,
     units: string,
+    unit: GlucoseScaleDoseUnit,
+    extraDoses: GlucoseExtraDose[] = [],
+    route?: string,
   ) => {
     if (!interval || overlaps(index, length)) return;
     found.push({
       minMgDl: interval.min,
       maxMgDl: interval.max,
       units: Number(units.replace(',', '.')),
+      unit,
+      ...(extraDoses.length ? { extraDoses } : {}),
+      ...(route ? { route } : {}),
+      ...(interval.closed && interval.min === MIN_GLUCOSE_MG_DL ? { writtenMinMgDl: true } : {}),
       index,
       length,
     });
@@ -178,15 +269,38 @@ export function findGlucoseRules(text: string): {
       offset += line.length + 1;
       continue;
     }
+    const multi = multiDoseBand(line);
+    if (multi)
+      add(
+        offset,
+        multi.length,
+        multi.interval,
+        String(multi.primary.amount),
+        multi.primary.unit,
+        multi.extraDoses,
+        multi.primary.route,
+      );
     for (const m of line.matchAll(GLU_RANGE_FIRST))
-      add(offset + (m.index ?? 0), m[0].length, glucoseInterval(m.slice(1, 7)), m[7]);
+      add(
+        offset + (m.index ?? 0),
+        m[0].length,
+        glucoseInterval(m.slice(1, 7)),
+        m[7]!,
+        doseUnitOf(m[8]!),
+      );
     for (const m of line.matchAll(GLU_UNITS_FIRST))
-      add(offset + (m.index ?? 0), m[0].length, glucoseInterval(m.slice(2, 8)), m[1]);
+      add(
+        offset + (m.index ?? 0),
+        m[0].length,
+        glucoseInterval(m.slice(3, 9)),
+        m[1]!,
+        doseUnitOf(m[2]!),
+      );
     offset += line.length + 1;
   }
   found.sort((a, b) => a.index - b.index);
   return {
-    rules: found.map(({ minMgDl, maxMgDl, units }) => ({ minMgDl, maxMgDl, units })),
+    rules: found.map(({ index: _index, length: _length, ...rule }) => rule),
     spans: found.map(({ index, length }) => ({ index, length })),
   };
 }
@@ -544,15 +658,47 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
   }
   for (const span of glucoseSpans) marca(span.index, span.length);
   const doseMode = glucoseScale.length > 0 ? ('glucose_scale' as const) : ('fixed' as const);
-  let normalizedGlucoseScale = glucoseScale;
-  let glucoseScaleValid = true;
-  if (glucoseScale.length) {
+  // Le fasce restano quelle scritte, nell'ordine delle glicemie: nessun confine adattato.
+  let normalizedGlucoseScale: GlucoseDoseRule[] = glucoseScale
+    .map(({ unit: _unit, route: _route, writtenMinMgDl: _written, ...rule }) => rule)
+    .sort((a, b) => a.minMgDl - b.minMgDl || (a.maxMgDl ?? Infinity) - (b.maxMgDl ?? Infinity));
+  const scaleUnits = new Set(glucoseScale.map((rule) => rule.unit));
+  const glucoseDoseUnit: GlucoseScaleDoseUnit = scaleUnits.has('ml/h') ? 'ml/h' : 'unità';
+  const scaleWarnings = glucoseScaleWarnings(normalizedGlucoseScale).map(glucoseScaleWarningText);
+  // Un "10" scritto come estremo ("10-120", OCR di "110-120") è sospetto quanto "11-120"; il 10
+  // che apre una fascia "< 110" è il limite del dominio, non un valore del documento.
+  for (const rule of glucoseScale)
+    if (rule.writtenMinMgDl)
+      scaleWarnings.unshift(
+        glucoseScaleWarningText({ kind: 'implausible', valueMgDl: rule.minMgDl }),
+      );
+  // La via della dose principale di una fascia a più dosi ("5 U.I e.v. + 15 U.I s.c") diversa da
+  // quella della terapia: il campo via ne tiene una sola, l'operatore deve leggerla.
+  for (const rule of glucoseScale)
+    if (rule.route && rule.route !== viaSomministrazione)
+      scaleWarnings.push(
+        `Fascia da ${rule.minMgDl} mg/dL: dose principale ${rule.units} ${rule.unit} per via ${rule.route}, verifica la via della terapia`,
+      );
+  // Fasce in unità diverse (unità e ml/h): lo schema ha un'unità sola, e attribuirne una
+  // sbaglierebbe la dose di qualche fascia. Nessuna fascia importata: l'operatore trascrive lo
+  // schema dal testo originale, e finché non lo fa la conferma resta bloccata.
+  const unitaMiste = scaleUnits.size > 1;
+  if (unitaMiste) {
+    normalizedGlucoseScale = [];
+    scaleWarnings.splice(
+      0,
+      scaleWarnings.length,
+      'Fasce scritte in unità diverse (unità e ml/h): schema non importato, trascrivilo dal documento',
+    );
+  }
+  let glucoseScaleValid = !unitaMiste;
+  if (glucoseScale.length && glucoseScaleValid) {
     try {
       normalizedGlucoseScale = normalizeGlucoseScaleProtocol({
         kind: 'blood_glucose',
         measurementUnit: 'mg/dL',
-        doseUnit: 'unità',
-        rules: glucoseScale,
+        doseUnit: glucoseDoseUnit,
+        rules: normalizedGlucoseScale,
       }).rules;
     } catch {
       glucoseScaleValid = false;
@@ -560,7 +706,13 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
   }
 
   const nomeGrezzo = testo.match(/^([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ0-9.-]*)/)?.[1] ?? '';
-  const farmacoNome = nomeGrezzo.toUpperCase();
+  // "SCHEMA INSULINICO SOTTOCUTE - INSULINA RAPIDA": la riga apre con il titolo dello schema, il
+  // farmaco è l'insulina nominata più avanti (come è scritta, senza inventarne il tipo).
+  const insulinaNominata =
+    doseMode === 'glucose_scale' && SCALE_TITLE_WORD_RE.test(nomeGrezzo)
+      ? testo.match(INSULIN_NAME_RE)?.[0]
+      : undefined;
+  const farmacoNome = (insulinaNominata ?? nomeGrezzo).replace(/\s+/g, ' ').toUpperCase();
   marca(0, nomeGrezzo.length);
 
   // forma = testo fra il nome e il primo marcatore strutturale, ma al massimo 3 parole. Senza
@@ -675,7 +827,13 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
       ? { tipo: 'al_bisogno' as const }
       : {}),
     doseMode,
-    ...(glucoseScale.length ? { glucoseScale: normalizedGlucoseScale } : {}),
+    ...(glucoseScale.length
+      ? {
+          glucoseScale: normalizedGlucoseScale,
+          ...(unitaMiste ? {} : { glucoseDoseUnit }),
+          ...(scaleWarnings.length ? { glucoseScaleWarnings: scaleWarnings } : {}),
+        }
+      : {}),
   };
 }
 
@@ -690,7 +848,14 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
 // seguono: "METFORMINA ... ore 08:00" seguita da "150-200: 2 UI" non diventa insulina, e una
 // basale a dose fissa ("LANTUS 14 UI ore 22:00") non eredita la scala correttiva successiva.
 const ANNOUNCES_GLUCOSE_SCALE_RE =
-  /\b(?:schema|scala|glicemi\w*|stick|dtx|destrostix)\b|\binsulin\w*\b.*(?:[:→]|->)\s*$/i;
+  /\b(?:schema|scala|glicemi\w*|stick|dtx|destrostix|glucostix|hgt)\b|\binsulin\w*\b.*(?:[:→]|->)\s*$/i;
+
+// Intestazione delle colonne di uno schema a tabella ("GLUCOSTIX   INSULINA", "Glicemia | Dose
+// (ml/h)"): non è un farmaco e non interrompe le fasce che seguono.
+const SCALE_TABLE_HEADER_RE =
+  /^(?:glucostix|glicemi\w*|stick|dtx|destrostix|hgt)\b[^\d]*\b(?:insulin\w*|dose|unit\w*|u\.?\s?i\.?|ml\s*\/\s*h|velocit\w*)\b[^\d]*$/i;
+const isScaleTableHeader = (line: string) =>
+  SCALE_TABLE_HEADER_RE.test(ripulisciRiga(line).replace(/[|]/g, ' '));
 
 // Indicazioni non farmacologiche scritte in coda all'elenco ("DIETA PER DIABETICI", "Controlli
 // periodici di emocromo"): senza dose né quantità non sono farmaci.
@@ -738,7 +903,8 @@ export function parseDischargeTherapy(text: string): ParsedTherapyRow[] {
   let sawDrugs = false;
   let previousWasRow = false;
   for (const lines of splitTherapyParagraphs(text)) {
-    const isDrugParagraph = talksAboutDrugs(lines);
+    // Un paragrafo di sole fasce (tabella staccata dalla sua intestazione) continua l'elenco.
+    const isDrugParagraph = talksAboutDrugs(lines) || lines.some(isGlucoseScaleOnlyLine);
     if (sawDrugs && !isDrugParagraph) {
       previousWasRow = false;
       continue;
@@ -747,6 +913,13 @@ export function parseDischargeTherapy(text: string): ParsedTherapyRow[] {
       // Saltata senza interrompere l'elenco: le fasce sotto restano dell'insulina sopra.
       if (isNonDrugInstruction(line)) continue;
       const last = rows[rows.length - 1];
+      if (
+        previousWasRow &&
+        last &&
+        ANNOUNCES_GLUCOSE_SCALE_RE.test(last.originalText) &&
+        isScaleTableHeader(line)
+      )
+        continue;
       if (
         previousWasRow &&
         last &&

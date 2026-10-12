@@ -1,0 +1,47 @@
+{
+  "patientId": "cmv5r9bu90000zclpt1dzm3cs",
+  "therapyId": "cmv5r9by6001vyklp0fhoakc7",
+  "consoleErrors": [],
+  "httpErrors": [],
+  "results": [
+    {
+      "name": "therapy created via API (201)",
+      "pass": true,
+      "therapyId": "cmv5r9by6001vyklp0fhoakc7",
+      "slot": "23:00",
+      "today": "2026-10-12"
+    },
+    {
+      "name": "glucose 120 (not covered): confirm disabled",
+      "pass": true
+    },
+    {
+      "name": "glucose 420: \"Dose prevista: 6 ml/h + 6 unità (bolo)\"",
+      "pass": true,
+      "doseText": "Dose prevista: 6 ml/h + 6 unità (bolo)"
+    },
+    {
+      "name": "DB MedicationAdministration farmacoDose + doseContext (ml/h + extra dose)",
+      "pass": true,
+      "farmacoDose": "6 ml/h + 6 unità (bolo) (glicemia 420 mg/dL)",
+      "doseContext": {
+        "kind": "blood_glucose",
+        "doseUnit": "ml/h",
+        "doseUnits": 6,
+        "extraDoses": [
+          {
+            "unit": "unità",
+            "label": "bolo",
+            "amount": 6
+          }
+        ],
+        "glucoseMgDl": 420
+      },
+      "confirmLabel": null
+    },
+    {
+      "name": "no console errors, no backend 4xx/5xx",
+      "pass": true
+    }
+  ]
+}

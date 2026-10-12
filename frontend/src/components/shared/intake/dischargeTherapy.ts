@@ -10,8 +10,10 @@ import {
 } from '../../operator/cartella/therapyDose';
 import { therapyFormToInput } from './therapyFormPayload';
 import {
+  glucoseScaleFormRows,
   validateGlucoseScaleRows,
   type GlucoseDoseRule,
+  type GlucoseScaleDoseUnit,
 } from '../../operator/cartella/glucoseScale';
 
 export interface DischargeTherapyRow {
@@ -31,7 +33,12 @@ export interface DischargeTherapyRow {
   /** Trovata nel documento fuori dalla sezione terapia: sempre da verificare. */
   outsideTherapySection?: boolean;
   doseMode?: 'fixed' | 'glucose_scale';
+  /** Unit of the scale's primary dose; missing means 'unità'. */
+  glucoseDoseUnit?: GlucoseScaleDoseUnit;
+  /** Imported exactly as written: rules may overlap and carry extra doses. */
   glucoseScale?: GlucoseDoseRule[];
+  /** Parser warnings on the scale as written (overlaps, gaps, suspicious values). */
+  glucoseScaleWarnings?: string[];
   excludedFromConfirm?: boolean;
   reviewedTherapy?: TherapyFormValue;
   importSource?: { groupId: string; inputHash: string };
@@ -175,11 +182,8 @@ export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormVa
     dataInizio: r.dataInizio?.trim() || localIsoDate(),
     dataSomministrazione: '',
     doseMode: scale ? 'glucose_scale' : 'fixed',
-    glucoseScale: (r.glucoseScale ?? []).map((rule) => ({
-      minMgDl: String(rule.minMgDl),
-      maxMgDl: rule.maxMgDl === null ? '' : String(rule.maxMgDl),
-      units: String(rule.units),
-    })),
+    glucoseScale: glucoseScaleFormRows(r.glucoseScale ?? []),
+    ...(scale ? { glucoseDoseUnit: r.glucoseDoseUnit ?? 'unità' } : {}),
     schedules:
       r.tipo === 'al_bisogno'
         ? []
@@ -224,8 +228,10 @@ export function therapyFormToDischargeRow(
     doseMode: v.doseMode ?? 'fixed',
     glucoseScale:
       v.doseMode === 'glucose_scale'
-        ? validateGlucoseScaleRows(v.glucoseScale ?? []).protocol?.rules
+        ? validateGlucoseScaleRows(v.glucoseScale ?? [], v.glucoseDoseUnit).protocol?.rules
         : undefined,
+    glucoseDoseUnit:
+      v.doseMode === 'glucose_scale' ? (v.glucoseDoseUnit ?? 'unità') : undefined,
     quantita:
       v.doseMode === 'glucose_scale'
         ? ''

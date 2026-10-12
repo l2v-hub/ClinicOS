@@ -52,8 +52,23 @@ function checkReviewedForm(source: Row, input: ReviewedInput, row: number) {
       minMgDl: Number(rule.minMgDl),
       maxMgDl: rule.maxMgDl === '' || rule.maxMgDl === null ? null : Number(rule.maxMgDl),
       units: text(rule.units) === '' && typeof rule.units !== 'number' ? NaN : Number(rule.units),
+      ...(Array.isArray(rule.extraDoses) && rule.extraDoses.length
+        ? {
+            extraDoses: rows(rule.extraDoses).map((dose) => ({
+              ...dose,
+              amount:
+                text(dose.amount) === '' && typeof dose.amount !== 'number'
+                  ? NaN
+                  : Number(dose.amount),
+            })),
+          }
+        : {}),
     }));
-    const saved = normalizeGlucoseScaleProtocol({ kind: 'blood_glucose', rules: scaleRows });
+    const saved = normalizeGlucoseScaleProtocol({
+      kind: 'blood_glucose',
+      ...(source.glucoseDoseUnit ? { doseUnit: source.glucoseDoseUnit } : {}),
+      rules: scaleRows,
+    });
     const submitted = normalizeGlucoseScaleProtocol(input.doseProtocol);
     if (JSON.stringify(saved) !== JSON.stringify(submitted)) throw mismatch(row, 'doseProtocol');
   }

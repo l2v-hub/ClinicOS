@@ -1,0 +1,212 @@
+=== TABLE
+[
+ {
+  "farmacoNome": "INSULINA",
+  "forma": "rapida sottocute secondo",
+  "dosaggio": "",
+  "viaSomministrazione": "SC",
+  "quantita": "",
+  "orari": [],
+  "giorni": [],
+  "dataInizio": "",
+  "classe": "",
+  "note": "schema:",
+  "originalText": "Insulina rapida sottocute secondo schema:\n<110 0U.I\n111-120 2U.I\n121-140 4U.I\n141-180 6U.I\n181-200 7U.I\n201-250 8U.I\n251-300 12U.I\n301-350 14U.I\n>350 Bolo 5 U.I e.v. +15U.I s.c",
+  "stato": "da_verificare",
+  "doseMode": "glucose_scale",
+  "glucoseScale": [
+   {
+    "minMgDl": 10,
+    "maxMgDl": 109,
+    "units": 0
+   },
+   {
+    "minMgDl": 111,
+    "maxMgDl": 120,
+    "units": 2
+   },
+   {
+    "minMgDl": 121,
+    "maxMgDl": 140,
+    "units": 4
+   },
+   {
+    "minMgDl": 141,
+    "maxMgDl": 180,
+    "units": 6
+   },
+   {
+    "minMgDl": 181,
+    "maxMgDl": 200,
+    "units": 7
+   },
+   {
+    "minMgDl": 201,
+    "maxMgDl": 250,
+    "units": 8
+   },
+   {
+    "minMgDl": 251,
+    "maxMgDl": 300,
+    "units": 12
+   },
+   {
+    "minMgDl": 301,
+    "maxMgDl": 350,
+    "units": 14
+   },
+   {
+    "minMgDl": 351,
+    "maxMgDl": null,
+    "units": 15,
+    "extraDoses": [
+     {
+      "amount": 5,
+      "unit": "unità",
+      "route": "EV",
+      "label": "bolo"
+     }
+    ]
+   }
+  ],
+  "glucoseDoseUnit": "unità",
+  "glucoseScaleWarnings": [
+   "Glicemia 110 mg/dL non coperta dallo schema"
+  ]
+ }
+]
+=== IMOLA
+[
+ {
+  "farmacoNome": "LANTUS",
+  "forma": "FL SC",
+  "dosaggio": "100 UI /ML",
+  "viaSomministrazione": "",
+  "quantita": "10 UI",
+  "orari": [
+   "08:00"
+  ],
+  "giorni": [],
+  "dataInizio": "",
+  "classe": "",
+  "note": "",
+  "originalText": "LANTUS FL SC 100 UI /ML 10 Ui ore 08:00",
+  "stato": "ok",
+  "doseMode": "fixed"
+ },
+ {
+  "farmacoNome": "HUMALOG",
+  "forma": "",
+  "dosaggio": "100 UI/ML",
+  "viaSomministrazione": "",
+  "quantita": "1 FL",
+  "orari": [],
+  "giorni": [],
+  "dataInizio": "",
+  "classe": "",
+  "note": "10 ML eventuale rivalutazione diabetologica con glicemia e Hb glicata",
+  "originalText": "HUMALOG*1 FL 10 ML 100 UI/ML 4 U se glicemia tra 200-250, 6 U tra 250-300, 8 U da 350-450, eventuale rivalutazione diabetologica con glicemia e Hb glicata",
+  "stato": "da_verificare",
+  "doseMode": "glucose_scale",
+  "glucoseScale": [
+   {
+    "minMgDl": 200,
+    "maxMgDl": 250,
+    "units": 4
+   },
+   {
+    "minMgDl": 250,
+    "maxMgDl": 300,
+    "units": 6
+   },
+   {
+    "minMgDl": 350,
+    "maxMgDl": 450,
+    "units": 8
+   }
+  ],
+  "glucoseDoseUnit": "unità",
+  "glucoseScaleWarnings": [
+   "Fasce sovrapposte a 250 mg/dL: due dosi per la stessa glicemia",
+   "Glicemia 301–349 mg/dL non coperta dallo schema"
+  ]
+ }
+]
+=== TABLE_OCR_11
+[
+ {
+  "farmacoNome": "INSULINA",
+  "forma": "rapida sottocute secondo",
+  "dosaggio": "",
+  "viaSomministrazione": "SC",
+  "quantita": "",
+  "orari": [],
+  "giorni": [],
+  "dataInizio": "",
+  "classe": "",
+  "note": "schema:",
+  "originalText": "Insulina rapida sottocute secondo schema:\n<110 0U.I\n11-120 2U.I\n121-140 4U.I\n141-180 6U.I\n181-200 7U.I\n201-250 8U.I\n251-300 12U.I\n301-350 14U.I\n>350 Bolo 5 U.I e.v. +15U.I s.c",
+  "stato": "da_verificare",
+  "doseMode": "glucose_scale",
+  "glucoseScale": [
+   {
+    "minMgDl": 10,
+    "maxMgDl": 109,
+    "units": 0
+   },
+   {
+    "minMgDl": 11,
+    "maxMgDl": 120,
+    "units": 2
+   },
+   {
+    "minMgDl": 121,
+    "maxMgDl": 140,
+    "units": 4
+   },
+   {
+    "minMgDl": 141,
+    "maxMgDl": 180,
+    "units": 6
+   },
+   {
+    "minMgDl": 181,
+    "maxMgDl": 200,
+    "units": 7
+   },
+   {
+    "minMgDl": 201,
+    "maxMgDl": 250,
+    "units": 8
+   },
+   {
+    "minMgDl": 251,
+    "maxMgDl": 300,
+    "units": 12
+   },
+   {
+    "minMgDl": 301,
+    "maxMgDl": 350,
+    "units": 14
+   },
+   {
+    "minMgDl": 351,
+    "maxMgDl": null,
+    "units": 15,
+    "extraDoses": [
+     {
+      "amount": 5,
+      "unit": "unità",
+      "route": "EV",
+      "label": "bolo"
+     }
+    ]
+   }
+  ],
+  "glucoseDoseUnit": "unità",
+  "glucoseScaleWarnings": [
+   "Valore 11 mg/dL sospetto: confrontalo con il documento",
+   "Fasce sovrapposte tra 11 e 109 mg/dL: due dosi per la stessa glicemia"
+  ]
+ }
+]

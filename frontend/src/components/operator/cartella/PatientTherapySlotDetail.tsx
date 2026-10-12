@@ -171,11 +171,11 @@ export function PatientTherapySlotDetail({
           protocol={administration.doseProtocol}
           target={`${info.drugName}, ore ${info.ora}`}
           sending={sendingRetry === key}
-          onConfirm={(measuredGlucose, units) => {
+          onConfirm={(measuredGlucose, _units, doseText) => {
             const measuredInfo = {
               ...info,
               measuredGlucose,
-              dosage: `${units} unità (glicemia ${measuredGlucose} mg/dL)`,
+              dosage: `${doseText} (glicemia ${measuredGlucose} mg/dL)`,
             };
             if (needsConfirmation) setRetry(measuredInfo);
             else void administerAgain(measuredInfo, true);

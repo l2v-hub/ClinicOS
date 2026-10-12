@@ -1,0 +1,71 @@
+{
+  "ids": {
+    "draft": "cmv5r801v000oyklpfax8bv5n",
+    "patient": "cmv5r8mod0019yklp8h2j4lsx"
+  },
+  "consoleErrors": [],
+  "httpErrors": [],
+  "results": [
+    {
+      "name": "API: mixed-unit scale → 0 bands, no glucoseDoseUnit, single warning, da_verificare",
+      "pass": true,
+      "row": {
+        "glucoseScale": [],
+        "warnings": [
+          "Fasce scritte in unità diverse (unità e ml/h): schema non importato, trascrivilo dal documento"
+        ]
+      }
+    },
+    {
+      "name": "UI: warning visible, editor has 0 bands, \"Ho verificato\" and \"Crea paziente\" disabled",
+      "pass": true
+    },
+    {
+      "name": "API: forged confirmations (invented bands / empty scale) rejected, no patient created",
+      "pass": true,
+      "patchStatus": 200,
+      "forgedBands": [
+        400,
+        "{\"error\":\"Aggiungi almeno una fascia glicemica\",\"kind\":\"config\"}"
+      ],
+      "emptyRules": [
+        400,
+        "{\"error\":\"Terapia 1: Aggiungi almeno una fascia glicemica. Correggi la riga nella sezione Terapia e riprova.\",\"kind\":\"config\"}"
+      ]
+    },
+    {
+      "name": "UI: operator transcribes 3 ml/h bands → \"Ho verificato\" enabled, clicked; Crea paziente enabled",
+      "pass": true
+    },
+    {
+      "name": "DB: PatientTherapy.doseProtocol = operator transcription (ml/h, 3 bands)",
+      "pass": true,
+      "doseProtocol": {
+        "kind": "blood_glucose",
+        "rules": [
+          {
+            "units": 2,
+            "maxMgDl": 200,
+            "minMgDl": 150
+          },
+          {
+            "units": 3,
+            "maxMgDl": 250,
+            "minMgDl": 201
+          },
+          {
+            "units": 4,
+            "maxMgDl": null,
+            "minMgDl": 251
+          }
+        ],
+        "doseUnit": "ml/h",
+        "measurementUnit": "mg/dL"
+      }
+    },
+    {
+      "name": "no console errors, no backend 4xx/5xx in the browser",
+      "pass": true
+    }
+  ]
+}
