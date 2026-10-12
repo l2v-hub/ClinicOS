@@ -139,6 +139,7 @@ const MARK = `E2E-449 ${Date.now()}`;
   await page.waitForTimeout(2500);
   const before = await page.locator('.diario-card').count();
   const MARK2 = `${MARK} bis`;
+  const absentBefore = await page.locator('.diario-card', { hasText: MARK2 }).count();
   const quick2 = page.locator('section[aria-label="Scrivi una consegna"]');
   await quick2.locator('select').first().selectOption(nanni);
   await quick2.locator('textarea').first().fill(`${MARK2} diuresi scarsa`);
@@ -150,8 +151,31 @@ const MARK = `E2E-449 ${Date.now()}`;
   check(
     'AC1c',
     'the diary below shows a handover sent from the top form without switching view',
-    shown === 1 && after === before + 1,
-    `cards ${before}→${after} · new ${shown}`,
+    // la pagina del diario è fissa a 50 voci: conta la scheda nuova, non il totale (#449 QA)
+    absentBefore === 0 && shown === 1,
+    `new card ${absentBefore}→${shown} · cards ${before}→${after}`,
+  );
+  // QA: un invio per un altro paziente non ricostruisce il diario aperto (filtri e storico restano)
+  await page.locator('.handover-rounds__select', { hasText: 'Verdi' }).first().click();
+  await page.waitForTimeout(2500);
+  await page.locator('.diario-history > summary').first().click();
+  await page.locator('.diario-history input[type=date]').first().fill('2026-10-01');
+  await page.getByRole('button', { name: 'Filtra storico' }).click();
+  await page.waitForTimeout(2000);
+  const quick3 = page.locator('section[aria-label="Scrivi una consegna"]');
+  await quick3.locator('select').first().selectOption(nanni);
+  await quick3.locator('textarea').first().fill(`${MARK} ter per Nanni`);
+  await quick3.getByRole('button', { name: /^Invia$/ }).click();
+  await page.waitForTimeout(3000);
+  const kept = await page.evaluate(() => ({
+    open: document.querySelector('.diario-history')?.open ?? null,
+    from: document.querySelector('.diario-history input[type=date]')?.value ?? null,
+  }));
+  check(
+    'AC1d',
+    'a send for another patient leaves the open diary as it was (history and filter kept)',
+    kept.open === true && kept.from === '2026-10-01',
+    JSON.stringify(kept),
   );
   if (process.env.TRACE) await context.tracing.stop({ path: `${OUT}/trace/infermiere.zip` });
   await context.close();

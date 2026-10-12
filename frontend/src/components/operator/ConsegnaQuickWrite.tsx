@@ -24,7 +24,7 @@ export function ConsegnaQuickWrite({
   operatori: Operatore[];
   onAdd: ConsegnaCreate;
   initialPatientId?: string;
-  onSaved?: () => void;
+  onSaved?: (patientId: string) => void;
 }) {
   const id = useId();
   const canCreate = useCan('consegne.create');
@@ -60,7 +60,7 @@ export function ConsegnaQuickWrite({
     if (!token) return;
     const ok = await submitConsegna(store, token, onAdd);
     if (ok) {
-      onSaved?.();
+      onSaved?.(selected.id);
     }
   }
   return (

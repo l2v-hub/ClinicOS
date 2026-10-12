@@ -56,6 +56,15 @@
    e c'è «Ho capito» (unit `#449 one gesture per entry`).
 6. Il modulo in cima mostra «Elenco in caricamento…» e «Riprova» se l'elenco pazienti non arriva.
 
+### Secondo passaggio QA (READY FOR QA su d46574811) — due punti chiusi prima del merge
+
+7. Il diario sotto si ricostruiva a ogni invio, anche per un altro paziente, perdendo filtri,
+   storico e pagine. Ora `ConsegneRounds` riceve `sentFrom` e il diario si rilegge solo quando
+   l'invio è del paziente mostrato (E2E AC1d: diario di Verdi aperto e filtrato dal 01/10, invio per
+   Nanni → storico aperto e filtro conservati).
+8. AC1c non dipende più dal totale delle schede: la pagina del diario è fissa a 50 voci. Ora la
+   scheda nuova è assente prima dell'invio e presente dopo.
+
 ## Files Changed
 
 - `frontend/src/components/operator/ConsegnaQuickWrite.tsx` — nuovo
@@ -84,7 +93,7 @@
 | Unit | PASS | `logs/unit-tests.log` (1377/1377) |
 | Integration | NA | |
 | API | NA | nessuna modifica backend |
-| Playwright | PASS | `scripts/e2e/issue-449-consegne.mjs` 9/9, `logs/playwright-after.log`, `trace/*.zip`, `screenshots/` |
+| Playwright | PASS | `scripts/e2e/issue-449-consegne.mjs` 10/10, `logs/playwright-after.log`, `trace/*.zip`, `screenshots/` |
 | Persistence | PASS | consegna nel DB (`Consegna`) e nella coda del collega dopo la navigazione |
 | Agnos AI | NA | |
 | Voice | NA | |
@@ -113,7 +122,8 @@ errori.
   - dopo l'invio il campo testo vuoto mostra il bordo «non valido» del design system;
   - il selettore del paziente resta attivo durante un invio in sospeso;
   - l'opzione di gravità si chiama ancora «Alta · richiede presa in carico» (etichetta precedente);
-  - `consegnaDrafts.ts` contiene modifiche di sola formattazione del formatter del repository.
+  - `consegnaDrafts.ts` contiene modifiche di sola formattazione del formatter del repository;
+  - `ConsegnaCreateForm` non è più montato da nessuna pagina (resta per una pulizia successiva).
 - Verifica su stack locale sintetico, non su prod.
 
 ## Final Decision
