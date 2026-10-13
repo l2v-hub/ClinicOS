@@ -19,12 +19,10 @@ jobs:
           node-version: 20
       - name: Install pinned Railway CLI
         run: npm install -g @railway/cli@5.66.0
-      - name: Install frozen application dependencies
-        env:
-          HUSKY: '0'
-        run: npm ci --no-audit --no-fund
-      - name: Read-only inventory through verified backend database mapping
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
-        run: node scripts/maintenance/railway-production-inventory.mjs
+      - name: Inspect supported maintenance commands
+        run: |
+          railway --help
+          railway add --help
+          railway service --help
+          railway up --help
+          railway volume --help
