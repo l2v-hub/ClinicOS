@@ -58,5 +58,18 @@ jobs:
           const args = ['ssh', '--service', process.env.RAILWAY_SERVICE, '--',
             'node', '--input-type=module', '-e', probe];
           const result = run(args);
+          if (result.status !== 0) {
+            run(['ssh', 'keys', '--help']);
+            // Check credential scope without printing public-key names or contents.
+            const keys = spawnSync('railway', ['ssh', 'keys', 'list'], {
+              encoding: 'utf8', timeout: 30000,
+            });
+            if (keys.status === 0) {
+              console.log('SSH-key metadata access supported; no keys modified.');
+            } else {
+              const safe = (keys.stderr ?? '').split(process.env.RAILWAY_TOKEN).join('[redacted]');
+              console.error('SSH-key metadata access failed:', safe.slice(0, 2000));
+            }
+          }
           process.exit(result.status ?? 1);
           NODE
