@@ -1,0 +1,60 @@
+name: Claude — avvia sessione cloud su nuova issue
+
+# Quando viene aperta una issue, chiama l'endpoint /fire della Routine Claude Code
+# "ClinicOS — risolvi nuova GitHub issue": la routine apre una nuova sessione cloud
+# che lavora la issue (quality gate, PR, mai merge/deploy). Setup: docs/claude-issue-trigger.md
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claude-issue-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  fire-routine:
+    if: github.event.issue.user.type != 'Bot'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Fire Claude Code routine
+        env:
+          ROUTINE_ID: ${{ vars.CLAUDE_ROUTINE_ID }}
+          ROUTINE_TOKEN: ${{ secrets.CLAUDE_ROUTINE_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+          ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ', ') }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ROUTINE_ID:-}" ] || [ -z "${ROUTINE_TOKEN:-}" ]; then
+            echo "::warning::CLAUDE_ROUTINE_ID (variable) o CLAUDE_ROUTINE_TOKEN (secret) non configurati — salto. Vedi docs/claude-issue-trigger.md"
+            exit 0
+          fi
+          # Il testo della issue passa solo da variabili d'ambiente + jq: niente interpolazione nello script.
+          TEXT=$(printf 'Repository: %s\nIssue #%s: %s\nURL: %s\nAutore: %s\nLabel: %s\n\n--- Testo della issue ---\n%s\n' \
+            "$REPO" "$ISSUE_NUMBER" "$ISSUE_TITLE" "$ISSUE_URL" "$ISSUE_AUTHOR" "${ISSUE_LABELS:-nessuna}" "${ISSUE_BODY:-}" | head -c 30000)
+          BODY=$(jq -n --arg text "$TEXT" '{text: $text}')
+          HTTP=$(curl -sS -o response.json -w '%{http_code}' -X POST \
+            "https://api.anthropic.com/v1/claude_code/routines/${ROUTINE_ID}/fire" \
+            -H "Authorization: Bearer ${ROUTINE_TOKEN}" \
+            -H "anthropic-beta: experimental-cc-routine-2026-04-01" \
+            -H "anthropic-version: 2023-06-01" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          if [ "$HTTP" -lt 200 ] || [ "$HTTP" -ge 300 ]; then
+            echo "::error::Fire della routine fallito (HTTP $HTTP)"
+            jq -r '.error.message // .' response.json || true
+            exit 1
+          fi
+          URL=$(jq -r '.claude_code_session_url // empty' response.json)
+          echo "Sessione Claude avviata: ${URL:-n/d}"
+          echo "### Sessione Claude avviata per #${ISSUE_NUMBER}" >> "$GITHUB_STEP_SUMMARY"
+          echo "${URL:-n/d}" >> "$GITHUB_STEP_SUMMARY"
