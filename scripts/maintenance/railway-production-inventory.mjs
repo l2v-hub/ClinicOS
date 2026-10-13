@@ -84,8 +84,8 @@ try {
     database: decodeURIComponent(primary.pathname.slice(1)), credentialsExported: false,
   }));
   const inventory = spawnSync(process.execPath, [
-    'scripts/maintenance/production-db-inventory.mjs', '--expected-host', connection.hostname,
-    '--expected-database', decodeURIComponent(primary.pathname.slice(1)),
+    'scripts/maintenance/production-db-inventory.mjs', `--expected-host=${connection.hostname}`,
+    `--expected-database=${decodeURIComponent(primary.pathname.slice(1))}`,
   ], {
     stdio: 'inherit', timeout: 120000,
     env: { ...process.env, CLINICOS_PRODUCTION_DATABASE_URL: connection.toString() },
