@@ -19,57 +19,12 @@ jobs:
           node-version: 20
       - name: Install pinned Railway CLI
         run: npm install -g @railway/cli@5.66.0
-      - name: Read-only inventory using existing project authentication
+      - name: Install frozen application dependencies
+        env:
+          HUSKY: '0'
+        run: npm ci --no-audit --no-fund
+      - name: Read-only inventory through verified backend database mapping
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
-        run: |
-          node --input-type=module <<'NODE'
-          import { spawnSync } from 'node:child_process';
-          const run = (args) => {
-            const result = spawnSync('railway', args, { encoding: 'utf8', timeout: 120000 });
-            const safe = (value) => (value ?? '').split(process.env.RAILWAY_TOKEN).join('[redacted]');
-            if (result.stdout) process.stdout.write(safe(result.stdout));
-            if (result.stderr) process.stderr.write(safe(result.stderr));
-            return result;
-          };
-          if (!process.env.RAILWAY_TOKEN) throw new Error('Existing Railway project token unavailable');
-          if (!process.env.RAILWAY_SERVICE) throw new Error('Existing backend service selection unavailable; no database queried');
-          const help = run(['ssh', '--help']);
-          if (help.status !== 0) process.exit(help.status ?? 1);
-          const probe = `
-            import { spawnSync } from 'node:child_process';
-            let target;
-            try {
-              target = new URL(process.env.DATABASE_URL);
-              if (!['postgres:', 'postgresql:'].includes(target.protocol)) throw new Error();
-            } catch {
-              console.error('Backend database binding unavailable or invalid');
-              process.exit(1);
-            }
-            process.env.CLINICOS_PRODUCTION_DATABASE_URL = process.env.DATABASE_URL;
-            const result = spawnSync(process.execPath, [
-              'scripts/maintenance/production-db-inventory.mjs',
-              '--expected-host', target.hostname,
-              '--expected-database', decodeURIComponent(target.pathname.slice(1))
-            ], { stdio: 'inherit', env: process.env });
-            process.exit(result.status ?? 1);
-          `;
-          const args = ['ssh', '--service', process.env.RAILWAY_SERVICE, '--',
-            'node', '--input-type=module', '-e', probe];
-          const result = run(args);
-          if (result.status !== 0) {
-            run(['ssh', 'keys', '--help']);
-            // Check credential scope without printing public-key names or contents.
-            const keys = spawnSync('railway', ['ssh', 'keys', 'list'], {
-              encoding: 'utf8', timeout: 30000,
-            });
-            if (keys.status === 0) {
-              console.log('SSH-key metadata access supported; no keys modified.');
-            } else {
-              const safe = (keys.stderr ?? '').split(process.env.RAILWAY_TOKEN).join('[redacted]');
-              console.error('SSH-key metadata access failed:', safe.slice(0, 2000));
-            }
-          }
-          process.exit(result.status ?? 1);
-          NODE
+        run: node scripts/maintenance/railway-production-inventory.mjs
