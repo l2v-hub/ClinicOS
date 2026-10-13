@@ -1,60 +1,62 @@
-name: Deploy Backend to Railway
+name: Production read-only inventory diagnosis
 
-# Deploys the backend to Railway on every push to main (and on demand).
-# GitHub-hosted runners can reach Railway's API, so this is more reliable than
-# Railway's GitHub auto-deploy (which on this project kept serving an old commit).
-#
-# Required GitHub secret:
-#   RAILWAY_TOKEN  -> a Railway *project* token scoped to the backend's project+environment
-#                     (Railway dashboard -> project -> Settings -> Tokens -> Create,
-#                      pick the Production environment).
-# Optional GitHub variable (Settings -> Secrets and variables -> Actions -> Variables):
-#   RAILWAY_SERVICE -> the backend service name, if the project has more than one service.
-#
-# `railway up` uploads the checked-out repo and builds it with railway.json
-# (npm install + prisma generate + build:backend), then runs the start command
-# `prisma migrate deploy && node backend/dist/server.js` — so migrations are applied
-# automatically on each deploy.
-
+# Diagnostic branch only. No deploy, migration, seed, backup export or deletion.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'backend/**'
-      - 'prisma/**'
-      - 'railway.json'
-      - 'package.json'
-      - '.github/workflows/deploy-backend.yml'
   workflow_dispatch: {}
 
-concurrency:
-  group: railway-backend
-  cancel-in-progress: false
+permissions:
+  contents: read
 
 jobs:
-  deploy:
+  inventory:
+    if: github.ref_name == 'codex/production-inventory-2026-10-13'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
-
-      - name: Deploy to Railway
+      - name: Install pinned Railway CLI
+        run: npm install -g @railway/cli@5.66.0
+      - name: Read-only inventory using existing project authentication
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
         run: |
-          if [ -z "$RAILWAY_TOKEN" ]; then
-            echo "::error::RAILWAY_TOKEN secret is not set. Add it under Settings -> Secrets and variables -> Actions."
-            exit 1
-          fi
-          if [ -n "$RAILWAY_SERVICE" ]; then
-            railway up --ci --service "$RAILWAY_SERVICE"
-          else
-            railway up --ci
-          fi
+          node --input-type=module <<'NODE'
+          import { spawnSync } from 'node:child_process';
+          const run = (args) => {
+            const result = spawnSync('railway', args, { encoding: 'utf8', timeout: 120000 });
+            const safe = (value) => (value ?? '').split(process.env.RAILWAY_TOKEN).join('[redacted]');
+            if (result.stdout) process.stdout.write(safe(result.stdout));
+            if (result.stderr) process.stderr.write(safe(result.stderr));
+            return result;
+          };
+          if (!process.env.RAILWAY_TOKEN) throw new Error('Existing Railway project token unavailable');
+          if (!process.env.RAILWAY_SERVICE) throw new Error('Existing backend service selection unavailable; no database queried');
+          const help = run(['ssh', '--help']);
+          if (help.status !== 0) process.exit(help.status ?? 1);
+          const probe = `
+            import { spawnSync } from 'node:child_process';
+            let target;
+            try {
+              target = new URL(process.env.DATABASE_URL);
+              if (!['postgres:', 'postgresql:'].includes(target.protocol)) throw new Error();
+            } catch {
+              console.error('Backend database binding unavailable or invalid');
+              process.exit(1);
+            }
+            process.env.CLINICOS_PRODUCTION_DATABASE_URL = process.env.DATABASE_URL;
+            const result = spawnSync(process.execPath, [
+              'scripts/maintenance/production-db-inventory.mjs',
+              '--expected-host', target.hostname,
+              '--expected-database', decodeURIComponent(target.pathname.slice(1))
+            ], { stdio: 'inherit', env: process.env });
+            process.exit(result.status ?? 1);
+          `;
+          const args = ['ssh', '--service', process.env.RAILWAY_SERVICE, '--',
+            'node', '--input-type=module', '-e', probe];
+          const result = run(args);
+          process.exit(result.status ?? 1);
+          NODE
