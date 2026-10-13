@@ -348,7 +348,7 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
               style={{ textTransform: 'uppercase' }}
             />
           </NpmField>
-          <span className="sr-only" role="status" aria-live="polite">
+          <span className="ds-sr-only" role="status" aria-live="polite">
             {value.codiceFiscaleOrigine === 'auto'
               ? `Codice fiscale compilato automaticamente: ${value.codiceFiscale}`
               : !value.codiceFiscale

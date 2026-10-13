@@ -20,10 +20,16 @@
       "detail": "Anagrafica DATI PERSONALI Identità e dati necessari alla registrazione 0/4 necessari all’ingresso Nome * Cognome * Data "
     },
     {
+      "id": "AC3b",
+      "name": "the screen-reader status under the tax code is not visible on screen",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
       "id": "AC4",
       "name": "manual creation still works (patient in the local DB)",
       "result": "PASS",
-      "detail": "CF PRVNRS58R61F205X · cmv75xetg00hn4olpw703dbtb"
+      "detail": "CF PRVNRS38E58F205K · cmv7676sw00ii4olpe7qnnafy"
     }
   ],
   "consoleErrors": []

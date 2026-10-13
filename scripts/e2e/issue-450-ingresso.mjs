@@ -110,6 +110,18 @@ await page.getByLabel(/^Comune di nascita/).fill('Milano');
 await page.getByLabel(/^Provincia di nascita/).fill('MI');
 await page.waitForTimeout(1500);
 const cf = await page.locator('[data-demographic-field="codiceFiscale"]').inputValue();
+// QA: le righe per lo screen reader non devono comparire a schermo (prima: classe sr-only assente)
+const srVisible = await page.evaluate(() =>
+  [...document.querySelectorAll('#intake-sec-anagrafica [role=status]')]
+    .filter((el) =>
+      /Codice fiscale (automatico non disponibile|compilato automaticamente:)/.test(el.textContent),
+    )
+    .some((el) => {
+      const r = el.getBoundingClientRect();
+      return r.width > 1 && r.height > 1;
+    }),
+);
+check('AC3b', 'the screen-reader status under the tax code is not visible on screen', !srVisible);
 await page.screenshot({ path: `${OUT}/screenshots/03-anagrafica-compilata.png` });
 await page.getByRole('button', { name: /Crea paziente/ }).click();
 await page.waitForTimeout(4000);

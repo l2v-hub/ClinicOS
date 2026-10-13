@@ -26,10 +26,23 @@
    estero») e «Si compila automaticamente con…». Resta l'avviso quando il codice fiscale è stato
    calcolato automaticamente.
 
+## Correzioni dopo il QA indipendente (FAILED VALIDATION su fa9fd76cb)
+
+5. **Bloccante.** La riga di stato per lo screen reader sotto il codice fiscale usava la classe
+   `sr-only`, che non esiste a livello globale, quindi compariva a schermo:
+   - a modulo vuoto: «Codice fiscale automatico non disponibile»;
+   - dopo il calcolo: «Codice fiscale compilato automaticamente: …», che ripeteva il campo.
+
+   Il difetto esisteva prima di questa issue. Ora la riga usa `ds-sr-only`. Lo stesso difetto è
+   corretto nei due stati di `InlineEditableField`. Nuovi controlli: E2E AC3b e un test unitario.
+6. Tolto il CSS morto del riquadro «Come funziona» (`NewPatientStart.css`).
+
 ## Files Changed
 
 - `frontend/src/components/operator/NewPatientStart.tsx`
+- `frontend/src/components/operator/NewPatientStart.css`
 - `frontend/src/components/shared/intake/intakeProgress.ts`, `StepAnagrafica.tsx`, `IntakeWorkspace.tsx`
+- `frontend/src/components/shared/InlineEditableField.tsx` — `ds-sr-only`
 - Test: `frontend/src/components/shared/intake/__tests__/intakeMinimal450.test.ts` (nuovo)
 - `scripts/e2e/issue-450-ingresso.mjs`
 
@@ -39,17 +52,17 @@
 |---|---:|---|
 | AC1 | PASS | opzioni `["Lettera o trasferimento","A mano"]`, nessun «Come funziona» (`screenshots/01-nuovo-ingresso.png`) |
 | AC2 | PASS | appena aperto «A mano», con data presa in carico già impostata: «Ingresso» → «facoltativa, vuota», nessuna spunta (`02-a-mano-apertura.png`); unit `450 «Ingresso» is not complete…` |
-| AC3 | PASS | sezione anagrafica senza riquadro ripetuto, paragrafi sui campi obbligatori né aiuti ovvi (`03-anagrafica-compilata.png`); unit sui sorgenti |
-| AC4 | PASS | creazione a mano: codice fiscale calcolato dall'app, paziente nel DB locale (`04-dopo-crea.png`); tsc + build verdi, unit 1380/1380 |
+| AC3 | PASS | sezione anagrafica senza riquadro ripetuto, paragrafi sui campi obbligatori né aiuti ovvi (`03-anagrafica-compilata.png`); la riga per lo screen reader del codice fiscale non è visibile (AC3b); unit sui sorgenti |
+| AC4 | PASS | creazione a mano: codice fiscale calcolato dall'app, paziente nel DB locale (`04-dopo-crea.png`); tsc + build verdi, unit 1381/1381 |
 
 ## Test Results
 
 | Test | Result | Evidence |
 |---|---:|---|
-| Unit | PASS | `logs/unit-tests.log` (1380/1380) |
+| Unit | PASS | `logs/unit-tests.log` (1381/1381) |
 | Integration | NA | |
 | API | NA | nessuna modifica backend |
-| Playwright | PASS | `scripts/e2e/issue-450-ingresso.mjs` 4/4, `logs/playwright-after.log`, `trace/ingresso.zip` |
+| Playwright | PASS | `scripts/e2e/issue-450-ingresso.mjs` 5/5, `logs/playwright-after.log`, `trace/ingresso.zip` |
 | Persistence | PASS | paziente creato nel DB locale |
 | Agnos AI | NA | |
 | Voice | NA | |
@@ -70,6 +83,7 @@ errori.
 ## Residual Risks
 
 - Restano, per decisione, le 8 sezioni della pagina unica e la loro lunghezza.
+- «EE» per i nati all'estero resta solo come placeholder della provincia: sparisce quando si scrive.
 - Il commit `a51949079` (creazione con dati incompleti, solo su `ux2/cycle`, mai verificato) non è
   incluso.
 - Verifica su stack locale sintetico, non su prod.

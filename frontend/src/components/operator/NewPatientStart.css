@@ -88,34 +88,8 @@
   background: var(--ds-surface);
   color: var(--ds-text);
 }
-.nps__how {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.nps__how h2 {
-  margin: 0;
-}
-.nps__how-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-}
-.nps__how-title {
-  margin: 0 0 4px;
-  font: 600 16px/24px var(--ds-font);
-  color: var(--ds-text);
-}
-.nps__how-text {
-  margin: 0;
-  font: 400 16px/24px var(--ds-font);
-  color: var(--ds-text);
-}
 @media (max-width: 1023px) {
   .nps__options,
-  .nps__how-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .nps-option {
     min-height: 0;
   }

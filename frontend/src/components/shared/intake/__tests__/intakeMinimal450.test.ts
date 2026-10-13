@@ -36,3 +36,8 @@ test('450 no box repeating the demographics, no required-fields paragraphs, no o
   // resta l'avviso quando il codice fiscale è stato calcolato
   assert.match(anagrafica, /Calcolato automaticamente dai dati anagrafici/);
 });
+
+test('450 QA: screen-reader status lines use the design-system class, never a bare sr-only', () => {
+  for (const rel of ['../StepAnagrafica.tsx', '../../InlineEditableField.tsx'])
+    assert.doesNotMatch(source(rel), /className="sr-only"/);
+});
