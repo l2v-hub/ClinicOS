@@ -46,6 +46,8 @@ function serviceCandidates(value, host, result = new Map(), depth = 0) {
 try {
   if (!process.env.RAILWAY_TOKEN || !process.env.RAILWAY_SERVICE) fail('RAILWAY_BINDING_UNAVAILABLE');
   const backend = railwayJson(['variables', '--service', process.env.RAILWAY_SERVICE, '--json']);
+  if (String(backend.RAILWAY_ENVIRONMENT_NAME ?? '').toLowerCase() !== 'production')
+    fail('PRODUCTION_ENVIRONMENT_NOT_VERIFIED');
   const primary = url(backend.DATABASE_URL);
   let connection = primary;
   if (privateHost(primary.hostname)) {
@@ -77,6 +79,7 @@ try {
   console.log(JSON.stringify({
     mode: 'read-only', projectId: backend.RAILWAY_PROJECT_ID,
     environmentId: backend.RAILWAY_ENVIRONMENT_ID, backendServiceId: backend.RAILWAY_SERVICE_ID,
+    environmentName: backend.RAILWAY_ENVIRONMENT_NAME,
     configuredDatabaseHost: primary.hostname, connectionHost: connection.hostname,
     database: decodeURIComponent(primary.pathname.slice(1)), credentialsExported: false,
   }));
