@@ -1,5 +1,4 @@
 import { intakeDemographicErrors } from '../../../lib/intakeDemographics';
-import { DemographicsStatus } from '../DemographicsStatus';
 // StepAnagrafica — controlled anagrafica form for the intake wizard.
 // Mirrors the field set of NewPatientModal's TabAnagrafica + referente section.
 // No fetches here — the parent IntakeWorkspace owns patchDraft.
@@ -249,17 +248,6 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
 
   return (
     <>
-      <DemographicsStatus
-        value={value}
-        optionalFields={['phone']}
-        onEdit={(field) =>
-          document.querySelector<HTMLElement>(`[data-demographic-field="${field}"]`)?.focus()
-        }
-      />
-      <p className="form-hint">
-        Per registrare l’ingresso servono nome, cognome, codice fiscale e data di nascita. Tutti gli
-        altri dati sono facoltativi e possono essere completati successivamente.
-      </p>
       <NpmCard
         title="Dati personali"
         desc="Identità e dati necessari alla registrazione"
@@ -305,18 +293,14 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
               onChange={f('dateOfBirth')}
             />
           </NpmField>
-          <NpmField
-            label="Sesso"
-            path="anagrafica.sex"
-            hint="Necessario per il calcolo automatico del codice fiscale"
-          >
+          <NpmField label="Sesso" path="anagrafica.sex">
             <select className="npm-input npm-select" value={value.sex ?? ''} onChange={f('sex')}>
               <option value="">— Seleziona —</option>
               <option value="M">Maschio</option>
               <option value="F">Femmina</option>
             </select>
           </NpmField>
-          <NpmField label="Comune di nascita" hint="Usato per calcolare il CF">
+          <NpmField label="Comune di nascita">
             <input
               className="npm-input"
               value={value.comuneNascita ?? ''}
@@ -324,12 +308,12 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
               placeholder="Roma"
             />
           </NpmField>
-          <NpmField label="Provincia di nascita" hint="Sigla provincia; EE per l'estero">
+          <NpmField label="Provincia di nascita">
             <input
               className="npm-input"
               value={value.provinciaNascita ?? ''}
               onChange={f('provinciaNascita')}
-              placeholder="MI"
+              placeholder="MI · EE estero"
               maxLength={2}
               style={{ textTransform: 'uppercase' }}
             />
@@ -343,7 +327,7 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
             hint={
               value.codiceFiscaleOrigine === 'auto'
                 ? 'Calcolato automaticamente dai dati anagrafici; puoi correggerlo manualmente'
-                : 'Si compila automaticamente con nome, cognome, sesso, data e luogo di nascita'
+                : undefined
             }
           >
             <input

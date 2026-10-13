@@ -39,6 +39,13 @@ function filled(value: unknown): boolean {
   return true;
 }
 
+function omitAuto(value: unknown): unknown {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return value;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { dataPresa, oraPresa, ...rest } = value as Record<string, unknown>;
+  return rest;
+}
+
 export function intakeProgress(
   data: Record<string, unknown>,
   options: { moduleSelected?: boolean; proposalUncertain?: boolean } = {},
@@ -93,7 +100,9 @@ export function intakeProgress(
     anagrafica: anagraficaIssues.length
       ? { kind: 'issues', count: demoErrors.length }
       : { kind: 'done' },
-    ingresso: filled(data.ingresso) ? { kind: 'done' } : { kind: 'empty' },
+    // #450: data e ora di presa in carico si compilano da sole all'apertura; da sole non fanno una
+    // sezione completata.
+    ingresso: filled(omitAuto(data.ingresso)) ? { kind: 'done' } : { kind: 'empty' },
     allergie:
       filled(data.allergie) || filled(data.allergieStatus) ? { kind: 'done' } : { kind: 'empty' },
     terapia: terapiaIssues.length

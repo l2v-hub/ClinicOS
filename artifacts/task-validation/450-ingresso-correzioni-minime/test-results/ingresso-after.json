@@ -1,0 +1,30 @@
+{
+  "pass": true,
+  "results": [
+    {
+      "id": "AC1",
+      "name": "one documents option (letter or transfer) plus «A mano», no explainer box",
+      "result": "PASS",
+      "detail": "[\"Lettera o trasferimento\",\"A mano\"]"
+    },
+    {
+      "id": "AC2",
+      "name": "«Ingresso» is not complete when only the automatic date/time are set",
+      "result": "PASS",
+      "detail": "{\"done\":false,\"text\":\": facoltativa, vuota\",\"presa\":\"2026-10-13\"}"
+    },
+    {
+      "id": "AC3",
+      "name": "no box repeating the demographics, no required-fields paragraph, no obvious hints",
+      "result": "PASS",
+      "detail": "Anagrafica DATI PERSONALI Identità e dati necessari alla registrazione 0/4 necessari all’ingresso Nome * Cognome * Data "
+    },
+    {
+      "id": "AC4",
+      "name": "manual creation still works (patient in the local DB)",
+      "result": "PASS",
+      "detail": "CF PRVNRS58R61F205X · cmv75xetg00hn4olpw703dbtb"
+    }
+  ],
+  "consoleErrors": []
+}

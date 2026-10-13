@@ -992,12 +992,7 @@ export function IntakeWorkspace({
                 )}
 
                 <section {...sectionProps('anagrafica')}>
-                  <header className="intake-section__head">
-                    {sectionTitle('anagrafica')}
-                    <span className="form-hint">
-                      Gli altri dati possono essere completati dopo l’ingresso
-                    </span>
-                  </header>
+                  <header className="intake-section__head">{sectionTitle('anagrafica')}</header>
                   <StepAnagrafica
                     value={data.anagrafica ?? {}}
                     onChange={(v) => updateSection('anagrafica', v)}

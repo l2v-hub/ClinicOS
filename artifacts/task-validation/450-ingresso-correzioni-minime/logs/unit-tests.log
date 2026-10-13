@@ -1,0 +1,6 @@
+ℹ tests 1380
+ℹ pass 1380
+ℹ fail 0
+✔ 450 «Ingresso» is not complete with only the automatic date and time (6.415ms)
+✔ 450 one documents option on «Nuovo ingresso», no explainer box (5.2444ms)
+✔ 450 no box repeating the demographics, no required-fields paragraphs, no obvious hints (8.6278ms)
