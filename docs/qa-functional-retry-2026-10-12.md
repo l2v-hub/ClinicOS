@@ -1,6 +1,6 @@
 # ClinicOS — verifica funzionale del 12 ottobre 2026
 
-Le correzioni di questa consegna risolvono #441, #442, #460 e i due difetti riprodotti durante il nuovo audit, #463 e #464. La branch `codex/qa-retry-2026-10-12` integra `main` a `224a7e68`, incluse le modifiche del Turno per ruolo (#446). La precedente PR #431 è già unita: questa consegna usa una nuova PR e preserva le modifiche intervenute su `main`.
+Le correzioni di questa consegna risolvono #441, #442, #460 e i tre difetti riprodotti durante il nuovo audit, #463, #464 e #467. La branch `codex/qa-retry-2026-10-12` integra `main` a `224a7e68`, incluse le modifiche del Turno per ruolo (#446). La precedente PR #431 è già unita: questa consegna usa una nuova PR e preserva le modifiche intervenute su `main`.
 
 ## Difetti e comportamento verificato
 
@@ -11,6 +11,7 @@ Le correzioni di questa consegna risolvono #441, #442, #460 e i due difetti ripr
 | #460  | `requestId` facoltativo salva atomicamente il primo risultato e lo restituisce sui retry con `Idempotent-Replayed: true`. Un payload diverso con la stessa chiave riceve 409; il replay ricontrolla lo scope attuale. `expectedStato: da_erogare` impedisce alla conferma di sovrascrivere il rifiuto di un collega. Giro, cartella, Turno e assistente condividono il writer. |
 | #463  | Prima di cercare i nomi delle prescrizioni, la cartella legge lo stato del catalogo AIFA. Con catalogo vuoto, 106 prescrizioni producono zero ricerche automatiche per nome. La fonte indisponibile resta distinta dal farmaco non trovato; i limiti pubblici non vengono aumentati.                                                                                           |
 | #464  | Giorno e ora dell'assistente e della coda terapia usano `Europe/Rome`. Alle 00:30 italiane, la dose delle 08:00 non è già in ritardo. Prove pure e PostgreSQL coprono mezzanotte, cambio d'anno e i due cambi dell'ora legale.                                                                                                                                                 |
+| #467  | Dopo una dose una tantum, cambiare l’ora da 11:30 a 18:10 non permette una seconda erogazione nello stesso giorno. Writer, feed, conteggi e assistente riconoscono il primo esito anche fra fasce diverse. Anche un rifiuto resta registrato; autore, ora e record originale non vengono riscritti. Le dosi periodiche restano indipendenti.                                   |
 
 Per #460 la prova browser perde intenzionalmente la risposta dopo il salvataggio HTTP 200: la GUI mostra un esito non verificabile. Dopo reload, il retry riusa la stessa chiave, restituisce il primo record, non cambia autore/ora/esito e lascia una sola registrazione e una sola ricevuta. Le chiavi persistite in `sessionStorage` contengono digest, nonce e scadenza, senza testo clinico o token. Le risposte tardive di una sessione precedente non producono un successo nella nuova sessione.
 
@@ -18,22 +19,22 @@ Per #460 la prova browser perde intenzionalmente la risposta dopo il salvataggio
 
 Tutti i controlli usano PostgreSQL 16 locale e dati sintetici. Le prove sono in [functional-retry-2026-10-12](../artifacts/task-validation/functional-retry-2026-10-12/README.md), con riepiloghi e hash. I risultati del 10 ottobre restano storici e separati.
 
-| Controllo                                        | Esito                                                                                                                                     |
-| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Frontend completo dopo integrazione di #446      | 1.379 passati, zero falliti/saltati                                                                                                       |
-| Backend completo, due fasi del runner            | 1.931 test: 1.926 passati, zero falliti, 5 skip per harness dedicati                                                                      |
-| Archivio documenti, harness PostgreSQL dedicato  | 6/6 passati, nessuno skip                                                                                                                 |
-| Regresso ruoli, cluster PostgreSQL dedicato      | 4/4 passati, nessuno skip; guardia sul vero `data_directory` mantenuta                                                                    |
-| API, accessi e operazioni cliniche               | 489/489 passati                                                                                                                           |
-| Browser, cinque ruoli, cartelle e mobile         | 92 viste, zero alert/overflow/errori JavaScript/HTTP rilevati                                                                             |
-| Terapie con inventario completo                  | 8/8 controlli: 106 prescrizioni, 105 attive e una sospesa; PRN, feed mancante, due dosi indipendenti, una tantum, catalogo vuoto e mobile |
-| Retry dopo risposta persa                        | Passato: una scrittura, una ricevuta, record immutato dopo reload                                                                         |
-| Moduli clinici, ciclo HTTP e PDF                 | 7/7 tipi: salvataggio, finalizzazione, replay e PDF verificati                                                                            |
-| Isolamento sessione su risposta reale trattenuta | Passato: OSS riceve 403; nessuna narrativa del medico nella cache o nel DOM                                                               |
-| Import terapia sul codice corrente               | Passato: 5 voci rilevate, 3 persistite secondo la selezione esplicita                                                                     |
-| Mezzanotte/ora legale e regressioni collegate    | 35/35 test mirati passati; già compresi nella suite backend                                                                               |
-| Build frontend e backend                         | Passate                                                                                                                                   |
-| Scanner segreti e contratto CI                   | Zero segreti rilevati; 6/6 test configurazione passati                                                                                    |
+| Controllo                                        | Esito                                                                                                                                                                                |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Frontend completo dopo integrazione di #446      | 1.379 passati, zero falliti/saltati                                                                                                                                                  |
+| Backend completo, due fasi del runner            | 1.931 test: 1.926 passati, zero falliti, 5 skip per harness dedicati                                                                                                                 |
+| Archivio documenti, harness PostgreSQL dedicato  | 6/6 passati, nessuno skip                                                                                                                                                            |
+| Regresso ruoli, cluster PostgreSQL dedicato      | 4/4 passati, nessuno skip; guardia sul vero `data_directory` mantenuta                                                                                                               |
+| API, accessi e operazioni cliniche               | 489/489 passati                                                                                                                                                                      |
+| Browser, cinque ruoli, cartelle e mobile         | 92 viste, zero alert/overflow/errori JavaScript/HTTP rilevati                                                                                                                        |
+| Terapie con inventario completo                  | 9/9 controlli: 106 prescrizioni, 105 attive e una sospesa; PRN, feed mancante, due dosi indipendenti, una tantum, cambio di fascia dopo erogazione e reload, catalogo vuoto e mobile |
+| Retry dopo risposta persa                        | Passato: una scrittura, una ricevuta, record immutato dopo reload                                                                                                                    |
+| Moduli clinici, ciclo HTTP e PDF                 | 7/7 tipi: salvataggio, finalizzazione, replay e PDF verificati                                                                                                                       |
+| Isolamento sessione su risposta reale trattenuta | Passato: OSS riceve 403; nessuna narrativa del medico nella cache o nel DOM                                                                                                          |
+| Import terapia sul codice corrente               | Passato: 5 voci rilevate, 3 persistite secondo la selezione esplicita                                                                                                                |
+| Mezzanotte/ora legale e regressioni collegate    | 35/35 test mirati passati; già compresi nella suite backend                                                                                                                          |
+| Build frontend e backend                         | Passate                                                                                                                                                                              |
+| Scanner segreti e contratto CI                   | Zero segreti rilevati; 6/6 test configurazione passati                                                                                                                               |
 
 Gli skip standard comprendono archivio e quattro prove di conservazione dei ruoli: gli harness separati verificano questi casi senza rimuovere le guardie. Non sommare test mirati e suite complete come coperture indipendenti. L'integrazione di #446 modifica solo frontend e prove browser: il backend verificato non cambia con quel merge; frontend e browser sono stati rieseguiti sul risultato integrato.
 
@@ -43,7 +44,7 @@ Il lint globale ha debito preesistente. Il confronto dei sei file frontend di qu
 
 Le prove API comprendono capability e scope dei cinque ruoli, anonimato, token alterato/revocato, pazienti e duplicati, contatti e campi malformati, prescrizioni e giorni validi, dosi multiple e PRN, parametri con replay/concorrenza, narrativa e diario, agenda con conflitti, consegne e letture, occupazione di letti concorrente, assistente con preview/cancel e moduli. Le suite complete aggiungono parsing e riconciliazione import, schemi insulinici e pompe, dose autorevole, paginazione e conteggi oltre 50/100, revisioni e snapshot, PDF, rollback e policy.
 
-Non si attesta copertura del 100% né assenza di qualsiasi bug. Provider AI/OCR/STT reali, Entra, dati reali, screen reader e dispositivi fisici richiedono verifiche dedicate. Un job CI `real-provider` verde può essere uno skip protetto: non certifica il provider effettivo. Le ulteriori proposte UX aperte nel frattempo sono distinte dalle cinque correzioni di questa consegna; #446 è già integrata da `main`.
+Non si attesta copertura del 100% né assenza di qualsiasi bug. Provider AI/OCR/STT reali, Entra, dati reali, screen reader e dispositivi fisici richiedono verifiche dedicate. Un job CI `real-provider` verde può essere uno skip protetto: non certifica il provider effettivo. Le ulteriori proposte UX aperte nel frattempo sono distinte dalle sei correzioni di questa consegna; #446 è già integrata da `main`.
 
 ## Riproduzione e rilascio
 

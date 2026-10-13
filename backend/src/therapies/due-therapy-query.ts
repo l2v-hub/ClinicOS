@@ -65,6 +65,7 @@ export async function findTherapiesDue(
     WITH due_therapy AS (
       SELECT
         pt.id AS "therapyId",
+        pt.tipo,
         pt."patientId",
         pt."farmacoNome" AS "drugName",
         pt.dosaggio,
@@ -160,8 +161,10 @@ export async function findTherapiesDue(
         FROM "MedicationAdministration" ma
         WHERE ma."therapyId" = due."therapyId"
           AND ma.date = ${date}
-          AND ma.fascia = due.fascia
-          AND (ma.ora = due."scheduledTime" OR due."bandDoses" <= 1)
+          AND (due.tipo = 'una_tantum' OR (
+            ma.fascia = due.fascia
+            AND (ma.ora = due."scheduledTime" OR due."bandDoses" <= 1)
+          ))
         ORDER BY (ma.stato = 'erogata') DESC, (ma.ora = due."scheduledTime") DESC, ma.id ASC
         LIMIT 1
       ) modern ON TRUE

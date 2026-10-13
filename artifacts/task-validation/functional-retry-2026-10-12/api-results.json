@@ -2415,7 +2415,7 @@
     }
   ],
   "evidence": {
-    "patientId": "cmv5vodsa006ucxqpdguh7yt9",
+    "patientId": "cmv5wnnrx006uuoqpprttxwuu",
     "malformedEmail": {
       "status": 400,
       "data": {
@@ -2424,13 +2424,13 @@
       "cache": "private, no-store",
       "replayed": null
     },
-    "parameterReading": "ce28de55-e6f9-4b6b-b8ed-5d857be2cf2d",
+    "parameterReading": "be2da0ed-4f2a-4c7e-a271-19f31c7d1d7c",
     "emptyNarrative": {
       "error": "La revisione non può essere vuota: inserisci il testo oppure ripristina il testo originale. Nessuna modifica è stata salvata."
     },
     "therapy": {
-      "id": "cmv5voeqc007qcxqplrh93mi3",
-      "patientId": "cmv5vodsa006ucxqpdguh7yt9",
+      "id": "cmv5wno5u007quoqpmo7hv8m4",
+      "patientId": "cmv5wnnrx006uuoqpprttxwuu",
       "farmacoNome": "QA Farmaco sintetico",
       "dosaggio": "500 mg",
       "viaSomministrazione": "orale",
@@ -2457,8 +2457,8 @@
       "giorniSettimana": null,
       "doseMode": "fixed",
       "doseProtocol": null,
-      "createdAt": "2026-10-12T23:23:20.340Z",
-      "updatedAt": "2026-10-12T23:23:20.340Z",
+      "createdAt": "2026-10-12T23:50:45.522Z",
+      "updatedAt": "2026-10-12T23:50:45.522Z",
       "schedules": []
     },
     "invalidWeekdays": {
@@ -2471,8 +2471,8 @@
     },
     "sameBandSchedules": {
       "therapy": {
-        "id": "cmv5voet9007ucxqpj6rqy0jt",
-        "patientId": "cmv5vodsa006ucxqpdguh7yt9",
+        "id": "cmv5wno8s007uuoqpvi3qxbjl",
+        "patientId": "cmv5wnnrx006uuoqpprttxwuu",
         "farmacoNome": "QA Two morning doses",
         "dosaggio": "100 mg compressa",
         "viaSomministrazione": "orale",
@@ -2499,37 +2499,37 @@
         "giorniSettimana": null,
         "doseMode": "fixed",
         "doseProtocol": null,
-        "createdAt": "2026-10-12T23:23:20.445Z",
-        "updatedAt": "2026-10-12T23:23:20.445Z",
+        "createdAt": "2026-10-12T23:50:45.628Z",
+        "updatedAt": "2026-10-12T23:50:45.628Z",
         "schedules": [
           {
-            "id": "cmv5voete007vcxqpssmv3ej4",
-            "therapyId": "cmv5voet9007ucxqpj6rqy0jt",
+            "id": "cmv5wno8u007vuoqpnvm1lxux",
+            "therapyId": "cmv5wno8s007uuoqpvi3qxbjl",
             "time": "08:00",
             "fascia": "mattina",
             "quantityNumerator": 1,
             "quantityDenominator": 1,
             "administrationUnit": "compressa",
-            "createdAt": "2026-10-12T23:23:20.445Z",
-            "updatedAt": "2026-10-12T23:23:20.445Z"
+            "createdAt": "2026-10-12T23:50:45.628Z",
+            "updatedAt": "2026-10-12T23:50:45.628Z"
           },
           {
-            "id": "cmv5voete007wcxqp1wuhc3s3",
-            "therapyId": "cmv5voet9007ucxqpj6rqy0jt",
+            "id": "cmv5wno8u007wuoqps3q34foe",
+            "therapyId": "cmv5wno8s007uuoqpvi3qxbjl",
             "time": "10:00",
             "fascia": "mattina",
             "quantityNumerator": 2,
             "quantityDenominator": 1,
             "administrationUnit": "compressa",
-            "createdAt": "2026-10-12T23:23:20.445Z",
-            "updatedAt": "2026-10-12T23:23:20.445Z"
+            "createdAt": "2026-10-12T23:50:45.628Z",
+            "updatedAt": "2026-10-12T23:50:45.628Z"
           }
         ]
       },
       "doses": [
         {
           "administrationId": null,
-          "therapyId": "cmv5voet9007ucxqpj6rqy0jt",
+          "therapyId": "cmv5wno8s007uuoqpvi3qxbjl",
           "drugName": "QA Two morning doses",
           "dosage": "1 compressa — 100 mg",
           "quantityLabel": "1 compressa — 100 mg",
@@ -2544,7 +2544,7 @@
         },
         {
           "administrationId": null,
-          "therapyId": "cmv5voet9007ucxqpj6rqy0jt",
+          "therapyId": "cmv5wno8s007uuoqpvi3qxbjl",
           "drugName": "QA Two morning doses",
           "dosage": "2 compressa — 200 mg",
           "quantityLabel": "2 compressa — 200 mg",
@@ -2560,12 +2560,12 @@
       ]
     },
     "singleAdministration": {
-      "therapyId": "cmv5vof0c007ycxqpqoxamo94",
+      "therapyId": "cmv5wnocx007yuoqploudn9bi",
       "prescribedTime": "11:30",
       "initial": [
         {
           "administrationId": null,
-          "therapyId": "cmv5vof0c007ycxqpqoxamo94",
+          "therapyId": "cmv5wnocx007yuoqploudn9bi",
           "drugName": "QA one-off clock",
           "dosage": "Dose sintetica prescritta",
           "quantityLabel": null,
@@ -2581,15 +2581,15 @@
       ],
       "final": [
         {
-          "administrationId": "cmv5vof2x0081cxqpn41q0j62",
-          "therapyId": "cmv5vof0c007ycxqpqoxamo94",
+          "administrationId": "cmv5wnoic0081uoqpy25ihw1c",
+          "therapyId": "cmv5wnocx007yuoqploudn9bi",
           "drugName": "QA one-off clock",
           "dosage": "Dose sintetica prescritta",
           "quantityLabel": null,
           "route": "orale",
           "scheduledTime": "11:30",
           "status": "administered",
-          "administeredAt": "2026-10-12T23:23:20.791Z",
+          "administeredAt": "2026-10-12T23:50:45.970Z",
           "administeredBy": "Infermiere 1",
           "notAdministeredReason": null,
           "doseMode": "fixed",
@@ -2599,9 +2599,9 @@
     },
     "scheduledReceipt": {
       "first": {
-        "id": "cmv5voff20086cxqpj3dcowll",
-        "therapyId": "cmv5vof8r0084cxqpr56hxyl4",
-        "patientId": "cmv5vodsa006ucxqpdguh7yt9",
+        "id": "cmv5wnomm0086uoqp7l4cvqzg",
+        "therapyId": "cmv5wnola0084uoqpd3j3t5sa",
+        "patientId": "cmv5wnnrx006uuoqpprttxwuu",
         "farmacoNome": "QA replay and refusal",
         "farmacoDose": "Dose sintetica prescritta",
         "farmacoVia": "orale",
@@ -2615,17 +2615,17 @@
         "doseContext": null,
         "motivo": "rifiutata_paziente",
         "note": null,
-        "createdAt": "2026-10-12T23:23:21.230Z",
-        "updatedAt": "2026-10-12T23:23:21.230Z"
+        "createdAt": "2026-10-12T23:50:46.126Z",
+        "updatedAt": "2026-10-12T23:50:46.126Z"
       },
       "replayed": "true",
       "overwriteStatus": 409,
       "alteredRequestStatus": 409
     },
     "administration": {
-      "id": "cmv5vofph008bcxqpa7xepzmi",
-      "therapyId": "cmv5voeqc007qcxqplrh93mi3",
-      "patientId": "cmv5vodsa006ucxqpdguh7yt9",
+      "id": "cmv5wnopk008buoqp6y84w176",
+      "therapyId": "cmv5wno5u007quoqpmo7hv8m4",
+      "patientId": "cmv5wnnrx006uuoqpprttxwuu",
       "farmacoNome": "QA Farmaco sintetico",
       "farmacoDose": "500 mg",
       "farmacoVia": "orale",
@@ -2635,23 +2635,23 @@
       "stato": "erogata",
       "operatoreId": "SIM-NURSE-1",
       "operatoreNome": "Infermiere 1",
-      "confirmedAt": "2026-10-12T23:23:21.605Z",
+      "confirmedAt": "2026-10-12T23:50:46.231Z",
       "doseContext": null,
       "motivo": null,
       "note": null,
-      "createdAt": "2026-10-12T23:23:21.605Z",
-      "updatedAt": "2026-10-12T23:23:21.605Z"
+      "createdAt": "2026-10-12T23:50:46.232Z",
+      "updatedAt": "2026-10-12T23:50:46.232Z"
     },
     "assessment": {
       "assessment": {
-        "id": "bad99da2-89bc-4902-ba5c-6f33c3a5eaa3",
-        "patientId": "cmv5vodsa006ucxqpdguh7yt9",
+        "id": "63a98a19-c5b4-4c76-8052-621cf3ea3833",
+        "patientId": "cmv5wnnrx006uuoqpprttxwuu",
         "status": "final",
         "version": 3,
-        "assessedAt": "2026-10-12T23:23:21.880Z",
-        "createdAt": "2026-10-12T23:23:21.897Z",
-        "updatedAt": "2026-10-12T23:23:22.227Z",
-        "finalizedAt": "2026-10-12T23:23:22.227Z",
+        "assessedAt": "2026-10-12T23:50:46.418Z",
+        "createdAt": "2026-10-12T23:50:46.434Z",
+        "updatedAt": "2026-10-12T23:50:46.560Z",
+        "finalizedAt": "2026-10-12T23:50:46.560Z",
         "author": {
           "operatorId": "SIM-NURSE-1",
           "name": "Infermiere 1"
@@ -2659,10 +2659,10 @@
         "predecessorId": null,
         "correctionReason": null,
         "correctedById": null,
-        "snapshotSha256": "c819c937ba20582b0a7c2ac8777c86d229ac63588b07bb6065ed940a15748b0e",
+        "snapshotSha256": "a7b4ddefa7bc617159055350d02188ce33bca2752f92f6a3d161cb6e617faa84",
         "pdf": {
           "status": "ready",
-          "documentId": "48219649-f1db-48a6-94a2-bd0c5e4900b0",
+          "documentId": "f7d437cb-6f86-4219-8c32-f103ec7b96a1",
           "errorCode": null,
           "retryAvailable": false
         },
@@ -2729,7 +2729,7 @@
             "total": 4
           },
           "patient": {
-            "id": "cmv5vodsa006ucxqpdguh7yt9",
+            "id": "cmv5wnnrx006uuoqpprttxwuu",
             "lastName": "Rossi QA sintetico",
             "location": {
               "bed": null,
@@ -2739,12 +2739,12 @@
               "status": "unassigned"
             },
             "firstName": "Mario",
-            "dateOfBirth": "1988-09-27",
-            "codiceFiscale": "RSSMRA88P27H501X"
+            "dateOfBirth": "1977-02-21",
+            "codiceFiscale": "RSSMRA77B21H501A"
           },
-          "createdAt": "2026-10-12T23:23:21.897Z",
-          "assessedAt": "2026-10-12T23:23:21.880Z",
-          "finalizedAt": "2026-10-12T23:23:22.227Z",
+          "createdAt": "2026-10-12T23:50:46.434Z",
+          "assessedAt": "2026-10-12T23:50:46.418Z",
+          "finalizedAt": "2026-10-12T23:50:46.560Z",
           "predecessor": null,
           "predecessorId": null,
           "interpretation": "Dolore moderato (richiede intervento/monitoraggio).",
@@ -2752,14 +2752,14 @@
           "correctionReason": null
         }
       },
-      "requestId": "30a2ddaf-fe92-4e6e-b4cd-d8eb717c8e89",
+      "requestId": "4d61078f-3c42-4d5b-879b-54f9698ee2f9",
       "replayed": false
     },
-    "handover": "152327a6-f605-4b06-9619-2807b7c58957",
+    "handover": "929bf4fe-8a2c-49ca-84bb-79a4d5a61ade",
     "bedRace": [
       {
         "status": 201,
-        "id": "cmv5vohkt008wcxqpf4vt0be0"
+        "id": "cmv5wnpxn008wuoqpukhyek5g"
       },
       {
         "status": 409

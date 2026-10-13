@@ -97,6 +97,8 @@ export interface AuthoritativeTherapyAdministration extends TherapyAdministratio
   ora: string;
   /** One prescribed dose in this band: any record of the band is that dose, whatever its hour. */
   singleBandDose: boolean;
+  /** A one-off has just one dose on its date, including after an edit crosses bands. */
+  singleDayDose: boolean;
   doseContext?: {
     kind: 'blood_glucose';
     glucoseMgDl: number;
@@ -328,6 +330,7 @@ export async function resolveAuthoritativeTherapy(
     farmacoVia: therapy.viaSomministrazione || 'orale',
     ora: schedule?.time || fallbackTime,
     singleBandDose: schedules.length <= 1,
+    singleDayDose: therapy.tipo === 'una_tantum',
     ...(doseContext ? { doseContext } : {}),
   };
 }

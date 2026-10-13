@@ -40,7 +40,7 @@
       "headings": [
         "Posti Letto"
       ],
-      "controls": 40
+      "controls": 43
     },
     {
       "role": "admin",
@@ -71,12 +71,12 @@
         "Dashboard",
         "Situazione clinica",
         "Prossime terapie",
-        "In programma 50",
+        "In programma 56",
         "Occupazione Struttura",
         "Carico Operatori",
         "Riepilogo Agenda Oggi"
       ],
-      "controls": 118
+      "controls": 130
     },
     {
       "role": "supervisor",
@@ -114,7 +114,7 @@
       "headings": [
         "Posti Letto"
       ],
-      "controls": 40
+      "controls": 43
     },
     {
       "role": "supervisor",
@@ -181,7 +181,7 @@
         "Pazienti",
         "Nuovo ingresso"
       ],
-      "controls": 26
+      "controls": 27
     },
     {
       "role": "doctor",
@@ -202,7 +202,7 @@
         "Parametri vitali",
         "Bassi, Giorgio"
       ],
-      "controls": 47
+      "controls": 49
     },
     {
       "role": "doctor",
@@ -483,7 +483,7 @@
         "Pazienti",
         "Nuovo ingresso"
       ],
-      "controls": 26
+      "controls": 27
     },
     {
       "role": "nurse",
@@ -504,7 +504,7 @@
         "Parametri vitali",
         "Bassi, Giorgio"
       ],
-      "controls": 47
+      "controls": 49
     },
     {
       "role": "nurse",
@@ -672,14 +672,10 @@
       "alerts": [],
       "headings": [
         "Bassi, Giorgio",
-        "1. Contesto",
-        "2. Mobilizzazione",
-        "3. Assistenza",
-        "4. Ausili",
-        "5. Note",
-        "Storico valutazioni"
+        "Assistenza e mobilizzazione",
+        "Scale di valutazione"
       ],
-      "controls": 87
+      "controls": 37
     },
     {
       "role": "nurse",
@@ -698,10 +694,9 @@
       "alerts": [],
       "headings": [
         "Bassi, Giorgio",
-        "Scala PAINAD — Scheda di Valutazione",
         "Storico valutazioni"
       ],
-      "controls": 37
+      "controls": 18
     },
     {
       "role": "nurse",
@@ -889,7 +884,7 @@
       "alerts": [],
       "headings": [
         "Il mio turno",
-        "Giro parametri di oggi · 2 di 10",
+        "Giro parametri di oggi · 3 di 11",
         "Prossimi appuntamenti",
         "Da leggere"
       ],
@@ -903,7 +898,7 @@
       "headings": [
         "Pazienti"
       ],
-      "controls": 26
+      "controls": 27
     },
     {
       "role": "oss",
@@ -914,7 +909,7 @@
         "Parametri vitali",
         "Bassi, Giorgio"
       ],
-      "controls": 47
+      "controls": 49
     },
     {
       "role": "oss",

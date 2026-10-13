@@ -431,6 +431,75 @@ test('one-off explicit clocks survive empty flags across feed, summary, assistan
     assert.equal(after.total, before.total);
     assert.equal(after.pending, before.pending - 1);
     assert.equal(after.administered, before.administered + 1);
+    // A one-off dose stays given even if its edited time crosses into a different band.
+    await prisma.patientTherapy.update({
+      where: { id: therapy.id },
+      data: { orarioSomministrazione: '18:10' },
+    });
+    assert.equal((await write({ fascia: 'sera', scheduledTime: '18:10' })).status, 409);
+    const moved = (await read()).slots.find((s) => s.fascia === 'sera')!;
+    assert.equal(
+      moved.patients.flatMap((p) => p.administrations).find((a) => a.therapyId === therapy.id)
+        ?.status,
+      'administered',
+    );
+    assert.equal(moved.summary.administered, 1);
+    assert.deepEqual(
+      await prisma.medicationAdministration.findFirstOrThrow({ where: { therapyId: therapy.id } }),
+      record,
+    );
+    const refused = rows[1];
+    const refusal = await fetch(`${base}/therapy-slots/not-administered`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Operator-Id': ownerOperatorId,
+        'X-Operator-Role': 'operatore',
+      },
+      body: JSON.stringify({
+        patientId,
+        therapyId: refused.id,
+        date,
+        fascia: 'mattina',
+        scheduledTime: '08:45',
+        motivo: 'rifiuto',
+        requestId: randomUUID(),
+        expectedStato: 'da_erogare',
+      }),
+    });
+    assert.equal(refusal.status, 200);
+    const refusedRecord = await prisma.medicationAdministration.findFirstOrThrow({
+      where: { therapyId: refused.id },
+    });
+    await prisma.patientTherapy.update({
+      where: { id: refused.id },
+      data: { orarioSomministrazione: '18:20' },
+    });
+    assert.equal(
+      (
+        await write({
+          therapyId: refused.id,
+          fascia: 'sera',
+          scheduledTime: '18:20',
+          requestId: randomUUID(),
+          expectedStato: 'da_erogare',
+        })
+      ).status,
+      409,
+    );
+    const refusedSlot = (await read()).slots.find((s) => s.fascia === 'sera')!;
+    assert.equal(
+      refusedSlot.patients.flatMap((p) => p.administrations).find((a) => a.therapyId === refused.id)
+        ?.status,
+      'not_administered',
+    );
+    assert.equal(refusedSlot.summary.notAdministered, 1);
+    assert.deepEqual(
+      await prisma.medicationAdministration.findFirstOrThrow({
+        where: { therapyId: refused.id },
+      }),
+      refusedRecord,
+    );
     assert.equal(
       (await due()).overdue.some((a) => a.therapyId === therapy.id),
       false,

@@ -1,0 +1,32 @@
+✔ nighttime assistant queue uses the clinical day and Rome clock for future and due doses (297.115464ms)
+✔ scheduled request receipts replay each first outcome without changing clinical records (801.905718ms)
+✔ concurrent retries of a scheduled request both return the same single record (192.091163ms)
+✔ a pending-only request cannot overwrite refusal; replay preserves its original snapshot (271.91108ms)
+✔ one-off explicit clocks survive empty flags across feed, summary, assistant and writes (643.623568ms)
+✔ distinct same-band doses retain quantity, independent writes and exact summaries (193.144434ms)
+✔ a given single dose stays given after its time moves within the band (no double dose) (226.5871ms)
+✔ a single dose recorded as not given and then moved is updated in place, not duplicated (36.711018ms)
+✔ conditional insulin requires a measured glucose and stores the server-resolved dose (29.544301ms)
+✔ conditional insulin rejects coercible non-number glucose values (10.037587ms)
+✔ therapy confirm persists prescription fields, not spoofed client drug data (29.159592ms)
+✔ therapy confirm rejects a mismatched therapy/patient pair (73.944643ms)
+✔ two same-name prescriptions keep independent administration records (27.899935ms)
+✔ ordinary operators cannot read or mutate another owner patient; managers retain global scope (234.084841ms)
+✔ therapy reads and writes apply patient scope before loading clinical data (8.376611ms)
+✔ therapy slot relations and administration candidates are bounded (0.259342ms)
+✔ assistant therapy queue is exact-counted, bounded and declares sampled results (0.165712ms)
+✔ interactive agenda uses keyset pages with exact scoped summaries (0.301417ms)
+✔ glucose reading boundary accepts numeric integers only, rejects dose spoof (1.661023ms)
+✔ conditional dose is resolved from saved protocol, never schedule placeholder (1.458849ms)
+✔ pump scale records the rate in ml/h and the band bolus beside it (0.486562ms)
+✔ missing reading and uncovered interval block administration without fallback dose (2.11273ms)
+✔ not-administered records do not require glucose but still require scoped therapy (0.415288ms)
+✔ fixed therapies retain exact fraction label without glucose (0.570525ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14885.797684

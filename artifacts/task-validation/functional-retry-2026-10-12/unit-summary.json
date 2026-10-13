@@ -23,7 +23,7 @@
       "cancelled": 0,
       "skipped": 5
     },
-    "log": "retry-backend-verified-2026-10-12.log",
+    "log": "retry-backend-with-band-guard-2026-10-12.log",
     "exitCode": 0
   },
   "frontend": {

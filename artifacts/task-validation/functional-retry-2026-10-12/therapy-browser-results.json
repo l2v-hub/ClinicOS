@@ -1,5 +1,5 @@
 {
-  "patientId": "cmv5vo8ki00004eqpla60vlm6",
+  "patientId": "cmv5wqnxu00003lqpmdygc5p3",
   "results": [
     {
       "name": "106-prescription-inventory",
@@ -11,11 +11,18 @@
         "?limit=100&status=tutte",
         "?limit=100&status=attiva",
         "?limit=100&status=tutte",
-        "?limit=100&status=attiva&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTEyVDIzOjIzOjEyLjY0NloiLCJpZCI6IlFBLWNtdjV2bzhraTAwMDA0ZXFwbGE2MHZsbTYtMTAyIiwic3RhdHVzIjoiYXR0aXZhIn0",
-        "?limit=100&status=tutte&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTEyVDIzOjIzOjEyLjY0NloiLCJpZCI6IlFBLWNtdjV2bzhraTAwMDA0ZXFwbGE2MHZsbTYtMTAzIiwic3RhdHVzIjoidHV0dGUifQ",
+        "?limit=100&status=tutte&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTEyVDIzOjUzOjA1LjI3NloiLCJpZCI6IlFBLWNtdjV3cW54dTAwMDAzbHFwbWR5Z2M1cDMtMTAzIiwic3RhdHVzIjoidHV0dGUifQ",
+        "?limit=100&status=attiva&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTEyVDIzOjUzOjA1LjI3NloiLCJpZCI6IlFBLWNtdjV3cW54dTAwMDAzbHFwbWR5Z2M1cDMtMTAyIiwic3RhdHVzIjoiYXR0aXZhIn0",
         "?limit=100&status=attiva",
         "?limit=100&status=attiva",
-        "?limit=100&status=attiva&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTEyVDIzOjIzOjEyLjY0NloiLCJpZCI6IlFBLWNtdjV2bzhraTAwMDA0ZXFwbGE2MHZsbTYtMTAyIiwic3RhdHVzIjoiYXR0aXZhIn0"
+        "?limit=100&status=attiva&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTEyVDIzOjUzOjA1LjI3NloiLCJpZCI6IlFBLWNtdjV3cW54dTAwMDAzbHFwbWR5Z2M1cDMtMTAyIiwic3RhdHVzIjoiYXR0aXZhIn0",
+        "?limit=100&status=attiva",
+        "?limit=100&status=tutte",
+        "?limit=100&status=attiva",
+        "?limit=100&status=tutte",
+        "?limit=100&status=tutte&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTEyVDIzOjUzOjA1LjI3NloiLCJpZCI6IlFBLWNtdjV3cW54dTAwMDAzbHFwbWR5Z2M1cDMtMTAzIiwic3RhdHVzIjoidHV0dGUifQ",
+        "?limit=100&status=attiva&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTEyVDIzOjUzOjA1LjI3NloiLCJpZCI6IlFBLWNtdjV3cW54dTAwMDAzbHFwbWR5Z2M1cDMtMTAyIiwic3RhdHVzIjoiYXR0aXZhIn0",
+        "?limit=100&status=tutte"
       ]
     },
     {
@@ -38,6 +45,10 @@
       "name": "one-off-explicit-clock-with-empty-flags",
       "pass": true,
       "scheduledTime": "11:30"
+    },
+    {
+      "name": "one-off-given-stays-given-after-band-shift-and-reload",
+      "pass": true
     },
     {
       "name": "empty-catalog-no-automatic-name-searches",

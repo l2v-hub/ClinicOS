@@ -167,6 +167,36 @@ try {
     false,
   );
   await page.screenshot({ path: resolve(out, 'mobile-distinct-doses.png'), fullPage: true });
+  await prisma.patientTherapy.update({
+    where: { id: `QA-${patient.id}-105` },
+    data: { orarioSomministrazione: '18:10' },
+  });
+  await page.reload();
+  const loginButton = page.getByRole('button', { name: /^Infermiere 1/ });
+  const needsLogin = await Promise.race([
+    loginButton.waitFor({ state: 'visible' }).then(() => true),
+    page
+      .locator('.patient-record-view')
+      .waitFor()
+      .then(() => false),
+  ]);
+  if (needsLogin) await loginButton.click();
+  await page.locator('.patient-record-view').waitFor();
+  await page.getByRole('tab', { name: 'Terapia', exact: true }).click();
+  await page.getByRole('tab', { name: 'Calendario', exact: true }).click();
+  await page.getByRole('button', { name: 'Giorno', exact: true }).click();
+  await calendar.locator('button[data-time="18:10"]').click();
+  await page.getByRole('dialog').waitFor();
+  assert.equal(
+    await calendar.getByRole('button', { name: /^Erogata:.*QA inventory 105/ }).count(),
+    0,
+  );
+  const afterMove = await prisma.medicationAdministration.findMany({
+    where: { therapyId: oneOff.therapyId },
+  });
+  assert.deepEqual(afterMove, [oneOff]);
+  await page.screenshot({ path: resolve(out, 'oneoff-after-band-shift.png'), fullPage: true });
+  results.push({ name: 'one-off-given-stays-given-after-band-shift-and-reload', pass: true });
   assert.deepEqual(errors, []);
   if (emptyCatalog) {
     assert.equal(

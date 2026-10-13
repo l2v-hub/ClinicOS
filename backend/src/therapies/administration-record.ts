@@ -30,16 +30,23 @@ export class TherapyAlreadyAdministeredError extends Error {}
  */
 async function existingSlotRecord(
   tx: Prisma.TransactionClient,
-  slot: { therapyId: string; date: string; fascia: string; ora: string; singleBandDose: boolean },
+  slot: {
+    therapyId: string;
+    date: string;
+    fascia: string;
+    ora: string;
+    singleBandDose: boolean;
+    singleDayDose: boolean;
+  },
 ) {
   const { therapyId, date, fascia, ora } = slot;
-  if (!slot.singleBandDose)
+  if (!slot.singleBandDose && !slot.singleDayDose)
     return tx.medicationAdministration.findUnique({
       where: { therapyId_date_fascia_ora: { therapyId, date, fascia, ora } },
       select: { id: true, stato: true },
     });
   const records = await tx.medicationAdministration.findMany({
-    where: { therapyId, date, fascia },
+    where: { therapyId, date, ...(!slot.singleDayDose && { fascia }) },
     select: { id: true, stato: true, ora: true },
     orderBy: { id: 'asc' },
   });
@@ -79,6 +86,7 @@ export async function confirmTherapyAdministration(
       fascia,
       ora,
       singleBandDose,
+      singleDayDose,
       doseContext,
     } = authoritative;
     const existing = await existingSlotRecord(tx, {
@@ -87,6 +95,7 @@ export async function confirmTherapyAdministration(
       fascia,
       ora,
       singleBandDose,
+      singleDayDose,
     });
     if (existing?.stato === 'erogata') throw new TherapyAlreadyAdministeredError();
     if (input.expectedStato && existing && existing.stato !== input.expectedStato)
@@ -158,6 +167,7 @@ export async function recordTherapyNotAdministered(
       fascia,
       ora,
       singleBandDose,
+      singleDayDose,
       motivo = '',
       note: noteText,
     } = authoritative;
@@ -167,6 +177,7 @@ export async function recordTherapyNotAdministered(
       fascia,
       ora,
       singleBandDose,
+      singleDayDose,
     });
     if (existing?.stato === 'erogata') throw new TherapyAlreadyAdministeredError();
     if (input.expectedStato && existing && existing.stato !== input.expectedStato)
