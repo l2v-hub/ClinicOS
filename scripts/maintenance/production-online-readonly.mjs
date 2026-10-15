@@ -10,6 +10,7 @@ async function read(path,headers={}) {
 }
 let browser,issuedSessionToken;
 let phase='auth-status';
+const loginDiagnostics={requests:[]};
 try {
  const auth=await read('/auth/status');
  await read('/ready');
@@ -35,6 +36,7 @@ try {
   });
   const page=await context.newPage();page.setDefaultTimeout(30000);
   page.on('pageerror',()=>{pageErrors++;});
+  page.on('response',r=>{const u=new URL(r.url());if(['/auth/status','/auth/simulator/identities','/auth/simulator/session'].some(p=>u.pathname.endsWith(p)))loginDiagnostics.requests.push({origin:u.origin,path:u.pathname,status:r.status()});});
   phase='browser-navigation';
   await page.goto(frontend+'/#/pazienti',{waitUntil:'networkidle'});
   if(auth.simulator) {
@@ -42,8 +44,14 @@ try {
    const list=await read('/auth/simulator/identities');
    const profile=list.identities.find(p=>p.id===process.env.EXISTING_SIMULATOR_ID);
    assert.ok(profile);
-   phase='existing-profile-login';
-   const [response]=await Promise.all([page.waitForResponse(r=>r.url()===backend+'/auth/simulator/session'&&r.status()===201),page.getByRole('button',{name:new RegExp('^'+profile.name+' ')}).click()]);
+   phase='existing-profile-button';
+   const choice=page.getByRole('button',{name:new RegExp('^'+profile.name)});
+   loginDiagnostics.profileButtonMatches=await choice.count();
+   loginDiagnostics.simulatorButtons=await page.locator('.login-sim__item').count();
+   if(loginDiagnostics.profileButtonMatches!==1)throw new Error('EXISTING_PROFILE_BUTTON_MISSING');
+   phase='existing-profile-session';
+   const [response]=await Promise.all([page.waitForResponse(r=>r.url()===backend+'/auth/simulator/session'),choice.click()]);
+   if(response.status()!==201)throw new Error('EXISTING_PROFILE_SESSION_REJECTED');
    const session=await response.json();sessionToken=session.token;issuedSessionToken=sessionToken;assert.ok(sessionToken);
    headers={Authorization:'Bearer '+sessionToken};
   } else {
@@ -75,7 +83,7 @@ try {
  }
  console.log(JSON.stringify({onlineReadonlyVerification:report}));
 } catch(error) {
- console.error(JSON.stringify({onlineReadonlyFailed:true,phase,code:/^[A-Z0-9_]+$/.test(error.message??'')?error.message:error.code??(/Executable doesn't exist|distribution.*not found/i.test(error.message??'')?'BROWSER_RUNTIME_MISSING':error.name??'ONLINE_VERIFICATION_FAILED'),completedChecks:checks}));process.exitCode=1;
+ console.error(JSON.stringify({onlineReadonlyFailed:true,phase,code:/^[A-Z0-9_]+$/.test(error.message??'')?error.message:error.code??(/Executable doesn't exist|distribution.*not found/i.test(error.message??'')?'BROWSER_RUNTIME_MISSING':error.name??'ONLINE_VERIFICATION_FAILED'),loginDiagnostics,completedChecks:checks}));process.exitCode=1;
 } finally {
  if(issuedSessionToken)try{await fetch(backend+'/auth/simulator/logout',{method:'POST',headers:{Authorization:'Bearer '+issuedSessionToken},signal:AbortSignal.timeout(10000)});}catch{}
  if(browser)await browser.close();
