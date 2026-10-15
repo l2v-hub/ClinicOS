@@ -1,0 +1,24 @@
+import {test,expect} from 'playwright/test';
+import {readFile} from 'node:fs/promises';
+test('recorded review runner results persist on reload with safety checks',async({page})=>{
+  const errors=[],failures=[];
+  page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
+  page.on('pageerror',error=>errors.push(error.message));
+  page.on('response',response=>{if(response.status()>=400)failures.push(response.status());});
+  const output=await readFile(new URL('test-results/qa-review-loop.txt',import.meta.url),'utf8');
+  const passed=output.match(/ℹ pass (\d+)/)?.[1];
+  expect(Number(passed)).toBeGreaterThanOrEqual(11);
+  const response=await page.goto('/');expect(response.ok()).toBe(true);
+  await expect(page.locator('#passed')).toBeVisible();
+  await expect(page.locator('#passed')).toHaveText(passed);
+  await expect(page.locator('#failed')).toHaveText('0');
+  await expect(page.getByText(/four rejected rounds remain blocked/)).toBeVisible();
+  await expect(page.getByText(/missing authentication consumes no review round/)).toBeVisible();
+  await expect(page.getByText(/reviewer has only read tools/)).toBeVisible();
+  await expect(page.getByText('Integrazione GitHub automatica: non attivata')).toBeVisible();
+  await page.reload();
+  await expect(page.locator('#passed')).toHaveText(passed);
+  await expect(page.locator('#failed')).toHaveText('0');
+  expect(errors).toEqual([]);expect(failures).toEqual([]);
+  await page.screenshot({path:new URL('result.png',import.meta.url).pathname,fullPage:true});
+});

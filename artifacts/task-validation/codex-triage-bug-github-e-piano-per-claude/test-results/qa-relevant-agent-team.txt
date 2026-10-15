@@ -1,0 +1,26 @@
+✔ runtime source contains no prohibited automatic action or bypass invocation (21.642683ms)
+✔ sanitizeText removes credentials and authorization values (2.483506ms)
+✔ sanitizeText strips trailing whitespace deterministically so captured evidence passes git diff --check (2.381286ms)
+✔ runProcess reports a missing executable without throwing (10.352115ms)
+✔ runProcess refuses a nonexistent working directory with an unambiguous diagnostic instead of a misleading spawn ENOENT (QA-263-013) (0.97248ms)
+✔ runProcess timeout escalates to a process-tree kill so no owned child survives (QA-263-011) (203.460376ms)
+✔ runProcess default timeout kill actually terminates the spawned process (404.317115ms)
+✔ protocol comment round-trips one schema-valid JSON object (1.909682ms)
+✔ protocol rejects prose and unknown fields (1.00357ms)
+✔ finding fingerprints remain stable across timestamps (12.239923ms)
+✔ the module constants pin every nested-agent surface (2.678937ms)
+✔ buildClaudeWorkerArgs produces the exact safe argv with --tools and --disallowedTools (0.898452ms)
+✔ the built argv never references bypass or dangerous permission modes (1.515886ms)
+✔ a policy exposing a nested-agent tool is rejected with a precise diagnostic (0.428493ms)
+✔ a policy missing a required nested-execution deny rule is rejected (0.521178ms)
+✔ empty or missing tool policies fail closed (0.235035ms)
+✔ bypass tokens are rejected in every policy list (0.378729ms)
+✔ buildClaudeWorkerArgs refuses an unsafe policy before any spawn (1.279839ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 740.350838

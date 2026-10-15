@@ -1,0 +1,17 @@
+{
+  "all_relevant_baseline_files_unchanged": true,
+  "baseline_ref": "origin/main",
+  "checks_failed_in_existing_suite": [
+    "ci-browser-e2e-config: production fallback regex",
+    "e2e-import-journey: removed demographics acceptance toggle",
+    "process-exit-ownership: Linux child PID survival"
+  ],
+  "files": [
+    "e2e/import-happy-path.mjs",
+    "frontend/src/config.ts",
+    "agent-team/tests/unit/e2e-import-journey.test.mjs",
+    "agent-team/tests/unit/ci-browser-e2e-config.test.mjs",
+    "agent-team/tests/integration/process-exit-ownership.test.mjs"
+  ],
+  "out_of_scope_fixes_applied": false
+}

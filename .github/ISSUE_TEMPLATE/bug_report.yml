@@ -1,0 +1,45 @@
+name: Bug da analizzare con Codex
+description: Segnala un bug da raggruppare per feature, analizzare e correggere con Codex.
+title: '[Bug] '
+labels: ['bug', 'codex-triage']
+body:
+  - type: dropdown
+    id: feature
+    attributes:
+      label: Area funzionale
+      options:
+        - Pazienti e cartelle
+        - Terapie e somministrazioni
+        - Parametri e valutazioni
+        - Diario e consegne
+        - Agenda e operatori
+        - Documenti e importazione
+        - Assistente
+        - Accesso e permessi
+        - Da determinare
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Passaggi per riprodurre il bug
+      description: Indica schermata, azioni e un esempio con dati sintetici.
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Comportamento osservato
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento atteso
+    validations:
+      required: true
+  - type: textarea
+    id: related
+    attributes:
+      label: Bug collegati o condizioni particolari
+      description: Collega eventuali issue simili e specifica frequenza, ruolo e dispositivo.
