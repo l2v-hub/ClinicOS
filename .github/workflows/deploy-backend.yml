@@ -22,12 +22,9 @@ jobs:
           node-version: 20
       - name: Install pinned Railway CLI
         run: npm install -g @railway/cli@5.66.0
-      - name: Inspect supported private maintenance access
+      - name: Inventory production through a temporary private read-only job
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
         run: |
-          railway service files list --help
-          railway service files download --help
-          railway volume files list --help
-          node scripts/maintenance/railway-access-inspect.mjs
+          node scripts/maintenance/railway-private-inventory-runner.mjs
