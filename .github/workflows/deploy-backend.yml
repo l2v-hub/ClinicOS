@@ -20,16 +20,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install pinned Railway CLI
-        run: npm install -g @railway/cli@5.66.0
-      - name: Independently verify patient data is empty
+      - name: Install browser driver for read-only live verification
+        run: npm install --prefix "$RUNNER_TEMP/clinicos-readonly-browser" --ignore-scripts --no-audit --no-fund playwright@1.61.1
+      - name: Verify live API access and empty browser list without clinical writes
         env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
-        run: |
-          node scripts/maintenance/railway-private-inventory-runner.mjs --verify-clean
-      - name: Clear transient caches and retain private recovery backup
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
-        run: node scripts/maintenance/production-online-finalize.mjs
+          PLAYWRIGHT_MODULE_PATH: ${{ runner.temp }}/clinicos-readonly-browser/node_modules/playwright/index.mjs
+        run: node scripts/maintenance/production-online-readonly.mjs
