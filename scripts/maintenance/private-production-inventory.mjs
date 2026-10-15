@@ -19,9 +19,10 @@ try {
   const remainingPatientAudits=(await client.query('SELECT count(*)::int AS n FROM "AiAuditEvent" WHERE "patientId" IS NOT NULL')).rows[0].n;
   const remainingPatientNotes=(await client.query('SELECT count(*)::int AS n FROM "Nota" WHERE coalesce("pazienteId",\'\')<>\'\' OR coalesce("pazienteNome",\'\')<>\'\'')).rows[0].n;
   const patientDataEmpty=counts.filter(r=>patientDataTables.includes(r.table)).every(r=>r.rows==='0')&&remainingPatientAudits===0&&remainingPatientNotes===0;
+  const existingSimulatorProfiles=(await client.query('SELECT o.id FROM "Operator" o JOIN "User" u ON u.id=o."userId" WHERE o.id=ANY($1::text[]) AND u."isActive"=true ORDER BY o.id',[['SIM-ADMIN','SIM-DOCTOR-1','SIM-NURSE-1','SIM-SUPERVISOR-1','SIM-OSS-1']])).rows.map(r=>r.id);
   if(process.env.ASSERT_PATIENT_DATA_EMPTY==='true'&&!patientDataEmpty) throw new Error('PATIENT_DATA_REMAINS');
   await client.query('ROLLBACK');
-  console.log('CLINICOS_MAINTENANCE_RESULT '+JSON.stringify({mode:'read-only',identity,counts,foreignKeys,triggers,archival,patientDataEmpty,remainingPatientAudits,remainingPatientNotes,deletionPerformed:false}));
+  console.log('CLINICOS_MAINTENANCE_RESULT '+JSON.stringify({mode:'read-only',identity,counts,foreignKeys,triggers,archival,patientDataEmpty,remainingPatientAudits,remainingPatientNotes,existingSimulatorProfiles,deletionPerformed:false}));
 } catch(error) {
   console.log('CLINICOS_MAINTENANCE_RESULT '+JSON.stringify({failed:true,code:/^[A-Z0-9_]+$/.test(error.code ?? '')?error.code:'INVENTORY_FAILED',deletionPerformed:false}));process.exitCode=1;
 } finally {await client.end().catch(()=>{});}

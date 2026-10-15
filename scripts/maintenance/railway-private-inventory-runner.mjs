@@ -1,5 +1,5 @@
 import {spawnSync} from 'node:child_process';
-import {mkdtempSync,writeFileSync,copyFileSync} from 'node:fs';
+import {mkdtempSync,writeFileSync,copyFileSync,appendFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 function call(args,{json=false,timeout=30000}={}) {
@@ -80,6 +80,7 @@ try {
   }
   if(!result) throw new Error('PRIVATE_INVENTORY_RESULT_TIMEOUT');
   console.log(JSON.stringify({[cleanupMode?'productionPatientCleanup':backupMode?'privateBackup':'privateInventory']:result}));
+  if(process.env.GITHUB_OUTPUT&&process.argv.includes('--verify-clean')&&result.existingSimulatorProfiles?.length) appendFileSync(process.env.GITHUB_OUTPUT,'simulator_identity='+result.existingSimulatorProfiles[0]+'\n');
   if(result.failed) process.exitCode=1;
 } catch(error) {
   console.error(JSON.stringify({operation:cleanupMode?'production-patient-cleanup':'private-read-only-inventory',error:/^[A-Z0-9_]+$/.test(error.message)?error.message:'MAINTENANCE_FAILED',deletionPerformed:cleanupMode?null:false}));process.exitCode=1;

@@ -22,7 +22,16 @@ jobs:
           node-version: 20
       - name: Install browser driver for read-only live verification
         run: npm install --prefix "$RUNNER_TEMP/clinicos-readonly-browser" --ignore-scripts --no-audit --no-fund playwright@1.61.1
+      - name: Verify clean database and identify an existing login profile
+        id: inventory
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
+        run: |
+          npm install -g @railway/cli@5.66.0
+          node scripts/maintenance/railway-private-inventory-runner.mjs --verify-clean
       - name: Verify live API access and empty browser list without clinical writes
         env:
           PLAYWRIGHT_MODULE_PATH: ${{ runner.temp }}/clinicos-readonly-browser/node_modules/playwright/index.mjs
+          EXISTING_SIMULATOR_ID: ${{ steps.inventory.outputs.simulator_identity }}
         run: node scripts/maintenance/production-online-readonly.mjs
