@@ -19,10 +19,12 @@ jobs:
           node-version: 20
       - name: Install pinned Railway CLI
         run: npm install -g @railway/cli@5.66.0
-      - name: Inspect supported maintenance commands
+      - name: Inspect supported private maintenance access
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
         run: |
-          railway --help
-          railway add --help
-          railway service --help
-          railway up --help
-          railway volume --help
+          railway service files list --help
+          railway service files download --help
+          railway volume files list --help
+          node scripts/maintenance/railway-access-inspect.mjs
