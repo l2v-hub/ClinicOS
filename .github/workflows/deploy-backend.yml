@@ -21,14 +21,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Verify the live frontend alias against the cleaned database binding
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
-          RAILWAY_DEMO_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
-          RAILWAY_TOKEN_DEMO: ${{ secrets.RAILWAY_TOKEN_DEMO }}
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+      - name: Install supported browser runtime
         run: |
-          npm install -g @railway/cli@5.66.0
-          node -e 'console.log(JSON.stringify({credentialBindingPresence:Object.fromEntries(["RAILWAY_TOKEN","RAILWAY_DEMO_TOKEN","RAILWAY_TOKEN_DEMO","RAILWAY_API_TOKEN"].map(k=>[k,Boolean(process.env[k])]))}))'
-          node scripts/maintenance/railway-live-target-inspect.mjs
+          npm install --prefix "$RUNNER_TEMP/clinicos-readonly-browser" --ignore-scripts --no-audit --no-fund playwright@1.61.1
+          node "$RUNNER_TEMP/clinicos-readonly-browser/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Read the actual online patient list without clinical writes
+        env:
+          PLAYWRIGHT_MODULE_PATH: ${{ runner.temp }}/clinicos-readonly-browser/node_modules/playwright/index.mjs
+          CLINICOS_ONLINE_BACKEND_ORIGIN: https://clinicos-backend-demo.up.railway.app
+          SIMULATOR_ID: SIM-DOCTOR-1
+        run: node scripts/maintenance/production-online-readonly.mjs

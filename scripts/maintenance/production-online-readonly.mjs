@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import {pathToFileURL} from 'node:url';
-const backend='https://clinicos-backend-production-df88.up.railway.app';
+const backend=process.env.CLINICOS_ONLINE_BACKEND_ORIGIN??'https://clinicos-backend-production-df88.up.railway.app';
+if(!['https://clinicos-backend-production-df88.up.railway.app','https://clinicos-backend-demo.up.railway.app'].includes(backend))throw new Error('UNEXPECTED_ONLINE_ORIGIN');
+const simulatorIdentityId=process.env.EXISTING_SIMULATOR_ID??process.env.SIMULATOR_ID;
 const frontend='https://clinicos-eosin.vercel.app';
 const checks=[];
 async function read(path,headers={}) {
@@ -28,7 +30,7 @@ try {
    const request=route.request();
    if(!['GET','HEAD','OPTIONS'].includes(request.method())) {
     const sessionUrl=request.url()===backend+'/auth/simulator/session';
-    if(sessionUrl&&request.method()==='POST'&&process.env.EXISTING_SIMULATOR_ID&&request.postDataJSON()?.identityId===process.env.EXISTING_SIMULATOR_ID) {await route.continue();return;}
+    if(sessionUrl&&request.method()==='POST'&&simulatorIdentityId&&request.postDataJSON()?.identityId===simulatorIdentityId) {await route.continue();return;}
     if(new URL(request.url()).origin===backend)blockedWrites++;else blockedNonclinicalWrites++;await route.abort();return;
    }
    if(request.url().includes('/patients/page'))clinicalOrigins.add(new URL(request.url()).origin);
@@ -40,9 +42,9 @@ try {
   phase='browser-navigation';
   await page.goto(frontend+'/#/pazienti',{waitUntil:'networkidle'});
   if(auth.simulator) {
-   if(!process.env.EXISTING_SIMULATOR_ID)throw new Error('EXISTING_PROFILE_REQUIRED');
+   if(!simulatorIdentityId)throw new Error('PROFILE_REQUIRED');
    const list=await read('/auth/simulator/identities');
-   const profile=list.identities.find(p=>p.id===process.env.EXISTING_SIMULATOR_ID);
+   const profile=list.identities.find(p=>p.id===simulatorIdentityId);
    assert.ok(profile);
    phase='existing-profile-button';
    const choice=page.getByRole('button',{name:new RegExp('^'+profile.name)});
@@ -61,11 +63,13 @@ try {
   phase='authenticated-api';
   const me=await read('/auth/me',headers);assert.ok(me.id);
   const patients=await read('/patients/page?limit=1',headers);
-  assert.ok(Array.isArray(patients.items));assert.equal(patients.items.length,0);
+  assert.ok(Array.isArray(patients.items));
+  checks.push({name:'live-user-access',pass:true},{name:'live-patient-api-empty',pass:patients.items.length===0,patientsOnFirstPage:patients.items.length});
+  assert.equal(patients.items.length,0);
   const today=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Rome'}).format(new Date());
   const therapy=await read('/therapy-slots/page?date='+today+'&limit=1',headers);
   assert.ok(Array.isArray(therapy.slots));assert.equal(therapy.slots.length,0);
-  checks.push({name:'preserved-user-access',pass:true},{name:'live-patient-api-empty',pass:true,patients:0},{name:'live-therapy-api-empty',pass:true,slots:0});
+  checks.push({name:'live-therapy-api-empty',pass:true,slots:0});
   phase='empty-patient-view';
   await page.waitForFunction(()=>!document.querySelector('.login-screen'));
   await page.goto(frontend+'/#/pazienti',{waitUntil:'networkidle'});
