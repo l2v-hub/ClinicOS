@@ -22,9 +22,9 @@ jobs:
           node-version: 20
       - name: Install pinned Railway CLI
         run: npm install -g @railway/cli@5.66.0
-      - name: Rehearse on restored backup and clear authorized production patient data
+      - name: Verify persistent mount and create recoverable backup
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
         run: |
-          node scripts/maintenance/railway-private-inventory-runner.mjs --cleanup-patients
+          node scripts/maintenance/railway-private-inventory-runner.mjs --backup-existing

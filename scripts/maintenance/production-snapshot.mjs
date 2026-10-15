@@ -23,6 +23,9 @@ try {
  process.umask(0o077);
  const url=new URL(process.env.DATABASE_URL);
  if(url.hostname!=='postgres.railway.internal'||url.pathname!=='/railway') throw new Error('TARGET_CHANGED');
+ const mounted=readFileSync('/proc/self/mountinfo','utf8').split('\n').some(l=>l.split(' ')[4]==='/backup');
+ console.log('CLINICOS_BACKUP_MOUNT '+JSON.stringify({mounted,mountPath:process.env.RAILWAY_VOLUME_MOUNT_PATH??null,volumeId:process.env.RAILWAY_VOLUME_ID??null}));
+ if(!mounted) throw new Error('PERSISTENT_BACKUP_VOLUME_NOT_MOUNTED');
  if(existsSync(root+'/database.dump')) throw new Error('BACKUP_ALREADY_EXISTS');
  mkdirSync(root,{recursive:true,mode:0o700});chmodSync(root,0o700);
  source=new pg.Client({connectionString:process.env.DATABASE_URL,connectionTimeoutMillis:15000});await source.connect();
@@ -52,9 +55,9 @@ try {
  const report={createdAt:new Date().toISOString(),host:url.hostname,database:'railway',dumpSha256,restoreVerified:true,verifiedTables:before.length,counts:before.map(({table,rows})=>({table,rows}))};
  writeFileSync(root+'/baseline-private.json',JSON.stringify({report,signatures:before},null,2),{mode:0o600});
  writeFileSync(root+'/restore-verified.json',JSON.stringify(report,null,2),{mode:0o600});
- console.log('CLINICOS_MAINTENANCE_RESULT '+JSON.stringify({backup:report,path:root+'/database.dump',deletionPerformed:false}));
+ console.log('CLINICOS_MAINTENANCE_RESULT '+JSON.stringify({operationRunId:process.env.MAINTENANCE_RUN_ID,backup:report,path:root+'/database.dump',deletionPerformed:false}));
 } catch(error) {
- console.log('CLINICOS_MAINTENANCE_RESULT '+JSON.stringify({failed:true,code:/^[A-Z0-9_]+$/.test(error.message??'')?error.message:'BACKUP_FAILED',deletionPerformed:false}));process.exitCode=1;
+ console.log('CLINICOS_MAINTENANCE_RESULT '+JSON.stringify({operationRunId:process.env.MAINTENANCE_RUN_ID,failed:true,code:/^[A-Z0-9_]+$/.test(error.message??'')?error.message:'BACKUP_FAILED',deletionPerformed:false}));process.exitCode=1;
 } finally {
  if(restored) await restored.end().catch(()=>{});
  if(source) await source.end().catch(()=>{});

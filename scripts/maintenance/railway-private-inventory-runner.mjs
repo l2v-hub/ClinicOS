@@ -23,16 +23,17 @@ async function api(query,variables) {
   }
   return data.data;
 }
-const backupMode=process.argv.includes('--backup');
+const backupMode=process.argv.includes('--backup')||process.argv.includes('--backup-existing');
 const cleanupMode=process.argv.includes('--cleanup-patients');
+const reuseBackup=cleanupMode||process.argv.includes('--backup-existing');
 let serviceId,volumeId;
 try {
   const backend=call(['variables','--service',process.env.RAILWAY_SERVICE,'--json'],{json:true});
   if(backend.RAILWAY_PROJECT_ID!=='bddf5d1b-ee83-4362-8238-a79721f795e5'||backend.RAILWAY_ENVIRONMENT_ID!=='235fd681-2b0a-4c09-a0c4-04d862a99b38') throw new Error('TARGET_CHANGED');
   const before=call(['service','list','--json'],{json:true});
   if(!Array.isArray(before)) throw new Error('UNEXPECTED_SERVICE_LIST');
-  const name=cleanupMode?'clinicos-backup-20261015-38743287285':(backupMode?'clinicos-backup-20261015-':'clinicos-readonly-')+process.env.GITHUB_RUN_ID;
-  if(cleanupMode) {
+  const name=reuseBackup?'clinicos-backup-20261015-38743287285':(backupMode?'clinicos-backup-20261015-':'clinicos-readonly-')+process.env.GITHUB_RUN_ID;
+  if(reuseBackup) {
     serviceId='d7677bf9-3dc8-488d-915d-4c6639dc74a1';volumeId='61e3959f-9e3a-40d2-8e12-a3c65fbb2d7b';
     if(!before.some(s=>s.id===serviceId&&s.name===name)) throw new Error('BACKUP_SERVICE_NOT_VERIFIED');
     const schema=await api('query { input:__type(name:"VolumeInstanceUpdateInput"){inputFields{name type{kind name ofType{kind name}}}} environment:__type(name:"Environment"){fields{name type{kind name ofType{kind name}}}} }');
@@ -47,7 +48,7 @@ try {
     serviceId=created.serviceCreate.id;
   }
   console.log(JSON.stringify({temporaryReadOnlyServiceId:serviceId,name,productionWrites:false}));
-  if(backupMode) {
+  if(backupMode&&!volumeId) {
     const volume=await api('mutation($input:VolumeCreateInput!){volumeCreate(input:$input){id}}',{input:{projectId:backend.RAILWAY_PROJECT_ID,environmentId:backend.RAILWAY_ENVIRONMENT_ID,serviceId,mountPath:'/backup',region:'us-west2'}});
     volumeId=volume.volumeCreate.id;
     console.log(JSON.stringify({privateBackupServiceId:serviceId,privateBackupVolumeId:volumeId,publicEndpoint:false,retainedForRecovery:true}));
@@ -61,15 +62,17 @@ try {
   writeFileSync(join(dir,'railway.json'),JSON.stringify({build:{builder:'DOCKERFILE',dockerfilePath:'Dockerfile'},deploy:{restartPolicyType:'NEVER'}}));
   call(['up',dir,'--path-as-root','--service',serviceId,'--environment','production','--project',backend.RAILWAY_PROJECT_ID,'--detach','--yes','--json'],{timeout:120000});
   let result;
+  const emittedMounts=new Set();
   for(let i=0;i<(backupMode||cleanupMode?150:60);i++) {
     await sleep(5000);
     try {
       const logs=call(['logs','--service',serviceId,'--environment','production','--json','--lines','100']);
       for(const line of logs.split('\n')) {
         let message;try{message=JSON.parse(line).message;}catch{continue;}
+        if(typeof message==='string'&&message.startsWith('CLINICOS_BACKUP_MOUNT ')&&!emittedMounts.has(message)) {emittedMounts.add(message);console.log(JSON.stringify({backupMount:JSON.parse(message.slice('CLINICOS_BACKUP_MOUNT '.length))}));}
         if(typeof message==='string'&&message.startsWith('CLINICOS_MAINTENANCE_RESULT ')) {
           const parsed=JSON.parse(message.slice('CLINICOS_MAINTENANCE_RESULT '.length));
-          if(!cleanupMode||parsed.operationRunId===process.env.GITHUB_RUN_ID) result=parsed;
+          if(!reuseBackup||parsed.operationRunId===process.env.GITHUB_RUN_ID) result=parsed;
         }
       }
     } catch { /* Build/start may not have produced application logs yet. */ }
