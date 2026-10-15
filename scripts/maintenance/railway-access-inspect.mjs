@@ -21,9 +21,12 @@ try {
   console.log(JSON.stringify({target:{projectId:backend.RAILWAY_PROJECT_ID,environmentId:backend.RAILWAY_ENVIRONMENT_ID,backendServiceId:backend.RAILWAY_SERVICE_ID},services:safe(services)}));
   const response = await fetch('https://backboard.railway.app/graphql/v2', {
     method:'POST', headers:{'Content-Type':'application/json','Project-Access-Token':process.env.RAILWAY_TOKEN},
-    body:JSON.stringify({query:'query { __schema { queryType { fields { name } } mutationType { fields { name args { name type { kind name ofType { kind name } } } } } } }'}),
+    body:JSON.stringify({query:'query { __schema { queryType { fields { name args { name type { kind name ofType { kind name ofType { kind name } } } } type { kind name ofType { kind name } } } } mutationType { fields { name args { name type { kind name ofType { kind name ofType { kind name } } } } type { kind name ofType { kind name } } } } } executionInput: __type(name:"DeploymentInstanceExecutionCreateInput") { inputFields { name type { kind name ofType { kind name ofType { kind name } } } } } volumeInput: __type(name:"VolumeCreateInput") { inputFields { name type { kind name ofType { kind name } } } } }'}),
   });
   const data=await response.json();
   if(data.errors) {console.log(JSON.stringify({graphqlStatus:response.status,introspectionErrors:data.errors.map(e=>e.extensions?.code ?? 'REJECTED')})); process.exitCode=1;}
-  else console.log(JSON.stringify({operations:Object.fromEntries(Object.entries(data.data.__schema).map(([k,v])=>[k,v.fields.filter(f=>/backup|file|exec|volume/i.test(f.name))]))}));
+  else console.log(JSON.stringify({operations:Object.fromEntries(Object.entries(data.data.__schema).map(([k,v])=>[k,v.fields.filter(f=>/backup|execution|volumeCreate|volumeInstance$|serviceInstance$/i.test(f.name))])),executionInput:data.data.executionInput,volumeInput:data.data.volumeInput}));
+  const database = json(['variables','--service','11a104b2-9788-4a70-94e8-38a95e4fdb6b','--json']);
+  const primary=new URL(backend.DATABASE_URL), internal=new URL(database.DATABASE_URL);
+  console.log(JSON.stringify({databaseMappingVerified:primary.hostname===internal.hostname&&primary.username===internal.username&&primary.password===internal.password&&primary.pathname===internal.pathname,databaseServiceId:'11a104b2-9788-4a70-94e8-38a95e4fdb6b',host:primary.hostname,database:primary.pathname.slice(1)}));
 } catch { console.error('PRIVATE_ACCESS_INSPECTION_FAILED');process.exitCode=1; }
