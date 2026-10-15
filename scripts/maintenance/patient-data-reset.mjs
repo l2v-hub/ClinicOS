@@ -10,6 +10,7 @@ const fullDelete=[
  'PatientRoomAssignment','ImportAudit','ImportDocument','ImportProcessingUnit','ImportMutation',
  'ImportJob','PatientIntakeDraft','Patient',
 ];
+export {fullDelete as patientDataTables};
 const preserved=['AuthzPolicyVersion','Bed','Farmaco','FarmacoImport','FarmacoPrincipioAttivo','Operator','OperatorRosterPreference','OperatorSchedule','Room','RosterContext','User','_prisma_migrations'];
 export async function signatures(client,tables) {
  const result=[];

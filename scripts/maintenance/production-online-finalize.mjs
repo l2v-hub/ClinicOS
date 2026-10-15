@@ -36,8 +36,12 @@ try {
  console.log(JSON.stringify({onlineVerification:{backend:base,health:health.status,ready:200,frontend:frontend.status,authenticationMode:backend.AUTH_MODE??'unspecified'}}));
  const own=services.find(s=>s.id===backupServiceId&&s.name==='clinicos-backup-20261015-38743287285');
  if(!own)throw new Error('OWN_BACKUP_SERVICE_NOT_VERIFIED');
+ await api('mutation($input:VariableCollectionUpsertInput!){variableCollectionUpsert(input:$input)}',{input:{projectId,environmentId,serviceId:backupServiceId,skipDeploys:true,replace:true,variables:{BACKUP_RETAINED:'true'}}});
  const detached=await api('mutation($volumeId:String!,$environmentId:String!,$input:VolumeInstanceUpdateInput!){volumeInstanceUpdate(volumeId:$volumeId,environmentId:$environmentId,input:$input)}',{volumeId:backupVolumeId,environmentId,input:{serviceId:null}});
  if(!detached.volumeInstanceUpdate)throw new Error('BACKUP_DETACH_FAILED');
+ const detachedVolumes=railway(['volume','--environment','production','list','--json']);
+ const detachedVolume=detachedVolumes.volumes?.find(v=>v.id===backupVolumeId);
+ if(!detachedVolume||detachedVolume.serviceName)throw new Error('BACKUP_DETACH_NOT_VERIFIED');
  await api('mutation($id:String!,$environmentId:String!){serviceDelete(id:$id,environmentId:$environmentId)}',{id:backupServiceId,environmentId});
  const volumes=railway(['volume','--environment','production','list','--json']);
  const retained=volumes.volumes?.find(v=>v.id===backupVolumeId);

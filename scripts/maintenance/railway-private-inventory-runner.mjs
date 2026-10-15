@@ -43,7 +43,7 @@ try {
     await api('mutation($input:VariableCollectionUpsertInput!){variableCollectionUpsert(input:$input)}',{input:{projectId:backend.RAILWAY_PROJECT_ID,environmentId:backend.RAILWAY_ENVIRONMENT_ID,serviceId,skipDeploys:true,replace:false,variables:{EXPECTED_BACKUP_SERVICE_ID:serviceId,MAINTENANCE_RUN_ID:process.env.GITHUB_RUN_ID}}});
   } else {
     if(before.some(s=>s.name===name)) throw new Error('SERVICE_NAME_ALREADY_EXISTS');
-    const created=await api('mutation($input:ServiceCreateInput!){serviceCreate(input:$input){id name}}',{input:{projectId:backend.RAILWAY_PROJECT_ID,environmentId:backend.RAILWAY_ENVIRONMENT_ID,name,variables:{DATABASE_URL:'${{clinicos-backend.DATABASE_URL}}'}}});
+    const created=await api('mutation($input:ServiceCreateInput!){serviceCreate(input:$input){id name}}',{input:{projectId:backend.RAILWAY_PROJECT_ID,environmentId:backend.RAILWAY_ENVIRONMENT_ID,name,variables:{DATABASE_URL:'${{clinicos-backend.DATABASE_URL}}',ASSERT_PATIENT_DATA_EMPTY:String(process.argv.includes('--verify-clean'))}}});
     if(!created.serviceCreate?.id || created.serviceCreate.name!==name || before.some(b=>b.id===created.serviceCreate.id)) throw new Error('NEW_SERVICE_ID_NOT_VERIFIED');
     serviceId=created.serviceCreate.id;
   }
@@ -55,7 +55,7 @@ try {
   }
   const dir=mkdtempSync(join(tmpdir(),'clinicos-inventory-'));
   copyFileSync(cleanupMode?'scripts/maintenance/production-patient-cleanup.mjs':backupMode?'scripts/maintenance/production-snapshot.mjs':'scripts/maintenance/private-production-inventory.mjs',join(dir,'inventory.mjs'));
-  if(cleanupMode) copyFileSync('scripts/maintenance/patient-data-reset.mjs',join(dir,'patient-data-reset.mjs'));
+  if(cleanupMode||!backupMode) copyFileSync('scripts/maintenance/patient-data-reset.mjs',join(dir,'patient-data-reset.mjs'));
   writeFileSync(join(dir,'package.json'),JSON.stringify({type:'module',dependencies:{pg:'8.16.3'}}));
   const base=backupMode||cleanupMode?'FROM postgres:18-bookworm\nRUN apt-get update && apt-get install -y --no-install-recommends nodejs npm && rm -rf /var/lib/apt/lists/*\n':'FROM node:22-alpine\n';
   writeFileSync(join(dir,'Dockerfile'),base+'WORKDIR /maintenance\nCOPY package.json ./\nRUN npm install --omit=dev --ignore-scripts --no-audit --no-fund\nCOPY *.mjs ./\n'+(backupMode||cleanupMode?'':'USER node\n')+'CMD ["node","inventory.mjs"]\n');

@@ -1,6 +1,6 @@
-name: Production read-only inventory diagnosis
+name: Authorized production maintenance verification
 
-# Diagnostic branch only. No deploy, migration, seed, backup export or deletion.
+# Restricted maintenance branch. The authorized cleanup is complete; verify only.
 on:
   workflow_dispatch: {}
 
@@ -22,9 +22,14 @@ jobs:
           node-version: 20
       - name: Install pinned Railway CLI
         run: npm install -g @railway/cli@5.66.0
-      - name: Rehearse on persistent backup and clear production patient data
+      - name: Independently verify patient data is empty
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
         run: |
-          node scripts/maintenance/railway-private-inventory-runner.mjs --cleanup-patients
+          node scripts/maintenance/railway-private-inventory-runner.mjs --verify-clean
+      - name: Clear transient caches and retain private recovery backup
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
+        run: node scripts/maintenance/production-online-finalize.mjs

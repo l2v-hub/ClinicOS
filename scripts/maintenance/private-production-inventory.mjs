@@ -1,4 +1,5 @@
 import pg from 'pg';
+import {patientDataTables} from './patient-data-reset.mjs';
 const client = new pg.Client({connectionString:process.env.DATABASE_URL,connectionTimeoutMillis:15000});
 const q = (s) => '"' + s.replaceAll('"','""') + '"';
 try {
@@ -15,8 +16,12 @@ try {
   const foreignKeys=(await client.query("SELECT conrelid::regclass::text AS source,confrelid::regclass::text AS target,conname AS name,confdeltype AS deletion FROM pg_constraint WHERE contype='f' AND connamespace='public'::regnamespace ORDER BY 1,2")).rows;
   const triggers=(await client.query("SELECT c.relname AS table,t.tgname AS name,t.tgenabled AS enabled FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid JOIN pg_namespace n ON n.oid=c.relnamespace WHERE NOT t.tgisinternal AND n.nspname='public' ORDER BY 1,2")).rows;
   const archival=(await client.query('SELECT count(*)::text AS total,count(*) FILTER (WHERE "dataBase64" IS NULL)::text AS missingDurableCopy FROM "ImportDocument"')).rows[0];
+  const remainingPatientAudits=(await client.query('SELECT count(*)::int AS n FROM "AiAuditEvent" WHERE "patientId" IS NOT NULL')).rows[0].n;
+  const remainingPatientNotes=(await client.query('SELECT count(*)::int AS n FROM "Nota" WHERE coalesce("pazienteId",\'\')<>\'\' OR coalesce("pazienteNome",\'\')<>\'\'')).rows[0].n;
+  const patientDataEmpty=counts.filter(r=>patientDataTables.includes(r.table)).every(r=>r.rows==='0')&&remainingPatientAudits===0&&remainingPatientNotes===0;
+  if(process.env.ASSERT_PATIENT_DATA_EMPTY==='true'&&!patientDataEmpty) throw new Error('PATIENT_DATA_REMAINS');
   await client.query('ROLLBACK');
-  console.log('CLINICOS_MAINTENANCE_RESULT '+JSON.stringify({mode:'read-only',identity,counts,foreignKeys,triggers,archival,deletionPerformed:false}));
+  console.log('CLINICOS_MAINTENANCE_RESULT '+JSON.stringify({mode:'read-only',identity,counts,foreignKeys,triggers,archival,patientDataEmpty,remainingPatientAudits,remainingPatientNotes,deletionPerformed:false}));
 } catch(error) {
   console.log('CLINICOS_MAINTENANCE_RESULT '+JSON.stringify({failed:true,code:/^[A-Z0-9_]+$/.test(error.code ?? '')?error.code:'INVENTORY_FAILED',deletionPerformed:false}));process.exitCode=1;
 } finally {await client.end().catch(()=>{});}
