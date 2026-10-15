@@ -25,6 +25,10 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
+          RAILWAY_DEMO_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+          RAILWAY_TOKEN_DEMO: ${{ secrets.RAILWAY_TOKEN_DEMO }}
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
         run: |
           npm install -g @railway/cli@5.66.0
+          node -e 'console.log(JSON.stringify({credentialBindingPresence:Object.fromEntries(["RAILWAY_TOKEN","RAILWAY_DEMO_TOKEN","RAILWAY_TOKEN_DEMO","RAILWAY_API_TOKEN"].map(k=>[k,Boolean(process.env[k])]))}))'
           node scripts/maintenance/railway-live-target-inspect.mjs
