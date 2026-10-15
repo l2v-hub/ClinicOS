@@ -18,7 +18,9 @@ try {
  if(process.env.RAILWAY_SERVICE_ID!==process.env.EXPECTED_BACKUP_SERVICE_ID || !process.env.EXPECTED_BACKUP_SERVICE_ID) throw new Error('BACKUP_SERVICE_ID_MISMATCH');
  const url=new URL(process.env.DATABASE_URL);
  if(url.hostname!=='postgres.railway.internal'||url.pathname!=='/railway') throw new Error('TARGET_CHANGED');
- console.log('CLINICOS_BACKUP_MOUNT '+JSON.stringify({mountPath:process.env.RAILWAY_VOLUME_MOUNT_PATH??null,volumeId:process.env.RAILWAY_VOLUME_ID??null,mounted:readFileSync('/proc/self/mountinfo','utf8').split('\n').some(l=>l.split(' ')[4]==='/backup'),backupDirectory:existsSync(root),baselineExists:existsSync(root+'/baseline-private.json'),dumpExists:existsSync(root+'/database.dump')}));
+ const mounted=readFileSync('/proc/self/mountinfo','utf8').split('\n').some(l=>l.split(' ')[4]==='/backup');
+ console.log('CLINICOS_BACKUP_MOUNT '+JSON.stringify({mountPath:process.env.RAILWAY_VOLUME_MOUNT_PATH??null,volumeId:process.env.RAILWAY_VOLUME_ID??null,mounted,backupDirectory:existsSync(root),baselineExists:existsSync(root+'/baseline-private.json'),dumpExists:existsSync(root+'/database.dump')}));
+ if(!mounted) throw new Error('PERSISTENT_BACKUP_VOLUME_NOT_MOUNTED');
  const baseline=JSON.parse(readFileSync(root+'/baseline-private.json','utf8'));
  if(!baseline.report.restoreVerified||baseline.report.host!==url.hostname||baseline.report.database!=='railway') throw new Error('VERIFIED_BACKUP_REQUIRED');
  const actualSha=createHash('sha256').update(readFileSync(root+'/database.dump')).digest('hex');
