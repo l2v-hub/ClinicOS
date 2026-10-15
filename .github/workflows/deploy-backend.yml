@@ -23,11 +23,12 @@ jobs:
           node-version: 20
       - name: Install pinned maintenance CLI
         run: npm install -g @railway/cli@5.66.0
-      - name: Remove only the detached synthetic maintenance backup
+      - name: Erase only the synthetic maintenance backup and verify persistence
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: node scripts/maintenance/delete-authorized-fake-backup.mjs
+        run: node scripts/maintenance/erase-authorized-fake-backup.mjs
   online-cleanup:
+    # Explicit input avoids repeating an operation the server has already refused.
     if: github.ref_name == 'codex/production-inventory-2026-10-13'
     runs-on: ubuntu-latest
     timeout-minutes: 20
