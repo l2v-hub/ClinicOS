@@ -35,6 +35,10 @@ try {
   if(cleanupMode) {
     serviceId='d7677bf9-3dc8-488d-915d-4c6639dc74a1';volumeId='61e3959f-9e3a-40d2-8e12-a3c65fbb2d7b';
     if(!before.some(s=>s.id===serviceId&&s.name===name)) throw new Error('BACKUP_SERVICE_NOT_VERIFIED');
+    const schema=await api('query { input:__type(name:"VolumeInstanceUpdateInput"){inputFields{name type{kind name ofType{kind name}}}} environment:__type(name:"Environment"){fields{name type{kind name ofType{kind name}}}} }');
+    console.log(JSON.stringify({volumeMaintenanceSchema:schema}));
+    const volumeStatus=call(['volume','--service',serviceId,'--environment','production','list','--json'],{json:true});
+    console.log(JSON.stringify({backupVolumeStatus:volumeStatus}));
     await api('mutation($input:VariableCollectionUpsertInput!){variableCollectionUpsert(input:$input)}',{input:{projectId:backend.RAILWAY_PROJECT_ID,environmentId:backend.RAILWAY_ENVIRONMENT_ID,serviceId,skipDeploys:true,replace:false,variables:{EXPECTED_BACKUP_SERVICE_ID:serviceId,MAINTENANCE_RUN_ID:process.env.GITHUB_RUN_ID}}});
   } else {
     if(before.some(s=>s.name===name)) throw new Error('SERVICE_NAME_ALREADY_EXISTS');

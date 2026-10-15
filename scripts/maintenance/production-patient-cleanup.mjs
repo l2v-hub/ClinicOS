@@ -1,6 +1,6 @@
 import pg from 'pg';
 import {spawnSync} from 'node:child_process';
-import {readFileSync,writeFileSync} from 'node:fs';
+import {readFileSync,writeFileSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {resetPatientData,signatures} from './patient-data-reset.mjs';
 const root='/backup/patient-reset-2026-10-15';
@@ -18,6 +18,7 @@ try {
  if(process.env.RAILWAY_SERVICE_ID!==process.env.EXPECTED_BACKUP_SERVICE_ID || !process.env.EXPECTED_BACKUP_SERVICE_ID) throw new Error('BACKUP_SERVICE_ID_MISMATCH');
  const url=new URL(process.env.DATABASE_URL);
  if(url.hostname!=='postgres.railway.internal'||url.pathname!=='/railway') throw new Error('TARGET_CHANGED');
+ console.log('CLINICOS_BACKUP_MOUNT '+JSON.stringify({mountPath:process.env.RAILWAY_VOLUME_MOUNT_PATH??null,volumeId:process.env.RAILWAY_VOLUME_ID??null,mounted:readFileSync('/proc/self/mountinfo','utf8').split('\n').some(l=>l.split(' ')[4]==='/backup'),backupDirectory:existsSync(root),baselineExists:existsSync(root+'/baseline-private.json'),dumpExists:existsSync(root+'/database.dump')}));
  const baseline=JSON.parse(readFileSync(root+'/baseline-private.json','utf8'));
  if(!baseline.report.restoreVerified||baseline.report.host!==url.hostname||baseline.report.database!=='railway') throw new Error('VERIFIED_BACKUP_REQUIRED');
  const actualSha=createHash('sha256').update(readFileSync(root+'/database.dump')).digest('hex');
