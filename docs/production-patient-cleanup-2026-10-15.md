@@ -55,6 +55,8 @@ La CLI rifiuta la lettura delle variabili di `demo`; anche l'API nativa con il t
 
 Per proseguire serve il nome di un binding già presente che autorizzi il backend `demo`, oppure un token di progetto limitato a quell'ambiente nel segreto GitHub `RAILWAY_DEMO_TOKEN`. Non occorre ripetere l'autorizzazione alla pulizia. Dopo il collegamento: verificare il target reale, inventariare le tabelle, creare e ripristinare un nuovo backup, applicare la pulizia dei dati paziente e ripetere la prova autenticata online. Non ripetere la cancellazione di `production` già completata e non ripuntare il frontend a un database diverso per mascherare il problema.
 
+Il collegamento mancante e i controlli di completamento sono tracciati in [issue #470](https://github.com/l2v-hub/ClinicOS/issues/470). La branch operativa contiene un workflow diagnostico pronto a controllare il nuovo binding: non effettua cancellazioni e rifiuta un token destinato a un altro backend. Il suo `deploy-backend.yml` temporaneo non va unito al workflow di deployment di main.
+
 L'accesso online usa ancora il simulatore di ruoli in modalità demo: il sito non è stato attestato per l'uso con dati reali.
 
 - [Inventario iniziale](https://github.com/l2v-hub/ClinicOS/actions/runs/38742673237).
