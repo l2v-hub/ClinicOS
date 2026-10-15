@@ -13,6 +13,7 @@ on:
           - backup
           - online
           - full
+          - observe
 
 permissions:
   contents: read
@@ -88,3 +89,21 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: node scripts/maintenance/remove-fake-native-snapshots.mjs
+  inspect-worker:
+    if: github.ref_name == 'codex/production-inventory-2026-10-13' && inputs.operation == 'observe'
+    runs-on: ubuntu-latest
+    environment: 'glistening-friendship / production'
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts/maintenance
+          filter: blob:none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install -g @railway/cli@5.66.0
+      - name: Inspect only the current private backup worker
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: node scripts/maintenance/inspect-backup-erase-worker.mjs
