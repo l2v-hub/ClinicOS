@@ -22,7 +22,12 @@ try {
   if(target.name!==name||target.serviceName)throw new Error('BACKUP_IDENTITY_OR_DETACHMENT_CHANGED');
   const r=await fetch('https://backboard.railway.app/graphql/v2',{method:'POST',headers:{'Content-Type':'application/json','Project-Access-Token':process.env.RAILWAY_TOKEN},body:JSON.stringify({query:'mutation($volumeId:String!){volumeDelete(volumeId:$volumeId)}',variables:{volumeId}}),signal:AbortSignal.timeout(30000)});
   const result=await r.json();
-  if(!r.ok||result.errors||result.data?.volumeDelete!==true)throw new Error('BACKUP_DELETION_REJECTED');
+  if(!r.ok||result.errors||result.data?.volumeDelete!==true) {
+   const schemaResponse=await fetch('https://backboard.railway.app/graphql/v2',{method:'POST',headers:{'Content-Type':'application/json','Project-Access-Token':process.env.RAILWAY_TOKEN},body:JSON.stringify({query:'query{__schema{mutationType{fields{name args{name type{kind name ofType{kind name}}} type{kind name ofType{kind name}}}}} __type(name:"VolumeInstance"){fields{name type{kind name ofType{kind name}}}}}'}),signal:AbortSignal.timeout(30000)});
+   const schema=await schemaResponse.json();
+   console.log(JSON.stringify({deletionDiagnostics:{httpStatus:r.status,errors:(result.errors??[]).map(e=>({code:e.extensions?.code,message:e.message})),result:result.data?.volumeDelete,mutation:schema.data?.__schema?.mutationType?.fields.filter(f=>/volumeDelete|volumeInstanceBackupDelete/.test(f.name)),volumeInstanceFields:schema.data?.__type?.fields}}));
+   throw new Error('BACKUP_DELETION_REJECTED');
+  }
  }
  const after=volumes();
  if(after.some(v=>v.id===volumeId))throw new Error('BACKUP_STILL_PRESENT');
