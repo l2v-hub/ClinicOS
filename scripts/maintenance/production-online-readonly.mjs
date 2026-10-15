@@ -8,7 +8,8 @@ async function read(path,headers={}) {
  if(r.status!==200)throw new Error('ONLINE_READ_FAILED');
  return r.json();
 }
-let browser;
+let browser,issuedSessionToken;
+let phase='auth-status';
 try {
  const auth=await read('/auth/status');
  await read('/ready');
@@ -16,8 +17,9 @@ try {
  const report={authenticationMode:auth.mode,simulator:Boolean(auth.simulator),checks};
  if(auth.mode==='demo') {
   let headers,sessionToken;
+  phase='browser-launch';
   const {chromium}=await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE_PATH).href);
-  browser=await chromium.launch({channel:'chrome',headless:true});
+  browser=await chromium.launch({headless:true});
   const context=await browser.newContext({viewport:{width:1280,height:900}});
   let blockedWrites=0,blockedNonclinicalWrites=0,pageErrors=0;
   const clinicalOrigins=new Set();
@@ -33,20 +35,22 @@ try {
   });
   const page=await context.newPage();page.setDefaultTimeout(30000);
   page.on('pageerror',()=>{pageErrors++;});
+  phase='browser-navigation';
   await page.goto(frontend+'/#/pazienti',{waitUntil:'networkidle'});
   if(auth.simulator) {
    if(!process.env.EXISTING_SIMULATOR_ID)throw new Error('EXISTING_PROFILE_REQUIRED');
    const list=await read('/auth/simulator/identities');
    const profile=list.identities.find(p=>p.id===process.env.EXISTING_SIMULATOR_ID);
    assert.ok(profile);
-   const sessionPromise=page.waitForResponse(r=>r.url()===backend+'/auth/simulator/session'&&r.status()===201);
-   await page.getByRole('button',{name:new RegExp('^'+profile.name+' ')}).click();
-   const session=await (await sessionPromise).json();sessionToken=session.token;assert.ok(sessionToken);
+   phase='existing-profile-login';
+   const [response]=await Promise.all([page.waitForResponse(r=>r.url()===backend+'/auth/simulator/session'&&r.status()===201),page.getByRole('button',{name:new RegExp('^'+profile.name+' ')}).click()]);
+   const session=await response.json();sessionToken=session.token;issuedSessionToken=sessionToken;assert.ok(sessionToken);
    headers={Authorization:'Bearer '+sessionToken};
   } else {
    await page.getByRole('button',{name:/Amministratore/}).click();
    headers={'X-Operator-Id':'admin1','X-Operator-Role':'admin'};
   }
+  phase='authenticated-api';
   const me=await read('/auth/me',headers);assert.ok(me.id);
   const patients=await read('/patients/page?limit=1',headers);
   assert.ok(Array.isArray(patients.items));assert.equal(patients.items.length,0);
@@ -54,6 +58,7 @@ try {
   const therapy=await read('/therapy-slots/page?date='+today+'&limit=1',headers);
   assert.ok(Array.isArray(therapy.slots));assert.equal(therapy.slots.length,0);
   checks.push({name:'preserved-user-access',pass:true},{name:'live-patient-api-empty',pass:true,patients:0},{name:'live-therapy-api-empty',pass:true,slots:0});
+  phase='empty-patient-view';
   await page.waitForFunction(()=>!document.querySelector('.login-screen'));
   await page.goto(frontend+'/#/pazienti',{waitUntil:'networkidle'});
   await page.getByRole('heading',{name:'Nessun paziente presente',exact:true}).waitFor();
@@ -62,6 +67,7 @@ try {
   if(sessionToken) {
    const logout=await fetch(backend+'/auth/simulator/logout',{method:'POST',headers,signal:AbortSignal.timeout(15000)});
    assert.equal(logout.status,204);
+   issuedSessionToken=null;
    checks.push({name:'test-session-revoked',pass:true});
   }
  } else {
@@ -69,5 +75,8 @@ try {
  }
  console.log(JSON.stringify({onlineReadonlyVerification:report}));
 } catch(error) {
- console.error(JSON.stringify({onlineReadonlyFailed:true,code:/^[A-Z0-9_]+$/.test(error.message??'')?error.message:error.code??'ONLINE_VERIFICATION_FAILED',completedChecks:checks}));process.exitCode=1;
-} finally {if(browser)await browser.close();}
+ console.error(JSON.stringify({onlineReadonlyFailed:true,phase,code:/^[A-Z0-9_]+$/.test(error.message??'')?error.message:error.code??(/Executable doesn't exist|distribution.*not found/i.test(error.message??'')?'BROWSER_RUNTIME_MISSING':error.name??'ONLINE_VERIFICATION_FAILED'),completedChecks:checks}));process.exitCode=1;
+} finally {
+ if(issuedSessionToken)try{await fetch(backend+'/auth/simulator/logout',{method:'POST',headers:{Authorization:'Bearer '+issuedSessionToken},signal:AbortSignal.timeout(10000)});}catch{}
+ if(browser)await browser.close();
+}

@@ -21,7 +21,9 @@ jobs:
         with:
           node-version: 20
       - name: Install browser driver for read-only live verification
-        run: npm install --prefix "$RUNNER_TEMP/clinicos-readonly-browser" --ignore-scripts --no-audit --no-fund playwright@1.61.1
+        run: |
+          npm install --prefix "$RUNNER_TEMP/clinicos-readonly-browser" --ignore-scripts --no-audit --no-fund playwright@1.61.1
+          node "$RUNNER_TEMP/clinicos-readonly-browser/node_modules/playwright/cli.js" install --with-deps chromium
       - name: Verify clean database and identify an existing login profile
         id: inventory
         env:
