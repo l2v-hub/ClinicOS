@@ -1,0 +1,20 @@
+✔ four rejected rounds remain blocked and a fifth model call is impossible (441.754198ms)
+✔ the same rejected commit cannot spend a second round (190.872208ms)
+✔ approval is reusable only at the same SHA and code changes require another review (191.759057ms)
+✔ missing authentication consumes no review round (68.168515ms)
+✔ reviewer has only read tools and no project settings, MCP or bypass (121.160891ms)
+✔ dirty implementation and packets outside the worktree are rejected before model invocation (83.737294ms)
+✔ corrupted approved evidence is rejected (97.295328ms)
+✔ a malformed provider response is a failed attempt rather than approval (92.878788ms)
+✔ files changed during review invalidate the result (84.651401ms)
+✔ concurrent callers cannot invoke two reviewers for the same packet (130.482985ms)
+✔ review validation rejects stale SHA, invented paths and contradictory approval (1.553102ms)
+✔ a tracked prerequisite symlink cannot read an external implementation plan (99.186863ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1716.589542

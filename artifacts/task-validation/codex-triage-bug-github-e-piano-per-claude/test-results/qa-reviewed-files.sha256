@@ -1,0 +1,7 @@
+323818805973a1f0feb120851ddfe3d929b64e98403d8488512da32023a01db2  .agents/skills/codex-bug-triage/SKILL.md
+e9d28f655d88d951a145486901113aba025e140cea434da83dfa942f5e828a65  .claude/skills/bug-final-review/SKILL.md
+0d8e7e31ce76b9ddf128b4634db2ff4f51a9e74f5d9daa5b418c0af96dbd7049  .github/ISSUE_TEMPLATE/bug_report.yml
+cb7bff072fc2e1eafdb908cf50bcba83899c8af820d41ee1ea95037c017507f6  docs/codex-bug-workflow.md
+4d378010fe107f65e2c3586051ac14f6ed3fbdcfdeb2f42219e689713fd5a5d9  agent-team/README.md
+652bf00cc662e27c6e830257474adbc3448fb8aaed228a1500b51e1330b833a9  scripts/quality-gate/claude-bug-review.mjs
+6a8a1745e96f4d81c1a14697724a90f9bb10698d77756f3922e2d322cbb12847  scripts/quality-gate/claude-bug-review.test.mjs

@@ -1,5 +1,10 @@
 # ClinicOS Agent Team
 
+For the Codex-led GitHub bug workflow (Codex triage/planning/implementation, Claude final
+review capped at four rounds), use the `codex-bug-triage` skill and
+[its guide](../docs/codex-bug-workflow.md). That queue is separate from the
+Claude-development/Codex-QA runtime described below.
+
 This directory contains the ClinicOS Claude-development/Codex-QA orchestration runtime. GitHub issues, pull requests, protocol comments, and committed validation artifacts are authoritative. Files under `.runtime/` and `.worktrees/` are local and disposable.
 
 ## Prerequisites
