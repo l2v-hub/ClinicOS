@@ -1,7 +1,6 @@
-name: Read-only inspection of the actual online cleanup target
+name: Remove authorized fake data and maintenance backup
 
-# Restricted maintenance branch. Production is clean; the online demo target is pending.
-# This branch's workflow is diagnostic only and must not replace main's deploy workflow.
+# Restricted maintenance branch. Must not replace main's deploy workflow.
 on:
   workflow_dispatch: {}
 
@@ -9,10 +8,10 @@ permissions:
   contents: read
 
 jobs:
-  inventory:
+  backup-cleanup:
     if: github.ref_name == 'codex/production-inventory-2026-10-13'
     runs-on: ubuntu-latest
-    environment: 'glistening-friendship / demo'
+    environment: 'glistening-friendship / production'
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
@@ -24,7 +23,39 @@ jobs:
           node-version: 20
       - name: Install pinned maintenance CLI
         run: npm install -g @railway/cli@5.66.0
-      - name: Verify the newly connected token belongs to the live demo backend
+      - name: Remove only the detached synthetic maintenance backup
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: node scripts/maintenance/delete-authorized-fake-backup.mjs
+  online-cleanup:
+    if: github.ref_name == 'codex/production-inventory-2026-10-13'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts/maintenance
+          filter: blob:none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Delete synthetic patients through the supported online API
+        run: node scripts/maintenance/online-fake-patients-cleanup.mjs
+  demo-binding-recheck:
+    if: github.ref_name == 'codex/production-inventory-2026-10-13'
+    runs-on: ubuntu-latest
+    environment: 'glistening-friendship / demo'
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts/maintenance
+          filter: blob:none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install -g @railway/cli@5.66.0
+      - name: Recheck the binding for the actual online database
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
         run: node scripts/maintenance/railway-demo-target-inspect.mjs
