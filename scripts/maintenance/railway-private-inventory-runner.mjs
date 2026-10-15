@@ -14,6 +14,15 @@ function call(args,{json=false,timeout=30000}={}) {
   return r.stdout;
 }
 const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+async function api(query,variables) {
+  const response=await fetch('https://backboard.railway.app/graphql/v2',{method:'POST',headers:{'Content-Type':'application/json','Project-Access-Token':process.env.RAILWAY_TOKEN},body:JSON.stringify({query,variables}),signal:AbortSignal.timeout(30000)});
+  const data=await response.json();
+  if(data.errors) {
+    console.log(JSON.stringify({nativeApiStatus:response.status,codes:data.errors.map(e=>e.extensions?.code??(/not authorized|unauthorized|forbidden/i.test(e.message??'')?'NOT_AUTHORIZED':'REJECTED'))}));
+    throw new Error('NATIVE_API_REJECTED');
+  }
+  return data.data;
+}
 let serviceId;
 try {
   const backend=call(['variables','--service',process.env.RAILWAY_SERVICE,'--json'],{json:true});
@@ -22,12 +31,9 @@ try {
   if(!Array.isArray(before)) throw new Error('UNEXPECTED_SERVICE_LIST');
   const name='clinicos-readonly-'+process.env.GITHUB_RUN_ID;
   if(before.some(s=>s.name===name)) throw new Error('SERVICE_NAME_ALREADY_EXISTS');
-  call(['link','--project',backend.RAILWAY_PROJECT_ID,'--environment','production','--service',process.env.RAILWAY_SERVICE]);
-  call(['add','--service',name,'--variables','DATABASE_URL=${{clinicos-backend.DATABASE_URL}}','--json']);
-  const after=call(['service','list','--json'],{json:true});
-  const created=after.filter(s=>s.name===name&&!before.some(b=>b.id===s.id));
-  if(created.length!==1) throw new Error('NEW_SERVICE_ID_NOT_VERIFIED');
-  serviceId=created[0].id;
+  const created=await api('mutation($input:ServiceCreateInput!){serviceCreate(input:$input){id name}}',{input:{projectId:backend.RAILWAY_PROJECT_ID,environmentId:backend.RAILWAY_ENVIRONMENT_ID,name,variables:{DATABASE_URL:'${{clinicos-backend.DATABASE_URL}}'}}});
+  if(!created.serviceCreate?.id || created.serviceCreate.name!==name || before.some(b=>b.id===created.serviceCreate.id)) throw new Error('NEW_SERVICE_ID_NOT_VERIFIED');
+  serviceId=created.serviceCreate.id;
   console.log(JSON.stringify({temporaryReadOnlyServiceId:serviceId,name,productionWrites:false}));
   const dir=mkdtempSync(join(tmpdir(),'clinicos-inventory-'));
   copyFileSync('scripts/maintenance/private-production-inventory.mjs',join(dir,'inventory.mjs'));
@@ -54,7 +60,7 @@ try {
   console.error(JSON.stringify({operation:'private-read-only-inventory',error:/^[A-Z0-9_]+$/.test(error.message)?error.message:'MAINTENANCE_FAILED',deletionPerformed:false}));process.exitCode=1;
 } finally {
   if(serviceId) {
-    try {call(['service','delete','--service',serviceId,'--environment','production','--yes','--json']);console.log(JSON.stringify({temporaryServiceRemoved:serviceId}));}
+    try {await api('mutation($id:String!,$environmentId:String!){serviceDelete(id:$id,environmentId:$environmentId)}',{id:serviceId,environmentId:'235fd681-2b0a-4c09-a0c4-04d862a99b38'});console.log(JSON.stringify({temporaryServiceRemoved:serviceId}));}
     catch {console.error(JSON.stringify({temporaryServiceCleanupFailed:serviceId}));process.exitCode=1;}
   }
 }
