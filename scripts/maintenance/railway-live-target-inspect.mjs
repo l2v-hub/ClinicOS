@@ -10,5 +10,12 @@ try {
  const domains=[...instance.domains.serviceDomains,...instance.domains.customDomains].map(d=>d.domain);
  const url=new URL(config.DATABASE_URL);
  console.log(JSON.stringify({liveFrontendBackend:'clinicos-backend-demo.up.railway.app',verifiedBackendServiceId:instance.serviceId,verifiedEnvironmentId:instance.environmentId,domains,liveAliasMapsToCleanedDatabase:domains.includes('clinicos-backend-demo.up.railway.app'),databaseHost:url.hostname,database:url.pathname.slice(1)}));
- if(!domains.includes('clinicos-backend-demo.up.railway.app'))process.exitCode=1;
+ if(!domains.includes('clinicos-backend-demo.up.railway.app')) {
+  const demo=spawnSync('railway',['variables','--service','clinicos-backend','--environment','demo','--json'],{encoding:'utf8',timeout:30000});
+  if(demo.status!==0){console.log(JSON.stringify({demoBindingReadable:false,readRejected:true}));process.exitCode=1;}
+  else {
+   const binding=JSON.parse(demo.stdout),target=new URL(binding.DATABASE_URL);
+   console.log(JSON.stringify({demoBindingReadable:true,projectId:binding.RAILWAY_PROJECT_ID,environmentId:binding.RAILWAY_ENVIRONMENT_ID,environmentName:binding.RAILWAY_ENVIRONMENT_NAME,serviceId:binding.RAILWAY_SERVICE_ID,databaseHost:target.hostname,database:target.pathname.slice(1)}));
+  }
+ }
 } catch(error){console.error(JSON.stringify({liveTargetVerificationFailed:true,code:/^[A-Z0-9_]+$/.test(error.message??'')?error.message:'TARGET_VERIFICATION_FAILED'}));process.exitCode=1;}
