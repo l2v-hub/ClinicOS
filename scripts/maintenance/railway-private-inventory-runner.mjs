@@ -4,7 +4,12 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 function call(args,{json=false,timeout=30000}={}) {
   const r=spawnSync('railway',args,{encoding:'utf8',timeout,maxBuffer:8*1024*1024});
-  if(r.status!==0) throw new Error('RAILWAY_'+String(args[0]).toUpperCase()+'_FAILED');
+  if(r.status!==0) {
+    const diagnostic=String(r.stderr)+' '+String(r.stdout);
+    const categories=[['NOT_LINKED',/no linked|not linked|link.*project/i],['NOT_AUTHORIZED',/unauthorized|not authorized|forbidden|permission denied/i],['PROJECT_TOKEN_UNSUPPORTED',/project tokens?.*not supported|not supported.*project tokens?/i],['INVALID_ARGUMENT',/unexpected argument|invalid value|unknown argument/i],['NETWORK',/network|connect|timeout|timed out/i]].filter(([,pattern])=>pattern.test(diagnostic)).map(([code])=>code);
+    console.log(JSON.stringify({railwayCommand:args[0],exitCode:r.status,categories}));
+    throw new Error('RAILWAY_'+String(args[0]).toUpperCase()+'_FAILED');
+  }
   if(json) return JSON.parse(r.stdout);
   return r.stdout;
 }
@@ -17,6 +22,7 @@ try {
   if(!Array.isArray(before)) throw new Error('UNEXPECTED_SERVICE_LIST');
   const name='clinicos-readonly-'+process.env.GITHUB_RUN_ID;
   if(before.some(s=>s.name===name)) throw new Error('SERVICE_NAME_ALREADY_EXISTS');
+  call(['link','--project',backend.RAILWAY_PROJECT_ID,'--environment','production','--service',process.env.RAILWAY_SERVICE]);
   call(['add','--service',name,'--variables','DATABASE_URL=${{clinicos-backend.DATABASE_URL}}','--json']);
   const after=call(['service','list','--json'],{json:true});
   const created=after.filter(s=>s.name===name&&!before.some(b=>b.id===s.id));
