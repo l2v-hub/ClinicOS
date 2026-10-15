@@ -11,6 +11,7 @@ jobs:
   inventory:
     if: github.ref_name == 'codex/production-inventory-2026-10-13'
     runs-on: ubuntu-latest
+    environment: 'glistening-friendship / demo'
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
