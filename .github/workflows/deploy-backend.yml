@@ -1,6 +1,7 @@
-name: Authorized production maintenance verification
+name: Read-only inspection of the actual online cleanup target
 
-# Restricted maintenance branch. The authorized cleanup is complete; verify only.
+# Restricted maintenance branch. Production is clean; the online demo target is pending.
+# This branch's workflow is diagnostic only and must not replace main's deploy workflow.
 on:
   workflow_dispatch: {}
 
@@ -21,13 +22,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install supported browser runtime
-        run: |
-          npm install --prefix "$RUNNER_TEMP/clinicos-readonly-browser" --ignore-scripts --no-audit --no-fund playwright@1.61.1
-          node "$RUNNER_TEMP/clinicos-readonly-browser/node_modules/playwright/cli.js" install --with-deps chromium
-      - name: Read the actual online patient list without clinical writes
+      - name: Install pinned maintenance CLI
+        run: npm install -g @railway/cli@5.66.0
+      - name: Verify the newly connected token belongs to the live demo backend
         env:
-          PLAYWRIGHT_MODULE_PATH: ${{ runner.temp }}/clinicos-readonly-browser/node_modules/playwright/index.mjs
-          CLINICOS_ONLINE_BACKEND_ORIGIN: https://clinicos-backend-demo.up.railway.app
-          SIMULATOR_ID: SIM-DOCTOR-1
-        run: node scripts/maintenance/production-online-readonly.mjs
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+        run: node scripts/maintenance/railway-demo-target-inspect.mjs
