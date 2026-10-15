@@ -2,14 +2,24 @@ name: Remove authorized fake data and maintenance backup
 
 # Restricted maintenance branch. Must not replace main's deploy workflow.
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Explicit maintenance operation for the already authorized synthetic data
+        type: choice
+        default: snapshots
+        options:
+          - snapshots
+          - backup
+          - online
+          - full
 
 permissions:
   contents: read
 
 jobs:
   backup-cleanup:
-    if: github.ref_name == 'codex/production-inventory-2026-10-13'
+    if: github.ref_name == 'codex/production-inventory-2026-10-13' && (inputs.operation == 'backup' || inputs.operation == 'full')
     runs-on: ubuntu-latest
     environment: 'glistening-friendship / production'
     timeout-minutes: 20
@@ -28,8 +38,7 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: node scripts/maintenance/erase-authorized-fake-backup.mjs
   online-cleanup:
-    # Explicit input avoids repeating an operation the server has already refused.
-    if: github.ref_name == 'codex/production-inventory-2026-10-13'
+    if: github.ref_name == 'codex/production-inventory-2026-10-13' && (inputs.operation == 'online' || inputs.operation == 'full')
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -43,7 +52,7 @@ jobs:
       - name: Delete synthetic patients through the supported online API
         run: node scripts/maintenance/online-fake-patients-cleanup.mjs
   demo-binding-recheck:
-    if: github.ref_name == 'codex/production-inventory-2026-10-13'
+    if: github.ref_name == 'codex/production-inventory-2026-10-13' && (inputs.operation == 'online' || inputs.operation == 'full')
     runs-on: ubuntu-latest
     environment: 'glistening-friendship / demo'
     timeout-minutes: 10
@@ -60,3 +69,22 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
         run: node scripts/maintenance/railway-demo-target-inspect.mjs
+  native-snapshots:
+    if: always() && github.ref_name == 'codex/production-inventory-2026-10-13' && (inputs.operation == 'snapshots' || (inputs.operation == 'full' && needs.backup-cleanup.result == 'success'))
+    needs: backup-cleanup
+    # A skipped backup job is expected for the standalone snapshot operation.
+    runs-on: ubuntu-latest
+    environment: 'glistening-friendship / production'
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts/maintenance
+          filter: blob:none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Inspect and remove synthetic snapshots on the two verified volumes
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: node scripts/maintenance/remove-fake-native-snapshots.mjs
