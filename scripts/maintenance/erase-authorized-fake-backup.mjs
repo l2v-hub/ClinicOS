@@ -26,8 +26,8 @@ try {
  if(services.some(s=>s.name===name))throw new Error('SERVICE_NAME_EXISTS');
  const created=await api('mutation($input:ServiceCreateInput!){serviceCreate(input:$input){id name}}',{input:{projectId,environmentId,name,variables:{MAINTENANCE_RUN_ID:process.env.GITHUB_RUN_ID}}});
  if(!created.serviceCreate?.id||created.serviceCreate.name!==name)throw new Error('NEW_SERVICE_UNVERIFIED');
+ if(services.some(s=>s.id===created.serviceCreate.id))throw new Error('SERVICE_ID_NOT_NEW');
  serviceId=created.serviceCreate.id;
- if(services.some(s=>s.id===serviceId))throw new Error('SERVICE_ID_NOT_NEW');
  console.log(JSON.stringify({privateBackupEraseService:serviceId,volumeId,databaseBinding:false}));
  await api('mutation($volumeId:String!,$environmentId:String!,$input:VolumeInstanceUpdateInput!){volumeInstanceUpdate(volumeId:$volumeId,environmentId:$environmentId,input:$input)}',{volumeId,environmentId,input:{serviceId,mountPath:'/backup'}});
  attached=true;

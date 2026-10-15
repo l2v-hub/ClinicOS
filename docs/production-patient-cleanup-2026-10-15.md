@@ -2,7 +2,7 @@
 
 L'utente ha richiesto esplicitamente la pulizia della produzione e della versione online. La transazione sul database Railway **`production`** è stata completata alle **13:44:35 UTC**, conservando accessi e configurazione. Nessuna migrazione o procedura di seed è stata eseguita in produzione.
 
-La verifica finale ha rilevato che il sito pubblico usa un backend **`demo` separato**: vi sono ancora pazienti e il token disponibile non autorizza l'accesso a quel database. La richiesta di rendere pulita la versione online **non è ancora completata**. I conteggi e il backup sotto indicati riguardano soltanto `production`.
+La verifica finale ha rilevato che il sito pubblico usa un backend **`demo` separato**: vi sono ancora pazienti e il token disponibile non autorizza l'accesso a quel database. Anche il tentativo di cancellazione tramite il normale login amministratore viene rifiutato con HTTP 403. La richiesta di rendere pulita la versione online **non è ancora completata**. I conteggi sotto indicati riguardano soltanto `production`. Dopo la conferma dell'utente che tutti i dati sono fittizi, il backup della manutenzione è stato eliminato come descritto sotto.
 
 ## Destinazione e risultato
 
@@ -27,25 +27,27 @@ Anche tutte le altre tabelle cliniche selezionate sono vuote. I 90 eventi di aud
 
 I foreign key sono rimasti attivi; i trigger applicativi sospesi all'interno della transazione sono stati ripristinati nello stato originale. Una tabella non classificata, una modifica clinica successiva al backup o un dato preservato differente avrebbero impedito il commit.
 
-## Backup riservato e recupero
+## Backup verificato e successivamente eliminato su richiesta
 
 Dump PostgreSQL consistente creato alle **13:41:19 UTC** su un volume privato realmente montato; ripristino isolato verificato confrontando il contenuto di tutte le **45 tabelle**. Il job successivo ha verificato nuovamente l'accessibilità del backup dopo la sostituzione del container, ha ripristinato il dump, verificato un rollback dopo un errore simulato e provato la pulizia completa sul clone prima di intervenire sulla produzione.
 
-- Volume conservato: `61e3959f-9e3a-40d2-8e12-a3c65fbb2d7b`.
+- Volume ora vuoto e scollegato: `61e3959f-9e3a-40d2-8e12-a3c65fbb2d7b`.
 - Nome: `clinicos-backup-20261015-38743287285-volume`.
-- File alla radice del volume: `/patient-reset-2026-10-15/database.dump`.
-- SHA-256: `43e463f591f8c4c63ed794d356f4c614f8c02cd5e719c2364939a234876b9907`.
-- Manifest e attestazioni: `baseline-private.json`, `restore-verified.json`, `cleanup-result.json`, nella stessa directory privata.
+- File precedente, ora eliminato: `/patient-reset-2026-10-15/database.dump`.
+- SHA-256 verificato prima della rimozione: `43e463f591f8c4c63ed794d356f4c614f8c02cd5e719c2364939a234876b9907`.
+- Eliminati anche i manifest `baseline-private.json`, `restore-verified.json`, `cleanup-result.json`.
 
-Il volume è **scollegato e conservato**. Il servizio temporaneo che aveva accesso al database è stato eliminato dopo la rimozione dei suoi binding. Non sono stati pubblicati dump, credenziali, documenti o righe dei pazienti nei log o negli artifact GitHub.
+L'utente ha successivamente confermato che tutti i dati presenti sono fittizi e ha autorizzato la pulizia anche dei backup. La cancellazione della risorsa volume tramite API Railway è stata rifiutata con `Not Authorized`; il percorso alternativo autorizzato ha montato esclusivamente questo volume su un servizio privato senza credenziali database, verificato identità SHA-256 del dump e montaggio, quindi eliminato l'intera directory del backup. Un nuovo deployment/container ha verificato nuovamente il volume montato e l'assenza dei file. Il servizio temporaneo è stato eliminato, il volume **vuoto** è scollegato. La risorsa volume esiste ancora, ma non contiene il backup. Non sono stati pubblicati dump, credenziali, documenti o righe dei pazienti nei log o negli artifact GitHub.
 
-Per un recupero, collegare il volume a un servizio isolato autorizzato nel progetto Railway, verificarne SHA-256 e manifest e ripristinare inizialmente in un database isolato. Non ripristinare automaticamente l'intero dump sul database online.
+Il backup di questa manutenzione non è più disponibile per il recupero, conformemente alla richiesta di rimuovere i dati fittizi anche dalle copie.
+
+Il controllo delle copie native Railway ha trovato **1 snapshot** sul volume del PostgreSQL `production` e **0** sul volume del dump. Lo snapshot è stato eliminato e una nuova lettura ha confermato **0 copie native su entrambi i volumi**. Il volume PostgreSQL attivo è preservato; l'altro volume PostgreSQL del progetto, non identificato come origine di questi pazienti, non è stato modificato. Una verifica separata ha confermato che non restano servizi temporanei per la cancellazione del backup. Questa verifica non copre eventuali backup dell'ambiente `demo` a cui manca accesso.
 
 Il backup attesta il contenuto PostgreSQL. Nell'inventario precedente, 32 documenti di importazione storici avevano `dataBase64` nullo: il dump ne contiene i metadati, ma non attesta la recuperabilità dei vecchi file temporanei esterni al database. I documenti persistenti del paziente sono inclusi nel dump.
 
 ## Verifica di `production` e riscontro sul sito pubblico
 
-Un inventario indipendente di `production` ha confermato zero dati clinici e zero riferimenti paziente nei messaggi e negli audit. Backend e runtime AI di quell'ambiente sono stati riavviati per rimuovere cache e file effimeri; il backend non ha volumi collegati. Readiness e health del backend e pagina frontend hanno risposto **HTTP 200**. Tutti i servizi temporanei sono stati rimossi; il solo volume privato del backup è conservato. Questi controlli HTTP da soli non attestano che il frontend usi quel backend.
+Un inventario indipendente di `production` ha confermato zero dati clinici e zero riferimenti paziente nei messaggi e negli audit. Backend e runtime AI di quell'ambiente sono stati riavviati per rimuovere cache e file effimeri; il backend non ha volumi collegati. Readiness e health del backend e pagina frontend hanno risposto **HTTP 200**. Tutti i servizi temporanei sono stati rimossi; il volume privato del backup è stato successivamente svuotato. Questi controlli HTTP da soli non attestano che il frontend usi quel backend.
 
 Il browser su `https://clinicos-eosin.vercel.app` chiama invece **`https://clinicos-backend-demo.up.railway.app`**. L'API di gestione Railway conferma che il servizio `production` verificato sopra espone soltanto `clinicos-backend-production-df88.up.railway.app`: il dominio `demo` non è un alias di quel servizio nell'ambiente `production`.
 
@@ -53,9 +55,11 @@ Una verifica attraverso il normale login del simulatore ha ricevuto HTTP 201 per
 
 La CLI rifiuta la lettura delle variabili di `demo`; anche l'API nativa con il token esistente restituisce soltanto l'ambiente `production`. Sono stati controllati i binding candidati: `RAILWAY_TOKEN` è presente, mentre `RAILWAY_DEMO_TOKEN`, `RAILWAY_TOKEN_DEMO` e `RAILWAY_API_TOKEN` non risultano disponibili al job, nemmeno associandolo all'ambiente GitHub `glistening-friendship / demo`. La lettura dei nomi dei segreti tramite API GitHub è rifiutata con HTTP 403; non è prova dell'assenza di altri segreti con nomi diversi.
 
-Per proseguire serve il nome di un binding già presente che autorizzi il backend `demo`, oppure un token di progetto limitato a quell'ambiente nel segreto GitHub `RAILWAY_DEMO_TOKEN`. Non occorre ripetere l'autorizzazione alla pulizia. Dopo il collegamento: verificare il target reale, inventariare le tabelle, creare e ripristinare un nuovo backup, applicare la pulizia dei dati paziente e ripetere la prova autenticata online. Non ripetere la cancellazione di `production` già completata e non ripuntare il frontend a un database diverso per mascherare il problema.
+Un ulteriore tentativo con il normale profilo amministratore del simulatore ha verificato login e `/auth/me`, quindi provato il `DELETE /patients/:id` previsto dall'applicazione. Il server ha risposto **HTTP 403**, senza cancellare pazienti; la sessione è stata revocata. Il nuovo controllo del binding ha confermato `RAILWAY_DEMO_TOKEN_BINDING_MISSING`. Il chiarimento sui dati fittizi autorizza la cancellazione, ma non modifica questi limiti tecnici del server e del token.
 
-Il collegamento mancante e i controlli di completamento sono tracciati in [issue #470](https://github.com/l2v-hub/ClinicOS/issues/470). La branch operativa contiene un workflow diagnostico pronto a controllare il nuovo binding: non effettua cancellazioni e rifiuta un token destinato a un altro backend. Il suo `deploy-backend.yml` temporaneo non va unito al workflow di deployment di main.
+Per proseguire serve il nome di un binding già presente che autorizzi il backend `demo`, oppure un token di progetto limitato a quell'ambiente nel segreto GitHub `RAILWAY_DEMO_TOKEN`. Non occorre ripetere l'autorizzazione alla pulizia. Dopo il collegamento: verificare il target reale, inventariare le tabelle, applicare la pulizia dei dati paziente e ripetere la prova autenticata online. Non creare un'altra copia persistente dei dati fittizi contro la richiesta di eliminare anche i backup. Non ripetere la cancellazione di `production` già completata e non ripuntare il frontend a un database diverso per mascherare il problema.
+
+Il collegamento mancante e i controlli di completamento sono tracciati in [issue #470](https://github.com/l2v-hub/ClinicOS/issues/470). La branch operativa contiene un workflow di manutenzione con operazioni esplicite distinte (`backup`, `snapshots`, `online`, `observe`, `full`). Il suo `deploy-backend.yml` temporaneo non va unito al workflow di deployment di main.
 
 L'accesso online usa ancora il simulatore di ruoli in modalità demo: il sito non è stato attestato per l'uso con dati reali.
 
@@ -66,5 +70,8 @@ L'accesso online usa ancora il simulatore di ruoli in modalità demo: il sito no
 - [Dominio live distinto dal backend `production`](https://github.com/l2v-hub/ClinicOS/actions/runs/38748390948).
 - [Verifica dei binding e rifiuto dell'accesso a `demo`](https://github.com/l2v-hub/ClinicOS/actions/runs/38749535484).
 - [Login sul vero backend online e requisito di elenco vuoto non soddisfatto](https://github.com/l2v-hub/ClinicOS/actions/runs/38750022261).
+- [Backup svuotato e verifica da nuovo container; cancellazione online rifiutata](https://github.com/l2v-hub/ClinicOS/actions/runs/38753177223): il solo job `backup-cleanup` è riuscito; gli altri due job attestano i rifiuti descritti sopra.
+- [Snapshot nativi: una copia eliminata, zero residue sui due volumi verificati](https://github.com/l2v-hub/ClinicOS/actions/runs/38753583410).
+- [Nessun servizio temporaneo di cancellazione rimasto](https://github.com/l2v-hub/ClinicOS/actions/runs/38753538393).
 
 Le prime prove di persistenza si sono fermate prima delle eliminazioni perché il volume appena creato non era ancora montato. La pulizia produttiva ha utilizzato esclusivamente il backup successivo verificato come persistente.
