@@ -1,0 +1,26 @@
+✔ managed crontab replacement preserves other jobs, is idempotent and removes only its own block (1.965908ms)
+✔ actual install verifies the resulting crontab, preserves unrelated jobs and performs no model invocation (24.925867ms)
+✔ missing cron or API-only Claude authentication blocks before any schedule or launcher mutation (9.852212ms)
+✔ an unreadable crontab is not mistaken for an empty one and check mode never writes (9.483246ms)
+✔ generated POSIX launcher preserves exit codes, clears API tokens and quotes unusual repository paths (97.824061ms)
+✔ concurrent crontab edits prevent overwrite and cron percent escaping stays separate from shell quoting (12.372707ms)
+✔ read-only check verifies the exact schedule, complete markers and actual private launcher (14.432034ms)
+✔ existing state, launcher and log must remain private regular owned files (50.746463ms)
+✔ Windows install verifies a single user task, preserves unrelated work and removes only the verified task (21.140312ms)
+✔ Windows prerequisites and altered existing tasks fail closed without an inference or overwrite (11.796685ms)
+✔ Windows task read failures and concurrent registration cannot replace an existing task (8.375007ms)
+✔ Windows launch runs the real child, retains exit7, strips provider tokens and preserves interrupted locks (90.94056ms)
+✔ npm Claude entrypoints execute with Node without a shell and reviewer credentials remain isolated (224.61825ms)
+﹣ PowerShell scheduler definitions parse on Windows and use actual task action/trigger/principal objects (0.297424ms) # SKIP
+﹣ native Windows ACL creation is private and rejects a later public access rule (0.121829ms) # SKIP
+﹣ native Windows bootstrap preserves dirty, foreign, wrong-branch and diverged work and fast-forwards only its dedicated checkout (0.106987ms) # SKIP
+✔ existing Windows state is inspected before any ACL write and malformed schedules fail closed (12.110811ms)
+✔ Windows installed-state check rejects hardlinked configuration consistently with the worker (10.376022ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 3
+ℹ todo 0
+ℹ duration_ms 526.206745

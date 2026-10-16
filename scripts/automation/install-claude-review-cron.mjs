@@ -79,11 +79,18 @@ export async function execute(command, args, { cwd, env = process.env, input } =
       stderr = '',
       error = false,
       overflow = false;
+    // Windows PowerShell must build its own module path, rather than inherit PowerShell 7 modules.
+    const childEnv =
+      path.basename(command).toLowerCase() === 'powershell.exe'
+        ? Object.fromEntries(
+            Object.entries(env).filter(([key]) => key.toLowerCase() !== 'psmodulepath'),
+          )
+        : env;
     const javascript = /\.[cm]?js$/i.test(command);
     const child = spawn(
       javascript ? process.execPath : command,
       javascript ? [command, ...args] : args,
-      { cwd, env, shell: false, stdio: ['pipe', 'pipe', 'pipe'] },
+      { cwd, env: childEnv, shell: false, stdio: ['pipe', 'pipe', 'pipe'] },
     );
     const timer = setTimeout(() => child.kill('SIGTERM'), 30000);
     for (const [stream, save] of [

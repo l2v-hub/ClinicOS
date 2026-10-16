@@ -270,13 +270,17 @@ test(
     const config = path.join(f.stateDir, 'config.json');
     const parameters = { name: taskIdentity(f.root), plan: f.plan, stateDir: f.stateDir };
     const ps = (program) =>
-      execute('powershell.exe', [
-        '-NoLogo',
-        '-NoProfile',
-        '-NonInteractive',
-        '-EncodedCommand',
-        Buffer.from(program, 'utf16le').toString('base64'),
-      ]);
+      execute(
+        'powershell.exe',
+        [
+          '-NoLogo',
+          '-NoProfile',
+          '-NonInteractive',
+          '-EncodedCommand',
+          Buffer.from(program, 'utf16le').toString('base64'),
+        ],
+        { env: { ...process.env, PSModulePath: path.join(f.base, 'wrong-powershell-edition') } },
+      );
     const secure = await ps(taskScript('secure', parameters));
     assert.equal(secure.ok, true, secure.stderr);
     await writeFile(config, '{}');
@@ -387,7 +391,7 @@ test(
       }
       const before =
         scenario === 'nonrepo' ? null : await git(['-C', destination, 'rev-parse', 'HEAD']);
-      const program = `$ErrorActionPreference='Stop';function global:Get-Command {param($Name,$ErrorAction);switch($Name){'gh.exe'{[pscustomobject]@{Source=${psQuote(fakeGh)}}}'node.exe'{[pscustomobject]@{Source=${psQuote(fakeNode)}}}'git.exe'{[pscustomobject]@{Source=${psQuote(gitPath)}}}default{throw 'Unexpected command'}}};try { & ${psQuote(scriptFile)} -Destination ${psQuote(destination)}; Write-Output 'BOOTSTRAP_OK' }catch{Write-Output 'BOOTSTRAP_BLOCKED';exit 9}`;
+      const program = `$ErrorActionPreference='Stop';function global:Get-Command {param($Name,$ErrorAction);switch($Name){'gh.exe'{[pscustomobject]@{Source=${psQuote(fakeGh)}}}'node.exe'{[pscustomobject]@{Source=${psQuote(fakeNode)}}}'git.exe'{[pscustomobject]@{Source=${psQuote(gitPath)}}}default{throw 'Unexpected command'}}};try { & ${psQuote(scriptFile)} -Destination ${psQuote(destination)}; Write-Output 'BOOTSTRAP_OK' }catch{Write-Output ('BOOTSTRAP_BLOCKED: ' + $_.Exception.Message);exit 9}`;
       const result = await execute(
         'powershell.exe',
         [
@@ -400,7 +404,7 @@ test(
         { env: { ...process.env, GIT_CONFIG_GLOBAL: globalConfig, QA_NODE_MARKER: marker } },
       );
       if (scenario === 'clean') {
-        assert.equal(result.ok, true, result.stderr);
+        assert.equal(result.ok, true, result.stderr || result.stdout);
         assert.equal(
           await git(['-C', destination, 'rev-parse', 'HEAD']),
           await git(['-C', source, 'rev-parse', 'HEAD']),
