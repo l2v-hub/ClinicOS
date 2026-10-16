@@ -41,7 +41,7 @@ Source issues receive immutable screenshot, plan, test and trace/video links. Th
 
 | Check | Result | Evidence |
 | --- | --- | --- |
-| Complete scoped runner/controller/release suite | 67/67 PASS | `test-results/implementation-tests.txt`, independent `test-results/qa-final-scoped.txt` |
+| Complete scoped runner/controller/release suite | 68/68 PASS | `test-results/implementation-tests.txt`, independent `test-results/qa-final-scoped.txt` |
 | Independent adversarial probes | 5/5 PASS | `test-results/qa-independent-probes.txt` |
 | Relevant existing Agent Team regressions | 14/14 PASS | `test-results/qa-existing-regression.txt` |
 | Separate TypeScript check and frontend build | PASS | `test-results/qa-typescript.txt`, `test-results/qa-frontend-build.txt` |

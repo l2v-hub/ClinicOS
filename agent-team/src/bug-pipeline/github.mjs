@@ -415,6 +415,9 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     }
     const latestReviewByAuthor = new Map();
     for (const review of reviews) {
+      // A later COMMENTED/PENDING review is not an approval and cannot clear a
+      // prior request for changes. Dismissed decisions are already marked by GitHub.
+      if (!['APPROVED', 'CHANGES_REQUESTED'].includes(review.state)) continue;
       const author = actorLogin(review.user);
       if (!author) continue;
       const prior = latestReviewByAuthor.get(author);

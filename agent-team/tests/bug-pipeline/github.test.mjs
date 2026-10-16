@@ -377,6 +377,60 @@ test('review feedback fails closed when more than 100 review threads are returne
   assert.equal(result.unresolved, true);
 });
 
+test('a commented review cannot clear an earlier request for changes; explicit approval can', async () => {
+  for (const decision of ['COMMENTED', 'PENDING', 'APPROVED']) {
+    const run = async ({ args }) => {
+      const endpoint = apiPath(args);
+      if (args.includes('graphql'))
+        return response({
+          data: {
+            repository: {
+              pullRequest: { reviewThreads: { pageInfo: { hasNextPage: false }, nodes: [] } },
+            },
+          },
+        });
+      if (endpoint === 'user') return response({ login: 'pipeline-bot' });
+      if (endpoint.endsWith('/pulls/42'))
+        return response({
+          state: 'open',
+          head: {
+            sha: 'c'.repeat(40),
+            ref: 'codex/batch-17',
+            repo: { full_name: 'l2v-hub/ClinicOS' },
+          },
+          base: { ref: 'main' },
+        });
+      if (endpoint.includes('/reviews?'))
+        return response([
+          [
+            {
+              id: 1,
+              state: 'CHANGES_REQUESTED',
+              submitted_at: '2026-10-16T10:00:00Z',
+              user: { login: 'reviewer' },
+              body: 'Fix the regression',
+            },
+            {
+              id: 2,
+              state: decision,
+              submitted_at: '2026-10-16T11:00:00Z',
+              user: { login: 'reviewer' },
+              body: 'Follow-up',
+            },
+          ],
+        ]);
+      if (endpoint.includes('/comments?')) return response([[]]);
+      throw new Error('unexpected endpoint');
+    };
+    const result = await createGitHub({
+      cwd: '/tmp',
+      repo: 'l2v-hub/ClinicOS',
+      run,
+    }).reviewFeedback(42);
+    assert.equal(result.changesRequested, decision !== 'APPROVED');
+  }
+});
+
 test('review feedback identifies a merged PR from the real REST state and merge flag', async () => {
   const run = async ({ args }) => {
     const path = apiPath(args);
