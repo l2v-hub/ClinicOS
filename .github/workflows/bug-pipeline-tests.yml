@@ -234,10 +234,7 @@ jobs:
           HUSKY: 0
           DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/clinicos_test?schema=public
         run: |
-          if [ ! -x /usr/lib/postgresql/16/bin/pg_ctl ]; then
-            sudo apt-get update
-            sudo apt-get install -y postgresql-16
-          fi
+          bash scripts/quality-gate/install-verification-tools.sh
           npm ci --ignore-scripts --no-audit --no-fund
           npm run db:generate
 

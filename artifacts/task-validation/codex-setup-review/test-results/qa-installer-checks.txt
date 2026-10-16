@@ -1,0 +1,3 @@
+PASS: installer bash syntax and actual non-CI guard exit1 before privileged work; bothworkflowYAML/sharedinstaller callsites; updated native schema-proof JavaScript syntax.
+Reviewed: exactly1primarykey + full40hexPGDGfingerprint, officialHTTPSdownload/APTsource and scoped signed-by, installbeforeprovidersecrets, targeted freshlyinstalled default16mainstop only.
+Native dependency/profile readiness not claimed: prior38972121631 failed apt package lookup before profile execution; next native run required. No TLS bypass or keyvalue logging.

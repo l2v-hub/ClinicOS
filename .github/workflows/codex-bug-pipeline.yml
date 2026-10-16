@@ -57,10 +57,7 @@ jobs:
 
       - name: Install local validation tools
         run: |
-          if [ ! -x /usr/lib/postgresql/16/bin/pg_ctl ]; then
-            sudo apt-get update
-            sudo apt-get install -y postgresql-16
-          fi
+          bash scripts/quality-gate/install-verification-tools.sh
           python -m pip install -r clinicos-ai-runtime/requirements.txt
           node node_modules/playwright/cli.js install --with-deps chromium
 
