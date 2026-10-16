@@ -1,0 +1,6 @@
+bea07b31e095164ab75d4b4fe0b1f0b46ec7db6a3e31a07aae32ad49511deae5  .github/workflows/bug-pipeline-tests.yml
+5ead6440fa3259bb46caabd3f47afb40f9cb3607d253902e64f75539176d6196  .github/workflows/codex-bug-pipeline.yml
+6c43de7e436056fb5e802f307a674d185ac43d0ba26725dedd1b1f8bc0c87d65  agent-team/src/bug-pipeline/process.mjs
+1a4d2b9565663b3ed5a593cdecf7cbadbd6f9cd6ef296a4b8c1c426b08ca042b  agent-team/src/core/sanitize.mjs
+40ed0e86a4f7ca9e4a1e49752f6fbad53236ccea04fe1833c26d9efc3b99b9dc  agent-team/tests/bug-pipeline/subscription-auth.test.mjs
+52bbf290bd5d538ea496dc3ea753d9d719a68cbac4e48e5c73eb42f186de041f  docs/codex-bug-workflow.md

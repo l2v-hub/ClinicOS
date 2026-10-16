@@ -1,0 +1,14 @@
+✔ sanitizeText removes credentials and authorization values (1.831079ms)
+✔ sanitizeText strips trailing whitespace deterministically so captured evidence passes git diff --check (1.594973ms)
+✔ runProcess reports a missing executable without throwing (7.016922ms)
+✔ runProcess refuses a nonexistent working directory with an unambiguous diagnostic instead of a misleading spawn ENOENT (QA-263-013) (0.337988ms)
+✔ runProcess timeout escalates to a process-tree kill so no owned child survives (QA-263-011) (202.550101ms)
+✔ runProcess default timeout kill actually terminates the spawned process (404.79761ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 699.405213

@@ -1,0 +1,12 @@
+Run: https://github.com/l2v-hub/ClinicOS/actions/runs/38967955543
+Source: b99ff005b8fdb8d6bdd9df09cd4e93c90334c0df
+Actual selected output only; no token values or provider bodies.
+
+verify-provider-access	Verify read-only model API access on the reviewed revision	2026-10-16T21:15:10.9561647Z {"probe":"openai-planner-model","httpStatus":200,"verified":true}
+verify-provider-access	Verify read-only model API access on the reviewed revision	2026-10-16T21:15:10.9573325Z {"probe":"claude-max-configuration","credentialConfigured":false,"apiKeyExcluded":true,"cliRecognizesAuthentication":false,"inferenceExecuted":false}
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T21:14:55.8230271Z {"OPENAI_API_KEY_CONFIGURED":true,"ANTHROPIC_API_KEY_CONFIGURED":true,"CLAUDE_CODE_OAUTH_TOKEN_CONFIGURED":false,"CLINICOS_BOT_TOKEN_CONFIGURED":true,"VERCEL_TOKEN_CONFIGURED":true,"VERCEL_PROJECT_CONFIGURED":true,"RAILWAY_TOKEN_CONFIGURED":true,"AUTO_RELEASE_ENABLED":true}
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T21:14:58.6201195Z # tests 86
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T21:14:58.6208361Z # pass 86
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T21:14:58.6208715Z # fail 0
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T21:15:06.4370847Z {"isolatedRunner":{"ok":true,"code":0,"error":null,"stdout":"sandbox-ready","stderr":""},"directCli":{"code":0,"stdout":"sandbox-ready","stderr":""}}
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T21:15:06.4397907Z Real isolated Codex sandbox: PASS
