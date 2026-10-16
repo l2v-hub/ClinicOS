@@ -12,7 +12,7 @@
         {
           "round": 1,
           "subject_sha": "6bedebea6481b895c9b803876d06ec401dcd6e9a",
-          "verdict": "running"
+          "verdict": "failed"
         }
       ]
     },
