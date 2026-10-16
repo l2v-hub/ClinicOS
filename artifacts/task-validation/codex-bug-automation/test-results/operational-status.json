@@ -1,0 +1,25 @@
+{
+  "checked_at": "2026-10-16T06:19:05.974298+00:00",
+  "doctor_exit": 1,
+  "github_queue_count": 0,
+  "actions_secret_metadata": "HTTP403: resource not accessible by integration; absence not established",
+  "credential_presence": {
+    "ANTHROPIC_API_KEY": false,
+    "CLINICOS_ANTHROPIC_API_KEY": false,
+    "CODEX_API_KEY": false,
+    "OPENAI_API_KEY": false,
+    "GH_TOKEN": true
+  },
+  "model_catalog": {
+    "source": "https://github.com/openai/codex/blob/main/codex-rs/models-manager/models.json",
+    "planner": "gpt-6.1-sol",
+    "executor": "gpt-6-luna",
+    "real_cli_model_call": false
+  },
+  "live_issue_processing": false,
+  "production_merge": false,
+  "production_deploy": false,
+  "cloud_draft_saved": true,
+  "cloud_requires_publish": true,
+  "default_branch_workflow_activation": false
+}

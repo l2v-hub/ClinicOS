@@ -1,0 +1,2 @@
+import {defineConfig} from 'playwright/test';
+export default defineConfig({testDir:'.',testMatch:'qa-surface.spec.mjs',workers:1,fullyParallel:false,outputDir:'test-results/browser',reporter:[['list'],['html',{outputFolder:'playwright-report',open:'never'}]],use:{baseURL:'http://127.0.0.1:4392',viewport:{width:1440,height:1100},trace:'on',launchOptions:{executablePath:'/usr/bin/chromium',args:['--no-sandbox']}},webServer:{command:'CLINICOS_QA_SURFACE=1 node qa-surface-server.mjs',url:'http://127.0.0.1:4392',reuseExistingServer:false,timeout:10000}});

@@ -1,0 +1,164 @@
+name: Codex bug release
+
+on:
+  workflow_dispatch:
+    inputs:
+      batch_id:
+        description: Durable batch ID from the Codex bug pipeline
+        required: true
+        type: string
+      reviewed_sha:
+        description: Exact full PR commit SHA approved by Claude
+        required: true
+        type: string
+  workflow_run:
+    workflows: [Codex bug pipeline]
+    types: [completed]
+    branches: [main]
+
+# Keep this lock identical to the pipeline lock: release and triage cannot race on state.
+concurrency:
+  group: codex-bug-pipeline-${{ github.repository }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  actions: read
+  checks: read
+
+jobs:
+  release:
+    if: >-
+      ${{
+        (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+        (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && vars.BUG_PIPELINE_AUTO_RELEASE == 'true')
+      }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    environment: production
+    steps:
+      # Workflow-run and manual releases always execute trusted main code. No PR ref is checked out.
+      - name: Checkout trusted default branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          path: control
+          persist-credentials: false
+
+      - name: Set up Node 22
+        uses: actions/setup-node@1e60f620b9541d2a5dfd848218e6c15fbbd3b72d
+        with:
+          node-version: 22
+
+      # Install CLIs before production credentials enter any step.
+      - name: Install pinned Vercel CLI
+        run: npm install --prefix "$RUNNER_TEMP/bug-release-tools" --no-audit --no-fund --no-save vercel@64.3.1
+
+      - name: Verify evidence, Claude approval, deployment bindings and merge gates
+        id: release
+        env:
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+          BUG_PIPELINE_RELEASE_EXECUTE: 'true'
+          BUG_PIPELINE_AUTO_RELEASE: ${{ vars.BUG_PIPELINE_AUTO_RELEASE }}
+          CLINICOS_BOT_TOKEN_CONFIGURED: ${{ secrets.CLINICOS_BOT_TOKEN != '' }}
+          VERCEL_CONFIGURED: ${{ secrets.VERCEL_TOKEN != '' && vars.VERCEL_ORG_ID != '' && vars.VERCEL_PROJECT_ID != '' }}
+          RAILWAY_CONFIGURED: ${{ secrets.RAILWAY_TOKEN != '' }}
+          BUG_PIPELINE_BATCH_ID: ${{ inputs.batch_id }}
+          BUG_PIPELINE_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+        run: node control/agent-team/src/bug-pipeline/release.mjs
+
+      - name: Checkout exact merged revision for deployment
+        if: steps.release.outputs.status == 'merged'
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ steps.release.outputs.merge_sha }}
+          path: deployment
+          persist-credentials: false
+
+      - name: Deploy frontend to Vercel
+        id: vercel
+        working-directory: deployment
+        if: steps.release.outputs.status == 'merged' && steps.release.outputs.frontend == 'true'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$($RUNNER_TEMP/bug-release-tools/node_modules/.bin/vercel deploy --prod --archive=tgz --yes --token "$VERCEL_TOKEN")"
+          url="$(node -e 'const s=process.argv[1]; const u=[...s.matchAll(/https:\/\/[A-Za-z0-9.-]+\.vercel\.app/g)].map(x=>x[0]); if(!u.length) process.exit(1); process.stdout.write(u.at(-1));' "$output")"
+          printf 'url=%s\n' "$url" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for Railway deployment of the merged commit
+        id: railway
+        if: steps.release.outputs.status == 'merged' && steps.release.outputs.backend == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+          MERGE_SHA: ${{ steps.release.outputs.merge_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 60); do
+            runs="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow deploy-backend.yml --commit "$MERGE_SHA" --json status,conclusion,url --limit 5)"
+            status="$(node -e 'const a=JSON.parse(process.argv[1]);const r=a.find(x=>x.status==="completed")||a[0];process.stdout.write(r?JSON.stringify(r):"{}");' "$runs")"
+            state="$(node -e 'const r=JSON.parse(process.argv[1]);process.stdout.write(r.status||"");' "$status")"
+            if [[ "$state" == completed ]]; then
+              conclusion="$(node -e 'const r=JSON.parse(process.argv[1]);process.stdout.write(r.conclusion||"");' "$status")"
+              if [[ "$conclusion" != success ]]; then echo 'Railway deployment did not succeed.' >&2; exit 1; fi
+              url="$(node -e 'const r=JSON.parse(process.argv[1]);if(!/^https:\/\/github\.com\//.test(r.url||""))process.exit(1);process.stdout.write(r.url);' "$status")"
+              printf 'url=%s\n' "$url" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            sleep 60
+          done
+          echo 'Timed out waiting for Railway deployment.' >&2
+          exit 1
+
+      - name: Wait for Railway runtime deployment of the merged commit
+        id: runtime
+        if: steps.release.outputs.status == 'merged' && steps.release.outputs.runtime == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+          MERGE_SHA: ${{ steps.release.outputs.merge_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 60); do
+            runs="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow deploy-runtime.yml --commit "$MERGE_SHA" --json status,conclusion,url --limit 5)"
+            status="$(node -e 'const a=JSON.parse(process.argv[1]);const r=a.find(x=>x.status==="completed")||a[0];process.stdout.write(r?JSON.stringify(r):"{}");' "$runs")"
+            state="$(node -e 'const r=JSON.parse(process.argv[1]);process.stdout.write(r.status||"");' "$status")"
+            if [[ "$state" == completed ]]; then
+              conclusion="$(node -e 'const r=JSON.parse(process.argv[1]);process.stdout.write(r.conclusion||"");' "$status")"
+              if [[ "$conclusion" != success ]]; then echo 'Railway runtime deployment did not succeed.' >&2; exit 1; fi
+              url="$(node -e 'const r=JSON.parse(process.argv[1]);if(!/^https:\/\/github\.com\//.test(r.url||""))process.exit(1);process.stdout.write(r.url);' "$status")"
+              printf 'url=%s\n' "$url" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            sleep 60
+          done
+          echo 'Timed out waiting for Railway runtime deployment.' >&2
+          exit 1
+
+      - name: Record confirmed deployments on source issues
+        if: success() && (steps.release.outputs.status == 'merged' || steps.release.outputs.status == 'deployed')
+        env:
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+          BUG_PIPELINE_RELEASE_ACTION: record
+          BUG_PIPELINE_BATCH_ID: ${{ steps.release.outputs.batch_id }}
+          BUG_PIPELINE_MERGE_SHA: ${{ steps.release.outputs.merge_sha }}
+          VERCEL_DEPLOYMENT_URL: ${{ steps.vercel.outputs.url }}
+          RAILWAY_DEPLOYMENT_RUN_URL: ${{ steps.railway.outputs.url }}
+          RUNTIME_DEPLOYMENT_RUN_URL: ${{ steps.runtime.outputs.url }}
+        run: node control/agent-team/src/bug-pipeline/release.mjs
+
+      - name: Upload sanitized release diagnostic on failure
+        if: failure()
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08
+        with:
+          name: codex-bug-release-diagnostic-${{ github.run_id }}
+          path: control/agent-team/.runtime/bug-pipeline/release-diagnostic.json
+          if-no-files-found: ignore
+          retention-days: 14

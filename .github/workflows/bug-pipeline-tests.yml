@@ -1,0 +1,34 @@
+name: Bug pipeline regression gate
+
+on:
+  pull_request:
+    paths:
+      - 'agent-team/**'
+      - 'scripts/quality-gate/**'
+      - '.github/workflows/*bug*.yml'
+      - 'artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+  push:
+    branches: [main]
+    paths:
+      - 'agent-team/**'
+      - 'scripts/quality-gate/**'
+      - '.github/workflows/*bug*.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  bug-pipeline-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@1e60f620b9541d2a5dfd848218e6c15fbbd3b72d
+        with:
+          node-version: 22
+      # Built-in Node tests, synthetic repositories and mock providers; no app install or secrets.
+      - name: Test queue, sessions, evidence, budgets and release guards
+        run: node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs

@@ -1,0 +1,22 @@
+✔ loadConfig loads versioned defaults and resolves repository paths (9.464044ms)
+✔ validateConfig fails closed for unknown keys and unsafe relationships (1.321119ms)
+✔ GitHub adapter passes labels as argv and never constructs a shell string (3.109837ms)
+✔ protocol comment round-trips one schema-valid JSON object (3.750263ms)
+✔ protocol rejects prose and unknown fields (0.961399ms)
+✔ finding fingerprints remain stable across timestamps (16.450698ms)
+✔ the module constants pin every nested-agent surface (1.669502ms)
+✔ buildClaudeWorkerArgs produces the exact safe argv with --tools and --disallowedTools (1.523827ms)
+✔ the built argv never references bypass or dangerous permission modes (0.368624ms)
+✔ a policy exposing a nested-agent tool is rejected with a precise diagnostic (0.552695ms)
+✔ a policy missing a required nested-execution deny rule is rejected (0.498705ms)
+✔ empty or missing tool policies fail closed (0.206756ms)
+✔ bypass tokens are rejected in every policy list (0.208094ms)
+✔ buildClaudeWorkerArgs refuses an unsafe policy before any spawn (0.558026ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 193.482843

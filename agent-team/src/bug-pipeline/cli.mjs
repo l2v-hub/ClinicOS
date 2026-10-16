@@ -1,0 +1,141 @@
+#!/usr/bin/env node
+import path from 'node:path';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { createRunner } from './process.mjs';
+import { createGitHub } from './github.mjs';
+import { createModels } from './models.mjs';
+import { createWorkspace } from './workspace.mjs';
+import { runPipeline } from './pipeline.mjs';
+
+export async function doctor({ run, models, env = process.env, cwd }) {
+  const codex = await models.preflight();
+  const login = env.CODEX_API_KEY
+    ? { ok: true }
+    : await run({ command: 'codex', args: ['login', 'status'], cwd, envMode: 'model' });
+  const claude = await run({ command: 'claude', args: ['auth', 'status'], cwd, envMode: 'review' });
+  let claudeAuth = false;
+  try {
+    claudeAuth = claude.ok && JSON.parse(claude.stdout).loggedIn === true;
+  } catch {
+    /* missing auth */
+  }
+  const sandbox = await run({
+    command: 'codex',
+    args: [
+      'sandbox',
+      '--permission-profile',
+      ':workspace',
+      '--cd',
+      cwd,
+      '--',
+      'node',
+      '-e',
+      'process.stdout.write("sandbox-ready")',
+    ],
+    cwd,
+    envMode: 'verification',
+  });
+  const checks = {
+    codexCli: codex.ready,
+    codexAuth: login.ok,
+    claudeAuth,
+    sandbox: sandbox.ok && sandbox.stdout === 'sandbox-ready',
+    plannerModel: Boolean(env.CODEX_PLANNER_MODEL),
+    executorModel: Boolean(env.CODEX_EXECUTOR_MODEL),
+  };
+  return { checks, ready: Object.values(checks).every(Boolean) };
+}
+export async function main({ env = process.env, args = process.argv.slice(2) } = {}) {
+  // Cloud secret targets cannot use reserved CODEX_/OPENAI_ names. Only process-local aliases.
+  env = {
+    ...env,
+    CODEX_API_KEY: env.CODEX_API_KEY || env.CLINICOS_OPENAI_API_KEY,
+    ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY || env.CLINICOS_ANTHROPIC_API_KEY,
+    CODEX_PLANNER_MODEL: env.CODEX_PLANNER_MODEL || env.CLINICOS_PLANNER_MODEL || 'gpt-6.1-sol',
+    CODEX_EXECUTOR_MODEL: env.CODEX_EXECUTOR_MODEL || env.CLINICOS_EXECUTOR_MODEL || 'gpt-6-luna',
+  };
+  const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+  const diagnosticRoot = path.join(root, 'agent-team', '.runtime', 'bug-pipeline');
+  // Outputs must be OUTSIDE both the source checkout and every model worktree.
+  const runtimeRoot = path.join(env.RUNNER_TEMP || path.dirname(root), '.clinicos-bug-sessions');
+  await mkdir(runtimeRoot, { recursive: true, mode: 0o700 });
+  await mkdir(diagnosticRoot, { recursive: true });
+  const run = createRunner({ env, runtimeRoot });
+  const models = createModels({
+    plannerModel: env.CODEX_PLANNER_MODEL,
+    executorModel: env.CODEX_EXECUTOR_MODEL,
+    run,
+    runtimeRoot,
+  });
+  const report = await doctor({ run, models, env, cwd: root });
+  if (args.includes('--doctor')) {
+    console.log(JSON.stringify(report));
+    return report.ready ? 0 : 1;
+  }
+  if (env.GITHUB_ACTIONS !== 'true' && !args.includes('--run'))
+    throw new Error('Use --run explicitly outside GitHub Actions');
+  if (!report.ready) {
+    await writeFile(
+      path.join(diagnosticRoot, 'diagnostic.json'),
+      JSON.stringify({ status: 'blocked-prerequisites', ...report }, null, 2) + '\n',
+    );
+    console.log(JSON.stringify({ status: 'blocked-prerequisites', ...report }));
+    return 1;
+  }
+  const repo = env.GITHUB_REPOSITORY || 'l2v-hub/ClinicOS';
+  const event = env.GITHUB_EVENT_PATH
+    ? JSON.parse(await readFile(env.GITHUB_EVENT_PATH, 'utf8'))
+    : {};
+  const gh = createGitHub({ cwd: root, repo, run });
+  const store = gh.createStateStore();
+  const workspace = createWorkspace({ root, repo, run, models });
+  try {
+    const state = await runPipeline({ repo, event, gh, models, workspace, store });
+    const blocked = state.batches.filter((b) => b.phase === 'blocked').length;
+    const summary = {
+      status: blocked ? 'partial' : 'reconciled',
+      blocked,
+      batches: state.batches.map((b) => ({
+        id: b.id,
+        phase: b.phase,
+        implementation: b.implementation.length,
+        reviews: b.reviews.length,
+        sha: b.sha ?? null,
+      })),
+    };
+    await writeFile(
+      path.join(diagnosticRoot, 'diagnostic.json'),
+      JSON.stringify(summary, null, 2) + '\n',
+    );
+    // Successful reconciliation is distinct from every bug being resolved. Terminal blocked
+    // batches are reported explicitly and cannot release; they do not starve unrelated ready batches.
+    console.log(JSON.stringify(summary));
+    return 0;
+  } catch {
+    await writeFile(
+      path.join(diagnosticRoot, 'diagnostic.json'),
+      JSON.stringify(
+        {
+          status: 'blocked-controller',
+          reason:
+            'Inspect GitHub permissions, durable state and pending triage; no automatic budget reset.',
+        },
+        null,
+        2,
+      ) + '\n',
+    );
+    console.error(
+      'Pipeline blocked: GitHub permissions, durable state, triage or execution failed. No budget reset.',
+    );
+    return 1;
+  }
+}
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  try {
+    process.exitCode = await main();
+  } catch {
+    console.error('Pipeline configuration failed. Run --doctor; no credentials are printed.');
+    process.exitCode = 1;
+  }
+}

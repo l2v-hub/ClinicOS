@@ -1,0 +1,13 @@
+✔ QA: review pagination cannot hide unresolved threads beyond the first page (4.066251ms)
+✔ QA: verification and reviewer never inherit a local Codex credential directory (0.87361ms)
+✔ QA: shell-looking commands and multiline command suffixes never authenticate intake (1.433176ms)
+✔ QA: interrupted triage blocks another model call without resetting durable state (3.359915ms)
+✔ QA: agent policy instructions and Codex configuration are outside delegated file scope (1.370468ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 177.250715
