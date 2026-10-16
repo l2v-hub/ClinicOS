@@ -1,0 +1,1 @@
+{"status":"blocked-prerequisites","ready":false,"checks":{"node":true,"git":true,"gh":true,"claude":true,"crontab":false,"claudeMaxLogin":false,"checkout":true,"githubWrite":true},"installed":false}

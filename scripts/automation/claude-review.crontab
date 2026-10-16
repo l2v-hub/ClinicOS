@@ -1,0 +1,3 @@
+# Installed in the current user's crontab by install-claude-review-cron.mjs.
+# Claude Code runs on the machine already authenticated to Pro/Max.
+*/5 * * * * {{COMMAND}}

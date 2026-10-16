@@ -1,0 +1,5 @@
+4e214d3771c7ccd1983c65e7036ef2b460b78e89808509dadec5575eedafd6be  .github/workflows/bug-pipeline-tests.yml
+66bd3aad2e1eb69537ab3e5afdcf9f842bc59d1801522819fdf835f2544687cd  docs/codex-bug-workflow.md
+eb3501caab54e8d71a8b5f6b90218bb22e453f503c6544b286a8bf0d03e179d9  scripts/automation/claude-review.crontab
+13af7a58c8e364aff5f30e229bc2bf9f1a15ac761a786df000b683ede2b34faa  scripts/automation/install-claude-review-cron.mjs
+28a181658c6f5c183108899e7f934b777a6e45be21b1c43b8cc62600b99a0a45  agent-team/tests/bug-pipeline/cron-install.test.mjs
