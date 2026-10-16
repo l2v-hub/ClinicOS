@@ -51,7 +51,7 @@ Prior native38969585616 recognized Max OAuth and passed86 regressions/sandbox wi
 
 ## Local-service follow-up before inference
 
-Independent source investigation found the original `:workspace` verification network cannot reach host PostgreSQL or bind local HTTP: pinned Codex0.159.2 restricted seccomp denies connect/bind/listen/IP sockets and bubblewrap unshares networking. `workspace.prepare` already generates Prisma, so that was not reported as missing. The root canceled the first review while still checking out; no model reservation/inference occurred according to its inspected state/run evidence.
+Independent source investigation found the original `:workspace` verification network cannot reach host PostgreSQL or bind local HTTP: pinned Codex0.159.2 restricted seccomp denies connect/bind/listen/IP sockets and bubblewrap unshares networking. `workspace.prepare` already generates Prisma, so that was not reported as missing. The canceled first review did reach the actual review step: subsequent authoritative remote-ledger inspection confirms round1 failed on SHA6bedebea6481b895c9b803876d06ec401dcd6e9a. That attempt remains spent; see the final ledger correction below.
 
 Reviewed correction:
 
@@ -72,3 +72,9 @@ Reviewed correction adds a shared installer used by both required regression and
 Independent checks pass: `bash -n`, actual non-CI guard execution returns1 before privileged work, both workflow YAML/shared callsites, updated native probe JavaScript syntax and `git diff --check`. Existing93/93 suite is carried forward without an unnecessary rerun for this installer/probe-only change. The SQL positive proof now checks the actual Patient table and nonempty Prisma migration history, not only a successful connection. Evidence: `test-results/qa-installer-checks.txt`.
 
 The manifest is expanded to ten reviewed source files. Approval remains **native-readiness-only**: dependency installation and every positive/negative service assertion must pass on the actual runner before a model review. The local environment's blocked public-key download was not bypassed, and no native key verification success is fabricated.
+
+## Empty-allowlist correction and authoritative budget state
+
+Native38972683804 successfully installed PostgreSQL but rejected global denied-domain pattern `*` before profile execution. Reviewed correction uses the supported `domains={}` empty allowlist, retaining local binding, disabled SOCKS/UDP proxy and every actual positive/negative assertion. Independent inspection of pinned upstream `codex-rs/network-proxy/src/runtime.rs:725` and779–782 confirms an empty allowed-domain set unconditionally returns Blocked(NotAllowed), regardless of local binding. This does not authorize external hosts. No unrestricted networking or fallback was added. Native local-service readiness is still unverified until the unchanged actual positive/negative probe passes. Current ten-source manifest includes this exact correction; approved for native readiness only.
+
+The earlier assertion that canceling38970606680 prevented model dispatch is superseded by actual evidence. QA independently read the remote setupReview471 ledger, selecting only round/SHA/verdict metadata: round1 on `6bedebea6481b895c9b803876d06ec401dcd6e9a` has verdict `failed`; three of four attempts remain. The run reached `claude --print` and reported authentication-rejected/code1 before cancellation. No model success or valid Max token is claimed; local auth-status recognition did not establish remote validity. The failed attempt must remain preserved across further commits, credentials and runs. No further model dispatch is approved until the token is updated, native service readiness passes and current source QA is complete.

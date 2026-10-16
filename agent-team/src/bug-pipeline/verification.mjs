@@ -13,7 +13,7 @@ export function verificationArguments(cwd, command, args = []) {
     '-c',
     'features.network_proxy=true',
     '-c',
-    'permissions.clinicos-verification={extends=":workspace",network={enabled=true,mode="full",allow_local_binding=true,domains={"*"="deny"},enable_socks5=false,enable_socks5_udp=false}}',
+    'permissions.clinicos-verification={extends=":workspace",network={enabled=true,mode="full",allow_local_binding=true,domains={},enable_socks5=false,enable_socks5_udp=false}}',
     '--permission-profile',
     'clinicos-verification',
     '--include-managed-config',
