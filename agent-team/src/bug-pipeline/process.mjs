@@ -62,7 +62,11 @@ export function createRunner({ env = process.env, runtimeRoot }) {
     envMode = 'controller',
   }) => {
     const childEnv = childEnvironment(envMode, env, runtimeRoot);
-    if (envMode !== 'controller') await mkdir(childEnv.HOME, { recursive: true, mode: 0o700 });
+    if (envMode !== 'controller') {
+      for (const directory of [childEnv.HOME, childEnv.CODEX_HOME, childEnv.CLAUDE_CONFIG_DIR]) {
+        await mkdir(directory, { recursive: true, mode: 0o700 });
+      }
+    }
     const executable =
       command === 'codex'
         ? env.CODEX_CLI_PATH || command

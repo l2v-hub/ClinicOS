@@ -32,3 +32,27 @@ jobs:
       # Built-in Node tests, synthetic repositories and mock providers; no app install or secrets.
       - name: Test queue, sessions, evidence, budgets and release guards
         run: node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs
+
+      # Exercise the actual sandbox on a clean runner; no model call or secrets are needed.
+      - name: Install pinned Codex CLI for runner readiness
+        run: npm install --prefix "$RUNNER_TEMP/bug-pipeline-tools" --no-audit --no-fund --no-save @openai/codex@0.159.2
+
+      - name: Verify actual isolated Codex sandbox
+        env:
+          CODEX_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/codex
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import path from 'node:path';
+          import { createRunner } from './agent-team/src/bug-pipeline/process.mjs';
+          const run = createRunner({ runtimeRoot: path.join(process.env.RUNNER_TEMP, 'cli-readiness') });
+          const result = await run({
+            command: 'codex',
+            args: ['sandbox', '--permission-profile', ':workspace', '--cd', process.cwd(), '--', 'node', '-e', 'process.stdout.write("sandbox-ready")'],
+            cwd: process.cwd(),
+            envMode: 'verification',
+          });
+          assert.equal(result.ok, true, result.stderr || result.error);
+          assert.equal(result.stdout, 'sandbox-ready');
+          console.log('Real isolated Codex sandbox: PASS');
+          JS
