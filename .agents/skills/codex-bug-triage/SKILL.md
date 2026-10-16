@@ -1,6 +1,6 @@
 ---
 name: codex-bug-triage
-description: Process authorized GitHub bugs with Codex planning, grouped worktrees, detailed delegation to smaller executors, evidence and simplification, then Claude PR review with bounded correction cycles.
+description: Process authorized GitHub bugs with Codex planning, grouped worktrees, adaptive direct execution or delegation, evidence and simplification, then Claude PR review with bounded correction cycles.
 ---
 
 # Codex bug queue and Claude review
@@ -10,9 +10,10 @@ label queue, or Codex development followed by Claude review.
 
 ## Roles and scope
 
-- Codex owns intake, grouping, analysis, worktrees, planning, implementation and tests. Delegate
-  scoped implementation and simplification to smaller executors such as Luna where available.
-  Use an actual supported executor model ID on CLI/API hosts, never invent a public ID for Luna.
+- Codex owns intake, grouping, analysis, worktrees, planning, implementation and tests. Choose
+  direct senior execution or delegation according to difficulty, risk and observed workload.
+  It may implement the entire group with gpt-6.1-sol. Luna is an optional executor for bounded
+  work. Record difficulty, direct/delegate choice and rationale; never require a small model.
 - Claude only reviews the final code and evidence. Codex applies the requested corrections.
 - Use the existing `agent-loop-quality-gate` and `qa-gate` skills for contracts and evidence.
   The user's specified roles take precedence over the old Agent Team's Claude-development role.
@@ -77,9 +78,12 @@ Sanitize artifacts: field names and synthetic examples only, no patient data, cr
 issue dumps. Publish a concise grouping/plan link only on the selected GitHub issues. Do not
 implement until the group's packet is complete and essential questions are resolved.
 
-## 4. Delegate implementation, validate and simplify
+## 4. Select execution, validate and simplify
 
-Delegate the complete group plan to a smaller executor in a fresh bounded session. Add meaningful regression coverage, run the
+Execute the complete group plan directly with the senior model or delegate a suitable bounded
+group in a fresh session. Automatic routing considers the plan, actual local in-flight sessions
+and observed capacity errors; it never invents global provider load. A fixed executor override
+can keep all development in gpt-6.1-sol. Add meaningful regression coverage, run the
 relevant tests and required build/runtime checks, and store actual outputs in the packet.
 Changes to backend/schema require the bug scope to justify them. Never use a production database
 for development or testing. Permit at most four implementation/validation attempts per group.

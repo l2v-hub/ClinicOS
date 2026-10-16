@@ -1,0 +1,14 @@
+✔ explicit malformed assessments cannot masquerade as absent legacy assessments (4.036053ms)
+✔ legacy validation preserves bytes and exhausted counters; unrelated invalid state is refused (2.325899ms)
+✔ ordinary CLI diagnostic containing503 is not a provider capacity observation (24.255512ms)
+✔ failed CLI sessions release actual in-flight count without hidden retries (8.055697ms)
+✔ senior implementation and senior independent QA use distinct ephemeral restricted sessions (22.653562ms)
+✔ real model choices persist identically in workspace packet and durable batch on success and failure (29.087593ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 204.716877

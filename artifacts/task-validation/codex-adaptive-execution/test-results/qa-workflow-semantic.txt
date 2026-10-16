@@ -1,0 +1,2 @@
+PASS: 3 workflow documents parsed; secret-free read-only regression CI; shared serialized lock; production environment; separate trusted/exact-merge checkouts; deployment uses exact merge SHA; backend/runtime success monitoring; guarded record step; production credentials absent from model controller; immutable action refs
+PASS: adaptive executor defaults to auto; optional delegate exposed separately.

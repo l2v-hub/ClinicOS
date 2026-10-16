@@ -2,6 +2,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { validateAgainstSchema } from '../core/json-schema.mjs';
 import { sanitizeText } from '../core/sanitize.mjs';
+import { legacyExecution } from './routing.mjs';
 
 const string = { type: 'string' };
 const integer = { type: 'integer' };
@@ -20,6 +21,11 @@ export const planSchema = object({
       feature: string,
       rationale: string,
       analysis: string,
+      execution: object({
+        difficulty: { type: 'string', enum: ['low', 'medium', 'high'] },
+        mode: { type: 'string', enum: ['direct', 'delegate'] },
+        reason: string,
+      }),
       issues: list(integer),
       scope: list(string),
       acceptance: list(object({ issue: integer, criteria: list(string) })),
@@ -68,13 +74,24 @@ export function editableFile(file) {
     throw new Error('automation control or credential path is outside implementation scope');
   return file;
 }
-export function validatePlan(plan, issues) {
-  validateAgainstSchema(plan, planSchema);
+export function validatePlan(plan, issues, { allowLegacyExecution = false } = {}) {
+  const checked =
+    allowLegacyExecution && Array.isArray(plan?.groups)
+      ? {
+          ...plan,
+          groups: plan.groups.map((group) =>
+            group.execution !== undefined ? group : { ...group, execution: legacyExecution },
+          ),
+        }
+      : plan;
+  validateAgainstSchema(checked, planSchema);
   safeText(JSON.stringify(plan));
   if (plan.groups.length > 20 || plan.blocked.length > 100) throw new Error('plan too large');
   const selected = new Set(issues.map((i) => i.number));
   const seen = [];
   for (const group of plan.groups) {
+    if (group.execution && !group.execution.reason.trim())
+      throw new Error('missing execution rationale');
     if ([group.title, group.feature, group.rationale, group.analysis].some((s) => !s.trim()))
       throw new Error('missing grouping analysis');
     if (group.issues.length > 20 || group.verification.length > 12 || group.tasks.length > 50)
@@ -200,6 +217,7 @@ export function validateState(state, repo) {
       validatePlan(
         { groups: [b.plan], blocked: [] },
         b.issues.map((number) => ({ number })),
+        { allowLegacyExecution: true },
       );
   }
   return state;

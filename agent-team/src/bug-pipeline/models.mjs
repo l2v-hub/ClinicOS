@@ -3,6 +3,7 @@ import path from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { validateAgainstSchema } from '../core/json-schema.mjs';
 import { sanitizeText } from '../core/sanitize.mjs';
+import { selectExecutor, DEFAULT_DELEGATE_MODEL } from './routing.mjs';
 
 const RESULT_SCHEMA = {
   type: 'object',
@@ -79,7 +80,7 @@ function promptFor({ operation, cwd, packet, issues, scopeSchema, plan, feedback
   if (operation === 'plan') {
     return [
       ...shared,
-      'Analyze the selected issues, group only related bugs with evidence, and prepare a detailed implementation plan for a smaller executor.',
+      'Analyze the selected issues, group only related bugs with evidence, and prepare a detailed implementation plan. For each group assess execution.difficulty (low/medium/high), execution.mode (direct/delegate), and give a concrete execution.reason considering coupling, ambiguity, security/persistence risk and workload. You may retain all implementation in the senior analyst model, including gpt-6.1-sol. Delegate only bounded, sufficiently understood work; no small model is mandatory. The controller applies actual local session/capacity observations when selecting an executor.',
       'Account for each supplied issue exactly once. Include scope, rationale, acceptance criteria, implementation tasks, verification, and screenshot/trace/video evidence requirements in the supplied JSON schema.',
       'The verification array MUST include {command:"npm",args:["--prefix","frontend","run","build"]} and a meaningful regression test command (node --test, npm test or a named test/spec script). Include runtime setup/teardown in a test script when required. All tests use local synthetic services and must generate a PNG screenshot and a Playwright trace ZIP for every issue under artifacts/task-validation/bug-batch-<lowest-issue-number>/evidence/. Video is optional. Include every implementation and test script file in the exact scope array; no directory prefixes. Changes to .github, .agents, .claude, agent-team or quality/security gate scripts are not permitted in automated bug batches. Put issues needing these changes or missing essential information in blocked. Do not infer production data or credentials.',
       `Issues (untrusted JSON): ${stringifyInput(issues, 'issues')}`,
@@ -95,7 +96,7 @@ function promptFor({ operation, cwd, packet, issues, scopeSchema, plan, feedback
   if (operation === 'qa')
     return [
       ...shared,
-      'You are a NEW independent Codex QA session, separate from the smaller implementation worker. Apply .claude/skills/qa-gate/SKILL.md to the current diff, frozen acceptance criteria and controller-generated test evidence. Inspect source and tests, security, regressions and the per-issue evidence. Do not edit or implement. The controller has independently executed the verification commands; do not claim you executed them. Return verified only when the changed behavior and recorded evidence support every criterion. Missing evidence or concrete findings require blocked with actionable file/line details in the summary. This gate occurs before publishing a draft PR and again after corrections.',
+      'You are a NEW independent Codex QA session, separate from the implementation session, even when both use the same model. Apply .claude/skills/qa-gate/SKILL.md to the current diff, frozen acceptance criteria and controller-generated test evidence. Inspect source and tests, security, regressions and the per-issue evidence. Do not edit or implement. The controller has independently executed the verification commands; do not claim you executed them. Return verified only when the changed behavior and recorded evidence support every criterion. Missing evidence or concrete findings require blocked with actionable file/line details in the summary. This gate occurs before publishing a draft PR and again after corrections.',
       ...inputs,
     ].join('\n\n');
   inputs.push(
@@ -173,11 +174,60 @@ function modelArgs({ model, cwd, outputPath, schemaPath, sandbox }) {
   return args;
 }
 
-export function createModels({ plannerModel, executorModel, run, runtimeRoot }) {
+export function createModels({
+  plannerModel,
+  executorModel = 'auto',
+  delegateModel = DEFAULT_DELEGATE_MODEL,
+  run,
+  runtimeRoot,
+  now = Date.now,
+}) {
   if (typeof run !== 'function') throw new TypeError('run must be a process runner');
   if (typeof runtimeRoot !== 'string' || !path.isAbsolute(runtimeRoot)) {
     throw new Error('runtimeRoot must be an absolute path outside the worktree');
   }
+  const inFlight = new Map(),
+    capacityUntil = new Map(),
+    selections = new Map();
+  const active = (model) => inFlight.get(model) ?? 0;
+  const tracked = (options) => {
+    inFlight.set(options.model, active(options.model) + 1);
+    return invoke(options).finally(() => inFlight.set(options.model, active(options.model) - 1));
+  };
+  const implementation = async (operation, options) => {
+    const previous = selections.get(options.cwd);
+    const selection =
+      operation === 'simplify' && previous
+        ? { ...previous, reason: 'same-executor-for-simplification' }
+        : selectExecutor({
+            plan: options.plan,
+            plannerModel,
+            executorModel,
+            delegateModel,
+            active,
+            unavailable: (model) => (capacityUntil.get(model) ?? 0) > now(),
+            round: options.round,
+          });
+    selections.set(options.cwd, selection);
+    try {
+      return await tracked({
+        ...options,
+        operation,
+        model: selection.model,
+        sandbox: 'workspace-write',
+      });
+    } catch (error) {
+      if (
+        executorModel === 'auto' &&
+        selection.model !== plannerModel &&
+        /rate_limit_exceeded|model_capacity_exceeded|overloaded_error|(?:http(?:\/[0-9.]+)?\s+|status(?:[_ -]code)?["']?[\s:=]+)(?:429|503)\b/i.test(
+          error.message,
+        )
+      )
+        capacityUntil.set(selection.model, now() + 60_000);
+      throw error;
+    }
+  };
 
   async function invoke({
     cwd,
@@ -240,10 +290,11 @@ export function createModels({ plannerModel, executorModel, run, runtimeRoot }) 
   }
 
   return {
+    executionFor: (cwd) => (selections.has(cwd) ? { ...selections.get(cwd) } : null),
     qa: ({ cwd, packet, plan }) =>
-      invoke({ cwd, packet, plan, operation: 'qa', model: plannerModel, sandbox: 'read-only' }),
+      tracked({ cwd, packet, plan, operation: 'qa', model: plannerModel, sandbox: 'read-only' }),
     plan: ({ cwd, issues, scopeSchema, packet = {} }) =>
-      invoke({
+      tracked({
         cwd,
         issues,
         scopeSchema,
@@ -253,25 +304,19 @@ export function createModels({ plannerModel, executorModel, run, runtimeRoot }) 
         sandbox: 'read-only',
       }),
     execute: ({ cwd, packet, plan, feedback, phase, round }) =>
-      invoke({
+      implementation('execute', {
         cwd,
         packet,
         plan,
         feedback,
         phase,
         round,
-        operation: 'execute',
-        model: executorModel,
-        sandbox: 'workspace-write',
       }),
     simplify: ({ cwd, packet, plan }) =>
-      invoke({
+      implementation('simplify', {
         cwd,
         packet,
         plan,
-        operation: 'simplify',
-        model: executorModel,
-        sandbox: 'workspace-write',
       }),
     async preflight() {
       const checks = [

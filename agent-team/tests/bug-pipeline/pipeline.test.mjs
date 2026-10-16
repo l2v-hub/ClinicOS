@@ -15,6 +15,11 @@ function planFor(issues = [17, 18]) {
         title: 'Stabilize the patient list filter',
         feature: 'Patient list',
         rationale: 'The related reports share the same filter behavior.',
+        execution: {
+          difficulty: 'low',
+          mode: 'delegate',
+          reason: 'Bounded, independently testable change.',
+        },
         analysis:
           'Both issues describe the same feature regression with separate reproduction details.',
         issues: [...issues],
