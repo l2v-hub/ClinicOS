@@ -44,6 +44,13 @@ export async function reviewBugSetup({ cwd, env = process.env, run, store }) {
     return pr;
   };
   const pr = await checkHead();
+  assert.match(pr.base.sha, /^[a-f0-9]{40}$/);
+  const comparison = await api(`compare/${pr.base.sha}...${env.GITHUB_SHA}`);
+  assert.equal(
+    comparison.merge_base_commit.sha,
+    pr.base.sha,
+    'Update the setup branch with current main before review',
+  );
   assert.equal((await invoke('git', ['rev-parse', 'HEAD'])).trim(), env.GITHUB_SHA);
   store ??= createGitHub({ cwd, repo: REPO, run }).createStateStore();
   const state = (await store.load()) || { schemaVersion: 1, repository: REPO, batches: [] };
@@ -71,13 +78,15 @@ export async function reviewBugSetup({ cwd, env = process.env, run, store }) {
     assert.ok(content.length <= 100001);
     await writeFile(path.join(directory, name), content, { flag: 'wx' });
   }
-  const diff = await invoke('git', [
-    'diff',
-    `${pr.base.sha}...HEAD`,
-    '--',
-    '.',
-    ':(exclude)artifacts',
-  ]);
+  const baseAvailable = await run({
+    command: 'git',
+    args: ['cat-file', '-e', `${pr.base.sha}^{commit}`],
+    cwd,
+    envMode: 'verification',
+  });
+  if (!baseAvailable.ok)
+    await invoke('git', ['fetch', '--no-tags', '--depth=1', 'origin', pr.base.sha]);
+  const diff = await invoke('git', ['diff', pr.base.sha, 'HEAD', '--', '.', ':(exclude)artifacts']);
   await writeFile(path.join(directory, 'claude-review-diff.local'), diff, { flag: 'wx' });
   const previousRounds = saved.ledger?.rounds?.length || 0;
   let reserved = false;
@@ -141,7 +150,7 @@ export async function reviewBugSetup({ cwd, env = process.env, run, store }) {
   } finally {
     if (reserved) await persist();
   }
-  await checkHead();
+  assert.equal((await checkHead()).base.sha, pr.base.sha, 'Main changed during setup review');
   if (result.report || result.reused) {
     const content = await readFile(
       path.join(directory, `claude-review-${result.round}.json`),

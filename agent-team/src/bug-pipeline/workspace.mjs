@@ -3,6 +3,7 @@ import path from 'node:path';
 import { runBugReview } from '../../../scripts/quality-gate/claude-bug-review.mjs';
 import { relativeFile, editableFile, safeText, sha256 } from './contracts.mjs';
 import { validatePng, validateTrace } from './evidence.mjs';
+import { verificationArguments } from './verification.mjs';
 
 export async function regularFile(root, file) {
   relativeFile(file);
@@ -129,16 +130,7 @@ export function createWorkspace({ root, repo, run, models }) {
       // Run model-selected test commands inside the actual Codex sandbox, with NO API/GitHub keys.
       const result = await run({
         command: 'codex',
-        args: [
-          'sandbox',
-          '--permission-profile',
-          ':workspace',
-          '--cd',
-          cwd,
-          '--',
-          entry.command,
-          ...entry.args,
-        ],
+        args: verificationArguments(cwd, entry.command, entry.args),
         cwd,
         envMode: 'verification',
         timeoutMs: 15 * 60_000,
