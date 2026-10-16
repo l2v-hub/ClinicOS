@@ -119,6 +119,38 @@ test('createRunner subprocess receives only the role credential and a demo local
   }
 });
 
+test('fresh CLI configuration directories are private and survive repeated isolated launches', async (t) => {
+  const root = await tempDir(t);
+  const runner = createRunner({
+    env: { PATH: process.env.PATH },
+    runtimeRoot: path.join(root, 'runtime'),
+  });
+  const script = `
+    const fs = require('node:fs');
+    const path = require('node:path');
+    for (const key of ['HOME', 'CODEX_HOME', 'CLAUDE_CONFIG_DIR']) {
+      const directory = process.env[key];
+      const stat = fs.statSync(directory);
+      if (!stat.isDirectory() || (stat.mode & 0o777) !== 0o700) process.exit(2);
+    }
+    const file = path.join(process.env.CODEX_HOME, 'retained-fixture');
+    const previous = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
+    fs.writeFileSync(file, previous + 'x');
+    process.stdout.write(previous);
+  `;
+  for (const envMode of ['verification', 'model', 'review']) {
+    const call = () =>
+      runner({ command: process.execPath, args: ['-e', script], cwd: root, envMode });
+    const first = await call();
+    assert.equal(first.ok, true, first.stderr);
+    // The model and review modes intentionally share their model HOME.
+    assert.equal(first.stdout, envMode === 'review' ? 'xx' : '');
+    const second = await call();
+    assert.equal(second.ok, true, second.stderr);
+    assert.equal(second.stdout, envMode === 'review' ? 'xxx' : 'x');
+  }
+});
+
 test('createRunner reports child exit failure and output overflow as failures', async (t) => {
   const root = await tempDir(t);
   const runner = createRunner({
