@@ -1,0 +1,6 @@
+Run: https://github.com/l2v-hub/ClinicOS/actions/runs/38972121631
+Source: b1d54d7c8a3964645ee453acf50295477eaa1fef
+Full-stack sandbox probe NOT RUN: dependency installation failed on stock Ubuntu22 package catalog.
+
+bug-pipeline-tests	Prepare trusted dependencies and PostgreSQL for isolated service readiness	2026-10-16T21:52:21.0641479Z E: Unable to locate package postgresql-16
+bug-pipeline-tests	Prepare trusted dependencies and PostgreSQL for isolated service readiness	2026-10-16T21:52:21.0670900Z ##[error]Process completed with exit code 100.

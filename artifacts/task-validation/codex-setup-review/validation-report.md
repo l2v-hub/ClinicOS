@@ -18,3 +18,11 @@ The actual model report, reserved/spent attempt ledger and hashes are saved in s
 ## Verdict
 
 **BLOCKED** for complete activation pending actual Max review, required checks and trusted-default-branch integration. Source is ready for the independent QA-approved bounded model dispatch. No real bug or production deployment has been certified by these checks.
+
+## Local services integration prerequisite (before any actual model call)
+
+Independent source QA identified a concrete gap: :workspace blocks sockets and the host Postgres service is inaccessible inside verification. A supported named workspace-derived managed proxy profile now permits local binding and denies every external domain, without SOCKS/UDP proxy or unrestricted network flags. Each planned command starts fresh synthetic PostgreSQL16 and applies migrations inside its invocation; HTTP services start in the same test script. Native probes require local HTTP value, Patient schema/migration history, explicit TCP/UDP denial, proxy HTTP/CONNECT403, failed outside-workspace writes and propagated failing-command exit7. The original five basic assertions remain.
+
+The first native run38972121631 stopped before this new profile probe: stock Ubuntu22 could not locate postgresql-16. A CI-only shared installer now adds the official HTTPS PGDG repository using a single-primary-key/full40hex fingerprint check and per-source apt signature validation. No TLS/signature bypass was used; local access to the public key hostname was denied403 by the cloud allowlist, so actual key/install validation belongs to the native run. The hosted check remains blocked until that prerequisite and every service/containment assertion passes.
+
+The initial real-review dispatch38970606680 was canceled while fetching full Git history and before any budget/state branch/model call existed. Bootstrap now fetches only validated base/current trees and checks ancestry/base freshness. No actual Claude setup review budget has been consumed. Root must wait for native services proof and fresh source QA before launching the first actual Max review.

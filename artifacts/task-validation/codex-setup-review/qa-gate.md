@@ -1,14 +1,14 @@
 # Independent QA — bounded setup PR review
 
-Date: 2026-10-16. Existing draft PR #471. Three reviewed workflow/helper/test files are bound by `qa-reviewed-files.sha256`. Dedicated QA did not author implementation, invoke a model, mutate GitHub, merge or deploy.
+Date: 2026-10-16. Existing draft PR #471. Ten reviewed workflow/helper/test/documentation files, including local-service readiness and its CI installer, are bound by `qa-reviewed-files.sha256`. Dedicated QA did not author implementation, invoke a model, mutate GitHub, merge or deploy.
 
 ## Phase results
 
 | Phase | Result | Evidence |
 | --- | --- | --- |
-| 0 Contract | PASS: AC1–AC6 require exact-SHA/admin/same-repository preflights, subscription-only read-only review, remote reservation before inference, four durable attempts, authentic published evidence and no release bypass. | `task-contract.md`, `implementation-plan.md` |
+| 0 Contract | PASS: AC1–AC7 require exact-SHA/admin/same-repository preflights, subscription-only read-only review, remote reservation before inference, four durable attempts, authentic published evidence, isolated local-service readiness and no release bypass. | `task-contract.md`, `implementation-plan.md` |
 | 1 Diff | PASS after two findings below were fixed. One workflow adds a manual bootstrap review job; the fixed-PR helper reuses existing reviewer/state APIs; seven synthetic real-Git tests verify recovery and bounds. | `qa-reviewed-files.sha256` |
-| 2 Tests/build | PASS: independent complete scoped regressions93/93, including bootstrap7/7; new helper syntax, workflow YAML, native regression dependency, matching concurrency group and unchanged default token permissions checked. Existing application TypeScript/build evidence carried forward for unchanged application/package files. | `test-results/qa-regressions.txt`; `../codex-runner-activation/test-results/qa-frontend-build-carried-forward.txt` |
+| 2 Tests/build | PASS for independent complete scoped regressions93/93, including bootstrap7/7; repeated93/93 after the local-service follow-up; new helper syntax, both workflow YAML/all inline JavaScript, retained five basic sandbox assertions and unchanged permission/concurrency controls checked. Actual new native service positive/negative checks remain pending. Existing application TypeScript/build evidence carried forward for unchanged application/package files. | `test-results/qa-regressions.txt`, `test-results/qa-local-services-regressions.txt`; `../codex-runner-activation/test-results/qa-frontend-build-carried-forward.txt` |
 | 3 Browser | Prior independent Max report Playwright1/1 and result artifacts carried forward explicitly: bootstrap changes metadata/state/publication only; application and safe report-surface UI remain unchanged. Screenshot/report prove the prior synthetic86-regression result, not this new93-test run or an actual Claude review. | `../codex-claude-max-auth/result.png`, `../codex-claude-max-auth/trace.zip`, `../codex-claude-max-auth/playwright-report/index.html`, `../codex-claude-max-auth/test-results/qa-playwright.txt` |
 | 4 Security | PASS for scoped source; real review/default-branch integration remain separately gated. | Checklist below |
 
@@ -45,6 +45,30 @@ No unresolved scoped correctness/security finding remains.
 
 ## Verdict and limits
 
-**BLOCKED** for completed default-branch activation until an actual Claude review and required exact-head gates pass. The scoped bootstrap source has no unresolved QA finding and is approved for one authorized exact-SHA subscription review dispatch. Its actual result must be recorded independently; source changes require re-review and remain within the same durable four-round budget.
+**BLOCKED** for completed default-branch activation until actual native local-service positive/negative checks, Claude review and required exact-head gates pass. The current source is approved for native readiness probing only. Actual inference requires those native service gates first; source changes require re-review and remain within the same durable four-round budget.
 
 Prior native38969585616 recognized Max OAuth and passed86 regressions/sandbox without inference; this is a prerequisite, not the requested real review. The new93/93 synthetic regression result does not prove real provider execution, PR approval, integration or deployment. No model inference, new issue processing, merge or deployment was performed by this QA session.
+
+## Local-service follow-up before inference
+
+Independent source investigation found the original `:workspace` verification network cannot reach host PostgreSQL or bind local HTTP: pinned Codex0.159.2 restricted seccomp denies connect/bind/listen/IP sockets and bubblewrap unshares networking. `workspace.prepare` already generates Prisma, so that was not reported as missing. The root canceled the first review while still checking out; no model reservation/inference occurred according to its inspected state/run evidence.
+
+Reviewed correction:
+
+- A controller-owned static named profile inherits `:workspace` filesystem restrictions and enables the supported managed proxy, with every proxy domain denied, local binding only and SOCKS/UDP proxy disabled. It does not select unrestricted access, legacy Landlock or global policy changes. CLI overrides and the executed harness come from trusted controller source outside model worktrees.
+- Each verification command gets a fresh synthetic PostgreSQL16 cluster, migrations and command lifecycle in the same sandbox network namespace, followed by cleanup. PostgreSQL uses TCP127.0.0.1 only; Unix sockets are disabled to preserve the managed proxy's AF_UNIX restriction. The planner is told that HTTP/API/frontend/mock services must start/test/stop within that same invocation.
+- The required native job now installs trusted dependencies/Prisma and PostgreSQL, then uses the identical profile/harness factory. It retains all five original basic assertions and adds actual local HTTP/SQL checks, explicit external TCP/UDP denial, proxy GET/CONNECT403 and denied writes to a controller-owned external file. Actual pass is not inferred from mocked tests or schema support.
+- QA required removing `ECONNREFUSED` from accepted external-denial outcomes: a remote refusal does not establish containment. Both negative tests now accept only `ENETUNREACH`, `EACCES` or `EPERM`; timeout also fails validation. QA also identified the Unix-socket conflict; the fixed harness disables those sockets.
+- Bootstrap checkout now uses shallow history. The helper validates the exact base SHA and GitHub comparison ancestry, fetches only that base when absent, computes direct-tree diff and rechecks unchanged main base/head after review. This avoids the large full-history fetch without skipping diff verification.
+
+Independent local follow-up suite passed93/93 in3.45seconds. Both workflow YAML/all inline JavaScript, new helper/probe syntax, exact original sandbox assertions and `git diff --check` passed. The expanded nine-file manifest must match the actual native-tested source; native results are recorded by the root before any model dispatch. The new local-service capability remains unverified until that actual run completes.
+
+## Native dependency installation follow-up
+
+Actual run38972121631 stopped before the new profile/harness executed because stock Ubuntu22.04 APT could not locate `postgresql-16`. This is a dependency-preparation failure, not an observed profile success or failure. No model attempt was reserved.
+
+Reviewed correction adds a shared installer used by both required regression and processing workflows before provider credentials enter any step. It is restricted to ephemeral Actions execution, downloads the official PGDG public key over verified HTTPS, requires exactly one primary key and the full pinned40-hex fingerprint, installs that key for a single `signed-by` HTTPS Jammy PGDG repository, and installs PostgreSQL16. It stops only the default16main cluster after installing missing binaries; it does not stop arbitrary existing PostgreSQL versions or alter production hosts. Key mismatch/bundle ambiguity fails before repository trust is added; no TLS bypass was introduced.
+
+Independent checks pass: `bash -n`, actual non-CI guard execution returns1 before privileged work, both workflow YAML/shared callsites, updated native probe JavaScript syntax and `git diff --check`. Existing93/93 suite is carried forward without an unnecessary rerun for this installer/probe-only change. The SQL positive proof now checks the actual Patient table and nonempty Prisma migration history, not only a successful connection. Evidence: `test-results/qa-installer-checks.txt`.
+
+The manifest is expanded to ten reviewed source files. Approval remains **native-readiness-only**: dependency installation and every positive/negative service assertion must pass on the actual runner before a model review. The local environment's blocked public-key download was not bypassed, and no native key verification success is fabricated.

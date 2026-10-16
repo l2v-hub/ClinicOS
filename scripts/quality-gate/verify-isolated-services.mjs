@@ -88,11 +88,11 @@ if (process.argv[2] === '--inside') {
         '-d',
         'clinicos_test',
         '-Atqc',
-        'SELECT current_database(), 1',
+        'SELECT current_database(), to_regclass(\'public."Patient"\') IS NOT NULL, (SELECT count(*) > 0 FROM "_prisma_migrations")',
       ],
       { encoding: 'utf8' },
     ).trim();
-    assert.equal(sql, 'clinicos_test|1');
+    assert.equal(sql, 'clinicos_test|t|t');
     await connectDenied();
     await udpDenied();
     assert.equal(await proxyStatus('GET'), 403);
