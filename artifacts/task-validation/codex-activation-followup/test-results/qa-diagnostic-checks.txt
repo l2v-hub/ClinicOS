@@ -1,0 +1,16 @@
+Independent QA, baseline ff6d24a3, 2026-10-16, updated administrative/sync-probe follow-up.
+PASS: full workflow parsed by PyYAML6.0.3.
+PASS: extracted readiness JavaScript parsed by node --check (no program execution).
+PASS: CLI/admin scripts pass node --check.
+PASS: all5 existing assert.equal readiness assertions retained verbatim.
+PASS: every PR emits regression check; manual-only fixed-repository admin job.
+PASS: failure diagnostics cover runner and direct CLI failures; synchronous exact-output payload.
+PASS: contents-read-only permission, persist-credentials:false and verification environment unchanged.
+PASS: git diff --check.
+PASS: independent full81/81 scoped regressions after push2f832ee11d99497bbd7789f7b655d512dc47d822; full log qa-complete-regressions.txt.
+Carried forward, not rerun: frontend TypeScript/build and QA-only Playwright1/1 screenshot/trace for unchanged application/UI/package sources.
+Actual native/admin result: pending root recording; no readiness success inferred from syntax/unit coverage.
+
+Provider/permission follow-up: all3 workflow inlineJavaScript blocks pass node --check, helper syntax and git diff --check PASS. Optional exactSHA GET-only provider metadata job reviewed: fixedofficialorigins, redirect:error,30s timeout, no bot/deploysecrets, fixedfields only. Errorbody maps only to predefined sanitized categories. No new native success fabricated.
+
+FINAL ACTUAL RUN INSPECTED:38964563242, cf6be8198946230821685a2309554fff07894b59. Native81/81+real sandboxPASS, OpenAIplanner metadata200verifiedtrue, Anthropicmetadata401verifiedfalse, botfirstsettingswrite403bot-token-permission-denied. No mutation succeeded. Source hashes allmatch. FullactivationBLOCKED by actual Anthropic/GitHub access failures. No paidinference/Claudereview/merge/deploy certified.

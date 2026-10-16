@@ -1,0 +1,13 @@
+✔ repository settings reject a mismatched revision before using credentials (3.326403ms)
+✔ non-admin callers and failed read preflights cannot mutate settings (0.983649ms)
+✔ configuration adds a cumulative exact-main gate and preserves default permissions (6.551092ms)
+✔ adding the check preserves existing human review and strict status requirements (0.642644ms)
+✔ ambiguous targets and differently bound checks fail before any mutation (2.53261ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 149.045871
