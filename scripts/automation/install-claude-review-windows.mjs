@@ -27,7 +27,9 @@ export function taskPlan({ root, configFile, node }) {
   };
 }
 export function taskScript(operation, { name, plan, stateDir }) {
-  assert.ok(['read', 'install', 'remove', 'secure', 'privacy'].includes(operation));
+  assert.ok(
+    ['read', 'install', 'remove', 'secure', 'secure-config', 'privacy'].includes(operation),
+  );
   assert.match(name, /^ClinicOS-ClaudeReview-[a-f0-9]{16}$/);
   const prelude = `$ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
@@ -49,6 +51,19 @@ $acl.SetAccessRuleProtection($true, $false)
 $rule = [System.Security.AccessControl.FileSystemAccessRule]::new($identity, 'FullControl', 'ContainerInherit,ObjectInherit', 'None', 'Allow')
 $acl.AddAccessRule($rule)
 Set-Acl -LiteralPath $directory -AclObject $acl
+`
+    );
+  if (operation === 'secure-config')
+    return (
+      prelude +
+      `$file = ${psQuote(path.join(stateDir, 'config.json'))}
+$item = Get-Item -LiteralPath $file -Force
+if ($item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) { throw 'Redirected new scheduler config' }
+$acl = New-Object System.Security.AccessControl.FileSecurity
+$acl.SetOwner($identity)
+$acl.SetAccessRuleProtection($true, $false)
+$acl.AddAccessRule([System.Security.AccessControl.FileSystemAccessRule]::new($identity, 'FullControl', 'Allow'))
+Set-Acl -LiteralPath $file -AclObject $acl
 `
     );
   if (operation === 'privacy')
@@ -228,6 +243,9 @@ export async function installWindows({
     assert.equal((await lstat(stateDir)).isSymbolicLink(), false);
     await invoke('secure');
     await writeFile(configFile, config, { flag: 'wx' });
+    const fresh = await lstat(configFile);
+    assert.ok(fresh.isFile() && !fresh.isSymbolicLink() && fresh.nlink === 1);
+    await invoke('secure-config');
   }
   // Existing directories/config must pass inspection before any ACL or file mutation.
   await verifyState();

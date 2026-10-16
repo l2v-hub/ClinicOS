@@ -218,8 +218,9 @@ test(
   { skip: process.platform !== 'win32' },
   async (t) => {
     const f = await fixture(t);
-    const scripts = ['read', 'install', 'remove', 'privacy', 'secure'].map((operation) =>
-      taskScript(operation, { name: taskIdentity(f.root), plan: f.plan, stateDir: f.stateDir }),
+    const scripts = ['read', 'install', 'remove', 'privacy', 'secure', 'secure-config'].map(
+      (operation) =>
+        taskScript(operation, { name: taskIdentity(f.root), plan: f.plan, stateDir: f.stateDir }),
     );
     const bootstrap = await readFile(
       new URL('../../../scripts/automation/setup-claude-review-windows.ps1', import.meta.url),
@@ -284,6 +285,8 @@ test(
     const secure = await ps(taskScript('secure', parameters));
     assert.equal(secure.ok, true, secure.stderr);
     await writeFile(config, '{}');
+    const secureConfig = await ps(taskScript('secure-config', parameters));
+    assert.equal(secureConfig.ok, true, secureConfig.stderr);
     const privateResult = await ps(taskScript('privacy', parameters));
     assert.equal(privateResult.ok, true, privateResult.stderr);
     const change = await ps(
@@ -412,6 +415,15 @@ test(
         await access(marker);
       } else {
         assert.equal(result.code, 9, scenario);
+        const reason = {
+          nonrepo: /not.*(git repository|dedicated checkout)/i,
+          dirty: /local changes/i,
+          'wrong-branch': /another branch/i,
+          foreign: /checkout origin/i,
+          diverged: /fast-forward/i,
+          'local-only': /local-only commits/i,
+        }[scenario];
+        assert.match(result.stdout, reason, scenario);
         await assert.rejects(access(marker), { code: 'ENOENT' });
         if (before)
           assert.equal(await git(['-C', destination, 'rev-parse', 'HEAD']), before, scenario);
