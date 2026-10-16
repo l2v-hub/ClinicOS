@@ -83,6 +83,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN || github.token }}
           CODEX_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # Max subscription only: never fall back to a separately billed API key.
+          CLAUDE_REVIEW_AUTH_MODE: subscription
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # Accept an existing setup-token stored under the old secret name only
+          # when its OAuth prefix is recognized; API keys are excluded from review.
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CODEX_PLANNER_MODEL: ${{ vars.CODEX_PLANNER_MODEL || 'gpt-6.1-sol' }}
           CODEX_EXECUTOR_MODEL: ${{ vars.CODEX_EXECUTOR_MODEL || 'auto' }}

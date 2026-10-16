@@ -65,7 +65,7 @@ In Settings → Secrets and variables → Actions:
 | Nome                                 | Tipo               | Uso                                                                                                   |
 | ------------------------------------ | ------------------ | ----------------------------------------------------------------------------------------------------- |
 | `OPENAI_API_KEY`                     | Secret             | Sessioni Codex nel runner GitHub; il login ChatGPT della macchina cloud non si trasferisce ad Actions |
-| `ANTHROPIC_API_KEY`                  | Secret             | Review finale Claude                                                                                  |
+| `CLAUDE_CODE_OAUTH_TOKEN`            | Secret             | Review Claude Code con abbonamento Max                                                                |
 | `CODEX_PLANNER_MODEL`                | Variable opzionale | Default `gpt-6.1-sol`                                                                                 |
 | `CODEX_EXECUTOR_MODEL`               | Variable opzionale | Default `auto`; `gpt-6.1-sol` forza tutta l'implementazione sul senior                                |
 | `CODEX_SMALL_EXECUTOR_MODEL`         | Variable opzionale | Delegato opzionale, default `gpt-6-luna`                                                              |
@@ -74,13 +74,17 @@ In Settings → Secrets and variables → Actions:
 | `VERCEL_TOKEN`                       | Secret             | Deploy frontend nel passo di rilascio, mai passato ai modelli                                         |
 | `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` | Variables          | Identità del progetto Vercel, secondo il workflow di rilascio                                         |
 
+La review usa `CLAUDE_REVIEW_AUTH_MODE=subscription`: manca il token Max, il flusso si blocca senza passare alle API Anthropic. Generare il token con `claude setup-token` nel terminale autenticato al proprio account Max e salvarlo solo nel secret `CLAUDE_CODE_OAUTH_TOKEN`. Il token OAuth viene passato esclusivamente al reviewer Claude; modelli Codex, test e controller GitHub non lo ricevono. Un token OAuth riconosciuto dal prefisso `sk-ant-oat01-` già salvato nel vecchio secret `ANTHROPIC_API_KEY` viene accettato come OAuth, mentre una chiave API nello stesso secret resta esclusa. OAuth ha precedenza quando entrambe le credenziali sono presenti. Le review consumano i limiti dell’abbonamento; l’API Anthropic ha una fatturazione separata. Non viene invocata come ripiego.
+
+Il supporto Pro/Max su Actions è documentato nell’[autenticazione ufficiale Claude Code Action](https://github.com/anthropics/claude-code-action/blob/main/docs/setup.md). Un runner permanente non è necessario per questa modalità. Il probe `auth status` verifica la configurazione CLI e non dimostra da solo validità remota, quota o review eseguita.
+
 Il token di fallback `github.token` permette la coda, i commenti e la PR, ma i suoi push non avviano automaticamente altri workflow. I controlli richiesti assenti o non completati bloccano la readiness: non vengono interpretati come successo. Configurare branch protection e i check richiesti su `main`. Il token di bot deve avere contents/issues/pull requests e i permessi strettamente necessari al monitoraggio CI; i secrets non entrano nell'ambiente delle shell dei modelli o dei test.
 
 Il workflow `codex-bug-release.yml` fornisce il rilascio separato, con ambiente GitHub `production`. Il gate ricontrolla batch, SHA approvato, evidenze e PR prima del merge. I workflow esistenti Railway coprono backend e runtime AI dopo il push su `main`; il frontend usa il passo Vercel esplicito sul commit appena unito. Impostare le credenziali e le regole dell'ambiente `production` prima dell'attivazione. Nessun merge o deploy viene eseguito per installare questa automazione. Le issue restano aperte finché il risultato distribuito non è verificato; il successo del deploy non prova da solo la risoluzione clinica/funzionale.
 
 ## Ambiente cloud e diagnostica
 
-CLI fissate: Codex 0.159.2, Claude Code 2.1.301. Installazione fuori dal checkout; autenticazione tramite binding supportati, mai copiata nel repository. Nell'ambiente Codex cloud si possono usare gli alias `CLINICOS_ANTHROPIC_API_KEY`, `CLINICOS_PLANNER_MODEL` e `CLINICOS_EXECUTOR_MODEL`. Il draft cloud e i secret di GitHub Actions sono configurazioni distinte.
+CLI fissate: Codex 0.159.2, Claude Code 2.1.301. Installazione fuori dal checkout; autenticazione tramite binding supportati, mai copiata nel repository. Nell'ambiente Codex cloud si può fornire `CLAUDE_CODE_OAUTH_TOKEN` con `CLAUDE_REVIEW_AUTH_MODE=subscription`; gli alias `CLINICOS_PLANNER_MODEL` e `CLINICOS_EXECUTOR_MODEL`. Il draft cloud e i secret di GitHub Actions sono configurazioni distinte.
 
 ```bash
 node agent-team/src/bug-pipeline/cli.mjs --doctor
