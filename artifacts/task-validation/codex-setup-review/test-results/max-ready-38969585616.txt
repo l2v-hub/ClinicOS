@@ -1,0 +1,10 @@
+Run: https://github.com/l2v-hub/ClinicOS/actions/runs/38969585616
+Source: 38802c94af099a54dc942ed986f3ba3c8efc1c89
+Actualselectedconfigurationoutput; no inference in this check.
+
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T21:28:50.9019022Z # tests 86
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T21:28:50.9019261Z # pass 86
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T21:28:50.9019384Z # fail 0
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T21:28:55.7167125Z Real isolated Codex sandbox: PASS
+verify-provider-access	Verify read-only model API access on the reviewed revision	2026-10-16T21:28:56.2844488Z {"probe":"openai-planner-model","httpStatus":200,"verified":true}
+verify-provider-access	Verify read-only model API access on the reviewed revision	2026-10-16T21:28:56.5156731Z {"probe":"claude-max-configuration","credentialConfigured":true,"apiKeyExcluded":true,"cliRecognizesAuthentication":true,"inferenceExecuted":false}
