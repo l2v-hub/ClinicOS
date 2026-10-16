@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ClinicOS — Coda bug</title>
+    <link rel="stylesheet" href="/dashboard.css" />
+    <script src="/dashboard.js" defer></script>
+  </head>
+  <body>
+    <header><span class="brand">ClinicOS</span><span>Automazione bug · GitHub</span></header>
+    <main>
+      <div class="heading">
+        <div>
+          <p class="eyebrow">MONITORAGGIO</p>
+          <h1>Coda di lavorazione</h1>
+          <p>
+            Stati effettivi registrati dal controller. Aggiornamento automatico ogni 15 secondi.
+          </p>
+        </div>
+        <button id="refresh" type="button">Aggiorna</button>
+      </div>
+      <p id="error" role="alert" hidden></p>
+      <section class="metrics" aria-label="Riepilogo">
+        <article><span>In coda</span><strong id="queued">—</strong></article>
+        <article><span>In progress</span><strong id="processing">—</strong></article>
+        <article><span>Bloccati</span><strong id="blocked">—</strong></article>
+        <article><span>Risolti</span><strong id="resolved">—</strong></article>
+      </section>
+      <section class="setup">
+        <div>
+          <h2>Attivazione del flusso · PR #471</h2>
+          <p id="setup-phase">Caricamento…</p>
+        </div>
+        <span id="setup-rounds"></span>
+      </section>
+      <section class="queue">
+        <h2>Issue e fase corrente</h2>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Issue</th>
+                <th>Stato</th>
+                <th>Fase corrente</th>
+                <th>Gruppo</th>
+                <th>Sviluppo</th>
+                <th>Review Claude</th>
+                <th>PR</th>
+              </tr>
+            </thead>
+            <tbody id="issues"></tbody>
+          </table>
+        </div>
+        <p id="empty" hidden>Nessuna issue presente nel flusso.</p>
+      </section>
+      <footer>
+        <p id="updated">In attesa del primo aggiornamento GitHub.</p>
+        <p>
+          Risolto: test ed evidenze superati, review approvata e rilascio confermato. Un blocco
+          mantiene la issue aperta.
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>

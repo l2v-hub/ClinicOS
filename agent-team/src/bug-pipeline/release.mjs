@@ -395,6 +395,34 @@ export async function recordDeployment({
   batch.release.status = 'deployed';
   await store.save(state);
 
+  await publishDeploymentCompletion({ batch, github });
+  return { ok: true, status: batch.release.deployment.status, batchId, mergeSha, deployments };
+}
+
+export async function publishDeploymentCompletion({ batch, github }) {
+  const { mergeSha, reviewedSha, deployment } = batch.release ?? {};
+  if (
+    batch.release?.status !== 'deployed' ||
+    !SHA_RE.test(mergeSha ?? '') ||
+    !SHA_RE.test(reviewedSha ?? '') ||
+    !['deployed', 'not-required'].includes(deployment?.status)
+  )
+    fail('completion publication requires durable verified deployment facts');
+  const { vercelUrl, railwayRunUrl, runtimeRunUrl } = deployment;
+  const deployments = appDeployments(batch);
+  if (
+    deployment.reviewedSha !== reviewedSha ||
+    deployment.mergeSha !== mergeSha ||
+    batch.sha !== reviewedSha
+  )
+    fail('completion deployment revision does not match its reviewed merge');
+  if (
+    (deployments.frontend && !validateDeploymentUrl(vercelUrl, 'vercel')) ||
+    (deployments.backend && !validateDeploymentUrl(railwayRunUrl, 'railway')) ||
+    (deployments.runtime && !validateDeploymentUrl(runtimeRunUrl, 'railway'))
+  )
+    fail('completion publication requires the confirmed deployment links');
+  const batchId = batch.id;
   const marker = `<!-- codex-bug-pipeline:deployment:${batchId}:${mergeSha} -->`;
   const links = [
     `[PR](${batch.pr.url})`,
@@ -402,15 +430,15 @@ export async function recordDeployment({
     ...(deployments.backend ? [`[Deploy Railway riuscito](${railwayRunUrl})`] : []),
     ...(deployments.runtime ? [`[Deploy AI runtime riuscito](${runtimeRunUrl})`] : []),
   ];
-  const body = `${marker}\nRelease completata per ${batchId} sulla revisione ${batch.release.reviewedSha}, merge ${mergeSha}. ${links.join(' · ')}. L’issue resta aperta per la verifica funzionale.`;
+  const body = `${marker}\n**Risolto** — verifiche, evidenze e review completate per ${batchId} sulla revisione ${batch.release.reviewedSha}, merge ${mergeSha}. ${links.join(' · ')}. Rilascio confermato; issue chiusa come completata.`;
   for (const issueNumber of batch.issues) {
     const issue = await github.viewIssue(issueNumber);
     const alreadyPosted = (issue.comments ?? []).some((comment) =>
       String(comment.body ?? '').includes(marker),
     );
     if (!alreadyPosted) await github.commentIssue(issueNumber, body);
+    await github.setIssueStatus(issueNumber, 'Risolto');
   }
-  return { ok: true, status: batch.release.deployment.status, batchId, mergeSha, deployments };
 }
 
 async function writeOutputs(outputs) {

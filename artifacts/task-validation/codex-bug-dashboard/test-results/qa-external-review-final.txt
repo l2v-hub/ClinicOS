@@ -1,0 +1,17 @@
+✔ external doctor requires no Claude credential or Claude subprocess (2.245159ms)
+✔ request waits for real checks, then makes the PR ready without executing Claude (2.19227ms)
+✔ external harness reserves remotely before inference, publishes hashed approval and Codex accepts the exact revision (109.510454ms)
+✔ external publication failure is retryable without another model call; a CAS conflict prevents inference (147.358449ms)
+✔ Claude findings trigger fresh Codex correction, test/simplification/QA, new SHA and a new bounded request (83.188019ms)
+✔ new human comments invalidate approval and exhausted review budgets block correction instead of starting round five (75.58037ms)
+✔ human feedback arriving with review publication is retained rather than silently included in approval (88.660455ms)
+✔ draft or foreign PRs and an exhausted external budget never start a model (33.197079ms)
+✔ closed source issues block the external harness and Codex before review or correction (33.254439ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 691.748738

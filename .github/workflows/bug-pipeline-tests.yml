@@ -20,11 +20,7 @@ on:
         type: string
         default: ''
       verify_provider_access:
-        description: Check OpenAI model metadata and Claude Max CLI configuration without inference
-        type: boolean
-        default: false
-      review_setup_pr:
-        description: Run one bounded read-only Claude Max review of setup PR471, preserving the remote budget
+        description: Check OpenAI model metadata without inference
         type: boolean
         default: false
 
@@ -32,41 +28,6 @@ permissions:
   contents: read
 
 jobs:
-  review-setup-pr:
-    if: github.event_name == 'workflow_dispatch' && inputs.review_setup_pr && github.repository == 'l2v-hub/ClinicOS'
-    needs: bug-pipeline-tests
-    runs-on: ubuntu-22.04
-    timeout-minutes: 30
-    concurrency:
-      group: codex-bug-pipeline-${{ github.repository }}
-      cancel-in-progress: false
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
-        with:
-          node-version: 22
-      - name: Install pinned Claude CLI before credentials enter the environment
-        run: npm install --prefix "$RUNNER_TEMP/bug-pipeline-tools" --no-audit --no-fund --no-save @anthropic-ai/claude-code@2.1.301
-      - name: Review setup PR with Max and durable four-review budget
-        env:
-          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
-          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          CLAUDE_REVIEW_AUTH_MODE: subscription
-          CLAUDE_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/claude
-          CLINICOS_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
-        run: node scripts/quality-gate/review-bug-setup.mjs
-      - name: Upload structured setup review evidence
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: claude-max-setup-review-${{ github.run_id }}
-          path: artifacts/task-validation/codex-setup-review/claude-review-*.json
-          if-no-files-found: ignore
-          retention-days: 30
-
   verify-provider-access:
     if: github.event_name == 'workflow_dispatch' && inputs.verify_provider_access && github.repository == 'l2v-hub/ClinicOS'
     runs-on: ubuntu-22.04
@@ -78,22 +39,14 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22
-      - name: Install pinned Claude CLI before credentials enter the environment
-        run: npm install --prefix "$RUNNER_TEMP/bug-pipeline-tools" --no-audit --no-fund --no-save @anthropic-ai/claude-code@2.1.301
       - name: Verify read-only model API access on the reviewed revision
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          CLAUDE_REVIEW_AUTH_MODE: subscription
-          CLAUDE_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/claude
           PLANNER_MODEL: ${{ vars.CODEX_PLANNER_MODEL || 'gpt-6.1-sol' }}
           CLINICOS_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
         run: |
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';
-          import path from 'node:path';
-          import { createRunner, childEnvironment } from './agent-team/src/bug-pipeline/process.mjs';
           assert.match(process.env.CLINICOS_REVIEWED_SHA || '', /^[a-f0-9]{40}$/);
           assert.equal(process.env.GITHUB_SHA, process.env.CLINICOS_REVIEWED_SHA);
           const probes = [
@@ -111,18 +64,6 @@ jobs:
               failed = true;
             }
           }
-          const runtimeRoot = path.join(process.env.RUNNER_TEMP, 'claude-max-readiness');
-          const reviewEnv = childEnvironment('review', process.env, runtimeRoot);
-          const credentialConfigured = Boolean(reviewEnv.CLAUDE_CODE_OAUTH_TOKEN);
-          const apiKeyExcluded = !reviewEnv.ANTHROPIC_API_KEY;
-          let cliRecognizesAuthentication = false;
-          if (credentialConfigured) {
-            const run = createRunner({ env: process.env, runtimeRoot });
-            const auth = await run({ command: 'claude', args: ['auth', 'status'], cwd: process.cwd(), envMode: 'review' });
-            try { cliRecognizesAuthentication = auth.ok && JSON.parse(auth.stdout).loggedIn === true; } catch {}
-          }
-          console.log(JSON.stringify({ probe: 'claude-max-configuration', credentialConfigured, apiKeyExcluded, cliRecognizesAuthentication, inferenceExecuted: false }));
-          failed ||= !credentialConfigured || !apiKeyExcluded || !cliRecognizesAuthentication;
           process.exitCode = failed ? 1 : 0;
           JS
 
@@ -187,9 +128,9 @@ jobs:
         run: |
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';
-          import path from 'node:path';
           import { spawnSync } from 'node:child_process';
           import { mkdtemp, readFile, rm } from 'node:fs/promises';
+          import path from 'node:path';
           import { createRunner, childEnvironment } from './agent-team/src/bug-pipeline/process.mjs';
           const runtimeRoot = path.join(process.env.RUNNER_TEMP, 'cli-readiness');
           const run = createRunner({ runtimeRoot });

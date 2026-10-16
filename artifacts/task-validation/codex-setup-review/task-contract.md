@@ -1,5 +1,18 @@
 # Task Contract
 
+## Latest user decision — external Claude Code harness
+
+The user stopped hosted Max-token attempts and will run their own cron with the already
+authenticated Claude Code subscription. This supersedes the hosted-token portions below.
+The selected implementation is now described in `../codex-bug-dashboard/task-contract.md`:
+Actions runs Codex, prepares checked PRs Ready for review and waits for a CAS-reserved,
+SHA-bound external review. The cron uses its own local Pro/Max login, excludes API/OAuth
+environment tokens, publishes a hashed structured report to GitHub and returns feedback to
+Codex for bounded corrections. Do not require another Actions Max secret or a real provider
+invocation during preparation. No merge/deploy is authorized as proof of this preparation.
+Remote setupReview471 already contains round1 failed on6bedebea; three attempts remain.
+Review all new external-handoff and dashboard source, tests and independent QA evidence.
+
 ## Task
 
 Complete the user-authorized GitHub issue automation setup. User supplied Claude Max OAuth; native38969585616 now sees the secret and the official CLI recognizes it. Keep subscription-only authentication, never switch to paid Anthropic API.

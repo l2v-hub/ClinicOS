@@ -18,7 +18,9 @@ label queue, or Codex development followed by Claude review.
 - Use the existing `agent-loop-quality-gate` and `qa-gate` skills for contracts and evidence.
   The user's specified roles take precedence over the old Agent Team's Claude-development role.
 - Never launch the old `agent-team:start` for this queue, add `assigned-to-claude`, or delegate
-  implementation to Claude. Do not merge, deploy, close issues or touch production data.
+  implementation to Claude. Release and issue closure belong to the trusted release controller
+  after its exact-SHA review, evidence, required-check and deployment gates; never bypass these
+  gates or touch production data.
 - The automatic entry point is `agent-team/src/bug-pipeline/cli.mjs`, started by the GitHub
   workflow after a maintainer's exact `/codex fix` comment or `codex-run` label. Read
   `docs/codex-bug-workflow.md` for configuration and release gating. The issue form's
@@ -94,6 +96,16 @@ Commit code, frozen plan and test evidence in the group's branch before review.
 
 ## 5. Claude review, at most four rounds
 
+Production uses the user's external Claude Code cron harness. Codex makes the tested PR
+Ready for review and persists a SHA-bound `externalReview` request. It must not require Max
+tokens in GitHub Actions or start Claude inside that runner. The user's already authenticated
+harness executes `node agent-team/src/bug-pipeline/claude-review-cron.mjs`; it reserves the
+existing remote budget before inference, saves a hashed report and publishes its GitHub review.
+Codex reconciles that record plus all PR feedback, applies corrections and requests the next
+review only on the new verified SHA. Free-form approval comments cannot replace the report.
+The direct helper command below is an internal primitive, not a competing supervisor; never
+run it separately on a batch owned by the durable external handoff.
+
 Read PR review comments and unresolved threads, in addition to the source issues and code.
 Check that the Claude CLI is installed and authenticated. Do not copy credentials into the
 repository or ask for secret values in chat. Missing CLI/authentication is `BLOCKED`, not a pass.
@@ -132,7 +144,9 @@ such and must not silently change reviewed code.
 Record source issues, group rationale, worktree/branch, implementation plan, reviewed SHA, actual
 test results, Claude verdict/round count and residual risks. Open/update one draft PR per group
 only after the applicable QA gate; use `Refs #<source>` links, not automatic issue-closing text.
-Update the source issues with the PR/evidence links. Preserve issue state for the final QA decision.
+Update the source issues with the PR/evidence links. Set **In progress** after the durable claim,
+**Bloccato** on an unresolved gate, and **Risolto** with GitHub completion only after the trusted
+release controller confirms the tested deployment. Approval or merge alone must not close issues.
 
 Report exactly what ran and what remains blocked. A queued issue, a prepared plan, a written fix,
 a review approval and a verified runtime are different outcomes.

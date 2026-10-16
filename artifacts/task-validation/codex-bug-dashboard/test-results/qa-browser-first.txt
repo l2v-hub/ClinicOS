@@ -1,0 +1,67 @@
+[WebServer] (node:299638) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:299651) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 artifacts/task-validation/codex-bug-dashboard/qa-dashboard.spec.mjs:30:1 › actual dashboard renders synthetic queue, durable phases, resolved state and refresh failure without leaking source payloads (370ms)
+(node:299801) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 artifacts/task-validation/codex-bug-dashboard/qa-dashboard.spec.mjs:69:1 › actual live read-only dashboard matches its current GitHub snapshot and survives reload (224ms)
+
+
+  1) artifacts/task-validation/codex-bug-dashboard/qa-dashboard.spec.mjs:30:1 › actual dashboard renders synthetic queue, durable phases, resolved state and refresh failure without leaking source payloads
+
+    Error: browserContext.newPage: Executable doesn't exist at /home/agent/.cache/ms-playwright/ffmpeg-1011/ffmpeg-linux
+    ╔═════════════════════════════════════════════════════════════════╗
+    ║ Video rendering requires ffmpeg binary.                         ║
+    ║ Downloading it will not affect any of the system-wide settings. ║
+    ║ Please run the following command:                               ║
+    ║                                                                 ║
+    ║     npx playwright install ffmpeg                               ║
+    ║                                                                 ║
+    ║ <3 Playwright Team                                              ║
+    ╚═════════════════════════════════════════════════════════════════╝
+
+    Error Context: artifacts/task-validation/codex-bug-dashboard/test-results/browser/qa-dashboard-actual-dashbo-a8e13-out-leaking-source-payloads/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/task-validation/codex-bug-dashboard/test-results/browser/qa-dashboard-actual-dashbo-a8e13-out-leaking-source-payloads/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/task-validation/codex-bug-dashboard/test-results/browser/qa-dashboard-actual-dashbo-a8e13-out-leaking-source-payloads/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) artifacts/task-validation/codex-bug-dashboard/qa-dashboard.spec.mjs:69:1 › actual live read-only dashboard matches its current GitHub snapshot and survives reload
+
+    Error: browserContext.newPage: Executable doesn't exist at /home/agent/.cache/ms-playwright/ffmpeg-1011/ffmpeg-linux
+    ╔═════════════════════════════════════════════════════════════════╗
+    ║ Video rendering requires ffmpeg binary.                         ║
+    ║ Downloading it will not affect any of the system-wide settings. ║
+    ║ Please run the following command:                               ║
+    ║                                                                 ║
+    ║     npx playwright install ffmpeg                               ║
+    ║                                                                 ║
+    ║ <3 Playwright Team                                              ║
+    ╚═════════════════════════════════════════════════════════════════╝
+
+    Error Context: artifacts/task-validation/codex-bug-dashboard/test-results/browser/qa-dashboard-actual-live-r-09620-napshot-and-survives-reload/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/task-validation/codex-bug-dashboard/test-results/browser/qa-dashboard-actual-live-r-09620-napshot-and-survives-reload/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/task-validation/codex-bug-dashboard/test-results/browser/qa-dashboard-actual-live-r-09620-napshot-and-survives-reload/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    artifacts/task-validation/codex-bug-dashboard/qa-dashboard.spec.mjs:30:1 › actual dashboard renders synthetic queue, durable phases, resolved state and refresh failure without leaking source payloads
+    artifacts/task-validation/codex-bug-dashboard/qa-dashboard.spec.mjs:69:1 › actual live read-only dashboard matches its current GitHub snapshot and survives reload
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

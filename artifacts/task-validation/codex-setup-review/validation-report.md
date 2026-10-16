@@ -1,3 +1,5 @@
+> HISTORICAL CHECKPOINT — This report and its10-file source manifest describe the earlier native/hosted review checkpoint. The current combined lifecycle/dashboard/external-cron preparation is reviewed in [codex-bug-dashboard/qa-gate.md](../codex-bug-dashboard/qa-gate.md), its `validation-report.md` and `qa-reviewed-files.sha256`. The historical manifest is not a current-source verification command. Retain its evidence and the spent setup review attempt; this notice resets no state or budget.
+
 # Bootstrap review validation
 
 Date: 2026-10-16. Existing draft PR471. User supplied Max OAuth; actual readiness38969585616 sees it and the official CLI recognizes it. OpenAI model metadata,86regressions and actual sandbox passed in that check. This is not yet a remote model review.

@@ -1,0 +1,24 @@
+Syntax PASS agent-team/src/bug-pipeline/claude-review-cron.mjs
+Syntax PASS agent-team/src/bug-pipeline/cli.mjs
+Syntax PASS agent-team/src/bug-pipeline/contracts.mjs
+Syntax PASS agent-team/src/bug-pipeline/dashboard-server.mjs
+Syntax PASS agent-team/src/bug-pipeline/dashboard.mjs
+Syntax PASS agent-team/src/bug-pipeline/dashboard/dashboard-client.js
+Syntax PASS agent-team/src/bug-pipeline/external-review.mjs
+Syntax PASS agent-team/src/bug-pipeline/github.mjs
+Syntax PASS agent-team/src/bug-pipeline/pipeline.mjs
+Syntax PASS agent-team/src/bug-pipeline/process.mjs
+Syntax PASS agent-team/src/bug-pipeline/release.mjs
+Syntax PASS agent-team/tests/bug-pipeline/dashboard.test.mjs
+Syntax PASS agent-team/tests/bug-pipeline/external-review.test.mjs
+Syntax PASS agent-team/tests/bug-pipeline/github.test.mjs
+Syntax PASS agent-team/tests/bug-pipeline/pipeline.test.mjs
+Syntax PASS agent-team/tests/bug-pipeline/release.test.mjs
+Syntax PASS agent-team/tests/bug-pipeline/subscription-auth.test.mjs
+Syntax PASS scripts/quality-gate/claude-bug-review.mjs
+YAML PASS .github/workflows/bug-pipeline-tests.yml
+YAML PASS .github/workflows/codex-bug-pipeline.yml
+YAML PASS .github/workflows/codex-bug-release.yml
+Inline JavaScript PASS (3 blocks)
+Production Actions: external review, no Claude credential passed; PR required check always emitted: PASS
+git diff --check: PASS

@@ -1,0 +1,7 @@
+import { defineConfig } from 'playwright/test';
+export default defineConfig({
+  testDir: '.', testMatch: 'qa-dashboard.spec.mjs', workers: 1, fullyParallel: false,
+  outputDir: 'test-results/browser', reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }]],
+  use: { viewport: { width: 1440, height: 1100 }, trace: 'on', video: 'on', launchOptions: { executablePath: '/usr/bin/chromium', args: ['--no-sandbox'] } },
+  webServer: { command: 'CLINICOS_DASHBOARD_QA=1 node qa-dashboard-server.mjs', url: 'http://127.0.0.1:4399', reuseExistingServer: false, timeout: 10000 },
+});

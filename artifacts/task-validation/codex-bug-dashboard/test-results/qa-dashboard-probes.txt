@@ -1,0 +1,10 @@
+✔ default cache deduplicates overlapping upstream reads and repeated manual refreshes (147.037729ms)
+✔ initial upstream failure is visible without inventing an empty successful snapshot (18.428312ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 330.036775

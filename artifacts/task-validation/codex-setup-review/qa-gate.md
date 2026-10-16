@@ -1,3 +1,5 @@
+> HISTORICAL CHECKPOINT — This report and its10-file source manifest describe the earlier native/hosted review checkpoint. The current combined lifecycle/dashboard/external-cron preparation is reviewed in [codex-bug-dashboard/qa-gate.md](../codex-bug-dashboard/qa-gate.md), its `validation-report.md` and `qa-reviewed-files.sha256`. The historical manifest is not a current-source verification command. Retain its evidence and the spent setup review attempt; this notice resets no state or budget.
+
 # Independent QA — bounded setup PR review
 
 Date: 2026-10-16. Existing draft PR #471. Ten reviewed workflow/helper/test/documentation files, including local-service readiness and its CI installer, are bound by `qa-reviewed-files.sha256`. Dedicated QA did not author implementation, invoke a model, mutate GitHub, merge or deploy.

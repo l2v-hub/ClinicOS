@@ -10,6 +10,7 @@ const BLOCKING_LABELS = new Set([
   'status-blocked',
 ]);
 const BOT_PROTOCOL_MARKER = '<!-- codex-bug-pipeline:';
+const ISSUE_STATUSES = ['In progress', 'Bloccato', 'Risolto'];
 
 function assertRepo(repo) {
   if (typeof repo !== 'string' || !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo)) {
@@ -47,6 +48,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
   if (typeof run !== 'function') throw new TypeError('run must be a function');
   const [owner, name] = repo.split('/');
   let identityPromise;
+  const statusCache = new Map();
 
   async function invoke(
     args,
@@ -338,12 +340,102 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     ).value;
   }
 
+  async function setIssueStatus(number, status) {
+    issueNumber({ number });
+    if (!ISSUE_STATUSES.includes(status)) throw new Error('Invalid issue lifecycle status');
+    if (statusCache.get(number) === status) return;
+    await ensureLabel(status);
+    // Preserve unrelated labels and never reopen an issue closed by another operator.
+    await api(`repos/${repo}/issues/${number}/labels`, {
+      method: 'POST',
+      body: { labels: [status] },
+    });
+    for (const old of ISSUE_STATUSES.filter((value) => value !== status)) {
+      const removed = await api(
+        `repos/${repo}/issues/${number}/labels/${encodeURIComponent(old)}`,
+        {
+          method: 'DELETE',
+          allowFailure: true,
+        },
+      );
+      if (!removed.ok && !notFound(removed))
+        throw new Error('Cannot reconcile issue lifecycle labels');
+    }
+    if (status === 'Risolto') {
+      await api(`repos/${repo}/issues/${number}`, {
+        method: 'PATCH',
+        body: { state: 'closed', state_reason: 'completed' },
+      });
+    }
+    statusCache.set(number, status);
+  }
+
+  async function readDashboardState() {
+    const response = await api(
+      `repos/${repo}/contents/${STATE_PATH}?ref=${encodeURIComponent(STATE_BRANCH)}`,
+      { allowFailure: true },
+    );
+    if (!response.ok) {
+      if (notFound(response)) return null;
+      throw new Error('Cannot read dashboard state');
+    }
+    return parseJson(
+      Buffer.from(response.value.content, 'base64').toString('utf8'),
+      'dashboard state',
+    );
+  }
+
+  async function listBugIssues() {
+    return (await apiList(`repos/${repo}/issues?state=open&labels=bug&per_page=100`)).filter(
+      (issue) => !issue.pull_request,
+    );
+  }
+
+  async function dashboardSetup() {
+    const pr = (await api(`repos/${repo}/pulls/471`)).value;
+    const runs = (
+      await api(
+        `repos/${repo}/actions/workflows/bug-pipeline-tests.yml/runs?branch=${encodeURIComponent(pr.head.ref)}&per_page=10`,
+      )
+    ).value.workflow_runs;
+    const latest = runs.find((run) => run.head_sha === pr.head.sha);
+    return {
+      head: pr.head.sha,
+      merged: Boolean(pr.merged),
+      draft: pr.draft,
+      check: latest
+        ? { status: latest.status, conclusion: latest.conclusion, url: latest.html_url }
+        : null,
+    };
+  }
+
   async function commentPR(number, body) {
     issueNumber({ number });
     return (
       await api(`repos/${repo}/issues/${number}/comments`, {
         method: 'POST',
         body: { body: String(body) },
+      })
+    ).value;
+  }
+
+  async function publishExternalReview(number, sha, report, round) {
+    issueNumber({ number });
+    if (!/^[a-f0-9]{40}$/.test(sha) || !Number.isInteger(round) || round < 1 || round > 4)
+      throw new Error('Invalid external review identity');
+    const marker = `<!-- clinicos-claude-cron:${number}:${sha}:${round} -->`;
+    const full = `${marker}\nClaude Code review ${round}/4 on \`${sha}\`: **${report.verdict}**.\n\n${report.summary}\n\n${JSON.stringify(report, null, 2)}`;
+    const body =
+      full.length <= 60000
+        ? full
+        : `${marker}\nClaude Code review ${round}/4 on \`${sha}\`: **${report.verdict}**. Full hashed report is preserved in codex/bug-control, .codex-bug-state.json.`;
+    const reviews = await apiList(`repos/${repo}/pulls/${number}/reviews?per_page=100`);
+    const previous = reviews.find((review) => review.commit_id === sha && review.body === body);
+    if (previous) return previous;
+    return (
+      await api(`repos/${repo}/pulls/${number}/reviews`, {
+        method: 'POST',
+        body: { event: 'COMMENT', commit_id: sha, body },
       })
     ).value;
   }
@@ -569,7 +661,12 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     viewIssue,
     createDraft,
     commentIssue,
+    setIssueStatus,
+    readDashboardState,
+    listBugIssues,
+    dashboardSetup,
     commentPR,
+    publishExternalReview,
     reviewFeedback,
     draftReady,
     mergePullRequest,

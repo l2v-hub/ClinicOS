@@ -2,6 +2,59 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createGitHub } from '../../src/bug-pipeline/github.mjs';
 
+test('issue lifecycle uses additive managed labels and closes resolved issues as completed, with retry after a failed close', async () => {
+  const calls = [];
+  let failClose = true;
+  const gh = createGitHub({
+    repo: 'l2v-hub/ClinicOS',
+    cwd: '/tmp',
+    run: async ({ args, input }) => {
+      calls.push({ args, body: input ? JSON.parse(input) : null });
+      if (args.includes('PATCH') && failClose) {
+        failClose = false;
+        return response({}, { ok: false, code: 1, stderr: 'HTTP 503' });
+      }
+      return response({});
+    },
+  });
+  await gh.setIssueStatus(17, 'In progress');
+  assert.equal(
+    calls.some((call) => call.args.includes('PATCH')),
+    false,
+  );
+  await assert.rejects(gh.setIssueStatus(17, 'Risolto'), /503/);
+  await gh.setIssueStatus(17, 'Risolto');
+  const patches = calls.filter((call) => call.args.includes('PATCH'));
+  assert.equal(patches.length, 2);
+  assert.deepEqual(patches[1].body, { state: 'closed', state_reason: 'completed' });
+  assert.ok(
+    calls
+      .filter((call) => call.args.includes('DELETE'))
+      .every((call) => /\/labels\/(In%20progress|Risolto|Bloccato)$/.test(call.args[1])),
+  );
+  const count = calls.length;
+  await gh.setIssueStatus(17, 'Risolto');
+  assert.equal(calls.length, count);
+  await assert.rejects(gh.setIssueStatus(17, 'approved'), /Invalid/);
+});
+
+test('dashboard state reads never initialize a branch, and source permission errors are not treated as an empty queue', async () => {
+  const calls = [];
+  let forbidden = false;
+  const gh = createGitHub({
+    repo: 'l2v-hub/ClinicOS',
+    cwd: '/tmp',
+    run: async ({ args }) => {
+      calls.push(args);
+      return response({}, { ok: false, code: 1, stderr: forbidden ? 'HTTP 403' : 'HTTP 404' });
+    },
+  });
+  assert.equal(await gh.readDashboardState(), null);
+  assert.ok(calls.every((args) => !args.includes('-X')));
+  forbidden = true;
+  await assert.rejects(gh.readDashboardState(), /Cannot read/);
+});
+
 function response(value, { ok = true, code = 0, stderr = '' } = {}) {
   return { ok, code, stdout: JSON.stringify(value), stderr };
 }

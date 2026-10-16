@@ -185,6 +185,7 @@ export function validateState(state, repo) {
         'validating',
         'publishing',
         'reviewing',
+        'waiting-review',
         'waiting-checks',
         'ready',
         'blocked',

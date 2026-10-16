@@ -121,6 +121,12 @@ function harness({
     },
   };
   const gh = {
+    async setIssueStatus(number, status) {
+      log.push(`gh.setIssueStatus:${number}:${status}`);
+    },
+    async draftReady() {
+      log.push('gh.draftReady');
+    },
     async intake(event) {
       log.push('gh.intake');
       assert.deepEqual(event, { action: 'test' });
@@ -266,21 +272,67 @@ function harness({
     hydrated,
     issueComments,
     planningInput,
-    run: (event = { action: 'test' }) => runPipeline({ repo, event, gh, models, workspace, store }),
+    run: (event = { action: 'test' }, reviewMode = 'internal') =>
+      runPipeline({ repo, event, gh, models, workspace, store, reviewMode }),
   };
 }
 
 test('merged and deployed batches remain terminal and never restart implementation', async () => {
   for (const status of ['merged', 'deployed']) {
     const batch = batchFor();
-    batch.release = { status };
+    batch.release = {
+      status,
+      mergeSha: sha('b'),
+      reviewedSha: batch.sha,
+      deployment: {
+        status: 'deployed',
+        reviewedSha: batch.sha,
+        mergeSha: sha('b'),
+        vercelUrl: 'https://clinicos-eosin.vercel.app',
+      },
+    };
     const h = harness({ initialState: { ...blankState(), batches: [batch] }, queue: [] });
     const result = await h.run();
     assert.equal(result.batches[0].release.status, status);
     assert.equal(h.counts.execute, 0);
     assert.equal(h.counts.review, 0);
     assert.ok(!h.log.includes('gh.reviewFeedback'));
+    assert.ok(
+      h.log.includes(`gh.setIssueStatus:17:${status === 'deployed' ? 'Risolto' : 'In progress'}`),
+    );
   }
+});
+
+test('all grouped issues are claimed after remote reservation and before triage; readiness never marks them resolved', async () => {
+  const h = harness();
+  await h.run();
+  for (const number of [17, 18]) {
+    const claim = h.log.indexOf(`gh.setIssueStatus:${number}:In progress`);
+    assert.ok(claim > h.log.indexOf('store.save'));
+    assert.ok(claim < h.log.indexOf('models.plan'));
+  }
+  assert.equal(
+    h.log.some((line) => line.endsWith(':Risolto')),
+    false,
+  );
+});
+
+test('failed claim publication prevents triage and retains its remote claim without consuming implementation or review budgets', async () => {
+  const h = harness();
+  const publish = h.gh.setIssueStatus;
+  h.gh.setIssueStatus = async () => {
+    throw new Error('issue status unavailable');
+  };
+  await assert.rejects(h.run(), /issue status unavailable/);
+  assert.deepEqual(h.stateRef.value.pendingTriage.issues, [17, 18]);
+  assert.equal(h.counts.plan, 0);
+  assert.equal(h.counts.execute, 0);
+  assert.equal(h.counts.review, 0);
+  assert.equal(h.stateRef.value.pendingTriage.status, 'claiming');
+  h.gh.setIssueStatus = publish;
+  await h.run();
+  assert.equal(h.counts.plan, 1);
+  assert.equal(h.counts.review, 1);
 });
 
 test('unchanged unresolved human review waits without spending another Claude attempt', async () => {
@@ -510,8 +562,8 @@ test('interrupted running work is blocked for operator recovery without restarti
 });
 
 test('remote compare-and-swap failure while reserving an implementation attempt prevents executor invocation', async () => {
-  // Save #1 reserves triage; #2 persists its validated plan; #3 must reserve round 1 remotely.
-  const h = harness({ issues: [17], queue: [17], failSave: 3 });
+  // Save #1 reserves labels; #2 reserves triage; #3 persists its plan; #4 reserves round 1.
+  const h = harness({ issues: [17], queue: [17], failSave: 4 });
   let failure;
   try {
     await h.run();
@@ -527,5 +579,5 @@ test('remote compare-and-swap failure while reserving an implementation attempt 
   assert.equal(h.counts.execute, 0);
   assert.equal(h.counts.review, 0);
   assert.ok(h.log.includes('workspace.prepare'));
-  assert.equal(h.log.filter((entry) => entry === 'store.save').length, 3);
+  assert.equal(h.log.filter((entry) => entry === 'store.save').length, 4);
 });

@@ -13,10 +13,13 @@ export async function doctor({ run, models, env = process.env, cwd }) {
   const login = env.CODEX_API_KEY
     ? { ok: true }
     : await run({ command: 'codex', args: ['login', 'status'], cwd, envMode: 'model' });
-  const claude = await run({ command: 'claude', args: ['auth', 'status'], cwd, envMode: 'review' });
+  const external = env.BUG_PIPELINE_REVIEW_MODE === 'external';
+  const claude = external
+    ? null
+    : await run({ command: 'claude', args: ['auth', 'status'], cwd, envMode: 'review' });
   let claudeAuth = false;
   try {
-    claudeAuth = claude.ok && JSON.parse(claude.stdout).loggedIn === true;
+    claudeAuth = external || (claude.ok && JSON.parse(claude.stdout).loggedIn === true);
   } catch {
     /* missing auth */
   }
@@ -39,7 +42,7 @@ export async function doctor({ run, models, env = process.env, cwd }) {
   const checks = {
     codexCli: codex.ready,
     codexAuth: login.ok,
-    claudeAuth,
+    ...(external ? { externalReviewer: true } : { claudeAuth }),
     sandbox: sandbox.ok && sandbox.stdout === 'sandbox-ready',
     plannerModel: Boolean(env.CODEX_PLANNER_MODEL),
     executorModel: Boolean(env.CODEX_EXECUTOR_MODEL),
@@ -56,6 +59,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
     CODEX_EXECUTOR_MODEL: env.CODEX_EXECUTOR_MODEL || env.CLINICOS_EXECUTOR_MODEL || 'auto',
     CODEX_SMALL_EXECUTOR_MODEL:
       env.CODEX_SMALL_EXECUTOR_MODEL || env.CLINICOS_SMALL_EXECUTOR_MODEL || 'gpt-6-luna',
+    BUG_PIPELINE_REVIEW_MODE: env.BUG_PIPELINE_REVIEW_MODE || 'external',
   };
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
   const diagnosticRoot = path.join(root, 'agent-team', '.runtime', 'bug-pipeline');
@@ -94,7 +98,15 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
   const store = gh.createStateStore();
   const workspace = createWorkspace({ root, repo, run, models });
   try {
-    const state = await runPipeline({ repo, event, gh, models, workspace, store });
+    const state = await runPipeline({
+      repo,
+      event,
+      gh,
+      models,
+      workspace,
+      store,
+      reviewMode: env.BUG_PIPELINE_REVIEW_MODE,
+    });
     const blocked = state.batches.filter((b) => b.phase === 'blocked').length;
     const summary = {
       status: blocked ? 'partial' : 'reconciled',
