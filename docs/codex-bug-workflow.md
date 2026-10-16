@@ -90,7 +90,18 @@ Il controller Actions usa `BUG_PIPELINE_REVIEW_MODE=external`: non installa Clau
 node agent-team/src/bug-pipeline/claude-review-cron.mjs
 ```
 
-Il cron è versionato in `scripts/automation/claude-review.crontab`. Per installarlo, dal checkout di questa PR sul Mac/Linux persistente dove Claude Code è già collegato a Max e `gh` è autenticato, basta:
+Su **Windows** si usa l'Utilità di pianificazione, non `crontab`. Dal checkout dedicato della PR:
+
+```powershell
+node scripts/automation/install-claude-review-windows.mjs
+node scripts/automation/install-claude-review-windows.mjs --check
+```
+
+`setup-claude-review-windows.ps1` prepara automaticamente un checkout separato sotto `%LOCALAPPDATA%\ClinicOS\review-checkout` e avvia l'installer. Non cambiare branch nella cartella di lavoro se Git segnala file locali: non serve stash/reset/clean. Il bootstrap conserva checkout sporchi, origini diverse, altre branch e commit locali; aggiorna soltanto tramite fast-forward il checkout dedicato. I file di questo script devono essere disponibili dalla PR: un checkout fallito lascia assente l'installer e causa `MODULE_NOT_FOUND`.
+
+Il task Windows è per l'utente corrente, con login interattivo, privilegi normali e nessuna password aggiuntiva. Ogni cinque minuti richiama Node con percorsi assoluti, file di stato sotto `%LOCALAPPDATA%\ClinicOS\claude-review`, ACL del solo utente e blocco delle sovrapposizioni. Richiede computer acceso, connesso e utente collegato; non è un servizio cloud. `--check` e `--remove` verificano identità, azione e impostazioni prima di dichiarare installato o rimuovere il task. Native CLI e installazione npm di Claude sono supportate senza eseguire shim `.cmd` tramite shell. Restano necessari login Pro/Max locale e `gh` con permessi sul repository.
+
+Il cron è versionato in `scripts/automation/claude-review.crontab`. Per installarlo su **Mac/Linux**, dal checkout di questa PR sul computer persistente dove Claude Code è già collegato a Max e `gh` è autenticato, basta:
 
 ```bash
 node scripts/automation/install-claude-review-cron.mjs

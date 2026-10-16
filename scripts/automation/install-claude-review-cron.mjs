@@ -79,7 +79,12 @@ export async function execute(command, args, { cwd, env = process.env, input } =
       stderr = '',
       error = false,
       overflow = false;
-    const child = spawn(command, args, { cwd, env, shell: false, stdio: ['pipe', 'pipe', 'pipe'] });
+    const javascript = /\.[cm]?js$/i.test(command);
+    const child = spawn(
+      javascript ? process.execPath : command,
+      javascript ? [command, ...args] : args,
+      { cwd, env, shell: false, stdio: ['pipe', 'pipe', 'pipe'] },
+    );
     const timer = setTimeout(() => child.kill('SIGTERM'), 30000);
     for (const [stream, save] of [
       [
@@ -113,7 +118,7 @@ export async function execute(command, args, { cwd, env = process.env, input } =
   });
 }
 
-async function findExecutable(name, search) {
+export async function findExecutable(name, search) {
   if (name.includes(path.sep)) {
     try {
       await access(name, constants.X_OK);
@@ -152,6 +157,14 @@ export async function prerequisites({
     'LC_ALL',
     'TERM',
     'TMPDIR',
+    'SystemRoot',
+    'WINDIR',
+    'TEMP',
+    'TMP',
+    'USERPROFILE',
+    'APPDATA',
+    'LOCALAPPDATA',
+    'CLAUDE_CODE_GIT_BASH_PATH',
     'SSL_CERT_FILE',
     'NODE_EXTRA_CA_CERTS',
     'HTTP_PROXY',
