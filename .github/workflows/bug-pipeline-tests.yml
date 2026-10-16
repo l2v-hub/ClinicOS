@@ -77,6 +77,21 @@ jobs:
           });
           const direct = spawnSync(process.env.CODEX_CLI_PATH, args, { cwd: process.cwd(), env: childEnvironment('verification', process.env, runtimeRoot), encoding: 'utf8', timeout: 30000 });
           console.log(JSON.stringify({ isolatedRunner: result, directCli: { code: direct.status, stdout: direct.stdout, stderr: direct.stderr, error: direct.error?.code } }));
+          if (!result.ok || result.stdout !== 'sandbox-ready' || direct.status !== 0 || direct.stdout !== 'sandbox-ready') {
+            console.log(JSON.stringify({ executedMarker: await readFile(marker, 'utf8').catch(() => null), nodeExecutable: process.execPath }));
+            for (const [name, command] of [
+              ['absolute-echo', ['/bin/echo', 'sandbox-ready']],
+              ['failure-exit', ['/bin/sh', '-c', 'exit 7']],
+            ]) {
+              const probe = await run({ command: 'codex', args: ['sandbox', '--permission-profile', ':workspace', '--cd', process.cwd(), '--', ...command], cwd: process.cwd(), envMode: 'verification' });
+              console.log(JSON.stringify({ probe: name, ...probe }));
+            }
+            const traceFile = path.join(directory, 'sandbox-process.trace');
+            const trace = spawnSync('strace', ['-f', '-e', 'trace=execve,wait4', '-s', '200', '-o', traceFile, process.env.CODEX_CLI_PATH, ...args], { cwd: process.cwd(), env: childEnvironment('verification', process.env, runtimeRoot), encoding: 'utf8', timeout: 30000 });
+            console.log(JSON.stringify({ traceExit: trace.status, traceError: trace.error?.code, traceStderr: trace.stderr }));
+            const lines = (await readFile(traceFile, 'utf8').catch(() => '')).split('\n').filter(line => /execve|SIGSYS|SIGSEGV|exited|killed|EPERM/.test(line));
+            console.log(JSON.stringify({ sandboxProcessTrace: lines.slice(-40) }));
+          }
           assert.equal(result.ok, true, result.stderr || result.error);
           assert.equal(result.stdout, 'sandbox-ready');
           assert.equal(direct.status, 0, direct.stderr);
