@@ -43,7 +43,6 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
@@ -149,7 +148,7 @@ jobs:
 
   bug-pipeline-tests:
     runs-on: ubuntu-22.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -229,3 +228,20 @@ jobs:
           await rm(directory, { recursive: true });
           console.log('Real isolated Codex sandbox: PASS');
           JS
+
+      - name: Prepare trusted dependencies and PostgreSQL for isolated service readiness
+        env:
+          HUSKY: 0
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/clinicos_test?schema=public
+        run: |
+          if [ ! -x /usr/lib/postgresql/16/bin/pg_ctl ]; then
+            sudo apt-get update
+            sudo apt-get install -y postgresql-16
+          fi
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run db:generate
+
+      - name: Verify real isolated HTTP and database access with denied external egress
+        env:
+          CODEX_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/codex
+        run: node scripts/quality-gate/verify-isolated-services.mjs

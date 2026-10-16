@@ -23,11 +23,12 @@ A manual exact-SHA admin-only job uses the existing read-only reviewer and the e
 - AC3: CAS budget reservation precedes inference. Failed/stale/interrupted calls cannot reset limits; interrupted remote running state is blocked for explicit recovery.
 - AC4: Restore previous hashed reports and ledger for the existing helper; no fifth review, no fresh packet per retry and no auto approval/reset.
 - AC5: Publish actual structured review bound to its SHA. Preserve existing batch records and unrelated task files. No helper merge/deploy or closing issues.
+- AC7: Full-stack verification uses a controller-owned workspace profile with managed proxy deny-all egress and local binding only. Fresh synthetic PostgreSQL and migrations run inside the same verification invocation. Native positive HTTP/SQL/migrations and negative external TCP/UDP/HTTP-proxy/CONNECT plus outside-write probes must pass before declaring readiness. Keep filesystem isolation, credential boundaries and original basic assertions.
 - AC6: Review the complete runtime/workflow diff and current QA evidence, including subscription mode and previous QA findings. Missing functional/evidence prerequisites require blocked/changes-requested, never fabricated readiness.
 
 ## Test Plan
 
-Temporary real Git checkouts with synthetic Claude providers: reserve-before-inference, CAS failure prevents inference, successful restored approval reuse, stale/current head checks, admin preflight, interruptions and four-attempt cap. Full relevant existing suite, independent QA, exact-SHA native regression job, then one actual subscription review only after source QA passes.
+Temporary real Git checkouts with synthetic Claude providers: reserve-before-inference, CAS failure prevents inference, successful restored approval reuse, stale/current head checks, admin preflight, interruptions and four-attempt cap. Full relevant existing suite, independent QA, exact-SHA native regression job with actual isolated HTTP/PostgreSQL/migrations and explicit external-egress/filesystem denials, then one actual subscription review only after source QA and native services checks pass.
 
 ## Evidence Plan
 

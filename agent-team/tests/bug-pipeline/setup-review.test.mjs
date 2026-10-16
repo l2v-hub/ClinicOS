@@ -60,6 +60,8 @@ async function fixture(
         return { ok: true, stdout: '{}' };
       }
       if (route.includes('/reviews?')) return { ok: true, stdout: JSON.stringify(posts) };
+      if (route.includes('/compare/'))
+        return { ok: true, stdout: JSON.stringify({ merge_base_commit: { sha: base } }) };
       if (route.endsWith('/pulls/471'))
         return {
           ok: true,
