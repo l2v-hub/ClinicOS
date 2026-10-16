@@ -17,5 +17,32 @@
       ]
     },
     "reports": {}
+  },
+  "setupReview474": {
+    "pullRequest": 474,
+    "packet": "artifacts/task-validation/pr474-windows-verification",
+    "ledger": {
+      "schema_version": 1,
+      "max_rounds": 4,
+      "rounds": [
+        {
+          "round": 1,
+          "subject_sha": "6bedebea6481b895c9b803876d06ec401dcd6e9a",
+          "verdict": "failed"
+        },
+        {
+          "round": 2,
+          "subject_sha": "47deacafca914a2051294b0a5999eb6268b31e86",
+          "verdict": "running"
+        }
+      ]
+    },
+    "reports": {},
+    "inheritedFrom": {
+      "pullRequest": 471,
+      "ledgerSha256": "3a8d2f8369f27d91c0d406ba7486ee1e4dc8708c3ab10f7237cd1d78f5a23fd6",
+      "spentRounds": 1
+    },
+    "updatedAt": "2026-10-16T23:46:05.474Z"
   }
 }
