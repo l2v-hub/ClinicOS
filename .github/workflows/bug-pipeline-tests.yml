@@ -1,24 +1,49 @@
 name: Bug pipeline regression gate
 
 on:
+  # A main-required check must be emitted for every pull request.
   pull_request:
-    paths:
-      - 'agent-team/**'
-      - 'scripts/quality-gate/**'
-      - '.github/workflows/*bug*.yml'
-      - 'artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
   push:
     branches: [main]
     paths:
       - 'agent-team/**'
       - 'scripts/quality-gate/**'
       - '.github/workflows/*bug*.yml'
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      configure_repository:
+        description: Enable Actions PR creation/approval and add the required main check without replacing protections
+        type: boolean
+        default: false
+      reviewed_sha:
+        description: Exact reviewed workflow commit, required only for repository configuration
+        type: string
+        default: ''
 
 permissions:
   contents: read
 
 jobs:
+  configure-repository:
+    if: github.event_name == 'workflow_dispatch' && inputs.configure_repository && github.repository == 'l2v-hub/ClinicOS'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    concurrency:
+      group: clinicos-repository-configuration
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Apply and verify the explicitly authorized repository settings
+        env:
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+          CLINICOS_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+        run: node scripts/quality-gate/configure-bug-repository.mjs
+
   bug-pipeline-tests:
     runs-on: ubuntu-22.04
     timeout-minutes: 10
@@ -67,7 +92,7 @@ jobs:
           const run = createRunner({ runtimeRoot });
           const directory = await mkdtemp(path.join(process.cwd(), '.cli-readiness-'));
           const marker = path.join(directory, 'executed.txt');
-          const script = `require('node:fs').writeFileSync(${JSON.stringify(marker)}, 'sandbox-ready'); process.stdout.write('sandbox-ready');`;
+          const script = `require('node:fs').writeFileSync(${JSON.stringify(marker)}, 'sandbox-ready'); require('node:fs').writeSync(1, 'sandbox-ready');`;
           const args = ['sandbox', '--permission-profile', ':workspace', '--cd', process.cwd(), '--', 'node', '-e', script];
           const result = await run({
             command: 'codex',

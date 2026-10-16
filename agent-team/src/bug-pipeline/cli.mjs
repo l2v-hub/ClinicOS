@@ -31,7 +31,7 @@ export async function doctor({ run, models, env = process.env, cwd }) {
       '--',
       'node',
       '-e',
-      'process.stdout.write("sandbox-ready")',
+      'require("node:fs").writeSync(1, "sandbox-ready")',
     ],
     cwd,
     envMode: 'verification',
