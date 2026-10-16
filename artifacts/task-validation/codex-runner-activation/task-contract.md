@@ -6,7 +6,7 @@ Activate and verify the GitHub bug workflow requested by the user; diagnose actu
 
 ## Impact Classification
 
-Runner process isolation and CI readiness checks only. No application/schema/patient data changes. Preserve unrelated cleanup SQL. Credential values must not enter logs or code.
+Runner process isolation, compatible GitHub runner selection and CI readiness checks only. No application/schema/patient data changes. Preserve unrelated cleanup SQL. Credential values must not enter logs or code.
 
 ## Current Behaviour
 
@@ -25,7 +25,7 @@ Create private isolated CLI configuration directories before launch. Verify a re
 
 ## Test Plan
 
-Real subprocess directory/mode/repeatability tests plus existing pipeline/Claude review regression tests. Native GitHub Actions sandbox probe. Read-only auth/API diagnostics. Independent QA phases apply; no production data or artificial paid bug processing until credentials and trusted-default-branch gates are usable.
+Real subprocess directory/mode/repeatability tests plus existing pipeline/Claude review regression tests. Native GitHub Actions sandbox probe. The initial ubuntu-latest probe failed at bubblewrap loopback setup; compare ubuntu-22.04 for host compatibility while retaining the same sandbox and assertions. Read-only auth/API diagnostics. Independent QA phases apply; no production data or artificial paid bug processing until credentials and trusted-default-branch gates are usable.
 
 ## Evidence Plan
 
