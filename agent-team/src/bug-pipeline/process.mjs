@@ -40,7 +40,14 @@ export function childEnvironment(mode, env, runtimeRoot) {
         : path.join(base.HOME, '.codex');
     base.CLAUDE_CONFIG_DIR = path.join(base.HOME, '.claude');
     if (mode === 'model' && env.CODEX_API_KEY) base.CODEX_API_KEY = env.CODEX_API_KEY;
-    if (mode === 'review' && env.ANTHROPIC_API_KEY) base.ANTHROPIC_API_KEY = env.ANTHROPIC_API_KEY;
+    if (mode === 'review') {
+      const oauth =
+        env.CLAUDE_CODE_OAUTH_TOKEN ||
+        (env.ANTHROPIC_API_KEY?.startsWith('sk-ant-oat01-') ? env.ANTHROPIC_API_KEY : undefined);
+      if (oauth) base.CLAUDE_CODE_OAUTH_TOKEN = oauth;
+      else if (env.CLAUDE_REVIEW_AUTH_MODE !== 'subscription' && env.ANTHROPIC_API_KEY)
+        base.ANTHROPIC_API_KEY = env.ANTHROPIC_API_KEY;
+    }
     base.NODE_ENV = 'test';
     base.AUTH_MODE = 'demo';
     base.VITE_API_URL = 'http://127.0.0.1:3001';
@@ -62,6 +69,19 @@ export function createRunner({ env = process.env, runtimeRoot }) {
     envMode = 'controller',
   }) => {
     const childEnv = childEnvironment(envMode, env, runtimeRoot);
+    if (
+      envMode === 'review' &&
+      env.CLAUDE_REVIEW_AUTH_MODE === 'subscription' &&
+      !childEnv.CLAUDE_CODE_OAUTH_TOKEN
+    ) {
+      return {
+        ok: false,
+        code: null,
+        error: 'subscription-oauth-required',
+        stdout: '',
+        stderr: '',
+      };
+    }
     if (envMode !== 'controller') {
       for (const directory of [childEnv.HOME, childEnv.CODEX_HOME, childEnv.CLAUDE_CONFIG_DIR]) {
         await mkdir(directory, { recursive: true, mode: 0o700 });

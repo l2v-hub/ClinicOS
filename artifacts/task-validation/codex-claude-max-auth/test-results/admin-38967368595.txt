@@ -1,0 +1,11 @@
+Run: https://github.com/l2v-hub/ClinicOS/actions/runs/38967368595
+Source: e12cb28d1dd2c5ed50605547d51ae3b446c10021
+Actual selected output only.
+
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T21:10:02.9661219Z # tests 81
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T21:10:02.9661524Z # pass 81
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T21:10:02.9661704Z # fail 0
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T21:10:07.9403028Z Real isolated Codex sandbox: PASS
+configure-repository	Apply and verify the explicitly authorized repository settings	2026-10-16T21:10:24.8327290Z {"status":"verified","repository":"l2v-hub/ClinicOS","approvePullRequests":true,"requiredCheck":"bug-pipeline-tests","rulesetId":25275509}
+
+Independent branch read: main protected=true
