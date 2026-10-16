@@ -33,16 +33,19 @@
         {
           "round": 2,
           "subject_sha": "47deacafca914a2051294b0a5999eb6268b31e86",
-          "verdict": "running"
+          "verdict": "changes-requested",
+          "review_sha256": "38af29b1b86e7ccdb5b08f197fcd6599ea0a8eb45ffd6097eb01c47e6ac72ea4"
         }
       ]
     },
-    "reports": {},
+    "reports": {
+      "claude-review-2.json": "{\n  \"subject_sha\": \"47deacafca914a2051294b0a5999eb6268b31e86\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"Read-only review of 47deacaf (round 2/4). The two fixture fixes handle the root causes described in the validation report. The ACL fixture now changes only the DACL through [IO.File]::GetAccessControl/SetAccessControl(Access), without Get-Acl/Set-Acl or SACL privileges, and asserts that owner and AreAccessRulesProtected are unchanged. The bootstrap fixture uses -ExecutionPolicy RemoteSigned only for its synthetic child (no Bypass or Set-ExecutionPolicy). It keeps all seven scenarios with their HEAD, file, marker and reason assertions, and compares the MachinePolicy/UserPolicy/LocalMachine/CurrentUser execution policies before and after. No assertions were removed and no skips were added; the existing skips only apply off Windows. Production installer/runner/bootstrap code is unchanged, so the earlier security properties still hold: private ACL creation, inspection before mutation, no task overwrite, provider tokens stripped, no shell. Evidence: the report records native 10/10 runs (root and independent) with source manifests, a runtime snapshot (PT5M, Interactive/Limited, Ready, last result 0) and the original two failures with their causes. The controller-supplied CI context shows windows-review-setup and bug-pipeline-tests passing at this SHA; the gate check is still in progress. The 13 broad-suite failures on the Windows host are disclosed, not waived, and are outside this fixture-only change. The tracked packet does not include the raw native logs; they are referenced by path. I did not run any tests. One small test-strength gap remains on the 'proves public ACL rejected' criterion.\",\n  \"findings\": [\n    {\n      \"severity\": \"low\",\n      \"file\": \"agent-team/tests/bug-pipeline/windows-review.test.mjs\",\n      \"line\": 296,\n      \"problem\": \"The negative privacy check only asserts `.ok === false`. It never checks why the privacy script failed. Any PowerShell error would satisfy it: module or host failure, Get-Item failure, the owner check, or an encoding error. Acceptance criterion 1 requires proof that the public (Everyone Read) ACL specifically is rejected, so a regression that broke the DACL-rule check could hide behind an unrelated failure.\",\n      \"requested_change\": \"Capture the result of the second privacy run. Assert ok === false and that its stderr (or stdout) matches /Non-private scheduler state/, the throw for a foreign Allow rule in the privacy taskScript (scripts/automation/install-claude-review-windows.mjs, privacy branch). Optionally, before running privacy, confirm the mutation actually added an S-1-1-0 rule by reading the DACL back in the same `change` program.\",\n      \"test_expectation\": \"Native Windows run: 'native Windows ACL creation is private and rejects a later public access rule' passes only when privacy rejects with the 'Non-private scheduler state' reason. Temporarily removing the IdentityReference/sid comparison from the privacy script would make the test fail. Native suite still 10/10 with no skips on Windows, and the windows-review-setup CI job is green on the new SHA.\"\n    }\n  ]\n}\n"
+    },
     "inheritedFrom": {
       "pullRequest": 471,
       "ledgerSha256": "3a8d2f8369f27d91c0d406ba7486ee1e4dc8708c3ab10f7237cd1d78f5a23fd6",
       "spentRounds": 1
     },
-    "updatedAt": "2026-10-16T23:46:05.474Z"
+    "updatedAt": "2026-10-16T23:47:19.937Z"
   }
 }
