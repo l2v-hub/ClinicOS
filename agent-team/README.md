@@ -1,7 +1,7 @@
 # ClinicOS Agent Team
 
-For the Codex-led GitHub bug workflow (`/codex fix`, grouped plans/worktrees, smaller-model
-executors, synthetic evidence, simplification and Claude PR review capped at four rounds), use the `codex-bug-triage` skill and
+For the Codex-led GitHub bug workflow (`/codex fix`, grouped plans/worktrees, adaptive direct
+execution or delegation, synthetic evidence, simplification and Claude PR review capped at four rounds), use the `codex-bug-triage` skill and
 [its guide](../docs/codex-bug-workflow.md). That queue is separate from the
 Claude-development/Codex-QA runtime described below.
 

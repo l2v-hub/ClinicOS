@@ -85,7 +85,8 @@ jobs:
           CODEX_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CODEX_PLANNER_MODEL: ${{ vars.CODEX_PLANNER_MODEL || 'gpt-6.1-sol' }}
-          CODEX_EXECUTOR_MODEL: ${{ vars.CODEX_EXECUTOR_MODEL || 'gpt-6-luna' }}
+          CODEX_EXECUTOR_MODEL: ${{ vars.CODEX_EXECUTOR_MODEL || 'auto' }}
+          CODEX_SMALL_EXECUTOR_MODEL: ${{ vars.CODEX_SMALL_EXECUTOR_MODEL || 'gpt-6-luna' }}
           CODEX_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/codex
           CLAUDE_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/claude
         run: node agent-team/src/bug-pipeline/cli.mjs

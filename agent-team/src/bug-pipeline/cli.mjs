@@ -53,7 +53,9 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
     CODEX_API_KEY: env.CODEX_API_KEY || env.CLINICOS_OPENAI_API_KEY,
     ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY || env.CLINICOS_ANTHROPIC_API_KEY,
     CODEX_PLANNER_MODEL: env.CODEX_PLANNER_MODEL || env.CLINICOS_PLANNER_MODEL || 'gpt-6.1-sol',
-    CODEX_EXECUTOR_MODEL: env.CODEX_EXECUTOR_MODEL || env.CLINICOS_EXECUTOR_MODEL || 'gpt-6-luna',
+    CODEX_EXECUTOR_MODEL: env.CODEX_EXECUTOR_MODEL || env.CLINICOS_EXECUTOR_MODEL || 'auto',
+    CODEX_SMALL_EXECUTOR_MODEL:
+      env.CODEX_SMALL_EXECUTOR_MODEL || env.CLINICOS_SMALL_EXECUTOR_MODEL || 'gpt-6-luna',
   };
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
   const diagnosticRoot = path.join(root, 'agent-team', '.runtime', 'bug-pipeline');
@@ -65,6 +67,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
   const models = createModels({
     plannerModel: env.CODEX_PLANNER_MODEL,
     executorModel: env.CODEX_EXECUTOR_MODEL,
+    delegateModel: env.CODEX_SMALL_EXECUTOR_MODEL,
     run,
     runtimeRoot,
   });

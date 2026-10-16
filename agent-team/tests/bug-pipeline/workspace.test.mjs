@@ -214,6 +214,11 @@ function implementationPlan(issues = [17]) {
     title: 'Stabilize the patient list filter',
     feature: 'Patient list',
     rationale: 'Related reports share filter behavior.',
+    execution: {
+      difficulty: 'low',
+      mode: 'delegate',
+      reason: 'Bounded, independently testable change.',
+    },
     analysis: 'The issue is caused by stale filter state.',
     issues,
     scope: ['frontend/src/features/patients/filter.ts'],

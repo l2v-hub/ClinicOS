@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { validatePlan, editableFile, relativeFile } from '../../src/bug-pipeline/contracts.mjs';
+import {
+  validatePlan,
+  validateState,
+  editableFile,
+  relativeFile,
+} from '../../src/bug-pipeline/contracts.mjs';
 
 export function planFor(issues = [17, 18]) {
   const batch = Math.min(...issues);
@@ -10,6 +15,11 @@ export function planFor(issues = [17, 18]) {
         title: 'Stabilize the patient list filter',
         feature: 'Patient list',
         rationale: 'The related reports share the same filter behavior.',
+        execution: {
+          difficulty: 'low',
+          mode: 'delegate',
+          reason: 'Bounded, independently testable change.',
+        },
         analysis:
           'Both issues describe the same feature regression with separate reproduction details.',
         issues: [...issues],
@@ -108,6 +118,38 @@ test('editable paths reject credentials, automation control files, and path trav
     'frontend/$HOME.ts',
   ]) {
     assert.throws(() => relativeFile(file), /invalid relative path/);
+  }
+});
+
+test('new plans require execution assessment while existing frozen state remains byte-for-byte unchanged', () => {
+  const plan = planFor();
+  delete plan.groups[0].execution;
+  assert.throws(() => validatePlan(plan, selected()), /missing execution/);
+  const group = plan.groups[0],
+    lead = Math.min(...group.issues);
+  const state = {
+    schemaVersion: 1,
+    repository: 'l2v-hub/ClinicOS',
+    batches: [
+      {
+        id: `bug-batch-${lead}`,
+        branch: `codex/bug-batch-${lead}`,
+        issues: group.issues,
+        plan: group,
+        phase: 'planned',
+        implementation: [],
+        reviews: [],
+        sha: null,
+        pr: null,
+      },
+    ],
+  };
+  const before = JSON.stringify(state);
+  validateState(state, state.repository);
+  assert.equal(JSON.stringify(state), before);
+  for (const invalid of [null, false, 0, '']) {
+    group.execution = invalid;
+    assert.throws(() => validateState(state, state.repository), /expected object/);
   }
 });
 

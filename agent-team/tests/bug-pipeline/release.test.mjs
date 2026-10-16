@@ -45,6 +45,11 @@ function fixture(scope = ['frontend/src/Patient.jsx']) {
       title: 'Fix patient list display',
       feature: 'Patient list',
       rationale: 'The list hides rows.',
+      execution: {
+        difficulty: 'low',
+        mode: 'delegate',
+        reason: 'Bounded, independently testable change.',
+      },
       analysis: 'Patient rows should be visible.',
       issues: [5],
       scope,

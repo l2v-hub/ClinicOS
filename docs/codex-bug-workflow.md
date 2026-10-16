@@ -1,4 +1,4 @@
-# Bug GitHub: Codex coordina, esecutori piccoli implementano, Claude revisiona
+# Bug GitHub: Codex coordina e sceglie l'esecutore, Claude revisiona
 
 ## Comando e percorso
 
@@ -11,7 +11,7 @@ flowchart TD
   I[Issue: /codex fix oppure codex-run] --> A[Verifica permessi]
   A --> T[Codex: triage, gruppi per feature e cause]
   T --> P[Worktree e piano dettagliato per gruppo]
-  P --> E[Modello piccolo: implementazione]
+  P --> E[Codex: esecuzione diretta o delegata]
   E --> V[Test e prove sintetiche]
   V -->|Fallisce: massimo 4 tentativi| E
   V --> S[Semplificazione e nuova verifica]
@@ -32,7 +32,11 @@ La PR richiede un branch remoto per ricevere la review. Per questo la pubblicazi
 
 La skill `.agents/skills/codex-bug-triage/SKILL.md` assegna a Codex l'analisi, il raggruppamento motivato, il worktree e il piano. Un gruppo contiene ogni issue selezionata una sola volta, criteri di accettazione distinti, file esatti da modificare, passi implementativi, test di regressione e prove browser. Le issue senza informazioni essenziali restano bloccate. I gruppi già presenti nel registro e le issue in lavorazione nel vecchio Agent Team vengono esclusi.
 
-I valori predefiniti sono **`gpt-6.1-sol`** per l'analisi e **`gpt-6-luna`** per implementare e semplificare, verificati nel [catalogo ufficiale Codex](https://github.com/openai/codex/blob/main/codex-rs/models-manager/models.json). `CODEX_PLANNER_MODEL` e `CODEX_EXECUTOR_MODEL` permettono di cambiarli. L'account API del runner deve poter usare questi modelli; la verifica del catalogo non prova l'accesso di una credenziale. Durante questa configurazione moduli circoscritti sono stati effettivamente delegati a Luna.
+Il modello analista predefinito è **`gpt-6.1-sol`**; l'esecuzione predefinita è **`auto`**. Ogni piano valuta difficoltà, modalità diretta/delegata e motivazione. Codex può sviluppare tutto direttamente con 6.1-Sol: gruppi complessi, rischiosi o non sufficientemente delimitati restano al modello senior. Il lavoro circoscritto può essere delegato a un modello più piccolo; Luna è una delle opzioni.
+
+Il router considera le sessioni effettivamente in corso nel controller e gli errori espliciti di capacità/rate limit. Se il delegato è occupato o temporaneamente indisponibile, sceglie il senior; un tentativo successivo al primo viene elevato al senior. Un errore non provoca retry nascosti: resta il budget esistente. Il carico globale del provider non viene stimato senza dati. La semplificazione mantiene l'esecutore scelto per il gruppo e `execution-history.json` registra le decisioni. I piani precedenti senza valutazione restano immutati e usano prudentemente il senior.
+
+Per tenere **tutta l'implementazione in 6.1-Sol**, imposta `CODEX_EXECUTOR_MODEL=gpt-6.1-sol`; per la selezione automatica usa `auto`. `CODEX_SMALL_EXECUTOR_MODEL` sceglie il delegato opzionale (default `gpt-6-luna`). Gli ID predefiniti sono presenti nel [catalogo ufficiale Codex](https://github.com/openai/codex/blob/main/codex-rs/models-manager/models.json); l'account del runner deve poterli usare. Anche se sviluppo e QA usano 6.1-Sol, la verifica indipendente mantiene una sessione separata. Claude resta reviewer finale.
 
 Il vecchio `agent-team:start` assegna lo sviluppo a Claude e rimane separato. Per questo flusso si usa `node agent-team/src/bug-pipeline/cli.mjs`.
 
@@ -63,7 +67,8 @@ In Settings → Secrets and variables → Actions:
 | `OPENAI_API_KEY`                     | Secret             | Sessioni Codex nel runner GitHub; il login ChatGPT della macchina cloud non si trasferisce ad Actions |
 | `ANTHROPIC_API_KEY`                  | Secret             | Review finale Claude                                                                                  |
 | `CODEX_PLANNER_MODEL`                | Variable opzionale | Default `gpt-6.1-sol`                                                                                 |
-| `CODEX_EXECUTOR_MODEL`               | Variable opzionale | Default `gpt-6-luna`                                                                                  |
+| `CODEX_EXECUTOR_MODEL`               | Variable opzionale | Default `auto`; `gpt-6.1-sol` forza tutta l'implementazione sul senior                                |
+| `CODEX_SMALL_EXECUTOR_MODEL`         | Variable opzionale | Delegato opzionale, default `gpt-6-luna`                                                              |
 | `CLINICOS_BOT_TOKEN`                 | Secret             | Token di bot/App con accesso al repository e PR; serve per avviare CI e deploy dai push del bot       |
 | `BUG_PIPELINE_AUTO_RELEASE`          | Variable           | Abilita il workflow di rilascio automatico soltanto quando impostata a `true`                         |
 | `VERCEL_TOKEN`                       | Secret             | Deploy frontend nel passo di rilascio, mai passato ai modelli                                         |

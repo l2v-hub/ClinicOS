@@ -63,6 +63,16 @@ export function createWorkspace({ root, repo, run, models }) {
   const git = (args, cwd) => invoke('git', args, cwd);
   const packetFile = (batch, file) =>
     path.join(coordinates(batch).cwd, coordinates(batch).packet, file);
+  const recordExecution = async (batch, phase, round) => {
+    const selection = models.executionFor?.(coordinates(batch).cwd);
+    if (!selection) return;
+    batch.executionHistory ??= [];
+    batch.executionHistory.push({ phase, round: round ?? null, ...selection });
+    await writeFile(
+      packetFile(batch, 'execution-history.json'),
+      JSON.stringify(batch.executionHistory, null, 2) + '\n',
+    );
+  };
   const status = (cwd) => git(['status', '--porcelain', '--untracked-files=all'], cwd);
   async function assertScope(batch) {
     const { cwd, packet } = coordinates(batch);
@@ -221,9 +231,19 @@ export function createWorkspace({ root, repo, run, models }) {
         const content = safeText(JSON.stringify(options.feedback, null, 2) + '\n');
         await writeFile(packetFile(batch, 'review-feedback.json'), content);
       }
-      return models.execute({ ...coordinates(batch), plan: batch.plan, ...options });
+      try {
+        return await models.execute({ ...coordinates(batch), plan: batch.plan, ...options });
+      } finally {
+        await recordExecution(batch, options.phase, options.round);
+      }
     },
-    simplify: (batch) => models.simplify({ ...coordinates(batch), plan: batch.plan }),
+    async simplify(batch) {
+      try {
+        return await models.simplify({ ...coordinates(batch), plan: batch.plan });
+      } finally {
+        await recordExecution(batch, 'simplify');
+      }
+    },
     async qa(batch) {
       const result = await models.qa({ ...coordinates(batch), plan: batch.plan });
       safeText(result.summary);
