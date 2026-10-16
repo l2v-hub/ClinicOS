@@ -1,0 +1,11 @@
+Run: https://github.com/l2v-hub/ClinicOS/actions/runs/38964221458
+Source: 2f832ee11d99497bbd7789f7b655d512dc47d822
+Selected actual output only; no secret values.
+
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T20:43:23.3238478Z {"OPENAI_API_KEY_CONFIGURED":true,"ANTHROPIC_API_KEY_CONFIGURED":true,"CLINICOS_BOT_TOKEN_CONFIGURED":true,"VERCEL_TOKEN_CONFIGURED":true,"VERCEL_PROJECT_CONFIGURED":true,"RAILWAY_TOKEN_CONFIGURED":true,"AUTO_RELEASE_ENABLED":true}
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T20:43:25.3276703Z # tests 81
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T20:43:25.3277060Z # pass 81
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T20:43:25.3277179Z # fail 0
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T20:43:29.4776702Z {"isolatedRunner":{"ok":true,"code":0,"error":null,"stdout":"sandbox-ready","stderr":""},"directCli":{"code":0,"stdout":"sandbox-ready","stderr":""}}
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T20:43:29.5328649Z Real isolated Codex sandbox: PASS
+configure-repository	Apply and verify the explicitly authorized repository settings	2026-10-16T20:43:31.8889886Z Repository configuration blocked: GitHub PUT /repos/l2v-hub/ClinicOS/actions/permissions/workflow: HTTP 403; repository Administration write access is required

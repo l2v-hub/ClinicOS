@@ -1,0 +1,4 @@
+e7768aa410ce2f5ea9a39498ed8f7f9754997496d2268f09c8d4ce2efb1c9b52  .github/workflows/bug-pipeline-tests.yml
+cb8f3f781ea09365ef6bc00e56a3c11c1a1dae02407a6707bc3a9432f3c17576  agent-team/src/bug-pipeline/cli.mjs
+01c2281552bf49ac0fe0edce8508ebaa71db0ce9f016101a56854f3afbfaef4a  scripts/quality-gate/configure-bug-repository.mjs
+301d133835799c28d16ece7814903f801f2f47ed7e9256a9bdb1615cd2e33d24  agent-team/tests/bug-pipeline/repository-settings.test.mjs
