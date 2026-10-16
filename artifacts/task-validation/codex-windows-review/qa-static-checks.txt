@@ -1,0 +1,10 @@
+Syntax PASS agent-team/src/bug-pipeline/process.mjs
+Syntax PASS scripts/automation/install-claude-review-cron.mjs
+Syntax PASS scripts/automation/install-claude-review-windows.mjs
+Syntax PASS scripts/automation/run-claude-review-windows.mjs
+Syntax PASS agent-team/tests/bug-pipeline/windows-review.test.mjs
+YAML + stable required Linux check requires successful native Windows job: PASS
+Inline workflow JavaScript syntax: PASS (3 blocks)
+git diff --check: PASS
+Final changed implementation/test/workflow/docs Prettier check: PASS
+Native-only trigger-default assertions added: reviewed; pending Windows execution

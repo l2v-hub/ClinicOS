@@ -89,9 +89,15 @@ jobs:
         run: node scripts/quality-gate/configure-bug-repository.mjs
 
   bug-pipeline-tests:
+    needs: windows-review-setup
+    if: always()
     runs-on: ubuntu-22.04
     timeout-minutes: 20
     steps:
+      - name: Require native Windows setup checks
+        env:
+          WINDOWS_RESULT: ${{ needs.windows-review-setup.result }}
+        run: test "$WINDOWS_RESULT" = success
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
@@ -184,3 +190,18 @@ jobs:
         env:
           CODEX_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/codex
         run: node scripts/quality-gate/verify-isolated-services.mjs
+
+  windows-review-setup:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      # Synthetic auth/process boundaries; native PowerShell parser and Task Scheduler objects.
+      # No provider credentials, actual task registration or subscription inference.
+      - name: Verify Windows review setup and native scheduler definitions
+        run: node --test agent-team/tests/bug-pipeline/windows-review.test.mjs
