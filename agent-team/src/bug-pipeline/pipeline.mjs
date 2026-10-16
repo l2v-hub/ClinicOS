@@ -5,10 +5,21 @@ import {
   validateState,
   feedbackFingerprint,
 } from './contracts.mjs';
+import { publishDeploymentCompletion } from './release.mjs';
+import { externalReviewStep } from './external-review.mjs';
 
 // The controller owns every transition and reserves attempts remotely BEFORE starting models.
 // Models never own GitHub mutation, budgets, release decisions or deployment credentials.
-export async function runPipeline({ repo, event, gh, models, workspace, store }) {
+export async function runPipeline({
+  repo,
+  event,
+  gh,
+  models,
+  workspace,
+  store,
+  reviewMode = 'internal',
+}) {
+  if (!['internal', 'external'].includes(reviewMode)) throw new Error('Unknown review mode');
   await gh.intake(event);
   const state = validateState(
     (await store.load()) ?? { schemaVersion: 1, repository: repo, batches: [] },
@@ -17,6 +28,7 @@ export async function runPipeline({ repo, event, gh, models, workspace, store })
   let persistenceFailed = false;
   const save = async () => {
     try {
+      state.updatedAt = new Date().toISOString();
       return await store.save(state);
     } catch (error) {
       persistenceFailed = true;
@@ -31,14 +43,24 @@ export async function runPipeline({ repo, event, gh, models, workspace, store })
     batch.phase = 'blocked';
     batch.reason = reason;
     await save();
+    for (const number of batch.issues) await gh.setIssueStatus(number, 'Bloccato');
     await report(
       batch,
       `**BLOCKED** — ${reason}. Budget sviluppo ${batch.implementation.length}/4, review ${batch.reviews.length}/4. Il budget non viene azzerato da nuovi comandi.`,
     );
   };
   const claimed = new Set(state.batches.flatMap((b) => b.issues));
+  // Retry label/closure publication from durable facts before taking new work.
+  for (const batch of state.batches) {
+    if (batch.release?.status === 'deployed') {
+      await publishDeploymentCompletion({ batch, github: gh });
+      continue;
+    }
+    const status = batch.phase === 'blocked' ? 'Bloccato' : 'In progress';
+    for (const number of batch.issues) await gh.setIssueStatus(number, status);
+  }
   const queue = await gh.discoverQueue();
-  const selected = [];
+  let selected = [];
   for (const item of queue) {
     const issue = await gh.viewIssue(typeof item === 'number' ? item : item.number);
     if (claimed.has(issue.number)) continue;
@@ -58,10 +80,21 @@ export async function runPipeline({ repo, event, gh, models, workspace, store })
     if (issue.state && issue.state.toLowerCase() !== 'open') continue;
     selected.push(issue);
   }
-  if (state.pendingTriage)
-    throw new Error('Interrupted triage requires operator recovery; no automatic model restart');
+  if (state.pendingTriage) {
+    if (state.pendingTriage.status !== 'claiming')
+      throw new Error('Interrupted triage requires operator recovery; no automatic model restart');
+    const pending = new Set(state.pendingTriage.issues);
+    selected = selected.filter((issue) => pending.has(issue.number));
+    if (selected.length !== pending.size)
+      throw new Error('Pending claim is no longer authorized or open');
+  }
   if (selected.length) {
-    state.pendingTriage = { issues: selected.map((i) => i.number), status: 'running' };
+    if (!state.pendingTriage) {
+      state.pendingTriage = { issues: selected.map((i) => i.number), status: 'claiming' };
+      await save();
+    }
+    for (const issue of selected) await gh.setIssueStatus(issue.number, 'In progress');
+    state.pendingTriage.status = 'running';
     await save();
     const plan = validatePlan(
       await models.plan({ cwd: workspace.root, issues: selected, scopeSchema: planSchema }),
@@ -93,6 +126,7 @@ export async function runPipeline({ repo, event, gh, models, workspace, store })
       });
     delete state.pendingTriage;
     await save();
+    for (const rejected of plan.blocked) await gh.setIssueStatus(rejected.issue, 'Bloccato');
     for (const rejected of plan.blocked)
       await gh.commentIssue(
         rejected.issue,
@@ -102,6 +136,19 @@ export async function runPipeline({ repo, event, gh, models, workspace, store })
   for (const batch of state.batches) {
     if (['merged', 'deployed'].includes(batch.release?.status)) continue;
     if (batch.phase === 'blocked') continue;
+    if (reviewMode === 'external' && batch.externalReview?.status === 'running') continue;
+    if (reviewMode === 'external' && batch.pr) {
+      try {
+        await externalReviewStep({ repo, batch, gh, workspace, save, report, block });
+      } catch {
+        if (persistenceFailed) throw new Error('External review reconciliation persistence failed');
+        await block(
+          batch,
+          'External review consistency or correction failed; inspect the existing batch',
+        );
+      }
+      continue;
+    }
     if (
       batch.implementation.some((a) => a.status === 'running') ||
       batch.reviews.some((a) => a.status === 'running') ||
@@ -172,11 +219,15 @@ export async function runPipeline({ repo, event, gh, models, workspace, store })
               feedback: batch.lastFailure ?? null,
             });
             if (outcome.status !== 'implemented') throw new Error('executor blocked');
+            batch.phase = 'validating';
+            await save();
             await workspace.verify(batch);
             batch.phase = 'simplifying';
             await save();
             if ((await workspace.simplify(batch)).status !== 'implemented')
               throw new Error('simplification blocked');
+            batch.phase = 'validating';
+            await save();
             await workspace.verify(batch);
             if ((await workspace.qa(batch)).status !== 'verified')
               throw new Error('independent Codex QA blocked');
@@ -209,6 +260,10 @@ export async function runPipeline({ repo, event, gh, models, workspace, store })
         await save();
         await report(batch, await workspace.issueEvidence(batch));
       }
+      if (reviewMode === 'external') {
+        await externalReviewStep({ repo, batch, gh, workspace, save, report, block });
+        continue;
+      }
       // New PR feedback is handled once, in a new executor session, before the next review.
       if (feedback && feedbackFingerprint(feedback) !== batch.feedbackFingerprint) {
         batch.phase = 'implementing';
@@ -223,9 +278,13 @@ export async function runPipeline({ repo, event, gh, models, workspace, store })
           ).status !== 'implemented'
         )
           throw new Error('PR feedback correction blocked');
+        batch.phase = 'validating';
+        await save();
         await workspace.verify(batch);
         if ((await workspace.simplify(batch)).status !== 'implemented')
           throw new Error('simplification blocked');
+        batch.phase = 'validating';
+        await save();
         await workspace.verify(batch);
         if ((await workspace.qa(batch)).status !== 'verified')
           throw new Error('independent Codex QA blocked');
@@ -286,9 +345,13 @@ export async function runPipeline({ repo, event, gh, models, workspace, store })
           ).status !== 'implemented'
         )
           throw new Error('review correction blocked');
+        batch.phase = 'validating';
+        await save();
         await workspace.verify(batch);
         if ((await workspace.simplify(batch)).status !== 'implemented')
           throw new Error('simplification blocked');
+        batch.phase = 'validating';
+        await save();
         await workspace.verify(batch);
         if ((await workspace.qa(batch)).status !== 'verified')
           throw new Error('independent Codex QA blocked');

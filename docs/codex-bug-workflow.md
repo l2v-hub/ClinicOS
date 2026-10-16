@@ -4,7 +4,7 @@
 
 Apri una issue e scrivi **`/codex fix`**, oppure applica **`codex-run`**. Il comando deve provenire da un collaboratore con permesso write, maintain o admin. La form bug applica `bug` e `codex-triage`: queste due label da sole raccolgono segnalazioni e non autorizzano sessioni a pagamento. I workflow devono prima essere presenti nel branch predefinito e avere i prerequisiti sotto indicati.
 
-GitHub Actions avvia il controller, serializzato per repository. Le sessioni e i terminali sono processi CLI nuovi nel runner, con risultati nei log Actions e nelle issue. Non dipendono da un terminale personale lasciato aperto. La riconciliazione periodica ogni 15 minuti recupera la coda e i commenti PR se un evento viene accorpato dalla concorrenza di Actions.
+GitHub Actions avvia il controller, serializzato per repository. Le sessioni e i terminali sono processi CLI nuovi nel runner, con risultati nei log Actions e nelle issue. Codex gira nel runner Actions; Claude usa il cron sul terminale personale già autenticato, come scelto dall’utente. La riconciliazione periodica ogni 15 minuti recupera la coda e i commenti PR se un evento viene accorpato dalla concorrenza di Actions.
 
 ```mermaid
 flowchart TD
@@ -17,7 +17,8 @@ flowchart TD
   V --> S[Semplificazione e nuova verifica]
   S --> QI[Sessione Codex indipendente: QA su diff e prove]
   QI --> D[Branch pubblicato e PR in bozza]
-  D --> C[Claude: review finale in sola lettura]
+  D --> RC[Controlli verdi: PR Ready for review]
+  RC --> C[Cron Claude Code: review in sola lettura]
   C -->|Rilievi/commenti: massimo 4 review totali| F[Esecutore: correzioni, test e semplificazione]
   F --> C
   C -->|SHA approvato e controlli richiesti verdi| Q[Gate di rilascio]
@@ -52,6 +53,14 @@ Prima della PR e dopo ogni correzione, una sessione Codex nuova e indipendente d
 
 ## Review e recupero
 
+### Stati issue e dashboard operativa
+
+La prenotazione durevole precede la presa in carico: tutte le issue del gruppo ricevono la label **In progress** prima del triage. Test, semplificazione, pubblicazione PR, review e attesa dei check hanno fasi distinte nel registro. Un errore o un budget esaurito imposta **Bloccato** e mantiene aperta la issue. Una review approvata o il solo merge non significano risoluzione.
+
+Dopo la conferma del rilascio della revisione verificata, il controller pubblica il riepilogo e i collegamenti alle prove, applica **Risolto** e chiude la issue con motivo `completed`. Le label estranee vengono conservate. Alla successiva esecuzione, eventuali aggiornamenti GitHub falliti vengono ripetuti dallo stato durevole senza rilanciare modelli o azzerare contatori.
+
+La dashboard operativa si avvia con `node agent-team/src/bug-pipeline/dashboard-server.mjs` e ascolta solo su `http://127.0.0.1:4317`. Mostra coda autorizzata, issue gestite da altri flussi, fase registrata, gruppi, PR e tentativi utilizzati. Legge GitHub ogni 15 secondi tramite autenticazione del server; non trasferisce token, corpi issue o report dei modelli al browser. Errori e dati non aggiornati restano visibili. È una superficie locale di monitoraggio, separata dall'app clinica pubblica; l'apertura nel pannello Codex richiede la disponibilità del collegamento alla macchina cloud.
+
 La skill `.claude/skills/bug-final-review/SKILL.md` mantiene Claude in sola lettura con Read/Glob/Grep, senza MCP. Il controller riutilizza `scripts/quality-gate/claude-bug-review.mjs`, il suo schema e il legame con lo SHA. La review viene pubblicata sulla PR; gli esecutori applicano le correzioni e ricreano tutte le prove. Anche commenti o review PR successivi all'approvazione invalidano la readiness e richiedono un altro giro disponibile. Thread irrisolti e review con richiesta di modifiche impediscono il rilascio; il bot non approva al posto di un reviewer umano.
 
 I limiti sono separati: **4 tentativi di implementazione/verifica** e **4 review finali totali**, comprese quelle richieste da commenti successivi. I tentativi vengono prenotati prima della chiamata al modello e le chiamate fallite consumano il budget. Il preflight avviene prima di avviare il batch. Un'interruzione resta bloccata per recupero esplicito: niente quinto giro, cancellazione del registro o nuovo batch per aggirare il limite.
@@ -65,7 +74,6 @@ In Settings → Secrets and variables → Actions:
 | Nome                                 | Tipo               | Uso                                                                                                   |
 | ------------------------------------ | ------------------ | ----------------------------------------------------------------------------------------------------- |
 | `OPENAI_API_KEY`                     | Secret             | Sessioni Codex nel runner GitHub; il login ChatGPT della macchina cloud non si trasferisce ad Actions |
-| `CLAUDE_CODE_OAUTH_TOKEN`            | Secret             | Review Claude Code con abbonamento Max                                                                |
 | `CODEX_PLANNER_MODEL`                | Variable opzionale | Default `gpt-6.1-sol`                                                                                 |
 | `CODEX_EXECUTOR_MODEL`               | Variable opzionale | Default `auto`; `gpt-6.1-sol` forza tutta l'implementazione sul senior                                |
 | `CODEX_SMALL_EXECUTOR_MODEL`         | Variable opzionale | Delegato opzionale, default `gpt-6-luna`                                                              |
@@ -74,9 +82,19 @@ In Settings → Secrets and variables → Actions:
 | `VERCEL_TOKEN`                       | Secret             | Deploy frontend nel passo di rilascio, mai passato ai modelli                                         |
 | `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` | Variables          | Identità del progetto Vercel, secondo il workflow di rilascio                                         |
 
-La review usa `CLAUDE_REVIEW_AUTH_MODE=subscription`: manca il token Max, il flusso si blocca senza passare alle API Anthropic. Generare il token con `claude setup-token` nel terminale autenticato al proprio account Max e salvarlo solo nel secret `CLAUDE_CODE_OAUTH_TOKEN`. Il token OAuth viene passato esclusivamente al reviewer Claude; modelli Codex, test e controller GitHub non lo ricevono. Un token OAuth riconosciuto dal prefisso `sk-ant-oat01-` già salvato nel vecchio secret `ANTHROPIC_API_KEY` viene accettato come OAuth, mentre una chiave API nello stesso secret resta esclusa. OAuth ha precedenza quando entrambe le credenziali sono presenti. Le review consumano i limiti dell’abbonamento; l’API Anthropic ha una fatturazione separata. Non viene invocata come ripiego.
+### Harness Claude Code esterno
 
-Il supporto Pro/Max su Actions è documentato nell’[autenticazione ufficiale Claude Code Action](https://github.com/anthropics/claude-code-action/blob/main/docs/setup.md). Un runner permanente non è necessario per questa modalità. Il probe `auth status` verifica la configurazione CLI e non dimostra da solo validità remota, quota o review eseguita.
+Il controller Actions usa `BUG_PIPELINE_REVIEW_MODE=external`: non installa Claude e non legge token Max o API Anthropic. Dopo test e check obbligatori rende la PR **Ready for review**, salva una richiesta legata allo SHA e attende. Il cron dell’utente esegue dal checkout fidato:
+
+```bash
+node agent-team/src/bug-pipeline/claude-review-cron.mjs
+```
+
+Il comando processa al massimo una richiesta per esecuzione. Usa `gh` già autenticato con accesso write al repository e Claude Code già collegato a Pro/Max: il controllo `auth status` richiede `authMethod=claude.ai` e abbonamento `pro`/`max`. La configurazione è quella personale `.claude`, oppure il percorso assoluto `CLINICOS_CLAUDE_CONFIG_DIR`. Non genera, copia o richiede token; rimuove le chiavi API e i token OAuth dall’ambiente del modello. Un login diverso blocca la review senza ripiego API. Il task può essere richiamato ogni cinque minuti dal cron personale; il registro CAS impedisce due inferenze per lo stesso tentativo, anche fra cron sovrapposti.
+
+Il reviewer prepara un worktree temporaneo sul commit esatto, applica la skill di sola lettura e prenota il tentativo remoto **prima** della chiamata. Salva report e digest nel registro esistente e pubblica una review GitHub `COMMENT` legata al commit: non impersona approvazioni umane. Un POST fallito viene ripetuto senza una nuova inferenza. Per la PR di installazione471 riutilizza il registro `setupReview471`, incluso il primo tentativo fallito; non riparte da zero.
+
+Gli eventi review/commento e la riconciliazione ogni15minuti riportano il controllo a Codex. Codex accetta soltanto un report strutturato verificato nel registro, mai la parola “approved” in un commento. Rilievi o commenti nuovi avviano correzione, test, semplificazione, QA, nuove prove e un nuovo SHA, quindi un’altra richiesta al cron. Una review pulita consente il gate di rilascio solo se coincidono SHA, commenti, check e protezioni. Le issue ricevono il riepilogo dell’esito; la dashboard mostra attesa cron e review in corso. Il limite resta quattro, senza retry di modelli nascosti.
 
 Il token di fallback `github.token` permette la coda, i commenti e la PR, ma i suoi push non avviano automaticamente altri workflow. I controlli richiesti assenti o non completati bloccano la readiness: non vengono interpretati come successo. Configurare branch protection e i check richiesti su `main`. Il token di bot deve avere contents/issues/pull requests e i permessi strettamente necessari al monitoraggio CI; i secrets non entrano nell'ambiente delle shell dei modelli o dei test.
 
@@ -84,7 +102,7 @@ Il workflow `codex-bug-release.yml` fornisce il rilascio separato, con ambiente 
 
 ## Ambiente cloud e diagnostica
 
-CLI fissate: Codex 0.159.2, Claude Code 2.1.301. Installazione fuori dal checkout; autenticazione tramite binding supportati, mai copiata nel repository. Nell'ambiente Codex cloud si può fornire `CLAUDE_CODE_OAUTH_TOKEN` con `CLAUDE_REVIEW_AUTH_MODE=subscription`; gli alias `CLINICOS_PLANNER_MODEL` e `CLINICOS_EXECUTOR_MODEL`. Il draft cloud e i secret di GitHub Actions sono configurazioni distinte.
+CLI fissate: Codex 0.159.2, Claude Code 2.1.301. Installazione fuori dal checkout; autenticazione tramite binding supportati, mai copiata nel repository. Il controller cloud usa gli alias `CLINICOS_PLANNER_MODEL` e `CLINICOS_EXECUTOR_MODEL`; il reviewer esterno usa la sessione personale Claude Code. Il draft cloud e i secret di GitHub Actions sono configurazioni distinte.
 
 ```bash
 node agent-team/src/bug-pipeline/cli.mjs --doctor

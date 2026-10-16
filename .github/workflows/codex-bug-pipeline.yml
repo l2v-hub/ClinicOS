@@ -28,7 +28,7 @@ permissions:
 jobs:
   process:
     # Suppress wake-ups caused by the pipeline's own status comments and reviews.
-    if: ${{ !((github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '<!-- codex-bug-pipeline:')) || (github.event_name == 'pull_request_review' && startsWith(github.event.review.body, '<!-- codex-bug-pipeline:')) || (github.event_name == 'pull_request_review_comment' && startsWith(github.event.comment.body, '<!-- codex-bug-pipeline:'))) }}
+    if: ${{ (github.event_name != 'issues' || github.event.label.name == 'codex-run') && !((github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '<!-- codex-bug-pipeline:')) || (github.event_name == 'pull_request_review' && startsWith(github.event.review.body, '<!-- codex-bug-pipeline:')) || (github.event_name == 'pull_request_review_comment' && startsWith(github.event.comment.body, '<!-- codex-bug-pipeline:'))) }}
     runs-on: ubuntu-22.04
     timeout-minutes: 180
     steps:
@@ -67,23 +67,18 @@ jobs:
         run: >-
           npm install --prefix "$RUNNER_TEMP/bug-pipeline-tools"
           --no-audit --no-fund --no-save
-          @openai/codex@0.159.2 @anthropic-ai/claude-code@2.1.301
+          @openai/codex@0.159.2
 
       - name: Run serialized issue and review controller
         env:
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN || github.token }}
           CODEX_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          # Max subscription only: never fall back to a separately billed API key.
-          CLAUDE_REVIEW_AUTH_MODE: subscription
-          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          # Accept an existing setup-token stored under the old secret name only
-          # when its OAuth prefix is recognized; API keys are excluded from review.
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Claude runs in the user's external subscription harness, never with Actions tokens.
+          BUG_PIPELINE_REVIEW_MODE: external
           CODEX_PLANNER_MODEL: ${{ vars.CODEX_PLANNER_MODEL || 'gpt-6.1-sol' }}
           CODEX_EXECUTOR_MODEL: ${{ vars.CODEX_EXECUTOR_MODEL || 'auto' }}
           CODEX_SMALL_EXECUTOR_MODEL: ${{ vars.CODEX_SMALL_EXECUTOR_MODEL || 'gpt-6-luna' }}
           CODEX_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/codex
-          CLAUDE_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/claude
         run: node agent-team/src/bug-pipeline/cli.mjs
 
       - name: Upload sanitized pipeline diagnostic on failure

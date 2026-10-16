@@ -1,0 +1,11 @@
+Native run https://github.com/l2v-hub/ClinicOS/actions/runs/38973156720
+SHA309f0f2256d8419c581f581f27f7cac3a159b511; conclusion SUCCESS.
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T22:01:46.8928443Z # tests 93
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T22:01:46.8928827Z # pass 93
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T22:01:52.6301406Z ^[[36;1mconsole.log('Real isolated Codex sandbox: PASS');^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T22:01:52.8915826Z Real isolated Codex sandbox: PASS
+58 migrations found in prisma/migrations
+All migrations have been successfully applied.
+Isolated HTTP, PostgreSQL and migrations: PASS; external TCP/UDP/proxy and outside writes: DENIED
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T22:02:27.7401644Z Isolated failing-command exit propagation: PASS
+No provider inference; no clinical or production data used.

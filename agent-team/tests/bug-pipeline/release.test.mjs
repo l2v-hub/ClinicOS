@@ -4,6 +4,7 @@ import {
   releaseBatch,
   recordDeployment,
   ReleaseGateError,
+  publishDeploymentCompletion,
 } from '../../src/bug-pipeline/release.mjs';
 import { feedbackFingerprint, sha256 } from '../../src/bug-pipeline/contracts.mjs';
 
@@ -78,6 +79,9 @@ function fixture(scope = ['frontend/src/Patient.jsx']) {
   let saved = state;
   const calls = [];
   const github = {
+    async setIssueStatus(number, status) {
+      calls.push(['status', number, status]);
+    },
     async viewIssue(number) {
       return { number, state: 'open', comments: [] };
     },
@@ -242,7 +246,7 @@ test('release blocks changed evidence digest before mutation', async () => {
   );
 });
 
-test('deployment recording validates the merge, posts true deployment links, and leaves issues open', async () => {
+test('verified deployment records true links then marks the issue resolved', async () => {
   const f = fixture();
   f.batch.release = {
     status: 'merged',
@@ -266,5 +270,43 @@ test('deployment recording validates the merge, posts true deployment links, and
   assert.equal(result.status, 'deployed');
   const comment = f.calls.find(([call]) => call === 'comment');
   assert.match(comment[2], /clinicos-eosin\.vercel\.app/);
-  assert.match(comment[2], /resta aperta/);
+  assert.match(comment[2], /Risolto/);
+  assert.deepEqual(f.calls.at(-1), ['status', 5, 'Risolto']);
+});
+
+test('completion comment failure never closes an issue and terminal publication retries without model work', async () => {
+  const f = fixture();
+  f.batch.release = {
+    status: 'deployed',
+    reviewedSha: sha,
+    mergeSha,
+    deployment: {
+      status: 'deployed',
+      reviewedSha: sha,
+      mergeSha,
+      vercelUrl: 'https://clinicos-eosin.vercel.app',
+    },
+  };
+  const post = f.github.commentIssue;
+  f.github.commentIssue = async () => {
+    throw new Error('POST unavailable');
+  };
+  await assert.rejects(
+    publishDeploymentCompletion({ batch: f.batch, github: f.github }),
+    /POST unavailable/,
+  );
+  assert.equal(
+    f.calls.some(([call]) => call === 'status'),
+    false,
+  );
+  f.github.commentIssue = post;
+  await publishDeploymentCompletion({ batch: f.batch, github: f.github });
+  assert.equal(f.calls.at(-1)[0], 'status');
+  delete f.batch.release.deployment.vercelUrl;
+  const before = f.calls.length;
+  await assert.rejects(
+    publishDeploymentCompletion({ batch: f.batch, github: f.github }),
+    /confirmed deployment links/,
+  );
+  assert.equal(f.calls.length, before);
 });

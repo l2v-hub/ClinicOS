@@ -41,11 +41,19 @@ export function childEnvironment(mode, env, runtimeRoot) {
     base.CLAUDE_CONFIG_DIR = path.join(base.HOME, '.claude');
     if (mode === 'model' && env.CODEX_API_KEY) base.CODEX_API_KEY = env.CODEX_API_KEY;
     if (mode === 'review') {
+      const localSubscription = env.CLAUDE_REVIEW_AUTH_MODE === 'subscription-local';
+      if (localSubscription && env.CLINICOS_CLAUDE_CONFIG_DIR)
+        base.CLAUDE_CONFIG_DIR = env.CLINICOS_CLAUDE_CONFIG_DIR;
       const oauth =
-        env.CLAUDE_CODE_OAUTH_TOKEN ||
-        (env.ANTHROPIC_API_KEY?.startsWith('sk-ant-oat01-') ? env.ANTHROPIC_API_KEY : undefined);
+        !localSubscription &&
+        (env.CLAUDE_CODE_OAUTH_TOKEN ||
+          (env.ANTHROPIC_API_KEY?.startsWith('sk-ant-oat01-') ? env.ANTHROPIC_API_KEY : undefined));
       if (oauth) base.CLAUDE_CODE_OAUTH_TOKEN = oauth;
-      else if (env.CLAUDE_REVIEW_AUTH_MODE !== 'subscription' && env.ANTHROPIC_API_KEY)
+      else if (
+        !localSubscription &&
+        env.CLAUDE_REVIEW_AUTH_MODE !== 'subscription' &&
+        env.ANTHROPIC_API_KEY
+      )
         base.ANTHROPIC_API_KEY = env.ANTHROPIC_API_KEY;
     }
     base.NODE_ENV = 'test';
@@ -69,6 +77,18 @@ export function createRunner({ env = process.env, runtimeRoot }) {
     envMode = 'controller',
   }) => {
     const childEnv = childEnvironment(envMode, env, runtimeRoot);
+    if (
+      envMode === 'review' &&
+      env.CLAUDE_REVIEW_AUTH_MODE === 'subscription-local' &&
+      !path.isAbsolute(env.CLINICOS_CLAUDE_CONFIG_DIR || '')
+    )
+      return {
+        ok: false,
+        code: null,
+        error: 'local-subscription-config-required',
+        stdout: '',
+        stderr: '',
+      };
     if (
       envMode === 'review' &&
       env.CLAUDE_REVIEW_AUTH_MODE === 'subscription' &&
