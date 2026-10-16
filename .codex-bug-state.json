@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "repository": "l2v-hub/ClinicOS",
+  "batches": [],
+  "setupReview471": {
+    "pullRequest": 471,
+    "packet": "artifacts/task-validation/codex-setup-review",
+    "ledger": {
+      "schema_version": 1,
+      "max_rounds": 4,
+      "rounds": [
+        {
+          "round": 1,
+          "subject_sha": "6bedebea6481b895c9b803876d06ec401dcd6e9a",
+          "verdict": "running"
+        }
+      ]
+    },
+    "reports": {}
+  }
+}
