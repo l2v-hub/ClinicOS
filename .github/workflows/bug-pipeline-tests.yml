@@ -19,11 +19,56 @@ on:
         description: Exact reviewed workflow commit, required only for repository configuration
         type: string
         default: ''
+      verify_provider_access:
+        description: Check model API authentication and planner availability without paid inference
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
 jobs:
+  verify-provider-access:
+    if: github.event_name == 'workflow_dispatch' && inputs.verify_provider_access && github.repository == 'l2v-hub/ClinicOS'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Verify read-only model API access on the reviewed revision
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PLANNER_MODEL: ${{ vars.CODEX_PLANNER_MODEL || 'gpt-6.1-sol' }}
+          CLINICOS_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          assert.match(process.env.CLINICOS_REVIEWED_SHA || '', /^[a-f0-9]{40}$/);
+          assert.equal(process.env.GITHUB_SHA, process.env.CLINICOS_REVIEWED_SHA);
+          const probes = [
+            { name: 'openai-planner-model', url: `https://api.openai.com/v1/models/${encodeURIComponent(process.env.PLANNER_MODEL)}`, headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` }, valid: body => body.id === process.env.PLANNER_MODEL },
+            { name: 'anthropic-model-access', url: 'https://api.anthropic.com/v1/models?limit=1', headers: { 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' }, valid: body => Array.isArray(body.data) && body.data.length > 0 },
+          ];
+          let failed = false;
+          for (const probe of probes) {
+            try {
+              const response = await fetch(probe.url, { headers: probe.headers, redirect: 'error', signal: AbortSignal.timeout(30000) });
+              const verified = response.ok && probe.valid(await response.json());
+              console.log(JSON.stringify({ probe: probe.name, httpStatus: response.status, verified }));
+              failed ||= !verified;
+            } catch {
+              console.log(JSON.stringify({ probe: probe.name, verified: false, reason: 'request-failed' }));
+              failed = true;
+            }
+          }
+          process.exitCode = failed ? 1 : 0;
+          JS
+
   configure-repository:
     if: github.event_name == 'workflow_dispatch' && inputs.configure_repository && github.repository == 'l2v-hub/ClinicOS'
     runs-on: ubuntu-22.04

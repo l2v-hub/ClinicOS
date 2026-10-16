@@ -22,6 +22,7 @@ Use existing authorized access to configure settings where possible, without ove
 - AC2: On a real readiness failure, diagnostics identify marker presence, absolute-executable behavior, failure-exit propagation and relevant process execution/errors. No model request, clinical data, credentials, sandbox bypass or global policy change.
 - AC3: Preserve all existing readiness assertions. Resolve the runtime fault if a supported fix is identified; otherwise retain the exact failing evidence and BLOCKED status.
 - AC5: The manual-only administrative job requires the exact reviewed SHA and an administrator actor; add a cumulative exact-main ruleset requiring the Actions-owned bug-pipeline-tests check, preserving all other protections and default workflow permissions. Verify effective settings through GitHub after mutation. Credentials stay inside Actions.
+- AC6: Optional exact-SHA manual probes use fixed official model API origins, no redirects, bounded timeouts and GET requests only. Log status/availability only, never headers/bodies/credentials; distinguish authenticated model metadata access from paid inference or Claude review.
 - AC4: Independent QA reviews the scoped change and its source hash before delivery. No merge or deploy before actual gates pass.
 
 ## Test Plan

@@ -121,10 +121,19 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         signal: AbortSignal.timeout(30000),
         redirect: 'error',
       });
-      if (!response.ok)
+      if (!response.ok) {
+        const details = await response.json().catch(() => ({}));
+        const reason =
+          new Map([
+            ['Resource not accessible by personal access token', 'bot-token-permission-denied'],
+            ['Resource not accessible by integration', 'integration-permission-denied'],
+            ['Bad credentials', 'invalid-credential'],
+            ['Not Found', 'resource-not-visible'],
+          ]).get(details.message) || 'github-request-denied';
         throw new Error(
-          `GitHub ${method} ${route}: HTTP ${response.status}; repository Administration write access is required`,
+          `GitHub ${method} ${route}: HTTP ${response.status}; ${reason}; repository Administration write access is required`,
         );
+      }
       return response.status === 204 ? null : response.json();
     };
     const result = await configureRepository({
