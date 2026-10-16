@@ -1,0 +1,20 @@
+{
+  "code": 0,
+  "args": [
+    "--test",
+    "--test-concurrency=1",
+    "agent-team/tests/bug-pipeline/windows-review.test.mjs"
+  ],
+  "counts": {
+    "tests": 10,
+    "pass": 10,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "sourceSha256": "b36cdc2fcc942ac3151f037df30034e5d2c2853da4cccf90f2c5285d3aa6ae1a",
+  "sourceUnchanged": true,
+  "logSha256": "0ed5a784e29dffc3dc375e675c6b937fd3d628e98493e0e843599b90a92cf892",
+  "temp": "Explicit canonical synthetic test directory; avoids MSIX alias ambiguity",
+  "at": "2026-10-16T23:35:49.819Z"
+}

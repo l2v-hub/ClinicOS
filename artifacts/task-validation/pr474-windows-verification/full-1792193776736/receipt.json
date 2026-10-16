@@ -1,0 +1,34 @@
+{
+  "code": 1,
+  "args": [
+    "--test",
+    "--test-concurrency=1",
+    "agent-team/tests/bug-pipeline/contracts.test.mjs",
+    "agent-team/tests/bug-pipeline/cron-install.test.mjs",
+    "agent-team/tests/bug-pipeline/dashboard.test.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/tests/bug-pipeline/models.test.mjs",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+    "agent-team/tests/bug-pipeline/routing.test.mjs",
+    "agent-team/tests/bug-pipeline/setup-review.test.mjs",
+    "agent-team/tests/bug-pipeline/subscription-auth.test.mjs",
+    "agent-team/tests/bug-pipeline/windows-review.test.mjs",
+    "agent-team/tests/bug-pipeline/workspace.test.mjs",
+    "scripts/quality-gate/claude-bug-review.test.mjs"
+  ],
+  "counts": {
+    "tests": 130,
+    "pass": 116,
+    "fail": 13,
+    "cancelled": 0,
+    "skipped": 1
+  },
+  "sourceSha256": "b36cdc2fcc942ac3151f037df30034e5d2c2853da4cccf90f2c5285d3aa6ae1a",
+  "sourceUnchanged": true,
+  "logSha256": "d55b2e48fcd3e5a8489718c95142c14c9ecf280d7f240fca8d2b68bf6753fc33",
+  "temp": "Explicit canonical synthetic test directory; avoids MSIX alias ambiguity",
+  "at": "2026-10-16T23:36:58.867Z"
+}

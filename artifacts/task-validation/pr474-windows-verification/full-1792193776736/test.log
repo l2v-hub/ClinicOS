@@ -1,0 +1,511 @@
+✔ plan accounts for every selected issue exactly once and permits explicit blocked items (2.8908ms)
+✔ plan rejects duplicated, missing, and unselected issue coverage (0.7237ms)
+✔ plan rejects task files outside the declared editable scope (0.2283ms)
+✔ editable paths reject credentials, automation control files, and path traversal (0.2512ms)
+✔ new plans require execution assessment while existing frozen state remains byte-for-byte unchanged (0.6195ms)
+✔ plan requires screenshot and Playwright trace evidence for each source issue (0.4317ms)
+✔ managed crontab replacement preserves other jobs, is idempotent and removes only its own block (1.5595ms)
+✖ actual install verifies the resulting crontab, preserves unrelated jobs and performs no model invocation (11.1472ms)
+✔ missing cron or API-only Claude authentication blocks before any schedule or launcher mutation (9.4327ms)
+✖ an unreadable crontab is not mistaken for an empty one and check mode never writes (10.2904ms)
+✖ generated POSIX launcher preserves exit codes, clears API tokens and quotes unusual repository paths (5.4042ms)
+✖ concurrent crontab edits prevent overwrite and cron percent escaping stays separate from shell quoting (5.5217ms)
+✖ read-only check verifies the exact schedule, complete markers and actual private launcher (5.0102ms)
+✖ existing state, launcher and log must remain private regular owned files (5.3438ms)
+✔ snapshot distinguishes the authorized queue, triage, external QA and waiting issues without exposing source payloads (2.9333ms)
+✔ dashboard loader is read-only and propagates a source failure instead of returning an empty queue (0.5262ms)
+✔ local dashboard blocks foreign Host/Origin, cross-site reads, mutations and path traversal (24.6744ms)
+✔ refresh failure preserves the previous snapshot, reports staleness and never leaks provider diagnostics (4.2182ms)
+✔ external doctor requires no Claude credential or Claude subprocess (1.3922ms)
+✔ request waits for real checks, then makes the PR ready without executing Claude (2.0054ms)
+✔ external harness reserves remotely before inference, publishes hashed approval and Codex accepts the exact revision (499.4582ms)
+✔ external publication failure is retryable without another model call; a CAS conflict prevents inference (874.584ms)
+✔ Claude findings trigger fresh Codex correction, test/simplification/QA, new SHA and a new bounded request (459.1144ms)
+✔ new human comments invalidate approval and exhausted review budgets block correction instead of starting round five (448.8271ms)
+✔ human feedback arriving with review publication is retained rather than silently included in approval (456.195ms)
+✔ draft or foreign PRs and an exhausted external budget never start a model (202.4459ms)
+✔ closed source issues block the external harness and Codex before review or correction (246.8093ms)
+✔ issue lifecycle uses additive managed labels and closes resolved issues as completed, with retry after a failed close (3.4975ms)
+✔ dashboard state reads never initialize a branch, and source permission errors are not treated as an empty queue (0.3051ms)
+✔ authorized accepts only write-capable collaborators (0.2549ms)
+✔ intake requires exact command and authorized actor before adding all queue labels (0.4105ms)
+✔ intake refuses unauthorized actors, near-match commands, and pull requests (0.1646ms)
+✔ scheduled queue accepts only an authorized explicit codex-run event and skips blocked issues (0.7198ms)
+✔ durable state initializes only its branch from main and uses returned Contents SHA (0.6269ms)
+✔ failed state CAS keeps the remembered SHA and never retries without it (0.3381ms)
+✔ review feedback binds to PR head, tracks current reviews, unresolved threads and human comments (0.5775ms)
+✔ review feedback fails closed when more than 100 review threads are returned (0.308ms)
+✔ a commented review cannot clear an earlier request for changes; explicit approval can (0.4216ms)
+✔ review feedback identifies a merged PR from the real REST state and merge flag (0.2169ms)
+✔ required checks fail closed when absent and pass only when all reported checks succeed (0.2517ms)
+✔ independent Codex QA uses a fresh read-only analyst session and cannot return implementation status (16.9541ms)
+✔ plan, implementation and simplification use distinct bounded Codex sessions and models (16.4089ms)
+✔ missing model IDs fail explicitly before starting Codex (2.1971ms)
+✖ missing, invalid and symlink output fail closed (11.7948ms)
+✔ Codex failure is surfaced and does not parse stale output (4.72ms)
+✔ model worktree cannot contain the runtime output directory (2.7079ms)
+✔ preflight probes CLI support without invoking a model or reading credentials (1.8583ms)
+✔ merged and deployed batches remain terminal and never restart implementation (3.8601ms)
+✔ all grouped issues are claimed after remote reservation and before triage; readiness never marks them resolved (2.8067ms)
+✔ failed claim publication prevents triage and retains its remote claim without consuming implementation or review budgets (1.4819ms)
+✔ unchanged unresolved human review waits without spending another Claude attempt (0.7131ms)
+✔ successful grouped flow hydrates every issue, validates, simplifies, revalidates, publishes draft before Claude, and posts evidence to each source issue (0.9866ms)
+✔ failed independent QA prevents PR publication and consumes the existing implementation budget (1.0494ms)
+✔ four implementation failures exhaust the budget, and a rerun cannot reset or exceed it (0.8303ms)
+✔ four changes-requested Claude reviews run no fifth round and retain each correction in the same budget (2.0251ms)
+✔ later PR comments cannot restart an exhausted Claude review budget (0.6503ms)
+✔ a new comment on an approved ready PR triggers correction, revalidation and a review of the new head (0.823ms)
+✔ external PR head or fork identity blocks before any executor or review model call (0.3374ms)
+✔ pending required checks remain waiting and can become ready without resetting review or implementation budgets (0.6323ms)
+✔ interrupted running work is blocked for operator recovery without restarting a model (0.2746ms)
+✔ remote compare-and-swap failure while reserving an implementation attempt prevents executor invocation (0.4396ms)
+✔ release dry-run verifies persisted proof and never merges (3.0392ms)
+✔ release execution rechecks then merges only the approved exact SHA (1.3412ms)
+▶ release blocks stale SHA, missing review proof, and absent required deployment credentials
+  ✔ stale SHA (0.7361ms)
+  ✔ review report digest (0.3851ms)
+  ✔ missing Vercel config (0.4288ms)
+  ✔ missing Railway config for runtime (0.3913ms)
+  ✔ pending checks (0.4745ms)
+  ✔ fork PR (0.4721ms)
+✔ release blocks stale SHA, missing review proof, and absent required deployment credentials (3.8128ms)
+✔ release blocks changed evidence digest before mutation (0.6264ms)
+✔ verified deployment records true links then marks the issue resolved (2.8894ms)
+✔ completion comment failure never closes an issue and terminal publication retries without model work (0.4173ms)
+✔ repository settings reject a mismatched revision before using credentials (2.6965ms)
+✔ non-admin callers and failed read preflights cannot mutate settings (0.4914ms)
+✔ configuration adds a cumulative exact-main gate and preserves default permissions (1.0558ms)
+✔ adding the check preserves existing human review and strict status requirements (0.3758ms)
+✔ ambiguous targets and differently bound checks fail before any mutation (0.8847ms)
+✔ auto routes difficulty/direct requests to senior and only bounded work to a delegate (1.5455ms)
+✔ fixed 6.1-Sol override runs implementation and simplification entirely with senior (12.3719ms)
+✔ actual overlapping sessions divert bounded work to senior without starting a second delegate (11.9811ms)
+✔ capacity errors consume their call and influence only a later requested attempt (8.4602ms)
+✔ automatic high-difficulty and legacy execution use the senior model in real CLI arguments (6.5665ms)
+✔ incidental line numbers in diagnostics do not invent provider capacity pressure (4.9791ms)
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ setup review reserves remotely before inference and reuses only exact-SHA approval (818.6741ms)
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ CAS failure, non-admin actor, stale head and interrupted budget prevent inference (1105.3719ms)
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ a head change during review preserves the spent attempt and cannot publish approval (552.3399ms)
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ new source changes cannot exceed four total remote setup review attempts (2286.9955ms)
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ tampered saved approval evidence cannot trigger another review or publish approval (794.2347ms)
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ a failed review publication is recovered without another model attempt (1097.8061ms)
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/codex-setup-review/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✖ restoring durable review state cannot overwrite a symlink target (561.7336ms)
+✔ external subscription mode reuses only the explicit local config and excludes every token/API fallback (50.4218ms)
+✔ Max OAuth is confined to the reviewer and excludes separately billed API authentication (0.2328ms)
+✔ subscription mode fails closed with only an API key and recognizes a legacy OAuth secret (0.1466ms)
+✔ actual reviewer subprocess has OAuth only, including when both credentials exist (40.2271ms)
+✔ missing Max OAuth prevents launching a reviewer even with cached API authentication (4.7901ms)
+✔ captured diagnostics redact OAuth and GitHub token forms and arbitrary OAuth assignments (0.303ms)
+✔ Windows install verifies a single user task, preserves unrelated work and removes only the verified task (14.8797ms)
+✔ Windows prerequisites and altered existing tasks fail closed without an inference or overwrite (7.6144ms)
+✔ Windows task read failures and concurrent registration cannot replace an existing task (5.0113ms)
+✔ Windows launch runs the real child, retains exit7, strips provider tokens and preserves interrupted locks (63.9071ms)
+✔ npm Claude entrypoints execute with Node without a shell and reviewer credentials remain isolated (92.3126ms)
+✔ PowerShell scheduler definitions parse on Windows and use actual task action/trigger/principal objects (6111.1517ms)
+✔ native Windows ACL creation is private and rejects a later public access rule (3647.6821ms)
+✔ native Windows bootstrap preserves dirty, foreign, wrong-branch and diverged work and fast-forwards only its dedicated checkout (9559.4592ms)
+✔ existing Windows state is inspected before any ACL write and malformed schedules fail closed (27.2686ms)
+✔ Windows installed-state check rejects hardlinked configuration consistently with the worker (19.61ms)
+✔ child environment isolates verification, executor, reviewer, and controller credentials (1.2692ms)
+✖ local Codex login directory is available only to Codex model authentication (3.5295ms)
+✔ createRunner subprocess receives only the role credential and a demo localhost database (176.85ms)
+✖ fresh CLI configuration directories are private and survive repeated isolated launches (57.8336ms)
+✔ createRunner reports child exit failure and output overflow as failures (109.3918ms)
+﹣ createRunner timeout terminates the subprocess group, including a child process (0.2161ms) # SKIP
+✔ validateEvidence accepts a valid synthetic PNG and a recorded Playwright trace and records content digests (18.7715ms)
+✖ validateEvidence rejects missing files, wrong headers, path traversal, and symlinks outside the packet (17.0771ms)
+✔ validateEvidence rejects PNG signature filler and PNG/trace checksum corruption (16.0023ms)
+✔ real Git workspace prepares the exact batch branch, freezes its task packet, and regenerates evidence after clearing stale files (1357.6955ms)
+✔ real Git workspace rejects changes outside the accepted source-file scope (918.2592ms)
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ four rejected rounds remain blocked and a fifth model call is impossible (2348.2807ms)
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ the same rejected commit cannot spend a second round (670.4665ms)
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ approval is reusable only at the same SHA and code changes require another review (1121.698ms)
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ missing authentication consumes no review round (368.7888ms)
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ reviewer has only read tools and no project settings, MCP or bypass (532.9333ms)
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✖ dirty implementation and packets outside the worktree are rejected before model invocation (407.8713ms)
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ corrupted approved evidence is rejected (684.5653ms)
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ a malformed provider response is a failed attempt rather than approval (450.4984ms)
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ files changed during review invalidate the result (608.7501ms)
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✔ concurrent callers cannot invoke two reviewers for the same packet (537.9525ms)
+✔ review validation rejects stale SHA, invented paths and contradictory approval (0.4499ms)
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/implementation-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'artifacts/task-validation/bug-batch-1/task-contract.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'feature.ts', LF will be replaced by CRLF the next time Git touches it
+✖ a tracked prerequisite symlink cannot read an external implementation plan (231.683ms)
+ℹ tests 130
+ℹ suites 0
+ℹ pass 116
+ℹ fail 13
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 42039.5824
+
+✖ failing tests:
+
+test at agent-team\tests\bug-pipeline\cron-install.test.mjs:118:1
+✖ actual install verifies the resulting crontab, preserves unrelated jobs and performs no model invocation (11.1472ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   '*/5 * * * * {{COMMAND}}\r'
+  -   '*/5 * * * * {{COMMAND}}'
+    ]
+  
+      at launchPlan (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/scripts/automation/install-claude-review-cron.mjs:231:10)
+      at async installCron (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/scripts/automation/install-claude-review-cron.mjs:289:32)
+      at async TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/cron-install.test.mjs:120:17)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ '*/5 * * * * {{COMMAND}}\r' ],
+    expected: [ '*/5 * * * * {{COMMAND}}' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at agent-team\tests\bug-pipeline\cron-install.test.mjs:154:1
+✖ an unreadable crontab is not mistaken for an empty one and check mode never writes (10.2904ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   '*/5 * * * * {{COMMAND}}\r'
+  -   '*/5 * * * * {{COMMAND}}'
+    ]
+  
+      at launchPlan (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/scripts/automation/install-claude-review-cron.mjs:231:10)
+      at async installCron (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/scripts/automation/install-claude-review-cron.mjs:289:32)
+      at async TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/cron-install.test.mjs:159:19)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ '*/5 * * * * {{COMMAND}}\r' ],
+    expected: [ '*/5 * * * * {{COMMAND}}' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at agent-team\tests\bug-pipeline\cron-install.test.mjs:166:1
+✖ generated POSIX launcher preserves exit codes, clears API tokens and quotes unusual repository paths (5.4042ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   '*/5 * * * * {{COMMAND}}\r'
+  -   '*/5 * * * * {{COMMAND}}'
+    ]
+  
+      at launchPlan (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/scripts/automation/install-claude-review-cron.mjs:231:10)
+      at async installCron (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/scripts/automation/install-claude-review-cron.mjs:289:32)
+      at async TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/cron-install.test.mjs:168:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ '*/5 * * * * {{COMMAND}}\r' ],
+    expected: [ '*/5 * * * * {{COMMAND}}' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at agent-team\tests\bug-pipeline\cron-install.test.mjs:194:1
+✖ concurrent crontab edits prevent overwrite and cron percent escaping stays separate from shell quoting (5.5217ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /changed concurrently/. Input:
+  
+  'AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n' +
+    '+ actual - expected\n' +
+    '\n' +
+    '  [\n' +
+    "+   '*/5 * * * * {{COMMAND}}\\r'\n" +
+    "-   '*/5 * * * * {{COMMAND}}'\n" +
+    '  ]\n'
+  
+      at async TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/cron-install.test.mjs:202:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    +   '*/5 * * * * {{COMMAND}}\r'
+    -   '*/5 * * * * {{COMMAND}}'
+      ]
+    
+        at launchPlan (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/scripts/automation/install-claude-review-cron.mjs:231:10)
+        at async installCron (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/scripts/automation/install-claude-review-cron.mjs:289:32)
+        at async waitForActual (node:assert:615:5)
+        at async strict.rejects (node:assert:738:25)
+        at async TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/cron-install.test.mjs:202:3)
+        at async Test.run (node:internal/test_runner/test:1389:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:960:7),
+    expected: /changed concurrently/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team\tests\bug-pipeline\cron-install.test.mjs:209:1
+✖ read-only check verifies the exact schedule, complete markers and actual private launcher (5.0102ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   '*/5 * * * * {{COMMAND}}\r'
+  -   '*/5 * * * * {{COMMAND}}'
+    ]
+  
+      at launchPlan (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/scripts/automation/install-claude-review-cron.mjs:231:10)
+      at async installCron (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/scripts/automation/install-claude-review-cron.mjs:289:32)
+      at async TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/cron-install.test.mjs:211:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ '*/5 * * * * {{COMMAND}}\r' ],
+    expected: [ '*/5 * * * * {{COMMAND}}' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at agent-team\tests\bug-pipeline\cron-install.test.mjs:236:1
+✖ existing state, launcher and log must remain private regular owned files (5.3438ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   '*/5 * * * * {{COMMAND}}\r'
+  -   '*/5 * * * * {{COMMAND}}'
+    ]
+  
+      at launchPlan (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/scripts/automation/install-claude-review-cron.mjs:231:10)
+      at async installCron (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/scripts/automation/install-claude-review-cron.mjs:289:32)
+      at async TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/cron-install.test.mjs:239:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ '*/5 * * * * {{COMMAND}}\r' ],
+    expected: [ '*/5 * * * * {{COMMAND}}' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at agent-team\tests\bug-pipeline\models.test.mjs:183:1
+✖ missing, invalid and symlink output fail closed (11.7948ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /did not produce a regular structured output/. Input:
+  
+  "Error: EPERM: operation not permitted, symlink 'C:\\Users\\Claudio\\.local\\tmp\\pr474-verification\\clinicos-models-IYNzVL\\outside.json' -> 'C:\\Users\\Claudio\\.local\\tmp\\pr474-verification\\clinicos-models-IYNzVL\\runtime\\codex-plan-ca353c5fecec6c826b0d8ad227db7e6b98cf.json'"
+  
+      at async TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/models.test.mjs:206:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: EPERM: operation not permitted, symlink 'C:\Users\Claudio\.local\tmp\pr474-verification\clinicos-models-IYNzVL\outside.json' -> 'C:\Users\Claudio\.local\tmp\pr474-verification\clinicos-models-IYNzVL\runtime\codex-plan-ca353c5fecec6c826b0d8ad227db7e6b98cf.json'
+        at async symlink (node:internal/fs/promises:1650:10)
+        at async run (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/models.test.mjs:191:9)
+        at async invoke (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/src/bug-pipeline/models.mjs:271:22)
+        at async waitForActual (node:assert:615:5)
+        at async strict.rejects (node:assert:738:25)
+        at async TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/models.test.mjs:206:3)
+        at async Test.run (node:internal/test_runner/test:1389:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:960:7),
+    expected: /did not produce a regular structured output/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team\tests\bug-pipeline\setup-review.test.mjs:225:1
+✖ restoring durable review state cannot overwrite a symlink target (561.7336ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    Comparison {
+  +   code: 'EPERM'
+  -   code: 'EEXIST'
+    }
+  
+      at async TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/setup-review.test.mjs:229:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: EPERM: operation not permitted, symlink 'C:\Users\Claudio\.local\tmp\pr474-verification\setup-review-rrRu3b\outside-ledger-target' -> 'C:\Users\Claudio\.local\tmp\pr474-verification\setup-review-rrRu3b\artifacts\task-validation\codex-setup-review\claude-review-state.local'
+        at async symlink (node:internal/fs/promises:1650:10)
+        at async file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/setup-review.test.mjs:233:7
+        at async Object.review (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/setup-review.test.mjs:148:25)
+        at async waitForActual (node:assert:615:5)
+        at async strict.rejects (node:assert:738:25)
+        at async TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/setup-review.test.mjs:229:3)
+        at async Test.run (node:internal/test_runner/test:1389:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:960:7),
+    expected: { code: 'EEXIST' },
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team\tests\bug-pipeline\workspace.test.mjs:69:1
+✖ local Codex login directory is available only to Codex model authentication (3.5295ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(child.CODEX_HOME.startsWith('/tmp/isolated-login-probe/'))
+  
+      at TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/workspace.test.mjs:75:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at agent-team\tests\bug-pipeline\workspace.test.mjs:122:1
+✖ fresh CLI configuration directories are private and survive repeated isolated launches (57.8336ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/workspace.test.mjs:145:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at agent-team\tests\bug-pipeline\workspace.test.mjs:332:1
+✖ validateEvidence rejects missing files, wrong headers, path traversal, and symlinks outside the packet (17.0771ms)
+  Error: EPERM: operation not permitted, symlink 'C:\Users\Claudio\.local\tmp\pr474-verification\clinicos-bug-pipeline-M2n8yT\outside.png' -> 'C:\Users\Claudio\.local\tmp\pr474-verification\clinicos-bug-pipeline-M2n8yT\artifacts\task-validation\bug-batch-17\evidence\issue-17.png'
+      at async symlink (node:internal/fs/promises:1650:10)
+      at async TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/agent-team/tests/bug-pipeline/workspace.test.mjs:354:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    errno: -4048,
+    code: 'EPERM',
+    syscall: 'symlink',
+    path: 'C:\\Users\\Claudio\\.local\\tmp\\pr474-verification\\clinicos-bug-pipeline-M2n8yT\\outside.png',
+    dest: 'C:\\Users\\Claudio\\.local\\tmp\\pr474-verification\\clinicos-bug-pipeline-M2n8yT\\artifacts\\task-validation\\bug-batch-17\\evidence\\issue-17.png'
+  }
+
+test at scripts\quality-gate\claude-bug-review.test.mjs:123:1
+✖ dirty implementation and packets outside the worktree are rejected before model invocation (407.8713ms)
+  Error: EPERM: operation not permitted, symlink 'C:\Users\Claudio\.local\tmp\pr474-verification\outside-review-57ibLK' -> 'C:\Users\Claudio\.local\tmp\pr474-verification\clinicos-claude-review-ToBcCB\artifacts\task-validation\escape'
+      at async symlink (node:internal/fs/promises:1650:10)
+      at async TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/scripts/quality-gate/claude-bug-review.test.mjs:130:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    errno: -4048,
+    code: 'EPERM',
+    syscall: 'symlink',
+    path: 'C:\\Users\\Claudio\\.local\\tmp\\pr474-verification\\outside-review-57ibLK',
+    dest: 'C:\\Users\\Claudio\\.local\\tmp\\pr474-verification\\clinicos-claude-review-ToBcCB\\artifacts\\task-validation\\escape'
+  }
+
+test at scripts\quality-gate\claude-bug-review.test.mjs:214:1
+✖ a tracked prerequisite symlink cannot read an external implementation plan (231.683ms)
+  Error: EPERM: operation not permitted, symlink 'C:\Users\Claudio\.local\tmp\pr474-verification\external-plan-rVIi1L\plan.md' -> 'C:\Users\Claudio\.local\tmp\pr474-verification\clinicos-claude-review-JX8e9I\artifacts\task-validation\bug-batch-1\implementation-plan.md'
+      at async symlink (node:internal/fs/promises:1650:10)
+      at async TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/ClinicOS/review-checkout/scripts/quality-gate/claude-bug-review.test.mjs:221:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    errno: -4048,
+    code: 'EPERM',
+    syscall: 'symlink',
+    path: 'C:\\Users\\Claudio\\.local\\tmp\\pr474-verification\\external-plan-rVIi1L\\plan.md',
+    dest: 'C:\\Users\\Claudio\\.local\\tmp\\pr474-verification\\clinicos-claude-review-JX8e9I\\artifacts\\task-validation\\bug-batch-1\\implementation-plan.md'
+  }
