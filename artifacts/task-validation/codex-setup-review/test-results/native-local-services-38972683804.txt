@@ -1,0 +1,28 @@
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	﻿2026-10-16T21:58:00.4995959Z ##[group]Run node scripts/quality-gate/verify-isolated-services.mjs
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.4996536Z ^[[36;1mnode scripts/quality-gate/verify-isolated-services.mjs^[[0m
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.5071886Z shell: /usr/bin/bash -e {0}
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.5072166Z env:
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.5072543Z   CODEX_CLI_PATH: /home/runner/work/_temp/bug-pipeline-tools/node_modules/.bin/codex
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.5072990Z ##[endgroup]
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6390917Z {"ok":false,"code":1,"error":null,"stdout":"","stderr":"Error: network proxy constraints are invalid: invalid value for network.denied_domains: * (allowed exact hosts or scoped wildcards like *.example.com or **.example.com)\n"}
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6416101Z node:internal/modules/run_main:123
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6417105Z     triggerUncaughtException(
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6417996Z     ^
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6418487Z 
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6420277Z AssertionError [ERR_ASSERTION]: Error: network proxy constraints are invalid: invalid value for network.denied_domains: * (allowed exact hosts or scoped wildcards like *.example.com or **.example.com)
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6421874Z 
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6422079Z 
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6422464Z false !== true
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6422911Z 
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6423845Z     at file:///home/runner/work/ClinicOS/ClinicOS/scripts/quality-gate/verify-isolated-services.mjs:128:12
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6425436Z     at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6426509Z   generatedMessage: false,
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6427444Z   code: 'ERR_ASSERTION',
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6428085Z   actual: false,
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6428665Z   expected: true,
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6429313Z   operator: 'strictEqual',
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6429926Z   diff: 'simple'
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6430473Z }
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6430931Z 
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6431329Z Node.js v22.23.3
+bug-pipeline-tests	Verify real isolated HTTP and database access with denied external egress	2026-10-16T21:58:00.6543770Z ##[error]Process completed with exit code 1.

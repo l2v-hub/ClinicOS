@@ -2,7 +2,7 @@
 28b40e3c6b593d8e0ec43b53a571a2917e366b41b158d97bf61da804dda4667e  .github/workflows/codex-bug-pipeline.yml
 dee6275e5b2da095c10ccaffb7032cebb4e8184ddebb13d6d80b89fe678c2140  agent-team/src/bug-pipeline/models.mjs
 c1d3e58a57e8b7fca0e7393eb43413d74e9d2d8328423e7005d85e0b39596ba8  agent-team/src/bug-pipeline/workspace.mjs
-716e1fe09ec39095ac40b4bc204a4834cc542423f1c765e365b18c05066c34b0  agent-team/src/bug-pipeline/verification.mjs
+4eb9a32abb129d74ee7694fbfac443f00da9ab2bdd10a6106d2423cb50a41b64  agent-team/src/bug-pipeline/verification.mjs
 df2adafb2833464cf9adc739c23ea0fd3a4a2791243a24eb9eae5d53b322d0d5  agent-team/tests/bug-pipeline/setup-review.test.mjs
 e959277f3bb82a0a8f206025b19b15375678743017be62ec032e3a5aa5f485a0  scripts/quality-gate/review-bug-setup.mjs
 72bad7bef414d219e6b8853cfb4b372ad1736ce510a211f67658e79876207eba  scripts/quality-gate/verify-isolated-services.mjs
