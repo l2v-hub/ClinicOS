@@ -1,0 +1,4 @@
+02906369dba9dc7de6a5cdcb83cd63f3a007f913778963b120d3a7ddc6f1eb3b  .github/workflows/bug-pipeline-tests.yml
+1d5a82c0e5aa5d65424f1dd369e2855f4642b2fb38ff38fd379b9fd169652415  .github/workflows/codex-bug-pipeline.yml
+65f7cb8e2601e61b863514d9762bb024419300caf7838238539014d7e43c242b  agent-team/src/bug-pipeline/process.mjs
+7f1ebafc460be94fd9afe47b332579408b7b5a43b20aa0d22dcd1bc9e6bd7a47  agent-team/tests/bug-pipeline/workspace.test.mjs

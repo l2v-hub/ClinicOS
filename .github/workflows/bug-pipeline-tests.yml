@@ -51,7 +51,7 @@ jobs:
 
       # Exercise the actual sandbox on a clean runner; no model call or secrets are needed.
       - name: Install pinned Codex CLI for runner readiness
-        run: npm install --prefix "$RUNNER_TEMP/bug-pipeline-tools" --no-audit --no-fund --no-save @openai/codex@0.163.0
+        run: npm install --prefix "$RUNNER_TEMP/bug-pipeline-tools" --no-audit --no-fund --no-save @openai/codex@0.159.2
 
       - name: Verify actual isolated Codex sandbox
         env:

@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-16",
+  "source_baseline": "255d9917",
+  "runner_fix_commit": "ab8acfe3",
+  "credential_values_recorded": false,
+  "github": {
+    "repository_read_write": true,
+    "actions_secret_metadata_status": 403,
+    "actions_secret_public_key_status": 403,
+    "environment_secret_metadata_status": 403,
+    "actions_variables_status": 403,
+    "actions_settings_status": 403,
+    "branch_protection_status": 403,
+    "workflow_on_default_branch": false,
+    "claude_pr_reviews": 0,
+    "authorized_bug_queue_count": 0,
+    "configuration_availability_from_actions": {
+      "OPENAI_API_KEY": false,
+      "ANTHROPIC_API_KEY": false,
+      "CLINICOS_BOT_TOKEN": false,
+      "VERCEL_TOKEN": true,
+      "VERCEL_PROJECT_VARIABLES": false,
+      "RAILWAY_TOKEN": true,
+      "BUG_PIPELINE_AUTO_RELEASE": false
+    },
+    "configuration_evidence": "https://github.com/l2v-hub/ClinicOS/actions/runs/38865689899"
+  },
+  "cloud": {
+    "codex_cli": true,
+    "codex_auth": true,
+    "claude_auth": false,
+    "claude_secret_binding_saved": false,
+    "sandbox_ready": false,
+    "sandbox_error": "app-server socket directory must be a user-owned directory with mode 0700",
+    "managed_socket_directory_modified": false
+  },
+  "native_ci": {
+    "status": "failed-actual-sandbox",
+    "unit_tests": {
+      "tests": 76,
+      "pass": 76,
+      "fail": 0
+    },
+    "probes": [
+      {
+        "os": "ubuntu-latest",
+        "cli": "0.159.2",
+        "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/38865031028",
+        "result": "bubblewrap loopback RTM_NEWADDR denied"
+      },
+      {
+        "os": "ubuntu-22.04",
+        "cli": "0.159.2",
+        "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/38865689899",
+        "result": "isolated runner and direct CLI return0 but exact expected command output is absent; readiness fails"
+      },
+      {
+        "os": "ubuntu-22.04",
+        "cli": "0.163.0",
+        "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/38865939919",
+        "result": "same failure as pinned CLI; candidate not adopted"
+      }
+    ]
+  },
+  "overall_status": "BLOCKED",
+  "blocked_operations": [
+    "GitHub Actions credential/configuration management with current integration permissions",
+    "Actual Claude review without usable authentication",
+    "Local CLI sandbox execution under current managed platform socket configuration",
+    "Trusted main activation and complete paid end-to-end run before required review/authentication gates pass",
+    "Actual native GitHub sandbox command output is not verified on tested hosts/CLI versions"
+  ]
+}
