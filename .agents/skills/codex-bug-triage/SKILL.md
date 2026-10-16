@@ -1,6 +1,6 @@
 ---
 name: codex-bug-triage
-description: Process the GitHub bug queue with Codex: group duplicates and related feature bugs, analyze, prepare one worktree and implementation plan per group, implement and validate, then use Claude only for final review with at most four review/correction rounds.
+description: Process authorized GitHub bugs with Codex planning, grouped worktrees, detailed delegation to smaller executors, evidence and simplification, then Claude PR review with bounded correction cycles.
 ---
 
 # Codex bug queue and Claude review
@@ -10,14 +10,21 @@ label queue, or Codex development followed by Claude review.
 
 ## Roles and scope
 
-- Codex owns intake, grouping, analysis, worktrees, planning, implementation and tests.
+- Codex owns intake, grouping, analysis, worktrees, planning, implementation and tests. Delegate
+  scoped implementation and simplification to smaller executors such as Luna where available.
+  Use an actual supported executor model ID on CLI/API hosts, never invent a public ID for Luna.
 - Claude only reviews the final code and evidence. Codex applies the requested corrections.
 - Use the existing `agent-loop-quality-gate` and `qa-gate` skills for contracts and evidence.
   The user's specified roles take precedence over the old Agent Team's Claude-development role.
 - Never launch the old `agent-team:start` for this queue, add `assigned-to-claude`, or delegate
   implementation to Claude. Do not merge, deploy, close issues or touch production data.
-- A label is queue state. This skill alone does not create an always-on GitHub event receiver
-  or launch a Codex cloud task. State the actual trigger in use; never claim activation without it.
+- The automatic entry point is `agent-team/src/bug-pipeline/cli.mjs`, started by the GitHub
+  workflow after a maintainer's exact `/codex fix` comment or `codex-run` label. Read
+  `docs/codex-bug-workflow.md` for configuration and release gating. The issue form's
+  `codex-triage` label alone does not authorize paid sessions. Never claim activation before
+  the workflow is on the default branch and usable credentials and sandbox are verified.
+- The durable state on `codex/bug-control` is authoritative for automation. Never process
+  an existing batch manually in parallel, reset its budget, or route around its blocked state.
 
 ## 1. Read the queue
 
@@ -70,15 +77,20 @@ Sanitize artifacts: field names and synthetic examples only, no patient data, cr
 issue dumps. Publish a concise grouping/plan link only on the selected GitHub issues. Do not
 implement until the group's packet is complete and essential questions are resolved.
 
-## 4. Codex implements and validates
+## 4. Delegate implementation, validate and simplify
 
-Implement the complete group plan surgically. Add meaningful regression coverage, run the
+Delegate the complete group plan to a smaller executor in a fresh bounded session. Add meaningful regression coverage, run the
 relevant tests and required build/runtime checks, and store actual outputs in the packet.
 Changes to backend/schema require the bug scope to justify them. Never use a production database
-for development or testing. Commit code, plan and test evidence in the group's branch before review.
+for development or testing. Permit at most four implementation/validation attempts per group.
+After behavior passes, simplify without widening scope, then repeat the required tests and
+regenerate evidence. Publish a draft branch/PR before Claude's PR review. Embed immutable
+Markdown screenshots and trace/video links in every source issue, bound to the tested SHA.
+Commit code, frozen plan and test evidence in the group's branch before review.
 
 ## 5. Claude review, at most four rounds
 
+Read PR review comments and unresolved threads, in addition to the source issues and code.
 Check that the Claude CLI is installed and authenticated. Do not copy credentials into the
 repository or ask for secret values in chat. Missing CLI/authentication is `BLOCKED`, not a pass.
 
@@ -99,6 +111,9 @@ limit, or invoke Claude outside the helper for extra reviews.
 - `approved`: no actionable findings remain at that reviewed SHA. Codex verifies the actual required
   checks and acceptance criteria; reviewer approval alone is not proof that tests ran.
 - Code changes after approval invalidate that approval and require another available review round.
+- New PR comments invalidate readiness and require correction, validation, simplification and
+  another available review; they do not reset the four-round budget. Human unresolved threads
+  or changes-requested reviews block release until the responsible reviewer resolves them.
 - A failed review execution consumes its reserved attempt. Missing authentication before invocation
   does not. Unknown output, a changed worktree or a stale SHA never count as approval.
 - At round four, residual findings or failed validation mean `BLOCKED` / `FAILED VALIDATION`.

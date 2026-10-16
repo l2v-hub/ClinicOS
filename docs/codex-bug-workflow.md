@@ -1,81 +1,85 @@
-# Bug GitHub: Codex sviluppa, Claude revisiona
+# Bug GitHub: Codex coordina, esecutori piccoli implementano, Claude revisiona
 
-## Uso
+## Comando e percorso
 
-1. Apri un bug con il modulo **Bug da analizzare con Codex** oppure applica `bug` e
-   `codex-triage` a una issue esistente.
-2. In Codex richiama la skill: `$codex-bug-triage processa la coda bug di l2v-hub/ClinicOS`.
-3. Codex legge le issue, aggrega duplicati e problemi vicini nella stessa feature,
-   analizza cause e dipendenze e prepara un worktree e un piano per ogni gruppo.
-4. Codex implementa il piano, esegue i test e prepara il codice per la review.
-5. Claude revisiona; Codex applica le correzioni e ripete i controlli. Massimo **4 round**.
+Apri una issue e scrivi **`/codex fix`**, oppure applica **`codex-run`**. Il comando deve provenire da un collaboratore con permesso write, maintain o admin. La form bug applica `bug` e `codex-triage`: queste due label da sole raccolgono segnalazioni e non autorizzano sessioni a pagamento. I workflow devono prima essere presenti nel branch predefinito e avere i prerequisiti sotto indicati.
+
+GitHub Actions avvia il controller, serializzato per repository. Le sessioni e i terminali sono processi CLI nuovi nel runner, con risultati nei log Actions e nelle issue. Non dipendono da un terminale personale lasciato aperto. La riconciliazione periodica ogni 15 minuti recupera la coda e i commenti PR se un evento viene accorpato dalla concorrenza di Actions.
 
 ```mermaid
-flowchart LR
-  G[Issue: bug + codex-triage] --> T[Codex: triage e gruppi per feature]
-  T --> P[Codex: worktree, analisi e piano]
-  P --> D[Codex: sviluppo e test]
-  D --> R[Claude: review in sola lettura]
-  R -->|Rilievi, entro 4 round| D
-  R -->|Approvato e test verificati| Q[PR in bozza e QA finale]
-  R -->|Rilievi residui al round 4| B[BLOCKED]
+flowchart TD
+  I[Issue: /codex fix oppure codex-run] --> A[Verifica permessi]
+  A --> T[Codex: triage, gruppi per feature e cause]
+  T --> P[Worktree e piano dettagliato per gruppo]
+  P --> E[Modello piccolo: implementazione]
+  E --> V[Test e prove sintetiche]
+  V -->|Fallisce: massimo 4 tentativi| E
+  V --> S[Semplificazione e nuova verifica]
+  S --> QI[Sessione Codex indipendente: QA su diff e prove]
+  QI --> D[Branch pubblicato e PR in bozza]
+  D --> C[Claude: review finale in sola lettura]
+  C -->|Rilievi/commenti: massimo 4 review totali| F[Esecutore: correzioni, test e semplificazione]
+  F --> C
+  C -->|SHA approvato e controlli richiesti verdi| Q[Gate di rilascio]
+  Q -->|Rilascio configurato e autorizzato| R[Merge della stessa revisione e deploy]
+  V -->|Limite raggiunto| B[BLOCKED]
+  C -->|Limite raggiunto| B
 ```
 
-Codex resta il responsabile dello sviluppo. Il vecchio `agent-team:start`, che assegna
-lo sviluppo a Claude, appartiene a un flusso diverso e non va avviato per questa coda.
+La PR richiede un branch remoto per ricevere la review. Per questo la pubblicazione del branch precede Claude; il merge in `main` e il deploy avvengono soltanto dopo i gate. Nessuna fase promette codice perfetto: un problema residuo lascia il gruppo bloccato.
 
-## Materiale per ogni gruppo
+## Ruoli e piano delegabile
 
-La skill prepara un indice delle issue e, nel worktree del gruppo, una cartella
-`artifacts/task-validation/bug-batch-<issue-guida>/` con contratto, analisi, piano,
-criteri di accettazione per ogni issue, test ed evidenze. Le issue soltanto simili
-forniscono contesto; non entrano automaticamente nell'ambito della correzione.
+La skill `.agents/skills/codex-bug-triage/SKILL.md` assegna a Codex l'analisi, il raggruppamento motivato, il worktree e il piano. Un gruppo contiene ogni issue selezionata una sola volta, criteri di accettazione distinti, file esatti da modificare, passi implementativi, test di regressione e prove browser. Le issue senza informazioni essenziali restano bloccate. I gruppi già presenti nel registro e le issue in lavorazione nel vecchio Agent Team vengono esclusi.
 
-Il piano precede le modifiche. I duplicati vengono segnalati con una motivazione;
-le issue non vengono chiuse automaticamente. Branch e worktree distinti mantengono
-isolati i gruppi, con dipendenze esplicite quando condividono codice.
+I valori predefiniti sono **`gpt-6.1-sol`** per l'analisi e **`gpt-6-luna`** per implementare e semplificare, verificati nel [catalogo ufficiale Codex](https://github.com/openai/codex/blob/main/codex-rs/models-manager/models.json). `CODEX_PLANNER_MODEL` e `CODEX_EXECUTOR_MODEL` permettono di cambiarli. L'account API del runner deve poter usare questi modelli; la verifica del catalogo non prova l'accesso di una credenziale. Durante questa configurazione moduli circoscritti sono stati effettivamente delegati a Luna.
 
-## Review Claude
+Il vecchio `agent-team:start` assegna lo sviluppo a Claude e rimane separato. Per questo flusso si usa `node agent-team/src/bug-pipeline/cli.mjs`.
 
-Serve una CLI Claude Code che supporti `--restricted`, `--json-schema` e gli altri
-flag verificati dal runner. La CLI deve essere autenticata tramite il normale
-`claude auth login` o un binding supportato; mai inserire credenziali nei file.
+## Verifica ed evidenze
 
-Dal worktree del gruppo, dopo aver committato codice, piano ed evidenze:
+Ogni gruppo usa `codex/bug-batch-N`, un worktree registrato sotto `agent-team/.worktrees/` e il pacchetto `artifacts/task-validation/bug-batch-N/`. Il contratto e il piano vengono congelati e verificati con hash. L'esecutore non gestisce commit, push, contatori o credenziali GitHub.
+
+Il controller esegue i comandi del piano nel sandbox Codex, verifica gli exit code e richiede test di regressione e build frontend. Dopo la semplificazione ripete la verifica. Il piano deve includere l'avvio e l'arresto dei servizi locali necessari al test; il runner prepara dipendenze, Chromium, Python e PostgreSQL di test. Il database di sviluppo e la produzione non vengono usati. Le modifiche agli strumenti di controllo, ai workflow e alle credenziali richiedono un intervento separato e vengono rifiutate nei batch automatici.
+
+Prima di ogni verifica le vecchie evidenze vengono rimosse: per ogni issue i test devono rigenerare PNG e trace Playwright, con video opzionale. I test browser devono asserire comportamento e valori attesi, controllare errori console/HTTP e verificare la persistenza dove necessaria, secondo la skill QA. Il controller controlla percorso, tipo, dimensione e digest dei file; questi controlli non sostituiscono le assertion del test. Le issue ricevono screenshot incorporati in Markdown e link immutabili a piano, risultati, trace e video associati allo SHA pubblicato. Solo dati sintetici: mai cartelle cliniche o credenziali nelle prove.
+
+Prima della PR e dopo ogni correzione, una sessione Codex nuova e indipendente dall'esecutore applica la skill QA al diff, ai criteri e ai risultati generati dal controller. È in sola lettura e può bloccare il gruppo; il suo report viene conservato nel pacchetto. Un gate QA fallito rientra nel budget del tentativo corrente, senza aprire la PR o azzerare i contatori.
+
+## Review e recupero
+
+La skill `.claude/skills/bug-final-review/SKILL.md` mantiene Claude in sola lettura con Read/Glob/Grep, senza MCP. Il controller riutilizza `scripts/quality-gate/claude-bug-review.mjs`, il suo schema e il legame con lo SHA. La review viene pubblicata sulla PR; gli esecutori applicano le correzioni e ricreano tutte le prove. Anche commenti o review PR successivi all'approvazione invalidano la readiness e richiedono un altro giro disponibile. Thread irrisolti e review con richiesta di modifiche impediscono il rilascio; il bot non approva al posto di un reviewer umano.
+
+I limiti sono separati: **4 tentativi di implementazione/verifica** e **4 review finali totali**, comprese quelle richieste da commenti successivi. I tentativi vengono prenotati prima della chiamata al modello e le chiamate fallite consumano il budget. Il preflight avviene prima di avviare il batch. Un'interruzione resta bloccata per recupero esplicito: niente quinto giro, cancellazione del registro o nuovo batch per aggirare il limite.
+
+Il registro durevole è `.codex-bug-state.json` nel branch `codex/bug-control`, aggiornato tramite compare-and-swap. I report Claude e i digest rimangono nel registro e nei commenti PR per non cambiare lo SHA appena approvato. Worktree e file `.local` sono dati operativi; il registro GitHub non deve essere cancellato. Un errore CAS interrompe il controller. Il recupero richiede ispezionare stato, branch, HEAD, lock e tentativi prima di correggere la fase nello stesso registro; non è implementato un reset automatico.
+
+## Configurazione GitHub Actions
+
+In Settings → Secrets and variables → Actions:
+
+| Nome                                 | Tipo               | Uso                                                                                                   |
+| ------------------------------------ | ------------------ | ----------------------------------------------------------------------------------------------------- |
+| `OPENAI_API_KEY`                     | Secret             | Sessioni Codex nel runner GitHub; il login ChatGPT della macchina cloud non si trasferisce ad Actions |
+| `ANTHROPIC_API_KEY`                  | Secret             | Review finale Claude                                                                                  |
+| `CODEX_PLANNER_MODEL`                | Variable opzionale | Default `gpt-6.1-sol`                                                                                 |
+| `CODEX_EXECUTOR_MODEL`               | Variable opzionale | Default `gpt-6-luna`                                                                                  |
+| `CLINICOS_BOT_TOKEN`                 | Secret             | Token di bot/App con accesso al repository e PR; serve per avviare CI e deploy dai push del bot       |
+| `BUG_PIPELINE_AUTO_RELEASE`          | Variable           | Abilita il workflow di rilascio automatico soltanto quando impostata a `true`                         |
+| `VERCEL_TOKEN`                       | Secret             | Deploy frontend nel passo di rilascio, mai passato ai modelli                                         |
+| `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` | Variables          | Identità del progetto Vercel, secondo il workflow di rilascio                                         |
+
+Il token di fallback `github.token` permette la coda, i commenti e la PR, ma i suoi push non avviano automaticamente altri workflow. I controlli richiesti assenti o non completati bloccano la readiness: non vengono interpretati come successo. Configurare branch protection e i check richiesti su `main`. Il token di bot deve avere contents/issues/pull requests e i permessi strettamente necessari al monitoraggio CI; i secrets non entrano nell'ambiente delle shell dei modelli o dei test.
+
+Il workflow `codex-bug-release.yml` fornisce il rilascio separato, con ambiente GitHub `production`. Il gate ricontrolla batch, SHA approvato, evidenze e PR prima del merge. I workflow esistenti Railway coprono backend e runtime AI dopo il push su `main`; il frontend usa il passo Vercel esplicito sul commit appena unito. Impostare le credenziali e le regole dell'ambiente `production` prima dell'attivazione. Nessun merge o deploy viene eseguito per installare questa automazione. Le issue restano aperte finché il risultato distribuito non è verificato; il successo del deploy non prova da solo la risoluzione clinica/funzionale.
+
+## Ambiente cloud e diagnostica
+
+CLI fissate: Codex 0.159.2, Claude Code 2.1.301. Installazione fuori dal checkout; autenticazione tramite binding supportati, mai copiata nel repository. Nell'ambiente Codex cloud si possono usare gli alias `CLINICOS_ANTHROPIC_API_KEY`, `CLINICOS_PLANNER_MODEL` e `CLINICOS_EXECUTOR_MODEL`. Il draft cloud e i secret di GitHub Actions sono configurazioni distinte.
 
 ```bash
-node scripts/quality-gate/claude-bug-review.mjs \
-  artifacts/task-validation/bug-batch-<issue-guida>
+node agent-team/src/bug-pipeline/cli.mjs --doctor
+node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs
 ```
 
-Claude usa la skill `.claude/skills/bug-final-review/SKILL.md`, con soli strumenti
-Read/Glob/Grep e senza server MCP aggiuntivi. Restituisce un risultato strutturato
-associato al commit analizzato. Codex, non Claude, applica le modifiche e lancia i test.
-
-Il runner conserva il numero dei tentativi in `claude-review-state.local`, con un
-lock per chiamate concorrenti. Conservare questo file attraverso tutti i round
-dello stesso gruppo; non cancellarlo per ricominciare il conteggio. Una revisione
-rifiutata richiede un nuovo commit prima del round successivo. Codice modificato
-dopo l'approvazione richiede un'altra review disponibile. L'autenticazione mancante
-prima della chiamata non consuma round; una chiamata avviata e fallita lo consuma.
-
-Il quinto round è bloccato. Dopo quattro round, rilievi o verifiche fallite restano
-`BLOCKED` / `FAILED VALIDATION`, senza dichiarazioni di codice “perfetto”.
-
-## Attivazione e limiti verificabili
-
-La label mette il bug in coda e il modulo GitHub la applica automaticamente. Una
-skill viene eseguita dentro una sessione Codex: il solo inserimento della label
-non crea un nuovo task cloud. Un avvio automatico richiede un trigger effettivamente
-configurato e verificato; questa modifica non ne simula l'esistenza.
-
-La pipeline non usa il token Railway, dati di produzione, deploy o merge. Le
-credenziali GitHub/Codex sono quelle della sessione. Il pacchetto finale riporta
-issue sorgenti, ramo/worktree, SHA revisionato, test eseguiti, round Claude e rischi
-residui; la PR resta in bozza fino alla decisione QA.
-
-La suite del runner si esegue con:
-
-```bash
-node --test scripts/quality-gate/claude-bug-review.test.mjs
-```
+Il doctor verifica CLI, autenticazione, sandbox e presenza degli ID modello senza chiamate ai modelli. L'esecuzione locale richiede `--run` esplicito. Non dichiarare attivo il flusso solo perché i test con adapter simulati passano: servono workflow sul branch predefinito, credenziali utilizzabili e una prova reale autorizzata.

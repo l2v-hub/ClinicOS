@@ -24,6 +24,7 @@ on:
       - 'prisma/**'
       - 'railway.json'
       - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/deploy-backend.yml'
   workflow_dispatch: {}
 

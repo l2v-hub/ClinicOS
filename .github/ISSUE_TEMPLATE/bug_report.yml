@@ -3,6 +3,9 @@ description: Segnala un bug da raggruppare per feature, analizzare e correggere 
 title: '[Bug] '
 labels: ['bug', 'codex-triage']
 body:
+  - type: markdown
+    attributes:
+      value: 'Per avviare il flusso, un maintainer scrive `/codex fix` nei commenti oppure applica `codex-run`. Codex prepara gruppi e piano, gli esecutori implementano e Claude revisiona la PR.'
   - type: dropdown
     id: feature
     attributes:

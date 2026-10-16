@@ -1,0 +1,15 @@
+{
+  "baseRefName": "main",
+  "comments": [
+    {
+      "author": "vercel",
+      "url": "https://github.com/l2v-hub/ClinicOS/pull/471#issuecomment-6203984264",
+      "classification": "Existing Vercel deployment status; no task acceptance criteria"
+    }
+  ],
+  "headRefName": "codex/claude-github-labels",
+  "isDraft": true,
+  "number": 471,
+  "state": "OPEN",
+  "title": "Codex: triage e sviluppo bug con review Claude fino a quattro round"
+}

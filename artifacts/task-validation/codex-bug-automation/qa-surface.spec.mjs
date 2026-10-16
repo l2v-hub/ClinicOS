@@ -1,0 +1,20 @@
+import {test,expect} from 'playwright/test';
+import {readFile} from 'node:fs/promises';
+test('actual pipeline test results and operational limitations survive reload',async({page})=>{
+ const errors=[],httpFailures=[];
+ page.on('console',msg=>{if(msg.type()==='error')errors.push(msg.text());});
+ page.on('pageerror',error=>errors.push(error.message));
+ page.on('response',response=>{if(response.status()>=400)httpFailures.push(response.status());});
+ const output=await readFile(new URL('test-results/qa-final-scoped.txt',import.meta.url),'utf8');
+ const count=output.match(/ℹ pass (\d+)/)?.[1];expect(Number(count)).toBeGreaterThanOrEqual(49);
+ const response=await page.goto('/');expect(response.ok()).toBe(true);
+ await expect(page.locator('#passed')).toBeVisible();await expect(page.locator('#passed')).toHaveText(count);
+ await expect(page.locator('#failed')).toHaveText('0');
+ await expect(page.getByText(/four implementation failures exhaust the budget/)).toBeVisible();
+ await expect(page.getByText(/intake requires exact command and authorized actor/)).toBeVisible();
+ await expect(page.getByText(/successful grouped flow hydrates every issue/)).toBeVisible();
+ await expect(page.locator('#operational')).toHaveText(/Attivazione live bloccata: autenticazione Claude e sandbox/);
+ await page.reload();await expect(page.locator('#passed')).toHaveText(count);await expect(page.locator('#failed')).toHaveText('0');
+ expect(errors).toEqual([]);expect(httpFailures).toEqual([]);
+ await page.screenshot({path:new URL('result.png',import.meta.url).pathname,fullPage:true});
+});
