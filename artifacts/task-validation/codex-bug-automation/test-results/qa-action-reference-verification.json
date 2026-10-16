@@ -1,0 +1,19 @@
+{
+  "independent_check": "GitHub REST git/commits/<sha> and git/ref/tags/v4 both returned the expected SHA on the official actions repositories",
+  "verified_replacements": {
+    "actions/setup-node": "49933ea5288caeca8642d1e84afbd3f7d6820020",
+    "actions/upload-artifact": "ea165f8d65b6e75b540449e92b4886f43607fa02"
+  },
+  "first_ci_run": "https://github.com/l2v-hub/ClinicOS/actions/runs/38861061131",
+  "first_ci_status": "completed",
+  "first_ci_conclusion": "failure",
+  "observed_steps": [
+    {
+      "name": "Set up job",
+      "conclusion": "failure"
+    }
+  ],
+  "tests_executed_in_first_ci_run": false,
+  "replacement_ci_status": "not yet certified; parent will push and watch the native Node 22 regression gate",
+  "source_delta": "Only setup-node and upload-artifact commit references in the three new workflows; implementation/tests unchanged"
+}

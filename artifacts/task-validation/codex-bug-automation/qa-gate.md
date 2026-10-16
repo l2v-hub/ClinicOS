@@ -27,6 +27,12 @@ The independent QA session delta was separately reviewed: a fresh senior-model s
 
 The final review also checked CAS reservation before model calls; interrupted triage and attempts block recovery without resetting limits; per-source coverage; dirty/foreign worktree rejection; frozen packet hashes; real exit codes and no-test detection; fresh evidence and symlink rejection; read-only Claude tools; four-round caps; new-comment invalidation; unresolved human review guards; SHA-bound review/evidence and required checks; no direct main push or force push. Optional release never runs merely to install this change and requires trusted main workflow, explicit configuration, protected environment and actual prerequisites.
 
+## Action-reference correction after first hosted CI attempt
+
+The first hosted regression run, [38861061131](https://github.com/l2v-hub/ClinicOS/actions/runs/38861061131), failed during Set up job before any tests executed because the setup-node reference could not be resolved. The three new workflows now use setup-node `49933ea5288caeca8642d1e84afbd3f7d6820020` and upload-artifact `ea165f8d65b6e75b540449e92b4886f43607fa02`. Independent GitHub REST reads confirmed both replacement commits exist in the official repositories and match their v4 tags. Only these references changed; the 22 other reviewed files retain their prior hashes. The three-workflow semantic probe passed again and the manifest was refreshed. See `test-results/qa-action-reference-verification.json`.
+
+The existing **67/67 result remains a local test result**. This addendum does not claim a successful replacement hosted CI run; the parent will push the reference fix and observe that run. No source/test behavior changed, so the existing browser and build evidence remains applicable.
+
 ## Practical limits
 
 - `test-results/qa-doctor.json` is a real read-only local probe: Codex CLI/auth and model configuration pass; Claude authentication and sandbox readiness fail. Normal sandbox protections were not bypassed.

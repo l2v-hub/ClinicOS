@@ -51,7 +51,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up Node 22
-        uses: actions/setup-node@1e60f620b9541d2a5dfd848218e6c15fbbd3b72d
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22
 
@@ -92,7 +92,7 @@ jobs:
 
       - name: Upload sanitized pipeline diagnostic on failure
         if: failure()
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: codex-bug-pipeline-diagnostic-${{ github.run_id }}
           path: agent-team/.runtime/bug-pipeline/diagnostic.json
