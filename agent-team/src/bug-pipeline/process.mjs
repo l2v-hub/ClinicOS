@@ -14,6 +14,24 @@ export function childEnvironment(mode, env, runtimeRoot) {
     CI: 'true',
     DISABLE_AUTOUPDATER: '1',
   };
+  // Windows native executables need these OS paths even in a restricted child environment.
+  if (process.platform === 'win32') {
+    for (const key of [
+      'SystemRoot',
+      'WINDIR',
+      'TEMP',
+      'TMP',
+      'LOCALAPPDATA',
+      'CLAUDE_CODE_GIT_BASH_PATH',
+    ])
+      if (env[key]) base[key] = env[key];
+    if (
+      mode === 'controller' ||
+      (mode === 'review' && env.CLAUDE_REVIEW_AUTH_MODE === 'subscription-local')
+    ) {
+      for (const key of ['USERPROFILE', 'APPDATA']) if (env[key]) base[key] = env[key];
+    }
+  }
   if (mode === 'controller') {
     for (const key of [
       'HOME',
@@ -119,13 +137,18 @@ export function createRunner({ env = process.env, runtimeRoot }) {
         failure = null,
         bytes = 0,
         finished = false;
-      const child = spawn(executable, args, {
-        cwd,
-        env: childEnv,
-        shell: false,
-        detached: process.platform !== 'win32',
-        stdio: ['pipe', 'pipe', 'pipe'],
-      });
+      const javascriptCli = ['claude', 'codex'].includes(command) && /\.[cm]?js$/i.test(executable);
+      const child = spawn(
+        javascriptCli ? process.execPath : executable,
+        javascriptCli ? [executable, ...args] : args,
+        {
+          cwd,
+          env: childEnv,
+          shell: false,
+          detached: process.platform !== 'win32',
+          stdio: ['pipe', 'pipe', 'pipe'],
+        },
+      );
       const kill = (signal) => {
         try {
           if (process.platform !== 'win32') process.kill(-child.pid, signal);
