@@ -1,0 +1,18 @@
+✔ Windows install verifies a single user task, preserves unrelated work and removes only the verified task (17.3717ms)
+✔ Windows prerequisites and altered existing tasks fail closed without an inference or overwrite (9.9978ms)
+✔ Windows task read failures and concurrent registration cannot replace an existing task (6.2009ms)
+✔ Windows launch runs the real child, retains exit7, strips provider tokens and preserves interrupted locks (61.5242ms)
+✔ npm Claude entrypoints execute with Node without a shell and reviewer credentials remain isolated (103.7122ms)
+✔ PowerShell scheduler definitions parse on Windows and use actual task action/trigger/principal objects (3919.8876ms)
+✔ native Windows ACL creation is private and rejects a later public access rule (3630.6387ms)
+✔ native Windows bootstrap preserves dirty, foreign, wrong-branch and diverged work and fast-forwards only its dedicated checkout (9956.0909ms)
+✔ existing Windows state is inspected before any ACL write and malformed schedules fail closed (24.3843ms)
+✔ Windows installed-state check rejects hardlinked configuration consistently with the worker (19.9277ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17842.1341

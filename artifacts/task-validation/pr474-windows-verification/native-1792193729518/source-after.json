@@ -1,0 +1,190 @@
+[
+  {
+    "file": "agent-team/src/bug-pipeline/claude-review-cron.mjs",
+    "sha256": "fab675031d738ca63096e57dd7dd33b8a2fea7cad1c27d23895018a822861bac"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/cli.mjs",
+    "sha256": "c6c46f0f042661bb618fca57984f6efba0211878d9b7dec94217eda3b70c0db4"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/contracts.mjs",
+    "sha256": "07585f3ef94c02fda3158a0d6dfcb5678ab0973f0dc456790efc1e018f826f54"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/dashboard-server.mjs",
+    "sha256": "bf8bb141e1e100f88c803aea2940a591bbbee97d93311afd19f176b16ded1103"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/dashboard.mjs",
+    "sha256": "c5d02d0e7d81fd41f09d3f573122e34e88bbd3d054547bca52cc01e72bdf9842"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/dashboard/dashboard-client.js",
+    "sha256": "fd12c91defd08287e12fd0f9244209f358b8a4ddb24bd6ab2c27f4c0bc8f2e39"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/dashboard/dashboard.css",
+    "sha256": "14db78e6eae9462322fbbcc9d1ae4c4bf8c8ca76b9d65be713d46a18b61bccae"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/dashboard/dashboard.html",
+    "sha256": "3e036b21ce61246ec36c9022b8bafbed4ddfa67c96bf726ca1341aadb8bc9000"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/evidence.mjs",
+    "sha256": "64a40d3224c522e36335109bcd262e34d5e5f7feb72cb9948b55a7aa2126de6f"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/external-review.mjs",
+    "sha256": "0ffe2af203b11feb74451c454a5b08f5af10afa065839d2e16a557cc0266e813"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/github.mjs",
+    "sha256": "44a0d56ae95d8cc8b6c61a840f21ffb5de66a64556105d71dd26f88c7122c18c"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/models.mjs",
+    "sha256": "704fdce845d03cef0754e3c8094907e564224a791c42791ce57f64b2ec11dcdd"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/pipeline.mjs",
+    "sha256": "db078dcc3ddf3d49db09b5ee534393b88bcdfdd01dcbd664d1d7798829a57f6a"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/process.mjs",
+    "sha256": "fe0aca7fd57271d0ecd768121cc219c08eda0843b6ee3977148176385dcd6814"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/release.mjs",
+    "sha256": "8b130bc92eb44bf18984564ac4132c7213167dcb791a169dbebaa22a98489a2e"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/routing.mjs",
+    "sha256": "6767a48c57616411486322855231b228cd45a2e35c3d066b9bc735f3a75888a7"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/verification.mjs",
+    "sha256": "557d636502f39a1e903bd1d926e803cbc4c67276bf80133d3b9ed384c0ddeb4b"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/workspace.mjs",
+    "sha256": "d1e67cbb8704370d982a14ac6cacbdf663bbd50350076917c66004947e23b1ef"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/contracts.test.mjs",
+    "sha256": "8d138eb0338bbd24e491e902683b912a5a5aea354c79f67b46eb746b1967103f"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/cron-install.test.mjs",
+    "sha256": "50a1890f4db78773096bc2c3342dabe2f4921ac8524d919094a81a6c8f332e68"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/dashboard.test.mjs",
+    "sha256": "f783b663819187b22038363b14fc49a08e8dde6aa84856a46308399b60d13919"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "sha256": "62e6faf082a8f9341d1cd500d3fd31daddc03a0a748d744cf9da414ba146358a"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/github.test.mjs",
+    "sha256": "ae440495878d98f09d33a15c77875c39c67152b9aa95fc66f4ffa5dbcac2401f"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/models.test.mjs",
+    "sha256": "7e8996b6fdece9146c1d6843c3c9506dd53691a385bc20edfb7e7b8aebb2b229"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "sha256": "d2516af6d8891b21c1d6bacc1bdf363b0e48aa60f277c1f43a6f4fbacb1a30b6"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/release.test.mjs",
+    "sha256": "64c4c317854e679e35b38e12a1165c99ec522ac5eae63a7604c40362727fa65e"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+    "sha256": "80a42c27662a043c1abb4d5a9b68086985a11bcda1a8bd5699bea26e997bbb1c"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/routing.test.mjs",
+    "sha256": "7056e39296c1ccdc7ba0dced1955bb00f3978c4d8cc589fe147a7b63dbb35746"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/setup-review.test.mjs",
+    "sha256": "4591935016d61ac56eb2af2956e6cdda70c03c0619921ae63c3018f67637d1b1"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/subscription-auth.test.mjs",
+    "sha256": "91cf9440b77a5bef5998cf548ed978fde2ba499d3c52b647d2c4839433af7fe3"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/windows-review.test.mjs",
+    "sha256": "ba1c5a5fbd4845668ad687f4ad91000f4f17f636e4b210085a235a3fa605dd0a"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/workspace.test.mjs",
+    "sha256": "d8ed1cac67f621aba3d77ed725b6e1c96a0cdac4fdf21c375f518ba1b87a8f65"
+  },
+  {
+    "file": "scripts/automation/claude-review.crontab",
+    "sha256": "0ed71e6dbb5c7bcf373c2e0019a86ac5ad686d551ed30953e7240d40309015d5"
+  },
+  {
+    "file": "scripts/automation/install-claude-review-cron.mjs",
+    "sha256": "8a9912b797d3663f4983455cfa258c014e76ee46f806d924218b12b768c6668d"
+  },
+  {
+    "file": "scripts/automation/install-claude-review-windows.mjs",
+    "sha256": "3f5d010f855c56999702bc1e5616e95b996b0cdb4360a63b05f100afd0565e53"
+  },
+  {
+    "file": "scripts/automation/run-claude-review-windows.mjs",
+    "sha256": "6f7c51a70def947d983557b3d286b71d72465bea2271acb3b53d5f7518f77b24"
+  },
+  {
+    "file": "scripts/automation/setup-claude-review-windows.ps1",
+    "sha256": "716a6281632940c72fbb12650675e2fa96106e52056a281c2267244d89951f22"
+  },
+  {
+    "file": "scripts/quality-gate/check-closure.js",
+    "sha256": "5cc98899b0ebc905e59f100f3818c6bab4dbbfab42f5a63a724a25af389c7f81"
+  },
+  {
+    "file": "scripts/quality-gate/claude-bug-review.mjs",
+    "sha256": "4456b2deea54ff1c674b8ec0fc105b6110352b76603ab3f3cd4d5438c048fbcb"
+  },
+  {
+    "file": "scripts/quality-gate/claude-bug-review.test.mjs",
+    "sha256": "3c61c2b0e9e458a60861dec6fcfe74f2d469bca298084d86d662070cb9fff334"
+  },
+  {
+    "file": "scripts/quality-gate/configure-bug-repository.mjs",
+    "sha256": "55a98faab95b4528321fd06f27094c4dad535d24b73c28566e6855f1403fdd1d"
+  },
+  {
+    "file": "scripts/quality-gate/create-task-contract.js",
+    "sha256": "1a169a11541baa58f9ffefc4fc34f1c623d236c5eb67e66a1fdabfb721d4d8dd"
+  },
+  {
+    "file": "scripts/quality-gate/install-verification-tools.sh",
+    "sha256": "bde6ff12e145165faf3153810b0aa6939a6805842e094b9fdfe6e970233d94ee"
+  },
+  {
+    "file": "scripts/quality-gate/lib.js",
+    "sha256": "d0cae2940b44eb781c787e3c601ef9a2628e9066e3ee12a6568c5bb2cab30f07"
+  },
+  {
+    "file": "scripts/quality-gate/review-bug-setup.mjs",
+    "sha256": "7ca1a0b6ccfd8ea23e7f6ac6e3b006a7cecd935af07102d69cb5493e4257036d"
+  },
+  {
+    "file": "scripts/quality-gate/validate-task-contract.js",
+    "sha256": "4d790b7b103a697651b56223c95442f860575557a5e5ecea79f870bd25353854"
+  },
+  {
+    "file": "scripts/quality-gate/verify-isolated-services.mjs",
+    "sha256": "f4d23cc8e6c02403956775c29819eeef601de5eb2667704d9669b6f4906d0811"
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "source": "d2019b6f308187d513b742a6779d2764f350b8a9",
+  "code": 0,
+  "args": [
+    "--test",
+    "--test-concurrency=1",
+    "agent-team/tests/bug-pipeline/windows-review.test.mjs"
+  ],
+  "counts": {
+    "tests": 10,
+    "pass": 10,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "sourceUnchanged": true,
+  "manifestSha256": "b36cdc2fcc942ac3151f037df30034e5d2c2853da4cccf90f2c5285d3aa6ae1a",
+  "logSha256": "f03202dd928b9c1f10f5e6a1387239de383d423fd60d2b769ffb3394b8754c03",
+  "timestamp": "2026-10-16T23:36:52.853Z"
+}

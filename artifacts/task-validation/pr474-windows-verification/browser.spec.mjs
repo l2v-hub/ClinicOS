@@ -1,0 +1,12 @@
+import {createRequire} from 'node:module';
+import {readFile} from 'node:fs/promises';
+const require=createRequire(import.meta.url);
+const {test,expect}=require(process.env.PR474_PLAYWRIGHT||'playwright/test');
+test('captured native Windows task and test facts remain honest after reload',async({page})=>{
+ const actual=JSON.parse(await readFile(new URL('./runtime-snapshot.json',import.meta.url),'utf8'));
+ expect(actual.platform).toBe('win32');expect(actual.interval).toBe('PT5M');expect(actual.lastResult).toBe(0);expect(actual.nativeTests).toEqual({pass:10,fail:0,skipped:0});expect(actual.reviewExecuted).toBe(false);
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});page.on('response',r=>{if(r.status()>=400)errors.push('HTTP '+r.status())});
+ await page.route('**/*',r=>r.request().url()==='http://qa.invalid/pr474'?r.fulfill({contentType:'text/html',body:'<!doctype html><meta charset="utf-8"><title>PR474 — QA only</title><style>body{font:19px system-ui;background:#eef3f9;color:#17314a;padding:35px}main{background:white;border:1px solid #ccd7e7;border-radius:14px;padding:28px}dt{font-weight:650;margin-top:15px}dd{margin:5px 0;overflow-wrap:anywhere}h1{color:#205eb3}</style><main><h1>PR474 · Windows reale</h1><p>Superficie QA: visualizza fatti catturati, non comanda il task.</p><dl></dl><footer>Solo metadata, nessun dato clinico. La review Claude è verificata separatamente.</footer></main>'}):r.abort());
+ const render=()=>page.evaluate(v=>{for(const [key,value]of Object.entries(v)){const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=key;dd.dataset.key=key;dd.textContent=typeof value==='object'?JSON.stringify(value):String(value);document.querySelector('dl').append(dt,dd)}},actual);
+ await page.goto('http://qa.invalid/pr474');await render();await expect(page.locator('[data-key=interval]')).toHaveText('PT5M');await expect(page.locator('[data-key=lastResult]')).toHaveText('0');await expect(page.locator('[data-key=privilege]')).toHaveText('Limited');await page.reload();await render();await expect(page.locator('[data-key=task]')).toHaveText(actual.task);await expect(page.locator('[data-key=reviewExecuted]')).toHaveText('false');await expect(page.locator('[data-key=nextRun]')).toHaveText(actual.nextRun);expect(errors).toEqual([]);await page.screenshot({path:new URL('./windows-result.png',import.meta.url).pathname.replace(/^\/([A-Za-z]:)/,'$1'),fullPage:true});
+});

@@ -101,6 +101,10 @@ node scripts/automation/install-claude-review-windows.mjs --check
 
 Il task Windows è per l'utente corrente, con login interattivo, privilegi normali e nessuna password aggiuntiva. Ogni cinque minuti richiama Node con percorsi assoluti, file di stato sotto `%LOCALAPPDATA%\ClinicOS\claude-review`, ACL del solo utente e blocco delle sovrapposizioni. Richiede computer acceso, connesso e utente collegato; non è un servizio cloud. `--check` e `--remove` verificano identità, azione e impostazioni prima di dichiarare installato o rimuovere il task. Native CLI e installazione npm di Claude sono supportate senza eseguire shim `.cmd` tramite shell. Restano necessari login Pro/Max locale e `gh` con permessi sul repository.
 
+Nota Windows Store/MSIX: un alias sotto AppData può essere visto da Git come un percorso fisico diverso. Il bootstrap conserva il rifiuto di percorsi non coincidenti: non rimuovere i controlli di redirezione. In questo caso usare il percorso fisico verificato da `git -C <checkout> rev-parse --show-toplevel` come `-Destination` e la corrispondente radice fisica per `LOCALAPPDATA` **solo nel processo di installazione/check**, ripristinando poi il valore. Non modificare l'ambiente globale né ricopiare credenziali. L'attività registra percorsi assoluti utilizzabili anche fuori da Codex; se risiedono nei dati dell'app MSIX, reinstallare il setup prima di disinstallare Codex.
+
+I test Windows usano repository e file sintetici: la mutazione ACL negativa modifica solo la DACL, non richiede privilegi SACL e verifica che proprietario/protezione restino invariati. Il solo processo PowerShell della fixture bootstrap usa `RemoteSigned` per i file locali appena creati; le policy MachinePolicy/UserPolicy/LocalMachine/CurrentUser vengono confrontate prima/dopo. Non si usa `Bypass`, non si modifica la policy globale e le GPO imposte restano applicabili. Tutte le assertion di preservazione restano necessarie.
+
 Il cron è versionato in `scripts/automation/claude-review.crontab`. Per installarlo su **Mac/Linux**, dal checkout di questa PR sul computer persistente dove Claude Code è già collegato a Max e `gh` è autenticato, basta:
 
 ```bash

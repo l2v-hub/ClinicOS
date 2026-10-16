@@ -1,0 +1,8 @@
+# Implementation plan
+
+1. Inspect original result/tests and current PR/task/source; preserve primary dirty files. Confirm cached claude.ai Max, not API auth.
+2. Replace only the ACL fixture's privilege-sensitive Get-Acl/Set-Acl public mutation with .NET Access-section DACL read/write, retaining privacy rejection and owner/inheritance assertions. Bootstrap synthetic child uses process-only RemoteSigned, not Bypass or Set-ExecutionPolicy; assert unchanged MachinePolicy/UserPolicy/LocalMachine/CurrentUser values before/after all7scenarios.
+3. Run native suite and adjacent regressions in the dedicated physical checkout, synthetic canonical temporary root, record all failures without rewriting them. Do not remove redirect/hardlink/task checks. MSIX logical alias remains fail-closed; explicit physical checkout/state used by installed task and documented.
+4. Commit only scoped source/test/doc/evidence after independent QA; fast-forward push only existing PR474 branch after checking remote head. No merge/deploy or clinical changes.
+5. Use existing runBugReview structured schema and Read/Glob/Grep-only restricted CLI with personal Max config; no API fallback. Retain setupReview471 unchanged. Continue its one spent failed round in setupReview474 lineage, reserve total round2/4 before inference with remote CAS. Preserve all prior reports and interrupted attempts; no reset. Codex fixes concrete findings and commits a new SHA before another remaining Claude cycle.
+6. Recheck exact installed/pushed/reviewed SHA, task PT5M/last-result/next-run, private ACL/config and primary preservation. Post sanitized summary and SHA-bound Claude COMMENT review; leave open READY FOR FINAL VERIFICATION only when supported, otherwise explicit remaining findings/blocker.
