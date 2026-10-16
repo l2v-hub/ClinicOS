@@ -35,6 +35,11 @@
           "subject_sha": "47deacafca914a2051294b0a5999eb6268b31e86",
           "verdict": "changes-requested",
           "review_sha256": "38af29b1b86e7ccdb5b08f197fcd6599ea0a8eb45ffd6097eb01c47e6ac72ea4"
+        },
+        {
+          "round": 3,
+          "subject_sha": "093b8aedcf5ad902179bf03a04b11a73e6bb1d8f",
+          "verdict": "running"
         }
       ]
     },
@@ -46,6 +51,6 @@
       "ledgerSha256": "3a8d2f8369f27d91c0d406ba7486ee1e4dc8708c3ab10f7237cd1d78f5a23fd6",
       "spentRounds": 1
     },
-    "updatedAt": "2026-10-16T23:47:19.937Z"
+    "updatedAt": "2026-10-16T23:50:35.211Z"
   }
 }
