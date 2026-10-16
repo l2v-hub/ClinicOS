@@ -8,6 +8,7 @@ on:
     paths:
       - 'agent-team/**'
       - 'scripts/quality-gate/**'
+      - 'scripts/automation/**'
       - '.github/workflows/*bug*.yml'
   workflow_dispatch:
     inputs:

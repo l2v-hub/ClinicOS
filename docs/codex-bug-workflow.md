@@ -90,6 +90,23 @@ Il controller Actions usa `BUG_PIPELINE_REVIEW_MODE=external`: non installa Clau
 node agent-team/src/bug-pipeline/claude-review-cron.mjs
 ```
 
+Il cron è versionato in `scripts/automation/claude-review.crontab`. Per installarlo, dal checkout di questa PR sul Mac/Linux persistente dove Claude Code è già collegato a Max e `gh` è autenticato, basta:
+
+```bash
+node scripts/automation/install-claude-review-cron.mjs
+```
+
+L'installer controlla Node, Git, `gh`, `crontab`, permessi GitHub e login Pro/Max, senza chiamare un modello. Installa nel crontab dell'utente una sola voce ogni cinque minuti, preserva gli altri job e rilegge il risultato per verificarlo. Launcher e log privati restano fuori dal repository, sotto `~/.local/state/clinicos-claude-review/`. Usa percorsi assoluti e un lock locale; un lock lasciato da un'interruzione richiede ispezione, non viene cancellato automaticamente. Il computer deve restare acceso e connesso: il cron personale non gira quando è spento o in sospensione.
+
+```bash
+node scripts/automation/install-claude-review-cron.mjs --check
+node scripts/automation/install-claude-review-cron.mjs --remove
+```
+
+`--check` è di sola lettura: `installed=true` richiede voce esatta, delimitatori completi e launcher/log privati e validi. Prerequisiti disponibili senza voce installata non significano cron attivo. `--remove` elimina soltanto la voce di questo checkout e conserva file/log. Non viene installato un daemon permanente nel cloud temporaneo: qui mancano `crontab` e il login personale Max. La pianificazione GitHub ogni quindici minuti diventa attiva quando i workflow arrivano su `main`; quella personale ogni cinque minuti esegue Claude. Nessuna delle due prove sostituisce una review reale autenticata.
+
+Le issue aperte non entrano tutte automaticamente nella coda. Dopo l'attivazione su `main`, aggiungere `codex-run` oppure commentare `/codex fix` sulle issue scelte; il controller le classifica e può accorpare quelle simili. Le issue già `ready-for-qa` continuano il loro flusso e non vanno riavviate come nuove implementazioni. Per verificare la situazione corrente usare la dashboard e il registro, non il solo numero di issue aperte.
+
 Il comando processa al massimo una richiesta per esecuzione. Usa `gh` già autenticato con accesso write al repository e Claude Code già collegato a Pro/Max: il controllo `auth status` richiede `authMethod=claude.ai` e abbonamento `pro`/`max`. La configurazione è quella personale `.claude`, oppure il percorso assoluto `CLINICOS_CLAUDE_CONFIG_DIR`. Non genera, copia o richiede token; rimuove le chiavi API e i token OAuth dall’ambiente del modello. Un login diverso blocca la review senza ripiego API. Il task può essere richiamato ogni cinque minuti dal cron personale; il registro CAS impedisce due inferenze per lo stesso tentativo, anche fra cron sovrapposti.
 
 Il reviewer prepara un worktree temporaneo sul commit esatto, applica la skill di sola lettura e prenota il tentativo remoto **prima** della chiamata. Salva report e digest nel registro esistente e pubblica una review GitHub `COMMENT` legata al commit: non impersona approvazioni umane. Un POST fallito viene ripetuto senza una nuova inferenza. Per la PR di installazione471 riutilizza il registro `setupReview471`, incluso il primo tentativo fallito; non riparte da zero.

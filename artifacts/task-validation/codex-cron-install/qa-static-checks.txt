@@ -1,0 +1,6 @@
+Syntax PASS scripts/automation/install-claude-review-cron.mjs
+Syntax PASS agent-team/tests/bug-pipeline/cron-install.test.mjs
+YAML PASS .github/workflows/bug-pipeline-tests.yml
+Automation push path added; required PR check stays unconditional: PASS
+git diff --check: PASS
+Prettier check of all changed implementation/test/workflow/docs: PASS
