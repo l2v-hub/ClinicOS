@@ -1,0 +1,75 @@
+bug-pipeline-tests	Report integration configuration availability	﻿2026-10-16T07:15:10.8726826Z ##[group]Run node --input-type=module <<'JS'
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:10.8727446Z ^[[36;1mnode --input-type=module <<'JS'^[[0m
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:10.8728332Z ^[[36;1mconst names = ['OPENAI_API_KEY_CONFIGURED', 'ANTHROPIC_API_KEY_CONFIGURED', 'CLINICOS_BOT_TOKEN_CONFIGURED', 'VERCEL_TOKEN_CONFIGURED', 'VERCEL_PROJECT_CONFIGURED', 'RAILWAY_TOKEN_CONFIGURED', 'AUTO_RELEASE_ENABLED'];^[[0m
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:10.8729447Z ^[[36;1mconsole.log(JSON.stringify(Object.fromEntries(names.map(name => [name, process.env[name] === 'true']))));^[[0m
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:10.8729955Z ^[[36;1mJS^[[0m
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:11.1701796Z shell: /usr/bin/bash -e {0}
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:11.1702164Z env:
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:11.1702451Z   OPENAI_API_KEY_CONFIGURED: false
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:11.1703360Z   ANTHROPIC_API_KEY_CONFIGURED: false
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:11.1703812Z   CLINICOS_BOT_TOKEN_CONFIGURED: false
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:11.1704208Z   VERCEL_TOKEN_CONFIGURED: true
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:11.1704510Z   VERCEL_PROJECT_CONFIGURED: false
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:11.1704792Z   RAILWAY_TOKEN_CONFIGURED: true
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:11.1705110Z   AUTO_RELEASE_ENABLED: false
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:11.1705358Z ##[endgroup]
+bug-pipeline-tests	Report integration configuration availability	2026-10-16T07:15:11.2101281Z {"OPENAI_API_KEY_CONFIGURED":false,"ANTHROPIC_API_KEY_CONFIGURED":false,"CLINICOS_BOT_TOKEN_CONFIGURED":false,"VERCEL_TOKEN_CONFIGURED":true,"VERCEL_PROJECT_CONFIGURED":false,"RAILWAY_TOKEN_CONFIGURED":true,"AUTO_RELEASE_ENABLED":false}
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T07:15:13.8551091Z # tests 76
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T07:15:13.8551740Z # pass 76
+bug-pipeline-tests	Test queue, sessions, evidence, budgets and release guards	2026-10-16T07:15:13.8552054Z # fail 0
+bug-pipeline-tests	Verify actual isolated Codex sandbox	﻿2026-10-16T07:15:20.8130580Z ##[group]Run node --input-type=module <<'JS'
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8131191Z ^[[36;1mnode --input-type=module <<'JS'^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8131697Z ^[[36;1mimport assert from 'node:assert/strict';^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8132025Z ^[[36;1mimport path from 'node:path';^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8132349Z ^[[36;1mimport { spawnSync } from 'node:child_process';^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8132745Z ^[[36;1mimport { mkdtemp, readFile, rm } from 'node:fs/promises';^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8133614Z ^[[36;1mimport { createRunner, childEnvironment } from './agent-team/src/bug-pipeline/process.mjs';^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8134233Z ^[[36;1mconst runtimeRoot = path.join(process.env.RUNNER_TEMP, 'cli-readiness');^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8134691Z ^[[36;1mconst run = createRunner({ runtimeRoot });^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8135131Z ^[[36;1mconst directory = await mkdtemp(path.join(process.cwd(), '.cli-readiness-'));^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8135629Z ^[[36;1mconst marker = path.join(directory, 'executed.txt');^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8136283Z ^[[36;1mconst script = `require('node:fs').writeFileSync(${JSON.stringify(marker)}, 'sandbox-ready'); process.stdout.write('sandbox-ready');`;^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8137142Z ^[[36;1mconst args = ['sandbox', '--permission-profile', ':workspace', '--cd', process.cwd(), '--', 'node', '-e', script];^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8137660Z ^[[36;1mconst result = await run({^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8137930Z ^[[36;1m  command: 'codex',^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8138160Z ^[[36;1m  args,^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8138370Z ^[[36;1m  cwd: process.cwd(),^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8138620Z ^[[36;1m  envMode: 'verification',^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8138864Z ^[[36;1m});^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8139544Z ^[[36;1mconst direct = spawnSync(process.env.CODEX_CLI_PATH, args, { cwd: process.cwd(), env: childEnvironment('verification', process.env, runtimeRoot), encoding: 'utf8', timeout: 30000 });^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8140702Z ^[[36;1mconsole.log(JSON.stringify({ isolatedRunner: result, directCli: { code: direct.status, stdout: direct.stdout, stderr: direct.stderr, error: direct.error?.code } }));^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8141490Z ^[[36;1massert.equal(result.ok, true, result.stderr || result.error);^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8141909Z ^[[36;1massert.equal(result.stdout, 'sandbox-ready');^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8142264Z ^[[36;1massert.equal(direct.status, 0, direct.stderr);^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8142615Z ^[[36;1massert.equal(direct.stdout, 'sandbox-ready');^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8143165Z ^[[36;1massert.equal(await readFile(marker, 'utf8'), 'sandbox-ready');^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8143569Z ^[[36;1mawait rm(directory, { recursive: true });^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8143918Z ^[[36;1mconsole.log('Real isolated Codex sandbox: PASS');^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8144224Z ^[[36;1mJS^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8214024Z shell: /usr/bin/bash -e {0}
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8214277Z env:
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8214637Z   CODEX_CLI_PATH: /home/runner/work/_temp/bug-pipeline-tools/node_modules/.bin/codex
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:20.8215073Z ##[endgroup]
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0766109Z {"isolatedRunner":{"ok":true,"code":0,"error":null,"stdout":"","stderr":""},"directCli":{"code":0,"stdout":"","stderr":""}}
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0778880Z node:internal/modules/run_main:123
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0779534Z     triggerUncaughtException(
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0779992Z     ^
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0780184Z
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0780705Z AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0781500Z + actual - expected
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0781726Z
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0781876Z + ''
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0782259Z - 'sandbox-ready'
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0782495Z
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0783020Z     at file:///home/runner/work/ClinicOS/ClinicOS/[eval1]:21:8
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0783727Z     at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0784200Z   generatedMessage: true,
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0784626Z   code: 'ERR_ASSERTION',
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0785206Z   actual: '',
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0785445Z   expected: 'sandbox-ready',
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0785927Z   operator: 'strictEqual',
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0786164Z   diff: 'simple'
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0786377Z }
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0786489Z
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0786584Z Node.js v22.23.3
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:15:21.0828492Z ##[error]Process completed with exit code 1.

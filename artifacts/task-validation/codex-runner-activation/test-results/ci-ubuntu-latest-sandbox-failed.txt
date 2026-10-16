@@ -1,0 +1,41 @@
+bug-pipeline-tests	Verify actual isolated Codex sandbox	﻿2026-10-16T07:07:14.4159597Z ##[group]Run node --input-type=module <<'JS'
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4160360Z ^[[36;1mnode --input-type=module <<'JS'^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4161012Z ^[[36;1mimport assert from 'node:assert/strict';^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4161705Z ^[[36;1mimport path from 'node:path';^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4162590Z ^[[36;1mimport { createRunner } from './agent-team/src/bug-pipeline/process.mjs';^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4163971Z ^[[36;1mconst run = createRunner({ runtimeRoot: path.join(process.env.RUNNER_TEMP, 'cli-readiness') });^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4164959Z ^[[36;1mconst result = await run({^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4165392Z ^[[36;1m  command: 'codex',^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4166345Z ^[[36;1m  args: ['sandbox', '--permission-profile', ':workspace', '--cd', process.cwd(), '--', 'node', '-e', 'process.stdout.write("sandbox-ready")'],^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4167341Z ^[[36;1m  cwd: process.cwd(),^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4167759Z ^[[36;1m  envMode: 'verification',^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4168182Z ^[[36;1m});^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4168943Z ^[[36;1massert.equal(result.ok, true, result.stderr || result.error);^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4169666Z ^[[36;1massert.equal(result.stdout, 'sandbox-ready');^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4170306Z ^[[36;1mconsole.log('Real isolated Codex sandbox: PASS');^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4170837Z ^[[36;1mJS^[[0m
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4237131Z shell: /usr/bin/bash -e {0}
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4237418Z env:
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4237791Z   CODEX_CLI_PATH: /home/runner/work/_temp/bug-pipeline-tools/node_modules/.bin/codex
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.4238697Z ##[endgroup]
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5642671Z node:internal/modules/run_main:123
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5643516Z     triggerUncaughtException(
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5644106Z     ^
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5644349Z
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5645332Z AssertionError [ERR_ASSERTION]: bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5646091Z
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5646103Z
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5646309Z false !== true
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5646519Z
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5646874Z     at file:///home/runner/work/ClinicOS/ClinicOS/[eval1]:11:8
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5647855Z     at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5648818Z   generatedMessage: false,
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5649179Z   code: 'ERR_ASSERTION',
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5649428Z   actual: false,
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5649644Z   expected: true,
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5649864Z   operator: 'strictEqual',
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5650129Z   diff: 'simple'
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5650334Z }
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5650451Z
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5650543Z Node.js v22.23.3
+bug-pipeline-tests	Verify actual isolated Codex sandbox	2026-10-16T07:07:14.5689743Z ##[error]Process completed with exit code 1.

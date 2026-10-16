@@ -1,0 +1,20 @@
+import {test,expect} from 'playwright/test';
+import {readFile} from 'node:fs/promises';
+test('actual pipeline test results and operational limitations survive reload',async({page})=>{
+ const errors=[],httpFailures=[];
+ page.on('console',msg=>{if(msg.type()==='error')errors.push(msg.text());});
+ page.on('pageerror',error=>errors.push(error.message));
+ page.on('response',response=>{if(response.status()>=400)httpFailures.push(response.status());});
+ const output=await readFile(new URL('test-results/qa-node-suite.txt',import.meta.url),'utf8');
+ const count=output.match(/ℹ pass (\d+)/)?.[1];expect(Number(count)).toBeGreaterThanOrEqual(76);
+ const response=await page.goto('/');expect(response.ok()).toBe(true);
+ await expect(page.locator('#passed')).toBeVisible();await expect(page.locator('#passed')).toHaveText(count);
+ await expect(page.locator('#failed')).toHaveText('0');
+ await expect(page.getByText(/fresh CLI configuration directories are private and survive repeated isolated launches/)).toBeVisible();
+ await expect(page.getByText(/createRunner subprocess receives only the role credential/)).toBeVisible();
+ await expect(page.getByText(/createRunner reports child exit failure and output overflow as failures/)).toBeVisible();
+ await expect(page.locator('#operational')).toHaveText(/Attivazione live BLOCCATA/);
+ await page.reload();await expect(page.locator('#passed')).toHaveText(count);await expect(page.locator('#failed')).toHaveText('0');
+ expect(errors).toEqual([]);expect(httpFailures).toEqual([]);
+ await page.screenshot({path:new URL('result.png',import.meta.url).pathname,fullPage:true});
+});

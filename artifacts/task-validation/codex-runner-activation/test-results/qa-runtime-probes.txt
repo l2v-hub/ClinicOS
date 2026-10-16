@@ -1,0 +1,10 @@
+✔ first child sees private config roots and its role credential only (203.773118ms)
+✔ existing configuration content survives failed and successful launches (76.457479ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 423.967262
