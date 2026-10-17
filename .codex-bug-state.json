@@ -565,7 +565,8 @@
         },
         {
           "round": 2,
-          "status": "running"
+          "status": "running",
+          "runtimeVerificationNote": "Only runner oracle/navigation, default hosted Chromium/cache and complete47source receipt corrected before finalQA; application46source unchanged."
         }
       ],
       "reviews": [],
@@ -578,7 +579,9 @@
         "scope-amendment-1.md": "d182cb2d560b07d197512a9e6e6df7b6c08f71e2771e56ee9492ea4b7d260d21",
         "scope-amendment-2.md": "bd85e3596ab948d4cdad46e3d47cd3d478ab22021414679159f8100dd02d80c1",
         "scope-amendment-3.md": "68ec40674d1676f5345ca4baf23d834d41976c72bea88da0da9a4636ea6bcd72",
-        "cycle-2-correction.md": "20561d66fa9cc8f6f7ce1564fedf6858d39b4fcf10453ee08815b5a35d40ba98"
+        "cycle-2-correction.md": "20561d66fa9cc8f6f7ce1564fedf6858d39b4fcf10453ee08815b5a35d40ba98",
+        "runtime-source-scope.json": "18f67d8e8f5af157d6fc7218a998bb808d34379404c013cb72d251a6f33fd24a",
+        "cycle-2-runtime-verification-amendment.md": "bf3be25c87ff2079f4e8dbc5d39d80c1756c3b69e5637337a5e5e2fe9b25f525"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -2084,5 +2087,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-17T09:23:28.069Z"
+  "updatedAt": "2026-10-17T09:40:00.831Z"
 }
