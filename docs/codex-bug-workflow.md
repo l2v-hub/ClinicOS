@@ -148,3 +148,30 @@ node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude
 ```
 
 Il doctor verifica CLI, autenticazione, sandbox e presenza degli ID modello senza chiamate ai modelli. L'esecuzione locale richiede `--run` esplicito. Non dichiarare attivo il flusso solo perché i test con adapter simulati passano: servono workflow sul branch predefinito, credenziali utilizzabili e una prova reale autorizzata.
+
+## Handoff esplicito Claude locale → Codex tramite GitHub
+
+Il canale `github-comments` usa la stessa proprietà/budget del controller. `claude-review-ready`
+compare sia sulla PR sia sulle issue sorgenti dopo implementazione, qualità, semplificazione,
+prove e check. Il CLI fidato `agent-team/src/bug-pipeline/review-handoff-cli.mjs` offre
+`status`, `request`, `claim`, `submit`, `reconcile` con `--pr N`. `claim` riserva il round con CAS
+prima della review; `submit --report <file>` pubblica un report strutturato autenticato con
+SHA, requestId, claimId e round. Il controller valida autore, sorgenti tracked, prove di registro,
+PR/issue attuali e schema prima di accettarlo. Commenti e label senza tale prova non approvano.
+
+Stati distinti `comment-requested`/`comment-running` impediscono al vecchio cron di consumare
+questo canale. Durante la review la label è `claude-reviewing`; dopo pubblicazione durevole del
+report diventa `codex-review-ready`, rimuovendo le altre label di handoff e preservando quelle
+estranee. Codex corregge e ripete i controlli sui rilievi; su approvazione esegue una QA indipendente
+prima della readiness al rilascio. Le protezioni e il gate di deploy restano obbligatori.
+
+La richiesta esplicita dell'utente consente il recupero infrastrutturale iniziale con
+`request --pr N --recover-failed`: conserva il tentativo fallito e riserva il successivo, anche
+sullo stesso SHA quando nessuna review sostanziale è stata prodotta. Non è un reset o retry
+automatico; dopo un finding o al limite di quattro serve il normale percorso previsto.
+Il CLI non esegue modelli, non mergea e non distribuisce; il controller di rilascio è l'unico
+proprietario di merge/deploy/chiusura. Snapshot tra risorse GitHub e CAS del ledger non sono
+una transazione atomica con la PR; le verifiche ripetute riducono finestre di concorrenza senza
+promettere atomicità del provider.
+
+Prompt completo da dare a Claude Max sul PC: [claude-local-review-prompt.md](claude-local-review-prompt.md).

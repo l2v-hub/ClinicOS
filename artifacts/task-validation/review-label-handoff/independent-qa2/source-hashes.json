@@ -1,0 +1,17 @@
+{
+  ".agents/skills/codex-bug-triage/SKILL.md": "2219a22b298dfba0d28eb34b558a13c40fa769729073051cb57d9ebae807d1ea",
+  ".claude/skills/clinicos/references/bug-delivery.md": "7e81198c2c354bdca277667b1c4949f06ffc438db74834ad9402f5bef2498683",
+  "agent-team/src/bug-pipeline/dashboard.mjs": "1e2802d97ffceb2f14ccf222d262ca85f06ab1cd2fc1ec423f68d820113b07ae",
+  "agent-team/src/bug-pipeline/external-review.mjs": "beae109efa0f4f4b62e51c4f3974bf3165411e2d0d8e757063b2463e169f1364",
+  "agent-team/src/bug-pipeline/issue-review-communication.mjs": "abd03086220b27de9ad6d82d886d0ed8b78fbaab935c42a8e1ff0b6b96c13593",
+  "agent-team/src/bug-pipeline/pipeline.mjs": "d687f193efc3d1eb9249c0e2cf227c11f2bf8b83ef8323bd979fb1bc20bf83be",
+  "agent-team/src/bug-pipeline/workspace.mjs": "5076bb2309be0b0e134361aaed720ec775d76f1605621214b1a034fb67ccaaba",
+  "agent-team/tests/bug-pipeline/external-review.test.mjs": "8e5f3249be8cb8c4d2f3c398b10bd38c863ad24c8b9ce14676379fba921c5379",
+  "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs": "f5d1df1b1819e33eb0e1c3653b141be3cac42697e836816b29753d71cd5cec9a",
+  "agent-team/tests/bug-pipeline/workspace.test.mjs": "343f51decbe9817c53d9f9e01466eb9189fd2bd8f7064e923679dcffb62d5a62",
+  "docs/codex-bug-workflow.md": "ee2729b2050fe2825c43431b17033eabf44c13de9fdcd3f779cff0c01700f536",
+  "agent-team/src/bug-pipeline/comment-review-handoff.mjs": "331980f15bfd7ec5638fadc59558327519d0ecce79496045c192456320c1e941",
+  "agent-team/src/bug-pipeline/review-handoff-cli.mjs": "21865869f3159cba0afe2e8ff55ca37371610ec985b84aadbfb9cb265583922a",
+  "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs": "0af8be57342640980b9932bc79db1f3a9957046e9def19b61d54c95df03d1034",
+  "docs/claude-local-review-prompt.md": "0206d3e1c38dcc3fb559c65c8713b875a0d0d9a40cf9a1f9764d19683174f07e"
+}

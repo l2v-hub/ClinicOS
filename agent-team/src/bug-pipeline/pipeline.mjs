@@ -52,10 +52,10 @@ export async function runPipeline({
     repo,
   );
   let persistenceFailed = false;
-  const save = async () => {
+  const save = async (options) => {
     try {
       state.updatedAt = new Date().toISOString();
-      return await store.save(state);
+      return await store.save(state, options);
     } catch (error) {
       persistenceFailed = true;
       throw error;

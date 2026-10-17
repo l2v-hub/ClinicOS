@@ -1,0 +1,22 @@
+Preparing worktree (new branch 'codex/bug-batch-17')
+{"probe":"actual-workspace-post-approval-qa","qa":"changes-requested","dirty":"M artifacts/task-validation/bug-batch-17/codex-independent-qa.md","error":"occupied worktree is not the clean expected batch"}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: A Codex finding must be correctable through the actual workspace, not deadlock on its own QA report
++ actual - expected
+
++ 'occupied worktree is not the clean expected batch'
+- undefined
+
+    at file:///workspace/clinicos-review-handoff/artifacts/task-validation/review-label-handoff/independent-qa2/F2-historical-path-red.mjs:29:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'occupied worktree is not the clean expected batch',
+  expected: undefined,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

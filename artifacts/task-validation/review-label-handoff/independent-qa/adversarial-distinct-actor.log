@@ -1,0 +1,19 @@
+{"probe":"different-publishing-controller","status":"published","feedbackChanged":true,"reviews":1}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Controller request by another authorized actor is protocol, not a code correction
+
+true !== false
+
+    at file:///workspace/clinicos-review-handoff/artifacts/task-validation/review-label-handoff/independent-qa/qa-fixture.mjs:239:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: true,
+  expected: false,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

@@ -638,3 +638,43 @@ test('trusted browser installation, controller and native sandbox service proof 
     /ignoreHTTPSErrors|ignore-certificate|disable-web-security|--no-sandbox/,
   );
 });
+
+test('post-Claude independent final QA leaves a real reviewed worktree clean for a correction', async (t) => {
+  const { root } = await gitFixture(t);
+  const batch = {
+    id: 'bug-batch-17',
+    branch: 'codex/bug-batch-17',
+    issues: [17],
+    plan: implementationPlan([17]),
+    implementation: [],
+    reviews: [],
+    sha: null,
+  };
+  const workspace = createWorkspace({
+    root,
+    repo: 'l2v-hub/ClinicOS',
+    run: safeGitRunner,
+    models: {
+      qa: async () => ({
+        status: 'blocked',
+        summary: 'A real independent finding requires correction.',
+      }),
+    },
+  });
+  await workspace.prepare(batch);
+  const cwd = path.join(root, 'agent-team/.worktrees', batch.id);
+  const packet = path.join('artifacts/task-validation', batch.id);
+  await writeFile(
+    path.join(cwd, packet, 'codex-independent-qa.md'),
+    'Existing immutable reviewed evidence\n',
+  );
+  await git(cwd, 'add', packet);
+  await git(cwd, 'commit', '-m', 'Freeze reviewed fixture and evidence');
+  batch.sha = (await git(cwd, 'rev-parse', 'HEAD')).trim();
+  const before = await readFile(path.join(cwd, packet, 'codex-independent-qa.md'), 'utf8');
+  assert.equal((await workspace.finalQa(batch)).status, 'blocked');
+  assert.equal(await readFile(path.join(cwd, packet, 'codex-independent-qa.md'), 'utf8'), before);
+  assert.equal((await git(cwd, 'status', '--porcelain')).trim(), '');
+  await workspace.prepare(batch);
+  assert.equal((await git(cwd, 'rev-parse', 'HEAD')).trim(), batch.sha);
+});

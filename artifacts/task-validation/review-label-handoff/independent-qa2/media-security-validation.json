@@ -1,0 +1,93 @@
+{
+  "status": "PASS",
+  "files": [
+    {
+      "file": "01-codex-review-ready.png",
+      "type": "PNG",
+      "width": 1365,
+      "height": 1796
+    },
+    {
+      "file": "02-independent-codex-approved.png",
+      "type": "PNG",
+      "width": 1365,
+      "height": 1910
+    },
+    {
+      "file": "03-correction-new-sha.png",
+      "type": "PNG",
+      "width": 1365,
+      "height": 2024
+    },
+    {
+      "file": "first-pass/01-codex-review-ready.png",
+      "type": "PNG",
+      "width": 1365,
+      "height": 5069
+    },
+    {
+      "file": "first-pass/02-independent-codex-approved.png",
+      "type": "PNG",
+      "width": 1365,
+      "height": 2485
+    },
+    {
+      "file": "first-pass/03-correction-new-sha.png",
+      "type": "PNG",
+      "width": 1365,
+      "height": 2618
+    },
+    {
+      "file": "first-pass/trace.zip",
+      "type": "ZIP",
+      "members": 32,
+      "CRC": "PASS"
+    },
+    {
+      "file": "first-pass/video/page@d0e08d110ea299f2ff0a4350292dc264.webm",
+      "type": "video",
+      "fullDecode": "PASS",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1364,
+            "height": 1000
+          }
+        ],
+        "format": {
+          "duration": "5.760000"
+        }
+      }
+    },
+    {
+      "file": "trace.zip",
+      "type": "ZIP",
+      "members": 32,
+      "CRC": "PASS"
+    },
+    {
+      "file": "video/page@ea65b408529a76a6f2cbef34da2c0967.webm",
+      "type": "video",
+      "fullDecode": "PASS",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1364,
+            "height": 1000
+          }
+        ],
+        "format": {
+          "duration": "4.400000"
+        }
+      }
+    }
+  ],
+  "zipSecretMatches": [],
+  "syntheticOnly": true
+}
