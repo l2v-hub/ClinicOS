@@ -15,7 +15,7 @@
       "sourceSha": "29b2f5c9b72b4d909b954d5360ec08095825f29e",
       "branch": "codex/bug-batch-450",
       "owner": "codex-root-2026-10-17",
-      "phase": "waiting-review",
+      "phase": "reviewing",
       "reservedAt": "2026-10-17T07:38:22.669Z",
       "implementation": [
         {
@@ -31,7 +31,13 @@
           "sha": "111e672faf77b45280d8ef6ebb15268180b58376"
         }
       ],
-      "reviews": [],
+      "reviews": [
+        {
+          "round": 1,
+          "status": "running",
+          "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376"
+        }
+      ],
       "expandedAt": "2026-10-17T07:44:43.114Z",
       "packetHashes": {
         "task-contract.md": "d705047ea54d51d74019cfb417efce9cd28ef78592a514fbb957c2f45574a0a9",
@@ -636,10 +642,21 @@
         "createdAt": "2026-10-17T10:12:22.908Z"
       },
       "externalReview": {
-        "status": "requested",
+        "status": "running",
         "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
-        "requestedAt": "2026-10-17T10:27:26.673Z",
-        "feedbackFingerprint": "52fda3caae5852e9675b616f819f7b4ba3d5888b50f4c3f56c11fce42e0b56d3"
+        "feedbackFingerprint": "52fda3caae5852e9675b616f819f7b4ba3d5888b50f4c3f56c11fce42e0b56d3",
+        "startedAt": "2026-10-17T10:43:45.038Z"
+      },
+      "reviewLedger": {
+        "schema_version": 1,
+        "max_rounds": 4,
+        "rounds": [
+          {
+            "round": 1,
+            "subject_sha": "111e672faf77b45280d8ef6ebb15268180b58376",
+            "verdict": "running"
+          }
+        ]
       }
     },
     {
@@ -3826,5 +3843,5 @@
       }
     }
   ],
-  "updatedAt": "2026-10-17T10:41:38.174Z"
+  "updatedAt": "2026-10-17T10:43:45.039Z"
 }
