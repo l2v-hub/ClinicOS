@@ -1865,6 +1865,11 @@
         },
         {
           "round": 2,
+          "status": "failed",
+          "reason": "Independent QA2 reproduced hold races before publication/inside actual label-close adapter and false issue-closed claim on API503."
+        },
+        {
+          "round": 3,
           "status": "running"
         }
       ],
@@ -1878,9 +1883,17 @@
             "agent-team/tests/bug-pipeline/repository-settings.test.mjs"
           ],
           "reason": "User authorized full mandatory CI settings; preserve prior protections"
+        },
+        {
+          "cycle": 3,
+          "files": [
+            "agent-team/src/bug-pipeline/github.mjs",
+            "agent-team/tests/bug-pipeline/github.test.mjs"
+          ],
+          "reason": "Guard actual issue API mutation boundaries and publish truthful release facts"
         }
       ]
     }
   ],
-  "updatedAt": "2026-10-17T08:37:42.844Z"
+  "updatedAt": "2026-10-17T08:45:49.141Z"
 }
