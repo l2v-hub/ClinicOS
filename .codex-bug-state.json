@@ -694,17 +694,19 @@
         "createdAt": "2026-10-17T10:12:22.908Z"
       },
       "externalReview": {
-        "status": "finished",
+        "status": "published",
         "channel": "github-comments",
         "requestId": "2570afcb-36d9-4130-91df-972e48d38efb",
         "subjectSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
         "requestedAt": "2026-10-17T21:16:51.714Z",
-        "feedbackFingerprint": "fa9ee5ea7612b8aef551a4b09d2bb822ba08a4afea5584a133e2341230037292",
+        "feedbackFingerprint": "4f2bd7172b9ceb3fb931590334dde2d452240b67e179135299e5f32cd86614f1",
         "owner": "l2v-hub",
         "claimId": "30f770d6-bb06-441c-8d97-8d9b249b332a",
         "startedAt": "2026-10-17T21:18:11.348Z",
         "reportComment": 6241433252,
-        "reportBodySha256": "c7dafa98ce7a8350278a0e6457ae0280ed6e39e30825c3be25ea90d5b1b30b66"
+        "reportBodySha256": "c7dafa98ce7a8350278a0e6457ae0280ed6e39e30825c3be25ea90d5b1b30b66",
+        "completedAt": "2026-10-17T21:33:15.435Z",
+        "feedbackChanged": false
       },
       "reviewLedger": {
         "schema_version": 1,
@@ -7061,7 +7063,7 @@
       }
     }
   ],
-  "updatedAt": "2026-10-17T21:32:41.916Z",
+  "updatedAt": "2026-10-17T21:33:15.435Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
