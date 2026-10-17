@@ -4526,7 +4526,7 @@
     {
       "id": "standalone-pr-review-adapter",
       "issues": [],
-      "phase": "implementing",
+      "phase": "waiting-checks",
       "branch": "codex/standalone-pr-review",
       "implementation": [
         {
@@ -4573,21 +4573,38 @@
         },
         {
           "round": 4,
-          "status": "running",
+          "status": "passed",
           "reservedAt": "2026-10-17T17:28:09.765020+00:00",
           "recordedAt": "2026-10-17T17:32:45.005Z",
           "reservedBeforeSourceEdits": true,
           "owner": "standalone_review_adapter",
           "localReservationSha256": "f5c4f7f425d62464f7a0fedc46f39ed6d3a2f7882d37210c558d24b9bb51f5cf",
           "reason": "Only proven F5 pre-inference report/result capacity reservation and F6 guarded disjoint-subject state rebase, preserving strict default CAS and all prior failures. Add sanitized known error codes for future controller diagnosis.",
-          "registrationNote": "Actual local wx reservation preceded source edits; GitHub registration delayed until clinical controller39053232445 completed to preserve its strict-CAS result."
+          "registrationNote": "Actual local wx reservation preceded source edits; GitHub registration delayed until clinical controller39053232445 completed to preserve its strict-CAS result.",
+          "subjectSha": "e16e2fac1eca82cc6c429db5d555635a94cb0717",
+          "uncommitted": false,
+          "evidence": "validation-report.md",
+          "finishedAt": "2026-10-17T17:56:37.322617+00:00",
+          "sourceManifestSha256": "d88c088fe9a38d16c9c89d4e7263643a878a779ae98c558e6b74da4693d10a08",
+          "independentQaReportSha256": "a7d735bef083eb32f23de1ca210c3ec0bbba588c3346b253c5d1cba07893a8da",
+          "independentQaSealSha256": "46b0cc05f3642171b6cff88e0aa0f70d034f429542f6c7aaf1531d8d3617748b"
         }
       ],
       "reviews": [],
-      "maxImplementationAttempts": 4
+      "maxImplementationAttempts": 4,
+      "publication": {
+        "prNumber": 492,
+        "url": "https://github.com/l2v-hub/ClinicOS/pull/492",
+        "testedSha": "e16e2fac1eca82cc6c429db5d555635a94cb0717",
+        "publishedSha": "fcabd40713ad355c944d7aff3fcfa7852dce01e9",
+        "checks": "pending",
+        "actualClaudeApproval": false,
+        "actualFinalCodexModelQa": false
+      },
+      "reason": "Independent QA4 passed; actual native checks, Max bootstrap review and separate supported-runtime final Codex QA remain required."
     }
   ],
-  "updatedAt": "2026-10-17T17:50:10.529Z",
+  "updatedAt": "2026-10-17T17:57:56.881Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
