@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { PatientIdentity } from '../../shared/PatientIdentity';
 import { PatientRoster } from '../PatientRoster';
 import { OperatorAgenda } from '../OperatorAgenda';
+import { TherapySlotModal } from '../TherapySlotModal';
 import type { Paziente, TherapySlot } from '../../../types';
 import { setSessionCapabilities } from '../../../lib/capabilities';
 Object.assign(globalThis, { React });
@@ -30,9 +31,10 @@ test('patient roster leads with bed, hides globally empty optional columns and a
   const html = renderToStaticMarkup(
     React.createElement(PatientRoster, {
       patients: [patient],
+      completionPatients: [patient],
       sort: { field: 'patient', direction: 'asc' },
       onSortChange: () => {},
-      hasMore: false,
+      hasMore: true,
       loading: false,
       summaryMap: new Map(),
       consegneAperteMap: new Map(),
@@ -52,6 +54,12 @@ test('patient roster leads with bed, hides globally empty optional columns and a
   assert.match(html, /<th scope="col"[^>]*>Letto<\/th>/);
   assert.doesNotMatch(html, /<th[^>]*>NEWS2<\/th>|>Regime<\/button>/);
   assert.equal((html.match(/pazienti hanno l’anagrafica incompleta/g) ?? []).length, 1);
+  assert.equal((html.match(/class="patient-list-incomplete"/g) ?? []).length, 1);
+  assert.match(html, /<details class="patient-list-incomplete"><summary>1 pazienti/);
+  assert.match(html, /tra 1 caricati, elenco parziale/);
+  assert.match(html, /Completa anagrafica · Identity/);
+  assert.ok(html.indexOf('patient-list-incomplete') > html.indexOf('patient-card-grid'));
+  assert.doesNotMatch(html, /<details[^>]+open/);
   setSessionCapabilities(null);
 });
 
@@ -85,7 +93,7 @@ test('roster keeps the NEWS2 column and a single loading status until absence ha
 });
 
 test('agenda without appointments retains morning and evening pending therapy doses while omitting empty half-hour slots', () => {
-  setSessionCapabilities({});
+  setSessionCapabilities({ 'administration.list_slots': { allowed: true, effect: 'ALLOWED' } });
   const therapySlot = (ora: string, fascia: 'mattina' | 'sera'): TherapySlot => ({
     id: fascia,
     ora,
@@ -134,7 +142,97 @@ test('agenda without appointments retains morning and evening pending therapy do
     assert.equal((html.match(/data-testid="therapy-dose-list"/g) ?? []).length, 2);
     assert.doesNotMatch(html, /class="agt-slot(?: |")|agt-free-slot|Crea appuntamento alle/);
     assert.match(html, /Nessun appuntamento in questa giornata/);
+    const props = {
+      operatoreId: 'op1',
+      nomeOperatore: 'Operatore QA',
+      operatori: [],
+      appuntamenti: [],
+      onAddAppuntamento: async () => null,
+      therapySlots: [therapySlot('08:00', 'mattina')],
+      onLoadTherapySlots: () => {},
+    };
+    const stale = renderToStaticMarkup(
+      React.createElement(OperatorAgenda, { ...props, therapyDate: '2000-01-01' }),
+    );
+    assert.doesNotMatch(stale, /Farmaco mattina|1 da erogare/);
+    assert.match(stale, /Caricamento terapie/);
+    const failed = renderToStaticMarkup(
+      React.createElement(OperatorAgenda, {
+        ...props,
+        therapyLoadError: 'Sorgente non disponibile',
+      }),
+    );
+    assert.doesNotMatch(failed, /Farmaco mattina|1 da erogare/);
+    assert.match(failed, /Sorgente non disponibile|Riprova terapie/);
+    setSessionCapabilities({});
+    const denied = renderToStaticMarkup(React.createElement(OperatorAgenda, props));
+    assert.doesNotMatch(denied, /Farmaco mattina|1 da erogare|Caricamento terapie/);
   } finally {
     setSessionCapabilities(null);
   }
+});
+
+test('slot modal retains pause, explicit absence, glucose protocol, completed history and other patients', () => {
+  const dose = (name: string, extra = {}) => ({
+    administrationId: null,
+    therapyId: name,
+    drugName: name,
+    dosage: '1 mg',
+    route: 'orale',
+    scheduledTime: '08:00',
+    status: 'pending',
+    administeredAt: null,
+    administeredBy: null,
+    notAdministeredReason: null,
+    ...extra,
+  });
+  const slot = {
+    id: 'pause-test',
+    ora: '08:00',
+    fascia: 'mattina',
+    label: 'Mattina',
+    summary: { total: 4, pending: 3, administered: 1, notAdministered: 0 },
+    patients: [
+      {
+        patientId: 'paused',
+        firstName: 'Paused',
+        lastName: 'Synthetic',
+        temporaryPsExit: { exitId: 'exit1', decision: 'pause', departedAt: '2026-10-17T08:00:00Z' },
+        administrations: [
+          dose('Paused ordinary'),
+          dose('Paused glucose', { doseMode: 'glucose_scale' }),
+          dose('Recorded medicine', { status: 'administered', administeredBy: 'Actual nurse' }),
+        ],
+      },
+      {
+        patientId: 'other',
+        firstName: 'Other',
+        lastName: 'Synthetic',
+        administrations: [dose('Other ordinary')],
+      },
+    ],
+  } as TherapySlot;
+  const html = renderToStaticMarkup(
+    React.createElement(TherapySlotModal, {
+      slot,
+      date: '2026-10-17',
+      onClose: () => {},
+      onConfirm: () => {},
+      onNotAdministered: () => {},
+    }),
+  );
+  assert.match(html, /Somministrazioni in pausa per uscita PS/);
+  assert.match(html, /<button[^>]+aria-label="Erogata:[^"]+Paused ordinary[^"]*"[^>]+disabled/);
+  assert.match(html, /<fieldset disabled=""[^>]+aria-label="Somministrazione secondo glicemia:/);
+  assert.match(html, /Visualizza schema prescritto/);
+  assert.match(html, /<button[^>]+aria-label="Non erogata:[^"]+Paused ordinary[^"]*"[^>]*>/);
+  assert.doesNotMatch(
+    html,
+    /<button[^>]+aria-label="Non erogata:[^"]+Paused ordinary[^"]*"[^>]+disabled/,
+  );
+  assert.doesNotMatch(
+    html,
+    /<button[^>]+aria-label="Erogata:[^"]+Other ordinary[^"]*"[^>]+disabled/,
+  );
+  assert.match(html, /Recorded medicine[\s\S]*Actual nurse/);
 });

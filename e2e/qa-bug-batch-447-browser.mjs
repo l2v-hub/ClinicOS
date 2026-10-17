@@ -43,6 +43,7 @@ function sourceFingerprint() {
   for (const filename of [
     'e2e/qa-bug-batch-447-browser.mjs',
     'e2e/qa-bug-batch-447.mjs',
+    'scripts/e2e/issue-450-ingresso.mjs',
     'artifacts/task-validation/bug-batch-447/trace-privacy/redact-traces.py',
   ])
     hash.update(filename).update('\0').update(readFileSync(filename)).update('\0');
@@ -576,7 +577,7 @@ async function scenario(issue, role, route, execute) {
       issue,
       status: 'FAILED',
       message: String(error.message).slice(0, 1400),
-      stack: error.stack?.split('\n').slice(0, 6),
+      stack: error.stack?.split('\n').slice(0, 12),
       errors: state?.errors ?? [],
     });
     console.error(`Issue ${issue}: ${String(error.message).slice(0, 350)}`);
@@ -1371,6 +1372,59 @@ try {
         fullPage: true,
       });
       await page.getByRole('button', { name: 'Nuovo appuntamento', exact: true }).waitFor();
+      await page
+        .locator('.agt-day-wrap')
+        .getByRole('button', { name: /ore 08:00.*da erogare/ })
+        .click();
+      const agendaDose = page.locator('.therapy-modal').getByRole('button', {
+        name: /^Erogata:.*QA D Agenda452.*QA Agenda pending452.*08:00/,
+      });
+      await agendaDose.click();
+      await eventually(
+        async () =>
+          assert.equal(
+            await prisma.medicationAdministration.count({
+              where: {
+                patientId: agendaPatient.id,
+                therapyId: agendaTherapy.id,
+                ora: '08:00',
+                stato: 'erogata',
+              },
+            }),
+            1,
+          ),
+        'Actual agenda action persists the exact patient and scheduled dose once',
+      );
+      await page
+        .locator('.therapy-modal')
+        .getByRole('button', { name: 'Chiudi', exact: true })
+        .last()
+        .click();
+      await reloadAuthenticated(state, 'agenda-operatore');
+      await text(page.locator('.agt-day-wrap'), /QA Agenda pending452/);
+      assert.equal(
+        await prisma.medicationAdministration.count({ where: { therapyId: agendaTherapy.id } }),
+        1,
+      );
+      const agendaErrorPath = '/therapy-slots/page';
+      state.fault = { path: agendaErrorPath, status: 503, method: 'GET' };
+      const failAgenda = async (route) =>
+        route.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          body: JSON.stringify({ error: 'QA deliberate agenda therapy source failure' }),
+        });
+      await page.route(`${api}${agendaErrorPath}**`, failAgenda);
+      await reloadAuthenticated(state, 'agenda-operatore');
+      await page.getByRole('button', { name: 'Riprova terapie', exact: true }).waitFor();
+      await count(page.locator('.agt-day-wrap .tdose'), 0);
+      await page.unroute(`${api}${agendaErrorPath}**`, failAgenda);
+      state.fault = null;
+      await page.getByRole('button', { name: 'Riprova terapie', exact: true }).click();
+      await text(page.locator('.agt-day-wrap'), /QA Agenda pending452/);
+      await page.getByRole('button', { name: 'Intervallo successivo', exact: true }).click();
+      await page.getByRole('button', { name: 'Intervallo precedente', exact: true }).click();
+      await text(page.locator('.agt-day-wrap'), /QA Agenda pending452/);
 
       // The only complete observation is beyond the first page. A separate patient's
       // failed source must keep this verified positive visible and expose one aggregate unknown.
@@ -1455,6 +1509,7 @@ try {
       const completeRow = page
         .locator('.patient-roster tbody tr')
         .filter({ hasText: completePatient.lastName });
+      await completeRow.scrollIntoViewIfNeeded();
       await text(completeRow.locator('.news2-chip'), /NEWS2 0.*da aggiornare/);
       await count(page.locator('.patient-roster th').filter({ hasText: /^NEWS2$/ }), 1);
       const newsUnknown = page
@@ -1489,13 +1544,11 @@ try {
       await page.screenshot({ path: path.join(out, 'issue-452-news2-partial-failure.png') });
       await page.unroute(`${api}${failedPath}**`, failNewsSource);
       await page.getByRole('button', { name: 'Riprova NEWS2', exact: true }).click();
-      await text(
-        page
-          .locator('.patient-roster tbody tr')
-          .filter({ hasText: failedPatient.lastName })
-          .locator('.news2-chip'),
-        /NEWS2 0/,
-      );
+      const recoveredRow = page
+        .locator('.patient-roster tbody tr')
+        .filter({ hasText: failedPatient.lastName });
+      await recoveredRow.scrollIntoViewIfNeeded();
+      await text(recoveredRow.locator('.news2-chip'), /NEWS2 0/);
       await text(completeRow.locator('.news2-chip'), /NEWS2 0.*da aggiornare/);
       await count(newsUnknown, 0);
       await Promise.all(pageReads);
@@ -1703,6 +1756,9 @@ try {
       await preset();
       await acknowledgement.check();
 
+      const prescriptionBeforeAllergyEdit = await page
+        .locator('.therapy-form__preview')
+        .innerText();
       // A chart edit through the actual modal changes the revision without remounting the draft.
       const localAllergen = `QA local453 ${runId}`;
       await page.locator('.cr-alert-strip--allergie').click();
@@ -1728,8 +1784,20 @@ try {
       await allergyDialog.getByRole('button', { name: 'Chiudi', exact: true }).last().click();
       await text(warning, new RegExp(localAllergen));
       await assertUnchecked('Current allergy revision immediately invalidates acknowledgement');
-      await value(page.getByLabel('Quantità orario 1', { exact: true }), '1');
-      await value(page.getByLabel('Quantità orario 2', { exact: true }), '1');
+      for (const index of [1, 2]) {
+        assert.equal(
+          await page
+            .getByRole('button', { name: `1 compressa, orario ${index}`, exact: true })
+            .getAttribute('aria-pressed'),
+          'true',
+          `Allergy revision preserves the actual one-compressa dose for schedule ${index}`,
+        );
+      }
+      assert.equal(
+        await page.locator('.therapy-form__preview').innerText(),
+        prescriptionBeforeAllergyEdit,
+        'Allergy revision preserves the exact dose, schedule, route and civil dates summary',
+      );
       assert.equal(
         await page
           .locator('.campo-farmaco__scelto')
@@ -2103,6 +2171,38 @@ try {
         (await prisma.cartella.findUnique({ where: { patientId: patient.id } })).data.liberatoria
           ?.usciteLog ?? [];
       await page.getByRole('button', { name: 'Invio in Pronto Soccorso', exact: true }).click();
+      await page
+        .getByRole('radio', { name: 'Metti in pausa le somministrazioni fino al rientro' })
+        .check();
+      await page
+        .getByRole('checkbox', {
+          name: 'Confermo l’uscita PS e la decisione selezionata sul giro somministrazioni.',
+        })
+        .check();
+      await page
+        .locator('.invio-ps-overlay')
+        .getByRole('button', { name: 'Chiudi', exact: true })
+        .click();
+      await navigate(state, chart(nextPatient.id));
+      await page.getByRole('button', { name: 'Invio in Pronto Soccorso', exact: true }).click();
+      assert.equal(
+        await page.getByRole('radio', { checked: true }).count(),
+        0,
+        'Different patient cannot inherit a pending PS choice',
+      );
+      assert.equal(await page.locator('[data-ps-exit-submit]').isDisabled(), true);
+      await page
+        .locator('.invio-ps-overlay')
+        .getByRole('button', { name: 'Chiudi', exact: true })
+        .click();
+      await navigate(state, chart());
+      assert.deepEqual(
+        (await prisma.cartella.findUnique({ where: { patientId: patient.id } })).data.liberatoria
+          ?.usciteLog ?? [],
+        beforeExits,
+        'Unsubmitted choices and switching patient never register an exit',
+      );
+      await page.getByRole('button', { name: 'Invio in Pronto Soccorso', exact: true }).click();
       const print = page.locator('[data-invio-ps-print]');
       await eventually(
         async () => assert.equal(await print.isEnabled(), true),
@@ -2312,6 +2412,42 @@ try {
         true,
       );
       await page.screenshot({ path: path.join(out, 'issue-457-paused.png') });
+      await navigate(state, 'agenda-operatore');
+      await page
+        .locator('.agt-day-wrap')
+        .getByRole('button', { name: /ore 20:00.*da erogare/ })
+        .click();
+      const psAgendaGroup = page
+        .locator('.therapy-patient-group')
+        .filter({ hasText: 'QA PS pending457' });
+      await text(psAgendaGroup, /Somministrazioni in pausa per uscita PS/);
+      assert.equal(
+        await psAgendaGroup
+          .getByRole('button', { name: /^Erogata:.*QA PS pending457.*20:00/ })
+          .isDisabled(),
+        true,
+      );
+      assert.equal(
+        await psAgendaGroup
+          .getByRole('button', { name: /^Non erogata:.*QA PS pending457.*20:00/ })
+          .isEnabled(),
+        true,
+      );
+      const otherAgendaDose = page
+        .locator('.therapy-modal')
+        .getByRole('button', { name: /^Erogata:.*QA Agenda pending452/ });
+      await count(otherAgendaDose, 1);
+      assert.equal(
+        await otherAgendaDose.isEnabled(),
+        true,
+        'A paused patient never disables another patient administration',
+      );
+      await page
+        .locator('.therapy-modal')
+        .getByRole('button', { name: 'Chiudi', exact: true })
+        .last()
+        .click();
+      await navigate(state, chart());
       // An actual explicit absence record remains allowed; it is never fabricated by the exit.
       const absent = await request(state, '/therapy-slots/not-administered', {
         ...pauseDoseBody,
@@ -2485,5 +2621,5 @@ assert.equal(
 assert.equal(
   results.filter((row) => row.status === 'FAILED').length,
   0,
-  'All clear-scope acceptance scenarios must pass; inspect per-issue real evidence. Clinical policy gates remain separate and unresolved.',
+  'All seven approved acceptance scenarios must pass; inspect per-issue evidence and explicit residual gates.',
 );

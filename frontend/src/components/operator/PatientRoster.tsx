@@ -148,6 +148,7 @@ function SignalChip({
 
 interface PatientRosterProps {
   patients: Paziente[];
+  completionPatients?: Paziente[];
   sort: PatientRosterSort;
   localSortActive?: boolean;
   serverCriterion?: 'name' | 'location';
@@ -255,6 +256,7 @@ function rosterAge(patient: Paziente): string {
 
 export function PatientRoster({
   patients,
+  completionPatients = [],
   sort,
   localSortActive = false,
   serverCriterion = 'name',
@@ -330,7 +332,10 @@ export function PatientRoster({
   const showRegime = patients.some(
     (p) => patientRegime(summaryMap.get(p.id)?.statoRicovero) !== 'non_disponibile',
   );
-  const incomplete = patients.filter(patientIdentityIncomplete);
+  const completionIds = new Set(completionPatients.map((patient) => patient.id));
+  const incomplete = patients.filter(
+    (patient) => patientIdentityIncomplete(patient) || completionIds.has(patient.id),
+  );
   const ariaSort = (field: PatientSortField) =>
     sort.field === field && (localSortActive || serverCriterion === 'name')
       ? sort.direction === 'asc'
@@ -623,18 +628,6 @@ export function PatientRoster({
           )}
         </p>
       )}
-      {incomplete.length > 0 && (
-        <p className="patient-list-incomplete">
-          {incomplete.length} pazienti hanno l’anagrafica incompleta ·{' '}
-          <button
-            type="button"
-            className="ds-link"
-            onClick={() => onSelect(incomplete[0], 'profilo')}
-          >
-            Vedi quali
-          </button>
-        </p>
-      )}
       <div className="patient-card-grid" aria-busy={loading}>
         {patients.length === 0 ? (
           <div className="patient-card-grid__state" role="status" aria-live="polite">
@@ -658,6 +651,30 @@ export function PatientRoster({
           ))
         )}
       </div>
+      {incomplete.length > 0 && (
+        <details className="patient-list-incomplete">
+          <summary>
+            {incomplete.length} pazienti hanno l’anagrafica incompleta · Vedi quali
+            <span>
+              {' '}
+              (tra {patients.length} caricati{hasMore ? ', elenco parziale' : ''})
+            </span>
+          </summary>
+          <div className="patient-completion-actions">
+            {incomplete.map((patient) => (
+              <button
+                key={patient.id}
+                type="button"
+                className="ds-btn ds-btn--secondary"
+                onClick={() => onSelect(patient, 'profilo')}
+              >
+                {completionIds.has(patient.id) ? 'Completa anagrafica' : 'Apri profilo'} ·{' '}
+                {patient.lastName} {patient.firstName}
+              </button>
+            ))}
+          </div>
+        </details>
+      )}
     </>
   );
 }

@@ -3927,6 +3927,20 @@ export default function App() {
                             onRetryAppointments={retryAppointmentRange}
                             onLoadAppointments={loadAppointmentRange}
                             onSelectPaziente={goToPazienteByNome}
+                            therapySlots={therapySlots}
+                            therapyDate={therapyDate}
+                            loadingTherapySlots={loadingTherapySlots}
+                            therapyLoadError={therapyLoadError}
+                            therapyLoadMoreError={therapyLoadMoreError}
+                            therapyPageInfo={therapyPageInfo}
+                            loadingMoreTherapySlots={loadingMoreTherapySlots}
+                            onRetryTherapySlots={() =>
+                              void loadTherapySlots(therapyDateRef.current)
+                            }
+                            onLoadMoreTherapySlots={loadMoreTherapySlots}
+                            onLoadTherapySlots={loadTherapySlots}
+                            onConfirmTherapy={confirmTherapy}
+                            onNotAdministeredTherapy={notAdministeredTherapy}
                           />
                         )}
                       </>

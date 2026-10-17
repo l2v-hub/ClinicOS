@@ -427,22 +427,6 @@ export function PatientList({
           )}
         </section>
       )}
-      {canIntake && filtrati.some(intakeCompletionPending) && (
-        <section className="plist-card" aria-label="Anagrafiche in bozza">
-          <h2>Anagrafiche da completare</h2>
-          <p>Pazienti già registrati con dati anagrafici da verificare.</p>
-          {filtrati.filter(intakeCompletionPending).map((patient) => (
-            <button
-              key={patient.id}
-              type="button"
-              className="ds-btn ds-btn--secondary"
-              onClick={() => onSelect(patient, 'profilo')}
-            >
-              Completa anagrafica · {patient.lastName} {patient.firstName}
-            </button>
-          ))}
-        </section>
-      )}
       <section className="plist-card plist-list" aria-label="Elenco pazienti">
         <div className="plist-toolbar">
           <div className="search-wrap plist-search">
@@ -608,6 +592,7 @@ export function PatientList({
               localSortActive={Boolean(localSort)}
               serverCriterion={rosterOrder.order.criterion}
               patients={ordinati}
+              completionPatients={canIntake ? ordinati.filter(intakeCompletionPending) : []}
               sort={sort}
               onSortChange={setSort}
               hasMore={hasMore}

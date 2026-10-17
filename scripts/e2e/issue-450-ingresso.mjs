@@ -1157,6 +1157,9 @@ try {
         .locator('.teams-sidebar')
         .getByRole('button', { name: 'Pazienti', exact: true })
         .click();
+      const completionDisclosure = page.locator('details.patient-list-incomplete');
+      if (!(await completionDisclosure.evaluate((element) => element.open)))
+        await completionDisclosure.locator('summary').click();
       await page.getByRole('button', { name: /Completa anagrafica · Sintetica Maria/ }).click();
       await page
         .getByRole('heading', { name: /Sintetica/ })

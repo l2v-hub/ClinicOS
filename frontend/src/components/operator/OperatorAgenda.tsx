@@ -22,6 +22,7 @@ import './OperatorAgendaHmi.css';
 import '../shared/AgendaInline.css';
 import { TherapySlotModal } from './TherapySlotModal';
 import { useCan } from '../../lib/capabilities';
+import { useCanAdministerTherapy } from '../../lib/therapyPermissions';
 import {
   canOpenOperatorAppointment,
   firstOperatorAppointmentSlot,
@@ -44,6 +45,7 @@ interface OperatorAgendaProps {
   onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;
   onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
   therapySlots?: TherapySlot[];
+  therapyDate?: string;
   loadingTherapySlots?: boolean;
   therapyLoadError?: string | null;
   therapyLoadMoreError?: string | null;
@@ -124,9 +126,10 @@ export function OperatorAgenda({
   onRetryAppointments,
   onLoadAppointments,
   onSelectPaziente,
-  therapySlots,
-  loadingTherapySlots = false,
-  therapyLoadError = null,
+  therapySlots: providedTherapySlots,
+  therapyDate,
+  loadingTherapySlots: providedTherapyLoading = false,
+  therapyLoadError: providedTherapyError = null,
   therapyLoadMoreError = null,
   therapyPageInfo,
   loadingMoreTherapySlots = false,
@@ -138,6 +141,8 @@ export function OperatorAgenda({
 }: OperatorAgendaProps) {
   // Creazione appuntamenti: la GUI la nasconde se il ruolo non la consente (il backend decide).
   const canCreateAppointment = useCan('appointments.create');
+  const canReadTherapies = useCan('administration.list_slots');
+  const canAdministerTherapies = useCanAdministerTherapy();
   const now = useRecencyClock();
   const [view, setView] = useState<ViewMode>('giornaliero');
   const [refDate, setRefDate] = useState(new Date());
@@ -147,6 +152,20 @@ export function OperatorAgenda({
   const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);
   const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const therapyDateMatches = therapyDate === undefined || therapyDate === isoDate(refDate);
+  const showTherapies = canReadTherapies && view === 'giornaliero';
+  const loadingTherapySlots =
+    showTherapies &&
+    (providedTherapyLoading || (!therapyDateMatches && Boolean(onLoadTherapySlots)));
+  const therapyLoadError = showTherapies && therapyDateMatches ? providedTherapyError : null;
+  const therapySlots =
+    showTherapies && therapyDateMatches && !providedTherapyLoading && !providedTherapyError
+      ? providedTherapySlots
+      : undefined;
+
+  useEffect(() => {
+    if (canReadTherapies && view === 'giornaliero') onLoadTherapySlots?.(isoDate(refDate));
+  }, [canReadTherapies, onLoadTherapySlots, refDate, view]);
 
   useEffect(() => {
     // A denied session must not resurrect a pending creation when permission returns.
@@ -195,7 +214,6 @@ export function OperatorAgenda({
         next = new Date(d);
         next.setMonth(d.getMonth() + delta);
       }
-      if (view === 'giornaliero') onLoadTherapySlots?.(isoDate(next));
       return next;
     });
   }
@@ -203,21 +221,18 @@ export function OperatorAgenda({
   function changeView(next: ViewMode) {
     setSelectedTherapySlotId(null);
     setView(next);
-    if (next === 'giornaliero') onLoadTherapySlots?.(isoDate(refDate));
   }
 
   function openDay(date: Date) {
     setSelectedTherapySlotId(null);
     setRefDate(date);
     setView('giornaliero');
-    onLoadTherapySlots?.(isoDate(date));
   }
 
   function goToday() {
     const today = new Date();
     setSelectedTherapySlotId(null);
     setRefDate(today);
-    if (view === 'giornaliero') onLoadTherapySlots?.(isoDate(today));
   }
 
   function titleLabel(): string {
@@ -404,23 +419,27 @@ export function OperatorAgenda({
           </button>
         </div>
       )}
-      {!loadingTherapySlots && !therapyLoadError && therapyPageInfo?.hasMore && (
-        <div className="empty-state-card" role="status" aria-live="polite">
-          <strong>Visualizzazione parziale</strong>
-          <span>
-            Totali esatti; dettagli caricati per {therapyPageInfo.loadedTherapies} terapie.
-          </span>
-          {therapyLoadMoreError && <span role="alert">{therapyLoadMoreError}</span>}
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={onLoadMoreTherapySlots}
-            disabled={loadingMoreTherapySlots}
-          >
-            {loadingMoreTherapySlots ? 'Caricamento…' : 'Carica altre terapie'}
-          </button>
-        </div>
-      )}
+      {showTherapies &&
+        therapyDateMatches &&
+        !loadingTherapySlots &&
+        !therapyLoadError &&
+        therapyPageInfo?.hasMore && (
+          <div className="empty-state-card" role="status" aria-live="polite">
+            <strong>Visualizzazione parziale</strong>
+            <span>
+              Totali esatti; dettagli caricati per {therapyPageInfo.loadedTherapies} terapie.
+            </span>
+            {therapyLoadMoreError && <span role="alert">{therapyLoadMoreError}</span>}
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={onLoadMoreTherapySlots}
+              disabled={loadingMoreTherapySlots}
+            >
+              {loadingMoreTherapySlots ? 'Caricamento…' : 'Carica altre terapie'}
+            </button>
+          </div>
+        )}
 
       {/* ── DAILY VIEW ── */}
       {!loadingAppuntamenti && !appointmentLoadError && view === 'giornaliero' && (
@@ -800,6 +819,7 @@ export function OperatorAgenda({
           onClose={() => setSelectedTherapySlotId(null)}
           onConfirm={onConfirmTherapy}
           onNotAdministered={onNotAdministeredTherapy}
+          readOnly={!canAdministerTherapies}
           detailsPartial={therapyPageInfo?.hasMore}
           loadingMore={loadingMoreTherapySlots}
           loadMoreError={therapyLoadMoreError}

@@ -685,3 +685,31 @@ td.patient-roster__actions > button + button {
 .plist-list .patient-roster:has(.patient-roster__delete) th.patient-roster__action-heading {
   width: 136px;
 }
+
+.patient-list-incomplete {
+  margin: 12px 0;
+  border-top: 1px solid var(--border);
+}
+.patient-list-incomplete > summary {
+  min-height: 44px;
+  padding: 12px 4px;
+  cursor: pointer;
+}
+.patient-list-incomplete > summary:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+.patient-completion-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 8px;
+  padding: 8px 0;
+}
+.patient-completion-actions > button {
+  min-height: 44px;
+  white-space: normal;
+  text-align: left;
+}
+.patient-list-incomplete:not([open]) .patient-completion-actions {
+  display: none;
+}
