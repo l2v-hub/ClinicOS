@@ -2755,7 +2755,9 @@
         "scope-amendment-12-intake-roster-integration.md": "d16f2bcd56ba951a158883e174918919b27f6e96e9ee83559a81a969733e5f8e",
         "scope-amendment-13-main-and-preliminary-qa.md": "27089bce73264f524b179b2084b0d970ca27358625ba80f3cb987fce2d5cc1a7",
         "approved-plan-cycle-2-main-integrated.json": "758fe2560b5c086a8b1520aed6a7813081995717ef9f67f0e096d64fd093e1b1",
-        "implementation-cycle-3-session-isolation.md": "6da4a95dd2df7911ee786b45d06ea60e0fc1a170c7516a95e7ffedd7d7f6f2b4"
+        "implementation-cycle-3-session-isolation.md": "6da4a95dd2df7911ee786b45d06ea60e0fc1a170c7516a95e7ffedd7d7f6f2b4",
+        "scope-amendment-14-intake-read-serialization.md": "94e0338277725a1e64955fb75fe96bc530cbe5fe0ce4504cc467dd1ce4c7a181",
+        "approved-plan-cycle-3-intake-read.json": "7c6feb931c84f97351290aeca92cfe5d7b62d2ff93060267788c953022828165"
       },
       "baseSha": "05fd62363d89573d6e2449235a7499cc855434cd",
       "plan": {
@@ -2869,7 +2871,9 @@
           "frontend/src/components/operator/sections/TherapyEditor.tsx",
           "frontend/src/components/operator/TherapySlotModal.tsx",
           "frontend/src/lib/__tests__/therapyAgendaDateGuard.test.ts",
-          "scripts/e2e/issue-450-ingresso.mjs"
+          "scripts/e2e/issue-450-ingresso.mjs",
+          "backend/src/intake/patient-review.ts",
+          "backend/src/intake/__tests__/patient-review-db.test.ts"
         ],
         "acceptance": [
           {
@@ -3337,6 +3341,21 @@
               "Adapt only the upstream intake browser navigation oracle to open the real disclosure before locating the unchanged completion/resume action. Keep all nineteen intake assertions and real SQL/persistence/authorization negatives; run the full intake browser in an owned447 output folder.",
               "Scroll actual NEWS2 row into viewport before asserting the existing lazy IntersectionObserver consumer; do not bypass loader or network."
             ]
+          },
+          {
+            "title": "Preserve consistent intake-review reads across explicit PS patient row versions",
+            "files": [
+              "backend/src/intake/patient-review.ts",
+              "backend/src/intake/__tests__/patient-review-db.test.ts",
+              "e2e/qa-bug-batch-447.mjs"
+            ],
+            "steps": [
+              "Preserve the complete read-only RepeatableRead transaction, lockPatient and ACL/budget/order/document queries; retry only this complete read at most3times on the existing strict isConcurrentWriteConflict classifier (P2034 or P2010 with TransactionWriteConflict SQLSTATE40001/40P01).",
+              "Never retry404, validation/access/syntax/deadline/network or generic errors. Do not change generic assessmentTransaction, routes, schema, PS/write protocol, patient/draft data, locks or isolation.",
+              "Add an actual two-client marked PostgreSQL interleaving: observe our reader waiting on our writer PID, commit the writer, preserve actual oldRED serialization proof and require newGREEN identical read/no patient or draft changes. Bound every new barrier/run/finally/settlement and test3attemptcap and immediate unrelated errors.",
+              "Within existing owned canonical runner add the intake-review regression test alongside unchanged PS tests; no assertion skip/deadline widening. Archive original runtime proofs before new runs.",
+              "Author runs focused realDB regression/backendbuild and repeated actual7UI plus19intake on finalsource; newindependentQA3 must run fullbackend once after backendchanges."
+            ]
           }
         ],
         "verification": [
@@ -3581,7 +3600,9 @@
               "frontend/src/App.tsx",
               "frontend/src/lib/cartellaWriteQueue.ts",
               "frontend/src/lib/__tests__/cartellaWriteQueue.test.ts",
-              "frontend/src/components/operator/TherapySlotModal.tsx"
+              "frontend/src/components/operator/TherapySlotModal.tsx",
+              "backend/src/intake/patient-review.ts",
+              "backend/src/intake/__tests__/patient-review-db.test.ts"
             ]
           }
         ],
@@ -3956,7 +3977,7 @@
       "rationale": "Explicit new user-requested issue-comment/label feedback feature. Seven sources outside frozen G19; no guard or clinical budget reset. Existing normal-controller ownership preserved."
     }
   ],
-  "updatedAt": "2026-10-17T11:24:44.620Z",
+  "updatedAt": "2026-10-17T11:27:42.833Z",
   "triageQueue": {
     "issues": [
       485,
