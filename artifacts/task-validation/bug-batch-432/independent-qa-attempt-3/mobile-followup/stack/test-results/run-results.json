@@ -1,0 +1,14 @@
+{
+  "results": [
+    {
+      "label": "migration",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "browser-e2e",
+      "code": 0,
+      "signal": null
+    }
+  ]
+}

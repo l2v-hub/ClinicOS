@@ -1,0 +1,26 @@
+{
+  "verified": false,
+  "error": "browser-e2e failed; see test-results/browser-e2e.txt\n\n1 !== 0\n",
+  "results": [
+    {
+      "label": "migration",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "therapy-import-api",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "seed",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "browser-e2e",
+      "code": 1,
+      "signal": null
+    }
+  ]
+}

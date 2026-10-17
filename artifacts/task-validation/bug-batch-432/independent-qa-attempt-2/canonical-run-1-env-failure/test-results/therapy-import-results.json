@@ -1,0 +1,17 @@
+{
+  "patientId": "cmvc7564700084mp95lcxqect",
+  "detected": 5,
+  "persisted": 3,
+  "deferred": [
+    2,
+    4
+  ],
+  "names": [
+    "CACIT",
+    "KEPPRA",
+    "PARACETAMOLO"
+  ],
+  "replay": "idempotent",
+  "missingIncludedRowsRejected": true,
+  "staleLegacyOmissionsRejected": true
+}

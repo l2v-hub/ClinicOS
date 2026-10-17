@@ -1,0 +1,190 @@
+{
+  "status": "Historical development/QA2 output, not QA3 proof",
+  "files": [
+    {
+      "path": "test-results/frontend-unit.txt",
+      "sha256": "33d68f3f174f9454f44e415420fa83c3fcc4d06cb9aa29cdcc1cf28866a550ec",
+      "bytes": 129231
+    },
+    {
+      "path": "test-results/validation-summary.json",
+      "sha256": "b6e2aacbcc387b472e0dae41a5c8c534f72ada881fdcf0c6eeaedc7d0825e59d",
+      "bytes": 650
+    },
+    {
+      "path": "test-results/frontend-build.txt",
+      "sha256": "095d1c85933bbe1aa9651c0ccbd1803a78ac76b6425cbd7540d4fa2162b5ac73",
+      "bytes": 16443
+    },
+    {
+      "path": "test-results/migration.txt",
+      "sha256": "970569a48340b5765ef3a385adc60d6562b7a2f1ceba1f1b29925f8e58ce795f",
+      "bytes": 7994
+    },
+    {
+      "path": "test-results/database-provenance.json",
+      "sha256": "d7d6c89b806001643ff43443a0ccd251d06e006dc0f960a0dcec35c1e787fc9d",
+      "bytes": 313
+    },
+    {
+      "path": "test-results/source-fingerprints.json",
+      "sha256": "96fc335f78d259577f990fefaf7e158caac40c9231075aa771bfc35b218bd5cd",
+      "bytes": 4366
+    },
+    {
+      "path": "test-results/backend-unit.txt",
+      "sha256": "767f47a5135bf6d5581be6ed44a31a3f739f5b808bce67b8a62a3ca0c3e36855",
+      "bytes": 115832
+    },
+    {
+      "path": "test-results/mock-runtime.txt",
+      "sha256": "d80065f1b80816943b5842bdeb2796b9e8438a7e112e7ca0a0bbdcc4c92a5197",
+      "bytes": 726
+    },
+    {
+      "path": "test-results/backend-build.txt",
+      "sha256": "d34e6e7754e968dacff16b46d3f97ce6fbeed5be202f3ebe182aa4a762981b44",
+      "bytes": 438
+    },
+    {
+      "path": "test-results/failure.json",
+      "sha256": "301a65518a8cb4abd45a4e7b1de5c020c68e06c57ddd9f2fce2c2d7869d285a5",
+      "bytes": 546
+    },
+    {
+      "path": "test-results/generated-fixture-archive.json",
+      "sha256": "c0c2bb9830a869345966ff3e94cc38d32e8f8eb9d12b19d3ad8adb47724a62e8",
+      "bytes": 2663
+    },
+    {
+      "path": "test-results/run-results.json",
+      "sha256": "de46c6213c7a4ecb5d69fa04ae0bf27ee653e400751d66109f68a4b316511c9e",
+      "bytes": 440
+    },
+    {
+      "path": "test-results/generated-pdfs/painad/painad-long.pdf",
+      "sha256": "9f30d081e890f44efb59922289d519e753328522d7e86ed6d107eeeeded2119d",
+      "bytes": 29657
+    },
+    {
+      "path": "test-results/generated-pdfs/painad/painad-normal.pdf",
+      "sha256": "7e04eb7d6e6ab1667d23137ee11506ef71c2a76de1c0eb36f99d76ca05465170",
+      "bytes": 23837
+    },
+    {
+      "path": "test-results/generated-pdfs/transfers/transfers-normal.pdf",
+      "sha256": "60055047b1dbd8415cae0b616c96039e358f5072bee1c2719c277244e90ef989",
+      "bytes": 19477
+    },
+    {
+      "path": "test-results/generated-pdfs/transfers/transfers-long.pdf",
+      "sha256": "ec624d43914c46d81fb0f1fd303399950855420886aabbc76f61066760a3e6f3",
+      "bytes": 24976
+    },
+    {
+      "path": "test-results/generated-pdfs/gds/gds15-normal.snapshot.json",
+      "sha256": "cab727733cb1702548c7d47d6ab53137661804a3ad80fe6b451e19cdb6b14a0f",
+      "bytes": 4392
+    },
+    {
+      "path": "test-results/generated-pdfs/gds/gds15-normal.pdf",
+      "sha256": "6f01a5daf488c6d6e1d414be1730fa42c595ae84ef00bffab22965d74177c637",
+      "bytes": 23696
+    },
+    {
+      "path": "test-results/generated-pdfs/gds/gds15-long.snapshot.json",
+      "sha256": "76d6f3eaeaedb04998ef3c7661d1bb5e1a8b3c212381ad7cb61138f2a46a9b8b",
+      "bytes": 9330
+    },
+    {
+      "path": "test-results/generated-pdfs/gds/gds15-long.pdf",
+      "sha256": "c58c301359a2e8cc708b5a882d26dc29959ac78d2bbbc9073272eec1a0534096",
+      "bytes": 29992
+    },
+    {
+      "path": "test-results/generated-pdfs/mna/mna-full-long.snapshot.json",
+      "sha256": "7d8c0611e351579cb6828a419a89ab05eae704abf90224d0d36a7c182f28a266",
+      "bytes": 18576
+    },
+    {
+      "path": "test-results/generated-pdfs/mna/mna-full-normal.pdf",
+      "sha256": "7e60c34631c45efadd44b635d50fa5804000ef3699acdcd639f4b412ba275c55",
+      "bytes": 29150
+    },
+    {
+      "path": "test-results/generated-pdfs/mna/mna-screening-partial.snapshot.json",
+      "sha256": "cba64a1c13001235feb7c90e76dd3815bd4fc8a7a4a0207e540317e5b7d2b2d7",
+      "bytes": 9056
+    },
+    {
+      "path": "test-results/generated-pdfs/mna/mna-full-long.pdf",
+      "sha256": "94fb3dca03f2589ae229c3af2db4ab71e52865dc79858a07081e48579c1339a3",
+      "bytes": 35020
+    },
+    {
+      "path": "test-results/generated-pdfs/mna/mna-screening-partial.pdf",
+      "sha256": "8991ab885a5734cc4f5f3626bd4837b867a48d333a522fdd6969c7b328247da0",
+      "bytes": 29074
+    },
+    {
+      "path": "test-results/generated-pdfs/mna/mna-full-normal.snapshot.json",
+      "sha256": "f8bb9110dfa2f247aa21c64c0ef3636d1ee4c02cfd2cfbc898310d987b9ba24d",
+      "bytes": 9216
+    },
+    {
+      "path": "test-results/generated-pdfs/tinetti/tinetti-normal.pdf",
+      "sha256": "39db16d06b906d317bdb2bc1b97887d015f9364d2f0f2e235137e0bbd6868e1c",
+      "bytes": 22838
+    },
+    {
+      "path": "test-results/generated-pdfs/tinetti/tinetti-long.pdf",
+      "sha256": "070f8f14fe91bd02b04c44f3c41e474f95f7b3d09ca0506a4a48a545c7f790b0",
+      "bytes": 28698
+    },
+    {
+      "path": "test-results/generated-fixture-results/artifacts/task-validation/po-16-giro/backend/fresh-v2-proof.json",
+      "sha256": "ff3d2901ec6a92d834a7065b3f47b117e6f0e5b05e6d3f247ab38fcd5e85ba61",
+      "bytes": 820
+    },
+    {
+      "path": "test-results/generated-fixture-results/artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-v2-half-point.snapshot.json",
+      "sha256": "c0729340b4a7a242566932fcb253c1bb4e1f597dbace6f99dfa757cbeaf1cc01",
+      "bytes": 6971
+    },
+    {
+      "path": "test-results/generated-fixture-results/artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-v2-half-point.pdf",
+      "sha256": "f85cc7ec8cb35dcaf5c834f2f9a18c6884a2e27d22f6db2f46e999ff8c1d3d4e",
+      "bytes": 29360
+    },
+    {
+      "path": "test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/barthel-paper.pdf",
+      "sha256": "665ea43fbda31d93af70acb1859d04ed5a94ae2c37c05a101f77ba4b45553fbe",
+      "bytes": 27189
+    },
+    {
+      "path": "test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/ucla_npi_sleep-paper.pdf",
+      "sha256": "97b232a2b68de54e4e6a5931a1fa941feec7fa26eaf2ce69c90270a9f7fb204e",
+      "bytes": 21476
+    },
+    {
+      "path": "test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/gds15-paper.pdf",
+      "sha256": "eb2eb0d8aafe6b4a47270edbbefced995469357de87574ac62e7176723bd5f4d",
+      "bytes": 23672
+    },
+    {
+      "path": "test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/painad-paper.pdf",
+      "sha256": "22fe1ece6928ead9f522d1a360eaa856c30cd979115cccdec57888ceffa4b2db",
+      "bytes": 23631
+    },
+    {
+      "path": "test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/mna-paper.pdf",
+      "sha256": "bf3ba260f80625fc9c25a4ae30a7f4cc77b556e03c6292e9afce2fc1bc3639ee",
+      "bytes": 24668
+    },
+    {
+      "path": "test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/tinetti-paper.pdf",
+      "sha256": "3a3e4c7d7740f2cecee31e33eacf126d3345aa871b09ebe197d30ca17d536d50",
+      "bytes": 30062
+    }
+  ]
+}

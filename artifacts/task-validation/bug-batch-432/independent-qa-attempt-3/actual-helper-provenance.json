@@ -1,0 +1,18 @@
+[
+  {
+    "source": "backend/src/skills/__tests__/skills-e2e.test.ts",
+    "sourceSha256": "af85c1f5afc263949006db5ef0f8000c0a1bf9e04900f26ac93292563d1f9433",
+    "extractedHelperSha256": "24857859d0d3186163cf9b734a46589d34d9bb44cd20e67ad21ff13c6b912cb6",
+    "testModule": "actual-backend-helper.mjs",
+    "testModuleSha256": "ab32a3d24970b518618d8b07216378328b5f13b4d4ae8f1497f5e7e3c71dd9dd",
+    "transpilation": "TypeScript installed in isolated worktree; target ES2022/module ES2022. No application or test imports or code edits."
+  },
+  {
+    "source": "e2e/qa-bug-batch-432-browser.mjs",
+    "sourceSha256": "3946a70fb69c238e3232c74485d6aa54021500c814c52e0126d0cd57029ee274",
+    "extractedHelperSha256": "d7b7de61a14a435629c1643732fca3c4496f70cb58687239706a71458020b709",
+    "testModule": "actual-browser-helper.mjs",
+    "testModuleSha256": "ae40c69a4e437a74dd50799c12f151070d7af9b0bdf8666ba260b231db34a1db",
+    "transpilation": "TypeScript installed in isolated worktree; target ES2022/module ES2022. No application or test imports or code edits."
+  }
+]

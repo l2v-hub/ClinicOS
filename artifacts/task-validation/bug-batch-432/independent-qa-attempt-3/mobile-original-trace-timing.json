@@ -1,0 +1,55 @@
+{
+  "source": "evidence/issue-432-additional-trace.zip",
+  "selectedCalls": [
+    {
+      "type": "before",
+      "callId": "call@206",
+      "startTime": 84194.201,
+      "method": "setViewportSize"
+    },
+    {
+      "type": "after",
+      "callId": "call@206",
+      "endTime": 84217.985
+    },
+    {
+      "type": "before",
+      "callId": "call@208",
+      "startTime": 84223.226,
+      "method": "evaluateExpression"
+    },
+    {
+      "type": "after",
+      "callId": "call@208",
+      "endTime": 84235.765
+    },
+    {
+      "type": "before",
+      "callId": "call@210",
+      "startTime": 84245.727,
+      "method": "screenshot"
+    },
+    {
+      "type": "log",
+      "callId": "call@210"
+    },
+    {
+      "type": "log",
+      "callId": "call@210"
+    },
+    {
+      "type": "log",
+      "callId": "call@210"
+    },
+    {
+      "type": "after",
+      "callId": "call@210",
+      "endTime": 84310.779
+    }
+  ],
+  "viewportStartMs": 84194.201,
+  "screenshotStartMs": 84245.727,
+  "elapsedToScreenshotMs": 51.526,
+  "sidebarTransformTransitionMs": 220,
+  "note": "Screenshot begins during the existing220ms transition; source/trace/image unchanged. Runtime final-geometry proof is separate."
+}

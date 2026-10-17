@@ -1,0 +1,21 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: inventory-browser failed; see inventory-browser.txt
+
+1 !== 0
+
+    at script (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/e2e/qa-bug-batch-432-browser.mjs:178:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async runBrowserQa (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/e2e/qa-bug-batch-432-browser.mjs:192:21)
+    at async <anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/e2e/qa-bug-batch-432-browser.mjs:787:3) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

@@ -1,0 +1,12 @@
+
+> @clinicos/backend@1.0.0 build
+> prisma generate --schema=../prisma/schema.prisma && tsc -p tsconfig.json && node ../scripts/build/copy-assessment-fonts.mjs
+
+Prisma schema loaded from ../prisma/schema.prisma.
+
+✔ Generated Prisma Client (v7.10.0) to ./../node_modules/@prisma/client in 847ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+
+Assessment PDF fonts and license copied into backend build.

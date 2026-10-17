@@ -1,0 +1,12 @@
+{
+  "observedAt": "2026-10-17T09:34:01.801462+00:00",
+  "sourceMismatches": [],
+  "ownContainerAbsent": true,
+  "ownServicePortsClosed": {
+    "3432": true,
+    "5433": true,
+    "8432": true
+  },
+  "canonicalExit": 1,
+  "classification": "QA environment PATH omitted before Playwright import; no product source change"
+}

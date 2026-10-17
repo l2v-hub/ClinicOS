@@ -1,0 +1,12 @@
+✔ QA H1 barrier failure paths release and settle while preserving the primary error (23.95648ms)
+✔ QA H1 confirmation timeout and late rejection always release and settle (42.69139ms)
+✔ QA H1 barrier failure paths release and settle while preserving the primary error (24.926035ms)
+✔ QA H1 confirmation timeout and late rejection always release and settle (42.877649ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 172.310307

@@ -1,0 +1,22 @@
+{
+  "verified": false,
+  "focusedOnly": true,
+  "focusedMobileAssertionsPassed": true,
+  "results": [
+    {
+      "label": "migration",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "browser-e2e",
+      "code": 0,
+      "signal": null
+    }
+  ],
+  "evidence": "evidence/",
+  "lifecycleAndScopeClean": true,
+  "limitations": [
+    "Independent QA, exact-SHA Claude review and production deployment are separate root-owned gates."
+  ]
+}

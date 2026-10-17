@@ -1,0 +1,37 @@
+✔ facility day crosses midnight in Rome before UTC, including the winter year boundary (3.739431ms)
+✔ facility clock follows spring and autumn DST changes without using the host clock (0.334157ms)
+✔ nighttime therapy and handover signals compare local clinical times consistently (1.01146ms)
+✔ uncertain scheduled writes retry the same intent key and retain pending-state precondition (76.987524ms)
+✔ reload storage restores the nonce while outcome and actor remain isolated; no clinical text is stored (35.26009ms)
+✔ a role change during request preparation prevents a clinical write under the next identity (1.769238ms)
+✔ a late write response cannot report success in a different operator session (1.427842ms)
+✔ complete inventory keeps every one of 103 prescriptions, inactive and every regimen included (65.406103ms)
+✔ short terminal page and wrong active/inactive counts never yield a complete inventory (2.914044ms)
+✔ foreign patient and repeated prescription IDs are rejected without displaying prior pages (2.477241ms)
+✔ inactive inventory validates state and zero active count (12.402175ms)
+✔ complete inventory does not return page one on a later HTTP failure (2.224364ms)
+✔ complete print read rejects a short terminal response rather than silently omitting a medicine (2.647544ms)
+✔ old partial or foreign-patient prefetch snapshots cannot be presented as complete (0.681238ms)
+✔ week keeps PRN applying only later in the week once, without adding scheduled doses (2.28528ms)
+✔ loaded slot missing a prescribed drug retains it as read-only source data, not a fabricated action (17.278226ms)
+✔ therapy page loader returns the complete patient-scoped clinical list (42.130559ms)
+✔ therapy page loader rejects a repeating cursor instead of looping forever (2.412611ms)
+✔ therapy page loader carries every server filter on the first page (1.737285ms)
+✔ therapy plan and emergency print require every page, never a manual partial plan (21.340881ms)
+✔ therapy failures are announced and never rendered as empty clinical results (5.215034ms)
+✔ medication administration history follows the bounded opaque cursor feed (2.599117ms)
+✔ complete printable inventory rejects foreign patient (1.623387ms)
+✔ complete printable inventory rejects wrong state counts (0.66987ms)
+✔ complete printable inventory rejects repeated prescription (0.507841ms)
+✔ complete printable inventory rejects short terminal page (0.638656ms)
+✔ failed printable inventory can retry and never returns a partial page (1.604387ms)
+✔ printable inventory rejects changed page totals and empty nonterminal pages (0.97111ms)
+✔ a rejected short printable snapshot is evicted so retry reads repaired server data (0.754687ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1023.773595
