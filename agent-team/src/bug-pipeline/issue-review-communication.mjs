@@ -8,6 +8,7 @@ import { sanitizeText } from '../core/sanitize.mjs';
 export const REVIEW_LABELS = Object.freeze([
   'claude-review-ready',
   'claude-reviewing',
+  'codex-review-ready',
   'codex-review-fixes',
   'review-blocked',
   'claude-reviewed',
@@ -100,7 +101,10 @@ export function reviewProjection(batch, readReport) {
     digest: null,
   };
   if (handoff) assert.equal(handoff.subjectSha, batch.sha, 'Review handoff has a stale SHA');
-  if (batch.phase === 'blocked' || handoff?.status === 'failed') {
+  if (
+    (batch.phase === 'blocked' && handoff?.status !== 'published') ||
+    handoff?.status === 'failed'
+  ) {
     if (handoff?.status === 'failed') {
       assert.equal(
         batch.reviews.at(-1)?.status,
@@ -123,10 +127,10 @@ export function reviewProjection(batch, readReport) {
     batch.implementation.some((attempt) => attempt.status === 'running')
   )
     return result;
-  if (handoff?.status === 'requested') {
+  if (['requested', 'comment-requested'].includes(handoff?.status)) {
     result.label = 'claude-review-ready';
     result.outcome = 'requested';
-  } else if (handoff?.status === 'running') {
+  } else if (['running', 'comment-running'].includes(handoff?.status)) {
     assert.equal(batch.reviews.at(-1)?.status, 'running');
     assert.equal(batch.reviews.at(-1)?.subjectSha, batch.sha);
     result.label = 'claude-reviewing';
@@ -137,14 +141,7 @@ export function reviewProjection(batch, readReport) {
     result.digest = batch.reviewLedger.rounds.at(-1).review_sha256;
     assert.match(result.digest, /^[a-f0-9]{64}$/);
     result.outcome = result.report.verdict;
-    result.label =
-      handoff.status === 'finished'
-        ? 'claude-reviewing'
-        : result.report.verdict === 'approved'
-          ? 'claude-reviewed'
-          : result.report.verdict === 'changes-requested'
-            ? 'codex-review-fixes'
-            : 'review-blocked';
+    result.label = handoff.status === 'finished' ? 'claude-reviewing' : 'codex-review-ready';
   }
   return result;
 }
@@ -164,10 +161,11 @@ function statusMessages(batch, projection) {
     'codex-validation':
       'Codex sta correggendo o verificando il codice. Una nuova review richiede un nuovo SHA verificato e i controlli previsti.',
     approved:
-      'Claude ha prodotto un report approvato sullo SHA indicato. Restano obbligatori tutti i controlli e i vincoli di rilascio; le issue restano aperte.',
+      'Claude ha prodotto un report sullo SHA indicato e lo ha consegnato a Codex per la review. Restano obbligatori tutti i controlli e i vincoli di rilascio; le issue restano aperte.',
     'changes-requested':
-      'Claude richiede correzioni. Codex deve correggere, rieseguire test e QA, quindi richiedere la review sul nuovo SHA entro i budget esistenti.',
-    blocked: 'Claude ha bloccato la review. Il controller mantiene il gruppo bloccato.',
+      'Il report Claude richiede correzioni ed è stato consegnato a Codex per la review. Codex valuta le correzioni, riesegue test e QA, quindi richiede la review sul nuovo SHA entro i budget esistenti.',
+    blocked:
+      'Il report Claude segnala un blocco ed è stato consegnato a Codex per la review. Il controller mantiene i vincoli del gruppo.',
   };
   const details = report ? communicationText(JSON.stringify(report, null, 2)) : '';
   // The report is at most 100KB; bounded chunks keep every finding available on the issue.
@@ -260,6 +258,13 @@ export function createIssueReviewCommunication({
         pr.base?.ref === 'main',
       'Review PR identity or SHA changed',
     );
+    const prIssue = await get(`repos/${repo}/issues/${expected.pr.number}`);
+    assert.ok(
+      prIssue.number === expected.pr.number &&
+        prIssue.state === 'open' &&
+        Boolean(prIssue.pull_request),
+      'Review PR issue is no longer open',
+    );
     const issues = [];
     for (const number of expected.issues) {
       const issue = await get(`repos/${repo}/issues/${number}`);
@@ -277,7 +282,7 @@ export function createIssueReviewCommunication({
     );
     // Changes during the preceding network awaits cannot reuse the old ownership proof.
     await stateSubject();
-    return { issues, pr };
+    return { issues, pr, prIssue };
   }
   async function write(expected, endpoint, method, body, sourceGuard) {
     // Serialize before awaiting the last guard: caller aliases cannot replace the body.
@@ -322,6 +327,38 @@ export function createIssueReviewCommunication({
     });
   }
 
+  async function projectLabels(expected, number, isPr, desired) {
+    // Read the current issue label inventory immediately before each guarded write.
+    // GitHub's issue endpoint is authoritative for both PR and source issue labels.
+    for (let attempt = 0; attempt <= REVIEW_LABELS.length + 1; attempt++) {
+      const issue = await get(`repos/${repo}/issues/${number}`);
+      assert.ok(
+        issue.number === number && issue.state === 'open' && Boolean(issue.pull_request) === isPr,
+        'Review label target changed',
+      );
+      const labels = (issue.labels ?? []).map((item) =>
+        typeof item === 'string' ? item : item.name,
+      );
+      if (!labels.includes(desired)) {
+        await write(expected, `repos/${repo}/issues/${number}/labels`, 'POST', {
+          labels: [desired],
+        });
+        continue;
+      }
+      const stale = labels.find((item) => REVIEW_LABELS.includes(item) && item !== desired);
+      if (stale) {
+        await write(
+          expected,
+          `repos/${repo}/issues/${number}/labels/${encodeURIComponent(stale)}`,
+          'DELETE',
+        );
+        continue;
+      }
+      return;
+    }
+    assert.fail('Review label projection did not converge');
+  }
+
   async function publishState(batch) {
     const expected = clone(batch);
     const projection = reviewProjection(expected, readReport);
@@ -329,22 +366,10 @@ export function createIssueReviewCommunication({
     await ensureLabel(expected, projection.label);
     const messages = statusMessages(expected, projection);
     let comments = 0;
+    for (const issue of current.issues)
+      await projectLabels(expected, issue.number, false, projection.label);
+    await projectLabels(expected, expected.pr.number, true, projection.label);
     for (const issue of current.issues) {
-      const labels = (issue.labels ?? []).map((item) =>
-        typeof item === 'string' ? item : item.name,
-      );
-      if (!labels.includes(projection.label))
-        await write(expected, `repos/${repo}/issues/${issue.number}/labels`, 'POST', {
-          labels: [projection.label],
-        });
-      for (const label of labels.filter(
-        (item) => REVIEW_LABELS.includes(item) && item !== projection.label,
-      ))
-        await write(
-          expected,
-          `repos/${repo}/issues/${issue.number}/labels/${encodeURIComponent(label)}`,
-          'DELETE',
-        );
       const existing = await list(`repos/${repo}/issues/${issue.number}/comments`);
       for (const body of messages)
         comments += Number(await comment(expected, issue.number, body, existing));

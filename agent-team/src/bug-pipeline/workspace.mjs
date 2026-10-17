@@ -246,6 +246,12 @@ export function createWorkspace({ root, repo, run, models }) {
       );
       return result;
     },
+    async finalQa(batch) {
+      // A finding must leave the reviewed worktree clean for prepare/correction.
+      const result = await models.qa({ ...coordinates(batch), plan: batch.plan });
+      safeText(result.summary);
+      return result;
+    },
     verify,
     async checkpoint(batch) {
       const { cwd, packet } = coordinates(batch);

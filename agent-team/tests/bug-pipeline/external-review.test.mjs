@@ -497,3 +497,62 @@ test('issue notification outage after reserving a correction does not spend anot
   assert.equal(f.batch.reviews.length, 1);
   assert.equal(f.batch.externalReview.status, 'requested');
 });
+
+test('comment channel is preserved when requesting the next exact-SHA review', async () => {
+  const batch = batchFixture();
+  batch.reviewChannel = 'github-comments';
+  await externalReviewStep({
+    repo,
+    batch,
+    gh: {
+      viewIssue: async () => ({ state: 'open' }),
+      reviewFeedback: async () => feedback(batch),
+      requiredChecks: async () => ({ ok: true }),
+    },
+    workspace: {},
+    save: async () => {},
+    report: async () => {},
+    block: async () => assert.fail('no block'),
+  });
+  assert.equal(batch.externalReview.status, 'comment-requested');
+  assert.equal(batch.externalReview.channel, 'github-comments');
+  assert.match(batch.externalReview.requestId, /^[a-f0-9-]{36}$/);
+});
+
+test('Claude approval on comment channel requires a new independent Codex QA before readiness', async (t) => {
+  const fixture = await workerFixture(t);
+  await reviewExternalBatch(fixture);
+  const { batch } = fixture;
+  batch.externalReview.channel = 'github-comments';
+  const calls = [];
+  const args = {
+    repo,
+    batch,
+    gh: { ...fixture.github, createStateStore: () => ({}) },
+    workspace: {
+      prepare: async () => calls.push('prepare'),
+      finalQa: async () => {
+        calls.push('codex-qa');
+        return { status: 'verified', summary: 'Independent synthetic review PASS' };
+      },
+    },
+    save: async () => calls.push('save'),
+    report: async () => {},
+    block: async () => assert.fail('no block'),
+  };
+  await externalReviewStep(args);
+  assert.equal(batch.codexFinalReview.status, 'verified');
+  assert.equal(batch.codexFinalReview.subjectSha, batch.sha);
+  assert.equal(batch.phase, 'ready');
+  assert.equal(batch.approvedSha, batch.sha);
+  assert.deepEqual(
+    calls.filter((x) => x !== 'save'),
+    ['prepare', 'codex-qa'],
+  );
+  await externalReviewStep(args);
+  assert.equal(
+    calls.filter((x) => x === 'codex-qa').length,
+    1,
+    'same immutable approval must not spend another QA session',
+  );
+});

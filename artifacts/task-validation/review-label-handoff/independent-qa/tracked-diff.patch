@@ -1,0 +1,577 @@
+diff --git a/.agents/skills/codex-bug-triage/SKILL.md b/.agents/skills/codex-bug-triage/SKILL.md
+index c89cc091..f118c6b5 100644
+--- a/.agents/skills/codex-bug-triage/SKILL.md
++++ b/.agents/skills/codex-bug-triage/SKILL.md
+@@ -174,3 +174,23 @@ release controller confirms the tested deployment. Approval or merge alone must
+ 
+ Report exactly what ran and what remains blocked. A queued issue, a prepared plan, a written fix,
+ a review approval and a verified runtime are different outcomes.
++
++## Explicit GitHub-comment handoff (local Claude coordinator)
++
++For the user-authorized `github-comments` channel use the trusted-main
++`agent-team/src/bug-pipeline/review-handoff-cli.mjs` and
++`docs/claude-local-review-prompt.md`. Project `claude-review-ready` on both PR and source issues;
++claim durably before analysis (`comment-running` / `claude-reviewing`). A schema-valid,
++authorized, nonce/round/current-SHA-bound report is imported from the PR comment, hashed into
++the existing ledger and handed to Codex as `codex-review-ready`. Ordinary labels/comments never
++approve code. The coordinator may execute this trusted CLI and write its temporary report;
++the code-review operation itself remains read-only and cannot execute PR code or use secrets.
++
++Codex responds to findings with its adaptive executor, verification, simplification, fresh
++independent QA and a new SHA; the selected channel persists across rounds. After a clean Claude
++report, a separate Codex QA must pass on that SHA before release readiness. Only the trusted
++release controller merges and confirms deployment/issue closure under actual protections.
++The user explicitly authorized initial infrastructure-failure recovery: `request --recover-failed`
++retains the failed attempt and can request the next bounded round on the same SHA when no
++substantive review existed. This exception does not permit replay after findings, resetting
++budgets, autonomous failed-round retries or a fifth round. No Anthropic API fallback.
+diff --git a/.claude/skills/clinicos/references/bug-delivery.md b/.claude/skills/clinicos/references/bug-delivery.md
+index f90b6915..1b77f1a7 100644
+--- a/.claude/skills/clinicos/references/bug-delivery.md
++++ b/.claude/skills/clinicos/references/bug-delivery.md
+@@ -178,3 +178,15 @@ modello scelto e motivazione, tentativi consumati, test realmente eseguiti, arte
+ verdetto QA e Claude, CI, deploy, blocchi e prossima azione concreta. Mantieni le categorie
+ locale / GitHub nativo / provider / ambiente distribuito separate. Riporta solo ciò che le
+ prove dimostrano; nessun segreto o dato clinico negli handoff.
++
++## Coordinatore locale per il canale commenti
++
++Quando l'utente sceglie il canale `github-comments`, applica il prompt
++`docs/claude-local-review-prompt.md` e il CLI fidato su main. Le label sono esclusive su PR e
++issue: `claude-review-ready` → `claude-reviewing` → `codex-review-ready`. Il coordinatore locale
++può usare il solo CLI di handoff e scrivere il JSON temporaneo; il reviewer non esegue codice
++PR o test sul PC autenticato. Request/claim/round/SHA/provenienza del report sono verificati
++prima dell'importazione durevole. Codex mantiene l'esecuzione adattiva e fa una propria QA dopo
++una review Claude pulita. La richiesta esplicita dell'utente autorizza il recupero iniziale di
++un'esecuzione infrastrutturale fallita mantenendo il round consumato, anche sullo stesso SHA
++senza review sostanziale: non autorizza contatori azzerati o tentativi oltre quattro.
+diff --git a/agent-team/src/bug-pipeline/dashboard.mjs b/agent-team/src/bug-pipeline/dashboard.mjs
+index 83a43e7e..0b51f3cf 100644
+--- a/agent-team/src/bug-pipeline/dashboard.mjs
++++ b/agent-team/src/bug-pipeline/dashboard.mjs
+@@ -72,11 +72,22 @@ export function dashboardSnapshot({ repo, state, issues, queue, setup, now = new
+                     ? 'Raccolta issue per accorpamento'
+                     : 'In attesa del controller'
+                   : 'Aggiungere codex-run o /codex fix';
++      const handoff = batch?.externalReview;
++      const handoffPhase =
++        handoff?.channel === 'github-comments'
++          ? handoff.status === 'comment-requested'
++            ? 'claude-review-ready · attesa Claude locale'
++            : handoff.status === 'comment-running'
++              ? 'claude-reviewing · review Claude in corso'
++              : handoff.status === 'published' && batch.phase === 'waiting-review'
++                ? 'codex-review-ready · controllo Codex'
++                : phase
++          : phase;
+       return {
+         number: issue.number,
+         url: `https://github.com/${repo}/issues/${issue.number}`,
+         status,
+-        phase,
++        phase: handoffPhase,
+         batch: batch?.id ?? null,
+         // Titles/bodies, raw model reports and credentials are never part of this DTO.
+         implementation: batch?.implementation.length ?? 0,
+diff --git a/agent-team/src/bug-pipeline/external-review.mjs b/agent-team/src/bug-pipeline/external-review.mjs
+index d300d9c8..33684c11 100644
+--- a/agent-team/src/bug-pipeline/external-review.mjs
++++ b/agent-team/src/bug-pipeline/external-review.mjs
+@@ -1,5 +1,10 @@
+ import { feedbackFingerprint, MAX_CYCLES, sha256 } from './contracts.mjs';
+ import { createIssueReviewCommunication } from './issue-review-communication.mjs';
++import { createCommentReviewHandoff } from './comment-review-handoff.mjs';
++import { createRunner } from './process.mjs';
++import { randomUUID } from 'node:crypto';
++import os from 'node:os';
++import path from 'node:path';
+ 
+ export function externalReport(batch) {
+   const attempt = batch.reviews.at(-1);
+@@ -49,6 +54,16 @@ export async function externalReviewStep({
+     await block(batch, reason);
+     await notify();
+   };
++  if (batch.externalReview?.channel === 'github-comments') {
++    const receiver = createCommentReviewHandoff({
++      github: gh,
++      cwd: process.cwd(),
++      run: createRunner({
++        runtimeRoot: path.join(os.tmpdir(), 'clinicos-comment-review-controller'),
++      }),
++    });
++    if (!(await receiver.reconcile(batch, save))) return notify();
++  }
+   for (const number of batch.issues) {
+     const issue = await gh.viewIssue(number);
+     if (String(issue.state).toLowerCase() !== 'open')
+@@ -79,7 +94,30 @@ export async function externalReviewStep({
+     const verdict = externalReport(batch);
+     if (verdict.verdict === 'blocked')
+       return blocked('External Claude reviewer blocked the change');
+-    const changed = handoff.feedbackChanged || fingerprint !== handoff.feedbackFingerprint;
++    let changed = handoff.feedbackChanged || fingerprint !== handoff.feedbackFingerprint;
++    if (verdict.verdict === 'approved' && !changed && handoff.channel === 'github-comments') {
++      const prior = batch.codexFinalReview;
++      if (!prior || prior.subjectSha !== batch.sha || prior.claudeRound !== batch.reviews.length) {
++        batch.codexFinalReview = {
++          subjectSha: batch.sha,
++          claudeRound: batch.reviews.length,
++          status: 'running',
++        };
++        await save();
++        await workspace.prepare(batch);
++        const qa = await workspace.finalQa(batch);
++        batch.codexFinalReview.status = qa.status === 'verified' ? 'verified' : 'changes-requested';
++        batch.codexFinalReview.summary = qa.summary;
++        await save();
++      }
++      if (batch.codexFinalReview.status === 'running')
++        return blocked('Interrupted independent Codex review requires recovery');
++      changed = batch.codexFinalReview.status !== 'verified';
++      if (!changed) {
++        const current = await gh.reviewFeedback(batch.pr.number);
++        changed = current.head !== batch.sha || feedbackFingerprint(current) !== fingerprint;
++      }
++    }
+     if (verdict.verdict === 'approved' && !changed) {
+       batch.approvedSha = batch.sha;
+       batch.feedbackFingerprint = fingerprint;
+@@ -110,7 +148,11 @@ export async function externalReviewStep({
+           await workspace.execute(batch, {
+             phase: 'external-review-correction',
+             round: attempt.round,
+-            feedback: { claude: verdict, github: feedback },
++            feedback: {
++              claude: verdict,
++              github: feedback,
++              ...(batch.codexFinalReview ? { codex: batch.codexFinalReview } : {}),
++            },
+           })
+         ).status !== 'implemented'
+       )
+@@ -156,7 +198,10 @@ export async function externalReviewStep({
+   }
+   if (feedback.isDraft) await gh.draftReady(batch.pr.number);
+   batch.externalReview = {
+-    status: 'requested',
++    status: batch.reviewChannel === 'github-comments' ? 'comment-requested' : 'requested',
++    ...(batch.reviewChannel === 'github-comments'
++      ? { channel: 'github-comments', requestId: randomUUID() }
++      : {}),
+     subjectSha: batch.sha,
+     requestedAt: new Date().toISOString(),
+     feedbackFingerprint: fingerprint,
+diff --git a/agent-team/src/bug-pipeline/issue-review-communication.mjs b/agent-team/src/bug-pipeline/issue-review-communication.mjs
+index b2bc1fb3..27b48704 100644
+--- a/agent-team/src/bug-pipeline/issue-review-communication.mjs
++++ b/agent-team/src/bug-pipeline/issue-review-communication.mjs
+@@ -8,6 +8,7 @@ import { sanitizeText } from '../core/sanitize.mjs';
+ export const REVIEW_LABELS = Object.freeze([
+   'claude-review-ready',
+   'claude-reviewing',
++  'codex-review-ready',
+   'codex-review-fixes',
+   'review-blocked',
+   'claude-reviewed',
+@@ -100,7 +101,10 @@ export function reviewProjection(batch, readReport) {
+     digest: null,
+   };
+   if (handoff) assert.equal(handoff.subjectSha, batch.sha, 'Review handoff has a stale SHA');
+-  if (batch.phase === 'blocked' || handoff?.status === 'failed') {
++  if (
++    (batch.phase === 'blocked' && handoff?.status !== 'published') ||
++    handoff?.status === 'failed'
++  ) {
+     if (handoff?.status === 'failed') {
+       assert.equal(
+         batch.reviews.at(-1)?.status,
+@@ -123,10 +127,10 @@ export function reviewProjection(batch, readReport) {
+     batch.implementation.some((attempt) => attempt.status === 'running')
+   )
+     return result;
+-  if (handoff?.status === 'requested') {
++  if (['requested', 'comment-requested'].includes(handoff?.status)) {
+     result.label = 'claude-review-ready';
+     result.outcome = 'requested';
+-  } else if (handoff?.status === 'running') {
++  } else if (['running', 'comment-running'].includes(handoff?.status)) {
+     assert.equal(batch.reviews.at(-1)?.status, 'running');
+     assert.equal(batch.reviews.at(-1)?.subjectSha, batch.sha);
+     result.label = 'claude-reviewing';
+@@ -137,14 +141,7 @@ export function reviewProjection(batch, readReport) {
+     result.digest = batch.reviewLedger.rounds.at(-1).review_sha256;
+     assert.match(result.digest, /^[a-f0-9]{64}$/);
+     result.outcome = result.report.verdict;
+-    result.label =
+-      handoff.status === 'finished'
+-        ? 'claude-reviewing'
+-        : result.report.verdict === 'approved'
+-          ? 'claude-reviewed'
+-          : result.report.verdict === 'changes-requested'
+-            ? 'codex-review-fixes'
+-            : 'review-blocked';
++    result.label = handoff.status === 'finished' ? 'claude-reviewing' : 'codex-review-ready';
+   }
+   return result;
+ }
+@@ -164,10 +161,11 @@ function statusMessages(batch, projection) {
+     'codex-validation':
+       'Codex sta correggendo o verificando il codice. Una nuova review richiede un nuovo SHA verificato e i controlli previsti.',
+     approved:
+-      'Claude ha prodotto un report approvato sullo SHA indicato. Restano obbligatori tutti i controlli e i vincoli di rilascio; le issue restano aperte.',
++      'Claude ha prodotto un report sullo SHA indicato e lo ha consegnato a Codex per la review. Restano obbligatori tutti i controlli e i vincoli di rilascio; le issue restano aperte.',
+     'changes-requested':
+-      'Claude richiede correzioni. Codex deve correggere, rieseguire test e QA, quindi richiedere la review sul nuovo SHA entro i budget esistenti.',
+-    blocked: 'Claude ha bloccato la review. Il controller mantiene il gruppo bloccato.',
++      'Il report Claude richiede correzioni ed è stato consegnato a Codex per la review. Codex valuta le correzioni, riesegue test e QA, quindi richiede la review sul nuovo SHA entro i budget esistenti.',
++    blocked:
++      'Il report Claude segnala un blocco ed è stato consegnato a Codex per la review. Il controller mantiene i vincoli del gruppo.',
+   };
+   const details = report ? communicationText(JSON.stringify(report, null, 2)) : '';
+   // The report is at most 100KB; bounded chunks keep every finding available on the issue.
+@@ -260,6 +258,13 @@ export function createIssueReviewCommunication({
+         pr.base?.ref === 'main',
+       'Review PR identity or SHA changed',
+     );
++    const prIssue = await get(`repos/${repo}/issues/${expected.pr.number}`);
++    assert.ok(
++      prIssue.number === expected.pr.number &&
++        prIssue.state === 'open' &&
++        Boolean(prIssue.pull_request),
++      'Review PR issue is no longer open',
++    );
+     const issues = [];
+     for (const number of expected.issues) {
+       const issue = await get(`repos/${repo}/issues/${number}`);
+@@ -277,7 +282,7 @@ export function createIssueReviewCommunication({
+     );
+     // Changes during the preceding network awaits cannot reuse the old ownership proof.
+     await stateSubject();
+-    return { issues, pr };
++    return { issues, pr, prIssue };
+   }
+   async function write(expected, endpoint, method, body, sourceGuard) {
+     // Serialize before awaiting the last guard: caller aliases cannot replace the body.
+@@ -322,29 +327,49 @@ export function createIssueReviewCommunication({
+     });
+   }
+ 
+-  async function publishState(batch) {
+-    const expected = clone(batch);
+-    const projection = reviewProjection(expected, readReport);
+-    const current = await subject(expected);
+-    await ensureLabel(expected, projection.label);
+-    const messages = statusMessages(expected, projection);
+-    let comments = 0;
+-    for (const issue of current.issues) {
++  async function projectLabels(expected, number, isPr, desired) {
++    // Read the current issue label inventory immediately before each guarded write.
++    // GitHub's issue endpoint is authoritative for both PR and source issue labels.
++    for (let attempt = 0; attempt <= REVIEW_LABELS.length + 1; attempt++) {
++      const issue = await get(`repos/${repo}/issues/${number}`);
++      assert.ok(
++        issue.number === number && issue.state === 'open' && Boolean(issue.pull_request) === isPr,
++        'Review label target changed',
++      );
+       const labels = (issue.labels ?? []).map((item) =>
+         typeof item === 'string' ? item : item.name,
+       );
+-      if (!labels.includes(projection.label))
+-        await write(expected, `repos/${repo}/issues/${issue.number}/labels`, 'POST', {
+-          labels: [projection.label],
++      if (!labels.includes(desired)) {
++        await write(expected, `repos/${repo}/issues/${number}/labels`, 'POST', {
++          labels: [desired],
+         });
+-      for (const label of labels.filter(
+-        (item) => REVIEW_LABELS.includes(item) && item !== projection.label,
+-      ))
++        continue;
++      }
++      const stale = labels.find((item) => REVIEW_LABELS.includes(item) && item !== desired);
++      if (stale) {
+         await write(
+           expected,
+-          `repos/${repo}/issues/${issue.number}/labels/${encodeURIComponent(label)}`,
++          `repos/${repo}/issues/${number}/labels/${encodeURIComponent(stale)}`,
+           'DELETE',
+         );
++        continue;
++      }
++      return;
++    }
++    assert.fail('Review label projection did not converge');
++  }
++
++  async function publishState(batch) {
++    const expected = clone(batch);
++    const projection = reviewProjection(expected, readReport);
++    const current = await subject(expected);
++    await ensureLabel(expected, projection.label);
++    const messages = statusMessages(expected, projection);
++    let comments = 0;
++    for (const issue of current.issues)
++      await projectLabels(expected, issue.number, false, projection.label);
++    await projectLabels(expected, expected.pr.number, true, projection.label);
++    for (const issue of current.issues) {
+       const existing = await list(`repos/${repo}/issues/${issue.number}/comments`);
+       for (const body of messages)
+         comments += Number(await comment(expected, issue.number, body, existing));
+diff --git a/agent-team/src/bug-pipeline/pipeline.mjs b/agent-team/src/bug-pipeline/pipeline.mjs
+index 19d1e11e..49409e3b 100644
+--- a/agent-team/src/bug-pipeline/pipeline.mjs
++++ b/agent-team/src/bug-pipeline/pipeline.mjs
+@@ -52,10 +52,10 @@ export async function runPipeline({
+     repo,
+   );
+   let persistenceFailed = false;
+-  const save = async () => {
++  const save = async (options) => {
+     try {
+       state.updatedAt = new Date().toISOString();
+-      return await store.save(state);
++      return await store.save(state, options);
+     } catch (error) {
+       persistenceFailed = true;
+       throw error;
+diff --git a/agent-team/src/bug-pipeline/workspace.mjs b/agent-team/src/bug-pipeline/workspace.mjs
+index 1c402967..638f43ff 100644
+--- a/agent-team/src/bug-pipeline/workspace.mjs
++++ b/agent-team/src/bug-pipeline/workspace.mjs
+@@ -246,6 +246,12 @@ export function createWorkspace({ root, repo, run, models }) {
+       );
+       return result;
+     },
++    async finalQa(batch) {
++      // A finding must leave the reviewed worktree clean for prepare/correction.
++      const result = await models.qa({ ...coordinates(batch), plan: batch.plan });
++      safeText(result.summary);
++      return result;
++    },
+     verify,
+     async checkpoint(batch) {
+       const { cwd, packet } = coordinates(batch);
+diff --git a/agent-team/tests/bug-pipeline/external-review.test.mjs b/agent-team/tests/bug-pipeline/external-review.test.mjs
+index 6782ec36..d6b7c53e 100644
+--- a/agent-team/tests/bug-pipeline/external-review.test.mjs
++++ b/agent-team/tests/bug-pipeline/external-review.test.mjs
+@@ -497,3 +497,62 @@ test('issue notification outage after reserving a correction does not spend anot
+   assert.equal(f.batch.reviews.length, 1);
+   assert.equal(f.batch.externalReview.status, 'requested');
+ });
++
++test('comment channel is preserved when requesting the next exact-SHA review', async () => {
++  const batch = batchFixture();
++  batch.reviewChannel = 'github-comments';
++  await externalReviewStep({
++    repo,
++    batch,
++    gh: {
++      viewIssue: async () => ({ state: 'open' }),
++      reviewFeedback: async () => feedback(batch),
++      requiredChecks: async () => ({ ok: true }),
++    },
++    workspace: {},
++    save: async () => {},
++    report: async () => {},
++    block: async () => assert.fail('no block'),
++  });
++  assert.equal(batch.externalReview.status, 'comment-requested');
++  assert.equal(batch.externalReview.channel, 'github-comments');
++  assert.match(batch.externalReview.requestId, /^[a-f0-9-]{36}$/);
++});
++
++test('Claude approval on comment channel requires a new independent Codex QA before readiness', async (t) => {
++  const fixture = await workerFixture(t);
++  await reviewExternalBatch(fixture);
++  const { batch } = fixture;
++  batch.externalReview.channel = 'github-comments';
++  const calls = [];
++  const args = {
++    repo,
++    batch,
++    gh: { ...fixture.github, createStateStore: () => ({}) },
++    workspace: {
++      prepare: async () => calls.push('prepare'),
++      finalQa: async () => {
++        calls.push('codex-qa');
++        return { status: 'verified', summary: 'Independent synthetic review PASS' };
++      },
++    },
++    save: async () => calls.push('save'),
++    report: async () => {},
++    block: async () => assert.fail('no block'),
++  };
++  await externalReviewStep(args);
++  assert.equal(batch.codexFinalReview.status, 'verified');
++  assert.equal(batch.codexFinalReview.subjectSha, batch.sha);
++  assert.equal(batch.phase, 'ready');
++  assert.equal(batch.approvedSha, batch.sha);
++  assert.deepEqual(
++    calls.filter((x) => x !== 'save'),
++    ['prepare', 'codex-qa'],
++  );
++  await externalReviewStep(args);
++  assert.equal(
++    calls.filter((x) => x === 'codex-qa').length,
++    1,
++    'same immutable approval must not spend another QA session',
++  );
++});
+diff --git a/agent-team/tests/bug-pipeline/issue-review-communication.test.mjs b/agent-team/tests/bug-pipeline/issue-review-communication.test.mjs
+index 6378cdc5..d5e944b1 100644
+--- a/agent-team/tests/bug-pipeline/issue-review-communication.test.mjs
++++ b/agent-team/tests/bug-pipeline/issue-review-communication.test.mjs
+@@ -62,6 +62,7 @@ export function communicationFixture({ clock } = {}) {
+       {
+         number,
+         state: 'open',
++        ...(number === 81 ? { pull_request: {} } : {}),
+         labels: [{ name: 'In progress' }, { name: 'clinical-unrelated' }],
+         comments: [],
+       },
+@@ -246,11 +247,15 @@ function report(f, verdict = 'approved') {
+ 
+ test('requested/running/findings/approved/failed lifecycle is exclusive on every issue and preserves unrelated/lifecycle labels', async () => {
+   const f = communicationFixture();
++  for (const issue of f.issues.values())
++    issue.labels.push(
++      ...['claude-reviewing', 'codex-review-fixes', 'claude-reviewed'].map((name) => ({ name })),
++    );
+   const expected = [
+     'claude-review-ready',
+     'claude-reviewing',
+-    'codex-review-fixes',
+-    'claude-reviewed',
++    'codex-review-ready',
++    'codex-review-ready',
+     'review-blocked',
+   ];
+   for (let step = 0; step < expected.length; step++) {
+@@ -285,7 +290,15 @@ test('requested/running/findings/approved/failed lifecycle is exclusive on every
+       assert.ok(labels.includes('In progress') && labels.includes('clinical-unrelated'));
+       assert.ok(f.issues.get(number).comments.at(-1).body.includes(sha));
+       assert.ok(f.issues.get(number).comments.at(-1).body.includes('1/4') || step === 0);
++      if (step === 2 || step === 3)
++        assert.match(f.issues.get(number).comments.at(-1).body, /Codex.*review/i);
+     }
++    const prLabels = f.issues.get(81).labels.map((item) => item.name);
++    assert.deepEqual(
++      prLabels.filter((name) => REVIEW_LABELS.includes(name)),
++      [expected[step]],
++    );
++    assert.ok(prLabels.includes('In progress') && prLabels.includes('clinical-unrelated'));
+     assert.deepEqual(f.state(), before, 'Projection never changes durable state/budgets');
+   }
+   assert.ok(f.issues.get(17).comments.at(-1).body.includes('tentativo rimane consumato'));
+@@ -317,6 +330,63 @@ test('findings are present on each source issue and their report digest is verif
+   assert.equal(other.batch.reviews.length, 0);
+ });
+ 
++test('every published structured verdict becomes Codex review ready while finished remains Claude reviewing', () => {
++  for (const verdict of ['approved', 'changes-requested', 'blocked']) {
++    const f = communicationFixture();
++    report(f, verdict);
++    assert.equal(reviewProjection(f.batch, externalReport).label, 'codex-review-ready');
++  }
++  const finished = communicationFixture();
++  report(finished, 'approved');
++  finished.batch.externalReview.status = 'finished';
++  assert.equal(reviewProjection(finished.batch, externalReport).label, 'claude-reviewing');
++  const commentRequested = communicationFixture();
++  commentRequested.batch.externalReview = {
++    status: 'comment-requested',
++    channel: 'github-comments',
++    subjectSha: sha,
++  };
++  assert.equal(
++    reviewProjection(commentRequested.batch, externalReport).label,
++    'claude-review-ready',
++  );
++  commentRequested.batch.reviews = [{ round: 1, subjectSha: sha, status: 'running' }];
++  commentRequested.batch.externalReview.status = 'comment-running';
++  assert.equal(reviewProjection(commentRequested.batch, externalReport).label, 'claude-reviewing');
++});
++
++test('PR labels use the current PR issue inventory and stale SHA or authorization prevents PR writes', async () => {
++  const f = communicationFixture();
++  f.issues.get(81).labels.push({ name: 'claude-reviewed' }, { name: 'codex-review-fixes' });
++  await f.communication.publishState(f.batch);
++  assert.deepEqual(
++    f.issues
++      .get(81)
++      .labels.map((item) => item.name)
++      .filter((name) => REVIEW_LABELS.includes(name)),
++    ['claude-review-ready'],
++  );
++  assert.ok(f.issues.get(81).labels.some((item) => item.name === 'clinical-unrelated'));
++
++  for (const drift of ['sha', 'authorization']) {
++    const other = communicationFixture();
++    other.hook((call) => {
++      if (call.args[1] === `repos/${repo}/labels?per_page=100`) {
++        if (drift === 'sha') other.pr.head.sha = 'f'.repeat(40);
++        else other.authorized.delete('review-bot');
++      }
++    });
++    await assert.rejects(other.communication.publishState(other.batch));
++    assert.ok(
++      !other.writes.some(
++        (item) =>
++          item.endpoint === `repos/${repo}/issues/81/labels` ||
++          item.endpoint.startsWith(`repos/${repo}/issues/81/labels/`),
++      ),
++    );
++  }
++});
++
+ test('authorized source comments reach old-worker PR context, get acknowledged once, and do not create feedback loops', async () => {
+   const f = communicationFixture();
+   f.source(17, 'feature.ts:7 loses the selected value after reload.');
+@@ -646,7 +716,8 @@ for (const [name, mutate] of [
+ test('drift between first label write and the next write stops all remaining cohort mutations', async () => {
+   const f = communicationFixture();
+   f.hook((call) => {
+-    if (f.writes.length && call.args[1].includes('/comments?')) f.issues.get(18).state = 'closed';
++    if (f.writes.length && call.args[1] === `repos/${repo}/issues/18`)
++      f.issues.get(18).state = 'closed';
+   });
+   await assert.rejects(f.communication.publishState(f.batch));
+   assert.equal(f.writes.length, 1);
+diff --git a/docs/codex-bug-workflow.md b/docs/codex-bug-workflow.md
+index 0621ff73..d8555bea 100644
+--- a/docs/codex-bug-workflow.md
++++ b/docs/codex-bug-workflow.md
+@@ -148,3 +148,30 @@ node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude
+ ```
+ 
+ Il doctor verifica CLI, autenticazione, sandbox e presenza degli ID modello senza chiamate ai modelli. L'esecuzione locale richiede `--run` esplicito. Non dichiarare attivo il flusso solo perché i test con adapter simulati passano: servono workflow sul branch predefinito, credenziali utilizzabili e una prova reale autorizzata.
++
++## Handoff esplicito Claude locale → Codex tramite GitHub
++
++Il canale `github-comments` usa la stessa proprietà/budget del controller. `claude-review-ready`
++compare sia sulla PR sia sulle issue sorgenti dopo implementazione, qualità, semplificazione,
++prove e check. Il CLI fidato `agent-team/src/bug-pipeline/review-handoff-cli.mjs` offre
++`status`, `request`, `claim`, `submit`, `reconcile` con `--pr N`. `claim` riserva il round con CAS
++prima della review; `submit --report <file>` pubblica un report strutturato autenticato con
++SHA, requestId, claimId e round. Il controller valida autore, sorgenti tracked, prove di registro,
++PR/issue attuali e schema prima di accettarlo. Commenti e label senza tale prova non approvano.
++
++Stati distinti `comment-requested`/`comment-running` impediscono al vecchio cron di consumare
++questo canale. Durante la review la label è `claude-reviewing`; dopo pubblicazione durevole del
++report diventa `codex-review-ready`, rimuovendo le altre label di handoff e preservando quelle
++estranee. Codex corregge e ripete i controlli sui rilievi; su approvazione esegue una QA indipendente
++prima della readiness al rilascio. Le protezioni e il gate di deploy restano obbligatori.
++
++La richiesta esplicita dell'utente consente il recupero infrastrutturale iniziale con
++`request --pr N --recover-failed`: conserva il tentativo fallito e riserva il successivo, anche
++sullo stesso SHA quando nessuna review sostanziale è stata prodotta. Non è un reset o retry
++automatico; dopo un finding o al limite di quattro serve il normale percorso previsto.
++Il CLI non esegue modelli, non mergea e non distribuisce; il controller di rilascio è l'unico
++proprietario di merge/deploy/chiusura. Snapshot tra risorse GitHub e CAS del ledger non sono
++una transazione atomica con la PR; le verifiche ripetute riducono finestre di concorrenza senza
++promettere atomicità del provider.
++
++Prompt completo da dare a Claude Max sul PC: [claude-local-review-prompt.md](claude-local-review-prompt.md).

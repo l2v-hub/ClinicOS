@@ -178,3 +178,15 @@ modello scelto e motivazione, tentativi consumati, test realmente eseguiti, arte
 verdetto QA e Claude, CI, deploy, blocchi e prossima azione concreta. Mantieni le categorie
 locale / GitHub nativo / provider / ambiente distribuito separate. Riporta solo ciò che le
 prove dimostrano; nessun segreto o dato clinico negli handoff.
+
+## Coordinatore locale per il canale commenti
+
+Quando l'utente sceglie il canale `github-comments`, applica il prompt
+`docs/claude-local-review-prompt.md` e il CLI fidato su main. Le label sono esclusive su PR e
+issue: `claude-review-ready` → `claude-reviewing` → `codex-review-ready`. Il coordinatore locale
+può usare il solo CLI di handoff e scrivere il JSON temporaneo; il reviewer non esegue codice
+PR o test sul PC autenticato. Request/claim/round/SHA/provenienza del report sono verificati
+prima dell'importazione durevole. Codex mantiene l'esecuzione adattiva e fa una propria QA dopo
+una review Claude pulita. La richiesta esplicita dell'utente autorizza il recupero iniziale di
+un'esecuzione infrastrutturale fallita mantenendo il round consumato, anche sullo stesso SHA
+senza review sostanziale: non autorizza contatori azzerati o tentativi oltre quattro.

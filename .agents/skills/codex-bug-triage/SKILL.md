@@ -174,3 +174,23 @@ release controller confirms the tested deployment. Approval or merge alone must 
 
 Report exactly what ran and what remains blocked. A queued issue, a prepared plan, a written fix,
 a review approval and a verified runtime are different outcomes.
+
+## Explicit GitHub-comment handoff (local Claude coordinator)
+
+For the user-authorized `github-comments` channel use the trusted-main
+`agent-team/src/bug-pipeline/review-handoff-cli.mjs` and
+`docs/claude-local-review-prompt.md`. Project `claude-review-ready` on both PR and source issues;
+claim durably before analysis (`comment-running` / `claude-reviewing`). A schema-valid,
+authorized, nonce/round/current-SHA-bound report is imported from the PR comment, hashed into
+the existing ledger and handed to Codex as `codex-review-ready`. Ordinary labels/comments never
+approve code. The coordinator may execute this trusted CLI and write its temporary report;
+the code-review operation itself remains read-only and cannot execute PR code or use secrets.
+
+Codex responds to findings with its adaptive executor, verification, simplification, fresh
+independent QA and a new SHA; the selected channel persists across rounds. After a clean Claude
+report, a separate Codex QA must pass on that SHA before release readiness. Only the trusted
+release controller merges and confirms deployment/issue closure under actual protections.
+The user explicitly authorized initial infrastructure-failure recovery: `request --recover-failed`
+retains the failed attempt and can request the next bounded round on the same SHA when no
+substantive review existed. This exception does not permit replay after findings, resetting
+budgets, autonomous failed-round retries or a fifth round. No Anthropic API fallback.
