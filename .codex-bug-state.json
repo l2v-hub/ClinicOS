@@ -1236,7 +1236,8 @@
         "scope-amendment-8-allergy-wrapper.md": "0c8f82578c01d10068c6701acde65eb9fcbf655d2f6253611fd634b8e03d2e58",
         "scope-amendment-9-real-agenda-and-dependencies.md": "278874491265900d075ac9bd57fce030f3d7be9093474e71069a0a33a62fea5c",
         "approved-plan-cycle-2-combined.json": "ab8f9790279f6257ffadb589d524ce5c5c8bf9b564c52a11441371432b0994c0",
-        "scope-amendment-10-ps-slot-modal.md": "947755c8a34128141c066b291359c251e98713e68dd3b8836d08f902ca974504"
+        "scope-amendment-10-ps-slot-modal.md": "947755c8a34128141c066b291359c251e98713e68dd3b8836d08f902ca974504",
+        "scope-amendment-11-agenda-date-regression.md": "b2146cf0c8a12cedbe2d28e63bbb4e4d4c73b5c19630f1b9054da6a0f10ab9c8"
       },
       "baseSha": "65e902f40026ec8e2cf3e8b385cb1de0cc269f7b",
       "plan": {
@@ -1348,7 +1349,8 @@
           "frontend/src/lib/news2History.ts",
           "frontend/src/lib/__tests__/news2History.test.ts",
           "frontend/src/components/operator/sections/TherapyEditor.tsx",
-          "frontend/src/components/operator/TherapySlotModal.tsx"
+          "frontend/src/components/operator/TherapySlotModal.tsx",
+          "frontend/src/lib/__tests__/therapyAgendaDateGuard.test.ts"
         ],
         "acceptance": [
           {
@@ -1792,6 +1794,16 @@
               "Retain explicit NOT_GIVEN actions, completed event history, unpaused patients and existing role permissions. The server remains authoritative.",
               "Cover modal action visibility and real day-agenda plus PS transitions in existing scoped regressions and browser."
             ]
+          },
+          {
+            "title": "Keep date regression aligned to actual mounted day loader",
+            "files": [
+              "frontend/src/lib/__tests__/therapyAgendaDateGuard.test.ts"
+            ],
+            "steps": [
+              "Replace only the obsolete operator source-shape assertion requiring an imperative openDay loader call with assertions for the mounted current-refDate day effect.",
+              "Preserve admin exact-date loading, modal mutation date, weekly/monthly exclusion and modal closing on every transition; verify positive real browser day/date behavior."
+            ]
           }
         ],
         "verification": [
@@ -1953,7 +1965,8 @@
               "frontend/src/components/operator/News2Chip.tsx",
               "frontend/src/lib/news2History.ts",
               "frontend/src/lib/__tests__/news2History.test.ts",
-              "frontend/src/App.tsx"
+              "frontend/src/App.tsx",
+              "frontend/src/lib/__tests__/therapyAgendaDateGuard.test.ts"
             ]
           },
           {
@@ -2280,5 +2293,5 @@
       "deploymentRun": 39023763026
     }
   ],
-  "updatedAt": "2026-10-17T10:09:13.323Z"
+  "updatedAt": "2026-10-17T10:09:47.175Z"
 }
