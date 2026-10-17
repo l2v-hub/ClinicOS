@@ -1010,7 +1010,8 @@
         "task-contract.md": "1aaabdb135ab3dff474faad2b623b1ade714ee4827a9de92cecd84895c9bf6e3",
         "analysis.md": "588fb13b7b9c36b1a6e0290c25d6b57bfc93d16245ac410353e3a32ccbf98671",
         "implementation-plan.md": "a548a6c45df6151cc3976683c6fc7733ea118f139228ffef0c9e028ad1386845",
-        "triage-index.md": "42ee2288f97e76104b47854d715618fb1955fe2f1359dcb17e695df118845a61"
+        "triage-index.md": "42ee2288f97e76104b47854d715618fb1955fe2f1359dcb17e695df118845a61",
+        "scope-amendment-1.md": "83d56fd3d02a242f7070cfa18384a7eea536ec72e30c1ada8bfef81f07d08078"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -1086,7 +1087,9 @@
           "frontend/src/lib/emergencyTransferContext.ts",
           "frontend/src/lib/parameterPad.ts",
           "frontend/src/lib/parameterRound.ts",
-          "frontend/src/lib/therapyGiro.ts"
+          "frontend/src/lib/therapyGiro.ts",
+          "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+          "frontend/src/lib/__tests__/consegneReadModelGuard.test.ts"
         ],
         "acceptance": [
           {
@@ -1348,7 +1351,9 @@
               "frontend/src/components/admin/AdminAttentionList.tsx",
               "frontend/src/components/admin/AdminDashboard.tsx",
               "frontend/src/components/admin/__tests__/adminAttention456.test.ts",
-              "frontend/src/components/admin/adminAttentionModel.ts"
+              "frontend/src/components/admin/adminAttentionModel.ts",
+              "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+              "frontend/src/lib/__tests__/consegneReadModelGuard.test.ts"
             ],
             "steps": [
               "Reuse unread diary/handover queue and existing exact target resolver instead of legacy consegneOverview urgency counts.",
@@ -1613,7 +1618,9 @@
               "frontend/src/components/admin/AdminAttentionList.css",
               "frontend/src/components/admin/__tests__/adminAttention456.test.ts",
               "e2e/qa-bug-batch-447.mjs",
-              "e2e/qa-bug-batch-447-browser.mjs"
+              "e2e/qa-bug-batch-447-browser.mjs",
+              "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+              "frontend/src/lib/__tests__/consegneReadModelGuard.test.ts"
             ]
           },
           {
@@ -1632,7 +1639,21 @@
         ],
         "separationReason": "Batch432 owns authoritative therapy write/query/schema, AIFA catalog semantics and App.tsx; this batch owns clinical presentation and reuses its public read/write contracts without editing backend or App.tsx. Integrate tested432 before final therapy/UI QA. Batch450 owns intake/import draft lifecycle and changes PatientList.tsx; this batch changes existing row presentation only. Integrate450 first, reconcile PatientList without overriding draft visibility/status, rerun both draft and operational-list regressions. Shared identity component gains an opt-in compact presentation preserving default callers and accessible disambiguation. No parallel edit to another worktree or silent frozen scope expansion."
       },
-      "frozenAt": "2026-10-17T07:49:17.949Z"
+      "frozenAt": "2026-10-17T07:49:17.949Z",
+      "amendments": [
+        {
+          "number": 1,
+          "at": "2026-10-17T07:50:12.395Z",
+          "issue": 456,
+          "files": [
+            "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+            "frontend/src/lib/__tests__/consegneReadModelGuard.test.ts"
+          ],
+          "reason": "Issue456 deliberately replaces the legacy passive KPI first screen and stale overview urgency source. Existing source-structure tests explicitly require those removed implementations. Change only obsolete implementation-shape assertions and add actual authoritative queue/render behavior assertions. Preserve pagination, count completeness, source error/retry, permissions, room recovery, exact patient/deep-link and unrelated operator guards; no skip, weaker oracle or blanket removal. New browser must prove first-screen action ordering/no passive KPI, diary+handover acknowledgements and no tomorrow doses.",
+          "packet": "scope-amendment-1.md",
+          "sha256": "83d56fd3d02a242f7070cfa18384a7eea536ec72e30c1ada8bfef81f07d08078"
+        }
+      ]
     },
     {
       "id": "tracking-455",
@@ -1659,5 +1680,5 @@
       "reservedAt": "2026-10-17T07:44:43.115Z"
     }
   ],
-  "updatedAt": "2026-10-17T07:49:17.953Z"
+  "updatedAt": "2026-10-17T07:50:12.396Z"
 }
