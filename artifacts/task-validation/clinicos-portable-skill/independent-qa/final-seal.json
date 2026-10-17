@@ -1,0 +1,19 @@
+{
+  ".claude/skills/clinicos/SKILL.md": "06049ed0fa6136ede4f4a8b437beb92c0e2819789ab16d82285f3d19059ba892",
+  ".claude/skills/clinicos/references/bug-delivery.md": "cf3a2603d4ac70e1990b2bc9d002f44ff0d0d1fb95ed8e4921cbfa6d02e1559d",
+  ".agents/skills/clinicos/SKILL.md": "090a3a6363b65941a07d1a05d9bbb7aefaca3ef10f65add7c231c242872d5a73",
+  "artifacts/task-validation/clinicos-portable-skill/task-contract.md": "8e67e9cbb6da2f596fd98bac68a158b81cd9dc740962e33fe6fb74157dda6707",
+  "artifacts/task-validation/clinicos-portable-skill/independent-qa/document-checks.json": "cce8f390360d39a45131f65def3df2f6c870a5fe638eae5d05272083039639c7",
+  "artifacts/task-validation/clinicos-portable-skill/independent-qa/logs/build.log": "10ee7ebd7c3f0c96faf24cfd3fb0e0af126624ee4341475abf190d08d6f32584",
+  "artifacts/task-validation/clinicos-portable-skill/independent-qa/logs/contract.log": "c5ebc3b106ae65d9c22db4b48a186c0d8cb75e92d67192ba6a2e176e11609035",
+  "artifacts/task-validation/clinicos-portable-skill/independent-qa/logs/document-browser.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "artifacts/task-validation/clinicos-portable-skill/independent-qa/logs/typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "artifacts/task-validation/clinicos-portable-skill/independent-qa/logs/video-decode.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "artifacts/task-validation/clinicos-portable-skill/independent-qa/playbook-full.png": "8cfb0d71cac1ec2ed5f6e41fd9af688ebbb0d4e410c86a83bde346cda7694262",
+  "artifacts/task-validation/clinicos-portable-skill/independent-qa/review-playbook.png": "b5224cd281ebbc694e1d7382844c57300717044f5eca4b327d87b134eec35634",
+  "artifacts/task-validation/clinicos-portable-skill/independent-qa/skill.png": "263896e55c9e52bb98fbb53c4e1fae1e7257762dbc10839c60363198b586b821",
+  "artifacts/task-validation/clinicos-portable-skill/independent-qa/trace.zip": "7797e3530460d38315c6be85e40787e6157781b1838f1dff02f4ba647a67fa8b",
+  "artifacts/task-validation/clinicos-portable-skill/independent-qa/validation-report.md": "f3e5093ef45bd4019e3b60227a8a9ad9a47bf9d2c74077e086d1c0b506ed3866",
+  "artifacts/task-validation/clinicos-portable-skill/independent-qa/verify.mjs": "ead009a9263cc56e4a84eb53bdbd261d950399442bf31a2eca807878fab60575",
+  "artifacts/task-validation/clinicos-portable-skill/independent-qa/video/page@d53b3cd625243168c45c0a05cd5c6cfe.webm": "3812c95345d43ba9865c6abf65e6dd676e9a1bb208df843bd1eed61d44914472"
+}
