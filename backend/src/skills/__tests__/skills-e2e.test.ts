@@ -572,7 +572,8 @@ async function withHeldCorrection<T>(
       ]),
       'Correction did not reach interpreter entry',
     );
-    await run();
+    // Attach rejection handling before invoking the callback, including late rejection after timeout.
+    await bounded(Promise.resolve().then(run), 'Confirmation callback did not complete');
   } catch (error) {
     failed = true;
     primary = error;
@@ -670,6 +671,119 @@ test('QA H1 barrier failure paths release and settle while preserving the primar
       error.errors[1] === cleanup,
   );
 });
+
+test(
+  'QA H1 confirmation timeout and late rejection always release and settle',
+  { timeout: 1000 },
+  async () => {
+    function heldFixture(cleanupError?: Error) {
+      let release!: () => void;
+      let released = false;
+      let settled = false;
+      const held = new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      return {
+        correction: held.then(() => {
+          settled = true;
+          if (cleanupError) throw cleanupError;
+        }),
+        release: () => {
+          released = true;
+          release();
+        },
+        assertReleased: () => {
+          assert.equal(released, true);
+          assert.equal(settled, true);
+        },
+      };
+    }
+    const stalled = heldFixture();
+    await assert.rejects(
+      withHeldCorrection(
+        stalled.correction,
+        Promise.resolve(),
+        stalled.release,
+        () => new Promise<void>(() => {}),
+        10,
+      ),
+      /Confirmation callback did not complete/,
+    );
+    stalled.assertReleased();
+
+    const late = heldFixture();
+    let rejectLate!: (error: Error) => void;
+    const lateRun = new Promise<void>((_, reject) => {
+      rejectLate = reject;
+    });
+    await assert.rejects(
+      withHeldCorrection(late.correction, Promise.resolve(), late.release, () => lateRun, 10),
+      /Confirmation callback did not complete/,
+    );
+    late.assertReleased();
+    rejectLate(new Error('callback rejected after its timeout'));
+    // A task barrier lets strict unhandled-rejection mode observe any detached rejected Promise.
+    await new Promise<void>((resolve) => setImmediate(resolve));
+
+    const rejected = heldFixture();
+    const primary = new Error('callback rejection before timeout');
+    await assert.rejects(
+      withHeldCorrection(
+        rejected.correction,
+        Promise.resolve(),
+        rejected.release,
+        () =>
+          new Promise<void>((_, reject) => {
+            queueMicrotask(() => reject(primary));
+          }),
+        50,
+      ),
+      (error) => error === primary,
+    );
+    rejected.assertReleased();
+
+    const cleanupError = new Error('correction cleanup rejected after callback timeout');
+    const failedCleanup = heldFixture(cleanupError);
+    await assert.rejects(
+      withHeldCorrection(
+        failedCleanup.correction,
+        Promise.resolve(),
+        failedCleanup.release,
+        () => new Promise<void>(() => {}),
+        10,
+      ),
+      (error) =>
+        error instanceof AggregateError &&
+        error.cause instanceof Error &&
+        error.cause.message === 'Confirmation callback did not complete' &&
+        error.errors[0] === error.cause &&
+        error.errors[1] === cleanupError,
+    );
+    failedCleanup.assertReleased();
+
+    let releasedNeverSettling = false;
+    await assert.rejects(
+      withHeldCorrection(
+        new Promise<void>(() => {}),
+        Promise.resolve(),
+        () => {
+          releasedNeverSettling = true;
+        },
+        async () => {
+          throw primary;
+        },
+        10,
+      ),
+      (error) =>
+        error instanceof AggregateError &&
+        error.cause === primary &&
+        error.errors[0] === primary &&
+        error.errors[1] instanceof Error &&
+        error.errors[1].message === 'Correction did not settle after barrier release',
+    );
+    assert.equal(releasedNeverSettling, true);
+  },
+);
 
 test(
   'QA H1 — a slow correction racing a confirmation cannot produce a second write',
