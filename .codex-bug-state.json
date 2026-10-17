@@ -675,7 +675,7 @@
       "sourceSha": "7028844633760f03a42072fa6648f975370e6db6",
       "branch": "codex/bug-batch-432",
       "owner": "codex-root-2026-10-17",
-      "phase": "waiting-checks",
+      "phase": "waiting-review",
       "reservedAt": "2026-10-17T07:38:22.106Z",
       "implementation": [
         {
@@ -1308,6 +1308,12 @@
         "reason": "Actual demo preflight rejected exact main repository trigger; await verified configuration. Review allowed, merge/deploy/closure held.",
         "runId": 39023763026,
         "createdAt": "2026-10-17T10:36:07.080Z"
+      },
+      "externalReview": {
+        "status": "requested",
+        "subjectSha": "34c865233df53a3930f29c8b7befc02208588d64",
+        "requestedAt": "2026-10-17T10:58:26.535Z",
+        "feedbackFingerprint": "a5428f757923783245ed909d5215d9d54824d9406abeeb58da3b1932b36fb41d"
       }
     }
   ],
@@ -3853,5 +3859,5 @@
       }
     }
   ],
-  "updatedAt": "2026-10-17T10:49:51.638Z"
+  "updatedAt": "2026-10-17T10:58:26.536Z"
 }
