@@ -2726,7 +2726,7 @@
         456,
         457
       ],
-      "phase": "implementing",
+      "phase": "publishing-local-proof",
       "implementation": [
         {
           "round": 1,
@@ -3747,14 +3747,26 @@
         }
       },
       "independentQa": {
-        "attempt": 3,
-        "verdict": "FAILED VALIDATION",
-        "reportSha256": "964fbe47d85f50f69b991ab64a7bdf5dd8097acf2e4031d9047c919d7612edd1",
-        "sealSha256": "03fcda69c573ed77d058baaed01996c6e789ab5dde149b2c55e137bf61b3f308",
+        "attempt": 4,
+        "verdict": "BLOCKED",
+        "localPhasesPassed": true,
+        "reason": "Actual reviewedclinicalparentmain432/450 notavailable; all local5phases passed",
+        "reportSha256": "8f2497589c431266d9c3ec4f72388c3460ca1212ef53d1004aaab13e7195aed3",
+        "sealSha256": "5a083758b79971988f026575aa164b8e2e52e3db3a014ba122cda39092be6818",
+        "artifactHashesVerified": 97,
         "source94Unchanged": true,
-        "contracts26Unchanged": true,
-        "finding": "generic roster trwait accepts loadingplaceholder;457dependentfixture notcreated"
-      }
+        "contracts27Unchanged": true,
+        "actualUxPass": 7,
+        "actualFocusedDbPass": 12,
+        "inheritedQa3NotRerun": {
+          "frontendPass": 1480,
+          "backendPass": 1942,
+          "existingOptInSkipped": 5,
+          "intakePass": 19
+        },
+        "privacyFindings": 0
+      },
+      "pendingPublicationSha": "e14ee2f22c18f1026c63e53b5ce0f5744fb0cfe1"
     },
     {
       "id": "tracking-455",
@@ -3822,7 +3834,15 @@
         "storage": "blocked-before-storage-mutation",
         "online": "failed-session-revoked-no-media-published"
       },
-      "blockedReason": "Four attempts exhausted. Demo database zero clinical/import rows verified; native backup/storage identity not proven, and browser verifier expects a clinical endpoint forbidden to simulator admin. Readonly diagnosis allowed; no fifth implementation or reset."
+      "blockedReason": "Four attempts exhausted. Demo database zero clinical/import rows verified; native backup/storage identity not proven, and browser verifier expects a clinical endpoint forbidden to simulator admin. Readonly diagnosis allowed; no fifth implementation or reset.",
+      "relatedDemoSourceBlock": {
+        "configurationTask": "demo-source-configuration",
+        "createRun": 39032475284,
+        "postInspectRun": 39032761614,
+        "errorCode": "DEMO_SOURCE_API_REJECTED",
+        "triggerStillMissing": true,
+        "evidenceSha": "e71fc4ff3f22d1384d96d1c2b23a699192c97a3b"
+      }
     },
     {
       "id": "demo-release-guard",
@@ -3920,6 +3940,14 @@
         "reason": "exact main repository trigger required",
         "demoDeploymentPerformed": false,
         "productionJob": "success"
+      },
+      "relatedDemoSourceBlock": {
+        "configurationTask": "demo-source-configuration",
+        "createRun": 39032475284,
+        "postInspectRun": 39032761614,
+        "errorCode": "DEMO_SOURCE_API_REJECTED",
+        "triggerStillMissing": true,
+        "evidenceSha": "e71fc4ff3f22d1384d96d1c2b23a699192c97a3b"
       }
     },
     {
@@ -3927,7 +3955,7 @@
       "issues": [],
       "branch": "codex/demo-source-configuration",
       "owner": "codex-root-2026-10-17",
-      "phase": "awaiting-native-inspection",
+      "phase": "provider-blocked",
       "implementation": [
         {
           "round": 1,
@@ -4008,7 +4036,25 @@
         "all6Required": true,
         "realProvider": true
       },
-      "activationSourceSha": "14dbcd353242b35a050c45cbed7978ac213edd62"
+      "activationSourceSha": "14dbcd353242b35a050c45cbed7978ac213edd62",
+      "evidenceSha": "e71fc4ff3f22d1384d96d1c2b23a699192c97a3b",
+      "actualVerification": {
+        "mainSha": "14dbcd353242b35a050c45cbed7978ac213edd62",
+        "inspectBeforeRun": 39032317392,
+        "inspectBeforeStatus": "success",
+        "createRun": 39032475284,
+        "createStatus": "failure",
+        "errorCode": "DEMO_SOURCE_API_REJECTED",
+        "technicalCause": "not exposed; not inferred",
+        "createDispatches": 1,
+        "inspectAfterRun": 39032761614,
+        "inspectAfterStatus": "success",
+        "inventoryDigest": "bb0843673ebc593892cc8bdabddca75746f06676e0c141f3bb4ea0ee70d05a5f",
+        "triggerCount": 0,
+        "completeInventory": true,
+        "inventoryUnchanged": true,
+        "mutationRetried": false
+      }
     },
     {
       "id": "issue-review-communication",
@@ -4025,7 +4071,7 @@
         "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
         ".github/workflows/codex-issue-review-sync.yml"
       ],
-      "phase": "awaiting-live-sync",
+      "phase": "active-verified",
       "implementation": [
         {
           "round": 1,
@@ -4076,7 +4122,22 @@
         "all6Required": true,
         "realProvider": true
       },
-      "activationSourceSha": "14dbcd353242b35a050c45cbed7978ac213edd62"
+      "activationSourceSha": "14dbcd353242b35a050c45cbed7978ac213edd62",
+      "evidenceSha": "51cd75d5e2e66fd808355a8b2395b46567292a31",
+      "actualVerification": {
+        "mainSha": "14dbcd353242b35a050c45cbed7978ac213edd62",
+        "syncRun": 39032315862,
+        "status": "success",
+        "sourceIssuesVerified": 12,
+        "comments": 12,
+        "controllerNotificationRun": 39032417330,
+        "controllerStatus": "success",
+        "automaticIdempotentRun": 39032626268,
+        "duplicateComments": 0,
+        "forwarded": 0,
+        "normalBudgetsUnchanged": true,
+        "existingMaxFailuresNotRepaired": true
+      }
     },
     {
       "id": "ci-note-isolation",
@@ -4126,7 +4187,7 @@
       "evidenceRevision": "88406c7aa251b176c13a8c92d695f9e9d43d901d"
     }
   ],
-  "updatedAt": "2026-10-17T12:24:00.327Z",
+  "updatedAt": "2026-10-17T12:38:34.669Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
