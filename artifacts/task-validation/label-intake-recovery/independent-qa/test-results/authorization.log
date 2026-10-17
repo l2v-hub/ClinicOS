@@ -1,0 +1,35 @@
+✔ authorized human write can recover label-only queue and dashboard never writes (6.164463ms)
+✔ authorized human maintain can recover label-only queue and dashboard never writes (0.791707ms)
+✔ authorized human admin can recover label-only queue and dashboard never writes (0.875862ms)
+✔ non-write read cannot normalize or enter queue (0.360833ms)
+✔ non-write triage cannot normalize or enter queue (0.232872ms)
+✔ non-write none cannot normalize or enter queue (0.171297ms)
+✔ actor Bot cannot self-authorize from permission alone (0.238128ms)
+✔ actor null cannot self-authorize from permission alone (0.732154ms)
+✔ actor Unknown cannot self-authorize from permission alone (0.522742ms)
+✔ Bot fallback recent exact authorized human command (0.695347ms)
+✔ Bot fallback near match rejected (0.713627ms)
+✔ Bot fallback stale command rejected (0.174205ms)
+✔ Bot fallback future command rejected (0.661467ms)
+✔ Bot fallback unauthorized command rejected (0.156917ms)
+✔ blocked codex-blocked not normalized (0.608038ms)
+✔ blocked codex-in-flight not normalized (0.125148ms)
+✔ blocked codex-processing not normalized (0.18874ms)
+✔ blocked status-blocked not normalized (0.121828ms)
+✔ PRs never normalized as issues (0.138659ms)
+✔ Bot fallback rejects command author metadata Bot (1.261321ms)
+✔ Bot fallback rejects command author metadata null (0.376272ms)
+✔ Bot fallback rejects command author metadata Unknown (0.284722ms)
+✔ external agent-working remains visible but never normalized (0.202565ms)
+✔ external ready-for-dev remains visible but never normalized (0.093543ms)
+✔ external assigned-to-claude remains visible but never normalized (0.549306ms)
+✔ external ready-for-qa remains visible but never normalized (0.222704ms)
+✔ external qa-passed remains visible but never normalized (0.247897ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 135.723498

@@ -86,7 +86,7 @@ export async function runPipeline({
     const status = batch.phase === 'blocked' ? 'Bloccato' : 'In progress';
     for (const number of batch.issues) await gh.setIssueStatus(number, status);
   }
-  const queue = await gh.discoverQueue();
+  const queue = await gh.discoverQueue({ normalize: true });
   let selected = [];
   for (const item of queue) {
     const issue = await gh.viewIssue(typeof item === 'number' ? item : item.number);

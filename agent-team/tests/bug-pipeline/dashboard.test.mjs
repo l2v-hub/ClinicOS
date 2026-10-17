@@ -7,6 +7,23 @@ import { createDashboardServer } from '../../src/bug-pipeline/dashboard-server.m
 const repo = 'l2v-hub/ClinicOS';
 const empty = { schemaVersion: 1, repository: repo, batches: [] };
 
+test('authorized codex-run issues are visible before bug-label normalization without exposing payloads', () => {
+  const snapshot = dashboardSnapshot({
+    repo,
+    state: empty,
+    issues: [],
+    queue: [
+      { number: 17, body: 'PRIVATE_SYNTHETIC_PAYLOAD' },
+      { number: 18, labels: ['ready-for-qa'] },
+    ],
+  });
+  assert.equal(snapshot.counts.queued, 1);
+  assert.equal(snapshot.rows[0].number, 17);
+  assert.equal(snapshot.rows[0].status, 'In coda');
+  assert.equal(snapshot.rows[1].status, 'Gestita da altro flusso');
+  assert.doesNotMatch(JSON.stringify(snapshot), /PRIVATE_SYNTHETIC_PAYLOAD|body/);
+});
+
 test('collection window is visible as queued aggregation, without claiming or exposing issue data', () => {
   const snapshot = dashboardSnapshot({
     repo,

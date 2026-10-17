@@ -63,6 +63,170 @@ function apiPath(args) {
   return args.find((arg, index) => index > 0 && !arg.startsWith('-'));
 }
 
+test('a maintainer labeling with the same User identity as the controller PAT is authorized', async () => {
+  const calls = [];
+  const gh = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async ({ args }) => {
+      calls.push(args);
+      const route = apiPath(args);
+      if (route === 'user') return response({ login: 'alice', type: 'User' });
+      if (route.includes('/issues?'))
+        return response([[{ number: 17, labels: [{ name: 'codex-run' }] }]]);
+      if (route.includes('/events?'))
+        return response([
+          [
+            {
+              event: 'labeled',
+              label: { name: 'codex-run' },
+              actor: { login: 'alice', type: 'User' },
+              created_at: '2026-10-17T06:00:00Z',
+            },
+          ],
+        ]);
+      if (route.endsWith('/collaborators/alice/permission'))
+        return response({ permission: 'admin' });
+      throw new Error(`Unexpected route ${route}`);
+    },
+  });
+  assert.deepEqual(
+    (await gh.discoverQueue()).map((i) => i.number),
+    [17],
+  );
+  assert.ok(
+    calls.every((args) => !args.includes('-X')),
+    'dashboard discovery is read-only',
+  );
+  assert.ok(
+    calls.every((args) => !apiPath(args).includes('/comments')),
+    'a human label needs no slash-command workaround',
+  );
+});
+
+test('scheduled normalization recovers codex-run without bug only after authorization and never mutates dashboard reads', async () => {
+  const writes = [];
+  const gh = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async ({ args, input }) => {
+      const route = apiPath(args);
+      if (args.includes('POST')) {
+        writes.push({ route, body: JSON.parse(input) });
+        return response({});
+      }
+      if (route.includes('/issues?'))
+        return response([
+          [
+            { number: 17, labels: [{ name: 'codex-run' }] },
+            { number: 18, labels: [{ name: 'codex-run' }] },
+            { number: 19, labels: [{ name: 'codex-run' }], pull_request: {} },
+            { number: 20, labels: [{ name: 'codex-run' }, { name: 'ready-for-qa' }] },
+          ],
+        ]);
+      if (route.includes('/events?'))
+        return response([
+          [
+            {
+              event: 'labeled',
+              label: { name: 'codex-run' },
+              actor: {
+                login: route.includes('/17/') || route.includes('/20/') ? 'alice' : 'bob',
+                type: 'User',
+              },
+              created_at: '2026-10-17T06:00:00Z',
+            },
+          ],
+        ]);
+      if (route.includes('/collaborators/'))
+        return response({ permission: route.includes('/alice/') ? 'write' : 'triage' });
+      if (route.includes('/labels/')) return response({});
+      throw new Error(`Unexpected route ${route}`);
+    },
+  });
+  assert.deepEqual(
+    (await gh.discoverQueue()).map((i) => i.number),
+    [17, 20],
+  );
+  assert.equal(writes.length, 0);
+  await gh.discoverQueue({ normalize: true });
+  assert.deepEqual(writes, [
+    {
+      route: 'repos/l2v-hub/ClinicOS/issues/17/labels',
+      body: { labels: ['bug', 'codex-triage', 'codex-run'] },
+    },
+  ]);
+});
+
+test('bot and missing actor types cannot self-authorize even if permission lookup would grant admin', async () => {
+  for (const type of ['Bot', undefined]) {
+    const gh = createGitHub({
+      cwd: '/tmp',
+      repo: 'l2v-hub/ClinicOS',
+      run: async ({ args }) => {
+        const route = apiPath(args);
+        if (route.includes('/issues?'))
+          return response([[{ number: 17, labels: [{ name: 'codex-run' }] }]]);
+        if (route.includes('/events?'))
+          return response([
+            [
+              {
+                event: 'labeled',
+                label: { name: 'codex-run' },
+                actor: { login: 'service-account', type },
+                created_at: '2026-10-17T06:00:00Z',
+              },
+            ],
+          ]);
+        if (route.includes('/comments?')) return response([[]]);
+        throw new Error(`Unexpected authorization or mutation ${route}`);
+      },
+    });
+    assert.deepEqual(await gh.discoverQueue({ normalize: true }), []);
+  }
+});
+
+test('bot label fallback rejects non-human command metadata and old human commands', async () => {
+  for (const command of [
+    { type: 'Bot', createdAt: '2026-10-17T05:59:00Z' },
+    { type: undefined, createdAt: '2026-10-17T05:59:00Z' },
+    { type: 'User', createdAt: '2026-10-17T03:00:00Z' },
+  ]) {
+    const gh = createGitHub({
+      cwd: '/tmp',
+      repo: 'l2v-hub/ClinicOS',
+      run: async ({ args }) => {
+        const route = apiPath(args);
+        if (route.includes('/issues?'))
+          return response([[{ number: 17, labels: [{ name: 'codex-run' }] }]]);
+        if (route.includes('/events?'))
+          return response([
+            [
+              {
+                event: 'labeled',
+                label: { name: 'codex-run' },
+                actor: { login: 'github-actions[bot]', type: 'Bot' },
+                created_at: '2026-10-17T06:00:00Z',
+              },
+            ],
+          ]);
+        if (route.includes('/comments?'))
+          return response([
+            [
+              {
+                body: '/codex fix',
+                user: { login: 'alice', type: command.type },
+                created_at: command.createdAt,
+              },
+            ],
+          ]);
+        throw new Error(`Unexpected authorization or mutation ${route}`);
+      },
+    });
+    assert.deepEqual(await gh.discoverQueue({ normalize: true }), []);
+  }
+});
+
 test('authorized accepts only write-capable collaborators', async () => {
   const run = async ({ args }) => {
     const path = apiPath(args);
@@ -152,7 +316,7 @@ test('intake refuses unauthorized actors, near-match commands, and pull requests
 test('scheduled queue accepts only an authorized explicit codex-run event and skips blocked issues', async () => {
   const run = async ({ args }) => {
     const path = apiPath(args);
-    if (path === 'repos/l2v-hub/ClinicOS/issues?state=open&labels=bug,codex-run&per_page=100')
+    if (path === 'repos/l2v-hub/ClinicOS/issues?state=open&labels=codex-run&per_page=100')
       return response([
         [
           { number: 10, labels: [{ name: 'bug' }, { name: 'codex-run' }] },
@@ -172,13 +336,13 @@ test('scheduled queue accepts only an authorized explicit codex-run event and sk
           {
             event: 'labeled',
             label: { name: 'codex-triage' },
-            actor: { login: 'alice' },
+            actor: { login: 'alice', type: 'User' },
             created_at: '2026-10-16T09:00:00Z',
           },
           {
             event: 'labeled',
             label: { name: 'codex-run' },
-            actor: { login: 'alice' },
+            actor: { login: 'alice', type: 'User' },
             created_at: '2026-10-16T10:00:00Z',
           },
         ],
@@ -189,7 +353,7 @@ test('scheduled queue accepts only an authorized explicit codex-run event and sk
           {
             event: 'labeled',
             label: { name: 'codex-run' },
-            actor: { login: 'github-actions[bot]' },
+            actor: { login: 'github-actions[bot]', type: 'Bot' },
             created_at: '2026-10-16T10:00:00Z',
           },
         ],
@@ -201,14 +365,20 @@ test('scheduled queue accepts only an authorized explicit codex-run event and sk
           {
             event: 'labeled',
             label: { name: 'codex-run' },
-            actor: { login: 'github-actions[bot]' },
+            actor: { login: 'github-actions[bot]', type: 'Bot' },
             created_at: '2026-10-16T10:00:00Z',
           },
         ],
       ]);
     if (path.endsWith('/issues/13/comments?per_page=100'))
       return response([
-        [{ body: '/codex fix', user: { login: 'alice' }, created_at: '2026-10-16T09:59:00Z' }],
+        [
+          {
+            body: '/codex fix',
+            user: { login: 'alice', type: 'User' },
+            created_at: '2026-10-16T09:59:00Z',
+          },
+        ],
       ]);
     if (path.endsWith('/issues/14/events?per_page=100'))
       return response([
@@ -216,11 +386,12 @@ test('scheduled queue accepts only an authorized explicit codex-run event and sk
           {
             event: 'labeled',
             label: { name: 'codex-run' },
-            actor: { login: 'untrusted-bot[bot]' },
+            actor: { login: 'untrusted-bot[bot]', type: 'Bot' },
             created_at: '2026-10-16T10:00:00Z',
           },
         ],
       ]);
+    if (path.endsWith('/issues/14/comments?per_page=100')) return response([[]]);
     if (path.endsWith('/collaborators/alice/permission')) return response({ permission: 'write' });
     if (path.endsWith('/collaborators/github-actions/permission'))
       return response({}, { ok: false, code: 1, stderr: 'HTTP 404' });

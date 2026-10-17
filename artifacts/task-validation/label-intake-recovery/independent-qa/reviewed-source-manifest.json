@@ -1,0 +1,51 @@
+{
+  "base": "b058ce032e5b1d73050353e849103ea438f7d613",
+  "branch": "codex/fix-label-intake",
+  "recordedAt": "2026-10-17T07:27:10.327599+00:00",
+  "files": [
+    {
+      "path": ".agents/skills/codex-bug-triage/SKILL.md",
+      "sha256": "1ca7519f996cfeb6a246367f79eb810a5792e929d6188c47679ac4dcc306cf67"
+    },
+    {
+      "path": ".github/workflows/codex-bug-pipeline.yml",
+      "sha256": "9e6a0ba499de1ce71e1de4806aa250ebcda8bdc75643f763bdd02b88b167ffb5"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/dashboard.mjs",
+      "sha256": "8568619b018a501955d12a93b0ee43fce26094086eca3b72250757c00844ab79"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/github.mjs",
+      "sha256": "84294104eee7fdfe384c0dd2bf63573111dc935631c50db68b6eee74fd4ab3d3"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "sha256": "64633dfad4f78dae75c8c37a59ef9aa4eb3607629b1afb1d7a68ea7cd3a054c0"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/dashboard-server.mjs",
+      "sha256": "4e0061ea2ccbb30bf62c48f554b2cec43686a365599682d3f652830cd226f266"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/contracts.mjs",
+      "sha256": "cd650b0eddf19ea47d592b6db7770e2c4863e769f01441e17258c57aab516f69"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/dashboard.test.mjs",
+      "sha256": "35a264ac561617d8d96f934d741ebc7d3d80fe75a3dd5d93dce6647d30bfa575"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "sha256": "797490679dd6320171ae0e848738d79c783d2647dcdde1da3bc1b4998baae650"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/workflow-intake.test.mjs",
+      "sha256": "e24c8ec2e8c862634f73ca5d3f03b1c1531b18295f03ac09ad4a45edbe978b60"
+    },
+    {
+      "path": "docs/codex-bug-workflow.md",
+      "sha256": "ee97317083af6080475417f31664eccac858e36261739cf70f40a9579eff1d66"
+    }
+  ]
+}

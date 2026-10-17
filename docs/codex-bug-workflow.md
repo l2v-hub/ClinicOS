@@ -4,6 +4,8 @@
 
 Apri una issue e scrivi **`/codex fix`**, oppure applica **`codex-run`**. Il comando deve provenire da un collaboratore con permesso write, maintain o admin. La form bug applica `bug` e `codex-triage`: queste due label da sole raccolgono segnalazioni e non autorizzano sessioni a pagamento. I workflow devono prima essere presenti nel branch predefinito e avere i prerequisiti sotto indicati.
 
+`codex-run` è sufficiente anche sulle issue che non hanno ancora `bug`: il controller recupera le autorizzazioni dalla cronologia GitHub e aggiunge le label di classificazione mancanti. Questo recupero funziona anche se un evento iniziale viene cancellato nella coda Actions. Un account GitHub di tipo `User` con i permessi necessari resta umano anche se è lo stesso account di `CLINICOS_BOT_TOKEN`; l'identità del token non viene usata per dedurre che una label sia stata aggiunta da un bot. Gli attori `Bot` richiedono invece il comando recente di un umano autorizzato; metadati incompleti non autorizzano avvii. La dashboard legge la coda senza cambiare label e mostra anche le issue ancora prive di classificazione. Le issue già assegnate ad altri flussi o `ready-for-qa` conservano la propria gestione.
+
 GitHub Actions avvia il controller, serializzato per repository. Le sessioni e i terminali sono processi CLI nuovi nel runner, con risultati nei log Actions e nelle issue. Codex gira nel runner Actions; Claude usa il cron sul terminale personale già autenticato, come scelto dall’utente. La riconciliazione periodica ogni 15 minuti recupera la coda e i commenti PR se un evento viene accorpato dalla concorrenza di Actions.
 
 ```mermaid

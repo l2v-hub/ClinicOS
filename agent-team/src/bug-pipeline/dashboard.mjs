@@ -23,6 +23,11 @@ export function dashboardSnapshot({ repo, state, issues, queue, setup, now = new
   );
   const byNumber = new Map(issues.map((issue) => [issue.number, issue]));
   for (const number of batches.keys()) if (!byNumber.has(number)) byNumber.set(number, { number });
+  for (const queued of queue) {
+    const number = typeof queued === 'number' ? queued : queued.number;
+    if (!byNumber.has(number))
+      byNumber.set(number, { number, labels: typeof queued === 'number' ? [] : queued.labels });
+  }
   const rows = [...byNumber.values()]
     .map((issue) => {
       const batch = batches.get(issue.number);
