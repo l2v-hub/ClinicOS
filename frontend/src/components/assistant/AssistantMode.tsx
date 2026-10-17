@@ -42,7 +42,7 @@ import { ProactivePanel } from './ProactivePanel';
 import { CopilotHome } from './CopilotHome';
 import { RoundPanel } from './RoundPanel';
 import { useVoiceChannel } from './voice/useVoiceChannel';
-import type { AssistantTurnStatus } from './voice/audioSession';
+import { capturing, type AssistantTurnStatus } from './voice/audioSession';
 import './AssistantMode.css';
 
 export type AssistantInputSource = 'keyboard' | 'starter' | 'voice';
@@ -409,9 +409,7 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
           e.stopPropagation();
           // First Escape stops an open microphone / pending transcript; the next one closes.
           if (
-            ['LISTENING', 'SPEECH_ACTIVE', 'TRANSCRIBING', 'TRANSCRIPT_READY'].includes(
-              voice.audio.state,
-            )
+            capturing(voice.audio.state) || voice.audio.state === 'TRANSCRIPT_READY'
           ) {
             voice.cancel();
             return;

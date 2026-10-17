@@ -37,7 +37,8 @@ import {
   SttUnavailableError,
   createRuntimeSttProvider,
   looksLikeWav,
-  runtimeSttAvailable,
+  runtimeSttStatus,
+  voiceTransport,
   voiceChannelEnabled,
 } from '../voice/stt.js';
 import { voiceVadConfig } from '../voice/vad-config.js';
@@ -300,10 +301,21 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
     const identity = requireIdentity(req, res);
     if (!identity) return;
     const channelEnabled = voiceChannelEnabled();
+    // A disabled channel never even probes its shared runtime.
+    const stt = channelEnabled && !deps.stt ? await runtimeSttStatus() : null;
+    const transport = stt ? voiceTransport(stt) : 'server';
     res.status(200).json({
       voiceAllowed: voiceAllowed(req),
       channelEnabled,
-      sttConfigured: channelEnabled && (Boolean(deps.stt) || (await runtimeSttAvailable())),
+      sttConfigured:
+        channelEnabled &&
+        (Boolean(deps.stt) ||
+          (transport === 'webrtc' ? stt?.realtime.available === true : stt?.available === true)),
+      transport,
+      realtime: {
+        enabled: stt?.realtime.enabled ?? false,
+        configured: stt?.realtime.available ?? false,
+      },
       locale: 'it-IT',
       maxUtteranceBytes: MAX_UTTERANCE_BYTES,
       vad: voiceVadConfig(),
@@ -338,6 +350,90 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
     }
     next();
   }
+
+  router.post(
+    '/voice/realtime-call',
+    voiceTranscribeRateLimit,
+    voiceGate,
+    express.text({ type: 'application/sdp', limit: 64_000 }),
+    async (req: AuthedRequest, res: Response) => {
+      const identity = requireIdentity(req, res);
+      if (!identity) return;
+      const offer = typeof req.body === 'string' ? req.body : '';
+      if (
+        !req.is('application/sdp') ||
+        !offer.startsWith('v=0') ||
+        offer.includes('\0') ||
+        Buffer.byteLength(offer) > 64_000
+      ) {
+        res.status(400).json({ error: 'Offerta WebRTC non valida', code: 'invalid_sdp' });
+        return;
+      }
+      const provider = deps.stt ?? createRuntimeSttProvider();
+      if (!provider.negotiateRealtimeCall) {
+        res
+          .status(409)
+          .json({ error: 'Trascrizione realtime non disponibile', code: 'transport_unsupported' });
+        return;
+      }
+      const controller = new AbortController();
+      const disconnected = () => {
+        if (!res.writableEnded) controller.abort();
+      };
+      req.once('aborted', disconnected);
+      res.once('close', disconnected);
+      const requestId = `voice-${randomUUID()}`;
+      try {
+        const answer = await provider.negotiateRealtimeCall(offer, {
+          requestId,
+          signal: controller.signal,
+        });
+        if (controller.signal.aborted) return;
+        recordAuditEvent({
+          requestId,
+          operatorId: identity.operatorId,
+          operatorRole: identity.appRole ?? identity.role,
+          patientId: null,
+          actionType: 'voice:session',
+          kind: 'read',
+          channel: 'voce',
+          fields: ['transport:webrtc'],
+          outcome: 'ok',
+        });
+        // Enforce the same allowlist even for injected test/provider implementations.
+        res
+          .status(200)
+          .json({
+            sdp: answer.sdp,
+            model: answer.model,
+            deployment: answer.deployment,
+            expiresAt: answer.expiresAt,
+            transport: 'webrtc',
+          });
+      } catch (error) {
+        if (controller.signal.aborted) return;
+        const e =
+          error instanceof SttUnavailableError
+            ? error
+            : new SttUnavailableError('stt_provider_error', 'Errore STT realtime', 502);
+        recordAuditEvent({
+          requestId,
+          operatorId: identity.operatorId,
+          operatorRole: identity.appRole ?? identity.role,
+          patientId: null,
+          actionType: 'voice:session',
+          kind: 'read',
+          channel: 'voce',
+          fields: [`code:${e.code}`],
+          outcome: 'error',
+        });
+        res.status(e.status).json({ error: 'Trascrizione realtime non disponibile', code: e.code });
+      } finally {
+        req.removeListener('aborted', disconnected);
+        res.removeListener('close', disconnected);
+      }
+    },
+  );
 
   router.post(
     '/voice/transcribe',
@@ -439,7 +535,9 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
   });
 
   // Phase 7: Attention Inbox, ack/seen, shift briefing (read-only; actions reuse existing skills).
-  const proactiveDeps = proactive ?? { listWorkflows: (id: string) => deps.store.listByOperator?.(id) ?? [] };
+  const proactiveDeps = proactive ?? {
+    listWorkflows: (id: string) => deps.store.listByOperator?.(id) ?? [],
+  };
   registerProactiveRoutes(router, proactiveDeps);
   // Phase 8: role copilot home + resident round (presentation over the same skills / policy / scope).
   registerCopilotRoutes(router, {

@@ -1,0 +1,9 @@
+# Executable plan
+
+1. Senior reserves cycle 1/4 and validates contract before source changes (recorded).
+2. Senior runtime: registry optional realtime module; generic dispatcher honoring AI_ENABLED and realtime flags; Azure adapter uses explicit configured model and HTTPS endpoint, no redirects, bounded responses, sanitized errors. API bearer check then bounded streamed JSON and SDP validation before adapter.
+3. Senior backend: additive typed negotiation, bounded response validation and correlation metadata; status keeps batch availability and selects realtime only when enabled/supported. Existing explicit server path unchanged. New route uses existing voice gates and rate limit; no audio/transcript/SDP audit values.
+4. Senior frontend: preserve current TRANSCRIPT_READY final state and spoken preview support; add permission and partial states; bounded WebRTC lifecycle, explicit commit, no fallback, cancellation/stale-final guards. Partials display only.
+5. Bounded smaller executor: write separate pure frontend parser/reducer/transport tests against frozen exported contract, no application edits, no DB/provider calls. Senior reviews assertions. Model choice: Luna for deterministic isolated tests; senior for media/security async orchestration.
+6. Senior runs targeted Python and Node tests, frontend type/build, safe loopback route test and actual synthetic-media browser component/hook proof. Capture before/after ownership, no local5432/remote DB. Global browser lock spans runtime/service startup through teardown.
+7. Simplify within scope; freeze source+contract manifest; STOP author edits. Root starts fresh independent QA session, controls any next bounded cycle, publication, GitHub comments/labels and real Claude review. No self-certification, commit/push or automatic activation here.

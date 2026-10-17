@@ -1,0 +1,4 @@
+Recorded from actual tool execution (session5294), before artifact normalization; not a re-execution.
+Exit1: AssertionError: public per-file artifact limit: runtime-1/trace/trace.zip
+Traceback verify_artifacts.py line54 assert len(raw)<=25*1024*1024.
+Original full archive retained privately with actualbeforehash in trace-lossless-normalization.json. Earlier short-trace pre-sanitization digest was not saved by that inherited verifier; disclosed in privacy-provenance-note.md, not invented.

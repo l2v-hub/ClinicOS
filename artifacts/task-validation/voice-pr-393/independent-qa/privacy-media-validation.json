@@ -1,0 +1,410 @@
+{
+  "scope": "independent-qa owned packet only",
+  "filesChecked": 105,
+  "zipMemberVisits": 1813,
+  "zips": [
+    {
+      "path": "early-buffer-probe/trace/trace.zip",
+      "crc": "PASS"
+    },
+    {
+      "path": "runtime-1/trace/trace.zip",
+      "crc": "PASS"
+    },
+    {
+      "path": "runtime-2/trace/trace.zip",
+      "crc": "PASS"
+    },
+    {
+      "path": "runtime-3/trace/trace.zip",
+      "crc": "PASS"
+    }
+  ],
+  "pngs": [
+    {
+      "path": "early-buffer-probe/screenshots/01-partial-display-only.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "early-buffer-probe/screenshots/failure.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "early-buffer-probe/screenshots/independent-early-empty-buffer-error.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-1/screenshots/01-partial-display-only.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-1/screenshots/02-final-operator-review.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-1/screenshots/02b-independent-early-final-rejected.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-1/screenshots/03-preview-zero-write.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-1/screenshots/04-confirmed-one-write.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-1/screenshots/05-cancelled-partial.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-1/screenshots/06-provider-failure-text-fallback.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-1/screenshots/07-text-assistant-after-failure.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-1/screenshots/08-disconnected-release.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-1/screenshots/08b-stale-resume-preserves-new-capture.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-1/screenshots/09-resident-change-discard.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-1/screenshots/10-hidden-pending-permission.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-1/screenshots/11-unmounted-no-capture.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-1/screenshots/12-reload-persisted-readback.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-2/screenshots/01-partial-display-only.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-2/screenshots/02-final-operator-review.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-2/screenshots/02b-independent-early-final-rejected.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-2/screenshots/03-preview-zero-write.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-2/screenshots/04-confirmed-one-write.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-2/screenshots/05-cancelled-partial.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-2/screenshots/06-provider-failure-text-fallback.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-2/screenshots/07-text-assistant-after-failure.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-2/screenshots/08-disconnected-release.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-2/screenshots/08b-stale-resume-preserves-new-capture.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-2/screenshots/09-resident-change-discard.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-2/screenshots/10-hidden-pending-permission.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-2/screenshots/11-unmounted-no-capture.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-2/screenshots/12-reload-persisted-readback.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-3/screenshots/01-partial-display-only.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-3/screenshots/02-final-operator-review.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-3/screenshots/02b-independent-early-final-rejected.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-3/screenshots/03-preview-zero-write.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-3/screenshots/04-confirmed-one-write.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-3/screenshots/05-cancelled-partial.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-3/screenshots/06-provider-failure-text-fallback.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-3/screenshots/07-text-assistant-after-failure.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-3/screenshots/08-disconnected-release.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-3/screenshots/08b-stale-resume-preserves-new-capture.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-3/screenshots/09-resident-change-discard.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-3/screenshots/10-hidden-pending-permission.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-3/screenshots/11-unmounted-no-capture.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "runtime-3/screenshots/12-reload-persisted-readback.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    }
+  ],
+  "videos": [
+    {
+      "path": "early-buffer-probe/video/page@948d92570c783441edab1a41bd150b3c.webm",
+      "fullDecode": "PASS",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 562
+        }
+      ],
+      "format": {
+        "duration": "27.640000"
+      }
+    },
+    {
+      "path": "runtime-1/video/page@8256f959572821a2909e20dca58c19c9.webm",
+      "fullDecode": "PASS",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 562
+        }
+      ],
+      "format": {
+        "duration": "41.160000"
+      }
+    },
+    {
+      "path": "runtime-2/video/page@a5c1fcb30788349ba8e693e878b9a5ec.webm",
+      "fullDecode": "PASS",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 562
+        }
+      ],
+      "format": {
+        "duration": "41.600000"
+      }
+    },
+    {
+      "path": "runtime-3/video/page@fa84d54a0548332b3dccb7f8806b5301.webm",
+      "fullDecode": "PASS",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 562
+        }
+      ],
+      "format": {
+        "duration": "38.840000"
+      }
+    }
+  ],
+  "credentialPatternFindings": 0,
+  "realPatientDataUsed": false,
+  "transientSyntheticRedactions": [
+    {
+      "path": "early-buffer-probe/trace/trace.zip",
+      "beforeSha256": "509519382819d26d6cbe962b2cb72c01c3be5b32049701f5c29369f803d067de",
+      "afterSha256": "c3d68e8c42951d703b3bea197d53f69fca30680e2f543d77a9d88cca9dfbe590",
+      "redactedMembers": [
+        {
+          "member": "trace.network",
+          "redactions": 32,
+          "beforeSha256": "b7582d01a45cb032ea693370d4f3c29cf46372d0dfc6fd3f98fc6ecda93e872d",
+          "afterSha256": "24abf172d6e13f17162fb92a15f8962ea390c8b7172d1d0edfc57bb99be40519"
+        },
+        {
+          "member": "resources/90950e72bf610fd131f79c1b33e9163dfb23b33e.json",
+          "redactions": 1,
+          "beforeSha256": "d714bca6a98999a7b103b4a299fc9a5bb25c400002c9db0008c0314cd3ed983f",
+          "afterSha256": "5fe6ac027d4d1b346589f74f6487cf85a42dbd228f2922d214b9c6622a8337d0"
+        }
+      ]
+    },
+    {
+      "path": "runtime-3/trace/trace.zip",
+      "beforeSha256": "cab502d09d64c3359c7083109a2923eca10aa0431c60f942cd3f8b3c6c967934",
+      "afterSha256": "255aa7146580372175c2c614458d5d56a8df7b154498f62a81164cd25428efd3",
+      "redactedMembers": [
+        {
+          "member": "trace.network",
+          "redactions": 86,
+          "beforeSha256": "3a183f001ba7affb8b953a89fed6f62e28de2162296c0db2a736c593041a3390",
+          "afterSha256": "88dff3a0f87130d5030317860157b3b2e4ee8a11ca77e084e0af90b0eec50c53"
+        },
+        {
+          "member": "resources/01eac2b1461f26cdfe896db9199bc90b670a8dad.json",
+          "redactions": 1,
+          "beforeSha256": "c016d109253817672d130513ea8fa232b87d41455a976e9d0fcf43acde94fd04",
+          "afterSha256": "80d8b0fd3a784e6ad033ea92c171e210e63b76c4caa56e1f11f4da3c4a9747a3"
+        },
+        {
+          "member": "resources/777ab5f560db5e0d7305ee542fb5235821ad9632.json",
+          "redactions": 1,
+          "beforeSha256": "d445e539116e310fa8c0dacccfc8998b6d44cb8885d6db2404911d912621da18",
+          "afterSha256": "c6452ccb89c825c2ec6140d6c15abdb1ddbf1116ee00b74508276cc02db1b1b4"
+        }
+      ]
+    }
+  ],
+  "note": "Synthetic bearer and QA DSN redaction only. ZIP CRC validated before/after. Existing member resource names are retained as identifiers; modified payload digests are explicitly recorded, not asserted unchanged. No executable source or assertions modified."
+}

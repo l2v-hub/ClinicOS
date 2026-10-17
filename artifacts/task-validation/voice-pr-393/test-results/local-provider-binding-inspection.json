@@ -1,0 +1,17 @@
+{
+  "inspectedAt": "2026-10-17T15:24:16.674862+00:00",
+  "scope": "current cloud process environment only; no deployment/provider API queried",
+  "presence": {
+    "AZURE_OPENAI_ENDPOINT": false,
+    "AZURE_OPENAI_REALTIME_ENDPOINT": false,
+    "AZURE_OPENAI_API_KEY": false,
+    "STT_PROVIDER": false,
+    "STT_MODEL": false,
+    "STT_REALTIME_MODEL": false,
+    "AI_RUNTIME_URL": false,
+    "AI_RUNTIME_SERVICE_TOKEN": false
+  },
+  "realProviderProof": false,
+  "remoteDeploymentReadiness": "unknown",
+  "environmentActivationPerformed": false
+}

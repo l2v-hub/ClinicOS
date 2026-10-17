@@ -1,0 +1,22 @@
+/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/domain/contracts.py:36: UserWarning: Field name "schema" in "CreateJobRequest" shadows an attribute in parent "BaseModel"
+  class CreateJobRequest(BaseModel):
+/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/api/app.py:88: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/workspace/.venvs/clinicos-ai/lib/python3.12/site-packages/fastapi/applications.py:4745: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)  # ty: ignore[deprecated]
+Executing <Task pending name='Task-2' coro=<DispatcherTests.test_real_asgi_auth_actual_stream_limit_and_safe_response() running at /workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_voice_realtime.py:173> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.327 seconds
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.345s
+
+OK

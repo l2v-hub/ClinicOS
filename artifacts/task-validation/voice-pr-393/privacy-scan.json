@@ -1,0 +1,114 @@
+{
+  "scope": "owned voice task artifacts only",
+  "checkedFiles": 132,
+  "realPatientDataUsed": false,
+  "transientSyntheticBearerRedaction": true,
+  "changes": [
+    {
+      "file": "author-attempt-2/trace/trace.zip",
+      "beforeSha256": "2ba5687e25a9a7ba6b6555692e8afd8eeefcd6c93a84e7fffa49475f2a4e3ced",
+      "afterSha256": "5d2874b046e37a6785bfa9a5f478267400637681e747d535b04d03d21e76ad04",
+      "redactedMembers": [
+        {
+          "member": "trace.network",
+          "redactions": 28,
+          "beforeSha256": "10d4ed74eed1252a5e58c0d38ba87ceefcd65c65a8a057dbc1bbbb56d503022d",
+          "afterSha256": "ae826d36f948a5fd7c6237c40e72c1ee6678cf35f32ec52e1a71c2b5cc2e8ae0"
+        },
+        {
+          "member": "resources/08e2e14d714686e6dee50a35223b63dc9e81a360.json",
+          "redactions": 1,
+          "beforeSha256": "578c5712d90021c2bba0f66ec7deaaafb9ac2a847a5083cab86f943840c3681e",
+          "afterSha256": "87b22f92cbeb9c352a5cb7b82464b2678b23ac02f2a955bb9eca879b342f2624"
+        }
+      ],
+      "note": "Only transient synthetic bearer/QA DSN redaction; trace event IDs retained; member names remain resource identifiers, not a claim of unchanged payload digests."
+    },
+    {
+      "file": "author-attempt-3/trace/trace.zip",
+      "beforeSha256": "9f9688cfdec69e2b0f510aaf7935170b7b959e88541dfee0b6e5cdc1485d9144",
+      "afterSha256": "93114c15b353a8ee224117d6b81bbdbf81fc692c3b84af59b0712c6652029f20",
+      "redactedMembers": [
+        {
+          "member": "trace.network",
+          "redactions": 42,
+          "beforeSha256": "93459487bc9ae9fdede8fbae18608b73b44634de6b283ef1416fbc070baab8df",
+          "afterSha256": "1d1fd238582ac67d055df2119c8032f133111a32ea05ff054f2e133e889b1457"
+        },
+        {
+          "member": "resources/186b097da89571bc45a833f4227b8c716e23d5a2.json",
+          "redactions": 1,
+          "beforeSha256": "3763a415c5d8d3cab83aecaba7da7fce8e54b634dfb5a07bca7cea3498832b0c",
+          "afterSha256": "0fac26e88a1474514211821fd477ac57f9c048fbce50742411815c1e7db9838a"
+        }
+      ],
+      "note": "Only transient synthetic bearer/QA DSN redaction; trace event IDs retained; member names remain resource identifiers, not a claim of unchanged payload digests."
+    },
+    {
+      "file": "author-attempt-4/trace/trace.zip",
+      "beforeSha256": "bb8748c319b4ff83d33bf3848d6da7aabcaa7ad9dc883c3be485b334683bf7af",
+      "afterSha256": "a6177ab4f133febdf2e23405c2495bce586476f7b522fd550fa187026ea31d87",
+      "redactedMembers": [
+        {
+          "member": "trace.network",
+          "redactions": 48,
+          "beforeSha256": "a81c450964519bfa8c26a5ab386e1d556869abd1fc43f9360f1d62bad997ed22",
+          "afterSha256": "708ab7423919865815288a181a2b26f39e00b584d146db1fbb35784cb2cc7d6b"
+        },
+        {
+          "member": "resources/fe9f8583c5367eb6a79c75a1a32a84788c6a37c1.json",
+          "redactions": 1,
+          "beforeSha256": "b7b9a7b4a43fd6e9cb0e923504475bcb7f072e63ec3d435bb14954047441e0c2",
+          "afterSha256": "031ba86d08f87b0400032b1295822accf650d743e9ad1b81c2470781252fe668"
+        }
+      ],
+      "note": "Only transient synthetic bearer/QA DSN redaction; trace event IDs retained; member names remain resource identifiers, not a claim of unchanged payload digests."
+    },
+    {
+      "file": "author-attempt-5/trace/trace.zip",
+      "beforeSha256": "77f395248233c4c81cbb58400d2f78d3e5c91efeeadb3edc9e8e32e3fb3cc2b3",
+      "afterSha256": "ddfb5d1b12f43b512717d894a81e44d3e2d111b55a2c9f20b94add314defee60",
+      "redactedMembers": [
+        {
+          "member": "trace.network",
+          "redactions": 51,
+          "beforeSha256": "23251a2204b8aeb4f4cbc0fae52d3073ca368dc7a2d7637cbb5e21a00ef29bf8",
+          "afterSha256": "67ea99ec0bf6ca4547d1812852b98e7852baf875fe353537c0e7b15253e9624e"
+        },
+        {
+          "member": "resources/10da09e787c41364bc876d3eb4066b58986fd78a.json",
+          "redactions": 1,
+          "beforeSha256": "4b00712493470bdc8fe457da787abb29c0b2679c6e2995dfa220e593112d1de3",
+          "afterSha256": "6f5a5f93911ebc5a49324758c67b42b3c9af00bcef4666cd8228a8be1adc9805"
+        }
+      ],
+      "note": "Only transient synthetic bearer/QA DSN redaction; trace event IDs retained; member names remain resource identifiers, not a claim of unchanged payload digests."
+    },
+    {
+      "file": "trace/trace.zip",
+      "beforeSha256": "0cfac199dfd967cf5043b2284f2f7718997328eeaee94338ca07a3699f74e273",
+      "afterSha256": "425f4ebba2b0b9d3151622cfe4a1365d97bc4e2d848d3985f716e93cf4e7be3c",
+      "redactedMembers": [
+        {
+          "member": "trace.network",
+          "redactions": 86,
+          "beforeSha256": "3891fdf3f55651010e48cf98d4b6529268a2251a82df77ad79e6e9266f820306",
+          "afterSha256": "91b2a6c51e1ae4db6fdc81cfb4b39f4816f5be8a0010f431c7fb9cadf444bd08"
+        },
+        {
+          "member": "resources/00501e83156b2834604a3e927223a75e07a2c34e.json",
+          "redactions": 1,
+          "beforeSha256": "70bea5e48aed90893cc8062f3283f7fb4c8d27c950205da4ac554f8f77b06c38",
+          "afterSha256": "124f0f8c00b015ee6a7eca0e6ac9a97f25dc579ea1c6464a44586ddf801599cf"
+        },
+        {
+          "member": "resources/082c2ed5fb3810cae2630c949075c7784cd2edf5.json",
+          "redactions": 1,
+          "beforeSha256": "3f10eb941e09f8758d586e41d6d8ffbbbdab052db39bc41e8b80a20c2d35422b",
+          "afterSha256": "11eb115614f6010b68e9ddb2b8a1a5f6b9cc4f72cf95e6f39033ad17e15f9289"
+        }
+      ],
+      "note": "Only transient synthetic bearer/QA DSN redaction; trace event IDs retained; member names remain resource identifiers, not a claim of unchanged payload digests."
+    }
+  ]
+}

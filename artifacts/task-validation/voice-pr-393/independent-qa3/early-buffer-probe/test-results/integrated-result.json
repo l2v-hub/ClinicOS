@@ -1,0 +1,39 @@
+{
+  "mode": "synthetic-provider-transport-real-app-and-owned-postgres16",
+  "parentDatabaseUsed": false,
+  "developmentDatabaseUsed": false,
+  "realProviderProof": false,
+  "checks": [
+    {
+      "name": "partial exact visible value",
+      "status": "PASS"
+    },
+    {
+      "name": "partial has no submission control",
+      "status": "PASS"
+    },
+    {
+      "name": "partial triggers no assistant request",
+      "status": "PASS"
+    },
+    {
+      "name": "early empty-buffer provider error must exit microphone-open UI states",
+      "status": "PASS"
+    }
+  ],
+  "consoleErrors": [],
+  "httpErrors": [],
+  "expectedErrors": [],
+  "earlyBuffer": {
+    "state": "ERROR",
+    "peerClosed": true,
+    "allTracksStopped": true,
+    "commits": 0,
+    "partial": null,
+    "voiceSendControls": 0,
+    "assistantRequests": 0
+  },
+  "status": "PASS",
+  "databaseOwnershipVerified": true,
+  "ownedContainerRemoved": true
+}

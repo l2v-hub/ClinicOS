@@ -1,0 +1,3 @@
+# Author integration attempt 1
+
+Backend voice 12/12 PASS in owned isolated PostgreSQL. Browser proof did not complete. The cleanup assertion checked Docker --rm immediately after stop and failed during asynchronous removal, masking the earlier browser/runtime error; its exact cause is not proven by the retained logs. Subsequent `docker ps` verified the owned container was removed and development container remained. No PASS is claimed for browser or complete lifecycle. Correct the harness to await removal and persist original failure, explicitly configure loopback CORS and browser ffmpeg cache before rerunning. No application criteria or timeout is weakened.

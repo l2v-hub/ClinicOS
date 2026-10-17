@@ -79,7 +79,7 @@
         "tool_calling": true,
         "streaming": true,
         "stt": true,
-        "realtime": false,
+        "realtime": true,
         "usage_metadata": true,
         "cancellation": false,
         "timeout": true,

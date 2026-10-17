@@ -1,0 +1,114 @@
+{
+  "at": "2026-10-17T16:16:37.859534+00:00",
+  "note": "Pristine own artifact digests captured before first sanitizer execution; not reconstructed",
+  "files": {
+    "early-buffer-runner.mjs": {
+      "sha256": "3559b3abb3d1190d950c9bdb60491cc5b86b9135668bd200aa7b0f56f6eee4bc",
+      "bytes": 10497
+    },
+    "early-buffer-browser.mjs": {
+      "sha256": "c7e097eebdba8776d4ce527b9b7c4df04e2310ef446baca89f4d751ec9a12719",
+      "bytes": 26000
+    },
+    "source-identity-before.json": {
+      "sha256": "6c5b4e3a37d3be1837d04e49f9dd83b241c17905e5564b86d0bdba435d389eb8",
+      "bytes": 286930
+    },
+    "diff-security-review.md": {
+      "sha256": "400c0b6da0ba0b548c8e3abc05dfc5aaa2fe94b157078e4bd8d461ccaf6c9055",
+      "bytes": 3006
+    },
+    "verify_artifacts.py": {
+      "sha256": "9a61913d59d822a0daea945057630f131516ee84b6958981e37dbda2ac235e4d",
+      "bytes": 5800
+    },
+    "task-contract.md": {
+      "sha256": "29e18b34cf8fb399f454feacc387f6898cd3d2d49a1f7c765d21cd2ea3f04e2e",
+      "bytes": 1486
+    },
+    "verify_without_httpx.py": {
+      "sha256": "7e59af2168522c30076c9448dc8f6e35be1617d707381567b33f3373ffbf1e36",
+      "bytes": 1000
+    },
+    "test-results/compile-check.json": {
+      "sha256": "03c7cbfe62a65d7764b99ce22f04ff47dbcf280dd770b037661793ea142a2024",
+      "bytes": 65
+    },
+    "test-results/probe-audit.json": {
+      "sha256": "dea5d6055d490244b94048f2e6cadc0b5c5f7d4fea64ef635a9442c7dd9680e9",
+      "bytes": 738
+    },
+    "test-results/full-source-diff.patch": {
+      "sha256": "4b0e63bf993f82603f5c84d84b4df28f2ea899dc4ad3b0cdf6b345b8ff62434e",
+      "bytes": 149973
+    },
+    "test-results/cycle3-test-diff.patch": {
+      "sha256": "a35f0d2c5006b5584d554ca5e49c87a0057ddc05f6536e19ac1709bfc0af4dec",
+      "bytes": 5418
+    },
+    "playwright-report/index.html": {
+      "sha256": "e0af102d0c3177344116ec1f20ff28ee54fafd284acc2182cb5cb2783329990b",
+      "bytes": 922
+    },
+    "logs/diff-check.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "logs/python-full-no-httpx.log": {
+      "sha256": "feb686766a1b3a5816a06b500046aff985feb5b4e4d5a5334947bda5218eb88a",
+      "bytes": 46120
+    },
+    "logs/owned-probe.log": {
+      "sha256": "eb80fead8aaa816b2e2a72936837d247ddcf80d0234b4e305326f9aacba96d7f",
+      "bytes": 84
+    },
+    "logs/contract-validation.log": {
+      "sha256": "8bd6776ee63e3fbbc129e525938b5d4622b178978a27067488f4522cfab3ddb3",
+      "bytes": 103
+    },
+    "early-buffer-probe/screenshots/independent-early-empty-buffer-error.png": {
+      "sha256": "30b54e5be40167b867e10959af9641a4d42f7fa8a2b0866f88e43080513b9c70",
+      "bytes": 94241
+    },
+    "early-buffer-probe/screenshots/01-partial-display-only.png": {
+      "sha256": "ee7104ac2f1877ea271e7be583b46cc7299c376c9ac76dbb5f811ba50eb69265",
+      "bytes": 108041
+    },
+    "early-buffer-probe/test-results/early-buffer-observed.json": {
+      "sha256": "81ab8ef2c24a689fa9f4025b3dc41ce8f1ce5603beed154f97756eed47ff68b8",
+      "bytes": 160
+    },
+    "early-buffer-probe/test-results/integrated-result.json": {
+      "sha256": "26d1bfbfd3682ec81cd6bec6312a6c40205f1431ad29860ce98995a3d5cf4510",
+      "bytes": 923
+    },
+    "early-buffer-probe/trace/trace.zip": {
+      "sha256": "b0b9b112794eefc0a4b937f576a3d2431f91695f542b44c78c3a9868b8116a14",
+      "bytes": 3940840
+    },
+    "early-buffer-probe/video/page@d54c03d8990840fabdfe10e14d35471e.webm": {
+      "sha256": "d9f349d6e423893d704f3303d88f5c7f1b41bcbc758401ac76df9aaa5cb5c0b0",
+      "bytes": 501055
+    },
+    "early-buffer-probe/logs/backend-server.log": {
+      "sha256": "9f8b182cfe4f3f376c69095557f91f2f1035d96c20c43e215e560bdc654c711a",
+      "bytes": 294
+    },
+    "early-buffer-probe/logs/migrate.log": {
+      "sha256": "7f543bddcdae202e8b09aa5139e928362ada8aab3d6463adf7e66f4123f6ead3",
+      "bytes": 7833
+    },
+    "early-buffer-probe/logs/seed-assistant.log": {
+      "sha256": "f0f4379ada2eafaf344730ae80d54f7bfc7c273ad46b04c691a6425f14b4eb73",
+      "bytes": 143
+    },
+    "early-buffer-probe/logs/backend-voice.log": {
+      "sha256": "c4cd211e5c330f4e5269718646e627c14244085ee75df8685f8c1f726a1e75c3",
+      "bytes": 1382
+    },
+    "early-buffer-probe/logs/frontend-server.log": {
+      "sha256": "7e3eb32386fa949b9859106f8f4e0a718c6e0e00bd604dec26e6c968f9631f4d",
+      "bytes": 72
+    }
+  }
+}

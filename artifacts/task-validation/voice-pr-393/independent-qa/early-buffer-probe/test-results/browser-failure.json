@@ -1,0 +1,19 @@
+{
+  "checks": [
+    {
+      "name": "partial exact visible value",
+      "status": "PASS"
+    },
+    {
+      "name": "partial has no submission control",
+      "status": "PASS"
+    },
+    {
+      "name": "partial triggers no assistant request",
+      "status": "PASS"
+    }
+  ],
+  "errors": [],
+  "httpErrors": [],
+  "failure": "early empty-buffer provider error must exit microphone-open UI states"
+}

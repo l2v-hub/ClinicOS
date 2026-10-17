@@ -1,0 +1,2 @@
+Two initial setup assertions stopped before runner creation:106 sealed first-QA artifacts excludes final-seal.json, and schema uses artifactFiles. Corrected verification checks106 explicitly sealed artifacts plus immutable seal separately; no source/QA1 edits.
+Own browser assembly initially used an incorrect text anchor and stopped before runner creation; corrected exact block boundary without product edits/assertion removal.

@@ -416,6 +416,42 @@ test('B/K — voice transcript → preview, zero write; spoken «conferma» neve
   assert.equal(bad.status, 400);
 });
 
+test('realtime SDP route: identity, capability, feature-off, byte bounds, allowlist and safe audit', async () => {
+  const doctor = await login(base, 'SIM-DOCTOR-1');
+  let count = 0;
+  setSttProvider({ ...scripted('unchanged batch'), async negotiateRealtimeCall(offer) {
+    count += 1;
+    assert.equal(offer, 'v=0\r\nsynthetic-offer');
+    return { sdp: 'v=0\r\nsynthetic-answer', model: 'synthetic-live', deployment: 'synthetic-live', expiresAt: 123,
+      transport: 'webrtc', token: 'must-not-escape' } as any;
+  } });
+  const send = async (session: Session | null, text: string, mime = 'application/sdp') => {
+    const response = await fetch(`${base}/skills/voice/realtime-call`, { method: 'POST',
+      headers: { 'Content-Type': mime, ...(session ? { Authorization: `Bearer ${session.token}` } : {}) }, body: text });
+    return { status: response.status, body: await response.json() as any };
+  };
+  assert.equal((await send(null, 'v=0')).status, 401);
+  assert.equal((await send(admin, 'v=0')).status, 403);
+  assert.equal((await send(doctor, 'v=0', 'text/plain')).status, 400);
+  assert.equal((await send(doctor, 'invalid')).status, 400);
+  assert.equal((await send(doctor, 'v=0' + 'é'.repeat(32000))).status, 413);
+  process.env.VOICE_CHANNEL_ENABLED = 'false';
+  try { assert.equal((await send(doctor, 'v=0')).status, 503); }
+  finally { process.env.VOICE_CHANNEL_ENABLED = 'true'; }
+  assert.equal(count, 0, 'unauthorized, disabled and invalid SDP never reaches provider');
+  const success = await send(doctor, 'v=0\r\nsynthetic-offer');
+  assert.equal(success.status, 200);
+  assert.equal(success.body.sdp, 'v=0\r\nsynthetic-answer');
+  assert.equal(count, 1);
+  assert.deepEqual(Object.keys(success.body).sort(), ['deployment', 'expiresAt', 'model', 'sdp', 'transport']);
+  const audit = await waitForAudit({ operatorId: doctor.identityId, actionType: 'voice:session', outcome: 'ok' });
+  assert.ok(audit);
+  assert.deepEqual(audit.fields, ['transport:webrtc']);
+  assert.ok(!JSON.stringify(audit).includes('synthetic-offer'));
+  setSttProvider(scripted('unchanged batch'));
+  assert.equal((await send(doctor, 'v=0')).status, 409);
+});
+
 test('STT cost guard: per-operator utterance rate limit → 429, provider not called', async () => {
   let providerCalls = 0;
   setSttProvider({

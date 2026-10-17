@@ -1,0 +1,18 @@
+{"status":"FAILED","checks":0,"ownedContainerRemoved":true,"realProviderProof":false}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: early empty-buffer provider error must exit microphone-open UI states
+    at check (file:///workspace/clinicos-voice-393/artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-browser.mjs:15:12)
+    at runVoiceBrowser (file:///workspace/clinicos-voice-393/artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-browser.mjs:275:5)
+    at async file:///workspace/clinicos-voice-393/artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-runner.mjs:251:24 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

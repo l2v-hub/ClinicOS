@@ -1,0 +1,13 @@
+{
+  "attempt": 2,
+  "status": "reserved",
+  "reservedAt": "2026-10-17T15:44:27.324884+00:00",
+  "owner": "voice_393_reconciliation",
+  "reason": "Independent QA1 P2 early empty-buffer error strands LISTENING/PARTIAL after tracks close",
+  "authorizedBy": "root explicit bounded cycle2/4 authorization",
+  "scope": [
+    "frontend/src/components/assistant/voice/useVoiceChannel.ts",
+    "e2e/qa-voice-pr-393-browser.mjs"
+  ],
+  "priorSourceManifestSha256": "eeeebb5fa6ddc80940ec50baba8b3aad4383311845b3dda4a72034db577877c6"
+}

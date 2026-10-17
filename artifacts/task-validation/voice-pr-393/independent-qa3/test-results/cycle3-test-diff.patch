@@ -1,0 +1,98 @@
+diff --git a/clinicos-ai-runtime/tests/test_voice_realtime.py b/clinicos-ai-runtime/tests/test_voice_realtime.py
+index 24f5985d..aa011b1b 100644
+--- a/clinicos-ai-runtime/tests/test_voice_realtime.py
++++ b/clinicos-ai-runtime/tests/test_voice_realtime.py
+@@ -119,28 +119,74 @@ class DispatcherTests(unittest.IsolatedAsyncioTestCase):
+         self.assertEqual(stt.stt_model(ENV)[1], "file-transcribe")
+ 
+     async def test_real_asgi_auth_actual_stream_limit_and_safe_response(self):
+-        import httpx
++        import asyncio
+         from clinicos_ai.api import app as runtime
++
++        async def request(path, body, headers=(), chunks=None):
++            """Drive the real ASGI app without an optional HTTP client dependency."""
++            body_frames = list(chunks) if chunks is not None else [body]
++            frames = [
++                {"type": "http.request", "body": chunk, "more_body": index < len(body_frames) - 1}
++                for index, chunk in enumerate(body_frames)
++            ]
++            if not frames:
++                frames = [{"type": "http.request", "body": b"", "more_body": False}]
++            response_status = None
++            response_body = bytearray()
++
++            async def receive():
++                if frames:
++                    return frames.pop(0)
++                return {"type": "http.disconnect"}
++
++            async def send(message):
++                nonlocal response_status
++                if message["type"] == "http.response.start":
++                    response_status = message["status"]
++                elif message["type"] == "http.response.body":
++                    response_body.extend(message.get("body", b""))
++
++            request_headers = [*headers, ("content-type", "application/json")]
++            if chunks is None:
++                request_headers.append(("content-length", str(len(body))))
++            scope = {
++                "type": "http",
++                "asgi": {"version": "3.0", "spec_version": "2.3"},
++                "http_version": "1.1",
++                "method": "POST",
++                "scheme": "http",
++                "path": path,
++                "raw_path": path.encode("ascii"),
++                "query_string": b"",
++                "root_path": "",
++                "headers": [(key.lower().encode("ascii"), value.encode("latin-1")) for key, value in request_headers],
++                "client": ("127.0.0.1", 12345),
++                "server": ("testserver", 80),
++            }
++            await asyncio.wait_for(runtime.app(scope, receive, send), timeout=3)
++            return response_status, bytes(response_body)
++
+         testenv = {**ENV, "AI_RUNTIME_SERVICE_TOKEN": "synthetic-runtime-bearer"}
+         with mock.patch.dict(os.environ, testenv, clear=True):
+-            async with httpx.AsyncClient(transport=httpx.ASGITransport(app=runtime.app), base_url="http://qa") as client:
+-                headers = {"Authorization": "Bearer synthetic-runtime-bearer"}
+-                with mock.patch.object(realtime, "negotiate", return_value={"sdp": "v=0\r\nanswer", "transport": "webrtc"}) as call:
+-                    denied = await client.post("/v1/voice/realtime-call", json={"sdp": "v=0"})
+-                    self.assertEqual(denied.status_code, 401)
+-                    call.assert_not_called()
+-                    bad = await client.post("/v1/voice/realtime-call", headers=headers, json={"sdp": "invalid"})
+-                    self.assertEqual(bad.status_code, 400)
+-                    async def chunks():
+-                        yield b'{' + b'x' * 40000
+-                        yield b'x' * 40000
+-                    oversized = await client.post("/v1/voice/realtime-call", headers=headers, content=chunks())
+-                    self.assertEqual(oversized.status_code, 413)
+-                    call.assert_not_called()
+-                    ok = await client.post("/v1/voice/realtime-call", headers=headers, json={"sdp": "v=0\r\noffer"})
+-                    self.assertEqual(ok.status_code, 200)
+-                    self.assertEqual(ok.json()["sdp"], "v=0\r\nanswer")
+-                    call.assert_awaited_once_with("v=0\r\noffer")
++            headers = [("authorization", "Bearer synthetic-runtime-bearer")]
++            with mock.patch.object(realtime, "negotiate", return_value={"sdp": "v=0\r\nanswer", "transport": "webrtc"}) as call:
++                denied_status, _ = await request("/v1/voice/realtime-call", b'{"sdp":"v=0"}')
++                self.assertEqual(denied_status, 401)
++                call.assert_not_called()
++                bad_status, _ = await request("/v1/voice/realtime-call", b'{"sdp":"invalid"}', headers)
++                self.assertEqual(bad_status, 400)
++                oversized_status, _ = await request(
++                    "/v1/voice/realtime-call", b"", headers,
++                    chunks=[b"{" + b"x" * 40000, b"x" * 40000],
++                )
++                self.assertEqual(oversized_status, 413)
++                call.assert_not_called()
++                ok_status, ok_body = await request(
++                    "/v1/voice/realtime-call", b'{"sdp":"v=0\\r\\noffer"}', headers,
++                )
++                self.assertEqual(ok_status, 200)
++                self.assertEqual(json.loads(ok_body)["sdp"], "v=0\r\nanswer")
++                call.assert_awaited_once_with("v=0\r\noffer")
+ 
+ 
+ if __name__ == "__main__":
