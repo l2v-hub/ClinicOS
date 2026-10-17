@@ -1,0 +1,50 @@
+{
+  "status": "READY FOR CODEX QA",
+  "sourceHashes": {
+    "scripts/run-node-tests.mjs": "e885289d27cc6c315f8fb252e367f7062243ce2117625383106eae486805713f"
+  },
+  "contractHashes": {
+    "task-contract.md": "ca4c2b6444da536470ea2499c603f18d5c8610e81f4e191c229465f12125d036",
+    "implementation-plan.md": "0fd6ef4bc60f7c69ab7a9d599be60128e860b09400f97d24ce2eb0f9333cceb1"
+  },
+  "files": {
+    "all-original-nine-plus-notes.log": "bb9edcd90f782d5b8d4705e8e565795d7a1155696173a005a4737d1da10f774d",
+    "browser/page@5c7beba55777a7ba1dcc90d45c2d4e9e.webm": "a38b6f57b011cdc57b54fb7db5e0c89799fdf2a35abb983143ed11a4dcf2de1c",
+    "browser/real-runner.webm": "a38b6f57b011cdc57b54fb7db5e0c89799fdf2a35abb983143ed11a4dcf2de1c",
+    "browser/result-after-reload.png": "62ca895a510e3c01bbed903d0ac764e463c571870c4caabe16fd81b2dafe5e2a",
+    "browser/trace.zip": "8851978afdcaa3bedf877a75384a493eb86bbe22d54590a875f65f4ed554fa06",
+    "browser-command.log": "8e8f3f5b7777670de7d3ff914fc5396a0ff4412421a5333b1c9e725f1fd53107",
+    "browser-evidence.mjs": "9c49d5cb1b1b38255dc413391b50282268da2606c67a5ab359beaa5d489e25eb",
+    "browser-live-runner.log": "ac509406feb35ba9a246e46fe6650f0334c93b7378773a18a0a2adf404612fb8",
+    "browser-results.json": "cc45ac7b13809afc8a32ff0912369dc24f4076a2e742d27e84efda41b5f42497",
+    "concurrent-failure-exit-propagation.log": "938c7077c3e1a3a12a98f41a4f8a582ed316f760fc5dd6d397697972870fb7af",
+    "contract-validation.log": "1689bc630e6bbc4417702cd748bc6cea02848dbd13ae40b9041b7a0b4aec9788",
+    "diff-and-security-review.md": "9fea2c623a2549d5c7a19aa3aa450003eecd807c4b293e372e08ae3cdf8ec7b0",
+    "diff-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "empty-discovery-explicit-no-tests.log": "3e5cd363232714b530d830798537039015c6cf742a92ce2328b471466cdfb215",
+    "existing-nonbackend-isolation-retained.log": "7867d0c08cb9aaefc1b9525cc182178dfdaa7f27ff9a9997c6ce187bdaba320d",
+    "explicit-environment-retained.log": "e6490dfe237a4279230441b52d1acbd957c8a21f609a01028a8e994fca39ade4",
+    "frontend-candidate.log": "5e46fcffd059bac707fe49106313f43c035c691c2bdfe1e7182521da4400abfc",
+    "frontend-original.log": "2ace842a7744a2780f5db04cd633e577ffbc695a624797a51cb01b8501224ba8",
+    "history/initial-frontend-overlap-oracle/all-original-nine-plus-notes.log": "cb397620478d64cc918876c33b92fa6d2a8174d1a3c49791d8e7ed977a0e07a8",
+    "history/initial-frontend-overlap-oracle/frontend-candidate.log": "3b2338fd556a85e82dc30dba2fb3460c234346f0f24c3402c89bc99d2d01dd5c",
+    "history/initial-frontend-overlap-oracle/frontend-original.log": "12ddea2666ce2d117c4091b86b0ca0d444810ee2382f1d9ac19a0e2ab8286e75",
+    "history/initial-frontend-overlap-oracle/independent-new-green.log": "0da5bf3f7fbd2018ccd781aa51d699997356cd9a05947770467d4afdc42900f1",
+    "history/initial-frontend-overlap-oracle/independent-old-red.log": "fec86cfccd5828d87c0e80c3071fa5650f6e60504211004421610904fbf3f368",
+    "history/initial-frontend-overlap-oracle/probes-command.log": "87c3e0baffe182ea28160f600d4fb4c5bd8df4338368eedac9ca8ffc32afd9f3",
+    "independent-new-green.log": "d55a1e0e939eaa368414e36773cc2443ecedc6f32594f763e2f95858ce2b507c",
+    "independent-old-red.log": "8f2d55e9dbc06efcea8c6d510d116a38513a10805a37ec287417fe7546e1bfad",
+    "independent-probe-results.json": "07c21af9f43e212170134b253a8ade967d837b4abb919fad47ce86e7a662b43d",
+    "independent-probes.mjs": "eb6e75d3ff199cd891fb6288d7341be6224f4845c1b5d7ac2fe63f572692cfb1",
+    "media-validation.json": "03516baa78ab9f63e9dd88025d9f5031b82c8fcdddcca80be763a0dd9d32a3ca",
+    "missing-source-directory-fails.log": "ed1ab97396db2cdf553347659bc64427e3e29b549db0ea9b0afb8d3dc93e2e0c",
+    "preservation-review.json": "00f24e8cf192a575ba8cf81e3ab81b050ec37bf5ba21671e90c88b81078da835",
+    "privacy-scan.json": "53608e0540860e4775f017d9d192fac9c9a4eff81f324b5ac9aec131a47141f8",
+    "probes-command.log": "07c21af9f43e212170134b253a8ade967d837b4abb919fad47ce86e7a662b43d",
+    "seal-qa.py": "8d09c05d6fa1637b363fcdda38602c49067d6ce88d27236a0e3850e4a92d7f70",
+    "serial-failure-exit-propagation.log": "ca2c63f2f92f6e1452e51e74344fab068e495d0b3765d0fb1b40e9d5c863c93b",
+    "source-syntax.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "validation-report.md": "e2c6153eff73bad6235c76309c88dbf373a8983ed1c0b6c2c6d4a04842221333"
+  },
+  "fileCount": 37
+}

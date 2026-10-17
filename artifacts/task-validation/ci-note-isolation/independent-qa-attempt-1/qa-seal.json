@@ -1,0 +1,10 @@
+{
+  "status": "READY FOR CODEX QA",
+  "sourceSha256": "e885289d27cc6c315f8fb252e367f7062243ce2117625383106eae486805713f",
+  "authorSealSha256": "a94fc3caaa2cdb330d5d46d6f563f63f1d40b492c0368c8c01a969e6c1f21856",
+  "artifactManifestSha256": "0f62c0e6be08f31fe2a6c433ab4b43bd4cf500ec98648f32adb7f03d30977209",
+  "validationReportSha256": "e2c6153eff73bad6235c76309c88dbf373a8983ed1c0b6c2c6d4a04842221333",
+  "sourceChangedByQA": false,
+  "ownFixtureCleanupCompleted": true,
+  "noGitMutationOrProviderInvocation": true
+}
