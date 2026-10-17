@@ -1,0 +1,53 @@
+{
+  "sourceHashes": {
+    ".github/workflows/configure-demo-source.yml": "08d627e26623c70f35041f51d64ea80a7e52c9d9d3c46f4d0e09b585ed0ebfde",
+    "scripts/automation/configure-demo-source.mjs": "c674e302471ea8b95154aa7e440761d0ca188475bdaffd294e9f4d3ad9c4536a",
+    "scripts/automation/configure-demo-source.test.mjs": "5da3aa8f5865c3b7d47d210a95ae56bef6e856a0d6f07cac494328fb3f32896a"
+  },
+  "contractHashes": {
+    "operational-contract.md": "aa77b5a65e51d6c79a6c14b8a208d01e85c2e5dcbdefdec9b704ca55ae6d1559",
+    "operational-addendum-2-create-missing-trigger.md": "909fe83a3c1ed6ff228202bf28fc4c818bc4c4e71cf9d3f107a79678f4696d66",
+    "provider-constraint-clarification.md": "b2917f9d408b290f7f48d2f64c1bafb16209b7b2fc7beab2cc1b8fdff9e5207e"
+  },
+  "preexistingEvidence": {
+    "artifacts/task-validation/demo-source-configuration/unit-tests.log": "4f484097e042cd8035a2ee926df0d0921db8fcc96e8a8ca1f09632bbd06fa8f4",
+    "artifacts/task-validation/demo-source-configuration/validation-report.md": "f65f0a33ade2606c6195d65160c22b58fab59a9b6588b579b361ffba5a4e57bd",
+    "artifacts/task-validation/demo-source-configuration/operational-addendum-2-create-missing-trigger.md": "909fe83a3c1ed6ff228202bf28fc4c818bc4c4e71cf9d3f107a79678f4696d66",
+    "artifacts/task-validation/demo-source-configuration/verify-static-contract.mjs": "49075864973e1551409a63e96dad5e0f4c61d3e41641bd3088d2e77e10c797f1",
+    "artifacts/task-validation/demo-source-configuration/static-validation.json": "f3b70b846e247ba6ba03cdcf42a82616c0dffcd2100dea2fb7c14129bc02cb2f",
+    "artifacts/task-validation/demo-source-configuration/provider-constraint-clarification.md": "b2917f9d408b290f7f48d2f64c1bafb16209b7b2fc7beab2cc1b8fdff9e5207e",
+    "artifacts/task-validation/demo-source-configuration/candidate-seal.json": "adff4341d290c4e41c15752552d7adf9b9a078bd4fc35ba535ec00766d157de4",
+    "artifacts/task-validation/demo-source-configuration/root-final-review.json": "07084c465f9bf1da6f42c2dcdbea1f56db4d11d420c66ec7da935bfd70030ff2",
+    "artifacts/task-validation/demo-source-configuration/operational-contract.md": "aa77b5a65e51d6c79a6c14b8a208d01e85c2e5dcbdefdec9b704ca55ae6d1559",
+    "artifacts/task-validation/demo-source-configuration/attempt-2/unit-tests.log": "4dde95e6de95596e2fdd5e5a6971155e4b9e0cab4deb414cab253e3dfe84629c",
+    "artifacts/task-validation/demo-source-configuration/attempt-2/validation-report.md": "f7171b41f40d76a6bf83e28623e014c89613cb81e4599c2d85fe0eb38f1e486e",
+    "artifacts/task-validation/demo-source-configuration/attempt-2/verify-static-contract.mjs": "274bd18f43f7e4afc622f981085f60bba4d3681abd768e525790123728e2eb2b",
+    "artifacts/task-validation/demo-source-configuration/attempt-2/static-validation.json": "e5e4c761f729c694562480ab045509426cdb7ef70e885330a0e5a9f354c91ee3",
+    "artifacts/task-validation/demo-source-configuration/attempt-2/candidate-seal.json": "4b3fc5551967c222602193041e3a1f3ede018f255ae73a9673f9c4c44f9ba009",
+    "artifacts/task-validation/demo-source-configuration/attempt-2/historical-evidence-hashes.json": "8452829314a6bc77597a120580d68de81e4f5df83654e1329d3cd98a5ca64577",
+    "artifacts/task-validation/demo-source-configuration/attempt-2/original-57-regressions.log": "e82bffb6ccc8cbf3e75e17a59d92ed38125387102901f78ffc7f8f19c0ed66fe",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/diff-review.md": "93f97645e2efeec401d3967de1bfc2060c54c8fcddaa273cb0470cdb86051254",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/validation-report.md": "96c381e0fc0552f45fe4e6a20d904b0a57a9d455891ddd4e2d638c962b20bd92",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/run-existing-static-checker.mjs": "e93e8318e136ee20585f4d1d9de7aa492aab15946ddc9e2f8a375b887a3fa2b9",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/result.png": "079d9f6cb9a2260ee09079bceb0d08f43bd20ea6ebe12a694e47b6914e88044e",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/browser-qa.mjs": "48157a67280c4ac9c21f691f8be01133f38f71c096b7296a05195d79831ab143",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/final-manifest.json": "f2332544f353617315d4467d64c4c3ee8a3c590eacc8066bde47e682b541fee2",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/independent-probes.test.mjs": "18c4db924ee0c51968ef20b91a73055c3ece93d49f29a9b9c7ef7b3067605379",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/task-contract.md": "8db4017c8cfeeb7f6cd9e069c2d07567805a513d7a3cf856e87e90b746714080",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/trace.zip": "fc69cec78a61a0cfed225b837c1b3dae9c0ce5d6cbbc511991cde04a71369d4c",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/test-results/unit-tests.log": "96fb6aead8001283583243d47f7f7daa3e4742398b84156e606194322dc87ac5",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/test-results/security-final.json": "10355b7ec4230b443aaef4008d571cff0b5a6b918be8d312f4a244879f618a48",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/test-results/static-checker.log": "4cd2081eba948db7c39ec8f992d098d66e0a79b3029c7bad33eebb2279f79baf",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/test-results/browser-results.json": "87d9d98b0d4cbf57da7d3597e554d3cdacffc71e0db414c9a2b3a846da22046a",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/test-results/static-validation.json": "f3b70b846e247ba6ba03cdcf42a82616c0dffcd2100dea2fb7c14129bc02cb2f",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/test-results/browser-initial-environment.log": "9953209db3866f312f0251260b46d9c5ad2e6f73a01d64001e09455c5d6e4e02",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/test-results/video-probe.json": "dde39a067709f4b21b9293714bd22934bf445ad3fd552937727e82b5582cc2b1",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/test-results/browser.log": "af018b51e1186ef794e56e172a404ae1642a5862e901b8a44888e84352a00bc4",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/test-results/independent-probes.log": "5cfa50b38ec12e78d445d34a5bc31e058c7613bf8798746af7b85ba66140ec7e",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/test-results/initial-source-check.json": "c753fab57a68a1f5f91bcf441d23c25643e9d906e98c60ab17a2421584da95ce",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/test-results/issue-read-receipt.json": "4cf38169da0f088ad60616d3d5a04e105888ababe2b59a6ffccc0130acbf34d4",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/playwright-report/index.html": "75a21f67e9e3b6b7c54c5dc7e90fd550d65e7039272a453885abcf2a05ad2a62",
+    "artifacts/task-validation/demo-source-configuration/independent-qa-1/video/page@53138eac82647a6749a4e5e112e09717.webm": "2b7681cdbf1b797d6ca00adae5be0b4c6e9410340b70b113e39bf608b0062e45"
+  },
+  "historicalCount": 29
+}

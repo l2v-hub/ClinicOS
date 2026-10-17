@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "verdict": "READY FOR CODEX QA",
+  "configurationAttempt": 2,
+  "baselineSha": "44e2aaeabcc0583ff89b655774a5026546283f70",
+  "sourceHashes": {
+    ".github/workflows/configure-demo-source.yml": "08d627e26623c70f35041f51d64ea80a7e52c9d9d3c46f4d0e09b585ed0ebfde",
+    "scripts/automation/configure-demo-source.mjs": "c674e302471ea8b95154aa7e440761d0ca188475bdaffd294e9f4d3ad9c4536a",
+    "scripts/automation/configure-demo-source.test.mjs": "5da3aa8f5865c3b7d47d210a95ae56bef6e856a0d6f07cac494328fb3f32896a"
+  },
+  "contractHashes": {
+    "operational-contract.md": "aa77b5a65e51d6c79a6c14b8a208d01e85c2e5dcbdefdec9b704ca55ae6d1559",
+    "operational-addendum-2-create-missing-trigger.md": "909fe83a3c1ed6ff228202bf28fc4c818bc4c4e71cf9d3f107a79678f4696d66",
+    "provider-constraint-clarification.md": "b2917f9d408b290f7f48d2f64c1bafb16209b7b2fc7beab2cc1b8fdff9e5207e"
+  },
+  "sourceFilesUnchanged": true,
+  "preexistingEvidenceFilesUnchanged": 38,
+  "candidateTests": 107,
+  "independentTests": 41,
+  "browserScenarios": 19,
+  "browserExecutions": 20,
+  "browserAssertions": 207,
+  "actualProviderRequests": 0,
+  "files": {
+    "browser-qa.mjs": "0c116bfc774dc02da1fbb413118a794078c7a3345d898342c49f930828ffea41",
+    "diff-review.md": "35d5a9f88bd7b52c97c3f4cffdd9fe5c19f2d180526cce887839f8d1f4fc3a76",
+    "fixture-harness.mjs": "f7d4495a561939e1f18f151c1f3d7c4f8f46c8316d2694a43efd3bb97791e38a",
+    "independent-probes.test.mjs": "7ab2ae47da9cfad7881a3a4f8863b6b09a6896b164df3edd3453925413cc4254",
+    "playwright-report/index.html": "829dc57564719a6725718dafd279271ab21cf30ab30cea41f1e19ee97cbbaef1",
+    "result.png": "a66fbd616c1832fb05ed9679cb083aed76183b64e7450fbeee682b2af1c9a0c1",
+    "security-and-preservation.py": "0ba1fcac560dcfe509703bd91cb0ee2bb81eab39bd1a4e5259c08df8816c84f8",
+    "static-validation.mjs": "8d6d7f4d8691fa4d9852f8cc8e6e9332a82761b778f04d36941d44dad1982ff0",
+    "task-contract.md": "82e564cf522f564f0e80a3f9409edcc43bd9c09cbf85c45b0a34ddddc5bf9956",
+    "test-results/browser-results.json": "1461d53bb3e2151c7e9f45be92a9bcba1eb5c2b811bdb954b0fe6877d8f12ba1",
+    "test-results/browser.log": "718db56b667df370f61c95a83b33571fbc8cdb1e0aafb0b64a779151349b8715",
+    "test-results/independent-probes.log": "56a8368fe152befcc27079cdfd5768fc2525cc2a8b048fe76eb96194d670d293",
+    "test-results/initial-hashes.json": "2e46137660415d4453e336582f2eb34814f3b452ba936ecd31f8210068cdc8fd",
+    "test-results/original-and-new-unit.log": "21797e93cfb5b13c3eccdb87c069d2d2cdf560f8528ed19d465f9dded8fdbe4e",
+    "test-results/security-and-preservation.json": "58dd962eb12654892f905998678b22010eff4193083656231dcfe00393328fcf",
+    "test-results/static-validation.json": "4aa6f0b91abe70a30e304caaa807ed30d9369bb150a0ef8c3337d622bd71403c",
+    "test-results/static-validation.log": "951a6fa75f8503a7554ffb90f8afab8b5192ab0e2f96820d99f677e70c8444df",
+    "test-results/video-probe.json": "88a11e8c3eb57a7b02d02624dc9caafd5ea769e49eb17225f8401c509446eb82",
+    "trace.zip": "e77dba01e139873ab1fac40af0901faaaf31ab4d1ffe56fe86843308d039af11",
+    "validation-report.md": "d2ffbcc833f1b607fd8c1ab1762998e77d89d7a69b06eae02bc6e8cee5a1caab",
+    "video/page@157564b8a46c3dbec33f6814369ba27d.webm": "0240c84bfc277934deee233a218ff090a0ef6dbb4e43e1aeec48800dd38e4c7d"
+  }
+}
