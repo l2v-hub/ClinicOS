@@ -3927,7 +3927,7 @@
       "issues": [],
       "branch": "codex/demo-source-configuration",
       "owner": "codex-root-2026-10-17",
-      "phase": "waiting-checks",
+      "phase": "awaiting-native-inspection",
       "implementation": [
         {
           "round": 1,
@@ -3974,7 +3974,7 @@
         "valueAssertions": 207,
         "actualProviderOperation": false
       },
-      "mergeSha": "8124b1bc88c0f086b1ee328214f87f4802005d11",
+      "mergeSha": "d5d253f33e504f4259c874e5b03941074dc541ac",
       "actualInspection": {
         "runId": 39026327913,
         "reviewedSha": "8124b1bc88c0f086b1ee328214f87f4802005d11",
@@ -4001,7 +4001,14 @@
         "mergeSha": "6904b6d02180cf2efc989964b4d0dcf27274b050",
         "pr": 487,
         "source3AndContracts3Unchanged": true
-      }
+      },
+      "nativeCi": {
+        "run": 39031080487,
+        "status": "success",
+        "all6Required": true,
+        "realProvider": true
+      },
+      "activationSourceSha": "14dbcd353242b35a050c45cbed7978ac213edd62"
     },
     {
       "id": "issue-review-communication",
@@ -4018,7 +4025,7 @@
         "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
         ".github/workflows/codex-issue-review-sync.yml"
       ],
-      "phase": "waiting-checks",
+      "phase": "awaiting-live-sync",
       "implementation": [
         {
           "round": 1,
@@ -4061,7 +4068,15 @@
         "mergeSha": "6904b6d02180cf2efc989964b4d0dcf27274b050",
         "pr": 487,
         "source7AndContracts4Unchanged": true
-      }
+      },
+      "mergeSha": "14dbcd353242b35a050c45cbed7978ac213edd62",
+      "nativeCi": {
+        "run": 39031066161,
+        "status": "success",
+        "all6Required": true,
+        "realProvider": true
+      },
+      "activationSourceSha": "14dbcd353242b35a050c45cbed7978ac213edd62"
     },
     {
       "id": "ci-note-isolation",
@@ -4111,7 +4126,7 @@
       "evidenceRevision": "88406c7aa251b176c13a8c92d695f9e9d43d901d"
     }
   ],
-  "updatedAt": "2026-10-17T12:19:53.199Z",
+  "updatedAt": "2026-10-17T12:24:00.327Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
