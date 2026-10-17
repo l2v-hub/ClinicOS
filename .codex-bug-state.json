@@ -1069,7 +1069,8 @@
         "scope-amendment-1.md": "83d56fd3d02a242f7070cfa18384a7eea536ec72e30c1ada8bfef81f07d08078",
         "scope-amendment-2.md": "868ee1d36373421b6f2003cb4007f7d18f057a66228c802652be8fc100549ca7",
         "scope-amendment-3.md": "cbbdfbaeb8c78c14160dfc6fe63afd6a269788afdb4e3242838f556d9310d1e5",
-        "scope-amendment-4.md": "da083700035882a4ae20fa039f0565ffc6a5a6ae3bbb657526a9a1ba0a9bcb2d"
+        "scope-amendment-4.md": "da083700035882a4ae20fa039f0565ffc6a5a6ae3bbb657526a9a1ba0a9bcb2d",
+        "scope-amendment-5.md": "40c85ae6de778293257788807fd608f36c5bb5c1494de4cf3933afbdf2b616c9"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -1156,7 +1157,8 @@
           "frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts",
           "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
           "frontend/src/lib/__tests__/clinicalHistory.test.ts",
-          "frontend/src/lib/__tests__/therapyPages.test.ts"
+          "frontend/src/lib/__tests__/therapyPages.test.ts",
+          "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts"
         ],
         "acceptance": [
           {
@@ -1367,7 +1369,8 @@
               "frontend/src/components/operator/TherapyGiroRows.tsx",
               "frontend/src/components/operator/__tests__/operationalLists452.test.ts",
               "frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx",
-              "frontend/src/components/shared/PatientIdentity.tsx"
+              "frontend/src/components/shared/PatientIdentity.tsx",
+              "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts"
             ],
             "steps": [
               "Add opt-in compact identity rendering with accessible stable disambiguation, bed-first available column and aggregate incomplete footer.",
@@ -1658,7 +1661,8 @@
               "frontend/src/components/operator/__tests__/operationalLists452.test.ts",
               "e2e/qa-bug-batch-447.mjs",
               "e2e/qa-bug-batch-447-browser.mjs",
-              "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts"
+              "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
+              "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts"
             ]
           },
           {
@@ -1780,6 +1784,17 @@
           "reason": "Issues451/452 intentionally remove no-previous-value prose and desktop keypad and hide globally empty regime columns; retain exact11fieldorder/fullACVPU/rawkeyboard/noprefill/uncertainrequest identity and actual regime ordering. Issue457 requires current patient identity for print context and complete loading/error print gates now delegated to emergencyTransferContext. Add missing synthetic patient identity to existing print fixture and move implementation-shape assertions to the real helper while preserving every existing source/diagnosis-once/completepagination/denied/error oracle. therapyPages.test.ts overlaps batch432: do not edit it until root explicitly integrates stable432 changes, then preserve all added negative pagination regressions and reverify both groups. No source scope expansion or clinical policy decision.",
           "packet": "scope-amendment-4.md",
           "sha256": "da083700035882a4ae20fa039f0565ffc6a5a6ae3bbb657526a9a1ba0a9bcb2d"
+        },
+        {
+          "number": 5,
+          "at": "2026-10-17T08:05:52.968Z",
+          "issue": 452,
+          "files": [
+            "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts"
+          ],
+          "reason": "Issue452 deliberately introduces bed-first location and hides wholly empty optional regime/NEWS columns; a fixed five-column source assertion no longer matches the required behavior. Preserve all tax-code identity/no-medical-record-number fallback, accessible same-name disambiguation, actions, valid values and intake-derived-CF provenance assertions. Replace only obsolete roster column and brittle source-length assumptions with actual rendered mixed/empty roster behavior: assigned bed first, supplied CF visible/accessibly retained, optional globally empty columns hidden, real regime/NEWS values retained. No broad deletion, skips or relaxing identity safeguards.",
+          "packet": "scope-amendment-5.md",
+          "sha256": "40c85ae6de778293257788807fd608f36c5bb5c1494de4cf3933afbdf2b616c9"
         }
       ]
     },
@@ -1818,5 +1833,5 @@
       "reservedAt": "2026-10-17T07:44:43.115Z"
     }
   ],
-  "updatedAt": "2026-10-17T08:04:27.671Z"
+  "updatedAt": "2026-10-17T08:05:52.968Z"
 }
