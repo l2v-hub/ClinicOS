@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {buildClientSchema,parse,validate} from '/tmp/clinicos-schema-check/node_modules/graphql/index.mjs';
+const schemaBytes=await readFile('/tmp/clinicos-railway-cli-source/src/gql/schema.json');
+assert.equal(createHash('sha256').update(schemaBytes).digest('hex'),'3c3d1448f2a746d6e5977ba3aa205889f959c427be5cfe37c72e79b1fa65f2be');
+const schemaJson=JSON.parse(schemaBytes),schema=buildClientSchema(schemaJson.data??schemaJson);
+const source=await readFile('agent-team/src/bug-pipeline/demo-deployment.mjs','utf8');
+const docs=[...source.matchAll(/`((?:query|mutation)\([\s\S]*?)`/g)].map(m=>m[1]);
+assert.equal(docs.length,3);const results=docs.map(document=>{const errors=validate(schema,parse(document)).map(e=>e.message);assert.deepEqual(errors,[]);return {sha256:createHash('sha256').update(document).digest('hex'),errors};});
+await writeFile(new URL('railway-schema-qa.json',import.meta.url),JSON.stringify({officialSchemaVersion:'railway-cli-v5.66.0',schemaSha256:createHash('sha256').update(schemaBytes).digest('hex'),sourceSha256:createHash('sha256').update(source).digest('hex'),results,actualRailwayCalls:0},null,2)+'\n');
+console.log('Independent GraphQL AST validation: 3/3 PASS against exact official cached CLI 5.66.0 schema; zero Railway calls');

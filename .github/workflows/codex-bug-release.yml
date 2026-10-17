@@ -38,6 +38,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     environment: production
+    outputs:
+      status: ${{ steps.release.outputs.status }}
+      batch_id: ${{ steps.release.outputs.batch_id }}
+      merge_sha: ${{ steps.release.outputs.merge_sha }}
+      vercel_url: ${{ steps.vercel.outputs.url }}
+      railway_url: ${{ steps.railway.outputs.url }}
+      runtime_url: ${{ steps.runtime.outputs.url }}
     steps:
       # Workflow-run and manual releases always execute trusted main code. No PR ref is checked out.
       - name: Checkout trusted default branch
@@ -92,6 +99,8 @@ jobs:
           url="$(node -e 'const s=process.argv[1]; const u=[...s.matchAll(/https:\/\/[A-Za-z0-9.-]+\.vercel\.app/g)].map(x=>x[0]); if(!u.length) process.exit(1); process.stdout.write(u.at(-1));' "$output")"
           printf 'url=%s\n' "$url" >> "$GITHUB_OUTPUT"
 
+      # Success alone is not deployment proof: the record step verifies this run's
+      # immutable demo receipt, exact source/target and active public deployment identity.
       - name: Wait for Railway deployment of the merged commit
         id: railway
         if: steps.release.outputs.status == 'merged' && steps.release.outputs.backend == 'true'
@@ -142,18 +151,6 @@ jobs:
           echo 'Timed out waiting for Railway runtime deployment.' >&2
           exit 1
 
-      - name: Record confirmed deployments on source issues
-        if: success() && (steps.release.outputs.status == 'merged' || steps.release.outputs.status == 'deployed')
-        env:
-          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
-          BUG_PIPELINE_RELEASE_ACTION: record
-          BUG_PIPELINE_BATCH_ID: ${{ steps.release.outputs.batch_id }}
-          BUG_PIPELINE_MERGE_SHA: ${{ steps.release.outputs.merge_sha }}
-          VERCEL_DEPLOYMENT_URL: ${{ steps.vercel.outputs.url }}
-          RAILWAY_DEPLOYMENT_RUN_URL: ${{ steps.railway.outputs.url }}
-          RUNTIME_DEPLOYMENT_RUN_URL: ${{ steps.runtime.outputs.url }}
-        run: node control/agent-team/src/bug-pipeline/release.mjs
-
       - name: Upload sanitized release diagnostic on failure
         if: failure()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -162,3 +159,30 @@ jobs:
           path: control/agent-team/.runtime/bug-pipeline/release-diagnostic.json
           if-no-files-found: ignore
           retention-days: 14
+
+  confirm-demo:
+    needs: release
+    if: needs.release.result == 'success' && (needs.release.outputs.status == 'merged' || needs.release.outputs.status == 'deployed')
+    runs-on: ubuntu-latest
+    environment: 'glistening-friendship / demo'
+    steps:
+      - name: Checkout trusted default branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          path: control
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Verify actual demo and record confirmed deployments on source issues
+        env:
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+          BUG_PIPELINE_RELEASE_ACTION: record
+          BUG_PIPELINE_BATCH_ID: ${{ needs.release.outputs.batch_id }}
+          BUG_PIPELINE_MERGE_SHA: ${{ needs.release.outputs.merge_sha }}
+          VERCEL_DEPLOYMENT_URL: ${{ needs.release.outputs.vercel_url }}
+          RAILWAY_DEPLOYMENT_RUN_URL: ${{ needs.release.outputs.railway_url }}
+          RUNTIME_DEPLOYMENT_RUN_URL: ${{ needs.release.outputs.runtime_url }}
+          RAILWAY_DEMO_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+        run: node control/agent-team/src/bug-pipeline/release.mjs

@@ -1,0 +1,11 @@
+{"header":"No-StOrE","accepted":true}
+{"header":"private, extension=\"x,\\\"no-store\", no-store","accepted":true}
+{"header":"no-store, extension=\"x\\\"","accepted":false}
+{"header":"extension=\"no-store\", no-store=0","accepted":false}
+{"header":"no-store, =x","accepted":false}
+{"header":"no-store, extension=\"good\"bad","accepted":false}
+{"header":"no-store, extension=\"good\" =more","accepted":false}
+{"header":"no-store, extension=bad value","accepted":false}
+{"header":"no-store, extension=","accepted":false}
+{"header":"no-store, no-store=\"\"","accepted":false}
+Independent grammar: 10/10 actual helper expectations match.

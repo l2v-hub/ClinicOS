@@ -1,0 +1,37 @@
+{"preflights":2,"verifiedPr":9,"durablePr":10,"actualMerges":[["merge",10,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]],"result":{"ok":true,"status":"merged","batchId":"bug-batch-5","reviewedSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","mergeSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","deployments":{"frontend":false,"backend":true,"runtime":false}}}
+✖ a PR identity change during final trusted preflight cannot select an unverified PR for merge (16.728487ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 261.629666
+
+✖ failing tests:
+
+test at artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/premerge-identity-race.test.mjs:6:1
+✖ a PR identity change during final trusted preflight cannot select an unverified PR for merge (16.728487ms)
+  AssertionError [ERR_ASSERTION]: A fresh durable PR identity must match the PR checked before the awaited preflight
+  + actual - expected
+  
+  + [
+  +   [
+  +     'merge',
+  +     10,
+  +     'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+  +   ]
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/premerge-identity-race.test.mjs:18:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'merge', 10, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' ] ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

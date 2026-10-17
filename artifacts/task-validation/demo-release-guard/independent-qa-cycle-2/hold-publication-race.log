@@ -1,0 +1,61 @@
+✖ a hold applied while reading issue comments prevents completion publication (7.57104ms)
+✖ hold during real GitHub status adapter label inspection prevents actual close PATCH (2.145621ms)
+✖ a failed actual close must not leave an untrue already-closed completion claim (0.998318ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 130.103926
+
+✖ failing tests:
+
+test at artifacts/task-validation/demo-release-guard/independent-qa-cycle-2/hold-publication-race.test.mjs:126:1
+✖ a hold applied while reading issue comments prevents completion publication (7.57104ms)
+  AssertionError [ERR_ASSERTION]: Must not publish Risolto after a durable hold was applied during the awaited issue read
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/artifacts/task-validation/demo-release-guard/independent-qa-cycle-2/hold-publication-race.test.mjs:132:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at artifacts/task-validation/demo-release-guard/independent-qa-cycle-2/hold-publication-race.test.mjs:136:1
+✖ hold during real GitHub status adapter label inspection prevents actual close PATCH (2.145621ms)
+  AssertionError [ERR_ASSERTION]: {"reason":"Active hold must block actual issue close PATCH after awaited label operations","patches":[{"held":true,"body":{"state":"closed","state_reason":"completed"}}]}
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/artifacts/task-validation/demo-release-guard/independent-qa-cycle-2/hold-publication-race.test.mjs:145:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at artifacts/task-validation/demo-release-guard/independent-qa-cycle-2/hold-publication-race.test.mjs:147:1
+✖ a failed actual close must not leave an untrue already-closed completion claim (0.998318ms)
+  AssertionError [ERR_ASSERTION]: Do not claim issue is closed before closure succeeds; use resolution/deployment facts only
+      at TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/artifacts/task-validation/demo-release-guard/independent-qa-cycle-2/hold-publication-race.test.mjs:151:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '<!-- codex-bug-pipeline:deployment:bug-batch-5:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb -->\n**Risolto** — verifiche, evidenze e review completate per bug-batch-5 sulla revisione aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, merge bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb. [PR](https://github.com/l2v-hub/ClinicOS/pull/9) · [Frontend produzione](https://clinicos-eosin.vercel.app). Rilascio confermato; issue chiusa come completata.',
+    expected: /issue chiusa come completata/,
+    operator: 'doesNotMatch',
+    diff: 'simple'
+  }

@@ -1,0 +1,43 @@
+✔ repository settings reject mismatched or malformed revisions before using credentials (7.668776ms)
+✔ non-admin callers and every failed read preflight cannot mutate settings (3.407802ms)
+✔ configuration adds all six cumulative exact-main Actions gates and preserves default permissions (2.615899ms)
+✔ adding missing gates preserves existing human reviews, strict checks, bypass actors and default permissions (1.0708ms)
+✔ fully configured rules preserve all controls without issuing writes (0.698203ms)
+✔ ambiguous managed targets fail before any mutation (3.798363ms)
+▶ a wrong managed or cumulative app binding for ANY mandatory check blocks ALL mutations
+  ✔ managed: bug-pipeline-tests (1.199236ms)
+  ✔ effective: bug-pipeline-tests (0.504749ms)
+  ✔ classic: bug-pipeline-tests (0.583621ms)
+  ✔ managed: secret-scan (0.541957ms)
+  ✔ effective: secret-scan (0.346372ms)
+  ✔ classic: secret-scan (0.343021ms)
+  ✔ managed: frontend-tests (0.301041ms)
+  ✔ effective: frontend-tests (0.628218ms)
+  ✔ classic: frontend-tests (0.27695ms)
+  ✔ managed: archive-tests (0.344089ms)
+  ✔ effective: archive-tests (0.273287ms)
+  ✔ classic: archive-tests (0.224006ms)
+  ✔ managed: gate (7.840102ms)
+  ✔ effective: gate (0.530447ms)
+  ✔ classic: gate (0.721262ms)
+  ✔ managed: browser-e2e (0.595512ms)
+  ✔ effective: browser-e2e (0.326552ms)
+  ✔ classic: browser-e2e (0.194268ms)
+✔ a wrong managed or cumulative app binding for ANY mandatory check blocks ALL mutations (19.076206ms)
+▶ effective verification checks EVERY mandatory check instead of accepting only bug-pipeline-tests
+  ✔ bug-pipeline-tests (1.403981ms)
+  ✔ secret-scan (1.092874ms)
+  ✔ frontend-tests (0.548792ms)
+  ✔ archive-tests (0.595373ms)
+  ✔ gate (0.621223ms)
+  ✔ browser-e2e (4.041946ms)
+✔ effective verification checks EVERY mandatory check instead of accepting only bug-pipeline-tests (9.442376ms)
+✔ mandatory check jobs are emitted by existing unrestricted pull-request workflows (37.643443ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 312.193548

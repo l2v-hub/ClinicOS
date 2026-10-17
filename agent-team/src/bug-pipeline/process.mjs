@@ -82,6 +82,14 @@ export function childEnvironment(mode, env, runtimeRoot) {
     base.AI_RUNTIME_URL = 'http://127.0.0.1:8000';
     base.AI_RUNTIME_SERVICE_TOKEN = 'ci-mock-runtime-token';
   }
+  if (mode === 'verification' && env.PLAYWRIGHT_BROWSERS_PATH !== undefined) {
+    if (
+      !path.isAbsolute(env.PLAYWRIGHT_BROWSERS_PATH) ||
+      /[\r\n\0]/.test(env.PLAYWRIGHT_BROWSERS_PATH)
+    )
+      throw new Error('Verification browser cache must be an absolute nonsecret path');
+    base.PLAYWRIGHT_BROWSERS_PATH = env.PLAYWRIGHT_BROWSERS_PATH;
+  }
   return base;
 }
 export function createRunner({ env = process.env, runtimeRoot }) {

@@ -26,7 +26,17 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/deploy-backend.yml'
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Read-only target preflight, or deployment of this exact main commit
+        type: choice
+        options: [preflight, deploy]
+        default: preflight
+        required: true
+
+permissions:
+  contents: read
 
 concurrency:
   group: railway-backend
@@ -34,6 +44,7 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || inputs.operation == 'deploy')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,7 +54,7 @@ jobs:
           node-version: 20
 
       - name: Install Railway CLI
-        run: npm install -g @railway/cli
+        run: npm install -g @railway/cli@5.66.0
 
       - name: Deploy to Railway
         env:
@@ -59,3 +70,47 @@ jobs:
           else
             railway up --ci
           fi
+
+  demo:
+    # The demo token never enters the production job or untrusted PR code.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    environment: 'glistening-friendship / demo'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+
+      - name: Verify dedicated demo token, source and domain before any deployment
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+        run: node agent-team/src/bug-pipeline/demo-deployment.mjs preflight
+
+      - name: Publish immutable read-only target preflight
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: demo-preflight-${{ github.run_id }}-${{ github.run_attempt }}
+          path: demo-preflight-receipt.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Deploy exact main commit and prove it is served by the demo
+        if: github.event_name == 'push' || inputs.operation == 'deploy'
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+        run: node agent-team/src/bug-pipeline/demo-deployment.mjs deploy
+
+      - name: Publish immutable live demo deployment proof
+        if: github.event_name == 'push' || inputs.operation == 'deploy'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: demo-deployment-${{ github.run_id }}-${{ github.run_attempt }}
+          path: demo-deployment-receipt.json
+          if-no-files-found: error
+          retention-days: 30
