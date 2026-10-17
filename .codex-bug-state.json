@@ -76,7 +76,8 @@
         "cycle4/task-contract.md": "07fef835d1c9e090183673662fd5e30ec462e29fbaa0ddafd6c326632a819f68",
         "cycle4/analysis.md": "e85d44a48d657a4db9cac389d0210c1558b25e48746d741be4d6c703e9e79942",
         "cycle4/implementation-plan.md": "998c43bc0f5096daf0beec74ad74321c8cc8709475dd9dd8e414eb30ee675ca8",
-        "cycle4/scope-amendment-exact-paths.md": "e497637ea92b3f23b3549e5f98e5828d2d476091f29944f573f097f971576ed2"
+        "cycle4/scope-amendment-exact-paths.md": "e497637ea92b3f23b3549e5f98e5828d2d476091f29944f573f097f971576ed2",
+        "cycle4/csp/task-contract.md": "5697d8c1ed5cf7b248fdab0b59bcfdcdb2099bf37503beb1acc3718b9276005d"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -148,7 +149,8 @@
           "frontend/src/components/shared/intake/intakeSexReview.ts",
           "frontend/src/components/shared/intake/__tests__/intakeSexReview.test.ts",
           "frontend/src/lib/patientIncompleteSummary.ts",
-          "frontend/src/lib/patientIncompleteSummary.test.ts"
+          "frontend/src/lib/patientIncompleteSummary.test.ts",
+          "frontend/vercel.json"
         ],
         "acceptance": [
           {
@@ -750,6 +752,19 @@
             "cycle4/scope-amendment-exact-paths.md": "e497637ea92b3f23b3549e5f98e5828d2d476091f29944f573f097f971576ed2"
           },
           "reason": "Six actual Claude round2 findings; original frozen packet preserved. Behavioral contract predates edits; exact supplemental listing follows initial already-authorized dialog/list edits, as disclosed in the amendment."
+        },
+        {
+          "at": "2026-10-17T17:50:10.529Z",
+          "round": 4,
+          "owner": "l2v-hub",
+          "added": [
+            "frontend/vercel.json"
+          ],
+          "hashes": {
+            "cycle4/csp/task-contract.md": "5697d8c1ed5cf7b248fdab0b59bcfdcdb2099bf37503beb1acc3718b9276005d"
+          },
+          "negativeReproductionSha256": "190dfd233ac58fba9c5746f9c955f172029c580a11620699b622de1c7dbe2ffe",
+          "reason": "Actual built nonroot JPX worker reports WebAssembly compilation CSP denial while JavaScript fallback still renders. Authorize only wasm-unsafe-eval token in script-src, preserving JS eval denial, origins, all other directives and asset rewrite; no claim of hosted blank-preview root cause."
         }
       ]
     },
@@ -4572,7 +4587,7 @@
       "maxImplementationAttempts": 4
     }
   ],
-  "updatedAt": "2026-10-17T17:38:31.361Z",
+  "updatedAt": "2026-10-17T17:50:10.529Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
