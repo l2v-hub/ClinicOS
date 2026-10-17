@@ -3848,7 +3848,8 @@
       "rationale": "Existing operational configuration task extended by immutable addendum2 for exact missing GitHub trigger creation. No guard19 or maintenance470 edits/budget reset; protectedmain only; clinical release proof still required.",
       "packetHashes": {
         "operational-contract.md": "aa77b5a65e51d6c79a6c14b8a208d01e85c2e5dcbdefdec9b704ca55ae6d1559",
-        "operational-addendum-2-create-missing-trigger.md": "909fe83a3c1ed6ff228202bf28fc4c818bc4c4e71cf9d3f107a79678f4696d66"
+        "operational-addendum-2-create-missing-trigger.md": "909fe83a3c1ed6ff228202bf28fc4c818bc4c4e71cf9d3f107a79678f4696d66",
+        "provider-constraint-clarification.md": "b2917f9d408b290f7f48d2f64c1bafb16209b7b2fc7beab2cc1b8fdff9e5207e"
       },
       "operationalOnly": true,
       "sha": "44e2aaeabcc0583ff89b655774a5026546283f70",
@@ -3877,5 +3878,5 @@
       }
     }
   ],
-  "updatedAt": "2026-10-17T11:00:31.830Z"
+  "updatedAt": "2026-10-17T11:01:11.547Z"
 }
