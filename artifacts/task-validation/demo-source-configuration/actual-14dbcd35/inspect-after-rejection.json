@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "repository": "l2v-hub/ClinicOS",
+  "reviewedSha": "14dbcd353242b35a050c45cbed7978ac213edd62",
+  "runId": "39032761614",
+  "runAttempt": "1",
+  "capturedAt": "2026-10-17T12:30:48.265Z",
+  "operation": "inspect",
+  "outcome": "missing-trigger",
+  "inventory": {
+    "schemaVersion": 1,
+    "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+    "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+    "environmentName": "demo",
+    "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+    "repository": "l2v-hub/ClinicOS",
+    "rootDirectory": "",
+    "domains": [
+      {
+        "kind": "serviceDomains",
+        "domain": "clinicos-backend-demo.up.railway.app"
+      }
+    ],
+    "triggers": [],
+    "hasMoreTriggers": false
+  },
+  "inventorySha256": "bb0843673ebc593892cc8bdabddca75746f06676e0c141f3bb4ea0ee70d05a5f"
+}

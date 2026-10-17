@@ -1,0 +1,13 @@
+{
+  "run": 39032475284,
+  "reviewedSha": "14dbcd353242b35a050c45cbed7978ac213edd62",
+  "status": "failure",
+  "allowlistedErrorCode": "DEMO_SOURCE_API_REJECTED",
+  "createMainDispatches": 1,
+  "mutationRetry": false,
+  "providerTechnicalCause": "not exposed; not inferred",
+  "postFailureInventoryUnchanged": true,
+  "postFailureTriggers": 0,
+  "postFailureInventoryComplete": true,
+  "clinicalReleaseReady": false
+}
