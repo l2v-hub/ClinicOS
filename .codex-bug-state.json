@@ -15,7 +15,7 @@
       "sourceSha": "29b2f5c9b72b4d909b954d5360ec08095825f29e",
       "branch": "codex/bug-batch-450",
       "owner": "codex-root-2026-10-17",
-      "phase": "waiting-checks",
+      "phase": "waiting-review",
       "reservedAt": "2026-10-17T07:38:22.669Z",
       "implementation": [
         {
@@ -634,6 +634,12 @@
         "reason": "Actual demo target preflight failed before deployment; awaiting diagnosed and verified environment binding. Review may proceed; merge/deploy/closure held.",
         "runId": 39023763026,
         "createdAt": "2026-10-17T10:12:22.908Z"
+      },
+      "externalReview": {
+        "status": "requested",
+        "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
+        "requestedAt": "2026-10-17T10:27:26.673Z",
+        "feedbackFingerprint": "52fda3caae5852e9675b616f819f7b4ba3d5888b50f4c3f56c11fce42e0b56d3"
       }
     }
   ],
@@ -2973,5 +2979,5 @@
       "operationalOnly": true
     }
   ],
-  "updatedAt": "2026-10-17T10:16:29.753Z"
+  "updatedAt": "2026-10-17T10:27:26.674Z"
 }
