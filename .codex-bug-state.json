@@ -562,7 +562,8 @@
         "task-contract.md": "d705047ea54d51d74019cfb417efce9cd28ef78592a514fbb957c2f45574a0a9",
         "analysis.md": "5439104c28762c7511d21b72b892757db92963624e7c9bf4dd74972da2adabda",
         "implementation-plan.md": "bc9012a4ddd5d9685430d4bf59874dd582eab573514e6850d93efc21130c031b",
-        "triage-index.md": "6a25d7a1bbcd5e29441b7c5397b02127ba3b3ef03801496bdc53638a5f8efbdb"
+        "triage-index.md": "6a25d7a1bbcd5e29441b7c5397b02127ba3b3ef03801496bdc53638a5f8efbdb",
+        "scope-amendment-1.md": "d182cb2d560b07d197512a9e6e6df7b6c08f71e2771e56ee9492ea4b7d260d21"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -626,7 +627,8 @@
           "frontend/src/components/shared/intake/intakeDraftSession.ts",
           "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
           "frontend/src/components/shared/intake/IntakeIndex.tsx",
-          "frontend/src/components/shared/intake/__tests__/intakeProgress.test.ts"
+          "frontend/src/components/shared/intake/__tests__/intakeProgress.test.ts",
+          "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx"
         ],
         "acceptance": [
           {
@@ -719,7 +721,8 @@
               "backend/src/routes/import-pages.ts",
               "frontend/src/components/shared/import/__tests__/importReview.test.ts",
               "scripts/e2e/issue-450-ingresso.mjs",
-              "frontend/src/components/shared/ImportReviewFull.tsx"
+              "frontend/src/components/shared/ImportReviewFull.tsx",
+              "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx"
             ],
             "steps": [
               "Generate fully synthetic text plus scanned-image PDF and run real authenticated upload/source requests. Record failing browser behavior before choosing preview resource/cache fix.",
@@ -906,7 +909,8 @@
               "backend/src/intake/__tests__/confirm-draft-guards.test.ts",
               "scripts/e2e/issue-450-ingresso.mjs",
               "frontend/src/components/operator/NewPatientFlow.tsx",
-              "frontend/src/components/shared/intake/intakeDraftSession.ts"
+              "frontend/src/components/shared/intake/intakeDraftSession.ts",
+              "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx"
             ]
           },
           {
@@ -928,7 +932,8 @@
               "backend/src/intake/__tests__/seed-draft-from-import.test.ts",
               "backend/src/intake/__tests__/parse-discharge-therapy.test.ts",
               "scripts/e2e/issue-450-ingresso.mjs",
-              "frontend/src/components/shared/sections/ImportSectionsReview.tsx"
+              "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+              "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx"
             ]
           },
           {
@@ -966,7 +971,23 @@
         ],
         "separationReason": "Manual and import intake are consolidated to avoid IntakeWorkspace overlap. PatientList and patientListView overlap future452 list presentation: land this batch first, then rebase452 and rerun both draft/status and identity/list regressions; do not modify unrelated row presentation. Therapygroup owns therapy administration/AIFA, which are outside this intake scope."
       },
-      "frozenAt": "2026-10-17T07:47:23.726Z"
+      "frozenAt": "2026-10-17T07:47:23.726Z",
+      "amendments": [
+        {
+          "number": 1,
+          "at": "2026-10-17T07:50:47.643Z",
+          "issues": [
+            472,
+            473
+          ],
+          "files": [
+            "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx"
+          ],
+          "reason": "Issues472/473 require the original document remain accessible while editing at tablet/phone widths. Existing IntakeDocumentPanel forces a modal overlay/focus trap below1180px. Add optional persistent-inline presentation for the import caller, preserving existing manual/default overlay behavior, page cache authorization/cleanup, current-source isolation and accessible keyboard navigation. Prove simultaneous source and editable fields at responsive widths with real browser value/canvas assertions, not CSS/source-only checks.",
+          "packet": "scope-amendment-1.md",
+          "sha256": "d182cb2d560b07d197512a9e6e6df7b6c08f71e2771e56ee9492ea4b7d260d21"
+        }
+      ]
     },
     {
       "id": "bug-batch-447",
@@ -1680,5 +1701,5 @@
       "reservedAt": "2026-10-17T07:44:43.115Z"
     }
   ],
-  "updatedAt": "2026-10-17T07:50:12.396Z"
+  "updatedAt": "2026-10-17T07:50:47.644Z"
 }
