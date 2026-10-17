@@ -40,7 +40,8 @@ export async function withHeldCorrection(correction, entered, release, run, time
       ]),
       'Correction did not reach interpreter entry',
     );
-    await run();
+    // Attach rejection handling before invoking the callback, including late rejection after timeout.
+    await bounded(Promise.resolve().then(run), 'Confirmation callback did not complete');
   } catch (error) {
     failed = true;
     primary = error;

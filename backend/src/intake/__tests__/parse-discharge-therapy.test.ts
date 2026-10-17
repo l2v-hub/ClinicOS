@@ -536,3 +536,27 @@ test('PO03: an inferred form alone cannot turn a monitoring time into a schedule
   assert.equal(parsed.originalText, source);
   assert.equal(parsed.stato, 'da_verificare');
 });
+
+test('#473: heading-free prescriptions retain quantity, schedules and source without guessing alternatives', () => {
+  const source = [
+    'Ramipril 5 mg 1 compressa per os ore 08:00',
+    'Furosemide 25 mg 1/2 compressa per os ore 14:00',
+    'Bisoprololo 2,5 mg 1 compressa per os ore 08:00 o alle 20:00',
+  ];
+  const rows = parseDischargeTherapy(source.join('\n'));
+  assert.equal(rows.length, 3);
+  assert.deepEqual(
+    rows.map((row) => row.quantita),
+    ['1 compressa', '1/2 compressa', '1 compressa'],
+  );
+  assert.deepEqual(
+    rows.map((row) => row.orari),
+    [['08:00'], ['14:00'], []],
+  );
+  assert.deepEqual(
+    rows.map((row) => row.originalText),
+    source,
+  );
+  assert.equal(rows[2].stato, 'da_verificare');
+  assert.match(rows[2].note, /08:00 o alle 20:00/);
+});

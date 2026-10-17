@@ -1,3 +1,4 @@
+import { incompleteDemographicFields, type Demographics } from './patientDemographics';
 // Internal in_carico key remains compatible; its exact broad UI meaning is Non dimessi.
 // Lo stato di ricovero viene dal riepilogo clinico; se per un paziente non è ancora noto, il
 // paziente resta fra quelli in carico: non lo si nasconde per un dato mancante.
@@ -12,10 +13,7 @@ export const LIST_VIEW_LABEL: Record<ListView, string> = {
   tutti: 'Tutti',
 };
 
-export function matchesListView(
-  stato: string | null | undefined,
-  view: ListView,
-): boolean {
+export function matchesListView(stato: string | null | undefined, view: ListView): boolean {
   if (view === 'tutti') return true;
   if (view === 'dimessi') return stato === 'dimesso';
   return stato !== 'dimesso';
@@ -82,4 +80,9 @@ export function matchesListSignal(
   if (signal === 'critici') return summary.hasCriticalVitals;
   if (signal === 'rischi') return summary.hasHighRisk;
   return summary.hasSevereAllergy;
+}
+
+/** Incomplete identity remains visible after registering a patient; optional phone alone is not a draft. */
+export function intakeCompletionPending(patient: Demographics): boolean {
+  return incompleteDemographicFields(patient).some((field) => field !== 'phone');
 }

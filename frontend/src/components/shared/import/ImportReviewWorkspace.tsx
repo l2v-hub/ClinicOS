@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { ImportSectionsReview } from '../sections/ImportSectionsReview';
-import { ImportPageContent, ImportPagePreview } from './ImportPageView';
+import { ImportPageContent } from './ImportPageView';
 import { ImportConflictReview } from './ImportConflictReview';
 import { effectiveImportSections } from './importReviewModel';
 import { ImportReviewHandoff } from './importReviewHandoff';
@@ -23,6 +23,8 @@ interface Props {
   onBack(): void;
   onImported(patientId?: string): void;
   onBusy(value: boolean): void;
+  onClose(): void;
+  registerSave(save: (() => void) | null): void;
 }
 export function ImportReviewWorkspace({
   job,
@@ -36,14 +38,13 @@ export function ImportReviewWorkspace({
   onBack,
   onImported,
   onBusy,
+  onClose,
+  registerSave,
 }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [groupId, setGroupId] = useState(result._groups[0]?.groupId ?? '');
   const [pageId, setPageId] = useState(job.manifest.pages[0]?.id ?? '');
-  const [sourceId, setSourceId] = useState<string | null>(null);
-  const [pane, setPane] = useState<'doc' | 'data'>('data');
-  const [layout, setLayout] = useState<'doc' | '5050' | 'data'>('5050');
   const [showOcr, setShowOcr] = useState(false);
   const [decisionsDirty, setDecisionsDirty] = useState(false);
   const [handoffPending, setHandoffPending] = useState(false);
@@ -56,8 +57,6 @@ export function ImportReviewWorkspace({
     .sort((a, b) => a.sortOrder - b.sortOrder);
   const page = groupPages.find((item) => item.id === pageId) ?? groupPages[0];
   const document = job.documents.find((item) => item.id === page?.documentId);
-  const sourcePage = job.manifest.pages.find((item) => item.id === sourceId);
-  const sourceDocument = job.documents.find((item) => item.id === sourcePage?.documentId);
   const canProceed =
     !decisionsDirty && job.review.canProceed && result._review.unresolvedConflictIds.length === 0;
   async function run(action: () => Promise<void>) {
@@ -89,10 +88,22 @@ export function ImportReviewWorkspace({
     patient: ConfirmPatient;
     cartella: Record<string, unknown>;
   }) {
+    // Close/save uses this same entry point: unready decisions must never create an intent.
+    if (!canProceed) throw new Error('Decidi e salva tutti i conflitti prima di proseguire.');
     try {
       const completed = await handoff.current.complete(job.id, result._source, actor, api, review);
       onJob(completed.job);
       onWorkspace(completed.draftId);
+    } catch (error) {
+      // This definitive refusal happens before draft creation. A later resolved decision
+      // must start fresh; uncertain transport/patch outcomes retain their frozen intent.
+      if (
+        error instanceof DraftApiError &&
+        error.status === 409 &&
+        error.code === 'unresolved_conflicts'
+      )
+        handoff.current = new ImportReviewHandoff();
+      throw error;
     } finally {
       setHandoffPending(handoff.current.pending);
     }
@@ -127,18 +138,15 @@ export function ImportReviewWorkspace({
       fileId ? item.id === fileId : item.filename === fileName,
     );
     if (sourceGroups.length + documents.length !== 1) {
-      setPane('doc');
       setError('Fonte non univoca: seleziona la lettera e la pagina da consultare.');
       return;
     }
     if (sourceGroups.length === 1) {
       setGroupId(sourceGroups[0].groupId);
-      setPane('doc');
       setShowOcr(false);
       return;
     }
     if (documents.length !== 1) {
-      setPane('doc');
       setError(
         'Più originali hanno questo nome: seleziona la lettera e la pagina per consultarli.',
       );
@@ -149,44 +157,14 @@ export function ImportReviewWorkspace({
         item.documentId === documents[0].id &&
         (!sourcePageNumber || item.sourcePageNumber === sourcePageNumber),
     );
-    if (matches[0]) setSourceId(matches[0].id);
+    if (matches[0]) {
+      setGroupId(matches[0].groupId);
+      setPageId(matches[0].id);
+      setShowOcr(false);
+    }
   }
   return (
-    <div className={`import-workspace import-workspace--${layout} pane-${pane}`}>
-      <div className="iw-toolbar">
-        <div className="iw-panetabs" role="tablist" aria-label="Pannello">
-          <button
-            role="tab"
-            aria-selected={pane === 'doc'}
-            className="ds-chip"
-            onClick={() => setPane('doc')}
-          >
-            Documento
-          </button>
-          <button
-            role="tab"
-            aria-selected={pane === 'data'}
-            className="ds-chip"
-            onClick={() => setPane('data')}
-          >
-            Dati ClinicOS
-          </button>
-        </div>
-        <div className="iw-presets">
-          {(['doc', '5050', 'data'] as const).map((value, index) => (
-            <button
-              key={value}
-              type="button"
-              className="ds-chip"
-              aria-pressed={layout === value}
-              aria-label={['Documento più grande', 'Divisione 50/50', 'Dati più grandi'][index]}
-              onClick={() => setLayout(value)}
-            >
-              {['◧', '▣', '◨'][index]}
-            </button>
-          ))}
-        </div>
-      </div>
+    <div className="import-workspace import-workspace--5050">
       <div className="iw-doc" aria-label="Documento originale">
         <label>
           Consulta lettera{' '}
@@ -234,7 +212,14 @@ export function ImportReviewWorkspace({
           result={result}
           busy={busy}
           onSave={saveDecisions}
-          onOpenPage={setSourceId}
+          onOpenPage={(id) => {
+            const selected = job.manifest.pages.find((item) => item.id === id);
+            if (selected) {
+              setGroupId(selected.groupId);
+              setPageId(id);
+              setShowOcr(false);
+            }
+          }}
           onDirty={() => setDecisionsDirty(true)}
         />
         {!canProceed && <p role="alert">Decidi e salva tutti i conflitti prima di proseguire.</p>}
@@ -307,16 +292,15 @@ export function ImportReviewWorkspace({
           onBack={onBack}
           onConfirm={(patient, cartella, opts) => void proceed(patient, cartella, opts)}
           onOpenSource={openLegacySource}
+          registerSave={registerSave}
+          onSaveDraft={(patient, cartella) =>
+            void run(async () => {
+              await openDraft({ patient, cartella });
+              onClose();
+            })
+          }
         />
       </div>
-      {sourcePage && sourceDocument && (
-        <ImportPagePreview
-          page={sourcePage}
-          document={sourceDocument}
-          cache={cache}
-          onClose={() => setSourceId(null)}
-        />
-      )}
     </div>
   );
 }

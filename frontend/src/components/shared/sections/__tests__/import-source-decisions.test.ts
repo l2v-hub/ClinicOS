@@ -7,16 +7,30 @@ import type { ImportSectionsReview } from '../ImportSectionsReview';
 import { sectionsFromNarrative } from '../deriveSections';
 import { effectiveImportSections } from '../../import/importReviewModel';
 import type { ImportResult } from '../../import/importSessionTypes';
+import type { ImportReviewWorkspace } from '../../import/ImportReviewWorkspace';
+import { job, json } from '../../import/__tests__/fixtures';
 
 type Props = Parameters<typeof ImportSectionsReview>[0];
 type Element = { type: unknown; props: Record<string, unknown> };
 
 /** Exercise the real component's render/event handlers with persistent hook state, without a DOM. */
-function renderer() {
+function componentRenderer<TProps>(
+  url: URL,
+  exportName: string,
+  overrides: Record<string, unknown> = {},
+) {
   const values: unknown[] = [];
   let cursor = 0;
+  let pendingEffects: Array<() => void | (() => void)> = [];
+  let cleanups: Array<() => void> = [];
   const hooks = {
+    useEffect: (make: () => void | (() => void)) => pendingEffects.push(make),
     useMemo: (make: () => unknown) => make(),
+    useRef: (initial: unknown) => {
+      const index = cursor++;
+      if (!(index in values)) values[index] = { current: initial };
+      return values[index];
+    },
     useState: (initial: unknown) => {
       const index = cursor++;
       if (!(index in values)) values[index] = typeof initial === 'function' ? initial() : initial;
@@ -28,7 +42,6 @@ function renderer() {
       ];
     },
   };
-  const url = new URL('../ImportSectionsReview.tsx', import.meta.url);
   const require = createRequire(url);
   const output = ts.transpileModule(readFileSync(url, 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX },
@@ -37,6 +50,7 @@ function renderer() {
   new Function('require', 'module', 'exports', output)(
     (name: string) => {
       if (name === 'react') return hooks;
+      if (Object.hasOwn(overrides, name)) return overrides[name];
       // Leaf visuals are not under test; the real review state, labels and handlers are.
       if (name === '../DemographicsStatus') return { DemographicsStatus: () => null };
       if (name === './SemanticTaggedText') return { SemanticTaggedText: () => null };
@@ -45,12 +59,29 @@ function renderer() {
     module,
     module.exports,
   );
-  const component = (module.exports as { ImportSectionsReview: typeof ImportSectionsReview })
-    .ImportSectionsReview;
-  return (props: Props) => {
+  const component = (module.exports as Record<string, (props: TProps) => unknown>)[exportName];
+  const render = (props: TProps) => {
     cursor = 0;
-    return component(props);
+    pendingEffects = [];
+    const tree = component(props);
+    for (const cleanup of cleanups) cleanup();
+    cleanups = pendingEffects
+      .map((effect) => effect())
+      .filter((cleanup): cleanup is () => void => typeof cleanup === 'function');
+    return tree;
   };
+  return Object.assign(render, {
+    unmount() {
+      for (const cleanup of cleanups) cleanup();
+      cleanups = [];
+    },
+  });
+}
+function renderer() {
+  return componentRenderer<Props>(
+    new URL('../ImportSectionsReview.tsx', import.meta.url),
+    'ImportSectionsReview',
+  );
 }
 function nodes(root: unknown): Element[] {
   if (Array.isArray(root)) return root.flatMap(nodes);
@@ -268,3 +299,341 @@ test('legacy names remain labels and absent/unknown source identities never beco
   assert.match(text(tree), /Fonte: non identificata/);
   assert.doesNotMatch(text(tree), /wrong-first.pdf/);
 });
+
+test('472 save-and-leave registers latest reviewed edits, preserves source and cleans up on unmount', () => {
+  const render = renderer();
+  const sections = sectionsFromNarrative({
+    firstName: 'Maria',
+    lastName: 'Sintetica',
+    diagnosisText: 'Immutable synthetic source',
+  });
+  const before = structuredClone(sections);
+  let save: (() => void) | null = null;
+  const saved: Array<{ patient: unknown; cartella: unknown }> = [];
+  let confirms = 0;
+  const props: Props = {
+    sections,
+    documents: [],
+    onBack() {},
+    onConfirm() {
+      confirms++;
+    },
+    registerSave(value) {
+      save = value;
+    },
+    onSaveDraft(patient, cartella) {
+      saved.push({ patient, cartella });
+    },
+  };
+  let tree = render(props);
+  invoke(
+    find(tree, (element) => element.props.id === 'import-demographic-firstName'),
+    'onChange',
+    { target: { value: 'Modificata' } },
+  );
+  tree = render(props);
+  assert.ok(save, 'close handler must be registered after render');
+  (save as () => void)();
+  assert.equal((saved[0].patient as { firstName: string }).firstName, 'Modificata');
+  assert.equal(confirms, 0, 'saving an incomplete draft never confirms a patient');
+  assert.deepEqual(sections, before, 'original extracted sections remain immutable');
+  invoke(
+    find(tree, (element) => element.type === 'button' && text(element) === 'Salva bozza e chiudi'),
+    'onClick',
+  );
+  assert.equal(saved.length, 2);
+  render.unmount();
+  assert.equal(save, null, 'a closed review cannot retain a stale save callback');
+});
+
+type WorkspaceProps = Parameters<typeof ImportReviewWorkspace>[0];
+const ReviewLeaf = () => null;
+const ConflictLeaf = () => null;
+function reviewLifecycle(value: ImportResult, ready: boolean) {
+  const currentJob = job(3);
+  currentJob.status = 'review_ready';
+  currentJob.review.canProceed = ready;
+  currentJob.review.draftSourceIsCurrent = true;
+  let registered: (() => void) | null = null;
+  let closed = 0;
+  const opened: string[] = [];
+  const workspace = componentRenderer<WorkspaceProps>(
+    new URL('../../import/ImportReviewWorkspace.tsx', import.meta.url),
+    'ImportReviewWorkspace',
+    {
+      '../sections/ImportSectionsReview': { ImportSectionsReview: ReviewLeaf },
+      './ImportConflictReview': { ImportConflictReview: ConflictLeaf },
+      './ImportPageView': { ImportPageContent: () => null },
+    },
+  );
+  const review = renderer();
+  const api = {
+    async get() {
+      return currentJob;
+    },
+    async review(_id: string, _source: unknown, decisions: ImportResult['_review']['decisions']) {
+      value._review = { decisions, unresolvedConflictIds: [] };
+      currentJob.review.canProceed = true;
+      return { job: currentJob };
+    },
+    async result() {
+      return value;
+    },
+  };
+  const props = {
+    job: currentJob,
+    result: value,
+    api,
+    actor: {},
+    cache: {},
+    onResult(next: ImportResult) {
+      Object.assign(value, next);
+    },
+    onJob(next: typeof currentJob) {
+      Object.assign(currentJob, next);
+    },
+    onWorkspace(id: string) {
+      opened.push(id);
+    },
+    onClose() {
+      closed++;
+    },
+    registerSave(save: (() => void) | null) {
+      registered = save;
+    },
+    onBusy() {},
+    onBack() {},
+    onImported() {},
+  } as unknown as WorkspaceProps;
+  let workspaceTree: unknown;
+  let reviewTree: unknown;
+  function render() {
+    workspaceTree = workspace(props);
+    reviewTree = review(
+      find(workspaceTree, (element) => element.type === ReviewLeaf).props as unknown as Props,
+    );
+    return { workspace: workspaceTree, review: reviewTree };
+  }
+  render();
+  return {
+    render,
+    currentJob,
+    api,
+    opened,
+    get closed() {
+      return closed;
+    },
+    get workspace() {
+      return workspaceTree;
+    },
+    get review() {
+      return reviewTree;
+    },
+    saveRegistered() {
+      assert.ok(registered);
+      registered();
+    },
+    dirty() {
+      invoke(
+        find(workspaceTree, (element) => element.type === ConflictLeaf),
+        'onDirty',
+      );
+    },
+    async resolve(candidateId: string) {
+      const conflict = find(workspaceTree, (element) => element.type === ConflictLeaf);
+      await (conflict.props.onSave as (decisions: unknown[]) => Promise<void>)([
+        { conflictId: 'name', action: 'select', candidateId },
+      ]);
+      render();
+    },
+    unmount() {
+      review.unmount();
+      workspace.unmount();
+      assert.equal(registered, null);
+    },
+  };
+}
+const settleReview = () => new Promise<void>((resolve) => setImmediate(resolve));
+function editReview(lifecycle: ReturnType<typeof reviewLifecycle>, field: string, value: string) {
+  invoke(
+    find(lifecycle.review, (element) => element.props.id === `import-demographic-${field}`),
+    'onChange',
+    { target: { value } },
+  );
+  lifecycle.render();
+}
+
+test('QA450-1 registered close-save preserves unresolved/dirty review until corrected choices can be persisted', async () => {
+  const previous = globalThis.fetch;
+  const value = result();
+  const immutableSource = structuredClone(value._narrative);
+  const lifecycle = reviewLifecycle(value, false);
+  const requests: string[] = [];
+  let patch: Record<string, unknown> | undefined;
+  globalThis.fetch = (async (_url, init) => {
+    requests.push(init?.method ?? 'GET');
+    if (init?.method === 'POST')
+      return json({
+        id: 'corrected-draft',
+        version: 0,
+        data: { anagrafica: { firstName: 'Bea', lastName: 'Synthetic' } },
+      });
+    assert.equal(init?.method, 'PATCH');
+    patch = JSON.parse(String(init.body));
+    return json({ id: 'corrected-draft', version: 1, data: patch });
+  }) as typeof fetch;
+  try {
+    editReview(lifecycle, 'address', 'Correzione manuale conservata');
+    // The mounted review registers the callback consumed by header/footer/Escape dismissal.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      lifecycle.saveRegistered();
+      await settleReview();
+      lifecycle.render();
+      assert.deepEqual(requests, []);
+      assert.equal(lifecycle.closed, 0);
+      assert.deepEqual(lifecycle.opened, []);
+      assert.doesNotMatch(text(lifecycle.workspace), /passaggio alla bozza è in attesa/);
+    }
+    await lifecycle.resolve('Alba');
+    lifecycle.dirty();
+    lifecycle.render();
+    lifecycle.saveRegistered();
+    await settleReview();
+    lifecycle.render();
+    assert.deepEqual(requests, [], 'unsaved choices cannot start an intent either');
+    await lifecycle.resolve('Bea');
+    lifecycle.saveRegistered();
+    await settleReview();
+    lifecycle.render();
+    assert.deepEqual(requests, ['POST', 'PATCH']);
+    assert.equal((patch?.anagrafica as Record<string, unknown>).firstName, 'Bea');
+    assert.equal(
+      (patch?.anagrafica as Record<string, unknown>).address,
+      'Correzione manuale conservata',
+    );
+    assert.deepEqual(value._narrative, immutableSource);
+    assert.equal(lifecycle.closed, 1);
+    assert.deepEqual(lifecycle.opened, ['corrected-draft']);
+  } finally {
+    lifecycle.unmount();
+    globalThis.fetch = previous;
+  }
+});
+
+test('QA450-1 definitive unresolved409 discards rejected intent before the corrected same-hash review', async () => {
+  const previous = globalThis.fetch;
+  const value = result();
+  choose(value, 'Alba');
+  const source = structuredClone(value._source);
+  const lifecycle = reviewLifecycle(value, true);
+  let creates = 0;
+  const patches: Record<string, unknown>[] = [];
+  globalThis.fetch = (async (_url, init) => {
+    if (init?.method === 'POST') {
+      creates++;
+      if (creates === 1)
+        return json(
+          {
+            code: 'unresolved_conflicts',
+            error: 'Scegli come gestire ogni informazione discordante prima di continuare',
+          },
+          409,
+        );
+      return json({
+        id: 'resolved-draft',
+        version: 0,
+        data: { anagrafica: { firstName: 'Bea', lastName: 'Synthetic' } },
+      });
+    }
+    assert.equal(init?.method, 'PATCH');
+    const patch = JSON.parse(String(init.body));
+    patches.push(patch);
+    return json({ id: 'resolved-draft', version: 1, data: patch });
+  }) as typeof fetch;
+  try {
+    editReview(lifecycle, 'firstName', 'Prima');
+    lifecycle.saveRegistered();
+    await settleReview();
+    lifecycle.render();
+    assert.equal(lifecycle.closed, 0);
+    assert.deepEqual(patches, []);
+    assert.doesNotMatch(text(lifecycle.workspace), /passaggio alla bozza è in attesa/);
+    await lifecycle.resolve('Bea');
+    editReview(lifecycle, 'firstName', 'Corretto');
+    lifecycle.saveRegistered();
+    await settleReview();
+    lifecycle.render();
+    assert.equal(creates, 2);
+    assert.equal(patches.length, 1);
+    assert.equal((patches[0].anagrafica as Record<string, unknown>).firstName, 'Corretto');
+    assert.deepEqual(
+      value._source,
+      source,
+      'conflict resolution need not change extraction identity',
+    );
+    assert.equal(lifecycle.closed, 1);
+  } finally {
+    lifecycle.unmount();
+    globalThis.fetch = previous;
+  }
+});
+
+for (const failure of ['network', '503'] as const)
+  test(`uncertain ${failure} handoff preserves the frozen review until actual recovery`, async () => {
+    const previous = globalThis.fetch;
+    const value = result();
+    choose(value, 'Alba');
+    const lifecycle = reviewLifecycle(value, true);
+    let created = false;
+    let creates = 0;
+    let patch: Record<string, unknown> | undefined;
+    globalThis.fetch = (async (_url, init) => {
+      if (init?.method === 'POST') {
+        creates++;
+        created = true;
+        if (failure === 'network') throw new TypeError('lost response');
+        return json({ error: 'temporary unknown write outcome' }, 503);
+      }
+      if (init?.method === 'GET')
+        return json({
+          id: 'uncertain-draft',
+          version: 0,
+          data: { anagrafica: { firstName: 'Seed' } },
+        });
+      assert.equal(init?.method, 'PATCH');
+      patch = JSON.parse(String(init.body));
+      return json({ id: 'uncertain-draft', version: 1, data: patch });
+    }) as typeof fetch;
+    const originalGet = lifecycle.api.get;
+    lifecycle.api.get = async () => {
+      const job = await originalGet();
+      job.review.draftId = created ? 'uncertain-draft' : null;
+      return job;
+    };
+    try {
+      editReview(lifecycle, 'firstName', 'Prima incerta');
+      lifecycle.saveRegistered();
+      await settleReview();
+      lifecycle.render();
+      assert.equal(lifecycle.closed, 0);
+      assert.match(text(lifecycle.workspace), /passaggio alla bozza è in attesa/);
+      choose(value, 'Bea');
+      lifecycle.render();
+      invoke(
+        find(
+          lifecycle.workspace,
+          (element) =>
+            element.type === 'button' && text(element) === 'Riprova passaggio alla bozza',
+        ),
+        'onClick',
+      );
+      await settleReview();
+      lifecycle.render();
+      assert.equal(creates, 1);
+      assert.equal((patch?.anagrafica as Record<string, unknown>).firstName, 'Prima incerta');
+      assert.deepEqual(lifecycle.opened, ['uncertain-draft']);
+    } finally {
+      lifecycle.unmount();
+      globalThis.fetch = previous;
+    }
+  });

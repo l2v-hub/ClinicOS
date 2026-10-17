@@ -1,0 +1,14 @@
+{
+  "status": "IMPLEMENTED_NOT_VERIFIED",
+  "implementationCycle": 3,
+  "sealedAt": "2026-10-17T09:53:51.028823+00:00",
+  "candidate2Checkpoint": "5a250319bae5b3f61f2c5864aee438f04d948df5",
+  "sourceManifestSha256": "2bdf9c414df2304784ad09f241964bc58db530014fa9db4c349a743aac530c0c",
+  "sourceFiles": 37,
+  "changedSourceFiles": 2,
+  "outsideScope": [],
+  "preservedOldPacketHashesMatch": true,
+  "focusedRuntimeSourceHashesMatch": true,
+  "independentQa3Required": true,
+  "canonicalCommand": "node e2e/qa-bug-batch-432.mjs --test"
+}

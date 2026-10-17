@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { PageHeader } from '../shared/PageHeader';
 import { useAiImportStatus } from '../shared/useAiImportStatus';
-import { IcoAI, IcoCamera, IcoEdit, IcoUpload } from '../../icons';
+import { IcoAI, IcoCamera, IcoEdit } from '../../icons';
 import type { NewPatientPath } from './NewPatientChooser';
 import './NewPatientStart.css';
 
@@ -20,18 +20,13 @@ export function NewPatientStart({ onChoose, onBack }: Props) {
   const docsEnabled = available && !loading;
   const docsStatus = loading ? 'Verifica del servizio AI in corso…' : !available ? reason : null;
 
+  // #450: lettera e trasferimento fanno la stessa cosa (documenti letti dall'AI): una sola strada.
   const DOCS = [
     {
-      key: 'lettera',
+      key: 'documenti',
       icon: <IcoCamera />,
-      title: 'Da lettera di dimissione',
-      text: 'Scansiona le pagine con la fotocamera o carica PDF e foto: l’AI propone i dati, tu li verifichi.',
-    },
-    {
-      key: 'trasferimento',
-      icon: <IcoUpload />,
-      title: 'Da file del trasferimento',
-      text: 'Carica i PDF ricevuti dalla struttura, anche più file insieme. Puoi riordinare, rimuovere o sostituire le pagine.',
+      title: 'Lettera o trasferimento',
+      text: 'Fotografa le pagine o carica PDF e foto, anche più file: l’AI propone i dati, tu li verifichi.',
     },
   ];
 
@@ -77,32 +72,6 @@ export function NewPatientStart({ onChoose, onBack }: Props) {
           </span>
         </button>
       </div>
-      <section className="ds-card nps__how" aria-labelledby="nps-how-title">
-        <h2 id="nps-how-title" className="ds-eyebrow">
-          Come funziona
-        </h2>
-        <div className="nps__how-grid">
-          <div>
-            <h3 className="nps__how-title">L’AI propone, tu confermi</h3>
-            <p className="nps__how-text">
-              Dai documenti l’AI compila i campi, poi li verifichi prima di confermare.
-            </p>
-          </div>
-          <div>
-            <h3 className="nps__how-title">Pagine sotto controllo</h3>
-            <p className="nps__how-text">
-              Puoi riordinare, rimuovere o sostituire una pagina prima di procedere.
-            </p>
-          </div>
-          <div>
-            <h3 className="nps__how-title">Bozza quando serve</h3>
-            <p className="nps__how-text">
-              Nell’inserimento a mano puoi salvare la bozza e chiudere, per riprenderla in questa
-              sessione.
-            </p>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

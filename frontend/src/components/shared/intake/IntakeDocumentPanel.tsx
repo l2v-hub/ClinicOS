@@ -53,13 +53,17 @@ export function IntakeDocumentPanel({
   api,
   request,
   onClose,
+  persistentInline = false,
 }: {
   job: ImportJob;
   api: ImportSessionApi;
   request: DocumentPanelRequest;
   onClose: () => void;
+  /** Imported sources remain alongside editable fields at every viewport. */
+  persistentInline?: boolean;
 }) {
-  const column = useMediaQuery(DOCUMENT_PANEL_COLUMN_QUERY);
+  const wide = useMediaQuery(DOCUMENT_PANEL_COLUMN_QUERY);
+  const column = persistentInline || wide;
   const root = useRef<HTMLElement>(null);
   const tabRefs = useRef(new Map<string, HTMLButtonElement>());
   const onCloseRef = useRef(onClose);

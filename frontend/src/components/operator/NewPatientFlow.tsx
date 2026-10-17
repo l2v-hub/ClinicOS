@@ -64,6 +64,7 @@ interface Props {
   operatoreNome?: string;
   /** Percorso già scelto (pagina Nuovo ingresso): niente finestra di scelta. */
   initialPath?: NewPatientPath;
+  resumeDraftId?: string;
 }
 
 /** Ingresso unico "Nuovo paziente": la scelta, poi l'import dei documenti o il wizard manuale.
@@ -75,6 +76,7 @@ export function NewPatientFlow({
   operatorRole,
   operatoreNome,
   initialPath,
+  resumeDraftId,
 }: Props) {
   const [path, setPath] = useState<NewPatientPath | null>(initialPath ?? null);
 
@@ -85,6 +87,7 @@ export function NewPatientFlow({
       <Suspense fallback={<DialogLoading onClose={onClose} />}>
         {path === 'documenti' ? (
           <DischargeImportModal
+            initialDraftId={resumeDraftId}
             open
             onClose={onClose}
             onImported={(patientId, moduleTabId) => onDone(patientId, moduleTabId, 'documenti')}
