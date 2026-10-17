@@ -1902,9 +1902,22 @@
             "agent-team/tests/bug-pipeline/github.test.mjs"
           ],
           "reason": "Guard actual issue API mutation boundaries and publish truthful release facts"
+        },
+        {
+          "cycle": 3,
+          "files": [
+            "agent-team/src/bug-pipeline/process.mjs",
+            "agent-team/tests/bug-pipeline/workspace.test.mjs",
+            "agent-team/src/bug-pipeline/pipeline.mjs",
+            "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+            ".github/workflows/codex-bug-pipeline.yml",
+            ".github/workflows/bug-pipeline-tests.yml",
+            "scripts/quality-gate/verify-isolated-services.mjs"
+          ],
+          "reason": "Concrete isolated Chromium cache and protected terminal publication retry defects in complete automatic flow"
         }
       ]
     }
   ],
-  "updatedAt": "2026-10-17T08:53:03.013Z"
+  "updatedAt": "2026-10-17T08:54:35.210Z"
 }
