@@ -4494,18 +4494,36 @@
         },
         {
           "round": 3,
-          "status": "running",
+          "status": "failed",
           "reservedAt": "2026-10-17T17:03:05.744Z",
           "reservedBeforeSourceEdits": true,
           "owner": "standalone_review_adapter",
-          "reason": "Only Unicode-safe report storage and bounded SHA-verified large-state blob fallback/save preflight; preserve all previous failures."
+          "reason": "Only Unicode-safe report storage and bounded SHA-verified large-state blob fallback/save preflight; preserve all previous failures.",
+          "finishedAt": "2026-10-17T17:32:45.005Z",
+          "subjectSha": null,
+          "uncommitted": true,
+          "sourceManifestSha256": "7dd41bf20229026e85bff335d4a7749cd748a5a119cbe74cfe9cd69b73275bf2",
+          "independentQaReportSha256": "db7e4c6839fcf13d92fcb20d1f0e052f31c06755c3368e8e3399ea1804bc5c01",
+          "independentQaSealSha256": "7920efe7f45e25653258c12d1f25791e62f7a6eab082f2b5095176024b97dd56",
+          "failure": "Independent QA3 reproduced exhausted durable report capacity after claim and disjoint-subject CAS loss leaving a running final QA. No actual hosted-failure causation asserted."
+        },
+        {
+          "round": 4,
+          "status": "running",
+          "reservedAt": "2026-10-17T17:28:09.765020+00:00",
+          "recordedAt": "2026-10-17T17:32:45.005Z",
+          "reservedBeforeSourceEdits": true,
+          "owner": "standalone_review_adapter",
+          "localReservationSha256": "f5c4f7f425d62464f7a0fedc46f39ed6d3a2f7882d37210c558d24b9bb51f5cf",
+          "reason": "Only proven F5 pre-inference report/result capacity reservation and F6 guarded disjoint-subject state rebase, preserving strict default CAS and all prior failures. Add sanitized known error codes for future controller diagnosis.",
+          "registrationNote": "Actual local wx reservation preceded source edits; GitHub registration delayed until clinical controller39053232445 completed to preserve its strict-CAS result."
         }
       ],
       "reviews": [],
       "maxImplementationAttempts": 4
     }
   ],
-  "updatedAt": "2026-10-17T17:27:34.131Z",
+  "updatedAt": "2026-10-17T17:32:45.005Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
