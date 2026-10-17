@@ -534,6 +534,8 @@ export async function executeSkill(
             date: a.date,
             fascia: a.fascia,
             scheduledTime: a.scheduledTime,
+            requestId: `skill-${state.id}`,
+            expectedStato: 'da_erogare',
           },
         },
         true,

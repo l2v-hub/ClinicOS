@@ -1,8 +1,9 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
+import { facilityClock } from '../lib/facility-time.js';
 import type { TherapyDueItem } from '../ai/assistant/facility-signals.js';
 import { scheduleDoseLabel } from '../lib/therapy-dose.js';
-import type { TherapyPatientAccess } from './therapy-query.js';
+import { therapyBandEnabledSql, type TherapyPatientAccess } from './therapy-query.js';
 
 interface TherapyDueRow {
   bucket: 'overdue' | 'dueSoon';
@@ -56,7 +57,7 @@ export async function findTherapiesDue(
 ): Promise<TherapyDueResult> {
   const weekday = new Date(`${date}T00:00:00.000Z`).getUTCDay() || 7;
   const weekdayPattern = `%,${weekday},%`;
-  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  const currentMinutes = facilityClock(now).minutes;
   const boundedWindow = Math.max(0, Math.min(24 * 60, Math.trunc(windowMinutes)));
   const boundedSample = Math.max(1, Math.min(50, Math.trunc(sampleLimit)));
 
@@ -64,6 +65,7 @@ export async function findTherapiesDue(
     WITH due_therapy AS (
       SELECT
         pt.id AS "therapyId",
+        pt.tipo,
         pt."patientId",
         pt."farmacoNome" AS "drugName",
         pt.dosaggio,
@@ -72,7 +74,7 @@ export async function findTherapiesDue(
         p."firstName",
         p."lastName",
         band.fascia,
-        COALESCE(schedule.time, band."defaultTime") AS "scheduledTime",
+        COALESCE(schedule.time, CASE WHEN pt.tipo = 'una_tantum' THEN pt."orarioSomministrazione" END, band."defaultTime") AS "scheduledTime",
         (
           SELECT count(*)::int FROM "TherapySchedule" bs
           WHERE bs."therapyId" = pt.id AND bs.fascia = band.fascia
@@ -131,7 +133,7 @@ export async function findTherapiesDue(
             ',' || regexp_replace(pt."giorniSettimana", '[[:space:]]+', '', 'g') || ','
           ) LIKE ${weekdayPattern}
         )
-        AND band.enabled = TRUE
+        AND ${therapyBandEnabledSql()}
         ${therapyAccessSql(access)}
     ), legacy_administration AS (
       SELECT DISTINCT ON (ma."patientId", ma."farmacoNome", ma.fascia, ma.ora)
@@ -159,8 +161,10 @@ export async function findTherapiesDue(
         FROM "MedicationAdministration" ma
         WHERE ma."therapyId" = due."therapyId"
           AND ma.date = ${date}
-          AND ma.fascia = due.fascia
-          AND (ma.ora = due."scheduledTime" OR due."bandDoses" <= 1)
+          AND (due.tipo = 'una_tantum' OR (
+            ma.fascia = due.fascia
+            AND (ma.ora = due."scheduledTime" OR due."bandDoses" <= 1)
+          ))
         ORDER BY (ma.stato = 'erogata') DESC, (ma.ora = due."scheduledTime") DESC, ma.id ASC
         LIMIT 1
       ) modern ON TRUE

@@ -476,13 +476,33 @@ test('J — regression: Phase 1/2 tool surface unchanged for the GUI/Agno path',
 test('per-role coverage: every executable skill completes for an intended role', async () => {
   const supervisor = await login(base, 'SIM-SUPERVISOR-1');
   const cases: [Session, string, string, Record<string, unknown>?][] = [
-    [nurse, 'diary.recent', 'mostrami il diario di questo ospite', { currentPatientId: patients.rossi }],
-    [nurse, 'clinical.question', 'quali terapie in corso ha questo ospite?', { currentPatientId: patients.rossi }],
+    [
+      nurse,
+      'diary.recent',
+      'mostrami il diario di questo ospite',
+      { currentPatientId: patients.rossi },
+    ],
+    [
+      nurse,
+      'clinical.question',
+      'quali terapie in corso ha questo ospite?',
+      { currentPatientId: patients.rossi },
+    ],
     [nurse, 'therapy.due_administrations', 'quali somministrazioni ci sono oggi?'],
     [oss, 'handover.overview', 'come sono le consegne?'],
-    [oss, 'vitals.recent', 'mostrami i parametri recenti di questo ospite', { currentPatientId: patients.ossPatient }],
+    [
+      oss,
+      'vitals.recent',
+      'mostrami i parametri recenti di questo ospite',
+      { currentPatientId: patients.ossPatient },
+    ],
     [doctor, 'appointments.day', 'appuntamenti di oggi'],
-    [doctor, 'patient.overview', 'dimmi tutto su questo ospite', { currentPatientId: patients.doctorPatient }],
+    [
+      doctor,
+      'patient.overview',
+      'dimmi tutto su questo ospite',
+      { currentPatientId: patients.doctorPatient },
+    ],
     [supervisor, 'facility.occupancy', 'quanti posti letto sono occupati?'],
     [admin, 'facility.occupancy', 'quanti posti letto sono occupati?'],
     [admin, 'admin.roster_contexts', 'mostrami gli ordinamenti dei reparti'],
@@ -492,7 +512,11 @@ test('per-role coverage: every executable skill completes for an intended role',
   for (const [session, skillId, message, context] of cases) {
     const response = await say(session, { message, ...(context ? { context } : {}) });
     assert.equal(response.body.skillId, skillId, `${session.identityId}: ${message}`);
-    assert.equal(response.body.status, 'COMPLETED', `${session.identityId} ${skillId}: ${JSON.stringify(response.body)}`);
+    assert.equal(
+      response.body.status,
+      'COMPLETED',
+      `${session.identityId} ${skillId}: ${JSON.stringify(response.body)}`,
+    );
   }
   // handover.create completed end-to-end (G only cancelled it).
   const note = `consegna completata ${runTag}`;
@@ -504,55 +528,247 @@ test('per-role coverage: every executable skill completes for an intended role',
   // doctor records vitals too (intended role), OSS adds an observation.
   const vit = await say(doctor, { message: `registra pressione 140/90 per Dario Neri${Tag}` });
   assert.equal((await confirmPreview(doctor, vit)).body.status, 'COMPLETED');
-  const obs = await say(oss, { message: `aggiungi questa osservazione per Olga Verdi${Tag}: "passeggiata in giardino"` });
+  const obs = await say(oss, {
+    message: `aggiungi questa osservazione per Olga Verdi${Tag}: "passeggiata in giardino"`,
+  });
   assert.equal((await confirmPreview(oss, obs)).body.status, 'COMPLETED');
 });
 
-test('QA H1 — a slow correction racing a confirmation cannot produce a second write', async () => {
-  const { converse } = await import('../engine.js');
-  const { defaultSkillDeps } = await import('../index.js');
-  const { deterministicInterpreter } = await import('../interpreter.js');
-  const identity = { operatorId: 'SIM-NURSE-1', role: 'operatore', name: 'Infermiere 1', appRole: 'nurse' };
-  let slow = false;
-  const deps = {
-    ...defaultSkillDeps,
-    interpreter: async (input: Parameters<typeof deterministicInterpreter>[0]) => {
-      if (slow) await new Promise((resolve) => setTimeout(resolve, 400));
-      return deterministicInterpreter(input);
-    },
-  };
-  const before = await readings(patients.rossi);
-  const start = await converse(deps, identity, { message: `registra pressione 120/80 per Mario ${rossi}` });
-  assert.equal(start.status, 'NEEDS_CONFIRMATION', JSON.stringify(start));
-  slow = true;
-  const correction = converse(deps, identity, { workflowId: start.workflowId!, message: 'pressione 130/80' });
-  await new Promise((resolve) => setTimeout(resolve, 100));
-  slow = false;
-  const confirmed = await converse(deps, identity, {
-    workflowId: start.workflowId!,
-    action: 'confirm',
-    previewId: start.preview!.previewId,
+/** Observe correction immediately; every entry/assertion failure releases and settles it. */
+async function withHeldCorrection<T>(
+  correction: Promise<T>,
+  entered: Promise<void>,
+  release: () => void,
+  run: () => Promise<void>,
+  timeoutMs = 5000,
+): Promise<void> {
+  const settled = correction.then(
+    (value) => ({ ok: true as const, value }),
+    (error: unknown) => ({ ok: false as const, error }),
+  );
+  async function bounded<U>(operation: Promise<U>, message: string): Promise<U> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    try {
+      return await Promise.race([
+        operation,
+        new Promise<never>((_, reject) => {
+          timer = setTimeout(() => reject(new Error(message)), timeoutMs);
+        }),
+      ]);
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  let failed = false;
+  let primary: unknown;
+  try {
+    await bounded(
+      Promise.race([
+        entered,
+        settled.then((result) => {
+          if (!result.ok) throw result.error;
+          throw new Error('Correction settled before interpreter entry');
+        }),
+      ]),
+      'Correction did not reach interpreter entry',
+    );
+    await run();
+  } catch (error) {
+    failed = true;
+    primary = error;
+    throw error;
+  } finally {
+    release();
+    try {
+      const result = await bounded(settled, 'Correction did not settle after barrier release');
+      if (!result.ok) throw result.error;
+    } catch (cleanupError) {
+      if (!failed) throw cleanupError;
+      if (cleanupError !== primary)
+        throw new AggregateError([primary, cleanupError], 'Correction and cleanup failed', {
+          cause: primary,
+        });
+    }
+  }
+}
+
+test('QA H1 barrier failure paths release and settle while preserving the primary error', async () => {
+  const neverEntered = new Promise<void>(() => {});
+  let releases = 0;
+  const primary = new Error('correction rejected before entry');
+  await assert.rejects(
+    withHeldCorrection(
+      Promise.reject(primary),
+      neverEntered,
+      () => {
+        releases++;
+      },
+      async () => {
+        assert.fail('entry required');
+      },
+      50,
+    ),
+    (error) => error === primary,
+  );
+  assert.equal(releases, 1);
+  await assert.rejects(
+    withHeldCorrection(
+      Promise.resolve('DENIED'),
+      neverEntered,
+      () => {
+        releases++;
+      },
+      async () => {
+        assert.fail('entry required');
+      },
+      50,
+    ),
+    /settled before interpreter entry/,
+  );
+  assert.equal(releases, 2);
+  let releaseHeld!: () => void;
+  let correctionSettled = false;
+  const held = new Promise<void>((resolve) => {
+    releaseHeld = resolve;
   });
-  assert.equal(confirmed.status, 'COMPLETED', JSON.stringify(confirmed));
-  const late = await correction;
-  assert.equal(late.status, 'COMPLETED', `the stale correction must not reopen the workflow: ${JSON.stringify(late)}`);
-  const again = await converse(deps, identity, {
-    workflowId: start.workflowId!,
-    action: 'confirm',
-    previewId: start.preview!.previewId,
+  await assert.rejects(
+    withHeldCorrection(
+      held.then(() => {
+        correctionSettled = true;
+      }),
+      neverEntered,
+      releaseHeld,
+      async () => {
+        assert.fail('entry required');
+      },
+      20,
+    ),
+    /did not reach interpreter entry/,
+  );
+  assert.equal(correctionSettled, true);
+  const assertion = new Error('confirmation assertion failed');
+  const cleanup = new Error('correction rejected after release');
+  const heldFailure = new Promise<void>((resolve) => {
+    releaseHeld = resolve;
   });
-  assert.equal(again.status, 'COMPLETED');
-  assert.equal(await readings(patients.rossi), before + 1, 'exactly one write');
+  await assert.rejects(
+    withHeldCorrection(
+      heldFailure.then(() => {
+        throw cleanup;
+      }),
+      Promise.resolve(),
+      releaseHeld,
+      async () => {
+        throw assertion;
+      },
+      50,
+    ),
+    (error) =>
+      error instanceof AggregateError &&
+      error.cause === assertion &&
+      error.errors[0] === assertion &&
+      error.errors[1] === cleanup,
+  );
 });
 
+test(
+  'QA H1 — a slow correction racing a confirmation cannot produce a second write',
+  { timeout: 20_000 },
+  async () => {
+    const { converse } = await import('../engine.js');
+    const { defaultSkillDeps } = await import('../index.js');
+    const { deterministicInterpreter } = await import('../interpreter.js');
+    const identity = {
+      operatorId: 'SIM-NURSE-1',
+      role: 'operatore',
+      name: 'Infermiere 1',
+      appRole: 'nurse',
+    };
+    let slow = false;
+    let entered!: () => void;
+    let release!: () => void;
+    const reachedInterpreter = new Promise<void>((resolve) => {
+      entered = resolve;
+    });
+    const heldCorrection = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    const deps = {
+      ...defaultSkillDeps,
+      interpreter: async (input: Parameters<typeof deterministicInterpreter>[0]) => {
+        if (slow) {
+          entered();
+          await heldCorrection;
+        }
+        return deterministicInterpreter(input);
+      },
+    };
+    const before = await readings(patients.rossi);
+    const start = await converse(deps, identity, {
+      message: `registra pressione 120/80 per Mario ${rossi}`,
+    });
+    assert.equal(start.status, 'NEEDS_CONFIRMATION', JSON.stringify(start));
+    slow = true;
+    const correction = converse(deps, identity, {
+      workflowId: start.workflowId!,
+      message: 'pressione 130/80',
+    });
+    await withHeldCorrection(
+      correction,
+      reachedInterpreter,
+      () => {
+        slow = false;
+        release();
+      },
+      async () => {
+        slow = false;
+        const confirmed = await converse(deps, identity, {
+          workflowId: start.workflowId!,
+          action: 'confirm',
+          previewId: start.preview!.previewId,
+        });
+        assert.equal(confirmed.status, 'COMPLETED', JSON.stringify(confirmed));
+        const original = await prisma.patientParameterReading.findUniqueOrThrow({
+          where: { id: confirmed.result!.readingId as string },
+        });
+        assert.deepEqual(original.values, { pa: '120/80' });
+        assert.equal(original.authorOperatorId, identity.operatorId);
+        release();
+        const late = await correction;
+        assert.equal(
+          late.status,
+          'COMPLETED',
+          `the stale correction must not reopen the workflow: ${JSON.stringify(late)}`,
+        );
+        const again = await converse(deps, identity, {
+          workflowId: start.workflowId!,
+          action: 'confirm',
+          previewId: start.preview!.previewId,
+        });
+        assert.equal(again.status, 'COMPLETED');
+        assert.equal(await readings(patients.rossi), before + 1, 'exactly one write');
+        assert.deepEqual(
+          await prisma.patientParameterReading.findUniqueOrThrow({ where: { id: original.id } }),
+          original,
+        );
+      },
+    );
+  },
+);
+
 test('QA M1 — a near-confirmation never replaces the text; «correggi:» does', async () => {
-  const start = await say(nurse, { message: `aggiungi questa osservazione per Mario ${rossi}: "dorme tranquillo"` });
+  const start = await say(nurse, {
+    message: `aggiungi questa osservazione per Mario ${rossi}: "dorme tranquillo"`,
+  });
   assert.equal(start.body.status, 'NEEDS_CONFIRMATION', JSON.stringify(start.body));
   const near = await say(nurse, { workflowId: start.body.workflowId, message: 'sì, conferma' });
   assert.equal(near.body.status, 'NEEDS_CONFIRMATION');
   assert.equal(near.body.preview.values.Testo, 'dorme tranquillo');
   assert.match(near.body.reply, /correggi/);
-  const fixed = await say(nurse, { workflowId: start.body.workflowId, message: 'correggi: dorme, respiro regolare' });
+  const fixed = await say(nurse, {
+    workflowId: start.body.workflowId,
+    message: 'correggi: dorme, respiro regolare',
+  });
   assert.equal(fixed.body.preview.values.Testo, 'dorme, respiro regolare');
   const cancel = await say(nurse, { workflowId: start.body.workflowId, action: 'cancel' });
   assert.equal(cancel.body.status, 'CANCELLED');

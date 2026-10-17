@@ -6,6 +6,7 @@ export interface TherapyAdministrationCandidate {
   patientId: string;
   drugName: string;
   fasce: string[];
+  singleDayDose?: boolean;
 }
 
 export interface TherapyAdministrationPageRow {
@@ -42,7 +43,11 @@ export async function findTherapyPageAdministrations(
   const dueCandidates = candidates.filter((candidate) => candidate.fasce.length > 0);
   if (dueCandidates.length === 0) return [];
   const modernCandidates = dueCandidates.flatMap((candidate) =>
-    candidate.fasce.map((fascia) => ({ therapyId: candidate.therapyId, fascia })),
+    candidate.fasce.map((fascia) => ({
+      therapyId: candidate.therapyId,
+      fascia,
+      singleDayDose: candidate.singleDayDose === true,
+    })),
   );
   const legacyCandidates = [
     ...new Map(
@@ -60,10 +65,11 @@ export async function findTherapyPageAdministrations(
 
   const [modernRows, legacyRows] = await Promise.all([
     db.$queryRaw<TherapyAdministrationPageRow[]>(Prisma.sql`
-      WITH candidate("therapyId", fascia) AS (
+      WITH candidate("therapyId", fascia, "singleDayDose") AS (
         VALUES ${Prisma.join(
           modernCandidates.map(
-            (candidate) => Prisma.sql`(${candidate.therapyId}, ${candidate.fascia})`,
+            (candidate) =>
+              Prisma.sql`(${candidate.therapyId}, ${candidate.fascia}, ${candidate.singleDayDose}::boolean)`,
           ),
         )}
       )
@@ -82,7 +88,7 @@ export async function findTherapyPageAdministrations(
       FROM candidate
       JOIN "MedicationAdministration" ma
         ON ma."therapyId" = candidate."therapyId"
-        AND ma.fascia = candidate.fascia
+        AND (ma.fascia = candidate.fascia OR candidate."singleDayDose")
         AND ma.date = ${date}
       ORDER BY ma.id ASC
     `),

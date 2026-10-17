@@ -3,6 +3,10 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 const app = readFileSync(new URL('../../App.tsx', import.meta.url), 'utf8');
+const administration = readFileSync(
+  new URL('../therapyAdministrationWrite.ts', import.meta.url),
+  'utf8',
+);
 
 test('therapy slots are loaded only when the therapy page is visible, including history navigation', () => {
   assert.match(app, /navKey !== 'terapie'[\s\S]*void loadTherapySlots\(\)/);
@@ -20,6 +24,7 @@ test('agenda follows the bounded page contract and aborts obsolete date requests
   assert.match(app, /mergeTherapySlotPages\(current, page\.slots, page\.pageInfo\.summaryExact\)/);
   assert.match(app, /append: true,[\s\S]*cursor: therapyPageInfo\.nextCursor/);
   assert.doesNotMatch(app, /cachedGetJson<unknown>\(`\$\{API_URL\}\/therapy-slots/);
-  assert.match(app, /date: info\.date/);
+  assert.match(app, /recordAdministration\(info,/);
+  assert.match(administration, /date: info\.date/);
   assert.match(app, /loadTherapySlots\(info\.date\)/);
 });

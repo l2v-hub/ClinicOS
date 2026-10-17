@@ -14,13 +14,17 @@ import {
   scheduleDoseLabel,
   type ScheduleInput,
 } from '../lib/therapy-dose.js';
-import { earliestOra } from './slot-scheduling.js';
+import { earliestOra, oneTimeSlot, therapyBandEnabled } from './slot-scheduling.js';
 import {
   findTherapyPageAdministrations,
   legacyAdministrationKey,
 } from './therapy-administration-page.js';
 import { TherapySlotCapacityError } from './therapy-capacity.js';
-import { therapyWhereForAccess, type TherapyPatientAccess } from './therapy-query.js';
+import {
+  therapyWhereForAccess,
+  therapyBandEnabledSql,
+  type TherapyPatientAccess,
+} from './therapy-query.js';
 import {
   loadOperationalIdentities,
   type PatientLocationDto,
@@ -121,10 +125,11 @@ export async function buildTherapySlotExactSummary(
     WITH due_therapy AS (
       SELECT
         pt.id,
+        pt.tipo,
         pt."patientId",
         pt."farmacoNome",
         band.fascia,
-        COALESCE(schedule.time, band.ora) AS "scheduledTime",
+        COALESCE(schedule.time, CASE WHEN pt.tipo = 'una_tantum' THEN pt."orarioSomministrazione" END, band.ora) AS "scheduledTime",
         (
           SELECT count(*)::int FROM "TherapySchedule" bs
           WHERE bs."therapyId" = pt.id AND bs.fascia = band.fascia
@@ -157,7 +162,7 @@ export async function buildTherapySlotExactSummary(
             ',' || regexp_replace(pt."giorniSettimana", '[[:space:]]+', '', 'g') || ','
           ) LIKE ${weekdayPattern}
         )
-        AND band.enabled = TRUE
+        AND ${therapyBandEnabledSql()}
         ${therapyAccessSql(access)}
     ), legacy_administration AS (
       SELECT DISTINCT ON (ma."patientId", ma."farmacoNome", ma.fascia, ma.ora)
@@ -183,8 +188,10 @@ export async function buildTherapySlotExactSummary(
         FROM "MedicationAdministration" ma
         WHERE ma."therapyId" = due.id
           AND ma.date = ${date}
-          AND ma.fascia = due.fascia
-          AND (ma.ora = due."scheduledTime" OR due."bandDoses" <= 1)
+          AND (due.tipo = 'una_tantum' OR (
+            ma.fascia = due.fascia
+            AND (ma.ora = due."scheduledTime" OR due."bandDoses" <= 1)
+          ))
         ORDER BY (ma.stato = 'erogata') DESC, (ma.ora = due."scheduledTime") DESC, ma.id ASC
         LIMIT 1
       ) modern ON TRUE
@@ -242,6 +249,7 @@ async function buildTherapySlotSourcePage(
       dosaggio: true,
       viaSomministrazione: true,
       tipo: true,
+      orarioSomministrazione: true,
       fasceMattina: true,
       fascePranzo: true,
       fascePomeriggio: true,
@@ -294,7 +302,9 @@ async function buildTherapySlotSourcePage(
 
   const legacyCandidateKeys = new Set(
     validTherapies.flatMap((therapy) =>
-      FASCE.filter((fascia) => therapy[fascia.flagField as FlagField] === true).map((fascia) =>
+      FASCE.filter((fascia) =>
+        therapyBandEnabled(therapy, fascia.fascia, therapy[fascia.flagField as FlagField] === true),
+      ).map((fascia) =>
         legacyAdministrationKey(therapy.patientId, therapy.farmacoNome, fascia.fascia),
       ),
     ),
@@ -312,9 +322,10 @@ async function buildTherapySlotSourcePage(
       therapyId: therapy.id,
       patientId: therapy.patientId,
       drugName: therapy.farmacoNome,
-      fasce: FASCE.filter((fascia) => therapy[fascia.flagField as FlagField] === true).map(
-        ({ fascia }) => fascia,
-      ),
+      singleDayDose: therapy.tipo === 'una_tantum',
+      fasce: FASCE.filter((fascia) =>
+        therapyBandEnabled(therapy, fascia.fascia, therapy[fascia.flagField as FlagField] === true),
+      ).map(({ fascia }) => fascia),
     })),
     db,
   );
@@ -351,16 +362,22 @@ async function buildTherapySlotSourcePage(
   // A band with ONE prescribed dose has one record for the day whatever its hour (the time may
   // have been moved after the dose was given); `erogata` wins so a given dose never reopens.
   const bandRecords = new Map<string, (typeof administrations)[0]>();
+  const dayRecords = new Map<string, (typeof administrations)[0]>();
   for (const administration of administrations) {
     if (!administration.therapyId) continue;
     const key = `${administration.therapyId}|${administration.fascia}`;
     const held = bandRecords.get(key);
     if (!held || (held.stato !== 'erogata' && administration.stato === 'erogata'))
       bandRecords.set(key, administration);
+    const dayHeld = dayRecords.get(administration.therapyId);
+    if (!dayHeld || (dayHeld.stato !== 'erogata' && administration.stato === 'erogata'))
+      dayRecords.set(administration.therapyId, administration);
   }
 
   const slots: TherapySlot[] = FASCE.map((f) => {
-    const fasciaTherapies = validTherapies.filter((pt) => pt[f.flagField as FlagField] === true);
+    const fasciaTherapies = validTherapies.filter((pt) =>
+      therapyBandEnabled(pt, f.fascia, pt[f.flagField as FlagField] === true),
+    );
     const patientMap = new Map<string, SlotPatient>();
 
     for (const pt of fasciaTherapies) {
@@ -374,8 +391,13 @@ async function buildTherapySlotSourcePage(
       const schedules = (pt.schedules as ScheduleInput[]).filter((s) => s.fascia === f.fascia);
       const doses: Array<ScheduleInput | undefined> = schedules.length ? schedules : [undefined];
       for (const sched of doses) {
-        const time = sched?.time || f.ora;
-        const bandRecord = doses.length === 1 ? bandRecords.get(`${pt.id}|${f.fascia}`) : undefined;
+        const time = oneTimeSlot(pt)?.time || sched?.time || f.ora;
+        const bandRecord =
+          pt.tipo === 'una_tantum'
+            ? dayRecords.get(pt.id)
+            : doses.length === 1
+              ? bandRecords.get(`${pt.id}|${f.fascia}`)
+              : undefined;
         const existing =
           (bandRecord?.stato === 'erogata' ? bandRecord : undefined) ??
           adminMap.get(`${pt.id}|${f.fascia}|${time}`) ??
@@ -407,7 +429,7 @@ async function buildTherapySlotSourcePage(
               : (quantityLabel ?? pt.dosaggio),
           quantityLabel,
           route: pt.viaSomministrazione || 'orale',
-          scheduledTime: sched?.time || f.ora,
+          scheduledTime: time,
           status,
           administeredAt: existing?.confirmedAt
             ? new Date(existing.confirmedAt).toISOString()

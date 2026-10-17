@@ -19,7 +19,7 @@ import {
 import { RosterError } from '../roster/order-contract.js';
 import {
   isConcurrentWriteConflict,
-  recordTherapyAdministration,
+  recordTherapyAdministrationResult,
   TherapyAlreadyAdministeredError,
 } from '../therapies/administration-record.js';
 import {
@@ -158,7 +158,10 @@ router.post('/confirm', async (req, res) => {
     const actor = (req as AuthedRequest).operator!;
     const taken = takeConfirmation(req as AuthedRequest, res, 'administration.confirm');
     if (!taken.ok) return;
-    const record = await recordTherapyAdministration(taken.body, actor, { notAdministered: false });
+    const { record, replayed } = await recordTherapyAdministrationResult(taken.body, actor, {
+      notAdministered: false,
+    });
+    if (replayed) res.set('Idempotent-Replayed', 'true');
 
     res.status(200).json(record);
   } catch (error) {
@@ -201,7 +204,10 @@ router.post('/not-administered', async (req, res) => {
       'administration.record_not_administered',
     );
     if (!taken.ok) return;
-    const record = await recordTherapyAdministration(taken.body, actor, { notAdministered: true });
+    const { record, replayed } = await recordTherapyAdministrationResult(taken.body, actor, {
+      notAdministered: true,
+    });
+    if (replayed) res.set('Idempotent-Replayed', 'true');
 
     res.status(200).json(record);
   } catch (error) {

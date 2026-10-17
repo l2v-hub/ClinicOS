@@ -10,6 +10,8 @@
 // ora locale). Se le due implementazioni divergono, il badge "in ritardo" dell'UI e la risposta
 // dell'assistente si contraddicono davanti allo stesso operatore.
 
+import { facilityClock } from '../../lib/facility-time.js';
+
 export interface SlotAdministrationView {
   therapyId: string;
   drugName: string;
@@ -73,13 +75,12 @@ export function minutesFromMidnight(orario: string): number {
 
 /** Minuti da mezzanotte dell'istante dato, ora locale (come `minutiCorrenti()` lato UI). */
 export function nowMinutes(now: Date): number {
-  return now.getHours() * 60 + now.getMinutes();
+  return facilityClock(now).minutes;
 }
 
-/** Giorno di riferimento in formato YYYY-MM-DD, stessa derivazione usata dall'UI e dalla rotta
- *  /therapy-slots (`toISOString().slice(0,10)`). */
+/** Clinical reference day in Europe/Rome, matching the facility's calendar and parameters. */
 export function dayKey(now: Date): string {
-  return now.toISOString().slice(0, 10);
+  return facilityClock(now).date;
 }
 
 /** Ripartisce le dosi ancora da somministrare in "in ritardo" e "in scadenza entro la finestra".

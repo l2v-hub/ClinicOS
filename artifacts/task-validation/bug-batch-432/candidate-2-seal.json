@@ -1,0 +1,11 @@
+{
+  "status": "IMPLEMENTED_NOT_VERIFIED",
+  "cycle": 2,
+  "sealedAt": "2026-10-17T09:07:10.248304+00:00",
+  "sourceManifestSha256": "2868fedc1c96697b0e028cc6bca66257f38df1dbcae257346d9ecd211aa305a3",
+  "frozenContractsUnchanged": true,
+  "sourceScopeFiles": 37,
+  "outsideScope": [],
+  "independentQaRequired": true,
+  "canonicalCommand": "node e2e/qa-bug-batch-432.mjs --test"
+}

@@ -16,7 +16,8 @@ import {
 // Istante di riferimento sempre esplicito: i fixture non dipendono dall'ora in cui gira la suite.
 // Le date di scadenza sono derivate dall'istante con `dayKey`, la stessa funzione usata in
 // produzione, cosi' i confronti restano validi in qualunque fuso orario esegua la suite.
-const at = (hh: number, mm: number) => new Date(2026, 7, 8, hh, mm, 0);
+const at = (hh: number, mm: number) =>
+  new Date(`2026-08-08T${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}:00+02:00`);
 const giorniPrima = (d: Date, n: number) => dayKey(new Date(d.getTime() - n * 86_400_000));
 
 function slots(
