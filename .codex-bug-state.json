@@ -15,7 +15,7 @@
       "sourceSha": "29b2f5c9b72b4d909b954d5360ec08095825f29e",
       "branch": "codex/bug-batch-450",
       "owner": "codex-root-2026-10-17",
-      "phase": "waiting-review",
+      "phase": "reviewing",
       "reservedAt": "2026-10-17T07:38:22.669Z",
       "implementation": [
         {
@@ -63,6 +63,11 @@
           "round": 2,
           "status": "changes-requested",
           "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376"
+        },
+        {
+          "round": 3,
+          "status": "running",
+          "subjectSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4"
         }
       ],
       "expandedAt": "2026-10-17T07:44:43.114Z",
@@ -689,12 +694,15 @@
         "createdAt": "2026-10-17T10:12:22.908Z"
       },
       "externalReview": {
-        "status": "comment-requested",
+        "status": "comment-running",
         "channel": "github-comments",
         "requestId": "2570afcb-36d9-4130-91df-972e48d38efb",
         "subjectSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
         "requestedAt": "2026-10-17T21:16:51.714Z",
-        "feedbackFingerprint": "b355e4026acbf879a56cb50595dab4310a504c6009b64e3c68eae6264a7f72ef"
+        "feedbackFingerprint": "fa9ee5ea7612b8aef551a4b09d2bb822ba08a4afea5584a133e2341230037292",
+        "owner": "l2v-hub",
+        "claimId": "30f770d6-bb06-441c-8d97-8d9b249b332a",
+        "startedAt": "2026-10-17T21:18:11.348Z"
       },
       "reviewLedger": {
         "schema_version": 1,
@@ -710,6 +718,11 @@
             "verdict": "changes-requested",
             "subject_sha": "111e672faf77b45280d8ef6ebb15268180b58376",
             "review_sha256": "57af682e4795a0e7dc0c2eb48662157713ede52753896e1e2147e586a6324092"
+          },
+          {
+            "round": 3,
+            "verdict": "running",
+            "subject_sha": "6d2cc7919a86e3896426a7281f28f3406d8418e4"
           }
         ]
       },
@@ -7044,7 +7057,7 @@
       }
     }
   ],
-  "updatedAt": "2026-10-17T21:16:51.714Z",
+  "updatedAt": "2026-10-17T21:18:11.349Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
