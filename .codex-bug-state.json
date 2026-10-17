@@ -4604,7 +4604,7 @@
       "reason": "Independent QA4 passed; actual native checks, Max bootstrap review and separate supported-runtime final Codex QA remain required."
     }
   ],
-  "updatedAt": "2026-10-17T18:05:22.821Z",
+  "updatedAt": "2026-10-17T18:13:41.750Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
@@ -8164,7 +8164,24 @@
         "at": "2026-10-17T18:08:51.598Z",
         "subjectSha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6",
         "manifestSha256": "d34bb7905dc4fb9b85fb3aaebf5a800f2642521ac2ae4b8632dc808cdb4e644d"
-      }
+      },
+      "reviewHandoffHistory": [
+        {
+          "at": "2026-10-17T18:13:41.735Z",
+          "actor": "l2v-hub",
+          "previous": null,
+          "recovery": false,
+          "spentReviews": 0
+        }
+      ],
+      "externalReview": {
+        "channel": "github-comments",
+        "status": "comment-requested",
+        "subjectSha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6",
+        "requestId": "7d057d79-1a7b-4630-b151-f30391da10ca",
+        "requestedAt": "2026-10-17T18:13:41.736Z"
+      },
+      "reviewChannel": "github-comments"
     }
   ]
 }
