@@ -3943,6 +3943,12 @@
         "number": 482,
         "url": "https://github.com/l2v-hub/ClinicOS/pull/482",
         "mergeSha": "8124b1bc88c0f086b1ee328214f87f4802005d11"
+      },
+      "ciFailure": {
+        "run": 39028043893,
+        "sha": "87dfe795f7cc205291aee4bfc9e3ef9e887a3ae0",
+        "cause": "Unrelated concurrent global notes mailbox fixture expected57 actual58; original failure retained; no assertion waived or blind rerun",
+        "dependencyPr": 487
       }
     },
     {
@@ -4006,20 +4012,34 @@
         "task-contract.md": "ca4c2b6444da536470ea2499c603f18d5c8610e81f4e191c229465f12125d036",
         "implementation-plan.md": "0fd6ef4bc60f7c69ab7a9d599be60128e860b09400f97d24ce2eb0f9333cceb1"
       },
-      "phase": "implementing",
+      "phase": "waiting-checks",
       "implementation": [
         {
           "round": 1,
-          "status": "running",
-          "startedAt": "2026-10-17T11:32:26.310Z"
+          "status": "passed",
+          "startedAt": "2026-10-17T11:32:26.310Z",
+          "sha": "5404aabf1ac023beda4f1c6e887f8cebb73f76d8",
+          "reason": "Fresh QA1 all5PASS:11 real-process probes/27 childtests, actual browser2childtests/12DOM/reload, privacy0, source1/contracts2/G19 preserved; root fullreport/diff/PNG and37artifacthashes verified."
         }
       ],
       "reviews": [],
       "operationalOnly": true,
-      "rationale": "Actual requiredCI global broadcast test interference. One existing test runner list only; all app/tests/G19 untouched; separate new operation not exhausted guard retry."
+      "rationale": "Actual requiredCI global broadcast test interference. One existing test runner list only; all app/tests/G19 untouched; separate new operation not exhausted guard retry.",
+      "sha": "5404aabf1ac023beda4f1c6e887f8cebb73f76d8",
+      "pr": {
+        "number": 487,
+        "url": "https://github.com/l2v-hub/ClinicOS/pull/487"
+      },
+      "independentQa": {
+        "attempt": 1,
+        "verdict": "READY FOR CODEX QA",
+        "reportSha256": "e2c6153eff73bad6235c76309c88dbf373a8983ed1c0b6c2c6d4a04842221333",
+        "manifestSha256": "0f62c0e6be08f31fe2a6c433ab4b43bd4cf500ec98648f32adb7f03d30977209",
+        "artifactHashesVerified": 37
+      }
     }
   ],
-  "updatedAt": "2026-10-17T11:47:09.312Z",
+  "updatedAt": "2026-10-17T11:49:09.394Z",
   "pendingTriage": {
     "issues": [
       486,
