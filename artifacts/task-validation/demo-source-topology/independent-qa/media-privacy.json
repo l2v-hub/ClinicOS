@@ -1,0 +1,123 @@
+{
+  "outcome": "PASS",
+  "pngs": [
+    {
+      "file": "screenshots/foreign-owner.png",
+      "dimensions": [
+        1440,
+        1080
+      ],
+      "decode": "PASS"
+    },
+    {
+      "file": "screenshots/unsafe-metadata.png",
+      "dimensions": [
+        1440,
+        1080
+      ],
+      "decode": "PASS"
+    },
+    {
+      "file": "screenshots/singleton.png",
+      "dimensions": [
+        1440,
+        1080
+      ],
+      "decode": "PASS"
+    },
+    {
+      "file": "screenshots/drift.png",
+      "dimensions": [
+        1440,
+        1080
+      ],
+      "decode": "PASS"
+    },
+    {
+      "file": "screenshots/repeat-cursor.png",
+      "dimensions": [
+        1440,
+        1080
+      ],
+      "decode": "PASS"
+    },
+    {
+      "file": "screenshots/inaccessible.png",
+      "dimensions": [
+        1440,
+        1080
+      ],
+      "decode": "PASS"
+    },
+    {
+      "file": "screenshots/mutation-denied.png",
+      "dimensions": [
+        1440,
+        1080
+      ],
+      "decode": "PASS"
+    },
+    {
+      "file": "screenshots/multipage.png",
+      "dimensions": [
+        1440,
+        1080
+      ],
+      "decode": "PASS"
+    },
+    {
+      "file": "screenshots/private-error.png",
+      "dimensions": [
+        1440,
+        1080
+      ],
+      "decode": "PASS"
+    },
+    {
+      "file": "attempt-1-probe-expectation/screenshots/singleton.png",
+      "dimensions": [
+        1440,
+        1080
+      ],
+      "decode": "PASS"
+    },
+    {
+      "file": "attempt-1-probe-expectation/screenshots/inaccessible.png",
+      "dimensions": [
+        1440,
+        1080
+      ],
+      "decode": "PASS"
+    },
+    {
+      "file": "attempt-1-probe-expectation/screenshots/multipage.png",
+      "dimensions": [
+        1440,
+        1080
+      ],
+      "decode": "PASS"
+    }
+  ],
+  "videos": [
+    {
+      "file": "attempt-1-probe-expectation/video/page@ceda5f9f3d5cb698af751f6d03c55ef1.webm",
+      "duration": "2.200000",
+      "fullDecode": "PASS"
+    },
+    {
+      "file": "video/page@38dbd7796c72e7053180a06afd2965e9.webm",
+      "duration": "7.480000",
+      "fullDecode": "PASS"
+    }
+  ],
+  "zipArchives": [
+    {
+      "file": "trace/trace.zip",
+      "crc": "PASS",
+      "members": 43
+    }
+  ],
+  "otherFilesScanned": 16,
+  "findings": [],
+  "limits": "Synthetic fixtures and public fixed provider metadata only. PNGs fully decoded and OCR-scanned; videos fully decoded. Trace CRC and every ZIP member byte scanned. No real credential, PHI or external calls used."
+}
