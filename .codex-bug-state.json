@@ -102,7 +102,8 @@
         "analysis.md": "420ba0971d022d19276ffa52c6210a1035b41351f43fbb2699671cdcaaa30753",
         "implementation-plan.md": "d7881525b1a2c32fc84c2ef22a7a98867407c2382b6f4673a717816a5243ac7a",
         "triage-index.md": "4b8a46b7ba1be48c1b8aacc065b7ef8f03c0bce15bf4d906e19b86e194605d12",
-        "cycle-2-correction.md": "6b40b4f39263a7a03d846b4f388bd6e753f4a7a6cb4796b6eea1b2fabf83bbd1"
+        "cycle-2-correction.md": "6b40b4f39263a7a03d846b4f388bd6e753f4a7a6cb4796b6eea1b2fabf83bbd1",
+        "downstream-447-coordination.md": "609d97eeedaeeab0809f413a84cb9176c3d6328948154a5798d51f724b20bf20"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -537,7 +538,7 @@
             ]
           }
         ],
-        "separationReason": "App.tsx also needs later UX447 presentation work, a separate UI cause from authoritative therapy write/idempotency/timezone. Integrate this therapy batch first; UX447 must rebase and serialize integration afterward, preserve recordAdministration/session guards and rerun therapy/navigation regressions. No parallel edits to same file or frozen batch scope expansion."
+        "separationReason": "App.tsx also needs later UX447 presentation work, a separate UI cause from authoritative therapy write/idempotency/timezone. Integrate this therapy batch first; UX447 must rebase and serialize integration afterward, preserve recordAdministration/session guards and rerun therapy/navigation regressions. No parallel edits to same file or frozen batch scope expansion.\n\nApproved user clinical decisions now require exactly19 additional PS-exit files and supersede the original no-backend/App restriction for issue457 only. Root first checkpoints and integrates sealed batch432 source before this group edits shared administration writers/slot query/App/types; no parallel shared-source edits. Preserve432 receipts/ACL/civil-time/negative guards. Integrate final reviewed432 and450 actual main contents before final QA/review; reconcile shared PatientList and deferred therapyPages tests preserving both regressions. No scope or budget reset."
       },
       "frozenAt": "2026-10-17T07:47:23.712Z"
     },
@@ -1050,6 +1051,11 @@
       "implementation": [
         {
           "round": 1,
+          "status": "failed",
+          "reason": "Independent QA447 found hidden actual therapy with empty appointments, incomplete NEWS2 pagination/error inference, and raw synthetic bearer values in trace media."
+        },
+        {
+          "round": 2,
           "status": "running"
         }
       ],
@@ -1087,7 +1093,9 @@
         "scope-amendment-3.md": "cbbdfbaeb8c78c14160dfc6fe63afd6a269788afdb4e3242838f556d9310d1e5",
         "scope-amendment-4.md": "da083700035882a4ae20fa039f0565ffc6a5a6ae3bbb657526a9a1ba0a9bcb2d",
         "scope-amendment-5.md": "40c85ae6de778293257788807fd608f36c5bb5c1494de4cf3933afbdf2b616c9",
-        "clinical-decisions-2026-10-17.md": "bbcb8132f59b48c1ead147d79e5a0b4dd5d553841c880b0bd0e15eeffe592139"
+        "clinical-decisions-2026-10-17.md": "bbcb8132f59b48c1ead147d79e5a0b4dd5d553841c880b0bd0e15eeffe592139",
+        "scope-amendment-6-ps-exit-and-qa.md": "acd535fe593a13d4f1573baa46ccf6b80681408307e1f97efe119204840739ea",
+        "approved-plan-cycle-2.json": "9c01a6c6a9e9eff0ae34785349f6539e53a422d50bd768bf5fc4950b12ac22e9"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -1175,7 +1183,26 @@
           "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
           "frontend/src/lib/__tests__/clinicalHistory.test.ts",
           "frontend/src/lib/__tests__/therapyPages.test.ts",
-          "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts"
+          "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts",
+          "backend/src/patients/temporary-ps-exits.ts",
+          "backend/src/patients/cartella-update.ts",
+          "backend/src/routes/patients.ts",
+          "backend/src/therapies/administration-record.ts",
+          "backend/src/therapies/prn-administration.ts",
+          "backend/src/therapies/therapy-slots.ts",
+          "backend/src/therapies/due-therapy-query.ts",
+          "backend/src/routes/therapy.ts",
+          "backend/src/patients/__tests__/temporary-ps-exits.test.ts",
+          "backend/src/patients/__tests__/temporary-ps-exits-db.test.ts",
+          "frontend/src/types.ts",
+          "frontend/src/lib/temporaryPsExit.ts",
+          "frontend/src/lib/therapySlotPage.ts",
+          "frontend/src/lib/__tests__/therapySlotPage.test.ts",
+          "frontend/src/components/operator/cartella/TherapyDrugDosePanel.tsx",
+          "frontend/src/components/operator/cartella/DimissioneTab.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/lib/cartellaWriteQueue.ts",
+          "frontend/src/lib/__tests__/cartellaWriteQueue.test.ts"
         ],
         "acceptance": [
           {
@@ -1219,7 +1246,8 @@
               "New manual prescriptions default to active and omit the creation-state selector; edit/import consumers retain explicit unresolved/imported state and existing suspend/conclude controls.",
               "Reliable package form/strength/route data are prefilled only from actual structured package information; missing/ambiguous fields remain reviewable and selecting a new package never carries forward unrelated commercial strength.",
               "A visible sentence summary derives from the exact payload and facility civil start/end date, selected schedule/dose/unit and next eligible occurrence; seven-day duration is calendar arithmetic including DST rather than elapsed-hour assumptions.",
-              "Clinical decision on allergy-drug checking must be recorded before any matching, warning/block/override behavior is implemented; while unanswered, display recorded allergies only and keep this issue unresolved. No substring or invented allergen-class mapping is permitted."
+              "Clinical decision on allergy-drug checking must be recorded before any matching, warning/block/override behavior is implemented; while unanswered, display recorded allergies only and keep this issue unresolved. No substring or invented allergen-class mapping is permitted.",
+              "User decision recorded: explicit confirmable warning, no automatic prohibition. Bind acknowledgement to current patient, selected product and current allergy context; never fabricate drug/allergen mapping or claim unknown data are negative."
             ]
           },
           {
@@ -1250,7 +1278,8 @@
               "Print action has no transfer/write side effect, waits for complete authorized clinical source loading and remains blocked or clearly partial when essential data cannot be read; print CSS and PDF are tested using synthetic data.",
               "Registra uscita creates exactly one entry in existing liberatoria.usciteLog and survives reload with actor and facility time, using verified non-optimistic existing chart update rather than unrelated mobility assessment forms.",
               "Clinical decision on therapy pause/continuation at temporary PS exit must be recorded before implementing exit policy or automatic scheduling changes; unanswered decision prevents full issue closure. Return must never silently re-open an already administered dose or discharge the patient.",
-              "Role-negative, failed/uncertain/double submission, patient switch and return scenarios preserve authorization/current-patient isolation and do not weaken the server clinical-record write boundary."
+              "Role-negative, failed/uncertain/double submission, patient switch and return scenarios preserve authorization/current-patient isolation and do not weaken the server clinical-record write boundary.",
+              "User decision recorded: require an authorized operator explicit pause/continue administration-round choice at exit; atomically persist real uscitelog and operational state, enforce new scheduled/PRN writes on server while preserving valid replay/history, and explicit return restores availability without reopening already-given doses."
             ]
           }
         ],
@@ -1539,6 +1568,37 @@
               "Record PNG, Playwright trace and video perissue plus printPDF, sanitized tested-source receipt, actual outputs and residual gates.",
               "Dedicated independent QA must review full diff, rerun checks/browser/security and bind evidence to final code; root publishescanonicalPR with Refs only, Max exactSHA review <=4 rounds and trusted verified-release gates before closure."
             ]
+          },
+          {
+            "title": "Implement approved explicit temporary PS exit decisions with authoritative administration hold",
+            "files": [
+              "backend/src/patients/temporary-ps-exits.ts",
+              "backend/src/patients/cartella-update.ts",
+              "backend/src/routes/patients.ts",
+              "backend/src/therapies/administration-record.ts",
+              "backend/src/therapies/prn-administration.ts",
+              "backend/src/therapies/therapy-slots.ts",
+              "backend/src/therapies/due-therapy-query.ts",
+              "backend/src/routes/therapy.ts",
+              "backend/src/patients/__tests__/temporary-ps-exits.test.ts",
+              "backend/src/patients/__tests__/temporary-ps-exits-db.test.ts",
+              "frontend/src/types.ts",
+              "frontend/src/lib/temporaryPsExit.ts",
+              "frontend/src/lib/therapySlotPage.ts",
+              "frontend/src/lib/__tests__/therapySlotPage.test.ts",
+              "frontend/src/components/operator/cartella/TherapyDrugDosePanel.tsx",
+              "frontend/src/components/operator/cartella/DimissioneTab.tsx",
+              "frontend/src/App.tsx",
+              "frontend/src/lib/cartellaWriteQueue.ts",
+              "frontend/src/lib/__tests__/cartellaWriteQueue.test.ts"
+            ],
+            "steps": [
+              "Use existing authorized PUT chart command mutually exclusive with generic data; atomically lock patient/chart, persist server actor/civil time, idempotent exit log and protected active pointer without inventing legal consent.",
+              "Require explicit pause/continue choice; pause operational administrations only, preserve prescription state and historical receipts; valid old replay stays readable, new scheduled/PRN writes blocked while held; return explicit and never reopens given doses.",
+              "Preserve managed state against generic overwrites and serialize verified chart snapshot in App queue, no optimistic double PUT/session mix.",
+              "Keep pending dose context visible with scoped hold metadata and exclude held work only from due attention; existing capabilities/patient scope remain mandatory.",
+              "Add actual DB/HTTP role/concurrency/tamper/uncertain/reload/return tests plus frontend queue and page validation negatives."
+            ]
           }
         ],
         "verification": [
@@ -1574,6 +1634,23 @@
             "command": "node",
             "args": [
               "e2e/qa-bug-batch-447.mjs"
+            ]
+          },
+          {
+            "command": "npm",
+            "args": [
+              "run",
+              "build:backend"
+            ]
+          },
+          {
+            "command": "node",
+            "args": [
+              "--import",
+              "tsx",
+              "--test",
+              "backend/src/patients/__tests__/temporary-ps-exits.test.ts",
+              "backend/src/patients/__tests__/temporary-ps-exits-db.test.ts"
             ]
           }
         ],
@@ -1739,11 +1816,30 @@
               "e2e/qa-bug-batch-447.mjs",
               "e2e/qa-bug-batch-447-browser.mjs",
               "frontend/src/lib/__tests__/clinicalHistory.test.ts",
-              "frontend/src/lib/__tests__/therapyPages.test.ts"
+              "frontend/src/lib/__tests__/therapyPages.test.ts",
+              "backend/src/patients/temporary-ps-exits.ts",
+              "backend/src/patients/cartella-update.ts",
+              "backend/src/routes/patients.ts",
+              "backend/src/therapies/administration-record.ts",
+              "backend/src/therapies/prn-administration.ts",
+              "backend/src/therapies/therapy-slots.ts",
+              "backend/src/therapies/due-therapy-query.ts",
+              "backend/src/routes/therapy.ts",
+              "backend/src/patients/__tests__/temporary-ps-exits.test.ts",
+              "backend/src/patients/__tests__/temporary-ps-exits-db.test.ts",
+              "frontend/src/types.ts",
+              "frontend/src/lib/temporaryPsExit.ts",
+              "frontend/src/lib/therapySlotPage.ts",
+              "frontend/src/lib/__tests__/therapySlotPage.test.ts",
+              "frontend/src/components/operator/cartella/TherapyDrugDosePanel.tsx",
+              "frontend/src/components/operator/cartella/DimissioneTab.tsx",
+              "frontend/src/App.tsx",
+              "frontend/src/lib/cartellaWriteQueue.ts",
+              "frontend/src/lib/__tests__/cartellaWriteQueue.test.ts"
             ]
           }
         ],
-        "separationReason": "Batch432 owns authoritative therapy write/query/schema, AIFA catalog semantics and App.tsx; this batch owns clinical presentation and reuses its public read/write contracts without editing backend or App.tsx. Integrate tested432 before final therapy/UI QA. Batch450 owns intake/import draft lifecycle and changes PatientList.tsx; this batch changes existing row presentation only. Integrate450 first, reconcile PatientList without overriding draft visibility/status, rerun both draft and operational-list regressions. Shared identity component gains an opt-in compact presentation preserving default callers and accessible disambiguation. No parallel edit to another worktree or silent frozen scope expansion."
+        "separationReason": "Batch432 owns authoritative therapy write/query/schema, AIFA catalog semantics and App.tsx; this batch owns clinical presentation and reuses its public read/write contracts without editing backend or App.tsx. Integrate tested432 before final therapy/UI QA. Batch450 owns intake/import draft lifecycle and changes PatientList.tsx; this batch changes existing row presentation only. Integrate450 first, reconcile PatientList without overriding draft visibility/status, rerun both draft and operational-list regressions. Shared identity component gains an opt-in compact presentation preserving default callers and accessible disambiguation. No parallel edit to another worktree or silent frozen scope expansion.\n\nApproved user clinical decisions now require exactly19 additional PS-exit files and supersede the original no-backend/App restriction for issue457 only. Root first checkpoints and integrates sealed batch432 source before this group edits shared administration writers/slot query/App/types; no parallel shared-source edits. Preserve432 receipts/ACL/civil-time/negative guards. Integrate final reviewed432 and450 actual main contents before final QA/review; reconcile shared PatientList and deferred therapyPages tests preserving both regressions. No scope or budget reset."
       },
       "frozenAt": "2026-10-17T07:49:17.949Z",
       "amendments": [
@@ -1925,5 +2021,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-17T09:08:37.172Z"
+  "updatedAt": "2026-10-17T09:10:23.201Z"
 }
