@@ -675,7 +675,7 @@
       "sourceSha": "7028844633760f03a42072fa6648f975370e6db6",
       "branch": "codex/bug-batch-432",
       "owner": "codex-root-2026-10-17",
-      "phase": "waiting-review",
+      "phase": "reviewing",
       "reservedAt": "2026-10-17T07:38:22.106Z",
       "implementation": [
         {
@@ -696,7 +696,13 @@
           "sha": "34c865233df53a3930f29c8b7befc02208588d64"
         }
       ],
-      "reviews": [],
+      "reviews": [
+        {
+          "round": 1,
+          "status": "running",
+          "subjectSha": "34c865233df53a3930f29c8b7befc02208588d64"
+        }
+      ],
       "packetHashes": {
         "task-contract.md": "15e59741402d2fec31999c8edd3adf8fa0cb4a62c5d4d336a90228c7128e254e",
         "analysis.md": "420ba0971d022d19276ffa52c6210a1035b41351f43fbb2699671cdcaaa30753",
@@ -1310,10 +1316,21 @@
         "createdAt": "2026-10-17T10:36:07.080Z"
       },
       "externalReview": {
-        "status": "requested",
+        "status": "running",
         "subjectSha": "34c865233df53a3930f29c8b7befc02208588d64",
-        "requestedAt": "2026-10-17T10:58:26.535Z",
-        "feedbackFingerprint": "a5428f757923783245ed909d5215d9d54824d9406abeeb58da3b1932b36fb41d"
+        "feedbackFingerprint": "a5428f757923783245ed909d5215d9d54824d9406abeeb58da3b1932b36fb41d",
+        "startedAt": "2026-10-17T11:08:55.570Z"
+      },
+      "reviewLedger": {
+        "schema_version": 1,
+        "max_rounds": 4,
+        "rounds": [
+          {
+            "round": 1,
+            "subject_sha": "34c865233df53a3930f29c8b7befc02208588d64",
+            "verdict": "running"
+          }
+        ]
       }
     }
   ],
@@ -3878,5 +3895,5 @@
       }
     }
   ],
-  "updatedAt": "2026-10-17T11:01:11.547Z"
+  "updatedAt": "2026-10-17T11:08:55.572Z"
 }
