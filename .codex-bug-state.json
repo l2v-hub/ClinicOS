@@ -1333,6 +1333,44 @@
         ]
       },
       "reason": "External Claude execution failed; its reserved attempt remains spent"
+    },
+    {
+      "id": "bug-batch-485",
+      "branch": "codex/bug-batch-485",
+      "issues": [
+        485
+      ],
+      "phase": "blocked",
+      "implementation": [],
+      "reviews": [],
+      "reason": "Shared intake scope is owned by PR481/batch450. Existing import fullscreen may already address this report; verify exact stage and 1903x1032 after dependency release before any new source plan. Screenshot could not be inspected (HTTP403). No duplicate implementation reserved.",
+      "triageRecovery": {
+        "kind": "operator-completed-read-only-triage",
+        "sourceRun": 39029815917,
+        "sourcePendingSha256": "e14e63ea2a34f01fd1fbd590aba82266117fe81412ce36bae79221097544ced3",
+        "reportSha256": "916eeb0800e5aa8ef5cb720e4724891746684a90002841e3485b61129c75d249",
+        "recoveredAt": "2026-10-17T11:52:53.427Z",
+        "dependency": "bug-batch-450"
+      }
+    },
+    {
+      "id": "bug-batch-486",
+      "branch": "codex/bug-batch-486",
+      "issues": [
+        486
+      ],
+      "phase": "blocked",
+      "implementation": [],
+      "reviews": [],
+      "reason": "Shared therapy form scope is owned by UX447. Precise operator-confirmed route-suggestion semantics and approved unambiguous mapping are not established; existing explicit/imported prescription routes must remain preserved. No clinical mapping guessed or implementation reserved.",
+      "triageRecovery": {
+        "kind": "operator-completed-read-only-triage",
+        "sourceRun": 39029815917,
+        "sourcePendingSha256": "e14e63ea2a34f01fd1fbd590aba82266117fe81412ce36bae79221097544ced3",
+        "reportSha256": "916eeb0800e5aa8ef5cb720e4724891746684a90002841e3485b61129c75d249",
+        "recoveredAt": "2026-10-17T11:52:53.427Z",
+        "dependency": "bug-batch-447"
+      }
     }
   ],
   "setupReview471": {
@@ -4039,12 +4077,24 @@
       }
     }
   ],
-  "updatedAt": "2026-10-17T11:49:09.394Z",
-  "pendingTriage": {
-    "issues": [
-      486,
-      485
-    ],
-    "status": "running"
-  }
+  "updatedAt": "2026-10-17T11:52:53.428Z",
+  "operatorTriageRecoveries": [
+    {
+      "issues": [
+        485,
+        486
+      ],
+      "sourceRun": 39029815917,
+      "priorPending": {
+        "issues": [
+          486,
+          485
+        ],
+        "status": "running"
+      },
+      "reportSha256": "916eeb0800e5aa8ef5cb720e4724891746684a90002841e3485b61129c75d249",
+      "outcome": "Two blocked dependency/decision records; no restart, model call, source change or attempt reset",
+      "at": "2026-10-17T11:52:53.427Z"
+    }
+  ]
 }
