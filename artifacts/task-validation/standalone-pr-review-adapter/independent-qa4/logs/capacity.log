@@ -1,0 +1,14 @@
+{
+  "result": "PASS_PREINFERENCE_CAPACITY_REFUSAL",
+  "subjects": 24,
+  "initialStateBytes": 8358608,
+  "maximumStateBytes": 8388608,
+  "priorReportCount": 92,
+  "reasonPadding": false,
+  "validState": true,
+  "durableRoundsConsumed": 0,
+  "resultComments": 0,
+  "actualGitHubWrites": 0,
+  "actualModels": 0,
+  "syntheticStateWrites": 1
+}

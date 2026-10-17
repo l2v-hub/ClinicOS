@@ -1,0 +1,14 @@
+{
+  "result": "PASS_NORMAL_PIPELINE_IMPLEMENTATION_PERSISTS_AFTER_CONCURRENT_STANDALONE_ADOPT_REQUEST_CLAIM",
+  "normalPhase": "ready",
+  "normalImplementationStatus": "passed",
+  "peerReviewStatus": "running",
+  "strictCasConflicts": 1,
+  "syntheticWrites": 12,
+  "syntheticImplementationCallbacks": 1,
+  "syntheticQaCallbacks": 1,
+  "syntheticReviewCallbacks": 1,
+  "actualModels": 0,
+  "actualGitHubWrites": 0,
+  "actualMerges": 0
+}

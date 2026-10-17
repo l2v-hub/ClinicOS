@@ -1,0 +1,13 @@
+{
+  "result": "FAILED VALIDATION",
+  "schemaValid": true,
+  "reportCompactChars": 50106,
+  "reportUTF8Bytes": 150106,
+  "submittedCommentChars": 50373,
+  "submitted": true,
+  "importError": "Stored review exceeds bound",
+  "durableReviewStatus": "running",
+  "shortReplacementSubmitted": true,
+  "shortReplacementImported": false,
+  "durableStatusAfterReplacement": "running"
+}

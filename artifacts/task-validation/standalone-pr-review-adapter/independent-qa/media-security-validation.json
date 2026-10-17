@@ -1,0 +1,51 @@
+{
+  "png": [
+    {
+      "path": "02-read-only-codex-complete.png",
+      "size": [
+        1360,
+        1100
+      ]
+    },
+    {
+      "path": "01-codex-review-ready.png",
+      "size": [
+        1360,
+        1100
+      ]
+    },
+    {
+      "path": "first-browser-fixture-error/02-read-only-codex-complete.png",
+      "size": [
+        1360,
+        1100
+      ]
+    },
+    {
+      "path": "first-browser-fixture-error/01-codex-review-ready.png",
+      "size": [
+        1360,
+        1100
+      ]
+    }
+  ],
+  "videos": [
+    {
+      "path": "video/page@247c188c55de11c957fc79f9f268d45d.webm",
+      "exitCode": 0,
+      "stderr": ""
+    },
+    {
+      "path": "first-browser-fixture-error/video/page@b5347dc0ee7672e10ba9b75ba464aa01.webm",
+      "exitCode": 0,
+      "stderr": ""
+    }
+  ],
+  "zip": [
+    {
+      "path": "trace.zip",
+      "members": 27
+    }
+  ],
+  "credentialMatches": []
+}

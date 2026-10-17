@@ -1,0 +1,37 @@
+{
+  "at": "2026-10-17T17:55:33.353211+00:00",
+  "verdict": "READY FOR CODEX QA",
+  "sourceFreezeSha256": "d88c088fe9a38d16c9c89d4e7263643a878a779ae98c558e6b74da4693d10a08",
+  "sourceFilesUnchanged": 15,
+  "supportingSourceFilesUnchanged": 8,
+  "priorProofFilesUnchanged": 214,
+  "ownProofFiles": 67,
+  "reportSha256": "a7d735bef083eb32f23de1ca210c3ec0bbba588c3346b253c5d1cba07893a8da",
+  "evidenceManifestSha256": "ed2f70cadf5f7b42d6974ba84fbda651181b107d8a12bc1f9df5bc627048adc5",
+  "freshRegression": {
+    "total": 681,
+    "pass": 678,
+    "fail": 0,
+    "skip": 3
+  },
+  "extraIndependentChecks": 31,
+  "actualGitHubReadonlyCalls": 82,
+  "actualGitHubWrites": 0,
+  "actualModels": 0,
+  "actualProviders": 0,
+  "actualDatabaseOperations": 0,
+  "browser": {
+    "png": 5,
+    "video": 2,
+    "trace": 2,
+    "reloadPersistence": true,
+    "errors": []
+  },
+  "remainingOperationalRequirements": [
+    "Genuine Claude Max bootstrap review",
+    "Actual independent Codex read-only model QA on a supported writable local runtime",
+    "Current native checks and exact-SHA protected merge",
+    "Clinical release holds and deployment proof remain unchanged"
+  ],
+  "boundedCasResidual": "Exhausted disjoint retries or same-entity changes fail closed and may require explicit recovery; no inference repetition or budget reset."
+}

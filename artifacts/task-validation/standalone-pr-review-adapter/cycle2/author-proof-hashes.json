@@ -1,0 +1,11 @@
+{
+  "task-contract.md": "97f65b3bfab7c843adeb8abc5838ce884d58933486ebd158d5bc80a9a3717361",
+  "analysis.md": "6c74527a0376facfbcc9a205b74986eadd181ff40176f3eaffa765c903ae35d5",
+  "implementation-plan.md": "52a2f4f49db6583f6ad4c0c6f4bd43632c86507ffb0774dce91e5fc8f0792960",
+  "implementation-attempts.json": "b30a3ccc8c9b2fccd966176b6a0ad3470188a07dae4b9f9faf761b409ddb45a0",
+  "source-freeze.json": "7451927efd684e6978b96299501e5b69b6160b605ecc4701dc4b6a7b8250a9a1",
+  "validation-report.md": "2d908fa5480f472ca4defbce204a89a018ca029c2e948956b4a629f233847d10",
+  "test-results/author-regression.log": "aad1f6aee75c9f9e92577d95d03f77ccedd341f7a93a553dd312e69911d55cbf",
+  "test-results/actual-git-verification.json": "0287e32a7746da6de6760610ef7c7375f858913d4694e3e543f5e9736a4aa8a0",
+  "test-results/preserved-cycle1-proof.json": "08dc32af2e0422ede830b56cfb3d27659340e91016f2b39c8968f4f479abddaf"
+}

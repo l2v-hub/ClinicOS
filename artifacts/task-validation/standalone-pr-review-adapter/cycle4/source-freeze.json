@@ -1,0 +1,25 @@
+{
+  "baseline": "d1324cb3",
+  "branch": "codex/standalone-pr-review",
+  "attempt": 4,
+  "maxAttempts": 4,
+  "status": "SOURCE STOP \u2014 awaiting fresh independent QA4",
+  "timestamp": "2026-10-17T17:47:01.646121+00:00",
+  "files": {
+    "agent-team/src/bug-pipeline/cli.mjs": "1b3416c1c8fda544775d319182bcfce362904dc0457b8663a69ecedf72104279",
+    "agent-team/src/bug-pipeline/comment-review-handoff.mjs": "b3a452a10e494a9460b10ed017bf68d79e39648c90fedc281aebc92f112c9bcb",
+    "agent-team/src/bug-pipeline/github.mjs": "cb493806a3885390bcafaf1862b83fea50a3c7491d3718b39bd43085c632d9a9",
+    "agent-team/src/bug-pipeline/models.mjs": "1a50e72a0f652622fea8bdde01bfcdbab4a91b1f017ac30eb5f0b4ccb183aca6",
+    "agent-team/src/bug-pipeline/pipeline.mjs": "9333de2841c2167660c0a02d966353759d3bf65ec43d4c0a10041dbf17f6ce8b",
+    "agent-team/src/bug-pipeline/review-handoff-cli.mjs": "a5189293561e7322fd008c9636ad3dea7c1b4dd6a0b44a48f0137e878e2950cc",
+    "agent-team/src/bug-pipeline/standalone-review.mjs": "b05ce1844dfd854f9baa818f7f8e42af74b58061895a8c0fdd1942f329fdb5c1",
+    "agent-team/src/bug-pipeline/workspace.mjs": "a333ed4c288e334d870c4bd0322044f0ad84e47ca903b762faf99d8dad94f50d",
+    "agent-team/tests/bug-pipeline/github.test.mjs": "ff0e8585b5c36fa8ee312805540732a822dad46ea1c55de8b93690077fb92a5e",
+    "agent-team/tests/bug-pipeline/models.test.mjs": "05a0d314b0e65a9b0623088923165d29653543cf938a9ad13ae0aa4c9ba73137",
+    "agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs": "f63d27a700430522a3a0c052297cfca218d82ca09edc9e79c8e3e647c47b5da1",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs": "774613b8994d8e4f827ea309d2c54371e118f43cda76b4721f251b581ba41b58",
+    "agent-team/tests/bug-pipeline/workspace.test.mjs": "873dc275015fda9285d85bfabcbb090c0e136191528e60430e22fcf58bbfc301",
+    "docs/claude-local-review-prompt.md": "2b4e33c55388bb28f086bba15ff540ee4ef0b1ba9e692dd2ec79d3307e23f2f5",
+    "docs/standalone-pr-review.md": "30b46d34bbe09984c02dde1bbe01ca87b470109a6f3d19541e752956f25a9fbd"
+  }
+}
