@@ -15,7 +15,7 @@
       "sourceSha": "29b2f5c9b72b4d909b954d5360ec08095825f29e",
       "branch": "codex/bug-batch-450",
       "owner": "codex-root-2026-10-17",
-      "phase": "blocked",
+      "phase": "waiting-review",
       "reservedAt": "2026-10-17T07:38:22.669Z",
       "implementation": [
         {
@@ -642,10 +642,11 @@
         "createdAt": "2026-10-17T10:12:22.908Z"
       },
       "externalReview": {
-        "status": "failed",
+        "channel": "github-comments",
+        "status": "comment-requested",
         "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
-        "feedbackFingerprint": "52fda3caae5852e9675b616f819f7b4ba3d5888b50f4c3f56c11fce42e0b56d3",
-        "startedAt": "2026-10-17T10:43:45.038Z"
+        "requestId": "0ca3c1d5-2f6b-42b6-bcc6-907ce778d1a0",
+        "requestedAt": "2026-10-17T15:31:55.988Z"
       },
       "reviewLedger": {
         "schema_version": 1,
@@ -658,7 +659,21 @@
           }
         ]
       },
-      "reason": "External Claude execution failed; its reserved attempt remains spent"
+      "reviewHandoffHistory": [
+        {
+          "at": "2026-10-17T15:31:55.987Z",
+          "actor": "l2v-hub",
+          "previous": {
+            "status": "failed",
+            "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
+            "feedbackFingerprint": "52fda3caae5852e9675b616f819f7b4ba3d5888b50f4c3f56c11fce42e0b56d3",
+            "startedAt": "2026-10-17T10:43:45.038Z"
+          },
+          "recovery": true,
+          "spentReviews": 1
+        }
+      ],
+      "reviewChannel": "github-comments"
     },
     {
       "id": "bug-batch-432",
@@ -4343,7 +4358,7 @@
       "evidenceRevision": "88406c7aa251b176c13a8c92d695f9e9d43d901d"
     }
   ],
-  "updatedAt": "2026-10-17T12:40:14.132Z",
+  "updatedAt": "2026-10-17T15:31:55.988Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
