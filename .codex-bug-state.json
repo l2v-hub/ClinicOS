@@ -3932,7 +3932,7 @@
           "status": "passed",
           "startedAt": "2026-10-17T11:00:31.829Z",
           "reason": "NewindependentQA2 all5PASS:107+41tests,officialschema3/YAML/AST,actual19browser207assert,zeroerrors/credentialfindings,3sources/contracts3/history38exact. Rootreadfullreport/diff/actualPNG.",
-          "sha": "87dfe795f7cc205291aee4bfc9e3ef9e887a3ae0"
+          "sha": "f48d8d70e257aa97fd6aac241d13eb803e7bcb92"
         }
       ],
       "reviews": [],
@@ -3949,7 +3949,7 @@
         "provider-constraint-clarification.md": "b2917f9d408b290f7f48d2f64c1bafb16209b7b2fc7beab2cc1b8fdff9e5207e"
       },
       "operationalOnly": true,
-      "sha": "87dfe795f7cc205291aee4bfc9e3ef9e887a3ae0",
+      "sha": "f48d8d70e257aa97fd6aac241d13eb803e7bcb92",
       "pr": {
         "number": 484,
         "url": "https://github.com/l2v-hub/ClinicOS/pull/484"
@@ -3987,6 +3987,12 @@
         "sha": "87dfe795f7cc205291aee4bfc9e3ef9e887a3ae0",
         "cause": "Unrelated concurrent global notes mailbox fixture expected57 actual58; original failure retained; no assertion waived or blind rerun",
         "dependencyPr": 487
+      },
+      "verificationSourceCheckpoint": "87dfe795f7cc205291aee4bfc9e3ef9e887a3ae0",
+      "verificationDependency": {
+        "mergeSha": "6904b6d02180cf2efc989964b4d0dcf27274b050",
+        "pr": 487,
+        "source3AndContracts3Unchanged": true
       }
     },
     {
@@ -4004,7 +4010,7 @@
         "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
         ".github/workflows/codex-issue-review-sync.yml"
       ],
-      "phase": "implementing",
+      "phase": "waiting-checks",
       "implementation": [
         {
           "round": 1,
@@ -4014,9 +4020,10 @@
         },
         {
           "round": 2,
-          "status": "running",
+          "status": "passed",
           "startedAt": "2026-10-17T11:43:17.966Z",
-          "reason": "Final-boundary role/source revision guard correction within same7sources; newindependentQA2 required."
+          "reason": "Fresh independentQA2 all5PASS625regressions+3nativeWindows skips,21HTTP,13actualbrowser,type/build/privacy0; rootfull7source/4contracts/report/PNG/all47artifacthashes/G19 accepted. TrustedCI487main integrated without source7changes.",
+          "sha": "1dd532ac1b5386322bef51bf99c974aef382c1d1"
         }
       ],
       "reviews": [],
@@ -4029,12 +4036,23 @@
       "operationalOnly": true,
       "rationale": "Explicit new user-requested issue-comment/label feedback feature. Seven sources outside frozen G19; no guard or clinical budget reset. Existing normal-controller ownership preserved.",
       "independentQa": {
-        "attempt": 1,
-        "verdict": "BLOCKED",
-        "report": "independent-qa-attempt-1/validation-report.md",
-        "reportSha256": "aa2ae81d49b05f9303061caef75f36a0484773aa31d6b62c783d2bdddfd0d929",
-        "manifestSha256": "d333ba820f4da91c6005ed009323a0e879ad7e64561865ee4e814d51f18d0026",
-        "findings": 2
+        "attempt": 2,
+        "verdict": "READY FOR CODEX QA",
+        "reportSha256": "499055f405139b2fcde734b86050a4d5e87077e56d1c4116b597ac8531ed6957",
+        "manifestSha256": "d8ddfa5d6a6d2094f6fd3049bfcfcc8326a7b0886583b593fc6d9d53a0e15daa",
+        "artifactHashesVerified": 47,
+        "independentHttpProbes": 21,
+        "browserScenarios": 13
+      },
+      "sha": "1dd532ac1b5386322bef51bf99c974aef382c1d1",
+      "pr": {
+        "number": 488,
+        "url": "https://github.com/l2v-hub/ClinicOS/pull/488"
+      },
+      "verificationDependency": {
+        "mergeSha": "6904b6d02180cf2efc989964b4d0dcf27274b050",
+        "pr": 487,
+        "source7AndContracts4Unchanged": true
       }
     },
     {
@@ -4050,7 +4068,7 @@
         "task-contract.md": "ca4c2b6444da536470ea2499c603f18d5c8610e81f4e191c229465f12125d036",
         "implementation-plan.md": "0fd6ef4bc60f7c69ab7a9d599be60128e860b09400f97d24ce2eb0f9333cceb1"
       },
-      "phase": "waiting-checks",
+      "phase": "merged",
       "implementation": [
         {
           "round": 1,
@@ -4074,10 +4092,18 @@
         "reportSha256": "e2c6153eff73bad6235c76309c88dbf373a8983ed1c0b6c2c6d4a04842221333",
         "manifestSha256": "0f62c0e6be08f31fe2a6c433ab4b43bd4cf500ec98648f32adb7f03d30977209",
         "artifactHashesVerified": 37
-      }
+      },
+      "mergeSha": "6904b6d02180cf2efc989964b4d0dcf27274b050",
+      "nativeCi": {
+        "run": 39029812345,
+        "status": "success",
+        "all6Required": true,
+        "realProvider": true
+      },
+      "evidenceRevision": "88406c7aa251b176c13a8c92d695f9e9d43d901d"
     }
   ],
-  "updatedAt": "2026-10-17T11:52:53.428Z",
+  "updatedAt": "2026-10-17T12:04:37.739Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
