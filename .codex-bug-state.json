@@ -15,7 +15,7 @@
       "sourceSha": "29b2f5c9b72b4d909b954d5360ec08095825f29e",
       "branch": "codex/bug-batch-450",
       "owner": "codex-root-2026-10-17",
-      "phase": "waiting-review",
+      "phase": "reviewing",
       "reservedAt": "2026-10-17T07:38:22.669Z",
       "implementation": [
         {
@@ -35,6 +35,11 @@
         {
           "round": 1,
           "status": "failed",
+          "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376"
+        },
+        {
+          "round": 2,
+          "status": "running",
           "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376"
         }
       ],
@@ -643,10 +648,14 @@
       },
       "externalReview": {
         "channel": "github-comments",
-        "status": "comment-requested",
+        "status": "comment-running",
         "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
         "requestId": "0ca3c1d5-2f6b-42b6-bcc6-907ce778d1a0",
-        "requestedAt": "2026-10-17T15:31:55.988Z"
+        "requestedAt": "2026-10-17T15:31:55.988Z",
+        "owner": "l2v-hub",
+        "claimId": "15e9d6dc-494a-4f98-900e-1916b5d24da8",
+        "startedAt": "2026-10-17T17:02:20.865Z",
+        "feedbackFingerprint": "583c18e708edb60175ddad838ed5b14942b1609cc09918bf07fc471af12e6265"
       },
       "reviewLedger": {
         "schema_version": 1,
@@ -656,6 +665,11 @@
             "round": 1,
             "subject_sha": "111e672faf77b45280d8ef6ebb15268180b58376",
             "verdict": "failed"
+          },
+          {
+            "round": 2,
+            "verdict": "running",
+            "subject_sha": "111e672faf77b45280d8ef6ebb15268180b58376"
           }
         ]
       },
@@ -4434,7 +4448,7 @@
       "maxImplementationAttempts": 4
     }
   ],
-  "updatedAt": "2026-10-17T16:57:19.394Z",
+  "updatedAt": "2026-10-17T17:02:20.868Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
