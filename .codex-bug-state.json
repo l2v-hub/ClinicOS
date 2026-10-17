@@ -1970,7 +1970,7 @@
       "issues": [
         470
       ],
-      "phase": "operational-verifying",
+      "phase": "blocked",
       "implementation": [
         {
           "round": 1,
@@ -1990,9 +1990,9 @@
         },
         {
           "round": 4,
-          "status": "passed",
+          "status": "failed",
           "sha": "101719920ea1572724e93b51ac497c05b3e73555",
-          "reason": "Independent QA4 all5phases passes:52checks, realPG43-table integration, internal114browserassertions; root17hash/sanitizedpacket final review passed."
+          "reason": "Independent synthetic QA passed, actual authorized run SQL and independent43-table inventory passed, but native storage binding failed before mutations and hosted online verifier used SIM-ADMIN without clinical slot capability (403). Full operational acceptance not met; four implementation attempts exhausted."
         }
       ],
       "reviews": [],
@@ -2011,9 +2011,15 @@
         "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/39020438022",
         "headSha": "101719920ea1572724e93b51ac497c05b3e73555",
         "operation": "demo-cleanup",
-        "status": "in_progress",
-        "mainRolloutHeld": true
-      }
+        "status": "completed",
+        "mainRolloutHeld": false,
+        "conclusion": "failure",
+        "databaseCleanup": "verified",
+        "postInventory": "verified-empty",
+        "storage": "blocked-before-storage-mutation",
+        "online": "failed-session-revoked-no-media-published"
+      },
+      "blockedReason": "Four attempts exhausted. Demo database zero clinical/import rows verified; native backup/storage identity not proven, and browser verifier expects a clinical endpoint forbidden to simulator admin. Readonly diagnosis allowed; no fifth implementation or reset."
     },
     {
       "id": "demo-release-guard",
@@ -2073,5 +2079,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-17T09:18:33.180Z"
+  "updatedAt": "2026-10-17T09:23:05.401Z"
 }
