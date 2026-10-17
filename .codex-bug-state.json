@@ -1052,7 +1052,8 @@
         "implementation-plan.md": "a548a6c45df6151cc3976683c6fc7733ea118f139228ffef0c9e028ad1386845",
         "triage-index.md": "42ee2288f97e76104b47854d715618fb1955fe2f1359dcb17e695df118845a61",
         "scope-amendment-1.md": "83d56fd3d02a242f7070cfa18384a7eea536ec72e30c1ada8bfef81f07d08078",
-        "scope-amendment-2.md": "868ee1d36373421b6f2003cb4007f7d18f057a66228c802652be8fc100549ca7"
+        "scope-amendment-2.md": "868ee1d36373421b6f2003cb4007f7d18f057a66228c802652be8fc100549ca7",
+        "scope-amendment-3.md": "cbbdfbaeb8c78c14160dfc6fe63afd6a269788afdb4e3242838f556d9310d1e5"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -1133,7 +1134,9 @@
           "frontend/src/lib/__tests__/consegneReadModelGuard.test.ts",
           "frontend/src/components/operator/__tests__/operator-dashboard-anomaly-layout.test.ts",
           "frontend/src/lib/__tests__/clinicalOverviewResilience.test.ts",
-          "frontend/src/lib/__tests__/roomAssignmentScope.test.ts"
+          "frontend/src/lib/__tests__/roomAssignmentScope.test.ts",
+          "frontend/src/lib/__tests__/patientChartNavigation.test.ts",
+          "frontend/src/lib/__tests__/patientDetailWorkspace.test.ts"
         ],
         "acceptance": [
           {
@@ -1293,7 +1296,9 @@
               "frontend/src/components/operator/cartella/__tests__/uxW4Misc.test.ts",
               "frontend/src/components/operator/tabGroups.ts",
               "frontend/src/components/shared/DemographicsStatus.tsx",
-              "frontend/src/components/shared/TherapyCalendarGrid.tsx"
+              "frontend/src/components/shared/TherapyCalendarGrid.tsx",
+              "frontend/src/lib/__tests__/patientChartNavigation.test.ts",
+              "frontend/src/lib/__tests__/patientDetailWorkspace.test.ts"
             ],
             "steps": [
               "Read complete PatientDetail flow and existing tab permission model before editing.",
@@ -1591,7 +1596,9 @@
               "frontend/src/components/operator/cartella/__tests__/uxW4Misc.test.ts",
               "frontend/src/components/operator/__tests__/patientToday447.test.ts",
               "e2e/qa-bug-batch-447.mjs",
-              "e2e/qa-bug-batch-447-browser.mjs"
+              "e2e/qa-bug-batch-447-browser.mjs",
+              "frontend/src/lib/__tests__/patientChartNavigation.test.ts",
+              "frontend/src/lib/__tests__/patientDetailWorkspace.test.ts"
             ]
           },
           {
@@ -1715,6 +1722,18 @@
           "reason": "Issue456 deliberately replaces the legacy passive KPI first screen and stale overview urgency source. Existing source-structure tests explicitly require those removed implementations. Change only obsolete implementation-shape assertions and add actual authoritative queue/render behavior assertions. Preserve pagination, count completeness, source error/retry, permissions, room recovery, exact patient/deep-link and unrelated operator guards; no skip, weaker oracle or blanket removal. New browser must prove first-screen action ordering/no passive KPI, diary+handover acknowledgements and no tomorrow doses.",
           "packet": "scope-amendment-2.md",
           "sha256": "868ee1d36373421b6f2003cb4007f7d18f057a66228c802652be8fc100549ca7"
+        },
+        {
+          "number": 3,
+          "at": "2026-10-17T08:01:02.487Z",
+          "issue": 447,
+          "files": [
+            "frontend/src/lib/__tests__/patientChartNavigation.test.ts",
+            "frontend/src/lib/__tests__/patientDetailWorkspace.test.ts"
+          ],
+          "reason": "Issue447 intentionally replaces Panoramica label and passive NEWS2-first tiles with Oggi actual doses/diary/vitals. Update only obsolete label/layout implementation assertions in the two existing tests; preserve every legacy/deep-link destination, unique section membership, role capabilities, keyboard tabs, exact therapy navigation, persistent modules, clinical-source/value and responsive behavior. Add actual behavior assertions for Today dose/diary/vitals rather than source-only oracles. No broad test removal, skips or weaker authorization checks.",
+          "packet": "scope-amendment-3.md",
+          "sha256": "cbbdfbaeb8c78c14160dfc6fe63afd6a269788afdb4e3242838f556d9310d1e5"
         }
       ]
     },
@@ -1753,5 +1772,5 @@
       "reservedAt": "2026-10-17T07:44:43.115Z"
     }
   ],
-  "updatedAt": "2026-10-17T07:58:55.399Z"
+  "updatedAt": "2026-10-17T08:01:02.488Z"
 }
