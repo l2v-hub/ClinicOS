@@ -2966,8 +2966,12 @@
         "scripts/automation/configure-demo-source.mjs",
         "scripts/automation/configure-demo-source.test.mjs"
       ],
-      "rationale": "Operational configuration of existing demo GitHub trigger only. Frozen release guard19 and maintenance470 sources/budgets unchanged. Read-only inventory first, digest-bound unique same-repo branch correction only. No clinical logic, weakenedguard, deployment, patient writes, triggercreation/deletion or serviceConnect."
+      "rationale": "Operational configuration of existing demo GitHub trigger only. Frozen release guard19 and maintenance470 sources/budgets unchanged. Read-only inventory first, digest-bound unique same-repo branch correction only. No clinical logic, weakenedguard, deployment, patient writes, triggercreation/deletion or serviceConnect.",
+      "packetHashes": {
+        "operational-contract.md": "aa77b5a65e51d6c79a6c14b8a208d01e85c2e5dcbdefdec9b704ca55ae6d1559"
+      },
+      "operationalOnly": true
     }
   ],
-  "updatedAt": "2026-10-17T10:15:52.665Z"
+  "updatedAt": "2026-10-17T10:16:29.753Z"
 }
