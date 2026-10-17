@@ -3823,13 +3823,19 @@
       "issues": [],
       "branch": "codex/demo-source-configuration",
       "owner": "codex-root-2026-10-17",
-      "phase": "waiting-checks",
+      "phase": "implementing",
       "implementation": [
         {
           "round": 1,
           "status": "passed",
           "startedAt": "2026-10-17T10:15:52.665Z",
           "sha": "44e2aaeabcc0583ff89b655774a5026546283f70"
+        },
+        {
+          "round": 2,
+          "status": "running",
+          "startedAt": "2026-10-17T11:00:31.829Z",
+          "reason": "Native validated missing trigger requires explicit digest-bound creation. Same3 operational paths, previous tests preserved, new independent QA required."
         }
       ],
       "reviews": [],
@@ -3839,9 +3845,10 @@
         "scripts/automation/configure-demo-source.mjs",
         "scripts/automation/configure-demo-source.test.mjs"
       ],
-      "rationale": "Operational configuration of existing demo GitHub trigger only. Frozen release guard19 and maintenance470 sources/budgets unchanged. Read-only inventory first, digest-bound unique same-repo branch correction only. No clinical logic, weakenedguard, deployment, patient writes, triggercreation/deletion or serviceConnect.",
+      "rationale": "Existing operational configuration task extended by immutable addendum2 for exact missing GitHub trigger creation. No guard19 or maintenance470 edits/budget reset; protectedmain only; clinical release proof still required.",
       "packetHashes": {
-        "operational-contract.md": "aa77b5a65e51d6c79a6c14b8a208d01e85c2e5dcbdefdec9b704ca55ae6d1559"
+        "operational-contract.md": "aa77b5a65e51d6c79a6c14b8a208d01e85c2e5dcbdefdec9b704ca55ae6d1559",
+        "operational-addendum-2-create-missing-trigger.md": "909fe83a3c1ed6ff228202bf28fc4c818bc4c4e71cf9d3f107a79678f4696d66"
       },
       "operationalOnly": true,
       "sha": "44e2aaeabcc0583ff89b655774a5026546283f70",
@@ -3856,8 +3863,19 @@
         "browserScenarios": 9,
         "valueAssertions": 110,
         "actualProviderOperation": false
+      },
+      "mergeSha": "8124b1bc88c0f086b1ee328214f87f4802005d11",
+      "actualInspection": {
+        "runId": 39026327913,
+        "reviewedSha": "8124b1bc88c0f086b1ee328214f87f4802005d11",
+        "status": "success",
+        "outcome": "missing-trigger",
+        "inventorySha256": "bb0843673ebc593892cc8bdabddca75746f06676e0c141f3bb4ea0ee70d05a5f",
+        "proof": "validated aggregate GitHub job log",
+        "artifactDownload": "blocked-by-cloud-proxy",
+        "providerWrites": 0
       }
     }
   ],
-  "updatedAt": "2026-10-17T10:58:26.536Z"
+  "updatedAt": "2026-10-17T11:00:31.830Z"
 }
