@@ -1097,7 +1097,8 @@
         "scope-amendment-6-ps-exit-and-qa.md": "acd535fe593a13d4f1573baa46ccf6b80681408307e1f97efe119204840739ea",
         "approved-plan-cycle-2.json": "9c01a6c6a9e9eff0ae34785349f6539e53a422d50bd768bf5fc4950b12ac22e9",
         "scope-amendment-7-news2-and-dependency.md": "d3f7abe648a13835bd7409937e9a14eb12f89f9b8b6b12d9ca453876c8964880",
-        "approved-plan-cycle-2-integrated.json": "e41e2342af3fa949331f067648579493f4c9e08c4917622902ab783ec336bfca"
+        "approved-plan-cycle-2-integrated.json": "e41e2342af3fa949331f067648579493f4c9e08c4917622902ab783ec336bfca",
+        "scope-amendment-8-allergy-wrapper.md": "0c8f82578c01d10068c6701acde65eb9fcbf655d2f6253611fd634b8e03d2e58"
       },
       "baseSha": "5a250319bae5b3f61f2c5864aee438f04d948df5",
       "plan": {
@@ -1207,7 +1208,8 @@
           "frontend/src/lib/__tests__/cartellaWriteQueue.test.ts",
           "frontend/src/components/operator/News2Chip.tsx",
           "frontend/src/lib/news2History.ts",
-          "frontend/src/lib/__tests__/news2History.test.ts"
+          "frontend/src/lib/__tests__/news2History.test.ts",
+          "frontend/src/components/operator/sections/TherapyEditor.tsx"
         ],
         "acceptance": [
           {
@@ -1617,6 +1619,16 @@
               "Use one common loader in roster and News2Chip; preserve patient identity/staleness and independent successes with allSettled.",
               "Regress complete row beyond first50, per-patient failure/recovery, pagination boundaries and actual rendered chip."
             ]
+          },
+          {
+            "title": "Pass current allergy revision through existing therapy editor wrapper",
+            "files": [
+              "frontend/src/components/operator/sections/TherapyEditor.tsx"
+            ],
+            "steps": [
+              "Forward patient-bound allergy context revision from PatientDetail to the current therapy editor without remounting or losing the draft.",
+              "Invalidate warning acknowledgement when allergy context changes; preserve existing form behaviour and explicit user decision."
+            ]
           }
         ],
         "verification": [
@@ -1791,7 +1803,8 @@
               "frontend/src/components/operator/cartella/drugPackageSelection.ts",
               "frontend/src/components/operator/cartella/__tests__/therapyQuickSchedule453.test.ts",
               "e2e/qa-bug-batch-447.mjs",
-              "e2e/qa-bug-batch-447-browser.mjs"
+              "e2e/qa-bug-batch-447-browser.mjs",
+              "frontend/src/components/operator/sections/TherapyEditor.tsx"
             ]
           },
           {
@@ -2060,5 +2073,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-17T09:16:31.840Z"
+  "updatedAt": "2026-10-17T09:18:33.180Z"
 }
