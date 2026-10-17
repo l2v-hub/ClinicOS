@@ -724,7 +724,7 @@
       "sourceSha": "7028844633760f03a42072fa6648f975370e6db6",
       "branch": "codex/bug-batch-432",
       "owner": "codex-root-2026-10-17",
-      "phase": "implementing",
+      "phase": "publishing",
       "reservedAt": "2026-10-17T07:38:22.106Z",
       "implementation": [
         {
@@ -739,7 +739,9 @@
         },
         {
           "round": 3,
-          "status": "running"
+          "status": "passed",
+          "sourceCheckpoint": "938ae9c44d60b1d963873762f26677d6856f6d63",
+          "reason": "Independent QA3 all5PASS: frontend1388,backend1928PASS/5outsideopt-in,37targeted+10independent,actualbrowser+focusedmobile,privacy/cleanup/source37contracts7 unchanged."
         }
       ],
       "reviews": [],
@@ -750,7 +752,8 @@
         "triage-index.md": "4b8a46b7ba1be48c1b8aacc065b7ef8f03c0bce15bf4d906e19b86e194605d12",
         "cycle-2-correction.md": "6b40b4f39263a7a03d846b4f388bd6e753f4a7a6cb4796b6eea1b2fabf83bbd1",
         "downstream-447-coordination.md": "609d97eeedaeeab0809f413a84cb9176c3d6328948154a5798d51f724b20bf20",
-        "cycle-3-correction.md": "aafa9f677da4c47427a6c4969f5af3b425ded1282cc9c7b33fe8fdb19feffa2e"
+        "cycle-3-correction.md": "aafa9f677da4c47427a6c4969f5af3b425ded1282cc9c7b33fe8fdb19feffa2e",
+        "publication-history-and-qa3.md": "b6665c07684ea849d951d3199d619e15d75f43dbaf29a02194b12e15e100fc75"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -1187,7 +1190,157 @@
         ],
         "separationReason": "App.tsx also needs later UX447 presentation work, a separate UI cause from authoritative therapy write/idempotency/timezone. Integrate this therapy batch first; UX447 must rebase and serialize integration afterward, preserve recordAdministration/session guards and rerun therapy/navigation regressions. No parallel edits to same file or frozen batch scope expansion.\n\nApproved user clinical decisions now require exactly19 additional PS-exit files and supersede the original no-backend/App restriction for issue457 only. Root first checkpoints and integrates sealed batch432 source before this group edits shared administration writers/slot query/App/types; no parallel shared-source edits. Preserve432 receipts/ACL/civil-time/negative guards. Integrate final reviewed432 and450 actual main contents before final QA/review; reconcile shared PatientList and deferred therapyPages tests preserving both regressions. No scope or budget reset."
       },
-      "frozenAt": "2026-10-17T07:47:23.712Z"
+      "frozenAt": "2026-10-17T07:47:23.712Z",
+      "evidence": [
+        {
+          "issue": 432,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-432.png",
+              "sha256": "80f3b2dc4d97da4344b93d6f627188a4e3ebc362dabccf235f5dc1c20bfc85ae",
+              "bytes": 113228
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-432-trace.zip",
+              "sha256": "9933e93d8afb4296429a12ad5908ecf6f160c3b2cc0cc84a819f28d558fcca34",
+              "bytes": 7516805
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-432.webm",
+              "sha256": "fbde722f20531dcf3048d32e8abcefcc46a51160a30544c264e1a033b438d643",
+              "bytes": 1167775
+            }
+          }
+        },
+        {
+          "issue": 441,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-441.png",
+              "sha256": "be88fde7e3bd7d85e041d0dab88a6da6090fc4cb23a3c844aa1af330e189d09a",
+              "bytes": 160504
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-441-trace.zip",
+              "sha256": "9933e93d8afb4296429a12ad5908ecf6f160c3b2cc0cc84a819f28d558fcca34",
+              "bytes": 7516805
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-441.webm",
+              "sha256": "fbde722f20531dcf3048d32e8abcefcc46a51160a30544c264e1a033b438d643",
+              "bytes": 1167775
+            }
+          }
+        },
+        {
+          "issue": 442,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-442.png",
+              "sha256": "b81072f2843023a02fa7e28539614e5bd415fa590c430d3279f82f6b8f025d63",
+              "bytes": 24276
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-442-trace.zip",
+              "sha256": "646d32c27750e38d5ccb67e91f04e99bc44eef1cbb7dfcef01250ecdaf2c2ad5",
+              "bytes": 65489
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-442.webm",
+              "sha256": "637a46a3483afce6ef053c5217503b84aafea9d166587045893b621392964fb6",
+              "bytes": 26160
+            }
+          }
+        },
+        {
+          "issue": 460,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-460.png",
+              "sha256": "6a39cdd6f89ed40f2ccd81346293046930aa95b78c80e7d496c62dd41a130eba",
+              "bytes": 120081
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-460-trace.zip",
+              "sha256": "fdbebe4765423d129b91fa04697941ce46071f5f3bb7c256b62a6c2c1f7f7ee3",
+              "bytes": 6405643
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-460.webm",
+              "sha256": "5fa628fac1f0fcd69c5499386b278b2edbd9705b71e6ff1072ce55ac3550a69a",
+              "bytes": 679161
+            }
+          }
+        },
+        {
+          "issue": 463,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-463.png",
+              "sha256": "80f3b2dc4d97da4344b93d6f627188a4e3ebc362dabccf235f5dc1c20bfc85ae",
+              "bytes": 113228
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-463-trace.zip",
+              "sha256": "9933e93d8afb4296429a12ad5908ecf6f160c3b2cc0cc84a819f28d558fcca34",
+              "bytes": 7516805
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-463.webm",
+              "sha256": "fbde722f20531dcf3048d32e8abcefcc46a51160a30544c264e1a033b438d643",
+              "bytes": 1167775
+            }
+          }
+        },
+        {
+          "issue": 464,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-464.png",
+              "sha256": "d8892ca230fcc4b7ceb7deeee3c30aa23afc6e0b8d831ee8ee27f54b3072c399",
+              "bytes": 23070
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-464-trace.zip",
+              "sha256": "646d32c27750e38d5ccb67e91f04e99bc44eef1cbb7dfcef01250ecdaf2c2ad5",
+              "bytes": 65489
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-464.webm",
+              "sha256": "637a46a3483afce6ef053c5217503b84aafea9d166587045893b621392964fb6",
+              "bytes": 26160
+            }
+          }
+        },
+        {
+          "issue": 467,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-467.png",
+              "sha256": "062ceec8e667d2fc4a3757c9c0777e9250fae134e8bcbec10da612a8c75a1f1f",
+              "bytes": 199750
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-467-trace.zip",
+              "sha256": "9933e93d8afb4296429a12ad5908ecf6f160c3b2cc0cc84a819f28d558fcca34",
+              "bytes": 7516805
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-432/evidence/issue-467.webm",
+              "sha256": "fbde722f20531dcf3048d32e8abcefcc46a51160a30544c264e1a033b438d643",
+              "bytes": 1167775
+            }
+          }
+        }
+      ],
+      "independentQa": {
+        "attempt": 3,
+        "verdict": "READY FOR CODEX QA",
+        "report": "independent-qa-attempt-3/validation-report.md",
+        "reportSha256": "bc33538dbc638b37f1413b1dbcc8119bf05a01b6c06e8b346c4a7eea420f0c61",
+        "manifestSha256": "30048291c7c30ee383901a23299b4676eb819c08d55bfe346fae433a3767cd2e",
+        "rootFullReportAndMobilePngReviewed": true
+      }
     },
     {
       "id": "bug-batch-450",
@@ -2974,12 +3127,13 @@
       "issues": [],
       "branch": "codex/demo-source-configuration",
       "owner": "codex-root-2026-10-17",
-      "phase": "implementing",
+      "phase": "waiting-checks",
       "implementation": [
         {
           "round": 1,
-          "status": "running",
-          "startedAt": "2026-10-17T10:15:52.665Z"
+          "status": "passed",
+          "startedAt": "2026-10-17T10:15:52.665Z",
+          "sha": "44e2aaeabcc0583ff89b655774a5026546283f70"
         }
       ],
       "reviews": [],
@@ -2993,8 +3147,21 @@
       "packetHashes": {
         "operational-contract.md": "aa77b5a65e51d6c79a6c14b8a208d01e85c2e5dcbdefdec9b704ca55ae6d1559"
       },
-      "operationalOnly": true
+      "operationalOnly": true,
+      "sha": "44e2aaeabcc0583ff89b655774a5026546283f70",
+      "pr": {
+        "number": 482,
+        "url": "https://github.com/l2v-hub/ClinicOS/pull/482"
+      },
+      "independentQa": {
+        "verdict": "READY FOR CODEX QA",
+        "report": "independent-qa-1/validation-report.md",
+        "tests": 87,
+        "browserScenarios": 9,
+        "valueAssertions": 110,
+        "actualProviderOperation": false
+      }
     }
   ],
-  "updatedAt": "2026-10-17T10:32:24.033Z"
+  "updatedAt": "2026-10-17T10:33:25.923Z"
 }
