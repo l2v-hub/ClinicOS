@@ -8,6 +8,29 @@ import {
 import { publishDeploymentCompletion } from './release.mjs';
 import { externalReviewStep } from './external-review.mjs';
 
+function eligibleIssue(issue) {
+  const labels = (issue.labels ?? []).map((l) => (typeof l === 'string' ? l : l.name));
+  return (
+    !issue.pull_request &&
+    (!issue.state || issue.state.toLowerCase() === 'open') &&
+    labels.includes('bug') &&
+    labels.includes('codex-run') &&
+    !labels.some((label) =>
+      [
+        'agent-working',
+        'ready-for-dev',
+        'assigned-to-claude',
+        'ready-for-qa',
+        'qa-passed',
+        'codex-blocked',
+        'codex-in-flight',
+        'codex-processing',
+        'status-blocked',
+      ].includes(label),
+    )
+  );
+}
+
 // The controller owns every transition and reserves attempts remotely BEFORE starting models.
 // Models never own GitHub mutation, budgets, release decisions or deployment credentials.
 export async function runPipeline({
@@ -18,8 +41,12 @@ export async function runPipeline({
   workspace,
   store,
   reviewMode = 'internal',
+  now = Date.now,
+  triageWindowMs = 120_000,
 }) {
   if (!['internal', 'external'].includes(reviewMode)) throw new Error('Unknown review mode');
+  if (!Number.isSafeInteger(triageWindowMs) || triageWindowMs < 0 || triageWindowMs > 600_000)
+    throw new Error('Invalid triage collection window');
   await gh.intake(event);
   const state = validateState(
     (await store.load()) ?? { schemaVersion: 1, repository: repo, batches: [] },
@@ -64,20 +91,7 @@ export async function runPipeline({
   for (const item of queue) {
     const issue = await gh.viewIssue(typeof item === 'number' ? item : item.number);
     if (claimed.has(issue.number)) continue;
-    const labels = (issue.labels ?? []).map((l) => (typeof l === 'string' ? l : l.name));
-    if (
-      labels.some((l) =>
-        [
-          'agent-working',
-          'ready-for-dev',
-          'assigned-to-claude',
-          'ready-for-qa',
-          'qa-passed',
-        ].includes(l),
-      )
-    )
-      continue;
-    if (issue.state && issue.state.toLowerCase() !== 'open') continue;
+    if (!eligibleIssue(issue)) continue;
     selected.push(issue);
   }
   if (state.pendingTriage) {
@@ -87,27 +101,91 @@ export async function runPipeline({
     selected = selected.filter((issue) => pending.has(issue.number));
     if (selected.length !== pending.size)
       throw new Error('Pending claim is no longer authorized or open');
+  } else if (selected.length) {
+    // Persist a quiet window rather than sleeping in Actions. Labeling several issues in
+    // succession must not freeze the first singleton plan before the others enter the queue.
+    const timestamp = now();
+    if (!Number.isSafeInteger(timestamp) || timestamp < 0) throw new Error('Invalid triage clock');
+    const numbers = selected.map((issue) => issue.number).sort((a, b) => a - b);
+    const previous = state.triageQueue;
+    if (JSON.stringify(previous?.issues) !== JSON.stringify(numbers)) {
+      state.triageQueue = {
+        issues: numbers,
+        openedAt: previous?.openedAt ?? timestamp,
+        changedAt: timestamp,
+      };
+      await save();
+    }
+    const collection = state.triageQueue;
+    if (
+      timestamp - collection.changedAt < triageWindowMs &&
+      timestamp - collection.openedAt < 600_000
+    )
+      selected = [];
+  } else if (state.triageQueue) {
+    delete state.triageQueue;
+    await save();
   }
   if (selected.length) {
+    // Recheck authorization and live labels after collection, before taking ownership.
+    const authorized = new Set(
+      (await gh.discoverQueue()).map((item) => (typeof item === 'number' ? item : item.number)),
+    );
+    for (const issue of selected)
+      if (!authorized.has(issue.number) || !eligibleIssue(await gh.viewIssue(issue.number)))
+        throw new Error('Selected issue authorization or ownership changed before claim');
     if (!state.pendingTriage) {
+      delete state.triageQueue;
       state.pendingTriage = { issues: selected.map((i) => i.number), status: 'claiming' };
       await save();
     }
     for (const issue of selected) await gh.setIssueStatus(issue.number, 'In progress');
+    for (const issue of selected)
+      if (!eligibleIssue(await gh.viewIssue(issue.number)))
+        throw new Error('Selected issue authorization or ownership changed before triage');
     state.pendingTriage.status = 'running';
     await save();
     const plan = validatePlan(
-      await models.plan({ cwd: workspace.root, issues: selected, scopeSchema: planSchema }),
+      await models.plan({
+        cwd: workspace.root,
+        issues: selected,
+        scopeSchema: planSchema,
+        packet: {
+          activeBatches: state.batches
+            .filter((batch) => batch.release?.status !== 'deployed')
+            .map((batch) => ({
+              id: batch.id,
+              issues: batch.issues,
+              feature: batch.plan?.feature ?? '',
+              scope: batch.plan?.scope ?? [],
+            })),
+        },
+      }),
       selected,
     );
+    const existingBatches = [...state.batches];
     for (const group of plan.groups) {
       const id = `bug-batch-${Math.min(...group.issues)}`;
+      // Older installed external-review workers validate plan with a closed schema.
+      // Keep the frozen plan wire format compatible and store new grouping alongside it.
+      const { fileMap, separationReason, ...frozenPlan } = group;
+      const overlaps = existingBatches.filter(
+        (batch) =>
+          batch.release?.status !== 'deployed' &&
+          batch.plan?.scope.some((file) => group.scope.includes(file)),
+      );
       state.batches.push({
         id,
         branch: `codex/${id}`,
         issues: group.issues,
-        plan: group,
-        phase: 'planned',
+        plan: frozenPlan,
+        grouping: { fileMap, separationReason },
+        phase: overlaps.length ? 'blocked' : 'planned',
+        ...(overlaps.length
+          ? {
+              reason: `File scope overlaps existing batches: ${overlaps.map((b) => b.id).join(', ')}. Coordinate the existing work before replanning; frozen plans and budgets cannot be reset.`,
+            }
+          : {}),
         implementation: [],
         reviews: [],
         sha: null,
@@ -126,6 +204,15 @@ export async function runPipeline({
       });
     delete state.pendingTriage;
     await save();
+    for (const batch of state.batches.filter(
+      (batch) =>
+        batch.phase === 'blocked' &&
+        batch.plan &&
+        selected.some((i) => batch.issues.includes(i.number)),
+    )) {
+      for (const number of batch.issues) await gh.setIssueStatus(number, 'Bloccato');
+      await report(batch, `**BLOCKED** — ${batch.reason}`);
+    }
     for (const rejected of plan.blocked) await gh.setIssueStatus(rejected.issue, 'Bloccato');
     for (const rejected of plan.blocked)
       await gh.commentIssue(
@@ -197,13 +284,13 @@ export async function runPipeline({
       // Recheck every issue before any model/worktree mutation, after grouping and on restart.
       for (const n of batch.issues) {
         const live = await gh.viewIssue(n);
-        if (live.state && live.state.toLowerCase() !== 'open')
-          throw new Error('source issue is no longer open');
+        if (!eligibleIssue(live))
+          throw new Error('source issue is no longer authorized, open or available');
       }
       await workspace.prepare(batch);
       await report(
         batch,
-        `Codex ha raggruppato ${batch.issues.map((n) => `#${n}`).join(', ')}. Worktree e piano: \`${batch.branch}\`. Esecutore configurato separatamente; Claude interviene nella review finale.`,
+        `Codex ha raggruppato ${batch.issues.map((n) => `#${n}`).join(', ')}. Feature: ${batch.plan.feature.slice(0, 500)}. Motivo: ${batch.plan.rationale.slice(0, 2000)}\n\nMappa issue/file: ${JSON.stringify(batch.grouping?.fileMap ?? []).slice(0, 8000)}\n\nWorktree e piano: \`${batch.branch}\`. Esecutore configurato separatamente; Claude interviene nella review finale.`,
       );
       if (!batch.sha) {
         let passed = false;

@@ -24,6 +24,11 @@ function planFor(issues = [17, 18]) {
           'Both issues describe the same feature regression with separate reproduction details.',
         issues: [...issues],
         scope: ['frontend/src/features/patients/filter.ts'],
+        fileMap: issues.map((issue) => ({
+          issue,
+          files: ['frontend/src/features/patients/filter.ts'],
+        })),
+        separationReason: '',
         acceptance: issues.map((issue) => ({
           issue,
           criteria: [`Issue #${issue} reproduces and is fixed`],
@@ -93,6 +98,8 @@ function harness({
   executeResults = [],
   reviews = [],
   checks = [true],
+  now = () => 1_000_000,
+  triageWindowMs = 0,
   feedback,
   failSave = false,
 } = {}) {
@@ -142,7 +149,7 @@ function harness({
         state: 'open',
         title: `Bug ${number}`,
         body: `Hydrated issue body for #${number}`,
-        labels: [{ name: 'bug' }, { name: 'codex-triage' }],
+        labels: [{ name: 'bug' }, { name: 'codex-triage' }, { name: 'codex-run' }],
         comments: [
           { id: number * 10, body: `Hydrated comment for #${number}`, user: { login: 'reporter' } },
         ],
@@ -273,7 +280,7 @@ function harness({
     issueComments,
     planningInput,
     run: (event = { action: 'test' }, reviewMode = 'internal') =>
-      runPipeline({ repo, event, gh, models, workspace, store, reviewMode }),
+      runPipeline({ repo, event, gh, models, workspace, store, reviewMode, now, triageWindowMs }),
   };
 }
 
@@ -315,6 +322,114 @@ test('all grouped issues are claimed after remote reservation and before triage;
     h.log.some((line) => line.endsWith(':Risolto')),
     false,
   );
+});
+
+test('successive label wake-ups collect related issues durably before one plan, worktree and PR', async () => {
+  let clock = 1_000_000;
+  const queue = [17];
+  const h = harness({ queue, now: () => clock, triageWindowMs: 120_000 });
+  await h.run();
+  assert.equal(h.counts.plan, 0);
+  assert.deepEqual(h.stateRef.value.triageQueue.issues, [17]);
+  assert.ok(!h.log.some((line) => line.includes('In progress')));
+  clock += 60_000;
+  queue.push(18);
+  await h.run();
+  assert.equal(h.counts.execute, 0);
+  assert.equal(h.stateRef.value.triageQueue.openedAt, 1_000_000);
+  assert.equal(h.stateRef.value.triageQueue.changedAt, clock);
+  clock += 119_999;
+  await h.run();
+  assert.equal(h.counts.plan, 0);
+  clock += 1;
+  const final = await h.run();
+  assert.equal(h.counts.plan, 1);
+  assert.equal(final.triageQueue, undefined);
+  assert.deepEqual(final.batches[0].issues, [17, 18]);
+  assert.equal(
+    final.batches[0].plan.fileMap,
+    undefined,
+    'old installed reviewer plan schema stays compatible',
+  );
+  assert.equal(final.batches[0].grouping.fileMap.length, 2);
+  assert.equal(h.log.filter((line) => line === 'workspace.prepare').length, 1);
+  assert.equal(h.log.filter((line) => line === 'gh.createDraft').length, 1);
+  for (const issue of [17, 18])
+    assert.ok(
+      h.issueComments.some(
+        (entry) => entry.number === issue && entry.body.includes('Mappa issue/file'),
+      ),
+    );
+});
+
+test('collection clears revoked entries and is bounded even if queue membership keeps changing', async () => {
+  let clock = 1_000_000;
+  const queue = [17];
+  const h = harness({ queue, now: () => clock, triageWindowMs: 120_000 });
+  await h.run();
+  queue.length = 0;
+  await h.run();
+  assert.equal(h.stateRef.value.triageQueue, undefined);
+  queue.push(17);
+  await h.run();
+  clock += 600_000;
+  queue.push(18);
+  const final = await h.run();
+  assert.deepEqual(final.batches[0].issues, [17, 18]);
+  assert.equal(h.counts.plan, 1);
+});
+
+test('a new issue cannot duplicate an occupied file scope or reset the existing budget', async () => {
+  const existing = batchFor({ issues: [99], phase: 'blocked' });
+  const before = clone(existing);
+  const h = harness({
+    issues: [17],
+    queue: [17],
+    initialState: { ...blankState(), batches: [existing] },
+  });
+  const state = await h.run();
+  assert.deepEqual(state.batches[0], before);
+  assert.equal(state.batches[1].phase, 'blocked');
+  assert.match(state.batches[1].reason, /bug-batch-99/);
+  assert.equal(h.counts.execute, 0);
+  assert.equal(h.counts.review, 0);
+  assert.ok(!h.log.includes('workspace.prepare'));
+});
+
+test('unjustified separate plans touching the same file fail before any worktree or executor', async () => {
+  const h = harness({
+    plan: {
+      groups: [planFor([17]).groups[0], planFor([18]).groups[0]],
+      blocked: [],
+    },
+  });
+  await assert.rejects(h.run(), /shared-file groups must be consolidated/);
+  assert.equal(h.counts.execute, 0);
+  assert.ok(!h.log.includes('workspace.prepare'));
+  assert.equal(h.stateRef.value.pendingTriage.status, 'running');
+});
+
+test('revoked or externally owned issues cannot enter collection or be claimed after the window', async () => {
+  for (const labels of [['bug'], ['bug', 'codex-run', 'ready-for-qa']]) {
+    const h = harness({ issues: [17], queue: [17], triageWindowMs: 120_000 });
+    h.gh.viewIssue = async (number) => ({ number, state: 'open', labels });
+    const state = await h.run();
+    assert.equal(state.triageQueue, undefined);
+    assert.equal(h.counts.plan, 0);
+    assert.ok(!h.log.some((line) => line.includes('In progress')));
+  }
+  const h = harness({ issues: [17], queue: [17] });
+  const view = h.gh.viewIssue;
+  let reads = 0;
+  h.gh.viewIssue = async (number) => {
+    const issue = await view(number);
+    if (++reads === 2) issue.labels = ['bug'];
+    return issue;
+  };
+  await assert.rejects(h.run(), /authorization or ownership changed before claim/);
+  assert.equal(h.counts.plan, 0);
+  assert.equal(h.counts.execute, 0);
+  assert.ok(!h.log.some((line) => line.includes('In progress')));
 });
 
 test('failed claim publication prevents triage and retains its remote claim without consuming implementation or review budgets', async () => {
@@ -362,7 +477,7 @@ test('successful grouped flow hydrates every issue, validates, simplifies, reval
   ]);
   assert.deepEqual(
     h.hydrated.map((issue) => issue.number),
-    [17, 18, 17, 18],
+    [17, 18, 17, 18, 17, 18, 17, 18],
     'issues are rehydrated immediately before work',
   );
   assert.deepEqual(final.batches[0].issues, [17, 18]);
@@ -562,8 +677,8 @@ test('interrupted running work is blocked for operator recovery without restarti
 });
 
 test('remote compare-and-swap failure while reserving an implementation attempt prevents executor invocation', async () => {
-  // Save #1 reserves labels; #2 reserves triage; #3 persists its plan; #4 reserves round 1.
-  const h = harness({ issues: [17], queue: [17], failSave: 4 });
+  // #1 collects queue; #2 reserves labels; #3 reserves triage; #4 plan; #5 round 1.
+  const h = harness({ issues: [17], queue: [17], failSave: 5 });
   let failure;
   try {
     await h.run();
@@ -579,5 +694,5 @@ test('remote compare-and-swap failure while reserving an implementation attempt 
   assert.equal(h.counts.execute, 0);
   assert.equal(h.counts.review, 0);
   assert.ok(h.log.includes('workspace.prepare'));
-  assert.equal(h.log.filter((entry) => entry === 'store.save').length, 4);
+  assert.equal(h.log.filter((entry) => entry === 'store.save').length, 5);
 });

@@ -47,6 +47,12 @@ If the queue is empty, report it and stop without creating artificial work or in
 
 ## 2. Aggregate before changing code
 
+The controller collects newly authorized issues for a durable two-minute quiet window before
+claiming them, and processes the collected queue at the next invocation (the scheduled poll is
+every 15 minutes). Membership changes restart the quiet window, bounded by ten minutes from
+the first observation. No model session or `In progress` claim starts while collecting. Only
+issues explicitly authorized with `codex-run` or `/codex fix` may enter implementation scope.
+
 Inspect code and tests against a recorded `origin/main` SHA. Distinguish actual duplicates from
 related symptoms in one feature and unrelated root causes. A matching title or broad label alone
 does not justify grouping. Record:
@@ -56,6 +62,18 @@ does not justify grouping. Record:
 - observed behavior versus root-cause hypotheses, dependencies and overlap between groups;
 - a separate acceptance criterion and regression scenario for every source issue;
 - missing information and risks. Unresolved essential questions block that group.
+
+Aggregation is a primary objective. Inspect all selected issues against code before assigning
+groups. Prefer a single worktree and PR when reports share affected files, components, a
+persistence path or a root cause, even if their titles/symptoms differ. Produce `fileMap` with
+exact affected files for every issue, covering every scoped file. Keep per-issue acceptance,
+regression scenarios and evidence. Two groups sharing a scoped file require an explicit
+`separationReason` in both plans, explaining why distinct causes merit separate fixes and how
+to coordinate them; otherwise consolidate them. Broad labels alone do not establish relatedness.
+
+Inspect the controller's active-batch context. Existing plans/contracts/budgets are frozen:
+incoming issues overlapping an occupied scope must be blocked for coordination, never silently
+added to a running worktree or launched as a competing fix. The controller enforces this check.
 
 Save a `triage-index.md` mapping source issues to groups. Recheck live issue state before starting
 development. Coordinate with existing work/claims and preserve others' work.

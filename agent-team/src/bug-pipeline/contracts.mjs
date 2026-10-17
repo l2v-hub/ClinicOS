@@ -28,6 +28,8 @@ export const planSchema = object({
       }),
       issues: list(integer),
       scope: list(string),
+      fileMap: list(object({ issue: integer, files: list(string) })),
+      separationReason: string,
       acceptance: list(object({ issue: integer, criteria: list(string) })),
       tasks: list(object({ title: string, files: list(string), steps: list(string) })),
       verification: list(object({ command: string, args: list(string) })),
@@ -74,14 +76,29 @@ export function editableFile(file) {
     throw new Error('automation control or credential path is outside implementation scope');
   return file;
 }
-export function validatePlan(plan, issues, { allowLegacyExecution = false } = {}) {
+export function validatePlan(
+  plan,
+  issues,
+  { allowLegacyExecution = false, allowLegacyGrouping = false } = {},
+) {
   const checked =
-    allowLegacyExecution && Array.isArray(plan?.groups)
+    (allowLegacyExecution || allowLegacyGrouping) && Array.isArray(plan?.groups)
       ? {
           ...plan,
-          groups: plan.groups.map((group) =>
-            group.execution !== undefined ? group : { ...group, execution: legacyExecution },
-          ),
+          groups: plan.groups.map((group) => ({
+            ...group,
+            ...(allowLegacyExecution && group.execution === undefined
+              ? { execution: legacyExecution }
+              : {}),
+            ...(allowLegacyGrouping &&
+            group.fileMap === undefined &&
+            group.separationReason === undefined
+              ? {
+                  fileMap: group.issues.map((issue) => ({ issue, files: group.scope })),
+                  separationReason: '',
+                }
+              : {}),
+          })),
         }
       : plan;
   validateAgainstSchema(checked, planSchema);
@@ -89,7 +106,7 @@ export function validatePlan(plan, issues, { allowLegacyExecution = false } = {}
   if (plan.groups.length > 20 || plan.blocked.length > 100) throw new Error('plan too large');
   const selected = new Set(issues.map((i) => i.number));
   const seen = [];
-  for (const group of plan.groups) {
+  for (const group of checked.groups) {
     if (group.execution && !group.execution.reason.trim())
       throw new Error('missing execution rationale');
     if ([group.title, group.feature, group.rationale, group.analysis].some((s) => !s.trim()))
@@ -107,6 +124,15 @@ export function validatePlan(plan, issues, { allowLegacyExecution = false } = {}
     )
       throw new Error('per-issue acceptance/evidence coverage is incomplete');
     group.scope.forEach(editableFile);
+    if (!exactCoverage(group.fileMap.map((entry) => entry.issue)))
+      throw new Error('per-issue file map coverage is incomplete');
+    for (const entry of group.fileMap)
+      for (const file of entry.files) {
+        editableFile(file);
+        if (!group.scope.includes(file)) throw new Error('issue file outside declared scope');
+      }
+    if (group.scope.some((file) => !group.fileMap.some((entry) => entry.files.includes(file))))
+      throw new Error('scope file has no source issue');
     for (const task of group.tasks)
       for (const file of task.files) {
         editableFile(file);
@@ -149,6 +175,15 @@ export function validatePlan(plan, issues, { allowLegacyExecution = false } = {}
           throw new Error('evidence must be inside the batch evidence directory');
       }
   }
+  for (let i = 0; i < checked.groups.length; i++)
+    for (const other of checked.groups.slice(i + 1)) {
+      const group = checked.groups[i];
+      if (
+        group.scope.some((file) => other.scope.includes(file)) &&
+        (!group.separationReason.trim() || !other.separationReason.trim())
+      )
+        throw new Error('shared-file groups must be consolidated or explicitly justify separation');
+    }
   for (const item of plan.blocked) {
     seen.push(item.issue);
     if (!item.reason.trim()) throw new Error('missing blocked reason');
@@ -216,10 +251,35 @@ export function validateState(state, repo) {
       throw new Error('invalid PR coordinates');
     if (b.phase !== 'blocked')
       validatePlan(
-        { groups: [b.plan], blocked: [] },
+        {
+          groups: [
+            b.grouping === undefined
+              ? b.plan
+              : {
+                  ...b.plan,
+                  fileMap: b.grouping?.fileMap,
+                  separationReason: b.grouping?.separationReason,
+                },
+          ],
+          blocked: [],
+        },
         b.issues.map((number) => ({ number })),
-        { allowLegacyExecution: true },
+        { allowLegacyExecution: true, allowLegacyGrouping: b.grouping === undefined },
       );
+  }
+  if (state.triageQueue) {
+    const queue = state.triageQueue;
+    if (
+      !Array.isArray(queue.issues) ||
+      !queue.issues.length ||
+      new Set(queue.issues).size !== queue.issues.length ||
+      queue.issues.some((n) => !Number.isSafeInteger(n) || n < 1 || issues.has(n)) ||
+      !Number.isSafeInteger(queue.openedAt) ||
+      !Number.isSafeInteger(queue.changedAt) ||
+      queue.openedAt < 0 ||
+      queue.changedAt < queue.openedAt
+    )
+      throw new Error('invalid triage collection window');
   }
   return state;
 }

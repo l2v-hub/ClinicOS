@@ -488,6 +488,7 @@ test('real Git workspace prepares the exact batch branch, freezes its task packe
     'analysis.md',
     'implementation-plan.md',
     'task-contract.md',
+    'triage-index.md',
   ]);
   const initialContract = await readFile(path.join(packet, 'task-contract.md'), 'utf8');
   assert.match(initialContract, /READY FOR IMPLEMENTATION/);

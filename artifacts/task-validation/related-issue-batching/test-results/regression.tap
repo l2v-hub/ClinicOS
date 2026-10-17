@@ -1,0 +1,839 @@
+TAP version 13
+# Subtest: new triage requires a complete issue/file map and rejects unjustified shared-file splits
+ok 1 - new triage requires a complete issue/file map and rejects unjustified shared-file splits
+  ---
+  duration_ms: 7.37419
+  type: 'test'
+  ...
+# Subtest: legacy grouping remains frozen and queue windows reject corrupt durable metadata
+ok 2 - legacy grouping remains frozen and queue windows reject corrupt durable metadata
+  ---
+  duration_ms: 1.454248
+  type: 'test'
+  ...
+# Subtest: plan accounts for every selected issue exactly once and permits explicit blocked items
+ok 3 - plan accounts for every selected issue exactly once and permits explicit blocked items
+  ---
+  duration_ms: 0.399368
+  type: 'test'
+  ...
+# Subtest: plan rejects duplicated, missing, and unselected issue coverage
+ok 4 - plan rejects duplicated, missing, and unselected issue coverage
+  ---
+  duration_ms: 1.20142
+  type: 'test'
+  ...
+# Subtest: plan rejects task files outside the declared editable scope
+ok 5 - plan rejects task files outside the declared editable scope
+  ---
+  duration_ms: 0.361925
+  type: 'test'
+  ...
+# Subtest: editable paths reject credentials, automation control files, and path traversal
+ok 6 - editable paths reject credentials, automation control files, and path traversal
+  ---
+  duration_ms: 2.14879
+  type: 'test'
+  ...
+# Subtest: new plans require execution assessment while existing frozen state remains byte-for-byte unchanged
+ok 7 - new plans require execution assessment while existing frozen state remains byte-for-byte unchanged
+  ---
+  duration_ms: 1.084499
+  type: 'test'
+  ...
+# Subtest: plan requires screenshot and Playwright trace evidence for each source issue
+ok 8 - plan requires screenshot and Playwright trace evidence for each source issue
+  ---
+  duration_ms: 1.103374
+  type: 'test'
+  ...
+# Subtest: managed crontab replacement preserves other jobs, is idempotent and removes only its own block
+ok 9 - managed crontab replacement preserves other jobs, is idempotent and removes only its own block
+  ---
+  duration_ms: 5.74241
+  type: 'test'
+  ...
+# Subtest: actual install verifies the resulting crontab, preserves unrelated jobs and performs no model invocation
+ok 10 - actual install verifies the resulting crontab, preserves unrelated jobs and performs no model invocation
+  ---
+  duration_ms: 68.86508
+  type: 'test'
+  ...
+# Subtest: missing cron or API-only Claude authentication blocks before any schedule or launcher mutation
+ok 11 - missing cron or API-only Claude authentication blocks before any schedule or launcher mutation
+  ---
+  duration_ms: 17.179365
+  type: 'test'
+  ...
+# Subtest: an unreadable crontab is not mistaken for an empty one and check mode never writes
+ok 12 - an unreadable crontab is not mistaken for an empty one and check mode never writes
+  ---
+  duration_ms: 41.401198
+  type: 'test'
+  ...
+# Subtest: generated POSIX launcher preserves exit codes, clears API tokens and quotes unusual repository paths
+ok 13 - generated POSIX launcher preserves exit codes, clears API tokens and quotes unusual repository paths
+  ---
+  duration_ms: 136.19831
+  type: 'test'
+  ...
+# Subtest: concurrent crontab edits prevent overwrite and cron percent escaping stays separate from shell quoting
+ok 14 - concurrent crontab edits prevent overwrite and cron percent escaping stays separate from shell quoting
+  ---
+  duration_ms: 16.403284
+  type: 'test'
+  ...
+# Subtest: read-only check verifies the exact schedule, complete markers and actual private launcher
+ok 15 - read-only check verifies the exact schedule, complete markers and actual private launcher
+  ---
+  duration_ms: 37.338195
+  type: 'test'
+  ...
+# Subtest: existing state, launcher and log must remain private regular owned files
+ok 16 - existing state, launcher and log must remain private regular owned files
+  ---
+  duration_ms: 73.801608
+  type: 'test'
+  ...
+# Subtest: collection window is visible as queued aggregation, without claiming or exposing issue data
+ok 17 - collection window is visible as queued aggregation, without claiming or exposing issue data
+  ---
+  duration_ms: 12.117368
+  type: 'test'
+  ...
+# Subtest: snapshot distinguishes the authorized queue, triage, external QA and waiting issues without exposing source payloads
+ok 18 - snapshot distinguishes the authorized queue, triage, external QA and waiting issues without exposing source payloads
+  ---
+  duration_ms: 8.328485
+  type: 'test'
+  ...
+# Subtest: dashboard loader is read-only and propagates a source failure instead of returning an empty queue
+ok 19 - dashboard loader is read-only and propagates a source failure instead of returning an empty queue
+  ---
+  duration_ms: 0.940334
+  type: 'test'
+  ...
+# Subtest: local dashboard blocks foreign Host/Origin, cross-site reads, mutations and path traversal
+ok 20 - local dashboard blocks foreign Host/Origin, cross-site reads, mutations and path traversal
+  ---
+  duration_ms: 64.425697
+  type: 'test'
+  ...
+# Subtest: refresh failure preserves the previous snapshot, reports staleness and never leaks provider diagnostics
+ok 21 - refresh failure preserves the previous snapshot, reports staleness and never leaks provider diagnostics
+  ---
+  duration_ms: 18.277829
+  type: 'test'
+  ...
+# Subtest: external doctor requires no Claude credential or Claude subprocess
+ok 22 - external doctor requires no Claude credential or Claude subprocess
+  ---
+  duration_ms: 2.75572
+  type: 'test'
+  ...
+# Subtest: request waits for real checks, then makes the PR ready without executing Claude
+ok 23 - request waits for real checks, then makes the PR ready without executing Claude
+  ---
+  duration_ms: 2.315861
+  type: 'test'
+  ...
+# Subtest: external harness reserves remotely before inference, publishes hashed approval and Codex accepts the exact revision
+ok 24 - external harness reserves remotely before inference, publishes hashed approval and Codex accepts the exact revision
+  ---
+  duration_ms: 194.716123
+  type: 'test'
+  ...
+# Subtest: external publication failure is retryable without another model call; a CAS conflict prevents inference
+ok 25 - external publication failure is retryable without another model call; a CAS conflict prevents inference
+  ---
+  duration_ms: 255.022609
+  type: 'test'
+  ...
+# Subtest: Claude findings trigger fresh Codex correction, test/simplification/QA, new SHA and a new bounded request
+ok 26 - Claude findings trigger fresh Codex correction, test/simplification/QA, new SHA and a new bounded request
+  ---
+  duration_ms: 166.84935
+  type: 'test'
+  ...
+# Subtest: new human comments invalidate approval and exhausted review budgets block correction instead of starting round five
+ok 27 - new human comments invalidate approval and exhausted review budgets block correction instead of starting round five
+  ---
+  duration_ms: 159.139701
+  type: 'test'
+  ...
+# Subtest: human feedback arriving with review publication is retained rather than silently included in approval
+ok 28 - human feedback arriving with review publication is retained rather than silently included in approval
+  ---
+  duration_ms: 113.870689
+  type: 'test'
+  ...
+# Subtest: draft or foreign PRs and an exhausted external budget never start a model
+ok 29 - draft or foreign PRs and an exhausted external budget never start a model
+  ---
+  duration_ms: 81.06434
+  type: 'test'
+  ...
+# Subtest: closed source issues block the external harness and Codex before review or correction
+ok 30 - closed source issues block the external harness and Codex before review or correction
+  ---
+  duration_ms: 49.0225
+  type: 'test'
+  ...
+# Subtest: issue lifecycle uses additive managed labels and closes resolved issues as completed, with retry after a failed close
+ok 31 - issue lifecycle uses additive managed labels and closes resolved issues as completed, with retry after a failed close
+  ---
+  duration_ms: 8.693567
+  type: 'test'
+  ...
+# Subtest: dashboard state reads never initialize a branch, and source permission errors are not treated as an empty queue
+ok 32 - dashboard state reads never initialize a branch, and source permission errors are not treated as an empty queue
+  ---
+  duration_ms: 1.387304
+  type: 'test'
+  ...
+# Subtest: authorized accepts only write-capable collaborators
+ok 33 - authorized accepts only write-capable collaborators
+  ---
+  duration_ms: 0.817602
+  type: 'test'
+  ...
+# Subtest: intake requires exact command and authorized actor before adding all queue labels
+ok 34 - intake requires exact command and authorized actor before adding all queue labels
+  ---
+  duration_ms: 1.544126
+  type: 'test'
+  ...
+# Subtest: intake refuses unauthorized actors, near-match commands, and pull requests
+ok 35 - intake refuses unauthorized actors, near-match commands, and pull requests
+  ---
+  duration_ms: 0.861037
+  type: 'test'
+  ...
+# Subtest: scheduled queue accepts only an authorized explicit codex-run event and skips blocked issues
+ok 36 - scheduled queue accepts only an authorized explicit codex-run event and skips blocked issues
+  ---
+  duration_ms: 2.463279
+  type: 'test'
+  ...
+# Subtest: durable state initializes only its branch from main and uses returned Contents SHA
+ok 37 - durable state initializes only its branch from main and uses returned Contents SHA
+  ---
+  duration_ms: 2.358773
+  type: 'test'
+  ...
+# Subtest: failed state CAS keeps the remembered SHA and never retries without it
+ok 38 - failed state CAS keeps the remembered SHA and never retries without it
+  ---
+  duration_ms: 1.033535
+  type: 'test'
+  ...
+# Subtest: review feedback binds to PR head, tracks current reviews, unresolved threads and human comments
+ok 39 - review feedback binds to PR head, tracks current reviews, unresolved threads and human comments
+  ---
+  duration_ms: 2.239777
+  type: 'test'
+  ...
+# Subtest: review feedback fails closed when more than 100 review threads are returned
+ok 40 - review feedback fails closed when more than 100 review threads are returned
+  ---
+  duration_ms: 1.037022
+  type: 'test'
+  ...
+# Subtest: a commented review cannot clear an earlier request for changes; explicit approval can
+ok 41 - a commented review cannot clear an earlier request for changes; explicit approval can
+  ---
+  duration_ms: 1.573992
+  type: 'test'
+  ...
+# Subtest: review feedback identifies a merged PR from the real REST state and merge flag
+ok 42 - review feedback identifies a merged PR from the real REST state and merge flag
+  ---
+  duration_ms: 0.340829
+  type: 'test'
+  ...
+# Subtest: required checks fail closed when absent and pass only when all reported checks succeed
+ok 43 - required checks fail closed when absent and pass only when all reported checks succeed
+  ---
+  duration_ms: 0.446251
+  type: 'test'
+  ...
+# Subtest: independent Codex QA uses a fresh read-only analyst session and cannot return implementation status
+ok 44 - independent Codex QA uses a fresh read-only analyst session and cannot return implementation status
+  ---
+  duration_ms: 40.903738
+  type: 'test'
+  ...
+# Subtest: plan, implementation and simplification use distinct bounded Codex sessions and models
+ok 45 - plan, implementation and simplification use distinct bounded Codex sessions and models
+  ---
+  duration_ms: 35.514107
+  type: 'test'
+  ...
+# Subtest: missing model IDs fail explicitly before starting Codex
+ok 46 - missing model IDs fail explicitly before starting Codex
+  ---
+  duration_ms: 2.442365
+  type: 'test'
+  ...
+# Subtest: missing, invalid and symlink output fail closed
+ok 47 - missing, invalid and symlink output fail closed
+  ---
+  duration_ms: 19.972805
+  type: 'test'
+  ...
+# Subtest: Codex failure is surfaced and does not parse stale output
+ok 48 - Codex failure is surfaced and does not parse stale output
+  ---
+  duration_ms: 16.782158
+  type: 'test'
+  ...
+# Subtest: model worktree cannot contain the runtime output directory
+ok 49 - model worktree cannot contain the runtime output directory
+  ---
+  duration_ms: 7.577001
+  type: 'test'
+  ...
+# Subtest: preflight probes CLI support without invoking a model or reading credentials
+ok 50 - preflight probes CLI support without invoking a model or reading credentials
+  ---
+  duration_ms: 2.453013
+  type: 'test'
+  ...
+# Subtest: merged and deployed batches remain terminal and never restart implementation
+ok 51 - merged and deployed batches remain terminal and never restart implementation
+  ---
+  duration_ms: 11.565279
+  type: 'test'
+  ...
+# Subtest: all grouped issues are claimed after remote reservation and before triage; readiness never marks them resolved
+ok 52 - all grouped issues are claimed after remote reservation and before triage; readiness never marks them resolved
+  ---
+  duration_ms: 6.472783
+  type: 'test'
+  ...
+# Subtest: successive label wake-ups collect related issues durably before one plan, worktree and PR
+ok 53 - successive label wake-ups collect related issues durably before one plan, worktree and PR
+  ---
+  duration_ms: 6.246676
+  type: 'test'
+  ...
+# Subtest: collection clears revoked entries and is bounded even if queue membership keeps changing
+ok 54 - collection clears revoked entries and is bounded even if queue membership keeps changing
+  ---
+  duration_ms: 2.489603
+  type: 'test'
+  ...
+# Subtest: a new issue cannot duplicate an occupied file scope or reset the existing budget
+ok 55 - a new issue cannot duplicate an occupied file scope or reset the existing budget
+  ---
+  duration_ms: 2.368774
+  type: 'test'
+  ...
+# Subtest: unjustified separate plans touching the same file fail before any worktree or executor
+ok 56 - unjustified separate plans touching the same file fail before any worktree or executor
+  ---
+  duration_ms: 2.74044
+  type: 'test'
+  ...
+# Subtest: revoked or externally owned issues cannot enter collection or be claimed after the window
+ok 57 - revoked or externally owned issues cannot enter collection or be claimed after the window
+  ---
+  duration_ms: 1.088908
+  type: 'test'
+  ...
+# Subtest: failed claim publication prevents triage and retains its remote claim without consuming implementation or review budgets
+ok 58 - failed claim publication prevents triage and retains its remote claim without consuming implementation or review budgets
+  ---
+  duration_ms: 2.07205
+  type: 'test'
+  ...
+# Subtest: unchanged unresolved human review waits without spending another Claude attempt
+ok 59 - unchanged unresolved human review waits without spending another Claude attempt
+  ---
+  duration_ms: 9.289892
+  type: 'test'
+  ...
+# Subtest: successful grouped flow hydrates every issue, validates, simplifies, revalidates, publishes draft before Claude, and posts evidence to each source issue
+ok 60 - successful grouped flow hydrates every issue, validates, simplifies, revalidates, publishes draft before Claude, and posts evidence to each source issue
+  ---
+  duration_ms: 2.455184
+  type: 'test'
+  ...
+# Subtest: failed independent QA prevents PR publication and consumes the existing implementation budget
+ok 61 - failed independent QA prevents PR publication and consumes the existing implementation budget
+  ---
+  duration_ms: 2.622289
+  type: 'test'
+  ...
+# Subtest: four implementation failures exhaust the budget, and a rerun cannot reset or exceed it
+ok 62 - four implementation failures exhaust the budget, and a rerun cannot reset or exceed it
+  ---
+  duration_ms: 1.360166
+  type: 'test'
+  ...
+# Subtest: four changes-requested Claude reviews run no fifth round and retain each correction in the same budget
+ok 63 - four changes-requested Claude reviews run no fifth round and retain each correction in the same budget
+  ---
+  duration_ms: 2.645094
+  type: 'test'
+  ...
+# Subtest: later PR comments cannot restart an exhausted Claude review budget
+ok 64 - later PR comments cannot restart an exhausted Claude review budget
+  ---
+  duration_ms: 1.458094
+  type: 'test'
+  ...
+# Subtest: a new comment on an approved ready PR triggers correction, revalidation and a review of the new head
+ok 65 - a new comment on an approved ready PR triggers correction, revalidation and a review of the new head
+  ---
+  duration_ms: 1.198122
+  type: 'test'
+  ...
+# Subtest: external PR head or fork identity blocks before any executor or review model call
+ok 66 - external PR head or fork identity blocks before any executor or review model call
+  ---
+  duration_ms: 0.814765
+  type: 'test'
+  ...
+# Subtest: pending required checks remain waiting and can become ready without resetting review or implementation budgets
+ok 67 - pending required checks remain waiting and can become ready without resetting review or implementation budgets
+  ---
+  duration_ms: 1.867044
+  type: 'test'
+  ...
+# Subtest: interrupted running work is blocked for operator recovery without restarting a model
+ok 68 - interrupted running work is blocked for operator recovery without restarting a model
+  ---
+  duration_ms: 0.563565
+  type: 'test'
+  ...
+# Subtest: remote compare-and-swap failure while reserving an implementation attempt prevents executor invocation
+ok 69 - remote compare-and-swap failure while reserving an implementation attempt prevents executor invocation
+  ---
+  duration_ms: 2.896789
+  type: 'test'
+  ...
+# Subtest: release dry-run verifies persisted proof and never merges
+ok 70 - release dry-run verifies persisted proof and never merges
+  ---
+  duration_ms: 11.162915
+  type: 'test'
+  ...
+# Subtest: release execution rechecks then merges only the approved exact SHA
+ok 71 - release execution rechecks then merges only the approved exact SHA
+  ---
+  duration_ms: 3.675298
+  type: 'test'
+  ...
+# Subtest: release blocks stale SHA, missing review proof, and absent required deployment credentials
+    # Subtest: stale SHA
+    ok 1 - stale SHA
+      ---
+      duration_ms: 2.42026
+      type: 'test'
+      ...
+    # Subtest: review report digest
+    ok 2 - review report digest
+      ---
+      duration_ms: 1.401733
+      type: 'test'
+      ...
+    # Subtest: missing Vercel config
+    ok 3 - missing Vercel config
+      ---
+      duration_ms: 1.245356
+      type: 'test'
+      ...
+    # Subtest: missing Railway config for runtime
+    ok 4 - missing Railway config for runtime
+      ---
+      duration_ms: 1.238925
+      type: 'test'
+      ...
+    # Subtest: pending checks
+    ok 5 - pending checks
+      ---
+      duration_ms: 2.116545
+      type: 'test'
+      ...
+    # Subtest: fork PR
+    ok 6 - fork PR
+      ---
+      duration_ms: 3.572767
+      type: 'test'
+      ...
+    1..6
+ok 72 - release blocks stale SHA, missing review proof, and absent required deployment credentials
+  ---
+  duration_ms: 14.762639
+  type: 'test'
+  ...
+# Subtest: release blocks changed evidence digest before mutation
+ok 73 - release blocks changed evidence digest before mutation
+  ---
+  duration_ms: 2.63503
+  type: 'test'
+  ...
+# Subtest: verified deployment records true links then marks the issue resolved
+ok 74 - verified deployment records true links then marks the issue resolved
+  ---
+  duration_ms: 3.263684
+  type: 'test'
+  ...
+# Subtest: completion comment failure never closes an issue and terminal publication retries without model work
+ok 75 - completion comment failure never closes an issue and terminal publication retries without model work
+  ---
+  duration_ms: 1.003662
+  type: 'test'
+  ...
+# Subtest: repository settings reject a mismatched revision before using credentials
+ok 76 - repository settings reject a mismatched revision before using credentials
+  ---
+  duration_ms: 5.012509
+  type: 'test'
+  ...
+# Subtest: non-admin callers and failed read preflights cannot mutate settings
+ok 77 - non-admin callers and failed read preflights cannot mutate settings
+  ---
+  duration_ms: 1.527931
+  type: 'test'
+  ...
+# Subtest: configuration adds a cumulative exact-main gate and preserves default permissions
+ok 78 - configuration adds a cumulative exact-main gate and preserves default permissions
+  ---
+  duration_ms: 7.049971
+  type: 'test'
+  ...
+# Subtest: adding the check preserves existing human review and strict status requirements
+ok 79 - adding the check preserves existing human review and strict status requirements
+  ---
+  duration_ms: 8.100486
+  type: 'test'
+  ...
+# Subtest: ambiguous targets and differently bound checks fail before any mutation
+ok 80 - ambiguous targets and differently bound checks fail before any mutation
+  ---
+  duration_ms: 3.978316
+  type: 'test'
+  ...
+# Subtest: auto routes difficulty/direct requests to senior and only bounded work to a delegate
+ok 81 - auto routes difficulty/direct requests to senior and only bounded work to a delegate
+  ---
+  duration_ms: 1.96402
+  type: 'test'
+  ...
+# Subtest: fixed 6.1-Sol override runs implementation and simplification entirely with senior
+ok 82 - fixed 6.1-Sol override runs implementation and simplification entirely with senior
+  ---
+  duration_ms: 33.216488
+  type: 'test'
+  ...
+# Subtest: actual overlapping sessions divert bounded work to senior without starting a second delegate
+ok 83 - actual overlapping sessions divert bounded work to senior without starting a second delegate
+  ---
+  duration_ms: 16.637023
+  type: 'test'
+  ...
+# Subtest: capacity errors consume their call and influence only a later requested attempt
+ok 84 - capacity errors consume their call and influence only a later requested attempt
+  ---
+  duration_ms: 15.141294
+  type: 'test'
+  ...
+# Subtest: automatic high-difficulty and legacy execution use the senior model in real CLI arguments
+ok 85 - automatic high-difficulty and legacy execution use the senior model in real CLI arguments
+  ---
+  duration_ms: 7.938866
+  type: 'test'
+  ...
+# Subtest: incidental line numbers in diagnostics do not invent provider capacity pressure
+ok 86 - incidental line numbers in diagnostics do not invent provider capacity pressure
+  ---
+  duration_ms: 7.687197
+  type: 'test'
+  ...
+# Subtest: setup review reserves remotely before inference and reuses only exact-SHA approval
+ok 87 - setup review reserves remotely before inference and reuses only exact-SHA approval
+  ---
+  duration_ms: 257.223783
+  type: 'test'
+  ...
+# Subtest: CAS failure, non-admin actor, stale head and interrupted budget prevent inference
+ok 88 - CAS failure, non-admin actor, stale head and interrupted budget prevent inference
+  ---
+  duration_ms: 331.760949
+  type: 'test'
+  ...
+# Subtest: a head change during review preserves the spent attempt and cannot publish approval
+ok 89 - a head change during review preserves the spent attempt and cannot publish approval
+  ---
+  duration_ms: 139.314498
+  type: 'test'
+  ...
+# Subtest: new source changes cannot exceed four total remote setup review attempts
+ok 90 - new source changes cannot exceed four total remote setup review attempts
+  ---
+  duration_ms: 674.34614
+  type: 'test'
+  ...
+# Subtest: tampered saved approval evidence cannot trigger another review or publish approval
+ok 91 - tampered saved approval evidence cannot trigger another review or publish approval
+  ---
+  duration_ms: 222.01138
+  type: 'test'
+  ...
+# Subtest: a failed review publication is recovered without another model attempt
+ok 92 - a failed review publication is recovered without another model attempt
+  ---
+  duration_ms: 287.673534
+  type: 'test'
+  ...
+# Subtest: restoring durable review state cannot overwrite a symlink target
+ok 93 - restoring durable review state cannot overwrite a symlink target
+  ---
+  duration_ms: 144.544139
+  type: 'test'
+  ...
+# Subtest: external subscription mode reuses only the explicit local config and excludes every token/API fallback
+ok 94 - external subscription mode reuses only the explicit local config and excludes every token/API fallback
+  ---
+  duration_ms: 101.739584
+  type: 'test'
+  ...
+# Subtest: Max OAuth is confined to the reviewer and excludes separately billed API authentication
+ok 95 - Max OAuth is confined to the reviewer and excludes separately billed API authentication
+  ---
+  duration_ms: 0.723605
+  type: 'test'
+  ...
+# Subtest: subscription mode fails closed with only an API key and recognizes a legacy OAuth secret
+ok 96 - subscription mode fails closed with only an API key and recognizes a legacy OAuth secret
+  ---
+  duration_ms: 0.346744
+  type: 'test'
+  ...
+# Subtest: actual reviewer subprocess has OAuth only, including when both credentials exist
+ok 97 - actual reviewer subprocess has OAuth only, including when both credentials exist
+  ---
+  duration_ms: 75.343099
+  type: 'test'
+  ...
+# Subtest: missing Max OAuth prevents launching a reviewer even with cached API authentication
+ok 98 - missing Max OAuth prevents launching a reviewer even with cached API authentication
+  ---
+  duration_ms: 11.404715
+  type: 'test'
+  ...
+# Subtest: captured diagnostics redact OAuth and GitHub token forms and arbitrary OAuth assignments
+ok 99 - captured diagnostics redact OAuth and GitHub token forms and arbitrary OAuth assignments
+  ---
+  duration_ms: 0.487025
+  type: 'test'
+  ...
+# Subtest: Windows install verifies a single user task, preserves unrelated work and removes only the verified task
+ok 100 - Windows install verifies a single user task, preserves unrelated work and removes only the verified task
+  ---
+  duration_ms: 63.903213
+  type: 'test'
+  ...
+# Subtest: Windows prerequisites and altered existing tasks fail closed without an inference or overwrite
+ok 101 - Windows prerequisites and altered existing tasks fail closed without an inference or overwrite
+  ---
+  duration_ms: 35.240091
+  type: 'test'
+  ...
+# Subtest: Windows task read failures and concurrent registration cannot replace an existing task
+ok 102 - Windows task read failures and concurrent registration cannot replace an existing task
+  ---
+  duration_ms: 10.858593
+  type: 'test'
+  ...
+# Subtest: Windows launch runs the real child, retains exit7, strips provider tokens and preserves interrupted locks
+ok 103 - Windows launch runs the real child, retains exit7, strips provider tokens and preserves interrupted locks
+  ---
+  duration_ms: 128.360435
+  type: 'test'
+  ...
+# Subtest: npm Claude entrypoints execute with Node without a shell and reviewer credentials remain isolated
+ok 104 - npm Claude entrypoints execute with Node without a shell and reviewer credentials remain isolated
+  ---
+  duration_ms: 160.164966
+  type: 'test'
+  ...
+# Subtest: PowerShell scheduler definitions parse on Windows and use actual task action/trigger/principal objects
+ok 105 - PowerShell scheduler definitions parse on Windows and use actual task action/trigger/principal objects # SKIP
+  ---
+  duration_ms: 0.402092
+  type: 'test'
+  ...
+# Subtest: native Windows ACL creation is private and rejects a later public access rule
+ok 106 - native Windows ACL creation is private and rejects a later public access rule # SKIP
+  ---
+  duration_ms: 0.131771
+  type: 'test'
+  ...
+# Subtest: native Windows bootstrap preserves dirty, foreign, wrong-branch and diverged work and fast-forwards only its dedicated checkout
+ok 107 - native Windows bootstrap preserves dirty, foreign, wrong-branch and diverged work and fast-forwards only its dedicated checkout # SKIP
+  ---
+  duration_ms: 0.167514
+  type: 'test'
+  ...
+# Subtest: existing Windows state is inspected before any ACL write and malformed schedules fail closed
+ok 108 - existing Windows state is inspected before any ACL write and malformed schedules fail closed
+  ---
+  duration_ms: 35.451994
+  type: 'test'
+  ...
+# Subtest: Windows installed-state check rejects hardlinked configuration consistently with the worker
+ok 109 - Windows installed-state check rejects hardlinked configuration consistently with the worker
+  ---
+  duration_ms: 25.468806
+  type: 'test'
+  ...
+# Subtest: child environment isolates verification, executor, reviewer, and controller credentials
+ok 110 - child environment isolates verification, executor, reviewer, and controller credentials
+  ---
+  duration_ms: 2.559086
+  type: 'test'
+  ...
+# Subtest: local Codex login directory is available only to Codex model authentication
+ok 111 - local Codex login directory is available only to Codex model authentication
+  ---
+  duration_ms: 0.465335
+  type: 'test'
+  ...
+# Subtest: createRunner subprocess receives only the role credential and a demo localhost database
+ok 112 - createRunner subprocess receives only the role credential and a demo localhost database
+  ---
+  duration_ms: 340.278022
+  type: 'test'
+  ...
+# Subtest: fresh CLI configuration directories are private and survive repeated isolated launches
+ok 113 - fresh CLI configuration directories are private and survive repeated isolated launches
+  ---
+  duration_ms: 614.429696
+  type: 'test'
+  ...
+# Subtest: createRunner reports child exit failure and output overflow as failures
+ok 114 - createRunner reports child exit failure and output overflow as failures
+  ---
+  duration_ms: 174.544601
+  type: 'test'
+  ...
+# Subtest: createRunner timeout terminates the subprocess group, including a child process
+ok 115 - createRunner timeout terminates the subprocess group, including a child process
+  ---
+  duration_ms: 1524.898757
+  type: 'test'
+  ...
+# Subtest: validateEvidence accepts a valid synthetic PNG and a recorded Playwright trace and records content digests
+ok 116 - validateEvidence accepts a valid synthetic PNG and a recorded Playwright trace and records content digests
+  ---
+  duration_ms: 131.608641
+  type: 'test'
+  ...
+# Subtest: validateEvidence rejects missing files, wrong headers, path traversal, and symlinks outside the packet
+ok 117 - validateEvidence rejects missing files, wrong headers, path traversal, and symlinks outside the packet
+  ---
+  duration_ms: 20.652318
+  type: 'test'
+  ...
+# Subtest: validateEvidence rejects PNG signature filler and PNG/trace checksum corruption
+ok 118 - validateEvidence rejects PNG signature filler and PNG/trace checksum corruption
+  ---
+  duration_ms: 11.174092
+  type: 'test'
+  ...
+# Subtest: real Git workspace prepares the exact batch branch, freezes its task packet, and regenerates evidence after clearing stale files
+ok 119 - real Git workspace prepares the exact batch branch, freezes its task packet, and regenerates evidence after clearing stale files
+  ---
+  duration_ms: 272.471939
+  type: 'test'
+  ...
+# Subtest: real Git workspace rejects changes outside the accepted source-file scope
+ok 120 - real Git workspace rejects changes outside the accepted source-file scope
+  ---
+  duration_ms: 149.780302
+  type: 'test'
+  ...
+# Subtest: four rejected rounds remain blocked and a fifth model call is impossible
+ok 121 - four rejected rounds remain blocked and a fifth model call is impossible
+  ---
+  duration_ms: 574.001602
+  type: 'test'
+  ...
+# Subtest: the same rejected commit cannot spend a second round
+ok 122 - the same rejected commit cannot spend a second round
+  ---
+  duration_ms: 137.621902
+  type: 'test'
+  ...
+# Subtest: approval is reusable only at the same SHA and code changes require another review
+ok 123 - approval is reusable only at the same SHA and code changes require another review
+  ---
+  duration_ms: 208.03418
+  type: 'test'
+  ...
+# Subtest: missing authentication consumes no review round
+ok 124 - missing authentication consumes no review round
+  ---
+  duration_ms: 80.875184
+  type: 'test'
+  ...
+# Subtest: reviewer has only read tools and no project settings, MCP or bypass
+ok 125 - reviewer has only read tools and no project settings, MCP or bypass
+  ---
+  duration_ms: 99.112531
+  type: 'test'
+  ...
+# Subtest: dirty implementation and packets outside the worktree are rejected before model invocation
+ok 126 - dirty implementation and packets outside the worktree are rejected before model invocation
+  ---
+  duration_ms: 111.386355
+  type: 'test'
+  ...
+# Subtest: corrupted approved evidence is rejected
+ok 127 - corrupted approved evidence is rejected
+  ---
+  duration_ms: 139.893093
+  type: 'test'
+  ...
+# Subtest: a malformed provider response is a failed attempt rather than approval
+ok 128 - a malformed provider response is a failed attempt rather than approval
+  ---
+  duration_ms: 129.46669
+  type: 'test'
+  ...
+# Subtest: files changed during review invalidate the result
+ok 129 - files changed during review invalidate the result
+  ---
+  duration_ms: 110.010631
+  type: 'test'
+  ...
+# Subtest: concurrent callers cannot invoke two reviewers for the same packet
+ok 130 - concurrent callers cannot invoke two reviewers for the same packet
+  ---
+  duration_ms: 265.787048
+  type: 'test'
+  ...
+# Subtest: review validation rejects stale SHA, invented paths and contradictory approval
+ok 131 - review validation rejects stale SHA, invented paths and contradictory approval
+  ---
+  duration_ms: 1.287424
+  type: 'test'
+  ...
+# Subtest: a tracked prerequisite symlink cannot read an external implementation plan
+ok 132 - a tracked prerequisite symlink cannot read an external implementation plan
+  ---
+  duration_ms: 88.718195
+  type: 'test'
+  ...
+1..132
+# tests 138
+# suites 0
+# pass 135
+# fail 0
+# cancelled 0
+# skipped 3
+# todo 0
+# duration_ms 4893.704802
