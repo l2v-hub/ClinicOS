@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "sourceHashes": {
+    ".claude/skills/clinicos/SKILL.md": "06049ed0fa6136ede4f4a8b437beb92c0e2819789ab16d82285f3d19059ba892",
+    ".claude/skills/clinicos/references/bug-delivery.md": "cf3a2603d4ac70e1990b2bc9d002f44ff0d0d1fb95ed8e4921cbfa6d02e1559d",
+    ".agents/skills/clinicos/SKILL.md": "090a3a6363b65941a07d1a05d9bbb7aefaca3ef10f65add7c231c242872d5a73"
+  },
+  "checks": [
+    "YAML metadata",
+    "all Markdown links",
+    "portable package outside repo",
+    "real Markdown rendering",
+    "playbook navigation",
+    "nine ordered sections",
+    "budget/QA/review/release contents",
+    "reload",
+    "zero console/page/HTTP errors"
+  ],
+  "headings": [
+    "1. Coda, autorizzazione e aggregazione",
+    "2. Analisi profonda e decisioni",
+    "3. Packet, proprietà e piano eseguibile",
+    "4. Implementazione e budget",
+    "5. Ambiente QA e test proporzionati",
+    "6. Evidenze e QA indipendente",
+    "7. PR e ping-pong Codex–Claude attraverso GitHub",
+    "8. Stato, dashboard, merge e rilascio",
+    "Handoff minimo"
+  ],
+  "errors": [],
+  "httpErrors": []
+}
