@@ -3975,9 +3975,34 @@
       },
       "operationalOnly": true,
       "rationale": "Explicit new user-requested issue-comment/label feedback feature. Seven sources outside frozen G19; no guard or clinical budget reset. Existing normal-controller ownership preserved."
+    },
+    {
+      "id": "ci-note-isolation",
+      "issues": [],
+      "owner": "codex-root-2026-10-17",
+      "branch": "codex/ci-note-isolation",
+      "baseSha": "8124b1bc88c0f086b1ee328214f87f4802005d11",
+      "scope": [
+        "scripts/run-node-tests.mjs"
+      ],
+      "packetHashes": {
+        "task-contract.md": "ca4c2b6444da536470ea2499c603f18d5c8610e81f4e191c229465f12125d036",
+        "implementation-plan.md": "0fd6ef4bc60f7c69ab7a9d599be60128e860b09400f97d24ce2eb0f9333cceb1"
+      },
+      "phase": "implementing",
+      "implementation": [
+        {
+          "round": 1,
+          "status": "running",
+          "startedAt": "2026-10-17T11:32:26.310Z"
+        }
+      ],
+      "reviews": [],
+      "operationalOnly": true,
+      "rationale": "Actual requiredCI global broadcast test interference. One existing test runner list only; all app/tests/G19 untouched; separate new operation not exhausted guard retry."
     }
   ],
-  "updatedAt": "2026-10-17T11:27:42.833Z",
+  "updatedAt": "2026-10-17T11:32:26.311Z",
   "triageQueue": {
     "issues": [
       485,
