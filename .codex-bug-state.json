@@ -1830,6 +1830,11 @@
         },
         {
           "round": 3,
+          "status": "failed",
+          "reason": "Independent QA3 BLOCKED: false cache freshness, incorrect persistence mount binding, unsafe artifact upload after hard timeout."
+        },
+        {
+          "round": 4,
           "status": "running"
         }
       ],
@@ -1842,7 +1847,8 @@
         "tables": 43,
         "patientDataEmpty": false,
         "backupsVerified": false
-      }
+      },
+      "operationalFallback": "Native redeploy exact existing deployment IDs preserving same code/build/deploy configuration; no app/runtime volumes; prove old termination/new unique identities and both real health. Root serializes rollout."
     },
     {
       "id": "demo-release-guard",
@@ -1876,5 +1882,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-17T08:31:12.457Z"
+  "updatedAt": "2026-10-17T08:37:42.844Z"
 }
