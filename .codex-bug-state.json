@@ -718,7 +718,7 @@
       "sourceSha": "7028844633760f03a42072fa6648f975370e6db6",
       "branch": "codex/bug-batch-432",
       "owner": "codex-root-2026-10-17",
-      "phase": "reviewing",
+      "phase": "waiting-review",
       "reservedAt": "2026-10-17T07:38:22.106Z",
       "implementation": [
         {
@@ -747,7 +747,7 @@
         },
         {
           "round": 2,
-          "status": "running",
+          "status": "changes-requested",
           "subjectSha": "34c865233df53a3930f29c8b7befc02208588d64"
         }
       ],
@@ -1365,14 +1365,16 @@
       },
       "externalReview": {
         "channel": "github-comments",
-        "status": "comment-running",
+        "status": "finished",
         "subjectSha": "34c865233df53a3930f29c8b7befc02208588d64",
         "requestId": "fe9fdad4-7cd9-4b01-aadd-740783da9d9c",
         "requestedAt": "2026-10-17T15:37:43.656Z",
         "owner": "l2v-hub",
         "claimId": "fccf28f9-3580-4245-9a05-c823410bfe1a",
         "startedAt": "2026-10-17T16:57:19.392Z",
-        "feedbackFingerprint": "f935edaa0faf6719bc8e2960be62aefa3dbe74e6a444ac045b8a7ed7704fd0f1"
+        "feedbackFingerprint": "f935edaa0faf6719bc8e2960be62aefa3dbe74e6a444ac045b8a7ed7704fd0f1",
+        "reportComment": 6237430324,
+        "reportBodySha256": "f6d0769d8df6d040e8cecc0914c6cc5766cbeb4eef587a2424813d1849b67dfd"
       },
       "reviewLedger": {
         "schema_version": 1,
@@ -1385,8 +1387,9 @@
           },
           {
             "round": 2,
-            "verdict": "running",
-            "subject_sha": "34c865233df53a3930f29c8b7befc02208588d64"
+            "verdict": "changes-requested",
+            "subject_sha": "34c865233df53a3930f29c8b7befc02208588d64",
+            "review_sha256": "9f6c47b04ead1261dd7da49cb588769cf2452d234c685bfe0c0bbb0f460b4f24"
           }
         ]
       },
@@ -1404,7 +1407,10 @@
           "spentReviews": 1
         }
       ],
-      "reviewChannel": "github-comments"
+      "reviewChannel": "github-comments",
+      "reviewReports": {
+        "claude-review-2.json": "{\n  \"subject_sha\": \"34c865233df53a3930f29c8b7befc02208588d64\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"Read-only review of PR #483 (batch bug-batch-432: #432, #441, #442, #460, #463, #464, #467) at 34c865233. The worktree HEAD matches. No code changed between the QA3 source checkpoint 938ae9c44 and 34c865233 (empty non-artifact diff), so the evidence recorded against 938ae9c44 applies to this SHA. Hosted checks are green on 34c865233. This PR has no earlier review findings; the only earlier attempt (round 1) produced no report.\\n\\nWhat is solid:\\n- #464: facilityClock uses Europe/Rome through Intl. It is shared by dayKey, nowMinutes, overdueConsegne and findTherapiesDue. Pure tests cover midnight, the year boundary and both DST transitions with correct expected values, and a DB test covers 08:00 not overdue / 00:45 due / 00:46 overdue.\\n- #460: the receipt table is additive (composite PK actorId+requestId, patient FK with cascade, no backfill) and its migration sorts after base. The receipt is written in the same SERIALIZABLE transaction as the clinical record. The payload hash rejects a reused requestId with a different body. Replay re-checks patient scope. P2002/P2034 are retried a bounded number of times. The concurrency and replay DB tests make meaningful assertions.\\n- #467: a one-off is matched for the whole day instead of by band, in the writer, the feed, the exact summary and the due query.\\n- #463: catalog status is read before per-name searches, the 'source unavailable' state stays distinct from 'not found', and the rate limit is unchanged.\\n- #442: the barrier and bounded cleanup were reworked and checked by independent QA.\\n- #432: pagination now fails closed on short, inconsistent or other-patient pages.\\n\\nTwo clinical regressions or gaps block approval:\\n1. The giro and cartella client now sends expectedStato='da_erogare' on every write. This breaks the existing 'Somministra ora' correction for today's refused doses, which now always gets 409.\\n2. #441: a one-off whose time is missing, unpadded or contradicted by a schedule is now dropped from the feed, the summary and the assistant without any 'to verify' surface. This includes legacy one-offs that had band flags and were visible before, and intake one-offs saved with an unpadded H:MM. That contradicts #441 ('restano da verificare') and #432 (no silent loss).\\n\\nEvidence notes:\\n- Evidence for #441 reuses the #432 trace and video (identical hashes); only the screenshot is specific to #441.\\n- The manifests reference checkpoint 938ae9c44, not 34c865233.\\n- The packet's own Final Decision is PARTIAL: external review, migration before deployment and the demo deployment are still pending.\\n- No evidence exercises 'Somministra ora' on a refused dose.\",\n  \"findings\": [\n    {\n      \"severity\": \"high\",\n      \"file\": \"frontend/src/lib/therapyAdministrationWrite.ts\",\n      \"line\": 57,\n      \"problem\": \"administrationBody now sends expectedStato:'da_erogare' unconditionally. PatientTherapySlotDetail's 'Somministra ora' action (administerAgain, frontend/src/components/operator/cartella/PatientTherapySlotDetail.tsx:129) re-administers today's doses already marked non_erogata through the same recordAdministration path. The server (backend/src/therapies/administration-record.ts) now answers 409 'La dose non è più da erogare' whenever an existing record's stato differs from expectedStato. The explicit refusal-to-given correction, which #460 says must remain a separate action, is therefore always rejected. Before this PR it worked.\",\n      \"requested_change\": \"Send expectedStato only for pending-dose actions. Make the explicit correction path (administerAgain / missedToday) omit it, or send a distinct expected state such as 'non_erogata' that the server validates, so a correction still cannot overwrite an outcome it did not see. Keep the giro, Turno and assistant pending actions on 'da_erogare'.\",\n      \"test_expectation\": \"Unit test: the body built for 'Somministra ora' on a not_administered dose does not carry expectedStato='da_erogare'. DB/HTTP test: refused dose, then correction via the client body, gives 200 and exactly one record now 'erogata'. A pending-only confirm still gets 409. Browser evidence on the final SHA: refuse, 'Somministra ora', reload shows Erogata.\"\n    },\n    {\n      \"severity\": \"high\",\n      \"file\": \"backend/src/therapies/slot-scheduling.ts\",\n      \"line\": 16,\n      \"problem\": \"oneTimeSlot/therapyBandEnabled, and the SQL twin therapyBandEnabledSql (backend/src/therapies/therapy-query.ts:6-10), make any una_tantum whose orarioSomministrazione is null, not strictly HH:MM, or different from a TherapySchedule.time invisible in every band. Such a dose disappears from the feed, the exact summary and the assistant due queue, and nothing marks it as 'da verificare'. Affected data includes legacy one-offs created through POST/PUT /patients/:id/therapies without a time but with band flags (visible before this PR), and intake one-offs: confirm-therapies.ts:77 accepts '8:30' and stores it unnormalized. The new test explicitly asserts that the null and '99:00' rows are absent. #441 requires contradictory clocks/schedules to stay 'da verificare', and #432 forbids silent loss of prescribed drugs.\",\n      \"requested_change\": \"Keep writes rejected for invalid or contradictory one-offs. Do not drop them from reads: surface them in the feed and summary as a non-administrable 'da verificare' item, with no invented time, fascia or quantity, and count them in the assistant. Accept the zero-padding-equivalent H:MM form ('8:30' equals '08:30', the same value, as the diary already normalizes), or normalize it at intake confirmation. Apply the same rule in the TS and SQL implementations.\",\n      \"test_expectation\": \"DB test: a una_tantum with null time and fasceMattina=true, one with '8:30', and one whose schedule time contradicts orarioSomministrazione all appear on the date as read-only 'to verify' (or, for '8:30', as a normal 08:30 dose). Summary totals and the assistant reflect them. Confirm/not-administered on the invalid ones returns 409/404 and creates no record.\"\n    }\n  ]\n}\n"
+      }
     },
     {
       "id": "bug-batch-485",
@@ -4478,7 +4484,7 @@
       "maxImplementationAttempts": 4
     }
   ],
-  "updatedAt": "2026-10-17T17:17:27.649Z",
+  "updatedAt": "2026-10-17T17:18:01.432Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
