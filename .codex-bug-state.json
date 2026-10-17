@@ -561,7 +561,7 @@
       "sourceSha": "29b2f5c9b72b4d909b954d5360ec08095825f29e",
       "branch": "codex/bug-batch-450",
       "owner": "codex-root-2026-10-17",
-      "phase": "publishing",
+      "phase": "waiting-checks",
       "reservedAt": "2026-10-17T07:38:22.669Z",
       "implementation": [
         {
@@ -573,7 +573,8 @@
           "round": 2,
           "status": "passed",
           "runtimeVerificationNote": "Only runner oracle/navigation, default hosted Chromium/cache and complete47source receipt corrected before finalQA; application46source unchanged.",
-          "reason": "IndependentQA2 all5phases PASS: frontend1390,backend69,proactive23,fullbrowser19/SQL,actualPDF phone/tablet,privacy/source47 checks; original134bytes archived before current proof publication."
+          "reason": "IndependentQA2 all5phases PASS: frontend1390,backend69,proactive23,fullbrowser19/SQL,actualPDF phone/tablet,privacy/source47 checks; original134bytes archived before current proof publication.",
+          "sha": "111e672faf77b45280d8ef6ebb15268180b58376"
         }
       ],
       "reviews": [],
@@ -1155,6 +1156,19 @@
         "sourceFiles": 47,
         "report": "artifacts/task-validation/bug-batch-450/independent-qa-attempt-2/validation-report.md",
         "awaiting": "requiredCI, externalClaudeMax, actualverifiedrelease"
+      },
+      "sha": "111e672faf77b45280d8ef6ebb15268180b58376",
+      "pr": {
+        "number": 481,
+        "url": "https://github.com/l2v-hub/ClinicOS/pull/481"
+      },
+      "publication": {
+        "publishedAt": "2026-10-17T10:09:13.318Z",
+        "sourceCheckpoint": "0eae11061ada23a60f888c36fd8923a6dbba93d1",
+        "sha": "111e672faf77b45280d8ef6ebb15268180b58376",
+        "pr": 481,
+        "qa": "independent-qa-attempt-2",
+        "normalControllerPromoted": false
       }
     },
     {
@@ -2185,7 +2199,7 @@
       "owner": "codex-root-2026-10-17",
       "branch": "codex/demo-release-guard",
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
-      "phase": "waiting-ci",
+      "phase": "merged-operational-verifying",
       "implementation": [
         {
           "round": 1,
@@ -2252,8 +2266,19 @@
         "sourceSha": "d5f82969bea8a50b2da22ec00edf2682a3e1d16d",
         "same19SourceBytes": true,
         "status": "success"
-      }
+      },
+      "mergeSha": "b7194ac4dd185b3edc4f8d093c0505d0b4ef69ea",
+      "requiredCi": {
+        "status": "passed",
+        "headSha": "4c042b6acf837cf3afef636708c41fc763ac6e95",
+        "runs": [
+          39022602451,
+          39022602525
+        ]
+      },
+      "configurationRun": 39023778842,
+      "deploymentRun": 39023763026
     }
   ],
-  "updatedAt": "2026-10-17T10:06:19.341Z"
+  "updatedAt": "2026-10-17T10:09:13.323Z"
 }
