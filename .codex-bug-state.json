@@ -2741,9 +2741,16 @@
         },
         {
           "round": 3,
-          "status": "running",
+          "status": "failed",
           "startedAt": "2026-10-17T11:14:02.032Z",
-          "reason": "Minimal existing-scope post-JSON and deferred React updater epoch isolation correction; real production-function regressions and newQA3 mandatory."
+          "reason": "IndependentQA3: canonical452wait selected loadingplaceholder, then457missingdependentfixture.1primaryharnessfinding; clinical1480frontend/1942backend+5optin/19intake passed; source94/contracts26 unchanged; allproofretained.",
+          "qaSealSha256": "03fcda69c573ed77d058baaed01996c6e789ab5dde149b2c55e137bf61b3f308"
+        },
+        {
+          "round": 4,
+          "status": "running",
+          "startedAt": "2026-10-17T12:19:53.196Z",
+          "reason": "Final existing4/4: one actual roster-row readinessselector only, unchanged timeout/assertions;93other sources andQA3clinicalproof byteexact; freshQA4required."
         }
       ],
       "reviews": [],
@@ -2796,7 +2803,8 @@
         "implementation-cycle-3-session-isolation.md": "6da4a95dd2df7911ee786b45d06ea60e0fc1a170c7516a95e7ffedd7d7f6f2b4",
         "scope-amendment-14-intake-read-serialization.md": "94e0338277725a1e64955fb75fe96bc530cbe5fe0ce4504cc467dd1ce4c7a181",
         "approved-plan-cycle-3-intake-read.json": "7c6feb931c84f97351290aeca92cfe5d7b62d2ff93060267788c953022828165",
-        "runtime-amendment-15-focused-browser-isolation.md": "10e5add9cbe2ec236db7ec39c969184bf1d8c4aa78ca54403b33aaae73eb2573"
+        "runtime-amendment-15-focused-browser-isolation.md": "10e5add9cbe2ec236db7ec39c969184bf1d8c4aa78ca54403b33aaae73eb2573",
+        "implementation-cycle-4-roster-readiness.md": "2d46892ccd4e51164d9bed553b0c79df23f59a1d14f709f7069a3924dbd957d8"
       },
       "baseSha": "05fd62363d89573d6e2449235a7499cc855434cd",
       "plan": {
@@ -3739,13 +3747,13 @@
         }
       },
       "independentQa": {
-        "attempt": 2,
+        "attempt": 3,
         "verdict": "FAILED VALIDATION",
-        "report": "independent-qa-attempt-2/validation-report.md",
-        "sealSha256": "9f1008691e6ea0312c60adc15bb7b28468ea5afde6586a1472fee12ff016f3dd",
-        "source92Unchanged": true,
-        "contracts22Unchanged": true,
-        "finding": "late old-session clinical JSON receipt crosses session boundary"
+        "reportSha256": "964fbe47d85f50f69b991ab64a7bdf5dd8097acf2e4031d9047c919d7612edd1",
+        "sealSha256": "03fcda69c573ed77d058baaed01996c6e789ab5dde149b2c55e137bf61b3f308",
+        "source94Unchanged": true,
+        "contracts26Unchanged": true,
+        "finding": "generic roster trwait accepts loadingplaceholder;457dependentfixture notcreated"
       }
     },
     {
@@ -4103,7 +4111,7 @@
       "evidenceRevision": "88406c7aa251b176c13a8c92d695f9e9d43d901d"
     }
   ],
-  "updatedAt": "2026-10-17T12:04:37.739Z",
+  "updatedAt": "2026-10-17T12:19:53.199Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
