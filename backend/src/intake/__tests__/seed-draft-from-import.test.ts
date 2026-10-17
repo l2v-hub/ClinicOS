@@ -11,6 +11,7 @@ import {
   isPlausibleAllergenText,
 } from '../draft-service.js';
 import { prisma } from '../../lib/prisma.js';
+import * as fiscalCode from '../../lib/codice-fiscale.js';
 import type { DischargeNarrativeDraft } from '../../ai/sections/narrative.js';
 
 const NARRATIVE: DischargeNarrativeDraft = {
@@ -224,4 +225,105 @@ test('buildImportDraftData: therapyText parsed into structured terapia rows (one
   assert.equal(data._terapiaText, therapyText);
   assert.ok((data._importedFields as string[]).includes('terapiaImport'));
   assert.equal(data.terapia, undefined); // must NOT collide with the manual TherapyFormValue editor
+});
+
+// #473: synthetic codes, never actual patient identifiers. A checksum alone is not
+// sufficient for deriving sex: the encoded day must also be a real calendar day.
+const syntheticCf = (day: string, year = '80', month = 'A') => {
+  const body = `RSSMRA${year}${month}${day}H501`;
+  return body + fiscalCode.controlChar(body);
+};
+
+test('#473: validated CF derives only an unambiguous encoded sex', () => {
+  for (const [day, expected] of [
+    ['01', 'M'],
+    ['31', 'M'],
+    ['41', 'F'],
+    ['71', 'F'],
+  ] as const) {
+    assert.equal(fiscalCode.sexFromCodiceFiscale(syntheticCf(day)), expected, day);
+  }
+  // Numeric omocodia substitution is decoded only after validating the raw checksum.
+  assert.equal(fiscalCode.sexFromCodiceFiscale(syntheticCf('QM', 'UL')), 'F');
+  assert.equal(fiscalCode.sexFromCodiceFiscale(` ${syntheticCf('41').toLowerCase()} `), 'F');
+  for (const day of ['00', '32', '40', '72', '99']) {
+    assert.equal(fiscalCode.sexFromCodiceFiscale(syntheticCf(day)), null, day);
+  }
+  assert.equal(fiscalCode.sexFromCodiceFiscale(syntheticCf('31', '80', 'D')), null, 'April 31');
+  assert.equal(fiscalCode.sexFromCodiceFiscale(syntheticCf('70', '80', 'B')), null, 'February 30');
+  assert.equal(
+    fiscalCode.sexFromCodiceFiscale(syntheticCf('69', '81', 'B')),
+    null,
+    'non-leap February 29',
+  );
+  assert.equal(
+    fiscalCode.sexFromCodiceFiscale(syntheticCf('69', '80', 'B')),
+    'F',
+    'leap February 29',
+  );
+  const valid = syntheticCf('41');
+  const wrongChecksum = valid.slice(0, 15) + (valid[15] === 'A' ? 'B' : 'A');
+  assert.equal(fiscalCode.sexFromCodiceFiscale(wrongChecksum), null);
+  assert.equal(fiscalCode.sexFromCodiceFiscale('not-a-fiscal-code'), null);
+  assert.equal(fiscalCode.sexFromCodiceFiscale(null), null);
+});
+
+test('#473: missing imported sex is an editable derived field with retained source', () => {
+  for (const sex of ['', '   ']) {
+    const narrative = { ...NARRATIVE, sex, fiscalCode: syntheticCf('41') };
+    const data = buildImportDraftData(narrative, null);
+    assert.equal((data.anagrafica as Record<string, unknown>).sex, 'F');
+    assert.deepEqual(data._derivedFields, {
+      anagrafica: { sex: { source: 'codiceFiscale', value: 'F', reviewRequired: true } },
+    });
+    assert.deepEqual(data._narrative, narrative, 'immutable narrative must not be rewritten');
+    assert.equal(narrative.sex, sex, 'input must remain unchanged');
+  }
+});
+
+test('#473: invalid CF cannot invent sex and contradictory explicit sex remains untouched', () => {
+  for (const code of ['not-a-fiscal-code', syntheticCf('00'), syntheticCf('72')]) {
+    const data = buildImportDraftData({ ...NARRATIVE, fiscalCode: code }, null);
+    assert.equal((data.anagrafica as Record<string, unknown>).sex, undefined);
+    assert.equal(data._derivedFields, undefined);
+  }
+  for (const sex of ['M', 'F', 'non-specificato']) {
+    const data = buildImportDraftData({ ...NARRATIVE, sex, fiscalCode: syntheticCf('41') }, null);
+    assert.equal((data.anagrafica as Record<string, unknown>).sex, sex);
+    assert.equal(data._derivedFields, undefined, 'explicit source is never labeled as derived');
+  }
+});
+
+test('#473: unheaded medication source remains a review inventory, not an administration', () => {
+  const source = [
+    'Ramipril 5 mg 1 compressa per os ore 08:00',
+    'Furosemide 25 mg 1/2 compressa per os ore 14:00',
+  ];
+  const narrative = { ...NARRATIVE, therapyText: '', unmappedText: source.join('\n') };
+  const data = buildImportDraftData(narrative, null);
+  const rows = data.terapiaImport as Array<Record<string, unknown>>;
+  assert.equal(rows.length, 2);
+  assert.deepEqual(
+    rows.map((row) => row.farmacoNome),
+    ['RAMIPRIL', 'FUROSEMIDE'],
+  );
+  assert.deepEqual(
+    rows.map((row) => row.quantita),
+    ['1 compressa', '1/2 compressa'],
+  );
+  assert.deepEqual(
+    rows.map((row) => row.orari),
+    [['08:00'], ['14:00']],
+  );
+  for (let index = 0; index < rows.length; index++) {
+    assert.equal(rows[index].originalText, source[index]);
+    assert.equal(rows[index].stato, 'da_verificare');
+    assert.equal(rows[index].outsideTherapySection, true);
+    assert.ok(rows[index].importRowKey, 'stable source identity remains available for review');
+    assert.equal(rows[index].somministrata, undefined);
+    assert.equal(rows[index].administeredAt, undefined);
+  }
+  assert.equal(data.terapia, undefined, 'no active/manual therapy is invented');
+  assert.equal(data.somministrazioni, undefined);
+  assert.deepEqual(data._narrative, narrative);
 });

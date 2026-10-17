@@ -1,6 +1,7 @@
+import { fiscalCodeSex } from '../../../lib/codiceFiscale';
 import { intakeDemographicErrors } from '../../../lib/intakeDemographics';
 import { DemographicsStatus } from '../DemographicsStatus';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { SemanticTaggedText } from './SemanticTaggedText';
 import { SECTION_MAP, REVIEW_ORDER, TARGET_AREA_LABEL, allergyStatusLabel } from './sectionMapping';
 import type { ConfirmPatient } from '../ImportReviewFull';
@@ -28,6 +29,8 @@ interface Props {
     opts: { confirmAllergyConflict: boolean },
   ) => void;
   onBack: () => void;
+  onSaveDraft?: (patient: ConfirmPatient, cartella: Record<string, unknown>) => void;
+  registerSave?: (save: (() => void) | null) => void;
   /** REQ-032: open the source document/page for a section in the preview panel. */
   onOpenSource?: (fileName: string, page?: number, fileId?: string) => void;
 }
@@ -55,6 +58,8 @@ export function ImportSectionsReview({
   onConfirm,
   onBack,
   onOpenSource,
+  onSaveDraft,
+  registerSave,
 }: Props) {
   const docName = useMemo(() => {
     const map = new Map(documents.map((d) => [d.id, d.filename]));
@@ -82,6 +87,9 @@ export function ImportSectionsReview({
     codiceFiscale: demo.codiceFiscale ?? '',
     ...patientEdits,
   };
+
+  const derivedSex = fiscalCodeSex(patient.codiceFiscale ?? '');
+  if (!patient.sex && !Object.hasOwn(patientEdits, 'sex') && derivedSex) patient.sex = derivedSex;
 
   // Per-section review state. Default accepted; the operator can modify/exclude.
   const [status, setStatus] = useState<Record<string, ReviewStatus>>({});
@@ -134,14 +142,14 @@ export function ImportSectionsReview({
     }
   }
 
-  function handleSubmit() {
+  function handleSubmit(draftOnly = false) {
     setError(null);
     const demographicErrors = Object.values(intakeDemographicErrors(patient));
-    if (demographicErrors.length) {
+    if (!draftOnly && demographicErrors.length) {
       setError(demographicErrors.join('. '));
       return;
     }
-    if (allergyNeedsAck && !allergyAck) {
+    if (!draftOnly && allergyNeedsAck && !allergyAck) {
       setError(
         'Le informazioni sulle allergie richiedono conferma esplicita prima del salvataggio.',
       );
@@ -172,10 +180,19 @@ export function ImportSectionsReview({
         acknowledged: allergyAck || !allergyNeedsAck,
       },
     };
+    if (draftOnly) {
+      onSaveDraft?.({ ...patient, dateOfBirth: toIso(patient.dateOfBirth) }, cartella);
+      return;
+    }
     onConfirm({ ...patient, dateOfBirth: toIso(patient.dateOfBirth) }, cartella, {
       confirmAllergyConflict: allergyAck,
     });
   }
+
+  useEffect(() => {
+    registerSave?.(() => handleSubmit(true));
+    return () => registerSave?.(null);
+  });
 
   const clinicalKeys = REVIEW_ORDER.filter(
     (k) => k !== 'PATIENT_DEMOGRAPHICS' && k !== 'ALLERGIES',
@@ -194,10 +211,21 @@ export function ImportSectionsReview({
           busy={busy}
           onEdit={(field) => document.getElementById(`import-demographic-${field}`)?.focus()}
         />
+        {derivedSex && !demo.sex && !Object.hasOwn(patientEdits, 'sex') && (
+          <p role="status">
+            Sesso proposto dal codice fiscale: {derivedSex === 'F' ? 'Femmina' : 'Maschio'}.
+            Verifica con il documento; puoi correggerlo.
+          </p>
+        )}
         <div className="srev-anag-grid">
           {ANAG_PREFILL.map(([field, lbl]) => (
             <label key={field} className="srev-field">
-              <span>{lbl}</span>
+              <span>
+                {lbl}
+                {['firstName', 'lastName', 'codiceFiscale'].includes(field)
+                  ? ' *'
+                  : ' · consigliato'}
+              </span>
               <input
                 id={`import-demographic-${field}`}
                 type={field === 'dateOfBirth' ? 'date' : 'text'}
@@ -380,7 +408,12 @@ export function ImportSectionsReview({
         <button className="btn-ghost" disabled={busy} onClick={onBack}>
           Indietro
         </button>
-        <button className="btn-success" disabled={busy} onClick={handleSubmit}>
+        {onSaveDraft && (
+          <button className="btn-secondary" disabled={busy} onClick={() => handleSubmit(true)}>
+            Salva bozza e chiudi
+          </button>
+        )}
+        <button className="btn-success" disabled={busy} onClick={() => handleSubmit(false)}>
           Crea paziente
         </button>
       </footer>

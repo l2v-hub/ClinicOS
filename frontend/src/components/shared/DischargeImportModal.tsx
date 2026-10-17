@@ -2,6 +2,7 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { getCurrentOperator } from '../../lib/operatorSession';
 import { useRecencyClock } from '../../lib/useRecencyClock';
 import { AccessibleDialogSurface } from './AccessibleDialogSurface';
+import { getDraft } from './intake/intakeDraftApi';
 import { IntakeWorkspace } from './intake/IntakeWorkspace';
 import { ImportDocumentsWorkspace } from './import/ImportDocumentsWorkspace';
 import { ImportReviewWorkspace } from './import/ImportReviewWorkspace';
@@ -25,6 +26,7 @@ import './import/ImportSession.css';
 
 interface Props {
   open: boolean;
+  initialDraftId?: string;
   onClose(): void;
   /** Paziente creato o aggiornato dall'import e, se scelto nel wizard, il modulo da aprire. */
   onImported?(patientId?: string, moduleTabId?: string): void;
@@ -42,7 +44,12 @@ export function DischargeImportModal(props: Props) {
     <ImportSession key={`${actor.operatorId}:${actor.operatorRole}`} {...props} actor={actor} />
   ) : null;
 }
-function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportActor }) {
+function ImportSession({
+  onClose,
+  onImported,
+  actor,
+  initialDraftId,
+}: Props & { actor: ImportActor }) {
   const title = useId();
   const [job, setJob] = useState<ImportJob | null>(null);
   const [result, setResult] = useState<ImportResult | null>(null);
@@ -57,6 +64,22 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
   const [creation, setCreation] = useState<'pending' | 'created' | null>(null);
   const [retryMutation, setRetryMutation] = useState<(() => Promise<ImportJob>) | null>(null);
   const active = useRef(true);
+  const reviewSave = useRef<(() => void) | null>(null);
+  const registerSave = useCallback((save: (() => void) | null) => {
+    reviewSave.current = save;
+  }, []);
+  function requestClose() {
+    if (step === 'review' && !job?.review.draftId && reviewSave.current) {
+      if (
+        window.confirm(
+          'Salvare la compilazione in bozza e chiudere? Annulla per continuare la revisione.',
+        )
+      )
+        reviewSave.current();
+      return;
+    }
+    onClose();
+  }
   const busyRef = useRef(false);
   const jobRef = useRef<ImportJob | null>(null);
   const api = useMemo(
@@ -117,8 +140,17 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
   useEffect(() => {
     let alive = true;
     let sessionRead = true;
-    void importSessionMemory
-      .open({ operatorId: actor.operatorId, operatorRole: actor.operatorRole }, api)
+    const opening = initialDraftId
+      ? getDraft(initialDraftId, actor).then((draft) => {
+          if (!draft.importJobId) throw new Error('La bozza non ha un documento collegato.');
+          if (draft.status !== 'draft') throw new Error('Questa bozza è già stata confermata.');
+          return api.get(draft.importJobId);
+        })
+      : importSessionMemory.open(
+          { operatorId: actor.operatorId, operatorRole: actor.operatorRole },
+          api,
+        );
+    void opening
       .then(async (value) => {
         if (!alive) return;
         updateJob(value);
@@ -148,7 +180,15 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
     return () => {
       alive = false;
     };
-  }, [api, actor.operatorId, actor.operatorRole, attempt, updateJob, invalidateSession]);
+  }, [
+    api,
+    actor.operatorId,
+    actor.operatorRole,
+    initialDraftId,
+    attempt,
+    updateJob,
+    invalidateSession,
+  ]);
   const processing = job ? activeImport(job) : false;
   useEffect(() => {
     if (!processing || !jobId) return;
@@ -295,13 +335,14 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
         operatorId={actor.operatorId}
         operatorRole={actor.operatorRole}
         importDraftId={draftId}
+        importDocuments={job ? { job, api } : undefined}
         onBackToDocuments={() => void backFromDraft()}
       />
     );
   return (
     <AccessibleDialogSurface
       labelledBy={title}
-      onClose={onClose}
+      onClose={requestClose}
       dismissible={!busy && !pendingUpload}
       closeOnOverlay={false}
       surfaceClassName={`modal-card import-modal import-session${step === 'review' ? ' import-modal--review' : ''}`}
@@ -322,7 +363,7 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
         <button
           className="icon-btn"
           disabled={busy || pendingUpload}
-          onClick={onClose}
+          onClick={requestClose}
           aria-label={recovery.closeLabel}
           data-dialog-initial-focus
         >
@@ -386,6 +427,8 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
         !opening &&
         (step === 'review' && result ? (
           <ImportReviewWorkspace
+            onClose={onClose}
+            registerSave={registerSave}
             job={job}
             result={result}
             api={api}
@@ -428,7 +471,11 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
             rinnovano la scadenza.
           </span>
         )}
-        <button className="btn-secondary btn-sm" disabled={busy || pendingUpload} onClick={onClose}>
+        <button
+          className="btn-secondary btn-sm"
+          disabled={busy || pendingUpload}
+          onClick={requestClose}
+        >
           Chiudi importazione
         </button>
         {job && (
