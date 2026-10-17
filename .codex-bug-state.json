@@ -564,7 +564,8 @@
         "implementation-plan.md": "bc9012a4ddd5d9685430d4bf59874dd582eab573514e6850d93efc21130c031b",
         "triage-index.md": "6a25d7a1bbcd5e29441b7c5397b02127ba3b3ef03801496bdc53638a5f8efbdb",
         "scope-amendment-1.md": "d182cb2d560b07d197512a9e6e6df7b6c08f71e2771e56ee9492ea4b7d260d21",
-        "scope-amendment-2.md": "bd85e3596ab948d4cdad46e3d47cd3d478ab22021414679159f8100dd02d80c1"
+        "scope-amendment-2.md": "bd85e3596ab948d4cdad46e3d47cd3d478ab22021414679159f8100dd02d80c1",
+        "scope-amendment-3.md": "68ec40674d1676f5345ca4baf23d834d41976c72bea88da0da9a4636ea6bcd72"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -630,7 +631,8 @@
           "frontend/src/components/shared/intake/IntakeIndex.tsx",
           "frontend/src/components/shared/intake/__tests__/intakeProgress.test.ts",
           "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx",
-          "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts"
+          "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts",
+          "frontend/src/lib/__tests__/pdfPreviewResources.test.ts"
         ],
         "acceptance": [
           {
@@ -724,7 +726,8 @@
               "frontend/src/components/shared/import/__tests__/importReview.test.ts",
               "scripts/e2e/issue-450-ingresso.mjs",
               "frontend/src/components/shared/ImportReviewFull.tsx",
-              "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx"
+              "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx",
+              "frontend/src/lib/__tests__/pdfPreviewResources.test.ts"
             ],
             "steps": [
               "Generate fully synthetic text plus scanned-image PDF and run real authenticated upload/source requests. Record failing browser behavior before choosing preview resource/cache fix.",
@@ -951,7 +954,8 @@
               "frontend/config/pdfPreviewAssets.ts",
               "backend/src/routes/import-pages.ts",
               "frontend/src/components/shared/import/__tests__/importReview.test.ts",
-              "scripts/e2e/issue-450-ingresso.mjs"
+              "scripts/e2e/issue-450-ingresso.mjs",
+              "frontend/src/lib/__tests__/pdfPreviewResources.test.ts"
             ]
           },
           {
@@ -1005,6 +1009,17 @@
           "reason": "Issues472/476 preserve review edits before leaving. Existing behavior-test custom React renderer lacks useEffect lifecycle now required by the real review save-handler registration. Extend the fixture to run lifecycle registration/cleanup realistically and add behavior assertions proving edited values persist through save/leave/resume. Preserve source immutability/conflict/defer/explicit decision and cancellation/error assertions; do not replace behavior tests with source matching, skip assertions or no-op the lifecycle to hide a defect.",
           "packet": "scope-amendment-2.md",
           "sha256": "bd85e3596ab948d4cdad46e3d47cd3d478ab22021414679159f8100dd02d80c1"
+        },
+        {
+          "number": 3,
+          "at": "2026-10-17T08:01:44.247Z",
+          "issue": 475,
+          "files": [
+            "frontend/src/lib/__tests__/pdfPreviewResources.test.ts"
+          ],
+          "reason": "Issue475 reproduced a real Vite-development PDF decoder asset URL mismatch: resource helper derives node_modules decoder directory while the pinned asset plugin serves assets/pdfjs version directory. Extend the existing helper behavior tests for the real development worker URL, pinned decoder files, production and non-root base paths. Keep version/path/asset authorization constraints and prove scanned JPX canvas rendering in a real browser; never replace missing asset with blank or skip decoding. Existing app helper and asset configuration already within original scope.",
+          "packet": "scope-amendment-3.md",
+          "sha256": "68ec40674d1676f5345ca4baf23d834d41976c72bea88da0da9a4636ea6bcd72"
         }
       ]
     },
@@ -1772,5 +1787,5 @@
       "reservedAt": "2026-10-17T07:44:43.115Z"
     }
   ],
-  "updatedAt": "2026-10-17T08:01:02.488Z"
+  "updatedAt": "2026-10-17T08:01:44.248Z"
 }
