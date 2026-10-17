@@ -1885,7 +1885,8 @@
         "scope-amendment-9-real-agenda-and-dependencies.md": "278874491265900d075ac9bd57fce030f3d7be9093474e71069a0a33a62fea5c",
         "approved-plan-cycle-2-combined.json": "ab8f9790279f6257ffadb589d524ce5c5c8bf9b564c52a11441371432b0994c0",
         "scope-amendment-10-ps-slot-modal.md": "947755c8a34128141c066b291359c251e98713e68dd3b8836d08f902ca974504",
-        "scope-amendment-11-agenda-date-regression.md": "b2146cf0c8a12cedbe2d28e63bbb4e4d4c73b5c19630f1b9054da6a0f10ab9c8"
+        "scope-amendment-11-agenda-date-regression.md": "b2146cf0c8a12cedbe2d28e63bbb4e4d4c73b5c19630f1b9054da6a0f10ab9c8",
+        "scope-amendment-12-intake-roster-integration.md": "d16f2bcd56ba951a158883e174918919b27f6e96e9ee83559a81a969733e5f8e"
       },
       "baseSha": "65e902f40026ec8e2cf3e8b385cb1de0cc269f7b",
       "plan": {
@@ -1998,7 +1999,8 @@
           "frontend/src/lib/__tests__/news2History.test.ts",
           "frontend/src/components/operator/sections/TherapyEditor.tsx",
           "frontend/src/components/operator/TherapySlotModal.tsx",
-          "frontend/src/lib/__tests__/therapyAgendaDateGuard.test.ts"
+          "frontend/src/lib/__tests__/therapyAgendaDateGuard.test.ts",
+          "scripts/e2e/issue-450-ingresso.mjs"
         ],
         "acceptance": [
           {
@@ -2452,6 +2454,20 @@
               "Replace only the obsolete operator source-shape assertion requiring an imperative openDay loader call with assertions for the mounted current-refDate day effect.",
               "Preserve admin exact-date loading, modal mutation date, weekly/monthly exclusion and modal closing on every transition; verify positive real browser day/date behavior."
             ]
+          },
+          {
+            "title": "Reconcile intake completion actions with single compact roster status",
+            "files": [
+              "scripts/e2e/issue-450-ingresso.mjs",
+              "frontend/src/components/operator/PatientList.tsx",
+              "e2e/qa-bug-batch-447-browser.mjs"
+            ],
+            "steps": [
+              "Keep all resumed draft and registered incomplete-patient completion actions, routes, identity, permissions and persisted data while making the repeated list of actions compact and explicitly expandable.",
+              "Keep a single missing-data aggregate; never merge different populations or claim a global total for loaded-only patients. The primary roster must remain reachable without fifty completion buttons above it.",
+              "Adapt only the upstream intake browser navigation oracle to open the real disclosure before locating the unchanged completion/resume action. Keep all nineteen intake assertions and real SQL/persistence/authorization negatives; run the full intake browser in an owned447 output folder.",
+              "Scroll actual NEWS2 row into viewport before asserting the existing lazy IntersectionObserver consumer; do not bypass loader or network."
+            ]
           }
         ],
         "verification": [
@@ -2614,7 +2630,8 @@
               "frontend/src/lib/news2History.ts",
               "frontend/src/lib/__tests__/news2History.test.ts",
               "frontend/src/App.tsx",
-              "frontend/src/lib/__tests__/therapyAgendaDateGuard.test.ts"
+              "frontend/src/lib/__tests__/therapyAgendaDateGuard.test.ts",
+              "scripts/e2e/issue-450-ingresso.mjs"
             ]
           },
           {
@@ -2979,5 +2996,5 @@
       "operationalOnly": true
     }
   ],
-  "updatedAt": "2026-10-17T10:27:26.674Z"
+  "updatedAt": "2026-10-17T10:32:24.033Z"
 }
