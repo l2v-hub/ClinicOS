@@ -1,0 +1,18 @@
+✔ runtime refuses every wrong identity before DB connect (3.90629ms)
+✔ private inventory reads aggregate counts and always rolls back/closes (3.228153ms)
+✔ non-FK import/draft data, linked notes/audits or orphan states prevent completion (44.465329ms)
+✔ bad DB identity, missing required table or query failure rolls back/closes (3.036162ms)
+✔ parent refuses wrong branch/secret/target/domain without service mutations (1.883382ms)
+✔ controller passes a private reference, emits counts only and removes exact temporary service (2.192727ms)
+✔ deploy, log-format and timeout failures still remove newly created service (2.456663ms)
+✔ log projection excludes unexpected rows/credentials and refuses malformed count payloads (0.698903ms)
+✔ workflow isolates new inventory operation and preserves every existing production guard (1.058778ms)
+✔ log validation refuses duplicates, omitted required tables and false empty claims (1.07623ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 315.474195

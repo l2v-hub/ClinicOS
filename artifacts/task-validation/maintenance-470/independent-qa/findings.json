@@ -1,0 +1,23 @@
+{
+  "reviewer": "independent-maintenance-470-qa",
+  "implementationAttemptInitiallyReviewed": 1,
+  "findings": [
+    {
+      "id": "QA470-1",
+      "severity": "high",
+      "file": "scripts/maintenance/demo-patient-inventory.mjs",
+      "initialLines": [325, 329],
+      "problem": "Parent validation required six baseline tables but could accept omission of another actual catalog table such as ImportJob and therefore accept an incomplete empty claim.",
+      "requiredFix": "Freeze the actual initial public-table catalog, count and deterministic digest in the worker. Parent must validate the header and require exact set equality with counts, retaining fail-closed classification and empty-result recomputation."
+    },
+    {
+      "id": "QA470-2",
+      "severity": "high",
+      "file": "scripts/maintenance/demo-patient-inventory.mjs",
+      "initialLines": [446, 469],
+      "problem": "Sixty polls each allowed a five-second wait and thirty-second CLI timeout; total execution could exceed the fifteen-minute Actions timeout and prevent finally from removing the owned temporary service.",
+      "requiredFix": "Bound the whole operation and each log call using a monotonic deadline, reserve a separate cleanup budget and bound preparatory workflow steps before any service can be created."
+    }
+  ],
+  "initialDisposition": "FAILED VALIDATION; root notified; implementation round 2 required without resetting the four-round budget"
+}

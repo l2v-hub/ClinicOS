@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-17T07:56:27.423Z",
+  "runUrl": "https://github.com/l2v-hub/ClinicOS/actions/runs/39015026575",
+  "headSha": "ca7783718ed6c1834dc87194cbe96093e5bc9517",
+  "conclusion": "success",
+  "results": [
+    {
+      "onlinePatientCleanup": true,
+      "backend": "https://clinicos-backend-demo.up.railway.app",
+      "deleted": 0,
+      "patientListEmpty": true,
+      "orphanClinicalDataVerified": false
+    },
+    {
+      "maintenanceSessionRevoked": true
+    },
+    {
+      "onlineTargetVerified": true,
+      "mode": "configuration-read-only",
+      "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "environmentName": "demo",
+      "backendServiceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+      "backendServiceName": "clinicos-backend",
+      "domains": [
+        "clinicos-backend-demo.up.railway.app"
+      ],
+      "databaseHost": "postgres.railway.internal",
+      "database": "railway",
+      "credentialsExported": false,
+      "inventoryPerformed": false,
+      "deletionPerformed": false
+    }
+  ],
+  "limits": [
+    "No orphan/import/draft SQL inventory yet",
+    "No demo backup inventory yet",
+    "deleted=0: this run did not delete patient records"
+  ]
+}

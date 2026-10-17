@@ -1,0 +1,25 @@
+✔ runtime refuses every wrong identity before DB connect (5.519777ms)
+✔ private inventory reads aggregate counts and always rolls back/closes (1.524016ms)
+✔ non-FK import/draft data, linked notes/audits or orphan states prevent completion (4.732679ms)
+✔ bad DB identity, missing required table or query failure rolls back/closes (0.564701ms)
+✔ parent refuses wrong branch/secret/target/domain without service mutations (6.960272ms)
+✔ controller passes a private reference, emits counts only and removes exact temporary service (4.442846ms)
+✔ deploy, log-format and timeout failures still remove newly created service (2.418356ms)
+✔ log projection excludes unexpected rows/credentials and refuses malformed count payloads (0.993975ms)
+✔ workflow isolates new inventory operation and preserves every existing production guard (0.572584ms)
+✔ log validation refuses duplicates, omitted required tables and false empty claims (1.328581ms)
+✔ worker freezes actual catalog metadata before counting, with deterministic table manifest (1.074152ms)
+✔ parent rejects omitted ImportJob counts while preserving the actual original catalog header (1.988501ms)
+✔ parent rejects inconsistent catalog counts/digests, duplicate headers and extra count tables (0.804776ms)
+✔ unknown actual tables stay unclassified and prevent empty claim even with consistent manifest/counts (3.285937ms)
+✔ global monotonic deadline includes deploy and slow/failing logs, preserving bounded cleanup (8.412052ms)
+✔ API timeout is capped by remaining operation time and cleanup gets its own budget (1.007486ms)
+✔ deploy overrun triggers exact-service cleanup before polling (0.382956ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 240.886334

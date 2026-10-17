@@ -14,11 +14,33 @@ on:
           - online
           - full
           - observe
+          - demo-inventory
 
 permissions:
   contents: read
 
 jobs:
+  demo-inventory:
+    if: github.ref_name == 'codex/demo-470-completion' && inputs.operation == 'demo-inventory'
+    runs-on: ubuntu-latest
+    environment: 'glistening-friendship / demo'
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        timeout-minutes: 1
+        with:
+          sparse-checkout: scripts/maintenance
+          filter: blob:none
+      - uses: actions/setup-node@v4
+        timeout-minutes: 1
+        with:
+          node-version: 22
+      - run: npm install -g @railway/cli@5.66.0
+        timeout-minutes: 1
+      - name: Inventory the verified demo database without reading clinical rows
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+        run: node scripts/maintenance/demo-patient-inventory.mjs
   backup-cleanup:
     if: github.ref_name == 'codex/production-inventory-2026-10-13' && (inputs.operation == 'backup' || inputs.operation == 'full')
     runs-on: ubuntu-latest

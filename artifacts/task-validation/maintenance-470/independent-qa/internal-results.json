@@ -1,0 +1,59 @@
+{
+  "mode": "synthetic QA only",
+  "generatedAt": "2026-10-17T08:03:50.865Z",
+  "checks": [
+    {
+      "name": "reject project mismatch",
+      "value": "PASS"
+    },
+    {
+      "name": "reject environment mismatch",
+      "value": "PASS"
+    },
+    {
+      "name": "reject production name",
+      "value": "PASS"
+    },
+    {
+      "name": "reject backend service identity",
+      "value": "PASS"
+    },
+    {
+      "name": "reject service expectation mismatch",
+      "value": "PASS"
+    },
+    {
+      "name": "reject database host mismatch",
+      "value": "PASS"
+    },
+    {
+      "name": "reject database name mismatch",
+      "value": "PASS"
+    },
+    {
+      "name": "reject absent credential components",
+      "value": "PASS"
+    },
+    {
+      "name": "CLI failure projects allowlisted outcome only",
+      "value": "PASS"
+    },
+    {
+      "name": "Independent unit and real PostgreSQL assertions",
+      "value": "18 PASS / 0 FAIL"
+    },
+    {
+      "name": "Database write probe",
+      "value": "SQLSTATE 25006 (rejected)"
+    },
+    {
+      "name": "Live demo inventory",
+      "value": "NOT RUN — review gate required"
+    },
+    {
+      "name": "Backup verification",
+      "value": "NOT VERIFIED"
+    }
+  ],
+  "testLogSha256": "cdcb84e9d4713c319bfac5deb455e324b949aa28e2e6c010422114ebfcbe44b1"
+}

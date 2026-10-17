@@ -1,0 +1,8 @@
+{
+  "scripts/maintenance/demo-patient-inventory.mjs": "ea94b7ff88a2570eb57c7e86c2b5ff64544a99d67f6be42d2451d2ad8d833bb1",
+  "scripts/maintenance/__tests__/demo-patient-inventory.test.mjs": "01b3d7b6ce65fdfd5f9561e4619be5c50286b5d646ed7eddc302af4cbb3ab4f2",
+  "scripts/maintenance/__tests__/demo-patient-inventory.runtime.test.mjs": "c7df244deeeaac9edf4e774d2e14a813f0e9fbee9155be99d4c505db2b4be564",
+  ".github/workflows/deploy-backend.yml": "65081da58c695079c131399b53a06e1045f611856921d079a962e3006282d534",
+  "artifacts/task-validation/maintenance-470/task-contract.md": "a5867da5a8612a852658aff80f37571143ae70aa9bdad5c3eaf6f8f8e4ac8cde",
+  "artifacts/task-validation/maintenance-470/implementation-plan.md": "f7cdaa4fa395bb8cc05e34db6e1edbaa43f5c8cbdef025dabe3c2b0a2e378c9e"
+}

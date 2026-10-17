@@ -1,0 +1,21 @@
+{
+  "browser-internal.mjs": "966a752b53976e5d06dc640554bca2d26c0ab2165f15913258ed2098118b6e3c",
+  "browser-results.json": "974290c0fc5b1367501b51b46a6d1b0730f37e4b0ac40ed6245d4972de5e9763",
+  "browser.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "contract-review.json": "d504f40ad1c85a134cddea9e41bde97b7194b86d0f2a798e6a827d12d038bfd4",
+  "failure-boundaries.log": "419a4a87d12ce749efdc7a02cc69e9469e725c6c37aa8aaa5c6e811a1b21281f",
+  "failure-boundaries.test.mjs": "c9c0ad930df8111964a728455855c00c9b9050387d63d916879e03470348484f",
+  "findings.json": "01692498d56c3f7e0929045eefd8bed1a720689d16332b08e90b2c56221bc4a0",
+  "frontend-build.log": "bd52813dc9823a7c453cc3ee46b5f76efc197ef7351e72418d4d9a405ebe7e2c",
+  "internal-results.json": "320cd434eee252371837f5c51d0f576f2067ab1cc8426ccf3d00740d7daed454",
+  "internal-results.png": "07102e7e06cbabda9758c35d6a17c372779525507a310e20bc51e1d912e76b2f",
+  "playwright-report/index.html": "87ed218e8d5683491e00b3550cdc150a67a8ef8d3f6ed2766a9faed328bd0d54",
+  "resource-cleanup.json": "099925acc58f983781149eebb9f3595f6572933092a46b2bd7142c89f5dbe718",
+  "runtime-independent.test.mjs": "ba076c02cd7d6801f155e6302e054c6466f837662be589df77a6303201904f8c",
+  "source-sha256.json": "04759f671259ce2e3f876a2dafaa05e0e4293d3150839e1b5d7308687c9cc042",
+  "test-results/browser-results.json": "974290c0fc5b1367501b51b46a6d1b0730f37e4b0ac40ed6245d4972de5e9763",
+  "tests.log": "cdcb84e9d4713c319bfac5deb455e324b949aa28e2e6c010422114ebfcbe44b1",
+  "trace.zip": "72294fce5897d2a7a05fab62e55a291e9550e7a2e379aaaa4d18034c0a868bda",
+  "validation-report.md": "a71b2740a95e2858db4c35f8d4099b824f65bc751e60cfd3b8064d7727b244fd",
+  "video/page@ec0c5fcec9d5dd4b3a68ae2565f1f5de.webm": "61b1721ad78636e49b669e8b8c531f79f90b6eeb5081927bc1c9a071b7335fb4"
+}

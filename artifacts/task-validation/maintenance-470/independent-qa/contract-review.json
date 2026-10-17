@@ -1,0 +1,11 @@
+{
+  "number": 470,
+  "title": "Pulizia sito demo: DELETE rifiutato con 403 e accesso database mancante",
+  "updatedAt": "2026-10-17T07:45:37Z",
+  "commentCount": 1,
+  "commentIds": [
+    "IC_kwDOSt4Zr88AAAABc2r2RA"
+  ],
+  "contractSha256": "a5867da5a8612a852658aff80f37571143ae70aa9bdad5c3eaf6f8f8e4ac8cde",
+  "baseline": "ca7783718ed6c1834dc87194cbe96093e5bc9517"
+}

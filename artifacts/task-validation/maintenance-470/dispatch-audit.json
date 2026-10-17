@@ -1,0 +1,21 @@
+{
+  "issue": 470,
+  "operation": "online",
+  "runUrl": "https://github.com/l2v-hub/ClinicOS/actions/runs/39015026575",
+  "ref": "origin/codex/production-inventory-2026-10-13",
+  "headSha": "ca7783718ed6c1834dc87194cbe96093e5bc9517",
+  "authorizedTarget": "https://clinicos-backend-demo.up.railway.app",
+  "frontend": "https://clinicos-eosin.vercel.app",
+  "scope": {
+    "production": false,
+    "backup": false,
+    "nativeSnapshots": false,
+    "supportedDemoPatientDelete": true,
+    "readOnlyDemoBindingInspection": true
+  },
+  "auditedFiles": {
+    ".github/workflows/deploy-backend.yml": "8709bc2ac27799437f1f76d3159538c75c16a93f86d1bdbce0ad345499a30a0b",
+    "scripts/maintenance/online-fake-patients-cleanup.mjs": "b089a7e31e31883062d6a0799931e4ebd1fe6e8e12d374468188dd5bdc3a2f51",
+    "scripts/maintenance/railway-demo-target-inspect.mjs": "73ac3aa4c3e403d97ed916aef3d8dd4fab826f3bdc05964e2c069aa0fc17daa7"
+  }
+}
