@@ -1,0 +1,37 @@
+✔ realtime parser accepts bounded provider partial and final events (2.518986ms)
+✔ realtime parser retains item ids and replaces provider errors with fixed messages (0.220282ms)
+✔ audio session waits for permission, displays partials without submission, and accepts only matching final (0.473912ms)
+✔ cancel and resident change invalidate pending partial capture text (0.375177ms)
+✔ transport rejects a pre-aborted signal before creating a peer (0.741961ms)
+✔ transport cancellation during negotiation closes peer and channel (13.893448ms)
+✔ transport negotiation timeout closes peer and channel (6.408972ms)
+✔ transport commits at most once and close ignores later channel events (25.101249ms)
+✔ transport removes its abort listener when closed (0.940293ms)
+✔ VAD: speech between silences → one utterance (pre-roll kept, trailing silence ends it) (42.371459ms)
+✔ VAD: silence only → no_speech after the timeout, nothing to send (8.193228ms)
+✔ VAD: steady background noise is learned as floor → never «speech» (9.252534ms)
+✔ VAD: a click / too-short sound is discarded, never sent (3.562733ms)
+✔ VAD: pauses inside a sentence do not cut it; the max length caps it (14.968976ms)
+✔ VAD: «Fine» (flush) closes the utterance now; with no speech it discards (3.995305ms)
+✔ VAD: configurable end-of-turn silence (9.763653ms)
+✔ VAD (QA M4): speech starting right at the tap is detected and kept from the start (6.779931ms)
+✔ VAD (QA M4): talking at the tap, then softer syllables → the sentence is not cut (8.037302ms)
+✔ rmsDb: silence is very low, a loud tone is near 0 dBFS (0.516685ms)
+✔ WAV: 16 kHz mono PCM16 header and samples (0.769953ms)
+✔ WAV: resampling 48 kHz → 16 kHz keeps duration (18.781164ms)
+✔ session: push-to-talk happy path to AWAITING_CONFIRMATION and COMPLETED (0.57976ms)
+✔ session: a transcript is never sent by itself; empty STT goes back to IDLE (0.385168ms)
+✔ session: stale STT answers of a cancelled capture are ignored (0.655108ms)
+✔ session: resident change discards a pending transcript (never re-targeted) (0.334791ms)
+✔ session: STT / mic failures → ERROR with a code (text fallback), no transcript (0.213869ms)
+✔ session: no new capture while audio or a request is in flight (0.176146ms)
+✔ session: discarded audio (silence / too short) → IDLE with a notice (0.195938ms)
+✔ spoken feedback never carries clinical data: fixed phrases only (0.500835ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 410.423611

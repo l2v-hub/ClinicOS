@@ -1,0 +1,12 @@
+{
+  "mode": "synthetic-provider-transport-real-app-and-owned-postgres16",
+  "parentDatabaseUsed": false,
+  "developmentDatabaseUsed": false,
+  "realProviderProof": false,
+  "checks": [],
+  "status": "FAILED",
+  "failure": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Assistente AI' }) to be visible\u001b[22m\n",
+  "failureStack": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Assistente AI' }) to be visible\u001b[22m\n\n    at runVoiceBrowser (/workspace/clinicos-voice-393/e2e/qa-voice-pr-393-browser.mjs:53:107)\n    at async file:///workspace/clinicos-voice-393/e2e/qa-voice-pr-393.mjs:57:21",
+  "databaseOwnershipVerified": true,
+  "ownedContainerRemoved": true
+}

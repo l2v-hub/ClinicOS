@@ -1,0 +1,18 @@
+{"status":"FAILED","checks":0,"ownedContainerRemoved":true,"realProviderProof":false}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('dialog', { name: 'Assistente AI' }) to be visible[22m
+
+    at runVoiceBrowser (/workspace/clinicos-voice-393/e2e/qa-voice-pr-393-browser.mjs:53:107)
+    at async file:///workspace/clinicos-voice-393/e2e/qa-voice-pr-393.mjs:57:21 {
+  log: [
+    "  - waiting for getByRole('dialog', { name: 'Assistente AI' }) to be visible"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.19.0

@@ -1,0 +1,3 @@
+# Author integration attempt 2
+
+Actual 12/12 backend cases PASS and owned database/container cleanup verified. Browser failed before voice assertions because the harness used the old PR accessible dialog name Assistente AI; current main names it Milo · assistente clinico AI, as confirmed by source and real screenshot. Google font request was unavailable through the managed proxy. Correct only the current dialog selector and serve verified official font fixture bytes with hashes/licenses; do not weaken application assertions or network error checks. Browser result remains FAIL, not evidence of successful transcription.

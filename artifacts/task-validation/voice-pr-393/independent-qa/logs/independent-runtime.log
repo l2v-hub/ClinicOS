@@ -1,0 +1,29 @@
+test_current_and_legacy_file_contract_immutable_under_realtime (__main__.IndependentBoundaries.test_current_and_legacy_file_contract_immutable_under_realtime) ... ok
+test_provider_exception_does_not_echo_sensitive_payload (__main__.IndependentBoundaries.test_provider_exception_does_not_echo_sensitive_payload) ... /workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/domain/contracts.py:36: UserWarning: Field name "schema" in "CreateJobRequest" shadows an attribute in parent "BaseModel"
+  class CreateJobRequest(BaseModel):
+/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/api/app.py:88: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/workspace/.venvs/clinicos-ai/lib/python3.12/site-packages/fastapi/applications.py:4745: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)  # ty: ignore[deprecated]
+Executing <Task pending name='Task-7' coro=<IndependentBoundaries.test_provider_exception_does_not_echo_sensitive_payload() running at /workspace/clinicos-voice-393/artifacts/task-validation/voice-pr-393/independent-qa/adversarial_runtime.py:61> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.931 seconds
+stt realtime outcome=provider_error
+ok
+test_real_asgi_auth_precedes_even_large_or_malformed_body (__main__.IndependentBoundaries.test_real_asgi_auth_precedes_even_large_or_malformed_body) ... ok
+test_real_asgi_unicode_byte_boundary_and_nonobject_json (__main__.IndependentBoundaries.test_real_asgi_unicode_byte_boundary_and_nonobject_json) ... ok
+test_second_stage_credential_error_is_fixed_public_kind (__main__.IndependentBoundaries.test_second_stage_credential_error_is_fixed_public_kind) ... ok
+test_status_never_creates_remote_session (__main__.IndependentBoundaries.test_status_never_creates_remote_session) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.090s
+
+OK

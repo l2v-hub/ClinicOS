@@ -1,0 +1,18 @@
+{
+  "scope": "older retained runs, not final canonical trace",
+  "reason": "An initial verifier rerun overwrote its prior transformation list; these two prior pre-sanitization digests cannot be recovered. No original byte-identity claim is made. Final sanitized bytes/CRC/source seals remain valid; final runtime-3 is separately captured and receives a preserved full transformation receipt.",
+  "runs": [
+    {
+      "path": "runtime-1/trace/trace.zip",
+      "firstPassSyntheticRedaction": true,
+      "preSanitizationDigestRetained": false,
+      "finalSanitizedSha256": "701e6a6b24d74106732ddb076f53bcb0f40712c79af595f434494c9fbae9cf9f"
+    },
+    {
+      "path": "runtime-2/trace/trace.zip",
+      "firstPassSyntheticRedaction": true,
+      "preSanitizationDigestRetained": false,
+      "finalSanitizedSha256": "5af19988bc2b82f2c35010af285f16a59326535853a649f4b6e360393187af6f"
+    }
+  ]
+}
