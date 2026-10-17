@@ -1,0 +1,22 @@
+test_real_asgi_auth_actual_stream_limit_and_safe_response (old_voice_realtime.DispatcherTests.test_real_asgi_auth_actual_stream_limit_and_safe_response) ... ERROR
+
+======================================================================
+ERROR: test_real_asgi_auth_actual_stream_limit_and_safe_response (old_voice_realtime.DispatcherTests.test_real_asgi_auth_actual_stream_limit_and_safe_response)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/workspace/.clinicos-cloud/voice393-httpx-red/test_voice_realtime.py", line 122, in test_real_asgi_auth_actual_stream_limit_and_safe_response
+    import httpx
+  File "/workspace/clinicos-voice-393/artifacts/task-validation/voice-pr-393/cycle3/verify_without_httpx.py", line 11, in find_spec
+    raise ModuleNotFoundError('httpx intentionally unavailable in core compatibility probe', name=fullname)
+ModuleNotFoundError: httpx intentionally unavailable in core compatibility probe
+
+----------------------------------------------------------------------
+Ran 1 test in 0.004s
+
+FAILED (errors=1)

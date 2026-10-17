@@ -1,0 +1,11 @@
+{
+  "attempt": 3,
+  "status": "reserved",
+  "reservedAt": "2026-10-17T16:06:22.901277+00:00",
+  "owner": "root coordinated bounded Luna test harness correction",
+  "reason": "Actual native AI Runtime Tests39047709835 failed240-test run with ModuleNotFoundError httpx; dependency-free core CI must exercise same actual ASGI contracts",
+  "scope": [
+    "clinicos-ai-runtime/tests/test_voice_realtime.py"
+  ],
+  "priorCandidateSha": "49e65822c168682f2f262d186357ce3c7f94ec9c"
+}

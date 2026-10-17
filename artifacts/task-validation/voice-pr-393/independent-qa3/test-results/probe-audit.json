@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "newBrowserAssertions": 4,
+  "newBackendCases": 12,
+  "consoleErrors": 0,
+  "httpErrors": 0,
+  "observation": {
+    "state": "ERROR",
+    "peerClosed": true,
+    "allTracksStopped": true,
+    "commits": 0,
+    "partial": null,
+    "voiceSendControls": 0,
+    "assistantRequests": 0
+  },
+  "manualScreenshotInspection": "ERROR: Voce non disponibile; provider failure notice; Scrivi il messaggio text fallback; Parla mic gesture available to retry; no partial/review/send controls. Synthetic fixture resident only.",
+  "retryClickCoverage": "inherited QA2 52-case proof; QA3 original probe observes error exit and available retry gesture, does not claim a new retry-click assertion",
+  "ownershipAndCleanup": true
+}
