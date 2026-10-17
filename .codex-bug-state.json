@@ -1068,7 +1068,8 @@
         "triage-index.md": "42ee2288f97e76104b47854d715618fb1955fe2f1359dcb17e695df118845a61",
         "scope-amendment-1.md": "83d56fd3d02a242f7070cfa18384a7eea536ec72e30c1ada8bfef81f07d08078",
         "scope-amendment-2.md": "868ee1d36373421b6f2003cb4007f7d18f057a66228c802652be8fc100549ca7",
-        "scope-amendment-3.md": "cbbdfbaeb8c78c14160dfc6fe63afd6a269788afdb4e3242838f556d9310d1e5"
+        "scope-amendment-3.md": "cbbdfbaeb8c78c14160dfc6fe63afd6a269788afdb4e3242838f556d9310d1e5",
+        "scope-amendment-4.md": "da083700035882a4ae20fa039f0565ffc6a5a6ae3bbb657526a9a1ba0a9bcb2d"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -1151,7 +1152,11 @@
           "frontend/src/lib/__tests__/clinicalOverviewResilience.test.ts",
           "frontend/src/lib/__tests__/roomAssignmentScope.test.ts",
           "frontend/src/lib/__tests__/patientChartNavigation.test.ts",
-          "frontend/src/lib/__tests__/patientDetailWorkspace.test.ts"
+          "frontend/src/lib/__tests__/patientDetailWorkspace.test.ts",
+          "frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts",
+          "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
+          "frontend/src/lib/__tests__/clinicalHistory.test.ts",
+          "frontend/src/lib/__tests__/therapyPages.test.ts"
         ],
         "acceptance": [
           {
@@ -1287,7 +1292,11 @@
               "frontend/src/lib/emergencyTransferContext.ts",
               "frontend/src/lib/parameterPad.ts",
               "frontend/src/lib/parameterRound.ts",
-              "frontend/src/lib/therapyGiro.ts"
+              "frontend/src/lib/therapyGiro.ts",
+              "frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts",
+              "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
+              "frontend/src/lib/__tests__/clinicalHistory.test.ts",
+              "frontend/src/lib/__tests__/therapyPages.test.ts"
             ],
             "steps": [
               "Start only owned nonprivileged official PostgreSQL16 container clinicos-qa-batch447 on loopback55447; use installed nativePG16 in CI when available, and runtime-derived local synthetic connection configuration without URLs in packet JSON.",
@@ -1629,7 +1638,8 @@
               "frontend/src/lib/parameterRound.ts",
               "frontend/src/lib/__tests__/parameterRound451.test.ts",
               "e2e/qa-bug-batch-447.mjs",
-              "e2e/qa-bug-batch-447-browser.mjs"
+              "e2e/qa-bug-batch-447-browser.mjs",
+              "frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts"
             ]
           },
           {
@@ -1647,7 +1657,8 @@
               "frontend/src/components/operator/OperatorAgenda.tsx",
               "frontend/src/components/operator/__tests__/operationalLists452.test.ts",
               "e2e/qa-bug-batch-447.mjs",
-              "e2e/qa-bug-batch-447-browser.mjs"
+              "e2e/qa-bug-batch-447-browser.mjs",
+              "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts"
             ]
           },
           {
@@ -1705,7 +1716,9 @@
               "frontend/src/components/operator/__tests__/invioPS.test.ts",
               "frontend/src/lib/__tests__/invioPSPrintLayout.test.ts",
               "e2e/qa-bug-batch-447.mjs",
-              "e2e/qa-bug-batch-447-browser.mjs"
+              "e2e/qa-bug-batch-447-browser.mjs",
+              "frontend/src/lib/__tests__/clinicalHistory.test.ts",
+              "frontend/src/lib/__tests__/therapyPages.test.ts"
             ]
           }
         ],
@@ -1749,6 +1762,24 @@
           "reason": "Issue447 intentionally replaces Panoramica label and passive NEWS2-first tiles with Oggi actual doses/diary/vitals. Update only obsolete label/layout implementation assertions in the two existing tests; preserve every legacy/deep-link destination, unique section membership, role capabilities, keyboard tabs, exact therapy navigation, persistent modules, clinical-source/value and responsive behavior. Add actual behavior assertions for Today dose/diary/vitals rather than source-only oracles. No broad test removal, skips or weaker authorization checks.",
           "packet": "scope-amendment-3.md",
           "sha256": "cbbdfbaeb8c78c14160dfc6fe63afd6a269788afdb4e3242838f556d9310d1e5"
+        },
+        {
+          "number": 4,
+          "at": "2026-10-17T08:04:27.671Z",
+          "issues": [
+            451,
+            452,
+            457
+          ],
+          "files": [
+            "frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts",
+            "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
+            "frontend/src/lib/__tests__/clinicalHistory.test.ts",
+            "frontend/src/lib/__tests__/therapyPages.test.ts"
+          ],
+          "reason": "Issues451/452 intentionally remove no-previous-value prose and desktop keypad and hide globally empty regime columns; retain exact11fieldorder/fullACVPU/rawkeyboard/noprefill/uncertainrequest identity and actual regime ordering. Issue457 requires current patient identity for print context and complete loading/error print gates now delegated to emergencyTransferContext. Add missing synthetic patient identity to existing print fixture and move implementation-shape assertions to the real helper while preserving every existing source/diagnosis-once/completepagination/denied/error oracle. therapyPages.test.ts overlaps batch432: do not edit it until root explicitly integrates stable432 changes, then preserve all added negative pagination regressions and reverify both groups. No source scope expansion or clinical policy decision.",
+          "packet": "scope-amendment-4.md",
+          "sha256": "da083700035882a4ae20fa039f0565ffc6a5a6ae3bbb657526a9a1ba0a9bcb2d"
         }
       ]
     },
@@ -1787,5 +1818,5 @@
       "reservedAt": "2026-10-17T07:44:43.115Z"
     }
   ],
-  "updatedAt": "2026-10-17T08:01:44.248Z"
+  "updatedAt": "2026-10-17T08:04:27.671Z"
 }
