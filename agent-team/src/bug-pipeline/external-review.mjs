@@ -1,5 +1,10 @@
 import { feedbackFingerprint, MAX_CYCLES, sha256 } from './contracts.mjs';
 import { createIssueReviewCommunication } from './issue-review-communication.mjs';
+import { createCommentReviewHandoff } from './comment-review-handoff.mjs';
+import { createRunner } from './process.mjs';
+import { randomUUID } from 'node:crypto';
+import os from 'node:os';
+import path from 'node:path';
 
 export function externalReport(batch) {
   const attempt = batch.reviews.at(-1);
@@ -49,6 +54,16 @@ export async function externalReviewStep({
     await block(batch, reason);
     await notify();
   };
+  if (batch.externalReview?.channel === 'github-comments') {
+    const receiver = createCommentReviewHandoff({
+      github: gh,
+      cwd: process.cwd(),
+      run: createRunner({
+        runtimeRoot: path.join(os.tmpdir(), 'clinicos-comment-review-controller'),
+      }),
+    });
+    if (!(await receiver.reconcile(batch, save))) return notify();
+  }
   for (const number of batch.issues) {
     const issue = await gh.viewIssue(number);
     if (String(issue.state).toLowerCase() !== 'open')
@@ -79,7 +94,30 @@ export async function externalReviewStep({
     const verdict = externalReport(batch);
     if (verdict.verdict === 'blocked')
       return blocked('External Claude reviewer blocked the change');
-    const changed = handoff.feedbackChanged || fingerprint !== handoff.feedbackFingerprint;
+    let changed = handoff.feedbackChanged || fingerprint !== handoff.feedbackFingerprint;
+    if (verdict.verdict === 'approved' && !changed && handoff.channel === 'github-comments') {
+      const prior = batch.codexFinalReview;
+      if (!prior || prior.subjectSha !== batch.sha || prior.claudeRound !== batch.reviews.length) {
+        batch.codexFinalReview = {
+          subjectSha: batch.sha,
+          claudeRound: batch.reviews.length,
+          status: 'running',
+        };
+        await save();
+        await workspace.prepare(batch);
+        const qa = await workspace.finalQa(batch);
+        batch.codexFinalReview.status = qa.status === 'verified' ? 'verified' : 'changes-requested';
+        batch.codexFinalReview.summary = qa.summary;
+        await save();
+      }
+      if (batch.codexFinalReview.status === 'running')
+        return blocked('Interrupted independent Codex review requires recovery');
+      changed = batch.codexFinalReview.status !== 'verified';
+      if (!changed) {
+        const current = await gh.reviewFeedback(batch.pr.number);
+        changed = current.head !== batch.sha || feedbackFingerprint(current) !== fingerprint;
+      }
+    }
     if (verdict.verdict === 'approved' && !changed) {
       batch.approvedSha = batch.sha;
       batch.feedbackFingerprint = fingerprint;
@@ -110,7 +148,11 @@ export async function externalReviewStep({
           await workspace.execute(batch, {
             phase: 'external-review-correction',
             round: attempt.round,
-            feedback: { claude: verdict, github: feedback },
+            feedback: {
+              claude: verdict,
+              github: feedback,
+              ...(batch.codexFinalReview ? { codex: batch.codexFinalReview } : {}),
+            },
           })
         ).status !== 'implemented'
       )
@@ -156,7 +198,10 @@ export async function externalReviewStep({
   }
   if (feedback.isDraft) await gh.draftReady(batch.pr.number);
   batch.externalReview = {
-    status: 'requested',
+    status: batch.reviewChannel === 'github-comments' ? 'comment-requested' : 'requested',
+    ...(batch.reviewChannel === 'github-comments'
+      ? { channel: 'github-comments', requestId: randomUUID() }
+      : {}),
     subjectSha: batch.sha,
     requestedAt: new Date().toISOString(),
     feedbackFingerprint: fingerprint,
