@@ -96,7 +96,11 @@
     {
       "id": "bug-batch-450",
       "issues": [
-        450
+        450,
+        472,
+        473,
+        475,
+        476
       ],
       "sourcePr": 469,
       "sourceSha": "29b2f5c9b72b4d909b954d5360ec08095825f29e",
@@ -110,8 +114,55 @@
           "status": "running"
         }
       ],
-      "reviews": []
+      "reviews": [],
+      "expandedAt": "2026-10-17T07:44:43.114Z"
+    },
+    {
+      "id": "bug-batch-447",
+      "issues": [
+        447,
+        451,
+        452,
+        453,
+        454,
+        456,
+        457
+      ],
+      "phase": "planning",
+      "implementation": [],
+      "reviews": [],
+      "dependencies": [
+        "bug-batch-432",
+        "bug-batch-450"
+      ],
+      "branch": "codex/bug-batch-447",
+      "owner": "codex-root-2026-10-17",
+      "reservedAt": "2026-10-17T07:44:43.115Z"
+    },
+    {
+      "id": "tracking-455",
+      "issues": [
+        455
+      ],
+      "phase": "tracking",
+      "implementation": [],
+      "reviews": [],
+      "branch": null,
+      "owner": "codex-root-2026-10-17",
+      "reservedAt": "2026-10-17T07:44:43.115Z"
+    },
+    {
+      "id": "maintenance-470",
+      "issues": [
+        470
+      ],
+      "phase": "access-check",
+      "implementation": [],
+      "reviews": [],
+      "branch": null,
+      "owner": "codex-root-2026-10-17",
+      "reservedAt": "2026-10-17T07:44:43.115Z"
     }
   ],
-  "updatedAt": "2026-10-17T07:38:22.669Z"
+  "updatedAt": "2026-10-17T07:44:43.115Z"
 }
