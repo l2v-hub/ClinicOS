@@ -1,0 +1,23 @@
+import {createRequire} from 'node:module';
+import {readFile,readdir,mkdir,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import path from 'node:path';
+const require=createRequire(import.meta.url);
+const {test,expect}=require(process.env.PR474_PLAYWRIGHT||'playwright/test');
+const root=path.resolve(import.meta.dirname,'../../..');
+const out=process.env.PR474_BROWSER_OUT||path.join(import.meta.dirname,'browser');
+test('synthetic QA result shows actual ACL tests and branch-specific deployment veto after reload',async({page})=>{
+ const branch='codex/pr474-acl-rejection-followup';
+ const config=JSON.parse(await readFile(path.join(root,'frontend/vercel.json'),'utf8'));
+ const native=(await readdir(import.meta.dirname)).filter(n=>/^native-\d+$/.test(n)).sort().at(-1);
+ const receipt=JSON.parse(await readFile(path.join(import.meta.dirname,native,'receipt.json'),'utf8'));
+ expect(receipt.code).toBe(0);expect(receipt.counts).toEqual({tests:13,pass:13,fail:0,cancelled:0,skipped:0});expect(receipt.sourceUnchanged).toBe(true);
+ const hash=createHash('sha256').update((await readFile(path.join(root,'agent-team/tests/bug-pipeline/windows-review.test.mjs'),'utf8')).replaceAll('\r\n','\n')).digest('hex');
+ expect(hash).toBe('082762f220976a73978ce5fb2deca9657eecaf7adb996552c9b5697b49f9cc1f');expect(config.git.deploymentEnabled).toEqual({[branch]:false});
+ const actual={surface:'QA only — synthetic metadata, no deployment',branch,deploymentAllowed:config.git.deploymentEnabled[branch],testsPassed:receipt.counts.pass,testsFailed:receipt.counts.fail,testsSkipped:receipt.counts.skipped,approvedAclTestLfSha256:hash,sourceManifest:receipt.sourceSha256,externalCI:'Verified separately on GitHub; not claimed by this page',claude:'093b8aed code approved round3; final source review recorded separately'};
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});page.on('response',r=>{if(r.status()>=400)errors.push('HTTP '+r.status())});
+ await page.route('**/*',r=>r.request().url()==='http://qa.invalid/pr474-followup'?r.fulfill({contentType:'text/html',body:'<!doctype html><meta charset="utf-8"><title>PR474 follow-up — QA only</title><style>body{font:19px system-ui;background:#eef3f9;color:#17314a;padding:32px}main{background:white;border:1px solid #ccd7e7;border-radius:14px;padding:28px}dt{font-weight:650;margin-top:14px}dd{margin:5px 0;overflow-wrap:anywhere}h1{color:#205eb3}</style><main><h1>PR474 follow-up · ACL & no-deploy</h1><p>Verified local result — not a deployed clinical application.</p><dl></dl></main>'}):r.abort());
+ const render=()=>page.evaluate(v=>{for(const[key,value]of Object.entries(v)){const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=key;dd.dataset.key=key;dd.textContent=String(value);document.querySelector('dl').append(dt,dd)}},actual);
+ await page.goto('http://qa.invalid/pr474-followup');await render();await expect(page.locator('[data-key=deploymentAllowed]')).toBeVisible();await expect(page.locator('[data-key=deploymentAllowed]')).toHaveText('false');await expect(page.locator('[data-key=testsPassed]')).toHaveText('13');await page.reload();await render();await expect(page.locator('[data-key=branch]')).toHaveText(branch);await expect(page.locator('[data-key=deploymentAllowed]')).toHaveText('false');await expect(page.locator('[data-key=testsFailed]')).toHaveText('0');await expect(page.locator('[data-key=approvedAclTestLfSha256]')).toHaveText(hash);expect(errors).toEqual([]);
+ await mkdir(out,{recursive:true});await writeFile(path.join(out,'metadata.json'),JSON.stringify(actual,null,2));await page.screenshot({path:path.join(out,'result.png'),fullPage:true});
+});

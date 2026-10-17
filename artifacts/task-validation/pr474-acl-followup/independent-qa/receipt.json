@@ -1,0 +1,35 @@
+{
+  "base": "62a52a94218cf3c02f2817e946b0b76126e76bc8",
+  "sourceManifestSha256": "6909ba6e6b188cd336ebc2cc62764f87820ac97b58ced4b4f16486cd4ff9daef",
+  "sourceUnchanged": true,
+  "nativeAndGuard": {
+    "code": 0,
+    "counts": {
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "logSha256": "45e49c0d86d15141aa7ae8455b25e281a0dbdf4a1ad42a1bfb81a96478151879"
+  },
+  "negativeControl": {
+    "code": 1,
+    "counts": {
+      "tests": 1,
+      "pass": 0,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "logSha256": "5933dd9d385e37747d963e9f811667b1da298fa67f9a1c536a5ee6966a2f16bd",
+    "change": "Sandbox-only removal of IdentityReference/sid rejection; assertions unchanged"
+  },
+  "browser": {
+    "code": 0,
+    "counts": {},
+    "logSha256": "7707e4312b32eebb33c0d77fab04e4e768b2955ab3c05d2b7d7c46af752797d2"
+  },
+  "localFrontendDependencies": false,
+  "at": "2026-10-17T00:01:48.724Z"
+}

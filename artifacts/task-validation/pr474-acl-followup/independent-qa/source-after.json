@@ -1,0 +1,46 @@
+[
+  {
+    "file": "agent-team/tests/bug-pipeline/windows-review.test.mjs",
+    "sha256": "561e8757d6a66c270ab4cad4c56e34c714f5fd4157c0568985dabdf4f5ff3795"
+  },
+  {
+    "file": "scripts/automation/install-claude-review-windows.mjs",
+    "sha256": "3f5d010f855c56999702bc1e5616e95b996b0cdb4360a63b05f100afd0565e53"
+  },
+  {
+    "file": "scripts/automation/run-claude-review-windows.mjs",
+    "sha256": "6f7c51a70def947d983557b3d286b71d72465bea2271acb3b53d5f7518f77b24"
+  },
+  {
+    "file": "scripts/automation/install-claude-review-cron.mjs",
+    "sha256": "8a9912b797d3663f4983455cfa258c014e76ee46f806d924218b12b768c6668d"
+  },
+  {
+    "file": "scripts/automation/setup-claude-review-windows.ps1",
+    "sha256": "716a6281632940c72fbb12650675e2fa96106e52056a281c2267244d89951f22"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/process.mjs",
+    "sha256": "fe0aca7fd57271d0ecd768121cc219c08eda0843b6ee3977148176385dcd6814"
+  },
+  {
+    "file": "agent-team/src/core/sanitize.mjs",
+    "sha256": "f7bd0cfee8811ee083c25b9b46b68980bcf6a96f4b3cd2d73c8b2934176062f6"
+  },
+  {
+    "file": "frontend/vercel.json",
+    "sha256": "210a5c1ce4cbc78ded356cce5b807125c2e21669c11fc2c4d2fe038cb37d32c0"
+  },
+  {
+    "file": "artifacts/task-validation/pr474-acl-followup/deployment-guard.test.mjs",
+    "sha256": "1b3e1ad4046fb1302aadf7a5fbf902ce894e41bb60d3cfd9985a2f9b6cb70494"
+  },
+  {
+    "file": "artifacts/task-validation/pr474-acl-followup/browser.spec.mjs",
+    "sha256": "d01646f4553c8800a995cdd6e2529a24667421d6517281e0dc88291037cfaa69"
+  },
+  {
+    "file": "artifacts/task-validation/pr474-acl-followup/browser.config.mjs",
+    "sha256": "d773c6952cae12dbaaf66ffcfb0419851b16f3a4de44933e45f3d35c5a653419"
+  }
+]

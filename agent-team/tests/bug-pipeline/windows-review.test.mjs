@@ -293,7 +293,9 @@ test(
       `$ErrorActionPreference='Stop';$file=${psQuote(config)};$before=Get-Acl -LiteralPath $file;$acl=[IO.File]::GetAccessControl($file,[System.Security.AccessControl.AccessControlSections]::Access);$world=[System.Security.Principal.SecurityIdentifier]::new('S-1-1-0');$acl.AddAccessRule([System.Security.AccessControl.FileSystemAccessRule]::new($world,'Read','Allow'));[IO.File]::SetAccessControl($file,$acl);$after=Get-Acl -LiteralPath $file;if($before.Owner -ne $after.Owner -or $before.AreAccessRulesProtected -ne $after.AreAccessRulesProtected){throw 'DACL mutation changed owner or inheritance'}`,
     );
     assert.equal(change.ok, true, change.stderr);
-    assert.equal((await ps(taskScript('privacy', parameters))).ok, false);
+    const publicResult = await ps(taskScript('privacy', parameters));
+    assert.equal(publicResult.ok, false);
+    assert.match(publicResult.stderr, /Non-private scheduler state/);
   },
 );
 

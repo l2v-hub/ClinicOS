@@ -1,0 +1,22 @@
+[
+  {
+    "file": "frontend/vercel.json",
+    "sha256": "210a5c1ce4cbc78ded356cce5b807125c2e21669c11fc2c4d2fe038cb37d32c0"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/windows-review.test.mjs",
+    "sha256": "561e8757d6a66c270ab4cad4c56e34c714f5fd4157c0568985dabdf4f5ff3795"
+  },
+  {
+    "file": "scripts/automation/install-claude-review-windows.mjs",
+    "sha256": "3f5d010f855c56999702bc1e5616e95b996b0cdb4360a63b05f100afd0565e53"
+  },
+  {
+    "file": "scripts/automation/setup-claude-review-windows.ps1",
+    "sha256": "716a6281632940c72fbb12650675e2fa96106e52056a281c2267244d89951f22"
+  },
+  {
+    "file": "artifacts/task-validation/pr474-acl-followup/deployment-guard.test.mjs",
+    "sha256": "1b3e1ad4046fb1302aadf7a5fbf902ce894e41bb60d3cfd9985a2f9b6cb70494"
+  }
+]
