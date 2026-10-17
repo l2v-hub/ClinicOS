@@ -2726,7 +2726,7 @@
         456,
         457
       ],
-      "phase": "publishing-local-proof",
+      "phase": "blocked-dependencies",
       "implementation": [
         {
           "round": 1,
@@ -2748,9 +2748,10 @@
         },
         {
           "round": 4,
-          "status": "running",
+          "status": "passed",
           "startedAt": "2026-10-17T12:19:53.196Z",
-          "reason": "Final existing4/4: one actual roster-row readinessselector only, unchanged timeout/assertions;93other sources andQA3clinicalproof byteexact; freshQA4required."
+          "reason": "Fresh independentQA4 all5localPASS:one actualcanonical7UX+12DB,source94/contracts27exact,97artifacthashes/rootfullreport/452+457PNGaccepted. QA3clinical1480frontend/1942backend+5optin/19intake inheritedonlyafterexact93source/fingerprint verification. Externalreviewedparentmain432/450 stillBLOCKED;4/4final,noUXPR/release/closure.",
+          "sha": "e14ee2f22c18f1026c63e53b5ce0f5744fb0cfe1"
         }
       ],
       "reviews": [],
@@ -3766,19 +3767,174 @@
         },
         "privacyFindings": 0
       },
-      "pendingPublicationSha": "e14ee2f22c18f1026c63e53b5ce0f5744fb0cfe1"
+      "sha": "e14ee2f22c18f1026c63e53b5ce0f5744fb0cfe1",
+      "blockingDependencies": [
+        {
+          "batch": "bug-batch-432",
+          "pr": 483,
+          "reason": "PersonalMax1/4failedwithoutreport; actualreviewedmainnotavailable"
+        },
+        {
+          "batch": "bug-batch-450",
+          "pr": 481,
+          "reason": "PersonalMax1/4failedwithoutreport; actualreviewedmainnotavailable"
+        }
+      ],
+      "evidence": [
+        {
+          "issue": 447,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-447.png",
+              "sha256": "fdee99f8ba941548dd71c06f4d9bc85483aef680511612a84dcfa2b4bec841b6",
+              "bytes": 118980
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-447-trace.zip",
+              "sha256": "b5948917cc6f9d7dd4673dcafeb980ab6951126129514bdb1e4bb15c06350bca",
+              "bytes": 21336524
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-447.webm",
+              "sha256": "e9ba02753f38dbee66a8b2e88dcb682bfe3517dbbf6d57c14b727afc701c4e68",
+              "bytes": 1403073
+            }
+          }
+        },
+        {
+          "issue": 451,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-451.png",
+              "sha256": "cd5e67a54145520e339affc82d266291f210c0eac470ff6f4dd3030339f8dd4c",
+              "bytes": 150722
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-451-trace.zip",
+              "sha256": "f849a23230d87938e367376138bba40b26eff9ed6829cc2ab4c730c61de4fd80",
+              "bytes": 9747116
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-451.webm",
+              "sha256": "1af9c881a5191aeed708a3229b6a7e743e5d976a47ebce567f384892d2812ad1",
+              "bytes": 1005649
+            }
+          }
+        },
+        {
+          "issue": 452,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-452.png",
+              "sha256": "640f260c6bb8f1d18d1917ed7b3a6e047de7e6a4632e1458b9bc0d62af569bc0",
+              "bytes": 128112
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-452-trace.zip",
+              "sha256": "a33560c9c4327f5508b4e45445a7d91f8f5788adc52d35aa44c96de6e2c5d048",
+              "bytes": 11842894
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-452.webm",
+              "sha256": "fd5259cf8a3f9c3687fd60da5dc1fa80ef327a9bc80d8a065162106009d399fd",
+              "bytes": 1560547
+            }
+          }
+        },
+        {
+          "issue": 453,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-453.png",
+              "sha256": "0df735addfa42d193f1fcb23b16b0d77619246aa5fb68eadf4ba6102d7296047",
+              "bytes": 110161
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-453-trace.zip",
+              "sha256": "5a37ddc65ee452fe5f37be648bc650b4af71bd57382f5d4fc3b91e87b80a0d60",
+              "bytes": 24680073
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-453.webm",
+              "sha256": "483e51d1b6abba0ea4f9b9dff6d063f865ca945d76bb17b40e08c2b87f929719",
+              "bytes": 2666235
+            }
+          }
+        },
+        {
+          "issue": 454,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-454.png",
+              "sha256": "be8a8eaaf071891e4bb0c17cb6c43f15482a6d364a22f213c53aef1530073d81",
+              "bytes": 109172
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-454-trace.zip",
+              "sha256": "f3f809eae2c70ec509ab380b641315e928f606f5317b8db1938a2f95a1b921e5",
+              "bytes": 4602398
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-454.webm",
+              "sha256": "5b98f201fff39b5acc6f7169920c61e6586f46a688a0b67976aaf5bfd54e937a",
+              "bytes": 445364
+            }
+          }
+        },
+        {
+          "issue": 456,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-456.png",
+              "sha256": "ef8f85bed00b5eccc4446c5b7c770e2cbf0b0ce906fe6fd7888885146ef7742f",
+              "bytes": 145979
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-456-trace.zip",
+              "sha256": "32049764dcb8a7ed9b89c3822307e028a00ddc5fbd474829c53d0b58da885e4f",
+              "bytes": 5430642
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-456.webm",
+              "sha256": "89f94cee46c22d669ad40c99216e7e79006af24063b3a64b607bb33a8dd45e8a",
+              "bytes": 773807
+            }
+          }
+        },
+        {
+          "issue": 457,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-457.png",
+              "sha256": "7f1d50576e056b07cd8fb8b91ee71bc9f331a3f3af6cd70533c1224f5f279252",
+              "bytes": 203105
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-457-trace.zip",
+              "sha256": "e409691fa96b0784080c136ded4d9e5622054243019d23f32f457a928fac9868",
+              "bytes": 13135333
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/browser/evidence/issue-457.webm",
+              "sha256": "4dcfc656d9180e5797e7bfaf1b95c320020bbb310f0980a8716fdaf77401c4d7",
+              "bytes": 2106243
+            }
+          }
+        }
+      ]
     },
     {
       "id": "tracking-455",
       "issues": [
         455
       ],
-      "phase": "tracking",
+      "phase": "blocked-dependencies",
       "implementation": [],
       "reviews": [],
       "branch": null,
       "owner": "codex-root-2026-10-17",
-      "reservedAt": "2026-10-17T07:44:43.115Z"
+      "reservedAt": "2026-10-17T07:44:43.115Z",
+      "reason": "Eight openchildren require exactreviewedclinicalmain/verifieddeployment. LocalUX4passedbutparentMaxfailed/providertriggermissing; noearlyepicclose."
     },
     {
       "id": "maintenance-470",
@@ -4187,7 +4343,7 @@
       "evidenceRevision": "88406c7aa251b176c13a8c92d695f9e9d43d901d"
     }
   ],
-  "updatedAt": "2026-10-17T12:38:34.669Z",
+  "updatedAt": "2026-10-17T12:40:14.132Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
