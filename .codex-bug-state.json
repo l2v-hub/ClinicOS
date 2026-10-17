@@ -3894,7 +3894,39 @@
         "artifactDownload": "blocked-by-cloud-proxy",
         "providerWrites": 0
       }
+    },
+    {
+      "id": "issue-review-communication",
+      "issues": [],
+      "branch": "codex/issue-review-communication",
+      "owner": "codex-root-2026-10-17",
+      "baseSha": "8124b1bc88c0f086b1ee328214f87f4802005d11",
+      "scope": [
+        "agent-team/src/bug-pipeline/external-review.mjs",
+        "agent-team/src/bug-pipeline/claude-review-cron.mjs",
+        "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+        "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+        "agent-team/tests/bug-pipeline/external-review.test.mjs",
+        "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+        ".github/workflows/codex-issue-review-sync.yml"
+      ],
+      "phase": "implementing",
+      "implementation": [
+        {
+          "round": 1,
+          "status": "running",
+          "startedAt": "2026-10-17T11:12:53.485Z"
+        }
+      ],
+      "reviews": [],
+      "packetHashes": {
+        "task-contract.md": "80d72fe00d383ce3c7c22b619ab0b87e998a456504870e2c746710cd750876f2",
+        "implementation-plan.md": "92eaa03161ca24fddb8fa075ae67038f39e7a6171fb675b013e3e3ef984c3f80",
+        "analysis.md": "afe206b2b975669fcf059c07031270560d51a64ee8c5020eb3ed7c255c7c6d70"
+      },
+      "operationalOnly": true,
+      "rationale": "Explicit new user-requested issue-comment/label feedback feature. Seven sources outside frozen G19; no guard or clinical budget reset. Existing normal-controller ownership preserved."
     }
   ],
-  "updatedAt": "2026-10-17T11:11:01.257Z"
+  "updatedAt": "2026-10-17T11:12:53.486Z"
 }
