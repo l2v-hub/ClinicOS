@@ -15,7 +15,7 @@
       "sourceSha": "29b2f5c9b72b4d909b954d5360ec08095825f29e",
       "branch": "codex/bug-batch-450",
       "owner": "codex-root-2026-10-17",
-      "phase": "waiting-checks",
+      "phase": "waiting-review",
       "reservedAt": "2026-10-17T07:38:22.669Z",
       "implementation": [
         {
@@ -688,7 +688,14 @@
         "runId": 39023763026,
         "createdAt": "2026-10-17T10:12:22.908Z"
       },
-      "externalReview": null,
+      "externalReview": {
+        "status": "comment-requested",
+        "channel": "github-comments",
+        "requestId": "2570afcb-36d9-4130-91df-972e48d38efb",
+        "subjectSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
+        "requestedAt": "2026-10-17T21:16:51.714Z",
+        "feedbackFingerprint": "b355e4026acbf879a56cb50595dab4310a504c6009b64e3c68eae6264a7f72ef"
+      },
       "reviewLedger": {
         "schema_version": 1,
         "max_rounds": 4,
@@ -7037,7 +7044,7 @@
       }
     }
   ],
-  "updatedAt": "2026-10-17T18:24:09.399Z",
+  "updatedAt": "2026-10-17T21:16:51.714Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
