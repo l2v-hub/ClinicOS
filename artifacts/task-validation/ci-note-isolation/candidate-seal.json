@@ -1,0 +1,54 @@
+{
+  "status": "authorSTOP-pending-new-independent-QA",
+  "baseSha": "8124b1bc88c0f086b1ee328214f87f4802005d11",
+  "sourceHashes": {
+    "scripts/run-node-tests.mjs": "e885289d27cc6c315f8fb252e367f7062243ce2117625383106eae486805713f"
+  },
+  "contractHashes": {
+    "task-contract.md": "ca4c2b6444da536470ea2499c603f18d5c8610e81f4e191c229465f12125d036",
+    "implementation-plan.md": "0fd6ef4bc60f7c69ab7a9d599be60128e860b09400f97d24ce2eb0f9333cceb1"
+  },
+  "files": {
+    "implementation-handoff.md": "7453a41092aa2c021943271f6c968a13a39755c47ba2be43b27d91167ad27437",
+    "validation-report.md": "5009427897b4d09720716121e073f708aeb82a0c74865d043c4752669aaedfbe",
+    "prove-runner.mjs": "7ae85af8a4cc2ddaa12a0bc55ce2362ca61cf953bff13315fe5349cd7ab9a46d",
+    "native-failure-analysis.json": "fb2185caee520da78ef82efc9dd7b823a43acce0d86c65745113b0683ab8a802",
+    "implementation-plan.md": "0fd6ef4bc60f7c69ab7a9d599be60128e860b09400f97d24ce2eb0f9333cceb1",
+    "task-contract.md": "ca4c2b6444da536470ea2499c603f18d5c8610e81f4e191c229465f12125d036",
+    "baseline/run-node-tests.mjs": "4e0704d701a918175da719a66389b9798ef2d0204c6c7275072644b5684ac86a",
+    "baseline/stub-css-loader.mjs": "ce514845a821bddef9d97fe33dcf04096df190a7949ece42a7e85b9b46510953",
+    "test-results/candidate-green.log": "aeae49ae2caed49ab93b26b0ec1062e41b269afb19ae67b037fe58ab43ad70b3",
+    "test-results/actual-scheduling-proof.json": "eab11e82fe89cb5817201219b8e1c51bb92cff7a7302e66a4b503f83060f1d89",
+    "test-results/original-red.log": "aa33959e6889a9b3841ecb829e02aa30acb4a98b2d50036356fdbb75c547008b",
+    "history/initial-spec-reporter-parse.log": "12458671e492e9704bcda75dce3301f7e3a4d48866112685acba34b57aca9bdd"
+  },
+  "sourceChanges": 1,
+  "originalAllOtherBytesUnchanged": true,
+  "actualSchedulingProof": {
+    "actualProductionRunner": true,
+    "unchangedFixtureTestBodies": true,
+    "realChildProcesses": true,
+    "syntheticFilesystemSharedStateOnly": true,
+    "networkOrDatabaseAccess": false,
+    "results": [
+      {
+        "name": "original-red",
+        "exit": 1,
+        "executedTests": 2,
+        "writerFinished": true,
+        "readerRan": true,
+        "isolationPhase": false
+      },
+      {
+        "name": "candidate-green",
+        "exit": 0,
+        "executedTests": 2,
+        "writerFinished": true,
+        "readerRan": true,
+        "isolationPhase": true
+      }
+    ],
+    "cleanupCompleted": true
+  },
+  "nativeCIUnrun": true
+}

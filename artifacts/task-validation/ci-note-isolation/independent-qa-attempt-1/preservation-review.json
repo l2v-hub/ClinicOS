@@ -1,0 +1,105 @@
+{
+  "status": "PASS",
+  "originalAuthorFilesPreserved": {
+    "implementation-handoff.md": "7453a41092aa2c021943271f6c968a13a39755c47ba2be43b27d91167ad27437",
+    "validation-report.md": "5009427897b4d09720716121e073f708aeb82a0c74865d043c4752669aaedfbe",
+    "prove-runner.mjs": "7ae85af8a4cc2ddaa12a0bc55ce2362ca61cf953bff13315fe5349cd7ab9a46d",
+    "native-failure-analysis.json": "fb2185caee520da78ef82efc9dd7b823a43acce0d86c65745113b0683ab8a802",
+    "implementation-plan.md": "0fd6ef4bc60f7c69ab7a9d599be60128e860b09400f97d24ce2eb0f9333cceb1",
+    "task-contract.md": "ca4c2b6444da536470ea2499c603f18d5c8610e81f4e191c229465f12125d036",
+    "baseline/run-node-tests.mjs": "4e0704d701a918175da719a66389b9798ef2d0204c6c7275072644b5684ac86a",
+    "baseline/stub-css-loader.mjs": "ce514845a821bddef9d97fe33dcf04096df190a7949ece42a7e85b9b46510953",
+    "test-results/candidate-green.log": "aeae49ae2caed49ab93b26b0ec1062e41b269afb19ae67b037fe58ab43ad70b3",
+    "test-results/actual-scheduling-proof.json": "eab11e82fe89cb5817201219b8e1c51bb92cff7a7302e66a4b503f83060f1d89",
+    "test-results/original-red.log": "aa33959e6889a9b3841ecb829e02aa30acb4a98b2d50036356fdbb75c547008b",
+    "history/initial-spec-reporter-parse.log": "12458671e492e9704bcda75dce3301f7e3a4d48866112685acba34b57aca9bdd"
+  },
+  "candidateSealSha256": "a94fc3caaa2cdb330d5d46d6f563f63f1d40b492c0368c8c01a969e6c1f21856",
+  "trackedDiffPaths": [
+    "scripts/run-node-tests.mjs"
+  ],
+  "sourceHash": {
+    "scripts/run-node-tests.mjs": "e885289d27cc6c315f8fb252e367f7062243ce2117625383106eae486805713f"
+  },
+  "guard19VerifiedFromGitObjects": [
+    {
+      "file": ".github/workflows/deploy-backend.yml",
+      "sha256": "6743d823679a9c1076c85dfcb5e5b9a8f96705849123b3091cac5d00cadaa3f9"
+    },
+    {
+      "file": ".github/workflows/codex-bug-release.yml",
+      "sha256": "aba0ae7af2185330789d6666c1958e15acee4ce36ffa3f0814c2c92a3e31b55e"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/release.mjs",
+      "sha256": "49ca26c74122204ad21d9cf94279d867384ed781b01d4ef62eb2d37b5c18430e"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "sha256": "44855bee987e57b36e4acf47a4de95da19c75558a3975b3d443faa263776f43f"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "sha256": "134299131f264135dba3e75211b02dd6c07954d56447820065973a3b0fa1b5ae"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "sha256": "cb27b28624b83aa37aa6e5f25b0393c7e7698f647257cc53664d36d93131c68c"
+    },
+    {
+      "file": "backend/src/lib/readiness.ts",
+      "sha256": "f7a1338c5934bee0821fa9af5c30d64a732dbd5bec54131cf6569471f6e31461"
+    },
+    {
+      "file": "backend/src/lib/__tests__/readiness-deployment.test.ts",
+      "sha256": "fe79ec9c73c499350826d537cc0b45514ead967e5b640c84eb469bed1a1a9389"
+    },
+    {
+      "file": "scripts/quality-gate/configure-bug-repository.mjs",
+      "sha256": "83359916abe7447d4107fba032f53b444a81e702073eae0fdfcecc16bdfb8fdf"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+      "sha256": "23e7639f39ed2dab384e76fb97faf6d7e7f2115d4b1223b32c0b458e8cd356ac"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/github.mjs",
+      "sha256": "39e04254403105d90220119778ef137698a230ccf15b2937d4f4a1daebd5722d"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "sha256": "cbbe764826f7ffad3bd7c21451e0d6bfeec4ab718c8f61033c8e6561dfca80df"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/process.mjs",
+      "sha256": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/workspace.test.mjs",
+      "sha256": "930257f4aac3e63b7548fb59512130a15848caa8164a2a635cd1d2f58e185d2c"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "sha256": "b2c0d18b93d65a526838ec3f8a4852fbe309d42dbf67bb005f1b646703cf7749"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "sha256": "6102d7239d792ddf1fc1f225b902cff268443ad362c8413499bb8ba990d2a08c"
+    },
+    {
+      "file": ".github/workflows/codex-bug-pipeline.yml",
+      "sha256": "265542dafb39489a2a64d87eec8b580306ad577392049227cc7fb88bae722315"
+    },
+    {
+      "file": ".github/workflows/bug-pipeline-tests.yml",
+      "sha256": "79114c4363dba61d96a45f73363ecef4d2f6c6ce5ac63f5d1f56801c2f23153b"
+    },
+    {
+      "file": "scripts/quality-gate/verify-isolated-services.mjs",
+      "sha256": "681a3e387e603edc99c7b3a2ec3246b6b82445ee2459446de83380a2178cefb2"
+    }
+  ],
+  "notesTestBlob": "081fce16afd1dc6c115ffb803b91116fa2fdab15",
+  "originalExactUnread57Retained": true,
+  "sparseMissingDirectoriesNotDeleted": true
+}

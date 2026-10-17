@@ -1,0 +1,12 @@
+{
+  "runId": 39028043893,
+  "jobId": 117382931199,
+  "sha": "87dfe795f7cc205291aee4bfc9e3ef9e887a3ae0",
+  "failedTest": "notes keyset pagination, exact summary, indexed search and malformed queries",
+  "testPath": "backend/src/routes/__tests__/notes-privacy.test.ts",
+  "actual": 58,
+  "expected": 57,
+  "testAndProductSourcesChanged": false,
+  "cause": "Global broadcast notes are intentionally visible across unique actors; concurrent suites write them while exact mailbox total is asserted. Existing serial global-database phase omitted this test.",
+  "rawLogsPublished": false
+}
