@@ -4623,5 +4623,3126 @@
       "outcome": "Two blocked dependency/decision records; no restart, model call, source change or attempt reset",
       "at": "2026-10-17T11:52:53.427Z"
     }
+  ],
+  "standaloneReviews": [
+    {
+      "schemaVersion": 1,
+      "repository": "l2v-hub/ClinicOS",
+      "pr": {
+        "number": 393,
+        "url": "https://github.com/l2v-hub/ClinicOS/pull/393"
+      },
+      "sha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
+      "baseSha": "d1324cb3dd9ac2a9eafdc7eb3d88abc399da7f55",
+      "baseRef": "main",
+      "branch": "feat/phase5-azure-live-transcribe",
+      "issues": [],
+      "packet": {
+        "path": "artifacts/task-validation/standalone-pr-393",
+        "files": {
+          "analysis.md": "b2ac7cd9aa9f5d358442dd92dbb502994121a717bb94975a4cd6807f44fb3e03",
+          "evidence/12-reload-persisted-readback.png": "3f50c56334dbbc3f024ddc82df15fbe2526a7f40566853aa0c159aa202b58292",
+          "evidence/application-trace.zip": "bf0670bcea27406f25cee802dd6584853de2c42738ee98b02cf96252f55a8390",
+          "evidence/early-buffer-error-recovery.png": "0ef8a06a4961033f426ceea6f6b0e52b3faa69f152349cc163679bc9b879258f",
+          "evidence/page@786c35163b6bb9987f995e673bd9d47a.webm": "c6c6089e01fd11ec176cd734220cf6cb7b408957c6418008d41e4db974c2878d",
+          "history/native-runtime-failure-39047709835.log": "7d1521e4717dd8ed718591eb699ee74837818f15f623e45c61ef49eb6b6ec2f8",
+          "history/original-implementation-ledger.json": "3cd57321ab39c50f1b7ee69eadda89da3daa8652e2529479905cac6932dcc30c",
+          "history/qa1-validation-report.md": "d807ccae6aa2830d72607923b36b304ce649b1303356856597dbff9de247eb2f",
+          "history/qa2-final-seal.json": "e49b3bc94be6fa208ce72cb9b7ccc69939b7adb8722628acb5a6b18fbc4dc8b8",
+          "history/qa2-validation-report.md": "a7dd7eefcbea20aa596a8f09f71e1366796c356c8e92c034939032643c27d6d2",
+          "history/qa3-final-seal.json": "531ca3b3657b05578a3364dc6c832af716c854528f64a61d9e502322e75fbb50",
+          "history/qa3-validation-report.md": "52f4b90896491c7de22e42809152a180140a13124a037d91561c403f4b8b6393",
+          "history/source-manifest-cycle1.json": "eeeebb5fa6ddc80940ec50baba8b3aad4383311845b3dda4a72034db577877c6",
+          "history/source-manifest-cycle3.json": "313aa08cc7e327e706d2e36344f20f2738496e9f83824f59b3bf14b1574c32d5",
+          "implementation-plan.md": "bcdac2bb95b522180adcdb24c549991024871315e1e67853c0ed33632d6682d1",
+          "task-contract.md": "e3ce930de16e67f776d9b28e1778d3e381967d0a85a6a4140580d845182d466f",
+          "validation-report.md": "b995672c8d501de96697a09795a869a12612bd7dd4087da5fae2bb9206782da5",
+          "imported-history.json": "8f12ae0855c394b5b3202361760bc31d90597893a81e388286d9af04a21d317e"
+        }
+      },
+      "sourceManifest": [
+        {
+          "path": ".ai-architecture/phase-5-voice/REALTIME_RECONCILIATION.md",
+          "blob": "218778bf11f0fea2d9ef95ecc7cf58ece896548b",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": ".ai-architecture/phase-9-production/PRODUCTION_RUNBOOK.md",
+          "blob": "aa443d8075518d1f136e425d4f35223a9c8a5e43",
+          "mode": "100644",
+          "baseBlob": "2c16dbc5794a542291ac5ec5b09aea8fb96d3f84",
+          "baseMode": "100644"
+        },
+        {
+          "path": ".ai-architecture/phase-9-production/PROVIDER_CAPABILITY_MATRIX.json",
+          "blob": "2d2dd77b05edbea32bf4dce04d55bbf49f18744f",
+          "mode": "100644",
+          "baseBlob": "32337bae6f0032e8765def1ac45edf9430e77b12",
+          "baseMode": "100644"
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/analysis.md",
+          "blob": "89f47446685e645054005e419e097fe78b1676b5",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-1/logs/backend-server.log",
+          "blob": "35ad9f0ba006128072294ce753d8e8ad9f632781",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-1/logs/backend-voice.log",
+          "blob": "fb4cdac2f93b477085f274b677b947c214640dba",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-1/logs/frontend-server.log",
+          "blob": "2107865dbb8e0cf8cdbc8838081bdf40a7f8be51",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-1/logs/integrated-run.log",
+          "blob": "ec1420574ee213bf7d9afee39f1ea075434899e5",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-1/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-1/logs/seed-assistant.log",
+          "blob": "b041b30fc415b20954c9964554ddc5fd04694bab",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-1/result.md",
+          "blob": "0c10a62b9752b43f1770ad974aeb6c5b47354e3d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-2/logs/backend-server.log",
+          "blob": "c127c8a56979a5fcfa6b582096374a3f817ebc0c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-2/logs/backend-voice.log",
+          "blob": "4e3a2d7b5cfbfeb264e05e1e6ae4031621130936",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-2/logs/frontend-server.log",
+          "blob": "0108228e91188366b5a0361c73eaa4003210e36d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-2/logs/integrated-run.log",
+          "blob": "60b2c7b8b41187e0189181e1e64722ed61d6cb0d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-2/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-2/logs/seed-assistant.log",
+          "blob": "51bf5a9b2a806ebd4e0d8b688f65e6034017eab7",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-2/result.md",
+          "blob": "fb51660845762f19c5e8d44be1c0e42a2585b944",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-2/screenshots/failure.png",
+          "blob": "0e6c78b1f2adfb212ad4e591b148f29b7f19777a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-2/test-results/browser-failure.json",
+          "blob": "44ea5634050a7ef1679e835a81c29571a1aab7f2",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-2/test-results/integrated-result.json",
+          "blob": "2c0d3b3cbd42b1fa94fafe2432ed827d2d1ddd2d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-2/trace/trace.zip",
+          "blob": "57dbcc6969c9d99e0564d015c335360905f422ea",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-2/video/page@34c8c72eeefa711790dc15eb2b884e55.webm",
+          "blob": "9b45b7c67d70dc60e092e1dfe04fa901d482f842",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/logs/backend-server.log",
+          "blob": "c127c8a56979a5fcfa6b582096374a3f817ebc0c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/logs/backend-voice.log",
+          "blob": "f41e77c85ac2117896b9b70989f0b67ea4bf25c3",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/logs/frontend-server.log",
+          "blob": "1afcb2cb6cbbeb987b615e3801b525bfcc894cf8",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/logs/integrated-run.log",
+          "blob": "fb8846bd6da5f7d85b70075478788a46f8ea8dc5",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/logs/seed-assistant.log",
+          "blob": "45a1e29e87e767b7c700b55153684dcb68f32040",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/result.md",
+          "blob": "d66344e87d16d11b79a339ddfa7d4b4634fbb3bf",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/screenshots/01-partial-display-only.png",
+          "blob": "570ab2e774079f6e7df0302054a9117b37ae8ab2",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/screenshots/02-final-operator-review.png",
+          "blob": "f8692d224d696e89755f15bc951e0c773f163d10",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/screenshots/03-preview-zero-write.png",
+          "blob": "fb8150b45593bee5227946fb467b39f1f43b6409",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/screenshots/04-confirmed-one-write.png",
+          "blob": "f2f649121e60a5aa5007f0b37247a656128fcebb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/screenshots/05-cancelled-partial.png",
+          "blob": "5f4be0005cf6e53c526f4487d3a1e997630beec1",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/screenshots/06-provider-failure-text-fallback.png",
+          "blob": "11e8d1ad0143f7b524ad82a5c018b47b3966997c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/screenshots/07-text-assistant-after-failure.png",
+          "blob": "d1fce9b20cc7d760462177d80ea979a484b7a5d8",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/test-results/integrated-result.json",
+          "blob": "1a275109a8578eebe4b6da4b0b998a427316a28e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/trace/trace.zip",
+          "blob": "571b7693ecd5c2d62a9dd298666f408a1d997850",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-3/video/page@bd9a1882b0882019a11be75ab33d766c.webm",
+          "blob": "90fc4d282a04eb61a0475cecb31441ab30eac6d4",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/logs/backend-server.log",
+          "blob": "c127c8a56979a5fcfa6b582096374a3f817ebc0c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/logs/backend-voice.log",
+          "blob": "ec888ec7f3e54f03c65204efe48c9c95ff0ac1fe",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/logs/frontend-server.log",
+          "blob": "f2e681a8fe0556a325ab5f29b4af404022cc9582",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/logs/integrated-run.log",
+          "blob": "6fa9f8b8dfb6c96d3ff73ccc05c96e7cc33ddd8e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/logs/seed-assistant.log",
+          "blob": "9fee115cdc2a65612951e591554c49578dbc72ed",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/result.md",
+          "blob": "8fb74bb75a61799e048348470b90a1c8b77cdd73",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/screenshots/01-partial-display-only.png",
+          "blob": "73b31cebfb4ba68193a1e15c2517075d7dca489a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/screenshots/02-final-operator-review.png",
+          "blob": "03404c14009d6d8cc2f50b9b93bb701dfa2baa0b",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/screenshots/03-preview-zero-write.png",
+          "blob": "5a219f25e03ff742cefb3ca4cc9be728ac307d39",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/screenshots/04-confirmed-one-write.png",
+          "blob": "c49de21272d93cdd115e4a6ebb7103b9404d7fe7",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/screenshots/05-cancelled-partial.png",
+          "blob": "99b8cf74c2fc22cd6e760c83c81831249c500ebf",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/screenshots/06-provider-failure-text-fallback.png",
+          "blob": "84987fa2bfe2003973264b91a518b758b653a92f",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/screenshots/07-text-assistant-after-failure.png",
+          "blob": "806615d8fd9ca4dbe074a647b22e81c84d7db5e0",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/screenshots/08-disconnected-release.png",
+          "blob": "0e73d06a898192555212b1d7fb2fdfdc7a93e68a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/screenshots/09-resident-change-discard.png",
+          "blob": "19af3e155aa03e6d88c3fbee8f2249599d3003eb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/screenshots/10-hidden-pending-permission.png",
+          "blob": "005b8ff91418b16d22f298b4b8859d22a8f96493",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/screenshots/11-unmounted-no-capture.png",
+          "blob": "806615d8fd9ca4dbe074a647b22e81c84d7db5e0",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/test-results/integrated-result.json",
+          "blob": "f581e01bcdb86db201bbf5b8efa904117058ab78",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/trace/trace.zip",
+          "blob": "9b3726ebbc428d92adba91589d8152eb1a21906b",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-4/video/page@6408235bbf529a38b76f9db26034837a.webm",
+          "blob": "6f1d4c5ad22e2cbcafa5b9282a15e1217e046b72",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/logs/backend-server.log",
+          "blob": "c127c8a56979a5fcfa6b582096374a3f817ebc0c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/logs/backend-voice.log",
+          "blob": "c3afeeb7d5bc6ecf65a201c800f466a0ed651fc1",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/logs/frontend-server.log",
+          "blob": "b65149e70426333a7821172cbd92a79b6489f32d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/logs/integrated-run.log",
+          "blob": "75ad61eb43f113ec5e4053fc5d5537b803dad65a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/logs/seed-assistant.log",
+          "blob": "10eb398cf00df74f2070c106e4d067ab15787747",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/result.md",
+          "blob": "06c862e30249e58a4dbe1ff1b4d868f88874a3a6",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/screenshots/01-partial-display-only.png",
+          "blob": "43b86761c88a4105dfcda1c46fb5272887548fa4",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/screenshots/02-final-operator-review.png",
+          "blob": "8691701e1721d38fe91b6243607e521e169457e0",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/screenshots/03-preview-zero-write.png",
+          "blob": "572990d471d3229abb34cbbf80c7cc212e2c608f",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/screenshots/04-confirmed-one-write.png",
+          "blob": "349176c6aa3924d5804c143d14bcc3192ab59cfb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/screenshots/05-cancelled-partial.png",
+          "blob": "17e0f15ab136e1029aa4838604cac151b6624cde",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/screenshots/06-provider-failure-text-fallback.png",
+          "blob": "53340135bb9a6dbc4cedd5d56375398177ecef20",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/screenshots/07-text-assistant-after-failure.png",
+          "blob": "1c68b583eac2f847fed6c6ae66eb14cd1dd14ebf",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/screenshots/08-disconnected-release.png",
+          "blob": "15b88b08cf41be1639a9e82a0c79cd087452f701",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/screenshots/09-resident-change-discard.png",
+          "blob": "490a8f441ade50bc9b79b7ab34dde9c4121c76c6",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/screenshots/10-hidden-pending-permission.png",
+          "blob": "6fc33b81563fbefa81911c37ab2191d1adc712a6",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/screenshots/11-unmounted-no-capture.png",
+          "blob": "1c68b583eac2f847fed6c6ae66eb14cd1dd14ebf",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/screenshots/failure.png",
+          "blob": "34772b06958a31a8a4f813840055a5b4c4078c2f",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/test-results/browser-failure.json",
+          "blob": "23e163eed1f0f99fa98d0b9b83fb43c8daed32cc",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/test-results/integrated-result.json",
+          "blob": "a1575f78fc932ced3ea53a610c190745ef06d9ab",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/trace/trace.zip",
+          "blob": "ba3b6650a9a75f18378a8aef6b7fa57f7639e8c9",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-attempt-5/video/page@0510675738a2aa54d7cb66caea13ab63.webm",
+          "blob": "846f8550249b12866aa7593784fe2014b8dcbe1d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/author-evidence-manifest.json",
+          "blob": "d97330472a400641742f0785da8790c4101bd001",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/analysis-and-plan.md",
+          "blob": "cce8392bfc93b5e8256a7106df853cb82a8fbfb7",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/author-evidence-manifest.json",
+          "blob": "3431e5986605f14e87385d3f3ceb37ad44471ac7",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/frontend-build.log",
+          "blob": "19606d044cd16da75cb68295eabf7273ec6818e4",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/frontend-voice.log",
+          "blob": "5d3d870520306af538cfeab63deb790a844ba69c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/implementation-reservation.json",
+          "blob": "59c26b17a493323981f3ba8550b8e7cb2519f911",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/inherited-proof-identity.json",
+          "blob": "b9f260bee11b70668a9fff53f9f0bd2207cc649a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/integrated-run.log",
+          "blob": "73df4d73471339fa72e4712a9609303700865004",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/privacy-scan.json",
+          "blob": "6bcd0ea71decd8b7f5b2fd4bc944b6ffcb2986c2",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/logs/backend-server.log",
+          "blob": "c127c8a56979a5fcfa6b582096374a3f817ebc0c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/logs/backend-voice.log",
+          "blob": "42a3cfac1dfff83e3c4386b81b9c86f403493959",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/logs/frontend-server.log",
+          "blob": "5adb877b7d9d1e2f52e6d7371d7ebad0706eb76e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/logs/seed-assistant.log",
+          "blob": "e65b3eb1771f151024b29ed5448ef2e46ff443cc",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/01-partial-display-only.png",
+          "blob": "dbb8ce7ed4966e415d9c706ba589c22ad935779a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/02-final-operator-review.png",
+          "blob": "9cd8d09453943848753a3dfe19c49e1d0bfcbb22",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/03-preview-zero-write.png",
+          "blob": "1108d9987bcd4de293fd3c994d4f3e664489bd4a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/04-confirmed-one-write.png",
+          "blob": "80983631e11a07fdc50144b3f9604523130c3f0d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/05-cancelled-partial.png",
+          "blob": "9b0a2346a846923a0a3b1aa75f045d47f0dfaed1",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/06-provider-failure-text-fallback.png",
+          "blob": "382d36e57873e8090161a9cf9f65de4e406e2e13",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/07-text-assistant-after-failure.png",
+          "blob": "75585d3beb91bed8ebf949fb140de724fd2cfc9a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/08-disconnected-release.png",
+          "blob": "2a8af473a5b50bb9825676df67bf5d8d9ff10002",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/08b-stale-resume-preserves-new-capture.png",
+          "blob": "122d089aa7b526cd12ebc84c6f5c77b5d24f88d0",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/09-resident-change-discard.png",
+          "blob": "997d49a2bf346a8c1c99631d1b3f391985dcceec",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/10-hidden-pending-permission.png",
+          "blob": "61837f1291dbda06841d50e81666455f49416e3e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/11-unmounted-no-capture.png",
+          "blob": "636cb60838f4bf5426f8a8dbcbf8278aa261a8d3",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/12-reload-persisted-readback.png",
+          "blob": "c91b961423f47d4755bc1236649fa564dd5788bf",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/13-early-listening-input_audio_buffer_commit_buffer_too_small.png",
+          "blob": "0f63b03e09a86ac45de33db0734d327dec3a5463",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/13-early-listening-input_audio_buffer_commit_empty.png",
+          "blob": "a1b41f7f7713dddd91fc73050eb2bb07d460aeb5",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/13-early-transcript_partial-input_audio_buffer_commit_buffer_too_small.png",
+          "blob": "0f63b03e09a86ac45de33db0734d327dec3a5463",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/13-early-transcript_partial-input_audio_buffer_commit_empty.png",
+          "blob": "0f63b03e09a86ac45de33db0734d327dec3a5463",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/14-empty-committed-idle.png",
+          "blob": "7ede73ec15209aab6c91ecbb19db83a22e33e75e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/screenshots/15-retry-after-buffer-errors.png",
+          "blob": "f09a87a92af04a82abd75f5ade40451d8c3adbbe",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/test-results/integrated-result.json",
+          "blob": "7e3e5efefce4ee3e6a6370b21bd019b950068de8",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/trace/trace.zip",
+          "blob": "adb86ee0d82bf2be0c5bc0f39c258d03625bc631",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/runtime-1/video/page@d4bb5b23768de39768c5b802d304c908.webm",
+          "blob": "a4c79f791c18d64ddfa811d6b8b5fc321821a351",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/source-manifest.json",
+          "blob": "5c19f73cd395e5f8e3eaeac997002cb5c395d68b",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle2/validation-report.md",
+          "blob": "715b7674221ffdac3ea852b9c0307a4a6338ee3f",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle3/analysis-and-plan.md",
+          "blob": "5b479db4f672f4b51aa567ed2a84f725a2600625",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle3/coordinator-no-httpx-result.json",
+          "blob": "4ca7269b99cb5696db41646b22ce59ee9a01b40d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle3/implementation-reservation.json",
+          "blob": "1f60d0ed1c71e5f7c3c65754896bb52df31f404b",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle3/logs/coordinator-full-no-httpx-green.log",
+          "blob": "59b717a0f2d78c0f6a961beefc2f82d4af183775",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle3/logs/coordinator-old-test-no-httpx-red.log",
+          "blob": "1f3ff13b4f0f39c53d693b07eb0c7c9135b296e3",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle3/logs/focused-asgi-test.log",
+          "blob": "c5665601c4ad7fa94232cd757a4cc69976bb1cc1",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle3/logs/full-runtime-unittest.log",
+          "blob": "738ec69b2a6281d09ff7142d44e2b639b835e0eb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle3/native-python-failure.log",
+          "blob": "f38614b241e9c385ecaa2d00c911015b2803d8f8",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle3/source-manifest.json",
+          "blob": "1c6b6a42bb5102a35a8bdc28104cf2db58f977fc",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle3/validation-report.md",
+          "blob": "9f1b3e65d899a2d66c5aa99cc10a80c12633365a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/cycle3/verify_without_httpx.py",
+          "blob": "5167d60fa5bbaea894b76ce9037d41ef49a2068a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/font-assets/inter-OFL.txt",
+          "blob": "40589daa9de8bc96606292ea0be712ff0f0626eb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/font-assets/inter-latin-400-normal.woff2",
+          "blob": "f15b025d666269fb07daf0263e54231481e4289c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/font-assets/inter-latin-500-normal.woff2",
+          "blob": "54f0a595dd3c76344a980109e7517ed42416de93",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/font-assets/inter-latin-600-normal.woff2",
+          "blob": "d1897949fda5c7fc5f04622df43a3fcba5b89d84",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/font-assets/inter-latin-700-normal.woff2",
+          "blob": "a68fb101cd9224aa7bb6ca80356b5132c40c6f3f",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/font-assets/inter-latin-800-normal.woff2",
+          "blob": "74a16d45945264434aa7409e79549c626ebcdfb1",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/font-assets/jetbrains-mono-OFL.txt",
+          "blob": "8f7ed671137e7a27c646ead86f45d5cb4875f459",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/font-assets/jetbrains-mono-latin-400-normal.woff2",
+          "blob": "585887339efd032b6b715466ae72d86e306bec79",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/font-assets/jetbrains-mono-latin-500-normal.woff2",
+          "blob": "be878e68fa71bc1f08894c0882d07adbe485ef99",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/font-assets/manifest.json",
+          "blob": "dd1a8bcc7b68622ff5090fdfbdd20f8938fc552e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/implementation-ledger.json",
+          "blob": "78f9e6238960b5c9b8106da115677b4cb4ba8595",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/implementation-plan.md",
+          "blob": "8d0630d01010ffff4950ceb1f0d7b167d73052de",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/adversarial_runtime.py",
+          "blob": "e33974b7a097362fd8f1a1fa34c67859c16eb12e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/diff-security-review.md",
+          "blob": "f9695638e2eb317bc63d38a717354e3f4b2b9335",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-browser.mjs",
+          "blob": "cbe0602e6125228322f006f076876e2d7703ab9d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-probe/logs/backend-server.log",
+          "blob": "c127c8a56979a5fcfa6b582096374a3f817ebc0c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-probe/logs/backend-voice.log",
+          "blob": "60b521bf0a1e88a1584f7e2c962a544f7abd5f6e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-probe/logs/frontend-server.log",
+          "blob": "7ef210aa9c59591a15219e1e22638b08ae69bdca",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-probe/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-probe/logs/seed-assistant.log",
+          "blob": "834e5396f6b8dd969f75d2d3f8349794031142a4",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-probe/screenshots/01-partial-display-only.png",
+          "blob": "86f2cfb7c746877a8bab0a635b6aa60d978f3c60",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-probe/screenshots/failure.png",
+          "blob": "1f092d8f865cac594e74d5a1e525ba118273bb7e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-probe/screenshots/independent-early-empty-buffer-error.png",
+          "blob": "acae5040a9512c127b74ee049eedbf3158b7527a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-probe/test-results/browser-failure.json",
+          "blob": "b3d33f81e179dd2953c4ea5020563ddb479ec0b2",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-probe/test-results/early-buffer-observed.json",
+          "blob": "57db4e792d1ed53cf15218757f90ff0bfe16d629",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-probe/test-results/integrated-result.json",
+          "blob": "d632f1f2470f9f9a119701b086edf43c6efd45cc",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-probe/trace/trace.zip",
+          "blob": "72c1622721fa3e5f83311aa148b98f654f890f7e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-probe/video/page@948d92570c783441edab1a41bd150b3c.webm",
+          "blob": "cea2ca44bd34e2761e30ff20614affe5aa2b503a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-runner.mjs",
+          "blob": "8fb5b8c53b53672215dc52209618cf61e90e7ba1",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/final-seal.json",
+          "blob": "c89bb522a5c023538f80e51f3d8aceeb7dca0b37",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/finding-early-buffer.md",
+          "blob": "ad8dd202dc702994a309bf2e9a72fe27ec3defde",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/independent-browser.mjs",
+          "blob": "6f0d0b7b4079654b8817a0e04257f34c2756908f",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/independent-runner.mjs",
+          "blob": "29923cb56e45a38d8112dd1b6033aab461b7d36d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/logs/backend-types.log",
+          "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/logs/early-buffer-probe.log",
+          "blob": "998450184dd9351cb61cfd00a6a4c3feb8e6a612",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/logs/frontend-build.log",
+          "blob": "b73b1f34e13c584b8a38e3241bf4e953ea9bdc21",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/logs/frontend-tests.log",
+          "blob": "b58763a4f874f395de56bb11f1056996710f5dc6",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/logs/independent-integrated-2.log",
+          "blob": "837d92f0e255d14a940227331aa94161fa5e5a54",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/logs/independent-integrated-3.log",
+          "blob": "837d92f0e255d14a940227331aa94161fa5e5a54",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/logs/independent-integrated.log",
+          "blob": "837d92f0e255d14a940227331aa94161fa5e5a54",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/logs/independent-runtime.log",
+          "blob": "29a3abdc51d991132ff429b7182dec5c1fd690b8",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/logs/python-full.log",
+          "blob": "2e0a95969b68a09129d3150e30640b84e04837ce",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/playwright-report/index.html",
+          "blob": "a3d5a79991e47b26d8b558296a9f18e53365f7dc",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/privacy-media-validation.json",
+          "blob": "6dd53da1a8c6d557800ddd37ce255151b48f8190",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/retained-earlier-trace-provenance.json",
+          "blob": "723cb5e4c46db59199513de0fbf525bff8ba5bb6",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/harness/independent-browser.mjs",
+          "blob": "05a4ae3d758ecf1883c635db7562c46e59e0f7bd",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/harness/independent-runner.mjs",
+          "blob": "29923cb56e45a38d8112dd1b6033aab461b7d36d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/logs/backend-server.log",
+          "blob": "c127c8a56979a5fcfa6b582096374a3f817ebc0c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/logs/backend-voice.log",
+          "blob": "56dde79e31744db2126391f0e409d7772b8e8cdc",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/logs/frontend-server.log",
+          "blob": "1a52612153bc64b30fae7d05bf4228b9bc7576cf",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/logs/seed-assistant.log",
+          "blob": "a324a41bbc3dd932c4b1ee5e96c6641d1b933377",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/screenshots/01-partial-display-only.png",
+          "blob": "1893dba88fa63007d98eb9956e161e5ebe78eb86",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/screenshots/02-final-operator-review.png",
+          "blob": "a7b769198952faabb66837c4e153916cf7e5fc6e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/screenshots/02b-independent-early-final-rejected.png",
+          "blob": "a7b769198952faabb66837c4e153916cf7e5fc6e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/screenshots/03-preview-zero-write.png",
+          "blob": "4dd300f175ea52c85aa848c06b40015b97606b63",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/screenshots/04-confirmed-one-write.png",
+          "blob": "1f603243d031db78e2fd378fa9c1f840e124679b",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/screenshots/05-cancelled-partial.png",
+          "blob": "9378dbcfdb869fc2c4ace84cfa6dfd92d35094f1",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/screenshots/06-provider-failure-text-fallback.png",
+          "blob": "79920183122014bf57ca9fd75c57032c165bd13c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/screenshots/07-text-assistant-after-failure.png",
+          "blob": "41526069dc990bc42155348688e3588d1a8cacff",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/screenshots/08-disconnected-release.png",
+          "blob": "53da673da049ab070af17fd04db3b9e7d2195c62",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/screenshots/08b-stale-resume-preserves-new-capture.png",
+          "blob": "eb4c2c26b561831a71bcfc8e4cc7d2f73c44403b",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/screenshots/09-resident-change-discard.png",
+          "blob": "dfdbd55b4433abd7624f48f8d14f448cdd10ab8f",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/screenshots/10-hidden-pending-permission.png",
+          "blob": "155974a11867d28e930700c06f287a00bb9352c2",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/screenshots/11-unmounted-no-capture.png",
+          "blob": "047b8a949144ff2b87498582cd372db948ceb4b2",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/screenshots/12-reload-persisted-readback.png",
+          "blob": "3ad398241335f03aeeb233e70aa9e8eaf4f70f12",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/test-results/integrated-result.json",
+          "blob": "c74ea174fc655dd65259190d0377aac53e88f222",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/trace/trace.zip",
+          "blob": "ad1839a0c21015b618bcde0afd2be1d90914ab98",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-1/video/page@8256f959572821a2909e20dca58c19c9.webm",
+          "blob": "f717a9af82161f3abbe83569d2fa6fd2794fa294",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/logs/backend-server.log",
+          "blob": "c127c8a56979a5fcfa6b582096374a3f817ebc0c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/logs/backend-voice.log",
+          "blob": "eeb8079a5c7be4374486cbc3e71ad13f795d37f9",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/logs/frontend-server.log",
+          "blob": "2049cdd5b94b3920acc66fcc750ea2d444624447",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/logs/seed-assistant.log",
+          "blob": "a3057d71d414de601037db3364a9122269c23f33",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/screenshots/01-partial-display-only.png",
+          "blob": "d7ee8b79dc7ac6a4c4ab287b2dcf86ccaaceea42",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/screenshots/02-final-operator-review.png",
+          "blob": "739a50963d7f2ab6e9f7a559cc64def6606e227d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/screenshots/02b-independent-early-final-rejected.png",
+          "blob": "739a50963d7f2ab6e9f7a559cc64def6606e227d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/screenshots/03-preview-zero-write.png",
+          "blob": "ae656cba1b4cca1fa89d4abade27232098900ed2",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/screenshots/04-confirmed-one-write.png",
+          "blob": "e924989f31f9cb429a385b6d119728478148f5e0",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/screenshots/05-cancelled-partial.png",
+          "blob": "34b03a774a4bfa75e1314eedd3d182770f6e97dd",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/screenshots/06-provider-failure-text-fallback.png",
+          "blob": "ec1f8085c78a8649f51789618fe24a61222230bd",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/screenshots/07-text-assistant-after-failure.png",
+          "blob": "95e965d1ca1328315ada73029ffe55cbe6d87712",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/screenshots/08-disconnected-release.png",
+          "blob": "a6a7e9b0d003007231a82f371dfb35c1c1dbd5ff",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/screenshots/08b-stale-resume-preserves-new-capture.png",
+          "blob": "859b65f7ee3c1de7e267fd59c7e8c0f86eb39b1b",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/screenshots/09-resident-change-discard.png",
+          "blob": "8ae8577ba44f55fc05facfe21d386879ef77b1d9",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/screenshots/10-hidden-pending-permission.png",
+          "blob": "2815188975209869d4b4edc2c90e782e0620c232",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/screenshots/11-unmounted-no-capture.png",
+          "blob": "93aba1fe9da9ef7df272745808e1c0b56129d365",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/screenshots/12-reload-persisted-readback.png",
+          "blob": "ba23c3ea50e1191efa2afedb4ec8f2eb8b2d4388",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/test-results/integrated-result.json",
+          "blob": "c74ea174fc655dd65259190d0377aac53e88f222",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/trace/trace.zip",
+          "blob": "887b09436892548ad9bdf26128afb9a86040b1a9",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-2/video/page@a5c1fcb30788349ba8e693e878b9a5ec.webm",
+          "blob": "dee237ffac08840ecd1a1fed690177eea70c1466",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/logs/backend-server.log",
+          "blob": "c127c8a56979a5fcfa6b582096374a3f817ebc0c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/logs/backend-voice.log",
+          "blob": "eb09522a0098bc00b2569fa3bfe63d1d74e68693",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/logs/frontend-server.log",
+          "blob": "5d3bd47dd8e1d2c81386270e8184c83e3028597d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/logs/seed-assistant.log",
+          "blob": "838e11a77e4319a8b58b770cb40a48803c2b44e2",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/screenshots/01-partial-display-only.png",
+          "blob": "a481e3f07f1478dd7f1015e3bdb6feb5d413dbc3",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/screenshots/02-final-operator-review.png",
+          "blob": "ef65aee44744aa00e19495f736572888fe2f0b8a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/screenshots/02b-independent-early-final-rejected.png",
+          "blob": "ef65aee44744aa00e19495f736572888fe2f0b8a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/screenshots/03-preview-zero-write.png",
+          "blob": "14856b47cc2257f51af80a02345fec1fbbc58026",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/screenshots/04-confirmed-one-write.png",
+          "blob": "9017be57e272edd0318e306bc64225e09f020ccb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/screenshots/05-cancelled-partial.png",
+          "blob": "917c3ef7059cfcca7c00e938d21178e465ac1804",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/screenshots/06-provider-failure-text-fallback.png",
+          "blob": "450faf80d9f0b3aec9878c74ecf70028ce5baca2",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/screenshots/07-text-assistant-after-failure.png",
+          "blob": "fa9f82a4b79867656354ee12f1fd663a881e35a1",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/screenshots/08-disconnected-release.png",
+          "blob": "203552f3007719a5fb63b1f0e372b89fabf8c7d2",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/screenshots/08b-stale-resume-preserves-new-capture.png",
+          "blob": "98f53e0dfeac77e0a3097cdec49984e8915d5907",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/screenshots/09-resident-change-discard.png",
+          "blob": "6d4e76b341e5f5661fdccba91140d07aae0b1a8f",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/screenshots/10-hidden-pending-permission.png",
+          "blob": "92e824131f1c5a89546d0d762d95d24b38747d10",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/screenshots/11-unmounted-no-capture.png",
+          "blob": "226b46477a1028529f784e3c4091954d01e60aeb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/screenshots/12-reload-persisted-readback.png",
+          "blob": "c7a3483301285118e414ecde2c80966d8ec64e33",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/test-results/integrated-result.json",
+          "blob": "c74ea174fc655dd65259190d0377aac53e88f222",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/trace/trace.zip",
+          "blob": "acb7eac27833d06e45e6592120b8250a2dfbf785",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-3/video/page@fa84d54a0548332b3dccb7f8806b5301.webm",
+          "blob": "e04f77f40b2ba7d8e20b1ad5661c3773441ce76a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/runtime-repeat-reason.md",
+          "blob": "349e5b91881a694d191b1ceae7edc9f4ffa03a49",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/source-identity-after.json",
+          "blob": "4c324934cb77fffca28bb4f331a3d72b81a1963e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/source-identity-before.json",
+          "blob": "fa6bedb0a639676fef1249d56abd188dfd9379ab",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/task-contract.md",
+          "blob": "010944e74451a0c66299338aec11d72790a81433",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/validation-report.md",
+          "blob": "0679304019eeac793dcef05401d0e587cdd94364",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa/verify_artifacts.py",
+          "blob": "7450f20447942a13ad780f790969ea6f57295e80",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/diff-security-review.md",
+          "blob": "136ff23826bac51e17d925e32ce964a813694488",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-browser.mjs",
+          "blob": "21c61746ec404eb67e3a7405475b69d3345faf05",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe/logs/backend-server.log",
+          "blob": "c127c8a56979a5fcfa6b582096374a3f817ebc0c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe/logs/backend-voice.log",
+          "blob": "aadee8d9e1652170e909a4863fbe0c5fcb0ef098",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe/logs/frontend-server.log",
+          "blob": "e31d1742e4412cde671e7bef49e00feccae8d7e5",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe/logs/seed-assistant.log",
+          "blob": "9bb579c7c9873583576ab9d35fb5c032a5b0caa7",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe/screenshots/01-partial-display-only.png",
+          "blob": "f0c7fc840e99cbec8b48d91357dff62add9feaef",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe/screenshots/independent-early-empty-buffer-error.png",
+          "blob": "682ddffcdf67ff770ba250770a1241b6a3f08a4d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe/test-results/early-buffer-observed.json",
+          "blob": "0a91fcdeec93fe87e4ffe310ea9dddcbd89d745a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe/test-results/integrated-result.json",
+          "blob": "15826eafcd77b0f56a2550da7a97de5b5d8e66fa",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe/trace/trace.zip",
+          "blob": "8ad3a4d4d9619df73a9f1be376954ca82b118ec6",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe/video/page@34c96ed415680d654dfbe9bbbeb4f34d.webm",
+          "blob": "1b9a875f54f1d252a589227433a3eae1434fbb11",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe2/logs/backend-server.log",
+          "blob": "c127c8a56979a5fcfa6b582096374a3f817ebc0c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe2/logs/backend-voice.log",
+          "blob": "575fc27434a19f2f76b304e9de643e632d756c3e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe2/logs/frontend-server.log",
+          "blob": "270fc425731b9d1a366a7c6f7df203a41a149041",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe2/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe2/logs/seed-assistant.log",
+          "blob": "ec8d2db878d8681361633c86f9adadcb7f6bd402",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe2/screenshots/01-partial-display-only.png",
+          "blob": "59c4e0bf14ae87d27abadfe723fb650c06ebda3a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe2/screenshots/independent-early-empty-buffer-error.png",
+          "blob": "fb2dea0a46f4abf3bd5cd671cdf9691a7116b3fa",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe2/test-results/early-buffer-observed.json",
+          "blob": "0a91fcdeec93fe87e4ffe310ea9dddcbd89d745a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe2/test-results/integrated-result.json",
+          "blob": "15826eafcd77b0f56a2550da7a97de5b5d8e66fa",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe2/trace/trace.zip",
+          "blob": "10ff45a55289d2901ec42bd7bfa9bc40b6079a93",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-probe2/video/page@7009b8d7f6b4c26c2ce08b4a24be6c7c.webm",
+          "blob": "deb1fe12d0eac76bdfa6517dd35b8c7a6513e564",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/early-buffer-runner.mjs",
+          "blob": "8fb5b8c53b53672215dc52209618cf61e90e7ba1",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/final-seal.json",
+          "blob": "1c3599630410020b6563e9b655fe8bf6b1198a49",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/independent-browser.mjs",
+          "blob": "d962f98d8612755ee6e8f12016d4b255fa3102da",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/independent-runner.mjs",
+          "blob": "29923cb56e45a38d8112dd1b6033aab461b7d36d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/inherited-proof-identity.json",
+          "blob": "6727038b5ee86fb4c6591aebc65faebe0ffc4229",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/logs/backend-types.log",
+          "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/logs/early-buffer-probe.log",
+          "blob": "87153e1ecb93e564e77a68e293e187ae47065cc8",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/logs/early-buffer-probe2.log",
+          "blob": "87153e1ecb93e564e77a68e293e187ae47065cc8",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/logs/first-verifier-failure.txt",
+          "blob": "ca870d06d95c1a0da32bfd26d0887dfd5dd3b807",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/logs/frontend-build.log",
+          "blob": "1213dc06dc1d4942a19bdf5ed4588b61080194ed",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/logs/frontend-tests.log",
+          "blob": "7f42f6d57fd2bac39f22139af5c31abd2a93f3fb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/logs/independent-integrated.log",
+          "blob": "80f7a51207be7f67910c3502f633c1aea7e27819",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/logs/media-verifier.log",
+          "blob": "eb91cce344fd815275b26de49c96a3e1b8b0b096",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/logs/setup-note.txt",
+          "blob": "2750dc66bc119fa8ca17b79c920f817d653f8865",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/playwright-report/index.html",
+          "blob": "1fc3915e6b49c89a4a72ffb2abd986936eee059e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/pre-sanitize-manifest.json",
+          "blob": "4f877e08a818f807c802cd714c64978e912d3d62",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/privacy-media-validation.json",
+          "blob": "412400c3e3470322ac01d7179f55f03592a5baa5",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/privacy-provenance-note.md",
+          "blob": "cb8c65884c746a7210b651b0f232d0722da96940",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/logs/backend-server.log",
+          "blob": "c127c8a56979a5fcfa6b582096374a3f817ebc0c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/logs/backend-voice.log",
+          "blob": "5ab5bebb1ec82454437dd2a0a8dcfa4da4aff34d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/logs/frontend-server.log",
+          "blob": "9b0097a1c815105ee7a93850101cddf90260c80e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/logs/seed-assistant.log",
+          "blob": "44a43fb52d41d9b50c7172aa260e82d6e07a91e1",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/01-partial-display-only.png",
+          "blob": "fc1e34f69e3f9464012d6cc27cdf8758c0b10d2e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/02-final-operator-review.png",
+          "blob": "b635615b9010ab22ac89e9ce4267935e09e6ca54",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/02b-independent-early-final-rejected.png",
+          "blob": "b635615b9010ab22ac89e9ce4267935e09e6ca54",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/03-preview-zero-write.png",
+          "blob": "dfc371fd6ca8cfd96ea731776475ca38db0a93e0",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/04-confirmed-one-write.png",
+          "blob": "21adffc35be6a98f9150720df5536d0205f3ec7b",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/05-cancelled-partial.png",
+          "blob": "4a7706720b7978f94b62e23c1b3639640c8339da",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/06-provider-failure-text-fallback.png",
+          "blob": "9d0fc93773c67eed7dba81bac197a0986e842f51",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/07-text-assistant-after-failure.png",
+          "blob": "e6fc034ce6982af42ce6316df7102c2fa3700b69",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/08-disconnected-release.png",
+          "blob": "aed47d2d1cbe84e96025c9f14b89a16f06c075ce",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/08b-stale-resume-preserves-new-capture.png",
+          "blob": "4eb062fc943aff9fe961e03e5eb9638dd5821933",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/09-resident-change-discard.png",
+          "blob": "027fe85c79547ef6d61ce9791e5febb4d57ce2ff",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/10-hidden-pending-permission.png",
+          "blob": "75f556c23d0af683598d4a4626c59ef13eb151aa",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/11-unmounted-no-capture.png",
+          "blob": "69c22b8b1d5ec69d20ce7fa8f149d78cf89c6689",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/12-reload-persisted-readback.png",
+          "blob": "f07ceded33de9b67954a2c30812ab034ae3e2ad1",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/13-early-listening-input_audio_buffer_commit_buffer_too_small.png",
+          "blob": "256561272f96a7c7ed2103c49899b57b15144855",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/13-early-listening-input_audio_buffer_commit_empty.png",
+          "blob": "c6a0252e184d4741f30bd50d7aedac3a8ac2d54a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/13-early-transcript_partial-input_audio_buffer_commit_buffer_too_small.png",
+          "blob": "256561272f96a7c7ed2103c49899b57b15144855",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/13-early-transcript_partial-input_audio_buffer_commit_empty.png",
+          "blob": "256561272f96a7c7ed2103c49899b57b15144855",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/14-empty-committed-idle.png",
+          "blob": "49fb0f08b347f35b3f316bf6c4b7bfb21a56a771",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/screenshots/15-retry-after-buffer-errors.png",
+          "blob": "642cc58ca68e94f54e284114a4cdfe00f7ec9238",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/test-results/integrated-result.json",
+          "blob": "ff2c0dc24b4ad8a24358001473bc54e0e96d8b18",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/trace/trace.zip",
+          "blob": "cacc8d62abc4a49656b745e0ebd136129f63ce91",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/runtime-1/video/page@786c35163b6bb9987f995e673bd9d47a.webm",
+          "blob": "7eba2837c538490b23b0d9e5b4507e8a187ff919",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/source-identity-after.json",
+          "blob": "21b02e688dcb246840176636a11d5600dbc4ce66",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/source-identity-before.json",
+          "blob": "148efbe3f4e5b1556a1d208c7a2a851b871e1a63",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/task-contract.md",
+          "blob": "ba573e8d09054356b85ead2647a43b187e296e5c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/test-results/full-diff-scope.json",
+          "blob": "e4bbfbcac5fab3090e6eaa881a33e8eb5cbb42d4",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/test-results/full-tracked-diff.patch",
+          "blob": "6ff740f5040a6a44e1f72fccb53ab417f2d27525",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/test-results/live-pr393.json",
+          "blob": "e95ab52beb138ba5f2b35ee779e7a38c06ac38df",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/trace-lossless-normalization.json",
+          "blob": "5ac2a634c96678970798d2cc1529d23477cd0d25",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/validation-report.md",
+          "blob": "660ce34595ee9bb71fa8691e68614a5754baf7d5",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa2/verify_artifacts.py",
+          "blob": "202197e2bd69323c7f4dc78df5e17aa37bcd85fa",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/diff-security-review.md",
+          "blob": "da2c17a4be72983da25d5003aed294ede4eeff9b",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/early-buffer-browser.mjs",
+          "blob": "21c61746ec404eb67e3a7405475b69d3345faf05",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/early-buffer-probe/logs/backend-server.log",
+          "blob": "c127c8a56979a5fcfa6b582096374a3f817ebc0c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/early-buffer-probe/logs/backend-voice.log",
+          "blob": "8ebf4e6f24829609e1ad9f3e3e0809d0c1ed194d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/early-buffer-probe/logs/frontend-server.log",
+          "blob": "3f7d04d6e49cd6a953fd323e62a49e9f7b488e08",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/early-buffer-probe/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/early-buffer-probe/logs/seed-assistant.log",
+          "blob": "fdc812aae5a38df914b9a9c3963b6f298dd71c2d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/early-buffer-probe/screenshots/01-partial-display-only.png",
+          "blob": "c11a8e64465e7c1b270836fb9377551a40d441c5",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/early-buffer-probe/screenshots/independent-early-empty-buffer-error.png",
+          "blob": "b66403f66f1644d1c47f01ec108b2bd8f9e5b7a4",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/early-buffer-probe/test-results/early-buffer-observed.json",
+          "blob": "0a91fcdeec93fe87e4ffe310ea9dddcbd89d745a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/early-buffer-probe/test-results/integrated-result.json",
+          "blob": "15826eafcd77b0f56a2550da7a97de5b5d8e66fa",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/early-buffer-probe/trace/trace.zip",
+          "blob": "c1ffb4f7c1b45aa56bd9808a11925c0d41d45579",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/early-buffer-probe/video/page@d54c03d8990840fabdfe10e14d35471e.webm",
+          "blob": "49f67e6200695ed4d0dfa0021d6176d4dcad83d0",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/early-buffer-runner.mjs",
+          "blob": "8fb5b8c53b53672215dc52209618cf61e90e7ba1",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/final-seal.json",
+          "blob": "5b931e80bd8e034b316bbc950e2951e754d5da9d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/logs/contract-validation.log",
+          "blob": "e64e46a4bb0155af761e4b22ce7d0fae61fb10cf",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/logs/diff-check.log",
+          "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/logs/media-audit-final.log",
+          "blob": "72eac6369cb09f55b6de9321c32c111fd67e18e4",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/logs/media-audit.log",
+          "blob": "5b4e0722999c97c34c615e35b3737cabce20394f",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/logs/owned-probe.log",
+          "blob": "87153e1ecb93e564e77a68e293e187ae47065cc8",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/logs/python-full-no-httpx.log",
+          "blob": "c4e98668eca0acfd081223800ba62ed024d407e8",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/playwright-report/index.html",
+          "blob": "36365efb4d6bd5624b7dc73b85aa3e75c8387601",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/pre-sanitize-manifest.json",
+          "blob": "4ccf69f0ac814a413ffecfb4bf4d2f20e3a0291b",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/privacy-media-validation.json",
+          "blob": "23739e85f4770020076cb53307e9245cab4afa71",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/source-identity-after.json",
+          "blob": "d3aa6c5e703cfad46919241c56f05a6a5d7f0495",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/source-identity-before.json",
+          "blob": "d6fd5a5b37b43a13b21c2d28b25af07962668bca",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/task-contract.md",
+          "blob": "d4ab8fddd95e51da4c2d2392b2b733203cf9d44e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/test-results/compile-check.json",
+          "blob": "c8bf8bc98ddd914db5d2af895b46d4dc8e76ad95",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/test-results/cycle3-test-diff.patch",
+          "blob": "8fbe64aa19af022c3b3ceda8f0d4415a68e97787",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/test-results/full-inherited-input-identity.json",
+          "blob": "0c53b245462e98c468298ee9be3ba4fb15044d9a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/test-results/full-source-diff.patch",
+          "blob": "009f1ba9e0b877e01f90bbcb49b5e1005b7d1371",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/test-results/live-pr393-contract-reference.json",
+          "blob": "35d182ff66d282105d6101698686d31675e2c60f",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/test-results/privacy-provenance-verification.json",
+          "blob": "ea818b2c08088b2e184b867f342dd2724a2e43a4",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/test-results/probe-audit.json",
+          "blob": "b0b9939ef0d6d43972e6e7ee7674e1df3d4975ae",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/validation-report.md",
+          "blob": "3fdd1a6879798711c8585a3bffc69ff37204be52",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/verify_artifacts.py",
+          "blob": "155860bc196054a5417afdd295dd365658dec0f4",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/independent-qa3/verify_without_httpx.py",
+          "blob": "7bf3b4b9da43c43c1ada4be77c4c28c5da273cdc",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/backend-client.log",
+          "blob": "d64508353b9111a4320fbdac8f8c53a9c06092fd",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/backend-server.log",
+          "blob": "c127c8a56979a5fcfa6b582096374a3f817ebc0c",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/backend-types-final.log",
+          "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/backend-types.log",
+          "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/backend-voice.log",
+          "blob": "9630a989c81bf21f3478403dd42b59d992414374",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/frontend-build-final.log",
+          "blob": "b637d4060c8a7e5e63e2a426a3a56a9d730614c0",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/frontend-build.log",
+          "blob": "a64ef72d0a5011ed1c29ce1fa825a1b4d5ec3119",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/frontend-server.log",
+          "blob": "0149c7e0d9b93bbb3b07736530cdcad432441429",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/frontend-tests-final.log",
+          "blob": "b6d848530f94abf132eaebe436c4e5a321781432",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/frontend-tests.log",
+          "blob": "13b346ae471e178111217d30622f9348bb9cbf57",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/frontend-voice-final.log",
+          "blob": "efa6396fa1a828d9f3d0c9ebee5da880f6e0d06f",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/integrated-run.log",
+          "blob": "b6f7c997fe624a8f55afb0f23e64dcc5b1bc241a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/migrate.log",
+          "blob": "f6086a886f3cfa04e7db433dab1f8c10f180eefb",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/prisma-generate.log",
+          "blob": "56edde79c5808cdcab9973fe5f8c6e37d7b72269",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/python-full-final.log",
+          "blob": "8e4cfb7464c0f57949c65e6e1ce9f8f6dcbe73dc",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/python-full.log",
+          "blob": "3c0e7043ccc95fa6736fe2df60050030515133b4",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/python-voice-final.log",
+          "blob": "8f8bbc2672476a5ee72f7252c164d362c8481201",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/python-voice.log",
+          "blob": "be3ccc77fc41137b147e7e44cea590efce38dc18",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/logs/seed-assistant.log",
+          "blob": "f7180bacca16e54822a821de306c54f6e9b6c1ec",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/privacy-scan.json",
+          "blob": "63c1ced9bfded88c659fa92a15b99ee4d82d9986",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/screenshots/01-partial-display-only.png",
+          "blob": "76890e121726e083823749cbb21b788f6de753e3",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/screenshots/02-final-operator-review.png",
+          "blob": "ad4f45d92714602b420f55fd1152462b4f162956",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/screenshots/03-preview-zero-write.png",
+          "blob": "ec2464bf418992eb861d7c63d39f114e803ce20f",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/screenshots/04-confirmed-one-write.png",
+          "blob": "82774528cfd01f2ec8303d34fda73f517cb01362",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/screenshots/05-cancelled-partial.png",
+          "blob": "12968fadb442422a5d82a06c0b6a79cb8a0b7fec",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/screenshots/06-provider-failure-text-fallback.png",
+          "blob": "7a0f1899ada443931384a24ce8113734fabb26e0",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/screenshots/08-disconnected-release.png",
+          "blob": "0b12b2a4ccb5cd0dc04f8eecd3564cdd85d03672",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/screenshots/08b-stale-resume-preserves-new-capture.png",
+          "blob": "c85f7734d2090c553f16ca9d07f2da96c923948a",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/screenshots/09-resident-change-discard.png",
+          "blob": "dad94a7e8dc5f76b9a69babf030f560bb10f09a9",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/screenshots/10-hidden-pending-permission.png",
+          "blob": "ad61a28606c646e16a8d5004dbaf67b6c07f6e53",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/screenshots/11-unmounted-no-capture.png",
+          "blob": "38a03118c172ed26b1358ad1d21f07edc66ab87d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/screenshots/11b-post-unmount-dashboard.png",
+          "blob": "38a03118c172ed26b1358ad1d21f07edc66ab87d",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/screenshots/12-reload-persisted-readback.png",
+          "blob": "765b3ae8c62c2d479acd3a6431af25bdc48ea4a3",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/source-manifest.json",
+          "blob": "fa6bedb0a639676fef1249d56abd188dfd9379ab",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/task-contract.md",
+          "blob": "a43510581429d57453e6e239335fa321a70d4fd2",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/test-results/integrated-result.json",
+          "blob": "49090086371a35042f0ffed99fef84805d389dd8",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/test-results/local-provider-binding-inspection.json",
+          "blob": "a98d433685444d33d1312edd98e6b4bd2d8291e8",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/trace/trace.zip",
+          "blob": "d3df80af0e7d2efd8924e737804cbc235bea4c40",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/validation-report.md",
+          "blob": "1efb45d8dbf466b26d476f0d175a65d93f7cb85e",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "artifacts/task-validation/voice-pr-393/video/page@633507722560cc5ac13079576e6e18b5.webm",
+          "blob": "c413343df1ad643b47c3865185fa725a8a7f7695",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "backend/src/skills/http.ts",
+          "blob": "b0b11f8dc67e0c5d5cf8b3d3159cac035da1cef2",
+          "mode": "100644",
+          "baseBlob": "38b05992c67d1dd70b4d8d059852000b9c54790f",
+          "baseMode": "100644"
+        },
+        {
+          "path": "backend/src/voice/__tests__/realtime-client.test.ts",
+          "blob": "5fddab04e9dc89eb865c18539236795fec928e75",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "backend/src/voice/__tests__/voice-e2e.test.ts",
+          "blob": "5b0e4767fbe605e25fe7b45cb1263e7a7b0225b4",
+          "mode": "100644",
+          "baseBlob": "9aa2b0b158b82ce29aaa6dc7e11a9c61c7b96257",
+          "baseMode": "100644"
+        },
+        {
+          "path": "backend/src/voice/stt.ts",
+          "blob": "58572251ee557fa814c325e266389190270ed2a7",
+          "mode": "100644",
+          "baseBlob": "3876c5532af204cf48eca9969ae848f74f3eed8e",
+          "baseMode": "100644"
+        },
+        {
+          "path": "clinicos-ai-runtime/clinicos_ai/api/app.py",
+          "blob": "1d8954b25277c45e08e64a5b17a35dd223f66f07",
+          "mode": "100644",
+          "baseBlob": "88cf7131e7b51b9225054574d8b57bce28ce2abb",
+          "baseMode": "100644"
+        },
+        {
+          "path": "clinicos-ai-runtime/clinicos_ai/models/provider_registry.py",
+          "blob": "0f952f854f5f18d833ef66c7896c8dafdaeed824",
+          "mode": "100644",
+          "baseBlob": "3a2c1cb674b430189a66fee7694145bc818437fa",
+          "baseMode": "100644"
+        },
+        {
+          "path": "clinicos-ai-runtime/clinicos_ai/models/validation.py",
+          "blob": "af5ca9bee6959e91551d3bbffc1993730d523e1e",
+          "mode": "100644",
+          "baseBlob": "6c2ae81206a97c6103c0f0e327bcc64bf0aaf255",
+          "baseMode": "100644"
+        },
+        {
+          "path": "clinicos-ai-runtime/clinicos_ai/voice/azure_realtime.py",
+          "blob": "334b09a18e9e507e209e4632b915fc244e68afa0",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "clinicos-ai-runtime/clinicos_ai/voice/realtime.py",
+          "blob": "4d3f64466031c78ffc2f5d35f59b6abfa266609b",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "clinicos-ai-runtime/tests/test_voice_realtime.py",
+          "blob": "aa011b1b769ed3e93411bba0b5cbd8d51094b7c1",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "e2e/qa-voice-pr-393-browser.mjs",
+          "blob": "d3ae77a781dc85c5e78dfbe604cdcbe315b13b12",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "e2e/qa-voice-pr-393.mjs",
+          "blob": "e6f70015e9acc458d78bf1564d8a2ff14a0b8194",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "frontend/src/components/assistant/AssistantMode.css",
+          "blob": "e20b89667948c3cd51aa3e8e6986d70ea49716d5",
+          "mode": "100644",
+          "baseBlob": "6b826038295c4d2cd81d1a9fd5bd419606c23950",
+          "baseMode": "100644"
+        },
+        {
+          "path": "frontend/src/components/assistant/AssistantMode.tsx",
+          "blob": "401150889fe76f00eb077c2d0680ecb3f9e85f25",
+          "mode": "100644",
+          "baseBlob": "3fce30ac3da52430f2cae4f959778fe03e44a307",
+          "baseMode": "100644"
+        },
+        {
+          "path": "frontend/src/components/assistant/voice/VoicePanel.tsx",
+          "blob": "0dfdb07d205c0464b241b424235dce911112ba2a",
+          "mode": "100644",
+          "baseBlob": "e0158628185a663c975ee09b3656928ad91f5bec",
+          "baseMode": "100644"
+        },
+        {
+          "path": "frontend/src/components/assistant/voice/__tests__/realtime.test.ts",
+          "blob": "ec1a072b8bc3fef518470d883aa6e939cc879ffe",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "frontend/src/components/assistant/voice/__tests__/voice.test.ts",
+          "blob": "1aaeb318b653346d9855f62fb0e1a0c531f31cef",
+          "mode": "100644",
+          "baseBlob": "3bf6b990d9c97c16ad512f99e70434116396a65f",
+          "baseMode": "100644"
+        },
+        {
+          "path": "frontend/src/components/assistant/voice/audioSession.ts",
+          "blob": "b77cfe190a5fc02cd74ce2e708bea0f6631247a6",
+          "mode": "100644",
+          "baseBlob": "9408bcd8bd6d1f4fb86cbdc128b372274b0d6db0",
+          "baseMode": "100644"
+        },
+        {
+          "path": "frontend/src/components/assistant/voice/realtimeTransport.ts",
+          "blob": "20e0cae078e5ce362de067e335a1d4f70aea4426",
+          "mode": "100644",
+          "baseBlob": null,
+          "baseMode": null
+        },
+        {
+          "path": "frontend/src/components/assistant/voice/useVoiceCapture.ts",
+          "blob": "a895ee8549c2e59969df5beca8625c9654379ec6",
+          "mode": "100644",
+          "baseBlob": "4d0ddae9ffbd47c12495bc3a3943eab8bf9f8978",
+          "baseMode": "100644"
+        },
+        {
+          "path": "frontend/src/components/assistant/voice/useVoiceChannel.ts",
+          "blob": "f24d9624c781ae96e71f96f9b54e802494ca722d",
+          "mode": "100644",
+          "baseBlob": "90f8f90a75acef4f749e1594a349f6856bddc007",
+          "baseMode": "100644"
+        },
+        {
+          "path": "frontend/src/components/assistant/voice/voiceApi.ts",
+          "blob": "cce0bedf845778ee182b92bd54e353c9b3b3510e",
+          "mode": "100644",
+          "baseBlob": "fc5a507d8e1fa22e9409f4684c9b323bb4b64915",
+          "baseMode": "100644"
+        }
+      ],
+      "implementation": [
+        {
+          "attempt": 1,
+          "status": "failed",
+          "reservedAt": "2026-10-17T15:01:12.916396+00:00",
+          "owner": "voice_393_reconciliation",
+          "reason": "integrate legacy optional realtime into current provider-neutral architecture",
+          "authorBrowserAssertions": 33,
+          "fixtureExecutionArchives": 5,
+          "note": "One dispatched initial implementation session. Fixture executions are retained separately; no independent QA/review round, remote counter reset or second model cycle.",
+          "qaReportSha256": "d807ccae6aa2830d72607923b36b304ce649b1303356856597dbff9de247eb2f",
+          "round": 1,
+          "subjectSha": null,
+          "evidence": "history/qa1-validation-report.md",
+          "uncommitted": true,
+          "sourceManifestSha256": "eeeebb5fa6ddc80940ec50baba8b3aad4383311845b3dda4a72034db577877c6"
+        },
+        {
+          "attempt": 2,
+          "status": "failed",
+          "reservedAt": "2026-10-17T15:44:27.324884+00:00",
+          "owner": "voice_393_reconciliation",
+          "reason": "Independent QA1 P2 early empty-buffer error strands LISTENING/PARTIAL after tracks close",
+          "authorizedBy": "root explicit bounded cycle2/4 authorization",
+          "scope": [
+            "frontend/src/components/assistant/voice/useVoiceChannel.ts",
+            "e2e/qa-voice-pr-393-browser.mjs"
+          ],
+          "priorSourceManifestSha256": "eeeebb5fa6ddc80940ec50baba8b3aad4383311845b3dda4a72034db577877c6",
+          "completedAt": "2026-10-17T15:48:44.638396+00:00",
+          "authorBrowserAssertions": 48,
+          "backendTests": 12,
+          "frontendVoiceTests": 29,
+          "sourcePathsChanged": 2,
+          "qaReportSha256": "a7dd7eefcbea20aa596a8f09f71e1366796c356c8e92c034939032643c27d6d2",
+          "round": 2,
+          "subjectSha": "49e65822c168682f2f262d186357ce3c7f94ec9c",
+          "evidence": "history/native-runtime-failure-39047709835.log"
+        },
+        {
+          "attempt": 3,
+          "status": "passed",
+          "reservedAt": "2026-10-17T16:06:22.901277+00:00",
+          "owner": "root coordinated bounded Luna test harness correction",
+          "reason": "Actual native AI Runtime Tests39047709835 failed240-test run with ModuleNotFoundError httpx; dependency-free core CI must exercise same actual ASGI contracts",
+          "scope": [
+            "clinicos-ai-runtime/tests/test_voice_realtime.py"
+          ],
+          "priorCandidateSha": "49e65822c168682f2f262d186357ce3c7f94ec9c",
+          "round": 3,
+          "subjectSha": "a16b08e2063d397f615b9675a2cc3a247affc8fd",
+          "evidence": "history/qa3-validation-report.md"
+        }
+      ],
+      "reviews": [],
+      "reviewLedger": null,
+      "reviewReports": {},
+      "releaseHold": {
+        "reason": "Actual demo target preflight39023763026 has no verified main trigger; review may proceed, clinical merge/deploy held.",
+        "runId": 39023763026,
+        "createdAt": "2026-10-17T16:29:59.131136+00:00"
+      },
+      "kind": "standalone-pr-review",
+      "id": "standalone-pr-393",
+      "phase": "waiting-review",
+      "adoption": {
+        "actor": "l2v-hub",
+        "at": "2026-10-17T18:03:28.152Z",
+        "subjectSha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
+        "manifestSha256": "d2b3a7a63c3ffc35810310cd188d4bdee08a83e42808adca3b611ad13ea0a2b9"
+      }
+    }
   ]
 }
