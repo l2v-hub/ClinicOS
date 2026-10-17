@@ -66,5 +66,52 @@
       "packet": "artifacts/task-validation/pr474-acl-followup",
       "sha": "c7fb5f5986e6621c9e18cadf911a3420e1fb386a"
     }
-  }
+  },
+  "manualBatches": [
+    {
+      "id": "bug-batch-432",
+      "issues": [
+        432,
+        441,
+        442,
+        460,
+        463,
+        464,
+        467
+      ],
+      "sourcePr": 466,
+      "sourceSha": "7028844633760f03a42072fa6648f975370e6db6",
+      "branch": "codex/bug-batch-432",
+      "owner": "codex-root-2026-10-17",
+      "phase": "implementing",
+      "reservedAt": "2026-10-17T07:38:22.106Z",
+      "implementation": [
+        {
+          "round": 1,
+          "status": "running"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "id": "bug-batch-450",
+      "issues": [
+        450
+      ],
+      "sourcePr": 469,
+      "sourceSha": "29b2f5c9b72b4d909b954d5360ec08095825f29e",
+      "branch": "codex/bug-batch-450",
+      "owner": "codex-root-2026-10-17",
+      "phase": "implementing",
+      "reservedAt": "2026-10-17T07:38:22.669Z",
+      "implementation": [
+        {
+          "round": 1,
+          "status": "running"
+        }
+      ],
+      "reviews": []
+    }
+  ],
+  "updatedAt": "2026-10-17T07:38:22.669Z"
 }
