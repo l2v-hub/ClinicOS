@@ -1,0 +1,78 @@
+{
+  "synthetic": true,
+  "liveOperations": 0,
+  "outcomes": [
+    {
+      "name": "Old process remains ready after restart ACK",
+      "expected": "sourceStorageVerified=false",
+      "observed": "sourceStorageVerified=true",
+      "finding": "F1",
+      "calls": [
+        {
+          "phase": "native",
+          "name": "metadata"
+        },
+        {
+          "phase": "native",
+          "name": "metadata"
+        },
+        {
+          "phase": "native",
+          "name": "backups"
+        },
+        {
+          "phase": "native",
+          "name": "backups"
+        },
+        {
+          "phase": "ssh"
+        },
+        {
+          "phase": "native",
+          "name": "restart"
+        },
+        {
+          "phase": "native",
+          "name": "restart"
+        },
+        {
+          "phase": "http",
+          "status": 200,
+          "body": "old-process-ready"
+        }
+      ]
+    },
+    {
+      "name": "Missing/forged source emptiness refused",
+      "observed": "3 negative cases rejected"
+    },
+    {
+      "name": "SSH raw sensitive errors sanitized",
+      "observed": "PASS"
+    },
+    {
+      "name": "Multiple active deployments refused",
+      "observed": "PASS"
+    },
+    {
+      "name": "Main branch rejected before metadata or mutation",
+      "observed": "PASS"
+    },
+    {
+      "name": "Wrong online auth mode rejected",
+      "observed": "PASS"
+    },
+    {
+      "name": "Unrelated database-service volume mount accepted",
+      "expected": "Unverified database volume must be rejected",
+      "observed": "inspectStorageBinding returns verified binding",
+      "finding": "F2"
+    },
+    {
+      "name": "Abrupt kill before proving emptiness",
+      "expected": "No media in unconditional artifact directory",
+      "observed": "Partial precheck video survives; no result verdict exists",
+      "finding": "F3"
+    }
+  ]
+}

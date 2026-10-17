@@ -1,0 +1,51 @@
+✔ wrong runtime target cannot connect or mutate (2.478105ms)
+✔ cleanup result projects only counts/invariants and rejects forged completion (2.093972ms)
+✔ bounded reused launcher requires separate committed cleanup evidence and independent zero inventory, then removes owned service (12.803438ms)
+✔ new workflow operations preserve old production scope and require demo secret/branch (1.566303ms)
+✔ only actual intended online endpoints are configured (4.069941ms)
+✔ artifact privacy rejects network headers and session secrets in a real trace zip (231.337743ms)
+✔ runtime refuses every wrong identity before DB connect (6.707752ms)
+✔ private inventory reads aggregate counts and always rolls back/closes (2.794846ms)
+✔ non-FK import/draft data, linked notes/audits or orphan states prevent completion (4.021632ms)
+✔ bad DB identity, missing required table or query failure rolls back/closes (1.705894ms)
+✔ parent refuses wrong branch/secret/target/domain without service mutations (3.052888ms)
+✔ controller passes a private reference, emits counts only and removes exact temporary service (3.30267ms)
+✔ deploy, log-format and timeout failures still remove newly created service (5.067327ms)
+✔ log projection excludes unexpected rows/credentials and refuses malformed count payloads (1.000416ms)
+✔ workflow isolates new inventory operation and preserves every existing production guard (1.214994ms)
+✔ log validation refuses duplicates, omitted required tables and false empty claims (2.544835ms)
+✔ worker freezes actual catalog metadata before counting, with deterministic table manifest (1.456965ms)
+✔ parent rejects omitted ImportJob counts while preserving the actual original catalog header (1.475444ms)
+✔ parent rejects inconsistent catalog counts/digests, duplicate headers and extra count tables (1.717455ms)
+✔ unknown actual tables stay unclassified and prevent empty claim even with consistent manifest/counts (1.912791ms)
+✔ global monotonic deadline includes deploy and slow/failing logs, preserving bounded cleanup (2.246175ms)
+✔ API timeout is capped by remaining operation time and cleanup gets its own budget (0.791459ms)
+✔ deploy overrun triggers exact-service cleanup before polling (0.736095ms)
+✔ complete media bundle publishes atomically only after real verifier assertions and successful revocation (268.453271ms)
+✔ failed logout cannot publish any video/trace/screenshot and emits only safe failure summary (143.286997ms)
+✔ SIGKILL before proving emptiness leaves media only in private staging outside every upload path (99.039491ms)
+✔ workflow independently gates media on successful verifier and published-bundle check, failures upload JSON only (0.943876ms)
+{"ownedPrivateHealthServiceId":"50000000-0000-4000-8000-000000000900","environmentId":"8021987e-8eaa-4bc8-a102-20566db5e6b4"}
+{"ownedPrivateHealthServiceId":"50000000-0000-4000-8000-000000000900","environmentId":"8021987e-8eaa-4bc8-a102-20566db5e6b4"}
+✔ native clone verifies exact existing source/config, both fresh instances, old teardown and real payloads (15.460993ms)
+✔ old200, old-not-stopped, surviving old instance, replica transitions and changed source/config cannot pass (86.022335ms)
+✔ real backend and runtime payload validation rejects stale or degraded success status (2.871296ms)
+✔ database backup mount must be canonical, active and contain actual PGDATA (0.864399ms)
+✔ private health worker is target-bound, secret-free, and always removes owned service after invalid health (6.384266ms)
+✔ unrelated or inactive database mount aborts before any snapshot or redeploy operation (1.151222ms)
+✔ native access failures preserve diagnostic category without exposing raw sensitive errors (3.035379ms)
+✔ missing old instance records cannot substitute for explicit terminal evidence (28.901186ms)
+✔ actual synthetic filesystem counts/erase are exact and unrelated files survive (65.347627ms)
+✔ source cleanup refuses wrong runtime, custom config, symlinks and leaves outside content intact (10.329971ms)
+✔ snapshot removal only uses IDs from verified exact demo volume and independently rechecks zero (1.583619ms)
+✔ failed snapshot deletion or persistent backup count cannot claim empty (0.72155ms)
+✔ volume/database/runtime binding is exact and unknown persistence prevents maintenance (3.265011ms)
+✔ storage deadline prevents subsequent snapshot or filesystem writes after slow metadata (0.678508ms)
+ℹ tests 41
+ℹ suites 0
+ℹ pass 41
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 895.622149

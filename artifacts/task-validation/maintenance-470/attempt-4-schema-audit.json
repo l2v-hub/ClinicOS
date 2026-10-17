@@ -1,0 +1,105 @@
+{
+  "schemaSource": "railwayapp/cli v5.66.0 src/gql/schema.json",
+  "schemaSha256": "3c3d1448f2a746d6e5977ba3aa205889f959c427be5cfe37c72e79b1fa65f2be",
+  "validator": "graphql16.11.0, isolated temporary tooling; no product dependency",
+  "operations": [
+    {
+      "file": "scripts/maintenance/demo-storage-backups.mjs",
+      "line": 210,
+      "operation": "query",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-storage-backups.mjs",
+      "line": 327,
+      "operation": "query",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-storage-backups.mjs",
+      "line": 341,
+      "operation": "mutation",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-storage-backups.mjs",
+      "line": 542,
+      "operation": "query",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-storage-backups.mjs",
+      "line": 674,
+      "operation": "mutation",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-storage-backups.mjs",
+      "line": 871,
+      "operation": "mutation",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-storage-backups.mjs",
+      "line": 967,
+      "operation": "mutation",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-patient-inventory.mjs",
+      "line": 273,
+      "operation": "query",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-patient-inventory.mjs",
+      "line": 460,
+      "operation": "mutation",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-patient-inventory.mjs",
+      "line": 480,
+      "operation": "mutation",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-patient-inventory.mjs",
+      "line": 532,
+      "operation": "mutation",
+      "errors": []
+    }
+  ],
+  "count": 11,
+  "passed": true,
+  "cli": "No new CLI flags: owned worker uses the already verified service list/up/logs lifecycle",
+  "enums": {
+    "VolumeState": "READY",
+    "terminalInstances": [
+      "CRASHED",
+      "EXITED",
+      "REMOVED",
+      "SKIPPED",
+      "STOPPED"
+    ],
+    "runningInstance": "RUNNING",
+    "healthyDeployment": "SUCCESS"
+  },
+  "enumChecksPassed": true,
+  "validatedEnumValues": {
+    "VolumeState": [
+      "READY"
+    ],
+    "DeploymentInstanceStatus": [
+      "RUNNING",
+      "CRASHED",
+      "EXITED",
+      "REMOVED",
+      "SKIPPED",
+      "STOPPED"
+    ],
+    "DeploymentStatus": [
+      "SUCCESS"
+    ]
+  }
+}

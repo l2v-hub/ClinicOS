@@ -1,0 +1,14 @@
+{
+  "frontend": "https://clinicos-eosin.vercel.app",
+  "backend": "https://clinicos-backend-demo.up.railway.app",
+  "online": true,
+  "patientPages": 0,
+  "emptyAfterReload": false,
+  "pageErrors": 0,
+  "consoleErrors": 0,
+  "httpErrors": [],
+  "sessionRevoked": false,
+  "networkTracing": false,
+  "status": "failed",
+  "failureCode": "ACTUAL_ONLINE_VERIFICATION_FAILED"
+}

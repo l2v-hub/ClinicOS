@@ -1,0 +1,14 @@
+{
+  "scripts/maintenance/demo-patient-inventory.mjs": {
+    "qa3": "ea94b7ff88a2570eb57c7e86c2b5ff64544a99d67f6be42d2451d2ad8d833bb1",
+    "qa4": "ea94b7ff88a2570eb57c7e86c2b5ff64544a99d67f6be42d2451d2ad8d833bb1"
+  },
+  "scripts/maintenance/demo-patient-cleanup-authorized.mjs": {
+    "qa3": "66b91f44d731781cae5180fcf64cf57b8a167144b72f8cd13ec4121f12ce003f",
+    "qa4": "66b91f44d731781cae5180fcf64cf57b8a167144b72f8cd13ec4121f12ce003f"
+  },
+  "scripts/maintenance/__tests__/demo-patient-cleanup.runtime.test.mjs": {
+    "qa3": "db10d8bb0ee00833c2fcf5b93033705378c2565f51e530a04f302ef9e85f8a1d",
+    "qa4": "db10d8bb0ee00833c2fcf5b93033705378c2565f51e530a04f302ef9e85f8a1d"
+  }
+}

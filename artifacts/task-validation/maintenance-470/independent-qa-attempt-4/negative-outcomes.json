@@ -1,0 +1,98 @@
+{
+  "synthetic": true,
+  "liveOperations": 0,
+  "outcomes": [
+    {
+      "name": "Old200 and disappeared old instances",
+      "actual": {
+        "staleVerified": false,
+        "missingVerified": false,
+        "healthRequests": 0
+      }
+    },
+    {
+      "name": "Actual replacement function happy path",
+      "actual": {
+        "verified": true,
+        "oldInstancesTerminated": true,
+        "replacements": 2,
+        "backendDatabase": "ok",
+        "runtimeRoleCount": 6
+      }
+    },
+    {
+      "name": "Mount negatives before snapshot mutation",
+      "actual": [
+        {
+          "kind": "unrelated",
+          "sensitive": 0
+        },
+        {
+          "kind": "inactive",
+          "sensitive": 0
+        },
+        {
+          "kind": "prefix",
+          "sensitive": 0
+        },
+        {
+          "kind": "traversal",
+          "sensitive": 0
+        },
+        {
+          "kind": "injected",
+          "sensitive": 0
+        }
+      ]
+    },
+    {
+      "name": "Wrong branch and recognized unknown persistence refused",
+      "actual": {
+        "branchCalls": 0,
+        "unknownVolumeMutations": 0,
+        "externalDbMutations": 0
+      }
+    },
+    {
+      "name": "Actual private-worker program and finally cleanup",
+      "actual": [
+        {
+          "healthy": true,
+          "actualWorkerExit": 0,
+          "ownedRemoved": true,
+          "removalVerified": true
+        },
+        {
+          "healthy": false,
+          "actualWorkerExit": 1,
+          "ownedRemoved": true,
+          "removalVerified": true
+        }
+      ]
+    },
+    {
+      "name": "Hard-kill media boundary",
+      "actual": {
+        "publishedExists": false,
+        "privateMode": "0700",
+        "precheckMediaPrivate": true
+      }
+    },
+    {
+      "name": "Failed online auth/publication gate",
+      "actual": {
+        "browserLaunches": 0,
+        "publishedExists": false,
+        "failureKeys": [
+          "consoleErrors",
+          "failureCode",
+          "httpErrorCount",
+          "pageErrors",
+          "patientPages",
+          "sessionRevoked",
+          "status"
+        ]
+      }
+    }
+  ]
+}

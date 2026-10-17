@@ -1,0 +1,38 @@
+✔ wrong runtime target cannot connect or mutate (2.087572ms)
+✔ cleanup result projects only counts/invariants and rejects forged completion (1.400724ms)
+✔ bounded reused launcher requires separate committed cleanup evidence and independent zero inventory, then removes owned service (6.510319ms)
+✔ new workflow operations preserve old production scope and require demo secret/branch (0.952146ms)
+✔ only actual intended online endpoints are configured (1.129072ms)
+✔ artifact privacy rejects network headers and session secrets in a real trace zip (116.934146ms)
+✔ runtime refuses every wrong identity before DB connect (6.970026ms)
+✔ private inventory reads aggregate counts and always rolls back/closes (2.49087ms)
+✔ non-FK import/draft data, linked notes/audits or orphan states prevent completion (3.363764ms)
+✔ bad DB identity, missing required table or query failure rolls back/closes (1.069171ms)
+✔ parent refuses wrong branch/secret/target/domain without service mutations (2.206825ms)
+✔ controller passes a private reference, emits counts only and removes exact temporary service (2.69949ms)
+✔ deploy, log-format and timeout failures still remove newly created service (4.506072ms)
+✔ log projection excludes unexpected rows/credentials and refuses malformed count payloads (0.929321ms)
+✔ workflow isolates new inventory operation and preserves every existing production guard (0.887569ms)
+✔ log validation refuses duplicates, omitted required tables and false empty claims (0.876581ms)
+✔ worker freezes actual catalog metadata before counting, with deterministic table manifest (1.037099ms)
+✔ parent rejects omitted ImportJob counts while preserving the actual original catalog header (1.264716ms)
+✔ parent rejects inconsistent catalog counts/digests, duplicate headers and extra count tables (0.58959ms)
+✔ unknown actual tables stay unclassified and prevent empty claim even with consistent manifest/counts (1.021232ms)
+✔ global monotonic deadline includes deploy and slow/failing logs, preserving bounded cleanup (3.069482ms)
+✔ API timeout is capped by remaining operation time and cleanup gets its own budget (0.929908ms)
+✔ deploy overrun triggers exact-service cleanup before polling (0.465434ms)
+✔ actual synthetic filesystem counts/erase are exact and unrelated files survive (17.651704ms)
+✔ source cleanup refuses wrong runtime, custom config, symlinks and leaves outside content intact (5.921494ms)
+✔ snapshot removal only uses IDs from verified exact demo volume and independently rechecks zero (1.135883ms)
+✔ failed snapshot deletion or persistent backup count cannot claim empty (0.895064ms)
+✔ volume/database/runtime binding is exact and unknown persistence prevents maintenance (2.814943ms)
+✔ storage phases project counts only and continue permitted work when snapshots or SSH are denied (3.332623ms)
+✔ storage deadline prevents subsequent snapshot or filesystem writes after slow metadata (0.463315ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 283.492876

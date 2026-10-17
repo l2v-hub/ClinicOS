@@ -1,0 +1,349 @@
+{
+  "postgresVersion": "16.15 (Debian 16.15-1.pgdg13+2)",
+  "cleanup": {
+    "mode": "authorized-demo-cleanup",
+    "committed": true,
+    "catalogSha256": "14770fae19038e341ae47af4e4301536592b25cae25f14085260cd017df2e7d6",
+    "tables": [
+      {
+        "table": "AiAuditEvent",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "Appointment",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "Cartella",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "ClinicalNote",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "ClinicalRecord",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "Consegna",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "ConsegnaAcknowledgement",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "ConsegnaCreationReceipt",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "DiaryEntryAcknowledgement",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "ImportAudit",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "ImportDocument",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "ImportJob",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "ImportMutation",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "ImportProcessingUnit",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "MedicationAdministration",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "Nota",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "NotaRecipientState",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "Patient",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "PatientAssessment",
+        "before": "2",
+        "after": "0"
+      },
+      {
+        "table": "PatientAssessmentAttestation",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "PatientDiaryEntry",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "PatientDocument",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "PatientIntakeDocument",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "PatientIntakeDraft",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "PatientNarrativeSection",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "PatientParameterReading",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "PatientRoomAssignment",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "PatientTherapy",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "PrnAdministration",
+        "before": "1",
+        "after": "0"
+      },
+      {
+        "table": "TherapySchedule",
+        "before": "1",
+        "after": "0"
+      }
+    ],
+    "preservedTableCount": 13,
+    "preservedContentUnchanged": true,
+    "triggerStatesUnchanged": true,
+    "foreignKeysEnabled": true,
+    "truncateTriggerExceptions": [
+      {
+        "table": "AiAuditEvent",
+        "name": "AiAuditEvent_no_truncate"
+      }
+    ],
+    "backupsVerified": false
+  },
+  "actualAfterCounts": [
+    {
+      "table": "AiAuditEvent",
+      "rows": "0"
+    },
+    {
+      "table": "Appointment",
+      "rows": "0"
+    },
+    {
+      "table": "AuthzPolicyVersion",
+      "rows": "1"
+    },
+    {
+      "table": "Bed",
+      "rows": "1"
+    },
+    {
+      "table": "Cartella",
+      "rows": "0"
+    },
+    {
+      "table": "ClinicalNote",
+      "rows": "0"
+    },
+    {
+      "table": "ClinicalRecord",
+      "rows": "0"
+    },
+    {
+      "table": "Consegna",
+      "rows": "0"
+    },
+    {
+      "table": "ConsegnaAcknowledgement",
+      "rows": "0"
+    },
+    {
+      "table": "ConsegnaCreationReceipt",
+      "rows": "0"
+    },
+    {
+      "table": "DiaryEntryAcknowledgement",
+      "rows": "0"
+    },
+    {
+      "table": "Farmaco",
+      "rows": "1"
+    },
+    {
+      "table": "FarmacoImport",
+      "rows": "1"
+    },
+    {
+      "table": "FarmacoPrincipioAttivo",
+      "rows": "1"
+    },
+    {
+      "table": "ImportAudit",
+      "rows": "0"
+    },
+    {
+      "table": "ImportDocument",
+      "rows": "0"
+    },
+    {
+      "table": "ImportJob",
+      "rows": "0"
+    },
+    {
+      "table": "ImportMutation",
+      "rows": "0"
+    },
+    {
+      "table": "ImportProcessingUnit",
+      "rows": "0"
+    },
+    {
+      "table": "MedicationAdministration",
+      "rows": "0"
+    },
+    {
+      "table": "Nota",
+      "rows": "0"
+    },
+    {
+      "table": "NotaRecipientState",
+      "rows": "0"
+    },
+    {
+      "table": "Operator",
+      "rows": "1"
+    },
+    {
+      "table": "OperatorRosterPreference",
+      "rows": "1"
+    },
+    {
+      "table": "OperatorSchedule",
+      "rows": "1"
+    },
+    {
+      "table": "Patient",
+      "rows": "0"
+    },
+    {
+      "table": "PatientAssessment",
+      "rows": "0"
+    },
+    {
+      "table": "PatientAssessmentAttestation",
+      "rows": "0"
+    },
+    {
+      "table": "PatientDiaryEntry",
+      "rows": "0"
+    },
+    {
+      "table": "PatientDocument",
+      "rows": "0"
+    },
+    {
+      "table": "PatientIntakeDocument",
+      "rows": "0"
+    },
+    {
+      "table": "PatientIntakeDraft",
+      "rows": "0"
+    },
+    {
+      "table": "PatientNarrativeSection",
+      "rows": "0"
+    },
+    {
+      "table": "PatientParameterReading",
+      "rows": "0"
+    },
+    {
+      "table": "PatientRoomAssignment",
+      "rows": "0"
+    },
+    {
+      "table": "PatientTherapy",
+      "rows": "0"
+    },
+    {
+      "table": "PrnAdministration",
+      "rows": "0"
+    },
+    {
+      "table": "Room",
+      "rows": "1"
+    },
+    {
+      "table": "RosterContext",
+      "rows": "1"
+    },
+    {
+      "table": "RosterEpoch",
+      "rows": "1"
+    },
+    {
+      "table": "TherapySchedule",
+      "rows": "0"
+    },
+    {
+      "table": "User",
+      "rows": "1"
+    },
+    {
+      "table": "_prisma_migrations",
+      "rows": "1"
+    }
+  ],
+  "rollbackAll43Verified": true,
+  "preserved13Verified": true,
+  "independentCatalogCount": 43,
+  "independentPatientDataEmpty": true
+}

@@ -1,0 +1,14 @@
+{
+  "surfaceAssertionsPassed": true,
+  "assertedValueCount": 98,
+  "reloadVerified": true,
+  "errors": {
+    "console": [],
+    "page": [],
+    "http": []
+  },
+  "clinicalAcceptance": "FAILED VALIDATION",
+  "liveOperations": 0,
+  "ffmpegSource": "/usr/bin/ffmpeg",
+  "chromiumSource": "/usr/bin/chromium"
+}

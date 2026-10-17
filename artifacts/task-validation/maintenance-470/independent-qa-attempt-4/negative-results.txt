@@ -1,0 +1,17 @@
+{"ownedPrivateHealthServiceId":"50000000-0000-4000-8000-000000000990","environmentId":"8021987e-8eaa-4bc8-a102-20566db5e6b4"}
+{"ownedPrivateHealthServiceId":"50000000-0000-4000-8000-000000000990","environmentId":"8021987e-8eaa-4bc8-a102-20566db5e6b4"}
+✔ F1 corrected: unchanged old200 and missing old-instance records cannot yield disposal proof (69.893415ms)
+✔ F1 corrected: fully converged exact clone validates real health and source/config changes abort (11.680914ms)
+✔ F2 corrected: READY PGDATA binding canonical containment precedes every sensitive request (5.4333ms)
+✔ wrong branch, external database and extra volume abort before sensitive mutations (1.216114ms)
+✔ private worker executes actual generated health validator and cleans exact owned ID on success/failure (391.238664ms)
+✔ F3 corrected: SIGKILL media stays private and outside every uploaded path (173.866553ms)
+✔ wrong online auth fails before browser and completed manifest is mandatory (21.67857ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1819.625354

@@ -1,0 +1,19 @@
+{
+  ".github/workflows/deploy-backend.yml": "a96a63f363388d120745c5ccf0527c11c586eede825c745e31c97807079768b9",
+  "scripts/maintenance/demo-patient-inventory.mjs": "ea94b7ff88a2570eb57c7e86c2b5ff64544a99d67f6be42d2451d2ad8d833bb1",
+  "scripts/maintenance/demo-patient-cleanup-authorized.mjs": "66b91f44d731781cae5180fcf64cf57b8a167144b72f8cd13ec4121f12ce003f",
+  "scripts/maintenance/demo-storage-backups.mjs": "f663075284f14b479fd4c5d2bb2dbf952c0b360fe3dc5582a3490a57dd0e5189",
+  "scripts/maintenance/demo-online-empty-browser.mjs": "bf60a4de6c7e5f808f3307431c573a2be2095fe9aa67e86889f35ed01dbe914c",
+  "scripts/maintenance/__tests__/demo-patient-inventory.test.mjs": "3357c587feeeaa51e5e1de9767e0165ec7ab3b004e38e3cfc89bb7c55644ef52",
+  "scripts/maintenance/__tests__/demo-cleanup.test.mjs": "85658aba1499f412af5d10a6d655cd6bb971ce99effa05905c43fa421c584ed4",
+  "scripts/maintenance/__tests__/demo-storage-backups.test.mjs": "f22f610abb7567d95bbb24cc0a8c88c1f298f760f35726c6b3aa749e3442944e",
+  "scripts/maintenance/__tests__/demo-online-empty-browser.test.mjs": "7586481e32f0976b32293ba32cb15fcaa3e0ccc5c00be516fd04bf95d914c5df",
+  "scripts/maintenance/__tests__/demo-patient-cleanup.runtime.test.mjs": "db10d8bb0ee00833c2fcf5b93033705378c2565f51e530a04f302ef9e85f8a1d",
+  "artifacts/task-validation/maintenance-470/cleanup-contract.md": "3dc23a99b2e7727b62db9540a5e466a1fe99dd082213c3d72a07b82804617571",
+  "artifacts/task-validation/maintenance-470/cleanup-plan-addendum.md": "7ababa2da90da8c77bf4741dfebe006aa7f7b865f398267cade998b3d0c4e690",
+  "artifacts/task-validation/maintenance-470/live-inventory.json": "17c6a65241c2076b1a476a87f773bf03a3f7e81aa8e924971b12b6506fa0e125",
+  "scripts/maintenance/__tests__/demo-replacement.test.mjs": "5cf96fbf872917b20e41102a4d015c89a99f94f989ffab8d63f632f02c7b3bc3",
+  "scripts/maintenance/__tests__/demo-publication.test.mjs": "e3a6c17927cd83dc66a433dd518409ecb683afb6e485952afc14daeec882d34b",
+  "artifacts/task-validation/maintenance-470/attempt-4-correction-addendum.md": "32e6880eb8803f890bb69b92d38d9bf460757bbc8e20cd04f5fdb852b6979946",
+  "artifacts/task-validation/maintenance-470/attempt-4-schema-audit.json": "567336177c7405dff49a5d7a9d5aa605a53a1d9692ad9f076abd8ee4fa28aff8"
+}

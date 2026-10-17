@@ -1,0 +1,16 @@
+✔ REPRO: old process health200 plus restart acknowledgements falsely claims fresh cleared runtime caches (3.848048ms)
+✔ missing or inconsistent source marker never claims filesystem empty (1.286153ms)
+✔ unexpected SSH errors expose only sanitized allowlist blocker (0.810461ms)
+✔ duplicate backend/runtime ambiguity is rejected before mutations (0.97458ms)
+✔ wrong-context cannot invoke any target mutation (0.675854ms)
+✔ online verifier rejects wrong auth mode before launching browser and sanitizes outcome (51.240096ms)
+✔ REPRO: unrelated database-service volume mount accepted as verified database backup target (0.860982ms)
+✔ REPRO: hard killed online verifier leaves pre-emptiness video in unconditional upload directory (97.936807ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 329.222861

@@ -1,0 +1,14 @@
+{
+  "surfaceAssertionsPassed": true,
+  "assertedValueCount": 114,
+  "reloadVerified": true,
+  "errors": {
+    "console": [],
+    "page": [],
+    "http": []
+  },
+  "liveOperations": 0,
+  "ffmpegSource": "/usr/bin/ffmpeg",
+  "chromiumSource": "/usr/bin/chromium",
+  "evidenceScope": "Synthetic internal function and PostgreSQL results; actual online gate remains pending"
+}

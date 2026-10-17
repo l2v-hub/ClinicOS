@@ -304,7 +304,7 @@ test('workflow isolates new inventory operation and preserves every existing pro
     /demo-inventory:\n    if: github\.ref_name == 'codex\/demo-470-completion' && inputs\.operation == 'demo-inventory'/,
   );
   assert.match(yaml, /RAILWAY_TOKEN: \$\{\{ secrets\.RAILWAY_DEMO_TOKEN \}\}/);
-  const demoJob = yaml.split('  demo-inventory:\n')[1].split('  backup-cleanup:\n')[0];
+  const demoJob = yaml.split('  demo-inventory:\n')[1].split(/\n  [a-z][a-z-]+:\n/)[0];
   assert.equal((demoJob.match(/timeout-minutes: 1\n/g) ?? []).length, 3);
   assert.match(demoJob, /timeout-minutes: 15\n/);
   assert.ok(

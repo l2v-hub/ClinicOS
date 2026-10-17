@@ -1,0 +1,41 @@
+{
+  "synthetic": true,
+  "liveOperations": 0,
+  "outcomes": [
+    {
+      "name": "Completed atomic publication",
+      "actual": {
+        "published": true,
+        "patientPages": 2,
+        "emptyAfterReload": true,
+        "sessionRevoked": true,
+        "tokenInManifest": false
+      }
+    },
+    {
+      "name": "Failed logout",
+      "actual": {
+        "published": false,
+        "privateMediaRemoved": true,
+        "safeFailure": true,
+        "sessionRevoked": false
+      }
+    },
+    {
+      "name": "Failed nonempty",
+      "actual": {
+        "published": false,
+        "privateMediaRemoved": true,
+        "safeFailure": true,
+        "sessionRevoked": true
+      }
+    },
+    {
+      "name": "Independent completed-bundle gate",
+      "actual": {
+        "missingBooleanRejected": 4,
+        "invalidVideoRejected": true
+      }
+    }
+  ]
+}

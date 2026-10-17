@@ -1,0 +1,15 @@
+{
+  ".github/workflows/deploy-backend.yml": "e473034dea37ee2b5ab59e9cb3d41098927c0c1f91f6d0de6630a4e989d4d5d7",
+  "scripts/maintenance/demo-patient-inventory.mjs": "ea94b7ff88a2570eb57c7e86c2b5ff64544a99d67f6be42d2451d2ad8d833bb1",
+  "scripts/maintenance/demo-patient-cleanup-authorized.mjs": "66b91f44d731781cae5180fcf64cf57b8a167144b72f8cd13ec4121f12ce003f",
+  "scripts/maintenance/demo-storage-backups.mjs": "9503d9bf125db9717ae763b35e357866265e3553a6c5d510f4c79b072c246cb0",
+  "scripts/maintenance/demo-online-empty-browser.mjs": "76132278186ebf600e7f715acb2711c6c46ebc2735e9379be74dcaee460d5036",
+  "scripts/maintenance/__tests__/demo-patient-inventory.test.mjs": "3357c587feeeaa51e5e1de9767e0165ec7ab3b004e38e3cfc89bb7c55644ef52",
+  "scripts/maintenance/__tests__/demo-cleanup.test.mjs": "85658aba1499f412af5d10a6d655cd6bb971ce99effa05905c43fa421c584ed4",
+  "scripts/maintenance/__tests__/demo-storage-backups.test.mjs": "480073f3ace4d5d103385da6fed8f68498f88eafd53782253f48a9856a8d67c9",
+  "scripts/maintenance/__tests__/demo-online-empty-browser.test.mjs": "7586481e32f0976b32293ba32cb15fcaa3e0ccc5c00be516fd04bf95d914c5df",
+  "scripts/maintenance/__tests__/demo-patient-cleanup.runtime.test.mjs": "db10d8bb0ee00833c2fcf5b93033705378c2565f51e530a04f302ef9e85f8a1d",
+  "artifacts/task-validation/maintenance-470/cleanup-contract.md": "3dc23a99b2e7727b62db9540a5e466a1fe99dd082213c3d72a07b82804617571",
+  "artifacts/task-validation/maintenance-470/cleanup-plan-addendum.md": "7ababa2da90da8c77bf4741dfebe006aa7f7b865f398267cade998b3d0c4e690",
+  "artifacts/task-validation/maintenance-470/live-inventory.json": "17c6a65241c2076b1a476a87f773bf03a3f7e81aa8e924971b12b6506fa0e125"
+}

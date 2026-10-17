@@ -1,0 +1,5 @@
+# Root final review — operational candidate4
+
+Independent QA4 READY FOR CODEX QA was read in full; 17 source/contract SHA256 hashes verified unchanged. 52 independent checks and real PostgreSQL16.15 full43-table integration passed; safe internal browser has114 concrete assertions, reload, PNG/trace/WebM and no errors. Sanitized packet106 files scanned, no JWT/provider/GitHub secret patterns or oversized files. Production jobs and immutable readonly source retained.
+
+Root accepts candidate4 for the already authorized exact demo cleanup execution only: SQLcleanup → verified native snapshots/storage and same-existing-code/config process replacement → independent readonly43-table inventory → actual hosted standard-TLS online browser and revoked session. Main rollout is held until this operational run completes. No application release, production change or feature-review approval is implied. Native permissions/convergence and actual online empty results remain unverified until real job evidence succeeds. This is existing implementation4/4; no fifth attempt authorized.

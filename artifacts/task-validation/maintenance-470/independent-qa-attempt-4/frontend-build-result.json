@@ -1,0 +1,21 @@
+{
+  "commands": [
+    "npm ci --ignore-scripts --no-audit --no-fund --cache /workspace/.cache/npm",
+    "cd frontend && npm exec -- tsc --noEmit",
+    "cd frontend && npm run build"
+  ],
+  "exitCode": 0,
+  "isolatedDependencyRoot": "/workspace/ClinicOS/agent-team/.worktrees/maintenance-470/node_modules",
+  "installedPackages": 496,
+  "transformedModules": 739,
+  "outputs": [
+    "npm-ci.txt",
+    "frontend-tsc.txt",
+    "frontend-build.txt"
+  ],
+  "warnings": [
+    "Existing chunk size warning",
+    "Vite plugin timing report"
+  ],
+  "noSourceChanges": true
+}

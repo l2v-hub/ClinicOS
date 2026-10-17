@@ -1,0 +1,91 @@
+{
+  "officialSchema": "railwayapp/cli v5.66.0 src/gql/schema.json",
+  "schemaSha256": "3c3d1448f2a746d6e5977ba3aa205889f959c427be5cfe37c72e79b1fa65f2be",
+  "graphqlVersion": "16.11.0",
+  "extractor": "TypeScript AST string literals; every query/mutation in all three source modules",
+  "operations": [
+    {
+      "file": "scripts/maintenance/demo-storage-backups.mjs",
+      "line": 210,
+      "operation": "query",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-storage-backups.mjs",
+      "line": 327,
+      "operation": "query",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-storage-backups.mjs",
+      "line": 341,
+      "operation": "mutation",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-storage-backups.mjs",
+      "line": 542,
+      "operation": "query",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-storage-backups.mjs",
+      "line": 674,
+      "operation": "mutation",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-storage-backups.mjs",
+      "line": 871,
+      "operation": "mutation",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-storage-backups.mjs",
+      "line": 967,
+      "operation": "mutation",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-patient-inventory.mjs",
+      "line": 273,
+      "operation": "query",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-patient-inventory.mjs",
+      "line": 460,
+      "operation": "mutation",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-patient-inventory.mjs",
+      "line": 480,
+      "operation": "mutation",
+      "errors": []
+    },
+    {
+      "file": "scripts/maintenance/demo-patient-inventory.mjs",
+      "line": 532,
+      "operation": "mutation",
+      "errors": []
+    }
+  ],
+  "enumValues": {
+    "VolumeState": [
+      "READY"
+    ],
+    "DeploymentInstanceStatus": [
+      "RUNNING",
+      "CRASHED",
+      "EXITED",
+      "REMOVED",
+      "SKIPPED",
+      "STOPPED"
+    ],
+    "DeploymentStatus": [
+      "SUCCESS"
+    ]
+  },
+  "allValid": true
+}

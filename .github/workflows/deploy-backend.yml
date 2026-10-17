@@ -15,6 +15,8 @@ on:
           - full
           - observe
           - demo-inventory
+          - demo-cleanup
+          - demo-online-verify
 
 permissions:
   contents: read
@@ -41,6 +43,122 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
         run: node scripts/maintenance/demo-patient-inventory.mjs
+  demo-cleanup:
+    if: github.ref_name == 'codex/demo-470-completion' && inputs.operation == 'demo-cleanup'
+    runs-on: ubuntu-latest
+    environment: 'glistening-friendship / demo'
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        timeout-minutes: 1
+        with:
+          sparse-checkout: scripts/maintenance
+          filter: blob:none
+      - uses: actions/setup-node@v4
+        timeout-minutes: 1
+        with:
+          node-version: 22
+      - run: npm install -g @railway/cli@5.66.0
+        timeout-minutes: 1
+      - name: demo-cleanup
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+        run: node scripts/maintenance/demo-patient-cleanup-authorized.mjs
+  demo-storage-backups:
+    concurrency:
+      group: railway-backend
+      cancel-in-progress: false
+    needs: demo-cleanup
+    if: github.ref_name == 'codex/demo-470-completion' && inputs.operation == 'demo-cleanup'
+    runs-on: ubuntu-latest
+    environment: 'glistening-friendship / demo'
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        timeout-minutes: 1
+        with:
+          sparse-checkout: scripts/maintenance
+          filter: blob:none
+      - uses: actions/setup-node@v4
+        timeout-minutes: 1
+        with:
+          node-version: 22
+      - run: npm install -g @railway/cli@5.66.0
+        timeout-minutes: 1
+      - name: demo-storage-backups
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+        run: node scripts/maintenance/demo-storage-backups.mjs --erase
+  demo-post-inventory:
+    needs: [demo-cleanup, demo-storage-backups]
+    if: always() && github.ref_name == 'codex/demo-470-completion' && inputs.operation == 'demo-cleanup' && needs.demo-cleanup.result == 'success'
+    runs-on: ubuntu-latest
+    environment: 'glistening-friendship / demo'
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        timeout-minutes: 1
+        with:
+          sparse-checkout: scripts/maintenance
+          filter: blob:none
+      - uses: actions/setup-node@v4
+        timeout-minutes: 1
+        with:
+          node-version: 22
+      - run: npm install -g @railway/cli@5.66.0
+        timeout-minutes: 1
+      - name: demo-post-inventory
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+        run: node scripts/maintenance/demo-patient-inventory.mjs
+  demo-online-browser:
+    needs: [demo-cleanup, demo-storage-backups, demo-post-inventory]
+    if: always() && github.ref_name == 'codex/demo-470-completion' && (inputs.operation == 'demo-online-verify' || (inputs.operation == 'demo-cleanup' && needs.demo-post-inventory.result == 'success'))
+    runs-on: ubuntu-latest
+    environment: 'glistening-friendship / demo'
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        timeout-minutes: 1
+        with:
+          sparse-checkout: scripts/maintenance
+          filter: blob:none
+      - uses: actions/setup-node@v4
+        timeout-minutes: 1
+        with:
+          node-version: 22
+      - name: Install pinned browser with standard TLS
+        timeout-minutes: 6
+        run: |
+          npm install --prefix "$RUNNER_TEMP/clinicos-demo-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.61.1
+          "$RUNNER_TEMP/clinicos-demo-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Verify actual online demo and revoke the test session
+        id: online_verification
+        timeout-minutes: 4
+        env:
+          PLAYWRIGHT_MODULE_PATH: ${{ runner.temp }}/clinicos-demo-browser/node_modules/playwright/index.mjs
+        run: node scripts/maintenance/demo-online-empty-browser.mjs
+      - name: Independently verify the completed published bundle
+        id: online_artifact_gate
+        if: success() && steps.online_verification.outcome == 'success'
+        timeout-minutes: 1
+        run: node scripts/maintenance/demo-online-empty-browser.mjs --check-published
+      - uses: actions/upload-artifact@v4
+        if: success() && steps.online_verification.outcome == 'success' && steps.online_artifact_gate.outcome == 'success'
+        timeout-minutes: 1
+        with:
+          name: demo-470-actual-online-${{ github.run_id }}
+          path: artifacts/task-validation/maintenance-470/actual-online/
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        if: always()
+        timeout-minutes: 1
+        with:
+          name: demo-470-online-failure-${{ github.run_id }}
+          path: artifacts/task-validation/maintenance-470/actual-online-failure.json
+          if-no-files-found: ignore
+          retention-days: 7
   backup-cleanup:
     if: github.ref_name == 'codex/production-inventory-2026-10-13' && (inputs.operation == 'backup' || inputs.operation == 'full')
     runs-on: ubuntu-latest

@@ -1,0 +1,574 @@
+{
+  "run": "https://github.com/l2v-hub/ClinicOS/actions/runs/39016118678",
+  "mode": "read-only",
+  "targetVerified": true,
+  "catalogTables": [
+    "AiAuditEvent",
+    "Appointment",
+    "AuthzPolicyVersion",
+    "Bed",
+    "Cartella",
+    "ClinicalNote",
+    "ClinicalRecord",
+    "Consegna",
+    "ConsegnaAcknowledgement",
+    "ConsegnaCreationReceipt",
+    "DiaryEntryAcknowledgement",
+    "Farmaco",
+    "FarmacoImport",
+    "FarmacoPrincipioAttivo",
+    "ImportAudit",
+    "ImportDocument",
+    "ImportJob",
+    "ImportMutation",
+    "ImportProcessingUnit",
+    "MedicationAdministration",
+    "Nota",
+    "NotaRecipientState",
+    "Operator",
+    "OperatorRosterPreference",
+    "OperatorSchedule",
+    "Patient",
+    "PatientAssessment",
+    "PatientAssessmentAttestation",
+    "PatientDiaryEntry",
+    "PatientDocument",
+    "PatientIntakeDocument",
+    "PatientIntakeDraft",
+    "PatientNarrativeSection",
+    "PatientParameterReading",
+    "PatientRoomAssignment",
+    "PatientTherapy",
+    "PrnAdministration",
+    "Room",
+    "RosterContext",
+    "RosterEpoch",
+    "TherapySchedule",
+    "User",
+    "_prisma_migrations"
+  ],
+  "catalogTableCount": 43,
+  "catalogSha256": "14770fae19038e341ae47af4e4301536592b25cae25f14085260cd017df2e7d6",
+  "counts": [
+    {
+      "table": "AiAuditEvent",
+      "rows": "1533",
+      "kind": "mixed"
+    },
+    {
+      "table": "Appointment",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "AuthzPolicyVersion",
+      "rows": "0",
+      "kind": "preserved"
+    },
+    {
+      "table": "Bed",
+      "rows": "12",
+      "kind": "preserved"
+    },
+    {
+      "table": "Cartella",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "ClinicalNote",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "ClinicalRecord",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "Consegna",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "ConsegnaAcknowledgement",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "ConsegnaCreationReceipt",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "DiaryEntryAcknowledgement",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "Farmaco",
+      "rows": "159942",
+      "kind": "preserved"
+    },
+    {
+      "table": "FarmacoImport",
+      "rows": "1",
+      "kind": "preserved"
+    },
+    {
+      "table": "FarmacoPrincipioAttivo",
+      "rows": "159402",
+      "kind": "preserved"
+    },
+    {
+      "table": "ImportAudit",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "ImportDocument",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "ImportJob",
+      "rows": "10",
+      "kind": "patient"
+    },
+    {
+      "table": "ImportMutation",
+      "rows": "1",
+      "kind": "patient"
+    },
+    {
+      "table": "ImportProcessingUnit",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "MedicationAdministration",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "Nota",
+      "rows": "0",
+      "kind": "mixed"
+    },
+    {
+      "table": "NotaRecipientState",
+      "rows": "0",
+      "kind": "mixed"
+    },
+    {
+      "table": "Operator",
+      "rows": "11",
+      "kind": "preserved"
+    },
+    {
+      "table": "OperatorRosterPreference",
+      "rows": "2",
+      "kind": "preserved"
+    },
+    {
+      "table": "OperatorSchedule",
+      "rows": "1",
+      "kind": "preserved"
+    },
+    {
+      "table": "Patient",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "PatientAssessment",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "PatientAssessmentAttestation",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "PatientDiaryEntry",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "PatientDocument",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "PatientIntakeDocument",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "PatientIntakeDraft",
+      "rows": "3",
+      "kind": "patient"
+    },
+    {
+      "table": "PatientNarrativeSection",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "PatientParameterReading",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "PatientRoomAssignment",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "PatientTherapy",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "PrnAdministration",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "Room",
+      "rows": "6",
+      "kind": "preserved"
+    },
+    {
+      "table": "RosterContext",
+      "rows": "7",
+      "kind": "preserved"
+    },
+    {
+      "table": "RosterEpoch",
+      "rows": "1",
+      "kind": "preserved"
+    },
+    {
+      "table": "TherapySchedule",
+      "rows": "0",
+      "kind": "patient"
+    },
+    {
+      "table": "User",
+      "rows": "11",
+      "kind": "preserved"
+    },
+    {
+      "table": "_prisma_migrations",
+      "rows": "55",
+      "kind": "preserved"
+    }
+  ],
+  "foreignKeys": [
+    {
+      "source": "Appointment",
+      "target": "Operator",
+      "name": "Appointment_operatorId_fkey",
+      "deletion": "r",
+      "validated": true
+    },
+    {
+      "source": "Appointment",
+      "target": "Patient",
+      "name": "Appointment_patientId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "Appointment",
+      "target": "User",
+      "name": "Appointment_createdByUserId_fkey",
+      "deletion": "r",
+      "validated": true
+    },
+    {
+      "source": "Bed",
+      "target": "Room",
+      "name": "Bed_roomId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "Cartella",
+      "target": "Patient",
+      "name": "Cartella_patientId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "ClinicalNote",
+      "target": "ClinicalRecord",
+      "name": "ClinicalNote_clinicalRecordId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "ClinicalNote",
+      "target": "Operator",
+      "name": "ClinicalNote_authorOperatorId_fkey",
+      "deletion": "r",
+      "validated": true
+    },
+    {
+      "source": "ClinicalRecord",
+      "target": "Appointment",
+      "name": "ClinicalRecord_appointmentId_fkey",
+      "deletion": "n",
+      "validated": true
+    },
+    {
+      "source": "ClinicalRecord",
+      "target": "Operator",
+      "name": "ClinicalRecord_authorOperatorId_fkey",
+      "deletion": "r",
+      "validated": true
+    },
+    {
+      "source": "ClinicalRecord",
+      "target": "Patient",
+      "name": "ClinicalRecord_patientId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "ConsegnaAcknowledgement",
+      "target": "Consegna",
+      "name": "ConsegnaAcknowledgement_consegnaId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "DiaryEntryAcknowledgement",
+      "target": "PatientDiaryEntry",
+      "name": "DiaryEntryAcknowledgement_entryId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "FarmacoPrincipioAttivo",
+      "target": "Farmaco",
+      "name": "FarmacoPrincipioAttivo_aic_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "ImportAudit",
+      "target": "ImportJob",
+      "name": "ImportAudit_jobId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "ImportDocument",
+      "target": "ImportJob",
+      "name": "ImportDocument_jobId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "ImportMutation",
+      "target": "ImportJob",
+      "name": "ImportMutation_jobId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "ImportProcessingUnit",
+      "target": "ImportJob",
+      "name": "ImportProcessingUnit_jobId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "MedicationAdministration",
+      "target": "Patient",
+      "name": "MedicationAdministration_patientId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "MedicationAdministration",
+      "target": "PatientTherapy",
+      "name": "MedicationAdministration_therapyId_fkey",
+      "deletion": "n",
+      "validated": true
+    },
+    {
+      "source": "NotaRecipientState",
+      "target": "Nota",
+      "name": "NotaRecipientState_notaId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "Operator",
+      "target": "RosterContext",
+      "name": "Operator_rosterContextId_fkey",
+      "deletion": "n",
+      "validated": true
+    },
+    {
+      "source": "Operator",
+      "target": "User",
+      "name": "Operator_userId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "OperatorRosterPreference",
+      "target": "Operator",
+      "name": "OperatorRosterPreference_operatorId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "OperatorRosterPreference",
+      "target": "RosterContext",
+      "name": "OperatorRosterPreference_contextId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "OperatorSchedule",
+      "target": "Operator",
+      "name": "OperatorSchedule_operatorId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "Patient",
+      "target": "Operator",
+      "name": "Patient_registeredById_fkey",
+      "deletion": "n",
+      "validated": true
+    },
+    {
+      "source": "PatientAssessment",
+      "target": "Patient",
+      "name": "PatientAssessment_patientId_fkey",
+      "deletion": "r",
+      "validated": true
+    },
+    {
+      "source": "PatientAssessment",
+      "target": "PatientAssessment",
+      "name": "PatientAssessment_predecessorId_fkey",
+      "deletion": "r",
+      "validated": true
+    },
+    {
+      "source": "PatientAssessmentAttestation",
+      "target": "PatientAssessment",
+      "name": "PatientAssessmentAttestation_assessmentId_snapshotSha256_fkey",
+      "deletion": "r",
+      "validated": true
+    },
+    {
+      "source": "PatientDiaryEntry",
+      "target": "Patient",
+      "name": "PatientDiaryEntry_patientId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "PatientDiaryEntry",
+      "target": "PatientTherapy",
+      "name": "PatientDiaryEntry_therapyId_fkey",
+      "deletion": "n",
+      "validated": true
+    },
+    {
+      "source": "PatientDocument",
+      "target": "Patient",
+      "name": "PatientDocument_patientId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "PatientDocument",
+      "target": "PatientAssessment",
+      "name": "PatientDocument_assessmentId_patientId_fkey",
+      "deletion": "r",
+      "validated": true
+    },
+    {
+      "source": "PatientIntakeDocument",
+      "target": "Patient",
+      "name": "PatientIntakeDocument_patientId_fkey",
+      "deletion": "n",
+      "validated": true
+    },
+    {
+      "source": "PatientNarrativeSection",
+      "target": "Patient",
+      "name": "PatientNarrativeSection_patientId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "PatientParameterReading",
+      "target": "Patient",
+      "name": "PatientParameterReading_patientId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "PatientRoomAssignment",
+      "target": "Bed",
+      "name": "PatientRoomAssignment_bedId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "PatientRoomAssignment",
+      "target": "Patient",
+      "name": "PatientRoomAssignment_patientId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "PatientTherapy",
+      "target": "Patient",
+      "name": "PatientTherapy_patientId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "PrnAdministration",
+      "target": "Patient",
+      "name": "PrnAdministration_patientId_fkey",
+      "deletion": "c",
+      "validated": true
+    },
+    {
+      "source": "PrnAdministration",
+      "target": "PatientTherapy",
+      "name": "PrnAdministration_therapyId_fkey",
+      "deletion": "n",
+      "validated": true
+    },
+    {
+      "source": "TherapySchedule",
+      "target": "PatientTherapy",
+      "name": "TherapySchedule_therapyId_fkey",
+      "deletion": "c",
+      "validated": true
+    }
+  ],
+  "linkedCounts": {
+    "patientAudits": "0",
+    "patientNotes": "0",
+    "orphanNoteStates": "0"
+  },
+  "unclassifiedTables": [],
+  "patientDataEmpty": false,
+  "backupsVerified": false,
+  "deletionPerformed": false
+}

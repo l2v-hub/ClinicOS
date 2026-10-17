@@ -1,0 +1,32 @@
+import {readFileSync,writeFileSync,mkdirSync,existsSync,symlinkSync} from 'node:fs';
+import {createServer} from 'node:http';import {join} from 'node:path';import assert from 'node:assert/strict';
+const directory=import.meta.dirname,runtime=JSON.parse(readFileSync(join(directory,'runtime-outcomes.json'))),negatives=JSON.parse(readFileSync(join(directory,'negative-outcomes.json'))),publication=JSON.parse(readFileSync(join(directory,'publication-outcomes.json')));
+const units=readFileSync(join(directory,'unit-results.txt'),'utf8');assert.match(units,/pass 41/);assert.match(units,/fail 0/);assert.equal(runtime.cleanup.committed,true);assert.equal(runtime.independentPatientDataEmpty,true);
+const replacement=negatives.outcomes.find(x=>x.name==='Actual replacement function happy path').actual;
+const values=[
+ ['Scope','Independent synthetic QA4 — live Railway operations: 0'],
+ ['Live closure gate','Pending actual Railway SQL/storage/backup/online proof'],
+ ['PostgreSQL actual version',runtime.postgresVersion],
+ ['Actual inventory catalog count',String(runtime.independentCatalogCount)],
+ ['Clinical/import/mixed targets actually truncated',String(runtime.cleanup.tables.length)],
+ ['Preserved content tables actually verified',String(runtime.cleanup.preservedTableCount)],
+ ['Rollback restores all43 tables',String(runtime.rollbackAll43Verified)],
+ ['Preserved content unchanged',String(runtime.cleanup.preservedContentUnchanged)],
+ ['Trigger states restored',String(runtime.cleanup.triggerStatesUnchanged)],
+ ['Independent fresh-connection patient data empty',String(runtime.independentPatientDataEmpty)],
+ ['Native replacement actual function verified',String(replacement.verified)],
+ ['Replacement old instances terminal',String(replacement.oldInstancesTerminated)],
+ ['Fresh distinct deployments',String(replacement.replacements)],
+ ['Backend actual validated database check',replacement.backendDatabase],
+ ['Runtime actual validated role count',String(replacement.runtimeRoleCount)],
+ ['Original suite independently run','41 passed / 0 failed / 0 skipped'],
+ ...negatives.outcomes.map(n=>[n.name,JSON.stringify(n.actual)]),
+ ...publication.outcomes.map(n=>[n.name,JSON.stringify(n.actual)]),
+ ...runtime.actualAfterCounts.filter(x=>runtime.cleanup.tables.some(t=>t.table===x.table)).map(x=>['Actual '+x.table+' count',x.rows]),
+];
+const esc=x=>String(x).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+const html=`<!doctype html><html lang="en"><meta charset="utf-8"><title>Independent maintenance470 QA4</title><style>body{font:16px system-ui;background:#edf5fa;color:#143650;margin:24px}main{background:white;border-radius:14px;padding:24px;max-width:1310px}h1{color:#19639b}td{padding:8px 12px;border-bottom:1px solid #d6e3ec;vertical-align:top;overflow-wrap:anywhere}td:last-child{font-weight:600;width:60%}tr:nth-child(-n+2){background:#edf5fa}small{color:#405b6d}</style><main><h1>Demo cleanup · independent candidate4 QA</h1><p>Actual maintenance functions, disposable PostgreSQL16, explicit synthetic native/browser I/O. No live credentials, patient records or Railway mutation.</p><table><thead><tr><th>Observed assertion</th><th>Actual result</th></tr></thead><tbody>${values.map(([n,v],i)=>`<tr><td>${esc(n)}</td><td id="value-${i}">${esc(v)}</td></tr>`).join('')}</tbody></table><p><small>F1 old200 and missing termination proof rejected. F2 unrelated/inactive/traversal PGDATA mounts rejected before mutation. F3 hard-killed media remains0700 private and unpublished; failed logout publishes no media.</small></p></main></html>`;
+const server=createServer((req,res)=>{if(req.url==='/favicon.ico'){res.writeHead(204).end();return;}if(req.url!=='/'){res.writeHead(404).end();return;}res.writeHead(200,{'content-type':'text/html;charset=utf-8','cache-control':'no-store','content-security-policy':"default-src 'none'; style-src 'unsafe-inline'"});res.end(html);});await new Promise(done=>server.listen(0,'127.0.0.1',done));
+process.env.PLAYWRIGHT_BROWSERS_PATH='/workspace/.cache/clinicos-maint470-qa4-playwright';mkdirSync(join(process.env.PLAYWRIGHT_BROWSERS_PATH,'ffmpeg-1011'),{recursive:true});const ffmpeg=join(process.env.PLAYWRIGHT_BROWSERS_PATH,'ffmpeg-1011/ffmpeg-linux');if(!existsSync(ffmpeg))symlinkSync('/usr/bin/ffmpeg',ffmpeg);
+const {chromium}=await import('../../../../node_modules/playwright/index.mjs');let browser;const errors={console:[],page:[],http:[]};
+try{browser=await chromium.launch({headless:true,executablePath:'/usr/bin/chromium'});const context=await browser.newContext({viewport:{width:1440,height:1080},recordVideo:{dir:join(directory,'video')}});await context.tracing.start({screenshots:true,snapshots:true,sources:true});const page=await context.newPage();page.on('console',m=>{if(m.type()==='error')errors.console.push(m.text())});page.on('pageerror',e=>errors.page.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.http.push(r.status())});await page.goto(`http://127.0.0.1:${server.address().port}/`);const verify=async()=>{assert.equal(await page.locator('tbody tr').count(),values.length);for(let i=0;i<values.length;i++){const cell=page.locator('#value-'+i);assert.equal(await cell.isVisible(),true);assert.equal(await cell.innerText(),values[i][1]);}};await verify();await page.reload();await verify();assert.deepEqual(errors,{console:[],page:[],http:[]});await page.screenshot({path:join(directory,'internal-result.png'),fullPage:true});await context.tracing.stop({path:join(directory,'trace.zip')});await context.close();const result={surfaceAssertionsPassed:true,assertedValueCount:values.length*2,reloadVerified:true,errors,liveOperations:0,ffmpegSource:'/usr/bin/ffmpeg',chromiumSource:'/usr/bin/chromium',evidenceScope:'Synthetic internal function and PostgreSQL results; actual online gate remains pending'};writeFileSync(join(directory,'browser-results.json'),JSON.stringify(result,null,2));mkdirSync(join(directory,'test-results'),{recursive:true});writeFileSync(join(directory,'test-results/browser-results.json'),JSON.stringify(result,null,2));mkdirSync(join(directory,'playwright-report'),{recursive:true});writeFileSync(join(directory,'playwright-report/index.html'),html.replace('</main>','<p>Actual Playwright assertions repeated after reload. <a href="../trace.zip">Trace</a> · <a href="../browser-results.json">Raw results</a></p></main>'));console.log(JSON.stringify(result));}finally{if(browser)await browser.close();await new Promise(done=>server.close(done));}

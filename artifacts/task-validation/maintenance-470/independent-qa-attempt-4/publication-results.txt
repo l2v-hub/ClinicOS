@@ -1,0 +1,11 @@
+✔ success publishes complete actual-function bundle only after finalized media and revocation (131.281101ms)
+✔ failed logout and failed emptiness never publish media and safe failure has no raw details (130.229975ms)
+✔ independent publication gate refuses forged completed booleans and truncated video (129.17918ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 515.376689

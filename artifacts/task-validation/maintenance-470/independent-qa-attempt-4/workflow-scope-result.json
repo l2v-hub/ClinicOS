@@ -1,0 +1,13 @@
+{
+  "existingProductionAndInventoryJobsBytePreserved": true,
+  "newJobs": [
+    "demo-cleanup",
+    "demo-storage-backups",
+    "demo-post-inventory",
+    "demo-online-browser"
+  ],
+  "mediaUploadRequiresVerifierAndIndependentGateSuccess": true,
+  "failureUploadExactSafeJsonOnly": true,
+  "storageConcurrency": "railway-backend",
+  "cancelInProgress": false
+}

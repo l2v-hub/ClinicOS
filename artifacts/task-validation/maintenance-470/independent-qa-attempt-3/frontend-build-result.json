@@ -1,0 +1,15 @@
+{
+  "commands": [
+    "npm exec -- tsc --noEmit",
+    "npm run build"
+  ],
+  "workdir": "frontend",
+  "exitCode": 0,
+  "terminalSession": 9525,
+  "modulesTransformed": 739,
+  "viteBuildSeconds": 29.83,
+  "warnings": [
+    "Existing chunks larger than 500kB"
+  ],
+  "independentlyExecuted": true
+}
