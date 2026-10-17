@@ -1077,7 +1077,12 @@
           },
           "reason": "Preserve the previous47-path grouping and map the six explicitly authorized correction4 additions to their actual source issues."
         }
-      ]
+      ],
+      "codexFinalReview": {
+        "subjectSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
+        "claudeRound": 3,
+        "status": "running"
+      }
     },
     {
       "id": "bug-batch-432",
@@ -7063,7 +7068,7 @@
       }
     }
   ],
-  "updatedAt": "2026-10-17T21:33:15.435Z",
+  "updatedAt": "2026-10-17T21:35:51.020Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
