@@ -41,6 +41,11 @@
           "subject_sha": "093b8aedcf5ad902179bf03a04b11a73e6bb1d8f",
           "verdict": "approved",
           "review_sha256": "0b3aca7b977a1544f12fcb7050b1b300790e62640609134ee6f605982203d4da"
+        },
+        {
+          "round": 4,
+          "subject_sha": "c7fb5f5986e6621c9e18cadf911a3420e1fb386a",
+          "verdict": "running"
         }
       ]
     },
@@ -53,6 +58,11 @@
       "ledgerSha256": "3a8d2f8369f27d91c0d406ba7486ee1e4dc8708c3ab10f7237cd1d78f5a23fd6",
       "spentRounds": 1
     },
-    "updatedAt": "2026-10-16T23:51:25.606Z"
+    "updatedAt": "2026-10-17T00:26:12.607Z",
+    "followup": {
+      "pullRequest": 477,
+      "packet": "artifacts/task-validation/pr474-acl-followup",
+      "sha": "c7fb5f5986e6621c9e18cadf911a3420e1fb386a"
+    }
   }
 }
