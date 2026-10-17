@@ -1,0 +1,590 @@
+✔ release dry-run verifies persisted proof and never merges (18.392615ms)
+✔ release execution rechecks then merges only the approved exact SHA (19.567545ms)
+▶ release blocks stale SHA, missing review proof, and absent required deployment credentials
+  ✔ stale SHA (5.953747ms)
+  ✔ review report digest (0.89512ms)
+  ✔ missing Vercel config (5.541852ms)
+  ✔ missing Railway config for runtime (1.411574ms)
+  ✔ pending checks (1.525523ms)
+  ✔ fork PR (3.160406ms)
+✔ release blocks stale SHA, missing review proof, and absent required deployment credentials (22.039008ms)
+✔ release blocks changed evidence digest before mutation (8.099295ms)
+✔ verified deployment records true links then marks the issue resolved (31.3107ms)
+✔ completion comment failure never closes an issue and terminal publication retries without model work (1.384065ms)
+✔ backend merge requires actual trusted demo preflight, not production credential presence (1.87443ms)
+✔ production-only successful URL cannot record deployment or close backend issues (2.041397ms)
+✔ verified demo receipt is durable and rechecked before backend issue closure (5.310995ms)
+✔ legacy backend deployment without demo proof cannot publish completion (0.742422ms)
+✔ durable release hold blocks automatic choice, direct merge and recording (1.262128ms)
+✔ hold applied during remote premerge preflight blocks final merge without resetting ledgers (6.172658ms)
+✔ hold applied during live proof verification blocks deployment record and closure (1.506433ms)
+✔ hold added while posting completion comment prevents the final issue closure (3.546711ms)
+▶ actual publication adapter blocks changed durable authorization after every avoidable awaited request
+  ✔ issue-read: hold (3.348734ms)
+  ✔ issue-read: merge revision (1.699732ms)
+  ✔ issue-read: reviewed revision (2.13069ms)
+  ✔ issue-read: approval revision (2.399998ms)
+  ✔ issue-labels-read: hold (2.189354ms)
+  ✔ issue-labels-read: merge revision (2.512686ms)
+  ✔ issue-labels-read: reviewed revision (1.246725ms)
+  ✔ issue-labels-read: approval revision (1.624553ms)
+  ✔ issue-comments-read: hold (1.767583ms)
+  ✔ issue-comments-read: merge revision (1.461741ms)
+  ✔ issue-comments-read: reviewed revision (1.356901ms)
+  ✔ issue-comments-read: approval revision (1.357018ms)
+  ✔ completion-comment: hold (4.291598ms)
+  ✔ completion-comment: merge revision (3.40804ms)
+  ✔ completion-comment: reviewed revision (6.478296ms)
+  ✔ completion-comment: approval revision (2.322501ms)
+  ✔ status-label-inspection: hold (3.033043ms)
+  ✔ status-label-inspection: merge revision (2.894302ms)
+  ✔ status-label-inspection: reviewed revision (5.862885ms)
+  ✔ status-label-inspection: approval revision (2.352686ms)
+  ✔ status-label-post: hold (4.034424ms)
+  ✔ status-label-post: merge revision (2.791648ms)
+  ✔ status-label-post: reviewed revision (4.081764ms)
+  ✔ status-label-post: approval revision (2.667974ms)
+  ✔ delete-progress: hold (6.126113ms)
+  ✔ delete-progress: merge revision (3.609523ms)
+  ✔ delete-progress: reviewed revision (7.302037ms)
+  ✔ delete-progress: approval revision (6.182158ms)
+  ✔ delete-blocked: hold (3.457173ms)
+  ✔ delete-blocked: merge revision (5.307204ms)
+  ✔ delete-blocked: reviewed revision (5.490011ms)
+  ✔ delete-blocked: approval revision (3.376517ms)
+✔ actual publication adapter blocks changed durable authorization after every avoidable awaited request (118.907808ms)
+▶ final actual close boundary binds current deployment, PR identity, source revision and review ledger
+  ✔ deployment merge SHA (5.491554ms)
+  ✔ deployment reviewed SHA (6.020271ms)
+  ✔ deployment status (43.93504ms)
+  ✔ release status (2.992464ms)
+  ✔ PR identity (5.265194ms)
+  ✔ PR URL (3.105258ms)
+  ✔ source revision (2.920838ms)
+  ✔ phase (2.990074ms)
+  ✔ implementation status (4.513977ms)
+  ✔ review status (3.722831ms)
+  ✔ report digest (3.219359ms)
+✔ final actual close boundary binds current deployment, PR identity, source revision and review ledger (86.692108ms)
+✔ state-read failure after actual adapter awaits prevents all later mutations (4.804909ms)
+✔ failed actual close leaves only truthful deployment facts; retry reuses the marker and preserves unrelated labels (11.749698ms)
+✔ publication recovery selects only pending matching releases and rejects changed published identity (2.903562ms)
+✔ already deployed recovery retains full exact review/evidence checks and never merges again (1.604343ms)
+✔ published completion is durable only after all real closures and a successful state compare-and-swap (6.052715ms)
+▶ full verified subject remains frozen at actual merge, record and recovery boundaries
+  ✔ evidence: PR (5.03617ms)
+  ✔ evidence: source membership (1.975689ms)
+  ✔ evidence: scope (0.717503ms)
+  ✔ evidence: acceptance (0.843762ms)
+  ✔ evidence: grouping (1.427745ms)
+  ✖ evidence: evidence (1.986722ms)
+  ✔ evidence: approved report (1.065483ms)
+  ✔ evidence: implementation ledger (0.901803ms)
+  ✔ evidence: release facts (1.179055ms)
+  ✔ evidence: hold (1.381084ms)
+  ✔ source-issue: PR (0.876313ms)
+  ✔ source-issue: source membership (1.02678ms)
+  ✔ source-issue: scope (2.01312ms)
+  ✔ source-issue: acceptance (0.828883ms)
+  ✔ source-issue: grouping (1.207456ms)
+  ✖ source-issue: evidence (3.185887ms)
+  ✔ source-issue: approved report (0.819066ms)
+  ✔ source-issue: implementation ledger (0.915834ms)
+  ✔ source-issue: release facts (0.953311ms)
+  ✔ source-issue: hold (0.769377ms)
+  ✔ feedback-1: PR (0.780635ms)
+  ✔ feedback-1: source membership (0.783768ms)
+  ✔ feedback-1: scope (1.181876ms)
+  ✔ feedback-1: acceptance (0.815649ms)
+  ✔ feedback-1: grouping (0.925615ms)
+  ✖ feedback-1: evidence (3.134154ms)
+  ✔ feedback-1: approved report (0.920689ms)
+  ✔ feedback-1: implementation ledger (0.896708ms)
+  ✔ feedback-1: release facts (0.808433ms)
+  ✔ feedback-1: hold (0.452167ms)
+  ✔ checks-1: PR (0.471725ms)
+  ✔ checks-1: source membership (0.499904ms)
+  ✔ checks-1: scope (0.828949ms)
+  ✔ checks-1: acceptance (0.797045ms)
+  ✔ checks-1: grouping (0.958387ms)
+  ✖ checks-1: evidence (2.298121ms)
+  ✔ checks-1: approved report (0.557708ms)
+  ✔ checks-1: implementation ledger (2.074423ms)
+  ✔ checks-1: release facts (0.605133ms)
+  ✔ checks-1: hold (0.422985ms)
+  ✔ preflight-1: PR (1.081359ms)
+  ✔ preflight-1: source membership (1.114758ms)
+  ✔ preflight-1: scope (0.535239ms)
+  ✔ preflight-1: acceptance (0.627463ms)
+  ✔ preflight-1: grouping (2.277757ms)
+  ✖ preflight-1: evidence (3.289693ms)
+  ✔ preflight-1: approved report (1.049452ms)
+  ✔ preflight-1: implementation ledger (1.390582ms)
+  ✔ preflight-1: release facts (1.197231ms)
+  ✔ preflight-1: hold (0.690688ms)
+  ✔ ready-response: PR (2.097463ms)
+  ✔ ready-response: source membership (1.844764ms)
+  ✔ ready-response: scope (1.642332ms)
+  ✔ ready-response: acceptance (2.119056ms)
+  ✔ ready-response: grouping (1.244057ms)
+  ✖ ready-response: evidence (6.407337ms)
+  ✔ ready-response: approved report (2.545192ms)
+  ✔ ready-response: implementation ledger (0.900332ms)
+  ✔ ready-response: release facts (0.896211ms)
+  ✔ ready-response: hold (0.953393ms)
+  ✔ feedback-2: PR (1.521518ms)
+  ✔ feedback-2: source membership (1.547759ms)
+  ✔ feedback-2: scope (1.405828ms)
+  ✔ feedback-2: acceptance (1.154163ms)
+  ✔ feedback-2: grouping (0.701686ms)
+  ✖ feedback-2: evidence (1.160117ms)
+  ✔ feedback-2: approved report (2.150943ms)
+  ✔ feedback-2: implementation ledger (0.863132ms)
+  ✔ feedback-2: release facts (0.693689ms)
+  ✔ feedback-2: hold (37.091822ms)
+  ✔ checks-2: PR (1.513581ms)
+  ✔ checks-2: source membership (2.92147ms)
+  ✔ checks-2: scope (1.925944ms)
+  ✔ checks-2: acceptance (1.629585ms)
+  ✔ checks-2: grouping (1.712026ms)
+  ✖ checks-2: evidence (1.952281ms)
+  ✔ checks-2: approved report (1.087924ms)
+  ✔ checks-2: implementation ledger (1.484127ms)
+  ✔ checks-2: release facts (1.369459ms)
+  ✔ checks-2: hold (1.816558ms)
+  ✔ preflight-2: PR (3.490711ms)
+  ✔ preflight-2: source membership (3.029996ms)
+  ✔ preflight-2: scope (2.674651ms)
+  ✔ preflight-2: acceptance (1.921438ms)
+  ✔ preflight-2: grouping (6.094529ms)
+  ✖ preflight-2: evidence (4.021205ms)
+  ✔ preflight-2: approved report (2.993054ms)
+  ✔ preflight-2: implementation ledger (2.046611ms)
+  ✔ preflight-2: release facts (2.209489ms)
+  ✔ preflight-2: hold (1.588712ms)
+  ✔ merge-response: PR (3.339845ms)
+  ✔ merge-response: source membership (2.454612ms)
+  ✔ merge-response: scope (2.270859ms)
+  ✔ merge-response: acceptance (2.821084ms)
+  ✔ merge-response: grouping (4.863492ms)
+  ✖ merge-response: evidence (4.808882ms)
+  ✔ merge-response: approved report (11.489447ms)
+  ✔ merge-response: implementation ledger (2.164688ms)
+  ✔ merge-response: release facts (7.182692ms)
+  ✔ merge-response: hold (4.50705ms)
+  ✔ record-proof: PR (1.440294ms)
+  ✔ record-proof: source membership (0.871141ms)
+  ✔ record-proof: scope (2.324674ms)
+  ✔ record-proof: acceptance (1.455682ms)
+  ✔ record-proof: grouping (0.846473ms)
+  ✖ record-proof: evidence (6.83998ms)
+  ✔ record-proof: approved report (1.378387ms)
+  ✔ record-proof: implementation ledger (1.09609ms)
+  ✔ record-proof: release facts (0.854812ms)
+  ✔ record-proof: hold (1.042968ms)
+  ✔ merged-recovery: PR (2.746151ms)
+  ✔ merged-recovery: source membership (1.511469ms)
+  ✔ merged-recovery: scope (1.197481ms)
+  ✔ merged-recovery: acceptance (0.839992ms)
+  ✔ merged-recovery: grouping (0.84042ms)
+  ✖ merged-recovery: evidence (11.728683ms)
+  ✔ merged-recovery: approved report (1.430415ms)
+  ✔ merged-recovery: implementation ledger (0.964872ms)
+  ✔ merged-recovery: release facts (0.82425ms)
+  ✔ merged-recovery: hold (0.712563ms)
+  ✔ deployed-recovery: PR (1.604237ms)
+  ✔ deployed-recovery: source membership (1.037464ms)
+  ✔ deployed-recovery: scope (0.971586ms)
+  ✔ deployed-recovery: acceptance (0.987359ms)
+  ✔ deployed-recovery: grouping (0.761161ms)
+  ✖ deployed-recovery: evidence (0.867796ms)
+  ✔ deployed-recovery: approved report (0.838533ms)
+  ✔ deployed-recovery: implementation ledger (0.868161ms)
+  ✔ deployed-recovery: release facts (0.782807ms)
+  ✔ deployed-recovery: hold (0.939173ms)
+  ✔ publication-proof: PR (0.991893ms)
+  ✔ publication-proof: source membership (1.253043ms)
+  ✔ publication-proof: scope (0.708825ms)
+  ✔ publication-proof: acceptance (1.611681ms)
+  ✔ publication-proof: grouping (1.998457ms)
+  ✖ publication-proof: evidence (33.304916ms)
+  ✔ publication-proof: approved report (0.814849ms)
+  ✔ publication-proof: implementation ledger (1.326665ms)
+  ✔ publication-proof: release facts (1.635637ms)
+  ✔ publication-proof: hold (0.852787ms)
+✖ full verified subject remains frozen at actual merge, record and recovery boundaries (347.418777ms)
+▶ full plan, grouping, evidence and report remain frozen at every actual issue mutation
+  ✔ issue-read: PR (4.512702ms)
+  ✔ issue-read: scope (1.682878ms)
+  ✔ issue-read: acceptance (1.1179ms)
+  ✔ issue-read: grouping (1.07586ms)
+  ✖ issue-read: evidence (8.100411ms)
+  ✔ issue-read: approved report (1.411854ms)
+  ✔ issue-read: implementation ledger (1.091663ms)
+  ✔ issue-read: release facts (1.777672ms)
+  ✔ issue-read: hold (3.689086ms)
+  ✔ status-label-inspection: PR (2.453002ms)
+  ✔ status-label-inspection: scope (5.715257ms)
+  ✔ status-label-inspection: acceptance (2.080677ms)
+  ✔ status-label-inspection: grouping (6.795743ms)
+  ✖ status-label-inspection: evidence (6.041292ms)
+  ✔ status-label-inspection: approved report (2.260036ms)
+  ✔ status-label-inspection: implementation ledger (2.004186ms)
+  ✔ status-label-inspection: release facts (3.1286ms)
+  ✔ status-label-inspection: hold (3.578933ms)
+  ✔ status-label-post: PR (2.920372ms)
+  ✔ status-label-post: scope (2.721331ms)
+  ✔ status-label-post: acceptance (3.011688ms)
+  ✔ status-label-post: grouping (7.227277ms)
+  ✖ status-label-post: evidence (4.135341ms)
+  ✔ status-label-post: approved report (4.526851ms)
+  ✔ status-label-post: implementation ledger (3.690966ms)
+  ✔ status-label-post: release facts (3.986759ms)
+  ✔ status-label-post: hold (6.786174ms)
+  ✔ delete-progress: PR (6.46121ms)
+  ✔ delete-progress: scope (3.848426ms)
+  ✔ delete-progress: acceptance (3.52636ms)
+  ✔ delete-progress: grouping (2.529654ms)
+  ✖ delete-progress: evidence (17.763837ms)
+  ✔ delete-progress: approved report (2.890421ms)
+  ✔ delete-progress: implementation ledger (2.452782ms)
+  ✔ delete-progress: release facts (3.858005ms)
+  ✔ delete-progress: hold (2.673614ms)
+  ✔ delete-blocked: PR (3.570327ms)
+  ✔ delete-blocked: scope (1.281577ms)
+  ✔ delete-blocked: acceptance (1.782176ms)
+  ✔ delete-blocked: grouping (4.066942ms)
+  ✖ delete-blocked: evidence (2.445106ms)
+  ✔ delete-blocked: approved report (32.030525ms)
+  ✔ delete-blocked: implementation ledger (2.350225ms)
+  ✔ delete-blocked: release facts (5.281554ms)
+  ✔ delete-blocked: hold (4.421308ms)
+✖ full plan, grouping, evidence and report remain frozen at every actual issue mutation (213.510478ms)
+✔ draft conversion and merged recovery preserve the unchanged verified PR and cohort (9.550659ms)
+ℹ tests 258
+ℹ suites 0
+ℹ pass 237
+ℹ fail 21
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1361.844282
+
+✖ failing tests:
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:959:13
+✖ evidence: evidence (1.986722ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /identity changed|releaseHold/. Input:
+  
+  'ReleaseGateError: remote screenshot evidence digest mismatch for issue #5'
+  
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: ReleaseGateError: remote screenshot evidence digest mismatch for issue #5
+        at fail (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/release.mjs:80:9)
+        at verifyEvidence (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/release.mjs:218:9)
+        at async verifyCurrentCandidate (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/release.mjs:252:20)
+        at async releaseBatch (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/release.mjs:373:21)
+        at async waitForActual (node:assert:646:5)
+        at async strict.rejects (node:assert:769:25)
+        at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+        at async Test.run (node:internal/test_runner/test:1389:7)
+        at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+        at async Test.run (node:internal/test_runner/test:1389:7),
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:959:13
+✖ source-issue: evidence (3.185887ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:959:13
+✖ feedback-1: evidence (3.134154ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:959:13
+✖ checks-1: evidence (2.298121ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:959:13
+✖ preflight-1: evidence (3.289693ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:959:13
+✖ ready-response: evidence (6.407337ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:959:13
+✖ feedback-2: evidence (1.160117ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:959:13
+✖ checks-2: evidence (1.952281ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:959:13
+✖ preflight-2: evidence (4.021205ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:959:13
+✖ merge-response: evidence (4.808882ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:959:13
+✖ record-proof: evidence (6.83998ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:959:13
+✖ merged-recovery: evidence (11.728683ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:959:13
+✖ deployed-recovery: evidence (0.867796ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:959:13
+✖ publication-proof: evidence (33.304916ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:978:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:959:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:993:15
+✖ issue-read: evidence (8.100411ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:995:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:993:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:993:15
+✖ status-label-inspection: evidence (6.041292ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:995:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:993:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:993:15
+✖ status-label-post: evidence (4.135341ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:995:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:993:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:993:15
+✖ delete-progress: evidence (17.763837ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:995:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:993:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:993:15
+✖ delete-blocked: evidence (2.445106ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:995:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/release.test.mjs:993:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /identity changed|releaseHold/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

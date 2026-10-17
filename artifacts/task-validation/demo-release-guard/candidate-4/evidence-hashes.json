@@ -1,0 +1,147 @@
+[
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/backend-types.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/contract.log",
+    "bytes": 140,
+    "sha256": "68b433c1cf39122d258bab0cc413d7b09bbc1c857a272576bc774aa44cc28258"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/demo-guard-cycle4-initial.log",
+    "bytes": 7786,
+    "sha256": "bd23597bdcf4fdbda0f2b5441b2bd7c3965a44f892ddf2646f0cce1e9c556f0d"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/demo-guard-cycle4-old-qa.log",
+    "bytes": 6460,
+    "sha256": "d26d25eec8bca6ef9684c018ec7bfc9e17588c54755f0389e14b36c187e74af1"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/demo-guard-cycle4-release-matrix.log",
+    "bytes": 31597,
+    "sha256": "bba3ee07209b8c28da22406ef0ac6557984eb4106a3c16f7890141eced1b2878"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/diff-check.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/final-formatting.log",
+    "bytes": 109,
+    "sha256": "1ad604e6e3d289da0b2fc12e7ab1a3270930415ddef8815da378b21fa2820c32"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/formatting.log",
+    "bytes": 66,
+    "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/frontend-build.log",
+    "bytes": 16700,
+    "sha256": "bf53f60dadc06d021e11d5f2a4bc2ecdf53750ad51e3d97e0adc0939f4568e1b"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/frontend-types.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/frozen-diff-check.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/frozen-full-ci-unit-tests.log",
+    "bytes": 39543,
+    "sha256": "8ee355025c24e50d12c6fc6d66c50977c71c39a9d4f7165a54d5a4ca021009fb"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/frozen-historical-repros.log",
+    "bytes": 6474,
+    "sha256": "787ca56145fe3195b456f992c3013666b53b3a54a8f6bb0071a096bf051e01a8"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/full-ci-unit-tests.log",
+    "bytes": 36816,
+    "sha256": "7dc9fa3b2837f7a60b20b50be50e210c673375f6714243af5ddc7f56fa429386"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/full-unit-final.log",
+    "bytes": 39359,
+    "sha256": "d43675f75004a85fb7af2aedb9bad7c35a38cb28e2eea616ae1802b84330f9c2"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/historical-evidence-hashes.json",
+    "bytes": 21669,
+    "sha256": "c44d8812d25a2438a01d20514ec1ae25b1c881d3eae25aeaa4c3609d41303eea"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/historical-repros-final.log",
+    "bytes": 6473,
+    "sha256": "2fa0798e505a347af7b7cdef591d1e185d9bd63208e58c97011a519445360a54"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/implementation-handoff.md",
+    "bytes": 4320,
+    "sha256": "2ee0f9aef6fe99de4d1dca80397798bec2514b1a351f9b765f20d1f1a24fcaef"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/railway-graphql-schema-validation.json",
+    "bytes": 831,
+    "sha256": "6313b99ba0d562faeaab53864ceba531ca3c9b2a6153a61d8a996a91ffdcbe31"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/railway-schema.log",
+    "bytes": 106,
+    "sha256": "6254f7d4b36f9a1f35e2164737d4feaeff7ec3cf0e11e5512a718d7ada263779"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/readiness-http.log",
+    "bytes": 224,
+    "sha256": "726ebf8f72a1ea4506f6cbd25e15d66781174d78d299204f518878ec63aefcf2"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/scope-audit.json",
+    "bytes": 329,
+    "sha256": "69c1e332a1a7699b82e597a7fc60ab1c7377fa4f9978d23fc29c8be3c16ae9e1"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/source-hashes.json",
+    "bytes": 3559,
+    "sha256": "e6a33038e749e0a5b8602cf58239851a8ec8ac3d046c4ba7c1971cc7c9ec08fb"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/subject-and-real-adapter-final-tests.log",
+    "bytes": 19656,
+    "sha256": "3c9090c5cea8512b5669d457b440bd7a94f2d487c61b218ad931ad55ac44b7e3"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/subject-and-real-adapter-tests.log",
+    "bytes": 17240,
+    "sha256": "bc83ea6d7a4fa20a0501eaf4cc9f3414dad591348e6a67427f07fa1d90256270"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/syntax.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/validate-railway-schema.mjs",
+    "bytes": 1778,
+    "sha256": "f86876bd95ded307a59c0d37ab9aff2786c91c65359e73f554c386929498094a"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/validation-summary.json",
+    "bytes": 1271,
+    "sha256": "2bbe4248030e7576d8ae97692fd65dead35be045e72eb39b578733de921577af"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/candidate-4/workflow-yaml.log",
+    "bytes": 115,
+    "sha256": "130e7876d523daa4dbbc2a226806dab2d7d7f132ce57e1ccc274b58d027253bb"
+  }
+]

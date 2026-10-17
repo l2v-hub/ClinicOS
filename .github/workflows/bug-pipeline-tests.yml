@@ -179,15 +179,18 @@ jobs:
 
       - name: Prepare trusted dependencies and PostgreSQL for isolated service readiness
         env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/clinicos-verification-browsers
           HUSKY: 0
           DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/clinicos_test?schema=public
         run: |
           bash scripts/quality-gate/install-verification-tools.sh
           npm ci --ignore-scripts --no-audit --no-fund
           npm run db:generate
+          node node_modules/playwright/cli.js install --with-deps chromium
 
       - name: Verify real isolated HTTP and database access with denied external egress
         env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/clinicos-verification-browsers
           CODEX_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/codex
         run: node scripts/quality-gate/verify-isolated-services.mjs
 

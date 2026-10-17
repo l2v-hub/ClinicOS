@@ -1,0 +1,3 @@
+.github/workflows/deploy-backend.yml YAML PASS jobs: deploy, demo
+.github/workflows/codex-bug-release.yml YAML PASS jobs: release, confirm-demo
+Native actionlint unavailable; YAML parsing and actual structural credential/environment tests only.

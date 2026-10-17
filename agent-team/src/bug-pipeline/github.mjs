@@ -77,10 +77,18 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     return result ?? { ok: false, stdout: '', stderr: 'No command result' };
   }
 
-  async function api(path, { method, body, allowFailure = false, maxOutputBytes } = {}) {
+  // Optional release authorization reaches the actual request boundary, after earlier awaits.
+  // Existing intake/status callers omit it and retain their current behavior.
+  async function checkMutationGuard(guard) {
+    if (typeof guard !== 'function') throw new TypeError('Issue mutation guard must be a function');
+    if ((await guard()) === false) throw new Error('Issue mutation guard rejected the operation');
+  }
+
+  async function api(path, { method, body, allowFailure = false, maxOutputBytes, guard } = {}) {
     const args = ['api', path];
     if (method) args.push('-X', method);
     if (body !== undefined) args.push('--input', '-');
+    if (guard !== undefined) await checkMutationGuard(guard);
     const result = await invoke(args, {
       ...(body === undefined ? {} : { input: JSON.stringify(body) }),
       allowFailure,
@@ -114,7 +122,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     return ['write', 'maintain', 'admin'].includes(response.value?.permission);
   }
 
-  async function ensureLabel(label) {
+  async function ensureLabel(label, { guard } = {}) {
     const check = await api(`repos/${repo}/labels/${encodeURIComponent(label)}`, {
       allowFailure: true,
     });
@@ -124,6 +132,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       method: 'POST',
       body: { name: label, color: '1D76DB', description: 'Codex bug pipeline queue' },
       allowFailure: true,
+      guard,
     });
     if (created.ok) return;
     // A concurrent workflow may have created it between GET and POST.
@@ -276,28 +285,37 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       return parseJson(text, 'durable state');
     }
 
-    async function save(state) {
+    async function save(state, { guard } = {}) {
       if (!loaded) throw new Error('load durable state before saving (optimistic concurrency)');
       if (state === null || typeof state !== 'object' || Array.isArray(state)) {
         throw new TypeError('state must be a JSON object');
       }
-      await ensureBranch();
+      const expectedFileSHA = fileSHA;
       const body = {
         message: 'chore: update Codex bug pipeline state',
         content: encodeState(state),
         branch: STATE_BRANCH,
       };
-      if (fileSHA) body.sha = fileSHA;
-      const response = await api(`repos/${repo}/contents/${STATE_PATH}`, {
-        method: 'PUT',
-        body,
-        allowFailure: true,
-      });
-      if (!response.ok)
-        throw new Error('Durable state compare-and-swap failed; state was not reset');
-      const sha = response.value?.content?.sha;
-      if (typeof sha !== 'string')
-        throw new Error('GitHub saved state without returning its file SHA');
+      if (expectedFileSHA) body.sha = expectedFileSHA;
+      let sha;
+      try {
+        await ensureBranch();
+        const response = await api(`repos/${repo}/contents/${STATE_PATH}`, {
+          method: 'PUT',
+          body,
+          allowFailure: true,
+          ...(guard === undefined ? {} : { guard }),
+        });
+        if (!response.ok)
+          throw new Error('Durable state compare-and-swap failed; state was not reset');
+        sha = response.value?.content?.sha;
+        if (typeof sha !== 'string')
+          throw new Error('GitHub saved state without returning its file SHA');
+      } catch (error) {
+        // A guard may load a newer revision. Never retry this old body against it.
+        fileSHA = expectedFileSHA;
+        throw error;
+      }
       fileSHA = sha;
       loaded = true;
       return sha;
@@ -338,25 +356,30 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     return { number: Number(match[1]), url };
   }
 
-  async function commentIssue(number, body) {
+  async function commentIssue(number, body, { guard } = {}) {
     issueNumber({ number });
     return (
       await api(`repos/${repo}/issues/${number}/comments`, {
         method: 'POST',
         body: { body: String(body) },
+        guard,
       })
     ).value;
   }
 
-  async function setIssueStatus(number, status) {
+  async function setIssueStatus(number, status, { guard } = {}) {
     issueNumber({ number });
     if (!ISSUE_STATUSES.includes(status)) throw new Error('Invalid issue lifecycle status');
+    if (guard !== undefined) await checkMutationGuard(guard);
     if (statusCache.get(number) === status) return;
-    await ensureLabel(status);
+    await ensureLabel(status, { guard });
+    // A partial update makes a formerly cached status unreliable until reconciliation succeeds.
+    statusCache.delete(number);
     // Preserve unrelated labels and never reopen an issue closed by another operator.
     await api(`repos/${repo}/issues/${number}/labels`, {
       method: 'POST',
       body: { labels: [status] },
+      guard,
     });
     for (const old of ISSUE_STATUSES.filter((value) => value !== status)) {
       const removed = await api(
@@ -364,6 +387,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
         {
           method: 'DELETE',
           allowFailure: true,
+          guard,
         },
       );
       if (!removed.ok && !notFound(removed))
@@ -373,6 +397,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       await api(`repos/${repo}/issues/${number}`, {
         method: 'PATCH',
         body: { state: 'closed', state_reason: 'completed' },
+        guard,
       });
     }
     statusCache.set(number, status);
@@ -548,16 +573,18 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     };
   }
 
-  async function draftReady(pr) {
+  async function draftReady(pr, { guard } = {}) {
     const number = issueNumber({ number: typeof pr === 'object' ? pr.number : pr });
+    if (guard !== undefined) await checkMutationGuard(guard);
     await invoke(['pr', 'ready', String(number), '--repo', repo]);
     return (await api(`repos/${repo}/pulls/${number}`)).value;
   }
 
-  async function mergePullRequest(pr, sha) {
+  async function mergePullRequest(pr, sha, { guard } = {}) {
     const number = issueNumber({ number: typeof pr === 'object' ? pr.number : pr });
     if (typeof sha !== 'string' || !/^[a-f0-9]{40}$/.test(sha))
       throw new TypeError('merge requires an exact reviewed SHA');
+    if (guard !== undefined) await checkMutationGuard(guard);
     await invoke([
       'pr',
       'merge',

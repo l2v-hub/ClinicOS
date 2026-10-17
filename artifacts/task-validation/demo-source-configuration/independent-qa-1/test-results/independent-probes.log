@@ -1,0 +1,38 @@
+✔ independent malformed token environment blocks read-only and all mutation (4.671045ms)
+✔ independent malformed service environment blocks read-only and all mutation (0.483332ms)
+✔ independent malformed trigger project blocks read-only and all mutation (10.50565ms)
+✔ independent malformed trigger service blocks read-only and all mutation (0.25688ms)
+✔ independent malformed root object blocks read-only and all mutation (0.575063ms)
+✔ independent malformed root oversized blocks read-only and all mutation (0.182611ms)
+✔ independent malformed unbounded domains blocks read-only and all mutation (0.230889ms)
+✔ independent malformed duplicate ID blocks read-only and all mutation (1.095535ms)
+✔ independent malformed undefined override blocks read-only and all mutation (0.688088ms)
+✔ independent malformed newline provider blocks read-only and all mutation (0.463047ms)
+✔ independent malformed newline domain blocks read-only and all mutation (0.339192ms)
+✔ independent malformed overlong branch blocks read-only and all mutation (0.347921ms)
+✔ independent fresh-read transport failure cannot retry or return success (2.203645ms)
+✔ independent mutation transport failure cannot retry or return success (0.695606ms)
+✔ independent post-read transport failure cannot retry or return success (0.511935ms)
+✔ independent post-write rootDirectory drift is rejected after exactly one mutation (1.878478ms)
+✔ independent post-write checkSuites drift is rejected after exactly one mutation (0.578795ms)
+✔ independent post-write baseEnvironmentOverrideId drift is rejected after exactly one mutation (0.749418ms)
+✔ independent nested metadata cannot disclose arbitrary provider fields (1.120299ms)
+✔ independent omitted GITHUB_EVENT_NAME refuses trust (0.34318ms)
+✔ independent omitted GITHUB_REPOSITORY refuses trust (0.285586ms)
+✔ independent omitted GITHUB_REF refuses trust (0.191214ms)
+✔ independent omitted GITHUB_SHA refuses trust (0.166389ms)
+✔ independent omitted CONFIGURE_DEMO_REVIEWED_SHA refuses trust (0.187569ms)
+✔ independent omitted GITHUB_RUN_ID refuses trust (0.151432ms)
+✔ independent omitted GITHUB_RUN_ATTEMPT refuses trust (0.122885ms)
+✔ independent client foreign-url emits only fixed diagnostic (0.964318ms)
+✔ independent client stream-error emits only fixed diagnostic (0.30833ms)
+✔ independent client null-body emits only fixed diagnostic (0.452948ms)
+✔ independent client response-secret emits only fixed diagnostic (35.703008ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 222.83829

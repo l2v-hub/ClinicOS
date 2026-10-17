@@ -1,0 +1,11 @@
+✔ cacheable extension does not establish no-store: public, max-age=3600, x-no-store-extension=1 (76.965179ms)
+✔ cacheable extension does not establish no-store: public, max-age=3600, no-store-extension (0.792003ms)
+✔ cacheable extension does not establish no-store: public, max-age=3600, extension="no-store" (0.752339ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 340.610115

@@ -5,7 +5,6 @@ import {
   validateState,
   feedbackFingerprint,
 } from './contracts.mjs';
-import { publishDeploymentCompletion } from './release.mjs';
 import { externalReviewStep } from './external-review.mjs';
 
 function eligibleIssue(issue) {
@@ -77,12 +76,10 @@ export async function runPipeline({
     );
   };
   const claimed = new Set(state.batches.flatMap((b) => b.issues));
-  // Retry label/closure publication from durable facts before taking new work.
+  // Only the protected release confirmation job publishes deployed completion.
+  // It owns live demo credentials and retries durable pending publication without model work.
   for (const batch of state.batches) {
-    if (batch.release?.status === 'deployed') {
-      await publishDeploymentCompletion({ batch, github: gh });
-      continue;
-    }
+    if (batch.release?.status === 'deployed') continue;
     const status = batch.phase === 'blocked' ? 'Bloccato' : 'In progress';
     for (const number of batch.issues) await gh.setIssueStatus(number, status);
   }

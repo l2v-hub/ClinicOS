@@ -708,3 +708,454 @@ test('required checks fail closed when absent and pass only when all reported ch
   checks = [{ name: 'build', state: '', bucket: 'pass' }];
   assert.equal((await gh.requiredChecks(42)).ok, true);
 });
+
+function guardedLifecycle({
+  labelExists = true,
+  creationConflict = false,
+  after,
+  failClose = false,
+} = {}) {
+  const calls = [];
+  let held = false,
+    triggered = false,
+    inspections = 0,
+    guardCalls = 0;
+  const gh = createGitHub({
+    repo: 'l2v-hub/ClinicOS',
+    cwd: '/tmp',
+    run: async ({ args, input }) => {
+      const route = args[1],
+        method = args.includes('-X') ? args[args.indexOf('-X') + 1] : 'GET';
+      const step =
+        method === 'GET' && route.endsWith('/labels/Risolto')
+          ? ++inspections === 1
+            ? 'label-inspection'
+            : 'label-retry'
+          : method === 'POST' && route.endsWith('/issues/17/labels')
+            ? 'issue-label-post'
+            : method === 'POST' && route.endsWith('/labels')
+              ? 'label-creation'
+              : method === 'DELETE' && route.endsWith('/In%20progress')
+                ? 'delete-progress'
+                : method === 'DELETE'
+                  ? 'delete-blocked'
+                  : method === 'PATCH'
+                    ? 'close'
+                    : 'comment';
+      calls.push({ step, method, route, held, body: input ? JSON.parse(input) : null });
+      await Promise.resolve();
+      if (after === step && !triggered) {
+        held = true;
+        triggered = true;
+      }
+      if (step === 'label-inspection' && !labelExists)
+        return response({}, { ok: false, code: 1, stderr: 'HTTP 404' });
+      if (step === 'label-creation' && creationConflict)
+        return response({}, { ok: false, code: 1, stderr: 'HTTP 422' });
+      if (step === 'close' && failClose)
+        return response({}, { ok: false, code: 1, stderr: 'HTTP 503' });
+      return response({});
+    },
+  });
+  const guard = async () => {
+    guardCalls++;
+    assert.equal(held, false, 'fresh durable hold');
+  };
+  return {
+    gh,
+    calls,
+    guard,
+    setHeld: (value) => {
+      held = value;
+    },
+    guardCalls: () => guardCalls,
+  };
+}
+
+test('real status adapter rechecks the optional guard after every preceding awaited API boundary', async (t) => {
+  for (const options of [
+    { after: 'label-inspection' },
+    { after: 'label-inspection', labelExists: false },
+    { after: 'label-creation', labelExists: false },
+    { after: 'label-retry', labelExists: false, creationConflict: true },
+    { after: 'issue-label-post' },
+    { after: 'delete-progress' },
+    { after: 'delete-blocked' },
+  ])
+    await t.test(JSON.stringify(options), async () => {
+      const f = guardedLifecycle(options);
+      await assert.rejects(
+        f.gh.setIssueStatus(17, 'Risolto', { guard: f.guard }),
+        /fresh durable hold/,
+      );
+      assert.equal(
+        f.calls.some((call) => call.method !== 'GET' && call.held),
+        false,
+        'No mutation may start with an active hold',
+      );
+      assert.equal(
+        f.calls.some((call) => call.step === 'close'),
+        false,
+      );
+      f.setHeld(false);
+      await f.gh.setIssueStatus(17, 'Risolto', { guard: f.guard });
+      assert.equal(
+        f.calls.filter((call) => call.step === 'close').length,
+        1,
+        'A prevented operation must not poison the status cache',
+      );
+    });
+});
+
+test('cached lifecycle status still checks a fresh guard and preserves unguarded callers', async () => {
+  const f = guardedLifecycle();
+  await f.gh.setIssueStatus(17, 'Risolto');
+  const before = f.calls.length;
+  f.setHeld(true);
+  await assert.rejects(
+    f.gh.setIssueStatus(17, 'Risolto', { guard: f.guard }),
+    /fresh durable hold/,
+  );
+  assert.equal(f.calls.length, before);
+  f.setHeld(false);
+  await f.gh.setIssueStatus(17, 'Risolto', { guard: f.guard });
+  await f.gh.setIssueStatus(17, 'Risolto');
+  assert.equal(f.calls.length, before);
+  assert.equal(f.guardCalls(), 2);
+});
+
+test('actual comment request accepts the optional fresh guard, rejects errors/false/invalid guards, and keeps default callers', async () => {
+  const f = guardedLifecycle();
+  f.setHeld(true);
+  await assert.rejects(
+    f.gh.commentIssue(17, 'Verified deployment facts', { guard: f.guard }),
+    /fresh durable hold/,
+  );
+  await assert.rejects(
+    f.gh.commentIssue(17, 'Verified deployment facts', { guard: async () => false }),
+    /rejected/,
+  );
+  await assert.rejects(
+    f.gh.setIssueStatus(17, 'Risolto', { guard: 'invalid' }),
+    /must be a function/,
+  );
+  await assert.rejects(
+    f.gh.commentIssue(17, 'Verified deployment facts', {
+      guard: async () => {
+        throw Error('State read HTTP403');
+      },
+    }),
+    /HTTP403/,
+  );
+  assert.equal(f.calls.length, 0);
+  await f.gh.commentIssue(17, 'Existing non-release protocol');
+  assert.equal(f.calls.length, 1);
+});
+
+test('a hold arriving after an already-sent close cannot undo that request, but blocks later cached calls', async () => {
+  const f = guardedLifecycle({ after: 'close' });
+  await f.gh.setIssueStatus(17, 'Risolto', { guard: f.guard });
+  assert.equal(f.calls.find((call) => call.step === 'close').held, false);
+  const before = f.calls.length;
+  await assert.rejects(
+    f.gh.setIssueStatus(17, 'Risolto', { guard: f.guard }),
+    /fresh durable hold/,
+  );
+  assert.equal(
+    f.calls.length,
+    before,
+    'No later mutation may begin after the in-flight request completes with a hold',
+  );
+});
+
+test('a partial guarded lifecycle update invalidates an older cached status before reconciliation', async (t) => {
+  for (const failure of ['hold', 'close503'])
+    await t.test(failure, async () => {
+      const calls = [];
+      let resolving = false,
+        held = false;
+      const gh = createGitHub({
+        repo: 'l2v-hub/ClinicOS',
+        cwd: '/tmp',
+        run: async ({ args, input }) => {
+          const body = input ? JSON.parse(input) : null;
+          calls.push({ args, body });
+          if (
+            resolving &&
+            failure === 'hold' &&
+            args.includes('POST') &&
+            body?.labels?.includes('Risolto')
+          )
+            held = true;
+          if (resolving && failure === 'close503' && args.includes('PATCH'))
+            return response({}, { ok: false, code: 1, stderr: 'HTTP 503' });
+          return response({});
+        },
+      });
+      await gh.setIssueStatus(17, 'In progress');
+      resolving = true;
+      await assert.rejects(
+        gh.setIssueStatus(17, 'Risolto', {
+          guard: async () => {
+            if (held) throw Error('Durable hold');
+          },
+        }),
+      );
+      resolving = false;
+      held = false;
+      await gh.setIssueStatus(17, 'In progress');
+      assert.equal(
+        calls.filter((call) => call.body?.labels?.includes('In progress')).length,
+        2,
+        'Partially changed remote labels must not retain a stale In progress cache hit',
+      );
+    });
+});
+
+test('actual ready and merge transports reject a fresh guard before emitting commands', async () => {
+  for (const action of ['draftReady', 'mergePullRequest'])
+    for (const verdict of [false, 'throw']) {
+      const requests = [];
+      const gh = createGitHub({
+        cwd: '/tmp',
+        repo: 'l2v-hub/ClinicOS',
+        run: async ({ args }) => {
+          requests.push(args);
+          return response({});
+        },
+      });
+      const guard = async () => {
+        await Promise.resolve();
+        if (verdict === 'throw') throw Error('Changed release subject');
+        return false;
+      };
+      await assert.rejects(
+        action === 'draftReady'
+          ? gh.draftReady(9, { guard })
+          : gh.mergePullRequest(9, 'a'.repeat(40), { guard }),
+      );
+      assert.deepEqual(requests, []);
+    }
+});
+
+test('guard rereads cannot promote an old snapshot to a newer Contents CAS revision', async (t) => {
+  for (const boundary of ['branch-await', 'guard-await'])
+    for (const field of ['other batch', 'manualBatches', 'root field'])
+      await t.test(`${boundary}: ${field}`, async () => {
+        const original = {
+          batches: [
+            { id: 'target', phase: 'ready' },
+            { id: 'other', progress: 1 },
+          ],
+          manualBatches: [{ progress: 1 }],
+          operatorNote: 'original',
+        };
+        let remote = structuredClone(original),
+          version = 'a'.repeat(40),
+          changed = false,
+          saving = false;
+        const writes = [];
+        const change = () => {
+          if (changed) return;
+          changed = true;
+          if (field === 'other batch') remote.batches[1].progress = 2;
+          else if (field === 'manualBatches') remote.manualBatches[0].progress = 2;
+          else remote.operatorNote = 'New operator instruction';
+          version = 'b'.repeat(40);
+        };
+        const gh = createGitHub({
+          cwd: '/tmp',
+          repo: 'l2v-hub/ClinicOS',
+          run: async ({ args, input }) => {
+            const route = apiPath(args);
+            if (route.includes('/git/ref/heads/codex/bug-control')) {
+              if (saving && boundary === 'branch-await') change();
+              return response({ object: { sha: 'c'.repeat(40) } });
+            }
+            if (args.includes('PUT')) {
+              const body = JSON.parse(input);
+              writes.push(body);
+              if (body.sha !== version)
+                return response({}, { ok: false, code: 1, stderr: 'HTTP 409 conflict' });
+              remote = JSON.parse(Buffer.from(body.content, 'base64').toString('utf8'));
+              return response({ content: { sha: 'd'.repeat(40) } });
+            }
+            if (route.includes('/.codex-bug-state.json'))
+              return response({
+                type: 'file',
+                sha: version,
+                content: Buffer.from(JSON.stringify(remote)).toString('base64'),
+              });
+            throw Error(`Unexpected transport ${route}`);
+          },
+        });
+        const store = gh.createStateStore();
+        const old = await store.load();
+        old.batches[0].phase = 'deployed';
+        saving = true;
+        const guard = async () => {
+          if (boundary === 'guard-await') change();
+          const latest = await store.load();
+          assert.deepEqual(
+            latest.batches[0],
+            original.batches[0],
+            'Target is unchanged while another owner updates state',
+          );
+        };
+        await assert.rejects(store.save(old, { guard }), /compare-and-swap/);
+        assert.equal(changed, true);
+        assert.equal(writes.length, 1);
+        assert.equal(
+          writes[0].sha,
+          'a'.repeat(40),
+          'Do not adopt the guard read revision for the old body',
+        );
+        assert.equal(remote.batches[0].phase, 'ready');
+        if (field === 'other batch') assert.equal(remote.batches[1].progress, 2);
+        else if (field === 'manualBatches') assert.equal(remote.manualBatches[0].progress, 2);
+        else assert.equal(remote.operatorNote, 'New operator instruction');
+      });
+});
+
+test('actual durable PUT waits for a final release guard after branch inspection', async () => {
+  const writes = [];
+  let held = false,
+    saving = false;
+  const gh = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async ({ args }) => {
+      if (args[1].includes('/git/ref/heads/')) {
+        if (saving) held = true;
+        return response({});
+      }
+      if (args.includes('PUT')) {
+        writes.push(args);
+        return response({ content: { sha: 'b'.repeat(40) } });
+      }
+      return response({
+        type: 'file',
+        sha: 'a'.repeat(40),
+        content: Buffer.from('{}').toString('base64'),
+      });
+    },
+  });
+  const store = gh.createStateStore();
+  await store.load();
+  saving = true;
+  await assert.rejects(
+    store.save(
+      { changed: true },
+      {
+        guard: async () => {
+          if (held) throw Error('Fresh hold');
+        },
+      },
+    ),
+    /Fresh hold/,
+  );
+  assert.deepEqual(writes, []);
+});
+
+test('failed guarded CAS cannot retry an old state body against the revision read by its guard', async () => {
+  const writes = [];
+  let remote = { target: 'ready', unrelated: 'original' },
+    version = 'a'.repeat(40);
+  const gh = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async ({ args, input }) => {
+      if (args[1].includes('/git/ref/heads/')) return response({});
+      if (args.includes('PUT')) {
+        const body = JSON.parse(input);
+        writes.push(body);
+        if (body.sha !== version) return response({}, { ok: false, code: 1, stderr: 'HTTP 409' });
+        remote = JSON.parse(Buffer.from(body.content, 'base64').toString('utf8'));
+        return response({ content: { sha: 'c'.repeat(40) } });
+      }
+      return response({
+        type: 'file',
+        sha: version,
+        content: Buffer.from(JSON.stringify(remote)).toString('base64'),
+      });
+    },
+  });
+  const store = gh.createStateStore(),
+    old = await store.load();
+  old.target = 'deployed';
+  const guard = async () => {
+    remote.unrelated = 'Concurrent update';
+    version = 'b'.repeat(40);
+    await store.load();
+  };
+  await assert.rejects(store.save(old, { guard }), /compare-and-swap/);
+  await assert.rejects(store.save(old), /compare-and-swap/);
+  assert.deepEqual(
+    writes.map((body) => body.sha),
+    ['a'.repeat(40), 'a'.repeat(40)],
+  );
+  assert.deepEqual(remote, { target: 'ready', unrelated: 'Concurrent update' });
+});
+
+test('optional release guards reject explicitly invalid values at all actual transports', async () => {
+  for (const guard of [null, false, 'not a function']) {
+    const writes = [];
+    const gh = createGitHub({
+      cwd: '/tmp',
+      repo: 'l2v-hub/ClinicOS',
+      run: async ({ args }) => {
+        if (args[0] === 'pr' || args.includes('PUT')) writes.push(args);
+        if (args[1].includes('/git/ref/heads/')) return response({});
+        return response({
+          type: 'file',
+          sha: 'a'.repeat(40),
+          content: Buffer.from('{}').toString('base64'),
+        });
+      },
+    });
+    const store = gh.createStateStore();
+    await store.load();
+    await assert.rejects(gh.draftReady(9, { guard }), /guard must be a function/);
+    await assert.rejects(
+      gh.mergePullRequest(9, 'a'.repeat(40), { guard }),
+      /guard must be a function/,
+    );
+    await assert.rejects(store.save({}, { guard }), /guard must be a function/);
+    assert.deepEqual(writes, []);
+  }
+});
+
+test('durable save serializes its body before any branch await can mutate the supplied object', async () => {
+  let submitted, written;
+  const gh = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async ({ args, input }) => {
+      if (args[1].includes('/git/ref/heads/')) {
+        if (submitted) submitted.target = 'Unverified alias mutation';
+        return response({});
+      }
+      if (args.includes('PUT')) {
+        written = JSON.parse(input);
+        return response({ content: { sha: 'b'.repeat(40) } });
+      }
+      return response({
+        type: 'file',
+        sha: 'a'.repeat(40),
+        content: Buffer.from('{}').toString('base64'),
+      });
+    },
+  });
+  const store = gh.createStateStore();
+  await store.load();
+  submitted = { target: 'Verified transition' };
+  await store.save(submitted, { guard: async () => true });
+  assert.equal(
+    submitted.target,
+    'Unverified alias mutation',
+    'The test actually mutated the submitted reference',
+  );
+  assert.deepEqual(JSON.parse(Buffer.from(written.content, 'base64').toString('utf8')), {
+    target: 'Verified transition',
+  });
+});

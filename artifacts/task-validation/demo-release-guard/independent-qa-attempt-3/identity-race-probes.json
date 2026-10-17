@@ -1,0 +1,296 @@
+[
+  {
+    "scenario": "premerge-pr",
+    "decision": "DEFECT",
+    "preflights": 2,
+    "liveChecks": 0,
+    "views": 0,
+    "changeDone": true,
+    "verifiedPr": 9,
+    "durablePr": 10,
+    "verifiedSourceIssues": [
+      5
+    ],
+    "durableSourceIssues": [
+      5
+    ],
+    "actualMerges": [
+      [
+        "merge",
+        10,
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ]
+    ],
+    "actualClosures": [],
+    "completionComments": 0,
+    "result": {
+      "ok": true,
+      "status": "merged",
+      "batchId": "bug-batch-5",
+      "reviewedSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "mergeSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "deployments": {
+        "frontend": false,
+        "backend": true,
+        "runtime": false
+      }
+    },
+    "implementationRounds": 1,
+    "reviewRounds": 1
+  },
+  {
+    "scenario": "premerge-source-issue",
+    "decision": "DEFECT",
+    "preflights": 2,
+    "liveChecks": 0,
+    "views": 0,
+    "changeDone": true,
+    "verifiedPr": 9,
+    "durablePr": 9,
+    "verifiedSourceIssues": [
+      5
+    ],
+    "durableSourceIssues": [
+      5,
+      6
+    ],
+    "actualMerges": [
+      [
+        "merge",
+        9,
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ]
+    ],
+    "actualClosures": [],
+    "completionComments": 0,
+    "result": {
+      "ok": true,
+      "status": "merged",
+      "batchId": "bug-batch-5",
+      "reviewedSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "mergeSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "deployments": {
+        "frontend": false,
+        "backend": true,
+        "runtime": false
+      }
+    },
+    "implementationRounds": 1,
+    "reviewRounds": 1
+  },
+  {
+    "scenario": "premerge-approval-sha",
+    "decision": "BLOCKED",
+    "preflights": 2,
+    "liveChecks": 0,
+    "views": 0,
+    "changeDone": true,
+    "verifiedPr": 9,
+    "durablePr": 9,
+    "verifiedSourceIssues": [
+      5
+    ],
+    "durableSourceIssues": [
+      5
+    ],
+    "actualMerges": [],
+    "actualClosures": [],
+    "completionComments": 0,
+    "error": "durable approval changed immediately before merge",
+    "implementationRounds": 1,
+    "reviewRounds": 1
+  },
+  {
+    "scenario": "record-pr",
+    "decision": "DEFECT",
+    "preflights": 0,
+    "liveChecks": 2,
+    "views": 0,
+    "changeDone": true,
+    "verifiedPr": 9,
+    "durablePr": 10,
+    "verifiedSourceIssues": [
+      5
+    ],
+    "durableSourceIssues": [
+      5
+    ],
+    "actualMerges": [],
+    "actualClosures": [
+      [
+        "status",
+        5,
+        "Risolto"
+      ]
+    ],
+    "completionComments": 1,
+    "result": {
+      "ok": true,
+      "status": "deployed",
+      "batchId": "bug-batch-5",
+      "mergeSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "deployments": {
+        "frontend": false,
+        "backend": true,
+        "runtime": false
+      }
+    },
+    "implementationRounds": 1,
+    "reviewRounds": 1
+  },
+  {
+    "scenario": "record-source-issue",
+    "decision": "DEFECT",
+    "preflights": 0,
+    "liveChecks": 2,
+    "views": 0,
+    "changeDone": true,
+    "verifiedPr": 9,
+    "durablePr": 9,
+    "verifiedSourceIssues": [
+      5
+    ],
+    "durableSourceIssues": [
+      5,
+      6
+    ],
+    "actualMerges": [],
+    "actualClosures": [
+      [
+        "status",
+        5,
+        "Risolto"
+      ],
+      [
+        "status",
+        6,
+        "Risolto"
+      ]
+    ],
+    "completionComments": 2,
+    "result": {
+      "ok": true,
+      "status": "deployed",
+      "batchId": "bug-batch-5",
+      "mergeSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "deployments": {
+        "frontend": false,
+        "backend": true,
+        "runtime": false
+      }
+    },
+    "implementationRounds": 1,
+    "reviewRounds": 1
+  },
+  {
+    "scenario": "record-hold",
+    "decision": "BLOCKED",
+    "preflights": 0,
+    "liveChecks": 1,
+    "views": 0,
+    "changeDone": true,
+    "verifiedPr": 9,
+    "durablePr": 9,
+    "verifiedSourceIssues": [
+      5
+    ],
+    "durableSourceIssues": [
+      5
+    ],
+    "actualMerges": [],
+    "actualClosures": [],
+    "completionComments": 0,
+    "error": "durable releaseHold prevents merge, deployment recording and closure",
+    "implementationRounds": 1,
+    "reviewRounds": 1
+  },
+  {
+    "scenario": "publication-pr",
+    "decision": "BLOCKED",
+    "preflights": 0,
+    "liveChecks": 1,
+    "views": 1,
+    "changeDone": true,
+    "verifiedPr": 9,
+    "durablePr": 10,
+    "verifiedSourceIssues": [
+      5
+    ],
+    "durableSourceIssues": [
+      5
+    ],
+    "actualMerges": [],
+    "actualClosures": [],
+    "completionComments": 0,
+    "error": "verified release identity changed before issue publication or closure",
+    "implementationRounds": 1,
+    "reviewRounds": 1
+  },
+  {
+    "scenario": "publication-source-issue",
+    "decision": "BLOCKED",
+    "preflights": 0,
+    "liveChecks": 1,
+    "views": 1,
+    "changeDone": true,
+    "verifiedPr": 9,
+    "durablePr": 9,
+    "verifiedSourceIssues": [
+      5
+    ],
+    "durableSourceIssues": [
+      5,
+      6
+    ],
+    "actualMerges": [],
+    "actualClosures": [],
+    "completionComments": 0,
+    "error": "verified release identity changed before issue publication or closure",
+    "implementationRounds": 1,
+    "reviewRounds": 1
+  },
+  {
+    "scenario": "publication-approval-sha",
+    "decision": "BLOCKED",
+    "preflights": 0,
+    "liveChecks": 1,
+    "views": 1,
+    "changeDone": true,
+    "verifiedPr": 9,
+    "durablePr": 9,
+    "verifiedSourceIssues": [
+      5
+    ],
+    "durableSourceIssues": [
+      5
+    ],
+    "actualMerges": [],
+    "actualClosures": [],
+    "completionComments": 0,
+    "error": "verified release identity changed before issue publication or closure",
+    "implementationRounds": 1,
+    "reviewRounds": 1
+  },
+  {
+    "scenario": "publication-live-proof",
+    "decision": "BLOCKED",
+    "preflights": 0,
+    "liveChecks": 1,
+    "views": 1,
+    "changeDone": true,
+    "verifiedPr": 9,
+    "durablePr": 9,
+    "verifiedSourceIssues": [
+      5
+    ],
+    "durableSourceIssues": [
+      5
+    ],
+    "actualMerges": [],
+    "actualClosures": [],
+    "completionComments": 0,
+    "error": "verified release identity changed before issue publication or closure",
+    "implementationRounds": 1,
+    "reviewRounds": 1
+  }
+]

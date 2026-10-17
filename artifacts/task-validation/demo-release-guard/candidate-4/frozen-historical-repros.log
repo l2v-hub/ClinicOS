@@ -1,0 +1,42 @@
+{"scenario":"actual-premerge-pr","verifiedPr":9,"verifiedBase":"main","unverifiedPr":10,"unverifiedBase":"release","requests":[],"error":"verified release identity changed during asynchronous verification"}
+{"scenario":"actual-record-pr","verifiedSourceIssues":[5],"durableSourceIssues":[5],"closed":[],"error":"verified release identity changed during asynchronous verification"}
+{"scenario":"actual-record-source-issue","verifiedSourceIssues":[5],"durableSourceIssues":[5,6],"closed":[],"error":"verified release identity changed during asynchronous verification"}
+✔ actual gh merge adapter cannot merge changed PR10 targeting another base after validating PR9/main (118.177704ms)
+✔ actual issue adapter cannot close after record proof await changes pr (20.913008ms)
+✔ actual issue adapter cannot close after record proof await changes source-issue (47.601273ms)
+{"scenario":"premerge-pr","decision":"BLOCKED","preflights":2,"liveChecks":0,"views":0,"changeDone":true,"verifiedPr":9,"durablePr":10,"verifiedSourceIssues":[5],"durableSourceIssues":[5],"actualMerges":[],"actualClosures":[],"completionComments":0,"error":"verified release identity changed during asynchronous verification","implementationRounds":1,"reviewRounds":1}
+{"scenario":"premerge-source-issue","decision":"BLOCKED","preflights":2,"liveChecks":0,"views":0,"changeDone":true,"verifiedPr":9,"durablePr":9,"verifiedSourceIssues":[5],"durableSourceIssues":[5,6],"actualMerges":[],"actualClosures":[],"completionComments":0,"error":"verified release identity changed during asynchronous verification","implementationRounds":1,"reviewRounds":1}
+{"scenario":"premerge-approval-sha","decision":"BLOCKED","preflights":2,"liveChecks":0,"views":0,"changeDone":true,"verifiedPr":9,"durablePr":9,"verifiedSourceIssues":[5],"durableSourceIssues":[5],"actualMerges":[],"actualClosures":[],"completionComments":0,"error":"verified release identity changed during asynchronous verification","implementationRounds":1,"reviewRounds":1}
+{"scenario":"record-pr","decision":"BLOCKED","preflights":0,"liveChecks":1,"views":0,"changeDone":true,"verifiedPr":9,"durablePr":10,"verifiedSourceIssues":[5],"durableSourceIssues":[5],"actualMerges":[],"actualClosures":[],"completionComments":0,"error":"verified release identity changed during asynchronous verification","implementationRounds":1,"reviewRounds":1}
+{"scenario":"record-source-issue","decision":"BLOCKED","preflights":0,"liveChecks":1,"views":0,"changeDone":true,"verifiedPr":9,"durablePr":9,"verifiedSourceIssues":[5],"durableSourceIssues":[5,6],"actualMerges":[],"actualClosures":[],"completionComments":0,"error":"verified release identity changed during asynchronous verification","implementationRounds":1,"reviewRounds":1}
+{"scenario":"record-hold","decision":"BLOCKED","preflights":0,"liveChecks":1,"views":0,"changeDone":true,"verifiedPr":9,"durablePr":9,"verifiedSourceIssues":[5],"durableSourceIssues":[5],"actualMerges":[],"actualClosures":[],"completionComments":0,"error":"durable releaseHold prevents merge, deployment recording and closure","implementationRounds":1,"reviewRounds":1}
+{"scenario":"publication-pr","decision":"BLOCKED","preflights":0,"liveChecks":1,"views":1,"changeDone":true,"verifiedPr":9,"durablePr":10,"verifiedSourceIssues":[5],"durableSourceIssues":[5],"actualMerges":[],"actualClosures":[],"completionComments":0,"error":"verified release identity changed during asynchronous verification","implementationRounds":1,"reviewRounds":1}
+{"scenario":"publication-source-issue","decision":"BLOCKED","preflights":0,"liveChecks":1,"views":1,"changeDone":true,"verifiedPr":9,"durablePr":9,"verifiedSourceIssues":[5],"durableSourceIssues":[5,6],"actualMerges":[],"actualClosures":[],"completionComments":0,"error":"verified release identity changed during asynchronous verification","implementationRounds":1,"reviewRounds":1}
+{"scenario":"publication-approval-sha","decision":"BLOCKED","preflights":0,"liveChecks":1,"views":1,"changeDone":true,"verifiedPr":9,"durablePr":9,"verifiedSourceIssues":[5],"durableSourceIssues":[5],"actualMerges":[],"actualClosures":[],"completionComments":0,"error":"verified release identity changed during asynchronous verification","implementationRounds":1,"reviewRounds":1}
+{"scenario":"publication-live-proof","decision":"BLOCKED","preflights":0,"liveChecks":1,"views":1,"changeDone":true,"verifiedPr":9,"durablePr":9,"verifiedSourceIssues":[5],"durableSourceIssues":[5],"actualMerges":[],"actualClosures":[],"completionComments":0,"error":"verified release identity changed during asynchronous verification","implementationRounds":1,"reviewRounds":1}
+✔ fresh identity rejects premerge-pr before a merge or closure (147.397682ms)
+✔ fresh identity rejects premerge-source-issue before a merge or closure (27.647083ms)
+✔ fresh identity rejects premerge-approval-sha before a merge or closure (24.415915ms)
+✔ fresh identity rejects record-pr before a merge or closure (54.69252ms)
+✔ fresh identity rejects record-source-issue before a merge or closure (9.058322ms)
+✔ fresh identity rejects record-hold before a merge or closure (23.892183ms)
+✔ fresh identity rejects publication-pr before a merge or closure (7.213893ms)
+✔ fresh identity rejects publication-source-issue before a merge or closure (22.380089ms)
+✔ fresh identity rejects publication-approval-sha before a merge or closure (6.420362ms)
+✔ fresh identity rejects publication-live-proof before a merge or closure (9.919921ms)
+{"preflights":2,"verifiedPr":9,"durablePr":10,"actualMerges":[],"error":"verified release identity changed during asynchronous verification"}
+✔ a PR identity change during final trusted preflight cannot select an unverified PR for merge (193.874207ms)
+✔ a hold applied while reading issue comments prevents completion publication (20.470077ms)
+✔ hold during real GitHub status adapter label inspection prevents actual close PATCH (19.236799ms)
+✔ a failed actual close must not leave an untrue already-closed completion claim (3.255792ms)
+✔ cacheable extension does not establish no-store: public, max-age=3600, x-no-store-extension=1 (256.728881ms)
+✔ cacheable extension does not establish no-store: public, max-age=3600, no-store-extension (20.766171ms)
+✔ cacheable extension does not establish no-store: public, max-age=3600, extension="no-store" (0.952131ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2606.303764

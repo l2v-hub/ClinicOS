@@ -1,0 +1,11 @@
+{
+  "authorizedSourceFiles": 19,
+  "actualSourceFiles": 19,
+  "matchesAuthorizedScope": true,
+  "changedSinceCandidate3": [
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs"
+  ]
+}

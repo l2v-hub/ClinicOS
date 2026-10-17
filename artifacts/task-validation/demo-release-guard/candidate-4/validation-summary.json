@@ -1,0 +1,36 @@
+{
+  "status": "candidate-4-frozen-awaiting-independent-qa4",
+  "sourceFiles": 19,
+  "changedSinceCandidate3": 4,
+  "nativeCiUnitCommand": "node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs",
+  "unit": {
+    "total": 586,
+    "passed": 583,
+    "failed": 0,
+    "skippedNativeWindows": 3
+  },
+  "unchangedEarlierQaReproductions": {
+    "total": 20,
+    "passed": 20,
+    "failed": 0
+  },
+  "backendTypeScript": "PASS",
+  "frontendTypeScript": "PASS",
+  "frontendProductionBuild": "PASS",
+  "syntheticActualReadinessHttp": "PASS 1/1",
+  "officialRailwayGraphqlAst": "PASS 3/3",
+  "taskContract": "PASS",
+  "fourWorkflowYamlParse": "PASS",
+  "sourceFormatting": "PASS",
+  "syntax": "PASS",
+  "diffWhitespace": "PASS",
+  "sourceIntegrity": "PASS 19/19",
+  "historicalKnownDigestRecordsVerified": 91,
+  "historicalUniqueFilesFrozen": 108,
+  "nativeActionlint": "unavailable; not claimed",
+  "nativeIsolatedCodexChromiumPostgres": "not run locally; actual GitHub CI remains required",
+  "browserDiagnostic": "new independent QA4 required; implementation did not run a browser",
+  "claudeApproval": "not claimed",
+  "liveSettingsDeploymentOrClosure": "not performed",
+  "budget": "fourth and last reserved attempt; no reset"
+}

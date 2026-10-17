@@ -1,0 +1,61 @@
+name: Configure verified demo source branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Inspect metadata, or set only the unique existing demo trigger branch
+        type: choice
+        options: [inspect, set-main]
+        default: inspect
+        required: true
+      reviewed_sha:
+        description: Exact reviewed current main commit SHA
+        type: string
+        required: true
+      expected_inventory_digest:
+        description: SHA-256 from a prior inspection; mandatory for set-main
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: railway-backend
+  cancel-in-progress: false
+
+jobs:
+  configuration:
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      github.repository == 'l2v-hub/ClinicOS' &&
+      github.ref == 'refs/heads/main' &&
+      inputs.reviewed_sha == github.sha
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: 'glistening-friendship / demo'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Verify operational configuration tests without credentials
+        run: node --test scripts/automation/configure-demo-source.test.mjs
+      - name: Inspect or update the existing demo trigger branch
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+          CONFIGURE_DEMO_OPERATION: ${{ inputs.operation }}
+          CONFIGURE_DEMO_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+          CONFIGURE_DEMO_EXPECTED_DIGEST: ${{ inputs.expected_inventory_digest }}
+        run: node scripts/automation/configure-demo-source.mjs
+      - name: Publish only the validated metadata receipt
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: demo-source-configuration-${{ github.run_id }}-${{ github.run_attempt }}
+          path: demo-source-configuration-receipt.json
+          if-no-files-found: error
+          retention-days: 7

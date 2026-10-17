@@ -69,13 +69,65 @@ if (process.argv[2] === '--inside') {
     'CLAUDE_CODE_OAUTH_TOKEN',
     'VERCEL_TOKEN',
     'RAILWAY_TOKEN',
+    'RAILWAY_DEMO_TOKEN',
   ])
     assert.equal(process.env[name], undefined);
-  const server = http.createServer((request, response) => response.end('isolated-local-ready'));
+  assert.ok(
+    path.isAbsolute(process.env.PLAYWRIGHT_BROWSERS_PATH || ''),
+    'Trusted browser cache must survive verification HOME isolation',
+  );
+  const browserHtml = `<!doctype html><html><head><meta charset="utf-8"><title>Isolated verification</title></head><body>
+    <label>Proof value <input id="proof-value"></label><button id="save">Save synthetic proof</button><output id="saved"></output>
+    <script>
+      const input=document.querySelector('#proof-value'), saved=document.querySelector('#saved');
+      input.value=localStorage.getItem('proof') || '';
+      saved.textContent=localStorage.getItem('proof') || 'Not saved';
+      document.querySelector('#save').onclick=()=>{localStorage.setItem('proof',input.value);saved.textContent=input.value;};
+    </script></body></html>`;
+  const server = http.createServer((request, response) => {
+    response.setHeader('Cache-Control', 'no-store');
+    response.setHeader(
+      'Content-Type',
+      request.url === '/browser-proof' ? 'text/html; charset=utf-8' : 'text/plain',
+    );
+    response.end(request.url === '/browser-proof' ? browserHtml : 'isolated-local-ready');
+  });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   try {
     const response = await fetch(`http://127.0.0.1:${server.address().port}`);
     assert.equal(await response.text(), 'isolated-local-ready');
+    // Actual Chromium, same installed revision and cache as planned E2E verification commands.
+    // No model/deployment credential, external asset, TLS flag or relaxed egress is used.
+    const { chromium } = await import('playwright');
+    const browser = await chromium.launch({ headless: true });
+    try {
+      const context = await browser.newContext();
+      const page = await context.newPage();
+      const errors = [];
+      const origin = `http://127.0.0.1:${server.address().port}`;
+      page.on('console', (message) => {
+        if (message.type() === 'error') errors.push('console');
+      });
+      page.on('pageerror', () => errors.push('page'));
+      page.on('request', (request) => {
+        if (!request.url().startsWith(`${origin}/`)) errors.push('external-request');
+      });
+      page.on('response', (response) => {
+        if (response.status() >= 400) errors.push('http');
+      });
+      await page.goto(`${origin}/browser-proof`);
+      assert.equal(await page.locator('#saved').textContent(), 'Not saved');
+      await page.locator('#proof-value').fill('isolated-chromium-ready');
+      await page.locator('#save').click();
+      assert.equal(await page.locator('#saved').textContent(), 'isolated-chromium-ready');
+      await page.reload();
+      assert.equal(await page.locator('#proof-value').inputValue(), 'isolated-chromium-ready');
+      assert.equal(await page.locator('#saved').textContent(), 'isolated-chromium-ready');
+      assert.deepEqual(errors, []);
+      await context.close();
+    } finally {
+      await browser.close();
+    }
     const sql = execFileSync(
       '/usr/lib/postgresql/16/bin/psql',
       [
@@ -102,7 +154,7 @@ if (process.argv[2] === '--inside') {
     );
     writeSync(
       1,
-      'Isolated HTTP, PostgreSQL and migrations: PASS; external TCP/UDP/proxy and outside writes: DENIED\n',
+      'Isolated HTTP, PostgreSQL and migrations: PASS; actual Chromium DOM/save/reload: PASS; external TCP/UDP/proxy and outside writes: DENIED\n',
     );
   } finally {
     await new Promise((resolve) => server.close(resolve));
@@ -127,6 +179,7 @@ if (process.argv[2] === '--inside') {
     console.log(JSON.stringify(result));
     assert.equal(result.ok, true, result.stderr || result.error);
     assert.ok(result.stdout.includes('Isolated HTTP, PostgreSQL and migrations: PASS'));
+    assert.ok(result.stdout.includes('actual Chromium DOM/save/reload: PASS'));
     assert.equal(await readFile(outside, 'utf8'), 'preserved');
     const failure = await run({
       command: 'codex',
