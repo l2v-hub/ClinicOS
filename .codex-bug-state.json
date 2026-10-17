@@ -2688,7 +2688,7 @@
         456,
         457
       ],
-      "phase": "independent-qa-preliminary",
+      "phase": "implementing",
       "implementation": [
         {
           "round": 1,
@@ -2697,7 +2697,15 @@
         },
         {
           "round": 2,
-          "status": "running"
+          "status": "failed",
+          "reason": "IndependentQA2 exact App function reproduction RED: old clinical JSON receipt installs chart in new session despite outerfalse. Ordinary1474frontend/1940backend/7UI/19intake pass; source92/contracts22 unchanged.",
+          "qaSealSha256": "9f1008691e6ea0312c60adc15bb7b28468ea5afde6586a1472fee12ff016f3dd"
+        },
+        {
+          "round": 3,
+          "status": "running",
+          "startedAt": "2026-10-17T11:14:02.032Z",
+          "reason": "Minimal existing-scope post-JSON and deferred React updater epoch isolation correction; real production-function regressions and newQA3 mandatory."
         }
       ],
       "reviews": [],
@@ -2746,7 +2754,8 @@
         "scope-amendment-11-agenda-date-regression.md": "b2146cf0c8a12cedbe2d28e63bbb4e4d4c73b5c19630f1b9054da6a0f10ab9c8",
         "scope-amendment-12-intake-roster-integration.md": "d16f2bcd56ba951a158883e174918919b27f6e96e9ee83559a81a969733e5f8e",
         "scope-amendment-13-main-and-preliminary-qa.md": "27089bce73264f524b179b2084b0d970ca27358625ba80f3cb987fce2d5cc1a7",
-        "approved-plan-cycle-2-main-integrated.json": "758fe2560b5c086a8b1520aed6a7813081995717ef9f67f0e096d64fd093e1b1"
+        "approved-plan-cycle-2-main-integrated.json": "758fe2560b5c086a8b1520aed6a7813081995717ef9f67f0e096d64fd093e1b1",
+        "implementation-cycle-3-session-isolation.md": "6da4a95dd2df7911ee786b45d06ea60e0fc1a170c7516a95e7ffedd7d7f6f2b4"
       },
       "baseSha": "05fd62363d89573d6e2449235a7499cc855434cd",
       "plan": {
@@ -3668,6 +3677,15 @@
           "therapy": "34c865233df53a3930f29c8b7befc02208588d64",
           "intake": "111e672faf77b45280d8ef6ebb15268180b58376"
         }
+      },
+      "independentQa": {
+        "attempt": 2,
+        "verdict": "FAILED VALIDATION",
+        "report": "independent-qa-attempt-2/validation-report.md",
+        "sealSha256": "9f1008691e6ea0312c60adc15bb7b28468ea5afde6586a1472fee12ff016f3dd",
+        "source92Unchanged": true,
+        "contracts22Unchanged": true,
+        "finding": "late old-session clinical JSON receipt crosses session boundary"
       }
     },
     {
@@ -3928,5 +3946,5 @@
       "rationale": "Explicit new user-requested issue-comment/label feedback feature. Seven sources outside frozen G19; no guard or clinical budget reset. Existing normal-controller ownership preserved."
     }
   ],
-  "updatedAt": "2026-10-17T11:12:53.486Z"
+  "updatedAt": "2026-10-17T11:14:02.032Z"
 }
