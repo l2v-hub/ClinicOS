@@ -1,0 +1,13 @@
+✔ independent: controller state with new grouping is accepted unchanged by installed origin/main validator (23.984956ms)
+✔ independent: live label revocation and external ownership cannot enter collection or paid planning (0.969236ms)
+✔ independent: authorization disappearing after collection refuses ownership before model call (1.434935ms)
+✔ independent: new issue overlapping a frozen legacy batch stays blocked and preserves exhausted budgets (4.154515ms)
+✔ independent: unrelated incoming files may proceed without mutating a frozen legacy scope (3.531865ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 180.098725
