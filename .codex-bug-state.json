@@ -561,7 +561,7 @@
       "sourceSha": "29b2f5c9b72b4d909b954d5360ec08095825f29e",
       "branch": "codex/bug-batch-450",
       "owner": "codex-root-2026-10-17",
-      "phase": "implementing",
+      "phase": "publishing",
       "reservedAt": "2026-10-17T07:38:22.669Z",
       "implementation": [
         {
@@ -571,8 +571,9 @@
         },
         {
           "round": 2,
-          "status": "running",
-          "runtimeVerificationNote": "Only runner oracle/navigation, default hosted Chromium/cache and complete47source receipt corrected before finalQA; application46source unchanged."
+          "status": "passed",
+          "runtimeVerificationNote": "Only runner oracle/navigation, default hosted Chromium/cache and complete47source receipt corrected before finalQA; application46source unchanged.",
+          "reason": "IndependentQA2 all5phases PASS: frontend1390,backend69,proactive23,fullbrowser19/SQL,actualPDF phone/tablet,privacy/source47 checks; original134bytes archived before current proof publication."
         }
       ],
       "reviews": [],
@@ -587,7 +588,8 @@
         "scope-amendment-3.md": "68ec40674d1676f5345ca4baf23d834d41976c72bea88da0da9a4636ea6bcd72",
         "cycle-2-correction.md": "20561d66fa9cc8f6f7ce1564fedf6858d39b4fcf10453ee08815b5a35d40ba98",
         "runtime-source-scope.json": "18f67d8e8f5af157d6fc7218a998bb808d34379404c013cb72d251a6f33fd24a",
-        "cycle-2-runtime-verification-amendment.md": "bf3be25c87ff2079f4e8dbc5d39d80c1756c3b69e5637337a5e5e2fe9b25f525"
+        "cycle-2-runtime-verification-amendment.md": "bf3be25c87ff2079f4e8dbc5d39d80c1756c3b69e5637337a5e5e2fe9b25f525",
+        "publication-history-and-qa2.md": "db021a7ac100c608c6515b2f808d80df7ce5e1f18afea1f16e5592962f3f8888"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -1043,7 +1045,117 @@
           "packet": "scope-amendment-3.md",
           "sha256": "68ec40674d1676f5345ca4baf23d834d41976c72bea88da0da9a4636ea6bcd72"
         }
-      ]
+      ],
+      "evidence": [
+        {
+          "issue": 450,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue450.png",
+              "sha256": "4971065af8392e06bcf34da22220fa3aea193db417cf33d011774c09ea6d2cb0",
+              "bytes": 80566
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue450.zip",
+              "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
+              "bytes": 20161286
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue450.webm",
+              "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
+              "bytes": 3910102
+            }
+          }
+        },
+        {
+          "issue": 472,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue472.png",
+              "sha256": "f4e52e8fae3787f950b25051f7524fd1b4c3162365db598b63c987e8cb6b075a",
+              "bytes": 104916
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue472.zip",
+              "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
+              "bytes": 20161286
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue472.webm",
+              "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
+              "bytes": 3910102
+            }
+          }
+        },
+        {
+          "issue": 473,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue473.png",
+              "sha256": "a5e2be73d61100d2aaeb94fbe561dedb16c353f860501fccc190f2b0f4b76718",
+              "bytes": 126886
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue473.zip",
+              "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
+              "bytes": 20161286
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue473.webm",
+              "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
+              "bytes": 3910102
+            }
+          }
+        },
+        {
+          "issue": 475,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue475.png",
+              "sha256": "efe44dfa5b1dbbb840c334b0fb191ab6a6980d7cde3540f452625aecc6582d88",
+              "bytes": 111715
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue475.zip",
+              "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
+              "bytes": 20161286
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue475.webm",
+              "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
+              "bytes": 3910102
+            }
+          }
+        },
+        {
+          "issue": 476,
+          "files": {
+            "screenshot": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue476.png",
+              "sha256": "c22cd27258f97f4b497a3af8680c6043d183e268464ce542720f4ca4ab2304b2",
+              "bytes": 88757
+            },
+            "trace": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue476.zip",
+              "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
+              "bytes": 20161286
+            },
+            "video": {
+              "path": "artifacts/task-validation/bug-batch-450/evidence/issue476.webm",
+              "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
+              "bytes": 3910102
+            }
+          }
+        }
+      ],
+      "qa": {
+        "verdict": "READY FOR CODEX QA",
+        "cycle": 2,
+        "testedSourceSha": "0eae11061ada23a60f888c36fd8923a6dbba93d1",
+        "sourceFiles": 47,
+        "report": "artifacts/task-validation/bug-batch-450/independent-qa-attempt-2/validation-report.md",
+        "awaiting": "requiredCI, externalClaudeMax, actualverifiedrelease"
+      }
     },
     {
       "id": "bug-batch-447",
@@ -2036,7 +2148,7 @@
       "owner": "codex-root-2026-10-17",
       "branch": "codex/demo-release-guard",
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
-      "phase": "implementing",
+      "phase": "waiting-ci",
       "implementation": [
         {
           "round": 1,
@@ -2055,7 +2167,9 @@
         },
         {
           "round": 4,
-          "status": "running"
+          "status": "passed",
+          "sha": "4c042b6acf837cf3afef636708c41fc763ac6e95",
+          "reason": "Independent QA4 all5phases passed; nativeWindows and actualCodex/Chromium/Postgres39022301979 passed same19source; PR480 checks pending finalSHA."
         }
       ],
       "reviews": [],
@@ -2090,8 +2204,19 @@
           ],
           "reason": "Concrete isolated Chromium cache and protected terminal publication retry defects in complete automatic flow"
         }
-      ]
+      ],
+      "pr": {
+        "number": 480,
+        "url": "https://github.com/l2v-hub/ClinicOS/pull/480"
+      },
+      "sha": "4c042b6acf837cf3afef636708c41fc763ac6e95",
+      "nativeVerification": {
+        "runId": 39022301979,
+        "sourceSha": "d5f82969bea8a50b2da22ec00edf2682a3e1d16d",
+        "same19SourceBytes": true,
+        "status": "success"
+      }
     }
   ],
-  "updatedAt": "2026-10-17T09:46:45.901Z"
+  "updatedAt": "2026-10-17T09:59:22.407Z"
 }
