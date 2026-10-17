@@ -5,9 +5,30 @@ import { fileURLToPath } from 'node:url';
 const REPO = 'l2v-hub/ClinicOS';
 const NAME = 'ClinicOS Codex: bug-pipeline-tests';
 const CHECK = 'bug-pipeline-tests';
+const REQUIRED_CHECKS = [
+  CHECK,
+  'secret-scan',
+  'frontend-tests',
+  'archive-tests',
+  'gate',
+  'browser-e2e',
+];
+const ACTIONS_APP = 15368;
+
+function assertCheckBindings(checks, binding = 'integration_id') {
+  assert.ok(Array.isArray(checks), 'Required checks must be readable');
+  for (const check of checks)
+    if (REQUIRED_CHECKS.includes(check.context))
+      assert.equal(
+        check[binding],
+        ACTIONS_APP,
+        `Inspect the differently bound ${check.context} check before changing it`,
+      );
+}
 
 export async function configureRepository({ request, actor, expectedSha, actualSha }) {
   assert.match(expectedSha ?? '', /^[a-f0-9]{40}$/);
+  assert.equal(expectedSha.length, 40);
   assert.equal(actualSha, expectedSha, 'The dispatched revision must match the reviewed revision');
   assert.match(actor ?? '', /^[A-Za-z0-9][A-Za-z0-9-]*(?:\[bot\])?$/);
   const base = `/repos/${REPO}`;
@@ -18,15 +39,41 @@ export async function configureRepository({ request, actor, expectedSha, actualS
     'Only a repository administrator may configure gates',
   );
   const settings = await request('GET', `${base}/actions/permissions/workflow`);
-  await request('GET', `${base}/branches/main`);
-  const rulesets = [];
-  for (let page = 1; ; page++) {
-    const records = await request('GET', `${base}/rulesets?per_page=100&page=${page}`);
-    assert.ok(Array.isArray(records), 'Invalid ruleset list');
-    rulesets.push(...records);
-    if (records.length < 100) break;
-    assert.ok(page < 100, 'Ruleset pagination exceeded its safety bound');
+  assert.ok(
+    ['read', 'write'].includes(settings.default_workflow_permissions),
+    'Default workflow permissions must be readable',
+  );
+  assert.equal(typeof settings.can_approve_pull_request_reviews, 'boolean');
+  const branch = await request('GET', `${base}/branches/main`);
+  assert.equal(branch.name, 'main', 'The target branch must be main');
+  const classic = branch.protection?.required_status_checks;
+  if (classic) {
+    assertCheckBindings(classic.checks ?? [], 'app_id');
+    for (const context of classic.contexts ?? [])
+      if (REQUIRED_CHECKS.includes(context))
+        assert.ok(
+          classic.checks?.some(
+            (check) => check.context === context && check.app_id === ACTIONS_APP,
+          ),
+          `The classic ${context} check must have the expected Actions binding`,
+        );
   }
+  const listAll = async (route) => {
+    const all = [];
+    for (let page = 1; ; page++) {
+      const records = await request('GET', `${base}${route}?per_page=100&page=${page}`);
+      assert.ok(Array.isArray(records) && records.length <= 100, 'Invalid paginated rules list');
+      all.push(...records);
+      if (records.length < 100) return all;
+      assert.ok(page < 100, 'Rules pagination exceeded its safety bound');
+    }
+  };
+  // Read effective cumulative gates before ANY write, including enabling PR approval.
+  const before = await listAll('/rules/branches/main');
+  assert.ok(Array.isArray(before), 'Effective branch rules must be readable');
+  for (const rule of before.filter((rule) => rule.type === 'required_status_checks'))
+    assertCheckBindings(rule.parameters?.required_status_checks);
+  const rulesets = await listAll('/rulesets');
   const matches = rulesets.filter((rule) => rule.name === NAME && rule.source === REPO);
   assert.ok(matches.length < 2, 'Ambiguous managed ruleset');
   let existing = matches.length ? await request('GET', `${base}/rulesets/${matches[0].id}`) : null;
@@ -42,7 +89,9 @@ export async function configureRepository({ request, actor, expectedSha, actualS
     );
   }
   const rules = structuredClone(existing?.rules ?? []);
-  let gate = rules.find((rule) => rule.type === 'required_status_checks');
+  const gates = rules.filter((rule) => rule.type === 'required_status_checks');
+  assert.ok(gates.length <= 1, 'Ambiguous managed required-check rules');
+  let gate = gates[0];
   if (!gate) {
     gate = {
       type: 'required_status_checks',
@@ -50,14 +99,14 @@ export async function configureRepository({ request, actor, expectedSha, actualS
     };
     rules.push(gate);
   }
-  const prior = gate.parameters.required_status_checks.find((check) => check.context === CHECK);
-  if (prior)
-    assert.equal(
-      prior.integration_id,
-      15368,
-      'Inspect a differently bound check before changing it',
-    );
-  else gate.parameters.required_status_checks.push({ context: CHECK, integration_id: 15368 });
+  assertCheckBindings(gate.parameters?.required_status_checks);
+  let changed = false;
+  for (const context of REQUIRED_CHECKS) {
+    if (!gate.parameters.required_status_checks.some((check) => check.context === context)) {
+      gate.parameters.required_status_checks.push({ context, integration_id: ACTIONS_APP });
+      changed = true;
+    }
+  }
 
   // Only this flag changes; the repository's default workflow permissions are preserved.
   if (settings.can_approve_pull_request_reviews !== true) {
@@ -75,7 +124,7 @@ export async function configureRepository({ request, actor, expectedSha, actualS
       bypass_actors: [],
       rules,
     });
-  } else if (!prior) {
+  } else if (changed) {
     await request('PUT', `${base}/rulesets/${existing.id}`, { rules });
   }
   const verifiedSettings = await request('GET', `${base}/actions/permissions/workflow`);
@@ -84,23 +133,27 @@ export async function configureRepository({ request, actor, expectedSha, actualS
     verifiedSettings.default_workflow_permissions,
     settings.default_workflow_permissions,
   );
-  const effective = await request('GET', `${base}/rules/branches/main`);
-  assert.ok(
-    effective.some(
-      (rule) =>
-        rule.type === 'required_status_checks' &&
-        rule.ruleset_id === existing.id &&
-        rule.parameters.required_status_checks.some(
-          (check) => check.context === CHECK && check.integration_id === 15368,
-        ),
-    ),
-    'The required Actions check is not effective on main',
-  );
+  const effective = await listAll('/rules/branches/main');
+  assert.ok(Array.isArray(effective), 'Effective branch rules must be readable');
+  const effectiveGates = effective.filter((rule) => rule.type === 'required_status_checks');
+  for (const rule of effectiveGates) assertCheckBindings(rule.parameters?.required_status_checks);
+  const managedChecks = effectiveGates
+    .filter((rule) => rule.ruleset_id === existing.id)
+    .flatMap((rule) => rule.parameters.required_status_checks);
+  for (const context of REQUIRED_CHECKS)
+    assert.ok(
+      managedChecks.some(
+        (check) => check.context === context && check.integration_id === ACTIONS_APP,
+      ),
+      `The required Actions check ${context} is not effective on main`,
+    );
+
   return {
     status: 'verified',
     repository: REPO,
     approvePullRequests: true,
     requiredCheck: CHECK,
+    requiredChecks: [...REQUIRED_CHECKS],
     rulesetId: existing.id,
   };
 }

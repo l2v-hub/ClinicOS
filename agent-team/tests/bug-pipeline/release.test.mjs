@@ -1,7 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createGitHub } from '../../src/bug-pipeline/github.mjs';
 import {
   releaseBatch,
+  selectAutoReleaseBatch,
+  publicationComplete,
   recordDeployment,
   ReleaseGateError,
   publishDeploymentCompletion,
@@ -270,8 +273,9 @@ test('verified deployment records true links then marks the issue resolved', asy
   assert.equal(result.status, 'deployed');
   const comment = f.calls.find(([call]) => call === 'comment');
   assert.match(comment[2], /clinicos-eosin\.vercel\.app/);
-  assert.match(comment[2], /Risolto/);
-  assert.deepEqual(f.calls.at(-1), ['status', 5, 'Risolto']);
+  assert.match(comment[2], /Rilascio verificato/);
+  assert.doesNotMatch(comment[2], /issue chiusa|already closed/i);
+  assert.deepEqual(f.calls.filter(([type]) => type === 'status').at(-1), ['status', 5, 'Risolto']);
 });
 
 test('completion comment failure never closes an issue and terminal publication retries without model work', async () => {
@@ -309,4 +313,947 @@ test('completion comment failure never closes an issue and terminal publication 
     /confirmed deployment links/,
   );
   assert.equal(f.calls.length, before);
+});
+
+const railwayUrl = 'https://github.com/l2v-hub/ClinicOS/actions/runs/123';
+function backendFixture() {
+  const f = fixture(['backend/src/routes/patients.ts']);
+  const proof = {
+    receipt: { mergeSha },
+    reviewedSha: sha,
+    runUrl: railwayUrl,
+    artifactDigest: `sha256:${'7'.repeat(64)}`,
+    receiptSha256: '8'.repeat(64),
+  };
+  f.github.verifyDemoPreflight = async () => {
+    f.calls.push(['demo-preflight']);
+    return {};
+  };
+  f.github.verifyDemoRelease = async () => {
+    f.calls.push(['demo-live']);
+    return proof;
+  };
+  return { ...f, proof };
+}
+
+test('backend merge requires actual trusted demo preflight, not production credential presence', async () => {
+  const f = backendFixture();
+  f.github.verifyDemoPreflight = async () => {
+    throw new Error('No trusted current-main preflight');
+  };
+  await assert.rejects(
+    releaseBatch({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      reviewedSha: sha,
+      configured,
+      execute: true,
+    }),
+    /preflight/,
+  );
+  assert.equal(
+    f.calls.some(([call]) => call === 'merge'),
+    false,
+  );
+});
+
+test('production-only successful URL cannot record deployment or close backend issues', async () => {
+  const f = backendFixture();
+  f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha };
+  f.github.verifyDemoRelease = async () => {
+    throw new Error('No live exact-SHA demo proof');
+  };
+  await assert.rejects(
+    recordDeployment({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      mergeSha,
+      railwayRunUrl: railwayUrl,
+    }),
+    /demo proof/,
+  );
+  assert.equal(
+    f.calls.some(([call]) => call === 'status'),
+    false,
+  );
+  assert.equal(f.getSaved().batches[0].release.status, 'merged');
+});
+
+test('verified demo receipt is durable and rechecked before backend issue closure', async () => {
+  const f = backendFixture();
+  f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha };
+  const result = await recordDeployment({
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    mergeSha,
+    railwayRunUrl: railwayUrl,
+  });
+  assert.equal(result.status, 'deployed');
+  assert.deepEqual(f.getSaved().batches[0].release.deployment.demo, f.proof);
+  assert.equal(f.calls.filter(([call]) => call === 'demo-live').length, 2);
+  assert.deepEqual(
+    f.calls.filter(([call]) => call === 'status'),
+    [['status', 5, 'Risolto']],
+  );
+});
+
+test('legacy backend deployment without demo proof cannot publish completion', async () => {
+  const f = backendFixture();
+  f.batch.release = {
+    status: 'deployed',
+    mergeSha,
+    reviewedSha: sha,
+    deployment: { status: 'deployed', mergeSha, reviewedSha: sha, railwayRunUrl: railwayUrl },
+  };
+  await assert.rejects(
+    publishDeploymentCompletion({ batch: f.batch, github: f.github }),
+    /demo deployment receipt/,
+  );
+  assert.equal(
+    f.calls.some(([call]) => call === 'status'),
+    false,
+  );
+});
+
+test('durable release hold blocks automatic choice, direct merge and recording', async () => {
+  const f = backendFixture();
+  f.batch.releaseHold = { reason: 'Verify mandatory demo target before release' };
+  assert.equal(selectAutoReleaseBatch(f.state), null);
+  await assert.rejects(
+    releaseBatch({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      reviewedSha: sha,
+      configured,
+      execute: true,
+    }),
+    /releaseHold/,
+  );
+  f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha };
+  await assert.rejects(
+    recordDeployment({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      mergeSha,
+      railwayRunUrl: railwayUrl,
+    }),
+    /releaseHold/,
+  );
+  assert.equal(
+    f.calls.some(([call]) => call === 'merge' || call === 'status'),
+    false,
+  );
+});
+
+test('hold applied during remote premerge preflight blocks final merge without resetting ledgers', async () => {
+  const f = backendFixture();
+  let count = 0;
+  f.github.verifyDemoPreflight = async () => {
+    if (++count === 2) f.batch.releaseHold = 'Await actual deployment approval';
+  };
+  await assert.rejects(
+    releaseBatch({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      reviewedSha: sha,
+      configured,
+      execute: true,
+    }),
+    /releaseHold/,
+  );
+  assert.equal(
+    f.calls.some(([call]) => call === 'merge'),
+    false,
+  );
+  assert.equal(f.batch.reviews.length, 1);
+  assert.equal(f.batch.implementation.length, 1);
+});
+
+test('hold applied during live proof verification blocks deployment record and closure', async () => {
+  const f = backendFixture();
+  f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha };
+  f.github.verifyDemoRelease = async () => {
+    f.batch.releaseHold = true;
+    return f.proof;
+  };
+  await assert.rejects(
+    recordDeployment({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      mergeSha,
+      railwayRunUrl: railwayUrl,
+    }),
+    /releaseHold/,
+  );
+  assert.equal(
+    f.calls.some(([call]) => call === 'status'),
+    false,
+  );
+});
+
+test('hold added while posting completion comment prevents the final issue closure', async () => {
+  const f = backendFixture();
+  f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha };
+  f.github.commentIssue = async () => {
+    const current = f.getSaved();
+    current.batches[0].releaseHold = true;
+  };
+  await assert.rejects(
+    recordDeployment({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      mergeSha,
+      railwayRunUrl: railwayUrl,
+    }),
+    /releaseHold/,
+  );
+  assert.equal(
+    f.calls.some(([call]) => call === 'status'),
+    false,
+  );
+});
+
+// Real GitHub adapter; only the HTTP command transport is synthetic. These tests exercise
+// the same view/read, comment, label/retry and close boundaries used by live publication.
+function realPublicationFixture({
+  after,
+  change = () => {},
+  close503 = false,
+  failGuardRead = false,
+} = {}) {
+  const f = fixture();
+  f.batch.release = {
+    status: 'deployed',
+    reviewedSha: sha,
+    mergeSha,
+    deployment: {
+      status: 'deployed',
+      reviewedSha: sha,
+      mergeSha,
+      vercelUrl: 'https://clinicos-eosin.vercel.app',
+    },
+  };
+  const requests = [],
+    comments = [],
+    labels = new Set(['bug', 'customer-label', 'In progress']);
+  let issueState = 'open',
+    changed = false,
+    closeFailures = close503 ? 1 : 0,
+    unavailable = false;
+  const load = f.store.load;
+  f.store.load = async () => {
+    if (unavailable) throw Error('Durable state read HTTP403');
+    return load();
+  };
+  const real = createGitHub({
+    repo: f.state.repository,
+    cwd: '/tmp',
+    run: async ({ args, input }) => {
+      const route = args[1],
+        method = args.includes('-X') ? args[args.indexOf('-X') + 1] : 'GET';
+      const body = input ? JSON.parse(input) : null;
+      const step =
+        method === 'GET' && route.endsWith('/issues/5')
+          ? 'issue-read'
+          : route.includes('/issues/5/labels?')
+            ? 'issue-labels-read'
+            : route.includes('/issues/5/comments?')
+              ? 'issue-comments-read'
+              : method === 'POST' && route.endsWith('/comments')
+                ? 'completion-comment'
+                : method === 'GET' && route.endsWith('/labels/Risolto')
+                  ? 'status-label-inspection'
+                  : method === 'POST' && route.endsWith('/issues/5/labels')
+                    ? 'status-label-post'
+                    : method === 'DELETE' && route.endsWith('/In%20progress')
+                      ? 'delete-progress'
+                      : method === 'DELETE'
+                        ? 'delete-blocked'
+                        : method === 'PATCH'
+                          ? 'close'
+                          : 'unexpected';
+      requests.push({ step, method, route, body, held: !!f.getSaved().batches[0]?.releaseHold });
+      let result = { ok: true, code: 0, stdout: '{}', stderr: '' };
+      if (step === 'issue-read') result.stdout = JSON.stringify({ number: 5, state: issueState });
+      else if (step === 'issue-labels-read')
+        result.stdout = JSON.stringify([[...labels].map((name) => ({ name }))]);
+      else if (step === 'issue-comments-read') result.stdout = JSON.stringify([comments]);
+      else if (step === 'completion-comment') {
+        comments.push({ body: body.body });
+        result.stdout = JSON.stringify(comments.at(-1));
+      } else if (step === 'status-label-post') body.labels.forEach((name) => labels.add(name));
+      else if (step.startsWith('delete-'))
+        labels.delete(decodeURIComponent(route.split('/').at(-1)));
+      else if (step === 'close') {
+        if (closeFailures-- > 0) result = { ok: false, code: 1, stdout: '{}', stderr: 'HTTP 503' };
+        else issueState = 'closed';
+      } else if (step === 'unexpected')
+        throw Error(`Unexpected synthetic request: ${method} ${route}`);
+      await Promise.resolve();
+      if (after === step && !changed) {
+        changed = true;
+        change(f.getSaved().batches[0]);
+        if (failGuardRead) unavailable = true;
+      }
+      return result;
+    },
+  });
+  Object.assign(f.github, {
+    viewIssue: real.viewIssue,
+    commentIssue: real.commentIssue,
+    setIssueStatus: real.setIssueStatus,
+  });
+  return {
+    ...f,
+    requests,
+    comments,
+    labels,
+    issueState: () => issueState,
+    publish: async () =>
+      publishDeploymentCompletion({
+        batch: (await f.store.load()).batches[0],
+        github: f.github,
+        store: f.store,
+        repo: f.state.repository,
+      }),
+  };
+}
+
+test('actual publication adapter blocks changed durable authorization after every avoidable awaited request', async (t) => {
+  const changes = [
+    [
+      'hold',
+      (b) => {
+        b.releaseHold = 'Operator paused issue completion';
+      },
+    ],
+    [
+      'merge revision',
+      (b) => {
+        b.release.mergeSha = 'c'.repeat(40);
+      },
+    ],
+    [
+      'reviewed revision',
+      (b) => {
+        b.release.reviewedSha = 'c'.repeat(40);
+      },
+    ],
+    [
+      'approval revision',
+      (b) => {
+        b.approvedSha = 'c'.repeat(40);
+      },
+    ],
+  ];
+  for (const after of [
+    'issue-read',
+    'issue-labels-read',
+    'issue-comments-read',
+    'completion-comment',
+    'status-label-inspection',
+    'status-label-post',
+    'delete-progress',
+    'delete-blocked',
+  ])
+    for (const [name, change] of changes)
+      await t.test(`${after}: ${name}`, async () => {
+        const f = realPublicationFixture({ after, change });
+        await assert.rejects(f.publish(), /releaseHold|identity changed/);
+        assert.equal(
+          f.requests.some((r) => r.step === 'close'),
+          false,
+        );
+        assert.equal(
+          f.requests.some((r) => r.method !== 'GET' && r.held),
+          false,
+        );
+        if (['issue-read', 'issue-labels-read', 'issue-comments-read'].includes(after))
+          assert.equal(f.comments.length, 0);
+      });
+});
+
+test('final actual close boundary binds current deployment, PR identity, source revision and review ledger', async (t) => {
+  for (const [name, change] of [
+    [
+      'deployment merge SHA',
+      (b) => {
+        b.release.deployment.mergeSha = 'c'.repeat(40);
+      },
+    ],
+    [
+      'deployment reviewed SHA',
+      (b) => {
+        b.release.deployment.reviewedSha = 'c'.repeat(40);
+      },
+    ],
+    [
+      'deployment status',
+      (b) => {
+        b.release.deployment.status = 'pending';
+      },
+    ],
+    [
+      'release status',
+      (b) => {
+        b.release.status = 'merged';
+      },
+    ],
+    [
+      'PR identity',
+      (b) => {
+        b.pr.number++;
+      },
+    ],
+    [
+      'PR URL',
+      (b) => {
+        b.pr.url = 'https://github.com/l2v-hub/ClinicOS/pull/10';
+      },
+    ],
+    [
+      'source revision',
+      (b) => {
+        b.sha = 'c'.repeat(40);
+      },
+    ],
+    [
+      'phase',
+      (b) => {
+        b.phase = 'blocked';
+      },
+    ],
+    [
+      'implementation status',
+      (b) => {
+        b.implementation[0].status = 'failed';
+      },
+    ],
+    [
+      'review status',
+      (b) => {
+        b.reviews[0].status = 'changes-requested';
+      },
+    ],
+    [
+      'report digest',
+      (b) => {
+        b.reviewReports['claude-review-1.json'] = '{}';
+      },
+    ],
+  ])
+    await t.test(name, async () => {
+      const f = realPublicationFixture({ after: 'delete-blocked', change });
+      await assert.rejects(f.publish());
+      assert.equal(
+        f.requests.some((r) => r.step === 'close'),
+        false,
+      );
+    });
+});
+
+test('state-read failure after actual adapter awaits prevents all later mutations', async () => {
+  const f = realPublicationFixture({ after: 'delete-progress', failGuardRead: true });
+  await assert.rejects(f.publish(), /HTTP403/);
+  assert.equal(
+    f.requests.some((r) => r.step === 'delete-blocked' || r.step === 'close'),
+    false,
+  );
+});
+
+test('failed actual close leaves only truthful deployment facts; retry reuses the marker and preserves unrelated labels', async () => {
+  const f = realPublicationFixture({ close503: true });
+  await assert.rejects(f.publish(), /503/);
+  assert.equal(f.issueState(), 'open');
+  assert.equal(f.comments.length, 1);
+  assert.match(f.comments[0].body, /Rilascio verificato/);
+  assert.doesNotMatch(f.comments[0].body, /issue chiusa|already closed|\*\*Risolto\*\*/i);
+  await f.publish();
+  assert.equal(f.issueState(), 'closed');
+  assert.equal(f.comments.length, 1);
+  assert.equal(f.requests.filter((r) => r.step === 'close').length, 2);
+  assert.ok(f.labels.has('bug') && f.labels.has('customer-label') && f.labels.has('Risolto'));
+  const before = f.requests.filter((r) => r.method !== 'GET').length;
+  await f.publish();
+  assert.equal(
+    f.requests.filter((r) => r.method !== 'GET').length,
+    before,
+    'Cached successful closure and marker require no duplicate mutation',
+  );
+  assert.equal(f.batch.reviews.length, 1);
+  assert.equal(f.batch.implementation.length, 1);
+});
+
+test('publication recovery selects only pending matching releases and rejects changed published identity', async () => {
+  const f = fixture();
+  f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha };
+  await recordDeployment({
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    mergeSha,
+    vercelUrl: 'https://clinicos-eosin.vercel.app',
+  });
+  const saved = f.getSaved();
+  assert.equal(publicationComplete(saved.batches[0]), true);
+  assert.equal(selectAutoReleaseBatch(saved), null);
+  saved.batches[0].release.publication.reviewedSha = 'c'.repeat(40);
+  assert.equal(publicationComplete(saved.batches[0]), false);
+  assert.equal(selectAutoReleaseBatch(saved).id, f.batch.id);
+});
+
+test('already deployed recovery retains full exact review/evidence checks and never merges again', async () => {
+  const f = fixture();
+  f.batch.release = {
+    status: 'deployed',
+    mergeSha,
+    reviewedSha: sha,
+    deployment: {
+      status: 'deployed',
+      mergeSha,
+      reviewedSha: sha,
+      vercelUrl: 'https://clinicos-eosin.vercel.app',
+    },
+  };
+  f.feedback.state = 'MERGED';
+  f.feedback.mergeCommitSha = mergeSha;
+  f.github.viewIssue = async (number) => ({ number, state: 'closed', comments: [] });
+  const result = await releaseBatch({
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    reviewedSha: sha,
+    execute: true,
+  });
+  assert.equal(result.status, 'deployed');
+  assert.deepEqual(result.deployments, { frontend: false, backend: false, runtime: false });
+  assert.equal(
+    f.calls.some(([type]) => type === 'merge' || type === 'status'),
+    false,
+  );
+  delete f.batch.reviewLedger;
+  await assert.rejects(
+    releaseBatch({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      reviewedSha: sha,
+      execute: true,
+    }),
+    /review ledger/,
+  );
+});
+
+test('published completion is durable only after all real closures and a successful state compare-and-swap', async () => {
+  const f = realPublicationFixture();
+  const save = f.store.save;
+  f.store.save = async () => {
+    throw Error('Publication compare-and-swap conflict');
+  };
+  await assert.rejects(f.publish(), /compare-and-swap/);
+  assert.equal(f.issueState(), 'closed');
+  assert.equal(f.comments.length, 1);
+  assert.equal(publicationComplete(f.getSaved().batches[0]), false);
+  assert.equal(selectAutoReleaseBatch(f.getSaved()).id, f.batch.id);
+  f.store.save = save;
+  await f.publish();
+  assert.equal(publicationComplete(f.getSaved().batches[0]), true);
+  assert.equal(selectAutoReleaseBatch(f.getSaved()), null);
+  assert.equal(f.comments.length, 1);
+  const changed = structuredClone(f.getSaved().batches[0]);
+  changed.release.deployment.mergeSha = 'c'.repeat(40);
+  assert.equal(
+    publicationComplete(changed),
+    false,
+    'Published identity cannot conceal changed deployment facts',
+  );
+  changed.release.deployment.mergeSha = mergeSha;
+  changed.release.status = 'merged';
+  assert.equal(
+    publicationComplete(changed),
+    false,
+    'Nonterminal release cannot masquerade as published deployment',
+  );
+});
+
+const subjectChanges = [
+  [
+    'PR',
+    (b) => {
+      b.pr = { number: 10, url: b.pr.url.replace('/9', '/10') };
+    },
+  ],
+  [
+    'source membership',
+    (b) => {
+      b.issues.push(6);
+      b.plan.issues.push(6);
+      b.plan.acceptance.push({ issue: 6, criteria: ['Unverified additional issue'] });
+      b.plan.evidence.push({
+        issue: 6,
+        screenshot: screenshotPath.replace('5.png', '6.png'),
+        trace: tracePath.replace('5.zip', '6.zip'),
+        video: '',
+      });
+    },
+  ],
+  [
+    'scope',
+    (b) => {
+      b.plan.scope.push('backend/src/unreviewed.ts');
+    },
+  ],
+  [
+    'acceptance',
+    (b) => {
+      b.plan.acceptance[0].criteria.push('Unreviewed requirement');
+    },
+  ],
+  [
+    'grouping',
+    (b) => {
+      b.grouping = {
+        fileMap: [{ issue: 5, files: [...b.plan.scope] }],
+        separationReason: 'New grouping decision',
+      };
+    },
+  ],
+  [
+    'evidence',
+    (b) => {
+      b.evidence = structuredClone(b.evidence);
+      b.evidence[0].files.screenshot.sha256 = '9'.repeat(64);
+    },
+  ],
+  [
+    'approved report',
+    (b) => {
+      const changed = JSON.stringify({
+        subject_sha: sha,
+        verdict: 'approved',
+        summary: 'A different approval report',
+        findings: [],
+      });
+      b.reviewReports['claude-review-1.json'] = changed;
+      b.reviewLedger.rounds[0].review_sha256 = sha256(changed);
+    },
+  ],
+  [
+    'implementation ledger',
+    (b) => {
+      b.implementation[0].details = 'Changed validation facts';
+    },
+  ],
+  [
+    'release facts',
+    (b) => {
+      b.release = { ...b.release, prNumber: 10 };
+    },
+  ],
+  [
+    'hold',
+    (b) => {
+      b.releaseHold = 'Pause during remote verification';
+    },
+  ],
+];
+
+// Real mutation adapters over an in-memory GitHub transport: external reads may
+// race, but the actual ready/merge/comment/PATCH target is observable here.
+function releaseBoundaryFixture(window, change) {
+  const f = backendFixture();
+  const requests = [];
+  let changed = false;
+  const inject = (at) => {
+    if (!changed && at === window) {
+      changed = true;
+      change(f.getSaved().batches[0]);
+    }
+  };
+  const real = createGitHub({
+    repo: f.state.repository,
+    cwd: '/tmp',
+    run: async ({ args, input }) => {
+      const method = args.includes('-X') ? args[args.indexOf('-X') + 1] : 'GET';
+      requests.push({ args, method, body: input ? JSON.parse(input) : null });
+      if (args[0] === 'pr' && args[1] === 'ready') {
+        f.feedback.isDraft = false;
+        inject('ready-response');
+      }
+      if (args[0] === 'pr' && args[1] === 'merge') inject('merge-response');
+      if (args[0] === 'api' && /\/pulls\/9$/.test(args[1]))
+        return {
+          ok: true,
+          code: 0,
+          stdout: JSON.stringify({
+            state: 'closed',
+            merged: true,
+            merge_commit_sha: mergeSha,
+            html_url: f.feedback.url,
+          }),
+          stderr: '',
+        };
+      return { ok: true, code: 0, stdout: '{}', stderr: '' };
+    },
+  });
+  Object.assign(f.github, {
+    draftReady: real.draftReady,
+    mergePullRequest: real.mergePullRequest,
+    commentIssue: real.commentIssue,
+    setIssueStatus: real.setIssueStatus,
+  });
+  let evidenceReads = 0,
+    feedbackReads = 0,
+    checkReads = 0,
+    preflights = 0;
+  const read = f.github.readFileAtRevision;
+  f.github.readFileAtRevision = async (...args) => {
+    const result = await read(...args);
+    if (++evidenceReads === 1) inject('evidence');
+    return result;
+  };
+  f.github.viewIssue = async (number) => {
+    inject('source-issue');
+    return { number, state: 'open', comments: [] };
+  };
+  f.github.reviewFeedback = async () => {
+    const value = structuredClone(f.feedback);
+    inject(`feedback-${++feedbackReads}`);
+    return value;
+  };
+  f.github.requiredChecks = async () => {
+    inject(`checks-${++checkReads}`);
+    return { ok: true, details: ['required: SUCCESS'] };
+  };
+  f.github.verifyDemoPreflight = async () => {
+    inject(`preflight-${++preflights}`);
+    return {};
+  };
+  f.github.verifyDemoRelease = async () => {
+    inject('live-proof');
+    return structuredClone(f.proof);
+  };
+  return { ...f, requests, changed: () => changed };
+}
+
+test('full verified subject remains frozen at actual merge, record and recovery boundaries', async (t) => {
+  const windows = [
+    'evidence',
+    'source-issue',
+    'feedback-1',
+    'checks-1',
+    'preflight-1',
+    'ready-response',
+    'feedback-2',
+    'checks-2',
+    'preflight-2',
+    'merge-response',
+    'record-proof',
+    'merged-recovery',
+    'deployed-recovery',
+    'publication-proof',
+  ];
+  for (const window of windows)
+    for (const [name, change] of subjectChanges)
+      await t.test(`${window}: ${name}`, async () => {
+        const target = ['record-proof', 'publication-proof'].includes(window)
+          ? 'live-proof'
+          : ['merged-recovery', 'deployed-recovery'].includes(window)
+            ? 'checks-1'
+            : window;
+        const f = releaseBoundaryFixture(target, change);
+        const input = {
+          repo: f.state.repository,
+          github: f.github,
+          store: f.store,
+          batchId: f.batch.id,
+        };
+        if (window === 'ready-response') f.feedback.isDraft = true;
+        if (window === 'merged-recovery' || window === 'deployed-recovery') {
+          f.feedback.state = 'MERGED';
+          f.feedback.mergeCommitSha = mergeSha;
+        }
+        if (['record-proof', 'deployed-recovery', 'publication-proof'].includes(window))
+          f.batch.release = { status: 'merged', reviewedSha: sha, mergeSha, prNumber: 9 };
+        if (['deployed-recovery', 'publication-proof'].includes(window)) {
+          f.batch.release.status = 'deployed';
+          f.batch.release.deployment = {
+            status: 'deployed',
+            reviewedSha: sha,
+            mergeSha,
+            railwayRunUrl: railwayUrl,
+            demo: structuredClone(f.proof),
+          };
+        }
+        const action =
+          window === 'record-proof'
+            ? () => recordDeployment({ ...input, mergeSha, railwayRunUrl: railwayUrl })
+            : window === 'publication-proof'
+              ? () => publishDeploymentCompletion({ ...input, batch: f.batch })
+              : () => releaseBatch({ ...input, reviewedSha: sha, execute: true, configured });
+        await assert.rejects(action(), /identity changed|releaseHold/);
+        assert.equal(f.changed(), true, 'Exercise the intended asynchronous race');
+        const merges = f.requests.filter(({ args }) => args[0] === 'pr' && args[1] === 'merge');
+        assert.equal(merges.length, window === 'merge-response' ? 1 : 0);
+        if (merges.length)
+          assert.equal(
+            merges[0].args[2],
+            '9',
+            'An already sent merge still targets the verified PR',
+          );
+        assert.equal(
+          f.requests.some(({ method }) => ['PATCH', 'POST', 'DELETE', 'PUT'].includes(method)),
+          false,
+        );
+        assert.equal(
+          f.calls.some(([kind]) => kind === 'save'),
+          false,
+        );
+        assert.equal(f.getSaved().batches[0].implementation.length, 1);
+        assert.equal(f.getSaved().batches[0].reviews.length, 1);
+      });
+});
+
+test('full plan, grouping, evidence and report remain frozen at every actual issue mutation', async (t) => {
+  for (const after of [
+    'issue-read',
+    'status-label-inspection',
+    'status-label-post',
+    'delete-progress',
+    'delete-blocked',
+  ])
+    for (const [name, change] of subjectChanges.filter(([name]) => name !== 'source membership'))
+      await t.test(`${after}: ${name}`, async () => {
+        const f = realPublicationFixture({ after, change });
+        await assert.rejects(f.publish(), /identity changed|releaseHold/);
+        assert.equal(
+          f.requests.some((r) => r.step === 'close'),
+          false,
+        );
+        assert.equal(publicationComplete(f.getSaved().batches[0]), false);
+      });
+});
+
+test('draft conversion and merged recovery preserve the unchanged verified PR and cohort', async () => {
+  for (const mode of ['draft', 'merged']) {
+    const f = releaseBoundaryFixture('none', () => {});
+    if (mode === 'draft') f.feedback.isDraft = true;
+    else {
+      f.feedback.state = 'MERGED';
+      f.feedback.mergeCommitSha = mergeSha;
+    }
+    const result = await releaseBatch({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      reviewedSha: sha,
+      execute: true,
+      configured,
+    });
+    assert.equal(result.status, 'merged');
+    assert.equal(f.getSaved().batches[0].release.prNumber, 9);
+    assert.deepEqual(f.getSaved().batches[0].issues, [5]);
+    assert.equal(
+      f.requests.filter(({ args }) => args[0] === 'pr' && args[1] === 'merge').length,
+      mode === 'draft' ? 1 : 0,
+    );
+  }
+});
+
+test('read-only preflight cannot return a replaced verified subject as ready', async (t) => {
+  for (const [name, change] of subjectChanges)
+    await t.test(name, async () => {
+      const f = releaseBoundaryFixture('preflight-1', change);
+      await assert.rejects(
+        releaseBatch({
+          repo: f.state.repository,
+          github: f.github,
+          store: f.store,
+          batchId: f.batch.id,
+          reviewedSha: sha,
+          configured,
+        }),
+        /identity changed|releaseHold/,
+      );
+      assert.equal(f.changed(), true);
+      assert.equal(f.requests.length, 0);
+      assert.equal(
+        f.calls.some(([kind]) => kind === 'save'),
+        false,
+      );
+    });
+});
+
+test('persisted transition identity is captured before save awaits, including protected retry', async (t) => {
+  for (const mode of ['merge', 'merged-recovery', 'record', 'publication'])
+    for (const [name, change] of subjectChanges)
+      await t.test(`${mode}: ${name}`, async () => {
+        const f = releaseBoundaryFixture('none', () => {});
+        if (mode === 'merged-recovery') {
+          f.feedback.state = 'MERGED';
+          f.feedback.mergeCommitSha = mergeSha;
+        }
+        if (mode === 'record' || mode === 'publication')
+          f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha, prNumber: 9 };
+        if (mode === 'publication') {
+          f.batch.release.status = 'deployed';
+          f.batch.release.deployment = {
+            status: 'deployed',
+            mergeSha,
+            reviewedSha: sha,
+            railwayRunUrl: railwayUrl,
+            demo: structuredClone(f.proof),
+          };
+        }
+        const save = f.store.save;
+        let saves = 0;
+        f.store.save = async (value, options) => {
+          await save(value, options);
+          saves++;
+          change(f.getSaved().batches[0]);
+          // Mutating the submitted object as well must not redefine expected proof.
+          change(value.batches[0]);
+        };
+        const input = {
+          repo: f.state.repository,
+          github: f.github,
+          store: f.store,
+          batchId: f.batch.id,
+        };
+        const action =
+          mode === 'record'
+            ? () => recordDeployment({ ...input, mergeSha, railwayRunUrl: railwayUrl })
+            : mode === 'publication'
+              ? () => publishDeploymentCompletion({ ...input, batch: f.batch })
+              : () => releaseBatch({ ...input, reviewedSha: sha, execute: true, configured });
+        await assert.rejects(action(), /identity changed|releaseHold/);
+        assert.equal(saves, 1);
+        if (mode === 'record')
+          assert.equal(
+            f.requests.some(({ method }) => method === 'PATCH'),
+            false,
+          );
+        assert.equal(f.getSaved().batches[0].implementation.length, 1);
+        assert.equal(f.getSaved().batches[0].reviews.length, 1);
+      });
 });

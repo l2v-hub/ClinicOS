@@ -56,6 +56,8 @@ jobs:
           python-version: '3.12'
 
       - name: Install local validation tools
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/clinicos-verification-browsers
         run: |
           bash scripts/quality-gate/install-verification-tools.sh
           python -m pip install -r clinicos-ai-runtime/requirements.txt
@@ -71,6 +73,7 @@ jobs:
 
       - name: Run serialized issue and review controller
         env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/clinicos-verification-browsers
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN || github.token }}
           CODEX_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           # Claude runs in the user's external subscription harness, never with Actions tokens.

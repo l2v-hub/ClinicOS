@@ -1,0 +1,9 @@
+{
+  "status": "UNRUN",
+  "reason": "Root canceled owned queued flock after certain P1 failures; QA4 must provide fresh full browser evidence",
+  "browserStarted": false,
+  "dockerCreated": false,
+  "screenshotProduced": false,
+  "traceProduced": false,
+  "videoProduced": false
+}

@@ -1,0 +1,14 @@
+✔ a hold applied while reading issue comments prevents completion publication (6.388816ms)
+✔ hold during real GitHub status adapter label inspection prevents actual close PATCH (2.650599ms)
+✔ a failed actual close must not leave an untrue already-closed completion claim (1.380413ms)
+✔ cacheable extension does not establish no-store: public, max-age=3600, x-no-store-extension=1 (34.284116ms)
+✔ cacheable extension does not establish no-store: public, max-age=3600, no-store-extension (0.771449ms)
+✔ cacheable extension does not establish no-store: public, max-age=3600, extension="no-store" (0.682436ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 152.489809

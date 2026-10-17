@@ -1,0 +1,192 @@
+{
+  "finding": "QA2-F1: completion comment is published after a hold arrives during awaited issue read; final closure is blocked",
+  "actualScenarios": [
+    {
+      "scenario": "healthy",
+      "decision": "VERIFIED",
+      "detail": "ready \u00b7 demo \u00b7 12345678-1234-4234-8234-123456789abc"
+    },
+    {
+      "scenario": "old-instance",
+      "decision": "BLOCKED",
+      "detail": "Demo deployment proof rejected: live demo does not serve this healthy deployment"
+    },
+    {
+      "scenario": "production-tier",
+      "decision": "BLOCKED",
+      "detail": "Demo deployment proof rejected: live demo does not serve this healthy deployment"
+    },
+    {
+      "scenario": "cacheable",
+      "decision": "BLOCKED",
+      "detail": "Demo deployment proof rejected: uncached demo readiness unavailable"
+    },
+    {
+      "scenario": "database-failed",
+      "decision": "BLOCKED",
+      "detail": "Demo deployment proof rejected: live demo does not serve this healthy deployment"
+    },
+    {
+      "scenario": "redirect",
+      "decision": "BLOCKED",
+      "detail": "HTTP redirect rejected by production fetch options"
+    },
+    {
+      "scenario": "oversized",
+      "decision": "BLOCKED",
+      "detail": "Demo deployment proof rejected: invalid readiness response"
+    },
+    {
+      "scenario": "cache-extension-defect",
+      "decision": "BLOCKED",
+      "detail": "Demo deployment proof rejected: uncached demo readiness unavailable"
+    },
+    {
+      "scenario": "wrong-native-target",
+      "decision": "BLOCKED",
+      "detail": "Demo deployment proof rejected: token, source, or target mismatch"
+    },
+    {
+      "scenario": "missing-native-sha",
+      "decision": "BLOCKED",
+      "detail": "Demo deployment proof rejected: deployment is not the successful exact-commit active demo deployment"
+    },
+    {
+      "scenario": "quoted-cache-lookalike",
+      "decision": "BLOCKED",
+      "detail": "Demo deployment proof rejected: uncached demo readiness unavailable"
+    },
+    {
+      "scenario": "argument-no-store",
+      "decision": "BLOCKED",
+      "detail": "Demo deployment proof rejected: uncached demo readiness unavailable"
+    },
+    {
+      "scenario": "malformed-cache",
+      "decision": "BLOCKED",
+      "detail": "Demo deployment proof rejected: uncached demo readiness unavailable"
+    },
+    {
+      "scenario": "valid-quoted-cache",
+      "decision": "VERIFIED",
+      "detail": "ready \u00b7 demo \u00b7 12345678-1234-4234-8234-123456789abc"
+    },
+    {
+      "scenario": "old-new-overlap",
+      "decision": "BLOCKED",
+      "detail": "Demo deployment proof rejected: deployment is not the successful exact-commit active demo deployment"
+    },
+    {
+      "scenario": "duplicate-active",
+      "decision": "BLOCKED",
+      "detail": "Demo deployment proof rejected: deployment is not the successful exact-commit active demo deployment"
+    },
+    {
+      "scenario": "transitional-active",
+      "decision": "BLOCKED",
+      "detail": "Demo deployment proof rejected: deployment is not the successful exact-commit active demo deployment"
+    },
+    {
+      "scenario": "hold-during-issue-read",
+      "decision": "DEFECT",
+      "detail": "completionComments=1 \u00b7 closedIssues=0 \u00b7 durableHold=active"
+    },
+    {
+      "scenario": "hold-inside-status-adapter",
+      "decision": "DEFECT",
+      "detail": "actualClosePatchWithHold=1 \u00b7 durableHold=active"
+    },
+    {
+      "scenario": "failed-close-claim",
+      "decision": "DEFECT",
+      "detail": "closedIssues=0 \u00b7 closeHTTP=503 \u00b7 alreadyClosedClaim=true"
+    }
+  ],
+  "consoleErrors": [],
+  "sourceHashesBefore": [
+    {
+      "file": ".github/workflows/deploy-backend.yml",
+      "sha256": "6743d823679a9c1076c85dfcb5e5b9a8f96705849123b3091cac5d00cadaa3f9"
+    },
+    {
+      "file": ".github/workflows/codex-bug-release.yml",
+      "sha256": "aba0ae7af2185330789d6666c1958e15acee4ce36ffa3f0814c2c92a3e31b55e"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/release.mjs",
+      "sha256": "e20d74c064ce2097adc8ca9aa6729b7b9237e54babd8c47123b830c111f1f123"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "sha256": "44855bee987e57b36e4acf47a4de95da19c75558a3975b3d443faa263776f43f"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "sha256": "57e355e9883f0cfd8b8614f22259217381ff7ce9b26ad1d38ffe3a02bce982c2"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "sha256": "cb27b28624b83aa37aa6e5f25b0393c7e7698f647257cc53664d36d93131c68c"
+    },
+    {
+      "file": "backend/src/lib/readiness.ts",
+      "sha256": "f7a1338c5934bee0821fa9af5c30d64a732dbd5bec54131cf6569471f6e31461"
+    },
+    {
+      "file": "backend/src/lib/__tests__/readiness-deployment.test.ts",
+      "sha256": "fe79ec9c73c499350826d537cc0b45514ead967e5b640c84eb469bed1a1a9389"
+    },
+    {
+      "file": "scripts/quality-gate/configure-bug-repository.mjs",
+      "sha256": "83359916abe7447d4107fba032f53b444a81e702073eae0fdfcecc16bdfb8fdf"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+      "sha256": "23e7639f39ed2dab384e76fb97faf6d7e7f2115d4b1223b32c0b458e8cd356ac"
+    }
+  ],
+  "sourceHashesAfter": [
+    {
+      "file": ".github/workflows/deploy-backend.yml",
+      "sha256": "6743d823679a9c1076c85dfcb5e5b9a8f96705849123b3091cac5d00cadaa3f9"
+    },
+    {
+      "file": ".github/workflows/codex-bug-release.yml",
+      "sha256": "aba0ae7af2185330789d6666c1958e15acee4ce36ffa3f0814c2c92a3e31b55e"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/release.mjs",
+      "sha256": "e20d74c064ce2097adc8ca9aa6729b7b9237e54babd8c47123b830c111f1f123"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "sha256": "44855bee987e57b36e4acf47a4de95da19c75558a3975b3d443faa263776f43f"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "sha256": "57e355e9883f0cfd8b8614f22259217381ff7ce9b26ad1d38ffe3a02bce982c2"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "sha256": "cb27b28624b83aa37aa6e5f25b0393c7e7698f647257cc53664d36d93131c68c"
+    },
+    {
+      "file": "backend/src/lib/readiness.ts",
+      "sha256": "f7a1338c5934bee0821fa9af5c30d64a732dbd5bec54131cf6569471f6e31461"
+    },
+    {
+      "file": "backend/src/lib/__tests__/readiness-deployment.test.ts",
+      "sha256": "fe79ec9c73c499350826d537cc0b45514ead967e5b640c84eb469bed1a1a9389"
+    },
+    {
+      "file": "scripts/quality-gate/configure-bug-repository.mjs",
+      "sha256": "83359916abe7447d4107fba032f53b444a81e702073eae0fdfcecc16bdfb8fdf"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+      "sha256": "23e7639f39ed2dab384e76fb97faf6d7e7f2115d4b1223b32c0b458e8cd356ac"
+    }
+  ],
+  "liveExternalCalls": 0,
+  "evidence": "Synthetic internal QA surface; actual production helpers; no product UI changed."
+}
