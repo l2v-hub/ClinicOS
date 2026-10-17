@@ -1,0 +1,14 @@
+{
+  "scope": "bug-batch-450",
+  "round": 4,
+  "maxAttempts": 4,
+  "status": "running",
+  "reservedAt": "2026-10-17T17:33:43.857Z",
+  "reservedBeforeSourceEdits": true,
+  "owner": "codex-root-450-correction4",
+  "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
+  "priorInterruptedRun": 39052835436,
+  "diagnosis": "Hosted controller failed without a persisted source revision or actionable sanitized cause. The interrupted third attempt is spent and retained as failed; its root cause remains unproven.",
+  "reportSha256": "57af682e4795a0e7dc0c2eb48662157713ede52753896e1e2147e586a6324092",
+  "noFifthAttempt": true
+}

@@ -1,0 +1,94 @@
+{
+  "pass": true,
+  "checks": [
+    {
+      "id": "actual pinned normal and bold fonts load with distinct text geometry",
+      "status": "PASS"
+    },
+    {
+      "id": "450 two real responsive entry choices",
+      "status": "PASS"
+    },
+    {
+      "id": "450 keyboard Tab and Enter activate manual entry",
+      "status": "PASS"
+    },
+    {
+      "id": "Claude2 manual missing steps stay closed with zero field overlap at tablet and phone",
+      "status": "PASS"
+    },
+    {
+      "id": "450 automatic-only admission remains empty",
+      "status": "PASS"
+    },
+    {
+      "id": "450 saved patient identity survives real browser reload and DB readback",
+      "status": "PASS"
+    },
+    {
+      "id": "450 keyboard ShiftTab and Enter activate document entry",
+      "status": "PASS"
+    },
+    {
+      "id": "475 both authentic source thumbnails contain rendered pixels",
+      "status": "PASS"
+    },
+    {
+      "id": "472/473 full viewport, real source canvas and reviewed extracted identity",
+      "status": "PASS"
+    },
+    {
+      "id": "485 contextual runtime only: same import review fills1903x1032 viewport",
+      "status": "PASS"
+    },
+    {
+      "id": "475 selected scanned JPX page loads real OpenJPEG decoder and nonblank source pixels",
+      "status": "PASS"
+    },
+    {
+      "id": "472/473 source remains visible beside editable fields at tablet and phone",
+      "status": "PASS"
+    },
+    {
+      "id": "475 authenticated source cannot be read anonymously or by another operator",
+      "status": "PASS"
+    },
+    {
+      "id": "472 closing review saves actual edited fields into a visible resumable draft",
+      "status": "PASS"
+    },
+    {
+      "id": "473 heading-free prescriptions survive actual parser and import handoff",
+      "status": "PASS"
+    },
+    {
+      "id": "473 original remains visible while actual demographic and therapy fields are edited at desktop, tablet and phone",
+      "status": "PASS"
+    },
+    {
+      "id": "476 incomplete identity persists and exact draft resumes with actionable blockers",
+      "status": "PASS"
+    },
+    {
+      "id": "476 invalid fiscal code and supplied future birthdate have actionable real blockers",
+      "status": "PASS"
+    },
+    {
+      "id": "476 three identity fields create an incomplete patient only after unsafe prescriptions are explicitly left in draft",
+      "status": "PASS"
+    },
+    {
+      "id": "Claude2 unresolved X/footer/Escape offer disabled save, continue intact and close without a draft",
+      "status": "PASS"
+    },
+    {
+      "id": "QA450-1 only the saved corrected decision and current manual edits reach the real draft",
+      "status": "PASS"
+    },
+    {
+      "id": "Claude2 thirty incomplete identities have one bounded filter and complete-only search remains escapable",
+      "status": "PASS"
+    }
+  ],
+  "errors": []
+}

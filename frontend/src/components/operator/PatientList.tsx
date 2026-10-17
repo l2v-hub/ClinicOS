@@ -12,7 +12,6 @@ import { NewPatientFlow } from './NewPatientFlow';
 import { NewPatientStart } from './NewPatientStart';
 import type { NewPatientPath } from './NewPatientChooser';
 import {
-  intakeCompletionPending,
   LIST_SIGNAL_LABEL,
   LIST_VIEW_LABEL,
   countListViews,
@@ -32,6 +31,7 @@ import { matchesPatientRegime, type PatientRegimeFilter } from '../../lib/patien
 import { RosterOrderControl } from '../shared/RosterOrderControl';
 import { useRosterOrderContext } from '../shared/RosterOrderContext';
 import { sortPatientRoster, type PatientRosterSort } from '../../lib/patientRosterSort';
+import { filterIncompletePatients } from '../../lib/patientIncompleteSummary';
 import './PatientList.css';
 
 interface PatientListProps {
@@ -158,6 +158,7 @@ export function PatientList({
   const [vista, setVista] = useState<ListView>(entry?.view ?? 'in_carico');
   const [regime, setRegime] = useState<PatientRegimeFilter>('tutti');
   const [segnale, setSegnale] = useState<PatientListSignal | null>(entry?.signal ?? null);
+  const [incompleteOnly, setIncompleteOnly] = useState(false);
   const appliedEntryRef = useRef(entry?.key);
   useEffect(() => {
     if (!entry || appliedEntryRef.current === entry.key) return;
@@ -165,6 +166,7 @@ export function PatientList({
     setVista(entry.view ?? 'in_carico');
     setSegnale(entry.signal ?? null);
     setRegime('tutti');
+    setIncompleteOnly(false);
   }, [entry]);
   const [showFilters, setShowFilters] = useState(false);
   // Vista scelta prima di iniziare una ricerca: cancellata la ricerca, si torna lì.
@@ -255,6 +257,11 @@ export function PatientList({
     () => filtratiBase.filter((p) => matchesListView(summaryMap.get(p.id)?.statoRicovero, vista)),
     [filtratiBase, vista, summaryMap, segnale, anomalie.perPaziente],
   );
+  const incompletePatients = useMemo(() => filterIncompletePatients(filtrati), [filtrati]);
+  const incompletePatientIds = useMemo(
+    () => new Set(incompletePatients.map((patient) => patient.id)),
+    [incompletePatients],
+  );
   const ordinati = useMemo(
     () =>
       localSort
@@ -265,6 +272,13 @@ export function PatientList({
           })
         : filtrati,
     [filtrati, localSort, summaryMap, consegneAperteMap, anomalie.perPaziente],
+  );
+  const rosterPatients = useMemo(
+    () =>
+      incompleteOnly && incompletePatients.length > 0
+        ? ordinati.filter((patient) => incompletePatientIds.has(patient.id))
+        : ordinati,
+    [ordinati, incompleteOnly, incompletePatientIds, incompletePatients.length],
   );
 
   // Fine import dal pulsante "Importa dimissione": ricarica la lista e apre
@@ -427,20 +441,19 @@ export function PatientList({
           )}
         </section>
       )}
-      {canIntake && filtrati.some(intakeCompletionPending) && (
+      {canIntake && incompletePatients.length > 0 && (
         <section className="plist-card" aria-label="Anagrafiche in bozza">
           <h2>Anagrafiche da completare</h2>
           <p>Pazienti già registrati con dati anagrafici da verificare.</p>
-          {filtrati.filter(intakeCompletionPending).map((patient) => (
-            <button
-              key={patient.id}
-              type="button"
-              className="ds-btn ds-btn--secondary"
-              onClick={() => onSelect(patient, 'profilo')}
-            >
-              Completa anagrafica · {patient.lastName} {patient.firstName}
-            </button>
-          ))}
+          <button
+            type="button"
+            className="ds-chip"
+            aria-pressed={incompleteOnly}
+            onClick={() => setIncompleteOnly((active) => !active)}
+          >
+            {incompleteOnly ? 'Mostra tutti i pazienti' : 'Filtra anagrafiche da completare'}
+            <span className="ds-chip__count">{incompletePatients.length}</span>
+          </button>
         </section>
       )}
       <section className="plist-card plist-list" aria-label="Elenco pazienti">
@@ -606,7 +619,7 @@ export function PatientList({
             <PatientRoster
               localSortActive={Boolean(localSort)}
               serverCriterion={rosterOrder.order.criterion}
-              patients={ordinati}
+              patients={rosterPatients}
               sort={sort}
               onSortChange={setSort}
               hasMore={hasMore}

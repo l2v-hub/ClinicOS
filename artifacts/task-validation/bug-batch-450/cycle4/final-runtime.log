@@ -1,0 +1,8 @@
+PASS actual pinned normal and bold fonts load with distinct text geometry
+PASS 450 two real responsive entry choices
+PASS 450 keyboard Tab and Enter activate manual entry
+PASS Claude2 manual missing steps stay closed with zero field overlap at tablet and phone
+PASS 450 automatic-only admission remains empty
+PASS 450 saved patient identity survives real browser reload and DB readback
+PASS 450 keyboard ShiftTab and Enter activate document entry
+Both text and JPX thumbnails contain actual nonblank pixels

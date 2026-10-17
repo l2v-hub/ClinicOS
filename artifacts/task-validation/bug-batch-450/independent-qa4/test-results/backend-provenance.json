@@ -1,0 +1,13 @@
+{
+  "owner": "clinicos-qa4-481-backend",
+  "port": 55451,
+  "database": "clinicos_qa4",
+  "freshOwnedContainer": true,
+  "files": [
+    "src/intake/__tests__/seed-draft-from-import.test.ts",
+    "src/intake/__tests__/confirm-draft-guards.test.ts",
+    "src/intake/__tests__/parse-discharge-therapy.test.ts"
+  ],
+  "result": "PASS",
+  "actualExit": 0
+}

@@ -1,0 +1,65 @@
+{
+  "authorAttempt": 4,
+  "maxAttempts": 4,
+  "allWithinExistingReservedAuthorAttempt": true,
+  "noNewAttemptOrReset": true,
+  "diagnosticRuns": [
+    {
+      "run": "original-csp-reproduction",
+      "pass": false,
+      "completedChecks": 0,
+      "diagnosis": "Harness missing per-outputscope path; canonical cycle4scope selected instead.",
+      "proof": "artifacts/task-validation/bug-batch-450/cycle4/original-csp-reproduction/test-results/fullstack.json"
+    },
+    {
+      "run": "original-csp-runtime",
+      "pass": false,
+      "completedChecks": 0,
+      "diagnosis": "Owned nativePG55450 unavailable. Never touched5432; switched existingownedDockerfixture.",
+      "proof": "artifacts/task-validation/bug-batch-450/cycle4/original-csp-runtime/test-results/fullstack.json"
+    },
+    {
+      "run": "original-csp-docker",
+      "pass": false,
+      "completedChecks": 0,
+      "diagnosis": "Browservideo ffmpeg looked indefaultcache; reused existingpinnedcache viaPLAYWRIGHT_BROWSERS_PATH.",
+      "proof": "artifacts/task-validation/bug-batch-450/cycle4/original-csp-docker/test-results/fullstack.json"
+    },
+    {
+      "run": "original-csp-browser",
+      "pass": false,
+      "completedChecks": 1,
+      "diagnosis": "NonrootURL accidentallyused asCORSorigin; harness FRONTEND_URL correctedtoorigin. No productionCORS change.",
+      "proof": "artifacts/task-validation/bug-batch-450/cycle4/original-csp-browser/test-results/fullstack.json"
+    },
+    {
+      "run": "original-csp-functional",
+      "pass": false,
+      "completedChecks": 3,
+      "diagnosis": "Rawclosed-details deferredBCR overlap althoughlistnotpainted; genuinevisibility/hit-testoracle adopted, transientCSSfullyreverted.",
+      "proof": "artifacts/task-validation/bug-batch-450/cycle4/original-csp-functional/test-results/fullstack.json"
+    },
+    {
+      "run": "original-csp-pdf",
+      "pass": false,
+      "completedChecks": 18,
+      "diagnosis": "18PASS plusactualworkerCSPwasmdenial (fallbackrenders) andactualthree-actiondialogclipping; narrowwasmpermission+conditionalactionwrap.",
+      "proof": "artifacts/task-validation/bug-batch-450/cycle4/original-csp-pdf/test-results/fullstack.json"
+    },
+    {
+      "run": "final-runtime",
+      "pass": false,
+      "completedChecks": 7,
+      "diagnosis": "Actualbuiltworker/wasm200. Tinyantialiased text15deepblackpixels vsarbitrary100threshold; integratedink+same-size whiteJPEGnegativecontrol replacesfaultyoracle.",
+      "proof": "artifacts/task-validation/bug-batch-450/cycle4/final-runtime/test-results/fullstack.json"
+    },
+    {
+      "run": "verified-runtime",
+      "pass": false,
+      "completedChecks": 21,
+      "diagnosis": "21PASS includingallnewcloseworkflow checks; lastsummarytestwrongtextboxrolefornativeinputtype=search. Exactsearchboxselectorcorrected; appsourceunchanged.",
+      "proof": "artifacts/task-validation/bug-batch-450/cycle4/verified-runtime/test-results/fullstack.json"
+    }
+  ],
+  "finalRuntime": "complete-runtime/test-results/fullstack.json (only authoritative final runtime result once present)"
+}

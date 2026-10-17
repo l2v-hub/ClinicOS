@@ -1,0 +1,5 @@
+PASS actual pinned normal and bold fonts load with distinct text geometry
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('button', { name: /Infermiere 1/ }).first()[22m
+

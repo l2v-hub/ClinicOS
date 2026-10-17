@@ -26,6 +26,7 @@ function componentRenderer<TProps>(
   const hooks = {
     useEffect: (make: () => void | (() => void)) => pendingEffects.push(make),
     useMemo: (make: () => unknown) => make(),
+    useCallback: (callback: unknown) => callback,
     useRef: (initial: unknown) => {
       const index = cursor++;
       if (!(index in values)) values[index] = { current: initial };
@@ -429,6 +430,9 @@ function reviewLifecycle(value: ImportResult, ready: boolean) {
     get review() {
       return reviewTree;
     },
+    get canSave() {
+      return !!registered;
+    },
     saveRegistered() {
       assert.ok(registered);
       registered();
@@ -486,7 +490,7 @@ test('QA450-1 registered close-save preserves unresolved/dirty review until corr
     editReview(lifecycle, 'address', 'Correzione manuale conservata');
     // The mounted review registers the callback consumed by header/footer/Escape dismissal.
     for (let attempt = 0; attempt < 3; attempt++) {
-      lifecycle.saveRegistered();
+      assert.equal(lifecycle.canSave, false, 'Unresolved review exposes no save action');
       await settleReview();
       lifecycle.render();
       assert.deepEqual(requests, []);
@@ -497,7 +501,7 @@ test('QA450-1 registered close-save preserves unresolved/dirty review until corr
     await lifecycle.resolve('Alba');
     lifecycle.dirty();
     lifecycle.render();
-    lifecycle.saveRegistered();
+    assert.equal(lifecycle.canSave, false, 'Unsaved decisions expose no save action');
     await settleReview();
     lifecycle.render();
     assert.deepEqual(requests, [], 'unsaved choices cannot start an intent either');

@@ -25,6 +25,7 @@ interface Props {
   saveLabel: string;
   onSave: () => void;
   error: string | null;
+  importMode?: boolean;
 }
 
 function statusText(status: IntakeSectionStatus): string {
@@ -66,6 +67,7 @@ export function IntakeIndex({
   saveLabel,
   onSave,
   error,
+  importMode = false,
 }: Props) {
   const n = missing.length;
   return (
@@ -90,7 +92,7 @@ export function IntakeIndex({
       </nav>
       <div className="intake-index__actions" data-testid="patient-intake-footer">
         {!ready ? null : n > 0 ? (
-          <details className="intake-index__missing" data-testid="intake-missing" open>
+          <details className="intake-index__missing" data-testid="intake-missing" open={importMode}>
             <summary>
               Mancano {n} {n === 1 ? 'passaggio obbligatorio' : 'passaggi obbligatori'}
             </summary>

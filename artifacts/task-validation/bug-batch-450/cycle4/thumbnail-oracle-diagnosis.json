@@ -1,0 +1,11 @@
+{
+  "sourceTrace": "artifacts/task-validation/bug-batch-450/cycle4/final-runtime/test-results/failure-trace.zip",
+  "traceSha256": "491af45f5ac30a2e420acc41809152d88be40774d188e12bc8e431a912c7d827",
+  "actualTraceCallId": "call@193",
+  "observedDarkPixelsUnder100": [
+    15,
+    132
+  ],
+  "originalThresholdEach": 100,
+  "diagnosis": "Text-page thumbnail visibly nonblank but tiny glyph antialiasing leaves15deepblack pixels; raster page132. Original count>100 fails real readable miniaturized text. New oracle measures integrated ink against a same-size actual whiteJPEGnegative control; both rendered pages must differ from blank, not merely relax oldthreshold."
+}
