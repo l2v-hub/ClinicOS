@@ -15,7 +15,7 @@
       "sourceSha": "29b2f5c9b72b4d909b954d5360ec08095825f29e",
       "branch": "codex/bug-batch-450",
       "owner": "codex-root-2026-10-17",
-      "phase": "blocked",
+      "phase": "waiting-checks",
       "reservedAt": "2026-10-17T07:38:22.669Z",
       "implementation": [
         {
@@ -39,13 +39,18 @@
         },
         {
           "round": 4,
-          "status": "running",
+          "status": "passed",
           "reservedAt": "2026-10-17T17:33:43.857Z",
           "reservedBeforeSourceEdits": true,
           "owner": "codex-root-450-correction4",
-          "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
+          "subjectSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
           "localReservationSha256": "2ecbf86b2f10d485a4133307269a2925347d642277d0e6377bac6052495453fe",
-          "reason": "Address six actual Claude round2 findings with scoped root orchestration, bounded delegation, fresh production-preview PDF and per-issue E2E evidence."
+          "reason": "All six actual Claude findings locally satisfied; independent QA4 five phases pass, frontend1395,backend49,actualproduction22E2E,CSP main/worker controls; exact hosted blank-preview cause remains unproven.",
+          "finishedAt": "2026-10-17T18:17:23.902Z",
+          "sha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
+          "sourceManifestSha256": "cd3f2c3054a941fd159bd69aad3235bb925afee61c00d91ab6a703e1a85ea6e3",
+          "independentQaReportSha256": "fffa3766818e0cd4410b295c12e5195098f5547a86a08c0138efc623cdc2d03f",
+          "independentQaSealSha256": "e507a838d395467915a17369697c4c29f33eafbbfb869a5fe9c0583c3cb6ebd4"
         }
       ],
       "reviews": [
@@ -77,7 +82,10 @@
         "cycle4/analysis.md": "e85d44a48d657a4db9cac389d0210c1558b25e48746d741be4d6c703e9e79942",
         "cycle4/implementation-plan.md": "998c43bc0f5096daf0beec74ad74321c8cc8709475dd9dd8e414eb30ee675ca8",
         "cycle4/scope-amendment-exact-paths.md": "e497637ea92b3f23b3549e5f98e5828d2d476091f29944f573f097f971576ed2",
-        "cycle4/csp/task-contract.md": "5697d8c1ed5cf7b248fdab0b59bcfdcdb2099bf37503beb1acc3718b9276005d"
+        "cycle4/csp/task-contract.md": "5697d8c1ed5cf7b248fdab0b59bcfdcdb2099bf37503beb1acc3718b9276005d",
+        "cycle4/source-freeze.json": "cd3f2c3054a941fd159bd69aad3235bb925afee61c00d91ab6a703e1a85ea6e3",
+        "independent-qa4/validation-report.md": "fffa3766818e0cd4410b295c12e5195098f5547a86a08c0138efc623cdc2d03f",
+        "independent-qa4/final-seal.json": "e507a838d395467915a17369697c4c29f33eafbbfb869a5fe9c0583c3cb6ebd4"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -369,33 +377,33 @@
         "evidence": [
           {
             "issue": 450,
-            "screenshot": "artifacts/task-validation/bug-batch-450/evidence/issue450.png",
-            "trace": "artifacts/task-validation/bug-batch-450/evidence/issue450.zip",
-            "video": "artifacts/task-validation/bug-batch-450/evidence/issue450.webm"
+            "screenshot": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue450.png",
+            "trace": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue450.zip",
+            "video": "artifacts/task-validation/bug-batch-450/evidence/correction4/verification.webm"
           },
           {
             "issue": 472,
-            "screenshot": "artifacts/task-validation/bug-batch-450/evidence/issue472.png",
-            "trace": "artifacts/task-validation/bug-batch-450/evidence/issue472.zip",
-            "video": "artifacts/task-validation/bug-batch-450/evidence/issue472.webm"
+            "screenshot": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue472.png",
+            "trace": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue472.zip",
+            "video": "artifacts/task-validation/bug-batch-450/evidence/correction4/verification.webm"
           },
           {
             "issue": 473,
-            "screenshot": "artifacts/task-validation/bug-batch-450/evidence/issue473.png",
-            "trace": "artifacts/task-validation/bug-batch-450/evidence/issue473.zip",
-            "video": "artifacts/task-validation/bug-batch-450/evidence/issue473.webm"
+            "screenshot": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue473.png",
+            "trace": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue473.zip",
+            "video": "artifacts/task-validation/bug-batch-450/evidence/correction4/verification.webm"
           },
           {
             "issue": 475,
-            "screenshot": "artifacts/task-validation/bug-batch-450/evidence/issue475.png",
-            "trace": "artifacts/task-validation/bug-batch-450/evidence/issue475.zip",
-            "video": "artifacts/task-validation/bug-batch-450/evidence/issue475.webm"
+            "screenshot": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue475.png",
+            "trace": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue475.zip",
+            "video": "artifacts/task-validation/bug-batch-450/evidence/correction4/verification.webm"
           },
           {
             "issue": 476,
-            "screenshot": "artifacts/task-validation/bug-batch-450/evidence/issue476.png",
-            "trace": "artifacts/task-validation/bug-batch-450/evidence/issue476.zip",
-            "video": "artifacts/task-validation/bug-batch-450/evidence/issue476.webm"
+            "screenshot": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue476.png",
+            "trace": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue476.zip",
+            "video": "artifacts/task-validation/bug-batch-450/evidence/correction4/verification.webm"
           }
         ]
       },
@@ -435,7 +443,8 @@
               "frontend/src/components/operator/NewPatientFlow.tsx",
               "frontend/src/components/shared/intake/intakeDraftSession.ts",
               "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx",
-              "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts"
+              "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts",
+              "frontend/src/components/shared/ConfirmDialog.tsx"
             ]
           },
           {
@@ -458,7 +467,9 @@
               "backend/src/intake/__tests__/parse-discharge-therapy.test.ts",
               "scripts/e2e/issue-450-ingresso.mjs",
               "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
-              "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx"
+              "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx",
+              "frontend/src/components/shared/intake/intakeSexReview.ts",
+              "frontend/src/components/shared/intake/__tests__/intakeSexReview.test.ts"
             ]
           },
           {
@@ -473,7 +484,8 @@
               "backend/src/routes/import-pages.ts",
               "frontend/src/components/shared/import/__tests__/importReview.test.ts",
               "scripts/e2e/issue-450-ingresso.mjs",
-              "frontend/src/lib/__tests__/pdfPreviewResources.test.ts"
+              "frontend/src/lib/__tests__/pdfPreviewResources.test.ts",
+              "frontend/vercel.json"
             ]
           },
           {
@@ -492,7 +504,9 @@
               "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
               "frontend/src/components/shared/intake/IntakeIndex.tsx",
               "frontend/src/components/shared/intake/__tests__/intakeProgress.test.ts",
-              "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts"
+              "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts",
+              "frontend/src/lib/patientIncompleteSummary.ts",
+              "frontend/src/lib/patientIncompleteSummary.test.ts"
             ]
           }
         ],
@@ -545,19 +559,19 @@
           "issue": 450,
           "files": {
             "screenshot": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue450.png",
-              "sha256": "4971065af8392e06bcf34da22220fa3aea193db417cf33d011774c09ea6d2cb0",
-              "bytes": 80566
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue450.png",
+              "sha256": "753cdbd6bd5ab939f82bd36565493e0584bef26db60bee004bee7baa4acc2252",
+              "bytes": 87794
             },
             "trace": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue450.zip",
-              "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
-              "bytes": 20161286
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue450.zip",
+              "sha256": "89a5151eac33b24589decaa751bc9249aa0ee058574a9ca951a7a9987f2e0b3c",
+              "bytes": 18191256
             },
             "video": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue450.webm",
-              "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
-              "bytes": 3910102
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/verification.webm",
+              "sha256": "dd5ac83feec3cfeff7f0a77bc3fe98b8174ee9301739838ea79bb0095cdb121a",
+              "bytes": 4105216
             }
           }
         },
@@ -565,19 +579,19 @@
           "issue": 472,
           "files": {
             "screenshot": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue472.png",
-              "sha256": "f4e52e8fae3787f950b25051f7524fd1b4c3162365db598b63c987e8cb6b075a",
-              "bytes": 104916
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue472.png",
+              "sha256": "3917b6c02bce556f3537708e61207f366f65e6e362f9808983fbf678ce2f6352",
+              "bytes": 105348
             },
             "trace": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue472.zip",
-              "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
-              "bytes": 20161286
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue472.zip",
+              "sha256": "89a5151eac33b24589decaa751bc9249aa0ee058574a9ca951a7a9987f2e0b3c",
+              "bytes": 18191256
             },
             "video": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue472.webm",
-              "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
-              "bytes": 3910102
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/verification.webm",
+              "sha256": "dd5ac83feec3cfeff7f0a77bc3fe98b8174ee9301739838ea79bb0095cdb121a",
+              "bytes": 4105216
             }
           }
         },
@@ -585,19 +599,19 @@
           "issue": 473,
           "files": {
             "screenshot": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue473.png",
-              "sha256": "a5e2be73d61100d2aaeb94fbe561dedb16c353f860501fccc190f2b0f4b76718",
-              "bytes": 126886
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue473.png",
+              "sha256": "71562aadc3ee5e7823cdd2a32371f9931e283292948c29363b3a5d1152b38375",
+              "bytes": 126682
             },
             "trace": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue473.zip",
-              "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
-              "bytes": 20161286
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue473.zip",
+              "sha256": "89a5151eac33b24589decaa751bc9249aa0ee058574a9ca951a7a9987f2e0b3c",
+              "bytes": 18191256
             },
             "video": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue473.webm",
-              "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
-              "bytes": 3910102
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/verification.webm",
+              "sha256": "dd5ac83feec3cfeff7f0a77bc3fe98b8174ee9301739838ea79bb0095cdb121a",
+              "bytes": 4105216
             }
           }
         },
@@ -605,19 +619,19 @@
           "issue": 475,
           "files": {
             "screenshot": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue475.png",
-              "sha256": "efe44dfa5b1dbbb840c334b0fb191ab6a6980d7cde3540f452625aecc6582d88",
-              "bytes": 111715
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue475.png",
+              "sha256": "4c5b7822f10f60887a0aebb8ad4c5bcfd27188eaedfd2d85b9b9a870b59ce371",
+              "bytes": 111618
             },
             "trace": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue475.zip",
-              "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
-              "bytes": 20161286
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue475.zip",
+              "sha256": "89a5151eac33b24589decaa751bc9249aa0ee058574a9ca951a7a9987f2e0b3c",
+              "bytes": 18191256
             },
             "video": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue475.webm",
-              "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
-              "bytes": 3910102
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/verification.webm",
+              "sha256": "dd5ac83feec3cfeff7f0a77bc3fe98b8174ee9301739838ea79bb0095cdb121a",
+              "bytes": 4105216
             }
           }
         },
@@ -625,19 +639,19 @@
           "issue": 476,
           "files": {
             "screenshot": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue476.png",
-              "sha256": "c22cd27258f97f4b497a3af8680c6043d183e268464ce542720f4ca4ab2304b2",
-              "bytes": 88757
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue476.png",
+              "sha256": "40731daf1940757291808233e8e89d16c9ac08fc68fcfbff07d661ec98fa2447",
+              "bytes": 92326
             },
             "trace": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue476.zip",
-              "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
-              "bytes": 20161286
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/issue476.zip",
+              "sha256": "89a5151eac33b24589decaa751bc9249aa0ee058574a9ca951a7a9987f2e0b3c",
+              "bytes": 18191256
             },
             "video": {
-              "path": "artifacts/task-validation/bug-batch-450/evidence/issue476.webm",
-              "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
-              "bytes": 3910102
+              "path": "artifacts/task-validation/bug-batch-450/evidence/correction4/verification.webm",
+              "sha256": "dd5ac83feec3cfeff7f0a77bc3fe98b8174ee9301739838ea79bb0095cdb121a",
+              "bytes": 4105216
             }
           }
         }
@@ -650,7 +664,7 @@
         "report": "artifacts/task-validation/bug-batch-450/independent-qa-attempt-2/validation-report.md",
         "awaiting": "requiredCI, externalClaudeMax, actualverifiedrelease"
       },
-      "sha": "111e672faf77b45280d8ef6ebb15268180b58376",
+      "sha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
       "pr": {
         "number": 481,
         "url": "https://github.com/l2v-hub/ClinicOS/pull/481"
@@ -664,31 +678,17 @@
         "normalControllerPromoted": false
       },
       "controllerOwnership": {
-        "promotedAt": "2026-10-17T10:12:22.907Z",
-        "previousOwner": "codex-root-2026-10-17",
+        "promotedAt": "2026-10-17T18:17:23.902Z",
+        "previousOwner": "codex-root-450-correction4",
         "trustedMain": "b7194ac4dd185b3edc4f8d093c0505d0b4ef69ea",
-        "reason": "Dedicated independent QA2 passed and exact source47 published; ordinary controller now owns all review corrections and budgets."
+        "reason": "Independent correction4 source53/proof integrity accepted; original4/4implementation and2/4reviews preserved. Trusted controller owns request after current native checks."
       },
       "releaseHold": {
         "reason": "Actual demo target preflight failed before deployment; awaiting diagnosed and verified environment binding. Review may proceed; merge/deploy/closure held.",
         "runId": 39023763026,
         "createdAt": "2026-10-17T10:12:22.908Z"
       },
-      "externalReview": {
-        "channel": "github-comments",
-        "status": "published",
-        "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
-        "requestId": "0ca3c1d5-2f6b-42b6-bcc6-907ce778d1a0",
-        "requestedAt": "2026-10-17T15:31:55.988Z",
-        "owner": "l2v-hub",
-        "claimId": "15e9d6dc-494a-4f98-900e-1916b5d24da8",
-        "startedAt": "2026-10-17T17:02:20.865Z",
-        "feedbackFingerprint": "acea12f72372c6d904db566ca3e66056c31d503a5c51528d1d3291ed2d2a0bb1",
-        "reportComment": 6237358545,
-        "reportBodySha256": "82a137fc9638c36734832568d287a8507aa22268a60c6eda3562298f15ad6ae3",
-        "completedAt": "2026-10-17T17:14:32.414Z",
-        "feedbackChanged": false
-      },
+      "externalReview": null,
       "reviewLedger": {
         "schema_version": 1,
         "max_rounds": 4,
@@ -718,6 +718,28 @@
           },
           "recovery": true,
           "spentReviews": 1
+        },
+        {
+          "at": "2026-10-17T18:17:23.902Z",
+          "actor": "l2v-hub",
+          "previous": {
+            "channel": "github-comments",
+            "status": "published",
+            "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
+            "requestId": "0ca3c1d5-2f6b-42b6-bcc6-907ce778d1a0",
+            "requestedAt": "2026-10-17T15:31:55.988Z",
+            "owner": "l2v-hub",
+            "claimId": "15e9d6dc-494a-4f98-900e-1916b5d24da8",
+            "startedAt": "2026-10-17T17:02:20.865Z",
+            "feedbackFingerprint": "acea12f72372c6d904db566ca3e66056c31d503a5c51528d1d3291ed2d2a0bb1",
+            "reportComment": 6237358545,
+            "reportBodySha256": "82a137fc9638c36734832568d287a8507aa22268a60c6eda3562298f15ad6ae3",
+            "completedAt": "2026-10-17T17:14:32.414Z",
+            "feedbackChanged": false
+          },
+          "recovery": false,
+          "spentReviews": 2,
+          "reason": "Verified correction4 publishes a new SHA; old report/ledger retained as immutable history."
         }
       ],
       "reviewChannel": "github-comments",
@@ -726,12 +748,13 @@
       },
       "approvedSha": null,
       "issueFeedbackSince": "2026-10-17T17:16:30.691Z",
-      "reason": "Root owns reserved implementation4 in existing clean worktree; hosted controller must not create a duplicate correction. Actual work is in progress.",
       "manualCorrectionOwnership": {
         "owner": "codex-root-450-correction4",
         "round": 4,
         "reservedAt": "2026-10-17T17:33:43.857Z",
-        "automatedExecutionSuspended": true
+        "automatedExecutionSuspended": false,
+        "releasedAt": "2026-10-17T18:17:23.902Z",
+        "sourceStopped": true
       },
       "scopeAmendmentHistory": [
         {
@@ -765,6 +788,268 @@
           },
           "negativeReproductionSha256": "190dfd233ac58fba9c5746f9c955f172029c580a11620699b622de1c7dbe2ffe",
           "reason": "Actual built nonroot JPX worker reports WebAssembly compilation CSP denial while JavaScript fallback still renders. Authorize only wasm-unsafe-eval token in script-src, preserving JS eval denial, origins, all other directives and asset rewrite; no claim of hosted blank-preview root cause."
+        }
+      ],
+      "evidenceHistory": [
+        {
+          "at": "2026-10-17T18:17:23.902Z",
+          "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
+          "evidence": [
+            {
+              "issue": 450,
+              "files": {
+                "screenshot": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue450.png",
+                  "sha256": "4971065af8392e06bcf34da22220fa3aea193db417cf33d011774c09ea6d2cb0",
+                  "bytes": 80566
+                },
+                "trace": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue450.zip",
+                  "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
+                  "bytes": 20161286
+                },
+                "video": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue450.webm",
+                  "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
+                  "bytes": 3910102
+                }
+              }
+            },
+            {
+              "issue": 472,
+              "files": {
+                "screenshot": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue472.png",
+                  "sha256": "f4e52e8fae3787f950b25051f7524fd1b4c3162365db598b63c987e8cb6b075a",
+                  "bytes": 104916
+                },
+                "trace": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue472.zip",
+                  "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
+                  "bytes": 20161286
+                },
+                "video": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue472.webm",
+                  "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
+                  "bytes": 3910102
+                }
+              }
+            },
+            {
+              "issue": 473,
+              "files": {
+                "screenshot": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue473.png",
+                  "sha256": "a5e2be73d61100d2aaeb94fbe561dedb16c353f860501fccc190f2b0f4b76718",
+                  "bytes": 126886
+                },
+                "trace": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue473.zip",
+                  "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
+                  "bytes": 20161286
+                },
+                "video": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue473.webm",
+                  "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
+                  "bytes": 3910102
+                }
+              }
+            },
+            {
+              "issue": 475,
+              "files": {
+                "screenshot": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue475.png",
+                  "sha256": "efe44dfa5b1dbbb840c334b0fb191ab6a6980d7cde3540f452625aecc6582d88",
+                  "bytes": 111715
+                },
+                "trace": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue475.zip",
+                  "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
+                  "bytes": 20161286
+                },
+                "video": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue475.webm",
+                  "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
+                  "bytes": 3910102
+                }
+              }
+            },
+            {
+              "issue": 476,
+              "files": {
+                "screenshot": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue476.png",
+                  "sha256": "c22cd27258f97f4b497a3af8680c6043d183e268464ce542720f4ca4ab2304b2",
+                  "bytes": 88757
+                },
+                "trace": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue476.zip",
+                  "sha256": "08fdbe3a3b4623764982abc49bcb5f671d3b0c4f3c2ba87b7ff52b33799c8449",
+                  "bytes": 20161286
+                },
+                "video": {
+                  "path": "artifacts/task-validation/bug-batch-450/evidence/issue476.webm",
+                  "sha256": "a96fec9bb79444c9f94fa53704c877a62e86099ba2f7094d205210ae4f13e168",
+                  "bytes": 3910102
+                }
+              }
+            }
+          ],
+          "reason": "Historical QA2 media retained byte-for-byte; current proof is independentQA4."
+        }
+      ],
+      "evidencePlanHistory": [
+        {
+          "at": "2026-10-17T18:17:23.902Z",
+          "round": 4,
+          "evidence": [
+            {
+              "issue": 450,
+              "screenshot": "artifacts/task-validation/bug-batch-450/evidence/issue450.png",
+              "trace": "artifacts/task-validation/bug-batch-450/evidence/issue450.zip",
+              "video": "artifacts/task-validation/bug-batch-450/evidence/issue450.webm"
+            },
+            {
+              "issue": 472,
+              "screenshot": "artifacts/task-validation/bug-batch-450/evidence/issue472.png",
+              "trace": "artifacts/task-validation/bug-batch-450/evidence/issue472.zip",
+              "video": "artifacts/task-validation/bug-batch-450/evidence/issue472.webm"
+            },
+            {
+              "issue": 473,
+              "screenshot": "artifacts/task-validation/bug-batch-450/evidence/issue473.png",
+              "trace": "artifacts/task-validation/bug-batch-450/evidence/issue473.zip",
+              "video": "artifacts/task-validation/bug-batch-450/evidence/issue473.webm"
+            },
+            {
+              "issue": 475,
+              "screenshot": "artifacts/task-validation/bug-batch-450/evidence/issue475.png",
+              "trace": "artifacts/task-validation/bug-batch-450/evidence/issue475.zip",
+              "video": "artifacts/task-validation/bug-batch-450/evidence/issue475.webm"
+            },
+            {
+              "issue": 476,
+              "screenshot": "artifacts/task-validation/bug-batch-450/evidence/issue476.png",
+              "trace": "artifacts/task-validation/bug-batch-450/evidence/issue476.zip",
+              "video": "artifacts/task-validation/bug-batch-450/evidence/issue476.webm"
+            }
+          ]
+        }
+      ],
+      "independentQa": {
+        "attempt": 4,
+        "verdict": "READY FOR CODEX QA",
+        "report": "independent-qa4/validation-report.md",
+        "reportSha256": "fffa3766818e0cd4410b295c12e5195098f5547a86a08c0138efc623cdc2d03f",
+        "manifestSha256": "fff86977f8513bfa62c6fc0f53ae6f8d859eff2573e843ac17c8ba1ff3a72b65",
+        "sealSha256": "e507a838d395467915a17369697c4c29f33eafbbfb869a5fe9c0583c3cb6ebd4",
+        "rootFullReportAndMediaReviewed": true
+      },
+      "groupingHistory": [
+        {
+          "at": "2026-10-17T18:17:23.902Z",
+          "round": 4,
+          "grouping": {
+            "fileMap": [
+              {
+                "issue": 450,
+                "files": [
+                  "frontend/src/components/operator/NewPatientStart.tsx",
+                  "frontend/src/components/operator/NewPatientStart.css",
+                  "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+                  "frontend/src/components/shared/intake/StepAnagrafica.tsx",
+                  "frontend/src/components/shared/intake/intakeProgress.ts",
+                  "frontend/src/components/shared/InlineEditableField.tsx",
+                  "frontend/src/components/shared/intake/__tests__/intakeMinimal450.test.ts",
+                  "scripts/e2e/issue-450-ingresso.mjs",
+                  "frontend/src/components/shared/intake/__tests__/intakeProgress.test.ts"
+                ]
+              },
+              {
+                "issue": 472,
+                "files": [
+                  "frontend/src/components/shared/DischargeImportModal.tsx",
+                  "frontend/src/components/shared/import/ImportReviewWorkspace.tsx",
+                  "frontend/src/components/shared/import/ImportSession.css",
+                  "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+                  "frontend/src/components/shared/intake/IntakePage.css",
+                  "frontend/src/components/shared/intake/intakeDraftApi.ts",
+                  "frontend/src/components/operator/PatientList.tsx",
+                  "frontend/src/lib/patientListView.ts",
+                  "backend/src/intake/draft-service.ts",
+                  "backend/src/routes/intake-drafts.ts",
+                  "backend/src/patients/progressive-identity.ts",
+                  "frontend/src/components/shared/intake/__tests__/intakeDraftSession.test.ts",
+                  "backend/src/intake/__tests__/confirm-draft-guards.test.ts",
+                  "scripts/e2e/issue-450-ingresso.mjs",
+                  "frontend/src/components/operator/NewPatientFlow.tsx",
+                  "frontend/src/components/shared/intake/intakeDraftSession.ts",
+                  "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx",
+                  "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts"
+                ]
+              },
+              {
+                "issue": 473,
+                "files": [
+                  "frontend/src/components/shared/DischargeImportModal.tsx",
+                  "frontend/src/components/shared/import/ImportReviewWorkspace.tsx",
+                  "frontend/src/components/shared/import/ImportSession.css",
+                  "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+                  "frontend/src/components/shared/intake/IntakePage.css",
+                  "frontend/src/components/shared/ImportReviewFull.tsx",
+                  "frontend/src/components/shared/intake/StepAnagrafica.tsx",
+                  "frontend/src/lib/codiceFiscale.ts",
+                  "backend/src/lib/codice-fiscale.ts",
+                  "backend/src/intake/parse-discharge-therapy.ts",
+                  "backend/src/intake/draft-service.ts",
+                  "backend/src/ai/sections/patient-narrative.ts",
+                  "backend/src/ai/upload/confirm-service.ts",
+                  "backend/src/intake/__tests__/seed-draft-from-import.test.ts",
+                  "backend/src/intake/__tests__/parse-discharge-therapy.test.ts",
+                  "scripts/e2e/issue-450-ingresso.mjs",
+                  "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+                  "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx"
+                ]
+              },
+              {
+                "issue": 475,
+                "files": [
+                  "frontend/src/components/shared/import/ImportPageView.tsx",
+                  "frontend/src/components/shared/import/importSourceCache.ts",
+                  "frontend/src/components/shared/PdfCanvasPreview.tsx",
+                  "frontend/src/components/shared/PdfCanvasPreview.css",
+                  "frontend/src/lib/pdfPreviewResources.ts",
+                  "frontend/config/pdfPreviewAssets.ts",
+                  "backend/src/routes/import-pages.ts",
+                  "frontend/src/components/shared/import/__tests__/importReview.test.ts",
+                  "scripts/e2e/issue-450-ingresso.mjs",
+                  "frontend/src/lib/__tests__/pdfPreviewResources.test.ts"
+                ]
+              },
+              {
+                "issue": 476,
+                "files": [
+                  "frontend/src/lib/intakeDemographics.ts",
+                  "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+                  "frontend/src/components/shared/intake/StepVerifica.tsx",
+                  "frontend/src/components/shared/intake/StepAnagrafica.tsx",
+                  "frontend/src/components/shared/intake/intakeProgress.ts",
+                  "backend/src/patients/progressive-identity.ts",
+                  "backend/src/ai/upload/confirm-service.ts",
+                  "frontend/src/lib/__tests__/intakeDemographics.test.ts",
+                  "backend/src/intake/__tests__/confirm-draft-guards.test.ts",
+                  "scripts/e2e/issue-450-ingresso.mjs",
+                  "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+                  "frontend/src/components/shared/intake/IntakeIndex.tsx",
+                  "frontend/src/components/shared/intake/__tests__/intakeProgress.test.ts",
+                  "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts"
+                ]
+              }
+            ],
+            "separationReason": "Manual and import intake are consolidated to avoid IntakeWorkspace overlap. PatientList and patientListView overlap future452 list presentation: land this batch first, then rebase452 and rerun both draft/status and identity/list regressions; do not modify unrelated row presentation. Therapygroup owns therapy administration/AIFA, which are outside this intake scope."
+          },
+          "reason": "Preserve the previous47-path grouping and map the six explicitly authorized correction4 additions to their actual source issues."
         }
       ]
     },
@@ -4604,7 +4889,7 @@
       "reason": "Independent QA4 passed; actual native checks, Max bootstrap review and separate supported-runtime final Codex QA remain required."
     }
   ],
-  "updatedAt": "2026-10-17T18:13:41.750Z",
+  "updatedAt": "2026-10-17T18:17:23.902Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
