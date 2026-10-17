@@ -1,5 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "git": {
+    "deploymentEnabled": {
+      "codex/pr474-acl-rejection-followup": false
+    }
+  },
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",

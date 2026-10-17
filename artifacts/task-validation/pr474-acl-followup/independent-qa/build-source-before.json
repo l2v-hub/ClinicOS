@@ -1,0 +1,34 @@
+[
+  {
+    "file": "package.json",
+    "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+  },
+  {
+    "file": "package-lock.json",
+    "sha256": "a7c71d1fb154f0d72ec2de6e207780cb352960848c8c47c5ef1bc300f2cf6e7f"
+  },
+  {
+    "file": "frontend/package.json",
+    "sha256": "319c3acade0ca06ff325e4749a65ab331bdd8c106086ccffd1d8be8f48468ac3"
+  },
+  {
+    "file": "frontend/tsconfig.json",
+    "sha256": "ddfbd4be8ba0c63cb46e9ea6d68f68e929f270bc23f2f64ec9aa13dc5057c78c"
+  },
+  {
+    "file": "frontend/tsconfig.app.json",
+    "sha256": "beb4745fe309bec67d29e9a8945b498f08d7164b0dd12ebd63a49818cd4548dd"
+  },
+  {
+    "file": "frontend/tsconfig.node.json",
+    "sha256": "e0f1936992f77a707102795e8ea311ae74cb54de87b221bb32b44055af66ff7e"
+  },
+  {
+    "file": "frontend/vercel.json",
+    "sha256": "210a5c1ce4cbc78ded356cce5b807125c2e21669c11fc2c4d2fe038cb37d32c0"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/windows-review.test.mjs",
+    "sha256": "561e8757d6a66c270ab4cad4c56e34c714f5fd4157c0568985dabdf4f5ff3795"
+  }
+]

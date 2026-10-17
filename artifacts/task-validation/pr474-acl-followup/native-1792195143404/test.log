@@ -1,0 +1,21 @@
+✔ Windows install verifies a single user task, preserves unrelated work and removes only the verified task (16.1855ms)
+✔ Windows prerequisites and altered existing tasks fail closed without an inference or overwrite (8.6958ms)
+✔ Windows task read failures and concurrent registration cannot replace an existing task (4.9641ms)
+✔ Windows launch runs the real child, retains exit7, strips provider tokens and preserves interrupted locks (55.6177ms)
+✔ npm Claude entrypoints execute with Node without a shell and reviewer credentials remain isolated (98.8317ms)
+✔ PowerShell scheduler definitions parse on Windows and use actual task action/trigger/principal objects (5871.3803ms)
+✔ native Windows ACL creation is private and rejects a later public access rule (3129.7175ms)
+✔ native Windows bootstrap preserves dirty, foreign, wrong-branch and diverged work and fast-forwards only its dedicated checkout (8266.8355ms)
+✔ existing Windows state is inspected before any ACL write and malformed schedules fail closed (13.8772ms)
+✔ Windows installed-state check rejects hardlinked configuration consistently with the worker (9.988ms)
+✔ only the followup branch is vetoed; unspecified branches retain Vercel defaults (1.2838ms)
+✔ all prior frontend configuration is unchanged (0.4717ms)
+✔ ACL test bytes are identical to the actual Claude Max approved093 commit (1.3024ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17624.2525

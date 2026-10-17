@@ -1,0 +1,29 @@
+✖ native Windows ACL creation is private and rejects a later public access rule (4919.0173ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5041.9064
+
+✖ failing tests:
+
+test at agent-team\tests\bug-pipeline\windows-review.test.mjs:265:1
+✖ native Windows ACL creation is private and rejects a later public access rule (4919.0173ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///C:/Users/Claudio/AppData/Local/ClinicOS/setup-pr474-20261017/followup-independent-1792195249869/synthetic-negative-control/agent-team/tests/bug-pipeline/windows-review.test.mjs:297:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,12 @@
+{
+  "surface": "QA only — synthetic metadata, no deployment",
+  "branch": "codex/pr474-acl-rejection-followup",
+  "deploymentAllowed": false,
+  "testsPassed": 13,
+  "testsFailed": 0,
+  "testsSkipped": 0,
+  "approvedAclTestLfSha256": "082762f220976a73978ce5fb2deca9657eecaf7adb996552c9b5697b49f9cc1f",
+  "sourceManifest": "c81799652fa01bc45dfe89d76b49a5ff9c8dbe06c61947004cc4dbb45a8a1fd6",
+  "externalCI": "Verified separately on GitHub; not claimed by this page",
+  "claude": "093b8aed code approved round3; final source review recorded separately"
+}

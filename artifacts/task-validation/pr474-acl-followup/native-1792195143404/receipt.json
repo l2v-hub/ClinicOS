@@ -1,0 +1,20 @@
+{
+  "code": 0,
+  "counts": {
+    "tests": 13,
+    "pass": 13,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "sourceSha256": "c81799652fa01bc45dfe89d76b49a5ff9c8dbe06c61947004cc4dbb45a8a1fd6",
+  "sourceUnchanged": true,
+  "logSha256": "d049dec6a3ae54b0c6c539eea036b10e58d7e0f6649a8fb366831c753c378d15",
+  "args": [
+    "--test",
+    "--test-concurrency=1",
+    "agent-team/tests/bug-pipeline/windows-review.test.mjs",
+    "artifacts/task-validation/pr474-acl-followup/deployment-guard.test.mjs"
+  ],
+  "at": "2026-10-16T23:59:21.095Z"
+}

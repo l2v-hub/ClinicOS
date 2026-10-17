@@ -1,0 +1,9 @@
+{
+  "code": 1,
+  "expectedFailure": true,
+  "expectedAssertion": "assert.match(publicResult.stderr, /Non-private scheduler state/)",
+  "logSha256": "d021e0cae7a60663cb451b6e8275aa98ad2962b4207ef302f377217e070e0889",
+  "change": "Synthetic copy only: privacy rejection retains failure exit but has unrelated stderr. Test assertions unchanged.",
+  "sourceUnchanged": true,
+  "at": "2026-10-17T00:01:45.766Z"
+}
