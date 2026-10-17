@@ -2854,7 +2854,7 @@
       "owner": "codex-root-2026-10-17",
       "branch": "codex/demo-release-guard",
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
-      "phase": "merged-operational-verifying",
+      "phase": "environment-preflight-blocked",
       "implementation": [
         {
           "round": 1,
@@ -2932,8 +2932,42 @@
         ]
       },
       "configurationRun": 39023778842,
-      "deploymentRun": 39023763026
+      "deploymentRun": 39023763026,
+      "repositoryConfiguration": {
+        "status": "verified",
+        "runId": 39023778842,
+        "requiredChecks": 6
+      },
+      "deploymentPreflight": {
+        "status": "blocked",
+        "runId": 39023763026,
+        "reason": "exact main repository trigger required",
+        "demoDeploymentPerformed": false,
+        "productionJob": "success"
+      }
+    },
+    {
+      "id": "demo-source-configuration",
+      "issues": [],
+      "branch": "codex/demo-source-configuration",
+      "owner": "codex-root-2026-10-17",
+      "phase": "implementing",
+      "implementation": [
+        {
+          "round": 1,
+          "status": "running",
+          "startedAt": "2026-10-17T10:15:52.665Z"
+        }
+      ],
+      "reviews": [],
+      "baseSha": "b7194ac4dd185b3edc4f8d093c0505d0b4ef69ea",
+      "scope": [
+        ".github/workflows/configure-demo-source.yml",
+        "scripts/automation/configure-demo-source.mjs",
+        "scripts/automation/configure-demo-source.test.mjs"
+      ],
+      "rationale": "Operational configuration of existing demo GitHub trigger only. Frozen release guard19 and maintenance470 sources/budgets unchanged. Read-only inventory first, digest-bound unique same-repo branch correction only. No clinical logic, weakenedguard, deployment, patient writes, triggercreation/deletion or serviceConnect."
     }
   ],
-  "updatedAt": "2026-10-17T10:14:47.542Z"
+  "updatedAt": "2026-10-17T10:15:52.665Z"
 }
