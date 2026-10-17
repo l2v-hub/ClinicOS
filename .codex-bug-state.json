@@ -4019,13 +4019,12 @@
       "rationale": "Actual requiredCI global broadcast test interference. One existing test runner list only; all app/tests/G19 untouched; separate new operation not exhausted guard retry."
     }
   ],
-  "updatedAt": "2026-10-17T11:43:17.967Z",
-  "triageQueue": {
+  "updatedAt": "2026-10-17T11:47:02.291Z",
+  "pendingTriage": {
     "issues": [
-      485,
-      486
+      486,
+      485
     ],
-    "openedAt": 1792236284620,
-    "changedAt": 1792236284620
+    "status": "claiming"
   }
 }
