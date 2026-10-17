@@ -1,0 +1,149 @@
+{
+  "files": [
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/audit-notes.md",
+      "bytes": 5064,
+      "sha256": "5e6e9630e174a14c62b1937f96c48e3f1a93d9121c98cae45cada52b2286b41e"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/backend-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/browser-qa.mjs",
+      "bytes": 10447,
+      "sha256": "138a7849697c86f9a82585f9538a19dee2342452aecd3916219ed8abbb3b2a8f"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/browser-results.json",
+      "bytes": 12959,
+      "sha256": "7e4ceb351e4c42b1791c9cb5f4341aef749289c0f44f28ef94390473f513f9da"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/browser.log",
+      "bytes": 89,
+      "sha256": "a946e53fd12ae9dcd35803034387d5b4ee2ca44956d74718a3b51b3eb085f3ed"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/final-result.png",
+      "bytes": 293609,
+      "sha256": "b66dbb7be7fa9d9727cf3491a50b9540f5dab19dea0f849473436fd410f5388a"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/frontend-build.log",
+      "bytes": 16443,
+      "sha256": "ad3bc2e54a0a0779227852301ae0f09be2584694a371b8ca0635d9873b95e48b"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/frontend-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/full-ci-unit-tests.log",
+      "bytes": 39439,
+      "sha256": "1382cb0cca9ff583a13ddd9cb9580164f56f9317f70db24a9c3a214c9312cf80"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/historical-integrity-after.json",
+      "bytes": 48,
+      "sha256": "9c3de599ccca09d70c7dc6ae92f394d50a68776da4a16045b4e05ceb7c955a4c"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/historical-integrity-before.json",
+      "bytes": 21621,
+      "sha256": "341dad490caeddba1655dfcba79e33405d5a9f43b2131913feaf542fcb8ef3ce"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/historical-reproductions.log",
+      "bytes": 6463,
+      "sha256": "54ec0c62f4f9f5ef3af8ce607fb569566089bdccafdf8e0cacabf93b01210d8d"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/independent-boundary-probes.log",
+      "bytes": 3471,
+      "sha256": "89dd454335d6c34ad08569e2f6d68018559d36810b17d2f398a638eaf49f19ca"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/independent-boundary-probes.test.mjs",
+      "bytes": 7789,
+      "sha256": "450aa5e989134f05358be2004505a8ef0bd60d6ac3f163c9d007a13492e6aff0"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/playwright-report/index.html",
+      "bytes": 6153,
+      "sha256": "9965f950bcbe96a809d21f0c8f10e16ff02ccfe306c982eb8dcb6925cfe506bf"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/playwright-report/run-summary.json",
+      "bytes": 105,
+      "sha256": "e8027f2912fbba7e8bf68366201ecc00d93743629cf97a4f2fbee08879add665"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/railway-schema-qa.json",
+      "bytes": 831,
+      "sha256": "6313b99ba0d562faeaab53864ceba531ca3c9b2a6153a61d8a996a91ffdcbe31"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/railway-schema-qa.mjs",
+      "bytes": 1775,
+      "sha256": "4c9a0c786ea832151c08b562df4ce86d32b6071401f284b4f6b5ffc43074e110"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/railway-schema.log",
+      "bytes": 106,
+      "sha256": "6254f7d4b36f9a1f35e2164737d4feaeff7ec3cf0e11e5512a718d7ada263779"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/readiness-http.log",
+      "bytes": 223,
+      "sha256": "30cf098a7ccd21b925a818c1ba0940f487c858f04718f321a800c5bb08cc8a46"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/security-scan.json",
+      "bytes": 307,
+      "sha256": "8b6cd8131dba576cad6862c1ccce23e8eefc9d26a4eab5920c6a6b9c9e7fbb00"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/source-hashes-after.json",
+      "bytes": 3432,
+      "sha256": "0600e5826997f93c770584f7370611b76250d298f1031baf7a27b3dd70fd4f95"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/source-hashes-before.json",
+      "bytes": 3432,
+      "sha256": "007adb4b269a12829644a26639015908823eb3fbf36e4be600b0dc54f8c5b7bb"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/task-contract.md",
+      "bytes": 1598,
+      "sha256": "5aa3588567b1b8c960d0cee39f7c855d3a32e411b9cc5792fe849e69c1230d44"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/test-results/page@b4194238bff5ed5c45fba19513ff00ea.webm",
+      "bytes": 505681,
+      "sha256": "025c20fccb457a5f340f5491a8762175e7ab38a385c4f230c664a406ad745550"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/trace.zip",
+      "bytes": 783990,
+      "sha256": "6e011284af864daea8ffa448faa1dfef4e25682465d7912e07f195a78635648a"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/validation-report.md",
+      "bytes": 7068,
+      "sha256": "8485dd01e1eccc55e825fa469744327b792d9d4ca5de505948a6d4a78e21cb0d"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/video-probe.json",
+      "bytes": 191,
+      "sha256": "9ddbf6a17b2f1cb1b2f76b6a7571a00b344d3b38ed9096667d9a8267ee206906"
+    },
+    {
+      "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-4/workflow-parse.json",
+      "bytes": 632,
+      "sha256": "902caf40866144db1c3f8714b4284d40b7cc22a1d70a2930178ca88ccae2c009"
+    }
+  ]
+}

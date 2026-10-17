@@ -1,0 +1,35 @@
+[
+  {
+    "file": ".github/workflows/deploy-backend.yml",
+    "validYaml": true,
+    "jobs": [
+      "deploy",
+      "demo"
+    ]
+  },
+  {
+    "file": ".github/workflows/codex-bug-release.yml",
+    "validYaml": true,
+    "jobs": [
+      "release",
+      "confirm-demo"
+    ]
+  },
+  {
+    "file": ".github/workflows/bug-pipeline-tests.yml",
+    "validYaml": true,
+    "jobs": [
+      "verify-provider-access",
+      "configure-repository",
+      "bug-pipeline-tests",
+      "windows-review-setup"
+    ]
+  },
+  {
+    "file": ".github/workflows/codex-bug-pipeline.yml",
+    "validYaml": true,
+    "jobs": [
+      "process"
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "sourceFile": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+  "sourceSha256": "44855bee987e57b36e4acf47a4de95da19c75558a3975b3d443faa263776f43f",
+  "officialSchema": "https://github.com/railwayapp/cli/blob/v5.66.0/src/gql/schema.json",
+  "schemaSha256": "3c3d1448f2a746d6e5977ba3aa205889f959c427be5cfe37c72e79b1fa65f2be",
+  "graphqlVersion": "16.11.0",
+  "documents": [
+    {
+      "index": 1,
+      "sha256": "b6c557295cbf1265b5236d2889e605a88ba1c882765f72e0eb335f135209939f",
+      "valid": true
+    },
+    {
+      "index": 2,
+      "sha256": "db445f06fbb5ee798002d0e2adb82e49b9d31d111390bce7c50c49ea64e9ef6f",
+      "valid": true
+    },
+    {
+      "index": 3,
+      "sha256": "ede19daaf64f756e263faa7cf410ab60f47af0bf4d1da2b2804dee189bb1d8a0",
+      "valid": true
+    }
+  ],
+  "actualRailwayRequestPerformed": false
+}

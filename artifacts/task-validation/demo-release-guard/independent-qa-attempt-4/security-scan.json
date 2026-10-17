@@ -1,0 +1,9 @@
+{
+  "scannedFiles": 201,
+  "scannedFilesAndArchiveEntries": 299,
+  "scope": "All nineteen sources plus complete task packet including immutable historical files and trace archives",
+  "secretPatternFindings": [],
+  "syntheticFixturesOnly": true,
+  "realProviderCalls": false,
+  "noExternalMutation": true
+}
