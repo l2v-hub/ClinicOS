@@ -1,0 +1,1 @@
+{"command": "npm exec -- tsc --noEmit -p tsconfig.json", "cwd": "backend", "exitCode": 0}

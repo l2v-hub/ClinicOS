@@ -1,0 +1,7 @@
+PASS 450 two real responsive entry choices
+Expected values to be strictly equal:
+
+1 !== 0
+
+{ name: /Infermiere 1/ }).first()[22m
+

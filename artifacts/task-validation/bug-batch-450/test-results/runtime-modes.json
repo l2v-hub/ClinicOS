@@ -1,0 +1,13 @@
+{
+  "pass": true,
+  "unchangedHarnessSha256": "b31e408a732107b725f90de218abc6f30153a418386bdb909e925c675f34e83b",
+  "modes": [
+    "docker",
+    "native"
+  ],
+  "nativeParentPublicTableCount": 0,
+  "nativeChildDatabaseCountAfterCleanup": 0,
+  "sourceReceiptsMatch": true,
+  "sourceFileCount": 30,
+  "frozenPacketHashesVerified": true
+}

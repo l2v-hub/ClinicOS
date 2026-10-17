@@ -1,0 +1,14 @@
+✔ invalid therapy returns indexed 400 before any patient or therapy write (976.796171ms)
+✔ corrected retry persists precise schedules, actor and weekdays; replay is idempotent (20.217091ms)
+✔ persistence failure rolls back all writes, sanitizes audit, and permits retry (8.262868ms)
+✔ confirmation remains operator-gated and owner-scoped (5.940531ms)
+✔ one imported and three manual therapies persist in order including whole patches (5.889823ms)
+✔ a divided patch in the final row rejects the entire confirmation before writes (4.807986ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1481.339256

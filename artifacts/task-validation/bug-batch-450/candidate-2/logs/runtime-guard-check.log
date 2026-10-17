@@ -1,0 +1,1 @@
+PASS actual runner capture block hashes all47 and only queries git rev-parse HEAD; empty/duplicate/traversal/absolute scopes fail closed. This is an isolated harness guard check, not a clean-clone/full-stack run.
