@@ -6,6 +6,10 @@ import {
   prescriptionSentence,
   nextPrescriptionOccurrence,
   QUICK_SCHEDULES,
+  prescriptionAllergyAcknowledged,
+  prescriptionAllergyScope,
+  prescriptionAllergyWarning,
+  type PrescriptionAllergyContext,
 } from '../therapyQuickSchedule';
 import { formToPayload } from '../therapyFormMapping';
 import { selectDrugPackage } from '../drugPackageSelection';
@@ -146,4 +150,103 @@ test('an existing different evening dose is preserved when a preset retains its 
   assert.equal(next.schedules.find((s) => s.time === '20:00')?.quantityNumerator, 2);
   assert.equal(next.schedules.find((s) => s.time === '08:00')?.quantityDenominator, 2);
   assert.equal(mixed.schedules.length, 2);
+});
+
+const documentedAllergies: PrescriptionAllergyContext = {
+  phase: 'ready',
+  snapshot: {
+    status: 'presenti',
+    items: [
+      {
+        allergene: 'Penicillina',
+        gravita: 'grave',
+        reazione: 'Anafilassi',
+        documentato: '2026-10-17',
+        documentatoDa: 'Medico QA',
+        note: 'Dato registrato',
+      },
+    ],
+  },
+};
+
+test('only an actual documented negative avoids acknowledgement; missing/error/loading never assert absence', () => {
+  const contexts: PrescriptionAllergyContext[] = [
+    { phase: 'loading' },
+    { phase: 'error' },
+    { phase: 'unavailable' },
+    { phase: 'ready', snapshot: { items: [] } },
+    { phase: 'ready', snapshot: { items: [], status: 'presenti' } },
+    documentedAllergies,
+    { phase: 'ready', snapshot: { ...documentedAllergies.snapshot, status: 'assenti' } },
+  ];
+  for (const context of contexts) {
+    assert.equal(prescriptionAllergyWarning(context), true);
+    assert.equal(prescriptionAllergyAcknowledged(context, 'scope', null), false);
+  }
+  for (const status of ['assenti', 'paziente_nega'] as const) {
+    const context: PrescriptionAllergyContext = { phase: 'ready', snapshot: { items: [], status } };
+    assert.equal(prescriptionAllergyWarning(context), false);
+    assert.equal(prescriptionAllergyAcknowledged(context, 'scope', null), true);
+  }
+  assert.equal(prescriptionAllergyAcknowledged({ phase: 'loading' }, 'scope', 'scope'), false);
+});
+
+test('actual allergy warning may be confirmed without inventing a drug match and never changes prescription payload', () => {
+  const before = formToPayload(base, 'QA1', 'QA');
+  // The unrelated drug still needs compatibility verification; text matching cannot prove safety.
+  const scope = prescriptionAllergyScope('QA1', 'doctor:QA', base, documentedAllergies);
+  assert.equal(prescriptionAllergyAcknowledged(documentedAllergies, scope, null), false);
+  assert.equal(prescriptionAllergyAcknowledged(documentedAllergies, scope, scope), true);
+  assert.deepEqual(formToPayload(base, 'QA1', 'QA'), before);
+});
+
+test('acknowledgement cannot cross patient, operator, drug/package, strength, form or actual chart context', () => {
+  const scope = prescriptionAllergyScope('QA1', 'doctor:QA', base, documentedAllergies);
+  const otherScopes = [
+    prescriptionAllergyScope('QA2', 'doctor:QA', base, documentedAllergies),
+    prescriptionAllergyScope('QA1', 'doctor:OTHER', base, documentedAllergies),
+    ...[
+      { farmacoNome: 'Farmaco diverso' },
+      { drugPackageRef: 'aic:123' },
+      { drugPackageDetached: true },
+      { commercialStrengthValue: '10' },
+      { commercialStrengthUnit: 'ml' },
+      { pharmaceuticalForm: 'soluzione' },
+    ].map((change) =>
+      prescriptionAllergyScope('QA1', 'doctor:QA', { ...base, ...change }, documentedAllergies),
+    ),
+    prescriptionAllergyScope('QA1', 'doctor:QA', base, {
+      phase: 'ready',
+      snapshot: {
+        ...documentedAllergies.snapshot,
+        items: [
+          ...documentedAllergies.snapshot.items,
+          { ...documentedAllergies.snapshot.items[0], allergene: 'Lattice' },
+        ],
+      },
+    }),
+    prescriptionAllergyScope('QA1', 'doctor:QA', base, {
+      phase: 'ready',
+      snapshot: {
+        ...documentedAllergies.snapshot,
+        items: [{ ...documentedAllergies.snapshot.items[0], reazione: 'Reazione aggiornata' }],
+      },
+    }),
+    prescriptionAllergyScope('QA1', 'doctor:QA', base, { phase: 'error' }),
+  ];
+  for (const other of otherScopes) {
+    assert.notEqual(other, scope);
+    assert.equal(prescriptionAllergyAcknowledged(documentedAllergies, other, scope), false);
+  }
+});
+
+test('unavailable context requires its own manual acknowledgement, which cannot authorize recovered clinical data', () => {
+  const failed: PrescriptionAllergyContext = { phase: 'error' };
+  const acknowledged = prescriptionAllergyScope('QA1', 'doctor:QA', base, failed);
+  assert.equal(prescriptionAllergyAcknowledged(failed, acknowledged, acknowledged), true);
+  const recovered = prescriptionAllergyScope('QA1', 'doctor:QA', base, documentedAllergies);
+  assert.equal(
+    prescriptionAllergyAcknowledged(documentedAllergies, recovered, acknowledged),
+    false,
+  );
 });

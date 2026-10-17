@@ -2,12 +2,14 @@
 // The only positive-response fixture supplies verified, official font bytes offline.
 import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
 import { prisma } from '../backend/src/lib/prisma.ts';
 import { SIMULATED_IDENTITIES, ensureSimulatedIdentity } from '../backend/src/authz/simulator.ts';
 import { createTherapyInTx } from '../backend/src/therapies/therapy-create.ts';
+import { findTherapiesDue } from '../backend/src/therapies/due-therapy-query.ts';
 import { facilityLocalMinute, facilityLocalDate } from '../frontend/src/lib/facilityTime.ts';
 
 const front = process.env.QA_FRONTEND_URL,
@@ -38,7 +40,11 @@ function sourceFingerprint() {
     for (const filename of files)
       hash.update(filename).update('\0').update(readFileSync(filename)).update('\0');
   }
-  for (const filename of ['e2e/qa-bug-batch-447-browser.mjs', 'e2e/qa-bug-batch-447.mjs'])
+  for (const filename of [
+    'e2e/qa-bug-batch-447-browser.mjs',
+    'e2e/qa-bug-batch-447.mjs',
+    'artifacts/task-validation/bug-batch-447/trace-privacy/redact-traces.py',
+  ])
     hash.update(filename).update('\0').update(readFileSync(filename)).update('\0');
   return hash.digest('hex');
 }
@@ -47,15 +53,15 @@ let sourceFingerprintAfter;
 const residualGates = [
   {
     issue: 453,
-    status: 'BLOCKED',
+    status: 'IMPLEMENTED_PENDING_VERIFICATION',
     reason:
-      'Clinical allergy–drug policy decision remains unanswered; no matching or override implemented.',
+      'Confirmable warning approved; real clinical acceptance and final independent verification remain required.',
   },
   {
     issue: 457,
-    status: 'BLOCKED',
+    status: 'IMPLEMENTATION_IN_PROGRESS',
     reason:
-      'Temporary PS exit and therapy-pause decision remains unanswered; no exit action implemented.',
+      'Explicit operator pause/continue decision approved; temporary exit implementation and final acceptance remain in progress.',
   },
 ];
 const fontRoot = path.resolve('artifacts/task-validation/bug-batch-447/font-assets');
@@ -464,7 +470,7 @@ async function session(
       state.fault &&
       record.path === state.fault.path &&
       record.status === state.fault.status &&
-      record.method === 'POST'
+      record.method === (state.fault.method ?? 'POST')
     )
       state.expectedErrors.push(record);
     else state.errors.push(record);
@@ -521,11 +527,27 @@ async function finish(state, issue) {
   const prefix = baseline ? 'baseline' : `issue-${issue}`;
   if (state.page && !state.page.isClosed())
     await state.page.screenshot({ path: path.join(out, `${prefix}.png`), fullPage: false });
-  await state.context.tracing.stop({ path: path.join(out, `${prefix}-trace.zip`) });
+  await stopPrivateTrace(state.context, prefix);
   const video = state.page?.video();
   await state.context.close();
   state.closed = true;
-  if (video) await video.saveAs(path.join(out, `${prefix}.webm`));
+  if (video) {
+    await video.saveAs(path.join(out, `${prefix}.webm`));
+    await video.delete(); // Only the duplicate recorder temporary file, after durable saveAs.
+  }
+}
+async function stopPrivateTrace(context, prefix) {
+  const filename = path.join(out, `${prefix}-trace.zip`);
+  await context.tracing.stop({ path: filename });
+  execFileSync(
+    'python3',
+    [
+      'artifacts/task-validation/bug-batch-447/trace-privacy/redact-traces.py',
+      filename,
+      path.join(out, `${prefix}-trace-privacy.json`),
+    ],
+    { stdio: ['ignore', 'pipe', 'pipe'] },
+  );
 }
 async function scenario(issue, role, route, execute) {
   let state;
@@ -538,9 +560,13 @@ async function scenario(issue, role, route, execute) {
       [],
       `Issue ${issue}: no unexpected console, page or HTTP errors`,
     );
+    if (issue === 453) {
+      const gate = residualGates.findIndex((item) => item.issue === issue);
+      if (gate >= 0) residualGates.splice(gate, 1);
+    }
     results.push({
       issue,
-      status: 'PASS_CLEAR_SCOPE',
+      status: 'PASS_SCENARIO',
       clinicalGate: residualGates.some((gate) => gate.issue === issue) ? 'pending' : null,
       expectedFaults: state.expectedErrors,
     });
@@ -581,6 +607,32 @@ async function giveDose(page, name) {
     async () => assert.equal(await row.getByRole('button', { name: /^Erogata:/ }).count(), 0),
     'Dose must become recorded',
   );
+}
+async function syntheticPatientWithChart(suffix, lastName) {
+  const fixture = await prisma.patient.create({
+    data: {
+      medicalRecordNumber: `QA447-${runId}-${suffix}`,
+      firstName: 'Synthetic',
+      lastName,
+      dateOfBirth: new Date('1970-01-01T00:00:00Z'),
+      registeredById: 'SIM-NURSE-1',
+    },
+  });
+  await prisma.cartella.create({
+    data: {
+      patientId: fixture.id,
+      data: {
+        statoRicovero: 'ricoverato',
+        diagnosi: [],
+        anamnesi: {},
+        parametriVitali: [],
+        allergie: [],
+        allergieStatus: 'assenti',
+        indicatoriRischio: [],
+      },
+    },
+  });
+  return fixture;
 }
 try {
   if (baseline) {
@@ -1102,10 +1154,13 @@ try {
         await touch.page.screenshot({ path: path.join(out, 'issue-451-touch.png') });
         assert.deepEqual(touch.errors, []);
       } finally {
-        await touch.context.tracing.stop({ path: path.join(out, 'issue-451-touch-trace.zip') });
+        await stopPrivateTrace(touch.context, 'issue-451-touch');
         const touchVideo = touch.page.video();
         await touch.context.close();
-        if (touchVideo) await touchVideo.saveAs(path.join(out, 'issue-451-touch.webm'));
+        if (touchVideo) {
+          await touchVideo.saveAs(path.join(out, 'issue-451-touch.webm'));
+          await touchVideo.delete();
+        }
         touch.closed = true;
       }
 
@@ -1270,9 +1325,197 @@ try {
       );
       await navigate(state, 'agenda-operatore');
       await text(page.locator('.agt-day-card'), /Nessun appuntamento in questa giornata/);
-      await count(page.locator('.agt-day-wrap'), 0);
+      assert.equal(
+        await prisma.appointment.count(),
+        0,
+        'Synthetic agenda has genuinely zero appointments',
+      );
+      const agendaPatient = await syntheticPatientWithChart('agenda452', 'QA D Agenda452');
+      const agendaTherapy = await prisma.$transaction((tx) =>
+        createTherapyInTx(tx, agendaPatient.id, {
+          farmacoNome: 'QA Agenda pending452',
+          dataInizio: today,
+          commercialStrengthValue: 5,
+          commercialStrengthUnit: 'mg',
+          pharmaceuticalForm: 'compressa',
+          viaSomministrazione: 'orale',
+          tipo: 'periodica',
+          schedules: ['08:00', '20:00'].map(schedule),
+          operatoreInseritore: 'QA',
+        }),
+      );
+      assert.equal(
+        await prisma.medicationAdministration.count({ where: { therapyId: agendaTherapy.id } }),
+        0,
+      );
+      await reloadAuthenticated(state, 'agenda-operatore');
+      await text(page.locator('.agt-day-card'), /Nessun appuntamento in questa giornata/);
+      await count(page.locator('.agt-day-wrap'), 1);
+      await count(page.locator('.agt-day-wrap .agt-slot'), 0);
+      for (const time of ['08:00', '20:00']) {
+        const card = page.locator('.agt-day-wrap').getByRole('button', {
+          name: new RegExp(`ore ${time}.*da erogare`),
+        });
+        await card.waitFor({ state: 'visible' });
+        const dose = page
+          .locator('.agt-day-wrap .tdose')
+          .filter({ hasText: 'QA Agenda pending452' });
+        await count(dose, 2);
+        await text(
+          dose.first(),
+          /QA D Agenda452[\s\S]*QA Agenda pending452[\s\S]*(?:Da somministrare|In ritardo)/i,
+        );
+      }
+      await page.screenshot({
+        path: path.join(out, 'issue-452-empty-agenda-pending.png'),
+        fullPage: true,
+      });
       await page.getByRole('button', { name: 'Nuovo appuntamento', exact: true }).waitFor();
-      await navigate(state, 'pazienti');
+
+      // The only complete observation is beyond the first page. A separate patient's
+      // failed source must keep this verified positive visible and expose one aggregate unknown.
+      const completePatient = await syntheticPatientWithChart(
+        'news-complete452',
+        'QA E Complete452',
+      );
+      const failedPatient = await syntheticPatientWithChart('news-error452', 'QA F Error452');
+      const completeValues = {
+        fr: '18',
+        spo2: '97',
+        o2: 'no',
+        pa: '125/80',
+        fc: '78',
+        coscienza: 'A',
+        temperatura: '36.8',
+      };
+      await prisma.patientParameterReading.createMany({
+        data: [
+          ...Array.from({ length: 50 }, (_, index) => ({
+            patientId: completePatient.id,
+            requestId: `qa452-partial-${runId}-${index}`,
+            measuredAt: now,
+            values: { fr: '18' },
+            authorOperatorId: 'SIM-NURSE-1',
+            authorName: 'Infermiere 1',
+          })),
+          {
+            patientId: completePatient.id,
+            requestId: `qa452-complete-${runId}`,
+            measuredAt: new Date(now.getTime() - 3600000),
+            values: completeValues,
+            authorOperatorId: 'SIM-NURSE-1',
+            authorName: 'Infermiere 1',
+          },
+          {
+            patientId: failedPatient.id,
+            requestId: `qa452-recovered-${runId}`,
+            measuredAt: now,
+            values: completeValues,
+            authorOperatorId: 'SIM-NURSE-1',
+            authorName: 'Infermiere 1',
+          },
+        ],
+      });
+      const newsPath = `/patients/${completePatient.id}/parameter-readings`;
+      const failedPath = `/patients/${failedPatient.id}/parameter-readings`;
+      const pages = [],
+        pageReads = [];
+      const recordNewsPage = (response) => {
+        const url = new URL(response.url());
+        if (url.pathname !== newsPath || response.request().method() !== 'GET' || !response.ok())
+          return;
+        pageReads.push(
+          response.json().then((body) =>
+            pages.push({
+              cursor: url.searchParams.get('cursor'),
+              size: body.readings.length,
+              hasMore: body.hasMore,
+              ids: body.readings.map((reading) => reading.id),
+              complete: body.readings.filter((reading) =>
+                Object.keys(completeValues).every((key) => reading.values[key] !== undefined),
+              ).length,
+            }),
+          ),
+        );
+      };
+      page.on('response', recordNewsPage);
+      state.fault = { path: failedPath, status: 503, method: 'GET' };
+      let newsFailures = 0;
+      const failNewsSource = async (route) => {
+        if (route.request().method() !== 'GET') return route.continue();
+        newsFailures++;
+        await route.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          body: JSON.stringify({ error: 'QA deliberate NEWS2 source failure' }),
+        });
+      };
+      await page.route(`${api}${failedPath}**`, failNewsSource);
+      await reloadAuthenticated(state, 'pazienti');
+      const completeRow = page
+        .locator('.patient-roster tbody tr')
+        .filter({ hasText: completePatient.lastName });
+      await text(completeRow.locator('.news2-chip'), /NEWS2 0.*da aggiornare/);
+      await count(page.locator('.patient-roster th').filter({ hasText: /^NEWS2$/ }), 1);
+      const newsUnknown = page
+        .getByRole('status')
+        .filter({ hasText: 'NEWS2 non verificabile per alcuni pazienti' });
+      await count(newsUnknown, 1);
+      await count(
+        page
+          .locator('.patient-roster tbody tr')
+          .filter({ hasText: failedPatient.lastName })
+          .locator('.news2-chip'),
+        0,
+      );
+      assert.doesNotMatch(
+        await page.locator('.patient-roster tbody').innerText(),
+        /NEWS2 non calcolabile|NEWS2 non verificabile|NEWS2 assente/,
+      );
+      await Promise.all(pageReads);
+      assert.ok(
+        pages.some(
+          (entry) =>
+            entry.cursor === null && entry.size === 50 && entry.complete === 0 && entry.hasMore,
+        ),
+      );
+      assert.ok(
+        pages.some(
+          (entry) =>
+            entry.cursor !== null && entry.size === 1 && entry.complete === 1 && !entry.hasMore,
+        ),
+      );
+      assert.ok(newsFailures >= 1, 'The separate patient actually received a controlled 503');
+      await page.screenshot({ path: path.join(out, 'issue-452-news2-partial-failure.png') });
+      await page.unroute(`${api}${failedPath}**`, failNewsSource);
+      await page.getByRole('button', { name: 'Riprova NEWS2', exact: true }).click();
+      await text(
+        page
+          .locator('.patient-roster tbody tr')
+          .filter({ hasText: failedPatient.lastName })
+          .locator('.news2-chip'),
+        /NEWS2 0/,
+      );
+      await text(completeRow.locator('.news2-chip'), /NEWS2 0.*da aggiornare/);
+      await count(newsUnknown, 0);
+      await Promise.all(pageReads);
+      page.off('response', recordNewsPage);
+      state.fault = null;
+      receipts.push({
+        issue: 452,
+        positiveData: {
+          zeroAppointments: true,
+          pendingAgendaTimes: ['08:00', '20:00'],
+          agendaTherapyId: agendaTherapy.id,
+          newsHistoryPages: pages.map(({ ids, ...entry }) => entry),
+          onlyOlderComplete: true,
+          independentFailedPatient: failedPatient.id,
+          controlled503: newsFailures,
+          knownCompletePreserved: true,
+          aggregateUnknownCount: 1,
+          recoveryVerified: true,
+        },
+      });
       await noOverflow(page);
       for (const viewport of [
         { width: 820, height: 1180 },
@@ -1288,23 +1531,87 @@ try {
         missingDataPerRow: false,
         incompleteFooterCount: 1,
         compactClinicalEmpty: true,
-        emptyAgendaGrid: false,
+        emptyAppointmentGrid: false,
+        pendingTherapyGridVisible: true,
       });
     });
 
     await scenario(453, 'Medico 1', chart(), async (state) => {
       const { page } = state;
-      await section(page, 'Terapia');
-      await page.getByRole('tab', { name: 'Nuova terapia', exact: true }).click();
-      await page
-        .getByRole('searchbox', { name: 'Cerca il farmaco per nome commerciale', exact: true })
-        .fill('QA453');
-      await page
-        .locator('.campo-farmaco__lista')
-        .getByRole('button')
-        .filter({ hasText: drugName })
-        .click();
-      await value(page.getByLabel('Dosaggio commerciale', { exact: true }), '5');
+      const negativePatient = await syntheticPatientWithChart('negative453', 'QA G Negative453');
+      const alternateAic = '999447002',
+        alternateDrug = 'QA453 ALTERNATIVA 10 MG';
+      await prisma.farmaco.create({
+        data: {
+          aic: alternateAic,
+          denominazione: alternateDrug,
+          denominazioneNorm: alternateDrug,
+          descrizione: '20 COMPRESSE USO ORALE',
+          statoAmministrativo: 'Autorizzata',
+          forma: 'COMPRESSE',
+          principiAttivi: {
+            create: {
+              principioAttivo: 'QA ALTRO PRINCIPIO SINTETICO',
+              principioAttivoNorm: 'QA ALTRO PRINCIPIO SINTETICO',
+              quantita: 10,
+              unitaMisura: 'mg',
+            },
+          },
+        },
+      });
+      const originalAllergies = (
+        await prisma.cartella.findUnique({ where: { patientId: patient.id } })
+      ).data.allergie;
+      const therapyPath = `/patients/${patient.id}/therapies`;
+      const sentBodies = [];
+      const capture = (request) => {
+        if (request.method() === 'POST' && new URL(request.url()).pathname === therapyPath)
+          sentBodies.push(request.postDataJSON());
+      };
+      page.on('request', capture);
+      const warning = page.getByTestId('therapy-allergy-warning');
+      const acknowledgement = page.getByTestId('therapy-allergy-acknowledge');
+      async function selectPackage(name = drugName) {
+        const change = page
+          .locator('.campo-farmaco__scelto')
+          .getByRole('button', { name: 'Cambia', exact: true });
+        if (await change.isVisible().catch(() => false)) await change.click();
+        await page
+          .getByRole('searchbox', { name: 'Cerca il farmaco per nome commerciale', exact: true })
+          .fill('QA453');
+        await page
+          .locator('.campo-farmaco__lista')
+          .getByRole('button')
+          .filter({ hasText: name })
+          .click();
+        await value(
+          page.getByLabel('Dosaggio commerciale', { exact: true }),
+          name === alternateDrug ? '10' : '5',
+        );
+      }
+      async function openPrescription(id) {
+        await navigate(state, chart(id));
+        await section(page, 'Terapia');
+        await page.getByRole('tab', { name: 'Nuova terapia', exact: true }).click();
+      }
+      async function newPrescription(id) {
+        await openPrescription(id);
+        await selectPackage();
+      }
+      async function assertUnchecked(message) {
+        await eventually(
+          async () => assert.equal(await acknowledgement.isChecked(), false, message),
+          message,
+        );
+      }
+      async function preset() {
+        await page.getByLabel('Quantità orario 1', { exact: true }).fill('1');
+        await page.getByRole('button', { name: 'Mattina e sera 08 · 20', exact: true }).click();
+        await page.getByRole('button', { name: '7 giorni', exact: true }).click();
+      }
+      await newPrescription(negativePatient.id);
+      await text(warning, /Allergie assenti \(verificato\)/);
+      await count(acknowledgement, 0);
       await value(page.getByLabel('Forma farmaceutica', { exact: true }), 'compressa');
       assert.equal(await page.getByLabel('Stato terapia', { exact: true }).count(), 0);
       let interactions = 0;
@@ -1312,8 +1619,7 @@ try {
         interactions++;
         await action();
       }
-      const quantity = page.getByLabel('Quantità orario 1', { exact: true });
-      await interaction(() => quantity.fill('1'));
+      await interaction(() => page.getByLabel('Quantità orario 1', { exact: true }).fill('1'));
       await interaction(() =>
         page.getByRole('button', { name: 'Mattina e sera 08 · 20', exact: true }).click(),
       );
@@ -1323,13 +1629,14 @@ try {
       assert.match(sentence, /1 compressa alle 20:00/);
       const responsePromise = page.waitForResponse(
         (r) =>
-          r.url() === `${api}/patients/${patient.id}/therapies` && r.request().method() === 'POST',
+          r.url() === `${api}/patients/${negativePatient.id}/therapies` &&
+          r.request().method() === 'POST',
       );
       await interaction(() =>
         page.getByRole('button', { name: 'Salva terapia', exact: true }).click(),
       );
       const response = await responsePromise;
-      assert.ok(response.ok(), `Prescription persisted HTTP${response.status()}`);
+      assert.ok(response.ok(), `Known-negative prescription persisted HTTP${response.status()}`);
       const payload = response.request().postDataJSON();
       assert.deepEqual(
         payload.schedules.map((s) => ({
@@ -1350,19 +1657,288 @@ try {
       assert.equal(payload.dataFine, end.toISOString().slice(0, 10));
       assert.ok(interactions <= 5, `Actual interactions after package selection: ${interactions}`);
       const stored = await prisma.patientTherapy.findFirst({
-        where: { patientId: patient.id, drugPackageRef: aic },
+        where: { patientId: negativePatient.id, drugPackageRef: aic },
         include: { schedules: true },
       });
       assert.equal(stored.schedules.length, 2);
+      await reloadAuthenticated(state, chart(negativePatient.id));
+      await section(page, 'Terapia');
+      await text(page.locator('#patient-tab-panel'), new RegExp(drugName));
+
+      // Real recorded positive context, with no invented association between the product and allergen.
+      await newPrescription(patient.id);
+      for (const allergy of originalAllergies) await text(warning, new RegExp(allergy.allergene));
+      await text(warning, /grave.*QA orticaria/);
+      await assertUnchecked('Positive context starts unacknowledged');
+      await acknowledgement.check();
+      await page
+        .locator('.campo-farmaco__scelto')
+        .getByRole('button', { name: 'Cambia', exact: true })
+        .click();
+      await assertUnchecked('Changing drug immediately clears acknowledgement');
+      await selectPackage(alternateDrug);
+      await assertUnchecked('Different actual AIC/strength cannot inherit acknowledgement');
+      await acknowledgement.check();
+      await selectPackage();
+      await assertUnchecked('Returning to the previous package cannot reuse its acknowledgement');
+      await acknowledgement.check();
+      await page.getByLabel('Dosaggio commerciale', { exact: true }).fill('10');
+      await assertUnchecked('Changed strength invalidates acknowledgement');
+      await page.getByLabel('Dosaggio commerciale', { exact: true }).fill('5');
+      await acknowledgement.check();
+      await page.getByLabel('Forma farmaceutica', { exact: true }).selectOption('capsula');
+      await assertUnchecked('Changed pharmaceutical form invalidates acknowledgement');
+      await selectPackage();
+      await preset();
+      await acknowledgement.check();
+      await openPrescription(negativePatient.id);
+      await text(warning, /Allergie assenti \(verificato\)/);
+      await count(acknowledgement, 0);
+      await openPrescription(patient.id);
+      await text(warning, /QA penicillina/);
+      await assertUnchecked(
+        'Switching away and back to a patient requires new acknowledgement before package selection',
+      );
+      await selectPackage();
+      await preset();
+      await acknowledgement.check();
+
+      // A chart edit through the actual modal changes the revision without remounting the draft.
+      const localAllergen = `QA local453 ${runId}`;
+      await page.locator('.cr-alert-strip--allergie').click();
+      const allergyDialog = page.getByRole('dialog', {
+        name: 'Allergie e Intolleranze',
+        exact: true,
+      });
+      await allergyDialog.getByRole('button', { name: 'Aggiungi allergia', exact: true }).click();
+      await allergyDialog.locator('.ec-modal-add-form input').nth(0).fill(localAllergen);
+      await allergyDialog
+        .locator('.ec-modal-add-form input')
+        .nth(1)
+        .fill('QA nuova reazione locale');
+      const chartSaved = page.waitForResponse(
+        (r) =>
+          r.url() === `${api}/patients/${patient.id}/cartella` && r.request().method() === 'PUT',
+      );
+      await allergyDialog.getByRole('button', { name: 'Salva', exact: true }).click();
+      assert.ok(
+        (await chartSaved).ok(),
+        'Local allergy revision actually persisted through the authorized API',
+      );
+      await allergyDialog.getByRole('button', { name: 'Chiudi', exact: true }).last().click();
+      await text(warning, new RegExp(localAllergen));
+      await assertUnchecked('Current allergy revision immediately invalidates acknowledgement');
+      await value(page.getByLabel('Quantità orario 1', { exact: true }), '1');
+      await value(page.getByLabel('Quantità orario 2', { exact: true }), '1');
+      assert.equal(
+        await page
+          .locator('.campo-farmaco__scelto')
+          .innerText()
+          .then((s) => s.includes(drugName)),
+        true,
+        'Allergy revision preserves the selected package and prescription draft',
+      );
+      assert.ok(
+        (await prisma.cartella.findUnique({ where: { patientId: patient.id } })).data.allergie.some(
+          (a) => a.allergene === localAllergen,
+        ),
+      );
+      await acknowledgement.check();
+      await reloadAuthenticated(state, chart());
+      await section(page, 'Terapia');
+      await page.getByRole('tab', { name: 'Nuova terapia', exact: true }).click();
+      await text(warning, new RegExp(localAllergen));
+      await assertUnchecked(
+        'Reload never persists a previous acknowledgement, before package selection',
+      );
+      await selectPackage();
+      await preset();
+      const cartellaPath = `/patients/${patient.id}/cartella`;
+      state.fault = { path: cartellaPath, status: 503, method: 'GET' };
+      let failedAllergyReads = 0;
+      const failAllergySource = async (route) => {
+        if (route.request().method() !== 'GET') return route.continue();
+        failedAllergyReads++;
+        await route.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          body: JSON.stringify({ error: 'QA deliberate allergy source failure' }),
+        });
+      };
+      await acknowledgement.check();
+      await page.route(`${api}${cartellaPath}`, failAllergySource);
+      await page.evaluate(() => window.dispatchEvent(new Event('focus')));
+      await text(warning, /dato non disponibile/);
+      assert.doesNotMatch(await warning.innerText(), /assenti|paziente nega/i);
+      await assertUnchecked(
+        'Failed allergy source cannot retain the previous acknowledgement or claim absence',
+      );
+      assert.ok(failedAllergyReads >= 1);
+      await page.unroute(`${api}${cartellaPath}`, failAllergySource);
+      await page.evaluate(() => window.dispatchEvent(new Event('focus')));
+      await text(warning, new RegExp(localAllergen));
+      await assertUnchecked('Recovered actual source requires a new acknowledgement');
+      state.fault = null;
+      await acknowledgement.check();
+
+      // An independently recorded allergy must be discovered by preflight, before any POST.
+      const externalAllergen = `QA external453 ${runId}`;
+      const beforeExternal = await prisma.cartella.findUnique({ where: { patientId: patient.id } });
+      await prisma.cartella.update({
+        where: { patientId: patient.id },
+        data: {
+          data: {
+            ...beforeExternal.data,
+            allergie: [
+              ...beforeExternal.data.allergie,
+              {
+                id: `external453-${runId}`,
+                allergene: externalAllergen,
+                gravita: 'moderata',
+                reazione: 'QA reazione esterna',
+                documentato: today,
+                documentatoDa: 'QA altro operatore',
+              },
+            ],
+          },
+        },
+      });
+      const beforePrescription = await prisma.patientTherapy.count({
+        where: { patientId: patient.id },
+      });
+      const freshRead = page.waitForResponse(
+        (r) =>
+          r.url() === `${api}/patients/${patient.id}/cartella` && r.request().method() === 'GET',
+      );
+      await page.getByRole('button', { name: 'Salva terapia', exact: true }).click();
+      assert.ok((await freshRead).ok());
+      await text(warning, new RegExp(externalAllergen));
+      await text(page.getByTestId('therapy-save-error'), /contesto allergie aggiornato.*conferma/);
+      await assertUnchecked('New external allergy requires a new explicit acknowledgement');
+      assert.equal(
+        sentBodies.length,
+        0,
+        'No prescription POST before acknowledging fresh external allergy',
+      );
+      assert.equal(
+        await prisma.patientTherapy.count({ where: { patientId: patient.id } }),
+        beforePrescription,
+      );
+      await page.screenshot({ path: path.join(out, 'issue-453-fresh-allergy-warning.png') });
+      await acknowledgement.check();
+
+      // Lose only the response, after the real server commits the exact preset prescription.
+      state.fault = { path: therapyPath, status: 503 };
+      let lostResponses = 0;
+      const loseResponse = async (route) => {
+        if (route.request().method() !== 'POST') return route.continue();
+        lostResponses++;
+        const committed = await route.fetch();
+        assert.ok(
+          committed.ok(),
+          'Warning-confirmed prescription actually committed before response loss',
+        );
+        await route.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            error: 'QA deliberately lost prescription response after commit',
+          }),
+        });
+      };
+      await page.route(`${api}${therapyPath}`, loseResponse);
+      await page.getByRole('button', { name: 'Salva terapia', exact: true }).click();
+      await text(
+        page.getByTestId('therapy-save-error'),
+        /QA deliberately lost prescription response after commit/,
+      );
+      assert.equal(
+        await prisma.patientTherapy.count({ where: { patientId: patient.id } }),
+        beforePrescription + 1,
+      );
+      await page.unroute(`${api}${therapyPath}`, loseResponse);
+      const replay = page.waitForResponse(
+        (r) => r.url() === `${api}${therapyPath}` && r.request().method() === 'POST',
+      );
+      await page.getByRole('button', { name: 'Salva terapia', exact: true }).click();
+      assert.ok((await replay).ok());
+      await eventually(
+        async () =>
+          assert.equal(
+            await page.getByRole('heading', { name: 'Nuova terapia', exact: true }).count(),
+            0,
+          ),
+        'Successful replay closes the prescription form',
+      );
+      assert.equal(lostResponses, 1);
+      assert.equal(sentBodies.length, 2);
+      assert.deepEqual(
+        sentBodies[1],
+        sentBodies[0],
+        'Uncertain retry preserves the exact body and requestId',
+      );
+      const {
+        patientId: ordinaryPatientId,
+        requestId: ordinaryRequestId,
+        ...ordinaryBody
+      } = payload;
+      const {
+        patientId: warningPatientId,
+        requestId: warningRequestId,
+        ...warningBody
+      } = sentBodies[0];
+      assert.equal(ordinaryPatientId, negativePatient.id);
+      assert.equal(warningPatientId, patient.id);
+      assert.ok(ordinaryRequestId && warningRequestId);
+      assert.deepEqual(
+        warningBody,
+        ordinaryBody,
+        'Acknowledgement adds no field or alteration to the therapy API payload',
+      );
+      assert.equal(
+        await prisma.patientTherapy.count({ where: { patientId: patient.id } }),
+        beforePrescription + 1,
+      );
+      state.fault = null;
+      page.off('request', capture);
+      // Remove only this scenario's extra allergy fixtures, preserving every other chart field.
+      const finalChart = await prisma.cartella.findUnique({ where: { patientId: patient.id } });
+      await prisma.cartella.update({
+        where: { patientId: patient.id },
+        data: {
+          data: {
+            ...finalChart.data,
+            allergie: finalChart.data.allergie.filter(
+              (a) => a.allergene !== localAllergen && a.allergene !== externalAllergen,
+            ),
+          },
+        },
+      });
       await reloadAuthenticated(state, chart());
       await section(page, 'Terapia');
       await text(page.locator('#patient-tab-panel'), new RegExp(drugName));
       receipts.push({
         issue: 453,
         interactionsAfterPackageSelection: interactions,
+        ordinaryPatientId: negativePatient.id,
+        ordinaryVerifiedAbsent: true,
         exactSchedulePayload: payload.schedules,
         sentence,
-        allergyPolicy: 'pending; unchanged',
+        allergyPolicy:
+          'Explicit compatibility acknowledgement; actual source, no invented drug matching',
+        recordedAllergens: originalAllergies.map((a) => a.allergene),
+        patientSwitchInvalidates: true,
+        packageSwitchAndReturnInvalidates: true,
+        strengthAndFormInvalidate: true,
+        localAllergyRevisionPreservesDraftAndInvalidates: true,
+        reloadInvalidates: true,
+        externalAllergyPreflightNoPost: true,
+        failedAllergyReads,
+        unknownNeverNegative: true,
+        recoveredSourceRequiresAcknowledgement: true,
+        noAutomaticContraindication: true,
+        acknowledgementPayloadUnchanged: true,
+        uncertainRetry: { lostResponses, identicalBody: true, exactlyOnePrescription: true },
       });
     });
 
@@ -1459,6 +2035,38 @@ try {
 
     await scenario(457, 'Infermiere 1', chart(), async (state) => {
       const { page } = state;
+      const pendingPs = await prisma.$transaction((tx) =>
+        createTherapyInTx(tx, patient.id, {
+          farmacoNome: 'QA PS pending457',
+          dataInizio: today,
+          tipo: 'periodica',
+          stato: 'attiva',
+          dosaggio: '1 compressa',
+          viaSomministrazione: 'orale',
+          schedules: ['08:00', '20:00'].map(schedule),
+        }),
+      );
+      const priorPs = await prisma.$transaction((tx) =>
+        createTherapyInTx(tx, patient.id, {
+          farmacoNome: 'QA PS prior457',
+          dataInizio: today,
+          tipo: 'periodica',
+          stato: 'attiva',
+          dosaggio: '1 compressa',
+          viaSomministrazione: 'orale',
+          schedules: [schedule('08:00')],
+        }),
+      );
+      const priorBody = {
+        patientId: patient.id,
+        therapyId: priorPs.id,
+        date: today,
+        fascia: 'mattina',
+        scheduledTime: '08:00',
+        requestId: randomUUID(),
+        expectedStato: 'da_erogare',
+      };
+      const priorRecord = await request(state, '/therapy-slots/confirm', priorBody);
       // Seed a given receipt through the normal authorized HTTP write if an earlier scenario
       // failed before writing; a prescription or database fixture is never treated as given.
       if (
@@ -1484,12 +2092,13 @@ try {
         assert.ok(key);
         await request(state, '/therapy-slots/confirm', key);
       }
-      await request(state, '/therapy-slots/prn', {
+      const priorPrnBody = {
         patientId: patient.id,
         therapyId: prnTherapy.id,
         indicazione: 'QA indicazione verificata',
         requestId: randomUUID(),
-      });
+      };
+      const priorPrn = await request(state, '/therapy-slots/prn', priorPrnBody);
       const beforeExits =
         (await prisma.cartella.findUnique({ where: { patientId: patient.id } })).data.liberatoria
           ?.usciteLog ?? [];
@@ -1509,7 +2118,12 @@ try {
       assert.doesNotMatch(await page.locator('[data-invio-ps-given]').innerText(), /QA Refused457/);
       await text(page.locator('[data-invio-ps-contact]'), /QA Contact.*0000000000/);
       await text(page.locator('[data-invio-ps-risks]'), /caduta.*alto/);
-      await count(page.getByRole('button', { name: /Registra uscita|Sospendi terapia/ }), 0);
+      assert.equal(await page.locator('[data-ps-exit-submit]').isDisabled(), true);
+      assert.equal(
+        await page.getByRole('radio', { checked: true }).count(),
+        0,
+        'No therapy pause or continuation is selected automatically',
+      );
       const records = await prisma.medicationAdministration.findMany({
         where: { patientId: patient.id, stato: 'erogata' },
       });
@@ -1545,13 +2159,289 @@ try {
         (await prisma.cartella.findUnique({ where: { patientId: patient.id } })).data.liberatoria
           ?.usciteLog ?? [];
       assert.deepEqual(afterExits, beforeExits, 'Print has no exit or clinical write side effect');
+      const cartellaPath = `/patients/${patient.id}/cartella`;
+      const commands = [];
+      const captureExit = (r) => {
+        if (
+          r.method() === 'PUT' &&
+          new URL(r.url()).pathname === cartellaPath &&
+          r.postDataJSON()?.temporaryPsExit
+        )
+          commands.push(r.postDataJSON().temporaryPsExit);
+      };
+      page.on('request', captureExit);
+      const reasonText = await reason.inputValue();
+      await page
+        .getByRole('radio', { name: 'Metti in pausa le somministrazioni fino al rientro' })
+        .check();
+      await page
+        .getByRole('checkbox', {
+          name: 'Confermo l’uscita PS e la decisione selezionata sul giro somministrazioni.',
+        })
+        .check();
+      state.fault = { path: cartellaPath, status: 503, method: 'PUT' };
+      let lostExitResponses = 0;
+      const uncertainExit = async (route) => {
+        if (route.request().method() !== 'PUT' || !route.request().postDataJSON()?.temporaryPsExit)
+          return route.continue();
+        const actual = await route.fetch();
+        assert.ok(
+          actual.ok(),
+          'The first uncertain exit really commits before its response is lost',
+        );
+        lostExitResponses++;
+        await route.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          body: JSON.stringify({ error: 'QA lost committed exit receipt' }),
+        });
+      };
+      await page.route(`${api}${cartellaPath}`, uncertainExit);
+      await page.locator('[data-ps-exit-submit]').click();
+      await page
+        .getByRole('button', { name: 'Riprova la stessa registrazione', exact: true })
+        .waitFor();
+      await page.unroute(`${api}${cartellaPath}`, uncertainExit);
+      const committed = await prisma.cartella.findUnique({ where: { patientId: patient.id } });
+      assert.equal(committed.data.liberatoria.usciteLog.length, beforeExits.length + 1);
+      assert.equal(committed.data.liberatoria.temporaryPsExit.decision, 'pause');
+      assert.equal(
+        committed.data.liberatoria.compilatoAt,
+        undefined,
+        'Temporary exit is not signed legal consent',
+      );
+      await page
+        .getByRole('button', { name: 'Riprova la stessa registrazione', exact: true })
+        .click();
+      await text(page.locator('[data-ps-exit-status]'), /Somministrazioni in pausa/);
+      await text(page.locator('[data-ps-exit-receipt]'), /Uscita PS registrata/);
+      assert.equal(lostExitResponses, 1);
+      assert.equal(commands.length, 2);
+      assert.deepEqual(
+        commands[1],
+        commands[0],
+        'Uncertain retry keeps the exact decision and requestId',
+      );
+      assert.equal(commands[0].reason, reasonText);
+      state.fault = null;
+      const exitId = committed.data.liberatoria.temporaryPsExit.exitId;
+      const pauseDoseBody = {
+        patientId: patient.id,
+        therapyId: pendingPs.id,
+        date: today,
+        fascia: 'mattina',
+        scheduledTime: '08:00',
+        requestId: randomUUID(),
+        expectedStato: 'da_erogare',
+      };
+      async function http(method, pathname, body, status, auth = state.auth) {
+        const response = await state.context.request.fetch(`${api}${pathname}`, {
+          method,
+          headers: { Authorization: auth },
+          ...(body ? { data: body } : {}),
+        });
+        assert.equal(response.status(), status, `${method} ${pathname} expected HTTP${status}`);
+        return response.json();
+      }
+      const scheduledBlocked = await http('POST', '/therapy-slots/confirm', pauseDoseBody, 409);
+      const prnBlocked = await http(
+        'POST',
+        '/therapy-slots/prn',
+        { ...priorPrnBody, requestId: randomUUID() },
+        409,
+      );
+      assert.match(scheduledBlocked.error, /pausa/);
+      assert.match(prnBlocked.error, /pausa/);
+      const replayedDose = await request(state, '/therapy-slots/confirm', priorBody);
+      const replayedPrn = await request(state, '/therapy-slots/prn', priorPrnBody);
+      assert.equal(replayedDose.id, priorRecord.id);
+      assert.equal(replayedPrn.id, priorPrn.id);
+      assert.equal(
+        await prisma.medicationAdministration.count({ where: { therapyId: priorPs.id } }),
+        1,
+      );
+      assert.equal(
+        await prisma.medicationAdministration.count({ where: { therapyId: pendingPs.id } }),
+        0,
+      );
+      await http('PUT', cartellaPath, { data: { liberatoria: { temporaryPsExit: null } } }, 409);
+      const pausedDue = await findTherapiesDue(
+        today,
+        { patientIds: [patient.id] },
+        new Date(),
+        1440,
+      );
+      assert.equal(
+        pausedDue.overdueCount + pausedDue.dueSoonCount,
+        0,
+        'Paused doses do not create operational attention',
+      );
+      const ossSession = await state.context.request.post(`${api}/auth/simulator/session`, {
+        data: { identityId: 'SIM-OSS-1' },
+      });
+      assert.ok(ossSession.ok());
+      const ossToken = (await ossSession.json()).token;
+      assert.ok(ossToken);
+      await http(
+        'PUT',
+        cartellaPath,
+        { temporaryPsExit: { action: 'return', exitId, requestId: randomUUID(), confirmed: true } },
+        403,
+        `Bearer ${ossToken}`,
+      );
+      assert.equal(
+        (await prisma.cartella.findUnique({ where: { patientId: patient.id } })).data.liberatoria
+          .temporaryPsExit.exitId,
+        exitId,
+      );
+      await page
+        .getByRole('dialog', { name: 'Invio in Pronto Soccorso' })
+        .getByRole('button', { name: 'Chiudi', exact: true })
+        .click();
+      await reloadAuthenticated(state, chart());
+      await text(
+        page.locator('#patient-tab-panel'),
+        /Somministrazioni in pausa durante l’uscita PS/,
+      );
+      const pendingRow = page.locator('.giro-drug').filter({ hasText: 'QA PS pending457' }).first();
+      assert.equal(await pendingRow.getByRole('button', { name: /^Erogata:/ }).isDisabled(), true);
+      assert.equal(
+        await page
+          .getByRole('button', { name: 'Somministra al bisogno', exact: true })
+          .isDisabled(),
+        true,
+      );
+      await page.screenshot({ path: path.join(out, 'issue-457-paused.png') });
+      // An actual explicit absence record remains allowed; it is never fabricated by the exit.
+      const absent = await request(state, '/therapy-slots/not-administered', {
+        ...pauseDoseBody,
+        requestId: randomUUID(),
+        motivo: 'paziente_assente',
+      });
+      assert.equal(absent.stato, 'non_erogata');
+      // Persisted overnight fixture exercises a real return into a later facility day.
+      const overnight = await prisma.cartella.findUnique({ where: { patientId: patient.id } });
+      const yesterday = new Date(`${today}T12:00:00Z`);
+      yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+      const departedYesterday = yesterday.toISOString();
+      const updatedLog = overnight.data.liberatoria.usciteLog.map((entry) =>
+        entry.id === exitId
+          ? {
+              ...entry,
+              data: facilityLocalDate(yesterday),
+              psExit: { ...entry.psExit, departedAt: departedYesterday },
+            }
+          : entry,
+      );
+      await prisma.cartella.update({
+        where: { patientId: patient.id },
+        data: {
+          data: {
+            ...overnight.data,
+            liberatoria: {
+              ...overnight.data.liberatoria,
+              usciteLog: updatedLog,
+              temporaryPsExit: {
+                ...overnight.data.liberatoria.temporaryPsExit,
+                departedAt: departedYesterday,
+              },
+            },
+          },
+        },
+      });
+      await reloadAuthenticated(state, chart());
+      await page.getByRole('button', { name: 'Invio in Pronto Soccorso', exact: true }).click();
+      await text(page.locator('[data-ps-exit-status]'), /Somministrazioni in pausa/);
+      await page.getByRole('checkbox', { name: /Confermo il rientro: il giro riprende/ }).check();
+      await page.getByRole('button', { name: 'Registra rientro', exact: true }).click();
+      await text(page.locator('[data-ps-exit-receipt]'), /Rientro registrato/);
+      const returned = await prisma.cartella.findUnique({ where: { patientId: patient.id } });
+      assert.equal(returned.data.liberatoria.temporaryPsExit, null);
+      assert.equal(returned.data.liberatoria.usciteLog.length, beforeExits.length + 1);
+      const exitEntry = returned.data.liberatoria.usciteLog.find((entry) => entry.id === exitId);
+      assert.equal(facilityLocalDate(new Date(exitEntry.psExit.returnedAt)), today);
+      assert.equal(
+        facilityLocalDate(new Date(exitEntry.psExit.departedAt)),
+        facilityLocalDate(yesterday),
+      );
+      assert.equal(exitEntry.psExit.returnActorId, 'SIM-NURSE-1');
+      await page
+        .getByRole('dialog', { name: 'Invio in Pronto Soccorso' })
+        .getByRole('button', { name: 'Chiudi', exact: true })
+        .click();
+      await reloadAuthenticated(state, chart());
+      await count(
+        page.getByText('Somministrazioni in pausa durante l’uscita PS.', { exact: true }),
+        0,
+      );
+      const remainingRow = page
+        .locator('.giro-drug')
+        .filter({ hasText: 'QA PS pending457' })
+        .last();
+      assert.equal(await remainingRow.getByRole('button', { name: /^Erogata:/ }).isEnabled(), true);
+      await remainingRow.getByRole('button', { name: /^Erogata:/ }).click();
+      await eventually(
+        async () =>
+          assert.equal(await remainingRow.getByRole('button', { name: /^Erogata:/ }).count(), 0),
+        'Remaining dose records after return',
+      );
+      assert.equal(
+        await prisma.medicationAdministration.count({
+          where: { therapyId: pendingPs.id, stato: 'erogata' },
+        }),
+        1,
+      );
+      assert.equal(
+        await prisma.medicationAdministration.count({
+          where: { therapyId: priorPs.id, stato: 'erogata' },
+        }),
+        1,
+        'Return does not reopen an already given dose',
+      );
+      await page.getByRole('button', { name: 'Invio in Pronto Soccorso', exact: true }).click();
+      await page.getByRole('radio', { name: 'Mantieni attivo il giro somministrazioni' }).check();
+      await page
+        .getByRole('checkbox', {
+          name: 'Confermo l’uscita PS e la decisione selezionata sul giro somministrazioni.',
+        })
+        .check();
+      await page.getByRole('button', { name: 'Registra uscita PS', exact: true }).click();
+      await text(page.locator('[data-ps-exit-status]'), /Giro somministrazioni mantenuto attivo/);
+      await request(state, '/therapy-slots/prn', { ...priorPrnBody, requestId: randomUUID() });
+      await page
+        .getByRole('checkbox', { name: 'Confermo il rientro del paziente.', exact: true })
+        .check();
+      await page.getByRole('button', { name: 'Registra rientro', exact: true }).click();
+      await text(page.locator('[data-ps-exit-receipt]'), /Rientro registrato/);
+      page.off('request', captureExit);
+      assert.equal(
+        (await prisma.cartella.findUnique({ where: { patientId: patient.id } })).data.liberatoria
+          .usciteLog.length,
+        beforeExits.length + 2,
+      );
+      assert.equal(
+        (await prisma.patientTherapy.findUnique({ where: { id: pendingPs.id } })).stato,
+        'attiva',
+      );
+      residualGates.splice(
+        residualGates.findIndex((gate) => gate.issue === 457),
+        1,
+      );
       receipts.push({
         issue: 457,
         reasonEditable: true,
         actualDoseTimes: records.map((row) => facilityLocalMinute(row.confirmedAt)),
         pdfBytes: pdf.length,
-        exitWrites: 0,
-        therapyPauseDecision: 'pending',
+        printExitWrites: 0,
+        explicitPauseAndContinue: true,
+        uncertainExitRetryExactlyOnce: true,
+        scheduledAndPrnServerPause: true,
+        priorReceiptsPreserved: true,
+        explicitAbsenceRecordPreserved: true,
+        unauthorizedAndTamperDenied: true,
+        reloadShowsAuthoritativePause: true,
+        nextDayReturnNoReopenedGivenDose: true,
+        therapyPauseDecision: 'approved-and-exercised',
       });
     });
   }

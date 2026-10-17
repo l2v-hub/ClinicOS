@@ -5,6 +5,7 @@ import type {
   TherapySlotPatient,
 } from '../types';
 import { parsePatientLocation } from './patientIdentity';
+import { parseTemporaryPsExit } from './temporaryPsExit';
 import { parseRosterMetadata, rosterQuery, type RosterPageOptions } from './rosterOrder';
 
 const FASCE = new Set(['mattina', 'pranzo', 'pomeriggio', 'sera', 'notte']);
@@ -64,6 +65,7 @@ function parsePatient(value: unknown): TherapySlotPatient {
     room: typeof row.room === 'string' ? row.room : 'Non assegnato',
     bed: typeof row.bed === 'string' ? row.bed : 'Non assegnato',
     administrations: row.administrations.map(parseAdministration),
+    temporaryPsExit: parseTemporaryPsExit(row.temporaryPsExit),
   };
 }
 

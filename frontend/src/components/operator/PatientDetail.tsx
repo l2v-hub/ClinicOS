@@ -1,4 +1,5 @@
 import { intakeDemographicErrors } from '../../lib/intakeDemographics';
+import type { TemporaryPsExitCommand } from '../../lib/temporaryPsExit';
 import {
   birthDateValue,
   birthSummary,
@@ -144,6 +145,10 @@ interface PatientDetailProps {
     updates: Partial<CartellaPaziente>,
     options?: { optimistic?: boolean },
   ) => void | Promise<boolean>;
+  onTemporaryPsExit?: (
+    patientId: string,
+    command: TemporaryPsExitCommand,
+  ) => Promise<CartellaPaziente>;
   onUpdatePaziente: (
     id: string,
     updates: Partial<Pick<Paziente, 'email' | 'phone' | 'codiceFiscale' | 'dateOfBirth'>>,
@@ -295,6 +300,7 @@ export function PatientDetail({
   assessmentDraftStore,
   onAcknowledgeConsegna,
   onUpdateCartella,
+  onTemporaryPsExit,
   onUpdatePaziente,
   onAssignCamera,
   operatoreNome,
@@ -2664,6 +2670,7 @@ export function PatientDetail({
               therapyFocus?.patientId === paziente.id ? therapyFocus.therapyId : undefined
             }
             therapyTarget={therapyTarget ?? undefined}
+            allergyRevision={JSON.stringify([cartella.allergieStatus, cartella.allergie ?? []])}
           />
         )}
         {current === 'note' && renderNote()}
@@ -3053,6 +3060,7 @@ export function PatientDetail({
           <InvioPSModal
             paziente={paziente}
             cartella={cartella}
+            onTemporaryPsExit={onTemporaryPsExit}
             onClose={() => setShowInvioPS(false)}
           />
         </Suspense>

@@ -3,6 +3,61 @@ import { test } from 'node:test';
 import { CartellaWriteQueue, mergeCartellaPatch } from '../cartellaWriteQueue';
 import type { CartellaPaziente, DocumentoConsegnato } from '../../types';
 
+test('verified server command serializes with ordinary saves and preserves its authoritative state', async () => {
+  const queue = new CartellaWriteQueue<{ notes: string; exit: string | null }>();
+  const initial = { notes: 'original', exit: null };
+  let release!: (snapshot: typeof initial) => void;
+  const command = queue.enqueueMutation(
+    'session:patient',
+    initial,
+    () =>
+      new Promise((resolve) => {
+        release = resolve;
+      }),
+  );
+  const save = queue.enqueue('session:patient', initial, { notes: 'updated' }, async (snapshot) => {
+    assert.deepEqual(snapshot, { notes: 'updated', exit: 'verified-exit' });
+    return true;
+  });
+  await Promise.resolve();
+  release({ ...initial, exit: 'verified-exit' });
+  assert.equal((await command).exit, 'verified-exit');
+  assert.equal(await save, true);
+});
+test('failed command never contaminates queued snapshots or another session', async () => {
+  const queue = new CartellaWriteQueue<{ exit: string | null; note: string }>();
+  const initial = { exit: null, note: 'before' };
+  const failed = queue.enqueueMutation('old:p', initial, async () => {
+    throw new Error('unverified');
+  });
+  const save = queue.enqueue('old:p', initial, { note: 'after' }, async (snapshot) => {
+    assert.equal(snapshot.exit, null);
+    return true;
+  });
+  await assert.rejects(failed, /unverified/);
+  assert.equal(await save, true);
+  assert.deepEqual(await queue.enqueueMutation('new:p', initial, async () => initial), initial);
+});
+
+test('a later ordinary server receipt recovers an exit committed during an uncertain command', async () => {
+  const queue = new CartellaWriteQueue<{ exit: string | null; note: string }>();
+  const initial = { exit: null, note: 'before' };
+  const uncertain = queue.enqueueMutation('s:p', initial, async () => {
+    throw new Error('response lost after commit');
+  });
+  const recovery = queue.enqueue('s:p', initial, { note: 'after' }, async () => ({
+    exit: 'actual-server-exit',
+    note: 'after',
+  }));
+  const last = queue.enqueue('s:p', initial, { note: 'last' }, async (snapshot) => {
+    assert.equal(snapshot.exit, 'actual-server-exit');
+    return snapshot;
+  });
+  await assert.rejects(uncertain, /response lost/);
+  assert.equal(await recovery, true);
+  assert.equal(await last, true);
+});
+
 test('serializes full snapshots, retaining earlier successful edits regardless of section order', async () => {
   for (const reverse of [false, true]) {
     const queue = new CartellaWriteQueue<{ docs: number; notes: number }>();

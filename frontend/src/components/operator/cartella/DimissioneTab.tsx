@@ -11,6 +11,7 @@ import type {
 import { todayStr, nowISO, nowTime, PrintButton } from './shared';
 import { ClinicalCard } from '../../shared/ClinicalCard';
 import { ClinicalTable } from './ClinicalTable';
+import { formatFacilityLocalMinute } from '../../../lib/facilityTime';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -560,15 +561,18 @@ function FormSection({ title, children }: { title: string; children: React.React
 export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: Props) {
   const dim = cartella.dimissione;
   const lib = cartella.liberatoria;
+  const hasLegalForm = Boolean(lib?.compilatoAt && lib.data && lib.ora);
   const [modulo, setModulo] = useState(false);
   const [editingDim, setEditingDim] = useState(false);
   const [dimForm, setDimForm] = useState<DimissioneInfermieristica>(
     dim ?? { ...EMPTY_DIM, operatore: operatoreNome },
   );
   const [editingLib, setEditingLib] = useState(false);
-  const [libForm, setLibForm] = useState<Liberatoria>(
-    lib ?? { ...EMPTY_LIB, operatore: operatoreNome },
-  );
+  const [libForm, setLibForm] = useState<Liberatoria>({
+    ...EMPTY_LIB,
+    operatore: operatoreNome,
+    ...lib,
+  });
   const [showAddUscita, setShowAddUscita] = useState(false);
   const [uscitaForm, setUscitaForm] = useState<Partial<UscitaLog>>({});
 
@@ -599,7 +603,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
       operatore: operatoreNome,
       note: uscitaForm.note,
     };
-    const existing = cartella.liberatoria ?? { ...EMPTY_LIB, operatore: operatoreNome };
+    const existing = cartella.liberatoria ?? {};
     onUpdate({ liberatoria: { ...existing, usciteLog: [...(existing.usciteLog ?? []), entry] } });
     setUscitaForm({});
     setShowAddUscita(false);
@@ -607,6 +611,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
 
   function deleteUscita(id: string) {
     if (!cartella.liberatoria) return;
+    if (cartella.liberatoria.usciteLog?.some((entry) => entry.id === id && entry.psExit)) return;
     onUpdate({
       liberatoria: {
         ...cartella.liberatoria,
@@ -1223,11 +1228,11 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                 <button
                   className="btn-secondary btn-sm"
                   onClick={() => {
-                    setLibForm(lib ?? { ...EMPTY_LIB, operatore: operatoreNome });
+                    setLibForm({ ...EMPTY_LIB, operatore: operatoreNome, ...lib });
                     setEditingLib(true);
                   }}
                 >
-                  {lib ? 'Modifica' : 'Compila liberatoria'}
+                  {hasLegalForm ? 'Modifica' : 'Compila liberatoria'}
                 </button>
               </div>
 
@@ -1401,12 +1406,12 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                     </button>
                   </div>
                 </div>
-              ) : lib ? (
+              ) : hasLegalForm && lib ? (
                 <div className="cr-form-section">
                   <div className="pic-row">
                     <span className="pic-row__lbl">Data / Ora uscita</span>
                     <span className="pic-row__val">
-                      {lib.data.split('-').reverse().join('/')} {lib.ora}
+                      {lib.data?.split('-').reverse().join('/')} {lib.ora}
                     </span>
                   </div>
                   {lib.referenteNome && (
@@ -1569,7 +1574,10 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                       key: 'oraRientro',
                       label: 'Rientro',
                       width: '100px',
-                      render: (_v, u) => u.oraRientro ?? '—',
+                      render: (_v, u) =>
+                        u.psExit?.returnedAt
+                          ? `${formatFacilityLocalMinute(u.psExit.returnedAt)} · ${u.psExit.returnActorName || u.psExit.returnActorId}`
+                          : (u.oraRientro ?? '—'),
                     },
                     {
                       key: 'referenteNome',
@@ -1578,19 +1586,30 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                     },
                     { key: 'firma', label: 'Firma', render: (_v, u) => u.firma ?? '—' },
                     {
+                      key: 'note',
+                      label: 'Decisione e operatore',
+                      render: (_v, u) =>
+                        u.psExit
+                          ? `PS · ${u.psExit.decision === 'pause' ? 'Somministrazioni in pausa' : 'Somministrazioni continuate'} · ${u.operatore}${u.note ? ` · ${u.note}` : ''}`
+                          : u.note || u.operatore,
+                    },
+                    {
                       key: 'id',
                       label: '',
                       width: '40px',
                       align: 'right',
-                      render: (_v, u) => (
-                        <button
-                          className="icon-btn icon-btn--sm icon-btn--danger"
-                          onClick={() => deleteUscita(u.id)}
-                          title="Elimina"
-                        >
-                          ✕
-                        </button>
-                      ),
+                      render: (_v, u) =>
+                        u.psExit ? (
+                          <span title="Registrazione PS protetta">—</span>
+                        ) : (
+                          <button
+                            className="icon-btn icon-btn--sm icon-btn--danger"
+                            onClick={() => deleteUscita(u.id)}
+                            title="Elimina"
+                          >
+                            ✕
+                          </button>
+                        ),
                     },
                   ]}
                 />

@@ -21,6 +21,8 @@ import type { UnreadDiaryEntry } from '../../lib/diaryUnreadQueue';
 import { UrgencyNotice } from '../shared/UrgencyNotice';
 import { PatientTherapySlotDetail } from './cartella/PatientTherapySlotDetail';
 import { TherapyDrugDosePanel } from './cartella/TherapyDrugDosePanel';
+import { TEMPORARY_PS_EXIT_CHANGED } from '../../lib/temporaryPsExit';
+import { invalidateCachedGet } from '../../lib/cachedFetch';
 
 export function todayReadings(readings: PatientParameterReading[], day: string) {
   return readings.filter((r) => facilityLocalMinute(new Date(r.measuredAt)).slice(0, 10) === day);
@@ -98,6 +100,23 @@ export function PatientToday({
     [ack, setAck] = useState(''),
     [ackError, setAckError] = useState('');
   useEffect(() => {
+    const refresh = (event: Event) => {
+      if (
+        event.type === 'focus' ||
+        (event as CustomEvent<{ patientId: string }>).detail?.patientId === patientId
+      ) {
+        invalidateCachedGet(`${API_URL}/therapy-slots`);
+        setRevision((value) => value + 1);
+      }
+    };
+    window.addEventListener(TEMPORARY_PS_EXIT_CHANGED, refresh);
+    window.addEventListener('focus', refresh);
+    return () => {
+      window.removeEventListener(TEMPORARY_PS_EXIT_CHANGED, refresh);
+      window.removeEventListener('focus', refresh);
+    };
+  }, [patientId]);
+  useEffect(() => {
     const c = new AbortController();
     void Promise.allSettled([
       canTherapy ? readPatientCalendarTherapies(patientId, c.signal) : Promise.resolve([]),
@@ -158,7 +177,7 @@ export function PatientToday({
                 <p>Nessuna terapia programmata oggi.</p>
               )}
               {times.map((time) => (
-                <div key={`${key}:${time}`} className="patient-today__time">
+                <div key={`${key}:${revision}:${time}`} className="patient-today__time">
                   <h4>Ore {time}</h4>
                   <PatientTherapySlotDetail
                     patientId={patientId}

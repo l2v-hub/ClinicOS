@@ -2,6 +2,56 @@ import type { TherapyFormValue } from './TherapyFormFields';
 import { formToPayload } from './therapyFormMapping';
 import { formatFraction } from './therapyDose';
 import { facilityLocalMinute } from '../../../lib/facilityTime';
+import type { GiroAllergySnapshot } from '../../../lib/therapyAllergyRead';
+
+export type PrescriptionAllergyContext =
+  | { phase: 'ready'; snapshot: GiroAllergySnapshot }
+  | { phase: 'loading' | 'error' | 'unavailable' };
+
+/** Only a documented negative is a negative. No drug/allergen text matching is clinical evidence. */
+export function prescriptionAllergyWarning(context: PrescriptionAllergyContext): boolean {
+  return (
+    context.phase !== 'ready' ||
+    context.snapshot.items.length > 0 ||
+    !['assenti', 'paziente_nega'].includes(context.snapshot.status ?? '')
+  );
+}
+
+/** Acknowledgement is local to this exact selection and actual recorded allergy context. */
+export function prescriptionAllergyScope(
+  patientId: string,
+  operatorKey: string,
+  value: TherapyFormValue,
+  context: PrescriptionAllergyContext,
+): string {
+  return JSON.stringify([
+    patientId,
+    operatorKey,
+    value.farmacoNome,
+    value.drugPackageRef ?? null,
+    value.drugPackageDetached ?? false,
+    value.pharmaceuticalForm,
+    value.commercialStrengthValue,
+    value.commercialStrengthUnit,
+    context.phase,
+    context.phase === 'ready'
+      ? [
+          context.snapshot.status ?? null,
+          context.snapshot.items.map((item) => JSON.stringify(item)).sort(),
+        ]
+      : null,
+  ]);
+}
+
+export function prescriptionAllergyAcknowledged(
+  context: PrescriptionAllergyContext,
+  scope: string,
+  acknowledged: string | null,
+): boolean {
+  return (
+    context.phase !== 'loading' && (!prescriptionAllergyWarning(context) || acknowledged === scope)
+  );
+}
 
 export const QUICK_SCHEDULES = [
   { id: 'morning', label: 'Mattina 08', times: ['08:00'] },

@@ -216,6 +216,12 @@ export function TherapyGiroRows({
                   contextKey={`${date}:${time.ora}`}
                 />
               )}
+              {p.temporaryPsExit?.decision === 'pause' && (
+                <p role="status">
+                  Somministrazioni in pausa durante l’uscita PS. Registra il rientro prima di
+                  erogare.
+                </p>
+              )}
               <ul className="giro-drugs" aria-label={`Farmaci di ${name} delle ${time.ora}`}>
                 {items.map((item) => {
                   const a = item.a;
@@ -294,7 +300,16 @@ export function TherapyGiroRows({
                             >
                               Non somm.
                             </button>
-                            {a.doseMode === 'glucose_scale' ? (
+                            {p.temporaryPsExit?.decision === 'pause' ? (
+                              <button
+                                type="button"
+                                className="ds-btn ds-btn--primary"
+                                disabled
+                                aria-label={`Erogata: ${actionTarget}`}
+                              >
+                                In pausa per uscita PS
+                              </button>
+                            ) : a.doseMode === 'glucose_scale' ? (
                               <GlucoseAdministrationControl
                                 key={`${key}|${date}|${a.scheduledTime}`}
                                 protocol={a.doseProtocol}

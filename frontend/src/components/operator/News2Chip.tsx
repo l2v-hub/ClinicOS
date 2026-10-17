@@ -4,20 +4,17 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { API_URL } from '../../config';
 import { operatorHeaders } from '../../lib/operatorSession';
-import {
-  fetchParameterReadings,
-  formatParameterValue,
-  readingTime,
-  type PatientParameterReading,
-} from '../../lib/patientParameterReadings';
+import { formatParameterValue, readingTime } from '../../lib/patientParameterReadings';
 import { NEWS2_LABELS, NEWS2_PARAMETERS } from '../../lib/news2';
 import {
   PARAMETER_READING_SAVED_EVENT,
+  loadNews2History,
   latestCompleteNews2,
   news2Points,
   news2Staleness,
   news2Tone,
   type News2Point,
+  type News2HistorySnapshot,
 } from '../../lib/news2History';
 import { createPortal } from 'react-dom';
 import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
@@ -46,8 +43,12 @@ const BADGE_TONE: Record<string, string> = {
 const badgeClass = (tone: string) => `ds-badge ds-badge--${BADGE_TONE[tone] ?? 'stale'}`;
 
 export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNow }: Props) {
-  const [readings, setReadings] = useState<PatientParameterReading[]>([]);
-  const [cursor, setCursor] = useState<string | null>(null);
+  const [snapshot, setSnapshot] = useState<News2HistorySnapshot>({
+    readings: [],
+    nextCursor: null,
+    visitedCursors: [],
+  });
+  const { readings, nextCursor: cursor } = snapshot;
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
   const [open, setOpen] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -61,16 +62,14 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
     requestRef.current = controller;
     // Annulla anche un "carica precedenti" in corso: il suo pulsante non deve restare bloccato.
     setLoadingMore(false);
+    setState('loading');
     try {
-      const page = await fetchParameterReadings(
-        API_URL,
-        patientId,
-        {},
-        { headers: operatorHeaders(), signal: controller.signal },
-      );
+      const history = await loadNews2History(API_URL, patientId, {
+        headers: operatorHeaders(),
+        signal: controller.signal,
+      });
       if (controller.signal.aborted) return;
-      setReadings(page.readings);
-      setCursor(page.hasMore ? page.nextCursor : null);
+      setSnapshot(history);
       setLoadMoreError(false);
       setState('ready');
     } catch {
@@ -80,6 +79,7 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
 
   useEffect(() => {
     setState('loading');
+    setSnapshot({ readings: [], nextCursor: null, visitedCursors: [] });
     void load();
     // Una nuova rilevazione salvata per questo paziente aggiorna subito il chip.
     const onSaved = (event: Event) => {
@@ -100,18 +100,14 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
     setLoadingMore(true);
     setLoadMoreError(false);
     try {
-      const page = await fetchParameterReadings(
+      const history = await loadNews2History(
         API_URL,
         patientId,
-        { cursor },
         { headers: operatorHeaders(), signal: controller.signal },
+        snapshot,
       );
       if (controller.signal.aborted) return;
-      setReadings((prev) => [
-        ...prev,
-        ...page.readings.filter((r) => !prev.some((p) => p.id === r.id)),
-      ]);
-      setCursor(page.hasMore ? page.nextCursor : null);
+      setSnapshot(history);
     } catch {
       if (!controller.signal.aborted) setLoadMoreError(true);
     } finally {
@@ -211,7 +207,6 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
     </>
   );
 }
-
 
 const incompleteText = (n: number) =>
   n === 1 ? "c'è 1 rilevazione incompleta" : `ci sono ${n} rilevazioni incomplete`;

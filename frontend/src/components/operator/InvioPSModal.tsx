@@ -1,5 +1,9 @@
-import { useState, useEffect } from 'react';
-import type { Paziente, CartellaPaziente } from '../../types';
+import { useState, useEffect, useRef } from 'react';
+import type { Paziente, CartellaPaziente, UscitaLog } from '../../types';
+import {
+  verifyTemporaryPsExitReceipt,
+  type TemporaryPsExitCommand,
+} from '../../lib/temporaryPsExit';
 import { useCan } from '../../lib/capabilities';
 import { getCurrentOperator } from '../../lib/operatorSession';
 import {
@@ -14,6 +18,42 @@ interface InvioPSModalProps {
   paziente: Paziente;
   cartella: CartellaPaziente;
   onClose: () => void;
+  onTemporaryPsExit?: (
+    patientId: string,
+    command: TemporaryPsExitCommand,
+  ) => Promise<CartellaPaziente>;
+}
+
+type PsExitIntent =
+  | { action: 'depart'; decision: 'pause' | 'continue'; reason: string }
+  | { action: 'return'; exitId: string };
+interface PsExitRequest {
+  context: string;
+  command: TemporaryPsExitCommand;
+}
+
+/** Reuse the exact confirmed request after an uncertain response; changes create a new intent. */
+export function psExitRequestForRetry(
+  previous: PsExitRequest | null,
+  patientId: string,
+  actorId: string,
+  intent: PsExitIntent,
+  newId = () => crypto.randomUUID(),
+): PsExitRequest {
+  const context = JSON.stringify([patientId, actorId, intent]);
+  return previous?.context === context
+    ? previous
+    : { context, command: { ...intent, requestId: newId(), confirmed: true } };
+}
+
+/** A successful HTTP response alone is insufficient to claim the operator's decision persisted. */
+export function verifyPsExitReceipt(
+  chart: CartellaPaziente,
+  patientId: string,
+  actorId: string,
+  command: TemporaryPsExitCommand,
+): UscitaLog {
+  return verifyTemporaryPsExitReceipt(chart, patientId, actorId, command);
 }
 
 // ── Component ──────────────────────────────────────────────────────────────────
@@ -36,7 +76,7 @@ export default function InvioPSModal(props: InvioPSModalProps) {
   );
 }
 
-function InvioPSContent({ paziente, cartella, onClose }: InvioPSModalProps) {
+function InvioPSContent({ paziente, cartella, onClose, onTemporaryPsExit }: InvioPSModalProps) {
   const [sources, setSources] = useState<EmergencyTransferSources | null>(null);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState('');
@@ -53,6 +93,18 @@ function InvioPSContent({ paziente, cartella, onClose }: InvioPSModalProps) {
   const canReadings = useCan('parameters.list_readings');
   const canDiary = useCan('diary.list');
   const authorized = canTherapy && canHistory && canPrn && canReadings && canDiary;
+  const canSaveChart = useCan('clinical_record.save');
+  const actorId = getCurrentOperator()?.id;
+  const activeExit = cartella.liberatoria?.temporaryPsExit;
+  const canRecordExit = canSaveChart && Boolean(onTemporaryPsExit) && Boolean(actorId);
+  const [exitDecision, setExitDecision] = useState<'' | 'pause' | 'continue'>('');
+  const [confirmedContext, setConfirmedContext] = useState<string | null>(null);
+  const [exitSaving, setExitSaving] = useState(false);
+  const [exitUncertain, setExitUncertain] = useState(false);
+  const [exitError, setExitError] = useState('');
+  const [exitReceipt, setExitReceipt] = useState('');
+  const exitRequest = useRef<PsExitRequest | null>(null);
+  const exitInFlight = useRef(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -82,6 +134,10 @@ function InvioPSContent({ paziente, cartella, onClose }: InvioPSModalProps) {
 
   const model = buildInvioPSModel(paziente, cartella, sources?.therapies ?? [], sources);
   const reason = reasonOverride ?? model.emergency.reason;
+  const exitContext = activeExit
+    ? `return:${activeExit.exitId}:${activeExit.decision}`
+    : JSON.stringify(['depart', exitDecision, reason]);
+  const exitConfirmed = confirmedContext === exitContext;
   const contact = contactOverride ?? model.emergency.contact;
   const allergyUnknown =
     model.patient.allergie.length === 0 &&
@@ -97,6 +153,50 @@ function InvioPSContent({ paziente, cartella, onClose }: InvioPSModalProps) {
     !reason.trim() ||
     (allergyUnknown && !allergyNote.trim()) ||
     (missingVitals && !vitalNote.trim());
+
+  async function recordExitDecision() {
+    if (!canRecordExit || !onTemporaryPsExit || !actorId || exitInFlight.current) return;
+    let request = exitRequest.current;
+    if (!exitUncertain) {
+      if (
+        !exitConfirmed ||
+        (!activeExit && (!exitDecision || !reason.trim() || reason.length > 2000))
+      )
+        return;
+      const intent: PsExitIntent = activeExit
+        ? { action: 'return', exitId: activeExit.exitId }
+        : { action: 'depart', decision: exitDecision as 'pause' | 'continue', reason };
+      request = psExitRequestForRetry(request, paziente.id, actorId, intent);
+      exitRequest.current = request;
+    }
+    if (!request) return;
+    exitInFlight.current = true;
+    setExitSaving(true);
+    setExitError('');
+    try {
+      const chart = await onTemporaryPsExit(paziente.id, request.command);
+      const entry = verifyPsExitReceipt(chart, paziente.id, actorId, request.command);
+      setExitReceipt(
+        request.command.action === 'depart'
+          ? `Uscita PS registrata il ${formatFacilityLocalMinute(entry.psExit!.departedAt)} da ${entry.operatore}.`
+          : `Rientro registrato il ${formatFacilityLocalMinute(entry.psExit!.returnedAt!)} da ${entry.psExit!.returnActorName || actorId}.`,
+      );
+      setExitUncertain(false);
+      setConfirmedContext(null);
+      setExitDecision('');
+      exitRequest.current = null;
+    } catch (error) {
+      setExitUncertain(true);
+      setExitError(
+        error instanceof Error
+          ? error.message
+          : 'Esito non verificato. Riprova la stessa registrazione.',
+      );
+    } finally {
+      exitInFlight.current = false;
+      setExitSaving(false);
+    }
+  }
 
   return (
     <div
@@ -158,6 +258,106 @@ function InvioPSContent({ paziente, cartella, onClose }: InvioPSModalProps) {
 
         {/* ── Printable document ── */}
         <div className="modal-body invio-ps-body">
+          <section
+            className="no-print"
+            aria-label="Uscita temporanea PS"
+            style={{ marginBottom: 20 }}
+          >
+            <h2>Uscita temporanea PS</h2>
+            <p>
+              La stampa della scheda non registra un’uscita e non modifica il giro delle
+              somministrazioni.
+            </p>
+            {activeExit && (
+              <p role="status" data-ps-exit-status>
+                Uscita aperta dal {formatFacilityLocalMinute(activeExit.departedAt)}.{' '}
+                {activeExit.decision === 'pause'
+                  ? 'Somministrazioni in pausa fino al rientro registrato.'
+                  : 'Giro somministrazioni mantenuto attivo per decisione dell’operatore.'}
+              </p>
+            )}
+            {exitReceipt && (
+              <p role="status" data-ps-exit-receipt>
+                {exitReceipt}
+              </p>
+            )}
+            {canRecordExit && (
+              <>
+                {!activeExit && (
+                  <fieldset disabled={exitSaving || exitUncertain}>
+                    <legend>
+                      Decisione sul giro somministrazioni durante l’uscita (obbligatoria)
+                    </legend>
+                    <label style={{ display: 'block', padding: 8 }}>
+                      <input
+                        type="radio"
+                        name="ps-exit-decision"
+                        value="pause"
+                        checked={exitDecision === 'pause'}
+                        onChange={() => setExitDecision('pause')}
+                      />{' '}
+                      Metti in pausa le somministrazioni fino al rientro
+                    </label>
+                    <label style={{ display: 'block', padding: 8 }}>
+                      <input
+                        type="radio"
+                        name="ps-exit-decision"
+                        value="continue"
+                        checked={exitDecision === 'continue'}
+                        onChange={() => setExitDecision('continue')}
+                      />{' '}
+                      Mantieni attivo il giro somministrazioni
+                    </label>
+                    <p>
+                      Il motivo dell’uscita è quello riportato nel campo «Motivo dell’invio»; per
+                      registrarlo sono consentiti fino a 2000 caratteri.
+                    </p>
+                  </fieldset>
+                )}
+                <label style={{ display: 'block', padding: '12px 0' }}>
+                  <input
+                    type="checkbox"
+                    checked={exitConfirmed}
+                    disabled={exitSaving || exitUncertain}
+                    onChange={(event) =>
+                      setConfirmedContext(event.target.checked ? exitContext : null)
+                    }
+                  />{' '}
+                  {activeExit
+                    ? activeExit.decision === 'pause'
+                      ? 'Confermo il rientro: il giro riprende, le dosi arretrate richiedono la consueta verifica.'
+                      : 'Confermo il rientro del paziente.'
+                    : 'Confermo l’uscita PS e la decisione selezionata sul giro somministrazioni.'}
+                </label>
+                <button
+                  type="button"
+                  className="btn-primary"
+                  data-ps-exit-submit
+                  disabled={
+                    exitSaving ||
+                    (!exitUncertain &&
+                      (!exitConfirmed ||
+                        (!activeExit && (!exitDecision || !reason.trim() || reason.length > 2000))))
+                  }
+                  onClick={() => void recordExitDecision()}
+                >
+                  {exitSaving
+                    ? 'Registrazione in corso…'
+                    : exitUncertain
+                      ? 'Riprova la stessa registrazione'
+                      : activeExit
+                        ? 'Registra rientro'
+                        : 'Registra uscita PS'}
+                </button>
+              </>
+            )}
+            {exitError && (
+              <p role="alert">
+                {exitError} La decisione resta da verificare: riprova per recuperare la stessa
+                conferma.
+              </p>
+            )}
+          </section>
           {fetchError && (
             <div
               className="alert alert--error no-print"
@@ -215,6 +415,7 @@ function InvioPSContent({ paziente, cartella, onClose }: InvioPSModalProps) {
                 data-invio-ps-reason
                 rows={4}
                 value={reason}
+                disabled={exitSaving || exitUncertain}
                 onChange={(event) => setReasonOverride(event.target.value)}
                 maxLength={10000}
                 placeholder="Descrivi il motivo dell'invio e le condizioni osservate"

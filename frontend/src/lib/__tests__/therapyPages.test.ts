@@ -109,8 +109,12 @@ test('therapy plan and emergency print require every page, never a manual partia
   assert.match(tab, /completeTherapySnapshot/);
   assert.match(tab, /Vedi tutti i farmaci nel piano terapeutico/);
   assert.match(tab, /setTherapies\(\[\]\);[\s\S]*setTherapySummary\(null\);/);
-  assert.match(emergencyPrint, /loadAllTherapyPages\(paziente\.id, 'attiva'\)/);
-  assert.match(emergencyPrint, /disabled=\{loading \|\| Boolean\(fetchError\)\}/);
+  assert.match(emergencyPrint, /loadEmergencyTransferSources\(paziente\.id, controller.signal\)/);
+  assert.match(emergencyPrint, /disabled=\{printBlocked\}/);
+  assert.match(
+    emergencyPrint,
+    /const printBlocked =[\s\S]*loading \|\|[\s\S]*Boolean\(fetchError\) \|\|[\s\S]*!authorized \|\|[\s\S]*!sources/,
+  );
   assert.match(emergencyPrint, /La stampa è bloccata/);
 });
 

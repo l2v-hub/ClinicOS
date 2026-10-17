@@ -43,11 +43,32 @@ export function cartellaWriteData(snapshot: CartellaPaziente) {
 export class CartellaWriteQueue<T extends object> {
   private pending = new Map<string, { snapshot: T; tail: Promise<unknown>; count: number }>();
 
+  /** Serialize server commands with full-record saves and install only a verified snapshot. */
+  enqueueMutation(key: string, initial: T, persist: () => Promise<T>): Promise<T> {
+    let queue = this.pending.get(key);
+    if (!queue) {
+      queue = { snapshot: initial, tail: Promise.resolve(), count: 0 };
+      this.pending.set(key, queue);
+    }
+    const current = queue;
+    current.count++;
+    const result = current.tail.then(async () => {
+      const confirmed = await persist();
+      current.snapshot = confirmed;
+      return confirmed;
+    });
+    current.tail = result.catch(() => {});
+    return result.finally(() => {
+      current.count--;
+      if (!current.count && this.pending.get(key) === current) this.pending.delete(key);
+    });
+  }
+
   enqueue(
     key: string,
     initial: T,
     patch: Partial<T>,
-    persist: (snapshot: T) => Promise<boolean>,
+    persist: (snapshot: T) => Promise<boolean | T>,
     merge = (latest: T, _initial: T, change: Partial<T>): T => ({ ...latest, ...change }),
   ): Promise<boolean> {
     let queue = this.pending.get(key);
@@ -59,9 +80,9 @@ export class CartellaWriteQueue<T extends object> {
     current.count++;
     const result = current.tail.then(async () => {
       const next = merge(current.snapshot, initial, patch);
-      const ok = await persist(next);
-      if (ok) current.snapshot = next;
-      return ok;
+      const saved = await persist(next);
+      if (saved) current.snapshot = typeof saved === 'object' ? saved : next;
+      return Boolean(saved);
     });
     current.tail = result.catch(() => {});
     return result.finally(() => {

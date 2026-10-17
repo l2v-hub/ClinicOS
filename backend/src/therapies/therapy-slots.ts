@@ -20,6 +20,7 @@ import {
   legacyAdministrationKey,
 } from './therapy-administration-page.js';
 import { TherapySlotCapacityError } from './therapy-capacity.js';
+import { currentTemporaryPsExit, type TemporaryPsExit } from '../patients/temporary-ps-exits.js';
 import {
   therapyWhereForAccess,
   therapyBandEnabledSql,
@@ -71,6 +72,7 @@ export interface SlotPatient {
   room: string;
   bed: string;
   administrations: SlotAdministration[];
+  temporaryPsExit: TemporaryPsExit | null;
 }
 
 export interface TherapySlot {
@@ -316,6 +318,15 @@ async function buildTherapySlotSourcePage(
     db,
     today,
   );
+  const exitRows = validTherapies.length
+    ? await db.cartella.findMany({
+        where: {
+          patientId: { in: [...new Set(validTherapies.map((therapy) => therapy.patientId))] },
+        },
+        select: { patientId: true, data: true },
+      })
+    : [];
+  const exits = new Map(exitRows.map((row) => [row.patientId, currentTemporaryPsExit(row.data)]));
   const administrations = await findTherapyPageAdministrations(
     date,
     validTherapies.map((therapy) => ({
@@ -451,6 +462,7 @@ async function buildTherapySlotSourcePage(
             room,
             bed,
             administrations: [],
+            temporaryPsExit: exits.get(pt.patientId) ?? null,
           });
         }
         patientMap.get(pt.patientId)!.administrations.push(administrationEntry);

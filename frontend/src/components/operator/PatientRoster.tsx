@@ -3,11 +3,8 @@ import { memo, useEffect, useState } from 'react';
 import { API_URL } from '../../config';
 import { useCan } from '../../lib/capabilities';
 import { operatorHeaders } from '../../lib/operatorSession';
-import {
-  fetchParameterReadings,
-  PARAMETER_READING_SAVED_EVENT,
-} from '../../lib/patientParameterReadings';
-import { latestCompleteNews2, news2Points } from '../../lib/news2History';
+import { PARAMETER_READING_SAVED_EVENT } from '../../lib/patientParameterReadings';
+import { loadRosterNews2 } from '../../lib/news2History';
 import { patientIdentityIncomplete } from '../../lib/patientIdentity';
 import { PatientIdentity, PatientIdentifier } from '../shared/PatientIdentity';
 import { LazyNews2 } from './LazyNews2';
@@ -282,43 +279,54 @@ export function PatientRoster({
     window.addEventListener(PARAMETER_READING_SAVED_EVENT, refresh);
     return () => window.removeEventListener(PARAMETER_READING_SAVED_EVENT, refresh);
   }, []);
-  const [newsState, setNewsState] = useState<{ key: string; ids: Set<string>; failed: boolean }>({
+  const [newsState, setNewsState] = useState<{
+    key: string;
+    revision: number;
+    ids: Set<string>;
+    unknownIds: Set<string>;
+  }>({
     key: '',
+    revision: -1,
     ids: new Set(),
-    failed: false,
+    unknownIds: new Set(),
   });
   useEffect(() => {
     const controller = new AbortController();
     if (!canReadVitals) return () => controller.abort();
     const ids = patientIds ? patientIds.split(',') : [];
-    void Promise.all(
-      ids.map(async (id) => {
-        const page = await fetchParameterReadings(
-          API_URL,
-          id,
-          {},
-          { headers: operatorHeaders(), signal: controller.signal },
-        );
-        return latestCompleteNews2(news2Points(page.readings)) ? id : null;
-      }),
-    ).then(
-      (ids) => {
+    void loadRosterNews2(API_URL, ids, {
+      headers: operatorHeaders(),
+      signal: controller.signal,
+    }).then(
+      (result) => {
         if (!controller.signal.aborted)
           setNewsState({
             key: patientIds,
-            ids: new Set(ids.filter((id): id is string => id !== null)),
-            failed: false,
+            revision: newsRevision,
+            ...result,
           });
       },
       () => {
         if (!controller.signal.aborted)
-          setNewsState({ key: patientIds, ids: new Set(), failed: true });
+          setNewsState({
+            key: patientIds,
+            revision: newsRevision,
+            ids: new Set(),
+            unknownIds: new Set(ids),
+          });
       },
     );
     return () => controller.abort();
   }, [patientIds, canReadVitals, newsRevision]);
   const newsIds = canReadVitals && newsState.key === patientIds ? newsState.ids : new Set<string>();
-  const showNews = newsIds.size > 0;
+  const newsPending =
+    canReadVitals &&
+    patients.length > 0 &&
+    (newsState.key !== patientIds || newsState.revision !== newsRevision);
+  const newsUnknown =
+    canReadVitals && newsState.key === patientIds && newsState.unknownIds.size > 0;
+  // Hide only when every loaded patient's history has been verified empty of complete scores.
+  const showNews = newsIds.size > 0 || newsPending || newsUnknown;
   const showRegime = patients.some(
     (p) => patientRegime(summaryMap.get(p.id)?.statoRicovero) !== 'non_disponibile',
   );
@@ -596,8 +604,24 @@ export function PatientRoster({
                 : ''}
         </p>
       )}
-      {newsState.key === patientIds && newsState.failed && (
-        <p role="status">NEWS2 non disponibile: apri i parametri per verificare.</p>
+      {(newsPending || newsUnknown) && (
+        <p role="status">
+          {newsPending
+            ? 'Verifica NEWS2 in corso…'
+            : 'NEWS2 non verificabile per alcuni pazienti: apri i parametri per verificare.'}
+          {!newsPending && (
+            <>
+              {' '}
+              <button
+                type="button"
+                className="ds-link"
+                onClick={() => setNewsRevision((n) => n + 1)}
+              >
+                Riprova NEWS2
+              </button>
+            </>
+          )}
+        </p>
       )}
       {incomplete.length > 0 && (
         <p className="patient-list-incomplete">

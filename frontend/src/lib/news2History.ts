@@ -1,10 +1,107 @@
 // Storico NEWS2 di un paziente dalle rilevazioni con data e ora (modello primario dei parametri).
 import { news2, type News2Result } from './news2';
-import type { PatientParameterReading } from './patientParameterReadings';
+import { fetchParameterReadings, type PatientParameterReading } from './patientParameterReadings';
 
 export interface News2Point {
   reading: PatientParameterReading;
   result: News2Result;
+}
+
+export interface News2HistorySnapshot {
+  readings: PatientParameterReading[];
+  nextCursor: string | null;
+  /** Cursors already consumed, including the initial page. Retained for history pagination. */
+  visitedCursors: string[];
+}
+
+interface HistoryOptions {
+  headers: HeadersInit;
+  signal?: AbortSignal;
+  fetcher?: typeof fetch;
+}
+
+function assertNotAborted(signal?: AbortSignal) {
+  if (signal?.aborted) throw new DOMException('Lettura annullata', 'AbortError');
+}
+
+/**
+ * Find the latest complete observation, retaining newer partial observations (staleness).
+ * Absence is verified only at the end of the history. A continuation loads one older page,
+ * retaining both the history and cursor provenance for the existing “Carica precedenti”.
+ */
+export async function loadNews2History(
+  apiUrl: string,
+  patientId: string,
+  options: HistoryOptions,
+  previous?: News2HistorySnapshot,
+): Promise<News2HistorySnapshot> {
+  assertNotAborted(options.signal);
+  const readings = [...(previous?.readings ?? [])];
+  const ids = new Set(readings.map((reading) => reading.id));
+  const visitedCursors = new Set(previous?.visitedCursors ?? []);
+  let cursor = previous?.nextCursor ?? null;
+  if (previous && !cursor) throw new Error('Storico già completo.');
+  do {
+    assertNotAborted(options.signal);
+    const cursorKey = cursor ?? '';
+    if (visitedCursors.has(cursorKey)) throw new Error('Paginazione dello storico non valida.');
+    visitedCursors.add(cursorKey);
+    const page = await fetchParameterReadings(apiUrl, patientId, cursor ? { cursor } : {}, options);
+    assertNotAborted(options.signal);
+    if (
+      (page.hasMore && (!page.nextCursor?.trim() || page.readings.length === 0)) ||
+      (!page.hasMore && page.nextCursor !== null) ||
+      (page.hasMore && visitedCursors.has(page.nextCursor!))
+    ) {
+      throw new Error('Paginazione dello storico non valida.');
+    }
+    for (const reading of page.readings) {
+      if (
+        !reading ||
+        typeof reading.id !== 'string' ||
+        !reading.id ||
+        ids.has(reading.id) ||
+        reading.patientId !== patientId ||
+        typeof reading.measuredAt !== 'string' ||
+        !Number.isFinite(Date.parse(reading.measuredAt)) ||
+        typeof reading.authorName !== 'string' ||
+        !reading.values ||
+        typeof reading.values !== 'object' ||
+        Array.isArray(reading.values) ||
+        Object.values(reading.values).some((value) => typeof value !== 'string') ||
+        (readings.length > 0 &&
+          Date.parse(reading.measuredAt) > Date.parse(readings[readings.length - 1].measuredAt))
+      ) {
+        throw new Error('Rilevazione dello storico non valida.');
+      }
+      ids.add(reading.id);
+      readings.push(reading);
+    }
+    cursor = page.hasMore ? page.nextCursor : null;
+    if (previous || page.readings.some((reading) => news2(reading.values).complete)) break;
+  } while (cursor);
+  return { readings, nextCursor: cursor, visitedCursors: [...visitedCursors] };
+}
+
+/** Independent patient results: one failed source cannot erase another verified score. */
+export async function loadRosterNews2(
+  apiUrl: string,
+  patientIds: string[],
+  options: HistoryOptions,
+): Promise<{ ids: Set<string>; unknownIds: Set<string> }> {
+  assertNotAborted(options.signal);
+  const results = await Promise.allSettled(
+    patientIds.map((id) => loadNews2History(apiUrl, id, options)),
+  );
+  assertNotAborted(options.signal);
+  const ids = new Set<string>();
+  const unknownIds = new Set<string>();
+  results.forEach((result, index) => {
+    const id = patientIds[index];
+    if (result.status === 'rejected') unknownIds.add(id);
+    else if (latestCompleteNews2(news2Points(result.value.readings))) ids.add(id);
+  });
+  return { ids, unknownIds };
 }
 
 export { PARAMETER_READING_SAVED_EVENT } from './patientParameterReadings';

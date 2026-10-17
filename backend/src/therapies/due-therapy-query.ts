@@ -117,6 +117,7 @@ export async function findTherapiesDue(
       ) room ON TRUE
       LEFT JOIN "Cartella" cartella ON cartella."patientId" = pt."patientId"
       WHERE pt.stato = 'attiva'
+        AND COALESCE(cartella.data #>> '{liberatoria,temporaryPsExit,decision}', '') <> 'pause'
         AND pt.tipo <> 'al_bisogno'
         AND (
           (pt.tipo = 'una_tantum' AND pt."dataSomministrazione" = ${date})

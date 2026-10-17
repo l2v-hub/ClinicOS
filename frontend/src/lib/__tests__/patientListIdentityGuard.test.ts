@@ -86,8 +86,14 @@ test('452 roster leads with bed and preserves native accessible actions while op
   assert.match(html, /QA44 · 7/);
   assert.match(html, /RSSMRA80A01H501U/);
   assert.doesNotMatch(html, /QA-NOT-VISIBLE/);
-  assert.doesNotMatch(html, /<th[^>]*>NEWS2<\/th>|Ordina per regime/);
-  assert.equal((html.match(/<th scope="col"/g) ?? []).length, 4);
+  assert.doesNotMatch(html, /Ordina per regime/);
+  assert.match(
+    html,
+    /<th[^>]*>NEWS2<\/th>/,
+    'Unknown NEWS2 remains visible until the history is verified',
+  );
+  assert.match(html, /Verifica NEWS2 in corso/);
+  assert.equal((html.match(/<th scope="col"/g) ?? []).length, 5);
   // HMI 1: colonna NEWS2 al posto della colonna codice fiscale (che va sotto il nome).
   for (const heading of ['Paziente', 'Regime', 'Segnalazioni', 'Azione']) {
     assert.match(roster, new RegExp(heading));

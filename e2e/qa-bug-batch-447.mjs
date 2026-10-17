@@ -38,6 +38,9 @@ const children = [],
   logs = [];
 let ownedContainer = false;
 let browserPassed = false;
+let databaseTestsPassed = false;
+const fullBackendOnly = process.argv.includes('--full-backend-tests-only');
+const databaseOnly = process.argv.includes('--database-tests-only') || fullBackendOnly;
 let nativeClient;
 let nativeDatabaseCreated = false;
 const nativeOwner = randomBytes(16).toString('hex');
@@ -129,7 +132,14 @@ const env = {
     : {}),
 };
 function run(command, args, options = {}) {
-  const p = spawnSync(command, args, { cwd: root, env, encoding: 'utf8', ...options });
+  const { logName, ...spawnOptions } = options;
+  const p = spawnSync(command, args, { cwd: root, env, encoding: 'utf8', ...spawnOptions });
+  if (logName) {
+    let output = `${p.stdout ?? ''}${p.stderr ?? ''}`;
+    for (const secret of [env.DATABASE_URL, env.DATABASE_URL && new URL(env.DATABASE_URL).password])
+      if (secret) output = output.split(secret).join('[redacted database credential]');
+    writeFileSync(path.join(out, 'test-results', logName), output);
+  }
   if (p.status !== 0)
     throw new Error(
       `QA stack command failed: ${command} ${args[0] ?? ''} (${p.status}); inspect sanitized local output`,
@@ -232,29 +242,51 @@ try {
   );
   const prismaCli = require.resolve('prisma/build/index.js');
   run(process.execPath, [prismaCli, 'migrate', 'deploy', '--config', 'prisma.config.ts']);
-  service('backend', ['--import', 'tsx', 'src/server.ts'], path.join(root, 'backend'));
-  service(
-    'frontend',
-    [
-      path.join(path.dirname(require.resolve('vite/package.json')), 'bin/vite.js'),
-      '--host',
-      '127.0.0.1',
-      '--port',
-      '5447',
-      '--strictPort',
-    ],
-    path.join(root, 'frontend'),
-  );
-  await Promise.all([ready(`${env.QA_BACKEND_URL}/health`), ready(env.QA_FRONTEND_URL)]);
-  const browserScript = path.join(root, 'e2e/qa-bug-batch-447-browser.mjs');
-  const execution = spawn(
-    process.execPath,
-    ['--import', 'tsx', browserScript, ...process.argv.slice(2)],
-    { cwd: root, env, stdio: 'inherit' },
-  );
-  const status = await new Promise((resolve) => execution.on('exit', resolve));
-  assert.equal(status, 0, 'Real browser acceptance failed');
-  browserPassed = true;
+  if (fullBackendOnly) {
+    run(process.execPath, [path.join(root, 'scripts/run-node-tests.mjs')], {
+      cwd: path.join(root, 'backend'),
+      env: { ...env, ROLE_SIMULATOR_ENABLED: 'false' },
+      logName: 'full-backend-tests.txt',
+      maxBuffer: 16 * 1024 * 1024,
+    });
+  } else
+    run(
+      process.execPath,
+      [
+        '--import',
+        'tsx',
+        '--test',
+        'backend/src/patients/__tests__/temporary-ps-exits.test.ts',
+        'backend/src/patients/__tests__/temporary-ps-exits-db.test.ts',
+      ],
+      { logName: 'temporary-ps-database-tests.txt' },
+    );
+  databaseTestsPassed = true;
+  if (!databaseOnly) {
+    service('backend', ['--import', 'tsx', 'src/server.ts'], path.join(root, 'backend'));
+    service(
+      'frontend',
+      [
+        path.join(path.dirname(require.resolve('vite/package.json')), 'bin/vite.js'),
+        '--host',
+        '127.0.0.1',
+        '--port',
+        '5447',
+        '--strictPort',
+      ],
+      path.join(root, 'frontend'),
+    );
+    await Promise.all([ready(`${env.QA_BACKEND_URL}/health`), ready(env.QA_FRONTEND_URL)]);
+    const browserScript = path.join(root, 'e2e/qa-bug-batch-447-browser.mjs');
+    const execution = spawn(
+      process.execPath,
+      ['--import', 'tsx', browserScript, ...process.argv.slice(2)],
+      { cwd: root, env, stdio: 'inherit' },
+    );
+    const status = await new Promise((resolve) => execution.on('exit', resolve));
+    assert.equal(status, 0, 'Real browser acceptance failed');
+    browserPassed = true;
+  }
 } finally {
   for (const c of children.reverse()) c.kill('SIGTERM');
   await new Promise((r) => setTimeout(r, 500));
@@ -295,8 +327,9 @@ try {
     path.join(out, 'test-results', 'stack-result.json'),
     JSON.stringify(
       {
-        status: browserPassed ? 'passed' : 'failed',
-        browser: browserPassed ? 'passed' : 'failed',
+        status: (databaseOnly ? databaseTestsPassed : browserPassed) ? 'passed' : 'failed',
+        browser: databaseOnly ? 'not-run' : browserPassed ? 'passed' : 'failed',
+        databaseTests: databaseTestsPassed ? 'passed' : 'failed',
         syntheticOnly: true,
         databaseMode: databaseReceipt.mode,
       },

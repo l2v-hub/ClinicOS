@@ -1,6 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { buildInvioPSModel } from '../invioPSModel';
+import { psExitRequestForRetry, verifyPsExitReceipt } from '../InvioPSModal';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { createElement } from 'react';
+import { DimissioneTab } from '../cartella/DimissioneTab';
 import type { Paziente, CartellaPaziente, PatientTherapyAPI, Diagnosi } from '../../../types';
 // ── Test fixtures ──────────────────────────────────────────────────────────────
 
@@ -621,4 +625,89 @@ test('457 legacy observations retain their recorded date precision and never inv
   assert.equal(context.legacyVitals[0].recordedAt, '2026-10-17 · orario non registrato');
   assert.match(context.reason, /FC 135 bpm/);
   assert.doesNotMatch(context.reason, /85\/50|44/);
+});
+
+test('PS uncertain retry keeps the exact intent and patient/operator isolation; receipt must prove the decision', () => {
+  const intent = {
+    action: 'depart' as const,
+    decision: 'pause' as const,
+    reason: 'Motivo clinico reale',
+  };
+  const request = psExitRequestForRetry(
+    null,
+    PAZIENTE.id,
+    'operator-1',
+    intent,
+    () => 'request-one',
+  );
+  assert.equal(psExitRequestForRetry(request, PAZIENTE.id, 'operator-1', intent), request);
+  for (const [patientId, actorId, changed] of [
+    ['other-patient', 'operator-1', intent],
+    [PAZIENTE.id, 'operator-2', intent],
+    [PAZIENTE.id, 'operator-1', { ...intent, reason: 'Nuovo motivo' }],
+  ] as const)
+    assert.notEqual(
+      psExitRequestForRetry(request, patientId, actorId, changed, () => 'request-new').command
+        .requestId,
+      'request-one',
+    );
+  const entry = {
+    id: 'exit-1',
+    data: '2026-10-17',
+    ora: '12:00',
+    operatore: 'Operatore reale',
+    note: intent.reason,
+    psExit: {
+      decision: 'pause' as const,
+      departedAt: '2026-10-17T10:00:00Z',
+      actorId: 'operator-1',
+      requestId: 'request-one',
+      requestHash: 'hash',
+    },
+  };
+  const chart = makeCartella({
+    liberatoria: { usciteLog: [entry] } as CartellaPaziente['liberatoria'],
+  });
+  assert.equal(verifyPsExitReceipt(chart, PAZIENTE.id, 'operator-1', request.command).id, entry.id);
+  assert.throws(() => verifyPsExitReceipt(chart, 'other', 'operator-1', request.command));
+  assert.throws(() => verifyPsExitReceipt(chart, PAZIENTE.id, 'other', request.command));
+  assert.throws(() =>
+    verifyPsExitReceipt(makeCartella(), PAZIENTE.id, 'operator-1', request.command),
+  );
+});
+
+test('PS-only exit history displays decision and actual next-day return without inventing legal completion or delete control', () => {
+  const entry = {
+    id: 'managed',
+    data: '2026-10-17',
+    ora: '23:00',
+    oraRientro: '08:00',
+    operatore: 'Nurse QA',
+    note: 'Motivo QA',
+    psExit: {
+      decision: 'pause' as const,
+      departedAt: '2026-10-17T21:00:00Z',
+      actorId: 'actor',
+      requestId: 'request-1',
+      requestHash: 'hash',
+      returnedAt: '2026-10-18T06:00:00Z',
+      returnActorId: 'returner',
+      returnActorName: 'Nurse Return',
+    },
+  };
+  const chart = makeCartella({
+    liberatoria: { usciteLog: [entry], temporaryPsExit: null } as CartellaPaziente['liberatoria'],
+  });
+  const html = renderToStaticMarkup(
+    createElement(DimissioneTab, {
+      cartella: chart,
+      paziente: PAZIENTE,
+      onUpdate: () => {},
+      operatoreNome: 'Nurse QA',
+    }),
+  );
+  assert.match(html, /Liberatoria non compilata/);
+  assert.match(html, /Somministrazioni in pausa/);
+  assert.match(html, /18\/10\/2026 08:00.*Nurse Return/);
+  assert.doesNotMatch(html, /title="Elimina"/);
 });
