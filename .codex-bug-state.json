@@ -1095,9 +1095,11 @@
         "scope-amendment-5.md": "40c85ae6de778293257788807fd608f36c5bb5c1494de4cf3933afbdf2b616c9",
         "clinical-decisions-2026-10-17.md": "bbcb8132f59b48c1ead147d79e5a0b4dd5d553841c880b0bd0e15eeffe592139",
         "scope-amendment-6-ps-exit-and-qa.md": "acd535fe593a13d4f1573baa46ccf6b80681408307e1f97efe119204840739ea",
-        "approved-plan-cycle-2.json": "9c01a6c6a9e9eff0ae34785349f6539e53a422d50bd768bf5fc4950b12ac22e9"
+        "approved-plan-cycle-2.json": "9c01a6c6a9e9eff0ae34785349f6539e53a422d50bd768bf5fc4950b12ac22e9",
+        "scope-amendment-7-news2-and-dependency.md": "d3f7abe648a13835bd7409937e9a14eb12f89f9b8b6b12d9ca453876c8964880",
+        "approved-plan-cycle-2-integrated.json": "e41e2342af3fa949331f067648579493f4c9e08c4917622902ab783ec336bfca"
       },
-      "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
+      "baseSha": "5a250319bae5b3f61f2c5864aee438f04d948df5",
       "plan": {
         "title": "Coordinated clinical UX: Today, rounds, lists, supervisor and PS transfer",
         "feature": "Shared patient clinical workspace and operational rounds",
@@ -1202,7 +1204,10 @@
           "frontend/src/components/operator/cartella/DimissioneTab.tsx",
           "frontend/src/App.tsx",
           "frontend/src/lib/cartellaWriteQueue.ts",
-          "frontend/src/lib/__tests__/cartellaWriteQueue.test.ts"
+          "frontend/src/lib/__tests__/cartellaWriteQueue.test.ts",
+          "frontend/src/components/operator/News2Chip.tsx",
+          "frontend/src/lib/news2History.ts",
+          "frontend/src/lib/__tests__/news2History.test.ts"
         ],
         "acceptance": [
           {
@@ -1599,6 +1604,19 @@
               "Keep pending dose context visible with scoped hold metadata and exclude held work only from due attention; existing capabilities/patient scope remain mandatory.",
               "Add actual DB/HTTP role/concurrency/tamper/uncertain/reload/return tests plus frontend queue and page validation negatives."
             ]
+          },
+          {
+            "title": "Complete NEWS2 history in actual roster and chip consumers",
+            "files": [
+              "frontend/src/components/operator/News2Chip.tsx",
+              "frontend/src/lib/news2History.ts",
+              "frontend/src/lib/__tests__/news2History.test.ts"
+            ],
+            "steps": [
+              "Read pages until the first complete NEWS2 or positively verified end; reject looping/invalid cursors and preserve unknown/error rather than claiming absence.",
+              "Use one common loader in roster and News2Chip; preserve patient identity/staleness and independent successes with allSettled.",
+              "Regress complete row beyond first50, per-patient failure/recovery, pagination boundaries and actual rendered chip."
+            ]
           }
         ],
         "verification": [
@@ -1756,7 +1774,10 @@
               "e2e/qa-bug-batch-447.mjs",
               "e2e/qa-bug-batch-447-browser.mjs",
               "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
-              "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts"
+              "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts",
+              "frontend/src/components/operator/News2Chip.tsx",
+              "frontend/src/lib/news2History.ts",
+              "frontend/src/lib/__tests__/news2History.test.ts"
             ]
           },
           {
@@ -1909,7 +1930,15 @@
           "packet": "scope-amendment-5.md",
           "sha256": "40c85ae6de778293257788807fd608f36c5bb5c1494de4cf3933afbdf2b616c9"
         }
-      ]
+      ],
+      "dependencyCheckpoint": {
+        "batch": "bug-batch-432",
+        "sha": "5a250319bae5b3f61f2c5864aee438f04d948df5",
+        "integrationSha": "b20c02ea231174e4230a5714d7480b3e6f619945",
+        "originalPlanningBaseline": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
+        "status": "local-unverified-dependency",
+        "requiresFinalMainReconciliation": true
+      }
     },
     {
       "id": "tracking-455",
@@ -1928,7 +1957,7 @@
       "issues": [
         470
       ],
-      "phase": "implementing",
+      "phase": "operational-verifying",
       "implementation": [
         {
           "round": 1,
@@ -1948,7 +1977,9 @@
         },
         {
           "round": 4,
-          "status": "running"
+          "status": "passed",
+          "sha": "101719920ea1572724e93b51ac497c05b3e73555",
+          "reason": "Independent QA4 all5phases passes:52checks, realPG43-table integration, internal114browserassertions; root17hash/sanitizedpacket final review passed."
         }
       ],
       "reviews": [],
@@ -1961,7 +1992,15 @@
         "patientDataEmpty": false,
         "backupsVerified": false
       },
-      "operationalFallback": "Native redeploy exact existing deployment IDs preserving same code/build/deploy configuration; no app/runtime volumes; prove old termination/new unique identities and both real health. Root serializes rollout."
+      "operationalFallback": "Native redeploy exact existing deployment IDs preserving same code/build/deploy configuration; no app/runtime volumes; prove old termination/new unique identities and both real health. Root serializes rollout.",
+      "operationalRun": {
+        "id": 39020438022,
+        "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/39020438022",
+        "headSha": "101719920ea1572724e93b51ac497c05b3e73555",
+        "operation": "demo-cleanup",
+        "status": "in_progress",
+        "mainRolloutHeld": true
+      }
     },
     {
       "id": "demo-release-guard",
@@ -2021,5 +2060,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-17T09:10:23.201Z"
+  "updatedAt": "2026-10-17T09:16:31.840Z"
 }
