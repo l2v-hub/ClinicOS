@@ -1,0 +1,133 @@
+{
+  "status": "passed",
+  "archives": [
+    {
+      "path": "evidence/issue-447-role-negative-trace.zip",
+      "sha256": "8afa72c09e9d7302117eebc7d1d917d85da034d3700e2d5cea8f154f94be2f9b",
+      "entries": 87,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-447-trace.zip",
+      "sha256": "ac63fa0c3369afe302b1414f3d4089be2030de604443c10dbfce22748374e66c",
+      "entries": 610,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-451-touch-trace.zip",
+      "sha256": "653d2a1455b9a004363e96bfa4c262d1ec8d6ca0286973ee836dca2d71715daf",
+      "entries": 71,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-451-trace.zip",
+      "sha256": "4a60aeb977f62483338692b5243475898690ef80b6d65093fb80d26d1ba7e658",
+      "entries": 274,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-452-trace.zip",
+      "sha256": "3ffd4540d8c6cd992cb509a964d7564eaf529536f15ad4f537f763c821dd48c3",
+      "entries": 488,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-453-trace.zip",
+      "sha256": "713d37e8f08285fe68009a1e37be81d6030112af63765a9aa1a1e5c63496c18f",
+      "entries": 697,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-454-trace.zip",
+      "sha256": "7aa60fdc9d697e7d13f63264a6aacabd70f89bc7f74b14f4bbc64c99d1e457e9",
+      "entries": 185,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-456-trace.zip",
+      "sha256": "b7ecaa03ec1556bcc9666269949bdaa4f066f56e0a0c2fc84d93fe17b46b5aa8",
+      "entries": 224,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-457-trace.zip",
+      "sha256": "5092fcda57a42018a33d10ee14f9eef108f97473ec35f7b2f9e3ebe52ee67659",
+      "entries": 420,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "history/cycle2-browser-1-unwired-agenda-and-fraction-input/issue-452-trace.zip",
+      "sha256": "cb5260e75661a2af49da16b04a0e1b9d9e31669e3a80c387dcccf1c8170e5c20",
+      "entries": 225,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "history/cycle2-browser-1-unwired-agenda-and-fraction-input/issue-453-trace.zip",
+      "sha256": "c387925d5605489f6a35c863a2d45f8e9ff8d7b5a6b63f7fea7bab05b31d48e0",
+      "entries": 450,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "history/cycle2-combined-browser-2-db-field-and-close-selector/issue-452-trace.zip",
+      "sha256": "ca41da9fc21bd568bdf2a776bb7d966b8e267bd111f26e1b82ab5944203e3431",
+      "entries": 263,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "history/cycle2-combined-browser-2-db-field-and-close-selector/issue-453-trace.zip",
+      "sha256": "c9f0ef69cee800be20e660e31aae27691271dea70db7cc1477792aa061d3123b",
+      "entries": 693,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "history/cycle2-combined-browser-2-db-field-and-close-selector/issue-457-trace.zip",
+      "sha256": "947f2b528bbf5e407c90208ffd4adec1d675b05382db9845403692a818d2cac0",
+      "entries": 264,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "history/cycle2-combined-browser-3-lazy-news-viewport/issue-452-trace.zip",
+      "sha256": "ccb98080e8785bd822e685235d867e9af1a9315e2ddf287856225056bfb96e4f",
+      "entries": 432,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "history/cycle2-combined-browser-4-lazy-recovery-row/issue-452-trace.zip",
+      "sha256": "96f6e98ea55033b9f784628082a566f7878ef0b5f691be8577c62e3850b4559b",
+      "entries": 449,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "intake-regression/evidence/issue450.zip",
+      "sha256": "97dbae0566e37f19ffe05c5db7b57a13682c89cad0a76437a9d9384c87aaece4",
+      "entries": 668,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "intake-regression/evidence/issue472.zip",
+      "sha256": "97dbae0566e37f19ffe05c5db7b57a13682c89cad0a76437a9d9384c87aaece4",
+      "entries": 668,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "intake-regression/evidence/issue473.zip",
+      "sha256": "97dbae0566e37f19ffe05c5db7b57a13682c89cad0a76437a9d9384c87aaece4",
+      "entries": 668,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "intake-regression/evidence/issue475.zip",
+      "sha256": "97dbae0566e37f19ffe05c5db7b57a13682c89cad0a76437a9d9384c87aaece4",
+      "entries": 668,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "intake-regression/evidence/issue476.zip",
+      "sha256": "97dbae0566e37f19ffe05c5db7b57a13682c89cad0a76437a9d9384c87aaece4",
+      "entries": 668,
+      "residualSignedTokens": 0
+    }
+  ],
+  "residualSignedTokens": 0,
+  "rawGitHubIssueDumps": 0
+}

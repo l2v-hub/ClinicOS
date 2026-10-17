@@ -1,0 +1,19 @@
+{
+  "files": 680,
+  "zipMembers": 18344,
+  "findings": [
+    {
+      "file": "independent-qa-attempt-2/launcher-smoke.mjs",
+      "kind": "passwordDsn",
+      "classification": "source template expression; no materialized credential",
+      "credential": false
+    },
+    {
+      "file": "independent-qa-attempt-2/launcher-backend-full.mjs",
+      "kind": "passwordDsn",
+      "classification": "source template expression; no materialized credential",
+      "credential": false
+    }
+  ],
+  "credentialFindings": 0
+}

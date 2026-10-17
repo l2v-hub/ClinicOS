@@ -1,0 +1,56 @@
+Issue 452: Actual agenda action persists the exact patient and scheduled dose once: 
+Invalid `prisma.medicationAdministration.count()` invocation:
+
+{
+  select: {
+    _count: {
+      select: {
+        _all: true
+      }
+    }
+  },
+  where: {
+    patientId: "cmvc8nnck003n1ip9zau9117f",
+    therapyId: "cmvc8nnd1003p1ip98feouo92",
+    scheduledTime: "08:00",
+    
+Issue 457: locator.click: Error: strict mode violation: locator('.therapy-modal').getByRole('button', { name: 'Chiudi', exact: true }) resolved to 2 elements:
+    1) <button aria-label="Chiudi" class="therapy-modal__close">×</button> aka getByLabel('Chiudi')
+    2) <button class="therapy-action-btn therapy-action-btn--reject">Chiudi</button> aka getByText('Ch
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: All seven approved acceptance scenarios must pass; inspect per-issue evidence and explicit residual gates.
+
+2 !== 0
+
+    at file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/qa-bug-batch-447-browser.mjs:2619:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 2,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Real browser acceptance failed
+
+1 !== 0
+
+    at file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/qa-bug-batch-447.mjs:287:12
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

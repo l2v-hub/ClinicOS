@@ -1,0 +1,19 @@
+{
+  "appSourceSha256": "0b2a6f28334955ef1a14fb70c8359701ad554c809eb3ab6a54155f0d10fc59cb",
+  "productionFunctionSha256": "c19e9ea2e91f6fa055ef6e751d5ba129f9d71c8d5c08ba45e5269fa747a80377",
+  "line": 2904,
+  "actualFunctionExecuted": true,
+  "actualQueueAndMappingHelpers": true,
+  "networkOnlyControlled": true,
+  "epochBeforeHeaders": 1,
+  "epochDuringJson": 2,
+  "saveReturned": false,
+  "newSessionPatientIds": [
+    "synthetic-old-session-patient"
+  ],
+  "stateWrites": [
+    [
+      "synthetic-old-session-patient"
+    ]
+  ]
+}

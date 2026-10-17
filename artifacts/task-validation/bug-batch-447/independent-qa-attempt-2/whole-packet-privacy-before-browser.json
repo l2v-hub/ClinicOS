@@ -1,0 +1,14 @@
+{
+  "files": 680,
+  "zipMembers": 18344,
+  "findings": [
+    {
+      "file": "independent-qa-attempt-2/launcher-smoke.mjs",
+      "kind": "passwordDsn"
+    },
+    {
+      "file": "independent-qa-attempt-2/launcher-backend-full.mjs",
+      "kind": "passwordDsn"
+    }
+  ]
+}

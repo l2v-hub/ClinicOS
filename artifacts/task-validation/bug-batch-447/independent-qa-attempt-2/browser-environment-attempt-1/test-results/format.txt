@@ -1,0 +1,27 @@
+frontend/src/components/operator/PatientToday.tsx 827ms
+frontend/src/components/operator/ParameterReadingForm.tsx 264ms
+frontend/src/components/operator/PatientRoster.tsx 414ms
+frontend/src/components/operator/MultiPatientParametri.tsx 282ms
+frontend/src/components/operator/PatientDetail.tsx 1889ms
+frontend/src/components/operator/ParameterPatientPick.tsx 46ms
+frontend/src/components/operator/ParameterEntryPanel.tsx 43ms (unchanged)
+frontend/src/components/operator/TherapyRoundsPage.tsx 262ms
+frontend/src/components/operator/TherapyGiroRows.tsx 307ms (unchanged)
+frontend/src/components/operator/TherapyPatientAllergies.tsx 48ms (unchanged)
+frontend/src/components/shared/PatientIdentity.tsx 64ms
+frontend/src/components/shared/DemographicsStatus.tsx 25ms
+frontend/src/components/shared/TherapyCalendarGrid.tsx 171ms
+frontend/src/components/operator/cartella/TherapyFormFields.tsx 305ms
+frontend/src/components/operator/cartella/TherapyFormPreview.tsx 38ms (unchanged)
+frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx 408ms (unchanged)
+frontend/src/components/operator/cartella/therapyQuickSchedule.ts 22ms
+frontend/src/components/operator/cartella/drugPackageSelection.ts 28ms
+frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx 201ms (unchanged)
+frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx 79ms
+frontend/src/components/operator/PatientList.tsx 325ms
+frontend/src/components/operator/OperatorAgenda.tsx 545ms
+frontend/src/lib/parameterPad.ts 103ms
+frontend/src/lib/parameterRound.ts 13ms
+frontend/src/lib/therapyGiro.ts 121ms
+e2e/qa-bug-batch-447-browser.mjs 237ms
+e2e/qa-bug-batch-447.mjs 88ms

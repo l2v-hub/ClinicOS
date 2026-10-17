@@ -1,0 +1,14 @@
+✔ quick schedules preserve explicit fractional dose and equal manual payload (2.517875ms)
+✔ inclusive civil duration handles DST, leap/month/year boundaries and invalid dates (0.744372ms)
+✔ sentence renders the actual payload schedule dose unit route and dates (1.435047ms)
+✔ structured single ingredient strength is prefilled, ambiguous packages stay unconfirmed (2.404098ms)
+✔ next occurrence uses actual facility date, weekday and end bounds and never predicts suspended/import-unconfirmed doses (0.704141ms)
+✔ an existing different evening dose is preserved when a preset retains its time (0.243272ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 445.593854

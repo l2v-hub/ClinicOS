@@ -1,0 +1,57 @@
+frontend/src/components/admin/AdminDashboard.tsx 396ms (unchanged)
+frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts 46ms (unchanged)
+frontend/src/components/operator/ConsegnePatientRoster.tsx 57ms (unchanged)
+frontend/src/components/operator/InvioPSModal.tsx 210ms (unchanged)
+frontend/src/components/operator/MultiPatientParametri.tsx 176ms (unchanged)
+frontend/src/components/operator/OperatorAgenda.tsx 516ms (unchanged)
+frontend/src/components/operator/ParameterEntryPanel.tsx 28ms (unchanged)
+frontend/src/components/operator/ParameterPatientPick.tsx 14ms (unchanged)
+frontend/src/components/operator/ParameterReadingForm.css 192ms
+frontend/src/components/operator/ParameterReadingForm.tsx 210ms (unchanged)
+frontend/src/components/operator/PatientDetail.tsx 1389ms
+frontend/src/components/operator/PatientList.css 372ms
+frontend/src/components/operator/PatientList.tsx 218ms (unchanged)
+frontend/src/components/operator/PatientRecordData.css 366ms
+frontend/src/components/operator/PatientRoster.tsx 222ms (unchanged)
+frontend/src/components/operator/TherapyGiroRows.tsx 265ms
+frontend/src/components/operator/TherapyPatientAllergies.tsx 47ms (unchanged)
+frontend/src/components/operator/TherapyRoundsPage.css 109ms
+frontend/src/components/operator/TherapyRoundsPage.tsx 164ms (unchanged)
+frontend/src/components/operator/__tests__/invioPS.test.ts 264ms (unchanged)
+frontend/src/components/operator/__tests__/operator-dashboard-anomaly-layout.test.ts 20ms
+frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts 75ms (unchanged)
+frontend/src/components/operator/__tests__/rosterOrderUi.test.ts 42ms (unchanged)
+frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx 70ms (unchanged)
+frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx 126ms (unchanged)
+frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx 261ms (unchanged)
+frontend/src/components/operator/cartella/TherapyFormFields.tsx 72ms (unchanged)
+frontend/src/components/operator/cartella/TherapyFormPreview.tsx 13ms (unchanged)
+frontend/src/components/operator/cartella/drugPackageSelection.ts 16ms (unchanged)
+frontend/src/components/operator/invioPSModel.ts 82ms (unchanged)
+frontend/src/components/operator/tabGroups.ts 47ms (unchanged)
+frontend/src/components/shared/DemographicsStatus.tsx 11ms (unchanged)
+frontend/src/components/shared/PatientIdentity.tsx 18ms (unchanged)
+frontend/src/components/shared/TherapyCalendarGrid.tsx 114ms
+frontend/src/lib/__tests__/clinicalHistory.test.ts 38ms (unchanged)
+frontend/src/lib/__tests__/clinicalOverviewResilience.test.ts 8ms (unchanged)
+frontend/src/lib/__tests__/consegneReadModelGuard.test.ts 5ms (unchanged)
+frontend/src/lib/__tests__/invioPSPrintLayout.test.ts 55ms (unchanged)
+frontend/src/lib/__tests__/patientChartNavigation.test.ts 24ms (unchanged)
+frontend/src/lib/__tests__/patientDetailWorkspace.test.ts 18ms
+frontend/src/lib/__tests__/patientListIdentityGuard.test.ts 29ms (unchanged)
+frontend/src/lib/__tests__/roomAssignmentScope.test.ts 15ms
+frontend/src/lib/parameterPad.ts 35ms (unchanged)
+frontend/src/lib/therapyGiro.ts 62ms
+frontend/src/components/admin/AdminAttentionList.css 14ms (unchanged)
+frontend/src/components/admin/AdminAttentionList.tsx 15ms (unchanged)
+frontend/src/components/admin/__tests__/adminAttention456.test.ts 140ms (unchanged)
+frontend/src/components/admin/adminAttentionModel.ts 46ms (unchanged)
+frontend/src/components/operator/PatientToday.tsx 77ms
+frontend/src/components/operator/__tests__/operationalLists452.test.ts 9ms
+frontend/src/components/operator/__tests__/patientToday447.test.ts 27ms
+frontend/src/components/operator/cartella/__tests__/therapyQuickSchedule453.test.ts 41ms
+frontend/src/components/operator/cartella/therapyQuickSchedule.ts 42ms
+frontend/src/lib/__tests__/parameterRound451.test.ts 7ms
+frontend/src/lib/__tests__/therapyEntry454.test.ts 27ms
+frontend/src/lib/emergencyTransferContext.ts 81ms (unchanged)
+frontend/src/lib/parameterRound.ts 13ms (unchanged)

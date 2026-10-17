@@ -1,0 +1,7 @@
+{
+  "status": "failed",
+  "browser": "not-run",
+  "databaseTests": "failed",
+  "diagnosticLimitation": "Wrapper did not persist child test stdout; retained original failure and corrected logging for next diagnosis.",
+  "productionDataUsed": false
+}

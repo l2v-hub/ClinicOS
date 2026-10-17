@@ -1,0 +1,33 @@
+✔ pause/continue and return persist; retries preserve exact history and valid dose receipts (850.445254ms)
+✖ real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts (200.54422ms)
+✔ exit decisions are explicit, confirmed and never accept client actor/time or mixed commands (4.610232ms)
+✔ managed hold requires matching immutable history; unknown/corrupt context is never permission to dose (0.846763ms)
+✔ ordinary writes retain managed history and active hold; explicit forge/erase/change is rejected (0.961592ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12204.760786
+
+✖ failing tests:
+
+test at backend/src/patients/__tests__/temporary-ps-exits-db.test.ts:1:4530
+✖ real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts (200.54422ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert(outcome.error.status === 409 || outcome.error.code === 'P2034')
+  
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend/src/patients/__tests__/temporary-ps-exits-db.test.ts:173:9)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

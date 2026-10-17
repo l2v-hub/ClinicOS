@@ -1,0 +1,19 @@
+✔ 417 both workspaces use exactly the shared field order, full ACVPU options and no prior prefill (24.197171ms)
+✔ 417 numeric raw text is never maxlength-truncated and desktop has no software keypad (3.707093ms)
+✔ 417 uncertain saves lock fields but retain enabled explicit retry and error/history guidance (3.415751ms)
+✔ Today vitals use facility civil date and exclude adjacent day and unrelated old readings (2.523613ms)
+✔ Today surface never offers denied therapy/clinical read or record action (29.216909ms)
+✔ Today counts the complete daily history and selects latest after paginated duplicates (1.157936ms)
+✔ Today rejects foreign patients, wrong civil days, repeated cursors and failed subsequent pages (5.788857ms)
+✔ advance skips recorded and unknown/stale patients and wraps without selecting current patient (1.615774ms)
+✔ previous placeholders only contain actual observation and never missing prose (1.485554ms)
+✔ advance reaches the unfinished patient after an entirely completed intermediate page (1.928789ms)
+✔ advance stops on cursor loops, unavailable pages and changed day or selection (1.252319ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1784.164809

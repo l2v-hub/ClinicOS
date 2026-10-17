@@ -1,0 +1,1222 @@
+{
+  "baseline": false,
+  "syntheticOnly": true,
+  "sourceFingerprintBefore": "e4d7e5d2412be2b8b7386286bb542cdc65e6a4c66d2481a5dd51a1221101e4ec",
+  "sourceFingerprintAfter": "e4d7e5d2412be2b8b7386286bb542cdc65e6a4c66d2481a5dd51a1221101e4ec",
+  "sourceStable": true,
+  "results": [
+    {
+      "issue": 456,
+      "status": "PASS_CLEAR_SCOPE",
+      "clinicalGate": null,
+      "expectedFaults": []
+    },
+    {
+      "issue": 447,
+      "status": "FAILED",
+      "message": "Parametri: first meaningful TIME top=161, required <=160",
+      "stack": [
+        "AssertionError [ERR_ASSERTION]: Parametri: first meaningful TIME top=161, required <=160",
+        "    at file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/qa-bug-batch-447-browser.mjs:806:16",
+        "    at async scenario (file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/qa-bug-batch-447-browser.mjs:535:5)",
+        "    at async file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/qa-bug-batch-447-browser.mjs:675:5"
+      ],
+      "errors": []
+    },
+    {
+      "issue": 451,
+      "status": "PASS_CLEAR_SCOPE",
+      "clinicalGate": null,
+      "expectedFaults": [
+        {
+          "kind": "http",
+          "status": 400,
+          "method": "POST",
+          "path": "/patients/cmvc5871m0007ipp9zudwk34i/parameter-readings"
+        },
+        {
+          "kind": "console",
+          "path": "/patients/cmvc5871m0007ipp9zudwk34i/parameter-readings",
+          "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+        },
+        {
+          "kind": "http",
+          "status": 503,
+          "method": "POST",
+          "path": "/patients/cmvc5872b0009ipp9zydihmvh/parameter-readings"
+        },
+        {
+          "kind": "console",
+          "path": "/patients/cmvc5872b0009ipp9zydihmvh/parameter-readings",
+          "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+        }
+      ]
+    },
+    {
+      "issue": 452,
+      "status": "PASS_CLEAR_SCOPE",
+      "clinicalGate": null,
+      "expectedFaults": []
+    },
+    {
+      "issue": 453,
+      "status": "PASS_CLEAR_SCOPE",
+      "clinicalGate": "pending",
+      "expectedFaults": []
+    },
+    {
+      "issue": 454,
+      "status": "PASS_CLEAR_SCOPE",
+      "clinicalGate": null,
+      "expectedFaults": []
+    },
+    {
+      "issue": 457,
+      "status": "PASS_CLEAR_SCOPE",
+      "clinicalGate": "pending",
+      "expectedFaults": []
+    }
+  ],
+  "receipts": [
+    {
+      "issue": 456,
+      "urgentDiaryAndHandover": 2,
+      "tomorrowExcluded": true,
+      "actualShiftVerified": true,
+      "occupancy": "1/1"
+    },
+    {
+      "issue": 447,
+      "section": "Oggi",
+      "containerY": 134,
+      "actualGeometry": {
+        "first": {
+          "tag": "H2",
+          "text": "Oggi ·",
+          "top": 135,
+          "visibleTop": 135
+        },
+        "header": {
+          "top": 4,
+          "height": 68
+        },
+        "navigation": {
+          "top": 77,
+          "height": 53
+        },
+        "targets": [
+          {
+            "name": "Allergie gravi: QA penicillina, QA lattice (moderata), QA acido acetilsalicilico",
+            "left": 112,
+            "right": 552.1875,
+            "top": 28,
+            "bottom": 72,
+            "width": 440.1875,
+            "height": 44,
+            "scrollWidth": 438,
+            "clientWidth": 438,
+            "scrollHeight": 42,
+            "clientHeight": 42
+          },
+          {
+            "name": "Rischi attivi: caduta (alto)Apri la scala →",
+            "left": 556.1875,
+            "right": 713.078125,
+            "top": 28,
+            "bottom": 72,
+            "width": 156.890625,
+            "height": 44,
+            "scrollWidth": 155,
+            "clientWidth": 155,
+            "scrollHeight": 42,
+            "clientHeight": 42
+          },
+          {
+            "name": "Completa anagrafica: Codice fiscale, Telefono",
+            "left": 770.890625,
+            "right": 852.078125,
+            "top": 28,
+            "bottom": 72,
+            "width": 81.1875,
+            "height": 44,
+            "scrollWidth": 81,
+            "clientWidth": 81,
+            "scrollHeight": 44,
+            "clientHeight": 44
+          },
+          {
+            "name": "Oggi",
+            "left": 96,
+            "right": 155.9375,
+            "top": 81,
+            "bottom": 125,
+            "width": 59.9375,
+            "height": 44,
+            "scrollWidth": 56,
+            "clientWidth": 56,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Dati di ingresso",
+            "left": 161.9375,
+            "right": 292.34375,
+            "top": 81,
+            "bottom": 125,
+            "width": 130.40625,
+            "height": 44,
+            "scrollWidth": 126,
+            "clientWidth": 126,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Clinica1",
+            "left": 298.34375,
+            "right": 398.015625,
+            "top": 81,
+            "bottom": 125,
+            "width": 99.671875,
+            "height": 44,
+            "scrollWidth": 96,
+            "clientWidth": 96,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Terapia",
+            "left": 404.015625,
+            "right": 481.078125,
+            "top": 81,
+            "bottom": 125,
+            "width": 77.0625,
+            "height": 44,
+            "scrollWidth": 73,
+            "clientWidth": 73,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Parametri",
+            "left": 487.078125,
+            "right": 578.828125,
+            "top": 81,
+            "bottom": 125,
+            "width": 91.75,
+            "height": 44,
+            "scrollWidth": 88,
+            "clientWidth": 88,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Moduli",
+            "left": 584.828125,
+            "right": 657.515625,
+            "top": 81,
+            "bottom": 125,
+            "width": 72.6875,
+            "height": 44,
+            "scrollWidth": 69,
+            "clientWidth": 69,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Documenti",
+            "left": 663.515625,
+            "right": 762.96875,
+            "top": 81,
+            "bottom": 125,
+            "width": 99.453125,
+            "height": 44,
+            "scrollWidth": 95,
+            "clientWidth": 95,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Dimissione",
+            "left": 768.96875,
+            "right": 869.125,
+            "top": 81,
+            "bottom": 125,
+            "width": 100.15625,
+            "height": 44,
+            "scrollWidth": 96,
+            "clientWidth": 96,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Stampa la scheda",
+            "left": 1080,
+            "right": 1126,
+            "top": 81,
+            "bottom": 125,
+            "width": 46,
+            "height": 44,
+            "scrollWidth": 42,
+            "clientWidth": 42,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Invio in Pronto Soccorso",
+            "left": 1134,
+            "right": 1180,
+            "top": 81,
+            "bottom": 125,
+            "width": 46,
+            "height": 44,
+            "scrollWidth": 42,
+            "clientWidth": 42,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          }
+        ],
+        "overlaps": [],
+        "viewportWidth": 1180,
+        "scrollY": 0
+      }
+    },
+    {
+      "issue": 447,
+      "section": "Dati di ingresso",
+      "containerY": 134,
+      "actualGeometry": {
+        "first": {
+          "tag": "BUTTON",
+          "text": "Modifica",
+          "top": 155,
+          "visibleTop": 155
+        },
+        "header": {
+          "top": 4,
+          "height": 68
+        },
+        "navigation": {
+          "top": 77,
+          "height": 53
+        },
+        "targets": [
+          {
+            "name": "Allergie gravi: QA penicillina, QA lattice (moderata), QA acido acetilsalicilico",
+            "left": 160,
+            "right": 600.1875,
+            "top": 28,
+            "bottom": 72,
+            "width": 440.1875,
+            "height": 44,
+            "scrollWidth": 438,
+            "clientWidth": 438,
+            "scrollHeight": 42,
+            "clientHeight": 42
+          },
+          {
+            "name": "Rischi attivi: caduta (alto)Apri la scala →",
+            "left": 604.1875,
+            "right": 761.078125,
+            "top": 28,
+            "bottom": 72,
+            "width": 156.890625,
+            "height": 44,
+            "scrollWidth": 155,
+            "clientWidth": 155,
+            "scrollHeight": 42,
+            "clientHeight": 42
+          },
+          {
+            "name": "Completa anagrafica: Codice fiscale, Telefono",
+            "left": 770.890625,
+            "right": 852.078125,
+            "top": 28,
+            "bottom": 72,
+            "width": 81.1875,
+            "height": 44,
+            "scrollWidth": 81,
+            "clientWidth": 81,
+            "scrollHeight": 44,
+            "clientHeight": 44
+          },
+          {
+            "name": "Oggi",
+            "left": 96,
+            "right": 155.28125,
+            "top": 81,
+            "bottom": 125,
+            "width": 59.28125,
+            "height": 44,
+            "scrollWidth": 55,
+            "clientWidth": 55,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Dati di ingresso",
+            "left": 161.28125,
+            "right": 293.921875,
+            "top": 81,
+            "bottom": 125,
+            "width": 132.640625,
+            "height": 44,
+            "scrollWidth": 129,
+            "clientWidth": 129,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Clinica1",
+            "left": 299.921875,
+            "right": 399.59375,
+            "top": 81,
+            "bottom": 125,
+            "width": 99.671875,
+            "height": 44,
+            "scrollWidth": 96,
+            "clientWidth": 96,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Terapia",
+            "left": 405.59375,
+            "right": 482.65625,
+            "top": 81,
+            "bottom": 125,
+            "width": 77.0625,
+            "height": 44,
+            "scrollWidth": 73,
+            "clientWidth": 73,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Parametri",
+            "left": 488.65625,
+            "right": 580.40625,
+            "top": 81,
+            "bottom": 125,
+            "width": 91.75,
+            "height": 44,
+            "scrollWidth": 88,
+            "clientWidth": 88,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Moduli",
+            "left": 586.40625,
+            "right": 659.09375,
+            "top": 81,
+            "bottom": 125,
+            "width": 72.6875,
+            "height": 44,
+            "scrollWidth": 69,
+            "clientWidth": 69,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Documenti",
+            "left": 665.09375,
+            "right": 764.546875,
+            "top": 81,
+            "bottom": 125,
+            "width": 99.453125,
+            "height": 44,
+            "scrollWidth": 95,
+            "clientWidth": 95,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Dimissione",
+            "left": 770.546875,
+            "right": 870.703125,
+            "top": 81,
+            "bottom": 125,
+            "width": 100.15625,
+            "height": 44,
+            "scrollWidth": 96,
+            "clientWidth": 96,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Stampa la scheda",
+            "left": 1080,
+            "right": 1126,
+            "top": 81,
+            "bottom": 125,
+            "width": 46,
+            "height": 44,
+            "scrollWidth": 42,
+            "clientWidth": 42,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Invio in Pronto Soccorso",
+            "left": 1134,
+            "right": 1180,
+            "top": 81,
+            "bottom": 125,
+            "width": 46,
+            "height": 44,
+            "scrollWidth": 42,
+            "clientWidth": 42,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          }
+        ],
+        "overlaps": [],
+        "viewportWidth": 1180,
+        "scrollY": 0
+      }
+    },
+    {
+      "issue": 447,
+      "section": "Clinica",
+      "containerY": 134,
+      "actualGeometry": {
+        "first": {
+          "tag": "SPAN",
+          "text": "Nessuna diagnosi",
+          "top": 146.84375,
+          "visibleTop": 146.84375
+        },
+        "header": {
+          "top": 4,
+          "height": 68
+        },
+        "navigation": {
+          "top": 77,
+          "height": 53
+        },
+        "targets": [
+          {
+            "name": "Allergie gravi: QA penicillina, QA lattice (moderata), QA acido acetilsalicilico",
+            "left": 160,
+            "right": 600.1875,
+            "top": 28,
+            "bottom": 72,
+            "width": 440.1875,
+            "height": 44,
+            "scrollWidth": 438,
+            "clientWidth": 438,
+            "scrollHeight": 42,
+            "clientHeight": 42
+          },
+          {
+            "name": "Rischi attivi: caduta (alto)Apri la scala →",
+            "left": 604.1875,
+            "right": 761.078125,
+            "top": 28,
+            "bottom": 72,
+            "width": 156.890625,
+            "height": 44,
+            "scrollWidth": 155,
+            "clientWidth": 155,
+            "scrollHeight": 42,
+            "clientHeight": 42
+          },
+          {
+            "name": "Completa anagrafica: Codice fiscale, Telefono",
+            "left": 770.890625,
+            "right": 852.078125,
+            "top": 28,
+            "bottom": 72,
+            "width": 81.1875,
+            "height": 44,
+            "scrollWidth": 81,
+            "clientWidth": 81,
+            "scrollHeight": 44,
+            "clientHeight": 44
+          },
+          {
+            "name": "Oggi",
+            "left": 96,
+            "right": 155.28125,
+            "top": 81,
+            "bottom": 125,
+            "width": 59.28125,
+            "height": 44,
+            "scrollWidth": 55,
+            "clientWidth": 55,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Dati di ingresso",
+            "left": 161.28125,
+            "right": 291.6875,
+            "top": 81,
+            "bottom": 125,
+            "width": 130.40625,
+            "height": 44,
+            "scrollWidth": 126,
+            "clientWidth": 126,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Clinica1",
+            "left": 297.6875,
+            "right": 398.90625,
+            "top": 81,
+            "bottom": 125,
+            "width": 101.21875,
+            "height": 44,
+            "scrollWidth": 97,
+            "clientWidth": 97,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Terapia",
+            "left": 404.90625,
+            "right": 481.96875,
+            "top": 81,
+            "bottom": 125,
+            "width": 77.0625,
+            "height": 44,
+            "scrollWidth": 73,
+            "clientWidth": 73,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Parametri",
+            "left": 487.96875,
+            "right": 579.71875,
+            "top": 81,
+            "bottom": 125,
+            "width": 91.75,
+            "height": 44,
+            "scrollWidth": 88,
+            "clientWidth": 88,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Moduli",
+            "left": 585.71875,
+            "right": 658.40625,
+            "top": 81,
+            "bottom": 125,
+            "width": 72.6875,
+            "height": 44,
+            "scrollWidth": 69,
+            "clientWidth": 69,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Documenti",
+            "left": 664.40625,
+            "right": 763.859375,
+            "top": 81,
+            "bottom": 125,
+            "width": 99.453125,
+            "height": 44,
+            "scrollWidth": 95,
+            "clientWidth": 95,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Dimissione",
+            "left": 769.859375,
+            "right": 870.015625,
+            "top": 81,
+            "bottom": 125,
+            "width": 100.15625,
+            "height": 44,
+            "scrollWidth": 96,
+            "clientWidth": 96,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Stampa la scheda",
+            "left": 1080,
+            "right": 1126,
+            "top": 81,
+            "bottom": 125,
+            "width": 46,
+            "height": 44,
+            "scrollWidth": 42,
+            "clientWidth": 42,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Invio in Pronto Soccorso",
+            "left": 1134,
+            "right": 1180,
+            "top": 81,
+            "bottom": 125,
+            "width": 46,
+            "height": 44,
+            "scrollWidth": 42,
+            "clientWidth": 42,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          }
+        ],
+        "overlaps": [],
+        "viewportWidth": 1180,
+        "scrollY": 0
+      }
+    },
+    {
+      "issue": 447,
+      "section": "Terapia",
+      "containerY": 134,
+      "actualGeometry": {
+        "first": {
+          "tag": "SPAN",
+          "text": "Terapia Farmacologica",
+          "top": 156.578125,
+          "visibleTop": 156.578125
+        },
+        "header": {
+          "top": 4,
+          "height": 68
+        },
+        "navigation": {
+          "top": 77,
+          "height": 53
+        },
+        "targets": [
+          {
+            "name": "Allergie gravi: QA penicillina, QA lattice (moderata), QA acido acetilsalicilico",
+            "left": 160,
+            "right": 600.1875,
+            "top": 28,
+            "bottom": 72,
+            "width": 440.1875,
+            "height": 44,
+            "scrollWidth": 438,
+            "clientWidth": 438,
+            "scrollHeight": 42,
+            "clientHeight": 42
+          },
+          {
+            "name": "Rischi attivi: caduta (alto)Apri la scala →",
+            "left": 604.1875,
+            "right": 761.078125,
+            "top": 28,
+            "bottom": 72,
+            "width": 156.890625,
+            "height": 44,
+            "scrollWidth": 155,
+            "clientWidth": 155,
+            "scrollHeight": 42,
+            "clientHeight": 42
+          },
+          {
+            "name": "Completa anagrafica: Codice fiscale, Telefono",
+            "left": 770.890625,
+            "right": 852.078125,
+            "top": 28,
+            "bottom": 72,
+            "width": 81.1875,
+            "height": 44,
+            "scrollWidth": 81,
+            "clientWidth": 81,
+            "scrollHeight": 44,
+            "clientHeight": 44
+          },
+          {
+            "name": "Oggi",
+            "left": 96,
+            "right": 155.28125,
+            "top": 81,
+            "bottom": 125,
+            "width": 59.28125,
+            "height": 44,
+            "scrollWidth": 55,
+            "clientWidth": 55,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Dati di ingresso",
+            "left": 161.28125,
+            "right": 291.6875,
+            "top": 81,
+            "bottom": 125,
+            "width": 130.40625,
+            "height": 44,
+            "scrollWidth": 126,
+            "clientWidth": 126,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Clinica1",
+            "left": 297.6875,
+            "right": 397.359375,
+            "top": 81,
+            "bottom": 125,
+            "width": 99.671875,
+            "height": 44,
+            "scrollWidth": 96,
+            "clientWidth": 96,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Terapia",
+            "left": 403.359375,
+            "right": 481.703125,
+            "top": 81,
+            "bottom": 125,
+            "width": 78.34375,
+            "height": 44,
+            "scrollWidth": 74,
+            "clientWidth": 74,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Parametri",
+            "left": 487.703125,
+            "right": 579.453125,
+            "top": 81,
+            "bottom": 125,
+            "width": 91.75,
+            "height": 44,
+            "scrollWidth": 88,
+            "clientWidth": 88,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Moduli",
+            "left": 585.453125,
+            "right": 658.140625,
+            "top": 81,
+            "bottom": 125,
+            "width": 72.6875,
+            "height": 44,
+            "scrollWidth": 69,
+            "clientWidth": 69,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Documenti",
+            "left": 664.140625,
+            "right": 763.59375,
+            "top": 81,
+            "bottom": 125,
+            "width": 99.453125,
+            "height": 44,
+            "scrollWidth": 95,
+            "clientWidth": 95,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Dimissione",
+            "left": 769.59375,
+            "right": 869.75,
+            "top": 81,
+            "bottom": 125,
+            "width": 100.15625,
+            "height": 44,
+            "scrollWidth": 96,
+            "clientWidth": 96,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Stampa la scheda",
+            "left": 1080,
+            "right": 1126,
+            "top": 81,
+            "bottom": 125,
+            "width": 46,
+            "height": 44,
+            "scrollWidth": 42,
+            "clientWidth": 42,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Invio in Pronto Soccorso",
+            "left": 1134,
+            "right": 1180,
+            "top": 81,
+            "bottom": 125,
+            "width": 46,
+            "height": 44,
+            "scrollWidth": 42,
+            "clientWidth": 42,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          }
+        ],
+        "overlaps": [],
+        "viewportWidth": 1180,
+        "scrollY": 0
+      }
+    },
+    {
+      "issue": 447,
+      "section": "Parametri",
+      "containerY": 134,
+      "actualGeometry": {
+        "first": {
+          "tag": "TIME",
+          "text": "10:37",
+          "top": 161,
+          "visibleTop": 161
+        },
+        "header": {
+          "top": 4,
+          "height": 68
+        },
+        "navigation": {
+          "top": 77,
+          "height": 53
+        },
+        "targets": [
+          {
+            "name": "Allergie gravi: QA penicillina, QA lattice (moderata), QA acido acetilsalicilico",
+            "left": 160,
+            "right": 600.1875,
+            "top": 28,
+            "bottom": 72,
+            "width": 440.1875,
+            "height": 44,
+            "scrollWidth": 438,
+            "clientWidth": 438,
+            "scrollHeight": 42,
+            "clientHeight": 42
+          },
+          {
+            "name": "Rischi attivi: caduta (alto)Apri la scala →",
+            "left": 604.1875,
+            "right": 761.078125,
+            "top": 28,
+            "bottom": 72,
+            "width": 156.890625,
+            "height": 44,
+            "scrollWidth": 155,
+            "clientWidth": 155,
+            "scrollHeight": 42,
+            "clientHeight": 42
+          },
+          {
+            "name": "Completa anagrafica: Codice fiscale, Telefono",
+            "left": 770.890625,
+            "right": 852.078125,
+            "top": 28,
+            "bottom": 72,
+            "width": 81.1875,
+            "height": 44,
+            "scrollWidth": 81,
+            "clientWidth": 81,
+            "scrollHeight": 44,
+            "clientHeight": 44
+          },
+          {
+            "name": "Oggi",
+            "left": 96,
+            "right": 155.28125,
+            "top": 81,
+            "bottom": 125,
+            "width": 59.28125,
+            "height": 44,
+            "scrollWidth": 55,
+            "clientWidth": 55,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Dati di ingresso",
+            "left": 161.28125,
+            "right": 291.6875,
+            "top": 81,
+            "bottom": 125,
+            "width": 130.40625,
+            "height": 44,
+            "scrollWidth": 126,
+            "clientWidth": 126,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Clinica1",
+            "left": 297.6875,
+            "right": 397.359375,
+            "top": 81,
+            "bottom": 125,
+            "width": 99.671875,
+            "height": 44,
+            "scrollWidth": 96,
+            "clientWidth": 96,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Terapia",
+            "left": 403.359375,
+            "right": 480.421875,
+            "top": 81,
+            "bottom": 125,
+            "width": 77.0625,
+            "height": 44,
+            "scrollWidth": 73,
+            "clientWidth": 73,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Parametri",
+            "left": 486.421875,
+            "right": 579.984375,
+            "top": 81,
+            "bottom": 125,
+            "width": 93.5625,
+            "height": 44,
+            "scrollWidth": 90,
+            "clientWidth": 90,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Moduli",
+            "left": 585.984375,
+            "right": 658.671875,
+            "top": 81,
+            "bottom": 125,
+            "width": 72.6875,
+            "height": 44,
+            "scrollWidth": 69,
+            "clientWidth": 69,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Documenti",
+            "left": 664.671875,
+            "right": 764.125,
+            "top": 81,
+            "bottom": 125,
+            "width": 99.453125,
+            "height": 44,
+            "scrollWidth": 95,
+            "clientWidth": 95,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Dimissione",
+            "left": 770.125,
+            "right": 870.28125,
+            "top": 81,
+            "bottom": 125,
+            "width": 100.15625,
+            "height": 44,
+            "scrollWidth": 96,
+            "clientWidth": 96,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Stampa la scheda",
+            "left": 1080,
+            "right": 1126,
+            "top": 81,
+            "bottom": 125,
+            "width": 46,
+            "height": 44,
+            "scrollWidth": 42,
+            "clientWidth": 42,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          },
+          {
+            "name": "Invio in Pronto Soccorso",
+            "left": 1134,
+            "right": 1180,
+            "top": 81,
+            "bottom": 125,
+            "width": 46,
+            "height": 44,
+            "scrollWidth": 42,
+            "clientWidth": 42,
+            "scrollHeight": 40,
+            "clientHeight": 40
+          }
+        ],
+        "overlaps": [],
+        "viewportWidth": 1180,
+        "scrollY": 0
+      }
+    },
+    {
+      "issue": 451,
+      "savedValues": {
+        "temperatura": "39.2",
+        "o2": "no"
+      },
+      "nextPatientAdvanced": true,
+      "failedSaveDidNotAdvance": true,
+      "uncertainReceiptRetrySameBodyExactlyOnce": true,
+      "negativeFaults": [
+        {
+          "kind": "http",
+          "status": 400,
+          "method": "POST",
+          "path": "/patients/cmvc5871m0007ipp9zudwk34i/parameter-readings"
+        },
+        {
+          "kind": "console",
+          "path": "/patients/cmvc5871m0007ipp9zudwk34i/parameter-readings",
+          "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+        },
+        {
+          "kind": "http",
+          "status": 503,
+          "method": "POST",
+          "path": "/patients/cmvc5872b0009ipp9zydihmvh/parameter-readings"
+        },
+        {
+          "kind": "console",
+          "path": "/patients/cmvc5872b0009ipp9zydihmvh/parameter-readings",
+          "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+        }
+      ]
+    },
+    {
+      "issue": 451,
+      "pagination": {
+        "cohort": "QA Paged451 ca7c84e5",
+        "pageSizes": [
+          25,
+          25,
+          1
+        ],
+        "crossedDistinctCursors": 2,
+        "completedIntermediateUnchanged": 49,
+        "firstPersistedExactlyOnce": true,
+        "selectedFinalIncomplete": "cmvc595px003lipp9tpqz1mqd"
+      }
+    },
+    {
+      "issue": 452,
+      "bedFirst": true,
+      "missingDataPerRow": false,
+      "incompleteFooterCount": 1,
+      "compactClinicalEmpty": true,
+      "emptyAgendaGrid": false
+    },
+    {
+      "issue": 453,
+      "interactionsAfterPackageSelection": 4,
+      "exactSchedulePayload": [
+        {
+          "time": "08:00",
+          "quantityNumerator": 1,
+          "quantityDenominator": 1,
+          "administrationUnit": "compressa"
+        },
+        {
+          "time": "20:00",
+          "quantityNumerator": 1,
+          "quantityDenominator": 1,
+          "administrationUnit": "compressa"
+        }
+      ],
+      "sentence": "QA453 COMPRESSE 5 MG · 1 compressa alle 08:00; 1 compressa alle 20:00 · orale · dal 2026-10-17 al 2026-10-23. Prossima dose prevista: 2026-10-17 ore 20:00.",
+      "allergyPolicy": "pending; unchanged"
+    },
+    {
+      "issue": 454,
+      "initialCurrentTime": "10:00",
+      "controlRows": 1,
+      "actualDosePersisted": true,
+      "calendarScroll": {
+        "scrollTop": 309,
+        "height": 578,
+        "top": 542.15625,
+        "parentTop": 501.421875
+      }
+    },
+    {
+      "issue": 457,
+      "reasonEditable": true,
+      "actualDoseTimes": [
+        "2026-10-17T10:38"
+      ],
+      "pdfBytes": 53558,
+      "exitWrites": 0,
+      "therapyPauseDecision": "pending"
+    }
+  ],
+  "residualGates": [
+    {
+      "issue": 453,
+      "status": "BLOCKED",
+      "reason": "Clinical allergy–drug policy decision remains unanswered; no matching or override implemented."
+    },
+    {
+      "issue": 457,
+      "status": "BLOCKED",
+      "reason": "Temporary PS exit and therapy-pause decision remains unanswered; no exit action implemented."
+    }
+  ],
+  "fontProvenance": {
+    "packages": [
+      {
+        "name": "@fontsource/inter",
+        "version": "5.2.8",
+        "registryIntegrity": "sha512-P6r5WnJoKiNVV+zvW2xM13gNdFhAEpQ9dQJHt3naLvfg+LkF2ldgSLiF4T41lf1SQCM9QmkqPTn4TH568IRagg==",
+        "tarballSha256": "7004eee208371e46125e999c67b094ba47f3606b1983331c6f8e77b39a2f825c"
+      },
+      {
+        "name": "@fontsource/jetbrains-mono",
+        "version": "5.2.8",
+        "registryIntegrity": "sha512-6w8/SG4kqvIMu7xd7wt6x3idn1Qux3p9N62s6G3rfldOUYHpWcc2FKrqf+Vo44jRvqWj2oAtTHrZXEP23oSKwQ==",
+        "tarballSha256": "6626da48530eb76b183d06acef52b4609d8ea3a35a7ed5d4fd8ef656eaca0a3c"
+      }
+    ],
+    "files": {
+      "inter-latin-400-normal.woff2": {
+        "sha256": "8909904ab6c872eb994093482a88a28eca2cd95912d7b6fecd72103b0dc07edc",
+        "version": "5.2.8"
+      },
+      "inter-latin-500-normal.woff2": {
+        "sha256": "f3779f1efccc4bdcdf9c0a02ab95bf6bd092ed09c48c08cedc725889edd1d19f",
+        "version": "5.2.8"
+      },
+      "inter-latin-600-normal.woff2": {
+        "sha256": "f9a06e79cd3a2a20951c0f0e28f66dd0e6d3fda73911d640a2125c8fcb78f21a",
+        "version": "5.2.8"
+      },
+      "inter-latin-700-normal.woff2": {
+        "sha256": "6f56409fd3d64bb85f7d070bce20749db2d66b6d63cec586cc22d1c761be2491",
+        "version": "5.2.8"
+      },
+      "inter-latin-800-normal.woff2": {
+        "sha256": "a7d0a50f15d389cad679238466bdb5fc9787aa0715719064ce25abaff042820d",
+        "version": "5.2.8"
+      },
+      "jetbrains-mono-latin-400-normal.woff2": {
+        "sha256": "14425ba9c695763c1547f48a206b7aa60350a33ae23de09f0407877f3fcd89eb",
+        "version": "5.2.8"
+      },
+      "jetbrains-mono-latin-500-normal.woff2": {
+        "sha256": "cb182feeed4d798ff6961d3c79f7026279448fca0676438aaecb21f3fc39553a",
+        "version": "5.2.8"
+      }
+    },
+    "fixture": "Verified official font bytes; no empty CSS/font response or error suppression"
+  }
+}

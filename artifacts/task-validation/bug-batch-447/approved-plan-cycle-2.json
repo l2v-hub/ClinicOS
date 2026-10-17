@@ -1,0 +1,746 @@
+{
+  "plan": {
+    "title": "Coordinated clinical UX: Today, rounds, lists, supervisor and PS transfer",
+    "feature": "Shared patient clinical workspace and operational rounds",
+    "rationale": "447/452/453/454/457 share PatientDetail and therapy parent;452/454 share Giro identity;451 and456 consume the same patient/current-day operational workflows. A single canonical worktree and PR prevents repeated competing edits, while preserving each source acceptance and separate evidence.453 and457 contain explicit unresolved clinical-policy gates, never inferred from UX instructions.",
+    "analysis": "Baseline a516d42e31f6674c39c1d130c9706cd80a7ab4c6; all seven issue bodies and comments read2026-10-17. Source confirms global repeated cartella banners, missing Today doses, parameter save without auto advance, always-present keypad, repeated missing previous text, calendar default, duplicate allergy details and supervisor legacy urgency summary. InvioPS loads only active prescriptions. Temporary exits are liberatoria.usciteLog via verified cartella update; assessments/transfers is unrelated mobility assessment and is excluded. Full group is not ready to implement clinical-policy portions until explicit decisions; root may authorize only the independent clear UX/print subset and must retain unsatisfied acceptance. No application edits made while proposal is reviewed.",
+    "execution": {
+      "difficulty": "high",
+      "mode": "direct",
+      "reason": "Use senior direct execution for tightly coupled clinical identity, persistence and accessibility behavior. Optional bounded delegated units must retain one coordinated worktree and independent QA; no mandatory smaller model and no assumed global load."
+    },
+    "issues": [
+      447,
+      451,
+      452,
+      453,
+      454,
+      456,
+      457
+    ],
+    "scope": [
+      "e2e/qa-bug-batch-447-browser.mjs",
+      "e2e/qa-bug-batch-447.mjs",
+      "frontend/src/components/admin/AdminAttentionList.css",
+      "frontend/src/components/admin/AdminAttentionList.tsx",
+      "frontend/src/components/admin/AdminDashboard.tsx",
+      "frontend/src/components/admin/__tests__/adminAttention456.test.ts",
+      "frontend/src/components/admin/adminAttentionModel.ts",
+      "frontend/src/components/operator/ConsegnePatientRoster.tsx",
+      "frontend/src/components/operator/InvioPSModal.tsx",
+      "frontend/src/components/operator/MultiPatientParametri.tsx",
+      "frontend/src/components/operator/OperatorAgenda.tsx",
+      "frontend/src/components/operator/ParameterEntryPanel.tsx",
+      "frontend/src/components/operator/ParameterPatientPick.tsx",
+      "frontend/src/components/operator/ParameterReadingForm.css",
+      "frontend/src/components/operator/ParameterReadingForm.tsx",
+      "frontend/src/components/operator/PatientDetail.tsx",
+      "frontend/src/components/operator/PatientList.css",
+      "frontend/src/components/operator/PatientList.tsx",
+      "frontend/src/components/operator/PatientOverview.css",
+      "frontend/src/components/operator/PatientParameters.css",
+      "frontend/src/components/operator/PatientRecordData.css",
+      "frontend/src/components/operator/PatientRegimeControls.tsx",
+      "frontend/src/components/operator/PatientRoster.tsx",
+      "frontend/src/components/operator/PatientToday.tsx",
+      "frontend/src/components/operator/TherapyGiroRows.tsx",
+      "frontend/src/components/operator/TherapyPatientAllergies.tsx",
+      "frontend/src/components/operator/TherapyRoundsPage.css",
+      "frontend/src/components/operator/TherapyRoundsPage.tsx",
+      "frontend/src/components/operator/__tests__/invioPS.test.ts",
+      "frontend/src/components/operator/__tests__/operationalLists452.test.ts",
+      "frontend/src/components/operator/__tests__/patientToday447.test.ts",
+      "frontend/src/components/operator/cartella/AvvisoAnomalieFarmaci.tsx",
+      "frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx",
+      "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+      "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "frontend/src/components/operator/cartella/TherapyFormFields.css",
+      "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+      "frontend/src/components/operator/cartella/TherapyFormPreview.tsx",
+      "frontend/src/components/operator/cartella/__tests__/therapyQuickSchedule453.test.ts",
+      "frontend/src/components/operator/cartella/__tests__/uxW4Misc.test.ts",
+      "frontend/src/components/operator/cartella/drugPackageSelection.ts",
+      "frontend/src/components/operator/cartella/therapyQuickSchedule.ts",
+      "frontend/src/components/operator/invioPSModel.ts",
+      "frontend/src/components/operator/tabGroups.ts",
+      "frontend/src/components/shared/DemographicsStatus.tsx",
+      "frontend/src/components/shared/PatientIdentity.tsx",
+      "frontend/src/components/shared/TherapyCalendarGrid.tsx",
+      "frontend/src/lib/__tests__/invioPSPrintLayout.test.ts",
+      "frontend/src/lib/__tests__/parameterRound451.test.ts",
+      "frontend/src/lib/__tests__/therapyEntry454.test.ts",
+      "frontend/src/lib/emergencyTransferContext.ts",
+      "frontend/src/lib/parameterPad.ts",
+      "frontend/src/lib/parameterRound.ts",
+      "frontend/src/lib/therapyGiro.ts",
+      "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+      "frontend/src/lib/__tests__/consegneReadModelGuard.test.ts",
+      "frontend/src/components/operator/__tests__/operator-dashboard-anomaly-layout.test.ts",
+      "frontend/src/lib/__tests__/clinicalOverviewResilience.test.ts",
+      "frontend/src/lib/__tests__/roomAssignmentScope.test.ts",
+      "frontend/src/lib/__tests__/patientChartNavigation.test.ts",
+      "frontend/src/lib/__tests__/patientDetailWorkspace.test.ts",
+      "frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts",
+      "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
+      "frontend/src/lib/__tests__/clinicalHistory.test.ts",
+      "frontend/src/lib/__tests__/therapyPages.test.ts",
+      "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts",
+      "backend/src/patients/temporary-ps-exits.ts",
+      "backend/src/patients/cartella-update.ts",
+      "backend/src/routes/patients.ts",
+      "backend/src/therapies/administration-record.ts",
+      "backend/src/therapies/prn-administration.ts",
+      "backend/src/therapies/therapy-slots.ts",
+      "backend/src/therapies/due-therapy-query.ts",
+      "backend/src/routes/therapy.ts",
+      "backend/src/patients/__tests__/temporary-ps-exits.test.ts",
+      "backend/src/patients/__tests__/temporary-ps-exits-db.test.ts",
+      "frontend/src/types.ts",
+      "frontend/src/lib/temporaryPsExit.ts",
+      "frontend/src/lib/therapySlotPage.ts",
+      "frontend/src/lib/__tests__/therapySlotPage.test.ts",
+      "frontend/src/components/operator/cartella/TherapyDrugDosePanel.tsx",
+      "frontend/src/components/operator/cartella/DimissioneTab.tsx",
+      "frontend/src/App.tsx",
+      "frontend/src/lib/cartellaWriteQueue.ts",
+      "frontend/src/lib/__tests__/cartellaWriteQueue.test.ts"
+    ],
+    "acceptance": [
+      {
+        "issue": 447,
+        "criteria": [
+          "One compact chart header retains the actual assigned bed, patient name, age when known, complete allergy names and active high-risk names and their existing authorized edit/scale destinations on every chart section at desktop, tablet and phone widths.",
+          "At a literal viewport of 1180 by 820 and scrollY zero, with incomplete identity, severe allergies, high risks and therapy anomalies, the first meaningful active-section content begins at absolute page y <= 160; measure each chart section rather than the container or a scrolled view.",
+          "Missing demographics appear as a discreet actionable link rather than repeated information panels; therapy anomalies appear beside their correction target in Therapy and never as an identical banner before every section; intake review blockers remain visible and actionable without duplication.",
+          "The first chart section is Oggi and shows today actual patient doses with in-place administration through the existing exact-dose, role and confirmation flow, urgent diary acknowledgement through the existing Ho capito model, and a compact accurate today-vitals summary/record action.",
+          "Day calendar opens at the first occupied dose or current facility time without midnight blank rows; late data, date/patient change, empty day, failures, PRN and unprivileged role do not cross-contaminate or fabricate dose state.",
+          "Today dose confirmation and diary acknowledgement persist after reload; no duplicate writes, missing prescriptions or hidden safety status are introduced by presentation simplification."
+        ]
+      },
+      {
+        "issue": 451,
+        "criteria": [
+          "No per-field repeated Nessuna rilevazione precedente prose; each actual previous value appears as an empty-input placeholder with facility-time age such as ieri or 3 h fa; placeholders never become newly submitted observations.",
+          "NEWS2 is one compact line with actual partial/complete score and named missing inputs, without presenting an incomplete score as a validated NEWS2; roster omits repeated uncomputable paragraphs.",
+          "Successful verified save advances to the next roster patient not yet recorded today, preserving drafts of all patients and recording progress/current/completed time; failed or uncertain writes never advance and retry keeps the original idempotent write.",
+          "Next-patient selection handles pagination, final patient, already-recorded patients, filtered selected-outside-results patient, stale refresh and facility-midnight change without skipped or wrongly identified patients.",
+          "Oxygen uses accessible Aria ambiente / Con O2 buttons, entered out-of-range values receive existing clinical threshold indication and on-screen keypad appears only when touch capability warrants it; physical keyboard input remains intact.",
+          "Reload proves each new reading belongs to the correct patient and actual value; exactly one explanation of timestamp behavior remains."
+        ]
+      },
+      {
+        "issue": 452,
+        "criteria": [
+          "Patient table and cards show available identity/location and actionable signals without missing-data prose per row; bed is the first column when assigned, including room plus bed disambiguation; retained accessible identifiers distinguish same-name patients.",
+          "Incomplete identity is reported once in a linked aggregate footer and optional regime/NEWS2 columns are hidden when globally empty among loaded patients; unknown/error statuses are distinguished once from negative clinical findings rather than falsely displaying no signal.",
+          "Pazienti, Giro and Consegne have no explanatory paragraphs before their main lists; navigation/filter/loading/error and partial-page safety states remain available with compact actionable status.",
+          "Each empty structured clinical topic uses one compact row with its permitted Add action; source/provenance are rendered only when actually present and existing positive/negative clinical data remain visible.",
+          "An empty agenda renders one empty-state and permitted Nuovo appuntamento action without empty half-hour grid or zero-only filters; nonempty agenda retains existing appointment action and exact-patient destinations.",
+          "Tablet/phone layouts, mixed and empty locations, same-name identities, positive allergy/risk signals, incomplete list/draft lifecycle and regimen filters are verified after serial integration of batch450."
+        ]
+      },
+      {
+        "issue": 453,
+        "criteria": [
+          "After selecting a reliable synthetic AIFA package, a periodic twice-daily 1-compressa seven-day prescription is completed in at most five actual user interactions, preserving required confirmation and explicit unresolved product-strength review.",
+          "Mattina08, Mattina/sera08/20, Tre volte08/14/20, Al bisogno and custom-editor options generate the same times, fractions and units as explicit manual editing; a preset never silently invents a patient-specific dose or overwrites an existing custom dose without visible operator choice.",
+          "New manual prescriptions default to active and omit the creation-state selector; edit/import consumers retain explicit unresolved/imported state and existing suspend/conclude controls.",
+          "Reliable package form/strength/route data are prefilled only from actual structured package information; missing/ambiguous fields remain reviewable and selecting a new package never carries forward unrelated commercial strength.",
+          "A visible sentence summary derives from the exact payload and facility civil start/end date, selected schedule/dose/unit and next eligible occurrence; seven-day duration is calendar arithmetic including DST rather than elapsed-hour assumptions.",
+          "Clinical decision on allergy-drug checking must be recorded before any matching, warning/block/override behavior is implemented; while unanswered, display recorded allergies only and keep this issue unresolved. No substring or invented allergen-class mapping is permitted.",
+          "User decision recorded: explicit confirmable warning, no automatic prohibition. Bind acknowledgement to current patient, selected product and current allergy context; never fabricate drug/allergen mapping or claim unknown data are negative."
+        ]
+      },
+      {
+        "issue": 454,
+        "criteria": [
+          "A fresh nurse Therapy navigation opens Giro at current facility band or first pending relevant dose; explicit deep links, restored intentional calendar view and day selection remain authoritative.",
+          "Giro presents one primary control row of times and actionable state filters, with date, calendar consultation and roster ordering in an accessible compact menu rather than three stacked toolbars.",
+          "Allergy facts appear once per patient block; preserve full allergen, severity and reaction and permit disclosure of documentation-only metadata without repeating facts or declaring undocumented allergy absence.",
+          "Patient day calendar initially scrolls past empty hours before the first dose; delayed load and patient/date changes reset correctly while an explicit selected dose retains focus.",
+          "Actual administration/not-administered and retry remain exact-dose identity safe after serial integration of batch432, including one-off band changes, nurse/supervisor/admin role checks, empty days and Rome midnight."
+        ]
+      },
+      {
+        "issue": 456,
+        "criteria": [
+          "Supervisor urgent attention derives from the same diary plus handover Ho capito acknowledgement queue and permissions as the Consegne badge and operator Turno; urgent-only diary, urgent-only handover, acknowledgement, pagination and unavailable source are handled without false Nessuna urgenza.",
+          "The first screen is an actionable Reparto adesso / Richiede attenzione list ordered by severity then age; no passive numeric KPI tile or alarm/attention counters remain in that first screen.",
+          "Today pending/overdue doses appear before future work and tomorrow doses do not appear on shift home; each clinical/urgency/dose action opens the exact patient, source item and scheduled time through existing target contracts.",
+          "In turno ora excludes irrelevant technical-administrator zero-work rows and uses actual configured shifts; missing shift configuration is stated once with configuration link rather than claiming staff are currently on shift.",
+          "Occupancy is one actionable row or missing-room configuration link; loading/error/partial data remain explicit and actionable, including Rome-midnight transitions."
+        ]
+      },
+      {
+        "issue": 457,
+        "criteria": [
+          "Printable InvioPS contains editable reason, latest vitals with actual observation timestamps, recent actual given doses with administration times, active prescription context, full documented allergies/status, active risks and recorded emergency contact; prescriptions, refused doses and unconfirmed data never become actual given doses.",
+          "When a recent urgent diary note or critical vital from the last24hours exists, reason is prefilled from that observed source and remains editable; stale, future and cross-patient data never prefill reason; missing clinical data require completion rather than invented negative findings.",
+          "Print action has no transfer/write side effect, waits for complete authorized clinical source loading and remains blocked or clearly partial when essential data cannot be read; print CSS and PDF are tested using synthetic data.",
+          "Registra uscita creates exactly one entry in existing liberatoria.usciteLog and survives reload with actor and facility time, using verified non-optimistic existing chart update rather than unrelated mobility assessment forms.",
+          "Clinical decision on therapy pause/continuation at temporary PS exit must be recorded before implementing exit policy or automatic scheduling changes; unanswered decision prevents full issue closure. Return must never silently re-open an already administered dose or discharge the patient.",
+          "Role-negative, failed/uncertain/double submission, patient switch and return scenarios preserve authorization/current-patient isolation and do not weaken the server clinical-record write boundary.",
+          "User decision recorded: require an authorized operator explicit pause/continue administration-round choice at exit; atomically persist real uscitelog and operational state, enforce new scheduled/PRN writes on server while preserving valid replay/history, and explicit return restores availability without reopening already-given doses."
+        ]
+      }
+    ],
+    "tasks": [
+      {
+        "title": "Establish isolated synthetic QA stack and per-issue baselines",
+        "files": [
+          "e2e/qa-bug-batch-447-browser.mjs",
+          "e2e/qa-bug-batch-447.mjs",
+          "frontend/src/components/admin/AdminAttentionList.css",
+          "frontend/src/components/admin/AdminAttentionList.tsx",
+          "frontend/src/components/admin/AdminDashboard.tsx",
+          "frontend/src/components/admin/__tests__/adminAttention456.test.ts",
+          "frontend/src/components/admin/adminAttentionModel.ts",
+          "frontend/src/components/operator/ConsegnePatientRoster.tsx",
+          "frontend/src/components/operator/InvioPSModal.tsx",
+          "frontend/src/components/operator/MultiPatientParametri.tsx",
+          "frontend/src/components/operator/OperatorAgenda.tsx",
+          "frontend/src/components/operator/ParameterEntryPanel.tsx",
+          "frontend/src/components/operator/ParameterPatientPick.tsx",
+          "frontend/src/components/operator/ParameterReadingForm.css",
+          "frontend/src/components/operator/ParameterReadingForm.tsx",
+          "frontend/src/components/operator/PatientDetail.tsx",
+          "frontend/src/components/operator/PatientList.css",
+          "frontend/src/components/operator/PatientList.tsx",
+          "frontend/src/components/operator/PatientOverview.css",
+          "frontend/src/components/operator/PatientParameters.css",
+          "frontend/src/components/operator/PatientRecordData.css",
+          "frontend/src/components/operator/PatientRegimeControls.tsx",
+          "frontend/src/components/operator/PatientRoster.tsx",
+          "frontend/src/components/operator/PatientToday.tsx",
+          "frontend/src/components/operator/TherapyGiroRows.tsx",
+          "frontend/src/components/operator/TherapyPatientAllergies.tsx",
+          "frontend/src/components/operator/TherapyRoundsPage.css",
+          "frontend/src/components/operator/TherapyRoundsPage.tsx",
+          "frontend/src/components/operator/__tests__/invioPS.test.ts",
+          "frontend/src/components/operator/__tests__/operationalLists452.test.ts",
+          "frontend/src/components/operator/__tests__/patientToday447.test.ts",
+          "frontend/src/components/operator/cartella/AvvisoAnomalieFarmaci.tsx",
+          "frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx",
+          "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+          "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+          "frontend/src/components/operator/cartella/TherapyFormFields.css",
+          "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+          "frontend/src/components/operator/cartella/TherapyFormPreview.tsx",
+          "frontend/src/components/operator/cartella/__tests__/therapyQuickSchedule453.test.ts",
+          "frontend/src/components/operator/cartella/__tests__/uxW4Misc.test.ts",
+          "frontend/src/components/operator/cartella/drugPackageSelection.ts",
+          "frontend/src/components/operator/cartella/therapyQuickSchedule.ts",
+          "frontend/src/components/operator/invioPSModel.ts",
+          "frontend/src/components/operator/tabGroups.ts",
+          "frontend/src/components/shared/DemographicsStatus.tsx",
+          "frontend/src/components/shared/PatientIdentity.tsx",
+          "frontend/src/components/shared/TherapyCalendarGrid.tsx",
+          "frontend/src/lib/__tests__/invioPSPrintLayout.test.ts",
+          "frontend/src/lib/__tests__/parameterRound451.test.ts",
+          "frontend/src/lib/__tests__/therapyEntry454.test.ts",
+          "frontend/src/lib/emergencyTransferContext.ts",
+          "frontend/src/lib/parameterPad.ts",
+          "frontend/src/lib/parameterRound.ts",
+          "frontend/src/lib/therapyGiro.ts",
+          "frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts",
+          "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
+          "frontend/src/lib/__tests__/clinicalHistory.test.ts",
+          "frontend/src/lib/__tests__/therapyPages.test.ts"
+        ],
+        "steps": [
+          "Start only owned nonprivileged official PostgreSQL16 container clinicos-qa-batch447 on loopback55447; use installed nativePG16 in CI when available, and runtime-derived local synthetic connection configuration without URLs in packet JSON.",
+          "Reuse repository seed/helpers with unique synthetic patients and real authenticated HTTP backend plus frontend ports3447/5447; no production credentials, real clinical records or auth-policy bypass.",
+          "Serialize Chromium evidence with flock /tmp/clinicos-browser-qa.lock; capture baseline observed failures and all acceptance mapped to exact scenario; root retains four-attempt ledger."
+        ]
+      },
+      {
+        "title": "Compact chart safety header and implement Today through existing actions",
+        "files": [
+          "e2e/qa-bug-batch-447-browser.mjs",
+          "e2e/qa-bug-batch-447.mjs",
+          "frontend/src/components/operator/PatientDetail.tsx",
+          "frontend/src/components/operator/PatientOverview.css",
+          "frontend/src/components/operator/PatientRecordData.css",
+          "frontend/src/components/operator/PatientToday.tsx",
+          "frontend/src/components/operator/__tests__/patientToday447.test.ts",
+          "frontend/src/components/operator/cartella/AvvisoAnomalieFarmaci.tsx",
+          "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+          "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+          "frontend/src/components/operator/cartella/__tests__/uxW4Misc.test.ts",
+          "frontend/src/components/operator/tabGroups.ts",
+          "frontend/src/components/shared/DemographicsStatus.tsx",
+          "frontend/src/components/shared/TherapyCalendarGrid.tsx",
+          "frontend/src/lib/__tests__/patientChartNavigation.test.ts",
+          "frontend/src/lib/__tests__/patientDetailWorkspace.test.ts"
+        ],
+        "steps": [
+          "Read complete PatientDetail flow and existing tab permission model before editing.",
+          "Move compact identity/demographic/safety information into one measured header, move drug anomalies to their actual therapy correction context, preserve intake blockers and accessible allergy/risk names.",
+          "Build small PatientToday using current patient actual day slots, existing exact-dose actions and urgent diary acknowledgement; preserve errors and patient isolation.",
+          "Assert literal first-content y at1180x820 for all chart tabs; no scroll or CSS-hidden safety bypass."
+        ]
+      },
+      {
+        "title": "Make vital round concise with verified next-patient advance",
+        "files": [
+          "e2e/qa-bug-batch-447-browser.mjs",
+          "e2e/qa-bug-batch-447.mjs",
+          "frontend/src/components/operator/MultiPatientParametri.tsx",
+          "frontend/src/components/operator/ParameterEntryPanel.tsx",
+          "frontend/src/components/operator/ParameterPatientPick.tsx",
+          "frontend/src/components/operator/ParameterReadingForm.css",
+          "frontend/src/components/operator/ParameterReadingForm.tsx",
+          "frontend/src/components/operator/PatientParameters.css",
+          "frontend/src/lib/__tests__/parameterRound451.test.ts",
+          "frontend/src/lib/parameterPad.ts",
+          "frontend/src/lib/parameterRound.ts"
+        ],
+        "steps": [
+          "Extract pure next-unrecorded roster selection; support newly loaded pages, stale summaries, day changes, current filtered-out patient and last patient.",
+          "After store.succeed and verified server result only, advance; preserve uncertain retry and drafts, show completed time/progress.",
+          "Render previous value/age placeholders, compact NEWS2 with missing labels, oxygen buttons and capability-aware keypad; preserve full keyboard/validation and make no placeholder save."
+        ]
+      },
+      {
+        "title": "Simplify operational list and empty clinical presentation",
+        "files": [
+          "e2e/qa-bug-batch-447-browser.mjs",
+          "e2e/qa-bug-batch-447.mjs",
+          "frontend/src/components/operator/ConsegnePatientRoster.tsx",
+          "frontend/src/components/operator/OperatorAgenda.tsx",
+          "frontend/src/components/operator/PatientDetail.tsx",
+          "frontend/src/components/operator/PatientList.css",
+          "frontend/src/components/operator/PatientList.tsx",
+          "frontend/src/components/operator/PatientRegimeControls.tsx",
+          "frontend/src/components/operator/PatientRoster.tsx",
+          "frontend/src/components/operator/TherapyGiroRows.tsx",
+          "frontend/src/components/operator/__tests__/operationalLists452.test.ts",
+          "frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx",
+          "frontend/src/components/shared/PatientIdentity.tsx",
+          "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts"
+        ],
+        "steps": [
+          "Add opt-in compact identity rendering with accessible stable disambiguation, bed-first available column and aggregate incomplete footer.",
+          "Hide globally empty optional regime/NEWS2 presentation without treating unknown source as clinical negative; preserve actual signal errors and partial pagination.",
+          "Compact empty clinical topics and source display only when actual source exists, plus empty agenda create action; retain nonempty views and existing permissions.",
+          "Reconcile PatientList only after450 integration and rerun draft lifecycle/list regressions."
+        ]
+      },
+      {
+        "title": "Add equivalent quick prescription schedules while retaining clinical policy gate",
+        "files": [
+          "e2e/qa-bug-batch-447-browser.mjs",
+          "e2e/qa-bug-batch-447.mjs",
+          "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+          "frontend/src/components/operator/cartella/TherapyFormFields.css",
+          "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+          "frontend/src/components/operator/cartella/TherapyFormPreview.tsx",
+          "frontend/src/components/operator/cartella/__tests__/therapyQuickSchedule453.test.ts",
+          "frontend/src/components/operator/cartella/drugPackageSelection.ts",
+          "frontend/src/components/operator/cartella/therapyQuickSchedule.ts"
+        ],
+        "steps": [
+          "Use pure quick-schedule and calendar-duration helpers; derive summary from same payload values and test preset/manual equivalence, fractions, PRN, custom and DST.",
+          "Hide status only for genuine new manual creation, preserve imported/edit unresolved values; prefill package fields only when authoritative structured data exists.",
+          "Show recorded allergy names in form context, but do not implement drug-class matching/warning/block/override until clinical decision and reliable mapping are recorded; issue remains unresolved meanwhile."
+        ]
+      },
+      {
+        "title": "Default nursing therapy to Giro and unify controls/allergy facts",
+        "files": [
+          "e2e/qa-bug-batch-447-browser.mjs",
+          "e2e/qa-bug-batch-447.mjs",
+          "frontend/src/components/operator/TherapyPatientAllergies.tsx",
+          "frontend/src/components/operator/TherapyRoundsPage.css",
+          "frontend/src/components/operator/TherapyRoundsPage.tsx",
+          "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+          "frontend/src/components/shared/TherapyCalendarGrid.tsx",
+          "frontend/src/lib/__tests__/therapyEntry454.test.ts",
+          "frontend/src/lib/therapyGiro.ts"
+        ],
+        "steps": [
+          "Use actual role/entry/remembered state to prefer current-band or first pending Giro for fresh nurse navigation.",
+          "One primary controls row with accessible menu for secondary date/order/calendar; preserve explicit dose deep links.",
+          "Remove duplicated allergy facts while retaining metadata and unknown/error source state.",
+          "Reset day calendar initial scroll on correct patient/day identity and delayed data; verify real administration persistence with432 regressions."
+        ]
+      },
+      {
+        "title": "Replace passive supervisor KPIs with authoritative attention queue",
+        "files": [
+          "e2e/qa-bug-batch-447-browser.mjs",
+          "e2e/qa-bug-batch-447.mjs",
+          "frontend/src/components/admin/AdminAttentionList.css",
+          "frontend/src/components/admin/AdminAttentionList.tsx",
+          "frontend/src/components/admin/AdminDashboard.tsx",
+          "frontend/src/components/admin/__tests__/adminAttention456.test.ts",
+          "frontend/src/components/admin/adminAttentionModel.ts",
+          "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+          "frontend/src/lib/__tests__/consegneReadModelGuard.test.ts",
+          "frontend/src/components/operator/__tests__/operator-dashboard-anomaly-layout.test.ts",
+          "frontend/src/lib/__tests__/clinicalOverviewResilience.test.ts",
+          "frontend/src/lib/__tests__/roomAssignmentScope.test.ts"
+        ],
+        "steps": [
+          "Reuse unread diary/handover queue and existing exact target resolver instead of legacy consegneOverview urgency counts.",
+          "Build pure severity/age attention model for current-day doses and clinical/urgency items, no tomorrow home rows.",
+          "Render actionable list, compact occupancy and actual configured on-shift staffing or single configuration warning, preserving source loading/error/pagination."
+        ]
+      },
+      {
+        "title": "Complete emergency print context; hold temporary-exit policy",
+        "files": [
+          "e2e/qa-bug-batch-447-browser.mjs",
+          "e2e/qa-bug-batch-447.mjs",
+          "frontend/src/components/operator/InvioPSModal.tsx",
+          "frontend/src/components/operator/PatientDetail.tsx",
+          "frontend/src/components/operator/__tests__/invioPS.test.ts",
+          "frontend/src/components/operator/invioPSModel.ts",
+          "frontend/src/lib/__tests__/invioPSPrintLayout.test.ts",
+          "frontend/src/lib/emergencyTransferContext.ts"
+        ],
+        "steps": [
+          "Build pure print model from authorized latest readings, recent urgent diary and actual administration history including PRN, not prescription schedules; filter by patient/time and retain provenance.",
+          "Render editable reason, latest vital timestamps, last given doses, risks/contact and truthful allergy status; print and missing-data/failed-read handling have no write side effect.",
+          "After root-recorded clinical decision only, connect explicit verified temporary-exit action to liberatoria.usciteLog with existing non-optimistic chart update; preserve actor, retries, duplicate protection and return semantics. Never use unrelated mobility assessment."
+        ]
+      },
+      {
+        "title": "Simplify, reverify integrated branch and deliver to independent QA",
+        "files": [
+          "e2e/qa-bug-batch-447-browser.mjs",
+          "e2e/qa-bug-batch-447.mjs",
+          "frontend/src/components/admin/AdminAttentionList.css",
+          "frontend/src/components/admin/AdminAttentionList.tsx",
+          "frontend/src/components/admin/AdminDashboard.tsx",
+          "frontend/src/components/admin/__tests__/adminAttention456.test.ts",
+          "frontend/src/components/admin/adminAttentionModel.ts",
+          "frontend/src/components/operator/ConsegnePatientRoster.tsx",
+          "frontend/src/components/operator/InvioPSModal.tsx",
+          "frontend/src/components/operator/MultiPatientParametri.tsx",
+          "frontend/src/components/operator/OperatorAgenda.tsx",
+          "frontend/src/components/operator/ParameterEntryPanel.tsx",
+          "frontend/src/components/operator/ParameterPatientPick.tsx",
+          "frontend/src/components/operator/ParameterReadingForm.css",
+          "frontend/src/components/operator/ParameterReadingForm.tsx",
+          "frontend/src/components/operator/PatientDetail.tsx",
+          "frontend/src/components/operator/PatientList.css",
+          "frontend/src/components/operator/PatientList.tsx",
+          "frontend/src/components/operator/PatientOverview.css",
+          "frontend/src/components/operator/PatientParameters.css",
+          "frontend/src/components/operator/PatientRecordData.css",
+          "frontend/src/components/operator/PatientRegimeControls.tsx",
+          "frontend/src/components/operator/PatientRoster.tsx",
+          "frontend/src/components/operator/PatientToday.tsx",
+          "frontend/src/components/operator/TherapyGiroRows.tsx",
+          "frontend/src/components/operator/TherapyPatientAllergies.tsx",
+          "frontend/src/components/operator/TherapyRoundsPage.css",
+          "frontend/src/components/operator/TherapyRoundsPage.tsx",
+          "frontend/src/components/operator/__tests__/invioPS.test.ts",
+          "frontend/src/components/operator/__tests__/operationalLists452.test.ts",
+          "frontend/src/components/operator/__tests__/patientToday447.test.ts",
+          "frontend/src/components/operator/cartella/AvvisoAnomalieFarmaci.tsx",
+          "frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx",
+          "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+          "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+          "frontend/src/components/operator/cartella/TherapyFormFields.css",
+          "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+          "frontend/src/components/operator/cartella/TherapyFormPreview.tsx",
+          "frontend/src/components/operator/cartella/__tests__/therapyQuickSchedule453.test.ts",
+          "frontend/src/components/operator/cartella/__tests__/uxW4Misc.test.ts",
+          "frontend/src/components/operator/cartella/drugPackageSelection.ts",
+          "frontend/src/components/operator/cartella/therapyQuickSchedule.ts",
+          "frontend/src/components/operator/invioPSModel.ts",
+          "frontend/src/components/operator/tabGroups.ts",
+          "frontend/src/components/shared/DemographicsStatus.tsx",
+          "frontend/src/components/shared/PatientIdentity.tsx",
+          "frontend/src/components/shared/TherapyCalendarGrid.tsx",
+          "frontend/src/lib/__tests__/invioPSPrintLayout.test.ts",
+          "frontend/src/lib/__tests__/parameterRound451.test.ts",
+          "frontend/src/lib/__tests__/therapyEntry454.test.ts",
+          "frontend/src/lib/emergencyTransferContext.ts",
+          "frontend/src/lib/parameterPad.ts",
+          "frontend/src/lib/parameterRound.ts",
+          "frontend/src/lib/therapyGiro.ts"
+        ],
+        "steps": [
+          "Integrate source dependency groups in declared order without replacing their fixes, rerun affected existing suites and both list/draft and authoritative therapy regressions.",
+          "Run frontend unit/integration suites, TypeScript/build and real synthetic HTTP+DB+Playwright for every criterion; assert values, persistence, no unexpected console/page errors or relevantHTTP4xx/5xx.",
+          "Record PNG, Playwright trace and video perissue plus printPDF, sanitized tested-source receipt, actual outputs and residual gates.",
+          "Dedicated independent QA must review full diff, rerun checks/browser/security and bind evidence to final code; root publishescanonicalPR with Refs only, Max exactSHA review <=4 rounds and trusted verified-release gates before closure."
+        ]
+      },
+      {
+        "title": "Implement approved explicit temporary PS exit decisions with authoritative administration hold",
+        "files": [
+          "backend/src/patients/temporary-ps-exits.ts",
+          "backend/src/patients/cartella-update.ts",
+          "backend/src/routes/patients.ts",
+          "backend/src/therapies/administration-record.ts",
+          "backend/src/therapies/prn-administration.ts",
+          "backend/src/therapies/therapy-slots.ts",
+          "backend/src/therapies/due-therapy-query.ts",
+          "backend/src/routes/therapy.ts",
+          "backend/src/patients/__tests__/temporary-ps-exits.test.ts",
+          "backend/src/patients/__tests__/temporary-ps-exits-db.test.ts",
+          "frontend/src/types.ts",
+          "frontend/src/lib/temporaryPsExit.ts",
+          "frontend/src/lib/therapySlotPage.ts",
+          "frontend/src/lib/__tests__/therapySlotPage.test.ts",
+          "frontend/src/components/operator/cartella/TherapyDrugDosePanel.tsx",
+          "frontend/src/components/operator/cartella/DimissioneTab.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/lib/cartellaWriteQueue.ts",
+          "frontend/src/lib/__tests__/cartellaWriteQueue.test.ts"
+        ],
+        "steps": [
+          "Use existing authorized PUT chart command mutually exclusive with generic data; atomically lock patient/chart, persist server actor/civil time, idempotent exit log and protected active pointer without inventing legal consent.",
+          "Require explicit pause/continue choice; pause operational administrations only, preserve prescription state and historical receipts; valid old replay stays readable, new scheduled/PRN writes blocked while held; return explicit and never reopens given doses.",
+          "Preserve managed state against generic overwrites and serialize verified chart snapshot in App queue, no optimistic double PUT/session mix.",
+          "Keep pending dose context visible with scoped hold metadata and exclude held work only from due attention; existing capabilities/patient scope remain mandatory.",
+          "Add actual DB/HTTP role/concurrency/tamper/uncertain/reload/return tests plus frontend queue and page validation negatives."
+        ]
+      }
+    ],
+    "verification": [
+      {
+        "command": "npm",
+        "args": [
+          "--prefix",
+          "frontend",
+          "test"
+        ]
+      },
+      {
+        "command": "npm",
+        "args": [
+          "--prefix",
+          "frontend",
+          "exec",
+          "tsc",
+          "--",
+          "--noEmit"
+        ]
+      },
+      {
+        "command": "npm",
+        "args": [
+          "--prefix",
+          "frontend",
+          "run",
+          "build"
+        ]
+      },
+      {
+        "command": "node",
+        "args": [
+          "e2e/qa-bug-batch-447.mjs"
+        ]
+      },
+      {
+        "command": "npm",
+        "args": [
+          "run",
+          "build:backend"
+        ]
+      },
+      {
+        "command": "node",
+        "args": [
+          "--import",
+          "tsx",
+          "--test",
+          "backend/src/patients/__tests__/temporary-ps-exits.test.ts",
+          "backend/src/patients/__tests__/temporary-ps-exits-db.test.ts"
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "issue": 447,
+        "screenshot": "artifacts/task-validation/bug-batch-447/evidence/issue-447.png",
+        "trace": "artifacts/task-validation/bug-batch-447/evidence/issue-447-trace.zip",
+        "video": "artifacts/task-validation/bug-batch-447/evidence/issue-447.webm"
+      },
+      {
+        "issue": 451,
+        "screenshot": "artifacts/task-validation/bug-batch-447/evidence/issue-451.png",
+        "trace": "artifacts/task-validation/bug-batch-447/evidence/issue-451-trace.zip",
+        "video": "artifacts/task-validation/bug-batch-447/evidence/issue-451.webm"
+      },
+      {
+        "issue": 452,
+        "screenshot": "artifacts/task-validation/bug-batch-447/evidence/issue-452.png",
+        "trace": "artifacts/task-validation/bug-batch-447/evidence/issue-452-trace.zip",
+        "video": "artifacts/task-validation/bug-batch-447/evidence/issue-452.webm"
+      },
+      {
+        "issue": 453,
+        "screenshot": "artifacts/task-validation/bug-batch-447/evidence/issue-453.png",
+        "trace": "artifacts/task-validation/bug-batch-447/evidence/issue-453-trace.zip",
+        "video": "artifacts/task-validation/bug-batch-447/evidence/issue-453.webm"
+      },
+      {
+        "issue": 454,
+        "screenshot": "artifacts/task-validation/bug-batch-447/evidence/issue-454.png",
+        "trace": "artifacts/task-validation/bug-batch-447/evidence/issue-454-trace.zip",
+        "video": "artifacts/task-validation/bug-batch-447/evidence/issue-454.webm"
+      },
+      {
+        "issue": 456,
+        "screenshot": "artifacts/task-validation/bug-batch-447/evidence/issue-456.png",
+        "trace": "artifacts/task-validation/bug-batch-447/evidence/issue-456-trace.zip",
+        "video": "artifacts/task-validation/bug-batch-447/evidence/issue-456.webm"
+      },
+      {
+        "issue": 457,
+        "screenshot": "artifacts/task-validation/bug-batch-447/evidence/issue-457.png",
+        "trace": "artifacts/task-validation/bug-batch-447/evidence/issue-457-trace.zip",
+        "video": "artifacts/task-validation/bug-batch-447/evidence/issue-457.webm"
+      }
+    ]
+  },
+  "grouping": {
+    "fileMap": [
+      {
+        "issue": 447,
+        "files": [
+          "frontend/src/components/operator/PatientDetail.tsx",
+          "frontend/src/components/operator/PatientRecordData.css",
+          "frontend/src/components/operator/PatientOverview.css",
+          "frontend/src/components/operator/PatientToday.tsx",
+          "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+          "frontend/src/components/shared/TherapyCalendarGrid.tsx",
+          "frontend/src/components/operator/cartella/AvvisoAnomalieFarmaci.tsx",
+          "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+          "frontend/src/components/operator/tabGroups.ts",
+          "frontend/src/components/shared/DemographicsStatus.tsx",
+          "frontend/src/components/operator/cartella/__tests__/uxW4Misc.test.ts",
+          "frontend/src/components/operator/__tests__/patientToday447.test.ts",
+          "e2e/qa-bug-batch-447.mjs",
+          "e2e/qa-bug-batch-447-browser.mjs",
+          "frontend/src/lib/__tests__/patientChartNavigation.test.ts",
+          "frontend/src/lib/__tests__/patientDetailWorkspace.test.ts"
+        ]
+      },
+      {
+        "issue": 451,
+        "files": [
+          "frontend/src/components/operator/MultiPatientParametri.tsx",
+          "frontend/src/components/operator/ParameterEntryPanel.tsx",
+          "frontend/src/components/operator/ParameterPatientPick.tsx",
+          "frontend/src/components/operator/ParameterReadingForm.tsx",
+          "frontend/src/components/operator/ParameterReadingForm.css",
+          "frontend/src/components/operator/PatientParameters.css",
+          "frontend/src/lib/parameterPad.ts",
+          "frontend/src/lib/parameterRound.ts",
+          "frontend/src/lib/__tests__/parameterRound451.test.ts",
+          "e2e/qa-bug-batch-447.mjs",
+          "e2e/qa-bug-batch-447-browser.mjs",
+          "frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts"
+        ]
+      },
+      {
+        "issue": 452,
+        "files": [
+          "frontend/src/components/operator/PatientList.tsx",
+          "frontend/src/components/operator/PatientRoster.tsx",
+          "frontend/src/components/operator/PatientList.css",
+          "frontend/src/components/operator/PatientRegimeControls.tsx",
+          "frontend/src/components/shared/PatientIdentity.tsx",
+          "frontend/src/components/operator/TherapyGiroRows.tsx",
+          "frontend/src/components/operator/ConsegnePatientRoster.tsx",
+          "frontend/src/components/operator/PatientDetail.tsx",
+          "frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx",
+          "frontend/src/components/operator/OperatorAgenda.tsx",
+          "frontend/src/components/operator/__tests__/operationalLists452.test.ts",
+          "e2e/qa-bug-batch-447.mjs",
+          "e2e/qa-bug-batch-447-browser.mjs",
+          "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
+          "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts"
+        ]
+      },
+      {
+        "issue": 453,
+        "files": [
+          "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+          "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+          "frontend/src/components/operator/cartella/TherapyFormFields.css",
+          "frontend/src/components/operator/cartella/TherapyFormPreview.tsx",
+          "frontend/src/components/operator/cartella/therapyQuickSchedule.ts",
+          "frontend/src/components/operator/cartella/drugPackageSelection.ts",
+          "frontend/src/components/operator/cartella/__tests__/therapyQuickSchedule453.test.ts",
+          "e2e/qa-bug-batch-447.mjs",
+          "e2e/qa-bug-batch-447-browser.mjs"
+        ]
+      },
+      {
+        "issue": 454,
+        "files": [
+          "frontend/src/components/operator/TherapyRoundsPage.tsx",
+          "frontend/src/components/operator/TherapyRoundsPage.css",
+          "frontend/src/components/operator/TherapyPatientAllergies.tsx",
+          "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+          "frontend/src/components/shared/TherapyCalendarGrid.tsx",
+          "frontend/src/lib/therapyGiro.ts",
+          "frontend/src/lib/__tests__/therapyEntry454.test.ts",
+          "e2e/qa-bug-batch-447.mjs",
+          "e2e/qa-bug-batch-447-browser.mjs"
+        ]
+      },
+      {
+        "issue": 456,
+        "files": [
+          "frontend/src/components/admin/AdminDashboard.tsx",
+          "frontend/src/components/admin/AdminAttentionList.tsx",
+          "frontend/src/components/admin/adminAttentionModel.ts",
+          "frontend/src/components/admin/AdminAttentionList.css",
+          "frontend/src/components/admin/__tests__/adminAttention456.test.ts",
+          "e2e/qa-bug-batch-447.mjs",
+          "e2e/qa-bug-batch-447-browser.mjs",
+          "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+          "frontend/src/lib/__tests__/consegneReadModelGuard.test.ts",
+          "frontend/src/components/operator/__tests__/operator-dashboard-anomaly-layout.test.ts",
+          "frontend/src/lib/__tests__/clinicalOverviewResilience.test.ts",
+          "frontend/src/lib/__tests__/roomAssignmentScope.test.ts"
+        ]
+      },
+      {
+        "issue": 457,
+        "files": [
+          "frontend/src/components/operator/PatientDetail.tsx",
+          "frontend/src/components/operator/InvioPSModal.tsx",
+          "frontend/src/components/operator/invioPSModel.ts",
+          "frontend/src/lib/emergencyTransferContext.ts",
+          "frontend/src/components/operator/__tests__/invioPS.test.ts",
+          "frontend/src/lib/__tests__/invioPSPrintLayout.test.ts",
+          "e2e/qa-bug-batch-447.mjs",
+          "e2e/qa-bug-batch-447-browser.mjs",
+          "frontend/src/lib/__tests__/clinicalHistory.test.ts",
+          "frontend/src/lib/__tests__/therapyPages.test.ts",
+          "backend/src/patients/temporary-ps-exits.ts",
+          "backend/src/patients/cartella-update.ts",
+          "backend/src/routes/patients.ts",
+          "backend/src/therapies/administration-record.ts",
+          "backend/src/therapies/prn-administration.ts",
+          "backend/src/therapies/therapy-slots.ts",
+          "backend/src/therapies/due-therapy-query.ts",
+          "backend/src/routes/therapy.ts",
+          "backend/src/patients/__tests__/temporary-ps-exits.test.ts",
+          "backend/src/patients/__tests__/temporary-ps-exits-db.test.ts",
+          "frontend/src/types.ts",
+          "frontend/src/lib/temporaryPsExit.ts",
+          "frontend/src/lib/therapySlotPage.ts",
+          "frontend/src/lib/__tests__/therapySlotPage.test.ts",
+          "frontend/src/components/operator/cartella/TherapyDrugDosePanel.tsx",
+          "frontend/src/components/operator/cartella/DimissioneTab.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/lib/cartellaWriteQueue.ts",
+          "frontend/src/lib/__tests__/cartellaWriteQueue.test.ts"
+        ]
+      }
+    ],
+    "separationReason": "Batch432 owns authoritative therapy write/query/schema, AIFA catalog semantics and App.tsx; this batch owns clinical presentation and reuses its public read/write contracts without editing backend or App.tsx. Integrate tested432 before final therapy/UI QA. Batch450 owns intake/import draft lifecycle and changes PatientList.tsx; this batch changes existing row presentation only. Integrate450 first, reconcile PatientList without overriding draft visibility/status, rerun both draft and operational-list regressions. Shared identity component gains an opt-in compact presentation preserving default callers and accessible disambiguation. No parallel edit to another worktree or silent frozen scope expansion.\n\nApproved user clinical decisions now require exactly19 additional PS-exit files and supersede the original no-backend/App restriction for issue457 only. Root first checkpoints and integrates sealed batch432 source before this group edits shared administration writers/slot query/App/types; no parallel shared-source edits. Preserve432 receipts/ACL/civil-time/negative guards. Integrate final reviewed432 and450 actual main contents before final QA/review; reconcile shared PatientList and deferred therapyPages tests preserving both regressions. No scope or budget reset."
+  },
+  "planningBaseline": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6"
+}

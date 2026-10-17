@@ -1,0 +1,6 @@
+{
+  "status": "failed",
+  "browser": "failed",
+  "syntheticOnly": true,
+  "databaseMode": "native-postgresql16"
+}

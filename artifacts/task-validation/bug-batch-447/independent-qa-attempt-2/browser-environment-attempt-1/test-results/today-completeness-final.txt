@@ -1,0 +1,21 @@
+✔ Today vitals use facility civil date and exclude adjacent day and unrelated old readings (5.760042ms)
+✔ Today surface never offers denied therapy/clinical read or record action (13.782709ms)
+✔ Today counts the complete daily history and selects latest after paginated duplicates (0.871774ms)
+✔ Today rejects foreign patients, wrong civil days, repeated cursors and failed subsequent pages (2.553302ms)
+✔ patient record exposes ONE labelled section rail and a controlled tab panel (12.861423ms)
+✔ top navigation follows the keyboard tab pattern with one focusable active tab (12.842222ms)
+✔ therapy sections reuse the canonical contextual navigation (1.0095ms)
+✔ 447 Today uses actual dose actions, shared diary acknowledgement and real daily readings, retaining diary and module state (20.193073ms)
+✔ overview is three columns on wide screens, two on tablet and one on phone (1.243142ms)
+✔ patient record applies one screen-only contract to cards, key-value rows and tables (0.392626ms)
+✔ patient record data contract keeps tablet overflow local and stacks key-value rows on phones (0.505067ms)
+✔ nurse entry selects pending current hour then first pending rather than completed slot (2.725096ms)
+✔ current clinical band wins over an older pending night dose and preserves exact hour (5.154739ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1614.670988

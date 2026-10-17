@@ -1,0 +1,6 @@
+frontend/src/components/operator/PatientRecordData.css 276ms (unchanged)
+frontend/src/components/operator/ParameterEntryPanel.tsx 289ms (unchanged)
+frontend/src/components/operator/MultiPatientParametri.tsx 192ms
+frontend/src/lib/parameterRound.ts 15ms
+frontend/src/lib/__tests__/parameterRound451.test.ts 18ms
+e2e/qa-bug-batch-447.mjs 100ms

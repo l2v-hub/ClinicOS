@@ -1,0 +1,17 @@
+[
+  {
+    "case": "non-loopback",
+    "rejectedBeforeClientConnection": true,
+    "exit": 1
+  },
+  {
+    "case": "wrong-parent",
+    "rejectedBeforeClientConnection": true,
+    "exit": 1
+  },
+  {
+    "case": "unapproved-port",
+    "rejectedBeforeClientConnection": true,
+    "exit": 1
+  }
+]

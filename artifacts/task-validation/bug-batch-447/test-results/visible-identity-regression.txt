@@ -1,0 +1,18 @@
+✔ compact identity hides repeated missing prose but preserves accessible disambiguation (16.9529ms)
+✔ patient roster leads with bed, hides globally empty optional columns and aggregates incomplete identity once (16.082853ms)
+✔ advance skips recorded and unknown/stale patients and wraps without selecting current patient (7.581402ms)
+✔ previous placeholders only contain actual observation and never missing prose (6.457258ms)
+✔ patient list exposes the canonical fiscal identity and never shows MRN (2.635834ms)
+✔ 452 roster leads with bed and preserves native accessible actions while optional empty columns disappear (36.723594ms)
+✔ tablet and mobile use a compact two-to-one-column card grid (0.356ms)
+✔ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance (2.25778ms)
+✔ new-patient wizard keeps required identity visible and progressively discloses optional data (1.610558ms)
+✔ patient intake uses a compact responsive layout without reducing touch targets (2.217928ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3262.972819

@@ -1,0 +1,25 @@
+{
+  "policy": "exact synthetic session values only; no event or outcome removal",
+  "zipValidation": "CRC and residual signed-token scan passed",
+  "archives": [
+    {
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/artifacts/task-validation/bug-batch-447/evidence/issue-451-touch-trace.zip",
+      "originalSha256": "8a3fc787244e4fec4ff2fc04055434994cc41e24a3061462c43ecfe2849f852d",
+      "sanitizedSha256": "653d2a1455b9a004363e96bfa4c262d1ec8d6ca0286973ee836dca2d71715daf",
+      "sessionsRedacted": 1,
+      "entries": [
+        {
+          "entry": "trace.network",
+          "replacements": 15
+        },
+        {
+          "entry": "resources/363f60106ff9f0958738e20b5b681f848ad07e4c.json",
+          "replacements": 1
+        }
+      ],
+      "tokensRemaining": 0,
+      "changed": true,
+      "originalRetainedPrivateOutsideRepository": true
+    }
+  ]
+}

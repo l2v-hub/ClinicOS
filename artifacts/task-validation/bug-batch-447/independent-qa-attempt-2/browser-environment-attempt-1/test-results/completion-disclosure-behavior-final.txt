@@ -1,0 +1,23 @@
+✔ compact identity hides repeated missing prose but preserves accessible disambiguation (9.549088ms)
+✔ patient roster leads with bed, hides globally empty optional columns and aggregates incomplete identity once (7.306825ms)
+✔ roster keeps the NEWS2 column and a single loading status until absence has been verified (3.093748ms)
+✔ agenda without appointments retains morning and evening pending therapy doses while omitting empty half-hour slots (16.898747ms)
+✔ slot modal retains pause, explicit absence, glucose protocol, completed history and other patients (9.72251ms)
+✔ 476 imported identity may continue without a birthdate; manual intake still requires it (2.699698ms)
+✔ 476 progressive import retains explicit invalid field errors and therapy review barriers (4.324927ms)
+✔ 473 fiscal-code sex inference requires valid code and preserves the numeric day distinction (0.528973ms)
+✔ 472/476 an incomplete registered identity stays actionable; missing optional phone does not make a draft (0.884438ms)
+✔ patient list exposes the canonical fiscal identity and never shows MRN (1.286391ms)
+✔ 452 roster leads with bed and preserves native accessible actions while optional empty columns disappear (14.886177ms)
+✔ tablet and mobile use a compact two-to-one-column card grid (0.194546ms)
+✔ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance (1.164449ms)
+✔ new-patient wizard keeps required identity visible and progressively discloses optional data (0.607311ms)
+✔ patient intake uses a compact responsive layout without reducing touch targets (1.203258ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 930.251503

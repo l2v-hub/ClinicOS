@@ -1,0 +1,18 @@
+✔ pause/continue and return persist; retries preserve exact history and valid dose receipts (588.948153ms)
+PS_INTERLEAVING {"kind":"scheduled","initialChart":false,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"prn","initialChart":false,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"scheduled","initialChart":true,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"prn","initialChart":true,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+✔ real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts (607.72778ms)
+✔ raw PostgreSQL serialization conflicts retry narrowly while unrelated query errors remain errors (1.805625ms)
+✔ exit decisions are explicit, confirmed and never accept client actor/time or mixed commands (2.564245ms)
+✔ managed hold requires matching immutable history; unknown/corrupt context is never permission to dose (1.178432ms)
+✔ ordinary writes retain managed history and active hold; explicit forge/erase/change is rejected (0.818386ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11805.60945

@@ -1,0 +1,14 @@
+✔ pause/continue and return persist; retries preserve exact history and valid dose receipts (456.73786ms)
+✔ real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts (474.835785ms)
+✔ raw PostgreSQL serialization conflicts retry narrowly while unrelated query errors remain errors (3.78623ms)
+✔ exit decisions are explicit, confirmed and never accept client actor/time or mixed commands (2.56497ms)
+✔ managed hold requires matching immutable history; unknown/corrupt context is never permission to dose (1.579283ms)
+✔ ordinary writes retain managed history and active hold; explicit forge/erase/change is rejected (1.062667ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11594.263359
