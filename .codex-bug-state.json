@@ -1058,13 +1058,17 @@
       "clinicalGates": [
         {
           "issue": 453,
-          "status": "pending",
-          "action": "No allergy matching/warning/blocking policy implementation before actual user decision"
+          "status": "approved",
+          "action": "No allergy matching/warning/blocking policy implementation before actual user decision",
+          "decision": "Confirmable warning, no automatic block",
+          "approvedAt": "2026-10-17T08:53:03.013Z"
         },
         {
           "issue": 457,
-          "status": "pending",
-          "action": "No temporary-exit/therapy pause policy implementation before actual user decision"
+          "status": "approved",
+          "action": "No temporary-exit/therapy pause policy implementation before actual user decision",
+          "decision": "Explicit decision of authorized operator required",
+          "approvedAt": "2026-10-17T08:53:03.013Z"
         }
       ],
       "packetHashes": {
@@ -1076,7 +1080,8 @@
         "scope-amendment-2.md": "868ee1d36373421b6f2003cb4007f7d18f057a66228c802652be8fc100549ca7",
         "scope-amendment-3.md": "cbbdfbaeb8c78c14160dfc6fe63afd6a269788afdb4e3242838f556d9310d1e5",
         "scope-amendment-4.md": "da083700035882a4ae20fa039f0565ffc6a5a6ae3bbb657526a9a1ba0a9bcb2d",
-        "scope-amendment-5.md": "40c85ae6de778293257788807fd608f36c5bb5c1494de4cf3933afbdf2b616c9"
+        "scope-amendment-5.md": "40c85ae6de778293257788807fd608f36c5bb5c1494de4cf3933afbdf2b616c9",
+        "clinical-decisions-2026-10-17.md": "bbcb8132f59b48c1ead147d79e5a0b4dd5d553841c880b0bd0e15eeffe592139"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -1901,5 +1906,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-17T08:46:37.377Z"
+  "updatedAt": "2026-10-17T08:53:03.013Z"
 }
