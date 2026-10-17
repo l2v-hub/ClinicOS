@@ -30,7 +30,12 @@ async function call(session, method, path, body, extra = {}) {
   } catch {
     /* PDF/empty/error text */
   }
-  return { status: r.status, data, cache: r.headers.get('cache-control') };
+  return {
+    status: r.status,
+    data,
+    cache: r.headers.get('cache-control'),
+    replayed: r.headers.get('Idempotent-Replayed'),
+  };
 }
 async function check(name, fn) {
   try {
@@ -349,6 +354,99 @@ if (patientId) {
       .filter((a) => a.therapyId === r.data.id);
     evidence.sameBandSchedules = { therapy: r.data, doses };
     assert.equal(doses.length, 2, 'Two valid morning schedules collapsed into one dose');
+  });
+  await check('therapy:one-off-explicit-time-is-administrable', async () => {
+    const created = await call(doctor, 'POST', `/patients/${patientId}/therapies`, {
+      farmacoNome: 'QA one-off clock',
+      dataInizio: today,
+      tipo: 'una_tantum',
+      dosaggio: 'Dose sintetica prescritta',
+      dataSomministrazione: today,
+      orarioSomministrazione: '11:30',
+      schedules: [],
+    });
+    assert.equal(created.status, 201, JSON.stringify(created.data));
+    const read = async () => {
+      const feed = await call(nurse, 'GET', `/therapy-slots?date=${today}`);
+      assert.equal(feed.status, 200, JSON.stringify(feed.data));
+      return (feed.data.slots ?? feed.data)
+        .flatMap((s) => s.patients ?? [])
+        .flatMap((p) => p.administrations ?? [])
+        .filter((a) => a.therapyId === created.data.id);
+    };
+    const initial = await read();
+    assert.equal(initial.length, 1);
+    assert.equal(initial[0].scheduledTime, '11:30');
+    assert.equal(initial[0].dosage, 'Dose sintetica prescritta');
+    const body = {
+      patientId,
+      therapyId: created.data.id,
+      date: today,
+      fascia: 'pranzo',
+      scheduledTime: '11:30',
+    };
+    assert.equal(
+      (await call(nurse, 'POST', '/therapy-slots/confirm', { ...body, scheduledTime: '12:00' }))
+        .status,
+      409,
+    );
+    const confirmed = await call(nurse, 'POST', '/therapy-slots/confirm', body);
+    assert.equal(confirmed.status, 200, JSON.stringify(confirmed.data));
+    assert.equal(confirmed.data.ora, '11:30');
+    assert.equal(confirmed.data.farmacoDose, 'Dose sintetica prescritta');
+    assert.equal((await call(nurse, 'POST', '/therapy-slots/confirm', body)).status, 409);
+    const final = await read();
+    assert.equal(final.length, 1);
+    assert.equal(final[0].status, 'administered');
+    evidence.singleAdministration = {
+      therapyId: created.data.id,
+      prescribedTime: '11:30',
+      initial,
+      final,
+    };
+  });
+  await check('administration:request-replay/pending-refusal-guard', async () => {
+    const created = await call(doctor, 'POST', `/patients/${patientId}/therapies`, {
+      farmacoNome: 'QA replay and refusal',
+      dataInizio: today,
+      dosaggio: 'Dose sintetica prescritta',
+      fasceMattina: true,
+    });
+    assert.equal(created.status, 201, JSON.stringify(created.data));
+    const body = {
+      patientId,
+      therapyId: created.data.id,
+      date: today,
+      fascia: 'mattina',
+      scheduledTime: '08:00',
+      requestId: randomUUID(),
+      expectedStato: 'da_erogare',
+      motivo: 'rifiutata_paziente',
+    };
+    const first = await call(nurse, 'POST', '/therapy-slots/not-administered', body);
+    assert.equal(first.status, 200, JSON.stringify(first.data));
+    const replay = await call(nurse, 'POST', '/therapy-slots/not-administered', body);
+    assert.equal(replay.status, 200);
+    assert.equal(replay.replayed, 'true');
+    assert.deepEqual(replay.data, first.data);
+    const overwrite = await call(nurse, 'POST', '/therapy-slots/confirm', {
+      ...body,
+      motivo: undefined,
+      requestId: randomUUID(),
+    });
+    assert.equal(overwrite.status, 409);
+    assert.match(overwrite.data.error, /non è più da erogare/);
+    const altered = await call(nurse, 'POST', '/therapy-slots/not-administered', {
+      ...body,
+      note: 'Contenuto modificato',
+    });
+    assert.equal(altered.status, 409);
+    evidence.scheduledReceipt = {
+      first: first.data,
+      replayed: replay.replayed,
+      overwriteStatus: overwrite.status,
+      alteredRequestStatus: altered.status,
+    };
   });
   if (therapy)
     await check('administration:confirmation/duplicate/actor-authority', async () => {

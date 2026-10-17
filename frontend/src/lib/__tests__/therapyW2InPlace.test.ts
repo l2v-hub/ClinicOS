@@ -144,6 +144,7 @@ test('write bodies carry only the slot key / PRN key — never a client dose, dr
     therapyId: 't',
     date: TODAY,
     fascia: 'mattina',
+    expectedStato: 'da_erogare',
     motivo: 'altro',
     note: 'vomito',
     confirmed: true,
@@ -152,7 +153,13 @@ test('write bodies carry only the slot key / PRN key — never a client dose, dr
     { patientId: 'p', therapyId: 't', date: TODAY, fascia: 'sera' },
     { kind: 'administered' },
   );
-  assert.deepEqual(Object.keys(plain).sort(), ['date', 'fascia', 'patientId', 'therapyId']);
+  assert.deepEqual(Object.keys(plain).sort(), [
+    'date',
+    'expectedStato',
+    'fascia',
+    'patientId',
+    'therapyId',
+  ]);
   const prn = prnBody({
     patientId: 'p',
     therapyId: 't',
@@ -320,11 +327,20 @@ test('therapy tab: role-based actions, drug tap detail, direct-access prop (sour
   assert.match(tab, /canDelete: canDeleteTherapy/);
   assert.match(tab, /renderDetail=\{renderDetail\}/);
   // W5: «Nuova terapia» only for therapy.create.
-  assert.match(tab, /\.\.\.\(canCreateTherapy \? \[\{ key: 'nuova', label: 'Nuova terapia' \}\] : \[\]\)/);
+  assert.match(
+    tab,
+    /\.\.\.\(canCreateTherapy \? \[\{ key: 'nuova', label: 'Nuova terapia' \}\] : \[\]\)/,
+  );
   const detail = await src('../../components/operator/cartella/TherapyDrugList.tsx');
-  assert.match(detail, /\{active && actions\.canUpdate && \(\s*<button[\s\S]{0,140}title="Modifica"/);
+  assert.match(
+    detail,
+    /\{active && actions\.canUpdate && \(\s*<button[\s\S]{0,140}title="Modifica"/,
+  );
   assert.match(detail, /\{actions\.canDelete && \(\s*<button[\s\S]{0,140}title="Elimina"/);
-  assert.match(detail, /\{!active && actions\.canUpdate && \(\s*<button[\s\S]{0,140}title="Riattiva"/);
+  assert.match(
+    detail,
+    /\{!active && actions\.canUpdate && \(\s*<button[\s\S]{0,140}title="Riattiva"/,
+  );
   // «Somministra ora» of a dose of today not given now lives in the calendar hour.
   const slotDetail = await src('../../components/operator/cartella/PatientTherapySlotDetail.tsx');
   assert.match(slotDetail, /Somministra ora/);
