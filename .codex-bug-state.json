@@ -3964,18 +3964,34 @@
       "implementation": [
         {
           "round": 1,
+          "status": "failed",
+          "startedAt": "2026-10-17T11:12:53.485Z",
+          "reason": "DedicatedQA1 BLOCKED: actor authorization and source comment revision can change during awaited subject lookup before label/PRmirror write. Two independent actual-module reproductions."
+        },
+        {
+          "round": 2,
           "status": "running",
-          "startedAt": "2026-10-17T11:12:53.485Z"
+          "startedAt": "2026-10-17T11:43:17.966Z",
+          "reason": "Final-boundary role/source revision guard correction within same7sources; newindependentQA2 required."
         }
       ],
       "reviews": [],
       "packetHashes": {
         "task-contract.md": "80d72fe00d383ce3c7c22b619ab0b87e998a456504870e2c746710cd750876f2",
         "implementation-plan.md": "92eaa03161ca24fddb8fa075ae67038f39e7a6171fb675b013e3e3ef984c3f80",
-        "analysis.md": "afe206b2b975669fcf059c07031270560d51a64ee8c5020eb3ed7c255c7c6d70"
+        "analysis.md": "afe206b2b975669fcf059c07031270560d51a64ee8c5020eb3ed7c255c7c6d70",
+        "implementation-cycle-2-final-communication-guard.md": "859b4ef5e04e517dddfa75441eab5aa424f1aaf484056559aca021a3cab2673f"
       },
       "operationalOnly": true,
-      "rationale": "Explicit new user-requested issue-comment/label feedback feature. Seven sources outside frozen G19; no guard or clinical budget reset. Existing normal-controller ownership preserved."
+      "rationale": "Explicit new user-requested issue-comment/label feedback feature. Seven sources outside frozen G19; no guard or clinical budget reset. Existing normal-controller ownership preserved.",
+      "independentQa": {
+        "attempt": 1,
+        "verdict": "BLOCKED",
+        "report": "independent-qa-attempt-1/validation-report.md",
+        "reportSha256": "aa2ae81d49b05f9303061caef75f36a0484773aa31d6b62c783d2bdddfd0d929",
+        "manifestSha256": "d333ba820f4da91c6005ed009323a0e879ad7e64561865ee4e814d51f18d0026",
+        "findings": 2
+      }
     },
     {
       "id": "ci-note-isolation",
@@ -4003,7 +4019,7 @@
       "rationale": "Actual requiredCI global broadcast test interference. One existing test runner list only; all app/tests/G19 untouched; separate new operation not exhausted guard retry."
     }
   ],
-  "updatedAt": "2026-10-17T11:41:58.730Z",
+  "updatedAt": "2026-10-17T11:43:17.967Z",
   "triageQueue": {
     "issues": [
       485,
