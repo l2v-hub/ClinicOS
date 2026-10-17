@@ -1,0 +1,194 @@
+{
+  "status": "PASS",
+  "scope": "Actual browser and production modules, loopback synthetic GitHub transport and declared synthetic model/correction callbacks; real Git finalQa/prepare; no actual Max or deploy",
+  "flows": 9,
+  "errors": [],
+  "history": [
+    {
+      "name": "request",
+      "phase": "waiting-review",
+      "label": "claude-review-ready",
+      "rounds": 0
+    },
+    {
+      "name": "claim",
+      "phase": "reviewing",
+      "label": "claude-reviewing",
+      "rounds": 1
+    },
+    {
+      "name": "duplicate",
+      "phase": "reviewing",
+      "label": "claude-reviewing",
+      "rounds": 1
+    },
+    {
+      "name": "stale",
+      "phase": "reviewing",
+      "label": "claude-reviewing",
+      "rounds": 1
+    },
+    {
+      "name": "unauthorized",
+      "phase": "reviewing",
+      "label": "claude-reviewing",
+      "rounds": 1
+    },
+    {
+      "name": "submit",
+      "phase": "reviewing",
+      "label": "claude-reviewing",
+      "rounds": 1
+    },
+    {
+      "name": "reconcile",
+      "phase": "waiting-review",
+      "label": "codex-review-ready",
+      "rounds": 1
+    },
+    {
+      "name": "codex",
+      "phase": "ready",
+      "label": "codex-review-ready",
+      "rounds": 1
+    },
+    {
+      "name": "codex-findings",
+      "phase": "waiting-review",
+      "label": "claude-review-ready",
+      "rounds": 1
+    }
+  ],
+  "actions": [
+    "correct",
+    "test",
+    "simplify",
+    "test",
+    "independent-qa",
+    "checkpoint",
+    "publish"
+  ],
+  "final": {
+    "dashboard": {
+      "repository": "l2v-hub/ClinicOS",
+      "fetchedAt": "2026-10-17T15:06:29.117Z",
+      "updatedAt": "2026-10-17T15:06:26.245Z",
+      "counts": {
+        "queued": 0,
+        "processing": 1,
+        "blocked": 0,
+        "resolved": 0
+      },
+      "setup": {
+        "pr": 471,
+        "integrated": true,
+        "phase": "Integrato in main",
+        "reviews": 0,
+        "reviewLimit": 4,
+        "check": null
+      },
+      "rows": [
+        {
+          "number": 17,
+          "url": "https://github.com/l2v-hub/ClinicOS/issues/17",
+          "status": "In progress",
+          "phase": "claude-review-ready · attesa Claude locale",
+          "batch": "bug-batch-17",
+          "implementation": 2,
+          "reviews": 1,
+          "sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "pr": 81
+        }
+      ]
+    },
+    "prLabels": [
+      "In progress",
+      "unrelated-clinical",
+      "claude-review-ready"
+    ],
+    "issueLabels": [
+      "In progress",
+      "unrelated-clinical",
+      "claude-review-ready"
+    ],
+    "attempt": {
+      "round": 1,
+      "status": "approved",
+      "subjectSha": "c4088ff30bb8810be240ef999b3383e0c44417cd"
+    },
+    "external": {
+      "status": "comment-requested",
+      "channel": "github-comments",
+      "requestId": "25e725c6-b3e6-4d39-bd16-c6f2d12b38ac",
+      "subjectSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "requestedAt": "2026-10-17T15:06:28.125Z",
+      "feedbackFingerprint": "8736002b6b4922c8981eac2367dbfb65c69ad6f1b75eef63ccaa0506230da882"
+    },
+    "history": [
+      {
+        "name": "request",
+        "phase": "waiting-review",
+        "label": "claude-review-ready",
+        "rounds": 0
+      },
+      {
+        "name": "claim",
+        "phase": "reviewing",
+        "label": "claude-reviewing",
+        "rounds": 1
+      },
+      {
+        "name": "duplicate",
+        "phase": "reviewing",
+        "label": "claude-reviewing",
+        "rounds": 1
+      },
+      {
+        "name": "stale",
+        "phase": "reviewing",
+        "label": "claude-reviewing",
+        "rounds": 1
+      },
+      {
+        "name": "unauthorized",
+        "phase": "reviewing",
+        "label": "claude-reviewing",
+        "rounds": 1
+      },
+      {
+        "name": "submit",
+        "phase": "reviewing",
+        "label": "claude-reviewing",
+        "rounds": 1
+      },
+      {
+        "name": "reconcile",
+        "phase": "waiting-review",
+        "label": "codex-review-ready",
+        "rounds": 1
+      },
+      {
+        "name": "codex",
+        "phase": "ready",
+        "label": "codex-review-ready",
+        "rounds": 1
+      },
+      {
+        "name": "codex-findings",
+        "phase": "waiting-review",
+        "label": "claude-review-ready",
+        "rounds": 1
+      }
+    ],
+    "actions": [
+      "correct",
+      "test",
+      "simplify",
+      "test",
+      "independent-qa",
+      "checkpoint",
+      "publish"
+    ],
+    "dirty": ""
+  }
+}

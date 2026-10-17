@@ -62,6 +62,7 @@ export function communicationFixture({ clock } = {}) {
       {
         number,
         state: 'open',
+        ...(number === 81 ? { pull_request: {} } : {}),
         labels: [{ name: 'In progress' }, { name: 'clinical-unrelated' }],
         comments: [],
       },
@@ -246,11 +247,15 @@ function report(f, verdict = 'approved') {
 
 test('requested/running/findings/approved/failed lifecycle is exclusive on every issue and preserves unrelated/lifecycle labels', async () => {
   const f = communicationFixture();
+  for (const issue of f.issues.values())
+    issue.labels.push(
+      ...['claude-reviewing', 'codex-review-fixes', 'claude-reviewed'].map((name) => ({ name })),
+    );
   const expected = [
     'claude-review-ready',
     'claude-reviewing',
-    'codex-review-fixes',
-    'claude-reviewed',
+    'codex-review-ready',
+    'codex-review-ready',
     'review-blocked',
   ];
   for (let step = 0; step < expected.length; step++) {
@@ -285,7 +290,15 @@ test('requested/running/findings/approved/failed lifecycle is exclusive on every
       assert.ok(labels.includes('In progress') && labels.includes('clinical-unrelated'));
       assert.ok(f.issues.get(number).comments.at(-1).body.includes(sha));
       assert.ok(f.issues.get(number).comments.at(-1).body.includes('1/4') || step === 0);
+      if (step === 2 || step === 3)
+        assert.match(f.issues.get(number).comments.at(-1).body, /Codex.*review/i);
     }
+    const prLabels = f.issues.get(81).labels.map((item) => item.name);
+    assert.deepEqual(
+      prLabels.filter((name) => REVIEW_LABELS.includes(name)),
+      [expected[step]],
+    );
+    assert.ok(prLabels.includes('In progress') && prLabels.includes('clinical-unrelated'));
     assert.deepEqual(f.state(), before, 'Projection never changes durable state/budgets');
   }
   assert.ok(f.issues.get(17).comments.at(-1).body.includes('tentativo rimane consumato'));
@@ -315,6 +328,63 @@ test('findings are present on each source issue and their report digest is verif
   await other.communication.mirrorFeedback(other.batch);
   assert.equal(reviewProjection(other.batch, externalReport).label, 'claude-review-ready');
   assert.equal(other.batch.reviews.length, 0);
+});
+
+test('every published structured verdict becomes Codex review ready while finished remains Claude reviewing', () => {
+  for (const verdict of ['approved', 'changes-requested', 'blocked']) {
+    const f = communicationFixture();
+    report(f, verdict);
+    assert.equal(reviewProjection(f.batch, externalReport).label, 'codex-review-ready');
+  }
+  const finished = communicationFixture();
+  report(finished, 'approved');
+  finished.batch.externalReview.status = 'finished';
+  assert.equal(reviewProjection(finished.batch, externalReport).label, 'claude-reviewing');
+  const commentRequested = communicationFixture();
+  commentRequested.batch.externalReview = {
+    status: 'comment-requested',
+    channel: 'github-comments',
+    subjectSha: sha,
+  };
+  assert.equal(
+    reviewProjection(commentRequested.batch, externalReport).label,
+    'claude-review-ready',
+  );
+  commentRequested.batch.reviews = [{ round: 1, subjectSha: sha, status: 'running' }];
+  commentRequested.batch.externalReview.status = 'comment-running';
+  assert.equal(reviewProjection(commentRequested.batch, externalReport).label, 'claude-reviewing');
+});
+
+test('PR labels use the current PR issue inventory and stale SHA or authorization prevents PR writes', async () => {
+  const f = communicationFixture();
+  f.issues.get(81).labels.push({ name: 'claude-reviewed' }, { name: 'codex-review-fixes' });
+  await f.communication.publishState(f.batch);
+  assert.deepEqual(
+    f.issues
+      .get(81)
+      .labels.map((item) => item.name)
+      .filter((name) => REVIEW_LABELS.includes(name)),
+    ['claude-review-ready'],
+  );
+  assert.ok(f.issues.get(81).labels.some((item) => item.name === 'clinical-unrelated'));
+
+  for (const drift of ['sha', 'authorization']) {
+    const other = communicationFixture();
+    other.hook((call) => {
+      if (call.args[1] === `repos/${repo}/labels?per_page=100`) {
+        if (drift === 'sha') other.pr.head.sha = 'f'.repeat(40);
+        else other.authorized.delete('review-bot');
+      }
+    });
+    await assert.rejects(other.communication.publishState(other.batch));
+    assert.ok(
+      !other.writes.some(
+        (item) =>
+          item.endpoint === `repos/${repo}/issues/81/labels` ||
+          item.endpoint.startsWith(`repos/${repo}/issues/81/labels/`),
+      ),
+    );
+  }
 });
 
 test('authorized source comments reach old-worker PR context, get acknowledged once, and do not create feedback loops', async () => {
@@ -646,7 +716,8 @@ for (const [name, mutate] of [
 test('drift between first label write and the next write stops all remaining cohort mutations', async () => {
   const f = communicationFixture();
   f.hook((call) => {
-    if (f.writes.length && call.args[1].includes('/comments?')) f.issues.get(18).state = 'closed';
+    if (f.writes.length && call.args[1] === `repos/${repo}/issues/18`)
+      f.issues.get(18).state = 'closed';
   });
   await assert.rejects(f.communication.publishState(f.batch));
   assert.equal(f.writes.length, 1);

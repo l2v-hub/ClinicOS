@@ -1,0 +1,79 @@
+✔ failed round recovery is explicit, preserves the spent round, ledger, release hold, and reserves round two (21.437681ms)
+✔ recovery does not reset a substantive attempt and requires a new SHA (1.435371ms)
+✔ only one concurrent claimant wins the durable compare-and-swap (5.289646ms)
+✔ active workers, repeated claims, exhausted budgets and changed review subjects cannot be taken over (12.407104ms)
+✖ unauthorized actors and authorization revoked inside the CAS guard cannot claim (1.114971ms)
+✔ report submit accepts no implicit approval and rejects stale, replayed, invalid, unsafe, and untracked reports (10.35531ms)
+✔ edited report comments and reviewer revocation prevent importing a report (5.711258ms)
+✔ valid exact-SHA report imports a hashed ledger and publishes a same-SHA server review idempotently (4.925121ms)
+✔ finished import retries interrupted server publication without spending another review round (3.391254ms)
+✔ feedback fingerprint excludes only own protocol comments, includes others, and records unrelated feedback changes (4.096484ms)
+✔ own request, report, and published review comments do not create feedback changes (3.939912ms)
+✔ a distinct authorized controller publishes the owner report without inventing new feedback (5.795875ms)
+✔ external doctor requires no Claude credential or Claude subprocess (4.037935ms)
+✔ request waits for real checks, then makes the PR ready without executing Claude (2.683635ms)
+✔ external harness reserves remotely before inference, publishes hashed approval and Codex accepts the exact revision (123.145315ms)
+✔ external publication failure is retryable without another model call; a CAS conflict prevents inference (144.700655ms)
+✔ Claude findings trigger fresh Codex correction, test/simplification/QA, new SHA and a new bounded request (84.643863ms)
+✔ new human comments invalidate approval and exhausted review budgets block correction instead of starting round five (92.590135ms)
+✔ human feedback arriving with review publication is retained rather than silently included in approval (89.579314ms)
+✔ draft or foreign PRs and an exhausted external budget never start a model (49.129248ms)
+✔ closed source issues block the external harness and Codex before review or correction (108.794862ms)
+✔ new cron records bounded failure codes and publishes failure state without exposing local output or retrying inference (72.996088ms)
+✔ failure classification accepts only fixed result codes and never copies arbitrary model output (1.16257ms)
+✔ transient issue-notification failure does not waste or retry the reserved model call (80.419743ms)
+✔ issue notification outage after reserving a correction does not spend another implementation attempt or block real fixes (80.471703ms)
+✔ comment channel is preserved when requesting the next exact-SHA review (2.601694ms)
+✔ Claude approval on comment channel requires a new independent Codex QA before readiness (109.093656ms)
+✔ child environment isolates verification, executor, reviewer, and controller credentials (5.802247ms)
+✔ local Codex login directory is available only to Codex model authentication (0.587168ms)
+✔ createRunner subprocess receives only the role credential and a demo localhost database (182.73968ms)
+✔ fresh CLI configuration directories are private and survive repeated isolated launches (316.96344ms)
+✔ createRunner reports child exit failure and output overflow as failures (127.046349ms)
+✔ createRunner timeout terminates the subprocess group, including a child process (1528.605005ms)
+✔ validateEvidence accepts a valid synthetic PNG and a recorded Playwright trace and records content digests (29.456742ms)
+✔ validateEvidence rejects missing files, wrong headers, path traversal, and symlinks outside the packet (27.373555ms)
+✔ validateEvidence rejects PNG signature filler and PNG/trace checksum corruption (20.519555ms)
+✔ real Git workspace prepares the exact batch branch, freezes its task packet, and regenerates evidence after clearing stale files (228.392876ms)
+✔ real Git workspace rejects changes outside the accepted source-file scope (138.555258ms)
+✔ only verification receives the absolute trusted browser cache while HOME and credential boundaries remain isolated (1.096809ms)
+✔ actual verification subprocess sees the trusted shared cache independently of isolated HOME (62.646832ms)
+✔ trusted browser installation, controller and native sandbox service proof share the explicit cache before credentials (2.335213ms)
+✔ post-Claude independent final QA leaves a real reviewed worktree clean for a correction (185.180411ms)
+ℹ tests 42
+ℹ suites 0
+ℹ pass 41
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2967.302375
+
+✖ failing tests:
+
+test at agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs:345:1
+✖ unauthorized actors and authorization revoked inside the CAS guard cannot claim (1.114971ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Unauthorized handoff actor/. Input:
+  
+  'AssertionError [ERR_ASSERTION]: Unexpected GitHub API call: GET repos/l2v-hub/ClinicOS/collaborators/outsider/permission'
+  
+      at async TestContext.<anonymous> (file:///workspace/clinicos-review-handoff/agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs:348:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: AssertionError [ERR_ASSERTION]: Unexpected GitHub API call: GET repos/l2v-hub/ClinicOS/collaborators/outsider/permission
+        at apiRun (file:///workspace/clinicos-review-handoff/agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs:153:12)
+        at invoke (file:///workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/github.mjs:63:26)
+        at api (file:///workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/github.mjs:92:26)
+        at Object.authorized (file:///workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/github.mjs:115:28)
+        at actor (file:///workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/comment-review-handoff.mjs:50:50)
+        at async Object.request (file:///workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/comment-review-handoff.mjs:120:19)
+        at async waitForActual (node:assert:646:5)
+        at async strict.rejects (node:assert:769:25)
+        at async TestContext.<anonymous> (file:///workspace/clinicos-review-handoff/agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs:348:3)
+        at async Test.run (node:internal/test_runner/test:1389:7),
+    expected: /Unauthorized handoff actor/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

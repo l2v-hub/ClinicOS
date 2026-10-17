@@ -1,0 +1,8 @@
+{
+  "verdict": "READY FOR CODEX QA",
+  "sourceManifestSha256": "3fbf31a8d31a601e45d167aa5fc1ec6c1a7ed86e9268bd5f11be6152ad4890b2",
+  "evidenceManifestSha256": "db03aca2fb9bdfdd1b5172d76713d46f401b425d41e7df92bb5fc2b15d477509",
+  "reportSha256": "86a2dec5237a6d6cfcdcafd9b768fd74b37b536730c6b9c2faba9f7bd324f6c1",
+  "evidenceFiles": 32,
+  "noLiveGitHubOrModelOrDeploy": true
+}
