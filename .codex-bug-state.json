@@ -3859,7 +3859,7 @@
       "issues": [],
       "branch": "codex/demo-source-configuration",
       "owner": "codex-root-2026-10-17",
-      "phase": "implementing",
+      "phase": "waiting-checks",
       "implementation": [
         {
           "round": 1,
@@ -3869,9 +3869,10 @@
         },
         {
           "round": 2,
-          "status": "running",
+          "status": "passed",
           "startedAt": "2026-10-17T11:00:31.829Z",
-          "reason": "Native validated missing trigger requires explicit digest-bound creation. Same3 operational paths, previous tests preserved, new independent QA required."
+          "reason": "NewindependentQA2 all5PASS:107+41tests,officialschema3/YAML/AST,actual19browser207assert,zeroerrors/credentialfindings,3sources/contracts3/history38exact. Rootreadfullreport/diff/actualPNG.",
+          "sha": "87dfe795f7cc205291aee4bfc9e3ef9e887a3ae0"
         }
       ],
       "reviews": [],
@@ -3888,17 +3889,21 @@
         "provider-constraint-clarification.md": "b2917f9d408b290f7f48d2f64c1bafb16209b7b2fc7beab2cc1b8fdff9e5207e"
       },
       "operationalOnly": true,
-      "sha": "44e2aaeabcc0583ff89b655774a5026546283f70",
+      "sha": "87dfe795f7cc205291aee4bfc9e3ef9e887a3ae0",
       "pr": {
-        "number": 482,
-        "url": "https://github.com/l2v-hub/ClinicOS/pull/482"
+        "number": 484,
+        "url": "https://github.com/l2v-hub/ClinicOS/pull/484"
       },
       "independentQa": {
+        "attempt": 2,
         "verdict": "READY FOR CODEX QA",
-        "report": "independent-qa-1/validation-report.md",
-        "tests": 87,
-        "browserScenarios": 9,
-        "valueAssertions": 110,
+        "report": "independent-qa-attempt-2/validation-report.md",
+        "reportSha256": "d2ffbcc833f1b607fd8c1ab1762998e77d89d7a69b06eae02bc6e8cee5a1caab",
+        "manifestSha256": "3fee438606b42c303ae269cc1d2772a6ea2b904cbb4fdda4e061ca38ab767378",
+        "candidateTests": 107,
+        "independentTests": 41,
+        "browserScenarios": 19,
+        "valueAssertions": 207,
         "actualProviderOperation": false
       },
       "mergeSha": "8124b1bc88c0f086b1ee328214f87f4802005d11",
@@ -3911,6 +3916,11 @@
         "proof": "validated aggregate GitHub job log",
         "artifactDownload": "blocked-by-cloud-proxy",
         "providerWrites": 0
+      },
+      "previousPr": {
+        "number": 482,
+        "url": "https://github.com/l2v-hub/ClinicOS/pull/482",
+        "mergeSha": "8124b1bc88c0f086b1ee328214f87f4802005d11"
       }
     },
     {
@@ -3946,5 +3956,5 @@
       "rationale": "Explicit new user-requested issue-comment/label feedback feature. Seven sources outside frozen G19; no guard or clinical budget reset. Existing normal-controller ownership preserved."
     }
   ],
-  "updatedAt": "2026-10-17T11:14:02.032Z"
+  "updatedAt": "2026-10-17T11:17:22.647Z"
 }
