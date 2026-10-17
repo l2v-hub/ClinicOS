@@ -1,0 +1,96 @@
+{
+  "base": "b058ce032e5b1d73050353e849103ea438f7d613",
+  "observedAt": "2026-10-17T07:24:50.018Z",
+  "readOnly": true,
+  "oldQueue": [],
+  "fixedQueue": [
+    451,
+    452,
+    453,
+    454,
+    455,
+    456,
+    457,
+    460,
+    463,
+    464,
+    467,
+    470,
+    472,
+    473,
+    475,
+    476
+  ],
+  "counts": {
+    "queued": 13,
+    "processing": 0,
+    "blocked": 0,
+    "resolved": 0
+  },
+  "statuses": [
+    {
+      "number": 451,
+      "status": "In coda"
+    },
+    {
+      "number": 452,
+      "status": "In coda"
+    },
+    {
+      "number": 453,
+      "status": "In coda"
+    },
+    {
+      "number": 454,
+      "status": "In coda"
+    },
+    {
+      "number": 455,
+      "status": "In coda"
+    },
+    {
+      "number": 456,
+      "status": "In coda"
+    },
+    {
+      "number": 457,
+      "status": "In coda"
+    },
+    {
+      "number": 460,
+      "status": "Gestita da altro flusso"
+    },
+    {
+      "number": 463,
+      "status": "Gestita da altro flusso"
+    },
+    {
+      "number": 464,
+      "status": "Gestita da altro flusso"
+    },
+    {
+      "number": 467,
+      "status": "In coda"
+    },
+    {
+      "number": 470,
+      "status": "In coda"
+    },
+    {
+      "number": 472,
+      "status": "In coda"
+    },
+    {
+      "number": 473,
+      "status": "In coda"
+    },
+    {
+      "number": 475,
+      "status": "In coda"
+    },
+    {
+      "number": 476,
+      "status": "In coda"
+    }
+  ]
+}

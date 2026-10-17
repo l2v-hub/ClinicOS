@@ -45,6 +45,12 @@ issues. Fetch details and comments with `gh issue view`. Exclude in-flight work 
 the user. Other open bugs may provide context, but are not automatically implementation scope.
 If the queue is empty, report it and stop without creating artificial work or invoking Claude.
 
+`codex-run` alone is the durable opt-in. The controller discovers it independently of `bug`,
+reconciles missing classification labels only after checking the authorized actor, and recovers
+from replaced Actions events. A GitHub `User` may be the same identity as the controller PAT;
+that does not make the actor a bot. Actual `Bot` actors still need a recent exact command from
+an authorized `User`. Dashboard discovery stays read-only, including before classification.
+
 ## 2. Aggregate before changing code
 
 The controller collects newly authorized issues for a durable two-minute quiet window before

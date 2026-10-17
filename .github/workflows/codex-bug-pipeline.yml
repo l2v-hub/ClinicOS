@@ -13,11 +13,6 @@ on:
   schedule:
     - cron: '*/15 * * * *'
 
-# One controller at a time for this repository. Never cancel a live model session.
-concurrency:
-  group: codex-bug-pipeline-${{ github.repository }}
-  cancel-in-progress: false
-
 permissions:
   contents: write
   issues: write
@@ -29,6 +24,11 @@ jobs:
   process:
     # Suppress wake-ups caused by the pipeline's own status comments and reviews.
     if: ${{ (github.event_name != 'issues' || github.event.label.name == 'codex-run') && !((github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '<!-- codex-bug-pipeline:')) || (github.event_name == 'pull_request_review' && startsWith(github.event.review.body, '<!-- codex-bug-pipeline:')) || (github.event_name == 'pull_request_review_comment' && startsWith(github.event.comment.body, '<!-- codex-bug-pipeline:'))) }}
+    # Evaluate the event filter before entering concurrency. Irrelevant label
+    # events must not replace the one pending controller wake-up.
+    concurrency:
+      group: codex-bug-pipeline-${{ github.repository }}
+      cancel-in-progress: false
     runs-on: ubuntu-22.04
     timeout-minutes: 180
     steps:

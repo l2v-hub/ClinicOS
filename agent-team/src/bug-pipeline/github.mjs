@@ -9,6 +9,13 @@ const BLOCKING_LABELS = new Set([
   'codex-processing',
   'status-blocked',
 ]);
+const EXTERNAL_WORK_LABELS = new Set([
+  'agent-working',
+  'ready-for-dev',
+  'assigned-to-claude',
+  'ready-for-qa',
+  'qa-passed',
+]);
 const BOT_PROTOCOL_MARKER = '<!-- codex-bug-pipeline:';
 const ISSUE_STATUSES = ['In progress', 'Bloccato', 'Risolto'];
 
@@ -47,7 +54,6 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
   assertRepo(repo);
   if (typeof run !== 'function') throw new TypeError('run must be a function');
   const [owner, name] = repo.split('/');
-  let identityPromise;
   const statusCache = new Map();
 
   async function invoke(
@@ -108,15 +114,6 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     return ['write', 'maintain', 'admin'].includes(response.value?.permission);
   }
 
-  async function authenticatedLogin() {
-    if (!identityPromise) {
-      identityPromise = api('user', { allowFailure: true }).then((response) =>
-        response.ok ? actorLogin(response.value) : null,
-      );
-    }
-    return (await identityPromise) ?? 'github-actions[bot]';
-  }
-
   async function ensureLabel(label) {
     const check = await api(`repos/${repo}/labels/${encodeURIComponent(label)}`, {
       allowFailure: true,
@@ -175,8 +172,10 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       )[0];
     const login = actorLogin(latest?.actor);
     if (!login) return false;
-    const botLogin = await authenticatedLogin();
-    if (login === botLogin || login === 'github-actions[bot]') {
+    // A maintainer may use their own PAT as CLINICOS_BOT_TOKEN. The same login
+    // is still a human actor; GitHub's actor type distinguishes it from an App.
+    if (latest.actor.type === 'User') return await authorized(login);
+    if (latest.actor.type === 'Bot') {
       // A label added by this workflow cannot authenticate itself. Accept its event only
       // when a recent exact command by a write-capable human immediately preceded it.
       const eventAt = Date.parse(latest.created_at ?? '');
@@ -187,6 +186,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
         const author = actorLogin(comment.user);
         if (
           author &&
+          comment.user?.type === 'User' &&
           /^\/codex fix$/.test(String(comment.body ?? '').trim()) &&
           Number.isFinite(createdAt) &&
           createdAt <= eventAt &&
@@ -197,19 +197,27 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       }
       return false;
     }
-    return await authorized(login);
+    return false;
   }
 
-  async function discoverQueue() {
-    const issues = await apiList(
-      `repos/${repo}/issues?state=open&labels=bug,codex-run&per_page=100`,
-    );
+  async function discoverQueue({ normalize = false } = {}) {
+    const issues = await apiList(`repos/${repo}/issues?state=open&labels=codex-run&per_page=100`);
     const queued = [];
     for (const issue of issues) {
       if (issue.pull_request) continue;
       const labels = new Set((issue.labels ?? []).map((label) => label.name));
       if ([...BLOCKING_LABELS].some((label) => labels.has(label))) continue;
-      if (await latestAuthorizedRunEvent(issueNumber(issue))) queued.push(issue);
+      if (!(await latestAuthorizedRunEvent(issueNumber(issue)))) continue;
+      // A later label event can replace a pending Actions run. Recover from the
+      // durable codex-run label even if that event never normalized bug/triage.
+      // Dashboard callers use the read-only default and never change labels.
+      if (
+        normalize &&
+        ![...EXTERNAL_WORK_LABELS].some((label) => labels.has(label)) &&
+        REQUIRED_LABELS.some((label) => !labels.has(label))
+      )
+        await applyIntakeLabels(issue.number);
+      queued.push(issue);
     }
     return queued;
   }
