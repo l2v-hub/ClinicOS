@@ -1,0 +1,140 @@
+{
+  "at": "2026-10-17T17:49:01.026541+00:00",
+  "scope": "Bounded public staticfrontend dependency reads only; noAPI/patientdata",
+  "rows": [
+    {
+      "path": "/assets/index-B43Bwayt.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 636347,
+      "sha256": "86015ecc1d7a77a885ac9032959c1a0d3723a4814b9000d5c5d45a8682fc9535",
+      "pdfAssets": [],
+      "pdfVersions": [],
+      "relevantDependencies": [
+        "NewPatientFlow-DOOwBOFn.js",
+        "PatientList-DHC6SmCa.js"
+      ]
+    },
+    {
+      "path": "/assets/NewPatientFlow-DOOwBOFn.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 9016,
+      "sha256": "a5e575926ab460b1a395d140e7ef4dab46a5916488b9106528fd3ee77d01a8eb",
+      "pdfAssets": [
+        "pdfPreviewResources-BxsAF4WT.js"
+      ],
+      "pdfVersions": [],
+      "relevantDependencies": [
+        "DischargeImportModal-CTNddU6s.js",
+        "IntakeWorkspace-C_H366Uw.js",
+        "pdfPreviewResources-BxsAF4WT.js"
+      ]
+    },
+    {
+      "path": "/assets/PatientList-DHC6SmCa.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 35242,
+      "sha256": "15a03e915449edf16a7b3cb616caecf4831594f958707c5483f9eb2d37a3076a",
+      "pdfAssets": [
+        "pdfPreviewResources-BxsAF4WT.js"
+      ],
+      "pdfVersions": [],
+      "relevantDependencies": [
+        "DischargeImportModal-CTNddU6s.js",
+        "IntakeWorkspace-C_H366Uw.js",
+        "NewPatientFlow-DOOwBOFn.js",
+        "pdfPreviewResources-BxsAF4WT.js"
+      ]
+    },
+    {
+      "path": "/assets/DischargeImportModal-CTNddU6s.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 46276,
+      "sha256": "5a16ca86acc597910598052cf431ecbdcbcd3c8e0001ddc87c4b33f66ed955c1",
+      "pdfAssets": [],
+      "pdfVersions": [],
+      "relevantDependencies": [
+        "IntakeWorkspace-C_H366Uw.js"
+      ]
+    },
+    {
+      "path": "/assets/IntakeWorkspace-C_H366Uw.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 133110,
+      "sha256": "4f287015ac17fa06964933b3ecd9b3822a7928af67cf00e5a76b8af35db1cfca",
+      "pdfAssets": [
+        "PdfCanvasPreview-DCEDgarS.js",
+        "pdf-BhrN1pI7.js",
+        "pdf.worker.min-0cTqlNvF.js",
+        "pdfPreviewResources-BxsAF4WT.js"
+      ],
+      "pdfVersions": [],
+      "relevantDependencies": [
+        "PdfCanvasPreview-DCEDgarS.js",
+        "pdf-BhrN1pI7.js",
+        "pdf.worker.min-0cTqlNvF.js",
+        "pdfPreviewResources-BxsAF4WT.js"
+      ]
+    },
+    {
+      "path": "/assets/pdfPreviewResources-BxsAF4WT.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 181,
+      "sha256": "a08a14f34aff74605114bd4da4c3cabc47cbd28d73eee52e3fdfd594e999fd76",
+      "pdfAssets": [],
+      "pdfVersions": [],
+      "relevantDependencies": []
+    },
+    {
+      "path": "/assets/PdfCanvasPreview-DCEDgarS.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 4288,
+      "sha256": "93427284ca7149015d626169d5e8df38e473df038d23ad214ea137eb033d4b71",
+      "pdfAssets": [
+        "pdf-BhrN1pI7.js",
+        "pdf.worker.min-0cTqlNvF.js",
+        "pdfPreviewResources-BxsAF4WT.js"
+      ],
+      "pdfVersions": [],
+      "relevantDependencies": [
+        "pdf-BhrN1pI7.js",
+        "pdf.worker.min-0cTqlNvF.js",
+        "pdfPreviewResources-BxsAF4WT.js"
+      ]
+    },
+    {
+      "path": "/assets/pdf-BhrN1pI7.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 427303,
+      "sha256": "6e5632b911b258ff60544eb54dd8d27157670e4cb8bde9abbde888bfa17488b4",
+      "pdfAssets": [
+        "pdf.worker.mjs"
+      ],
+      "pdfVersions": [],
+      "relevantDependencies": [
+        "pdf.worker.mjs"
+      ]
+    },
+    {
+      "path": "/assets/pdf.worker.min-0cTqlNvF.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 127,
+      "sha256": "e8633803a22192ad68fd9f70e49865e393fa1c1c5ca55c931924e377d5c8bc16",
+      "pdfAssets": [
+        "pdf.worker.min-CHFwMXne.mjs"
+      ],
+      "pdfVersions": [],
+      "relevantDependencies": [
+        "pdf.worker.min-CHFwMXne.mjs"
+      ]
+    }
+  ]
+}

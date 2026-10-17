@@ -1,0 +1,12 @@
+{
+  "onlyRunnerChanged": true,
+  "unchangedOtherFiles": 46,
+  "frozenPacketDocuments": 10,
+  "historicalFilesUnchanged": 164,
+  "delta": {
+    "scripts/e2e/issue-450-ingresso.mjs": {
+      "before": "acbc8795ad6e854fcbd6f3d5b7e22ac067497c89d8e1e51113312f1189917b6a",
+      "after": "c9394ec455e533cef59a2c6a6dd2a948984af16b73ba9002b2275821bb9a0c10"
+    }
+  }
+}

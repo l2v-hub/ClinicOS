@@ -1,0 +1,36 @@
+{
+  "pass": false,
+  "checks": [
+    {
+      "id": "actual pinned normal and bold fonts load with distinct text geometry",
+      "status": "PASS"
+    },
+    {
+      "id": "450 two real responsive entry choices",
+      "status": "PASS"
+    },
+    {
+      "id": "450 keyboard Tab and Enter activate manual entry",
+      "status": "PASS"
+    },
+    {
+      "id": "Claude2 manual missing steps stay closed with zero field overlap at tablet and phone",
+      "status": "PASS"
+    },
+    {
+      "id": "450 automatic-only admission remains empty",
+      "status": "PASS"
+    },
+    {
+      "id": "450 saved patient identity survives real browser reload and DB readback",
+      "status": "PASS"
+    },
+    {
+      "id": "450 keyboard ShiftTab and Enter activate document entry",
+      "status": "PASS"
+    }
+  ],
+  "errors": [
+    "AssertionError [ERR_ASSERTION]: Both text and JPX thumbnails contain actual nonblank pixels\n    at file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/scripts/e2e/issue-450-ingresso.mjs:797:12\n    at async verify (file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/scripts/e2e/issue-450-ingresso.mjs:172:3)\n    at async file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/scripts/e2e/issue-450-ingresso.mjs:794:3"
+  ]
+}

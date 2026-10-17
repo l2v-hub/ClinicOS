@@ -31,6 +31,7 @@ interface StepVerificaProps {
   /** Pagina unica (HMI 1): conferme nelle testate delle sezioni e "Crea paziente" nell'indice. */
   showAcceptance?: boolean;
   showCreate?: boolean;
+  allowMissingBirthDate?: boolean;
 }
 
 function countFilled(value: unknown): boolean {
@@ -51,6 +52,7 @@ export function StepVerifica({
   onReviewDemographics,
   showAcceptance = true,
   showCreate = true,
+  allowMissingBirthDate = false,
 }: StepVerificaProps) {
   const a = (data.anagrafica ?? {}) as AnagraficaData;
 
@@ -76,7 +78,7 @@ export function StepVerifica({
   const accepted = (data._accepted ?? {}) as { demographics?: boolean; therapy?: boolean };
   const therapyAccepted = accepted.therapy === true;
 
-  const missingDemo = Object.values(intakeDemographicErrors(a, true));
+  const missingDemo = Object.values(intakeDemographicErrors(a, true, { allowMissingBirthDate }));
 
   const checklist: Array<{ label: string; ok: boolean; target?: TherapyCorrectionTarget }> = [
     {

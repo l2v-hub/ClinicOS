@@ -1,0 +1,1 @@
+PASS main and real network-worker: original wasm denied; narrow candidate wasm allowed; JavaScript eval denied in both

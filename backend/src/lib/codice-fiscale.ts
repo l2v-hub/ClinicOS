@@ -103,3 +103,23 @@ export function isValidCodiceFiscale(raw: unknown): boolean {
   if (!CF_STRUCTURE.test(cf)) return false;
   return cf[15] === controlChar(cf.slice(0, 15));
 }
+
+/** Reviewable sex encoded by a valid CF; never infer it from an invalid calendar day.
+ * Decode omocodia only after checking the original characters and checksum. No birth
+ * date is inferred: the two-digit year cannot disambiguate the person's century.
+ */
+export function sexFromCodiceFiscale(raw: unknown): 'M' | 'F' | null {
+  const cf = normalizeCodiceFiscale(raw);
+  if (!isValidCodiceFiscale(cf)) return null;
+  const decode = (value: string) =>
+    Number(value.replace(/[LMNPQRSTUV]/g, (letter) => String('LMNPQRSTUV'.indexOf(letter))));
+  const encodedDay = decode(cf.slice(9, 11));
+  const sex = encodedDay >= 41 && encodedDay <= 71 ? 'F' : 'M';
+  const day = sex === 'F' ? encodedDay - 40 : encodedDay;
+  if (day < 1 || day > 31) return null;
+  const month = 'ABCDEHLMPRST'.indexOf(cf[8]);
+  const year = 2000 + decode(cf.slice(6, 8));
+  const calendarDay = new Date(Date.UTC(year, month, day));
+  if (calendarDay.getUTCMonth() !== month) return null;
+  return sex;
+}

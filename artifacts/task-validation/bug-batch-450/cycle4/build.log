@@ -1,0 +1,11 @@
+
+> frontend@0.0.0 build
+> tsc -b && vite build
+
+src/components/shared/intake/IntakeWorkspace.tsx(1184,21): error TS2322: Type '{ allowMissingBirthDate: boolean; derivedSexPending: boolean; onConfirmDerivedSex: () => void; data: DraftData; busy: boolean; error: null; onConfirm: () => undefined; onUpdateSection: (key: keyof DraftData, value: unknown, confirmDerivedSex?: boolean) => void; onReviewDemographics: (field: "phone" | ... 3 more ... ...' is not assignable to type 'IntrinsicAttributes & StepVerificaProps'.
+  Property 'derivedSexPending' does not exist on type 'IntrinsicAttributes & StepVerificaProps'.
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

@@ -1,0 +1,12 @@
+[
+  {
+    "path": "/qa-clinicos/assets/pdf.worker.min-CHFwMXne.mjs",
+    "status": 200,
+    "contentType": "text/javascript"
+  },
+  {
+    "path": "/qa-clinicos/assets/pdfjs-6.2.108/openjpeg.wasm",
+    "status": 200,
+    "contentType": "application/wasm"
+  }
+]

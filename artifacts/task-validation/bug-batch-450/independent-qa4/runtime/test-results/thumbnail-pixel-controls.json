@@ -1,0 +1,26 @@
+[
+  {
+    "width": 170,
+    "height": 240,
+    "actual": {
+      "ink": 79713,
+      "dark": 15
+    },
+    "whiteJpegControl": {
+      "ink": 0,
+      "dark": 0
+    }
+  },
+  {
+    "width": 170,
+    "height": 240,
+    "actual": {
+      "ink": 71900,
+      "dark": 132
+    },
+    "whiteJpegControl": {
+      "ink": 0,
+      "dark": 0
+    }
+  }
+]

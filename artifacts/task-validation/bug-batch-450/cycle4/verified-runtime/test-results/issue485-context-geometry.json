@@ -1,0 +1,14 @@
+{
+  "viewport": {
+    "width": 1903,
+    "height": 1032
+  },
+  "geometry": {
+    "x": 0,
+    "y": 0,
+    "width": 1903,
+    "height": 1032
+  },
+  "phase": "same letter import review as batch450; other issue485 phases not inferred",
+  "issueClosure": false
+}

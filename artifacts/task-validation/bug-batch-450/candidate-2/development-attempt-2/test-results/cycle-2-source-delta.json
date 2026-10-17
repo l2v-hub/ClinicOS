@@ -1,0 +1,24 @@
+{
+  "round": 2,
+  "changedFiles": {
+    "frontend/src/components/shared/import/ImportReviewWorkspace.tsx": {
+      "round1": "eaa744474b0ef95815bfe57e48dfe5c782b1595576181609b0a6c2fb1ad6b2a4",
+      "round2": "7b4e0f88f5016e79959088612b258d432301caa54bfd254fb317f0ee37d1d33a"
+    },
+    "frontend/src/components/shared/intake/intakeDraftApi.ts": {
+      "round1": "bd9f40e06d0b450c9536cdcc57f74116fcbc40d7f42b6c7d1273646148253cde",
+      "round2": "5088cce797a1eb4b562228502ed901167f40e9daeeb96bfba0b63a92cffd9948"
+    },
+    "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts": {
+      "round1": "403b0cda13bbb6c883d73dd115e873fa3fe946bd64224f7b852b097e27d6aad9",
+      "round2": "5d711a4226492af75ac016b1614fb87b923a909ba8c5a35981c4e997ada8b652"
+    },
+    "scripts/e2e/issue-450-ingresso.mjs": {
+      "round1": "b31e408a732107b725f90de218abc6f30153a418386bdb909e925c675f34e83b",
+      "round2": "acbc8795ad6e854fcbd6f3d5b7e22ac067497c89d8e1e51113312f1189917b6a"
+    }
+  },
+  "originalSevenFrozenHashesVerified": true,
+  "handoffClassUnchanged": true,
+  "originalHandoffRecoveryTestsUnchanged": true
+}

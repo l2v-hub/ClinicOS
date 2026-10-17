@@ -1,0 +1,130 @@
+ M backend/src/intake/__tests__/parse-discharge-therapy.test.ts
+ M backend/src/intake/__tests__/seed-draft-from-import.test.ts
+ M backend/src/intake/draft-service.ts
+ M backend/src/lib/codice-fiscale.ts
+ M frontend/src/components/operator/NewPatientFlow.tsx
+ M frontend/src/components/operator/NewPatientStart.css
+ M frontend/src/components/operator/NewPatientStart.tsx
+ M frontend/src/components/operator/PatientList.tsx
+ M frontend/src/components/shared/DischargeImportModal.tsx
+ M frontend/src/components/shared/InlineEditableField.tsx
+ M frontend/src/components/shared/import/ImportReviewWorkspace.tsx
+ M frontend/src/components/shared/import/ImportSession.css
+ M frontend/src/components/shared/intake/IntakeDocumentPanel.tsx
+ M frontend/src/components/shared/intake/IntakeIndex.tsx
+ M frontend/src/components/shared/intake/IntakePage.css
+ M frontend/src/components/shared/intake/IntakeWorkspace.tsx
+ M frontend/src/components/shared/intake/StepAnagrafica.tsx
+ M frontend/src/components/shared/intake/StepVerifica.tsx
+ M frontend/src/components/shared/intake/intakeDraftApi.ts
+ M frontend/src/components/shared/intake/intakeProgress.ts
+ M frontend/src/components/shared/sections/ImportSectionsReview.tsx
+ M frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts
+ M frontend/src/lib/__tests__/pdfPreviewResources.test.ts
+ M frontend/src/lib/codiceFiscale.ts
+ M frontend/src/lib/intakeDemographics.ts
+ M frontend/src/lib/patientListView.ts
+ M frontend/src/lib/pdfPreviewResources.ts
+?? artifacts/task-validation/bug-batch-450/analysis.md
+?? artifacts/task-validation/bug-batch-450/backend-import-subtask-report.json
+?? artifacts/task-validation/bug-batch-450/evidence/issue450.png
+?? artifacts/task-validation/bug-batch-450/evidence/issue450.webm
+?? artifacts/task-validation/bug-batch-450/evidence/issue450.zip
+?? artifacts/task-validation/bug-batch-450/evidence/issue472-390.png
+?? artifacts/task-validation/bug-batch-450/evidence/issue472-820.png
+?? artifacts/task-validation/bug-batch-450/evidence/issue472.png
+?? artifacts/task-validation/bug-batch-450/evidence/issue472.webm
+?? artifacts/task-validation/bug-batch-450/evidence/issue472.zip
+?? artifacts/task-validation/bug-batch-450/evidence/issue473-handoff-1180.png
+?? artifacts/task-validation/bug-batch-450/evidence/issue473-handoff-390.png
+?? artifacts/task-validation/bug-batch-450/evidence/issue473-handoff-820.png
+?? artifacts/task-validation/bug-batch-450/evidence/issue473.png
+?? artifacts/task-validation/bug-batch-450/evidence/issue473.webm
+?? artifacts/task-validation/bug-batch-450/evidence/issue473.zip
+?? artifacts/task-validation/bug-batch-450/evidence/issue475.png
+?? artifacts/task-validation/bug-batch-450/evidence/issue475.webm
+?? artifacts/task-validation/bug-batch-450/evidence/issue475.zip
+?? artifacts/task-validation/bug-batch-450/evidence/issue476.png
+?? artifacts/task-validation/bug-batch-450/evidence/issue476.webm
+?? artifacts/task-validation/bug-batch-450/evidence/issue476.zip
+?? artifacts/task-validation/bug-batch-450/final-manifest.json
+?? artifacts/task-validation/bug-batch-450/font-assets/inter-OFL.txt
+?? artifacts/task-validation/bug-batch-450/font-assets/inter-latin-400-normal.woff2
+?? artifacts/task-validation/bug-batch-450/font-assets/inter-latin-500-normal.woff2
+?? artifacts/task-validation/bug-batch-450/font-assets/inter-latin-600-normal.woff2
+?? artifacts/task-validation/bug-batch-450/font-assets/inter-latin-700-normal.woff2
+?? artifacts/task-validation/bug-batch-450/font-assets/inter-latin-800-normal.woff2
+?? artifacts/task-validation/bug-batch-450/font-assets/jetbrains-mono-OFL.txt
+?? artifacts/task-validation/bug-batch-450/font-assets/jetbrains-mono-latin-400-normal.woff2
+?? artifacts/task-validation/bug-batch-450/font-assets/jetbrains-mono-latin-500-normal.woff2
+?? artifacts/task-validation/bug-batch-450/font-assets/manifest.json
+?? artifacts/task-validation/bug-batch-450/frozen-packet-hashes.json
+?? artifacts/task-validation/bug-batch-450/implementation-notes.md
+?? artifacts/task-validation/bug-batch-450/implementation-plan.md
+?? artifacts/task-validation/bug-batch-450/independent-qa/backend-fixture-correction.json
+?? artifacts/task-validation/bug-batch-450/independent-qa/backend-tsc.json
+?? artifacts/task-validation/bug-batch-450/independent-qa/candidate-after.json
+?? artifacts/task-validation/bug-batch-450/independent-qa/candidate-before.json
+?? artifacts/task-validation/bug-batch-450/independent-qa/commands.json
+?? artifacts/task-validation/bug-batch-450/independent-qa/font-provenance-independent.json
+?? artifacts/task-validation/bug-batch-450/independent-qa/frontend-commands.json
+?? artifacts/task-validation/bug-batch-450/independent-qa/preliminary-review.md
+?? artifacts/task-validation/bug-batch-450/independent-qa/status-before.txt
+?? artifacts/task-validation/bug-batch-450/independent-qa/task-contract.md
+?? artifacts/task-validation/bug-batch-450/independent-qa/unresolved-save-reproduction.test.ts
+?? artifacts/task-validation/bug-batch-450/plan-proposal.json
+?? artifacts/task-validation/bug-batch-450/scope-amendment-1.md
+?? artifacts/task-validation/bug-batch-450/scope-amendment-2.md
+?? artifacts/task-validation/bug-batch-450/scope-amendment-3.md
+?? artifacts/task-validation/bug-batch-450/task-contract.md
+?? artifacts/task-validation/bug-batch-450/test-results/database-provenance.json
+?? artifacts/task-validation/bug-batch-450/test-results/development-responsive-therapy/failure.png
+?? artifacts/task-validation/bug-batch-450/test-results/development-responsive-therapy/fullstack.json
+?? artifacts/task-validation/bug-batch-450/test-results/development-visible-page/failure.png
+?? artifacts/task-validation/bug-batch-450/test-results/development-visible-page/fullstack.json
+?? artifacts/task-validation/bug-batch-450/test-results/development-visible-page/original-visible-390.json
+?? artifacts/task-validation/bug-batch-450/test-results/docker-mode/database-provenance.json
+?? artifacts/task-validation/bug-batch-450/test-results/docker-mode/evidence-redaction.json
+?? artifacts/task-validation/bug-batch-450/test-results/docker-mode/fullstack.json
+?? artifacts/task-validation/bug-batch-450/test-results/docker-mode/runtime-source-receipt.json
+?? artifacts/task-validation/bug-batch-450/test-results/evidence-redaction.json
+?? artifacts/task-validation/bug-batch-450/test-results/failure-trace.zip
+?? artifacts/task-validation/bug-batch-450/test-results/failure.png
+?? artifacts/task-validation/bug-batch-450/test-results/font-asset-mirror.json
+?? artifacts/task-validation/bug-batch-450/test-results/fullstack.json
+?? artifacts/task-validation/bug-batch-450/test-results/native-mode/database-provenance.json
+?? artifacts/task-validation/bug-batch-450/test-results/native-mode/evidence-redaction.json
+?? artifacts/task-validation/bug-batch-450/test-results/native-mode/fullstack.json
+?? artifacts/task-validation/bug-batch-450/test-results/native-mode/runtime-source-receipt.json
+?? artifacts/task-validation/bug-batch-450/test-results/original-visible-1180.json
+?? artifacts/task-validation/bug-batch-450/test-results/original-visible-390.json
+?? artifacts/task-validation/bug-batch-450/test-results/original-visible-820.json
+?? artifacts/task-validation/bug-batch-450/test-results/pre-shell-containment/runtime-modes.json
+?? artifacts/task-validation/bug-batch-450/test-results/runtime-modes.json
+?? artifacts/task-validation/bug-batch-450/test-results/runtime-provider-contract.md
+?? artifacts/task-validation/bug-batch-450/test-results/runtime-source-receipt.json
+?? artifacts/task-validation/bug-batch-450/test-results/scope-receipt.json
+?? artifacts/task-validation/bug-batch-450/test-results/trace-integrity-scan.json
+?? artifacts/task-validation/bug-batch-450/test-results/verify-runtime-modes.mjs
+?? artifacts/task-validation/bug-batch-450/triage-index.md
+?? artifacts/task-validation/bug-batch-450/validation-report.md
+?? artifacts/task-validation/bug-batch-450/video/page@0d8871708b16103e9a0cff3d5f1e2230.webm
+?? artifacts/task-validation/bug-batch-450/video/page@1ce84aaec6139d79f790edfdf757a9d2.webm
+?? artifacts/task-validation/bug-batch-450/video/page@281324fbb2306fa67e29752bf03ad25e.webm
+?? artifacts/task-validation/bug-batch-450/video/page@3725dc438406fca77b408e73b13354b4.webm
+?? artifacts/task-validation/bug-batch-450/video/page@3bd913a6698b9b413d1befdbec111a17.webm
+?? artifacts/task-validation/bug-batch-450/video/page@445a3ce540fcb886a9bb9830cbbc1ca0.webm
+?? artifacts/task-validation/bug-batch-450/video/page@538031f031c8dd7e7530ea53356def6f.webm
+?? artifacts/task-validation/bug-batch-450/video/page@5b26d88abd66222bd1e00f0ca5f99ab1.webm
+?? artifacts/task-validation/bug-batch-450/video/page@6668f3ddacff6dfc15ae7df143b2860a.webm
+?? artifacts/task-validation/bug-batch-450/video/page@6eb136fa53f40921193715775ba8fb5a.webm
+?? artifacts/task-validation/bug-batch-450/video/page@73ed3cf31b9d8343a53aaf2a3c9a123c.webm
+?? artifacts/task-validation/bug-batch-450/video/page@82c22617a0e8bcfa62e9e86ace704978.webm
+?? artifacts/task-validation/bug-batch-450/video/page@8466131ea81ff35d5885290bc31c98fc.webm
+?? artifacts/task-validation/bug-batch-450/video/page@877c7b7962b80aea90e2c51f4dfd48f1.webm
+?? artifacts/task-validation/bug-batch-450/video/page@9fb64b6f713e7c7269a1944c24e09592.webm
+?? artifacts/task-validation/bug-batch-450/video/page@a6b39a3e7787edbaab68f95697f31aca.webm
+?? artifacts/task-validation/bug-batch-450/video/page@bc3b525b9cb63326c3cec250f158ad2f.webm
+?? frontend/src/components/shared/intake/__tests__/intakeMinimal450.test.ts
+?? frontend/src/lib/__tests__/intakeDemographics.test.ts
+?? scripts/e2e/issue-450-ingresso.mjs

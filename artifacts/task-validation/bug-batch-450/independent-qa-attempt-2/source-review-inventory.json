@@ -1,0 +1,378 @@
+[
+  {
+    "path": "frontend/src/components/operator/NewPatientStart.tsx",
+    "sha256": "5293c9f7753c2f0881ebd466d59cfe2a05550d7bfa8136f5259fdce70139a4a1",
+    "bytes": 3042,
+    "lines": 77,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/operator/NewPatientStart.css",
+    "sha256": "4e2e064c3a1a36ff1048214416045b8d6e9f2dddd89e00fed63755a6a06e9e1e",
+    "bytes": 2264,
+    "lines": 98,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+    "sha256": "4b3a5785d3404d6e9a0e825c835bc54ab984fa3e61beaa60f28aaa470f630db3",
+    "bytes": 48152,
+    "lines": 1209,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/intake/StepAnagrafica.tsx",
+    "sha256": "6fbe419f3d9a998d9036b2a31ac482d5b683a0bf40505c66194f0c0883440727",
+    "bytes": 16467,
+    "lines": 502,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/intake/intakeProgress.ts",
+    "sha256": "27043cddd5667b66b2fbf3083952edb23d9173c1563a20f6ab884595095e8a70",
+    "bytes": 5656,
+    "lines": 125,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/InlineEditableField.tsx",
+    "sha256": "e9b3cbb19835efa7a052fb3d92da3f296609e058e958db3029f271a47e18f1a6",
+    "bytes": 9007,
+    "lines": 296,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/intake/__tests__/intakeMinimal450.test.ts",
+    "sha256": "24bd5418fbb9340d4c296edaf363f69b91593a867f461cbc48bb5e46e6812d36",
+    "bytes": 2574,
+    "lines": 66,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "scripts/e2e/issue-450-ingresso.mjs",
+    "sha256": "acbc8795ad6e854fcbd6f3d5b7e22ac067497c89d8e1e51113312f1189917b6a",
+    "bytes": 54199,
+    "lines": 1375,
+    "debugConsoleLog": 1,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/DischargeImportModal.tsx",
+    "sha256": "73ca2d8c4b1873e99d5d84def81ecb2b6bbf00292804f62280717335c51be137",
+    "bytes": 15994,
+    "lines": 493,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/import/ImportReviewWorkspace.tsx",
+    "sha256": "7b4e0f88f5016e79959088612b258d432301caa54bfd254fb317f0ee37d1d33a",
+    "bytes": 11152,
+    "lines": 306,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/import/ImportSession.css",
+    "sha256": "ab71d7b2e83c1f0d5f79d032d68b2bcdbb2fd04ab4630ae3af72d2dffb78ee09",
+    "bytes": 6934,
+    "lines": 345,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/intake/IntakePage.css",
+    "sha256": "3b7a732d70bd4680877f4952d8dbbd485f7cb7d3a03aa96071e54d9a7ad00fd4",
+    "bytes": 15627,
+    "lines": 624,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/intake/intakeDraftApi.ts",
+    "sha256": "5088cce797a1eb4b562228502ed901167f40e9daeeb96bfba0b63a92cffd9948",
+    "bytes": 13355,
+    "lines": 404,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/operator/PatientList.tsx",
+    "sha256": "cc7deaa4da896f72c2bde7f43d838d316efa8c62373d4f93ad0ecfb99f2f6d91",
+    "bytes": 24889,
+    "lines": 661,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/lib/patientListView.ts",
+    "sha256": "f2c98af4f43e2a05afc83f2cafec030c9b520f37a47fae37564347727218cbdb",
+    "bytes": 3316,
+    "lines": 88,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "backend/src/intake/draft-service.ts",
+    "sha256": "c5efb1b2a0c23069ba129b3bfd77a708f4e7de4809f9aa898a2dc0d4fe9ac231",
+    "bytes": 18797,
+    "lines": 424,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "backend/src/routes/intake-drafts.ts",
+    "sha256": "5956a3987543644403026225bdadba18f13b6958d2212c3def0023a87eb5fcc4",
+    "bytes": 8024,
+    "lines": 213,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "backend/src/patients/progressive-identity.ts",
+    "sha256": "f079df10f620613d2fb9a7402295df0cc3850d80d712248d0d40bef88b7d0716",
+    "bytes": 4006,
+    "lines": 91,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/intake/__tests__/intakeDraftSession.test.ts",
+    "sha256": "0f43f74520dfb57277f3fa13703780667c3ca0fb6f749067ea260419d8e46bce",
+    "bytes": 1847,
+    "lines": 42,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "backend/src/intake/__tests__/confirm-draft-guards.test.ts",
+    "sha256": "7952efaffce5944040fbb70c921a7dd3d98915a3ebabce3a551f31626b092f08",
+    "bytes": 4219,
+    "lines": 122,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/ImportReviewFull.tsx",
+    "sha256": "98f59ce01cecfe5755f23fca2795c55755ab12bd47673257f6f42d143a0b6608",
+    "bytes": 29585,
+    "lines": 902,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/lib/codiceFiscale.ts",
+    "sha256": "72a2b64d5ff6adbad729fd790a40d6723bbb94cdb532728b99d9f43a6718c6ad",
+    "bytes": 4873,
+    "lines": 134,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "backend/src/lib/codice-fiscale.ts",
+    "sha256": "f3862168a53da4e8cbb7a4d6e39da1e19865f6b83374bc5440fa4c9f5f9e96d6",
+    "bytes": 2927,
+    "lines": 125,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "backend/src/intake/parse-discharge-therapy.ts",
+    "sha256": "7f73c746b90376c3a0e63e725273cf98bc0bdf70beff2eca44bc2df2bbabe761",
+    "bytes": 48273,
+    "lines": 1172,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "backend/src/ai/sections/patient-narrative.ts",
+    "sha256": "e150db3f4b2c2eefdfc553b668590499ef5c798b8793f9b8f4cf8b9c0b0fea74",
+    "bytes": 9750,
+    "lines": 266,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "backend/src/ai/upload/confirm-service.ts",
+    "sha256": "e69dc9dc04af1f04abb4eb42ecb4ad0672dc00bbaf85d4d71a560ffb6b2ead98",
+    "bytes": 17088,
+    "lines": 424,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "backend/src/intake/__tests__/seed-draft-from-import.test.ts",
+    "sha256": "c7c9264190b1d43b504091c9f4d2724d512716f48e6e00ff9ddce39482e70b7a",
+    "bytes": 13705,
+    "lines": 329,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "backend/src/intake/__tests__/parse-discharge-therapy.test.ts",
+    "sha256": "c1b1c07f0c6993bdc4d101829dd4176fb7b4d0b8b49edeb943757aee13997363",
+    "bytes": 22854,
+    "lines": 562,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/import/ImportPageView.tsx",
+    "sha256": "00016529e3fd8dfc6a24b187ebe5447f0a1d0d1aa181d7376ee31a25cdd0ecfa",
+    "bytes": 5589,
+    "lines": 186,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/import/importSourceCache.ts",
+    "sha256": "662ee2747e6ff5383aab8de9799e00cbc4d646334b910219162fd3155705b256",
+    "bytes": 8061,
+    "lines": 202,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/PdfCanvasPreview.tsx",
+    "sha256": "33f75ead1c49298170458891c2226987fdf7ad8277e65bdb85cf3fcb30648b3f",
+    "bytes": 6456,
+    "lines": 188,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/PdfCanvasPreview.css",
+    "sha256": "fb802d6f6c7cb4eee36be4709bc7fb073c093ef4ce61f2987d4186fbf65e45ef",
+    "bytes": 827,
+    "lines": 41,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/lib/pdfPreviewResources.ts",
+    "sha256": "d748117fdf978098c7866aaf699369b579d04ce862d5e5e4da4210ee8ba68e16",
+    "bytes": 813,
+    "lines": 14,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/config/pdfPreviewAssets.ts",
+    "sha256": "f4ca487bdcaa5e1de0da4b12dcc7b3c803661bc51043150fb02bd191f824e8de",
+    "bytes": 1589,
+    "lines": 30,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "backend/src/routes/import-pages.ts",
+    "sha256": "f4786da0d931aa837b99d7e8db207d1c00a23e38656decc8e1883ebc294c3e2b",
+    "bytes": 7881,
+    "lines": 244,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/import/__tests__/importReview.test.ts",
+    "sha256": "d4840968f2e82a897bfefd61f50eacc3956bac56f5160c27d50df6a242aa4006",
+    "bytes": 4474,
+    "lines": 138,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/lib/intakeDemographics.ts",
+    "sha256": "39021bd773d917c5b1923cecdbcaa889f15f3091ac748522759640e05545c66b",
+    "bytes": 1899,
+    "lines": 45,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/intake/StepVerifica.tsx",
+    "sha256": "ae2e9ec9ed33b562eb228c282f52d420cf8785a37a7a56815ea8665b23733ef9",
+    "bytes": 11943,
+    "lines": 311,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/lib/__tests__/intakeDemographics.test.ts",
+    "sha256": "90344146622b03ebdf5663e8a8b4dbad059d598ced18889ffbf70797372435f9",
+    "bytes": 2231,
+    "lines": 52,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/operator/NewPatientFlow.tsx",
+    "sha256": "86e1427e4ae2c44f0aeed9778e77c6884bd539e5db103a6fb602f3cd68e3a1eb",
+    "bytes": 3615,
+    "lines": 110,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/intake/intakeDraftSession.ts",
+    "sha256": "dcfe8cfe3e79dad461069b808a355dcf4f39562dd74b42790f6d285c47efc3f7",
+    "bytes": 1288,
+    "lines": 39,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+    "sha256": "db95d95ebee8d61e317bede31ecbf1cfa57dafeef83875ec3fdf7095e117077b",
+    "bytes": 17271,
+    "lines": 465,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/intake/IntakeIndex.tsx",
+    "sha256": "64d0a9eb3a2a395c6a77c02f9f8dea4f6bfe785d73509803b9c141bbed8cc36f",
+    "bytes": 4354,
+    "lines": 141,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/intake/__tests__/intakeProgress.test.ts",
+    "sha256": "6004eefd76e9ebed391c1eb20a5073a9d70956a0ef732008bf9c5770cffadeff",
+    "bytes": 4241,
+    "lines": 120,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx",
+    "sha256": "10f056c1400efe53126d14f828a821ed07acb17dcba020ae7073a4c4b14b5cb4",
+    "bytes": 11563,
+    "lines": 298,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts",
+    "sha256": "5d711a4226492af75ac016b1614fb87b923a909ba8c5a35981c4e997ada8b652",
+    "bytes": 22193,
+    "lines": 639,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  },
+  {
+    "path": "frontend/src/lib/__tests__/pdfPreviewResources.test.ts",
+    "sha256": "f8fd30caa108bbd27825e98dc40b6f36ac88005886dbb16f923a6183f55d1f7c",
+    "bytes": 2826,
+    "lines": 68,
+    "debugConsoleLog": 0,
+    "dangerouslySetInnerHTML": 0
+  }
+]

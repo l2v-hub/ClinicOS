@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "testedSourceCommit": "b85e8f372fd0839a84327188d2f7650e472c75f1",
+  "purpose": "SHA-identical publication copies in the existing guarded batch evidence directory; historical originals and all source/config bytes preserved.",
+  "sourceFreezeSha256": "cd3f2c3054a941fd159bd69aad3235bb925afee61c00d91ab6a703e1a85ea6e3",
+  "independentQaReportSha256": "fffa3766818e0cd4410b295c12e5195098f5547a86a08c0138efc623cdc2d03f",
+  "independentQaSealSha256": "e507a838d395467915a17369697c4c29f33eafbbfb869a5fe9c0583c3cb6ebd4",
+  "files": {
+    "issue450.png": {
+      "sha256": "753cdbd6bd5ab939f82bd36565493e0584bef26db60bee004bee7baa4acc2252",
+      "source": "artifacts/task-validation/bug-batch-450/independent-qa4/runtime/evidence/issue450.png",
+      "bytes": 87794
+    },
+    "issue450.zip": {
+      "sha256": "89a5151eac33b24589decaa751bc9249aa0ee058574a9ca951a7a9987f2e0b3c",
+      "source": "artifacts/task-validation/bug-batch-450/independent-qa4/runtime/evidence/issue450.zip",
+      "bytes": 18191256
+    },
+    "issue472.png": {
+      "sha256": "3917b6c02bce556f3537708e61207f366f65e6e362f9808983fbf678ce2f6352",
+      "source": "artifacts/task-validation/bug-batch-450/independent-qa4/runtime/evidence/issue472.png",
+      "bytes": 105348
+    },
+    "issue472.zip": {
+      "sha256": "89a5151eac33b24589decaa751bc9249aa0ee058574a9ca951a7a9987f2e0b3c",
+      "source": "artifacts/task-validation/bug-batch-450/independent-qa4/runtime/evidence/issue472.zip",
+      "bytes": 18191256
+    },
+    "issue473.png": {
+      "sha256": "71562aadc3ee5e7823cdd2a32371f9931e283292948c29363b3a5d1152b38375",
+      "source": "artifacts/task-validation/bug-batch-450/independent-qa4/runtime/evidence/issue473.png",
+      "bytes": 126682
+    },
+    "issue473.zip": {
+      "sha256": "89a5151eac33b24589decaa751bc9249aa0ee058574a9ca951a7a9987f2e0b3c",
+      "source": "artifacts/task-validation/bug-batch-450/independent-qa4/runtime/evidence/issue473.zip",
+      "bytes": 18191256
+    },
+    "issue475.png": {
+      "sha256": "4c5b7822f10f60887a0aebb8ad4c5bcfd27188eaedfd2d85b9b9a870b59ce371",
+      "source": "artifacts/task-validation/bug-batch-450/independent-qa4/runtime/evidence/issue475.png",
+      "bytes": 111618
+    },
+    "issue475.zip": {
+      "sha256": "89a5151eac33b24589decaa751bc9249aa0ee058574a9ca951a7a9987f2e0b3c",
+      "source": "artifacts/task-validation/bug-batch-450/independent-qa4/runtime/evidence/issue475.zip",
+      "bytes": 18191256
+    },
+    "issue476.png": {
+      "sha256": "40731daf1940757291808233e8e89d16c9ac08fc68fcfbff07d661ec98fa2447",
+      "source": "artifacts/task-validation/bug-batch-450/independent-qa4/runtime/evidence/issue476.png",
+      "bytes": 92326
+    },
+    "issue476.zip": {
+      "sha256": "89a5151eac33b24589decaa751bc9249aa0ee058574a9ca951a7a9987f2e0b3c",
+      "source": "artifacts/task-validation/bug-batch-450/independent-qa4/runtime/evidence/issue476.zip",
+      "bytes": 18191256
+    },
+    "verification.webm": {
+      "sha256": "dd5ac83feec3cfeff7f0a77bc3fe98b8174ee9301739838ea79bb0095cdb121a",
+      "source": "artifacts/task-validation/bug-batch-450/independent-qa4/runtime/video/page@f231373b6fbe4a4c322c3b49bfc3ad1c.webm",
+      "bytes": 4105216
+    }
+  },
+  "implementationAttemptsAdded": 0,
+  "actualClaudeApproval": false,
+  "deploymentVerified": false
+}

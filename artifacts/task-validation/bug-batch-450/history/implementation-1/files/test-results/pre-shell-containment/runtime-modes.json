@@ -1,0 +1,10 @@
+{
+  "pass": true,
+  "unchangedHarnessSha256": "8a58448754b2e052d7e22bf8eb70413b93ad889e6fdf8b7662302e7f6fb002b9",
+  "modes": [
+    "docker",
+    "native"
+  ],
+  "nativeParentPublicTableCount": 0,
+  "nativeChildDatabaseCountAfterCleanup": 0
+}

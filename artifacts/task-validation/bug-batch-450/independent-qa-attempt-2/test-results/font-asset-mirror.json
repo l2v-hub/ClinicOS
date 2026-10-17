@@ -1,0 +1,69 @@
+{
+  "packages": [
+    {
+      "name": "@fontsource/inter",
+      "version": "5.2.8",
+      "registryIntegrity": "sha512-P6r5WnJoKiNVV+zvW2xM13gNdFhAEpQ9dQJHt3naLvfg+LkF2ldgSLiF4T41lf1SQCM9QmkqPTn4TH568IRagg==",
+      "tarballSha256": "7004eee208371e46125e999c67b094ba47f3606b1983331c6f8e77b39a2f825c",
+      "license": {
+        "path": "inter-OFL.txt",
+        "sha256": "3b0a5fca3d17942cde889069889dedbbbd075e9b599968c82a95f4d944e9b345"
+      }
+    },
+    {
+      "name": "@fontsource/jetbrains-mono",
+      "version": "5.2.8",
+      "registryIntegrity": "sha512-6w8/SG4kqvIMu7xd7wt6x3idn1Qux3p9N62s6G3rfldOUYHpWcc2FKrqf+Vo44jRvqWj2oAtTHrZXEP23oSKwQ==",
+      "tarballSha256": "6626da48530eb76b183d06acef52b4609d8ea3a35a7ed5d4fd8ef656eaca0a3c",
+      "license": {
+        "path": "jetbrains-mono-OFL.txt",
+        "sha256": "403581b69dac5cff4079205e01c6b467e56af449ecbd7247693ddb1baafa005b"
+      }
+    }
+  ],
+  "files": {
+    "inter-latin-400-normal.woff2": {
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/artifacts/task-validation/bug-batch-450/independent-qa-attempt-2/font-assets/inter-latin-400-normal.woff2",
+      "sha256": "8909904ab6c872eb994093482a88a28eca2cd95912d7b6fecd72103b0dc07edc",
+      "package": "inter",
+      "version": "5.2.8"
+    },
+    "inter-latin-500-normal.woff2": {
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/artifacts/task-validation/bug-batch-450/independent-qa-attempt-2/font-assets/inter-latin-500-normal.woff2",
+      "sha256": "f3779f1efccc4bdcdf9c0a02ab95bf6bd092ed09c48c08cedc725889edd1d19f",
+      "package": "inter",
+      "version": "5.2.8"
+    },
+    "inter-latin-600-normal.woff2": {
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/artifacts/task-validation/bug-batch-450/independent-qa-attempt-2/font-assets/inter-latin-600-normal.woff2",
+      "sha256": "f9a06e79cd3a2a20951c0f0e28f66dd0e6d3fda73911d640a2125c8fcb78f21a",
+      "package": "inter",
+      "version": "5.2.8"
+    },
+    "inter-latin-700-normal.woff2": {
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/artifacts/task-validation/bug-batch-450/independent-qa-attempt-2/font-assets/inter-latin-700-normal.woff2",
+      "sha256": "6f56409fd3d64bb85f7d070bce20749db2d66b6d63cec586cc22d1c761be2491",
+      "package": "inter",
+      "version": "5.2.8"
+    },
+    "inter-latin-800-normal.woff2": {
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/artifacts/task-validation/bug-batch-450/independent-qa-attempt-2/font-assets/inter-latin-800-normal.woff2",
+      "sha256": "a7d0a50f15d389cad679238466bdb5fc9787aa0715719064ce25abaff042820d",
+      "package": "inter",
+      "version": "5.2.8"
+    },
+    "jetbrains-mono-latin-400-normal.woff2": {
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/artifacts/task-validation/bug-batch-450/independent-qa-attempt-2/font-assets/jetbrains-mono-latin-400-normal.woff2",
+      "sha256": "14425ba9c695763c1547f48a206b7aa60350a33ae23de09f0407877f3fcd89eb",
+      "package": "jetbrains-mono",
+      "version": "5.2.8"
+    },
+    "jetbrains-mono-latin-500-normal.woff2": {
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/artifacts/task-validation/bug-batch-450/independent-qa-attempt-2/font-assets/jetbrains-mono-latin-500-normal.woff2",
+      "sha256": "cb182feeed4d798ff6961d3c79f7026279448fca0676438aaecb21f3fc39553a",
+      "package": "jetbrains-mono",
+      "version": "5.2.8"
+    }
+  },
+  "distribution": "Exact Google font CSS requests mirror real pinned npm font bytes. Production CSS and API untouched."
+}

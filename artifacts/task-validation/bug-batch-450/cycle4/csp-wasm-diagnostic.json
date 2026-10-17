@@ -1,0 +1,9 @@
+{
+  "csp": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://clinicos-backend-demo.up.railway.app https://clinicos-backend-production-df88.up.railway.app https://login.microsoftonline.com; media-src 'self' blob:; worker-src 'self' blob:; frame-src 'self' blob: https://login.microsoftonline.com; upgrade-insecure-requests",
+  "result": {
+    "compiled": false,
+    "name": "CompileError",
+    "message": "WebAssembly.compile(): Compiling or instantiating WebAssembly module violates the following Content Security policy directive because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: \"script-src 'self'\"."
+  },
+  "scope": "Actual frontend/vercel.json script policy on synthetic loopback document; browser WebAssembly compilation only; no deployed request or application code execution"
+}

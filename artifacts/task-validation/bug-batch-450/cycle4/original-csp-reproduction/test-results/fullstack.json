@@ -1,0 +1,7 @@
+{
+  "pass": false,
+  "checks": [],
+  "errors": [
+    "Error: ENOENT: no such file or directory, open '/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/artifacts/task-validation/bug-batch-450/cycle4/original-csp-reproduction/runtime-source-scope.json'\n    at async open (node:internal/fs/promises:697:25)\n    at async readFile (node:internal/fs/promises:1348:14)\n    at async file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/scripts/e2e/issue-450-ingresso.mjs:182:22"
+  ]
+}
