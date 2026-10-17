@@ -1219,9 +1219,11 @@
         "approved-plan-cycle-2.json": "9c01a6c6a9e9eff0ae34785349f6539e53a422d50bd768bf5fc4950b12ac22e9",
         "scope-amendment-7-news2-and-dependency.md": "d3f7abe648a13835bd7409937e9a14eb12f89f9b8b6b12d9ca453876c8964880",
         "approved-plan-cycle-2-integrated.json": "e41e2342af3fa949331f067648579493f4c9e08c4917622902ab783ec336bfca",
-        "scope-amendment-8-allergy-wrapper.md": "0c8f82578c01d10068c6701acde65eb9fcbf655d2f6253611fd634b8e03d2e58"
+        "scope-amendment-8-allergy-wrapper.md": "0c8f82578c01d10068c6701acde65eb9fcbf655d2f6253611fd634b8e03d2e58",
+        "scope-amendment-9-real-agenda-and-dependencies.md": "278874491265900d075ac9bd57fce030f3d7be9093474e71069a0a33a62fea5c",
+        "approved-plan-cycle-2-combined.json": "ab8f9790279f6257ffadb589d524ce5c5c8bf9b564c52a11441371432b0994c0"
       },
-      "baseSha": "5a250319bae5b3f61f2c5864aee438f04d948df5",
+      "baseSha": "65e902f40026ec8e2cf3e8b385cb1de0cc269f7b",
       "plan": {
         "title": "Coordinated clinical UX: Today, rounds, lists, supervisor and PS transfer",
         "feature": "Shared patient clinical workspace and operational rounds",
@@ -1750,6 +1752,19 @@
               "Forward patient-bound allergy context revision from PatientDetail to the current therapy editor without remounting or losing the draft.",
               "Invalidate warning acknowledgement when allergy context changes; preserve existing form behaviour and explicit user decision."
             ]
+          },
+          {
+            "title": "Wire real day agenda to bounded patient-scoped therapy feed",
+            "files": [
+              "frontend/src/App.tsx",
+              "frontend/src/components/operator/OperatorAgenda.tsx",
+              "e2e/qa-bug-batch-447-browser.mjs"
+            ],
+            "steps": [
+              "Pass the existing authorized therapy feed, loading, error, pagination and loader to the actual OperatorAgenda instance; load only the mounted day agenda and its current date.",
+              "Preserve patient/operator permissions, stale request cancellation, bounded pagination, completeness/unknown states and error retry. No automatic clinical fetch on unrelated pages or unauthorized roles.",
+              "Verify real day agenda with zero appointments and scheduled doses outside appointment hours. Correct allergy preset oracle to use actual selected aria-pressed preset, schedule summary and persisted payload, retaining draft and acknowledgement invalidation assertions."
+            ]
           }
         ],
         "verification": [
@@ -1910,7 +1925,8 @@
               "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts",
               "frontend/src/components/operator/News2Chip.tsx",
               "frontend/src/lib/news2History.ts",
-              "frontend/src/lib/__tests__/news2History.test.ts"
+              "frontend/src/lib/__tests__/news2History.test.ts",
+              "frontend/src/App.tsx"
             ]
           },
           {
@@ -2066,12 +2082,19 @@
         }
       ],
       "dependencyCheckpoint": {
-        "batch": "bug-batch-432",
-        "sha": "5a250319bae5b3f61f2c5864aee438f04d948df5",
-        "integrationSha": "b20c02ea231174e4230a5714d7480b3e6f619945",
-        "originalPlanningBaseline": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
-        "status": "local-unverified-dependency",
-        "requiresFinalMainReconciliation": true
+        "batches": [
+          "bug-batch-432",
+          "bug-batch-450"
+        ],
+        "sha": "65e902f40026ec8e2cf3e8b385cb1de0cc269f7b",
+        "integrationSha": "2912d4d09861d46fce75f8d213732c467c095c12",
+        "previousVerificationBase": "5a250319bae5b3f61f2c5864aee438f04d948df5",
+        "sourceCheckpoints": {
+          "therapy": "938ae9c44d60b1d963873762f26677d6856f6d63",
+          "intake": "0eae11061ada23a60f888c36fd8923a6dbba93d1"
+        },
+        "requiresFinalMainReconciliation": true,
+        "status": "local-dependency-integration"
       }
     },
     {
@@ -2218,5 +2241,5 @@
       }
     }
   ],
-  "updatedAt": "2026-10-17T09:59:22.407Z"
+  "updatedAt": "2026-10-17T10:03:58.134Z"
 }
