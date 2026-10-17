@@ -559,6 +559,11 @@
       "implementation": [
         {
           "round": 1,
+          "status": "failed",
+          "reason": "QA450-1 actual Handoff reproducer: unresolved save409 retains stale intent then overwrites corrected conflict decision."
+        },
+        {
+          "round": 2,
           "status": "running"
         }
       ],
@@ -571,7 +576,8 @@
         "triage-index.md": "6a25d7a1bbcd5e29441b7c5397b02127ba3b3ef03801496bdc53638a5f8efbdb",
         "scope-amendment-1.md": "d182cb2d560b07d197512a9e6e6df7b6c08f71e2771e56ee9492ea4b7d260d21",
         "scope-amendment-2.md": "bd85e3596ab948d4cdad46e3d47cd3d478ab22021414679159f8100dd02d80c1",
-        "scope-amendment-3.md": "68ec40674d1676f5345ca4baf23d834d41976c72bea88da0da9a4636ea6bcd72"
+        "scope-amendment-3.md": "68ec40674d1676f5345ca4baf23d834d41976c72bea88da0da9a4636ea6bcd72",
+        "cycle-2-correction.md": "20561d66fa9cc8f6f7ce1564fedf6858d39b4fcf10453ee08815b5a35d40ba98"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -1919,5 +1925,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-17T08:54:35.210Z"
+  "updatedAt": "2026-10-17T09:08:37.172Z"
 }
