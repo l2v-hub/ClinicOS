@@ -1,0 +1,46 @@
+[
+  {
+    "name": "syntax-browser",
+    "command": [
+      "node",
+      "--check",
+      "e2e/qa-bug-batch-447-browser.mjs"
+    ],
+    "cwd": ".",
+    "exit": 0,
+    "durationSeconds": 0.054
+  },
+  {
+    "name": "syntax-runner",
+    "command": [
+      "node",
+      "--check",
+      "e2e/qa-bug-batch-447.mjs"
+    ],
+    "cwd": ".",
+    "exit": 0,
+    "durationSeconds": 0.049
+  },
+  {
+    "name": "frontend-types",
+    "command": [
+      "npx",
+      "tsc",
+      "--noEmit"
+    ],
+    "cwd": "frontend",
+    "exit": 0,
+    "durationSeconds": 0.675
+  },
+  {
+    "name": "frontend-build",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "frontend",
+    "exit": 0,
+    "durationSeconds": 63.63
+  }
+]

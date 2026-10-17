@@ -1,0 +1,19 @@
+✔ compact identity hides repeated missing prose but preserves accessible disambiguation (16.361446ms)
+✔ patient roster leads with bed, hides globally empty optional columns and aggregates incomplete identity once (9.854246ms)
+✔ Today vitals use facility civil date and exclude adjacent day and unrelated old readings (1.793631ms)
+✔ Today surface never offers denied therapy/clinical read or record action (9.092487ms)
+✔ quick schedules preserve explicit fractional dose and equal manual payload (14.059372ms)
+✔ inclusive civil duration handles DST, leap/month/year boundaries and invalid dates (1.164276ms)
+✔ sentence renders the actual payload schedule dose unit route and dates (10.190352ms)
+✔ structured single ingredient strength is prefilled, ambiguous packages stay unconfirmed (5.46786ms)
+✔ advance skips recorded and unknown/stale patients and wraps without selecting current patient (0.996687ms)
+✔ previous placeholders only contain actual observation and never missing prose (1.825375ms)
+✔ nurse entry selects pending current hour then first pending rather than completed slot (1.042114ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2903.088767

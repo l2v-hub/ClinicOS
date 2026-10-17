@@ -1,0 +1,41 @@
+{
+  "policy": "exact synthetic session values only; no event or outcome removal",
+  "zipValidation": "CRC and residual signed-token scan passed",
+  "archives": [
+    {
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/artifacts/task-validation/bug-batch-447/evidence/issue-452-trace.zip",
+      "originalSha256": "58591050bd367ab741ed66a417bf979fdcb7fcbf343a676e11d3066f48f4574d",
+      "sanitizedSha256": "4df9934baba1c1d9c7d2e4c192c02591f726c38dfa44dc0938bd40a5ded6fd47",
+      "sessionsRedacted": 5,
+      "entries": [
+        {
+          "entry": "trace.network",
+          "replacements": 306
+        },
+        {
+          "entry": "resources/47e0dd1e1783763d23f3bb5498b094f6072571b4.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/d275f775161d458eb6938bc6a9be486043bd4506.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/dd71ef9a87fe491ec3085401fe7e40c13027ea1e.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/cd14cb5affd1f4ccca7ba1aac13085cb0ee63d00.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/a7eb34ece57322048bfc18cee8b740d71043d947.json",
+          "replacements": 1
+        }
+      ],
+      "tokensRemaining": 0,
+      "changed": true,
+      "originalRetainedPrivateOutsideRepository": true
+    }
+  ]
+}

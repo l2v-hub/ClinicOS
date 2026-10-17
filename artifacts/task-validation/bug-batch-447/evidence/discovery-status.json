@@ -21,22 +21,22 @@
           "kind": "http",
           "status": 400,
           "method": "POST",
-          "path": "/patients/cmvcafqx0000757p9fx7ugi2f/parameter-readings"
+          "path": "/patients/cmvcdcdn40007y4p9i3qchxl0/parameter-readings"
         },
         {
           "kind": "console",
-          "path": "/patients/cmvcafqx0000757p9fx7ugi2f/parameter-readings",
+          "path": "/patients/cmvcdcdn40007y4p9i3qchxl0/parameter-readings",
           "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)"
         },
         {
           "kind": "http",
           "status": 503,
           "method": "POST",
-          "path": "/patients/cmvcafqx6000957p9g9i7y6yq/parameter-readings"
+          "path": "/patients/cmvcdcdnb0009y4p9xi172qfn/parameter-readings"
         },
         {
           "kind": "console",
-          "path": "/patients/cmvcafqx6000957p9g9i7y6yq/parameter-readings",
+          "path": "/patients/cmvcdcdnb0009y4p9xi172qfn/parameter-readings",
           "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
         }
       ]
@@ -61,11 +61,11 @@
           "kind": "http",
           "status": 503,
           "method": "GET",
-          "path": "/patients/cmvcahnva003u57p95f03nr4g/parameter-readings"
+          "path": "/patients/cmvcde289003uy4p9epiv26lu/parameter-readings"
         },
         {
           "kind": "console",
-          "path": "/patients/cmvcahnva003u57p95f03nr4g/parameter-readings",
+          "path": "/patients/cmvcde289003uy4p9epiv26lu/parameter-readings",
           "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
         }
       ]
@@ -79,22 +79,22 @@
           "kind": "http",
           "status": 503,
           "method": "GET",
-          "path": "/patients/cmvcafqwl000557p9xbrq744o/cartella"
+          "path": "/patients/cmvcdcdmb0005y4p978z9twqi/cartella"
         },
         {
           "kind": "console",
-          "path": "/patients/cmvcafqwl000557p9xbrq744o/cartella",
+          "path": "/patients/cmvcdcdmb0005y4p978z9twqi/cartella",
           "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
         },
         {
           "kind": "http",
           "status": 503,
           "method": "POST",
-          "path": "/patients/cmvcafqwl000557p9xbrq744o/therapies"
+          "path": "/patients/cmvcdcdmb0005y4p978z9twqi/therapies"
         },
         {
           "kind": "console",
-          "path": "/patients/cmvcafqwl000557p9xbrq744o/therapies",
+          "path": "/patients/cmvcdcdmb0005y4p978z9twqi/therapies",
           "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
         }
       ]
@@ -114,11 +114,11 @@
           "kind": "http",
           "status": 503,
           "method": "PUT",
-          "path": "/patients/cmvcafqwl000557p9xbrq744o/cartella"
+          "path": "/patients/cmvcdcdmb0005y4p978z9twqi/cartella"
         },
         {
           "kind": "console",
-          "path": "/patients/cmvcafqwl000557p9xbrq744o/cartella",
+          "path": "/patients/cmvcdcdmb0005y4p978z9twqi/cartella",
           "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
         }
       ]
@@ -919,7 +919,7 @@
       "actualGeometry": {
         "first": {
           "tag": "TIME",
-          "text": "13:03",
+          "text": "14:25",
           "top": 157,
           "visibleTop": 157
         },
@@ -1747,22 +1747,22 @@
           "kind": "http",
           "status": 400,
           "method": "POST",
-          "path": "/patients/cmvcafqx0000757p9fx7ugi2f/parameter-readings"
+          "path": "/patients/cmvcdcdn40007y4p9i3qchxl0/parameter-readings"
         },
         {
           "kind": "console",
-          "path": "/patients/cmvcafqx0000757p9fx7ugi2f/parameter-readings",
+          "path": "/patients/cmvcdcdn40007y4p9i3qchxl0/parameter-readings",
           "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)"
         },
         {
           "kind": "http",
           "status": 503,
           "method": "POST",
-          "path": "/patients/cmvcafqx6000957p9g9i7y6yq/parameter-readings"
+          "path": "/patients/cmvcdcdnb0009y4p9xi172qfn/parameter-readings"
         },
         {
           "kind": "console",
-          "path": "/patients/cmvcafqx6000957p9g9i7y6yq/parameter-readings",
+          "path": "/patients/cmvcdcdnb0009y4p9xi172qfn/parameter-readings",
           "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
         }
       ]
@@ -1770,7 +1770,7 @@
     {
       "issue": 451,
       "pagination": {
-        "cohort": "QA Paged451 46d4e627",
+        "cohort": "QA Paged451 ad94226b",
         "pageSizes": [
           25,
           25,
@@ -1779,7 +1779,7 @@
         "crossedDistinctCursors": 2,
         "completedIntermediateUnchanged": 49,
         "firstPersistedExactlyOnce": true,
-        "selectedFinalIncomplete": "cmvcah8lj003l57p9t6j6qhjk"
+        "selectedFinalIncomplete": "cmvcddnjh003ly4p9nott8lov"
       }
     },
     {
@@ -1790,7 +1790,7 @@
           "08:00",
           "20:00"
         ],
-        "agendaTherapyId": "cmvcahhca003p57p98yzl3nbo",
+        "agendaTherapyId": "cmvcddvpm003py4p9vslfoo6v",
         "newsHistoryPages": [
           {
             "cursor": null,
@@ -1799,7 +1799,7 @@
             "complete": 0
           },
           {
-            "cursor": "eyJ2IjoxLCJwYXRpZW50SWQiOiJjbXZjYWhudjAwMDNzNTdwOTIxdnU4ZTdmIiwiaWQiOiIwMDI0OWIxNy1lYWU1LTQ4ZTAtOThlNS1iNThiY2FlMGJjZmEiLCJyZXF1ZXN0SWQiOiJxYTQ1Mi1wYXJ0aWFsLTQ2ZDRlNjI3LTI1IiwidmFsdWVzIjp7ImZyIjoiMTgifSwiYXV0aG9yT3BlcmF0b3JJZCI6IlNJTS1OVVJTRS0xIiwiYXV0aG9yTmFtZSI6IkluZmVybWllcmUgMSIsIm1lYXN1cmVkQXQiOiIyMDI2LTEwLTE3VDExOjAzOjA2Ljk1N1oiLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTE3VDExOjA0OjM2LjkzM1oifQ",
+            "cursor": "eyJ2IjoxLCJwYXRpZW50SWQiOiJjbXZjZGUyN3owMDNzeTRwOTAzazBvMml1IiwiaWQiOiIwMDUxMThiYS1kN2U1LTRjNmItOWI2YS04MjY0MjJlOGY2YzQiLCJyZXF1ZXN0SWQiOiJxYTQ1Mi1wYXJ0aWFsLWFkOTQyMjZiLTQ5IiwidmFsdWVzIjp7ImZyIjoiMTgifSwiYXV0aG9yT3BlcmF0b3JJZCI6IlNJTS1OVVJTRS0xIiwiYXV0aG9yTmFtZSI6IkluZmVybWllcmUgMSIsIm1lYXN1cmVkQXQiOiIyMDI2LTEwLTE3VDEyOjI0OjI4LjQwMloiLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTE3VDEyOjI1OjQ3Ljc0NloifQ",
             "size": 1,
             "hasMore": false,
             "complete": 1
@@ -1811,7 +1811,7 @@
             "complete": 0
           },
           {
-            "cursor": "eyJ2IjoxLCJwYXRpZW50SWQiOiJjbXZjYWhudjAwMDNzNTdwOTIxdnU4ZTdmIiwiaWQiOiIwMDI0OWIxNy1lYWU1LTQ4ZTAtOThlNS1iNThiY2FlMGJjZmEiLCJyZXF1ZXN0SWQiOiJxYTQ1Mi1wYXJ0aWFsLTQ2ZDRlNjI3LTI1IiwidmFsdWVzIjp7ImZyIjoiMTgifSwiYXV0aG9yT3BlcmF0b3JJZCI6IlNJTS1OVVJTRS0xIiwiYXV0aG9yTmFtZSI6IkluZmVybWllcmUgMSIsIm1lYXN1cmVkQXQiOiIyMDI2LTEwLTE3VDExOjAzOjA2Ljk1N1oiLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTE3VDExOjA0OjM2LjkzM1oifQ",
+            "cursor": "eyJ2IjoxLCJwYXRpZW50SWQiOiJjbXZjZGUyN3owMDNzeTRwOTAzazBvMml1IiwiaWQiOiIwMDUxMThiYS1kN2U1LTRjNmItOWI2YS04MjY0MjJlOGY2YzQiLCJyZXF1ZXN0SWQiOiJxYTQ1Mi1wYXJ0aWFsLWFkOTQyMjZiLTQ5IiwidmFsdWVzIjp7ImZyIjoiMTgifSwiYXV0aG9yT3BlcmF0b3JJZCI6IlNJTS1OVVJTRS0xIiwiYXV0aG9yTmFtZSI6IkluZmVybWllcmUgMSIsIm1lYXN1cmVkQXQiOiIyMDI2LTEwLTE3VDEyOjI0OjI4LjQwMloiLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTE3VDEyOjI1OjQ3Ljc0NloifQ",
             "size": 1,
             "hasMore": false,
             "complete": 1
@@ -1823,14 +1823,14 @@
             "complete": 0
           },
           {
-            "cursor": "eyJ2IjoxLCJwYXRpZW50SWQiOiJjbXZjYWhudjAwMDNzNTdwOTIxdnU4ZTdmIiwiaWQiOiIwMDI0OWIxNy1lYWU1LTQ4ZTAtOThlNS1iNThiY2FlMGJjZmEiLCJyZXF1ZXN0SWQiOiJxYTQ1Mi1wYXJ0aWFsLTQ2ZDRlNjI3LTI1IiwidmFsdWVzIjp7ImZyIjoiMTgifSwiYXV0aG9yT3BlcmF0b3JJZCI6IlNJTS1OVVJTRS0xIiwiYXV0aG9yTmFtZSI6IkluZmVybWllcmUgMSIsIm1lYXN1cmVkQXQiOiIyMDI2LTEwLTE3VDExOjAzOjA2Ljk1N1oiLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTE3VDExOjA0OjM2LjkzM1oifQ",
+            "cursor": "eyJ2IjoxLCJwYXRpZW50SWQiOiJjbXZjZGUyN3owMDNzeTRwOTAzazBvMml1IiwiaWQiOiIwMDUxMThiYS1kN2U1LTRjNmItOWI2YS04MjY0MjJlOGY2YzQiLCJyZXF1ZXN0SWQiOiJxYTQ1Mi1wYXJ0aWFsLWFkOTQyMjZiLTQ5IiwidmFsdWVzIjp7ImZyIjoiMTgifSwiYXV0aG9yT3BlcmF0b3JJZCI6IlNJTS1OVVJTRS0xIiwiYXV0aG9yTmFtZSI6IkluZmVybWllcmUgMSIsIm1lYXN1cmVkQXQiOiIyMDI2LTEwLTE3VDEyOjI0OjI4LjQwMloiLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTE3VDEyOjI1OjQ3Ljc0NloifQ",
             "size": 1,
             "hasMore": false,
             "complete": 1
           }
         ],
         "onlyOlderComplete": true,
-        "independentFailedPatient": "cmvcahnva003u57p95f03nr4g",
+        "independentFailedPatient": "cmvcde289003uy4p9epiv26lu",
         "controlled503": 1,
         "knownCompletePreserved": true,
         "aggregateUnknownCount": 1,
@@ -1849,7 +1849,7 @@
     {
       "issue": 453,
       "interactionsAfterPackageSelection": 4,
-      "ordinaryPatientId": "cmvcahvea003w57p9qbekqruw",
+      "ordinaryPatientId": "cmvcdeag9003wy4p9ohhhjmv9",
       "ordinaryVerifiedAbsent": true,
       "exactSchedulePayload": [
         {
@@ -1891,7 +1891,7 @@
     },
     {
       "issue": 454,
-      "initialCurrentTime": "13:00",
+      "initialCurrentTime": "14:00",
       "controlRows": 1,
       "actualDosePersisted": true,
       "calendarScroll": {
@@ -1905,10 +1905,10 @@
       "issue": 457,
       "reasonEditable": true,
       "actualDoseTimes": [
-        "2026-10-17T13:03",
-        "2026-10-17T13:05"
+        "2026-10-17T14:25",
+        "2026-10-17T14:26"
       ],
-      "pdfBytes": 54022,
+      "pdfBytes": 54151,
       "printExitWrites": 0,
       "explicitPauseAndContinue": true,
       "uncertainExitRetryExactlyOnce": true,

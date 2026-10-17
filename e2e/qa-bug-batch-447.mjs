@@ -44,7 +44,7 @@ const databaseOnly = process.argv.includes('--database-tests-only') || fullBacke
 let nativeClient;
 let nativeDatabaseCreated = false;
 const nativeOwner = randomBytes(16).toString('hex');
-const nativeDatabase = `clinicos_qa_batch447_${nativeOwner}`;
+const nativeDatabase = nativeMode ? `clinicos_qa_batch447_${nativeOwner}` : dbName;
 const databaseReceipt = {
   mode: nativeMode ? 'native-postgresql16' : 'owned-docker-postgresql16',
   syntheticOnly: true,
@@ -156,6 +156,46 @@ async function ready(url) {
   }
   throw new Error(`QA service did not become ready: ${new URL(url).pathname}`);
 }
+async function verifyOwnedDatabase() {
+  assert.match(
+    nativeDatabase,
+    nativeMode ? /^clinicos_qa_batch447_[a-f0-9]{32}$/ : /^clinicos_qa_batch447$/,
+  );
+  if (ownedContainer) {
+    const owner = spawnSync(
+      'docker',
+      ['inspect', '--format', '{{index .Config.Labels "clinicos.qa.owner"}}', container],
+      { encoding: 'utf8' },
+    );
+    assert.equal(owner.status, 0);
+    assert.equal(
+      owner.stdout.trim(),
+      nativeOwner,
+      'QA container ownership changed; refusing database mutation',
+    );
+  }
+  const marker = await nativeClient.query(
+    "SELECT shobj_description(oid, 'pg_database') AS marker FROM pg_database WHERE datname=$1",
+    [nativeDatabase],
+  );
+  assert.equal(
+    marker.rows[0]?.marker,
+    `clinicos-qa-batch447:${nativeOwner}`,
+    'QA database ownership changed; refusing DROP',
+  );
+}
+async function waitForOwnedConnectionsToClose() {
+  const deadline = Date.now() + 2_000;
+  do {
+    const connections = await nativeClient.query(
+      'SELECT count(*)::int AS count FROM pg_stat_activity WHERE datname=$1',
+      [nativeDatabase],
+    );
+    if (connections.rows[0].count === 0) return;
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  } while (Date.now() < deadline);
+  throw new Error('Owned child connections did not close; refusing DROP');
+}
 function service(label, args, cwd) {
   const fd = openSync(path.join(out, 'test-results', `${label}.local.log`), 'w');
   logs.push(fd);
@@ -170,7 +210,11 @@ writeFileSync(
 try {
   // Native CI supplies isolated PostgreSQL. A developer run owns a uniquely labelled ephemeral container.
   if (nativeMode) {
-    nativeClient = new pg.Client({ connectionString: nativeTarget.toString() });
+    nativeClient = new pg.Client({
+      connectionString: nativeTarget.toString(),
+      connectionTimeoutMillis: 5_000,
+      query_timeout: 10_000,
+    });
     await nativeClient.connect();
     const result = await nativeClient.query(
       "SELECT current_database() AS parent, current_setting('server_version_num')::int AS version",
@@ -182,6 +226,7 @@ try {
     await nativeClient.query(
       `COMMENT ON DATABASE "${nativeDatabase}" IS 'clinicos-qa-batch447:${nativeOwner}'`,
     );
+    await verifyOwnedDatabase();
     const local = new URL(nativeTarget);
     local.pathname = `/${nativeDatabase}`;
     env.DATABASE_URL = local.toString();
@@ -208,6 +253,8 @@ try {
       container,
       '--label',
       'clinicos.qa.batch=447',
+      '--label',
+      `clinicos.qa.owner=${nativeOwner}`,
       '-p',
       '127.0.0.1:55447:5432',
       '-e',
@@ -235,6 +282,33 @@ try {
       await new Promise((r) => setTimeout(r, 500));
     }
     assert.ok(sqlReady, 'Actual PostgreSQL readiness required');
+    const controlTarget = new URL(env.DATABASE_URL);
+    controlTarget.pathname = '/postgres';
+    nativeClient = new pg.Client({
+      connectionString: controlTarget.toString(),
+      connectionTimeoutMillis: 5_000,
+      query_timeout: 10_000,
+    });
+    await nativeClient.connect();
+    const server = await nativeClient.query(
+      "SELECT current_database() AS parent, current_setting('server_version_num')::int AS version",
+    );
+    assert.equal(server.rows[0].parent, 'postgres');
+    assert.ok(server.rows[0].version >= 160000 && server.rows[0].version < 170000);
+    await nativeClient.query(
+      `COMMENT ON DATABASE "${nativeDatabase}" IS 'clinicos-qa-batch447:${nativeOwner}'`,
+    );
+    nativeDatabaseCreated = true;
+    await verifyOwnedDatabase();
+    Object.assign(databaseReceipt, {
+      version: server.rows[0].version,
+      host: '127.0.0.1',
+      port: 55447,
+      parentDatabase: 'postgres',
+      ownedDatabase: nativeDatabase,
+      parentNeverMigrated: true,
+      ownershipMarkerInstalled: true,
+    });
   }
   writeFileSync(
     path.join(out, 'test-results', 'database-provenance.json'),
@@ -258,11 +332,48 @@ try {
         '--test',
         'backend/src/patients/__tests__/temporary-ps-exits.test.ts',
         'backend/src/patients/__tests__/temporary-ps-exits-db.test.ts',
+        'backend/src/intake/__tests__/patient-review-db.test.ts',
       ],
       { logName: 'temporary-ps-database-tests.txt' },
     );
   databaseTestsPassed = true;
   if (!databaseOnly) {
+    // Focused suites have their own fixtures. Their exited workers must not contaminate
+    // browser counts, roster completion or clinical first-view assertions.
+    const target = new URL(env.DATABASE_URL);
+    assert.ok(['127.0.0.1', 'localhost'].includes(target.hostname));
+    assert.equal(target.pathname, `/${nativeDatabase}`);
+    assert.equal(
+      Number(target.port || 5432),
+      nativeMode ? Number(nativeTarget.port || 5432) : 55447,
+    );
+    await verifyOwnedDatabase();
+    await waitForOwnedConnectionsToClose();
+    databaseReceipt.browserFixtureIsolation = {
+      focusedWorkersExited: true,
+      connectionsBeforeDrop: 0,
+      markerVerifiedBeforeDrop: true,
+      forcedDrop: false,
+      parentNeverMigrated: true,
+    };
+    await nativeClient.query(`DROP DATABASE "${nativeDatabase}"`);
+    nativeDatabaseCreated = false;
+    await nativeClient.query(`CREATE DATABASE "${nativeDatabase}"`);
+    nativeDatabaseCreated = true;
+    await nativeClient.query(
+      `COMMENT ON DATABASE "${nativeDatabase}" IS 'clinicos-qa-batch447:${nativeOwner}'`,
+    );
+    await verifyOwnedDatabase();
+    Object.assign(databaseReceipt.browserFixtureIsolation, {
+      recreated: true,
+      markerVerifiedAfterCreate: true,
+    });
+    run(process.execPath, [prismaCli, 'migrate', 'deploy', '--config', 'prisma.config.ts']);
+    databaseReceipt.browserFixtureIsolation.migrationsReapplied = true;
+    writeFileSync(
+      path.join(out, 'test-results', 'database-provenance.json'),
+      JSON.stringify(databaseReceipt, null, 2) + '\n',
+    );
     service('backend', ['--import', 'tsx', 'src/server.ts'], path.join(root, 'backend'));
     service(
       'frontend',
@@ -292,19 +403,13 @@ try {
   await new Promise((r) => setTimeout(r, 500));
   for (const c of children) if (c.exitCode === null) c.kill('SIGKILL');
   for (const fd of logs) closeSync(fd);
+  const cleanupErrors = [];
   if (nativeClient) {
     try {
       if (nativeDatabaseCreated) {
-        const marker = await nativeClient.query(
-          "SELECT shobj_description(oid, 'pg_database') AS marker FROM pg_database WHERE datname=$1",
-          [nativeDatabase],
-        );
-        assert.equal(
-          marker.rows[0]?.marker,
-          `clinicos-qa-batch447:${nativeOwner}`,
-          'QA database ownership changed; refusing cleanup',
-        );
-        await nativeClient.query(`DROP DATABASE "${nativeDatabase}" WITH (FORCE)`);
+        await verifyOwnedDatabase();
+        await waitForOwnedConnectionsToClose();
+        await nativeClient.query(`DROP DATABASE "${nativeDatabase}"`);
         const remaining = await nativeClient.query('SELECT 1 FROM pg_database WHERE datname=$1', [
           nativeDatabase,
         ]);
@@ -314,20 +419,40 @@ try {
           ownedDatabaseRemoved: true,
         });
       }
+    } catch (error) {
+      cleanupErrors.push({ stage: 'owned-database', code: error.code ?? error.name });
     } finally {
-      await nativeClient.end();
-      writeFileSync(
-        path.join(out, 'test-results', 'database-provenance.json'),
-        JSON.stringify(databaseReceipt, null, 2) + '\n',
-      );
+      try {
+        await nativeClient.end();
+      } catch (error) {
+        cleanupErrors.push({ stage: 'control-connection', code: error.code ?? error.name });
+      }
     }
   }
-  if (ownedContainer) spawnSync('docker', ['stop', container], { stdio: 'ignore' });
+  if (ownedContainer) {
+    const label = spawnSync(
+      'docker',
+      ['inspect', '--format', '{{index .Config.Labels "clinicos.qa.owner"}}', container],
+      { encoding: 'utf8' },
+    );
+    if (label.status !== 0 || label.stdout.trim() !== nativeOwner)
+      cleanupErrors.push({ stage: 'container-owner', code: 'ownership_mismatch' });
+    else if (spawnSync('docker', ['stop', container], { stdio: 'ignore' }).status !== 0)
+      cleanupErrors.push({ stage: 'owned-container', code: 'stop_failed' });
+  }
+  databaseReceipt.cleanupErrors = cleanupErrors;
+  writeFileSync(
+    path.join(out, 'test-results', 'database-provenance.json'),
+    JSON.stringify(databaseReceipt, null, 2) + '\n',
+  );
   writeFileSync(
     path.join(out, 'test-results', 'stack-result.json'),
     JSON.stringify(
       {
-        status: (databaseOnly ? databaseTestsPassed : browserPassed) ? 'passed' : 'failed',
+        status:
+          (databaseOnly ? databaseTestsPassed : browserPassed) && cleanupErrors.length === 0
+            ? 'passed'
+            : 'failed',
         browser: databaseOnly ? 'not-run' : browserPassed ? 'passed' : 'failed',
         databaseTests: databaseTestsPassed ? 'passed' : 'failed',
         syntheticOnly: true,
@@ -337,4 +462,6 @@ try {
       2,
     ) + '\n',
   );
+  if (cleanupErrors.length)
+    throw new Error('Synthetic QA cleanup failed; inspect sanitized database provenance');
 }

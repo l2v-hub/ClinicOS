@@ -4,8 +4,8 @@
   "archives": [
     {
       "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/artifacts/task-validation/bug-batch-447/evidence/issue-447-trace.zip",
-      "originalSha256": "577d90be57dae28b504703620c23756209e051432339bc5348474e8b8e6be532",
-      "sanitizedSha256": "15c53d8286d2a41d0cef49317044f9ee4efd42bb79a5b38903317b4caec760aa",
+      "originalSha256": "ac739baa5932ceaf3546805ff83a430ed4b6b4531c86ae61d54b86bf93f43939",
+      "sanitizedSha256": "b5948917cc6f9d7dd4673dcafeb980ab6951126129514bdb1e4bb15c06350bca",
       "sessionsRedacted": 2,
       "entries": [
         {
@@ -13,11 +13,11 @@
           "replacements": 106
         },
         {
-          "entry": "resources/b3b59b9419108d33bf007301743f6a1c3956e687.json",
+          "entry": "resources/61066986c57e747d547dfc59645489dd228b6f7f.json",
           "replacements": 1
         },
         {
-          "entry": "resources/ead791e0975eed4eaf69a4cb17540cc0b1786d3a.json",
+          "entry": "resources/0508555049cd969d98cc4e196948163f98e73098.json",
           "replacements": 1
         }
       ],

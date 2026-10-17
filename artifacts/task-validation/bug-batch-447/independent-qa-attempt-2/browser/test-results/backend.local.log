@@ -1,0 +1,23 @@
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000',
+  'http://127.0.0.1:5447'
+]
+[config] test: AI runtime non configurato: Assistente in modalità deterministica
+ClinicOS backend listening on port 3447
+[ai] extraction NOT available: AI runtime non configurato (AI_RUNTIME_URL / AI_RUNTIME_SERVICE_TOKEN)
+POST /patients/cmvcahvea003w57p9qbekqruw/therapies → created id=cmvcahxdk000q3zp9po4hgbnf (2 schedules)
+PUT /patients/cmvcafqwl000557p9xbrq744o/cartella → salvata
+POST /patients/cmvcafqwl000557p9xbrq744o/therapies → created id=cmvcaib1p000y3zp9r5j0e53b (2 schedules)
+PUT /patients/:id/cartella error: TemporaryPsExitError [TherapyWriteInputError]: Lo stato di uscita PS è gestito dal comando autorizzato.
+    at preserveTemporaryPsExits (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend/src/patients/temporary-ps-exits.ts:172:11)
+    at <anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend/src/patients/cartella-update.ts:95:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Proxy._transactionWithCallback (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:861:18)
+    at async <anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend/src/routes/patients.ts:1259:22) {
+  status: 409,
+  code: 'temporary_ps_exit_conflict'
+}
+[shutdown] SIGTERM: stop accepting connections
+[shutdown] done

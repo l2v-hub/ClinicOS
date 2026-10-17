@@ -1,0 +1,25 @@
+{
+  "pdf": "browser/evidence/issue-457-print.pdf",
+  "sha256": "a454ffe5e2fc4a863faa08efa941097f7cbaebba4e18f25c9f2c35fd4b17fd70",
+  "pages": 2,
+  "bytes": 54240,
+  "requiredActualValues": [
+    "INVIO IN PRONTO SOCCORSO",
+    "QA motivo verificato e modificato",
+    "ULTIMI PARAMETRI RILEVATI",
+    "125/80",
+    "97 %",
+    "78 bpm",
+    "18 atti/min",
+    "36.8",
+    "ULTIME DOSI EFFETTIVAMENTE SOMMINISTRATE",
+    "QA PRN457",
+    "QA PS prior457",
+    "QA Prescription447",
+    "QA Contact",
+    "0000000000",
+    "TERAPIA FARMACOLOGICA ATTIVA"
+  ],
+  "allRequiredAssertionsPass": true,
+  "classification": "Print portion actualPASS before later457 dependent-fixture failure; not a complete457PASS."
+}

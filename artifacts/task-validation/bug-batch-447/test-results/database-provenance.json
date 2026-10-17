@@ -5,9 +5,20 @@
   "host": "127.0.0.1",
   "port": 55447,
   "parentDatabase": "clinicos_test",
-  "ownedDatabase": "clinicos_qa_batch447_cdd0a92e04e710c2d996e57e252a4bec",
+  "ownedDatabase": "clinicos_qa_batch447_cf408d0f9ec7c42273431a89536eaa13",
   "parentNeverMigrated": true,
   "ownershipMarkerInstalled": true,
+  "browserFixtureIsolation": {
+    "focusedWorkersExited": true,
+    "connectionsBeforeDrop": 0,
+    "markerVerifiedBeforeDrop": true,
+    "forcedDrop": false,
+    "parentNeverMigrated": true,
+    "recreated": true,
+    "markerVerifiedAfterCreate": true,
+    "migrationsReapplied": true
+  },
   "cleanupOwnershipVerified": true,
-  "ownedDatabaseRemoved": true
+  "ownedDatabaseRemoved": true,
+  "cleanupErrors": []
 }

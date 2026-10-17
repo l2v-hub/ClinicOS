@@ -2892,11 +2892,12 @@ export default function App() {
     );
     if (epoch !== sessionEpochRef.current)
       throw new Error('Sessione cambiata. Riapri la cartella.');
-    setCartelle((previous) =>
-      previous.some((record) => record.pazienteId === patientId)
+    setCartelle((previous) => {
+      if (epoch !== sessionEpochRef.current) return previous;
+      return previous.some((record) => record.pazienteId === patientId)
         ? previous.map((record) => (record.pazienteId === patientId ? confirmed : record))
-        : [...previous, confirmed],
-    );
+        : [...previous, confirmed];
+    });
     invalidateCachedGet(`${API_URL}/therapy-slots`);
     void loadTherapySlots(therapyDateRef.current);
     window.dispatchEvent(new CustomEvent(TEMPORARY_PS_EXIT_CHANGED, { detail: { patientId } }));
@@ -2917,6 +2918,7 @@ export default function App() {
     // Optimistic update
     const applyUpdate = () =>
       setCartelle((prev) => {
+        if (documentSaveEpoch !== sessionEpochRef.current) return prev;
         const idx = prev.findIndex((c) => c.pazienteId === pazienteId);
         return idx >= 0
           ? prev.map((c, i) => (i === idx ? mergeCartellaPatch(c, existing, updates) : c))
@@ -2947,6 +2949,7 @@ export default function App() {
           }
           if (!response.ok || documentSaveEpoch !== sessionEpochRef.current) return false;
           const verified = await response.json().catch(() => null);
+          if (documentSaveEpoch !== sessionEpochRef.current) return false;
           if (
             verified?.patientId !== pazienteId ||
             !verified.data ||
@@ -2959,11 +2962,12 @@ export default function App() {
             ...verified.data,
             pazienteId,
           } as CartellaPaziente;
-          setCartelle((previous) =>
-            previous.some((record) => record.pazienteId === pazienteId)
+          setCartelle((previous) => {
+            if (documentSaveEpoch !== sessionEpochRef.current) return previous;
+            return previous.some((record) => record.pazienteId === pazienteId)
               ? previous.map((record) => (record.pazienteId === pazienteId ? confirmed : record))
-              : [...previous, confirmed],
-          );
+              : [...previous, confirmed];
+          });
           return confirmed;
         },
         mergeCartellaPatch,

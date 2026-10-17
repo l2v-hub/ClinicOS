@@ -1,0 +1,24 @@
+✔ confirmed pain retains original JSON/presence and never exposes other patients or pending drafts (316.241406ms)
+✔ count limit admits exactly100 and returns a distinct error at101 while preserving therapies (99.30236ms)
+✔ UTF-8 JSON byte limit includes quotes and overflow never materializes pain in therapy projection (204.581362ms)
+✔ repeatable snapshot survives historical reconciliation between budget and pain read (120.260876ms)
+✔ intake review restarts its read-only snapshot after an actual concurrent Patient row version (85.395191ms)
+✔ only declared transaction conflicts retry, with three fresh RepeatableRead attempts at most (1.119079ms)
+✔ pause/continue and return persist; retries preserve exact history and valid dose receipts (731.461815ms)
+PS_INTERLEAVING {"kind":"scheduled","initialChart":false,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"prn","initialChart":false,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"scheduled","initialChart":true,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"prn","initialChart":true,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+✔ real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts (634.279276ms)
+✔ raw PostgreSQL serialization conflicts retry narrowly while unrelated query errors remain errors (1.226741ms)
+✔ exit decisions are explicit, confirmed and never accept client actor/time or mixed commands (20.600249ms)
+✔ managed hold requires matching immutable history; unknown/corrupt context is never permission to dose (0.854065ms)
+✔ ordinary writes retain managed history and active hold; explicit forge/erase/change is rejected (0.670577ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12821.595371

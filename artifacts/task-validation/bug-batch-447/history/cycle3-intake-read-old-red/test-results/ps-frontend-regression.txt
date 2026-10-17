@@ -1,0 +1,44 @@
+✔ (a) populated dimissione + therapies → model has correct patient name/MRN and non-null dimissione (9.147298ms)
+✔ (a) patient name and MRN come from input paziente (scoping check) (0.863525ms)
+✔ (b) cartella.dimissione undefined → dimissione is null, no crash (0.632743ms)
+✔ (c) only active therapies appear in terapie (0.764501ms)
+✔ (c) empty therapies array → terapie is empty (1.72935ms)
+✔ (c) fasce labels built correctly for active therapy (0.872176ms)
+✔ (c) orarioSpecifico takes priority over fasce labels (0.582467ms)
+✔ (d) allergie mapped with testo and grave flag (0.74497ms)
+✔ (d) no allergie → empty array with separately explicit verification status (1.20328ms)
+✔ (d) only attive/monitoraggio diagnosi appear (1.433731ms)
+✔ (d) condizioni croniche from boolean flags (1.195302ms)
+✔ (d) no camera field on model anymore (0.893952ms)
+✔ PS separates current/discharge diagnoses, explicit comorbidities and saved prior history (1.659388ms)
+✔ PS exact deduplication preserves distinct admission findings and negations (1.424226ms)
+✔ 457 unknown allergy status never becomes a verified negative finding (2.101928ms)
+✔ 457 reason uses actual recent urgent diary and critical reading, remains separate from source data (3.140827ms)
+✔ 457 stale, future, wrong-patient and nonurgent notes never prefill a reason (0.726072ms)
+✔ 457 24-hour boundary follows actual Rome instants including the spring DST transition (0.557892ms)
+✔ 457 latest available value retains its own observation timestamp and missing fields stay unknown (1.102788ms)
+✔ 457 only actual given doses appear; prescribed time is never used as administration time (1.082732ms)
+✔ 457 sources, clinical chart and prescriptions remain scoped to exactly one patient (1.233905ms)
+✔ 457 full medication keyset pagination includes later-page actual given doses and authentic patient ID (0.829117ms)
+✔ 457 repeated cursor, duplicate records, mixed patient and aborted late page cannot produce printable sources (0.769292ms)
+✔ 457 known contact and risk are preserved verbatim without inventing negatives or changing the chart (0.605159ms)
+✔ 457 legacy observations retain their recorded date precision and never invent a midnight or urgent time (0.999416ms)
+✔ PS uncertain retry keeps the exact intent and patient/operator isolation; receipt must prove the decision (0.835327ms)
+✔ PS-only exit history displays decision and actual next-day return without inventing legal completion or delete control (28.452645ms)
+✔ verified server command serializes with ordinary saves and preserves its authoritative state (3.458692ms)
+✔ failed command never contaminates queued snapshots or another session (1.238897ms)
+✔ serializes full snapshots, retaining earlier successful edits regardless of section order (0.605213ms)
+✔ failed edits are not carried into later saves; independent patients do not block (0.64439ms)
+✔ record deltas retain additions made while a document form was reopened (0.832731ms)
+✔ rejected requests release queue and a new session uses its own baseline (1.506735ms)
+✔ therapy slot URL is bounded and carries an opaque cursor (1.651509ms)
+✔ therapy pages merge patients and therapies while replacing exact summaries (3.769588ms)
+✔ therapy page parser rejects partial responses without a continuation cursor (0.72267ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1538.22904

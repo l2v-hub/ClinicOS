@@ -1299,7 +1299,7 @@ try {
 
     await scenario(452, 'Infermiere 1', 'pazienti', async (state) => {
       const { page } = state;
-      await page.locator('.patient-roster tbody tr').first().waitFor();
+      await page.locator('.patient-roster tbody tr.patient-roster__row').first().waitFor();
       assert.equal((await page.locator('.patient-roster th').first().innerText()).trim(), 'Letto');
       const rows = await page.locator('.patient-roster tbody').innerText();
       assert.doesNotMatch(

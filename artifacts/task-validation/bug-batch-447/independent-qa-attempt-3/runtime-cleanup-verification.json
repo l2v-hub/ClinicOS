@@ -1,0 +1,14 @@
+{
+  "ownedPorts": {
+    "55447": "closed",
+    "55450": "closed",
+    "3447": "closed",
+    "5447": "closed",
+    "3450": "closed",
+    "5450": "closed",
+    "8795": "closed"
+  },
+  "remainingOwnContainerNames": [],
+  "neverConnectedTo5432": true,
+  "noProcessTerminatedByThisCheck": true
+}

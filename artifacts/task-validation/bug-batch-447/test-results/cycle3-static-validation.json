@@ -1,0 +1,42 @@
+{
+  "scopeCount": 94,
+  "checks": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--"
+      ],
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "node",
+        "--check",
+        "e2e/qa-bug-batch-447.mjs"
+      ],
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "node",
+        "--check",
+        "e2e/qa-bug-batch-447-browser.mjs"
+      ],
+      "exitCode": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "node",
+        "scripts/quality-gate/validate-task-contract.js",
+        "artifacts/task-validation/bug-batch-447"
+      ],
+      "exitCode": 0,
+      "output": "CONTRACT VALIDO: /workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/artifacts/task-validation/bug-batch-447/task-contract.md\n"
+    }
+  ]
+}

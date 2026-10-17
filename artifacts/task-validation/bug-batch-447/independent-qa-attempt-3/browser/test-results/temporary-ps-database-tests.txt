@@ -1,0 +1,25 @@
+✔ confirmed pain retains original JSON/presence and never exposes other patients or pending drafts (351.401322ms)
+✔ count limit admits exactly100 and returns a distinct error at101 while preserving therapies (96.415437ms)
+✔ UTF-8 JSON byte limit includes quotes and overflow never materializes pain in therapy projection (282.721556ms)
+✔ repeatable snapshot survives historical reconciliation between budget and pain read (127.392794ms)
+INTAKE_REVIEW_INTERLEAVING {"writerPid":107,"readerPid":105,"observedOwnedBlocking":true}
+✔ intake review restarts its read-only snapshot after an actual concurrent Patient row version (140.506281ms)
+✔ only declared transaction conflicts retry, with three fresh RepeatableRead attempts at most (1.164595ms)
+✔ pause/continue and return persist; retries preserve exact history and valid dose receipts (623.137986ms)
+PS_INTERLEAVING {"kind":"scheduled","initialChart":false,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"prn","initialChart":false,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"scheduled","initialChart":true,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"prn","initialChart":true,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+✔ real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts (603.594108ms)
+✔ raw PostgreSQL serialization conflicts retry narrowly while unrelated query errors remain errors (1.284356ms)
+✔ exit decisions are explicit, confirmed and never accept client actor/time or mixed commands (1.623055ms)
+✔ managed hold requires matching immutable history; unknown/corrupt context is never permission to dose (1.067224ms)
+✔ ordinary writes retain managed history and active hold; explicit forge/erase/change is rejected (0.778385ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12634.67017

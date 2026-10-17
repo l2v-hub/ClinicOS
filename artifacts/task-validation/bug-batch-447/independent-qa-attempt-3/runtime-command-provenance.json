@@ -1,0 +1,20 @@
+{
+  "backendWrapper": "/workspace/.clinicos-cloud/isolated-qa/batch447-backend.mjs",
+  "backendWrapperSha256": "9d3fb03564d56a16fc114260d4d18ada4fbc0e9d2566d87a98b1edfa48d69270",
+  "browserWrapper": "/workspace/.clinicos-cloud/isolated-qa/batch447-browser.mjs",
+  "browserWrapperSha256": "051c7897ef56868e08706b048e6d4c91751dd797d37da7ae96e064803d440c56",
+  "lock": "/tmp/clinicos-browser-qa.lock",
+  "lockCovers": "container creation, migration, focused/full tests, browser and teardown",
+  "nativeFixturePort": 55447,
+  "intakeFixturePort": 55450,
+  "developer5432NeverAccessed": true,
+  "fullBackendInvocations": 1,
+  "fullBackendResetExpected": false,
+  "runtimeEnv": "allowlist transport/tooling only; no GH/model/provider credentials inherited",
+  "externalExtraction": "declared synthetic OCR/AI provider fixture in intake; real HTTP/SQL/parser/storage/browser/print paths",
+  "canonicalBeforeBytes": "preserved-pre-qa/relocation-provenance.json",
+  "legacyRestoration": "legacy-after-restoration.json",
+  "portableBackendWrapper": "../independent-qa-attempt-2/launcher-backend-full.mjs",
+  "portableBrowserWrapper": "../independent-qa-attempt-2/launcher-smoke.mjs",
+  "portableWrapperBytesIndependentlyMatchExecutedSha": true
+}

@@ -1,0 +1,101 @@
+{
+  "source": "browser/evidence/issue-452-trace.zip",
+  "calls": [
+    {
+      "type": "before",
+      "callId": "call@912",
+      "startTime": 81369.805,
+      "class": "Frame",
+      "method": "waitForSelector",
+      "params": {
+        "selector": ".patient-roster tbody tr >> nth=0",
+        "strict": true,
+        "timeout": 30000,
+        "omitReturnValue": true
+      }
+    },
+    {
+      "type": "after",
+      "callId": "call@912",
+      "endTime": 81477.759,
+      "result": {}
+    },
+    {
+      "type": "before",
+      "callId": "call@914",
+      "startTime": 81504.645,
+      "class": "Frame",
+      "method": "innerText",
+      "params": {
+        "selector": ".patient-roster th >> nth=0",
+        "strict": true,
+        "timeout": 30000
+      }
+    },
+    {
+      "type": "after",
+      "callId": "call@914",
+      "endTime": 81521.379,
+      "result": {
+        "value": "Letto"
+      }
+    },
+    {
+      "type": "before",
+      "callId": "call@916",
+      "startTime": 81526.401,
+      "class": "Frame",
+      "method": "innerText",
+      "params": {
+        "selector": ".patient-roster tbody",
+        "strict": true,
+        "timeout": 30000
+      }
+    },
+    {
+      "type": "after",
+      "callId": "call@916",
+      "endTime": 81538.431,
+      "result": {
+        "value": "Caricamento\u2026"
+      }
+    },
+    {
+      "type": "before",
+      "callId": "call@918",
+      "startTime": 81844.543,
+      "class": "Page",
+      "method": "screenshot",
+      "params": {
+        "timeout": 30000,
+        "type": "png",
+        "fullPage": false
+      }
+    },
+    {
+      "type": "after",
+      "callId": "call@918",
+      "endTime": 82332.323,
+      "result": {
+        "binary": "<Buffer>"
+      }
+    }
+  ],
+  "patientPageRequests": [
+    {
+      "path": "patients/page",
+      "status": -1,
+      "time": -1,
+      "startedDateTime": "2026-10-17T12:07:06.970Z"
+    },
+    {
+      "path": "patients/page",
+      "status": 200,
+      "time": 116.783,
+      "startedDateTime": "2026-10-17T12:07:06.974Z"
+    }
+  ],
+  "defaultWaitTimeoutUnchangedMs": 30000,
+  "resultScreenshotAlreadyShowsActualQA44Bed7Rows": true,
+  "diagnosticHookRun": false
+}

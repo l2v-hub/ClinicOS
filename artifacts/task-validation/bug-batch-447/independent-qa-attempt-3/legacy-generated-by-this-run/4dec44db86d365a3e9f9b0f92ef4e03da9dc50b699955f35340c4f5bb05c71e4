@@ -1,0 +1,21 @@
+{
+  "assessmentId": "270a3b68-17ff-4fd5-a87e-5e6936ec1895",
+  "documentId": "a631ef70-acb8-450e-a13b-ffad955c5075",
+  "snapshotSha256": "e94d1a2e44279943cdee21cf8baaa1434cc8e7b12632e88a2ee5954eea0a787c",
+  "rawBmi": 24.999999999999996,
+  "total": 27.5,
+  "displayedBmi": "25",
+  "displayedTotal": "27,5",
+  "rendererVersion": "mna-a4-v2",
+  "producer": "ClinicOS mna-a4-v2",
+  "pdfSha256": "23661df29f8a9d5f64822bc2f2e5ee512f0b7ff68ae50316fe4782864a591324",
+  "bytes": 29362,
+  "sourceManifest": {
+    "kind": "assessment",
+    "assessmentId": "270a3b68-17ff-4fd5-a87e-5e6936ec1895",
+    "snapshotSha256": "e94d1a2e44279943cdee21cf8baaa1434cc8e7b12632e88a2ee5954eea0a787c",
+    "rendererVersion": "mna-a4-v2"
+  },
+  "pdfPath": "pdf-qa/mna-v2-half-point.pdf",
+  "snapshotPath": "pdf-qa/mna-v2-half-point.snapshot.json"
+}

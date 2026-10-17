@@ -1,0 +1,21 @@
+✔ verified server command serializes with ordinary saves and preserves its authoritative state (3.197671ms)
+✔ failed command never contaminates queued snapshots or another session (1.142912ms)
+✔ a later ordinary server receipt recovers an exit committed during an uncertain command (0.703891ms)
+✔ serializes full snapshots, retaining earlier successful edits regardless of section order (1.302125ms)
+✔ failed edits are not carried into later saves; independent patients do not block (1.109039ms)
+✔ record deltas retain additions made while a document form was reopened (1.719806ms)
+✔ rejected requests release queue and a new session uses its own baseline (0.531955ms)
+✔ actual App rejects a JSON receipt from the old session, skips old queued PUT and accepts a new same-patient session (113.719891ms)
+✔ actual App deferred confirmed and optimistic setters preserve new-session state by reference (104.949161ms)
+✔ actual App same-session writes keep authoritative PS state, serialized patches and success feedback (52.527663ms)
+✔ actual App still rejects foreign-patient authoritative receipts without installing data (52.780666ms)
+✔ actual App PS uses the real receipt verifier and guards its deferred React setter (115.556005ms)
+✔ actual App late PS JSON and its queued ordinary save cannot affect a new same-patient session (39.442113ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2915.296934

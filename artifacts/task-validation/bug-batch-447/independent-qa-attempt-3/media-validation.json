@@ -1,0 +1,267 @@
+{
+  "pngs": [
+    {
+      "path": "browser/evidence/issue-447-role-negative.png",
+      "width": 1180,
+      "height": 820,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-447.png",
+      "width": 1180,
+      "height": 820,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-451-touch.png",
+      "width": 820,
+      "height": 1180,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-451.png",
+      "width": 1180,
+      "height": 820,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-452.png",
+      "width": 1180,
+      "height": 820,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-453-fresh-allergy-warning.png",
+      "width": 1180,
+      "height": 820,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-453.png",
+      "width": 1180,
+      "height": 820,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-454.png",
+      "width": 1180,
+      "height": 820,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-456.png",
+      "width": 1180,
+      "height": 820,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-457-paused.png",
+      "width": 1180,
+      "height": 820,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-457.png",
+      "width": 1180,
+      "height": 820,
+      "visuallyInspected": true
+    }
+  ],
+  "videos": [
+    {
+      "path": "browser/evidence/issue-447-role-negative.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "4.680000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-447.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "31.040000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-451-touch.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 554,
+          "height": 800
+        }
+      ],
+      "format": {
+        "duration": "4.200000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-451.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "17.280000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-452.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "4.600000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-453.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "30.760000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-454.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "7.880000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-456.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "24.840000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-457.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "43.000000"
+      }
+    }
+  ],
+  "traces": [
+    {
+      "path": "browser/evidence/issue-447-role-negative-trace.zip",
+      "members": 92,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-447-trace.zip",
+      "members": 689,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-451-touch-trace.zip",
+      "members": 71,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-451-trace.zip",
+      "members": 258,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-452-trace.zip",
+      "members": 129,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-453-trace.zip",
+      "members": 723,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-454-trace.zip",
+      "members": 181,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-456-trace.zip",
+      "members": 218,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-457-trace.zip",
+      "members": 246,
+      "crcValid": true
+    }
+  ],
+  "freshPngCount": 11,
+  "stale452ExtrasExcluded": true,
+  "pdfPagesVisuallyInspected": 2,
+  "classification": "Media prove five fully passed scenarios and two preserved failed/partial scenarios; screenshot existence does not turn a failed result into PASS."
+}

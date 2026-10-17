@@ -1,0 +1,14 @@
+{
+  "qa3ExpectedFingerprint": "df0c8c5ffd47f8193f583127fe703ca6a0aeb78a5151a6e57f677558cd3f2d8b",
+  "reconstructedWithExactOldBrowser": "df0c8c5ffd47f8193f583127fe703ca6a0aeb78a5151a6e57f677558cd3f2d8b",
+  "allCurrentFrontendBackendPrismaAndRemainingHarnessBytesIdenticalToQa3": true,
+  "onlyBrowserSelectorChanged": true,
+  "newCandidateFingerprint": "169c1104802e75b84b8db1c22a434e7f9152b3db3995358f424e8c9184912438",
+  "broadProofInheritedNotRerun": {
+    "frontendPass": 1480,
+    "backendPass": 1942,
+    "existingOptInSkips": 5,
+    "intakePass": 19
+  },
+  "all93ScopeHashesAnd26ContractsAlsoVerified": true
+}

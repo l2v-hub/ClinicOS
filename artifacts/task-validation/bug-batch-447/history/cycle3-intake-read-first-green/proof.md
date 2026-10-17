@@ -1,0 +1,1 @@
+Focused real PostgreSQL16 run12/12PASS, zero skipped, and exact owned child cleanup. First GREEN was followed only by stronger finally nesting (owned writer.close even if rollback fails) and explicit PID provenance logging in its regression; production bytes unchanged. Final full UX runner will rerun all12 tests on that final test source.

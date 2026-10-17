@@ -1,0 +1,22 @@
+{
+  "scopePaths": 94,
+  "contracts": 26,
+  "addedDiffPatternCounts": {
+    "unsafeRawSql": 0,
+    "dangerousHtml": 0,
+    "debugger": 0,
+    "materializedApiCredential": 0,
+    "consoleDebug": 2
+  },
+  "allProductionWholeFileHitsRequiringContext": {
+    "backend/src/routes/patients.ts": {
+      "unsafeRawSql": 0,
+      "dangerousHtml": 0,
+      "debugger": 0,
+      "materializedApiCredential": 0,
+      "consoleDebug": 6
+    }
+  },
+  "classification": "Added2 console.log calls are synthetic test/harness PID proofs. Six production route console.log hits are inherited baseline context, not introduced by this group. Existing route console.error is unchanged. Necessary raw SQL uses parameterized Prisma tagged queries; bounded validated database identifiers belong only to the owned QA runner. Pattern scans supplement source/HTTP/SQL review and do not certify authorization alone.",
+  "schemaMigrationsDependenciesProdEnvChanged": false
+}

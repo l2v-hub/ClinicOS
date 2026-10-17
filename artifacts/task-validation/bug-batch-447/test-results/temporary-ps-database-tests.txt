@@ -1,18 +1,25 @@
-✔ pause/continue and return persist; retries preserve exact history and valid dose receipts (1422.568624ms)
+✔ confirmed pain retains original JSON/presence and never exposes other patients or pending drafts (296.762958ms)
+✔ count limit admits exactly100 and returns a distinct error at101 while preserving therapies (121.697946ms)
+✔ UTF-8 JSON byte limit includes quotes and overflow never materializes pain in therapy projection (247.974846ms)
+✔ repeatable snapshot survives historical reconciliation between budget and pain read (124.848659ms)
+INTAKE_REVIEW_INTERLEAVING {"writerPid":105,"readerPid":103,"observedOwnedBlocking":true}
+✔ intake review restarts its read-only snapshot after an actual concurrent Patient row version (99.210963ms)
+✔ only declared transaction conflicts retry, with three fresh RepeatableRead attempts at most (1.97454ms)
+✔ pause/continue and return persist; retries preserve exact history and valid dose receipts (620.459658ms)
 PS_INTERLEAVING {"kind":"scheduled","initialChart":false,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
 PS_INTERLEAVING {"kind":"prn","initialChart":false,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
 PS_INTERLEAVING {"kind":"scheduled","initialChart":true,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
 PS_INTERLEAVING {"kind":"prn","initialChart":true,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
-✔ real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts (945.962107ms)
-✔ raw PostgreSQL serialization conflicts retry narrowly while unrelated query errors remain errors (2.020501ms)
-✔ exit decisions are explicit, confirmed and never accept client actor/time or mixed commands (5.875753ms)
-✔ managed hold requires matching immutable history; unknown/corrupt context is never permission to dose (1.4154ms)
-✔ ordinary writes retain managed history and active hold; explicit forge/erase/change is rejected (0.627634ms)
-ℹ tests 6
+✔ real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts (607.543507ms)
+✔ raw PostgreSQL serialization conflicts retry narrowly while unrelated query errors remain errors (1.503101ms)
+✔ exit decisions are explicit, confirmed and never accept client actor/time or mixed commands (2.689742ms)
+✔ managed hold requires matching immutable history; unknown/corrupt context is never permission to dose (1.296501ms)
+✔ ordinary writes retain managed history and active hold; explicit forge/erase/change is rejected (1.18961ms)
+ℹ tests 12
 ℹ suites 0
-ℹ pass 6
+ℹ pass 12
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 13264.368062
+ℹ duration_ms 12638.164803

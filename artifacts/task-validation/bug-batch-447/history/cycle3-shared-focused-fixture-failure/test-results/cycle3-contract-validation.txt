@@ -1,0 +1,1 @@
+CONTRACT VALIDO: /workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/artifacts/task-validation/bug-batch-447/task-contract.md
