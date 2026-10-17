@@ -1,0 +1,124 @@
+{
+  "id": "demo-source-configuration",
+  "issues": [],
+  "branch": "codex/demo-source-configuration",
+  "owner": "codex-root-2026-10-17",
+  "phase": "provider-blocked",
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "startedAt": "2026-10-17T10:15:52.665Z",
+      "sha": "44e2aaeabcc0583ff89b655774a5026546283f70"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "startedAt": "2026-10-17T11:00:31.829Z",
+      "reason": "NewindependentQA2 all5PASS:107+41tests,officialschema3/YAML/AST,actual19browser207assert,zeroerrors/credentialfindings,3sources/contracts3/history38exact. Rootreadfullreport/diff/actualPNG.",
+      "sha": "f48d8d70e257aa97fd6aac241d13eb803e7bcb92"
+    },
+    {
+      "round": 3,
+      "status": "passed",
+      "recordedAt": "2026-10-17T15:47:05.583Z",
+      "owner": "railway_source_diagnosis",
+      "reason": "Inspect-only candidate3 was reserved by its pre-implementation task contract; historical registration after frozen author and independent QA, not a retroactive model launch or budget reset.",
+      "pr": 491,
+      "sha": "1276cfe9f8dcf340d1baaf85088a29a577ff8d28",
+      "independentQaReportSha256": "b373389571e8908bbe115a36c5702403a9a5a52c9b14b6a5b177552a8f8df7ce"
+    }
+  ],
+  "reviews": [],
+  "baseSha": "b7194ac4dd185b3edc4f8d093c0505d0b4ef69ea",
+  "scope": [
+    ".github/workflows/configure-demo-source.yml",
+    "scripts/automation/configure-demo-source.mjs",
+    "scripts/automation/configure-demo-source.test.mjs"
+  ],
+  "rationale": "Existing operational configuration task extended by immutable addendum2 for exact missing GitHub trigger creation. No guard19 or maintenance470 edits/budget reset; protectedmain only; clinical release proof still required.",
+  "packetHashes": {
+    "operational-contract.md": "aa77b5a65e51d6c79a6c14b8a208d01e85c2e5dcbdefdec9b704ca55ae6d1559",
+    "operational-addendum-2-create-missing-trigger.md": "909fe83a3c1ed6ff228202bf28fc4c818bc4c4e71cf9d3f107a79678f4696d66",
+    "provider-constraint-clarification.md": "b2917f9d408b290f7f48d2f64c1bafb16209b7b2fc7beab2cc1b8fdff9e5207e"
+  },
+  "operationalOnly": true,
+  "sha": "f48d8d70e257aa97fd6aac241d13eb803e7bcb92",
+  "pr": {
+    "number": 484,
+    "url": "https://github.com/l2v-hub/ClinicOS/pull/484"
+  },
+  "independentQa": {
+    "attempt": 2,
+    "verdict": "READY FOR CODEX QA",
+    "report": "independent-qa-attempt-2/validation-report.md",
+    "reportSha256": "d2ffbcc833f1b607fd8c1ab1762998e77d89d7a69b06eae02bc6e8cee5a1caab",
+    "manifestSha256": "3fee438606b42c303ae269cc1d2772a6ea2b904cbb4fdda4e061ca38ab767378",
+    "candidateTests": 107,
+    "independentTests": 41,
+    "browserScenarios": 19,
+    "valueAssertions": 207,
+    "actualProviderOperation": false
+  },
+  "mergeSha": "d5d253f33e504f4259c874e5b03941074dc541ac",
+  "actualInspection": {
+    "runId": 39026327913,
+    "reviewedSha": "8124b1bc88c0f086b1ee328214f87f4802005d11",
+    "status": "success",
+    "outcome": "missing-trigger",
+    "inventorySha256": "bb0843673ebc593892cc8bdabddca75746f06676e0c141f3bb4ea0ee70d05a5f",
+    "proof": "validated aggregate GitHub job log",
+    "artifactDownload": "blocked-by-cloud-proxy",
+    "providerWrites": 0
+  },
+  "previousPr": {
+    "number": 482,
+    "url": "https://github.com/l2v-hub/ClinicOS/pull/482",
+    "mergeSha": "8124b1bc88c0f086b1ee328214f87f4802005d11"
+  },
+  "ciFailure": {
+    "run": 39028043893,
+    "sha": "87dfe795f7cc205291aee4bfc9e3ef9e887a3ae0",
+    "cause": "Unrelated concurrent global notes mailbox fixture expected57 actual58; original failure retained; no assertion waived or blind rerun",
+    "dependencyPr": 487
+  },
+  "verificationSourceCheckpoint": "87dfe795f7cc205291aee4bfc9e3ef9e887a3ae0",
+  "verificationDependency": {
+    "mergeSha": "6904b6d02180cf2efc989964b4d0dcf27274b050",
+    "pr": 487,
+    "source3AndContracts3Unchanged": true
+  },
+  "nativeCi": {
+    "run": 39031080487,
+    "status": "success",
+    "all6Required": true,
+    "realProvider": true
+  },
+  "activationSourceSha": "14dbcd353242b35a050c45cbed7978ac213edd62",
+  "evidenceSha": "e71fc4ff3f22d1384d96d1c2b23a699192c97a3b",
+  "actualVerification": {
+    "mainSha": "14dbcd353242b35a050c45cbed7978ac213edd62",
+    "inspectBeforeRun": 39032317392,
+    "inspectBeforeStatus": "success",
+    "createRun": 39032475284,
+    "createStatus": "failure",
+    "errorCode": "DEMO_SOURCE_API_REJECTED",
+    "technicalCause": "not exposed; not inferred",
+    "createDispatches": 1,
+    "inspectAfterRun": 39032761614,
+    "inspectAfterStatus": "success",
+    "inventoryDigest": "bb0843673ebc593892cc8bdabddca75746f06676e0c141f3bb4ea0ee70d05a5f",
+    "triggerCount": 0,
+    "completeInventory": true,
+    "inventoryUnchanged": true,
+    "mutationRetried": false
+  },
+  "topologyInspection": {
+    "pr": 491,
+    "status": "local-independent-qa-passed",
+    "nativeCi": "pending",
+    "claudeReview": "not-requested",
+    "operation": "inspect-only",
+    "actualProviderInvoked": false
+  }
+}
