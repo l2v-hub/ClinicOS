@@ -20,6 +20,7 @@ import {
   guardPageRows,
 } from '../ai/upload/pages/draft-mutations.js';
 import { saveReceipt } from '../ai/upload/pages/repository.js';
+import { sexFromCodiceFiscale } from '../lib/codice-fiscale.js';
 
 // ── Allergene sanitation (import seeding) ────────────────────────────────────
 // CLINICAL SAFETY: an `allergene` is a CONCISE allergen name, never a clinical narrative. Real
@@ -236,17 +237,25 @@ export function buildImportDraftData(
   const seeded: Record<string, unknown> = {};
 
   // 1. Anagrafica — always present (even if mostly empty).
+  // Explicit source values, including a contradiction with the CF, belong to the
+  // operator's review. Only an absent sex may receive this traceable suggestion.
+  const derivedSex = narrative.sex?.trim() ? null : sexFromCodiceFiscale(narrative.fiscalCode);
   const anagrafica: Record<string, unknown> = {
     firstName: narrative.firstName ?? '',
     lastName: narrative.lastName ?? '',
     dateOfBirth: narrative.dateOfBirth ?? '',
-    ...(narrative.sex ? { sex: narrative.sex } : {}),
+    ...(derivedSex ? { sex: derivedSex } : narrative.sex ? { sex: narrative.sex } : {}),
     ...(narrative.fiscalCode ? { codiceFiscale: narrative.fiscalCode } : {}),
     ...(narrative.phone ? { phone: narrative.phone } : {}),
     ...(narrative.email ? { email: narrative.email } : {}),
     ...(narrative.address ? { address: narrative.address } : {}),
   };
   seeded.anagrafica = anagrafica;
+  if (derivedSex) {
+    seeded._derivedFields = {
+      anagrafica: { sex: { source: 'codiceFiscale', value: derivedSex, reviewRequired: true } },
+    };
+  }
 
   // Keep the full source for review; populate prior history only from explicit labels.
   const pastHistory = importedPastHistory(narrative, rawSections);

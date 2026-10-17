@@ -90,7 +90,7 @@ export function IntakeIndex({
       </nav>
       <div className="intake-index__actions" data-testid="patient-intake-footer">
         {!ready ? null : n > 0 ? (
-          <details className="intake-index__missing" data-testid="intake-missing">
+          <details className="intake-index__missing" data-testid="intake-missing" open>
             <summary>
               Mancano {n} {n === 1 ? 'passaggio obbligatorio' : 'passaggi obbligatori'}
             </summary>

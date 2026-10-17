@@ -1,5 +1,4 @@
 import { intakeDemographicErrors } from '../../../lib/intakeDemographics';
-import { DemographicsStatus } from '../DemographicsStatus';
 // StepAnagrafica — controlled anagrafica form for the intake wizard.
 // Mirrors the field set of NewPatientModal's TabAnagrafica + referente section.
 // No fetches here — the parent IntakeWorkspace owns patchDraft.
@@ -46,6 +45,7 @@ interface StepAnagraficaProps {
   onChange: (v: AnagraficaData) => void;
   /** Set to true after the user has tried to advance past this step */
   submitAttempted?: boolean;
+  allowMissingBirthDate?: boolean;
 }
 
 function NpmCard({
@@ -176,7 +176,12 @@ function NpmField({
   );
 }
 
-export function StepAnagrafica({ value, onChange, submitAttempted = false }: StepAnagraficaProps) {
+export function StepAnagrafica({
+  value,
+  onChange,
+  submitAttempted = false,
+  allowMissingBirthDate = false,
+}: StepAnagraficaProps) {
   const sourceKeys = new Set<keyof AnagraficaData>([
     'firstName',
     'lastName',
@@ -225,10 +230,13 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
       onChange(next);
     };
 
-  const validationErrors = intakeDemographicErrors(value, true);
+  const validationErrors = intakeDemographicErrors(value, true, { allowMissingBirthDate });
   const errors = submitAttempted ? validationErrors : {};
 
-  const requiredCompleted = ['firstName', 'lastName', 'dateOfBirth', 'codiceFiscale'].filter(
+  const requiredFields = allowMissingBirthDate
+    ? ['firstName', 'lastName', 'codiceFiscale']
+    : ['firstName', 'lastName', 'dateOfBirth', 'codiceFiscale'];
+  const requiredCompleted = requiredFields.filter(
     (field) =>
       !validationErrors[field as 'firstName' | 'lastName' | 'dateOfBirth' | 'codiceFiscale'],
   ).length;
@@ -249,26 +257,23 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
 
   return (
     <>
-      <DemographicsStatus
-        value={value}
-        optionalFields={['phone']}
-        onEdit={(field) =>
-          document.querySelector<HTMLElement>(`[data-demographic-field="${field}"]`)?.focus()
-        }
-      />
-      <p className="form-hint">
-        Per registrare l’ingresso servono nome, cognome, codice fiscale e data di nascita. Tutti gli
-        altri dati sono facoltativi e possono essere completati successivamente.
-      </p>
       <NpmCard
         title="Dati personali"
         desc="Identità e dati necessari alla registrazione"
         status={
-          requiredCompleted === 4
+          requiredCompleted === requiredFields.length
             ? 'Dati minimi presenti'
-            : `${requiredCompleted}/4 necessari all’ingresso`
+            : allowMissingBirthDate
+              ? `${requiredCompleted}/3 necessari all’ingresso`
+              : `${requiredCompleted}/4 necessari all’ingresso`
         }
-        statusTone={requiredCompleted === 4 ? 'complete' : submitAttempted ? 'error' : 'progress'}
+        statusTone={
+          requiredCompleted === requiredFields.length
+            ? 'complete'
+            : submitAttempted
+              ? 'error'
+              : 'progress'
+        }
       >
         <div className="npm-grid npm-grid--identity">
           <NpmField label="Nome" path="anagrafica.firstName" required error={errors.firstName}>
@@ -292,9 +297,9 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
             />
           </NpmField>
           <NpmField
-            label="Data di nascita"
+            label={allowMissingBirthDate ? 'Data di nascita · consigliata' : 'Data di nascita'}
             path="anagrafica.dateOfBirth"
-            required
+            required={!allowMissingBirthDate}
             error={errors.dateOfBirth}
           >
             <input
@@ -305,18 +310,14 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
               onChange={f('dateOfBirth')}
             />
           </NpmField>
-          <NpmField
-            label="Sesso"
-            path="anagrafica.sex"
-            hint="Necessario per il calcolo automatico del codice fiscale"
-          >
+          <NpmField label="Sesso" path="anagrafica.sex">
             <select className="npm-input npm-select" value={value.sex ?? ''} onChange={f('sex')}>
               <option value="">— Seleziona —</option>
               <option value="M">Maschio</option>
               <option value="F">Femmina</option>
             </select>
           </NpmField>
-          <NpmField label="Comune di nascita" hint="Usato per calcolare il CF">
+          <NpmField label="Comune di nascita">
             <input
               className="npm-input"
               value={value.comuneNascita ?? ''}
@@ -324,12 +325,12 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
               placeholder="Roma"
             />
           </NpmField>
-          <NpmField label="Provincia di nascita" hint="Sigla provincia; EE per l'estero">
+          <NpmField label="Provincia di nascita">
             <input
               className="npm-input"
               value={value.provinciaNascita ?? ''}
               onChange={f('provinciaNascita')}
-              placeholder="MI"
+              placeholder="MI · EE estero"
               maxLength={2}
               style={{ textTransform: 'uppercase' }}
             />
@@ -343,7 +344,7 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
             hint={
               value.codiceFiscaleOrigine === 'auto'
                 ? 'Calcolato automaticamente dai dati anagrafici; puoi correggerlo manualmente'
-                : 'Si compila automaticamente con nome, cognome, sesso, data e luogo di nascita'
+                : undefined
             }
           >
             <input
@@ -364,7 +365,7 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
               style={{ textTransform: 'uppercase' }}
             />
           </NpmField>
-          <span className="sr-only" role="status" aria-live="polite">
+          <span className="ds-sr-only" role="status" aria-live="polite">
             {value.codiceFiscaleOrigine === 'auto'
               ? `Codice fiscale compilato automaticamente: ${value.codiceFiscale}`
               : !value.codiceFiscale

@@ -28,6 +28,7 @@ export interface DraftResponse {
   id: string;
   data: Record<string, unknown>;
   status?: string;
+  source?: 'manual' | 'import';
   confirmedPatientId?: string | null;
   version?: number;
   /** Job d'import a pagine collegato alla bozza (card Documenti). */
@@ -76,6 +77,16 @@ function buildHeaders(op?: OperatorHeaders): Record<string, string> {
   if (op?.operatorId && !headers['X-Operator-Id']) headers['X-Operator-Id'] = op.operatorId;
   if (op?.operatorRole && !headers['X-Operator-Role']) headers['X-Operator-Role'] = op.operatorRole;
   return headers;
+}
+
+export async function listDrafts(op?: OperatorHeaders): Promise<DraftResponse[]> {
+  const response = await fetch(`${API_URL}/intake/drafts`, {
+    headers: buildHeaders(op),
+    cache: 'no-store',
+  });
+  if (!response.ok)
+    throw new DraftApiError('Impossibile caricare le bozze. Riprova.', response.status);
+  return response.json() as Promise<DraftResponse[]>;
 }
 
 export async function createDraft(
@@ -143,7 +154,11 @@ export async function createDraftFromImport(
   });
   if (!res.ok) {
     const e = await res.json().catch(() => ({}));
-    throw new Error((e as { error?: string }).error ?? `import draft failed: ${res.status}`);
+    throw new DraftApiError(
+      (e as { error?: string }).error ?? `import draft failed: ${res.status}`,
+      res.status,
+      (e as { code?: string }).code,
+    );
   }
   return res.json() as Promise<DraftResponse>;
 }

@@ -12,12 +12,14 @@ const text = (value: unknown) => (typeof value === 'string' ? value.trim() : '')
 export function intakeDemographicErrors(
   value: Demographics,
   requireIdentity = false,
+  { allowMissingBirthDate = false }: { allowMissingBirthDate?: boolean } = {},
 ): Partial<Record<DemographicField, string>> {
   const errors: Partial<Record<DemographicField, string>> = {};
   if (!text(value.firstName)) errors.firstName = 'Nome obbligatorio';
   if (!text(value.lastName)) errors.lastName = 'Cognome obbligatorio';
   if (missingValue(value.dateOfBirth)) {
-    if (requireIdentity) errors.dateOfBirth = 'Data di nascita obbligatoria';
+    if (requireIdentity && !allowMissingBirthDate)
+      errors.dateOfBirth = 'Data di nascita obbligatoria';
   } else if (!birthDateValue(value.dateOfBirth))
     errors.dateOfBirth = 'Inserisci una data di nascita valida e non futura';
   if (missingValue(value.codiceFiscale)) {
