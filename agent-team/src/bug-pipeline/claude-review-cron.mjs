@@ -9,12 +9,38 @@ import { createRunner } from './process.mjs';
 import { createGitHub } from './github.mjs';
 import { validateState, feedbackFingerprint } from './contracts.mjs';
 import { externalReport } from './external-review.mjs';
+import { createIssueReviewCommunication } from './issue-review-communication.mjs';
 import { sanitizeText } from '../core/sanitize.mjs';
 import { runBugReview } from '../../../scripts/quality-gate/claude-bug-review.mjs';
 import { reviewBugSetup } from '../../../scripts/quality-gate/review-bug-setup.mjs';
 
 const REPO = 'l2v-hub/ClinicOS';
 const FILE = fileURLToPath(import.meta.url);
+
+export function claudeFailureCode(result) {
+  if (!result?.ok) {
+    if (result?.error === 'timeout') return 'claude-timeout';
+    if (result?.error === 'output-limit') return 'claude-output-limit';
+    return 'claude-nonzero-exit';
+  }
+  let envelope;
+  try {
+    envelope = JSON.parse(result.stdout);
+  } catch {
+    return 'claude-invalid-json';
+  }
+  if (envelope?.subtype === 'error_max_turns') return 'claude-turn-limit';
+  if (envelope?.is_error) {
+    return (
+      {
+        authentication_error: 'claude-authentication-error',
+        rate_limit_error: 'claude-rate-limit',
+        overloaded_error: 'claude-overloaded',
+      }[envelope.error?.type] ?? 'claude-execution-error'
+    );
+  }
+  return envelope?.structured_output ? null : 'claude-missing-structured-report';
+}
 
 function assertCandidate(batch, feedback) {
   assert.equal(feedback.state, 'OPEN');
@@ -26,13 +52,22 @@ function assertCandidate(batch, feedback) {
   assert.equal(feedback.baseRef, 'main');
 }
 
-export async function reviewExternalBatch({ state, batch, store, github, cwd, run }) {
+export async function reviewExternalBatch({
+  state,
+  batch,
+  store,
+  github,
+  cwd,
+  run,
+  communication = createIssueReviewCommunication({ github, cwd, run, readReport: externalReport }),
+}) {
   validateState(state, REPO);
   assert.equal(batch.externalReview?.subjectSha, batch.sha);
   if (!['requested', 'finished'].includes(batch.externalReview.status))
     throw new Error(
       'External review is not available; an interrupted running attempt requires recovery',
     );
+  await communication.mirrorFeedback(batch);
   let current = await github.reviewFeedback(batch.pr.number);
   assertCandidate(batch, current);
   const checkIssues = async () => {
@@ -80,6 +115,7 @@ export async function reviewExternalBatch({ state, batch, store, github, cwd, ru
     });
     const baseline = feedbackFingerprint(current);
     let reserved = false;
+    let failureCode = 'review-validation-failed';
     try {
       await runBugReview({
         cwd,
@@ -109,8 +145,24 @@ export async function reviewExternalBatch({ state, batch, store, github, cwd, ru
             state.updatedAt = new Date().toISOString();
             await store.save(state); // CAS reservation BEFORE inference; conflicts prevent the model call.
             reserved = true;
+            // Notifications are recoverable by the sibling sync. A transient issue write
+            // must not waste an already reserved inference attempt.
+            await communication.publishState(batch).catch(() => {});
           }
-          return run(options);
+          try {
+            const result = await run(options);
+            if (options.command === 'claude' && options.args.includes('--print'))
+              failureCode = claudeFailureCode(result) ?? 'review-validation-failed';
+            return result;
+          } catch (error) {
+            if (
+              options.command === 'claude' &&
+              options.args.includes('--print') &&
+              ['ENOENT', 'EACCES'].includes(error?.code)
+            )
+              failureCode = 'claude-spawn-failed';
+            throw error;
+          }
         },
       });
     } finally {
@@ -129,11 +181,13 @@ export async function reviewExternalBatch({ state, batch, store, github, cwd, ru
           batch.reviewReports[name] = content;
         }
         batch.externalReview.status = content ? 'finished' : 'failed';
+        if (!content) batch.externalReview.failureCode = failureCode;
         batch.phase = content ? 'waiting-review' : 'blocked';
         if (!content)
           batch.reason = 'External Claude execution failed; its reserved attempt remains spent';
         state.updatedAt = new Date().toISOString();
         await store.save(state);
+        await communication.publishState(batch).catch(() => {});
       }
     }
   }
@@ -167,13 +221,8 @@ export async function reviewExternalBatch({ state, batch, store, github, cwd, ru
   batch.phase = 'waiting-review';
   state.updatedAt = new Date().toISOString();
   await store.save(state);
-  // A source-issue comment wakes Codex after the remote report is durable. Scheduled polling
-  // also reconciles it if this notification fails; no model retry is needed.
-  for (const number of batch.issues)
-    await github.commentIssue(
-      number,
-      `Claude Code ha terminato la review ${batch.reviews.length}/4 di PR ${batch.pr.url} su \`${batch.sha}\`: **${review.verdict}**. Codex può leggere il report e proseguire dal registro esistente.`,
-    );
+  // Issue comments carry findings and wake Codex only after the report is durable.
+  await communication.publishState(batch);
   return { status: 'published', verdict: review.verdict, round: batch.reviews.length };
 }
 

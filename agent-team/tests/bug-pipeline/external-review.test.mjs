@@ -4,11 +4,18 @@ import path from 'node:path';
 import os from 'node:os';
 import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
-import { externalReviewStep } from '../../src/bug-pipeline/external-review.mjs';
-import { reviewExternalBatch } from '../../src/bug-pipeline/claude-review-cron.mjs';
+import { externalReviewStep as actualExternalReviewStep } from '../../src/bug-pipeline/external-review.mjs';
+import {
+  reviewExternalBatch as actualReviewExternalBatch,
+  claudeFailureCode,
+} from '../../src/bug-pipeline/claude-review-cron.mjs';
 import { runProcess } from '../../src/adapters/process-runner.mjs';
 import { feedbackFingerprint } from '../../src/bug-pipeline/contracts.mjs';
 import { doctor } from '../../src/bug-pipeline/cli.mjs';
+
+const communication = { publishState: async () => {}, mirrorFeedback: async () => {} };
+const externalReviewStep = (args) => actualExternalReviewStep({ communication, ...args });
+const reviewExternalBatch = (args) => actualReviewExternalBatch({ communication, ...args });
 
 const repo = 'l2v-hub/ClinicOS';
 const sha = 'a'.repeat(40);
@@ -364,4 +371,129 @@ test('closed source issues block the external harness and Codex before review or
   });
   assert.match(reason, /closed or cancelled/);
   assert.equal(f.batch.phase, 'blocked');
+});
+
+test('new cron records bounded failure codes and publishes failure state without exposing local output or retrying inference', async (t) => {
+  const f = await workerFixture(t);
+  const notifications = [];
+  await assert.rejects(
+    reviewExternalBatch({
+      ...f,
+      communication: {
+        mirrorFeedback: async () => {},
+        publishState: async (batch) =>
+          notifications.push({
+            phase: batch.phase,
+            status: batch.externalReview.status,
+            code: batch.externalReview.failureCode,
+          }),
+      },
+      run: async (call) =>
+        call.command === 'claude' && call.args.includes('--print')
+          ? {
+              ok: false,
+              code: 1,
+              error: 'timeout',
+              stderr: 'private diagnostic must never leave the host',
+            }
+          : f.run(call),
+    }),
+  );
+  assert.equal(f.batch.reviews.length, 1);
+  assert.equal(f.batch.reviews[0].status, 'failed');
+  assert.equal(f.batch.externalReview.failureCode, 'claude-timeout');
+  assert.equal(f.batch.phase, 'blocked');
+  assert.deepEqual(
+    notifications.map((item) => item.status),
+    ['running', 'failed'],
+  );
+  assert.ok(!JSON.stringify(f.batch).includes('private diagnostic'));
+  await assert.rejects(reviewExternalBatch(f), /not available/);
+  assert.equal(f.batch.reviews.length, 1);
+});
+
+test('failure classification accepts only fixed result codes and never copies arbitrary model output', () => {
+  const cases = [
+    [{ ok: false, error: 'timeout' }, 'claude-timeout'],
+    [{ ok: false, error: 'output-limit' }, 'claude-output-limit'],
+    [{ ok: false, error: 'secret raw error', code: 1 }, 'claude-nonzero-exit'],
+    [{ ok: true, stdout: 'not json' }, 'claude-invalid-json'],
+    [{ ok: true, stdout: '{"subtype":"error_max_turns"}' }, 'claude-turn-limit'],
+    [
+      { ok: true, stdout: '{"is_error":true,"error":{"type":"authentication_error"}}' },
+      'claude-authentication-error',
+    ],
+    [
+      { ok: true, stdout: '{"is_error":true,"error":{"type":"rate_limit_error"}}' },
+      'claude-rate-limit',
+    ],
+    [
+      { ok: true, stdout: '{"is_error":true,"error":{"type":"overloaded_error"}}' },
+      'claude-overloaded',
+    ],
+    [
+      { ok: true, stdout: '{"is_error":true,"error":{"type":"raw secret"}}' },
+      'claude-execution-error',
+    ],
+    [{ ok: true, stdout: '{}' }, 'claude-missing-structured-report'],
+    [{ ok: true, stdout: '{"structured_output":{}}' }, null],
+  ];
+  for (const [input, expected] of cases) assert.equal(claudeFailureCode(input), expected);
+});
+
+test('transient issue-notification failure does not waste or retry the reserved model call', async (t) => {
+  const f = await workerFixture(t);
+  let notifications = 0;
+  await reviewExternalBatch({
+    ...f,
+    communication: {
+      mirrorFeedback: async () => {},
+      publishState: async () => {
+        notifications++;
+        if (notifications < 3) throw new Error('Synthetic notification outage');
+      },
+    },
+  });
+  assert.equal(f.calls(), 1);
+  assert.equal(f.batch.reviews.length, 1);
+  assert.equal(f.batch.externalReview.status, 'published');
+  assert.equal(notifications, 3);
+});
+
+test('issue notification outage after reserving a correction does not spend another implementation attempt or block real fixes', async (t) => {
+  const f = await workerFixture(t, { verdict: 'changes-requested' });
+  await reviewExternalBatch(f);
+  const phases = [];
+  await externalReviewStep({
+    repo,
+    batch: f.batch,
+    gh: f.github,
+    communication: {
+      mirrorFeedback: async () => {},
+      publishState: async () => {
+        throw new Error('Synthetic notification outage');
+      },
+    },
+    workspace: {
+      prepare: async () => {},
+      execute: async () => {
+        phases.push('fix');
+        return { status: 'implemented' };
+      },
+      verify: async () => phases.push('test'),
+      simplify: async () => ({ status: 'implemented' }),
+      qa: async () => ({ status: 'verified' }),
+      checkpoint: async () => 'b'.repeat(40),
+      publish: async () => phases.push('publish'),
+      issueEvidence: async () => 'Synthetic evidence',
+    },
+    save: async () => {},
+    report: async () => {},
+    block: async (_, reason) => assert.fail(reason),
+  });
+  assert.deepEqual(phases, ['fix', 'test', 'test', 'publish']);
+  assert.equal(f.batch.implementation.length, 2);
+  assert.equal(f.batch.implementation.at(-1).status, 'passed');
+  assert.equal(f.batch.reviews.length, 1);
+  assert.equal(f.batch.externalReview.status, 'requested');
 });

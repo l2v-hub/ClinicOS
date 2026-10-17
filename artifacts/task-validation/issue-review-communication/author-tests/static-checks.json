@@ -1,0 +1,58 @@
+[
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/src/bug-pipeline/external-review.mjs"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/src/bug-pipeline/claude-review-cron.mjs"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/src/bug-pipeline/issue-review-communication.mjs"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/src/bug-pipeline/issue-review-sync.mjs"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/tests/bug-pipeline/external-review.test.mjs"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0
+  }
+]

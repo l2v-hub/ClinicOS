@@ -1,0 +1,16 @@
+{
+  "decision": "ROOT ACCEPTS independent QA2; required native CI and actual activation pending",
+  "sourceFiles": 7,
+  "contracts": 4,
+  "regression": {
+    "passed": 625,
+    "windowsSkipped": 3
+  },
+  "independentHttpProbes": 21,
+  "browserScenarios": 13,
+  "qaArtifactHashesVerified": 47,
+  "reportSha256": "499055f405139b2fcde734b86050a4d5e87077e56d1c4116b597ac8531ed6957",
+  "manifestSha256": "d8ddfa5d6a6d2094f6fd3049bfcfcc8326a7b0886583b593fc6d9d53a0e15daa",
+  "reviewed": "Complete7source diff, contracts, fullQA2report, all47artifact hashes and actualPNG; G19byteexact",
+  "limits": "No actual Claude report repaired, no model/review restart, no release authorization. Source issue notification and actual PAT event still require trusted-main activation."
+}

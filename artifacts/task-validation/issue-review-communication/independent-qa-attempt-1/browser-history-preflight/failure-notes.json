@@ -1,0 +1,13 @@
+{
+  "candidateSourceChanged": false,
+  "preflights": [
+    {
+      "phase": "before first page",
+      "cause": "Playwright ffmpeg default cache absent; existing system ffmpeg cache supplied on retry"
+    },
+    {
+      "phase": "QA surface no-op authorization scenario",
+      "cause": "Harness expected rejection although idempotent sync required no write; force a pending label transition to exercise authorization before mutation"
+    }
+  ]
+}

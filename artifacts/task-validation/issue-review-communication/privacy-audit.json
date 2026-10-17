@@ -1,0 +1,10 @@
+{
+  "sourceAndEvidenceFiles": 23,
+  "bytes": 240777,
+  "realCredentialOrSignedSessionFindings": [],
+  "explicitSyntheticRedactionFixtures": 1,
+  "rawIssueBodiesCopied": false,
+  "patientDataOrProviderCallsUsed": false,
+  "secretEnvironmentRemovedForRegression": true,
+  "liveProviderExecutablesDeniedForRegression": true
+}

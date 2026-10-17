@@ -1,0 +1,89 @@
+{
+  "transport": "actual loopback HTTP; no external requests or models",
+  "results": [
+    {
+      "name": "actual loopback transport projects all cohort labels and idempotent comments without state writes",
+      "status": "PASS"
+    },
+    {
+      "name": "authorized source feedback mirrored and acknowledged once; hostile author ignored",
+      "status": "PASS"
+    },
+    {
+      "name": "actual existing correction path validates simplifies QA publishes new SHA and requests next bounded review",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sibling before any write rejects entire cohort",
+      "status": "PASS"
+    },
+    {
+      "name": "fork and exact SHA substitution are rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "missing hashed report does not manufacture approval",
+      "status": "PASS"
+    },
+    {
+      "name": "old installed worker failed attempt remains blocked spent and idempotent",
+      "status": "PASS"
+    },
+    {
+      "name": "write stops if bridge role revoked during its own cohort awaits",
+      "status": "PASS"
+    },
+    {
+      "name": "source edit during final cohort guard prevents stale mirror publication",
+      "status": "PASS"
+    },
+    {
+      "name": "source author revoked during final cohort read rejects before mirror",
+      "status": "PASS"
+    },
+    {
+      "name": "source deletion during final cohort read rejects before mirror",
+      "status": "PASS"
+    },
+    {
+      "name": "source author revoked during final actual comment read rejects before mirror",
+      "status": "PASS"
+    },
+    {
+      "name": "PR head changed during cohort read rejects before any label",
+      "status": "PASS"
+    },
+    {
+      "name": "durable reassignment during cohort read rejects before any label",
+      "status": "PASS"
+    },
+    {
+      "name": "historical oversized feedback skipped but fresh oversized feedback fails closed",
+      "status": "PASS"
+    },
+    {
+      "name": "one source digest remains deduplicated across candidate changes and refresh",
+      "status": "PASS"
+    },
+    {
+      "name": "monotonic guard older than60 seconds rejects all writes",
+      "status": "PASS"
+    },
+    {
+      "name": "backwards guard clock rejects all writes",
+      "status": "PASS"
+    },
+    {
+      "name": "own marker forged by outside author cannot count as bridge publication",
+      "status": "PASS"
+    },
+    {
+      "name": "publication redacts synthetic credential/contact fields and quotes injection without acting",
+      "status": "PASS"
+    },
+    {
+      "name": "tampering structured hashed report never creates approved label",
+      "status": "PASS"
+    }
+  ]
+}

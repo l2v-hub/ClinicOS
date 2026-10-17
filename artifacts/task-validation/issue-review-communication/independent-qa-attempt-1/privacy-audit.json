@@ -1,0 +1,14 @@
+{
+  "scannedFiles": 63,
+  "zipFiles": 2,
+  "zipMembersCRCValidated": 88,
+  "highConfidenceCredentialFindings": [],
+  "actualPHI": "none; only synthetic code-review fixtures; no patient or database reads",
+  "externalActions": "none; loopback HTTP fixture only",
+  "newDependencies": 0,
+  "borrowedDependencyLinksRemoved": true,
+  "remainingSecurityFindings": [
+    "SEC-1 application policy authorization race",
+    "COR-2 stale source publication race"
+  ]
+}

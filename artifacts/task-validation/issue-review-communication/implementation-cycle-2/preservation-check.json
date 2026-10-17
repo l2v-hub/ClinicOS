@@ -1,0 +1,15 @@
+{
+  "guardSourcesUnchanged": 19,
+  "oldSourcesArchivedExact": 7,
+  "oldAuthorProofsUnchanged": 20,
+  "qa1FilesUnchanged": 45,
+  "originalContractsUnchanged": 3,
+  "frozenContractsNow": 4,
+  "changedSinceAttempt1": [
+    "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs"
+  ],
+  "qa1RedStillPresent": true,
+  "qa1RedResultsSha256": "a60bfe7126d7e4d623145196071798f0ac8b1e36e3a2fe5e13243a2282115b3a",
+  "qa1ArtifactManifestSha256": "d333ba820f4da91c6005ed009323a0e879ad7e64561865ee4e814d51f18d0026"
+}

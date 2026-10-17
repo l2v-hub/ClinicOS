@@ -1,0 +1,3 @@
+#!/bin/sh
+printf "QA_UNEXPECTED_PROVIDER_COMMAND\n" >&2
+exit 99

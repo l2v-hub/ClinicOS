@@ -1,0 +1,11 @@
+{
+  "files": 91,
+  "zipMembersInspected": 88,
+  "bytesInspected": 25662911,
+  "realCredentialPrivateKeySignedSessionFindings": [],
+  "explicitSyntheticRedactionFixtureMatches": 2,
+  "realPatientDataUsed": false,
+  "rawIssueBodiesCopied": false,
+  "externalGitHubProviderModelCalls": 0,
+  "actualNetworkForCorrectedReplay": "loopback HTTP only"
+}
