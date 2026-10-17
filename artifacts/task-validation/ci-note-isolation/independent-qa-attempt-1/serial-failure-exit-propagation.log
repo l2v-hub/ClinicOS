@@ -1,0 +1,26 @@
+run-node-tests: running 2 test file(s) via node --import tsx --test
+✔ concurrent passes (0.934851ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 343.552103
+run-node-tests: isolated pass for 1 global-database suite(s)
+✖ src/routes/__tests__/notes-privacy.test.ts (280.448341ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 294.704935
+
+✖ failing tests:
+
+test at src/routes/__tests__/notes-privacy.test.ts:1:1
+✖ src/routes/__tests__/notes-privacy.test.ts (280.448341ms)
+  'test failed'

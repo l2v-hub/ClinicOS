@@ -1,0 +1,11 @@
+run-node-tests: running 2 test file(s) via node --import tsx --test
+✔ frontend 0 retains defaults (1.9369ms)
+✔ frontend 1 retains defaults (71.017238ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 571.49317

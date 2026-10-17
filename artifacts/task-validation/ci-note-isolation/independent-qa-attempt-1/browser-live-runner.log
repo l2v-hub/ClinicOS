@@ -1,0 +1,20 @@
+run-node-tests: running 2 test file(s) via node --import tsx --test
+✔ producer commits synthetic shared broadcast (122.750801ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 507.928649
+run-node-tests: isolated pass for 1 global-database suite(s)
+✔ mailbox reads after producer completion (1.246515ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 348.287917

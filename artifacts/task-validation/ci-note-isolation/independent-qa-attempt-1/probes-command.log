@@ -1,0 +1,294 @@
+{
+  "status": "PASS",
+  "sourceHash": "e885289d27cc6c315f8fb252e367f7062243ce2117625383106eae486805713f",
+  "independentRealRunnerProbes": 11,
+  "totalExecutedChildTests": 27,
+  "existingNinePreserved": [
+    "src/ai/__tests__/intake-tinetti-db.test.ts",
+    "src/assessments/__tests__/catalog-db.test.ts",
+    "src/roster/__tests__/order-key-db.test.ts",
+    "src/roster/__tests__/roster-pagination-db.test.ts",
+    "src/roster/__tests__/preferences-db.test.ts",
+    "src/patients/__tests__/alphabetical-pages-db.test.ts",
+    "src/patients/__tests__/room-filter-db.test.ts",
+    "src/patients/__tests__/diary-reading-db.test.ts",
+    "src/patients/__tests__/diary-unread-queue-db.test.ts"
+  ],
+  "globalReaderAdded": "src/routes/__tests__/notes-privacy.test.ts",
+  "fixtureBodiesIdenticalAcrossOldRedAndNewGreen": true,
+  "fixtureCleanupCompleted": true,
+  "networkOrDatabaseAccess": false,
+  "results": [
+    {
+      "label": "independent-old-red",
+      "exit": 1,
+      "executedTests": 2,
+      "events": [
+        {
+          "kind": "writer-start",
+          "pid": 719409
+        },
+        {
+          "kind": "reader-check",
+          "pid": 719410
+        },
+        {
+          "kind": "writer-end",
+          "pid": 719409
+        }
+      ],
+      "isolatedSuites": 0
+    },
+    {
+      "label": "independent-new-green",
+      "exit": 0,
+      "executedTests": 2,
+      "events": [
+        {
+          "kind": "writer-start",
+          "pid": 719471
+        },
+        {
+          "kind": "writer-end",
+          "pid": 719471
+        },
+        {
+          "kind": "reader-check",
+          "pid": 719558
+        }
+      ],
+      "isolatedSuites": 1
+    },
+    {
+      "label": "all-original-nine-plus-notes",
+      "exit": 0,
+      "executedTests": 13,
+      "events": [
+        {
+          "kind": "writer-0-start",
+          "pid": 719595
+        },
+        {
+          "kind": "writer-1-start",
+          "pid": 719596
+        },
+        {
+          "kind": "writer-2-start",
+          "pid": 719597
+        },
+        {
+          "kind": "writer-0-end",
+          "pid": 719595
+        },
+        {
+          "kind": "writer-1-end",
+          "pid": 719596
+        },
+        {
+          "kind": "writer-2-end",
+          "pid": 719597
+        },
+        {
+          "kind": "global-0-start",
+          "pid": 719657
+        },
+        {
+          "kind": "global-0-end",
+          "pid": 719657
+        },
+        {
+          "kind": "global-1-start",
+          "pid": 719681
+        },
+        {
+          "kind": "global-1-end",
+          "pid": 719681
+        },
+        {
+          "kind": "global-5-start",
+          "pid": 719700
+        },
+        {
+          "kind": "global-5-end",
+          "pid": 719700
+        },
+        {
+          "kind": "global-7-start",
+          "pid": 719720
+        },
+        {
+          "kind": "global-7-end",
+          "pid": 719720
+        },
+        {
+          "kind": "global-8-start",
+          "pid": 719741
+        },
+        {
+          "kind": "global-8-end",
+          "pid": 719741
+        },
+        {
+          "kind": "global-6-start",
+          "pid": 719761
+        },
+        {
+          "kind": "global-6-end",
+          "pid": 719761
+        },
+        {
+          "kind": "global-2-start",
+          "pid": 719781
+        },
+        {
+          "kind": "global-2-end",
+          "pid": 719781
+        },
+        {
+          "kind": "global-4-start",
+          "pid": 719809
+        },
+        {
+          "kind": "global-4-end",
+          "pid": 719809
+        },
+        {
+          "kind": "global-3-start",
+          "pid": 719840
+        },
+        {
+          "kind": "global-3-end",
+          "pid": 719840
+        },
+        {
+          "kind": "global-9-start",
+          "pid": 719860
+        },
+        {
+          "kind": "global-9-end",
+          "pid": 719860
+        }
+      ],
+      "isolatedSuites": 10
+    },
+    {
+      "label": "frontend-original",
+      "exit": 0,
+      "executedTests": 2,
+      "events": [
+        {
+          "kind": "frontend-0-start",
+          "pid": 719893
+        },
+        {
+          "kind": "frontend-1-start",
+          "pid": 719894
+        },
+        {
+          "kind": "frontend-1-end",
+          "pid": 719894
+        },
+        {
+          "kind": "frontend-0-end",
+          "pid": 719893
+        }
+      ],
+      "isolatedSuites": 0
+    },
+    {
+      "label": "frontend-candidate",
+      "exit": 0,
+      "executedTests": 2,
+      "events": [
+        {
+          "kind": "frontend-1-start",
+          "pid": 719967
+        },
+        {
+          "kind": "frontend-0-start",
+          "pid": 719966
+        },
+        {
+          "kind": "frontend-0-end",
+          "pid": 719966
+        },
+        {
+          "kind": "frontend-1-end",
+          "pid": 719967
+        }
+      ],
+      "isolatedSuites": 0
+    },
+    {
+      "label": "explicit-environment-retained",
+      "exit": 0,
+      "executedTests": 1,
+      "events": [
+        {
+          "kind": "explicit-preserved",
+          "pid": 720019
+        }
+      ],
+      "isolatedSuites": 0
+    },
+    {
+      "label": "concurrent-failure-exit-propagation",
+      "exit": 1,
+      "executedTests": 2,
+      "events": [
+        {
+          "kind": "concurrent-failure",
+          "pid": 720052
+        },
+        {
+          "kind": "serial-executed",
+          "pid": 720078
+        }
+      ],
+      "isolatedSuites": 1
+    },
+    {
+      "label": "serial-failure-exit-propagation",
+      "exit": 1,
+      "executedTests": 2,
+      "events": [
+        {
+          "kind": "concurrent-passed",
+          "pid": 720112
+        },
+        {
+          "kind": "serial-failure",
+          "pid": 720138
+        }
+      ],
+      "isolatedSuites": 1
+    },
+    {
+      "label": "existing-nonbackend-isolation-retained",
+      "exit": 0,
+      "executedTests": 1,
+      "events": [
+        {
+          "kind": "existing-isolation",
+          "pid": 720171
+        }
+      ],
+      "isolatedSuites": 1
+    },
+    {
+      "label": "empty-discovery-explicit-no-tests",
+      "exit": 0,
+      "executedTests": 0,
+      "events": [],
+      "isolatedSuites": 0,
+      "acceptedAsTestCoverage": false
+    },
+    {
+      "label": "missing-source-directory-fails",
+      "exit": 1,
+      "executedTests": 0,
+      "events": [],
+      "isolatedSuites": 0
+    }
+  ]
+}

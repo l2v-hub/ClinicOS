@@ -1,0 +1,32 @@
+run-node-tests: running 2 test file(s) via node --import tsx --test
+✖ global mailbox assertion waits for concurrent writers (4.491022ms)
+✔ synthetic shared broadcast writer finishes (32.145603ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 431.503803
+
+✖ failing tests:
+
+test at src/routes/__tests__/notes-privacy.test.ts:2:963
+✖ global mailbox assertion waits for concurrent writers (4.491022ms)
+  AssertionError [ERR_ASSERTION]: global assertions must follow completed shared-state writers
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/tmp/clinicos-ci-notes-proof-oktX2y/original-red/backend/src/routes/__tests__/notes-privacy.test.ts:1:448)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

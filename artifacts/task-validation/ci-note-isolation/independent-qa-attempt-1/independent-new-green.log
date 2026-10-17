@@ -1,0 +1,20 @@
+run-node-tests: running 2 test file(s) via node --import tsx --test
+✔ shared writer finishes (478.36053ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 977.019652
+run-node-tests: isolated pass for 1 global-database suite(s)
+✔ shared reader requires completed writer (2.297867ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 899.292196

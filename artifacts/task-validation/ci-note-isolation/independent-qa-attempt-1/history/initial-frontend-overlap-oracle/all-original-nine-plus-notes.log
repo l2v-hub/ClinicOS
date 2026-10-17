@@ -1,0 +1,31 @@
+run-node-tests: running 13 test file(s) via node --import tsx --test
+✔ concurrent producer 0 (183.123851ms)
+✔ concurrent producer 1 (183.534646ms)
+✔ concurrent producer 2 (181.930473ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 733.475906
+run-node-tests: isolated pass for 10 global-database suite(s)
+✔ serial global suite 0 (28.077617ms)
+✔ serial global suite 1 (26.601706ms)
+✔ serial global suite 5 (27.065513ms)
+✔ serial global suite 7 (27.224146ms)
+✔ serial global suite 8 (28.008472ms)
+✔ serial global suite 6 (27.7485ms)
+✔ serial global suite 2 (28.334308ms)
+✔ serial global suite 4 (26.693643ms)
+✔ serial global suite 3 (31.915492ms)
+✔ serial global suite 9 (28.976271ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4034.456605
