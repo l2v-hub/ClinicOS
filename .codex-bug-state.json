@@ -2757,7 +2757,8 @@
         "approved-plan-cycle-2-main-integrated.json": "758fe2560b5c086a8b1520aed6a7813081995717ef9f67f0e096d64fd093e1b1",
         "implementation-cycle-3-session-isolation.md": "6da4a95dd2df7911ee786b45d06ea60e0fc1a170c7516a95e7ffedd7d7f6f2b4",
         "scope-amendment-14-intake-read-serialization.md": "94e0338277725a1e64955fb75fe96bc530cbe5fe0ce4504cc467dd1ce4c7a181",
-        "approved-plan-cycle-3-intake-read.json": "7c6feb931c84f97351290aeca92cfe5d7b62d2ff93060267788c953022828165"
+        "approved-plan-cycle-3-intake-read.json": "7c6feb931c84f97351290aeca92cfe5d7b62d2ff93060267788c953022828165",
+        "runtime-amendment-15-focused-browser-isolation.md": "10e5add9cbe2ec236db7ec39c969184bf1d8c4aa78ca54403b33aaae73eb2573"
       },
       "baseSha": "05fd62363d89573d6e2449235a7499cc855434cd",
       "plan": {
@@ -4002,7 +4003,7 @@
       "rationale": "Actual requiredCI global broadcast test interference. One existing test runner list only; all app/tests/G19 untouched; separate new operation not exhausted guard retry."
     }
   ],
-  "updatedAt": "2026-10-17T11:32:26.311Z",
+  "updatedAt": "2026-10-17T11:41:58.730Z",
   "triageQueue": {
     "issues": [
       485,
