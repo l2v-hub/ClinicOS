@@ -1,0 +1,9 @@
+# Actual demo run39020438022
+
+Status: BLOCKED, not complete. Actual authorized sourceSHA101719920ea1572724e93b51ac497c05b3e73555. Run https://github.com/l2v-hub/ClinicOS/actions/runs/39020438022. SQL cleanup committed and independent43-table inventory confirms every30clinical/import/mixed target zero. Deleted1533audit events,10ImportJob,1ImportMutation,3PatientIntakeDraft. All13preserved tables, content digests, FK and trigger states retained. No production operation repeated and no new persistent backup created.
+
+Storage job failed its initial binding gate before snapshot deletion or process replacement; raw error/config/secret values are deliberately not logged, so the precise missing storage prerequisite is unknown. No cache/file/snapshot cleanup success is inferred from SQL.
+
+Hosted standard-TLS browser actually authenticated SIM-ADMIN and observed empty patients with no console/page/backend-pageHTTP errors. Its direct therapeutic endpoint request is forbidden to that role, causing failure before reload/screenshot publication. Root independently used the normal simulator protocol on the actual backend and reproduced /patients/page200/items0, /therapy-slots/page403, logout204. This is a verifier role mismatch, not evidence that authorizations should be weakened. Session was revoked and private failed video/trace were discarded; only allowlisted failure JSON artifact12096870167 was uploaded. No final online screenshot is claimed.
+
+The previous independent synthetic QA remains historical PASS for its declared fixtures, but actual operational acceptance failed. Implementation budget4/4 is preserved and exhausted; no fifth code correction, alternate group or false closure. Further read-only diagnosis does not alter the failed verdict. Source manifest attempt-4 remains unchanged; this commit adds evidence only.
