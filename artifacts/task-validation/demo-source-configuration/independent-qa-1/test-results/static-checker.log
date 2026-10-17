@@ -1,0 +1,1 @@
+PASS: 2 source ASTs, manual protected workflow YAML, 2 actual GraphQL documents against official schema; no provider call.

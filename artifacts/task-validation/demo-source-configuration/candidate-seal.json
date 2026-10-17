@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "baseSha": "b7194ac4dd185b3edc4f8d093c0505d0b4ef69ea",
+  "branch": "codex/demo-source-configuration",
+  "configurationAttempt": 1,
+  "maximumAttempts": 4,
+  "guardAndMaintenanceBudgetsReset": false,
+  "sourceHashes": {
+    ".github/workflows/configure-demo-source.yml": "099d4273b0d1a1775f8fa74a3e317bbcd3bc5e4a16fc69cf556ddcb890362442",
+    "scripts/automation/configure-demo-source.mjs": "b16efd6f215eb4ede26a4fb7ed1a9d1ff0f45c3b1f91db4085672f52a0aa6264",
+    "scripts/automation/configure-demo-source.test.mjs": "2cb4f7c8984c4a9967bcd4d3bd0753f69b628063d88e6b6131bc8369458be513"
+  },
+  "contractSha256": "aa77b5a65e51d6c79a6c14b8a208d01e85c2e5dcbdefdec9b704ca55ae6d1559",
+  "evidenceHashes": {
+    "unit-tests.log": "4f484097e042cd8035a2ee926df0d0921db8fcc96e8a8ca1f09632bbd06fa8f4",
+    "validation-report.md": "f65f0a33ade2606c6195d65160c22b58fab59a9b6588b579b361ffba5a4e57bd",
+    "verify-static-contract.mjs": "49075864973e1551409a63e96dad5e0f4c61d3e41641bd3088d2e77e10c797f1",
+    "static-validation.json": "f3b70b846e247ba6ba03cdcf42a82616c0dffcd2100dea2fb7c14129bc02cb2f",
+    "operational-contract.md": "aa77b5a65e51d6c79a6c14b8a208d01e85c2e5dcbdefdec9b704ca55ae6d1559"
+  },
+  "validation": {
+    "unitTests": 57,
+    "passed": 57,
+    "failed": 0,
+    "skipped": 0,
+    "graphqlDocuments": 2,
+    "astSources": 2,
+    "yamlValid": true,
+    "credentialFindings": 0,
+    "actualProviderCallPerformed": false
+  },
+  "decision": "PARTIAL_REQUIRES_NEW_INDEPENDENT_QA"
+}

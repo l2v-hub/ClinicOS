@@ -1,0 +1,43 @@
+{
+  "node": "v24.19.0",
+  "sourceHashes": {
+    ".github/workflows/configure-demo-source.yml": "099d4273b0d1a1775f8fa74a3e317bbcd3bc5e4a16fc69cf556ddcb890362442",
+    "scripts/automation/configure-demo-source.mjs": "b16efd6f215eb4ede26a4fb7ed1a9d1ff0f45c3b1f91db4085672f52a0aa6264",
+    "scripts/automation/configure-demo-source.test.mjs": "2cb4f7c8984c4a9967bcd4d3bd0753f69b628063d88e6b6131bc8369458be513"
+  },
+  "typescriptAst": [
+    {
+      "file": "scripts/automation/configure-demo-source.mjs",
+      "parseErrors": 0
+    },
+    {
+      "file": "scripts/automation/configure-demo-source.test.mjs",
+      "parseErrors": 0
+    }
+  ],
+  "yaml": {
+    "valid": true,
+    "manualOnly": true,
+    "exactMainSha": true,
+    "pinnedActions": true,
+    "soleSecret": "RAILWAY_DEMO_TOKEN",
+    "protectedEnvironment": "glistening-friendship / demo"
+  },
+  "officialSchema": {
+    "url": "https://github.com/railwayapp/cli/blob/v5.66.0/src/gql/schema.json",
+    "sha256": "3c3d1448f2a746d6e5977ba3aa205889f959c427be5cfe37c72e79b1fa65f2be"
+  },
+  "graphql": [
+    {
+      "name": "INVENTORY_QUERY",
+      "sha256": "ad35a2ef143b11babb5b34c17824927247a831503d39a0b86704a682eb640541",
+      "valid": true
+    },
+    {
+      "name": "UPDATE_BRANCH",
+      "sha256": "beb586f9bf048745a2563d7ad5f3a6d77047696325da87ab05179970a2e6ca5a",
+      "valid": true
+    }
+  ],
+  "actualProviderCallPerformed": false
+}
