@@ -93,6 +93,11 @@
         },
         {
           "round": 2,
+          "status": "failed",
+          "reason": "Independent QA2 reproduced never-settling run callback bypassing finally/release in both actual H1 helper copies; full happy-path suites pass but timeout cleanup acceptance fails."
+        },
+        {
+          "round": 3,
           "status": "running"
         }
       ],
@@ -103,7 +108,8 @@
         "implementation-plan.md": "d7881525b1a2c32fc84c2ef22a7a98867407c2382b6f4673a717816a5243ac7a",
         "triage-index.md": "4b8a46b7ba1be48c1b8aacc065b7ef8f03c0bce15bf4d906e19b86e194605d12",
         "cycle-2-correction.md": "6b40b4f39263a7a03d846b4f388bd6e753f4a7a6cb4796b6eea1b2fabf83bbd1",
-        "downstream-447-coordination.md": "609d97eeedaeeab0809f413a84cb9176c3d6328948154a5798d51f724b20bf20"
+        "downstream-447-coordination.md": "609d97eeedaeeab0809f413a84cb9176c3d6328948154a5798d51f724b20bf20",
+        "cycle-3-correction.md": "aafa9f677da4c47427a6c4969f5af3b425ded1282cc9c7b33fe8fdb19feffa2e"
       },
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
       "plan": {
@@ -2087,5 +2093,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-17T09:40:00.831Z"
+  "updatedAt": "2026-10-17T09:46:45.901Z"
 }
