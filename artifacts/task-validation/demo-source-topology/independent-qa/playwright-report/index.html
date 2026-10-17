@@ -1,0 +1,65 @@
+<meta charset="utf-8"><h1>Independent topology QA: PASS</h1><p>9 browser scenarios; actual production inspector/client with a loopback-only synthetic HTTP fixture. No live Railway or deployment.</p><pre>[
+  {
+    "scenario": "singleton",
+    "status": "inspected",
+    "projectWideVisibility": "unproven",
+    "serviceConnectAllowed": false,
+    "paginationComplete": true,
+    "reads": 10,
+    "environments": 1
+  },
+  {
+    "scenario": "multipage",
+    "status": "inspected",
+    "projectWideVisibility": "unproven",
+    "serviceConnectAllowed": false,
+    "paginationComplete": true,
+    "reads": 18,
+    "environments": 2
+  },
+  {
+    "scenario": "inaccessible",
+    "status": "inspected",
+    "projectWideVisibility": "unproven",
+    "serviceConnectAllowed": false,
+    "paginationComplete": false,
+    "reads": 10,
+    "environments": 2
+  },
+  {
+    "scenario": "repeat-cursor",
+    "status": "rejected",
+    "code": "DEMO_TOPOLOGY_PAGINATION_STALLED",
+    "reads": 2
+  },
+  {
+    "scenario": "drift",
+    "status": "rejected",
+    "code": "DEMO_TOPOLOGY_INVENTORY_DRIFT",
+    "reads": 10
+  },
+  {
+    "scenario": "private-error",
+    "status": "rejected",
+    "code": "DEMO_TOPOLOGY_ENVIRONMENTS_QUERY_REJECTED",
+    "reads": 1
+  },
+  {
+    "scenario": "unsafe-metadata",
+    "status": "rejected",
+    "code": "DEMO_TOPOLOGY_INVALID_METADATA",
+    "reads": 1
+  },
+  {
+    "scenario": "foreign-owner",
+    "status": "rejected",
+    "code": "DEMO_TOPOLOGY_OWNERSHIP_MISMATCH",
+    "reads": 1
+  },
+  {
+    "scenario": "mutation-denied",
+    "status": "rejected",
+    "code": "DEMO_TOPOLOGY_READ_ONLY_OPERATION_REQUIRED",
+    "reads": 0
+  }
+]</pre>

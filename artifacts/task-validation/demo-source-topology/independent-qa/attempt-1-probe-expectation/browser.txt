@@ -1,0 +1,21 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'DEMO_TOPOLOGY_PAGINATION_STALLED'
+- 'DEMO_TOPOLOGY_DUPLICATE_ENTITY'
+                 ^
+
+    at file:///workspace/clinicos-demo-source-topology/artifacts/task-validation/demo-source-topology/independent-qa/probe.mjs:93:18 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'DEMO_TOPOLOGY_PAGINATION_STALLED',
+  expected: 'DEMO_TOPOLOGY_DUPLICATE_ENTITY',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

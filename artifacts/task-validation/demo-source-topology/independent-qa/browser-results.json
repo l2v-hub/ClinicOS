@@ -1,0 +1,632 @@
+{
+  "outcome": "PASS",
+  "scenarioCount": 9,
+  "unexpectedErrors": [],
+  "results": [
+    {
+      "scenario": "singleton",
+      "status": "inspected",
+      "projectWideVisibility": "unproven",
+      "serviceConnectAllowed": false,
+      "paginationComplete": true,
+      "reads": 10,
+      "environments": 1,
+      "receipt": {
+        "schemaVersion": 1,
+        "repository": "l2v-hub/ClinicOS",
+        "reviewedSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "runId": "987654321",
+        "runAttempt": "1",
+        "capturedAt": "2026-10-17T15:41:05.403Z",
+        "operation": "inspect",
+        "outcome": "inspected-visibility-unproven",
+        "inventory": {
+          "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+          "environments": [
+            {
+              "id": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+              "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+              "name": "demo",
+              "canAccess": true,
+              "isEphemeral": false,
+              "sourceEnvironmentId": null,
+              "instances": [
+                {
+                  "id": "instance-8021987e-8eaa-4bc8-a102-20566db5e6b4",
+                  "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+                  "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+                  "repository": "l2v-hub/ClinicOS",
+                  "rootDirectory": "/"
+                }
+              ],
+              "triggers": []
+            }
+          ],
+          "services": [
+            {
+              "id": "c000f011-0349-4ea9-9b56-13c625b5767b",
+              "name": "backend",
+              "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5"
+            }
+          ],
+          "scopedInventory": {
+            "schemaVersion": 1,
+            "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+            "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+            "environmentName": "demo",
+            "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+            "repository": "l2v-hub/ClinicOS",
+            "rootDirectory": "/",
+            "domains": [
+              {
+                "kind": "serviceDomains",
+                "domain": "clinicos-backend-demo.up.railway.app"
+              }
+            ],
+            "triggers": [],
+            "hasMoreTriggers": false
+          },
+          "scopedInventorySha256": "c7520af8eba82dba89244e0659210197a32da4480cdf3acff9437bbd366468d1",
+          "visiblePaginationComplete": true,
+          "observedConstraints": [
+            "MISSING_TARGET_TRIGGER"
+          ],
+          "credentialScope": "project-environment",
+          "projectWideVisibility": "unproven",
+          "serviceConnectAllowed": false,
+          "refusalReason": "PROJECT_WIDE_VISIBILITY_UNPROVEN"
+        },
+        "inventorySha256": "17e6e7a79a0d1c8228db028beff355e73bdd6e457757ace68303b8c84373f507",
+        "readRequests": 10
+      }
+    },
+    {
+      "scenario": "multipage",
+      "status": "inspected",
+      "projectWideVisibility": "unproven",
+      "serviceConnectAllowed": false,
+      "paginationComplete": true,
+      "reads": 18,
+      "environments": 2,
+      "receipt": {
+        "schemaVersion": 1,
+        "repository": "l2v-hub/ClinicOS",
+        "reviewedSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "runId": "987654321",
+        "runAttempt": "1",
+        "capturedAt": "2026-10-17T15:41:06.698Z",
+        "operation": "inspect",
+        "outcome": "inspected-visibility-unproven",
+        "inventory": {
+          "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+          "environments": [
+            {
+              "id": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+              "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+              "name": "demo",
+              "canAccess": true,
+              "isEphemeral": false,
+              "sourceEnvironmentId": null,
+              "instances": [
+                {
+                  "id": "instance-8021987e-8eaa-4bc8-a102-20566db5e6b4",
+                  "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+                  "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+                  "repository": "l2v-hub/ClinicOS",
+                  "rootDirectory": "/"
+                }
+              ],
+              "triggers": []
+            },
+            {
+              "id": "qa-visible-second",
+              "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+              "name": "qa preview",
+              "canAccess": true,
+              "isEphemeral": true,
+              "sourceEnvironmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+              "instances": [
+                {
+                  "id": "instance-qa-visible-second",
+                  "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+                  "environmentId": "qa-visible-second",
+                  "repository": "l2v-hub/ClinicOS",
+                  "rootDirectory": "/"
+                }
+              ],
+              "triggers": []
+            }
+          ],
+          "services": [
+            {
+              "id": "c000f011-0349-4ea9-9b56-13c625b5767b",
+              "name": "backend",
+              "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5"
+            },
+            {
+              "id": "qa-extra-service",
+              "name": "aux",
+              "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5"
+            }
+          ],
+          "scopedInventory": {
+            "schemaVersion": 1,
+            "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+            "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+            "environmentName": "demo",
+            "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+            "repository": "l2v-hub/ClinicOS",
+            "rootDirectory": "/",
+            "domains": [
+              {
+                "kind": "serviceDomains",
+                "domain": "clinicos-backend-demo.up.railway.app"
+              }
+            ],
+            "triggers": [],
+            "hasMoreTriggers": false
+          },
+          "scopedInventorySha256": "c7520af8eba82dba89244e0659210197a32da4480cdf3acff9437bbd366468d1",
+          "visiblePaginationComplete": true,
+          "observedConstraints": [
+            "OTHER_VISIBLE_ENVIRONMENTS",
+            "FORKED_OR_EPHEMERAL_ENVIRONMENTS",
+            "MISSING_TARGET_TRIGGER"
+          ],
+          "credentialScope": "project-environment",
+          "projectWideVisibility": "unproven",
+          "serviceConnectAllowed": false,
+          "refusalReason": "PROJECT_WIDE_VISIBILITY_UNPROVEN"
+        },
+        "inventorySha256": "5bd8532a19ad161086fea8543d0fbb895bd308ea90b63700fbd2f4e1a4fef868",
+        "readRequests": 18
+      }
+    },
+    {
+      "scenario": "inaccessible",
+      "status": "inspected",
+      "projectWideVisibility": "unproven",
+      "serviceConnectAllowed": false,
+      "paginationComplete": false,
+      "reads": 10,
+      "environments": 2,
+      "receipt": {
+        "schemaVersion": 1,
+        "repository": "l2v-hub/ClinicOS",
+        "reviewedSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "runId": "987654321",
+        "runAttempt": "1",
+        "capturedAt": "2026-10-17T15:41:07.533Z",
+        "operation": "inspect",
+        "outcome": "inspected-visibility-unproven",
+        "inventory": {
+          "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+          "environments": [
+            {
+              "id": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+              "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+              "name": "demo",
+              "canAccess": true,
+              "isEphemeral": false,
+              "sourceEnvironmentId": null,
+              "instances": [
+                {
+                  "id": "instance-8021987e-8eaa-4bc8-a102-20566db5e6b4",
+                  "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+                  "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+                  "repository": "l2v-hub/ClinicOS",
+                  "rootDirectory": "/"
+                }
+              ],
+              "triggers": []
+            },
+            {
+              "id": "qa-visible-second",
+              "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+              "name": "qa preview",
+              "canAccess": false,
+              "isEphemeral": true,
+              "sourceEnvironmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+              "instances": null,
+              "triggers": null
+            }
+          ],
+          "services": [
+            {
+              "id": "c000f011-0349-4ea9-9b56-13c625b5767b",
+              "name": "backend",
+              "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5"
+            }
+          ],
+          "scopedInventory": {
+            "schemaVersion": 1,
+            "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+            "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+            "environmentName": "demo",
+            "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+            "repository": "l2v-hub/ClinicOS",
+            "rootDirectory": "/",
+            "domains": [
+              {
+                "kind": "serviceDomains",
+                "domain": "clinicos-backend-demo.up.railway.app"
+              }
+            ],
+            "triggers": [],
+            "hasMoreTriggers": false
+          },
+          "scopedInventorySha256": "c7520af8eba82dba89244e0659210197a32da4480cdf3acff9437bbd366468d1",
+          "visiblePaginationComplete": false,
+          "observedConstraints": [
+            "OTHER_VISIBLE_ENVIRONMENTS",
+            "INACCESSIBLE_VISIBLE_ENVIRONMENTS",
+            "FORKED_OR_EPHEMERAL_ENVIRONMENTS",
+            "MISSING_TARGET_TRIGGER"
+          ],
+          "credentialScope": "project-environment",
+          "projectWideVisibility": "unproven",
+          "serviceConnectAllowed": false,
+          "refusalReason": "PROJECT_WIDE_VISIBILITY_UNPROVEN"
+        },
+        "inventorySha256": "3dd9defde2322c6abedc3140f5b42394f3d4edd130e067b1775aed2b21bb0031",
+        "readRequests": 10
+      }
+    },
+    {
+      "scenario": "repeat-cursor",
+      "status": "rejected",
+      "code": "DEMO_TOPOLOGY_PAGINATION_STALLED",
+      "reads": 2
+    },
+    {
+      "scenario": "drift",
+      "status": "rejected",
+      "code": "DEMO_TOPOLOGY_INVENTORY_DRIFT",
+      "reads": 10
+    },
+    {
+      "scenario": "private-error",
+      "status": "rejected",
+      "code": "DEMO_TOPOLOGY_ENVIRONMENTS_QUERY_REJECTED",
+      "reads": 1
+    },
+    {
+      "scenario": "unsafe-metadata",
+      "status": "rejected",
+      "code": "DEMO_TOPOLOGY_INVALID_METADATA",
+      "reads": 1
+    },
+    {
+      "scenario": "foreign-owner",
+      "status": "rejected",
+      "code": "DEMO_TOPOLOGY_OWNERSHIP_MISMATCH",
+      "reads": 1
+    },
+    {
+      "scenario": "mutation-denied",
+      "status": "rejected",
+      "code": "DEMO_TOPOLOGY_READ_ONLY_OPERATION_REQUIRED",
+      "reads": 0
+    }
+  ],
+  "observations": [
+    {
+      "scenario": "singleton",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": "c-1"
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "services",
+      "environmentId": null,
+      "after": "c-1"
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "instances",
+      "environmentId": "qa-visible-second",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "triggers",
+      "environmentId": "qa-visible-second",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": "c-1"
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "services",
+      "environmentId": null,
+      "after": "c-1"
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "instances",
+      "environmentId": "qa-visible-second",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "triggers",
+      "environmentId": "qa-visible-second",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "repeat-cursor",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "repeat-cursor",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": "same"
+    },
+    {
+      "scenario": "drift",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "private-error",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "unsafe-metadata",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "foreign-owner",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    }
+  ]
+}

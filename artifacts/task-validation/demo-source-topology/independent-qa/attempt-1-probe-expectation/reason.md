@@ -1,0 +1,1 @@
+Independent QA probe expected DUPLICATE_ENTITY but its repeated-cursor response produces an empty follow-up page, correctly rejected as PAGINATION_STALLED. Preserve this failed QA fixture attempt; correct only the exact expected safe rejection code, with no production source change. All other assertions are retained.
