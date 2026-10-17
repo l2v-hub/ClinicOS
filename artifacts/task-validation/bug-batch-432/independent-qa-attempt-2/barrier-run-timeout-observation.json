@@ -1,0 +1,5 @@
+{
+  "cleanupCalledAfterOuterTimeout": false,
+  "source": "backend/src/skills/__tests__/skills-e2e.test.ts",
+  "reproduction": "Actual extracted source; interpreter entry reached, confirmation callback never settles; node:test expires while release is held."
+}

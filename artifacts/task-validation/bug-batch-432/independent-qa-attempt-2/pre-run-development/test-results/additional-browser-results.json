@@ -1,0 +1,34 @@
+{
+  "results": [
+    {
+      "name": "catalog-unreachable-real-name-search-retained",
+      "pass": true,
+      "searches": 2,
+      "deliberateStatusFailures": 2
+    },
+    {
+      "name": "empty-catalog-role-Infermiere 1",
+      "pass": true,
+      "searches": 0
+    },
+    {
+      "name": "empty-catalog-role-Medico 1",
+      "pass": true,
+      "searches": 0
+    },
+    {
+      "name": "empty-catalog-role-OSS 1",
+      "pass": true,
+      "searches": 0
+    },
+    {
+      "name": "empty-catalog-role-Supervisore 1",
+      "pass": true,
+      "searches": 0
+    },
+    {
+      "name": "real-runtime-correction-barrier-one-write-and-facility-clock",
+      "pass": true
+    }
+  ]
+}

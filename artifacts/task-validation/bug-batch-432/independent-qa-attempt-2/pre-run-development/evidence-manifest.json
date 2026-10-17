@@ -1,0 +1,131 @@
+{
+  "kind": "implementation-development-proofs-not-independent-QA",
+  "files": [
+    {
+      "issue": 432,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-432.png",
+      "sha256": "a139f0118147dec6c767df6006f1a8958cf30d7bb7e59a7e4fb04bab3a9fc5ab",
+      "bytes": 113385
+    },
+    {
+      "issue": 432,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-432-trace.zip",
+      "sha256": "63c5bc273a17abf2a643e6646aa923008ea8e2dd6159be098a7b0a51a6171741",
+      "bytes": 7408009
+    },
+    {
+      "issue": 432,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-432.webm",
+      "sha256": "a10339828b01dbb466b7849fe2572b606a99732512dfb9fdd33a8d6351b57ece",
+      "bytes": 1190017
+    },
+    {
+      "issue": 441,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-441.png",
+      "sha256": "a71b8fc65baf3ac9d7c80e862dc22806d4a2a9d93e7711e758f3ec6966ca0bea",
+      "bytes": 166685
+    },
+    {
+      "issue": 441,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-441-trace.zip",
+      "sha256": "63c5bc273a17abf2a643e6646aa923008ea8e2dd6159be098a7b0a51a6171741",
+      "bytes": 7408009
+    },
+    {
+      "issue": 441,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-441.webm",
+      "sha256": "a10339828b01dbb466b7849fe2572b606a99732512dfb9fdd33a8d6351b57ece",
+      "bytes": 1190017
+    },
+    {
+      "issue": 442,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-442.png",
+      "sha256": "b81072f2843023a02fa7e28539614e5bd415fa590c430d3279f82f6b8f025d63",
+      "bytes": 24276
+    },
+    {
+      "issue": 442,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-442-trace.zip",
+      "sha256": "6573d7b566557ff4359eaecc5b034f968ed9e9f046a4648fa70996e0c0dbb97c",
+      "bytes": 63276
+    },
+    {
+      "issue": 442,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-442.webm",
+      "sha256": "134d309bdf951928839fd67c1b0d135237cc2c6176597f81950d55ec13980a8d",
+      "bytes": 27948
+    },
+    {
+      "issue": 460,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-460.png",
+      "sha256": "a6beb55a802af9980c1e724e4257f36fdd16271621e2519cafd5201c0ec7991b",
+      "bytes": 120459
+    },
+    {
+      "issue": 460,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-460-trace.zip",
+      "sha256": "864730ba5e50e06e683be0019bd76aaae651289f2d99f9f1cb5c0c83f5f66d67",
+      "bytes": 8220510
+    },
+    {
+      "issue": 460,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-460.webm",
+      "sha256": "626278c5778c6e94f52701dcc801c14224f17f616b38be5b08fd7a36d3d3f891",
+      "bytes": 1357241
+    },
+    {
+      "issue": 463,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-463.png",
+      "sha256": "a139f0118147dec6c767df6006f1a8958cf30d7bb7e59a7e4fb04bab3a9fc5ab",
+      "bytes": 113385
+    },
+    {
+      "issue": 463,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-463-trace.zip",
+      "sha256": "63c5bc273a17abf2a643e6646aa923008ea8e2dd6159be098a7b0a51a6171741",
+      "bytes": 7408009
+    },
+    {
+      "issue": 463,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-463.webm",
+      "sha256": "a10339828b01dbb466b7849fe2572b606a99732512dfb9fdd33a8d6351b57ece",
+      "bytes": 1190017
+    },
+    {
+      "issue": 464,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-464.png",
+      "sha256": "d8892ca230fcc4b7ceb7deeee3c30aa23afc6e0b8d831ee8ee27f54b3072c399",
+      "bytes": 23070
+    },
+    {
+      "issue": 464,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-464-trace.zip",
+      "sha256": "6573d7b566557ff4359eaecc5b034f968ed9e9f046a4648fa70996e0c0dbb97c",
+      "bytes": 63276
+    },
+    {
+      "issue": 464,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-464.webm",
+      "sha256": "134d309bdf951928839fd67c1b0d135237cc2c6176597f81950d55ec13980a8d",
+      "bytes": 27948
+    },
+    {
+      "issue": 467,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-467.png",
+      "sha256": "88461ede9937bb1508d4861092ac1c40b822d7497759aa0b1fbe17db5331e9ee",
+      "bytes": 199746
+    },
+    {
+      "issue": 467,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-467-trace.zip",
+      "sha256": "63c5bc273a17abf2a643e6646aa923008ea8e2dd6159be098a7b0a51a6171741",
+      "bytes": 7408009
+    },
+    {
+      "issue": 467,
+      "path": "artifacts/task-validation/bug-batch-432/evidence/issue-467.webm",
+      "sha256": "a10339828b01dbb466b7849fe2572b606a99732512dfb9fdd33a8d6351b57ece",
+      "bytes": 1190017
+    }
+  ]
+}

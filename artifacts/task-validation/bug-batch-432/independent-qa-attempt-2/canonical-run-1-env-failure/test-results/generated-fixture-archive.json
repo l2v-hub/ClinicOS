@@ -1,0 +1,49 @@
+{
+  "archived": [
+    {
+      "source": "artifacts/task-validation/po-16-giro/backend/fresh-v2-proof.json",
+      "sha256": "50f1a90c6102025ff39715c3527bc4dcf04f8df4214472674f4436f9ad7424ce",
+      "disposition": "Fresh synthetic unit-suite output archived; original pre-run bytes restored."
+    },
+    {
+      "source": "artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-v2-half-point.pdf",
+      "sha256": "a321197594137db53421c233b5cd322d89fefb10c1d5cf493f119bb64b923e93",
+      "disposition": "Fresh synthetic unit-suite output archived; original pre-run bytes restored."
+    },
+    {
+      "source": "artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-v2-half-point.snapshot.json",
+      "sha256": "8f72ee8e90948de2a6c07268a5d56ace5cd02550244d6e91c478b5ace36a265b",
+      "disposition": "Fresh synthetic unit-suite output archived; original pre-run bytes restored."
+    },
+    {
+      "source": "artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/barthel-paper.pdf",
+      "sha256": "8b7be59062d3c4e89a9c28e7d2b2d2d496dfc77e3dbc4b4d95fc5adcf4a14ef6",
+      "disposition": "Fresh synthetic unit-suite output archived; original pre-run bytes restored."
+    },
+    {
+      "source": "artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/gds15-paper.pdf",
+      "sha256": "c8cbc6dc82d86b36427925c10889c745302fb159f350aa3a7c42914d56573ccc",
+      "disposition": "Fresh synthetic unit-suite output archived; original pre-run bytes restored."
+    },
+    {
+      "source": "artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/mna-paper.pdf",
+      "sha256": "36e155a2edf80966d7e1ab6989a6b1469fbe73674067da70f02196346c6125fa",
+      "disposition": "Fresh synthetic unit-suite output archived; original pre-run bytes restored."
+    },
+    {
+      "source": "artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/painad-paper.pdf",
+      "sha256": "e9d8c116851145fcdc67b5b7b184420e461ecec29809005b650cda01b79a5358",
+      "disposition": "Fresh synthetic unit-suite output archived; original pre-run bytes restored."
+    },
+    {
+      "source": "artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/tinetti-paper.pdf",
+      "sha256": "d35d2f2adbc1de70c8f1923133fe769de0cc759cf19af16f578978763a5866e2",
+      "disposition": "Fresh synthetic unit-suite output archived; original pre-run bytes restored."
+    },
+    {
+      "source": "artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/ucla_npi_sleep-paper.pdf",
+      "sha256": "52a22fa1b55ed7a0720a98a3fd2a61a63b54677316b38b4e3058fddb8a559b63",
+      "disposition": "Fresh synthetic unit-suite output archived; original pre-run bytes restored."
+    }
+  ]
+}

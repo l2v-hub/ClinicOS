@@ -1,0 +1,15 @@
+✖ actual H1 helper must release a held correction when confirmation times out (27.129857ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 0
+ℹ cancelled 1
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 772.712926
+
+✖ failing tests:
+
+test at artifacts/task-validation/bug-batch-432/independent-qa-attempt-2/barrier-run-timeout-reproduction.mjs:9:1
+✖ actual H1 helper must release a held correction when confirmation times out (27.129857ms)
+  'test timed out after 25ms'

@@ -1,0 +1,84 @@
+{
+  "authorizedBy": "root QA432-2 stop instruction",
+  "reason": "Independent certain timeout cleanup finding; source immutable",
+  "classification": "Intentional QA coordination cancellation, not a failing product test",
+  "observedAt": "2026-10-17T09:45:06.101397+00:00",
+  "canonicalPid": 606621,
+  "flockPid": 601846,
+  "ownedUnitRootPid": 610874,
+  "events": [
+    {
+      "pid": 610874,
+      "signal": "SIGSTOP",
+      "role": "owned backend npm root, canonical retained"
+    },
+    {
+      "pid": 610885,
+      "signal": "SIGSTOP",
+      "role": "verified owned backend test descendant"
+    },
+    {
+      "pid": 610886,
+      "signal": "SIGSTOP",
+      "role": "verified owned backend test descendant"
+    },
+    {
+      "pid": 610893,
+      "signal": "SIGSTOP",
+      "role": "verified owned backend test descendant"
+    },
+    {
+      "pid": 614638,
+      "signal": "SIGSTOP",
+      "role": "verified owned backend test descendant"
+    },
+    {
+      "pid": 614646,
+      "signal": "SIGSTOP",
+      "role": "verified owned backend test descendant"
+    },
+    {
+      "pid": 614678,
+      "signal": "SIGSTOP",
+      "role": "verified owned backend test descendant"
+    },
+    {
+      "pid": 614678,
+      "signal": "SIGKILL",
+      "role": "owned backend descendant; npm and canonical held"
+    },
+    {
+      "pid": 614646,
+      "signal": "SIGKILL",
+      "role": "owned backend descendant; npm and canonical held"
+    },
+    {
+      "pid": 614638,
+      "signal": "SIGKILL",
+      "role": "owned backend descendant; npm and canonical held"
+    },
+    {
+      "pid": 610893,
+      "signal": "SIGKILL",
+      "role": "owned backend descendant; npm and canonical held"
+    },
+    {
+      "pid": 610886,
+      "signal": "SIGKILL",
+      "role": "owned backend descendant; npm and canonical held"
+    },
+    {
+      "pid": 610885,
+      "signal": "SIGKILL",
+      "role": "owned backend descendant; npm and canonical held"
+    },
+    {
+      "pid": 610874,
+      "signal": "SIGKILL",
+      "role": "last owned unit root; canonical finally handles teardown"
+    }
+  ],
+  "allUnitDescendantsDeadOrZombieBeforeRootExit": true,
+  "wrapperAndLockNotSignalled": true,
+  "priorReadOnlyProbe": "Reading /proc/cwd denied before any signal; no cwd access/escalation used, identity bound by parent chain, full script path, start time, command and actual run results."
+}

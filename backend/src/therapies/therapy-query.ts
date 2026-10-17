@@ -1,4 +1,21 @@
-import type { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+
+/** Same one-off clock/band contract as oneTimeSlot; aliases belong to the bounded readers. */
+export function therapyBandEnabledSql() {
+  return Prisma.sql`CASE WHEN pt.tipo = 'una_tantum' THEN
+    pt."orarioSomministrazione" ~ '^([01][0-9]|2[0-3]):[0-5][0-9]$'
+    AND NOT EXISTS (
+      SELECT 1 FROM "TherapySchedule" conflict
+      WHERE conflict."therapyId" = pt.id AND conflict.time <> pt."orarioSomministrazione"
+    )
+    AND band.fascia = CASE
+      WHEN pt."orarioSomministrazione" BETWEEN '05:00' AND '10:59' THEN 'mattina'
+      WHEN pt."orarioSomministrazione" BETWEEN '11:00' AND '13:59' THEN 'pranzo'
+      WHEN pt."orarioSomministrazione" BETWEEN '14:00' AND '17:59' THEN 'pomeriggio'
+      WHEN pt."orarioSomministrazione" BETWEEN '18:00' AND '21:59' THEN 'sera'
+      ELSE 'notte' END
+    ELSE band.enabled END`;
+}
 
 export interface TherapyPatientAccess {
   /** null/undefined means verified global scope; an empty array means no patient access. */

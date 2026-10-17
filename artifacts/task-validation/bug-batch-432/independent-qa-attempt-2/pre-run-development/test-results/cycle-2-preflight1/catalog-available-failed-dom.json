@@ -1,0 +1,476 @@
+{
+  "searches": [
+    "AMLODIPINA",
+    "AMOXICILLINA",
+    "ASPIRINA",
+    "CACIT",
+    "CARDIOASPIRINA",
+    "CEFAZOLINA",
+    "CLEXANE",
+    "CORTISONE",
+    "EPARINA",
+    "IBUPROFENE",
+    "KEPPRA",
+    "KETOROLAC",
+    "LASIX",
+    "METFORMINA",
+    "PANTOPRAZOLO",
+    "PARACETAMOLO",
+    "QA PRINTABLE 000",
+    "QA PRINTABLE 001",
+    "QA PRINTABLE 002",
+    "QA PRINTABLE 003",
+    "QA PRINTABLE 004",
+    "QA PRINTABLE 005",
+    "QA PRINTABLE 006",
+    "QA PRINTABLE 007",
+    "QA PRINTABLE 008",
+    "QA PRINTABLE 009",
+    "QA PRINTABLE 010",
+    "QA PRINTABLE 011",
+    "QA PRINTABLE 012",
+    "QA PRINTABLE 013",
+    "QA PRINTABLE 014",
+    "QA PRINTABLE 015",
+    "QA PRINTABLE 016",
+    "QA PRINTABLE 017",
+    "QA PRINTABLE 018",
+    "QA PRINTABLE 019",
+    "QA PRINTABLE 020",
+    "QA PRINTABLE 021",
+    "QA PRINTABLE 022",
+    "QA PRINTABLE 023",
+    "QA PRINTABLE 024",
+    "QA PRINTABLE 025",
+    "QA PRINTABLE 026",
+    "QA PRINTABLE 027",
+    "QA PRINTABLE 028",
+    "QA PRINTABLE 029",
+    "QA PRINTABLE 030",
+    "QA PRINTABLE 031",
+    "QA PRINTABLE 032",
+    "QA PRINTABLE 033",
+    "QA PRINTABLE 034",
+    "QA PRINTABLE 035",
+    "QA PRINTABLE 036",
+    "QA PRINTABLE 037",
+    "QA PRINTABLE 038",
+    "QA PRINTABLE 039",
+    "QA PRINTABLE 040",
+    "QA PRINTABLE 041",
+    "QA PRINTABLE 042",
+    "QA PRINTABLE 043",
+    "QA PRINTABLE 044",
+    "QA PRINTABLE 045",
+    "QA PRINTABLE 046",
+    "QA PRINTABLE 047",
+    "QA PRINTABLE 048",
+    "QA PRINTABLE 049",
+    "QA PRINTABLE 050",
+    "QA PRINTABLE 051",
+    "QA PRINTABLE 052",
+    "QA PRINTABLE 053",
+    "QA PRINTABLE 054",
+    "QA PRINTABLE 055",
+    "QA PRINTABLE 056",
+    "QA PRINTABLE 057",
+    "QA PRINTABLE 058",
+    "QA PRINTABLE 059",
+    "QA PRINTABLE 060",
+    "QA PRINTABLE 061",
+    "QA PRINTABLE 062",
+    "QA PRINTABLE 063",
+    "QA PRINTABLE 064",
+    "QA PRINTABLE 065",
+    "QA PRINTABLE 066",
+    "QA PRINTABLE 067",
+    "QA PRINTABLE 068",
+    "QA PRINTABLE 069",
+    "QA PRINTABLE 070",
+    "QA PRINTABLE 071",
+    "QA PRINTABLE 072",
+    "QA PRINTABLE 073",
+    "QA PRINTABLE 074",
+    "QA PRINTABLE 075",
+    "QA PRINTABLE 076",
+    "QA PRINTABLE 077",
+    "QA PRINTABLE 078",
+    "QA PRINTABLE 079",
+    "QA PRINTABLE 080",
+    "QA PRINTABLE 081",
+    "QA PRINTABLE 082",
+    "QA PRINTABLE 083",
+    "QA PRINTABLE 084",
+    "QA PRINTABLE 085",
+    "QA PRINTABLE 086",
+    "QA PRINTABLE 087",
+    "QA PRINTABLE 088",
+    "QA PRINTABLE 089",
+    "QA PRINTABLE 090",
+    "QA PRINTABLE 091",
+    "QA PRINTABLE 092",
+    "QA PRINTABLE 093",
+    "QA PRINTABLE 094",
+    "QA PRINTABLE 095",
+    "QA PRINTABLE 096",
+    "QA PRINTABLE 097",
+    "QA PRINTABLE 098",
+    "QA PRINTABLE 099",
+    "QA PRINTABLE 100",
+    "QA PRINTABLE 101",
+    "QA PRINTABLE 102",
+    "QA PRINTABLE 103",
+    "QA PRINTABLE 104",
+    "QA SECOND 000",
+    "QA SECOND 001",
+    "RAMIPRIL",
+    "TACHIPIRINA",
+    "QA SECOND 000",
+    "QA SECOND 001"
+  ],
+  "statuses": [
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    },
+    {
+      "path": "/farmaci/cerca",
+      "status": 429
+    }
+  ],
+  "consoleMessages": [
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)"
+  ],
+  "visibleText": "Panoramica\nDati di ingresso\nClinica\nTerapia\nParametri\nModuli\nDocumenti\nDimissione\nStampa\nInvio in PS\nAnagrafica da completare\nDati da completare:\nData di nascita\nCodice fiscale\nTelefono\n▾\nTerapia Farmacologica\n2 farmaci attivi\nCalendario\nStorico\nPiano terapeutico\n▸ QA second 001\n1 compressa · 08:00 · orale\n▾ QA second 000\n1 compressa · 08:00 · orale\nAnagrafica AIFA\nQA second 000\nanagrafica non raggiungibile\nOrari e quantità\n08:00\nTipo\nPeriodica\nInizio\n2026-10-17\nFine\n—\nStato\nAttiva"
+}

@@ -1,9 +1,10 @@
 // Live PostgreSQL/HTTP/browser regression for full inventory and distinct prescribed doses.
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { chromium } from 'playwright';
+import { installVerifiedFonts, verifyLoadedFonts } from './qa-bug-batch-432-browser.mjs';
 import { prisma } from '../backend/src/lib/prisma.js';
 import { facilityToday } from '../backend/src/patients/parameter-reading-input.js';
 
@@ -28,19 +29,20 @@ const patient = await prisma.patient.create({
   },
 });
 await prisma.patientTherapy.createMany({
-  data: Array.from({ length: 105 }, (_, i) => ({
+  data: Array.from({ length: 106 }, (_, i) => ({
     id: `QA-${patient.id}-${i}`,
     patientId: patient.id,
     farmacoNome: `QA inventory ${String(i).padStart(3, '0')}`,
     dosaggio: '1 compressa',
     viaSomministrazione: 'orale',
-    tipo: i === 102 ? 'al_bisogno' : i === 104 ? 'una_tantum' : 'periodica',
+    tipo: i === 102 ? 'al_bisogno' : i >= 104 ? 'una_tantum' : 'periodica',
     stato: i === 103 ? 'sospesa' : 'attiva',
     dataInizio: today,
     fasceMattina: i < 101,
     orarioSpecifico: i === 101 ? '10:00' : i < 101 ? '08:00' : null,
-    dataSomministrazione: i === 104 ? tomorrow.toISOString().slice(0, 10) : null,
-    orarioSomministrazione: i === 104 ? '08:00' : null,
+    dataSomministrazione:
+      i === 104 ? tomorrow.toISOString().slice(0, 10) : i === 105 ? today : null,
+    orarioSomministrazione: i === 104 ? '08:00' : i === 105 ? '11:30' : null,
   })),
 });
 await prisma.therapySchedule.createMany({
@@ -69,30 +71,56 @@ const browser = await chromium.launch({
     : {}),
 });
 const results = [];
+let context;
+let recordedVideo;
+const networkErrors = [];
 try {
-  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  context = await browser.newContext({
+    viewport: { width: 1280, height: 900 },
+    recordVideo: { dir: resolve(out, 'video') },
+  });
+  await installVerifiedFonts(context, out);
+  await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
   const page = await context.newPage();
+  recordedVideo = page.video();
   page.setDefaultTimeout(20000);
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
+  page.on('console', (message) => {
+    if (message.type() === 'error') errors.push(message.text());
+  });
+  page.on('response', (response) => {
+    if (response.url().startsWith(backend) && response.status() >= 400)
+      networkErrors.push({ path: new URL(response.url()).pathname, status: response.status() });
+  });
   const pages = [];
+  const pharmacyQueries = [];
+  const emptyCatalog = (await prisma.farmaco.count()) === 0;
+  assert.equal(
+    emptyCatalog,
+    true,
+    'This empty-catalog regression requires the owned synthetic catalog fixture',
+  );
   page.on('request', (request) => {
+    if (request.url().includes('/farmaci/cerca?')) pharmacyQueries.push(request.url());
     if (request.url().includes(`/patients/${patient.id}/therapies/page`))
       pages.push(new URL(request.url()).search);
   });
   await page.goto(`${frontend}/#/dettaglio-paziente/${patient.id}`);
+  await verifyLoadedFonts(page);
   await page.getByRole('button', { name: /^Infermiere 1/ }).click();
   await page.locator('.patient-record-view').waitFor();
   await page.getByRole('tab', { name: 'Terapia', exact: true }).click();
   await page.getByRole('tab', { name: 'Piano terapeutico', exact: true }).click();
   const active = page.getByRole('list', { name: 'Farmaci attivi' });
-  await active.getByRole('button', { name: /^QA inventory 104 / }).waitFor();
-  assert.equal(await active.locator(':scope > li').count(), 104);
+  await active.getByRole('button', { name: /^QA inventory 105 / }).waitFor();
+  assert.equal(await active.locator(':scope > li').count(), 105);
   assert.ok(
     pages.some((query) => query.includes('cursor=')),
     'Live inventory must request later pages',
   );
-  results.push({ name: '105-prescription-inventory', pass: true, active: 104, requests: pages });
+  results.push({ name: '106-prescription-inventory', pass: true, active: 105, requests: pages });
+  await page.screenshot({ path: resolve(out, 'inventory-complete.png'), fullPage: true });
   await page.getByRole('tab', { name: 'Storico', exact: true }).click();
   await page.getByRole('button', { name: 'Prescrizioni sospese/concluse', exact: true }).click();
   await page.getByRole('button', { name: /^QA inventory 103 / }).waitFor();
@@ -137,6 +165,24 @@ try {
   await calendar.locator('button[data-time="08:00"]').click();
   await calendar.getByRole('button', { name: /^Erogata:.*QA inventory 000/ }).waitFor();
   results.push({ name: 'later-dose-confirmed-first-dose-still-pending', pass: true });
+  await page.getByRole('dialog').getByRole('button', { name: 'Chiudi', exact: true }).click();
+  await calendar.locator('button[data-time="11:30"]').click();
+  const oneOffResponse = page.waitForResponse(
+    (response) => response.url() === backend + '/therapy-slots/confirm',
+  );
+  await calendar.getByRole('button', { name: /^Erogata:.*QA inventory 105/ }).click();
+  assert.equal((await oneOffResponse).status(), 200);
+  const oneOff = await prisma.medicationAdministration.findFirstOrThrow({
+    where: { therapyId: `QA-${patient.id}-105` },
+  });
+  assert.equal(oneOff.ora, '11:30');
+  assert.equal(oneOff.fascia, 'pranzo');
+  assert.equal(oneOff.farmacoDose, '1 compressa');
+  results.push({
+    name: 'one-off-explicit-clock-with-empty-flags',
+    pass: true,
+    scheduledTime: oneOff.ora,
+  });
   await page.screenshot({ path: resolve(out, 'desktop-distinct-doses.png'), fullPage: true });
   await page.setViewportSize({ width: 360, height: 900 });
   await page.waitForTimeout(250);
@@ -145,7 +191,46 @@ try {
     false,
   );
   await page.screenshot({ path: resolve(out, 'mobile-distinct-doses.png'), fullPage: true });
+  await prisma.patientTherapy.update({
+    where: { id: `QA-${patient.id}-105` },
+    data: { orarioSomministrazione: '18:10' },
+  });
+  await page.reload();
+  const loginButton = page.getByRole('button', { name: /^Infermiere 1/ });
+  const needsLogin = await Promise.race([
+    loginButton.waitFor({ state: 'visible' }).then(() => true),
+    page
+      .locator('.patient-record-view')
+      .waitFor()
+      .then(() => false),
+  ]);
+  if (needsLogin) await loginButton.click();
+  await page.locator('.patient-record-view').waitFor();
+  await page.getByRole('tab', { name: 'Terapia', exact: true }).click();
+  await page.getByRole('tab', { name: 'Calendario', exact: true }).click();
+  await page.getByRole('button', { name: 'Giorno', exact: true }).click();
+  await calendar.locator('button[data-time="18:10"]').click();
+  await page.getByRole('dialog').waitFor();
+  assert.equal(
+    await calendar.getByRole('button', { name: /^Erogata:.*QA inventory 105/ }).count(),
+    0,
+  );
+  const afterMove = await prisma.medicationAdministration.findMany({
+    where: { therapyId: oneOff.therapyId },
+  });
+  assert.deepEqual(afterMove, [oneOff]);
+  await page.screenshot({ path: resolve(out, 'oneoff-after-band-shift.png'), fullPage: true });
+  results.push({ name: 'one-off-given-stays-given-after-band-shift-and-reload', pass: true });
   assert.deepEqual(errors, []);
+  assert.deepEqual(networkErrors, []);
+  if (emptyCatalog) {
+    assert.equal(
+      pharmacyQueries.length,
+      0,
+      'An unloaded catalog must not trigger one lookup per prescription',
+    );
+    results.push({ name: 'empty-catalog-no-automatic-name-searches', pass: true });
+  }
   results.push({ name: 'mobile-and-javascript', pass: true });
 } catch (error) {
   results.push({ name: 'browser-flow', pass: false, error: error.message });
@@ -156,6 +241,11 @@ try {
     JSON.stringify({ patientId: patient.id, results }, null, 2),
   );
   console.log(JSON.stringify(results, null, 2));
+  if (context) {
+    await context.tracing.stop({ path: resolve(out, 'trace.zip') });
+    await context.close();
+    if (recordedVideo) copyFileSync(await recordedVideo.path(), resolve(out, 'flow.webm'));
+  }
   await browser.close();
   await prisma.patient.delete({ where: { id: patient.id } });
   await prisma.$disconnect();

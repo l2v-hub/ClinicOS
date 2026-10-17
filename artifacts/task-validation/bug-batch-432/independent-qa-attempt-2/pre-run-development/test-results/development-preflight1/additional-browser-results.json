@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "name": "complete105-print-through-real-paginated-API",
+      "pass": true,
+      "count": 105
+    },
+    {
+      "name": "foreign-patient-print-blocked-retry-fetches-repaired-complete105",
+      "pass": true
+    },
+    {
+      "name": "short-page-fails-closed-and-visible-retry-restores105",
+      "pass": true
+    },
+    {
+      "name": "patient-switch-no-previous-prescriptions-mobile",
+      "pass": true,
+      "count": 2
+    },
+    {
+      "name": "import5-detected3-reviewed-persisted2-explicit-deferred-replay-visible-after-reload",
+      "pass": true
+    }
+  ]
+}

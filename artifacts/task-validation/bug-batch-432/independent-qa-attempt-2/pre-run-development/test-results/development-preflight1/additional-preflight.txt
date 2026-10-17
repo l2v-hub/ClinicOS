@@ -1,0 +1,17 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByText('Trovato in AIFA', { exact: true }).first() to be visible
+
+    at runBrowserQa (/tmp/clinicos432-additional-preflight.mjs:519:71)
+    at async <anonymous> (/tmp/clinicos432-additional-preflight.mjs:807:3) {
+  log: [
+    "  - waiting for getByText('Trovato in AIFA', { exact: true }).first() to be visible"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.19.0

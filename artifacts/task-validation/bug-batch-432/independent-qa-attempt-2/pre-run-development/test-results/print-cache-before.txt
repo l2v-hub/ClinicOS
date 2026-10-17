@@ -1,0 +1,31 @@
+✔ therapy page loader returns the complete patient-scoped clinical list (104.942153ms)
+✔ therapy page loader rejects a repeating cursor instead of looping forever (2.062504ms)
+✔ therapy page loader carries every server filter on the first page (5.7328ms)
+✔ therapy plan and emergency print require every page, never a manual partial plan (24.102328ms)
+✔ therapy failures are announced and never rendered as empty clinical results (5.755029ms)
+✔ medication administration history follows the bounded opaque cursor feed (12.093566ms)
+✔ complete printable inventory rejects foreign patient (0.989308ms)
+✔ complete printable inventory rejects wrong state counts (2.587571ms)
+✔ complete printable inventory rejects repeated prescription (2.371754ms)
+✔ complete printable inventory rejects short terminal page (0.869762ms)
+✔ failed printable inventory can retry and never returns a partial page (3.620711ms)
+✔ printable inventory rejects changed page totals and empty nonterminal pages (1.199ms)
+✖ a rejected short printable snapshot is evicted so retry reads repaired server data (7.399745ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 12
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 858.459367
+
+✖ failing tests:
+
+test at frontend/src/lib/__tests__/therapyPages.test.ts:1:7008
+✖ a rejected short printable snapshot is evicted so retry reads repaired server data (7.399745ms)
+  Error: Elenco terapie incompleto: riprovare
+      at loadAllTherapyPages (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/frontend/src/lib/therapyPages.ts:118:15)
+      at async TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/frontend/src/lib/__tests__/therapyPages.test.ts:250:21)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)

@@ -1,0 +1,56 @@
+{
+  "observedAt": "2026-10-17T09:45:16.956731+00:00",
+  "sourceMismatches": [],
+  "contractsUnchanged": 6,
+  "ownContainerAbsent": true,
+  "ownServicePortsClosed": {
+    "3432": true,
+    "5433": true,
+    "8432": true
+  },
+  "remainingKnownProcessStates": [
+    {
+      "pid": 610885,
+      "state": "Z"
+    },
+    {
+      "pid": 610886,
+      "state": "Z"
+    },
+    {
+      "pid": 610893,
+      "state": "Z"
+    }
+  ],
+  "activeKnownChildrenRemain": false,
+  "canonicalExit": {
+    "exitCode": 1,
+    "finishedAt": "2026-10-17T09:45:16.304154+00:00"
+  },
+  "allKnownSubtreeProcessStates": [
+    {
+      "pid": 610885,
+      "state": "Z"
+    },
+    {
+      "pid": 610886,
+      "state": "Z"
+    },
+    {
+      "pid": 610893,
+      "state": "Z"
+    },
+    {
+      "pid": 614638,
+      "state": "Z"
+    },
+    {
+      "pid": 614646,
+      "state": "Z"
+    },
+    {
+      "pid": 614678,
+      "state": "Z"
+    }
+  ]
+}

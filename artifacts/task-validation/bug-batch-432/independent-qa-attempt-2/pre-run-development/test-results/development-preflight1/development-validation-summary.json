@@ -1,0 +1,37 @@
+{
+  "verified": false,
+  "developmentOnly": true,
+  "browserAssertionsPassed": false,
+  "results": [
+    {
+      "label": "migration",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "therapy-import-api",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "seed",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "retry-preflight",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "additional-preflight",
+      "code": 1,
+      "signal": null
+    }
+  ],
+  "evidence": "evidence/",
+  "lifecycleAndScopeClean": false,
+  "limitations": [
+    "Independent QA, exact-SHA Claude review and production deployment are separate root-owned gates."
+  ]
+}

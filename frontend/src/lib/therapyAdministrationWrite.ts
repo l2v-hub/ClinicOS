@@ -6,8 +6,9 @@
 // `confirmed` dice al server che l'operatore ha confermato esplicitamente (ruoli «con conferma»).
 import type { MotivoNonErogazione, TherapyActionInfo } from '../types';
 import { API_URL } from '../config';
-import { operatorHeaders } from './operatorSession';
+import { operatorHeaders, getCurrentOperator } from './operatorSession';
 import { invalidateCachedGet } from './cachedFetch';
+import { sessionCacheEpoch } from './sessionCache';
 
 export type AdministrationOutcome =
   | { kind: 'administered' }
@@ -18,6 +19,8 @@ export type AdministrationWriteResult = { ok: true } | { ok: false; message: str
 export interface AdministrationWriteOptions {
   /** L'operatore ha confermato nel dialogo (richiesto dal server per i ruoli «con conferma»). */
   confirmed?: boolean;
+  /** Keep the same key when an uncertain request is retried. */
+  requestId?: string;
 }
 
 /** Messaggio del server quando c'è, altrimenti uno specifico per lo stato (mai solo «Errore»). */
@@ -51,6 +54,8 @@ export function administrationBody(
     therapyId: info.therapyId,
     date: info.date,
     fascia: info.fascia,
+    expectedStato: 'da_erogare',
+    ...(options.requestId ? { requestId: options.requestId } : {}),
     ...(info.scheduledTime !== undefined ? { scheduledTime: info.scheduledTime } : {}),
     ...(outcome.kind === 'administered' && info.measuredGlucose !== undefined
       ? { measuredGlucose: info.measuredGlucose }
@@ -62,22 +67,88 @@ export function administrationBody(
   };
 }
 
+const inMemoryRequests = new Map<string, { requestId: string; expiresAt: number }>();
+
+/** Reload-safe retry keys; storage contains a digest and nonce, never clinical text or tokens. */
+async function preparedAdministrationBody(
+  info: SlotKey,
+  outcome: AdministrationOutcome,
+  options: AdministrationWriteOptions,
+) {
+  const body = administrationBody(info, outcome, options);
+  if (options.requestId) return body;
+  const fields = { ...body };
+  delete fields.confirmed;
+  const identity = getCurrentOperator()?.id ?? 'unresolved';
+  const digest = await crypto.subtle.digest(
+    'SHA-256',
+    new TextEncoder().encode(JSON.stringify({ identity, ...fields })),
+  );
+  const signature = [...new Uint8Array(digest)]
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
+  const storageKey = `clinicos:administration:${signature}`;
+  let saved = inMemoryRequests.get(signature);
+  try {
+    const raw = sessionStorage.getItem(storageKey);
+    if (raw) {
+      const candidate = JSON.parse(raw);
+      if (
+        typeof candidate.requestId === 'string' &&
+        /^[A-Za-z0-9_-]{8,128}$/.test(candidate.requestId) &&
+        Number.isFinite(candidate.expiresAt)
+      )
+        saved = candidate;
+    }
+  } catch {
+    /* A blocked storage keeps this page's retry key in memory. */
+  }
+  if (!saved || saved.expiresAt < Date.now())
+    saved = { requestId: crypto.randomUUID(), expiresAt: Date.now() + 24 * 60 * 60 * 1000 };
+  inMemoryRequests.set(signature, saved);
+  try {
+    sessionStorage.setItem(storageKey, JSON.stringify(saved));
+  } catch {
+    /* In-memory retry remains available. */
+  }
+  return { ...body, requestId: saved.requestId };
+}
+
 export async function recordAdministration(
   info: SlotKey,
   outcome: AdministrationOutcome,
   options: AdministrationWriteOptions = {},
 ): Promise<AdministrationWriteResult> {
   const path = outcome.kind === 'administered' ? 'confirm' : 'not-administered';
+  const epoch = sessionCacheEpoch();
+  const identity = getCurrentOperator()?.id;
+  let body: Record<string, unknown>;
+  try {
+    body = await preparedAdministrationBody(info, outcome, options);
+  } catch {
+    return {
+      ok: false,
+      message:
+        'Impossibile preparare la richiesta. Riapri la pagina tramite una connessione sicura.',
+    };
+  }
+  if (epoch !== sessionCacheEpoch() || identity !== getCurrentOperator()?.id)
+    return { ok: false, message: 'La sessione è cambiata: rientra nel giro e verifica la dose.' };
   try {
     const res = await fetch(`${API_URL}/therapy-slots/${path}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-      body: JSON.stringify(administrationBody(info, outcome, options)),
+      body: JSON.stringify(body),
     });
+    if (epoch !== sessionCacheEpoch() || identity !== getCurrentOperator()?.id)
+      return { ok: false, message: 'La sessione è cambiata: verifica il registro dopo l’accesso.' };
     if (!res.ok) return { ok: false, message: await administrationErrorMessage(res) };
     return { ok: true };
   } catch {
-    return { ok: false, message: 'Errore di rete: la somministrazione non è stata registrata.' };
+    return {
+      ok: false,
+      message: 'Esito non verificabile per errore di rete. Rileggi il giro prima di riprovare.',
+    };
   } finally {
     invalidateCachedGet(`${API_URL}/therapy-slots`);
   }

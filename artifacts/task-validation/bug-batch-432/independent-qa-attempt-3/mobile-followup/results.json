@@ -1,0 +1,109 @@
+{
+  "focusedOnly": true,
+  "results": [
+    {
+      "case": "desktop-print-screen-patient-switch-resize",
+      "immediate": {
+        "innerWidth": 360,
+        "docWidth": 360,
+        "screen": true,
+        "mobileMedia": true,
+        "shellClass": "app-shell",
+        "sidebar": {
+          "left": 0,
+          "right": 100,
+          "width": 100,
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "transition": "0.22s"
+        }
+      },
+      "settled": {
+        "innerWidth": 360,
+        "docWidth": 360,
+        "screen": true,
+        "mobileMedia": true,
+        "shellClass": "app-shell",
+        "sidebar": {
+          "left": -99.98811340332031,
+          "right": 0.0118865966796875,
+          "width": 100,
+          "transform": "matrix(1, 0, 0, 1, -99.9881, 0)",
+          "transition": "0.22s"
+        }
+      },
+      "rows": [
+        {
+          "name": "QA second 000",
+          "box": {
+            "x": 35,
+            "y": 702.1875,
+            "width": 290,
+            "height": 60.59375
+          }
+        },
+        {
+          "name": "QA second 001",
+          "box": {
+            "x": 35,
+            "y": 640.59375,
+            "width": 290,
+            "height": 60.59375
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "case": "fresh-mobile-normal-menu-dismiss-and-reload",
+      "initial": {
+        "innerWidth": 360,
+        "docWidth": 360,
+        "screen": true,
+        "mobileMedia": true,
+        "shellClass": "app-shell",
+        "sidebar": {
+          "left": -100,
+          "right": 0,
+          "width": 100,
+          "transform": "matrix(1, 0, 0, 1, -100, 0)",
+          "transition": "0.22s"
+        }
+      },
+      "dismissed": {
+        "innerWidth": 360,
+        "docWidth": 360,
+        "screen": true,
+        "mobileMedia": true,
+        "shellClass": "app-shell",
+        "sidebar": {
+          "left": -100,
+          "right": 0,
+          "width": 100,
+          "transform": "matrix(1, 0, 0, 1, -100, 0)",
+          "transition": "0.22s"
+        }
+      },
+      "rows": [
+        {
+          "name": "QA second 000",
+          "box": {
+            "x": 35,
+            "y": 702.1875,
+            "width": 290,
+            "height": 60.59375
+          }
+        },
+        {
+          "name": "QA second 001",
+          "box": {
+            "x": 35,
+            "y": 640.59375,
+            "width": 290,
+            "height": 60.59375
+          }
+        }
+      ],
+      "pass": true
+    }
+  ]
+}

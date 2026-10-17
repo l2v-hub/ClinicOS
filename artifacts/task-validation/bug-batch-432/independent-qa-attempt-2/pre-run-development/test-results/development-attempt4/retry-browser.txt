@@ -1,0 +1,49 @@
+{
+  "patientId": "cmvc532ia0000i2p9qqu4ph77",
+  "therapyId": "cmvc532qq0001i2p9wumhpf3k",
+  "requests": [
+    {
+      "patientId": "cmvc532ia0000i2p9qqu4ph77",
+      "therapyId": "cmvc532qq0001i2p9wumhpf3k",
+      "date": "2026-10-17",
+      "fascia": "mattina",
+      "expectedStato": "da_erogare",
+      "scheduledTime": "08:00",
+      "requestId": "08e4d408-27c8-419c-af5a-ddad0ce9ad6e"
+    },
+    {
+      "patientId": "cmvc532ia0000i2p9qqu4ph77",
+      "therapyId": "cmvc532qq0001i2p9wumhpf3k",
+      "date": "2026-10-17",
+      "fascia": "mattina",
+      "expectedStato": "da_erogare",
+      "scheduledTime": "08:00",
+      "requestId": "08e4d408-27c8-419c-af5a-ddad0ce9ad6e"
+    }
+  ],
+  "intentionalNetworkFailures": 1,
+  "visibleRequests": [],
+  "firstServerResponse": {
+    "id": "cmvc538ru000c1ip9ls7n2cxo",
+    "therapyId": "cmvc532qq0001i2p9wumhpf3k",
+    "patientId": "cmvc532ia0000i2p9qqu4ph77",
+    "farmacoNome": "QA retry dose",
+    "farmacoDose": "1 compressa",
+    "farmacoVia": "orale",
+    "date": "2026-10-17",
+    "fascia": "mattina",
+    "ora": "08:00",
+    "stato": "erogata",
+    "operatoreId": "SIM-NURSE-1",
+    "operatoreNome": "Infermiere 1",
+    "confirmedAt": "2026-10-17T08:33:26.057Z",
+    "doseContext": null,
+    "motivo": null,
+    "note": null,
+    "createdAt": "2026-10-17T08:33:26.058Z",
+    "updatedAt": "2026-10-17T08:33:26.058Z"
+  },
+  "replayHeader": "true",
+  "pass": false,
+  "error": "locator.click: Timeout 25000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: /^Erogata:.*QA visible retry dose/ })\n"
+}

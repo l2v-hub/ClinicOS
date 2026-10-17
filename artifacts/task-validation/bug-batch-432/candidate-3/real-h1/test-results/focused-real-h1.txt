@@ -1,0 +1,16 @@
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ QA H1 barrier failure paths release and settle while preserving the primary error (623.192006ms)
+✔ QA H1 confirmation timeout and late rejection always release and settle (44.727314ms)
+✔ QA H1 — a slow correction racing a confirmation cannot produce a second write (590.50821ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13573.090765
