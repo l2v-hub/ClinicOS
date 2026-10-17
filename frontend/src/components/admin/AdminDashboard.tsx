@@ -1,26 +1,31 @@
-import type { Operatore, Camera, ClinicalOverview, ConsegnaOverview, NavKey } from '../../types';
-import {
-  IcoArrow,
-  IcoOperatori,
-  IcoConsegne,
-  IcoCalendar,
-  IcoBed,
-  IcoClock,
-  IcoUser,
-} from '../../icons';
+import { useEffect, useState } from 'react';
+import type {
+  Operatore,
+  Camera,
+  ClinicalOverview,
+  ConsegnaOverview,
+  NavKey,
+  ScheduleOperatore,
+} from '../../types';
 import { PageHeader } from '../shared/PageHeader';
-import { DashboardNotificationCenter } from '../operator/DashboardNotificationCenter';
-import { buildDashboardNotificationSections } from '../operator/buildDashboardNotificationSections';
-import { buildDashboardNotificationCounts } from '../operator/dashboardNotificationModel';
-import { useAnomalieReparto } from '../operator/cartella/useAnomalieReparto';
+import { useAnomalieReparto, anomalyTherapyId } from '../operator/cartella/useAnomalieReparto';
 import { useRiepilogoSomministrazioni } from '../operator/cartella/useRiepilogoSomministrazioni';
-import { AdminDashboardKpiBands } from './AdminDashboardKpiBands';
-import { DashboardTherapyDeadlines } from '../shared/DashboardTherapyDeadlines';
-import { landingOf, type PatientLanding } from '../../lib/patientTargetResolver';
+import type { PatientLanding } from '../../lib/patientTargetResolver';
 import type { PatientListEntry } from '../../lib/patientListView';
 import type { ConsegnaFeedQuery } from '../../lib/consegneFeed';
-import { OPERATOR_ROLE_EXPLANATION } from '../../lib/operatorRolePresentation';
-import { OperatorWorkloadHeading } from './OperatorWorkloadHeading';
+import { API_URL } from '../../config';
+import { operatorHeaders } from '../../lib/operatorSession';
+import { useCan } from '../../lib/capabilities';
+import { useUnreadUrgencies } from '../../lib/useUnreadUrgencies';
+import { facilityLocalMinute } from '../../lib/facilityTime';
+import {
+  buildAdminAttention,
+  operatorsOnDuty,
+  parseAttentionSchedules,
+  type AdminAttention,
+} from './adminAttentionModel';
+import { AdminAttentionList } from './AdminAttentionList';
+import './AdminAttentionList.css';
 
 interface AdminDashboardProps {
   operatori: Operatore[];
@@ -34,13 +39,10 @@ interface AdminDashboardProps {
   totalePazienti: number;
   loadingPazienti: boolean;
   onNavigate: (nav: NavKey) => void;
-  /** Giro terapia aperto sull'ora con dosi in ritardo, solo da somministrare (accesso diretto). */
   onOpenLateTherapy?: () => void;
-  /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
   onOpenConsegneFeed?: () => void;
   onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
-  /** Direct access: lista pazienti / consegne già filtrate su ciò che una tessera conta. */
   onOpenPatientList?: (entry: PatientListEntry) => void;
   onOpenConsegneQuery?: (query: ConsegnaFeedQuery) => void;
   clinicalOverview?: ClinicalOverview | null;
@@ -48,452 +50,339 @@ interface AdminDashboardProps {
   onRetryClinicalOverview: () => void;
 }
 
-function WorkloadBar({ value, max, color }: { value: number; max: number; color?: string }) {
-  const pct = max > 0 ? Math.min(100, Math.round((value / max) * 100)) : 0;
-  const bg = color ?? (pct >= 80 ? 'var(--red)' : pct >= 60 ? 'var(--amber)' : 'var(--emerald)');
-  return (
-    <div className="workload-bar-track">
-      <div className="workload-bar-fill" style={{ width: `${pct}%`, background: bg }} />
-    </div>
-  );
+function useStaffing(enabled: boolean) {
+  const [now, setNow] = useState(() => new Date());
+  const [revision, setRevision] = useState(0);
+  const [snapshot, setSnapshot] = useState<{
+    state: 'loading' | 'ready' | 'error';
+    rows: ScheduleOperatore[];
+  }>({ state: 'loading', rows: [] });
+  useEffect(() => {
+    const refresh = () => {
+      if (document.visibilityState === 'hidden') return;
+      setNow(new Date());
+      setRevision((value) => value + 1);
+    };
+    const timer = window.setInterval(refresh, 60_000);
+    window.addEventListener('focus', refresh);
+    document.addEventListener('visibilitychange', refresh);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener('focus', refresh);
+      document.removeEventListener('visibilitychange', refresh);
+    };
+  }, []);
+  useEffect(() => {
+    if (!enabled) return;
+    const controller = new AbortController();
+    void fetch(`${API_URL}/operators/schedules`, {
+      headers: operatorHeaders(),
+      signal: controller.signal,
+      cache: 'no-store',
+    })
+      .then(async (response) => {
+        if (!response.ok) throw new Error('Orari non disponibili');
+        const rows = parseAttentionSchedules(await response.json());
+        if (!controller.signal.aborted) setSnapshot({ state: 'ready', rows });
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setSnapshot({ state: 'error', rows: [] });
+      });
+    return () => controller.abort();
+  }, [enabled, revision]);
+  return { ...snapshot, now, retry: () => setRevision((value) => value + 1) };
 }
 
 export function AdminDashboard({
   operatori,
   operatorSummary = null,
-  consegneOverview,
   consegneOverviewState,
   camere,
   camereLoadState,
   camereLoadError,
   onRetryCamere,
-  totalePazienti,
   loadingPazienti,
   onNavigate,
-  onOpenLateTherapy,
   onOpenConsegneAperte,
   onSelectPaziente,
   onOpenPatientList,
-  onOpenConsegneQuery,
   clinicalOverview = null,
   clinicalOverviewState,
   onRetryClinicalOverview,
 }: AdminDashboardProps) {
-  const attivi = operatori.filter((o) => o.stato === 'attivo');
-  const operatorTotal = operatorSummary?.total ?? operatori.length;
-  const activeOperatorTotal = operatorSummary?.active ?? attivi.length;
-  const appointmentsTodayTotal =
-    operatorSummary?.appointmentsToday ??
-    attivi.reduce((sum, operator) => sum + operator.appuntamentiOggi, 0);
-  const urgenti = consegneOverview?.urgentPreview ?? [];
-  const overviewAvailable = consegneOverview !== null;
-  // UX2 W8: only urgencies still waiting for a «Ho capito» are counted / flagged.
-  const urgentCount = consegneOverview?.summary.urgentActive;
-  const maxPazienti = Math.max(...operatori.map((o) => o.pazientiAssegnati), 1);
+  const canReadDiary = useCan('diary.list');
+  const canReadSchedules = useCan('operators.schedules');
+  const canReadRooms = useCan('rooms.list');
+  const urgencies = useUnreadUrgencies(canReadDiary);
   const somministrazioni = useRiepilogoSomministrazioni();
   const anomalie = useAnomalieReparto();
-
-  // Clinical KPIs
-  const critici = clinicalOverview?.critici ?? 0;
-  const rischiAlti = clinicalOverview?.rischiAlti ?? 0;
-  const dimessi = clinicalOverview?.dimessi ?? 0;
-  const clinicalOverviewReady = clinicalOverviewState === 'ready' && clinicalOverview !== null;
-  const urgenzePreseInCarico = consegneOverview?.summary.urgentTaken;
-
-  // Occupancy
-  const totaleLetti = camere.flatMap((c) => c.letti);
-  const lettiOccupati = totaleLetti.filter((l) => l.stato === 'occupato').length;
-  const lettiLiberi = totaleLetti.filter((l) => l.stato === 'libero').length;
-  const occupancyPct =
-    totaleLetti.length > 0 ? Math.round((lettiOccupati / totaleLetti.length) * 100) : 0;
-  const camereOccupate = camere.filter((c) => c.letti.every((l) => l.stato === 'occupato')).length;
-  const roomSnapshotAvailable = camereLoadState === 'ready' || camere.length > 0;
-
-  const baseNotificationCounts = buildDashboardNotificationCounts({
-    delayedPatients: somministrazioni.ritardi.length,
-    urgentHandovers: urgentCount ?? 0,
-    drugAnomalyPatients: anomalie.pazienti.length,
-    deliveryOverviewFailed: consegneOverviewState === 'error',
-    clinicalOverviewFailed: clinicalOverviewState === 'error',
-    administrationsFailed: somministrazioni.fallito,
-    drugVerificationFailed: anomalie.fallito || anomalie.verificaIncompleta,
+  const staffing = useStaffing(canReadSchedules);
+  const rows = buildAdminAttention({
+    urgencies: urgencies.rows,
+    therapies: somministrazioni.disponibile && !somministrazioni.fallito ? somministrazioni : null,
+    clinical: clinicalOverview,
+    anomalies: anomalie.pazienti.flatMap((patient) =>
+      patient.esito.anomalie.map((anomaly) => ({
+        patientId: patient.patientId,
+        nome: patient.nome,
+        farmacoNome: anomaly.farmacoNome,
+        therapyId: anomalyTherapyId(anomalie, patient.patientId, anomaly.farmacoNome),
+      })),
+    ),
   });
-  const roomWarningCount = camereLoadState === 'error' ? 1 : 0;
-  const notificationCounts = {
-    ...baseNotificationCounts,
-    warning: baseNotificationCounts.warning + roomWarningCount,
-    total: baseNotificationCounts.total + roomWarningCount,
+  const uncertain =
+    !canReadDiary ||
+    urgencies.state !== 'ready' ||
+    urgencies.atLeast ||
+    somministrazioni.inCorso ||
+    somministrazioni.fallito ||
+    anomalie.inCorso ||
+    anomalie.fallito ||
+    anomalie.verificaIncompleta ||
+    clinicalOverviewState !== 'ready';
+  const currentStaff = operatorsOnDuty(operatori, staffing.rows, staffing.now);
+  const beds = camere.flatMap((camera) => camera.letti);
+  const occupied = beds.filter((bed) => bed.stato === 'occupato').length;
+  const free = beds.filter((bed) => bed.stato === 'libero').length;
+  const openAttention = (row: AdminAttention) => {
+    if ('list' in row.target) {
+      if (onOpenPatientList) onOpenPatientList(row.target.list);
+      else onNavigate('pazienti');
+    } else if (onSelectPaziente) {
+      onSelectPaziente(row.patientName ?? '', row.target.patientId, row.target.landing);
+    } else onNavigate('pazienti');
   };
-  const notificationSections = buildDashboardNotificationSections({
-    somministrazioni,
-    anomalie,
-    urgentCount,
-    consegneOverviewState,
-    clinicalOverviewState,
-    overviewAvailable,
-    onNavigate,
-    onOpenConsegneAperte,
-    onSelectPaziente,
-    onRetryClinicalOverview,
-    therapyNav: 'terapie',
-    onOpenPatientList,
-  });
-
-  if (camereLoadState === 'error') {
-    notificationSections.push({
-      id: 'occupazione-non-disponibile',
-      tone: 'warning',
-      count: 1,
-      title: 'Occupazione struttura non aggiornata',
-      summary: roomSnapshotAvailable
-        ? 'Sono mostrati gli ultimi dati disponibili.'
-        : (camereLoadError ?? 'I dati delle camere non sono disponibili.'),
-      content: (
-        <button
-          type="button"
-          className="btn-secondary dashboard-notification-section__action"
-          onClick={onRetryCamere}
-        >
-          Riprova <IcoArrow />
-        </button>
-      ),
-    });
-  }
-
-  const todayStr = new Date().toLocaleDateString('it-IT', {
+  const openUrgencies = () =>
+    onOpenConsegneAperte ? onOpenConsegneAperte() : onNavigate('consegne');
+  const localDay = facilityLocalMinute(staffing.now).slice(0, 10);
+  const dayLabel = new Intl.DateTimeFormat('it-IT', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
     year: 'numeric',
-  });
+    timeZone: 'Europe/Rome',
+  }).format(staffing.now);
 
   return (
-    <div className="admin-dashboard">
+    <div className="admin-dashboard" data-clinical-day={localDay}>
       <PageHeader
-        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Dashboard' }]}
-        title="Dashboard"
-        subtitle={todayStr}
+        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Reparto adesso' }]}
+        title="Reparto adesso"
+        subtitle={dayLabel}
       />
-
-      <DashboardNotificationCenter
-        counts={notificationCounts}
-        sections={notificationSections}
+      <AdminAttentionList
+        rows={rows}
         loading={
+          urgencies.state === 'loading' ||
           somministrazioni.inCorso ||
           anomalie.inCorso ||
-          consegneOverviewState === 'loading' ||
-          clinicalOverviewState === 'loading' ||
-          camereLoadState === 'idle' ||
-          camereLoadState === 'loading'
+          clinicalOverviewState === 'loading'
         }
-      />
-
-      <AdminDashboardKpiBands
-        onOpenLateTherapy={onOpenLateTherapy}
-        loadingPazienti={loadingPazienti}
-        totalePazienti={totalePazienti}
-        activeOperatorTotal={activeOperatorTotal}
-        operatorTotal={operatorTotal}
-        appointmentsTodayTotal={appointmentsTodayTotal}
-        urgenzePreseInCarico={urgenzePreseInCarico}
-        urgentCount={urgentCount}
-        consegneOverviewState={consegneOverviewState}
-        overviewAvailable={overviewAvailable}
-        clinicalOverviewState={clinicalOverviewState}
-        clinicalOverviewReady={clinicalOverviewReady}
-        critici={critici}
-        rischiAlti={rischiAlti}
-        dimessi={dimessi}
-        somministrazioni={somministrazioni}
-        onNavigate={onNavigate}
-        onOpenConsegneAperte={onOpenConsegneAperte}
-        onOpenPatientList={onOpenPatientList}
-        onOpenConsegneFeed={onOpenConsegneQuery}
-      />
-
-      {somministrazioni.disponibile && (
-        <DashboardTherapyDeadlines
-          summary={somministrazioni}
-          onOpenTherapy={onOpenLateTherapy ?? (() => onNavigate('terapie'))}
-          onSelectPaziente={onSelectPaziente}
-        />
-      )}
-
-      {/* Occupancy section */}
-      <div className="section-header" style={{ marginTop: 32 }}>
-        <h3 className="section-header__title">
-          <span className="section-header__ico">
-            <IcoBed />
-          </span>
-          Occupazione Struttura
-        </h3>
-        <button className="link-btn" onClick={() => onNavigate('posti-letto')}>
-          Gestione posti letto <IcoArrow />
-        </button>
-      </div>
-
-      {!roomSnapshotAvailable ? (
-        <div className="occupancy-overview">
-          <p role={camereLoadState === 'error' ? 'alert' : 'status'}>
-            {camereLoadState === 'error'
-              ? 'Dati di occupazione non disponibili.'
-              : 'Caricamento occupazione struttura…'}
+        uncertain={uncertain}
+        urgencyCount={canReadDiary && urgencies.state === 'ready' ? urgencies.rows.length : null}
+        atLeast={urgencies.atLeast}
+        onOpen={openAttention}
+      >
+        {!canReadDiary && (
+          <p className="admin-attention__status" role="status">
+            La coda delle urgenze non è disponibile per il tuo ruolo.
           </p>
-        </div>
-      ) : (
-        <div className="occupancy-overview">
-          <div className="occ-overview-card">
-            <div className="occ-gauge-wrap">
-              <svg viewBox="0 0 80 80" className="occ-gauge">
-                <circle
-                  cx="40"
-                  cy="40"
-                  r="32"
-                  fill="none"
-                  stroke="var(--divider)"
-                  strokeWidth="8"
-                />
-                <circle
-                  cx="40"
-                  cy="40"
-                  r="32"
-                  fill="none"
-                  stroke={
-                    occupancyPct >= 90
-                      ? 'var(--red)'
-                      : occupancyPct >= 70
-                        ? 'var(--amber)'
-                        : 'var(--emerald)'
-                  }
-                  strokeWidth="8"
-                  strokeDasharray={`${occupancyPct * 2.01} 201`}
-                  strokeLinecap="round"
-                  transform="rotate(-90 40 40)"
-                />
-                <text
-                  x="40"
-                  y="44"
-                  textAnchor="middle"
-                  fontSize="16"
-                  fontWeight="700"
-                  fill="var(--text)"
+        )}
+        {canReadDiary && urgencies.state === 'error' && (
+          <p className="admin-attention__status" role="alert">
+            Urgenze non disponibili: il dato non equivale a zero.{' '}
+            <button type="button" className="link-btn" onClick={openUrgencies}>
+              Apri Consegne
+            </button>
+          </p>
+        )}
+        {urgencies.atLeast && (
+          <p className="admin-attention__status" role="status">
+            Ci possono essere altre urgenze oltre le pagine lette.{' '}
+            <button type="button" className="link-btn" onClick={openUrgencies}>
+              Tutte le urgenze
+            </button>
+          </p>
+        )}
+        {somministrazioni.fallito && (
+          <p className="admin-attention__status" role="alert">
+            Dosi di oggi non disponibili.{' '}
+            <button type="button" className="link-btn" onClick={somministrazioni.aggiorna}>
+              Riprova dosi
+            </button>
+          </p>
+        )}
+        {somministrazioni.aggiornamentoInCorso && !somministrazioni.inCorso && (
+          <p className="admin-attention__status" role="status">
+            Aggiornamento delle dosi in corso; sono mostrati gli ultimi dati disponibili.
+          </p>
+        )}
+        {clinicalOverviewState === 'error' && (
+          <p className="admin-attention__status" role="alert">
+            Situazione clinica non aggiornata
+            {clinicalOverview ? ': sono mostrati gli ultimi dati disponibili.' : '.'}{' '}
+            <button type="button" className="link-btn" onClick={onRetryClinicalOverview}>
+              Riprova dati clinici
+            </button>
+          </p>
+        )}
+        {consegneOverviewState === 'error' && (
+          <p className="admin-attention__status" role="alert">
+            Riepilogo consegne non disponibile. Le urgenze mostrate provengono dalla coda diario e
+            consegne.{' '}
+            <button type="button" className="link-btn" onClick={openUrgencies}>
+              Apri Consegne
+            </button>
+          </p>
+        )}
+        {(anomalie.fallito || anomalie.verificaIncompleta) && (
+          <p className="admin-attention__status" role="alert">
+            Verifica prescrizioni {anomalie.fallito ? 'non disponibile' : 'parziale'}.{' '}
+            <button
+              type="button"
+              className="link-btn"
+              onClick={() =>
+                onOpenPatientList
+                  ? onOpenPatientList({ signal: 'anomalie' })
+                  : onNavigate('pazienti')
+              }
+            >
+              Verifica prescrizioni
+            </button>
+          </p>
+        )}
+      </AdminAttentionList>
+      <section
+        className="admin-ward-summary"
+        data-admin-staffing
+        aria-labelledby="admin-staffing-title"
+      >
+        <h2 id="admin-staffing-title">In turno ora</h2>
+        {!canReadSchedules ? (
+          <p role="status">Gli orari non sono disponibili per il tuo ruolo.</p>
+        ) : staffing.state === 'loading' ? (
+          <p role="status">Caricamento turni…</p>
+        ) : staffing.state === 'error' ? (
+          <p role="alert">
+            Turni non disponibili.{' '}
+            <button type="button" className="link-btn" onClick={staffing.retry}>
+              Riprova turni
+            </button>
+          </p>
+        ) : staffing.rows.length === 0 ? (
+          <p>
+            Nessun orario configurato.{' '}
+            <button
+              type="button"
+              className="link-btn"
+              onClick={() => onNavigate('orari-operatori')}
+            >
+              Configura turni
+            </button>
+          </p>
+        ) : (
+          <>
+            {currentStaff.length > 0 ? (
+              <ul className="admin-ward-summary__list">
+                {currentStaff.map((operator) => (
+                  <li key={operator.id} data-on-duty={operator.id}>
+                    <button
+                      type="button"
+                      className="link-btn"
+                      onClick={() => onNavigate('orari-operatori')}
+                    >
+                      {operator.cognome} {operator.nome}
+                    </button>
+                    <span>{operator.pazientiAssegnati} pazienti assegnati</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>
+                Nessun operatore in turno negli orari configurati.{' '}
+                <button
+                  type="button"
+                  className="link-btn"
+                  onClick={() => onNavigate('orari-operatori')}
                 >
-                  {occupancyPct}%
-                </text>
-              </svg>
-            </div>
-            <div className="occ-overview-stats">
-              <div className="occ-overview-stat">
-                <span className="occ-stat__val" style={{ color: 'var(--red)' }}>
-                  {lettiOccupati}
-                </span>
-                <span className="occ-stat__lbl">Letti occupati</span>
-              </div>
-              <div className="occ-overview-stat">
-                <span className="occ-stat__val" style={{ color: 'var(--emerald)' }}>
-                  {lettiLiberi}
-                </span>
-                <span className="occ-stat__lbl">Letti liberi</span>
-              </div>
-              <div className="occ-overview-stat">
-                <span className="occ-stat__val">{totaleLetti.length}</span>
-                <span className="occ-stat__lbl">Totale letti</span>
-              </div>
-              <div className="occ-overview-stat">
-                <span className="occ-stat__val">
-                  {camereOccupate}/{camere.filter((c) => c.stato === 'attiva').length}
-                </span>
-                <span className="occ-stat__lbl">Camere piene</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Reparto breakdown */}
-          <div className="occ-reparti">
-            {Array.from(new Set(camere.map((c) => c.reparto))).map((reparto) => {
-              const camRep = camere.filter((c) => c.reparto === reparto);
-              const lettiRep = camRep.flatMap((c) => c.letti);
-              const occRep = lettiRep.filter((l) => l.stato === 'occupato').length;
-              const pct = lettiRep.length > 0 ? Math.round((occRep / lettiRep.length) * 100) : 0;
-              return (
-                <div key={reparto} className="occ-reparto-row">
-                  <span className="occ-reparto-name">{reparto}</span>
-                  <div style={{ flex: 1 }}>
-                    <WorkloadBar
-                      value={occRep}
-                      max={lettiRep.length}
-                      color={
-                        pct >= 90 ? 'var(--red)' : pct >= 70 ? 'var(--amber)' : 'var(--emerald)'
-                      }
-                    />
-                  </div>
-                  <span className="occ-reparto-count">
-                    {occRep}/{lettiRep.length}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Carico operatori */}
-      <div className="section-header" style={{ marginTop: 32 }}>
-        <h3 className="section-header__title">
-          <span className="section-header__ico">
-            <IcoOperatori />
-          </span>
-          Carico Operatori
-        </h3>
-        <button className="link-btn" onClick={() => onNavigate('gestione-operatori')}>
-          Gestione operatori <IcoArrow />
-        </button>
-      </div>
-
-      <p className="view-header__sub">{OPERATOR_ROLE_EXPLANATION}</p>
-      <div className="operator-workload-grid">
-        {operatori.map((op) => (
-          <div
-            key={op.id}
-            className={`op-workload-card${op.stato === 'inattivo' ? ' op-workload-card--inactive' : ''}`}
-            style={{ borderTop: `3px solid ${op.colore}` }}
-          >
-            <OperatorWorkloadHeading op={op} />
-            {op.stato === 'attivo' && (
+                  Verifica turni
+                </button>
+              </p>
+            )}
+            {operatori.some(
+              (operator) =>
+                operator.stato === 'attivo' &&
+                !staffing.rows.some((schedule) => schedule.operatoreId === operator.id),
+            ) && (
+              <p role="status">
+                Alcuni operatori non hanno orari configurati.{' '}
+                <button
+                  type="button"
+                  className="link-btn"
+                  onClick={() => onNavigate('orari-operatori')}
+                >
+                  Completa turni
+                </button>
+              </p>
+            )}
+          </>
+        )}
+        {(loadingPazienti || (operatorSummary && operatorSummary.total > operatori.length)) && (
+          <p role="status">
+            Carichi mostrati per gli operatori disponibili
+            {operatorSummary ? ` (${operatori.length} di ${operatorSummary.total})` : ''}.{' '}
+            <button
+              type="button"
+              className="link-btn"
+              onClick={() => onNavigate('gestione-operatori')}
+            >
+              Gestione operatori
+            </button>
+          </p>
+        )}
+        {canReadRooms && (
+          <div className="admin-ward-summary__occupancy" data-admin-occupancy>
+            {camereLoadState === 'idle' || camereLoadState === 'loading' ? (
+              <span role="status">Caricamento occupazione…</span>
+            ) : camereLoadState === 'error' ? (
+              <span role="alert">
+                Occupazione non aggiornata
+                {camere.length > 0
+                  ? `: ultimi dati ${occupied}/${beds.length} letti occupati.`
+                  : '.'}{' '}
+                {camereLoadError && <span>{camereLoadError}</span>}{' '}
+                <button type="button" className="link-btn" onClick={onRetryCamere}>
+                  Riprova occupazione
+                </button>
+              </span>
+            ) : camere.length === 0 ? (
               <>
-                <div className="op-workload-stats">
-                  <div className="op-stat">
-                    <span className="op-stat__val">{op.pazientiAssegnati}</span>
-                    <span className="op-stat__lbl">Pazienti</span>
-                  </div>
-                  <div className="op-stat">
-                    <span className="op-stat__val">{op.appuntamentiOggi}</span>
-                    <span className="op-stat__lbl">Appuntamenti</span>
-                  </div>
-                  <div className="op-stat">
-                    <span className="op-stat__val">
-                      {overviewAvailable ? (consegneOverview.byOperator[op.id] ?? 0) : '—'}
-                    </span>
-                    <span className="op-stat__lbl">Consegne</span>
-                  </div>
-                </div>
-                <WorkloadBar value={op.pazientiAssegnati} max={maxPazienti} color={op.colore} />
+                <span>Nessuna camera configurata.</span>
+                <button
+                  type="button"
+                  className="link-btn"
+                  onClick={() => onNavigate('posti-letto')}
+                >
+                  Configura camere
+                </button>
+              </>
+            ) : (
+              <>
+                <span>
+                  Letti: {occupied}/{beds.length} occupati · {free} liberi
+                </span>
+                <button
+                  type="button"
+                  className="link-btn"
+                  onClick={() => onNavigate('posti-letto')}
+                >
+                  Gestisci letti
+                </button>
               </>
             )}
           </div>
-        ))}
-      </div>
-
-      {/* Agenda sommario */}
-      <div className="section-header" style={{ marginTop: 32 }}>
-        <h3 className="section-header__title">
-          <span className="section-header__ico">
-            <IcoCalendar />
-          </span>
-          Riepilogo Agenda Oggi
-        </h3>
-        <button className="link-btn" onClick={() => onNavigate('agenda-admin')}>
-          Agenda completa <IcoArrow />
-        </button>
-      </div>
-
-      <div className="agenda-summary-grid">
-        {attivi.map((op) => (
-          <div
-            key={op.id}
-            className="agenda-summary-card"
-            style={{ borderTop: `3px solid ${op.colore}` }}
-          >
-            <div className="agenda-summary-card__header">
-              <span
-                className="dashboard-person-icon"
-                style={{ color: op.colore }}
-                aria-hidden="true"
-              >
-                <IcoUser />
-              </span>
-              <span className="agenda-summary-card__name">
-                {op.cognome} {op.nome}
-              </span>
-              <span className="agenda-summary-card__count">{op.appuntamentiOggi} appt.</span>
-            </div>
-            <div className="agenda-summary-slots">
-              {Array.from({ length: Math.min(op.appuntamentiOggi, 5) }, (_, i) => (
-                <span key={i} className="agenda-slot-dot" style={{ background: op.colore }} />
-              ))}
-              {op.appuntamentiOggi === 0 && (
-                <span className="agenda-summary-free">Nessun appuntamento</span>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Consegne urgenti */}
-      {urgenti.length > 0 && (
-        <>
-          <div className="section-header" style={{ marginTop: 32 }}>
-            <h3 className="section-header__title">
-              <span className="section-header__ico">
-                <IcoConsegne />
-              </span>
-              Urgenze da prendere in carico
-            </h3>
-            <button
-              className="link-btn"
-              onClick={() =>
-                onOpenConsegneAperte ? onOpenConsegneAperte() : onNavigate('consegne')
-              }
-            >
-              Vedi tutte <IcoArrow />
-            </button>
-          </div>
-          <div className="consegne-list">
-            {urgenti.slice(0, 3).map((c) => (
-              <div key={c.id} className="consegna-card consegna-card--urgente">
-                <div className="consegna-card__top">
-                  <span className="consegna-priorita-badge consegna-priorita-badge--urgente">
-                    Urgente
-                  </span>
-                  <span className="consegna-tipo">{c.tipo}</span>
-                  {c.oraScadenza && (
-                    <span className="consegna-scadenza">
-                      <IcoClock />
-                      {c.oraScadenza}
-                    </span>
-                  )}
-                </div>
-                {onSelectPaziente && c.pazienteNome ? (
-                  // Direct access: la consegna stessa, evidenziata nella cartella del paziente.
-                  <button
-                    className="link-btn consegna-paziente"
-                    data-consegna-link={c.id}
-                    aria-label={`${c.pazienteNome}: apri questa consegna nella cartella`}
-                    onClick={() =>
-                      onSelectPaziente(
-                        c.pazienteNome!,
-                        c.pazienteId,
-                        landingOf({
-                          kind: 'handover',
-                          patientId: c.pazienteId,
-                          consegnaId: c.id,
-                        }),
-                      )
-                    }
-                    style={{ fontWeight: 600 }}
-                  >
-                    {c.pazienteNome}
-                  </button>
-                ) : (
-                  <span className="consegna-paziente">{c.pazienteNome}</span>
-                )}
-                <p className="consegna-note">{c.note}</p>
-                <span className="consegna-assegnato">→ {c.operatoreAssegnato}</span>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
+        )}
+      </section>
     </div>
   );
 }

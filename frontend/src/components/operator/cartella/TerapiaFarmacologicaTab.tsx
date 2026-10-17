@@ -715,6 +715,7 @@ export function TerapiaFarmacologicaTab({
         onChange={setForm}
         operatoreNome={operatoreNome}
         issues={formIssues}
+        creation={editId === null}
       />
       {(formIssues.length > 0 || saveError) && (
         <p className="therapy-form__error" role="alert" data-testid="therapy-save-error">

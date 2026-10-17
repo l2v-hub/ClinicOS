@@ -72,3 +72,17 @@
     grid-template-columns: minmax(0, 1fr) 220px;
   }
 }
+
+.parameter-reading-form .parameter-reading-form__input--attention {
+  border-color: #b36e11;
+  box-shadow: 0 0 0 1px #b36e11;
+}
+.parameter-oxygen-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.parameter-oxygen-choices button[aria-pressed='true'] {
+  background: var(--blue-bg, #eaf1fb);
+  border-color: var(--blue, #245a91);
+}

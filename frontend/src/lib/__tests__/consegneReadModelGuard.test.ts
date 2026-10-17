@@ -30,9 +30,12 @@ test('login loads only handover overview while the bounded feed is navigation-sc
   assert.match(app, /buildConsegnaFeedUrl\(API_URL, requestedQuery, cursor\)/);
 });
 
-test('dashboards consume exact overview and never derive KPI from a feed page', () => {
+test('dashboards use authoritative read models rather than deriving counts from a handover feed page', () => {
   assert.match(operatorDashboard, /consegneOverview\?\.summary/);
-  assert.match(adminDashboard, /consegneOverview\?\.summary/);
+  assert.match(adminDashboard, /useUnreadUrgencies\(canReadDiary\)/);
+  assert.match(adminDashboard, /urgencies\.state === 'ready' \? urgencies\.rows\.length : null/);
+  assert.match(adminDashboard, /atLeast=\{urgencies.atLeast\}/);
+  assert.doesNotMatch(adminDashboard, /consegneOverview\?\.summary\.urgentActive/);
   assert.doesNotMatch(operatorDashboard, /consegne\.filter/);
   assert.doesNotMatch(adminDashboard, /consegne\.filter/);
   assert.match(app, /consegneOverviewAbortRef\.current\?\.abort\(\)/);

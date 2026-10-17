@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import {
   ENTRY_FIELDS,
   entryFieldForError,
@@ -10,7 +10,7 @@ import {
   padInput,
   padUpdate,
   padValue,
-  previousText,
+  previousPlaceholder,
   type PadField,
   type PreviousKey,
 } from '../../lib/parameterPad';
@@ -62,6 +62,14 @@ export function ParameterReadingForm({
   const now = useRecencyClock();
   const locked = saving || uncertain;
   const score = news2(values);
+  const [showPad, setShowPad] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia('(pointer: coarse)');
+    const update = () => setShowPad(media.matches && navigator.maxTouchPoints > 0);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
   const activeNumeric = ENTRY_FIELDS.find((field) => field.key === active && field.numeric);
   const errorId = `${prefix}-error`;
   function update(key: keyof ParameterValues, value: string) {
@@ -114,6 +122,8 @@ export function ParameterReadingForm({
               (!!invalid && invalid.field === null && field.key === 'fr') ||
               invalid?.field === field.key ||
               (invalid?.field === 'pa' && ['pas', 'pad'].includes(field.key));
+            const scoreKey = field.key === 'pas' || field.key === 'pad' ? 'pa' : field.key;
+            const abnormal = ((score.parts as Record<string, number | null>)[scoreKey] ?? 0) > 0;
             const common = {
               id,
               className: 'form-input',
@@ -121,7 +131,6 @@ export function ParameterReadingForm({
               'aria-invalid': affected || undefined,
               'aria-describedby':
                 [
-                  historical ? `${id}-previous` : '',
                   affected ? errorId : '',
                   field.key === 'o2' || field.key === 'coscienza' ? `${prefix}-news2-help` : '',
                 ]
@@ -145,14 +154,39 @@ export function ParameterReadingForm({
                 <span>
                   {field.label} {field.unit && <small>{field.unit}</small>}
                 </span>
-                {field.options ? (
+                {field.key === 'o2' ? (
+                  <div
+                    role="group"
+                    aria-label={`Nuova rilevazione ${field.label}`}
+                    className="parameter-oxygen-choices"
+                  >
+                    {[
+                      ['no', 'Aria ambiente'],
+                      ['si', 'Con O₂'],
+                    ].map(([option, label]) => (
+                      <button
+                        key={option}
+                        type="button"
+                        className="ds-btn ds-btn--secondary"
+                        aria-pressed={values.o2 === option}
+                        onClick={() => update('o2', option)}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                ) : field.options ? (
                   <select
                     {...common}
                     onChange={(event) =>
                       update(field.key as keyof ParameterValues, event.target.value)
                     }
                   >
-                    <option value="">—</option>
+                    <option value="">
+                      {historical
+                        ? previousPlaceholder(previous, field.key as PreviousKey, now) || '—'
+                        : '—'}
+                    </option>
                     {field.options.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
@@ -169,8 +203,11 @@ export function ParameterReadingForm({
                 ) : (
                   <input
                     {...common}
+                    className={`${common.className}${abnormal ? ' parameter-reading-form__input--attention' : ''}`}
                     type="text"
-                    placeholder="—"
+                    placeholder={
+                      historical ? previousPlaceholder(previous, field.key as PreviousKey, now) : ''
+                    }
                     inputMode={field.numeric ? (field.decimals ? 'decimal' : 'numeric') : 'text'}
                     maxLength={field.numeric ? undefined : 200}
                     onChange={(event) => {
@@ -192,39 +229,42 @@ export function ParameterReadingForm({
                     }}
                   />
                 )}
-                {historical && (
-                  <small id={`${id}-previous`} className="parameter-reading-form__previous">
-                    {previousText(previous, field.key as PreviousKey, now)}
-                  </small>
-                )}
+
                 {field.key === 'note' && noteSummary && <small>{noteSummary}</small>}
               </label>
             );
           })}
         </fieldset>
         <div className="parameter-reading-form__tools">
-          <div
-            role="group"
-            aria-label="Tastierino numerico"
-            className="parameter-reading-form__pad"
-          >
-            {['7', '8', '9', '4', '5', '6', '1', '2', '3', ',', '0', 'back'].map((key) => (
-              <button
-                type="button"
-                key={key}
-                className="ds-btn ds-btn--secondary"
-                disabled={locked || !activeNumeric || (key === ',' && !activeNumeric.decimals)}
-                aria-label={key === 'back' ? 'Cancella' : key === ',' ? 'Virgola' : key}
-                onPointerDown={(event) => event.preventDefault()}
-                onClick={() => press(key)}
-              >
-                {key === 'back' ? '⌫' : key}
+          {showPad && (
+            <div
+              role="group"
+              aria-label="Tastierino numerico"
+              className="parameter-reading-form__pad"
+            >
+              {['7', '8', '9', '4', '5', '6', '1', '2', '3', ',', '0', 'back'].map((key) => (
+                <button
+                  type="button"
+                  key={key}
+                  className="ds-btn ds-btn--secondary"
+                  disabled={locked || !activeNumeric || (key === ',' && !activeNumeric.decimals)}
+                  aria-label={key === 'back' ? 'Cancella' : key === ',' ? 'Virgola' : key}
+                  onPointerDown={(event) => event.preventDefault()}
+                  onClick={() => press(key)}
+                >
+                  {key === 'back' ? '⌫' : key}
+                </button>
+              ))}
+            </div>
+          )}
+          {previous.status === 'error' && (
+            <small role="status">
+              Storico precedente non disponibile.{' '}
+              <button type="button" className="ds-link" onClick={onOpenHistory}>
+                Apri storico
               </button>
-            ))}
-          </div>
-          <small>
-            Seleziona un campo numerico. Il tastierino aggiunge o cancella in fondo al valore.
-          </small>
+            </small>
+          )}
           <button
             type="button"
             className="ds-btn ds-btn--secondary"
@@ -235,18 +275,21 @@ export function ParameterReadingForm({
             Campo successivo
           </button>
           <div className="parameter-reading-form__news2" role="status" aria-live="polite">
-            <strong>NEWS2 in tempo reale · {score.complete ? score.total : '—'}</strong>
-            <p>
+            <span>
+              NEWS2 {score.complete ? score.total : `parziale ${score.total}`} ·{' '}
               {score.complete
                 ? score.response
-                : `Mancano: ${score.missing.map((key) => NEWS2_LABELS[key]).join(', ')}`}
-            </p>
+                : `mancano ${score.missing.map((key) => NEWS2_LABELS[key]).join(', ')}`}
+            </span>
           </div>
-          <p id={`${prefix}-news2-help`} className="parameter-reading-form__help">
-            NEWS2 usa i sette parametri della stessa rilevazione e la scala SpO₂ 1. O₂ indica
-            l’ossigeno supplementare; coscienza usa ACVPU. Un punteggio incompleto non è un NEWS2
-            valido.
-          </p>
+          <details className="parameter-reading-form__help">
+            <summary>Informazioni NEWS2</summary>
+            <p id={`${prefix}-news2-help`}>
+              NEWS2 usa i sette parametri della stessa rilevazione e la scala SpO₂ 1; O₂ indica
+              ossigeno supplementare e coscienza usa ACVPU. Un punteggio parziale non è un NEWS2
+              valido.
+            </p>
+          </details>
           <small>Data e ora vengono registrate quando premi Salva.</small>
           <button
             ref={saveButton}

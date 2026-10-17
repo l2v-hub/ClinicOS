@@ -209,10 +209,15 @@ export function PatientList({
   }, [clinicalSummary]);
 
   // Same local regime/signal intersection for view counts and rendered patients.
-  const filtratiBase = useMemo(() => pazienti.filter(p =>
-    matchesPatientRegime(summaryMap.get(p.id)?.statoRicovero, regime) &&
-    matchesListSignal(summaryMap.get(p.id), anomalie.perPaziente.has(p.id), segnale)),
-    [pazienti, summaryMap, regime, segnale, anomalie.perPaziente]);
+  const filtratiBase = useMemo(
+    () =>
+      pazienti.filter(
+        (p) =>
+          matchesPatientRegime(summaryMap.get(p.id)?.statoRicovero, regime) &&
+          matchesListSignal(summaryMap.get(p.id), anomalie.perPaziente.has(p.id), segnale),
+      ),
+    [pazienti, summaryMap, regime, segnale, anomalie.perPaziente],
+  );
 
   // Conteggi sulle pagine già caricate: il backend non espone ancora un aggregato per stato.
   const contiVista = useMemo(
@@ -224,11 +229,7 @@ export function PatientList({
     [filtratiBase, summaryMap],
   );
   const filtrati = useMemo(
-    () =>
-      filtratiBase.filter(
-        (p) =>
-          matchesListView(summaryMap.get(p.id)?.statoRicovero, vista),
-      ),
+    () => filtratiBase.filter((p) => matchesListView(summaryMap.get(p.id)?.statoRicovero, vista)),
     [filtratiBase, vista, summaryMap, segnale, anomalie.perPaziente],
   );
   const ordinati = useMemo(
@@ -415,8 +416,10 @@ export function PatientList({
                 onClick={() => setVista(v)}
               >
                 {LIST_VIEW_LABEL[v]}
-                {contiVista[v] !== null && (v === 'tutti' || (!summaryLoading && !summaryError)) &&
-                  <span className="ds-chip__count">{contiVista[v]}</span>}
+                {contiVista[v] !== null &&
+                  (v === 'tutti' || (!summaryLoading && !summaryError)) && (
+                    <span className="ds-chip__count">{contiVista[v]}</span>
+                  )}
               </button>
             ))}
             <button
@@ -434,10 +437,6 @@ export function PatientList({
             </button>
           </div>
         </div>
-        <PatientRegimeControls regime={regime} onChange={setRegime} view={vista}
-          count={filtrati.length} loaded={pazienti.length} hasMore={hasMore}
-          unverified={summaryLoading || Boolean(summaryError) || contiVista.in_carico === null || contiVista.dimessi === null}
-          loading={summaryLoading} />
         {segnale && (
           <p className="plist-note plist-note--signal" role="status" data-list-signal={segnale}>
             Filtro attivo: <strong>{LIST_SIGNAL_LABEL[segnale]}</strong> ({filtrati.length} fra i
@@ -457,6 +456,22 @@ export function PatientList({
         )}
         {showFilters && (
           <div className="plist-filters" id="plist-filters">
+            <PatientRegimeControls
+              regime={regime}
+              onChange={setRegime}
+              view={vista}
+              count={filtrati.length}
+              loaded={pazienti.length}
+              hasMore={hasMore}
+              unverified={
+                summaryLoading ||
+                Boolean(summaryError) ||
+                contiVista.in_carico === null ||
+                contiVista.dimessi === null
+              }
+              loading={summaryLoading}
+            />
+
             <div className="filter-chips" role="group" aria-label="Filtra pazienti per sesso">
               {(['tutti', 'M', 'F'] as const).map((s) => (
                 <button

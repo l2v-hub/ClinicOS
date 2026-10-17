@@ -1,5 +1,14 @@
 import { SortArrow } from '../shared/SortArrow';
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
+import { API_URL } from '../../config';
+import { useCan } from '../../lib/capabilities';
+import { operatorHeaders } from '../../lib/operatorSession';
+import {
+  fetchParameterReadings,
+  PARAMETER_READING_SAVED_EVENT,
+} from '../../lib/patientParameterReadings';
+import { latestCompleteNews2, news2Points } from '../../lib/news2History';
+import { patientIdentityIncomplete } from '../../lib/patientIdentity';
 import { PatientIdentity, PatientIdentifier } from '../shared/PatientIdentity';
 import { LazyNews2 } from './LazyNews2';
 import { parsePatientLocation } from '../../lib/patientIdentity';
@@ -29,7 +38,6 @@ function PatientSignals({
   summary,
   openHandovers,
   anomalies,
-  summaryLoading,
   onSelect,
 }: {
   patient: Paziente;
@@ -46,19 +54,7 @@ function PatientSignals({
     patientAnomalies.totale > 0 ||
     openHandovers > 0;
 
-  if (!hasSignals) {
-    const incomplete = !summary || anomalies.fallito || anomalies.verificaIncompleta;
-    const pending = summaryLoading || anomalies.inCorso;
-    return (
-      <span className="patient-signals__empty">
-        {pending
-          ? 'Verifica in corso…'
-          : incomplete
-            ? 'Segnalazioni non disponibili'
-            : 'Nessuna segnalazione'}
-      </span>
-    );
-  }
+  if (!hasSignals) return null;
 
   return (
     <div
@@ -180,6 +176,7 @@ const PatientCard = memo(function PatientCard({
   summaryLoading,
   deleteEnabled,
   deleting,
+  hasNews,
   onSelect,
   onDelete,
 }: {
@@ -190,6 +187,7 @@ const PatientCard = memo(function PatientCard({
   summaryLoading?: boolean;
   deleteEnabled: boolean;
   deleting: boolean;
+  hasNews: boolean;
   onSelect: (patient: Paziente, landing?: PatientLanding) => void;
   onDelete: (patient: Paziente, event: React.MouseEvent) => void;
 }) {
@@ -201,7 +199,7 @@ const PatientCard = memo(function PatientCard({
           {rosterRoom(patient)}
         </span>
         <div className="patient-card__identity">
-          <PatientIdentity patient={patient} />
+          <PatientIdentity patient={patient} compact />
         </div>
         <button
           type="button"
@@ -213,19 +211,17 @@ const PatientCard = memo(function PatientCard({
         </button>
       </div>
       <div className="patient-card__context">
-        <LazyNews2
-          patientId={patient.id}
-          patientName={`${patient.lastName}, ${patient.firstName}`}
-        />
+        {hasNews && (
+          <LazyNews2
+            patientId={patient.id}
+            patientName={`${patient.lastName}, ${patient.firstName}`}
+          />
+        )}
         {patientRegime(state) !== 'non_disponibile' ? (
           <span className={`stato-pill stato-pill--ricovero-${state}`}>
             {PATIENT_REGIME_LABEL[patientRegime(state)]}
           </span>
-        ) : (
-          <span className="patient-signals__empty">
-            {summaryLoading ? 'Caricamento regime…' : 'Regime non disponibile'}
-          </span>
-        )}
+        ) : null}
         <PatientSignals
           patient={patient}
           summary={summary}
@@ -255,19 +251,9 @@ function rosterRoom(patient: Paziente): string {
   const location = parsePatientLocation(patient.location);
   return location?.status === 'assigned' && location.room ? location.room : '—';
 }
-function rosterRoomLabel(patient: Paziente): string {
-  const location = parsePatientLocation(patient.location);
-  if (!location || location.status === 'unavailable') return 'Posto letto non disponibile';
-  if (location.status === 'unassigned') return 'Posto letto non assegnato';
-  return location.room ? `Camera ${location.room}` : 'Camera non indicata';
-}
-function rosterBed(patient: Paziente): string {
-  const location = parsePatientLocation(patient.location);
-  return location?.status === 'assigned' && location.bed ? ` · Letto ${location.bed}` : '';
-}
 function rosterAge(patient: Paziente): string {
   const age = patientAge(patient.dateOfBirth);
-  return age === null ? 'Età non disponibile' : `${age} anni`;
+  return age === null ? '' : `${age} anni`;
 }
 
 export function PatientRoster({
@@ -288,6 +274,55 @@ export function PatientRoster({
   onPrefetch,
   onDelete,
 }: PatientRosterProps) {
+  const canReadVitals = useCan('parameters.list_readings');
+  const patientIds = patients.map((p) => p.id).join(',');
+  const [newsRevision, setNewsRevision] = useState(0);
+  useEffect(() => {
+    const refresh = () => setNewsRevision((n) => n + 1);
+    window.addEventListener(PARAMETER_READING_SAVED_EVENT, refresh);
+    return () => window.removeEventListener(PARAMETER_READING_SAVED_EVENT, refresh);
+  }, []);
+  const [newsState, setNewsState] = useState<{ key: string; ids: Set<string>; failed: boolean }>({
+    key: '',
+    ids: new Set(),
+    failed: false,
+  });
+  useEffect(() => {
+    const controller = new AbortController();
+    if (!canReadVitals) return () => controller.abort();
+    const ids = patientIds ? patientIds.split(',') : [];
+    void Promise.all(
+      ids.map(async (id) => {
+        const page = await fetchParameterReadings(
+          API_URL,
+          id,
+          {},
+          { headers: operatorHeaders(), signal: controller.signal },
+        );
+        return latestCompleteNews2(news2Points(page.readings)) ? id : null;
+      }),
+    ).then(
+      (ids) => {
+        if (!controller.signal.aborted)
+          setNewsState({
+            key: patientIds,
+            ids: new Set(ids.filter((id): id is string => id !== null)),
+            failed: false,
+          });
+      },
+      () => {
+        if (!controller.signal.aborted)
+          setNewsState({ key: patientIds, ids: new Set(), failed: true });
+      },
+    );
+    return () => controller.abort();
+  }, [patientIds, canReadVitals, newsRevision]);
+  const newsIds = canReadVitals && newsState.key === patientIds ? newsState.ids : new Set<string>();
+  const showNews = newsIds.size > 0;
+  const showRegime = patients.some(
+    (p) => patientRegime(summaryMap.get(p.id)?.statoRicovero) !== 'non_disponibile',
+  );
+  const incomplete = patients.filter(patientIdentityIncomplete);
   const ariaSort = (field: PatientSortField) =>
     sort.field === field && (localSortActive || serverCriterion === 'name')
       ? sort.direction === 'asc'
@@ -382,13 +417,22 @@ export function PatientRoster({
           <caption className="sr-only">Elenco pazienti caricati</caption>
           <thead>
             <tr>
-              <th scope="col" aria-sort={ariaSort('patient')}>
+              <th scope="col" className="patient-roster__bed-heading">
+                Letto
+              </th>
+              <th
+                scope="col"
+                className="patient-roster__name-heading"
+                aria-sort={ariaSort('patient')}
+              >
                 {sortButton('patient', 'Paziente')}
               </th>
-              <th scope="col" aria-sort={ariaSort('admission')}>
-                {sortButton('admission', 'Regime')}
-              </th>
-              <th scope="col">NEWS2</th>
+              {showRegime && (
+                <th scope="col" aria-sort={ariaSort('admission')}>
+                  {sortButton('admission', 'Regime')}
+                </th>
+              )}
+              {showNews && <th scope="col">NEWS2</th>}
               <th scope="col" aria-sort={ariaSort('signals')}>
                 {sortButton('signals', 'Segnalazioni')}
               </th>
@@ -400,7 +444,10 @@ export function PatientRoster({
           <tbody>
             {patients.length === 0 ? (
               <tr>
-                <td colSpan={5} className="patient-roster__empty">
+                <td
+                  colSpan={4 + Number(showRegime) + Number(showNews)}
+                  className="patient-roster__empty"
+                >
                   <span role="status" aria-live="polite">
                     {loading ? 'Caricamento…' : 'Nessun paziente trovato'}
                   </span>
@@ -437,39 +484,59 @@ export function PatientRoster({
                       onSelect(patient);
                     }}
                   >
+                    <td className="patient-roster__location">
+                      {parsePatientLocation(patient.location)?.status === 'assigned'
+                        ? [
+                            parsePatientLocation(patient.location)?.room,
+                            parsePatientLocation(patient.location)?.bed,
+                          ]
+                            .filter(Boolean)
+                            .join(' · ')
+                        : '—'}
+                    </td>
                     <td>
                       {/* HMI 1: camera nel riquadro, poi nome, età, letto e codice fiscale */}
                       <div className="patient-roster__identity">
-                        <span className="patient-roster__bed" aria-hidden="true">
-                          {rosterRoom(patient)}
-                        </span>
-                        <span className="plist-sr">{rosterRoomLabel(patient)}</span>
                         <span className="patient-roster__who">
-                          <PatientIdentity patient={patient} showIdentifier={false} />
+                          <PatientIdentity
+                            patient={patient}
+                            showIdentifier={false}
+                            compact
+                            showLocation={false}
+                          />
                           <span className="patient-roster__meta">
                             {rosterAge(patient)}
-                            {rosterBed(patient)} · <PatientIdentifier patient={patient} />
+                            {patient.codiceFiscale?.trim() && (
+                              <>
+                                {' '}
+                                · <PatientIdentifier patient={patient} />
+                              </>
+                            )}
                           </span>
                         </span>
                       </div>
                     </td>
-                    <td>
-                      {patientRegime(state) !== 'non_disponibile' ? (
-                        <span className={`stato-pill stato-pill--ricovero-${state}`}>
-                          {PATIENT_REGIME_LABEL[patientRegime(state)]}
-                        </span>
-                      ) : (
-                        <span className="patient-signals__empty">
-                          {summaryLoading ? 'Caricamento…' : 'Non disponibile'}
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      <LazyNews2
-                        patientId={patient.id}
-                        patientName={`${patient.lastName}, ${patient.firstName}`}
-                      />
-                    </td>
+                    {showRegime && (
+                      <td>
+                        {patientRegime(state) !== 'non_disponibile' ? (
+                          <span className={`stato-pill stato-pill--ricovero-${state}`}>
+                            {PATIENT_REGIME_LABEL[patientRegime(state)]}
+                          </span>
+                        ) : (
+                          <span aria-label="Regime non disponibile">—</span>
+                        )}
+                      </td>
+                    )}
+                    {showNews && (
+                      <td>
+                        {newsIds.has(patient.id) && (
+                          <LazyNews2
+                            patientId={patient.id}
+                            patientName={`${patient.lastName}, ${patient.firstName}`}
+                          />
+                        )}
+                      </td>
+                    )}
                     <td>
                       <PatientSignals
                         patient={patient}
@@ -509,6 +576,41 @@ export function PatientRoster({
         </table>
       </div>
 
+      {patients.length > 0 && (
+        <p className="patient-roster-status" role="status">
+          {summaryLoading || anomalie.inCorso
+            ? 'Verifica in corso…'
+            : patients.some((p) => !summaryMap.has(p.id)) ||
+                anomalie.fallito ||
+                anomalie.verificaIncompleta
+              ? 'Segnalazioni non disponibili per tutti i pazienti: verifica le cartelle.'
+              : !patients.some(
+                    (p) =>
+                      summaryMap.get(p.id)?.hasCriticalVitals ||
+                      summaryMap.get(p.id)?.hasHighRisk ||
+                      summaryMap.get(p.id)?.allergieCount ||
+                      (consegneAperteMap.get(p.id) ?? 0) > 0 ||
+                      (anomalie.perPaziente.get(p.id)?.totale ?? 0) > 0,
+                  )
+                ? 'Nessuna segnalazione nelle fonti verificate.'
+                : ''}
+        </p>
+      )}
+      {newsState.key === patientIds && newsState.failed && (
+        <p role="status">NEWS2 non disponibile: apri i parametri per verificare.</p>
+      )}
+      {incomplete.length > 0 && (
+        <p className="patient-list-incomplete">
+          {incomplete.length} pazienti hanno l’anagrafica incompleta ·{' '}
+          <button
+            type="button"
+            className="ds-link"
+            onClick={() => onSelect(incomplete[0], 'profilo')}
+          >
+            Vedi quali
+          </button>
+        </p>
+      )}
       <div className="patient-card-grid" aria-busy={loading}>
         {patients.length === 0 ? (
           <div className="patient-card-grid__state" role="status" aria-live="polite">
@@ -525,6 +627,7 @@ export function PatientRoster({
               summaryLoading={summaryLoading}
               deleteEnabled={deleteEnabled}
               deleting={deletingId === patient.id}
+              hasNews={newsIds.has(patient.id)}
               onSelect={onSelect}
               onDelete={onDelete}
             />

@@ -17,36 +17,30 @@ const sharedStyles = readFileSync(
   new URL('../../shared/DashboardKpiBand.css', import.meta.url),
   'utf8',
 );
-const details = readFileSync(
-  new URL('../../operator/buildDashboardNotificationSections.tsx', import.meta.url),
-  'utf8',
-);
 
-test('admin first view uses the shared compact notification center', () => {
-  const notificationIndex = dashboard.indexOf('<DashboardNotificationCenter');
-  const kpiIndex = dashboard.indexOf('<AdminDashboardKpiBands');
-
-  assert.ok(notificationIndex >= 0);
-  assert.ok(kpiIndex > notificationIndex);
-  assert.match(dashboard, /buildDashboardNotificationCounts/);
-  assert.match(dashboard, /buildDashboardNotificationSections/);
-  assert.match(dashboard, /therapyNav: 'terapie'/);
-  assert.match(details, /therapyNav = 'terapie'/);
-  assert.doesNotMatch(dashboard, /className="coverage-alert"/);
-  assert.doesNotMatch(dashboard, /className="stats-grid"/);
-  assert.doesNotMatch(dashboard, /className="stat-card/);
-  assert.doesNotMatch(dashboard, /className="kpi-alert/);
+test('admin first view prioritizes the actionable unified attention queue', () => {
+  assert.match(dashboard, /<AdminAttentionList/);
+  assert.match(dashboard, /buildAdminAttention/);
+  assert.match(dashboard, /useUnreadUrgencies\(canReadDiary\)/);
+  assert.match(dashboard, /useCan\('diary.list'\)/);
+  assert.doesNotMatch(dashboard, /<DashboardNotificationCenter|<AdminDashboardKpiBands/);
+  assert.doesNotMatch(dashboard, /<DashboardTherapyDeadlines/);
+  assert.doesNotMatch(
+    dashboard,
+    /className="coverage-alert"|className="stats-grid"|className="stat-card|className="kpi-alert/,
+  );
   assert.doesNotMatch(dashboard, /somministrazioni\.ritardi\.slice/);
 });
 
-test('admin-only room failures remain counted and recoverable inside notifications', () => {
-  assert.match(dashboard, /roomWarningCount = camereLoadState === 'error' \? 1 : 0/);
-  assert.match(dashboard, /warning: baseNotificationCounts\.warning \+ roomWarningCount/);
-  assert.match(dashboard, /total: baseNotificationCounts\.total \+ roomWarningCount/);
-  assert.match(dashboard, /id: 'occupazione-non-disponibile'/);
+test('room failures remain explicit and independently recoverable without stale occupancy claims', () => {
+  assert.match(dashboard, /camereLoadState === 'error'/);
+  assert.match(dashboard, /Occupazione non aggiornata/);
+  assert.match(dashboard, /ultimi dati/);
   assert.match(dashboard, /onClick=\{onRetryCamere\}/);
   assert.match(dashboard, /camereLoadState === 'idle'/);
   assert.match(dashboard, /camereLoadState === 'loading'/);
+  assert.match(dashboard, /canReadRooms &&/);
+  assert.match(dashboard, /Configura camere/);
 });
 
 test('management and clinical values use one native shared KPI primitive', () => {
@@ -83,20 +77,17 @@ test('shared KPI layout has equal card geometry and responsive no-overflow grids
   assert.doesNotMatch(sharedStyles, /overflow-x:\s*(auto|scroll)/);
 });
 
-test('dashboard people use a simple semantic icon instead of unreadable initials tiles', () => {
-  assert.match(dashboard, /import[\s\S]*IcoUser[\s\S]*from '\.\.\/\.\.\/icons'/);
-  assert.equal((dashboard.match(/<OperatorWorkloadHeading op=\{op\}/g) ?? []).length, 1);
-  for (const source of [dashboard, workloadHeading]) {
-    assert.match(source, /import[\s\S]*IcoUser[\s\S]*from '\.\.\/\.\.\/icons'/);
-    assert.equal((source.match(/className="dashboard-person-icon"/g) ?? []).length, 1);
-    assert.equal((source.match(/<IcoUser \/>/g) ?? []).length, 1);
-    assert.match(source, /className="dashboard-person-icon"[\s\S]*aria-hidden="true"/);
-    assert.doesNotMatch(source, /className="op-avatar-sm"[\s\S]*\{op\.iniziali\}/);
-  }
+test('on-duty roster uses configured schedules and preserves the independent operator heading primitive', () => {
+  assert.match(dashboard, /useCan\('operators.schedules'\)/);
+  assert.match(dashboard, /operatorsOnDuty\(operatori, staffing.rows, staffing.now\)/);
+  assert.match(dashboard, /currentStaff\.map/);
+  assert.match(dashboard, /data-on-duty=\{operator.id\}/);
+  assert.match(dashboard, /operator.pazientiAssegnati/);
+  assert.match(dashboard, /Nessun orario configurato/);
+  assert.match(dashboard, /Configura turni/);
+  assert.match(workloadHeading, /import[\s\S]*IcoUser[\s\S]*from '\.\.\/\.\.\/icons'/);
+  assert.match(workloadHeading, /className="dashboard-person-icon"[\s\S]*aria-hidden="true"/);
+  assert.match(workloadHeading, /<IcoUser \/>/);
+  assert.doesNotMatch(workloadHeading, /className="op-avatar-sm"[\s\S]*\{op\.iniziali\}/);
   assert.match(appStyles, /\.dashboard-person-icon\s*\{[^}]*width:\s*32px[^}]*height:\s*32px/s);
-  assert.match(appStyles, /\.dashboard-person-icon svg\s*\{[^}]*width:\s*24px[^}]*height:\s*24px/s);
-  assert.doesNotMatch(
-    appStyles,
-    /\.dashboard-person-icon\s*\{[^}]*(?:background|border-radius)\s*:/s,
-  );
 });

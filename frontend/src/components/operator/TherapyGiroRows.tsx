@@ -198,7 +198,13 @@ export function TherapyGiroRows({
                   <div className="giro-row__who">
                     <span className="giro-row__name">{name}</span>
                     <span className="giro-row__cap">
-                      {roomLabel(p)} · {patientIdentifier(identity)}
+                      {parsePatientLocation(p.location)?.status === 'assigned' ? roomLabel(p) : ''}
+                      {identity.codiceFiscale?.trim() ? ` · CF ${identity.codiceFiscale}` : ''}
+                    </span>
+                    <span className="ds-sr-only">
+                      {identity.dateOfBirth
+                        ? `Nato/a il ${identity.dateOfBirth}`
+                        : `Identificativo ${identity.id}`}
                     </span>
                   </div>
                 </div>

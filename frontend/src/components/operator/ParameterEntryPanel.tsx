@@ -16,6 +16,7 @@ interface Props {
   summaryPending?: boolean;
   outsideResults?: boolean;
   onOpenHistory: () => void;
+  onSaved?: (reading: PatientParameterReading) => void;
   onSave: (request: ParameterReadingRequest) => Promise<PatientParameterReading>;
 }
 export function ParameterEntryPanel({
@@ -25,6 +26,7 @@ export function ParameterEntryPanel({
   summaryPending = false,
   outsideResults = false,
   onOpenHistory,
+  onSaved,
   onSave,
 }: Props) {
   const { store, draft } = useParameterEntryDraft(patient.id, draftStore);
@@ -35,6 +37,7 @@ export function ParameterEntryPanel({
     try {
       const saved = await onSave(token.request);
       store.succeed(token, saved.measuredAt);
+      onSaved?.(saved);
     } catch (cause) {
       const unknownOutcome = !(cause instanceof ParameterReadingSaveError) || cause.uncertain;
       store.fail(

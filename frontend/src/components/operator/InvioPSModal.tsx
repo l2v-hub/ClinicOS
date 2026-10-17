@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
-import type { Paziente, CartellaPaziente, PatientTherapyAPI } from '../../types';
-import { loadAllTherapyPages } from '../../lib/therapyPages';
+import type { Paziente, CartellaPaziente } from '../../types';
+import { useCan } from '../../lib/capabilities';
+import { getCurrentOperator } from '../../lib/operatorSession';
+import {
+  loadEmergencyTransferSources,
+  type EmergencyTransferSources,
+} from '../../lib/emergencyTransferContext';
+import { formatFacilityLocalMinute } from '../../lib/facilityTime';
 import { buildInvioPSModel } from './invioPSModel';
 // ── Props ──────────────────────────────────────────────────────────────────────
 
@@ -12,36 +18,85 @@ interface InvioPSModalProps {
 
 // ── Component ──────────────────────────────────────────────────────────────────
 
-export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSModalProps) {
-  const [therapies, setTherapies] = useState<PatientTherapyAPI[]>([]);
+export default function InvioPSModal(props: InvioPSModalProps) {
+  if (props.cartella.pazienteId !== props.paziente.id)
+    return (
+      <div role="alert">
+        Contesto clinico non coerente con il paziente.{' '}
+        <button type="button" onClick={props.onClose}>
+          Chiudi
+        </button>
+      </div>
+    );
+  return (
+    <InvioPSContent
+      key={`${props.paziente.id}:${getCurrentOperator()?.id ?? 'unknown'}`}
+      {...props}
+    />
+  );
+}
+
+function InvioPSContent({ paziente, cartella, onClose }: InvioPSModalProps) {
+  const [sources, setSources] = useState<EmergencyTransferSources | null>(null);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState('');
   const [loadRevision, setLoadRevision] = useState(0);
+  const [reasonOverride, setReasonOverride] = useState<string | null>(null);
+  const [contactOverride, setContactOverride] = useState<string | null>(null);
+  const [allergyNote, setAllergyNote] = useState('');
+  const [vitalNote, setVitalNote] = useState('');
+  const [riskNote, setRiskNote] = useState('');
+  const [doseNote, setDoseNote] = useState('');
+  const canTherapy = useCan('therapy.list_page');
+  const canHistory = useCan('administration.history_page');
+  const canPrn = useCan('administration.list_slots');
+  const canReadings = useCan('parameters.list_readings');
+  const canDiary = useCan('diary.list');
+  const authorized = canTherapy && canHistory && canPrn && canReadings && canDiary;
 
   useEffect(() => {
-    let cancelled = false;
-    void (async () => {
-      setLoading(true);
-      setFetchError('');
-      try {
-        const data = await loadAllTherapyPages(paziente.id, 'attiva');
-        if (!cancelled) {
-          setTherapies(data);
+    const controller = new AbortController();
+    setSources(null);
+    setLoading(true);
+    setFetchError('');
+    if (!authorized) {
+      setFetchError('Il tuo ruolo non può consultare tutte le fonti necessarie alla scheda PS.');
+      setLoading(false);
+      return () => controller.abort();
+    }
+    void loadEmergencyTransferSources(paziente.id, controller.signal)
+      .then((data) => {
+        if (!controller.signal.aborted) {
+          setSources(data);
           setLoading(false);
         }
-      } catch (err) {
-        if (!cancelled) {
-          setFetchError(err instanceof Error ? err.message : 'Errore caricamento terapie');
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) {
+          setFetchError('Contesto clinico non disponibile o incompleto.');
           setLoading(false);
         }
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [paziente.id, loadRevision]);
+      });
+    return () => controller.abort();
+  }, [paziente.id, loadRevision, authorized]);
 
-  const model = buildInvioPSModel(paziente, cartella, therapies);
+  const model = buildInvioPSModel(paziente, cartella, sources?.therapies ?? [], sources);
+  const reason = reasonOverride ?? model.emergency.reason;
+  const contact = contactOverride ?? model.emergency.contact;
+  const allergyUnknown =
+    model.patient.allergie.length === 0 &&
+    !['assenti', 'paziente_nega'].includes(cartella.allergieStatus ?? '');
+  const missingVitals =
+    model.emergency.vitals.every((row) => row.value === null) &&
+    model.emergency.legacyVitals.length === 0;
+  const printBlocked =
+    loading ||
+    Boolean(fetchError) ||
+    !authorized ||
+    !sources ||
+    !reason.trim() ||
+    (allergyUnknown && !allergyNote.trim()) ||
+    (missingVitals && !vitalNote.trim());
 
   return (
     <div
@@ -61,15 +116,20 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
             {loading && (
-              <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Caricamento terapie…</span>
+              <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+                Caricamento contesto clinico…
+              </span>
             )}
             <button
               className="btn-primary btn-sm"
-              onClick={() => window.print()}
-              disabled={loading || Boolean(fetchError)}
+              onClick={() => {
+                if (!printBlocked) window.print();
+              }}
+              disabled={printBlocked}
+              data-invio-ps-print
               title={
-                loading || fetchError
-                  ? 'La stampa è disponibile solo dopo il caricamento completo delle terapie'
+                printBlocked
+                  ? 'Carica tutte le fonti e completa motivo, stato allergie e parametri mancanti prima della stampa'
                   : undefined
               }
               style={{ display: 'flex', alignItems: 'center', gap: 6 }}
@@ -104,7 +164,7 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
               role="alert"
               style={{ color: 'var(--red, #DC2626)', fontSize: 12, marginBottom: 8 }}
             >
-              {fetchError}. La stampa è bloccata perché i dati di terapia non sono completi.{' '}
+              {fetchError}. La stampa è bloccata finché tutte le fonti cliniche non sono complete.{' '}
               <button
                 className="btn-secondary btn-sm"
                 onClick={() => setLoadRevision((v) => v + 1)}
@@ -144,13 +204,44 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
               </div>
             </div>
 
+            <section className="fm-section" data-invio-ps-reason-section>
+              <h2 className="fm-section-title">Motivo dell'invio</h2>
+              <label className="no-print" htmlFor="invio-ps-reason">
+                Motivo dell'invio (modificabile)
+              </label>
+              <textarea
+                id="invio-ps-reason"
+                className="form-input no-print"
+                data-invio-ps-reason
+                rows={4}
+                value={reason}
+                onChange={(event) => setReasonOverride(event.target.value)}
+                maxLength={10000}
+                placeholder="Descrivi il motivo dell'invio e le condizioni osservate"
+              />
+              <p
+                className="fm-row__val"
+                style={{ whiteSpace: 'pre-wrap' }}
+                data-invio-ps-reason-print
+              >
+                {reason || 'Motivo da completare prima della stampa.'}
+              </p>
+              {model.emergency.urgentNote && (
+                <p>
+                  <strong>Ultima nota urgente nelle 24 ore:</strong>{' '}
+                  {model.emergency.urgentNote.content} ·{' '}
+                  {formatFacilityLocalMinute(model.emergency.urgentNote.at)}
+                </p>
+              )}
+            </section>
+
             {/* ── Allergie (alert clinico) ── */}
             <div
               className={`fm-allergie-box${model.patient.allergie.some((a) => a.grave) ? ' fm-allergie-box--grave' : ''}`}
             >
               <span className="fm-allergie-box__lbl">⚠ Allergie</span>
               {model.patient.allergie.length === 0 ? (
-                <span className="fm-allergie-box__val">Nessuna allergia nota</span>
+                <span className="fm-allergie-box__val">{model.patient.allergieStato}</span>
               ) : (
                 <span className="fm-allergie-box__val">
                   {model.patient.allergie.map((a, i) => (
@@ -162,6 +253,182 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
                 </span>
               )}
             </div>
+
+            {allergyUnknown && (
+              <section className="fm-section">
+                <label className="no-print" htmlFor="invio-ps-allergy-note">
+                  Stato allergie da verificare prima dell'invio
+                </label>
+                <textarea
+                  id="invio-ps-allergy-note"
+                  className="form-input no-print"
+                  rows={2}
+                  value={allergyNote}
+                  onChange={(event) => setAllergyNote(event.target.value)}
+                  placeholder="Documenta la verifica o l'impossibilità di raccogliere il dato"
+                />
+                <p>
+                  {allergyNote
+                    ? `Integrazione manuale allergie: ${allergyNote}`
+                    : 'Stato allergie da completare prima della stampa.'}
+                </p>
+              </section>
+            )}
+            <section className="fm-section" data-invio-ps-vitals>
+              <h2 className="fm-section-title">Ultimi parametri rilevati</h2>
+              <table className="fm-table">
+                <thead>
+                  <tr>
+                    <th>Parametro</th>
+                    <th>Valore</th>
+                    <th>Data e ora rilevazione</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {model.emergency.vitals.map((row) => (
+                    <tr key={row.key} data-ps-vital={row.key}>
+                      <td>{row.label}</td>
+                      <td>
+                        {row.value === null ? 'Non rilevato' : `${row.value} ${row.unit}`.trim()}
+                      </td>
+                      <td>
+                        {row.measuredAt
+                          ? formatFacilityLocalMinute(row.measuredAt)
+                          : 'Da rilevare o completare'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {model.emergency.legacyVitals.length > 0 && (
+                <div data-invio-ps-legacy-vitals>
+                  <h3>Osservazioni registrate nella cartella</h3>
+                  <ul>
+                    {model.emergency.legacyVitals.map((row, index) => (
+                      <li key={index}>
+                        {row.label}: {row.value} {row.unit} · {row.recordedAt}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <label className="no-print" htmlFor="invio-ps-vital-note">
+                Integrazioni sui parametri mancanti (valore, data e ora osservati)
+              </label>
+              <textarea
+                id="invio-ps-vital-note"
+                className="form-input no-print"
+                rows={2}
+                value={vitalNote}
+                onChange={(event) => setVitalNote(event.target.value)}
+                placeholder="Completa i dati mancanti o documenta perché non sono rilevabili"
+              />
+              {vitalNote && (
+                <p style={{ whiteSpace: 'pre-wrap' }}>
+                  Integrazione manuale parametri: {vitalNote}
+                </p>
+              )}
+            </section>
+            <section className="fm-section" data-invio-ps-given>
+              <h2 className="fm-section-title">Ultime dosi effettivamente somministrate</h2>
+              <p>
+                Registrazioni con orario effettivo nelle ultime 24 ore. Eventuali dati storici senza
+                ora sono indicati separatamente e non confermano l’orario della dose.
+              </p>
+              {model.emergency.given.length > 0 ? (
+                <table className="fm-table">
+                  <thead>
+                    <tr>
+                      <th>Farmaco / dose / via</th>
+                      <th>Somministrazione registrata</th>
+                      <th>Tipo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {model.emergency.given.map((row) => (
+                      <tr key={row.id} data-ps-given={row.id}>
+                        <td>
+                          {row.drug} · {row.dose} · {row.route}
+                        </td>
+                        <td>
+                          {row.at
+                            ? formatFacilityLocalMinute(row.at)
+                            : `${row.date} · orario effettivo non registrato (dato storico)`}
+                        </td>
+                        <td>{row.kind}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p>
+                  {loading
+                    ? 'Caricamento delle somministrazioni…'
+                    : fetchError
+                      ? 'Dosi non verificabili: stampa bloccata.'
+                      : 'Nessuna dose effettivamente somministrata risulta nelle fonti lette per le ultime 24 ore.'}
+                </p>
+              )}
+              <label className="no-print" htmlFor="invio-ps-dose-note">
+                Integrazioni sulle somministrazioni
+              </label>
+              <textarea
+                id="invio-ps-dose-note"
+                className="form-input no-print"
+                rows={2}
+                value={doseNote}
+                onChange={(event) => setDoseNote(event.target.value)}
+                placeholder="Eventuali somministrazioni da documentare separatamente"
+              />
+              {doseNote && (
+                <p style={{ whiteSpace: 'pre-wrap' }}>
+                  Integrazione manuale somministrazioni: {doseNote}
+                </p>
+              )}
+            </section>
+            <section className="fm-section" data-invio-ps-risks>
+              <h2 className="fm-section-title">Rischi documentati</h2>
+              {model.emergency.risks.length ? (
+                <ul>
+                  {model.emergency.risks.map((risk, index) => (
+                    <li key={index}>{risk}</li>
+                  ))}
+                </ul>
+              ) : (
+                <>
+                  <label className="no-print" htmlFor="invio-ps-risk-note">
+                    Rischi da verificare
+                  </label>
+                  <textarea
+                    id="invio-ps-risk-note"
+                    className="form-input no-print"
+                    rows={2}
+                    value={riskNote}
+                    onChange={(event) => setRiskNote(event.target.value)}
+                    placeholder="Completa i rischi rilevati o documenta la verifica"
+                  />
+                  <p>
+                    {riskNote
+                      ? `Integrazione manuale rischi: ${riskNote}`
+                      : 'Nessun rischio documentato nella cartella; verifica da completare.'}
+                  </p>
+                </>
+              )}
+            </section>
+            <section className="fm-section" data-invio-ps-contact>
+              <h2 className="fm-section-title">Familiare / contatto da avvisare</h2>
+              <label className="no-print" htmlFor="invio-ps-contact">
+                Nome, relazione e telefono
+              </label>
+              <input
+                id="invio-ps-contact"
+                className="form-input no-print"
+                value={contact}
+                onChange={(event) => setContactOverride(event.target.value)}
+                placeholder="Contatto da completare"
+              />
+              <p>{contact || 'Contatto non documentato: da completare prima dell’invio.'}</p>
+            </section>
 
             {/* ── Quadro clinico ── */}
             {(model.patient.diagnosi.length > 0 ||
@@ -212,68 +479,61 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
               </div>
             )}
 
-            {/* ── Sezione Dimissione ── */}
-            <div className="fm-section">
-              <div className="fm-section-title">Dimissione Infermieristica</div>
-              {model.dimissione === null ? (
+            {/* Historical discharge context, when actually recorded. */}
+            {model.dimissione !== null && (
+              <div className="fm-section">
+                <div className="fm-section-title">Dimissione Infermieristica</div>
+
                 <div className="fm-row">
-                  <span className="fm-row__val" style={{ fontStyle: 'italic', color: '#666' }}>
-                    Nessuna dimissione registrata
+                  <span className="fm-row__lbl">Data:</span>
+                  <span className="fm-row__val">{model.dimissione.data}</span>
+                  <span className="fm-row__lbl" style={{ marginLeft: 16 }}>
+                    Ora:
+                  </span>
+                  <span className="fm-row__val" style={{ maxWidth: 80 }}>
+                    {model.dimissione.ora}
                   </span>
                 </div>
-              ) : (
-                <>
-                  <div className="fm-row">
-                    <span className="fm-row__lbl">Data:</span>
-                    <span className="fm-row__val">{model.dimissione.data}</span>
-                    <span className="fm-row__lbl" style={{ marginLeft: 16 }}>
-                      Ora:
-                    </span>
-                    <span className="fm-row__val" style={{ maxWidth: 80 }}>
-                      {model.dimissione.ora}
-                    </span>
+                <div className="fm-row">
+                  <span className="fm-row__lbl">Condizioni:</span>
+                  <span className="fm-row__val">{model.dimissione.condizioni}</span>
+                  <span className="fm-row__lbl" style={{ marginLeft: 16 }}>
+                    Destinazione:
+                  </span>
+                  <span className="fm-row__val">{model.dimissione.destinazione}</span>
+                </div>
+                <div className="fm-row">
+                  <span className="fm-row__lbl">Autonomia residua:</span>
+                  <span className="fm-row__val">{model.dimissione.autonomiaResidua}</span>
+                </div>
+                <div className="fm-row">
+                  <span className="fm-row__lbl">Istruzioni:</span>
+                  <span className="fm-row__val">{model.dimissione.istruzioni}</span>
+                </div>
+                <div className="fm-row">
+                  <span className="fm-row__lbl">Controlli programmati:</span>
+                  <span className="fm-row__val">{model.dimissione.controlliProgrammati}</span>
+                </div>
+                <div className="fm-row">
+                  <span className="fm-row__lbl">Accompagna:</span>
+                  <span className="fm-row__val">{model.dimissione.personaAccompagna}</span>
+                  <span className="fm-row__lbl" style={{ marginLeft: 16 }}>
+                    Mezzo:
+                  </span>
+                  <span className="fm-row__val">{model.dimissione.mezzoTrasporto}</span>
+                </div>
+                <div className="fm-row">
+                  <span className="fm-row__lbl">Materiale consegnato:</span>
+                  <span className="fm-row__val">{model.dimissione.materialeConsegnato}</span>
+                </div>
+                {model.dimissione.note && (
+                  <div className="fm-notes" style={{ marginTop: 6 }}>
+                    <span className="fm-notes__lbl">Note</span>
+                    {model.dimissione.note}
                   </div>
-                  <div className="fm-row">
-                    <span className="fm-row__lbl">Condizioni:</span>
-                    <span className="fm-row__val">{model.dimissione.condizioni}</span>
-                    <span className="fm-row__lbl" style={{ marginLeft: 16 }}>
-                      Destinazione:
-                    </span>
-                    <span className="fm-row__val">{model.dimissione.destinazione}</span>
-                  </div>
-                  <div className="fm-row">
-                    <span className="fm-row__lbl">Autonomia residua:</span>
-                    <span className="fm-row__val">{model.dimissione.autonomiaResidua}</span>
-                  </div>
-                  <div className="fm-row">
-                    <span className="fm-row__lbl">Istruzioni:</span>
-                    <span className="fm-row__val">{model.dimissione.istruzioni}</span>
-                  </div>
-                  <div className="fm-row">
-                    <span className="fm-row__lbl">Controlli programmati:</span>
-                    <span className="fm-row__val">{model.dimissione.controlliProgrammati}</span>
-                  </div>
-                  <div className="fm-row">
-                    <span className="fm-row__lbl">Accompagna:</span>
-                    <span className="fm-row__val">{model.dimissione.personaAccompagna}</span>
-                    <span className="fm-row__lbl" style={{ marginLeft: 16 }}>
-                      Mezzo:
-                    </span>
-                    <span className="fm-row__val">{model.dimissione.mezzoTrasporto}</span>
-                  </div>
-                  <div className="fm-row">
-                    <span className="fm-row__lbl">Materiale consegnato:</span>
-                    <span className="fm-row__val">{model.dimissione.materialeConsegnato}</span>
-                  </div>
-                  {model.dimissione.note && (
-                    <div className="fm-notes" style={{ marginTop: 6 }}>
-                      <span className="fm-notes__lbl">Note</span>
-                      {model.dimissione.note}
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
+                )}
+              </div>
+            )}
 
             {/* ── Sezione Terapia ── */}
             <div className="fm-section">
@@ -287,7 +547,9 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
               ) : model.terapie.length === 0 ? (
                 <div className="fm-row">
                   <span className="fm-row__val" style={{ fontStyle: 'italic', color: '#666' }}>
-                    Nessuna terapia attiva registrata
+                    {fetchError
+                      ? 'Prescrizioni non verificabili: stampa bloccata.'
+                      : 'Nessuna terapia attiva registrata nelle fonti lette.'}
                   </span>
                 </div>
               ) : (

@@ -83,14 +83,11 @@ export function TherapyPatientAllergies({ patientId, patientName, contextKey }: 
       )}
       {snapshot && (
         <details key={key} className="giro-allergies__details">
-          <summary>Dettagli allergie di {patientName}</summary>
-          <p>
-            {summary.label}. Fonte: cartella clinica; nessuna valutazione automatica di
-            compatibilità.
-          </p>
+          <summary>Documentazione delle allergie</summary>
+
           {snapshot.items.map((item, index) => (
             <div key={index} className="giro-allergies__documentation">
-              <strong>{item.allergene}</strong>
+              <span>Voce {index + 1}</span>
               <p>
                 Documentazione: {item.documentato || 'non indicata'} · Autore:{' '}
                 {item.documentatoDa || 'non indicato'}

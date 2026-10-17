@@ -1,4 +1,9 @@
 import assert from 'node:assert/strict';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { PatientRoster } from '../../components/operator/PatientRoster';
+import type { Paziente } from '../../types';
+Object.assign(globalThis, { React });
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 
@@ -31,7 +36,7 @@ test('patient list exposes the canonical fiscal identity and never shows MRN', (
   // selettore dell'ordinamento (opzione fiscalCode di PATIENT_SORT_LABELS).
   assert.match(
     roster,
-    /\{rosterAge\(patient\)\}[\s\S]{0,120}<PatientIdentifier patient=\{patient\} \/>/,
+    /\{rosterAge\(patient\)\}[\s\S]*?<PatientIdentifier patient=\{patient\} \/>/,
   );
   assert.match(roster, /Object\.entries\(PATIENT_SORT_LABELS\)/);
   assert.match(roster, /<PatientIdentity patient=\{patient\}/);
@@ -39,8 +44,50 @@ test('patient list exposes the canonical fiscal identity and never shows MRN', (
   assert.doesNotMatch(roster, /MRN|medicalRecordNumber/);
 });
 
-test('roster has five operational columns and native accessible actions', () => {
-  assert.equal((roster.match(/<th scope="col"/g) ?? []).length, 5);
+test('452 roster leads with bed and preserves native accessible actions while optional empty columns disappear', () => {
+  const patient = {
+    id: 'qa-452',
+    firstName: 'Synthetic',
+    lastName: 'Identità',
+    medicalRecordNumber: 'QA-NOT-VISIBLE',
+    codiceFiscale: 'RSSMRA80A01H501U',
+    dateOfBirth: '1980-01-01',
+    location: {
+      status: 'assigned',
+      source: 'assignment',
+      room: 'QA44',
+      bed: '7',
+      asOf: '2026-10-17',
+    },
+  } as Paziente;
+  const props = {
+    patients: [patient],
+    sort: { field: 'patient' as const, direction: 'asc' as const },
+    onSortChange: () => {},
+    hasMore: false,
+    loading: false,
+    summaryMap: new Map(),
+    consegneAperteMap: new Map(),
+    anomalie: {
+      perPaziente: new Map(),
+      pazienti: [],
+      inCorso: false,
+      fallito: false,
+      verificaIncompleta: false,
+    },
+    deleteEnabled: false,
+    deletingId: null,
+    onSelect: () => {},
+    onDelete: () => {},
+  };
+  const html = renderToStaticMarkup(React.createElement(PatientRoster, props));
+  assert.match(html, /<th scope="col"[^>]*>Letto<\/th>/);
+  assert.ok(html.indexOf('Letto') < html.indexOf('Ordina per paziente'));
+  assert.match(html, /QA44 · 7/);
+  assert.match(html, /RSSMRA80A01H501U/);
+  assert.doesNotMatch(html, /QA-NOT-VISIBLE/);
+  assert.doesNotMatch(html, /<th[^>]*>NEWS2<\/th>|Ordina per regime/);
+  assert.equal((html.match(/<th scope="col"/g) ?? []).length, 4);
   // HMI 1: colonna NEWS2 al posto della colonna codice fiscale (che va sotto il nome).
   for (const heading of ['Paziente', 'Regime', 'Segnalazioni', 'Azione']) {
     assert.match(roster, new RegExp(heading));

@@ -22,6 +22,7 @@ import {
   type ParameterReadingRequest,
   type SavedParameterReading,
 } from '../../lib/patientParameterReadings';
+import { nextParameterPatientAcrossPages } from '../../lib/parameterRound';
 import { ParameterEntryPanel } from './ParameterEntryPanel';
 import { ParameterPatientPick } from './ParameterPatientPick';
 import { ParameterEntryClock } from './ParameterEntryClock';
@@ -44,6 +45,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
   const [day, setDay] = useState(() => facilityLocalMinute().slice(0, 10));
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<PatientParametersPageItem | null>(null);
+  const selectionRef = useRef<string | null>(null);
   const [showOrder, setShowOrder] = useState(false);
   // Ultimo elenco gia' mostrato in sessione per giorno/ordine: la pagina compare subito con
   // quello e lo rivalida in background invece di ripartire da "Caricamento pazienti…".
@@ -223,8 +225,8 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
     recoverRoster,
   ]);
 
-  async function loadMore() {
-    if (!nextCursor || moreController.current || loading) return;
+  async function loadMore(cursor = nextCursor) {
+    if (!cursor || moreController.current || loading) return;
     const controller = new AbortController();
     moreController.current = controller;
     const version = generation.current;
@@ -233,7 +235,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
     try {
       const page = await fetchPatientParametersPage(
         API_URL,
-        { ...filters, cursor: nextCursor },
+        { ...filters, cursor },
         { headers: operatorHeaders(), signal: controller.signal },
       );
       if (version !== generation.current) return;
@@ -243,6 +245,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
       );
       setNextCursor(page.nextCursor);
       failedMore.current = false;
+      return { items: page.items.map(protectSavedSummary), nextCursor: page.nextCursor };
     } catch (cause) {
       if (!controller.signal.aborted && version === generation.current) {
         if (isRosterChanged(cause) && (await recoverRoster())) return;
@@ -272,6 +275,31 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
     }
     return reading;
   }
+  async function advance(savedId: string, measuredAt: string) {
+    const instant = new Date(measuredAt);
+    if (!Number.isFinite(instant.getTime())) return;
+    const savedDay = facilityLocalMinute(instant).slice(0, 10);
+    const version = generation.current;
+    const isCurrent = () =>
+      selectionRef.current === savedId &&
+      currentDay.current === savedDay &&
+      generation.current === version;
+    if (!isCurrent()) return;
+    try {
+      const next = await nextParameterPatientAcrossPages(
+        itemsRef.current,
+        savedId,
+        savedDay,
+        nextCursor,
+        loadMore,
+        isCurrent,
+      );
+      if (next && isCurrent()) setSelected(next);
+    } catch {
+      if (isCurrent())
+        setError('Impossibile verificare il prossimo paziente. Usa il giro per continuare.');
+    }
+  }
   const recorded = items.filter((item) => (item.cartella.readingCount ?? 0) > 0).length;
   // Il paziente scelto resta nel modulo anche se una ricerca lo toglie dall'elenco: il modulo non
   // cambia paziente da solo. Senza scelta, il primo dell'elenco.
@@ -283,6 +311,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
     : undefined;
   const selectedItem = listed ?? selected ?? items[0];
   const selectedOutside = Boolean(selected && !listed);
+  selectionRef.current = selectedItem?.patient.id ?? null;
   return (
     <div className="par-view">
       <PageHeader title="Parametri vitali" subtitle="Rilevazione rapida con NEWS2" />
@@ -387,12 +416,11 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
             outsideResults={selectedOutside}
             onOpenHistory={() => onSelectPaziente(selectedItem.patient.id)}
             onSave={(request) => save(selectedItem.patient.id, request)}
+            onSaved={(reading) => void advance(selectedItem.patient.id, reading.measuredAt)}
           />
         )}
       </div>
-      <p className="parameter-entry-help">
-        Operatore: {operatoreNome}. Data e ora vengono registrate quando premi Salva.
-      </p>
+      <p className="parameter-entry-help">Operatore: {operatoreNome}.</p>
     </div>
   );
 }

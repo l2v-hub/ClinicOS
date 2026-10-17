@@ -53,18 +53,12 @@ import type {
 import { IcoEdit, IcoCheck, IcoX, IcoPlus, IcoWarning, IcoClock } from '../../icons';
 import { DIARIO_AUTHOR_FILTERS } from './cartella/diarioFilters';
 import { TopNav, type TopNavItem } from '../navigation/TopNav';
-import { AvvisoAnomalieFarmaci } from './cartella/AvvisoAnomalieFarmaci';
-import {
-  useAnomalieReparto,
-  anomalieDelPaziente,
-  anomalyTherapyId,
-} from './cartella/useAnomalieReparto';
 import type { PatientTargetRequest, TherapyTarget } from '../../lib/patientTarget';
 import { RISK_SCALE_TAB } from '../../lib/patientTargetResolver';
 import './chartFocus.css';
 import { createPortal } from 'react-dom';
 import { TopbarTitleSlot } from '../shared/topbarTitleSlot';
-import { News2Chip } from './News2Chip';
+import { PatientToday } from './PatientToday';
 import PatientRecordPrintDialog from './PatientRecordPrintDialog';
 import { ClinicalTableSection } from './cartella/shared';
 import { AllergiesEditor } from './sections/AllergiesEditor';
@@ -314,6 +308,8 @@ export function PatientDetail({
 }: PatientDetailProps) {
   const [tab, setTab] = useState<TabId>(resolvePatientTab(initialTab));
   const canListTherapy = useCan('therapy.list');
+  const canSaveClinicalRecord = useCan('clinical_record.save');
+  const [emptyClinicalEditor, setEmptyClinicalEditor] = useState<string | null>(null);
   const canListDocuments = useCan('documents.list');
   const sectionAllowed = (id: ChartSection) =>
     chartSectionAllowed(id, (capability) =>
@@ -404,7 +400,6 @@ export function PatientDetail({
   }, [navigationTarget, paziente.id]);
   // AC5: anomalie di terapia del paziente. Passa dalla stessa richiesta di reparto che alimenta
   // la lista pazienti, quindi aprire una cartella non aggiunge chiamate.
-  const anomalieReparto = useAnomalieReparto();
   // Dati dei tab piu' usati letti in anticipo a browser inattivo: il primo click su Clinica,
   // Terapia, Diario o Moduli non attende piu' la rete (vedi lib/patientDetailPrefetch.ts).
   useEffect(() => {
@@ -1710,13 +1705,25 @@ export function PatientDetail({
   function renderDiagnosi(sourceDetail?: React.ReactNode) {
     return (
       <div className="cr-tab-content">
-        <DiagnosisEditor
-          mode="patient-chart"
-          value={cartella.diagnosi ?? []}
-          onChange={(list) => upd({ diagnosi: list })}
-          operatoreNome={operatoreNome}
-          sourceDetail={sourceDetail}
-        />
+        {cartella.diagnosi.length === 0 ? (
+          <div className="clinical-empty-row" data-clinical-empty="diagnosis">
+            <span>Nessuna diagnosi</span>
+            {canSaveClinicalRecord && (
+              <button type="button" className="ds-link" onClick={() => setCardModal('diagnosi')}>
+                Aggiungi
+              </button>
+            )}
+            {sourceDetail}
+          </div>
+        ) : (
+          <DiagnosisEditor
+            mode="patient-chart"
+            value={cartella.diagnosi ?? []}
+            onChange={(list) => upd({ diagnosi: list })}
+            operatoreNome={operatoreNome}
+            sourceDetail={sourceDetail}
+          />
+        )}
 
         <ClinicalTableSection
           title="Indicatori di Rischio"
@@ -2330,15 +2337,18 @@ export function PatientDetail({
   }, [activeGroup, tab]);
 
   const topbarSlot = useContext(TopbarTitleSlot);
+  const headerLocation =
+    roomDataReady && currentPlacement
+      ? `Camera ${placementValues.room} · Letto ${placementValues.bed}`
+      : placementPending
+        ? `Posto letto ${placementPending.toLowerCase()}`
+        : patientLocationLabel(paziente.location);
   const patientSubtitle = [
-    patientLocationLabel(paziente.location),
+    headerLocation,
     (() => {
       const years = patientAge(paziente.dateOfBirth);
       return years === null ? 'Età non disponibile' : `${years} anni`;
     })(),
-    paziente.dateOfBirth
-      ? `${paziente.sex === 'F' ? 'nata' : paziente.sex === 'M' ? 'nato' : 'nato/a'} il ${formatBirthDate(paziente.dateOfBirth)}`
-      : 'Data di nascita non disponibile',
   ].join(' · ');
 
   const patientTitle = (
@@ -2347,8 +2357,72 @@ export function PatientDetail({
         <h1 className="page-header__title">
           {`${paziente.lastName}, ${paziente.firstName}`.trim().replace(/^,\s*/, '')}
         </h1>
+        {/* Banda allergie/rischi — sempre visibile sotto l'header, su tutti i tab */}
+        {((cartella.allergie?.length ?? 0) > 0 || rischioAlto.length > 0) && (
+          <div className="cr-alert-band">
+            {(cartella.allergie?.length ?? 0) > 0 && (
+              <button
+                className={`cr-alert-strip cr-alert-strip--allergie${hasAllergie ? ' cr-alert-strip--severe' : ''}`}
+                type="button"
+                onClick={() => setCardModal('allergie')}
+              >
+                <span className="cr-alert-strip__ico">
+                  <IcoWarning />
+                </span>
+                <span>
+                  <strong>Allergie{hasAllergie ? ' gravi' : ''}:</strong>{' '}
+                  {(cartella.allergie ?? [])
+                    .map(
+                      (a) =>
+                        `${a.allergene}${hasAllergie && a.gravita !== 'grave' ? ` (${a.gravita})` : ''}`,
+                    )
+                    .join(', ')}
+                </span>
+                <span className="cr-alert-strip__link">Gestisci →</span>
+              </button>
+            )}
+            {rischioAlto.length > 0 && (
+              // Direct access: la striscia apre la scala che misura il primo rischio (Braden,
+              // Tinetti, MNA, PAINAD) o il catalogo dei moduli se il rischio non ha una scala.
+              <button
+                type="button"
+                className="cr-alert-strip cr-alert-strip--rischi"
+                data-risk-strip
+                onClick={() =>
+                  switchTab(
+                    rischioAlto.map((r) => RISK_SCALE_TAB[r.tipo]).find(Boolean) ?? 'moduli',
+                  )
+                }
+              >
+                <span className="cr-alert-strip__ico">
+                  <IcoWarning />
+                </span>
+                <span>
+                  <strong>Rischi attivi:</strong>{' '}
+                  {rischioAlto.map((r) => `${r.tipo.replace('_', ' ')} (${r.livello})`).join(' · ')}
+                </span>
+                <span className="cr-alert-strip__link">Apri la scala →</span>
+              </button>
+            )}
+          </div>
+        )}{' '}
       </div>
-      <p className="page-header__subtitle">{patientSubtitle}</p>
+      <div className="patient-topbar-context">
+        <span
+          className="page-header__subtitle"
+          title={
+            paziente.dateOfBirth ? `Nato/a il ${formatBirthDate(paziente.dateOfBirth)}` : undefined
+          }
+        >
+          {patientSubtitle}
+        </span>
+        <DemographicsStatus
+          value={paziente}
+          onEdit={openProfileEditor}
+          busy={profiloSaving}
+          compact
+        />
+      </div>
       {tab === 'painad' && <PatientIdentifier patient={paziente} />}
     </div>
   );
@@ -2452,7 +2526,11 @@ export function PatientDetail({
             <WidgetGroup>
               <MedicazioniTab
                 key={paziente.id}
-                catalogViewRequest={legacyCatalogViews.medicazioni?.patientId === paziente.id ? legacyCatalogViews.medicazioni : undefined}
+                catalogViewRequest={
+                  legacyCatalogViews.medicazioni?.patientId === paziente.id
+                    ? legacyCatalogViews.medicazioni
+                    : undefined
+                }
                 createRequest={
                   legacyCreates.medicazioni?.patientId === paziente.id
                     ? legacyCreates.medicazioni.request
@@ -2475,7 +2553,11 @@ export function PatientDetail({
             <WidgetGroup>
               <ContenzioniTab
                 key={paziente.id}
-                catalogViewRequest={legacyCatalogViews.contenzioni?.patientId === paziente.id ? legacyCatalogViews.contenzioni : undefined}
+                catalogViewRequest={
+                  legacyCatalogViews.contenzioni?.patientId === paziente.id
+                    ? legacyCatalogViews.contenzioni
+                    : undefined
+                }
                 createRequest={
                   legacyCreates.contenzioni?.patientId === paziente.id
                     ? legacyCreates.contenzioni.request
@@ -2494,7 +2576,11 @@ export function PatientDetail({
             <WidgetGroup>
               <ScalaBradenTab
                 key={paziente.id}
-                catalogViewRequest={legacyCatalogViews.braden?.patientId === paziente.id ? legacyCatalogViews.braden : undefined}
+                catalogViewRequest={
+                  legacyCatalogViews.braden?.patientId === paziente.id
+                    ? legacyCatalogViews.braden
+                    : undefined
+                }
                 createRequest={
                   legacyCreates.braden?.patientId === paziente.id
                     ? legacyCreates.braden.request
@@ -2516,12 +2602,15 @@ export function PatientDetail({
     return (
       <>
         {current === 'panoramica' && (
-          <News2Chip
-            variant="overview"
+          <PatientToday
+            key={paziente.id}
             patientId={paziente.id}
-            patientName={`${paziente.lastName}, ${paziente.firstName}`}
-            onRecordNow={() => switchTab('parametri')}
+            onRecordVitals={() => switchTab('parametri')}
+            onOpenDiary={() => switchTab('diario')}
           />
+        )}
+        {current === 'terapia-farmacologica' && (
+          <PatientIntakeReview state={intakeReview.state} onRetry={intakeReview.retry} />
         )}
         {current === 'moduli' && (
           <AssessmentCatalog
@@ -2547,14 +2636,17 @@ export function PatientDetail({
                   : null,
               );
               if (!module.type && action === 'new') {
-                setLegacyCatalogViews(previous => ({...previous, [module.tab]: undefined}));
+                setLegacyCatalogViews((previous) => ({ ...previous, [module.tab]: undefined }));
                 setLegacyCreates((previous) => ({
                   ...previous,
                   [module.tab]: { patientId: paziente.id, request: crypto.randomUUID() },
                 }));
               } else if (!module.type) {
-                setLegacyCreates(previous => ({...previous, [module.tab]: undefined}));
-                setLegacyCatalogViews(previous => ({...previous, [module.tab]: {patientId:paziente.id,request:crypto.randomUUID(),action}}));
+                setLegacyCreates((previous) => ({ ...previous, [module.tab]: undefined }));
+                setLegacyCatalogViews((previous) => ({
+                  ...previous,
+                  [module.tab]: { patientId: paziente.id, request: crypto.randomUUID(), action },
+                }));
               }
               switchTab(module.tab);
             }}
@@ -2642,29 +2734,78 @@ export function PatientDetail({
               operatoreRole={operatoreRole}
               renderCurrentTopic={(topic, sourceDetail) => {
                 if (topic === 'DIAGNOSIS') return renderDiagnosi(sourceDetail);
-                if (topic === 'ALLERGIES') return (
-                  <ClinicalTableSection title="Allergie e intolleranze">
-                    <div className="cts__body--padded" data-chart-anchor="allergie">
-                      <p className="srev-source">Dati correnti registrati — Allergie</p>
-                      <AllergiesEditor
-                        mode="patient-chart"
-                        value={cartella.allergie ?? []}
-                        status={cartella.allergieStatus}
-                        onStatusChange={status => upd({ allergieStatus: status })}
-                        operatoreNome={operatoreNome}
-                        onChange={list => upd({ allergie: list })}
-                      />
+                if (topic === 'ALLERGIES' && !cartella.allergie?.length)
+                  return (
+                    <div className="clinical-empty-row" data-chart-anchor="allergie">
+                      <span>
+                        {cartella.allergieStatus === 'assenti'
+                          ? 'Allergie assenti (verificato)'
+                          : cartella.allergieStatus === 'paziente_nega'
+                            ? 'Paziente nega allergie'
+                            : 'Allergie: stato non documentato'}
+                      </span>
+                      {canSaveClinicalRecord && (
+                        <button
+                          type="button"
+                          className="ds-link"
+                          onClick={() => setCardModal('allergie')}
+                        >
+                          Verifica
+                        </button>
+                      )}
                       {sourceDetail}
                     </div>
-                  </ClinicalTableSection>
+                  );
+                if (topic === 'ALLERGIES')
+                  return (
+                    <ClinicalTableSection title="Allergie e intolleranze">
+                      <div className="cts__body--padded" data-chart-anchor="allergie">
+                        <p className="srev-source">Dati correnti registrati — Allergie</p>
+                        <AllergiesEditor
+                          mode="patient-chart"
+                          value={cartella.allergie ?? []}
+                          status={cartella.allergieStatus}
+                          onStatusChange={(status) => upd({ allergieStatus: status })}
+                          operatoreNome={operatoreNome}
+                          onChange={(list) => upd({ allergie: list })}
+                        />
+                        {sourceDetail}
+                      </div>
+                    </ClinicalTableSection>
+                  );
+                if (
+                  !Object.values(cartella.anamnesi ?? {}).some(
+                    (value) => typeof value === 'string' && value.trim(),
+                  ) &&
+                  emptyClinicalEditor !== paziente.id
+                )
+                  return (
+                    <div className="clinical-empty-row">
+                      <span>Nessuna anamnesi registrata</span>
+                      {canSaveClinicalRecord && (
+                        <button
+                          type="button"
+                          className="ds-link"
+                          onClick={() => setEmptyClinicalEditor(paziente.id)}
+                        >
+                          Aggiungi
+                        </button>
+                      )}
+                      {sourceDetail}
+                    </div>
+                  );
+                return (
+                  <AnamnesisEditor
+                    mode="patient-chart"
+                    showAllergySummary={false}
+                    value={cartella.anamnesi as unknown as Record<string, unknown>}
+                    onChange={(v) => upd({ anamnesi: v as unknown as Anamnesi })}
+                    readOnly={false}
+                    operatoreNome={operatoreNome}
+                    allergie={cartella.allergie ?? []}
+                    sourceDetail={sourceDetail}
+                  />
                 );
-                return <AnamnesisEditor
-                  mode="patient-chart" showAllergySummary={false}
-                  value={cartella.anamnesi as unknown as Record<string, unknown>}
-                  onChange={v => upd({ anamnesi: v as unknown as Anamnesi })}
-                  readOnly={false} operatoreNome={operatoreNome}
-                  allergie={cartella.allergie ?? []} sourceDetail={sourceDetail}
-                />;
               }}
             />
           </>
@@ -2733,7 +2874,11 @@ export function PatientDetail({
                 ? assessmentFocus.assessment.localKey
                 : undefined
             }
-            historyOnly={assessmentFocus?.patientId === paziente.id && assessmentFocus.assessment.type === (current === 'gds' ? 'gds15' : current) && assessmentFocus.assessment.historyOnly}
+            historyOnly={
+              assessmentFocus?.patientId === paziente.id &&
+              assessmentFocus.assessment.type === (current === 'gds' ? 'gds15' : current) &&
+              assessmentFocus.assessment.historyOnly
+            }
             onOpenArchive={(documentId, assessment) => {
               setArchiveFocus({ patientId: paziente.id, documentId, assessment });
               switchTab('documenti');
@@ -2801,75 +2946,6 @@ export function PatientDetail({
           </button>
         </div>
       </div>
-      <DemographicsStatus value={paziente} onEdit={openProfileEditor} busy={profiloSaving} />
-      <PatientIntakeReview state={intakeReview.state} onRetry={intakeReview.retry} />
-
-      {/* Banda allergie/rischi — sempre visibile sotto l'header, su tutti i tab */}
-      {((cartella.allergie?.length ?? 0) > 0 || rischioAlto.length > 0) && (
-        <div className="cr-alert-band">
-          {(cartella.allergie?.length ?? 0) > 0 && (
-            <button
-              className={`cr-alert-strip cr-alert-strip--allergie${hasAllergie ? ' cr-alert-strip--severe' : ''}`}
-              type="button"
-              onClick={() => setCardModal('allergie')}
-            >
-              <span className="cr-alert-strip__ico">
-                <IcoWarning />
-              </span>
-              <span>
-                <strong>Attenzione permanente · allergie{hasAllergie ? ' gravi' : ''}:</strong>{' '}
-                {(cartella.allergie ?? [])
-                  .map(
-                    (a) =>
-                      `${a.allergene}${hasAllergie && a.gravita !== 'grave' ? ` (${a.gravita})` : ''}`,
-                  )
-                  .join(', ')}
-              </span>
-              <span className="cr-alert-strip__link">Gestisci →</span>
-            </button>
-          )}
-          {rischioAlto.length > 0 && (
-            // Direct access: la striscia apre la scala che misura il primo rischio (Braden,
-            // Tinetti, MNA, PAINAD) o il catalogo dei moduli se il rischio non ha una scala.
-            <button
-              type="button"
-              className="cr-alert-strip cr-alert-strip--rischi"
-              data-risk-strip
-              onClick={() =>
-                switchTab(rischioAlto.map((r) => RISK_SCALE_TAB[r.tipo]).find(Boolean) ?? 'moduli')
-              }
-            >
-              <span className="cr-alert-strip__ico">
-                <IcoWarning />
-              </span>
-              <span>
-                <strong>Rischi attivi:</strong>{' '}
-                {rischioAlto.map((r) => `${r.tipo.replace('_', ' ')} (${r.livello})`).join(' · ')}
-              </span>
-              <span className="cr-alert-strip__link">Apri la scala →</span>
-            </button>
-          )}
-        </div>
-      )}
-
-      {/* AC5: anomalie di terapia in testa alla cartella, prima della navigazione, cosi' si
-          vedono aprendo il paziente e non solo entrando nella scheda terapia. L'ambito e'
-          dichiarato perche' /therapy-slots copre le sole terapie attive di oggi. */}
-      <AvvisoAnomalieFarmaci
-        esito={anomalieDelPaziente(anomalieReparto, paziente.id)}
-        ambito="terapie attive di oggi"
-        etichettaAzione="Vai alla terapia"
-        onAzione={() => {
-          const therapyId = anomalyTherapyId(anomalieReparto, paziente.id);
-          switchTab('terapia-farmacologica');
-          // Direct access: la riga del farmaco da sanare, non solo la sezione.
-          setTherapyTarget({
-            subView: 'attivi',
-            ...(therapyId ? { therapyId } : {}),
-            requestId: Date.now(),
-          });
-        }}
-      />
 
       {/* HMI a un solo livello: ogni sezione della cartella è a un tocco (prima: gruppo + sezione).
           Stesso TopNav condiviso; i gruppi restano come etichette visive, non come sottomenu. */}
@@ -2904,33 +2980,45 @@ export function PatientDetail({
             ) : section === 'moduli' ? (
               renderTab(tab)
             ) : section === 'panoramica' ? (
-              // Panoramica come il prototipo: tessere dei parametri e NEWS2, poi il diario.
+              // Today owns doses, urgent acknowledgement and compact vital summary.
               <>
-                <Suspense fallback={<ClinicalSectionLoading />}>{renderTab('panoramica')}</Suspense>
-                <div className="chart-part chart-overview" data-chart-part="diario">
-                  {/* Il filtro per autore del Diario è un filtro del contenuto, non una
+                {tab !== 'diario' ? (
+                  <Suspense fallback={<ClinicalSectionLoading />}>
+                    {renderTab('panoramica')}
+                  </Suspense>
+                ) : (
+                  <div className="chart-part chart-overview" data-chart-part="diario">
+                    <button
+                      type="button"
+                      className="ds-link"
+                      onClick={() => switchTab('panoramica')}
+                    >
+                      ← Torna a Oggi
+                    </button>
+                    {/* Il filtro per autore del Diario è un filtro del contenuto, non una
                       navigazione. */}
-                  <div
-                    className="filter-chips patient-diary-filters no-print"
-                    role="group"
-                    aria-label="Filtra il diario per autore"
-                  >
-                    {DIARIO_AUTHOR_FILTERS.map((filter) => (
-                      <button
-                        key={filter.id}
-                        id={`patient-diary-filter-${filter.id}`}
-                        type="button"
-                        className={`filter-chip${diarioFilter === filter.id ? ' active' : ''}`}
-                        aria-pressed={diarioFilter === filter.id}
-                        aria-controls="patient-tab-panel"
-                        onClick={() => setDiarioFilter(filter.id)}
-                      >
-                        {filter.label}
-                      </button>
-                    ))}
+                    <div
+                      className="filter-chips patient-diary-filters no-print"
+                      role="group"
+                      aria-label="Filtra il diario per autore"
+                    >
+                      {DIARIO_AUTHOR_FILTERS.map((filter) => (
+                        <button
+                          key={filter.id}
+                          id={`patient-diary-filter-${filter.id}`}
+                          type="button"
+                          className={`filter-chip${diarioFilter === filter.id ? ' active' : ''}`}
+                          aria-pressed={diarioFilter === filter.id}
+                          aria-controls="patient-tab-panel"
+                          onClick={() => setDiarioFilter(filter.id)}
+                        >
+                          {filter.label}
+                        </button>
+                      ))}
+                    </div>
+                    <Suspense fallback={<ClinicalSectionLoading />}>{renderTab('diario')}</Suspense>
                   </div>
-                  <Suspense fallback={<ClinicalSectionLoading />}>{renderTab('diario')}</Suspense>
-                </div>
+                )}
               </>
             ) : (
               sectionTabs
