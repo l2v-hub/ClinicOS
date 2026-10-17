@@ -2664,7 +2664,7 @@
         456,
         457
       ],
-      "phase": "implementing",
+      "phase": "independent-qa-preliminary",
       "implementation": [
         {
           "round": 1,
@@ -2720,9 +2720,11 @@
         "approved-plan-cycle-2-combined.json": "ab8f9790279f6257ffadb589d524ce5c5c8bf9b564c52a11441371432b0994c0",
         "scope-amendment-10-ps-slot-modal.md": "947755c8a34128141c066b291359c251e98713e68dd3b8836d08f902ca974504",
         "scope-amendment-11-agenda-date-regression.md": "b2146cf0c8a12cedbe2d28e63bbb4e4d4c73b5c19630f1b9054da6a0f10ab9c8",
-        "scope-amendment-12-intake-roster-integration.md": "d16f2bcd56ba951a158883e174918919b27f6e96e9ee83559a81a969733e5f8e"
+        "scope-amendment-12-intake-roster-integration.md": "d16f2bcd56ba951a158883e174918919b27f6e96e9ee83559a81a969733e5f8e",
+        "scope-amendment-13-main-and-preliminary-qa.md": "27089bce73264f524b179b2084b0d970ca27358625ba80f3cb987fce2d5cc1a7",
+        "approved-plan-cycle-2-main-integrated.json": "758fe2560b5c086a8b1520aed6a7813081995717ef9f67f0e096d64fd093e1b1"
       },
-      "baseSha": "65e902f40026ec8e2cf3e8b385cb1de0cc269f7b",
+      "baseSha": "05fd62363d89573d6e2449235a7499cc855434cd",
       "plan": {
         "title": "Coordinated clinical UX: Today, rounds, lists, supervisor and PS transfer",
         "feature": "Shared patient clinical workspace and operational rounds",
@@ -3626,15 +3628,22 @@
           "bug-batch-432",
           "bug-batch-450"
         ],
-        "sha": "65e902f40026ec8e2cf3e8b385cb1de0cc269f7b",
-        "integrationSha": "2912d4d09861d46fce75f8d213732c467c095c12",
-        "previousVerificationBase": "5a250319bae5b3f61f2c5864aee438f04d948df5",
+        "sha": "05fd62363d89573d6e2449235a7499cc855434cd",
+        "integrationSha": "59e871853384d1536d3d9d197a5b9c8c1197c6a1",
+        "previousVerificationBase": "65e902f40026ec8e2cf3e8b385cb1de0cc269f7b",
         "sourceCheckpoints": {
           "therapy": "938ae9c44d60b1d963873762f26677d6856f6d63",
           "intake": "0eae11061ada23a60f888c36fd8923a6dbba93d1"
         },
         "requiresFinalMainReconciliation": true,
-        "status": "local-dependency-integration"
+        "status": "local-combined-source-preliminary-qa",
+        "sourceCheckpoint": "98569573a1c83195913d0a1f35c5db31d6b6bd81",
+        "trustedOperationalMain": "8124b1bc88c0f086b1ee328214f87f4802005d11",
+        "source92ByteIdentical": true,
+        "upstreamPublished": {
+          "therapy": "34c865233df53a3930f29c8b7befc02208588d64",
+          "intake": "111e672faf77b45280d8ef6ebb15268180b58376"
+        }
       }
     },
     {
@@ -3844,5 +3853,5 @@
       }
     }
   ],
-  "updatedAt": "2026-10-17T10:45:10.386Z"
+  "updatedAt": "2026-10-17T10:49:51.638Z"
 }
