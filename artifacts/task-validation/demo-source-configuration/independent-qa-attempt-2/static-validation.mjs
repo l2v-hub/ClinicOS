@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {readFile,writeFile} from 'node:fs/promises';
+import {execFileSync} from 'node:child_process';
+import {createRequire} from 'node:module';
+import {pathToFileURL} from 'node:url';
+import * as source from '../../../../scripts/automation/configure-demo-source.mjs';
+const require=createRequire('/workspace/ClinicOS/package.json'),ts=require('typescript'),yaml=require('yaml');
+const {buildClientSchema,parse,validate}=await import(pathToFileURL('/tmp/clinicos-schema-check/node_modules/graphql/index.mjs'));
+const dir=new URL('./test-results/',import.meta.url),base='44e2aaeabcc0583ff89b655774a5026546283f70';
+const files=['.github/workflows/configure-demo-source.yml','scripts/automation/configure-demo-source.mjs','scripts/automation/configure-demo-source.test.mjs'];
+const sha=v=>createHash('sha256').update(v).digest('hex');
+const bytes=await Promise.all(files.map(p=>readFile(p)));
+const parsed=yaml.parseDocument(bytes[0].toString(),{uniqueKeys:true});assert.deepEqual(parsed.errors,[]);const w=parsed.toJS();
+assert.deepEqual(Object.keys(w.on),['workflow_dispatch']);assert.deepEqual(w.permissions,{contents:'read'});assert.deepEqual(w.on.workflow_dispatch.inputs.operation.options,['inspect','set-main','create-main']);assert.equal(w.on.workflow_dispatch.inputs.operation.default,'inspect');
+assert.deepEqual(w.concurrency,{group:'railway-backend','cancel-in-progress':false});assert.deepEqual(Object.keys(w.jobs),['configuration']);const j=w.jobs.configuration;assert.equal(j.environment,'glistening-friendship / demo');assert.equal(j['timeout-minutes'],5);assert.equal(j['runs-on'],'ubuntu-latest');
+for(const c of ["github.event_name == 'workflow_dispatch'","github.repository == 'l2v-hub/ClinicOS'","github.ref == 'refs/heads/main'",'inputs.reviewed_sha == github.sha'])assert.ok(j.if.includes(c));
+assert.deepEqual(j.steps[0].with,{ref:'${{ github.sha }}','persist-credentials':false});assert.ok(j.steps.every(s=>!s.uses||/@[a-f0-9]{40}$/.test(s.uses)));assert.equal(j.steps[2].env,undefined);assert.equal(j.steps[2].run,'node --test scripts/automation/configure-demo-source.test.mjs');assert.deepEqual(j.steps[3].env,{RAILWAY_TOKEN:'${{ secrets.RAILWAY_DEMO_TOKEN }}',GITHUB_TOKEN:'${{ github.token }}',CONFIGURE_DEMO_OPERATION:'${{ inputs.operation }}',CONFIGURE_DEMO_REVIEWED_SHA:'${{ inputs.reviewed_sha }}',CONFIGURE_DEMO_EXPECTED_DIGEST:'${{ inputs.expected_inventory_digest }}'});assert.equal((bytes[0].toString().match(/secrets\./g)||[]).length,1);assert.equal(j.steps[4].with.path,'demo-source-configuration-receipt.json');
+for(const [i,file]of files.entries())if(i){const ast=ts.createSourceFile(file,bytes[i].toString(),ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);assert.deepEqual(ast.parseDiagnostics,[]);}
+const old=execFileSync('git',['show',base+':scripts/automation/configure-demo-source.test.mjs'],{encoding:'utf8'}),statements=text=>{const sf=ts.createSourceFile('x.mjs',text,ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);return sf.statements.filter(n=>!ts.isImportDeclaration(n)).map(n=>n.getText(sf));};assert.deepEqual(statements(bytes[2].toString()).slice(0,statements(old).length),statements(old));
+const raw=await readFile('/workspace/ClinicOS/agent-team/.runtime/all-open-issues/railway-schema-v5.66.0.json'),schema=buildClientSchema(JSON.parse(raw).data);
+const docs=['INVENTORY_QUERY','UPDATE_BRANCH','CREATE_MAIN'];for(const key of docs)assert.deepEqual(validate(schema,parse(source[key])).map(e=>e.message),[]);
+const input=schema.getType('DeploymentTriggerCreateInput').getFields();assert.equal(String(input.provider.type),'String!');assert.equal(String(input.checkSuites.type),'Boolean');assert.equal(String(input.rootDirectory.type),'String');assert.equal(String(schema.getMutationType().getFields().deploymentTriggerCreate.type),'DeploymentTrigger!');
+const changed=execFileSync('git',['diff','--name-only','HEAD'],{encoding:'utf8'}).trim().split('\n').sort();assert.deepEqual(changed,[...files].sort());
+const result={passed:true,node:process.version,sourceHashes:Object.fromEntries(files.map((f,i)=>[f,sha(bytes[i])])),yamlProtectedMain:true,typescriptAstParseErrors:0,preservedOriginal57Statements:true,officialSchema:{sha256:sha(raw),graphqlDocuments:docs,providerType:String(input.provider.type),providerLiteralUnverified:true,creationRootNullable:true},historicalEvidenceNotModified:true,noFrontendSourceTouched:true,noProviderCall:true};await writeFile(new URL('static-validation.json',dir),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({passed:true,astSources:2,schemaDocuments:3,workflowProtected:true,original57Preserved:true}));

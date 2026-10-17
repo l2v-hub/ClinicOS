@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "baseSha": "44e2aaeabcc0583ff89b655774a5026546283f70",
+  "sourceIdenticalIntegratedMain": "8124b1bc88c0f086b1ee328214f87f4802005d11",
+  "branch": "codex/demo-source-configuration",
+  "configurationAttempt": 2,
+  "maximumAttempts": 4,
+  "guardAndMaintenanceBudgetsReset": false,
+  "sourceHashes": {
+    ".github/workflows/configure-demo-source.yml": "08d627e26623c70f35041f51d64ea80a7e52c9d9d3c46f4d0e09b585ed0ebfde",
+    "scripts/automation/configure-demo-source.mjs": "c674e302471ea8b95154aa7e440761d0ca188475bdaffd294e9f4d3ad9c4536a",
+    "scripts/automation/configure-demo-source.test.mjs": "5da3aa8f5865c3b7d47d210a95ae56bef6e856a0d6f07cac494328fb3f32896a"
+  },
+  "contractHashes": {
+    "operational-contract.md": "aa77b5a65e51d6c79a6c14b8a208d01e85c2e5dcbdefdec9b704ca55ae6d1559",
+    "operational-addendum-2-create-missing-trigger.md": "909fe83a3c1ed6ff228202bf28fc4c818bc4c4e71cf9d3f107a79678f4696d66",
+    "provider-constraint-clarification.md": "b2917f9d408b290f7f48d2f64c1bafb16209b7b2fc7beab2cc1b8fdff9e5207e"
+  },
+  "evidenceHashes": {
+    "unit-tests.log": "4dde95e6de95596e2fdd5e5a6971155e4b9e0cab4deb414cab253e3dfe84629c",
+    "validation-report.md": "f7171b41f40d76a6bf83e28623e014c89613cb81e4599c2d85fe0eb38f1e486e",
+    "verify-static-contract.mjs": "274bd18f43f7e4afc622f981085f60bba4d3681abd768e525790123728e2eb2b",
+    "static-validation.json": "e5e4c761f729c694562480ab045509426cdb7ef70e885330a0e5a9f354c91ee3",
+    "historical-evidence-hashes.json": "8452829314a6bc77597a120580d68de81e4f5df83654e1329d3cd98a5ca64577",
+    "original-57-regressions.log": "e82bffb6ccc8cbf3e75e17a59d92ed38125387102901f78ffc7f8f19c0ed66fe"
+  },
+  "historicalEvidenceCount": 29,
+  "validation": {
+    "unitTests": 107,
+    "passed": 107,
+    "failed": 0,
+    "skipped": 0,
+    "preservedOriginalTests": 57,
+    "graphqlDocuments": 3,
+    "astSources": 2,
+    "yamlValid": true,
+    "credentialFindings": 0,
+    "actualProviderCallPerformed": false,
+    "actualNewNativeRunPerformed": false
+  },
+  "decision": "PARTIAL_REQUIRES_NEW_INDEPENDENT_QA"
+}

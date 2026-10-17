@@ -1,0 +1,61 @@
+{
+  "node": "v24.19.0",
+  "sourceHashes": {
+    ".github/workflows/configure-demo-source.yml": "08d627e26623c70f35041f51d64ea80a7e52c9d9d3c46f4d0e09b585ed0ebfde",
+    "scripts/automation/configure-demo-source.mjs": "c674e302471ea8b95154aa7e440761d0ca188475bdaffd294e9f4d3ad9c4536a",
+    "scripts/automation/configure-demo-source.test.mjs": "5da3aa8f5865c3b7d47d210a95ae56bef6e856a0d6f07cac494328fb3f32896a"
+  },
+  "contractHashes": {
+    "operational-contract.md": "aa77b5a65e51d6c79a6c14b8a208d01e85c2e5dcbdefdec9b704ca55ae6d1559",
+    "operational-addendum-2-create-missing-trigger.md": "909fe83a3c1ed6ff228202bf28fc4c818bc4c4e71cf9d3f107a79678f4696d66",
+    "provider-constraint-clarification.md": "b2917f9d408b290f7f48d2f64c1bafb16209b7b2fc7beab2cc1b8fdff9e5207e"
+  },
+  "typescriptAst": [
+    {
+      "file": "scripts/automation/configure-demo-source.mjs",
+      "parseErrors": 0
+    },
+    {
+      "file": "scripts/automation/configure-demo-source.test.mjs",
+      "parseErrors": 0
+    }
+  ],
+  "yaml": {
+    "valid": true,
+    "manualOnly": true,
+    "exactMainSha": true,
+    "pinnedActions": true,
+    "soleRepositorySecret": "RAILWAY_DEMO_TOKEN",
+    "automaticReadOnlyGitHubToken": true,
+    "protectedEnvironment": "glistening-friendship / demo"
+  },
+  "officialSchema": {
+    "url": "https://github.com/railwayapp/cli/blob/v5.66.0/src/gql/schema.json",
+    "sha256": "3c3d1448f2a746d6e5977ba3aa205889f959c427be5cfe37c72e79b1fa65f2be"
+  },
+  "graphql": [
+    {
+      "name": "INVENTORY_QUERY",
+      "sha256": "ad35a2ef143b11babb5b34c17824927247a831503d39a0b86704a682eb640541",
+      "valid": true
+    },
+    {
+      "name": "UPDATE_BRANCH",
+      "sha256": "beb586f9bf048745a2563d7ad5f3a6d77047696325da87ab05179970a2e6ca5a",
+      "valid": true
+    },
+    {
+      "name": "CREATE_MAIN",
+      "sha256": "d0e60e7c41bfa18471dea9a59a0194501a0e5a4a758c562c40e16a8c8ca14cd2",
+      "valid": true
+    }
+  ],
+  "originalTestsPreserved": {
+    "sourceSha": "2cb4f7c8984c4a9967bcd4d3bd0753f69b628063d88e6b6131bc8369458be513",
+    "topLevelNonImportStatements": 29,
+    "originalTestCount": 57,
+    "unchanged": true
+  },
+  "historicalTrackedEvidenceUnchanged": true,
+  "actualProviderCallPerformed": false
+}
