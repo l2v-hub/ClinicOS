@@ -1,0 +1,99 @@
+{
+  "files": [
+    {
+      "file": ".github/workflows/deploy-backend.yml",
+      "sha256": "6743d823679a9c1076c85dfcb5e5b9a8f96705849123b3091cac5d00cadaa3f9",
+      "bytes": 4195
+    },
+    {
+      "file": ".github/workflows/codex-bug-release.yml",
+      "sha256": "aba0ae7af2185330789d6666c1958e15acee4ce36ffa3f0814c2c92a3e31b55e",
+      "bytes": 8975
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/release.mjs",
+      "sha256": "49ca26c74122204ad21d9cf94279d867384ed781b01d4ef62eb2d37b5c18430e",
+      "bytes": 28052
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "sha256": "44855bee987e57b36e4acf47a4de95da19c75558a3975b3d443faa263776f43f",
+      "bytes": 20648
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "sha256": "134299131f264135dba3e75211b02dd6c07954d56447820065973a3b0fa1b5ae",
+      "bytes": 38913
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "sha256": "cb27b28624b83aa37aa6e5f25b0393c7e7698f647257cc53664d36d93131c68c",
+      "bytes": 24163
+    },
+    {
+      "file": "backend/src/lib/readiness.ts",
+      "sha256": "f7a1338c5934bee0821fa9af5c30d64a732dbd5bec54131cf6569471f6e31461",
+      "bytes": 3825
+    },
+    {
+      "file": "backend/src/lib/__tests__/readiness-deployment.test.ts",
+      "sha256": "fe79ec9c73c499350826d537cc0b45514ead967e5b640c84eb469bed1a1a9389",
+      "bytes": 2616
+    },
+    {
+      "file": "scripts/quality-gate/configure-bug-repository.mjs",
+      "sha256": "83359916abe7447d4107fba032f53b444a81e702073eae0fdfcecc16bdfb8fdf",
+      "bytes": 8199
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+      "sha256": "23e7639f39ed2dab384e76fb97faf6d7e7f2115d4b1223b32c0b458e8cd356ac",
+      "bytes": 10610
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/github.mjs",
+      "sha256": "39e04254403105d90220119778ef137698a230ccf15b2937d4f4a1daebd5722d",
+      "bytes": 26302
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "sha256": "cbbe764826f7ffad3bd7c21451e0d6bfeec4ab718c8f61033c8e6561dfca80df",
+      "bytes": 40041
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/process.mjs",
+      "sha256": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf",
+      "bytes": 6760
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/workspace.test.mjs",
+      "sha256": "930257f4aac3e63b7548fb59512130a15848caa8164a2a635cd1d2f58e185d2c",
+      "bytes": 24852
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "sha256": "b2c0d18b93d65a526838ec3f8a4852fbe309d42dbf67bb005f1b646703cf7749",
+      "bytes": 18371
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "sha256": "6102d7239d792ddf1fc1f225b902cff268443ad362c8413499bb8ba990d2a08c",
+      "bytes": 31430
+    },
+    {
+      "file": ".github/workflows/codex-bug-pipeline.yml",
+      "sha256": "265542dafb39489a2a64d87eec8b580306ad577392049227cc7fb88bae722315",
+      "bytes": 4020
+    },
+    {
+      "file": ".github/workflows/bug-pipeline-tests.yml",
+      "sha256": "79114c4363dba61d96a45f73363ecef4d2f6c6ce5ac63f5d1f56801c2f23153b",
+      "bytes": 11249
+    },
+    {
+      "file": "scripts/quality-gate/verify-isolated-services.mjs",
+      "sha256": "681a3e387e603edc99c7b3a2ec3246b6b82445ee2459446de83380a2178cefb2",
+      "bytes": 8086
+    }
+  ]
+}

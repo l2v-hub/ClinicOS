@@ -1,0 +1,132 @@
+[
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/actual-adapter-identity-races.log",
+    "bytes": 5075,
+    "sha256": "350c9658e3d0f0e2deda5601182d5e48d032e953605d27cf7e59808b17764b4d"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/actual-adapter-identity-races.test.mjs",
+    "bytes": 3156,
+    "sha256": "5aed55f1bc190f0902011956a7d93c5a1bc37d51dbf3bebfe4c6a5bb5890c7ba"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/backend-typecheck.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/browser-qa.mjs",
+    "bytes": 10180,
+    "sha256": "4a0933c71891b51bce588da05dc0f6eee456748fd5668078224164ee7e8128cd"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/browser-run-status.json",
+    "bytes": 280,
+    "sha256": "1460087e51303e7436ec2f1700852ee5edcecb10279cf11f38f65564e088960f"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/browser.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/frontend-build.log",
+    "bytes": 16443,
+    "sha256": "351cdae11b0bfbbe3ac754b9154b9c4508d8af7727947d11ef2a03051214e51d"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/frontend-typecheck.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/full-ci-unit.log",
+    "bytes": 27372,
+    "sha256": "2d1bb83d563c6c6d17cd84a260dd36a0508c4d5e3ac9abbdbb1f088b7af4d51f"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/historical-integrity.json",
+    "bytes": 107,
+    "sha256": "dc8cfa6e10465cdb2a0e1cf30be3494795dfba5f0372f4d04c982dd736339689"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/historical-regressions.log",
+    "bytes": 733,
+    "sha256": "7dd49a6fec6abdbfe87e5d3e5c09a07cc3ee492358ef52511da98462ecb854b4"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/identity-race-matrix.log",
+    "bytes": 9309,
+    "sha256": "4646c046d43f38239cf398b48636c533cd333501f6c40e3c29d60f7899c49507"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/identity-race-matrix.test.mjs",
+    "bytes": 641,
+    "sha256": "b26a2e09f558bfbd2bfed0d2c9e88ffc859bdfb7a3178ff5c8f4f2bc09777b2b"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/identity-race-probes.json",
+    "bytes": 6311,
+    "sha256": "2203766eb747ebcc74c3510717ecdfc0984a9fddbf1a40053a439331768d49c7"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/identity-race-probes.mjs",
+    "bytes": 3822,
+    "sha256": "3295e6294e77a5a9c81cb255407e1b0634f5d3130b8f511c68e17b8cb59de6af"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/premerge-identity-race.log",
+    "bytes": 1657,
+    "sha256": "ce24e50dc75be5247d278cf84474c818db9669fa9f01c31b7fe7105be58a89c5"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/premerge-identity-race.test.mjs",
+    "bytes": 1126,
+    "sha256": "bf62b5eb47d156f451cfe1175143112aa05bfe2b5e417ce6cf11410af1d3892b"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/railway-schema-qa.json",
+    "bytes": 619,
+    "sha256": "9ed0b8b21eb5b821505a4f3d2ad155fb67390bb25ce61460ab79c7eb3e71a85a"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/railway-schema-qa.log",
+    "bytes": 113,
+    "sha256": "a20e21b8d2e6ece166ee85b740ae6cbe8f5c591ac92bc821c48af06f887cb948"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/railway-schema-qa.mjs",
+    "bytes": 1399,
+    "sha256": "52b5715e60172ad95325a904d41d8f7c2abe06cbf744cb419bc205f27d1c28bc"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/readiness-http.log",
+    "bytes": 224,
+    "sha256": "58b1713bdc0056859a744e7c7c97d5d075796681c1f5a22f6d72344989036fe8"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/source-hashes-after.json",
+    "bytes": 3643,
+    "sha256": "bc2ef3884e45c0f5918d6fe10a7adce71b9afa3c37cc3f9c32e48025674ff386"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/source-hashes-before.json",
+    "bytes": 3643,
+    "sha256": "bc2ef3884e45c0f5918d6fe10a7adce71b9afa3c37cc3f9c32e48025674ff386"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/task-contract.md",
+    "bytes": 2548,
+    "sha256": "7b65eed60dba4cf8108a1e260127d8116964e282ee624b7713486ee89725e302"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/validation-report.md",
+    "bytes": 8340,
+    "sha256": "ee2b69298c68117682fd60d4927364ad813ec5789445789d01e0b884755ff6da"
+  },
+  {
+    "file": "artifacts/task-validation/demo-release-guard/independent-qa-attempt-3/workflows-parse.json",
+    "bytes": 632,
+    "sha256": "7a19022c843bdba4a5adcbd011aeabb71bf29a289c5dfff0433d0b2ac9dab30e"
+  }
+]

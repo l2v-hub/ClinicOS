@@ -1,0 +1,1 @@
+Independent GraphQL AST validation: 3/3 PASS against exact official cached CLI 5.66.0 schema; zero Railway calls

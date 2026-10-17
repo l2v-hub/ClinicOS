@@ -1,0 +1,17 @@
+{
+  "filesScanned": 24,
+  "zipMembersScanned": 125,
+  "credentialFindings": [],
+  "symlinks": 0,
+  "oversizedFiles": 0,
+  "sourceHashesUnchanged": {
+    ".github/workflows/configure-demo-source.yml": "099d4273b0d1a1775f8fa74a3e317bbcd3bc5e4a16fc69cf556ddcb890362442",
+    "scripts/automation/configure-demo-source.mjs": "b16efd6f215eb4ede26a4fb7ed1a9d1ff0f45c3b1f91db4085672f52a0aa6264",
+    "scripts/automation/configure-demo-source.test.mjs": "2cb4f7c8984c4a9967bcd4d3bd0753f69b628063d88e6b6131bc8369458be513"
+  },
+  "contractHashUnchanged": "aa77b5a65e51d6c79a6c14b8a208d01e85c2e5dcbdefdec9b704ca55ae6d1559",
+  "allFiveSealedEvidenceHashesUnchanged": true,
+  "actualProviderCalls": 0,
+  "githubWrites": 0,
+  "fixtures": "synthetic only; no patients"
+}

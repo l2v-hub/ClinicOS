@@ -1,0 +1,42 @@
+[
+  {
+    "file": ".github/workflows/deploy-backend.yml",
+    "bytes": 4195,
+    "sha256": "6743d823679a9c1076c85dfcb5e5b9a8f96705849123b3091cac5d00cadaa3f9"
+  },
+  {
+    "file": ".github/workflows/codex-bug-release.yml",
+    "bytes": 8975,
+    "sha256": "aba0ae7af2185330789d6666c1958e15acee4ce36ffa3f0814c2c92a3e31b55e"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/release.mjs",
+    "bytes": 24654,
+    "sha256": "e20d74c064ce2097adc8ca9aa6729b7b9237e54babd8c47123b830c111f1f123"
+  },
+  {
+    "file": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+    "bytes": 18986,
+    "sha256": "6b9b3ef892fb5d79859fee902f5061b9dbb6a463169bcc449f908b2dda18ac77"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/release.test.mjs",
+    "bytes": 15304,
+    "sha256": "57e355e9883f0cfd8b8614f22259217381ff7ce9b26ad1d38ffe3a02bce982c2"
+  },
+  {
+    "file": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+    "bytes": 20037,
+    "sha256": "887ff881ae661fafbddede57bcaad7c4567b554857f10fc0b3748f2c8abbae14"
+  },
+  {
+    "file": "backend/src/lib/readiness.ts",
+    "bytes": 3825,
+    "sha256": "f7a1338c5934bee0821fa9af5c30d64a732dbd5bec54131cf6569471f6e31461"
+  },
+  {
+    "file": "backend/src/lib/__tests__/readiness-deployment.test.ts",
+    "bytes": 2616,
+    "sha256": "fe79ec9c73c499350826d537cc0b45514ead967e5b640c84eb469bed1a1a9389"
+  }
+]

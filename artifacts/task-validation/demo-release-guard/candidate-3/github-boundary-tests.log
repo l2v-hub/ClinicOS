@@ -1,0 +1,131 @@
+✔ issue lifecycle uses additive managed labels and closes resolved issues as completed, with retry after a failed close (10.0281ms)
+✔ dashboard state reads never initialize a branch, and source permission errors are not treated as an empty queue (1.480099ms)
+✔ a maintainer labeling with the same User identity as the controller PAT is authorized (1.724954ms)
+✔ scheduled normalization recovers codex-run without bug only after authorization and never mutates dashboard reads (4.252539ms)
+✔ bot and missing actor types cannot self-authorize even if permission lookup would grant admin (0.938038ms)
+✔ bot label fallback rejects non-human command metadata and old human commands (1.025823ms)
+✔ authorized accepts only write-capable collaborators (0.557333ms)
+✔ intake requires exact command and authorized actor before adding all queue labels (1.195443ms)
+✔ intake refuses unauthorized actors, near-match commands, and pull requests (0.621632ms)
+✔ scheduled queue accepts only an authorized explicit codex-run event and skips blocked issues (1.458695ms)
+✔ durable state initializes only its branch from main and uses returned Contents SHA (1.819772ms)
+✔ failed state CAS keeps the remembered SHA and never retries without it (2.013238ms)
+✔ review feedback binds to PR head, tracks current reviews, unresolved threads and human comments (4.978027ms)
+✔ review feedback fails closed when more than 100 review threads are returned (0.530053ms)
+✔ a commented review cannot clear an earlier request for changes; explicit approval can (1.190039ms)
+✔ review feedback identifies a merged PR from the real REST state and merge flag (0.789125ms)
+✔ required checks fail closed when absent and pass only when all reported checks succeed (1.235391ms)
+▶ real status adapter rechecks the optional guard after every preceding awaited API boundary
+  ✔ {"after":"label-inspection"} (3.149049ms)
+  ✔ {"after":"label-inspection","labelExists":false} (1.838311ms)
+  ✔ {"after":"label-creation","labelExists":false} (1.438415ms)
+  ✖ {"after":"label-retry","labelExists":false,"creationConflict":true} (1.27554ms)
+  ✖ {"after":"issue-label-post"} (0.564609ms)
+  ✖ {"after":"delete-progress"} (1.455422ms)
+  ✖ {"after":"delete-blocked"} (0.682033ms)
+✖ real status adapter rechecks the optional guard after every preceding awaited API boundary (13.855275ms)
+✔ cached lifecycle status still checks a fresh guard and preserves unguarded callers (0.690644ms)
+✔ actual comment request accepts the optional fresh guard, rejects errors/false/invalid guards, and keeps default callers (0.748303ms)
+✔ a hold arriving after an already-sent close cannot undo that request, but blocks later cached calls (0.681186ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 23
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 504.415818
+
+✖ failing tests:
+
+test at agent-team/tests/bug-pipeline/github.test.mjs:781:13
+✖ {"after":"label-retry","labelExists":false,"creationConflict":true} (1.27554ms)
+  AssertionError [ERR_ASSERTION]: fresh durable hold
+  
+  true !== false
+  
+      at guard (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/github.test.mjs:758:12)
+      at checkMutationGuard (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/github.mjs:84:16)
+      at api (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/github.mjs:91:36)
+      at Object.setIssueStatus (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/github.mjs:368:11)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/github.test.mjs:797:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/github.test.mjs:781:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/github.test.mjs:781:13
+✖ {"after":"issue-label-post"} (0.564609ms)
+  AssertionError [ERR_ASSERTION]: fresh durable hold
+  
+  true !== false
+  
+      at guard (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/github.test.mjs:758:12)
+      at checkMutationGuard (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/github.mjs:84:16)
+      at api (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/github.mjs:91:36)
+      at Object.setIssueStatus (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/github.mjs:374:29)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/github.test.mjs:797:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/github.test.mjs:781:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/github.test.mjs:781:13
+✖ {"after":"delete-progress"} (1.455422ms)
+  AssertionError [ERR_ASSERTION]: fresh durable hold
+  
+  true !== false
+  
+      at guard (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/github.test.mjs:758:12)
+      at checkMutationGuard (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/github.mjs:84:16)
+      at api (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/github.mjs:91:36)
+      at Object.setIssueStatus (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/github.mjs:374:29)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/github.test.mjs:797:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/github.test.mjs:781:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/github.test.mjs:781:13
+✖ {"after":"delete-blocked"} (0.682033ms)
+  AssertionError [ERR_ASSERTION]: fresh durable hold
+  
+  true !== false
+  
+      at guard (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/github.test.mjs:758:12)
+      at checkMutationGuard (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/github.mjs:84:16)
+      at api (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/github.mjs:91:36)
+      at Object.setIssueStatus (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/src/bug-pipeline/github.mjs:386:13)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/github.test.mjs:797:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/ClinicOS/agent-team/.worktrees/demo-release-guard/agent-team/tests/bug-pipeline/github.test.mjs:781:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

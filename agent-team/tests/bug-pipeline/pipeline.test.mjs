@@ -1,7 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { runPipeline } from '../../src/bug-pipeline/pipeline.mjs';
-import { feedbackFingerprint, planSchema } from '../../src/bug-pipeline/contracts.mjs';
+import { createGitHub } from '../../src/bug-pipeline/github.mjs';
+import {
+  recordDeployment,
+  releaseBatch,
+  selectAutoReleaseBatch,
+  publicationComplete,
+} from '../../src/bug-pipeline/release.mjs';
+import { feedbackFingerprint, planSchema, sha256 } from '../../src/bug-pipeline/contracts.mjs';
 
 const repo = 'l2v-hub/ClinicOS';
 const sha = (letter) => letter.repeat(40);
@@ -284,29 +291,51 @@ function harness({
   };
 }
 
+function reviewedTerminalBatch(status = 'deployed') {
+  const batch = batchFor();
+  const report = JSON.stringify({
+    subject_sha: batch.sha,
+    verdict: 'approved',
+    summary: 'Synthetic exact-revision review fixture.',
+    findings: [],
+  });
+  batch.approvedSha = batch.sha;
+  batch.reviews = [{ round: 1, status: 'approved', subjectSha: batch.sha }];
+  batch.reviewReports = { 'claude-review-1.json': report };
+  batch.reviewLedger = {
+    rounds: [
+      { round: 1, subject_sha: batch.sha, verdict: 'approved', review_sha256: sha256(report) },
+    ],
+  };
+  batch.feedbackFingerprint = feedbackFingerprint(openFeedback(batch));
+  batch.release = {
+    status,
+    mergeSha: sha('b'),
+    reviewedSha: batch.sha,
+    deployment: {
+      status: 'deployed',
+      reviewedSha: batch.sha,
+      mergeSha: sha('b'),
+      vercelUrl: 'https://clinicos-eosin.vercel.app',
+    },
+  };
+  return batch;
+}
+
 test('merged and deployed batches remain terminal and never restart implementation', async () => {
   for (const status of ['merged', 'deployed']) {
-    const batch = batchFor();
-    batch.release = {
-      status,
-      mergeSha: sha('b'),
-      reviewedSha: batch.sha,
-      deployment: {
-        status: 'deployed',
-        reviewedSha: batch.sha,
-        mergeSha: sha('b'),
-        vercelUrl: 'https://clinicos-eosin.vercel.app',
-      },
-    };
+    const batch = reviewedTerminalBatch(status);
     const h = harness({ initialState: { ...blankState(), batches: [batch] }, queue: [] });
     const result = await h.run();
     assert.equal(result.batches[0].release.status, status);
     assert.equal(h.counts.execute, 0);
     assert.equal(h.counts.review, 0);
     assert.ok(!h.log.includes('gh.reviewFeedback'));
-    assert.ok(
-      h.log.includes(`gh.setIssueStatus:17:${status === 'deployed' ? 'Risolto' : 'In progress'}`),
-    );
+    if (status === 'merged') assert.ok(h.log.includes('gh.setIssueStatus:17:In progress'));
+    else {
+      assert.ok(!h.log.some((line) => line.startsWith('gh.setIssueStatus:')));
+      assert.ok(!h.log.some((line) => line.startsWith('gh.commentIssue:')));
+    }
   }
 });
 
@@ -695,4 +724,140 @@ test('remote compare-and-swap failure while reserving an implementation attempt 
   assert.equal(h.counts.review, 0);
   assert.ok(h.log.includes('workspace.prepare'));
   assert.equal(h.log.filter((entry) => entry === 'store.save').length, 5);
+});
+
+test('actual controller defers pending backend completion to protected confirmation and retries without models, merge or deploy', async () => {
+  const batch = reviewedTerminalBatch();
+  batch.plan.scope.push('backend/src/routes/patients.ts');
+  batch.plan.tasks[0].files.push('backend/src/routes/patients.ts');
+  batch.plan.fileMap.forEach((entry) => entry.files.push('backend/src/routes/patients.ts'));
+  batch.evidence = batch.plan.evidence.map((entry) => ({
+    issue: entry.issue,
+    files: {
+      screenshot: { path: entry.screenshot, bytes: 16, sha256: '1'.repeat(64) },
+      trace: { path: entry.trace, bytes: 17, sha256: '2'.repeat(64) },
+    },
+  }));
+  const railwayRunUrl = 'https://github.com/l2v-hub/ClinicOS/actions/runs/123';
+  const proof = {
+    receipt: { mergeSha: sha('b') },
+    reviewedSha: batch.sha,
+    runUrl: railwayRunUrl,
+    artifactDigest: `sha256:${'7'.repeat(64)}`,
+    receiptSha256: '8'.repeat(64),
+  };
+  batch.release.deployment.railwayRunUrl = railwayRunUrl;
+  batch.release.deployment.demo = proof;
+  const h = harness({ initialState: { ...blankState(), batches: [batch] }, queue: [] });
+  const requests = [],
+    comments = [],
+    closed = new Set();
+  let failClose = true;
+  const gh = createGitHub({
+    repo,
+    cwd: '/tmp',
+    run: async ({ args, input }) => {
+      const route = args[1],
+        method = args.includes('-X') ? args[args.indexOf('-X') + 1] : 'GET';
+      requests.push({ route, method, body: input ? JSON.parse(input) : null });
+      const match = route.match(/\/issues\/(\d+)/);
+      const issue = Number(match?.[1]);
+      let value = {};
+      if (method === 'GET' && /\/issues\/\d+$/.test(route))
+        value = { number: issue, state: closed.has(issue) ? 'closed' : 'open' };
+      else if (method === 'GET' && route.includes('/comments?'))
+        value = [comments.filter((item) => item.issue === issue)];
+      else if (method === 'GET' && route.includes('/labels?'))
+        value = [[{ name: 'customer-label' }]];
+      else if (method === 'POST' && route.endsWith('/comments'))
+        comments.push({ issue, body: JSON.parse(input).body });
+      else if (method === 'PATCH') {
+        if (failClose) {
+          failClose = false;
+          return { ok: false, code: 1, stdout: '{}', stderr: 'HTTP 503' };
+        }
+        closed.add(issue);
+      }
+      return { ok: true, code: 0, stdout: JSON.stringify(value), stderr: '' };
+    },
+  });
+  gh.intake = async () => [];
+  gh.discoverQueue = async () => [];
+  const controller = () =>
+    runPipeline({ repo, event: {}, gh, models: h.models, workspace: h.workspace, store: h.store });
+  const beforeBudget = clone(h.stateRef.value.batches[0].implementation);
+  await controller();
+  assert.equal(
+    requests.length,
+    0,
+    'The controller must not publish or request protected Railway proof',
+  );
+  assert.equal(gh.verifyDemoRelease, undefined);
+  assert.equal(selectAutoReleaseBatch(h.stateRef.value).id, batch.id);
+  const protectedGh = {
+    ...gh,
+    verifyDemoRelease: async () => proof,
+    reviewFeedback: async () =>
+      openFeedback(batch, {
+        number: 81,
+        url: batch.pr.url,
+        state: 'MERGED',
+        mergeCommitSha: sha('b'),
+      }),
+    requiredChecks: async () => ({ ok: true, details: ['all required checks: SUCCESS'] }),
+    readFileAtRevision: async (file) =>
+      file.endsWith('evidence-manifest.json')
+        ? { content: JSON.stringify(batch.evidence) }
+        : batch.evidence
+            .flatMap((item) => Object.values(item.files))
+            .find((item) => item.path === file),
+  };
+  await assert.rejects(
+    recordDeployment({
+      repo,
+      github: protectedGh,
+      store: h.store,
+      batchId: batch.id,
+      mergeSha: sha('b'),
+    }),
+    /503/,
+  );
+  assert.equal(h.stateRef.value.batches[0].release.publication.status, 'pending');
+  const mutations = requests.filter((request) => request.method !== 'GET').length;
+  await controller();
+  assert.equal(requests.filter((request) => request.method !== 'GET').length, mutations);
+  const retry = selectAutoReleaseBatch(h.stateRef.value);
+  const released = await releaseBatch({
+    repo,
+    github: protectedGh,
+    store: h.store,
+    batchId: retry.id,
+    reviewedSha: retry.sha,
+    execute: true,
+  });
+  assert.equal(released.status, 'deployed');
+  assert.deepEqual(released.deployments, { frontend: false, backend: false, runtime: false });
+  await recordDeployment({
+    repo,
+    github: protectedGh,
+    store: h.store,
+    batchId: batch.id,
+    mergeSha: sha('b'),
+  });
+  assert.equal(publicationComplete(h.stateRef.value.batches[0]), true);
+  assert.equal(selectAutoReleaseBatch(h.stateRef.value), null);
+  assert.equal(
+    comments.length,
+    batch.issues.length,
+    'Marker retries do not duplicate prior completion facts',
+  );
+  assert.deepEqual([...closed].sort(), batch.issues);
+  assert.equal(h.counts.execute, 0);
+  assert.equal(h.counts.plan, 0);
+  assert.equal(h.counts.review, 0);
+  assert.deepEqual(h.stateRef.value.batches[0].implementation, beforeBudget);
+  assert.equal(h.stateRef.value.batches[0].reviews.length, 1);
+  const after = requests.length;
+  await controller();
+  assert.equal(requests.length, after);
 });

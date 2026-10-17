@@ -3,6 +3,12 @@ import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { createRunner } from './process.mjs';
 import { createGitHub } from './github.mjs';
+import {
+  createProofReader,
+  createRailwayClient,
+  verifyDemoPreflight,
+  verifyDemoRelease,
+} from './demo-deployment.mjs';
 import { feedbackFingerprint, sha256, validateState } from './contracts.mjs';
 
 const SHA_RE = /^[a-f0-9]{40}$/;
@@ -13,6 +19,61 @@ export class ReleaseGateError extends Error {
     super(message);
     this.name = 'ReleaseGateError';
   }
+}
+
+export function hasReleaseHold(batch) {
+  return (
+    batch?.releaseHold !== undefined && batch.releaseHold !== null && batch.releaseHold !== false
+  );
+}
+
+function publicationRecord(batch, status) {
+  return {
+    status,
+    batchId: batch.id,
+    reviewedSha: batch.release.reviewedSha,
+    mergeSha: batch.release.mergeSha,
+    prNumber: batch.pr.number,
+    issues: [...batch.issues],
+  };
+}
+
+export function publicationComplete(batch) {
+  const saved = batch.release?.publication;
+  return (
+    batch.release?.status === 'deployed' &&
+    ['deployed', 'not-required'].includes(batch.release.deployment?.status) &&
+    batch.release.deployment.reviewedSha === batch.release.reviewedSha &&
+    batch.release.deployment.mergeSha === batch.release.mergeSha &&
+    saved?.status === 'published' &&
+    saved.batchId === batch.id &&
+    saved.reviewedSha === batch.sha &&
+    saved.reviewedSha === batch.release.reviewedSha &&
+    saved.mergeSha === batch.release.mergeSha &&
+    Number.isSafeInteger(saved.prNumber) &&
+    saved.prNumber === batch.pr?.number &&
+    JSON.stringify(saved.issues) === JSON.stringify(batch.issues)
+  );
+}
+
+export function selectAutoReleaseBatch(state) {
+  return (
+    state.batches
+      .filter(
+        (batch) =>
+          batch.phase === 'ready' &&
+          !hasReleaseHold(batch) &&
+          batch.sha &&
+          batch.approvedSha === batch.sha &&
+          (batch.release?.status !== 'deployed' || !publicationComplete(batch)),
+      )
+      .sort((a, b) => Math.min(...a.issues) - Math.min(...b.issues))[0] ?? null
+  );
+}
+
+function assertNoReleaseHold(batch) {
+  if (hasReleaseHold(batch))
+    fail('durable releaseHold prevents merge, deployment recording and closure');
 }
 
 function fail(message) {
@@ -172,7 +233,15 @@ function verifyChecks(checks) {
   }
 }
 
-async function verifyCurrentCandidate({ batch, sha, repo, github, verifyBlobs = true }) {
+async function verifyCurrentCandidate({
+  batch,
+  sha,
+  repo,
+  github,
+  verifyBlobs = true,
+  allowClosedIssues = false,
+}) {
+  assertNoReleaseHold(batch);
   if (batch.phase !== 'ready' || batch.sha !== sha || batch.approvedSha !== sha)
     fail('batch is not ready and approved for the supplied reviewed SHA');
   if (batch.implementation.at(-1)?.status !== 'passed')
@@ -184,7 +253,8 @@ async function verifyCurrentCandidate({ batch, sha, repo, github, verifyBlobs = 
 
   for (const issueNumber of batch.issues) {
     const issue = await github.viewIssue(issueNumber);
-    if (String(issue.state ?? '').toLowerCase() !== 'open')
+    const state = String(issue.state ?? '').toLowerCase();
+    if (state !== 'open' && !(allowClosedIssues && state === 'closed'))
       fail(`source issue #${issueNumber} is no longer open`);
   }
 
@@ -227,6 +297,33 @@ function assertDeploymentPrerequisites(deployments, configured) {
     fail('RAILWAY_TOKEN is required before merging Railway service changes');
 }
 
+// Freeze the entire authorized subject, including plan, evidence and review ledgers.
+// Remote verification must never acquire a newly loaded PR or source-issue set.
+function releaseSubject(batch) {
+  return JSON.stringify(batch);
+}
+
+function freshReleaseGuard({ batch, store, repo }) {
+  const batchId = batch.id;
+  const expected = releaseSubject(batch);
+  return async () => {
+    const state = store ? structuredClone(validateState(await store.load(), repo)) : null;
+    const current = state ? state.batches.find((item) => item.id === batchId) : batch;
+    assertNoReleaseHold(current);
+    if (!current || releaseSubject(current) !== expected)
+      fail('verified release identity changed during asynchronous verification');
+    return { state, current };
+  };
+}
+
+async function persistReleaseTransition({ state, batch, guard, store, repo }) {
+  const saved = structuredClone(batch);
+  const afterSave = freshReleaseGuard({ batch: saved, store, repo });
+  await store.save(structuredClone(state), { guard });
+  await afterSave();
+  return saved;
+}
+
 export async function releaseBatch({
   repo,
   github,
@@ -244,12 +341,32 @@ export async function releaseBatch({
   if (!github || !store?.load || !store?.save)
     throw new TypeError('GitHub adapter and durable state store are required');
 
-  let state = validateState(await store.load(), repo);
-  let batch = state.batches.find((candidate) => candidate.id === batchId);
+  const initial = validateState(await store.load(), repo);
+  const batch = structuredClone(initial.batches.find((candidate) => candidate.id === batchId));
   if (!batch) fail('batch is absent from durable state');
+  assertNoReleaseHold(batch);
+  const guard = freshReleaseGuard({ batch, store, repo });
   if (batch.release?.status === 'deployed') {
     if (batch.release.reviewedSha !== reviewedSha)
       fail('batch is already deployed from a different reviewed revision');
+    const candidate = await verifyCurrentCandidate({
+      batch,
+      sha: reviewedSha,
+      repo,
+      github,
+      allowClosedIssues: true,
+    });
+    if (
+      candidate.feedback.state !== 'MERGED' ||
+      candidate.feedback.mergeCommitSha !== batch.release.mergeSha ||
+      !SHA_RE.test(batch.release.mergeSha ?? '') ||
+      batch.release.deployment?.reviewedSha !== reviewedSha ||
+      batch.release.deployment?.mergeSha !== batch.release.mergeSha ||
+      !['deployed', 'not-required'].includes(batch.release.deployment?.status)
+    )
+      fail('deployed recovery must match the verified reviewed merge');
+    await guard();
+
     return {
       ok: true,
       status: 'deployed',
@@ -262,7 +379,14 @@ export async function releaseBatch({
   }
 
   const candidate = await verifyCurrentCandidate({ batch, sha: reviewedSha, repo, github });
+  await guard();
   assertDeploymentPrerequisites(candidate.deployments, configured);
+  if (candidate.deployments.backend) {
+    if (typeof github.verifyDemoPreflight !== 'function')
+      fail('trusted demo preflight reader unavailable');
+    await github.verifyDemoPreflight();
+  }
+  await guard();
   if (!execute)
     return {
       ok: true,
@@ -277,14 +401,15 @@ export async function releaseBatch({
       fail('recorded merge belongs to a different reviewed revision');
     if (!SHA_RE.test(candidate.feedback.mergeCommitSha ?? ''))
       fail('merged PR has no verifiable merge commit');
-    batch.release = {
+    const { state, current } = await guard();
+    current.release = {
       status: 'merged',
       reviewedSha,
       mergeSha: candidate.feedback.mergeCommitSha,
       prNumber: batch.pr.number,
       deployments: candidate.deployments,
     };
-    await store.save(state);
+    await persistReleaseTransition({ state, batch: current, guard, store, repo });
     return {
       ok: true,
       status: 'merged',
@@ -296,11 +421,14 @@ export async function releaseBatch({
     };
   }
 
-  if (candidate.feedback.isDraft) await github.draftReady(batch.pr.number);
+  if (candidate.feedback.isDraft) {
+    await guard();
+    await github.draftReady(batch.pr.number, { guard });
+    await guard();
+  }
 
-  // Re-read state, review feedback and branch-protection checks immediately before merge.
-  state = validateState(await store.load(), repo);
-  batch = state.batches.find((candidateBatch) => candidateBatch.id === batchId);
+  // Reverify the frozen target, then compare fresh durable authorization again.
+  await guard();
   const finalCandidate = await verifyCurrentCandidate({
     batch,
     sha: reviewedSha,
@@ -308,18 +436,22 @@ export async function releaseBatch({
     github,
     verifyBlobs: false,
   });
+  await guard();
+  if (finalCandidate.deployments.backend) await github.verifyDemoPreflight();
+  await guard();
   if (finalCandidate.feedback.state !== 'OPEN' || finalCandidate.feedback.isDraft)
     fail('PR must be open and ready for review before merge');
 
-  const merge = await github.mergePullRequest(batch.pr.number, reviewedSha);
-  batch.release = {
+  const merge = await github.mergePullRequest(batch.pr.number, reviewedSha, { guard });
+  const { state, current } = await guard();
+  current.release = {
     status: 'merged',
     reviewedSha,
     mergeSha: merge.mergeSha,
     prNumber: batch.pr.number,
     deployments: finalCandidate.deployments,
   };
-  await store.save(state);
+  await persistReleaseTransition({ state, batch: current, guard, store, repo });
   return {
     ok: true,
     status: 'merged',
@@ -361,14 +493,34 @@ export async function recordDeployment({
     !SHA_RE.test(mergeSha ?? '')
   )
     throw new TypeError('invalid deployment batch or merge SHA');
-  const state = validateState(await store.load(), repo);
-  const batch = state.batches.find((item) => item.id === batchId);
+  const initial = validateState(await store.load(), repo);
+  const batch = structuredClone(initial.batches.find((item) => item.id === batchId));
   if (
     !batch?.release ||
     !['merged', 'deployed'].includes(batch.release.status) ||
     batch.release.mergeSha !== mergeSha
   )
     fail('deployment does not match a recorded production merge');
+  assertNoReleaseHold(batch);
+  if (
+    batch.phase !== 'ready' ||
+    batch.sha !== batch.release.reviewedSha ||
+    batch.approvedSha !== batch.sha ||
+    batch.implementation.at(-1)?.status !== 'passed' ||
+    (batch.release.prNumber !== undefined && batch.release.prNumber !== batch.pr?.number)
+  )
+    fail('recorded release no longer matches its approved candidate');
+  verifyReviewProof(batch, batch.sha);
+  const guard = freshReleaseGuard({ batch, store, repo });
+  if (publicationComplete(batch))
+    return {
+      ok: true,
+      status: 'deployed',
+      batchId,
+      mergeSha,
+      deployments: appDeployments(batch),
+      alreadyPublished: true,
+    };
   const deployments = appDeployments(batch);
   vercelUrl ||= batch.release.deployment?.vercelUrl || '';
   railwayRunUrl ||= batch.release.deployment?.railwayRunUrl || '';
@@ -380,26 +532,41 @@ export async function recordDeployment({
   if (deployments.runtime && !validateDeploymentUrl(runtimeRunUrl, 'railway'))
     fail('successful Railway workflow URL is required for AI runtime changes');
 
-  batch.release.deployment = {
+  let demo;
+  if (deployments.backend) {
+    if (typeof github.verifyDemoRelease !== 'function')
+      fail('trusted demo release verifier unavailable');
+    demo = await github.verifyDemoRelease({
+      runUrl: railwayRunUrl,
+      mergeSha,
+      reviewedSha: batch.release.reviewedSha,
+    });
+  }
+  const { state, current } = await guard();
+  current.release.deployment = {
     status:
       deployments.frontend || deployments.backend || deployments.runtime
         ? 'deployed'
         : 'not-required',
-    reviewedSha: batch.release.reviewedSha,
+    reviewedSha: current.release.reviewedSha,
     mergeSha,
     ...(deployments.frontend ? { vercelUrl } : {}),
-    ...(deployments.backend ? { railwayRunUrl } : {}),
+    ...(deployments.backend ? { railwayRunUrl, demo } : {}),
     ...(deployments.runtime ? { runtimeRunUrl } : {}),
     completedAt: new Date().toISOString(),
   };
-  batch.release.status = 'deployed';
-  await store.save(state);
+  current.release.status = 'deployed';
+  current.release.publication = publicationRecord(current, 'pending');
+  const saved = await persistReleaseTransition({ state, batch: current, guard, store, repo });
 
-  await publishDeploymentCompletion({ batch, github });
-  return { ok: true, status: batch.release.deployment.status, batchId, mergeSha, deployments };
+  await publishDeploymentCompletion({ batch: saved, github, store, repo });
+  return { ok: true, status: current.release.deployment.status, batchId, mergeSha, deployments };
 }
 
-export async function publishDeploymentCompletion({ batch, github }) {
+export async function publishDeploymentCompletion({ batch, github, store, repo }) {
+  const suppliedBatch = batch;
+  batch = structuredClone(batch);
+  assertNoReleaseHold(batch);
   const { mergeSha, reviewedSha, deployment } = batch.release ?? {};
   if (
     batch.release?.status !== 'deployed' ||
@@ -422,6 +589,44 @@ export async function publishDeploymentCompletion({ batch, github }) {
     (deployments.runtime && !validateDeploymentUrl(runtimeRunUrl, 'railway'))
   )
     fail('completion publication requires the confirmed deployment links');
+  if (
+    deployments.backend &&
+    (!deployment.demo?.receipt ||
+      deployment.demo.receipt.mergeSha !== mergeSha ||
+      deployment.demo.reviewedSha !== reviewedSha ||
+      deployment.demo.runUrl !== railwayRunUrl)
+  )
+    fail('completion requires the verified demo deployment receipt');
+  const fresh = freshReleaseGuard({ batch: store ? batch : suppliedBatch, store, repo });
+  const guard = async () => {
+    const verified = await fresh();
+    const current = verified.current;
+    if (
+      current.phase !== 'ready' ||
+      current.sha !== reviewedSha ||
+      current.approvedSha !== reviewedSha ||
+      current.implementation.at(-1)?.status !== 'passed'
+    )
+      fail('verified release identity changed before issue publication or closure');
+    verifyReviewProof(current, reviewedSha);
+    return verified;
+  };
+  await guard();
+  if (publicationComplete(batch)) return { status: 'published' };
+  if (deployments.backend) {
+    if (typeof github.verifyDemoRelease !== 'function')
+      fail('trusted live demo verifier unavailable');
+    const currentProof = await github.verifyDemoRelease({
+      runUrl: railwayRunUrl,
+      mergeSha,
+      reviewedSha,
+    });
+    if (
+      currentProof.artifactDigest !== deployment.demo.artifactDigest ||
+      currentProof.receiptSha256 !== deployment.demo.receiptSha256
+    )
+      fail('persisted demo receipt differs from trusted current proof');
+  }
   const batchId = batch.id;
   const marker = `<!-- codex-bug-pipeline:deployment:${batchId}:${mergeSha} -->`;
   const links = [
@@ -430,15 +635,27 @@ export async function publishDeploymentCompletion({ batch, github }) {
     ...(deployments.backend ? [`[Deploy Railway riuscito](${railwayRunUrl})`] : []),
     ...(deployments.runtime ? [`[Deploy AI runtime riuscito](${runtimeRunUrl})`] : []),
   ];
-  const body = `${marker}\n**Risolto** — verifiche, evidenze e review completate per ${batchId} sulla revisione ${batch.release.reviewedSha}, merge ${mergeSha}. ${links.join(' · ')}. Rilascio confermato; issue chiusa come completata.`;
+  const body = `${marker}\n**Rilascio verificato** — verifiche, evidenze e review completate per ${batchId} sulla revisione ${reviewedSha}, merge ${mergeSha}. ${links.join(' · ')}.`;
   for (const issueNumber of batch.issues) {
+    await guard();
     const issue = await github.viewIssue(issueNumber);
+    await guard();
     const alreadyPosted = (issue.comments ?? []).some((comment) =>
       String(comment.body ?? '').includes(marker),
     );
-    if (!alreadyPosted) await github.commentIssue(issueNumber, body);
-    await github.setIssueStatus(issueNumber, 'Risolto');
+    if (!alreadyPosted) await github.commentIssue(issueNumber, body, { guard });
+    await guard();
+    await github.setIssueStatus(issueNumber, 'Risolto', { guard });
   }
+  const { state, current } = await guard();
+  current.release.publication = {
+    ...publicationRecord(current, 'published'),
+    completedAt: new Date().toISOString(),
+  };
+  if (store) {
+    await persistReleaseTransition({ state, batch: current, guard, store, repo });
+  }
+  return { status: 'published' };
 }
 
 async function writeOutputs(outputs) {
@@ -463,6 +680,14 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
   const repo = env.GITHUB_REPOSITORY || 'l2v-hub/ClinicOS';
   const github = createGitHub({ cwd: root, repo, run });
   const store = github.createStateStore();
+  const proofReader = () => createProofReader({ token: env.GH_TOKEN || env.GITHUB_TOKEN });
+  github.verifyDemoPreflight = () => verifyDemoPreflight({ reader: proofReader() });
+  github.verifyDemoRelease = (input) =>
+    verifyDemoRelease({
+      ...input,
+      reader: proofReader(),
+      client: createRailwayClient({ token: env.RAILWAY_DEMO_TOKEN }),
+    });
   const mode = env.BUG_PIPELINE_RELEASE_ACTION || 'release';
 
   if (mode === 'record') {
@@ -499,21 +724,14 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
       );
     }
     const state = validateState(await store.load(), repo);
-    const candidates = state.batches.filter(
-      (batch) =>
-        batch.phase === 'ready' &&
-        batch.sha &&
-        batch.approvedSha === batch.sha &&
-        batch.release?.status !== 'deployed',
-    );
-    if (candidates.length === 0) {
+    const candidate = selectAutoReleaseBatch(state);
+    if (!candidate) {
       await writeOutputs({ status: 'no-ready-batch', frontend: 'false', backend: 'false' });
       console.log(JSON.stringify({ status: 'no-ready-batch' }));
       return 0;
     }
-    candidates.sort((a, b) => Math.min(...a.issues) - Math.min(...b.issues));
-    batchId = candidates[0].id;
-    reviewedSha = candidates[0].approvedSha;
+    batchId = candidate.id;
+    reviewedSha = candidate.approvedSha;
   } else if (env.GITHUB_EVENT_NAME === 'workflow_dispatch') {
     if (env.GITHUB_REF !== 'refs/heads/main' || !batchId || !reviewedSha)
       fail('workflow_dispatch from main requires both batch_id and reviewed_sha');

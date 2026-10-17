@@ -545,3 +545,96 @@ test('real Git workspace rejects changes outside the accepted source-file scope'
   await writeFile(path.join(cwd, 'README.md'), 'unauthorized modification\n');
   await assert.rejects(workspace.verify(batch), /executor edited outside accepted file scope/);
 });
+
+test('only verification receives the absolute trusted browser cache while HOME and credential boundaries remain isolated', () => {
+  const env = {
+    ...envWithSecrets(),
+    PLAYWRIGHT_BROWSERS_PATH: '/trusted/clinicos-browser-cache',
+    PLAYWRIGHT_UNRELATED_SETTING: 'must-not-forward',
+    RAILWAY_DEMO_TOKEN: 'synthetic-private-demo-binding',
+  };
+  const child = childEnvironment('verification', env, '/tmp/browser-cache-proof');
+  assert.equal(child.PLAYWRIGHT_BROWSERS_PATH, env.PLAYWRIGHT_BROWSERS_PATH);
+  assert.equal(child.HOME, '/tmp/browser-cache-proof/verification-home');
+  assert.equal(child.PLAYWRIGHT_UNRELATED_SETTING, undefined);
+  assert.equal(child.RAILWAY_DEMO_TOKEN, undefined);
+  for (const role of ['controller', 'model', 'review'])
+    assert.equal(
+      childEnvironment(role, env, '/tmp/browser-cache-proof').PLAYWRIGHT_BROWSERS_PATH,
+      undefined,
+    );
+  for (const value of ['relative/cache', '0', '/cache\nother', '/cache\0other'])
+    assert.throws(
+      () =>
+        childEnvironment(
+          'verification',
+          { ...env, PLAYWRIGHT_BROWSERS_PATH: value },
+          '/tmp/browser-cache-proof',
+        ),
+      /absolute nonsecret path/,
+    );
+});
+
+test('actual verification subprocess sees the trusted shared cache independently of isolated HOME', async (t) => {
+  const root = await tempDir(t);
+  const cache = path.join(root, 'trusted-browser-cache');
+  const runner = createRunner({
+    env: { ...envWithSecrets(), PLAYWRIGHT_BROWSERS_PATH: cache },
+    runtimeRoot: path.join(root, 'runtime'),
+  });
+  const result = await runner({
+    command: process.execPath,
+    args: [
+      '-e',
+      'process.stdout.write(JSON.stringify({cache:process.env.PLAYWRIGHT_BROWSERS_PATH,home:process.env.HOME,gh:process.env.GH_TOKEN,api:process.env.CODEX_API_KEY}))',
+    ],
+    cwd: root,
+    envMode: 'verification',
+    timeoutMs: 3000,
+  });
+  assert.equal(result.ok, true, result.stderr);
+  assert.deepEqual(JSON.parse(result.stdout), {
+    cache,
+    home: path.join(root, 'runtime', 'verification-home'),
+  });
+});
+
+test('trusted browser installation, controller and native sandbox service proof share the explicit cache before credentials', async () => {
+  const workflow = await readFile(
+    new URL('../../../.github/workflows/codex-bug-pipeline.yml', import.meta.url),
+    'utf8',
+  );
+  const readiness = await readFile(
+    new URL('../../../.github/workflows/bug-pipeline-tests.yml', import.meta.url),
+    'utf8',
+  );
+  const native = await readFile(
+    new URL('../../../scripts/quality-gate/verify-isolated-services.mjs', import.meta.url),
+    'utf8',
+  );
+  const cache = 'PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/clinicos-verification-browsers';
+  for (const text of [workflow, readiness]) assert.equal(text.split(cache).length - 1, 2);
+  assert.ok(
+    workflow.indexOf('playwright/cli.js install --with-deps chromium') <
+      workflow.indexOf('GH_TOKEN:'),
+  );
+  assert.ok(
+    readiness.indexOf('playwright/cli.js install --with-deps chromium') <
+      readiness.indexOf('run: node scripts/quality-gate/verify-isolated-services.mjs'),
+  );
+  assert.match(native, /chromium\.launch\(/);
+  assert.match(native, /await page\.reload\(\)/);
+  assert.match(native, /inputValue\(\)/);
+  for (const name of [
+    'connectDenied',
+    'udpDenied',
+    "proxyStatus('GET')",
+    "proxyStatus('CONNECT')",
+    'failure.code, 7',
+  ])
+    assert.ok(native.includes(name), `native proof must retain ${name}`);
+  assert.doesNotMatch(
+    native,
+    /ignoreHTTPSErrors|ignore-certificate|disable-web-security|--no-sandbox/,
+  );
+});

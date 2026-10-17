@@ -1,0 +1,11 @@
+✔ a hold applied while reading issue comments prevents completion publication (20.738654ms)
+✔ hold during real GitHub status adapter label inspection prevents actual close PATCH (11.56067ms)
+✔ a failed actual close must not leave an untrue already-closed completion claim (6.137855ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 553.743104

@@ -89,8 +89,15 @@ export async function readinessHandler(_req: Request, res: Response): Promise<vo
   // The policy is read from the DB: skip it when the DB is already known down.
   const policy = database === 'ok' ? await check(deps.loadPolicy) : 'fail';
   const ready = !shuttingDown && database === 'ok' && policy === 'ok';
+  const deploymentId = process.env.RAILWAY_DEPLOYMENT_ID;
   res.status(ready ? 200 : 503).json({
     status: ready ? 'ready' : shuttingDown ? 'shutting_down' : 'not_ready',
+    // Public, nonsecret identity lets release verify which Railway instance serves this domain.
+    ...(deploymentId &&
+    deploymentId.length === 36 &&
+    /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(deploymentId)
+      ? { deploymentId }
+      : {}),
     tier: deploymentTier(),
     authMode: operatorAuthMode(),
     checks: { database, policy },
