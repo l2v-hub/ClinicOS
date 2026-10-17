@@ -1081,9 +1081,37 @@
       "codexFinalReview": {
         "subjectSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
         "claudeRound": 3,
-        "status": "running"
+        "status": "running",
+        "owner": "codex-cloud-goal-finalqa481",
+        "nonce": "5ccee54b-5a50-45d0-ae27-afd4533ed90a",
+        "reservedAt": "2026-10-17T23:20:07.546Z",
+        "reviewAttempt": 2,
+        "execution": "dedicated Codex agent, not nested CLI"
       },
-      "reason": "External review consistency or correction failed; inspect the existing batch"
+      "reason": "Dedicated final Codex QA is actually reserved; old completed hosted worker preserved in recovery history. Existing clinical releaseHold remains unchanged.",
+      "codexFinalReviewRecoveryHistory": [
+        {
+          "at": "2026-10-17T23:20:07.546Z",
+          "actor": "l2v-hub",
+          "previous": {
+            "subjectSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
+            "claudeRound": 3,
+            "status": "running"
+          },
+          "ownerJob": 39071373153,
+          "jobStatus": "completed",
+          "jobConclusion": "success",
+          "result": "No final QA result was persisted; exact execution failure cause unknown",
+          "spent": true
+        }
+      ],
+      "finalQaOwnership": {
+        "owner": "codex-cloud-goal-finalqa481",
+        "nonce": "5ccee54b-5a50-45d0-ae27-afd4533ed90a",
+        "reservedAt": "2026-10-17T23:20:07.546Z",
+        "sourceFrozen": true,
+        "noImplementationAttempt": true
+      }
     },
     {
       "id": "bug-batch-432",
@@ -7069,7 +7097,7 @@
       }
     }
   ],
-  "updatedAt": "2026-10-17T21:36:41.409Z",
+  "updatedAt": "2026-10-17T23:20:07.546Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
