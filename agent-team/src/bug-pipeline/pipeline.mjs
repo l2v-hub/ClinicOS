@@ -6,6 +6,8 @@ import {
   feedbackFingerprint,
 } from './contracts.mjs';
 import { externalReviewStep } from './external-review.mjs';
+import { validateStandaloneState, finalizeStandaloneSubject } from './standalone-review.mjs';
+import { controllerFailureCode } from './github.mjs';
 
 function eligibleIssue(issue) {
   const labels = (issue.labels ?? []).map((l) => (typeof l === 'string' ? l : l.name));
@@ -42,6 +44,8 @@ export async function runPipeline({
   reviewMode = 'internal',
   now = Date.now,
   triageWindowMs = 120_000,
+  standaloneController,
+  standaloneInfrastructureFiles = [],
 }) {
   if (!['internal', 'external'].includes(reviewMode)) throw new Error('Unknown review mode');
   if (!Number.isSafeInteger(triageWindowMs) || triageWindowMs < 0 || triageWindowMs > 600_000)
@@ -54,13 +58,47 @@ export async function runPipeline({
   let persistenceFailed = false;
   const save = async (options) => {
     try {
+      if (state.standaloneReviews) validateStandaloneState(state);
       state.updatedAt = new Date().toISOString();
-      return await store.save(state, options);
+      return await store.save(state, {
+        ...options,
+        rebaseIndependentSubjects: (merged) => {
+          validateState(merged, repo);
+          if (merged.standaloneReviews) validateStandaloneState(merged);
+        },
+      });
     } catch (error) {
       persistenceFailed = true;
       throw error;
     }
   };
+  if (state.standaloneReviews?.length) {
+    validateStandaloneState(state);
+    if (!standaloneController)
+      throw new Error('Standalone subjects require their trusted controller');
+    for (const subject of state.standaloneReviews) {
+      if (subject.release?.status === 'merged') continue;
+      try {
+        await finalizeStandaloneSubject({
+          subject,
+          controller: standaloneController,
+          github: gh,
+          workspace,
+          save,
+          infrastructureFiles: standaloneInfrastructureFiles,
+        });
+      } catch (error) {
+        if (persistenceFailed)
+          throw new Error('Standalone state persistence failed', { cause: error });
+        subject.phase = 'blocked';
+        subject.reason =
+          'Standalone identity, evidence, review or independent QA could not be verified; orchestrator recovery required';
+        subject.failureCode = controllerFailureCode(error);
+        delete subject.approvedSha;
+        await save();
+      }
+    }
+  }
   const report = async (batch, text) => {
     for (const n of batch.issues)
       await gh.commentIssue(n, `<!-- codex-bug-pipeline:status -->\n${text}`);
@@ -224,8 +262,10 @@ export async function runPipeline({
     if (reviewMode === 'external' && batch.pr) {
       try {
         await externalReviewStep({ repo, batch, gh, workspace, save, report, block });
-      } catch {
-        if (persistenceFailed) throw new Error('External review reconciliation persistence failed');
+      } catch (error) {
+        if (persistenceFailed)
+          throw new Error('External review reconciliation persistence failed', { cause: error });
+        batch.failureCode = controllerFailureCode(error);
         await block(
           batch,
           'External review consistency or correction failed; inspect the existing batch',
@@ -448,6 +488,7 @@ export async function runPipeline({
       }
     } catch (error) {
       if (persistenceFailed) throw error;
+      batch.failureCode = controllerFailureCode(error);
       for (const a of [...batch.implementation, ...batch.reviews])
         if (a.status === 'running') a.status = 'failed';
       await block(

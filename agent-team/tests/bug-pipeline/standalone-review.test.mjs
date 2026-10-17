@@ -1,0 +1,1321 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {
+  createStandaloneReview,
+  standaloneReviewStep,
+  mergeStandaloneReview,
+  validateStandaloneState,
+  STANDALONE_REPO as repo,
+} from '../../src/bug-pipeline/standalone-review.mjs';
+import { sha256, feedbackFingerprint } from '../../src/bug-pipeline/contracts.mjs';
+import { runPipeline } from '../../src/bug-pipeline/pipeline.mjs';
+import { STANDALONE_INFRASTRUCTURE_FILES } from '../../src/bug-pipeline/cli.mjs';
+import { main as handoffMain } from '../../src/bug-pipeline/review-handoff-cli.mjs';
+import {
+  createGitHub,
+  MAX_DURABLE_STATE_BYTES,
+  RESULT_RESERVATION_BYTES,
+} from '../../src/bug-pipeline/github.mjs';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { mkdtemp, rm, mkdir, writeFile } from 'node:fs/promises';
+import os from 'node:os';
+import nodePath from 'node:path';
+const clone = (value) => structuredClone(value);
+const sha = 'a'.repeat(40),
+  baseSha = 'b'.repeat(40),
+  testedSha = 'c'.repeat(40);
+const path = 'artifacts/task-validation/standalone-review-81';
+const report = () => ({
+  subject_sha: sha,
+  verdict: 'approved',
+  summary: 'Inspected frozen source and evidence.',
+  findings: [],
+});
+function fixture() {
+  let remote = { schemaVersion: 1, repository: repo, batches: [] },
+    version = 0,
+    login = 'maintainer',
+    authorized = true,
+    allChecks = true,
+    mutateTree,
+    checksHook,
+    mergeBase = baseSha;
+  const writes = [],
+    published = [],
+    comments = [],
+    labels = [];
+  const treeOverrides = new Map(),
+    fileContents = new Map();
+  const pr = {
+    number: 81,
+    state: 'open',
+    merged: false,
+    draft: false,
+    head: { sha, ref: 'feature/review', repo: { full_name: repo, fork: false } },
+    base: { sha: baseSha, ref: 'main', repo: { full_name: repo } },
+  };
+  const feedback = {
+    number: 81,
+    url: `https://github.com/${repo}/pull/81`,
+    state: 'OPEN',
+    isDraft: false,
+    head: sha,
+    headRef: 'feature/review',
+    headRepo: repo,
+    headIsFork: false,
+    baseRef: 'main',
+    comments: [],
+    unresolved: false,
+    changesRequested: false,
+  };
+  const implementation = [1, 2, 3].map((round) => ({
+    round,
+    status: round === 3 ? 'passed' : 'failed',
+    subjectSha: testedSha,
+    evidence: `attempt-${round}.json`,
+    legacy: { attempt: round, retained: true },
+  }));
+  const sources = [
+    {
+      path: 'agent-team/src/example.mjs',
+      blob: 'd'.repeat(40),
+      mode: '100644',
+      baseBlob: 'e'.repeat(40),
+      baseMode: '100644',
+    },
+  ];
+  const content = Object.fromEntries(
+    [
+      'task-contract.md',
+      'analysis.md',
+      'implementation-plan.md',
+      'validation-report.md',
+      ...implementation.map((a) => a.evidence),
+    ].map((file) => [file, `Synthetic frozen ${file}\n`]),
+  );
+  const files = Object.fromEntries(
+    Object.entries(content).map(([file, text]) => [file, sha256(text)]),
+  );
+  content['imported-history.json'] = JSON.stringify({
+    implementation,
+    reviews: [],
+    reviewLedger: null,
+    reviewReports: {},
+    sourceManifest: sources,
+    packetFiles: files,
+  });
+  const manifest = {
+    schemaVersion: 1,
+    repository: repo,
+    pr: { number: 81, url: feedback.url },
+    sha,
+    baseSha,
+    baseRef: 'main',
+    branch: pr.head.ref,
+    issues: [],
+    packet: {
+      path,
+      files: { ...files, 'imported-history.json': sha256(content['imported-history.json']) },
+    },
+    sourceManifest: sources,
+    implementation,
+    reviews: [],
+    reviewLedger: null,
+    reviewReports: {},
+    releaseHold: 'Await genuine reviews and infrastructure authorization',
+  };
+  const github = {
+    createStateStore() {
+      let loaded;
+      return {
+        load: async () => {
+          loaded = version;
+          return clone(remote);
+        },
+        save: async (state, { guard } = {}) => {
+          const expected = loaded;
+          if (guard) await guard();
+          assert.equal(expected, version, 'CAS conflict');
+          remote = clone(state);
+          version++;
+          loaded = version;
+          writes.push(clone(state));
+        },
+      };
+    },
+    authorized: async () => authorized,
+    requiredChecks: async () => {
+      if (checksHook) await checksHook();
+      return { ok: true, details: ['required: SUCCESS'] };
+    },
+    readFileAtRevision: async (file) => {
+      const text = fileContents.has(file)
+        ? fileContents.get(file)
+        : content[file.slice(path.length + 1)];
+      assert.equal(typeof text, 'string');
+      return { content: text, sha256: sha256(text) };
+    },
+    viewIssue: async (number) => ({
+      number,
+      state: 'open',
+      pull_request: number === 81 ? {} : undefined,
+      comments: clone(comments),
+      labels: clone(labels),
+    }),
+    reviewFeedback: async () => ({
+      ...clone(feedback),
+      comments: [
+        ...clone(feedback.comments),
+        ...clone(comments).map((c) => ({ id: c.id, body: c.body, author: c.user.login })),
+      ],
+    }),
+    commentPR: async (number, body) =>
+      comments.push({ id: comments.length + 1, body, user: { login, type: 'User' } }),
+    publishExternalReview: async (number, head, review, round) => {
+      published.push({ number, head, review, round });
+      feedback.comments.push({
+        id: 900,
+        author: login,
+        body: `<!-- clinicos-claude-cron:${number}:${head}:${round} -->\nreview`,
+      });
+    },
+  };
+  const run = async (call) => {
+    assert.equal(call.command, 'gh', 'Review must never execute source or model commands');
+    const args = call.args,
+      endpoint = args[1];
+    if (args[0] === 'pr' && args[1] === 'checks')
+      return {
+        ok: allChecks,
+        stdout: JSON.stringify([
+          {
+            name: 'AI Runtime Tests',
+            state: allChecks ? 'SUCCESS' : 'FAILURE',
+            bucket: allChecks ? 'pass' : 'fail',
+          },
+        ]),
+      };
+    if (endpoint === 'user') return { ok: true, stdout: JSON.stringify({ login }) };
+    if (endpoint === `repos/${repo}/pulls/81`) return { ok: true, stdout: JSON.stringify(pr) };
+    if (endpoint.startsWith(`repos/${repo}/compare/`))
+      return {
+        ok: true,
+        stdout: JSON.stringify({
+          base_commit: { sha: pr.base.sha },
+          merge_base_commit: { sha: mergeBase },
+        }),
+      };
+    if (endpoint.startsWith(`repos/${repo}/git/trees/`)) {
+      const revision = endpoint.split('/').at(-1).split('?')[0];
+      if (treeOverrides.has(revision))
+        return {
+          ok: true,
+          stdout: JSON.stringify({ truncated: false, tree: clone(treeOverrides.get(revision)) }),
+        };
+      const tree = [
+        {
+          path: sources[0].path,
+          type: 'blob',
+          mode: '100644',
+          sha: revision === baseSha ? sources[0].baseBlob : sources[0].blob,
+        },
+      ];
+      if (revision === sha)
+        for (const [file, digest] of Object.entries(manifest.packet.files))
+          tree.push({
+            path: path + '/' + file,
+            type: 'blob',
+            mode: '100644',
+            sha: digest.slice(0, 40),
+          });
+      if (mutateTree) mutateTree(tree, revision);
+      return { ok: true, stdout: JSON.stringify({ truncated: false, tree }) };
+    }
+    if (endpoint === `repos/${repo}/issues/81/labels`) {
+      const body = JSON.parse(call.input);
+      labels.push(...body.labels.filter((l) => !labels.includes(l)));
+      return { ok: true, stdout: '{}' };
+    }
+    if (endpoint.startsWith(`repos/${repo}/issues/81/labels/`)) {
+      labels.splice(labels.indexOf(decodeURIComponent(endpoint.split('/').at(-1))), 1);
+      return { ok: true, stdout: '' };
+    }
+    assert.fail('Unexpected transport ' + JSON.stringify(call));
+  };
+  let nonce = 0;
+  const controller = createStandaloneReview({
+    github,
+    run,
+    cwd: '/trusted',
+    nonce: () => `request-${++nonce}`,
+  });
+  return {
+    controller,
+    github,
+    manifest,
+    content,
+    writes,
+    published,
+    comments,
+    feedback,
+    labels,
+    pr,
+    remote: () => remote,
+    setActor: (v) => (login = v),
+    revoke: () => (authorized = false),
+    failChecks: () => (allChecks = false),
+    mutateTree: (fn) => (mutateTree = fn),
+    checksHook: (fn) => (checksHook = fn),
+    setMergeBase: (value) => (mergeBase = value),
+    run,
+    treeOverrides,
+    fileContents,
+  };
+}
+async function claimed(f) {
+  await f.controller.adopt(f.manifest);
+  await f.controller.request(81);
+  return f.controller.claim(81);
+}
+
+test('standalone adoption binds true PR identity, source/config projection, packet and all three imported attempts', async () => {
+  const f = fixture();
+  const adopted = await f.controller.adopt(f.manifest);
+  assert.equal(adopted.implementation.length, 3);
+  assert.equal(adopted.implementation[2].subjectSha, testedSha);
+  assert.equal(adopted.sha, sha);
+  assert.equal(f.remote().batches.length, 0);
+  assert.deepEqual(adopted.implementation, f.manifest.implementation);
+  await assert.rejects(f.controller.adopt(f.manifest), /New verified SHA/);
+});
+
+test('adoption rejects fork, base drift, missing native checks, malformed source or packet, and historical source mismatch', async () => {
+  for (const mutate of [
+    (f) => (f.pr.head.repo.fork = true),
+    (f) => (f.pr.base.ref = 'untrusted-base'),
+    (f) => f.failChecks(),
+    (f) => (f.content['analysis.md'] += 'edited'),
+    (f) => (f.manifest.sourceManifest[0].blob = 'f'.repeat(40)),
+    (f) =>
+      f.mutateTree((tree, rev) => {
+        if (rev === testedSha) tree[0].sha = 'f'.repeat(40);
+      }),
+  ]) {
+    const f = fixture();
+    mutate(f);
+    await assert.rejects(f.controller.adopt(f.manifest));
+    assert.equal(f.writes.length, 0);
+  }
+});
+
+test('CAS claim reserves before analysis, retains imported history, and exclusive PR labels follow request/running/published', async () => {
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  let subject = await f.controller.request(81);
+  f.labels.push('review-blocked');
+  await f.controller.publishState(subject);
+  assert.deepEqual(f.labels, ['claude-review-ready']);
+  subject = await f.controller.claim(81);
+  assert.equal(f.remote().standaloneReviews[0].reviews[0].status, 'running');
+  assert.equal(f.published.length, 0);
+  assert.equal(subject.implementation.length, 3);
+  await f.controller.publishState(subject);
+  assert.deepEqual(f.labels, ['claude-reviewing']);
+  await assert.rejects(f.controller.claim(81));
+  await f.controller.submit(81, report());
+  subject = await f.controller.reconcilePR(81);
+  assert.equal(subject.externalReview.status, 'published');
+  assert.equal(subject.reviews.length, 1);
+  assert.equal(
+    subject.reviewLedger.rounds[0].review_sha256,
+    sha256(subject.reviewReports['claude-review-1.json']),
+  );
+  await f.controller.publishState(subject);
+  assert.deepEqual(f.labels, ['codex-review-ready']);
+  assert.equal(f.published.length, 1);
+});
+
+test('standalone simultaneous claims use one durable reservation and no fifth review is inferred', async () => {
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  await f.controller.request(81);
+  let arrivals = 0,
+    release;
+  const gate = new Promise((resolve) => (release = resolve));
+  f.checksHook(async () => {
+    if (++arrivals === 2) release();
+    await gate;
+  });
+  const result = await Promise.allSettled([f.controller.claim(81), f.controller.claim(81)]);
+  assert.equal(result.filter((r) => r.status === 'fulfilled').length, 1);
+  assert.equal(f.remote().standaloneReviews[0].reviews.length, 1);
+});
+
+test('owner, nonce, SHA and full tracked tree protect standalone comment import', async () => {
+  const f = fixture();
+  await claimed(f);
+  f.setActor('another-maintainer');
+  await assert.rejects(f.controller.submit(81, report()), /owned review/);
+  f.setActor('maintainer');
+  const invalid = {
+    ...report(),
+    verdict: 'changes-requested',
+    findings: [
+      {
+        severity: 'high',
+        file: 'absent.mjs',
+        line: 1,
+        problem: 'Absent',
+        requested_change: 'Correct',
+        test_expectation: 'Regress',
+      },
+    ],
+  };
+  await assert.rejects(f.controller.submit(81, invalid));
+  await f.controller.submit(81, report());
+  const genuine = f.comments.pop();
+  const replay = JSON.parse(genuine.body.split('\n').slice(1).join('\n'));
+  replay.claim_id = 'old-claim';
+  f.comments.push({
+    ...genuine,
+    body: genuine.body.split('\n')[0] + '\n' + JSON.stringify(replay),
+  });
+  assert.equal((await f.controller.reconcilePR(81)).externalReview.status, 'comment-running');
+  f.comments.pop();
+  f.comments.push(genuine);
+  assert.equal((await f.controller.reconcilePR(81)).externalReview.status, 'published');
+});
+
+async function published(f) {
+  await claimed(f);
+  await f.controller.submit(81, report());
+  return f.controller.reconcilePR(81);
+}
+function stepOptions(f, subject, qa) {
+  const state = f.remote();
+  state.standaloneReviews[0] = subject;
+  return {
+    subject,
+    controller: f.controller,
+    github: f.github,
+    workspace: { finalQaStandalone: qa },
+    save: async () => {
+      const store = f.github.createStateStore();
+      await store.load();
+      await store.save(state);
+    },
+  };
+}
+
+test('pipeline independent QA reserves ownership, keeps release hold, and exposes genuine two-review readiness only', async () => {
+  const f = fixture();
+  const subject = await published(f);
+  let calls = 0;
+  const options = stepOptions(f, subject, async (s) => {
+    calls++;
+    assert.equal(f.remote().standaloneReviews[0].codexFinalReview.status, 'running');
+    assert.equal(s.sha, sha);
+    return { status: 'verified', summary: 'Read-only acceptance/evidence checked.' };
+  });
+  await standaloneReviewStep(options);
+  assert.equal(calls, 1);
+  assert.equal(subject.phase, 'ready');
+  assert.equal(subject.approvedSha, sha);
+  assert.equal(subject.releaseHold, f.manifest.releaseHold);
+  await standaloneReviewStep(options);
+  assert.equal(calls, 1, 'Independent QA never reruns implicitly');
+  await assert.rejects(
+    mergeStandaloneReview({
+      subject,
+      controller: f.controller,
+      github: f.github,
+      infrastructureFiles: [f.manifest.sourceManifest[0].path],
+    }),
+    /releaseHold/,
+  );
+});
+
+test('QA findings and changed feedback block, while an existing running owner remains pending', async () => {
+  for (const kind of ['findings', 'interrupted', 'feedback']) {
+    const f = fixture();
+    const subject = await published(f);
+    let calls = 0;
+    if (kind === 'interrupted')
+      subject.codexFinalReview = { status: 'running', subjectSha: sha, claudeRound: 1 };
+    if (kind === 'feedback')
+      f.feedback.comments.push({ id: 500, author: 'human', body: 'Check regression' });
+    await standaloneReviewStep(
+      stepOptions(f, subject, async () => {
+        calls++;
+        return {
+          status: 'blocked',
+          summary: 'agent-team/src/example.mjs:1: missing regression evidence',
+        };
+      }),
+    );
+    assert.equal(subject.phase, kind === 'interrupted' ? 'waiting-review' : 'blocked');
+    assert.equal(subject.approvedSha, undefined);
+    assert.equal(subject.implementation.length, 3);
+    assert.equal(calls, kind === 'findings' ? 1 : 0);
+  }
+});
+
+test('infrastructure merge boundary reuses exact-SHA protected merge and rejects application/deployment scope', async () => {
+  const f = fixture();
+  f.manifest.releaseHold = false;
+  const subject = await published(f);
+  await standaloneReviewStep(
+    stepOptions(f, subject, async () => ({ status: 'verified', summary: 'No findings' })),
+  );
+  let called = 0;
+  f.github.mergePullRequest = async (pr, head, { guard }) => {
+    await guard();
+    called++;
+    assert.equal(pr, 81);
+    assert.equal(head, sha);
+    return { mergeSha: '9'.repeat(40) };
+  };
+  assert.equal(
+    (
+      await mergeStandaloneReview({
+        subject,
+        controller: f.controller,
+        github: f.github,
+        infrastructureFiles: [f.manifest.sourceManifest[0].path],
+      })
+    ).status,
+    'ready-to-merge',
+  );
+  assert.equal(called, 0);
+  await mergeStandaloneReview({
+    subject,
+    controller: f.controller,
+    github: f.github,
+    infrastructureFiles: [f.manifest.sourceManifest[0].path],
+    execute: true,
+  });
+  assert.equal(called, 1);
+  await assert.rejects(
+    mergeStandaloneReview({
+      subject,
+      controller: f.controller,
+      github: f.github,
+      infrastructureFiles: [],
+    }),
+  );
+  f.failChecks();
+  await assert.rejects(
+    mergeStandaloneReview({
+      subject,
+      controller: f.controller,
+      github: f.github,
+      infrastructureFiles: [f.manifest.sourceManifest[0].path],
+    }),
+  );
+  assert.equal(called, 1);
+});
+
+function revision(f, { rewriteCopy = false, rewriteOld = false, removeOld = false } = {}) {
+  const old = f.manifest,
+    next = clone(old),
+    current = 'f'.repeat(40),
+    packet = path + '-revision-2';
+  const previousEntries = Object.entries(old.packet.files).map(([file, digest]) => ({
+    path: path + '/' + file,
+    type: 'blob',
+    mode: '100644',
+    sha: digest.slice(0, 40),
+  }));
+  for (const [file, text] of Object.entries(f.content)) f.fileContents.set(path + '/' + file, text);
+  if (rewriteOld) {
+    f.fileContents.set(path + '/analysis.md', 'Rewritten historical contract analysis');
+    previousEntries.find((e) => e.path === path + '/analysis.md').sha = sha256(
+      'Rewritten historical contract analysis',
+    ).slice(0, 40);
+  }
+  if (removeOld)
+    previousEntries.splice(
+      previousEntries.findIndex((e) => e.path === path + '/analysis.md'),
+      1,
+    );
+  next.sha = current;
+  next.packet = { path: packet, files: {} };
+  next.sourceManifest = [
+    ...clone(old.sourceManifest),
+    ...previousEntries.map((e) => ({
+      path: e.path,
+      blob: e.sha,
+      mode: e.mode,
+      baseBlob: null,
+      baseMode: null,
+    })),
+  ];
+  const contents = clone(f.content);
+  delete contents['imported-history.json'];
+  if (rewriteCopy) contents['attempt-1.json'] = 'Rewritten failed attempt proof';
+  for (const [file, text] of Object.entries(contents)) next.packet.files[file] = sha256(text);
+  contents['imported-history.json'] = JSON.stringify({
+    implementation: next.implementation,
+    reviews: next.reviews,
+    reviewLedger: next.reviewLedger,
+    reviewReports: next.reviewReports,
+    sourceManifest: next.sourceManifest,
+    packetFiles: clone(next.packet.files),
+  });
+  next.packet.files['imported-history.json'] = sha256(contents['imported-history.json']);
+  for (const [file, text] of Object.entries(contents))
+    f.fileContents.set(packet + '/' + file, text);
+  const tree = [
+    {
+      path: old.sourceManifest[0].path,
+      type: 'blob',
+      mode: '100644',
+      sha: old.sourceManifest[0].blob,
+    },
+    ...previousEntries,
+    ...Object.entries(next.packet.files).map(([file, digest]) => ({
+      path: packet + '/' + file,
+      type: 'blob',
+      mode: '100644',
+      sha: digest.slice(0, 40),
+    })),
+  ];
+  f.treeOverrides.set(current, tree);
+  f.pr.head.sha = current;
+  f.feedback.head = current;
+  return next;
+}
+
+test('revision appends new packet and preserves every old proof byte on the current head', async () => {
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  const next = revision(f);
+  const adopted = await f.controller.adopt(next);
+  assert.deepEqual(adopted.preservedPackets, [f.manifest.packet]);
+  assert.equal(adopted.implementation.length, 3);
+  assert.equal(f.writes.length, 2);
+  await f.controller.verify(adopted);
+});
+
+test('revision rejects rewritten old-attempt copy and rewritten or removed historical packet bytes on NEW head', async () => {
+  for (const options of [{ rewriteCopy: true }, { rewriteOld: true }, { removeOld: true }]) {
+    const f = fixture();
+    await f.controller.adopt(f.manifest);
+    const next = revision(f, options);
+    await assert.rejects(f.controller.adopt(next));
+    assert.equal(f.writes.length, 1, 'Invalid revision must never persist');
+  }
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  const next = clone(f.manifest);
+  next.sha = 'f'.repeat(40);
+  f.pr.head.sha = next.sha;
+  f.feedback.head = next.sha;
+  f.treeOverrides.set(next.sha, [
+    {
+      path: next.sourceManifest[0].path,
+      type: 'blob',
+      mode: '100644',
+      sha: next.sourceManifest[0].blob,
+    },
+    ...Object.entries(next.packet.files).map(([file, digest]) => ({
+      path: path + '/' + file,
+      type: 'blob',
+      mode: '100644',
+      sha: digest.slice(0, 40),
+    })),
+  ]);
+  await assert.rejects(f.controller.adopt(next), /Append a new revision packet/);
+});
+
+async function runRuntime(
+  f,
+  workspace = {
+    finalQaStandalone: async () => ({
+      status: 'verified',
+      summary: 'Read-only source and evidence inspection passed.',
+    }),
+  },
+) {
+  f.github.intake = async () => {};
+  f.github.discoverQueue = async () => [];
+  return runPipeline({
+    repo,
+    event: {},
+    gh: f.github,
+    models: {},
+    workspace,
+    store: f.github.createStateStore(),
+    standaloneController: f.controller,
+    standaloneInfrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+  });
+}
+function makeAllowlisted(f, file = 'agent-team/src/bug-pipeline/standalone-review.mjs') {
+  f.manifest.sourceManifest[0].path = file;
+  const history = JSON.parse(f.content['imported-history.json']);
+  history.sourceManifest = clone(f.manifest.sourceManifest);
+  f.content['imported-history.json'] = JSON.stringify(history);
+  f.manifest.packet.files['imported-history.json'] = sha256(f.content['imported-history.json']);
+}
+
+test('trusted runtime uses fixed18 policy, reserves protected infrastructure merge, persists receipt and skips next tick', async () => {
+  assert.equal(STANDALONE_INFRASTRUCTURE_FILES.length, 18);
+  assert.equal(Object.isFrozen(STANDALONE_INFRASTRUCTURE_FILES), true);
+  const f = fixture();
+  makeAllowlisted(f);
+  f.manifest.releaseHold = false;
+  await published(f);
+  let calls = 0;
+  f.github.mergePullRequest = async (pr, head, { guard }) => {
+    assert.equal(f.remote().standaloneReviews[0].release.status, 'merging');
+    await guard();
+    calls++;
+    f.pr.state = 'closed';
+    f.pr.merged = true;
+    f.pr.merge_commit_sha = '9'.repeat(40);
+    return { mergeSha: f.pr.merge_commit_sha, reviewedSha: head, number: pr };
+  };
+  let state = await runRuntime(f);
+  assert.equal(calls, 1);
+  assert.equal(state.standaloneReviews[0].release.status, 'merged');
+  assert.equal(state.standaloneReviews[0].release.reviewedSha, sha);
+  state = await runRuntime(f, {
+    finalQaStandalone: async () => assert.fail('Terminal merge must not invoke QA'),
+  });
+  assert.equal(calls, 1);
+  assert.equal(state.standaloneReviews[0].phase, 'ready');
+  assert.equal(state.standaloneReviews[0].release.status, 'merged');
+  assert.equal(state.standaloneReviews[0].release.deployment, undefined);
+});
+
+test('runtime never merges held, unknown, application, unreviewed or failed independent QA subjects', async () => {
+  for (const kind of ['hold', 'unknown', 'application', 'no-claude', 'codex-finding']) {
+    const f = fixture();
+    makeAllowlisted(
+      f,
+      kind === 'application'
+        ? 'frontend/src/actual.ts'
+        : kind === 'unknown'
+          ? 'agent-team/src/unreviewed-policy.mjs'
+          : undefined,
+    );
+    f.manifest.releaseHold = kind === 'hold' ? 'Existing release hold' : false;
+    if (kind === 'no-claude') {
+      await f.controller.adopt(f.manifest);
+      await f.controller.request(81);
+    } else await published(f);
+    let calls = 0;
+    f.github.mergePullRequest = async () => {
+      calls++;
+      assert.fail('Forbidden merge');
+    };
+    const state = await runRuntime(f, {
+      finalQaStandalone: async () => ({
+        status: kind === 'codex-finding' ? 'blocked' : 'verified',
+        summary: 'Read-only QA result',
+      }),
+    });
+    assert.equal(calls, 0);
+    assert.notEqual(state.standaloneReviews[0].release?.status, 'merged');
+    assert.equal(state.standaloneReviews[0].implementation.length, 3);
+  }
+});
+
+test('runtime recovers an actual exact-SHA merge after interruption without merging or reviewing again', async () => {
+  const f = fixture();
+  makeAllowlisted(f);
+  f.manifest.releaseHold = false;
+  let subject = await published(f);
+  await standaloneReviewStep(
+    stepOptions(f, subject, async () => ({
+      status: 'verified',
+      summary: 'Read-only inspection passed.',
+    })),
+  );
+  const store = f.github.createStateStore();
+  const state = await store.load();
+  state.standaloneReviews[0].release = { status: 'merging', reviewedSha: sha, prNumber: 81 };
+  await store.save(state);
+  f.pr.state = 'closed';
+  f.pr.merged = true;
+  f.pr.merge_commit_sha = '8'.repeat(40);
+  f.github.mergePullRequest = async () => assert.fail('Receipt recovery never merges');
+  const next = await runRuntime(f, {
+    finalQaStandalone: async () => assert.fail('Receipt recovery never reviews'),
+  });
+  assert.equal(next.standaloneReviews[0].release.status, 'merged');
+  assert.equal(next.standaloneReviews[0].release.mergeSha, f.pr.merge_commit_sha);
+});
+
+test('authenticated frozen merge-base survives a real main advance and rejects changed review ancestry/head/base', async (t) => {
+  const root = await mkdtemp(nodePath.join(os.tmpdir(), 'standalone-merge-base-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const git = (...args) =>
+    execFileSync('git', args, {
+      cwd: root,
+      env: { PATH: process.env.PATH, HOME: root, GIT_CONFIG_NOSYSTEM: '1' },
+      encoding: 'utf8',
+    }).trim();
+  const commit = (message) => {
+    git('add', '.');
+    git('-c', 'core.hooksPath=/dev/null', 'commit', '-qm', message);
+    return git('rev-parse', 'HEAD');
+  };
+  git('init', '-q', '-b', 'main');
+  git('config', 'user.name', 'Synthetic QA');
+  git('config', 'user.email', 'synthetic@example.invalid');
+  await writeFile(nodePath.join(root, 'source.mjs'), 'Synthetic base source\n');
+  const base = commit('base');
+  git('checkout', '-qb', 'feature/review');
+  await writeFile(nodePath.join(root, 'source.mjs'), 'Synthetic reviewed source\n');
+  const tested = commit('feature');
+  const f = fixture();
+  f.manifest.baseSha = base;
+  f.manifest.implementation.forEach((attempt) => (attempt.subjectSha = tested));
+  f.manifest.sourceManifest = [
+    {
+      path: 'source.mjs',
+      blob: git('rev-parse', `${tested}:source.mjs`),
+      mode: '100644',
+      baseBlob: git('rev-parse', `${base}:source.mjs`),
+      baseMode: '100644',
+    },
+  ];
+  f.content['imported-history.json'] = JSON.stringify({
+    implementation: f.manifest.implementation,
+    reviews: [],
+    reviewLedger: null,
+    reviewReports: {},
+    sourceManifest: f.manifest.sourceManifest,
+    packetFiles: Object.fromEntries(
+      Object.entries(f.manifest.packet.files).filter(([file]) => file !== 'imported-history.json'),
+    ),
+  });
+  f.manifest.packet.files['imported-history.json'] = sha256(f.content['imported-history.json']);
+  await mkdir(nodePath.join(root, path), { recursive: true });
+  for (const [file, text] of Object.entries(f.content))
+    await writeFile(nodePath.join(root, path, file), text);
+  const head = commit('frozen evidence publication');
+  f.manifest.sha = head;
+  f.pr.head.sha = head;
+  f.feedback.head = head;
+  f.pr.base.sha = base;
+  const inventory = (revision) =>
+    git('ls-tree', '-r', revision)
+      .split('\n')
+      .map((row) => {
+        const [meta, path] = row.split('\t');
+        const [mode, type, sha] = meta.split(' ');
+        return { path, mode, type, sha };
+      });
+  for (const revision of [base, tested, head]) f.treeOverrides.set(revision, inventory(revision));
+  f.setMergeBase(git('merge-base', base, head));
+  await f.controller.adopt(f.manifest);
+  git('checkout', '-q', 'main');
+  git('-c', 'core.hooksPath=/dev/null', 'commit', '--allow-empty', '-qm', 'main advance');
+  const advanced = git('rev-parse', 'HEAD');
+  assert.notEqual(advanced, base);
+  f.pr.base.sha = advanced;
+  f.setMergeBase(git('merge-base', advanced, head));
+  await f.controller.verify(f.remote().standaloneReviews[0]);
+  f.setMergeBase(tested);
+  await assert.rejects(f.controller.verify(f.remote().standaloneReviews[0]), /merge base changed/);
+  f.setMergeBase(base);
+  f.pr.head.sha = advanced;
+  await assert.rejects(f.controller.verify(f.remote().standaloneReviews[0]), /identity changed/);
+  f.pr.head.sha = head;
+  f.pr.base.ref = 'other';
+  await assert.rejects(f.controller.verify(f.remote().standaloneReviews[0]), /identity changed/);
+});
+
+test('production finalize CLI dispatch runs separate Codex QA then fixed-policy merge and is terminal-idempotent', async () => {
+  const f = fixture();
+  makeAllowlisted(f);
+  f.manifest.releaseHold = false;
+  await published(f);
+  let qa = 0,
+    merges = 0;
+  f.github.mergePullRequest = async (pr, head, { guard }) => {
+    await guard();
+    merges++;
+    f.pr.state = 'closed';
+    f.pr.merged = true;
+    f.pr.merge_commit_sha = '7'.repeat(40);
+    return { number: pr, reviewedSha: head, mergeSha: f.pr.merge_commit_sha };
+  };
+  const dependencies = {
+    run: f.run,
+    github: f.github,
+    workspace: {
+      finalQaStandalone: async (subject) => {
+        qa++;
+        assert.equal(f.remote().standaloneReviews[0].codexFinalReview.status, 'running');
+        assert.equal(subject.sha, sha);
+        return {
+          status: 'verified',
+          summary: 'Independent synthetic QA callback; no actual model invoked.',
+        };
+      },
+    },
+  };
+  assert.equal(await handoffMain({ args: ['finalize', '--pr', '81'], env: {}, dependencies }), 0);
+  assert.equal(qa, 1);
+  assert.equal(merges, 1);
+  assert.equal(f.remote().standaloneReviews[0].release.status, 'merged');
+  assert.equal(await handoffMain({ args: ['finalize', '--pr', '81'], env: {}, dependencies }), 0);
+  assert.equal(qa, 1);
+  assert.equal(merges, 1);
+});
+
+test('finalize CLI cannot process normal/unadopted PR and preserves failed Codex execution as blocked', async () => {
+  const empty = fixture();
+  await assert.rejects(
+    handoffMain({
+      args: ['finalize', '--pr', '81'],
+      env: {},
+      dependencies: { run: empty.run, github: empty.github },
+    }),
+    /explicitly adopted/,
+  );
+  const f = fixture();
+  makeAllowlisted(f);
+  f.manifest.releaseHold = false;
+  await published(f);
+  f.github.mergePullRequest = async () => assert.fail('Unverified Codex cannot merge');
+  const result = await handoffMain({
+    args: ['finalize', '--pr', '81'],
+    env: {},
+    dependencies: {
+      run: f.run,
+      github: f.github,
+      workspace: {
+        finalQaStandalone: async () => {
+          throw new Error('Synthetic missing model authentication');
+        },
+      },
+    },
+  });
+  assert.equal(result, 1);
+  assert.equal(f.remote().standaloneReviews[0].phase, 'blocked');
+  assert.equal(f.remote().standaloneReviews[0].codexFinalReview.status, 'failed');
+  assert.equal(f.remote().standaloneReviews[0].approvedSha, undefined);
+});
+
+test('standalone production CLI imports legitimate UTF8 CJK and surrogate-pair reports from real temp files', async (t) => {
+  const temporary = await mkdtemp(nodePath.join(os.tmpdir(), 'standalone-unicode-report-'));
+  t.after(() => rm(temporary, { recursive: true, force: true }));
+  for (const [kind, summary] of [
+    ['cjk', '確'.repeat(50000)],
+    ['astral', '😀'.repeat(24900)],
+  ]) {
+    const f = fixture();
+    await claimed(f);
+    const file = nodePath.join(temporary, kind + '.json');
+    const review = { ...report(), summary };
+    const content = JSON.stringify(review, null, 2) + '\n';
+    assert.ok(Buffer.byteLength(content) > 60000 && Buffer.byteLength(content) < 512000);
+    assert.ok(content.length < 60000);
+    await writeFile(file, content);
+    assert.equal(
+      await handoffMain({
+        args: ['submit', '--pr', '81', '--report', file],
+        env: {},
+        dependencies: { run: f.run, github: f.github },
+      }),
+      0,
+    );
+    const subject = f.remote().standaloneReviews[0];
+    assert.equal(subject.externalReview.status, 'published');
+    assert.equal(subject.reviews[0].status, 'approved');
+    assert.equal(JSON.parse(subject.reviewReports['claude-review-1.json']).summary, summary);
+  }
+});
+
+test('Unicode CLI pre-read allowance never expands canonical comment limit or normal60kB input guard', async (t) => {
+  const temporary = await mkdtemp(nodePath.join(os.tmpdir(), 'standalone-comment-bound-'));
+  t.after(() => rm(temporary, { recursive: true, force: true }));
+  const large = nodePath.join(temporary, 'large-comment.json');
+  await writeFile(large, JSON.stringify({ ...report(), summary: 'x'.repeat(61000) }));
+  const f = fixture();
+  await claimed(f);
+  await assert.rejects(
+    handoffMain({
+      args: ['submit', '--pr', '81', '--report', large],
+      env: {},
+      dependencies: { run: f.run, github: f.github },
+    }),
+    /comment exceeds/,
+  );
+  assert.equal(f.comments.length, 1, 'Only the preceding request was posted');
+  assert.equal(f.remote().standaloneReviews[0].reviews[0].status, 'running');
+  const unicode = nodePath.join(temporary, 'normal-unicode.json');
+  await writeFile(unicode, JSON.stringify({ ...report(), summary: '確'.repeat(50000) }));
+  const normal = fixture();
+  await assert.rejects(
+    handoffMain({
+      args: ['submit', '--pr', '81', '--report', unicode],
+      env: {},
+      dependencies: { run: normal.run, github: normal.github },
+    }),
+    /Invalid report file/,
+  );
+  assert.equal(normal.comments.length, 0);
+});
+
+test('concurrent production finalize and pipeline observe active Codex QA without mutation, duplicate inference or merge', async () => {
+  const f = fixture();
+  makeAllowlisted(f);
+  f.manifest.releaseHold = false;
+  await published(f);
+  let announce, finish;
+  const started = new Promise((resolve) => (announce = resolve)),
+    gate = new Promise((resolve) => (finish = resolve));
+  let qa = 0,
+    merges = 0;
+  f.github.mergePullRequest = async (pr, head, { guard }) => {
+    await guard();
+    merges++;
+    f.pr.state = 'closed';
+    f.pr.merged = true;
+    f.pr.merge_commit_sha = '6'.repeat(40);
+    return { number: pr, reviewedSha: head, mergeSha: f.pr.merge_commit_sha };
+  };
+  const first = handoffMain({
+    args: ['finalize', '--pr', '81'],
+    env: {},
+    dependencies: {
+      run: f.run,
+      github: f.github,
+      workspace: {
+        finalQaStandalone: async () => {
+          qa++;
+          announce();
+          await gate;
+          return { status: 'verified', summary: 'Independent owner completed its bounded QA.' };
+        },
+      },
+    },
+  });
+  await started;
+  const before = JSON.stringify(f.remote()),
+    writes = f.writes.length;
+  assert.equal(f.remote().standaloneReviews[0].codexFinalReview.status, 'running');
+  assert.equal(
+    await handoffMain({
+      args: ['finalize', '--pr', '81'],
+      env: {},
+      dependencies: {
+        run: f.run,
+        github: f.github,
+        workspace: {
+          finalQaStandalone: async () => assert.fail('Concurrent finalizer must not infer'),
+        },
+      },
+    }),
+    0,
+  );
+  await runRuntime(f, {
+    finalQaStandalone: async () => assert.fail('Concurrent pipeline must not infer'),
+  });
+  assert.equal(JSON.stringify(f.remote()), before);
+  assert.equal(f.writes.length, writes);
+  assert.equal(qa, 1);
+  assert.equal(merges, 0);
+  finish();
+  assert.equal(await first, 0);
+  assert.equal(merges, 1);
+  assert.equal(f.remote().standaloneReviews[0].release.status, 'merged');
+  assert.equal(f.remote().standaloneReviews[0].codexFinalReview.status, 'verified');
+});
+
+test('an existing open merge reservation remains pending instead of racing its active owner', async () => {
+  const f = fixture();
+  makeAllowlisted(f);
+  f.manifest.releaseHold = false;
+  const subject = await published(f);
+  await standaloneReviewStep(
+    stepOptions(f, subject, async () => ({
+      status: 'verified',
+      summary: 'Verified synthetic QA result',
+    })),
+  );
+  const store = f.github.createStateStore(),
+    state = await store.load();
+  state.standaloneReviews[0].release = { status: 'merging', reviewedSha: sha, prNumber: 81 };
+  await store.save(state);
+  const before = JSON.stringify(f.remote()),
+    writes = f.writes.length;
+  f.github.mergePullRequest = async () => assert.fail('Do not race a current merge owner');
+  await runRuntime(f, { finalQaStandalone: async () => assert.fail('Do not repeat QA') });
+  assert.equal(JSON.stringify(f.remote()), before);
+  assert.equal(f.writes.length, writes);
+});
+
+function realSharedStateStore(initial) {
+  let raw = Buffer.from(JSON.stringify(initial, null, 2) + '\n');
+  const oid = () => createHash('sha1').update(`blob ${raw.length}\0`).update(raw).digest('hex');
+  const stats = { writes: 0, conflicts: 0, puts: [] };
+  const transport = createGitHub({
+    cwd: '/tmp',
+    repo,
+    run: async (call) => {
+      const endpoint = call.args[1];
+      let value;
+      if (call.args.includes('PUT')) {
+        const body = JSON.parse(call.input);
+        stats.puts.push(body);
+        if (body.sha !== oid()) {
+          stats.conflicts++;
+          return { ok: false, code: 1, stderr: 'HTTP409 synthetic CAS conflict', stdout: '{}' };
+        }
+        raw = Buffer.from(body.content, 'base64');
+        stats.writes++;
+        value = { content: { sha: oid() } };
+      } else if (endpoint.includes('/git/ref/')) value = { object: { sha: '1'.repeat(40) } };
+      else if (endpoint.includes('/contents/'))
+        value = {
+          type: 'file',
+          sha: oid(),
+          size: raw.length,
+          encoding: raw.length > 1024 * 1024 ? 'none' : 'base64',
+          content: raw.length > 1024 * 1024 ? '' : raw.toString('base64'),
+        };
+      else if (endpoint.includes('/git/blobs/'))
+        value = {
+          sha: oid(),
+          size: raw.length,
+          encoding: 'base64',
+          content: raw.toString('base64'),
+        };
+      else assert.fail('Unexpected state-only endpoint ' + endpoint);
+      return { ok: true, stdout: JSON.stringify(value) };
+    },
+  });
+  return {
+    createStateStore: transport.createStateStore,
+    stats,
+    state: () => JSON.parse(raw),
+    bytes: () => raw.length,
+  };
+}
+function actualController(f, durable, number = 81) {
+  const github = { ...f.github, createStateStore: durable.createStateStore };
+  const controller = createStandaloneReview({
+    github,
+    cwd: '/trusted',
+    run: (call) =>
+      f.run({
+        ...call,
+        args: call.args.map((value) =>
+          typeof value === 'string' ? value.replace(`/pulls/${number}`, '/pulls/81') : value,
+        ),
+      }),
+  });
+  return { github, controller };
+}
+async function largeHistoryState(f, publishedOwn = false) {
+  if (publishedOwn) await published(f);
+  else await f.controller.adopt(f.manifest);
+  const state = clone(f.remote()),
+    base = state.standaloneReviews[0];
+  for (let pr = 82; pr < 105; pr++) {
+    const subject = clone(base);
+    subject.id = `standalone-pr-${pr}`;
+    subject.pr = { number: pr, url: `https://github.com/${repo}/pull/${pr}` };
+    subject.branch = `synthetic/history-${pr}`;
+    subject.reviews = [];
+    subject.reviewLedger = { schema_version: 1, max_rounds: 4, rounds: [] };
+    subject.reviewReports = {};
+    delete subject.externalReview;
+    delete subject.reviewChannel;
+    delete subject.reviewHandoffHistory;
+    for (let round = 1; round <= 4; round++) {
+      const content = JSON.stringify({
+        ...report(),
+        summary: 'Reviewed synthetic frozen source. ' + 'x'.repeat(88000),
+      });
+      subject.reviews.push({ round, status: 'approved', subjectSha: sha });
+      subject.reviewLedger.rounds.push({
+        round,
+        verdict: 'approved',
+        subject_sha: sha,
+        review_sha256: sha256(content),
+      });
+      subject.reviewReports[`claude-review-${round}.json`] = content;
+    }
+    state.standaloneReviews.push(subject);
+  }
+  const size = () => Buffer.byteLength(JSON.stringify(state, null, 2) + '\n'),
+    target = MAX_DURABLE_STATE_BYTES - 30000;
+  let missing = target - size();
+  assert.ok(missing > 0);
+  for (const subject of state.standaloneReviews.slice(1))
+    for (let round = 1; round <= 4 && missing > 0; round++) {
+      const file = `claude-review-${round}.json`,
+        value = JSON.parse(subject.reviewReports[file]),
+        add = Math.min(missing, 99000 - value.summary.length);
+      value.summary += 'x'.repeat(add);
+      subject.reviewReports[file] = JSON.stringify(value);
+      subject.reviewLedger.rounds[round - 1].review_sha256 = sha256(subject.reviewReports[file]);
+      missing -= add;
+    }
+  assert.equal(size(), target);
+  validateStandaloneState(state);
+  return state;
+}
+
+test('organic24subject92report near-capacity history refuses claim before durable round or report, and QA before inference', async () => {
+  const f = fixture(),
+    initial = await largeHistoryState(f),
+    durable = realSharedStateStore(initial),
+    { controller } = actualController(f, durable);
+  assert.equal(initial.standaloneReviews.length, 24);
+  await controller.request(81);
+  const writes = durable.stats.writes;
+  await assert.rejects(controller.claim(81), (error) => error.code === 'state-capacity-exhausted');
+  assert.equal(durable.stats.writes, writes);
+  assert.equal(durable.state().standaloneReviews[0].reviews.length, 0);
+  assert.equal(durable.state().standaloneReviews[0].externalReview.status, 'comment-requested');
+  await assert.rejects(
+    controller.submit(81, {
+      ...report(),
+      summary: 'Valid report must never be analyzed before claim',
+    }),
+    /owned review/,
+  );
+  assert.ok(
+    f.comments.every(
+      (comment) => JSON.parse(comment.body.split('\n').slice(1).join('\n')).kind === 'request',
+    ),
+  );
+  const g = fixture();
+  makeAllowlisted(g);
+  g.manifest.releaseHold = false;
+  const qaInitial = await largeHistoryState(g, true),
+    qaStore = realSharedStateStore(qaInitial),
+    owner = actualController(g, qaStore);
+  let models = 0;
+  owner.github.mergePullRequest = async () => assert.fail('No capacity, no merge');
+  await assert.rejects(
+    owner.controller.finalize(81, {
+      infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+      workspace: {
+        finalQaStandalone: async () => {
+          models++;
+          return { status: 'verified', summary: 'Never called' };
+        },
+      },
+    }),
+    (error) => error.code === 'state-capacity-exhausted',
+  );
+  assert.equal(models, 0);
+  assert.equal(qaStore.stats.writes, 0);
+  assert.equal(qaStore.state().standaloneReviews[0].codexFinalReview, undefined);
+  assert.equal(qaStore.state().standaloneReviews[0].reviews.length, 1);
+});
+
+test('actual store disjoint request+claim while QA waits preserves both entities and the owner result, merges once', async () => {
+  const f = fixture(),
+    peer = fixture();
+  makeAllowlisted(f);
+  makeAllowlisted(peer);
+  f.manifest.releaseHold = false;
+  await published(f);
+  await peer.controller.adopt(peer.manifest);
+  const initial = clone(f.remote()),
+    other = clone(peer.remote().standaloneReviews[0]);
+  other.id = 'standalone-pr-82';
+  other.pr = { number: 82, url: `https://github.com/${repo}/pull/82` };
+  other.branch = 'synthetic/peer-82';
+  initial.standaloneReviews.push(other);
+  peer.pr.number = 82;
+  peer.pr.head.ref = other.branch;
+  peer.feedback.number = 82;
+  peer.feedback.headRef = other.branch;
+  peer.feedback.url = other.pr.url;
+  const durable = realSharedStateStore(initial),
+    owner = actualController(f, durable),
+    sibling = actualController(peer, durable, 82);
+  let enter, release;
+  const entered = new Promise((resolve) => (enter = resolve)),
+    barrier = new Promise((resolve) => (release = resolve));
+  let models = 0,
+    merges = 0;
+  owner.github.mergePullRequest = async (pr, head, { guard }) => {
+    await guard();
+    merges++;
+    f.pr.state = 'closed';
+    f.pr.merged = true;
+    f.pr.merge_commit_sha = '5'.repeat(40);
+    return { number: pr, reviewedSha: head, mergeSha: f.pr.merge_commit_sha };
+  };
+  const finishing = owner.controller.finalize(81, {
+    infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+    workspace: {
+      finalQaStandalone: async () => {
+        models++;
+        enter();
+        await barrier;
+        return {
+          status: 'verified',
+          summary: 'Actual production boundary; synthetic model result',
+        };
+      },
+    },
+  });
+  await entered;
+  const first = clone(durable.state().standaloneReviews[0]);
+  await sibling.controller.request(82);
+  await sibling.controller.claim(82);
+  assert.deepEqual(durable.state().standaloneReviews[0], first);
+  release();
+  const result = await finishing;
+  assert.equal(result.release.status, 'merged');
+  assert.equal(durable.state().standaloneReviews[0].codexFinalReview.status, 'verified');
+  assert.equal(durable.state().standaloneReviews[1].reviews[0].status, 'running');
+  assert.ok(durable.stats.conflicts >= 1);
+  assert.equal(models, 1);
+  assert.equal(merges, 1);
+  await owner.controller.finalize(81, {
+    infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+    workspace: { finalQaStandalone: async () => assert.fail('Do not repeat model') },
+  });
+  assert.equal(models, 1);
+  assert.equal(merges, 1);
+});
+
+test('actual store same-subject modification during QA remains a conflict without overwriting peer hold or duplicating inference', async () => {
+  const f = fixture();
+  makeAllowlisted(f);
+  f.manifest.releaseHold = false;
+  await published(f);
+  const durable = realSharedStateStore(f.remote()),
+    owner = actualController(f, durable);
+  let enter, release;
+  const entered = new Promise((resolve) => (enter = resolve)),
+    barrier = new Promise((resolve) => (release = resolve));
+  let models = 0;
+  owner.github.mergePullRequest = async () => assert.fail('Same-entity conflict must not merge');
+  const finishing = owner.controller.finalize(81, {
+    infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+    workspace: {
+      finalQaStandalone: async () => {
+        models++;
+        enter();
+        await barrier;
+        return { status: 'verified', summary: 'Owner result cannot replace a changed subject' };
+      },
+    },
+  });
+  await entered;
+  const peer = durable.createStateStore(),
+    state = await peer.load();
+  state.standaloneReviews[0].releaseHold = 'Independent operator hold';
+  await peer.save(state);
+  release();
+  await assert.rejects(finishing, (error) => error.code === 'state-rebase-conflict');
+  assert.equal(durable.state().standaloneReviews[0].releaseHold, 'Independent operator hold');
+  assert.equal(durable.state().standaloneReviews[0].codexFinalReview.status, 'running');
+  assert.equal(models, 1);
+});

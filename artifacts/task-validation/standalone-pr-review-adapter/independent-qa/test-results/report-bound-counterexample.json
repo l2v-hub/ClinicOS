@@ -1,0 +1,8 @@
+{
+  "result": "FAIL",
+  "validReport": true,
+  "reviewChars": 14624,
+  "subjectChars": 104985,
+  "error": "unsafe or oversized structured text",
+  "stack": "Error: unsafe or oversized structured text\n    at safeText (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/contracts.mjs:50:11)\n    at validateStandaloneSubject (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:139:3)\n    at file:///workspace/clinicos-standalone-pr-review/[eval1]:1:970\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)"
+}

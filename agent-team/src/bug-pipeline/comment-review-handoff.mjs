@@ -30,6 +30,7 @@ export function createCommentReviewHandoff({
   cwd,
   now = () => new Date(),
   nonce = randomUUID,
+  subjectAdapter,
 }) {
   const store = github.createStateStore();
   async function api(endpoint) {
@@ -53,6 +54,7 @@ export function createCommentReviewHandoff({
     return login;
   }
   async function live(batch) {
+    if (subjectAdapter) await subjectAdapter.live(batch);
     const feedback = await github.reviewFeedback(batch.pr.number);
     assert.ok(
       feedback.state === 'OPEN' &&
@@ -74,19 +76,36 @@ export function createCommentReviewHandoff({
     return feedback;
   }
   async function load(pr) {
-    const state = validateState(await store.load(), REPO);
-    const batch = state.batches.find((item) => item.pr?.number === pr);
+    const state = subjectAdapter
+      ? subjectAdapter.validate(await store.load())
+      : validateState(await store.load(), REPO);
+    const batch = (subjectAdapter ? subjectAdapter.subjects(state) : state.batches).find(
+      (item) => item.pr?.number === pr,
+    );
     assert.ok(batch && batch.sha, 'PR has no controller-owned implementation/evidence packet');
     return { state, batch };
   }
   async function save(state, batch, login, { guard } = {}) {
+    if (subjectAdapter) subjectAdapter.validate(state);
     const expected = JSON.stringify(batch);
     state.updatedAt = now().toISOString();
     await store.save(state, {
+      rebaseIndependentSubjects: async (merged) => {
+        validateState(merged, REPO);
+        if (merged.standaloneReviews) {
+          const { validateStandaloneState } = await import('./standalone-review.mjs');
+          validateStandaloneState(merged);
+        }
+      },
       guard: async () => {
         const started = performance.now();
         if (guard) await guard();
         await live(batch);
+        if (
+          subjectAdapter?.reservationGuard &&
+          ['comment-requested', 'comment-running'].includes(batch.externalReview?.status)
+        )
+          await subjectAdapter.reservationGuard(batch);
         assert.equal(JSON.stringify(batch), expected, 'Handoff subject mutated');
         assert.ok(await github.authorized(login), 'Handoff actor lost authorization');
         assert.ok(performance.now() - started <= 60000, 'Handoff guard expired');

@@ -1,0 +1,33 @@
+{
+  "scope": "standalone-pr-review-adapter",
+  "maxAttempts": 4,
+  "priorImmutableLedgers": [
+    "../implementation-attempts.json",
+    "../cycle2/implementation-attempts.json"
+  ],
+  "attempts": [
+    {
+      "round": 1,
+      "status": "failed-independent-qa"
+    },
+    {
+      "round": 2,
+      "status": "failed-independent-qa",
+      "findings": [
+        "F3 multilingual stored report byte cap",
+        "F4 large Contents state body omitted"
+      ]
+    },
+    {
+      "round": 3,
+      "status": "author-passed-awaiting-independent-qa",
+      "rootAuthoritativeReservationBeforeSourceEdits": true,
+      "tests": {
+        "total": 670,
+        "passed": 667,
+        "failed": 0,
+        "skipped": 3
+      }
+    }
+  ]
+}

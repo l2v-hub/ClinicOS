@@ -1,0 +1,2 @@
+# Frozen implementation plan
+Baseline d1324cb3. Scope: standalone-pr-review module and tests, comment transport injection, trusted CLI, pipeline integration and local coordinator documentation. Preserve normal contracts/workspace/release guards. Implement adoption/identity+manifest verification, reusable transport, PR-only projection, read-only exact subject QA and protected merge boundary. Run regression then stop source for independent parent QA.

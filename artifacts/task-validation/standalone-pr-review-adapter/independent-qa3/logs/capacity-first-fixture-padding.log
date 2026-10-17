@@ -1,0 +1,21 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 8358628
+- 8358608
+       ^
+
+    at file:///workspace/clinicos-standalone-pr-review/artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/capacity-probe.mjs:14:8 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 8358628,
+  expected: 8358608,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

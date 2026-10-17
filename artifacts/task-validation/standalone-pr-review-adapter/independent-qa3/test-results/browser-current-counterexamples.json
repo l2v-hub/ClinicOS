@@ -1,0 +1,52 @@
+{
+  "scope": "QA3 actual production-module probes; synthetic GitHub/CAS/checks/QA callbacks. No live model or hosted mutation.",
+  "capacity": {
+    "subjects": 51,
+    "initialStateBytes": 8358608,
+    "runningStateBytes": 8359824,
+    "maximumStateBytes": 8388608,
+    "priorReportCount": 200,
+    "reasonPadding": false,
+    "validState": true,
+    "actualGitHubWrites": 0,
+    "actualModels": 0,
+    "acceptedCommentChars": 50427,
+    "import": "REJECTED",
+    "error": "Durable state exceeds 8 MiB save bound",
+    "durableReviewStatus": "running",
+    "replacementImport": "REJECTED",
+    "replacementError": "Durable state exceeds 8 MiB save bound",
+    "durableReviewStatusAfterReplacement": "running",
+    "syntheticStateWrites": 2
+  },
+  "disjoint": {
+    "result": "REPRODUCED_DISJOINT_GLOBAL_CAS_STRANDS_COMPLETED_QA",
+    "error": "Durable state compare-and-swap failed; state was not reset",
+    "firstSubject": 81,
+    "secondSubject": 82,
+    "firstSubjectUnchangedBySecondWriter": true,
+    "firstOwnerVerifiedResultLost": true,
+    "durableCodexStatus": "running",
+    "secondReviewStatus": "running",
+    "syntheticQaCallbacks": 1,
+    "syntheticMergeCalls": 0,
+    "syntheticStateWrites": 3,
+    "strictCasConflicts": 1,
+    "repeatFinalizeWrites": 0,
+    "events": [
+      "state save 1",
+      "first subject actual production boundary QA callback entered",
+      "state save 2",
+      "state save 3",
+      "independent second subject request and claim saved",
+      "first subject QA callback returned verified",
+      "strict CAS rejected stale file SHA"
+    ],
+    "actualModels": 0,
+    "actualGitHubWrites": 0,
+    "actualLiveFailureRootCause": "Not established; this isolated production-module reproduction does not prove root cause of a separate hosted run."
+  },
+  "errors": [],
+  "reloadPersistence": true,
+  "result": "PASS assertions reproduce F5 and F6"
+}

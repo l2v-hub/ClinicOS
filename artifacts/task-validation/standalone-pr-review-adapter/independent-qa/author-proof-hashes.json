@@ -1,0 +1,9 @@
+{
+  "validation-report.md": "733962f95120f7d8e5c3d07376e9d502cd19c982403f9ff6744a2add5a7b6a33",
+  "implementation-plan.md": "b412a67fdf0ae3d01287d1367c7e083ccd405fa340e555dd07ec6d32cf6a8a89",
+  "analysis.md": "b6093906190e982300b5e43c8916e982cddb7b890372340cd7678c3d1b8825b1",
+  "implementation-attempts.json": "ce7b64d442aa4395dd33908b0c25dc651c2a34f1b60ae7bf6c9859d2a835a16f",
+  "task-contract.md": "2a2e8dc64da470b58e58e97b2eea3bb991131b8bd045ec0268ab72b6917d3c19",
+  "source-freeze.json": "a075ddec60d5059005494fc9ba4b3b9c4e53e691627b7e200a3bd7c755c7974f",
+  "test-results/author-regression.log": "c8cef11f7bbed03e7eaf37f7d8ad3a7660cba2d4e8cba9761a030dd253f354ef"
+}

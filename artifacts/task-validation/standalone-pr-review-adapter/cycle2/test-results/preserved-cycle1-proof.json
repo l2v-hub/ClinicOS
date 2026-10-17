@@ -1,0 +1,9 @@
+{
+  "validation-report.md": true,
+  "implementation-plan.md": true,
+  "analysis.md": true,
+  "implementation-attempts.json": true,
+  "task-contract.md": true,
+  "source-freeze.json": true,
+  "test-results/author-regression.log": true
+}

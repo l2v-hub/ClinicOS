@@ -1,7 +1,11 @@
 import { createHash } from 'node:crypto';
+import { isDeepStrictEqual } from 'node:util';
 
 const STATE_BRANCH = 'codex/bug-control';
 const STATE_PATH = '.codex-bug-state.json';
+export const MAX_DURABLE_STATE_BYTES = 8 * 1024 * 1024;
+export const RESULT_RESERVATION_BYTES = 512 * 1024;
+const STATE_BLOB_OUTPUT_BYTES = 16 * 1024 * 1024;
 const REQUIRED_LABELS = ['bug', 'codex-triage', 'codex-run'];
 const BLOCKING_LABELS = new Set([
   'codex-blocked',
@@ -18,6 +22,195 @@ const EXTERNAL_WORK_LABELS = new Set([
 ]);
 const BOT_PROTOCOL_MARKER = '<!-- codex-bug-pipeline:';
 const ISSUE_STATUSES = ['In progress', 'Bloccato', 'Risolto'];
+const ENTITY_COLLECTIONS = ['batches', 'manualBatches', 'standaloneReviews'];
+const FAILURE_CODES = new Set([
+  'state-capacity-exhausted',
+  'state-cas-conflict',
+  'state-rebase-conflict',
+  'state-rebase-invalid',
+  'model-execution-failed',
+  'model-result-invalid',
+  'workspace-verification-failed',
+  'workspace-evidence-invalid',
+  'workspace-scope-invalid',
+  'independent-qa-blocked',
+  'implementation-blocked',
+  'controller-execution-failed',
+]);
+export function controllerFailureCode(error) {
+  for (let depth = 0; error && depth < 6; depth++, error = error.cause)
+    if (FAILURE_CODES.has(error.code)) return error.code;
+    else if (['required verification failed or executed no tests'].includes(error.message))
+      return 'workspace-verification-failed';
+    else if (
+      [
+        'executor edited outside accepted file scope',
+        'symlink implementation/evidence is not publishable',
+        'executor changed the frozen contract or plan',
+      ].includes(error.message)
+    )
+      return 'workspace-scope-invalid';
+    else if (
+      ['independent Codex QA blocked', 'Independent QA blocked', 'independent QA blocked'].includes(
+        error.message,
+      )
+    )
+      return 'independent-qa-blocked';
+    else if (
+      [
+        'executor blocked',
+        'simplification blocked',
+        'review correction blocked',
+        'Correction blocked',
+        'PR feedback correction blocked',
+      ].includes(error.message)
+    )
+      return 'implementation-blocked';
+  return 'controller-execution-failed';
+}
+function stateError(code, message, cause) {
+  return Object.assign(new Error(message, cause ? { cause } : undefined), { code });
+}
+export function pendingResultBytes(subject) {
+  const reviews = Array.isArray(subject.reviews)
+    ? subject.reviews.filter((a) => a.status === 'running').length
+    : 0;
+  const external = ['running', 'comment-running'].includes(subject.externalReview?.status) ? 1 : 0;
+  const qa = subject.codexFinalReview?.status === 'running' ? 1 : 0;
+  const merge = subject.release?.status === 'merging' ? 1 : 0;
+  return (Math.max(reviews, external) + qa + merge) * RESULT_RESERVATION_BYTES;
+}
+export function assertSubjectResultCapacity(subject, limit) {
+  if (Buffer.byteLength(JSON.stringify(subject)) + pendingResultBytes(subject) > limit)
+    throw stateError(
+      'state-capacity-exhausted',
+      'Standalone subject has no capacity for all reserved review results',
+    );
+}
+function reservedStateBytes(state) {
+  return ENTITY_COLLECTIONS.reduce(
+    (total, key) =>
+      total +
+      (Array.isArray(state[key])
+        ? state[key].reduce((sum, subject) => sum + pendingResultBytes(subject), 0)
+        : 0),
+    0,
+  );
+}
+
+function mergeIndependentEntities(base, intended, fresh) {
+  if (!base || !fresh)
+    throw stateError('state-rebase-conflict', 'Cannot rebase uninitialized state');
+  const merged = structuredClone(fresh);
+  for (const key of new Set([
+    ...Object.keys(base),
+    ...Object.keys(intended),
+    ...Object.keys(fresh),
+  ])) {
+    if (key === 'updatedAt') {
+      if (key in intended || key in fresh) merged.updatedAt = new Date().toISOString();
+      continue;
+    }
+    if (ENTITY_COLLECTIONS.includes(key)) {
+      const inventory = (value) => {
+        if (value === undefined) return new Map();
+        if (
+          !Array.isArray(value) ||
+          value.some((item) => !item || typeof item.id !== 'string' || !item.id)
+        )
+          throw stateError('state-rebase-invalid', 'Invalid entity collection for rebase');
+        const map = new Map(value.map((item) => [item.id, item]));
+        if (map.size !== value.length)
+          throw stateError('state-rebase-invalid', 'Duplicate entity identity');
+        return map;
+      };
+      const before = inventory(base[key]),
+        ours = inventory(intended[key]),
+        theirs = inventory(fresh[key]);
+      for (const id of new Set([...before.keys(), ...ours.keys(), ...theirs.keys()])) {
+        const oursChanged = !isDeepStrictEqual(before.get(id), ours.get(id));
+        const theirsChanged = !isDeepStrictEqual(before.get(id), theirs.get(id));
+        if (oursChanged && theirsChanged)
+          throw stateError(
+            'state-rebase-conflict',
+            'Durable state compare-and-swap conflict: concurrent changes to the same durable entity',
+          );
+        if (oursChanged) {
+          if (ours.has(id)) theirs.set(id, structuredClone(ours.get(id)));
+          else theirs.delete(id);
+        }
+      }
+      if (key in intended || key in fresh) merged[key] = [...theirs.values()];
+    } else {
+      const changed = (value) =>
+        Object.hasOwn(base, key) !== Object.hasOwn(value, key) ||
+        !isDeepStrictEqual(base[key], value[key]);
+      if (changed(intended) && changed(fresh))
+        throw stateError('state-rebase-conflict', 'Concurrent changes to a shared durable field');
+      if (changed(intended)) {
+        if (Object.hasOwn(intended, key))
+          Object.defineProperty(merged, key, {
+            value: structuredClone(intended[key]),
+            enumerable: true,
+            writable: true,
+            configurable: true,
+          });
+        else delete merged[key];
+      }
+    }
+  }
+  return merged;
+}
+
+// Preserve references held across awaits by pipeline loops and their active attempt objects.
+function synchronizeInPlace(target, source) {
+  if (Array.isArray(target) && Array.isArray(source)) {
+    const identity = (item) =>
+      item && typeof item === 'object'
+        ? typeof item.id === 'string'
+          ? `id:${item.id}`
+          : Number.isInteger(item.round)
+            ? `round:${item.round}`
+            : null
+        : null;
+    const existing = new Map(
+      target.filter((item) => identity(item) !== null).map((item) => [identity(item), item]),
+    );
+    const next = source.map((item, index) => {
+      const previous = identity(item) === null ? target[index] : existing.get(identity(item));
+      return previous &&
+        item &&
+        typeof previous === 'object' &&
+        typeof item === 'object' &&
+        Array.isArray(previous) === Array.isArray(item)
+        ? synchronizeInPlace(previous, item)
+        : structuredClone(item);
+    });
+    target.length = 0;
+    for (const item of next) target.push(item);
+    return target;
+  }
+  for (const key of Object.keys(target)) if (!Object.hasOwn(source, key)) delete target[key];
+  for (const [key, value] of Object.entries(source)) {
+    if (
+      Object.hasOwn(target, key) &&
+      value &&
+      target[key] &&
+      typeof value === 'object' &&
+      typeof target[key] === 'object' &&
+      Array.isArray(value) === Array.isArray(target[key])
+    )
+      synchronizeInPlace(target[key], value);
+    else
+      Object.defineProperty(target, key, {
+        value: structuredClone(value),
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
+  }
+  return target;
+}
 
 function assertRepo(repo) {
   if (typeof repo !== 'string' || !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo)) {
@@ -35,7 +228,35 @@ function parseJson(text, description) {
 }
 
 function encodeState(state) {
-  return Buffer.from(`${JSON.stringify(state, null, 2)}\n`, 'utf8').toString('base64');
+  const bytes = Buffer.from(`${JSON.stringify(state, null, 2)}\n`, 'utf8');
+  if (bytes.length > MAX_DURABLE_STATE_BYTES)
+    throw new Error('Durable state exceeds 8 MiB save bound');
+  if (bytes.length + reservedStateBytes(state) > MAX_DURABLE_STATE_BYTES)
+    throw stateError(
+      'state-capacity-exhausted',
+      'Durable state has no capacity for all reserved review results',
+    );
+  return bytes.toString('base64');
+}
+
+function decodeStateBytes(content, expectedSize) {
+  if (typeof content !== 'string' || content.length > 12 * 1024 * 1024)
+    throw new Error('Durable state base64 exceeds its bound');
+  const normalized = content.replace(/[\r\n]/g, '');
+  if (
+    normalized.length > Math.ceil(MAX_DURABLE_STATE_BYTES / 3) * 4 ||
+    normalized.length % 4 !== 0 ||
+    !/^[A-Za-z0-9+/]*={0,2}$/.test(normalized)
+  )
+    throw new Error('Durable state file is not valid bounded base64');
+  const bytes = Buffer.from(normalized, 'base64');
+  if (
+    bytes.toString('base64') !== normalized ||
+    bytes.length > MAX_DURABLE_STATE_BYTES ||
+    (expectedSize !== undefined && bytes.length !== expectedSize)
+  )
+    throw new Error('Durable state decoded size or encoding mismatch');
+  return bytes;
 }
 
 function issueNumber(issue) {
@@ -231,9 +452,59 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     return queued;
   }
 
+  async function decodeDurableState(metadata) {
+    if (
+      metadata?.type !== 'file' ||
+      metadata.target !== undefined ||
+      metadata.submodule_git_url !== undefined ||
+      typeof metadata.sha !== 'string'
+    ) {
+      throw new Error('Durable state path is not a regular file');
+    }
+    if (
+      metadata.size !== undefined &&
+      (!Number.isSafeInteger(metadata.size) ||
+        metadata.size < 0 ||
+        metadata.size > MAX_DURABLE_STATE_BYTES)
+    )
+      throw new Error('Durable state metadata exceeds its size bound');
+    if (metadata.encoding !== undefined && !['base64', 'none'].includes(metadata.encoding))
+      throw new Error('Durable state metadata encoding is invalid');
+    let bytes;
+    if (metadata.encoding === 'none' || metadata.size > 1024 * 1024) {
+      if (
+        !Number.isSafeInteger(metadata.size) ||
+        !/^[a-f0-9]{40}$/.test(metadata.sha) ||
+        (metadata.encoding === 'none' && metadata.content !== '')
+      )
+        throw new Error('Durable state blob metadata is invalid');
+      const blob = (
+        await api(`repos/${repo}/git/blobs/${metadata.sha}`, {
+          maxOutputBytes: STATE_BLOB_OUTPUT_BYTES,
+        })
+      ).value;
+      if (blob?.sha !== metadata.sha || blob.encoding !== 'base64' || blob.size !== metadata.size)
+        throw new Error('Durable state blob identity, size or encoding mismatch');
+      bytes = decodeStateBytes(blob.content, metadata.size);
+      const actualSHA = createHash('sha1')
+        .update(`blob ${bytes.length}\0`)
+        .update(bytes)
+        .digest('hex');
+      if (actualSHA !== metadata.sha) throw new Error('Durable state blob digest mismatch');
+    } else bytes = decodeStateBytes(metadata.content, metadata.size);
+    let text;
+    try {
+      text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+    } catch {
+      throw new Error('Durable state file is not valid UTF-8');
+    }
+    return parseJson(text, 'durable state');
+  }
+
   function createStateStore() {
     let fileSHA;
     let loaded = false;
+    let persistedBase;
 
     async function ensureBranch() {
       const refPath = `repos/${repo}/git/ref/heads/${STATE_BRANCH}`;
@@ -258,6 +529,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     }
 
     async function load() {
+      loaded = false;
       await ensureBranch();
       const response = await api(
         `repos/${repo}/contents/${STATE_PATH}?ref=${encodeURIComponent(STATE_BRANCH)}`,
@@ -269,56 +541,94 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
         if (!notFound(response)) throw new Error('Cannot read durable bug pipeline state');
         loaded = true;
         fileSHA = null;
+        persistedBase = null;
         return null;
       }
-      if (response.value?.type !== 'file' || typeof response.value.sha !== 'string') {
-        throw new Error('Durable state path is not a regular file');
-      }
-      let text;
-      try {
-        text = Buffer.from(response.value.content, 'base64').toString('utf8');
-      } catch {
-        throw new Error('Durable state file is not valid base64');
-      }
+      const state = await decodeDurableState(response.value);
       fileSHA = response.value.sha;
+      persistedBase = structuredClone(state);
       loaded = true;
-      return parseJson(text, 'durable state');
+      return state;
     }
 
-    async function save(state, { guard } = {}) {
+    async function save(state, { guard, rebaseIndependentSubjects } = {}) {
       if (!loaded) throw new Error('load durable state before saving (optimistic concurrency)');
       if (state === null || typeof state !== 'object' || Array.isArray(state)) {
         throw new TypeError('state must be a JSON object');
       }
-      const expectedFileSHA = fileSHA;
-      const body = {
-        message: 'chore: update Codex bug pipeline state',
-        content: encodeState(state),
-        branch: STATE_BRANCH,
-      };
-      if (expectedFileSHA) body.sha = expectedFileSHA;
-      let sha;
+      if (
+        rebaseIndependentSubjects !== undefined &&
+        typeof rebaseIndependentSubjects !== 'function'
+      )
+        throw new TypeError('Independent subject rebase requires a full state validator');
+      const expectedFileSHA = fileSHA,
+        originalBase = structuredClone(persistedBase);
+      // Freeze both intended data and its actual persisted base BEFORE any validator/guard await.
+      let content = encodeState(state);
+      const intended = parseJson(
+        Buffer.from(content, 'base64').toString('utf8'),
+        'intended durable state',
+      );
+      let candidate = intended,
+        candidateSHA = expectedFileSHA;
       try {
-        await ensureBranch();
-        const response = await api(`repos/${repo}/contents/${STATE_PATH}`, {
-          method: 'PUT',
-          body,
-          allowFailure: true,
-          ...(guard === undefined ? {} : { guard }),
-        });
-        if (!response.ok)
-          throw new Error('Durable state compare-and-swap failed; state was not reset');
-        sha = response.value?.content?.sha;
-        if (typeof sha !== 'string')
-          throw new Error('GitHub saved state without returning its file SHA');
+        if (rebaseIndependentSubjects) await rebaseIndependentSubjects(structuredClone(candidate));
+        for (let retry = 0; ; retry++) {
+          const body = {
+            message: 'chore: update Codex bug pipeline state',
+            content,
+            branch: STATE_BRANCH,
+          };
+          if (candidateSHA) body.sha = candidateSHA;
+          await ensureBranch();
+          const response = await api(`repos/${repo}/contents/${STATE_PATH}`, {
+            method: 'PUT',
+            body,
+            allowFailure: true,
+            ...(guard === undefined ? {} : { guard }),
+          });
+          if (response.ok) {
+            const sha = response.value?.content?.sha;
+            if (typeof sha !== 'string')
+              throw new Error('GitHub saved state without returning its file SHA');
+            fileSHA = sha;
+            persistedBase = structuredClone(candidate);
+            loaded = true;
+            return sha;
+          }
+          if (
+            !rebaseIndependentSubjects ||
+            retry >= 3 ||
+            !/(?:\bHTTP\s*409\b|\b409\s+conflict\b)/i.test(
+              String(response.result?.stderr ?? response.result?.error ?? ''),
+            )
+          )
+            throw stateError(
+              'state-cas-conflict',
+              'Durable state compare-and-swap failed; state was not reset',
+            );
+          const fresh = await load();
+          const freshSHA = fileSHA; // A subsequent validator or guard load cannot promote this body.
+          candidate = mergeIndependentEntities(originalBase, intended, fresh);
+          try {
+            await rebaseIndependentSubjects(structuredClone(candidate));
+          } catch (error) {
+            throw stateError(
+              'state-rebase-invalid',
+              'Merged durable state failed full validation',
+              error,
+            );
+          }
+          content = encodeState(candidate); // NEW merged body, including every remote reservation.
+          synchronizeInPlace(state, candidate);
+          candidateSHA = freshSHA;
+        }
       } catch (error) {
         // A guard may load a newer revision. Never retry this old body against it.
         fileSHA = expectedFileSHA;
+        persistedBase = originalBase;
         throw error;
       }
-      fileSHA = sha;
-      loaded = true;
-      return sha;
     }
 
     return { load, save };
@@ -412,10 +722,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       if (notFound(response)) return null;
       throw new Error('Cannot read dashboard state');
     }
-    return parseJson(
-      Buffer.from(response.value.content, 'base64').toString('utf8'),
-      'dashboard state',
-    );
+    return decodeDurableState(response.value);
   }
 
   async function listBugIssues() {

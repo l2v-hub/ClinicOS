@@ -1,0 +1,139 @@
+<!doctype html><meta charset="utf-8"><title>Independent QA3 — FAILED VALIDATION</title><h1>FAILED VALIDATION</h1><p>QA-owned Playwright protocol report. Actual candidate modules, synthetic transport/CAS/checks/model callbacks. No actual GitHub/model/merge/deployment.</p><p>F5 accepted report strands near capacity; F6 disjoint shared-file CAS loses completed QA. All browser value/reload/error assertions passed while reproducing these failures.</p><a href="../validation-report.md">Validation report</a><pre>{
+  &quot;browser-result.json&quot;: {
+    &quot;scope&quot;: &quot;Synthetic GitHub/CAS/checks, actual production modules. No actual model or merge.&quot;,
+    &quot;actions&quot;: [
+      &quot;adopt&quot;,
+      &quot;request&quot;,
+      &quot;claim&quot;,
+      &quot;duplicate&quot;,
+      &quot;stale&quot;,
+      &quot;submit&quot;,
+      &quot;reconcile&quot;,
+      &quot;finalize-held&quot;,
+      &quot;finalize-infrastructure&quot;,
+      &quot;terminal-tick&quot;
+    ],
+    &quot;clinical&quot;: {
+      &quot;phase&quot;: &quot;ready&quot;,
+      &quot;labels&quot;: [
+        &quot;codex-review-ready&quot;
+      ],
+      &quot;implementation&quot;: 3,
+      &quot;reviews&quot;: 1,
+      &quot;external&quot;: &quot;published&quot;,
+      &quot;unicodeReportBytes&quot;: 150124,
+      &quot;releaseHeld&quot;: true,
+      &quot;release&quot;: &quot;none&quot;
+    },
+    &quot;infrastructure&quot;: {
+      &quot;phase&quot;: &quot;ready&quot;,
+      &quot;release&quot;: &quot;merged&quot;
+    },
+    &quot;modelCallbacks&quot;: 2,
+    &quot;mergeCalls&quot;: 1,
+    &quot;errors&quot;: [],
+    &quot;actualModelCalls&quot;: 0,
+    &quot;actualGitHubWrites&quot;: 0,
+    &quot;actualDeployments&quot;: 0,
+    &quot;reloadPersistence&quot;: true,
+    &quot;result&quot;: &quot;PASS&quot;
+  },
+  &quot;test-results/capacity-verification.json&quot;: {
+    &quot;subjects&quot;: 51,
+    &quot;initialStateBytes&quot;: 8358608,
+    &quot;runningStateBytes&quot;: 8359824,
+    &quot;maximumStateBytes&quot;: 8388608,
+    &quot;priorReportCount&quot;: 200,
+    &quot;reasonPadding&quot;: false,
+    &quot;validState&quot;: true,
+    &quot;actualGitHubWrites&quot;: 0,
+    &quot;actualModels&quot;: 0,
+    &quot;acceptedCommentChars&quot;: 50427,
+    &quot;import&quot;: &quot;REJECTED&quot;,
+    &quot;error&quot;: &quot;Durable state exceeds 8 MiB save bound&quot;,
+    &quot;durableReviewStatus&quot;: &quot;running&quot;,
+    &quot;replacementImport&quot;: &quot;REJECTED&quot;,
+    &quot;replacementError&quot;: &quot;Durable state exceeds 8 MiB save bound&quot;,
+    &quot;durableReviewStatusAfterReplacement&quot;: &quot;running&quot;,
+    &quot;syntheticStateWrites&quot;: 2
+  },
+  &quot;test-results/disjoint-cas-verification.json&quot;: {
+    &quot;result&quot;: &quot;REPRODUCED_DISJOINT_GLOBAL_CAS_STRANDS_COMPLETED_QA&quot;,
+    &quot;error&quot;: &quot;Durable state compare-and-swap failed; state was not reset&quot;,
+    &quot;firstSubject&quot;: 81,
+    &quot;secondSubject&quot;: 82,
+    &quot;firstSubjectUnchangedBySecondWriter&quot;: true,
+    &quot;firstOwnerVerifiedResultLost&quot;: true,
+    &quot;durableCodexStatus&quot;: &quot;running&quot;,
+    &quot;secondReviewStatus&quot;: &quot;running&quot;,
+    &quot;syntheticQaCallbacks&quot;: 1,
+    &quot;syntheticMergeCalls&quot;: 0,
+    &quot;syntheticStateWrites&quot;: 3,
+    &quot;strictCasConflicts&quot;: 1,
+    &quot;repeatFinalizeWrites&quot;: 0,
+    &quot;events&quot;: [
+      &quot;state save 1&quot;,
+      &quot;first subject actual production boundary QA callback entered&quot;,
+      &quot;state save 2&quot;,
+      &quot;state save 3&quot;,
+      &quot;independent second subject request and claim saved&quot;,
+      &quot;first subject QA callback returned verified&quot;,
+      &quot;strict CAS rejected stale file SHA&quot;
+    ],
+    &quot;actualModels&quot;: 0,
+    &quot;actualGitHubWrites&quot;: 0,
+    &quot;actualLiveFailureRootCause&quot;: &quot;Not established; this isolated production-module reproduction does not prove root cause of a separate hosted run.&quot;
+  },
+  &quot;test-results/browser-current-counterexamples.json&quot;: {
+    &quot;scope&quot;: &quot;QA3 actual production-module probes; synthetic GitHub/CAS/checks/QA callbacks. No live model or hosted mutation.&quot;,
+    &quot;capacity&quot;: {
+      &quot;subjects&quot;: 51,
+      &quot;initialStateBytes&quot;: 8358608,
+      &quot;runningStateBytes&quot;: 8359824,
+      &quot;maximumStateBytes&quot;: 8388608,
+      &quot;priorReportCount&quot;: 200,
+      &quot;reasonPadding&quot;: false,
+      &quot;validState&quot;: true,
+      &quot;actualGitHubWrites&quot;: 0,
+      &quot;actualModels&quot;: 0,
+      &quot;acceptedCommentChars&quot;: 50427,
+      &quot;import&quot;: &quot;REJECTED&quot;,
+      &quot;error&quot;: &quot;Durable state exceeds 8 MiB save bound&quot;,
+      &quot;durableReviewStatus&quot;: &quot;running&quot;,
+      &quot;replacementImport&quot;: &quot;REJECTED&quot;,
+      &quot;replacementError&quot;: &quot;Durable state exceeds 8 MiB save bound&quot;,
+      &quot;durableReviewStatusAfterReplacement&quot;: &quot;running&quot;,
+      &quot;syntheticStateWrites&quot;: 2
+    },
+    &quot;disjoint&quot;: {
+      &quot;result&quot;: &quot;REPRODUCED_DISJOINT_GLOBAL_CAS_STRANDS_COMPLETED_QA&quot;,
+      &quot;error&quot;: &quot;Durable state compare-and-swap failed; state was not reset&quot;,
+      &quot;firstSubject&quot;: 81,
+      &quot;secondSubject&quot;: 82,
+      &quot;firstSubjectUnchangedBySecondWriter&quot;: true,
+      &quot;firstOwnerVerifiedResultLost&quot;: true,
+      &quot;durableCodexStatus&quot;: &quot;running&quot;,
+      &quot;secondReviewStatus&quot;: &quot;running&quot;,
+      &quot;syntheticQaCallbacks&quot;: 1,
+      &quot;syntheticMergeCalls&quot;: 0,
+      &quot;syntheticStateWrites&quot;: 3,
+      &quot;strictCasConflicts&quot;: 1,
+      &quot;repeatFinalizeWrites&quot;: 0,
+      &quot;events&quot;: [
+        &quot;state save 1&quot;,
+        &quot;first subject actual production boundary QA callback entered&quot;,
+        &quot;state save 2&quot;,
+        &quot;state save 3&quot;,
+        &quot;independent second subject request and claim saved&quot;,
+        &quot;first subject QA callback returned verified&quot;,
+        &quot;strict CAS rejected stale file SHA&quot;
+      ],
+      &quot;actualModels&quot;: 0,
+      &quot;actualGitHubWrites&quot;: 0,
+      &quot;actualLiveFailureRootCause&quot;: &quot;Not established; this isolated production-module reproduction does not prove root cause of a separate hosted run.&quot;
+    },
+    &quot;errors&quot;: [],
+    &quot;reloadPersistence&quot;: true,
+    &quot;result&quot;: &quot;PASS assertions reproduce F5 and F6&quot;
+  }
+}</pre>

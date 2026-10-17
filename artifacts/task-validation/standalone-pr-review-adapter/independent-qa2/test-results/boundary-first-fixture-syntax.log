@@ -1,0 +1,17 @@
+file:///workspace/clinicos-standalone-pr-review/artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/boundary-probe.mjs:14
+await check('CAS merge reservation failure prevents merge',async()=>{const f=fixture();makeAllowlisted(f);f.manifest.releaseHold=false;await published(f);const create=f.github.createStateStore;f.github.createStateStore=()=>{const s=create();return{...s,save:async(state,options)=>{if(state.standaloneReviews?.[0].release?.status==='merging')throw Error('Synthetic CAS conflict');return s.save(state,options);}};let merges=0;f.github.mergePullRequest=async()=>{merges++;assert.fail('CAS failure cannot merge');};await assert.rejects(runRuntime(f));assert.equal(merges,0);assert.equal(f.remote().standaloneReviews[0].release,undefined);return{syntheticMergeCalls:merges};});
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^^^^^
+
+SyntaxError: Unexpected reserved word
+    at compileSourceTextModule (node:internal/modules/esm/utils:318:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:89:18)
+    at #translate (node:internal/modules/esm/loader:434:20)
+    at afterLoad (node:internal/modules/esm/loader:502:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:507:12)
+    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:560:36)
+    at afterResolve (node:internal/modules/esm/loader:607:52)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:613:12)
+    at node:internal/modules/esm/loader:632:32
+    at TracingChannel.tracePromise (node:diagnostics_channel:362:14)
+
+Node.js v24.19.0

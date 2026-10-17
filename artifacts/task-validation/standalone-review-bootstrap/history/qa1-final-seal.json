@@ -1,0 +1,18 @@
+{
+  "verdict": "FAILED VALIDATION",
+  "reviewer": "/root/standalone_adapter_independent_qa",
+  "createdAt": "2026-10-17T16:40:23.965046+00:00",
+  "sourceFiles": 13,
+  "sourceMismatches": [],
+  "sourceManifestSha256": "fbe1a8a4128bce11879771aaab27984edba7e2fef652ec70db08c3e0e4ded4c6",
+  "authorProofManifestSha256": "d0bef3544d550aa118a6ef8cad0d571978eaebbc999394b5a9c386fa0ec726af",
+  "evidenceManifestSha256": "d73d1d74b099c6bf7d5f737c034eb6f359a58bbbb2b9ec91b67b977345461a2d",
+  "validationReportSha256": "9056e07c0433d3c0c723ad1a47baa4caabb13faa1b3e0c4339a7bc4544a80289",
+  "findings": [
+    "F1 aggregate subject report bound",
+    "F2 revision historical proof rewrite"
+  ],
+  "actualGitHubWrites": 0,
+  "actualModelCalls": 0,
+  "actualDeployments": 0
+}

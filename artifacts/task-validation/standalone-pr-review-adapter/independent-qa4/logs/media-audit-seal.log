@@ -1,0 +1,100 @@
+{
+  "png": [
+    {
+      "path": "screenshots/02-release-hold-preserved.png",
+      "size": [
+        1440,
+        1250
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/03-infrastructure-receipt-terminal.png",
+      "size": [
+        1440,
+        1250
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/01-authenticated-report-import.png",
+      "size": [
+        1440,
+        1250
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/04-capacity-refused-before-inference.png",
+      "size": [
+        1500,
+        1400
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/05-disjoint-cas-owner-and-peer-preserved.png",
+      "size": [
+        1500,
+        1400
+      ],
+      "mode": "RGB"
+    }
+  ],
+  "videos": [
+    {
+      "path": "video/page@cd209c2323a0168763cb6d1659b6069c.webm",
+      "decoded": true,
+      "info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1440,
+            "height": 1250
+          }
+        ],
+        "format": {
+          "duration": "2.840000"
+        }
+      }
+    },
+    {
+      "path": "capacity-cas-video/page@020134293cbbb00f35f5bf4f2fb0a5da.webm",
+      "decoded": true,
+      "info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1500,
+            "height": 1400
+          }
+        ],
+        "format": {
+          "duration": "3.640000"
+        }
+      }
+    }
+  ],
+  "zip": [
+    {
+      "path": "trace/capacity-cas-trace.zip",
+      "members": 15,
+      "CRCValid": true,
+      "membersScanned": true
+    },
+    {
+      "path": "trace/trace.zip",
+      "members": 31,
+      "CRCValid": true,
+      "membersScanned": true
+    }
+  ],
+  "credentialFindings": [],
+  "sourceFrozen": true,
+  "priorProofFilesUnchanged": 214,
+  "PHI": "Synthetic fixtures and scalar real-Git verification counts only; manual content inspection performed."
+}

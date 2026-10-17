@@ -1,0 +1,19 @@
+{
+  "scope": "standalone-pr-review-adapter",
+  "maxAttempts": 4,
+  "attempts": [
+    {
+      "round": 1,
+      "status": "author-passed-awaiting-independent-qa",
+      "reservedBeforeSourceEdits": true,
+      "baseline": "d1324cb3",
+      "owner": "standalone_review_adapter",
+      "tests": {
+        "total": 649,
+        "passed": 646,
+        "failed": 0,
+        "skipped": 3
+      }
+    }
+  ]
+}

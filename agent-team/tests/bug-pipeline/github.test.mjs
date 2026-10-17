@@ -1,6 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createGitHub } from '../../src/bug-pipeline/github.mjs';
+import {
+  createGitHub,
+  MAX_DURABLE_STATE_BYTES,
+  RESULT_RESERVATION_BYTES,
+  pendingResultBytes,
+  controllerFailureCode,
+} from '../../src/bug-pipeline/github.mjs';
+import { createHash } from 'node:crypto';
 
 test('issue lifecycle uses additive managed labels and closes resolved issues as completed, with retry after a failed close', async () => {
   const calls = [];
@@ -1158,4 +1165,418 @@ test('durable save serializes its body before any branch await can mutate the su
   assert.deepEqual(JSON.parse(Buffer.from(written.content, 'base64').toString('utf8')), {
     target: 'Verified transition',
   });
+});
+
+function stateBlobFixture(state = { payload: '文'.repeat(375000) }) {
+  let raw, oid;
+  const f = { calls: [], writes: [], failCAS: false };
+  f.setRaw = (bytes) => {
+    raw = Buffer.from(bytes);
+    oid = createHash('sha1').update(`blob ${raw.length}\0`).update(raw).digest('hex');
+    f.metadata = { type: 'file', size: raw.length, sha: oid, encoding: 'none', content: '' };
+    f.blob = {
+      sha: oid,
+      size: raw.length,
+      encoding: 'base64',
+      content:
+        raw
+          .toString('base64')
+          .match(/.{1,60}/g)
+          ?.join('\n') ?? '',
+    };
+  };
+  f.setRaw(Buffer.from(JSON.stringify(state, null, 2) + '\n'));
+  f.run = async (call) => {
+    f.calls.push(call);
+    const endpoint = call.args[1];
+    if (endpoint.includes('/git/ref/heads/')) return response({ object: { sha: 'a'.repeat(40) } });
+    if (call.args.includes('PUT')) {
+      const body = JSON.parse(call.input);
+      f.writes.push(body);
+      if (f.failCAS || body.sha !== oid)
+        return response({}, { ok: false, code: 1, stderr: 'HTTP 409 conflict' });
+      f.setRaw(Buffer.from(body.content, 'base64'));
+      return response({ content: { sha: oid } });
+    }
+    if (endpoint.includes('/contents/.codex-bug-state.json')) return response(f.metadata);
+    if (endpoint.includes('/git/blobs/')) {
+      assert.ok(endpoint.endsWith('/' + f.metadata.sha));
+      assert.equal(call.maxOutputBytes, 16 * 1024 * 1024);
+      return response(f.blob);
+    }
+    assert.fail('Unexpected state endpoint ' + endpoint);
+  };
+  f.store = createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run: f.run }).createStateStore();
+  return f;
+}
+
+test('large durable state loads from authenticated blob SHA and preserves Contents identity for CAS', async () => {
+  const state = {
+    schemaVersion: 1,
+    repository: 'l2v-hub/ClinicOS',
+    batches: [],
+    payload: '文'.repeat(375000),
+  };
+  const f = stateBlobFixture(state);
+  assert.ok(f.metadata.size > 1024 * 1024);
+  const oldSHA = f.metadata.sha;
+  assert.deepEqual(await f.store.load(), state);
+  assert.equal(f.calls.filter((c) => c.args[1].includes('/git/blobs/')).length, 1);
+  await f.store.save({ ...state, reconciled: true });
+  assert.equal(f.writes[0].sha, oldSHA);
+  assert.notEqual(f.metadata.sha, oldSHA);
+  assert.equal((await f.store.load()).reconciled, true);
+});
+
+test('read-only dashboard uses the same large-state blob decoder without branch initialization or writes', async () => {
+  const state = { payload: '文'.repeat(375000) };
+  const f = stateBlobFixture(state);
+  const github = createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run: f.run });
+  assert.deepEqual(await github.readDashboardState(), state);
+  assert.ok(
+    f.calls.every((call) => !call.args[1].includes('/git/ref/') && !call.args.includes('-X')),
+  );
+});
+
+test('durable state rejects invalid blob metadata, bytes and digest before authorizing any save', async () => {
+  const cases = [
+    (f) => (f.metadata.type = 'symlink'),
+    (f) => (f.metadata.target = 'elsewhere'),
+    (f) => (f.metadata.submodule_git_url = 'https://example.invalid/repo'),
+    (f) => (f.metadata.sha = 'invalid-sha'),
+    (f) => (f.metadata.size = MAX_DURABLE_STATE_BYTES + 1),
+    (f) => (f.metadata.size = 1.5),
+    (f) => delete f.metadata.size,
+    (f) => (f.metadata.content = 'unexpected-inline-body'),
+    (f) => (f.metadata.encoding = 'utf8'),
+    (f) => (f.blob.sha = 'f'.repeat(40)),
+    (f) => f.blob.size++,
+    (f) => (f.blob.encoding = 'none'),
+    (f) => (f.blob.content += '@'),
+    (f) => {
+      f.blob.content = Buffer.from('x'.repeat(f.metadata.size)).toString('base64');
+    },
+    (f) => {
+      f.blob.size = f.metadata.size;
+      f.blob.content = Buffer.from('{}').toString('base64');
+    },
+    (f) => f.setRaw(Buffer.from([123, 34, 120, 34, 58, 34, 255, 34, 125])),
+    (f) => f.setRaw(Buffer.from('not valid JSON')),
+  ];
+  for (const change of cases) {
+    const f = stateBlobFixture({ payload: 'synthetic' });
+    change(f);
+    await assert.rejects(f.store.load());
+    await assert.rejects(f.store.save({ shouldNotSave: true }), /load durable state/);
+    assert.equal(f.writes.length, 0);
+  }
+});
+
+test('explicit inline state metadata validates canonical base64, supplied size and UTF8 without requiring blob I/O', async () => {
+  const state = { counter: 1 };
+  const f = stateBlobFixture(state);
+  f.metadata.encoding = 'base64';
+  f.metadata.content = f.blob.content;
+  assert.deepEqual(await f.store.load(), state);
+  assert.equal(
+    f.calls.some((c) => c.args[1].includes('/git/blobs/')),
+    false,
+  );
+  for (const change of [
+    (f) => f.metadata.size++,
+    (f) => (f.metadata.content += '@'),
+    (f) => (f.metadata.encoding = 'unexpected'),
+  ]) {
+    const invalid = stateBlobFixture(state);
+    invalid.metadata.encoding = 'base64';
+    invalid.metadata.content = invalid.blob.content;
+    change(invalid);
+    await assert.rejects(invalid.store.load());
+  }
+});
+
+test('state save rejects >8MiB before any mutation/guard and exact8MiB remains reloadable', async () => {
+  const f = stateBlobFixture({});
+  await f.store.load();
+  const priorCalls = f.calls.length;
+  let guards = 0;
+  await assert.rejects(
+    f.store.save(
+      { payload: 'x'.repeat(MAX_DURABLE_STATE_BYTES) },
+      {
+        guard: async () => {
+          guards++;
+        },
+      },
+    ),
+    /8 MiB save bound/,
+  );
+  assert.equal(guards, 0);
+  assert.equal(f.writes.length, 0);
+  assert.equal(f.calls.length, priorCalls);
+  const overhead = Buffer.byteLength(JSON.stringify({ payload: '' }, null, 2) + '\n');
+  const exact = { payload: 'x'.repeat(MAX_DURABLE_STATE_BYTES - overhead) };
+  await f.store.save(exact);
+  assert.equal(f.metadata.size, MAX_DURABLE_STATE_BYTES);
+  assert.equal(
+    Buffer.byteLength(JSON.stringify(await f.store.load(), null, 2) + '\n'),
+    MAX_DURABLE_STATE_BYTES,
+  );
+});
+
+test('blob-loaded state CAS failure retains the original metadata SHA and never retries without it', async () => {
+  const f = stateBlobFixture();
+  await f.store.load();
+  const expected = f.metadata.sha;
+  f.failCAS = true;
+  await assert.rejects(f.store.save({ attempt: 1 }), /compare-and-swap/);
+  await assert.rejects(f.store.save({ attempt: 2 }), /compare-and-swap/);
+  assert.deepEqual(
+    f.writes.map((body) => body.sha),
+    [expected, expected],
+  );
+});
+
+const entityState = () => ({
+  schemaVersion: 1,
+  repository: 'l2v-hub/ClinicOS',
+  batches: [
+    { id: 'batch-a', implementation: [{ round: 1, status: 'running' }] },
+    { id: 'batch-b', implementation: [] },
+  ],
+  manualBatches: [{ id: 'manual-a', status: 'planned' }],
+  standaloneReviews: [{ id: 'standalone-a', reviews: [] }],
+});
+const entityValidator = (state) => {
+  assert.equal(state.repository, 'l2v-hub/ClinicOS');
+  for (const key of ['batches', 'manualBatches', 'standaloneReviews']) {
+    assert.ok(Array.isArray(state[key]));
+    assert.equal(new Set(state[key].map((item) => item.id)).size, state[key].length);
+  }
+  assert.notEqual(
+    state.invalidOwnership,
+    true,
+    'Full merged ownership validator rejects illegal combinations',
+  );
+};
+
+test('explicit disjoint rebase saves a NEW validated body and preserves nested caller object/array references', async () => {
+  const f = stateBlobFixture(entityState()),
+    other = createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run: f.run }).createStateStore();
+  const ours = await f.store.load(),
+    theirs = await other.load();
+  const arrays = [ours.batches, ours.manualBatches, ours.standaloneReviews],
+    batch = ours.batches[0],
+    attempts = batch.implementation,
+    attempt = attempts[0],
+    manual = ours.manualBatches[0];
+  attempt.status = 'passed';
+  theirs.batches[1].remote = 'retained';
+  theirs.manualBatches[0].status = 'complete';
+  theirs.standaloneReviews.push({ id: 'standalone-b', reviews: [] });
+  theirs.updatedAt = 'remote';
+  await other.save(theirs);
+  const remoteSHA = f.metadata.sha;
+  let guards = 0,
+    validations = 0;
+  await f.store.save(ours, {
+    rebaseIndependentSubjects: (state) => {
+      validations++;
+      entityValidator(state);
+    },
+    guard: async () => {
+      guards++;
+      assert.equal(attempt.status, 'passed');
+    },
+  });
+  assert.equal(guards, 2);
+  assert.equal(validations, 2);
+  assert.equal(f.writes.at(-1).sha, remoteSHA);
+  const old = JSON.parse(Buffer.from(f.writes.at(-2).content, 'base64')),
+    fresh = JSON.parse(Buffer.from(f.writes.at(-1).content, 'base64'));
+  assert.equal(old.batches[1].remote, undefined);
+  assert.equal(fresh.batches[1].remote, 'retained');
+  assert.equal(fresh.batches[0].implementation[0].status, 'passed');
+  assert.equal(fresh.standaloneReviews.length, 2);
+  assert.equal(ours.batches, arrays[0]);
+  assert.equal(ours.manualBatches, arrays[1]);
+  assert.equal(ours.standaloneReviews, arrays[2]);
+  assert.equal(ours.batches[0], batch);
+  assert.equal(batch.implementation, attempts);
+  assert.equal(attempts[0], attempt);
+  assert.equal(ours.manualBatches[0], manual);
+  assert.equal(manual.status, 'complete');
+  attempt.afterRebase = 'original reference still live';
+  await f.store.save(ours);
+  assert.equal(
+    (await f.store.load()).batches[0].implementation[0].afterRebase,
+    'original reference still live',
+  );
+});
+
+test('strict default still rejects disjoint409 and opt-in rejects same entity, conflicting root fields and invalid merged state', async () => {
+  for (const kind of ['strict', 'same-entity', 'root-field', 'invalid-merge', 'duplicate-id']) {
+    const f = stateBlobFixture(entityState()),
+      other = createGitHub({
+        cwd: '/tmp',
+        repo: 'l2v-hub/ClinicOS',
+        run: f.run,
+      }).createStateStore();
+    const a = await f.store.load(),
+      b = await other.load();
+    a.batches[0].local = true;
+    if (kind === 'same-entity') b.batches[0].remote = true;
+    else if (kind === 'root-field') {
+      a.shared = { local: true };
+      b.shared = { remote: true };
+    } else if (kind === 'invalid-merge') b.invalidOwnership = true;
+    else if (kind === 'duplicate-id') b.manualBatches.push({ ...b.manualBatches[0] });
+    else b.batches[1].remote = true;
+    await other.save(b);
+    let guards = 0;
+    const options = {
+      guard: async () => {
+        guards++;
+      },
+      ...(kind === 'strict' ? {} : { rebaseIndependentSubjects: entityValidator }),
+    };
+    await assert.rejects(f.store.save(a, options));
+    assert.equal(guards, 1);
+    assert.equal(f.writes.length, 2, 'No second PUT after unsafe conflict/validation');
+    assert.equal(
+      JSON.parse(Buffer.from(f.blob.content.replace(/\n/g, ''), 'base64')).batches[0].local,
+      undefined,
+    );
+  }
+});
+
+test('rebase reruns authorization guard and refuses nonce/subject changes instead of replaying stale authority', async () => {
+  const f = stateBlobFixture(entityState()),
+    other = createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run: f.run }).createStateStore();
+  const a = await f.store.load(),
+    b = await other.load();
+  a.batches[0].local = true;
+  b.batches[1].remote = true;
+  await other.save(b);
+  let guardCalls = 0;
+  await assert.rejects(
+    f.store.save(a, {
+      rebaseIndependentSubjects: entityValidator,
+      guard: async () => {
+        if (++guardCalls === 2) throw new Error('Synthetic authorization revoked');
+      },
+    }),
+    /revoked/,
+  );
+  assert.equal(guardCalls, 2);
+  assert.equal(f.writes.length, 2, 'Retry guard prevents second PUT');
+  const g = stateBlobFixture(entityState()),
+    peer = createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run: g.run }).createStateStore();
+  const x = await g.store.load(),
+    y = await peer.load();
+  x.standaloneReviews[0].claimId = 'old-claim';
+  y.standaloneReviews[0].claimId = 'new-claim';
+  await peer.save(y);
+  await assert.rejects(
+    g.store.save(x, { rebaseIndependentSubjects: entityValidator }),
+    (error) => error.code === 'state-rebase-conflict',
+  );
+});
+
+test('rebase uses fresh serialized snapshots even when guards reload a third disjoint state, with bounded retries', async () => {
+  const f = stateBlobFixture(entityState()),
+    other = createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run: f.run }).createStateStore();
+  const a = await f.store.load(),
+    b = await other.load();
+  a.batches[0].local = true;
+  b.batches[1].remote = 1;
+  await other.save(b);
+  let guards = 0;
+  await f.store.save(a, {
+    rebaseIndependentSubjects: entityValidator,
+    guard: async () => {
+      if (++guards === 2) {
+        const third = createGitHub({
+          cwd: '/tmp',
+          repo: 'l2v-hub/ClinicOS',
+          run: f.run,
+        }).createStateStore();
+        const latest = await third.load();
+        latest.manualBatches[0].remote = 2;
+        await third.save(latest);
+        await f.store.load();
+      }
+    },
+  });
+  assert.equal(guards, 3);
+  const final = await f.store.load();
+  assert.equal(final.batches[0].local, true);
+  assert.equal(final.batches[1].remote, 1);
+  assert.equal(final.manualBatches[0].remote, 2);
+  const g = stateBlobFixture(entityState());
+  const value = await g.store.load();
+  value.batches[0].local = true;
+  g.failCAS = true;
+  await assert.rejects(
+    g.store.save(value, { rebaseIndependentSubjects: entityValidator }),
+    (error) => error.code === 'state-cas-conflict',
+  );
+  assert.equal(g.writes.length, 4);
+});
+
+test('capacity counts simultaneous running reviews and Codex QA across every entity collection before any PUT or guard', async () => {
+  const state = {
+    batches: [{ id: 'a', reviews: [{ status: 'running' }], externalReview: { status: 'running' } }],
+    manualBatches: [{ id: 'b', reviews: [{ status: 'running' }] }],
+    standaloneReviews: [{ id: 'c', reviews: [], codexFinalReview: { status: 'running' } }],
+  };
+  assert.equal(
+    pendingResultBytes(state.batches[0]),
+    RESULT_RESERVATION_BYTES,
+    'Do not double count one external reservation',
+  );
+  const overhead = Buffer.byteLength(JSON.stringify({ ...state, payload: '' }, null, 2) + '\n');
+  state.payload = 'x'.repeat(
+    MAX_DURABLE_STATE_BYTES - overhead - 3 * RESULT_RESERVATION_BYTES - 512,
+  );
+  const f = stateBlobFixture({});
+  await f.store.load();
+  await f.store.save(state);
+  const writes = f.writes.length,
+    calls = f.calls.length;
+  let guards = 0;
+  state.standaloneReviews.push({ id: 'd', reviews: [{ status: 'running' }] });
+  await assert.rejects(
+    f.store.save(state, {
+      guard: async () => {
+        guards++;
+      },
+    }),
+    (error) => error.code === 'state-capacity-exhausted',
+  );
+  assert.equal(f.writes.length, writes);
+  assert.equal(f.calls.length, calls);
+  assert.equal(guards, 0);
+  state.standaloneReviews.pop();
+  state.batches[0].reviews[0].status = 'approved';
+  state.batches[0].externalReview.status = 'finished';
+  state.batches[0].reviewReports = {
+    'claude-review-1.json': JSON.stringify({
+      subject_sha: 'a'.repeat(40),
+      verdict: 'approved',
+      summary: '漢'.repeat(50000),
+      findings: [],
+    }),
+  };
+  await f.store.save(state);
+});
+
+test('diagnostics expose only owned bounded codes and preserve known cause chains', () => {
+  const privateError = new Error('Synthetic private stderr must not be exposed');
+  privateError.code = 'arbitrary-untrusted-code';
+  assert.equal(controllerFailureCode(privateError), 'controller-execution-failed');
+  const cause = Object.assign(new Error('Private underlying text'), {
+    code: 'state-capacity-exhausted',
+  });
+  assert.equal(controllerFailureCode(new Error('wrapper', { cause })), 'state-capacity-exhausted');
 });
