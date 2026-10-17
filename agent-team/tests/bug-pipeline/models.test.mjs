@@ -130,6 +130,10 @@ test('plan, implementation and simplification use distinct bounded Codex session
   assert.equal(planArgs['--sandbox'], 'read-only');
   assert.equal(planArgs['--ephemeral'], true);
   assert.equal(calls[0].args.includes('--ephemeral'), true);
+  assert.match(calls[0].input, /Aggregation is a primary planning objective/);
+  assert.match(calls[0].input, /fileMap.*one entry per issue/s);
+  assert.match(calls[0].input, /BOTH must provide a nonempty separationReason/);
+  assert.match(calls[0].input, /existing plans are frozen/);
   for (const call of calls) {
     assert.equal(call.command, 'codex');
     assert.equal(call.envMode, 'model');

@@ -1,0 +1,18 @@
+{
+  "base": "a733a293f6dd2fed29f71fc1a36f546ee7eae317",
+  "branch": "codex/related-issue-batching",
+  "files": {
+    ".agents/skills/codex-bug-triage/SKILL.md": "0788acdf4c9668c604b38deded16f00aadda6c25cba4007d6513ed42f7da72b2",
+    "agent-team/src/bug-pipeline/contracts.mjs": "cd650b0eddf19ea47d592b6db7770e2c4863e769f01441e17258c57aab516f69",
+    "agent-team/src/bug-pipeline/dashboard.mjs": "d33f9c4e5f4a76b80ff33ea311a838c12f76a3ea3f2cc3352ddaeb68deacec70",
+    "agent-team/src/bug-pipeline/models.mjs": "7b57d6d3a84bced2c05575a7f86c6fad6ac6f1d6e41cefa6fb2349f6cc2fe53e",
+    "agent-team/src/bug-pipeline/pipeline.mjs": "78bb2769bcb97693905a944956ccfb1f06483cd48588a944eb0b1cc61d08ac84",
+    "agent-team/src/bug-pipeline/workspace.mjs": "d12e35b065cab8dbd2f58fd8583f3741be798e5c5ff390364399ead322ab6e3d",
+    "agent-team/tests/bug-pipeline/contracts.test.mjs": "7f5e7b15a0c28d72c9356b2fc663086ca4491d655c3807b97ae4215e2878d5e3",
+    "agent-team/tests/bug-pipeline/dashboard.test.mjs": "7d94c4f76ed89696d36ca228a9f4069a57ca3c3c15d26b63f76441d258887ded",
+    "agent-team/tests/bug-pipeline/models.test.mjs": "8840980564971a477e198781feab39632a1cf2283b4a7584d9ca8a632c4654e9",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs": "02aa80f64cc2cd0b229f5e7b6695a29413d8ed232bab737ab28f08ef2eb2cd9c",
+    "agent-team/tests/bug-pipeline/workspace.test.mjs": "114673da233df1eaabc3f3b717642c17edba7b736cbd35c2f29e7807e1797fb4",
+    "docs/codex-bug-workflow.md": "fa1a5e00ad4bccdc8dbc52e47d31940f8f587569bc9d7a5ef672f9bb3febcf5c"
+  }
+}

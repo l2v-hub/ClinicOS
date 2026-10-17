@@ -198,7 +198,8 @@ export function createWorkspace({ root, repo, run, models }) {
         const files = {
           'task-contract.md': `# Task Contract\n\n## Impact Classification\n\nBug batch ${batch.id}. Only the accepted file scope is authorized.\n\n## Current Behaviour\n\n${batch.plan.analysis}\n\n## Expected Behaviour\n\n${batch.plan.title}\n\n## Acceptance Criteria\n\n${JSON.stringify(batch.plan.acceptance, null, 2)}\n\n## Test Plan\n\n${JSON.stringify(batch.plan.verification, null, 2)}\n\n## Evidence Plan\n\nSynthetic local fixtures; per-issue PNG and Playwright trace, optional video. No production data.\n\n## Gate Status\n\nREADY FOR IMPLEMENTATION\n`,
           'analysis.md': `# Analysis\n\nFeature: ${batch.plan.feature}\n\n${batch.plan.rationale}\n\n${batch.plan.analysis}\n\nSource issues: ${batch.issues.join(', ')}\nBaseline: ${batch.baseSha}\n`,
-          'implementation-plan.md': `# Frozen implementation plan\n\nBranch: ${batch.branch}\nBaseline: ${batch.baseSha}\n\n${JSON.stringify(batch.plan, null, 2)}\n`,
+          'triage-index.md': `# Issue grouping\n\nBatch: ${batch.id}\nBaseline: ${batch.baseSha}\nFeature: ${batch.plan.feature}\n\n${batch.plan.rationale}\n\n## Issue to affected files\n\n${JSON.stringify(batch.grouping?.fileMap ?? [], null, 2)}\n\n## Separation from overlapping groups\n\n${batch.grouping?.separationReason || 'No shared-file split declared.'}\n\nEvery source issue retains its own acceptance criteria, regression scenario and evidence in implementation-plan.md.\n`,
+          'implementation-plan.md': `# Frozen implementation plan\n\nBranch: ${batch.branch}\nBaseline: ${batch.baseSha}\n\n${JSON.stringify({ ...batch.plan, ...batch.grouping }, null, 2)}\n`,
         };
         batch.packetHashes = {};
         for (const [file, content] of Object.entries(files)) {

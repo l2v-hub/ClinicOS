@@ -63,7 +63,9 @@ export function dashboardSnapshot({ repo, state, issues, queue, setup, now = new
               : external
                 ? 'Verifica QA esterna'
                 : eligible.has(issue.number)
-                  ? 'In attesa del controller'
+                  ? state.triageQueue?.issues.includes(issue.number)
+                    ? 'Raccolta issue per accorpamento'
+                    : 'In attesa del controller'
                   : 'Aggiungere codex-run o /codex fix';
       return {
         number: issue.number,

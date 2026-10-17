@@ -7,6 +7,20 @@ import { createDashboardServer } from '../../src/bug-pipeline/dashboard-server.m
 const repo = 'l2v-hub/ClinicOS';
 const empty = { schemaVersion: 1, repository: repo, batches: [] };
 
+test('collection window is visible as queued aggregation, without claiming or exposing issue data', () => {
+  const snapshot = dashboardSnapshot({
+    repo,
+    state: { ...empty, triageQueue: { issues: [17, 18], openedAt: 1000, changedAt: 2000 } },
+    issues: [{ number: 17 }, { number: 18 }, { number: 19 }],
+    queue: [17, 18, 19],
+  });
+  assert.equal(snapshot.counts.processing, 0);
+  assert.equal(snapshot.counts.queued, 3);
+  assert.equal(snapshot.rows[0].phase, 'Raccolta issue per accorpamento');
+  assert.equal(snapshot.rows[1].phase, 'Raccolta issue per accorpamento');
+  assert.equal(snapshot.rows[2].phase, 'In attesa del controller');
+});
+
 test('snapshot distinguishes the authorized queue, triage, external QA and waiting issues without exposing source payloads', () => {
   const snapshot = dashboardSnapshot({
     repo,

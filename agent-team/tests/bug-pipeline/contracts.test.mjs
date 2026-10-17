@@ -24,6 +24,11 @@ export function planFor(issues = [17, 18]) {
           'Both issues describe the same feature regression with separate reproduction details.',
         issues: [...issues],
         scope: ['frontend/src/features/patients/filter.ts'],
+        fileMap: issues.map((issue) => ({
+          issue,
+          files: ['frontend/src/features/patients/filter.ts'],
+        })),
+        separationReason: '',
         acceptance: issues.map((issue) => ({
           issue,
           criteria: [`Issue #${issue} reproduces and is fixed`],
@@ -53,6 +58,80 @@ export function planFor(issues = [17, 18]) {
 
 const selected = (numbers = [17, 18]) => numbers.map((number) => ({ number }));
 
+test('new triage requires a complete issue/file map and rejects unjustified shared-file splits', () => {
+  const split = {
+    groups: [planFor([17]).groups[0], planFor([18]).groups[0]],
+    blocked: [],
+  };
+  assert.throws(() => validatePlan(split, selected()), /shared-file groups must be consolidated/);
+  for (const group of split.groups)
+    group.separationReason = 'Independent root causes in the same utility; coordinate PR order.';
+  assert.equal(validatePlan(split, selected()).groups.length, 2);
+  split.groups[1].separationReason = ' ';
+  assert.throws(() => validatePlan(split, selected()), /shared-file groups/);
+
+  for (const mutate of [
+    (g) => {
+      g.fileMap.pop();
+    },
+    (g) => {
+      g.fileMap[1].issue = 17;
+    },
+    (g) => {
+      g.fileMap[0].files.push('frontend/src/unrelated.ts');
+    },
+    (g) => {
+      g.scope.push('frontend/src/unmapped.ts');
+    },
+  ]) {
+    const plan = planFor();
+    mutate(plan.groups[0]);
+    assert.throws(
+      () => validatePlan(plan, selected()),
+      /file map coverage|outside declared scope|no source issue/,
+    );
+  }
+  const missing = planFor();
+  delete missing.groups[0].fileMap;
+  assert.throws(() => validatePlan(missing, selected()), /missing fileMap/);
+});
+
+test('legacy grouping remains frozen and queue windows reject corrupt durable metadata', () => {
+  const group = planFor([17]).groups[0];
+  delete group.fileMap;
+  delete group.separationReason;
+  const state = {
+    schemaVersion: 1,
+    repository: 'l2v-hub/ClinicOS',
+    batches: [
+      {
+        id: 'bug-batch-17',
+        branch: 'codex/bug-batch-17',
+        issues: [17],
+        plan: group,
+        phase: 'planned',
+        implementation: [],
+        reviews: [],
+        sha: null,
+        pr: null,
+      },
+    ],
+  };
+  const frozen = JSON.stringify(state);
+  validateState(state, state.repository);
+  assert.equal(JSON.stringify(state), frozen);
+  for (const window of [
+    { issues: [17], openedAt: 0, changedAt: 1 },
+    { issues: [18, 18], openedAt: 0, changedAt: 1 },
+    { issues: [18], openedAt: 2, changedAt: 1 },
+    { issues: [18], openedAt: 0, changedAt: '1' },
+  ])
+    assert.throws(
+      () => validateState({ ...state, triageQueue: window }, state.repository),
+      /invalid triage collection/,
+    );
+});
+
 test('plan accounts for every selected issue exactly once and permits explicit blocked items', () => {
   assert.equal(validatePlan(planFor(), selected()).groups.length, 1);
 
@@ -75,12 +154,14 @@ test('plan rejects duplicated, missing, and unselected issue coverage', () => {
   missing.groups[0].issues = [17];
   missing.groups[0].acceptance = missing.groups[0].acceptance.slice(0, 1);
   missing.groups[0].evidence = missing.groups[0].evidence.slice(0, 1);
+  missing.groups[0].fileMap = missing.groups[0].fileMap.slice(0, 1);
   assert.throws(() => validatePlan(missing, selected()), /triage must account/);
 
   const unexpected = planFor();
   unexpected.groups[0].issues[1] = 999;
   unexpected.groups[0].acceptance[1].issue = 999;
   unexpected.groups[0].evidence[1].issue = 999;
+  unexpected.groups[0].fileMap[1].issue = 999;
   assert.throws(() => validatePlan(unexpected, selected()), /triage must account/);
 });
 
