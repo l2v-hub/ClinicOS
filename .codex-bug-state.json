@@ -1843,7 +1843,23 @@
         "patientDataEmpty": false,
         "backupsVerified": false
       }
+    },
+    {
+      "id": "demo-release-guard",
+      "issues": [],
+      "owner": "codex-root-2026-10-17",
+      "branch": "codex/demo-release-guard",
+      "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
+      "phase": "independent-qa",
+      "implementation": [
+        {
+          "round": 1,
+          "status": "running"
+        }
+      ],
+      "reviews": [],
+      "reason": "Necessary trusted release infrastructure: require exact deployed demo revision before closing authorized issue groups; no feature release or review budget reset."
     }
   ],
-  "updatedAt": "2026-10-17T08:09:03.609Z"
+  "updatedAt": "2026-10-17T08:25:58.587Z"
 }
