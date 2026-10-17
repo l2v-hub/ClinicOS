@@ -1850,16 +1850,31 @@
       "owner": "codex-root-2026-10-17",
       "branch": "codex/demo-release-guard",
       "baseSha": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
-      "phase": "independent-qa",
+      "phase": "implementing",
       "implementation": [
         {
           "round": 1,
+          "status": "failed",
+          "reason": "Independent QA reproduced cacheable Cache-Control lookalike accepted as no-store; 3RED tests."
+        },
+        {
+          "round": 2,
           "status": "running"
         }
       ],
       "reviews": [],
-      "reason": "Necessary trusted release infrastructure: require exact deployed demo revision before closing authorized issue groups; no feature release or review budget reset."
+      "reason": "Necessary trusted release infrastructure: require exact deployed demo revision before closing authorized issue groups; no feature release or review budget reset.",
+      "scopeAddenda": [
+        {
+          "cycle": 2,
+          "files": [
+            "scripts/quality-gate/configure-bug-repository.mjs",
+            "agent-team/tests/bug-pipeline/repository-settings.test.mjs"
+          ],
+          "reason": "User authorized full mandatory CI settings; preserve prior protections"
+        }
+      ]
     }
   ],
-  "updatedAt": "2026-10-17T08:25:58.587Z"
+  "updatedAt": "2026-10-17T08:31:12.457Z"
 }
