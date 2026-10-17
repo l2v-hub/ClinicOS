@@ -1,0 +1,21 @@
+{
+  "status": "synced",
+  "batches": [
+    {
+      "id": "bug-batch-450",
+      "status": "synced",
+      "forwarded": 0,
+      "label": "review-blocked",
+      "outcome": "execution-failed-no-report",
+      "comments": 5
+    },
+    {
+      "id": "bug-batch-432",
+      "status": "synced",
+      "forwarded": 0,
+      "label": "review-blocked",
+      "outcome": "execution-failed-no-report",
+      "comments": 7
+    }
+  ]
+}

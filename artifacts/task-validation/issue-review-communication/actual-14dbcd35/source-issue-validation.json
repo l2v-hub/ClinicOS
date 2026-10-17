@@ -1,0 +1,120 @@
+{
+  "actualSyncRun": 39032315862,
+  "status": "success",
+  "nativeControllerNotificationRun": 39032417330,
+  "controllerStatus": "success",
+  "sourceIssuesVerified": [
+    {
+      "issue": 450,
+      "state": "OPEN",
+      "reviewLabel": "review-blocked",
+      "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
+      "commentId": 6233847563,
+      "commentSha256": "c069867622f715ab5a9a4596c9bc5b653397d471c1eb44c4f526cbca7fec5bc2",
+      "url": "https://github.com/l2v-hub/ClinicOS/issues/450#issuecomment-6233847563"
+    },
+    {
+      "issue": 472,
+      "state": "OPEN",
+      "reviewLabel": "review-blocked",
+      "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
+      "commentId": 6233849040,
+      "commentSha256": "c069867622f715ab5a9a4596c9bc5b653397d471c1eb44c4f526cbca7fec5bc2",
+      "url": "https://github.com/l2v-hub/ClinicOS/issues/472#issuecomment-6233849040"
+    },
+    {
+      "issue": 473,
+      "state": "OPEN",
+      "reviewLabel": "review-blocked",
+      "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
+      "commentId": 6233850496,
+      "commentSha256": "c069867622f715ab5a9a4596c9bc5b653397d471c1eb44c4f526cbca7fec5bc2",
+      "url": "https://github.com/l2v-hub/ClinicOS/issues/473#issuecomment-6233850496"
+    },
+    {
+      "issue": 475,
+      "state": "OPEN",
+      "reviewLabel": "review-blocked",
+      "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
+      "commentId": 6233851951,
+      "commentSha256": "c069867622f715ab5a9a4596c9bc5b653397d471c1eb44c4f526cbca7fec5bc2",
+      "url": "https://github.com/l2v-hub/ClinicOS/issues/475#issuecomment-6233851951"
+    },
+    {
+      "issue": 476,
+      "state": "OPEN",
+      "reviewLabel": "review-blocked",
+      "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
+      "commentId": 6233853278,
+      "commentSha256": "c069867622f715ab5a9a4596c9bc5b653397d471c1eb44c4f526cbca7fec5bc2",
+      "url": "https://github.com/l2v-hub/ClinicOS/issues/476#issuecomment-6233853278"
+    },
+    {
+      "issue": 432,
+      "state": "OPEN",
+      "reviewLabel": "review-blocked",
+      "subjectSha": "34c865233df53a3930f29c8b7befc02208588d64",
+      "commentId": 6233857116,
+      "commentSha256": "e68fb4dbf712c1be20801b8728b5849e9699e4520aca617d3a58ae872fe6f65b",
+      "url": "https://github.com/l2v-hub/ClinicOS/issues/432#issuecomment-6233857116"
+    },
+    {
+      "issue": 441,
+      "state": "OPEN",
+      "reviewLabel": "review-blocked",
+      "subjectSha": "34c865233df53a3930f29c8b7befc02208588d64",
+      "commentId": 6233858893,
+      "commentSha256": "e68fb4dbf712c1be20801b8728b5849e9699e4520aca617d3a58ae872fe6f65b",
+      "url": "https://github.com/l2v-hub/ClinicOS/issues/441#issuecomment-6233858893"
+    },
+    {
+      "issue": 442,
+      "state": "OPEN",
+      "reviewLabel": "review-blocked",
+      "subjectSha": "34c865233df53a3930f29c8b7befc02208588d64",
+      "commentId": 6233860499,
+      "commentSha256": "e68fb4dbf712c1be20801b8728b5849e9699e4520aca617d3a58ae872fe6f65b",
+      "url": "https://github.com/l2v-hub/ClinicOS/issues/442#issuecomment-6233860499"
+    },
+    {
+      "issue": 460,
+      "state": "OPEN",
+      "reviewLabel": "review-blocked",
+      "subjectSha": "34c865233df53a3930f29c8b7befc02208588d64",
+      "commentId": 6233862018,
+      "commentSha256": "e68fb4dbf712c1be20801b8728b5849e9699e4520aca617d3a58ae872fe6f65b",
+      "url": "https://github.com/l2v-hub/ClinicOS/issues/460#issuecomment-6233862018"
+    },
+    {
+      "issue": 463,
+      "state": "OPEN",
+      "reviewLabel": "review-blocked",
+      "subjectSha": "34c865233df53a3930f29c8b7befc02208588d64",
+      "commentId": 6233863655,
+      "commentSha256": "e68fb4dbf712c1be20801b8728b5849e9699e4520aca617d3a58ae872fe6f65b",
+      "url": "https://github.com/l2v-hub/ClinicOS/issues/463#issuecomment-6233863655"
+    },
+    {
+      "issue": 464,
+      "state": "OPEN",
+      "reviewLabel": "review-blocked",
+      "subjectSha": "34c865233df53a3930f29c8b7befc02208588d64",
+      "commentId": 6233865288,
+      "commentSha256": "e68fb4dbf712c1be20801b8728b5849e9699e4520aca617d3a58ae872fe6f65b",
+      "url": "https://github.com/l2v-hub/ClinicOS/issues/464#issuecomment-6233865288"
+    },
+    {
+      "issue": 467,
+      "state": "OPEN",
+      "reviewLabel": "review-blocked",
+      "subjectSha": "34c865233df53a3930f29c8b7befc02208588d64",
+      "commentId": 6233867119,
+      "commentSha256": "e68fb4dbf712c1be20801b8728b5849e9699e4520aca617d3a58ae872fe6f65b",
+      "url": "https://github.com/l2v-hub/ClinicOS/issues/467#issuecomment-6233867119"
+    }
+  ],
+  "newReviewOrImplementationAttempts": 0,
+  "issueClosures": 0,
+  "existingMaxFailuresNotRepaired": true,
+  "normalBatchesStructurallyUnchanged": true
+}
