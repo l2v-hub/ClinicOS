@@ -4155,6 +4155,16 @@
           "startedAt": "2026-10-17T11:00:31.829Z",
           "reason": "NewindependentQA2 all5PASS:107+41tests,officialschema3/YAML/AST,actual19browser207assert,zeroerrors/credentialfindings,3sources/contracts3/history38exact. Rootreadfullreport/diff/actualPNG.",
           "sha": "f48d8d70e257aa97fd6aac241d13eb803e7bcb92"
+        },
+        {
+          "round": 3,
+          "status": "passed",
+          "recordedAt": "2026-10-17T15:47:05.583Z",
+          "owner": "railway_source_diagnosis",
+          "reason": "Inspect-only candidate3 was reserved by its pre-implementation task contract; historical registration after frozen author and independent QA, not a retroactive model launch or budget reset.",
+          "pr": 491,
+          "sha": "1276cfe9f8dcf340d1baaf85088a29a577ff8d28",
+          "independentQaReportSha256": "b373389571e8908bbe115a36c5702403a9a5a52c9b14b6a5b177552a8f8df7ce"
         }
       ],
       "reviews": [],
@@ -4240,6 +4250,14 @@
         "completeInventory": true,
         "inventoryUnchanged": true,
         "mutationRetried": false
+      },
+      "topologyInspection": {
+        "pr": 491,
+        "status": "local-independent-qa-passed",
+        "nativeCi": "pending",
+        "claudeReview": "not-requested",
+        "operation": "inspect-only",
+        "actualProviderInvoked": false
       }
     },
     {
@@ -4373,7 +4391,7 @@
       "evidenceRevision": "88406c7aa251b176c13a8c92d695f9e9d43d901d"
     }
   ],
-  "updatedAt": "2026-10-17T15:37:43.657Z",
+  "updatedAt": "2026-10-17T15:47:05.585Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
