@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "filesScanned": 48,
+  "validZipFiles": [
+    "independent-qa-attempt-1/browser/trace.zip"
+  ],
+  "zipMembersScanned": 13,
+  "credentialFindings": 0,
+  "syntheticOnly": true,
+  "noRawIssueDump": true,
+  "noPatientData": true,
+  "noSymlink": true,
+  "all12AuthorFilesPreserved": true,
+  "sourceAndTwoContractsPreserved": true
+}

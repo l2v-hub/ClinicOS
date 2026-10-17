@@ -1,0 +1,9 @@
+# Implementer handoff — CI notes isolation
+
+IMPLEMENTED — NOT VERIFIED by independent QA. Root direct execution, attempt1/4. Only scripts/run-node-tests.mjs changes: one comment and the existing notes-privacy suite name added to DATABASE_ISOLATED. Removing exactly those2lines reconstructs the original complete source byte-for-byte; original9entries/testdiscovery/parallel default/failureexit and every application/test body are unchanged.
+
+Actual native failure39028043893 recorded58vs57 at notes-privacy.test.ts117, source87dfe795. No raw logs published. Root inspected other concurrent broadcast writers and the production mailbox semantics: broadcasts intentionally cross distinct actor IDs, so weaken-count/auth changes would be wrong.
+
+Actual unchanged child-test fixtures executed against original and corrected production runner (not source matching): original2tests execute with1failure/exit1; candidate2tests execute andPASS/exit0, global reader starts in the serial phase after writer completion. Fixture uses shared synthetic files rather than accessing any database/network. Finite waits and20s outer bound; exactownedtemporaryfixture deleted. First runner proof failed only because Node24 defaultspec reporter differed fromTAP countparser; originaloutput preserved, parser now supportsboth without changing source/test fixtures. Syntax, contract validation and diffcheckPASS.
+
+A NEW dedicated QA must independently exercise scheduling/exit/defaultfrontend behavior, all5phases incl safe actual browser screenshot/trace/video and privacy. Actual fullbackend/browser CI on the PR remains required; this is not a passing rerun of the failed native check. No model/GitHubmutation/provider/productiondata/commit/push has been performed bythis implementer. No G19 or clinical/maintenance source/budget changes.

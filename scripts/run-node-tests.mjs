@@ -63,6 +63,8 @@ const DATABASE_ISOLATED = [
   // entries shifts them. Failed deterministically in CI once new test files changed the schedule.
   'src/patients/__tests__/diary-reading-db.test.ts',
   'src/patients/__tests__/diary-unread-queue-db.test.ts',
+  // Broadcast notes are shared across actors; mailbox totals require completed writers.
+  'src/routes/__tests__/notes-privacy.test.ts',
 ];
 const isolated = files.filter((f) => DATABASE_ISOLATED.includes(f));
 const concurrent = files.filter((f) => !DATABASE_ISOLATED.includes(f));

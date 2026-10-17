@@ -1,0 +1,26 @@
+{
+  "actualProductionRunner": true,
+  "unchangedFixtureTestBodies": true,
+  "realChildProcesses": true,
+  "syntheticFilesystemSharedStateOnly": true,
+  "networkOrDatabaseAccess": false,
+  "results": [
+    {
+      "name": "original-red",
+      "exit": 1,
+      "executedTests": 2,
+      "writerFinished": true,
+      "readerRan": true,
+      "isolationPhase": false
+    },
+    {
+      "name": "candidate-green",
+      "exit": 0,
+      "executedTests": 2,
+      "writerFinished": true,
+      "readerRan": true,
+      "isolationPhase": true
+    }
+  ],
+  "cleanupCompleted": true
+}
