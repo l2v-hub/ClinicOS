@@ -1,0 +1,32 @@
+{
+  "verdict": "BLOCKED",
+  "implementationAttempt": 1,
+  "sourceManifestSha256": "ee950d8c2403885facb1d27105011fb1505619a5aadcdb1bc7e5b7d2a4f20c8c",
+  "candidateSealSha256": "8407c6efd99a25846b2ae1654b9abf3538b25e88b90e444460134cbd1f24c1bb",
+  "source7Unchanged": true,
+  "guard19GitObjectsUnchanged": true,
+  "contracts3Unchanged": true,
+  "authorFiles20Unchanged": true,
+  "fullRegression": {
+    "total": 622,
+    "pass": 619,
+    "skip": 3,
+    "fail": 0
+  },
+  "independentProbes": {
+    "pass": 7,
+    "fail": 2
+  },
+  "browser": {
+    "exit": 0,
+    "scenarios": 12,
+    "expectedPass": 10,
+    "productFailuresReproduced": 2,
+    "errors": 0
+  },
+  "typesExit": 0,
+  "buildExit": 0,
+  "allLocalServicesClosed": true,
+  "githubProviderAndDatabaseActions": 0,
+  "reportSha256": "aa2ae81d49b05f9303061caef75f36a0484773aa31d6b62c783d2bdddfd0d929"
+}

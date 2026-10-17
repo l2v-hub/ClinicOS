@@ -1,4 +1,5 @@
 import { feedbackFingerprint, MAX_CYCLES, sha256 } from './contracts.mjs';
+import { createIssueReviewCommunication } from './issue-review-communication.mjs';
 
 export function externalReport(batch) {
   const attempt = batch.reviews.at(-1);
@@ -30,7 +31,24 @@ export function externalReport(batch) {
   return report;
 }
 
-export async function externalReviewStep({ repo, batch, gh, workspace, save, report, block }) {
+export async function externalReviewStep({
+  repo,
+  batch,
+  gh,
+  workspace,
+  save,
+  report,
+  block,
+  communication = createIssueReviewCommunication({ github: gh, repo, readReport: externalReport }),
+}) {
+  const observedAt = new Date().toISOString();
+  // Informational publication is recoverable by the sibling. It must not consume
+  // an implementation attempt that was reserved for a real code correction.
+  const notify = () => communication.publishState(batch).catch(() => {});
+  const blocked = async (reason) => {
+    await block(batch, reason);
+    await notify();
+  };
   for (const number of batch.issues) {
     const issue = await gh.viewIssue(number);
     if (String(issue.state).toLowerCase() !== 'open')
@@ -40,7 +58,10 @@ export async function externalReviewStep({ repo, batch, gh, workspace, save, rep
     ['implementing', 'validating', 'simplifying', 'publishing'].includes(batch.phase) ||
     batch.implementation.some((attempt) => attempt.status === 'running')
   )
-    return block(batch, 'Interrupted Codex correction requires explicit recovery');
+    return blocked('Interrupted Codex correction requires explicit recovery');
+  // The real PR mirror also reaches an older installed Max worker, without changing
+  // the PR feedback fingerprint format or treating issue text as approval.
+  await communication.mirrorFeedback(batch);
   const feedback = await gh.reviewFeedback(batch.pr.number);
   if (
     feedback.state !== 'OPEN' ||
@@ -53,11 +74,11 @@ export async function externalReviewStep({ repo, batch, gh, workspace, save, rep
     return block(batch, 'External review PR identity or head changed');
   const fingerprint = feedbackFingerprint(feedback);
   const handoff = batch.externalReview;
-  if (handoff?.status === 'finished') return; // Publication is retried by the external harness.
+  if (handoff?.status === 'finished') return notify(); // Publication is retried by the external harness.
   if (handoff?.status === 'published') {
     const verdict = externalReport(batch);
     if (verdict.verdict === 'blocked')
-      return block(batch, 'External Claude reviewer blocked the change');
+      return blocked('External Claude reviewer blocked the change');
     const changed = handoff.feedbackChanged || fingerprint !== handoff.feedbackFingerprint;
     if (verdict.verdict === 'approved' && !changed) {
       batch.approvedSha = batch.sha;
@@ -68,18 +89,21 @@ export async function externalReviewStep({ repo, batch, gh, workspace, save, rep
           ? 'ready'
           : 'waiting-checks';
       await save();
+      await notify();
       return;
     }
     if (batch.reviews.length >= MAX_CYCLES)
-      return block(batch, 'Four external Claude review attempts exhausted');
+      return blocked('Four external Claude review attempts exhausted');
     if (batch.implementation.length >= MAX_CYCLES)
-      return block(batch, 'Four implementation/validation attempts exhausted');
+      return blocked('Four implementation/validation attempts exhausted');
     await workspace.prepare(batch);
     const attempt = { round: batch.implementation.length + 1, status: 'running' };
     batch.implementation.push(attempt);
     batch.phase = 'implementing';
     batch.approvedSha = null;
+    batch.issueFeedbackSince ??= observedAt;
     await save();
+    await notify();
     try {
       if (
         (
@@ -121,12 +145,13 @@ export async function externalReviewStep({ repo, batch, gh, workspace, save, rep
     }
   } else if (handoff?.status === 'requested' && handoff.subjectSha === batch.sha) {
     // Human feedback arriving before Claude is included in its next snapshot, never treated as approval.
-    return;
+    return notify();
   }
   const checks = await gh.requiredChecks(batch.pr.number);
   if (!checks.ok) {
     batch.phase = 'waiting-checks';
     await save();
+    await notify();
     return;
   }
   if (feedback.isDraft) await gh.draftReady(batch.pr.number);
@@ -136,8 +161,10 @@ export async function externalReviewStep({ repo, batch, gh, workspace, save, rep
     requestedAt: new Date().toISOString(),
     feedbackFingerprint: fingerprint,
   };
+  batch.issueFeedbackSince ??= observedAt;
   batch.phase = 'waiting-review';
   await save();
+  await notify();
   await report(
     batch,
     `PR ${batch.pr.url}: **Ready for review** su \`${batch.sha}\`. In attesa del cron Claude Code; review utilizzate ${batch.reviews.length}/4. Commenti e richieste di modifica torneranno a Codex tramite GitHub.`,

@@ -1,0 +1,8 @@
+{
+  "allAssertionsCompleted": 12,
+  "errors": [],
+  "findingsReproduced": 2,
+  "exitCode": 130,
+  "cause": "QA harness awaited video.saveAs before context.close; interrupted own process after all assertions, browser closed and file finalized; final retry closes context first",
+  "productSourceChanged": false
+}

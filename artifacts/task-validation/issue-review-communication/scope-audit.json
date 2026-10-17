@@ -1,0 +1,22 @@
+{
+  "allowedSource": [
+    "agent-team/src/bug-pipeline/external-review.mjs",
+    "agent-team/src/bug-pipeline/claude-review-cron.mjs",
+    "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+    "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+    ".github/workflows/codex-issue-review-sync.yml"
+  ],
+  "actualSource": [
+    ".github/workflows/codex-issue-review-sync.yml",
+    "agent-team/src/bug-pipeline/claude-review-cron.mjs",
+    "agent-team/src/bug-pipeline/external-review.mjs",
+    "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+    "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs"
+  ],
+  "outsideScope": [],
+  "gitHeadUnchanged": true
+}

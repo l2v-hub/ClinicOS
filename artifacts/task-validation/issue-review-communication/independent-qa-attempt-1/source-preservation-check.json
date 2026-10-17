@@ -1,0 +1,44 @@
+{
+  "source7": [
+    {
+      "file": "agent-team/src/bug-pipeline/external-review.mjs",
+      "sha256": "a699190f148e036e6430e01451482ab3131deb36e8c1f7d2ade7be552893fe56",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/claude-review-cron.mjs",
+      "sha256": "5d54688f8187d3fbffa2a1106b52343b3a223b53366119d4b2f7f8c8d49e9d03",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "sha256": "fc712d9f78508e7afbe44d670e270cc9895c20089fd3fd7bdea194a70204060d",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+      "sha256": "469dd18b7083d6e0b52b94a7d1291b18dfa87d8f4ff10a861fc49e71db2e8993",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "sha256": "c9ee849dc705b79366453212de5072d9c45dc0d3d780104e3e3fc1340b935101",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      "sha256": "3643b63d3700302b96c5ee71977e08350b30cbeda58f17e60900498b3ccee550",
+      "unchanged": true
+    },
+    {
+      "file": ".github/workflows/codex-issue-review-sync.yml",
+      "sha256": "f482c40f8f64991a6df91a0b1154a4bb1c51903fc948f4202f18749c8105cb34",
+      "unchanged": true
+    }
+  ],
+  "guard19UnchangedAgainstGitBaseline": true,
+  "frozenContracts3Unchanged": true,
+  "preservedAuthorFiles": 20,
+  "allPreserved": true,
+  "head": "8124b1bc88c0f086b1ee328214f87f4802005d11"
+}

@@ -1,0 +1,41 @@
+{
+  "baseline": "8124b1bc88c0f086b1ee328214f87f4802005d11",
+  "implementationAttempt": 2,
+  "files": [
+    {
+      "file": "agent-team/src/bug-pipeline/external-review.mjs",
+      "bytes": 6645,
+      "sha256": "a699190f148e036e6430e01451482ab3131deb36e8c1f7d2ade7be552893fe56"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/claude-review-cron.mjs",
+      "bytes": 14709,
+      "sha256": "5d54688f8187d3fbffa2a1106b52343b3a223b53366119d4b2f7f8c8d49e9d03"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "bytes": 19241,
+      "sha256": "b07d4b815aa034c852064594728257f3af3aa11ea85cf4bdd0f29841fc8fa57f"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+      "bytes": 2700,
+      "sha256": "469dd18b7083d6e0b52b94a7d1291b18dfa87d8f4ff10a861fc49e71db2e8993"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "bytes": 17379,
+      "sha256": "c9ee849dc705b79366453212de5072d9c45dc0d3d780104e3e3fc1340b935101"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      "bytes": 31627,
+      "sha256": "1f3cab08b220a282905be2f277a5acb3f73ed3de3206fe8f5bb7570ef71ad845"
+    },
+    {
+      "file": ".github/workflows/codex-issue-review-sync.yml",
+      "bytes": 1182,
+      "sha256": "f482c40f8f64991a6df91a0b1154a4bb1c51903fc948f4202f18749c8105cb34"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "files": 140,
+  "zipFiles": 4,
+  "zipMembersCRCValidated": 181,
+  "bytesInspected": 52179901,
+  "highConfidenceCredentialFindings": [],
+  "actualPHI": "none; only synthetic issue/code fixtures; no patient/database access",
+  "externalGitHubProviderModelWrites": 0,
+  "newDependencies": 0,
+  "rawIssueBodiesCopied": false,
+  "remainingSecurityFindings": []
+}

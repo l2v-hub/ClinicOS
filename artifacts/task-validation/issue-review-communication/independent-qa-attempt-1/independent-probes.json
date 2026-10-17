@@ -1,0 +1,43 @@
+{
+  "transport": "actual loopback HTTP; no external requests or models",
+  "results": [
+    {
+      "name": "actual loopback transport projects all cohort labels and idempotent comments without state writes",
+      "status": "PASS"
+    },
+    {
+      "name": "authorized source feedback mirrored and acknowledged once; hostile author ignored",
+      "status": "PASS"
+    },
+    {
+      "name": "actual existing correction path validates simplifies QA publishes new SHA and requests next bounded review",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sibling before any write rejects entire cohort",
+      "status": "PASS"
+    },
+    {
+      "name": "fork and exact SHA substitution are rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "missing hashed report does not manufacture approval",
+      "status": "PASS"
+    },
+    {
+      "name": "old installed worker failed attempt remains blocked spent and idempotent",
+      "status": "PASS"
+    },
+    {
+      "name": "write stops if bridge role revoked during its own cohort awaits",
+      "status": "FAIL",
+      "reason": "No issue mutation may occur after bridge authority is revoked\n\n1 !== 0\n"
+    },
+    {
+      "name": "source edit during final cohort guard prevents stale mirror publication",
+      "status": "FAIL",
+      "reason": "No mirror or acknowledgement may publish a stale source digest\n\n1 !== 0\n"
+    }
+  ]
+}
