@@ -15,7 +15,7 @@
       "sourceSha": "29b2f5c9b72b4d909b954d5360ec08095825f29e",
       "branch": "codex/bug-batch-450",
       "owner": "codex-root-2026-10-17",
-      "phase": "waiting-review",
+      "phase": "blocked",
       "reservedAt": "2026-10-17T07:38:22.669Z",
       "implementation": [
         {
@@ -1082,7 +1082,8 @@
         "subjectSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
         "claudeRound": 3,
         "status": "running"
-      }
+      },
+      "reason": "External review consistency or correction failed; inspect the existing batch"
     },
     {
       "id": "bug-batch-432",
@@ -7068,7 +7069,7 @@
       }
     }
   ],
-  "updatedAt": "2026-10-17T21:35:51.020Z",
+  "updatedAt": "2026-10-17T21:36:41.409Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
