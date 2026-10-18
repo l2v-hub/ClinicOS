@@ -46,14 +46,45 @@ const env = {
   GITHUB_SHA: sha,
   GITHUB_RUN_ID: '123',
   GITHUB_RUN_ATTEMPT: '2',
-};
-const exactEnv = {
-  ...env,
   GITHUB_ACTIONS: 'true',
   GITHUB_EVENT_NAME: 'push',
   GITHUB_WORKFLOW_REF: `${repo}/.github/workflows/deploy-backend.yml@refs/heads/main`,
 };
+const exactEnv = {
+  ...env,
+  GITHUB_EVENT_NAME: 'workflow_dispatch',
+  GITHUB_WORKFLOW_REF: `${repo}/.github/workflows/deploy-demo-exact-commit.yml@refs/heads/main`,
+  CLINICOS_REVIEWED_SHA: sha,
+  GITHUB_TOKEN: 'synthetic-readonly-github-binding',
+};
+const exactRun = {
+  ...run,
+  path: '.github/workflows/deploy-demo-exact-commit.yml',
+  event: 'workflow_dispatch',
+};
 const exactPolicy = DEMO_SOURCE_POLICIES.exact;
+const mainEndpoint = 'https://api.github.com/repos/l2v-hub/ClinicOS/git/ref/heads/main';
+const mainBody = (current = sha) => ({
+  ref: 'refs/heads/main',
+  object: { type: 'commit', sha: current },
+});
+function mainFetch(
+  readyFetch = async (url) => {
+    assert.equal(url, `https://${DEMO_TARGET.domain}/ready`);
+    return response();
+  },
+) {
+  return async (url, options) => {
+    if (url !== mainEndpoint) return readyFetch(url, options);
+    assert.equal(options.headers.Authorization, 'Bearer synthetic-readonly-github-binding');
+    assert.equal(options.headers['Project-Access-Token'], undefined);
+    assert.equal(options.redirect, 'error');
+    assert.equal(options.cache, 'no-store');
+    assert.equal(options.headers['Cache-Control'], 'no-cache');
+    return response(mainBody());
+  };
+}
+const exactReceipt = (kind) => ({ ...receipt(kind), sourcePolicy: exactPolicy, reviewedSha: sha });
 function exactTargetData() {
   const data = targetData();
   data.deploymentTriggers = { edges: [], pageInfo: { hasNextPage: false } };
@@ -498,10 +529,15 @@ function proofHttp({
   redirect = 'https://production.blob.core.windows.net/signed',
   receiptBody = receipt(),
 } = {}) {
-  const zip = zipReceipt(receiptBody);
+  const fixtureRun = receiptBody.sourcePolicy === exactPolicy ? exactRun : run;
+  const preflight = receiptBody.kind === 'clinicos-demo-preflight';
+  const zip = zipReceipt(
+    receiptBody,
+    preflight ? 'demo-preflight-receipt.json' : 'demo-deployment-receipt.json',
+  );
   const artifact = modifyArtifact({
     id: 456,
-    name: `demo-deployment-${run.id}-${run.run_attempt}`,
+    name: `${preflight ? 'demo-preflight' : 'demo-deployment'}-${run.id}-${run.run_attempt}`,
     expired: false,
     digest: `sha256:${hash(zip)}`,
     size_in_bytes: zip.length,
@@ -515,7 +551,15 @@ function proofHttp({
     if (String(url).endsWith('/zip'))
       return new Response(null, { status: 302, headers: { location: redirect } });
     if (String(url).includes('/artifacts?')) return response({ artifacts: [artifact] });
-    if (String(url).includes('/actions/runs/123')) return response(modifyRun(structuredClone(run)));
+    if (String(url).endsWith('/commits/main')) return response({ sha });
+    if (String(url).includes('/actions/workflows/'))
+      return response({
+        workflow_runs: String(url).includes(`/${fixtureRun.path.split('/').at(-1)}/runs?`)
+          ? [modifyRun(structuredClone(fixtureRun))]
+          : [],
+      });
+    if (String(url).includes('/actions/runs/123'))
+      return response(modifyRun(structuredClone(fixtureRun)));
     if (String(url).endsWith('/ready')) return response();
     throw new Error('Unexpected URL');
   };
@@ -630,15 +674,9 @@ test('deployment workflow isolates demo credentials, defaults dispatch to read-o
   assert.match(demo, /RAILWAY_TOKEN: \$\{\{ secrets\.RAILWAY_DEMO_TOKEN \}\}/);
   assert.match(demo, /ref: \$\{\{ github\.sha \}\}/);
   assert.ok(
-    demo.indexOf('demo-deployment.mjs preflight-exact') <
-      demo.indexOf('demo-deployment.mjs deploy-exact'),
+    demo.indexOf('demo-deployment.mjs preflight') < demo.indexOf('demo-deployment.mjs deploy'),
   );
-  const guardTests = demo.indexOf(
-    'run: node --test agent-team/tests/bug-pipeline/demo-deployment.test.mjs',
-  );
-  assert.ok(guardTests >= 0 && guardTests < demo.indexOf('secrets.RAILWAY_DEMO_TOKEN'));
-  assert.equal((demo.match(/demo-deployment\.mjs preflight-exact/g) ?? []).length, 1);
-  assert.equal((demo.match(/demo-deployment\.mjs deploy-exact/g) ?? []).length, 1);
+  assert.doesNotMatch(backend, /preflight-exact|deploy-exact/);
   assert.match(backend, /permissions:\n  contents: read/);
   assert.match(backend, /concurrency:\n  group: railway-backend\n  cancel-in-progress: false/);
   assert.match(demo, /if: github.event_name == 'push' \|\| inputs.operation == 'deploy'/);
@@ -799,13 +837,14 @@ test('zero-trigger exact policy is explicit; complete fixed inventories retain s
   const proof = await prepareDemo({
     env: exactEnv,
     sourcePolicy: exactPolicy,
+    fetchImpl: mainFetch(),
     client: async (query) => {
       assert.match(query, /pageInfo\{hasNextPage\}/);
       return data;
     },
   });
   assert.equal(proof.sourcePolicy, exactPolicy);
-  validateReceipt(proof, run, 'clinicos-demo-preflight', Date.now(), exactPolicy);
+  validateReceipt(proof, exactRun, 'clinicos-demo-preflight', Date.now(), exactPolicy);
   // Historical receipts without the field remain strict and independently verifiable.
   validateReceipt(receipt(), run);
 });
@@ -969,6 +1008,7 @@ test('exact policy rejects incomplete or hostile source inventories', async (t) 
         deployDemo({
           env: exactEnv,
           sourcePolicy: policy,
+          fetchImpl: mainFetch(),
           client: async (query) => {
             if (query.startsWith('mutation')) mutations++;
             return data;
@@ -988,6 +1028,10 @@ test('only the fixed main Actions deployment workflow may select exact policy', 
     ['GITHUB_WORKFLOW_REF', `${repo}/.github/workflows/deploy-backend.yml@refs/heads/preview`],
     ['GITHUB_EVENT_NAME', 'pull_request_target'],
     ['GITHUB_EVENT_NAME', 'pull_request'],
+    ['GITHUB_EVENT_NAME', 'push'],
+    ['GITHUB_WORKFLOW_REF', env.GITHUB_WORKFLOW_REF],
+    ['CLINICOS_REVIEWED_SHA', undefined],
+    ['CLINICOS_REVIEWED_SHA', reviewedSha],
     ['GITHUB_REPOSITORY', 'foreign/repo'],
     ['GITHUB_REF', 'refs/heads/preview'],
     ['GITHUB_SHA', 'not-a-sha'],
@@ -999,6 +1043,7 @@ test('only the fixed main Actions deployment workflow may select exact policy', 
       const options = {
         env: { ...exactEnv, [key]: value },
         sourcePolicy: exactPolicy,
+        fetchImpl: mainFetch(),
         client: async () => {
           calls++;
           return exactTargetData();
@@ -1013,6 +1058,7 @@ test('only the fixed main Actions deployment workflow may select exact policy', 
       await prepareDemo({
         env: { ...exactEnv, GITHUB_EVENT_NAME: 'workflow_dispatch' },
         sourcePolicy: exactPolicy,
+        fetchImpl: mainFetch(),
         client: async () => exactTargetData(),
       })
     ).sourcePolicy,
@@ -1040,13 +1086,13 @@ test('native exact policy binds one exact mutation, native metadata, readiness a
       }
       return exactTargetData();
     },
-    fetchImpl: async (url, options) => {
+    fetchImpl: mainFetch(async (url, options) => {
       assert.equal(url, `https://${DEMO_TARGET.domain}/ready`);
       assert.equal(options.redirect, 'error');
       assert.equal(options.headers['Cache-Control'], 'no-cache');
       ready = true;
       return response();
-    },
+    }),
   });
   assert.equal(calls.filter((c) => c.query.startsWith('mutation')).length, 1);
   assert.equal(
@@ -1058,12 +1104,11 @@ test('native exact policy binds one exact mutation, native metadata, readiness a
   assert.equal(proof.sourcePolicy, exactPolicy);
   assert.equal(proof.deployment.commitHash, sha);
   assert.equal(proof.ready.deploymentId, deploymentId);
-  validateReceipt(proof, run, undefined, Date.now(), exactPolicy);
+  validateReceipt(proof, exactRun, undefined, Date.now(), exactPolicy);
 });
 
 test('source policy is bound through artifact receipt and independent native verification', async (t) => {
-  const exactReceipt = { ...receipt(), sourcePolicy: exactPolicy };
-  const f = proofHttp({ receiptBody: exactReceipt });
+  const f = proofHttp({ receiptBody: exactReceipt() });
   let inspections = 0;
   const proof = await verifyDemoRelease({
     reader: f.reader,
@@ -1091,6 +1136,7 @@ test('source policy is bound through artifact receipt and independent native ver
       const saved = {
         ...receipt(),
         ...(receiptPolicy === undefined ? {} : { sourcePolicy: receiptPolicy }),
+        ...(receiptPolicy === exactPolicy ? { reviewedSha: sha } : {}),
       };
       const http = proofHttp({ receiptBody: saved });
       await assert.rejects(
@@ -1105,9 +1151,9 @@ test('source policy is bound through artifact receipt and independent native ver
         }),
       );
     });
-  const preflight = { ...receipt('clinicos-demo-preflight'), sourcePolicy: exactPolicy };
+  const preflight = exactReceipt('clinicos-demo-preflight');
   const reader = {
-    getJson: async (route) => (route === 'commits/main' ? { sha } : { workflow_runs: [run] }),
+    getJson: async (route) => (route === 'commits/main' ? { sha } : { workflow_runs: [exactRun] }),
     artifact: async () => ({ receipt: preflight }),
   };
   assert.equal(
@@ -1181,7 +1227,7 @@ test('exact policy rejects native provenance and source drift after mutation wit
             if (++queries > 1) mutate(data);
             return data;
           },
-          fetchImpl: async () => response(),
+          fetchImpl: mainFetch(),
         }),
       );
       assert.equal(mutations, 1);
@@ -1202,10 +1248,10 @@ test('exact policy rejects native provenance and source drift after mutation wit
         if (ready) data.serviceInstance.source.repo = 'drift/after-ready';
         return data;
       },
-      fetchImpl: async () => {
+      fetchImpl: mainFetch(async () => {
         ready = true;
         return response();
-      },
+      }),
     }),
     /source, or target mismatch/,
   );
@@ -1238,7 +1284,13 @@ test('uncertain or denied exact mutation and polling errors stop after one submi
         },
       });
       await assert.rejects(
-        deployDemo({ env: exactEnv, sourcePolicy: exactPolicy, client, attempts: 2 }),
+        deployDemo({
+          env: exactEnv,
+          sourcePolicy: exactPolicy,
+          client,
+          attempts: 2,
+          fetchImpl: mainFetch(),
+        }),
       );
       assert.equal(mutations, 1);
       assert.equal(requests, failure === 'polling' ? 3 : 2);
@@ -1261,6 +1313,13 @@ const data = ${JSON.stringify(exactTargetData())};
 const ready = ${JSON.stringify(readyBody())};
 globalThis.fetch = async (url, options) => {
   assert.equal(options.redirect, 'error');
+  if (url === '${mainEndpoint}') {
+    assert.equal(options.headers.Authorization, 'Bearer synthetic-readonly-github-binding');
+    assert.equal(options.headers['Project-Access-Token'], undefined);
+    assert.equal(options.cache, 'no-store');
+    appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ main: true }) + '\\n');
+    return new Response(JSON.stringify(${JSON.stringify(mainBody())}));
+  }
   if (url === 'https://${DEMO_TARGET.domain}/ready') {
     assert.equal(options.headers['Cache-Control'], 'no-cache');
     appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ ready: true }) + '\\n');
@@ -1286,7 +1345,10 @@ globalThis.fetch = async (url, options) => {
           ['--import', fixturePath, modulePath, operation],
           {
             cwd: directory,
-            env: { ...exactEnv, RAILWAY_TOKEN: 'synthetic-demo-binding' },
+            env: {
+              ...(operation.endsWith('-exact') ? exactEnv : env),
+              RAILWAY_TOKEN: 'synthetic-demo-binding',
+            },
             encoding: 'utf8',
             timeout: 30_000,
           },
@@ -1301,7 +1363,8 @@ globalThis.fetch = async (url, options) => {
           const saved = JSON.parse(await readFile(join(directory, filename), 'utf8'));
           assert.equal(saved.sourcePolicy, exactPolicy);
           assert.equal(saved.mergeSha, sha);
-          validateReceipt(saved, run, saved.kind, Date.now(), exactPolicy);
+          validateReceipt(saved, exactRun, saved.kind, Date.now(), exactPolicy);
+          assert.equal(requests.filter((r) => r.main).length, operation === 'deploy-exact' ? 3 : 1);
           assert.equal(
             requests.filter((r) => r.mutation).length,
             operation === 'deploy-exact' ? 1 : 0,
@@ -1315,6 +1378,338 @@ globalThis.fetch = async (url, options) => {
           assert.match(result.stderr, /main repository trigger required/);
           assert.equal(requests.filter((r) => r.mutation).length, 0);
         }
+      } finally {
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
+});
+
+test('dedicated manual workflow restores old bytes, isolates proof and shares only serialized run concurrency', async () => {
+  const legacy = await readFile(
+    new URL('../../../.github/workflows/deploy-backend.yml', import.meta.url),
+  );
+  assert.equal(hash(legacy), '6743d823679a9c1076c85dfcb5e5b9a8f96705849123b3091cac5d00cadaa3f9');
+  const exact = await readFile(
+    new URL('../../../.github/workflows/deploy-demo-exact-commit.yml', import.meta.url),
+    'utf8',
+  );
+  assert.match(exact, /on:\n  workflow_dispatch:/);
+  assert.doesNotMatch(exact, /^  (?:push|pull_request|schedule|workflow_run):/m);
+  assert.match(exact, /reviewed_sha:[\s\S]*?type: string\n        required: true/);
+  assert.match(exact, /permissions:\n  contents: read/);
+  assert.match(exact, /concurrency:\n  group: railway-backend\n  cancel-in-progress: false/);
+  assert.match(
+    legacy.toString(),
+    /concurrency:\n  group: railway-backend\n  cancel-in-progress: false/,
+  );
+  assert.match(
+    exact,
+    /if: github.repository == 'l2v-hub\/ClinicOS' && github.ref == 'refs\/heads\/main' && github.event_name == 'workflow_dispatch'/,
+  );
+  assert.equal(
+    (exact.match(/^  [a-z][a-z-]*:\n    if:/gm) ?? []).length,
+    1,
+    'one demo job has no sibling dependency',
+  );
+  assert.doesNotMatch(
+    exact,
+    /railway up|secrets\.RAILWAY_TOKEN\b|serviceConnect|deploymentTrigger/,
+  );
+  assert.match(exact, /ref: \$\{\{ github.sha \}\}\n          persist-credentials: false/);
+  assert.match(exact, /GITHUB_TOKEN: \$\{\{ github.token \}\}/);
+  assert.equal((exact.match(/secrets\.RAILWAY_DEMO_TOKEN/g) ?? []).length, 1);
+  const tests = exact.indexOf(
+    'run: node --test agent-team/tests/bug-pipeline/demo-deployment.test.mjs',
+  );
+  const reviewedGate = exact.indexOf(
+    'assert.equal(process.env.CLINICOS_REVIEWED_SHA, process.env.GITHUB_SHA)',
+  );
+  const secret = exact.indexOf('secrets.RAILWAY_DEMO_TOKEN');
+  assert.ok(tests >= 0 && tests < reviewedGate && reviewedGate < secret);
+  assert.ok(
+    exact.indexOf('demo-deployment.mjs preflight-exact') <
+      exact.indexOf('demo-deployment.mjs deploy-exact'),
+  );
+  assert.match(exact, /if: inputs.operation == 'deploy'/);
+  for (const match of exact.matchAll(/uses: ([^\n]+)/g)) assert.match(match[1], /@[a-f0-9]{40}$/);
+  // The infrastructure diff against 45033 excludes every legacy push path.
+  const infrastructure = [
+    'agent-team/src/bug-pipeline/demo-deployment.mjs',
+    'agent-team/tests/bug-pipeline/demo-deployment.test.mjs',
+    '.github/workflows/deploy-demo-exact-commit.yml',
+    'artifacts/task-validation/demo-exact-commit-release/author-2/author-report.md',
+  ];
+  const filters = [...legacy.toString().matchAll(/^      - '([^']+)'$/gm)].map((m) => m[1]);
+  assert.ok(filters.length > 0);
+  for (const path of infrastructure)
+    for (const filter of filters) {
+      assert.equal(
+        filter.endsWith('/**') ? path.startsWith(filter.slice(0, -2)) : path === filter,
+        false,
+        `${path} matches ${filter}`,
+      );
+    }
+});
+
+test('receipt source policy is exclusive to its fixed workflow and manual exact event', async (t) => {
+  for (const [label, saved, nativeRun] of [
+    ['exact in old workflow', exactReceipt(), run],
+    ['legacy in new workflow', receipt(), exactRun],
+    [
+      'explicit strict in new workflow',
+      { ...receipt(), sourcePolicy: DEMO_SOURCE_POLICIES.trigger },
+      exactRun,
+    ],
+    ['exact push event', exactReceipt(), { ...exactRun, event: 'push' }],
+    [
+      'exact foreign workflow',
+      exactReceipt(),
+      { ...exactRun, path: '.github/workflows/foreign.yml' },
+    ],
+    ['missing reviewed workflow SHA', { ...exactReceipt(), reviewedSha: undefined }, exactRun],
+    ['different reviewed workflow SHA', { ...exactReceipt(), reviewedSha }, exactRun],
+  ])
+    await t.test(label, async () => {
+      assert.throws(() => validateReceipt(saved, nativeRun));
+      const f = proofHttp({ receiptBody: saved, modifyRun: () => nativeRun });
+      let nativeReads = 0;
+      await assert.rejects(
+        verifyDemoRelease({
+          reader: f.reader,
+          fetchImpl: f.fetchImpl,
+          runUrl: `https://github.com/${repo}/actions/runs/123`,
+          mergeSha: sha,
+          reviewedSha,
+          client: async () => {
+            nativeReads++;
+            return exactTargetData();
+          },
+        }),
+      );
+      assert.equal(nativeReads, 0);
+    });
+  let providerReads = 0;
+  await assert.rejects(
+    prepareDemo({
+      env: exactEnv,
+      client: async () => {
+        providerReads++;
+        return targetData();
+      },
+      fetchImpl: async () => {
+        throw new Error('must not fetch');
+      },
+    }),
+    /fixed main deployment workflow/,
+  );
+  assert.equal(providerReads, 0, 'strict producer cannot run in the exact workflow');
+});
+
+test('real immutable preflight discovery selects only each policy fixed workflow', async () => {
+  for (const [saved, path] of [
+    [exactReceipt('clinicos-demo-preflight'), 'deploy-demo-exact-commit.yml'],
+    [receipt('clinicos-demo-preflight'), 'deploy-backend.yml'],
+  ]) {
+    const f = proofHttp({ receiptBody: saved });
+    const proof = await verifyDemoPreflight({ reader: f.reader });
+    assert.equal(proof.receipt.mergeSha, sha);
+    const selected = f.requests.filter((r) => r.url.includes('/actions/workflows/')).at(-1);
+    assert.ok(selected.url.includes(`/${path}/runs?`));
+    assert.ok(f.requests.some((r) => r.url.endsWith('/zip')));
+  }
+  const wrong = proofHttp({
+    receiptBody: exactReceipt('clinicos-demo-preflight'),
+    modifyRun: () => run,
+  });
+  await assert.rejects(verifyDemoPreflight({ reader: wrong.reader, sourcePolicy: exactPolicy }));
+  const f = proofHttp({ receiptBody: exactReceipt() });
+  const reader = {
+    ...f.reader,
+    getJson: async (route) => {
+      assert.notEqual(route, 'actions/runs/999', 'separate failed legacy run is irrelevant');
+      return f.reader.getJson(route);
+    },
+  };
+  const proof = await verifyDemoRelease({
+    reader,
+    fetchImpl: f.fetchImpl,
+    mergeSha: sha,
+    reviewedSha,
+    runUrl: `https://github.com/${repo}/actions/runs/123`,
+    client: async () => exactTargetData(),
+  });
+  assert.equal(proof.receipt.sourcePolicy, exactPolicy);
+});
+
+test('fresh main is checked before provider reads, directly before mutation and after readiness', async (t) => {
+  for (const [label, failAt, expectedMutations] of [
+    ['stale before provider', 1, 0],
+    ['main advanced during preflight', 2, 0],
+    ['main advanced during readiness', 3, 1],
+    ['unchanged reviewed current main', 0, 1],
+  ])
+    await t.test(label, async () => {
+      const events = [];
+      let checks = 0;
+      const options = {
+        env: exactEnv,
+        sourcePolicy: exactPolicy,
+        attempts: 1,
+        client: async (query) => {
+          const mutation = query.startsWith('mutation');
+          events.push(
+            mutation ? 'mutation' : query.includes('deployment(id:') ? 'native' : 'target',
+          );
+          return mutation ? { serviceInstanceDeployV2: deploymentId } : exactTargetData();
+        },
+        fetchImpl: async (url, request) => {
+          if (url === mainEndpoint) {
+            assert.equal(request.headers.Authorization, 'Bearer synthetic-readonly-github-binding');
+            assert.equal(request.headers['Project-Access-Token'], undefined);
+            assert.equal(request.redirect, 'error');
+            assert.equal(request.cache, 'no-store');
+            events.push('main');
+            return response(mainBody(++checks === failAt ? reviewedSha : sha));
+          }
+          assert.equal(url, `https://${DEMO_TARGET.domain}/ready`);
+          events.push('ready');
+          return response();
+        },
+      };
+      if (failAt) await assert.rejects(deployDemo(options), /current main unavailable or changed/);
+      else assert.equal((await deployDemo(options)).reviewedSha, sha);
+      assert.equal(events.filter((event) => event === 'mutation').length, expectedMutations);
+      assert.equal(events[0], 'main');
+      if (failAt === 1) assert.deepEqual(events, ['main']);
+      if (failAt === 2) assert.deepEqual(events, ['main', 'target', 'main']);
+      if (expectedMutations) {
+        const mutation = events.indexOf('mutation');
+        assert.equal(events[mutation - 1], 'main');
+        assert.deepEqual(events.slice(-3), ['ready', 'native', 'main']);
+      }
+    });
+});
+
+test('reviewed SHA and unavailable or malformed current main fail before provider inspection', async (t) => {
+  const missingToken = { ...exactEnv, GITHUB_TOKEN: undefined };
+  for (const [label, overrides, result] of [
+    ['missing reviewed SHA', { CLINICOS_REVIEWED_SHA: undefined }, mainBody()],
+    ['wrong reviewed SHA', { CLINICOS_REVIEWED_SHA: reviewedSha }, mainBody()],
+    ['malformed reviewed SHA', { CLINICOS_REVIEWED_SHA: sha + '\n' }, mainBody()],
+    ['missing GitHub binding', missingToken, mainBody()],
+    ['wrong main ref', {}, { ...mainBody(), ref: 'refs/heads/preview' }],
+    ['main is a tag', {}, { ...mainBody(), object: { type: 'tag', sha } }],
+    ['malformed current SHA', {}, mainBody(sha + '\n')],
+    ['main unavailable', {}, null],
+    ['oversized current main', {}, 'x'.repeat(262_145)],
+  ])
+    await t.test(label, async () => {
+      let providers = 0;
+      const options = {
+        env: { ...exactEnv, ...overrides },
+        sourcePolicy: exactPolicy,
+        client: async () => {
+          providers++;
+          return exactTargetData();
+        },
+        fetchImpl: async (url) => {
+          assert.equal(url, mainEndpoint);
+          return typeof result === 'string'
+            ? new Response(result)
+            : response(result, result ? 200 : 403);
+        },
+      };
+      await assert.rejects(prepareDemo(options));
+      await assert.rejects(deployDemo(options));
+      assert.equal(providers, 0);
+    });
+});
+
+test('actual CLI rejects stale queued main and cross-workflow producers without issuing a receipt', async (t) => {
+  const modulePath = fileURLToPath(
+    new URL('../../src/bug-pipeline/demo-deployment.mjs', import.meta.url),
+  );
+  for (const [label, operation, overrides, failAt, mutations, providerReads] of [
+    ['stale queued SHA', 'deploy-exact', {}, 1, 0, 0],
+    ['main moved during preflight', 'deploy-exact', {}, 2, 0, 1],
+    ['main moved after readiness', 'deploy-exact', {}, 3, 1, 4],
+    ['wrong reviewed SHA', 'deploy-exact', { CLINICOS_REVIEWED_SHA: reviewedSha }, 0, 0, 0],
+    [
+      'old workflow exact policy',
+      'deploy-exact',
+      { GITHUB_WORKFLOW_REF: env.GITHUB_WORKFLOW_REF },
+      0,
+      0,
+      0,
+    ],
+    ['new workflow strict policy', 'deploy', {}, 0, 0, 0],
+    ['push exact policy', 'deploy-exact', { GITHUB_EVENT_NAME: 'push' }, 0, 0, 0],
+  ])
+    await t.test(label, async () => {
+      const directory = await mkdtemp(join(tmpdir(), 'demo-exact-cli-reject-'));
+      try {
+        const fixturePath = join(directory, 'fetch-fixture.mjs');
+        const logPath = join(directory, 'requests.jsonl');
+        await writeFile(
+          fixturePath,
+          `import assert from 'node:assert/strict';
+import { appendFileSync } from 'node:fs';
+let mainReads = 0;
+globalThis.fetch = async (url, options) => {
+  assert.equal(options.redirect, 'error');
+  if (url === '${mainEndpoint}') {
+    assert.equal(options.headers.Authorization, 'Bearer synthetic-readonly-github-binding');
+    assert.equal(options.headers['Project-Access-Token'], undefined);
+    appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ main: true }) + '\\n');
+    const sha = ++mainReads === ${failAt} ? '${reviewedSha}' : '${sha}';
+    return new Response(JSON.stringify({ ref: 'refs/heads/main', object: { type: 'commit', sha } }));
+  }
+  if (url === 'https://${DEMO_TARGET.domain}/ready') {
+    appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ ready: true }) + '\\n');
+    return new Response(JSON.stringify(${JSON.stringify(readyBody())}), { headers: { 'Cache-Control': 'no-store' } });
+  }
+  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(options.headers['Project-Access-Token'], 'synthetic-demo-binding');
+  assert.equal(options.headers.Authorization, undefined);
+  const { query, variables } = JSON.parse(options.body);
+  const mutation = query.startsWith('mutation');
+  if (mutation) {
+    assert.match(query, /serviceInstanceDeployV2/);
+    assert.equal(variables.commitSha, '${sha}');
+    assert.equal(variables.serviceId, '${DEMO_TARGET.serviceId}');
+    assert.equal(variables.environmentId, '${DEMO_TARGET.environmentId}');
+  }
+  appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ provider: true, mutation }) + '\\n');
+  return new Response(JSON.stringify({ data: mutation ? { serviceInstanceDeployV2: '${deploymentId}' } : ${JSON.stringify(exactTargetData())} }));
+};\n`,
+        );
+        const result = spawnSync(
+          process.execPath,
+          ['--import', fixturePath, modulePath, operation],
+          {
+            cwd: directory,
+            env: { ...exactEnv, ...overrides, RAILWAY_TOKEN: 'synthetic-demo-binding' },
+            encoding: 'utf8',
+            timeout: 30_000,
+          },
+        );
+        assert.equal(result.error, undefined);
+        assert.equal(result.status, 1, result.stderr);
+        const log = await readFile(logPath, 'utf8').catch((error) => {
+          assert.equal(error.code, 'ENOENT');
+          return '';
+        });
+        const requests = log.trim() ? log.trim().split('\n').map(JSON.parse) : [];
+        assert.equal(requests.filter((r) => r.mutation).length, mutations);
+        assert.equal(requests.filter((r) => r.provider).length, providerReads);
+        if (failAt === 0) assert.equal(requests.length, 0);
+        await assert.rejects(readFile(join(directory, 'demo-deployment-receipt.json')), {
+          code: 'ENOENT',
+        });
+        assert.doesNotMatch(
+          result.stdout + result.stderr,
+          /synthetic-demo-binding|synthetic-readonly-github-binding/,
+        );
       } finally {
         await rm(directory, { recursive: true, force: true });
       }

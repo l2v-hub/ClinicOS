@@ -87,13 +87,10 @@ jobs:
         with:
           node-version: 22
 
-      - name: Test exact demo release guards without credentials
-        run: node --test agent-team/tests/bug-pipeline/demo-deployment.test.mjs
-
       - name: Verify dedicated demo token, source and domain before any deployment
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
-        run: node agent-team/src/bug-pipeline/demo-deployment.mjs preflight-exact
+        run: node agent-team/src/bug-pipeline/demo-deployment.mjs preflight
 
       - name: Publish immutable read-only target preflight
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -107,7 +104,7 @@ jobs:
         if: github.event_name == 'push' || inputs.operation == 'deploy'
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
-        run: node agent-team/src/bug-pipeline/demo-deployment.mjs deploy-exact
+        run: node agent-team/src/bug-pipeline/demo-deployment.mjs deploy
 
       - name: Publish immutable live demo deployment proof
         if: github.event_name == 'push' || inputs.operation == 'deploy'

@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { inflateRawSync } from 'node:zlib';
+import { createMainVerifier } from '../../../scripts/automation/configure-demo-source.mjs';
 
 export const DEMO_TARGET = Object.freeze({
   projectId: 'bddf5d1b-ee83-4362-8238-a79721f795e5',
@@ -14,6 +15,7 @@ const SHA = /^[a-f0-9]{40}(?![\s\S])/;
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}(?![\s\S])/i;
 const DIGEST = /^sha256:[a-f0-9]{64}$/;
 const WORKFLOW = '.github/workflows/deploy-backend.yml';
+const EXACT_WORKFLOW = '.github/workflows/deploy-demo-exact-commit.yml';
 export const DEMO_SOURCE_POLICIES = Object.freeze({
   trigger: 'main-trigger-v1',
   exact: 'native-exact-commit-v1',
@@ -59,6 +61,10 @@ export async function fetchJson(url, { fetchImpl = fetch, ...options } = {}) {
 function sourcePolicy(value = DEMO_SOURCE_POLICIES.trigger) {
   if (!Object.values(DEMO_SOURCE_POLICIES).includes(value)) fail('unknown source policy');
   return value;
+}
+
+function policyWorkflow(policy) {
+  return sourcePolicy(policy) === DEMO_SOURCE_POLICIES.exact ? EXACT_WORKFLOW : WORKFLOW;
 }
 
 export function validateTarget(data, policy = DEMO_SOURCE_POLICIES.trigger) {
@@ -260,25 +266,55 @@ function context(env, policy) {
   )
     fail('trusted main Actions context required');
   if (
-    policy === DEMO_SOURCE_POLICIES.exact &&
-    (env.GITHUB_ACTIONS !== 'true' ||
-      env.GITHUB_WORKFLOW_REF !== `${REPO}/${WORKFLOW}@refs/heads/main` ||
-      !['push', 'workflow_dispatch'].includes(env.GITHUB_EVENT_NAME))
+    env.GITHUB_ACTIONS !== 'true' ||
+    env.GITHUB_WORKFLOW_REF !== `${REPO}/${policyWorkflow(policy)}@refs/heads/main` ||
+    !(policy === DEMO_SOURCE_POLICIES.exact
+      ? env.GITHUB_EVENT_NAME === 'workflow_dispatch'
+      : ['push', 'workflow_dispatch'].includes(env.GITHUB_EVENT_NAME))
   )
-    fail('exact source policy requires the fixed main deployment workflow');
+    fail('source policy requires its fixed main deployment workflow');
+  if (
+    policy === DEMO_SOURCE_POLICIES.exact &&
+    (!SHA.test(env.CLINICOS_REVIEWED_SHA ?? '') || env.CLINICOS_REVIEWED_SHA !== env.GITHUB_SHA)
+  )
+    fail('exact source policy requires the reviewed workflow SHA');
   return {
     repository: REPO,
     sourceRef: 'refs/heads/main',
     mergeSha: env.GITHUB_SHA,
     runId,
     runAttempt,
+    ...(policy === DEMO_SOURCE_POLICIES.exact ? { reviewedSha: env.CLINICOS_REVIEWED_SHA } : {}),
   };
 }
 
-export async function prepareDemo({ env = process.env, client, sourcePolicy: policy } = {}) {
+function mainVerifier(env, source, policy, fetchImpl) {
+  if (policy !== DEMO_SOURCE_POLICIES.exact) return async () => {};
+  // This fixed, bounded, read-only verifier receives only the Actions GitHub binding.
+  const verify = createMainVerifier({
+    token: env.GITHUB_TOKEN,
+    reviewedSha: source.reviewedSha,
+    fetchImpl,
+  });
+  return async () => {
+    try {
+      await verify();
+    } catch {
+      fail('reviewed current main unavailable or changed');
+    }
+  };
+}
+
+export async function prepareDemo({
+  env = process.env,
+  client,
+  sourcePolicy: policy,
+  fetchImpl = fetch,
+} = {}) {
   policy = sourcePolicy(policy);
   const source = context(env, policy);
-  await inspectDemo(client ?? createRailwayClient({ token: env.RAILWAY_TOKEN }), policy);
+  await mainVerifier(env, source, policy, fetchImpl)();
+  await inspectDemo(client ?? createRailwayClient({ token: env.RAILWAY_TOKEN, fetchImpl }), policy);
   return {
     schemaVersion: 1,
     kind: 'clinicos-demo-preflight',
@@ -299,10 +335,13 @@ export async function deployDemo({
 } = {}) {
   policy = sourcePolicy(policy);
   const source = context(env, policy);
+  const assertCurrentMain = mainVerifier(env, source, policy, fetchImpl);
+  await assertCurrentMain();
   client ??= createRailwayClient({ token: env.RAILWAY_TOKEN, fetchImpl });
   await inspectDemo(client, policy);
   // Unlike `railway up`, this official source-deploy mutation accepts an exact commitSha.
   // Never change the source configuration or substitute an arbitrary deploy message as proof.
+  await assertCurrentMain();
   const result = await client(
     `mutation($environmentId:String!,$serviceId:String!,$commitSha:String){
     serviceInstanceDeployV2(environmentId:$environmentId,serviceId:$serviceId,commitSha:$commitSha)
@@ -327,6 +366,7 @@ export async function deployDemo({
       if (ready) {
         // Reinspect after readiness: a source/target or active-deployment change cannot issue proof.
         await inspectDeployment(client, deploymentId, source.mergeSha, policy);
+        await assertCurrentMain();
         return {
           schemaVersion: 1,
           kind: 'clinicos-demo-backend',
@@ -344,7 +384,7 @@ export async function deployDemo({
   fail('exact deployment readiness timed out');
 }
 
-function validateRun(run, mergeSha) {
+function validateRun(run, mergeSha, policy = DEMO_SOURCE_POLICIES.trigger) {
   if (
     !integer(run?.id) ||
     !integer(run.run_attempt) ||
@@ -354,8 +394,10 @@ function validateRun(run, mergeSha) {
     run.head_sha !== mergeSha ||
     run.repository?.full_name !== REPO ||
     run.head_repository?.full_name !== REPO ||
-    run.path !== WORKFLOW ||
-    !['push', 'workflow_dispatch'].includes(run.event)
+    run.path !== policyWorkflow(policy) ||
+    !(policy === DEMO_SOURCE_POLICIES.exact
+      ? run.event === 'workflow_dispatch'
+      : ['push', 'workflow_dispatch'].includes(run.event))
   )
     fail('trusted completed main deployment workflow required');
 }
@@ -371,7 +413,7 @@ export function validateReceipt(
   const policy = sourcePolicy(receipt?.sourcePolicy);
   if (expectedPolicy !== undefined && policy !== sourcePolicy(expectedPolicy))
     fail('receipt source policy mismatch');
-  validateRun(run, receipt?.mergeSha);
+  validateRun(run, receipt?.mergeSha, policy);
   if (
     receipt?.schemaVersion !== 1 ||
     receipt.kind !== kind ||
@@ -385,6 +427,8 @@ export function validateReceipt(
     Date.parse(receipt.verifiedAt) > now + 300_000
   )
     fail('receipt source, attempt, or target mismatch');
+  if (policy === DEMO_SOURCE_POLICIES.exact && receipt.reviewedSha !== receipt.mergeSha)
+    fail('receipt reviewed workflow SHA mismatch');
   if (kind === 'clinicos-demo-preflight') {
     if (now - Date.parse(receipt.verifiedAt) > 24 * 60 * 60 * 1000) fail('demo preflight expired');
   } else if (
@@ -532,17 +576,22 @@ export async function verifyDemoPreflight({ reader, sourcePolicy: policy } = {})
   if (policy !== undefined) sourcePolicy(policy);
   const head = await reader.getJson('commits/main');
   if (!SHA.test(head.sha ?? '')) fail('trusted main head unavailable');
-  const list = await reader.getJson(
-    `actions/workflows/deploy-backend.yml/runs?branch=main&status=success&head_sha=${head.sha}&per_page=20`,
-  );
-  for (const run of list.workflow_runs ?? []) {
-    try {
-      validateRun(run, head.sha);
-      const proof = await reader.artifact(run, 'clinicos-demo-preflight');
-      validateReceipt(proof.receipt, run, 'clinicos-demo-preflight', Date.now(), policy);
-      return { ...proof, runUrl: `https://github.com/${REPO}/actions/runs/${run.id}` };
-    } catch {
-      /* Older workflows may have no mandatory demo proof; they cannot authorize merge. */
+  const policies =
+    policy === undefined ? [DEMO_SOURCE_POLICIES.exact, DEMO_SOURCE_POLICIES.trigger] : [policy];
+  for (const selected of policies) {
+    const workflow = policyWorkflow(selected).split('/').at(-1);
+    const list = await reader.getJson(
+      `actions/workflows/${workflow}/runs?branch=main&status=success&head_sha=${head.sha}&per_page=20`,
+    );
+    for (const run of list.workflow_runs ?? []) {
+      try {
+        validateRun(run, head.sha, selected);
+        const proof = await reader.artifact(run, 'clinicos-demo-preflight');
+        validateReceipt(proof.receipt, run, 'clinicos-demo-preflight', Date.now(), selected);
+        return { ...proof, runUrl: `https://github.com/${REPO}/actions/runs/${run.id}` };
+      } catch {
+        /* A receipt can authorize only its policy's fixed workflow. */
+      }
     }
   }
   fail('current trusted main has no successful demo target preflight');
@@ -566,10 +615,10 @@ export async function verifyDemoRelease({
   if (!match) fail('invalid deployment run URL');
   const run = await reader.getJson(`actions/runs/${match[1]}`);
   if (run.id !== Number(match[1])) fail('deployment run identity mismatch');
-  validateRun(run, mergeSha);
   const proof = await reader.artifact(run, 'clinicos-demo-backend');
   validateReceipt(proof.receipt, run, 'clinicos-demo-backend', Date.now(), policy);
   const boundPolicy = sourcePolicy(proof.receipt.sourcePolicy);
+  validateRun(run, mergeSha, boundPolicy);
   await inspectDeployment(client, proof.receipt.deployment.id, mergeSha, boundPolicy);
   await verifyLiveReady(proof.receipt.deployment.id, { fetchImpl });
   await inspectDeployment(client, proof.receipt.deployment.id, mergeSha, boundPolicy);
