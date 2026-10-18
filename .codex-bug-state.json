@@ -8880,9 +8880,39 @@
         "manifestSha256": "791d91c72ad1625b4aff561536113af5eab440f6a1065018744fc1bec67546c1",
         "kind": "audited-operator-revision-same-subject"
       }
+    },
+    {
+      "id": "demo-topology-receipt-recovery",
+      "issues": [],
+      "branch": "codex/recover-topology-receipt",
+      "sha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
+      "baseSha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
+      "phase": "implementing",
+      "maxImplementationAttempts": 4,
+      "implementation": [
+        {
+          "round": 1,
+          "status": "running",
+          "owner": "codex-cloud-after-claude",
+          "nonce": "e5ea75a1-9706-4392-ba85-e58c3251e157",
+          "startedAt": "2026-10-18T17:56:37.609Z",
+          "baseSha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
+          "contractSha256": "47eaf91e4336741c3a96ae22e9022bae35aa2c392bf56f83cd28088a39528200",
+          "reason": "New bounded metadata-evidence transport task after real artifact redirect403; no clinical regrouping or inherited review."
+        }
+      ],
+      "reviews": [],
+      "operatorCoordination": {
+        "active": true,
+        "owner": "codex-cloud-after-claude",
+        "nonce": "e5ea75a1-9706-4392-ba85-e58c3251e157",
+        "stage": "implementing",
+        "automaticWritersPaused": true
+      },
+      "reason": "Recover existing original receipt through reviewed main-only GitHub runner; no Railway credentials/provider call or release gate bypass."
     }
   ],
-  "updatedAt": "2026-10-18T17:51:25.777Z",
+  "updatedAt": "2026-10-18T17:56:37.609Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
