@@ -1897,13 +1897,23 @@
           "owner": "codex-cloud-issue485",
           "nonce": "d80746f2-66b6-41b5-9c24-6cc87fe60fab",
           "baseSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
-          "contractSha256": "abe1de1782a9cb7a31d48e5237a27814495a40860ffd9ee95a5a49c18b6ce3ed",
+          "contractSha256": "cd0f1c9fd71dce6e85ff036df4df56dd81f27574c4e62daaa91d1ea12eb82db1",
           "executor": "gpt-6.1-sol",
-          "executorReason": "Nested CSS cascade, intrinsic row sizing and two measured control-density contexts require direct6.1-Sol execution after bounded Luna attempts."
+          "executorReason": "Nested CSS cascade, intrinsic row sizing and two measured control-density contexts require direct6.1-Sol execution after bounded Luna attempts.",
+          "initialContractSha256": "abe1de1782a9cb7a31d48e5237a27814495a40860ffd9ee95a5a49c18b6ce3ed",
+          "scopeAmendments": [
+            {
+              "version": 2,
+              "at": "2026-10-18T09:33:37.291Z",
+              "addedFile": "frontend/src/components/operator/PatientList.css",
+              "reason": "Verified320px long draft-name overflow in the actual intake entrypoint; no global masking or clinical changes.",
+              "contractSha256": "cd0f1c9fd71dce6e85ff036df4df56dd81f27574c4e62daaa91d1ea12eb82db1"
+            }
+          ]
         }
       ],
       "reviews": [],
-      "reason": "Issue485 rounds1/2FAILED with immutable evidence; round3/4 reserved for intrinsic source sizing and verified short editor layout. Frozen2CSS scope and parent budgets retained, scheduled writer paused.",
+      "reason": "Issue485 round3 running; explicit plan/contractv2 adds surgical PatientList draft-action wrapping before edit. Original2CSSplan and failed attempts retained; parent450/UX447 frozen code/budgets unchanged.",
       "triageRecovery": {
         "kind": "operator-completed-read-only-triage",
         "sourceRun": 39029815917,
@@ -1918,16 +1928,17 @@
         "rationale": "Issue485 richiede fullscreen anche nella compilazione manuale. Il parent450 ha terminato implementazione e review sul codice immutabile6d2; piano dipendente distinto, non nuovo nome per un finding parent.",
         "analysis": "Browser indipendente: manuale1903x1032 produce rettangolo231.5/16/1440/1000; CSS limita inoltre sezioni a880. Solo modificatore import usa fullscreen. Correzione esclusivamente geometrica, nessuna logica clinica. Actual phone import source shows3.515625px of canvas/zero visible ink and painted Adatta/download overlap due32dvh row and flex shrinking.",
         "execution": {
-          "difficulty": "low",
+          "difficulty": "medium",
           "mode": "delegate",
-          "reason": "Modifica CSS delimitata affidata a Luna; orchestrazione e QA indipendente6.1-Sol."
+          "reason": "Root6.1-Sol diagnoses nested cascade and concrete entrypoint overflow;6.1-Sol executes bounded CSS after two preservedLuna rounds."
         },
         "issues": [
           485
         ],
         "scope": [
           "frontend/src/components/shared/intake/IntakePage.css",
-          "frontend/src/components/shared/import/ImportSession.css"
+          "frontend/src/components/shared/import/ImportSession.css",
+          "frontend/src/components/operator/PatientList.css"
         ],
         "acceptance": [
           {
@@ -1937,7 +1948,8 @@
               "Import/review e compilazione postimport restano fullscreen e usabili a1903/820/390.",
               "At390x844 source PDF ink is visible, toolbar and download do not overlap; Adatta full button hit-target and data inputs work.",
               "Nessuna occlusione dipinta o overflow orizzontale; draft sintetico persiste dopo reload nel runtime QA isolato.",
-              "Solo CSS autorizzato cambia; build/test frontend e nuova QA browser indipendente passano."
+              "Solo CSS autorizzato cambia; build/test frontend e nuova QA browser indipendente passano.",
+              "Long draft identity wraps fully within patient card at320x568, action reachable and actual page/foreground widths fit."
             ]
           }
         ],
@@ -1953,6 +1965,16 @@
               "Rimuovere limite880 e centratura superflua nelle sezioni; semplificare dichiarazioni duplicate.",
               "Allocate useful phone source-preview space without toolbar/download overlap, preserving reachable scrollable patient fields.",
               "Nessuna modifica TSX, API, schema, auth, dipendenze o parent450."
+            ]
+          },
+          {
+            "title": "Wrap long existing draft resume action within its patient card",
+            "files": [
+              "frontend/src/components/operator/PatientList.css"
+            ],
+            "steps": [
+              "Use a scoped direct-card action rule with natural text wrapping and autoheight, preserving touch minimum and full identifier.",
+              "Verify320px actual page/button bounds and real resume action; do not mask global body overflow."
             ]
           }
         ],
@@ -1990,11 +2012,12 @@
             "issue": 485,
             "files": [
               "frontend/src/components/shared/intake/IntakePage.css",
-              "frontend/src/components/shared/import/ImportSession.css"
+              "frontend/src/components/shared/import/ImportSession.css",
+              "frontend/src/components/operator/PatientList.css"
             ]
           }
         ],
-        "separationReason": "Ripianificazione esplicita di nuova issue485 dopo freeze/review parent450: distinta richiesta fullscreen manuale, worktree dipendente da6d2 e un solo autore CSS. Parent sorgenti, piano, contatori4/4 e review restano invariati; integrazione dopo parent."
+        "separationReason": "Ripianificazione esplicita di nuova issue485 dopo freeze/review parent450: distinta richiesta fullscreen manuale, worktree dipendente da6d2 e un solo autore CSS. Parent sorgenti, piano, contatori4/4 e review restano invariati; integrazione dopo parent. PatientList.css overlap with frozen inactiveUX447 is explicit:485solewriter; preserve both rule sets on later447integration and revalidate; no parent edit/reset."
       },
       "dependency": {
         "batch": "bug-batch-450",
@@ -2007,8 +2030,100 @@
         "nonce": "d80746f2-66b6-41b5-9c24-6cc87fe60fab",
         "phase": "implementing",
         "startedAt": "2026-10-18T09:23:34.160Z",
-        "contractSha256": "abe1de1782a9cb7a31d48e5237a27814495a40860ffd9ee95a5a49c18b6ce3ed"
-      }
+        "contractSha256": "cd0f1c9fd71dce6e85ff036df4df56dd81f27574c4e62daaa91d1ea12eb82db1"
+      },
+      "planRevisions": [
+        {
+          "version": 1,
+          "supersededAt": "2026-10-18T09:33:37.291Z",
+          "reason": "Actual related resume-draft entrypoint long name causes333px page width on320viewport; explicit scope replan before third CSS edit.",
+          "plan": {
+            "title": "Usare lo spazio disponibile durante ingresso paziente",
+            "feature": "Ingresso pazienti / layout manuale e import",
+            "rationale": "Issue485 richiede fullscreen anche nella compilazione manuale. Il parent450 ha terminato implementazione e review sul codice immutabile6d2; piano dipendente distinto, non nuovo nome per un finding parent.",
+            "analysis": "Browser indipendente: manuale1903x1032 produce rettangolo231.5/16/1440/1000; CSS limita inoltre sezioni a880. Solo modificatore import usa fullscreen. Correzione esclusivamente geometrica, nessuna logica clinica. Actual phone import source shows3.515625px of canvas/zero visible ink and painted Adatta/download overlap due32dvh row and flex shrinking.",
+            "execution": {
+              "difficulty": "low",
+              "mode": "delegate",
+              "reason": "Modifica CSS delimitata affidata a Luna; orchestrazione e QA indipendente6.1-Sol."
+            },
+            "issues": [
+              485
+            ],
+            "scope": [
+              "frontend/src/components/shared/intake/IntakePage.css",
+              "frontend/src/components/shared/import/ImportSession.css"
+            ],
+            "acceptance": [
+              {
+                "issue": 485,
+                "criteria": [
+                  "Manuale1903x1032 occupa viewport e area dati disponibile, input puntabili e modificabili.",
+                  "Import/review e compilazione postimport restano fullscreen e usabili a1903/820/390.",
+                  "At390x844 source PDF ink is visible, toolbar and download do not overlap; Adatta full button hit-target and data inputs work.",
+                  "Nessuna occlusione dipinta o overflow orizzontale; draft sintetico persiste dopo reload nel runtime QA isolato.",
+                  "Solo CSS autorizzato cambia; build/test frontend e nuova QA browser indipendente passano."
+                ]
+              }
+            ],
+            "tasks": [
+              {
+                "title": "Condividere layout fullscreen e rimuovere cap arbitrari",
+                "files": [
+                  "frontend/src/components/shared/intake/IntakePage.css",
+                  "frontend/src/components/shared/import/ImportSession.css"
+                ],
+                "steps": [
+                  "Usare regole fullscreen comuni per manuale/import mantenendo griglie, padding e azioni responsive.",
+                  "Rimuovere limite880 e centratura superflua nelle sezioni; semplificare dichiarazioni duplicate.",
+                  "Allocate useful phone source-preview space without toolbar/download overlap, preserving reachable scrollable patient fields.",
+                  "Nessuna modifica TSX, API, schema, auth, dipendenze o parent450."
+                ]
+              }
+            ],
+            "verification": [
+              {
+                "command": "npm",
+                "args": [
+                  "--prefix",
+                  "frontend",
+                  "run",
+                  "build"
+                ]
+              },
+              {
+                "command": "npm",
+                "args": [
+                  "--prefix",
+                  "frontend",
+                  "test"
+                ]
+              }
+            ],
+            "evidence": [
+              {
+                "issue": 485,
+                "screenshot": "artifacts/task-validation/bug-batch-485/evidence/manual-fullscreen-1903.png",
+                "trace": "artifacts/task-validation/bug-batch-485/evidence/layout-trace.zip",
+                "video": "artifacts/task-validation/bug-batch-485/evidence/layout-proof.webm"
+              }
+            ]
+          },
+          "grouping": {
+            "fileMap": [
+              {
+                "issue": 485,
+                "files": [
+                  "frontend/src/components/shared/intake/IntakePage.css",
+                  "frontend/src/components/shared/import/ImportSession.css"
+                ]
+              }
+            ],
+            "separationReason": "Ripianificazione esplicita di nuova issue485 dopo freeze/review parent450: distinta richiesta fullscreen manuale, worktree dipendente da6d2 e un solo autore CSS. Parent sorgenti, piano, contatori4/4 e review restano invariati; integrazione dopo parent."
+          }
+        }
+      ],
+      "planVersion": 2
     },
     {
       "id": "bug-batch-486",
@@ -7246,7 +7361,7 @@
       }
     }
   ],
-  "updatedAt": "2026-10-18T09:23:34.160Z",
+  "updatedAt": "2026-10-18T09:33:37.291Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
