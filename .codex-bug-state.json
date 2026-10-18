@@ -1101,7 +1101,7 @@
         "findings": [],
         "sourceFilesVerified": 53
       },
-      "reason": "Claude round3 approved and actual final Codex review verified on currentSHA; only release remains unverified: fresh Railway inspect39078628172 has zero main triggers, online deploymentId absent, frontend old CSP, Vercel last status dailyquota failure.",
+      "reason": "Claude round3 approved and exact-SHA final Codex QA verified. Release remains unverified: confirmed demo inspection39111995168 has zero main triggers; no exact-SHA hosted deployment receipt. Old Vercel quota status is historical and is not evidence of current global unavailability.",
       "codexFinalReviewRecoveryHistory": [
         {
           "at": "2026-10-17T23:20:07.546Z",
@@ -1127,7 +1127,23 @@
         "releasedAt": "2026-10-17T23:24:26.554Z",
         "result": "verified"
       },
-      "feedbackFingerprint": "4f2bd7172b9ceb3fb931590334dde2d452240b67e179135299e5f32cd86614f1"
+      "feedbackFingerprint": "4f2bd7172b9ceb3fb931590334dde2d452240b67e179135299e5f32cd86614f1",
+      "operatorReasonHistory": [
+        {
+          "at": "2026-10-18T17:15:06.448Z",
+          "reason": "Claude round3 approved and actual final Codex review verified on currentSHA; only release remains unverified: fresh Railway inspect39078628172 has zero main triggers, online deploymentId absent, frontend old CSP, Vercel last status dailyquota failure."
+        }
+      ],
+      "operatorReleaseCoordination": {
+        "owner": "codex-cloud-after-claude",
+        "stage": "awaiting-reviewed-demo-binding-diagnosis",
+        "recordedAt": "2026-10-18T17:15:06.448Z",
+        "sourceSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
+        "inspectionRunId": 39111995168,
+        "inspectionInventorySha256": "bb0843673ebc593892cc8bdabddca75746f06676e0c141f3bb4ea0ee70d05a5f",
+        "freshProviderInspectionPerformed": false,
+        "reviewAlreadyComplete": true
+      }
     },
     {
       "id": "bug-batch-432",
@@ -1886,6 +1902,16 @@
           "preservedEntityDigest": "6f044d6ce285efce05428b12df612c8a67be08209aa573b8956180ffbe0c5f2a",
           "reason": "User explicitly authorized continued corrections beyond four with all previous attempts and reports preserved. Existing subject retained; no legacy counter or review approval rewritten."
         }
+      ],
+      "operatorScopeAmendments": [
+        {
+          "id": "scope-amendment-1",
+          "owner": "codex-cloud-after-claude",
+          "reservationNonce": "ae512ce7-aff8-421c-bac2-cd0e776e5eb4",
+          "authorizedAt": "2026-10-18T17:15:06.448Z",
+          "sha256": "2c26b08aa25f7ff130f58fa7d786b249edb3a64bdafd1286a4332a07ca3ded7e",
+          "reason": "Actual useAnomalieReparto feed consumer must include read-only verification references without creating administration actions."
+        }
       ]
     },
     {
@@ -2352,7 +2378,7 @@
       "phase": "blocked",
       "implementation": [],
       "reviews": [],
-      "reason": "Shared therapy form scope is owned by UX447. Precise operator-confirmed route-suggestion semantics and approved unambiguous mapping are not established; existing explicit/imported prescription routes must remain preserved. No clinical mapping guessed or implementation reserved.",
+      "reason": "Route policy approved by user and recorded; implementation queued behind shared therapy form owner UX447 and active clinical integration. No further clinical-decision confirmation required.",
       "triageRecovery": {
         "kind": "operator-completed-read-only-triage",
         "sourceRun": 39029815917,
@@ -2360,6 +2386,19 @@
         "reportSha256": "916eeb0800e5aa8ef5cb720e4724891746684a90002841e3485b61129c75d249",
         "recoveredAt": "2026-10-17T11:52:53.427Z",
         "dependency": "bug-batch-447"
+      },
+      "operatorReasonHistory": [
+        {
+          "at": "2026-10-18T17:15:06.448Z",
+          "reason": "Shared therapy form scope is owned by UX447. Precise operator-confirmed route-suggestion semantics and approved unambiguous mapping are not established; existing explicit/imported prescription routes must remain preserved. No clinical mapping guessed or implementation reserved."
+        }
+      ],
+      "clinicalDecision": {
+        "status": "approved-by-user",
+        "recordedAt": "2026-10-18T17:15:06.448Z",
+        "source": "User asynchronous reply: Usa dati espliciti e scelta dell’operatore",
+        "routePolicy": "Use only explicit drug/prescription route; preserve operator choice; otherwise require operator selection. No form-to-route mapping.",
+        "githubComment": "https://github.com/l2v-hub/ClinicOS/issues/486#issuecomment-6252716739"
       }
     }
   ],
@@ -7632,7 +7671,7 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-18T17:07:06.072Z",
+  "updatedAt": "2026-10-18T17:15:06.448Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
@@ -10805,7 +10844,7 @@
         "active": true,
         "owner": "codex-cloud-after-claude",
         "nonce": "5ef4558e-2243-4380-8330-453cfa1df672",
-        "stage": "implementing",
+        "stage": "independent-qa",
         "startedAt": "2026-10-18T16:47:23.897Z",
         "baseSha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
         "implementationStarted": true,
@@ -10817,7 +10856,7 @@
       "operatorContinuations": [
         {
           "round": 4,
-          "status": "running",
+          "status": "implemented-awaiting-independent-qa",
           "owner": "codex-cloud-after-claude",
           "nonce": "eec1f09c-4764-4256-bfad-522a4f6de0be",
           "startedAt": "2026-10-18T16:55:32.697Z",
@@ -10828,7 +10867,9 @@
           "preservedLegacyImplementationDigest": "0765b22182c82647c7c55d765e226e3e044fd5a8dec35473603e340cb70090c2",
           "preservedLegacyReviewsDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
           "preservedEntityDigest": "7dfc893d412503cdac73015d0327612c7f60a7c9c635a6762f1b375b3d719774",
-          "reason": "User explicitly authorized continued corrections beyond four with all previous attempts and reports preserved. Existing subject retained; no legacy counter or review approval rewritten."
+          "reason": "User explicitly authorized continued corrections beyond four with all previous attempts and reports preserved. Existing subject retained; no legacy counter or review approval rewritten.",
+          "authorStoppedAt": "2026-10-18T17:15:06.448Z",
+          "sourceHandoffSha256": "d11f3ba9bed9040480098ba441081d7a6feaf1f49dc71499a86a902ecc3f4fa3"
         }
       ],
       "operatorScopeAmendments": [
