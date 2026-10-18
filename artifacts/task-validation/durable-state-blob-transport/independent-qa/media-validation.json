@@ -1,0 +1,8 @@
+{
+  "pngCRC": true,
+  "pngDecode": true,
+  "traceZIPCRC": true,
+  "videoDecode": true,
+  "publicSentinelScan": true,
+  "publicFileLimitMiB": 25
+}
