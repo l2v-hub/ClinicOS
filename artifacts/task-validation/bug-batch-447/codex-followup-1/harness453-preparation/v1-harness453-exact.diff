@@ -1,0 +1,185 @@
+--- e2e/qa-bug-batch-447-browser.mjs
++++ e2e/qa-bug-batch-447-route486-browser.mjs
+@@ -1651,6 +1651,9 @@
+         await openPrescription(id);
+         await selectPackage();
+       }
++      async function selectRoute() {
++        await page.getByLabel('Via di somministrazione', { exact: true }).selectOption('orale');
++      }
+       async function assertUnchecked(message) {
+         await eventually(
+           async () => assert.equal(await acknowledgement.isChecked(), false, message),
+@@ -1658,7 +1661,6 @@
+         );
+       }
+       async function preset() {
+-        await page.getByLabel('Quantità orario 1', { exact: true }).fill('1');
+         await page.getByRole('button', { name: 'Mattina e sera 08 · 20', exact: true }).click();
+         await page.getByRole('button', { name: '7 giorni', exact: true }).click();
+       }
+@@ -1672,7 +1674,8 @@
+         interactions++;
+         await action();
+       }
+-      await interaction(() => page.getByLabel('Quantità orario 1', { exact: true }).fill('1'));
++      await value(page.getByLabel('Quantità orario 1', { exact: true }), '1');
++      await interaction(selectRoute);
+       await interaction(() =>
+         page.getByRole('button', { name: 'Mattina e sera 08 · 20', exact: true }).click(),
+       );
+@@ -1709,6 +1712,7 @@
+       end.setUTCDate(end.getUTCDate() + 6);
+       assert.equal(payload.dataFine, end.toISOString().slice(0, 10));
+       assert.ok(interactions <= 5, `Actual interactions after package selection: ${interactions}`);
++      const negativeInteractions = interactions;
+       const stored = await prisma.patientTherapy.findFirst({
+         where: { patientId: negativePatient.id, drugPackageRef: aic },
+         include: { schedules: true },
+@@ -1718,11 +1722,86 @@
+       await section(page, 'Terapia');
+       await text(page.locator('#patient-tab-panel'), new RegExp(drugName));
+ 
+-      // Real recorded positive context, with no invented association between the product and allergen.
++      // Positive allergy context is confirmed and saved without inventing a product/allergen match.
+       await newPrescription(patient.id);
+       for (const allergy of originalAllergies) await text(warning, new RegExp(allergy.allergene));
+       await text(warning, /grave.*QA orticaria/);
+       await assertUnchecked('Positive context starts unacknowledged');
++      await value(page.getByLabel('Quantità orario 1', { exact: true }), '1');
++      interactions = 0;
++      await interaction(selectRoute);
++      await interaction(() =>
++        page.getByRole('button', { name: 'Mattina e sera 08 · 20', exact: true }).click(),
++      );
++      await interaction(() => page.getByRole('button', { name: '7 giorni', exact: true }).click());
++      const positiveSentence = await page.locator('[data-prescription-sentence]').innerText();
++      assert.match(positiveSentence, /1 compressa alle 08:00/);
++      assert.match(positiveSentence, /1 compressa alle 20:00/);
++      const positiveResponsePromise = page.waitForResponse(
++        (r) =>
++          r.url() === `${api}/patients/${patient.id}/therapies` &&
++          r.request().method() === 'POST',
++      );
++      await interaction(() => acknowledgement.check());
++      await interaction(() =>
++        page.getByRole('button', { name: 'Salva terapia', exact: true }).click(),
++      );
++      const positiveResponse = await positiveResponsePromise;
++      assert.ok(
++        positiveResponse.ok(),
++        `Positive-allergy prescription persisted HTTP${positiveResponse.status()}`,
++      );
++      const savedPositiveRequestCount = sentBodies.length;
++      assert.equal(savedPositiveRequestCount, 1);
++      const positivePayload = positiveResponse.request().postDataJSON();
++      assert.deepEqual(
++        positivePayload.schedules.map((s) => ({
++          time: s.time,
++          quantityNumerator: s.quantityNumerator,
++          quantityDenominator: s.quantityDenominator,
++          administrationUnit: s.administrationUnit,
++        })),
++        ['08:00', '20:00'].map(schedule),
++      );
++      assert.equal(positivePayload.drugPackageRef, aic);
++      assert.equal(positivePayload.commercialStrengthValue, 5);
++      assert.equal(positivePayload.viaSomministrazione, 'orale');
++      assert.equal(positivePayload.stato, 'attiva');
++      assert.equal(positivePayload.dataInizio, today);
++      assert.equal(positivePayload.dataFine, end.toISOString().slice(0, 10));
++      assert.ok(
++        interactions <= 5,
++        `Positive-context actual interactions after package selection: ${interactions}`,
++      );
++      const positiveInteractions = interactions;
++      const positiveStored = await prisma.patientTherapy.findFirst({
++        where: { patientId: patient.id, drugPackageRef: aic },
++        include: { schedules: true },
++      });
++      assert.ok(positiveStored, 'Positive-allergy prescription has a SQL record');
++      assert.equal(positiveStored.drugPackageRef, aic);
++      assert.equal(positiveStored.commercialStrengthValue, 5);
++      assert.equal(positiveStored.viaSomministrazione, 'orale');
++      assert.equal(positiveStored.stato, 'attiva');
++      assert.equal(positiveStored.dataInizio, today);
++      assert.equal(positiveStored.dataFine, end.toISOString().slice(0, 10));
++      assert.deepEqual(
++        positiveStored.schedules.map((s) => ({
++          time: s.time,
++          quantityNumerator: s.quantityNumerator,
++          quantityDenominator: s.quantityDenominator,
++          administrationUnit: s.administrationUnit,
++        })),
++        ['08:00', '20:00'].map(schedule),
++      );
++      await reloadAuthenticated(state, chart());
++      await section(page, 'Terapia');
++      await text(page.locator('#patient-tab-panel'), new RegExp(drugName));
++
++      // Start a fresh prescription for the original acknowledgement invalidation cases.
++      await newPrescription(patient.id);
++      await selectRoute();
++      await assertUnchecked('Fresh prescription starts unacknowledged');
+       await acknowledgement.check();
+       await page
+         .locator('.campo-farmaco__scelto')
+@@ -1753,6 +1832,7 @@
+         'Switching away and back to a patient requires new acknowledgement before package selection',
+       );
+       await selectPackage();
++      await selectRoute();
+       await preset();
+       await acknowledgement.check();
+ 
+@@ -1820,6 +1900,7 @@
+         'Reload never persists a previous acknowledgement, before package selection',
+       );
+       await selectPackage();
++      await selectRoute();
+       await preset();
+       const cartellaPath = `/patients/${patient.id}/cartella`;
+       state.fault = { path: cartellaPath, status: 503, method: 'GET' };
+@@ -1885,7 +1966,7 @@
+       await assertUnchecked('New external allergy requires a new explicit acknowledgement');
+       assert.equal(
+         sentBodies.length,
+-        0,
++        savedPositiveRequestCount,
+         'No prescription POST before acknowledging fresh external allergy',
+       );
+       assert.equal(
+@@ -1939,10 +2020,10 @@
+         'Successful replay closes the prescription form',
+       );
+       assert.equal(lostResponses, 1);
+-      assert.equal(sentBodies.length, 2);
++      assert.equal(sentBodies.length, savedPositiveRequestCount + 2);
+       assert.deepEqual(
+-        sentBodies[1],
+-        sentBodies[0],
++        sentBodies.at(-1),
++        sentBodies.at(-2),
+         'Uncertain retry preserves the exact body and requestId',
+       );
+       const {
+@@ -1954,7 +2035,7 @@
+         patientId: warningPatientId,
+         requestId: warningRequestId,
+         ...warningBody
+-      } = sentBodies[0];
++      } = sentBodies.at(-2);
+       assert.equal(ordinaryPatientId, negativePatient.id);
+       assert.equal(warningPatientId, patient.id);
+       assert.ok(ordinaryRequestId && warningRequestId);
+@@ -1987,7 +2068,9 @@
+       await text(page.locator('#patient-tab-panel'), new RegExp(drugName));
+       receipts.push({
+         issue: 453,
+-        interactionsAfterPackageSelection: interactions,
++        negativeInteractionsAfterPackageSelection: negativeInteractions,
++        positiveInteractionsAfterPackageSelection: positiveInteractions,
++        positiveContextSavedAndReloaded: true,
+         ordinaryPatientId: negativePatient.id,
+         ordinaryVerifiedAbsent: true,
+         exactSchedulePayload: payload.schedules,
