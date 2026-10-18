@@ -15,7 +15,7 @@ import {
   DiaryTherapyInputError,
   diaryTherapyAuditFields,
   parseTherapyRequestId,
-  prepareDiaryTherapyInput,
+  prepareDiaryTherapyReplayInput,
   type DiaryTherapyResult,
 } from './diary-therapy-service.js';
 import { parseDiaryTherapyText } from '../therapies/diary-therapy-parse.js';
@@ -72,8 +72,10 @@ export async function createPatientDiaryEntry(
 
 /**
  * POST /patients/:patientId/diary/with-therapy  { requestId, entry, therapy }.
- * Everything is validated before touching the database; then diary entry + therapy are created
- * in one transaction (replay by requestId returns the existing pair, `replay: true`).
+ * Everything except a missing route on a potential historical replay is validated before the
+ * database call. That narrow case may only return an exact existing same-patient replay; if no
+ * pair exists, the shared create validator rejects it before any write. New pairs are created in
+ * one transaction (replay by requestId returns the existing pair, `replay: true`).
  * Records the operational audit (field names only) exactly as the route did.
  */
 export async function createPatientDiaryEntryWithTherapy(
@@ -97,7 +99,7 @@ export async function createPatientDiaryEntryWithTherapy(
   const requestId = parseTherapyRequestId(body.requestId);
   const entry = parseDiaryCreateBody(body.entry);
   assertPrescriptionEntry(entry);
-  const therapy = prepareDiaryTherapyInput(body.therapy, actor.name || actor.id);
+  const therapy = prepareDiaryTherapyReplayInput(body.therapy, actor.name || actor.id);
 
   const author = await authoritativeDiaryAuthor(actor);
   const result = await createDiaryEntryWithTherapy({

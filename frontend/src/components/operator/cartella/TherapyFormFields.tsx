@@ -91,7 +91,8 @@ export function emptyTherapyForm(): TherapyFormValue {
     commercialStrengthValue: '',
     commercialStrengthUnit: 'mg',
     allowedFractions: ['1'],
-    viaSomministrazione: 'orale',
+    // Route is prescription data: leave it unset until an explicit source or the operator supplies it.
+    viaSomministrazione: '',
     tipo: 'periodica',
     stato: 'attiva',
     dataInizio: todayStr(),

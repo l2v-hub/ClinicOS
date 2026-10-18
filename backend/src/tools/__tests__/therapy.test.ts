@@ -472,6 +472,16 @@ test('therapy.create: missing required field → invalid_input (route 400); othe
   );
   assert.equal(missing.ok, false);
   if (!missing.ok) assert.equal(missing.error.code, 'invalid_input');
+  const routeMissing = await registry.invoke(
+    'therapy.create',
+    {
+      patientId,
+      body: { farmacoNome: 'Farmaco sintetico', dataInizio: '2033-02-01' },
+    },
+    ctxOf(owner),
+  );
+  assert.equal(routeMissing.ok, false);
+  if (!routeMissing.ok) assert.equal(routeMissing.error.code, 'invalid_input');
   const badRange = await registry.invoke(
     'therapy.create',
     { patientId, body: { farmacoNome: 'X', dataInizio: '2033-02-10', dataFine: '2033-02-01' } },

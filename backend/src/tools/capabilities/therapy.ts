@@ -207,7 +207,7 @@ export const therapyTools: ToolDefinition[] = [
     kind: 'write',
     auditKind: 'create',
     description:
-      'Crea una prescrizione (PatientTherapy + orari) per un paziente nello scope dell’operatore; farmacoNome e dataInizio obbligatori, operatore inseritore = operatore autenticato.',
+      'Crea una prescrizione (PatientTherapy + orari) per un paziente nello scope dell’operatore; farmacoNome, dataInizio e viaSomministrazione esplicita obbligatori. Indica la via solo se presente nella prescrizione o scelta esplicitamente dall’operatore; non dedurla dalla forma farmaceutica. Operatore inseritore = operatore autenticato.',
     sensitivity: 'critical',
     idempotency: 'none',
     patientScoped: true,
@@ -217,13 +217,18 @@ export const therapyTools: ToolDefinition[] = [
       properties: {
         patientId: { type: 'string', minLength: 1 },
         body: {
+          required: ['viaSomministrazione'],
           type: 'object',
           properties: {
             farmacoNome: { type: 'string' },
             dataInizio: { type: 'string', description: 'YYYY-MM-DD' },
             dataFine: { type: 'string' },
             dosaggio: { type: 'string' },
-            viaSomministrazione: { type: 'string' },
+            viaSomministrazione: {
+              type: 'string',
+              minLength: 1,
+              description: 'Via esplicitamente presente nella prescrizione o scelta dall’operatore; non inferire dalla forma farmaceutica.',
+            },
             tipo: { type: 'string' },
             stato: { type: 'string' },
             prescrittore: { type: 'string' },
