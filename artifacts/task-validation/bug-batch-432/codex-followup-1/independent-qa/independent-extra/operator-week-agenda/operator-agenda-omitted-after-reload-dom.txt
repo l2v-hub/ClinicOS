@@ -1,0 +1,59 @@
+Turno
+Pazienti
+Terapia
+Parametri
+Consegne
+Agenda
+Farmaci
+Milo
+Agenda di oggi
+
+Infermiere 1
+·
+Domenica 18 Ottobre 2026
+·
+fasce da 30 minuti
+
+Turno pomeriggio
+18:30
+Milo
+SIMULATORE
+I1
+Giorno
+Settimana
+Mese
+Oggi
+Appuntamenti nel periodo selezionato
+Tutti gli stati
+0
+Programmato
+In corso
+Completato
+Annullato
+Domenica 18 ottobre 2026
+Nuovo appuntamento
+
+Nessun appuntamento in questa giornata. Usa Nuovo appuntamento oppure scegli una fascia disponibile. Seleziona il paziente nel modulo.
+
+08:00
+08:30
+09:00
+09:30
+10:00
+10:30
+11:00
+11:30
+12:00
+12:30
+13:00
+13:30
+14:00
+14:30
+15:00
+15:30
+16:00
+16:30
+17:00
+17:30
+18:00
+18:30

@@ -1,0 +1,54 @@
+{
+  "results": [
+    {
+      "label": "migration",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "backend-build",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "backend-font-assets",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "frontend-build",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "frontend-unit",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "backend-unit",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "therapy-import-api",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "seed",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "browser-e2e",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "independent-extra-browser",
+      "code": 1,
+      "signal": null
+    }
+  ]
+}

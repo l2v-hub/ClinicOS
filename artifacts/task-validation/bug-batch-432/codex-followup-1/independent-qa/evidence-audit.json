@@ -1,0 +1,131 @@
+{
+  "fileCount": 72,
+  "allFilesAtMost25MiB": true,
+  "decodedImagesIncludingZipMembers": 1562,
+  "crcCheckedZips": 9,
+  "crcCheckedMembers": 1950,
+  "decodedVideos": 8,
+  "videos": [
+    {
+      "file": "canonical/issue-432-import.webm",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 562
+        }
+      ],
+      "format": {
+        "duration": "6.440000"
+      }
+    },
+    {
+      "file": "canonical/issue-432.webm",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 562
+        }
+      ],
+      "format": {
+        "duration": "23.640000"
+      }
+    },
+    {
+      "file": "canonical/issue-442.webm",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 450
+        }
+      ],
+      "format": {
+        "duration": "1.240000"
+      }
+    },
+    {
+      "file": "canonical/issue-460.webm",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 562
+        }
+      ],
+      "format": {
+        "duration": "11.840000"
+      }
+    },
+    {
+      "file": "clinical-followup/correction/flow.webm",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 562
+        }
+      ],
+      "format": {
+        "duration": "20.400000"
+      }
+    },
+    {
+      "file": "clinical-followup/verification/flow.webm",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 562
+        }
+      ],
+      "format": {
+        "duration": "7.040000"
+      }
+    },
+    {
+      "file": "independent-extra/admin-agenda/flow.webm",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 562
+        }
+      ],
+      "format": {
+        "duration": "6.440000"
+      }
+    },
+    {
+      "file": "independent-extra/operator-week-agenda/flow.webm",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 562
+        }
+      ],
+      "format": {
+        "duration": "10.760000"
+      }
+    }
+  ],
+  "secretFindings": []
+}
