@@ -165,6 +165,9 @@ test('dashboard displays six spent implementations and active continuation inste
   batch.budgetExtensions = [{ entityId: batch.id, pr: 81, kind: 'implementation', previousLimit: 5, limit: 6,
     actor: 'operator', at: base.startedAt, reason: base.reason, authorizationRef: 'legacy-reference', nonce: 'extension6',
     historyLength: 5, historyDigest: historyDigest([...implementation, batch.operatorContinuations[0]]) }];
+  batch.budgetAuthorizationCutover = { schemaVersion: 1, legacyCount: 1,
+    legacyDigest: historyDigest(batch.budgetExtensions), actor: 'trusted-state-owner',
+    at: '2026-10-18T00:00:00Z', authorizationRef: 'test:legacy-cutover' };
   const state = { ...empty, batches: [batch], operatorTakeover: { nonce: 'takeover',
     continuePastFourPreserveHistory: true, subjects: [{ collection: 'batches', id: batch.id, pr: 81 }] } };
   const snapshot = dashboardSnapshot({ repo, state, issues: [{ number: 17 }], queue: [] });

@@ -962,5 +962,8 @@ test('running and awaiting-QA continuations never project a ready review label',
     previousLimit: 5, limit: 6, actor: 'operator', at: '2026-10-18T00:00:00Z', reason: 'Historical allowance',
     authorizationRef: 'legacy-reference', nonce: 'extension6', historyLength: 5,
     historyDigest: historyDigest([...f.batch.implementation, f.batch.operatorContinuations[0]]) }];
+  f.batch.budgetAuthorizationCutover = { schemaVersion: 1, legacyCount: 1,
+    legacyDigest: historyDigest(f.batch.budgetExtensions), actor: 'trusted-state-owner',
+    at: '2026-10-18T00:00:00Z', authorizationRef: 'test:legacy-cutover' };
   assert.equal(reviewProjection(f.batch).label, 'codex-review-fixes');
 });

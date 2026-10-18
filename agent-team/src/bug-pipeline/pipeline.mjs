@@ -8,7 +8,7 @@ import {
 import { planSchema, validatePlan, validateState, feedbackFingerprint } from './contracts.mjs';
 import { externalReviewStep } from './external-review.mjs';
 import { validateStandaloneState, finalizeStandaloneSubject } from './standalone-review.mjs';
-import { controllerFailureCode, isRetryableGitHubFailure } from './github.mjs';
+import { controllerFailureCode, isRetryableGitHubFailure, recordTransientGitHubFailure } from './github.mjs';
 
 function eligibleIssue(issue) {
   const labels = (issue.labels ?? []).map((l) => (typeof l === 'string' ? l : l.name));
@@ -105,22 +105,19 @@ export async function runPipeline({
         if (!subject) continue;
         const code = controllerFailureCode(error);
         if (isRetryableGitHubFailure(error)) {
-          const previous = subject.lastTransientFailure;
-          const count = previous?.subjectSha === subject.sha ? Math.min(previous.count + 1, 3) : 1;
-          subject.lastTransientFailure = {
-            code, operation: 'read', at: new Date(now()).toISOString(), count,
-            subjectSha: subject.sha, nextRetryAt: now() + Math.min(count * 1000, 3000),
-          };
-          if (count >= 3) {
+          if (recordTransientGitHubFailure(subject, now())) {
             subject.phase = 'blocked';
             subject.failureCode = 'github-transient-exhausted';
-            subject.reason = 'Repeated retryable GitHub reads require explicit recovery';
+            subject.reason = 'Retryable GitHub reads failed across the recovery window';
             delete subject.approvedSha;
           }
         } else {
           subject.phase = 'blocked';
           subject.reason = 'Standalone identity, evidence or GitHub operation requires explicit recovery';
           subject.failureCode = code;
+          delete subject.failureOperation;
+          if (['projection', 'merge', 'mutation', 'read'].includes(error.operation))
+            subject.failureOperation = error.operation;
           delete subject.approvedSha;
         }
         // Failure here propagates: no diagnostic is claimed durable and unrelated

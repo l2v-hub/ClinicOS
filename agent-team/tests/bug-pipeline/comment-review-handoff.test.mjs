@@ -711,3 +711,15 @@ test('default compatibility2 spends3/4 without extensions and same-account exter
   assert.equal(fifth.budgetExtensionNonce, extended.budgetExtensions[0].nonce);
   assert.deepEqual(implementationAttempts(extended).slice(0, 2), prefix);
 });
+
+test('background normal waiting reconciliation never repairs notices across accounts or transient reads', async () => {
+  const f = fixture();
+  await f.handoff.request(81);
+  const previous = clone(f.remote.batches[0]), callCount = f.calls.length, notices = f.pr.comments.length;
+  f.setActor('another-authorized-user');
+  f.github.viewIssue = async () => { throw Object.assign(new Error('Synthetic notice 503'), { code: 'github-read-transient' }); };
+  assert.equal(await f.handoff.reconcile(previous, async () => assert.fail('Waiting phase must remain unchanged')), false);
+  assert.equal(f.calls.length, callCount, 'No actor or notice API in the background reconciliation');
+  assert.equal(f.pr.comments.length, notices);
+  assert.deepEqual(f.remote.batches[0], previous);
+});

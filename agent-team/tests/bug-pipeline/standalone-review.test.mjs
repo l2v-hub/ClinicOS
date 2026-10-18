@@ -17,6 +17,8 @@ import {
 } from '../../src/bug-pipeline/review-handoff-cli.mjs';
 import {
   createGitHub,
+  MERGE_PREPARATION_TIMEOUT_MS,
+  MERGE_RESERVATION_LEASE_MS,
   MAX_DURABLE_STATE_BYTES,
   RESULT_RESERVATION_BYTES,
 } from '../../src/bug-pipeline/github.mjs';
@@ -26,6 +28,8 @@ import { mkdtemp, rm, mkdir, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import nodePath from 'node:path';
 const clone = (value) => structuredClone(value);
+// Core merge fixtures inject a harmless scope; production CLI policy remains empty.
+const FIXTURE_INFRASTRUCTURE_FILES = Object.freeze(['docs/synthetic-review-regression.md']);
 const sha = 'a'.repeat(40),
   baseSha = 'b'.repeat(40),
   testedSha = 'c'.repeat(40);
@@ -512,6 +516,8 @@ test('infrastructure merge boundary reuses exact-SHA protected merge and rejects
     'ready-to-merge',
   );
   assert.equal(called, 0);
+  subject.release = { status: 'merging', reviewedSha: sha, prNumber: 81, nonce: 'direct-reservation', reservedAt: new Date().toISOString() };
+  await stepOptions(f, subject, async () => assert.fail()).save();
   await mergeStandaloneReview({
     subject,
     controller: f.controller,
@@ -675,7 +681,7 @@ async function runRuntime(
     standaloneInfrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
   });
 }
-function makeAllowlisted(f, file = 'docs/standalone-pr-review.md') {
+function makeAllowlisted(f, file = FIXTURE_INFRASTRUCTURE_FILES[0]) {
   f.manifest.sourceManifest[0].path = file;
   const history = JSON.parse(f.content['imported-history.json']);
   history.sourceManifest = clone(f.manifest.sourceManifest);
@@ -683,39 +689,19 @@ function makeAllowlisted(f, file = 'docs/standalone-pr-review.md') {
   f.manifest.packet.files['imported-history.json'] = sha256(f.content['imported-history.json']);
 }
 
-test('trusted runtime uses fixed human-safe policy, reserves infrastructure merge, persists receipt and skips next tick', async () => {
-  assert.equal(STANDALONE_INFRASTRUCTURE_FILES.length, 3);
-  assert.ok(
-    STANDALONE_INFRASTRUCTURE_FILES.every(
-      (file) => !file.startsWith('agent-team/src/') && !file.startsWith('.github/'),
-    ),
-  );
+test('trusted runtime fixed policy protects all original infrastructure paths and leaves protected merge manual', async () => {
+  assert.deepEqual(STANDALONE_INFRASTRUCTURE_FILES, []);
   assert.equal(Object.isFrozen(STANDALONE_INFRASTRUCTURE_FILES), true);
   const f = fixture();
-  makeAllowlisted(f);
+  makeAllowlisted(f, 'docs/standalone-pr-review.md');
   f.manifest.releaseHold = false;
   await published(f);
-  let calls = 0;
-  f.github.mergePullRequest = async (pr, head, { guard }) => {
-    assert.equal(f.remote().standaloneReviews[0].release.status, 'merging');
-    await guard();
-    calls++;
-    f.pr.state = 'closed';
-    f.pr.merged = true;
-    f.pr.merge_commit_sha = '9'.repeat(40);
-    return { mergeSha: f.pr.merge_commit_sha, reviewedSha: head, number: pr };
-  };
-  let state = await runRuntime(f);
-  assert.equal(calls, 1);
-  assert.equal(state.standaloneReviews[0].release.status, 'merged');
-  assert.equal(state.standaloneReviews[0].release.reviewedSha, sha);
-  state = await runRuntime(f, {
-    finalQaStandalone: async () => assert.fail('Terminal merge must not invoke QA'),
-  });
-  assert.equal(calls, 1);
+  f.github.mergePullRequest = async () => assert.fail('Runbook is human protected');
+  const state = await runRuntime(f);
   assert.equal(state.standaloneReviews[0].phase, 'ready');
-  assert.equal(state.standaloneReviews[0].release.status, 'merged');
-  assert.equal(state.standaloneReviews[0].release.deployment, undefined);
+  assert.equal(state.standaloneReviews[0].codexFinalReview.status, 'verified');
+  assert.equal(state.standaloneReviews[0].release, undefined);
+  await runRuntime(f, { finalQaStandalone: async () => assert.fail('Verified QA is idempotent') });
 });
 
 test('runtime never merges held, unknown, application, unreviewed or failed independent QA subjects', async () => {
@@ -907,10 +893,10 @@ test('finalize authentication accepts only an explicit synthetic directory witho
   );
 });
 
-test('production finalize CLI dispatch runs separate Codex QA then fixed-policy merge and is terminal-idempotent', async (t) => {
+test('production finalize CLI dispatch runs separate Codex QA and leaves protected merge manual without repeating QA', async (t) => {
   const env = await isolatedFinalizeEnvironment(t);
   const f = fixture();
-  makeAllowlisted(f);
+  makeAllowlisted(f, 'docs/standalone-pr-review.md');
   f.manifest.releaseHold = false;
   await published(f);
   let qa = 0,
@@ -940,11 +926,12 @@ test('production finalize CLI dispatch runs separate Codex QA then fixed-policy 
   };
   assert.equal(await handoffMain({ args: ['finalize', '--pr', '81'], env, dependencies }), 0);
   assert.equal(qa, 1);
-  assert.equal(merges, 1);
-  assert.equal(f.remote().standaloneReviews[0].release.status, 'merged');
+  assert.equal(merges, 0);
+  assert.equal(f.remote().standaloneReviews[0].phase, 'ready');
+  assert.equal(f.remote().standaloneReviews[0].release, undefined);
   assert.equal(await handoffMain({ args: ['finalize', '--pr', '81'], env, dependencies }), 0);
   assert.equal(qa, 1);
-  assert.equal(merges, 1);
+  assert.equal(merges, 0);
 });
 
 test('finalize CLI cannot process normal/unadopted PR and preserves failed Codex execution as blocked', async (t) => {
@@ -1105,8 +1092,9 @@ test('concurrent production finalize and pipeline observe active Codex QA withou
   assert.equal(merges, 0);
   finish();
   assert.equal(await first, 0);
-  assert.equal(merges, 1);
-  assert.equal(f.remote().standaloneReviews[0].release.status, 'merged');
+  assert.equal(merges, 0);
+  assert.equal(f.remote().standaloneReviews[0].phase, 'ready');
+  assert.equal(f.remote().standaloneReviews[0].release, undefined);
   assert.equal(f.remote().standaloneReviews[0].codexFinalReview.status, 'verified');
 });
 
@@ -1280,7 +1268,7 @@ test('organic24subject92report near-capacity history refuses claim before durabl
   owner.github.mergePullRequest = async () => assert.fail('No capacity, no merge');
   await assert.rejects(
     owner.controller.finalize(81, {
-      infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+      infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
       workspace: {
         finalQaStandalone: async () => {
           models++;
@@ -1332,7 +1320,7 @@ test('actual store disjoint request+claim while QA waits preserves both entities
     return { number: pr, reviewedSha: head, mergeSha: f.pr.merge_commit_sha };
   };
   const finishing = owner.controller.finalize(81, {
-    infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+    infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
     workspace: {
       finalQaStandalone: async () => {
         models++;
@@ -1359,7 +1347,7 @@ test('actual store disjoint request+claim while QA waits preserves both entities
   assert.equal(models, 1);
   assert.equal(merges, 1);
   await owner.controller.finalize(81, {
-    infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+    infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
     workspace: { finalQaStandalone: async () => assert.fail('Do not repeat model') },
   });
   assert.equal(models, 1);
@@ -1379,7 +1367,7 @@ test('actual store same-subject modification during QA remains a conflict withou
   let models = 0;
   owner.github.mergePullRequest = async () => assert.fail('Same-entity conflict must not merge');
   const finishing = owner.controller.finalize(81, {
-    infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+    infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
     workspace: {
       finalQaStandalone: async () => {
         models++;
@@ -1481,6 +1469,8 @@ test('F3 same-account report cannot authorize merge; distinct reviewer or protec
     humanApproved: false,
     protectedReviews: true,
   });
+  subject.release = { status: 'merging', reviewedSha: sha, prNumber: 81, nonce: 'direct-reservation', reservedAt: new Date().toISOString() };
+  await stepOptions(f, subject, async () => assert.fail()).save();
   let merges = 0;
   f.github.mergePullRequest = async (_pr, _sha, { guard }) => {
     await guard();
@@ -1953,22 +1943,32 @@ async function fairSubjects() {
   };
   return { initial, store, github, controller,
     remote: () => remote, saves: () => saves, setCode: (value) => { failureCode = value; },
-    tick: async () => { clock += 10000; return runPipeline({ repo, event: {}, gh: github,
+    tick: async (elapsed = 10000) => { clock += elapsed; return runPipeline({ repo, event: {}, gh: github,
       store, workspace: {}, models: {}, standaloneController: controller, now: () => clock }); },
   };
 }
 
-test('transient fairness resolves later subjects from refreshed canonical state and escalates at three ticks', async () => {
+test('transient fairness uses elapsed backoff, keeps three rapid ticks pending, and exhausts only after the window', async () => {
   const f = await fairSubjects();
-  for (let count = 1; count <= 3; count++) {
-    const state = await f.tick();
-    assert.equal(state.standaloneReviews[0].lastTransientFailure.count, count);
-    assert.equal(state.standaloneReviews[1].projectionTicks, count);
-    assert.equal(f.remote().standaloneReviews[1].projectionTicks, count,
-      'Later subject mutation belongs to canonical reloaded state');
+  for (let tick = 1; tick <= 3; tick++) {
+    await f.tick();
+    assert.equal(f.remote().standaloneReviews[0].lastTransientFailure.count, 1);
+    assert.equal(f.remote().standaloneReviews[0].phase, 'waiting-review');
+    assert.equal(f.remote().standaloneReviews[1].projectionTicks, tick);
+  }
+  let previousRetry = f.remote().standaloneReviews[0].lastTransientFailure.nextRetryAt;
+  for (const [elapsed, count, delay] of [[60000, 2, 120000], [120000, 3, 240000],
+    [240000, 4, 480000], [480000, 5, 960000], [960000, 6, 1800000]]) {
+    await f.tick(elapsed);
+    const failure = f.remote().standaloneReviews[0].lastTransientFailure;
+    assert.equal(failure.count, count);
+    assert.equal(failure.nextRetryAt - Date.parse(failure.at), delay);
+    assert.ok(failure.nextRetryAt > previousRetry);
+    previousRetry = failure.nextRetryAt;
   }
   assert.equal(f.remote().standaloneReviews[0].phase, 'blocked');
   assert.equal(f.remote().standaloneReviews[0].failureCode, 'github-transient-exhausted');
+  assert.equal(f.remote().standaloneReviews[1].projectionTicks, 8);
   assert.deepEqual(f.remote().standaloneReviews[0].implementation, f.initial.standaloneReviews[0].implementation);
 });
 
@@ -1987,7 +1987,7 @@ test('transient counters reset on successful work and changed SHA without resett
   const f = await fairSubjects();
   await f.tick();
   f.setCode(null);
-  await f.tick();
+  await f.tick(60000);
   assert.equal(f.remote().standaloneReviews[0].lastTransientFailure, undefined);
   f.setCode('github-read-transient');
   await f.tick();
@@ -2006,7 +2006,10 @@ test('human-protected prompt and policy tests reject automatic merge even with a
     'agent-team/tests/bug-pipeline/standalone-review.test.mjs',
     'agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs',
     'agent-team/tests/bug-pipeline/operator-authorization.test.mjs',
-    'agent-team/tests/bug-pipeline/attempt-budget.test.mjs'];
+    'agent-team/tests/bug-pipeline/attempt-budget.test.mjs',
+    'docs/standalone-pr-review.md',
+    'agent-team/tests/bug-pipeline/models.test.mjs',
+    'agent-team/tests/bug-pipeline/workspace.test.mjs'];
   for (const path of paths) {
     assert.equal(requiresHumanReview(path), true);
     assert.equal(STANDALONE_INFRASTRUCTURE_FILES.includes(path), false);
@@ -2015,7 +2018,7 @@ test('human-protected prompt and policy tests reject automatic merge even with a
         native: { humanApproved: true, author: 'author', protectedReviews: true } }),
       'human-protected-trust-root');
   }
-  assert.equal(requiresHumanReview('docs/standalone-pr-review.md'), false);
+  assert.equal(requiresHumanReview('docs/standalone-pr-review.md'), true);
 });
 
 test('post-save request notice failure is repaired by the actual suggested CLI command, idempotently without spending a round', async () => {
@@ -2086,14 +2089,14 @@ const mergeRecovery = (extra = {}) => ({ action: 'release-merge-reservation', ex
   token: 'unique-merge-reservation', reason: 'Exact reservation recovery',
   authorizationRef: 'test:session', ...extra });
 
-test('merge lease uses injected clock and actual thirty-second command timeout; fresh owner cannot be preempted', async () => {
+test('merge lease covers bounded preparation plus command; recovery at 31 seconds still needs verified force', async () => {
   let clock = Date.parse('2026-10-18T00:00:00Z');
   const f = fixture({ now: () => new Date(clock) });
   await reservedMerge(f);
   await assert.rejects(f.controller.recover(81, mergeRecovery()), /authorized force/);
-  clock += 29999;
+  clock += 31000;
   await assert.rejects(f.controller.recover(81, mergeRecovery()), /authorized force/);
-  clock += 1;
+  clock += MERGE_RESERVATION_LEASE_MS - 31000;
   const recovered = await f.controller.recover(81, mergeRecovery());
   assert.equal(recovered.release.status, 'merging');
   assert.equal(recovered.release.recoveryReleasedAt, new Date(clock).toISOString());
@@ -2121,7 +2124,7 @@ test('explicit verified force is audited and cannot reset consumed implementatio
 });
 
 test('merge completed before release converges to exact-head receipt rather than waiting review', async () => {
-  const f = fixture({ now: () => new Date('2026-10-18T00:01:00Z') });
+  const f = fixture({ now: () => new Date('2026-10-18T00:06:00Z') });
   await reservedMerge(f);
   markMerged(f);
   const recovered = await f.controller.recover(81, mergeRecovery());
@@ -2131,7 +2134,7 @@ test('merge completed before release converges to exact-head receipt rather than
 });
 
 test('merge during actual save guard refuses stale recovery and reconciles the retained reservation', async () => {
-  const f = fixture({ now: () => new Date('2026-10-18T00:01:00Z') });
+  const f = fixture({ now: () => new Date('2026-10-18T00:06:00Z') });
   await reservedMerge(f);
   const feedback = f.github.reviewFeedback;
   let reads = 0;
@@ -2149,7 +2152,7 @@ test('merge during actual save guard refuses stale recovery and reconciles the r
 });
 
 test('merge after recovery CAS is reconciled through tombstone without a second merge', async () => {
-  const f = fixture({ now: () => new Date('2026-10-18T00:01:00Z') });
+  const f = fixture({ now: () => new Date('2026-10-18T00:06:00Z') });
   await reservedMerge(f);
   const tombstone = await f.controller.recover(81, mergeRecovery());
   assert.ok(tombstone.release.recoveryReleasedAt);
@@ -2172,7 +2175,7 @@ test('failed QA reservation is terminal and needs no invented lease, but each re
   assert.equal(recovered.recoveryHistory.at(-1).authorization.binding.reservation.forceLive, false);
 });
 
-test('definite protected merge rejection persists visible failure and retains unique reservation instead of retrying', async () => {
+test('definite protected merge rejection archives the full reservation for explicit resume without retrying', async () => {
   const f = fixture({ now: () => new Date('2026-10-18T00:00:00Z') });
   makeAllowlisted(f);
   f.manifest.releaseHold = false;
@@ -2185,15 +2188,21 @@ test('definite protected merge rejection persists visible failure and retains un
   };
   const subject = await f.controller.finalize(81, {
     workspace: { finalQaStandalone: async () => ({ status: 'verified', summary: 'Synthetic QA' }) },
-    infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+    infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
   });
   assert.equal(subject.phase, 'blocked');
-  assert.equal(subject.failureCode, 'github-write-rejected');
-  assert.equal(subject.release.status, 'merging');
-  assert.match(subject.release.nonce, /^[a-f0-9-]{36}$/);
-  assert.equal(subject.release.reservedAt, '2026-10-18T00:00:00.000Z');
+  assert.equal(subject.failureCode, 'github-merge-rejected');
+  assert.equal(subject.release, undefined);
+  assert.equal(subject.mergeHistory[0].status, 'merging');
+  assert.match(subject.mergeHistory[0].nonce, /^[a-f0-9-]{36}$/);
+  assert.equal(subject.mergeHistory[0].reservedAt, '2026-10-18T00:00:00.000Z');
   await f.controller.finalize(81, { workspace: {}, infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES });
-  assert.equal(merges, 1, 'A pending/refused reservation is never blindly repeated');
+  assert.equal(merges, 1, 'A refused reservation is never blindly repeated');
+  const resumed = await f.controller.recover(81, { action: 'resume', expectedSha: sha,
+    token: sha256(JSON.stringify({ phase: subject.phase, failureCode: subject.failureCode })), reason: 'Definite rejection diagnosed' });
+  assert.equal(resumed.phase, 'waiting-review');
+  assert.deepEqual(resumed.mergeHistory, subject.mergeHistory);
+  assert.equal(merges, 1);
 });
 
 test('unknown-outcome merge that committed reconciles receipt and preserves reservation nonce without a second write', async () => {
@@ -2210,7 +2219,7 @@ test('unknown-outcome merge that committed reconciles receipt and preserves rese
   };
   const uncertain = await f.controller.finalize(81, {
     workspace: { finalQaStandalone: async () => ({ status: 'verified', summary: 'Synthetic QA' }) },
-    infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+    infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
   });
   assert.equal(uncertain.failureCode, 'github-write-uncertain');
   assert.equal(uncertain.release.status, 'merging');
@@ -2219,4 +2228,160 @@ test('unknown-outcome merge that committed reconciles receipt and preserves rese
   assert.equal(recovered.release.nonce, uncertain.release.nonce);
   assert.equal(recovered.release.mergeSha, f.pr.merge_commit_sha);
   assert.equal(merges, 1);
+});
+
+test('projection 502 retries block with operation metadata and resume only after exact evidence verification', async () => {
+  const f = fixture();
+  let rejectLabels = true, writes = 0;
+  const controller = createStandaloneReview({ github: f.github, cwd: '/trusted', run: async (call) => {
+    if (call.args[1] === `repos/${repo}/issues/81/labels` && rejectLabels) {
+      writes++;
+      return { ok: false, stderr: 'gh: unavailable (HTTP 502)', stdout: '' };
+    }
+    return f.run(call);
+  } });
+  await controller.adopt(f.manifest);
+  const blocked = await controller.finalize(81, { workspace: {}, infrastructureFiles: [] });
+  assert.equal(writes, 3);
+  assert.equal(blocked.failureCode, 'github-write-uncertain');
+  assert.equal(blocked.failureOperation, 'projection');
+  const options = { action: 'resume', expectedSha: sha,
+    token: sha256(JSON.stringify({ phase: blocked.phase, failureCode: blocked.failureCode })),
+    reason: 'Idempotent projection repaired after native verification' };
+  f.treeOverrides.set(testedSha, [{ path: f.manifest.sourceManifest[0].path,
+    type: 'blob', mode: '100644', sha: '7'.repeat(40) }]);
+  await assert.rejects(controller.recover(81, options), /Frozen standalone subject/);
+  f.treeOverrides.delete(testedSha);
+  const resumed = await controller.recover(81, options);
+  assert.equal(resumed.phase, 'waiting-review');
+  assert.equal(resumed.failureOperation, undefined);
+  assert.deepEqual(resumed.implementation, blocked.implementation);
+  rejectLabels = false;
+  await controller.finalize(81, { workspace: {}, infrastructureFiles: [] });
+  assert.equal(f.labels.length, 1);
+});
+
+test('uncertain or rejected non-projection mutations remain fail closed for resume', async () => {
+  for (const failureCode of ['github-write-uncertain', 'github-write-rejected']) {
+    const f = fixture();
+    await f.controller.adopt(f.manifest);
+    const store = f.github.createStateStore(), state = await store.load();
+    Object.assign(state.standaloneReviews[0], { phase: 'blocked', failureCode, failureOperation: 'mutation' });
+    await store.save(state);
+    await assert.rejects(f.controller.recover(81, { action: 'resume', expectedSha: sha,
+      token: sha256(JSON.stringify({ phase: 'blocked', failureCode })), reason: 'No safe retry evidence' }),
+    /explicit retryable failure/);
+  }
+});
+
+test('revision adoption preserves a full merging tombstone only at a verified OPEN different head', async () => {
+  for (const condition of ['same-head', 'merged', 'open-new-head']) {
+    const f = fixture();
+    await f.controller.adopt(f.manifest);
+    const store = f.github.createStateStore(), state = await store.load(), previous = state.standaloneReviews[0];
+    previous.release = { status: 'merging', reviewedSha: sha, prNumber: 81,
+      nonce: 'full-random-reservation', reservedAt: '2026-10-18T00:00:00Z',
+      recoveryReleasedAt: '2026-10-18T00:06:00Z', diagnostic: { preserve: true } };
+    previous.mergeHistory = [{ status: 'older-history', preserve: ['all', 'fields'] }];
+    previous.budgetAuthorizationCutover = { schemaVersion: 1, legacyCount: 0,
+      legacyDigest: sha256('[]'), actor: 'root', at: '2026-10-18T00:00:00Z', authorizationRef: 'test:cutover' };
+    await store.save(state);
+    const next = revision(f);
+    if (condition === 'same-head') { f.pr.head.sha = sha; f.feedback.head = sha; }
+    if (condition === 'merged') { f.pr.state = 'closed'; f.pr.merged = true; }
+    if (condition !== 'open-new-head') {
+      await assert.rejects(f.controller.adopt(next), /identity/);
+      assert.deepEqual(f.remote().standaloneReviews[0].release, previous.release);
+    } else {
+      const adopted = await f.controller.adopt(next);
+      assert.deepEqual(adopted.mergeHistory, [...previous.mergeHistory, previous.release]);
+      assert.equal(adopted.release, undefined);
+      assert.deepEqual(adopted.budgetAuthorizationCutover, previous.budgetAuthorizationCutover);
+    }
+  }
+});
+
+test('new adoption cannot supply a legacy budget authorization exemption; both validators reject unauthorized appended PR extensions', async () => {
+  const f = fixture();
+  const forged = clone(f.manifest);
+  forged.budgetAuthorizationCutover = { schemaVersion: 1, legacyCount: 99 };
+  await assert.rejects(f.controller.adopt(forged));
+  await f.controller.adopt(f.manifest);
+  const extended = await f.controller.extendBudget(81, { kind: 'implementation', limit: 5,
+    reason: 'Synthetic independently verified action', authorizationRef: 'test:session' });
+  assert.equal(extended.budgetAuthorizationCutover, undefined);
+  const { validateState } = await import('../../src/bug-pipeline/contracts.mjs');
+  for (const validate of [(state) => validateState(state, repo), validateStandaloneState]) {
+    validate(f.remote());
+    const altered = clone(f.remote());
+    delete altered.standaloneReviews[0].budgetExtensions[0].authorization;
+    assert.throws(() => validate(altered), /authorization provenance/);
+  }
+});
+
+test('background standalone waiting notice neither reads the notice nor blocks when actor differs or notice reads fail', async () => {
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  await f.controller.request(81);
+  f.setActor('another-authorized-user');
+  const previous = clone(f.remote().standaloneReviews[0]), notices = f.comments.length;
+  f.github.viewIssue = async () => { throw Object.assign(new Error('Synthetic notice read 503'), { code: 'github-read-transient' }); };
+  const result = (await runRuntime(f, {})).standaloneReviews[0];
+  // The label read has its own backoff; the notice path performs no API operation.
+
+  assert.equal(await f.controller.reconcile(previous, async () => assert.fail('No pending notice state write')), false);
+  assert.equal(f.comments.length, notices);
+  assert.equal(result.phase, 'waiting-review');
+});
+
+test('slow merge readiness keeps 31-second reservation live and prevents commands after preparation deadline', async () => {
+  for (const elapsed of [31000, MERGE_PREPARATION_TIMEOUT_MS]) {
+    let clock = Date.parse('2026-10-18T00:00:00Z');
+    const f = fixture({ now: () => new Date(clock) });
+    makeAllowlisted(f); f.manifest.releaseHold = false;
+    await published(f);
+    let delayed = false, merges = 0;
+    f.checksHook(async () => {
+      if (!delayed && f.remote().standaloneReviews[0].release?.status === 'merging') {
+        delayed = true; clock += elapsed;
+        if (elapsed === 31000) {
+          const release = f.remote().standaloneReviews[0].release;
+          await assert.rejects(f.controller.recover(81, { ...mergeRecovery(), token: release.nonce }), /authorized force/);
+        }
+      }
+    });
+    f.github.mergePullRequest = async (_pr, _sha, { guard }) => {
+      await guard(); merges++; markMerged(f);
+      return { mergeSha: f.pr.merge_commit_sha };
+    };
+    const result = await f.controller.finalize(81, { workspace: {
+      finalQaStandalone: async () => ({ status: 'verified', summary: 'Synthetic QA' }) },
+      infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES });
+    assert.equal(delayed, true);
+    assert.equal(merges, elapsed === 31000 ? 1 : 0);
+    assert.equal(result.release.status, elapsed === 31000 ? 'merged' : 'merging');
+  }
+});
+
+test('definite merge rejection cannot archive a reservation after native head/state becomes uncertain', async () => {
+  for (const outcome of ['new-head', 'merged', 'timeout']) {
+    const f = fixture();
+    makeAllowlisted(f); f.manifest.releaseHold = false;
+    await published(f);
+    let merges = 0;
+    f.github.mergePullRequest = async () => {
+      merges++;
+      const { githubOperationError } = await import('../../src/bug-pipeline/github.mjs');
+      if (outcome === 'new-head') f.pr.head.sha = '6'.repeat(40);
+      if (outcome === 'merged') markMerged(f);
+      throw githubOperationError(outcome === 'timeout' ? { error: 'timeout' } :
+        { stderr: 'gh: definite rejection (HTTP 405)' }, 'merge');
+    };
+    const blocked = await f.controller.finalize(81, { infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
+      workspace: { finalQaStandalone: async () => ({ status: 'verified', summary: 'Synthetic QA' }) } });
+    assert.equal(merges, 1);
+    assert.equal(blocked.release.status, 'merging');
+    assert.equal(blocked.mergeHistory, undefined);
+    assert.notEqual(blocked.failureCode, 'github-merge-rejected');
+  }
 });

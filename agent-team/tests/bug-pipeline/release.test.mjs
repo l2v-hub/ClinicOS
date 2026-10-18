@@ -1282,6 +1282,9 @@ async function addContinuations(f, statuses) {
       preservedLegacyImplementationDigest: historyDigest(f.batch.implementation),
       preservedLegacyReviewsDigest: historyDigest(f.batch.reviews) });
   }
+  if (f.batch.budgetExtensions) f.batch.budgetAuthorizationCutover = { schemaVersion: 1,
+    legacyCount: f.batch.budgetExtensions.length, legacyDigest: historyDigest(f.batch.budgetExtensions),
+    actor: 'trusted-state-owner', at: '2026-10-18T00:00:00Z', authorizationRef: 'test:legacy-cutover' };
 }
 
 test('actual release reserves and merges a passed continuation after four failed legacy attempts', async () => {

@@ -18,44 +18,74 @@ export const spentAttempts = (subject, kind) =>
 const history = (subject, kind) =>
   kind === 'implementation' ? implementationAttempts(subject) : subject[kind];
 
-// Extensions are controller-owned durable records, never adoption-manifest input.
-// The first legacy-compatible operator reservation authorizes only its already spent round.
-export function attemptLimit(subject, kind) {
+// A cutover is pinned by the trusted state owner before new actions, never by adoption.
+// Its digest freezes the exact historical JSON prefix without inventing live grants.
+function legacyExtensionCount(subject, extensions) {
+  const cutover = subject.budgetAuthorizationCutover;
+  if (cutover === undefined) return 0;
+  assert.equal(cutover.schemaVersion, 1, 'Invalid budget authorization cutover');
+  assert.ok(Number.isSafeInteger(cutover.legacyCount) && cutover.legacyCount >= 0 &&
+    cutover.legacyCount <= extensions.length, 'Invalid budget legacy prefix count');
+  assert.ok(typeof cutover.actor === 'string' && cutover.actor.length > 0 &&
+    typeof cutover.authorizationRef === 'string' && cutover.authorizationRef.length > 0 &&
+    typeof cutover.at === 'string' && Number.isFinite(Date.parse(cutover.at)),
+    'Cutover needs the trusted owner audit coordinates');
+  assert.match(cutover.legacyDigest, digest);
+  assert.equal(cutover.legacyDigest, historyDigest(extensions.slice(0, cutover.legacyCount)),
+    'Budget legacy prefix changed');
+  return cutover.legacyCount;
+}
+function validateExtensionAuthorization(subject, entry, collection) {
+  const authorization = entry.authorization;
+  assert.ok(['user-session', 'distinct-maintainer-comment'].includes(authorization?.provenance),
+    'Budget extension requires external authorization provenance');
+  for (const field of ['grantId', 'consumptionNonce', 'sourceRef'])
+    assert.ok(typeof authorization[field] === 'string' &&
+      /^[A-Za-z0-9_:.#/-]{1,200}$/.test(authorization[field]), 'Invalid authorization identity');
+  const binding = authorization.binding;
+  assert.ok(binding && typeof binding === 'object' && !Array.isArray(binding));
+  assert.equal(authorization.bindingDigest, historyDigest(binding), 'Authorization content changed');
+  assert.equal(binding.version, 1);
+  assert.equal(binding.repository, 'l2v-hub/ClinicOS');
+  assert.ok(ENTITY_COLLECTIONS.includes(binding.collection));
+  if (collection) assert.equal(binding.collection, collection, 'Authorization collection changed');
+  if (subject.kind === 'standalone-pr-review') assert.equal(binding.collection, 'standaloneReviews');
+  assert.equal(binding.entityId, subject.id);
+  assert.equal(binding.pr, subject.pr?.number ?? null);
+  assert.equal(binding.reviewIssue, subject.pr?.number ? null : subject.reviewIssue);
+  assert.equal(binding.actor, entry.actor);
+  assert.equal(binding.action, 'extend-budget');
+  assert.ok(binding.subjectSha === null || /^[a-f0-9]{40}$/.test(binding.subjectSha));
+  assert.match(binding.historyDigest, digest);
+  assert.equal(binding.reservation, null);
+  assert.deepEqual(binding.budget, {
+    kind: entry.kind, previousLimit: entry.previousLimit, limit: entry.limit,
+  });
+}
+
+// Stored receipts bind content; only the injected mutator verifier authenticates a grant.
+export function attemptLimit(subject, kind, collection) {
   assert.ok(['implementation', 'reviews'].includes(kind));
   let limit =
     kind === 'implementation' ? Math.max(4, subject.operatorContinuations?.[0]?.round ?? 4) : 4;
-  assert.ok(
-    Array.isArray(subject.budgetExtensions ?? []) && (subject.budgetExtensions?.length ?? 0) <= 56,
-  );
-  for (const entry of subject.budgetExtensions ?? []) {
+  const extensions = subject.budgetExtensions ?? [];
+  assert.ok(Array.isArray(extensions) && extensions.length <= 56);
+  const legacyCount = legacyExtensionCount(subject, extensions);
+  for (const [index, entry] of extensions.entries()) {
     assert.ok(['implementation', 'reviews'].includes(entry.kind));
     assert.ok(entry.actor && entry.at && entry.reason && entry.authorizationRef && entry.nonce);
     assert.equal(entry.entityId, subject.id);
     if (subject.pr?.number) {
       assert.equal(entry.pr, subject.pr.number);
-    } else {
+    } else if (index >= legacyCount) {
       assert.equal(entry.collection, 'manualBatches', 'Issue-only allowance needs manual owner');
       assert.equal(entry.pr, null, 'Issue allowance must not invent a PR');
       assert.ok(Number.isSafeInteger(subject.reviewIssue) && subject.reviewIssue > 0,
         'Issue-only allowance needs an existing reviewIssue');
       assert.equal(entry.reviewIssue, subject.reviewIssue, 'Issue allowance coordinate changed');
       assert.ok(subject.issues?.includes(subject.reviewIssue), 'Issue is outside the actual cohort');
-      const authorization = entry.authorization;
-      assert.ok(['user-session', 'distinct-maintainer-comment'].includes(authorization?.provenance),
-        'Issue allowance requires external authorization provenance');
-      assert.ok(authorization.grantId && authorization.consumptionNonce && authorization.sourceRef);
-      const binding = authorization.binding;
-      assert.equal(authorization.bindingDigest, historyDigest(binding), 'Authorization content changed');
-      assert.equal(binding.collection, 'manualBatches');
-      assert.equal(binding.entityId, subject.id);
-      assert.equal(binding.pr, null);
-      assert.equal(binding.reviewIssue, subject.reviewIssue);
-      assert.equal(binding.actor, entry.actor);
-      assert.equal(binding.action, 'extend-budget');
-      assert.deepEqual(binding.budget, {
-        kind: entry.kind, previousLimit: entry.previousLimit, limit: entry.limit,
-      });
     }
+    if (index >= legacyCount) validateExtensionAuthorization(subject, entry, collection);
     assert.ok(
       Number.isSafeInteger(entry.historyLength) &&
         entry.historyLength >= 0 &&
@@ -78,7 +108,7 @@ export function attemptLimit(subject, kind) {
 export function validateOperatorContinuations(state) {
   for (const key of ENTITY_COLLECTIONS)
     for (const subject of state[key] ?? []) {
-      for (const kind of ['implementation', 'reviews']) attemptLimit(subject, kind);
+      for (const kind of ['implementation', 'reviews']) attemptLimit(subject, kind, key);
       const continuations = subject.operatorContinuations ?? [];
       assert.ok(Array.isArray(continuations) && continuations.length <= 32);
       for (const [index, record] of continuations.entries()) {

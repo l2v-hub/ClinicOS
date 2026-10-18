@@ -1,4 +1,4 @@
-import { githubOperationError, isRetryableGitHubFailure } from './github.mjs';
+import { githubOperationError, isRetryableGitHubFailure, recordTransientGitHubFailure, MERGE_PREPARATION_TIMEOUT_MS } from './github.mjs';
 import { randomUUID } from 'node:crypto';
 import {
   attemptLimit,
@@ -532,7 +532,7 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
     const subject = {
       ...clone(manifest),
       ...Object.fromEntries(
-        ['budgetExtensions', 'operatorContinuations', 'operatorCoordination']
+        ['budgetExtensions', 'budgetAuthorizationCutover', 'operatorContinuations', 'operatorCoordination']
           .filter((key) => previous?.[key])
           .map((key) => [key, clone(previous[key])]),
       ),
@@ -578,6 +578,7 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
         equal(subject.packet.files[attempt.evidence], previous.packet.files[attempt.evidence]);
       for (const key of [
         'budgetExtensions',
+        'budgetAuthorizationCutover',
         'operatorContinuations',
         'operatorCoordination',
         'recoveryHistory',
@@ -585,6 +586,12 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
         'mergeHistory',
       ])
         if (previous[key]) subject[key] = clone(previous[key]);
+      if (previous.release) {
+        assert.equal(previous.release.status, 'merging', 'A merged subject is terminal');
+        // verify() and the persistence guard authenticate an OPEN different head.
+        subject.mergeHistory ??= [];
+        subject.mergeHistory.push(clone(previous.release));
+      }
       subject.preservedPackets = [
         ...clone(previous.preservedPackets ?? []),
         clone(previous.packet),
@@ -706,15 +713,14 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
       subject = state.standaloneReviews?.find((item) => item.pr.number === pr);
       assert.ok(subject, 'Finalize owner disappeared');
       if (isRetryableGitHubFailure(error)) {
-        const previous = subject.lastTransientFailure;
-        const count = previous?.subjectSha === subject.sha ? Math.min(previous.count + 1, 3) : 1;
-        subject.lastTransientFailure = {
-          code: 'github-read-transient', operation: 'read', at: now().toISOString(),
-          count, subjectSha: subject.sha, nextRetryAt: now().getTime() + Math.min(count * 1000, 3000),
-        };
-        if (count < 3) { await save(); throw error; }
+        if (!recordTransientGitHubFailure(subject, now().getTime())) { await save(); throw error; }
         subject.failureCode = 'github-transient-exhausted';
-      } else subject.failureCode = controllerFailureCode(error);
+      } else {
+        subject.failureCode = controllerFailureCode(error);
+        delete subject.failureOperation;
+        if (['projection', 'merge', 'mutation', 'read'].includes(error.operation))
+          subject.failureOperation = error.operation;
+      }
       subject.phase = 'blocked';
       delete subject.approvedSha;
       subject.reason = 'Standalone finalization requires explicit recovery';
@@ -781,6 +787,8 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
     claim: (...args) => gated('claim', ...args),
     submit: (...args) => gated('submit', ...args),
     reconcilePR: (...args) => gated('reconcilePR', ...args),
+    recover: (...args) => operation(() => handoff.recover(...args)),
+    extendBudget: (...args) => operation(() => handoff.extendBudget(...args)),
     adopt: (...args) => operation(() => adopt(...args)),
     verify: (...args) => operation(() => verify(...args)),
     publishState: (...args) => operation(() => publishState(...args)),
@@ -859,13 +867,28 @@ export async function finalizeStandaloneSubject({
     subject.release = { status: 'merging', reviewedSha: subject.sha, prNumber: subject.pr.number,
       nonce: randomUUID(), reservedAt: now().toISOString() };
     await persist();
-    const receipt = await mergeStandaloneReview({
-      subject,
-      controller,
-      github,
-      infrastructureFiles,
-      execute: true,
-    });
+    let receipt;
+    try {
+      receipt = await mergeStandaloneReview({
+        subject, controller, github, infrastructureFiles, execute: true, now,
+      });
+    } catch (error) {
+      if (error.code !== 'github-write-rejected' || error.operation !== 'merge' ||
+        !(error.httpStatus >= 400 && error.httpStatus < 500 && error.httpStatus !== 408)) throw error;
+      // Only a definite rejection plus a fresh exact-head OPEN native observation
+      // can end this reservation. Transport uncertainty retains its tombstone.
+      await controller.current(subject);
+      subject.mergeHistory ??= [];
+      subject.mergeHistory.push(clone(subject.release));
+      delete subject.release;
+      subject.phase = 'blocked';
+      subject.failureCode = 'github-merge-rejected';
+      subject.failureOperation = 'merge';
+      subject.reason = 'Definite merge rejection; exact-head open PR verified for explicit resume';
+      delete subject.approvedSha;
+      await persist();
+      return;
+    }
     subject.release = {
       ...subject.release,
       status: 'merged',
@@ -965,9 +988,18 @@ export async function mergeStandaloneReview({
   github,
   infrastructureFiles,
   execute = false,
+  now = () => new Date(),
 }) {
   const expected = clone(subject);
   const actor = await controller.actor();
+  const preparationStart = Date.parse(expected.release?.reservedAt);
+  const preparationDeadline = preparationStart + MERGE_PREPARATION_TIMEOUT_MS;
+  const preparationLive = () => {
+    assert.equal(expected.release?.status, 'merging', 'Merge requires its durable reservation');
+    const clock = now().getTime();
+    assert.ok(clock >= preparationStart && clock < preparationDeadline,
+      'Merge preparation deadline expired before command');
+  };
   const guard = async () => {
     await controller.current(expected);
     assert.ok(await github.authorized(actor), 'Merge actor lost authorization');
@@ -1030,6 +1062,7 @@ export async function mergeStandaloneReview({
     );
     await controller.current(expected);
     assert.ok(await github.authorized(actor));
+    if (execute) preparationLive();
   };
   const reason = await guard();
   if (reason)

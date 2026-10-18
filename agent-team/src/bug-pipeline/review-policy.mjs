@@ -3,6 +3,9 @@ export function requiresHumanReview(file) {
   return (
     [
       'docs/claude-local-review-prompt.md',
+      'docs/standalone-pr-review.md',
+      'agent-team/tests/bug-pipeline/models.test.mjs',
+      'agent-team/tests/bug-pipeline/workspace.test.mjs',
       'agent-team/tests/bug-pipeline/standalone-review.test.mjs',
       'agent-team/tests/bug-pipeline/github.test.mjs',
       'agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs',

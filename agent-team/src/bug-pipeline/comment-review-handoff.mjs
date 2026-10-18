@@ -6,7 +6,7 @@ import {
   activeImplementation,
   spentAttempts,
 } from './attempt-budget.mjs';
-import { githubOperationError } from './github.mjs';
+import { githubOperationError, MERGE_RESERVATION_LEASE_MS } from './github.mjs';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { validateState, feedbackFingerprint, sha256, safeText } from './contracts.mjs';
@@ -41,10 +41,11 @@ export function createCommentReviewHandoff({
   nonce = randomUUID,
   subjectAdapter,
   authorizationVerifier,
-  operationTimeouts = { merge: 30_000 },
+  operationTimeouts = {},
 }) {
   const store = github.createStateStore();
-  const timeouts = Object.freeze({ ...operationTimeouts });
+  const timeouts = Object.freeze({ ...operationTimeouts,
+    merge: Math.max(MERGE_RESERVATION_LEASE_MS, operationTimeouts.merge ?? 0) });
   async function api(endpoint) {
     const result = await run({
       command: 'gh',
@@ -305,10 +306,10 @@ export function createCommentReviewHandoff({
     });
     return { status: 'submitted', pr, sha: batch.sha, round: batch.reviews.length };
   }
-  async function reconcile(batch, persist) {
+  async function reconcile(batch, persist, { repairNotice = false } = {}) {
     if (!channel(batch)) return false;
     if (batch.externalReview.status === 'comment-requested') {
-      await requestNotice(batch, await actor());
+      if (repairNotice) await requestNotice(batch, await actor());
       return false;
     }
     if (batch.externalReview.status === 'published') return true;
@@ -437,7 +438,7 @@ export function createCommentReviewHandoff({
       await reconcile(batch, async (options) => {
         await save(state, batch, login, options);
         persisted = true;
-      });
+      }, { repairNotice: true });
     } catch (error) {
       if (persisted)
         Object.assign(error, { persisted: true, projection: 'report-publication-failed', pr });
@@ -576,7 +577,13 @@ export function createCommentReviewHandoff({
         historyDigest({ phase: batch.phase, failureCode: batch.failureCode ?? null }),
       );
       if (subjectAdapter?.recoveryVerify) {
-        assert.ok(['github-read-transient', 'github-transient-exhausted'].includes(batch.failureCode),
+        const projectionFailure =
+          ['github-write-uncertain', 'github-write-rejected'].includes(batch.failureCode) &&
+          batch.failureOperation === 'projection';
+        const rejectedMerge = batch.failureCode === 'github-merge-rejected' && !batch.release &&
+          batch.mergeHistory?.at(-1)?.status === 'merging';
+        assert.ok(['github-read-transient', 'github-transient-exhausted'].includes(batch.failureCode) ||
+          projectionFailure || rejectedMerge,
           'Standalone resume requires an explicit retryable failure');
         await subjectAdapter.recoveryVerify(batch);
       }
@@ -622,6 +629,8 @@ export function createCommentReviewHandoff({
     });
     delete batch.approvedSha;
     delete batch.failureCode;
+    delete batch.failureOperation;
+    if (action === 'resume') delete batch.lastTransientFailure;
     if (batch.release?.recoveryReleasedAt && batch.release.status === 'merging')
       batch.failureCode = 'github-write-uncertain';
     await save(state, batch, login, {

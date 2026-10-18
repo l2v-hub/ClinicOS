@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 1,
+  "baseSha": "ded0c92c95362c25bd8b7c07aa191ce9f1bae470",
+  "scopeAmendment": "scope-amendment-1-review-fixture.md",
+  "entries": [
+    {
+      "path": "agent-team/src/bug-pipeline/github.mjs",
+      "sha256": "4af3436a7cd44270a1543a7ff84b05ca57ad947ad87c7ad940e223ef20208ebd",
+      "bytes": 44341,
+      "baseGitBlob": "5e290dd2bb691e96aa1fd9eaf178f238465e05bc",
+      "currentGitBlob": "a4e478c04de2bfacd294e3a1ff4c504b889ff4f7",
+      "changed": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "sha256": "84ad6cd00633a83030fb3b19c8d7e49f813dca6e74d8b8f300e889a45749685e",
+      "bytes": 21986,
+      "baseGitBlob": "a3748fe203a7e077d647d6e0c72d83ff8db11e7e",
+      "currentGitBlob": "9f4ce009cbd8f58336214eb6d7a6b41297419a3b",
+      "changed": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "sha256": "e6a938c2bed4c7f87f223d734e5f39895c623ef3ec46ef6cc8eabf45f28cab48",
+      "bytes": 42355,
+      "baseGitBlob": "8f60fca2cececc2c7dd26908d9124db2c8d16e50",
+      "currentGitBlob": "847983d15006c7ea9b06d8b7598f2221a96dbd51",
+      "changed": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "sha256": "b02d66ff94d65ddab6e4e51c884ca568eff857c9db907a4cd23ce4826bcef687",
+      "bytes": 27092,
+      "baseGitBlob": "4ba14c007a0c189310dd84a65ac85edc726242a0",
+      "currentGitBlob": "92da9466f34bd68bf9768b3fbd0b68b1e8398974",
+      "changed": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/review-handoff-cli.mjs",
+      "sha256": "bf56832827bfb59c16eceb4c1e9569a95eb9f8bfc77c2fd9d3b69ce2ca79ec33",
+      "bytes": 9248,
+      "baseGitBlob": "ba350ef64a86be2b4d2f6d4e0b1157348bbbeb82",
+      "currentGitBlob": "ba350ef64a86be2b4d2f6d4e0b1157348bbbeb82",
+      "changed": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/attempt-budget.mjs",
+      "sha256": "99066c62ffffb8b7a590a3a1f7a7291c4d7b16a3ae3ef638d07ef591655b3ca2",
+      "bytes": 10893,
+      "baseGitBlob": "be13ea97133262464c5e95cdad9683f1d558c444",
+      "currentGitBlob": "13b3556daa34aed04b619816ad16c1e422031544",
+      "changed": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/review-policy.mjs",
+      "sha256": "500124168a97311d658e89f02fd64d88d1d00e562e17c2abf53c7d515d6cf080",
+      "bytes": 1197,
+      "baseGitBlob": "ff1f5375aa2c55d2104acd73352d151b0b3bd116",
+      "currentGitBlob": "d50776ea6272ae3cbdee8503a92a41c2472a1152",
+      "changed": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/release.mjs",
+      "sha256": "a5928d1d00018c0d9f04d254590771d5ba902fad4fe138d829693358928d5ffe",
+      "bytes": 28142,
+      "baseGitBlob": "2220dce2ae611e92b4d5b16d66b022054c4c0933",
+      "currentGitBlob": "2220dce2ae611e92b4d5b16d66b022054c4c0933",
+      "changed": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "sha256": "5355a530f7bd7997f6386cc67893ee21447ec238be8156c0eb304bc6bafa34b9",
+      "bytes": 21129,
+      "baseGitBlob": "0b4399c8b9c9a8f146c05d4077bba8bbc3de9c83",
+      "currentGitBlob": "0b4399c8b9c9a8f146c05d4077bba8bbc3de9c83",
+      "changed": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "sha256": "57d733cf7a6084a5cabd812b159e786b9c20ba3b9651281c4eb0678ad509ca27",
+      "bytes": 7059,
+      "baseGitBlob": "49f6863999ec35956ab5075e2261156788cb3116",
+      "currentGitBlob": "49f6863999ec35956ab5075e2261156788cb3116",
+      "changed": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/dashboard.mjs",
+      "sha256": "d8792c7f2144ace7932ee264478576a26f61ed52a764e3e0cafada82921f7f39",
+      "bytes": 5930,
+      "baseGitBlob": "3b8340de73a5c6b126066aef9c1ec527cbe98d36",
+      "currentGitBlob": "3b8340de73a5c6b126066aef9c1ec527cbe98d36",
+      "changed": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/contracts.mjs",
+      "sha256": "eef4bd3286750f986119b2e15409fffd118ca4e7bcf56d8d8f90b894946f7988",
+      "bytes": 10741,
+      "baseGitBlob": "31acc4c64edea4ab241346e334047f2ecb974724",
+      "currentGitBlob": "31acc4c64edea4ab241346e334047f2ecb974724",
+      "changed": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/operator-authorization.mjs",
+      "sha256": "083a66043d4be386d37cece84ec601f390829d0bfd4998846fb8edc6e1dd73f1",
+      "bytes": 4018,
+      "baseGitBlob": "3ce7fe7a7e8355a0627aa750053acb2bed45e71e",
+      "currentGitBlob": "3ce7fe7a7e8355a0627aa750053acb2bed45e71e",
+      "changed": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "sha256": "d00394814f3660e7820deda97dbbc79c56c802151a57883ba4ef5b3292241a4c",
+      "bytes": 69731,
+      "baseGitBlob": "2fb87102eda83e7a03a8e1ef92465b468fff467c",
+      "currentGitBlob": "2fb87102eda83e7a03a8e1ef92465b468fff467c",
+      "changed": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "sha256": "6102d7239d792ddf1fc1f225b902cff268443ad362c8413499bb8ba990d2a08c",
+      "bytes": 31430,
+      "baseGitBlob": "b5b747904d68225c02a8aaf9f86696e968d74b32",
+      "currentGitBlob": "b5b747904d68225c02a8aaf9f86696e968d74b32",
+      "changed": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "sha256": "5237393fc6d1c3d59ade41f0447c0446c4e93e409b02048edb7249f6f0e641e6",
+      "bytes": 93900,
+      "baseGitBlob": "6658f48a52c5f80cc8b3fab0dbaf76c3c29418af",
+      "currentGitBlob": "4b74379aa6ff79f5c51673257d637775a8a55da2",
+      "changed": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs",
+      "sha256": "f63d27a700430522a3a0c052297cfca218d82ca09edc9e79c8e3e647c47b5da1",
+      "bytes": 14145,
+      "baseGitBlob": "fd0bfee82b554c68376725d0ff6cc655ddc68c32",
+      "currentGitBlob": "fd0bfee82b554c68376725d0ff6cc655ddc68c32",
+      "changed": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "sha256": "0f633e111d73455839b181caebd5c2d133bfc7d1d45aa83dab9a51cbbfa7000c",
+      "bytes": 29189,
+      "baseGitBlob": "e17e231f774564b0f3ec07324e144e679243e477",
+      "currentGitBlob": "882553fb0bf75b13fa24e6f86b9617b62a3297a3",
+      "changed": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/attempt-budget.test.mjs",
+      "sha256": "684e42761f5214a54b26ccf02d6f3e61ff320d670b440ff60451e8b19ca60466",
+      "bytes": 19017,
+      "baseGitBlob": "a4c3971dd127fb679c209ad95fbea7f83da3ca92",
+      "currentGitBlob": "2cf25e823b48b0912a08e4dc29e97be17644962d",
+      "changed": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "sha256": "c361e4f4bb93bb651cd3c007d828a3f8b93f5a09efc8a0c1984d00c5c778ced1",
+      "bytes": 42071,
+      "baseGitBlob": "382c737e198c74c11997bc184306efae00747fea",
+      "currentGitBlob": "8e32274bbb1328727f56d7f67c17e624f70736bf",
+      "changed": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      "sha256": "942bdcce71716e6eff2faf3f474bd5c8d72a52b18c99c603ccd534dd21ab73df",
+      "bytes": 36000,
+      "baseGitBlob": "db24bd43349ca9e5423893e7a403c6286e23e3ac",
+      "currentGitBlob": "4d047725d34c1b2a7b9a7b95d4d0cf1cc357b5cd",
+      "changed": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/dashboard.test.mjs",
+      "sha256": "6bea50a41285d8c40948ed0a2ddd8f86c6136285621618da8ebf77cd4df99667",
+      "bytes": 8647,
+      "baseGitBlob": "24803ff99b4a05fda832065b3fa4c71b5ec7a678",
+      "currentGitBlob": "ccf7076d4a2bd0165ce729f5fecc8cb7ea653175",
+      "changed": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/routing.test.mjs",
+      "sha256": "a8ee77e83ed96a56b3cb01ad2e8bae66f3111e852e82d1485080ef2498ec135b",
+      "bytes": 6589,
+      "baseGitBlob": "f90c16f6ee37e4c785c378186d21b95ed4bd0f66",
+      "currentGitBlob": "f90c16f6ee37e4c785c378186d21b95ed4bd0f66",
+      "changed": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/operator-authorization.test.mjs",
+      "sha256": "0741a48f6b6bb158ba295064f9be3f42a085b00942d7f67c02087b79853bf283",
+      "bytes": 3986,
+      "baseGitBlob": "dbf18da8d4ab91b2575ef9fb04ebb6b0a44c23b9",
+      "currentGitBlob": "dbf18da8d4ab91b2575ef9fb04ebb6b0a44c23b9",
+      "changed": false
+    },
+    {
+      "path": "docs/standalone-pr-review.md",
+      "sha256": "d76561cc5f03377d085e45920d2a44d2420079c3968ceafc3cb92d10433e9bad",
+      "bytes": 27904,
+      "baseGitBlob": "39b695394c191c234c5fa352ca2aee113f26f44a",
+      "currentGitBlob": "330bc14061ac49396079f7073133f6965fd531a3",
+      "changed": true
+    },
+    {
+      "path": "docs/claude-local-review-prompt.md",
+      "sha256": "6d9b828976113e2f3a5afedf1044af7b2f5ce42f87039510cd47218db7e97ef8",
+      "bytes": 11630,
+      "baseGitBlob": "6347048c2932fee9d6a09c4c2246f6019bfdb040",
+      "currentGitBlob": "6347048c2932fee9d6a09c4c2246f6019bfdb040",
+      "changed": false
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.test.mjs",
+      "sha256": "b3fc368c4d48b5c4e057b81e96bec14b5dec9c9afd4cd41ba6a3ec7f2070414a",
+      "bytes": 11510,
+      "baseGitBlob": "7fd941698726061858a45b773794ee73453743f9",
+      "currentGitBlob": "41c7c3de7147d677b9615fa30cd43960e7339f13",
+      "changed": true
+    }
+  ]
+}

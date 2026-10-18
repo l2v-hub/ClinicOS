@@ -264,6 +264,9 @@ test('an explicitly audited effective allowance permits round5 and preserves his
       },
     ],
   };
+  budgetSubject.budgetAuthorizationCutover = { schemaVersion: 1, legacyCount: 1,
+    legacyDigest: historyDigest(budgetSubject.budgetExtensions), actor: 'trusted-state-owner',
+    at: '2026-10-18T00:00:00Z', authorizationRef: 'test:legacy-cutover' };
   await f.change(5);
   const result = await runBugReview({ cwd: f.cwd, packet: f.packet, run: f.run, budgetSubject });
   assert.equal(result.round, 5);

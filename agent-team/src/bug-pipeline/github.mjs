@@ -7,6 +7,24 @@ const STATE_PATH = '.codex-bug-state.json';
 export const MAX_DURABLE_STATE_BYTES = 8 * 1024 * 1024;
 export const RESULT_RESERVATION_BYTES = 512 * 1024;
 const STATE_OUTPUT_BYTES = 16 * 1024 * 1024;
+// A command may start only within preparation's bounded window. The recovery lease
+// also includes its 30-second command timeout, so a slow guard cannot expire ownership.
+export const MERGE_PREPARATION_TIMEOUT_MS = 5 * 60_000;
+export const MERGE_RESERVATION_LEASE_MS = MERGE_PREPARATION_TIMEOUT_MS + 30_000;
+export const GITHUB_TRANSIENT_WINDOW_MS = 30 * 60_000;
+export function recordTransientGitHubFailure(subject, clock) {
+  const previous = subject.lastTransientFailure;
+  const sameHead = previous?.subjectSha === subject.sha;
+  const count = sameHead ? Math.min(previous.count + 1, 32) : 1;
+  const firstFailureAt = sameHead && Number.isFinite(previous.firstFailureAt)
+    ? previous.firstFailureAt : clock;
+  subject.lastTransientFailure = {
+    code: 'github-read-transient', operation: 'read', at: new Date(clock).toISOString(),
+    count, firstFailureAt, subjectSha: subject.sha,
+    nextRetryAt: clock + Math.min(60_000 * 2 ** Math.min(count - 1, 5), 30 * 60_000),
+  };
+  return clock - firstFailureAt >= GITHUB_TRANSIENT_WINDOW_MS;
+}
 const REQUIRED_LABELS = ['bug', 'codex-triage', 'codex-run'];
 const BLOCKING_LABELS = new Set([
   'codex-blocked',
@@ -33,6 +51,7 @@ const FAILURE_CODES = new Set([
   'github-write-rejected',
   'github-write-uncertain',
   'github-transient-exhausted',
+  'github-merge-rejected',
   'label-projection-failed',
   'codex-auth-unavailable',
   'codex-auth-conflict',

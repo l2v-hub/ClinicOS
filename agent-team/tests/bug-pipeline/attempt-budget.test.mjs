@@ -13,7 +13,26 @@ import {
   activeImplementation,
 } from '../../src/bug-pipeline/attempt-budget.mjs';
 import { finalizeEnvironment } from '../../src/bug-pipeline/review-handoff-cli.mjs';
+import { validateState } from '../../src/bug-pipeline/contracts.mjs';
+import { validateStandaloneState } from '../../src/bug-pipeline/standalone-review.mjs';
 import { childEnvironment } from '../../src/bug-pipeline/process.mjs';
+
+function authorizeFixture(subject, entry, collection = 'manualBatches') {
+  const binding = { version: 1, repository: 'l2v-hub/ClinicOS', collection,
+    entityId: subject.id, pr: subject.pr?.number ?? null,
+    reviewIssue: subject.pr?.number ? null : subject.reviewIssue,
+    actor: entry.actor, action: 'extend-budget', subjectSha: subject.sha ?? null,
+    historyDigest: historyDigest(subject), reservation: null,
+    budget: { kind: entry.kind, previousLimit: entry.previousLimit, limit: entry.limit } };
+  entry.authorization = { provenance: 'user-session', grantId: 'synthetic-fixture',
+    consumptionNonce: `synthetic-${entry.nonce}`, sourceRef: 'test:fixture',
+    binding, bindingDigest: historyDigest(binding) };
+}
+function pinLegacy(subject) {
+  subject.budgetAuthorizationCutover = { schemaVersion: 1,
+    legacyCount: subject.budgetExtensions.length, legacyDigest: historyDigest(subject.budgetExtensions),
+    actor: 'trusted-state-owner', at: '2026-10-18T00:00:00Z', authorizationRef: 'test:legacy-cutover' };
+}
 
 function compatibility() {
   const subject = {
@@ -98,6 +117,7 @@ test('one append-only audited extension permits exactly round6; wrong authority,
       historyDigest: historyDigest(prefix),
     },
   ];
+  pinLegacy(subject);
   const reservationBaseline = historyDigest(subject);
   const attempt = reserveImplementation(subject, () => new Date('2026-10-18T01:02:03Z'));
   validateOperatorContinuations(state);
@@ -137,7 +157,7 @@ test('legacy entities retain default4; unaudited fifth implementation and cross-
   subject.operatorContinuations[0].status = 'passed';
   assert.equal(attemptLimit({ implementation: [], reviews: [] }, 'reviews'), 4);
   state.operatorTakeover.subjects[0].id = 'another-owner';
-  assert.throws(() => validateOperatorContinuations(state), /exact durable entity/);
+  assert.throws(() => validateOperatorContinuations(state), /exact durable entity|Authorization collection changed/);
 });
 
 test('F6 application provider key never becomes Codex API auth; missing or conflicting auth blocks before inference', async (t) => {
@@ -174,6 +194,8 @@ test('issue-only manual allowance keeps five spent attempts and binds exact real
   state.operatorTakeover.subjects[0] = { collection: 'manualBatches', id: subject.id };
   const old = JSON.stringify(implementationAttempts(subject));
   const binding = {
+    version: 1, repository: 'l2v-hub/ClinicOS', subjectSha: null, reservation: null,
+    historyDigest: historyDigest(subject),
     collection: 'manualBatches', entityId: subject.id, pr: null, reviewIssue: 470,
     actor: 'operator', action: 'extend-budget',
     budget: { kind: 'implementation', previousLimit: 5, limit: 6 },
@@ -209,7 +231,7 @@ test('issue-only manual allowance keeps five spent attempts and binds exact real
   }
   state.manualBatches = [];
   state.standaloneReviews = [subject];
-  assert.throws(() => validateOperatorContinuations(state), /exact durable entity/);
+  assert.throws(() => validateOperatorContinuations(state), /exact durable entity|Authorization collection changed/);
 });
 
 
@@ -254,6 +276,7 @@ test('default four supports separately audited continuations3 and4 after compati
     previousLimit: 4, limit: 5, actor: 'operator', at: '2026-10-18T21:00:00Z',
     reason: 'Externally authorized next allowance', authorizationRef: 'external-session-action5',
     nonce: 'allowance5', historyLength: 4, historyDigest: historyDigest(implementationAttempts(subject)) }];
+  authorizeFixture(subject, subject.budgetExtensions[0]);
   const fifth = reserveImplementation(subject);
   assert.equal(fifth.round, 5);
   assert.equal(fifth.budgetSource, undefined);
@@ -296,6 +319,7 @@ test('legacy compatibility5 and separately extended6/7/8 keep exact consumed pre
       previousLimit: round - 1, limit: round, actor: 'operator', at: '2026-10-18T21:00:00Z',
       reason: 'Preserved scoped allowance', authorizationRef: `external-action${round}`,
       nonce: `extension${round}`, historyLength: round - 1, historyDigest: historyDigest(prefix) });
+    authorizeFixture(subject, subject.budgetExtensions.at(-1));
     const reserved = reserveImplementation(subject);
     assert.equal(reserved.round, round);
     assert.equal(reserved.budgetExtensionNonce, `extension${round}`);
@@ -307,4 +331,51 @@ test('legacy compatibility5 and separately extended6/7/8 keep exact consumed pre
   assert.equal(subject.operatorContinuations[2].status, 'passed', 'Passed7 stays passed');
   assert.equal(spentAttempts(subject, 'implementation'), 8);
   assert.deepEqual(implementationAttempts(subject).slice(0, 5), original);
+});
+
+
+test('all collection validators enforce authorized suffixes after an exact root-pinned legacy prefix', () => {
+  for (const collection of ['batches', 'manualBatches', 'standaloneReviews']) {
+    for (const kind of ['implementation', 'reviews']) {
+      const subject = { id: 'bug-batch-17', branch: 'codex/bug-batch-17', issues: [17],
+        pr: { number: 81 }, sha: 'a'.repeat(40), phase: 'blocked', implementation: [], reviews: [] };
+      const entry = { entityId: subject.id, pr: 81, kind, previousLimit: 4, limit: 5,
+        actor: 'operator', at: '2026-10-18T00:00:00Z', reason: 'Synthetic scoped extension',
+        authorizationRef: 'test:extension', nonce: 'extension5', historyLength: 0,
+        historyDigest: historyDigest([]) };
+      subject.budgetExtensions = [entry];
+      const state = { schemaVersion: 1, repository: 'l2v-hub/ClinicOS', batches: [], [collection]: [subject] };
+      // validateStandaloneState must reject in its shared authorization boundary,
+      // before standalone-specific shape checks for this minimal test subject.
+      for (const validate of [() => validateState(state, state.repository), () => validateStandaloneState(state)])
+        assert.throws(validate, /authorization provenance/);
+      pinLegacy(subject);
+      validateState(state, state.repository);
+      const next = { ...entry, previousLimit: 5, limit: 6, nonce: 'extension6' };
+      subject.budgetExtensions.push(next);
+      assert.throws(() => validateState(state, state.repository), /authorization provenance/);
+      authorizeFixture(subject, next, collection);
+      validateState(state, state.repository);
+      for (const mutate of [
+        (s) => { s.budgetExtensions[0].reason += ' changed'; },
+        (s) => { s.budgetAuthorizationCutover.legacyCount = 3; },
+        (s) => { s.budgetExtensions[1].authorization.binding.actor = 'another-actor'; },
+        (s) => { s.budgetExtensions[1].authorization.binding.action = 'force-live-recovery'; },
+        (s) => { s.budgetExtensions[1].authorization.binding.entityId = 'another-owner'; },
+        (s) => { s.budgetExtensions[1].authorization.binding.collection = 'wrong-collection'; },
+        (s) => { s.budgetExtensions[1].authorization.binding.pr = 82; },
+        (s) => { s.budgetExtensions[1].authorization.binding.budget.kind = kind === 'reviews' ? 'implementation' : 'reviews'; },
+        (s) => { s.budgetExtensions[1].authorization.binding.budget.limit = 7; },
+        (s) => { s.budgetExtensions[1].authorization.provenance = 'stored-json'; },
+      ]) {
+        const altered = structuredClone(state), changed = altered[collection][0];
+        mutate(changed);
+        // Recompute a content digest: a matching digest alone never repairs wrong scope.
+        const auth = changed.budgetExtensions[1].authorization;
+        auth.bindingDigest = historyDigest(auth.binding);
+        for (const validate of [() => validateState(altered, altered.repository), () => validateStandaloneState(altered)])
+          assert.throws(validate);
+      }
+    }
+  }
 });
