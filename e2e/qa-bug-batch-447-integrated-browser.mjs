@@ -618,7 +618,27 @@ async function readTherapyRoundsPage(page) {
     async () => assert.equal(await secondaryControls.evaluate((node) => node.open), true),
     'Native secondary Giro controls are open',
   );
+  const tools = secondaryControls.locator('.giro-tools');
   await secondaryControls.getByRole('group', { name: 'Vista della terapia' }).waitFor({ state: 'visible' });
+  for (const viewport of [
+    { width: 1180, height: 820 },
+    { width: 820, height: 1180 },
+    { width: 390, height: 844 },
+    { width: 320, height: 740 },
+  ]) {
+    await page.setViewportSize(viewport);
+    const bounds = await tools.boundingBox();
+    assert.ok(bounds, `Open Giro menu is visible at ${viewport.width}px`);
+    assert.ok(bounds.x >= 0, `Giro menu begins inside viewport at ${viewport.width}px`);
+    assert.ok(bounds.x + bounds.width <= viewport.width + 1, `Giro menu ends inside viewport at ${viewport.width}px`);
+    await noOverflow(page);
+  }
+  await page.setViewportSize({ width: 1180, height: 820 });
+  await summary.focus();
+  await summary.press('Enter');
+  assert.equal(await secondaryControls.evaluate((node) => node.open), false, 'Native summary closes with Enter');
+  await summary.press('Enter');
+  assert.equal(await secondaryControls.evaluate((node) => node.open), true, 'Native summary reopens with Enter');
   return secondaryControls;
 }
 async function giveDose(page, name) {

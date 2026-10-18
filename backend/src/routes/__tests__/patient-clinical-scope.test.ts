@@ -305,6 +305,7 @@ test('own patient access works and client authorship is ignored', async () => {
     body: JSON.stringify({
       farmacoNome: 'Terapia senza orari',
       dataInizio: '2026-08-29',
+      viaSomministrazione: 'orale',
       schedules: [],
     }),
   });
