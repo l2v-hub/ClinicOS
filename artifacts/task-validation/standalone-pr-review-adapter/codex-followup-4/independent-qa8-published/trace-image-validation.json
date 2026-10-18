@@ -1,0 +1,11 @@
+{
+  "traceImageDecode": "PASS",
+  "traceImages": 23,
+  "formats": [
+    "JPEG"
+  ],
+  "publicPNGDecode": "PASS",
+  "width": 1200,
+  "height": 1280,
+  "traceSha256": "1d50afc09f2757678f309a1d7bedb970156d24b9879f67216e645b8d6c78135e"
+}

@@ -1,0 +1,14 @@
+{
+  "N1FailureClassification": {
+    "unchanged": true,
+    "sha256": "26d46dffbba842780cb861ef5588ffaa19fce7f1e430fce85a5a0abaa5dfa701"
+  },
+  "ControllerFailureCodes": {
+    "unchanged": true,
+    "sha256": "55662cbb77193470da4ccf65de3f0b5b5899965e45e759e91593b33b53b0032b"
+  },
+  "StateCASWriteAndRebase": {
+    "unchanged": true,
+    "sha256": "6c90e2283a6ccc93c44a9f2ef073356ad7bfaa40decc47fdcef071e02338f2ba"
+  }
+}

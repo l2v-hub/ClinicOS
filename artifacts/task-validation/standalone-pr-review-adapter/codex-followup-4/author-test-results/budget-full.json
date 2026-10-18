@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "stdout": "✔ explicit root compatibility continuation counts round5 without folding or rewriting legacy arrays (3.395305ms)\n✔ one append-only audited extension permits exactly round6; wrong authority, changed history and larger jump reject (9.447699ms)\n✔ legacy entities retain default4; unaudited fifth implementation and cross-entity compatibility authorization reject (0.560909ms)\n✔ F6 application provider key never becomes Codex API auth; missing or conflicting auth blocks before inference (7.504728ms)\n✔ issue-only manual allowance keeps five spent attempts and binds exact real issue and external grant (7.993004ms)\n✔ default four supports separately audited continuations3 and4 after compatibility2 without granting attempt5 (1.441304ms)\n✔ within-default audit marker cannot forge owner, replay a nonce, fake an extension or authorize round5 (1.604937ms)\nℹ tests 7\nℹ suites 0\nℹ pass 7\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 134.05899\n",
+  "stderr": "",
+  "node": "v24.19.0",
+  "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+  "args": [
+    "--test",
+    "agent-team/tests/bug-pipeline/attempt-budget.test.mjs"
+  ],
+  "envMode": "verification",
+  "trustedRunner": "/workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs"
+}

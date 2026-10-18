@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-18T21:28:01.378517+00:00",
+  "status": "SOURCE AND QA HARNESS FROZEN BEFORE FINAL FRESH RUNS",
+  "sourceSha": "210a257c96aea12e9386018fe9ce762715870447",
+  "files": {
+    "fixture.mjs": "b663a522397989203e1dd3f443e3bac30a9193ac0cbbd71d18225ffd59752781",
+    "adversarial.test.mjs": "ba76e9f3fe38e0e03dd30bab6cb900f7b5cab3bd2b388538633ddaab339d5bfe",
+    "browser.mjs": "cf9bd063c9e71f7098f30537f63ab01ef05c00b9df3f8ae41ba90f56e1c11506",
+    "run.mjs": "f2de4430d9bd53292f679c36791c23fb8a728cd8680835c212d0487520d348c3",
+    "preservation.py": "fe3f2d2a72cbad1a4d8c6032d1d9f544eb6959f292b14002d2bd3151728e492c",
+    "media-check.mjs": "47fdfb917d824de9b7ebe5c8f2453053ea0891a005ea7d981314cef56d00a599",
+    "security-scan.py": "fd8187121dfc58119a8050cd380381adaa109782c17319ee5bc1ba7f0bc1b0d8"
+  }
+}
