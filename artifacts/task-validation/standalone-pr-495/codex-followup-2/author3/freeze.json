@@ -1,0 +1,71 @@
+{
+  "task": "PR495 continuation 3 author freeze",
+  "baseSha": "ba5b512f63720e09e09afd53ec69d3cd5f36aec1",
+  "contractSha256": "dd6ad7e99fb31488f6c76fa817544b1ff78377a95132eb37d69463ac50f7a0bd",
+  "reservationNonce": "92e1609e-67bd-44c7-bf32-7eba6241754d",
+  "capturedAt": "2026-10-18T21:18:27.447865+00:00",
+  "sourceFiles": [
+    {
+      "path": "scripts/automation/inspect-demo-bearer-readiness.mjs",
+      "sha256": "f94bfdb0f8c633b0f61b556458b7953e8cfc4c788c8f370ca79833e10d2ada47",
+      "bytes": 11296
+    },
+    {
+      "path": "scripts/automation/inspect-demo-bearer-readiness.test.mjs",
+      "sha256": "559d978bb01b5cb1004a16c975fdcc07f7185b94f575c01436ef4b136777ef20",
+      "bytes": 20375
+    }
+  ],
+  "authorHarness": {
+    "path": "run-focused-tests.mjs",
+    "sha256": "3a77963f1aad6a50279ac4f12ed3e0fda21594b6772203f84098299867b28852",
+    "bytes": 1255
+  },
+  "testAttempts": [
+    {
+      "attempt": 1,
+      "record": "test-attempt-1.json",
+      "nodeVersion": "v24.19.0",
+      "testCount": 15,
+      "exitCode": 1,
+      "passed": false,
+      "fullOutputSha256": "9bb65366780fc2caae193cecb3c38f8e4be547badad070847c3e236c40af0996",
+      "outputBytes": 6443
+    },
+    {
+      "attempt": 2,
+      "record": "test-attempt-2.json",
+      "nodeVersion": "v24.19.0",
+      "testCount": 15,
+      "exitCode": 1,
+      "passed": false,
+      "fullOutputSha256": "451634a0cce1335a36fe51cfdabaca78f13dac4a75b8855785cec5bfa6b3473a",
+      "outputBytes": 3477
+    },
+    {
+      "attempt": 3,
+      "record": "test-attempt-3.json",
+      "nodeVersion": "v24.19.0",
+      "testCount": 15,
+      "exitCode": 0,
+      "passed": true,
+      "fullOutputSha256": "264f74aec111a73ba058ca3c8367784cda25f3e3ee8d853eac0d570f0a460efd",
+      "outputBytes": 1588
+    }
+  ],
+  "proofPreservation": {
+    "manifest": "prior-proof-manifest.json",
+    "count": 64,
+    "beforeVerified": 64,
+    "afterVerified": 64,
+    "changed": 0,
+    "beforeRecordSha256": "561ed915df6524256e41366424e4ffa7282c8545871ecde924f4688fbc0abea7",
+    "afterRecordSha256": "602f1615e49bb3cef04e5ba989d3f0ddc847c28a573b15ce7461c4bdde6327c3"
+  },
+  "diff": {
+    "path": "source.diff",
+    "sha256": "039f987f2eb49a76057671bf88d18917b6db64c5640a0f0f092c5b36b03d7599",
+    "bytes": 6057
+  },
+  "scope": "Only the two authorized source/test paths modified; no commit, push, provider, GitHub, runtime, database, dependency or browser actions."
+}

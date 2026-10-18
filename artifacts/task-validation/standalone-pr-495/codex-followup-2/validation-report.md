@@ -1,0 +1,7 @@
+# PR495 continuation3 — current authoritative result
+
+VERIFIED OFFLINE. Tested source efd9e1a4e5ddab4488a1911f40718a14ec143014; QA nonce889f5d9f-2f11-48d0-a79a-3f10dda820b3. Fresh independent QA166PASS0FAIL0SKIP:122 exact workflow,20 topology,24 independently authored actual CLI checks. Twenty-two failures have constant-only stderr, empty stdout and no receipt; success and access-false remain read-only observations. QA-only result browser controls/reload and safe screenshot PASS. Root inspected the screenshot. Full report [independent-qa3/report.md](independent-qa3/report.md), seal36b8a1560bb04cfcbb88eab28f190b39bbd22e6b02d9a25e0ce8bc907b26b304.
+
+Original implementation1 and passed continuation2, both actual Claude changes-requested comments and all64 old proof blobs remain unchanged. Copied independent-qa/ and independent-qa-followup-1/ are immutable historical evidence for those attempts, NOT this new result. Current QA3 is the distinct namespace above. Author ran15 focused tests with two stale-expectation failures retained before15/15 success. QA parser and evidence filename setup failures retained, corrected only in owned harness, refrozen and full166 rerun. No product failure hidden or replaced.
+
+No clinical app, database, real bearer/provider/schema/deploy verification. Native CI and actual new Claude/fresh final Codex review remain pending. Public operational metadata is intentionally whitelisted by the unchanged prior contract; no patient/identity/config/credential output is authorized. Raw trace remains private.

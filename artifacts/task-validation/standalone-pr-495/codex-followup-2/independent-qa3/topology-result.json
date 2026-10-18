@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "counts": {
+    "tests": 20,
+    "pass": 20,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "command": "process.execPath",
+  "args": [
+    "--test",
+    "scripts/automation/inspect-demo-source-topology.test.mjs"
+  ],
+  "outputSha256": "4f7c43795102d7575a015bfeaac5cdef119144d973ba2e4aede0db02a8ed65ae",
+  "outputBytes": 1923
+}

@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "counts": {
+    "tests": 0,
+    "pass": 0,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "command": "process.execPath",
+  "args": [
+    "/workspace/.clinicos-cloud/495-continuation3-independent-qa-20261018/browser-lock.mjs"
+  ],
+  "outputSha256": "a93e704744d1cd0221637a8077912df78fec9e58d3bbabd8481bcd950955c2cd",
+  "outputBytes": 89
+}

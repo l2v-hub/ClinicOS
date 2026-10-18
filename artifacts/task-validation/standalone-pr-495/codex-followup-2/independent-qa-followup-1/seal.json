@@ -1,0 +1,32 @@
+{
+  "status": "QA_STOP",
+  "sourceHead": "c1f11fa77945ce8cc57d1948ef0bfa8736954d63",
+  "verdict": "READY FOR CODEX QA",
+  "hashes": {
+    "after.json": "d60ecb91b95450f0bb6cb1014602ef855385aa646b0d03c008a9467690440731",
+    "attempt1-browser-result.json": "8748ca0c1054107d0cdeff18ca29606c7f388d4a4d8aa1bf3617582390766a73",
+    "attempt1-browser.mjs": "bda69d7daa41788d0692a52a10d8341b196726379bae0e9976d9b42da99fe56d",
+    "attempt1-run.mjs": "0986d79547fe1c2b9c9de7feef2572d627c68c2efa9f40db12833c5deb055dfa",
+    "attempt1-spawn-result.json": "efaff53c13ba07b5ec08892ca6fb49885d162e34d68d15e0aa1d196400d2ad36",
+    "before.json": "d60ecb91b95450f0bb6cb1014602ef855385aa646b0d03c008a9467690440731",
+    "browser-result.json": "24c7d716e9f389604342b106a60105aa745e5dc9d70a33a04c50a6db3d389439",
+    "browser-run-result.json": "9b4cd66f53cfa0a8e645f212a97ced511f5548a82c13fb3ab98f73f855fe0f43",
+    "browser.mjs": "7a047e57241af8913dbd94436c4ae652aee0a1dcf256442931c7f8aa2427b5d3",
+    "candidate-result.json": "63e67a84f22f3e35eac39574c00ecb9e01e90ca6517ac64e7cd4ae3f444d6431",
+    "candidate.tap": "85575666035f1e45eab14e5e6896fe6242f04989ec0d95944250bd8ce29b2d73",
+    "cleanup.json": "141cfa3dec8f111450c8375be9f324e6ab875064e41a60ed0d85ee725140f5d3",
+    "fresh.test.mjs": "b2f7f167ef945d66bd1e5fd3ce320c6a7600623a12e3930ef3869957359b69a4",
+    "independent-result.json": "63e67a84f22f3e35eac39574c00ecb9e01e90ca6517ac64e7cd4ae3f444d6431",
+    "independent.tap": "54f5a21ed11234d2abd521c3c99f8a9b3ddaf959784e30a479afba2633099fc0",
+    "private/trace.zip": "392b67f773f7e9969fc8ca490cf7c392744926d303472aadaecc31ec9f698633",
+    "public/fresh-receipts.json": "957f25b269a24bc47e07fa4718db7060144694ae5d4f2052c75499a64a8e45c9",
+    "public/qa-result.png": "9342ace4ee5b31056e7606d4841b0dfac684f073392f704546359142a3035257",
+    "public-manifest.json": "efe37bfaea06fb4ab98a9fc0add6904eafbba99667db52d047306a154a230c54",
+    "report.md": "ad3292e8a8ebeef5e61c43c2f88f31ef7961740c8e6c9233d7dc418555acda6d",
+    "run-browser.mjs": "5b681d44e5b599a76e8c3673c64eab0dfaffb4ac8bd48d6af5fc3ae5303c933e",
+    "run.mjs": "8143e81d63c3cfa614df373643b993f280ed1c7eae8cc3f42c47af614ed15001",
+    "security-cleanup-check.json": "b687952a5526b78b1f93fa56cdb4c69573582a6bd767fee5a0a7445a9f46e902",
+    "topology-result.json": "63e67a84f22f3e35eac39574c00ecb9e01e90ca6517ac64e7cd4ae3f444d6431",
+    "topology.tap": "c3a27f55ef8b5a668e971c3152215e92e63446b7309e023b77b3f32cc200e604"
+  }
+}

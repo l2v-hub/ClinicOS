@@ -1,0 +1,10 @@
+{
+  "qa-result.png": {
+    "sha256": "9342ace4ee5b31056e7606d4841b0dfac684f073392f704546359142a3035257",
+    "bytes": 78743
+  },
+  "fresh-receipts.json": {
+    "sha256": "957f25b269a24bc47e07fa4718db7060144694ae5d4f2052c75499a64a8e45c9",
+    "bytes": 509
+  }
+}

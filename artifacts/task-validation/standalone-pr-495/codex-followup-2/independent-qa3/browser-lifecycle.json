@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "scope": "Fresh synthetic actual CLI only; not clinical/provider/deploy proof",
+  "ownedLoopback": true,
+  "port": 36387,
+  "controls": true,
+  "reload": true,
+  "screenshot": true,
+  "privateTrace": true,
+  "consolePageHttpErrors": [],
+  "externalRequests": 0,
+  "requestCount": 2,
+  "browserClosed": true,
+  "serverClosed": true,
+  "portRefused": true
+}

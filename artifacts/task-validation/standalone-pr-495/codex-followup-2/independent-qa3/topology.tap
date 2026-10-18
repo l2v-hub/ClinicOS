@@ -1,0 +1,29 @@
+✔ reads fixed full inventory twice and checks trusted context three times (8.489958ms)
+✔ follows service and environment pages using the returned opaque cursor (13.787427ms)
+✔ singleton demo and additional, forked, or inaccessible environments never permit service connect (2.946806ms)
+✔ rejects foreign environment project without exposing provider data (1.614497ms)
+✔ rejects foreign environment source parent without exposing provider data (0.362835ms)
+✔ rejects foreign service project without exposing provider data (0.440898ms)
+✔ rejects foreign instance service without exposing provider data (0.582554ms)
+✔ rejects unknown malformed environment metadata without exposing provider data (0.240739ms)
+✔ rejects unknown unsafe trigger metadata without exposing provider data (1.283607ms)
+✔ rejects malformed connection pages, repeated cursors, and duplicate entities (5.255183ms)
+✔ rejects source or trigger disagreement with the exact scoped legacy inventory (0.371418ms)
+✔ accepts matching nonempty scoped and topology triggers independent of provider ordering (1.656304ms)
+✔ enforces per-page and total inventory bounds (1.225608ms)
+✔ detects drift between complete snapshots and stale trusted context (0.678125ms)
+✔ mutation-like operation is rejected before invoking the client (0.274631ms)
+✔ transport failures are sanitized and never retried (39.179754ms)
+✔ receipt serializes an actual inspection result, redacts forbidden values, and excludes unknown provider fields (0.913452ms)
+✔ receipt rejects altered or fabricated inspection results (0.741248ms)
+✔ createClient sends real HTTP requests to a local fixture with no mutation or retry (42.346417ms)
+✔ workflow is exact-main, inspect-only, credential-scoped, and independently serialized (4.471942ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 262.978678
+

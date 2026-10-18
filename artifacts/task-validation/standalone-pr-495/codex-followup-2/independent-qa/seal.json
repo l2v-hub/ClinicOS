@@ -1,0 +1,40 @@
+{
+  "status": "VERIFIED",
+  "stop": "SOURCE_HARNESS_STOP",
+  "sourceSha": "e47583ca150e1300926a5421aef131cc1e65ecfe",
+  "qaReservationNonce": "5c1cf749-c5d9-46fe-aa59-4eb6b107cd6a",
+  "implementationNonce": "3de0341b-1a04-43f4-997b-f1578689a5e9",
+  "contractSha256": "6bcfcb1759939cb3817554d69c98194006914ed529b45ab8e38a5e7ca20ca67f",
+  "candidate": {
+    "pass": 119,
+    "fail": 0,
+    "skip": 0
+  },
+  "fresh": {
+    "pass": 7,
+    "fail": 0,
+    "skip": 0
+  },
+  "findings": [],
+  "inputIdentityUnchanged": true,
+  "baselinePresentFilesChecked": 5845,
+  "baselineChanged": [],
+  "noAuthenticatedCalls": true,
+  "noSecretReads": true,
+  "noSourceChanges": true,
+  "noGithubOperations": true,
+  "evidenceBytes": 39779,
+  "evidenceSha256": {
+    "fresh.test.mjs": "433253fe3b5900cf3d6cd5bc38c5785ff9cf147076d04490eb686d685f571a32",
+    "run.mjs": "c45b030deb685440d1bf940a42c7d16e93a76a9a792588c2374d3a35c202f033",
+    "after.json": "a535ea5c643298b87e76832b709106b80e541553e7631637ef44f1946ad8a2b5",
+    "findings.json": "6bf5c6c39b289cba8f6d16480254ab30ba802a1bd679eeeeccf02e462833367a",
+    "candidate-result.json": "21f956bacc88b3094e1a9348f3fb2b0f91d3e77672613a7c95fc2a2f90fa0fe0",
+    "fresh-result.json": "21f956bacc88b3094e1a9348f3fb2b0f91d3e77672613a7c95fc2a2f90fa0fe0",
+    "fresh.tap": "5e04f70f7ef50afda24d41451505d044905067d153e8c38d66f8c71b6a789489",
+    "baseline-check.json": "82b44f0e74e8c9ab05b2a4dd06c847b6ed6dd886d33ee0a7e7434f445613f20b",
+    "report.md": "b53578f6cdb7d6520c20f773d6d375de0f6dacdd2f6fac38381c52192a474a2c",
+    "candidate.tap": "efe2cb7748a85aed233c58154a3158c856ecd3d54acb8f1bbe2f197d741efb70",
+    "before.json": "a535ea5c643298b87e76832b709106b80e541553e7631637ef44f1946ad8a2b5"
+  }
+}
