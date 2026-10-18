@@ -6,7 +6,9 @@ import { PatientIdentity } from '../../shared/PatientIdentity';
 import { PatientRoster } from '../PatientRoster';
 import { OperatorAgenda } from '../OperatorAgenda';
 import { TherapySlotModal } from '../TherapySlotModal';
-import type { Paziente, TherapySlot } from '../../../types';
+import type { Paziente, TherapySlot, TherapyVerificationGroup } from '../../../types';
+import { localIsoDate } from '../../../lib/appointmentRange';
+import type { AgendaTherapyVerificationFeed } from '../../shared/AgendaTherapyVerification';
 import { setSessionCapabilities } from '../../../lib/capabilities';
 Object.assign(globalThis, { React });
 const patient = {
@@ -92,81 +94,122 @@ test('roster keeps the NEWS2 column and a single loading status until absence ha
   assert.doesNotMatch(html, /NEWS2 non calcolabile/);
 });
 
-test('agenda without appointments retains morning and evening pending therapy doses while omitting empty half-hour slots', () => {
-  setSessionCapabilities({ 'administration.list_slots': { allowed: true, effect: 'ALLOWED' } });
-  const therapySlot = (ora: string, fascia: 'mattina' | 'sera'): TherapySlot => ({
-    id: fascia,
-    ora,
-    fascia,
-    label: `Terapia ${fascia}`,
-    summary: { total: 1, pending: 1, administered: 0, notAdministered: 0 },
+test('agenda without appointments shows untimed prescriptions in read-only verification, never timed dose actions', () => {
+  const date = localIsoDate(new Date());
+  const scopeKey = 'synthetic-session:policy:roster';
+  const verificationGroup: TherapyVerificationGroup = {
+    kind: 'verification',
+    id: 'therapy-verification',
+    date,
+    label: 'Da verificare',
+    fascia: null,
+    ora: null,
+    summary: { total: 2, verification: 2 },
     patients: [
       {
         patientId: patient.id,
         firstName: patient.firstName,
         lastName: patient.lastName,
-        room: '1',
-        bed: 'A',
-        administrations: [
-          {
-            administrationId: null,
-            therapyId: `therapy-${fascia}`,
-            drugName: `Farmaco ${fascia}`,
-            dosage: '1 mg',
-            route: 'orale',
-            scheduledTime: ora,
-            status: 'pending',
-            administeredAt: null,
-            administeredBy: null,
-            notAdministeredReason: null,
-          },
-        ],
+        room: '',
+        bed: '',
+        items: ['Farmaco mattina', 'Farmaco sera'].map((drugName, index) => ({
+          therapyId: `untimed-${index}`,
+          drugName,
+          status: 'to_verify' as const,
+          reason: 'missing_time' as const,
+          scheduledTime: null,
+          quantityLabel: null,
+          dosage: null,
+          canAdminister: false as const,
+        })),
       },
     ],
+  };
+  const accepted = { date, scopeKey };
+  const feedFor = (
+    patch: Partial<AgendaTherapyVerificationFeed> = {},
+  ): AgendaTherapyVerificationFeed => ({
+    groups: [verificationGroup],
+    accepted,
+    requested: accepted,
+    scopeKey,
+    allowed: true,
+    loading: false,
+    error: null,
+    pageInfo: {
+      hasMore: false,
+      nextCursor: null,
+      loadedTherapies: 2,
+      completeness: 'complete',
+      summaryExact: true,
+    },
+    loadingMore: false,
+    loadMoreError: null,
+    onLoad: async () => {},
+    onLoadMore: () => {},
+    ...patch,
   });
+
+  setSessionCapabilities({ 'administration.list_slots': { allowed: true, effect: 'ALLOWED' } });
   try {
-    const html = renderToStaticMarkup(
-      React.createElement(OperatorAgenda, {
-        operatoreId: 'op1',
-        nomeOperatore: 'Operatore QA',
-        operatori: [],
-        appuntamenti: [],
-        onAddAppuntamento: async () => null,
-        therapySlots: [therapySlot('08:00', 'mattina'), therapySlot('20:00', 'sera')],
-      }),
-    );
-    assert.match(html, /Farmaco mattina/);
-    assert.match(html, /Farmaco sera/);
-    assert.match(html, /ore 08:00, 1 da erogare/);
-    assert.match(html, /ore 20:00, 1 da erogare/);
-    assert.equal((html.match(/data-testid="therapy-dose-list"/g) ?? []).length, 2);
-    assert.doesNotMatch(html, /class="agt-slot(?: |")|agt-free-slot|Crea appuntamento alle/);
-    assert.match(html, /Nessun appuntamento in questa giornata/);
     const props = {
       operatoreId: 'op1',
       nomeOperatore: 'Operatore QA',
       operatori: [],
       appuntamenti: [],
       onAddAppuntamento: async () => null,
-      therapySlots: [therapySlot('08:00', 'mattina')],
-      onLoadTherapySlots: () => {},
     };
-    const stale = renderToStaticMarkup(
-      React.createElement(OperatorAgenda, { ...props, therapyDate: '2000-01-01' }),
+    const html = renderToStaticMarkup(
+      React.createElement(OperatorAgenda, { ...props, verificationFeed: feedFor() }),
     );
-    assert.doesNotMatch(stale, /Farmaco mattina|1 da erogare/);
-    assert.match(stale, /Caricamento terapie/);
+    const verification = html.match(
+      /<section class="empty-state-card" aria-label="Terapie da verificare[^>]*>[\s\S]*?<\/section>/,
+    )?.[0];
+    assert.ok(verification, 'accepted untimed prescriptions have a named verification region');
+    assert.match(html, /Nessun appuntamento in questa giornata/);
+    assert.match(verification, /Da verificare · 2/);
+    assert.match(verification, /Farmaco mattina/);
+    assert.match(verification, /Farmaco sera/);
+    assert.match(verification, /Nessuna nuova somministrazione disponibile/);
+    assert.doesNotMatch(
+      verification,
+      /<button|Somministra|therapy-dose-list|ore 08:00|ore 20:00|Letto A|Stanza 1/,
+    );
+    assert.equal(verificationGroup.patients[0].room, '', 'unknown room stays unknown');
+    assert.equal(verificationGroup.patients[0].bed, '', 'unknown bed stays unknown');
+    assert.doesNotMatch(html, /class="agt-slot(?: |")|agt-free-slot|Crea appuntamento alle/);
+
+    const staleDate = '2000-01-01';
+    const stale = renderToStaticMarkup(
+      React.createElement(OperatorAgenda, {
+        ...props,
+        verificationFeed: feedFor({
+          accepted: { date: staleDate, scopeKey },
+          requested: { date: staleDate, scopeKey },
+        }),
+      }),
+    );
+    assert.doesNotMatch(stale, /Farmaco mattina|Farmaco sera/);
+    assert.match(stale, /Caricamento verifiche delle terapie/);
+
     const failed = renderToStaticMarkup(
       React.createElement(OperatorAgenda, {
         ...props,
-        therapyLoadError: 'Sorgente non disponibile',
+        verificationFeed: feedFor({ error: 'Sorgente non disponibile' }),
       }),
     );
-    assert.doesNotMatch(failed, /Farmaco mattina|1 da erogare/);
-    assert.match(failed, /Sorgente non disponibile|Riprova terapie/);
+    assert.doesNotMatch(failed, /Farmaco mattina|Farmaco sera/);
+    assert.match(failed, /Sorgente non disponibile|Riprova verifiche/);
+
     setSessionCapabilities({});
-    const denied = renderToStaticMarkup(React.createElement(OperatorAgenda, props));
-    assert.doesNotMatch(denied, /Farmaco mattina|1 da erogare|Caricamento terapie/);
+    const denied = renderToStaticMarkup(
+      React.createElement(OperatorAgenda, {
+        ...props,
+        verificationFeed: feedFor({ allowed: false }),
+      }),
+    );
+    assert.doesNotMatch(denied, /Farmaco mattina|Farmaco sera|Nessuna nuova somministrazione/);
+    assert.match(denied, /Verifiche delle terapie non consultabili per il tuo ruolo/);
   } finally {
     setSessionCapabilities(null);
   }

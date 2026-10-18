@@ -186,22 +186,28 @@ test('AT-05: a refused administration shows the server reason, not a generic err
   assert.equal(offline.ok, false);
 });
 
-test('AT-12: a correctly filled therapy form has no issues', () => {
-  assert.deepEqual(therapyFormIssues({ ...emptyTherapyForm(), farmacoNome: 'Paracetamolo' }), []);
-  assert.deepEqual(
-    therapyFormIssues({
-      ...emptyTherapyForm(),
-      farmacoNome: 'Paracetamolo',
-      commercialStrengthValue: '500',
-    }),
-    [],
-  );
+test('AT-12: a correctly filled therapy form has no issues and missing or unknown routes block', () => {
+  const valid = {
+    ...emptyTherapyForm(),
+    farmacoNome: 'Paracetamolo',
+    viaSomministrazione: 'orale',
+  };
+  assert.deepEqual(therapyFormIssues(valid), []);
+  assert.deepEqual(therapyFormIssues({ ...valid, commercialStrengthValue: '500' }), []);
+  for (const route of ['', 'ZZ']) {
+    const routeIssues = therapyFormIssues({ ...valid, viaSomministrazione: route }).filter(
+      (issue) => issue.field === 'viaSomministrazione',
+    );
+    assert.equal(routeIssues.length, 1, `route ${JSON.stringify(route)} has one actionable issue`);
+    assert.match(routeIssues[0].message, /via/i);
+  }
 });
 
 test('AT-11: invalid fields are reported per field and schedule row, never dropped', () => {
   const form = {
     ...emptyTherapyForm(),
     farmacoNome: 'Paracetamolo',
+    viaSomministrazione: 'orale',
     commercialStrengthValue: '2,5',
     schedules: [
       ...emptyTherapyForm().schedules,
@@ -218,6 +224,7 @@ test('AT-11: invalid fields are reported per field and schedule row, never dropp
   const oneTime = therapyFormIssues({
     ...emptyTherapyForm(),
     farmacoNome: 'Paracetamolo',
+    viaSomministrazione: 'orale',
     tipo: 'una_tantum',
     orarioSomministrazione: '',
   });

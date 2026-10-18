@@ -56,9 +56,13 @@ test('therapy reads and writes apply patient scope before loading clinical data'
 
 test('therapy slot relations and administration candidates are bounded', () => {
   assert.match(slots, /schedules:\s*\{\s*take: MAX_THERAPY_SCHEDULES \+ 1/);
-  assert.match(administrationPage, /WITH candidate\("therapyId", fascia, "singleDayDose"\) AS/);
+  assert.match(
+    administrationPage,
+    /WITH candidate\("therapyId", "patientId", fascia, "singleDayDose"\) AS/,
+  );
   assert.match(administrationPage, /ma\.fascia = candidate\.fascia OR candidate\."singleDayDose"/);
   assert.match(administrationPage, /ma\."therapyId" = candidate\."therapyId"/);
+  assert.match(administrationPage, /ma\."patientId" = candidate\."patientId"/);
   assert.match(administrationPage, /WITH candidate\("patientId", "farmacoNome", fascia\) AS/);
   assert.match(administrationPage, /VALUES \$\{Prisma\.join/);
   assert.match(administrationPage, /ma\."patientId" = candidate\."patientId"/);

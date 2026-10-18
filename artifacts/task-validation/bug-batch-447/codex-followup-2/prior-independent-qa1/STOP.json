@@ -1,0 +1,17 @@
+{
+  "status": "STOP",
+  "verdict": "PARTIAL / FAILED VALIDATION",
+  "sourceSha": "b5229d8e5af936e6757843ec201a95c6ed0e9a0d",
+  "nonce": "be39e2dd-b195-4412-a59e-b738c54e2213",
+  "sourceAndOldProofUnchanged": true,
+  "ownedCleanupComplete": true,
+  "allEightVerified": false,
+  "all15Verified": false,
+  "report": "report.json",
+  "unrunMatrix": "unrun-matrix.json",
+  "attemptLedger": "attempt-ledger.json",
+  "mediaIndex": "media-index.json",
+  "checksumsSha256": "8132993a9ed33d63af0e0552c57f741bba0a55f09865f7202e1642d90c31765f",
+  "rootMayBeginNextReservedPhaseOnlyAfterReadback": true,
+  "timestamp": "2026-10-18T23:33:16.275665+00:00"
+}

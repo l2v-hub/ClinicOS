@@ -608,6 +608,19 @@ async function section(page, name) {
     'All actual section loaders have completed',
   );
 }
+async function readTherapyRoundsPage(page) {
+  const secondaryControls = page.locator('details.giro-secondary-controls');
+  await secondaryControls.waitFor({ state: 'visible' });
+  const summary = secondaryControls.getByText('Data, vista e ordine', { exact: true });
+  await summary.waitFor({ state: 'visible' });
+  if (!(await secondaryControls.evaluate((node) => node.open))) await summary.click();
+  await eventually(
+    async () => assert.equal(await secondaryControls.evaluate((node) => node.open), true),
+    'Native secondary Giro controls are open',
+  );
+  await secondaryControls.getByRole('group', { name: 'Vista della terapia' }).waitFor({ state: 'visible' });
+  return secondaryControls;
+}
 async function giveDose(page, name) {
   const row = page.locator('.giro-drug').filter({ hasText: name }).first();
   await row.getByRole('button', { name: /^Erogata:/ }).click();
@@ -1367,6 +1380,7 @@ try {
       const verificationTherapy = await prisma.patientTherapy.create({ data: {
         patientId: agendaPatient.id, farmacoNome: 'QA Agenda verify452',
         viaSomministrazione: 'orale', tipo: 'una_tantum', stato: 'attiva',
+        dosaggio: '',
         dataInizio: agendaDay, dataSomministrazione: agendaDay, orarioSomministrazione: null,
       } });
       const verification = () => page.getByRole('region', { name: `Terapie da verificare ${agendaDay}`, exact: true });
@@ -1384,8 +1398,7 @@ try {
 
       // The same exact scheduled doses are actionable in Giro, with their original patient identity.
       await navigate(state, 'terapie');
-      const dateTools = page.locator('.giro-secondary-controls');
-      if (!(await dateTools.evaluate((node) => node.open))) await dateTools.locator('summary').click();
+      await readTherapyRoundsPage(page);
       await page.getByRole('button', { name: 'Giro', exact: true }).click();
       await page.getByLabel('Data terapia', { exact: true }).fill(today);
       for (const time of ['08:00', '20:00']) {

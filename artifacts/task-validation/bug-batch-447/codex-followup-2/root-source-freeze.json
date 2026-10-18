@@ -1,0 +1,16 @@
+{
+  "baseSha": "b5229d8e5af936e6757843ec201a95c6ed0e9a0d",
+  "files": {
+    "frontend/src/components/operator/__tests__/operationalLists452.test.ts": "b9b5f3eadd063358b40bbddeb816f8f6bc9683e8a14b5621b1f95a16361821c5",
+    "frontend/src/components/operator/__tests__/patientTherapySlotAndForm.test.ts": "b530aa91ab7a378123de797ab9d7c16c0c889c35220389edf23670843de56773",
+    "frontend/src/components/shared/intake/__tests__/therapyFieldFeedback.test.ts": "457a50144506c65475c46f7c343f099bb6639d8287a534e1705d19dd5401d4ab",
+    "backend/src/routes/__tests__/patient-clinical-scope.test.ts": "0db253deb14308bbcf79c170144ae6302238f650a628b0421d667eadeb6f2250",
+    "backend/src/routes/__tests__/therapy-slot-scope-contract.test.ts": "c7eed22588e5ca08b2e858f4414e553aee99670f98e9d31afbf23f0859537a45",
+    "backend/src/skills/__tests__/assistant-e2e.test.ts": "c8303d53cc8ea0d487c9e5a2a4b44af123f71c114b38ffeba98f267cf479453b",
+    "backend/src/tools/__tests__/therapy.test.ts": "d0ffc22c2f4b582e46a33af6295f0288ae49b3a392a7b426fca108a56541eeb9",
+    "e2e/qa-bug-batch-447-integrated-browser.mjs": "a0f3c78da5af1315b633887861c709bf8895499b06c5aca3e667f204d823f6be"
+  },
+  "productionChanges": 0,
+  "authorStopped": true,
+  "independentQa": false
+}

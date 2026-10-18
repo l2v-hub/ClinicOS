@@ -489,11 +489,28 @@ test('therapy.create: missing required field → invalid_input (route 400); othe
   );
   assert.equal(badRange.ok, false);
   if (!badRange.ok) assert.equal(badRange.error.code, 'invalid_input');
+  const blankRoute = await registry.invoke(
+    'therapy.create',
+    {
+      patientId,
+      body: { farmacoNome: 'Farmaco sintetico', dataInizio: '2033-02-01', viaSomministrazione: '' },
+    },
+    ctxOf(owner),
+  );
+  assert.equal(blankRoute.ok, false);
+  if (!blankRoute.ok) assert.equal(blankRoute.error.code, 'invalid_input');
   assert.equal(await prisma.patientTherapy.count({ where: { patientId } }), before);
 
   const foreign = await registry.invoke(
     'therapy.create',
-    { patientId: strangerPatientId, body: { farmacoNome: 'X', dataInizio: '2033-02-01' } },
+    {
+      patientId: strangerPatientId,
+      body: {
+        farmacoNome: 'X',
+        dataInizio: '2033-02-01',
+        viaSomministrazione: 'orale',
+      },
+    },
     ctxOf(owner),
   );
   assert.equal(foreign.ok, false);
