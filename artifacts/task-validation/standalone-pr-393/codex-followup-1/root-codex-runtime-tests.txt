@@ -1,0 +1,40 @@
+test_credential_redirects_are_rejected (tests.test_voice_realtime.AzureNegotiationTests.test_credential_redirects_are_rejected) ... ok
+test_ephemeral_token_is_used_only_server_side (tests.test_voice_realtime.AzureNegotiationTests.test_ephemeral_token_is_used_only_server_side) ... ok
+test_invalid_response_never_releases_provider_details (tests.test_voice_realtime.AzureNegotiationTests.test_invalid_response_never_releases_provider_details) ... ok
+test_provider_response_has_actual_byte_limit (tests.test_voice_realtime.AzureNegotiationTests.test_provider_response_has_actual_byte_limit) ... ok
+test_azure_configuration_has_no_implicit_model_or_secret_representation (tests.test_voice_realtime.ConfigurationTests.test_azure_configuration_has_no_implicit_model_or_secret_representation) ... ok
+test_default_off_and_current_batch_contract_survive (tests.test_voice_realtime.ConfigurationTests.test_default_off_and_current_batch_contract_survive) ... ok
+test_sdp_byte_bound_unicode_and_nul (tests.test_voice_realtime.ConfigurationTests.test_sdp_byte_bound_unicode_and_nul) ... ok
+test_validator_allows_only_implemented_realtime_adapter (tests.test_voice_realtime.ConfigurationTests.test_validator_allows_only_implemented_realtime_adapter) ... ok
+test_budget_refusal_precedes_provider_http_and_supported_sessions_are_counted (tests.test_voice_realtime.DispatcherTests.test_budget_refusal_precedes_provider_http_and_supported_sessions_are_counted) ... Executing <Task pending name='Task-2' coro=<DispatcherTests.test_budget_refusal_precedes_provider_http_and_supported_sessions_are_counted() running at /workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_voice_realtime.py:144> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/futures.py:389, Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.162 seconds
+ok
+test_disabled_or_unsupported_never_calls_adapter (tests.test_voice_realtime.DispatcherTests.test_disabled_or_unsupported_never_calls_adapter) ... ok
+test_real_asgi_auth_actual_stream_limit_and_safe_response (tests.test_voice_realtime.DispatcherTests.test_real_asgi_auth_actual_stream_limit_and_safe_response) ... /workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/domain/contracts.py:36: UserWarning: Field name "schema" in "CreateJobRequest" shadows an attribute in parent "BaseModel"
+  class CreateJobRequest(BaseModel):
+/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/api/app.py:88: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/workspace/.venvs/clinicos-ai/lib/python3.12/site-packages/fastapi/applications.py:4745: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)  # ty: ignore[deprecated]
+Executing <Task pending name='Task-12' coro=<DispatcherTests.test_real_asgi_auth_actual_stream_limit_and_safe_response() running at /workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_voice_realtime.py:205> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 1.633 seconds
+Executing <Task pending name='starlette.middleware.base.BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.coro' coro=<TaskHandle._run_coro() running at /workspace/.venvs/clinicos-ai/lib/python3.12/site-packages/anyio/_core/_tasks.py:327> wait_for=<Future pending cb=[Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[TaskGroup._spawn.<locals>.task_done() at /workspace/.venvs/clinicos-ai/lib/python3.12/site-packages/anyio/_backends/_asyncio.py:870] created at /workspace/.venvs/clinicos-ai/lib/python3.12/site-packages/anyio/_backends/_asyncio.py:944> took 0.257 seconds
+Executing <Task pending name='starlette.middleware.base.BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.coro' coro=<TaskHandle._run_coro() running at /workspace/.venvs/clinicos-ai/lib/python3.12/site-packages/anyio/_core/_tasks.py:327> wait_for=<Future pending cb=[Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[TaskGroup._spawn.<locals>.task_done() at /workspace/.venvs/clinicos-ai/lib/python3.12/site-packages/anyio/_backends/_asyncio.py:870] created at /workspace/.venvs/clinicos-ai/lib/python3.12/site-packages/anyio/_backends/_asyncio.py:944> took 0.125 seconds
+Executing <Task pending name='starlette.middleware.base.BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.coro' coro=<TaskHandle._run_coro() running at /workspace/.venvs/clinicos-ai/lib/python3.12/site-packages/anyio/_core/_tasks.py:327> cb=[TaskGroup._spawn.<locals>.task_done() at /workspace/.venvs/clinicos-ai/lib/python3.12/site-packages/anyio/_backends/_asyncio.py:870] created at /workspace/.venvs/clinicos-ai/lib/python3.12/site-packages/anyio/_backends/_asyncio.py:944> took 0.198 seconds
+stt realtime outcome=budget_exceeded
+ok
+test_registry_dispatch_is_separate_from_batch_model (tests.test_voice_realtime.DispatcherTests.test_registry_dispatch_is_separate_from_batch_model) ... ok
+test_unverified_session_duration_is_fail_closed_even_with_opt_in (tests.test_voice_realtime.DispatcherTests.test_unverified_session_duration_is_fail_closed_even_with_opt_in) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 2.668s
+
+OK

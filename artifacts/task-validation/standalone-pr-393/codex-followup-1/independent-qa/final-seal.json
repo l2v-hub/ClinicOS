@@ -1,0 +1,13 @@
+{
+  "schema": "clinicos.independent-qa.seal/v1",
+  "decision": "READY FOR CODEX QA",
+  "baseSha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
+  "sourceDigest": "0e239c1633a11c33397d28a1263935e7278f1ec204858246056141acf3cb38af",
+  "evidenceManifestSha256": "bfe4ecdd85d273ba5964ee082bc0f68863caf37248fe904b1c1a2e7ef4cc63e3",
+  "validationReportSha256": "1c3075790b50f28444156714ac33a604cadcb52bd8c5e08fcbfc30cbe818b666",
+  "sourceManifestSha256": "3dc799f0b8ff8b93dfba429b2e6f97fc0b465133ecb20cbb87fb6fc360ffeab2",
+  "publicFiles": 75,
+  "generatedAt": "2026-10-18T17:20:45.099605+00:00",
+  "sourceAndHistoricalProofsUnchanged": true,
+  "writesStoppedAfterSeal": true
+}

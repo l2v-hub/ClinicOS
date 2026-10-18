@@ -1,0 +1,3 @@
+{"status":"PASS","checks":1,"ownedContainerRemoved":true,"realProviderProof":false}
+flock: getting lock took 0.000002 seconds
+flock: executing node

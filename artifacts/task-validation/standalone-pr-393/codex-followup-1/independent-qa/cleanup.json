@@ -1,0 +1,13 @@
+{
+  "portsFree": {
+    "55493": true,
+    "3093": true,
+    "5393": true,
+    "8093": true
+  },
+  "lockReleased": true,
+  "portCheck": "SO_REUSEADDR bind; initial plain bind saw closed socket TIME_WAIT",
+  "dockerRemaining": [
+    "clinicos-postgres postgres:16-alpine"
+  ]
+}

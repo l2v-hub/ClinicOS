@@ -1,0 +1,16 @@
+{
+  "mode": "synthetic-backend-only-owned-postgres16",
+  "parentDatabaseUsed": false,
+  "developmentDatabaseUsed": false,
+  "realProviderProof": false,
+  "checks": [
+    {
+      "name": "focused backend voice suites",
+      "status": "PASS"
+    }
+  ],
+  "containerImage": "sha256:275447c94b11b151decd1f29877965301d5a77032037c46de93d990f739f00a9",
+  "status": "PASS",
+  "databaseOwnershipVerified": true,
+  "ownedContainerRemoved": true
+}
