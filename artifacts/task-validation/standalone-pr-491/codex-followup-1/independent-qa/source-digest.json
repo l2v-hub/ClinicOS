@@ -1,0 +1,37 @@
+{
+  "baseSha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6",
+  "contractSha256": "8aad0290ebfd9662685c34cd2b9482721a9a754bc3696edfd6df3d838aa1301c",
+  "sourceFiles": [
+    {
+      "path": ".github/workflows/inspect-demo-source-topology.yml",
+      "bytes": 1786,
+      "workingSha256": "d12b84e4eba6c2eac2ab843b4c63bb46bdaecf9f0b47a0847666fd22fe3151b2",
+      "handoffSha256": "d12b84e4eba6c2eac2ab843b4c63bb46bdaecf9f0b47a0847666fd22fe3151b2",
+      "matchesHandoff": true,
+      "baseSha256": "d9bc710f6432b03b45fcc3c16ac691b0cbc16c1c6bc5a855b62183d179804b4a"
+    },
+    {
+      "path": "scripts/automation/inspect-demo-source-topology.mjs",
+      "bytes": 13592,
+      "workingSha256": "005f4a72f1be0fafaed29013702307fbe4d3f1f291032eed4cb1c1a79a00f488",
+      "handoffSha256": "005f4a72f1be0fafaed29013702307fbe4d3f1f291032eed4cb1c1a79a00f488",
+      "matchesHandoff": true,
+      "baseSha256": "9e0c2adde1287451f001b104412611e839df39bbb0a4eccae6edeb2889a2b94e"
+    },
+    {
+      "path": "scripts/automation/inspect-demo-source-topology.test.mjs",
+      "bytes": 24698,
+      "workingSha256": "2fbc450bd71b83ea3fe4c3ff96818f43317c13cf4099d4d2c5601a3003932a75",
+      "handoffSha256": "2fbc450bd71b83ea3fe4c3ff96818f43317c13cf4099d4d2c5601a3003932a75",
+      "matchesHandoff": true,
+      "baseSha256": "cdb5918c4eb96d63c160a0c2df116d20504f28dbc98c7b8882c37584e267277a"
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-491/codex-followup-1/task-contract.md",
+      "bytes": 3443,
+      "workingSha256": "8aad0290ebfd9662685c34cd2b9482721a9a754bc3696edfd6df3d838aa1301c",
+      "handoffSha256": "8aad0290ebfd9662685c34cd2b9482721a9a754bc3696edfd6df3d838aa1301c",
+      "matchesHandoff": true
+    }
+  ]
+}
