@@ -133,18 +133,21 @@
         "independent": false
       },
       "independentQaReservation": {
-        "status": "running",
+        "status": "verified",
         "nonce": "5a00ab87-a065-4506-92df-a0d9d05cd997",
         "agent": "/root/qa492_isolated_auth_fixtures",
         "reservedAt": "2026-10-18T19:39:32.336Z",
         "reservedBeforeSession": true,
         "sourceSha": "0f91a96e0a89010a6abc6a2e1d7319ceafe27933",
         "sourceDigest": "a5c95fefc7a34c92f06ae02b954456230005ea55844632f1b65f911be22e893b",
-        "sourceHandoffSha256": "7fe2acb0d2a58e8e44c310a29bc90571b6eed2e30fb479360b0521257b00a1ac"
+        "sourceHandoffSha256": "7fe2acb0d2a58e8e44c310a29bc90571b6eed2e30fb479360b0521257b00a1ac",
+        "completedAt": "2026-10-18T19:50:38.664Z",
+        "reportSha256": "405248704ed6891ea66fe05af0528ee6e32298a46f0c2288326652b8475ae7ab",
+        "sealSha256": "0dcfae6966973b3e4d0ed4801ae29d321bdef49f29c44ced9f3d99dcfa3fb17f"
       },
       "subjectSha": "0f91a96e0a89010a6abc6a2e1d7319ceafe27933",
       "evidence": "independent-qa-followup-2/qa-report.md",
-      "completedAt": "2026-10-18T19:50:05.655Z",
+      "completedAt": "2026-10-18T19:50:38.664Z",
       "independentQaReportSha256": "405248704ed6891ea66fe05af0528ee6e32298a46f0c2288326652b8475ae7ab",
       "independentQaSealSha256": "0dcfae6966973b3e4d0ed4801ae29d321bdef49f29c44ced9f3d99dcfa3fb17f",
       "rootVerification": {
