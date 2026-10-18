@@ -1,0 +1,59 @@
+{
+  "qaOnly": true,
+  "clinicalE2E": false,
+  "sourceSha": "19d0db6ae2f345d7ac8c03a0ee9e9dabbc969c86",
+  "largeBytes": 1913844,
+  "historyCount": 16000,
+  "historyDigest": "cd1469fcd27ea700809731f0afb5eae4fb814f4d7987f44e1da86a20dbbea532",
+  "mutationsAfterDenial": 0,
+  "checks": [
+    {
+      "name": "large wrapped pinned blob retains full history",
+      "passed": true
+    },
+    {
+      "name": "inline bypasses fallback",
+      "passed": true
+    },
+    {
+      "name": "wrong pinned sha",
+      "passed": true
+    },
+    {
+      "name": "declared size mismatch",
+      "passed": true
+    },
+    {
+      "name": "noncanonical base64",
+      "passed": true
+    },
+    {
+      "name": "oversize metadata",
+      "passed": true
+    },
+    {
+      "name": "unknown encoding",
+      "passed": true
+    },
+    {
+      "name": "blob read error",
+      "passed": true
+    },
+    {
+      "name": "strict invalid UTF8",
+      "passed": true
+    },
+    {
+      "name": "malformed JSON",
+      "passed": true
+    },
+    {
+      "name": "array rejected",
+      "passed": true
+    },
+    {
+      "name": "guard denial and oversize prevent mutations",
+      "passed": true
+    }
+  ]
+}

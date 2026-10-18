@@ -1,0 +1,64 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "03d56052-9dd6-4a42-8891-a23a59c8d1df",
+      "contractSha256": "bd8dc948818ff50c3428ad16135096d311ba8e91773e159e3fa26aed61d14ae2",
+      "baseSha": "df1bf69f48242ad5f61d81d7ac54f7f7a14f9711",
+      "subjectSha": "19d0db6ae2f345d7ac8c03a0ee9e9dabbc969c86",
+      "evidence": "independent-qa/validation-report.md",
+      "reason": "Actual Claude cannot read durable state larger than Contents inline1MiB; bounded pinnedblobtransport correction without history deletion",
+      "independentQaNonce": "5a93d3d2-e12a-4352-a361-851772a53419",
+      "independentQaSealSha256": "b9f06673ed0b5f79a89d75ff2a37e2fab99b1640883167d9f001c3ff1dc68796",
+      "completedAt": "2026-10-18T21:00:06.317Z"
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "sourceManifest": [
+    {
+      "path": "agent-team/src/bug-pipeline/github.mjs",
+      "blob": "9c73550f4c5ddb1761771ad24f3a1cd897fb9a9d",
+      "mode": "100644",
+      "baseBlob": "cd79945fa36e825979cb621cc71544a4559b742d",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "blob": "3f96ee2c6be1da50f227fdf843e909c82926c39b",
+      "mode": "100644",
+      "baseBlob": "84e6c27018937ec840cbc6e59e11597e8a33e8c9",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "blob": "d04fcbef5278d0e101a6ba2eacb49f0094eb6995",
+      "mode": "100644",
+      "baseBlob": "f5a693bcc1fbb9038fb0cc337ea15c1ee15d47c6",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "analysis.md": "dbf1e17cb48dfc38451f214a72c6fe265c1fe6eca7a6565a7632bef46b005e53",
+    "author/author-handoff.md": "552631ef7f80233b51374484b0636f7875c7299af85cf1599a07aab6f06c8d30",
+    "codex-verification.md": "0633d6caec097212857d0e9f8ce99e05e4d072f13b1f2afce94f8a31722a729f",
+    "implementation-plan.md": "6819c080a8db29b543c954fe8be9a922fa6b8b51b29b861ff543f0a0172f294b",
+    "independent-qa/after-seals.json": "5c1b4fd19490d6bacf0c4730e179cc7fa7c50898702208c245c207dd068a36b9",
+    "independent-qa/aggregate-results.json": "aaf63d29f39ae7c50952bd469c6000baf296ec2574e576abaf1357f590c709c2",
+    "independent-qa/before-seals.json": "5c1b4fd19490d6bacf0c4730e179cc7fa7c50898702208c245c207dd068a36b9",
+    "independent-qa/browser-results.json": "c765cd2200748af38794b4663fca8debae8bbf87635345935a26599cbcbb1859",
+    "independent-qa/final-seal.json": "b9f06673ed0b5f79a89d75ff2a37e2fab99b1640883167d9f001c3ff1dc68796",
+    "independent-qa/media-validation.json": "cce6e073a823979a902d4731235e48b5478a772c2fee2290bd1055c492a39c16",
+    "independent-qa/public-manifest.json": "68cce5a15ecab0969629ba3eeab13b38626941e8a546bea21bc9764c6a02b3fe",
+    "independent-qa/result.png": "c3dce9db707b7c1ae16967e4fadb729856c6e0ff1110f75dc952332a02bd60e0",
+    "independent-qa/validation-report.md": "e2ab8454b7a4c6463e1dceb0a4c2bbbf491a7a04c900fce0714a62e0ff9ca19f",
+    "plan.md": "6819c080a8db29b543c954fe8be9a922fa6b8b51b29b861ff543f0a0172f294b",
+    "publication-manifest.json": "ae69e50464a640ee8befa15f3517238aa5ef3f9682fadaa5c28546772f744033",
+    "scope-amendment-1.md": "7798a1873acda7bf96a221f173f0f5e707ad519dcd9cc95d693197eb893f8b59",
+    "task-contract.md": "bd8dc948818ff50c3428ad16135096d311ba8e91773e159e3fa26aed61d14ae2",
+    "validation-report.md": "03307b250c926994f78555e45de76bead539223cff1745622ab9c2811249e26b"
+  }
+}
