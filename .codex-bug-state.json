@@ -1880,16 +1880,30 @@
         },
         {
           "round": 2,
-          "status": "running",
+          "status": "failed",
           "startedAt": "2026-10-18T09:09:54.158Z",
           "owner": "codex-cloud-issue485",
           "nonce": "a27b8897-4aa2-43b7-907f-2127c31bcc10",
           "baseSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
-          "contractSha256": "28e3ee6839e02d5acba7ef84d579b4e2c3d46c90dc4bff805c115ec03c43162d"
+          "contractSha256": "28e3ee6839e02d5acba7ef84d579b4e2c3d46c90dc4bff805c115ec03c43162d",
+          "completedAt": "2026-10-18T09:23:34.160Z",
+          "failure": "Independent QA: resumed readonly patient-list review uses44px controls/117px toolbar; actual420px source row leaves67.046875px PDF stage despite deliberate scroll. All regular9cases/18inputs/3DBpersist/1395frontend pass; unexecutedshortcases notPASS.",
+          "sourceFreezeSha256": "04e85e723132174f9cdbd3f3de3029fbd6162e10710d5e5b0a8b88f4e65cba50"
+        },
+        {
+          "round": 3,
+          "status": "running",
+          "startedAt": "2026-10-18T09:23:34.160Z",
+          "owner": "codex-cloud-issue485",
+          "nonce": "d80746f2-66b6-41b5-9c24-6cc87fe60fab",
+          "baseSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
+          "contractSha256": "abe1de1782a9cb7a31d48e5237a27814495a40860ffd9ee95a5a49c18b6ce3ed",
+          "executor": "gpt-6.1-sol",
+          "executorReason": "Nested CSS cascade, intrinsic row sizing and two measured control-density contexts require direct6.1-Sol execution after bounded Luna attempts."
         }
       ],
       "reviews": [],
-      "reason": "Issue485 implementation2/4 frozen; new independent QA is executing all five phases. Scheduled executor paused to avoid duplicate authors; parent450 remains unchanged.",
+      "reason": "Issue485 rounds1/2FAILED with immutable evidence; round3/4 reserved for intrinsic source sizing and verified short editor layout. Frozen2CSS scope and parent budgets retained, scheduled writer paused.",
       "triageRecovery": {
         "kind": "operator-completed-read-only-triage",
         "sourceRun": 39029815917,
@@ -1990,12 +2004,10 @@
       },
       "operatorActivity": {
         "owner": "codex-cloud-issue485",
-        "nonce": "a27b8897-4aa2-43b7-907f-2127c31bcc10",
-        "phase": "validating",
-        "startedAt": "2026-10-18T09:09:54.158Z",
-        "contractSha256": "28e3ee6839e02d5acba7ef84d579b4e2c3d46c90dc4bff805c115ec03c43162d",
-        "updatedAt": "2026-10-18T09:12:03.817Z",
-        "qaOwner": "issue485_fix_qa2"
+        "nonce": "d80746f2-66b6-41b5-9c24-6cc87fe60fab",
+        "phase": "implementing",
+        "startedAt": "2026-10-18T09:23:34.160Z",
+        "contractSha256": "abe1de1782a9cb7a31d48e5237a27814495a40860ffd9ee95a5a49c18b6ce3ed"
       }
     },
     {
@@ -7234,7 +7246,7 @@
       }
     }
   ],
-  "updatedAt": "2026-10-18T09:12:03.818Z",
+  "updatedAt": "2026-10-18T09:23:34.160Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
