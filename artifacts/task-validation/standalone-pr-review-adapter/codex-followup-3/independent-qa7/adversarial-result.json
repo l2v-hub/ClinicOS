@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "code": 0,
+  "node": "v24.19.0",
+  "envMode": "verification",
+  "trustedRunner": "/workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs",
+  "tail": "\u2714 authorization await cannot hide maintainer revocation (19.645231ms)\n\u2714 authorization await cannot overwrite a concurrent same-owner state change (9.349297ms)\n\u2714 same capability cannot extend a second time after successful exact-bound consumption (3.706339ms)\n\u2714 request repair revalidates head after comment-list await before any write (9.752312ms)\n\u2714 transport classifier cannot leak arbitrary stderr and body defaults are mutation (1.094364ms)\n\u2139 tests 5\n\u2139 suites 0\n\u2139 pass 5\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 246.957609\n",
+  "stderr": ""
+}

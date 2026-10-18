@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "code": 0,
+  "node": "v24.19.0",
+  "envMode": "verification",
+  "trustedRunner": "/workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs",
+  "tail": "{\"schema\":\"PASS\",\"sha256\":\"2e472cd597fc6a3e6949884dfd5b0b0fd26ceb7f7d42cd8b6a773fddfe2a3ddd\",\"batches\":4,\"manualBatches\":7,\"standaloneReviews\":4}\n\u2714 /workspace/.clinicos-cloud/492-continuation7-independent-qa-20261018/compatibility.mjs (146.100851ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 156.827608\n",
+  "stderr": ""
+}

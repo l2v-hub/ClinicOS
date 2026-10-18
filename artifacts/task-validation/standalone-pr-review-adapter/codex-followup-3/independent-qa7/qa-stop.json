@@ -1,0 +1,11 @@
+{
+  "status": "SOURCE/HARNESS/PROOF STOP",
+  "at": "2026-10-18T20:49:02.474792+00:00",
+  "sourceFreezeSha256": "0e06479d2a4e937cd69a345aaee8fc572c975e0aceabdc9a408d84e70df03a3c",
+  "publicManifestSha256": "250b5a9d5aee5e37f1b7af82f7aa4c6daab6cc80c52ad84375e5e3cc47965c6f",
+  "privateManifestSha256": "cc74b694f8e0dcef71e20ea48d6979ced3fcc52552a14281364a5799f3273474",
+  "reportSha256": "45a196c07f12344e97a508f886dfa7663d5b15e188c358536d2911b3d8593d0f",
+  "qaReservation": "b8124012-7bd2-42f3-80c4-a3d6da95f69f",
+  "decision": "READY FOR CODEX QA",
+  "githubReconciled": false
+}
