@@ -1886,6 +1886,31 @@ test('GitHub failure semantics distinguish positive status evidence, default POS
     await assert.rejects(github.commentPR(81, 'Synthetic notice'), { code: expected });
     assert.ok(calls.at(-1).input, 'Comment request carries a mutation body');
   }
+
+  const refusal = 'GraphQL: Head branch was modified. Review and try the merge again. (mergePullRequest)';
+  for (const [result, expectedCode, expectedDiagnostic] of [
+    [{ ok: false, code: 1, stderr: refusal }, 'github-write-rejected', 'graphql-merge-refusal'],
+    [{ ok: false, code: 1, stderr: `prefix ${refusal}` }, 'github-write-uncertain', 'unknown'],
+    [{ ok: false, code: 1, stderr: `${refusal}\nGraphQL: another error (mergePullRequest)` }, 'github-write-uncertain', 'unknown'],
+    [{ ok: false, code: 1, stderr: refusal, error: 'spawn-failed' }, 'github-write-uncertain', 'unknown'],
+    [{ ok: false, code: null, stderr: refusal, error: 'timeout' }, 'github-write-uncertain', 'timeout'],
+    [{ ok: false, code: 0, stderr: refusal }, 'github-write-uncertain', 'unknown'],
+  ]) {
+    const gh = createGitHub({ repo: 'l2v-hub/ClinicOS', cwd: '/synthetic',
+      run: async () => result });
+    await assert.rejects(gh.mergePullRequest(81, 'a'.repeat(40)), (error) => {
+      assert.equal(error.code, expectedCode);
+      assert.equal(error.diagnostic, expectedDiagnostic);
+      assert.equal(error.operation, 'merge');
+      assert.equal(error.httpStatus, null);
+      assert.doesNotMatch(JSON.stringify(error), /Head branch|GraphQL/);
+      return true;
+    });
+  }
+  const wrongOperation = createGitHub({ repo: 'l2v-hub/ClinicOS', cwd: '/synthetic',
+    run: async () => ({ ok: false, code: 1, stderr: refusal }) });
+  await assert.rejects(wrongOperation.commentPR(81, 'Synthetic notice'),
+    { code: 'github-write-uncertain', diagnostic: 'unknown' });
 });
 
 test('strict integrated decoder rejects JSON scalars/arrays and oversized raw wrapping without permitting a save', async () => {

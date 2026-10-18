@@ -874,7 +874,8 @@ export async function finalizeStandaloneSubject({
       });
     } catch (error) {
       if (error.code !== 'github-write-rejected' || error.operation !== 'merge' ||
-        !(error.httpStatus >= 400 && error.httpStatus < 500 && error.httpStatus !== 408)) throw error;
+        !((error.httpStatus >= 400 && error.httpStatus < 500 && error.httpStatus !== 408) ||
+          error.diagnostic === 'graphql-merge-refusal')) throw error;
       // Only a definite rejection plus a fresh exact-head OPEN native observation
       // can end this reservation. Transport uncertainty retains its tombstone.
       await controller.current(subject);

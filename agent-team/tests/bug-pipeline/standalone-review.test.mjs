@@ -2205,6 +2205,38 @@ test('definite protected merge rejection archives the full reservation for expli
   assert.equal(merges, 1);
 });
 
+test('completed gh mergePullRequest GraphQL refusal archives after a fresh exact-open check and resumes without retrying', async () => {
+  const f = fixture({ now: () => new Date('2026-10-18T00:00:00Z') });
+  makeAllowlisted(f);
+  f.manifest.releaseHold = false;
+  await published(f);
+  let merges = 0;
+  const realGitHub = createGitHub({ repo, cwd: '/trusted', run: async () => {
+    merges++;
+    return { ok: false, code: 1,
+      stderr: 'GraphQL: Head branch was modified. Review and try the merge again. (mergePullRequest)' };
+  } });
+  f.github.mergePullRequest = (...args) => realGitHub.mergePullRequest(...args);
+  const subject = await f.controller.finalize(81, {
+    workspace: { finalQaStandalone: async () => ({ status: 'verified', summary: 'Synthetic QA' }) },
+    infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
+  });
+  assert.equal(subject.phase, 'blocked');
+  assert.equal(subject.failureCode, 'github-merge-rejected');
+  assert.equal(subject.failureOperation, 'merge');
+  assert.equal(subject.release, undefined);
+  assert.equal(subject.mergeHistory[0].status, 'merging');
+  assert.equal(subject.mergeHistory[0].reviewedSha, sha);
+  await f.controller.finalize(81, { workspace: {}, infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES });
+  assert.equal(merges, 1, 'A refused reservation is never blindly repeated');
+  const resumed = await f.controller.recover(81, { action: 'resume', expectedSha: sha,
+    token: sha256(JSON.stringify({ phase: subject.phase, failureCode: subject.failureCode })),
+    reason: 'Completed GraphQL refusal diagnosed' });
+  assert.equal(resumed.phase, 'waiting-review');
+  assert.deepEqual(resumed.mergeHistory, subject.mergeHistory);
+  assert.equal(merges, 1);
+});
+
 test('unknown-outcome merge that committed reconciles receipt and preserves reservation nonce without a second write', async () => {
   const f = fixture({ now: () => new Date('2026-10-18T00:00:00Z') });
   makeAllowlisted(f);

@@ -109,13 +109,19 @@ export function githubOperationError(result, operation = 'read') {
   const status = statusMatch ? Number(statusMatch[1] ?? statusMatch[2]) : null;
   const rateLimited = status === 403 && /(?:API rate limit exceeded|secondary rate limit)/i.test(detail);
   const timeout = result?.error === 'timeout';
+  const graphqlMergeRefusal = operation === 'merge' && result?.code === 1 && !result?.error &&
+    !String(result?.stdout ?? '').trim() &&
+    /^GraphQL: Head branch was modified\. Review and try the merge again\. \(mergePullRequest\)$/
+      .test(detail.trim());
   const transient = timeout || status === 408 || status === 429 || status >= 500 || rateLimited;
   const code = operation === 'read'
     ? transient ? 'github-read-transient' : status ? 'github-read-rejected' : 'github-read-failed'
-    : status && status < 500 && status !== 408 ? 'github-write-rejected' : 'github-write-uncertain';
+    : (status && status < 500 && status !== 408) || graphqlMergeRefusal
+      ? 'github-write-rejected' : 'github-write-uncertain';
   return Object.assign(stateError(code, `GitHub operation failed${status ? ` (HTTP ${status})` : ''}`), {
     operation, httpStatus: status, retryable: ['read', 'projection'].includes(operation) && transient,
-    diagnostic: timeout ? 'timeout' : rateLimited ? 'rate-limit' : status ? 'http-status' : 'unknown',
+    diagnostic: timeout ? 'timeout' : rateLimited ? 'rate-limit' : status ? 'http-status' :
+      graphqlMergeRefusal ? 'graphql-merge-refusal' : 'unknown',
   });
 }
 export function githubApiOperation({ method, body } = {}) {
