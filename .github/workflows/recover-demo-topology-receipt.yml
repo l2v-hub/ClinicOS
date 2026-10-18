@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: Fixed original topology receipt or fixed failed CI fingerprints
+        description: Fixed evidence; topology artifact expires 2026-10-25T17:39:03Z
         required: true
         type: choice
         options: [topology, ci-fingerprints]
         default: topology
       reviewed_sha:
-        description: Exact reviewed current main SHA for receipt transport only
+        description: Exact reviewed main SHA; dispatch only with no target PR review in flight, or require renewed review
         required: true
         type: string
 

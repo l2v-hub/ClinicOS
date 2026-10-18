@@ -316,6 +316,10 @@ class GitHub:
         self.opener = urllib.request.build_opener(NoRedirect())
 
     def request(self, url, authenticated=False, data=None, redirect=False, limit=2097152):
+        stage = 'API' if authenticated else 'STORAGE'
+        def http_failure(status):
+            require(type(status) is int and 100 <= status <= 599, stage + '_HTTP_STATUS_INVALID')
+            raise RecoveryError(stage + '_HTTP_' + str(status))
         headers = {'User-Agent': 'ClinicOS-original-topology-recovery'}
         if authenticated:
             require(url.startswith(f'https://api.github.com/repos/{REPO}/'), 'API_DESTINATION')
@@ -328,17 +332,19 @@ class GitHub:
             try:
                 response = self.opener.open(request, timeout=30)
             except urllib.error.HTTPError as error:
-                if redirect and error.code == 302:
+                if redirect and type(error.code) is int and error.code == 302:
                     with error:
                         return error.headers.get('Location')
-                raise
+                with error:
+                    http_failure(error.code)
             with response:
-                require(not redirect and response.status in (200, 201), 'HTTP_STATUS')
+                if redirect or type(response.status) is not int or response.status not in (200, 201):
+                    http_failure(response.status)
                 raw = response.read(limit + 1)
                 require(len(raw) <= limit, 'HTTP_SIZE')
                 return raw
         except (urllib.error.URLError, OSError, ValueError):
-            raise RecoveryError('HTTP_FAILED') from None
+            raise RecoveryError(stage + '_HTTP_FAILED') from None
 
     def api(self, route, data=None):
         raw = self.request(f'https://api.github.com/repos/{REPO}/{route}', authenticated=True,
@@ -380,6 +386,7 @@ def validate_run(run):
 
 
 def validate_artifact(value):
+    require(value.get('expired') is not True, 'ARTIFACT_EXPIRED')
     for key, expected in {'id': ARTIFACT, 'name': ARTIFACT_NAME, 'expired': False,
                           'size_in_bytes': ARCHIVE_SIZE, 'digest': 'sha256:' + ARCHIVE_DIGEST}.items():
         exact(value.get(key), expected)
@@ -401,7 +408,8 @@ def fresh_main(client, sha):
     value = client.api('git/ref/heads/main')
     exact(value.get('ref'), 'refs/heads/main')
     exact(value.get('object', {}).get('type'), 'commit')
-    exact(value['object'].get('sha'), sha)
+    current = text(value['object'].get('sha'), r'[a-f0-9]{40}')
+    require(current == sha, 'MAIN_MOVED')
 
 
 def validate_ci_provenance(run, job):
@@ -442,7 +450,14 @@ def parse_ci_log(raw):
         contents = decoded.decode('utf-8')
     except UnicodeError:
         raise RecoveryError('LOG_ENCODING') from None
-    require('\x1b' not in contents and '\x00' not in contents, 'LOG_CONTROL')
+    if contents.startswith('\ufeff'):
+        contents = contents[1:]  # Exactly one leading UTF-8 BOM; never strip interior BOMs.
+    require(all(len(line.encode()) <= 8192 for line in contents.splitlines()), 'LOG_LINE_SIZE')
+    sgr = re.compile(r'\x1b\[[0-9;]{0,64}m')
+    require(sum(1 for _ in sgr.finditer(contents)) <= 4096, 'LOG_SGR_LIMIT')
+    contents = sgr.sub('', contents)
+    # SGR is formatting only. Never interpret cursor movement, OSC or other controls.
+    require(not re.search(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f\ufeff]|\r(?!\n)', contents), 'LOG_CONTROL')
     source_lines = contents.splitlines()
     require(0 < len(source_lines) <= 30000, 'LOG_LINES')
     lines = []
@@ -570,8 +585,12 @@ def recover(client, env, forbidden=()):
         for item in comments:
             require(type(item) is dict and type(item.get('body')) is str, 'COMMENTS_INVALID')
             if marker in item['body']:
-                require(item.get('user', {}).get('login') == 'github-actions[bot]'
-                        and item['user'].get('type') == 'Bot' and item['body'] == body, 'COMMENT_CONFLICT')
+                user = item.get('user')
+                require(type(user) is dict and type(user.get('login')) is str
+                        and type(user.get('type')) is str, 'COMMENTS_INVALID')
+                if user['login'] != 'github-actions[bot]':
+                    continue  # A public commenter cannot reserve the canonical bot marker.
+                require(user['type'] == 'Bot' and item['body'] == body, 'COMMENT_CONFLICT')
                 found.append(item)
         if len(comments) < 100:
             break

@@ -6,6 +6,7 @@ import io
 import json
 import pathlib
 import gzip
+from contextlib import redirect_stderr
 import stat
 import unittest
 import urllib.error
@@ -420,7 +421,7 @@ class Tests(unittest.TestCase):
         self.reject_receipt(value)
 
     def test_comment_conflicts_duplicate_marker_and_size_fail_closed(self):
-        for user in ({'login': 'attacker', 'type': 'User'}, {'login': 'github-actions[bot]', 'type': 'Bot'}):
+        for user in ({'login': 'github-actions[bot]', 'type': 'Bot'}, {'login': 'github-actions[bot]', 'type': 'User'}):
             client = FakeGitHub()
             client.comments = [{'body': R.MARKER + '\nwrong', 'user': user}]
             with self.assertRaises(R.RecoveryError):
@@ -495,7 +496,7 @@ class Tests(unittest.TestCase):
         opener.open.side_effect = urllib.error.URLError('https://private/signed?secret=yes')
         with self.assertRaises(R.RecoveryError) as error:
             client.request('https://x.blob.core.windows.net/a?private=yes')
-        self.assertEqual(str(error.exception), 'HTTP_FAILED')
+        self.assertEqual(str(error.exception), 'STORAGE_HTTP_FAILED')
         self.assertIsNone(R.NoRedirect().redirect_request(None, None, 302, '', {}, 'https://evil.com'))
 
     def test_workflow_guards_pins_and_permission_scope(self):
@@ -512,6 +513,8 @@ class Tests(unittest.TestCase):
         self.assertNotIn('pull_request', value)
         self.assertIn('options: [topology, ci-fingerprints]', value)
         self.assertIn('default: topology', value)
+        self.assertIn('2026-10-25T17:39:03Z', value)
+        self.assertIn('no target PR review in flight', value)
 
     def test_ci_fixed_provenance_fingerprints_and_idempotence(self):
         self.assertEqual(len(R.CI_TEST_FILES), 22)
@@ -589,7 +592,7 @@ class Tests(unittest.TestCase):
                 plain.replace(b'  ...', b'    ...'), plain.replace(b"  code: 'ERR_ASSERTION'", b"  code: 'ERR_ASSERTION'\n2026-10-18T17:38:42Z   code: 'ENOENT'"),
                 plain.replace(b'##[error]Process completed with exit code 1.', b'finished'),
                 b'2026-10-18T17:38:42Z ' + b'x' * 8193 + b'\n', b'untimestamped\n',
-                plain + b'2026-10-18T17:38:42Z \x1b[31mred\n']
+                plain + b'2026-10-18T17:38:42Z \x1b[2Jcursor\n']
         for raw in bads:
             client = FakeCIGitHub(raw)
             with self.subTest(length=len(raw)), self.assertRaises(R.RecoveryError):
@@ -626,6 +629,126 @@ class Tests(unittest.TestCase):
             self.assertEqual(client.job_log(), ci_log())
         self.assertIn(f'actions/jobs/{R.CI_JOB}/logs', calls[0][0])
         self.assertNotIn('authenticated', calls[1][1])
+
+    def test_reported_bom_sgr_format_synthetic_fixture_plain_title_hash_and_raw_hash(self):
+        # Synthetic example of the format reported by Claude; these are not hosted log bytes.
+        plain = ci_log()
+        colored = b'\xef\xbb\xbf' + plain.replace(b'synthetic failing title', b'\x1b[1;31msynthetic failing title\x1b[0m')
+        colored += b'2026-10-18T17:39:04Z \x1b[32moutside step\x1b[m\n'
+        colored = colored.replace(b'  duration_ms: 1.2', b'\x1b[38;2;128;64;32m  duration_ms: 1.2\x1b[0m')
+        self.assertEqual(R.parse_ci_log(plain), R.parse_ci_log(colored))
+        self.assertEqual(R.parse_ci_log(plain), R.parse_ci_log(gzip.compress(colored)))
+        client = FakeCIGitHub(colored)
+        self.assertEqual(R.recover(client, {**self.env(), 'RECOVERY_MODE': 'ci-fingerprints'}), 'published')
+        body = client.writes[0]['body']
+        report = json.loads(body.split('```json\n')[1].split('\n```')[0])
+        self.assertEqual(report['fetchedBytes'], len(colored))
+        self.assertEqual(report['fetchedBytesSha256'], hashlib.sha256(colored).hexdigest())
+        self.assertEqual(report['failures'][0]['testTitleSha256'], hashlib.sha256(b'synthetic failing title').hexdigest())
+        self.assertNotIn('\x1b', body)
+        self.assertNotIn('synthetic failing title', body)
+        self.assertEqual(R.parse_ci_log(plain.replace(b'\n', b'\r\n')), R.parse_ci_log(plain))
+
+    def test_sgr_normalization_rejects_unsupported_controls_and_duplicate_bom(self):
+        for unsafe in (b'\x1b', b'\x1b[31', b'\x1b[2J', b'\x1b[1A', b'\x1b[0G',
+                       b'\x1b]0;title\x07', b'\x1b[38:2:0:0:0m', b'\x1b[?25m',
+                       b'\x1b[' + b'1' * 65 + b'm', b'\x00', b'\x08', b'\x0b',
+                       b'\x7f', b'\xc2\x85', b'bare\rcarriage', b'\xef\xbb\xbf'):
+            raw = ci_log() + b'2026-10-18T17:39:04Z ' + unsafe + b'\n'
+            with self.subTest(unsafe=unsafe), self.assertRaisesRegex(R.RecoveryError, 'LOG_CONTROL'):
+                R.parse_ci_log(raw)
+        with self.assertRaisesRegex(R.RecoveryError, 'LOG_CONTROL'):
+            R.parse_ci_log(b'\xef\xbb\xbf\xef\xbb\xbf' + ci_log())
+        with self.assertRaisesRegex(R.RecoveryError, 'LOG_SGR_LIMIT'):
+            R.parse_ci_log(ci_log() + b'2026-10-18T17:39:04Z \x1b[m\n' * 4097)
+        with self.assertRaisesRegex(R.RecoveryError, 'LOG_LINE_SIZE'):
+            R.parse_ci_log(ci_log() + b'2026-10-18T17:39:04Z ' + b'\x1b[m' * 2800 + b'\n')
+
+    def test_http_status_stage_diagnostics_suppress_private_remote_details(self):
+        private = 'https://private.blob.core.windows.net/log?signature=private-token'
+        for authenticated in (False, True):
+            stage = 'API' if authenticated else 'STORAGE'
+            url = f'https://api.github.com/repos/{R.REPO}/actions/runs/1' if authenticated else private
+            for status in (301, 403, 404, 410, 500, 503):
+                transport = R.GitHub('private-token')
+                transport.opener = unittest.mock.Mock()
+                transport.opener.open.side_effect = urllib.error.HTTPError(
+                    private, status, 'private-message', {'Private': 'private-header'}, io.BytesIO(b'private-body'))
+                with self.subTest(stage=stage, status=status), self.assertRaises(R.RecoveryError) as error:
+                    transport.request(url, authenticated=authenticated)
+                self.assertEqual(str(error.exception), stage + '_HTTP_' + str(status))
+                self.assertNotIn('private', str(error.exception))
+            for status in (True, '403-private', 99, 600):
+                transport = R.GitHub('private-token')
+                transport.opener = unittest.mock.Mock()
+                transport.opener.open.side_effect = urllib.error.HTTPError(private, status, private, {}, None)
+                with self.assertRaisesRegex(R.RecoveryError, stage + '_HTTP_STATUS_INVALID'):
+                    transport.request(url, authenticated=authenticated)
+        transport = R.GitHub('private-token')
+        transport.opener = unittest.mock.Mock()
+        transport.opener.open.side_effect = urllib.error.HTTPError(private, 403, private, {}, None)
+        stderr = io.StringIO()
+        with patch.object(R, 'GitHub', return_value=transport), patch.object(R, 'recover', side_effect=lambda client, env, forbidden: client.request(private)), redirect_stderr(stderr):
+            self.assertEqual(R.main(), 1)
+        self.assertEqual(stderr.getvalue(), 'TOPOLOGY_RECOVERY_STORAGE_HTTP_403\n')
+
+    def test_expired_artifact_and_moved_main_have_specific_codes_and_no_write(self):
+        client = FakeGitHub()
+        client.artifact['expired'] = True
+        with self.assertRaisesRegex(R.RecoveryError, 'ARTIFACT_EXPIRED'):
+            self.recover(client)
+        self.assertNotIn('archive', client.calls)
+        self.assertFalse(client.writes)
+        for client in (FakeGitHub(), FakeCIGitHub()):
+            client.stale_second = True
+            with self.assertRaisesRegex(R.RecoveryError, 'MAIN_MOVED'):
+                if isinstance(client, FakeCIGitHub):
+                    R.recover(client, {**self.env(), 'RECOVERY_MODE': 'ci-fingerprints'})
+                else:
+                    self.recover(client)
+            self.assertFalse(client.writes)
+
+    def test_foreign_markers_ignored_but_canonical_bot_conflicts_and_malformed_users_rejected(self):
+        for client, marker in ((FakeGitHub(), R.MARKER), (FakeCIGitHub(), R.CI_MARKER)):
+            client.comments = [{'body': marker + '\nforeign content', 'user': {'login': 'foreign-user', 'type': 'User'}}]
+            def run():
+                if isinstance(client, FakeCIGitHub):
+                    return R.recover(client, {**self.env(), 'RECOVERY_MODE': 'ci-fingerprints'})
+                return self.recover(client)
+            self.assertEqual(run(), 'published')
+            self.assertEqual(run(), 'already-published')
+            self.assertEqual(len(client.writes), 1)
+            client.comments[-1]['body'] += '\nchanged'
+            with self.assertRaisesRegex(R.RecoveryError, 'COMMENT_CONFLICT'):
+                run()
+            self.assertEqual(len(client.writes), 1)
+        for user in (None, {}, {'login': 'foreign-user'}, {'login': 42, 'type': 'User'}):
+            client = FakeGitHub()
+            client.comments = [{'body': R.MARKER, 'user': user}]
+            with self.assertRaisesRegex(R.RecoveryError, 'COMMENTS_INVALID'):
+                self.recover(client)
+            self.assertFalse(client.writes)
+
+    def test_accepted_post_with_lost_response_rerun_does_not_double_write(self):
+        for client in (FakeGitHub(), FakeCIGitHub()):
+            original = client.api
+            lost = [True]
+            def api(route, data=None):
+                result = original(route, data)
+                if data is not None and lost[0]:
+                    lost[0] = False
+                    raise R.RecoveryError('API_HTTP_FAILED')
+                return result
+            client.api = api
+            def run():
+                if isinstance(client, FakeCIGitHub):
+                    return R.recover(client, {**self.env(), 'RECOVERY_MODE': 'ci-fingerprints'})
+                return self.recover(client)
+            with self.assertRaisesRegex(R.RecoveryError, 'API_HTTP_FAILED'):
+                run()
+            self.assertEqual(len(client.writes), 1)
+            self.assertEqual(run(), 'already-published')
+            self.assertEqual(len(client.writes), 1)
 
 
 if __name__ == '__main__':
