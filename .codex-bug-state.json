@@ -6405,7 +6405,7 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-18T17:30:07.312Z",
+  "updatedAt": "2026-10-18T17:37:27.982Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
@@ -13497,6 +13497,19 @@
           "previous": null,
           "reason": "Fresh verified revision after actual Claude changes-requested; current native required checks passed.",
           "spentReviews": 0
+        },
+        {
+          "at": "2026-10-18T17:37:27.982Z",
+          "actor": "l2v-hub",
+          "previous": {
+            "channel": "github-comments",
+            "status": "comment-requested",
+            "subjectSha": "fb607a287b5406b871fd03c0bc258088e95abaf0",
+            "requestId": "5a1da90a-6b9d-40ee-b66a-febb08b65e8a",
+            "requestedAt": "2026-10-18T17:27:19.546Z"
+          },
+          "reason": "Actual exact-SHA freeform Claude approval received; not converted into a fabricated structured controller claim/round.",
+          "spentReviews": 0
         }
       ],
       "reviewChannel": "github-comments",
@@ -13511,13 +13524,25 @@
           "kind": "authenticated-freeform-negative-feedback",
           "structuredControllerReview": false,
           "recordedAt": "2026-10-18T16:47:23.897Z"
+        },
+        {
+          "commentId": 6252917997,
+          "url": "https://github.com/l2v-hub/ClinicOS/pull/491#issuecomment-6252917997",
+          "author": "l2v-hub",
+          "subjectSha": "fb607a287b5406b871fd03c0bc258088e95abaf0",
+          "bodySha256": "2d318bb482b19758ccac8f39c40a77f6db3501a74ed014beead06cb1b09854e9",
+          "verdict": "approved",
+          "kind": "authenticated-freeform-review-feedback",
+          "structuredControllerReview": false,
+          "nativeHumanApprovalClaimed": false,
+          "recordedAt": "2026-10-18T17:37:27.982Z"
         }
       ],
       "operatorCoordination": {
         "active": true,
         "owner": "codex-cloud-after-claude",
         "nonce": "5ef4558e-2243-4380-8330-453cfa1df672",
-        "stage": "awaiting-claude-review",
+        "stage": "protected-bootstrap-merge",
         "startedAt": "2026-10-18T16:47:23.897Z",
         "baseSha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6",
         "implementationStarted": false,
@@ -13966,13 +13991,6 @@
           "manifestSha256": "d34bb7905dc4fb9b85fb3aaebf5a800f2642521ac2ae4b8632dc808cdb4e644d"
         }
       ],
-      "externalReview": {
-        "channel": "github-comments",
-        "status": "comment-requested",
-        "subjectSha": "fb607a287b5406b871fd03c0bc258088e95abaf0",
-        "requestId": "5a1da90a-6b9d-40ee-b66a-febb08b65e8a",
-        "requestedAt": "2026-10-18T17:27:19.546Z"
-      },
       "nativeCi": {
         "sha": "fb607a287b5406b871fd03c0bc258088e95abaf0",
         "verifiedAt": "2026-10-18T17:27:19.546Z",
@@ -13984,6 +14002,87 @@
           "gate: SUCCESS",
           "secret-scan: SUCCESS"
         ]
+      },
+      "operatorFinalReviews": [
+        {
+          "role": "Codex",
+          "kind": "actual-dedicated-read-only-agent",
+          "agent": "/root/final_codex_review491_after_claude",
+          "status": "verified",
+          "subjectSha": "fb607a287b5406b871fd03c0bc258088e95abaf0",
+          "recordedAt": "2026-10-18T17:37:27.982Z",
+          "registrationTiming": "Recorded after actual external session result; no earlier durable reservation claimed.",
+          "resultSha256": "bb78b093defaf4e1577eda72da2057cb81d4415c3f913b32c409437fa22077ba",
+          "reportSha256": "5c25eb33c3e70c9c3639b7ee5c37c27e00209a541142e8b83ea7d690c6ddf965",
+          "integritySha256": "c3f5677d59108ee3d0b7e4283c1fb29d3cd09658bd610590279eddd700980ec0",
+          "result": {
+            "reviewer": "Codex independent final review after actual Claude feedback",
+            "reviewedAt": "2026-10-18T17:36:28.004242+00:00",
+            "pr": 491,
+            "subjectSha": "fb607a287b5406b871fd03c0bc258088e95abaf0",
+            "mainBaseSha": "d1324cb3dd9ac2a9eafdc7eb3d88abc399da7f55",
+            "priorReviewBaseSha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6",
+            "testedSourceSha": "f1aeb439691744b236f289dda0a44ec03f98d821",
+            "verdict": "VERIFIED",
+            "summary": "No actionable findings in the three PR source files, current follow-up packet, or preserved historical evidence.",
+            "findings": [],
+            "contractSha256": "8aad0290ebfd9662685c34cd2b9482721a9a754bc3696edfd6df3d838aa1301c",
+            "tests": {
+              "mode": "inherited, not rerun by this reviewer",
+              "focused": {
+                "passed": 127,
+                "failed": 0,
+                "skipped": 0,
+                "independentQaAndRootRuns": true
+              },
+              "browser": {
+                "scenarios": 9,
+                "reloadAssertions": 1,
+                "loopbackRequests": 73,
+                "unexpectedErrors": 0
+              },
+              "nativeRequiredChecks": "6/6 success at exact subject SHA; cached snapshot read locally"
+            },
+            "integrity": {
+              "sourceInputsMatched": 4,
+              "qaArtifactsMatched": 23,
+              "packetFilesVerified": 34,
+              "historicalProofsUnchanged": 56,
+              "sourceManifestBlobsMatched": 59,
+              "traceMembersCrcVerified": 52
+            },
+            "claudeFeedback": {
+              "commentId": 6252917997,
+              "url": "https://github.com/l2v-hub/ClinicOS/pull/491#issuecomment-6252917997",
+              "subjectSha": "fb607a287b5406b871fd03c0bc258088e95abaf0",
+              "verdict": "approved",
+              "actionableFindings": 0,
+              "type": "actual freeform PR comment; not a native approving PR review or fabricated structured controller round"
+            },
+            "limitations": [
+              "Hosted Railway query acceptance and first trusted-main inspection run remain unproven.",
+              "Synthetic local QA and unrelated real-provider CI do not establish live Railway topology compatibility.",
+              "This reviewer did not rerun tests/builds or execute source, providers, models, GitHub writes, merge, deploy or closure.",
+              "Native merge protections and any human review requirements remain binding; this local review does not assert merge permission."
+            ],
+            "releaseAuthorizedByThisReport": false
+          }
+        }
+      ],
+      "operatorProtectedMerge": {
+        "status": "merging",
+        "nonce": "6752c620-6540-40ce-afe6-4745a35ea704",
+        "owner": "codex-cloud-after-claude",
+        "subjectSha": "fb607a287b5406b871fd03c0bc258088e95abaf0",
+        "recordedAt": "2026-10-18T17:37:27.982Z",
+        "mode": "explicit-user-directed-protected-bootstrap",
+        "unattendedAutoMerge": false,
+        "usesNativeProtection": true,
+        "adminBypass": false,
+        "nativeHumanApprovalClaimed": false,
+        "authorization": "User explicitly directed Codex to complete the PRs and perform protected merges after genuine Claude and Codex reviews. This is the reviewed diagnostic bootstrap on current main, outside the not-yet-installed standalone automatic merge allowlist.",
+        "claudeCommentId": 6252917997,
+        "codexResultSha256": "bb78b093defaf4e1577eda72da2057cb81d4415c3f913b32c409437fa22077ba"
       }
     }
   ],
