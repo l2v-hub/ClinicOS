@@ -1938,7 +1938,7 @@
         }
       ],
       "reviews": [],
-      "reason": "Issue485 fourth implementation passed new independent QA; evidence-backed draft stackedPR awaits approved parent481 integration and eligible exact-SHA review. No release/closure or Claude approval claimed; previous3failed attempts remain.",
+      "reason": "Issue485 local independent QA and all six native required check names passed on03ffef47. Draft stackedPR493 awaits approved parent481 integration and eligible actual exact-SHA review; no deploy/closure/Claude approval implied. Four implementation attempts preserved (three failed, fourth passed).",
       "triageRecovery": {
         "kind": "operator-completed-read-only-triage",
         "sourceRun": 39029815917,
@@ -2061,7 +2061,57 @@
         "qaOwner": "qa_gate_issue485_cycle4",
         "sourceSha": "8e4edf3a3a9fe25044024e53918d6c7aa8053a14",
         "evidenceSha": "03ffef4786ac5316bab96742bed342b6c8e3e216",
-        "qaReportSha256": "04a5af87d6a8c8f7dd0932fee9252d9aa70ddf694008c7e4379a0d68d64fb59a"
+        "qaReportSha256": "04a5af87d6a8c8f7dd0932fee9252d9aa70ddf694008c7e4379a0d68d64fb59a",
+        "nativeCi": {
+          "sha": "03ffef4786ac5316bab96742bed342b6c8e3e216",
+          "verifiedAt": "2026-10-18T10:24:34.748967+00:00",
+          "requiredNames": [
+            "bug-pipeline-tests",
+            "secret-scan",
+            "frontend-tests",
+            "archive-tests",
+            "gate",
+            "browser-e2e"
+          ],
+          "result": "passed",
+          "checks": [
+            {
+              "link": "https://github.com/l2v-hub/ClinicOS/actions/runs/39117940682/job/117649970168",
+              "name": "browser-e2e",
+              "state": "SUCCESS"
+            },
+            {
+              "link": "https://github.com/l2v-hub/ClinicOS/actions/runs/39117940735/job/117647692331",
+              "name": "bug-pipeline-tests",
+              "state": "SUCCESS"
+            },
+            {
+              "link": "https://github.com/l2v-hub/ClinicOS/actions/runs/39117940682/job/117647554802",
+              "name": "frontend-tests",
+              "state": "SUCCESS"
+            },
+            {
+              "link": "https://github.com/l2v-hub/ClinicOS/actions/runs/39117940682/job/117647554771",
+              "name": "gate",
+              "state": "SUCCESS"
+            },
+            {
+              "link": "https://github.com/l2v-hub/ClinicOS/actions/runs/39117940682/job/117647554823",
+              "name": "archive-tests",
+              "state": "SUCCESS"
+            },
+            {
+              "link": "https://github.com/l2v-hub/ClinicOS/actions/runs/39117940680/job/117647438990",
+              "name": "secret-scan",
+              "state": "SUCCESS"
+            },
+            {
+              "link": "https://github.com/l2v-hub/ClinicOS/actions/runs/39117940682/job/117647438983",
+              "name": "secret-scan",
+              "state": "SUCCESS"
+            }
+          ]
+        }
       },
       "planRevisions": [
         {
@@ -7499,7 +7549,7 @@
       }
     }
   ],
-  "updatedAt": "2026-10-18T10:06:29.599Z",
+  "updatedAt": "2026-10-18T10:25:10.003Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
