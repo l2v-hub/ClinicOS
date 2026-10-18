@@ -1,0 +1,2498 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "recordedAt": "2026-10-17T16:40:48.598Z",
+      "owner": "standalone_review_adapter",
+      "reason": "Historical import of pre-reserved local author cycle1; fresh independent QA found two reproducible defects; no reset.",
+      "subjectSha": null,
+      "uncommitted": true,
+      "independentQaReportSha256": "9056e07c0433d3c0c723ad1a47baa4caabb13faa1b3e0c4339a7bc4544a80289",
+      "independentQaSealSha256": "e535d76405b097e6a7351ed5211d5b754e7215dfe74fdfcf28506d37768d078e",
+      "sourceManifestSha256": "a075ddec60d5059005494fc9ba4b3b9c4e53e691627b7e200a3bd7c755c7974f"
+    },
+    {
+      "round": 2,
+      "status": "failed",
+      "reservedAt": "2026-10-17T16:40:48.598Z",
+      "reservedBeforeSourceEdits": true,
+      "owner": "standalone_review_adapter",
+      "reason": "Fix actual report aggregate bound and historical evidence immutability; wire fixed trusted infrastructure release after actual dual review.",
+      "finishedAt": "2026-10-17T17:03:05.744Z",
+      "subjectSha": null,
+      "uncommitted": true,
+      "sourceManifestSha256": "7451927efd684e6978b96299501e5b69b6160b605ecc4701dc4b6a7b8250a9a1",
+      "independentQaReportSha256": "b103b1e9c72a9760bf4b325f116c06471c06ad0680a3347f8eb15c33f05aa713",
+      "independentQaSealSha256": "7d134f6bea468d8d8a5af569ebbea561636cf7f3491d226fd5f2bcd62b830e0a",
+      "failure": "Accepted Unicode report fails byte-based storage bound; large valid state cannot load GitHub encoding:none contents."
+    },
+    {
+      "round": 3,
+      "status": "failed",
+      "reservedAt": "2026-10-17T17:03:05.744Z",
+      "reservedBeforeSourceEdits": true,
+      "owner": "standalone_review_adapter",
+      "reason": "Only Unicode-safe report storage and bounded SHA-verified large-state blob fallback/save preflight; preserve all previous failures.",
+      "finishedAt": "2026-10-17T17:32:45.005Z",
+      "subjectSha": null,
+      "uncommitted": true,
+      "sourceManifestSha256": "7dd41bf20229026e85bff335d4a7749cd748a5a119cbe74cfe9cd69b73275bf2",
+      "independentQaReportSha256": "db7e4c6839fcf13d92fcb20d1f0e052f31c06755c3368e8e3399ea1804bc5c01",
+      "independentQaSealSha256": "7920efe7f45e25653258c12d1f25791e62f7a6eab082f2b5095176024b97dd56",
+      "failure": "Independent QA3 reproduced exhausted durable report capacity after claim and disjoint-subject CAS loss leaving a running final QA. No actual hosted-failure causation asserted."
+    },
+    {
+      "round": 4,
+      "status": "passed",
+      "reservedAt": "2026-10-17T17:28:09.765020+00:00",
+      "recordedAt": "2026-10-17T17:32:45.005Z",
+      "reservedBeforeSourceEdits": true,
+      "owner": "standalone_review_adapter",
+      "localReservationSha256": "f5c4f7f425d62464f7a0fedc46f39ed6d3a2f7882d37210c558d24b9bb51f5cf",
+      "reason": "Only proven F5 pre-inference report/result capacity reservation and F6 guarded disjoint-subject state rebase, preserving strict default CAS and all prior failures. Add sanitized known error codes for future controller diagnosis.",
+      "registrationNote": "Actual local wx reservation preceded source edits; GitHub registration delayed until clinical controller39053232445 completed to preserve its strict-CAS result.",
+      "subjectSha": "e16e2fac1eca82cc6c429db5d555635a94cb0717",
+      "uncommitted": false,
+      "evidence": "validation-report.md",
+      "finishedAt": "2026-10-17T17:56:37.322617+00:00",
+      "sourceManifestSha256": "d88c088fe9a38d16c9c89d4e7263643a878a779ae98c558e6b74da4693d10a08",
+      "independentQaReportSha256": "a7d735bef083eb32f23de1ca210c3ec0bbba588c3346b253c5d1cba07893a8da",
+      "independentQaSealSha256": "46b0cc05f3642171b6cff88e0aa0f70d034f429542f6c7aaf1531d8d3617748b"
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "operatorContinuations": [
+    {
+      "round": 5,
+      "status": "passed",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "69d4ecf8-6326-42af-9872-dede3e1bc595",
+      "startedAt": "2026-10-18T16:54:18.973Z",
+      "baseSha": "fcabd40713ad355c944d7aff3fcfa7852dce01e9",
+      "contractSha256": "d068ec5717289dfea65c1ff5c8fd53a0458e4929a8aaaa754cf0d879de78a594",
+      "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+      "kind": "explicit-operator-compatibility-continuation",
+      "preservedLegacyImplementationDigest": "3fc282e616603909f37267b309268650b003f08663de8508a37c5ab94e428705",
+      "preservedLegacyReviewsDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "preservedEntityDigest": "a9e671cfb27ce372c482a5ca3143f516cfe68b9d3edd91f69480a8d061b9536a",
+      "reason": "User explicitly authorized continued corrections beyond four with all previous attempts and reports preserved. Existing subject retained; no legacy counter or review approval rewritten.",
+      "authorStoppedAt": "2026-10-18T17:21:08.159Z",
+      "sourceHandoffSha256": "2e3dd600555b7faecf90177dfe8f8acae8444f9e0072135644983ce718cb13d4",
+      "authorTests": {
+        "total": 714,
+        "passed": 711,
+        "failed": 0,
+        "skipped": 3,
+        "skipReason": "native Windows only",
+        "independent": false
+      },
+      "subjectSha": "642db0b5408916bbf4df59a41e1e989bec3fb510",
+      "evidence": "independent-qa/validation-report.md",
+      "completedAt": "2026-10-18T17:50:39.343Z",
+      "independentQaReportSha256": "31539d16c8ff48ea57bba2d7702b808a9b93d6c7550329ed39b31b9822e99a36",
+      "independentQaSealSha256": "c699a51463925123b4146788dbfd97b44fa5025a6f2e5f986e4e64ff01e72364",
+      "rootVerification": {
+        "status": "verified",
+        "focusedTestsPassed": 17,
+        "priorProofsMatched": 369,
+        "qaArtifactsMatched": 34,
+        "sourceInputsMatched": 21,
+        "browserScreenshotInspected": true
+      }
+    }
+  ],
+  "sourceManifest": [
+    {
+      "path": "agent-team/src/bug-pipeline/attempt-budget.mjs",
+      "blob": "89f60173d56e3f2b5c385b8775b4458c54886515",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "blob": "3118c86642f00147f4e145871fa08e7a9ee3c94c",
+      "mode": "100644",
+      "baseBlob": "454c7158d4ca0f55878719986223a58895931f92",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "blob": "5aa3837ae4a672c35f6a527e6cce5ca89af53576",
+      "mode": "100644",
+      "baseBlob": "62e9c4674c8087409d24fbac5368813eb24dbdf5",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/contracts.mjs",
+      "blob": "31acc4c64edea4ab241346e334047f2ecb974724",
+      "mode": "100644",
+      "baseBlob": "e9c469dc037cef2a4816e79477cc91101aeded14",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/external-review.mjs",
+      "blob": "1bdb40777b970cef056b59f654a7fff9967295b1",
+      "mode": "100644",
+      "baseBlob": "33684c11a5d0cf850892eb4ea971f3149ea375b1",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/github.mjs",
+      "blob": "f3e2211d8d9c0eea5f531d2953dffcd1c105c877",
+      "mode": "100644",
+      "baseBlob": "cd79945fa36e825979cb621cc71544a4559b742d",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "blob": "efb3fe68c135f70c39806c1e72e8dbb6d358dddb",
+      "mode": "100644",
+      "baseBlob": "27b487044b1e3d368d0a4f1fb4ec79f1b2c944b3",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/models.mjs",
+      "blob": "afeaedc93a27018fb668e3258e29f870b82852f9",
+      "mode": "100644",
+      "baseBlob": "83c4616ed66bb75c5394b0cfdfca83ca847c8f26",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "blob": "0cc0f849e9894f4486c53a59c439432fbe101aa6",
+      "mode": "100644",
+      "baseBlob": "49409e3bcf0d2442eb0f93f719c7b2f884e02fae",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/review-handoff-cli.mjs",
+      "blob": "ec6c3751eca52fe534d235aa70bb592f779db671",
+      "mode": "100644",
+      "baseBlob": "f1a943a74bbdb088464d64ae85d8d43c2e190d52",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/review-policy.mjs",
+      "blob": "fc6e57c7824d2a8961eecdf2622e572292a0d0f9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "blob": "c3075c96e99bb87e2cc8b8d27a7c64eba93d49e8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/workspace.mjs",
+      "blob": "afe70a0e2aaa623b654480013d50fa3d2df6f748",
+      "mode": "100644",
+      "baseBlob": "638f43ff0c7524011814f4df27e4081b4072fb8d",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/attempt-budget.test.mjs",
+      "blob": "b61ac9437b78fd62ad0eeb2d895103676756545a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "blob": "788ccaacaedd12f3a8154f22f1c7513e870db51b",
+      "mode": "100644",
+      "baseBlob": "84e6c27018937ec840cbc6e59e11597e8a33e8c9",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "blob": "4336126406283bfb9436ddbe0139b9bf9e01274c",
+      "mode": "100644",
+      "baseBlob": "f5a693bcc1fbb9038fb0cc337ea15c1ee15d47c6",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      "blob": "93e54f00ee7bb5b2fb1e561d26e0c5a42db006c5",
+      "mode": "100644",
+      "baseBlob": "d5e944b18d84cca297e5bf7a10fa5f91a3e8759e",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/models.test.mjs",
+      "blob": "20d1de14d876ecc3f4f14810eb90cfcec6b0f406",
+      "mode": "100644",
+      "baseBlob": "2da662e80b98222ee0bdf6be2dc12aead099cfcb",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs",
+      "blob": "fd0bfee82b554c68376725d0ff6cc655ddc68c32",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "blob": "09e0e5563a61c5e64a8c6246f41430eee80e72a2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/workspace.test.mjs",
+      "blob": "60186c2aceadd3e7341c8790c6e99cca7ac037f6",
+      "mode": "100644",
+      "baseBlob": "8e241bf4c63404b8c87eccd7ee01e9e64a791473",
+      "baseMode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/analysis.md",
+      "blob": "2bd057316c6fc86a6b9c959e98ed92ff7e286b5a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle2/actual-git-probe.mjs",
+      "blob": "dd55a089048392bedb0414efa78127a8b6a1eea7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle2/analysis.md",
+      "blob": "f8e39b75587bcadfb5117b272c0cd1133174547a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle2/author-proof-hashes.json",
+      "blob": "866a5d755b551ae083355d1e4aab65ef1858eefc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle2/implementation-attempts.json",
+      "blob": "deff5e4263b2ea86cff68d4f1b4e5bfa9acd82e4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle2/implementation-plan.md",
+      "blob": "e8d84b83efdf333c644401b9f66518bbce62097b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle2/source-freeze.json",
+      "blob": "20a7752222b251ac3e5d5d95f5616228f9cea9bd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle2/task-contract.md",
+      "blob": "4b8f88ad66a9a3ce0dcd5a01b67145f2e09c2f1c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle2/test-results/actual-git-probe.log",
+      "blob": "db18508f04b341add351ea1a2a139c3957c279dc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle2/test-results/actual-git-verification.json",
+      "blob": "db18508f04b341add351ea1a2a139c3957c279dc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle2/test-results/author-regression.log",
+      "blob": "b1fa5be3060037bf9ade95af768d019bbb7c4dbe",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle2/test-results/preserved-cycle1-proof.json",
+      "blob": "9c8438f596d99e74f5509ce1714abfbeb95bb3c3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle2/test-results/targeted.log",
+      "blob": "72715b1cd0c02902ce9b82bc38a685a6ced5e7b4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle2/validation-report.md",
+      "blob": "8e4a6d1b3dd74a91114d9fe7c9a0673082356840",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/actual-git-unicode-probe.mjs",
+      "blob": "5122799adfec7aacb65b0705d03b9d2ba693e892",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/analysis.md",
+      "blob": "5ad46fa34e999a768e542f3e10466ffd304805b5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/author-proof-hashes.json",
+      "blob": "d36c33f8138ac6ff326ca6a504bccf74fae48c40",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/durable-state-probe.mjs",
+      "blob": "9ca566134434cd9bc645a68d0c6fcbf7cf72c406",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/implementation-attempts.json",
+      "blob": "4fbad8049798a4aacc19010aadf27793121f7f6e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/implementation-plan.md",
+      "blob": "cd7ca8334637f2eeb57fc9848764996a3b351010",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/source-freeze.json",
+      "blob": "73b8d72fdd924588c5ccbcf08c196b528974d112",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/task-contract.md",
+      "blob": "4a5a17afba7cc385041afcaa668bfc2823a50e04",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/test-results/actual-git-unicode-probe.log",
+      "blob": "66ee353cdee3c5def5aebce922fef18040db86a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/test-results/actual-git-unicode-verification.json",
+      "blob": "66ee353cdee3c5def5aebce922fef18040db86a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/test-results/author-regression.log",
+      "blob": "64f555c12354458b40228a6df3d96b1f2ad1bb13",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/test-results/concurrency-targeted.log",
+      "blob": "b3ba2060d1883975df8d70b5c096426069757eaf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/test-results/durable-state-probe.log",
+      "blob": "afffd85b36f497c7a254a6d6611ad7beef255167",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/test-results/durable-state-verification.json",
+      "blob": "afffd85b36f497c7a254a6d6611ad7beef255167",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/test-results/preserved-prior-proof.json",
+      "blob": "c8b1ef72870ac94c1df5eb9199c31bfe6a52f75d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/test-results/targeted.log",
+      "blob": "89709ab044054f03531c734a4fe96eeed8d74981",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/test-results/unicode-report-probe.log",
+      "blob": "662310bbe341a5f4fdcc28734a04f779d7d70348",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/test-results/unicode-report-verification.json",
+      "blob": "662310bbe341a5f4fdcc28734a04f779d7d70348",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/unicode-report-probe.mjs",
+      "blob": "5d6008a5c89f3eb61e249bfac1d62a958fdd418b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle3/validation-report.md",
+      "blob": "c21e37ec4492bece282602582ddea660a14bd60b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/analysis.md",
+      "blob": "86361a9b5cae627dea126dd2e2a0e762f422388e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/author-proof-hashes.json",
+      "blob": "602a3ba72a94ced992f7973b82605d061a19d699",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/implementation-attempts.json",
+      "blob": "2b37bbe875563d2037cb658df288d3b2f0b7b938",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/implementation-plan.md",
+      "blob": "5fdfdf11a92d37a6430f567f536191677fa08bf8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/root-reservation.json",
+      "blob": "c94be0d2dddd8dfb1ea3a038acd395ec2fd4e25a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/source-freeze.json",
+      "blob": "40d98881025c052546f0e068b3c42cdff10c2634",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/task-contract.md",
+      "blob": "8365680edb674d384915bc40f9ee1274763045b0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/test-results/contract-validation.log",
+      "blob": "0387c8f2e9d3c1e5981753ce0c104f986f0da980",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/test-results/format-check.log",
+      "blob": "4aa0d16e7a0ff5c16269bf45771cebe89cc2e81d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/test-results/format-write.log",
+      "blob": "b6ce889ef3be809977b68243ea80187eb3d7b715",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/test-results/full-suite-2.log",
+      "blob": "04447617d000bde48634bc138556e67b7218eb71",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/test-results/full-suite.log",
+      "blob": "c907441e637dfc80e1b445bf71ecfb77fce7b1ac",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/test-results/github-targeted.log",
+      "blob": "c2b46246a3be1f8f91a2c10413b52d9c9e422ac1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/test-results/preserved-prior-proof.json",
+      "blob": "2d1fec1fc8bd1dc55de8be3a1420baddc4cc4f17",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/test-results/protocol-targeted-2.log",
+      "blob": "da2912cdb6a5e4860b2b2335255f53e94b3b2826",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/test-results/protocol-targeted.log",
+      "blob": "9bf532eb834d5ff2bc9468e7f8d532d1734629f6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/test-results/schema-targeted.log",
+      "blob": "34c69777712f71e621f266694f7417507d5df801",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/cycle4/validation-report.md",
+      "blob": "d4d5438c8bb407625b3ddf89ea2aec39db6143c4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/implementation-attempts.json",
+      "blob": "a15919ef2f209de685e6de2e76ceb59e0b005e1f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/implementation-plan.md",
+      "blob": "3ef65e5f8782a9d2c93faf1b5482d7451a194de6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/01-codex-review-ready.png",
+      "blob": "7f677ba357f5aa2a95a7cd299d43548c29bc1919",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/02-read-only-codex-complete.png",
+      "blob": "a6f0cb06397c4b8800f8ac86a77271163e26391c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/actual-git-probe.mjs",
+      "blob": "d738dc1b70e473772a78a4f10cbb9067cd6f2a5b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/author-proof-hashes.json",
+      "blob": "4cf8832d26aa375c9024584df96605477b4b05ce",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/browser-protocol.mjs",
+      "blob": "b565b6a97a4b96be239d2e145e8b139fc37a4a33",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/browser-result.json",
+      "blob": "39ba7709b7ce09abb78f833f86a8f743b9dba1d6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/evidence-hashes.json",
+      "blob": "cade24180348251845bee84f650e38cdc7198e33",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/final-seal.json",
+      "blob": "d7bfbfe4cd0361666b75157fd37d7015333296ad",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/first-browser-fixture-error/01-codex-review-ready.png",
+      "blob": "7f677ba357f5aa2a95a7cd299d43548c29bc1919",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/first-browser-fixture-error/02-read-only-codex-complete.png",
+      "blob": "a6f0cb06397c4b8800f8ac86a77271163e26391c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/first-browser-fixture-error/browser-protocol.mjs",
+      "blob": "2b5f111283ca042c52b86a493e7a9489435e182d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/first-browser-fixture-error/video/page@b5347dc0ee7672e10ba9b75ba464aa01.webm",
+      "blob": "cb153966ae6ee534ec56a8e70b66d1984bd6d8f0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/fixture.mjs",
+      "blob": "6bb2ab240eceaeb07ede8f90419ef4803ebc2ee3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/media-security-validation.json",
+      "blob": "38e3096cce28422161a272fb68bddbc7a289c005",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/source-hashes.json",
+      "blob": "545f9538ec82f62caa38bcad1e60597e5f220a15",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/task-contract.md",
+      "blob": "a755b4a2e891c3bf17103c8cb6d4d23d7020f897",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/test-results/actual-descriptors.json",
+      "blob": "107f66978468ec832097a8d2d6f41f1a71388134",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/test-results/actual-git-verification.json",
+      "blob": "0cfffc9d4e42da53955b11b62dbdb6f3e9f859dd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/test-results/browser-first-cache-error.log",
+      "blob": "c632a01ab0c79477de5bf1d2faa1c9c4a3037fae",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/test-results/browser-first-favicon-error.log",
+      "blob": "fab03d325031c2d2e47de63549bbdfcd70169375",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/test-results/browser.log",
+      "blob": "0e2b806d589afc2323c1aaa4573d235f66655e8d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/test-results/frontend-build.log",
+      "blob": "d7b8dece17518c1f902553e61e7dd5e2172d9ae2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/test-results/frontend-types.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/test-results/full-regression.log",
+      "blob": "4d7403e31a416a1060d1260ac28328c6e56cf620",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/test-results/report-bound-counterexample.json",
+      "blob": "bfc1d5694022a6ee423a6a179e4b5edabbb78279",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/test-results/revision-history-counterexample.json",
+      "blob": "9497bb50bcd09760a2cdae0bbe76d60e958e9b1a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/test-results/source-integrity.json",
+      "blob": "59d68cffd5c37bc1cd613a1988a3962ecbab1dc7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/trace.zip",
+      "blob": "881b9d8a525a73043bc6e357a5e7852d7a8e417e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/validation-report.md",
+      "blob": "f0213389c473c81e86612a3c57cdc00d8bbe7990",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa/video/page@247c188c55de11c957fc79f9f268d45d.webm",
+      "blob": "0e67605b6831af876a2933e2bfe2a5849446e7f1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/actual-git-probe.mjs",
+      "blob": "dd55a089048392bedb0414efa78127a8b6a1eea7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/actual-git-unicode-probe.mjs",
+      "blob": "0073b3054023ce9425c77048211b08bfe76cb293",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/audit-evidence.py",
+      "blob": "43236aa593a37521f58c922f3f46ac239859e478",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/boundary-probe.mjs",
+      "blob": "adfc00c43309e135dc168c8d17ab8664558842f9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/browser-counterexample.mjs",
+      "blob": "3fb293cba2cbd5b5a7eafc60f8cacd6230fd331b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/browser-protocol.mjs",
+      "blob": "74ee5485b732df893707d4e3f7ffe9c8f70f376b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/browser-result.json",
+      "blob": "fdab746955296c20ea119cf88f40f5184f75cdf1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/counterexample-video/page@e30a368273d0b14c68daf1ef60348855.webm",
+      "blob": "bc8298ca0aeb9aa89c5b2cd432382dc37adb412a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/durable-state-probe.mjs",
+      "blob": "f2491f46ab83585a1b0ddec410334abad187a498",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/evidence-hashes.json",
+      "blob": "47d6bb2589dfa735017f5d049440e80393a1a950",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/final-seal.json",
+      "blob": "b6236c73b4a26d10d74a71c4c61f15f23ee1c33b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/fixture.mjs",
+      "blob": "425b4dafca0278d6140194df2cd5e9d00bfdd3ae",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/media-security-validation.json",
+      "blob": "5ff247ddf6d9092a7893fb0b9dd9fac18d066c27",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/playwright-report/index.html",
+      "blob": "4c326d0a35d4a77f2deeed8f6e40bc3213f4dc82",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/prior-proof-hashes.json",
+      "blob": "6db73f81ad8281f50df2f0bda0886858e86fc2d0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/revision-recovery-probe.mjs",
+      "blob": "e6b83e513449823593b7dd311b5246fd897effb1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/screenshots/01-authenticated-report-import.png",
+      "blob": "194e3bda8b5c647914542db05ece3a6d1ecae661",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/screenshots/02-release-hold-preserved.png",
+      "blob": "d693a1f4b1dbe40d6d200920b3512ba6e836204f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/screenshots/03-infrastructure-receipt-terminal.png",
+      "blob": "fe91d0be91804786107ac780c5e29c2529722b35",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/screenshots/04-valid-unicode-report-stranded.png",
+      "blob": "b16e1b8b3a2e49e7ca59c30df380ebe40e43f5dc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/seal-evidence.py",
+      "blob": "41a139d3c0c75d43f57b4fabfe3948ccff776c51",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/source-hashes.json",
+      "blob": "755baeea00221c2d172202bdda0c966a3cdfd2de",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/supporting-source-hashes.json",
+      "blob": "15569c52cf287c9ab3164511dbf9538e9903fad1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/task-contract.md",
+      "blob": "3c5be07fe6170161980e370a34ad288869f7536c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/actual-git-probe.log",
+      "blob": "db18508f04b341add351ea1a2a139c3957c279dc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/actual-git-unicode-probe.log",
+      "blob": "c22ca84357835d9a5a456ecbfc4e88b3bf80bdb0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/actual-git-unicode-verification.json",
+      "blob": "c22ca84357835d9a5a456ecbfc4e88b3bf80bdb0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/actual-git-verification.json",
+      "blob": "db18508f04b341add351ea1a2a139c3957c279dc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/boundary-first-fixture-syntax.log",
+      "blob": "9c196a998d53077cf4600a9f58ce6354647ce5d7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/boundary-probe.log",
+      "blob": "df3a7645e3f47e5341ee32d74829da057ea036ce",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/boundary-verification.json",
+      "blob": "0a42b46a80dddf76728c30bce8edb9847e0085cf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/browser-counterexample.json",
+      "blob": "f75f8b7af7f6b4ef83d38a4afa72a584035a03e0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/browser-counterexample.log",
+      "blob": "7ba6f026f8f0c61476063aeacc9bd08a3342b86f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/browser.log",
+      "blob": "a69a9d6b6483382452a38a7a8185f9eff61719db",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/durable-state-probe.log",
+      "blob": "bb89cceb453f2d039d9ddb9f857ff7a1cb2a3e01",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/durable-state-verification.json",
+      "blob": "bb89cceb453f2d039d9ddb9f857ff7a1cb2a3e01",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/external-root-live-readonly-receipt.json",
+      "blob": "0ccdac1d2cedec9272b4a61b36d7893ce0e2270b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/frontend-build.log",
+      "blob": "727345ae009ccb5fc3df90876802c0789e6577e2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/frontend-types.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/full-regression.log",
+      "blob": "9af4532e1856622a253fa44e4276073a8ef76b1b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/media-audit.log",
+      "blob": "5ff247ddf6d9092a7893fb0b9dd9fac18d066c27",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/revision-recovery-probe.log",
+      "blob": "7446cf8543b37b0e683bb4cb53c6c684e77df37e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/revision-recovery-verification.json",
+      "blob": "cb037a19bf1171807ceca031cee9fb0e6fc549df",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/source-integrity.json",
+      "blob": "d126c561639187cbc1500d551012b9378b34be67",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/unicode-report-probe.log",
+      "blob": "9532967a77ccfc5c2ca093af1817fa8ae7af8eaa",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/test-results/unicode-report-verification.json",
+      "blob": "9532967a77ccfc5c2ca093af1817fa8ae7af8eaa",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/trace/counterexample-trace.zip",
+      "blob": "dfa5c28f515cdfd85760f0db5a1ca4dd22080edd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/trace/trace.zip",
+      "blob": "9f79e7d5f71796c886208ae821f54dcd2e31a3ce",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/unicode-report-probe.mjs",
+      "blob": "c7a18f649a52a8e5c9625d4eecabf4e256458445",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/validation-report.md",
+      "blob": "6cd0a2db3486e044229bbbadbdcdf50dbbfd5eb0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/video/page@2b7d32ee471cc8325539857e8c52fbb9.webm",
+      "blob": "eeb10adbe647e45530ecfe9b1f7209b4a09ca54b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/actual-git-unicode-probe.mjs",
+      "blob": "5122799adfec7aacb65b0705d03b9d2ba693e892",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/audit-evidence.py",
+      "blob": "065c265bed5a59d3b992b176ab0a1e63efe44cee",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/boundary-probe.mjs",
+      "blob": "adfc00c43309e135dc168c8d17ab8664558842f9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/browser-counterexamples.mjs",
+      "blob": "efddb0a3948e2f0e56006c79f0ee5d1e09b37a00",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/browser-current-counterexamples.mjs",
+      "blob": "c74bca26590afa1d297acb5ccfcf836be4bbe731",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/browser-protocol.mjs",
+      "blob": "389ad4ace5c196a295a7a32dc85a7fc9e4fb26af",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/browser-result.json",
+      "blob": "212448d542f4c52764f5923f1a3844ab6bf09bbc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/capacity-imported-schema-history-probe.mjs",
+      "blob": "254d5f7a73a674bda38af012106ea9b3fb606cb6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/capacity-probe.mjs",
+      "blob": "7351983c15895a98a51ecb40f08d89a0dce069ee",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/capacity-reason-probe.mjs",
+      "blob": "d5b903bccbb9a63eedd1c646f03feb6235eae92e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/counterexample-video/page@f618296c1d635ca7c3a0f55559098eff.webm",
+      "blob": "a244c3fa76f98a7929b2c96e3b06e71e6ba18c10",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/current-counterexample-video/page@aeb46179c4201d2a30819b0a2af4ae08.webm",
+      "blob": "780ce55d8e6359c9e7534d0824840d0157edc115",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/disjoint-cas-probe.mjs",
+      "blob": "93a6a7468d642b0bd99b519ccfefebea1ec0edd6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/durable-state-probe.mjs",
+      "blob": "1ec6955907a935fd4a572f513d90544c39146ed1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/evidence-hashes.json",
+      "blob": "5f2403834d436a9bce370c6ac0d857d06153a259",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/final-seal.json",
+      "blob": "b9692e08645b0f6df27d179f57e31a27fab1744c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/fixture.mjs",
+      "blob": "425b4dafca0278d6140194df2cd5e9d00bfdd3ae",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/independent-boundaries.mjs",
+      "blob": "20fc2e36ee67eea538f18b85c8f513f831232347",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/actual-git-unicode.log",
+      "blob": "66ee353cdee3c5def5aebce922fef18040db86a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/boundary.log",
+      "blob": "2cc3abaf33590c2a74187de5955043bc233ee2b4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/browser-counterexamples.log",
+      "blob": "96809e6f9121035ad7ed5e1d0fddb4bb13c6c8ae",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/browser-current-counterexamples.log",
+      "blob": "f409330936ef42df78eb641f2554599d409d04b1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/browser-first-missing-ffmpeg.log",
+      "blob": "32c573e214ea169a139311cd625c98b5f62f9e68",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/browser.log",
+      "blob": "be3e5db07c2e90c6f94fe61a09885affc7c72fd5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/bug-pipeline-tests.log",
+      "blob": "c47fcab08a20d2681a651d7d6a3a5d31215733ad",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/capacity-first-fixture-padding.log",
+      "blob": "6d9cbb2be4c4bbc25d8a44c0d9187c74fe36ac11",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/capacity-prior-reports.log",
+      "blob": "fabfc8069d09c6d70a9b64e5e78d7f66fccebd3b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/capacity-second-fixture-reason-deleted.log",
+      "blob": "9609d1b91981bb2c0f61e5a0fe8ccabcda91f989",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/capacity.log",
+      "blob": "d71ee33cb53b0b9172e5039d7a8a982b1e114519",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/disjoint-cas.log",
+      "blob": "806537a5b3800cf18a543c137fc3ff459156f7b2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/durable-state.log",
+      "blob": "78b925bcea75ac904d9c3aaa4673c84d18de40d6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/frontend-app-types.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/frontend-build.log",
+      "blob": "76d039e8b475f074e2d6d771f3c054dc6ab91b26",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/frontend-node-types.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/frontend-types.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/independent-boundaries.log",
+      "blob": "c979ffd68179c076f6854037813e5915bc0dda45",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/media-audit.log",
+      "blob": "d11a7c21ef263c63ea6175b959b99d179593d45c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/reviewed-supporting-diff.patch",
+      "blob": "5e743112ff29eeabc0402416dd93c2ed04732822",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/revision-recovery.log",
+      "blob": "7446cf8543b37b0e683bb4cb53c6c684e77df37e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/logs/unicode-report.log",
+      "blob": "662310bbe341a5f4fdcc28734a04f779d7d70348",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/media-security-validation.json",
+      "blob": "d11a7c21ef263c63ea6175b959b99d179593d45c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/playwright-report/index.html",
+      "blob": "dadfeee0df078dcf716cb35fecebeaa32b4df326",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/playwright-report/protocol-success.html",
+      "blob": "94abec6cb85b7f710936f8a36277e47e4398d10f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/prior-proof-hashes.json",
+      "blob": "bbb204db0ab0a20fd8d00cd62b8611dcf2eb4e79",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/revision-recovery-probe.mjs",
+      "blob": "e6b83e513449823593b7dd311b5246fd897effb1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/screenshots/01-authenticated-report-import.png",
+      "blob": "d6dba8b5abf419637bd9feae3722e00557adae52",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/screenshots/02-release-hold-preserved.png",
+      "blob": "5b9424d058e44a8228731d078e09f31f9993c04b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/screenshots/03-infrastructure-receipt-terminal.png",
+      "blob": "0e6859605cb6e9a92367dff6b8849ef41acd6df7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/screenshots/04-capacity-stranded.png",
+      "blob": "c49d6d9fc1b389f51959b636b52dac5b5bc1a430",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/screenshots/05-disjoint-cas-result-lost.png",
+      "blob": "8fe3efc8306a91dbfc323e574189ba4f7b138641",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/screenshots/06-comment-compatible-history-capacity-stranded.png",
+      "blob": "50879dfd5de71f6734afd246571e619db7bff4b9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/screenshots/07-disjoint-cas-result-lost.png",
+      "blob": "a6794ce3edb8236a7e5ae85f0759b59ec92e2347",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/source-hashes.json",
+      "blob": "73b8d72fdd924588c5ccbcf08c196b528974d112",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/supporting-source-hashes.json",
+      "blob": "b5a245efba36f9604a3fc559d808b52d98eaeddb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/task-contract.md",
+      "blob": "c74def2260bde497fc371f2efc9d82cf500fe02d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/test-results/actual-git-unicode-verification.json",
+      "blob": "66ee353cdee3c5def5aebce922fef18040db86a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/test-results/boundary-verification.json",
+      "blob": "0a42b46a80dddf76728c30bce8edb9847e0085cf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/test-results/browser-counterexamples.json",
+      "blob": "de317c3d5ba0732343f87600baaa9a7755c88f2e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/test-results/browser-current-counterexamples.json",
+      "blob": "879958dd20fef288181ee082c234e670ab700ea2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/test-results/capacity-imported-schema-history-verification.json",
+      "blob": "fabfc8069d09c6d70a9b64e5e78d7f66fccebd3b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/test-results/capacity-verification.json",
+      "blob": "20bdfb8dd8239b393e7d9652ade2371688b66fd7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/test-results/disjoint-cas-verification.json",
+      "blob": "806537a5b3800cf18a543c137fc3ff459156f7b2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/test-results/durable-state-verification.json",
+      "blob": "78b925bcea75ac904d9c3aaa4673c84d18de40d6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/test-results/external-root-hosted-run-observation.json",
+      "blob": "544c5a8f3b82d76e86ba4c25cebe77073d74a603",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/test-results/external-root-live-readonly-receipt.json",
+      "blob": "52b0805b27097cd58cd8745ba820230e33824657",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/test-results/independent-boundaries.json",
+      "blob": "11cf1d78d44e9b79eb2a7de1f5ec77534c794971",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/test-results/revision-recovery-verification.json",
+      "blob": "cb037a19bf1171807ceca031cee9fb0e6fc549df",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/test-results/source-integrity.json",
+      "blob": "796b8c9cdc12a92faeba76e1adf18721e0e804c4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/test-results/unicode-report-verification.json",
+      "blob": "662310bbe341a5f4fdcc28734a04f779d7d70348",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/trace/counterexample-trace.zip",
+      "blob": "d6e333693369177d9c3a73ea8e98f060d4d1de4f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/trace/current-counterexample-trace.zip",
+      "blob": "ab2651db1a2e64a2008972475022538d2c4f0a32",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/trace/trace.zip",
+      "blob": "06cd1bf33f17c2a320abd0a267489856f712881a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/unicode-report-probe.mjs",
+      "blob": "c7a18f649a52a8e5c9625d4eecabf4e256458445",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/validation-report.md",
+      "blob": "2e4dd7573b910fbd7e1632edc2c5c5fb1f825d9e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/video/page@53924699b5a64ab2c3642bd62a5e0bb6.webm",
+      "blob": "b587492e75446d9e8f21031758a8e9838f1cd55a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/actual-git-unicode-probe.mjs",
+      "blob": "5122799adfec7aacb65b0705d03b9d2ba693e892",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/audit-evidence.py",
+      "blob": "bb75f41d8def75ca248cfef14c285b8fab6fa25e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/browser-capacity-cas.mjs",
+      "blob": "e42be2adde956a6b0f499617a970daaf13ea6cb6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/browser-protocol.mjs",
+      "blob": "fc02d3b4cfa7cf88233030c00ce36d546707346c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/browser-result.json",
+      "blob": "212448d542f4c52764f5923f1a3844ab6bf09bbc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/bug-pipeline-tests.log",
+      "blob": "7ec2c86b51a1cf27b20eb22dde89b4f0f8e16b8e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/capacity-cas-video/page@020134293cbbb00f35f5bf4f2fb0a5da.webm",
+      "blob": "3409019640a87d0004a0657c617c6a7c15e1551d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/capacity-imported-schema-history-probe.mjs",
+      "blob": "8eb5743e52ece20f9916fb4cc6956095c14aed8a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/disjoint-cas-probe.mjs",
+      "blob": "cbae5206a334b10278d3160776dfe0e3bf6330ca",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/evidence-hashes.json",
+      "blob": "1deea9b8a1445ca3e3046f7822da01c2673d2ace",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/final-seal.json",
+      "blob": "bdbb104fd19005d4ce69bfd8fb0e8e6e96cacb93",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/fixture.mjs",
+      "blob": "425b4dafca0278d6140194df2cd5e9d00bfdd3ae",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/frontend-app-types.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/frontend-build-retry.log",
+      "blob": "52066f84bb0813cee8ff6b7946692e373505f4d0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/frontend-build.log",
+      "blob": "65dbe93815180884cdb8b59b579c745e8b36476c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/frontend-node-types.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/frontend-types.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/independent-boundaries.mjs",
+      "blob": "fdbfcd0b023625b402f893a9d20a4877b22ffd41",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/live-readonly.mjs",
+      "blob": "5a0752e3dd6fa1981f8eb92d2d4ef65e650dab4b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/actual-git-unicode.log",
+      "blob": "66ee353cdee3c5def5aebce922fef18040db86a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/browser-capacity-cas-verified.log",
+      "blob": "66143b8b6c7dfb757cc81ec2fd8044efd2112cf4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/browser-capacity-cas.log",
+      "blob": "ee465f94492622342e90629f8ae2b2c2318024a0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/browser-retry.log",
+      "blob": "0da7fef31960de6c9740f306b90585980a514cde",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/browser-verified.log",
+      "blob": "96a3ec048f9822d872e0174161d46df98cdc7bda",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/browser.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/capacity.log",
+      "blob": "e0f0fbd54fc3915aad152039554d3ec91bcd893c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/contract-validation-absolute.log",
+      "blob": "0387c8f2e9d3c1e5981753ce0c104f986f0da980",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/contract-validation.log",
+      "blob": "a0c3a93920c154a9b1252d2195164d0e8eb9050f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/disjoint-cas.log",
+      "blob": "16c9239fd3e3c46ab2a6d9b7ddf43893232b7bca",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/independent-boundaries.log",
+      "blob": "fa875494089bd808caadf0aa81b237ddf239975c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/live-readonly.log",
+      "blob": "79d5be889a1c1b16b6ccf375a84d8abf3feb7406",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/media-audit-final.log",
+      "blob": "c2d0c5579cac692c28e607d9b309642a1a7a6440",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/media-audit-seal.log",
+      "blob": "c2d0c5579cac692c28e607d9b309642a1a7a6440",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/media-audit.log",
+      "blob": "c2d0c5579cac692c28e607d9b309642a1a7a6440",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/native-preflight.log",
+      "blob": "31c30445d23a486b29204ed87bb13ed17b1db1cb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/normal-pipeline-cas.log",
+      "blob": "901990b8b3fd5c5d51f4c2c9588f3342022d864e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/normal-standalone-cas.log",
+      "blob": "2a8a33788cf8e2fd13ef755c95345e512c05d2c2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/reviewed-full-diff.patch",
+      "blob": "cd63c1bf905206dab5100d514287c3fa22d48108",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/revision-recovery.log",
+      "blob": "7446cf8543b37b0e683bb4cb53c6c684e77df37e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/logs/source-hygiene.log",
+      "blob": "4aa0d16e7a0ff5c16269bf45771cebe89cc2e81d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/media-security-validation.json",
+      "blob": "c2d0c5579cac692c28e607d9b309642a1a7a6440",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/normal-pipeline-cas-probe.mjs",
+      "blob": "b9e0b4686cae6c70057ecfe4411f0cd3612af1b8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/normal-standalone-cas-probe.mjs",
+      "blob": "09f232aa0df7545c4e2e6de280ea2e682ebec2d9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/playwright-report/index.html",
+      "blob": "a3f4ece892c761aef812f691334e49794b600ebd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/prior-proof-hashes.json",
+      "blob": "e8bbfec5e8225131081b7c7bcf9482d01cc9e516",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/revision-recovery-probe.mjs",
+      "blob": "e6b83e513449823593b7dd311b5246fd897effb1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/screenshots/01-authenticated-report-import.png",
+      "blob": "9a01b75e8101781a50f2cde0649d79947c95a4cb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/screenshots/02-release-hold-preserved.png",
+      "blob": "49aaa7b6923914cac1fa1eccd59ba1d775a002ae",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/screenshots/03-infrastructure-receipt-terminal.png",
+      "blob": "2944f945331fe94b9c4d5381a154b2bf0f034745",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/screenshots/04-capacity-refused-before-inference.png",
+      "blob": "2008dd487f949e19746218095205c4fc4e627802",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/screenshots/05-disjoint-cas-owner-and-peer-preserved.png",
+      "blob": "9daad69c8130805076ea2622e1cb786b20d2c161",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/source-hashes.json",
+      "blob": "0be349e77a1682c72651923271d66352af68abb2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/supporting-source-hashes.json",
+      "blob": "ddeb40fdcbf41ee058d3cb1cd1dc7fdf0a3f6793",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/task-contract.md",
+      "blob": "0a34db297d58f105bce847b5ea2b809c2ba34567",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/test-results/actual-git-unicode-verification.json",
+      "blob": "66ee353cdee3c5def5aebce922fef18040db86a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/test-results/browser-capacity-cass.json",
+      "blob": "4fa51bf70e9d1e5f3386cba991d6f2f88edab656",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/test-results/capacity-verification.json",
+      "blob": "e0f0fbd54fc3915aad152039554d3ec91bcd893c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/test-results/disjoint-cas-verification.json",
+      "blob": "16c9239fd3e3c46ab2a6d9b7ddf43893232b7bca",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/test-results/independent-boundaries.json",
+      "blob": "11cf1d78d44e9b79eb2a7de1f5ec77534c794971",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/test-results/live-readonly-receipt.json",
+      "blob": "b1cabc43eda2511f4f11b0a28f74cdb2ebe4b920",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/test-results/normal-pipeline-cas-verification.json",
+      "blob": "901990b8b3fd5c5d51f4c2c9588f3342022d864e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/test-results/normal-standalone-cas-verification.json",
+      "blob": "2a8a33788cf8e2fd13ef755c95345e512c05d2c2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/test-results/revision-recovery-verification.json",
+      "blob": "cb037a19bf1171807ceca031cee9fb0e6fc549df",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/test-results/source-integrity.json",
+      "blob": "3cc46f5a8d60f4757636f965d7f06435241e02b2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/trace/capacity-cas-trace.zip",
+      "blob": "64475d13751222ceaec9a48313dc24ddfc50dd86",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/trace/trace.zip",
+      "blob": "5527d7ed803178424986d9cf0a6bbf68a7887525",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/unicode-report-probe.mjs",
+      "blob": "c7a18f649a52a8e5c9625d4eecabf4e256458445",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/validation-report.md",
+      "blob": "08241d3c05f137cb61b81d8ccaeb7aefe7fe3fc3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/independent-qa4/video/page@cd209c2323a0168763cb6d1659b6069c.webm",
+      "blob": "9543b478162537c72f951657ef98154b25defefb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/source-freeze.json",
+      "blob": "78168b70196097bdf96d6c10fd0a1889c0809823",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/task-contract.md",
+      "blob": "f78d89a1deb4ad4afd2b440dbe2da9744b75d67d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/test-results/author-regression.log",
+      "blob": "1e7e2344e62f94340ce4b41abe93928547cfd126",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-review-adapter/validation-report.md",
+      "blob": "59fdd10d4d870d2c8f745e92aadd210674820f01",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/analysis.md",
+      "blob": "86361a9b5cae627dea126dd2e2a0e762f422388e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/evidence/01-authenticated-report-import.png",
+      "blob": "9a01b75e8101781a50f2cde0649d79947c95a4cb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/evidence/02-release-hold-preserved.png",
+      "blob": "49aaa7b6923914cac1fa1eccd59ba1d775a002ae",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/evidence/capacity-cas-trace.zip",
+      "blob": "64475d13751222ceaec9a48313dc24ddfc50dd86",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/evidence/page@cd209c2323a0168763cb6d1659b6069c.webm",
+      "blob": "9543b478162537c72f951657ef98154b25defefb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/history/author-cycle4-proof-hashes.json",
+      "blob": "602a3ba72a94ced992f7973b82605d061a19d699",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/history/author-cycle4-validation-report.md",
+      "blob": "d4d5438c8bb407625b3ddf89ea2aec39db6143c4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/history/original-manual-state.json",
+      "blob": "a4a1418b4e0956082fb4c6ff68cce97bb46f8d80",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/history/qa1-final-seal.json",
+      "blob": "d7bfbfe4cd0361666b75157fd37d7015333296ad",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/history/qa1-validation-report.md",
+      "blob": "f0213389c473c81e86612a3c57cdc00d8bbe7990",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/history/qa2-final-seal.json",
+      "blob": "b6236c73b4a26d10d74a71c4c61f15f23ee1c33b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/history/qa2-validation-report.md",
+      "blob": "6cd0a2db3486e044229bbbadbdcdf50dbbfd5eb0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/history/qa3-final-seal.json",
+      "blob": "b9692e08645b0f6df27d179f57e31a27fab1744c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/history/qa3-validation-report.md",
+      "blob": "2e4dd7573b910fbd7e1632edc2c5c5fb1f825d9e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/history/qa4-final-seal.json",
+      "blob": "bdbb104fd19005d4ce69bfd8fb0e8e6e96cacb93",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/history/source-freeze-cycle1.json",
+      "blob": "78168b70196097bdf96d6c10fd0a1889c0809823",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/history/source-freeze-cycle2.json",
+      "blob": "20a7752222b251ac3e5d5d95f5616228f9cea9bd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/history/source-freeze-cycle3.json",
+      "blob": "73b8d72fdd924588c5ccbcf08c196b528974d112",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/history/source-freeze-cycle4.json",
+      "blob": "40d98881025c052546f0e068b3c42cdff10c2634",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/implementation-plan.md",
+      "blob": "5fdfdf11a92d37a6430f567f536191677fa08bf8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/imported-history.json",
+      "blob": "6d907c84bed0581678b628b31e4901adcd9b6b0a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/task-contract.md",
+      "blob": "8365680edb674d384915bc40f9ee1274763045b0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/standalone-review-bootstrap/validation-report.md",
+      "blob": "08241d3c05f137cb61b81d8ccaeb7aefe7fe3fc3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "docs/claude-local-review-prompt.md",
+      "blob": "edd93d6a44b2736d1ccc63a144ac2042d311c5a3",
+      "mode": "100644",
+      "baseBlob": "e9ec717026b864cf17805c8d621d7d7da0c6da05",
+      "baseMode": "100644"
+    },
+    {
+      "path": "docs/codex-bug-workflow.md",
+      "blob": "6899b712eb80f5e87a39a40ac59245214e7c175e",
+      "mode": "100644",
+      "baseBlob": "d8555bea1ecb3403747353467026a40235a117b6",
+      "baseMode": "100644"
+    },
+    {
+      "path": "docs/standalone-pr-review.md",
+      "blob": "151059cacdae4bd923050c68a0c5b8953ed5b2c2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.mjs",
+      "blob": "9524356fb52bae39cde92de27daeb14c370db090",
+      "mode": "100644",
+      "baseBlob": "b0635a863022fe8a1d2a701dc48394e2cf0a80f8",
+      "baseMode": "100644"
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.test.mjs",
+      "blob": "7fd941698726061858a45b773794ee73453743f9",
+      "mode": "100644",
+      "baseBlob": "cfc43b7d215587692022ee4693a8513f66cd8562",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "analysis.md": "542706bea2f4374087527876a63c3d95e9d661be36b4eb0ff07358687ff21b89",
+    "author-full-suite.tap": "991b1a71c5545515725886b6d82e55b5d1a5018d80fa4329f44d0b3caa3626ab",
+    "author-publication-scan.json": "6ce5187682f6003a41310251d3c42afc904c3d3394992d68238d381aedb65818",
+    "author-results.json": "468286d03be43ad1028be7ca7c495ff019f642b7509c7ccfda9729b89ce144dc",
+    "codex-verification.md": "52a4b167e69f28e7a8b01a9a0071d5acf20f334212013ab3e8e9f5907292f445",
+    "history/legacy-author-cycle4-proof-hashes.json": "2f3a19d00249cbf50306a7f585ef730d7321799c03eac46a91887b6355072fde",
+    "history/legacy-author-cycle4-validation-report.md": "0f8deb10bdc1a52138454f4e9da59e9469ca4574467958c888c821245e9f4d80",
+    "history/legacy-original-manual-state.json": "7c8b8be918c7208d4d3a05d6a6a38e6552cf6d3851e33e5e2f9477b99778aa14",
+    "history/legacy-qa1-final-seal.json": "e535d76405b097e6a7351ed5211d5b754e7215dfe74fdfcf28506d37768d078e",
+    "history/legacy-qa1-validation-report.md": "9056e07c0433d3c0c723ad1a47baa4caabb13faa1b3e0c4339a7bc4544a80289",
+    "history/legacy-qa2-final-seal.json": "7d134f6bea468d8d8a5af569ebbea561636cf7f3491d226fd5f2bcd62b830e0a",
+    "history/legacy-qa2-validation-report.md": "b103b1e9c72a9760bf4b325f116c06471c06ad0680a3347f8eb15c33f05aa713",
+    "history/legacy-qa3-final-seal.json": "7920efe7f45e25653258c12d1f25791e62f7a6eab082f2b5095176024b97dd56",
+    "history/legacy-qa3-validation-report.md": "db7e4c6839fcf13d92fcb20d1f0e052f31c06755c3368e8e3399ea1804bc5c01",
+    "history/legacy-qa4-final-seal.json": "46b0cc05f3642171b6cff88e0aa0f70d034f429542f6c7aaf1531d8d3617748b",
+    "history/legacy-source-freeze-cycle1.json": "a075ddec60d5059005494fc9ba4b3b9c4e53e691627b7e200a3bd7c755c7974f",
+    "history/legacy-source-freeze-cycle2.json": "7451927efd684e6978b96299501e5b69b6160b605ecc4701dc4b6a7b8250a9a1",
+    "history/legacy-source-freeze-cycle3.json": "7dd41bf20229026e85bff335d4a7749cd748a5a119cbe74cfe9cd69b73275bf2",
+    "history/legacy-source-freeze-cycle4.json": "d88c088fe9a38d16c9c89d4e7263643a878a779ae98c558e6b74da4693d10a08",
+    "history/legacy-validation-report.md": "a7d735bef083eb32f23de1ca210c3ec0bbba588c3346b253c5d1cba07893a8da",
+    "implementation-plan.md": "8e7dd20e422f728026f2f37fc2edbd991d248e3a084b79157de803d1830356f4",
+    "independent-qa/acceptance-matrix.md": "8bef2d0fb3f697312c8946873c33416461fa272cad2288ac3efb5d2e8741e384",
+    "independent-qa/actual-state-local-validation.json": "384fe0ec89e545f823be4d437b247c47ff2fbd31076e64df2c6b668c022d8f2f",
+    "independent-qa/actual-state-local-validation.mjs": "26a19722f7c92a5559f45dab3b4fcfac48f76994b59593f9b376d486abfa18e9",
+    "independent-qa/artifact-manifest.json": "454a540b661d00db90c3174833eb61381b345a08b5f945c5b9440dcb1326519d",
+    "independent-qa/audit-and-seal.py": "23a20f7c77e047df74ce2b1ea6cdd6955d893e93dd3ebac1f8755dbd5d968131",
+    "independent-qa/browser-receipt-recovery.mjs": "4f86dcb84f35e4db8c9364ce1d85e1fd537832c9deed154c6e84d3ab2f4ad389",
+    "independent-qa/diff-review-and-security.md": "b7e17d8a83b50dfe9693cc0428d86c752586409c613f6071ba75efce24afad0e",
+    "independent-qa/final-seal.json": "c699a51463925123b4146788dbfd97b44fa5025a6f2e5f986e4e64ff01e72364",
+    "independent-qa/fixture.mjs": "191c1fa501113018b5e455dbba9bca20f6cf65132e490e34bd5419eb7bfb93f5",
+    "independent-qa/followup.diff": "ed726bce8db6bfeccda45cb48c12ab3535b26b4b4749ea82b5407527d0a80049",
+    "independent-qa/full-main-source.diff": "cfe050d477ebb8f5562239e9ee8145b1422b175159521d68399d7daf32425204",
+    "independent-qa/full-state-local-validation.json": "6f2728fac3312a3b00b1e8e968653ddabbeb565f442fe4342794c3675ea01ef8",
+    "independent-qa/full-state-local-validation.mjs": "a05a18a080b7744d0c4d95dee0e24f8281b97dcd9eabec0213ac16cb86f5cc0c",
+    "independent-qa/full-suite.tap": "df9718b232ed3954a82689240922799d2d5611de8bde392f9a4a11b66240c74e",
+    "independent-qa/independent-negative-cases.mjs": "1e2a7fc86134e120d854f8de17b61302f0ef10adc6d619032458e69642115d1f",
+    "independent-qa/independent-negative-cases.tap": "46daa65126cd5808893cda5db70e4107efa6a2103fc165d00c1d9d94e3d23f25",
+    "independent-qa/integrity-after.json": "35942804476a684881b21bb37f22975b06fb78ee0678b453b9ec469971ded434",
+    "independent-qa/integrity-before.json": "934dd695460109365b8b0c041a7a78363b929f759f0db4831c71ab886b91b8d1",
+    "independent-qa/media-security-validation.json": "39548895a951857ce3964670b55212d6384c9b9114381640781fb5593efe2f3d",
+    "independent-qa/playwright-report/index.html": "12d5cfaee3267729c41b9d62623cdce252782f9601b986938f801e1138f95541",
+    "independent-qa/prior-proof-manifest.json": "3d98b07e825d25fafc1f26eee00fc5b4c9d177c8a3c8a8b9fdba9f931a3c1cf2",
+    "independent-qa/reproduce.md": "115d6278ecd68acb7a22c3e9d1b90c0e353eee1f8b7df982911d38b0c3c66b7d",
+    "independent-qa/screenshots/durable-projection-receipt.png": "258d5e587cc12d1fff57853eb056a26ba011a557e73a536afc6f5f1b0881ce17",
+    "independent-qa/screenshots/protected-release-and-recovery.png": "cccda8d5985ee67418b74d47ad3606e2f1dce83195fd47fc883f4aacf4a77167",
+    "independent-qa/source-freeze.json": "710bc718c7dc562627c078607d615b174adf228a3aee78e3a3077c8750059f1f",
+    "independent-qa/supporting-source-hashes.json": "45e190594525d1c66ee96e845f157610509ddee41574ec99f0b17d519460d3e0",
+    "independent-qa/task-contract.md": "4af4e4513875a3da72c86a2f44967576cbac10a60135781087b765a55fa4614d",
+    "independent-qa/test-results/browser-result.json": "e98722e24c05aba2d90e447b520d4e51fa484a78301b09ca0e3544a3d745671f",
+    "independent-qa/test-results/browser-run.log": "924560ab21e285ce6d6c126ce58a10d1b1b041cf0cefb58476c8c3efbf603274",
+    "independent-qa/test-results/execution-summary.json": "89777ec4d85b7e736cefae04a8a5354854e7170e2d5f2240ac2aaf5dfb3f6637",
+    "independent-qa/test-results/full-state-local-validation.log": "d04235762441acacfbf5da53642eb555222a746e2550eae04da96fa7e0cc8556",
+    "independent-qa/test-results/review-revisions.json": "a42547fd67b0fef2fa04b29dff219511172f4db49632e804106d5809b417eb55",
+    "independent-qa/test-results/syntax-and-scope.json": "f68073a499e39a1091e465599d4687f6d19de602bb2c36f43eda7126572de356",
+    "independent-qa/trace/trace.zip": "5fd7d8d77863a3e251c9363377d0088e551fae96412a4391b1a7cb9bcb70f5c1",
+    "independent-qa/validation-report.md": "31539d16c8ff48ea57bba2d7702b808a9b93d6c7550329ed39b31b9822e99a36",
+    "independent-qa/video/receipt-recovery.webm": "fda3a95e47e3faf77b7855e78b70b33a8b2f33169709e6b2ce80cbd43dae853d",
+    "prior-proofs-verification.json": "c8a8c7356ccbe5940fe960ad0adaa2d09a9dfa03d58b9045975a3aeecfc67e52",
+    "root-independent-probes.tap": "68bb7b8a179d3e679fd791bed537dd1bb10d6d9613f90507569638c5e38725aa",
+    "scope-amendment-1.md": "15d1c6718bfb3a38f75c8bdbe12c0492093847fc8606358761d7b994f88dcdb1",
+    "source-freeze.json": "2e3dd600555b7faecf90177dfe8f8acae8444f9e0072135644983ce718cb13d4",
+    "task-contract.md": "d068ec5717289dfea65c1ff5c8fd53a0458e4929a8aaaa754cf0d879de78a594",
+    "validation-report.md": "20ea37aa8cc1802c81b2076d33e1cd25842c8e7e00a8c1b2e1ea98f85129bc92"
+  }
+}

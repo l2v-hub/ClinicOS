@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "status": "AUTHOR STOPPED \u2014 AWAITING FRESH INDEPENDENT QA",
+  "baseSha": "fcabd40713ad355c944d7aff3fcfa7852dce01e9",
+  "group": "manualBatches/standalone-pr-review-adapter",
+  "implementationRound": 5,
+  "sourceDigest": "940d4254e31568cdb108263bc7e01c428a2b17ce78af902c41989ffc840fd1ac",
+  "sourceFiles": 21,
+  "suite": {
+    "command": "node --test --test-reporter=tap agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/*.test.mjs",
+    "total": 714,
+    "passed": 711,
+    "failed": 0,
+    "skipped": 3,
+    "skips": "Windows-only PowerShell scheduler, ACL and bootstrap checks; host is Linux",
+    "log": "author-full-suite.tap"
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "high",
+      "testCoverage": "trust-root and workflow changes never merge even through a caller-supplied allowlist; native human approval requires current head, nonauthor User and stale-dismissal protection",
+      "authorResult": "PASS"
+    },
+    {
+      "id": "F2",
+      "severity": "high",
+      "testCoverage": "existing manual PR, branch or issue ownership blocks adoption without shortening history",
+      "authorResult": "PASS"
+    },
+    {
+      "id": "F3",
+      "severity": "medium",
+      "testCoverage": "same-account report cannot authorize merge; distinct reviewer or protected native human approval can",
+      "authorResult": "PASS"
+    },
+    {
+      "id": "F4",
+      "severity": "medium",
+      "testCoverage": "head-drift claim recovery; one-use maintainer-only QA release; native open/unmerged merge release; transient waiting read failure; audited normal-budget recovery",
+      "authorResult": "PASS"
+    },
+    {
+      "id": "F5",
+      "severity": "medium",
+      "testCoverage": "persisted submit reports failed projection and reconcile alone converges; confirmed409 vs definite502 vs uncertain timeout; bounded idempotent label retries",
+      "authorResult": "PASS"
+    },
+    {
+      "id": "F6",
+      "severity": "medium",
+      "testCoverage": "application provider key never becomes Codex API auth; missing/conflicting auth blocks before inference",
+      "authorResult": "PASS"
+    },
+    {
+      "id": "F7",
+      "severity": "medium",
+      "testCoverage": "packet reads once through submit/import/projection with live identity; failed standalone save reloads before normal queue save; existing real-store concurrency fixtures",
+      "authorResult": "PASS"
+    },
+    {
+      "id": "F8",
+      "severity": "low",
+      "testCoverage": "only exact-name optional Vercel failures tolerated; required checks mandatory",
+      "authorResult": "PASS"
+    },
+    {
+      "id": "F9",
+      "severity": "low",
+      "testCoverage": "independent QA reservation uses injected time",
+      "authorResult": "PASS"
+    }
+  ],
+  "historyIntegrity": {
+    "filesChecked": 369,
+    "changed": [],
+    "result": "PASS"
+  },
+  "limits": [
+    "Tests exercise real controller/store/guard code with synthetic GitHub/model/merge callbacks and temporary local Git repositories; no live GitHub transport, rate limits, uncertain server behavior or paid inference reproduced.",
+    "No application files changed; application builds/runtime/DB/provider checks were not rerun.",
+    "Fresh independent QA, visual receipt/recovery evidence, actual Claude Max review, independent final Codex QA, current native checks and human/protection merge prerequisites remain root-owned.",
+    "Source not committed or pushed by author. No state/GitHub/provider/model mutation or issue closure performed.",
+    "Existing legacy installed cron remains capped until separately updated; audited comment handoff and explicitly budget-bound local review helper support extensions."
+  ]
+}

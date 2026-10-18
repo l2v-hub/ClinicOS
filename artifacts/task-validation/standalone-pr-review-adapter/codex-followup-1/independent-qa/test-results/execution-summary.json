@@ -1,0 +1,27 @@
+{
+  "fullSuite": {
+    "command": "node --test --test-reporter=tap agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/*.test.mjs",
+    "exitCode": 0,
+    "total": 714,
+    "passed": 711,
+    "failed": 0,
+    "skipped": 3,
+    "skipReason": "Windows-only PowerShell scheduler, ACL and bootstrap tests on Linux"
+  },
+  "independentProbes": {
+    "command": "node --test --test-reporter=tap publication/independent-negative-cases.mjs",
+    "total": 17,
+    "passed": 17,
+    "failed": 0,
+    "skipped": 0
+  },
+  "harnessCorrections": "First reviewer run corrected invalid normal-batch fixture identity and absent mock state-branch GET. Expanded native-adapter fixture corrected gh --slurp list shape. These were fixture failures, no candidate edits; latest complete17probe run passed. Raw early harness logs kept outside publication.",
+  "actualNetworkCalls": 0,
+  "sourceEdits": 0,
+  "installs": 0,
+  "limitations": [
+    "Node24 on Linux; CI Node22/Windows-native jobs not replicated",
+    "Synthetic GitHub/model/merge callbacks; actual native protections and human approvals not established",
+    "No application build/runtime/deployment claim"
+  ]
+}

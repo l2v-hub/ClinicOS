@@ -1,0 +1,25 @@
+✔ F1 independently hostile allowlist cannot auto-merge any trust root or .github file (110.291506ms)
+✔ F2 historical manual and normal ownership cannot be shortened by first adoption in any key (14.070099ms)
+✔ F3 same actor/reviewer/author with absent protection or approval never merges, including guard-time revocation (21.810368ms)
+✔ F4 claim head drift recovery requires maintainer exact nonce and preserves consumed history; stale submit fails (11.336112ms)
+✔ F4 stale QA worker cannot overwrite authenticated recovery through real CAS store (24.787793ms)
+✔ F4 merge release rejects merged native subject and accepts open once only (15.276288ms)
+✔ F5 submit persisted even when all three label POSTs fail; reconcile alone converges idempotently (128.280676ms)
+✔ F5 actual store distinguishes confirmed409, definite502, and uncertain timeout with no blind write retry (2.278846ms)
+✔ F6 provider credentials never reach model environment and explicit API conflict blocks finalize auth (4.709537ms)
+✔ F7 cached blobs are operation-scoped; mutable identity and changed pinned bytes fail in next operation (22.121031ms)
+✔ F7 isolated failed standalone write reloads authoritative state before a normal queue save; transient read remains waiting (10.199968ms)
+✔ F8 only exact optional Vercel is tolerated; empty required checks or Vercel-as-required blocks (0.6783ms)
+✔ F9 fixed injected clock determines persisted QA ownership before callback (13.818072ms)
+✔ Attempt allowances preserve old proof fields and exact history; fresh round never inherits terminal approval (2.575385ms)
+✔ F1/F3 native human evidence rejects stale, dismissed, Bot, author, excluded actor and missing review protection (2.259761ms)
+✔ F5 uncertain write can be reconciled by fresh read without reexecuting reservation (0.96506ms)
+✔ Audited extension command requires maintain/admin and exact next limit; manifest grants and changed prefix reject (5.9881ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 539.267732
