@@ -1,5 +1,8 @@
 import { isScheduledTherapySlot, type TherapyReadGroup } from '../../types';
-import { TherapyVerificationPanel } from '../shared/TherapyVerificationPanel';
+import {
+  AgendaTherapyVerification,
+  type AgendaTherapyVerificationFeed,
+} from '../shared/AgendaTherapyVerification';
 import { useState, useMemo, Fragment, useEffect } from 'react';
 import { appointmentLanding, type PatientLanding } from '../../lib/patientTargetResolver';
 import type {
@@ -33,6 +36,7 @@ import { useRecencyClock } from '../../lib/useRecencyClock';
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
 
 interface OperatorAgendaProps {
+  verificationFeed: AgendaTherapyVerificationFeed;
   operatoreId: string;
   nomeOperatore: string;
   operatori: Operatore[];
@@ -137,6 +141,7 @@ export function OperatorAgenda({
   onConfirmTherapy,
   onNotAdministeredTherapy,
   onLoadTherapySlots,
+  verificationFeed,
 }: OperatorAgendaProps) {
   // Creazione appuntamenti: la GUI la nasconde se il ruolo non la consente (il backend decide).
   const canCreateAppointment = useCan('appointments.create');
@@ -396,9 +401,11 @@ export function OperatorAgenda({
           </button>
         </div>
       )}
-      {!loadingTherapySlots && !therapyLoadError && (
-        <TherapyVerificationPanel groups={therapyGroups ?? []} />
-      )}
+      <AgendaTherapyVerification
+        active={view === 'giornaliero'}
+        date={isoDate(refDate)}
+        feed={verificationFeed}
+      />
       {loadingTherapySlots && <div className="empty-state-card">Caricamento terapie…</div>}
       {!loadingTherapySlots && therapyLoadError && (
         <div className="empty-state-card" role="alert">

@@ -1,5 +1,8 @@
 import { isScheduledTherapySlot, type TherapyReadGroup } from '../../types';
-import { TherapyVerificationPanel } from '../shared/TherapyVerificationPanel';
+import {
+  AgendaTherapyVerification,
+  type AgendaTherapyVerificationFeed,
+} from '../shared/AgendaTherapyVerification';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { appointmentLanding, type PatientLanding } from '../../lib/patientTargetResolver';
 import type { Appuntamento, Operatore, TherapySlot, TherapySlotPageInfo } from '../../types';
@@ -25,6 +28,7 @@ function operatorShortName(op: Operatore | undefined): string {
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
 
 interface AdminAgendaProps {
+  verificationFeed: AgendaTherapyVerificationFeed;
   operatori: Operatore[];
   appuntamenti: Appuntamento[];
   onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
@@ -121,6 +125,7 @@ export function AdminAgenda({
   onRetryTherapySlots,
   onLoadMoreTherapySlots,
   onLoadTherapySlots,
+  verificationFeed,
 }: AdminAgendaProps) {
   // Creazione appuntamenti: la GUI la nasconde se il ruolo non la consente (il backend decide).
   const canCreateAppointment = useCan('appointments.create');
@@ -374,9 +379,11 @@ export function AdminAgenda({
           </button>
         </div>
       )}
-      {!loadingTherapySlots && !therapyLoadError && (
-        <TherapyVerificationPanel groups={therapyGroups ?? []} />
-      )}
+      <AgendaTherapyVerification
+        active={view === 'giornaliero'}
+        date={isoDate(refDate)}
+        feed={verificationFeed}
+      />
       {loadingTherapySlots && <div className="empty-state-card">Caricamento terapie…</div>}
       {!loadingTherapySlots && therapyLoadError && (
         <div className="empty-state-card" role="alert">
