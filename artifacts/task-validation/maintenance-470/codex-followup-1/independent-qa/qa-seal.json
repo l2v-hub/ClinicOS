@@ -1,0 +1,10 @@
+{
+  "sourceSha": "ce7da2f7f5f3f149e4a5a16046843f067252e807",
+  "verdict": "FAILED VALIDATION",
+  "finding": "F1 sparse checkout excludes workflow read by mandatory test",
+  "status": "QA SOURCE/HARNESS/PROOF STOP",
+  "manifestSha256": "2fc559f70142798c3fc5ee8f5d05670143ce834d45562bf04857016b8035665d",
+  "browserRun": false,
+  "providerCalls": false,
+  "sourceMutation": false
+}

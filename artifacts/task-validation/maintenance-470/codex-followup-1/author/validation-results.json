@@ -1,0 +1,38 @@
+[
+  {
+    "command": [
+      "node",
+      "--check",
+      "scripts/maintenance/demo-storage-inspect.mjs"
+    ],
+    "exitCode": 0,
+    "output": "check-0.txt"
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "scripts/maintenance/demo-storage-inspect.test.mjs"
+    ],
+    "exitCode": 0,
+    "output": "check-1.txt"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "output": "check-2.txt"
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "scripts/maintenance/demo-storage-inspect.test.mjs"
+    ],
+    "exitCode": 0,
+    "output": "author-test-attempt-3.tap"
+  }
+]

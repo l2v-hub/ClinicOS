@@ -1,0 +1,28 @@
+{
+  "baseSha": "9817a4c1b454a5911db902021df7f51c06fc5161",
+  "branch": "codex/demo-470-completion",
+  "sourcePaths": [
+    ".github/workflows/deploy-backend.yml",
+    "scripts/maintenance/demo-storage-inspect.mjs",
+    "scripts/maintenance/demo-storage-inspect.test.mjs"
+  ],
+  "immutableInputsMatch": {
+    "scripts/maintenance/demo-storage-backups.mjs": true,
+    "scripts/maintenance/demo-patient-inventory.mjs": true,
+    "artifacts/task-validation/maintenance-470/codex-followup-1/task-contract.md": true,
+    "artifacts/task-validation/maintenance-470/codex-followup-1/plan.md": true,
+    "artifacts/task-validation/maintenance-470/codex-followup-1/prior-present-proof-manifest.json": true
+  },
+  "sourceManifestSha256": "3cafd2fe80cff924d8cda4bb36ec30446ef5764b54c6146f6bfc416fd2f7e329",
+  "finalTapSha256": "72a1765f082884945d0dfb456700dc6a5393f449528eea9bbe6f3df3106f4646",
+  "status": "AUTHOR SOURCE AND HARNESS STOP \u2014 pending independent QA and exact-SHA reviews",
+  "providerNetworkPerformed": false,
+  "githubMutationPerformed": false,
+  "commitPerformed": false,
+  "tests": {
+    "passed": 115,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "sourceInputs": {
+    ".github/workflows/deploy-backend.yml": {
+      "sha256": "41942f2b685508294158fe853af418c4a2ccf4faa4b63a6a712578ce1dc8d785",
+      "matches": true
+    },
+    "scripts/maintenance/demo-storage-inspect.mjs": {
+      "sha256": "ef67dc97b06c9bc7e7d9157240dbb71f913eb216e28ff0a28c00bce5e5d29429",
+      "matches": true
+    },
+    "scripts/maintenance/demo-storage-inspect.test.mjs": {
+      "sha256": "e52f4ea1b669758db4391ad63d163828d71fe2b1806ab36ddc704150fbf55b7d",
+      "matches": true
+    },
+    "scripts/maintenance/demo-storage-backups.mjs": {
+      "sha256": "f663075284f14b479fd4c5d2bb2dbf952c0b360fe3dc5582a3490a57dd0e5189",
+      "matches": true
+    },
+    "scripts/maintenance/demo-patient-inventory.mjs": {
+      "sha256": "ea94b7ff88a2570eb57c7e86c2b5ff64544a99d67f6be42d2451d2ad8d833bb1",
+      "matches": true
+    },
+    "artifacts/task-validation/maintenance-470/codex-followup-1/task-contract.md": {
+      "sha256": "b3261c3576fc237abae6c553e733475ac74462778528742af42b809ba301c22a",
+      "matches": true
+    },
+    "artifacts/task-validation/maintenance-470/codex-followup-1/plan.md": {
+      "sha256": "868f495e4ef4fec80419b868abbc23156de85b2f8feeca0bcce3f6f3297fe55f",
+      "matches": true
+    },
+    "artifacts/task-validation/maintenance-470/codex-followup-1/prior-present-proof-manifest.json": {
+      "sha256": "4c2716a4f64483d123e5eedfcf71a97e04f336284a30dfe0af07d4295d68a649",
+      "matches": true
+    },
+    "artifacts/task-validation/maintenance-470/codex-followup-1/scope-amendment-1.md": {
+      "sha256": "5416b1a9fb9fe6a7c63fdb9222beafe451a99c1e1654f4b3d5e73c6664f2db15",
+      "matches": true
+    }
+  },
+  "priorProof": {
+    "count": 5931,
+    "bytes": 1149600589,
+    "mismatches": []
+  },
+  "authorSealSha256": "5a603240ccdab55a56ef17bd66e74ccf63acb023bfbc4fcee21b02e2005b3811"
+}
