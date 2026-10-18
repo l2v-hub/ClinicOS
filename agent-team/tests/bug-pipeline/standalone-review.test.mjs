@@ -10,7 +10,10 @@ import {
 import { sha256, feedbackFingerprint } from '../../src/bug-pipeline/contracts.mjs';
 import { runPipeline } from '../../src/bug-pipeline/pipeline.mjs';
 import { STANDALONE_INFRASTRUCTURE_FILES } from '../../src/bug-pipeline/cli.mjs';
-import { main as handoffMain } from '../../src/bug-pipeline/review-handoff-cli.mjs';
+import {
+  finalizeEnvironment,
+  main as handoffMain,
+} from '../../src/bug-pipeline/review-handoff-cli.mjs';
 import {
   createGitHub,
   MAX_DURABLE_STATE_BYTES,
@@ -278,6 +281,14 @@ function fixture() {
     treeOverrides,
     fileContents,
   };
+}
+
+async function isolatedFinalizeEnvironment(t) {
+  const home = await mkdtemp(nodePath.join(os.tmpdir(), 'standalone-finalize-auth-'));
+  const codexHome = nodePath.join(home, 'synthetic-codex-home');
+  await mkdir(codexHome);
+  t.after(() => rm(home, { recursive: true, force: true }));
+  return { HOME: home, CODEX_HOME: codexHome };
 }
 async function claimed(f) {
   await f.controller.adopt(f.manifest);
@@ -840,7 +851,57 @@ test('authenticated frozen merge-base survives a real main advance and rejects c
   await assert.rejects(f.controller.verify(f.remote().standaloneReviews[0]), /identity changed/);
 });
 
-test('production finalize CLI dispatch runs separate Codex QA then fixed-policy merge and is terminal-idempotent', async () => {
+test('finalize authentication accepts only an explicit synthetic directory without API-key conflict', async (t) => {
+  const environment = await isolatedFinalizeEnvironment(t);
+  assert.deepEqual(await finalizeEnvironment(environment), environment);
+
+  await assert.rejects(
+    finalizeEnvironment({ HOME: environment.HOME }),
+    (error) => error.code === 'codex-auth-unavailable',
+  );
+
+  await assert.rejects(
+    finalizeEnvironment({
+      HOME: environment.HOME,
+      CODEX_HOME: nodePath.join(environment.HOME, 'missing-codex-home'),
+    }),
+    (error) => error.code === 'codex-auth-unavailable',
+  );
+
+  const fileHome = nodePath.join(environment.HOME, 'not-a-directory');
+  await writeFile(fileHome, 'synthetic test file');
+  await assert.rejects(
+    finalizeEnvironment({ HOME: environment.HOME, CODEX_HOME: fileHome }),
+    (error) => error.code === 'codex-auth-unavailable',
+  );
+
+  const emptyHome = await mkdtemp(nodePath.join(os.tmpdir(), 'standalone-finalize-empty-home-'));
+  t.after(() => rm(emptyHome, { recursive: true, force: true }));
+  await assert.rejects(
+    finalizeEnvironment({ HOME: emptyHome }),
+    (error) => error.code === 'codex-auth-unavailable',
+  );
+  let dependencyCalls = 0;
+  await assert.rejects(
+    handoffMain({
+      args: ['finalize', '--pr', '81'],
+      env: { HOME: emptyHome },
+      dependencies: {
+        run: async () => dependencyCalls++,
+        github: { createStateStore: () => (dependencyCalls++, { load: async () => null }) },
+      },
+    }),
+    (error) => error.code === 'codex-auth-unavailable',
+  );
+  assert.equal(dependencyCalls, 0, 'Authentication gate runs before mocked dependencies');
+  await assert.rejects(
+    finalizeEnvironment({ ...environment, CODEX_API_KEY: 'synthetic-test-only-key' }),
+    (error) => error.code === 'codex-auth-conflict',
+  );
+});
+
+test('production finalize CLI dispatch runs separate Codex QA then fixed-policy merge and is terminal-idempotent', async (t) => {
+  const env = await isolatedFinalizeEnvironment(t);
   const f = fixture();
   makeAllowlisted(f);
   f.manifest.releaseHold = false;
@@ -870,21 +931,22 @@ test('production finalize CLI dispatch runs separate Codex QA then fixed-policy 
       },
     },
   };
-  assert.equal(await handoffMain({ args: ['finalize', '--pr', '81'], env: {}, dependencies }), 0);
+  assert.equal(await handoffMain({ args: ['finalize', '--pr', '81'], env, dependencies }), 0);
   assert.equal(qa, 1);
   assert.equal(merges, 1);
   assert.equal(f.remote().standaloneReviews[0].release.status, 'merged');
-  assert.equal(await handoffMain({ args: ['finalize', '--pr', '81'], env: {}, dependencies }), 0);
+  assert.equal(await handoffMain({ args: ['finalize', '--pr', '81'], env, dependencies }), 0);
   assert.equal(qa, 1);
   assert.equal(merges, 1);
 });
 
-test('finalize CLI cannot process normal/unadopted PR and preserves failed Codex execution as blocked', async () => {
+test('finalize CLI cannot process normal/unadopted PR and preserves failed Codex execution as blocked', async (t) => {
+  const env = await isolatedFinalizeEnvironment(t);
   const empty = fixture();
   await assert.rejects(
     handoffMain({
       args: ['finalize', '--pr', '81'],
-      env: {},
+      env,
       dependencies: { run: empty.run, github: empty.github },
     }),
     /explicitly adopted/,
@@ -896,7 +958,7 @@ test('finalize CLI cannot process normal/unadopted PR and preserves failed Codex
   f.github.mergePullRequest = async () => assert.fail('Unverified Codex cannot merge');
   const result = await handoffMain({
     args: ['finalize', '--pr', '81'],
-    env: {},
+    env,
     dependencies: {
       run: f.run,
       github: f.github,
@@ -974,7 +1036,8 @@ test('Unicode CLI pre-read allowance never expands canonical comment limit or no
   assert.equal(normal.comments.length, 0);
 });
 
-test('concurrent production finalize and pipeline observe active Codex QA without mutation, duplicate inference or merge', async () => {
+test('concurrent production finalize and pipeline observe active Codex QA without mutation, duplicate inference or merge', async (t) => {
+  const env = await isolatedFinalizeEnvironment(t);
   const f = fixture();
   makeAllowlisted(f);
   f.manifest.releaseHold = false;
@@ -994,7 +1057,7 @@ test('concurrent production finalize and pipeline observe active Codex QA withou
   };
   const first = handoffMain({
     args: ['finalize', '--pr', '81'],
-    env: {},
+    env,
     dependencies: {
       run: f.run,
       github: f.github,
@@ -1015,7 +1078,7 @@ test('concurrent production finalize and pipeline observe active Codex QA withou
   assert.equal(
     await handoffMain({
       args: ['finalize', '--pr', '81'],
-      env: {},
+      env,
       dependencies: {
         run: f.run,
         github: f.github,
