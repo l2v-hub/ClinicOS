@@ -30,6 +30,7 @@ import { IntakeDocumentPanel, type DocumentPanelRequest } from './IntakeDocument
 import type { PanelTarget } from './intakeDocumentPages';
 import { IntakeFieldProposals } from './IntakeFieldProposals';
 import { ImportProposalsReview, type ImportProposal } from './ImportProposalsReview';
+import { acknowledgeDerivedSex, pendingDerivedSex } from './intakeSexReview';
 import { StepAnagrafica } from './StepAnagrafica';
 import { StepIngresso } from './StepIngresso';
 import type { IngressoData } from './StepIngresso';
@@ -479,7 +480,7 @@ export function IntakeWorkspace({
     }
   }
 
-  function updateSection(key: keyof DraftData, value: unknown) {
+  function updateSection(key: keyof DraftData, value: unknown, confirmDerivedSex = false) {
     if (submittingRef.current || proposalRequestRef.current) return;
     const accepted = dataRef.current._accepted ?? {};
     const next = {
@@ -491,7 +492,9 @@ export function IntakeWorkspace({
           ? { _accepted: { ...accepted, demographics: false } }
           : {}),
     };
-    commitLocal(next);
+    const sexEdited =
+      key === 'anagrafica' && (value as AnagraficaData)?.sex !== dataRef.current.anagrafica?.sex;
+    commitLocal((sexEdited || confirmDerivedSex ? acknowledgeDerivedSex(next) : next) as DraftData);
 
     if (!draftId) return;
     scheduleAutosave();
@@ -892,6 +895,7 @@ export function IntakeWorkspace({
 
       <div className={`intake-page__grid${docPanel && docsJob ? ' intake-page__grid--doc' : ''}`}>
         <IntakeIndex
+          importMode={!!importDraftId}
           sections={progress.sections}
           active={active}
           missing={progress.missing}
@@ -1015,6 +1019,10 @@ export function IntakeWorkspace({
                   <header className="intake-section__head">{sectionTitle('anagrafica')}</header>
                   <StepAnagrafica
                     allowMissingBirthDate={!!importDraftId}
+                    derivedSexPending={pendingDerivedSex(data)}
+                    onConfirmDerivedSex={() =>
+                      updateSection('anagrafica', data.anagrafica ?? {}, true)
+                    }
                     value={data.anagrafica ?? {}}
                     onChange={(v) => updateSection('anagrafica', v)}
                     submitAttempted={submitAttempted}

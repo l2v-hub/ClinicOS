@@ -64,3 +64,34 @@ test('450 actual demographics render keeps field errors and useful computed-code
   assert.match(filled, /Calcolato automaticamente dai dati anagrafici/);
   assert.match(filled, /class="ds-sr-only" role="status"/);
 });
+
+test('Claude2 close confirmation keeps three actions accessible and default callers retain two', async () => {
+  const { ConfirmDialog } = await import('../../ConfirmDialog');
+  const markup = renderToStaticMarkup(
+    createElement(ConfirmDialog, {
+      open: true,
+      title: 'Chiudere?',
+      message: 'Conflitti da decidere',
+      confirmLabel: 'Salva bozza e chiudi',
+      confirmDisabled: true,
+      cancelLabel: 'Continua la revisione',
+      onConfirm: noop,
+      onCancel: noop,
+      alternativeAction: { label: 'Chiudi senza salvare', onClick: noop },
+    }),
+  );
+  assert.equal((markup.match(/<button/g) ?? []).length, 3);
+  assert.match(markup, /flex-wrap:wrap/);
+  assert.match(markup, /data-dialog-initial-focus="true"[^>]*>[^<]*<svg/);
+  assert.match(markup, /disabled=""/);
+  const normal = renderToStaticMarkup(
+    createElement(ConfirmDialog, {
+      open: true,
+      title: 'Conferma',
+      message: 'Verifica',
+      onConfirm: noop,
+      onCancel: noop,
+    }),
+  );
+  assert.equal((normal.match(/<button/g) ?? []).length, 2);
+});

@@ -1,0 +1,36 @@
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ A — OSS inbox: only allowed event types and only residents in scope (938.420853ms)
+✔ B — cross-resident leakage: an out-of-scope event reaches neither the UI nor the LLM context (130.941239ms)
+✔ C — nurse shift briefing: real events, period = previous shift start → now, links to sources (62.283477ms)
+✔ D — doctor change-since-last-view uses a real watermark (1272.155032ms)
+✔ E — supervisor: facility aggregation within capability, technical signals included (546.027873ms)
+✔ F — administrator: no implicit clinical feed, technical signals only (122.065178ms)
+✔ G — Signal → Skill opens an EXISTING skill, never bypasses preview/confirmation (607.044745ms)
+✔ H — prescription event visible when authorized, zero autonomous action (143.945001ms)
+✔ I — handover prepared by the AI defaults to NORMAL; escalation only by explicit human edit + confirm (287.077418ms)
+✔ J — deduplication: a burst of events is one grouped signal, stable across refreshes (171.296365ms)
+✔ K — acknowledgement changes the view only, never the source fact; a new event re-opens it (1367.263557ms)
+✔ L — prompt injection in a note changes neither scope, policy nor the LLM instructions (112.482809ms)
+✔ M — AI unavailable → deterministic fallback, nothing lost, nothing resolved (270.841752ms)
+✔ N — dynamic revocation: capability or scope removed → signals gone at the next refresh (379.978219ms)
+✔ O — overdue administration is a deterministic time rule (no LLM), grouped per slot (57.892563ms)
+✔ P — audit: shown, ack, action opened, briefing are traced with identity and role (101.90499ms)
+✔ Q — acknowledging «in arrivo» never hides the same slot once it is overdue (QA finding 1) (200.829374ms)
+✔ R — a handover escalated to urgent becomes a signal; «Ho capito» removes it (UX2 W8) (436.317715ms)
+✔ S — a handover about an out-of-scope resident never discloses that resident (UI or LLM) (QA finding 3) (131.891488ms)
+✔ T — free text typed in a prescription (drug name) never reaches the LLM (QA finding 4) (83.224466ms)
+✔ U — the denied-access summary keeps its ack until a NEW denial happens (QA finding 5) (1184.35844ms)
+✔ V — briefing AI cost guard: same facts reuse the summary, new facts inside the window use the fallback (191.519865ms)
+✔ W — a cached AI summary never survives a scope revocation (QA re-verification finding) (82.166032ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22210.944592

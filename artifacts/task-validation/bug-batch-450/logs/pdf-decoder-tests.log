@@ -1,0 +1,11 @@
+✔ PDF decoders resolve beside version-matched worker on app origin, also under a base path (2.555396ms)
+✔ Vite emits exact installed decoder bytes and licenses with names expected by PDF.js (6.225775ms)
+✔ Vite dev workers use the actual plugin assets route rather than a nonexistent node_modules decoder directory (0.741746ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 904.164854

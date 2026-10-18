@@ -1,0 +1,14 @@
+PASS actual pinned normal and bold fonts load with distinct text geometry
+PASS 450 two real responsive entry choices
+PASS 450 automatic-only admission remains empty
+PASS 450 saved patient identity survives real browser reload and DB readback
+PASS 475 both authentic source thumbnails contain rendered pixels
+PASS 472/473 full viewport, real source canvas and reviewed extracted identity
+PASS 475 selected scanned JPX page loads real OpenJPEG decoder and nonblank source pixels
+PASS 472/473 source remains visible beside editable fields at tablet and phone
+PASS 475 authenticated source cannot be read anonymously or by another operator
+PASS 473 heading-free prescriptions survive actual parser and import handoff
+PASS 473 intake handoff retains a nonmodal original while fields remain editable on tablet and phone
+PASS 476 incomplete identity persists and exact draft resumes with actionable blockers
+PASS 476 invalid fiscal code and supplied future birthdate have actionable real blockers
+Cannot read properties of undefined (reading 'dateOfBirth')

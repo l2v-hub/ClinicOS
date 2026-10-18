@@ -1,0 +1,19 @@
+✔ effective demographics follows each explicit select/defer and preserves immutable source text (4.232839ms)
+✔ real review keeps untouched demographics current while retaining manual fields and section review (178.874625ms)
+✔ three letter identities remain distinct and compare requires an explicit source when several exist (55.174364ms)
+✔ legacy names remain labels and absent/unknown source identities never become the first original (31.71972ms)
+✔ 472 save-and-leave registers latest reviewed edits, preserves source and cleans up on unmount (64.514183ms)
+✔ 476 imported identity may continue without a birthdate; manual intake still requires it (2.225241ms)
+✔ 476 progressive import retains explicit invalid field errors and therapy review barriers (3.586609ms)
+✔ 473 fiscal-code sex inference requires valid code and preserves the numeric day distinction (0.672052ms)
+✔ PDF decoders resolve beside version-matched worker on app origin, also under a base path (3.918362ms)
+✔ Vite emits exact installed decoder bytes and licenses with names expected by PDF.js (5.093442ms)
+✔ Vite dev workers use the actual plugin assets route rather than a nonexistent node_modules decoder directory (0.257492ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1544.962517

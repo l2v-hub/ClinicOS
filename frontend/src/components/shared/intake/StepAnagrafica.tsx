@@ -12,7 +12,12 @@ import {
   type ReactNode,
 } from 'react';
 
-import { deriveAutoCFUpdate, normalizeCF, type FiscalCodeOrigin } from '../../../lib/codiceFiscale';
+import {
+  deriveAutoCFUpdate,
+  fiscalCodeSex,
+  normalizeCF,
+  type FiscalCodeOrigin,
+} from '../../../lib/codiceFiscale';
 import { useAiField } from './intakeAiOrigin';
 import { AiBadge } from './IntakeAiBadge';
 import { PATIENT_PHONE_MAX_LENGTH } from '../../../lib/patientPhone';
@@ -46,6 +51,8 @@ interface StepAnagraficaProps {
   /** Set to true after the user has tried to advance past this step */
   submitAttempted?: boolean;
   allowMissingBirthDate?: boolean;
+  derivedSexPending?: boolean;
+  onConfirmDerivedSex?: () => void;
 }
 
 function NpmCard({
@@ -181,6 +188,8 @@ export function StepAnagrafica({
   onChange,
   submitAttempted = false,
   allowMissingBirthDate = false,
+  derivedSexPending = false,
+  onConfirmDerivedSex,
 }: StepAnagraficaProps) {
   const sourceKeys = new Set<keyof AnagraficaData>([
     'firstName',
@@ -230,6 +239,8 @@ export function StepAnagrafica({
       onChange(next);
     };
 
+  const cfSex = fiscalCodeSex(value.codiceFiscale ?? '');
+  const sexContradiction = !!cfSex && !!value.sex && cfSex !== value.sex;
   const validationErrors = intakeDemographicErrors(value, true, { allowMissingBirthDate });
   const errors = submitAttempted ? validationErrors : {};
 
@@ -317,6 +328,20 @@ export function StepAnagrafica({
               <option value="F">Femmina</option>
             </select>
           </NpmField>
+          {derivedSexPending && (
+            <div className="npm-hint" role="status" data-testid="derived-sex-review">
+              Sesso dal codice fiscale, da verificare.
+              <button type="button" className="link-btn" onClick={onConfirmDerivedSex}>
+                Conferma sesso
+              </button>
+            </div>
+          )}
+          {sexContradiction && (
+            <p className="import-modal__warning" role="alert">
+              Il sesso indicato è diverso da quello del codice fiscale. Verifica il documento; il
+              valore esplicito viene mantenuto.
+            </p>
+          )}
           <NpmField label="Comune di nascita">
             <input
               className="npm-input"

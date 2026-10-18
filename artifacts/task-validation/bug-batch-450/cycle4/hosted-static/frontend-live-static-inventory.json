@@ -1,0 +1,63 @@
+{
+  "at": "2026-10-17T17:48:21.190002+00:00",
+  "scope": "Unauthenticated staticfrontend files only; no API or patient data",
+  "rows": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1910,
+      "sha256": "4d34e287bd551fa91c80399693e4f0a0bd64bf635ae452d3ecf9dd039a262052",
+      "scripts": [
+        "/assets/index-B43Bwayt.js",
+        "/assets/react-B3nAlWH0.js",
+        "/assets/compiler-runtime-XYET9J12.js",
+        "/assets/appointmentRange-Bcoh8cH0.js",
+        "/assets/therapyDose-hyD67tme.js",
+        "/assets/patientTherapyCalendar-oJO4T2nO.js",
+        "/assets/operatorSession-CocZDchv.js",
+        "/assets/rosterOrder-Cj3l_KEH.js",
+        "/assets/facilityTime-DLFyR9ze.js",
+        "/assets/tinettiTypes-DMl49mUB.js",
+        "/assets/assessmentTypes-H3bfR4sY.js",
+        "/assets/patientDemographics-OKkN11Bn.js",
+        "/assets/capabilities-sGJaafSh.js"
+      ]
+    },
+    {
+      "path": "/assets/index-B43Bwayt.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 636347,
+      "sha256": "86015ecc1d7a77a885ac9032959c1a0d3723a4814b9000d5c5d45a8682fc9535",
+      "pdfAssets": [],
+      "pdfVersions": []
+    },
+    {
+      "path": "/assets/react-B3nAlWH0.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 8185,
+      "sha256": "ee9838a4cbba0a54feea8f2d38ec1d8d3c7592bc8b5cc325e0b53ff06c22755b",
+      "pdfAssets": [],
+      "pdfVersions": []
+    },
+    {
+      "path": "/assets/compiler-runtime-XYET9J12.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 221,
+      "sha256": "db9bb270e68f5c6ef2cb48570b74e652ad106300d84572479574b6105cd63ac9",
+      "pdfAssets": [],
+      "pdfVersions": []
+    },
+    {
+      "path": "/assets/appointmentRange-Bcoh8cH0.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 309,
+      "sha256": "bf71782718943f19f9888d5dcfce3c734611f333fe05559e2f02a78df62a3e53",
+      "pdfAssets": [],
+      "pdfVersions": []
+    }
+  ]
+}

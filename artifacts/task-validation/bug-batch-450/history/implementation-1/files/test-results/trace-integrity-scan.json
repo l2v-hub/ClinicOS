@@ -1,0 +1,41 @@
+{
+  "pass": true,
+  "archives": [
+    {
+      "file": "evidence/issue475.zip",
+      "additionalSyntheticTokenRedactions": 0,
+      "validTraceJsonLines": 3921,
+      "sha256": "6e31b5c64613c412ee64b058d8247de81c11f8bbbcd1d0c063784453034c866d"
+    },
+    {
+      "file": "evidence/issue473.zip",
+      "additionalSyntheticTokenRedactions": 0,
+      "validTraceJsonLines": 3921,
+      "sha256": "6e31b5c64613c412ee64b058d8247de81c11f8bbbcd1d0c063784453034c866d"
+    },
+    {
+      "file": "evidence/issue450.zip",
+      "additionalSyntheticTokenRedactions": 0,
+      "validTraceJsonLines": 3921,
+      "sha256": "6e31b5c64613c412ee64b058d8247de81c11f8bbbcd1d0c063784453034c866d"
+    },
+    {
+      "file": "evidence/issue472.zip",
+      "additionalSyntheticTokenRedactions": 0,
+      "validTraceJsonLines": 3921,
+      "sha256": "6e31b5c64613c412ee64b058d8247de81c11f8bbbcd1d0c063784453034c866d"
+    },
+    {
+      "file": "evidence/issue476.zip",
+      "additionalSyntheticTokenRedactions": 0,
+      "validTraceJsonLines": 3921,
+      "sha256": "6e31b5c64613c412ee64b058d8247de81c11f8bbbcd1d0c063784453034c866d"
+    },
+    {
+      "file": "test-results/failure-trace.zip",
+      "additionalSyntheticTokenRedactions": 0,
+      "validTraceJsonLines": 2418,
+      "sha256": "fe063a9e5e425680a32c9cf8583c3d1e401172db68472124c53f14b1a77eb723"
+    }
+  ]
+}

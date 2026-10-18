@@ -1,0 +1,16 @@
+{
+  "viewport": {
+    "width": 820,
+    "height": 1180
+  },
+  "shell": {
+    "scrollTop": 0,
+    "y": 0,
+    "bottom": 1180
+  },
+  "visiblePage": {
+    "width": 260,
+    "height": 368,
+    "dark": 122
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "reservationNonce": "943c2e49-e37f-4c5e-8403-974f689b1593",
+  "finding": "Static root review; not an executed E2E failure",
+  "sourceHarnessStopped": true,
+  "onlyChangedFromFirstFreeze": "scripts/e2e/issue-450-ingresso.mjs",
+  "other15SourceHashesUnchanged": true,
+  "oldArtifactWorkingBlobsChecked": 9107,
+  "changedOldArtifacts": [],
+  "sourceSha256": "7dd44849963337ee4418d5fc39bf059a2642bf4cbd6f761e81d4402bebf089c7",
+  "gitBlob": "52fe100d4866833d6dadfb306ad5370ae0925782",
+  "head": "0d4f889578a34b85aed2cdcf264ea1bd5db07743",
+  "mergeHead": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
+  "unmerged": "",
+  "syntaxStaticPass": true,
+  "browserDbBackendExecuted": false,
+  "e2ePassClaimed": false
+}

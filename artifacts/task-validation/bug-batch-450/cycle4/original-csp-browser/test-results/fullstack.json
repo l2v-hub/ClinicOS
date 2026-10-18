@@ -1,0 +1,14 @@
+{
+  "pass": false,
+  "checks": [
+    {
+      "id": "actual pinned normal and bold fonts load with distinct text geometry",
+      "status": "PASS"
+    }
+  ],
+  "errors": [
+    "console: Access to fetch at 'http://127.0.0.1:3450/auth/status' from origin 'http://127.0.0.1:5450' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "console: Failed to load resource: net::ERR_FAILED",
+    "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /Infermiere 1/ }).first()\u001b[22m\n\n    at /workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/scripts/e2e/issue-450-ingresso.mjs:593:6"
+  ]
+}

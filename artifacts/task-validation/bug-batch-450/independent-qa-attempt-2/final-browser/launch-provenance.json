@@ -1,0 +1,31 @@
+{
+  "command": [
+    "node",
+    "scripts/e2e/issue-450-ingresso.mjs",
+    "artifacts/task-validation/bug-batch-450/independent-qa-attempt-2/final-browser"
+  ],
+  "environmentNames": [
+    "CLINICOS_CHROMIUM_PATH",
+    "DOTENV_CONFIG_PATH",
+    "HTTPS_PROXY",
+    "HTTP_PROXY",
+    "LANG",
+    "LC_ALL",
+    "LC_CTYPE",
+    "NODE_ENV",
+    "NODE_EXTRA_CA_CERTS",
+    "NO_PROXY",
+    "PATH",
+    "PLAYWRIGHT_BROWSERS_PATH",
+    "QA_POSTGRES_MODE",
+    "REQUESTS_CA_BUNDLE",
+    "SSL_CERT_FILE",
+    "http_proxy",
+    "https_proxy",
+    "no_proxy"
+  ],
+  "explicitLocalChromium": "/usr/bin/chromium",
+  "mode": "ownedDockerPG16",
+  "lock": "single outer global flock covering whole lifecycle",
+  "startedAt": "2026-10-17T09:45:57.608Z"
+}

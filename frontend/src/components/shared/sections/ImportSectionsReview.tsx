@@ -89,7 +89,7 @@ export function ImportSectionsReview({
   };
 
   const derivedSex = fiscalCodeSex(patient.codiceFiscale ?? '');
-  if (!patient.sex && !Object.hasOwn(patientEdits, 'sex') && derivedSex) patient.sex = derivedSex;
+  // Suggestion stays visibly reviewable; the draft service is the sole derivation authority.
 
   // Per-section review state. Default accepted; the operator can modify/exclude.
   const [status, setStatus] = useState<Record<string, ReviewStatus>>({});

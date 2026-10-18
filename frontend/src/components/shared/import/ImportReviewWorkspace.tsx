@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { ImportSectionsReview } from '../sections/ImportSectionsReview';
 import { ImportPageContent } from './ImportPageView';
 import { ImportConflictReview } from './ImportConflictReview';
@@ -59,6 +59,12 @@ export function ImportReviewWorkspace({
   const document = job.documents.find((item) => item.id === page?.documentId);
   const canProceed =
     !decisionsDirty && job.review.canProceed && result._review.unresolvedConflictIds.length === 0;
+  const registerEligibleSave = useCallback(
+    (save: (() => void) | null) => {
+      registerSave(canProceed && !busy ? save : null);
+    },
+    [registerSave, canProceed, busy],
+  );
   async function run(action: () => Promise<void>) {
     if (guard.current) return;
     guard.current = true;
@@ -292,7 +298,7 @@ export function ImportReviewWorkspace({
           onBack={onBack}
           onConfirm={(patient, cartella, opts) => void proceed(patient, cartella, opts)}
           onOpenSource={openLegacySource}
-          registerSave={registerSave}
+          registerSave={registerEligibleSave}
           onSaveDraft={(patient, cartella) =>
             void run(async () => {
               await openDraft({ patient, cartella });

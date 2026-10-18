@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { getCurrentOperator } from '../../lib/operatorSession';
 import { useRecencyClock } from '../../lib/useRecencyClock';
+import { ConfirmDialog } from './ConfirmDialog';
 import { AccessibleDialogSurface } from './AccessibleDialogSurface';
 import { getDraft } from './intake/intakeDraftApi';
 import { IntakeWorkspace } from './intake/IntakeWorkspace';
@@ -65,17 +66,15 @@ function ImportSession({
   const [retryMutation, setRetryMutation] = useState<(() => Promise<ImportJob>) | null>(null);
   const active = useRef(true);
   const reviewSave = useRef<(() => void) | null>(null);
+  const [closeRequested, setCloseRequested] = useState(false);
+  const [reviewCanSave, setReviewCanSave] = useState(false);
   const registerSave = useCallback((save: (() => void) | null) => {
     reviewSave.current = save;
+    setReviewCanSave(!!save);
   }, []);
   function requestClose() {
-    if (step === 'review' && !job?.review.draftId && reviewSave.current) {
-      if (
-        window.confirm(
-          'Salvare la compilazione in bozza e chiudere? Annulla per continuare la revisione.',
-        )
-      )
-        reviewSave.current();
+    if (step === 'review' && !job?.review.draftId) {
+      setCloseRequested(true);
       return;
     }
     onClose();
@@ -412,6 +411,26 @@ function ImportSession({
             ))}
         </div>
       )}
+      <ConfirmDialog
+        open={closeRequested}
+        title="Chiudere l'importazione?"
+        message={
+          reviewCanSave
+            ? 'Puoi salvare la bozza o chiudere senza salvarla. La sessione documenti resta recuperabile.'
+            : 'Decidi e salva tutti i conflitti prima di salvare una bozza. Puoi comunque chiudere: la sessione documenti resta recuperabile.'
+        }
+        tone="primary"
+        confirmLabel="Salva bozza e chiudi"
+        confirmDisabled={!reviewCanSave}
+        cancelLabel="Continua la revisione"
+        busy={busy}
+        onCancel={() => setCloseRequested(false)}
+        alternativeAction={{ label: 'Chiudi senza salvare', onClick: onClose }}
+        onConfirm={() => {
+          setCloseRequested(false);
+          reviewSave.current?.();
+        }}
+      />
       {opening && (
         <p role="status">
           {creation === 'pending'

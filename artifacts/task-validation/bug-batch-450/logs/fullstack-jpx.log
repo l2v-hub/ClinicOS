@@ -1,0 +1,9 @@
+PASS actual pinned normal and bold fonts load with distinct text geometry
+PASS 450 two real responsive entry choices
+PASS 450 automatic-only admission remains empty
+PASS 450 saved patient identity survives real browser reload and DB readback
+PASS 475 both authentic source thumbnails contain rendered pixels
+The expression evaluated to a falsy value:
+
+  assert.ok(rect.width >= 1178 && rect.height >= 818)
+

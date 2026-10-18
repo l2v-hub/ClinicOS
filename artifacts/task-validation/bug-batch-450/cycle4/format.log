@@ -1,0 +1,16 @@
+frontend/src/components/operator/PatientList.tsx 291ms (unchanged)
+frontend/src/components/shared/ConfirmDialog.tsx 16ms
+frontend/src/components/shared/DischargeImportModal.tsx 78ms
+frontend/src/components/shared/import/ImportReviewWorkspace.tsx 52ms
+frontend/src/components/shared/intake/IntakeIndex.tsx 22ms (unchanged)
+frontend/src/components/shared/intake/IntakeWorkspace.tsx 124ms
+frontend/src/components/shared/intake/StepAnagrafica.tsx 36ms
+frontend/src/components/shared/intake/intakeSexReview.ts 7ms
+frontend/src/components/shared/intake/__tests__/intakeSexReview.test.ts 11ms
+frontend/src/components/shared/intake/__tests__/intakeMinimal450.test.ts 15ms
+frontend/src/components/shared/sections/ImportSectionsReview.tsx 65ms (unchanged)
+frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts 83ms
+frontend/src/lib/patientIncompleteSummary.ts 2ms (unchanged)
+frontend/src/lib/patientIncompleteSummary.test.ts 6ms
+frontend/vercel.json 16ms (unchanged)
+scripts/e2e/issue-450-ingresso.mjs 169ms

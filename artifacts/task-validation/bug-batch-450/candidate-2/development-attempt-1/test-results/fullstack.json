@@ -1,0 +1,80 @@
+{
+  "pass": false,
+  "checks": [
+    {
+      "id": "actual pinned normal and bold fonts load with distinct text geometry",
+      "status": "PASS"
+    },
+    {
+      "id": "450 two real responsive entry choices",
+      "status": "PASS"
+    },
+    {
+      "id": "450 keyboard Tab and Enter activate manual entry",
+      "status": "PASS"
+    },
+    {
+      "id": "450 automatic-only admission remains empty",
+      "status": "PASS"
+    },
+    {
+      "id": "450 saved patient identity survives real browser reload and DB readback",
+      "status": "PASS"
+    },
+    {
+      "id": "450 keyboard ShiftTab and Enter activate document entry",
+      "status": "PASS"
+    },
+    {
+      "id": "475 both authentic source thumbnails contain rendered pixels",
+      "status": "PASS"
+    },
+    {
+      "id": "472/473 full viewport, real source canvas and reviewed extracted identity",
+      "status": "PASS"
+    },
+    {
+      "id": "475 selected scanned JPX page loads real OpenJPEG decoder and nonblank source pixels",
+      "status": "PASS"
+    },
+    {
+      "id": "472/473 source remains visible beside editable fields at tablet and phone",
+      "status": "PASS"
+    },
+    {
+      "id": "475 authenticated source cannot be read anonymously or by another operator",
+      "status": "PASS"
+    },
+    {
+      "id": "472 closing review saves actual edited fields into a visible resumable draft",
+      "status": "PASS"
+    },
+    {
+      "id": "473 heading-free prescriptions survive actual parser and import handoff",
+      "status": "PASS"
+    },
+    {
+      "id": "473 original remains visible while actual demographic and therapy fields are edited at desktop, tablet and phone",
+      "status": "PASS"
+    },
+    {
+      "id": "476 incomplete identity persists and exact draft resumes with actionable blockers",
+      "status": "PASS"
+    },
+    {
+      "id": "476 invalid fiscal code and supplied future birthdate have actionable real blockers",
+      "status": "PASS"
+    },
+    {
+      "id": "476 three identity fields create an incomplete patient only after unsafe prescriptions are explicitly left in draft",
+      "status": "PASS"
+    },
+    {
+      "id": "QA450-1 unresolved footer, close and Escape preserve the review without creating any draft intent",
+      "status": "PASS"
+    }
+  ],
+  "errors": [
+    "page.waitForResponse: Timeout 30000ms exceeded while waiting for event \"response\"\n    at /workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/scripts/e2e/issue-450-ingresso.mjs:1253:29\n    at verify (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/scripts/e2e/issue-450-ingresso.mjs:169:9)\n    at /workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/scripts/e2e/issue-450-ingresso.mjs:1250:9"
+  ]
+}

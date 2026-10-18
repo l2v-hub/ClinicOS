@@ -1,0 +1,19 @@
+✔ 450 automatic dates and whitespace do not complete admission; actual entered content does (6.294705ms)
+✔ 450 entry renders one disabled-until-ready document choice and a working manual choice (61.488332ms)
+✔ 450 actual demographics render keeps field errors and useful computed-code notice without duplicate prose (36.830709ms)
+✔ effective demographics follows each explicit select/defer and preserves immutable source text (8.390511ms)
+✔ real review keeps untouched demographics current while retaining manual fields and section review (453.110154ms)
+✔ three letter identities remain distinct and compare requires an explicit source when several exist (177.821299ms)
+✔ legacy names remain labels and absent/unknown source identities never become the first original (123.615997ms)
+✔ 472 save-and-leave registers latest reviewed edits, preserves source and cleans up on unmount (116.806208ms)
+✔ 476 imported identity may continue without a birthdate; manual intake still requires it (5.465698ms)
+✔ 476 progressive import retains explicit invalid field errors and therapy review barriers (6.326067ms)
+✔ 473 fiscal-code sex inference requires valid code and preserves the numeric day distinction (0.466788ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4706.156502

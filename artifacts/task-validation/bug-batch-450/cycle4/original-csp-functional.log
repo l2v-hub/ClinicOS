@@ -1,0 +1,12 @@
+PASS actual pinned normal and bold fonts load with distinct text geometry
+PASS 450 two real responsive entry choices
+PASS 450 keyboard Tab and Enter activate manual entry
+Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    first: 0,
++   section: 19344.136474609375
+-   section: 0
+  }
+

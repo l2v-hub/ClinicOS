@@ -2,7 +2,7 @@
 // real storage/parser/review/persistence. Only the external OCR/extraction provider is a fixture.
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
-import { createServer } from 'node:http';
+import { createServer, request as httpRequest } from 'node:http';
 import { createHash } from 'node:crypto';
 import { spawn, spawnSync } from 'node:child_process';
 import { mkdir, writeFile, copyFile, mkdtemp, readFile, rm } from 'node:fs/promises';
@@ -22,8 +22,13 @@ import pg from 'pg';
 import CodiceFiscale from 'codice-fiscale-js';
 
 const ROOT = process.cwd();
-const OUT = path.resolve(process.argv[2] ?? 'artifacts/task-validation/bug-batch-450');
-const FRONT = 'http://127.0.0.1:5450';
+const OUT = path.resolve(
+  process.argv[2] ?? 'artifacts/task-validation/bug-batch-450/cycle4/runtime',
+);
+const FRONT_ORIGIN = 'http://127.0.0.1:5450';
+const PREVIEW_BASE = '/qa-clinicos/';
+const FRONT = FRONT_ORIGIN + PREVIEW_BASE;
+const PREVIEW_ORIGIN = 'http://127.0.0.1:5451';
 const BACK = 'http://127.0.0.1:3450';
 const RUNTIME = 'http://127.0.0.1:8795';
 const DATABASE_URL = 'postgresql://postgres@127.0.0.1:55450/clinicos_test';
@@ -39,6 +44,9 @@ let browser;
 let context;
 let db;
 let server;
+let previewProxy;
+let buildDir;
+const pdfAssets = [];
 let traceSaved = false;
 let uploadDir;
 let originalSource;
@@ -56,7 +64,7 @@ const env = {
   NODE_ENV: 'test',
   AUTH_MODE: 'demo',
   ROLE_SIMULATOR_ENABLED: 'true',
-  FRONTEND_URL: FRONT,
+  FRONTEND_URL: FRONT_ORIGIN,
   AI_PROVIDER: 'mock',
   AI_ENABLED: 'true',
   AI_RUNTIME_URL: RUNTIME,
@@ -129,7 +137,7 @@ print(json.dumps({'trace': os.path.basename(source), 'redactedSyntheticTokens': 
   return JSON.parse(result);
 }
 async function verifiedFontAssets() {
-  const root = path.join(OUT, 'font-assets');
+  const root = path.join(ROOT, 'artifacts/task-validation/bug-batch-450/font-assets');
   const manifest = JSON.parse(await readFile(path.join(root, 'manifest.json'), 'utf8'));
   const pinned = {
     '@fontsource/inter':
@@ -172,14 +180,27 @@ async function screenshot(issue) {
 }
 let page;
 try {
-  const scopeFile = 'artifacts/task-validation/bug-batch-450/runtime-source-scope.json';
+  const scopeFile = 'artifacts/task-validation/bug-batch-450/cycle4/runtime-source-scope.json';
   const scopeBytes = await readFile(path.join(ROOT, scopeFile));
   const sourceScope = JSON.parse(scopeBytes.toString('utf8'));
   assert.equal(sourceScope.schemaVersion, 1);
   assert.equal(sourceScope.batchId, 'bug-batch-450');
   const files = sourceScope.scope;
   assert.ok(Array.isArray(files), 'Frozen runtime source scope must be an array');
-  assert.equal(files.length, 47, 'Frozen runtime source scope must include all 47 files');
+  assert.ok(
+    files.length >= 47,
+    'Frozen runtime source scope includes original47 plus exact cycle4 amendment',
+  );
+  const originalScope = JSON.parse(
+    await readFile(
+      path.join(ROOT, 'artifacts/task-validation/bug-batch-450/runtime-source-scope.json'),
+      'utf8',
+    ),
+  ).scope;
+  assert.ok(
+    originalScope.every((file) => files.includes(file)),
+    'No historical source path may leave runtime verification',
+  );
   assert.equal(new Set(files).size, files.length, 'Frozen source paths must be unique');
   for (const file of files) {
     assert.ok(
@@ -439,19 +460,88 @@ try {
       AI_UPLOAD_DIR: uploadDir,
     },
   });
+  buildDir = await mkdtemp(path.join(os.tmpdir(), 'clinicos-batch450-built-'));
+  const build = run(
+    process.execPath,
+    [
+      path.join(ROOT, 'node_modules/vite/bin/vite.js'),
+      'build',
+      '--base',
+      PREVIEW_BASE,
+      '--outDir',
+      buildDir,
+    ],
+    {
+      cwd: path.join(ROOT, 'frontend'),
+      env: { ...env, NODE_ENV: 'production', VITE_API_URL: BACK },
+    },
+  );
+  await writeFile(path.join(OUT, 'logs', 'production-build.log'), build);
   start(
     process.execPath,
     [
       path.join(ROOT, 'node_modules/vite/bin/vite.js'),
+      'preview',
+      '--outDir',
+      buildDir,
+      '--base',
+      PREVIEW_BASE,
       '--host',
       '127.0.0.1',
       '--port',
-      '5450',
+      '5451',
       '--strictPort',
     ],
-    'frontend',
-    { cwd: path.join(ROOT, 'frontend'), env: { ...env, VITE_API_URL: BACK } },
+    'frontend-preview',
+    {
+      cwd: path.join(ROOT, 'frontend'),
+      env: { ...env, NODE_ENV: 'production', VITE_API_URL: BACK },
+    },
   );
+  await ready(PREVIEW_ORIGIN + PREVIEW_BASE);
+  const vercel = JSON.parse(await readFile(path.join(ROOT, 'frontend/vercel.json'), 'utf8'));
+  const prodCsp = vercel.headers
+    .find((item) => item.source === '/(.*)')
+    .headers.find((item) => item.key === 'Content-Security-Policy').value;
+  // Preserve every production directive. Add only this owned loopback backend to connect-src;
+  // HTTPS-only deployment upgrading is inapplicable on the loopback fixture.
+  const localCsp = prodCsp.replace("connect-src 'self'", `connect-src 'self' ${BACK}`);
+  await writeFile(
+    path.join(OUT, 'test-results', 'built-preview-policy.json'),
+    JSON.stringify(
+      {
+        base: PREVIEW_BASE,
+        productionCsp: prodCsp,
+        localCsp,
+        soleTestOriginAddition: BACK,
+        nodeEnv: 'production',
+        viteMode: 'production',
+        applicationApi: 'real isolated loopback backend',
+        mode: 'actual vite build and preview, production script/worker CSP also applied to worker responses',
+      },
+      null,
+      2,
+    ),
+  );
+  previewProxy = createServer((request, response) => {
+    const upstream = httpRequest(
+      PREVIEW_ORIGIN + request.url,
+      { method: request.method, headers: request.headers },
+      (reply) => {
+        response.writeHead(reply.statusCode, {
+          ...reply.headers,
+          'Content-Security-Policy': localCsp,
+        });
+        reply.pipe(response);
+      },
+    );
+    upstream.on('error', () => {
+      response.writeHead(502);
+      response.end();
+    });
+    request.pipe(upstream);
+  });
+  await new Promise((resolve) => previewProxy.listen(5450, '127.0.0.1', resolve));
   await Promise.all([ready(`${BACK}/health`), ready(FRONT)]);
   const executablePath =
     process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ?? process.env.CLINICOS_CHROMIUM_PATH;
@@ -511,12 +601,8 @@ try {
   );
   page = await context.newPage();
   page.on('dialog', async (dialog) => {
-    if (dialog.message().startsWith('Salvare la compilazione in bozza e chiudere?'))
-      await dialog.accept();
-    else {
-      errors.push('Unexpected application confirmation');
-      await dialog.dismiss();
-    }
+    errors.push('Unexpected native application confirmation');
+    await dialog.dismiss();
   });
   const draftCreates = [];
   page.on('request', (request) => {
@@ -536,13 +622,26 @@ try {
       };
   });
   page.on('console', (msg) => {
-    if (msg.type() === 'error') errors.push(`console: ${msg.text()}`);
+    if (msg.type() === 'error' || /#instantiateWasm|WebAssembly.*Content Security/.test(msg.text()))
+      errors.push(`console: ${msg.text()}`);
   });
   page.on('pageerror', (error) => errors.push(`page: ${error.message}`));
+  page.on('requestfailed', (request) => {
+    if (request.url().startsWith(FRONT_ORIGIN) && /\/assets\//.test(request.url()))
+      errors.push(
+        `Asset request failed: ${new URL(request.url()).pathname}: ${request.failure()?.errorText}`,
+      );
+  });
   page.on('response', (response) => {
+    if (/\/assets\/.*(?:openjpeg\.wasm|pdf\.worker[^/]*\.mjs)/.test(response.url()))
+      pdfAssets.push({
+        path: new URL(response.url()).pathname,
+        status: response.status(),
+        contentType: response.headers()['content-type'] ?? '',
+      });
     if (
       response.status() >= 400 &&
-      [FRONT, BACK].some((origin) => response.url().startsWith(origin))
+      [FRONT_ORIGIN, BACK].some((origin) => response.url().startsWith(origin))
     )
       errors.push(`HTTP ${response.status()} ${new URL(response.url()).pathname}`);
   });
@@ -618,6 +717,56 @@ try {
     await page.keyboard.press('Enter');
   });
   await page.locator('[data-demographic-field=firstName]').waitFor();
+  await verify(
+    'Claude2 manual missing steps stay closed with zero field overlap at tablet and phone',
+    async () => {
+      for (const viewport of [
+        { width: 820, height: 1180 },
+        { width: 390, height: 844 },
+      ]) {
+        await page.setViewportSize(viewport);
+        const details = page.locator('details.intake-index__missing');
+        await details.waitFor();
+        assert.equal(await details.evaluate((element) => element.open), false);
+        const overlap = await page.evaluate(() => {
+          const list = document.querySelector('.intake-index__missing ul');
+          const first = document.querySelector('[data-demographic-field=firstName]');
+          const section = document.querySelector('#intake-sec-anagrafica');
+          const details = list.closest('details');
+          if (!details.open || !list.checkVisibility({ contentVisibilityAuto: true }))
+            return { first: 0, section: 0 };
+          const a = list.getBoundingClientRect();
+          const intersection = (element) => {
+            const b = element.getBoundingClientRect();
+            return (
+              Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) *
+              Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top))
+            );
+          };
+          return { first: intersection(first), section: intersection(section) };
+        });
+        assert.deepEqual(overlap, { first: 0, section: 0 });
+        const firstField = page.locator('[data-demographic-field=firstName]');
+        await firstField.scrollIntoViewIfNeeded();
+        assert.ok(
+          await firstField.evaluate((element) => {
+            const box = element.getBoundingClientRect();
+            return (
+              document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2) === element
+            );
+          }),
+          'Closed missing list never intercepts the actual first field',
+        );
+        await firstField.fill('Prova tastiera');
+        assert.equal(await firstField.inputValue(), 'Prova tastiera');
+        await firstField.fill('');
+        await page.screenshot({
+          path: path.join(OUT, 'evidence', `manual-no-overlap-${viewport.width}.png`),
+        });
+      }
+      await page.setViewportSize({ width: 1180, height: 820 });
+    },
+  );
   await verify('450 automatic-only admission remains empty', async () => {
     assert.equal(
       await page
@@ -756,6 +905,58 @@ try {
   await page.locator('.import-page__thumbnail img').nth(1).waitFor({ timeout: 30000 });
   await verify('475 both authentic source thumbnails contain rendered pixels', async () => {
     assert.equal(await page.locator('.import-page__thumbnail img').count(), 2);
+    const thumbnailPixels = await page
+      .locator('.import-page__thumbnail img')
+      .evaluateAll(async (images) => {
+        const measure = (ctx, width, height) => {
+          const rgba = ctx.getImageData(0, 0, width, height).data;
+          let ink = 0,
+            dark = 0;
+          for (let i = 0; i < rgba.length; i += 4) {
+            const luminance = (rgba[i] + rgba[i + 1] + rgba[i + 2]) / 3;
+            ink += 255 - luminance;
+            if (luminance < 100) dark++;
+          }
+          return { ink, dark };
+        };
+        return Promise.all(
+          images.map(async (img) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            const actual = measure(ctx, canvas.width, canvas.height);
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            const blankJpeg = await new Promise((resolve) =>
+              canvas.toBlob(resolve, 'image/jpeg', 0.8),
+            );
+            const blank = await createImageBitmap(blankJpeg);
+            ctx.drawImage(blank, 0, 0);
+            blank.close();
+            return {
+              width: canvas.width,
+              height: canvas.height,
+              actual,
+              whiteJpegControl: measure(ctx, canvas.width, canvas.height),
+            };
+          }),
+        );
+      });
+    await writeFile(
+      path.join(OUT, 'test-results', 'thumbnail-pixel-controls.json'),
+      JSON.stringify(thumbnailPixels, null, 2),
+    );
+    const nonblank = (sample) => sample.dark > 0 && sample.ink > 1000;
+    assert.ok(
+      thumbnailPixels.every((sample) => !nonblank(sample.whiteJpegControl)),
+      'Real same-size encoded whiteJPEG controls must fail the nonblank criterion',
+    );
+    assert.ok(
+      thumbnailPixels.every((sample) => nonblank(sample.actual)),
+      'Both rendered thumbnails must contain integrated text/image ink distinct from whiteJPEG controls',
+    );
     assert.ok(
       (
         await page
@@ -773,7 +974,10 @@ try {
       const rect = await page.locator('.import-session').boundingBox();
       assert.ok(rect.width >= 1178 && rect.height >= 818);
       assert.equal(await page.locator('#import-demographic-firstName').inputValue(), 'Maria');
-      assert.equal(await page.locator('#import-demographic-sex').inputValue(), 'F');
+      assert.equal(await page.locator('#import-demographic-sex').inputValue(), '');
+      assert.ok(
+        await page.getByText('Sesso proposto dal codice fiscale:', { exact: false }).isVisible(),
+      );
       assert.ok(
         await page.locator('.iw-doc canvas').evaluate((canvas) => {
           const data = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
@@ -786,6 +990,35 @@ try {
       const source = await page.locator('.iw-doc canvas').boundingBox();
       assert.ok(source && source.y < 820 && source.y + source.height > 50);
       await screenshot(473);
+    },
+  );
+  await verify(
+    '485 contextual runtime only: same import review fills1903x1032 viewport',
+    async () => {
+      await page.setViewportSize({ width: 1903, height: 1032 });
+      const geometry = await page.locator('.import-session').boundingBox();
+      assert.ok(
+        geometry.x === 0 && geometry.y === 0 && geometry.width >= 1901 && geometry.height >= 1030,
+      );
+      await page.locator('.iw-doc canvas[data-ready=true]').waitFor();
+      assert.ok(await page.locator('#import-demographic-firstName').isVisible());
+      await writeFile(
+        path.join(OUT, 'test-results', 'issue485-context-geometry.json'),
+        JSON.stringify(
+          {
+            viewport: { width: 1903, height: 1032 },
+            geometry,
+            phase: 'same letter import review as batch450; other issue485 phases not inferred',
+            issueClosure: false,
+          },
+          null,
+          2,
+        ),
+      );
+      await page.screenshot({
+        path: path.join(OUT, 'evidence', 'issue485-context-import-fullscreen-1903.png'),
+      });
+      await page.setViewportSize({ width: 1180, height: 820 });
     },
   );
   await verify(
@@ -886,6 +1119,10 @@ try {
       await page.locator('#import-demographic-address').fill('Via sintetica QA 12');
       await page.getByRole('button', { name: 'Chiudi importazione', exact: true }).last().click();
       await page
+        .getByRole('alertdialog')
+        .getByRole('button', { name: 'Salva bozza e chiudi', exact: true })
+        .click();
+      await page
         .locator('.teams-sidebar')
         .getByRole('button', { name: 'Pazienti', exact: true })
         .click();
@@ -906,6 +1143,10 @@ try {
       ]);
       const data = rows.rows[0].data;
       assert.equal(data.anagrafica.sex, 'F');
+      assert.equal(data._derivedFields.anagrafica.sex.reviewRequired, true);
+      await page.getByTestId('derived-sex-review').waitFor();
+      await page.getByRole('button', { name: 'Conferma sesso', exact: true }).click();
+      await page.getByTestId('derived-sex-review').waitFor({ state: 'detached' });
       assert.ok(
         data.terapiaImport.some(
           (row) => /Ramipril/i.test(row.farmacoNome) && row.orari.includes('08:00'),
@@ -1050,6 +1291,16 @@ try {
     async () => {
       assert.equal(await page.locator('[data-demographic-field=firstName]').inputValue(), 'Maria');
       assert.equal(await page.locator('[data-demographic-field=dateOfBirth]').inputValue(), '');
+      assert.equal(
+        await page.getByTestId('derived-sex-review').count(),
+        0,
+        'Acknowledged provenance stays clear after reload',
+      );
+      assert.equal(
+        (await db.query('SELECT data FROM "PatientIntakeDraft" WHERE source=$1', ['import']))
+          .rows[0].data._derivedFields.anagrafica.sex.reviewRequired,
+        false,
+      );
       const savedTherapies = (
         await db.query('SELECT data FROM "PatientIntakeDraft" WHERE source=$1', ['import'])
       ).rows[0].data.terapiaImport;
@@ -1157,6 +1408,7 @@ try {
         .locator('.teams-sidebar')
         .getByRole('button', { name: 'Pazienti', exact: true })
         .click();
+      await page.getByRole('button', { name: /Filtra anagrafiche da completare/ }).click();
       const completionDisclosure = page.locator('details.patient-list-incomplete');
       if (!(await completionDisclosure.evaluate((element) => element.open)))
         await completionDisclosure.locator('summary').click();
@@ -1209,7 +1461,7 @@ try {
     ).rows[0].total,
   );
   await verify(
-    'QA450-1 unresolved footer, close and Escape preserve the review without creating any draft intent',
+    'Claude2 unresolved X/footer/Escape offer disabled save, continue intact and close without a draft',
     async () => {
       for (const close of [
         () => page.getByRole('button', { name: 'Chiudi importazione', exact: true }).last().click(),
@@ -1218,40 +1470,78 @@ try {
         () => page.keyboard.press('Escape'),
       ]) {
         await close();
-        await page
-          .locator('.iw-data > .import-modal__error')
-          .filter({ hasText: 'Decidi e salva tutti i conflitti' })
-          .waitFor();
-        assert.equal(draftCreates.length, createsBeforeConflict);
+        const dialog = page.getByRole('alertdialog');
+        await dialog.waitFor();
         assert.equal(
-          Number(
-            (
-              await db.query(
-                'SELECT count(*)::int AS total FROM "PatientIntakeDraft" WHERE status=$1',
-                ['draft'],
-              )
-            ).rows[0].total,
-          ),
-          draftsBeforeConflict,
+          await dialog
+            .getByRole('button', { name: 'Salva bozza e chiudi', exact: true })
+            .isDisabled(),
+          true,
         );
+        assert.ok(
+          await dialog
+            .getByRole('button', { name: 'Continua la revisione', exact: true })
+            .evaluate((element) => element === document.activeElement),
+          'Disabled save gives initial focus to Continue',
+        );
+        await page.keyboard.press('Shift+Tab');
+        assert.ok(
+          await dialog
+            .getByRole('button', { name: 'Chiudi senza salvare', exact: true })
+            .evaluate((element) => element === document.activeElement),
+          'ShiftTab wraps inside dialog',
+        );
+        await page.keyboard.press('Tab');
+        assert.ok(
+          await dialog
+            .getByRole('button', { name: 'Continua la revisione', exact: true })
+            .evaluate((element) => element === document.activeElement),
+          'Tab wraps inside dialog',
+        );
+        assert.equal(draftCreates.length, createsBeforeConflict);
+        await dialog.getByRole('button', { name: 'Continua la revisione', exact: true }).click();
         assert.ok(await page.locator('.iw-doc canvas[data-ready=true]').isVisible());
       }
-      await page.getByRole('radio', { name: 'Corretto', exact: true }).check();
+      await page.keyboard.press('Escape');
+      await page.getByRole('alertdialog').waitFor();
+      await page.keyboard.press('Escape');
+      await page.getByRole('alertdialog').waitFor({ state: 'detached' });
+      assert.ok(
+        await page.locator('.import-workspace').isVisible(),
+        'Escape dismisses only top confirmation',
+      );
       await page.getByRole('button', { name: 'Chiudi importazione', exact: true }).last().click();
       await page
-        .locator('.iw-data > .import-modal__error')
-        .filter({ hasText: 'Decidi e salva tutti i conflitti' })
-        .waitFor();
+        .getByRole('alertdialog')
+        .getByRole('button', { name: 'Chiudi senza salvare', exact: true })
+        .click();
+      await page.locator('.import-session').waitFor({ state: 'detached' });
+      assert.equal(draftCreates.length, createsBeforeConflict);
       assert.equal(
-        draftCreates.length,
-        createsBeforeConflict,
-        'A selected but unsaved conflict cannot start an intent',
+        (
+          await db.query(
+            'SELECT count(*)::int AS total FROM "PatientIntakeDraft" WHERE status=$1',
+            ['draft'],
+          )
+        ).rows[0].total,
+        draftsBeforeConflict,
       );
-      assert.ok(
-        await page.getByRole('radio', { name: 'Corretto', exact: true }).isChecked(),
-        'Dirty choice stays available',
+      await page.getByRole('button', { name: /^Lettera o trasferimento/ }).click();
+      await page.getByRole('region', { name: 'Conflitti tra lettere' }).waitFor();
+      await page.getByRole('radio', { name: 'Corretto', exact: true }).check();
+      await page.getByRole('button', { name: 'Chiudi importazione', exact: true }).last().click();
+      const dialog = page.getByRole('alertdialog');
+      assert.equal(
+        await dialog
+          .getByRole('button', { name: 'Salva bozza e chiudi', exact: true })
+          .isDisabled(),
+        true,
       );
-      await page.screenshot({ path: path.join(OUT, 'evidence', 'qa450-1-blocked-close.png') });
+      await dialog.getByRole('button', { name: 'Continua la revisione', exact: true }).click();
+      assert.ok(await page.getByRole('radio', { name: 'Corretto', exact: true }).isChecked());
+      await page.screenshot({
+        path: path.join(OUT, 'evidence', 'unresolved-close-session-recovered.png'),
+      });
     },
   );
   await verify(
@@ -1271,6 +1561,10 @@ try {
       await page.locator('#import-demographic-address').fill('Solo correzione attuale');
       await page.getByRole('button', { name: 'Chiudi importazione', exact: true }).last().click();
       await page
+        .getByRole('alertdialog')
+        .getByRole('button', { name: 'Salva bozza e chiudi', exact: true })
+        .click();
+      await page
         .locator('.teams-sidebar')
         .getByRole('button', { name: 'Pazienti', exact: true })
         .click();
@@ -1285,6 +1579,125 @@ try {
       assert.equal(draftCreates.length, createsBeforeConflict + 1);
       await page.screenshot({ path: path.join(OUT, 'evidence', 'qa450-1-corrected-draft.png') });
     },
+  );
+  await verify(
+    'Claude2 thirty incomplete identities have one bounded filter and complete-only search remains escapable',
+    async () => {
+      for (let index = 0; index < 30; index++)
+        await db.query(
+          'INSERT INTO "Patient" (id,"medicalRecordNumber","firstName","lastName","updatedAt") VALUES ($1,$2,$3,$4,NOW())',
+          [
+            `cycle4-incomplete-${index}`,
+            `C4-I-${index}`,
+            `Persona${String(index).padStart(2, '0')}`,
+            'SintesiCoda',
+          ],
+        );
+      await page.reload();
+      await page
+        .getByRole('button', { name: /Infermiere 1/ })
+        .first()
+        .click();
+      await page
+        .locator('.teams-sidebar')
+        .getByRole('button', { name: 'Pazienti', exact: true })
+        .click();
+      const search = page.getByRole('searchbox', {
+        name: 'Cerca paziente per nome o codice fiscale',
+        exact: true,
+      });
+      await search.fill('SintesiCoda');
+      await page.waitForFunction(
+        () => document.querySelectorAll('.patient-roster tbody tr[aria-label]').length === 30,
+      );
+      const list = page.getByRole('region', { name: 'Elenco pazienti', exact: true });
+      const incompleteFilter = list.locator('.plist-toolbar').getByRole('button', {
+        name: /^(Filtra anagrafiche da completare|Mostra tutti i pazienti)$/,
+      });
+      const incompleteSummary = list.locator('details.patient-list-incomplete');
+      const rosterRows = list.locator('.patient-roster tbody tr[aria-label]');
+      const expectedIncompleteLabels = Array.from(
+        { length: 30 },
+        (_, index) => `Apri cartella di Persona${String(index).padStart(2, '0')} SintesiCoda`,
+      );
+      const assertIncompleteRoster = async () => {
+        assert.deepEqual(
+          await rosterRows.evaluateAll((rows) =>
+            rows.map((row) => row.getAttribute('aria-label')).sort(),
+          ),
+          expectedIncompleteLabels,
+          'The roster contains all thirty exact seeded identities, without substitutions',
+        );
+      };
+      assert.equal(await incompleteFilter.count(), 1, 'One bounded incomplete-identity filter');
+      assert.equal(await incompleteFilter.getAttribute('aria-pressed'), 'false');
+      assert.equal(
+        await incompleteSummary.count(),
+        1,
+        'One aggregate incomplete-identity disclosure',
+      );
+      assert.equal(await incompleteSummary.evaluate((element) => element.open), false);
+      assert.match(await incompleteSummary.locator('summary').innerText(), /30 pazienti/);
+      assert.match(
+        await incompleteSummary.locator('summary').innerText(),
+        /\(tra 30 caricati(?:, elenco parziale)?\)/,
+      );
+      assert.equal(
+        await incompleteSummary.getByRole('button', { includeHidden: true }).count(),
+        30,
+      );
+      assert.equal(await incompleteSummary.locator('button:visible').count(), 0);
+      await assertIncompleteRoster();
+      await incompleteFilter.click();
+      assert.equal(await incompleteFilter.getAttribute('aria-pressed'), 'true');
+      await assertIncompleteRoster();
+      await incompleteFilter.click();
+      assert.equal(await incompleteFilter.getAttribute('aria-pressed'), 'false');
+      await assertIncompleteRoster();
+      await incompleteFilter.click();
+      assert.equal(await incompleteFilter.getAttribute('aria-pressed'), 'true');
+      await assertIncompleteRoster();
+      await page.screenshot({
+        path: path.join(OUT, 'evidence', 'thirty-incomplete-bounded-filter.png'),
+      });
+      await search.fill('Manuele');
+      await page.waitForFunction(
+        () => document.querySelectorAll('.patient-roster tbody tr[aria-label]').length === 1,
+      );
+      assert.equal(
+        await incompleteFilter.count(),
+        0,
+        'Complete-only search escapes the active incomplete filter and hides its control',
+      );
+      assert.equal(
+        await incompleteSummary.count(),
+        0,
+        'Complete-only subset hides the aggregate incomplete-identity disclosure',
+      );
+      assert.deepEqual(
+        await rosterRows.evaluateAll((rows) => rows.map((row) => row.getAttribute('aria-label'))),
+        ['Apri cartella di Manuele Sintetico'],
+        'Complete-only search retains the exact previously persisted complete patient',
+      );
+      assert.match(await list.locator('.patient-roster tbody').innerText(), /Manuele/);
+      await page.screenshot({
+        path: path.join(OUT, 'evidence', 'zero-incomplete-summary-absent.png'),
+      });
+    },
+  );
+  await writeFile(
+    path.join(OUT, 'test-results', 'built-pdf-assets.json'),
+    JSON.stringify(pdfAssets, null, 2),
+  );
+  assert.ok(
+    pdfAssets.some(
+      (item) =>
+        item.path.startsWith(PREVIEW_BASE + 'assets/pdfjs-') &&
+        item.path.endsWith('/openjpeg.wasm') &&
+        item.status === 200 &&
+        /application\/wasm/.test(item.contentType),
+    ),
+    'Actual built nonroot OpenJPEG wasm HTTP200 MIME receipt required',
   );
   assert.ok(providerCalls.some((call) => call.operation === 'ocr'));
   assert.ok(providerCalls.some((call) => call.operation === 'extraction'));
@@ -1317,6 +1730,10 @@ try {
     await page.screenshot({ path: path.join(OUT, 'test-results', 'failure.png') }).catch(() => {});
   console.error(error.message);
 } finally {
+  await writeFile(
+    path.join(OUT, 'test-results', 'built-pdf-assets.json'),
+    JSON.stringify(pdfAssets, null, 2),
+  );
   if (context && !traceSaved) {
     const failureTrace = path.join(OUT, 'test-results', 'failure-trace.zip');
     await context.tracing
@@ -1334,6 +1751,8 @@ try {
     await writeFile(path.join(OUT, 'logs', `${name}.log`), Buffer.concat(chunks));
   }
   if (server) await new Promise((resolve) => server.close(resolve));
+  if (previewProxy) await new Promise((resolve) => previewProxy.close(resolve));
+  if (buildDir) await rm(buildDir, { recursive: true, force: true });
   if (nativeClient) {
     try {
       if (nativeDatabaseCreated) {

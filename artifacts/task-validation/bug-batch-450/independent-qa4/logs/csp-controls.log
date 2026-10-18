@@ -1,0 +1,1 @@
+PASS independent CSP controls, original wasm DENY and JS DENY; candidate wasm ALLOW and JS DENY; complete other config identical

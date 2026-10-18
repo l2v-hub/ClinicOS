@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-17T17:49:44.123567+00:00",
+  "scope": "Unauthenticated staticasset HEAD only; noAPI/patientreads",
+  "pdfjsVersion": "6.2.108",
+  "rows": [
+    {
+      "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+      "method": "HEAD",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "csp": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://clinicos-backend-demo.up.railway.app https://clinicos-backend-production-df88.up.railway.app https://login.microsoftonline.com; media-src 'self' blob:; worker-src 'self' blob:; frame-src 'self' blob: https://login.microsoftonline.com; upgrade-insecure-requests",
+      "contentLength": "1262398"
+    },
+    {
+      "path": "/assets/pdfjs-6.2.108/openjpeg.wasm",
+      "method": "HEAD",
+      "status": 200,
+      "contentType": "application/wasm",
+      "csp": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://clinicos-backend-demo.up.railway.app https://clinicos-backend-production-df88.up.railway.app https://login.microsoftonline.com; media-src 'self' blob:; worker-src 'self' blob:; frame-src 'self' blob: https://login.microsoftonline.com; upgrade-insecure-requests",
+      "contentLength": "252032"
+    },
+    {
+      "path": "/assets/pdfjs-6.2.108/openjpeg_nowasm_fallback.js",
+      "method": "HEAD",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "csp": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://clinicos-backend-demo.up.railway.app https://clinicos-backend-production-df88.up.railway.app https://login.microsoftonline.com; media-src 'self' blob:; worker-src 'self' blob:; frame-src 'self' blob: https://login.microsoftonline.com; upgrade-insecure-requests",
+      "contentLength": "451590"
+    }
+  ]
+}

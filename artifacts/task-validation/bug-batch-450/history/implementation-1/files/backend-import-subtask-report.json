@@ -1,0 +1,71 @@
+{
+  "scope": "issue473 bounded backend subtask of frozen bug-batch-450 round1/4",
+  "verdict": "READY FOR CODEX QA",
+  "sourceFiles": [
+    {
+      "path": "backend/src/lib/codice-fiscale.ts",
+      "sha256": "f3862168a53da4e8cbb7a4d6e39da1e19865f6b83374bc5440fa4c9f5f9e96d6"
+    },
+    {
+      "path": "backend/src/intake/draft-service.ts",
+      "sha256": "c5efb1b2a0c23069ba129b3bfd77a708f4e7de4809f9aa898a2dc0d4fe9ac231"
+    },
+    {
+      "path": "backend/src/intake/__tests__/seed-draft-from-import.test.ts",
+      "sha256": "c7c9264190b1d43b504091c9f4d2724d512716f48e6e00ff9ddce39482e70b7a"
+    },
+    {
+      "path": "backend/src/intake/__tests__/parse-discharge-therapy.test.ts",
+      "sha256": "c1b1c07f0c6993bdc4d101829dd4176fb7b4d0b8b49edeb943757aee13997363"
+    }
+  ],
+  "productionBehavior": [
+    "sexFromCodiceFiscale checks original checksum and format, decodes omocodia, rejects day0/32-40/72+ and impossible month/day, returns reviewable M/F only; does not infer birth date.",
+    "buildImportDraftData derives absent/whitespace sex only; preserves explicit contradictory sex and immutable narrative; records _derivedFields.anagrafica.sex source/value/reviewRequired.",
+    "No production parser change: existing inventory already retains heading-free prescriptions with quantity/time/originalText/importRowKey/outsideTherapySection and da_verificare."
+  ],
+  "verification": [
+    {
+      "stage": "before implementation",
+      "command": "DATABASE_URL=<synthetic-loopback-only> node --import tsx --test --test-name-pattern='#473' backend/src/intake/__tests__/seed-draft-from-import.test.ts",
+      "exitCode": 1,
+      "result": "2 failed (missing sex helper and missing derived F), 2 passed. This is the behavior baseline RED."
+    },
+    {
+      "stage": "before implementation",
+      "command": "node --import tsx --test --test-name-pattern='#473' backend/src/intake/__tests__/parse-discharge-therapy.test.ts",
+      "exitCode": 0,
+      "result": "1 passed; heading-free parser fix unnecessary."
+    },
+    {
+      "stage": "after implementation",
+      "command": "DATABASE_URL=<synthetic-loopback-only> node --import tsx --test --test-name-pattern='#473' backend/src/intake/__tests__/seed-draft-from-import.test.ts backend/src/intake/__tests__/parse-discharge-therapy.test.ts",
+      "exitCode": 0,
+      "result": "5 passed."
+    },
+    {
+      "stage": "final after formatting",
+      "command": "DATABASE_URL=<synthetic-loopback-only> node --import tsx --test --test-skip-pattern='seedDraftFromImport:' backend/src/intake/__tests__/seed-draft-from-import.test.ts backend/src/intake/__tests__/parse-discharge-therapy.test.ts backend/src/intake/__tests__/therapy-source-inventory.test.ts backend/src/__tests__/codice-fiscale.test.ts",
+      "exitCode": 0,
+      "result": "74 passed, 0 failed. Three existing database-dependent seed tests deliberately not selected; no database was accessed."
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --noEmit -p backend/tsconfig.json",
+      "exitCode": 0,
+      "result": "Backend typecheck passed."
+    },
+    {
+      "command": "prettier scoped source/test formatting + check draft-service.ts; git diff --check scoped files",
+      "exitCode": 0,
+      "result": "Passed."
+    }
+  ],
+  "honestFailures": [
+    "Initial npm-ci race transiently removed tsx package; next attempt ran before Prisma generation completed. Both loader failures retained in log, not counted as behavior red.",
+    "An attempted negative-lookahead --test-name-pattern accidentally selected the three existing DB seed tests; run had 74 passes / 3 DB connection failures because PostgreSQL was not started. Corrected selection uses explicit --test-skip-pattern. No assertions were weakened."
+  ],
+  "pendingRootGates": [
+    "Fresh isolated DB integration including all seed tests, full PDF/browser E2E and persistence, source authorization/safety guards, independent QA, external review and verified release remain root-owned. No GitHub status/closure/commit/push or review budget change made by subtask."
+  ],
+  "integrationNote": "_derivedFields is new review-only metadata. Frontend notice should be conditional on current value matching derived value. Parent informed server metadata allowlist may need integration under broader scope."
+}

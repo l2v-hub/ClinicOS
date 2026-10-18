@@ -1,0 +1,497 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+Error: Cannot find package '/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/node_modules/tsx/index.js' imported from /workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/
+Did you mean to import "tsx/dist/loader.mjs"?
+    at legacyMainResolve (node:internal/modules/esm/resolve:201:26)
+    at packageResolve (node:internal/modules/esm/resolve:778:12)
+    at moduleResolve (node:internal/modules/esm/resolve:859:18)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at node:internal/modules/esm/loader:632:32 {
+  code: 'ERR_MODULE_NOT_FOUND'
+}
+
+Node.js v24.19.0
+✖ backend/src/intake/__tests__/seed-draft-from-import.test.ts (117.334834ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 142.783188
+
+✖ failing tests:
+
+test at backend/src/intake/__tests__/seed-draft-from-import.test.ts:1:1
+✖ backend/src/intake/__tests__/seed-draft-from-import.test.ts (117.334834ms)
+  'test failed'
+/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/lib/prisma.ts:2
+import { PrismaClient } from '@prisma/client';
+         ^
+SyntaxError: The requested module '@prisma/client' does not provide an export named 'PrismaClient'
+    at #asyncInstantiate (node:internal/modules/esm/module_job:327:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:431:5)
+    at async node:internal/modules/esm/loader:643:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.19.0
+✖ backend/src/intake/__tests__/seed-draft-from-import.test.ts (463.116395ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 474.104972
+
+✖ failing tests:
+
+test at backend/src/intake/__tests__/seed-draft-from-import.test.ts:1:1
+✖ backend/src/intake/__tests__/seed-draft-from-import.test.ts (463.116395ms)
+  'test failed'
+✔ #473: heading-free prescriptions retain quantity, schedules and source without guessing alternatives (20.69316ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 217.968052
+✖ #473: validated CF derives only an unambiguous encoded sex (1.587098ms)
+✖ #473: missing imported sex is an editable derived field with retained source (29.400283ms)
+✔ #473: invalid CF cannot invent sex and contradictory explicit sex remains untouched (3.020662ms)
+✔ #473: unheaded medication source remains a review inventory, not an administration (15.483244ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 2
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 632.371973
+
+✖ failing tests:
+
+test at backend/src/intake/__tests__/seed-draft-from-import.test.ts:1:6319
+✖ #473: validated CF derives only an unambiguous encoded sex (1.587098ms)
+  TypeError: fiscalCode.sexFromCodiceFiscale is not a function
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/intake/__tests__/seed-draft-from-import.test.ts:240:29)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+
+test at backend/src/intake/__tests__/seed-draft-from-import.test.ts:1:7493
+✖ #473: missing imported sex is an editable derived field with retained source (29.400283ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  undefined !== 'F'
+  
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/intake/__tests__/seed-draft-from-import.test.ts:263:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'F',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+✔ #473: heading-free prescriptions retain quantity, schedules and source without guessing alternatives (19.976481ms)
+✔ #473: validated CF derives only an unambiguous encoded sex (1.850362ms)
+✔ #473: missing imported sex is an editable derived field with retained source (26.227006ms)
+✔ #473: invalid CF cannot invent sex and contradictory explicit sex remains untouched (1.38195ms)
+✔ #473: unheaded medication source remains a review inventory, not an administration (14.185961ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 589.048473
+✔ accepts a canonical valid CF (1.320627ms)
+✔ normalizes case and surrounding whitespace (0.287347ms)
+✔ accepts an omocodia variant with recomputed control character (0.291832ms)
+✔ rejects a CF with a wrong control character (4.121034ms)
+✔ rejects malformed input (0.959246ms)
+✔ dose insulinica condizionale: conserva le fasce glicemia→unità senza inventare quantità fisse (22.475066ms)
+✔ dose insulinica condizionale: mantiene da verificare le fasce con estremi sovrapposti (6.696909ms)
+✔ dose insulinica condizionale: riconosce anche la notazione intervallo-freccia-dose (7.997609ms)
+✔ dose insulinica condizionale: una fascia invertita resta da verificare (0.649592ms)
+✔ #156 AC1/AC2: recognises therapy and yields one row per drug line (6.65802ms)
+✔ #156 AC3: KEPPRA structured fields (0.40591ms)
+✔ #156 AC4: multiple times are all extracted (0.460443ms)
+✔ #156 AC5: specific weekdays are captured (0.583788ms)
+✔ #156 AC6: incomplete line kept as da_verificare, original preserved, not dropped (3.152952ms)
+✔ #156 AC3: unusual dosage/quantity and empty class preserved (CETIRIZINA) (1.326083ms)
+✔ #156 AC10: no hardcoding — a DIFFERENT prescription of the same shape parses correctly (0.359109ms)
+✔ #156: every row keeps its original text verbatim (audit/reference) (1.244535ms)
+✔ #156: blank/empty text yields no rows (0.165307ms)
+✔ #274: free-text administration route is captured (per os, endovena, sottocute) (0.814067ms)
+✔ #274: full-word quantity units are captured (compressa/e, fiala/e, capsula/e) (0.428999ms)
+✔ #274: medicinale + quantitativo + via together upgrade the row to ok (0.142654ms)
+✔ #274: parenthesized route codes still work (no regression) (0.132799ms)
+✔ #296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia terminata) (2.914922ms)
+✔ 2026-10-11: un farmaco DOPO un paragrafo di prosa resta un farmaco (la prosa è saltata) (2.947957ms)
+✔ #296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati (0.648412ms)
+✔ #296 AC4: intestazione iniziale + riga vuota non termina il blocco (0.538803ms)
+✔ #296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_verificare (no drop) (0.833824ms)
+✔ AC1: ogni variante di intestazione non genera una riga farmaco (1.066216ms)
+✔ AC1: l'intestazione non interrompe l'elenco che la segue (1.330188ms)
+✔ AC2: una riga che prescrive resta un farmaco anche se inizia per "Terapia" (0.534788ms)
+✔ AC2: una riga di prosa clinica che nomina la terapia non viene scartata (0.437062ms)
+✔ explicit absence of therapy and inline headings do not create drug rows (0.807116ms)
+✔ negative therapy statements leave nearby prescriptions and ambiguous instructions for review (0.742198ms)
+✔ AC3: la forma non assorbe la riga; il resto finisce in note e la riga è da verificare (1.016301ms)
+✔ AC4: la via riconosciuta a parole non resta duplicata in note (0.457329ms)
+✔ AC4: note non ripete il nome del farmaco né i campi già mappati (0.694525ms)
+✔ AC4: un nome farmaco con caratteri speciali non rompe la pulizia di note (0.355422ms)
+✔ AC4: una posologia in lettere resta in note senza declassare una riga completa (0.501482ms)
+✔ multi-farmaco AC1: la forma non assorbe il nome del secondo farmaco (0.309641ms)
+✔ multi-farmaco AC2: il secondo farmaco resta leggibile nelle note (0.668186ms)
+✔ multi-farmaco AC3: nessuno split automatico, una riga in ingresso = una in uscita (0.519579ms)
+✔ multi-farmaco AC4: le forme legittime multi-token non regrediscono (0.446522ms)
+✔ AC4: un numero non collocato porta la riga a da_verificare (1.608186ms)
+✔ PO03: the administration list stops before monitoring instructions (0.640311ms)
+✔ PO03: explicit contiguous time lists retain every administration time (0.552ms)
+✔ PO03: instructions retain their connectors and clock times after the list (0.896532ms)
+✔ PO03: a clock time introduced by clinical prose is not a schedule (1.974517ms)
+✔ PO03: alternatives and intervals remain whole instructions for review (1.699931ms)
+✔ PO03: an inferred form alone cannot turn a monitoring time into a schedule (0.253807ms)
+✔ #473: heading-free prescriptions retain quantity, schedules and source without guessing alternatives (2.79661ms)
+✖ seedDraftFromImport: creates draft seeded from narrative (452.991794ms)
+✖ seedDraftFromImport: does NOT seed allergie when allergyStatus is explicitly_absent (13.025917ms)
+✖ seedDraftFromImport: throws when job has no _narrative (5.380086ms)
+✔ isPlausibleAllergenText: rejects a multi-section narrative blob, accepts concise text (2.354212ms)
+✔ deriveAllergens: [] for a blob; one entry per concise allergen otherwise (1.411702ms)
+✔ buildImportDraftData: blob allergiesText does NOT seed a false allergy row (47.034916ms)
+✔ buildImportDraftData: concise multi-allergen text → one row per allergen (1.13691ms)
+✔ buildImportDraftData: therapyText parsed into structured terapia rows (one per drug) (18.47393ms)
+✔ #473: validated CF derives only an unambiguous encoded sex (1.070056ms)
+✔ #473: missing imported sex is an editable derived field with retained source (1.517965ms)
+✔ #473: invalid CF cannot invent sex and contradictory explicit sex remains untouched (2.727939ms)
+✔ #473: unheaded medication source remains a review inventory, not an administration (6.946796ms)
+✔ legacy draft reopening recovers missing source occurrences without overwriting review or inventing doses (50.493907ms)
+✔ missing narrative or a prose delimiter cannot silently lose a structured medication (1.628604ms)
+✔ a whole narrative adds prescriptions written outside the therapy section, keyed by source (3.705653ms)
+✔ only exact unambiguous fields cover an occurrence; variants and extra fields stay visible (0.611826ms)
+✔ duplicate extraction occurrences and malformed names remain accounted for, not actionable (0.338797ms)
+✔ one raw line cannot collapse two extracted drugs through shared or empty originalText (0.488601ms)
+✔ refresh retains reviewed values and exclusions, adds new variants once with stable proposal ids (2.774052ms)
+✔ identical groups aggregate provenance and reordering cannot manufacture prescriptions (2.185863ms)
+✔ a selected conflict from the same group authorizes only its exact extracted variant (1.623053ms)
+✔ server-owned extraction evidence cannot be forged in page or legacy autosave (2.2006ms)
+✔ legacy draft seeding includes structured inventory without headings or manufactured source text (3.478408ms)
+✔ row keys ignore editable values and extraction object key order (0.58939ms)
+✔ partial versus richer extraction on a shared narrative line has distinct source identity (3.384227ms)
+✔ same-group selection cannot authorize a narrative dose from another extracted variant (0.917101ms)
+✔ confirmation cannot silently omit an extracted candidate; explicit deferral keeps its evidence (1.592612ms)
+ℹ tests 77
+ℹ suites 0
+ℹ pass 74
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1915.071164
+
+✖ failing tests:
+
+test at backend/src/intake/__tests__/seed-draft-from-import.test.ts:1:1013
+✖ seedDraftFromImport: creates draft seeded from narrative (452.991794ms)
+  PrismaClientKnownRequestError: 
+  Invalid `prisma.importJob.create()` invocation in
+  /workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/intake/__tests__/seed-draft-from-import.test.ts:54:38
+  
+    51 
+    52 test('seedDraftFromImport: creates draft seeded from narrative', async () => {
+    53   // Create a minimal ImportJob with the required resultData shape.
+  → 54   const job = await prisma.importJob.create(
+  Can't reach database server at 127.0.0.1:55450
+      at vn.handleRequestError (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/node_modules/@prisma/client/src/runtime/RequestHandler.ts:238:13)
+      at vn.handleAndLogRequestError (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/node_modules/@prisma/client/src/runtime/RequestHandler.ts:184:12)
+      at vn.request (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/node_modules/@prisma/client/src/runtime/RequestHandler.ts:153:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async a (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:1014:24)
+      at async TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/intake/__tests__/seed-draft-from-import.test.ts:54:15)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at backend/src/intake/__tests__/seed-draft-from-import.test.ts:1:2595
+✖ seedDraftFromImport: does NOT seed allergie when allergyStatus is explicitly_absent (13.025917ms)
+  PrismaClientKnownRequestError: 
+  Invalid `prisma.importJob.create()` invocation in
+  /workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/intake/__tests__/seed-draft-from-import.test.ts:121:38
+  
+    118   allergyStatus: 'explicitly_absent',
+    119   allergiesText: 'Nessuna allergia nota',
+    120 };
+  → 121 const job = await prisma.importJob.create(
+  Can't reach database server at 127.0.0.1:55450
+      at vn.handleRequestError (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/node_modules/@prisma/client/src/runtime/RequestHandler.ts:238:13)
+      at vn.handleAndLogRequestError (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/node_modules/@prisma/client/src/runtime/RequestHandler.ts:184:12)
+      at vn.request (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/node_modules/@prisma/client/src/runtime/RequestHandler.ts:153:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async a (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:1014:24)
+      at async TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/intake/__tests__/seed-draft-from-import.test.ts:121:15)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at backend/src/intake/__tests__/seed-draft-from-import.test.ts:1:3540
+✖ seedDraftFromImport: throws when job has no _narrative (5.380086ms)
+  PrismaClientKnownRequestError: 
+  Invalid `prisma.importJob.create()` invocation in
+  /workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/intake/__tests__/seed-draft-from-import.test.ts:149:38
+  
+    146 });
+    147 
+    148 test('seedDraftFromImport: throws when job has no _narrative', async () => {
+  → 149   const job = await prisma.importJob.create(
+  Can't reach database server at 127.0.0.1:55450
+      at vn.handleRequestError (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/node_modules/@prisma/client/src/runtime/RequestHandler.ts:238:13)
+      at vn.handleAndLogRequestError (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/node_modules/@prisma/client/src/runtime/RequestHandler.ts:184:12)
+      at vn.request (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/node_modules/@prisma/client/src/runtime/RequestHandler.ts:153:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async a (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:1014:24)
+      at async TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/intake/__tests__/seed-draft-from-import.test.ts:149:15)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+✔ accepts a canonical valid CF (0.947684ms)
+✔ normalizes case and surrounding whitespace (0.200617ms)
+✔ accepts an omocodia variant with recomputed control character (0.15078ms)
+✔ rejects a CF with a wrong control character (0.148607ms)
+✔ rejects malformed input (0.127235ms)
+✔ dose insulinica condizionale: conserva le fasce glicemia→unità senza inventare quantità fisse (16.934763ms)
+✔ dose insulinica condizionale: mantiene da verificare le fasce con estremi sovrapposti (3.178255ms)
+✔ dose insulinica condizionale: riconosce anche la notazione intervallo-freccia-dose (6.547531ms)
+✔ dose insulinica condizionale: una fascia invertita resta da verificare (0.571569ms)
+✔ #156 AC1/AC2: recognises therapy and yields one row per drug line (8.488833ms)
+✔ #156 AC3: KEPPRA structured fields (0.576028ms)
+✔ #156 AC4: multiple times are all extracted (0.311275ms)
+✔ #156 AC5: specific weekdays are captured (0.173361ms)
+✔ #156 AC6: incomplete line kept as da_verificare, original preserved, not dropped (1.798324ms)
+✔ #156 AC3: unusual dosage/quantity and empty class preserved (CETIRIZINA) (0.438649ms)
+✔ #156 AC10: no hardcoding — a DIFFERENT prescription of the same shape parses correctly (0.417014ms)
+✔ #156: every row keeps its original text verbatim (audit/reference) (1.730997ms)
+✔ #156: blank/empty text yields no rows (0.178241ms)
+✔ #274: free-text administration route is captured (per os, endovena, sottocute) (0.489356ms)
+✔ #274: full-word quantity units are captured (compressa/e, fiala/e, capsula/e) (0.376845ms)
+✔ #274: medicinale + quantitativo + via together upgrade the row to ok (0.210589ms)
+✔ #274: parenthesized route codes still work (no regression) (0.158354ms)
+✔ #296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia terminata) (0.931935ms)
+✔ 2026-10-11: un farmaco DOPO un paragrafo di prosa resta un farmaco (la prosa è saltata) (0.83127ms)
+✔ #296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati (0.339876ms)
+✔ #296 AC4: intestazione iniziale + riga vuota non termina il blocco (0.427589ms)
+✔ #296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_verificare (no drop) (1.214679ms)
+✔ AC1: ogni variante di intestazione non genera una riga farmaco (1.334659ms)
+✔ AC1: l'intestazione non interrompe l'elenco che la segue (0.609683ms)
+✔ AC2: una riga che prescrive resta un farmaco anche se inizia per "Terapia" (0.353299ms)
+✔ AC2: una riga di prosa clinica che nomina la terapia non viene scartata (0.330301ms)
+✔ explicit absence of therapy and inline headings do not create drug rows (1.855633ms)
+✔ negative therapy statements leave nearby prescriptions and ambiguous instructions for review (0.667632ms)
+✔ AC3: la forma non assorbe la riga; il resto finisce in note e la riga è da verificare (0.485846ms)
+✔ AC4: la via riconosciuta a parole non resta duplicata in note (0.274793ms)
+✔ AC4: note non ripete il nome del farmaco né i campi già mappati (0.298908ms)
+✔ AC4: un nome farmaco con caratteri speciali non rompe la pulizia di note (0.368992ms)
+✔ AC4: una posologia in lettere resta in note senza declassare una riga completa (0.366901ms)
+✔ multi-farmaco AC1: la forma non assorbe il nome del secondo farmaco (0.313785ms)
+✔ multi-farmaco AC2: il secondo farmaco resta leggibile nelle note (0.971186ms)
+✔ multi-farmaco AC3: nessuno split automatico, una riga in ingresso = una in uscita (0.758819ms)
+✔ multi-farmaco AC4: le forme legittime multi-token non regrediscono (0.607168ms)
+✔ AC4: un numero non collocato porta la riga a da_verificare (1.267452ms)
+✔ PO03: the administration list stops before monitoring instructions (0.273543ms)
+✔ PO03: explicit contiguous time lists retain every administration time (2.54534ms)
+✔ PO03: instructions retain their connectors and clock times after the list (0.513973ms)
+✔ PO03: a clock time introduced by clinical prose is not a schedule (0.954635ms)
+✔ PO03: alternatives and intervals remain whole instructions for review (0.404172ms)
+✔ PO03: an inferred form alone cannot turn a monitoring time into a schedule (0.428244ms)
+✔ #473: heading-free prescriptions retain quantity, schedules and source without guessing alternatives (0.707945ms)
+ℹ tests 50
+ℹ suites 0
+ℹ pass 50
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 297.850762
+✔ accepts a canonical valid CF (1.214298ms)
+✔ normalizes case and surrounding whitespace (0.262264ms)
+✔ accepts an omocodia variant with recomputed control character (0.166228ms)
+✔ rejects a CF with a wrong control character (0.1118ms)
+✔ rejects malformed input (0.166149ms)
+✔ dose insulinica condizionale: conserva le fasce glicemia→unità senza inventare quantità fisse (16.438197ms)
+✔ dose insulinica condizionale: mantiene da verificare le fasce con estremi sovrapposti (3.698763ms)
+✔ dose insulinica condizionale: riconosce anche la notazione intervallo-freccia-dose (6.764383ms)
+✔ dose insulinica condizionale: una fascia invertita resta da verificare (0.604086ms)
+✔ #156 AC1/AC2: recognises therapy and yields one row per drug line (8.321644ms)
+✔ #156 AC3: KEPPRA structured fields (0.451144ms)
+✔ #156 AC4: multiple times are all extracted (0.579955ms)
+✔ #156 AC5: specific weekdays are captured (0.449889ms)
+✔ #156 AC6: incomplete line kept as da_verificare, original preserved, not dropped (2.656908ms)
+✔ #156 AC3: unusual dosage/quantity and empty class preserved (CETIRIZINA) (1.303873ms)
+✔ #156 AC10: no hardcoding — a DIFFERENT prescription of the same shape parses correctly (0.639799ms)
+✔ #156: every row keeps its original text verbatim (audit/reference) (0.990148ms)
+✔ #156: blank/empty text yields no rows (0.18974ms)
+✔ #274: free-text administration route is captured (per os, endovena, sottocute) (1.610889ms)
+✔ #274: full-word quantity units are captured (compressa/e, fiala/e, capsula/e) (0.242318ms)
+✔ #274: medicinale + quantitativo + via together upgrade the row to ok (0.593407ms)
+✔ #274: parenthesized route codes still work (no regression) (0.438305ms)
+✔ #296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia terminata) (2.538444ms)
+✔ 2026-10-11: un farmaco DOPO un paragrafo di prosa resta un farmaco (la prosa è saltata) (1.978484ms)
+✔ #296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati (0.579194ms)
+✔ #296 AC4: intestazione iniziale + riga vuota non termina il blocco (0.61252ms)
+✔ #296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_verificare (no drop) (1.219303ms)
+✔ AC1: ogni variante di intestazione non genera una riga farmaco (2.23299ms)
+✔ AC1: l'intestazione non interrompe l'elenco che la segue (1.182961ms)
+✔ AC2: una riga che prescrive resta un farmaco anche se inizia per "Terapia" (0.907224ms)
+✔ AC2: una riga di prosa clinica che nomina la terapia non viene scartata (0.657476ms)
+✔ explicit absence of therapy and inline headings do not create drug rows (1.441381ms)
+✔ negative therapy statements leave nearby prescriptions and ambiguous instructions for review (1.293711ms)
+✔ AC3: la forma non assorbe la riga; il resto finisce in note e la riga è da verificare (0.458879ms)
+✔ AC4: la via riconosciuta a parole non resta duplicata in note (0.409965ms)
+✔ AC4: note non ripete il nome del farmaco né i campi già mappati (0.281823ms)
+✔ AC4: un nome farmaco con caratteri speciali non rompe la pulizia di note (0.351341ms)
+✔ AC4: una posologia in lettere resta in note senza declassare una riga completa (0.271158ms)
+✔ multi-farmaco AC1: la forma non assorbe il nome del secondo farmaco (0.306546ms)
+✔ multi-farmaco AC2: il secondo farmaco resta leggibile nelle note (0.798263ms)
+✔ multi-farmaco AC3: nessuno split automatico, una riga in ingresso = una in uscita (0.505907ms)
+✔ multi-farmaco AC4: le forme legittime multi-token non regrediscono (0.42836ms)
+✔ AC4: un numero non collocato porta la riga a da_verificare (0.866421ms)
+✔ PO03: the administration list stops before monitoring instructions (0.215765ms)
+✔ PO03: explicit contiguous time lists retain every administration time (1.828867ms)
+✔ PO03: instructions retain their connectors and clock times after the list (0.255067ms)
+✔ PO03: a clock time introduced by clinical prose is not a schedule (1.186776ms)
+✔ PO03: alternatives and intervals remain whole instructions for review (0.377514ms)
+✔ PO03: an inferred form alone cannot turn a monitoring time into a schedule (0.160722ms)
+✔ #473: heading-free prescriptions retain quantity, schedules and source without guessing alternatives (0.493719ms)
+✔ isPlausibleAllergenText: rejects a multi-section narrative blob, accepts concise text (2.840596ms)
+✔ deriveAllergens: [] for a blob; one entry per concise allergen otherwise (1.87693ms)
+✔ buildImportDraftData: blob allergiesText does NOT seed a false allergy row (30.499017ms)
+✔ buildImportDraftData: concise multi-allergen text → one row per allergen (0.948111ms)
+✔ buildImportDraftData: therapyText parsed into structured terapia rows (one per drug) (23.343447ms)
+✔ #473: validated CF derives only an unambiguous encoded sex (0.57972ms)
+✔ #473: missing imported sex is an editable derived field with retained source (1.256616ms)
+✔ #473: invalid CF cannot invent sex and contradictory explicit sex remains untouched (1.229648ms)
+✔ #473: unheaded medication source remains a review inventory, not an administration (3.784622ms)
+✔ legacy draft reopening recovers missing source occurrences without overwriting review or inventing doses (49.251499ms)
+✔ missing narrative or a prose delimiter cannot silently lose a structured medication (1.849065ms)
+✔ a whole narrative adds prescriptions written outside the therapy section, keyed by source (6.447138ms)
+✔ only exact unambiguous fields cover an occurrence; variants and extra fields stay visible (0.9138ms)
+✔ duplicate extraction occurrences and malformed names remain accounted for, not actionable (0.417673ms)
+✔ one raw line cannot collapse two extracted drugs through shared or empty originalText (0.721217ms)
+✔ refresh retains reviewed values and exclusions, adds new variants once with stable proposal ids (5.908564ms)
+✔ identical groups aggregate provenance and reordering cannot manufacture prescriptions (2.813393ms)
+✔ a selected conflict from the same group authorizes only its exact extracted variant (1.288197ms)
+✔ server-owned extraction evidence cannot be forged in page or legacy autosave (1.79099ms)
+✔ legacy draft seeding includes structured inventory without headings or manufactured source text (2.827ms)
+✔ row keys ignore editable values and extraction object key order (0.476343ms)
+✔ partial versus richer extraction on a shared narrative line has distinct source identity (3.38785ms)
+✔ same-group selection cannot authorize a narrative dose from another extracted variant (0.892409ms)
+✔ confirmation cannot silently omit an extracted candidate; explicit deferral keeps its evidence (1.054334ms)
+ℹ tests 74
+ℹ suites 0
+ℹ pass 74
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 831.728356
+✔ accepts a canonical valid CF (2.36765ms)
+✔ normalizes case and surrounding whitespace (0.308191ms)
+✔ accepts an omocodia variant with recomputed control character (0.240137ms)
+✔ rejects a CF with a wrong control character (0.240612ms)
+✔ rejects malformed input (0.235505ms)
+✔ dose insulinica condizionale: conserva le fasce glicemia→unità senza inventare quantità fisse (33.922003ms)
+✔ dose insulinica condizionale: mantiene da verificare le fasce con estremi sovrapposti (7.167626ms)
+✔ dose insulinica condizionale: riconosce anche la notazione intervallo-freccia-dose (7.867976ms)
+✔ dose insulinica condizionale: una fascia invertita resta da verificare (1.040152ms)
+✔ #156 AC1/AC2: recognises therapy and yields one row per drug line (11.843039ms)
+✔ #156 AC3: KEPPRA structured fields (0.421712ms)
+✔ #156 AC4: multiple times are all extracted (0.496097ms)
+✔ #156 AC5: specific weekdays are captured (0.311711ms)
+✔ #156 AC6: incomplete line kept as da_verificare, original preserved, not dropped (4.108163ms)
+✔ #156 AC3: unusual dosage/quantity and empty class preserved (CETIRIZINA) (0.419987ms)
+✔ #156 AC10: no hardcoding — a DIFFERENT prescription of the same shape parses correctly (0.419858ms)
+✔ #156: every row keeps its original text verbatim (audit/reference) (5.7574ms)
+✔ #156: blank/empty text yields no rows (0.165524ms)
+✔ #274: free-text administration route is captured (per os, endovena, sottocute) (4.025563ms)
+✔ #274: full-word quantity units are captured (compressa/e, fiala/e, capsula/e) (0.788648ms)
+✔ #274: medicinale + quantitativo + via together upgrade the row to ok (0.252098ms)
+✔ #274: parenthesized route codes still work (no regression) (0.27895ms)
+✔ #296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia terminata) (4.846986ms)
+✔ 2026-10-11: un farmaco DOPO un paragrafo di prosa resta un farmaco (la prosa è saltata) (2.59319ms)
+✔ #296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati (2.221906ms)
+✔ #296 AC4: intestazione iniziale + riga vuota non termina il blocco (0.659589ms)
+✔ #296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_verificare (no drop) (1.38635ms)
+✔ AC1: ogni variante di intestazione non genera una riga farmaco (2.196867ms)
+✔ AC1: l'intestazione non interrompe l'elenco che la segue (1.479884ms)
+✔ AC2: una riga che prescrive resta un farmaco anche se inizia per "Terapia" (0.603842ms)
+✔ AC2: una riga di prosa clinica che nomina la terapia non viene scartata (0.414016ms)
+✔ explicit absence of therapy and inline headings do not create drug rows (5.567435ms)
+✔ negative therapy statements leave nearby prescriptions and ambiguous instructions for review (5.166028ms)
+✔ AC3: la forma non assorbe la riga; il resto finisce in note e la riga è da verificare (0.529582ms)
+✔ AC4: la via riconosciuta a parole non resta duplicata in note (0.438056ms)
+✔ AC4: note non ripete il nome del farmaco né i campi già mappati (0.279792ms)
+✔ AC4: un nome farmaco con caratteri speciali non rompe la pulizia di note (0.311438ms)
+✔ AC4: una posologia in lettere resta in note senza declassare una riga completa (4.490373ms)
+✔ multi-farmaco AC1: la forma non assorbe il nome del secondo farmaco (0.328638ms)
+✔ multi-farmaco AC2: il secondo farmaco resta leggibile nelle note (0.61259ms)
+✔ multi-farmaco AC3: nessuno split automatico, una riga in ingresso = una in uscita (0.509427ms)
+✔ multi-farmaco AC4: le forme legittime multi-token non regrediscono (0.460585ms)
+✔ AC4: un numero non collocato porta la riga a da_verificare (1.034085ms)
+✔ PO03: the administration list stops before monitoring instructions (0.289364ms)
+✔ PO03: explicit contiguous time lists retain every administration time (4.717495ms)
+✔ PO03: instructions retain their connectors and clock times after the list (0.756527ms)
+✔ PO03: a clock time introduced by clinical prose is not a schedule (1.222325ms)
+✔ PO03: alternatives and intervals remain whole instructions for review (0.989147ms)
+✔ PO03: an inferred form alone cannot turn a monitoring time into a schedule (0.352662ms)
+✔ #473: heading-free prescriptions retain quantity, schedules and source without guessing alternatives (0.628873ms)
+✔ isPlausibleAllergenText: rejects a multi-section narrative blob, accepts concise text (4.090732ms)
+✔ deriveAllergens: [] for a blob; one entry per concise allergen otherwise (1.695204ms)
+✔ buildImportDraftData: blob allergiesText does NOT seed a false allergy row (39.180021ms)
+✔ buildImportDraftData: concise multi-allergen text → one row per allergen (1.201437ms)
+✔ buildImportDraftData: therapyText parsed into structured terapia rows (one per drug) (26.839691ms)
+✔ #473: validated CF derives only an unambiguous encoded sex (0.848777ms)
+✔ #473: missing imported sex is an editable derived field with retained source (2.289747ms)
+✔ #473: invalid CF cannot invent sex and contradictory explicit sex remains untouched (3.546404ms)
+✔ #473: unheaded medication source remains a review inventory, not an administration (3.451602ms)
+✔ legacy draft reopening recovers missing source occurrences without overwriting review or inventing doses (63.867462ms)
+✔ missing narrative or a prose delimiter cannot silently lose a structured medication (2.304615ms)
+✔ a whole narrative adds prescriptions written outside the therapy section, keyed by source (5.113032ms)
+✔ only exact unambiguous fields cover an occurrence; variants and extra fields stay visible (0.589636ms)
+✔ duplicate extraction occurrences and malformed names remain accounted for, not actionable (0.448045ms)
+✔ one raw line cannot collapse two extracted drugs through shared or empty originalText (0.417868ms)
+✔ refresh retains reviewed values and exclusions, adds new variants once with stable proposal ids (3.595953ms)
+✔ identical groups aggregate provenance and reordering cannot manufacture prescriptions (4.064372ms)
+✔ a selected conflict from the same group authorizes only its exact extracted variant (2.702261ms)
+✔ server-owned extraction evidence cannot be forged in page or legacy autosave (2.788493ms)
+✔ legacy draft seeding includes structured inventory without headings or manufactured source text (3.032075ms)
+✔ row keys ignore editable values and extraction object key order (0.818269ms)
+✔ partial versus richer extraction on a shared narrative line has distinct source identity (2.885401ms)
+✔ same-group selection cannot authorize a narrative dose from another extracted variant (0.84331ms)
+✔ confirmation cannot silently omit an extracted candidate; explicit deferral keeps its evidence (1.419846ms)
+ℹ tests 74
+ℹ suites 0
+ℹ pass 74
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1081.924711
+
+FINAL SUBTASK CHECKPOINT: 74 pure tests PASS; backend tsc --noEmit PASS (exit0); scoped Prettier and diff-check PASS. Existing database-dependent tests await parent isolated PostgreSQL run. Report: backend-import-subtask-report.json.
