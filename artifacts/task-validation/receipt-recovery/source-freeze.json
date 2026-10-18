@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "baseSha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
+  "branch": "codex/recover-topology-receipt",
+  "attempt": 1,
+  "contractSha256": "47eaf91e4336741c3a96ae22e9022bae35aa2c392bf56f83cd28088a39528200",
+  "sources": {
+    "scripts/automation/recover-demo-topology-receipt.py": {
+      "sha256": "3cb5071bf61557d7f9a8621b7b58734a023d771f45f4a99a51b7318e506be3f8",
+      "bytes": 21307
+    },
+    "scripts/automation/recover-demo-topology-receipt.test.py": {
+      "sha256": "4b68ec110ded151aafd0c6b04385cb071d1d57c4659b007ba0511113ce0f5116",
+      "bytes": 22737
+    },
+    ".github/workflows/recover-demo-topology-receipt.yml": {
+      "sha256": "ecfb38397b67daac302fc47aced672e25dc2e162e883cd5a2e2b57a5669911d1",
+      "bytes": 1323
+    }
+  },
+  "evidence": {
+    "task-contract.md": {
+      "sha256": "47eaf91e4336741c3a96ae22e9022bae35aa2c392bf56f83cd28088a39528200",
+      "bytes": 4053
+    },
+    "author-report.md": {
+      "sha256": "352f71e1d0e897f094541fd4b3dc389652c15965fe95043d8a51efaeab03bd17",
+      "bytes": 3495
+    },
+    "author-offline-tests.txt": {
+      "sha256": "5d5a881250cc9c4c9f8ea106a3ba4c7f79f9340653ef91905387fc198b06bac0",
+      "bytes": 2887
+    }
+  },
+  "status": "author-frozen-pending-independent-QA"
+}

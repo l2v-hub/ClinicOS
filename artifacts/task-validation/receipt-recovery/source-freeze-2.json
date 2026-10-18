@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "baseSha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
+  "branch": "codex/recover-topology-receipt",
+  "attempt": 1,
+  "scopeAmendment1Sha256": "889482a49cab1820b1722c11d5b2d8b4d1f1e9d06fc7e1f5f679ec0af55a1aa2",
+  "sources": {
+    "scripts/automation/recover-demo-topology-receipt.py": {
+      "sha256": "3ec7e53de5ba576529a9967fb0131373c5dad86746a1db077b098a1ca8e39469",
+      "bytes": 30399
+    },
+    "scripts/automation/recover-demo-topology-receipt.test.py": {
+      "sha256": "f7e58d3c51d3a263dd9f1d836e0850f303758466fa294d4d3a94cdbe1ec3b437",
+      "bytes": 33357
+    },
+    ".github/workflows/recover-demo-topology-receipt.yml": {
+      "sha256": "f9e95751860295a92e00c4a5ab21883ce157dbf97c304bd4ca640e14ac5ee3f6",
+      "bytes": 1572
+    }
+  },
+  "evidence": {
+    "task-contract.md": {
+      "sha256": "47eaf91e4336741c3a96ae22e9022bae35aa2c392bf56f83cd28088a39528200",
+      "bytes": 4053
+    },
+    "scope-amendment-1.md": {
+      "sha256": "889482a49cab1820b1722c11d5b2d8b4d1f1e9d06fc7e1f5f679ec0af55a1aa2",
+      "bytes": 1619
+    },
+    "author-report.md": {
+      "sha256": "352f71e1d0e897f094541fd4b3dc389652c15965fe95043d8a51efaeab03bd17",
+      "bytes": 3495
+    },
+    "author-offline-tests.txt": {
+      "sha256": "5d5a881250cc9c4c9f8ea106a3ba4c7f79f9340653ef91905387fc198b06bac0",
+      "bytes": 2887
+    },
+    "source-freeze.json": {
+      "sha256": "6261ef744a1a7884827554cbf8d067b51788e90ef220b1b055f7b52b37a3eea1",
+      "bytes": 1265
+    },
+    "author-report-2.md": {
+      "sha256": "7cf55418661481130d0b40e993263306531f53dfb1fc7de9d83be5a98dccb788",
+      "bytes": 3409
+    },
+    "author-offline-tests-2.txt": {
+      "sha256": "fb85309a0b638e2f56e12cc2f70f6fd806b6ce52c536743a2ff74be27b81a004",
+      "bytes": 3601
+    }
+  },
+  "status": "amended-author-frozen-pending-independent-QA"
+}
