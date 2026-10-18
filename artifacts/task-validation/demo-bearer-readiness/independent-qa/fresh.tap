@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: unknown upstream keys and identity never enter minted receipt; clone and proxy cannot serialize
+ok 1 - unknown upstream keys and identity never enter minted receipt; clone and proxy cannot serialize
+  ---
+  duration_ms: 35.00693
+  type: 'test'
+  ...
+# Subtest: secret reflected in allowed branch-independent root blocks public serialization
+ok 2 - secret reflected in allowed branch-independent root blocks public serialization
+  ---
+  duration_ms: 4.076367
+  type: 'test'
+  ...
+# Subtest: late second repository access drift rejects even unchanged inventory
+ok 3 - late second repository access drift rejects even unchanged inventory
+  ---
+  duration_ms: 2.017811
+  type: 'test'
+  ...
+# Subtest: cross-kind duplicate domain and foreign instance environment reject
+ok 4 - cross-kind duplicate domain and foreign instance environment reject
+  ---
+  duration_ms: 2.108303
+  type: 'test'
+  ...
+# Subtest: content-length overflow rejects before any stream read
+ok 5 - content-length overflow rejects before any stream read
+  ---
+  duration_ms: 1.258819
+  type: 'test'
+  ...
+# Subtest: abort-style read rejection is constant and does not expose exception
+ok 6 - abort-style read rejection is constant and does not expose exception
+  ---
+  duration_ms: 0.837497
+  type: 'test'
+  ...
+# Subtest: false environment observations suppress both inventories and retain no authorization
+ok 7 - false environment observations suppress both inventories and retain no authorization
+  ---
+  duration_ms: 1.205447
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 174.600217
