@@ -1,0 +1,112 @@
+TAP version 13
+# Subtest: F1 independently hostile allowlist cannot auto-merge any trust root or .github file
+ok 1 - F1 independently hostile allowlist cannot auto-merge any trust root or .github file
+  ---
+  duration_ms: 74.189298
+  type: 'test'
+  ...
+# Subtest: F2 historical manual and normal ownership cannot be shortened by first adoption in any key
+ok 2 - F2 historical manual and normal ownership cannot be shortened by first adoption in any key
+  ---
+  duration_ms: 11.589035
+  type: 'test'
+  ...
+# Subtest: F3 same actor/reviewer/author with absent protection or approval never merges, including guard-time revocation
+ok 3 - F3 same actor/reviewer/author with absent protection or approval never merges, including guard-time revocation
+  ---
+  duration_ms: 17.945639
+  type: 'test'
+  ...
+# Subtest: F4 claim head drift recovery requires maintainer exact nonce and preserves consumed history; stale submit fails
+ok 4 - F4 claim head drift recovery requires maintainer exact nonce and preserves consumed history; stale submit fails
+  ---
+  duration_ms: 7.959252
+  type: 'test'
+  ...
+# Subtest: F4 stale QA worker cannot overwrite authenticated recovery through real CAS store
+ok 5 - F4 stale QA worker cannot overwrite authenticated recovery through real CAS store
+  ---
+  duration_ms: 16.403093
+  type: 'test'
+  ...
+# Subtest: F4 merge release rejects merged native subject and accepts open once only
+ok 6 - F4 merge release rejects merged native subject and accepts open once only
+  ---
+  duration_ms: 10.906361
+  type: 'test'
+  ...
+# Subtest: F5 submit persisted even when all three label POSTs fail; reconcile alone converges idempotently
+ok 7 - F5 submit persisted even when all three label POSTs fail; reconcile alone converges idempotently
+  ---
+  duration_ms: 109.561589
+  type: 'test'
+  ...
+# Subtest: F5 actual store distinguishes confirmed409, definite502, and uncertain timeout with no blind write retry
+ok 8 - F5 actual store distinguishes confirmed409, definite502, and uncertain timeout with no blind write retry
+  ---
+  duration_ms: 1.404632
+  type: 'test'
+  ...
+# Subtest: F6 provider credentials never reach model environment and explicit API conflict blocks finalize auth
+ok 9 - F6 provider credentials never reach model environment and explicit API conflict blocks finalize auth
+  ---
+  duration_ms: 3.677839
+  type: 'test'
+  ...
+# Subtest: F7 cached blobs are operation-scoped; mutable identity and changed pinned bytes fail in next operation
+ok 10 - F7 cached blobs are operation-scoped; mutable identity and changed pinned bytes fail in next operation
+  ---
+  duration_ms: 11.924731
+  type: 'test'
+  ...
+# Subtest: F7 isolated failed standalone write reloads authoritative state before a normal queue save; transient read remains waiting
+ok 11 - F7 isolated failed standalone write reloads authoritative state before a normal queue save; transient read remains waiting
+  ---
+  duration_ms: 6.430428
+  type: 'test'
+  ...
+# Subtest: F8 only exact optional Vercel is tolerated; empty required checks or Vercel-as-required blocks
+ok 12 - F8 only exact optional Vercel is tolerated; empty required checks or Vercel-as-required blocks
+  ---
+  duration_ms: 0.702077
+  type: 'test'
+  ...
+# Subtest: F9 fixed injected clock determines persisted QA ownership before callback
+ok 13 - F9 fixed injected clock determines persisted QA ownership before callback
+  ---
+  duration_ms: 11.488733
+  type: 'test'
+  ...
+# Subtest: Attempt allowances preserve old proof fields and exact history; fresh round never inherits terminal approval
+ok 14 - Attempt allowances preserve old proof fields and exact history; fresh round never inherits terminal approval
+  ---
+  duration_ms: 1.438329
+  type: 'test'
+  ...
+# Subtest: F1/F3 native human evidence rejects stale, dismissed, Bot, author, excluded actor and missing review protection
+ok 15 - F1/F3 native human evidence rejects stale, dismissed, Bot, author, excluded actor and missing review protection
+  ---
+  duration_ms: 1.39344
+  type: 'test'
+  ...
+# Subtest: F5 uncertain write can be reconciled by fresh read without reexecuting reservation
+ok 16 - F5 uncertain write can be reconciled by fresh read without reexecuting reservation
+  ---
+  duration_ms: 0.739107
+  type: 'test'
+  ...
+# Subtest: Audited extension command requires maintain/admin and exact next limit; manifest grants and changed prefix reject
+ok 17 - Audited extension command requires maintain/admin and exact next limit; manifest grants and changed prefix reject
+  ---
+  duration_ms: 6.60922
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 412.756122

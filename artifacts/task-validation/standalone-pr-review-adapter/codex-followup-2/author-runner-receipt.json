@@ -1,0 +1,31 @@
+{
+  "runner": "agent-team/src/bug-pipeline/process.mjs#createRunner",
+  "envMode": "verification",
+  "command": "node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs",
+  "result": {
+    "ok": true,
+    "exitCode": 0,
+    "tests": 715,
+    "passed": 712,
+    "failed": 0,
+    "skipped": 3
+  },
+  "childEnvironmentKeys": [
+    "AI_PROVIDER",
+    "AI_RUNTIME_SERVICE_TOKEN",
+    "AI_RUNTIME_URL",
+    "AUTH_MODE",
+    "CI",
+    "CLAUDE_CONFIG_DIR",
+    "CODEX_HOME",
+    "DATABASE_URL",
+    "DISABLE_AUTOUPDATER",
+    "HOME",
+    "LANG",
+    "NODE_ENV",
+    "PATH",
+    "VITE_API_URL"
+  ],
+  "childHasApiKey": false,
+  "finalizeTestEnvironment": "Each mocked finalize test passes an explicit per-test temporary HOME and empty synthetic CODEX_HOME; test cleanup removes the fixture."
+}

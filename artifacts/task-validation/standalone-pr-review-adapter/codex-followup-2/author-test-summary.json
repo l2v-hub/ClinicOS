@@ -1,0 +1,25 @@
+{
+  "focused": {
+    "command": "node --test --test-name-pattern 'finalize authentication|production finalize CLI dispatch|finalize CLI cannot process|concurrent production finalize' agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "outerHome": "/tmp/pr492-noauth-home",
+    "outerCodexHome": "unset",
+    "result": {
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "fullSuite": {
+    "command": "node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs",
+    "result": {
+      "tests": 715,
+      "passed": 712,
+      "failed": 0,
+      "skipped": 3,
+      "skipReason": "Existing native-Windows skips"
+    }
+  },
+  "runtime": "Node v24.19.0",
+  "diffCheck": "passed"
+}
