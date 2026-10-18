@@ -144,7 +144,7 @@
       },
       "subjectSha": "0f91a96e0a89010a6abc6a2e1d7319ceafe27933",
       "evidence": "independent-qa-followup-2/qa-report.md",
-      "completedAt": "2026-10-18T19:47:41.712Z",
+      "completedAt": "2026-10-18T19:50:05.655Z",
       "independentQaReportSha256": "405248704ed6891ea66fe05af0528ee6e32298a46f0c2288326652b8475ae7ab",
       "independentQaSealSha256": "0dcfae6966973b3e4d0ed4801ae29d321bdef49f29c44ced9f3d99dcfa3fb17f",
       "rootVerification": {
@@ -2974,9 +2974,7 @@
     "independent-qa/supporting-source-hashes.json": "45e190594525d1c66ee96e845f157610509ddee41574ec99f0b17d519460d3e0",
     "independent-qa/task-contract.md": "4af4e4513875a3da72c86a2f44967576cbac10a60135781087b765a55fa4614d",
     "independent-qa/test-results/browser-result.json": "e98722e24c05aba2d90e447b520d4e51fa484a78301b09ca0e3544a3d745671f",
-    "independent-qa/test-results/browser-run.log": "924560ab21e285ce6d6c126ce58a10d1b1b041cf0cefb58476c8c3efbf603274",
     "independent-qa/test-results/execution-summary.json": "89777ec4d85b7e736cefae04a8a5354854e7170e2d5f2240ac2aaf5dfb3f6637",
-    "independent-qa/test-results/full-state-local-validation.log": "d04235762441acacfbf5da53642eb555222a746e2550eae04da96fa7e0cc8556",
     "independent-qa/test-results/review-revisions.json": "a42547fd67b0fef2fa04b29dff219511172f4db49632e804106d5809b417eb55",
     "independent-qa/test-results/syntax-and-scope.json": "f68073a499e39a1091e465599d4687f6d19de602bb2c36f43eda7126572de356",
     "independent-qa/trace/trace.zip": "5fd7d8d77863a3e251c9363377d0088e551fae96412a4391b1a7cb9bcb70f5c1",
