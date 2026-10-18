@@ -174,7 +174,9 @@ test('reads fixed full inventory twice and checks trusted context three times', 
   assert.equal(result.inventory.projectId, TARGET.projectId);
   assert.equal(result.inventory.scopedInventory.repository, TARGET.repository);
   assert.equal(result.inventory.scopedInventory.domains[0].domain, TARGET.domain);
-  assert.equal(result.inventory.visiblePaginationComplete, true);
+  assert.equal(result.inventory.paginationComplete, true);
+  assert.equal(result.inventory.allVisibleEnvironmentsAccessible, true);
+  assert.equal('visiblePaginationComplete' in result.inventory, false);
   assert.equal(result.inventory.projectWideVisibility, 'unproven');
   assert.equal(result.inventory.serviceConnectAllowed, false);
   assert.equal(result.inventory.refusalReason, 'PROJECT_WIDE_VISIBILITY_UNPROVEN');
@@ -268,8 +270,11 @@ test('singleton demo and additional, forked, or inaccessible environments never 
     assert.equal(result.inventory.projectWideVisibility, 'unproven');
     assert.equal(result.inventory.serviceConnectAllowed, false);
     assert.equal(result.inventory.refusalReason, 'PROJECT_WIDE_VISIBILITY_UNPROVEN');
-    if (data.environments.some(({ canAccess }) => !canAccess))
-      assert.equal(result.inventory.visiblePaginationComplete, false);
+    assert.equal(result.inventory.paginationComplete, true);
+    assert.equal(
+      result.inventory.allVisibleEnvironmentsAccessible,
+      data.environments.every(({ canAccess }) => canAccess),
+    );
   }
 });
 
@@ -702,16 +707,23 @@ test('createClient sends real HTTP requests to a local fixture with no mutation 
   assert.ok(state.observed.every(({ query }) => !/mutation|serviceConnect/i.test(query)));
 });
 
-test('workflow is exact-main, inspect-only, credential-scoped, and concurrency-serialized', async () => {
+test('workflow is exact-main, inspect-only, credential-scoped, and independently serialized', async () => {
   const workflow = await readFile(
     new URL('../../.github/workflows/inspect-demo-source-topology.yml', import.meta.url),
     'utf8',
   );
+  const deployWorkflow = await readFile(
+    new URL('../../.github/workflows/deploy-backend.yml', import.meta.url),
+    'utf8',
+  );
+  const concurrencyGroup = (yaml) => yaml.match(/^  group: ([A-Za-z0-9-]+)$/m)?.[1];
   assert.match(workflow, /workflow_dispatch:/);
   assert.match(workflow, /inputs\.reviewed_sha == github\.sha/);
   assert.match(workflow, /github\.repository == 'l2v-hub\/ClinicOS'/);
   assert.match(workflow, /github\.ref == 'refs\/heads\/main'/);
-  assert.match(workflow, /group: railway-backend/);
+  assert.equal(concurrencyGroup(workflow), 'demo-source-topology');
+  assert.equal(concurrencyGroup(deployWorkflow), 'railway-backend');
+  assert.notEqual(concurrencyGroup(workflow), concurrencyGroup(deployWorkflow));
   assert.match(workflow, /cancel-in-progress: false/);
   assert.match(workflow, /DEMO_TOPOLOGY_OPERATION: inspect/);
   assert.match(workflow, /RAILWAY_TOKEN: \$\{\{ secrets\.RAILWAY_DEMO_TOKEN \}\}/);

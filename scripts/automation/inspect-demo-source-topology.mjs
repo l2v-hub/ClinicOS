@@ -218,7 +218,8 @@ async function snapshot(client) {
     services,
     scopedInventory: scoped,
     scopedInventorySha256: inventoryDigest(scoped),
-    visiblePaginationComplete: environments.every(({ canAccess }) => canAccess),
+    paginationComplete: true,
+    allVisibleEnvironmentsAccessible: environments.every(({ canAccess }) => canAccess),
     observedConstraints: [
       ...(environments.some(({ id }) => id !== TARGET.environmentId)
         ? ['OTHER_VISIBLE_ENVIRONMENTS']
