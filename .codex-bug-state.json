@@ -6405,7 +6405,7 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-18T17:40:12.288Z",
+  "updatedAt": "2026-10-18T17:49:49.702Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
@@ -9763,7 +9763,7 @@
       },
       "kind": "standalone-pr-review",
       "id": "standalone-pr-393",
-      "phase": "waiting-checks",
+      "phase": "waiting-review",
       "adoption": {
         "actor": "l2v-hub",
         "at": "2026-10-18T17:27:32.790Z",
@@ -9791,6 +9791,13 @@
           },
           "reason": "Unclaimed old-SHA request superseded after real negative feedback and verified code revision",
           "spentReviews": 0
+        },
+        {
+          "at": "2026-10-18T17:49:49.702Z",
+          "actor": "l2v-hub",
+          "previous": null,
+          "reason": "Fresh verified revision after actual Claude changes-requested; current native required checks passed.",
+          "spentReviews": 0
         }
       ],
       "reviewChannel": "github-comments",
@@ -9811,7 +9818,7 @@
         "active": true,
         "owner": "codex-cloud-after-claude",
         "nonce": "5ef4558e-2243-4380-8330-453cfa1df672",
-        "stage": "waiting-checks",
+        "stage": "awaiting-claude-review",
         "startedAt": "2026-10-18T16:47:23.897Z",
         "baseSha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
         "implementationStarted": false,
@@ -12957,7 +12964,26 @@
           "manifestSha256": "d2b3a7a63c3ffc35810310cd188d4bdee08a83e42808adca3b611ad13ea0a2b9"
         }
       ],
-      "reason": "Fresh source and independent local QA verified; current native CI must pass before the next Claude request."
+      "externalReview": {
+        "channel": "github-comments",
+        "status": "comment-requested",
+        "subjectSha": "d71fb06af9dc55f212714e73914edbe30674effe",
+        "requestId": "9bf8d255-c131-40e0-8fdd-51f75357f6a8",
+        "requestedAt": "2026-10-18T17:49:49.702Z"
+      },
+      "nativeCi": {
+        "sha": "d71fb06af9dc55f212714e73914edbe30674effe",
+        "verifiedAt": "2026-10-18T17:49:49.702Z",
+        "requiredChecks": [
+          "browser-e2e: SUCCESS",
+          "bug-pipeline-tests: SUCCESS",
+          "archive-tests: SUCCESS",
+          "frontend-tests: SUCCESS",
+          "gate: SUCCESS",
+          "secret-scan: SUCCESS",
+          "secret-scan: SUCCESS"
+        ]
+      }
     },
     {
       "schemaVersion": 1,
