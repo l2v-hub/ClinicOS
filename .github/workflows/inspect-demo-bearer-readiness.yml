@@ -1,0 +1,39 @@
+name: Inspect fixed demo bearer readiness
+on:
+  workflow_dispatch:
+    inputs:
+      reviewed_sha:
+        description: Exact reviewed current main commit SHA
+        type: string
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: demo-bearer-readiness
+  cancel-in-progress: false
+jobs:
+  inspect:
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      github.repository == 'l2v-hub/ClinicOS' &&
+      github.ref == 'refs/heads/main' &&
+      inputs.reviewed_sha == github.sha
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: 'glistening-friendship / demo'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Test fixed reader without credentials
+        run: node --test scripts/automation/configure-demo-source.test.mjs scripts/automation/inspect-demo-bearer-readiness.test.mjs
+      - name: Observe fixed demo bearer context without mutation
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+          CONFIGURE_DEMO_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+        run: node scripts/automation/inspect-demo-bearer-readiness.mjs

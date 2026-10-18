@@ -1,0 +1,106 @@
+[
+  {
+    "name": "workflow",
+    "ok": true,
+    "code": 0,
+    "error": null,
+    "counts": {
+      "tests": 122,
+      "pass": 122,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "command": "process.execPath",
+    "args": [
+      "--test",
+      "scripts/automation/configure-demo-source.test.mjs",
+      "scripts/automation/inspect-demo-bearer-readiness.test.mjs"
+    ],
+    "outputSha256": "33c0e077ef94da62be3364ed8a1e93384b4afee7ee77b945e0938ace2ccbbc1c",
+    "outputBytes": 10984
+  },
+  {
+    "name": "topology",
+    "ok": true,
+    "code": 0,
+    "error": null,
+    "counts": {
+      "tests": 20,
+      "pass": 20,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "command": "process.execPath",
+    "args": [
+      "--test",
+      "scripts/automation/inspect-demo-source-topology.test.mjs"
+    ],
+    "outputSha256": "4f7c43795102d7575a015bfeaac5cdef119144d973ba2e4aede0db02a8ed65ae",
+    "outputBytes": 1923
+  },
+  {
+    "name": "independent",
+    "ok": true,
+    "code": 0,
+    "error": null,
+    "counts": {
+      "tests": 24,
+      "pass": 24,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "command": "process.execPath",
+    "args": [
+      "--test",
+      "/workspace/.clinicos-cloud/495-continuation3-independent-qa-20261018/adversarial.test.mjs"
+    ],
+    "outputSha256": "f7760799f4a3854daa8925f74ddca0e67802507c4f2f1c975ed208d8b5a5ac18",
+    "outputBytes": 1363
+  },
+  {
+    "name": "browser",
+    "ok": true,
+    "code": 0,
+    "error": null,
+    "counts": {
+      "tests": 0,
+      "pass": 0,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "command": "process.execPath",
+    "args": [
+      "/workspace/.clinicos-cloud/495-continuation3-independent-qa-20261018/browser-lock.mjs"
+    ],
+    "outputSha256": "a93e704744d1cd0221637a8077912df78fec9e58d3bbabd8481bcd950955c2cd",
+    "outputBytes": 89
+  },
+  {
+    "name": "artifact-check",
+    "ok": true,
+    "code": 0,
+    "error": null,
+    "counts": {
+      "tests": 0,
+      "pass": 0,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "command": "/usr/bin/python3",
+    "args": [
+      "/workspace/.clinicos-cloud/495-continuation3-independent-qa-20261018/validate-artifacts.py"
+    ],
+    "outputSha256": "c0f930262c2c689e6c0fef99195c0c03acceb7818388577e9b09def9396b08ca",
+    "outputBytes": 334
+  }
+]

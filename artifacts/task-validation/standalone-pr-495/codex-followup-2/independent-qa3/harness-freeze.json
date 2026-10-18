@@ -1,0 +1,41 @@
+{
+  "sourceSha": "efd9e1a4e5ddab4488a1911f40718a14ec143014",
+  "frozenBeforeTests": true,
+  "files": [
+    {
+      "path": "boundary.mjs",
+      "sha256": "da436d73884d9076a442e91d97221e01c1612ab23b2b2bd2511d36f5b6fbe571",
+      "bytes": 3165
+    },
+    {
+      "path": "adversarial.test.mjs",
+      "sha256": "8543f784df4366d130314295a195f4f096f4318137739de44f2ceb180c46cf21",
+      "bytes": 7375
+    },
+    {
+      "path": "browser.mjs",
+      "sha256": "80c1c0f7f045c9fc556dad9f2a4e818fd0e19e4ea6fc105c62dd2e0ba8f44709",
+      "bytes": 6084
+    },
+    {
+      "path": "browser-lock.mjs",
+      "sha256": "ea70279ba85ec31e42a9a3799d43e1da10910d34bac805f63415e9bae6bb0a23",
+      "bytes": 326
+    },
+    {
+      "path": "validate-artifacts.py",
+      "sha256": "5c8f67602739eaad3b458647b098c469b4d2122b2080e5fd5592fc39309be7d8",
+      "bytes": 2342
+    },
+    {
+      "path": "run.mjs",
+      "sha256": "b24c00081db9890ec7dfccbb76ce5699969233210586ccc4bac60189c6c249be",
+      "bytes": 2567
+    },
+    {
+      "path": "run-attempt1.mjs",
+      "sha256": "d61ec205edcc80636e08b1918f03c7a6995a2b5e331c5f63964522a118192973",
+      "bytes": 2543
+    }
+  ]
+}
