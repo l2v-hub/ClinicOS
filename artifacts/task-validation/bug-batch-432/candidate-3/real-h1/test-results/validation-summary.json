@@ -1,0 +1,22 @@
+{
+  "verified": false,
+  "focusedOnly": true,
+  "targetedAssertionsPassed": true,
+  "results": [
+    {
+      "label": "migration",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "focused-real-h1",
+      "code": 0,
+      "signal": null
+    }
+  ],
+  "evidence": "evidence/",
+  "lifecycleAndScopeClean": true,
+  "limitations": [
+    "Independent QA, exact-SHA Claude review and production deployment are separate root-owned gates."
+  ]
+}

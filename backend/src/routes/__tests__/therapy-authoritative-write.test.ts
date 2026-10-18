@@ -7,8 +7,9 @@ import express from 'express';
 import type { Server } from 'node:http';
 import { prisma } from '../../lib/prisma.js';
 import therapyRouter from '../therapy.js';
-import { buildTherapySlotPage } from '../../therapies/therapy-slots.js';
+import { buildTherapySlotPage, isScheduledTherapySlot } from '../../therapies/therapy-slots.js';
 import { findTherapiesDue } from '../../therapies/due-therapy-query.js';
+import { administrationBody } from '../../../../frontend/src/lib/therapyAdministrationWrite.js';
 import { dayKey } from '../../ai/assistant/facility-signals.js';
 
 let server: Server;
@@ -342,6 +343,113 @@ test('a pending-only request cannot overwrite refusal; replay preserves its orig
   }
 });
 
+test('explicit client refusal correction requires an observed record and replays one immutable result', async () => {
+  const therapy = await prisma.patientTherapy.create({
+    data: {
+      patientId,
+      farmacoNome: 'Synthetic explicit correction',
+      dosaggio: '10 mg',
+      dataInizio: date,
+      fasceMattina: true,
+    },
+  });
+  const info = {
+    patientId,
+    therapyId: therapy.id,
+    date,
+    fascia: 'mattina',
+    scheduledTime: '08:00',
+  };
+  const correction = administrationBody(
+    info,
+    { kind: 'administered' },
+    { expectedStato: 'non_erogata', requestId: randomUUID() },
+  );
+  const post = (endpoint: string, body: unknown) =>
+    fetch(`${base}/therapy-slots/${endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Operator-Id': ownerOperatorId,
+        'X-Operator-Role': 'operatore',
+      },
+      body: JSON.stringify(body),
+    });
+  try {
+    assert.equal((await post('confirm', correction)).status, 409);
+    assert.equal(
+      await prisma.medicationAdministration.count({ where: { therapyId: therapy.id } }),
+      0,
+    );
+    const refusal = await post(
+      'not-administered',
+      administrationBody(
+        info,
+        { kind: 'not_administered', motivo: 'rifiutata_paziente', note: '' },
+        { requestId: randomUUID() },
+      ),
+    );
+    assert.equal(refusal.status, 200);
+    const refused = await refusal.json();
+    assert.equal(
+      (
+        await post(
+          'confirm',
+          administrationBody(info, { kind: 'administered' }, { requestId: randomUUID() }),
+        )
+      ).status,
+      409,
+    );
+    assert.equal(
+      (await post('not-administered', { ...correction, motivo: 'rifiuto' })).status,
+      400,
+    );
+    const [corrected, concurrent] = await Promise.all([
+      post('confirm', correction),
+      post('confirm', correction),
+    ]);
+    assert.equal(concurrent.status, 200);
+    assert.ok(
+      [corrected, concurrent].some(
+        (response) => response.headers.get('Idempotent-Replayed') === 'true',
+      ),
+    );
+    assert.equal(corrected.status, 200);
+    const first = await corrected.json();
+    assert.deepEqual(await concurrent.json(), first);
+    assert.equal(first.id, refused.id);
+    assert.equal(first.stato, 'erogata');
+    const replay = await post('confirm', correction);
+    assert.equal(replay.status, 200);
+    assert.equal(replay.headers.get('Idempotent-Replayed'), 'true');
+    assert.deepEqual(await replay.json(), first);
+    assert.equal((await post('confirm', { ...correction, requestId: randomUUID() })).status, 409);
+    assert.equal((await post('confirm', { ...correction, note: 'changed' })).status, 409);
+    assert.equal(
+      await prisma.medicationAdministration.count({ where: { therapyId: therapy.id } }),
+      1,
+    );
+    assert.equal(
+      await prisma.therapyAdministrationReceipt.count({
+        where: { actorId: ownerOperatorId, requestId: String(correction.requestId) },
+      }),
+      1,
+    );
+    await prisma.patient.update({ where: { id: patientId }, data: { registeredById: null } });
+    assert.equal((await post('confirm', correction)).status, 404);
+  } finally {
+    await prisma.patient.update({
+      where: { id: patientId },
+      data: { registeredById: ownerOperatorId },
+    });
+    await prisma.therapyAdministrationReceipt.deleteMany({
+      where: { patientId, result: { path: ['therapyId'], equals: therapy.id } },
+    });
+    await prisma.medicationAdministration.deleteMany({ where: { therapyId: therapy.id } });
+    await prisma.patientTherapy.delete({ where: { id: therapy.id } });
+  }
+});
+
 test('one-off explicit clocks survive empty flags across feed, summary, assistant and writes', async () => {
   const clocks = ['00:15', '08:45', '11:30', '14:20', '18:10'];
   const rows = [];
@@ -381,16 +489,113 @@ test('one-off explicit clocks survive empty flags across feed, summary, assistan
         administrationUnit: 'compressa',
       },
     });
+    rows.push(await create('8:30'));
+    const duplicate = await create('08:30');
+    rows.push(duplicate);
+    await prisma.therapySchedule.createMany({
+      data: [1, 2].map((quantityNumerator) => ({
+        therapyId: duplicate.id,
+        time: '08:30',
+        fascia: 'mattina',
+        quantityNumerator,
+        quantityDenominator: 1,
+        administrationUnit: 'compressa',
+      })),
+    });
+    await prisma.patientTherapy.update({
+      where: { id: rows[clocks.length + 1].id },
+      data: { fasceMattina: true, fasceSera: true },
+    });
     const ids = new Set(rows.map((row) => row.id));
-    const feed = (await read()).slots
+    const expectedClocks = [...clocks, '08:30'].sort();
+    const page = await read();
+    const feed = page.slots
+      .filter(isScheduledTherapySlot)
       .flatMap((s) => s.patients.flatMap((p) => p.administrations))
       .filter((a) => ids.has(a.therapyId));
-    assert.deepEqual(feed.map((a) => a.scheduledTime).sort(), [...clocks].sort());
+    assert.deepEqual(feed.map((a) => a.scheduledTime).sort(), expectedClocks);
     assert.ok(
       feed.every((a) => a.dosage === 'Dose sintetica prescritta' && a.quantityLabel === null),
     );
     const pending = (await due()).overdue.filter((a) => ids.has(a.therapyId));
-    assert.deepEqual(pending.map((a) => a.scheduledTime).sort(), [...clocks].sort());
+    assert.deepEqual(pending.map((a) => a.scheduledTime).sort(), expectedClocks);
+    const verification = page.slots.find((group) => group.kind === 'verification');
+    assert.ok(verification && verification.kind === 'verification');
+    assert.equal(verification.summary.total, 4);
+    const unresolved = verification.patients
+      .flatMap((patient) => patient.items)
+      .filter((item) => ids.has(item.therapyId));
+    assert.equal(unresolved.length, 4);
+    assert.ok(
+      unresolved.every(
+        (item) =>
+          item.scheduledTime === null &&
+          item.dosage === null &&
+          item.quantityLabel === null &&
+          !item.canAdminister,
+      ),
+    );
+    assert.equal((await due()).toVerifyCount, 4);
+    assert.deepEqual(
+      new Set((await due()).toVerify.map((item) => item.therapyId)),
+      new Set(unresolved.map((item) => item.therapyId)),
+    );
+    for (const item of unresolved)
+      for (const endpoint of ['confirm', 'not-administered']) {
+        const response = await fetch(`${base}/therapy-slots/${endpoint}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Operator-Id': ownerOperatorId,
+            'X-Operator-Role': 'operatore',
+          },
+          body: JSON.stringify({
+            patientId,
+            therapyId: item.therapyId,
+            date,
+            fascia: 'mattina',
+            scheduledTime: '08:30',
+            motivo: 'rifiuto',
+            expectedStato: 'da_erogare',
+            requestId: randomUUID(),
+          }),
+        });
+        assert.equal(response.status, 409);
+        assert.equal(
+          await prisma.medicationAdministration.count({ where: { therapyId: item.therapyId } }),
+          0,
+        );
+      }
+    const pagedVerification = [];
+    let cursor: string | undefined;
+    let pages = 0;
+    do {
+      const chunk = await buildTherapySlotPage(
+        date,
+        { patientIds: [patientId] },
+        { limit: 2, ...(cursor ? { cursor } : {}) },
+        actor,
+      );
+      const group = chunk.slots.find((entry) => entry.kind === 'verification');
+      if (group?.kind === 'verification') {
+        if (!cursor) assert.equal(group.summary.total, 4);
+        pagedVerification.push(
+          ...group.patients.flatMap((patient) => patient.items).map((item) => item.therapyId),
+        );
+      }
+      pages++;
+      cursor = chunk.pageInfo.nextCursor ?? undefined;
+      assert.ok(pages < 20, 'candidate cursor must advance');
+    } while (cursor);
+    assert.equal(pagedVerification.length, 4);
+    assert.deepEqual(new Set(pagedVerification), new Set(unresolved.map((item) => item.therapyId)));
+    const denied = await buildTherapySlotPage(date, { patientIds: [] }, { limit: 100 }, actor);
+    assert.deepEqual(denied.slots, []);
+    assert.equal(
+      (await findTherapiesDue(date, { patientIds: [] }, new Date(`${date}T20:00:00Z`), 15))
+        .toVerifyCount,
+      0,
+    );
     const therapy = rows[2];
     const body = {
       patientId,

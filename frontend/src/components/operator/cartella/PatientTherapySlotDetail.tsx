@@ -1,3 +1,4 @@
+import { parseTherapySlots } from '../../../lib/therapySlotPage';
 // Dettaglio di un orario del calendario terapie del paziente: le terapie programmate a quell'ora e,
 // per i ruoli che possono registrarla, la somministrazione con le stesse azioni del giro terapia
 // (TherapyGiroRows) e gli stessi endpoint. Nessuna regola nuova: stato e conferme vengono dal server.
@@ -5,7 +6,7 @@
 // segnata come non somministrata (prima stava nello Storico; il server lo consente, una dose
 // somministrata resta immutabile).
 import { useEffect, useRef, useState } from 'react';
-import type { MotivoNonErogazione, TherapyActionInfo, TherapySlot } from '../../../types';
+import type { MotivoNonErogazione, TherapyActionInfo } from '../../../types';
 import type { CalendarOccurrence } from '../../../lib/patientTherapyCalendar';
 import { uncoveredPrescriptions } from '../../../lib/therapyCompleteness';
 import { API_URL } from '../../../config';
@@ -82,19 +83,21 @@ export function PatientTherapySlotDetail({
 
   useEffect(() => {
     let active = true;
-    cachedGetJson<TherapySlot[]>(`${API_URL}/therapy-slots?date=${date}`).then(
-      (slots) => {
-        if (active)
-          setLoaded({
-            key: requestKey,
-            status: 'ready',
-            time: patientGiroTime(Array.isArray(slots) ? slots : [], patientId, time),
-          });
-      },
-      () => {
-        if (active) setLoaded({ key: requestKey, status: 'error' });
-      },
-    );
+    cachedGetJson<unknown>(`${API_URL}/therapy-slots?date=${date}`)
+      .then(parseTherapySlots)
+      .then(
+        (slots) => {
+          if (active)
+            setLoaded({
+              key: requestKey,
+              status: 'ready',
+              time: patientGiroTime(slots, patientId, time),
+            });
+        },
+        () => {
+          if (active) setLoaded({ key: requestKey, status: 'error' });
+        },
+      );
     return () => {
       active = false;
     };
@@ -104,9 +107,10 @@ export function PatientTherapySlotDetail({
     info: TherapyActionInfo,
     outcome: Parameters<typeof recordAdministration>[1],
     confirmed = false,
+    expectedStato: 'da_erogare' | 'non_erogata' = 'da_erogare',
   ) {
     setFeedback(null);
-    const result = await recordAdministration(info, outcome, { confirmed });
+    const result = await recordAdministration(info, outcome, { confirmed, expectedStato });
     setFeedback(
       result.ok
         ? {
@@ -126,7 +130,7 @@ export function PatientTherapySlotDetail({
     const key = `${info.therapyId}|${info.fascia}|${info.scheduledTime ?? info.ora}`;
     if (sendingRetry) return;
     setSendingRetry(key);
-    await record(info, { kind: 'administered' }, confirmed);
+    await record(info, { kind: 'administered' }, confirmed, 'non_erogata');
     setSendingRetry(null);
   }
 

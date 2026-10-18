@@ -17,6 +17,8 @@ export type AdministrationOutcome =
 export type AdministrationWriteResult = { ok: true } | { ok: false; message: string };
 
 export interface AdministrationWriteOptions {
+  /** Only the explicit correction of an observed refusal uses non_erogata. */
+  expectedStato?: 'da_erogare' | 'non_erogata';
   /** L'operatore ha confermato nel dialogo (richiesto dal server per i ruoli «con conferma»). */
   confirmed?: boolean;
   /** Keep the same key when an uncertain request is retried. */
@@ -54,7 +56,7 @@ export function administrationBody(
     therapyId: info.therapyId,
     date: info.date,
     fascia: info.fascia,
-    expectedStato: 'da_erogare',
+    expectedStato: options.expectedStato ?? 'da_erogare',
     ...(options.requestId ? { requestId: options.requestId } : {}),
     ...(info.scheduledTime !== undefined ? { scheduledTime: info.scheduledTime } : {}),
     ...(outcome.kind === 'administered' && info.measuredGlucose !== undefined

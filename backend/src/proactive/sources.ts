@@ -9,7 +9,7 @@ import { residentScopeWhere } from '../access-scope/resident-access-scope.js';
 import { loadConsegnaFeed } from '../consegne/read-service.js';
 import { parseConsegnaFeedQuery } from '../consegne/query.js';
 import { diaryEntriesUrgencySettled } from '../patients/diary-ack-service.js';
-import { buildTherapySlots } from '../therapies/therapy-slots.js';
+import { buildTherapySlots, isScheduledTherapySlot } from '../therapies/therapy-slots.js';
 import { therapySlotPatientAccess } from '../routes/therapy.js';
 import { unreadNotesWhere } from '../routes/note.js';
 import type { WorkflowState } from '../skills/types.js';
@@ -275,7 +275,7 @@ const administrationsDue: Collector = async ({ operator, now, env }) => {
   const ahead = intEnv(env, 'PROACTIVE_DUE_AHEAD_MIN', 60);
   const slots = await buildTherapySlots(date, therapySlotPatientAccess(operator as Operator));
   const events: ProactiveEvent[] = [];
-  for (const slot of slots) {
+  for (const slot of slots.filter(isScheduledTherapySlot)) {
     const at = romeInstant(date, slot.ora);
     const minutes = (now.getTime() - at.getTime()) / 60_000;
     const overdue = minutes > grace;

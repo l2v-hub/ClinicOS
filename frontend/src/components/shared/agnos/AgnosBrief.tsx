@@ -50,6 +50,11 @@ interface BriefConsegna {
   oraScadenza: string | null;
 }
 
+interface BriefVerification {
+  therapyId: string;
+  drugName: string;
+  patientName: string;
+}
 interface FacilitySnapshot {
   occupancy: {
     totalBeds: number;
@@ -57,6 +62,8 @@ interface FacilitySnapshot {
     freeBeds: number;
     occupancyPct: number;
   } | null;
+  therapiesToVerifyCount?: number;
+  therapiesToVerify?: BriefVerification[];
   therapiesOverdueCount: number;
   therapiesOverdueSampleCount: number;
   therapiesOverdue: BriefTherapy[];
@@ -68,6 +75,8 @@ interface FacilitySnapshot {
 
 interface OperatorQueue {
   windowMinutes: number;
+  therapiesToVerifyCount?: number;
+  therapiesToVerify?: BriefVerification[];
   therapiesOverdueCount: number;
   therapiesOverdueSampleCount: number;
   therapiesOverdue: BriefTherapy[];
@@ -259,11 +268,14 @@ function BriefRow({
   );
 }
 
-function FacilitySnapshotBody({ snapshot }: { snapshot: FacilitySnapshot }) {
+export function FacilitySnapshotBody({ snapshot }: { snapshot: FacilitySnapshot }) {
   const { occupancy } = snapshot;
   const terapie = snapshot.therapiesOverdue[0];
   const consegna = snapshot.consegneOverdue[0];
-  const tutto = snapshot.therapiesOverdueCount === 0 && snapshot.consegneOverdueCount === 0;
+  const tutto =
+    snapshot.therapiesOverdueCount === 0 &&
+    snapshot.consegneOverdueCount === 0 &&
+    (snapshot.therapiesToVerifyCount ?? 0) === 0;
   return (
     <>
       <div className="agnos-brief__eyebrow">{EYEBROW.facility}</div>
@@ -288,6 +300,17 @@ function FacilitySnapshotBody({ snapshot }: { snapshot: FacilitySnapshot }) {
       ) : (
         <>
           <div className="agnos-brief__eyebrow">Da controllare</div>
+          {(snapshot.therapiesToVerifyCount ?? 0) > 0 && (
+            <BriefRow
+              title="Terapie da verificare"
+              meta={
+                snapshot.therapiesToVerify?.[0]
+                  ? `${snapshot.therapiesToVerify[0].drugName} · ${snapshot.therapiesToVerify[0].patientName} · programmazione da verificare`
+                  : 'Programmazione da verificare'
+              }
+              badge={<span className="badge badge--amber">{snapshot.therapiesToVerifyCount}</span>}
+            />
+          )}
           {snapshot.therapiesOverdueCount > 0 && (
             <BriefRow
               title="Terapie in ritardo"
@@ -306,7 +329,9 @@ function FacilitySnapshotBody({ snapshot }: { snapshot: FacilitySnapshot }) {
               badge={<span className="badge badge--amber">{snapshot.consegneOverdueCount}</span>}
             />
           )}
-          {(snapshot.therapiesOverdueCount > (terapie ? 1 : 0) ||
+          {((snapshot.therapiesToVerifyCount ?? 0) >
+            ((snapshot.therapiesToVerify?.length ?? 0) ? 1 : 0) ||
+            snapshot.therapiesOverdueCount > (terapie ? 1 : 0) ||
             snapshot.consegneOverdueCount > (consegna ? 1 : 0)) && (
             <div className="ai-asst__partial" role="status" aria-live="polite">
               Riepilogo parziale: mostrato un esempio per categoria. Apri la sezione per vedere
@@ -324,14 +349,15 @@ function FacilitySnapshotBody({ snapshot }: { snapshot: FacilitySnapshot }) {
   );
 }
 
-function OperatorQueueBody({
+export function OperatorQueueBody({
   queue,
   onNavigate,
 }: {
   queue: OperatorQueue;
   onNavigate?: (n: AssistantNav) => void;
 }) {
-  const terapieTot = queue.therapiesOverdueCount + queue.therapiesDueSoonCount;
+  const terapieTot =
+    queue.therapiesOverdueCount + queue.therapiesDueSoonCount + (queue.therapiesToVerifyCount ?? 0);
   const consegneTot = queue.myLikelyConsegneCount + queue.otherOpenConsegneCount;
   const totale = terapieTot + consegneTot;
 
@@ -339,6 +365,15 @@ function OperatorQueueBody({
   const push = (node: React.ReactNode) => {
     if (righe.length < ROWS_MAX) righe.push(node);
   };
+  for (const t of queue.therapiesToVerify ?? [])
+    push(
+      <BriefRow
+        key={`verify-${t.therapyId}`}
+        title={`${t.drugName} · ${t.patientName}`}
+        meta="Programmazione da verificare · nessuna somministrazione disponibile"
+        badge={<span className="badge badge--amber">da verificare</span>}
+      />,
+    );
   for (const t of queue.therapiesOverdue)
     push(
       <BriefRow

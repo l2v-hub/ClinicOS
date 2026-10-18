@@ -1,0 +1,13 @@
+{
+  "relocatedUnchanged": [
+    "test-results",
+    "evidence",
+    "inventory-browser",
+    "retry-browser",
+    "additional-video",
+    "internal-video",
+    "import-video",
+    "evidence-manifest.json"
+  ],
+  "reason": "Canonical fixed output paths must be fresh; previous development proof retained with original bytes under pre-run-development. No historical verdict rewritten."
+}

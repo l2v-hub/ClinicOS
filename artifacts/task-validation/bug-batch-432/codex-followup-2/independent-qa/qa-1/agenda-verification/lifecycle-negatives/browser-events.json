@@ -1,0 +1,61 @@
+{
+  "errors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)"
+  ],
+  "failedResponses": [
+    {
+      "url": "http://127.0.0.1:3432/therapy-slots/page?date=2026-10-18&limit=100",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:3432/therapy-slots/page?date=2026-10-18&limit=100&cursor=eyJ2IjozLCJiaW5kaW5nIjp7InZpZXciOiJ0aGVyYXB5Iiwic2NvcGUiOiJqRGtMR2lZdFdpTXIwbjlIc0tEMlN6bGdzczZsSUxCTll4UXktM2J3SFBjIiwiY29udGV4dElkIjoiMWRlY2Q2OTgtNzM5Yi00MDc2LWJiOTUtOWJhMTdkMDBmNWNhIiwiY29udGV4dFZlcnNpb24iOiIwIiwicmV2aXNpb24iOiIwIiwib3JkZXIiOnsiY3JpdGVyaW9uIjoibmFtZSIsImRpcmVjdGlvbiI6ImFzYyJ9LCJmaWx0ZXJzIjp7fSwiYXNPZiI6IjIwMjYtMTAtMTgiLCJlcG9jaCI6eyJyb3N0ZXIiOiIyODcyIiwidGhlcmFweSI6IjE4ODYifX0sImFuY2hvciI6eyJwYXRpZW50SWQiOiJjbXZlOGxveXUwMDAwYmRwNnBpNmlwaDViIiwidGhlcmFweUlkIjoicWE2LTZhNWJkMDY3LTRlYjYtNDNmZC1iMzllLTRkYTZjMWQxZDZlOS1tbW0tc2NoZWR1bGVkLTA5OCJ9fQ",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:3432/therapy-slots/page?date=2026-10-19&limit=100",
+      "status": 403
+    },
+    {
+      "url": "http://127.0.0.1:3432/therapy-slots/page?date=2026-10-18&limit=100&cursor=eyJ2IjozLCJiaW5kaW5nIjp7InZpZXciOiJ0aGVyYXB5Iiwic2NvcGUiOiJqRGtMR2lZdFdpTXIwbjlIc0tEMlN6bGdzczZsSUxCTll4UXktM2J3SFBjIiwiY29udGV4dElkIjoiMWRlY2Q2OTgtNzM5Yi00MDc2LWJiOTUtOWJhMTdkMDBmNWNhIiwiY29udGV4dFZlcnNpb24iOiIwIiwicmV2aXNpb24iOiIwIiwib3JkZXIiOnsiY3JpdGVyaW9uIjoibmFtZSIsImRpcmVjdGlvbiI6ImFzYyJ9LCJmaWx0ZXJzIjp7fSwiYXNPZiI6IjIwMjYtMTAtMTgiLCJlcG9jaCI6eyJyb3N0ZXIiOiIyODcyIiwidGhlcmFweSI6IjE4ODYifX0sImFuY2hvciI6eyJwYXRpZW50SWQiOiJjbXZlOGxveXUwMDAwYmRwNnBpNmlwaDViIiwidGhlcmFweUlkIjoicWE2LTZhNWJkMDY3LTRlYjYtNDNmZC1iMzllLTRkYTZjMWQxZDZlOS1tbW0tc2NoZWR1bGVkLTA5OCJ9fQ",
+      "status": 409
+    }
+  ],
+  "expectedFailures": [
+    {
+      "url": "http://127.0.0.1:3432/therapy-slots/page?date=2026-10-18&limit=100",
+      "status": 503,
+      "cause": "controlled lifecycle error",
+      "observed": false,
+      "transportFailure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:3432/therapy-slots/page?date=2026-10-18&limit=100",
+      "status": 503,
+      "cause": "controlled lifecycle error",
+      "observed": true
+    },
+    {
+      "url": "http://127.0.0.1:3432/therapy-slots/page?date=2026-10-18&limit=100&cursor=eyJ2IjozLCJiaW5kaW5nIjp7InZpZXciOiJ0aGVyYXB5Iiwic2NvcGUiOiJqRGtMR2lZdFdpTXIwbjlIc0tEMlN6bGdzczZsSUxCTll4UXktM2J3SFBjIiwiY29udGV4dElkIjoiMWRlY2Q2OTgtNzM5Yi00MDc2LWJiOTUtOWJhMTdkMDBmNWNhIiwiY29udGV4dFZlcnNpb24iOiIwIiwicmV2aXNpb24iOiIwIiwib3JkZXIiOnsiY3JpdGVyaW9uIjoibmFtZSIsImRpcmVjdGlvbiI6ImFzYyJ9LCJmaWx0ZXJzIjp7fSwiYXNPZiI6IjIwMjYtMTAtMTgiLCJlcG9jaCI6eyJyb3N0ZXIiOiIyODcyIiwidGhlcmFweSI6IjE4ODYifX0sImFuY2hvciI6eyJwYXRpZW50SWQiOiJjbXZlOGxveXUwMDAwYmRwNnBpNmlwaDViIiwidGhlcmFweUlkIjoicWE2LTZhNWJkMDY3LTRlYjYtNDNmZC1iMzllLTRkYTZjMWQxZDZlOS1tbW0tc2NoZWR1bGVkLTA5OCJ9fQ",
+      "status": 503,
+      "cause": "controlled lifecycle error",
+      "observed": true
+    },
+    {
+      "url": "http://127.0.0.1:3432/therapy-slots/page?date=2026-10-19&limit=100",
+      "status": 403,
+      "cause": "controlled lifecycle error",
+      "observed": true
+    },
+    {
+      "url": "http://127.0.0.1:3432/therapy-slots/page?date=2026-10-18&limit=100&cursor=eyJ2IjozLCJiaW5kaW5nIjp7InZpZXciOiJ0aGVyYXB5Iiwic2NvcGUiOiJqRGtMR2lZdFdpTXIwbjlIc0tEMlN6bGdzczZsSUxCTll4UXktM2J3SFBjIiwiY29udGV4dElkIjoiMWRlY2Q2OTgtNzM5Yi00MDc2LWJiOTUtOWJhMTdkMDBmNWNhIiwiY29udGV4dFZlcnNpb24iOiIwIiwicmV2aXNpb24iOiIwIiwib3JkZXIiOnsiY3JpdGVyaW9uIjoibmFtZSIsImRpcmVjdGlvbiI6ImFzYyJ9LCJmaWx0ZXJzIjp7fSwiYXNPZiI6IjIwMjYtMTAtMTgiLCJlcG9jaCI6eyJyb3N0ZXIiOiIyODcyIiwidGhlcmFweSI6IjE4ODYifX0sImFuY2hvciI6eyJwYXRpZW50SWQiOiJjbXZlOGxveXUwMDAwYmRwNnBpNmlwaDViIiwidGhlcmFweUlkIjoicWE2LTZhNWJkMDY3LTRlYjYtNDNmZC1iMzllLTRkYTZjMWQxZDZlOS1tbW0tc2NoZWR1bGVkLTA5OCJ9fQ",
+      "status": 409,
+      "observed": true,
+      "cause": "real owned SQL roster epoch mutation"
+    }
+  ],
+  "administrationPosts": []
+}

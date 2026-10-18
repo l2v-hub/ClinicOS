@@ -1,0 +1,28 @@
+{
+  "command": [
+    "node",
+    "e2e/qa-bug-batch-432.mjs",
+    "--test"
+  ],
+  "environmentNames": [
+    "HOME",
+    "HTTPS_PROXY",
+    "HTTP_PROXY",
+    "LANG",
+    "LC_ALL",
+    "NODE_EXTRA_CA_CERTS",
+    "NO_PROXY",
+    "PATH",
+    "PLAYWRIGHT_BROWSERS_PATH",
+    "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH",
+    "SSL_CERT_FILE",
+    "http_proxy",
+    "https_proxy",
+    "no_proxy"
+  ],
+  "startedAt": "2026-10-17T09:34:11.030011+00:00",
+  "globalLock": "owned internally by canonical for full stack lifecycle",
+  "externalProviderCalls": false,
+  "qaEnvironmentCorrection": "Explicit PLAYWRIGHT_BROWSERS_PATH exported before importing Playwright; existing pinned source unchanged. Prior entire failed execution retained under canonical-run-1-env-failure.",
+  "ffmpegExecutable": "/usr/bin/ffmpeg"
+}

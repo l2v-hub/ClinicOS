@@ -117,3 +117,31 @@ test('a late write response cannot report success in a different operator sessio
   assert.equal(result.ok, false);
   if (!result.ok) assert.match(result.message, /sessione è cambiata/);
 });
+
+test('uncertain explicit correction keeps its nonce separate from pending confirmation across reload storage', async () => {
+  const requests: Record<string, unknown>[] = [];
+  globalThis.fetch = (async (_input: unknown, init?: RequestInit) => {
+    requests.push(JSON.parse(String(init?.body)));
+    if (requests.length === 2) throw new Error('correction response lost');
+    return new Response('{}', { status: 200 });
+  }) as typeof fetch;
+  await recordAdministration(info, { kind: 'administered' });
+  await recordAdministration(info, { kind: 'administered' }, { expectedStato: 'non_erogata' });
+  const entry = [...stored.entries()].find(
+    ([, value]) => JSON.parse(value).requestId === requests[1].requestId,
+  );
+  assert.ok(entry);
+  stored.set(
+    entry[0],
+    JSON.stringify({ ...JSON.parse(entry[1]), requestId: 'correction-after-reload' }),
+  );
+  await recordAdministration(
+    info,
+    { kind: 'administered' },
+    { expectedStato: 'non_erogata', confirmed: true },
+  );
+  assert.equal(requests[0].expectedStato, 'da_erogare');
+  assert.equal(requests[1].expectedStato, 'non_erogata');
+  assert.notEqual(requests[0].requestId, requests[1].requestId);
+  assert.equal(requests[2].requestId, 'correction-after-reload');
+});

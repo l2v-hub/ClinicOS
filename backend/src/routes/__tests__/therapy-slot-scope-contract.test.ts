@@ -72,7 +72,7 @@ test('assistant therapy queue is exact-counted, bounded and declares sampled res
   assert.doesNotMatch(assistant, /buildTherapySlots/);
   assert.match(dueQuery, /COUNT\(\*\) OVER \(PARTITION BY bucket\)/);
   assert.match(dueQuery, /sample_rank <= \$\{boundedSample\}/);
-  assert.match(dueQuery, /truncated: overdueCount > overdueRows\.length/);
+  assert.match(dueQuery, /truncated:\s*overdueCount > overdueRows\.length/);
   assert.match(assistant, /therapiesOverdueSampleCount/);
   assert.match(assistant, /truncated:\s*therapies\.truncated/);
 });

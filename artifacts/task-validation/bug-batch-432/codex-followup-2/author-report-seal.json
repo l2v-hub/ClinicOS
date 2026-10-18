@@ -1,0 +1,35 @@
+{
+  "kind": "author metadata seal; independent QA6 pending",
+  "createdAtUtc": "2026-10-18T19:30:02.321623+00:00",
+  "sourceFrozenAtUtc": "2026-10-18T19:24:21.003348+00:00",
+  "changedSourceDigest": "1101ac764318611bfac1e4799c245823a23cad4fd19b48b6dbd940ffe99ad95f",
+  "sourceFiles": {
+    "frontend/src/App.tsx": "020e996d5ff30db6ea8d6fa7a13dc6fa481456c429f261981a950f2fd49d0870",
+    "frontend/src/components/admin/AdminAgenda.tsx": "909ba22d122fb4a04ce6608ffd602acb090f80889ad3a84de6e5aa429e414d07",
+    "frontend/src/components/operator/OperatorAgenda.tsx": "672bc1ede22e0be2402608fb26f376053b0102abffb8e8957e38baf6fee141d9",
+    "frontend/src/components/shared/AgendaTherapyVerification.tsx": "ecfc25c50a42be9dddea0c23ceeceace7db98a2bdcb72b607f7f4d961265dd8c",
+    "frontend/src/components/shared/__tests__/agendaTherapyVerification.test.ts": "1f1798ddb883efaefdf222d2e1ea8ec0cc65d56f82f17538c85178f4223d5589",
+    "frontend/src/lib/__tests__/therapyNavigationGuard.test.ts": "0d0e604d18dc896681aad4b45f08e08faa2d1839c73a529c3a1731909411e273"
+  },
+  "files": {
+    "source-handoff.json": "efa47da8e919a991da813693c87f518f112e92be34cb5b96b8119377f482680c",
+    "task-contract.md": "ff8582a11ec7d10fef17e3660b5adc443f3881562a06c379f150245377cd9e9c",
+    "plan.md": "6ac455c4ea1bbd77da2c709d88c23bd13a3ea5ca4d075e271a1da71ad5b6b597",
+    "analysis.md": "0ab00a8b521d77077c3141f258e6e3ab37c3e440701d82d39d1f79cf359b2b11",
+    "run-author.mjs": "e6f1d8b4aa5a89763d8732bf745c0da038f91f004c5b7e7f33d1b182f2de9e0d",
+    "clinical-browser.mjs": "3940a6ebec298059ae97e7b3a0b5d0999b632b7220e2c28bf8ca81108ad8639a",
+    "agenda-verification-browser.mjs": "dca1cc172708bee1a3e3f5f827f301a000d4e5ea737325c5c57c7d501dbdc980",
+    "implementation-manifest.json": "a2f3cf76c2b3dcc9364a7bd3b4fbe391d5e0a0c5e73f03f5bae079c0574150a7",
+    "parent-input-manifest.json": "e3fd1ec6f3420b3d811d1712e1e60a7a05e0ff85342188a22a0e4f88a16fe08e",
+    "parent-proof-manifest.json": "26580ab64ccf5796ce2878034798732861eb2ac2c307b7f8e66ffe530ecdbb59",
+    "author-artifact-audit.json": "f6fadc6d0d2cd924367888259c8f26a00db0a35f8a8962a1cf7f5626b344137c",
+    "author-validation.md": "ce4690bf9bdb1b5a15cb2b219f38583561fbda44953ec78010066a8f207edffb"
+  },
+  "frozenExistingMetadataUnchangedDuringReport": true,
+  "sourceStillMatchesFrozenHandoff": true,
+  "authorMediaAuditComplete": true,
+  "independentQaCertified": false,
+  "qa5RemainsFailed": true,
+  "priorProofFilesVerifiedAtFreeze": 7218,
+  "operationsAfterFreeze": "New metadata reports only; no source/test/harness/runtime/state/GitHub writes"
+}

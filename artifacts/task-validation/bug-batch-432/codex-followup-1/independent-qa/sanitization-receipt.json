@@ -1,0 +1,8 @@
+[
+  {
+    "source": "snapshot/artifacts/task-validation/bug-batch-432/test-results/backend-unit.txt",
+    "originalSha256": "34a08080e0f120bf401738be25c3f1c6ab1ef11bfdaf5c5969ab6e4632075a89",
+    "publishedSha256": "a45e8cd63a059743c50e329d9fb1059149b76898a0ab057221db29270c7cc12d",
+    "scope": "signed synthetic session/connection/runtime fixture values redacted; redundant broad-suite structured diagnostic lines removed; assertions/results/media unchanged"
+  }
+]

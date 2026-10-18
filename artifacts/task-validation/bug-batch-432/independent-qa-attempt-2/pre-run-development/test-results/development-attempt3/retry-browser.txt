@@ -1,0 +1,49 @@
+{
+  "patientId": "cmvc4xnof0000sop93p1ut0fe",
+  "therapyId": "cmvc4xnr00001sop9gp6afzt7",
+  "requests": [
+    {
+      "patientId": "cmvc4xnof0000sop93p1ut0fe",
+      "therapyId": "cmvc4xnr00001sop9gp6afzt7",
+      "date": "2026-10-17",
+      "fascia": "mattina",
+      "expectedStato": "da_erogare",
+      "scheduledTime": "08:00",
+      "requestId": "db086544-0598-4e55-94d6-178e285eac66"
+    },
+    {
+      "patientId": "cmvc4xnof0000sop93p1ut0fe",
+      "therapyId": "cmvc4xnr00001sop9gp6afzt7",
+      "date": "2026-10-17",
+      "fascia": "mattina",
+      "expectedStato": "da_erogare",
+      "scheduledTime": "08:00",
+      "requestId": "db086544-0598-4e55-94d6-178e285eac66"
+    }
+  ],
+  "intentionalNetworkFailures": 1,
+  "visibleRequests": [],
+  "firstServerResponse": {
+    "id": "cmvc4xs0l000c1pp92fcmb9nr",
+    "therapyId": "cmvc4xnr00001sop9gp6afzt7",
+    "patientId": "cmvc4xnof0000sop93p1ut0fe",
+    "farmacoNome": "QA retry dose",
+    "farmacoDose": "1 compressa",
+    "farmacoVia": "orale",
+    "date": "2026-10-17",
+    "fascia": "mattina",
+    "ora": "08:00",
+    "stato": "erogata",
+    "operatoreId": "SIM-NURSE-1",
+    "operatoreNome": "Infermiere 1",
+    "confirmedAt": "2026-10-17T08:29:11.060Z",
+    "doseContext": null,
+    "motivo": null,
+    "note": null,
+    "createdAt": "2026-10-17T08:29:11.061Z",
+    "updatedAt": "2026-10-17T08:29:11.061Z"
+  },
+  "replayHeader": "true",
+  "pass": false,
+  "error": "locator.click: Timeout 25000ms exceeded.\nCall log:\n  - waiting for locator('button[data-time=\"10:00\"]')\n    - locator resolved to <button type=\"button\" data-time=\"10:00\" aria-expanded=\"false\" aria-haspopup=\"dialog\" data-date=\"2026-10-17\" data-testid=\"therapy-calendar-cell\" class=\"therapy-calendar-cell is-late\" aria-label=\"2026-10-17, ore 10:00: QA visible retry dose, 1 dosi, 1 in ritardo. Apri dettagli\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div class=\"modal-overlay\">…</div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <div role=\"dialog\" tabindex=\"-1\" aria-modal=\"true\" aria-labelledby=\"_r_3_\" class=\"modal-box therapy-calendar-dialog therapy-calendar-dialog--patient\">…</div> from <div class=\"modal-overlay\">…</div> subtree intercepts pointer events\n  2 × retrying click action\n      - waiting 100ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <header class=\"therapy-calendar-dialog__head\">…</header> from <div class=\"modal-overlay\">…</div> subtree intercepts pointer events\n  11 × retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div class=\"modal-overlay\">…</div> intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div role=\"dialog\" tabindex=\"-1\" aria-modal=\"true\" aria-labelledby=\"_r_3_\" class=\"modal-box therapy-calendar-dialog therapy-calendar-dialog--patient\">…</div> from <div class=\"modal-overlay\">…</div> subtree intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <header class=\"therapy-calendar-dialog__head\">…</header> from <div class=\"modal-overlay\">…</div> subtree intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <header class=\"therapy-calendar-dialog__head\">…</header> from <div class=\"modal-overlay\">…</div> subtree intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <div class=\"modal-overlay\">…</div> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n"
+}

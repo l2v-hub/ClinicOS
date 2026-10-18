@@ -1,0 +1,16 @@
+{
+  "verdict": "FAILED VALIDATION",
+  "sealedAtUtc": "2026-10-18T18:37:05.685796+00:00",
+  "reservationNonce": "e647ae24-ea51-4e3e-b5f3-ae31c4dd4724",
+  "head": "34c865233df53a3930f29c8b7befc02208588d64",
+  "changedSourceDigest": "333b7c06f4d16e1ba54f857f594093008758e2a2165c3962a623e82f9d6a57f0",
+  "entireInputDigest": "9bea28c5e24825a6da9217a16fee7a8131a511c74f5c4989c63525b81ecc3851",
+  "artifactManifestSha256": "26746b8e3a75b35c4eaaeef155e72e22e6108cd807b06764d6eb0da8c2a3b6bd",
+  "reportSha256": "57c54824572e909b9848c7954c4e8605feadb55adc2b27caa86da7987011f36e",
+  "integritySha256": "bf759874dbd48df411e8fa47dd5897d100ec8e36dbce1fde7aa9efaab2eb4d16",
+  "finalPublicFileCount": 79,
+  "allFilesAtMost25MiB": true,
+  "sourceAndAll7119PriorProofBytesUnchanged": true,
+  "ownedRuntimeRemovedAndLockReleased": true,
+  "writesStoppedAfterSeal": true
+}

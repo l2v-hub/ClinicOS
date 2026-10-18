@@ -1,0 +1,8 @@
+{
+  "verified": true,
+  "scope": "Supplementary static report viewer of already executed results; no product test replay",
+  "reloadPreservedMeasuredValues": true,
+  "issueRows": 7,
+  "consoleErrors": [],
+  "responseFailures": []
+}

@@ -1,3 +1,8 @@
+import { isScheduledTherapySlot, type TherapyReadGroup } from '../../types';
+import {
+  AgendaTherapyVerification,
+  type AgendaTherapyVerificationFeed,
+} from '../shared/AgendaTherapyVerification';
 import { useState, useMemo, Fragment, useEffect } from 'react';
 import { appointmentLanding, type PatientLanding } from '../../lib/patientTargetResolver';
 import type {
@@ -32,6 +37,7 @@ import { useRecencyClock } from '../../lib/useRecencyClock';
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
 
 interface OperatorAgendaProps {
+  verificationFeed: AgendaTherapyVerificationFeed;
   operatoreId: string;
   nomeOperatore: string;
   operatori: Operatore[];
@@ -44,7 +50,7 @@ interface OperatorAgendaProps {
   onRetryAppointments?: () => void;
   onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;
   onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
-  therapySlots?: TherapySlot[];
+  therapySlots?: TherapyReadGroup[];
   therapyDate?: string;
   loadingTherapySlots?: boolean;
   therapyLoadError?: string | null;
@@ -138,6 +144,7 @@ export function OperatorAgenda({
   onConfirmTherapy,
   onNotAdministeredTherapy,
   onLoadTherapySlots,
+  verificationFeed,
 }: OperatorAgendaProps) {
   // Creazione appuntamenti: la GUI la nasconde se il ruolo non la consente (il backend decide).
   const canCreateAppointment = useCan('appointments.create');
@@ -160,7 +167,7 @@ export function OperatorAgenda({
   const therapyLoadError = showTherapies && therapyDateMatches ? providedTherapyError : null;
   const therapySlots =
     showTherapies && therapyDateMatches && !providedTherapyLoading && !providedTherapyError
-      ? providedTherapySlots
+      ? providedTherapySlots?.filter(isScheduledTherapySlot)
       : undefined;
 
   useEffect(() => {
@@ -410,6 +417,11 @@ export function OperatorAgenda({
           </button>
         </div>
       )}
+      <AgendaTherapyVerification
+        active={view === 'giornaliero'}
+        date={isoDate(refDate)}
+        feed={verificationFeed}
+      />
       {loadingTherapySlots && <div className="empty-state-card">Caricamento terapie…</div>}
       {!loadingTherapySlots && therapyLoadError && (
         <div className="empty-state-card" role="alert">

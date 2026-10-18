@@ -1,3 +1,4 @@
+import { TherapyVerificationPanel } from './TherapyVerificationPanel';
 import { useId } from 'react';
 import { IcoArrow, IcoClock, IcoPill } from '../../icons';
 import type { ScadenzaTerapia } from '../../lib/dashboardTherapies';
@@ -137,6 +138,7 @@ export function DashboardTherapyDeadlines({ summary, onOpenTherapy, onSelectPazi
           </button>
         </div>
       </header>
+      <TherapyVerificationPanel groups={summary.verificationGroups ?? []} />
 
       {summary.inCorso ? (
         <p className="therapy-deadlines__message" role="status">

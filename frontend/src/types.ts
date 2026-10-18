@@ -1169,7 +1169,35 @@ export interface TherapySlotSummary {
   pending: number;
 }
 
+export interface TherapyVerificationItem {
+  therapyId: string;
+  drugName: string;
+  status: 'to_verify';
+  reason: 'missing_time' | 'invalid_time' | 'conflicting_schedule';
+  scheduledTime: null;
+  quantityLabel: null;
+  dosage: null;
+  canAdminister: false;
+}
+export interface TherapyVerificationGroup {
+  kind: 'verification';
+  id: 'therapy-verification';
+  date: string;
+  label: 'Da verificare';
+  fascia: null;
+  ora: null;
+  summary: { total: number; verification: number };
+  patients: Array<
+    Omit<TherapySlotPatient, 'administrations'> & { items: TherapyVerificationItem[] }
+  >;
+}
+export type TherapyReadGroup = TherapySlot | TherapyVerificationGroup;
+export function isScheduledTherapySlot(group: TherapyReadGroup): group is TherapySlot {
+  return group.kind !== 'verification';
+}
+
 export interface TherapySlot {
+  kind?: 'scheduled';
   id: string;
   fascia: FasciaOrariaTerapia;
   label: string;
@@ -1188,7 +1216,7 @@ export interface TherapySlotPageInfo {
 
 export interface TherapySlotPageResponse {
   roster?: RosterMetadata;
-  slots: TherapySlot[];
+  slots: TherapyReadGroup[];
   pageInfo: TherapySlotPageInfo;
 }
 

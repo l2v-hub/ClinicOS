@@ -1,0 +1,17 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 25000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Terapie da verificare 2026-10-18' }).getByText('QA independent missing', { exact: true }) to be visible
+
+    at verifyPanel (/workspace/.clinicos-cloud/pr483-followup-independent-qa-20261018/independent-extra-browser.mjs:30:168)
+    at <anonymous> (/workspace/.clinicos-cloud/pr483-followup-independent-qa-20261018/independent-extra-browser.mjs:64:35) {
+  log: [
+    "  - waiting for getByRole('region', { name: 'Terapie da verificare 2026-10-18' }).getByText('QA independent missing', { exact: true }) to be visible"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.19.0

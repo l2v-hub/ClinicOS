@@ -1,0 +1,45 @@
+✔ facility day crosses midnight in Rome before UTC, including the winter year boundary (19.320382ms)
+✔ facility clock follows spring and autumn DST changes without using the host clock (0.411544ms)
+✔ nighttime therapy and handover signals compare local clinical times consistently (1.136929ms)
+✔ AC7: la chiave esatta distingue due dosaggi dello stesso farmaco (2.894175ms)
+✔ AC7: senza dosaggio ripiega su una risoluzione dello stesso farmaco invece di arrendersi (0.360417ms)
+✔ AC7: un dosaggio che non combacia ripiega comunque sul farmaco (0.209514ms)
+✔ AC7: il ripiego regge i nomi con spazi — e il vecchio taglio al primo spazio no (0.627124ms)
+✔ AC7: il nome e normalizzato come in anagrafica (maiuscole, spazi ridondanti) (0.399054ms)
+✔ AC7: un farmaco assente resta assente — il ripiego non inventa una risoluzione (0.644945ms)
+✔ AC7: su piu' righe dello stesso farmaco il ripiego e stabile (0.520575ms)
+✔ AC7: mappa vuota — nessuna risoluzione, nessuna eccezione (0.205148ms)
+✔ uncertain scheduled writes retry the same intent key and retain pending-state precondition (101.725294ms)
+✔ reload storage restores the nonce while outcome and actor remain isolated; no clinical text is stored (15.604002ms)
+✔ a role change during request preparation prevents a clinical write under the next identity (2.441851ms)
+✔ a late write response cannot report success in a different operator session (2.175877ms)
+✔ complete inventory keeps every one of 103 prescriptions, inactive and every regimen included (66.029196ms)
+✔ short terminal page and wrong active/inactive counts never yield a complete inventory (2.662108ms)
+✔ foreign patient and repeated prescription IDs are rejected without displaying prior pages (1.752184ms)
+✔ inactive inventory validates state and zero active count (1.511726ms)
+✔ complete inventory does not return page one on a later HTTP failure (5.285422ms)
+✔ complete print read rejects a short terminal response rather than silently omitting a medicine (2.905221ms)
+✔ old partial or foreign-patient prefetch snapshots cannot be presented as complete (0.527634ms)
+✔ week keeps PRN applying only later in the week once, without adding scheduled doses (3.438715ms)
+✔ loaded slot missing a prescribed drug retains it as read-only source data, not a fabricated action (18.906319ms)
+✔ therapy page loader returns the complete patient-scoped clinical list (53.541959ms)
+✔ therapy page loader rejects a repeating cursor instead of looping forever (2.280711ms)
+✔ therapy page loader carries every server filter on the first page (1.669793ms)
+✔ therapy plan and emergency print require every page, never a manual partial plan (22.030813ms)
+✔ therapy failures are announced and never rendered as empty clinical results (3.364379ms)
+✔ medication administration history follows the bounded opaque cursor feed (8.594787ms)
+✔ complete printable inventory rejects foreign patient (0.880912ms)
+✔ complete printable inventory rejects wrong state counts (0.542323ms)
+✔ complete printable inventory rejects repeated prescription (1.273495ms)
+✔ complete printable inventory rejects short terminal page (1.723697ms)
+✔ failed printable inventory can retry and never returns a partial page (0.987987ms)
+✔ printable inventory rejects changed page totals and empty nonterminal pages (2.205112ms)
+✔ a rejected short printable snapshot is evicted so retry reads repaired server data (0.85005ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 814.477652

@@ -1,7 +1,8 @@
+import { TherapyVerificationPanel } from '../shared/TherapyVerificationPanel';
 import { useEffect, useMemo, useState } from 'react';
 import type {
   TherapyActionInfo,
-  TherapySlot,
+  TherapyReadGroup,
   TherapySlotPageInfo,
   MotivoNonErogazione,
 } from '../../types';
@@ -9,7 +10,6 @@ import { PageHeader } from '../shared/PageHeader';
 import { RosterOrderControl } from '../shared/RosterOrderControl';
 import { TherapyGiroRows, type FiltroStato } from './TherapyGiroRows';
 import { TherapyWeekCalendar } from './TherapyWeekCalendar';
-import { localIsoDate } from '../../lib/appointmentRange';
 import { isCalendarDate, shiftCalendarDate } from '../../lib/patientTherapyCalendar';
 import { giroTimeDone, giroTimes, initialGiroTime } from '../../lib/therapyGiro';
 import { weekDays } from '../../lib/therapyWeek';
@@ -22,7 +22,7 @@ import {
   type AdministrationOutcome,
 } from '../../lib/therapyAdministrationWrite';
 import { getCurrentOperator } from '../../lib/operatorSession';
-import { facilityLocalMinute } from '../../lib/facilityTime';
+import { facilityLocalDate, facilityLocalMinute } from '../../lib/facilityTime';
 import { initialCurrentGiroTime } from '../../lib/therapyGiro';
 import { lateMinutes } from '../../lib/therapyDoseStatus';
 import './TherapyRoundsPage.css';
@@ -50,7 +50,7 @@ export interface TherapyRoundsEntry {
 }
 
 interface Props {
-  slots: TherapySlot[];
+  slots: TherapyReadGroup[];
   loading: boolean;
   error: string | null;
   pageInfo: TherapySlotPageInfo;
@@ -87,7 +87,7 @@ export function TherapyRoundsPage({
   onOpenPatient,
 }: Props) {
   const [date, setDate] = useState(
-    () => calendarState?.date ?? entry?.date ?? loadedDate ?? localIsoDate(),
+    () => calendarState?.date ?? entry?.date ?? loadedDate ?? facilityLocalDate(),
   );
   // Ruolo «con conferma» (supervisore): dopo il dialogo di conferma la registrazione parte da qui
   // con `confirmed: true` (il server la rifiuta senza); poi il giro si ricarica dal server.
@@ -204,7 +204,7 @@ export function TherapyRoundsPage({
   }
   if (!entryPending && ready && times.length > 0 && !times.some((t) => t.ora === selected))
     setSelected(
-      date === localIsoDate()
+      date === facilityLocalDate()
         ? initialCurrentGiroTime(times, facilityLocalMinute().slice(11, 16))
         : initialGiroTime(times),
     );
@@ -315,9 +315,9 @@ export function TherapyRoundsPage({
             <div className="giro-tools__right">
               {giro ? (
                 <DateNav
-                  isToday={date === localIsoDate()}
+                  isToday={date === facilityLocalDate()}
                   onPrev={() => changeDate(shiftCalendarDate(date, -1))}
-                  onToday={() => changeDate(localIsoDate())}
+                  onToday={() => changeDate(facilityLocalDate())}
                   onNext={() => changeDate(shiftCalendarDate(date, 1))}
                   date={date}
                   onDateChange={changeDate}
@@ -327,11 +327,11 @@ export function TherapyRoundsPage({
                 />
               ) : (
                 <DateNav
-                  isToday={weekDays(weekOf).includes(localIsoDate())}
+                  isToday={weekDays(weekOf).includes(facilityLocalDate())}
                   onPrev={() => (setCalendarOpen(null), setWeekOf(shiftCalendarDate(weekOf, -7)))}
                   onToday={() => {
                     setCalendarOpen(null);
-                    setWeekOf(localIsoDate());
+                    setWeekOf(facilityLocalDate());
                   }}
                   onNext={() => (setCalendarOpen(null), setWeekOf(shiftCalendarDate(weekOf, 7)))}
                   prevLabel="Settimana precedente"
@@ -355,6 +355,7 @@ export function TherapyRoundsPage({
           </div>
         </details>
       </div>
+      {giro && ready && <TherapyVerificationPanel groups={slots} />}
       {giro && showOrder && (
         <div id="giro-order">
           <RosterOrderControl />

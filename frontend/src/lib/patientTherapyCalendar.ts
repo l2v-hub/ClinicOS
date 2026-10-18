@@ -1,3 +1,4 @@
+import { isScheduledTherapySlot, type TherapyReadGroup } from '../types';
 import type {
   PatientTherapyAPI,
   TherapyAdministration,
@@ -144,6 +145,54 @@ export function buildPatientTherapyDay(
       continue;
     }
 
+    if (therapy.tipo === 'una_tantum') {
+      const normalize = (value: string | null | undefined) => {
+        const clock = value?.replace(/^ +| +$/g, '');
+        return clock && /^([01]?\d|2[0-3]):[0-5]\d$/.test(clock) ? clock.padStart(5, '0') : null;
+      };
+      const time = normalize(therapy.orarioSomministrazione);
+      const band = time
+        ? time >= '05:00' && time < '11:00'
+          ? 'mattina'
+          : time >= '11:00' && time < '14:00'
+            ? 'pranzo'
+            : time >= '14:00' && time < '18:00'
+              ? 'pomeriggio'
+              : time >= '18:00' && time < '22:00'
+                ? 'sera'
+                : 'notte'
+        : null;
+      if (
+        !time ||
+        (therapy.schedules?.length ?? 0) > 1 ||
+        therapy.schedules?.some(
+          (schedule) => normalize(schedule.time) !== time || schedule.fascia !== band,
+        )
+      ) {
+        warn(
+          'Da verificare: orario mancante, non valido o pianificazione contraddittoria. Nessuna dose disponibile.',
+        );
+        continue;
+      }
+      const schedule = therapy.schedules?.[0];
+      day.events.push({
+        ...medication,
+        id: `${therapy.id}:one-time`,
+        time,
+        oneTime: true,
+        dose: schedule ? scheduleDose(schedule) : medication.dose,
+        strength: schedule
+          ? computeEquivalent(
+              schedule.quantityNumerator,
+              schedule.quantityDenominator,
+              therapy.commercialStrengthValue,
+              therapy.commercialStrengthUnit,
+            )
+          : null,
+      });
+      continue;
+    }
+
     if (therapy.schedules?.length) {
       let invalidTime = false;
       therapy.schedules.forEach((schedule, index) => {
@@ -168,15 +217,14 @@ export function buildPatientTherapyDay(
                   therapy.commercialStrengthValue,
                   therapy.commercialStrengthUnit,
                 ),
-          oneTime: therapy.tipo === 'una_tantum',
+          oneTime: false,
         });
       });
       if (invalidTime) warn('Uno o più orari da verificare; gli orari validi sono nel calendario.');
       continue;
     }
 
-    const raw =
-      therapy.tipo === 'una_tantum' ? therapy.orarioSomministrazione : therapy.orarioSpecifico;
+    const raw = therapy.orarioSpecifico;
     const times = raw?.trim() ? [...new Set(raw.split(',').map((time) => time.trim()))] : [];
     if (!times.length) {
       warn(fasciaDescription(therapy));
@@ -187,7 +235,7 @@ export function buildPatientTherapyDay(
         ...medication,
         id: `${therapy.id}:legacy:${time}`,
         time,
-        oneTime: therapy.tipo === 'una_tantum',
+        oneTime: false,
       });
     }
     if (times.some((time) => !isTime(time)))
@@ -214,10 +262,10 @@ export interface CalendarDoseState {
  * Indice dello stato delle dosi di un paziente in un giorno: per terapia+ora e, come ripiego per le
  * prescrizioni senza orari strutturati, per terapia quando ha una sola dose quel giorno.
  */
-export function calendarDoseStates(slots: TherapySlot[], patientId: string) {
+export function calendarDoseStates(slots: TherapyReadGroup[], patientId: string) {
   const byTime = new Map<string, CalendarDoseState>();
   const byTherapy = new Map<string, CalendarDoseState[]>();
-  for (const slot of slots) {
+  for (const slot of slots.filter(isScheduledTherapySlot)) {
     for (const patient of slot.patients ?? []) {
       if (patient.patientId !== patientId) continue;
       for (const administration of patient.administrations) {

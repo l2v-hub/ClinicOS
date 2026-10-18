@@ -1,19 +1,40 @@
 import { Prisma } from '@prisma/client';
 
-/** Same one-off clock/band contract as oneTimeSlot; aliases belong to the bounded readers. */
+/** These expressions use the pt alias shared by the bounded readers. */
+export function normalizedTherapyClockSql(
+  value: Prisma.Sql = Prisma.sql`pt."orarioSomministrazione"`,
+) {
+  return Prisma.sql`CASE WHEN btrim(${value}) ~ '^([01]?[0-9]|2[0-3]):[0-5][0-9]$'
+    THEN lpad(btrim(${value}), 5, '0') ELSE NULL END`;
+}
+
+export function oneTimeFasciaSql() {
+  const time = normalizedTherapyClockSql();
+  return Prisma.sql`CASE
+    WHEN ${time} BETWEEN '05:00' AND '10:59' THEN 'mattina'
+    WHEN ${time} BETWEEN '11:00' AND '13:59' THEN 'pranzo'
+    WHEN ${time} BETWEEN '14:00' AND '17:59' THEN 'pomeriggio'
+    WHEN ${time} BETWEEN '18:00' AND '21:59' THEN 'sera'
+    ELSE 'notte' END`;
+}
+
+export function oneTimeSchedulableSql() {
+  return Prisma.sql`(${normalizedTherapyClockSql()} IS NOT NULL
+    AND (SELECT count(*) FROM "TherapySchedule" count_schedule WHERE count_schedule."therapyId" = pt.id) <= 1
+    AND NOT EXISTS (SELECT 1 FROM "TherapySchedule" conflict
+      WHERE conflict."therapyId" = pt.id AND (
+        ${normalizedTherapyClockSql(Prisma.sql`conflict.time`)} IS DISTINCT FROM ${normalizedTherapyClockSql()}
+        OR conflict.fascia <> ${oneTimeFasciaSql()})))`;
+}
+
+/** Missing/null clocks are explicitly verification, never SQL UNKNOWN and silently omitted. */
+export function oneTimeVerificationSql() {
+  return Prisma.sql`(pt.tipo = 'una_tantum' AND NOT ${oneTimeSchedulableSql()})`;
+}
+
 export function therapyBandEnabledSql() {
   return Prisma.sql`CASE WHEN pt.tipo = 'una_tantum' THEN
-    pt."orarioSomministrazione" ~ '^([01][0-9]|2[0-3]):[0-5][0-9]$'
-    AND NOT EXISTS (
-      SELECT 1 FROM "TherapySchedule" conflict
-      WHERE conflict."therapyId" = pt.id AND conflict.time <> pt."orarioSomministrazione"
-    )
-    AND band.fascia = CASE
-      WHEN pt."orarioSomministrazione" BETWEEN '05:00' AND '10:59' THEN 'mattina'
-      WHEN pt."orarioSomministrazione" BETWEEN '11:00' AND '13:59' THEN 'pranzo'
-      WHEN pt."orarioSomministrazione" BETWEEN '14:00' AND '17:59' THEN 'pomeriggio'
-      WHEN pt."orarioSomministrazione" BETWEEN '18:00' AND '21:59' THEN 'sera'
-      ELSE 'notte' END
+    ${oneTimeSchedulableSql()} AND band.fascia = ${oneTimeFasciaSql()}
     ELSE band.enabled END`;
 }
 
@@ -22,6 +43,17 @@ export interface TherapyPatientAccess {
   patientIds?: readonly string[] | null;
   /** Used by ordinary REST operators whose patient ownership is stored relationally. */
   registeredById?: string;
+}
+
+/** One row per authorized ambiguous one-off; no band/schedule join can multiply it. */
+export function oneTimeVerificationWhereSql(date: string, access: TherapyPatientAccess) {
+  const weekday = new Date(`${date}T00:00:00.000Z`).getUTCDay() || 7;
+  return Prisma.sql`pt.stato = 'attiva' AND pt."dataSomministrazione" = ${date}
+    AND ${oneTimeVerificationSql()}
+    AND (pt."giorniSettimana" IS NULL OR btrim(pt."giorniSettimana") = ''
+      OR (',' || regexp_replace(pt."giorniSettimana", '[[:space:]]+', '', 'g') || ',') LIKE ${`%,${weekday},%`})
+    ${Array.isArray(access.patientIds) ? (access.patientIds.length ? Prisma.sql`AND pt."patientId" IN (${Prisma.join([...access.patientIds])})` : Prisma.sql`AND FALSE`) : Prisma.empty}
+    ${access.registeredById ? Prisma.sql`AND p."registeredById" = ${access.registeredById}` : Prisma.empty}`;
 }
 
 /** Bound therapy candidates to the requested day before Prisma loads any relations. */

@@ -1,0 +1,53 @@
+{
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "HIGH",
+      "acceptanceCriterion": "AC4",
+      "title": "Actual operator and admin agendas omit authorized one-off verification prescriptions",
+      "sourceDigest": "333b7c06f4d16e1ba54f857f594093008758e2a2165c3962a623e82f9d6a57f0",
+      "locations": [
+        {
+          "file": "frontend/src/App.tsx",
+          "line": 2028
+        },
+        {
+          "file": "frontend/src/App.tsx",
+          "line": 3602
+        },
+        {
+          "file": "frontend/src/App.tsx",
+          "line": 3860
+        },
+        {
+          "file": "frontend/src/components/admin/AdminAgenda.tsx",
+          "line": 378
+        },
+        {
+          "file": "frontend/src/components/operator/OperatorAgenda.tsx",
+          "line": 400
+        }
+      ],
+      "expected": {
+        "authorizedReadOnlyVerificationPrescriptions": 5,
+        "visibleInBothAgendas": 5,
+        "persistsAfterReload": true
+      },
+      "actual": {
+        "visibleOperatorAgenda": 0,
+        "visibleAdminAgenda": 0,
+        "sameAfterReload": true,
+        "weekCalendarShowsAll5": true,
+        "sqlAndTypedFeedContainAll5": true
+      },
+      "minimalFixScope": "Wire authorized read-only verification groups and date/loading/error/pagination lifecycle to actual agenda mounts; preserve UX447 dedicated timed-therapy UI and ACL. No new clinical mapping or administration action.",
+      "evidence": [
+        "independent-outcomes.json",
+        "independent-extra/admin-agenda/admin-agenda-verification-omitted.png",
+        "independent-extra/operator-week-agenda/operator-agenda-omitted-after-reload.png",
+        "independent-extra/operator-week-agenda/week-verification.png"
+      ],
+      "verdict": "FAILED VALIDATION"
+    }
+  ]
+}

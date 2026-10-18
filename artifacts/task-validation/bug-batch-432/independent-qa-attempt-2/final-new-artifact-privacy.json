@@ -1,0 +1,11 @@
+{
+  "scannedTextAndZipMembers": 45,
+  "findings": [],
+  "invalidArchives": [],
+  "valuesPrinted": false,
+  "previousScans": [
+    "historical-privacy-scan.json",
+    "canonical-run-1-privacy.json"
+  ],
+  "unexecutedScenariosNotCertified": true
+}

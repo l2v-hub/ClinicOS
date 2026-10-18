@@ -1,0 +1,51 @@
+{
+  "checkedAtUtc": "2026-10-18T18:32:05.456514+00:00",
+  "head": "34c865233df53a3930f29c8b7befc02208588d64",
+  "changedApplicationAndTestFileCount": 41,
+  "changedSourceDigest": "333b7c06f4d16e1ba54f857f594093008758e2a2165c3962a623e82f9d6a57f0",
+  "sourcePhaseOrigins": {
+    "qa-4": {
+      "inputCount": 4736,
+      "inputDigest": "9bea28c5e24825a6da9217a16fee7a8131a511c74f5c4989c63525b81ecc3851",
+      "executedSourceUnchanged": true,
+      "originalSourceUnchanged": true,
+      "sourceProvenanceSha256": "7d9e9ffecdc005609498d8ddf23e73269db9eadff42bc9e35dd3d0691ddf9b65",
+      "sourceAfterSha256": "2a10a9238f74ecdbce60f7289cb602927ecf49eebfdadf0a5319d57ed98ed55f",
+      "executionExitCode": 1
+    },
+    "qa-5": {
+      "inputCount": 4736,
+      "inputDigest": "9bea28c5e24825a6da9217a16fee7a8131a511c74f5c4989c63525b81ecc3851",
+      "executedSourceUnchanged": true,
+      "originalSourceUnchanged": true,
+      "sourceProvenanceSha256": "0ccbe1ef64a847f2a7de6353e79b3e983a8897113dffe71b911471f92ee17e08",
+      "sourceAfterSha256": "2a10a9238f74ecdbce60f7289cb602927ecf49eebfdadf0a5319d57ed98ed55f",
+      "executionExitCode": 1
+    },
+    "qa-6": {
+      "inputCount": 4736,
+      "inputDigest": "9bea28c5e24825a6da9217a16fee7a8131a511c74f5c4989c63525b81ecc3851",
+      "executedSourceUnchanged": true,
+      "originalSourceUnchanged": true,
+      "sourceProvenanceSha256": "d0f945977d70a65011e86dac654d08c96984ded7bb01997fc439e4f1953d3180",
+      "sourceAfterSha256": "2a10a9238f74ecdbce60f7289cb602927ecf49eebfdadf0a5319d57ed98ed55f",
+      "executionExitCode": 1
+    }
+  },
+  "priorProofMap": "/workspace/.clinicos-cloud/codex-after-claude-20261018/prior-proofs-483.json",
+  "priorProofMapSha256": "b2eea825ace0d66bcdb153fb893c0fda5bfc3e129d9cddaa8196ab65acc8b432",
+  "priorProofsCheckedBeforeAndAfter": 7119,
+  "priorProofChanged": [],
+  "allPriorProofBytesUnchanged": true,
+  "ownedPortsClosed": {
+    "3432": true,
+    "5433": true,
+    "8432": true,
+    "55432": true
+  },
+  "lifecycleLockReleased": true,
+  "remainingContainers": [
+    "9000f70d4ee9 clinicos-postgres Up 15 hours (healthy)"
+  ],
+  "sourceFindingsDoNotAuthorizeSourceEdits": true
+}

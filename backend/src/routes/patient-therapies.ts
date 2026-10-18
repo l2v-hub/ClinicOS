@@ -1,3 +1,4 @@
+import { normalizeTherapyClock } from '../therapies/slot-scheduling.js';
 import { prisma } from '../lib/prisma.js';
 import { IdempotencyError, runIdempotent, takeRequestId } from '../lib/idempotency.js';
 import { Prisma } from '@prisma/client';
@@ -329,6 +330,9 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
     for (const key of scalarAllowed) {
       if (body[key] !== undefined) updates[key] = body[key];
     }
+    if (typeof updates.orarioSomministrazione === 'string')
+      updates.orarioSomministrazione =
+        normalizeTherapyClock(updates.orarioSomministrazione) ?? updates.orarioSomministrazione;
     if (updates.commercialStrengthValue === '') updates.commercialStrengthValue = null;
     if (updates.dataFine === '') updates.dataFine = null;
     if (updates.commercialStrengthValue != null)

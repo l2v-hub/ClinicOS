@@ -1,0 +1,10 @@
+{
+  "verdict": "FAILED PREPARATION",
+  "runtimeStarted": false,
+  "sourceProductFailure": false,
+  "cause": "Overbroad input classification included generated Vite _metadata.json runtime output",
+  "failedRunnerResult": "runner-result-qa2.json",
+  "preserved": true,
+  "qa1RequiredRuntimePhases": "PASS; generated-cache provenance exception explicit",
+  "qa3Correction": "Exact output-path classification only; private empty frontend/node_modules for all generated Vite runtime outputs; all real installed bytes unchanged"
+}

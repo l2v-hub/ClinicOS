@@ -100,3 +100,25 @@ test('therapy page parser rejects partial responses without a continuation curso
     }),
   );
 });
+
+test('merging another candidate page preserves distinct scheduled doses of one periodic therapy', () => {
+  const multidose = slot('multi', 3);
+  const first = multidose.patients[0].administrations[0];
+  first.scheduledTime = '08:00';
+  multidose.patients[0].administrations.push({
+    ...first,
+    scheduledTime: '10:00',
+    dosage: '2 compressa',
+  });
+  const merged = mergeTherapySlotPages([multidose], [slot('other', 1)]);
+  const scheduled = merged[0];
+  if (scheduled.kind === 'verification') throw new Error('unexpected verification');
+  assert.deepEqual(
+    scheduled.patients[0].administrations.map((item) => [item.therapyId, item.scheduledTime]),
+    [
+      ['multi', '08:00'],
+      ['multi', '10:00'],
+      ['other', '09:00'],
+    ],
+  );
+});

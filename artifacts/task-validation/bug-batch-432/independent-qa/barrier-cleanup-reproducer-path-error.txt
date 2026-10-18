@@ -1,0 +1,32 @@
+node:fs:484
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/workspace/ClinicOS/agent-team/.worktrees/backend/src/skills/__tests__/skills-e2e.test.ts'
+    at readFileSync (node:fs:484:20)
+    at file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/artifacts/task-validation/bug-batch-432/independent-qa/barrier-cleanup-reproducer.mjs:6:16
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:643:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/workspace/ClinicOS/agent-team/.worktrees/backend/src/skills/__tests__/skills-e2e.test.ts'
+}
+
+Node.js v24.19.0
+✖ artifacts/task-validation/bug-batch-432/independent-qa/barrier-cleanup-reproducer.mjs (108.498171ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 127.32917
+
+✖ failing tests:
+
+test at artifacts/task-validation/bug-batch-432/independent-qa/barrier-cleanup-reproducer.mjs:1:1
+✖ artifacts/task-validation/bug-batch-432/independent-qa/barrier-cleanup-reproducer.mjs (108.498171ms)
+  'test failed'

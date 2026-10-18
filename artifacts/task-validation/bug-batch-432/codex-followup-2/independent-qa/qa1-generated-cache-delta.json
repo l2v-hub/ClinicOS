@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "path": "frontend/node_modules/.vite/deps/_metadata.json",
+      "before": "834fc2eb5637f5c4cdf01cd0391e09323025077568b00155d5230b082e6d2183",
+      "after": "0c118cbc291098fdd90764859591ea49501bac7134175ce94bc73768b8b8f891"
+    }
+  ],
+  "classification": "Generated Vite prebundle cache output, not installed dependency input",
+  "allChangesWithinGeneratedViteCache": true
+}

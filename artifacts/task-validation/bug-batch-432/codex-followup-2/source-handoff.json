@@ -1,0 +1,70 @@
+{
+  "gate": "READY FOR CODEX QA; fresh independent QA6 pending; author cannot self-certify",
+  "frozenAtUtc": "2026-10-18T19:24:21.003348+00:00",
+  "head": "c212e3141b6c7fdd88b4b1a4eaef73e5616a04f7",
+  "baseSha": "c212e3141b6c7fdd88b4b1a4eaef73e5616a04f7",
+  "reservationNonce": "f4d74317-96d1-4111-a80d-a7ec1acde163",
+  "contractSha256": "ff8582a11ec7d10fef17e3660b5adc443f3881562a06c379f150245377cd9e9c",
+  "sourceFiles": {
+    "frontend/src/App.tsx": "020e996d5ff30db6ea8d6fa7a13dc6fa481456c429f261981a950f2fd49d0870",
+    "frontend/src/components/admin/AdminAgenda.tsx": "909ba22d122fb4a04ce6608ffd602acb090f80889ad3a84de6e5aa429e414d07",
+    "frontend/src/components/operator/OperatorAgenda.tsx": "672bc1ede22e0be2402608fb26f376053b0102abffb8e8957e38baf6fee141d9",
+    "frontend/src/components/shared/AgendaTherapyVerification.tsx": "ecfc25c50a42be9dddea0c23ceeceace7db98a2bdcb72b607f7f4d961265dd8c",
+    "frontend/src/components/shared/__tests__/agendaTherapyVerification.test.ts": "1f1798ddb883efaefdf222d2e1ea8ec0cc65d56f82f17538c85178f4223d5589",
+    "frontend/src/lib/__tests__/therapyNavigationGuard.test.ts": "0d0e604d18dc896681aad4b45f08e08faa2d1839c73a529c3a1731909411e273"
+  },
+  "sourceDigestAlgorithm": "SHA256 of UTF8 compact JSON with sorted relative path to SHA256 mapping",
+  "changedSourceDigest": "1101ac764318611bfac1e4799c245823a23cad4fd19b48b6dbd940ffe99ad95f",
+  "entireInputManifest": "/workspace/.clinicos-cloud/pr483-codex-followup2-20261018/runs/author-3/source-provenance.json",
+  "entireInputManifestSha256": "a44e90513c1500df6defaf70afca443bec374ec5d37744af8514c8d58011b795",
+  "entireInputFileCount": 4743,
+  "entireInputDigest": "3287751246fdbc1a9130aef1b4a2c2034d4ac67ff6f1b8613fccfbd15f404623",
+  "sourceAfter": {
+    "exitCode": 0,
+    "changed": [],
+    "originChanged": [],
+    "originalSourceUnchanged": true,
+    "executedSourceUnchanged": true
+  },
+  "backendPhase": {
+    "origin": "/workspace/.clinicos-cloud/pr483-codex-followup2-20261018/runs/author-1",
+    "actualFreshResult": "1932PASS / 0FAIL / 5unchanged optional skips",
+    "installedDependencyFilesHashed": 24182,
+    "borrowedFrontendInputClosureFiles": 27,
+    "originatingAttemptRemainsFailed": true
+  },
+  "frontendPhase": {
+    "origin": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/artifacts/task-validation/bug-batch-432/codex-followup-2/frontend-phase-2",
+    "result": "1400PASS / 0FAIL / 0SKIP; types/build PASS",
+    "executedFreshInRound6": true
+  },
+  "canonicalAndClinicalBrowser": {
+    "origin": "/workspace/.clinicos-cloud/pr483-codex-followup2-20261018/runs/author-2",
+    "executedFreshInRound6": true,
+    "phasesPassed": [
+      "browser-e2e",
+      "clinical-followup-browser"
+    ],
+    "originatingAttemptRemainsFailed": true
+  },
+  "actualAgendaBrowserSql": {
+    "origin": "/workspace/.clinicos-cloud/pr483-codex-followup2-20261018/runs/author-3",
+    "resultPath": "/workspace/.clinicos-cloud/pr483-codex-followup2-20261018/runs/author-3/source/artifacts/task-validation/bug-batch-432/codex-followup-2/runtime/agenda-verification/results.json",
+    "allFiveScenariosPassed": true,
+    "realSqlDeniedWrites": 10,
+    "actualAgendaAdministrations": 0,
+    "actualAgendaReceipts": 0,
+    "timedAgendaUiIntroduced": false,
+    "deliberate503And403Disclosed": true,
+    "realRoster409AndLogoutHeldResponse": true
+  },
+  "preservation": {
+    "priorProofFilesVerified": 7218,
+    "priorProofChanges": [],
+    "priorHardlinkedSnapshotTargetsVerified": 4,
+    "qa5RemainsFailed": true,
+    "parentSourceCommit": "2c8a4b2b91fcda5e527b323031992a757e47fe90",
+    "parentProofCommit": "c212e3141b6c7fdd88b4b1a4eaef73e5616a04f7"
+  },
+  "ownership": "Owned stack/browser/container removed, flock released; baseline clinicos-postgres untouched; no commit/push/GH/state/provider/production operation; application/test/harness writes STOPPED"
+}

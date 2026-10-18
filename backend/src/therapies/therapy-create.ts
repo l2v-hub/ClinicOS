@@ -4,6 +4,7 @@
 //   - POST /patients/:patientId/therapies  (patient-therapies.ts)
 //   - intake confirm transaction           (future: confirm-service.ts)
 
+import { normalizeTherapyClock } from './slot-scheduling.js';
 import { prisma } from '../lib/prisma.js';
 import {
   assertValidSchedulesInput,
@@ -221,7 +222,8 @@ export async function createTherapyInTx(
       operatoreInseritore: input.operatoreInseritore || null,
       note: input.note || null,
       dataSomministrazione: input.dataSomministrazione || null,
-      orarioSomministrazione: input.orarioSomministrazione || null,
+      orarioSomministrazione:
+        normalizeTherapyClock(input.orarioSomministrazione) ?? input.orarioSomministrazione ?? null,
       commercialStrengthValue: strengthValue,
       commercialStrengthUnit: strengthUnit,
       pharmaceuticalForm: form,

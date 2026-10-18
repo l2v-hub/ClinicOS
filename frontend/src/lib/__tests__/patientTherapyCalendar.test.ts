@@ -131,9 +131,15 @@ test('one-time dates and legacy times work independently from the recurring date
   assert.equal(build([item]).events[0].time, '21:35');
   assert.equal(build([item]).events[0].oneTime, true);
   assert.equal(build([item], '2026-09-16').events.length, 0);
+  // A schedule contradicting the explicit one-off clock requires review, never a replacement time.
+  const conflict = build([therapy({ ...item, schedules: [schedule('09:00')] })]);
+  assert.deepEqual(conflict.events, []);
+  assert.equal(conflict.unscheduled.length, 1);
+  assert.match(conflict.unscheduled[0].reason, /Da verificare/);
   assert.equal(
-    build([therapy({ ...item, schedules: [schedule('09:00')] })]).events[0].time,
-    '09:00',
+    build([therapy({ ...item, schedules: [{ ...schedule('21:35'), fascia: 'sera' }] })]).events[0]
+      .time,
+    '21:35',
   );
 });
 

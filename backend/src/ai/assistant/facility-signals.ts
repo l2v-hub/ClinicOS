@@ -10,6 +10,7 @@
 // ora locale). Se le due implementazioni divergono, il badge "in ritardo" dell'UI e la risposta
 // dell'assistente si contraddicono davanti allo stesso operatore.
 
+import type { TherapyVerificationGroup } from '../../therapies/therapy-slots.js';
 import { facilityClock } from '../../lib/facility-time.js';
 
 export interface SlotAdministrationView {
@@ -30,6 +31,7 @@ export interface SlotPatientView {
 }
 
 export interface TherapySlotView {
+  kind?: 'scheduled';
   fascia: string;
   patients: SlotPatientView[];
 }
@@ -48,6 +50,18 @@ export interface TherapyDueItem {
   minutesLate: number;
   /** Minuti mancanti (>= 0) per le dosi in arrivo; 0 per quelle gia' scadute. */
   minutesUntil: number;
+}
+
+export interface TherapyToVerifyItem {
+  therapyId: string;
+  patientId: string;
+  patientName: string;
+  drugName: string;
+  status: 'to_verify';
+  fascia: null;
+  scheduledTime: null;
+  dosage: null;
+  canAdminister: false;
 }
 
 export interface ConsegnaRow {
@@ -86,15 +100,32 @@ export function dayKey(now: Date): string {
 /** Ripartisce le dosi ancora da somministrare in "in ritardo" e "in scadenza entro la finestra".
  *  Le dosi gia' erogate o marcate non erogate non compaiono in nessuna delle due liste. */
 export function collectTherapiesDue(
-  slots: TherapySlotView[],
+  slots: Array<TherapySlotView | TherapyVerificationGroup>,
   now: Date,
   windowMinutes: number,
-): { overdue: TherapyDueItem[]; dueSoon: TherapyDueItem[] } {
+): { overdue: TherapyDueItem[]; dueSoon: TherapyDueItem[]; toVerify: TherapyToVerifyItem[] } {
   const soglia = nowMinutes(now);
   const overdue: TherapyDueItem[] = [];
   const dueSoon: TherapyDueItem[] = [];
+  const toVerify: TherapyToVerifyItem[] = [];
 
   for (const slot of slots ?? []) {
+    if (slot.kind === 'verification') {
+      for (const patient of slot.patients)
+        for (const item of patient.items)
+          toVerify.push({
+            therapyId: item.therapyId,
+            patientId: patient.patientId,
+            patientName: `${patient.lastName} ${patient.firstName}`.trim(),
+            drugName: item.drugName,
+            status: 'to_verify',
+            scheduledTime: null,
+            fascia: null,
+            dosage: null,
+            canAdminister: false,
+          });
+      continue;
+    }
     for (const paziente of slot.patients ?? []) {
       for (const a of paziente.administrations ?? []) {
         if (a.status !== 'pending') continue;
@@ -121,7 +152,7 @@ export function collectTherapiesDue(
 
   overdue.sort((a, b) => b.minutesLate - a.minutesLate);
   dueSoon.sort((a, b) => a.minutesUntil - b.minutesUntil);
-  return { overdue, dueSoon };
+  return { overdue, dueSoon, toVerify };
 }
 
 /** Una consegna e' aperta finche' non e' completata (`aperta` e `in_corso` restano da fare). */

@@ -1,0 +1,79 @@
+{
+  "patientId": "cmve8jk0y0000a3p66p7e9mlk",
+  "therapyId": "cmve8jk4w0001a3p6aqr4nyr5",
+  "requests": [
+    {
+      "patientId": "cmve8jk0y0000a3p66p7e9mlk",
+      "therapyId": "cmve8jk4w0001a3p6aqr4nyr5",
+      "date": "2026-10-18",
+      "fascia": "mattina",
+      "expectedStato": "da_erogare",
+      "scheduledTime": "08:00",
+      "requestId": "cf1ed4d4-93ae-4de1-9c20-694a31ba0816"
+    },
+    {
+      "patientId": "cmve8jk0y0000a3p66p7e9mlk",
+      "therapyId": "cmve8jk4w0001a3p6aqr4nyr5",
+      "date": "2026-10-18",
+      "fascia": "mattina",
+      "expectedStato": "da_erogare",
+      "scheduledTime": "08:00",
+      "requestId": "cf1ed4d4-93ae-4de1-9c20-694a31ba0816"
+    }
+  ],
+  "intentionalNetworkFailures": 2,
+  "visibleRequests": [
+    {
+      "patientId": "cmve8jk0y0000a3p66p7e9mlk",
+      "therapyId": "cmve8jk510002a3p65140z3aj",
+      "date": "2026-10-18",
+      "fascia": "mattina",
+      "expectedStato": "da_erogare",
+      "scheduledTime": "10:00",
+      "requestId": "5fa16fff-9038-4627-a44d-97b3d12613b3"
+    },
+    {
+      "patientId": "cmve8jk0y0000a3p66p7e9mlk",
+      "therapyId": "cmve8jk510002a3p65140z3aj",
+      "date": "2026-10-18",
+      "fascia": "mattina",
+      "expectedStato": "da_erogare",
+      "scheduledTime": "10:00",
+      "requestId": "5fa16fff-9038-4627-a44d-97b3d12613b3"
+    }
+  ],
+  "firstServerResponse": {
+    "id": "cmve8jndh000cu0p6ztxs8fol",
+    "therapyId": "cmve8jk4w0001a3p6aqr4nyr5",
+    "patientId": "cmve8jk0y0000a3p66p7e9mlk",
+    "farmacoNome": "QA retry dose",
+    "farmacoDose": "1 compressa",
+    "farmacoVia": "orale",
+    "date": "2026-10-18",
+    "fascia": "mattina",
+    "ora": "08:00",
+    "stato": "erogata",
+    "operatoreId": "SIM-NURSE-1",
+    "operatoreNome": "Infermiere 1",
+    "confirmedAt": "2026-10-18T19:45:42.676Z",
+    "doseContext": null,
+    "motivo": null,
+    "note": null,
+    "createdAt": "2026-10-18T19:45:42.677Z",
+    "updatedAt": "2026-10-18T19:45:42.677Z"
+  },
+  "replayHeader": "true",
+  "visibleRetryAfterReload": {
+    "pass": true,
+    "sameRequestId": true,
+    "clinicalRecords": 1,
+    "receipts": 1
+  },
+  "expectedConsoleNetworkAbort": 2,
+  "browserRetryBoundary": "Committed response-loss replays through the real shared client module because UI correctly removes its action; a separate pre-write transport loss retries through the visible UI after reload with the same persisted requestId.",
+  "pass": true,
+  "clinicalRecords": 1,
+  "receipts": 1,
+  "recordUnchanged": true,
+  "noRepeatActionAfterReload": true
+}

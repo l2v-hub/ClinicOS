@@ -3,20 +3,43 @@
 // env, niente orologio implicito, cosi' resta testabile senza database.
 import { fasciaFromTime } from '../lib/therapy-dose.js';
 
+/** Normalize equivalent clock spellings, never repair an invalid prescription. */
+export function normalizeTherapyClock(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const clock = value.replace(/^ +| +$/g, ''); // Same space trimming as PostgreSQL btrim.
+  if (!/^([01]?\d|2[0-3]):[0-5]\d$/.test(clock)) return null;
+  return clock.padStart(5, '0');
+}
+
+export type TherapyVerificationReason = 'missing_time' | 'invalid_time' | 'conflicting_schedule';
+
+export function oneTimeVerificationReason(
+  therapy: Parameters<typeof oneTimeSlot>[0],
+): TherapyVerificationReason | null {
+  if (therapy.tipo !== 'una_tantum') return null;
+  if (!therapy.orarioSomministrazione?.trim()) return 'missing_time';
+  const time = normalizeTherapyClock(therapy.orarioSomministrazione);
+  if (!time) return 'invalid_time';
+  if (
+    (therapy.schedules?.length ?? 0) > 1 ||
+    therapy.schedules?.some(
+      (schedule) =>
+        normalizeTherapyClock(schedule.time) !== time ||
+        (schedule.fascia !== undefined && schedule.fascia !== fasciaFromTime(time)),
+    )
+  )
+    return 'conflicting_schedule';
+  return null;
+}
+
 /** A one-off prescription already carries an explicit clock; empty legacy flags are irrelevant. */
 export function oneTimeSlot(therapy: {
   tipo?: string;
   orarioSomministrazione?: string | null;
-  schedules?: Array<{ time: string }>;
+  schedules?: Array<{ time: string; fascia?: string }>;
 }): { fascia: string; time: string } | null {
-  const time = therapy.orarioSomministrazione;
-  if (
-    therapy.tipo !== 'una_tantum' ||
-    !time ||
-    !/^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(time) ||
-    therapy.schedules?.some((schedule) => schedule.time !== time)
-  )
-    return null;
+  const time = normalizeTherapyClock(therapy.orarioSomministrazione);
+  if (therapy.tipo !== 'una_tantum' || !time || oneTimeVerificationReason(therapy)) return null;
   return { fascia: fasciaFromTime(time), time };
 }
 

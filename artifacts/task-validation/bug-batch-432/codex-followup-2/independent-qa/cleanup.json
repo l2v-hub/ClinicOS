@@ -1,0 +1,18 @@
+{
+  "ownedPortsClosed": {
+    "3432": true,
+    "5433": true,
+    "8432": true,
+    "55432": true
+  },
+  "fullLifecycleFlockReleased": true,
+  "ownedContainerRemoved": true,
+  "baselineContainer": "clinicos-postgres 9000f70d4ee9",
+  "baselineUntouched": true,
+  "remainingContainers": [
+    "clinicos-postgres 9000f70d4ee9"
+  ],
+  "sourceTestHarnessEditsInAuthorWorktree": false,
+  "noGitHubStateProviderOrProductionOperations": true,
+  "generatedRuntimeCacheException": "QA1 changed only shared generated frontend .vite metadata; all subsequent Vite outputs private; see cache delta"
+}

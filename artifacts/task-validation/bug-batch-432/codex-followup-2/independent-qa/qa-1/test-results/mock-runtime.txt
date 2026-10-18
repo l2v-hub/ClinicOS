@@ -1,0 +1,18 @@
+/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1/source/clinicos-ai-runtime/clinicos_ai/domain/contracts.py:36: UserWarning: Field name "schema" in "CreateJobRequest" shadows an attribute in parent "BaseModel"
+  class CreateJobRequest(BaseModel):
+INFO:     Started server process [305239]
+INFO:     Waiting for application startup.
+ai-config STT non configurato: canale voce non disponibile
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8432 (Press CTRL+C to quit)
+INFO:     127.0.0.1:38374 - "GET /v1/runtime/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57902 - "GET /v1/runtime/capabilities HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57908 - "POST /v1/document-jobs HTTP/1.1" 201 Created
+INFO:     127.0.0.1:57902 - "POST /v1/document-jobs/f99f623c-4b2f-4c9d-9a7f-7979ea8a16df/run HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:57902 - "GET /v1/document-jobs/f99f623c-4b2f-4c9d-9a7f-7979ea8a16df HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57908 - "GET /v1/document-jobs/f99f623c-4b2f-4c9d-9a7f-7979ea8a16df/result HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56668 - "GET /v1/voice/stt-status HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [305239]

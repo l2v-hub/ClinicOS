@@ -671,11 +671,27 @@ export async function executeSkill(
         ok: true,
         toolsUsed: used,
         result: result.data,
-        reply: listReply(
-          `Somministrazioni del ${date}`,
-          result.data,
-          `Nessuna somministrazione prevista il ${date}.`,
-        ),
+        reply: (() => {
+          const groups = (Array.isArray(result.data) ? result.data : []) as Array<{
+            kind?: string;
+            summary?: { total?: number };
+            label?: string;
+          }>;
+          const verification = groups
+            .filter((g) => g.kind === 'verification')
+            .reduce((n, g) => n + (g.summary?.total ?? 0), 0);
+          const scheduled = groups.filter((g) => g.kind !== 'verification');
+          return (
+            listReply(
+              `Somministrazioni del ${date}`,
+              scheduled,
+              `Nessuna somministrazione programmata il ${date}.`,
+            ) +
+            (verification
+              ? ` ${verification} terapie da verificare: programmazione incompleta o contraddittoria, nessuna somministrazione disponibile.`
+              : '')
+          );
+        })(),
       };
     }
     case 'handover.overview': {
