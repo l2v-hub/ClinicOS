@@ -1856,7 +1856,17 @@
           "localActive": 0
         }
       ],
-      "reason": "External review consistency or correction failed; inspect the existing batch"
+      "reason": "External review consistency or correction failed; inspect the existing batch",
+      "operatorCoordination": {
+        "active": true,
+        "owner": "codex-cloud-after-claude",
+        "nonce": "5ef4558e-2243-4380-8330-453cfa1df672",
+        "stage": "analysis",
+        "startedAt": "2026-10-18T16:47:23.897Z",
+        "baseSha": "34c865233df53a3930f29c8b7befc02208588d64",
+        "implementationStarted": false,
+        "automaticWritersPaused": true
+      }
     },
     {
       "id": "bug-batch-485",
@@ -7546,10 +7556,33 @@
         "noAdminMerge": true,
         "noClinicalDeployWaiver": true,
         "doesNotChangePermanentStandaloneAllChecksPolicy": true
+      },
+      "operatorFeedback": [
+        {
+          "commentId": 6250810839,
+          "url": "https://github.com/l2v-hub/ClinicOS/pull/492#issuecomment-6250810839",
+          "author": "l2v-hub",
+          "subjectSha": "fcabd40713ad355c944d7aff3fcfa7852dce01e9",
+          "bodySha256": "996dc4ea474424badc1da4b9c0267a3bdd3f544d51b08037554d3d66107b4f97",
+          "verdict": "changes-requested",
+          "kind": "authenticated-freeform-negative-feedback",
+          "structuredControllerReview": false,
+          "recordedAt": "2026-10-18T16:47:23.897Z"
+        }
+      ],
+      "operatorCoordination": {
+        "active": true,
+        "owner": "codex-cloud-after-claude",
+        "nonce": "5ef4558e-2243-4380-8330-453cfa1df672",
+        "stage": "analysis",
+        "startedAt": "2026-10-18T16:47:23.897Z",
+        "baseSha": "fcabd40713ad355c944d7aff3fcfa7852dce01e9",
+        "implementationStarted": false,
+        "automaticWritersPaused": true
       }
     }
   ],
-  "updatedAt": "2026-10-18T10:25:10.003Z",
+  "updatedAt": "2026-10-18T16:47:23.897Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
@@ -10704,7 +10737,30 @@
         "requestId": "6dc8f519-18a6-4f7c-bd42-f95631ab8842",
         "requestedAt": "2026-10-17T18:05:22.803Z"
       },
-      "reviewChannel": "github-comments"
+      "reviewChannel": "github-comments",
+      "operatorFeedback": [
+        {
+          "commentId": 6250811630,
+          "url": "https://github.com/l2v-hub/ClinicOS/pull/393#issuecomment-6250811630",
+          "author": "l2v-hub",
+          "subjectSha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
+          "bodySha256": "71efc8a795a1be2e1660d3f0f1f4acde8060a99b494a45eb12c52b2ae61644e5",
+          "verdict": "changes-requested",
+          "kind": "authenticated-freeform-negative-feedback",
+          "structuredControllerReview": false,
+          "recordedAt": "2026-10-18T16:47:23.897Z"
+        }
+      ],
+      "operatorCoordination": {
+        "active": true,
+        "owner": "codex-cloud-after-claude",
+        "nonce": "5ef4558e-2243-4380-8330-453cfa1df672",
+        "stage": "analysis",
+        "startedAt": "2026-10-18T16:47:23.897Z",
+        "baseSha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
+        "implementationStarted": false,
+        "automaticWritersPaused": true
+      }
     },
     {
       "schemaVersion": 1,
@@ -11126,7 +11182,66 @@
         "requestId": "7d057d79-1a7b-4630-b151-f30391da10ca",
         "requestedAt": "2026-10-17T18:13:41.736Z"
       },
-      "reviewChannel": "github-comments"
+      "reviewChannel": "github-comments",
+      "operatorFeedback": [
+        {
+          "commentId": 6250753128,
+          "url": "https://github.com/l2v-hub/ClinicOS/pull/491#issuecomment-6250753128",
+          "author": "l2v-hub",
+          "subjectSha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6",
+          "bodySha256": "5abc61edd590fd7b45fc05eb2fe8259afb5f46a3c1cf9197a2e9c4fba23a44aa",
+          "verdict": "changes-requested",
+          "kind": "authenticated-freeform-negative-feedback",
+          "structuredControllerReview": false,
+          "recordedAt": "2026-10-18T16:47:23.897Z"
+        }
+      ],
+      "operatorCoordination": {
+        "active": true,
+        "owner": "codex-cloud-after-claude",
+        "nonce": "5ef4558e-2243-4380-8330-453cfa1df672",
+        "stage": "analysis",
+        "startedAt": "2026-10-18T16:47:23.897Z",
+        "baseSha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6",
+        "implementationStarted": false,
+        "automaticWritersPaused": true
+      }
     }
-  ]
+  ],
+  "operatorTakeover": {
+    "active": true,
+    "owner": "codex-cloud-after-claude",
+    "nonce": "5ef4558e-2243-4380-8330-453cfa1df672",
+    "startedAt": "2026-10-18T16:47:23.897Z",
+    "authorization": "User explicitly requested Codex to act after Claude and previously approved continuing beyond four cycles with all history preserved; #486 explicit route/operator choice approved.",
+    "continuePastFourPreserveHistory": true,
+    "routeDecision": "explicit-drug-or-prescription-data-otherwise-operator-required",
+    "subjects": [
+      {
+        "collection": "manualBatches",
+        "id": "standalone-pr-review-adapter",
+        "pr": 492,
+        "sha": "fcabd40713ad355c944d7aff3fcfa7852dce01e9"
+      },
+      {
+        "collection": "standaloneReviews",
+        "id": "standalone-pr-491",
+        "pr": 491,
+        "sha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6"
+      },
+      {
+        "collection": "standaloneReviews",
+        "id": "standalone-pr-393",
+        "pr": 393,
+        "sha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a"
+      },
+      {
+        "collection": "batches",
+        "id": "bug-batch-432",
+        "pr": 483,
+        "sha": "34c865233df53a3930f29c8b7befc02208588d64"
+      }
+    ],
+    "workflowMode": "scheduled writers remain paused; existing legacy counters untouched"
+  }
 }
