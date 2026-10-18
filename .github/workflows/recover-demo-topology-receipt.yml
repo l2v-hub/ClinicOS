@@ -1,0 +1,50 @@
+name: Recover original demo topology receipt
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Fixed original topology receipt or fixed failed CI fingerprints
+        required: true
+        type: choice
+        options: [topology, ci-fingerprints]
+        default: topology
+      reviewed_sha:
+        description: Exact reviewed current main SHA for receipt transport only
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
+concurrency:
+  group: original-demo-topology-receipt-39150528800
+  cancel-in-progress: false
+
+jobs:
+  recover:
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      github.repository == 'l2v-hub/ClinicOS' &&
+      github.ref == 'refs/heads/main' &&
+      inputs.reviewed_sha == github.sha
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Test receipt transport offline without credentials
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python3 scripts/automation/recover-demo-topology-receipt.test.py
+      - name: Recover fixed evidence and publish bounded metadata to its fixed PR
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          GITHUB_TOKEN: ${{ github.token }}
+          RECOVERY_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+          RECOVERY_MODE: ${{ inputs.mode }}
+        run: python3 scripts/automation/recover-demo-topology-receipt.py
