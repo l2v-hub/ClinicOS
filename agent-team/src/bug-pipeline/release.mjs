@@ -1,3 +1,4 @@
+import { implementationAttempts } from './attempt-budget.mjs';
 import path from 'node:path';
 import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -244,7 +245,7 @@ async function verifyCurrentCandidate({
   assertNoReleaseHold(batch);
   if (batch.phase !== 'ready' || batch.sha !== sha || batch.approvedSha !== sha)
     fail('batch is not ready and approved for the supplied reviewed SHA');
-  if (batch.implementation.at(-1)?.status !== 'passed')
+  if (implementationAttempts(batch).at(-1)?.status !== 'passed')
     fail('latest implementation attempt did not pass validation');
   verifyReviewProof(batch, sha);
   if (!batch.pr || !validateIssuePullUrl(batch.pr.url, repo, batch.pr.number))
@@ -506,7 +507,7 @@ export async function recordDeployment({
     batch.phase !== 'ready' ||
     batch.sha !== batch.release.reviewedSha ||
     batch.approvedSha !== batch.sha ||
-    batch.implementation.at(-1)?.status !== 'passed' ||
+    implementationAttempts(batch).at(-1)?.status !== 'passed' ||
     (batch.release.prNumber !== undefined && batch.release.prNumber !== batch.pr?.number)
   )
     fail('recorded release no longer matches its approved candidate');
@@ -605,7 +606,7 @@ export async function publishDeploymentCompletion({ batch, github, store, repo }
       current.phase !== 'ready' ||
       current.sha !== reviewedSha ||
       current.approvedSha !== reviewedSha ||
-      current.implementation.at(-1)?.status !== 'passed'
+      implementationAttempts(current).at(-1)?.status !== 'passed'
     )
       fail('verified release identity changed before issue publication or closure');
     verifyReviewProof(current, reviewedSha);

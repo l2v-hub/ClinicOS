@@ -1664,3 +1664,39 @@ test('F1/F3 native human approval requires current head, nonauthor User and enfo
   assert.equal((await gh.nativeReviewAuthorization(81, head)).humanApproved, false);
   await assert.rejects(gh.nativeReviewAuthorization(81, 'b'.repeat(40)), /subject changed/);
 });
+
+test('GitHub failure semantics distinguish positive status evidence, default POST and merge uncertainty without raw diagnostics', async () => {
+  const { githubOperationError, githubApiOperation } = await import('../../src/bug-pipeline/github.mjs');
+  assert.equal(githubApiOperation({ body: { body: 'notice' } }), 'mutation');
+  assert.equal(githubApiOperation({}), 'read');
+  assert.equal(githubApiOperation({ method: 'GET', body: {} }), 'read');
+  for (const status of [401, 403, 404, 422]) {
+    const error = githubOperationError({ stderr: `gh: denied (HTTP ${status})` });
+    assert.equal(error.code, 'github-read-rejected');
+    assert.equal(error.httpStatus, status);
+  }
+  for (const status of [408, 429, 500, 503])
+    assert.equal(githubOperationError({ stderr: `gh: rejected (HTTP ${status})` }).code, 'github-read-transient');
+  assert.equal(githubOperationError({ stderr: 'gh: API rate limit exceeded (HTTP 403)' }).code,
+    'github-read-transient');
+  assert.equal(githubOperationError({ error: 'timeout' }).code, 'github-read-transient');
+  const unknown = githubOperationError({ stderr: 'synthetic patient 503 bearer PRIVATE_TOKEN ' + 'x'.repeat(100000) });
+  assert.equal(unknown.httpStatus, null);
+  assert.equal(unknown.code, 'github-read-failed');
+  assert.ok(JSON.stringify(unknown).length < 300);
+  assert.doesNotMatch(JSON.stringify(unknown), /PRIVATE_TOKEN|patient/);
+  for (const [response, expected] of [
+    [{ stderr: 'gh: protected (HTTP 405)' }, 'github-write-rejected'],
+    [{ error: 'timeout' }, 'github-write-uncertain'],
+    [{ stderr: 'gh: upstream (HTTP 503)' }, 'github-write-uncertain'],
+  ]) {
+    const calls = [];
+    const github = createGitHub({ repo: 'l2v-hub/ClinicOS', cwd: '/synthetic',
+      run: async (call) => { calls.push(call); return { ok: false, ...response }; } });
+    await assert.rejects(github.mergePullRequest(81, 'a'.repeat(40)), { code: expected });
+    assert.equal(calls.length, 1, 'No blind second merge attempt');
+    assert.equal(calls[0].timeoutMs, 30000);
+    await assert.rejects(github.commentPR(81, 'Synthetic notice'), { code: expected });
+    assert.ok(calls.at(-1).input, 'Comment request carries a mutation body');
+  }
+});

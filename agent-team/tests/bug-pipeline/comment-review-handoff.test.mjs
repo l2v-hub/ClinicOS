@@ -43,7 +43,7 @@ const validPlan = {
   ],
 };
 
-function fixture({ failed = false, reviewCount, actor = 'review-bot' } = {}) {
+function fixture({ failed = false, reviewCount, actor = 'review-bot', authorizationVerifier = true } = {}) {
   let round = failed ? 1 : 0;
   const batch = {
     id: 'bug-batch-17',
@@ -176,13 +176,17 @@ function fixture({ failed = false, reviewCount, actor = 'review-bot' } = {}) {
     const body = `<!-- clinicos-claude-cron:${number}:${head}:${currentRound} -->\nClaude report ${report.verdict}`;
     feedback.comments.push({ id: ++commentId, author: actorName, body });
   };
-  let nonceValue = 0;
+  let nonceValue = 0, authorizationNonce = 0;
   const handoff = createCommentReviewHandoff({
     github,
     run: apiRun,
     cwd: '/synthetic/worktree',
     now: () => new Date('2026-10-17T00:00:00.000Z'),
     nonce: () => `nonce-${++nonceValue}`,
+    authorizationVerifier: authorizationVerifier ? async ({ binding }) => ({
+      provenance: 'user-session', grantId: 'synthetic-session', sourceRef: 'test:session',
+      consumptionNonce: `grant-${++authorizationNonce}`, binding,
+    }) : undefined,
   });
   return {
     batch,
@@ -231,7 +235,7 @@ test('failed round recovery is explicit, preserves the spent round, ledger, rele
   const oldHold = clone(f.batch.releaseHold);
   await assert.rejects(f.handoff.request(81), /Explicit failed-execution recovery required/);
   assert.deepEqual(f.remote.batches[0], f.batch);
-  const requested = await f.handoff.request(81, { recoverFailed: true });
+  const requested = await f.handoff.request(81, { recoverFailed: true, authorizationRef: 'test:session' });
   assert.equal(requested.reviews.length, 1);
   assert.equal(requested.reviews[0].status, 'failed');
   assert.deepEqual(requested.reviewLedger, oldLedger);
@@ -267,7 +271,7 @@ test('recovery does not reset a substantive attempt and requires a new SHA', asy
   f.batch.reviewLedger.rounds[0].verdict = 'changes-requested';
   f.remote.batches[0] = clone(f.batch);
   await assert.rejects(
-    f.handoff.request(81, { recoverFailed: true }),
+    f.handoff.request(81, { recoverFailed: true, authorizationRef: 'test:session' }),
     /Explicit failed-execution recovery required/,
   );
   assert.equal(f.writes.length, 0);
@@ -623,4 +627,13 @@ test('audited allowances plus explicit recovery resume exhausted normal correcti
   assert.equal(recovered.budgetExtensions.length, 2);
   assert.equal(recovered.recoveryHistory.at(-1).action, 'resume');
   await assert.rejects(resume());
+});
+
+test('maintainer permission and a free-text instruction cannot extend budgets without an external verifier', async () => {
+  const f = fixture({ authorizationVerifier: false });
+  f.setPermission('admin');
+  const before = clone(f.remote);
+  await assert.rejects(f.handoff.extendBudget(81, { kind: 'implementation', limit: 5,
+    authorizationRef: 'I authorize myself', reason: 'Synthetic instruction' }), /verifier unavailable/);
+  assert.deepEqual(f.remote, before);
 });

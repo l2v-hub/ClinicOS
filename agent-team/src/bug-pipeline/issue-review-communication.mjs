@@ -1,5 +1,5 @@
-import { stateError, controllerFailureCode } from './github.mjs';
-import { attemptLimit } from './attempt-budget.mjs';
+import { githubOperationError } from './github.mjs';
+import { attemptLimit, spentAttempts, activeImplementation } from './attempt-budget.mjs';
 import assert from 'node:assert/strict';
 import os from 'node:os';
 import path from 'node:path';
@@ -94,7 +94,7 @@ export function reviewProjection(batch, readReport) {
   assert.match(batch.sha ?? '', /^[a-f0-9]{40}$/);
   assert.ok(
     batch.reviews.length <= attemptLimit(batch, 'reviews') &&
-      batch.implementation.length <= attemptLimit(batch, 'implementation'),
+      spentAttempts(batch, 'implementation') <= attemptLimit(batch, 'implementation'),
   );
   const handoff = batch.externalReview;
   const round = batch.reviews.length;
@@ -129,7 +129,7 @@ export function reviewProjection(batch, readReport) {
   }
   if (
     ['implementing', 'validating', 'simplifying', 'publishing'].includes(batch.phase) ||
-    batch.implementation.some((attempt) => attempt.status === 'running')
+    activeImplementation(batch)
   )
     return result;
   if (['requested', 'comment-requested'].includes(handoff?.status)) {
@@ -204,11 +204,7 @@ export function createIssueReviewCommunication({
       maxOutputBytes: 2 * 1024 * 1024,
       envMode: 'controller',
     });
-    if (!result?.ok)
-      throw stateError(
-        args.includes('-X') ? 'label-projection-failed' : 'github-read-failed',
-        'GitHub issue-review transport failed',
-      );
+    if (!result?.ok) throw githubOperationError(result, args.includes('-X') ? 'projection' : 'read');
     try {
       return result.stdout ? JSON.parse(result.stdout) : null;
     } catch {
@@ -319,7 +315,7 @@ export function createIssueReviewCommunication({
         retry >= 2 ||
         !endpoint.includes('/labels') ||
         !['POST', 'DELETE'].includes(method) ||
-        controllerFailureCode(error) !== 'label-projection-failed'
+        !error.retryable || error.operation !== 'projection'
       )
         throw error;
       await new Promise((resolve) => setTimeout(resolve, 25 * 2 ** retry));

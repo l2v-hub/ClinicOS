@@ -31,7 +31,31 @@ export function attemptLimit(subject, kind) {
     assert.ok(['implementation', 'reviews'].includes(entry.kind));
     assert.ok(entry.actor && entry.at && entry.reason && entry.authorizationRef && entry.nonce);
     assert.equal(entry.entityId, subject.id);
-    assert.equal(entry.pr, subject.pr.number);
+    if (subject.pr?.number) {
+      assert.equal(entry.pr, subject.pr.number);
+    } else {
+      assert.equal(entry.collection, 'manualBatches', 'Issue-only allowance needs manual owner');
+      assert.equal(entry.pr, null, 'Issue allowance must not invent a PR');
+      assert.ok(Number.isSafeInteger(subject.reviewIssue) && subject.reviewIssue > 0,
+        'Issue-only allowance needs an existing reviewIssue');
+      assert.equal(entry.reviewIssue, subject.reviewIssue, 'Issue allowance coordinate changed');
+      assert.ok(subject.issues?.includes(subject.reviewIssue), 'Issue is outside the actual cohort');
+      const authorization = entry.authorization;
+      assert.ok(['user-session', 'distinct-maintainer-comment'].includes(authorization?.provenance),
+        'Issue allowance requires external authorization provenance');
+      assert.ok(authorization.grantId && authorization.consumptionNonce && authorization.sourceRef);
+      const binding = authorization.binding;
+      assert.equal(authorization.bindingDigest, historyDigest(binding), 'Authorization content changed');
+      assert.equal(binding.collection, 'manualBatches');
+      assert.equal(binding.entityId, subject.id);
+      assert.equal(binding.pr, null);
+      assert.equal(binding.reviewIssue, subject.reviewIssue);
+      assert.equal(binding.actor, entry.actor);
+      assert.equal(binding.action, 'extend-budget');
+      assert.deepEqual(binding.budget, {
+        kind: entry.kind, previousLimit: entry.previousLimit, limit: entry.limit,
+      });
+    }
     assert.ok(
       Number.isSafeInteger(entry.historyLength) &&
         entry.historyLength >= 0 &&
@@ -92,7 +116,10 @@ export function validateOperatorContinuations(state) {
         assert.ok(
           state.operatorTakeover?.subjects?.some(
             (item) =>
-              item.collection === key && item.id === subject.id && item.pr === subject.pr?.number,
+              item.collection === key && item.id === subject.id &&
+              (item.pr === subject.pr?.number ||
+                (key === 'manualBatches' && !subject.pr && item.pr === null &&
+                  item.reviewIssue === subject.reviewIssue)),
           ),
           'Continuation authorization belongs to this exact durable entity',
         );

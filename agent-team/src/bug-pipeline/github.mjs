@@ -28,6 +28,11 @@ const FAILURE_CODES = new Set([
   'state-write-failed',
   'state-write-uncertain',
   'github-read-failed',
+  'github-read-transient',
+  'github-read-rejected',
+  'github-write-rejected',
+  'github-write-uncertain',
+  'github-transient-exhausted',
   'label-projection-failed',
   'codex-auth-unavailable',
   'codex-auth-conflict',
@@ -76,6 +81,29 @@ export function controllerFailureCode(error) {
 }
 export function stateError(code, message, cause) {
   return Object.assign(new Error(message, cause ? { cause } : undefined), { code });
+}
+// Only finite diagnostic metadata crosses the controller boundary. Provider stderr can
+// contain arbitrary clinical text and credentials, so it is never persisted or interpolated.
+export function githubOperationError(result, operation = 'read') {
+  const detail = String(result?.stderr ?? '');
+  const statusMatch = /(?:\(HTTP ([45][0-9]{2})\)|^HTTP(?:\/\d(?:\.\d)?)?\s+([45][0-9]{2})\b)/m.exec(detail);
+  const status = statusMatch ? Number(statusMatch[1] ?? statusMatch[2]) : null;
+  const rateLimited = status === 403 && /(?:API rate limit exceeded|secondary rate limit)/i.test(detail);
+  const timeout = result?.error === 'timeout';
+  const transient = timeout || status === 408 || status === 429 || status >= 500 || rateLimited;
+  const code = operation === 'read'
+    ? transient ? 'github-read-transient' : status ? 'github-read-rejected' : 'github-read-failed'
+    : status && status < 500 && status !== 408 ? 'github-write-rejected' : 'github-write-uncertain';
+  return Object.assign(stateError(code, `GitHub operation failed${status ? ` (HTTP ${status})` : ''}`), {
+    operation, httpStatus: status, retryable: ['read', 'projection'].includes(operation) && transient,
+    diagnostic: timeout ? 'timeout' : rateLimited ? 'rate-limit' : status ? 'http-status' : 'unknown',
+  });
+}
+export function githubApiOperation({ method, body } = {}) {
+  return ((!method && body === undefined) || method === 'GET') ? 'read' : 'mutation';
+}
+export function isRetryableGitHubFailure(error) {
+  return controllerFailureCode(error) === 'github-read-transient';
 }
 export function pendingResultBytes(subject) {
   const reviews = Array.isArray(subject.reviews)
@@ -285,7 +313,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
 
   async function invoke(
     args,
-    { input, allowFailure = false, maxOutputBytes = 2 * 1024 * 1024 } = {},
+    { input, allowFailure = false, maxOutputBytes = 2 * 1024 * 1024, operation = 'read' } = {},
   ) {
     const result = await run({
       command: 'gh',
@@ -296,14 +324,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       maxOutputBytes,
     });
     if (!result?.ok && !allowFailure) {
-      const detail = String(
-        result?.stderr || result?.error || `gh exited ${result?.code ?? 'unknown'}`,
-      );
-      const status = /\b(?:HTTP\s*)?([45][0-9]{2})\b/.exec(detail)?.[1];
-      throw stateError(
-        'github-read-failed',
-        `GitHub transport failed${status ? ` (HTTP ${status})` : ''}`,
-      );
+      throw githubOperationError(result, operation);
     }
     return result ?? { ok: false, stdout: '', stderr: 'No command result' };
   }
@@ -323,6 +344,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     const result = await invoke(args, {
       ...(body === undefined ? {} : { input: JSON.stringify(body) }),
       allowFailure,
+      operation: githubApiOperation({ method, body }),
       ...(maxOutputBytes === undefined ? {} : { maxOutputBytes }),
     });
     if (!result.ok && allowFailure) return { ok: false, status: result.code, value: null, result };
@@ -682,7 +704,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       '--body',
       body,
       '--draft',
-    ]);
+    ], { operation: 'mutation' });
     const url = response.stdout.trim();
     const match = url.match(/\/pull\/(\d+)\/?$/);
     if (!match) throw new Error('GitHub did not return a draft pull request URL');
@@ -966,7 +988,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
   async function draftReady(pr, { guard } = {}) {
     const number = issueNumber({ number: typeof pr === 'object' ? pr.number : pr });
     if (guard !== undefined) await checkMutationGuard(guard);
-    await invoke(['pr', 'ready', String(number), '--repo', repo]);
+    await invoke(['pr', 'ready', String(number), '--repo', repo], { operation: 'projection' });
     return (await api(`repos/${repo}/pulls/${number}`)).value;
   }
 
@@ -984,7 +1006,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       '--squash',
       '--match-head-commit',
       sha,
-    ]);
+    ], { operation: 'merge' });
     const merged = await api(`repos/${repo}/pulls/${number}`);
     if (
       String(merged.value.state ?? '').toUpperCase() !== 'CLOSED' ||

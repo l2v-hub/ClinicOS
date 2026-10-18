@@ -1,3 +1,4 @@
+import { authorizationBinding, consumeOperatorAuthorization } from './operator-authorization.mjs';
 import {
   attemptLimit,
   historyDigest,
@@ -5,7 +6,7 @@ import {
   activeImplementation,
   spentAttempts,
 } from './attempt-budget.mjs';
-import { stateError } from './github.mjs';
+import { githubOperationError } from './github.mjs';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { validateState, feedbackFingerprint, sha256, safeText } from './contracts.mjs';
@@ -39,8 +40,11 @@ export function createCommentReviewHandoff({
   now = () => new Date(),
   nonce = randomUUID,
   subjectAdapter,
+  authorizationVerifier,
+  operationTimeouts = { merge: 30_000 },
 }) {
   const store = github.createStateStore();
+  const timeouts = Object.freeze({ ...operationTimeouts });
   async function api(endpoint) {
     const result = await run({
       command: 'gh',
@@ -50,7 +54,7 @@ export function createCommentReviewHandoff({
       maxOutputBytes: 16 * 1024 * 1024,
       envMode: 'controller',
     });
-    if (!result.ok) throw stateError('github-read-failed', 'GitHub handoff read failed');
+    if (!result.ok) throw githubOperationError(result, 'read');
     return JSON.parse(result.stdout);
   }
   async function actor() {
@@ -146,7 +150,37 @@ export function createCommentReviewHandoff({
       await github.commentPR(batch.pr.number, body);
     }
   }
-  async function request(pr, { recoverFailed = false } = {}) {
+  async function requestNotice(batch, login) {
+    assert.equal(batch.externalReview?.status, 'comment-requested');
+    const owner = batch.externalReview.requestedBy ?? batch.reviewHandoffHistory?.at(-1)?.actor;
+    assert.equal(owner, login, 'Request notice belongs to another actor');
+    await message(batch, {
+      kind: 'request', actor: owner, pr: batch.pr.number, subject_sha: batch.sha,
+      request_id: batch.externalReview.requestId, next_round: batch.reviews.length + 1,
+      action: 'Claude: claim through the trusted handoff CLI before reviewing; publish exact-SHA structured findings, then hand control to Codex.',
+    });
+  }
+  async function authorization(state, batch, login, action, reference, details = {}) {
+    return consumeOperatorAuthorization({ verifier: authorizationVerifier, reference, state,
+      binding: authorizationBinding({ state, subject: batch, actor: login, action, ...details }) });
+  }
+  async function releaseLease(state, batch, login, kind, previous, token, forceLive, authorizationRef) {
+    const timestamp = previous.reservedAt ?? previous.startedAt;
+    const start = typeof timestamp === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(timestamp)
+      ? Date.parse(timestamp) : NaN;
+    const validStart = Number.isFinite(start) &&
+      [new Date(start).toISOString(), new Date(start).toISOString().replace('.000Z', 'Z')].includes(timestamp);
+    const timeout = timeouts[kind];
+    const clock = now().getTime();
+    const expired = validStart && Number.isFinite(clock) &&
+      Number.isSafeInteger(timeout) && timeout > 0 && clock >= start + timeout;
+    const live = previous.status !== 'failed' && !expired;
+    if (live) assert.equal(forceLive, true, 'Live or undated reservation requires authorized force');
+    // Each QA retry and every ownership release consumes an external capability.
+    return authorization(state, batch, login, live ? 'force-live-recovery' : 'release-reservation',
+      authorizationRef, { reservation: { kind, token, previous: historyDigest(previous), forceLive: live } });
+  }
+  async function request(pr, { recoverFailed = false, authorizationRef } = {}) {
     const login = await actor(),
       { state, batch } = await load(pr);
     await live(batch);
@@ -164,7 +198,10 @@ export function createCommentReviewHandoff({
       'Implementation/evidence not verified',
     );
     assert.ok((await github.requiredChecks(pr)).ok, 'Required checks are not passing');
-    if (channel(batch) && batch.externalReview.status === 'comment-requested') return clone(batch);
+    if (channel(batch) && batch.externalReview.status === 'comment-requested') {
+      await requestNotice(batch, login);
+      return clone(batch);
+    }
     if (batch.phase === 'blocked') {
       assert.ok(
         recoverFailed &&
@@ -183,12 +220,17 @@ export function createCommentReviewHandoff({
         recoverFailed && previous.status === 'failed',
         'New code revision required after a substantive review',
       );
+    const recoveryAuthorization = recoverFailed
+      ? await authorization(state, batch, login, 'retry-failed-review', authorizationRef,
+          { reservation: { requestId: batch.externalReview?.requestId ?? null, round: batch.reviews.length } })
+      : undefined;
     batch.reviewHandoffHistory ??= [];
     batch.reviewHandoffHistory.push({
       at: now().toISOString(),
       actor: login,
       previous: clone(batch.externalReview ?? null),
       recovery: recoverFailed,
+      ...(recoveryAuthorization ? { authorization: recoveryAuthorization } : {}),
       spentReviews: batch.reviews.length,
     });
     batch.externalReview = {
@@ -197,22 +239,14 @@ export function createCommentReviewHandoff({
       subjectSha: batch.sha,
       requestId: nonce(),
       requestedAt: now().toISOString(),
+      requestedBy: login,
     };
     batch.reviewChannel = 'github-comments';
     batch.phase = 'waiting-review';
     delete batch.reason;
     await save(state, batch, login);
     try {
-      await message(batch, {
-        kind: 'request',
-        actor: login,
-        pr,
-        subject_sha: batch.sha,
-        request_id: batch.externalReview.requestId,
-        next_round: batch.reviews.length + 1,
-        action:
-          'Claude: claim through the trusted handoff CLI before reviewing; publish exact-SHA structured findings, then hand control to Codex.',
-      });
+      await requestNotice(batch, login);
     } catch (error) {
       Object.assign(error, { persisted: true, projection: 'request-comment-failed', pr });
       throw error;
@@ -273,7 +307,10 @@ export function createCommentReviewHandoff({
   }
   async function reconcile(batch, persist) {
     if (!channel(batch)) return false;
-    if (batch.externalReview.status === 'comment-requested') return false;
+    if (batch.externalReview.status === 'comment-requested') {
+      await requestNotice(batch, await actor());
+      return false;
+    }
     if (batch.externalReview.status === 'published') return true;
     const handoff = batch.externalReview;
     assert.ok(
@@ -411,7 +448,8 @@ export function createCommentReviewHandoff({
   async function recoveryLive(batch, expectedHead) {
     const feedback = await github.reviewFeedback(batch.pr.number);
     assert.ok(
-      feedback.state === 'OPEN' &&
+      (feedback.state === 'OPEN' || (feedback.state === 'MERGED' &&
+        batch.release?.status === 'merged' && feedback.mergeCommitSha === batch.release.mergeSha)) &&
         !feedback.isDraft &&
         feedback.headRef === batch.branch &&
         feedback.headRepo === REPO &&
@@ -449,6 +487,8 @@ export function createCommentReviewHandoff({
     const previousLimit = attemptLimit(batch, kind);
     assert.equal(limit, previousLimit + 1, 'Extend one attempt at a time');
     assert.ok(limit <= 32, 'Explicit storage policy required beyond 32 attempts');
+    const approved = await authorization(state, batch, login, 'extend-budget', authorizationRef,
+      { budget: { kind, previousLimit, limit } });
     batch.budgetExtensions ??= [];
     batch.budgetExtensions.push({
       entityId: batch.id,
@@ -460,6 +500,7 @@ export function createCommentReviewHandoff({
       at: now().toISOString(),
       reason,
       authorizationRef,
+      authorization: approved,
       nonce: nonce(),
       historyLength: spentAttempts(batch, kind),
       historyDigest: historyDigest(
@@ -475,18 +516,21 @@ export function createCommentReviewHandoff({
     });
     return clone(batch);
   }
-  async function recover(pr, { action, expectedSha, token, reason }) {
+  async function recover(pr, { action, expectedSha, token, reason, forceLive = false, authorizationRef }) {
     const login = await maintainer(),
       { state, batch } = await load(pr, { includeManual: true });
     assert.equal(expectedSha, batch.sha, 'Recovery must name the durable subject SHA');
     assert.ok(typeof reason === 'string' && reason.trim() && reason.length <= 1000);
     safeText(reason);
-    const recoveryHead = await recoveryLive(batch);
+    let recoveryHead;
+    let recoveryAuthorization;
     let previous;
+    if (action !== 'release-merge-reservation') recoveryHead = await recoveryLive(batch);
     if (action === 'abandon-claim') {
       previous = clone(batch.externalReview);
       assert.equal(previous?.status, 'comment-running');
       assert.equal(token, previous.claimId, 'Recovery claim changed');
+      recoveryAuthorization = await releaseLease(state, batch, login, 'claim', previous, token, forceLive, authorizationRef);
       assert.equal(batch.reviews.at(-1)?.status, 'running');
       assert.equal(batch.reviewLedger?.rounds.at(-1)?.verdict, 'running');
       batch.reviews.at(-1).status = 'failed';
@@ -498,6 +542,7 @@ export function createCommentReviewHandoff({
       previous = clone(batch.codexFinalReview);
       assert.ok(['running', 'failed'].includes(previous?.status));
       assert.equal(token, previous.nonce ?? historyDigest(previous), 'Recovery QA changed');
+      recoveryAuthorization = await releaseLease(state, batch, login, 'qa', previous, token, forceLive, authorizationRef);
       batch.qaHistory ??= [];
       batch.qaHistory.push(previous);
       delete batch.codexFinalReview;
@@ -506,19 +551,35 @@ export function createCommentReviewHandoff({
       previous = clone(batch.release);
       assert.equal(previous?.status, 'merging');
       assert.equal(token, previous.nonce ?? historyDigest(previous), 'Recovery merge changed');
-      // Native OPEN above means not merged (the GitHub adapter exposes merged as MERGED).
-      assert.equal(recoveryHead, batch.sha);
+      assert.ok(!previous.recoveryReleasedAt, 'Merge reservation recovery already consumed');
+      recoveryAuthorization = await releaseLease(state, batch, login, 'merge', previous, token, forceLive, authorizationRef);
+      const feedback = await github.reviewFeedback(batch.pr.number);
+      assert.equal(feedback.head, batch.sha, 'Recovery head changed');
+      if (feedback.state === 'MERGED') {
+        assert.match(feedback.mergeCommitSha ?? '', /^[a-f0-9]{40}$/);
+        batch.release = { ...previous, status: 'merged', mergeSha: feedback.mergeCommitSha };
+      } else {
+        assert.equal(feedback.state, 'OPEN', 'Merge outcome cannot be reconciled');
+        // A tombstone remains eligible for exact-head receipt reconciliation. Remote
+        // merge can commit after this CAS, so deleting the reservation is unsafe.
+        batch.release = { ...previous, recoveryReleasedAt: now().toISOString(), outcome: 'uncertain' };
+        batch.phase = 'blocked';
+        batch.reason = 'Merge outcome pending exact-head receipt reconciliation';
+      }
+      recoveryHead = await recoveryLive(batch, batch.sha);
       batch.mergeHistory ??= [];
       batch.mergeHistory.push(previous);
-      delete batch.release;
-      batch.phase = 'waiting-review';
     } else if (action === 'resume') {
       assert.equal(batch.phase, 'blocked');
       assert.equal(
         token,
         historyDigest({ phase: batch.phase, failureCode: batch.failureCode ?? null }),
       );
-      if (subjectAdapter?.recoveryVerify) await subjectAdapter.recoveryVerify(batch);
+      if (subjectAdapter?.recoveryVerify) {
+        assert.ok(['github-read-transient', 'github-transient-exhausted'].includes(batch.failureCode),
+          'Standalone resume requires an explicit retryable failure');
+        await subjectAdapter.recoveryVerify(batch);
+      }
       else {
         const negativeReview =
           batch.externalReview?.status === 'published' &&
@@ -531,7 +592,7 @@ export function createCommentReviewHandoff({
           spentAttempts(batch, 'implementation') < attemptLimit(batch, 'implementation') &&
           batch.reviews.length < attemptLimit(batch, 'reviews');
         assert.ok(
-          ['github-read-failed', 'label-projection-failed'].includes(batch.failureCode) ||
+          ['github-read-transient', 'github-transient-exhausted'].includes(batch.failureCode) ||
             allowance,
           'Resume requires transient recovery or unused audited correction and review allowances',
         );
@@ -554,11 +615,15 @@ export function createCommentReviewHandoff({
       observedHead: recoveryHead,
       token,
       previous,
+      ...(recoveryAuthorization ? { authorization: recoveryAuthorization,
+        forceLive: recoveryAuthorization.binding.reservation?.forceLive ?? false } : {}),
       consumedReviews: batch.reviews.length,
       consumedImplementation: spentAttempts(batch, 'implementation'),
     });
     delete batch.approvedSha;
     delete batch.failureCode;
+    if (batch.release?.recoveryReleasedAt && batch.release.status === 'merging')
+      batch.failureCode = 'github-write-uncertain';
     await save(state, batch, login, {
       recoveryHead,
       guard: async () => {

@@ -8,7 +8,7 @@ import {
 import { planSchema, validatePlan, validateState, feedbackFingerprint } from './contracts.mjs';
 import { externalReviewStep } from './external-review.mjs';
 import { validateStandaloneState, finalizeStandaloneSubject } from './standalone-review.mjs';
-import { controllerFailureCode } from './github.mjs';
+import { controllerFailureCode, isRetryableGitHubFailure } from './github.mjs';
 
 function eligibleIssue(issue) {
   const labels = (issue.labels ?? []).map((l) => (typeof l === 'string' ? l : l.name));
@@ -77,43 +77,59 @@ export async function runPipeline({
     validateStandaloneState(state);
     if (!standaloneController)
       throw new Error('Standalone subjects require their trusted controller');
-    for (const subject of state.standaloneReviews) {
-      if (subject.release?.status === 'merged') continue;
+    // Snapshot identities, never object references: a failed CAS reload replaces all
+    // canonical objects. Later subjects must resolve against the refreshed state.
+    const subjectIds = state.standaloneReviews.map((subject) => subject.id);
+    for (const id of subjectIds) {
+      let subject = state.standaloneReviews.find((item) => item.id === id);
+      if (!subject || subject.release?.status === 'merged' ||
+        (subject.phase === 'blocked' && subject.release?.status !== 'merging')) continue;
+      const transient = subject.lastTransientFailure;
+      if (transient?.subjectSha === subject.sha && transient.nextRetryAt > now()) continue;
       try {
         await finalizeStandaloneSubject({
-          subject,
-          controller: standaloneController,
-          github: gh,
-          workspace,
-          save,
-          infrastructureFiles: standaloneInfrastructureFiles,
-          now: () => new Date(now()),
+          subject, controller: standaloneController, github: gh, workspace, save,
+          infrastructureFiles: standaloneInfrastructureFiles, now: () => new Date(now()),
         });
-      } catch (error) {
-        const code = controllerFailureCode(error);
-        if (
-          !persistenceFailed &&
-          !['github-read-failed', 'label-projection-failed'].includes(code)
-        ) {
-          subject.phase = 'blocked';
-          subject.reason = 'Standalone identity or evidence requires explicit recovery';
-          subject.failureCode = code;
-          delete subject.approvedSha;
-          try {
-            await save();
-          } catch {
-            /* Reload the authoritative state below. */
-          }
+        if (subject.lastTransientFailure) {
+          delete subject.lastTransientFailure;
+          await save();
         }
-        // Discard ALL local unsaved mutations. In particular an approval/running reservation
-        // must never hitchhike on the next normal-batch save after this subject's failed write.
+      } catch (error) {
+        // A failed persistence boundary halts the entire mutation pass. Loading a
+        // snapshot does not establish that writes are usable again.
+        if (persistenceFailed) throw error;
         state = validateState(await store.load(), repo);
         if (state.standaloneReviews) validateStandaloneState(state);
-        persistenceFailed = false;
-        break; // Other standalone subjects retry next tick; normal batches still run now.
+        subject = state.standaloneReviews?.find((item) => item.id === id);
+        if (!subject) continue;
+        const code = controllerFailureCode(error);
+        if (isRetryableGitHubFailure(error)) {
+          const previous = subject.lastTransientFailure;
+          const count = previous?.subjectSha === subject.sha ? Math.min(previous.count + 1, 3) : 1;
+          subject.lastTransientFailure = {
+            code, operation: 'read', at: new Date(now()).toISOString(), count,
+            subjectSha: subject.sha, nextRetryAt: now() + Math.min(count * 1000, 3000),
+          };
+          if (count >= 3) {
+            subject.phase = 'blocked';
+            subject.failureCode = 'github-transient-exhausted';
+            subject.reason = 'Repeated retryable GitHub reads require explicit recovery';
+            delete subject.approvedSha;
+          }
+        } else {
+          subject.phase = 'blocked';
+          subject.reason = 'Standalone identity, evidence or GitHub operation requires explicit recovery';
+          subject.failureCode = code;
+          delete subject.approvedSha;
+        }
+        // Failure here propagates: no diagnostic is claimed durable and unrelated
+        // subjects cannot carry unsafe unsaved mutations into a later write.
+        await save();
       }
     }
   }
+
   const report = async (batch, text) => {
     for (const n of batch.issues)
       await gh.commentIssue(n, `<!-- codex-bug-pipeline:status -->\n${text}`);

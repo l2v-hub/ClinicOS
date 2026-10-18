@@ -102,7 +102,7 @@ export function communicationFixture({ clock } = {}) {
     const endpoint = call.args[1];
     const method = call.args.includes('-X') ? call.args[call.args.indexOf('-X') + 1] : 'GET';
     if (failure?.(call))
-      return { ok: false, stderr: 'synthetic private provider body never logged' };
+      return { ok: false, error: 'timeout', stderr: 'synthetic private provider body never logged' };
     const clean = endpoint.split('?')[0];
     let value;
     if (method === 'GET') {
@@ -947,4 +947,20 @@ test('normal mirror/receipt/status publication survives final rechecks and remai
   assert.equal((await f.communication.publishState(f.batch)).comments, 0);
   assert.equal(f.writes.length, writes);
   assert.deepEqual(f.state(), before);
+});
+
+test('running and awaiting-QA continuations never project a ready review label', async () => {
+  const { historyDigest } = await import('../../src/bug-pipeline/attempt-budget.mjs');
+  const f = communicationFixture();
+  f.batch.implementation = [1, 2, 3, 4].map((round) => ({ round, status: 'failed' }));
+  for (const status of ['running', 'implemented-awaiting-independent-qa']) {
+    f.batch.operatorContinuations = [{ round: 5, status }];
+    assert.equal(reviewProjection(f.batch).label, 'codex-review-fixes');
+  }
+  f.batch.operatorContinuations = [{ round: 5, status: 'passed' }, { round: 6, status: 'running' }];
+  f.batch.budgetExtensions = [{ entityId: f.batch.id, pr: 81, kind: 'implementation',
+    previousLimit: 5, limit: 6, actor: 'operator', at: '2026-10-18T00:00:00Z', reason: 'Historical allowance',
+    authorizationRef: 'legacy-reference', nonce: 'extension6', historyLength: 5,
+    historyDigest: historyDigest([...f.batch.implementation, f.batch.operatorContinuations[0]]) }];
+  assert.equal(reviewProjection(f.batch).label, 'codex-review-fixes');
 });

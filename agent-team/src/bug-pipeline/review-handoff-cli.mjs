@@ -15,6 +15,18 @@ import { createModels } from './models.mjs';
 import { createWorkspace } from './workspace.mjs';
 import { STANDALONE_INFRASTRUCTURE_FILES } from './cli.mjs';
 
+export function handoffErrorDiagnostic(error) {
+  const pr = Number.isSafeInteger(error.pr) && error.pr > 0 ? error.pr : null;
+  return {
+    code: controllerFailureCode(error),
+    persisted: typeof error.persisted === 'boolean' ? error.persisted : 'unconfirmed',
+    projection: ['request-comment-failed', 'report-publication-failed'].includes(error.projection)
+      ? error.projection : undefined,
+    next: pr ? `node agent-team/src/bug-pipeline/review-handoff-cli.mjs reconcile --pr ${pr}`
+      : 'Inspect durable owner status before retrying',
+  };
+}
+
 export async function finalizeEnvironment(env) {
   const existingHome = path.join(env.HOME || env.USERPROFILE || os.homedir(), '.codex');
   const existingConfig = await lstat(existingHome).catch((error) =>
@@ -70,8 +82,8 @@ export async function main({
       runtimeRoot,
     });
   const github = dependencies.github ?? createGitHub({ cwd, repo: 'l2v-hub/ClinicOS', run });
-  const normal = createCommentReviewHandoff({ github, run, cwd });
-  const standalone = createStandaloneReview({ github, run, cwd });
+  const normal = createCommentReviewHandoff({ github, run, cwd, authorizationVerifier: dependencies.authorizationVerifier });
+  const standalone = createStandaloneReview({ github, run, cwd, authorizationVerifier: dependencies.authorizationVerifier });
   await normal.actor();
   const state = await github.createStateStore().load();
   const isStandalone =
@@ -107,6 +119,8 @@ export async function main({
               expectedSha: option('--sha'),
               token: option('--token'),
               reason: option('--reason'),
+              forceLive: options.includes('--force-live'),
+              authorizationRef: options.includes('--authorization') ? option('--authorization') : undefined,
             })
           : await handoff.extendBudget(pr, {
               kind: option('--kind'),
@@ -126,7 +140,8 @@ export async function main({
       assert.equal(manifest.pr?.number, pr, 'Manifest PR mismatch');
       batch = await standalone.adopt(manifest);
     } else if (command === 'request')
-      batch = await handoff.request(pr, { recoverFailed: options.includes('--recover-failed') });
+      batch = await handoff.request(pr, { recoverFailed: options.includes('--recover-failed'),
+        authorizationRef: options.includes('--authorization') ? options[options.indexOf('--authorization') + 1] : undefined });
     else if (command === 'claim') batch = await handoff.claim(pr);
     else if (command === 'submit') {
       assert.ok(options.includes('--report'), 'Specify --report');
@@ -162,7 +177,7 @@ export async function main({
             projection: 'failed',
             causeCode: controllerFailureCode(error),
             pr,
-            next: `reconcile --pr ${pr}`,
+            next: `node agent-team/src/bug-pipeline/review-handoff-cli.mjs reconcile --pr ${pr}`,
           }),
         );
         return 1;
@@ -207,14 +222,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   try {
     process.exitCode = await main();
   } catch (error) {
-    console.error(
-      JSON.stringify({
-        code: controllerFailureCode(error),
-        persisted: error.persisted ?? 'unconfirmed',
-        projection: error.projection,
-        next: error.pr ? `reconcile --pr ${error.pr}` : 'status; reconcile before retrying',
-      }),
-    );
+    console.error(JSON.stringify(handoffErrorDiagnostic(error)));
     process.exitCode = 1;
   }
 }

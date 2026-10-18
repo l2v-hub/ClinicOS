@@ -13,6 +13,7 @@ import { STANDALONE_INFRASTRUCTURE_FILES } from '../../src/bug-pipeline/cli.mjs'
 import {
   finalizeEnvironment,
   main as handoffMain,
+  handoffErrorDiagnostic,
 } from '../../src/bug-pipeline/review-handoff-cli.mjs';
 import {
   createGitHub,
@@ -35,7 +36,7 @@ const report = () => ({
   summary: 'Inspected frozen source and evidence.',
   findings: [],
 });
-function fixture() {
+function fixture({ authorizationVerifier = true, now } = {}) {
   let remote = { schemaVersion: 1, repository: repo, batches: [] },
     version = 0,
     login = 'maintainer',
@@ -253,7 +254,13 @@ function fixture() {
     assert.fail('Unexpected transport ' + JSON.stringify(call));
   };
   let nonce = 0;
+  let authorizationNonce = 0;
   const controller = createStandaloneReview({
+    now,
+    authorizationVerifier: authorizationVerifier ? async ({ binding }) => ({
+      provenance: 'user-session', grantId: 'synthetic-session', sourceRef: 'test:session',
+      consumptionNonce: `action-${++authorizationNonce}`, binding,
+    }) : undefined,
     github,
     run,
     cwd: '/trusted',
@@ -677,7 +684,7 @@ function makeAllowlisted(f, file = 'docs/standalone-pr-review.md') {
 }
 
 test('trusted runtime uses fixed human-safe policy, reserves infrastructure merge, persists receipt and skips next tick', async () => {
-  assert.equal(STANDALONE_INFRASTRUCTURE_FILES.length, 7);
+  assert.equal(STANDALONE_INFRASTRUCTURE_FILES.length, 3);
   assert.ok(
     STANDALONE_INFRASTRUCTURE_FILES.every(
       (file) => !file.startsWith('agent-team/src/') && !file.startsWith('.github/'),
@@ -1400,6 +1407,12 @@ test('F1 trust-root and workflow changes never merge even through a caller-suppl
     'agent-team/src/bug-pipeline/review-policy.mjs',
     'agent-team/src/bug-pipeline/comment-review-handoff.mjs',
     '.github/workflows/anything.yml',
+    'docs/claude-local-review-prompt.md',
+    'agent-team/tests/bug-pipeline/github.test.mjs',
+    'agent-team/tests/bug-pipeline/standalone-review.test.mjs',
+    'agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs',
+    'agent-team/tests/bug-pipeline/operator-authorization.test.mjs',
+    'agent-team/tests/bug-pipeline/attempt-budget.test.mjs',
   ]) {
     const f = fixture();
     makeAllowlisted(f, file);
@@ -1507,7 +1520,7 @@ test('F4 head-drift claim recovery preserves the consumed round and enables adop
   const claimedSubject = await claimed(f);
   f.pr.head.sha = f.feedback.head = 'f'.repeat(40);
   const recovered = await f.controller.recover(81, {
-    action: 'abandon-claim',
+    action: 'abandon-claim', forceLive: true, authorizationRef: 'test:session',
     expectedSha: sha,
     token: claimedSubject.externalReview.claimId,
     reason: 'Worker stopped after head changed',
@@ -1518,7 +1531,7 @@ test('F4 head-drift claim recovery preserves the consumed round and enables adop
   assert.equal(recovered.externalReview.claimId, undefined);
   await assert.rejects(
     f.controller.recover(81, {
-      action: 'abandon-claim',
+      action: 'abandon-claim', forceLive: true, authorizationRef: 'test:session',
       expectedSha: sha,
       token: claimedSubject.externalReview.claimId,
       reason: 'Replay',
@@ -1548,7 +1561,7 @@ test('F4 audited QA release is one-use, maintainer-only, preserves old reservati
   f.github.authorizedMaintainer = async () => false;
   await assert.rejects(
     f.controller.recover(81, {
-      action: 'release-qa-reservation',
+      action: 'release-qa-reservation', forceLive: true, authorizationRef: 'test:session',
       expectedSha: sha,
       token: 'old-qa',
       reason: 'Owner stopped',
@@ -1558,7 +1571,7 @@ test('F4 audited QA release is one-use, maintainer-only, preserves old reservati
   f.github.authorizedMaintainer = async () => true;
   await assert.rejects(
     f.controller.recover(81, {
-      action: 'release-qa-reservation',
+      action: 'release-qa-reservation', forceLive: true, authorizationRef: 'test:session',
       expectedSha: sha,
       token: 'wrong-nonce',
       reason: 'Owner stopped',
@@ -1566,7 +1579,7 @@ test('F4 audited QA release is one-use, maintainer-only, preserves old reservati
     /changed/,
   );
   const recovered = await f.controller.recover(81, {
-    action: 'release-qa-reservation',
+    action: 'release-qa-reservation', forceLive: true, authorizationRef: 'test:session',
     expectedSha: sha,
     token: 'old-qa',
     reason: 'Owner stopped',
@@ -1575,7 +1588,7 @@ test('F4 audited QA release is one-use, maintainer-only, preserves old reservati
   assert.equal(recovered.reviews.length, 1);
   await assert.rejects(
     f.controller.recover(81, {
-      action: 'release-qa-reservation',
+      action: 'release-qa-reservation', forceLive: true, authorizationRef: 'test:session',
       expectedSha: sha,
       token: 'old-qa',
       reason: 'Replay',
@@ -1596,22 +1609,24 @@ test('F4 merge release requires native open/unmerged identity and archives the e
   f.feedback.state = 'MERGED';
   await assert.rejects(
     f.controller.recover(81, {
-      action: 'release-merge-reservation',
+      action: 'release-merge-reservation', forceLive: true, authorizationRef: 'test:session',
       expectedSha: sha,
       token: 'merge-owner',
       reason: 'Owner stopped',
     }),
-    /identity/,
+    /identity|match/,
   );
   f.feedback.state = 'OPEN';
   const recovered = await f.controller.recover(81, {
-    action: 'release-merge-reservation',
+    action: 'release-merge-reservation', forceLive: true, authorizationRef: 'test:session',
     expectedSha: sha,
     token: 'merge-owner',
     reason: 'Confirmed no native merge',
   });
   assert.deepEqual(recovered.mergeHistory, [subject.release]);
-  assert.equal(recovered.release, undefined);
+  assert.equal(recovered.release.status, 'merging');
+  assert.ok(recovered.release.recoveryReleasedAt);
+  assert.equal(recovered.release.nonce, 'merge-owner');
 });
 
 test('F5 persisted submit reports failed projection and reconcile alone converges without another round/comment', async (t) => {
@@ -1647,7 +1662,7 @@ test('F5 persisted submit reports failed projection and reconcile alone converge
   const failure = JSON.parse(errors.at(-1));
   assert.deepEqual(
     { persisted: failure.persisted, projection: failure.projection, next: failure.next },
-    { persisted: true, projection: 'failed', next: 'reconcile --pr 81' },
+    { persisted: true, projection: 'failed', next: 'node agent-team/src/bug-pipeline/review-handoff-cli.mjs reconcile --pr 81' },
   );
   const comments = f.comments.length,
     rounds = f.remote().standaloneReviews[0].reviews.length;
@@ -1739,7 +1754,7 @@ test('F9 independent QA reservation uses injected time', async () => {
   assert.equal(subject.codexFinalReview.reservedAt, '2025-01-02T03:04:05.000Z');
 });
 
-test('F7 standalone failed save reloads durable state before normal queue work and cannot leak an unsaved QA reservation', async () => {
+test('F7 unusable persistence halts all later mutations and cannot leak an unsaved QA reservation', async () => {
   const f = fixture();
   await published(f);
   const backing = f.github.createStateStore();
@@ -1777,7 +1792,7 @@ test('F7 standalone failed save reloads durable state before normal queue work a
   const view = f.github.viewIssue;
   f.github.viewIssue = async (number) =>
     number === 17 ? { number, state: 'open', labels: ['bug', 'codex-run'] } : view(number);
-  const result = await runPipeline({
+  await assert.rejects(runPipeline({
     repo,
     event: {},
     gh: f.github,
@@ -1789,12 +1804,11 @@ test('F7 standalone failed save reloads durable state before normal queue work a
     standaloneController: f.controller,
     now: () => 1000000,
     triageWindowMs: 120000,
-  });
+  }), { code: 'state-write-failed' });
   assert.equal(failed, true);
-  assert.equal(normalStatus, 1, 'Normal batch handling continues after standalone write failure');
-  assert.deepEqual(result.triageQueue.issues, [17], 'Normal queue reached its own successful save');
+  assert.equal(normalStatus, 0, 'No further writes after unusable persistence');
   assert.equal(f.remote().standaloneReviews[0].codexFinalReview, undefined);
-  assert.deepEqual(f.remote().triageQueue.issues, [17]);
+  assert.equal(f.remote().triageQueue, undefined);
 });
 
 test('F4 a transient waiting-subject read failure leaves phase and consumed history unchanged', async () => {
@@ -1814,12 +1828,15 @@ test('F4 a transient waiting-subject read failure leaves phase and consumed hist
     standaloneController: {
       ...f.controller,
       publishState: async () => {
-        throw Object.assign(new Error('Synthetic HTTP 503'), { code: 'github-read-failed' });
+        throw Object.assign(new Error('Synthetic HTTP 503'), { code: 'github-read-transient' });
       },
     },
   });
-  assert.deepEqual(state.standaloneReviews[0], before);
-  assert.deepEqual(f.remote().standaloneReviews[0], before);
+  const recorded = clone(state.standaloneReviews[0]);
+  assert.equal(recorded.lastTransientFailure.count, 1);
+  delete recorded.lastTransientFailure;
+  assert.deepEqual(recorded, before);
+  assert.deepEqual(f.remote().standaloneReviews[0], state.standaloneReviews[0]);
 });
 
 test('audited completed operator continuation remains the latest tested source across revision adoption without legacy folding', async () => {
@@ -1902,4 +1919,304 @@ test('audited completed operator continuation remains the latest tested source a
     { path: next.sourceManifest[0].path, sha: '4'.repeat(40), type: 'blob', mode: '100644' },
   ]);
   await assert.rejects(f.controller.verify(adopted), /Frozen standalone subject/);
+});
+
+async function fairSubjects() {
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  const initial = clone(f.remote());
+  const second = clone(initial.standaloneReviews[0]);
+  second.pr = { number: 82, url: `https://github.com/${repo}/pull/82` };
+  second.id = 'standalone-pr-82';
+  second.branch = 'feature/second';
+  initial.standaloneReviews.push(second);
+  let remote = clone(initial), saves = 0, clock = 10000;
+  const store = {
+    load: async () => clone(remote),
+    save: async (state, options) => {
+      await options?.guard?.();
+      saves++;
+      remote = clone(state);
+    },
+  };
+  const github = { intake: async () => {}, discoverQueue: async () => [] };
+  let failureCode = 'github-read-transient';
+  const controller = {
+    actor: async () => 'operator', guardSubject: async () => {}, publishState: async () => {},
+    reconcile: async (subject, save) => {
+      if (subject.pr.number === 81 && failureCode)
+        throw Object.assign(new Error('Synthetic read failure'), { code: failureCode });
+      subject.projectionTicks = (subject.projectionTicks ?? 0) + 1;
+      await save();
+      return false;
+    },
+  };
+  return { initial, store, github, controller,
+    remote: () => remote, saves: () => saves, setCode: (value) => { failureCode = value; },
+    tick: async () => { clock += 10000; return runPipeline({ repo, event: {}, gh: github,
+      store, workspace: {}, models: {}, standaloneController: controller, now: () => clock }); },
+  };
+}
+
+test('transient fairness resolves later subjects from refreshed canonical state and escalates at three ticks', async () => {
+  const f = await fairSubjects();
+  for (let count = 1; count <= 3; count++) {
+    const state = await f.tick();
+    assert.equal(state.standaloneReviews[0].lastTransientFailure.count, count);
+    assert.equal(state.standaloneReviews[1].projectionTicks, count);
+    assert.equal(f.remote().standaloneReviews[1].projectionTicks, count,
+      'Later subject mutation belongs to canonical reloaded state');
+  }
+  assert.equal(f.remote().standaloneReviews[0].phase, 'blocked');
+  assert.equal(f.remote().standaloneReviews[0].failureCode, 'github-transient-exhausted');
+  assert.deepEqual(f.remote().standaloneReviews[0].implementation, f.initial.standaloneReviews[0].implementation);
+});
+
+test('permanent read failure blocks once while the next standalone subject progresses in the same tick', async () => {
+  const f = await fairSubjects();
+  f.setCode('github-read-rejected');
+  await f.tick();
+  assert.equal(f.remote().standaloneReviews[0].phase, 'blocked');
+  assert.equal(f.remote().standaloneReviews[0].failureCode, 'github-read-rejected');
+  assert.equal(f.remote().standaloneReviews[1].projectionTicks, 1);
+  await f.tick();
+  assert.equal(f.remote().standaloneReviews[1].projectionTicks, 2);
+});
+
+test('transient counters reset on successful work and changed SHA without resetting consumed attempts', async () => {
+  const f = await fairSubjects();
+  await f.tick();
+  f.setCode(null);
+  await f.tick();
+  assert.equal(f.remote().standaloneReviews[0].lastTransientFailure, undefined);
+  f.setCode('github-read-transient');
+  await f.tick();
+  const changed = await f.store.load();
+  changed.standaloneReviews[0].sha = 'e'.repeat(40);
+  await f.store.save(changed);
+  await f.tick();
+  assert.equal(f.remote().standaloneReviews[0].lastTransientFailure.count, 1);
+  assert.deepEqual(f.remote().standaloneReviews[0].implementation, f.initial.standaloneReviews[0].implementation);
+});
+
+test('human-protected prompt and policy tests reject automatic merge even with a supplied allowlist and native override', async () => {
+  const { requiresHumanReview, standaloneMergePolicy } = await import('../../src/bug-pipeline/review-policy.mjs');
+  const paths = ['docs/claude-local-review-prompt.md',
+    'agent-team/tests/bug-pipeline/github.test.mjs',
+    'agent-team/tests/bug-pipeline/standalone-review.test.mjs',
+    'agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs',
+    'agent-team/tests/bug-pipeline/operator-authorization.test.mjs',
+    'agent-team/tests/bug-pipeline/attempt-budget.test.mjs'];
+  for (const path of paths) {
+    assert.equal(requiresHumanReview(path), true);
+    assert.equal(STANDALONE_INFRASTRUCTURE_FILES.includes(path), false);
+    for (const files of [[path], ['docs/standalone-pr-review.md', path]])
+      assert.equal(standaloneMergePolicy({ files, reviewer: 'reviewer', actor: 'actor',
+        native: { humanApproved: true, author: 'author', protectedReviews: true } }),
+      'human-protected-trust-root');
+  }
+  assert.equal(requiresHumanReview('docs/standalone-pr-review.md'), false);
+});
+
+test('post-save request notice failure is repaired by the actual suggested CLI command, idempotently without spending a round', async () => {
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  const comment = f.github.commentPR;
+  let fail = true;
+  f.github.commentPR = async (...args) => {
+    if (fail) { fail = false; throw Object.assign(new Error('Synthetic uncertain comment'), { code: 'github-write-uncertain' }); }
+    return comment(...args);
+  };
+  let diagnostic;
+  await assert.rejects(handoffMain({ args: ['request', '--pr', '81'], env: {},
+    dependencies: { github: f.github, run: f.run } }), (error) => {
+    diagnostic = handoffErrorDiagnostic(error);
+    return diagnostic.persisted === true;
+  });
+  const reserved = clone(f.remote().standaloneReviews[0]);
+  const command = diagnostic.next;
+  assert.equal(command, 'node agent-team/src/bug-pipeline/review-handoff-cli.mjs reconcile --pr 81');
+  const args = command.split(' ').slice(2);
+  const output = console.log;
+  console.log = () => {};
+  try {
+    assert.equal(await handoffMain({ args, env: {}, dependencies: { github: f.github, run: f.run } }), 0);
+    assert.equal(await handoffMain({ args, env: {}, dependencies: { github: f.github, run: f.run } }), 0);
+  } finally { console.log = output; }
+  const current = f.remote().standaloneReviews[0];
+  assert.equal(current.externalReview.requestId, reserved.externalReview.requestId);
+  assert.equal(current.externalReview.requestedBy, reserved.externalReview.requestedBy);
+  assert.equal(current.reviews.length, 0);
+  assert.deepEqual(current.reviewLedger, reserved.reviewLedger);
+  const notices = f.comments.filter((comment) => comment.body.includes('"kind": "request"'));
+  assert.equal(notices.length, 1);
+});
+
+test('uncertain request comment that committed is reconciled without a second notice; changed actor cannot repair it', async () => {
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  const comment = f.github.commentPR;
+  f.github.commentPR = async (...args) => {
+    await comment(...args);
+    throw Object.assign(new Error('Synthetic committed write timeout'), { code: 'github-write-uncertain' });
+  };
+  await assert.rejects(f.controller.request(81));
+  await f.controller.reconcilePR(81);
+  assert.equal(f.comments.filter((item) => item.body.includes('"kind": "request"')).length, 1);
+  f.setActor('another-authorized-user');
+  await assert.rejects(f.controller.reconcilePR(81), /another actor/);
+  assert.equal(f.remote().standaloneReviews[0].reviews.length, 0);
+});
+
+async function reservedMerge(f, reservedAt = '2026-10-18T00:00:00Z') {
+  const subject = await published(f);
+  subject.release = { status: 'merging', reviewedSha: sha, prNumber: 81,
+    nonce: 'unique-merge-reservation', reservedAt };
+  await stepOptions(f, subject, async () => assert.fail()).save();
+  return subject;
+}
+function markMerged(f) {
+  f.pr.state = 'closed';
+  f.pr.merged = true;
+  f.pr.merge_commit_sha = '9'.repeat(40);
+  f.feedback.state = 'MERGED';
+  f.feedback.mergeCommitSha = f.pr.merge_commit_sha;
+}
+const mergeRecovery = (extra = {}) => ({ action: 'release-merge-reservation', expectedSha: sha,
+  token: 'unique-merge-reservation', reason: 'Exact reservation recovery',
+  authorizationRef: 'test:session', ...extra });
+
+test('merge lease uses injected clock and actual thirty-second command timeout; fresh owner cannot be preempted', async () => {
+  let clock = Date.parse('2026-10-18T00:00:00Z');
+  const f = fixture({ now: () => new Date(clock) });
+  await reservedMerge(f);
+  await assert.rejects(f.controller.recover(81, mergeRecovery()), /authorized force/);
+  clock += 29999;
+  await assert.rejects(f.controller.recover(81, mergeRecovery()), /authorized force/);
+  clock += 1;
+  const recovered = await f.controller.recover(81, mergeRecovery());
+  assert.equal(recovered.release.status, 'merging');
+  assert.equal(recovered.release.recoveryReleasedAt, new Date(clock).toISOString());
+  assert.equal(recovered.recoveryHistory.at(-1).authorization.binding.reservation.forceLive, false);
+  await assert.rejects(f.controller.recover(81, mergeRecovery()), /already consumed/);
+});
+
+test('force-live flag alone cannot replace trusted external capability verification', async () => {
+  const f = fixture({ authorizationVerifier: false, now: () => new Date('2026-10-18T00:00:00Z') });
+  await reservedMerge(f);
+  const before = clone(f.remote());
+  await assert.rejects(f.controller.recover(81, mergeRecovery({ forceLive: true })), /verifier unavailable/);
+  assert.deepEqual(f.remote(), before);
+});
+
+test('explicit verified force is audited and cannot reset consumed implementation or review history', async () => {
+  const f = fixture({ now: () => new Date('2026-10-18T00:00:00Z') });
+  const old = await reservedMerge(f);
+  const recovered = await f.controller.recover(81, mergeRecovery({ forceLive: true }));
+  const binding = recovered.recoveryHistory.at(-1).authorization.binding;
+  assert.equal(binding.action, 'force-live-recovery');
+  assert.equal(binding.reservation.forceLive, true);
+  assert.deepEqual(recovered.reviews, old.reviews);
+  assert.deepEqual(recovered.implementation, old.implementation);
+});
+
+test('merge completed before release converges to exact-head receipt rather than waiting review', async () => {
+  const f = fixture({ now: () => new Date('2026-10-18T00:01:00Z') });
+  await reservedMerge(f);
+  markMerged(f);
+  const recovered = await f.controller.recover(81, mergeRecovery());
+  assert.equal(recovered.release.status, 'merged');
+  assert.equal(recovered.release.mergeSha, f.pr.merge_commit_sha);
+  assert.equal(f.remote().standaloneReviews[0].release.status, 'merged');
+});
+
+test('merge during actual save guard refuses stale recovery and reconciles the retained reservation', async () => {
+  const f = fixture({ now: () => new Date('2026-10-18T00:01:00Z') });
+  await reservedMerge(f);
+  const feedback = f.github.reviewFeedback;
+  let reads = 0;
+  f.github.reviewFeedback = async (...args) => {
+    if (++reads === 3) markMerged(f); // final recovery save guard
+    return feedback(...args);
+  };
+  await assert.rejects(f.controller.recover(81, mergeRecovery()), /identity/);
+  assert.equal(reads, 3);
+  assert.equal(f.remote().standaloneReviews[0].release.nonce, 'unique-merge-reservation');
+  f.github.mergePullRequest = async () => assert.fail('Receipt recovery must not issue another merge');
+  const recovered = await f.controller.finalize(81, { workspace: {}, infrastructureFiles: [] });
+  assert.equal(recovered.release.status, 'merged');
+  assert.equal(recovered.release.mergeSha, f.pr.merge_commit_sha);
+});
+
+test('merge after recovery CAS is reconciled through tombstone without a second merge', async () => {
+  const f = fixture({ now: () => new Date('2026-10-18T00:01:00Z') });
+  await reservedMerge(f);
+  const tombstone = await f.controller.recover(81, mergeRecovery());
+  assert.ok(tombstone.release.recoveryReleasedAt);
+  markMerged(f);
+  f.github.mergePullRequest = async () => assert.fail('No blind retry of uncertain remote outcome');
+  const recovered = await f.controller.finalize(81, { workspace: {}, infrastructureFiles: [] });
+  assert.equal(recovered.release.status, 'merged');
+  assert.equal(recovered.mergeHistory[0].nonce, 'unique-merge-reservation');
+});
+
+test('failed QA reservation is terminal and needs no invented lease, but each release requires a fresh external consumption', async () => {
+  const f = fixture({ now: () => new Date('2026-10-18T00:00:00Z') });
+  const subject = await published(f);
+  subject.codexFinalReview = { status: 'failed', subjectSha: sha, claudeRound: 1, nonce: 'failed-qa' };
+  await stepOptions(f, subject, async () => assert.fail()).save();
+  const recovered = await f.controller.recover(81, { action: 'release-qa-reservation', expectedSha: sha,
+    token: 'failed-qa', reason: 'Terminal worker failure', authorizationRef: 'test:session' });
+  assert.equal(recovered.codexFinalReview, undefined);
+  assert.deepEqual(recovered.qaHistory, [subject.codexFinalReview]);
+  assert.equal(recovered.recoveryHistory.at(-1).authorization.binding.reservation.forceLive, false);
+});
+
+test('definite protected merge rejection persists visible failure and retains unique reservation instead of retrying', async () => {
+  const f = fixture({ now: () => new Date('2026-10-18T00:00:00Z') });
+  makeAllowlisted(f);
+  f.manifest.releaseHold = false;
+  await published(f);
+  let merges = 0;
+  f.github.mergePullRequest = async () => {
+    merges++;
+    const { githubOperationError } = await import('../../src/bug-pipeline/github.mjs');
+    throw githubOperationError({ stderr: 'gh: protection refused (HTTP 405)' }, 'merge');
+  };
+  const subject = await f.controller.finalize(81, {
+    workspace: { finalQaStandalone: async () => ({ status: 'verified', summary: 'Synthetic QA' }) },
+    infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+  });
+  assert.equal(subject.phase, 'blocked');
+  assert.equal(subject.failureCode, 'github-write-rejected');
+  assert.equal(subject.release.status, 'merging');
+  assert.match(subject.release.nonce, /^[a-f0-9-]{36}$/);
+  assert.equal(subject.release.reservedAt, '2026-10-18T00:00:00.000Z');
+  await f.controller.finalize(81, { workspace: {}, infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES });
+  assert.equal(merges, 1, 'A pending/refused reservation is never blindly repeated');
+});
+
+test('unknown-outcome merge that committed reconciles receipt and preserves reservation nonce without a second write', async () => {
+  const f = fixture({ now: () => new Date('2026-10-18T00:00:00Z') });
+  makeAllowlisted(f);
+  f.manifest.releaseHold = false;
+  await published(f);
+  let merges = 0;
+  f.github.mergePullRequest = async () => {
+    merges++;
+    markMerged(f);
+    const { githubOperationError } = await import('../../src/bug-pipeline/github.mjs');
+    throw githubOperationError({ error: 'timeout' }, 'merge');
+  };
+  const uncertain = await f.controller.finalize(81, {
+    workspace: { finalQaStandalone: async () => ({ status: 'verified', summary: 'Synthetic QA' }) },
+    infrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+  });
+  assert.equal(uncertain.failureCode, 'github-write-uncertain');
+  assert.equal(uncertain.release.status, 'merging');
+  const recovered = await f.controller.finalize(81, { workspace: {}, infrastructureFiles: [] });
+  assert.equal(recovered.release.status, 'merged');
+  assert.equal(recovered.release.nonce, uncertain.release.nonce);
+  assert.equal(recovered.release.mergeSha, f.pr.merge_commit_sha);
+  assert.equal(merges, 1);
 });

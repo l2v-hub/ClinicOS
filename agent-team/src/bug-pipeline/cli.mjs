@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import path from 'node:path';
+import { spentAttempts } from './attempt-budget.mjs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { createRunner } from './process.mjs';
@@ -130,7 +131,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
       batches: state.batches.map((b) => ({
         id: b.id,
         phase: b.phase,
-        implementation: b.implementation.length,
+        implementation: spentAttempts(b, 'implementation'),
         reviews: b.reviews.length,
         sha: b.sha ?? null,
         failureCode: b.failureCode,
@@ -140,7 +141,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
         pr: s.pr.number,
         sha: s.sha,
         phase: s.phase,
-        implementation: s.implementation.length,
+        implementation: spentAttempts(s, 'implementation'),
         reviews: s.reviews.length,
         releaseHold: s.releaseHold,
       })),

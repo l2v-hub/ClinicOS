@@ -163,3 +163,51 @@ test('F6 application provider key never becomes Codex API auth; missing or confl
     (e) => e.code === 'codex-auth-conflict',
   );
 });
+
+
+test('issue-only manual allowance keeps five spent attempts and binds exact real issue and external grant', () => {
+  const { subject, state } = compatibility();
+  subject.pr = null;
+  subject.reviewIssue = 470;
+  subject.issues = [470];
+  subject.operatorContinuations[0].status = 'failed';
+  state.operatorTakeover.subjects[0] = { collection: 'manualBatches', id: subject.id };
+  const old = JSON.stringify(implementationAttempts(subject));
+  const binding = {
+    collection: 'manualBatches', entityId: subject.id, pr: null, reviewIssue: 470,
+    actor: 'operator', action: 'extend-budget',
+    budget: { kind: 'implementation', previousLimit: 5, limit: 6 },
+  };
+  const entry = {
+    entityId: subject.id, collection: 'manualBatches', pr: null, reviewIssue: 470,
+    kind: 'implementation', previousLimit: 5, limit: 6, actor: 'operator',
+    at: '2026-10-18T01:00:00Z', reason: 'Session authorizes continued work',
+    authorizationRef: 'external-session-ref', nonce: 'allowance6',
+    historyLength: 5, historyDigest: historyDigest(implementationAttempts(subject)),
+    authorization: { provenance: 'user-session', grantId: 'session-grant',
+      consumptionNonce: 'single-use-action6', sourceRef: 'session:instruction',
+      binding, bindingDigest: historyDigest(binding) },
+  };
+  subject.budgetExtensions = [entry];
+  validateOperatorContinuations(state);
+  assert.equal(attemptLimit(subject, 'implementation'), 6);
+  const attempt = reserveImplementation(subject);
+  assert.equal(attempt.round, 6);
+  assert.equal(JSON.stringify(implementationAttempts(subject).slice(0, 5)), old);
+  validateOperatorContinuations(state);
+  for (const mutate of [
+    (e) => { e.reviewIssue = 471; },
+    (e) => { e.pr = 470; },
+    (e) => { e.collection = 'standaloneReviews'; },
+    (e) => { delete e.authorization; },
+    (e) => { e.authorization.binding.reviewIssue = 471; },
+  ]) {
+    const saved = structuredClone(subject.budgetExtensions);
+    mutate(subject.budgetExtensions[0]);
+    assert.throws(() => attemptLimit(subject, 'implementation'));
+    subject.budgetExtensions = saved;
+  }
+  state.manualBatches = [];
+  state.standaloneReviews = [subject];
+  assert.throws(() => validateOperatorContinuations(state), /exact durable entity/);
+});
