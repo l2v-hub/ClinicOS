@@ -1,0 +1,130 @@
+TAP version 13
+# Subtest: reads fixed full inventory twice and checks trusted context three times
+ok 1 - reads fixed full inventory twice and checks trusted context three times
+  ---
+  duration_ms: 5.508463
+  type: 'test'
+  ...
+# Subtest: follows service and environment pages using the returned opaque cursor
+ok 2 - follows service and environment pages using the returned opaque cursor
+  ---
+  duration_ms: 9.853635
+  type: 'test'
+  ...
+# Subtest: singleton demo and additional, forked, or inaccessible environments never permit service connect
+ok 3 - singleton demo and additional, forked, or inaccessible environments never permit service connect
+  ---
+  duration_ms: 3.138914
+  type: 'test'
+  ...
+# Subtest: rejects foreign environment project without exposing provider data
+ok 4 - rejects foreign environment project without exposing provider data
+  ---
+  duration_ms: 0.956162
+  type: 'test'
+  ...
+# Subtest: rejects foreign environment source parent without exposing provider data
+ok 5 - rejects foreign environment source parent without exposing provider data
+  ---
+  duration_ms: 0.2559
+  type: 'test'
+  ...
+# Subtest: rejects foreign service project without exposing provider data
+ok 6 - rejects foreign service project without exposing provider data
+  ---
+  duration_ms: 0.298992
+  type: 'test'
+  ...
+# Subtest: rejects foreign instance service without exposing provider data
+ok 7 - rejects foreign instance service without exposing provider data
+  ---
+  duration_ms: 0.315912
+  type: 'test'
+  ...
+# Subtest: rejects unknown malformed environment metadata without exposing provider data
+ok 8 - rejects unknown malformed environment metadata without exposing provider data
+  ---
+  duration_ms: 0.146642
+  type: 'test'
+  ...
+# Subtest: rejects unknown unsafe trigger metadata without exposing provider data
+ok 9 - rejects unknown unsafe trigger metadata without exposing provider data
+  ---
+  duration_ms: 1.521459
+  type: 'test'
+  ...
+# Subtest: rejects malformed connection pages, repeated cursors, and duplicate entities
+ok 10 - rejects malformed connection pages, repeated cursors, and duplicate entities
+  ---
+  duration_ms: 2.400066
+  type: 'test'
+  ...
+# Subtest: rejects source or trigger disagreement with the exact scoped legacy inventory
+ok 11 - rejects source or trigger disagreement with the exact scoped legacy inventory
+  ---
+  duration_ms: 0.339864
+  type: 'test'
+  ...
+# Subtest: accepts matching nonempty scoped and topology triggers independent of provider ordering
+ok 12 - accepts matching nonempty scoped and topology triggers independent of provider ordering
+  ---
+  duration_ms: 1.783859
+  type: 'test'
+  ...
+# Subtest: enforces per-page and total inventory bounds
+ok 13 - enforces per-page and total inventory bounds
+  ---
+  duration_ms: 1.362834
+  type: 'test'
+  ...
+# Subtest: detects drift between complete snapshots and stale trusted context
+ok 14 - detects drift between complete snapshots and stale trusted context
+  ---
+  duration_ms: 0.665937
+  type: 'test'
+  ...
+# Subtest: mutation-like operation is rejected before invoking the client
+ok 15 - mutation-like operation is rejected before invoking the client
+  ---
+  duration_ms: 0.204635
+  type: 'test'
+  ...
+# Subtest: transport failures are sanitized and never retried
+ok 16 - transport failures are sanitized and never retried
+  ---
+  duration_ms: 38.025849
+  type: 'test'
+  ...
+# Subtest: receipt serializes an actual inspection result, redacts forbidden values, and excludes unknown provider fields
+ok 17 - receipt serializes an actual inspection result, redacts forbidden values, and excludes unknown provider fields
+  ---
+  duration_ms: 1.065224
+  type: 'test'
+  ...
+# Subtest: receipt rejects altered or fabricated inspection results
+ok 18 - receipt rejects altered or fabricated inspection results
+  ---
+  duration_ms: 0.950385
+  type: 'test'
+  ...
+# Subtest: createClient sends real HTTP requests to a local fixture with no mutation or retry
+ok 19 - createClient sends real HTTP requests to a local fixture with no mutation or retry
+  ---
+  duration_ms: 40.243541
+  type: 'test'
+  ...
+# Subtest: workflow is exact-main, inspect-only, credential-scoped, and independently serialized
+ok 20 - workflow is exact-main, inspect-only, credential-scoped, and independently serialized
+  ---
+  duration_ms: 3.203339
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 238.43134

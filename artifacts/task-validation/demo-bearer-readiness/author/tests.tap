@@ -1,0 +1,724 @@
+TAP version 13
+# Subtest: inspection reads once, emits only immutable allowlisted metadata, and never updates
+ok 1 - inspection reads once, emits only immutable allowlisted metadata, and never updates
+  ---
+  duration_ms: 5.818377
+  type: 'test'
+  ...
+# Subtest: unique existing trigger changes only branch, after two fresh reads and exact after-read
+ok 2 - unique existing trigger changes only branch, after two fresh reads and exact after-read
+  ---
+  duration_ms: 1.905355
+  type: 'test'
+  ...
+# Subtest: already-main is idempotent with two reads and zero writes
+ok 3 - already-main is idempotent with two reads and zero writes
+  ---
+  duration_ms: 0.54443
+  type: 'test'
+  ...
+# Subtest: opaque GraphQL trigger IDs are preserved exactly without assuming UUID storage
+ok 4 - opaque GraphQL trigger IDs are preserved exactly without assuming UUID storage
+  ---
+  duration_ms: 0.930932
+  type: 'test'
+  ...
+# Subtest: forbidden operation "deploy" makes no request
+ok 5 - forbidden operation "deploy" makes no request
+  ---
+  duration_ms: 0.402687
+  type: 'test'
+  ...
+# Subtest: forbidden operation "create" makes no request
+ok 6 - forbidden operation "create" makes no request
+  ---
+  duration_ms: 0.181837
+  type: 'test'
+  ...
+# Subtest: forbidden operation "delete" makes no request
+ok 7 - forbidden operation "delete" makes no request
+  ---
+  duration_ms: 0.102415
+  type: 'test'
+  ...
+# Subtest: forbidden operation "serviceConnect" makes no request
+ok 8 - forbidden operation "serviceConnect" makes no request
+  ---
+  duration_ms: 0.081795
+  type: 'test'
+  ...
+# Subtest: forbidden operation "inspect\\n" makes no request
+ok 9 - forbidden operation "inspect\\n" makes no request
+  ---
+  duration_ms: 0.103174
+  type: 'test'
+  ...
+# Subtest: invalid update digest undefined blocks before read
+ok 10 - invalid update digest undefined blocks before read
+  ---
+  duration_ms: 0.233741
+  type: 'test'
+  ...
+# Subtest: invalid update digest "" blocks before read
+ok 11 - invalid update digest "" blocks before read
+  ---
+  duration_ms: 0.115437
+  type: 'test'
+  ...
+# Subtest: invalid update digest "000000000000000000000000000000000000000000000000000000000000000" blocks before read
+ok 12 - invalid update digest "000000000000000000000000000000000000000000000000000000000000000" blocks before read
+  ---
+  duration_ms: 0.099218
+  type: 'test'
+  ...
+# Subtest: invalid update digest "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" blocks before read
+ok 13 - invalid update digest "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" blocks before read
+  ---
+  duration_ms: 0.158295
+  type: 'test'
+  ...
+# Subtest: invalid update digest "0000000000000000000000000000000000000000000000000000000000000000\\n" blocks before read
+ok 14 - invalid update digest "0000000000000000000000000000000000000000000000000000000000000000\\n" blocks before read
+  ---
+  duration_ms: 0.135913
+  type: 'test'
+  ...
+# Subtest: stale expected inventory blocks before mutation
+ok 15 - stale expected inventory blocks before mutation
+  ---
+  duration_ms: 0.460082
+  type: 'test'
+  ...
+# Subtest: fresh branch drift aborts before write
+ok 16 - fresh branch drift aborts before write
+  ---
+  duration_ms: 0.773134
+  type: 'test'
+  ...
+# Subtest: fresh check policy drift aborts before write
+ok 17 - fresh check policy drift aborts before write
+  ---
+  duration_ms: 0.361664
+  type: 'test'
+  ...
+# Subtest: fresh root directory drift aborts before write
+ok 18 - fresh root directory drift aborts before write
+  ---
+  duration_ms: 0.350235
+  type: 'test'
+  ...
+# Subtest: fresh domain mapping drift aborts before write
+ok 19 - fresh domain mapping drift aborts before write
+  ---
+  duration_ms: 10.27698
+  type: 'test'
+  ...
+# Subtest: missing trigger is inspectable but update blocks before write
+ok 20 - missing trigger is inspectable but update blocks before write
+  ---
+  duration_ms: 2.776344
+  type: 'test'
+  ...
+# Subtest: duplicate trigger is inspectable but update blocks before write
+ok 21 - duplicate trigger is inspectable but update blocks before write
+  ---
+  duration_ms: 0.696957
+  type: 'test'
+  ...
+# Subtest: more pages trigger is inspectable but update blocks before write
+ok 22 - more pages trigger is inspectable but update blocks before write
+  ---
+  duration_ms: 0.663384
+  type: 'test'
+  ...
+# Subtest: project token blocks without returning provider metadata
+ok 23 - project token blocks without returning provider metadata
+  ---
+  duration_ms: 0.276969
+  type: 'test'
+  ...
+# Subtest: environment name blocks without returning provider metadata
+ok 24 - environment name blocks without returning provider metadata
+  ---
+  duration_ms: 0.141945
+  type: 'test'
+  ...
+# Subtest: service blocks without returning provider metadata
+ok 25 - service blocks without returning provider metadata
+  ---
+  duration_ms: 0.31544
+  type: 'test'
+  ...
+# Subtest: source repository blocks without returning provider metadata
+ok 26 - source repository blocks without returning provider metadata
+  ---
+  duration_ms: 0.157859
+  type: 'test'
+  ...
+# Subtest: domain blocks without returning provider metadata
+ok 27 - domain blocks without returning provider metadata
+  ---
+  duration_ms: 0.143753
+  type: 'test'
+  ...
+# Subtest: foreign trigger environment blocks without returning provider metadata
+ok 28 - foreign trigger environment blocks without returning provider metadata
+  ---
+  duration_ms: 0.1594
+  type: 'test'
+  ...
+# Subtest: foreign trigger repository blocks without returning provider metadata
+ok 29 - foreign trigger repository blocks without returning provider metadata
+  ---
+  duration_ms: 0.138488
+  type: 'test'
+  ...
+# Subtest: foreign provider blocks without returning provider metadata
+ok 30 - foreign provider blocks without returning provider metadata
+  ---
+  duration_ms: 0.121341
+  type: 'test'
+  ...
+# Subtest: missing check metadata blocks without returning provider metadata
+ok 31 - missing check metadata blocks without returning provider metadata
+  ---
+  duration_ms: 0.275734
+  type: 'test'
+  ...
+# Subtest: malformed ID blocks without returning provider metadata
+ok 32 - malformed ID blocks without returning provider metadata
+  ---
+  duration_ms: 0.16864
+  type: 'test'
+  ...
+# Subtest: secret-shaped branch blocks without returning provider metadata
+ok 33 - secret-shaped branch blocks without returning provider metadata
+  ---
+  duration_ms: 0.158491
+  type: 'test'
+  ...
+# Subtest: trigger and domain ordering do not create a false inventory drift
+ok 34 - trigger and domain ordering do not create a false inventory drift
+  ---
+  duration_ms: 0.238072
+  type: 'test'
+  ...
+# Subtest: post-update metadata drift cannot report success or retry/rollback automatically
+ok 35 - post-update metadata drift cannot report success or retry/rollback automatically
+  ---
+  duration_ms: 0.795847
+  type: 'test'
+  ...
+# Subtest: unconfirmed update response blocks success, without automatic mutation retry
+ok 36 - unconfirmed update response blocks success, without automatic mutation retry
+  ---
+  duration_ms: 0.654502
+  type: 'test'
+  ...
+# Subtest: client uses only fixed HTTPS endpoint, dedicated header, redirect refusal and finite timeout
+ok 37 - client uses only fixed HTTPS endpoint, dedicated header, redirect refusal and finite timeout
+  ---
+  duration_ms: 5.433848
+  type: 'test'
+  ...
+# Subtest: actual loopback HTTP transport exercises inspect, digest, branch-only update and verified after-read
+ok 38 - actual loopback HTTP transport exercises inspect, digest, branch-only update and verified after-read
+  ---
+  duration_ms: 112.793957
+  type: 'test'
+  ...
+# Subtest: client HTTP error uses a constant diagnostic and discloses no provider body
+ok 39 - client HTTP error uses a constant diagnostic and discloses no provider body
+  ---
+  duration_ms: 0.862939
+  type: 'test'
+  ...
+# Subtest: client GraphQL error uses a constant diagnostic and discloses no provider body
+ok 40 - client GraphQL error uses a constant diagnostic and discloses no provider body
+  ---
+  duration_ms: 0.684901
+  type: 'test'
+  ...
+# Subtest: client invalid JSON uses a constant diagnostic and discloses no provider body
+ok 41 - client invalid JSON uses a constant diagnostic and discloses no provider body
+  ---
+  duration_ms: 0.565736
+  type: 'test'
+  ...
+# Subtest: client absent data uses a constant diagnostic and discloses no provider body
+ok 42 - client absent data uses a constant diagnostic and discloses no provider body
+  ---
+  duration_ms: 0.453914
+  type: 'test'
+  ...
+# Subtest: client network error uses a constant diagnostic and discloses no provider body
+ok 43 - client network error uses a constant diagnostic and discloses no provider body
+  ---
+  duration_ms: 0.278745
+  type: 'test'
+  ...
+# Subtest: client oversized body uses a constant diagnostic and discloses no provider body
+ok 44 - client oversized body uses a constant diagnostic and discloses no provider body
+  ---
+  duration_ms: 1.161633
+  type: 'test'
+  ...
+# Subtest: client redirect uses a constant diagnostic and discloses no provider body
+ok 45 - client redirect uses a constant diagnostic and discloses no provider body
+  ---
+  duration_ms: 0.194745
+  type: 'test'
+  ...
+# Subtest: missing token blocks without performing a request
+ok 46 - missing token blocks without performing a request
+  ---
+  duration_ms: 0.136312
+  type: 'test'
+  ...
+# Subtest: trusted exact main manual context is accepted without copying unrelated env
+ok 47 - trusted exact main manual context is accepted without copying unrelated env
+  ---
+  duration_ms: 0.353884
+  type: 'test'
+  ...
+# Subtest: untrusted context GITHUB_EVENT_NAME is rejected
+ok 48 - untrusted context GITHUB_EVENT_NAME is rejected
+  ---
+  duration_ms: 0.20688
+  type: 'test'
+  ...
+# Subtest: untrusted context GITHUB_REPOSITORY is rejected
+ok 49 - untrusted context GITHUB_REPOSITORY is rejected
+  ---
+  duration_ms: 0.198026
+  type: 'test'
+  ...
+# Subtest: untrusted context GITHUB_REF is rejected
+ok 50 - untrusted context GITHUB_REF is rejected
+  ---
+  duration_ms: 0.073669
+  type: 'test'
+  ...
+# Subtest: untrusted context CONFIGURE_DEMO_REVIEWED_SHA is rejected
+ok 51 - untrusted context CONFIGURE_DEMO_REVIEWED_SHA is rejected
+  ---
+  duration_ms: 0.106993
+  type: 'test'
+  ...
+# Subtest: untrusted context GITHUB_SHA is rejected
+ok 52 - untrusted context GITHUB_SHA is rejected
+  ---
+  duration_ms: 0.059016
+  type: 'test'
+  ...
+# Subtest: untrusted context GITHUB_RUN_ID is rejected
+ok 53 - untrusted context GITHUB_RUN_ID is rejected
+  ---
+  duration_ms: 0.087551
+  type: 'test'
+  ...
+# Subtest: untrusted context GITHUB_RUN_ATTEMPT is rejected
+ok 54 - untrusted context GITHUB_RUN_ATTEMPT is rejected
+  ---
+  duration_ms: 0.225338
+  type: 'test'
+  ...
+# Subtest: actual CLI refuses untrusted context with a fixed diagnostic before contacting provider
+ok 55 - actual CLI refuses untrusted context with a fixed diagnostic before contacting provider
+  ---
+  duration_ms: 171.349526
+  type: 'test'
+  ...
+# Subtest: actual CLI with trusted context and absent binding fails without dumping its environment
+ok 56 - actual CLI with trusted context and absent binding fails without dumping its environment
+  ---
+  duration_ms: 172.540825
+  type: 'test'
+  ...
+# Subtest: manual workflow retains protected exact-main binding, no secret test step or shell-input interpolation
+ok 57 - manual workflow retains protected exact-main binding, no secret test step or shell-input interpolation
+  ---
+  duration_ms: 26.316958
+  type: 'test'
+  ...
+# Subtest: create-main preserves exact inspected root "/" and waits for CI
+ok 58 - create-main preserves exact inspected root "/" and waits for CI
+  ---
+  duration_ms: 1.196242
+  type: 'test'
+  ...
+# Subtest: create-main preserves exact inspected root "/backend" and waits for CI
+ok 59 - create-main preserves exact inspected root "/backend" and waits for CI
+  ---
+  duration_ms: 0.774138
+  type: 'test'
+  ...
+# Subtest: create-main preserves exact inspected root "" and waits for CI
+ok 60 - create-main preserves exact inspected root "" and waits for CI
+  ---
+  duration_ms: 0.656928
+  type: 'test'
+  ...
+# Subtest: create-main preserves exact inspected root null and waits for CI
+ok 61 - create-main preserves exact inspected root null and waits for CI
+  ---
+  duration_ms: 0.603862
+  type: 'test'
+  ...
+# Subtest: create-main with a fully matching existing trigger is a zero-write idempotent read
+ok 62 - create-main with a fully matching existing trigger is a zero-write idempotent read
+  ---
+  duration_ms: 2.2226
+  type: 'test'
+  ...
+# Subtest: create-main blocks existing other branch with zero writes
+ok 63 - create-main blocks existing other branch with zero writes
+  ---
+  duration_ms: 0.820588
+  type: 'test'
+  ...
+# Subtest: create-main blocks existing main without Wait for CI with zero writes
+ok 64 - create-main blocks existing main without Wait for CI with zero writes
+  ---
+  duration_ms: 0.356775
+  type: 'test'
+  ...
+# Subtest: create-main blocks existing inherited override with zero writes
+ok 65 - create-main blocks existing inherited override with zero writes
+  ---
+  duration_ms: 0.267187
+  type: 'test'
+  ...
+# Subtest: create-main blocks truncated empty page with zero writes
+ok 66 - create-main blocks truncated empty page with zero writes
+  ---
+  duration_ms: 0.20697
+  type: 'test'
+  ...
+# Subtest: create-main blocks existing foreign repository with zero writes
+ok 67 - create-main blocks existing foreign repository with zero writes
+  ---
+  duration_ms: 0.360397
+  type: 'test'
+  ...
+# Subtest: create-main invalid digest undefined makes no request
+ok 68 - create-main invalid digest undefined makes no request
+  ---
+  duration_ms: 0.224478
+  type: 'test'
+  ...
+# Subtest: create-main invalid digest "" makes no request
+ok 69 - create-main invalid digest "" makes no request
+  ---
+  duration_ms: 0.233854
+  type: 'test'
+  ...
+# Subtest: create-main invalid digest "000000000000000000000000000000000000000000000000000000000000000" makes no request
+ok 70 - create-main invalid digest "000000000000000000000000000000000000000000000000000000000000000" makes no request
+  ---
+  duration_ms: 0.27907
+  type: 'test'
+  ...
+# Subtest: create-main invalid digest "0000000000000000000000000000000000000000000000000000000000000000\\n" makes no request
+ok 71 - create-main invalid digest "0000000000000000000000000000000000000000000000000000000000000000\\n" makes no request
+  ---
+  duration_ms: 0.106634
+  type: 'test'
+  ...
+# Subtest: create-main detects new concurrent trigger before mutation
+ok 72 - create-main detects new concurrent trigger before mutation
+  ---
+  duration_ms: 0.853137
+  type: 'test'
+  ...
+# Subtest: create-main detects root directory changed before mutation
+ok 73 - create-main detects root directory changed before mutation
+  ---
+  duration_ms: 2.087716
+  type: 'test'
+  ...
+# Subtest: create-main detects extra domain binding before mutation
+ok 74 - create-main detects extra domain binding before mutation
+  ---
+  duration_ms: 0.441715
+  type: 'test'
+  ...
+# Subtest: create-main rejects an unconfirmed reply with missing identity; never retries
+ok 75 - create-main rejects an unconfirmed reply with missing identity; never retries
+  ---
+  duration_ms: 0.755514
+  type: 'test'
+  ...
+# Subtest: create-main rejects an unconfirmed reply with foreign target; never retries
+ok 76 - create-main rejects an unconfirmed reply with foreign target; never retries
+  ---
+  duration_ms: 0.548905
+  type: 'test'
+  ...
+# Subtest: create-main rejects an unconfirmed reply with foreign repository; never retries
+ok 77 - create-main rejects an unconfirmed reply with foreign repository; never retries
+  ---
+  duration_ms: 0.400472
+  type: 'test'
+  ...
+# Subtest: create-main rejects an unconfirmed reply with foreign provider; never retries
+ok 78 - create-main rejects an unconfirmed reply with foreign provider; never retries
+  ---
+  duration_ms: 0.404778
+  type: 'test'
+  ...
+# Subtest: create-main rejects an unconfirmed reply with wrong branch; never retries
+ok 79 - create-main rejects an unconfirmed reply with wrong branch; never retries
+  ---
+  duration_ms: 1.444964
+  type: 'test'
+  ...
+# Subtest: create-main rejects an unconfirmed reply with Wait for CI disabled; never retries
+ok 80 - create-main rejects an unconfirmed reply with Wait for CI disabled; never retries
+  ---
+  duration_ms: 1.642199
+  type: 'test'
+  ...
+# Subtest: create-main rejects an unconfirmed reply with inherited override; never retries
+ok 81 - create-main rejects an unconfirmed reply with inherited override; never retries
+  ---
+  duration_ms: 0.662173
+  type: 'test'
+  ...
+# Subtest: create-main API rejection is sanitized and makes one mutation attempt only
+ok 82 - create-main API rejection is sanitized and makes one mutation attempt only
+  ---
+  duration_ms: 3.014544
+  type: 'test'
+  ...
+# Subtest: create-main post-write different created identity drift blocks success without retry or rollback
+ok 83 - create-main post-write different created identity drift blocks success without retry or rollback
+  ---
+  duration_ms: 0.673495
+  type: 'test'
+  ...
+# Subtest: create-main post-write root directory drift blocks success without retry or rollback
+ok 84 - create-main post-write root directory drift blocks success without retry or rollback
+  ---
+  duration_ms: 0.498912
+  type: 'test'
+  ...
+# Subtest: create-main post-write extra domain drift blocks success without retry or rollback
+ok 85 - create-main post-write extra domain drift blocks success without retry or rollback
+  ---
+  duration_ms: 0.509278
+  type: 'test'
+  ...
+# Subtest: create-main post-write missing expected domain drift blocks success without retry or rollback
+ok 86 - create-main post-write missing expected domain drift blocks success without retry or rollback
+  ---
+  duration_ms: 0.878074
+  type: 'test'
+  ...
+# Subtest: create-main post-write Wait for CI drift blocks success without retry or rollback
+ok 87 - create-main post-write Wait for CI drift blocks success without retry or rollback
+  ---
+  duration_ms: 0.544288
+  type: 'test'
+  ...
+# Subtest: create-main post-write repository drift blocks success without retry or rollback
+ok 88 - create-main post-write repository drift blocks success without retry or rollback
+  ---
+  duration_ms: 0.472797
+  type: 'test'
+  ...
+# Subtest: create-main post-write branch drift blocks success without retry or rollback
+ok 89 - create-main post-write branch drift blocks success without retry or rollback
+  ---
+  duration_ms: 1.628751
+  type: 'test'
+  ...
+# Subtest: create-main post-write unexpected duplicate drift blocks success without retry or rollback
+ok 90 - create-main post-write unexpected duplicate drift blocks success without retry or rollback
+  ---
+  duration_ms: 2.314775
+  type: 'test'
+  ...
+# Subtest: fixed GitHub main verifier uses automatic GitHub token without sending Railway headers
+ok 91 - fixed GitHub main verifier uses automatic GitHub token without sending Railway headers
+  ---
+  duration_ms: 2.426563
+  type: 'test'
+  ...
+# Subtest: main verifier new main commit blocks with a fixed non-disclosing diagnostic
+ok 92 - main verifier new main commit blocks with a fixed non-disclosing diagnostic
+  ---
+  duration_ms: 0.314023
+  type: 'test'
+  ...
+# Subtest: main verifier API failure blocks with a fixed non-disclosing diagnostic
+ok 93 - main verifier API failure blocks with a fixed non-disclosing diagnostic
+  ---
+  duration_ms: 0.220024
+  type: 'test'
+  ...
+# Subtest: main verifier malformed ref blocks with a fixed non-disclosing diagnostic
+ok 94 - main verifier malformed ref blocks with a fixed non-disclosing diagnostic
+  ---
+  duration_ms: 0.332137
+  type: 'test'
+  ...
+# Subtest: main verifier malformed commit blocks with a fixed non-disclosing diagnostic
+ok 95 - main verifier malformed commit blocks with a fixed non-disclosing diagnostic
+  ---
+  duration_ms: 0.474766
+  type: 'test'
+  ...
+# Subtest: main verifier oversize response blocks with a fixed non-disclosing diagnostic
+ok 96 - main verifier oversize response blocks with a fixed non-disclosing diagnostic
+  ---
+  duration_ms: 0.645299
+  type: 'test'
+  ...
+# Subtest: main verifier network error blocks with a fixed non-disclosing diagnostic
+ok 97 - main verifier network error blocks with a fixed non-disclosing diagnostic
+  ---
+  duration_ms: 0.178517
+  type: 'test'
+  ...
+# Subtest: create-main stops before mutation if protected main advances during preparation
+ok 98 - create-main stops before mutation if protected main advances during preparation
+  ---
+  duration_ms: 0.32285
+  type: 'test'
+  ...
+# Subtest: create-main after-write main drift is uncertain and never retried
+ok 99 - create-main after-write main drift is uncertain and never retried
+  ---
+  duration_ms: 17.484913
+  type: 'test'
+  ...
+# Subtest: set-main stops before mutation if protected main advances during preparation
+ok 100 - set-main stops before mutation if protected main advances during preparation
+  ---
+  duration_ms: 0.259833
+  type: 'test'
+  ...
+# Subtest: set-main after-write main drift is uncertain and never retried
+ok 101 - set-main after-write main drift is uncertain and never retried
+  ---
+  duration_ms: 0.27411
+  type: 'test'
+  ...
+# Subtest: inspector refuses even a read receipt if main advances while metadata is loading
+ok 102 - inspector refuses even a read receipt if main advances while metadata is loading
+  ---
+  duration_ms: 0.356584
+  type: 'test'
+  ...
+# Subtest: bounded log receipt reprojects only known metadata and binds its exact inventory digest
+ok 103 - bounded log receipt reprojects only known metadata and binds its exact inventory digest
+  ---
+  duration_ms: 0.854121
+  type: 'test'
+  ...
+# Subtest: receipt refuses reflection of an actual bound credential even without a known token prefix
+ok 104 - receipt refuses reflection of an actual bound credential even without a known token prefix
+  ---
+  duration_ms: 0.402351
+  type: 'test'
+  ...
+# Subtest: receipt refuses a tampered hash and never accepts unknown outcome text
+ok 105 - receipt refuses a tampered hash and never accepts unknown outcome text
+  ---
+  duration_ms: 0.302878
+  type: 'test'
+  ...
+# Subtest: creation receipt includes exact returned trigger and prior digest, ignoring reply extensions
+ok 106 - creation receipt includes exact returned trigger and prior digest, ignoring reply extensions
+  ---
+  duration_ms: 9.387234
+  type: 'test'
+  ...
+# Subtest: attempt2 workflow explicitly exposes create-main and supplies only automatic GitHub token for main freshness
+ok 107 - attempt2 workflow explicitly exposes create-main and supplies only automatic GitHub token for main freshness
+  ---
+  duration_ms: 48.926925
+  type: 'test'
+  ...
+# Subtest: trusted runner uses fixed bearer reads, discards identity and freezes exact projected receipt
+ok 108 - trusted runner uses fixed bearer reads, discards identity and freezes exact projected receipt
+  ---
+  duration_ms: 102.039463
+  type: 'test'
+  ...
+# Subtest: invalid context or initial main prevents all provider reads
+ok 109 - invalid context or initial main prevents all provider reads
+  ---
+  duration_ms: 1.150641
+  type: 'test'
+  ...
+# Subtest: main moving between phases or snapshots fails closed
+ok 110 - main moving between phases or snapshots fails closed
+  ---
+  duration_ms: 19.856141
+  type: 'test'
+  ...
+# Subtest: false access is a truthful observation and never authorization
+ok 111 - false access is a truthful observation and never authorization
+  ---
+  duration_ms: 8.631978
+  type: 'test'
+  ...
+# Subtest: identity, target, partial, null and boolean shapes reject
+ok 112 - identity, target, partial, null and boolean shapes reject
+  ---
+  duration_ms: 23.54726
+  type: 'test'
+  ...
+# Subtest: trigger ownership, duplication and metadata reject; bounded valid trigger accepted
+ok 113 - trigger ownership, duplication and metadata reject; bounded valid trigger accepted
+  ---
+  duration_ms: 31.791645
+  type: 'test'
+  ...
+# Subtest: inventory drift prevents a receipt
+ok 114 - inventory drift prevents a receipt
+  ---
+  duration_ms: 2.01349
+  type: 'test'
+  ...
+# Subtest: transport, redirects, errors, malformed JSON and response bounds use constant errors
+ok 115 - transport, redirects, errors, malformed JSON and response bounds use constant errors
+  ---
+  duration_ms: 6.884607
+  type: 'test'
+  ...
+# Subtest: missing credentials and all CLI failures are sanitized with annotation and constant console code
+ok 116 - missing credentials and all CLI failures are sanitized with annotation and constant console code
+  ---
+  duration_ms: 164.546316
+  type: 'test'
+  ...
+# Subtest: workflow keeps exact main, fixed existing secret, readonly scope and offline tests before credentials
+ok 117 - workflow keeps exact main, fixed existing secret, readonly scope and offline tests before credentials
+  ---
+  duration_ms: 20.758001
+  type: 'test'
+  ...
+# Subtest: real CLI success writes exclusive mode0600 receipt and identical console marker without credentials or identity
+ok 118 - real CLI success writes exclusive mode0600 receipt and identical console marker without credentials or identity
+  ---
+  duration_ms: 400.59387
+  type: 'test'
+  ...
+# Subtest: timeouts are installed on each request and credential/request sizes stay bounded
+ok 119 - timeouts are installed on each request and credential/request sizes stay bounded
+  ---
+  duration_ms: 5.723249
+  type: 'test'
+  ...
+1..119
+# tests 119
+# suites 0
+# pass 119
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1277.964423

@@ -1,0 +1,3 @@
+# Root Codex pre-publication verification
+
+Read entire productiondiff andchecked strictGitBlobSHA/base64CRLF/UTF8/sizebound; verified maxOutputBytes reachesactualprocessrunner. Checked authorSTOP andsource3hashes,freshindependentQA657PASS+12scenarios,seal/media/publicmanifest, beforeafterimmutableinputs. ReadQArealresult screenshot andproofscopeQAonly. No clinicalappsourcechanged. Requires actualClaude+separatefreshfinalCodex+sixnativechecks beforeprotectedordinarymerge. No mainpushorGitHubstatewriteclaimedwhileauthentication401.

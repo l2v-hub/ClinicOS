@@ -1,0 +1,39 @@
+test_accepted_post_with_lost_response_rerun_does_not_double_write (__main__.Tests.test_accepted_post_with_lost_response_rerun_does_not_double_write) ... ok
+test_archive_digest_and_length_before_parse (__main__.Tests.test_archive_digest_and_length_before_parse) ... ok
+test_ci_failed_step_stale_main_conflicts_and_job_log_token_separation (__main__.Tests.test_ci_failed_step_stale_main_conflicts_and_job_log_token_separation) ... ok
+test_ci_fixed_provenance_fingerprints_and_idempotence (__main__.Tests.test_ci_fixed_provenance_fingerprints_and_idempotence) ... ok
+test_ci_logs_bounds_gzip_empty_nonfailed_duplicate_and_block_rejection (__main__.Tests.test_ci_logs_bounds_gzip_empty_nonfailed_duplicate_and_block_rejection) ... ok
+test_ci_paths_secret_reflection_and_unknown_enums (__main__.Tests.test_ci_paths_secret_reflection_and_unknown_enums) ... ok
+test_ci_unknown_modes_provenance_and_drift_rejected (__main__.Tests.test_ci_unknown_modes_provenance_and_drift_rejected) ... ok
+test_comment_conflicts_duplicate_marker_and_size_fail_closed (__main__.Tests.test_comment_conflicts_duplicate_marker_and_size_fail_closed) ... ok
+test_comment_pagination_exhaustion_and_http_size_fail_closed (__main__.Tests.test_comment_pagination_exhaustion_and_http_size_fail_closed) ... ok
+test_complete_receipt_and_idempotent_comment (__main__.Tests.test_complete_receipt_and_idempotent_comment) ... ok
+test_compression_size_and_symlink_rejected (__main__.Tests.test_compression_size_and_symlink_rejected) ... ok
+test_crc_failure_rejected_even_with_valid_archive_digest (__main__.Tests.test_crc_failure_rejected_even_with_valid_archive_digest) ... ok
+test_dispatch_context_and_fresh_main (__main__.Tests.test_dispatch_context_and_fresh_main) ... ok
+test_duplicate_foreign_instance_and_scope_mismatch (__main__.Tests.test_duplicate_foreign_instance_and_scope_mismatch) ... ok
+test_encrypted_and_unsupported_compression_rejected (__main__.Tests.test_encrypted_and_unsupported_compression_rejected) ... ok
+test_expired_artifact_and_moved_main_have_specific_codes_and_no_write (__main__.Tests.test_expired_artifact_and_moved_main_have_specific_codes_and_no_write) ... ok
+test_extra_path_members_trailing_and_prefix_rejected (__main__.Tests.test_extra_path_members_trailing_and_prefix_rejected) ... ok
+test_fixed_receipt_identity_flags_and_digests (__main__.Tests.test_fixed_receipt_identity_flags_and_digests) ... ok
+test_foreign_markers_ignored_but_canonical_bot_conflicts_and_malformed_users_rejected (__main__.Tests.test_foreign_markers_ignored_but_canonical_bot_conflicts_and_malformed_users_rejected) ... ok
+test_http_status_stage_diagnostics_suppress_private_remote_details (__main__.Tests.test_http_status_stage_diagnostics_suppress_private_remote_details) ... ok
+test_http_storage_no_auth_no_redirect_and_host_rejection (__main__.Tests.test_http_storage_no_auth_no_redirect_and_host_rejection) ... ok
+test_http_token_not_forwarded_and_failures_do_not_echo_url (__main__.Tests.test_http_token_not_forwarded_and_failures_do_not_echo_url) ... ok
+test_inaccessible_environment_semantics (__main__.Tests.test_inaccessible_environment_semantics) ... ok
+test_invalid_json_duplicate_fields_and_nonfinite (__main__.Tests.test_invalid_json_duplicate_fields_and_nonfinite) ... ok
+test_original_fixed_identity_constants (__main__.Tests.test_original_fixed_identity_constants) ... ok
+test_reported_bom_sgr_format_synthetic_fixture_plain_title_hash_and_raw_hash (__main__.Tests.test_reported_bom_sgr_format_synthetic_fixture_plain_title_hash_and_raw_hash) ... ok
+test_sgr_normalization_rejects_unsupported_controls_and_duplicate_bom (__main__.Tests.test_sgr_normalization_rejects_unsupported_controls_and_duplicate_bom) ... ok
+test_streaming_data_descriptor_supported_and_hidden_bytes_rejected (__main__.Tests.test_streaming_data_descriptor_supported_and_hidden_bytes_rejected) ... ok
+test_trigger_projection_order_and_scope (__main__.Tests.test_trigger_projection_order_and_scope) ... ok
+test_unknown_fields_at_every_schema_layer (__main__.Tests.test_unknown_fields_at_every_schema_layer) ... ok
+test_unsafe_names_and_actual_bound_secret_rejected (__main__.Tests.test_unsafe_names_and_actual_bound_secret_rejected) ... ok
+test_workflow_guards_pins_and_permission_scope (__main__.Tests.test_workflow_guards_pins_and_permission_scope) ... ok
+test_wrong_artifact_metadata (__main__.Tests.test_wrong_artifact_metadata) ... ok
+test_wrong_run_identity_rejected_before_archive (__main__.Tests.test_wrong_run_identity_rejected_before_archive) ... ok
+
+----------------------------------------------------------------------
+Ran 34 tests in 0.296s
+
+OK

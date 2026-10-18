@@ -1,0 +1,24 @@
+{
+  "scope": "QA-only mocked candidate result surface; no clinical product E2E",
+  "counts": {
+    "candidate": {
+      "passed": 122,
+      "failed": 0
+    },
+    "topology": {
+      "passed": 20,
+      "failed": 0
+    },
+    "independent": {
+      "passed": 12,
+      "failed": 0
+    }
+  },
+  "codes": [
+    "DEMO_BEARER_IDENTITY_HTTP_403",
+    "DEMO_BEARER_IDENTITY_GRAPHQL_REJECTED",
+    "DEMO_BEARER_IDENTITY_TIMEOUT",
+    "DEMO_BEARER_IDENTITY_NETWORK",
+    "DEMO_BEARER_IDENTITY_RESPONSE_INVALID"
+  ]
+}

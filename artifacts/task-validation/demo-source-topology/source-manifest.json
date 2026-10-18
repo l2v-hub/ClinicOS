@@ -1,0 +1,43 @@
+{
+  "status": "candidate-3-of-4-author-stopped-pending-independent-qa",
+  "baseline": "299ba8ff8d048631cdb969f26656d02de981da83",
+  "files": [
+    {
+      "file": "scripts/automation/inspect-demo-source-topology.mjs",
+      "bytes": 13555,
+      "sha256": "9e0c2adde1287451f001b104412611e839df39bbb0a4eccae6edeb2889a2b94e"
+    },
+    {
+      "file": "scripts/automation/inspect-demo-source-topology.test.mjs",
+      "bytes": 24103,
+      "sha256": "cdb5918c4eb96d63c160a0c2df116d20504f28dbc98c7b8882c37584e267277a"
+    },
+    {
+      "file": ".github/workflows/inspect-demo-source-topology.yml",
+      "bytes": 1781,
+      "sha256": "d9bc710f6432b03b45fcc3c16ac691b0cbc16c1c6bc5a855b62183d179804b4a"
+    }
+  ],
+  "contracts": [
+    {
+      "file": "artifacts/task-validation/demo-source-topology/task-contract.md",
+      "bytes": 3839,
+      "sha256": "0103085fed9497218c256c195f30655c8b387847b07ba17b1fe9beb249616149"
+    },
+    {
+      "file": "artifacts/task-validation/demo-source-topology/analysis.md",
+      "bytes": 2342,
+      "sha256": "f0f69146eba5c5fd9519db718b9a595afef06e475cdcfa7138e5d11cbeb84896"
+    },
+    {
+      "file": "artifacts/task-validation/demo-source-topology/implementation-plan.md",
+      "bytes": 1532,
+      "sha256": "5fa359480084fc1e60792508701150e97440c2e230f6a48403322e924a744631"
+    },
+    {
+      "file": "artifacts/task-validation/demo-source-topology/source-references.md",
+      "bytes": 2940,
+      "sha256": "644d840d65b70bad44eb99e8abb3a7dc251de9567c57e3ed108c4ee4c36b5e1d"
+    }
+  ]
+}

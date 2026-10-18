@@ -1,0 +1,540 @@
+{
+  "outcome": "PASS",
+  "browserScenarios": 9,
+  "reloadAssertions": 1,
+  "actualLoopbackRequests": 73,
+  "unexpectedErrors": [],
+  "results": [
+    {
+      "scenario": "singleton",
+      "status": "inspected",
+      "paginationComplete": true,
+      "allVisibleEnvironmentsAccessible": true,
+      "projectWideVisibility": "unproven",
+      "serviceConnectAllowed": false,
+      "refusalReason": "PROJECT_WIDE_VISIBILITY_UNPROVEN",
+      "reads": 10,
+      "environments": 1
+    },
+    {
+      "scenario": "multipage",
+      "status": "inspected",
+      "paginationComplete": true,
+      "allVisibleEnvironmentsAccessible": true,
+      "projectWideVisibility": "unproven",
+      "serviceConnectAllowed": false,
+      "refusalReason": "PROJECT_WIDE_VISIBILITY_UNPROVEN",
+      "reads": 18,
+      "environments": 2
+    },
+    {
+      "scenario": "inaccessible",
+      "status": "inspected",
+      "paginationComplete": true,
+      "allVisibleEnvironmentsAccessible": false,
+      "projectWideVisibility": "unproven",
+      "serviceConnectAllowed": false,
+      "refusalReason": "PROJECT_WIDE_VISIBILITY_UNPROVEN",
+      "reads": 10,
+      "environments": 2
+    },
+    {
+      "scenario": "repeat-cursor",
+      "status": "rejected",
+      "code": "DEMO_TOPOLOGY_PAGINATION_STALLED",
+      "reads": 2
+    },
+    {
+      "scenario": "drift",
+      "status": "rejected",
+      "code": "DEMO_TOPOLOGY_INVENTORY_DRIFT",
+      "reads": 10
+    },
+    {
+      "scenario": "private-error",
+      "status": "rejected",
+      "code": "DEMO_TOPOLOGY_ENVIRONMENTS_QUERY_REJECTED",
+      "reads": 1
+    },
+    {
+      "scenario": "unsafe-metadata",
+      "status": "rejected",
+      "code": "DEMO_TOPOLOGY_INVALID_METADATA",
+      "reads": 1
+    },
+    {
+      "scenario": "foreign-owner",
+      "status": "rejected",
+      "code": "DEMO_TOPOLOGY_OWNERSHIP_MISMATCH",
+      "reads": 1
+    },
+    {
+      "scenario": "mutation-denied",
+      "status": "rejected",
+      "code": "DEMO_TOPOLOGY_READ_ONLY_OPERATION_REQUIRED",
+      "reads": 0
+    },
+    {
+      "scenario": "inaccessible",
+      "status": "inspected",
+      "paginationComplete": true,
+      "allVisibleEnvironmentsAccessible": false,
+      "projectWideVisibility": "unproven",
+      "serviceConnectAllowed": false,
+      "refusalReason": "PROJECT_WIDE_VISIBILITY_UNPROVEN",
+      "reads": 10,
+      "environments": 2
+    },
+    {
+      "scenario": "inaccessible",
+      "status": "inspected",
+      "paginationComplete": true,
+      "allVisibleEnvironmentsAccessible": false,
+      "projectWideVisibility": "unproven",
+      "serviceConnectAllowed": false,
+      "refusalReason": "PROJECT_WIDE_VISIBILITY_UNPROVEN",
+      "reads": 10,
+      "environments": 2
+    }
+  ],
+  "observations": [
+    {
+      "scenario": "singleton",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "singleton",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": "c-1"
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "services",
+      "environmentId": null,
+      "after": "c-1"
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "instances",
+      "environmentId": "qa-visible-second",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "triggers",
+      "environmentId": "qa-visible-second",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": "c-1"
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "services",
+      "environmentId": null,
+      "after": "c-1"
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "instances",
+      "environmentId": "qa-visible-second",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "triggers",
+      "environmentId": "qa-visible-second",
+      "after": null
+    },
+    {
+      "scenario": "multipage",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "repeat-cursor",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "repeat-cursor",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": "same"
+    },
+    {
+      "scenario": "drift",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "drift",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "private-error",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "unsafe-metadata",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "foreign-owner",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "environments",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "services",
+      "environmentId": null,
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "instances",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "triggers",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    },
+    {
+      "scenario": "inaccessible",
+      "queryType": "scoped",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "after": null
+    }
+  ]
+}

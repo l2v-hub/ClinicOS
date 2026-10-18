@@ -1,0 +1,10 @@
+{
+  "verdict": "READY FOR CODEX QA",
+  "baseSha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6",
+  "sourceDigestSha256": "890245be00f033e272915e552c0aafc0e2e1cf8fe9dcd20de82c6be6ffb717a4",
+  "artifactManifestSha256": "ce37ef9217a2f0bc9cad6868d46857c89f1c5e3dd146c01dc66c540d9c1b7569",
+  "coveredFileCount": 23,
+  "historicalProofsMatched": 56,
+  "historicalProofsExpected": 56,
+  "privacyScanResult": "PASS"
+}

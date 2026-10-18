@@ -1,0 +1,21 @@
+{
+  "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+  "nodeVersion": "v24.19.0",
+  "args": [
+    "--test",
+    "scripts/automation/inspect-demo-bearer-readiness.test.mjs"
+  ],
+  "cwd": "/workspace/clinicos-demo-bearer-readiness",
+  "envMode": "verification",
+  "startedAt": "2026-10-18T21:17:56.163Z",
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "stdout": "✔ trusted runner uses fixed bearer reads, discards identity and freezes exact projected receipt (39.61331ms)\n✔ invalid context or initial main prevents all provider reads (0.848054ms)\n✔ main moving between phases or snapshots fails closed (6.262225ms)\n✔ false access is a truthful observation and never authorization (3.361616ms)\n✔ identity, target, partial, null and boolean shapes reject (13.743226ms)\n✔ trigger ownership, duplication and metadata reject; bounded valid trigger accepted (10.517695ms)\n✔ inventory drift prevents a receipt (1.806029ms)\n✔ transport, redirects, GraphQL, malformed JSON and bounds retain distinct constant causes (11.208507ms)\n✔ all fixed phases retain HTTP and GraphQL classification and reject malformed projected shapes (8.357007ms)\n✔ missing credentials and all CLI failures are sanitized with annotation and constant console code (98.46156ms)\n✔ workflow keeps exact main, fixed existing secret, readonly scope and offline tests before credentials (4.13945ms)\n✔ real CLI success writes exclusive mode0600 receipt and identical console marker without credentials or identity (222.174001ms)\n✔ timeouts are installed on each request and credential/request sizes stay bounded (1.998018ms)\n✔ poisoned provider errors never cross actual CLI stderr and constants preserve their causes (764.826912ms)\n✔ own request timeout reason classifies interrupted body reads without parsing arbitrary messages (1.894435ms)\nℹ tests 15\nℹ suites 0\nℹ pass 15\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1310.391213\n",
+  "stderr": "",
+  "testCount": 15,
+  "output": {
+    "stdout": "✔ trusted runner uses fixed bearer reads, discards identity and freezes exact projected receipt (39.61331ms)\n✔ invalid context or initial main prevents all provider reads (0.848054ms)\n✔ main moving between phases or snapshots fails closed (6.262225ms)\n✔ false access is a truthful observation and never authorization (3.361616ms)\n✔ identity, target, partial, null and boolean shapes reject (13.743226ms)\n✔ trigger ownership, duplication and metadata reject; bounded valid trigger accepted (10.517695ms)\n✔ inventory drift prevents a receipt (1.806029ms)\n✔ transport, redirects, GraphQL, malformed JSON and bounds retain distinct constant causes (11.208507ms)\n✔ all fixed phases retain HTTP and GraphQL classification and reject malformed projected shapes (8.357007ms)\n✔ missing credentials and all CLI failures are sanitized with annotation and constant console code (98.46156ms)\n✔ workflow keeps exact main, fixed existing secret, readonly scope and offline tests before credentials (4.13945ms)\n✔ real CLI success writes exclusive mode0600 receipt and identical console marker without credentials or identity (222.174001ms)\n✔ timeouts are installed on each request and credential/request sizes stay bounded (1.998018ms)\n✔ poisoned provider errors never cross actual CLI stderr and constants preserve their causes (764.826912ms)\n✔ own request timeout reason classifies interrupted body reads without parsing arbitrary messages (1.894435ms)\nℹ tests 15\nℹ suites 0\nℹ pass 15\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1310.391213\n",
+    "stderr": ""
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "ok": false,
+  "code": 1,
+  "error": null,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"<frozen runpy>\", line 287, in run_path\n  File \"<frozen runpy>\", line 98, in _run_module_code\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"scripts/automation/recover-demo-topology-receipt.test.py\", line 14, in <module>\n    from unittest.mock import patch\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py\", line 26, in <module>\n    import asyncio\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/__init__.py\", line 8, in <module>\n    from .base_events import *\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py\", line 34, in <module>\n    import ssl\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/ssl.py\", line 955, in <module>\n    class SSLSocket(socket):\nTypeError: function() argument 'code' must be code, not str\n"
+}

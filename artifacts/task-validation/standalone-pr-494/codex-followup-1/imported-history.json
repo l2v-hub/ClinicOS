@@ -1,0 +1,186 @@
+{
+  "kind": "same-entity-followup",
+  "entity": "standalone-pr-494",
+  "pr": 494,
+  "basePublicationSha": "dfd2f1575ab449507a207a2357da2a63c86e5b4f",
+  "baseSha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
+  "testedSourceSha": "9ec1c16fcb061f14cdab47c699087d504d8f2305",
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "e5ea75a1-9706-4392-ba85-e58c3251e157",
+      "startedAt": "2026-10-18T17:56:37.609Z",
+      "baseSha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
+      "contractSha256": "47eaf91e4336741c3a96ae22e9022bae35aa2c392bf56f83cd28088a39528200",
+      "reason": "New bounded metadata-evidence transport task after real artifact redirect403; no clinical regrouping or inherited review.",
+      "sourceFreezeSha256": "e15710a60770e1481272a67cac7031e64dae2315e51084a667b624dc491380f5",
+      "authorStoppedAt": "2026-10-18T18:08:40.850Z",
+      "subjectSha": "84c053d63b2c4df5455c17a3f3dc3d9228d28846",
+      "evidence": "independent-qa/validation-report.md",
+      "completedAt": "2026-10-18T18:18:11.537Z",
+      "independentQaReportSha256": "38c5c36e2a76cfcd329c4dd0bffa207716985ff87ad8ebc3c93aea07c777fc26",
+      "independentQaSealSha256": "c9019f3e60cf02a287b3e388af1b887f06c021a876ff41c79a55301d485b766e",
+      "rootVerification": {
+        "status": "verified",
+        "focusedTestsPassed": 18,
+        "publicationRetestPassed": 46,
+        "priorPacketFilesMatched": 8,
+        "qaArtifactsMatched": 9,
+        "sourceInputsMatched": 3,
+        "browserScreenshotInspected": false,
+        "browserApplicable": false,
+        "metadataCorrection": "Initial provisional root screenshot flag was an inherited generator error. Original packet preserved; no browser session existed."
+      }
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "operatorContinuations": [
+    {
+      "round": 2,
+      "status": "passed",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "7ca2125a-9b8a-456a-986c-3431c0ab5c9d",
+      "startedAt": "2026-10-18T18:51:32.500Z",
+      "sha": "dfd2f1575ab449507a207a2357da2a63c86e5b4f",
+      "baseSha": "dfd2f1575ab449507a207a2357da2a63c86e5b4f",
+      "contractSha256": "b300d4d645d28dea4a4f5ee4748279334c1e4797eed4da61e509c4ef3a89a86d",
+      "reason": "Correct actual Claude F1 BOM/SGR, F2 bounded diagnostics, F3 foreign-marker handling, F4 dispatch documentation; preserve first implementation and all49previousproofs.",
+      "kind": "explicit-operator-compatibility-continuation",
+      "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+      "preservedLegacyImplementationDigest": "232c67888baf1d8015f3b40108badeb8e9b28793b13e872ad73ea7e8ea08c325",
+      "preservedLegacyReviewsDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "preservedEntityDigest": "552af6fcc460beba487c98cb2b80c6a496a68c2996822ee7e94ab015497239f0",
+      "authorStoppedAt": "2026-10-18T18:55:25.416Z",
+      "sourceFreezeSha256": "6d75012656ecb0d21261927a626790ec985a652cf6050f19b773d090cf70761f",
+      "testedSourceSha": "9ec1c16fcb061f14cdab47c699087d504d8f2305",
+      "authorTests": {
+        "passed": 34,
+        "failed": 0,
+        "skipped": 0,
+        "browserApplicable": false,
+        "independent": false
+      },
+      "independentQaReservation": {
+        "status": "verified",
+        "nonce": "ee463fdc-8083-4d0c-8d55-b4649b3d3c5d",
+        "agent": "/root/qa_gate_receipt_recovery_followup1",
+        "reservedAt": "2026-10-18T18:55:25.416Z",
+        "reservedBeforeSession": true,
+        "sourceSha": "9ec1c16fcb061f14cdab47c699087d504d8f2305",
+        "sourceFreezeSha256": "6d75012656ecb0d21261927a626790ec985a652cf6050f19b773d090cf70761f",
+        "completedAt": "2026-10-18T19:01:23.689871+00:00",
+        "sealSha256": "c74b2f3dfbbb6ec4d9325302d56506d65ac7078c8eac6a9f75896d9a7c8e8bd0",
+        "reportSha256": "ef0499c5e836c8ccd5a0d6ad58d4cd456059819b92707ce5e4a05ab687c70969"
+      },
+      "subjectSha": "9ec1c16fcb061f14cdab47c699087d504d8f2305",
+      "evidence": "independent-qa-followup-1/validation-report.md",
+      "completedAt": "2026-10-18T19:01:23.689871+00:00",
+      "independentQaReportSha256": "ef0499c5e836c8ccd5a0d6ad58d4cd456059819b92707ce5e4a05ab687c70969",
+      "independentQaSealSha256": "c74b2f3dfbbb6ec4d9325302d56506d65ac7078c8eac6a9f75896d9a7c8e8bd0",
+      "rootVerification": {
+        "status": "verified-offline-scope",
+        "sourceFilesRead": 3,
+        "allPriorProofsMatched": 49,
+        "qaArtifactsMatched": 16,
+        "repeatedIndependentTestsPassed": 8,
+        "repeatedIndependentTestsLogSha256": "713169f2b0df84d8437e439583a4e3879f94b88e7688b8cdf9ea61c6c0dafc02",
+        "browserApplicable": false,
+        "browserScreenshotInspected": false,
+        "actualHostedExecutionVerified": false,
+        "actualCurrentCiVerified": false,
+        "actualNewClaudeReviewVerified": false
+      }
+    }
+  ],
+  "priorPacket": {
+    "path": "artifacts/task-validation/receipt-recovery/adoption-494",
+    "files": {
+      "analysis.md": "f7e6da8df2aeb71ae588c93f6bad886751381f12b1db74c09fc8cdda999a0b27",
+      "author-offline-tests-2.txt": "fb85309a0b638e2f56e12cc2f70f6fd806b6ce52c536743a2ff74be27b81a004",
+      "author-offline-tests.txt": "5d5a881250cc9c4c9f8ea106a3ba4c7f79f9340653ef91905387fc198b06bac0",
+      "author-report-2.md": "7cf55418661481130d0b40e993263306531f53dfb1fc7de9d83be5a98dccb788",
+      "author-report.md": "352f71e1d0e897f094541fd4b3dc389652c15965fe95043d8a51efaeab03bd17",
+      "codex-verification.md": "fe74c7743011eaeb33e027f6b2573b8ea1bd38dafbfe80011d6c599aa86b8c34",
+      "implementation-plan.md": "a7d1773fff6eea0974473f5cafb0be031b6fd4b28e342f76a37be77d33fcbc4d",
+      "independent-qa/artifact-manifest.json": "bbde4ef8ac22941cf01e2c073b7ed722c8fdce597d2011c514a64d9e9e61abec",
+      "independent-qa/author-suite-rerun.txt": "45590ff216bd4468b46ddd9d8a616d81d2bd37188e4dfbd4bb211d14f40289f6",
+      "independent-qa/final-seal.json": "c9019f3e60cf02a287b3e388af1b887f06c021a876ff41c79a55301d485b766e",
+      "independent-qa/findings.json": "d0f147a7bff6b6f9ad314bfdda7777f23f6abc45fe8819c6897503a6d759bfa2",
+      "independent-qa/independent-negative-cases.py": "58f2e0f48ef0a992f3c4c7394ad66ef6654f0480e574c9b9be772a98b35cf483",
+      "independent-qa/independent-negative-results.txt": "041dc810aede48f3f0fee2db95f02e6a1c60012067cea6c22592a5a0ad41fcc9",
+      "independent-qa/runtime-and-repository.txt": "9460a7de4a0180914b7b2ceda1119ab880db9a69cf78c36eb6c530b73e88e658",
+      "independent-qa/secret-scan.json": "bb7e44d2abf18e9d6ddaeef29d1993c2a01876564cc928af9f5691861629d79e",
+      "independent-qa/source-integrity-before.json": "5df53dbd4c01a371ef1e833fc470c86617fcb8b9f02859980b6dac391b9fea21",
+      "independent-qa/source-integrity.json": "1ac50d35a79de0ee29630dd8deadbfadea14a81124b366b3ec76b01f1dab0960",
+      "independent-qa/validation-report.md": "38c5c36e2a76cfcd329c4dd0bffa207716985ff87ad8ebc3c93aea07c777fc26",
+      "root-independent-probes.txt": "c213cd408c0502bf2f4e881896bd12dd84e406464f1f4ffba2c30678c086ac93",
+      "root-publication-18tests.txt": "f57681c946aafa42628be940fc01a2c00891f75ee9243a0bb5029473567739c0",
+      "root-publication-28tests.txt": "c618b294dba42899124c04ecb68d09b6dc7a47333e61f36dd0641c0e82dc6668",
+      "scope-amendment-1.md": "889482a49cab1820b1722c11d5b2d8b4d1f1e9d06fc7e1f5f679ec0af55a1aa2",
+      "source-freeze-2.json": "e15710a60770e1481272a67cac7031e64dae2315e51084a667b624dc491380f5",
+      "source-freeze.json": "6261ef744a1a7884827554cbf8d067b51788e90ef220b1b055f7b52b37a3eea1",
+      "task-contract.md": "47eaf91e4336741c3a96ae22e9022bae35aa2c392bf56f83cd28088a39528200",
+      "validation-report.md": "fa69796e0027beb9f19f66cba4802ec8bda31a3d17ff83ccf1b66ffd77c0c473",
+      "imported-history.json": "205da292b3fcf483eb09d6ebb93f2d4c69369f2a4f2ba2eb01305b2235dccb56"
+    }
+  },
+  "priorManualOwner": {
+    "collection": "manualBatches",
+    "id": "demo-topology-receipt-recovery",
+    "recordSha256": "e85b351dead770fe9d1f8b47bb15e8a2c4efa50bbdac337b1333dd3b3184c27a",
+    "implementationNonce": "e5ea75a1-9706-4392-ba85-e58c3251e157",
+    "reason": "Same logical evidence transport task and spent attempt; standard standalone controller owner after PR number494 assigned, no clinical regrouping or counter reset."
+  },
+  "adoption": {
+    "actor": "l2v-hub",
+    "at": "2026-10-18T18:19:12.850Z",
+    "subjectSha": "dfd2f1575ab449507a207a2357da2a63c86e5b4f",
+    "importedReviewCount": 0,
+    "manifestSha256": "bd210a5c49c5737af3b6f585b708976016b07dbe29e88f8fc5d5ae73906dd675",
+    "kind": "audited-same-task-owner-transfer-after-pr-number-assignment"
+  },
+  "reviewHandoffHistory": [
+    {
+      "at": "2026-10-18T18:42:41.387Z",
+      "actor": "l2v-hub",
+      "previous": null,
+      "reason": "First actual Claude review requested after independent QA and all current native required checks passed; original attempt and provenance preserved.",
+      "spentReviews": 0
+    },
+    {
+      "at": "2026-10-18T18:51:32.500Z",
+      "actor": "l2v-hub",
+      "previous": {
+        "channel": "github-comments",
+        "status": "comment-requested",
+        "subjectSha": "dfd2f1575ab449507a207a2357da2a63c86e5b4f",
+        "requestId": "1a48f518-4eab-4dfe-86d9-05807f49c9d5",
+        "requestedAt": "2026-10-18T18:42:41.387Z"
+      },
+      "reason": "Actual exact-SHA freeform Claude review6253738333 requests four fixes; no structured claim/round or human approval fabricated.",
+      "actualFeedbackCommentId": 6253738333,
+      "actualFeedbackSha256": "5f7b95167404a84054023cd443182a054f492f85c69ad050abe96ae36a174627",
+      "spentReviews": 0
+    }
+  ],
+  "actualClaudeFeedback": [
+    {
+      "commentId": 6253738333,
+      "subjectSha": "dfd2f1575ab449507a207a2357da2a63c86e5b4f",
+      "verdict": "changes-requested",
+      "createdAt": "2026-10-18T18:48:27Z",
+      "bodySha256": "5f7b95167404a84054023cd443182a054f492f85c69ad050abe96ae36a174627",
+      "severityCounts": {
+        "high": 1,
+        "medium": 1,
+        "low": 2
+      },
+      "structuredReview": false
+    }
+  ],
+  "legacyEvidenceCopies": "independent-qa/ contains exact original implementation1 report, never relabeled as new QA; independent-qa-followup-1 is the new second-implementation QA."
+}

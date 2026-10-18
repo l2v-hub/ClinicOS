@@ -1,0 +1,241 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "e5ea75a1-9706-4392-ba85-e58c3251e157",
+      "startedAt": "2026-10-18T17:56:37.609Z",
+      "baseSha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
+      "contractSha256": "47eaf91e4336741c3a96ae22e9022bae35aa2c392bf56f83cd28088a39528200",
+      "reason": "New bounded metadata-evidence transport task after real artifact redirect403; no clinical regrouping or inherited review.",
+      "sourceFreezeSha256": "e15710a60770e1481272a67cac7031e64dae2315e51084a667b624dc491380f5",
+      "authorStoppedAt": "2026-10-18T18:08:40.850Z",
+      "subjectSha": "84c053d63b2c4df5455c17a3f3dc3d9228d28846",
+      "evidence": "independent-qa/validation-report.md",
+      "completedAt": "2026-10-18T18:18:11.537Z",
+      "independentQaReportSha256": "38c5c36e2a76cfcd329c4dd0bffa207716985ff87ad8ebc3c93aea07c777fc26",
+      "independentQaSealSha256": "c9019f3e60cf02a287b3e388af1b887f06c021a876ff41c79a55301d485b766e",
+      "rootVerification": {
+        "status": "verified",
+        "focusedTestsPassed": 18,
+        "publicationRetestPassed": 46,
+        "priorPacketFilesMatched": 8,
+        "qaArtifactsMatched": 9,
+        "sourceInputsMatched": 3,
+        "browserScreenshotInspected": false,
+        "browserApplicable": false,
+        "metadataCorrection": "Initial provisional root screenshot flag was an inherited generator error. Original packet preserved; no browser session existed."
+      }
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "operatorContinuations": [],
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/recover-demo-topology-receipt.yml",
+      "blob": "f94a64d5a076d17259942ac84c5be920fddbf8f7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/author-offline-tests-2.txt",
+      "blob": "3a1f88ce2765e678b5c4328cf385110aa302acea",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/author-offline-tests.txt",
+      "blob": "2d2e6f80b3dc37ccf596b4161e8c0cf29aac2af1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/author-report-2.md",
+      "blob": "8b09aa51536c9ed1b424ae0810a12fcc123daca8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/author-report.md",
+      "blob": "3a30643aacf952cc65b5efd00063e32ad84327a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/codex-verification.md",
+      "blob": "5bf702d2cadde53af39817e0098b564030719f99",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/imported-history.json",
+      "blob": "2db3264e54985e09b3bf6c3ea1f674a0fd4aff4b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/independent-qa/artifact-manifest.json",
+      "blob": "89e5f1cddb1600c78e9640c95af40c98f566c84d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/independent-qa/author-suite-rerun.txt",
+      "blob": "5b55429fb64ea81382c9ebb72f75e00f9703f122",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/independent-qa/final-seal.json",
+      "blob": "074edb1f142211573c91f6844d2a6142bcb42bbe",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/independent-qa/findings.json",
+      "blob": "9b43f93bdbdb8066fda63ccbb5ef042b482b681d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/independent-qa/independent-negative-cases.py",
+      "blob": "bbd6f167421d4bfc1a4cd88ed680a3b00e5a867e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/independent-qa/independent-negative-results.txt",
+      "blob": "6a5d4b16bc77f5c9bdc47f102f1c0b5aa80776ae",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/independent-qa/runtime-and-repository.txt",
+      "blob": "5be817439663ae48de814ee48005909f643d92a1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/independent-qa/secret-scan.json",
+      "blob": "7f484a8fd0add7c68b3b8388cd8f7cb2afc46402",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/independent-qa/source-integrity-before.json",
+      "blob": "4cb1c14d5048983ee4dba8a1e83f13d0b3681611",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/independent-qa/source-integrity.json",
+      "blob": "dc76d255117c9279d471c8f26e76ae15a6d9f5c0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/independent-qa/validation-report.md",
+      "blob": "134aac529594b353b3c47ece6e51c884a747de08",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/root-independent-probes.txt",
+      "blob": "44458a71c1c90ed2c648bab9c284e510ce2058f2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/scope-amendment-1.md",
+      "blob": "a6549cda88b62f2c118e517dcd0399479e2bac17",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/source-freeze-2.json",
+      "blob": "c1ee382186db45de5363286992e1576beadea7d8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/source-freeze.json",
+      "blob": "2306ec7c5aa9b637ff7219d4471ab0d0223c47e5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/receipt-recovery/task-contract.md",
+      "blob": "c7f67288674da389c8a184ec24fa79cb75bf41af",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/recover-demo-topology-receipt.py",
+      "blob": "d8ff41a7b21fa967c02488b8213f515259397e2b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/recover-demo-topology-receipt.test.py",
+      "blob": "690522b49894e96941fc41657bed74100851e52e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "analysis.md": "f7e6da8df2aeb71ae588c93f6bad886751381f12b1db74c09fc8cdda999a0b27",
+    "author-offline-tests-2.txt": "fb85309a0b638e2f56e12cc2f70f6fd806b6ce52c536743a2ff74be27b81a004",
+    "author-offline-tests.txt": "5d5a881250cc9c4c9f8ea106a3ba4c7f79f9340653ef91905387fc198b06bac0",
+    "author-report-2.md": "7cf55418661481130d0b40e993263306531f53dfb1fc7de9d83be5a98dccb788",
+    "author-report.md": "352f71e1d0e897f094541fd4b3dc389652c15965fe95043d8a51efaeab03bd17",
+    "codex-verification.md": "fe74c7743011eaeb33e027f6b2573b8ea1bd38dafbfe80011d6c599aa86b8c34",
+    "implementation-plan.md": "a7d1773fff6eea0974473f5cafb0be031b6fd4b28e342f76a37be77d33fcbc4d",
+    "independent-qa/artifact-manifest.json": "bbde4ef8ac22941cf01e2c073b7ed722c8fdce597d2011c514a64d9e9e61abec",
+    "independent-qa/author-suite-rerun.txt": "45590ff216bd4468b46ddd9d8a616d81d2bd37188e4dfbd4bb211d14f40289f6",
+    "independent-qa/final-seal.json": "c9019f3e60cf02a287b3e388af1b887f06c021a876ff41c79a55301d485b766e",
+    "independent-qa/findings.json": "d0f147a7bff6b6f9ad314bfdda7777f23f6abc45fe8819c6897503a6d759bfa2",
+    "independent-qa/independent-negative-cases.py": "58f2e0f48ef0a992f3c4c7394ad66ef6654f0480e574c9b9be772a98b35cf483",
+    "independent-qa/independent-negative-results.txt": "041dc810aede48f3f0fee2db95f02e6a1c60012067cea6c22592a5a0ad41fcc9",
+    "independent-qa/runtime-and-repository.txt": "9460a7de4a0180914b7b2ceda1119ab880db9a69cf78c36eb6c530b73e88e658",
+    "independent-qa/secret-scan.json": "bb7e44d2abf18e9d6ddaeef29d1993c2a01876564cc928af9f5691861629d79e",
+    "independent-qa/source-integrity-before.json": "5df53dbd4c01a371ef1e833fc470c86617fcb8b9f02859980b6dac391b9fea21",
+    "independent-qa/source-integrity.json": "1ac50d35a79de0ee29630dd8deadbfadea14a81124b366b3ec76b01f1dab0960",
+    "independent-qa/validation-report.md": "38c5c36e2a76cfcd329c4dd0bffa207716985ff87ad8ebc3c93aea07c777fc26",
+    "root-independent-probes.txt": "c213cd408c0502bf2f4e881896bd12dd84e406464f1f4ffba2c30678c086ac93",
+    "root-publication-18tests.txt": "f57681c946aafa42628be940fc01a2c00891f75ee9243a0bb5029473567739c0",
+    "root-publication-28tests.txt": "c618b294dba42899124c04ecb68d09b6dc7a47333e61f36dd0641c0e82dc6668",
+    "scope-amendment-1.md": "889482a49cab1820b1722c11d5b2d8b4d1f1e9d06fc7e1f5f679ec0af55a1aa2",
+    "source-freeze-2.json": "e15710a60770e1481272a67cac7031e64dae2315e51084a667b624dc491380f5",
+    "source-freeze.json": "6261ef744a1a7884827554cbf8d067b51788e90ef220b1b055f7b52b37a3eea1",
+    "task-contract.md": "47eaf91e4336741c3a96ae22e9022bae35aa2c392bf56f83cd28088a39528200",
+    "validation-report.md": "fa69796e0027beb9f19f66cba4802ec8bda31a3d17ff83ccf1b66ffd77c0c473"
+  }
+}

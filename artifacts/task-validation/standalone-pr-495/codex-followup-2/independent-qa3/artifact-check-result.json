@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "counts": {
+    "tests": 0,
+    "pass": 0,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "command": "/usr/bin/python3",
+  "args": [
+    "/workspace/.clinicos-cloud/495-continuation3-independent-qa-20261018/validate-artifacts.py"
+  ],
+  "outputSha256": "c0f930262c2c689e6c0fef99195c0c03acceb7818388577e9b09def9396b08ca",
+  "outputBytes": 334
+}

@@ -1,0 +1,21 @@
+{
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "counts": {
+    "tests": 122,
+    "pass": 122,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "command": "process.execPath",
+  "args": [
+    "--test",
+    "scripts/automation/configure-demo-source.test.mjs",
+    "scripts/automation/inspect-demo-bearer-readiness.test.mjs"
+  ],
+  "outputSha256": "33c0e077ef94da62be3364ed8a1e93384b4afee7ee77b945e0938ace2ccbbc1c",
+  "outputBytes": 10984
+}

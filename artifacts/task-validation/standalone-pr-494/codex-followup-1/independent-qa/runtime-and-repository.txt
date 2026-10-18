@@ -1,0 +1,7 @@
+Python: 3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]
+?? .github/workflows/recover-demo-topology-receipt.yml
+?? artifacts/task-validation/receipt-recovery/
+?? scripts/automation/recover-demo-topology-receipt.py
+?? scripts/automation/recover-demo-topology-receipt.test.py
+Tracked diff: empty
+No dependencies, app build, browser, DB, provider, GitHub, or network operations were needed or executed by this independent reviewer.

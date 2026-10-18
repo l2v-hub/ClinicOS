@@ -1,0 +1,1 @@
+CONTRACT VALIDO: /workspace/clinicos-demo-source-topology/artifacts/task-validation/demo-source-topology/task-contract.md

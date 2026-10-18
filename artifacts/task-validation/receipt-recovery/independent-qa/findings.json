@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "/root/qa_gate_receipt_recovery",
+  "reservationNonce": "9883bb15-5307-4af5-9483-d5f79aa89570",
+  "verdict": "READY FOR CODEX QA",
+  "blockingFindings": [],
+  "nonblockingFindings": [],
+  "candidateSuite": {"passed": 28, "failed": 0, "skipped": 0},
+  "independentSuite": {"passed": 18, "failed": 0, "skipped": 0},
+  "sourceEdits": false,
+  "networkOrProviderCalls": false,
+  "actualEvidenceRecovered": false,
+  "remoteGatesStillRequired": ["exact-current-head native CI", "actual Claude review", "final Codex review", "protected integration", "authorized fixed-mode workflow execution"]
+}

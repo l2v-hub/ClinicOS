@@ -1,0 +1,8 @@
+# PR491 follow-up acceptance matrix
+
+| Criterion | Result | Independent evidence |
+| --- | --- | --- |
+| AC1 — Inspector workflow uses a concurrency group distinct from backend deployment (`demo-source-topology` vs `railway-backend`). | PASS | Full workflow diff; focused test `workflow is exact-main, inspect-only, credential-scoped, and independently serialized` in `logs/focused-tests.txt`. |
+| AC2 — A successful bounded traversal reports `paginationComplete=true` independently from `allVisibleEnvironmentsAccessible`; visible environment inaccessibility does not claim project-wide visibility or permit service connect. | PASS | Focused tests; actual loopback fixture browser result in `screenshots/result.png`, `browser-results.json`, and trace/video. The inaccessible fixture reports pagination `true`, accessibility `false`, project visibility `unproven`, service connect `false`; reload repeats these values. |
+| AC3 — Existing adversarial no-mutation, bounds, ownership, drift, and secret guards remain effective. | PASS | Existing focused controller suites pass 127/127. Browser fixtures also exercise repeated cursor, inventory drift, inaccessible environment, provider error redaction, unsafe metadata, foreign ownership, and mutation denial. No fixture invokes a live provider. |
+| AC4 — Historical proofs remain byte-identical; fresh targeted tests and independent safe browser receipt proof pass. | PASS | `historical-proof-preservation.json` records 56/56 matching SHA-256 hashes. Browser: 9 scenarios plus a reload assertion, 73 loopback requests, zero console/page/relevant HTTP errors. All artifacts pass size, decoding, ZIP integrity, and privacy checks recorded in `privacy-scan.json`. |

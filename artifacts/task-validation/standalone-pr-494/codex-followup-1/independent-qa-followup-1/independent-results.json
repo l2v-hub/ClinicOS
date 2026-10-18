@@ -1,0 +1,7 @@
+{
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "stdout": "",
+  "stderr": "test_expiry_before_archive (__main__.Cases.test_expiry_before_archive) ... ok\ntest_fetched_raw_digest_independent (__main__.Cases.test_fetched_raw_digest_independent) ... ok\ntest_hostile_controls (__main__.Cases.test_hostile_controls) ... ok\ntest_http_codes_and_suppression (__main__.Cases.test_http_codes_and_suppression) ... ok\ntest_idempotence_foreign_conflict_freshness_lost_post (__main__.Cases.test_idempotence_foreign_conflict_freshness_lost_post) ... ok\ntest_limits_compression (__main__.Cases.test_limits_compression) ... ok\ntest_plain_colored_gzip (__main__.Cases.test_plain_colored_gzip) ... ok\ntest_sgr_bounds (__main__.Cases.test_sgr_bounds) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.026s\n\nOK\n"
+}

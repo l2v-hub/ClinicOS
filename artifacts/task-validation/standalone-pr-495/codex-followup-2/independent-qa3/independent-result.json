@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "counts": {
+    "tests": 24,
+    "pass": 24,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "command": "process.execPath",
+  "args": [
+    "--test",
+    "/workspace/.clinicos-cloud/495-continuation3-independent-qa-20261018/adversarial.test.mjs"
+  ],
+  "outputSha256": "f7760799f4a3854daa8925f74ddca0e67802507c4f2f1c975ed208d8b5a5ac18",
+  "outputBytes": 1363
+}

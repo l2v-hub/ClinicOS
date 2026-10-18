@@ -1,0 +1,62 @@
+{
+  "status": "sealed",
+  "task": "PR495 continuation 3 author evidence",
+  "files": [
+    {
+      "path": "prior-proof-manifest.json",
+      "sha256": "62bb733983b5342859a38c1362a9bd6dec86f0c867720dafd8bd364870c374fe",
+      "bytes": 13427
+    },
+    {
+      "path": "prior-proof-before.json",
+      "sha256": "561ed915df6524256e41366424e4ffa7282c8545871ecde924f4688fbc0abea7",
+      "bytes": 22682
+    },
+    {
+      "path": "prior-proof-after.json",
+      "sha256": "602f1615e49bb3cef04e5ba989d3f0ddc847c28a573b15ce7461c4bdde6327c3",
+      "bytes": 15219
+    },
+    {
+      "path": "source.diff",
+      "sha256": "039f987f2eb49a76057671bf88d18917b6db64c5640a0f0f092c5b36b03d7599",
+      "bytes": 6057
+    },
+    {
+      "path": "run-focused-tests.mjs",
+      "sha256": "3a77963f1aad6a50279ac4f12ed3e0fda21594b6772203f84098299867b28852",
+      "bytes": 1255
+    },
+    {
+      "path": "test-attempt-1.json",
+      "sha256": "2f0a08dc3a3a9fb30caca5077bfb0074983169d87ff4793a747905130c03d8f7",
+      "bytes": 13589
+    },
+    {
+      "path": "test-attempt-2.json",
+      "sha256": "f9830a773e7b441a47e08e8fd4eceadaf4854e893d1bb7ef219cd09646faedcb",
+      "bytes": 7547
+    },
+    {
+      "path": "test-attempt-3.json",
+      "sha256": "77e9312a459ec526fc19577af5d4ba27bb4b3213ddb5aa45689085017ca30b20",
+      "bytes": 3707
+    },
+    {
+      "path": "test-attempt-corrections.json",
+      "sha256": "168eb1ef6c2ae5f8b165604d779fa697c1861ba1e1f6c26493e3a42d8e6b2fb1",
+      "bytes": 561
+    },
+    {
+      "path": "author-report.md",
+      "sha256": "856180adff65fae86c3f97ac17523f298bd10d90c7f072361ef8340619b8f9f3",
+      "bytes": 1840
+    },
+    {
+      "path": "freeze.json",
+      "sha256": "b2ccc64d832d0fbbcf20022cf2d84d1c98bfee0859e69e7608729ad334f43783",
+      "bytes": 2418
+    }
+  ],
+  "fileCount": 11
+}
