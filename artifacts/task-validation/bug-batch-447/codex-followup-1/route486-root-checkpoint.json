@@ -1,0 +1,12 @@
+{
+  "phase": "route-subtask-checkpoint-awaiting-parent-integration-and-independent-QA",
+  "sourceSha": "bc28a09c6beb83806b3c584ee668045b6dcafe93",
+  "sourceManifestSha256": "f85bcba34074da2056e47cbfb1dae4a2ff6d79bf4bc9dce5091714774e381d82",
+  "sourceFiles": 12,
+  "priorProofFiles": 9098,
+  "rootPureTestsPassed": 25,
+  "rootPureTestsLogSha256": "8b5011392aa09de4bc0fe4c2eb6d7ef4c3209323d1a4a372c6760a5975ccda46",
+  "dbRegressionsExecuted": false,
+  "allEightIndependentQaCompleted": false,
+  "publicationOrRelease": false
+}

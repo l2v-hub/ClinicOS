@@ -1,0 +1,34 @@
+{
+  "continuation": {
+    "round": 5,
+    "nonce": "b9c47bef-ce58-4251-b08d-9a75c3bfd8ea",
+    "amendmentId": "scope-amendment-1",
+    "amendmentSha256": "55c1eda62ffec6f4d4266ada1b8a81564bc49560098528f9a2c6313a321f6f4e"
+  },
+  "candidate": {
+    "head": "e14ee2f22c18f1026c63e53b5ce0f5744fb0cfe1",
+    "committed": false,
+    "gitDiffBinarySha256": "924346e63d80d1e207751faadc01a120f95f7697432d132f7c02f58347bc9bea",
+    "previousHandoffSha256": "d32b941449075e95a0141886d3b82ab8a480c246c699b54ef65fece00a970183",
+    "followupHandoffSha256": "19bd9692fcc59d596289b746754dbcf613884892a31d7fb89366887c4d2f55bb"
+  },
+  "files": [
+    { "path": "backend/src/intake/__tests__/confirm-therapy-validation.test.ts", "sha256": "b7f5588e4a1bfa56ec99859afce91a264de8768dc7401c95cf6c06be9a68aeda" },
+    { "path": "backend/src/patients/diary-therapy-service.ts", "sha256": "60cc879cb3530cb7f3e83717cf98850b684588fb6bb1f9df186cd2a8ca2178eb" },
+    { "path": "backend/src/patients/diary-write-service.ts", "sha256": "98791665e259f5c251121c8a8c7354b2d7a0dd8f2e6225fed6f3de1180750199" },
+    { "path": "backend/src/routes/__tests__/patient-diary-therapy-contract.test.ts", "sha256": "9dc4ad5a7d61c97d3055388d3ed72728694d35a231ca9b90beb5a277e306ea41" },
+    { "path": "backend/src/routes/__tests__/patient-diary-therapy-db.test.ts", "sha256": "6c59779c1e5d33f652be5f6f620d277fbeb69f612c9415ade482df71299c5e5d" },
+    { "path": "backend/src/therapies/__tests__/therapy-create.test.ts", "sha256": "a53eeb345e81af6ac8d25df9442273e011192c75233baf67e29c0d47b2fb8a59" },
+    { "path": "backend/src/therapies/therapy-create.ts", "sha256": "9be9bfb3899822421d1f4a53e37743a69e698f1ea0b4b6ef40a1f61e1d30de21" },
+    { "path": "backend/src/tools/__tests__/therapy.test.ts", "sha256": "11d0a7709ab78bcb82834110f464ee60a127a56d207edbbd91c271ec3e0739c6" },
+    { "path": "backend/src/tools/capabilities/therapy.ts", "sha256": "f01988e6e711f622e5865e022bbd94e2a2d0a6ba543e621bde3b3c8b3c5a0a36" },
+    { "path": "frontend/src/components/operator/cartella/TherapyFormFields.tsx", "sha256": "295837d7dcf14a9dc2f91a8ffa95cb9601379c6b40cecf70c0192a25d16e9fa3" },
+    { "path": "frontend/src/components/operator/cartella/__tests__/drugPackageSelection.test.ts", "sha256": "20229720f083ce0ea17498895a9711cdb49ece92c5d5b3d1dd9fbc334e082d39" },
+    { "path": "frontend/src/components/operator/cartella/__tests__/therapyRouteRegime.test.ts", "sha256": "1344457b465427855384d02f53793154f7e38ac6e0c7476d5f4424152fcfb965" }
+  ],
+  "deferredChecks": [
+    "backend/src/routes/__tests__/patient-diary-therapy-db.test.ts against root-coordinated loopback Postgres",
+    "backend DB-backed therapy tool suite",
+    "fresh independent all-eight UX QA after serial parent integration and author stop"
+  ]
+}
