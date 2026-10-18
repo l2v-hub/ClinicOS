@@ -1,11 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
+import { mkdtemp, readFile, writeFile, rm } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { deflateRawSync } from 'node:zlib';
 import { createServer } from 'node:http';
 import {
   DEMO_TARGET,
+  DEMO_SOURCE_POLICIES,
   validateTarget,
   validateActiveDeployment,
   verifyLiveReady,
@@ -42,6 +47,18 @@ const env = {
   GITHUB_RUN_ID: '123',
   GITHUB_RUN_ATTEMPT: '2',
 };
+const exactEnv = {
+  ...env,
+  GITHUB_ACTIONS: 'true',
+  GITHUB_EVENT_NAME: 'push',
+  GITHUB_WORKFLOW_REF: `${repo}/.github/workflows/deploy-backend.yml@refs/heads/main`,
+};
+const exactPolicy = DEMO_SOURCE_POLICIES.exact;
+function exactTargetData() {
+  const data = targetData();
+  data.deploymentTriggers = { edges: [], pageInfo: { hasNextPage: false } };
+  return data;
+}
 function targetData() {
   return {
     projectToken: {
@@ -479,8 +496,9 @@ function proofHttp({
   modifyArtifact = (a) => a,
   corrupt = false,
   redirect = 'https://production.blob.core.windows.net/signed',
+  receiptBody = receipt(),
 } = {}) {
-  const zip = zipReceipt(receipt());
+  const zip = zipReceipt(receiptBody);
   const artifact = modifyArtifact({
     id: 456,
     name: `demo-deployment-${run.id}-${run.run_attempt}`,
@@ -612,8 +630,17 @@ test('deployment workflow isolates demo credentials, defaults dispatch to read-o
   assert.match(demo, /RAILWAY_TOKEN: \$\{\{ secrets\.RAILWAY_DEMO_TOKEN \}\}/);
   assert.match(demo, /ref: \$\{\{ github\.sha \}\}/);
   assert.ok(
-    demo.indexOf('demo-deployment.mjs preflight') < demo.indexOf('demo-deployment.mjs deploy'),
+    demo.indexOf('demo-deployment.mjs preflight-exact') <
+      demo.indexOf('demo-deployment.mjs deploy-exact'),
   );
+  const guardTests = demo.indexOf(
+    'run: node --test agent-team/tests/bug-pipeline/demo-deployment.test.mjs',
+  );
+  assert.ok(guardTests >= 0 && guardTests < demo.indexOf('secrets.RAILWAY_DEMO_TOKEN'));
+  assert.equal((demo.match(/demo-deployment\.mjs preflight-exact/g) ?? []).length, 1);
+  assert.equal((demo.match(/demo-deployment\.mjs deploy-exact/g) ?? []).length, 1);
+  assert.match(backend, /permissions:\n  contents: read/);
+  assert.match(backend, /concurrency:\n  group: railway-backend\n  cancel-in-progress: false/);
   assert.match(demo, /if: github.event_name == 'push' \|\| inputs.operation == 'deploy'/);
   const [releaseJob, confirm] = release.split('  confirm-demo:');
   assert.doesNotMatch(releaseJob, /BUG_PIPELINE_RELEASE_ACTION: record/);
@@ -760,4 +787,536 @@ test('persistent old/new overlap cannot issue a receipt despite healthy public r
     /readiness timed out/,
   );
   assert.equal(readinessCalls, 0);
+});
+
+test('zero-trigger exact policy is explicit; complete fixed inventories retain strict defaults', async () => {
+  const data = exactTargetData();
+  assert.throws(() => validateTarget(data), /main repository trigger required/);
+  assert.deepEqual(validateTarget(data, exactPolicy), DEMO_TARGET);
+  const one = targetData();
+  one.deploymentTriggers.pageInfo = { hasNextPage: false };
+  assert.deepEqual(validateTarget(one, exactPolicy), DEMO_TARGET);
+  const proof = await prepareDemo({
+    env: exactEnv,
+    sourcePolicy: exactPolicy,
+    client: async (query) => {
+      assert.match(query, /pageInfo\{hasNextPage\}/);
+      return data;
+    },
+  });
+  assert.equal(proof.sourcePolicy, exactPolicy);
+  validateReceipt(proof, run, 'clinicos-demo-preflight', Date.now(), exactPolicy);
+  // Historical receipts without the field remain strict and independently verifiable.
+  validateReceipt(receipt(), run);
+});
+
+test('exact policy rejects incomplete or hostile source inventories', async (t) => {
+  for (const [label, mutate, policy = exactPolicy] of [
+    ['unknown policy', () => {}, 'native-exact-commit-v2'],
+    ['null policy', () => {}, null],
+    [
+      'missing trigger collection',
+      (d) => {
+        delete d.deploymentTriggers;
+      },
+    ],
+    [
+      'missing edges',
+      (d) => {
+        delete d.deploymentTriggers.edges;
+      },
+    ],
+    [
+      'null edges',
+      (d) => {
+        d.deploymentTriggers.edges = null;
+      },
+    ],
+    [
+      'hidden next page',
+      (d) => {
+        d.deploymentTriggers.pageInfo.hasNextPage = true;
+      },
+    ],
+    [
+      'missing pageInfo',
+      (d) => {
+        delete d.deploymentTriggers.pageInfo;
+      },
+    ],
+    [
+      'missing pagination boolean',
+      (d) => {
+        delete d.deploymentTriggers.pageInfo.hasNextPage;
+      },
+    ],
+    [
+      'false-like pagination',
+      (d) => {
+        d.deploymentTriggers.pageInfo.hasNextPage = 'false';
+      },
+    ],
+    [
+      'missing service domains',
+      (d) => {
+        delete d.serviceInstance.domains.serviceDomains;
+      },
+    ],
+    [
+      'missing custom domains',
+      (d) => {
+        delete d.serviceInstance.domains.customDomains;
+      },
+    ],
+    [
+      'missing domains',
+      (d) => {
+        delete d.serviceInstance.domains;
+      },
+    ],
+    [
+      'wrong domain',
+      (d) => {
+        d.serviceInstance.domains.serviceDomains[0].domain = 'foreign.example';
+      },
+    ],
+    [
+      'wrong repository',
+      (d) => {
+        d.serviceInstance.source.repo = 'foreign/repo';
+      },
+    ],
+    [
+      'missing source',
+      (d) => {
+        delete d.serviceInstance.source;
+      },
+    ],
+    [
+      'wrong token project',
+      (d) => {
+        d.projectToken.project.id = 'other';
+      },
+    ],
+    [
+      'wrong token environment',
+      (d) => {
+        d.projectToken.environment.id = 'other';
+      },
+    ],
+    [
+      'wrong environment name',
+      (d) => {
+        d.projectToken.environment.name = 'production';
+      },
+    ],
+    [
+      'wrong service',
+      (d) => {
+        d.serviceInstance.serviceId = 'other';
+      },
+    ],
+    [
+      'wrong instance environment',
+      (d) => {
+        d.serviceInstance.environmentId = 'other';
+      },
+    ],
+    [
+      'foreign branch',
+      (d) => {
+        d.deploymentTriggers.edges = [
+          { node: { ...DEMO_TARGET, repository: repo, branch: 'preview' } },
+        ];
+      },
+    ],
+    [
+      'foreign trigger repository',
+      (d) => {
+        d.deploymentTriggers.edges = [
+          { node: { ...DEMO_TARGET, repository: 'other/repo', branch: 'main' } },
+        ];
+      },
+    ],
+    [
+      'foreign trigger target',
+      (d) => {
+        d.deploymentTriggers.edges = [
+          { node: { ...DEMO_TARGET, environmentId: 'other', repository: repo, branch: 'main' } },
+        ];
+      },
+    ],
+    [
+      'null trigger',
+      (d) => {
+        d.deploymentTriggers.edges = [null];
+      },
+    ],
+    [
+      'duplicate triggers',
+      (d) => {
+        const edge = targetData().deploymentTriggers.edges[0];
+        d.deploymentTriggers.edges = [edge, edge];
+      },
+    ],
+  ])
+    await t.test(label, async () => {
+      const data = exactTargetData();
+      mutate(data);
+      assert.throws(() => validateTarget(data, policy));
+      let mutations = 0;
+      await assert.rejects(
+        deployDemo({
+          env: exactEnv,
+          sourcePolicy: policy,
+          client: async (query) => {
+            if (query.startsWith('mutation')) mutations++;
+            return data;
+          },
+          attempts: 1,
+        }),
+      );
+      assert.equal(mutations, 0);
+    });
+});
+
+test('only the fixed main Actions deployment workflow may select exact policy', async (t) => {
+  for (const [key, value] of [
+    ['GITHUB_ACTIONS', undefined],
+    ['GITHUB_WORKFLOW_REF', undefined],
+    ['GITHUB_WORKFLOW_REF', `${repo}/.github/workflows/foreign.yml@refs/heads/main`],
+    ['GITHUB_WORKFLOW_REF', `${repo}/.github/workflows/deploy-backend.yml@refs/heads/preview`],
+    ['GITHUB_EVENT_NAME', 'pull_request_target'],
+    ['GITHUB_EVENT_NAME', 'pull_request'],
+    ['GITHUB_REPOSITORY', 'foreign/repo'],
+    ['GITHUB_REF', 'refs/heads/preview'],
+    ['GITHUB_SHA', 'not-a-sha'],
+    ['GITHUB_RUN_ID', '0'],
+    ['GITHUB_RUN_ATTEMPT', '0'],
+  ])
+    await t.test(`${key}=${value}`, async () => {
+      let calls = 0;
+      const options = {
+        env: { ...exactEnv, [key]: value },
+        sourcePolicy: exactPolicy,
+        client: async () => {
+          calls++;
+          return exactTargetData();
+        },
+      };
+      await assert.rejects(prepareDemo(options));
+      await assert.rejects(deployDemo(options));
+      assert.equal(calls, 0);
+    });
+  assert.equal(
+    (
+      await prepareDemo({
+        env: { ...exactEnv, GITHUB_EVENT_NAME: 'workflow_dispatch' },
+        sourcePolicy: exactPolicy,
+        client: async () => exactTargetData(),
+      })
+    ).sourcePolicy,
+    exactPolicy,
+  );
+});
+
+test('native exact policy binds one exact mutation, native metadata, readiness and final target inspection', async () => {
+  const calls = [];
+  let ready = false;
+  const proof = await deployDemo({
+    env: exactEnv,
+    sourcePolicy: exactPolicy,
+    attempts: 1,
+    client: async (query, variables) => {
+      calls.push({ query, variables, ready });
+      if (query.startsWith('mutation')) {
+        assert.match(
+          query,
+          /serviceInstanceDeployV2\(environmentId:\$environmentId,serviceId:\$serviceId,commitSha:\$commitSha\)/,
+        );
+        assert.deepEqual(variables, { ...DEMO_TARGET, commitSha: sha });
+        assert.doesNotMatch(query, /latestCommit|serviceConnect|deploymentTrigger/);
+        return { serviceInstanceDeployV2: deploymentId };
+      }
+      return exactTargetData();
+    },
+    fetchImpl: async (url, options) => {
+      assert.equal(url, `https://${DEMO_TARGET.domain}/ready`);
+      assert.equal(options.redirect, 'error');
+      assert.equal(options.headers['Cache-Control'], 'no-cache');
+      ready = true;
+      return response();
+    },
+  });
+  assert.equal(calls.filter((c) => c.query.startsWith('mutation')).length, 1);
+  assert.equal(
+    calls.length,
+    4,
+    'fresh preflight, single mutation, native poll, post-ready inspection',
+  );
+  assert.equal(calls.at(-1).ready, true);
+  assert.equal(proof.sourcePolicy, exactPolicy);
+  assert.equal(proof.deployment.commitHash, sha);
+  assert.equal(proof.ready.deploymentId, deploymentId);
+  validateReceipt(proof, run, undefined, Date.now(), exactPolicy);
+});
+
+test('source policy is bound through artifact receipt and independent native verification', async (t) => {
+  const exactReceipt = { ...receipt(), sourcePolicy: exactPolicy };
+  const f = proofHttp({ receiptBody: exactReceipt });
+  let inspections = 0;
+  const proof = await verifyDemoRelease({
+    reader: f.reader,
+    fetchImpl: f.fetchImpl,
+    runUrl: `https://github.com/${repo}/actions/runs/123`,
+    mergeSha: sha,
+    reviewedSha,
+    client: async () => {
+      inspections++;
+      return exactTargetData();
+    },
+    sourcePolicy: exactPolicy,
+  });
+  assert.equal(proof.receipt.sourcePolicy, exactPolicy);
+  assert.equal(inspections, 2);
+  for (const [label, receiptPolicy, expected, data] of [
+    ['unknown receipt', 'unknown', undefined, exactTargetData()],
+    ['explicit null receipt', null, undefined, exactTargetData()],
+    ['mismatch strict expectation', exactPolicy, DEMO_SOURCE_POLICIES.trigger, exactTargetData()],
+    ['mismatch exact expectation', DEMO_SOURCE_POLICIES.trigger, exactPolicy, targetData()],
+    ['legacy receipt cannot authorize zero triggers', undefined, undefined, exactTargetData()],
+    ['unknown expected policy', exactPolicy, 'unknown', exactTargetData()],
+  ])
+    await t.test(label, async () => {
+      const saved = {
+        ...receipt(),
+        ...(receiptPolicy === undefined ? {} : { sourcePolicy: receiptPolicy }),
+      };
+      const http = proofHttp({ receiptBody: saved });
+      await assert.rejects(
+        verifyDemoRelease({
+          reader: http.reader,
+          fetchImpl: http.fetchImpl,
+          runUrl: `https://github.com/${repo}/actions/runs/123`,
+          mergeSha: sha,
+          reviewedSha,
+          client: async () => data,
+          sourcePolicy: expected,
+        }),
+      );
+    });
+  const preflight = { ...receipt('clinicos-demo-preflight'), sourcePolicy: exactPolicy };
+  const reader = {
+    getJson: async (route) => (route === 'commits/main' ? { sha } : { workflow_runs: [run] }),
+    artifact: async () => ({ receipt: preflight }),
+  };
+  assert.equal(
+    (await verifyDemoPreflight({ reader, sourcePolicy: exactPolicy })).receipt.sourcePolicy,
+    exactPolicy,
+  );
+  await assert.rejects(verifyDemoPreflight({ reader, sourcePolicy: DEMO_SOURCE_POLICIES.trigger }));
+});
+
+test('exact policy rejects native provenance and source drift after mutation without mutation retry', async (t) => {
+  for (const [label, mutate] of [
+    [
+      'foreign source',
+      (d) => {
+        d.serviceInstance.source.repo = 'foreign/repo';
+      },
+    ],
+    [
+      'new foreign trigger',
+      (d) => {
+        d.deploymentTriggers.edges = [
+          { node: { ...DEMO_TARGET, repository: repo, branch: 'preview' } },
+        ];
+      },
+    ],
+    [
+      'incomplete next page',
+      (d) => {
+        d.deploymentTriggers.pageInfo.hasNextPage = true;
+      },
+    ],
+    [
+      'wrong target',
+      (d) => {
+        d.deployment.environmentId = 'other';
+      },
+    ],
+    [
+      'wrong native commit',
+      (d) => {
+        d.deployment.meta.commitHash = reviewedSha;
+      },
+    ],
+    [
+      'missing native commit',
+      (d) => {
+        d.deployment.meta = { message: sha };
+      },
+    ],
+    [
+      'ambiguous active deployment',
+      (d) => {
+        d.serviceInstance.activeDeployments.push({ id: deploymentId, status: 'SUCCESS' });
+      },
+    ],
+  ])
+    await t.test(label, async () => {
+      let mutations = 0;
+      let queries = 0;
+      await assert.rejects(
+        deployDemo({
+          env: exactEnv,
+          sourcePolicy: exactPolicy,
+          attempts: 1,
+          client: async (query) => {
+            if (query.startsWith('mutation')) {
+              mutations++;
+              return { serviceInstanceDeployV2: deploymentId };
+            }
+            const data = exactTargetData();
+            if (++queries > 1) mutate(data);
+            return data;
+          },
+          fetchImpl: async () => response(),
+        }),
+      );
+      assert.equal(mutations, 1);
+    });
+  let mutations = 0;
+  let ready = false;
+  await assert.rejects(
+    deployDemo({
+      env: exactEnv,
+      sourcePolicy: exactPolicy,
+      attempts: 1,
+      client: async (query) => {
+        if (query.startsWith('mutation')) {
+          mutations++;
+          return { serviceInstanceDeployV2: deploymentId };
+        }
+        const data = exactTargetData();
+        if (ready) data.serviceInstance.source.repo = 'drift/after-ready';
+        return data;
+      },
+      fetchImpl: async () => {
+        ready = true;
+        return response();
+      },
+    }),
+    /source, or target mismatch/,
+  );
+  assert.equal(mutations, 1);
+});
+
+test('uncertain or denied exact mutation and polling errors stop after one submission', async (t) => {
+  for (const failure of ['transport', 'denied', 'invalid-id', 'polling'])
+    await t.test(failure, async () => {
+      let mutations = 0;
+      let requests = 0;
+      const client = createRailwayClient({
+        token: 'synthetic-demo-binding',
+        fetchImpl: async (_url, options) => {
+          requests++;
+          const { query } = JSON.parse(options.body);
+          if (query.startsWith('mutation')) {
+            mutations++;
+            if (failure === 'transport') throw new Error('synthetic uncertain network');
+            if (failure === 'denied')
+              return response({ errors: [{ message: 'synthetic denial' }] });
+            return response({
+              data: {
+                serviceInstanceDeployV2: failure === 'invalid-id' ? 'invalid' : deploymentId,
+              },
+            });
+          }
+          if (mutations) throw new Error('synthetic polling unavailable');
+          return response({ data: exactTargetData() });
+        },
+      });
+      await assert.rejects(
+        deployDemo({ env: exactEnv, sourcePolicy: exactPolicy, client, attempts: 2 }),
+      );
+      assert.equal(mutations, 1);
+      assert.equal(requests, failure === 'polling' ? 3 : 2);
+    });
+});
+
+test('actual exact CLI operations use bounded Web Responses, fixed headers, and no external credentials', async (t) => {
+  const modulePath = fileURLToPath(
+    new URL('../../src/bug-pipeline/demo-deployment.mjs', import.meta.url),
+  );
+  for (const operation of ['preflight-exact', 'deploy-exact', 'preflight', 'deploy'])
+    await t.test(operation, async () => {
+      const directory = await mkdtemp(join(tmpdir(), 'demo-exact-cli-'));
+      try {
+        const fixturePath = join(directory, 'fetch-fixture.mjs');
+        const logPath = join(directory, 'requests.jsonl');
+        const fixture = `import assert from 'node:assert/strict';
+import { appendFileSync } from 'node:fs';
+const data = ${JSON.stringify(exactTargetData())};
+const ready = ${JSON.stringify(readyBody())};
+globalThis.fetch = async (url, options) => {
+  assert.equal(options.redirect, 'error');
+  if (url === 'https://${DEMO_TARGET.domain}/ready') {
+    assert.equal(options.headers['Cache-Control'], 'no-cache');
+    appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ ready: true }) + '\\n');
+    return new Response(JSON.stringify(ready), { headers: { 'Cache-Control': 'no-store' } });
+  }
+  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(options.headers['Project-Access-Token'], 'synthetic-demo-binding');
+  assert.equal(options.headers.Authorization, undefined);
+  const { query, variables } = JSON.parse(options.body);
+  const mutation = query.startsWith('mutation');
+  if (mutation) {
+    assert.match(query, /serviceInstanceDeployV2/);
+    assert.equal(variables.commitSha, '${sha}');
+    assert.equal(variables.serviceId, '${DEMO_TARGET.serviceId}');
+    assert.equal(variables.environmentId, '${DEMO_TARGET.environmentId}');
+  } else assert.match(query, /pageInfo\\{hasNextPage\\}/);
+  appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ mutation }) + '\\n');
+  return new Response(JSON.stringify({ data: mutation ? { serviceInstanceDeployV2: '${deploymentId}' } : data }));
+};\n`;
+        await writeFile(fixturePath, fixture);
+        const result = spawnSync(
+          process.execPath,
+          ['--import', fixturePath, modulePath, operation],
+          {
+            cwd: directory,
+            env: { ...exactEnv, RAILWAY_TOKEN: 'synthetic-demo-binding' },
+            encoding: 'utf8',
+            timeout: 30_000,
+          },
+        );
+        assert.equal(result.error, undefined);
+        const requests = (await readFile(logPath, 'utf8')).trim().split('\n').map(JSON.parse);
+        if (operation.endsWith('-exact')) {
+          assert.equal(result.status, 0, result.stderr);
+          const filename = operation.startsWith('preflight')
+            ? 'demo-preflight-receipt.json'
+            : 'demo-deployment-receipt.json';
+          const saved = JSON.parse(await readFile(join(directory, filename), 'utf8'));
+          assert.equal(saved.sourcePolicy, exactPolicy);
+          assert.equal(saved.mergeSha, sha);
+          validateReceipt(saved, run, saved.kind, Date.now(), exactPolicy);
+          assert.equal(
+            requests.filter((r) => r.mutation).length,
+            operation === 'deploy-exact' ? 1 : 0,
+          );
+          assert.equal(
+            requests.filter((r) => r.ready).length,
+            operation === 'deploy-exact' ? 1 : 0,
+          );
+        } else {
+          assert.equal(result.status, 1);
+          assert.match(result.stderr, /main repository trigger required/);
+          assert.equal(requests.filter((r) => r.mutation).length, 0);
+        }
+      } finally {
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
 });

@@ -14,6 +14,10 @@ const SHA = /^[a-f0-9]{40}(?![\s\S])/;
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}(?![\s\S])/i;
 const DIGEST = /^sha256:[a-f0-9]{64}$/;
 const WORKFLOW = '.github/workflows/deploy-backend.yml';
+export const DEMO_SOURCE_POLICIES = Object.freeze({
+  trigger: 'main-trigger-v1',
+  exact: 'native-exact-commit-v1',
+});
 const API = 'https://api.github.com';
 const RAILWAY_API = 'https://backboard.railway.app/graphql/v2';
 const MAX_BYTES = 1024 * 1024;
@@ -52,7 +56,13 @@ export async function fetchJson(url, { fetchImpl = fetch, ...options } = {}) {
   }
 }
 
-export function validateTarget(data) {
+function sourcePolicy(value = DEMO_SOURCE_POLICIES.trigger) {
+  if (!Object.values(DEMO_SOURCE_POLICIES).includes(value)) fail('unknown source policy');
+  return value;
+}
+
+export function validateTarget(data, policy = DEMO_SOURCE_POLICIES.trigger) {
+  policy = sourcePolicy(policy);
   const token = data?.projectToken;
   const instance = data?.serviceInstance;
   if (
@@ -65,14 +75,26 @@ export function validateTarget(data) {
   )
     fail('token, source, or target mismatch');
   const triggers = data?.deploymentTriggers?.edges;
+  const exact = policy === DEMO_SOURCE_POLICIES.exact;
+  if (
+    data?.deploymentTriggers?.pageInfo?.hasNextPage === true ||
+    (exact &&
+      (data?.deploymentTriggers?.pageInfo?.hasNextPage !== false ||
+        !Array.isArray(instance.domains?.serviceDomains) ||
+        !Array.isArray(instance.domains?.customDomains)))
+  )
+    fail('complete source and domain inventory required');
   if (
     !Array.isArray(triggers) ||
-    triggers.length !== 1 ||
-    triggers[0].node?.branch !== 'main' ||
-    triggers[0].node?.repository !== REPO ||
-    triggers[0].node?.environmentId !== DEMO_TARGET.environmentId ||
-    triggers[0].node?.serviceId !== DEMO_TARGET.serviceId ||
-    triggers[0].node?.projectId !== DEMO_TARGET.projectId
+    (exact ? triggers.length > 1 : triggers.length !== 1) ||
+    triggers.some(
+      (edge) =>
+        edge?.node?.branch !== 'main' ||
+        edge.node.repository !== REPO ||
+        edge.node.environmentId !== DEMO_TARGET.environmentId ||
+        edge.node.serviceId !== DEMO_TARGET.serviceId ||
+        edge.node.projectId !== DEMO_TARGET.projectId,
+    )
   )
     fail('exact main repository trigger required');
   const domains = [
@@ -93,8 +115,8 @@ function hasUniqueActiveDeployment(data, deploymentId) {
   );
 }
 
-export function validateActiveDeployment(data, mergeSha, deploymentId) {
-  validateTarget(data);
+export function validateActiveDeployment(data, mergeSha, deploymentId, policy) {
+  validateTarget(data, policy);
   const deployment = data.deployment;
   if (
     !SHA.test(mergeSha ?? '') ||
@@ -182,7 +204,7 @@ export async function verifyLiveReady(deploymentId, { fetchImpl = fetch } = {}) 
 // Shapes verified against Railway CLI v5.66.0 schema and EnvironmentInstances / ProjectToken queries.
 const TARGET_QUERY = `query($projectId:String!,$environmentId:String!,$serviceId:String!){
   projectToken{project{id} environment{id name}}
-  deploymentTriggers(projectId:$projectId,environmentId:$environmentId,serviceId:$serviceId,first:2){edges{node{projectId environmentId serviceId repository branch}}}
+  deploymentTriggers(projectId:$projectId,environmentId:$environmentId,serviceId:$serviceId,first:2){pageInfo{hasNextPage} edges{node{projectId environmentId serviceId repository branch}}}
   serviceInstance(environmentId:$environmentId,serviceId:$serviceId){
     serviceId environmentId source{repo}
     domains{serviceDomains{domain} customDomains{domain}}
@@ -191,7 +213,7 @@ const TARGET_QUERY = `query($projectId:String!,$environmentId:String!,$serviceId
 }`;
 const DEPLOYMENT_QUERY = `query($projectId:String!,$environmentId:String!,$serviceId:String!,$id:String!){
   projectToken{project{id} environment{id name}}
-  deploymentTriggers(projectId:$projectId,environmentId:$environmentId,serviceId:$serviceId,first:2){edges{node{projectId environmentId serviceId repository branch}}}
+  deploymentTriggers(projectId:$projectId,environmentId:$environmentId,serviceId:$serviceId,first:2){pageInfo{hasNextPage} edges{node{projectId environmentId serviceId repository branch}}}
   serviceInstance(environmentId:$environmentId,serviceId:$serviceId){
     serviceId environmentId source{repo}
     domains{serviceDomains{domain} customDomains{domain}}
@@ -214,18 +236,19 @@ export function createRailwayClient({ token, fetchImpl = fetch } = {}) {
   };
 }
 
-export async function inspectDemo(client) {
+export async function inspectDemo(client, policy) {
   const data = await client(TARGET_QUERY, DEMO_TARGET);
-  validateTarget(data);
+  validateTarget(data, policy);
   return data;
 }
 
-export async function inspectDeployment(client, deploymentId, mergeSha) {
+export async function inspectDeployment(client, deploymentId, mergeSha, policy) {
   const data = await client(DEPLOYMENT_QUERY, { ...DEMO_TARGET, id: deploymentId });
-  return validateActiveDeployment(data, mergeSha, deploymentId);
+  return validateActiveDeployment(data, mergeSha, deploymentId, policy);
 }
 
-function context(env) {
+function context(env, policy) {
+  policy = sourcePolicy(policy);
   const runId = Number(env.GITHUB_RUN_ID),
     runAttempt = Number(env.GITHUB_RUN_ATTEMPT);
   if (
@@ -236,6 +259,13 @@ function context(env) {
     !integer(runAttempt)
   )
     fail('trusted main Actions context required');
+  if (
+    policy === DEMO_SOURCE_POLICIES.exact &&
+    (env.GITHUB_ACTIONS !== 'true' ||
+      env.GITHUB_WORKFLOW_REF !== `${REPO}/${WORKFLOW}@refs/heads/main` ||
+      !['push', 'workflow_dispatch'].includes(env.GITHUB_EVENT_NAME))
+  )
+    fail('exact source policy requires the fixed main deployment workflow');
   return {
     repository: REPO,
     sourceRef: 'refs/heads/main',
@@ -245,13 +275,15 @@ function context(env) {
   };
 }
 
-export async function prepareDemo({ env = process.env, client } = {}) {
-  const source = context(env);
-  await inspectDemo(client ?? createRailwayClient({ token: env.RAILWAY_TOKEN }));
+export async function prepareDemo({ env = process.env, client, sourcePolicy: policy } = {}) {
+  policy = sourcePolicy(policy);
+  const source = context(env, policy);
+  await inspectDemo(client ?? createRailwayClient({ token: env.RAILWAY_TOKEN }), policy);
   return {
     schemaVersion: 1,
     kind: 'clinicos-demo-preflight',
     ...source,
+    sourcePolicy: policy,
     target: structuredClone(DEMO_TARGET),
     verifiedAt: new Date().toISOString(),
   };
@@ -263,10 +295,12 @@ export async function deployDemo({
   fetchImpl = fetch,
   delay = (ms) => new Promise((r) => setTimeout(r, ms)),
   attempts = 180,
+  sourcePolicy: policy,
 } = {}) {
-  const source = context(env);
+  policy = sourcePolicy(policy);
+  const source = context(env, policy);
   client ??= createRailwayClient({ token: env.RAILWAY_TOKEN, fetchImpl });
-  await inspectDemo(client);
+  await inspectDemo(client, policy);
   // Unlike `railway up`, this official source-deploy mutation accepts an exact commitSha.
   // Never change the source configuration or substitute an arbitrary deploy message as proof.
   const result = await client(
@@ -279,24 +313,30 @@ export async function deployDemo({
   if (!UUID.test(deploymentId ?? '')) fail('Railway returned invalid deployment identity');
   for (let attempt = 0; attempt < attempts; attempt++) {
     const data = await client(DEPLOYMENT_QUERY, { ...DEMO_TARGET, id: deploymentId });
-    validateTarget(data);
+    validateTarget(data, policy);
     if (['FAILED', 'CRASHED', 'REMOVED', 'CANCELLED'].includes(data.deployment?.status))
       fail('demo deployment failed');
     if (data.deployment?.status === 'SUCCESS' && hasUniqueActiveDeployment(data, deploymentId)) {
-      const deployment = validateActiveDeployment(data, source.mergeSha, deploymentId);
+      const deployment = validateActiveDeployment(data, source.mergeSha, deploymentId, policy);
+      let ready;
       try {
-        const ready = await verifyLiveReady(deploymentId, { fetchImpl });
+        ready = await verifyLiveReady(deploymentId, { fetchImpl });
+      } catch {
+        // Routing can converge after Railway reports SUCCESS. Final failure stays closed.
+      }
+      if (ready) {
+        // Reinspect after readiness: a source/target or active-deployment change cannot issue proof.
+        await inspectDeployment(client, deploymentId, source.mergeSha, policy);
         return {
           schemaVersion: 1,
           kind: 'clinicos-demo-backend',
           ...source,
+          sourcePolicy: policy,
           target: structuredClone(DEMO_TARGET),
           deployment,
           ready,
           verifiedAt: new Date().toISOString(),
         };
-      } catch {
-        // Routing can converge after Railway reports SUCCESS. Final failure stays closed.
       }
     }
     if (attempt + 1 < attempts) await delay(10_000);
@@ -320,7 +360,17 @@ function validateRun(run, mergeSha) {
     fail('trusted completed main deployment workflow required');
 }
 
-export function validateReceipt(receipt, run, kind = 'clinicos-demo-backend', now = Date.now()) {
+export function validateReceipt(
+  receipt,
+  run,
+  kind = 'clinicos-demo-backend',
+  now = Date.now(),
+  expectedPolicy,
+) {
+  // Receipts predating policy selection retain the original strict trigger policy.
+  const policy = sourcePolicy(receipt?.sourcePolicy);
+  if (expectedPolicy !== undefined && policy !== sourcePolicy(expectedPolicy))
+    fail('receipt source policy mismatch');
   validateRun(run, receipt?.mergeSha);
   if (
     receipt?.schemaVersion !== 1 ||
@@ -478,7 +528,8 @@ export function createProofReader({ token, fetchImpl = fetch } = {}) {
   return { getJson, artifact };
 }
 
-export async function verifyDemoPreflight({ reader } = {}) {
+export async function verifyDemoPreflight({ reader, sourcePolicy: policy } = {}) {
+  if (policy !== undefined) sourcePolicy(policy);
   const head = await reader.getJson('commits/main');
   if (!SHA.test(head.sha ?? '')) fail('trusted main head unavailable');
   const list = await reader.getJson(
@@ -488,6 +539,7 @@ export async function verifyDemoPreflight({ reader } = {}) {
     try {
       validateRun(run, head.sha);
       const proof = await reader.artifact(run, 'clinicos-demo-preflight');
+      validateReceipt(proof.receipt, run, 'clinicos-demo-preflight', Date.now(), policy);
       return { ...proof, runUrl: `https://github.com/${REPO}/actions/runs/${run.id}` };
     } catch {
       /* Older workflows may have no mandatory demo proof; they cannot authorize merge. */
@@ -503,7 +555,9 @@ export async function verifyDemoRelease({
   reviewedSha,
   client,
   fetchImpl = fetch,
+  sourcePolicy: policy,
 } = {}) {
+  if (policy !== undefined) sourcePolicy(policy);
   if (!SHA.test(mergeSha ?? '') || !SHA.test(reviewedSha ?? ''))
     fail('invalid reviewed or merged revision');
   const match = /^https:\/\/github\.com\/l2v-hub\/ClinicOS\/actions\/runs\/([1-9][0-9]*)$/.exec(
@@ -514,9 +568,11 @@ export async function verifyDemoRelease({
   if (run.id !== Number(match[1])) fail('deployment run identity mismatch');
   validateRun(run, mergeSha);
   const proof = await reader.artifact(run, 'clinicos-demo-backend');
-  validateReceipt(proof.receipt, run);
-  await inspectDeployment(client, proof.receipt.deployment.id, mergeSha);
+  validateReceipt(proof.receipt, run, 'clinicos-demo-backend', Date.now(), policy);
+  const boundPolicy = sourcePolicy(proof.receipt.sourcePolicy);
+  await inspectDeployment(client, proof.receipt.deployment.id, mergeSha, boundPolicy);
   await verifyLiveReady(proof.receipt.deployment.id, { fetchImpl });
+  await inspectDeployment(client, proof.receipt.deployment.id, mergeSha, boundPolicy);
   return { ...proof, reviewedSha, runUrl };
 }
 
@@ -524,19 +580,24 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   try {
     const operation = process.argv[2];
     const receipt =
-      operation === 'preflight'
-        ? await prepareDemo()
-        : operation === 'deploy'
-          ? await deployDemo()
+      operation === 'preflight' || operation === 'preflight-exact'
+        ? await prepareDemo({
+            sourcePolicy: operation === 'preflight-exact' ? DEMO_SOURCE_POLICIES.exact : undefined,
+          })
+        : operation === 'deploy' || operation === 'deploy-exact'
+          ? await deployDemo({
+              sourcePolicy: operation === 'deploy-exact' ? DEMO_SOURCE_POLICIES.exact : undefined,
+            })
           : fail('unsupported operation');
     await writeFile(
-      `${operation === 'preflight' ? 'demo-preflight' : 'demo-deployment'}-receipt.json`,
+      `${receipt.kind === 'clinicos-demo-preflight' ? 'demo-preflight' : 'demo-deployment'}-receipt.json`,
       `${JSON.stringify(receipt, null, 2)}\n`,
       { mode: 0o600 },
     );
     console.log(
       JSON.stringify({
-        status: operation === 'preflight' ? 'target-verified' : 'live-demo-verified',
+        status:
+          receipt.kind === 'clinicos-demo-preflight' ? 'target-verified' : 'live-demo-verified',
         mergeSha: receipt.mergeSha,
       }),
     );
