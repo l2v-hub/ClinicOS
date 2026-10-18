@@ -6405,7 +6405,7 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-18T17:37:27.982Z",
+  "updatedAt": "2026-10-18T17:40:12.288Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
@@ -13462,7 +13462,7 @@
       "releaseHold": null,
       "kind": "standalone-pr-review",
       "id": "standalone-pr-491",
-      "phase": "waiting-review",
+      "phase": "ready",
       "adoption": {
         "actor": "l2v-hub",
         "at": "2026-10-18T17:07:06.072Z",
@@ -13539,10 +13539,10 @@
         }
       ],
       "operatorCoordination": {
-        "active": true,
+        "active": false,
         "owner": "codex-cloud-after-claude",
         "nonce": "5ef4558e-2243-4380-8330-453cfa1df672",
-        "stage": "protected-bootstrap-merge",
+        "stage": "merged",
         "startedAt": "2026-10-18T16:47:23.897Z",
         "baseSha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6",
         "implementationStarted": false,
@@ -13552,7 +13552,7 @@
         "contractSha256": "8aad0290ebfd9662685c34cd2b9482721a9a754bc3696edfd6df3d838aa1301c",
         "sourceSha": "f1aeb439691744b236f289dda0a44ec03f98d821",
         "publicationSha": "fb607a287b5406b871fd03c0bc258088e95abaf0",
-        "finishedAt": "2026-10-18T17:07:06.072Z"
+        "finishedAt": "2026-10-18T17:40:12.288Z"
       },
       "operatorContinuations": [
         {
@@ -14070,7 +14070,7 @@
         }
       ],
       "operatorProtectedMerge": {
-        "status": "merging",
+        "status": "merged",
         "nonce": "6752c620-6540-40ce-afe6-4745a35ea704",
         "owner": "codex-cloud-after-claude",
         "subjectSha": "fb607a287b5406b871fd03c0bc258088e95abaf0",
@@ -14082,7 +14082,21 @@
         "nativeHumanApprovalClaimed": false,
         "authorization": "User explicitly directed Codex to complete the PRs and perform protected merges after genuine Claude and Codex reviews. This is the reviewed diagnostic bootstrap on current main, outside the not-yet-installed standalone automatic merge allowlist.",
         "claudeCommentId": 6252917997,
-        "codexResultSha256": "bb78b093defaf4e1577eda72da2057cb81d4415c3f913b32c409437fa22077ba"
+        "codexResultSha256": "bb78b093defaf4e1577eda72da2057cb81d4415c3f913b32c409437fa22077ba",
+        "mergeSha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
+        "nativeMergedAt": "2026-10-18T17:37:38Z",
+        "confirmedAt": "2026-10-18T17:40:12.288Z",
+        "nativeMerged": true
+      },
+      "release": {
+        "status": "merged",
+        "prNumber": 491,
+        "reviewedSha": "fb607a287b5406b871fd03c0bc258088e95abaf0",
+        "mergeSha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
+        "confirmedAt": "2026-10-18T17:40:12.288Z",
+        "mode": "explicit-user-directed-protected-bootstrap",
+        "adminBypass": false,
+        "nativeHumanApprovalClaimed": false
       }
     }
   ],
@@ -14120,7 +14134,17 @@
         "sha": "34c865233df53a3930f29c8b7befc02208588d64"
       }
     ],
-    "workflowMode": "scheduled writers remain paused; existing legacy counters untouched"
+    "workflowMode": "scheduled writers remain paused; existing legacy counters untouched",
+    "completedSubjects": [
+      {
+        "pr": 491,
+        "id": "standalone-pr-491",
+        "status": "merged",
+        "reviewedSha": "fb607a287b5406b871fd03c0bc258088e95abaf0",
+        "mergeSha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
+        "at": "2026-10-18T17:40:12.288Z"
+      }
+    ]
   },
   "controllerTransferArchives": [
     {
