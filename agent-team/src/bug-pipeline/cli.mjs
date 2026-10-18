@@ -7,29 +7,21 @@ import { createGitHub, controllerFailureCode } from './github.mjs';
 import { createModels } from './models.mjs';
 import { createWorkspace } from './workspace.mjs';
 import { runPipeline } from './pipeline.mjs';
+import { requiresHumanReview } from './review-policy.mjs';
 import { createStandaloneReview } from './standalone-review.mjs';
 
 // Trusted reviewed-main policy. Neither PR manifests nor environment flags can add files.
-export const STANDALONE_INFRASTRUCTURE_FILES = Object.freeze([
-  'agent-team/src/bug-pipeline/cli.mjs',
-  'agent-team/src/bug-pipeline/comment-review-handoff.mjs',
-  'agent-team/src/bug-pipeline/models.mjs',
-  'agent-team/src/bug-pipeline/pipeline.mjs',
-  'agent-team/src/bug-pipeline/review-handoff-cli.mjs',
-  'agent-team/src/bug-pipeline/standalone-review.mjs',
-  'agent-team/src/bug-pipeline/workspace.mjs',
-  'agent-team/src/bug-pipeline/github.mjs',
-  'agent-team/tests/bug-pipeline/models.test.mjs',
-  'agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs',
-  'agent-team/tests/bug-pipeline/standalone-review.test.mjs',
-  'agent-team/tests/bug-pipeline/workspace.test.mjs',
-  'agent-team/tests/bug-pipeline/github.test.mjs',
-  'docs/claude-local-review-prompt.md',
-  'docs/standalone-pr-review.md',
-  '.github/workflows/inspect-demo-source-topology.yml',
-  'scripts/automation/inspect-demo-source-topology.mjs',
-  'scripts/automation/inspect-demo-source-topology.test.mjs',
-]);
+export const STANDALONE_INFRASTRUCTURE_FILES = Object.freeze(
+  [
+    'agent-team/tests/bug-pipeline/models.test.mjs',
+    'agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs',
+    'agent-team/tests/bug-pipeline/standalone-review.test.mjs',
+    'agent-team/tests/bug-pipeline/workspace.test.mjs',
+    'agent-team/tests/bug-pipeline/github.test.mjs',
+    'docs/claude-local-review-prompt.md',
+    'docs/standalone-pr-review.md',
+  ].filter((file) => !requiresHumanReview(file)),
+);
 
 export async function doctor({ run, models, env = process.env, cwd }) {
   const codex = await models.preflight();
@@ -76,7 +68,6 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
   // Cloud secret targets cannot use reserved CODEX_/OPENAI_ names. Only process-local aliases.
   env = {
     ...env,
-    CODEX_API_KEY: env.CODEX_API_KEY || env.CLINICOS_OPENAI_API_KEY,
     ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY || env.CLINICOS_ANTHROPIC_API_KEY,
     CODEX_PLANNER_MODEL: env.CODEX_PLANNER_MODEL || env.CLINICOS_PLANNER_MODEL || 'gpt-6.1-sol',
     CODEX_EXECUTOR_MODEL: env.CODEX_EXECUTOR_MODEL || env.CLINICOS_EXECUTOR_MODEL || 'auto',

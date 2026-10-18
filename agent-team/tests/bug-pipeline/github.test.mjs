@@ -1580,3 +1580,87 @@ test('diagnostics expose only owned bounded codes and preserve known cause chain
   });
   assert.equal(controllerFailureCode(new Error('wrapper', { cause })), 'state-capacity-exhausted');
 });
+
+test('F5 state writes distinguish confirmed409, definite502 and uncertain timeout without blind retry', async () => {
+  for (const [result, expected] of [
+    [{ ok: false, code: 1, stderr: 'HTTP 409 conflict', stdout: '{}' }, 'state-cas-conflict'],
+    [{ ok: false, code: 1, stderr: 'HTTP 502', stdout: '{}' }, 'state-write-failed'],
+    [{ ok: false, error: 'timeout', stderr: '', stdout: '' }, 'state-write-uncertain'],
+  ]) {
+    let puts = 0;
+    const gh = createGitHub({
+      repo: 'l2v-hub/ClinicOS',
+      cwd: '/tmp',
+      run: async ({ args }) => {
+        if (args.includes('PUT')) {
+          puts++;
+          return result;
+        }
+        if (args[1].includes('/contents/'))
+          return response({}, { ok: false, code: 1, stderr: 'HTTP 404' });
+        return response({ object: { sha: 'a'.repeat(40) } });
+      },
+    });
+    const store = gh.createStateStore();
+    await store.load();
+    await assert.rejects(
+      store.save({ schemaVersion: 1, repository: 'l2v-hub/ClinicOS', batches: [] }),
+      (error) => controllerFailureCode(error) === expected,
+    );
+    assert.equal(puts, 1);
+  }
+});
+
+test('F1/F3 native human approval requires current head, nonauthor User and enforced stale-dismissal protection', async () => {
+  const head = 'a'.repeat(40);
+  let review = {
+    state: 'APPROVED',
+    commit_id: head,
+    submitted_at: '2026-10-18T01:00:00Z',
+    user: { login: 'human', type: 'User' },
+  };
+  let protectedMain = true;
+  const gh = createGitHub({
+    repo: 'l2v-hub/ClinicOS',
+    cwd: '/tmp',
+    run: async ({ args }) => {
+      const route = args[1];
+      if (route.endsWith('/pulls/81'))
+        return response({ state: 'open', head: { sha: head }, user: { login: 'author' } });
+      if (route.includes('/reviews?')) return response([[review]]);
+      if (route.endsWith('/protection'))
+        return protectedMain
+          ? response({
+              enforce_admins: { enabled: true },
+              required_pull_request_reviews: {
+                required_approving_review_count: 1,
+                dismiss_stale_reviews: true,
+              },
+            })
+          : response({}, { ok: false, code: 1, stderr: 'HTTP 404' });
+      if (route.includes('/permission')) return response({ permission: 'write' });
+      if (route.endsWith('/rules/branches/main'))
+        return response([{ type: 'required_status_checks' }]);
+      assert.fail(route);
+    },
+  });
+  assert.equal((await gh.nativeReviewAuthorization(81, head)).humanApproved, true);
+  assert.equal(
+    (await gh.nativeReviewAuthorization(81, head, { excludedLogins: ['human'] })).humanApproved,
+    false,
+  );
+  for (const mutation of [
+    { user: { login: 'author', type: 'User' } },
+    { user: { login: 'automation', type: 'Bot' } },
+    { commit_id: 'b'.repeat(40) },
+    { state: 'DISMISSED' },
+  ]) {
+    const original = review;
+    review = { ...review, ...mutation };
+    assert.equal((await gh.nativeReviewAuthorization(81, head)).humanApproved, false);
+    review = original;
+  }
+  protectedMain = false;
+  assert.equal((await gh.nativeReviewAuthorization(81, head)).humanApproved, false);
+  await assert.rejects(gh.nativeReviewAuthorization(81, 'b'.repeat(40)), /subject changed/);
+});

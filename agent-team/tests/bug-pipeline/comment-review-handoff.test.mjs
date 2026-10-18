@@ -582,3 +582,45 @@ test('a distinct authorized controller publishes the owner report without invent
     baseline,
   );
 });
+
+test('audited allowances plus explicit recovery resume exhausted normal corrections without changing historical attempts', async () => {
+  const { historyDigest } = await import('../../src/bug-pipeline/attempt-budget.mjs');
+  const f = fixture({ reviewCount: 4 });
+  f.setPermission('admin');
+  f.batch.phase = 'blocked';
+  f.batch.implementation = [1, 2, 3, 4].map((round) => ({ round, status: 'passed' }));
+  f.batch.reviews[3].subjectSha = sha;
+  f.batch.externalReview = { status: 'published', subjectSha: sha };
+  const original = {
+    implementation: clone(f.batch.implementation),
+    reviews: clone(f.batch.reviews),
+  };
+  const resume = () =>
+    f.handoff.recover(81, {
+      action: 'resume',
+      expectedSha: sha,
+      token: historyDigest({ phase: 'blocked', failureCode: null }),
+      reason: 'Owner authorized correction after exhausted default budget',
+    });
+  await assert.rejects(resume(), /allowances/);
+  await f.handoff.extendBudget(81, {
+    kind: 'implementation',
+    limit: 5,
+    authorizationRef: 'owner-command-1',
+    reason: 'One implementation allowance',
+  });
+  await assert.rejects(resume(), /allowances/);
+  await f.handoff.extendBudget(81, {
+    kind: 'reviews',
+    limit: 5,
+    authorizationRef: 'owner-command-2',
+    reason: 'One review allowance',
+  });
+  const recovered = await resume();
+  assert.equal(recovered.phase, 'waiting-review');
+  assert.deepEqual(recovered.implementation, original.implementation);
+  assert.deepEqual(recovered.reviews, original.reviews);
+  assert.equal(recovered.budgetExtensions.length, 2);
+  assert.equal(recovered.recoveryHistory.at(-1).action, 'resume');
+  await assert.rejects(resume());
+});

@@ -45,3 +45,9 @@ Resta in esecuzione mentre il terminale e il PC sono attivi. Non promettere che 
 Il prompt dà al coordinatore i soli strumenti necessari al protocollo fidato; l'analisi del
 codice rimane in sola lettura. La sua attività effettiva viene dimostrata dal claim e dal report
 GitHub, non da una label o dall'avvio di una sessione locale.
+
+## Audited continuation and trust-root changes
+
+Default implementation/review allowance remains four. A maintainer may append one explicit durable allowance after owner authorization; status exposes effective limits and consumed operator continuations. Preserve every prior attempt/report and the original group identity. A PR manifest, raw review comment or label cannot extend the budget or become an approval. Intermediate operator work remains unverified until independent QA and frozen exact-source evidence exist.
+
+The comment channel proves the authenticated account and report binding, not that a particular model produced it. A reviewer sharing the PR-author or finalizer identity cannot alone authorize automatic merge. Controller, policy, instruction and workflow changes always require the manual protected path and an actual independent native human approving review. A missing/unreadable review-protection policy is a release prerequisite to diagnose, never permission for admin merge. Claim/QA/merge recovery is a separate maintainer command documented in docs/standalone-pr-review.md; reviewers do not edit durable state or release their own failed results into approval.

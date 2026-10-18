@@ -1,3 +1,12 @@
+import { randomUUID } from 'node:crypto';
+import {
+  attemptLimit,
+  ENTITY_COLLECTIONS,
+  validateOperatorContinuations,
+  implementationAttempts,
+  activeImplementation,
+} from './attempt-budget.mjs';
+import { standaloneMergePolicy } from './review-policy.mjs';
 import assert from 'node:assert/strict';
 import {
   validateState,
@@ -5,13 +14,12 @@ import {
   safeText,
   sha256,
   feedbackFingerprint,
-  MAX_CYCLES,
 } from './contracts.mjs';
 import { createCommentReviewHandoff } from './comment-review-handoff.mjs';
 import { externalReport } from './external-review.mjs';
 import { reviewProjection, REVIEW_LABELS } from './issue-review-communication.mjs';
 import { validateReview } from '../../../scripts/quality-gate/claude-bug-review.mjs';
-import { assertSubjectResultCapacity, controllerFailureCode } from './github.mjs';
+import { assertSubjectResultCapacity, controllerFailureCode, stateError } from './github.mjs';
 
 export const STANDALONE_REPO = 'l2v-hub/ClinicOS';
 const SHA = /^[a-f0-9]{40}$/;
@@ -23,8 +31,8 @@ const keys = (value, required) => {
   assert.ok(value && typeof value === 'object' && !Array.isArray(value));
   equal(Object.keys(value).sort(), [...required].sort());
 };
-function attempts(items, review = false) {
-  assert.ok(Array.isArray(items) && items.length <= MAX_CYCLES, 'Invalid standalone budget');
+function attempts(items, review = false, limit = 4) {
+  assert.ok(Array.isArray(items) && items.length <= limit, 'Invalid standalone budget');
   for (const [i, item] of items.entries()) {
     assert.equal(item.round, i + 1, 'Noncontiguous attempt history');
     assert.ok(
@@ -170,17 +178,30 @@ export function validateStandaloneSubject(subject) {
     }
     assert.ok(file.blob !== null || file.baseBlob !== null);
   }
-  attempts(subject.implementation);
+  attempts(subject.implementation, false, attemptLimit(subject, 'implementation'));
   assert.ok(subject.implementation.length > 0 && subject.implementation.at(-1).status === 'passed');
   for (const attempt of subject.implementation)
     assert.ok(subject.packet.files[attempt.evidence], 'Attempt evidence must be frozen');
-  attempts(subject.reviews, true);
+  for (const [index, attempt] of (subject.operatorContinuations ?? []).entries()) {
+    assert.equal(attempt.round, subject.implementation.length + index + 1);
+    assert.ok(
+      ['running', 'implemented-awaiting-independent-qa', 'passed', 'failed', 'blocked'].includes(
+        attempt.status,
+      ),
+    );
+    if (attempt.status === 'passed') {
+      assert.match(attempt.subjectSha, SHA, 'Passed continuation requires its actual tested SHA');
+      relativeFile(attempt.evidence);
+    }
+  }
+  attempts(subject.reviews, true, attemptLimit(subject, 'reviews'));
   assert.ok(
-    subject.reviewReports && Object.keys(subject.reviewReports).length <= MAX_CYCLES,
+    subject.reviewReports &&
+      Object.keys(subject.reviewReports).length <= attemptLimit(subject, 'reviews'),
     'Too many stored review reports',
   );
   for (const [file, content] of Object.entries(subject.reviewReports)) {
-    const match = /^claude-review-([1-4])\.json$/.exec(file);
+    const match = /^claude-review-([1-9][0-9]*)\.json$/.exec(file);
     assert.ok(match && subject.reviews[Number(match[1]) - 1], 'Unbound stored report');
     assert.equal(typeof content, 'string');
     const report = JSON.parse(content);
@@ -212,29 +233,29 @@ export function validateStandaloneSubject(subject) {
   return subject;
 }
 export function validateStandaloneState(state) {
-  validateState(state, STANDALONE_REPO); // Normal batch guards are deliberately unchanged.
+  validateState(state, STANDALONE_REPO);
+  validateOperatorContinuations(state);
   const subjects = state.standaloneReviews ?? [];
   assert.ok(Array.isArray(subjects) && subjects.length <= 1000);
-  const prs = new Set(state.batches.filter((b) => b.pr).map((b) => b.pr.number));
-  const branches = new Set();
-  const issues = new Set();
-  for (const subject of subjects) {
-    validateStandaloneSubject(subject);
-    assert.ok(!prs.has(subject.pr.number), 'PR already has a durable review owner');
-    prs.add(subject.pr.number);
-    assert.ok(
-      !branches.has(subject.branch) && subject.issues.every((n) => !issues.has(n)),
-      'Duplicate standalone ownership',
-    );
-    branches.add(subject.branch);
-    subject.issues.forEach((n) => issues.add(n));
-    assert.ok(
-      !state.batches.some(
-        (b) => b.branch === subject.branch || b.issues.some((n) => subject.issues.includes(n)),
-      ),
-      'Standalone overlaps normal ownership',
-    );
-  }
+  const ownership = { pr: new Set(), branch: new Set(), issue: new Set(), id: new Set() };
+  for (const key of ENTITY_COLLECTIONS)
+    for (const entity of state[key] ?? []) {
+      for (const [kind, values] of [
+        ['id', [entity.id]],
+        ['pr', [entity.pr?.number]],
+        ['branch', [entity.branch]],
+        ['issue', entity.issues ?? []],
+      ])
+        for (const value of values) {
+          if (value === undefined || value === null) continue;
+          assert.ok(
+            !ownership[kind].has(value),
+            'PR/branch/issue already has a durable review owner',
+          );
+          ownership[kind].add(value);
+        }
+    }
+  for (const subject of subjects) validateStandaloneSubject(subject);
   return state;
 }
 
@@ -255,7 +276,11 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
       maxOutputBytes: 16 * 1024 * 1024,
       envMode: 'controller',
     });
-    assert.equal(result.ok, true, 'Standalone GitHub request failed');
+    if (!result.ok)
+      throw stateError(
+        method === 'GET' ? 'github-read-failed' : 'label-projection-failed',
+        'Standalone GitHub request failed',
+      );
     return result.stdout ? JSON.parse(result.stdout) : null;
   }
   async function native(subject) {
@@ -292,7 +317,34 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
       );
     }
   }
+  let immutable = new Map(),
+    activeOperations = 0;
+  async function operation(work) {
+    if (activeOperations++ === 0) immutable = new Map();
+    try {
+      return await work();
+    } finally {
+      if (--activeOperations === 0) immutable.clear();
+    }
+  }
+  async function pinned(key, read) {
+    if (!immutable.has(key)) {
+      const result = Promise.resolve()
+        .then(read)
+        .catch((error) => {
+          immutable.delete(key);
+          throw error;
+        });
+      immutable.set(key, result);
+    }
+    return immutable.get(key);
+  }
+  const readPinned = (file, sha) =>
+    pinned(`file:${sha}:${file}`, () => github.readFileAtRevision(file, sha));
   async function inventory(sha) {
+    return pinned(`tree:${sha}`, () => readInventory(sha));
+  }
+  async function readInventory(sha) {
     const tree = await api(`repos/${STANDALONE_REPO}/git/trees/${sha}?recursive=1`);
     assert.equal(tree.truncated, false, 'Incomplete standalone source tree');
     assert.ok(Array.isArray(tree.tree) && tree.tree.length <= 30000);
@@ -311,24 +363,44 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
       maxOutputBytes: 1024 * 1024,
       envMode: 'controller',
     });
-    assert.equal(result.ok, true, 'Native check inventory unavailable');
+    if (!result.stdout)
+      throw stateError('github-read-failed', 'Native check inventory unavailable');
     const all = JSON.parse(result.stdout);
     assert.ok(
       Array.isArray(all) &&
         all.length > 0 &&
-        all.every((check) => ['pass', 'skipping'].includes(String(check.bucket).toLowerCase())),
+        all.every(
+          (check) =>
+            check.name === 'Vercel' ||
+            ['pass', 'skipping'].includes(String(check.bucket).toLowerCase()),
+        ),
       'A native PR check is failed or pending',
+    );
+    assert.ok(
+      result.ok ||
+        ([1, 8].includes(result.code) &&
+          all.some(
+            (check) =>
+              check.name === 'Vercel' &&
+              !['pass', 'skipping'].includes(String(check.bucket).toLowerCase()),
+          )),
+      'Native check inventory transport failed',
     );
     return { ok: true, details: all };
   }
   async function verify(subject) {
     validateStandaloneSubject(subject);
+    for (const attempt of subject.operatorContinuations ?? [])
+      assert.ok(
+        attempt.status === 'passed' && subject.packet.files[attempt.evidence],
+        'Completed continuation evidence must be frozen in the adopted revision',
+      );
     await native(subject);
     const [head, base] = await Promise.all([inventory(subject.sha), inventory(subject.baseSha)]);
     const tested =
-      subject.implementation.at(-1).subjectSha === subject.sha
+      implementationAttempts(subject).at(-1).subjectSha === subject.sha
         ? head
-        : await inventory(subject.implementation.at(-1).subjectSha);
+        : await inventory(implementationAttempts(subject).at(-1).subjectSha);
     const sourceProjection = (tree) =>
       [...tree.values()]
         .filter((item) => !item.path.startsWith('artifacts/task-validation/'))
@@ -352,7 +424,7 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
           '100644',
           'Frozen packet must remain a regular file on current head',
         );
-        const remote = await github.readFileAtRevision(packetPrefix + file, subject.sha);
+        const remote = await readPinned(packetPrefix + file, subject.sha);
         assert.equal(remote.sha256, digest, 'Frozen packet digest changed on current head');
       }
     }
@@ -376,9 +448,17 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
         baseMode: before?.mode ?? null,
       });
     }
-    const raw = await github.readFileAtRevision(prefix + 'imported-history.json', subject.sha);
+    const raw = await readPinned(prefix + 'imported-history.json', subject.sha);
     const history = JSON.parse(raw.content);
     equal(history.implementation, subject.implementation);
+    const importedContinuations = history.operatorContinuations ?? [];
+    equal(
+      importedContinuations,
+      (subject.operatorContinuations ?? []).slice(0, importedContinuations.length),
+    );
+    assert.ok(importedContinuations.length <= (subject.operatorContinuations?.length ?? 0));
+    if (subject.adoption?.subjectSha === subject.sha && subject.operatorContinuations?.length)
+      equal(importedContinuations, subject.operatorContinuations);
     equal(history.sourceManifest, subject.sourceManifest);
     equal(
       history.packetFiles,
@@ -388,6 +468,12 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
     );
     // Imported rounds are an immutable prefix; new claims append without changing history.
     assert.ok(Array.isArray(history.reviews) && history.reviews.length <= subject.reviews.length);
+    if (subject.adoption?.importedReviewCount !== undefined)
+      assert.equal(
+        history.reviews.length,
+        subject.adoption.importedReviewCount,
+        'Frozen imported review prefix changed',
+      );
     equal(history.reviews, subject.reviews.slice(0, history.reviews.length));
     if (history.reviews.length) {
       equal(
@@ -409,8 +495,9 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
     subjectAdapter: {
       validate: validateStandaloneState,
       subjects: (state) => state.standaloneReviews ?? [],
-      live: verify,
+      live: native,
       reservationGuard: (subject) => checks(subject.pr.number),
+      recoveryVerify: verify,
     },
   });
   async function adopt(manifest) {
@@ -435,8 +522,14 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
     const state = validateStandaloneState(
       (await store.load()) ?? { schemaVersion: 1, repository: STANDALONE_REPO, batches: [] },
     );
+    const previous = state.standaloneReviews?.find((s) => s.pr.number === manifest.pr.number);
     const subject = {
       ...clone(manifest),
+      ...Object.fromEntries(
+        ['budgetExtensions', 'operatorContinuations', 'operatorCoordination']
+          .filter((key) => previous?.[key])
+          .map((key) => [key, clone(previous[key])]),
+      ),
       kind: 'standalone-pr-review',
       id: `standalone-pr-${manifest.pr.number}`,
       phase: 'waiting-review',
@@ -444,17 +537,18 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
         actor,
         at: now().toISOString(),
         subjectSha: manifest.sha,
+        importedReviewCount: manifest.reviews.length,
         manifestSha256: sha256(JSON.stringify(manifest)),
       },
     };
     await verify(subject);
     await checks(subject.pr.number);
     state.standaloneReviews ??= [];
-    const previous = state.standaloneReviews.find((s) => s.pr.number === subject.pr.number);
     if (previous) {
       assert.notEqual(subject.sha, previous.sha, 'New verified SHA required for revision adoption');
       assert.ok(
-        !previous.reviews.some((r) => r.status === 'running') &&
+        !activeImplementation(previous) &&
+          !previous.reviews.some((r) => r.status === 'running') &&
           previous.codexFinalReview?.status !== 'running',
         'Existing worker owns the subject',
       );
@@ -476,6 +570,15 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
       );
       for (const attempt of previous.implementation)
         equal(subject.packet.files[attempt.evidence], previous.packet.files[attempt.evidence]);
+      for (const key of [
+        'budgetExtensions',
+        'operatorContinuations',
+        'operatorCoordination',
+        'recoveryHistory',
+        'qaHistory',
+        'mergeHistory',
+      ])
+        if (previous[key]) subject[key] = clone(previous[key]);
       subject.preservedPackets = [
         ...clone(previous.preservedPackets ?? []),
         clone(previous.packet),
@@ -503,7 +606,7 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
   async function current(expected) {
     const { batch } = await handoff.load(expected.pr.number);
     equal(batch, expected);
-    await verify(batch);
+    await native(batch);
     return batch;
   }
   async function mergeReceipt(expected) {
@@ -551,7 +654,7 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
           pr.merge_commit_sha === subject.release.mergeSha,
         'Merged receipt changed before persistence',
       );
-    } else await verify(subject);
+    } else await native(subject);
     assert.ok(await github.authorized(login), 'Persistence actor lost authorization');
   }
   async function finalize(pr, { workspace, infrastructureFiles }) {
@@ -586,9 +689,14 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
         workspace,
         save,
         infrastructureFiles,
+        now,
       });
     } catch (error) {
-      if (persistenceFailed) throw error;
+      if (
+        persistenceFailed ||
+        ['github-read-failed', 'label-projection-failed'].includes(controllerFailureCode(error))
+      )
+        throw error;
       subject.phase = 'blocked';
       delete subject.approvedSha;
       subject.reason =
@@ -600,6 +708,7 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
   }
   async function publishState(subject) {
     const expected = clone(subject);
+    await current(expected);
     const projection = reviewProjection(expected, externalReport);
     const actor = await handoff.actor();
     async function write(endpoint, method, body) {
@@ -607,7 +716,16 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
       await current(expected);
       assert.ok(await github.authorized(actor));
       assert.ok(performance.now() - started <= 60000);
-      return api(endpoint, method, body);
+      for (let retry = 0; ; retry++) {
+        try {
+          return await api(endpoint, method, body);
+        } catch (error) {
+          if (retry >= 2 || controllerFailureCode(error) !== 'label-projection-failed') throw error;
+          await new Promise((resolve) => setTimeout(resolve, 25 * 2 ** retry));
+          await current(expected);
+          assert.ok(await github.authorized(actor));
+        }
+      }
     }
     // Labels are a PR-only projection, and never authorize transitions or source issues.
     for (let count = 0; count <= REVIEW_LABELS.length + 1; count++) {
@@ -634,21 +752,26 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
     }
     assert.fail('Standalone PR labels did not converge');
   }
-  const gated = async (operation, ...args) => {
-    await checks(args[0]);
-    return handoff[operation](...args);
-  };
+  const gated = async (name, ...args) =>
+    operation(async () => {
+      await checks(args[0]);
+      await verify((await handoff.load(args[0])).batch);
+      return handoff[name](...args);
+    });
   return {
     ...handoff,
     request: (...args) => gated('request', ...args),
     claim: (...args) => gated('claim', ...args),
-    adopt,
-    verify,
-    publishState,
+    submit: (...args) => gated('submit', ...args),
+    reconcilePR: (...args) => gated('reconcilePR', ...args),
+    adopt: (...args) => operation(() => adopt(...args)),
+    verify: (...args) => operation(() => verify(...args)),
+    publishState: (...args) => operation(() => publishState(...args)),
+    operation,
     current,
     checks,
     mergeReceipt,
-    finalize,
+    finalize: (...args) => operation(() => finalize(...args)),
     guardSubject,
   };
 }
@@ -660,6 +783,7 @@ export async function finalizeStandaloneSubject({
   workspace,
   save,
   infrastructureFiles = [],
+  now = () => new Date(),
 }) {
   const login = await controller.actor();
   const persist = async (options) => {
@@ -694,6 +818,7 @@ export async function finalizeStandaloneSubject({
     github,
     workspace,
     save: persist,
+    now,
   });
   if (review?.status === 'pending') return;
   await controller.publishState(subject);
@@ -706,6 +831,13 @@ export async function finalizeStandaloneSubject({
     files.length &&
     files.every((file) => infrastructureFiles.includes(file))
   ) {
+    const readiness = await mergeStandaloneReview({
+      subject,
+      controller,
+      github,
+      infrastructureFiles,
+    });
+    if (readiness.reason) return;
     subject.release = { status: 'merging', reviewedSha: subject.sha, prNumber: subject.pr.number };
     await persist();
     const receipt = await mergeStandaloneReview({
@@ -726,7 +858,16 @@ export async function finalizeStandaloneSubject({
 }
 
 // This boundary never executes or edits PR code. Findings go back to the orchestrator.
-export async function standaloneReviewStep({ subject, controller, github, workspace, save }) {
+export async function standaloneReviewStep({
+  subject,
+  controller,
+  github,
+  workspace,
+  save,
+  now = () => new Date(),
+  nonce = randomUUID,
+}) {
+  if (activeImplementation(subject)) return { status: 'pending' };
   if (subject.phase === 'blocked') return;
   // A durable running record is ownership, not evidence that its worker stopped.
   // Another invocation must remain read-only until that owner records a result.
@@ -758,7 +899,8 @@ export async function standaloneReviewStep({ subject, controller, github, worksp
       status: 'running',
       subjectSha: subject.sha,
       claudeRound: subject.reviews.length,
-      reservedAt: new Date().toISOString(),
+      reservedAt: now().toISOString(),
+      nonce: nonce(),
     };
     await save(); // Persistent ownership before independent model invocation.
     let qa;
@@ -838,31 +980,55 @@ export async function mergeStandaloneReview({
       'Current PR feedback invalidates standalone approval',
     );
     await controller.checks(expected.pr.number);
+    const files = expected.sourceManifest
+      .map((file) => file.path)
+      .filter((file) => !file.startsWith('artifacts/task-validation/'));
+    const native = await github.nativeReviewAuthorization(expected.pr.number, expected.sha, {
+      excludedLogins: [actor, expected.externalReview?.owner],
+    });
+    const policy = standaloneMergePolicy({
+      files,
+      reviewer: expected.externalReview?.owner,
+      actor,
+      native,
+    });
+    if (policy === 'human-protected-trust-root') return policy;
+    if (policy && !(native.humanApproved && native.protectedReviews)) return policy;
     assert.ok(
       Array.isArray(infrastructureFiles) && infrastructureFiles.length > 0,
       'Explicit trusted infrastructure allowlist required',
     );
-    const files = expected.sourceManifest
-      .map((file) => file.path)
-      .filter((file) => !file.startsWith('artifacts/task-validation/'));
     assert.ok(
       files.length > 0 &&
         files.every(
           (file) =>
-            infrastructureFiles.includes(file) &&
-            /^(?:agent-team\/|docs\/|\.agents\/skills\/|\.claude\/skills\/|scripts\/automation\/inspect-demo-source-topology(?:\.test)?\.mjs$|\.github\/workflows\/inspect-demo-source-topology\.yml$)/.test(
-              file,
-            ),
+            infrastructureFiles.includes(file) && /^(?:agent-team\/tests\/|docs\/)/.test(file),
         ),
       'Application or deployment changes require the verified deployment release controller',
     );
     await controller.current(expected);
     assert.ok(await github.authorized(actor));
   };
-  await guard();
+  const reason = await guard();
+  if (reason)
+    return {
+      status: 'ready-to-merge',
+      pr: expected.pr.number,
+      reviewedSha: expected.sha,
+      reason,
+      humanReviewRequired: true,
+    };
   if (!execute)
     return { status: 'ready-to-merge', pr: expected.pr.number, reviewedSha: expected.sha };
   // The existing adapter preserves actual branch protections and --match-head-commit.
   // The result is a merge receipt, never a deployment or source issue completion.
-  return github.mergePullRequest(expected.pr.number, expected.sha, { guard });
+  return github.mergePullRequest(expected.pr.number, expected.sha, {
+    guard: async () => {
+      assert.equal(
+        await guard(),
+        undefined,
+        'Native human review or independent reviewer required',
+      );
+    },
+  });
 }

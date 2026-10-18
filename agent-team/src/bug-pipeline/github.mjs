@@ -1,3 +1,4 @@
+import { ENTITY_COLLECTIONS, attemptLimit } from './attempt-budget.mjs';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 
@@ -22,9 +23,14 @@ const EXTERNAL_WORK_LABELS = new Set([
 ]);
 const BOT_PROTOCOL_MARKER = '<!-- codex-bug-pipeline:';
 const ISSUE_STATUSES = ['In progress', 'Bloccato', 'Risolto'];
-const ENTITY_COLLECTIONS = ['batches', 'manualBatches', 'standaloneReviews'];
 const FAILURE_CODES = new Set([
   'state-capacity-exhausted',
+  'state-write-failed',
+  'state-write-uncertain',
+  'github-read-failed',
+  'label-projection-failed',
+  'codex-auth-unavailable',
+  'codex-auth-conflict',
   'state-cas-conflict',
   'state-rebase-conflict',
   'state-rebase-invalid',
@@ -68,7 +74,7 @@ export function controllerFailureCode(error) {
       return 'implementation-blocked';
   return 'controller-execution-failed';
 }
-function stateError(code, message, cause) {
+export function stateError(code, message, cause) {
   return Object.assign(new Error(message, cause ? { cause } : undefined), { code });
 }
 export function pendingResultBytes(subject) {
@@ -293,7 +299,11 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       const detail = String(
         result?.stderr || result?.error || `gh exited ${result?.code ?? 'unknown'}`,
       );
-      throw new Error(`GitHub command failed: ${detail.slice(0, 1000)}`);
+      const status = /\b(?:HTTP\s*)?([45][0-9]{2})\b/.exec(detail)?.[1];
+      throw stateError(
+        'github-read-failed',
+        `GitHub transport failed${status ? ` (HTTP ${status})` : ''}`,
+      );
     }
     return result ?? { ok: false, stdout: '', stderr: 'No command result' };
   }
@@ -341,6 +351,15 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     );
     if (!response.ok) return false;
     return ['write', 'maintain', 'admin'].includes(response.value?.permission);
+  }
+
+  async function authorizedMaintainer(login) {
+    if (typeof login !== 'string' || !/^[A-Za-z0-9-]{1,39}$/.test(login)) return false;
+    const response = await api(
+      `repos/${repo}/collaborators/${encodeURIComponent(login)}/permission`,
+      { allowFailure: true },
+    );
+    return response.ok && ['maintain', 'admin'].includes(response.value?.permission);
   }
 
   async function ensureLabel(label, { guard } = {}) {
@@ -590,23 +609,27 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
           if (response.ok) {
             const sha = response.value?.content?.sha;
             if (typeof sha !== 'string')
-              throw new Error('GitHub saved state without returning its file SHA');
+              throw stateError(
+                'state-write-uncertain',
+                'GitHub saved state without a confirmed file SHA; reconcile before retrying',
+              );
             fileSHA = sha;
             persistedBase = structuredClone(candidate);
             loaded = true;
             return sha;
           }
-          if (
-            !rebaseIndependentSubjects ||
-            retry >= 3 ||
-            !/(?:\bHTTP\s*409\b|\b409\s+conflict\b)/i.test(
-              String(response.result?.stderr ?? response.result?.error ?? ''),
-            )
-          )
+          const detail = String(response.result?.stderr ?? response.result?.error ?? '');
+          const conflict = /(?:\bHTTP\s*409\b|\b409\s+conflict\b)/i.test(detail);
+          if (!conflict) {
+            const uncertain =
+              response.result?.error === 'timeout' || !/\b(?:HTTP\s*)?[45][0-9]{2}\b/i.test(detail);
             throw stateError(
-              'state-cas-conflict',
-              'Durable state compare-and-swap failed; state was not reset',
+              uncertain ? 'state-write-uncertain' : 'state-write-failed',
+              'Durable state write failed; reconcile the persisted state before retrying',
             );
+          }
+          if (!rebaseIndependentSubjects || retry >= 3)
+            throw stateError('state-cas-conflict', 'Durable state compare-and-swap conflict');
           const fresh = await load();
           const freshSHA = fileSHA; // A subsequent validator or guard load cannot promote this body.
           candidate = mergeIndependentEntities(originalBase, intended, fresh);
@@ -759,16 +782,21 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     ).value;
   }
 
-  async function publishExternalReview(number, sha, report, round) {
+  async function publishExternalReview(number, sha, report, round, subject) {
     issueNumber({ number });
-    if (!/^[a-f0-9]{40}$/.test(sha) || !Number.isInteger(round) || round < 1 || round > 4)
+    if (
+      !/^[a-f0-9]{40}$/.test(sha) ||
+      !Number.isInteger(round) ||
+      round < 1 ||
+      round > (subject ? attemptLimit(subject, 'reviews') : 4)
+    )
       throw new Error('Invalid external review identity');
     const marker = `<!-- clinicos-claude-cron:${number}:${sha}:${round} -->`;
-    const full = `${marker}\nClaude Code review ${round}/4 on \`${sha}\`: **${report.verdict}**.\n\n${report.summary}\n\n${JSON.stringify(report, null, 2)}`;
+    const full = `${marker}\nClaude Code review ${round}/${subject ? attemptLimit(subject, 'reviews') : 4} on \`${sha}\`: **${report.verdict}**.\n\n${report.summary}\n\n${JSON.stringify(report, null, 2)}`;
     const body =
       full.length <= 60000
         ? full
-        : `${marker}\nClaude Code review ${round}/4 on \`${sha}\`: **${report.verdict}**. Full hashed report is preserved in codex/bug-control, .codex-bug-state.json.`;
+        : `${marker}\nClaude Code review ${round}/${subject ? attemptLimit(subject, 'reviews') : 4} on \`${sha}\`: **${report.verdict}**. Full hashed report is preserved in codex/bug-control, .codex-bug-state.json.`;
     const reviews = await apiList(`repos/${repo}/pulls/${number}/reviews?per_page=100`);
     const previous = reviews.find((review) => review.commit_id === sha && review.body === body);
     if (previous) return previous;
@@ -877,6 +905,61 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       changesRequested: [...latestReviewByAuthor.values()].some(
         (review) => review.state === 'CHANGES_REQUESTED',
       ),
+    };
+  }
+
+  async function nativeReviewAuthorization(pr, sha, { excludedLogins = [] } = {}) {
+    const details = (await api(`repos/${repo}/pulls/${issueNumber({ number: pr })}`)).value;
+    if (details.head?.sha !== sha || details.state !== 'open')
+      throw stateError('controller-execution-failed', 'Native approval subject changed');
+    const reviews = await apiList(`repos/${repo}/pulls/${pr}/reviews?per_page=100`);
+    const latest = new Map();
+    for (const review of reviews) {
+      if (!['APPROVED', 'CHANGES_REQUESTED', 'DISMISSED'].includes(review.state)) continue;
+      const login = actorLogin(review.user);
+      if (
+        !latest.has(login) ||
+        Date.parse(review.submitted_at) >= Date.parse(latest.get(login).submitted_at)
+      )
+        latest.set(login, review);
+    }
+    const protection = await api(`repos/${repo}/branches/main/protection`, { allowFailure: true });
+    const rule = protection.value?.required_pull_request_reviews;
+    const classic =
+      protection.ok &&
+      rule?.required_approving_review_count >= 1 &&
+      rule.dismiss_stale_reviews === true &&
+      protection.value?.enforce_admins?.enabled === true;
+    const active = classic
+      ? null
+      : await api(`repos/${repo}/rules/branches/main`, { allowFailure: true });
+    const rules = active?.ok && Array.isArray(active.value) ? active.value : [];
+    const protectedReviews =
+      classic ||
+      rules.some(
+        (item) =>
+          item.type === 'pull_request' &&
+          item.parameters?.required_approving_review_count >= 1 &&
+          item.parameters?.dismiss_stale_reviews_on_push === true,
+      );
+    let humanApproved = false;
+    if (protectedReviews)
+      for (const review of latest.values()) {
+        if (
+          review.state === 'APPROVED' &&
+          review.commit_id === sha &&
+          review.user?.type === 'User' &&
+          review.user.login !== details.user?.login &&
+          !excludedLogins.includes(review.user.login) &&
+          (await authorized(review.user.login))
+        )
+          humanApproved = true;
+      }
+    return {
+      author: details.user?.login,
+      humanApproved,
+      protectedReviews,
+      protectionStatus: protectedReviews ? 'verified' : 'review-rule-unverified',
     };
   }
 
@@ -997,6 +1080,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
 
   return {
     authorized,
+    authorizedMaintainer,
     intake,
     discoverQueue,
     createStateStore,
@@ -1010,6 +1094,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     commentPR,
     publishExternalReview,
     reviewFeedback,
+    nativeReviewAuthorization,
     draftReady,
     mergePullRequest,
     readFileAtRevision,

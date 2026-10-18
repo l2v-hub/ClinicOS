@@ -1,3 +1,4 @@
+import { attemptLimit, validateOperatorContinuations } from './attempt-budget.mjs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { validateAgainstSchema } from '../core/json-schema.mjs';
@@ -235,7 +236,7 @@ export function validateState(state, repo) {
     for (const key of ['implementation', 'reviews']) {
       if (
         !Array.isArray(b[key]) ||
-        b[key].length > MAX_CYCLES ||
+        b[key].length > attemptLimit(b, key) ||
         b[key].some(
           (a, i) =>
             a.round !== i + 1 ||
@@ -281,6 +282,7 @@ export function validateState(state, repo) {
     )
       throw new Error('invalid triage collection window');
   }
+  validateOperatorContinuations(state);
   return state;
 }
 export function feedbackFingerprint(feedback) {

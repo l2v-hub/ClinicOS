@@ -1,10 +1,11 @@
 import {
-  MAX_CYCLES,
-  planSchema,
-  validatePlan,
-  validateState,
-  feedbackFingerprint,
-} from './contracts.mjs';
+  attemptLimit,
+  implementationAttempts,
+  activeImplementation,
+  reserveImplementation,
+  spentAttempts,
+} from './attempt-budget.mjs';
+import { planSchema, validatePlan, validateState, feedbackFingerprint } from './contracts.mjs';
 import { externalReviewStep } from './external-review.mjs';
 import { validateStandaloneState, finalizeStandaloneSubject } from './standalone-review.mjs';
 import { controllerFailureCode } from './github.mjs';
@@ -51,7 +52,7 @@ export async function runPipeline({
   if (!Number.isSafeInteger(triageWindowMs) || triageWindowMs < 0 || triageWindowMs > 600_000)
     throw new Error('Invalid triage collection window');
   await gh.intake(event);
-  const state = validateState(
+  let state = validateState(
     (await store.load()) ?? { schemaVersion: 1, repository: repo, batches: [] },
     repo,
   );
@@ -86,16 +87,30 @@ export async function runPipeline({
           workspace,
           save,
           infrastructureFiles: standaloneInfrastructureFiles,
+          now: () => new Date(now()),
         });
       } catch (error) {
-        if (persistenceFailed)
-          throw new Error('Standalone state persistence failed', { cause: error });
-        subject.phase = 'blocked';
-        subject.reason =
-          'Standalone identity, evidence, review or independent QA could not be verified; orchestrator recovery required';
-        subject.failureCode = controllerFailureCode(error);
-        delete subject.approvedSha;
-        await save();
+        const code = controllerFailureCode(error);
+        if (
+          !persistenceFailed &&
+          !['github-read-failed', 'label-projection-failed'].includes(code)
+        ) {
+          subject.phase = 'blocked';
+          subject.reason = 'Standalone identity or evidence requires explicit recovery';
+          subject.failureCode = code;
+          delete subject.approvedSha;
+          try {
+            await save();
+          } catch {
+            /* Reload the authoritative state below. */
+          }
+        }
+        // Discard ALL local unsaved mutations. In particular an approval/running reservation
+        // must never hitchhike on the next normal-batch save after this subject's failed write.
+        state = validateState(await store.load(), repo);
+        if (state.standaloneReviews) validateStandaloneState(state);
+        persistenceFailed = false;
+        break; // Other standalone subjects retry next tick; normal batches still run now.
       }
     }
   }
@@ -110,7 +125,7 @@ export async function runPipeline({
     for (const number of batch.issues) await gh.setIssueStatus(number, 'Bloccato');
     await report(
       batch,
-      `**BLOCKED** — ${reason}. Budget sviluppo ${batch.implementation.length}/4, review ${batch.reviews.length}/4. Il budget non viene azzerato da nuovi comandi.`,
+      `**BLOCKED** — ${reason}. Budget sviluppo ${spentAttempts(batch, 'implementation')}/${attemptLimit(batch, 'implementation')}, review ${batch.reviews.length}/${attemptLimit(batch, 'reviews')}. Il budget non viene azzerato da nuovi comandi.`,
     );
   };
   const claimed = new Set(state.batches.flatMap((b) => b.issues));
@@ -274,7 +289,7 @@ export async function runPipeline({
       continue;
     }
     if (
-      batch.implementation.some((a) => a.status === 'running') ||
+      activeImplementation(batch) ||
       batch.reviews.some((a) => a.status === 'running') ||
       ['implementing', 'simplifying', 'validating', 'publishing', 'reviewing'].includes(batch.phase)
     ) {
@@ -312,7 +327,7 @@ export async function runPipeline({
         await save();
         continue;
       }
-      if (batch.reviews.length >= MAX_CYCLES) {
+      if (batch.reviews.length >= attemptLimit(batch, 'reviews')) {
         await block(batch, 'Four-review limit reached; new comments cannot restart the budget');
         continue;
       }
@@ -331,9 +346,8 @@ export async function runPipeline({
       );
       if (!batch.sha) {
         let passed = false;
-        while (batch.implementation.length < MAX_CYCLES) {
-          const attempt = { round: batch.implementation.length + 1, status: 'running' };
-          batch.implementation.push(attempt);
+        while (spentAttempts(batch, 'implementation') < attemptLimit(batch, 'implementation')) {
+          const attempt = reserveImplementation(batch, () => new Date(now()));
           batch.phase = 'implementing';
           await save();
           try {
@@ -416,7 +430,7 @@ export async function runPipeline({
         await workspace.publish(batch);
         await report(batch, await workspace.issueEvidence(batch));
       }
-      while (batch.reviews.length < MAX_CYCLES) {
+      while (batch.reviews.length < attemptLimit(batch, 'reviews')) {
         const current = await gh.reviewFeedback(batch.pr.number);
         if (current.head !== batch.sha) throw new Error('head changed before review');
         const attempt = {
@@ -453,7 +467,7 @@ export async function runPipeline({
           );
           break;
         }
-        if (review.verdict === 'blocked' || attempt.round === MAX_CYCLES) {
+        if (review.verdict === 'blocked' || attempt.round === attemptLimit(batch, 'reviews')) {
           await block(batch, 'Claude review remains blocked or four-review limit reached');
           break;
         }
@@ -489,7 +503,7 @@ export async function runPipeline({
     } catch (error) {
       if (persistenceFailed) throw error;
       batch.failureCode = controllerFailureCode(error);
-      for (const a of [...batch.implementation, ...batch.reviews])
+      for (const a of [...implementationAttempts(batch), ...batch.reviews])
         if (a.status === 'running') a.status = 'failed';
       await block(
         batch,

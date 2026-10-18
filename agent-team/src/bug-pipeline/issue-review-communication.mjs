@@ -1,3 +1,5 @@
+import { stateError, controllerFailureCode } from './github.mjs';
+import { attemptLimit } from './attempt-budget.mjs';
 import assert from 'node:assert/strict';
 import os from 'node:os';
 import path from 'node:path';
@@ -90,7 +92,10 @@ export function communicationText(value) {
 
 export function reviewProjection(batch, readReport) {
   assert.match(batch.sha ?? '', /^[a-f0-9]{40}$/);
-  assert.ok(batch.reviews.length <= 4 && batch.implementation.length <= 4);
+  assert.ok(
+    batch.reviews.length <= attemptLimit(batch, 'reviews') &&
+      batch.implementation.length <= attemptLimit(batch, 'implementation'),
+  );
   const handoff = batch.externalReview;
   const round = batch.reviews.length;
   const result = {
@@ -148,7 +153,7 @@ export function reviewProjection(batch, readReport) {
 
 function statusMessages(batch, projection) {
   const report = projection.report;
-  const identity = `Gruppo ${batch.id}; PR ${batch.pr.url}; SHA \`${batch.sha}\`; review ${projection.round}/4.`;
+  const identity = `Gruppo ${batch.id}; PR ${batch.pr.url}; SHA \`${batch.sha}\`; review ${projection.round}/${attemptLimit(batch, 'reviews')}.`;
   const explanations = {
     requested:
       'Codex ha completato i controlli richiesti: la revisione attende il cron Claude Code Max.',
@@ -199,9 +204,13 @@ export function createIssueReviewCommunication({
       maxOutputBytes: 2 * 1024 * 1024,
       envMode: 'controller',
     });
-    if (!result?.ok) throw new Error('GitHub issue-review transport failed');
+    if (!result?.ok)
+      throw stateError(
+        args.includes('-X') ? 'label-projection-failed' : 'github-read-failed',
+        'GitHub issue-review transport failed',
+      );
     try {
-      return JSON.parse(result.stdout);
+      return result.stdout ? JSON.parse(result.stdout) : null;
     } catch {
       throw new Error('GitHub issue-review response is invalid');
     }
@@ -284,7 +293,7 @@ export function createIssueReviewCommunication({
     await stateSubject();
     return { issues, pr, prIssue };
   }
-  async function write(expected, endpoint, method, body, sourceGuard) {
+  async function write(expected, endpoint, method, body, sourceGuard, retry = 0) {
     // Serialize before awaiting the last guard: caller aliases cannot replace the body.
     const input = body === undefined ? undefined : JSON.stringify(clone(body));
     const started = clock();
@@ -300,10 +309,22 @@ export function createIssueReviewCommunication({
       Number.isFinite(age) && age >= 0 && age <= COMMUNICATION_GUARD_MAX_AGE_MS,
       'Issue-review publication guard expired',
     );
-    return invoke(
-      ['api', endpoint, '-X', method, ...(input === undefined ? [] : ['--input', '-'])],
-      input,
-    );
+    try {
+      return await invoke(
+        ['api', endpoint, '-X', method, ...(input === undefined ? [] : ['--input', '-'])],
+        input,
+      );
+    } catch (error) {
+      if (
+        retry >= 2 ||
+        !endpoint.includes('/labels') ||
+        !['POST', 'DELETE'].includes(method) ||
+        controllerFailureCode(error) !== 'label-projection-failed'
+      )
+        throw error;
+      await new Promise((resolve) => setTimeout(resolve, 25 * 2 ** retry));
+      return write(expected, endpoint, method, body, sourceGuard, retry + 1);
+    }
   }
   async function comment(expected, number, body, existing, sourceGuard) {
     const me = await identity();

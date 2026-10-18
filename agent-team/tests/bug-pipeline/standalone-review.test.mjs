@@ -78,7 +78,7 @@ function fixture() {
   }));
   const sources = [
     {
-      path: 'agent-team/src/example.mjs',
+      path: 'agent-team/tests/example.mjs',
       blob: 'd'.repeat(40),
       mode: '100644',
       baseBlob: 'e'.repeat(40),
@@ -145,6 +145,12 @@ function fixture() {
       };
     },
     authorized: async () => authorized,
+    authorizedMaintainer: async () => authorized,
+    nativeReviewAuthorization: async () => ({
+      author: 'pr-author',
+      humanApproved: true,
+      protectedReviews: true,
+    }),
     requiredChecks: async () => {
       if (checksHook) await checksHook();
       return { ok: true, details: ['required: SUCCESS'] };
@@ -450,7 +456,7 @@ test('QA findings and changed feedback block, while an existing running owner re
         calls++;
         return {
           status: 'blocked',
-          summary: 'agent-team/src/example.mjs:1: missing regression evidence',
+          summary: 'agent-team/tests/example.mjs:1: missing regression evidence',
         };
       }),
     );
@@ -651,7 +657,7 @@ async function runRuntime(
     standaloneInfrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
   });
 }
-function makeAllowlisted(f, file = 'agent-team/src/bug-pipeline/standalone-review.mjs') {
+function makeAllowlisted(f, file = 'docs/standalone-pr-review.md') {
   f.manifest.sourceManifest[0].path = file;
   const history = JSON.parse(f.content['imported-history.json']);
   history.sourceManifest = clone(f.manifest.sourceManifest);
@@ -659,8 +665,13 @@ function makeAllowlisted(f, file = 'agent-team/src/bug-pipeline/standalone-revie
   f.manifest.packet.files['imported-history.json'] = sha256(f.content['imported-history.json']);
 }
 
-test('trusted runtime uses fixed18 policy, reserves protected infrastructure merge, persists receipt and skips next tick', async () => {
-  assert.equal(STANDALONE_INFRASTRUCTURE_FILES.length, 18);
+test('trusted runtime uses fixed human-safe policy, reserves infrastructure merge, persists receipt and skips next tick', async () => {
+  assert.equal(STANDALONE_INFRASTRUCTURE_FILES.length, 7);
+  assert.ok(
+    STANDALONE_INFRASTRUCTURE_FILES.every(
+      (file) => !file.startsWith('agent-team/src/') && !file.startsWith('.github/'),
+    ),
+  );
   assert.equal(Object.isFrozen(STANDALONE_INFRASTRUCTURE_FILES), true);
   const f = fixture();
   makeAllowlisted(f);
@@ -1318,4 +1329,514 @@ test('actual store same-subject modification during QA remains a conflict withou
   assert.equal(durable.state().standaloneReviews[0].releaseHold, 'Independent operator hold');
   assert.equal(durable.state().standaloneReviews[0].codexFinalReview.status, 'running');
   assert.equal(models, 1);
+});
+
+test('F1 trust-root and workflow changes never merge even through a caller-supplied allowlist', async () => {
+  for (const file of [
+    'agent-team/src/bug-pipeline/cli.mjs',
+    'agent-team/src/bug-pipeline/review-policy.mjs',
+    'agent-team/src/bug-pipeline/comment-review-handoff.mjs',
+    '.github/workflows/anything.yml',
+  ]) {
+    const f = fixture();
+    makeAllowlisted(f, file);
+    f.manifest.releaseHold = false;
+    const subject = await published(f);
+    await standaloneReviewStep(
+      stepOptions(f, subject, async () => ({ status: 'verified', summary: 'Synthetic QA' })),
+    );
+    f.github.mergePullRequest = async () =>
+      assert.fail('Human-protected trust root cannot auto-merge');
+    const result = await mergeStandaloneReview({
+      subject,
+      controller: f.controller,
+      github: f.github,
+      infrastructureFiles: [file],
+      execute: true,
+    });
+    assert.equal(result.status, 'ready-to-merge');
+    assert.equal(result.reason, 'human-protected-trust-root');
+  }
+  assert.ok(
+    STANDALONE_INFRASTRUCTURE_FILES.every(
+      (file) =>
+        !file.startsWith('.github/') &&
+        !file.startsWith('agent-team/src/') &&
+        !file.includes('inspect-demo-source-topology'),
+    ),
+  );
+});
+
+test('F2 existing manual PR, branch or issue ownership blocks adoption without shortening history', async () => {
+  for (const overlap of ['pr', 'branch', 'issue']) {
+    const f = fixture();
+    const store = f.github.createStateStore(),
+      state = await store.load();
+    state.manualBatches = [
+      {
+        id: 'real-owner',
+        pr: { number: overlap === 'pr' ? 81 : 82 },
+        branch: overlap === 'branch' ? f.manifest.branch : 'feature/owned',
+        issues: overlap === 'issue' ? [12] : [],
+        implementation: [],
+        reviews: [
+          { round: 1, status: 'failed' },
+          { round: 2, status: 'failed' },
+        ],
+      },
+    ];
+    if (overlap === 'issue') f.manifest.issues = [12];
+    await store.save(state);
+    await assert.rejects(f.controller.adopt(f.manifest), /owner|overlap/);
+    assert.equal(f.remote().manualBatches[0].reviews.length, 2);
+    assert.equal(f.remote().standaloneReviews, undefined);
+  }
+});
+
+test('F3 same-account report cannot authorize merge; distinct reviewer or protected native human approval can', async () => {
+  const f = fixture();
+  f.manifest.releaseHold = false;
+  const subject = await published(f);
+  await standaloneReviewStep(
+    stepOptions(f, subject, async () => ({ status: 'verified', summary: 'Synthetic QA' })),
+  );
+  f.github.nativeReviewAuthorization = async () => ({
+    author: 'maintainer',
+    humanApproved: false,
+    protectedReviews: true,
+  });
+  let merges = 0;
+  f.github.mergePullRequest = async (_pr, _sha, { guard }) => {
+    await guard();
+    merges++;
+    return { mergeSha: '8'.repeat(40) };
+  };
+  const merge = () =>
+    mergeStandaloneReview({
+      subject,
+      controller: f.controller,
+      github: f.github,
+      infrastructureFiles: [subject.sourceManifest[0].path],
+      execute: true,
+    });
+  assert.equal((await merge()).reason, 'independent-reviewer-required');
+  assert.equal(merges, 0);
+  f.github.nativeReviewAuthorization = async () => ({
+    author: 'different-author',
+    humanApproved: false,
+    protectedReviews: true,
+  });
+  f.setActor('distinct-finalizer');
+  await merge();
+  assert.equal(merges, 1);
+  f.setActor('maintainer');
+  f.github.nativeReviewAuthorization = async () => ({
+    author: 'maintainer',
+    humanApproved: true,
+    protectedReviews: true,
+  });
+  await merge();
+  assert.equal(merges, 2);
+});
+
+test('F4 head-drift claim recovery preserves the consumed round and enables adoption of the new SHA', async () => {
+  const f = fixture();
+  const claimedSubject = await claimed(f);
+  f.pr.head.sha = f.feedback.head = 'f'.repeat(40);
+  const recovered = await f.controller.recover(81, {
+    action: 'abandon-claim',
+    expectedSha: sha,
+    token: claimedSubject.externalReview.claimId,
+    reason: 'Worker stopped after head changed',
+  });
+  assert.equal(recovered.reviews.length, 1);
+  assert.equal(recovered.reviews[0].status, 'failed');
+  assert.equal(recovered.reviewLedger.rounds[0].verdict, 'failed');
+  assert.equal(recovered.externalReview.claimId, undefined);
+  await assert.rejects(
+    f.controller.recover(81, {
+      action: 'abandon-claim',
+      expectedSha: sha,
+      token: claimedSubject.externalReview.claimId,
+      reason: 'Replay',
+    }),
+  );
+  for (const key of ['reviews', 'reviewLedger', 'reviewReports'])
+    f.manifest[key] = clone(recovered[key]);
+  const next = revision(f);
+  await f.controller.adopt(next);
+  await f.controller.request(81);
+  const round2 = await f.controller.claim(81);
+  assert.equal(round2.reviews.length, 2);
+  assert.equal(round2.reviews[0].status, 'failed');
+  assert.equal(round2.reviews[1].status, 'running');
+});
+
+test('F4 audited QA release is one-use, maintainer-only, preserves old reservation and reserves a fresh nonce', async () => {
+  const f = fixture();
+  const subject = await published(f);
+  subject.codexFinalReview = {
+    status: 'running',
+    subjectSha: sha,
+    claudeRound: 1,
+    nonce: 'old-qa',
+  };
+  await stepOptions(f, subject, async () => assert.fail()).save();
+  f.github.authorizedMaintainer = async () => false;
+  await assert.rejects(
+    f.controller.recover(81, {
+      action: 'release-qa-reservation',
+      expectedSha: sha,
+      token: 'old-qa',
+      reason: 'Owner stopped',
+    }),
+    /maintainer/,
+  );
+  f.github.authorizedMaintainer = async () => true;
+  await assert.rejects(
+    f.controller.recover(81, {
+      action: 'release-qa-reservation',
+      expectedSha: sha,
+      token: 'wrong-nonce',
+      reason: 'Owner stopped',
+    }),
+    /changed/,
+  );
+  const recovered = await f.controller.recover(81, {
+    action: 'release-qa-reservation',
+    expectedSha: sha,
+    token: 'old-qa',
+    reason: 'Owner stopped',
+  });
+  assert.deepEqual(recovered.qaHistory, [subject.codexFinalReview]);
+  assert.equal(recovered.reviews.length, 1);
+  await assert.rejects(
+    f.controller.recover(81, {
+      action: 'release-qa-reservation',
+      expectedSha: sha,
+      token: 'old-qa',
+      reason: 'Replay',
+    }),
+  );
+  await standaloneReviewStep(
+    stepOptions(f, recovered, async () => ({ status: 'verified', summary: 'Fresh synthetic QA' })),
+  );
+  assert.equal(recovered.codexFinalReview.status, 'verified');
+  assert.notEqual(recovered.codexFinalReview.nonce, 'old-qa');
+});
+
+test('F4 merge release requires native open/unmerged identity and archives the exact reservation', async () => {
+  const f = fixture();
+  const subject = await published(f);
+  subject.release = { status: 'merging', reviewedSha: sha, prNumber: 81, nonce: 'merge-owner' };
+  await stepOptions(f, subject, async () => assert.fail()).save();
+  f.feedback.state = 'MERGED';
+  await assert.rejects(
+    f.controller.recover(81, {
+      action: 'release-merge-reservation',
+      expectedSha: sha,
+      token: 'merge-owner',
+      reason: 'Owner stopped',
+    }),
+    /identity/,
+  );
+  f.feedback.state = 'OPEN';
+  const recovered = await f.controller.recover(81, {
+    action: 'release-merge-reservation',
+    expectedSha: sha,
+    token: 'merge-owner',
+    reason: 'Confirmed no native merge',
+  });
+  assert.deepEqual(recovered.mergeHistory, [subject.release]);
+  assert.equal(recovered.release, undefined);
+});
+
+test('F5 persisted submit reports failed projection and reconcile alone converges without another round/comment', async (t) => {
+  const f = fixture();
+  await claimed(f);
+  const dir = await mkdtemp(nodePath.join(os.tmpdir(), 'pr492-projection-'));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const reportFile = nodePath.join(dir, 'report.json');
+  await writeFile(reportFile, JSON.stringify(report()));
+  let failures = 0;
+  const errors = [],
+    originalError = console.error;
+  console.error = (line) => errors.push(line);
+  try {
+    const code = await handoffMain({
+      args: ['submit', '--pr', '81', '--report', reportFile],
+      dependencies: {
+        github: f.github,
+        run: (call) => {
+          if (call.args[1] === `repos/${repo}/issues/81/labels`) {
+            failures++;
+            return { ok: false, stderr: 'HTTP 502', stdout: '' };
+          }
+          return f.run(call);
+        },
+      },
+    });
+    assert.equal(code, 1);
+  } finally {
+    console.error = originalError;
+  }
+  assert.equal(failures, 3, 'Only idempotent label mutations retry');
+  const failure = JSON.parse(errors.at(-1));
+  assert.deepEqual(
+    { persisted: failure.persisted, projection: failure.projection, next: failure.next },
+    { persisted: true, projection: 'failed', next: 'reconcile --pr 81' },
+  );
+  const comments = f.comments.length,
+    rounds = f.remote().standaloneReviews[0].reviews.length;
+  assert.equal(f.remote().standaloneReviews[0].externalReview.status, 'published');
+  assert.equal(
+    await handoffMain({
+      args: ['reconcile', '--pr', '81'],
+      dependencies: { github: f.github, run: f.run },
+    }),
+    0,
+  );
+  assert.deepEqual(f.labels, ['codex-review-ready']);
+  assert.equal(f.comments.length, comments);
+  assert.equal(f.remote().standaloneReviews[0].reviews.length, rounds);
+});
+
+test('F7 immutable packet reads occur once through submit/reconcile/projection, while native identity remains live', async () => {
+  const f = fixture();
+  await claimed(f);
+  const reads = new Map(),
+    originalRead = f.github.readFileAtRevision;
+  f.github.readFileAtRevision = async (file, revision) => {
+    const key = `${revision}:${file}`;
+    reads.set(key, (reads.get(key) ?? 0) + 1);
+    return originalRead(file, revision);
+  };
+  let nativeReads = 0;
+  const controller = createStandaloneReview({
+    github: f.github,
+    cwd: '/trusted',
+    run: (call) => {
+      if (call.args[1] === `repos/${repo}/pulls/81`) nativeReads++;
+      return f.run(call);
+    },
+  });
+  let subject;
+  await controller.operation(async () => {
+    await controller.submit(81, report());
+    subject = await controller.reconcilePR(81);
+    await controller.publishState(subject);
+  });
+  assert.equal(reads.size, Object.keys(f.manifest.packet.files).length);
+  assert.ok([...reads.values()].every((count) => count === 1));
+  assert.ok(nativeReads >= 3);
+  f.pr.head.sha = 'f'.repeat(40);
+  await assert.rejects(controller.publishState(subject), /identity/);
+});
+
+test('F8 only optional exact-name Vercel failures are tolerated; required checks remain mandatory', async () => {
+  const f = fixture();
+  const optionalRun = (call) =>
+    call.args[0] === 'pr'
+      ? {
+          ok: false,
+          code: 1,
+          stdout: JSON.stringify([
+            { name: 'required', bucket: 'pass' },
+            { name: 'Vercel', bucket: 'fail' },
+          ]),
+        }
+      : f.run(call);
+  const controller = createStandaloneReview({
+    github: f.github,
+    run: optionalRun,
+    cwd: '/trusted',
+  });
+  assert.equal((await controller.checks(81)).ok, true);
+  f.github.requiredChecks = async () => ({ ok: false, details: ['Vercel required: FAILURE'] });
+  await assert.rejects(controller.checks(81), /required checks/);
+  f.github.requiredChecks = async () => ({ ok: true, details: ['required: SUCCESS'] });
+  const unknown = createStandaloneReview({
+    github: f.github,
+    cwd: '/trusted',
+    run: (call) =>
+      call.args[0] === 'pr'
+        ? { ok: false, stdout: JSON.stringify([{ name: 'UnreviewedOptional', bucket: 'fail' }]) }
+        : f.run(call),
+  });
+  await assert.rejects(unknown.checks(81), /failed or pending/);
+});
+
+test('F9 independent QA reservation uses injected time', async () => {
+  const f = fixture(),
+    subject = await published(f);
+  await standaloneReviewStep({
+    ...stepOptions(f, subject, async () => ({ status: 'verified', summary: 'Synthetic QA' })),
+    now: () => new Date('2025-01-02T03:04:05.000Z'),
+  });
+  assert.equal(subject.codexFinalReview.reservedAt, '2025-01-02T03:04:05.000Z');
+});
+
+test('F7 standalone failed save reloads durable state before normal queue work and cannot leak an unsaved QA reservation', async () => {
+  const f = fixture();
+  await published(f);
+  const backing = f.github.createStateStore();
+  let initial = await backing.load();
+  initial.batches = [
+    {
+      id: 'bug-batch-9',
+      branch: 'codex/bug-batch-9',
+      issues: [9],
+      phase: 'blocked',
+      implementation: [],
+      reviews: [],
+    },
+  ];
+  await backing.save(initial);
+  let failed = false,
+    normalStatus = 0;
+  const store = {
+    load: () => backing.load(),
+    save: async (state, options) => {
+      if (!failed && state.standaloneReviews[0].codexFinalReview?.status === 'running') {
+        failed = true;
+        throw Object.assign(new Error('Synthetic definite write failure'), {
+          code: 'state-write-failed',
+        });
+      }
+      return backing.save(state, options);
+    },
+  };
+  f.github.intake = async () => {};
+  f.github.setIssueStatus = async (number) => {
+    if (number === 9) normalStatus++;
+  };
+  f.github.discoverQueue = async () => [17];
+  const view = f.github.viewIssue;
+  f.github.viewIssue = async (number) =>
+    number === 17 ? { number, state: 'open', labels: ['bug', 'codex-run'] } : view(number);
+  const result = await runPipeline({
+    repo,
+    event: {},
+    gh: f.github,
+    store,
+    models: {},
+    workspace: {
+      finalQaStandalone: async () => assert.fail('Failed QA reservation must prevent inference'),
+    },
+    standaloneController: f.controller,
+    now: () => 1000000,
+    triageWindowMs: 120000,
+  });
+  assert.equal(failed, true);
+  assert.equal(normalStatus, 1, 'Normal batch handling continues after standalone write failure');
+  assert.deepEqual(result.triageQueue.issues, [17], 'Normal queue reached its own successful save');
+  assert.equal(f.remote().standaloneReviews[0].codexFinalReview, undefined);
+  assert.deepEqual(f.remote().triageQueue.issues, [17]);
+});
+
+test('F4 a transient waiting-subject read failure leaves phase and consumed history unchanged', async () => {
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  await f.controller.request(81);
+  const before = clone(f.remote().standaloneReviews[0]);
+  f.github.intake = async () => {};
+  f.github.discoverQueue = async () => [];
+  const state = await runPipeline({
+    repo,
+    event: {},
+    gh: f.github,
+    store: f.github.createStateStore(),
+    models: {},
+    workspace: {},
+    standaloneController: {
+      ...f.controller,
+      publishState: async () => {
+        throw Object.assign(new Error('Synthetic HTTP 503'), { code: 'github-read-failed' });
+      },
+    },
+  });
+  assert.deepEqual(state.standaloneReviews[0], before);
+  assert.deepEqual(f.remote().standaloneReviews[0], before);
+});
+
+test('audited completed operator continuation remains the latest tested source across revision adoption without legacy folding', async () => {
+  const { historyDigest } = await import('../../src/bug-pipeline/attempt-budget.mjs');
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  const store = f.github.createStateStore(),
+    state = await store.load(),
+    subject = state.standaloneReviews[0];
+  const original = clone(subject.implementation);
+  state.operatorTakeover = {
+    nonce: 'operator-authorization',
+    continuePastFourPreserveHistory: true,
+    subjects: [{ collection: 'standaloneReviews', id: subject.id, pr: 81 }],
+  };
+  const testedContinuation = '2'.repeat(40);
+  subject.operatorContinuations = [
+    {
+      round: 4,
+      kind: 'explicit-operator-compatibility-continuation',
+      status: 'passed',
+      owner: 'operator',
+      nonce: 'round4',
+      startedAt: '2026-10-18T01:00:00Z',
+      authorizationRef: 'operator-authorization',
+      reason: 'Explicit owner correction',
+      contractSha256: 'a'.repeat(64),
+      preservedEntityDigest: 'b'.repeat(64),
+      preservedLegacyImplementationDigest: historyDigest(original),
+      preservedLegacyReviewsDigest: historyDigest([]),
+      subjectSha: testedContinuation,
+      evidence: 'continuation-4.json',
+    },
+  ];
+  subject.operatorCoordination = { stage: 'independent-qa-passed' };
+  await store.save(state);
+  const next = revision(f),
+    prefix = next.packet.path + '/';
+  const proof = JSON.stringify({ status: 'passed', synthetic: true });
+  next.packet.files['continuation-4.json'] = sha256(proof);
+  f.fileContents.set(prefix + 'continuation-4.json', proof);
+  const history = JSON.parse(f.fileContents.get(prefix + 'imported-history.json'));
+  history.operatorContinuations = clone(subject.operatorContinuations);
+  history.packetFiles = Object.fromEntries(
+    Object.entries(next.packet.files).filter(([file]) => file !== 'imported-history.json'),
+  );
+  const content = JSON.stringify(history);
+  f.fileContents.set(prefix + 'imported-history.json', content);
+  next.packet.files['imported-history.json'] = sha256(content);
+  const tree = f.treeOverrides.get(next.sha);
+  tree.find((entry) => entry.path === prefix + 'imported-history.json').sha = sha256(content).slice(
+    0,
+    40,
+  );
+  tree.push({
+    path: prefix + 'continuation-4.json',
+    sha: sha256(proof).slice(0, 40),
+    type: 'blob',
+    mode: '100644',
+  });
+  f.treeOverrides.set(testedContinuation, [
+    {
+      path: next.sourceManifest[0].path,
+      sha: next.sourceManifest[0].blob,
+      type: 'blob',
+      mode: '100644',
+    },
+  ]);
+  // Legacy tested source now differs. Only the actual completed continuation matches the new source.
+  f.treeOverrides.set(testedSha, [
+    { path: next.sourceManifest[0].path, sha: '3'.repeat(40), type: 'blob', mode: '100644' },
+  ]);
+  const adopted = await f.controller.adopt(next);
+  assert.deepEqual(adopted.implementation, original);
+  assert.deepEqual(adopted.operatorContinuations, subject.operatorContinuations);
+  assert.deepEqual(adopted.operatorCoordination, subject.operatorCoordination);
+  assert.deepEqual(f.remote().operatorTakeover, state.operatorTakeover);
+  await f.controller.verify(adopted);
+  f.treeOverrides.set(testedContinuation, [
+    { path: next.sourceManifest[0].path, sha: '4'.repeat(40), type: 'blob', mode: '100644' },
+  ]);
+  await assert.rejects(f.controller.verify(adopted), /Frozen standalone subject/);
 });

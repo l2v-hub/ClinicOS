@@ -806,13 +806,15 @@ test('old-worker failed-no-report state is projected with one spent attempt, wit
   assert.equal(second.batches[0].comments, 0);
 });
 
-test('partial sync reports a safe error and never retries failed writes or invokes inference', async () => {
+test('partial sync retries only idempotent labels a bounded number of times and never invokes inference', async () => {
   const f = communicationFixture();
   f.fail((call) => call.args.includes('-X'));
   const result = await syncIssueReviews({ github: f.github, communication: f.communication });
   assert.equal(result.status, 'partial');
   assert.deepEqual(result.batches, [{ id: f.batch.id, status: 'blocked' }]);
-  assert.equal(f.calls.filter((call) => call.args.includes('-X')).length, 1);
+  const writes = f.calls.filter((call) => call.args.includes('-X'));
+  assert.equal(writes.length, 3);
+  assert.ok(writes.every((call) => call.args[1].includes('/labels')));
   assert.ok(!JSON.stringify(result).includes('private provider'));
 });
 
