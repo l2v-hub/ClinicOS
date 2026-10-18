@@ -1,0 +1,14 @@
+{
+  "sealedAt": "2026-10-18T18:58:24.152060+00:00",
+  "subjectSha": "9ec1c16fcb061f14cdab47c699087d504d8f2305",
+  "manifestSha256": "b6092dd542f50611d85fbe91bd0bcd79f8d93d6f2b819c9416ed191782c858d3",
+  "verdict": "READY FOR CODEX QA \u2014 offline scope only",
+  "overallFinalDecision": "IMPLEMENTED \u2014 NOT VERIFIED",
+  "candidateTestsPassed": 34,
+  "independentTestsPassed": 8,
+  "findingCount": 0,
+  "priorProofFilesPreserved": 49,
+  "sourceFilesPreserved": 3,
+  "frozenMetadataFilesPreserved": 8,
+  "status": "STOPPED \u2014 sealed; root owns publication and later gates"
+}

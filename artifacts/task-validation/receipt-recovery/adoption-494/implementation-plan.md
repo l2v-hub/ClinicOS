@@ -1,0 +1,3 @@
+# Plan and completed verification
+
+Reserve before source, implement exactly three source files with two fixed evidence modes, add offline adversarial tests, stop author and commission new independent QA. Root rechecks archive/schema/provenance/auth/idempotence and18independent cases. Keep original freeze/report and pre-QA amendment. Publish same single implementation history under the canonical PR494 review owner, preserve the earlier record in full, then real Claude review and new final Codex review. Native checks and ordinary protected merge precede any main-only dispatch. Actual recovery is not yet proven.

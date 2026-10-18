@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "task": "standalone-pr-494",
+  "implementationRound": 2,
+  "baseSha": "dfd2f1575ab449507a207a2357da2a63c86e5b4f",
+  "contractSha256": "b300d4d645d28dea4a4f5ee4748279334c1e4797eed4da61e509c4ef3a89a86d",
+  "actualClaudeCommentId": 6253738333,
+  "status": "author-frozen-pending-fresh-independent-QA",
+  "sources": {
+    "scripts/automation/recover-demo-topology-receipt.py": {
+      "sha256": "122affc111f4c59b451580fff592c78182f9814aa8f9491b44e54e862032ef66",
+      "bytes": 31683
+    },
+    "scripts/automation/recover-demo-topology-receipt.test.py": {
+      "sha256": "0ed587c3ffb1facaadfef4b818f14a6e569e8bebc055e0700e3ad039ab0db3ee",
+      "bytes": 41028
+    },
+    ".github/workflows/recover-demo-topology-receipt.yml": {
+      "sha256": "12429291df307ed11bfb13c73ca11dc3bea1b22f96cf1ec22adb30564f3de930",
+      "bytes": 1613
+    }
+  },
+  "evidence": {
+    "analysis.md": {
+      "sha256": "4c373e482ab0981d25420ce55b929ef161dc15a5fb9ae51ec7a1b0d37c8a7873",
+      "bytes": 1374
+    },
+    "author-offline-tests.txt": {
+      "sha256": "cdd93648c58ed398e98c9785d2e750c278342ca0355f48d8bc4d2b2839a37e2b",
+      "bytes": 4617
+    },
+    "author-report.md": {
+      "sha256": "f81e21f61874e22aac53efd25e190627b1263f8df3da63d8bf3e7bb37164b69d",
+      "bytes": 3213
+    },
+    "implementation-plan.md": {
+      "sha256": "d1db3195677ed2f3ddc0f532bda67ff1f63eaffa82992222a3ce4275f30a80bd",
+      "bytes": 913
+    },
+    "prior-proof-manifest.json": {
+      "sha256": "b7626ece84d4fee88805d6c17e4b54f42a5434516876b5b2880fbda12c27fcc7",
+      "bytes": 7468
+    },
+    "prior-proof-verification.json": {
+      "sha256": "6b0bec15c8ab49c79fbe6a3387338c96969aab1cb6d2280e577f1f4052a91cb8",
+      "bytes": 229
+    },
+    "task-contract.md": {
+      "sha256": "b300d4d645d28dea4a4f5ee4748279334c1e4797eed4da61e509c4ef3a89a86d",
+      "bytes": 4854
+    }
+  },
+  "priorProofFiles": 49
+}

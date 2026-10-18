@@ -1,0 +1,35 @@
+# Independent validation of fixed evidence recovery
+
+Verdict: **READY FOR CODEX QA**. No blocking findings were identified in the frozen three-file candidate. This verdict permits the next review gate; it does not assert successful remote recovery, native CI, deployment, clinical readiness, or release approval.
+
+Reviewed checkout: `/workspace/clinicos-topology-receipt`, branch `codex/recover-topology-receipt`, base `729e6144b9d5a924874843ba264819d4bd1a6dca`. Reservation nonce: `9883bb15-5307-4af5-9483-d5f79aa89570`. Current author freeze `source-freeze-2.json` SHA-256: `e15710a60770e1481272a67cac7031e64dae2315e51084a667b624dc491380f5`.
+
+The reviewer read the task contract and amendment before candidate source, applied the cloud environment onboarding setup skill, and found no applicable AGENTS.md in the checkout ancestry or scoped source/evidence directories. The authorized work is standard-library Python evidence transport. No installation, application build, database, browser, service lifecycle change, remote API, provider call, secret-file inspection, commit, or candidate edit was needed or performed.
+
+## Executed validation
+
+- Independently reran the complete candidate offline suite: **28 tests passed**, zero skipped or failed. Transcript: `author-suite-rerun.txt`. Candidate tests block socket creation.
+- Authored and ran a separate suite against a fresh import of the frozen helper: **18 tests passed**, zero skipped or failed. Source and transcript: `independent-negative-cases.py` and `independent-negative-results.txt`. This suite blocks socket constructors, connection helpers, and DNS resolution. Fixtures and client implementation are independently authored; candidate test fixtures are not imported.
+- Independent cases exercise exact public projection, raw secret/title/message suppression, fixed destinations, malformed modes, wrong repository IDs and step types/times, metadata drift after download, stale main before publication, marker conflicts across pages, gzip truncation/CRC/multiple members, unsafe locations, command injection into log structure, duplicate summaries, control bytes, pinned archive digest rejection, ZIP local/central filename disagreement and comments, JSON rejection, and constant diagnostics.
+- Ambiguous mutation handling was tested explicitly: a POST accepted remotely followed by a lost response, and a POST accepted remotely followed by an invalid acknowledgment, both fail the initial invocation and return `already-published` on rerun with exactly one total write. No automatic POST retry occurs.
+- Python AST parsing passed for both candidate Python files and the independent suite. All three source files and all eight task packet files matched their pre-review hashes afterward. Freeze-2 source/evidence records match their actual bytes, including original author report, original test transcript, original freeze, contract, and amendment. Tracked repository diff remains empty. Detailed bindings: `source-integrity-before.json`, `source-integrity.json`.
+
+## Security and contract assessment
+
+`recover-demo-topology-receipt.py:18` fixes the repository, original run/artifact/archive digest, scope identities and publication markers. `:156` projects the complete bounded topology inventory through exact key sets and constrained scalar types, reconstructs both digests, enforces demo inventory consistency and unproven project visibility, and refuses unknown fields. `:241` binds receipt provenance, capture time, permitted outcome and read count. The original inspector/configurator serializers were inspected to compare schema and serialization order; no invented artifact contents were used.
+
+`:262` checks the immutable archive byte count and digest before ZIP parsing. It constrains one exact member, local and central headers, paths, regular-file mode, supported compression, descriptors, advertised expansion, size and CRC, with bounded reads and no filesystem extraction. The independent tests preserve the production digest for wrong-byte rejection; additional structural tests temporarily inject a synthetic digest solely to reach the deeper archive guards.
+
+`:312` uses Python's normal TLS validation. Authentication is confined to the fixed GitHub repository API prefix. Supported signed HTTPS storage redirects have host, port, credential, control, fragment and scheme guards; the second request receives no Authorization header and cannot redirect onward. Errors are constant codes; raw responses, exception details and signed URLs do not cross the console boundary.
+
+`:407` binds the fixed failed CI run, attempt, exact head/branch/native event, repository identities, job and only failed step before and after log download, rejecting metadata drift. `:429` bounds fetched and decompressed bytes, line counts/lengths, diagnostic blocks and failure counts. Public fingerprints contain only a SHA-256 of each failure title, an exact allowlisted repository-relative path and line, bounded counts, and enum values; raw titles, messages, actual/expected values, stacks and URLs are absent. The fetched log hash is identified honestly as having no precommitted digest.
+
+`:555` permits only the two fixed modes and PR targets, checks current main before data recovery and again immediately before comment handling, bounds the final UTF-8 comment, and rejects marker conflicts, duplicates and pagination exhaustion. Existing exact reports require the GitHub Actions bot identity and exact body. Comments are never edited, issues never closed, and no merge/deploy/provider action is implemented. Read/verify/write is not an atomic transaction with a concurrent main update; the code makes the contract's fresh checks immediately around the publication stage.
+
+`recover-demo-topology-receipt.yml:1` exposes exactly two choices with topology as default. `:16` grants only contents read, actions read and issues write. `:28` restricts dispatch to the fixed repository and main with the reviewed SHA equal to the dispatch SHA. Checkout is pinned to a full action SHA and the exact dispatch SHA, with credentials persistence disabled. Only the recovery process receives the scoped GitHub token. The workflow does not check out or execute PR source, bind a provider environment/secret, or take a deployment lock.
+
+## Remaining gates and limits
+
+Real artifact and log bytes remain unknown to this reviewer. All fixtures are synthetic. The strict parser may refuse an unexpected real ZIP, schema or TAP layout; that must receive reviewed diagnosis rather than a relaxed validation bypass. This packet does not establish that GitHub redirects are reachable from this cloud or that the runner publication will succeed. Fixed CI fingerprints are transport of test output, not an independent assertion that the tests are correct.
+
+Root still owns publication, exact-current-head native CI, actual Claude review, final Codex review, protected integration and authorized workflow execution. Actual original topology receipt recovery and fixed-run CI failure identification remain pending those operations. No clinical or release waiver is granted.
