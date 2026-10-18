@@ -18,6 +18,8 @@ const EXTERNAL_WORK_LABELS = new Set([
 ]);
 const BOT_PROTOCOL_MARKER = '<!-- codex-bug-pipeline:';
 const ISSUE_STATUSES = ['In progress', 'Bloccato', 'Risolto'];
+const MAX_STATE_BYTES = 4 * 1024 * 1024;
+const STATE_OUTPUT_BYTES = 8 * 1024 * 1024;
 
 function assertRepo(repo) {
   if (typeof repo !== 'string' || !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo)) {
@@ -34,8 +36,45 @@ function parseJson(text, description) {
   }
 }
 
-function encodeState(state) {
-  return Buffer.from(`${JSON.stringify(state, null, 2)}\n`, 'utf8').toString('base64');
+function gitBlobSHA(bytes) {
+  return createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
+}
+
+function decodeStateBlob(record, expectedSHA, declaredSize) {
+  if (
+    !record ||
+    typeof record !== 'object' ||
+    record.encoding !== 'base64' ||
+    typeof record.content !== 'string' ||
+    !Number.isSafeInteger(record.size) ||
+    record.size <= 0 ||
+    record.size > MAX_STATE_BYTES ||
+    record.size !== declaredSize
+  ) {
+    throw new Error('Durable state blob metadata is invalid');
+  }
+  const encoded = record.content.replace(/[\r\n]/g, '');
+  if (encoded.length === 0 || encoded.length > Math.ceil(MAX_STATE_BYTES / 3) * 4) {
+    throw new Error('Durable state blob content is invalid');
+  }
+  const bytes = Buffer.from(encoded, 'base64');
+  if (bytes.length !== record.size || bytes.toString('base64') !== encoded) {
+    throw new Error('Durable state blob content is invalid');
+  }
+  if (gitBlobSHA(bytes) !== expectedSHA.toLowerCase()) {
+    throw new Error('Durable state blob SHA does not match its content');
+  }
+  let text;
+  try {
+    text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+  } catch {
+    throw new Error('Durable state file is not valid UTF-8');
+  }
+  const state = parseJson(text, 'durable state');
+  if (state === null || typeof state !== 'object' || Array.isArray(state)) {
+    throw new Error('Durable state must be a JSON object');
+  }
+  return state;
 }
 
 function issueNumber(issue) {
@@ -263,6 +302,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
         `repos/${repo}/contents/${STATE_PATH}?ref=${encodeURIComponent(STATE_BRANCH)}`,
         {
           allowFailure: true,
+          maxOutputBytes: STATE_OUTPUT_BYTES,
         },
       );
       if (!response.ok) {
@@ -271,18 +311,38 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
         fileSHA = null;
         return null;
       }
-      if (response.value?.type !== 'file' || typeof response.value.sha !== 'string') {
+      const contents = response.value;
+      if (
+        contents?.type !== 'file' ||
+        typeof contents.sha !== 'string' ||
+        !/^[a-f0-9]{40}$/i.test(contents.sha) ||
+        !Number.isSafeInteger(contents.size) ||
+        contents.size <= 0 ||
+        contents.size > MAX_STATE_BYTES
+      ) {
         throw new Error('Durable state path is not a regular file');
       }
-      let text;
-      try {
-        text = Buffer.from(response.value.content, 'base64').toString('utf8');
-      } catch {
-        throw new Error('Durable state file is not valid base64');
+      let record;
+      if (contents.encoding === 'base64') {
+        record = contents;
+      } else if (contents.encoding === 'none') {
+        const blob = await api(`repos/${repo}/git/blobs/${contents.sha}`, {
+          maxOutputBytes: STATE_OUTPUT_BYTES,
+        });
+        if (
+          blob.value?.sha !== contents.sha ||
+          blob.value?.size !== contents.size
+        ) {
+          throw new Error('Durable state blob does not match the pinned Contents object');
+        }
+        record = blob.value;
+      } else {
+        throw new Error('Durable state Contents encoding is invalid');
       }
-      fileSHA = response.value.sha;
+      const state = decodeStateBlob(record, contents.sha, contents.size);
+      fileSHA = contents.sha;
       loaded = true;
-      return parseJson(text, 'durable state');
+      return state;
     }
 
     async function save(state, { guard } = {}) {
@@ -290,10 +350,13 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       if (state === null || typeof state !== 'object' || Array.isArray(state)) {
         throw new TypeError('state must be a JSON object');
       }
+      const serialized = Buffer.from(JSON.stringify(state), 'utf8');
+      if (serialized.length > MAX_STATE_BYTES)
+        throw new Error('Durable state exceeds the 4 MiB limit');
       const expectedFileSHA = fileSHA;
       const body = {
         message: 'chore: update Codex bug pipeline state',
-        content: encodeState(state),
+        content: serialized.toString('base64'),
         branch: STATE_BRANCH,
       };
       if (expectedFileSHA) body.sha = expectedFileSHA;
@@ -406,16 +469,34 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
   async function readDashboardState() {
     const response = await api(
       `repos/${repo}/contents/${STATE_PATH}?ref=${encodeURIComponent(STATE_BRANCH)}`,
-      { allowFailure: true },
+      { allowFailure: true, maxOutputBytes: STATE_OUTPUT_BYTES },
     );
     if (!response.ok) {
       if (notFound(response)) return null;
       throw new Error('Cannot read dashboard state');
     }
-    return parseJson(
-      Buffer.from(response.value.content, 'base64').toString('utf8'),
-      'dashboard state',
-    );
+    const contents = response.value;
+    if (
+      contents?.type !== 'file' ||
+      typeof contents.sha !== 'string' ||
+      !/^[a-f0-9]{40}$/i.test(contents.sha) ||
+      !Number.isSafeInteger(contents.size) ||
+      contents.size <= 0 ||
+      contents.size > MAX_STATE_BYTES
+    ) {
+      throw new Error('Dashboard state path is not a regular file');
+    }
+    let record;
+    if (contents.encoding === 'base64') record = contents;
+    else if (contents.encoding === 'none') {
+      const blob = await api(`repos/${repo}/git/blobs/${contents.sha}`, {
+        maxOutputBytes: STATE_OUTPUT_BYTES,
+      });
+      if (blob.value?.sha !== contents.sha || blob.value?.size !== contents.size)
+        throw new Error('Dashboard state blob does not match the pinned Contents object');
+      record = blob.value;
+    } else throw new Error('Dashboard state Contents encoding is invalid');
+    return decodeStateBlob(record, contents.sha, contents.size);
   }
 
   async function listBugIssues() {

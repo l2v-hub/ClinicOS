@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { createGitHub } from '../../src/bug-pipeline/github.mjs';
 import { feedbackFingerprint } from '../../src/bug-pipeline/contracts.mjs';
 import {
@@ -11,6 +12,8 @@ import {
 const repo = 'l2v-hub/ClinicOS';
 const sha = 'a'.repeat(40);
 const clone = (value) => structuredClone(value);
+const gitBlobSHA = (bytes) =>
+  createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
 const validPlan = {
   title: 'Synthetic regression',
   feature: 'Synthetic feature',
@@ -83,7 +86,7 @@ function fixture({ failed = false, reviewCount, actor = 'review-bot' } = {}) {
       : { externalReview: { status: 'requested', subjectSha: sha } }),
   };
   const remote = { schemaVersion: 1, repository: repo, batches: [batch] };
-  let fileSha = 'state-version-1';
+  let fileSha = gitBlobSHA(Buffer.from(JSON.stringify(remote), 'utf8'));
   let actorName = actor;
   let permission = 'write';
   let revokeOnTree = false;
@@ -108,7 +111,6 @@ function fixture({ failed = false, reviewCount, actor = 'review-bot' } = {}) {
   const writes = [];
   const reported = [];
   let commentId = 200;
-  let saves = 0;
   const apiRun = async (call) => {
     calls.push(clone(call));
     const endpoint = call.args[1];
@@ -119,21 +121,27 @@ function fixture({ failed = false, reviewCount, actor = 'review-bot' } = {}) {
     if (endpoint === `repos/${repo}/git/ref/heads/codex/bug-control`)
       return { ok: true, stdout: JSON.stringify({ object: { sha: 'branch-sha' } }) };
     if (endpoint.startsWith(`repos/${repo}/contents/.codex-bug-state.json`)) {
-      if (method === 'GET')
+      if (method === 'GET') {
+        const bytes = Buffer.from(JSON.stringify(remote), 'utf8');
         return {
           ok: true,
           stdout: JSON.stringify({
             type: 'file',
-            sha: fileSha,
-            content: Buffer.from(JSON.stringify(remote)).toString('base64'),
+            sha: gitBlobSHA(bytes),
+            size: bytes.length,
+            encoding: 'base64',
+            content: bytes.toString('base64'),
           }),
         };
+      }
       const body = JSON.parse(call.input);
       writes.push({ endpoint, method, body });
       if (body.sha !== fileSha) return { ok: false, stdout: '', stderr: '409 conflict' };
-      remote.batches = JSON.parse(Buffer.from(body.content, 'base64').toString('utf8')).batches;
-      remote.updatedAt = JSON.parse(Buffer.from(body.content, 'base64').toString('utf8')).updatedAt;
-      fileSha = `state-version-${++saves + 1}`;
+      const bytes = Buffer.from(body.content, 'base64');
+      const next = JSON.parse(bytes.toString('utf8'));
+      for (const key of Object.keys(remote)) delete remote[key];
+      Object.assign(remote, next);
+      fileSha = gitBlobSHA(bytes);
       return { ok: true, stdout: JSON.stringify({ content: { sha: fileSha } }) };
     }
     if (endpoint.startsWith(`repos/${repo}/git/trees/`)) {
