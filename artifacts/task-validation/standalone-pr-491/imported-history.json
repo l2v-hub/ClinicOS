@@ -1,0 +1,380 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "startedAt": "2026-10-17T10:15:52.665Z",
+      "sha": "44e2aaeabcc0583ff89b655774a5026546283f70",
+      "subjectSha": "44e2aaeabcc0583ff89b655774a5026546283f70",
+      "evidence": "history/authoritative-existing-history.json"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "startedAt": "2026-10-17T11:00:31.829Z",
+      "reason": "NewindependentQA2 all5PASS:107+41tests,officialschema3/YAML/AST,actual19browser207assert,zeroerrors/credentialfindings,3sources/contracts3/history38exact. Rootreadfullreport/diff/actualPNG.",
+      "sha": "f48d8d70e257aa97fd6aac241d13eb803e7bcb92",
+      "subjectSha": "f48d8d70e257aa97fd6aac241d13eb803e7bcb92",
+      "evidence": "history/authoritative-existing-history.json"
+    },
+    {
+      "round": 3,
+      "status": "passed",
+      "recordedAt": "2026-10-17T15:47:05.583Z",
+      "owner": "railway_source_diagnosis",
+      "reason": "Inspect-only candidate3 was reserved by its pre-implementation task contract; historical registration after frozen author and independent QA, not a retroactive model launch or budget reset.",
+      "pr": 491,
+      "sha": "1276cfe9f8dcf340d1baaf85088a29a577ff8d28",
+      "independentQaReportSha256": "b373389571e8908bbe115a36c5702403a9a5a52c9b14b6a5b177552a8f8df7ce",
+      "subjectSha": "1276cfe9f8dcf340d1baaf85088a29a577ff8d28",
+      "evidence": "history/authoritative-existing-history.json"
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/inspect-demo-source-topology.yml",
+      "blob": "f1bcfcf79da62f413148cfbdac9f11087db73251",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/analysis.md",
+      "blob": "93c6e4b661340d1008e6fc2bb12ceb026b46de6e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/implementation-plan.md",
+      "blob": "3cbf223db0369e044d4259cbbc63da37dff8b553",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/attempt-1-probe-expectation/browser.txt",
+      "blob": "135dfcfb3aed6d5c466fdd27d7ee07c8d9bf01a2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/attempt-1-probe-expectation/probe.mjs",
+      "blob": "9c0dbca1681b7477c402b42543cf0e467488a12a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/attempt-1-probe-expectation/reason.md",
+      "blob": "b92ffb5bb670ed8173a1d8c4f5afb8a7eaf5d90a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/attempt-1-probe-expectation/screenshots/inaccessible.png",
+      "blob": "4603f142fc145ff70fe7297c0fbeb654648d0c0e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/attempt-1-probe-expectation/screenshots/multipage.png",
+      "blob": "5b36d56961728d1045fc3b1902a618c74199ff65",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/attempt-1-probe-expectation/screenshots/singleton.png",
+      "blob": "9638447b2d249a5831594a8894cdafffeee098d8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/attempt-1-probe-expectation/video/page@ceda5f9f3d5cb698af751f6d03c55ef1.webm",
+      "blob": "f7dd952db0332671b636727156c053a68aea584a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/browser-results.json",
+      "blob": "c45ef829e6b37541328abe89b51c260538106dbb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/build-results.json",
+      "blob": "918c70b6da396a3046e8161f2bd1f774034f1539",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/final-seal.json",
+      "blob": "b221629cf1dc8327b655b2ebefeb9c22c78941d4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/generated-build-manifest.json",
+      "blob": "403059ef33e9f403be3b75a4105b1fc2a5d46abf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/logs/browser.txt",
+      "blob": "fcbc9609cf08d00a27e3595dbb1425f279ed13a3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/logs/build-0.txt",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/logs/build-1.txt",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/logs/build-2.txt",
+      "blob": "540ab0008d79d6718b2ea1db681edd3823a7e809",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/logs/contract.txt",
+      "blob": "5068f410857b6a8efc8caa1364f9ab95b36d35ab",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/logs/operational-tests.txt",
+      "blob": "1c6285d64452404b4f81a6946c5c620722fb1154",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/media-privacy.json",
+      "blob": "6d0099a5e23477241ce85bccb75d414ed0382c46",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/playwright-report/index.html",
+      "blob": "56da98d5e06e8aec4fcb69633cf67e2a20195c32",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/probe.mjs",
+      "blob": "cecfda30ae1dbe8e3edbe85bf638315cb135bf19",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/provenance.json",
+      "blob": "2316d22e2e80ac3ad9e9958f4ebd5f34a49af03f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/schema-assertions.json",
+      "blob": "3df510e99c7d2347fa842a872bdeb101395cc543",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/screenshots/drift.png",
+      "blob": "d60c10a5a0d304c5438b33f92cbace9e971394a7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/screenshots/foreign-owner.png",
+      "blob": "0b1417df7a225a968c12b6df56b388518cc5b9f3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/screenshots/inaccessible.png",
+      "blob": "4603f142fc145ff70fe7297c0fbeb654648d0c0e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/screenshots/multipage.png",
+      "blob": "5b36d56961728d1045fc3b1902a618c74199ff65",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/screenshots/mutation-denied.png",
+      "blob": "a642925492c426bd261a5a08818c63a9243b4623",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/screenshots/private-error.png",
+      "blob": "e1d44a3573b05773c1fb6f2dcd98721e6b4b02f7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/screenshots/repeat-cursor.png",
+      "blob": "a7066ff0ef39164c7d3cd32452b15af8202a2c1f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/screenshots/singleton.png",
+      "blob": "9638447b2d249a5831594a8894cdafffeee098d8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/screenshots/unsafe-metadata.png",
+      "blob": "959de5251e85cb7127cec7b9dea732cbd48226ee",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/trace/trace.zip",
+      "blob": "0baf005f9e745097dc005805a888de502cbc3766",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/validation-report.md",
+      "blob": "eaaa15eedb09594f3a43408c8ffe3a43382aa610",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/video/page@38dbd7796c72e7053180a06afd2965e9.webm",
+      "blob": "99108238a327493cb8f78d99586a0f7dfc1a1761",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/independent-qa/workflow-assertions.json",
+      "blob": "b54a2a80420e48e6c46e812287e29a058a52c893",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/legacy-preservation.json",
+      "blob": "9f28fb1b3cdad7bb5c3aee14dcb4831bae75429a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/logs/author-operational-tests.txt",
+      "blob": "036ad55a50bbc3b14a516156f3a6c3d9db6e4058",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/logs/legacy-tests.txt",
+      "blob": "e3d765d0d3089a871f4915f961c6b0b34531d255",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/source-manifest.json",
+      "blob": "0677487ec4ca92aa5890dade312d84143edb15d5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/source-references.md",
+      "blob": "91c6d8ed48ad62dd0bae1e94f04dcaa435b30788",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/task-contract.md",
+      "blob": "19af3915eef448b7655ced14ea46664f4ff9a389",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-source-topology/validation-report.md",
+      "blob": "080cf3f6c1167cde14c1c5438bc6ac04f751713e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/inspect-demo-source-topology.mjs",
+      "blob": "d947775476eb36716b1a68866f5f08a348f5a5d0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/inspect-demo-source-topology.test.mjs",
+      "blob": "9f35a3b1ec51b2ea2594aa0c30fb7706767fadf5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "analysis.md": "f0f69146eba5c5fd9519db718b9a595afef06e475cdcfa7138e5d11cbeb84896",
+    "evidence/inaccessible.png": "eef6dbd403c12ed7e4de1ef188d021d123b00b046196d50c271bd27a0cf90f8a",
+    "evidence/page@38dbd7796c72e7053180a06afd2965e9.webm": "298e04d37393fe90296baf844a6c6f516713114038e04c58d848a56cee6027a7",
+    "evidence/trace.zip": "a199d0692bb8dd68fd4ad1c53c6957c126ef36f1d70c427e597d6bf9519ac9bd",
+    "history/authoritative-existing-history.json": "b119e25b2ef0d14f9ad2f6ef4a3840bf5a6f066dc416a14c7080de65d58f7d3e",
+    "history/independent-qa-final-seal.json": "68f8e9f535b5a0401260c53f49971e84a7b6430d819ee592c95ab52316595cf1",
+    "history/independent-qa-validation-report.md": "b373389571e8908bbe115a36c5702403a9a5a52c9b14b6a5b177552a8f8df7ce",
+    "history/source-manifest.json": "ec6267fa6002af6620226dc89092092830a84be6068b0ef78448d767d303ca10",
+    "implementation-plan.md": "5fa359480084fc1e60792508701150e97440c2e230f6a48403322e924a744631",
+    "task-contract.md": "0103085fed9497218c256c195f30655c8b387847b07ba17b1fe9beb249616149",
+    "validation-report.md": "482066f9a228ff28e8f88de7b60236fe90003a9cb398f9a9a43c05bd6285d2af"
+  }
+}

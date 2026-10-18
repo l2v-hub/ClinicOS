@@ -1,0 +1,11 @@
+# Analysis
+
+The old operation already validates the scoped fixed target and retains exactly one explicit create attempt with an unknown generic API failure. Changing provider spelling would be an unsupported retry. Official public schema leaves provider as String!, with no accepted literal. A separate documented serviceConnect binds a service repository/branch across matching environments; neither its input nor the CLI's actual mutation contains environmentId.
+
+Official sources: Railway CLI 05ed159796ef6bf15de0dab388b1054c1af6f395 `src/commands/service.rs` lines114 and337–359; schema `src/gql/schema.json` (minified line1), objects Project.environments, Environment.serviceInstances/sourceEnvironment/canAccess, and DeploymentTrigger. Railway docs166e6d1b1eb53fa7a2ca551e9b3c1e5097ab72ed `content/docs/integrations/api.md` lines35–60 documents project-token environment scope; `content/docs/integrations/api/manage-services.md` lines127–135 documents serviceConnect.
+
+Completing a paginated project.environments connection does not attest that authorization did not filter it. No inspected official field provides such an attestation. Consequently even a singleton demo result is insufficient proof for service-wide mutation. Implement only inspect; preserve the scoped release guard's existing expectations and every old source byte. The receipt must never claim a configured main trigger or clinical release.
+
+Bound requests to fixed static queries plus only validated project/environment IDs and opaque cursors. Inspect all visible environments and service catalog, plus visible instance/trigger connections per environment. Project ownership must be exact. Skip denied environment content only by reporting access=false metadata, never by claiming inventory complete. Fixed demo must be present and canAccess=true, source and domain exact, and match the legacy validated scoped inventory. No patient data, config/variables, deployments or credentials are queried.
+
+All provider unknown errors collapse to fixed safe constants. Pagination uses bounded page/total sizes and rejects duplicate identifiers and cursors. Snapshot metadata is best-effort and must be reread for drift; non-atomic cross-resource observations cannot establish CAS or provider mutation safety. Existing scoped serializer remains trusted and unchanged.

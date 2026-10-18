@@ -1,0 +1,25 @@
+{
+  "baseSha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6",
+  "files": [
+    {
+      "file": ".github/workflows/inspect-demo-source-topology.yml",
+      "bytes": 1786,
+      "sha256": "d12b84e4eba6c2eac2ab843b4c63bb46bdaecf9f0b47a0847666fd22fe3151b2"
+    },
+    {
+      "file": "scripts/automation/inspect-demo-source-topology.mjs",
+      "bytes": 13592,
+      "sha256": "005f4a72f1be0fafaed29013702307fbe4d3f1f291032eed4cb1c1a79a00f488"
+    },
+    {
+      "file": "scripts/automation/inspect-demo-source-topology.test.mjs",
+      "bytes": 24698,
+      "sha256": "2fbc450bd71b83ea3fe4c3ff96818f43317c13cf4099d4d2c5601a3003932a75"
+    },
+    {
+      "file": "artifacts/task-validation/standalone-pr-491/codex-followup-1/task-contract.md",
+      "bytes": 3443,
+      "sha256": "8aad0290ebfd9662685c34cd2b9482721a9a754bc3696edfd6df3d838aa1301c"
+    }
+  ]
+}
