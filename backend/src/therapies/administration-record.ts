@@ -98,6 +98,11 @@ export async function confirmTherapyAdministration(
       singleDayDose,
     });
     if (existing?.stato === 'erogata') throw new TherapyAlreadyAdministeredError();
+    if (input.expectedStato === 'non_erogata' && existing?.stato !== 'non_erogata')
+      throw new TherapyWriteInputError(
+        'La dose rifiutata non è più disponibile: rileggi il registro.',
+        409,
+      );
     if (input.expectedStato && existing && existing.stato !== input.expectedStato)
       throw new TherapyWriteInputError(
         'La dose non è più da erogare: rileggi il giro prima di registrare.',

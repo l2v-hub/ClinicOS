@@ -60,7 +60,11 @@ test('nighttime therapy and handover signals compare local clinical times consis
       ],
     },
   ];
-  assert.deepEqual(collectTherapiesDue(source, now, 15), { overdue: [], dueSoon: [] });
+  assert.deepEqual(collectTherapiesDue(source, now, 15), {
+    overdue: [],
+    dueSoon: [],
+    toVerify: [],
+  });
   assert.equal(
     isConsegnaOverdue({ stato: 'aperta', scadenza: '2026-10-13', oraScadenza: '00:45' }, now),
     false,

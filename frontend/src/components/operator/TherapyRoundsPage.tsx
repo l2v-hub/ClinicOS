@@ -1,7 +1,8 @@
+import { TherapyVerificationPanel } from '../shared/TherapyVerificationPanel';
 import { useEffect, useMemo, useState } from 'react';
 import type {
   TherapyActionInfo,
-  TherapySlot,
+  TherapyReadGroup,
   TherapySlotPageInfo,
   MotivoNonErogazione,
 } from '../../types';
@@ -47,7 +48,7 @@ export interface TherapyRoundsEntry {
 }
 
 interface Props {
-  slots: TherapySlot[];
+  slots: TherapyReadGroup[];
   loading: boolean;
   error: string | null;
   pageInfo: TherapySlotPageInfo;
@@ -264,6 +265,7 @@ export function TherapyRoundsPage({
           </div>
         </div>
       )}
+      {ready && mode === 'giro' && <TherapyVerificationPanel groups={slots} />}
       <div className="giro-tools">
         <div className="ds-chip-group" role="group" aria-label="Vista della terapia">
           <button

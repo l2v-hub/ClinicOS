@@ -1,4 +1,4 @@
-import type { TherapySlot } from '../types';
+import type { TherapyReadGroup } from '../types';
 import { facilityLocalMinute } from './facilityTime';
 import type { PatientLocationData } from './patientIdentity';
 
@@ -68,11 +68,12 @@ const text = (value: unknown, fallback: string) =>
   typeof value === 'string' && value.trim() ? value : fallback;
 
 export function summarizeDashboardTherapies(
-  today: TherapySlot[],
-  tomorrow: TherapySlot[],
+  today: TherapyReadGroup[],
+  tomorrow: TherapyReadGroup[],
   now: Date,
 ) {
   const calendar = therapyCalendar(now);
+  let daVerificare = 0;
   let totale = 0;
   let daFare = 0;
   let fatte = 0;
@@ -85,6 +86,13 @@ export function summarizeDashboardTherapies(
   for (const [dayOffset, slots] of [today, tomorrow].entries()) {
     const data = dayOffset === 0 ? calendar.oggi : calendar.domani;
     for (const slot of slots) {
+      if (slot.kind === 'verification') {
+        if (dayOffset === 0) {
+          daVerificare += slot.summary.total;
+          totale += slot.summary.total;
+        }
+        continue;
+      }
       for (const patient of slot.patients) {
         for (const administration of patient.administrations) {
           const time = therapyTime(administration.scheduledTime);
@@ -169,6 +177,8 @@ export function summarizeDashboardTherapies(
   );
   return {
     totale,
+    daVerificare,
+    verificationGroups: [...today, ...tomorrow].filter((group) => group.kind === 'verification'),
     daFare,
     fatte,
     nonErogate,

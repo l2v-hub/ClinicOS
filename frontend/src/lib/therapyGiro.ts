@@ -1,3 +1,4 @@
+import { isScheduledTherapySlot, type TherapyReadGroup } from '../types';
 // Giro terapia: regole delle fasce (conteggi, fascia iniziale) e dei motivi di non somministrazione.
 import type {
   MotivoNonErogazione,
@@ -72,9 +73,9 @@ export interface GiroTime {
   pending: number;
 }
 
-export function giroTimes(slots: TherapySlot[]): GiroTime[] {
+export function giroTimes(slots: TherapyReadGroup[]): GiroTime[] {
   const byTime = new Map<string, GiroTime>();
-  for (const slot of sortedSlots(slots)) {
+  for (const slot of sortedSlots(slots.filter(isScheduledTherapySlot))) {
     for (const patient of slot.patients) {
       for (const a of patient.administrations) {
         const ora = a.scheduledTime || slot.ora;
@@ -112,11 +113,11 @@ export function initialGiroTime(times: GiroTime[]): string | null {
 
 /** Le somministrazioni di UN paziente a un'ora reale, dal giro del giorno (calendario in cartella). */
 export function patientGiroTime(
-  slots: TherapySlot[],
+  slots: TherapyReadGroup[],
   patientId: string,
   ora: string,
 ): GiroTime | null {
-  const own = slots.map((slot) => ({
+  const own = slots.filter(isScheduledTherapySlot).map((slot) => ({
     ...slot,
     patients: (slot.patients ?? []).filter((p) => p.patientId === patientId),
   }));
@@ -125,11 +126,11 @@ export function patientGiroTime(
 
 /** Tutte le dosi del giorno di UN farmaco di UN paziente, per ora reale (pannello del farmaco). */
 export function patientDrugTimes(
-  slots: TherapySlot[],
+  slots: TherapyReadGroup[],
   patientId: string,
   therapyId: string,
 ): GiroTime[] {
-  const own = slots.map((slot) => ({
+  const own = slots.filter(isScheduledTherapySlot).map((slot) => ({
     ...slot,
     patients: (slot.patients ?? [])
       .filter((p) => p.patientId === patientId)

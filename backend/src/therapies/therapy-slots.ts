@@ -14,7 +14,12 @@ import {
   scheduleDoseLabel,
   type ScheduleInput,
 } from '../lib/therapy-dose.js';
-import { earliestOra, oneTimeSlot, therapyBandEnabled } from './slot-scheduling.js';
+import {
+  earliestOra,
+  oneTimeSlot,
+  oneTimeVerificationReason,
+  therapyBandEnabled,
+} from './slot-scheduling.js';
 import {
   findTherapyPageAdministrations,
   legacyAdministrationKey,
@@ -23,6 +28,8 @@ import { TherapySlotCapacityError } from './therapy-capacity.js';
 import {
   therapyWhereForAccess,
   therapyBandEnabledSql,
+  normalizedTherapyClockSql,
+  oneTimeVerificationWhereSql,
   type TherapyPatientAccess,
 } from './therapy-query.js';
 import {
@@ -73,7 +80,33 @@ export interface SlotPatient {
   administrations: SlotAdministration[];
 }
 
+export interface TherapyVerificationItem {
+  therapyId: string;
+  drugName: string;
+  status: 'to_verify';
+  reason: 'missing_time' | 'invalid_time' | 'conflicting_schedule';
+  scheduledTime: null;
+  quantityLabel: null;
+  dosage: null;
+  canAdminister: false;
+}
+export interface TherapyVerificationGroup {
+  kind: 'verification';
+  id: 'therapy-verification';
+  date: string;
+  label: 'Da verificare';
+  fascia: null;
+  ora: null;
+  summary: { total: number; verification: number };
+  patients: Array<Omit<SlotPatient, 'administrations'> & { items: TherapyVerificationItem[] }>;
+}
+export type TherapyReadGroup = TherapySlot | TherapyVerificationGroup;
+export function isScheduledTherapySlot(group: TherapyReadGroup): group is TherapySlot {
+  return group.kind !== 'verification';
+}
+
 export interface TherapySlot {
+  kind?: 'scheduled';
   id: string;
   fascia: string;
   label: string;
@@ -83,7 +116,7 @@ export interface TherapySlot {
 }
 
 export interface TherapySlotSourcePage {
-  slots: TherapySlot[];
+  slots: TherapyReadGroup[];
   roster?: AppliedRosterOrder;
   pageInfo: {
     hasMore: boolean;
@@ -129,7 +162,7 @@ export async function buildTherapySlotExactSummary(
         pt."patientId",
         pt."farmacoNome",
         band.fascia,
-        COALESCE(schedule.time, CASE WHEN pt.tipo = 'una_tantum' THEN pt."orarioSomministrazione" END, band.ora) AS "scheduledTime",
+        COALESCE(CASE WHEN pt.tipo = 'una_tantum' THEN ${normalizedTherapyClockSql()} ELSE schedule.time END, band.ora) AS "scheduledTime",
         (
           SELECT count(*)::int FROM "TherapySchedule" bs
           WHERE bs."therapyId" = pt.id AND bs.fascia = band.fascia
@@ -286,7 +319,12 @@ async function buildTherapySlotSourcePage(
   }
   const hasMore = sourceRows.length > limit;
   const therapies = sourceRows.slice(0, limit);
-  if (therapies.some((therapy) => therapy.schedules.length > MAX_THERAPY_SCHEDULES)) {
+  if (
+    therapies.some(
+      (therapy) =>
+        therapy.tipo !== 'una_tantum' && therapy.schedules.length > MAX_THERAPY_SCHEDULES,
+    )
+  ) {
     throw new TherapySlotCapacityError(
       `Terapia con troppi orari (massimo ${MAX_THERAPY_SCHEDULES})`,
     );
@@ -478,8 +516,56 @@ async function buildTherapySlotSourcePage(
     };
   });
 
+  const verificationPatients = new Map<string, TherapyVerificationGroup['patients'][number]>();
+  for (const therapy of validTherapies) {
+    const reason = oneTimeVerificationReason(therapy);
+    if (!reason) continue;
+    const patient = identities.get(therapy.patientId);
+    if (!patient) continue;
+    if (!verificationPatients.has(therapy.patientId)) {
+      const location = patient.location;
+      verificationPatients.set(therapy.patientId, {
+        patientId: therapy.patientId,
+        firstName: patient.firstName,
+        lastName: patient.lastName,
+        codiceFiscale: patient.codiceFiscale,
+        dateOfBirth: patient.dateOfBirth,
+        location,
+        room: location.room ?? 'Non assegnato',
+        bed: location.bed ?? 'Non assegnato',
+        items: [],
+      });
+    }
+    verificationPatients.get(therapy.patientId)!.items.push({
+      therapyId: therapy.id,
+      drugName: therapy.farmacoNome,
+      status: 'to_verify',
+      reason,
+      scheduledTime: null,
+      quantityLabel: null,
+      dosage: null,
+      canAdminister: false,
+    });
+  }
+  const verificationTotal = [...verificationPatients.values()].reduce(
+    (sum, patient) => sum + patient.items.length,
+    0,
+  );
+  const verification: TherapyVerificationGroup = {
+    kind: 'verification',
+    id: 'therapy-verification',
+    date,
+    label: 'Da verificare',
+    fascia: null,
+    ora: null,
+    summary: { total: verificationTotal, verification: verificationTotal },
+    patients: [...verificationPatients.values()],
+  };
   return {
-    slots: slots.filter((slot) => slot.patients.length > 0),
+    slots: [
+      ...slots.filter((slot) => slot.patients.length > 0),
+      ...(verificationTotal ? [verification] : []),
+    ],
     pageInfo: {
       hasMore,
       nextId: hasMore && therapies.length > 0 ? therapies[therapies.length - 1]!.id : null,
@@ -492,7 +578,7 @@ async function buildTherapySlotSourcePage(
 export async function buildTherapySlots(
   date: string,
   access: TherapyPatientAccess = {},
-): Promise<TherapySlot[]> {
+): Promise<TherapyReadGroup[]> {
   const page = await buildTherapySlotSourcePage(date, access, MAX_THERAPY_SLOT_SOURCE_ROWS);
   if (page.pageInfo.hasMore) {
     throw new TherapySlotCapacityError(
@@ -532,7 +618,12 @@ export async function buildTherapySlotPage(
       return page;
     }
     const exactSummary = await buildTherapySlotExactSummary(date, access, tx);
-    const pageByFascia = new Map(page.slots.map((slot) => [slot.fascia, slot]));
+    const verification = page.slots.find(
+      (slot): slot is TherapyVerificationGroup => !isScheduledTherapySlot(slot),
+    );
+    const pageByFascia = new Map(
+      page.slots.filter(isScheduledTherapySlot).map((slot) => [slot.fascia, slot]),
+    );
     page.slots = FASCE.flatMap((fascia) => {
       const summary = exactSummary.get(fascia.fascia);
       if (!summary?.total) return [];
@@ -548,6 +639,21 @@ export async function buildTherapySlotPage(
         },
       ];
     });
+    const [verificationCount] = await tx.$queryRaw<Array<{ total: number }>>(Prisma.sql`
+      SELECT count(*)::int AS total FROM "PatientTherapy" pt JOIN "Patient" p ON p.id = pt."patientId"
+      WHERE ${oneTimeVerificationWhereSql(date, access)}`);
+    const total = Number(verificationCount?.total ?? 0);
+    if (total)
+      page.slots.push({
+        kind: 'verification',
+        id: 'therapy-verification',
+        date,
+        label: 'Da verificare',
+        fascia: null,
+        ora: null,
+        summary: { total, verification: total },
+        patients: verification?.patients ?? [],
+      });
     return page;
   });
 }

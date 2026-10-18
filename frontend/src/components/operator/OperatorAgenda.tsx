@@ -1,3 +1,5 @@
+import { isScheduledTherapySlot, type TherapyReadGroup } from '../../types';
+import { TherapyVerificationPanel } from '../shared/TherapyVerificationPanel';
 import { useState, useMemo, Fragment, useEffect } from 'react';
 import { appointmentLanding, type PatientLanding } from '../../lib/patientTargetResolver';
 import type {
@@ -43,7 +45,7 @@ interface OperatorAgendaProps {
   onRetryAppointments?: () => void;
   onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;
   onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
-  therapySlots?: TherapySlot[];
+  therapySlots?: TherapyReadGroup[];
   loadingTherapySlots?: boolean;
   therapyLoadError?: string | null;
   therapyLoadMoreError?: string | null;
@@ -124,7 +126,7 @@ export function OperatorAgenda({
   onRetryAppointments,
   onLoadAppointments,
   onSelectPaziente,
-  therapySlots,
+  therapySlots: therapyGroups,
   loadingTherapySlots = false,
   therapyLoadError = null,
   therapyLoadMoreError = null,
@@ -144,6 +146,7 @@ export function OperatorAgenda({
   const [filtroStato, setFiltroStato] = useState<FiltroStatoAppuntamento>('tutti');
   const [aptForm, setAptForm] = useState<{ data: string; ora: string } | null>(null);
   const [selectedAptId, setSelectedAptId] = useState<string | null>(null);
+  const therapySlots = therapyGroups?.filter(isScheduledTherapySlot);
   const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);
   const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
@@ -392,6 +395,9 @@ export function OperatorAgenda({
             Riprova
           </button>
         </div>
+      )}
+      {!loadingTherapySlots && !therapyLoadError && (
+        <TherapyVerificationPanel groups={therapyGroups ?? []} />
       )}
       {loadingTherapySlots && <div className="empty-state-card">Caricamento terapie…</div>}
       {!loadingTherapySlots && therapyLoadError && (

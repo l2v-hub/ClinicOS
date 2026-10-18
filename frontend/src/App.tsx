@@ -128,7 +128,7 @@ import type {
   StatoNota,
   CartellaPaziente,
   ClinicalOverview,
-  TherapySlot,
+  TherapyReadGroup,
   MotivoNonErogazione,
   TipoIntervento,
   ConsegnaOverview,
@@ -709,7 +709,7 @@ export default function App() {
     hasMore: false,
     nextCursor: null,
   });
-  const [therapySlots, setTherapySlots] = useState<TherapySlot[]>([]);
+  const [therapySlots, setTherapySlots] = useState<TherapyReadGroup[]>([]);
   // Giorno del giro caricato: la pagina Terapia riparte da qui quando viene rimontata.
   const [therapyDate, setTherapyDate] = useState(localIsoDate);
   const [loadingTherapySlots, setLoadingTherapySlots] = useState(true);

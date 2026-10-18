@@ -1,10 +1,12 @@
+import { TherapyVerificationPanel } from '../../shared/TherapyVerificationPanel';
+import { parseTherapySlots } from '../../../lib/therapySlotPage';
 // «Tocca un farmaco → somministra lì» (UX 2026-10-03, regola del proprietario): pannello in linea
 // sotto la riga del farmaco con le dosi del giorno di QUEL farmaco e, per chi può, le stesse azioni
 // del giro (TherapyGiroRows: Somministra / Non somm. con motivo, «altro» con nota obbligatoria).
 // I farmaci «al bisogno» hanno «Somministra al bisogno» con l'indicazione obbligatoria.
 // Nessuna regola nuova: dose e ora le decide il server, che rifiuta i ruoli non autorizzati.
 import { useEffect, useRef, useState } from 'react';
-import type { MotivoNonErogazione, PatientTherapyAPI, TherapySlot } from '../../../types';
+import type { MotivoNonErogazione, PatientTherapyAPI, TherapyReadGroup } from '../../../types';
 import { API_URL } from '../../../config';
 import { cachedGetJson } from '../../../lib/cachedFetch';
 import { useRequiresConfirmation } from '../../../lib/capabilities';
@@ -96,7 +98,9 @@ function ScheduledPanel({
   const [revision, setRevision] = useState(0);
   const key = `${patientId}|${therapy.id}|${date}|${revision}`;
   const [loaded, setLoaded] = useState<
-    { key: string; status: 'ready'; slots: TherapySlot[] } | { key: string; status: 'error' } | null
+    | { key: string; status: 'ready'; slots: TherapyReadGroup[] }
+    | { key: string; status: 'error' }
+    | null
   >(null);
   const state = loaded?.key === key ? loaded : { status: 'loading' as const };
   const [feedback, setFeedback] = useState<Feedback>(null);
@@ -104,14 +108,16 @@ function ScheduledPanel({
 
   useEffect(() => {
     let active = true;
-    cachedGetJson<TherapySlot[]>(`${API_URL}/therapy-slots?date=${date}`).then(
-      (slots) => {
-        if (active) setLoaded({ key, status: 'ready', slots: Array.isArray(slots) ? slots : [] });
-      },
-      () => {
-        if (active) setLoaded({ key, status: 'error' });
-      },
-    );
+    cachedGetJson<unknown>(`${API_URL}/therapy-slots?date=${date}`)
+      .then(parseTherapySlots)
+      .then(
+        (slots) => {
+          if (active) setLoaded({ key, status: 'ready', slots });
+        },
+        () => {
+          if (active) setLoaded({ key, status: 'error' });
+        },
+      );
     return () => {
       active = false;
     };
@@ -174,7 +180,14 @@ function ScheduledPanel({
         </div>
       )}
       {state.status === 'ready' && times.length === 0 && (
-        <p className="drug-dose-panel__msg">Nessuna dose prevista per questo giorno.</p>
+        <p className="drug-dose-panel__msg">Nessuna dose programmata per questo giorno.</p>
+      )}
+      {state.status === 'ready' && (
+        <TherapyVerificationPanel
+          groups={state.slots}
+          patientId={patientId}
+          therapyId={therapy.id}
+        />
       )}
       {state.status === 'ready' &&
         times.map((time) => (

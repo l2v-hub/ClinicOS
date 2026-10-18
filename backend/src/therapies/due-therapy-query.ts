@@ -1,9 +1,14 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 import { facilityClock } from '../lib/facility-time.js';
-import type { TherapyDueItem } from '../ai/assistant/facility-signals.js';
+import type { TherapyDueItem, TherapyToVerifyItem } from '../ai/assistant/facility-signals.js';
 import { scheduleDoseLabel } from '../lib/therapy-dose.js';
-import { therapyBandEnabledSql, type TherapyPatientAccess } from './therapy-query.js';
+import {
+  therapyBandEnabledSql,
+  normalizedTherapyClockSql,
+  oneTimeVerificationWhereSql,
+  type TherapyPatientAccess,
+} from './therapy-query.js';
 
 interface TherapyDueRow {
   bucket: 'overdue' | 'dueSoon';
@@ -30,18 +35,20 @@ export interface TherapyDueResult {
   dueSoonCount: number;
   overdue: TherapyDueItem[];
   dueSoon: TherapyDueItem[];
+  toVerifyCount: number;
+  toVerify: TherapyToVerifyItem[];
   truncated: boolean;
 }
 
 function therapyAccessSql(access: TherapyPatientAccess): Prisma.Sql {
+  const predicates: Prisma.Sql[] = [];
   if (Array.isArray(access.patientIds)) {
-    if (access.patientIds.length === 0) return Prisma.sql`AND FALSE`;
-    return Prisma.sql`AND pt."patientId" IN (${Prisma.join([...access.patientIds])})`;
+    if (!access.patientIds.length) return Prisma.sql`AND FALSE`;
+    predicates.push(Prisma.sql`pt."patientId" IN (${Prisma.join([...access.patientIds])})`);
   }
-  if (access.registeredById) {
-    return Prisma.sql`AND p."registeredById" = ${access.registeredById}`;
-  }
-  return Prisma.empty;
+  if (access.registeredById)
+    predicates.push(Prisma.sql`p."registeredById" = ${access.registeredById}`);
+  return predicates.length ? Prisma.sql`AND ${Prisma.join(predicates, ' AND ')}` : Prisma.empty;
 }
 
 /**
@@ -74,7 +81,7 @@ export async function findTherapiesDue(
         p."firstName",
         p."lastName",
         band.fascia,
-        COALESCE(schedule.time, CASE WHEN pt.tipo = 'una_tantum' THEN pt."orarioSomministrazione" END, band."defaultTime") AS "scheduledTime",
+        COALESCE(CASE WHEN pt.tipo = 'una_tantum' THEN ${normalizedTherapyClockSql()} ELSE schedule.time END, band."defaultTime") AS "scheduledTime",
         (
           SELECT count(*)::int FROM "TherapySchedule" bs
           WHERE bs."therapyId" = pt.id AND bs.fascia = band.fascia
@@ -207,7 +214,7 @@ export async function findTherapiesDue(
       fascia,
       "therapyId",
       "drugName",
-      dosaggio,
+      dosaggio AS dosage,
       "commercialStrengthValue",
       "commercialStrengthUnit",
       "quantityNumerator",
@@ -219,6 +226,20 @@ export async function findTherapiesDue(
     WHERE sample_rank <= ${boundedSample}
     ORDER BY bucket ASC, "scheduledMinutes" ASC, "therapyId" ASC
   `);
+
+  // Count before LIMIT; one base row per therapy, irrespective of flags or schedule multiplicity.
+  const verificationRows = await prisma.$queryRaw<
+    Array<TherapyToVerifyItem & { totalCount: number }>
+  >(Prisma.sql`
+    SELECT pt.id AS "therapyId", pt."patientId", pt."farmacoNome" AS "drugName",
+      trim(p."lastName" || ' ' || p."firstName") AS "patientName",
+      'to_verify'::text AS status, NULL::text AS fascia, NULL::text AS "scheduledTime",
+      NULL::text AS dosage, false AS "canAdminister", count(*) OVER()::int AS "totalCount"
+    FROM "PatientTherapy" pt JOIN "Patient" p ON p.id = pt."patientId"
+    WHERE ${oneTimeVerificationWhereSql(date, access)}
+    ORDER BY pt.id ASC LIMIT ${boundedSample}`);
+  const toVerifyCount = Number(verificationRows[0]?.totalCount ?? 0);
+  const toVerify = verificationRows.map(({ totalCount: _total, ...item }) => item);
 
   const toItem = (row: TherapyDueRow): TherapyDueItem => ({
     patientId: row.patientId,
@@ -255,6 +276,11 @@ export async function findTherapiesDue(
     dueSoonCount,
     overdue: overdueRows.map(toItem),
     dueSoon: dueSoonRows.map(toItem),
-    truncated: overdueCount > overdueRows.length || dueSoonCount > dueSoonRows.length,
+    toVerifyCount,
+    toVerify,
+    truncated:
+      overdueCount > overdueRows.length ||
+      dueSoonCount > dueSoonRows.length ||
+      toVerifyCount > toVerify.length,
   };
 }

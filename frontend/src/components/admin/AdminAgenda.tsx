@@ -1,3 +1,5 @@
+import { isScheduledTherapySlot, type TherapyReadGroup } from '../../types';
+import { TherapyVerificationPanel } from '../shared/TherapyVerificationPanel';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { appointmentLanding, type PatientLanding } from '../../lib/patientTargetResolver';
 import type { Appuntamento, Operatore, TherapySlot, TherapySlotPageInfo } from '../../types';
@@ -35,7 +37,7 @@ interface AdminAgendaProps {
   onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
   /** Fasce terapia di reparto (GET /therapy-slots). In agenda admin sono di sola lettura:
    *  la firma di somministrazione resta un atto clinico dell'operatore erogante. */
-  therapySlots?: TherapySlot[];
+  therapySlots?: TherapyReadGroup[];
   loadingTherapySlots?: boolean;
   therapyLoadError?: string | null;
   therapyLoadMoreError?: string | null;
@@ -110,7 +112,7 @@ export function AdminAgenda({
   onRetryAppointments,
   onLoadAppointments,
   onSelectPaziente,
-  therapySlots,
+  therapySlots: therapyGroups,
   loadingTherapySlots = false,
   therapyLoadError = null,
   therapyLoadMoreError = null,
@@ -130,6 +132,7 @@ export function AdminAgenda({
     null,
   );
   const [selectedAptId, setSelectedAptId] = useState<string | null>(null);
+  const therapySlots = therapyGroups?.filter(isScheduledTherapySlot);
   const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);
   const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
@@ -370,6 +373,9 @@ export function AdminAgenda({
             Riprova
           </button>
         </div>
+      )}
+      {!loadingTherapySlots && !therapyLoadError && (
+        <TherapyVerificationPanel groups={therapyGroups ?? []} />
       )}
       {loadingTherapySlots && <div className="empty-state-card">Caricamento terapie…</div>}
       {!loadingTherapySlots && therapyLoadError && (
