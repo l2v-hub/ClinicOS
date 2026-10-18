@@ -103,3 +103,19 @@ export function therapyWhereForAccess(
   if (access.registeredById) scope.push({ patient: { registeredById: access.registeredById } });
   return scope.length === 1 ? scope[0] : { AND: scope };
 }
+
+/** Same single-day identity and given-wins priority as recordedOneTimeOutcome. pt/p aliases are scoped. */
+export function recordedOneTimeOutcomeSql(
+  date: string,
+  identity = {
+    patientId: Prisma.sql`pt."patientId"`,
+    id: Prisma.sql`pt.id`,
+    drugName: Prisma.sql`pt."farmacoNome"`,
+  },
+) {
+  return Prisma.sql`SELECT ma.* FROM "MedicationAdministration" ma
+    WHERE ma.date = ${date} AND ma."patientId" = ${identity.patientId}
+      AND (ma."therapyId" = ${identity.id} OR (ma."therapyId" IS NULL AND ma."farmacoNome" = ${identity.drugName}))
+      AND ma.stato IN ('erogata', 'non_erogata')
+    ORDER BY (ma.stato = 'erogata') DESC, (ma."therapyId" IS NOT NULL) DESC, ma.id ASC LIMIT 1`;
+}

@@ -131,3 +131,27 @@ test('append failure retains accepted readonly details and exact total with boun
   const completeVerification = feed({ pageInfo: value.pageInfo });
   assert.doesNotMatch(render(completeVerification), /Carica altre verifiche/);
 });
+
+test('accepted agenda displays recorded given/refused outcome after serialized reload, no dose controls', () => {
+  for (const status of ['administered', 'not_administered'] as const) {
+    const value = feed();
+    value.groups[0].patients[0].items[0].recordedOutcome = {
+      administrationId: 'synthetic-record',
+      therapyId: 'therapy-a',
+      patientId: 'patient-a',
+      date,
+      status,
+      recordedAt: '2026-10-18T08:00:00.000Z',
+      recordedBy: 'Recorded operator',
+      notAdministeredReason: status === 'not_administered' ? 'rifiutata_paziente' : null,
+    };
+    value.groups = JSON.parse(JSON.stringify(value.groups));
+    const html = render(value);
+    assert.match(
+      html,
+      status === 'administered' ? /Già somministrata/ : /Già registrata come non somministrata/,
+    );
+    assert.match(html, /Recorded operator/);
+    assert.doesNotMatch(html, /<button|Somministra ora|compressa/);
+  }
+});

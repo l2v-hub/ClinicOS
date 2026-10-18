@@ -7,7 +7,12 @@ import express from 'express';
 import type { Server } from 'node:http';
 import { prisma } from '../../lib/prisma.js';
 import therapyRouter from '../therapy.js';
-import { buildTherapySlotPage, isScheduledTherapySlot } from '../../therapies/therapy-slots.js';
+import {
+  buildTherapySlotPage,
+  buildTherapySlots,
+  buildTherapySlotExactSummary,
+  isScheduledTherapySlot,
+} from '../../therapies/therapy-slots.js';
 import { findTherapiesDue } from '../../therapies/due-therapy-query.js';
 import { administrationBody } from '../../../../frontend/src/lib/therapyAdministrationWrite.js';
 import { dayKey } from '../../ai/assistant/facility-signals.js';
@@ -1274,5 +1279,252 @@ test('ordinary operators cannot read or mutate another owner patient; managers r
   } finally {
     await prisma.patient.delete({ where: { id: otherPatient.id } }).catch(() => {});
     await prisma.user.delete({ where: { id: otherUser.id } }).catch(() => {});
+  }
+});
+
+// Author adds this regression; execution requires fresh independent QA's synthetic database.
+test('ambiguous one-off recorded outcomes remain visible once per civil day and deny every new write', async () => {
+  const clinicalDate = '2033-04-06';
+  const actor = { id: ownerOperatorId, role: 'operatore' as const, name: 'Verified Owner' };
+  const therapies: Array<{ id: string; farmacoNome: string }> = [];
+  const expected = new Map<string, { status: string; recordId: string }>();
+  const recordedAt = new Date('2033-04-05T22:15:00.000Z'); // April 6 in Rome, April 5 UTC.
+  const add = async (name: string, clock: string | null, stato: string | null, legacy = false) => {
+    const therapy = await prisma.patientTherapy.create({
+      data: {
+        patientId,
+        farmacoNome: 'Synthetic recorded one-off ' + name,
+        dosaggio: 'Prescribed synthetic dose',
+        tipo: 'una_tantum',
+        stato: 'attiva',
+        dataInizio: clinicalDate,
+        dataSomministrazione: clinicalDate,
+        orarioSomministrazione: clock,
+        fasceMattina: true,
+        fasceSera: true,
+      },
+    });
+    therapies.push(therapy);
+    if (name.startsWith('conflict'))
+      await prisma.therapySchedule.create({
+        data: {
+          therapyId: therapy.id,
+          fascia: 'sera',
+          time: '20:00',
+          quantityNumerator: 1,
+          quantityDenominator: 1,
+          administrationUnit: 'compressa',
+        },
+      });
+    if (stato) {
+      const record = await prisma.medicationAdministration.create({
+        data: {
+          therapyId: legacy ? null : therapy.id,
+          patientId,
+          farmacoNome: therapy.farmacoNome,
+          farmacoDose: 'Historical synthetic dose',
+          date: clinicalDate,
+          fascia: 'notte',
+          ora: '00:15',
+          stato,
+          operatoreNome: 'Recorded synthetic operator',
+          confirmedAt: stato === 'erogata' ? recordedAt : null,
+          updatedAt: recordedAt,
+          motivo: stato === 'non_erogata' ? 'rifiutata_paziente' : null,
+        },
+      });
+      expected.set(therapy.id, {
+        status: stato === 'erogata' ? 'administered' : 'not_administered',
+        recordId: record.id,
+      });
+    }
+    return therapy;
+  };
+  try {
+    for (const [name, clock] of [
+      ['missing', null],
+      ['invalid', '99:00'],
+      ['conflict', '08:30'],
+    ] as const)
+      for (const stato of ['erogata', 'non_erogata']) await add(name + stato, clock, stato);
+    await add('legacy-given', null, 'erogata', true);
+    await add('legacy-refused', null, 'non_erogata', true);
+    const unrecorded = await add('unrecorded', null, null);
+    const given = therapies[0];
+    // Contradictory cross-band duplicate must never hide an existing given outcome.
+    await prisma.medicationAdministration.create({
+      data: {
+        therapyId: given.id,
+        patientId,
+        farmacoNome: given.farmacoNome,
+        farmacoDose: 'Historical synthetic dose',
+        date: clinicalDate,
+        fascia: 'sera',
+        ora: '20:00',
+        stato: 'non_erogata',
+        motivo: 'rifiutata_paziente',
+      },
+    });
+    // Legacy duplicates at the same band/time: given wins even when a later id is refused.
+    const legacyGiven = therapies[6];
+    await prisma.medicationAdministration.create({
+      data: {
+        id: 'zz-recorded-legacy-' + randomUUID(),
+        patientId,
+        farmacoNome: legacyGiven.farmacoNome,
+        farmacoDose: 'Historical synthetic dose',
+        date: clinicalDate,
+        fascia: 'notte',
+        ora: '00:15',
+        stato: 'non_erogata',
+      },
+    });
+    // A record on another date must not be attached to today's unrecorded verification.
+    await prisma.medicationAdministration.create({
+      data: {
+        therapyId: unrecorded.id,
+        patientId,
+        farmacoNome: unrecorded.farmacoNome,
+        farmacoDose: 'Historical synthetic dose',
+        date: '2033-04-05',
+        fascia: 'mattina',
+        ora: '08:00',
+        stato: 'erogata',
+      },
+    });
+    const verify = (groups: Awaited<ReturnType<typeof buildTherapySlots>>, exact = true) => {
+      const group = groups.find((g) => g.kind === 'verification');
+      assert.ok(group && group.kind === 'verification');
+      if (exact)
+        assert.deepEqual(group.summary, {
+          total: 9,
+          verification: 9,
+          administered: 4,
+          notAdministered: 4,
+          unrecorded: 1,
+        });
+      const items = group.patients.flatMap((p) => p.items);
+      for (const item of items) {
+        assert.equal(item.canAdminister, false);
+        assert.equal(item.scheduledTime, null);
+        assert.equal(item.quantityLabel, null);
+        assert.equal(item.dosage, null);
+        const held = expected.get(item.therapyId);
+        if (!held) {
+          assert.equal(item.recordedOutcome, null);
+          continue;
+        }
+        assert.equal(item.recordedOutcome?.status, held.status);
+        assert.equal(item.recordedOutcome?.administrationId, held.recordId);
+        assert.equal(item.recordedOutcome?.date, clinicalDate);
+        assert.equal(item.recordedOutcome?.patientId, patientId);
+        assert.equal(item.recordedOutcome?.recordedBy, 'Recorded synthetic operator');
+        assert.equal(item.recordedOutcome?.recordedAt, recordedAt.toISOString());
+      }
+      assert.equal(
+        groups
+          .filter(isScheduledTherapySlot)
+          .flatMap((g) => g.patients.flatMap((p) => p.administrations))
+          .filter((a) => expected.has(a.therapyId)).length,
+        0,
+      );
+      return items;
+    };
+    const access = { patientIds: [patientId], registeredById: ownerOperatorId };
+    assert.equal(verify(await buildTherapySlots(clinicalDate, access)).length, 9);
+    const exact = await buildTherapySlotExactSummary(clinicalDate, access);
+    assert.deepEqual(exact.get('verification'), {
+      total: 9,
+      administered: 4,
+      notAdministered: 4,
+      pending: 1,
+    });
+    const paged: string[] = [];
+    let cursor: string | undefined;
+    let pages = 0;
+    do {
+      const page = await buildTherapySlotPage(
+        clinicalDate,
+        access,
+        { limit: 2, ...(cursor ? { cursor } : {}) },
+        actor,
+      );
+      const group = page.slots.find((g) => g.kind === 'verification');
+      if (group) paged.push(...verify(page.slots, !cursor).map((item) => item.therapyId));
+      cursor = page.pageInfo.nextCursor ?? undefined;
+      assert.ok(++pages < 20);
+    } while (cursor);
+    assert.equal(paged.length, 9);
+    assert.equal(new Set(paged).size, 9);
+    const due = await findTherapiesDue(
+      clinicalDate,
+      access,
+      new Date('2033-04-06T21:30:00Z'),
+      60,
+      50,
+    );
+    assert.equal(due.toVerifyCount, 1);
+    assert.equal(due.toVerify[0].therapyId, unrecorded.id);
+    assert.ok([...due.overdue, ...due.dueSoon].every((item) => !expected.has(item.therapyId)));
+    const before = await prisma.medicationAdministration.findMany({
+      where: { patientId, farmacoNome: { in: therapies.map((t) => t.farmacoNome) } },
+      orderBy: { id: 'asc' },
+    });
+    const receiptsBefore = await prisma.therapyAdministrationReceipt.count({
+      where: { patientId },
+    });
+    for (const therapy of therapies)
+      for (const endpoint of ['confirm', 'not-administered']) {
+        const response = await fetch(`${base}/therapy-slots/${endpoint}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Operator-Id': ownerOperatorId,
+            'X-Operator-Role': 'operatore',
+          },
+          body: JSON.stringify({
+            patientId,
+            therapyId: therapy.id,
+            date: clinicalDate,
+            fascia: 'mattina',
+            scheduledTime: '08:30',
+            motivo: 'rifiutata_paziente',
+            expectedStato: 'da_erogare',
+            requestId: randomUUID(),
+          }),
+        });
+        assert.equal(response.status, 409);
+      }
+    const after = await prisma.medicationAdministration.findMany({
+      where: { patientId, farmacoNome: { in: therapies.map((t) => t.farmacoNome) } },
+      orderBy: { id: 'asc' },
+    });
+    assert.deepEqual(after, before);
+    assert.equal(
+      await prisma.therapyAdministrationReceipt.count({ where: { patientId } }),
+      receiptsBefore,
+    );
+    for (const deniedAccess of [
+      { patientIds: [] },
+      { patientIds: [patientId], registeredById: 'foreign-operator' },
+    ]) {
+      assert.deepEqual(
+        (await buildTherapySlotPage(clinicalDate, deniedAccess, { limit: 100 }, actor)).slots,
+        [],
+      );
+      assert.equal(
+        (await findTherapiesDue(clinicalDate, deniedAccess, new Date('2033-04-06T21:30:00Z'), 60))
+          .toVerifyCount,
+        0,
+      );
+    }
+  } finally {
+    await prisma.therapyAdministrationReceipt.deleteMany({
+      where: { patientId, result: { path: ['date'], equals: clinicalDate } },
+    });
+    await prisma.medicationAdministration.deleteMany({
+      where: { patientId, farmacoNome: { in: therapies.map((t) => t.farmacoNome) } },
+    });
+    await prisma.patientTherapy.deleteMany({ where: { id: { in: therapies.map((t) => t.id) } } });
   }
 });

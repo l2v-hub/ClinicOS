@@ -7,6 +7,7 @@ import {
   therapyBandEnabledSql,
   normalizedTherapyClockSql,
   oneTimeVerificationWhereSql,
+  recordedOneTimeOutcomeSql,
   type TherapyPatientAccess,
 } from './therapy-query.js';
 
@@ -162,6 +163,11 @@ export async function findTherapiesDue(
           + split_part(due."scheduledTime", ':', 2)::int
         ) AS "scheduledMinutes"
       FROM due_therapy due
+      LEFT JOIN LATERAL (${recordedOneTimeOutcomeSql(date, {
+        patientId: Prisma.sql`due."patientId"`,
+        id: Prisma.sql`due."therapyId"`,
+        drugName: Prisma.sql`due."drugName"`,
+      })}) day_record ON due.tipo = 'una_tantum'
       -- A band with ONE prescribed dose has one record for the day whatever its hour (the time
       -- may have moved after the dose was given); several doses match by exact hour.
       LEFT JOIN LATERAL (
@@ -169,6 +175,7 @@ export async function findTherapiesDue(
         FROM "MedicationAdministration" ma
         WHERE ma."therapyId" = due."therapyId"
           AND ma.date = ${date}
+          AND ma."patientId" = due."patientId"
           AND (due.tipo = 'una_tantum' OR (
             ma.fascia = due.fascia
             AND (ma.ora = due."scheduledTime" OR due."bandDoses" <= 1)
@@ -182,8 +189,8 @@ export async function findTherapiesDue(
         AND legacy."farmacoNome" = due."drugName"
         AND legacy.fascia = due.fascia
         AND legacy.ora = due."scheduledTime"
-      WHERE (COALESCE(modern.stato, legacy.stato) IS NULL
-        OR COALESCE(modern.stato, legacy.stato) NOT IN ('erogata', 'non_erogata'))
+      WHERE (COALESCE(day_record.stato, modern.stato, legacy.stato) IS NULL
+        OR COALESCE(day_record.stato, modern.stato, legacy.stato) NOT IN ('erogata', 'non_erogata'))
         AND due."scheduledTime" ~ '^([01][0-9]|2[0-3]):[0-5][0-9]$'
     ), categorized AS (
       SELECT
@@ -238,6 +245,7 @@ export async function findTherapiesDue(
       NULL::text AS dosage, false AS "canAdminister", count(*) OVER()::int AS "totalCount"
     FROM "PatientTherapy" pt JOIN "Patient" p ON p.id = pt."patientId"
     WHERE ${oneTimeVerificationWhereSql(date, access)}
+      AND NOT EXISTS (${recordedOneTimeOutcomeSql(date)})
     ORDER BY pt.id ASC LIMIT ${boundedSample}`);
   const toVerifyCount = Number(verificationRows[0]?.totalCount ?? 0);
   const toVerify = verificationRows.map(({ totalCount: _total, ...item }) => item);

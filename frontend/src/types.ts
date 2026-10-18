@@ -1169,6 +1169,16 @@ export interface TherapySlotSummary {
   pending: number;
 }
 
+export interface TherapyRecordedOutcome {
+  administrationId: string;
+  therapyId: string;
+  patientId: string;
+  date: string;
+  status: 'administered' | 'not_administered';
+  recordedAt: string | null;
+  recordedBy: string | null;
+  notAdministeredReason: string | null;
+}
 export interface TherapyVerificationItem {
   therapyId: string;
   drugName: string;
@@ -1178,6 +1188,7 @@ export interface TherapyVerificationItem {
   quantityLabel: null;
   dosage: null;
   canAdminister: false;
+  recordedOutcome?: TherapyRecordedOutcome | null;
 }
 export interface TherapyVerificationGroup {
   kind: 'verification';
@@ -1186,7 +1197,13 @@ export interface TherapyVerificationGroup {
   label: 'Da verificare';
   fascia: null;
   ora: null;
-  summary: { total: number; verification: number };
+  summary: {
+    total: number;
+    verification: number;
+    administered?: number;
+    notAdministered?: number;
+    unrecorded?: number;
+  };
   patients: Array<
     Omit<TherapySlotPatient, 'administrations'> & { items: TherapyVerificationItem[] }
   >;
