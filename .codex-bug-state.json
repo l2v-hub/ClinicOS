@@ -1861,12 +1861,32 @@
         "active": true,
         "owner": "codex-cloud-after-claude",
         "nonce": "5ef4558e-2243-4380-8330-453cfa1df672",
-        "stage": "analysis",
+        "stage": "implementing",
         "startedAt": "2026-10-18T16:47:23.897Z",
         "baseSha": "34c865233df53a3930f29c8b7befc02208588d64",
-        "implementationStarted": false,
-        "automaticWritersPaused": true
-      }
+        "implementationStarted": true,
+        "automaticWritersPaused": true,
+        "implementationRound": 5,
+        "reservationNonce": "ae512ce7-aff8-421c-bac2-cd0e776e5eb4",
+        "contractSha256": "0434540a88f32c3bb7116fb77a8ad564da28a4098cd0a74bc7a82d28947894eb"
+      },
+      "operatorContinuations": [
+        {
+          "round": 5,
+          "status": "running",
+          "owner": "codex-cloud-after-claude",
+          "nonce": "ae512ce7-aff8-421c-bac2-cd0e776e5eb4",
+          "startedAt": "2026-10-18T16:55:32.005Z",
+          "baseSha": "34c865233df53a3930f29c8b7befc02208588d64",
+          "contractSha256": "0434540a88f32c3bb7116fb77a8ad564da28a4098cd0a74bc7a82d28947894eb",
+          "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+          "kind": "explicit-operator-compatibility-continuation",
+          "preservedLegacyImplementationDigest": "007ad3907eddc00d5ce0b8f52fa1d1e66a097569d1085c19234f8e7567b2b11c",
+          "preservedLegacyReviewsDigest": "625f559854d8fb4dd44c994e1af75686eb6c88280d72f6545a51aedde8660cd3",
+          "preservedEntityDigest": "6f044d6ce285efce05428b12df612c8a67be08209aa573b8956180ffbe0c5f2a",
+          "reason": "User explicitly authorized continued corrections beyond four with all previous attempts and reports preserved. Existing subject retained; no legacy counter or review approval rewritten."
+        }
+      ]
     },
     {
       "id": "bug-batch-485",
@@ -7602,7 +7622,7 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-18T16:54:18.974Z",
+  "updatedAt": "2026-10-18T16:55:32.697Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
@@ -10775,12 +10795,32 @@
         "active": true,
         "owner": "codex-cloud-after-claude",
         "nonce": "5ef4558e-2243-4380-8330-453cfa1df672",
-        "stage": "analysis",
+        "stage": "implementing",
         "startedAt": "2026-10-18T16:47:23.897Z",
         "baseSha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
-        "implementationStarted": false,
-        "automaticWritersPaused": true
-      }
+        "implementationStarted": true,
+        "automaticWritersPaused": true,
+        "implementationRound": 4,
+        "reservationNonce": "eec1f09c-4764-4256-bfad-522a4f6de0be",
+        "contractSha256": "fff355216fae5877f4cfb99a31f433118d84bf91ddcc09305dcb61b77ba8013d"
+      },
+      "operatorContinuations": [
+        {
+          "round": 4,
+          "status": "running",
+          "owner": "codex-cloud-after-claude",
+          "nonce": "eec1f09c-4764-4256-bfad-522a4f6de0be",
+          "startedAt": "2026-10-18T16:55:32.697Z",
+          "baseSha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
+          "contractSha256": "fff355216fae5877f4cfb99a31f433118d84bf91ddcc09305dcb61b77ba8013d",
+          "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+          "kind": "explicit-operator-compatibility-continuation",
+          "preservedLegacyImplementationDigest": "0765b22182c82647c7c55d765e226e3e044fd5a8dec35473603e340cb70090c2",
+          "preservedLegacyReviewsDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "preservedEntityDigest": "7dfc893d412503cdac73015d0327612c7f60a7c9c635a6762f1b375b3d719774",
+          "reason": "User explicitly authorized continued corrections beyond four with all previous attempts and reports preserved. Existing subject retained; no legacy counter or review approval rewritten."
+        }
+      ]
     },
     {
       "schemaVersion": 1,
