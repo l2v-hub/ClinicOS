@@ -1928,7 +1928,7 @@
         }
       ],
       "reviews": [],
-      "reason": "Issue485 final round4/4 reserved before canonical ownership fix. Rounds1/2/3 failed immutable; planversions1/2 preserved; parent450/UX447 unchanged. New independent QA required.",
+      "reason": "Issue485 implementation4/4 frozen; new independent QA is executing all five phases. Scheduled executor paused to avoid duplicate authors; parent450 remains unchanged.",
       "triageRecovery": {
         "kind": "operator-completed-read-only-triage",
         "sourceRun": 39029815917,
@@ -2044,9 +2044,11 @@
       "operatorActivity": {
         "owner": "codex-cloud-issue485",
         "nonce": "8216e510-621f-45ce-8fda-3b915dbe311b",
-        "phase": "implementing",
+        "phase": "validating",
         "startedAt": "2026-10-18T09:54:18.052Z",
-        "contractSha256": "8a5d888d2a4dd8d0840cbabb6f31f414e3d9d513e99a652a3614f9529325708f"
+        "contractSha256": "8a5d888d2a4dd8d0840cbabb6f31f414e3d9d513e99a652a3614f9529325708f",
+        "updatedAt": "2026-10-18T09:56:36.914Z",
+        "qaOwner": "qa_gate_issue485_cycle4"
       },
       "planRevisions": [
         {
@@ -7479,7 +7481,7 @@
       }
     }
   ],
-  "updatedAt": "2026-10-18T09:54:18.052Z",
+  "updatedAt": "2026-10-18T09:56:36.915Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
