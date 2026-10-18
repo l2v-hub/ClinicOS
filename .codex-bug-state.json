@@ -1911,6 +1911,14 @@
             "dedicatedClinicalBrowserSql": true,
             "independent": false,
             "sourceDigest": "333b7c06f4d16e1ba54f857f594093008758e2a2165c3962a623e82f9d6a57f0"
+          },
+          "independentQaReservation": {
+            "status": "running",
+            "nonce": "e647ae24-ea51-4e3e-b5f3-ae31c4dd4724",
+            "agent": "/root/qa_gate_pr483_followup1",
+            "reservedAt": "2026-10-18T18:07:49.824Z",
+            "reservedBeforeSession": true,
+            "sourceDigest": "333b7c06f4d16e1ba54f857f594093008758e2a2165c3962a623e82f9d6a57f0"
           }
         }
       ],
@@ -8931,7 +8939,7 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-18T18:07:07.622Z",
+  "updatedAt": "2026-10-18T18:07:49.824Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
