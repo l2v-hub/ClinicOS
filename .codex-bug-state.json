@@ -8911,13 +8911,15 @@
       "implementation": [
         {
           "round": 1,
-          "status": "running",
+          "status": "implemented-awaiting-independent-qa",
           "owner": "codex-cloud-after-claude",
           "nonce": "e5ea75a1-9706-4392-ba85-e58c3251e157",
           "startedAt": "2026-10-18T17:56:37.609Z",
           "baseSha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
           "contractSha256": "47eaf91e4336741c3a96ae22e9022bae35aa2c392bf56f83cd28088a39528200",
-          "reason": "New bounded metadata-evidence transport task after real artifact redirect403; no clinical regrouping or inherited review."
+          "reason": "New bounded metadata-evidence transport task after real artifact redirect403; no clinical regrouping or inherited review.",
+          "sourceFreezeSha256": "e15710a60770e1481272a67cac7031e64dae2315e51084a667b624dc491380f5",
+          "authorStoppedAt": "2026-10-18T18:08:40.850Z"
         }
       ],
       "reviews": [],
@@ -8925,7 +8927,7 @@
         "active": true,
         "owner": "codex-cloud-after-claude",
         "nonce": "e5ea75a1-9706-4392-ba85-e58c3251e157",
-        "stage": "implementing",
+        "stage": "independent-qa",
         "automaticWritersPaused": true
       },
       "reason": "Recover existing original receipt through reviewed main-only GitHub runner; no Railway credentials/provider call or release gate bypass.",
@@ -8936,10 +8938,17 @@
           "sha256": "889482a49cab1820b1722c11d5b2d8b4d1f1e9d06fc7e1f5f679ec0af55a1aa2",
           "reason": "Same fixed evidence transport additionally returns only immutable failed CI test fingerprints; original freeze/report retained, no provider or raw-log publication."
         }
-      ]
+      ],
+      "independentQaReservation": {
+        "status": "running",
+        "nonce": "9883bb15-5307-4af5-9483-d5f79aa89570",
+        "agent": "/root/qa_gate_receipt_recovery",
+        "reservedAt": "2026-10-18T18:08:40.850Z",
+        "reservedBeforeSession": true
+      }
     }
   ],
-  "updatedAt": "2026-10-18T18:07:49.824Z",
+  "updatedAt": "2026-10-18T18:08:40.850Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
