@@ -7622,7 +7622,7 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-18T16:55:32.697Z",
+  "updatedAt": "2026-10-18T16:57:57.620Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
@@ -10820,6 +10820,16 @@
           "preservedEntityDigest": "7dfc893d412503cdac73015d0327612c7f60a7c9c635a6762f1b375b3d719774",
           "reason": "User explicitly authorized continued corrections beyond four with all previous attempts and reports preserved. Existing subject retained; no legacy counter or review approval rewritten."
         }
+      ],
+      "operatorScopeAmendments": [
+        {
+          "id": "scope-amendment-1",
+          "reservationNonce": "eec1f09c-4764-4256-bfad-522a4f6de0be",
+          "owner": "codex-cloud-after-claude",
+          "authorizedAt": "2026-10-18T16:57:57.619Z",
+          "sha256": "7e0efb075eaeb511df9628355c1d2ae347f339106b89bfa740744f3e651690d6",
+          "reason": "Move current voice e2e executable harness source into owned followup; historical evidence remains byte-identical."
+        }
       ]
     },
     {
@@ -11260,7 +11270,7 @@
         "active": true,
         "owner": "codex-cloud-after-claude",
         "nonce": "5ef4558e-2243-4380-8330-453cfa1df672",
-        "stage": "implementing",
+        "stage": "independent-qa",
         "startedAt": "2026-10-18T16:47:23.897Z",
         "baseSha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6",
         "implementationStarted": true,
@@ -11272,7 +11282,7 @@
       "operatorContinuations": [
         {
           "round": 4,
-          "status": "running",
+          "status": "implemented-awaiting-independent-qa",
           "owner": "codex-cloud-after-claude",
           "nonce": "e333bed2-6270-4c53-ae5a-acf7e85dcd61",
           "startedAt": "2026-10-18T16:54:18.372Z",
@@ -11283,7 +11293,15 @@
           "preservedLegacyImplementationDigest": "8e5af5daa795435e16d0c76b9c9e068023c1a5ccc8fb1bcf566d679a6395cea0",
           "preservedLegacyReviewsDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
           "preservedEntityDigest": "87e394a6eadc579819850d2c57ebdda90396da8720fb359dab5528fb2328eb8f",
-          "reason": "User explicitly authorized continued corrections beyond four with all previous attempts and reports preserved. Existing subject retained; no legacy counter or review approval rewritten."
+          "reason": "User explicitly authorized continued corrections beyond four with all previous attempts and reports preserved. Existing subject retained; no legacy counter or review approval rewritten.",
+          "authorStoppedAt": "2026-10-18T16:57:57.618Z",
+          "sourceHandoffSha256": "7c357d4520896b76ad209278b30aa2a319135b9444aeee7373de908587d824af",
+          "authorTests": {
+            "passed": 127,
+            "failed": 0,
+            "skipped": 0,
+            "independent": false
+          }
         }
       ]
     }
