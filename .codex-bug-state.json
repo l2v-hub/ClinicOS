@@ -8909,10 +8909,18 @@
         "stage": "implementing",
         "automaticWritersPaused": true
       },
-      "reason": "Recover existing original receipt through reviewed main-only GitHub runner; no Railway credentials/provider call or release gate bypass."
+      "reason": "Recover existing original receipt through reviewed main-only GitHub runner; no Railway credentials/provider call or release gate bypass.",
+      "scopeAmendments": [
+        {
+          "id": "scope-amendment-1",
+          "authorizedAt": "2026-10-18T18:03:28.955Z",
+          "sha256": "889482a49cab1820b1722c11d5b2d8b4d1f1e9d06fc7e1f5f679ec0af55a1aa2",
+          "reason": "Same fixed evidence transport additionally returns only immutable failed CI test fingerprints; original freeze/report retained, no provider or raw-log publication."
+        }
+      ]
     }
   ],
-  "updatedAt": "2026-10-18T17:56:37.609Z",
+  "updatedAt": "2026-10-18T18:03:28.955Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
