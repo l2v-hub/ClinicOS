@@ -8,6 +8,7 @@
 // provider credentials and the model choice (AI_STT_MODEL, e.g. google:gemini-3.5-flash-lite).
 // Audio lives only in memory for the duration of the request; it is never stored or logged.
 
+import { createHash } from 'node:crypto';
 import { classifyAiFailure, correlationHeaders, recordAiCall } from '../lib/observability.js';
 import { aiEnabled } from '../lib/ai-flags.js';
 import type { AiCallMeta } from '../lib/observability.js';
@@ -301,15 +302,33 @@ async function boundedRuntimeJson(response: Response): Promise<Record<string, un
   }
 }
 
-/** Configuration availability only; never creates a session or claims provider readiness.
- * No cross-environment cache: changing the runtime/credential cannot reuse another backend's status.
- */
+const STATUS_TTL_MS = 60_000;
+const statusCache = new Map<string, { until: number; result: Promise<RuntimeSttStatus> }>();
+
+/** Configuration only. Partition probes by runtime URL and credential identity, never logging keys. */
 export async function runtimeSttStatus(
   env: NodeJS.ProcessEnv = process.env,
+  now = Date.now(),
 ): Promise<RuntimeSttStatus> {
-  const base = env.AI_RUNTIME_URL?.replace(/\/$/, '');
+  let base: string;
+  try {
+    base = new URL(env.AI_RUNTIME_URL?.trim() || '').href.replace(/\/+$/, '');
+  } catch {
+    return NO_STT;
+  }
   const token = env.AI_RUNTIME_SERVICE_TOKEN;
   if (!base || !token) return NO_STT;
+  const key = `${base}:${createHash('sha256').update(token).digest('hex')}`;
+  const cached = statusCache.get(key);
+  if (cached && cached.until > now) return structuredClone(await cached.result);
+  for (const [existing, entry] of statusCache) if (entry.until <= now) statusCache.delete(existing);
+  if (statusCache.size >= 64) statusCache.delete(statusCache.keys().next().value!);
+  const result = probeRuntimeSttStatus(base, token);
+  statusCache.set(key, { until: now + STATUS_TTL_MS, result });
+  return structuredClone(await result);
+}
+
+async function probeRuntimeSttStatus(base: string, token: string): Promise<RuntimeSttStatus> {
   try {
     const response = await fetch(`${base}/v1/voice/stt-status`, {
       headers: { Authorization: `Bearer ${token}`, ...correlationHeaders() },

@@ -323,38 +323,43 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
   });
 
   /** Capability + per-environment switch BEFORE the body is buffered (no 2 MB for nothing). */
-  function voiceGate(req: AuthedRequest, res: Response, next: () => void) {
-    const identity = requireIdentity(req, res);
-    if (!identity) return;
-    const refuse = (status: number, code: string, error: string, outcome: AiAuditOutcome) => {
-      recordAuditEvent({
-        requestId: `voice-${randomUUID()}`,
-        operatorId: identity.operatorId,
-        operatorRole: identity.appRole ?? identity.role,
-        patientId: null,
-        actionType: 'voice:transcribe',
-        kind: 'read',
-        channel: 'voce',
-        fields: [`code:${code === 'voice_denied' ? 'capability_denied' : code}`],
-        outcome,
-      });
-      res.status(status).json({ error, code });
+  function voiceGate(actionType: 'voice:session' | 'voice:transcribe') {
+    return (req: AuthedRequest, res: Response, next: () => void) => {
+      const identity = requireIdentity(req, res);
+      if (!identity) return;
+      const refuse = (status: number, code: string, error: string, outcome: AiAuditOutcome) => {
+        recordAuditEvent({
+          requestId: `voice-${randomUUID()}`,
+          operatorId: identity.operatorId,
+          operatorRole: identity.appRole ?? identity.role,
+          patientId: null,
+          actionType,
+          kind: 'read',
+          channel: 'voce',
+          fields: [`code:${code === 'voice_denied' ? 'capability_denied' : code}`],
+          outcome,
+        });
+        res.status(status).json({ error, code });
+      };
+      if (!voiceAllowed(req)) {
+        refuse(403, 'voice_denied', 'Canale vocale non consentito al tuo ruolo', 'denied');
+        return;
+      }
+      if (!voiceChannelEnabled()) {
+        refuse(503, 'voice_disabled', 'Canale vocale non attivo in questo ambiente', 'error');
+        return;
+      }
+      next();
     };
-    if (!voiceAllowed(req)) {
-      refuse(403, 'voice_denied', 'Canale vocale non consentito al tuo ruolo', 'denied');
-      return;
-    }
-    if (!voiceChannelEnabled()) {
-      refuse(503, 'voice_disabled', 'Canale vocale non attivo in questo ambiente', 'error');
-      return;
-    }
-    next();
   }
 
+  // Admission only: an established provider session needs authoritative runtime termination.
+  // The runtime refuses realtime adapters without that capability; this Set guards negotiations.
+  const realtimeNegotiations = new Set<string>();
   router.post(
     '/voice/realtime-call',
     voiceTranscribeRateLimit,
-    voiceGate,
+    voiceGate('voice:session'),
     express.text({ type: 'application/sdp', limit: 64_000 }),
     async (req: AuthedRequest, res: Response) => {
       const identity = requireIdentity(req, res);
@@ -370,19 +375,46 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
         return;
       }
       const provider = deps.stt ?? createRuntimeSttProvider();
-      if (!provider.negotiateRealtimeCall) {
-        res
-          .status(409)
-          .json({ error: 'Trascrizione realtime non disponibile', code: 'transport_unsupported' });
+      const requestId = `voice-${randomUUID()}`;
+      const refuse = (status: number, code: string) => {
+        recordAuditEvent({
+          requestId,
+          operatorId: identity.operatorId,
+          operatorRole: identity.appRole ?? identity.role,
+          patientId: null,
+          actionType: 'voice:session',
+          kind: 'read',
+          channel: 'voce',
+          fields: [`code:${code}`],
+          outcome: 'error',
+        });
+        res.status(status).json({ error: 'Trascrizione realtime non disponibile', code });
+      };
+      const pinnedServer =
+        (process.env.VOICE_STT_TRANSPORT || '').trim().toLowerCase() === 'server';
+      const status = !deps.stt && !pinnedServer ? await runtimeSttStatus() : null;
+      // The caller may disconnect while configuration is being probed, before listeners attach.
+      if (req.aborted || res.destroyed) return;
+      if (
+        pinnedServer ||
+        !provider.negotiateRealtimeCall ||
+        (!deps.stt &&
+          (!status || voiceTransport(status) !== 'webrtc' || !status.realtime.available))
+      ) {
+        refuse(409, 'transport_unsupported');
         return;
       }
+      if (realtimeNegotiations.has(identity.operatorId)) {
+        refuse(409, 'session_busy');
+        return;
+      }
+      realtimeNegotiations.add(identity.operatorId);
       const controller = new AbortController();
       const disconnected = () => {
         if (!res.writableEnded) controller.abort();
       };
       req.once('aborted', disconnected);
       res.once('close', disconnected);
-      const requestId = `voice-${randomUUID()}`;
       try {
         const answer = await provider.negotiateRealtimeCall(offer, {
           requestId,
@@ -401,15 +433,13 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
           outcome: 'ok',
         });
         // Enforce the same allowlist even for injected test/provider implementations.
-        res
-          .status(200)
-          .json({
-            sdp: answer.sdp,
-            model: answer.model,
-            deployment: answer.deployment,
-            expiresAt: answer.expiresAt,
-            transport: 'webrtc',
-          });
+        res.status(200).json({
+          sdp: answer.sdp,
+          model: answer.model,
+          deployment: answer.deployment,
+          expiresAt: answer.expiresAt,
+          transport: 'webrtc',
+        });
       } catch (error) {
         if (controller.signal.aborted) return;
         const e =
@@ -429,6 +459,7 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
         });
         res.status(e.status).json({ error: 'Trascrizione realtime non disponibile', code: e.code });
       } finally {
+        realtimeNegotiations.delete(identity.operatorId);
         req.removeListener('aborted', disconnected);
         res.removeListener('close', disconnected);
       }
@@ -438,7 +469,7 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
   router.post(
     '/voice/transcribe',
     voiceTranscribeRateLimit,
-    voiceGate,
+    voiceGate('voice:transcribe'),
     express.raw({ type: [...STT_MIME_TYPES], limit: MAX_UTTERANCE_BYTES }),
     async (req: AuthedRequest, res: Response) => {
       const identity = requireIdentity(req, res);

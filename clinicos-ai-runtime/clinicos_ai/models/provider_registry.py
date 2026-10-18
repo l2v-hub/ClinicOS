@@ -85,7 +85,8 @@ PROVIDERS: dict[str, ProviderEntry] = {
         capabilities=_caps("azure"),
         description="Azure OpenAI (deployment name = model id)",
         required_env=("AZURE_OPENAI_ENDPOINT",),
-        traits={"usage_metadata": True, "cancellation": False, "timeout": True, "model_discovery": False, "realtime": True, "sdk": "agno + http (structured)"},
+        # Adapter implemented, but provider protocol and authoritative session termination unverified.
+        traits={"usage_metadata": True, "cancellation": False, "timeout": True, "model_discovery": False, "realtime": False, "sdk": "agno + http (structured)"},
     ),
     "google": ProviderEntry(
         "google", "clinicos_ai.models.providers.google", ("GOOGLE_API_KEY", "GEMINI_API_KEY"),

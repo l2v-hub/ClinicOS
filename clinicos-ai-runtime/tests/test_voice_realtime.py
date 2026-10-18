@@ -20,7 +20,9 @@ class ConfigurationTests(unittest.TestCase):
         self.assertFalse(realtime.realtime_status({})["available"])
         self.assertEqual(stt.stt_model(ENV), ("azure", "file-transcribe"))
         self.assertEqual(stt.stt_model({"AI_STT_MODEL": "google:explicit"}), ("google", "explicit"))
-        self.assertTrue(realtime.realtime_status(ENV)["available"])
+        self.assertFalse(realtime.realtime_status(ENV)["available"], "unverified duration enforcement blocks real activation")
+        with mock.patch.object(azure, "SERVER_SESSION_DURATION_ENFORCED", True):
+            self.assertTrue(realtime.realtime_status(ENV)["available"])
         self.assertEqual(stt.stt_realtime(ENV), {"enabled": True, "model": "live-configured"})
         for extra in ({"AI_ENABLED": "false"}, {"STT_REALTIME_ENABLED": "false"},
                       {"STT_REALTIME_MODEL": ""}, {"STT_PROVIDER": "openai"}, {"AZURE_OPENAI_API_KEY": ""}):
@@ -67,6 +69,7 @@ class AzureNegotiationTests(unittest.TestCase):
         self.assertEqual(calls[0].headers["Api-key"], "synthetic-secret")
         self.assertEqual(calls[1].headers["Authorization"], "Bearer synthetic-ephemeral")
         self.assertEqual(json.loads(calls[0].data)["session"]["audio"]["input"]["transcription"]["model"], "live-configured")
+        self.assertEqual(json.loads(calls[0].data)["expires_after"], {"anchor": "created_at", "seconds": 60})
         self.assertNotIn("synthetic-ephemeral", json.dumps(result))
         self.assertNotIn("synthetic-secret", json.dumps(result))
         self.assertEqual(set(result), {"sdp", "model", "deployment", "expiresAt", "transport"})
@@ -112,11 +115,40 @@ class DispatcherTests(unittest.IsolatedAsyncioTestCase):
                 call.assert_not_called()
 
     async def test_registry_dispatch_is_separate_from_batch_model(self):
-        with mock.patch.dict(os.environ, ENV, clear=True), mock.patch.object(azure, "negotiate_call", return_value={"sdp": "v=0\r\nanswer"}) as call:
+        with mock.patch.dict(os.environ, ENV, clear=True), mock.patch.object(azure, "SERVER_SESSION_DURATION_ENFORCED", True), mock.patch.object(azure, "negotiate_call", return_value={"sdp": "v=0\r\nanswer"}) as call:
             result = await realtime.negotiate("v=0\r\noffer")
         self.assertEqual(result["sdp"], "v=0\r\nanswer")
         self.assertEqual(call.call_args.args[0].model, "live-configured")
         self.assertEqual(stt.stt_model(ENV)[1], "file-transcribe")
+
+    async def test_unverified_session_duration_is_fail_closed_even_with_opt_in(self):
+        with mock.patch.dict(os.environ, ENV, clear=True), mock.patch.object(azure, "_http") as http:
+            with self.assertRaises(stt.SttError) as caught:
+                await realtime.negotiate("v=0")
+            self.assertEqual(caught.exception.status, 503)
+            http.assert_not_called()
+
+    async def test_budget_refusal_precedes_provider_http_and_supported_sessions_are_counted(self):
+        from clinicos_ai.models.contract import BUDGET
+        from clinicos_ai.models.cost import COSTS
+        from clinicos_ai.models.errors import RuntimeError_, ErrorKind
+        with mock.patch.dict(os.environ, ENV, clear=True), mock.patch.object(BUDGET, "check", side_effect=RuntimeError_(ErrorKind.BUDGET_EXCEEDED, "exhausted")), mock.patch.object(azure, "_http") as http:
+            with self.assertRaises(stt.SttError) as caught:
+                await realtime.negotiate("v=0")
+            self.assertEqual((caught.exception.kind, caught.exception.status), ("budget_exceeded", 503))
+            http.assert_not_called()
+        # This fixture explicitly declares authoritative duration support; Azure does not.
+        env = {**ENV, "AI_PRICING_JSON": json.dumps({"azure:live-configured": {"audio_per_minute": 0.2}})}
+        before = COSTS.snapshot(env)
+        with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(azure, "SERVER_SESSION_DURATION_ENFORCED", True), mock.patch.object(azure, "negotiate_call", return_value={"sdp": "v=0"}):
+            await realtime.negotiate("v=0")
+        after = COSTS.snapshot(env)
+        self.assertEqual(after["calls"], before["calls"] + 1)
+        self.assertAlmostEqual(after["estimatedUsdToday"] - before["estimatedUsdToday"], 0.2)
+        before = COSTS.snapshot(ENV)
+        with mock.patch.dict(os.environ, ENV, clear=True), mock.patch.object(azure, "SERVER_SESSION_DURATION_ENFORCED", True), mock.patch.object(azure, "negotiate_call", return_value={"sdp": "v=0"}):
+            await realtime.negotiate("v=0")
+        self.assertEqual(COSTS.snapshot(ENV)["unpricedCalls"], before["unpricedCalls"] + 1)
 
     async def test_real_asgi_auth_actual_stream_limit_and_safe_response(self):
         import asyncio
@@ -187,6 +219,12 @@ class DispatcherTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(ok_status, 200)
                 self.assertEqual(json.loads(ok_body)["sdp"], "v=0\r\nanswer")
                 call.assert_awaited_once_with("v=0\r\noffer")
+            from clinicos_ai.models.errors import RuntimeError_, ErrorKind
+            with mock.patch.object(runtime.BUDGET, "check", side_effect=RuntimeError_(ErrorKind.BUDGET_EXCEEDED, "exhausted")), mock.patch.object(azure, "_http") as http:
+                budget_status, budget_body = await request("/v1/voice/realtime-call", b'{"sdp":"v=0"}', headers)
+                self.assertEqual(budget_status, 503)
+                self.assertEqual(json.loads(budget_body)["detail"]["kind"], "budget_exceeded")
+                http.assert_not_called()
 
 
 if __name__ == "__main__":

@@ -17,6 +17,11 @@ from urllib.parse import urlsplit
 from .stt import SttError
 
 MAX_RESPONSE_BYTES = 96_000
+# Grant expiry is not a media deadline. No supported, verified server termination contract
+# exists for this adapter yet, so the dispatcher refuses activation (including explicit opt-in).
+SERVER_SESSION_DURATION_ENFORCED = False
+MAX_SESSION_SECONDS = 60
+CLIENT_SECRET_SECONDS = 60
 
 
 @dataclass(frozen=True)
@@ -86,7 +91,8 @@ def negotiate_call(cfg: RealtimeConfig, offer: str, timeout: float = 12.0) -> di
     deadline = time.monotonic() + timeout
     remaining = lambda: max(0.05, deadline - time.monotonic())
     req = urllib.request.Request(f"{cfg.endpoint}/openai/v1/realtime/client_secrets", method="POST",
-                                 data=json.dumps({"session": session_config(cfg)}).encode(),
+                                 data=json.dumps({"session": session_config(cfg),
+                                                  "expires_after": {"anchor": "created_at", "seconds": CLIENT_SECRET_SECONDS}}).encode(),
                                  headers={"api-key": cfg.api_key, "Content-Type": "application/json"})
     try:
         grant = json.loads(_http(req, min(5.0, remaining())).decode("utf-8"))

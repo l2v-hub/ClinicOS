@@ -71,7 +71,7 @@ export function VoicePanel({ voice, busy }: { voice: VoiceChannel; busy: boolean
       data-state={audio.state}
     >
       <div className="am-voice__bar">
-        <span className={`am-voice__dot${listening ? ' is-live' : ''}`} aria-hidden="true" />
+        <span className={`am-voice__dot${voice.micActive ? ' is-live' : ''}`} aria-hidden="true" />
         <strong className="am-voice__state" role="status" data-testid="am-voice-state">
           {AUDIO_STATE_LABELS[audio.state]}
         </strong>

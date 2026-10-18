@@ -76,6 +76,8 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
     pendingStream.current = null;
     const current = capture.current;
     capture.current = null;
+    setActive(false);
+    setLevel(0);
     if (!current) return;
     current.processor.onaudioprocess = null;
     try {
@@ -85,8 +87,6 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
     }
     current.stream.getTracks().forEach((track) => track.stop());
     void current.context.close().catch(() => undefined);
-    setActive(false);
-    setLevel(0);
   }, []);
 
   const start = useCallback(
@@ -134,6 +134,7 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
       }
       if (beforeListen) {
         pendingStream.current = stream;
+        setActive(true);
         try {
           await beforeListen(stream);
           if (pendingStream.current === stream) pendingStream.current = null;
@@ -141,6 +142,7 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
           if (pendingStream.current === stream) pendingStream.current = null;
           stream.getTracks().forEach((track) => track.stop());
           if (!gate.current.complete(token)) return; // cancelled while connecting
+          setActive(false);
           const code =
             error && typeof error === 'object' && 'code' in error
               ? String(error.code)

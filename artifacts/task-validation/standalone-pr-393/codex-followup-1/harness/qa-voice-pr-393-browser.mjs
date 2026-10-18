@@ -168,6 +168,12 @@ export async function runVoiceBrowser({
       }
       async setLocalDescription() {}
       async setRemoteDescription() {
+        if (window.__voiceQA.holdNegotiation) {
+          await new Promise((resolve) => {
+            window.__voiceQA.releaseNegotiation = resolve;
+          });
+          if (this.closed) return;
+        }
         this.connectionState = 'connected';
         this.channel.readyState = 'open';
         this.channel.dispatchEvent(new Event('open'));
@@ -311,6 +317,44 @@ export async function runVoiceBrowser({
       traffic.converse === submitted && traffic.uploads === 0,
     );
     await shot('05-cancelled-partial');
+    await page.evaluate(() => {
+      window.__voiceQA.holdNegotiation = true;
+    });
+    await page.getByTestId('am-mic').click();
+    await state('REQUESTING_PERMISSION');
+    await page.waitForFunction(() => typeof window.__voiceQA.releaseNegotiation === 'function');
+    check(
+      'granted pending negotiation has live media and visible microphone indicator',
+      await page.evaluate(
+        () =>
+          window.__voiceQA.streams
+            .at(-1)
+            .getAudioTracks()
+            .some((t) => t.readyState === 'live') &&
+          document.querySelector('.am-voice__dot')?.classList.contains('is-live'),
+      ),
+    );
+    check(
+      'pending negotiation exposes no Finish or submit action',
+      (await page.getByTestId('am-mic').isDisabled()) &&
+        (await page.getByTestId('am-voice-send').count()) === 0,
+    );
+    await shot('05a-pending-negotiation-microphone-live');
+    await page.getByTestId('am-voice-cancel').click();
+    await state('CANCELLED');
+    await noTracks();
+    check(
+      'pending negotiation cancel clears visible microphone indicator',
+      await page.evaluate(
+        () => !document.querySelector('.am-voice__dot')?.classList.contains('is-live'),
+      ),
+    );
+    await shot('05b-pending-negotiation-cancelled');
+    await page.evaluate(() => {
+      window.__voiceQA.holdNegotiation = false;
+      window.__voiceQA.releaseNegotiation();
+      delete window.__voiceQA.releaseNegotiation;
+    });
     await page.evaluate(() => {
       window.__voiceQA.delayPermission = true;
     });
