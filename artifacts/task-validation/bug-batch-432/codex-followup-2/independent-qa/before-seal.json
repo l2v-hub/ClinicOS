@@ -1,0 +1,21 @@
+{
+  "origin": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432",
+  "inputManifestSha256": "a44e90513c1500df6defaf70afca443bec374ec5d37744af8514c8d58011b795",
+  "inputFiles": 4743,
+  "proofFiles": 7218,
+  "metadataFiles": {
+    "source-handoff.json": "efa47da8e919a991da813693c87f518f112e92be34cb5b96b8119377f482680c",
+    "task-contract.md": "ff8582a11ec7d10fef17e3660b5adc443f3881562a06c379f150245377cd9e9c",
+    "plan.md": "6ac455c4ea1bbd77da2c709d88c23bd13a3ea5ca4d075e271a1da71ad5b6b597",
+    "analysis.md": "0ab00a8b521d77077c3141f258e6e3ab37c3e440701d82d39d1f79cf359b2b11",
+    "run-author.mjs": "e6f1d8b4aa5a89763d8732bf745c0da038f91f004c5b7e7f33d1b182f2de9e0d",
+    "clinical-browser.mjs": "3940a6ebec298059ae97e7b3a0b5d0999b632b7220e2c28bf8ca81108ad8639a",
+    "agenda-verification-browser.mjs": "dca1cc172708bee1a3e3f5f827f301a000d4e5ea737325c5c57c7d501dbdc980",
+    "implementation-manifest.json": "a2f3cf76c2b3dcc9364a7bd3b4fbe391d5e0a0c5e73f03f5bae079c0574150a7",
+    "parent-input-manifest.json": "e3fd1ec6f3420b3d811d1712e1e60a7a05e0ff85342188a22a0e4f88a16fe08e",
+    "parent-proof-manifest.json": "26580ab64ccf5796ce2878034798732861eb2ac2c307b7f8e66ffe530ecdbb59",
+    "author-artifact-audit.json": "f6fadc6d0d2cd924367888259c8f26a00db0a35f8a8962a1cf7f5626b344137c",
+    "author-validation.md": "ce4690bf9bdb1b5a15cb2b219f38583561fbda44953ec78010066a8f207edffb"
+  },
+  "verified": true
+}

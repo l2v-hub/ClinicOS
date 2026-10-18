@@ -1,0 +1,8 @@
+{
+  "reason": "Explicit previous-day/native history gaps",
+  "source": "navigation-supplement-browser.mjs",
+  "existingQA1Untouched": true,
+  "ownFreshQA1PhaseOriginsRequired": true,
+  "authorAndQa5Inheritance": false,
+  "freshPhases": "startup/migrate/build/types then real two-role navigation/browser/SQL supplement; cleanup"
+}

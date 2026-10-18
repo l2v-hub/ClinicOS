@@ -1,0 +1,58 @@
+{
+  "results": [
+    {
+      "name": "operator-actual-App-cold-reload-selected-day-view-return-paginated-readonly",
+      "pass": true,
+      "verification": 5,
+      "timedCards": 0,
+      "administrationPosts": 0,
+      "terapiaContinuationRealClick": true
+    },
+    {
+      "name": "admin-actual-App-cold-reload-selected-day-view-return-paginated-readonly",
+      "pass": true,
+      "verification": 5,
+      "timedCards": 0,
+      "administrationPosts": 0,
+      "terapiaContinuationRealClick": true
+    },
+    {
+      "name": "real-App-initial-503-append-503-403-retry-and-out-of-order-day-append",
+      "pass": true,
+      "interceptionsDisclosed": true,
+      "oldNamesAbsent": true
+    },
+    {
+      "name": "real-roster-epoch-409-recovery-retains-selected-day",
+      "pass": true
+    },
+    {
+      "name": "real-logout-new-role-during-held-old-session-read",
+      "pass": true,
+      "oldSnapshotItemDeletedInOwnedFixture": true,
+      "newCount": 4
+    }
+  ],
+  "sql": [
+    {
+      "name": "real-sql-five-readonly-items-and-acl",
+      "verification": 5,
+      "deniedWrites": 10,
+      "administrations": 0,
+      "firstPageVerificationDetails": 1,
+      "hasMore": true
+    },
+    {
+      "name": "actual-Agenda-readonly-after-all-browser-cases",
+      "administrations": 0,
+      "receiptCount": 0
+    }
+  ],
+  "phases": [
+    "operator-cold-entry",
+    "admin-cold-entry",
+    "negative-errors-races-roster-session"
+  ],
+  "syntheticOnly": true,
+  "timedAgendaUiIntroduced": false
+}

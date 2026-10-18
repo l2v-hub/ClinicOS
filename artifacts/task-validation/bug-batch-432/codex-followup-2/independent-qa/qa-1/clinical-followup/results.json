@@ -1,0 +1,21 @@
+{
+  "results": [
+    {
+      "name": "refusal-explicit-correction-reload-and-replay",
+      "pass": true,
+      "expectedStato": "non_erogata",
+      "recordCount": 1,
+      "receiptCount": 1,
+      "stato": "erogata"
+    },
+    {
+      "name": "ambiguous-one-off-read-only-calendar-giro-dashboard-assistant",
+      "pass": true,
+      "verificationCount": 4,
+      "normalizedTime": "08:30",
+      "deniedWrites": 8,
+      "unwantedRecords": 0,
+      "mobileOverflow": false
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "round": 6,
+  "reservationNonce": "f4d74317-96d1-4111-a80d-a7ec1acde163",
+  "baseSha": "c212e3141b6c7fdd88b4b1a4eaef73e5616a04f7",
+  "contractSha256": "ff8582a11ec7d10fef17e3660b5adc443f3881562a06c379f150245377cd9e9c",
+  "copyBeforeEdit": [
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256BeforeAndAfter": "1776cfa05fc0bc2fc12df0b6b75b17c7f85355661b22ae7ed509c6ea63fb6e4e",
+      "priorInode": 555222,
+      "priorLinks": 4,
+      "privateInode": 543914,
+      "mode": "0o600"
+    },
+    {
+      "path": "frontend/src/components/operator/OperatorAgenda.tsx",
+      "sha256BeforeAndAfter": "fab3dc88df9af9e74358a3fdc12188d7cd8769c10945307fff91838c473bcbc3",
+      "priorInode": 554611,
+      "priorLinks": 4,
+      "privateInode": 546908,
+      "mode": "0o600"
+    },
+    {
+      "path": "frontend/src/components/admin/AdminAgenda.tsx",
+      "sha256BeforeAndAfter": "9ee1678b07d5f5dc158d19b07bda8281f4a95960b39d73128031557d22952d05",
+      "priorInode": 554512,
+      "priorLinks": 4,
+      "privateInode": 546946,
+      "mode": "0o600"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyNavigationGuard.test.ts",
+      "sha256BeforeAndAfter": "308bccbcf711db07b88fdeb15940685a02e14f3b0388b6a2ddbb6d2a4f3c09f8",
+      "priorInode": 555535,
+      "priorLinks": 4,
+      "privateInode": 546949,
+      "mode": "0o600"
+    }
+  ],
+  "scope": "four production and two test paths exactly; verification only"
+}

@@ -1,0 +1,60 @@
+{
+  "sourceSha": "06751cad390103a67c82cf42721ab85438e1f22e",
+  "changedSourceDigest": "1101ac764318611bfac1e4799c245823a23cad4fd19b48b6dbd940ffe99ad95f",
+  "originInputFiles": 4743,
+  "historicalProofFiles": 7218,
+  "authorMetadataFiles": 12,
+  "allOriginSourceConfigTestsUnchanged": true,
+  "allHistoricalProofUnchanged": true,
+  "generatedRuntimeOutputException": "Exactly frontend/node_modules/.vite/deps/_metadata.json changed by QA1 Vite; original before hash and after raw bytes retained; see qa1-generated-cache-delta.json. Excluded solely as generated output, all actual installed/source exports unchanged.",
+  "allSealedAuthorMetadataUnchanged": true,
+  "additionalClosures": {
+    "dependencies-before.json": 24182,
+    "workspace-installed-inputs-classified.json": 282,
+    "additional-fixture-inputs-before.json": 18,
+    "historical-snapshot-inputs-before.json": 12
+  },
+  "runs": {
+    "qa-1": {
+      "executedInputs": 4743,
+      "sourceAfter": {
+        "exitCode": 0,
+        "changed": [],
+        "originChanged": [],
+        "originalSourceUnchanged": true,
+        "executedSourceUnchanged": true
+      },
+      "sourceAfterSha256": "8358c8483172e590f603e5e4f9c8b8429b0af70b4cbdf8d9e5ff5bbc6709fb66",
+      "executedManifestSha256": "a93495d9aa63cc12915650e8e1b4e6bead5a91ef3a5324659e32eece351a25f3"
+    },
+    "qa-2": {
+      "runtimeExecuted": false,
+      "outcome": "FAILED PREPARATION; preserved; no DB/service started"
+    },
+    "qa-3": {
+      "executedInputs": 4743,
+      "sourceAfter": {
+        "exitCode": 1,
+        "changed": [],
+        "originChanged": [],
+        "originalSourceUnchanged": true,
+        "executedSourceUnchanged": true
+      },
+      "sourceAfterSha256": "2a10a9238f74ecdbce60f7289cb602927ecf49eebfdadf0a5319d57ed98ed55f",
+      "executedManifestSha256": "65f75cfc42efead1a113af9c3cdead201e975e7b4fd46ba1e26f7f3e0519f535"
+    },
+    "qa-4": {
+      "executedInputs": 4743,
+      "sourceAfter": {
+        "exitCode": 0,
+        "changed": [],
+        "originChanged": [],
+        "originalSourceUnchanged": true,
+        "executedSourceUnchanged": true
+      },
+      "sourceAfterSha256": "8358c8483172e590f603e5e4f9c8b8429b0af70b4cbdf8d9e5ff5bbc6709fb66",
+      "executedManifestSha256": "12e7e9f91b743e717f486c72896ec955ba9c18e9d417a4a939ffd3da27c48017"
+    }
+  },
+  "qa5RemainsFailed": true
+}

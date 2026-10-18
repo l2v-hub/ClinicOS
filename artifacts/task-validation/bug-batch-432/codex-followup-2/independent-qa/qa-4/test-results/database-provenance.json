@@ -1,0 +1,10 @@
+{
+  "image": "postgres@sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea",
+  "digests": [
+    "postgres@sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea"
+  ],
+  "postgresSqlReady": true,
+  "host": "127.0.0.1",
+  "port": 55432,
+  "database": "clinicos_qa_batch432"
+}

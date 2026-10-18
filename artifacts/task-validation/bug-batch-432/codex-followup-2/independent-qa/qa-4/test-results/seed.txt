@@ -1,0 +1,21 @@
+
+🌱  ClinicOS — Avvio seed demo…
+
+  ✓  users upserted:     4
+  ✓  operators upserted: 4
+  ✓  patients upserted:  8
+  ✓  facility upserted:    4 rooms, 8 beds, 8 placements
+  ✓  clinical records upserted: 8
+  ✓  therapies upserted: 16
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ✅  Seed completato. Totali nel DB:
+  • Pazienti nel DB:       8
+  • Cartelle cliniche:     8
+  • Note cliniche:         13
+  • Appuntamenti:          5
+  • Terapie:               16
+  • Camere / letti:        4 / 8
+  • Posti occupati:        8
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
