@@ -45,7 +45,9 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-          sparse-checkout: scripts/maintenance
+          sparse-checkout: |
+            scripts/maintenance
+            .github/workflows
           filter: blob:none
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:

@@ -535,6 +535,8 @@ test('workflow keeps all old jobs byte-identical and isolates the new explicit o
   const oldJobs = workflow.slice(workflow.indexOf('  demo-inventory:\n'));
   assert.equal(digest(oldJobs), 'fc90d6c15c39d9ba8c3e54f25c20f152cbb11e531d889ef0dc67382e74e30e97');
   const job = workflow.slice(workflow.indexOf('  demo-storage-inspect:\n'), workflow.indexOf('  demo-inventory:\n'));
+  assert.ok(job.includes('sparse-checkout: |\n            scripts/maintenance\n            .github/workflows\n'),
+    'the hosted cone sparse checkout must contain both test imports and the workflow read by this test');
   for (const text of ["github.event_name == 'workflow_dispatch'", "github.repository == 'l2v-hub/ClinicOS'",
     "github.ref == 'refs/heads/codex/demo-470-completion'", "inputs.operation == 'demo-storage-inspect'",
     'inputs.reviewed_sha == github.sha', "environment: 'glistening-friendship / demo'", 'timeout-minutes: 10',
