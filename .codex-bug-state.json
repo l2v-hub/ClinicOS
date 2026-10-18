@@ -1868,16 +1868,28 @@
       "implementation": [
         {
           "round": 1,
-          "status": "running",
+          "status": "failed",
           "startedAt": "2026-10-18T08:59:54.140Z",
           "owner": "codex-cloud-issue485",
           "nonce": "50977692-758c-4129-ac54-07cc844bac91",
           "baseSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
-          "contractSha256": "cf8537f1c33db318fb68d3619c7e8d47796242f35927afbc301aac1ca75fb405"
+          "contractSha256": "cf8537f1c33db318fb68d3619c7e8d47796242f35927afbc301aac1ca75fb405",
+          "completedAt": "2026-10-18T09:09:54.158Z",
+          "failure": "Independent QA: short390x600/320x568 original32px high and toolbar/download overlap;320 data field inaccessible. Full regular9cases and3DB persistence pass. History preserved.",
+          "sourceFreezeSha256": "acc93b986cac68b359613a52eec7e1b256d5ca86d8b3312a6971fab440161063"
+        },
+        {
+          "round": 2,
+          "status": "running",
+          "startedAt": "2026-10-18T09:09:54.158Z",
+          "owner": "codex-cloud-issue485",
+          "nonce": "a27b8897-4aa2-43b7-907f-2127c31bcc10",
+          "baseSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
+          "contractSha256": "28e3ee6839e02d5acba7ef84d579b4e2c3d46c90dc4bff805c115ec03c43162d"
         }
       ],
       "reviews": [],
-      "reason": "Issue485 implementation1/4 frozen; new independent QA is executing all five phases. Scheduled executor paused to avoid duplicate authors; parent450 remains unchanged.",
+      "reason": "Issue485 round1 FAILED on short phone layouts; round2/4 reserved before bounded CSS correction. Existing plan/scope/parent budgets retained; scheduled writer paused for operator ownership.",
       "triageRecovery": {
         "kind": "operator-completed-read-only-triage",
         "sourceRun": 39029815917,
@@ -1978,12 +1990,10 @@
       },
       "operatorActivity": {
         "owner": "codex-cloud-issue485",
-        "nonce": "50977692-758c-4129-ac54-07cc844bac91",
-        "phase": "validating",
-        "startedAt": "2026-10-18T08:59:54.140Z",
-        "contractSha256": "cf8537f1c33db318fb68d3619c7e8d47796242f35927afbc301aac1ca75fb405",
-        "updatedAt": "2026-10-18T09:02:19.324Z",
-        "qaOwner": "issue485_fix_qa"
+        "nonce": "a27b8897-4aa2-43b7-907f-2127c31bcc10",
+        "phase": "implementing",
+        "startedAt": "2026-10-18T09:09:54.158Z",
+        "contractSha256": "28e3ee6839e02d5acba7ef84d579b4e2c3d46c90dc4bff805c115ec03c43162d"
       }
     },
     {
@@ -7222,7 +7232,7 @@
       }
     }
   ],
-  "updatedAt": "2026-10-18T09:02:19.325Z",
+  "updatedAt": "2026-10-18T09:09:54.158Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
