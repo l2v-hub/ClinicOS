@@ -1877,7 +1877,7 @@
         "active": true,
         "owner": "codex-cloud-after-claude",
         "nonce": "5ef4558e-2243-4380-8330-453cfa1df672",
-        "stage": "implementing",
+        "stage": "independent-qa",
         "startedAt": "2026-10-18T16:47:23.897Z",
         "baseSha": "34c865233df53a3930f29c8b7befc02208588d64",
         "implementationStarted": true,
@@ -1889,7 +1889,7 @@
       "operatorContinuations": [
         {
           "round": 5,
-          "status": "running",
+          "status": "implemented-awaiting-independent-qa",
           "owner": "codex-cloud-after-claude",
           "nonce": "ae512ce7-aff8-421c-bac2-cd0e776e5eb4",
           "startedAt": "2026-10-18T16:55:32.005Z",
@@ -1900,7 +1900,18 @@
           "preservedLegacyImplementationDigest": "007ad3907eddc00d5ce0b8f52fa1d1e66a097569d1085c19234f8e7567b2b11c",
           "preservedLegacyReviewsDigest": "625f559854d8fb4dd44c994e1af75686eb6c88280d72f6545a51aedde8660cd3",
           "preservedEntityDigest": "6f044d6ce285efce05428b12df612c8a67be08209aa573b8956180ffbe0c5f2a",
-          "reason": "User explicitly authorized continued corrections beyond four with all previous attempts and reports preserved. Existing subject retained; no legacy counter or review approval rewritten."
+          "reason": "User explicitly authorized continued corrections beyond four with all previous attempts and reports preserved. Existing subject retained; no legacy counter or review approval rewritten.",
+          "authorStoppedAt": "2026-10-18T18:07:07.622Z",
+          "sourceHandoffSha256": "d746b0d2a72863a70fe082dd0a4547e7495ab84eccc03c6ea4921108a4ebdd80",
+          "authorTests": {
+            "backendPassed": 1932,
+            "backendOptInSkipped": 5,
+            "frontendPassed": 1396,
+            "canonicalBrowser": true,
+            "dedicatedClinicalBrowserSql": true,
+            "independent": false,
+            "sourceDigest": "333b7c06f4d16e1ba54f857f594093008758e2a2165c3962a623e82f9d6a57f0"
+          }
         }
       ],
       "operatorScopeAmendments": [
@@ -8920,7 +8931,7 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-18T18:05:52.983Z",
+  "updatedAt": "2026-10-18T18:07:07.622Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
