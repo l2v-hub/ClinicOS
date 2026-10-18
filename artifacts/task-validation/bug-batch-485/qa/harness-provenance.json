@@ -1,0 +1,17 @@
+{
+  "input": "/workspace/.clinicos-cloud/issue485-final-qa-20261018/run-issue485.mjs",
+  "inputSha256": "d1260cf80514f4f0483ef28c8c6959b719fed17dc6729f753fb6b275aba37c16",
+  "runnerSha256": "1a3617a9c9a4b099d3fa59a061ef0432d7eab90a5c1700d1b36df25b84482c18",
+  "changes": [
+    "new owned container/output root",
+    "capture and assert actual native focused minus/plus/Adatta bounds and all25/50/75 hitpoints",
+    "require imported editing source canvas instead of conditional omission"
+  ],
+  "appChanges": false,
+  "thresholds": {
+    "height": 80,
+    "width": 100,
+    "darkPixels": 100
+  },
+  "providerFixtureOnly": true
+}

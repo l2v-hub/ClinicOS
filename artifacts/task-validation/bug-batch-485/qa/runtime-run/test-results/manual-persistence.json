@@ -1,0 +1,17 @@
+[
+  {
+    "data": {
+      "ingresso": {
+        "oraPresa": "09:59",
+        "dataPresa": "2026-10-18"
+      },
+      "_accepted": {
+        "demographics": false
+      },
+      "anagrafica": {
+        "lastName": "Sintetico485",
+        "firstName": "Prova390"
+      }
+    }
+  }
+]
