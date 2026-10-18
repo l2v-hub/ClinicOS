@@ -64,13 +64,18 @@ function bearerReader(token, fetchImpl) {
   const started = Date.now();
   return async (phase) => {
     if (!Object.hasOwn(QUERIES, phase) || ++requests > 8 || Date.now() - started > 90_000) fail('READ_LIMIT');
+    const signal = AbortSignal.timeout(15_000);
     try {
       const response = await fetchImpl(ENDPOINT, {
-        method: 'POST', redirect: 'error', signal: AbortSignal.timeout(15_000),
+        method: 'POST', redirect: 'error', signal,
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ query: QUERIES[phase], variables: VARIABLES[phase] }),
       });
-      if (!response.ok || response.url !== ENDPOINT || response.redirected || !response.body || Number(response.headers.get('content-length')) > 262144) fail('RESPONSE');
+      if (!Number.isInteger(response?.status) || response.status < 100 || response.status > 599) fail(`${phase}_RESPONSE_INVALID`);
+      if (response.status < 200 || response.status > 299) fail(`${phase}_HTTP_${response.status}`);
+      if (response.url !== ENDPOINT || response.redirected !== false || typeof response.headers?.get !== 'function' || typeof response.body?.getReader !== 'function') fail(`${phase}_RESPONSE_INVALID`);
+      const length = response.headers.get('content-length');
+      if (length !== null && (!/^[0-9]{1,10}$/.test(length) || Number(length) > 262144)) fail(`${phase}_RESPONSE_INVALID`);
       const reader = response.body.getReader();
       const chunks = []; let bytes = 0;
       try {
@@ -78,14 +83,26 @@ function bearerReader(token, fetchImpl) {
           const {done,value} = await reader.read();
           if (done) break;
           bytes += value.byteLength;
-          if (bytes > 262144) fail('RESPONSE');
+          if (bytes > 262144) fail(`${phase}_RESPONSE_INVALID`);
           chunks.push(Buffer.from(value));
         }
       } finally { await reader.cancel().catch(() => {}); }
-      const body = JSON.parse(Buffer.concat(chunks).toString('utf8'));
-      if (!body?.data || Object.hasOwn(body, 'errors')) fail('RESPONSE');
+      let body;
+      try { body = JSON.parse(Buffer.concat(chunks).toString('utf8')); }
+      catch { fail(`${phase}_RESPONSE_INVALID`); }
+      if (!body || typeof body !== 'object' || Array.isArray(body)) fail(`${phase}_RESPONSE_INVALID`);
+      if (Object.hasOwn(body, 'errors')) {
+        if (!Array.isArray(body.errors) || !body.errors.length || !body.errors.every((error) => error && typeof error === 'object' && typeof error.message === 'string')) fail(`${phase}_RESPONSE_INVALID`);
+        fail(`${phase}_GRAPHQL_REJECTED`);
+      }
+      if (!body.data || typeof body.data !== 'object' || Array.isArray(body.data)) fail(`${phase}_RESPONSE_INVALID`);
       return body.data;
-    } catch { fail(`${phase}_READ_FAILED`); }
+    } catch (error) {
+      // Only helper-minted constant errors survive; never copy provider messages/codes.
+      if (safeErrors.has(error)) throw error;
+      if ((signal.aborted && signal.reason?.name === 'TimeoutError') || (error instanceof DOMException && error.name === 'TimeoutError')) fail(`${phase}_TIMEOUT`);
+      fail(`${phase}_NETWORK`);
+    }
   };
 }
 
@@ -99,20 +116,26 @@ export function createRunner({ railwayToken, githubToken, fetchImpl = fetch } = 
     const fresh = async () => { try { await verify(); } catch { fail('MAIN'); } };
     await fresh();
     const read = bearerReader(railwayToken, fetchImpl);
-    const identity = await read('IDENTITY');
-    try { safe(identity?.me?.id); } catch { fail('IDENTITY_SHAPE'); }
+    const project = async (phase, projection) => {
+      const data = await read(phase);
+      try { return projection(data); } catch { fail(`${phase}_RESPONSE_INVALID`); }
+    };
+    await project('IDENTITY', (identity) => { safe(identity?.me?.id); });
     // Identity ID is deliberately discarded here.
     const snapshot = async () => {
-      const access = await read('ACCESS');
-      exact(access?.project?.id, TARGET.projectId);
-      exact(access?.environment?.id, TARGET.environmentId);
-      exact(access.environment.projectId, TARGET.projectId);
-      exact(access.environment.name, 'demo');
-      const canAccess = bool(access.environment.canAccess);
-      const repo = (await read('REPOSITORY'))?.gitHubRepoAccessAvailable;
-      const repositoryAccess = { hasAccess: bool(repo?.hasAccess), isPublic: bool(repo?.isPublic) };
+      const canAccess = await project('ACCESS', (access) => {
+        exact(access?.project?.id, TARGET.projectId);
+        exact(access?.environment?.id, TARGET.environmentId);
+        exact(access.environment.projectId, TARGET.projectId);
+        exact(access.environment.name, 'demo');
+        return bool(access.environment.canAccess);
+      });
+      const repositoryAccess = await project('REPOSITORY', (data) => {
+        const repo = data.gitHubRepoAccessAvailable;
+        return { hasAccess: bool(repo?.hasAccess), isPublic: bool(repo?.isPublic) };
+      });
       // A false access observation is retained without claiming service inventory access.
-      return { environment: { id: TARGET.environmentId, name: 'demo', canAccess }, repositoryAccess, inventory: canAccess ? inventory(await read('INVENTORY')) : null };
+      return { environment: { id: TARGET.environmentId, name: 'demo', canAccess }, repositoryAccess, inventory: canAccess ? await project('INVENTORY', inventory) : null };
     };
     await fresh();
     const before = await snapshot();

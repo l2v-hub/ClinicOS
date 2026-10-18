@@ -9,7 +9,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: railway-backend
+  group: demo-bearer-readiness
   cancel-in-progress: false
 jobs:
   inspect:

@@ -102,7 +102,7 @@ test('trigger ownership, duplication and metadata reject; bounded valid trigger 
     await assert.rejects(harness({data}).run());
   }
   valid.INVENTORY.deploymentTriggers.edges.push({node: trigger()});
-  await assert.rejects(harness({data: valid}).run(), /DUPLICATE/);
+  await assert.rejects(harness({data: valid}).run(), /INVENTORY_RESPONSE_INVALID/);
 });
 test('inventory drift prevents a receipt', async () => {
   await assert.rejects(harness({modify: ({phase, body, inventories}) => {
@@ -110,18 +110,41 @@ test('inventory drift prevents a receipt', async () => {
     return response(body);
   }}).run(), /INVENTORY_DRIFT/);
 });
-test('transport, redirects, errors, malformed JSON and response bounds use constant errors', async () => {
+test('transport, redirects, GraphQL, malformed JSON and bounds retain distinct constant causes', async () => {
+  const invalid = 'IDENTITY_RESPONSE_INVALID';
   const cases = [
-    () => {throw new Error('raw-private-provider-error');},
-    () => response({data: null, errors: [{message: 'raw-private-provider-error'}]}),
-    () => response({data: fixture().IDENTITY, errors: []}),
-    () => response({}, 'https://evil.invalid'),
-    () => response({}, ENDPOINT, {status: 403}),
-    () => response({padding: 'x'.repeat(262145)}),
-    () => { const r = response({}); Object.defineProperty(r, 'redirected', {value: true}); return r; },
-    () => { const r = new Response('{broken'); Object.defineProperty(r, 'url', {value: ENDPOINT}); return r; },
+    [() => {throw new Error('raw-private-provider-error https://private.invalid/token');}, 'IDENTITY_NETWORK'],
+    [() => {throw new DOMException('raw-private-provider-error', 'TimeoutError');}, 'IDENTITY_TIMEOUT'],
+    [() => response({data: null, errors: [{message: 'raw-private-provider-error', extensions:{code:'arbitrary-private'}}]}), 'IDENTITY_GRAPHQL_REJECTED'],
+    [() => response({data: fixture().IDENTITY, errors: []}), invalid],
+    [() => response({errors: 'poisoned'}), invalid],
+    [() => response({}, 'https://evil.invalid'), invalid],
+    [() => ({}), invalid],
+    [() => response({},ENDPOINT,{headers:{'content-length':'bad'}}), invalid],
+    [() => {throw {name:'TimeoutError',message:'untrusted-error-name'};}, 'IDENTITY_NETWORK'],
+    [() => response({}, ENDPOINT, {status: 403}), 'IDENTITY_HTTP_403'],
+    [() => response({}, ENDPOINT, {status: 401}), 'IDENTITY_HTTP_401'],
+    [() => response({padding: 'x'.repeat(262145)}), invalid],
+    [() => {const r=response({}); Object.defineProperty(r,'status',{value:601}); return r;}, invalid],
+    [() => {const r=response({}); Object.defineProperty(r,'status',{value:'403'}); return r;}, invalid],
+    [() => {const r=response({},ENDPOINT,{headers:{'content-length':'262145'}}); return r;}, invalid],
+    [() => {const r=response({}); Object.defineProperty(r,'redirected',{value:true}); return r;}, invalid],
+    [() => {const r=new Response('{broken'); Object.defineProperty(r,'url',{value:ENDPOINT}); return r;}, invalid],
+    [() => {const r=new Response(new ReadableStream({pull(controller){controller.error(new Error('raw-stream-private'));}})); Object.defineProperty(r,'url',{value:ENDPOINT}); return r;}, 'IDENTITY_NETWORK'],
   ];
-  for (const modify of cases) await assert.rejects(harness({modify}).run(), (error) => error.message === 'DEMO_BEARER_IDENTITY_READ_FAILED');
+  for (const [modify, code] of cases) await assert.rejects(harness({modify}).run(), (error) => error.message === `DEMO_BEARER_${code}`);
+});
+test('all fixed phases retain HTTP and GraphQL classification and reject malformed projected shapes', async () => {
+  for (const phase of Object.keys(QUERIES)) {
+    for (const [reply, code] of [
+      [()=>response({},ENDPOINT,{status:403}), 'HTTP_403'],
+      [()=>response({errors:[{message:'private'}]}),'GRAPHQL_REJECTED'],
+      [()=>response({data:{}}),'RESPONSE_INVALID'],
+    ]) {
+      await assert.rejects(harness({modify: (request)=>request.phase===phase ? reply() : response(request.body)}).run(),
+        (error)=>error.message===`DEMO_BEARER_${phase}_${code}`);
+    }
+  }
 });
 test('missing credentials and all CLI failures are sanitized with annotation and constant console code', async () => {
   const directory = await mkdtemp(`${tmpdir()}/demo-bearer-cli-`);
@@ -135,7 +158,9 @@ test('workflow keeps exact main, fixed existing secret, readonly scope and offli
   const workflow = await readFile(new URL('../../.github/workflows/inspect-demo-bearer-readiness.yml', import.meta.url), 'utf8');
   assert.equal((workflow.match(/secrets\./g) ?? []).length, 1);
   assert.match(workflow, /RAILWAY_TOKEN: \$\{\{ secrets.RAILWAY_TOKEN \}\}/);
-  assert.match(workflow, /group: railway-backend/);
+  assert.match(workflow, /group: demo-bearer-readiness/);
+  const production = await readFile(new URL('../../.github/workflows/deploy-backend.yml', import.meta.url), 'utf8');
+  assert.notEqual(workflow.match(/group: ([^\n]+)/)[1], production.match(/group: ([^\n]+)/)[1]);
   assert.match(workflow, /persist-credentials: false/);
   assert.match(workflow, /inputs.reviewed_sha == github.sha/);
   assert.match(workflow, /environment: 'glistening-friendship \/ demo'/);
@@ -147,6 +172,8 @@ test('workflow keeps exact main, fixed existing secret, readonly scope and offli
 test('real CLI success writes exclusive mode0600 receipt and identical console marker without credentials or identity', async () => {
   const directory = await mkdtemp(`${tmpdir()}/demo-bearer-success-`);
   const data = fixture();
+  data.INVENTORY.deploymentTriggers.edges = [{node:{...trigger(), privateExtra:'never-publish'}}];
+  data.ACCESS.environment.privateExtra = 'never-publish';
   const preload = `const data=${JSON.stringify(data)}; const queries=${JSON.stringify(QUERIES)};
     globalThis.fetch=async(url,options)=>{
       let body;
@@ -162,7 +189,17 @@ test('real CLI success writes exclusive mode0600 receipt and identical console m
   const receipt = await readFile(receiptPath, 'utf8');
   assert.equal((await stat(receiptPath)).mode & 0o777, 0o600);
   assert.equal(child.stdout, `DEMO_BEARER_READINESS_RECEIPT ${receipt}`);
-  assert.ok(!/opaque-user|unrequested|synthetic-railway|synthetic-github/.test(receipt));
+  assert.ok(!/opaque-user|unrequested|synthetic-railway|synthetic-github|never-publish|privateExtra/.test(receipt));
+  const printed = JSON.parse(child.stdout.slice('DEMO_BEARER_READINESS_RECEIPT '.length));
+  const keys = (object) => Object.keys(object).sort();
+  assert.deepEqual(keys(printed), ['schemaVersion','repository','reviewedSha','runId','runAttempt','capturedAt','credentialBinding','authTransport','credentialKind','userIdentityObserved','projectWideVisibility','serviceConnectAllowed','mutationAllowed','deployVerified','outcome','target','observations','inventorySha256'].sort());
+  assert.deepEqual(keys(printed.target), ['projectId','environmentId','serviceId','repository','branch','domain'].sort());
+  assert.deepEqual(keys(printed.observations), ['environment','repositoryAccess','inventory'].sort());
+  assert.deepEqual(keys(printed.observations.environment), ['id','name','canAccess'].sort());
+  assert.deepEqual(keys(printed.observations.repositoryAccess), ['hasAccess','isPublic'].sort());
+  assert.deepEqual(keys(printed.observations.inventory), ['projectId','environmentId','serviceId','repository','rootDirectory','domains','triggers'].sort());
+  assert.deepEqual(keys(printed.observations.inventory.domains[0]), ['kind','domain'].sort());
+  assert.deepEqual(keys(printed.observations.inventory.triggers[0]), ['id','provider','projectId','environmentId','serviceId','repository','branch','checkSuites','baseEnvironmentOverrideId'].sort());
   const retry = spawnSync(process.execPath, args, {cwd: directory, env: childEnv, encoding:'utf8'});
   assert.equal(retry.status, 1);
   assert.equal(await readFile(receiptPath, 'utf8'), receipt);
@@ -183,4 +220,41 @@ test('timeouts are installed on each request and credential/request sizes stay b
     return response({ref:'refs/heads/main',object:{type:'commit',sha}},url);
   }})(env), /CREDENTIAL/);
   assert.equal(providerCalls, 0);
+});
+
+test('poisoned provider errors never cross actual CLI stderr and constants preserve their causes', async () => {
+  const directory = await mkdtemp(`${tmpdir()}/demo-bearer-poison-`);
+  const poison = 'synthetic-railway-credential https://credential:private@private.invalid/identity ghp_private';
+  for (const [failure, code] of [
+    [`throw new Error(${JSON.stringify(poison)})`, 'NETWORK'],
+    [`throw new DOMException(${JSON.stringify(poison)},'TimeoutError')`, 'TIMEOUT'],
+    [`return fixed({errors:[{message:${JSON.stringify(poison)},extensions:{code:'INFERRED_ACCOUNT_SCOPE'}}]})`, 'GRAPHQL_REJECTED'],
+    [`return fixed({},403)`, 'HTTP_403'],
+    [`return fixed('malformed')`, 'RESPONSE_INVALID'],
+  ]) {
+    const preload = `const fixed=(body,status=200)=>{const r=new Response(JSON.stringify(body),{status});Object.defineProperty(r,'url',{value:${JSON.stringify(ENDPOINT)}});return r;};
+      globalThis.fetch=async(url)=>{if(url===${JSON.stringify(MAIN_ENDPOINT)}) {const r=new Response(JSON.stringify({ref:'refs/heads/main',object:{type:'commit',sha:${JSON.stringify(sha)}}}));Object.defineProperty(r,'url',{value:url});return r;} ${failure};};`;
+    const child = spawnSync(process.execPath, ['--import',`data:text/javascript,${encodeURIComponent(preload)}`,new URL('./inspect-demo-bearer-readiness.mjs',import.meta.url).pathname],
+      {cwd:directory,env:{...env,PATH:process.env.PATH,RAILWAY_TOKEN:'synthetic-railway-credential',GITHUB_TOKEN:'synthetic-github-credential'},encoding:'utf8'});
+    assert.equal(child.status,1);
+    assert.equal(child.stdout,'');
+    assert.equal(child.stderr,`::error::DEMO_BEARER_IDENTITY_${code}\nDEMO_BEARER_IDENTITY_${code}\n`);
+    await assert.rejects(stat(`${directory}/demo-bearer-readiness-receipt.json`));
+  }
+});
+
+test('own request timeout reason classifies interrupted body reads without parsing arbitrary messages', async () => {
+  const original=AbortSignal.timeout;
+  AbortSignal.timeout=(ms)=>{
+    if(ms!==15000) return original(ms);
+    const controller=new AbortController();
+    controller.abort(new DOMException('private-timeout-message','TimeoutError'));
+    return controller.signal;
+  };
+  try {
+    await assert.rejects(harness({modify:()=>{
+      const r=new Response(new ReadableStream({pull(controller){controller.error(new TypeError('arbitrary-body-read-failure'));}}));
+      Object.defineProperty(r,'url',{value:ENDPOINT});return r;
+    }}).run(),(error)=>error.message==='DEMO_BEARER_IDENTITY_TIMEOUT');
+  } finally {AbortSignal.timeout=original;}
 });
