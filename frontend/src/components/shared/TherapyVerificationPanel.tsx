@@ -1,4 +1,5 @@
 import type { TherapyReadGroup, TherapyVerificationGroup } from '../../types';
+import { administeredTime, motivoLabel } from '../../lib/therapyGiro';
 
 const REASONS = {
   missing_time: 'Orario non specificato.',
@@ -41,14 +42,44 @@ export function TherapyVerificationPanel({
               <strong>Da verificare · {total}</strong> · {group.date}
             </p>
             <p>
-              Programmazione da verificare con il medico prescrittore. Nessuna somministrazione
-              disponibile.
+              Programmazione da verificare con il medico prescrittore. Nessuna nuova
+              somministrazione disponibile.
             </p>
             <ul>
               {rows.map(({ patient, item }) => (
                 <li key={`${patient.patientId}-${item.therapyId}`}>
                   <strong>{item.drugName}</strong> · {patient.lastName} {patient.firstName} ·{' '}
                   {REASONS[item.reason]}
+                  {item.recordedOutcome ? (
+                    <span>
+                      {' '}
+                      ·{' '}
+                      <strong>
+                        {item.recordedOutcome.status === 'administered'
+                          ? 'Già somministrata'
+                          : 'Già registrata come non somministrata'}
+                      </strong>
+                      {item.recordedOutcome.recordedBy && (
+                        <> · Operatore: {item.recordedOutcome.recordedBy}</>
+                      )}
+                      {item.recordedOutcome.recordedAt && (
+                        <>
+                          {' '}
+                          · Registrata il{' '}
+                          {new Date(item.recordedOutcome.recordedAt).toLocaleDateString('it-IT', {
+                            timeZone: 'Europe/Rome',
+                          })}{' '}
+                          alle {administeredTime(item.recordedOutcome.recordedAt)}
+                        </>
+                      )}
+                      {item.recordedOutcome.notAdministeredReason && (
+                        <> · {motivoLabel(item.recordedOutcome.notAdministeredReason)}</>
+                      )}
+                      {' · Esito registrato in sola lettura.'}
+                    </span>
+                  ) : (
+                    <span> · Esito registrato non disponibile.</span>
+                  )}
                 </li>
               ))}
             </ul>

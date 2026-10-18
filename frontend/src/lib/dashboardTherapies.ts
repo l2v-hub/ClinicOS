@@ -90,6 +90,8 @@ export function summarizeDashboardTherapies(
         if (dayOffset === 0) {
           daVerificare += slot.summary.total;
           totale += slot.summary.total;
+          fatte += slot.summary.administered ?? 0;
+          nonErogate += slot.summary.notAdministered ?? 0;
         }
         continue;
       }

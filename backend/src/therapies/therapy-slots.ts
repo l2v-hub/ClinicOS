@@ -18,6 +18,7 @@ import {
   earliestOra,
   oneTimeSlot,
   oneTimeVerificationReason,
+  recordedOneTimeOutcome,
   therapyBandEnabled,
 } from './slot-scheduling.js';
 import {
@@ -30,6 +31,7 @@ import {
   therapyBandEnabledSql,
   normalizedTherapyClockSql,
   oneTimeVerificationWhereSql,
+  recordedOneTimeOutcomeSql,
   type TherapyPatientAccess,
 } from './therapy-query.js';
 import {
@@ -80,6 +82,16 @@ export interface SlotPatient {
   administrations: SlotAdministration[];
 }
 
+export interface TherapyRecordedOutcome {
+  administrationId: string;
+  therapyId: string;
+  patientId: string;
+  date: string;
+  status: 'administered' | 'not_administered';
+  recordedAt: string | null;
+  recordedBy: string | null;
+  notAdministeredReason: string | null;
+}
 export interface TherapyVerificationItem {
   therapyId: string;
   drugName: string;
@@ -89,6 +101,7 @@ export interface TherapyVerificationItem {
   quantityLabel: null;
   dosage: null;
   canAdminister: false;
+  recordedOutcome?: TherapyRecordedOutcome | null;
 }
 export interface TherapyVerificationGroup {
   kind: 'verification';
@@ -97,7 +110,13 @@ export interface TherapyVerificationGroup {
   label: 'Da verificare';
   fascia: null;
   ora: null;
-  summary: { total: number; verification: number };
+  summary: {
+    total: number;
+    verification: number;
+    administered?: number;
+    notAdministered?: number;
+    unrecorded?: number;
+  };
   patients: Array<Omit<SlotPatient, 'administrations'> & { items: TherapyVerificationItem[] }>;
 }
 export type TherapyReadGroup = TherapySlot | TherapyVerificationGroup;
@@ -213,14 +232,20 @@ export async function buildTherapySlotExactSummary(
         AND ma."therapyId" IS NULL
       ORDER BY ma."patientId", ma."farmacoNome", ma.fascia, ma.ora, ma.id DESC
     ), resolved AS (
-      SELECT due.fascia, COALESCE(modern.stato, legacy.stato) AS stato
+      SELECT due.fascia, COALESCE(day_record.stato, modern.stato, legacy.stato) AS stato
       FROM due_therapy due
+      LEFT JOIN LATERAL (${recordedOneTimeOutcomeSql(date, {
+        patientId: Prisma.sql`due."patientId"`,
+        id: Prisma.sql`due.id`,
+        drugName: Prisma.sql`due."farmacoNome"`,
+      })}) day_record ON due.tipo = 'una_tantum'
       -- Same rule as the slot detail: ONE prescribed dose in a band = one record whatever its hour.
       LEFT JOIN LATERAL (
         SELECT ma.id, ma.stato
         FROM "MedicationAdministration" ma
         WHERE ma."therapyId" = due.id
           AND ma.date = ${date}
+          AND ma."patientId" = due."patientId"
           AND (due.tipo = 'una_tantum' OR (
             ma.fascia = due.fascia
             AND (ma.ora = due."scheduledTime" OR due."bandDoses" <= 1)
@@ -234,6 +259,11 @@ export async function buildTherapySlotExactSummary(
         AND legacy."farmacoNome" = due."farmacoNome"
         AND legacy.fascia = due.fascia
         AND legacy.ora = due."scheduledTime"
+      UNION ALL
+      SELECT 'verification' AS fascia, recorded.stato
+      FROM "PatientTherapy" pt JOIN "Patient" p ON p.id = pt."patientId"
+      LEFT JOIN LATERAL (${recordedOneTimeOutcomeSql(date)}) recorded ON TRUE
+      WHERE ${oneTimeVerificationWhereSql(date, access)}
     )
     SELECT
       fascia,
@@ -361,9 +391,16 @@ async function buildTherapySlotSourcePage(
       patientId: therapy.patientId,
       drugName: therapy.farmacoNome,
       singleDayDose: therapy.tipo === 'una_tantum',
-      fasce: FASCE.filter((fascia) =>
-        therapyBandEnabled(therapy, fascia.fascia, therapy[fascia.flagField as FlagField] === true),
-      ).map(({ fascia }) => fascia),
+      fasce:
+        therapy.tipo === 'una_tantum'
+          ? FASCE.map(({ fascia }) => fascia)
+          : FASCE.filter((fascia) =>
+              therapyBandEnabled(
+                therapy,
+                fascia.fascia,
+                therapy[fascia.flagField as FlagField] === true,
+              ),
+            ).map(({ fascia }) => fascia),
     })),
     db,
   );
@@ -401,15 +438,16 @@ async function buildTherapySlotSourcePage(
   // have been moved after the dose was given); `erogata` wins so a given dose never reopens.
   const bandRecords = new Map<string, (typeof administrations)[0]>();
   const dayRecords = new Map<string, (typeof administrations)[0]>();
+  for (const therapy of validTherapies.filter((therapy) => therapy.tipo === 'una_tantum')) {
+    const record = recordedOneTimeOutcome(therapy, administrations);
+    if (record) dayRecords.set(therapy.id, record);
+  }
   for (const administration of administrations) {
     if (!administration.therapyId) continue;
     const key = `${administration.therapyId}|${administration.fascia}`;
     const held = bandRecords.get(key);
     if (!held || (held.stato !== 'erogata' && administration.stato === 'erogata'))
       bandRecords.set(key, administration);
-    const dayHeld = dayRecords.get(administration.therapyId);
-    if (!dayHeld || (dayHeld.stato !== 'erogata' && administration.stato === 'erogata'))
-      dayRecords.set(administration.therapyId, administration);
   }
 
   const slots: TherapySlot[] = FASCE.map((f) => {
@@ -437,7 +475,7 @@ async function buildTherapySlotSourcePage(
               ? bandRecords.get(`${pt.id}|${f.fascia}`)
               : undefined;
         const existing =
-          (bandRecord?.stato === 'erogata' ? bandRecord : undefined) ??
+          (pt.tipo === 'una_tantum' || bandRecord?.stato === 'erogata' ? bandRecord : undefined) ??
           adminMap.get(`${pt.id}|${f.fascia}|${time}`) ??
           adminMap.get(legacyAdministrationKey(pt.patientId, pt.farmacoNome, f.fascia, time)) ??
           (doses.length === 1
@@ -536,6 +574,9 @@ async function buildTherapySlotSourcePage(
         items: [],
       });
     }
+    const recorded = dayRecords.get(therapy.id);
+    // Refusals have no confirmedAt: the record update timestamp is their actual recording time.
+    const recordedAt = recorded?.confirmedAt ?? recorded?.updatedAt ?? null;
     verificationPatients.get(therapy.patientId)!.items.push({
       therapyId: therapy.id,
       drugName: therapy.farmacoNome,
@@ -545,6 +586,18 @@ async function buildTherapySlotSourcePage(
       quantityLabel: null,
       dosage: null,
       canAdminister: false,
+      recordedOutcome: recorded
+        ? {
+            administrationId: recorded.id,
+            therapyId: therapy.id,
+            patientId: therapy.patientId,
+            date,
+            status: recorded.stato === 'erogata' ? 'administered' : 'not_administered',
+            recordedAt: recordedAt ? new Date(recordedAt).toISOString() : null,
+            recordedBy: recorded.operatoreNome,
+            notAdministeredReason: recorded.stato === 'non_erogata' ? recorded.motivo : null,
+          }
+        : null,
     });
   }
   const verificationTotal = [...verificationPatients.values()].reduce(
@@ -558,7 +611,19 @@ async function buildTherapySlotSourcePage(
     label: 'Da verificare',
     fascia: null,
     ora: null,
-    summary: { total: verificationTotal, verification: verificationTotal },
+    summary: {
+      total: verificationTotal,
+      verification: verificationTotal,
+      administered: [...verificationPatients.values()]
+        .flatMap((p) => p.items)
+        .filter((i) => i.recordedOutcome?.status === 'administered').length,
+      notAdministered: [...verificationPatients.values()]
+        .flatMap((p) => p.items)
+        .filter((i) => i.recordedOutcome?.status === 'not_administered').length,
+      unrecorded: [...verificationPatients.values()]
+        .flatMap((p) => p.items)
+        .filter((i) => !i.recordedOutcome).length,
+    },
     patients: [...verificationPatients.values()],
   };
   return {
@@ -639,9 +704,7 @@ export async function buildTherapySlotPage(
         },
       ];
     });
-    const [verificationCount] = await tx.$queryRaw<Array<{ total: number }>>(Prisma.sql`
-      SELECT count(*)::int AS total FROM "PatientTherapy" pt JOIN "Patient" p ON p.id = pt."patientId"
-      WHERE ${oneTimeVerificationWhereSql(date, access)}`);
+    const verificationCount = exactSummary.get('verification');
     const total = Number(verificationCount?.total ?? 0);
     if (total)
       page.slots.push({
@@ -651,7 +714,13 @@ export async function buildTherapySlotPage(
         label: 'Da verificare',
         fascia: null,
         ora: null,
-        summary: { total, verification: total },
+        summary: {
+          total,
+          verification: total,
+          administered: Number(verificationCount?.administered ?? 0),
+          notAdministered: Number(verificationCount?.notAdministered ?? 0),
+          unrecorded: Number(verificationCount?.pending ?? 0),
+        },
         patients: verification?.patients ?? [],
       });
     return page;

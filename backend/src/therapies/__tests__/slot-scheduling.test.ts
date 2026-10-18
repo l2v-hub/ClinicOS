@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   normalizeTherapyClock,
+  recordedOneTimeOutcome,
   oneTimeSlot,
   oneTimeVerificationReason,
 } from '../slot-scheduling.js';
@@ -66,4 +67,35 @@ test('only confirm accepts an observed refused state; pending-only remains expli
     parseTherapyAdministrationBody({ ...body, expectedStato: 'da_erogare' }, false).expectedStato,
     'da_erogare',
   );
+});
+
+test('single-day recorded outcome is patient-bound, given-wins across legacy bands, deterministic', () => {
+  const therapy = { id: 't1', patientId: 'p1', farmacoNome: 'Synthetic' };
+  const record = (id: string, stato: string, patch = {}) => ({
+    id,
+    stato,
+    therapyId: 't1',
+    patientId: 'p1',
+    farmacoNome: 'Synthetic',
+    fascia: 'mattina',
+    ...patch,
+  });
+  const refused = record('a', 'non_erogata');
+  const given = record('b', 'erogata', { fascia: 'sera' });
+  const legacy = record('c', 'erogata', { therapyId: null, fascia: 'notte' });
+  const foreign = record('0', 'erogata', { patientId: 'p2' });
+  const unrelated = record('0', 'erogata', { therapyId: 't2' });
+  for (const records of [
+    [refused, legacy, foreign, given, unrelated],
+    [given, legacy, refused, foreign, unrelated],
+  ])
+    assert.equal(recordedOneTimeOutcome(therapy, records)?.id, 'b');
+  assert.equal(recordedOneTimeOutcome(therapy, [refused, legacy])?.id, 'c');
+  assert.equal(recordedOneTimeOutcome(therapy, [refused])?.stato, 'non_erogata');
+  assert.equal(
+    recordedOneTimeOutcome(therapy, [foreign, unrelated, record('x', 'da_erogare')]),
+    null,
+  );
+  assert.equal(recordedOneTimeOutcome(therapy, [record('z', 'erogata'), given])?.id, 'b');
+  assert.equal(recordedOneTimeOutcome(therapy, []), null);
 });

@@ -1,3 +1,4 @@
+import { TherapyVerificationPanel } from '../../shared/TherapyVerificationPanel';
 import { parseTherapySlots } from '../../../lib/therapySlotPage';
 // Il calendario raggruppa le dosi nello slot; dettagli e azioni sono nella popup dell'ora.
 // Il proprietario inoltra onCreate solo ai profili autorizzati a prescrivere.
@@ -339,6 +340,18 @@ export function PatientTherapyCalendar({
               Stato delle somministrazioni non disponibile: è mostrata solo la programmazione.
             </p>
           )}
+          {visibleDays.map((visibleDate) => {
+            const loaded = slots[visibleDate];
+            return loaded?.status === 'ready' ? (
+              <TherapyVerificationPanel
+                key={visibleDate}
+                groups={loaded.slots.filter(
+                  (group) => group.kind === 'verification' && group.date === visibleDate,
+                )}
+                patientId={patientId}
+              />
+            ) : null;
+          })}
           <TherapyCalendarGrid
             days={visibleDays}
             cells={cells}

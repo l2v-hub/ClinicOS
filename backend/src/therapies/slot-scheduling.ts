@@ -61,3 +61,35 @@ export function earliestOra(scheduledTimes: string[], fallbackOra: string): stri
   if (scheduledTimes.length === 0) return fallbackOra;
   return scheduledTimes.reduce((min, t) => (t < min ? t : min), scheduledTimes[0]);
 }
+
+/** One civil-day outcome, including legacy cross-band records. Given always wins; ties are stable.
+ * Callers load records for the exact date. Patient identity is checked again before exposing data. */
+export function recordedOneTimeOutcome<
+  T extends {
+    id: string;
+    therapyId: string | null;
+    patientId: string;
+    farmacoNome: string;
+    stato: string;
+  },
+>(
+  therapy: { id: string; patientId: string; farmacoNome: string },
+  records: readonly T[],
+): T | null {
+  return (
+    records
+      .filter(
+        (record) =>
+          record.patientId === therapy.patientId &&
+          (record.therapyId === therapy.id ||
+            (record.therapyId === null && record.farmacoNome === therapy.farmacoNome)) &&
+          (record.stato === 'erogata' || record.stato === 'non_erogata'),
+      )
+      .sort(
+        (a, b) =>
+          Number(b.stato === 'erogata') - Number(a.stato === 'erogata') ||
+          Number(b.therapyId !== null) - Number(a.therapyId !== null) ||
+          (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
+      )[0] ?? null
+  );
+}
