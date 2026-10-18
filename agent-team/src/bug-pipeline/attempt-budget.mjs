@@ -132,7 +132,14 @@ export function validateOperatorContinuations(state) {
           state.operatorTakeover?.continuePastFourPreserveHistory === true,
           'Continuation requires explicit history-preserving authorization',
         );
-        if (index > 0)
+        if (index > 0 && record.round <= 4) {
+          assert.equal(record.budgetSource, 'default-four', 'Within-default continuation needs audited budget provenance');
+          assert.equal(record.budgetExtensionNonce, undefined, 'Default allowance is not an extension');
+          assert.equal(record.owner, continuations[0].owner, 'Default continuation owner changed');
+          assert.ok(!continuations.slice(0, index).some((previous) => previous.nonce === record.nonce),
+            'Default continuation reservation nonce replay');
+        } else if (index > 0) {
+          assert.equal(record.budgetSource, undefined, 'Beyond-default continuation requires its own extension');
           assert.ok(
             subject.budgetExtensions?.some(
               (entry) =>
@@ -142,6 +149,7 @@ export function validateOperatorContinuations(state) {
             ),
             'Each further continuation needs its own explicit allowance',
           );
+        }
       }
       assert.ok(
         spentAttempts(subject, 'implementation') <= attemptLimit(subject, 'implementation'),
@@ -156,18 +164,18 @@ export function reserveImplementation(subject, now = () => new Date()) {
   const attempt = { round, status: 'running' };
   if (!subject.operatorContinuations?.length) subject.implementation.push(attempt);
   else {
-    const extension = subject.budgetExtensions.find(
+    const extension = subject.budgetExtensions?.find(
       (entry) => entry.kind === 'implementation' && entry.limit === round,
     );
-    assert.ok(extension, 'An explicit next allowance is required');
+    assert.ok(round <= 4 || extension, 'An explicit next allowance is required');
     const lineage = subject.operatorContinuations[0];
     Object.assign(attempt, {
       kind: 'audited-budget-continuation',
-      budgetExtensionNonce: extension.nonce,
-      owner: extension.actor,
+      ...(round <= 4 ? { budgetSource: 'default-four' } : { budgetExtensionNonce: extension.nonce }),
+      owner: round <= 4 ? lineage.owner : extension.actor,
       nonce: randomUUID(),
       startedAt: now().toISOString(),
-      reason: extension.reason,
+      reason: round <= 4 ? lineage.reason : extension.reason,
       authorizationRef: lineage.authorizationRef,
       contractSha256: lineage.contractSha256,
       baseSha: subject.sha ?? lineage.baseSha,

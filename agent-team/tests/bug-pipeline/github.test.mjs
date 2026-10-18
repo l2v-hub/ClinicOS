@@ -70,6 +70,34 @@ function apiPath(args) {
   return args.find((arg, index) => index > 0 && !arg.startsWith('-'));
 }
 
+function stateContents(state) {
+  return stateContentsBytes(Buffer.from(typeof state === 'string' ? state : JSON.stringify(state), 'utf8'));
+}
+
+function stateContentsBytes(bytes) {
+  return {
+    type: 'file',
+    sha: createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex'),
+    size: bytes.length,
+    encoding: 'base64',
+    content: bytes.toString('base64'),
+  };
+}
+
+function blobFromContents(contents, overrides = {}) {
+  return {
+    sha: contents.sha,
+    size: contents.size,
+    encoding: 'base64',
+    content: contents.content,
+    ...overrides,
+  };
+}
+
+function wrappedBase64(value) {
+  return value.match(/.{1,76}/g)?.join('\r\n') ?? '';
+}
+
 test('a maintainer labeling with the same User identity as the controller PAT is authorized', async () => {
   const calls = [];
   const gh = createGitHub({
@@ -454,11 +482,7 @@ test('failed state CAS keeps the remembered SHA and never retries without it', a
       return response({}, { ok: false, code: 1, stderr: 'HTTP 409 conflict' });
     }
     if (path.startsWith('repos/l2v-hub/ClinicOS/contents/')) {
-      return response({
-        type: 'file',
-        sha: 'f'.repeat(40),
-        content: Buffer.from('{"count":1}').toString('base64'),
-      });
+      return response(stateContents({ count: 1 }));
     }
     throw new Error(`unexpected ${args.join(' ')}`);
   };
@@ -469,8 +493,190 @@ test('failed state CAS keeps the remembered SHA and never retries without it', a
   assert.equal(writes.length, 2);
   assert.deepEqual(
     writes.map((write) => write.sha),
-    ['f'.repeat(40), 'f'.repeat(40)],
+    [stateContents({ count: 1 }).sha, stateContents({ count: 1 }).sha],
   );
+});
+
+test('durable state over 1 MiB loads from one blob read pinned to the Contents SHA', async () => {
+  const history = Array.from({ length: 1400 }, (_, index) => ({
+    id: index + 1,
+    note: `historical review ${index}: ${'x'.repeat(900)}`,
+  }));
+  const expected = { batches: [{ id: 'complete-history', reviews: history }] };
+  const source = stateContents(expected);
+  assert.ok(source.size > 1024 * 1024);
+  const calls = [];
+  const store = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async ({ args, maxOutputBytes }) => {
+      const path = apiPath(args);
+      calls.push({ path, maxOutputBytes });
+      if (path.includes('/git/ref/heads/')) return response({ object: { sha: 'a'.repeat(40) } });
+      if (path.includes('/contents/'))
+        return response({
+          type: 'file',
+          sha: source.sha,
+          size: source.size,
+          encoding: 'none',
+          content: '',
+        });
+      if (path.endsWith(`/git/blobs/${source.sha}`))
+        return response(blobFromContents(source, { content: wrappedBase64(source.content) }));
+      throw new Error(`Unexpected route ${path}`);
+    },
+  }).createStateStore();
+  assert.deepEqual(await store.load(), expected);
+  assert.equal(calls.filter(({ path }) => path.includes('/git/blobs/')).length, 1);
+  assert.ok(
+    calls
+      .filter(({ path }) => path.includes('/contents/') || path.includes('/git/blobs/'))
+      .every(({ maxOutputBytes }) => maxOutputBytes >= 8 * 1024 * 1024),
+  );
+});
+
+test('small valid inline durable state does not read a Git blob', async () => {
+  const source = stateContents({ history: [{ id: 1 }, { id: 2 }] });
+  const calls = [];
+  const store = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async ({ args }) => {
+      const path = apiPath(args);
+      calls.push(path);
+      if (path.includes('/git/ref/heads/')) return response({ object: { sha: 'a'.repeat(40) } });
+      if (path.includes('/contents/'))
+        return response({ ...source, content: wrappedBase64(source.content) });
+      throw new Error(`Unexpected route ${path}`);
+    },
+  }).createStateStore();
+  assert.deepEqual(await store.load(), { history: [{ id: 1 }, { id: 2 }] });
+  assert.ok(calls.every((path) => !path.includes('/git/blobs/')));
+});
+
+test('dashboard state reads use the same pinned blob fallback without branch initialization', async () => {
+  const expected = { batches: [{ id: 'dashboard-state', history: ['first', 'second'] }] };
+  const source = stateContents(expected);
+  const calls = [];
+  const gh = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async ({ args, maxOutputBytes }) => {
+      const path = apiPath(args);
+      calls.push({ path, maxOutputBytes });
+      if (path.includes('/contents/'))
+        return response({
+          type: 'file',
+          sha: source.sha,
+          size: source.size,
+          encoding: 'none',
+          content: '',
+        });
+      if (path.endsWith(`/git/blobs/${source.sha}`)) return response(blobFromContents(source));
+      throw new Error(`Unexpected route ${path}`);
+    },
+  });
+  assert.deepEqual(await gh.readDashboardState(), expected);
+  assert.equal(calls.length, 2);
+  assert.ok(calls.every(({ path }) => !path.includes('/git/ref/heads/')));
+  assert.ok(calls.every(({ maxOutputBytes }) => maxOutputBytes >= 8 * 1024 * 1024));
+});
+
+test('durable state rejects corrupt encoding, size, SHA, UTF-8, and oversized payloads', async (t) => {
+  const valid = stateContents({ state: 'preserved' });
+  const cases = [
+    ['noncanonical base64', { ...valid, content: `${valid.content}!` }, /content is invalid/],
+    ['declared size mismatch', { ...valid, size: valid.size + 1 }, /content is invalid/],
+    ['SHA mismatch', { ...valid, sha: '0'.repeat(40) }, /SHA does not match/],
+    [
+      'invalid UTF-8',
+      stateContentsBytes(Buffer.from([0xff])),
+      /UTF-8/,
+    ],
+    ['oversized metadata', { ...valid, size: MAX_DURABLE_STATE_BYTES + 1 }, /regular file/],
+  ];
+  for (const [name, source, expectedError] of cases)
+    await t.test(name, async () => {
+      const store = createGitHub({
+        cwd: '/tmp',
+        repo: 'l2v-hub/ClinicOS',
+        run: async ({ args }) => {
+          const path = apiPath(args);
+          if (path.includes('/git/ref/heads/')) return response({ object: { sha: 'a'.repeat(40) } });
+          if (path.includes('/contents/')) return response(source);
+          throw new Error(`Unexpected route ${path}`);
+        },
+      }).createStateStore();
+      await assert.rejects(store.load(), expectedError);
+    });
+});
+
+test('durable state blob fallback rejects unpinned or malformed data without treating it as empty', async (t) => {
+  const source = stateContents({ state: 'preserved' });
+  for (const [name, fallback, expectedError] of [
+    ['different SHA', blobFromContents(source, { sha: '0'.repeat(40) }), /pinned Contents object/],
+    ['different size', blobFromContents(source, { size: source.size + 1 }), /pinned Contents object/],
+    ['invalid base64', blobFromContents(source, { content: '!!!!' }), /content is invalid/],
+  ])
+    await t.test(name, async () => {
+      const store = createGitHub({
+        cwd: '/tmp',
+        repo: 'l2v-hub/ClinicOS',
+        run: async ({ args }) => {
+          const path = apiPath(args);
+          if (path.includes('/git/ref/heads/')) return response({ object: { sha: 'a'.repeat(40) } });
+          if (path.includes('/contents/'))
+            return response({
+              type: 'file',
+              sha: source.sha,
+              size: source.size,
+              encoding: 'none',
+              content: '',
+            });
+          if (path.includes('/git/blobs/')) return response(fallback);
+          throw new Error(`Unexpected route ${path}`);
+        },
+      }).createStateStore();
+      await assert.rejects(store.load(), expectedError);
+    });
+});
+
+test('durable state load distinguishes a missing file from authorization or transport failures', async () => {
+  let failure = 'HTTP 404';
+  const store = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async ({ args }) => {
+      const path = apiPath(args);
+      if (path.includes('/git/ref/heads/')) return response({ object: { sha: 'a'.repeat(40) } });
+      if (path.includes('/contents/')) return response({}, { ok: false, code: 1, stderr: failure });
+      throw new Error(`Unexpected route ${path}`);
+    },
+  }).createStateStore();
+  assert.equal(await store.load(), null);
+  for (failure of ['HTTP 403', 'network timeout'])
+    await assert.rejects(store.load(), /Cannot read durable bug pipeline state/);
+});
+
+test('oversized durable state is rejected before any remote mutation', async () => {
+  const source = stateContents({ ready: true });
+  const calls = [];
+  const store = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async ({ args }) => {
+      const path = apiPath(args);
+      calls.push(args);
+      if (path.includes('/git/ref/heads/')) return response({ object: { sha: 'a'.repeat(40) } });
+      if (path.includes('/contents/')) return response(source);
+      if (args.includes('PUT')) return response({ content: { sha: 'b'.repeat(40) } });
+      throw new Error(`Unexpected route ${path}`);
+    },
+  }).createStateStore();
+  await store.load();
+  const before = calls.length;
+  await assert.rejects(store.save({ history: 'x'.repeat(MAX_DURABLE_STATE_BYTES) }), /8 MiB save bound/);
+  assert.equal(calls.length, before);
 });
 
 test('review feedback binds to PR head, tracks current reviews, unresolved threads and human comments', async () => {
@@ -958,17 +1164,18 @@ test('guard rereads cannot promote an old snapshot to a newer Contents CAS revis
           operatorNote: 'original',
         };
         let remote = structuredClone(original),
-          version = 'a'.repeat(40),
+          version = stateContents(remote).sha,
           changed = false,
           saving = false;
-        const writes = [];
+        const writes = [],
+          originalVersion = version;
         const change = () => {
           if (changed) return;
           changed = true;
           if (field === 'other batch') remote.batches[1].progress = 2;
           else if (field === 'manualBatches') remote.manualBatches[0].progress = 2;
           else remote.operatorNote = 'New operator instruction';
-          version = 'b'.repeat(40);
+          version = stateContents(remote).sha;
         };
         const gh = createGitHub({
           cwd: '/tmp',
@@ -987,12 +1194,7 @@ test('guard rereads cannot promote an old snapshot to a newer Contents CAS revis
               remote = JSON.parse(Buffer.from(body.content, 'base64').toString('utf8'));
               return response({ content: { sha: 'd'.repeat(40) } });
             }
-            if (route.includes('/.codex-bug-state.json'))
-              return response({
-                type: 'file',
-                sha: version,
-                content: Buffer.from(JSON.stringify(remote)).toString('base64'),
-              });
+            if (route.includes('/.codex-bug-state.json')) return response(stateContents(remote));
             throw Error(`Unexpected transport ${route}`);
           },
         });
@@ -1014,7 +1216,7 @@ test('guard rereads cannot promote an old snapshot to a newer Contents CAS revis
         assert.equal(writes.length, 1);
         assert.equal(
           writes[0].sha,
-          'a'.repeat(40),
+          originalVersion,
           'Do not adopt the guard read revision for the old body',
         );
         assert.equal(remote.batches[0].phase, 'ready');
@@ -1040,11 +1242,7 @@ test('actual durable PUT waits for a final release guard after branch inspection
         writes.push(args);
         return response({ content: { sha: 'b'.repeat(40) } });
       }
-      return response({
-        type: 'file',
-        sha: 'a'.repeat(40),
-        content: Buffer.from('{}').toString('base64'),
-      });
+      return response(stateContents({}));
     },
   });
   const store = gh.createStateStore();
@@ -1067,7 +1265,8 @@ test('actual durable PUT waits for a final release guard after branch inspection
 test('failed guarded CAS cannot retry an old state body against the revision read by its guard', async () => {
   const writes = [];
   let remote = { target: 'ready', unrelated: 'original' },
-    version = 'a'.repeat(40);
+    version = stateContents(remote).sha;
+  const originalVersion = version;
   const gh = createGitHub({
     cwd: '/tmp',
     repo: 'l2v-hub/ClinicOS',
@@ -1080,11 +1279,7 @@ test('failed guarded CAS cannot retry an old state body against the revision rea
         remote = JSON.parse(Buffer.from(body.content, 'base64').toString('utf8'));
         return response({ content: { sha: 'c'.repeat(40) } });
       }
-      return response({
-        type: 'file',
-        sha: version,
-        content: Buffer.from(JSON.stringify(remote)).toString('base64'),
-      });
+      return response(stateContents(remote));
     },
   });
   const store = gh.createStateStore(),
@@ -1092,14 +1287,14 @@ test('failed guarded CAS cannot retry an old state body against the revision rea
   old.target = 'deployed';
   const guard = async () => {
     remote.unrelated = 'Concurrent update';
-    version = 'b'.repeat(40);
+    version = stateContents(remote).sha;
     await store.load();
   };
   await assert.rejects(store.save(old, { guard }), /compare-and-swap/);
   await assert.rejects(store.save(old), /compare-and-swap/);
   assert.deepEqual(
     writes.map((body) => body.sha),
-    ['a'.repeat(40), 'a'.repeat(40)],
+    [originalVersion, originalVersion],
   );
   assert.deepEqual(remote, { target: 'ready', unrelated: 'Concurrent update' });
 });
@@ -1113,11 +1308,7 @@ test('optional release guards reject explicitly invalid values at all actual tra
       run: async ({ args }) => {
         if (args[0] === 'pr' || args.includes('PUT')) writes.push(args);
         if (args[1].includes('/git/ref/heads/')) return response({});
-        return response({
-          type: 'file',
-          sha: 'a'.repeat(40),
-          content: Buffer.from('{}').toString('base64'),
-        });
+        return response(stateContents({}));
       },
     });
     const store = gh.createStateStore();
@@ -1146,11 +1337,7 @@ test('durable save serializes its body before any branch await can mutate the su
         written = JSON.parse(input);
         return response({ content: { sha: 'b'.repeat(40) } });
       }
-      return response({
-        type: 'file',
-        sha: 'a'.repeat(40),
-        content: Buffer.from('{}').toString('base64'),
-      });
+      return response(stateContents({}));
     },
   });
   const store = gh.createStateStore();
@@ -1314,12 +1501,12 @@ test('state save rejects >8MiB before any mutation/guard and exact8MiB remains r
   assert.equal(guards, 0);
   assert.equal(f.writes.length, 0);
   assert.equal(f.calls.length, priorCalls);
-  const overhead = Buffer.byteLength(JSON.stringify({ payload: '' }, null, 2) + '\n');
+  const overhead = Buffer.byteLength(JSON.stringify({ payload: '' }));
   const exact = { payload: 'x'.repeat(MAX_DURABLE_STATE_BYTES - overhead) };
   await f.store.save(exact);
   assert.equal(f.metadata.size, MAX_DURABLE_STATE_BYTES);
   assert.equal(
-    Buffer.byteLength(JSON.stringify(await f.store.load(), null, 2) + '\n'),
+    Buffer.byteLength(JSON.stringify(await f.store.load())),
     MAX_DURABLE_STATE_BYTES,
   );
 });
@@ -1698,5 +1885,20 @@ test('GitHub failure semantics distinguish positive status evidence, default POS
     assert.equal(calls[0].timeoutMs, 30000);
     await assert.rejects(github.commentPR(81, 'Synthetic notice'), { code: expected });
     assert.ok(calls.at(-1).input, 'Comment request carries a mutation body');
+  }
+});
+
+test('strict integrated decoder rejects JSON scalars/arrays and oversized raw wrapping without permitting a save', async () => {
+  for (const contents of [stateContents(null), stateContents([]), stateContents(7),
+    { ...stateContents({}), content: stateContents({}).content + '\n'.repeat(12 * 1024 * 1024) }]) {
+    const writes = [];
+    const store = createGitHub({ repo: 'l2v-hub/ClinicOS', cwd: '/synthetic', run: async (call) => {
+      if (call.args.includes('PUT')) { writes.push(call); assert.fail('Invalid state must not authorize a save'); }
+      return response(apiPath(call.args).includes('/git/ref/heads/')
+        ? { object: { sha: 'a'.repeat(40) } } : contents);
+    } }).createStateStore();
+    await assert.rejects(store.load(), /JSON object|metadata is invalid/);
+    await assert.rejects(store.save({ replacement: true }), /load durable state/);
+    assert.equal(writes.length, 0);
   }
 });

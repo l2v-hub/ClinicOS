@@ -6,7 +6,7 @@ const STATE_BRANCH = 'codex/bug-control';
 const STATE_PATH = '.codex-bug-state.json';
 export const MAX_DURABLE_STATE_BYTES = 8 * 1024 * 1024;
 export const RESULT_RESERVATION_BYTES = 512 * 1024;
-const STATE_BLOB_OUTPUT_BYTES = 16 * 1024 * 1024;
+const STATE_OUTPUT_BYTES = 16 * 1024 * 1024;
 const REQUIRED_LABELS = ['bug', 'codex-triage', 'codex-run'];
 const BLOCKING_LABELS = new Set([
   'codex-blocked',
@@ -262,7 +262,7 @@ function parseJson(text, description) {
 }
 
 function encodeState(state) {
-  const bytes = Buffer.from(`${JSON.stringify(state, null, 2)}\n`, 'utf8');
+  const bytes = Buffer.from(JSON.stringify(state), 'utf8');
   if (bytes.length > MAX_DURABLE_STATE_BYTES)
     throw new Error('Durable state exceeds 8 MiB save bound');
   if (bytes.length + reservedStateBytes(state) > MAX_DURABLE_STATE_BYTES)
@@ -273,24 +273,46 @@ function encodeState(state) {
   return bytes.toString('base64');
 }
 
-function decodeStateBytes(content, expectedSize) {
-  if (typeof content !== 'string' || content.length > 12 * 1024 * 1024)
-    throw new Error('Durable state base64 exceeds its bound');
-  const normalized = content.replace(/[\r\n]/g, '');
+function gitBlobSHA(bytes) {
+  return createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
+}
+
+function decodeStateBlob(record, expectedSHA, declaredSize) {
   if (
-    normalized.length > Math.ceil(MAX_DURABLE_STATE_BYTES / 3) * 4 ||
-    normalized.length % 4 !== 0 ||
-    !/^[A-Za-z0-9+/]*={0,2}$/.test(normalized)
-  )
-    throw new Error('Durable state file is not valid bounded base64');
-  const bytes = Buffer.from(normalized, 'base64');
-  if (
-    bytes.toString('base64') !== normalized ||
-    bytes.length > MAX_DURABLE_STATE_BYTES ||
-    (expectedSize !== undefined && bytes.length !== expectedSize)
-  )
-    throw new Error('Durable state decoded size or encoding mismatch');
-  return bytes;
+    !record ||
+    typeof record !== 'object' ||
+    record.encoding !== 'base64' ||
+    typeof record.content !== 'string' ||
+    record.content.length > 12 * 1024 * 1024 ||
+    !Number.isSafeInteger(record.size) ||
+    record.size <= 0 ||
+    record.size > MAX_DURABLE_STATE_BYTES ||
+    record.size !== declaredSize
+  ) {
+    throw new Error('Durable state blob metadata is invalid');
+  }
+  const encoded = record.content.replace(/[\r\n]/g, '');
+  if (encoded.length === 0 || encoded.length > Math.ceil(MAX_DURABLE_STATE_BYTES / 3) * 4) {
+    throw new Error('Durable state blob content is invalid');
+  }
+  const bytes = Buffer.from(encoded, 'base64');
+  if (bytes.length !== record.size || bytes.toString('base64') !== encoded) {
+    throw new Error('Durable state blob content is invalid');
+  }
+  if (gitBlobSHA(bytes) !== expectedSHA.toLowerCase()) {
+    throw new Error('Durable state blob SHA does not match its content');
+  }
+  let text;
+  try {
+    text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+  } catch {
+    throw new Error('Durable state file is not valid UTF-8');
+  }
+  const state = parseJson(text, 'durable state');
+  if (state === null || typeof state !== 'object' || Array.isArray(state)) {
+    throw new Error('Durable state must be a JSON object');
+  }
+  return state;
 }
 
 function issueNumber(issue) {
@@ -493,53 +515,26 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     return queued;
   }
 
-  async function decodeDurableState(metadata) {
+  async function decodeDurableState(contents) {
     if (
-      metadata?.type !== 'file' ||
-      metadata.target !== undefined ||
-      metadata.submodule_git_url !== undefined ||
-      typeof metadata.sha !== 'string'
-    ) {
-      throw new Error('Durable state path is not a regular file');
-    }
-    if (
-      metadata.size !== undefined &&
-      (!Number.isSafeInteger(metadata.size) ||
-        metadata.size < 0 ||
-        metadata.size > MAX_DURABLE_STATE_BYTES)
-    )
-      throw new Error('Durable state metadata exceeds its size bound');
-    if (metadata.encoding !== undefined && !['base64', 'none'].includes(metadata.encoding))
-      throw new Error('Durable state metadata encoding is invalid');
-    let bytes;
-    if (metadata.encoding === 'none' || metadata.size > 1024 * 1024) {
-      if (
-        !Number.isSafeInteger(metadata.size) ||
-        !/^[a-f0-9]{40}$/.test(metadata.sha) ||
-        (metadata.encoding === 'none' && metadata.content !== '')
-      )
-        throw new Error('Durable state blob metadata is invalid');
-      const blob = (
-        await api(`repos/${repo}/git/blobs/${metadata.sha}`, {
-          maxOutputBytes: STATE_BLOB_OUTPUT_BYTES,
-        })
-      ).value;
-      if (blob?.sha !== metadata.sha || blob.encoding !== 'base64' || blob.size !== metadata.size)
-        throw new Error('Durable state blob identity, size or encoding mismatch');
-      bytes = decodeStateBytes(blob.content, metadata.size);
-      const actualSHA = createHash('sha1')
-        .update(`blob ${bytes.length}\0`)
-        .update(bytes)
-        .digest('hex');
-      if (actualSHA !== metadata.sha) throw new Error('Durable state blob digest mismatch');
-    } else bytes = decodeStateBytes(metadata.content, metadata.size);
-    let text;
-    try {
-      text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
-    } catch {
-      throw new Error('Durable state file is not valid UTF-8');
-    }
-    return parseJson(text, 'durable state');
+      contents?.type !== 'file' ||
+      contents.target !== undefined || contents.submodule_git_url !== undefined ||
+      typeof contents.sha !== 'string' || !/^[a-f0-9]{40}$/i.test(contents.sha) ||
+      !Number.isSafeInteger(contents.size) || contents.size <= 0 ||
+      contents.size > MAX_DURABLE_STATE_BYTES
+    ) throw new Error('Durable state path is not a regular file');
+    let record;
+    if (contents.encoding === 'base64') record = contents;
+    else if (contents.encoding === 'none') {
+      if (contents.content !== '') throw new Error('Durable state blob metadata is invalid');
+      const blob = await api(`repos/${repo}/git/blobs/${contents.sha}`, {
+        maxOutputBytes: STATE_OUTPUT_BYTES,
+      });
+      if (blob.value?.sha !== contents.sha || blob.value?.size !== contents.size)
+        throw new Error('Durable state blob does not match the pinned Contents object');
+      record = blob.value;
+    } else throw new Error('Durable state Contents encoding is invalid');
+    return decodeStateBlob(record, contents.sha, contents.size);
   }
 
   function createStateStore() {
@@ -576,6 +571,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
         `repos/${repo}/contents/${STATE_PATH}?ref=${encodeURIComponent(STATE_BRANCH)}`,
         {
           allowFailure: true,
+          maxOutputBytes: STATE_OUTPUT_BYTES,
         },
       );
       if (!response.ok) {
@@ -761,7 +757,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
   async function readDashboardState() {
     const response = await api(
       `repos/${repo}/contents/${STATE_PATH}?ref=${encodeURIComponent(STATE_BRANCH)}`,
-      { allowFailure: true },
+      { allowFailure: true, maxOutputBytes: STATE_OUTPUT_BYTES },
     );
     if (!response.ok) {
       if (notFound(response)) return null;

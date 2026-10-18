@@ -211,3 +211,100 @@ test('issue-only manual allowance keeps five spent attempts and binds exact real
   state.standaloneReviews = [subject];
   assert.throws(() => validateOperatorContinuations(state), /exact durable entity/);
 });
+
+
+function defaultCompatibility() {
+  const { subject, state } = compatibility();
+  subject.implementation = [{ round: 1, status: 'passed' }];
+  Object.assign(subject.operatorContinuations[0], { round: 2, status: 'passed', nonce: 'reservation-2',
+    preservedLegacyImplementationDigest: historyDigest(subject.implementation) });
+  return { subject, state };
+}
+
+test('default four supports separately audited continuations3 and4 after compatibility2 without granting attempt5', () => {
+  const { subject, state } = defaultCompatibility();
+  const original = structuredClone(implementationAttempts(subject));
+  validateOperatorContinuations(state);
+  for (const round of [3, 4]) {
+    const prefix = structuredClone(implementationAttempts(subject));
+    const before = historyDigest(subject);
+    const attempt = reserveImplementation(subject, () => new Date('2026-10-18T21:00:00Z'));
+    assert.equal(attempt.round, round);
+    assert.equal(attempt.kind, 'audited-budget-continuation');
+    assert.equal(attempt.budgetSource, 'default-four');
+    assert.equal(attempt.budgetExtensionNonce, undefined);
+    assert.equal(attempt.owner, subject.operatorContinuations[0].owner);
+    assert.equal(attempt.authorizationRef, state.operatorTakeover.nonce);
+    assert.equal(attempt.preservedEntityDigest, before);
+    assert.equal(attempt.preservedLegacyImplementationDigest, historyDigest(subject.implementation));
+    assert.equal(attempt.preservedLegacyReviewsDigest, historyDigest(subject.reviews));
+    assert.equal(attempt.startedAt, '2026-10-18T21:00:00.000Z');
+    assert.deepEqual(implementationAttempts(subject).slice(0, -1), prefix);
+    assert.throws(() => reserveImplementation(subject), /Another implementation worker/);
+    validateOperatorContinuations(state);
+    attempt.status = 'passed';
+    assert.equal(spentAttempts(subject, 'implementation'), round);
+    assert.equal(attemptLimit(subject, 'implementation'), 4);
+  }
+  assert.deepEqual(implementationAttempts(subject).slice(0, 2), original);
+  assert.equal(subject.budgetExtensions, undefined);
+  assert.notEqual(subject.operatorContinuations[1].nonce, subject.operatorContinuations[2].nonce);
+  assert.throws(() => reserveImplementation(subject), /allowance exhausted/);
+  subject.budgetExtensions = [{ entityId: subject.id, pr: 492, kind: 'implementation',
+    previousLimit: 4, limit: 5, actor: 'operator', at: '2026-10-18T21:00:00Z',
+    reason: 'Externally authorized next allowance', authorizationRef: 'external-session-action5',
+    nonce: 'allowance5', historyLength: 4, historyDigest: historyDigest(implementationAttempts(subject)) }];
+  const fifth = reserveImplementation(subject);
+  assert.equal(fifth.round, 5);
+  assert.equal(fifth.budgetSource, undefined);
+  assert.equal(fifth.budgetExtensionNonce, 'allowance5');
+  validateOperatorContinuations(state);
+});
+
+test('within-default audit marker cannot forge owner, replay a nonce, fake an extension or authorize round5', () => {
+  const { subject, state } = defaultCompatibility();
+  const attempt = reserveImplementation(subject);
+  for (const mutate of [
+    (entry) => { delete entry.budgetSource; },
+    (entry) => { entry.budgetSource = 'unlimited'; },
+    (entry) => { entry.budgetExtensionNonce = 'self-issued'; },
+    (entry) => { entry.owner = 'another-operator'; },
+    (entry) => { entry.nonce = subject.operatorContinuations[0].nonce; },
+    (entry) => { entry.authorizationRef = 'another-scope'; },
+  ]) {
+    const saved = structuredClone(attempt);
+    mutate(attempt);
+    assert.throws(() => validateOperatorContinuations(state));
+    Object.keys(attempt).forEach((key) => delete attempt[key]);
+    Object.assign(attempt, saved);
+  }
+  attempt.status = 'passed';
+  reserveImplementation(subject).status = 'passed';
+  const forged = { ...subject.operatorContinuations.at(-1), round: 5, nonce: 'forged5' };
+  subject.operatorContinuations.push(forged);
+  assert.throws(() => validateOperatorContinuations(state), /extension/);
+});
+
+test('legacy compatibility5 and separately extended6/7/8 keep exact consumed prefixes and extension provenance', () => {
+  const { subject, state } = compatibility();
+  subject.operatorContinuations[0].status = 'passed';
+  const original = structuredClone(implementationAttempts(subject));
+  subject.budgetExtensions = [];
+  for (const round of [6, 7, 8]) {
+    const prefix = structuredClone(implementationAttempts(subject));
+    subject.budgetExtensions.push({ entityId: subject.id, pr: 492, kind: 'implementation',
+      previousLimit: round - 1, limit: round, actor: 'operator', at: '2026-10-18T21:00:00Z',
+      reason: 'Preserved scoped allowance', authorizationRef: `external-action${round}`,
+      nonce: `extension${round}`, historyLength: round - 1, historyDigest: historyDigest(prefix) });
+    const reserved = reserveImplementation(subject);
+    assert.equal(reserved.round, round);
+    assert.equal(reserved.budgetExtensionNonce, `extension${round}`);
+    assert.equal(reserved.budgetSource, undefined, 'Beyond-default records must not inherit default allowance');
+    assert.deepEqual(implementationAttempts(subject).slice(0, -1), prefix);
+    validateOperatorContinuations(state);
+    if (round < 8) reserved.status = round === 6 ? 'failed' : 'passed';
+  }
+  assert.equal(subject.operatorContinuations[2].status, 'passed', 'Passed7 stays passed');
+  assert.equal(spentAttempts(subject, 'implementation'), 8);
+  assert.deepEqual(implementationAttempts(subject).slice(0, 5), original);
+});

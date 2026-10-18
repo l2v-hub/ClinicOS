@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { createGitHub } from '../../src/bug-pipeline/github.mjs';
 import { feedbackFingerprint } from '../../src/bug-pipeline/contracts.mjs';
 import {
@@ -11,6 +12,8 @@ import {
 const repo = 'l2v-hub/ClinicOS';
 const sha = 'a'.repeat(40);
 const clone = (value) => structuredClone(value);
+const gitBlobSHA = (bytes) =>
+  createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
 const validPlan = {
   title: 'Synthetic regression',
   feature: 'Synthetic feature',
@@ -43,7 +46,7 @@ const validPlan = {
   ],
 };
 
-function fixture({ failed = false, reviewCount, actor = 'review-bot', authorizationVerifier = true } = {}) {
+function fixture({ failed = false, reviewCount, actor = 'review-bot', authorizationVerifier = true, blobState = false } = {}) {
   let round = failed ? 1 : 0;
   const batch = {
     id: 'bug-batch-17',
@@ -82,8 +85,8 @@ function fixture({ failed = false, reviewCount, actor = 'review-bot', authorizat
         }
       : { externalReview: { status: 'requested', subjectSha: sha } }),
   };
-  const remote = { schemaVersion: 1, repository: repo, batches: [batch] };
-  let fileSha = 'state-version-1';
+  const remote = { schemaVersion: 1, repository: repo, batches: [batch],
+    ...(blobState ? { retainedHistory: 'x'.repeat(1024 * 1024 + 128) } : {}) };
   let actorName = actor;
   let permission = 'write';
   let revokeOnTree = false;
@@ -108,7 +111,6 @@ function fixture({ failed = false, reviewCount, actor = 'review-bot', authorizat
   const writes = [];
   const reported = [];
   let commentId = 200;
-  let saves = 0;
   const apiRun = async (call) => {
     calls.push(clone(call));
     const endpoint = call.args[1];
@@ -119,22 +121,37 @@ function fixture({ failed = false, reviewCount, actor = 'review-bot', authorizat
     if (endpoint === `repos/${repo}/git/ref/heads/codex/bug-control`)
       return { ok: true, stdout: JSON.stringify({ object: { sha: 'branch-sha' } }) };
     if (endpoint.startsWith(`repos/${repo}/contents/.codex-bug-state.json`)) {
-      if (method === 'GET')
+      if (method === 'GET') {
+        const bytes = Buffer.from(JSON.stringify(remote), 'utf8');
         return {
           ok: true,
           stdout: JSON.stringify({
             type: 'file',
-            sha: fileSha,
-            content: Buffer.from(JSON.stringify(remote)).toString('base64'),
+            sha: gitBlobSHA(bytes),
+            size: bytes.length,
+            encoding: blobState ? 'none' : 'base64',
+            content: blobState ? '' : bytes.toString('base64'),
           }),
         };
+      }
       const body = JSON.parse(call.input);
       writes.push({ endpoint, method, body });
-      if (body.sha !== fileSha) return { ok: false, stdout: '', stderr: '409 conflict' };
-      remote.batches = JSON.parse(Buffer.from(body.content, 'base64').toString('utf8')).batches;
-      remote.updatedAt = JSON.parse(Buffer.from(body.content, 'base64').toString('utf8')).updatedAt;
-      fileSha = `state-version-${++saves + 1}`;
+      if (body.sha !== gitBlobSHA(Buffer.from(JSON.stringify(remote), 'utf8')))
+        return { ok: false, stdout: '', stderr: 'gh: conflict (HTTP 409)' };
+      const bytes = Buffer.from(body.content, 'base64');
+      const next = JSON.parse(bytes.toString('utf8'));
+      for (const key of Object.keys(remote)) delete remote[key];
+      Object.assign(remote, next);
+      const fileSha = gitBlobSHA(bytes);
       return { ok: true, stdout: JSON.stringify({ content: { sha: fileSha } }) };
+    }
+    if (endpoint.startsWith(`repos/${repo}/git/blobs/`)) {
+      const bytes = Buffer.from(JSON.stringify(remote), 'utf8');
+      const oid = gitBlobSHA(bytes);
+      assert.equal(endpoint, `repos/${repo}/git/blobs/${oid}`);
+      assert.equal(call.maxOutputBytes, 16 * 1024 * 1024);
+      return { ok: true, stdout: JSON.stringify({ sha: oid, size: bytes.length, encoding: 'base64',
+        content: bytes.toString('base64').match(/.{1,60}/g).join('\n') }) };
     }
     if (endpoint.startsWith(`repos/${repo}/git/trees/`)) {
       if (revokeOnTree) permission = 'read';
@@ -636,4 +653,61 @@ test('maintainer permission and a free-text instruction cannot extend budgets wi
   await assert.rejects(f.handoff.extendBudget(81, { kind: 'implementation', limit: 5,
     authorizationRef: 'I authorize myself', reason: 'Synthetic instruction' }), /verifier unavailable/);
   assert.deepEqual(f.remote, before);
+});
+
+test('wrapped large Git blob state supports actual handoff request/reconcile/load and rejects stale CAS without losing history', async () => {
+  const f = fixture({ blobState: true });
+  const original = clone(f.remote);
+  const requested = await f.handoff.request(81);
+  assert.equal(requested.externalReview.status, 'comment-requested');
+  const reconciled = await f.handoff.reconcilePR(81);
+  assert.equal(reconciled.externalReview.requestId, requested.externalReview.requestId);
+  assert.equal(f.pr.comments.length, 1);
+  assert.equal(reconciled.reviews.length, 0);
+  assert.deepEqual(reconciled.implementation, original.batches[0].implementation);
+  assert.equal(f.remote.retainedHistory, original.retainedHistory);
+  assert.ok(f.calls.some((call) => call.args[1].includes('/git/blobs/')));
+  const stale = f.github.createStateStore();
+  const staleState = await stale.load();
+  const concurrent = f.github.createStateStore();
+  const fresh = await concurrent.load();
+  fresh.peerDiagnostic = 'separate durable revision';
+  await concurrent.save(fresh);
+  staleState.batches[0].reason = 'Must not overwrite the newer revision';
+  await assert.rejects(stale.save(staleState), { code: 'state-cas-conflict' });
+  assert.equal(f.remote.peerDiagnostic, 'separate durable revision');
+  assert.equal(f.remote.batches[0].reason, undefined);
+  assert.equal(f.remote.batches[0].externalReview.requestId, requested.externalReview.requestId);
+  const loaded = await f.handoff.load(81);
+  assert.equal(loaded.state.retainedHistory, original.retainedHistory);
+});
+
+test('default compatibility2 spends3/4 without extensions and same-account external verifier authorizes only the next5', async () => {
+  const { reserveImplementation, implementationAttempts, historyDigest, validateOperatorContinuations } =
+    await import('../../src/bug-pipeline/attempt-budget.mjs');
+  const f = fixture();
+  f.setPermission('admin');
+  f.remote.operatorTakeover = { nonce: 'takeover-scope', continuePastFourPreserveHistory: true,
+    subjects: [{ collection: 'batches', id: f.batch.id, pr: 81 }] };
+  f.batch.operatorContinuations = [{ kind: 'explicit-operator-compatibility-continuation',
+    round: 2, status: 'passed', owner: 'review-bot', nonce: 'reservation2', startedAt: '2026-10-18T00:00:00Z',
+    reason: 'Observed scope authorization', authorizationRef: 'takeover-scope',
+    contractSha256: 'c'.repeat(64), preservedEntityDigest: 'd'.repeat(64),
+    preservedLegacyImplementationDigest: historyDigest(f.batch.implementation),
+    preservedLegacyReviewsDigest: historyDigest(f.batch.reviews) }];
+  const prefix = clone(implementationAttempts(f.batch));
+  reserveImplementation(f.batch).status = 'passed';
+  reserveImplementation(f.batch).status = 'passed';
+  validateOperatorContinuations(f.remote);
+  assert.throws(() => reserveImplementation(f.batch), /allowance exhausted/);
+  const extended = await f.handoff.extendBudget(81, { kind: 'implementation', limit: 5,
+    authorizationRef: 'test:external-session-action5', reason: 'Actual scoped session verifier fixture' });
+  assert.equal(extended.budgetExtensions.length, 1);
+  assert.equal(extended.budgetExtensions[0].authorization.provenance, 'user-session');
+  assert.equal(extended.budgetExtensions[0].authorization.binding.actor, 'review-bot');
+  assert.equal(extended.budgetExtensions[0].authorization.binding.budget.previousLimit, 4);
+  const fifth = reserveImplementation(extended);
+  assert.equal(fifth.round, 5);
+  assert.equal(fifth.budgetExtensionNonce, extended.budgetExtensions[0].nonce);
+  assert.deepEqual(implementationAttempts(extended).slice(0, 2), prefix);
 });
