@@ -1865,9 +1865,19 @@
         485
       ],
       "phase": "blocked",
-      "implementation": [],
+      "implementation": [
+        {
+          "round": 1,
+          "status": "running",
+          "startedAt": "2026-10-18T08:59:54.140Z",
+          "owner": "codex-cloud-issue485",
+          "nonce": "50977692-758c-4129-ac54-07cc844bac91",
+          "baseSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
+          "contractSha256": "cf8537f1c33db318fb68d3619c7e8d47796242f35927afbc301aac1ca75fb405"
+        }
+      ],
       "reviews": [],
-      "reason": "Shared intake scope is owned by PR481/batch450. Existing import fullscreen may already address this report; verify exact stage and 1903x1032 after dependency release before any new source plan. Screenshot could not be inspected (HTTP403). No duplicate implementation reserved.",
+      "reason": "Explicit dependent replan for issue485. Owned implementation1/4 on approved parent source; scheduled execution paused to prevent duplicate authors. Parent450 history and4/4 unchanged.",
       "triageRecovery": {
         "kind": "operator-completed-read-only-triage",
         "sourceRun": 39029815917,
@@ -1875,6 +1885,103 @@
         "reportSha256": "916eeb0800e5aa8ef5cb720e4724891746684a90002841e3485b61129c75d249",
         "recoveredAt": "2026-10-17T11:52:53.427Z",
         "dependency": "bug-batch-450"
+      },
+      "plan": {
+        "title": "Usare lo spazio disponibile durante ingresso paziente",
+        "feature": "Ingresso pazienti / layout manuale e import",
+        "rationale": "Issue485 richiede fullscreen anche nella compilazione manuale. Il parent450 ha terminato implementazione e review sul codice immutabile6d2; piano dipendente distinto, non nuovo nome per un finding parent.",
+        "analysis": "Browser indipendente: manuale1903x1032 produce rettangolo231.5/16/1440/1000; CSS limita inoltre sezioni a880. Solo modificatore import usa fullscreen. Correzione esclusivamente geometrica, nessuna logica clinica. Actual phone import source shows3.515625px of canvas/zero visible ink and painted Adatta/download overlap due32dvh row and flex shrinking.",
+        "execution": {
+          "difficulty": "low",
+          "mode": "delegate",
+          "reason": "Modifica CSS delimitata affidata a Luna; orchestrazione e QA indipendente6.1-Sol."
+        },
+        "issues": [
+          485
+        ],
+        "scope": [
+          "frontend/src/components/shared/intake/IntakePage.css",
+          "frontend/src/components/shared/import/ImportSession.css"
+        ],
+        "acceptance": [
+          {
+            "issue": 485,
+            "criteria": [
+              "Manuale1903x1032 occupa viewport e area dati disponibile, input puntabili e modificabili.",
+              "Import/review e compilazione postimport restano fullscreen e usabili a1903/820/390.",
+              "At390x844 source PDF ink is visible, toolbar and download do not overlap; Adatta full button hit-target and data inputs work.",
+              "Nessuna occlusione dipinta o overflow orizzontale; draft sintetico persiste dopo reload nel runtime QA isolato.",
+              "Solo CSS autorizzato cambia; build/test frontend e nuova QA browser indipendente passano."
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "title": "Condividere layout fullscreen e rimuovere cap arbitrari",
+            "files": [
+              "frontend/src/components/shared/intake/IntakePage.css",
+              "frontend/src/components/shared/import/ImportSession.css"
+            ],
+            "steps": [
+              "Usare regole fullscreen comuni per manuale/import mantenendo griglie, padding e azioni responsive.",
+              "Rimuovere limite880 e centratura superflua nelle sezioni; semplificare dichiarazioni duplicate.",
+              "Allocate useful phone source-preview space without toolbar/download overlap, preserving reachable scrollable patient fields.",
+              "Nessuna modifica TSX, API, schema, auth, dipendenze o parent450."
+            ]
+          }
+        ],
+        "verification": [
+          {
+            "command": "npm",
+            "args": [
+              "--prefix",
+              "frontend",
+              "run",
+              "build"
+            ]
+          },
+          {
+            "command": "npm",
+            "args": [
+              "--prefix",
+              "frontend",
+              "test"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "issue": 485,
+            "screenshot": "artifacts/task-validation/bug-batch-485/evidence/manual-fullscreen-1903.png",
+            "trace": "artifacts/task-validation/bug-batch-485/evidence/layout-trace.zip",
+            "video": "artifacts/task-validation/bug-batch-485/evidence/layout-proof.webm"
+          }
+        ]
+      },
+      "grouping": {
+        "fileMap": [
+          {
+            "issue": 485,
+            "files": [
+              "frontend/src/components/shared/intake/IntakePage.css",
+              "frontend/src/components/shared/import/ImportSession.css"
+            ]
+          }
+        ],
+        "separationReason": "Ripianificazione esplicita di nuova issue485 dopo freeze/review parent450: distinta richiesta fullscreen manuale, worktree dipendente da6d2 e un solo autore CSS. Parent sorgenti, piano, contatori4/4 e review restano invariati; integrazione dopo parent."
+      },
+      "dependency": {
+        "batch": "bug-batch-450",
+        "pr": 481,
+        "baseSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
+        "integration": "stacked-followup; parent code/reviews/budget unchanged"
+      },
+      "operatorActivity": {
+        "owner": "codex-cloud-issue485",
+        "nonce": "50977692-758c-4129-ac54-07cc844bac91",
+        "phase": "implementing",
+        "startedAt": "2026-10-18T08:59:54.140Z",
+        "contractSha256": "cf8537f1c33db318fb68d3619c7e8d47796242f35927afbc301aac1ca75fb405"
       }
     },
     {
@@ -7113,7 +7220,7 @@
       }
     }
   ],
-  "updatedAt": "2026-10-17T23:24:26.554Z",
+  "updatedAt": "2026-10-18T08:59:54.140Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
