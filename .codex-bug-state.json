@@ -1877,7 +1877,7 @@
         }
       ],
       "reviews": [],
-      "reason": "Explicit dependent replan for issue485. Owned implementation1/4 on approved parent source; scheduled execution paused to prevent duplicate authors. Parent450 history and4/4 unchanged.",
+      "reason": "Issue485 implementation1/4 frozen; new independent QA is executing all five phases. Scheduled executor paused to avoid duplicate authors; parent450 remains unchanged.",
       "triageRecovery": {
         "kind": "operator-completed-read-only-triage",
         "sourceRun": 39029815917,
@@ -1979,9 +1979,11 @@
       "operatorActivity": {
         "owner": "codex-cloud-issue485",
         "nonce": "50977692-758c-4129-ac54-07cc844bac91",
-        "phase": "implementing",
+        "phase": "validating",
         "startedAt": "2026-10-18T08:59:54.140Z",
-        "contractSha256": "cf8537f1c33db318fb68d3619c7e8d47796242f35927afbc301aac1ca75fb405"
+        "contractSha256": "cf8537f1c33db318fb68d3619c7e8d47796242f35927afbc301aac1ca75fb405",
+        "updatedAt": "2026-10-18T09:02:19.324Z",
+        "qaOwner": "issue485_fix_qa"
       }
     },
     {
@@ -7220,7 +7222,7 @@
       }
     }
   ],
-  "updatedAt": "2026-10-18T08:59:54.140Z",
+  "updatedAt": "2026-10-18T09:02:19.325Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
