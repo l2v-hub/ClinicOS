@@ -1,0 +1,17 @@
+{
+  "invocation": {
+    "command": "git",
+    "args": [
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/maintenance-470",
+    "envMode": "verification",
+    "timeoutMs": 60000
+  },
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "stdout": "a9377cf2f2e66e42de246a604ce902496e4358da\n",
+  "stderr": ""
+}

@@ -1,0 +1,15 @@
+{
+  "sourceSha": "a9377cf2f2e66e42de246a604ce902496e4358da",
+  "verdict": "READY FOR CODEX QA",
+  "status": "QA SOURCE/HARNESS/PROOF STOP",
+  "publicManifestSha256": "73f516bb382431dd1e940858688f6def117189d552fbca8bef44de54ab6918e6",
+  "reportSha256": "dc9d2a05bff0dafff5b266fe909eb5e3c8cc3a8da4923e65ac5ea089945a4045",
+  "sourceMutation": false,
+  "providerCalls": 0,
+  "githubCalls": 0,
+  "fullTests": 115,
+  "sparseTests": 115,
+  "additionalChecks": 18,
+  "browser": true,
+  "privateTraceSha256": "1af93b39fbc6a1dca1c8c8d77b3b4d8238e56ad2e05198b221638991c5d1a39b"
+}

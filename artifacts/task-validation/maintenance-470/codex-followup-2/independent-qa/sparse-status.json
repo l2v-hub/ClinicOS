@@ -1,0 +1,17 @@
+{
+  "invocation": {
+    "command": "git",
+    "args": [
+      "status",
+      "--porcelain"
+    ],
+    "cwd": "/workspace/.clinicos-cloud/maintenance470-sparse6-independent-qa-20261018/sparse",
+    "envMode": "verification",
+    "timeoutMs": 60000
+  },
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "stdout": "",
+  "stderr": ""
+}

@@ -1,0 +1,7 @@
+{
+  ".github/workflows/deploy-backend.yml": "80889c5eea0129659e0678403f6b22922469d3b525e5619e12fb9e9f40ed5ec2",
+  "scripts/maintenance/demo-storage-inspect.test.mjs": "14955d91182ff8d4c1cce59fd57316ca34b29cc8ed1d391eaec089ee6af00a15",
+  "scripts/maintenance/demo-storage-inspect.mjs": "ef67dc97b06c9bc7e7d9157240dbb71f913eb216e28ff0a28c00bce5e5d29429",
+  "scripts/maintenance/demo-storage-backups.mjs": "f663075284f14b479fd4c5d2bb2dbf952c0b360fe3dc5582a3490a57dd0e5189",
+  "scripts/maintenance/demo-patient-inventory.mjs": "ea94b7ff88a2570eb57c7e86c2b5ff64544a99d67f6be42d2451d2ad8d833bb1"
+}

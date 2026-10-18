@@ -1,0 +1,24 @@
+{
+  "invocation": {
+    "command": "git",
+    "args": [
+      "diff",
+      "5babff63c52ef8935a9eccf654efe3aabe770a98",
+      "a9377cf2f2e66e42de246a604ce902496e4358da",
+      "--",
+      ".github/workflows/deploy-backend.yml",
+      "scripts/maintenance/demo-storage-inspect.test.mjs",
+      "scripts/maintenance/demo-storage-inspect.mjs",
+      "scripts/maintenance/demo-storage-backups.mjs",
+      "scripts/maintenance/demo-patient-inventory.mjs"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/maintenance-470",
+    "envMode": "verification",
+    "timeoutMs": 60000
+  },
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "stdout": "diff --git a/.github/workflows/deploy-backend.yml b/.github/workflows/deploy-backend.yml\nindex 83afb364..1df351e2 100644\n--- a/.github/workflows/deploy-backend.yml\n+++ b/.github/workflows/deploy-backend.yml\n@@ -45,7 +45,9 @@ jobs:\n         with:\n           ref: ${{ github.sha }}\n           persist-credentials: false\n-          sparse-checkout: scripts/maintenance\n+          sparse-checkout: |\n+            scripts/maintenance\n+            .github/workflows\n           filter: blob:none\n       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020\n         with:\ndiff --git a/scripts/maintenance/demo-storage-inspect.test.mjs b/scripts/maintenance/demo-storage-inspect.test.mjs\nindex c7df8f6a..8b7697ac 100644\n--- a/scripts/maintenance/demo-storage-inspect.test.mjs\n+++ b/scripts/maintenance/demo-storage-inspect.test.mjs\n@@ -535,6 +535,8 @@ test('workflow keeps all old jobs byte-identical and isolates the new explicit o\n   const oldJobs = workflow.slice(workflow.indexOf('  demo-inventory:\\n'));\n   assert.equal(digest(oldJobs), 'fc90d6c15c39d9ba8c3e54f25c20f152cbb11e531d889ef0dc67382e74e30e97');\n   const job = workflow.slice(workflow.indexOf('  demo-storage-inspect:\\n'), workflow.indexOf('  demo-inventory:\\n'));\n+  assert.ok(job.includes('sparse-checkout: |\\n            scripts/maintenance\\n            .github/workflows\\n'),\n+    'the hosted cone sparse checkout must contain both test imports and the workflow read by this test');\n   for (const text of [\"github.event_name == 'workflow_dispatch'\", \"github.repository == 'l2v-hub/ClinicOS'\",\n     \"github.ref == 'refs/heads/codex/demo-470-completion'\", \"inputs.operation == 'demo-storage-inspect'\",\n     'inputs.reviewed_sha == github.sha', \"environment: 'glistening-friendship / demo'\", 'timeout-minutes: 10',\n",
+  "stderr": ""
+}

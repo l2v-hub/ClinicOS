@@ -1,0 +1,11 @@
+{
+  "pass": true,
+  "controls": 2,
+  "reloads": 2,
+  "consoleErrors": [],
+  "httpErrors": [],
+  "source": "actual fresh candidate execution mocked receipts",
+  "scope": "QA-only result surface; not clinical application or live provider",
+  "video": "not configured",
+  "ownedEphemeralPort": 41021
+}

@@ -1,0 +1,78 @@
+{
+  "cases": [
+    {
+      "name": "full 115/115",
+      "pass": true
+    },
+    {
+      "name": "sparse 115/115",
+      "pass": true
+    },
+    {
+      "name": "actual helper two observations stable one snapshot no writes",
+      "pass": true
+    },
+    {
+      "name": "QA private config drift only second observation blocks/redacts",
+      "pass": true
+    },
+    {
+      "name": "snapshot drift",
+      "pass": true
+    },
+    {
+      "name": "post-binding branch drift",
+      "pass": true
+    },
+    {
+      "name": "reject argv delete",
+      "pass": true
+    },
+    {
+      "name": "reject argv variables",
+      "pass": true
+    },
+    {
+      "name": "reject argv ssh",
+      "pass": true
+    },
+    {
+      "name": "reject argv volume",
+      "pass": true
+    },
+    {
+      "name": "reject native mutation{deleteAll}",
+      "pass": true
+    },
+    {
+      "name": "reject native query{me{id}}",
+      "pass": true
+    },
+    {
+      "name": "reject native query($id:String!){v",
+      "pass": true
+    },
+    {
+      "name": "READONLY_HTTP_403",
+      "pass": true
+    },
+    {
+      "name": "READONLY_JSON_INVALID",
+      "pass": true
+    },
+    {
+      "name": "READONLY_REQUEST_TIMEOUT",
+      "pass": true
+    },
+    {
+      "name": "forged receipt rejects",
+      "pass": true
+    },
+    {
+      "name": "dedicated concurrency",
+      "pass": true
+    }
+  ],
+  "count": 18,
+  "fixtureOrigin": "candidate synthetic fixture only, QA-authored adversarial scenarios; actual immutable helper and candidate wrapper imported"
+}

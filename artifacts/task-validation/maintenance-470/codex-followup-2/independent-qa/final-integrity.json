@@ -1,0 +1,46 @@
+{
+  "full5998Before": {
+    "files": 5998,
+    "bytes": 1153830954,
+    "mismatches": []
+  },
+  "full5998After": {
+    "files": 5998,
+    "bytes": 1153830954,
+    "mismatches": []
+  },
+  "manifestSha256": "7bac65b587b771566c790ca030ddfb7cafd74e70aee4e5972207785741edfc85",
+  "oldExternalSeals": {
+    "maintenance470-readonly-author-20261018": {
+      "files": 19,
+      "bytes": 117148,
+      "mismatches": []
+    },
+    "maintenance470-readonly-qa-20261018": {
+      "files": 7,
+      "bytes": 30200,
+      "mismatches": []
+    },
+    "maintenance470-sparse-fix-author-20261018": {
+      "files": 26,
+      "bytes": 134181,
+      "mismatches": []
+    }
+  },
+  "authorSourceInputs": {
+    "files": 8,
+    "bytes": 1122155,
+    "mismatches": []
+  },
+  "privateTrace": {
+    "crc": "PASS",
+    "decode": "PASS",
+    "sensitiveSentinelScan": "PASS",
+    "entries": 13,
+    "private": true
+  },
+  "cleanup": {
+    "ownedSparseAndVerificationHomeRemoved": true,
+    "baselineRemoved": false
+  }
+}

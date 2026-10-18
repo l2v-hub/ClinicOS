@@ -1,0 +1,8 @@
+/*
+!/*/
+/.github/
+!/.github/*/
+/scripts/
+!/scripts/*/
+/.github/workflows/
+/scripts/maintenance/

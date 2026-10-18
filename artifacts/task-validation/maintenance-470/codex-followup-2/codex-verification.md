@@ -1,0 +1,3 @@
+# Codex gate before publication
+
+Root verified exact two-source packaging fix, immutable wrapper/helpers and old jobs, author STOP, fresh independent QA on actual committed sparse checkout,18extra checks and owned browser cleanup. Root viewed actual synthetic inspected-receipt screenshot with explicit no-live-provider label. Public files and report/seal SHA validated, all5998proof bytes checked again. Original QA5 failure retained, no reset. This is pre-publication Codex verification; actual Claude and separate fresh final Codex review remain pending. GitHub currently401; no provider dispatch/push/issueclosure claimed.

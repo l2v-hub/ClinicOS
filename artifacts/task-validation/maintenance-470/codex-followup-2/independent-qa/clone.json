@@ -1,0 +1,21 @@
+{
+  "invocation": {
+    "command": "git",
+    "args": [
+      "clone",
+      "--local",
+      "--shared",
+      "--no-checkout",
+      "/workspace/ClinicOS/agent-team/.worktrees/maintenance-470",
+      "/workspace/.clinicos-cloud/maintenance470-sparse6-independent-qa-20261018/sparse"
+    ],
+    "cwd": "/workspace/.clinicos-cloud/maintenance470-sparse6-independent-qa-20261018",
+    "envMode": "verification",
+    "timeoutMs": 60000
+  },
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "stdout": "",
+  "stderr": "Cloning into '/workspace/.clinicos-cloud/maintenance470-sparse6-independent-qa-20261018/sparse'...\ndone.\n"
+}

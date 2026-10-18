@@ -1,0 +1,47 @@
+{
+  "baseSha": "5babff63c52ef8935a9eccf654efe3aabe770a98",
+  "branch": "codex/demo-470-completion",
+  "status": "AUTHOR SOURCE AND HARNESS STOP \u2014 pending fresh independent QA exact committed SHA",
+  "allowedChangedSources": {
+    ".github/workflows/deploy-backend.yml": {
+      "sha256": "80889c5eea0129659e0678403f6b22922469d3b525e5619e12fb9e9f40ed5ec2",
+      "bytes": 11348
+    },
+    "scripts/maintenance/demo-storage-inspect.test.mjs": {
+      "sha256": "14955d91182ff8d4c1cce59fd57316ca34b29cc8ed1d391eaec089ee6af00a15",
+      "bytes": 32549
+    }
+  },
+  "immutableInputsMatch": true,
+  "priorProofs": {
+    "entries": 5998,
+    "matching": 5998,
+    "mismatches": [],
+    "totalBytes": 1153830954,
+    "manifestSha256": "7bac65b587b771566c790ca030ddfb7cafd74e70aee4e5972207785741edfc85",
+    "manifestBytes": 991944
+  },
+  "sourceManifestSha256": "d6455306df73f9bf1c755c7bdbb06d9a6e97d46493d54956fda2da2f0717792a",
+  "tests": {
+    "full": {
+      "tests": 115,
+      "passed": 115,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "exitCode": 0
+    },
+    "sparse": {
+      "tests": 115,
+      "passed": 115,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "exitCode": 0
+    }
+  },
+  "sparseProofMode": "uncommitted candidate overlay, not a committed candidate claim",
+  "providerCalls": 0,
+  "githubCalls": 0,
+  "commits": 0
+}

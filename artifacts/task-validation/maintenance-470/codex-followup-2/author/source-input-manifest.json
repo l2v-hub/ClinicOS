@@ -1,0 +1,34 @@
+{
+  ".github/workflows/deploy-backend.yml": {
+    "sha256": "80889c5eea0129659e0678403f6b22922469d3b525e5619e12fb9e9f40ed5ec2",
+    "bytes": 11348
+  },
+  "scripts/maintenance/demo-storage-inspect.test.mjs": {
+    "sha256": "14955d91182ff8d4c1cce59fd57316ca34b29cc8ed1d391eaec089ee6af00a15",
+    "bytes": 32549
+  },
+  "scripts/maintenance/demo-storage-inspect.mjs": {
+    "sha256": "ef67dc97b06c9bc7e7d9157240dbb71f913eb216e28ff0a28c00bce5e5d29429",
+    "bytes": 22453
+  },
+  "scripts/maintenance/demo-storage-backups.mjs": {
+    "sha256": "f663075284f14b479fd4c5d2bb2dbf952c0b360fe3dc5582a3490a57dd0e5189",
+    "bytes": 34566
+  },
+  "scripts/maintenance/demo-patient-inventory.mjs": {
+    "sha256": "ea94b7ff88a2570eb57c7e86c2b5ff64544a99d67f6be42d2451d2ad8d833bb1",
+    "bytes": 21073
+  },
+  "artifacts/task-validation/maintenance-470/codex-followup-2/task-contract.md": {
+    "sha256": "b0e5ae6d9e26e559a8626c495c0cf243bca59cee038e7e33f540153a06e099df",
+    "bytes": 1817
+  },
+  "artifacts/task-validation/maintenance-470/codex-followup-2/analysis-plan.md": {
+    "sha256": "052d34c543a167875b416943a44722ef304c62ce2aa254c9781dcfe40281eae4",
+    "bytes": 6405
+  },
+  "artifacts/task-validation/maintenance-470/codex-followup-2/prior-proof-manifest.json": {
+    "sha256": "7bac65b587b771566c790ca030ddfb7cafd74e70aee4e5972207785741edfc85",
+    "bytes": 991944
+  }
+}
