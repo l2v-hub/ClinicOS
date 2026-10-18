@@ -17,11 +17,50 @@ on:
           - demo-inventory
           - demo-cleanup
           - demo-online-verify
+          - demo-storage-inspect
+      reviewed_sha:
+        description: Exact reviewed maintenance branch SHA, required only for demo-storage-inspect
+        type: string
+        required: false
 
 permissions:
   contents: read
 
 jobs:
+  demo-storage-inspect:
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      github.repository == 'l2v-hub/ClinicOS' &&
+      github.ref == 'refs/heads/codex/demo-470-completion' &&
+      inputs.operation == 'demo-storage-inspect' &&
+      inputs.reviewed_sha == github.sha
+    concurrency:
+      group: demo-storage-inspect
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    environment: 'glistening-friendship / demo'
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: scripts/maintenance
+          filter: blob:none
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Test the actual read-only binding and diagnostic without credentials
+        run: node --test scripts/maintenance/demo-storage-inspect.test.mjs
+      - name: Install pinned read-only maintenance CLI without credentials
+        run: npm install -g @railway/cli@5.66.0
+      - name: Inspect only the reviewed demo storage binding and snapshot counts
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+          DEMO_STORAGE_OPERATION: ${{ inputs.operation }}
+          DEMO_STORAGE_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+        run: node scripts/maintenance/demo-storage-inspect.mjs
   demo-inventory:
     if: github.ref_name == 'codex/demo-470-completion' && inputs.operation == 'demo-inventory'
     runs-on: ubuntu-latest
