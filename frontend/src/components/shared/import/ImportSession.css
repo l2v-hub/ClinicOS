@@ -304,6 +304,21 @@
   display: flex;
   flex-direction: column;
 }
+.import-session .iw-doc > .import-page-preview > .document-pdf-preview {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.import-session
+  .iw-doc
+  > .import-page-preview
+  > .document-pdf-preview
+  > .document-pdf-preview__toolbar {
+  flex: 0 0 auto;
+}
+.import-session .iw-doc > .import-page-preview > a {
+  flex: 0 0 auto;
+  align-self: flex-start;
+}
 .import-session .document-pdf-preview {
   min-height: 0;
 }
@@ -330,16 +345,41 @@
   display: none;
 }
 @media (max-width: 600px) {
+  .import-session > .import-workspace {
+    overflow-x: hidden;
+    overflow-y: auto;
+    align-content: start;
+  }
   .import-session .import-workspace {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: 32dvh minmax(0, 1fr);
+    grid-template-rows: max-content max-content;
   }
   .import-session .import-workspace .iw-doc {
     grid-column: 1;
     grid-row: 1;
   }
+  .import-session .iw-doc > .import-page-preview,
+  .import-session .iw-doc > .import-page-preview > .document-pdf-preview {
+    flex: 0 0 auto;
+  }
+  .import-session .iw-doc > .import-page-preview {
+    padding: 0;
+  }
+  .import-session.import-modal .iw-doc .document-pdf-preview__toolbar button:not(#ds) {
+    scroll-margin-block: 0;
+  }
+  /* Wrapped controls determine the source row; only the PDF itself scrolls
+     inside a bounded viewport. The workspace can then reach the fields below. */
+  .import-session .document-pdf-preview__stage {
+    box-sizing: border-box;
+    flex: none;
+    height: clamp(192px, 40dvh, 320px);
+    padding: 8px;
+  }
   .import-session .import-workspace .iw-data {
     grid-column: 1;
     grid-row: 2;
+    min-height: auto;
+    overflow: visible;
   }
 }
