@@ -118,9 +118,13 @@ export function createRunner({ railwayToken, githubToken, fetchImpl = fetch } = 
     const read = bearerReader(railwayToken, fetchImpl);
     const project = async (phase, projection) => {
       const data = await read(phase);
-      try { return projection(data); } catch { fail(`${phase}_RESPONSE_INVALID`); }
+      try { return projection(data); } catch (error) {
+        // Preserve helper-minted diagnostics; normalize foreign projection errors.
+        if (safeErrors.has(error)) throw error;
+        fail(`${phase}_RESPONSE_INVALID`);
+      }
     };
-    await project('IDENTITY', (identity) => { safe(identity?.me?.id); });
+    await project('IDENTITY', (identity) => { safe(identity.me.id); });
     // Identity ID is deliberately discarded here.
     const snapshot = async () => {
       const canAccess = await project('ACCESS', (access) => {
@@ -165,6 +169,7 @@ async function main() {
   const result = await createRunner({ railwayToken: process.env.RAILWAY_TOKEN, githubToken: process.env.GITHUB_TOKEN })(process.env);
   const json = serializeReceipt(result, { forbiddenValues: [process.env.RAILWAY_TOKEN, process.env.GITHUB_TOKEN] });
   await writeFile('demo-bearer-readiness-receipt.json', `${json}\n`, { flag: 'wx', mode: 0o600 });
+  // Public console fields follow the acknowledged metadata decision in codex-followup-1/task-contract.md:11.
   console.log(`DEMO_BEARER_READINESS_RECEIPT ${json}`);
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

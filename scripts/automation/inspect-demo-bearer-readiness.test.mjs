@@ -102,7 +102,7 @@ test('trigger ownership, duplication and metadata reject; bounded valid trigger 
     await assert.rejects(harness({data}).run());
   }
   valid.INVENTORY.deploymentTriggers.edges.push({node: trigger()});
-  await assert.rejects(harness({data: valid}).run(), /INVENTORY_RESPONSE_INVALID/);
+  await assert.rejects(harness({data: valid}).run(), /DUPLICATE_TRIGGERS/);
 });
 test('inventory drift prevents a receipt', async () => {
   await assert.rejects(harness({modify: ({phase, body, inventories}) => {
@@ -136,13 +136,13 @@ test('transport, redirects, GraphQL, malformed JSON and bounds retain distinct c
 });
 test('all fixed phases retain HTTP and GraphQL classification and reject malformed projected shapes', async () => {
   for (const phase of Object.keys(QUERIES)) {
-    for (const [reply, code] of [
-      [()=>response({},ENDPOINT,{status:403}), 'HTTP_403'],
-      [()=>response({errors:[{message:'private'}]}),'GRAPHQL_REJECTED'],
-      [()=>response({data:{}}),'RESPONSE_INVALID'],
+    for (const [reply, expected] of [
+      [()=>response({},ENDPOINT,{status:403}), `DEMO_BEARER_${phase}_HTTP_403`],
+      [()=>response({errors:[{message:'private'}]}),`DEMO_BEARER_${phase}_GRAPHQL_REJECTED`],
+      [()=>response({data:{}}), phase === 'IDENTITY' ? 'DEMO_BEARER_IDENTITY_RESPONSE_INVALID' : (phase === 'ACCESS' || phase === 'INVENTORY' ? 'DEMO_BEARER_TARGET' : 'DEMO_BEARER_METADATA')],
     ]) {
       await assert.rejects(harness({modify: (request)=>request.phase===phase ? reply() : response(request.body)}).run(),
-        (error)=>error.message===`DEMO_BEARER_${phase}_${code}`);
+        (error)=>error.message===expected);
     }
   }
 });
@@ -239,6 +239,32 @@ test('poisoned provider errors never cross actual CLI stderr and constants prese
     assert.equal(child.status,1);
     assert.equal(child.stdout,'');
     assert.equal(child.stderr,`::error::DEMO_BEARER_IDENTITY_${code}\nDEMO_BEARER_IDENTITY_${code}\n`);
+    await assert.rejects(stat(`${directory}/demo-bearer-readiness-receipt.json`));
+  }
+  const cliCases = [];
+  const duplicate = fixture();
+  duplicate.INVENTORY.deploymentTriggers.edges = [{node:{...trigger(), privateExtra:poison}},{node:{...trigger(), privateExtra:poison}}];
+  cliCases.push([duplicate, 'DEMO_BEARER_DUPLICATE_TRIGGERS']);
+  const wrongEnvironment = fixture();
+  wrongEnvironment.ACCESS.environment.name = `production-${poison}`;
+  cliCases.push([wrongEnvironment, 'DEMO_BEARER_TARGET']);
+  const missingIdentity = fixture();
+  missingIdentity.IDENTITY = {privateExtra: poison};
+  cliCases.push([missingIdentity, 'DEMO_BEARER_IDENTITY_RESPONSE_INVALID']);
+  for (const [data, expected] of cliCases) {
+    const preload = `const data=${JSON.stringify(data)}; const queries=${JSON.stringify(QUERIES)};
+      globalThis.fetch=async(url,options)=>{
+        let body;
+        if(url===${JSON.stringify(MAIN_ENDPOINT)}) body={ref:'refs/heads/main',object:{type:'commit',sha:${JSON.stringify(sha)}}};
+        else { const request=JSON.parse(options.body); const phase=Object.keys(queries).find(key=>queries[key]===request.query); body={data:data[phase]}; }
+        const r=new Response(JSON.stringify(body)); Object.defineProperty(r,'url',{value:url}); return r;
+      };`;
+    const child = spawnSync(process.execPath, ['--import',`data:text/javascript,${encodeURIComponent(preload)}`,new URL('./inspect-demo-bearer-readiness.mjs',import.meta.url).pathname],
+      {cwd:directory,env:{...env,PATH:process.env.PATH,RAILWAY_TOKEN:'synthetic-railway-credential',GITHUB_TOKEN:'synthetic-github-credential'},encoding:'utf8'});
+    assert.equal(child.status,1);
+    assert.equal(child.stdout,'');
+    assert.equal(child.stderr,`::error::${expected}\n${expected}\n`);
+    assert.ok(!child.stderr.includes(poison));
     await assert.rejects(stat(`${directory}/demo-bearer-readiness-receipt.json`));
   }
 });
