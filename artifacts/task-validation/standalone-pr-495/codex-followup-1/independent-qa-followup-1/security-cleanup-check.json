@@ -1,0 +1,15 @@
+{
+  "sourceInputsUnchanged": true,
+  "oldProofCount": 24,
+  "oldProofsUnchanged": true,
+  "traceCRC": true,
+  "traceSecretPHIScan": "PASS synthetic-only metadata",
+  "pngCRC": true,
+  "publicSizeLimit": true,
+  "ownedPortClosed": true,
+  "cleanup": {
+    "browserClosed": true,
+    "serverClosed": true,
+    "ownedPort": 41623
+  }
+}
