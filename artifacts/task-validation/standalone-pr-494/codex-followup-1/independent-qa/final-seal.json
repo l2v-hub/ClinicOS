@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "verdict": "READY FOR CODEX QA",
+  "reviewer": "/root/qa_gate_receipt_recovery",
+  "reservationNonce": "9883bb15-5307-4af5-9483-d5f79aa89570",
+  "sealedAt": "2026-10-18T18:13:28.719930+00:00",
+  "manifestSha256": "bbde4ef8ac22941cf01e2c073b7ed722c8fdce597d2011c514a64d9e9e61abec",
+  "authorFreeze2Sha256": "e15710a60770e1481272a67cac7031e64dae2315e51084a667b624dc491380f5",
+  "sourceIntegritySha256": "1ac50d35a79de0ee29630dd8deadbfadea14a81124b366b3ec76b01f1dab0960",
+  "publicationFileCount": 11,
+  "sourceAndHistoricalEvidenceUnchanged": true,
+  "candidateSuitePassed": 28,
+  "independentSuitePassed": 18,
+  "noCandidateEdits": true,
+  "noRemoteOrProviderCalls": true,
+  "actualRecoveryOrReleaseProven": false
+}

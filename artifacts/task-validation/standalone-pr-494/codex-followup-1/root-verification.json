@@ -1,0 +1,13 @@
+{
+  "status": "verified-offline-scope",
+  "sourceFilesRead": 3,
+  "allPriorProofsMatched": 49,
+  "qaArtifactsMatched": 16,
+  "repeatedIndependentTestsPassed": 8,
+  "repeatedIndependentTestsLogSha256": "713169f2b0df84d8437e439583a4e3879f94b88e7688b8cdf9ea61c6c0dafc02",
+  "browserApplicable": false,
+  "browserScreenshotInspected": false,
+  "actualHostedExecutionVerified": false,
+  "actualCurrentCiVerified": false,
+  "actualNewClaudeReviewVerified": false
+}
