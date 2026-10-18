@@ -8948,7 +8948,7 @@
       }
     }
   ],
-  "updatedAt": "2026-10-18T18:08:40.850Z",
+  "updatedAt": "2026-10-18T18:11:37.439Z",
   "operatorTriageRecoveries": [
     {
       "issues": [
@@ -12300,13 +12300,15 @@
       "reviewLedger": null,
       "reviewReports": {},
       "releaseHold": {
-        "reason": "Actual demo target preflight39023763026 has no verified main trigger; review may proceed, clinical merge/deploy held.",
-        "runId": 39023763026,
-        "createdAt": "2026-10-17T16:29:59.131136+00:00"
+        "reason": "Backend source binding and fresh exact-main preflight remain unverified. Both model reviews complete; hold merge/deploy/closure until genuine provider evidence.",
+        "createdAt": "2026-10-18T18:11:37.439Z",
+        "diagnosticRunId": 39150528800,
+        "diagnosticExecution": "success",
+        "diagnosticContentsVerified": false
       },
       "kind": "standalone-pr-review",
       "id": "standalone-pr-393",
-      "phase": "waiting-review",
+      "phase": "ready",
       "adoption": {
         "actor": "l2v-hub",
         "at": "2026-10-18T17:27:32.790Z",
@@ -12341,6 +12343,19 @@
           "previous": null,
           "reason": "Fresh verified revision after actual Claude changes-requested; current native required checks passed.",
           "spentReviews": 0
+        },
+        {
+          "at": "2026-10-18T18:11:37.439Z",
+          "actor": "l2v-hub",
+          "previous": {
+            "channel": "github-comments",
+            "status": "comment-requested",
+            "subjectSha": "d71fb06af9dc55f212714e73914edbe30674effe",
+            "requestId": "9bf8d255-c131-40e0-8fdd-51f75357f6a8",
+            "requestedAt": "2026-10-18T17:49:49.702Z"
+          },
+          "reason": "Actual Claude freeform exact-SHA approval followed by reserved fresh independent Codex VERIFIED. No structured round or native human approval invented.",
+          "spentReviews": 0
         }
       ],
       "reviewChannel": "github-comments",
@@ -12373,7 +12388,7 @@
         "active": true,
         "owner": "codex-cloud-after-claude",
         "nonce": "5ef4558e-2243-4380-8330-453cfa1df672",
-        "stage": "final-codex-review",
+        "stage": "release-pending",
         "startedAt": "2026-10-18T16:47:23.897Z",
         "baseSha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
         "implementationStarted": false,
@@ -15519,13 +15534,6 @@
           "manifestSha256": "d2b3a7a63c3ffc35810310cd188d4bdee08a83e42808adca3b611ad13ea0a2b9"
         }
       ],
-      "externalReview": {
-        "channel": "github-comments",
-        "status": "comment-requested",
-        "subjectSha": "d71fb06af9dc55f212714e73914edbe30674effe",
-        "requestId": "9bf8d255-c131-40e0-8fdd-51f75357f6a8",
-        "requestedAt": "2026-10-18T17:49:49.702Z"
-      },
       "nativeCi": {
         "sha": "d71fb06af9dc55f212714e73914edbe30674effe",
         "verifiedAt": "2026-10-18T17:49:49.702Z",
@@ -15544,14 +15552,66 @@
           "role": "Codex",
           "kind": "actual-dedicated-read-only-agent",
           "agent": "/root/final_codex_review393_after_claude",
-          "status": "running",
+          "status": "verified",
           "subjectSha": "d71fb06af9dc55f212714e73914edbe30674effe",
           "nonce": "b6a30b59-dda4-4a46-a655-6e4d3ffff21b",
           "reservedAt": "2026-10-18T18:05:52.983Z",
           "reservedBeforeSession": true,
-          "claudeCommentId": 6253293605
+          "claudeCommentId": 6253293605,
+          "completedAt": "2026-10-18T18:11:37.439Z",
+          "resultSha256": "b067492241a20a51c6b48cbcccd3d2f0b31d7e4d3e1169e38c30fc9554220baa",
+          "reportSha256": "8be5b40b5775f08a2cbc67db249d30bf06e91c6ba46eb264f97b07da059203e6",
+          "integritySha256": "726e5da28d34ed3890df34279e4c580796d091b6cf43ecc8b7e6d868107237f0",
+          "result": {
+            "schema": "clinicos.final-codex-review/v1",
+            "verdict": "VERIFIED",
+            "subjectSha": "d71fb06af9dc55f212714e73914edbe30674effe",
+            "testedSourceSha": "6cd5196f78ccb488284f77719eca2ace5257377e",
+            "reviewBaseSha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
+            "mergeBaseSha": "d1324cb3dd9ac2a9eafdc7eb3d88abc399da7f55",
+            "reservationNonce": "b6a30b59-dda4-4a46-a655-6e4d3ffff21b",
+            "reviewer": "/root/final_codex_review393_after_claude",
+            "actualClaudeCommentId": 6253293605,
+            "findings": [],
+            "scope": "Frozen PR source correctness/security and identity-bound synthetic local QA evidence; Azure activation remains blocked",
+            "testsInheritedNotRerun": {
+              "runtime": 242,
+              "frontend": 32,
+              "backend": 16,
+              "browserAssertions": 51,
+              "runtimeBoundary": 3,
+              "cacheAssertions": 3,
+              "buildsAndTypes": "PASS"
+            },
+            "testsRerun": [],
+            "independentChecks": [
+              "full-source static review",
+              "17-path source digest vs tested and publication commits",
+              "445-entry inventory blob/base identities",
+              "138 imported packet file hashes",
+              "423 historical proof hashes vs frozen base",
+              "73 evidence file hashes and sizes",
+              "seal referenced hashes",
+              "both trace reconstructions, all member hashes and CRC",
+              "1307 embedded JPEG frame decodes",
+              "21 fresh PNG and 1 WebM decodes",
+              "3 PNG visual inspections",
+              "limited decompressed secret-pattern scans",
+              "exact-head GitHub check metadata",
+              "source diff --check"
+            ],
+            "limitations": [
+              "No real Azure provider calls, compatibility, transcription-quality, billing or authoritative live-session termination proof",
+              "No application test/build rerun in this final reviewer session; identity-verified QA results explicitly inherited",
+              "Per-process admission/accounting and soft USD alerts do not constitute hard distributed live-session limits",
+              "Broader privacy scans inherited; limited independent pattern scans are not exhaustive",
+              "Full diff whitespace check reports only preserved artifact log/patch whitespace"
+            ],
+            "completedAt": "2026-10-18T18:10:13.887460+00:00"
+          }
         }
-      ]
+      ],
+      "reason": "Both actual model reviews complete on exact SHA; backend release preflight/current demo binding and hosted deployment remain unverified."
     },
     {
       "schemaVersion": 1,
