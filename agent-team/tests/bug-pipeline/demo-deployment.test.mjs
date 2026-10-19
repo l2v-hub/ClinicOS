@@ -2265,14 +2265,14 @@ test('actual CLI excludes bound credential reflection across initial, mutation, 
       {
         label: `${binding}:escaped-final-receipt`,
         binding,
-        secret: 'synthetic\n"receipt\\credential',
+        secret: 'synthetic"receipt\\credential',
         reflect: 'receipt',
         mutations: 1,
       },
       {
         label: `${binding}:escaped-preflight-receipt`,
         binding,
-        secret: 'synthetic\n"preflight\\credential',
+        secret: 'synthetic"preflight\\credential',
         reflect: 'receipt',
         mutations: 0,
         operation: 'preflight-exact',
@@ -2420,4 +2420,159 @@ globalThis.fetch = async (url, options) => {
         await rm(directory, { recursive: true, force: true });
       }
     });
+});
+
+test('actual HTTP credential aliases share transport and output guards for both bindings', async (t) => {
+  const uuidCredential = '99999999-2222-4222-8222-777777777777';
+  const cases = [];
+  for (const binding of ['RAILWAY_TOKEN', 'GITHUB_TOKEN']) {
+    for (const [label, prefix, suffix] of [
+      ['leading-space', ' ', ''], ['trailing-space', '', ' '],
+      ['leading-tab', '\t', ''], ['trailing-tab', '', '\t'],
+      ['mixed-whitespace', ' \t', '\t '],
+    ]) for (const reflection of ['mutation', 'reuse', 'previous'])
+      cases.push({ label: `${binding}:${label}:${reflection}`, binding,
+        raw: prefix + uuidCredential + suffix, reflection, mutations: reflection === 'mutation' ? 1 : 0 });
+    cases.push({ label: `${binding}:context-alias`, binding, raw: ` \t${sha}\t `, reflection: 'context', mutations: 0, noArtifacts: true });
+    cases.push({ label: `${binding}:fallback-target-alias`, binding, raw: ` \t${DEMO_TARGET.projectId}\t `, reflection: 'context', mutations: 0, noArtifacts: true });
+    cases.push({ label: `${binding}:failure-code-alias`, binding, raw: ' DEPLOYMENT_PROOF_FAILED\t ', reflection: 'failure-code', mutations: 1 });
+    for (const invalid of ['internal\nnewline', 'internal\rcarriage', 'internal\u000bvertical', 'internal\u007fdelete', 'unicode\u0100value'])
+      cases.push({ label: `${binding}:invalid-header-${cases.length}`, binding, raw: invalid, reflection: 'invalid', mutations: 0 });
+    cases.push({ label: `${binding}:rejected-newline-fallback-alias`, binding, raw: `\n${DEMO_TARGET.projectId}\r`, reflection: 'context', mutations: 0, noArtifacts: true });
+  }
+  for (const binding of ['RAILWAY_TOKEN', 'GITHUB_TOKEN'])
+    cases.push({ label: `${binding}:immutable-guard-after-environment-mutation`, binding,
+      raw: ` \t${uuidCredential}\t `, reflection: 'snapshot-mutation', mutations: 1 });
+  cases.push({ label: 'immutable-canonical-snapshot-despite-environment-mutation', reflection: 'snapshot', mutations: 1, success: true });
+  for (const scenario of cases) await t.test(scenario.label, async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'demo-http-alias-'));
+    try {
+      const childEnv = { ...exactEnv, RAILWAY_TOKEN: 'synthetic-demo-binding', ...(scenario.binding ? { [scenario.binding]: scenario.raw } : {}) };
+      if (scenario.reflection === 'snapshot') {
+        childEnv.RAILWAY_TOKEN = ` \t${uuidCredential}\t `;
+        childEnv.GITHUB_TOKEN = ' 88888888-2222-4222-8222-666666666666\t';
+      }
+      const aliases = {};
+      for (const binding of ['RAILWAY_TOKEN', 'GITHUB_TOKEN']) {
+        try { aliases[binding] = new Headers({ credential: childEnv[binding] }).get('credential'); }
+        catch { aliases[binding] = null; }
+      }
+      if (scenario.binding && scenario.reflection !== 'invalid') assert.notEqual(aliases[scenario.binding], scenario.raw);
+      const initial = exactTargetData();
+      initial.serviceInstance.activeDeployments[0].meta = { commitHash: reviewedSha };
+      if (['reuse', 'previous'].includes(scenario.reflection)) {
+        initial.serviceInstance.activeDeployments[0].id = aliases[scenario.binding];
+        initial.serviceInstance.latestDeployment.id = aliases[scenario.binding];
+        if (scenario.reflection === 'reuse') initial.serviceInstance.activeDeployments[0].meta.commitHash = sha;
+      }
+      const fixturePath = join(directory, 'fixture.mjs');
+      const counterPath = join(directory, 'counts.json');
+      await writeFile(fixturePath, `
+import assert from 'node:assert/strict';
+import { writeFileSync } from 'node:fs';
+const scenario = ${JSON.stringify(scenario)};
+const expected = ${JSON.stringify(aliases)};
+const initial = ${JSON.stringify(initial)};
+const native = ${JSON.stringify(exactTargetData())};
+const counts = {mutations:0, main:0, reads:0, ready:0, requests:0};
+const save = () => writeFileSync(${JSON.stringify(counterPath)}, JSON.stringify(counts));
+let observedGithub;
+save();
+globalThis.fetch = async (url, options) => {
+  counts.requests++; save();
+  const request = new Request(url, options);
+  const headers = new Headers(options.headers);
+  assert.equal(options.redirect, 'error');
+  if (url === '${mainEndpoint}') {
+    counts.main++; save();
+    assert.equal(request.headers.get('authorization'), 'Bearer ' + expected.GITHUB_TOKEN);
+    assert.equal(headers.get('authorization'), 'Bearer ' + expected.GITHUB_TOKEN);
+    observedGithub = request.headers.get('authorization').slice('Bearer '.length);
+    if (scenario.reflection.startsWith('snapshot')) {
+      process.env.RAILWAY_TOKEN = 'changed-railway-binding';
+      process.env.GITHUB_TOKEN = 'changed-github-binding';
+    }
+    return new Response(JSON.stringify(${JSON.stringify(mainBody())}));
+  }
+  if (url === 'https://${DEMO_TARGET.domain}/ready') {
+    counts.ready++; save();
+    return new Response(JSON.stringify(${JSON.stringify(readyBody())}), {headers:{'Cache-Control':'no-store'}});
+  }
+  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(request.headers.get('Project-Access-Token'), expected.RAILWAY_TOKEN);
+  assert.equal(headers.get('Project-Access-Token'), expected.RAILWAY_TOKEN);
+  const {query, variables} = JSON.parse(options.body);
+  if (query.startsWith('mutation')) {
+    counts.mutations++; save();
+    assert.equal(variables.commitSha, '${sha}');
+    const effectiveAlias = scenario.binding === 'RAILWAY_TOKEN' ? request.headers.get('Project-Access-Token') : observedGithub;
+    return new Response(JSON.stringify({data:{serviceInstanceDeployV2:['mutation', 'snapshot-mutation'].includes(scenario.reflection) ? effectiveAlias : '${deploymentId}'}}));
+  }
+  counts.reads++; save();
+  if (scenario.reflection === 'failure-code' && counts.mutations)
+    return new Response(JSON.stringify({errors:[{message:'synthetic private denial'}]}));
+  return new Response(JSON.stringify({data:counts.mutations ? native : initial}));
+};
+`);
+      const result = spawnSync(process.execPath, ['--import', fixturePath,
+        fileURLToPath(new URL('../../src/bug-pipeline/demo-deployment.mjs', import.meta.url)), 'deploy-exact'], {
+        cwd: directory, env: childEnv, encoding: 'utf8', timeout: 5000,
+      });
+      assert.equal(result.error, undefined);
+      assert.equal(result.status, scenario.success ? 0 : 1, result.stderr);
+      const counts = JSON.parse(await readFile(counterPath, 'utf8'));
+      assert.equal(counts.mutations, scenario.mutations);
+      if (['context', 'invalid'].includes(scenario.reflection)) assert.equal(counts.requests, 0);
+      if (['mutation', 'snapshot-mutation'].includes(scenario.reflection)) assert.equal(counts.reads, 1, 'forbidden returned alias cannot be polled');
+      const artifacts = (await readdir(directory)).filter((name) => name.startsWith('demo-') && name.endsWith('.json'));
+      const output = [result.stdout, result.stderr, ...await Promise.all(artifacts.map((name) => readFile(join(directory, name), 'utf8')))];
+      for (const secret of [...Object.values(aliases), childEnv.RAILWAY_TOKEN, childEnv.GITHUB_TOKEN].filter(Boolean)) for (const text of output) {
+        assert.equal(text.includes(secret), false, 'raw or effective HTTP credential must not be emitted');
+        assert.equal(text.includes(JSON.stringify(secret).slice(1, -1)), false, 'escaped raw or effective HTTP credential must not be emitted');
+      }
+      assert.equal(artifacts.includes('demo-deployment-receipt.json'), Boolean(scenario.success));
+      if (scenario.noArtifacts) assert.equal(artifacts.length, 0, 'fallback cannot restore an effective credential alias');
+      else {
+        const progress = JSON.parse(await readFile(join(directory, 'demo-deployment-progress.json'), 'utf8'));
+        assert.equal(progress.status, scenario.success ? 'verified' : scenario.reflection === 'failure-code' ? 'submitted' : 'failed');
+        if (!scenario.success && scenario.reflection !== 'failure-code') assert.equal(progress.deploymentId, null);
+      }
+      if (scenario.success) {
+        const receipt = JSON.parse(await readFile(join(directory, 'demo-deployment-receipt.json'), 'utf8'));
+        validateReceipt(receipt, exactRun, 'clinicos-demo-backend', Date.now(), exactPolicy);
+        assert.equal(counts.main, 3);
+      }
+    } finally { await rm(directory, { recursive: true, force: true }); }
+  });
+});
+
+test('standalone Railway transport canonicalizes HTTP whitespace and rejects invalid headers with constant errors', async () => {
+  let calls = 0;
+  const client = createRailwayClient({ token: ' \tsynthetic-canonical-binding\t ', fetchImpl: async (url, options) => {
+    calls++;
+    assert.equal(new Request(url, options).headers.get('Project-Access-Token'), 'synthetic-canonical-binding');
+    assert.equal(options.headers['Project-Access-Token'], 'synthetic-canonical-binding');
+    return response({ data: { safe: true } });
+  } });
+  assert.deepEqual(await client('query{safe}', {}), { safe: true });
+  assert.equal(calls, 1);
+  assert.throws(() => createRailwayClient({ token: 'synthetic\ninvalid' }), /valid HTTP credential bindings required/);
+});
+
+test('HTTP control and non-ByteString bindings fail before callbacks or transport for either credential', async () => {
+  for (const binding of ['RAILWAY_TOKEN', 'GITHUB_TOKEN']) {
+    for (const raw of ['synthetic\u0000nul', 'synthetic\u0001control', 'synthetic\u000bvertical', 'synthetic\u007fdelete', '\nsynthetic\r', 'synthetic\u0100unicode']) {
+      let calls = 0;
+      const unexpected = async () => { calls++; throw new Error('must fail before external work'); };
+      await assert.rejects(deployDemo({
+        env: { ...exactEnv, RAILWAY_TOKEN: 'synthetic-demo-binding', [binding]: raw },
+        sourcePolicy: exactPolicy, client: unexpected, fetchImpl: unexpected, onProgress: unexpected,
+      }), /valid HTTP credential bindings required/);
+      await assert.rejects(prepareDemo({
+        env: { ...exactEnv, RAILWAY_TOKEN: 'synthetic-demo-binding', [binding]: raw },
+        sourcePolicy: exactPolicy, client: unexpected, fetchImpl: unexpected,
+      }), /valid HTTP credential bindings required/);
+      assert.equal(calls, 0);
+    }
+  }
 });

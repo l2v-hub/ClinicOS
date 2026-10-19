@@ -77,7 +77,32 @@ export function serializeDemoMetadata(value, { forbiddenValues = [] } = {}) {
   return `${json}\n`;
 }
 
-const boundCredentials = (env) => [env.RAILWAY_TOKEN, env.GITHUB_TOKEN];
+// Use the platform's actual header normalization, not an assumed credential format.
+function headerCredential(raw) {
+  if (raw === undefined || raw === null || raw === '') return { raw, effective: raw, valid: true };
+  try {
+    if (typeof raw !== 'string') return { raw, valid: false };
+    // Headers can trim CR/LF at the edges and can retain other control bytes
+    // that the HTTP transport rejects. Retain its alias even when failing closed.
+    const effective = new Headers({ 'Project-Access-Token': raw }).get('Project-Access-Token');
+    return { raw, effective, valid: !/[\x00-\x08\x0a-\x1f\x7f]/.test(raw) };
+  } catch { return { raw, valid: false }; }
+}
+
+function captureDemoBindings(env) {
+  const railway = headerCredential(env.RAILWAY_TOKEN);
+  const github = headerCredential(env.GITHUB_TOKEN);
+  return Object.freeze({
+    railwayToken: railway.effective,
+    githubToken: github.effective,
+    valid: railway.valid && github.valid,
+    forbiddenValues: Object.freeze([railway.raw, railway.effective, github.raw, github.effective]),
+  });
+}
+
+const requireValidBindings = (bindings) => {
+  if (!bindings.valid) fail('valid HTTP credential bindings required');
+};
 
 async function boundedBytes(response, max = MAX_BYTES) {
   if (!response.ok) fail('HTTP request did not succeed');
@@ -296,6 +321,9 @@ const DEPLOYMENT_QUERY = `query($projectId:String!,$environmentId:String!,$servi
 }`;
 
 export function createRailwayClient({ token, fetchImpl = fetch } = {}) {
+  const credential = headerCredential(token);
+  if (!credential.valid) fail('valid HTTP credential bindings required');
+  token = credential.effective;
   if (!token) fail('dedicated demo binding missing');
   return async (query, variables) => {
     const body = await fetchJson(RAILWAY_API, {
@@ -378,11 +406,11 @@ function context(env, policy) {
   };
 }
 
-function mainVerifier(env, source, policy, fetchImpl) {
+function mainVerifier(bindings, source, policy, fetchImpl) {
   if (policy !== DEMO_SOURCE_POLICIES.exact) return async () => {};
   // This fixed, bounded, read-only verifier receives only the Actions GitHub binding.
   const verify = createMainVerifier({
-    token: env.GITHUB_TOKEN,
+    token: bindings.githubToken,
     reviewedSha: source.reviewedSha,
     fetchImpl,
   });
@@ -400,15 +428,14 @@ export async function prepareDemo({
   client,
   sourcePolicy: policy,
   fetchImpl = fetch,
+  bindings = captureDemoBindings(env),
 } = {}) {
   policy = sourcePolicy(policy);
   const source = context(env, policy);
-  serializeDemoMetadata(
-    { source, target: DEMO_TARGET },
-    { forbiddenValues: boundCredentials(env) },
-  );
-  await mainVerifier(env, source, policy, fetchImpl)();
-  await inspectDemo(client ?? createRailwayClient({ token: env.RAILWAY_TOKEN, fetchImpl }), policy);
+  serializeDemoMetadata({ source, target: DEMO_TARGET }, { forbiddenValues: bindings.forbiddenValues });
+  requireValidBindings(bindings);
+  await mainVerifier(bindings, source, policy, fetchImpl)();
+  await inspectDemo(client ?? createRailwayClient({ token: bindings.railwayToken, fetchImpl }), policy);
   return {
     schemaVersion: 1,
     kind: 'clinicos-demo-preflight',
@@ -428,11 +455,13 @@ export async function deployDemo({
   now = Date.now,
   onProgress = async () => {},
   sourcePolicy: policy,
+  bindings = captureDemoBindings(env),
 } = {}) {
   policy = sourcePolicy(policy);
   const source = context(env, policy);
-  const forbiddenValues = boundCredentials(env);
+  const forbiddenValues = bindings.forbiddenValues;
   serializeDemoMetadata({ source, target: DEMO_TARGET }, { forbiddenValues });
+  requireValidBindings(bindings);
   const deadline = now() + DEMO_DEPLOY_BUDGET_MS;
   const budget = (cost) => {
     if (!Number.isFinite(now()) || now() + cost > deadline)
@@ -456,10 +485,10 @@ export async function deployDemo({
   await progress('checking');
   try {
     if (!integer(attempts) || attempts > 180) fail('bounded polling attempts required');
-    const assertCurrentMain = mainVerifier(env, source, policy, fetchImpl);
+    const assertCurrentMain = mainVerifier(bindings, source, policy, fetchImpl);
     budget(30_000);
     await assertCurrentMain();
-    client ??= createRailwayClient({ token: env.RAILWAY_TOKEN, fetchImpl });
+    client ??= createRailwayClient({ token: bindings.railwayToken, fetchImpl });
     budget(30_000);
     const initial = await inspectDemo(client, policy);
     serializeDemoMetadata(
@@ -815,7 +844,8 @@ export async function verifyDemoRelease({
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const operation = process.argv[2];
-  const forbiddenValues = boundCredentials(process.env);
+  const bindings = captureDemoBindings(process.env);
+  const forbiddenValues = bindings.forbiddenValues;
   let cliProgress;
   const saveProgress = async (progress) => {
     const json = serializeDemoMetadata(progress, { forbiddenValues });
@@ -826,10 +856,12 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
     const receipt =
       operation === 'preflight' || operation === 'preflight-exact'
         ? await prepareDemo({
+            bindings,
             sourcePolicy: operation === 'preflight-exact' ? DEMO_SOURCE_POLICIES.exact : undefined,
           })
         : operation === 'deploy' || operation === 'deploy-exact'
           ? await deployDemo({
+              bindings,
               sourcePolicy: operation === 'deploy-exact' ? DEMO_SOURCE_POLICIES.exact : undefined,
               ...(operation === 'deploy-exact' ? { onProgress: saveProgress } : {}),
             })
