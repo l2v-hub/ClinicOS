@@ -1,0 +1,116 @@
+{
+  "result": "PASS",
+  "receipts": [
+    {
+      "action": "adopt",
+      "status": "absent",
+      "reviewRounds": 0,
+      "implementationCount": 1,
+      "label": "codex-review-fixes",
+      "reloadPreserved": true
+    },
+    {
+      "action": "request",
+      "status": "comment-requested",
+      "reviewRounds": 0,
+      "implementationCount": 1,
+      "label": "claude-review-ready",
+      "reloadPreserved": true
+    },
+    {
+      "action": "claim",
+      "status": "comment-running",
+      "reviewRounds": 1,
+      "implementationCount": 1,
+      "label": "claude-reviewing",
+      "reloadPreserved": true
+    },
+    {
+      "action": "submit",
+      "status": "comment-running",
+      "reviewRounds": 1,
+      "implementationCount": 1,
+      "label": "claude-reviewing",
+      "reloadPreserved": true
+    },
+    {
+      "action": "reconcile",
+      "status": "published",
+      "reviewRounds": 1,
+      "implementationCount": 1,
+      "label": "codex-review-ready",
+      "reloadPreserved": true
+    },
+    {
+      "action": "round3",
+      "status": "published",
+      "reviewRounds": 1,
+      "implementationCount": 3,
+      "label": "codex-review-fixes",
+      "reloadPreserved": true
+    },
+    {
+      "action": "round4",
+      "status": "published",
+      "reviewRounds": 1,
+      "implementationCount": 4,
+      "label": "codex-review-fixes",
+      "reloadPreserved": true
+    }
+  ],
+  "final": {
+    "qaOnly": true,
+    "clinicalE2E": false,
+    "liveProvider": false,
+    "phase": "waiting-review",
+    "status": "published",
+    "reviewRounds": 1,
+    "implementationRounds": [
+      {
+        "round": 1,
+        "status": "passed",
+        "budgetSource": "legacy",
+        "owner": "imported"
+      },
+      {
+        "round": 2,
+        "status": "failed",
+        "budgetSource": "legacy",
+        "owner": "qa-operator"
+      },
+      {
+        "round": 3,
+        "status": "failed",
+        "budgetSource": "default-four",
+        "owner": "qa-operator"
+      },
+      {
+        "round": 4,
+        "status": "running",
+        "budgetSource": "default-four",
+        "owner": "qa-operator"
+      }
+    ],
+    "labels": [
+      "codex-review-fixes"
+    ],
+    "requestNotices": 2,
+    "retainedHistoryBytes": 1049385,
+    "retainedHistoryDigest": "734fd7b95068c43d0668d807b154afbba9bcafeb946c65f0dc1c79e567e52b1d",
+    "defaultLimit": 4,
+    "extensions": 0,
+    "gitBlobReads": 29,
+    "stateWrites": 7
+  },
+  "errors": [],
+  "cleanup": {
+    "contextClosed": true,
+    "browserClosed": true,
+    "serverClosed": true,
+    "portRefused": true
+  },
+  "lockHeld": true,
+  "synthetic": true,
+  "clinicalE2E": false,
+  "liveProvider": false
+}

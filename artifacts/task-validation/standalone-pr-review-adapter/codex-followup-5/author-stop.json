@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "status": "AUTHOR_STOP",
+  "baseSha": "ded0c92c95362c25bd8b7c07aa191ce9f1bae470",
+  "reservationNonce": "701c1b66-1b4a-471c-bfb8-e05e46649abf",
+  "round": 9,
+  "scopeCount": 27,
+  "changedCount": 14,
+  "sourceFreezeSha256": "c7a6b4689d1d27d7828844640263c1ea902082bdf70e11c4004d4234cd0f385b",
+  "workflow": {
+    "node": "v24.19.0",
+    "tests": 771,
+    "pass": 768,
+    "fail": 0,
+    "skip": 3
+  },
+  "changedPaths": [
+    {
+      "path": "agent-team/src/bug-pipeline/github.mjs",
+      "sha256": "4af3436a7cd44270a1543a7ff84b05ca57ad947ad87c7ad940e223ef20208ebd",
+      "currentGitBlob": "a4e478c04de2bfacd294e3a1ff4c504b889ff4f7"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "sha256": "84ad6cd00633a83030fb3b19c8d7e49f813dca6e74d8b8f300e889a45749685e",
+      "currentGitBlob": "9f4ce009cbd8f58336214eb6d7a6b41297419a3b"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "sha256": "e6a938c2bed4c7f87f223d734e5f39895c623ef3ec46ef6cc8eabf45f28cab48",
+      "currentGitBlob": "847983d15006c7ea9b06d8b7598f2221a96dbd51"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "sha256": "b02d66ff94d65ddab6e4e51c884ca568eff857c9db907a4cd23ce4826bcef687",
+      "currentGitBlob": "92da9466f34bd68bf9768b3fbd0b68b1e8398974"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/attempt-budget.mjs",
+      "sha256": "99066c62ffffb8b7a590a3a1f7a7291c4d7b16a3ae3ef638d07ef591655b3ca2",
+      "currentGitBlob": "13b3556daa34aed04b619816ad16c1e422031544"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/review-policy.mjs",
+      "sha256": "500124168a97311d658e89f02fd64d88d1d00e562e17c2abf53c7d515d6cf080",
+      "currentGitBlob": "d50776ea6272ae3cbdee8503a92a41c2472a1152"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "sha256": "5237393fc6d1c3d59ade41f0447c0446c4e93e409b02048edb7249f6f0e641e6",
+      "currentGitBlob": "4b74379aa6ff79f5c51673257d637775a8a55da2"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "sha256": "0f633e111d73455839b181caebd5c2d133bfc7d1d45aa83dab9a51cbbfa7000c",
+      "currentGitBlob": "882553fb0bf75b13fa24e6f86b9617b62a3297a3"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/attempt-budget.test.mjs",
+      "sha256": "684e42761f5214a54b26ccf02d6f3e61ff320d670b440ff60451e8b19ca60466",
+      "currentGitBlob": "2cf25e823b48b0912a08e4dc29e97be17644962d"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "sha256": "c361e4f4bb93bb651cd3c007d828a3f8b93f5a09efc8a0c1984d00c5c778ced1",
+      "currentGitBlob": "8e32274bbb1328727f56d7f67c17e624f70736bf"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      "sha256": "942bdcce71716e6eff2faf3f474bd5c8d72a52b18c99c603ccd534dd21ab73df",
+      "currentGitBlob": "4d047725d34c1b2a7b9a7b95d4d0cf1cc357b5cd"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/dashboard.test.mjs",
+      "sha256": "6bea50a41285d8c40948ed0a2ddd8f86c6136285621618da8ebf77cd4df99667",
+      "currentGitBlob": "ccf7076d4a2bd0165ce729f5fecc8cb7ea653175"
+    },
+    {
+      "path": "docs/standalone-pr-review.md",
+      "sha256": "d76561cc5f03377d085e45920d2a44d2420079c3968ceafc3cb92d10433e9bad",
+      "currentGitBlob": "330bc14061ac49396079f7073133f6965fd531a3"
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.test.mjs",
+      "sha256": "b3fc368c4d48b5c4e057b81e96bec14b5dec9c9afd4cd41ba6a3ec7f2070414a",
+      "currentGitBlob": "41c7c3de7147d677b9615fa30cd43960e7339f13"
+    }
+  ],
+  "preservedProofs": {
+    "oldProofEntries": 7448,
+    "trackedGitBlobEntries": 7422,
+    "originalUntrackedProofFiles": 26,
+    "diskPresent": 141,
+    "sparseDiskAbsent": 7307,
+    "changedOldProofs": [],
+    "privateProofRoots": 8,
+    "privateProofFiles": 131,
+    "changedPrivateProofs": [],
+    "head": "ded0c92c95362c25bd8b7c07aa191ce9f1bae470"
+  },
+  "rawOutputsPrivate": true,
+  "gitOrStateMutationsByAuthor": false,
+  "nextGates": [
+    "Independent QA against source freeze",
+    "496-first root-owned integration preserving 8MiB/16MiB limits",
+    "Exact-main hosted Node22 and native required checks",
+    "Actual Claude review",
+    "Fresh final Codex",
+    "Protected merge"
+  ]
+}

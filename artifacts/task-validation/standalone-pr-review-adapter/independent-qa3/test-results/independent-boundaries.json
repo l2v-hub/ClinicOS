@@ -1,0 +1,108 @@
+{
+  "results": [
+    {
+      "name": "trusted policy is immutable exact18 and excludes app393",
+      "result": "PASS"
+    },
+    {
+      "name": "real tempfile production CLI CJK50k",
+      "result": "PASS",
+      "utf8Bytes": 150106,
+      "commentChars": 50373
+    },
+    {
+      "name": "real tempfile production CLI astral24900",
+      "result": "PASS",
+      "utf8Bytes": 99706,
+      "commentChars": 50173
+    },
+    {
+      "name": "real tempfile production CLI mixed",
+      "result": "PASS",
+      "utf8Bytes": 108106,
+      "commentChars": 48373
+    },
+    {
+      "name": "concurrent first owner and repeated CLI/pipeline readers held=false",
+      "result": "PASS",
+      "secondCallerInvocations": 6,
+      "secondCallerWrites": 0,
+      "qaCallbacks": 1,
+      "syntheticMerges": 1
+    },
+    {
+      "name": "concurrent first owner and repeated CLI/pipeline readers held=true",
+      "result": "PASS",
+      "secondCallerInvocations": 6,
+      "secondCallerWrites": 0,
+      "qaCallbacks": 1,
+      "syntheticMerges": 0
+    },
+    {
+      "name": "large UTF8 state load/dashboard/save/reload bytes=1048577",
+      "result": "PASS",
+      "bytes": 1048577,
+      "save": "roundtrip"
+    },
+    {
+      "name": "large UTF8 state load/dashboard/save/reload bytes=8388608",
+      "result": "PASS",
+      "bytes": 8388608,
+      "save": "pretty serialization exceeds cap rejected before API/guard"
+    },
+    {
+      "name": "reject decoder bad sha",
+      "result": "PASS"
+    },
+    {
+      "name": "reject decoder bad encoding",
+      "result": "PASS"
+    },
+    {
+      "name": "reject decoder none nonempty",
+      "result": "PASS"
+    },
+    {
+      "name": "reject decoder oversize metadata",
+      "result": "PASS"
+    },
+    {
+      "name": "reject decoder fractional size",
+      "result": "PASS"
+    },
+    {
+      "name": "reject decoder symlink",
+      "result": "PASS"
+    },
+    {
+      "name": "reject decoder wrong blob sha",
+      "result": "PASS"
+    },
+    {
+      "name": "reject decoder wrong blob size",
+      "result": "PASS"
+    },
+    {
+      "name": "reject decoder bad blob encoding",
+      "result": "PASS"
+    },
+    {
+      "name": "reject decoder bad base64",
+      "result": "PASS"
+    },
+    {
+      "name": "reject decoder digest mismatch",
+      "result": "PASS"
+    },
+    {
+      "name": "reject malformed UTF8 even matching Git blob hash",
+      "result": "PASS"
+    },
+    {
+      "name": "reject nonJSON even matching Git blob hash",
+      "result": "PASS"
+    }
+  ],
+  "actualGitHubWrites": 0,
+  "actualModels": 0
+}

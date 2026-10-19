@@ -1,0 +1,27 @@
+# Continuation7 independent local QA
+
+Final Decision: READY FOR CODEX QA — local gate only.
+
+Source: `00749f3669d8757ead35efbde1fd0a751bee72b4`, compared with published baseline `4fcf349a415e0b9b5dfce1f2867bc8e45fe35a74`. Frozen 26 source/test/documentation inputs: SHA256 `0e06479d2a4e937cd69a345aaee8fc572c975e0aceabdc9a408d84e70df03a3c`. Dedicated independent session began after author source/harness STOP. Implementation reservation `b5864075-bb7e-4149-bf32-0331c95a7f46`; QA reservation `b8124012-7bd2-42f3-80c4-a3d6da95f69f` was locally fsynced before this session. Its GitHub reconciliation remains pending because the root reports HTTP401. This report grants no remote mutation authority.
+
+| Phase | Result | Evidence |
+| --- | --- | --- |
+| Contract | PASS locally | Parent task-contract.md, scope-amendment-1.md, analysis-plan.md, actual Claude review6254663867 |
+| Static diff review | PASS; no correctness/security finding | All 22 changed source/test/doc paths versus baseline reviewed; 26 frozen allowed paths preserved |
+| Tests | PASS | full-result.json: 741 tests, 738 passes, zero failures, three Windows-only skips; actual Node24.19.0 |
+| Additional adversarial checks | PASS | adversarial-result.json and adversarial.test.mjs: five independent tests |
+| Browser | PASS | browser-summary.json; controller-final.png; controller-video.webm; private trace with CRC/JSON/image decode verified |
+| Security | PASS within local scope | Credential-free trusted verification runner, PATH-only supplied environment, synthetic transports, no live provider/GitHub/DB calls |
+| Preservation | PASS | before-preservation.json and after-preservation.json: 26 source inputs, two frozen harnesses and 485 old proof files unchanged |
+
+The fresh full suite exercises actual controllers and release functions, including three-tick fair retry escalation against canonical reloaded objects, persistence failure stopping subsequent writes, latest-continuation release eligibility, protected instruction/policy paths, verified authorization requirements, live/expired leases, merge before/during/after recovery CAS, uncertain merge receipts and request-notice repair through the suggested CLI. Five additional independent tests exercise actual controller calls against synthetic transports: authorization revoked while awaiting a verifier, concurrent same-owner CAS modification during verification, repeated consumption nonce, head movement after comment enumeration, and finite transport classification without raw payload leakage. These supplements do not replace the fresh full suite.
+
+The private real canonical-state snapshot was validated read-only using candidate validateStandaloneState under the same credential-free runner. Result PASS: four normal batches, seven manual batches and four standalone subjects; digest `2e472cd597fc6a3e6949884dfd5b0b0fd26ceb7f7d42cd8b6a773fddfe2a3ddd`. No actual record or body was copied into this packet. This supports schema/manual-issue compatibility, not authentication of JSON provenance.
+
+The internal QA-only browser surface calls the fresh actual controller with synthetic GitHub transport. Controls adopt, request, claim and submit/reconcile produced the expected durable status, review count and exclusive labels; each state survived page reload. No page/console/HTTP errors occurred in the successful run. This is controller evidence, not clinical application E2E. Playwright was serialized using the shared flock; owned browser/server resources were closed. The private trace has 28 entries, 229 decoded JSON lines and 17 decoded images. The first browser preparation failed because isolated HOME lacked the video encoder; the second cache attempt set the path after Playwright had initialized its registry. Both failed outputs and harness versions remain private and their public result summaries are retained. The final run loads the existing trusted browser cache before dynamically importing Playwright; no packages were installed and no candidate source changed.
+
+Security review found no introduced dependencies, clinical data, credential literals, backend/API/schema changes, unsafe rendered input or weakened live integration boundary. Persisted diagnostics use finite metadata. The verifier remains injected and absent by default; a fixture receipt is never evidence of an authenticated live user session or native independent human review. Same-account user-grant semantics follow the explicit contract. Trust-root automatic merge remains denied. A frontend build is not applicable to these Node controller-only changes; the affected executable workflow was tested directly.
+
+Limits: hosted Node22/native CI, actual post-publication Claude exact-SHA review, final independent Codex review, GitHub QA reservation reconciliation and protected publication/merge remain root-owned and unverified here. No model/provider, real GitHub, credential, database, merge, deployment or issue closure action was performed. The separate state-blob transport bootstrap was not integrated or tested as part of this freeze.
+
+This report supersedes local verdict navigation for continuation7 only. Immutable earlier reports remain linked through ../validation-report.md and ../authoritative-reports.jsonl, including ../../codex-followup-2/continuation6-validation-report.md and ../../codex-followup-2/independent-qa-followup-2/qa-summary.json. All six spent earlier implementations and failed proofs remain consumed and unchanged. No old report was overwritten.

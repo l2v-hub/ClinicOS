@@ -1,0 +1,10 @@
+{
+  "validation": "PASS (actual candidate validateState + validateStandaloneState, read-only)",
+  "sha256": "16110677f8be7e4e70a4077282c3998a8b39175efbbbcfe919c7330a24a0a0ce",
+  "batches": 4,
+  "manualBatches": 7,
+  "standaloneReviews": 5,
+  "issueOnly470Owners": 1,
+  "preserved492ContinuationRounds": 4,
+  "actualRecordsPublished": false
+}

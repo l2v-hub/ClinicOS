@@ -1,0 +1,170 @@
+{
+  "results": [
+    {
+      "name": "F2 append fresh packet retains prior attempt proof digests and original currenthead bytes",
+      "result": "PASS",
+      "implementation": 3,
+      "preservedPackets": 1,
+      "writes": 2
+    },
+    {
+      "name": "F2 rejects rewrite copied historical attempt",
+      "result": "PASS",
+      "rejected": true,
+      "writes": 1
+    },
+    {
+      "name": "F2 rejects rewrite prior packet original bytes",
+      "result": "PASS",
+      "rejected": true,
+      "writes": 1
+    },
+    {
+      "name": "F2 rejects delete prior packet original bytes",
+      "result": "PASS",
+      "rejected": true,
+      "writes": 1
+    },
+    {
+      "name": "normal100KB and standalone unsafe per-field/aggregate guards",
+      "result": "PASS",
+      "normal100KBUnchanged": true
+    },
+    {
+      "name": "native main-advance",
+      "result": "PASS",
+      "expected": "accepted unchanged merge-base"
+    },
+    {
+      "name": "native merge-base",
+      "result": "PASS",
+      "expected": "rejected changed identity/ancestry"
+    },
+    {
+      "name": "native head",
+      "result": "PASS",
+      "expected": "rejected changed identity/ancestry"
+    },
+    {
+      "name": "native fork",
+      "result": "PASS",
+      "expected": "rejected changed identity/ancestry"
+    },
+    {
+      "name": "native base-ref",
+      "result": "PASS",
+      "expected": "rejected changed identity/ancestry"
+    },
+    {
+      "name": "production finalize CLI success",
+      "result": "PASS",
+      "code": 0,
+      "declaredSyntheticQaCallbacks": 1,
+      "syntheticMergeCalls": 1,
+      "phase": "ready",
+      "release": {
+        "status": "merged",
+        "reviewedSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "prNumber": 81,
+        "mergeSha": "7777777777777777777777777777777777777777"
+      }
+    },
+    {
+      "name": "production finalize CLI hold",
+      "result": "PASS",
+      "code": 0,
+      "declaredSyntheticQaCallbacks": 1,
+      "syntheticMergeCalls": 0,
+      "phase": "ready",
+      "release": null
+    },
+    {
+      "name": "production finalize CLI application",
+      "result": "PASS",
+      "code": 0,
+      "declaredSyntheticQaCallbacks": 1,
+      "syntheticMergeCalls": 0,
+      "phase": "ready",
+      "release": null
+    },
+    {
+      "name": "production finalize CLI unknown",
+      "result": "PASS",
+      "code": 0,
+      "declaredSyntheticQaCallbacks": 1,
+      "syntheticMergeCalls": 0,
+      "phase": "ready",
+      "release": null
+    },
+    {
+      "name": "production finalize CLI no-claude",
+      "result": "PASS",
+      "code": 0,
+      "declaredSyntheticQaCallbacks": 0,
+      "syntheticMergeCalls": 0,
+      "phase": "waiting-review",
+      "release": null
+    },
+    {
+      "name": "production finalize CLI codex-failure",
+      "result": "PASS",
+      "code": 1,
+      "declaredSyntheticQaCallbacks": 1,
+      "syntheticMergeCalls": 0,
+      "phase": "blocked",
+      "release": null
+    },
+    {
+      "name": "production finalize CLI codex-blocked",
+      "result": "PASS",
+      "code": 1,
+      "declaredSyntheticQaCallbacks": 1,
+      "syntheticMergeCalls": 0,
+      "phase": "blocked",
+      "release": null
+    },
+    {
+      "name": "production finalize CLI checks-failure",
+      "result": "PASS",
+      "code": 1,
+      "declaredSyntheticQaCallbacks": 1,
+      "syntheticMergeCalls": 0,
+      "phase": "blocked",
+      "release": null
+    },
+    {
+      "name": "production finalize CLI auth-loss",
+      "result": "PASS",
+      "code": 1,
+      "declaredSyntheticQaCallbacks": 1,
+      "syntheticMergeCalls": 0,
+      "phase": "blocked",
+      "release": null
+    },
+    {
+      "name": "actual merge side effect interruption recovers receipt without another review/merge",
+      "result": "PASS",
+      "syntheticMergeCalls": 1,
+      "syntheticQaCallbacks": 1,
+      "receipt": {
+        "status": "merged",
+        "reviewedSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "prNumber": 81,
+        "mergeSha": "8888888888888888888888888888888888888888"
+      }
+    },
+    {
+      "name": "CAS merge reservation failure prevents merge",
+      "result": "PASS",
+      "syntheticMergeCalls": 0
+    },
+    {
+      "name": "normal/unadopted finalizer rejected",
+      "result": "PASS",
+      "rejected": true
+    }
+  ],
+  "actualGitHubWrites": 0,
+  "actualModels": 0,
+  "actualDeployments": 0
+}

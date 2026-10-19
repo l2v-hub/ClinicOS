@@ -1,4 +1,10 @@
-import { feedbackFingerprint, MAX_CYCLES, sha256 } from './contracts.mjs';
+import {
+  attemptLimit,
+  activeImplementation,
+  reserveImplementation,
+  spentAttempts,
+} from './attempt-budget.mjs';
+import { feedbackFingerprint, sha256 } from './contracts.mjs';
 import { createIssueReviewCommunication } from './issue-review-communication.mjs';
 import { createCommentReviewHandoff } from './comment-review-handoff.mjs';
 import { createRunner } from './process.mjs';
@@ -71,7 +77,7 @@ export async function externalReviewStep({
   }
   if (
     ['implementing', 'validating', 'simplifying', 'publishing'].includes(batch.phase) ||
-    batch.implementation.some((attempt) => attempt.status === 'running')
+    activeImplementation(batch)
   )
     return blocked('Interrupted Codex correction requires explicit recovery');
   // The real PR mirror also reaches an older installed Max worker, without changing
@@ -130,13 +136,12 @@ export async function externalReviewStep({
       await notify();
       return;
     }
-    if (batch.reviews.length >= MAX_CYCLES)
+    if (batch.reviews.length >= attemptLimit(batch, 'reviews'))
       return blocked('Four external Claude review attempts exhausted');
-    if (batch.implementation.length >= MAX_CYCLES)
+    if (spentAttempts(batch, 'implementation') >= attemptLimit(batch, 'implementation'))
       return blocked('Four implementation/validation attempts exhausted');
     await workspace.prepare(batch);
-    const attempt = { round: batch.implementation.length + 1, status: 'running' };
-    batch.implementation.push(attempt);
+    const attempt = reserveImplementation(batch);
     batch.phase = 'implementing';
     batch.approvedSha = null;
     batch.issueFeedbackSince ??= observedAt;
@@ -212,6 +217,6 @@ export async function externalReviewStep({
   await notify();
   await report(
     batch,
-    `PR ${batch.pr.url}: **Ready for review** su \`${batch.sha}\`. In attesa del cron Claude Code; review utilizzate ${batch.reviews.length}/4. Commenti e richieste di modifica torneranno a Codex tramite GitHub.`,
+    `PR ${batch.pr.url}: **Ready for review** su \`${batch.sha}\`. In attesa del cron Claude Code; review utilizzate ${batch.reviews.length}/${attemptLimit(batch, 'reviews')}. Commenti e richieste di modifica torneranno a Codex tramite GitHub.`,
   );
 }

@@ -1,0 +1,43 @@
+{
+  "testedSourceSha": "0d8326db7d3e53691ce6f8127a70c06c3666b426",
+  "qaStopSha256": "472c2b6aa86c201f6d80a6f620d762a196da5794ced419c98bf0f8a09fc04ef2",
+  "originalReportSha256": "3e5fed60c166d2610b40936562790f79e02725edbe77f7516a64d408f5f6706e",
+  "results": {
+    "workflow": {
+      "tests": 771,
+      "pass": 768,
+      "skip": 3,
+      "fail": 0
+    },
+    "imported495": {
+      "tests": 142,
+      "pass": 142,
+      "fail": 0
+    },
+    "transportAdversarial": {
+      "tests": 33,
+      "pass": 33,
+      "fail": 0
+    },
+    "freshR1R7": {
+      "tests": 33,
+      "pass": 33,
+      "fail": 0
+    },
+    "actualCliProcess": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    "browserActions": 7
+  },
+  "sourceAndHistoryPreserved": true,
+  "screenshotVisuallyInspectedByRoot": true,
+  "screenshotSha256": "3af1ca84897741c3175de7a28cf74340a38b64f0a08df338f9e36f1f49fda8a9",
+  "rawLogsTraceVideoCanonicalStatePrivate": true,
+  "actualClaudeApproval": false,
+  "hostedNode22": false,
+  "nativeChecks": false,
+  "clinicalE2E": false,
+  "providerDeployment": false
+}

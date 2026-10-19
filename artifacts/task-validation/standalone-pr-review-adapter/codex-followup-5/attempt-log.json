@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "continuationRound": 9,
+  "preservedPriorAttempts": 8,
+  "node": "v24.19.0",
+  "rawOutputs": "Private; no raw output or trace is in this packet",
+  "runs": [
+    {
+      "id": "actual-state",
+      "result": "pass",
+      "note": "Both validators accepted untouched actual snapshot"
+    },
+    {
+      "id": "focused-1",
+      "tests": 88,
+      "pass": 78,
+      "fail": 10,
+      "skip": 0,
+      "note": "Initial assertions/fixtures exposed old policy/timing assumptions and recovery cache scope; retained privately"
+    },
+    {
+      "id": "focused-2",
+      "tests": 88,
+      "pass": 87,
+      "fail": 1,
+      "skip": 0,
+      "note": "One delayed-readiness fixture still supplied empty production allowlist"
+    },
+    {
+      "id": "focused-3",
+      "tests": 408,
+      "pass": 408,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "id": "workflow-regression",
+      "tests": 771,
+      "pass": 767,
+      "fail": 1,
+      "skip": 3,
+      "note": "Historical label-projection fixture lacked pinned cutover; assertions unchanged in correction"
+    },
+    {
+      "id": "fixture-recovery",
+      "tests": 54,
+      "pass": 54,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "id": "actual-snapshot-negative-checks",
+      "acceptedValidators": 2,
+      "entities": 16,
+      "negativeValidatorChecks": 84,
+      "snapshotUnchanged": true,
+      "liveAuthorizationVerified": false
+    },
+    {
+      "id": "workflow-regression-2",
+      "tests": 771,
+      "pass": 768,
+      "fail": 0,
+      "skip": 3
+    }
+  ]
+}

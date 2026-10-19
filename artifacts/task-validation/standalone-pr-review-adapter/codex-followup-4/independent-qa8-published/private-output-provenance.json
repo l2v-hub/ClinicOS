@@ -1,0 +1,90 @@
+{
+  "sourceSha": "210a257c96aea12e9386018fe9ce762715870447",
+  "originalQaStopSha256": "3457a300408ec2fd6ea99e40584fa9852da516a58eef153d1725ebbf7e3214bd",
+  "originalQaReportSha256": "4bc2d78c9ce7573d44dfd2e696b88ed2b2d446eb020aaa65f0a2e7e37add4984",
+  "rawCommandOutputsRetainedPrivately": 10,
+  "rawTraceSha256": "1d50afc09f2757678f309a1d7bedb970156d24b9879f67216e645b8d6c78135e",
+  "rawTracePublished": false,
+  "outputs": {
+    "final-adversarial.json": {
+      "sha256": "f52533ebc350301817ee2120d62ede7a7e583917d58699b5baae297639c32d3c",
+      "bytes": 3385,
+      "ok": true,
+      "exitCode": 0,
+      "classification": "authoritative-final",
+      "rawTextPublished": false
+    },
+    "final-browser.json": {
+      "sha256": "fb989ca29d2b59e1c17da52db3bc3cfdbbd2f0bd4c9ce75ab5273fb9791b166f",
+      "bytes": 322,
+      "ok": true,
+      "exitCode": 0,
+      "classification": "authoritative-final",
+      "rawTextPublished": false
+    },
+    "final-full.json": {
+      "sha256": "7b1076831717de622a439f750898cf7bf2db00f6d62ea7d7e6946b61a8256a34",
+      "bytes": 75212,
+      "ok": true,
+      "exitCode": 0,
+      "classification": "authoritative-final",
+      "rawTextPublished": false
+    },
+    "fourth-browser.json": {
+      "sha256": "fb989ca29d2b59e1c17da52db3bc3cfdbbd2f0bd4c9ce75ab5273fb9791b166f",
+      "bytes": 322,
+      "ok": true,
+      "exitCode": 0,
+      "classification": "retained-preparation",
+      "rawTextPublished": false
+    },
+    "initial-adversarial.json": {
+      "sha256": "c19d659af73ced09455e2669c75727a7cf4d352a5cdf534357f11708419e8c3d",
+      "bytes": 10738,
+      "ok": false,
+      "exitCode": 1,
+      "classification": "retained-preparation",
+      "rawTextPublished": false
+    },
+    "initial-browser.json": {
+      "sha256": "f2fc72a8f5b77e6fbc8ca0a1bfda1a1cc6bf22143c8bbc157399f9a354cdcad8",
+      "bytes": 605,
+      "ok": false,
+      "exitCode": 1,
+      "classification": "retained-preparation",
+      "rawTextPublished": false
+    },
+    "second-adversarial.json": {
+      "sha256": "e980018487916a02d9472d83c87b0874a587b5cf128e02fa64324eda81b866a5",
+      "bytes": 3289,
+      "ok": true,
+      "exitCode": 0,
+      "classification": "retained-preparation",
+      "rawTextPublished": false
+    },
+    "second-browser.json": {
+      "sha256": "c1d56f2051c3b436824273d864a941c36a8fbb28b7be84c64a88cfd360f70c0f",
+      "bytes": 604,
+      "ok": false,
+      "exitCode": 1,
+      "classification": "retained-preparation",
+      "rawTextPublished": false
+    },
+    "third-adversarial.json": {
+      "sha256": "53a9ea0dd3f2ab8d6948da4bf0600d8367a1bc1e2b2466d0d9a29029b14a8ff0",
+      "bytes": 3387,
+      "ok": true,
+      "exitCode": 0,
+      "classification": "retained-preparation",
+      "rawTextPublished": false
+    },
+    "third-browser.json": {
+      "sha256": "dcff99fe3d973c81b02b7f0921b23846083e6d19332795a1d5ce2b67435a6810",
+      "bytes": 869,
+      "ok": false,
+      "exitCode": 1,
+      "classification": "retained-preparation",
+      "rawTextPublished": false
+    }
+  }
+}

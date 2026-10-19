@@ -1,0 +1,26 @@
+{
+  "scope": "standalone-pr-review-adapter",
+  "maxAttempts": 4,
+  "priorAttempts": "../implementation-attempts.json (immutable original) + ../independent-qa/validation-report.md (QA1 FAILED)",
+  "attempts": [
+    {
+      "round": 1,
+      "status": "failed-independent-qa",
+      "findings": [
+        "F1 aggregate bound",
+        "F2 mutable historical proof"
+      ]
+    },
+    {
+      "round": 2,
+      "status": "author-passed-awaiting-independent-qa",
+      "rootAuthoritativeReservationBeforeSourceEdits": true,
+      "tests": {
+        "total": 659,
+        "passed": 656,
+        "failed": 0,
+        "skipped": 3
+      }
+    }
+  ]
+}

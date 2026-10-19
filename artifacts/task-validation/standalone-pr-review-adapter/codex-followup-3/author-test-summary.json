@@ -1,0 +1,103 @@
+{
+  "continuation": 7,
+  "finalRun": "final-full.json",
+  "node": "v24.19.0",
+  "baselineTests": 715,
+  "total": 741,
+  "passed": 738,
+  "failed": 0,
+  "skipped": 3,
+  "newTests": 26,
+  "runs": [
+    {
+      "run": "final-full.json",
+      "exitCode": 0,
+      "tests": 741,
+      "pass": 738,
+      "fail": 0,
+      "skipped": 3,
+      "sha256": "e02b315f14d446752e7fd8123cb4429cabe04a87822c2e7b5acf9e2a64be5a1c"
+    },
+    {
+      "run": "full-1.json",
+      "exitCode": 1,
+      "tests": 739,
+      "pass": 735,
+      "fail": 1,
+      "skipped": 3,
+      "sha256": "901e199cd90ba152c34f0ba19a2926601c1e2d43c6ed9ef368120b6e9d9588e8"
+    },
+    {
+      "run": "full-2.json",
+      "exitCode": 0,
+      "tests": 739,
+      "pass": 736,
+      "fail": 0,
+      "skipped": 3,
+      "sha256": "bb3a323db6b39d05432bf70a8dde7419cc9d933217f20c72f5dbaa7c47b460b4"
+    },
+    {
+      "run": "full-3.json",
+      "exitCode": 0,
+      "tests": 741,
+      "pass": 738,
+      "fail": 0,
+      "skipped": 3,
+      "sha256": "350d80417fde66c2a0791d3d9c7ca692a840b88b4bacb38f7a4a47ba2c14d116"
+    },
+    {
+      "run": "initial-scoped.json",
+      "exitCode": 1,
+      "tests": 505,
+      "pass": 493,
+      "fail": 12,
+      "skipped": 0,
+      "sha256": "d18d51bfa52a66d233149ba66a74e6735863414a20635cd4549aa147f1c5999d"
+    },
+    {
+      "run": "issue-allowance.json",
+      "exitCode": 0,
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "skipped": 0,
+      "sha256": "43cc54dcba16a6cd1ecb1f7f44eb0b72cb3b263a22d2b3095bd407356da2425c"
+    },
+    {
+      "run": "scoped-2.json",
+      "exitCode": 1,
+      "tests": 505,
+      "pass": 503,
+      "fail": 2,
+      "skipped": 0,
+      "sha256": "34c0fa7e9d60fb07abe8851a4029e210d7206b1cc02161cee552ad60bd6c65d4"
+    },
+    {
+      "run": "scoped-3.json",
+      "exitCode": 1,
+      "tests": 519,
+      "pass": 518,
+      "fail": 1,
+      "skipped": 0,
+      "sha256": "64e14becf6a8c790604d532946b4f5a112510c7360c6fb7fafb7d04260222027"
+    },
+    {
+      "run": "scoped-4.json",
+      "exitCode": 0,
+      "tests": 526,
+      "pass": 526,
+      "fail": 0,
+      "skipped": 0,
+      "sha256": "06167bfe3436f255ec742e5db7f79a0a43e5d7f67a095936c1d1bdd99b3d670d"
+    }
+  ],
+  "directPreparation": {
+    "command": "node --test agent-team/tests/bug-pipeline/attempt-budget.test.mjs",
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0,
+    "authoritative": false,
+    "note": "Initial direct Node preparation output was visible in tool transcript; no raw output file was captured. It is not credential-isolation evidence. Subsequent issue-allowance.json repeated all five tests through the trusted verification runner."
+  }
+}

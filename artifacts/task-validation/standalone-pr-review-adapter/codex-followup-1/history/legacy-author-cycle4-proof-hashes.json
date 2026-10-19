@@ -1,0 +1,19 @@
+{
+  "analysis.md": "fb95c7b51ddee998eb04d020ba9db141f2b32d2946c628083bd6aaebafd93d32",
+  "implementation-attempts.json": "a2a43d60ea18197f6a4fd4c994e3d1b283b71be72a4455120856040d6f645d88",
+  "implementation-plan.md": "0e4d27ea4383dcfd9b249224a1f0fb8e232700b078be2b6da808334d90244788",
+  "root-reservation.json": "f5c4f7f425d62464f7a0fedc46f39ed6d3a2f7882d37210c558d24b9bb51f5cf",
+  "source-freeze.json": "d88c088fe9a38d16c9c89d4e7263643a878a779ae98c558e6b74da4693d10a08",
+  "task-contract.md": "0e1c1fef0d8c993512ca94eee77e580bbfc8a1994a34ff582a0b702aeaf027ad",
+  "test-results/contract-validation.log": "3032d1a52c341d1509e10453bd00fa4df803e774931dca4d96a81c1e65ab79b0",
+  "test-results/format-check.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+  "test-results/format-write.log": "61b09d68771f76c3212214d44325647635300f6eb28eb4eaee5ed0ed9e7733ee",
+  "test-results/full-suite-2.log": "af36d7b46d9826b0dfb528550c3f67ca2bada12e82318200ef6bb4400706d192",
+  "test-results/full-suite.log": "0b9805bd004e18cbd8b34c1f522905499937c73517566b5e605498b471d70504",
+  "test-results/github-targeted.log": "64110e778639e2eecd8c763cb62bc7a275b49918e029c6493a78f944d4d12139",
+  "test-results/preserved-prior-proof.json": "fbaf4081672d416082fd3b9e42ab95876d5ae3b00ec46b9d592d8afb27dc615f",
+  "test-results/protocol-targeted-2.log": "3832f91dca1a99e333deaa10fe9c44fc1c01739d1662cee6b746ea24ae0d291a",
+  "test-results/protocol-targeted.log": "e232cb115140bd9907d5da5f409429743c5e08e13b38617bfde20ee8a847a4c8",
+  "test-results/schema-targeted.log": "2b04ea421b034386dd81c8dae2567f9a0d9e7c5c895f093c5b246a29594e8af1",
+  "validation-report.md": "0f8deb10bdc1a52138454f4e9da59e9469ca4574467958c888c821245e9f4d80"
+}

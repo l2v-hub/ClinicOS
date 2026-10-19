@@ -1,0 +1,175 @@
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:18:19.173Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:18:19.179Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:18:19.194Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/bug-pipeline/standalone-review.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:18:19.203Z","summary":"Declared synthetic QA callback, zero model calls"},"release":{"status":"merged","reviewedSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","prNumber":81,"mergeSha":"7777777777777777777777777777777777777777"}}
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:18:19.173Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:18:19.179Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:18:19.194Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/bug-pipeline/standalone-review.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:18:19.203Z","summary":"Declared synthetic QA callback, zero model calls"},"release":{"status":"merged","reviewedSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","prNumber":81,"mergeSha":"7777777777777777777777777777777777777777"}}
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:18:19.221Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:18:19.225Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:18:19.234Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/bug-pipeline/standalone-review.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":"Preserved release hold","codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:18:19.239Z","summary":"Declared synthetic QA callback, zero model calls"}}
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:18:19.246Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:18:19.250Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:18:19.258Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"frontend/src/qa.ts","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:18:19.264Z","summary":"Declared synthetic QA callback, zero model calls"}}
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:18:19.270Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:18:19.273Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:18:19.281Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/unknown.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:18:19.284Z","summary":"Declared synthetic QA callback, zero model calls"}}
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"waiting-review","issues":[],"reviews":0,"implementation":3,"handoff":{"channel":"github-comments","status":"comment-requested","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:18:19.291Z"},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/bug-pipeline/standalone-review.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false}
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"blocked","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:18:19.299Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:18:19.303Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:18:19.312Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/bug-pipeline/standalone-review.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"running","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:18:19.315Z"}}
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"blocked","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:18:19.319Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:18:19.323Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:18:19.331Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/bug-pipeline/standalone-review.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"blocked","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:18:19.334Z","summary":"Declared synthetic QA callback, zero model calls"}}
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"blocked","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:18:19.340Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:18:19.343Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:18:19.351Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/bug-pipeline/standalone-review.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:18:19.354Z","summary":"Declared synthetic QA callback, zero model calls"}}
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"blocked","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:18:19.388Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:18:19.392Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:18:19.404Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/bug-pipeline/standalone-review.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:18:19.407Z","summary":"Declared synthetic QA callback, zero model calls"}}
+[
+  {
+    "name": "F2 append fresh packet retains prior attempt proof digests and original currenthead bytes",
+    "result": "PASS",
+    "implementation": 3,
+    "preservedPackets": 1,
+    "writes": 2
+  },
+  {
+    "name": "F2 rejects rewrite copied historical attempt",
+    "result": "PASS",
+    "rejected": true,
+    "writes": 1
+  },
+  {
+    "name": "F2 rejects rewrite prior packet original bytes",
+    "result": "PASS",
+    "rejected": true,
+    "writes": 1
+  },
+  {
+    "name": "F2 rejects delete prior packet original bytes",
+    "result": "PASS",
+    "rejected": true,
+    "writes": 1
+  },
+  {
+    "name": "normal100KB and standalone unsafe per-field/aggregate guards",
+    "result": "PASS",
+    "normal100KBUnchanged": true
+  },
+  {
+    "name": "native main-advance",
+    "result": "PASS",
+    "expected": "accepted unchanged merge-base"
+  },
+  {
+    "name": "native merge-base",
+    "result": "PASS",
+    "expected": "rejected changed identity/ancestry"
+  },
+  {
+    "name": "native head",
+    "result": "PASS",
+    "expected": "rejected changed identity/ancestry"
+  },
+  {
+    "name": "native fork",
+    "result": "PASS",
+    "expected": "rejected changed identity/ancestry"
+  },
+  {
+    "name": "native base-ref",
+    "result": "PASS",
+    "expected": "rejected changed identity/ancestry"
+  },
+  {
+    "name": "production finalize CLI success",
+    "result": "PASS",
+    "code": 0,
+    "declaredSyntheticQaCallbacks": 1,
+    "syntheticMergeCalls": 1,
+    "phase": "ready",
+    "release": {
+      "status": "merged",
+      "reviewedSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "prNumber": 81,
+      "mergeSha": "7777777777777777777777777777777777777777"
+    }
+  },
+  {
+    "name": "production finalize CLI hold",
+    "result": "PASS",
+    "code": 0,
+    "declaredSyntheticQaCallbacks": 1,
+    "syntheticMergeCalls": 0,
+    "phase": "ready",
+    "release": null
+  },
+  {
+    "name": "production finalize CLI application",
+    "result": "PASS",
+    "code": 0,
+    "declaredSyntheticQaCallbacks": 1,
+    "syntheticMergeCalls": 0,
+    "phase": "ready",
+    "release": null
+  },
+  {
+    "name": "production finalize CLI unknown",
+    "result": "PASS",
+    "code": 0,
+    "declaredSyntheticQaCallbacks": 1,
+    "syntheticMergeCalls": 0,
+    "phase": "ready",
+    "release": null
+  },
+  {
+    "name": "production finalize CLI no-claude",
+    "result": "PASS",
+    "code": 0,
+    "declaredSyntheticQaCallbacks": 0,
+    "syntheticMergeCalls": 0,
+    "phase": "waiting-review",
+    "release": null
+  },
+  {
+    "name": "production finalize CLI codex-failure",
+    "result": "PASS",
+    "code": 1,
+    "declaredSyntheticQaCallbacks": 1,
+    "syntheticMergeCalls": 0,
+    "phase": "blocked",
+    "release": null
+  },
+  {
+    "name": "production finalize CLI codex-blocked",
+    "result": "PASS",
+    "code": 1,
+    "declaredSyntheticQaCallbacks": 1,
+    "syntheticMergeCalls": 0,
+    "phase": "blocked",
+    "release": null
+  },
+  {
+    "name": "production finalize CLI checks-failure",
+    "result": "PASS",
+    "code": 1,
+    "declaredSyntheticQaCallbacks": 1,
+    "syntheticMergeCalls": 0,
+    "phase": "blocked",
+    "release": null
+  },
+  {
+    "name": "production finalize CLI auth-loss",
+    "result": "PASS",
+    "code": 1,
+    "declaredSyntheticQaCallbacks": 1,
+    "syntheticMergeCalls": 0,
+    "phase": "blocked",
+    "release": null
+  },
+  {
+    "name": "actual merge side effect interruption recovers receipt without another review/merge",
+    "result": "PASS",
+    "syntheticMergeCalls": 1,
+    "syntheticQaCallbacks": 1,
+    "receipt": {
+      "status": "merged",
+      "reviewedSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "prNumber": 81,
+      "mergeSha": "8888888888888888888888888888888888888888"
+    }
+  },
+  {
+    "name": "CAS merge reservation failure prevents merge",
+    "result": "PASS",
+    "syntheticMergeCalls": 0
+  },
+  {
+    "name": "normal/unadopted finalizer rejected",
+    "result": "PASS",
+    "rejected": true
+  }
+]

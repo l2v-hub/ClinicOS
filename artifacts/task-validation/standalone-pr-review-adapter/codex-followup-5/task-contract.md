@@ -1,0 +1,32 @@
+# Task Contract
+
+## Task
+PR492 actual Claude third static review6256012226 on ded0c92c95362c25bd8b7c07aa191ce9f1bae470: bounded implementation continuation9. Root sole GitHub/state/Git/provider writer; author6.1-Sol has only exact existing26 source/docs/test paths and new packet. Preserve8 implementation attempts, actual review history and all old public/private proofs.
+
+## Impact Classification
+Infrastructure/controller/security/authorization/queue/review yes. Clinical application/frontend/backend/schema/provider changes no. No paid model/provider/API, no live GitHub mutation or real token in tests. Only credential-free local verification fixtures.
+
+## Current Behaviour
+Claude actual third review requests R1 medium and R2-R7 low. Exact original report is private 492-review3-feedback.json; source frozen atded0c92c. Prior8 is verified759PASS/3WindowsSkip+33 independent cases and native6PASS, not actual approved. CLI has no injected live verifier and must remain fail-closed where external authorization is truly required.
+
+## Expected Behaviour
+Implement all valid recovery/liveness/trust-path fixes without weakening uncertainty guards or inventing grants. Keep user-authorized continuation/history semantics. Clinical8-issue work proceeds in a separate worktree.
+
+## Acceptance Criteria
+1. R1: after recoveryVerify, maintainer resume supports idempotent projection-only GitHub write rejected/uncertain failures; non-projection uncertain mutations remain fail-closed. Definite4xx merge rejection only after fresh native PR OPEN at exact reviewedhead archives complete random reservation/tombstone into mergeHistory and becomes resumable without secondmerge. Revision adoption over merging reservation refuses unless native OPEN at changedhead and then archives full reservation. Preserve all CAS/readiness/feedback/nativecheck guards and ambiguous-outcome handling.
+2. R2: background tick awaiting comment review must not block on actor mismatch/transient notice repair; explicit CLI request/reconcile paths still repair exact idempotent notices. Choose explicit-only repair or documented best-effort; test normal andstandalone subjects with different authorized accounts and transientreads.
+3. R3: require authentic matching authorization schema/binding for every extension beyond a pinned legacy prefix in all normal/manualPR/manualissue/standalone collections; preserve actual old records. Root pins budgetAuthorizationCutover {schemaVersion:1,legacyCount,legacyDigest,actor,at,authorizationRef} on extant entities BEFORE new extension9. legacyDigest is SHA256 JSON.stringify(exact prefix); newentities defaultlegacyCount0 and must not grant arbitrary old-prefix exemptions. Both validateState/validateStandaloneState reject unauthorized appendedPR extension, mutatedprefix/cutover count overflow, wrongactor/action/entity/PR/kind/limit binding; allow exact authorized old prefix and actually verified newextension. Any design issue requiring different field contract must stop for root amendment. StoredJSON is not proof of live grant; mutators retain injected external verifier and replay checks; shippedCLI noverifier stillfailclosed.
+4. R4: wall-clock exponential backoff1min through30min with exhaustion only after a meaningful elapsedfailurewindow (document e.g30min), not three rapidticks; respect retryAt, reset properly after success, other subjects progress where safe; save failure aborts whole tick and document it. Tests inject clock for threefailures<1min versus beyondwindow. No sleep in tests or unboundedrequests.
+5. R5: merge lease includes full guard/readiness/command lifetime or authoritative restamp guarded immediately beforecommand. Recovery31sec after initialreservation while genuine commandnotstarted must still treat itaslive; preserve native reread/tombstones and no competing merge. Document exact budget, test clock and delayedguard.
+6. R6: docs/standalone-pr-review.md, models.test.mjs andworkspace.test.mjs guarded requiresHumanReview and excludedauto infrastructure list; test actualpolicy membership. No fictionalsecondhuman approval from same account.
+7. R7 decision: merge496 FIRST as minimal bootstrap, then integrate/rebase492 whilepreserving one pinned loader and4928MiB serialized/16MiB transport capacity. Root soleGitwriter; author must not rebase/merge refs. Recorddecision in newpacket and runbook; exact main integration/nativetests/review required before merge. Do not close496assuperseded or lower492limits.
+8. Exact allowed26 source paths only (source-scope.json), minimal changes; allothercode and old proofs immutable. Scan secrets/PHI/unsafe logging, noAPIbillingfallback, clinical/provider E2E not claimed. No blind error retries on writes or automatic merge recovery from uncertainremote outcome.
+
+## Test Plan
+Meaningful focusedrecovery/merge/adoption/notice/background/backoff/lease/authorization/cutover/trustpolicy tests; then exact actual CI workflow regression command once appropriate. Retain setup/assertion failures and reportcounts/skips. Use createRunner verification from /workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs with ownedruntime and childPATH only; no liveGH/credentials, Node24 local versus nativeNode22distinguished. Validate complete actual private root state snapshot, not fabricated normalized owner; author cannot mutatecanonicalstate. Fresh independent QA afterauthorSTOP; preserve sourcefreeze/STOP exact hashes and all8priorattempts. Root will integrate496onlyafterrealapproval/finalCodex; no currentmainintegrationclaim.
+
+## Evidence Plan
+Private /workspace/.clinicos-cloud/492-continuation9-author-20261019/ for rawoutputs/runtime/frozenoriginals. New publicpacket artifacts/task-validation/standalone-pr-review-adapter/codex-followup-5/ only contract/analysis/plan/safe summaries/attemptlog/sourcefreeze/authorSTOP after rootreview; no rawlog/trace force-add. Prior manifests contain sparse missing disk paths with actual Gitblob proofs: preserve and distinguish byteabsence. Actual canonical private snapshot beforeauthor holds rootcutovers and9reservation; never publishstate/userrecords. No app/screenshots/DB/provider claims from unitfixtures.
+
+## Gate Status
+READY FOR IMPLEMENTATION after actual durable9nonce/readback; root grants alreadyexplicitusercontinue-untilresolution. Author code and privateevidence only, no Git/GH/provider/state mutation. Stop with exactchangedpaths/hashes/commands/counts/failedattempts. QAindependent+actualClaude+freshfinalCodex/native6/protectedmerge remain required.

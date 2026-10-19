@@ -1,0 +1,16 @@
+{
+  "result": "PASS",
+  "files": [
+    "validation-report.md",
+    "implementation-plan.md",
+    "analysis.md",
+    "prior-proofs-verification.json",
+    "scope-amendment-1.md",
+    "author-full-suite.tap",
+    "author-results.json",
+    "task-contract.md",
+    "source-freeze.json"
+  ],
+  "maximumBytes": 26214400,
+  "scope": "Synthetic author packet only; no media/archives created by author"
+}

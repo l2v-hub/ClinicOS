@@ -1,0 +1,26 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'Failed to load resource: the server responded with a status of 500 (Internal Server Error)',
++   'Failed to load resource: the server responded with a status of 500 (Internal Server Error)'
++ ]
+- []
+
+    at file:///workspace/clinicos-standalone-pr-review/artifacts/task-validation/standalone-pr-review-adapter/independent-qa/browser-protocol.mjs:6:1923 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'Failed to load resource: the server responded with a status of 500 (Internal Server Error)',
+    'Failed to load resource: the server responded with a status of 500 (Internal Server Error)'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

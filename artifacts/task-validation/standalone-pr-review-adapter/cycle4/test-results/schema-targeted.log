@@ -1,0 +1,19 @@
+✔ accepts an imported standalone PR with three retained implementation rounds and actual PR identity (8.330062ms)
+✔ large standalone metadata accommodates four independently bounded reports without weakening normal100KB sanitation (48.66105ms)
+✔ standalone fields, report schema and explicit aggregate remain bounded and secret-safe (21.323073ms)
+✔ accepts valid pretty-printed multilingual reports within the review validator limits (39.683166ms)
+✔ 512 KiB reservation covers worst-case valid multilingual pretty report and its state escaping (8.547752ms)
+✔ a subject near 2 MiB validates without pending work but reserves capacity for review and Codex QA (35.517009ms)
+✔ rejects fake or inconsistent PR identity and more than four implementation rounds (2.294432ms)
+✔ failed uncommitted history retains an honest manifest identity instead of inventing a Git SHA (1.431846ms)
+✔ rejects unsafe source paths, symlinks, and non-regular source modes (2.044262ms)
+✔ checks review ledger and report digest consistency (4.255089ms)
+✔ standalone state keeps normal batch identity guards and prevents PR and ownership collisions (1.701059ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 310.072445

@@ -1,0 +1,140 @@
+{
+  "png": [
+    {
+      "path": "screenshots/02-release-hold-preserved.png",
+      "size": [
+        1440,
+        1250
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/03-infrastructure-receipt-terminal.png",
+      "size": [
+        1440,
+        1250
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/01-authenticated-report-import.png",
+      "size": [
+        1440,
+        1250
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/06-comment-compatible-history-capacity-stranded.png",
+      "size": [
+        1500,
+        1400
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/05-disjoint-cas-result-lost.png",
+      "size": [
+        1500,
+        1400
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/07-disjoint-cas-result-lost.png",
+      "size": [
+        1500,
+        1400
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/04-capacity-stranded.png",
+      "size": [
+        1500,
+        1400
+      ],
+      "mode": "RGB"
+    }
+  ],
+  "videos": [
+    {
+      "path": "current-counterexample-video/page@aeb46179c4201d2a30819b0a2af4ae08.webm",
+      "decoded": true,
+      "info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1500,
+            "height": 1400
+          }
+        ],
+        "format": {
+          "duration": "4.520000"
+        }
+      }
+    },
+    {
+      "path": "counterexample-video/page@f618296c1d635ca7c3a0f55559098eff.webm",
+      "decoded": true,
+      "info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1500,
+            "height": 1400
+          }
+        ],
+        "format": {
+          "duration": "4.160000"
+        }
+      }
+    },
+    {
+      "path": "video/page@53924699b5a64ab2c3642bd62a5e0bb6.webm",
+      "decoded": true,
+      "info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1440,
+            "height": 1250
+          }
+        ],
+        "format": {
+          "duration": "2.640000"
+        }
+      }
+    }
+  ],
+  "zip": [
+    {
+      "path": "trace/current-counterexample-trace.zip",
+      "members": 14,
+      "CRCValid": true,
+      "membersScanned": true
+    },
+    {
+      "path": "trace/counterexample-trace.zip",
+      "members": 15,
+      "CRCValid": true,
+      "membersScanned": true
+    },
+    {
+      "path": "trace/trace.zip",
+      "members": 33,
+      "CRCValid": true,
+      "membersScanned": true
+    }
+  ],
+  "credentialFindings": [],
+  "sourceFrozen": true,
+  "priorProofFilesUnchanged": 121,
+  "PHI": "Synthetic fixtures and scalar real-Git verification counts only; manual content inspection performed."
+}

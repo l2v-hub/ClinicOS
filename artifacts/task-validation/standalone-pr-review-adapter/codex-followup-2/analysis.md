@@ -1,0 +1,7 @@
+# Actual hosted CI cause and bounded fix
+
+The three recorded failures belong to standalone-review.test.mjs mocked finalize tests. Their env:{} unintentionally resolves os.homedir() and the runner personal .codex, so the hosted runner rejects codex-auth-unavailable before intended mock assertions. Source94fcaada preserves this failure in actual-hosted-ci-failure.json; no scheduling/Node version explanation is inferred.
+
+The new source0f91a96e changes only that test file, injecting owned synthetic empty directory fixtures into six mocked calls and asserting actual production auth rejects missing/file/API conflict inputs before callbacks. The production CLI remains byte-identical. Source/fixture synthetic directory existence is not real subscription authentication evidence. Full fresh independent715test suite executes with ambient Codex directory removed:712PASS/0FAIL/3unchangednativeWindowsSKIP, eight extraauthcases and fourpoisonedambientcasesPASS. All13099inputbytes and347+369priorproof maps unchanged. Previous four implementation entries and previouscontinuation5 remain unchanged. Newcontinuation6 records only this scoped source and freshQA.
+
+The manual-owner controller compatibility remains a distinct known coordination issue; this test correction does not claim a new Claude review or deployment. Root must explicitly bind a truthful controller packet before requesting actual review.

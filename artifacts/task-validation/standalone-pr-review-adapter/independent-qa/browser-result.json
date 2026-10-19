@@ -1,0 +1,26 @@
+{
+  "synthetic": true,
+  "phase": "ready",
+  "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "labels": [
+    "codex-review-ready"
+  ],
+  "implementation": 3,
+  "reviews": 1,
+  "external": "published",
+  "releaseHold": "Await genuine reviews and infrastructure authorization",
+  "actions": [
+    "adopt",
+    "request",
+    "claim",
+    "duplicate",
+    "stale",
+    "submit",
+    "reconcile",
+    "codex"
+  ],
+  "errors": [],
+  "actualModelInvocations": 0,
+  "actualGitHubWrites": 0,
+  "actualDeployments": 0
+}

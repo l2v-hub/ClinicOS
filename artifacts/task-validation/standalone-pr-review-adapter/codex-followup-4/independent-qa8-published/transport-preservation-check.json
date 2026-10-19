@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-18T21:36:30.548237+00:00",
+  "sourceSha": "210a257c96aea12e9386018fe9ce762715870447",
+  "sourceInputs": 26,
+  "changedAuthorizedPaths": 5,
+  "unchangedOtherInputs": 21,
+  "historicalProofs": 527,
+  "presentWorkingTree": 63,
+  "sparseVerifiedHeadGitBlobOnly": 464,
+  "authorEvidenceFiles": 15,
+  "originalQaPayloadsUnchanged": 34,
+  "originalQaFilesIncludingManifestAndStopUnchanged": 36,
+  "originalQaHarnessUnchanged": 7,
+  "originalPrivateManifestPayloadsUnchanged": 35,
+  "originalQaStopSha256": "3457a300408ec2fd6ea99e40584fa9852da516a58eef153d1725ebbf7e3214bd",
+  "originalPlannedManifestSha256": "2e77ac8798a4e76b0cdb8cba15c27a987c34e6a6385931ac597a4725a5a8beb6",
+  "originalAuthorStopSha256": "e1e353190129c9f1745723c6de90c19751f243107b3ef918f3a51c3b7e5dbcf9",
+  "mismatches": 0,
+  "testReruns": 0,
+  "runtimeOrBrowserReruns": 0
+}

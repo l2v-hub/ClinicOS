@@ -1,0 +1,38 @@
+{
+  "repository": "l2v-hub/ClinicOS",
+  "runId": 39151482025,
+  "attempt": 2,
+  "jobId": 117746872227,
+  "sourceSha": "94fcaada4c224d3a3e472725c07a89b35c8dfe33",
+  "retrievedAt": "2026-10-18T19:34:04.730447+00:00",
+  "retrieval": "gh run view --attempt2 --log, relevant job complete; overall retrieval exits1 for separate inaccessible blob, not evidence of test success",
+  "privateCombinedLogBytes": 439949,
+  "privateCombinedLogSha256": "88ddea46a57c11f23b2974c7ff2b30ef76ffb3ae1a09e0348c0c1b2341891945",
+  "failures": [
+    {
+      "testNumber": 258,
+      "title": "production finalize CLI dispatch runs separate Codex QA then fixed-policy merge and is terminal-idempotent",
+      "location": "agent-team/tests/bug-pipeline/standalone-review.test.mjs:843:1",
+      "errorCode": "codex-auth-unavailable"
+    },
+    {
+      "testNumber": 259,
+      "title": "finalize CLI cannot process normal/unadopted PR and preserves failed Codex execution as blocked",
+      "location": "agent-team/tests/bug-pipeline/standalone-review.test.mjs:882:1",
+      "errorCode": "unknown"
+    },
+    {
+      "testNumber": 262,
+      "title": "concurrent production finalize and pipeline observe active Codex QA without mutation, duplicate inference or merge",
+      "location": "agent-team/tests/bug-pipeline/standalone-review.test.mjs:977:1",
+      "errorCode": "codex-auth-unavailable"
+    }
+  ],
+  "counts": {
+    "tests": 714,
+    "pass": 708,
+    "fail": 3,
+    "skip": 3
+  },
+  "noRawLogPublished": true
+}

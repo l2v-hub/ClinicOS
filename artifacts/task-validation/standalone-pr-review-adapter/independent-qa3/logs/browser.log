@@ -1,0 +1,41 @@
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:19:44.993Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:19:45.120Z","feedbackFingerprint":"035da7e3c7979d8d926d6ac5fdef128e5f838a6285dcf5c85ca54def7936ff3a","reportComment":2,"reportBodySha256":"f313f4b30fa61b4fc4085b41540b390a5b6bf77df53c9c55e8ab62e14171c64f","completedAt":"2026-10-17T17:19:45.528Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/example.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":"Await genuine reviews and infrastructure authorization","codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:19:45.720Z","summary":"Declared synthetic read-only QA callback, no model invoked"}}
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:19:45.876Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:19:45.879Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:19:45.889Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/bug-pipeline/standalone-review.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:19:45.891Z","summary":"Declared synthetic separate Codex callback, no model invoked"},"release":{"status":"merged","reviewedSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","prNumber":81,"mergeSha":"9999999999999999999999999999999999999999"}}
+{
+  "scope": "Synthetic GitHub/CAS/checks, actual production modules. No actual model or merge.",
+  "actions": [
+    "adopt",
+    "request",
+    "claim",
+    "duplicate",
+    "stale",
+    "submit",
+    "reconcile",
+    "finalize-held",
+    "finalize-infrastructure",
+    "terminal-tick"
+  ],
+  "clinical": {
+    "phase": "ready",
+    "labels": [
+      "codex-review-ready"
+    ],
+    "implementation": 3,
+    "reviews": 1,
+    "external": "published",
+    "unicodeReportBytes": 150124,
+    "releaseHeld": true,
+    "release": "none"
+  },
+  "infrastructure": {
+    "phase": "ready",
+    "release": "merged"
+  },
+  "modelCallbacks": 2,
+  "mergeCalls": 1,
+  "errors": [],
+  "actualModelCalls": 0,
+  "actualGitHubWrites": 0,
+  "actualDeployments": 0,
+  "reloadPersistence": true,
+  "result": "PASS"
+}

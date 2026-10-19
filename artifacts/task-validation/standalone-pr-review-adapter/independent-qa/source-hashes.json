@@ -1,0 +1,15 @@
+{
+  "agent-team/src/bug-pipeline/cli.mjs": "3d6d278bca2d8b77fae0df5d3e4d2ddd7e24d40c0d81d22093c29d923b6b36a4",
+  "agent-team/src/bug-pipeline/comment-review-handoff.mjs": "2513cce87ca931de08725530df6014b34b8f6ea48540c44acb0375b6142fa7bd",
+  "agent-team/src/bug-pipeline/models.mjs": "cbf1c9cd993e424d707ca7451947044f0618ce9acfffdda15a75a6c445f985a7",
+  "agent-team/src/bug-pipeline/pipeline.mjs": "f0c54f98e24a809210934cbf184ff1b201453e52652f4a1d5088501ac9388c76",
+  "agent-team/src/bug-pipeline/review-handoff-cli.mjs": "c18227dcb344099842f84d4431930a46c0f9d4772386e07ba4e1367b6ca40d2b",
+  "agent-team/src/bug-pipeline/standalone-review.mjs": "c2a3ba35dcefa72c46efe18c5726af97e80215305883d4bad5d52afa5dd12a78",
+  "agent-team/src/bug-pipeline/workspace.mjs": "a333ed4c288e334d870c4bd0322044f0ad84e47ca903b762faf99d8dad94f50d",
+  "agent-team/tests/bug-pipeline/models.test.mjs": "05a0d314b0e65a9b0623088923165d29653543cf938a9ad13ae0aa4c9ba73137",
+  "agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs": "a4e6cce05e14425d076e495d4198a8d8edd415cb93ccbf21d2cdd904a0d655f2",
+  "agent-team/tests/bug-pipeline/standalone-review.test.mjs": "68181e55d05072e3337f7b2ede03c0cee08d4e739f4cec8a7323b7d6998abace",
+  "agent-team/tests/bug-pipeline/workspace.test.mjs": "873dc275015fda9285d85bfabcbb090c0e136191528e60430e22fcf58bbfc301",
+  "docs/claude-local-review-prompt.md": "82129af0346368c32bb97185701aae7265a5cddb1ba9a48695b3d28c2e33a9f9",
+  "docs/standalone-pr-review.md": "aae7c64fa0d6b16c45d4b8a6d153393b356a2998bbac9238c98355ab9d691ecf"
+}

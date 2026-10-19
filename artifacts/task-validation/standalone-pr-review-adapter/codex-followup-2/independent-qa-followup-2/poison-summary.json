@@ -1,0 +1,17 @@
+{
+  "status": "VERIFIED",
+  "purpose": "All four affected/auth tests ignore explicitly synthetic ambient API key and ambient synthetic Codex directory because they pass their own fixture env",
+  "counts": {
+    "tests": 4,
+    "pass": 4,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "code": 0,
+  "harnessSha256": "00287af1c501196e7e3bf1355bf8be2d0aae20f4b9e7952602cd7ddd6ad0e18d",
+  "harnessUnchanged": true,
+  "stdoutSha256": "23bd212ff377b220cde924de680c08fb9e7596ce73f053449c00973fc3273348",
+  "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

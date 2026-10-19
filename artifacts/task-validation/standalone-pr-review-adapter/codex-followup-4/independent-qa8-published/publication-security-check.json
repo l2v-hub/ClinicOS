@@ -1,0 +1,11 @@
+{
+  "sensitiveOrPHIPatternFindings": 0,
+  "rawOutputsPublished": 0,
+  "rawTracesPublished": 0,
+  "allExistingAndFinalReservedPathsNotGitIgnored": true,
+  "maxFileBytes": 26214400,
+  "copiedQaHarnessFiles": 7,
+  "copiedHarnessBytesUnchanged": true,
+  "testReruns": 0,
+  "browserReruns": 0
+}

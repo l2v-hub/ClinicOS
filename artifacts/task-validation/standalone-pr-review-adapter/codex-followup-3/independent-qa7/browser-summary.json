@@ -1,0 +1,52 @@
+{
+  "result": "PASS",
+  "receipts": [
+    {
+      "action": "adopt",
+      "phase": "waiting-review",
+      "status": "absent",
+      "rounds": 0,
+      "labels": [
+        "codex-review-fixes"
+      ],
+      "notices": 0,
+      "reloadPreserved": true
+    },
+    {
+      "action": "request",
+      "phase": "waiting-review",
+      "status": "comment-requested",
+      "rounds": 0,
+      "labels": [
+        "claude-review-ready"
+      ],
+      "notices": 1,
+      "reloadPreserved": true
+    },
+    {
+      "action": "claim",
+      "phase": "reviewing",
+      "status": "comment-running",
+      "rounds": 1,
+      "labels": [
+        "claude-reviewing"
+      ],
+      "notices": 1,
+      "reloadPreserved": true
+    },
+    {
+      "action": "submit",
+      "phase": "waiting-review",
+      "status": "published",
+      "rounds": 1,
+      "labels": [
+        "codex-review-ready"
+      ],
+      "notices": 2,
+      "reloadPreserved": true
+    }
+  ],
+  "errors": [],
+  "synthetic": true,
+  "clinicalE2E": false
+}

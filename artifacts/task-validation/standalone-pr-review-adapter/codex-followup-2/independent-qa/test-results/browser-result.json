@@ -1,0 +1,48 @@
+{
+  "result": "PASS",
+  "assertions": 24,
+  "reloaded": true,
+  "consoleErrors": [],
+  "httpErrors": [],
+  "outcomes": {
+    "scope": "QA-only loopback surface; synthetic transport and identities, real candidate controller modules. No GitHub, inference, provider or production calls.",
+    "receipt": {
+      "phase": "ready",
+      "handoff": "published",
+      "spentReviews": 1,
+      "persisted": true,
+      "projection": "reconciled",
+      "next": "reconcile --pr 81",
+      "label": "codex-review-ready",
+      "projectionAttempts": 3,
+      "automaticMergeCalls": 0,
+      "release": "none",
+      "trustRoot": "human-protected-trust-root"
+    },
+    "recovery": {
+      "phase": "blocked",
+      "spentReviews": 1,
+      "lastReview": "failed",
+      "auditRecords": 1,
+      "staleClaimDenied": true,
+      "wrongNonceDenied": true,
+      "headDriftRecovered": true
+    },
+    "qaRecovery": {
+      "status": "verified",
+      "archivedReservations": 1,
+      "archivedStatus": "failed",
+      "freshNonce": true,
+      "replayDenied": true,
+      "qaCallbacks": 3
+    },
+    "actions": [
+      "reserve-review",
+      "persist-submit-projection-failure",
+      "reconcile-receipt",
+      "finalize-trust-root",
+      "recover-head-drift",
+      "recover-failed-qa"
+    ]
+  }
+}

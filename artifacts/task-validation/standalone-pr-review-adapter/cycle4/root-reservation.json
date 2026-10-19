@@ -1,0 +1,16 @@
+{
+  "scope": "standalone-pr-review-adapter",
+  "round": 4,
+  "maxAttempts": 4,
+  "status": "running",
+  "owner": "standalone_review_adapter",
+  "reservedAt": "2026-10-17T17:28:09.765020+00:00",
+  "reservedBeforeSourceEdits": true,
+  "priorFailedAttempts": 3,
+  "priorQaReportSha256": "db7e4c6839fcf13d92fcb20d1f0e052f31c06755c3368e8e3399ea1804bc5c01",
+  "priorQaSealSha256": "7920efe7f45e25653258c12d1f25791e62f7a6eab082f2b5095176024b97dd56",
+  "source3FreezeSha256": "7dd41bf20229026e85bff335d4a7749cd748a5a119cbe74cfe9cd69b73275bf2",
+  "scopeAmendment": "Only proven F5 pre-inference report/result capacity reservation and F6 guarded disjoint-subject state rebase, preserving strict default CAS and all prior failures. Add sanitized known error codes for future controller diagnosis.",
+  "remoteRegistration": "Pending historical sync after currently active clinical controller39053232445 completes; this durable local wx reservation is the actual pre-inference/pre-edit reservation. No global state write while another clinical worker owns its last implementation attempt.",
+  "noFifthAttempt": true
+}

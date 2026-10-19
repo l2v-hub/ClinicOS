@@ -1,11 +1,14 @@
 import {
-  MAX_CYCLES,
-  planSchema,
-  validatePlan,
-  validateState,
-  feedbackFingerprint,
-} from './contracts.mjs';
+  attemptLimit,
+  implementationAttempts,
+  activeImplementation,
+  reserveImplementation,
+  spentAttempts,
+} from './attempt-budget.mjs';
+import { planSchema, validatePlan, validateState, feedbackFingerprint } from './contracts.mjs';
 import { externalReviewStep } from './external-review.mjs';
+import { validateStandaloneState, finalizeStandaloneSubject } from './standalone-review.mjs';
+import { controllerFailureCode, isRetryableGitHubFailure, recordTransientGitHubFailure } from './github.mjs';
 
 function eligibleIssue(issue) {
   const labels = (issue.labels ?? []).map((l) => (typeof l === 'string' ? l : l.name));
@@ -42,25 +45,88 @@ export async function runPipeline({
   reviewMode = 'internal',
   now = Date.now,
   triageWindowMs = 120_000,
+  standaloneController,
+  standaloneInfrastructureFiles = [],
 }) {
   if (!['internal', 'external'].includes(reviewMode)) throw new Error('Unknown review mode');
   if (!Number.isSafeInteger(triageWindowMs) || triageWindowMs < 0 || triageWindowMs > 600_000)
     throw new Error('Invalid triage collection window');
   await gh.intake(event);
-  const state = validateState(
+  let state = validateState(
     (await store.load()) ?? { schemaVersion: 1, repository: repo, batches: [] },
     repo,
   );
   let persistenceFailed = false;
   const save = async (options) => {
     try {
+      if (state.standaloneReviews) validateStandaloneState(state);
       state.updatedAt = new Date().toISOString();
-      return await store.save(state, options);
+      return await store.save(state, {
+        ...options,
+        rebaseIndependentSubjects: (merged) => {
+          validateState(merged, repo);
+          if (merged.standaloneReviews) validateStandaloneState(merged);
+        },
+      });
     } catch (error) {
       persistenceFailed = true;
       throw error;
     }
   };
+  if (state.standaloneReviews?.length) {
+    validateStandaloneState(state);
+    if (!standaloneController)
+      throw new Error('Standalone subjects require their trusted controller');
+    // Snapshot identities, never object references: a failed CAS reload replaces all
+    // canonical objects. Later subjects must resolve against the refreshed state.
+    const subjectIds = state.standaloneReviews.map((subject) => subject.id);
+    for (const id of subjectIds) {
+      let subject = state.standaloneReviews.find((item) => item.id === id);
+      if (!subject || subject.release?.status === 'merged' ||
+        (subject.phase === 'blocked' && subject.release?.status !== 'merging')) continue;
+      const transient = subject.lastTransientFailure;
+      if (transient?.subjectSha === subject.sha && transient.nextRetryAt > now()) continue;
+      try {
+        await finalizeStandaloneSubject({
+          subject, controller: standaloneController, github: gh, workspace, save,
+          infrastructureFiles: standaloneInfrastructureFiles, now: () => new Date(now()),
+        });
+        if (subject.lastTransientFailure) {
+          delete subject.lastTransientFailure;
+          await save();
+        }
+      } catch (error) {
+        // A failed persistence boundary halts the entire mutation pass. Loading a
+        // snapshot does not establish that writes are usable again.
+        if (persistenceFailed) throw error;
+        state = validateState(await store.load(), repo);
+        if (state.standaloneReviews) validateStandaloneState(state);
+        subject = state.standaloneReviews?.find((item) => item.id === id);
+        if (!subject) continue;
+        const code = controllerFailureCode(error);
+        if (isRetryableGitHubFailure(error)) {
+          if (recordTransientGitHubFailure(subject, now())) {
+            subject.phase = 'blocked';
+            subject.failureCode = 'github-transient-exhausted';
+            subject.reason = 'Retryable GitHub reads failed across the recovery window';
+            delete subject.approvedSha;
+          }
+        } else {
+          subject.phase = 'blocked';
+          subject.reason = 'Standalone identity, evidence or GitHub operation requires explicit recovery';
+          subject.failureCode = code;
+          delete subject.failureOperation;
+          if (['projection', 'merge', 'mutation', 'read'].includes(error.operation))
+            subject.failureOperation = error.operation;
+          delete subject.approvedSha;
+        }
+        // Failure here propagates: no diagnostic is claimed durable and unrelated
+        // subjects cannot carry unsafe unsaved mutations into a later write.
+        await save();
+      }
+    }
+  }
+
   const report = async (batch, text) => {
     for (const n of batch.issues)
       await gh.commentIssue(n, `<!-- codex-bug-pipeline:status -->\n${text}`);
@@ -72,7 +138,7 @@ export async function runPipeline({
     for (const number of batch.issues) await gh.setIssueStatus(number, 'Bloccato');
     await report(
       batch,
-      `**BLOCKED** — ${reason}. Budget sviluppo ${batch.implementation.length}/4, review ${batch.reviews.length}/4. Il budget non viene azzerato da nuovi comandi.`,
+      `**BLOCKED** — ${reason}. Budget sviluppo ${spentAttempts(batch, 'implementation')}/${attemptLimit(batch, 'implementation')}, review ${batch.reviews.length}/${attemptLimit(batch, 'reviews')}. Il budget non viene azzerato da nuovi comandi.`,
     );
   };
   const claimed = new Set(state.batches.flatMap((b) => b.issues));
@@ -224,8 +290,10 @@ export async function runPipeline({
     if (reviewMode === 'external' && batch.pr) {
       try {
         await externalReviewStep({ repo, batch, gh, workspace, save, report, block });
-      } catch {
-        if (persistenceFailed) throw new Error('External review reconciliation persistence failed');
+      } catch (error) {
+        if (persistenceFailed)
+          throw new Error('External review reconciliation persistence failed', { cause: error });
+        batch.failureCode = controllerFailureCode(error);
         await block(
           batch,
           'External review consistency or correction failed; inspect the existing batch',
@@ -234,7 +302,7 @@ export async function runPipeline({
       continue;
     }
     if (
-      batch.implementation.some((a) => a.status === 'running') ||
+      activeImplementation(batch) ||
       batch.reviews.some((a) => a.status === 'running') ||
       ['implementing', 'simplifying', 'validating', 'publishing', 'reviewing'].includes(batch.phase)
     ) {
@@ -272,7 +340,7 @@ export async function runPipeline({
         await save();
         continue;
       }
-      if (batch.reviews.length >= MAX_CYCLES) {
+      if (batch.reviews.length >= attemptLimit(batch, 'reviews')) {
         await block(batch, 'Four-review limit reached; new comments cannot restart the budget');
         continue;
       }
@@ -291,9 +359,8 @@ export async function runPipeline({
       );
       if (!batch.sha) {
         let passed = false;
-        while (batch.implementation.length < MAX_CYCLES) {
-          const attempt = { round: batch.implementation.length + 1, status: 'running' };
-          batch.implementation.push(attempt);
+        while (spentAttempts(batch, 'implementation') < attemptLimit(batch, 'implementation')) {
+          const attempt = reserveImplementation(batch, () => new Date(now()));
           batch.phase = 'implementing';
           await save();
           try {
@@ -376,7 +443,7 @@ export async function runPipeline({
         await workspace.publish(batch);
         await report(batch, await workspace.issueEvidence(batch));
       }
-      while (batch.reviews.length < MAX_CYCLES) {
+      while (batch.reviews.length < attemptLimit(batch, 'reviews')) {
         const current = await gh.reviewFeedback(batch.pr.number);
         if (current.head !== batch.sha) throw new Error('head changed before review');
         const attempt = {
@@ -413,7 +480,7 @@ export async function runPipeline({
           );
           break;
         }
-        if (review.verdict === 'blocked' || attempt.round === MAX_CYCLES) {
+        if (review.verdict === 'blocked' || attempt.round === attemptLimit(batch, 'reviews')) {
           await block(batch, 'Claude review remains blocked or four-review limit reached');
           break;
         }
@@ -448,7 +515,8 @@ export async function runPipeline({
       }
     } catch (error) {
       if (persistenceFailed) throw error;
-      for (const a of [...batch.implementation, ...batch.reviews])
+      batch.failureCode = controllerFailureCode(error);
+      for (const a of [...implementationAttempts(batch), ...batch.reviews])
         if (a.status === 'running') a.status = 'failed';
       await block(
         batch,

@@ -1,0 +1,13 @@
+{
+  "task-contract.md": "20ab1e3a238c475d41ab3ac77f3c47da729bcf195e9526a56965258c8ec9967f",
+  "analysis.md": "5807765dddbfdd98c163fb828cad9e5cdca9dc6fd5ec709738c584a83d76822b",
+  "implementation-plan.md": "771f3a9bb926033e6234a5275231b993a5bd98dc6a775eab831fa00424efc39a",
+  "implementation-attempts.json": "da0ffd44f23893e190b8444d3c9ed01e7faee70649afda5bd0c8622cae160753",
+  "source-freeze.json": "7dd41bf20229026e85bff335d4a7749cd748a5a119cbe74cfe9cd69b73275bf2",
+  "validation-report.md": "311770087b6f700350c1123f11503a9b0c8dd7dc02f99f9db5e02cabc11f8ea8",
+  "test-results/author-regression.log": "91b7d2f2355ac4aff1e62846be8a82c95d5831f8752d1668b49166c3cbd511b5",
+  "test-results/unicode-report-verification.json": "543e76b3035cab655ca669ded08eec4046c05ca43b2c7de61b3c304a69dee1db",
+  "test-results/actual-git-unicode-verification.json": "4480e00d0fddc43ac2dfcb9722d132cb5e5870dd9c8214f80dbda69dc0ec1ab9",
+  "test-results/durable-state-verification.json": "2b83a1072b0b1e36375c1468aa9971f306b58430a2b4b580057194bba7176503",
+  "test-results/preserved-prior-proof.json": "e75c1ca14e80dc072218811dc7bb648aa62324ad62a92a037ecb8cd1ecbb4627"
+}
