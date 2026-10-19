@@ -1,0 +1,52 @@
+{
+  "status": "STOPPED",
+  "verdict": "PASS",
+  "sourceSha": "17d3f5a7bef0565db1992221a41b9f924037195c",
+  "nonce": "b65205a9-8794-48b0-a482-7f5067c7e77d",
+  "sealedAt": "2026-10-19T01:01:20.447622+00:00",
+  "counts": {
+    "focused-workflow": {
+      "tests": 329,
+      "pass": 329,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "full-workflow-plus-configure": {
+      "tests": 1124,
+      "pass": 1121,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 3,
+      "todo": 0
+    }
+  },
+  "independentSecurity": {
+    "cliPass": 105,
+    "directPass": 24,
+    "failed": 0
+  },
+  "independentFunctional": {
+    "pass": 49,
+    "failed": 0
+  },
+  "schemaChecksPassed": 60,
+  "originalProbeExpectedObsoleteAssertionFailures": 5,
+  "sourceEditsByQa": 0,
+  "realCredentialsUsed": false,
+  "realProviderRequests": 0,
+  "realDeployments": 0,
+  "gitGhStateMutationsByQa": 0,
+  "preservation": {
+    "sourceFiles": 3117,
+    "priorPrivateFiles": 1840,
+    "allHashesInodesLinkCountsUnchanged": true,
+    "onlyPhysicalSourceAdditionRootRestoredHistoricalFixture": true
+  },
+  "limitations": [
+    "Permanent exact postmerge release selection remains unwired; default strict is intentional.",
+    "Offline synthetic validation only; no real provider/Claude/authorization/deployment claim."
+  ],
+  "report": "validation-report.md"
+}

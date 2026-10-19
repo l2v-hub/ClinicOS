@@ -1,0 +1,269 @@
+{
+  "schemaVersion": 1,
+  "entityId": "standalone-pr-498",
+  "previousEntitySha": "f8890678378c3cd8c59a1a3c2c29e0e4aad3fff4",
+  "previousEntityDigest": "3a2a89969a342d44f06cdcdb34decb2b6bb025459b427f9df8656ea6ce1f0985",
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "286d4e5e-1a0f-4f3f-9a97-19ddd709d5ab",
+      "contractSha256": "b7192a1735daf07ecfc0815ca7fedd79a56b58b5264325b70b8ffbbe0b42da2f",
+      "baseSha": "45033a3949742218b1c9d23a37a0c94776cd5bd5",
+      "subjectSha": "630bef997a53a2d335b1f4a775151a7e8c604d81",
+      "evidence": "author-2/qa1-failed-validation-report.md",
+      "reason": "IndependentQA1F1legacywholeworkflowreceiptdependency",
+      "independentQaReportSha256": "221e1e8fc8c28faf1fd04bd5cd2ba48b6801ce8caae52312b6542da5c41b9468",
+      "completedAt": "2026-10-18T23:26:32.002234+00:00"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "59e03b2b-4cb5-4673-ae2d-c428a7371a03",
+      "contractSha256": "c46b2dc801a3d5e0972834274fe42f85ef266f2ff91f85bc7eec237c532c1b70",
+      "baseSha": "630bef997a53a2d335b1f4a775151a7e8c604d81",
+      "subjectSha": "bb196b215cadce3ad0594dc3c06bc6d36e32c26f",
+      "evidence": "independent-qa2/validation-report.md",
+      "reason": "Isolatedmanualfixed-demoexactcommitworkflow;actualproviderunproven",
+      "independentQaNonce": "f73892e7-0594-4c0c-87cd-3e4c738674fd",
+      "independentQaSealSha256": "98e6afec3abdd9bbb4ccf27c03042aa9f80f753364bbb1f00e827d950037a6e2",
+      "completedAt": "2026-10-18T23:42:36.396153+00:00"
+    }
+  ],
+  "operatorContinuations": [
+    {
+      "round": 3,
+      "status": "failed",
+      "kind": "explicit-operator-compatibility-continuation",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "2f3159cd-28fd-4059-b6b5-a124ef2222f6",
+      "startedAt": "2026-10-19T00:04:50.357Z",
+      "reason": "ActualClaude1 queue/defaultgate/resume/exacttrigger/migrationfindings",
+      "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+      "contractSha256": "2e0df4b87787a605519895bee79168bb2e5f033560037b0f602dac7f02af2bc4",
+      "baseSha": "f8890678378c3cd8c59a1a3c2c29e0e4aad3fff4",
+      "sourceScope": [
+        ".github/workflows/deploy-demo-exact-commit.yml",
+        ".github/workflows/configure-demo-source.yml",
+        "agent-team/src/bug-pipeline/demo-deployment.mjs",
+        "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+        "agent-team/tests/bug-pipeline/release.test.mjs",
+        "scripts/automation/configure-demo-source.test.mjs"
+      ],
+      "model": "gpt-6.1-sol",
+      "preservedEntityDigest": "b2c7c4e5c584e9955a6f479fa444258aef0f9102d55942b2228557686595ded3",
+      "preservedLegacyImplementationDigest": "f50eed9162f39921c629039dced395c841c1d226850d85c50a08b195ac8a8581",
+      "preservedLegacyReviewsDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "testedSourceSha": "3fc38d3dc867b73baa26ef5dfd14f3f9e11c36aa",
+      "authorStopped": true,
+      "authorChecks": {
+        "passed": 930,
+        "failed": 0,
+        "skipped": 3,
+        "independent": false
+      },
+      "independentQaReservation": {
+        "status": "failed",
+        "nonce": "633f55df-ee56-4b41-a440-c2d89b2fad1f",
+        "reservedAt": "2026-10-19T00:14:00.759Z",
+        "reservedBeforeSession": true,
+        "sourceSha": "3fc38d3dc867b73baa26ef5dfd14f3f9e11c36aa",
+        "sourceWorktree": "/workspace/clinicos-demo-exact-release",
+        "privateOutput": "/workspace/.clinicos-cloud/demo-exact-independent-qa3-20261019",
+        "agent": "/root/qa_demo_exact_release",
+        "sourceEditsAllowed": false,
+        "providerActionAllowed": false,
+        "completedAt": "2026-10-19T00:25:11.104Z",
+        "sealSha256": "7691a5650fb2162699d5884cf64e1991706a5434a877ee8e31300e7c1a75bfe1",
+        "reportSha256": "6b5994564b5e830b01802579739b699b5b24fab293793ab54fe9a7b2eb431362",
+        "finding": "HIGH boundcredentialreflectioninuploadedprogressandreceipt"
+      },
+      "completedAt": "2026-10-19T00:25:11.104Z",
+      "sourceSha": "3fc38d3dc867b73baa26ef5dfd14f3f9e11c36aa",
+      "failure": "IndependentQA3HIGHcredentialreflection; syntheticonly"
+    },
+    {
+      "round": 4,
+      "status": "failed",
+      "kind": "audited-budget-continuation",
+      "budgetSource": "default-four",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "c7cd3f6b-cace-4038-815c-fbbe0034e629",
+      "startedAt": "2026-10-19T00:25:11.104Z",
+      "reason": "ActualindependentQA3HIGH, guardedserializationallpaths",
+      "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+      "contractSha256": "117165512966cd91f536c13a21ddc4c4263f4920a16ba4f9263340736e5d3b17",
+      "baseSha": "3fc38d3dc867b73baa26ef5dfd14f3f9e11c36aa",
+      "sourceScope": [
+        "agent-team/src/bug-pipeline/demo-deployment.mjs",
+        "agent-team/tests/bug-pipeline/demo-deployment.test.mjs"
+      ],
+      "model": "gpt-6.1-sol",
+      "preservedEntityDigest": "87aaf59c9501d1f8794157dc10f3f6aa7fa0bcdc0eef76ca3bb9971817e074be",
+      "preservedLegacyImplementationDigest": "f50eed9162f39921c629039dced395c841c1d226850d85c50a08b195ac8a8581",
+      "preservedLegacyReviewsDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "testedSourceSha": "d6681287161a769d82d2bc7b77fe06fa925e4ff7",
+      "authorStopped": true,
+      "authorChecks": {
+        "passed": 955,
+        "failed": 0,
+        "skipped": 3,
+        "actualCliCases": 22,
+        "independent": false
+      },
+      "independentQaReservation": {
+        "nonce": "34a951b3-b4a0-494a-ba79-690593ba1272",
+        "status": "failed",
+        "reservedAt": "2026-10-19T00:31:43.782Z",
+        "reservedBeforeSession": true,
+        "sourceSha": "d6681287161a769d82d2bc7b77fe06fa925e4ff7",
+        "sourceWorktree": "/workspace/clinicos-demo-exact-release",
+        "agent": "/root/qa_demo_exact_release",
+        "privateOutput": "/workspace/.clinicos-cloud/demo-exact-independent-qa4-20261019",
+        "sourceEditsAllowed": false,
+        "providerActionAllowed": false,
+        "completedAt": "2026-10-19T00:40:06.679575+00:00",
+        "sealSha256": "915447088755203ef36477e1c6f1f1f49cb2dbb11b700f24895dba3a12b03935",
+        "reportSha256": "7a8eb12845e9506d53ef68dd1f0058898b23d981779340d4f373422bb8a1e6b4",
+        "finding": "HIGH Q4-F1 HTTP canonical credential alias in uploaded progress"
+      },
+      "completedAt": "2026-10-19T00:40:06.679575+00:00",
+      "sourceSha": "d6681287161a769d82d2bc7b77fe06fa925e4ff7",
+      "failure": "Independent QA4 HIGH HTTP header normalized usable credential reflection; synthetic only"
+    },
+    {
+      "round": 5,
+      "status": "passed",
+      "kind": "audited-budget-continuation",
+      "budgetExtensionNonce": "cd24d699-6b0d-4e20-9135-e5f2a74240af",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "83822aa8-b804-4f52-933b-bda9a461cb7a",
+      "startedAt": "2026-10-19T00:44:39.770Z",
+      "reason": "Fix independently reproduced Q4-F1 effective HTTP credential alias",
+      "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+      "contractSha256": "5e45ff18ded00cd18c759ea27e3451a6d5e619349e8f4735dbb49e2f629da91c",
+      "baseSha": "d6681287161a769d82d2bc7b77fe06fa925e4ff7",
+      "sourceScope": [
+        "agent-team/src/bug-pipeline/demo-deployment.mjs",
+        "agent-team/tests/bug-pipeline/demo-deployment.test.mjs"
+      ],
+      "model": "gpt-6.1-sol",
+      "preservedEntityDigest": "cbb608a5a51e981001d2d052ac24cdbd71f0b45b06fce6984f106d7178b781aa",
+      "preservedLegacyImplementationDigest": "f50eed9162f39921c629039dced395c841c1d226850d85c50a08b195ac8a8581",
+      "preservedLegacyReviewsDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sessionResumptions": [
+        {
+          "at": "2026-10-19T00:52:47.951Z",
+          "priorAgent": "/root/author_demo_exact_followup3",
+          "newAgent": "/root/author498_5_resume",
+          "reason": "Selected model at capacity; keep same implementation/QA nonce and all actual files/results, no reset or invented terminal success",
+          "model": "gpt-6.1-sol",
+          "reservedBeforeReplacementSession": true
+        }
+      ],
+      "agent": "/root/author498_5_resume",
+      "authorStopped": true,
+      "authorStoppedAt": "2026-10-19T00:56:13.260Z",
+      "authorSourceCommit": "9fd5f48c",
+      "integratedMainSha": "fbaa78d8c7eacf8402db0c8fa2be276ae579a27c",
+      "testedSourceSha": "17d3f5a7bef0565db1992221a41b9f924037195c",
+      "authorStopSha256": "a7c0b6265e7e06db54886312b5de36e7194cc29d236fc28136dc2607acba947c",
+      "authorChecks": {
+        "focusedPassed": 747,
+        "failed": 0,
+        "skipped": 0,
+        "postMainIntegrationFresh": false,
+        "independent": false
+      },
+      "independentQaReservation": {
+        "nonce": "b65205a9-8794-48b0-a482-7f5067c7e77d",
+        "status": "verified",
+        "reservedAt": "2026-10-19T00:56:13.260Z",
+        "reservedBeforeSession": true,
+        "sourceSha": "17d3f5a7bef0565db1992221a41b9f924037195c",
+        "sourceWorktree": "/workspace/clinicos-demo-exact-release",
+        "privateOutput": "/workspace/.clinicos-cloud/demo-exact-independent-qa5-20261019",
+        "agent": "/root/qa498_5_sol",
+        "model": "gpt-6.1-sol",
+        "sourceEditsAllowed": false,
+        "providerActionAllowed": false,
+        "completedAt": "2026-10-19T01:01:20.447622+00:00",
+        "reportSha256": "f91603d678dc2972f452a7c5bfa6c2b43f6a9e7aa1cc85f316afb46e99ce4dbb",
+        "sealSha256": "fd1122358402d7ab1e175faad3b9659646a36890bcc23f86df5bb6a8f1f18ab6"
+      },
+      "subjectSha": "17d3f5a7bef0565db1992221a41b9f924037195c",
+      "completedAt": "2026-10-19T01:01:20.447622+00:00",
+      "evidence": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-report.md",
+      "independentQaReportSha256": "f91603d678dc2972f452a7c5bfa6c2b43f6a9e7aa1cc85f316afb46e99ce4dbb",
+      "independentQaSealSha256": "fd1122358402d7ab1e175faad3b9659646a36890bcc23f86df5bb6a8f1f18ab6"
+    }
+  ],
+  "reviews": [],
+  "reviewReports": {},
+  "reviewHandoffHistory": [
+    {
+      "at": "2026-10-18T23:55:48.468Z",
+      "actor": "l2v-hub",
+      "previous": null,
+      "spentReviews": 0,
+      "reason": "Actual read-only Claude requested after fresh independentQA; native CI runs in parallel. All six native contexts remain mandatory before merge; no hosted success claimed."
+    },
+    {
+      "at": "2026-10-19T00:04:50.357Z",
+      "actor": "l2v-hub",
+      "previous": {
+        "channel": "github-comments",
+        "status": "comment-requested",
+        "subjectSha": "f8890678378c3cd8c59a1a3c2c29e0e4aad3fff4",
+        "requestId": "781858a5-e812-4edd-84cd-1299d575aa96",
+        "requestedAt": "2026-10-18T23:55:48.468Z"
+      },
+      "reason": "ActualClaude1 findings owned byCodex",
+      "actualFeedbackCommentId": 6256790782
+    }
+  ],
+  "budgetExtensions": [
+    {
+      "entityId": "standalone-pr-498",
+      "pr": 498,
+      "kind": "implementation",
+      "previousLimit": 4,
+      "limit": 5,
+      "actor": "l2v-hub",
+      "at": "2026-10-19T00:44:39.770Z",
+      "reason": "Fix independently reproduced Q4-F1 effective HTTP credential alias",
+      "authorizationRef": "codex-session:01a1418a-4353-75ac-a256-6799edd61072:continue-until-resolution",
+      "authorization": {
+        "provenance": "user-session",
+        "grantId": "5ef4558e-2243-4380-8330-453cfa1df672",
+        "consumptionNonce": "22b8cf36-d86a-41eb-83d3-97b4301c48ca",
+        "sourceRef": "codex-thread:01a1418a-4353-75ac-a256-6799edd61072/user-continue-resolution",
+        "binding": {
+          "version": 1,
+          "repository": "l2v-hub/ClinicOS",
+          "collection": "standaloneReviews",
+          "entityId": "standalone-pr-498",
+          "pr": 498,
+          "reviewIssue": null,
+          "actor": "l2v-hub",
+          "action": "extend-budget",
+          "subjectSha": "f8890678378c3cd8c59a1a3c2c29e0e4aad3fff4",
+          "historyDigest": "c77b748b8fb5c6264573937666f813d6e367309dcea255754d31e2045aee8424",
+          "reservation": null,
+          "budget": {
+            "kind": "implementation",
+            "previousLimit": 4,
+            "limit": 5
+          }
+        },
+        "bindingDigest": "f72b2f93c01bd07a8633b958ca416e6d7eb1e22f62f12a449a1982300f358bf0"
+      },
+      "nonce": "cd24d699-6b0d-4e20-9135-e5f2a74240af",
+      "historyLength": 4,
+      "historyDigest": "2afb5e774356d54f2fb3e87dfc9ccc02eb530dc1042ee18596be8b5de5f0cca6"
+    }
+  ],
+  "allAttemptsPreserved": true
+}
