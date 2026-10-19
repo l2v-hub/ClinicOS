@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdtemp, readFile, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, writeFile, rm, readdir } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -24,6 +24,7 @@ import {
   createRailwayClient,
   DemoTransientReadError,
   DEMO_DEPLOY_BUDGET_MS,
+  serializeDemoMetadata,
 } from '../../src/bug-pipeline/demo-deployment.mjs';
 
 const repo = 'l2v-hub/ClinicOS';
@@ -2132,6 +2133,289 @@ globalThis.fetch = async (url, options) => {
             (await stat(join(directory, 'demo-deployment-progress.json'))).mode & 0o777,
             0o600,
           );
+      } finally {
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
+});
+
+test('metadata serializer rejects either nonempty bound credential in values or keys, including JSON escaping', () => {
+  for (const secret of [
+    '99999999-2222-4222-8222-777777777777',
+    'f'.repeat(40),
+    'synthetic\n"credential\\value',
+    '\u0000\tcredential',
+    '\ud800credential',
+  ]) {
+    for (const value of [
+      { nested: { id: secret } },
+      { [secret]: 'value' },
+      { nested: `before:${secret}:after` },
+    ]) {
+      for (const forbiddenValues of [
+        [secret, 'unrelated-binding'],
+        ['unrelated-binding', secret],
+      ]) {
+        assert.throws(
+          () => serializeDemoMetadata(value, { forbiddenValues }),
+          /credential-free metadata required/,
+        );
+      }
+    }
+  }
+  const safe = {
+    deploymentId,
+    previousActiveDeployment: { id: deploymentId, commitHash: reviewedSha },
+  };
+  assert.deepEqual(
+    JSON.parse(
+      serializeDemoMetadata(safe, {
+        forbiddenValues: [undefined, null, '', 'synthetic-safe-binding'],
+      }),
+    ),
+    safe,
+  );
+});
+
+test('callback guard rejects reflected identity before assignment and never restores it on failure', async () => {
+  const syntheticToken = '99999999-2222-4222-8222-777777777777';
+  let mutations = 0;
+  const progress = [];
+  await assert.rejects(
+    deployDemo({
+      env: { ...exactEnv, RAILWAY_TOKEN: syntheticToken },
+      sourcePolicy: exactPolicy,
+      fetchImpl: mainFetch(),
+      onProgress: async (item) => {
+        progress.push(item);
+        assert.equal(JSON.stringify(item).includes(syntheticToken), false);
+      },
+      client: async (query) => {
+        if (query.startsWith('mutation')) {
+          mutations++;
+          return { serviceInstanceDeployV2: syntheticToken };
+        }
+        return exactTargetData();
+      },
+    }),
+    /credential-free metadata required/,
+  );
+  assert.equal(mutations, 1);
+  assert.equal(progress.at(-1).deploymentId, null);
+  assert.equal(progress.at(-1).status, 'failed');
+});
+
+test('actual CLI excludes bound credential reflection across initial, mutation, receipt, progress and fallback boundaries', async (t) => {
+  const uuidCredential = '99999999-2222-4222-8222-777777777777';
+  const cases = [
+    ...['RAILWAY_TOKEN', 'GITHUB_TOKEN'].flatMap((binding) => [
+      {
+        label: `${binding}:mutation-uuid`,
+        binding,
+        secret: uuidCredential,
+        reflect: 'mutation',
+        mutations: 1,
+      },
+      {
+        label: `${binding}:reuse-uuid`,
+        binding,
+        secret: uuidCredential,
+        reflect: 'reuse',
+        mutations: 0,
+      },
+      {
+        label: `${binding}:previous-active-uuid`,
+        binding,
+        secret: uuidCredential,
+        reflect: 'previous-id',
+        mutations: 0,
+      },
+      {
+        label: `${binding}:previous-native-sha`,
+        binding,
+        secret: reviewedSha,
+        reflect: 'previous-sha',
+        mutations: 0,
+      },
+      {
+        label: `${binding}:current-sha`,
+        binding,
+        secret: sha,
+        reflect: 'context',
+        mutations: 0,
+        omitProgress: true,
+      },
+      {
+        label: `${binding}:preflight-current-sha`,
+        binding,
+        secret: sha,
+        reflect: 'context',
+        mutations: 0,
+        omitProgress: true,
+        operation: 'preflight-exact',
+      },
+      {
+        label: `${binding}:fixed-target`,
+        binding,
+        secret: DEMO_TARGET.projectId,
+        reflect: 'context',
+        mutations: 0,
+        omitProgress: true,
+      },
+      {
+        label: `${binding}:escaped-final-receipt`,
+        binding,
+        secret: 'synthetic\n"receipt\\credential',
+        reflect: 'receipt',
+        mutations: 1,
+      },
+      {
+        label: `${binding}:escaped-preflight-receipt`,
+        binding,
+        secret: 'synthetic\n"preflight\\credential',
+        reflect: 'receipt',
+        mutations: 0,
+        operation: 'preflight-exact',
+      },
+    ]),
+    {
+      label: 'fixed-diagnostic-matches-bound-credential',
+      binding: 'RAILWAY_TOKEN',
+      secret: 'proof',
+      reflect: 'safe-failure',
+      mutations: 1,
+    },
+    { label: 'safe-normal-success', reflect: 'safe-success', mutations: 1, success: true },
+    { label: 'safe-normal-failure', reflect: 'safe-failure', mutations: 1 },
+    { label: 'safe-native-reuse', reflect: 'safe-reuse', mutations: 0, success: true },
+  ];
+  for (const scenario of cases)
+    await t.test(scenario.label, async () => {
+      const directory = await mkdtemp(join(tmpdir(), 'demo-secret-boundary-'));
+      try {
+        const childEnv = {
+          ...exactEnv,
+          RAILWAY_TOKEN: 'synthetic-demo-binding',
+          ...(scenario.binding ? { [scenario.binding]: scenario.secret } : {}),
+        };
+        const initial = exactTargetData();
+        if (['reuse', 'previous-id'].includes(scenario.reflect)) {
+          initial.serviceInstance.activeDeployments[0].id = scenario.secret;
+          initial.serviceInstance.latestDeployment.id = scenario.secret;
+        }
+        initial.serviceInstance.activeDeployments[0].meta = {
+          commitHash: ['reuse', 'safe-reuse'].includes(scenario.reflect)
+            ? sha
+            : scenario.reflect === 'previous-sha'
+              ? scenario.secret
+              : reviewedSha,
+        };
+        const fixturePath = join(directory, 'fixture.mjs');
+        const counterPath = join(directory, 'counts.json');
+        await writeFile(
+          fixturePath,
+          `
+import assert from 'node:assert/strict';
+import { writeFileSync } from 'node:fs';
+const scenario = ${JSON.stringify(scenario)};
+const initial = ${JSON.stringify(initial)};
+const native = ${JSON.stringify(exactTargetData())};
+const counts = {mutations:0, main:0, reads:0};
+const save = () => writeFileSync(${JSON.stringify(counterPath)}, JSON.stringify(counts));
+save();
+if (scenario.reflect === 'receipt') Date.prototype.toISOString = () => scenario.secret;
+globalThis.fetch = async (url, options) => {
+  assert.equal(options.redirect, 'error');
+  if (url === '${mainEndpoint}') {
+    counts.main++; save();
+    assert.equal(options.headers.Authorization, 'Bearer ' + process.env.GITHUB_TOKEN);
+    return new Response(JSON.stringify(${JSON.stringify(mainBody())}));
+  }
+  if (url === 'https://${DEMO_TARGET.domain}/ready')
+    return new Response(JSON.stringify(${JSON.stringify(readyBody())}), {headers:{'Cache-Control':'no-store'}});
+  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(options.headers['Project-Access-Token'], process.env.RAILWAY_TOKEN);
+  const {query, variables} = JSON.parse(options.body);
+  if (query.startsWith('mutation')) {
+    counts.mutations++; save();
+    assert.equal(variables.commitSha, '${sha}');
+    return new Response(JSON.stringify({data:{serviceInstanceDeployV2:scenario.reflect === 'mutation' ? scenario.secret : '${deploymentId}'}}));
+  }
+  counts.reads++; save();
+  if (scenario.reflect === 'safe-failure' && counts.mutations)
+    return new Response(JSON.stringify({errors:[{message:'synthetic private provider failure'}]}));
+  return new Response(JSON.stringify({data:counts.mutations || (scenario.reflect === 'safe-reuse' && counts.reads > 1) ? native : initial}));
+};
+`,
+        );
+        const result = spawnSync(
+          process.execPath,
+          [
+            '--import',
+            fixturePath,
+            fileURLToPath(new URL('../../src/bug-pipeline/demo-deployment.mjs', import.meta.url)),
+            scenario.operation ?? 'deploy-exact',
+          ],
+          {
+            cwd: directory,
+            env: childEnv,
+            encoding: 'utf8',
+            timeout: 5000,
+          },
+        );
+        assert.equal(result.error, undefined);
+        assert.equal(result.status, scenario.success ? 0 : 1, result.stderr);
+        const counts = JSON.parse(await readFile(counterPath, 'utf8'));
+        assert.equal(counts.mutations, scenario.mutations);
+        if (scenario.reflect === 'context') assert.equal(counts.main + counts.reads, 0);
+        const filenames = await readdir(directory);
+        const artifacts = filenames.filter(
+          (name) => name.startsWith('demo-') && name.endsWith('.json'),
+        );
+        const output = [
+          result.stdout,
+          result.stderr,
+          ...(await Promise.all(artifacts.map((name) => readFile(join(directory, name), 'utf8')))),
+        ];
+        for (const secret of [childEnv.RAILWAY_TOKEN, childEnv.GITHUB_TOKEN])
+          for (const text of output) {
+            assert.equal(text.includes(secret), false, 'raw bound credential must not be emitted');
+            assert.equal(
+              text.includes(JSON.stringify(secret).slice(1, -1)),
+              false,
+              'JSON-escaped bound credential must not be emitted',
+            );
+          }
+        const receiptName = 'demo-deployment-receipt.json';
+        assert.equal(artifacts.includes(receiptName), Boolean(scenario.success));
+        if (scenario.omitProgress)
+          assert.equal(
+            artifacts.length,
+            0,
+            'credential-bearing context cannot be saved by fallback',
+          );
+        else {
+          const progress = JSON.parse(
+            await readFile(join(directory, 'demo-deployment-progress.json'), 'utf8'),
+          );
+          assert.equal(progress.status, scenario.success ? 'verified' : 'failed');
+          if (
+            !scenario.success &&
+            ['mutation', 'reuse', 'previous-id', 'previous-sha', 'receipt'].includes(
+              scenario.reflect,
+            )
+          )
+            assert.equal(
+              progress.deploymentId,
+              scenario.reflect === 'receipt' && !scenario.operation ? deploymentId : null,
+            );
+        }
+        if (scenario.success) {
+          const receipt = JSON.parse(await readFile(join(directory, receiptName), 'utf8'));
+          validateReceipt(receipt, exactRun, 'clinicos-demo-backend', Date.now(), exactPolicy);
+          assert.equal(receipt.deploymentReused, scenario.reflect === 'safe-reuse');
+          assert.equal(receipt.migrations.delta, 'unproven');
+        }
       } finally {
         await rm(directory, { recursive: true, force: true });
       }

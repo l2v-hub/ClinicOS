@@ -61,6 +61,24 @@ const fail = (message) => {
 const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const integer = (n) => Number.isSafeInteger(n) && n > 0;
 
+// Check the actual bytes written, including JSON escaping, without reflecting a rejected value.
+export function serializeDemoMetadata(value, { forbiddenValues = [] } = {}) {
+  const json = JSON.stringify(value, null, 2);
+  if (
+    typeof json !== 'string' ||
+    forbiddenValues.some(
+      (secret) =>
+        typeof secret === 'string' &&
+        secret.length > 0 &&
+        (json.includes(secret) || json.includes(JSON.stringify(secret).slice(1, -1))),
+    )
+  )
+    fail('credential-free metadata required');
+  return `${json}\n`;
+}
+
+const boundCredentials = (env) => [env.RAILWAY_TOKEN, env.GITHUB_TOKEN];
+
 async function boundedBytes(response, max = MAX_BYTES) {
   if (!response.ok) fail('HTTP request did not succeed');
   const chunks = [];
@@ -385,6 +403,10 @@ export async function prepareDemo({
 } = {}) {
   policy = sourcePolicy(policy);
   const source = context(env, policy);
+  serializeDemoMetadata(
+    { source, target: DEMO_TARGET },
+    { forbiddenValues: boundCredentials(env) },
+  );
   await mainVerifier(env, source, policy, fetchImpl)();
   await inspectDemo(client ?? createRailwayClient({ token: env.RAILWAY_TOKEN, fetchImpl }), policy);
   return {
@@ -409,6 +431,8 @@ export async function deployDemo({
 } = {}) {
   policy = sourcePolicy(policy);
   const source = context(env, policy);
+  const forbiddenValues = boundCredentials(env);
+  serializeDemoMetadata({ source, target: DEMO_TARGET }, { forbiddenValues });
   const deadline = now() + DEMO_DEPLOY_BUDGET_MS;
   const budget = (cost) => {
     if (!Number.isFinite(now()) || now() + cost > deadline)
@@ -416,8 +440,8 @@ export async function deployDemo({
   };
   let deploymentId = null,
     reused = false;
-  const progress = async (status, errorCode = null) =>
-    onProgress({
+  const progress = async (status, errorCode = null) => {
+    const metadata = {
       schemaVersion: 1,
       kind: 'clinicos-demo-deployment-progress',
       target: structuredClone(DEMO_TARGET),
@@ -425,7 +449,10 @@ export async function deployDemo({
       deploymentId,
       status,
       errorCode,
-    });
+    };
+    serializeDemoMetadata(metadata, { forbiddenValues });
+    await onProgress(metadata);
+  };
   await progress('checking');
   try {
     if (!integer(attempts) || attempts > 180) fail('bounded polling attempts required');
@@ -435,6 +462,16 @@ export async function deployDemo({
     client ??= createRailwayClient({ token: env.RAILWAY_TOKEN, fetchImpl });
     budget(30_000);
     const initial = await inspectDemo(client, policy);
+    serializeDemoMetadata(
+      {
+        active: initial.serviceInstance.activeDeployments?.map((d) => ({
+          id: d?.id,
+          commitHash: d?.meta?.commitHash,
+        })),
+        latestId: initial.serviceInstance.latestDeployment?.id,
+      },
+      { forbiddenValues },
+    );
     let previous = null;
     if (policy === DEMO_SOURCE_POLICIES.exact) {
       requireIdleDemo(initial);
@@ -457,6 +494,7 @@ export async function deployDemo({
       );
       if (!UUID.test(result?.serviceInstanceDeployV2 ?? ''))
         fail('Railway returned invalid deployment identity');
+      serializeDemoMetadata({ deploymentId: result.serviceInstanceDeployV2 }, { forbiddenValues });
       deploymentId = result.serviceInstanceDeployV2;
     }
     await progress(reused ? 'verifying-existing' : 'submitted');
@@ -495,8 +533,7 @@ export async function deployDemo({
             validateActiveDeployment(final, source.mergeSha, deploymentId, policy);
             if (policy === DEMO_SOURCE_POLICIES.exact) requireIdleDemo(final);
             await assertCurrentMain();
-            await progress('verified');
-            return {
+            const receipt = {
               schemaVersion: 1,
               kind: 'clinicos-demo-backend',
               ...source,
@@ -518,6 +555,9 @@ export async function deployDemo({
                 : {}),
               verifiedAt: new Date().toISOString(),
             };
+            serializeDemoMetadata(receipt, { forbiddenValues });
+            await progress('verified');
+            return receipt;
           }
         }
       }
@@ -775,12 +815,12 @@ export async function verifyDemoRelease({
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const operation = process.argv[2];
+  const forbiddenValues = boundCredentials(process.env);
   let cliProgress;
   const saveProgress = async (progress) => {
+    const json = serializeDemoMetadata(progress, { forbiddenValues });
+    await writeFile('demo-deployment-progress.json', json, { mode: 0o600 });
     cliProgress = progress;
-    await writeFile('demo-deployment-progress.json', `${JSON.stringify(progress, null, 2)}\n`, {
-      mode: 0o600,
-    });
   };
   try {
     const receipt =
@@ -796,15 +836,18 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
           : fail('unsupported operation');
     await writeFile(
       `${receipt.kind === 'clinicos-demo-preflight' ? 'demo-preflight' : 'demo-deployment'}-receipt.json`,
-      `${JSON.stringify(receipt, null, 2)}\n`,
+      serializeDemoMetadata(receipt, { forbiddenValues }),
       { mode: 0o600 },
     );
     console.log(
-      JSON.stringify({
-        status:
-          receipt.kind === 'clinicos-demo-preflight' ? 'target-verified' : 'live-demo-verified',
-        mergeSha: receipt.mergeSha,
-      }),
+      serializeDemoMetadata(
+        {
+          status:
+            receipt.kind === 'clinicos-demo-preflight' ? 'target-verified' : 'live-demo-verified',
+          mergeSha: receipt.mergeSha,
+        },
+        { forbiddenValues },
+      ).trim(),
     );
   } catch (error) {
     if (['preflight-exact', 'deploy-exact'].includes(operation) && !cliProgress) {
@@ -824,11 +867,16 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
       }
     }
     // Only constant proof errors are printable. Provider/network bodies may contain private data.
-    console.error(
+    const diagnostic =
       error instanceof DemoProofError
         ? error.message
-        : 'Demo target or deployment proof failed; no issue can be closed from this result.',
-    );
+        : 'Demo target or deployment proof failed; no issue can be closed from this result.';
+    try {
+      serializeDemoMetadata(diagnostic, { forbiddenValues });
+      console.error(diagnostic);
+    } catch {
+      /* Even a fixed diagnostic must not coincide with a bound credential. */
+    }
     process.exitCode = 1;
   }
 }

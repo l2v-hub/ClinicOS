@@ -1,0 +1,9 @@
+# Author security handoff
+
+**AUTHOR STOP — IMPLEMENTED-NOT-INDEPENDENTLYVERIFIED / READY FOR CODEX QA.** The original QA3 HIGH failure remains recorded; this author report does not change its verdict or independently certify the correction.
+
+Final trusted credential-free full bug-pipeline/configuration command: **958 tests, 955 passed, zero failed/cancelled, three native Windows checks skipped on Linux**. The count includes the prior 933 tests plus 25 new top-level/subtest outcomes. The new reflection group contains 22 actual CLI cases. Prior author4 attempts are preserved: existing focused suite 668 passed, then focused reflection suite 692 passed before the final additional diagnostic-coincidence regression. No failed author4 test/harness attempt occurred. Source formatting and `git diff --check` passed.
+
+Two authorized source files are frozen in private separate-inode read-only copies, and source-freeze.json binds their bytes. Original source bytes and original inode/link counts were saved before atomic source privatization. Both original copies match the author4 base. The six protected workflow/helper/controller/configuration files and all 20 older public packet files match HEAD. No Git refs/index, GitHub/state/provider or database mutation was made by this author.
+
+The actual CLI cases prove synthetic boundary behavior with stripped real credentials and stubbed fetches. Node v24.19.0 was used locally; Node22/native Windows/hosted CI and actual Railway permission/acceptance/live proof remain external checks. Existing deployment/migration behavior is unchanged: migration delta remains unproven, previous native SHA may be null, and no provider action is authorized by this packet. Fresh independent QA4, actual Claude/final Codex/native checks and protected merge remain root's next gates. No reusable environment draft change is needed for this built-in Node test workflow.
