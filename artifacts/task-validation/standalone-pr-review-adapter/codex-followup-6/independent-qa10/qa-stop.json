@@ -1,0 +1,51 @@
+{
+  "status": "STOP",
+  "stoppedAt": "2026-10-19T00:04:28.231176+00:00",
+  "nonce": "a7271d4e-10d6-4993-96f3-4602797c11a4",
+  "agent": "/root/qa492_followup10",
+  "reservedBeforeSession": true,
+  "actualHead": "7959282a635d64d25877c64ddf73e2e968f664fb",
+  "sourceCommit": "3bffd0e9",
+  "sourceEquality": true,
+  "oldEvidenceEquality": true,
+  "verdict": "READY FOR CODEX QA",
+  "findings": [],
+  "tests": {
+    "focused": {
+      "total": 134,
+      "pass": 134,
+      "fail": 0,
+      "skip": 0
+    },
+    "native": {
+      "total": 772,
+      "pass": 769,
+      "fail": 0,
+      "skip": 3
+    },
+    "probes": {
+      "distinctValidated": 27,
+      "executions": 28,
+      "attempts": 2,
+      "initialHarnessAssumptionFailures": 1,
+      "unresolvedProductFailures": 0
+    }
+  },
+  "skips": [
+    "PowerShell scheduler definitions parse on Windows and use actual task action/trigger/principal objects",
+    "native Windows ACL creation is private and rejects a later public access rule",
+    "native Windows bootstrap preserves dirty, foreign, wrong-branch and diverged work and fast-forwards only its dedicated checkout"
+  ],
+  "node": "v24.19.0",
+  "ciNode": 22,
+  "acceptanceChecksSkipped": 0,
+  "sourceEdits": false,
+  "publicEdits": false,
+  "gitWrites": false,
+  "githubWrites": false,
+  "providerCalls": false,
+  "deploymentClaims": false,
+  "nativeCiClaims": false,
+  "claudeClaims": false,
+  "limit": "Bounded local independent QA only; no frontend/browser/DB/provider/native CI/deployment checks."
+}
