@@ -1,0 +1,31 @@
+{
+  "results": [
+    {
+      "scenario": "third revision none",
+      "result": "PASS",
+      "priorPackets": 2,
+      "expected": "appended with all bytes intact"
+    },
+    {
+      "scenario": "third revision original",
+      "result": "PASS",
+      "priorPackets": 2,
+      "expected": "tamper rejected"
+    },
+    {
+      "scenario": "third revision second",
+      "result": "PASS",
+      "priorPackets": 2,
+      "expected": "tamper rejected"
+    },
+    {
+      "scenario": "lost merge response then lost authorization then restored auth",
+      "result": "PASS",
+      "syntheticMergeCalls": 1,
+      "syntheticQaCallbacks": 1,
+      "release": "merged"
+    }
+  ],
+  "actualModels": 0,
+  "actualGitHubWrites": 0
+}

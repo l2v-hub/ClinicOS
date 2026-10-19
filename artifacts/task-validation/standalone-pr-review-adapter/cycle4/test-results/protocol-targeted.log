@@ -1,0 +1,83 @@
+✔ standalone adoption binds true PR identity, source/config projection, packet and all three imported attempts (29.997946ms)
+✔ adoption rejects fork, base drift, missing native checks, malformed source or packet, and historical source mismatch (22.148454ms)
+✔ CAS claim reserves before analysis, retains imported history, and exclusive PR labels follow request/running/published (203.173696ms)
+✔ standalone simultaneous claims use one durable reservation and no fifth review is inferred (38.512162ms)
+✔ owner, nonce, SHA and full tracked tree protect standalone comment import (139.799242ms)
+✔ pipeline independent QA reserves ownership, keeps release hold, and exposes genuine two-review readiness only (38.135632ms)
+✔ QA findings and changed feedback block, while an existing running owner remains pending (166.655953ms)
+✔ infrastructure merge boundary reuses exact-SHA protected merge and rejects application/deployment scope (99.135329ms)
+✔ revision appends new packet and preserves every old proof byte on the current head (6.675507ms)
+✔ revision rejects rewritten old-attempt copy and rewritten or removed historical packet bytes on NEW head (68.472284ms)
+✔ trusted runtime uses fixed18 policy, reserves protected infrastructure merge, persists receipt and skips next tick (39.789252ms)
+✔ runtime never merges held, unknown, application, unreviewed or failed independent QA subjects (251.600865ms)
+✔ runtime recovers an actual exact-SHA merge after interruption without merging or reviewing again (32.113499ms)
+✔ authenticated frozen merge-base survives a real main advance and rejects changed review ancestry/head/base (377.365406ms)
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:42:18.328Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:42:18.335Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:42:18.354Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/bug-pipeline/standalone-review.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:42:18.364Z","summary":"Independent synthetic QA callback; no actual model invoked."},"release":{"status":"merged","reviewedSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","prNumber":81,"mergeSha":"7777777777777777777777777777777777777777"}}
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:42:18.328Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:42:18.335Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:42:18.354Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/bug-pipeline/standalone-review.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:42:18.364Z","summary":"Independent synthetic QA callback; no actual model invoked."},"release":{"status":"merged","reviewedSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","prNumber":81,"mergeSha":"7777777777777777777777777777777777777777"}}
+✔ production finalize CLI dispatch runs separate Codex QA then fixed-policy merge and is terminal-idempotent (101.008569ms)
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"blocked","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:42:18.433Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:42:18.442Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:42:18.462Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/bug-pipeline/standalone-review.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"failed","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:42:18.471Z","failureCode":"controller-execution-failed"},"failureCode":"controller-execution-failed"}
+✔ finalize CLI cannot process normal/unadopted PR and preserves failed Codex execution as blocked (65.319509ms)
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"waiting-review","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:42:18.497Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:42:18.503Z","feedbackFingerprint":"5fa4c0577da063fd59e6dad5d8bc1aba7a330d9cfe84888b82f349822c9f7e40","reportComment":2,"reportBodySha256":"84dfbd63ffafd193b5ec398ebcc09156c0c29f6c8a1f1c7a936c318b394bdc34","completedAt":"2026-10-17T17:42:18.538Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/example.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":"Await genuine reviews and infrastructure authorization"}
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"waiting-review","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:42:18.556Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:42:18.560Z","feedbackFingerprint":"82c1ced056690ea6e831886181e247a18ee14c43303a158365aa8c42f4168a88","reportComment":2,"reportBodySha256":"11fc20d1b0f47a6cff813146f51f0ede2ef937be8d8dd7ea910093f343032366","completedAt":"2026-10-17T17:42:18.604Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/example.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":"Await genuine reviews and infrastructure authorization"}
+✔ standalone production CLI imports legitimate UTF8 CJK and surrogate-pair reports from real temp files (140.338038ms)
+✔ Unicode CLI pre-read allowance never expands canonical comment limit or normal60kB input guard (21.811554ms)
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"waiting-review","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:42:18.655Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:42:18.659Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:42:18.673Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/bug-pipeline/standalone-review.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"running","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:42:18.678Z"}}
+{"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-17T17:42:18.655Z","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-17T17:42:18.659Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-17T17:42:18.673Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/src/bug-pipeline/standalone-review.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"reservedAt":"2026-10-17T17:42:18.678Z","summary":"Independent owner completed its bounded QA."},"release":{"status":"merged","reviewedSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","prNumber":81,"mergeSha":"6666666666666666666666666666666666666666"}}
+✔ concurrent production finalize and pipeline observe active Codex QA without mutation, duplicate inference or merge (48.523819ms)
+✔ an existing open merge reservation remains pending instead of racing its active owner (27.397211ms)
+✔ organic24subject92report near-capacity history refuses claim before durable round or report, and QA before inference (4120.651292ms)
+✖ actual store disjoint request+claim while QA waits preserves both entities and the owner result, merges once (24.821893ms)
+✖ actual store same-subject modification during QA remains a conflict without overwriting peer hold or duplicating inference (14.636803ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 21
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6339.305824
+
+✖ failing tests:
+
+test at agent-team/tests/bug-pipeline/standalone-review.test.mjs:1218:1
+✖ actual store disjoint request+claim while QA waits preserves both entities and the owner result, merges once (24.821893ms)
+  Error: Durable state compare-and-swap failed; state was not reset
+      at stateError (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/github.mjs:72:24)
+      at Object.save (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/github.mjs:603:19)
+      at async save (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:567:9)
+      at async persist (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:667:5)
+      at async standaloneReviewStep (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:776:5)
+      at async finalizeStandaloneSubject (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:691:18)
+      at async Object.finalize (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:574:7)
+      at async TestContext.<anonymous> (file:///workspace/clinicos-standalone-pr-review/agent-team/tests/bug-pipeline/standalone-review.test.mjs:1273:18)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    code: 'state-cas-conflict'
+  }
+
+test at agent-team/tests/bug-pipeline/standalone-review.test.mjs:1288:1
+✖ actual store same-subject modification during QA remains a conflict without overwriting peer hold or duplicating inference (14.636803ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  Error: Durable state compare-and-swap failed; state was not reset
+      at async TestContext.<anonymous> (file:///workspace/clinicos-standalone-pr-review/agent-team/tests/bug-pipeline/standalone-review.test.mjs:1317:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: Durable state compare-and-swap failed; state was not reset
+        at stateError (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/github.mjs:72:24)
+        at Object.save (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/github.mjs:603:19)
+        at async save (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:567:9)
+        at async persist (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:667:5)
+        at async standaloneReviewStep (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:776:5)
+        at async finalizeStandaloneSubject (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:691:18)
+        at async Object.finalize (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:574:7)
+        at async waitForActual (node:assert:646:5)
+        at async strict.rejects (node:assert:769:25)
+        at async TestContext.<anonymous> (file:///workspace/clinicos-standalone-pr-review/agent-team/tests/bug-pipeline/standalone-review.test.mjs:1317:3),
+    operator: 'rejects',
+    diff: 'simple'
+  }

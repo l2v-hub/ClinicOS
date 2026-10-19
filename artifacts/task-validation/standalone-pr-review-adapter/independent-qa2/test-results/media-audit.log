@@ -1,0 +1,92 @@
+{
+  "png": [
+    {
+      "path": "screenshots/02-release-hold-preserved.png",
+      "size": [
+        1440,
+        1250
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/03-infrastructure-receipt-terminal.png",
+      "size": [
+        1440,
+        1250
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/01-authenticated-report-import.png",
+      "size": [
+        1440,
+        1250
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/04-valid-unicode-report-stranded.png",
+      "size": [
+        1440,
+        1100
+      ],
+      "mode": "RGB"
+    }
+  ],
+  "videos": [
+    {
+      "path": "counterexample-video/page@e30a368273d0b14c68daf1ef60348855.webm",
+      "decoded": true,
+      "info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1440,
+            "height": 1100
+          }
+        ],
+        "format": {
+          "duration": "1.440000"
+        }
+      }
+    },
+    {
+      "path": "video/page@2b7d32ee471cc8325539857e8c52fbb9.webm",
+      "decoded": true,
+      "info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1440,
+            "height": 1250
+          }
+        ],
+        "format": {
+          "duration": "2.600000"
+        }
+      }
+    }
+  ],
+  "zip": [
+    {
+      "path": "trace/counterexample-trace.zip",
+      "members": 13,
+      "CRCValid": true,
+      "membersScanned": true
+    },
+    {
+      "path": "trace/trace.zip",
+      "members": 32,
+      "CRCValid": true,
+      "membersScanned": true
+    }
+  ],
+  "credentialFindings": [],
+  "sourceFrozen": true,
+  "priorProofFilesUnchanged": 50,
+  "PHI": "Synthetic fixtures and scalar real-Git verification counts only; manual content inspection performed."
+}

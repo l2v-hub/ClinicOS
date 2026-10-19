@@ -1257,3 +1257,54 @@ test('persisted transition identity is captured before save awaits, including pr
         assert.equal(f.getSaved().batches[0].reviews.length, 1);
       });
 });
+
+async function addContinuations(f, statuses) {
+  const { historyDigest, implementationAttempts } = await import('../../src/bug-pipeline/attempt-budget.mjs');
+  f.batch.implementation = [1, 2, 3, 4].map((round) => ({ round, status: 'failed' }));
+  f.state.operatorTakeover = { nonce: 'legacy-takeover', continuePastFourPreserveHistory: true,
+    subjects: [{ collection: 'batches', id: f.batch.id, pr: 9 }] };
+  f.batch.operatorContinuations = [];
+  for (const [index, status] of statuses.entries()) {
+    const round = 5 + index;
+    if (index) {
+      f.batch.budgetExtensions ??= [];
+      f.batch.budgetExtensions.push({ entityId: f.batch.id, pr: 9, kind: 'implementation',
+        previousLimit: round - 1, limit: round, actor: 'operator', at: '2026-10-18T00:00:00Z',
+        reason: 'Preserved legacy allowance', authorizationRef: 'legacy-source', nonce: `extension-${round}`,
+        historyLength: round - 1, historyDigest: historyDigest(implementationAttempts(f.batch)) });
+    }
+    f.batch.operatorContinuations.push({ round, status,
+      kind: index ? 'audited-budget-continuation' : 'explicit-operator-compatibility-continuation',
+      ...(index ? { budgetExtensionNonce: `extension-${round}` } : {}),
+      owner: 'operator', nonce: `round-${round}`, startedAt: '2026-10-18T00:00:00Z',
+      reason: 'Preserve all consumed attempts', authorizationRef: 'legacy-takeover',
+      contractSha256: 'c'.repeat(64), preservedEntityDigest: 'd'.repeat(64),
+      preservedLegacyImplementationDigest: historyDigest(f.batch.implementation),
+      preservedLegacyReviewsDigest: historyDigest(f.batch.reviews) });
+  }
+  if (f.batch.budgetExtensions) f.batch.budgetAuthorizationCutover = { schemaVersion: 1,
+    legacyCount: f.batch.budgetExtensions.length, legacyDigest: historyDigest(f.batch.budgetExtensions),
+    actor: 'trusted-state-owner', at: '2026-10-18T00:00:00Z', authorizationRef: 'test:legacy-cutover' };
+}
+
+test('actual release reserves and merges a passed continuation after four failed legacy attempts', async () => {
+  const f = fixture();
+  await addContinuations(f, ['failed', 'passed']);
+  const before = structuredClone(f.batch.implementation);
+  const result = await releaseBatch({ repo: f.state.repository, github: f.github, store: f.store,
+    batchId: f.batch.id, reviewedSha: sha, configured, execute: true });
+  assert.equal(result.status, 'merged');
+  assert.equal(f.calls.filter(([kind]) => kind === 'merge').length, 1);
+  assert.deepEqual(f.getSaved().batches[0].implementation, before);
+  assert.equal(f.getSaved().batches[0].operatorContinuations.length, 2);
+});
+
+test('failed or active latest continuation blocks actual release even after a passed continuation', async () => {
+  for (const status of ['failed', 'running', 'implemented-awaiting-independent-qa']) {
+    const f = fixture();
+    await addContinuations(f, ['passed', status]);
+    await assert.rejects(releaseBatch({ repo: f.state.repository, github: f.github, store: f.store,
+      batchId: f.batch.id, reviewedSha: sha, configured, execute: true }), /latest implementation/);
+    assert.equal(f.calls.filter(([kind]) => kind === 'merge').length, 0);
+  }
+});

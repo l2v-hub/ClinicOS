@@ -1,0 +1,22 @@
+[
+  {
+    "pr": 393,
+    "result": "REPRODUCED_VALID_REPORT_STRANDED",
+    "sha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
+    "error": "Stored review exceeds bound",
+    "durableStatus": "running",
+    "reportCompactChars": 50106,
+    "reportUTF8Bytes": 150106,
+    "stack": "AssertionError [ERR_ASSERTION]: Stored review exceeds bound\n    at visit (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:68:20)\n    at safeStandaloneFields (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:80:3)\n    at validateStandaloneSubject (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:95:3)\n    at Object.validateStandaloneState [as validate] (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:217:5)\n    at save (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/comment-review-handoff.mjs:89:40)\n    at file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/comment-review-handoff.mjs:366:41\n    at reconcile (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/comment-review-handoff.mjs:313:15)\n    at async Object.reconcilePR (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/comment-review-handoff.mjs:366:5)\n    at async file:///workspace/clinicos-standalone-pr-review/artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/actual-git-unicode-probe.mjs:35:56"
+  },
+  {
+    "pr": 491,
+    "result": "REPRODUCED_VALID_REPORT_STRANDED",
+    "sha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6",
+    "error": "Stored review exceeds bound",
+    "durableStatus": "running",
+    "reportCompactChars": 50106,
+    "reportUTF8Bytes": 150106,
+    "stack": "AssertionError [ERR_ASSERTION]: Stored review exceeds bound\n    at visit (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:68:20)\n    at safeStandaloneFields (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:80:3)\n    at validateStandaloneSubject (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:95:3)\n    at Object.validateStandaloneState [as validate] (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/standalone-review.mjs:217:5)\n    at save (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/comment-review-handoff.mjs:89:40)\n    at file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/comment-review-handoff.mjs:366:41\n    at reconcile (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/comment-review-handoff.mjs:313:15)\n    at async Object.reconcilePR (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/comment-review-handoff.mjs:366:5)\n    at async file:///workspace/clinicos-standalone-pr-review/artifacts/task-validation/standalone-pr-review-adapter/independent-qa2/actual-git-unicode-probe.mjs:35:56"
+  }
+]

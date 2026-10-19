@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "status": "QA_STOP",
+  "sourceSha": "0d8326db7d3e53691ce6f8127a70c06c3666b426",
+  "reservationNonce": "37ce512a-5556-49d5-9ef7-b1454ffe55e5",
+  "stoppedAt": "2026-10-18T23:24:00.504344+00:00",
+  "verdict": "READY FOR CODEX QA",
+  "independentFindings": [],
+  "sourceFreezeSha256": "38ee81c3d9adbe1d36787651751c987adc56e3c507418be0671336156edda286",
+  "harnessFreezeSha256": "0fb2218bc03b663d917c7f9b523e0af12830da8e4a01b366b7eda652bc0fcf7c",
+  "privateManifestSha256": "9002f88d5b76693ed038f27ce2def5469c9364a8777abed06156dff569539b77",
+  "validationReportSha256": "3e5fed60c166d2610b40936562790f79e02725edbe77f7516a64d408f5f6706e",
+  "preservationReportSha256": "0ce0e47103e3cbd6d060619a63d4b6a0c09bdbd6ff2bea6b6a7076982c8b87ee",
+  "mediaIndexSha256": "a6262b30ebef8b7ad3c352c42abef19c1949a777c3bccf1a3c85295ed60a1a70",
+  "canonicalSnapshotSha256": "907f968417927738ab6c1829fe1ebeb83165f43b12133f8ab17b88c024da5d66",
+  "results": {
+    "workflow": {
+      "tests": 771,
+      "pass": 768,
+      "skip": 3,
+      "fail": 0
+    },
+    "imported495": {
+      "tests": 142,
+      "pass": 142,
+      "fail": 0
+    },
+    "transportAdversarial": {
+      "tests": 33,
+      "pass": 33,
+      "fail": 0
+    },
+    "freshR1R7": {
+      "tests": 33,
+      "pass": 33,
+      "fail": 0
+    },
+    "actualCliProcess": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    "browserActions": 7
+  },
+  "localNode": "v24.19.0",
+  "sourceAndOriginalProofEdits": false,
+  "canonicalMutation": false,
+  "publicPacketCreated": false,
+  "liveProviderValidation": false,
+  "nativeHumanApproval": false,
+  "allOwnedProcessesStopped": true,
+  "rootNextGates": [
+    "Select safe publication artifacts after this STOP",
+    "Publish actual new Claude review request",
+    "Hosted Node22/native required checks",
+    "Fresh final Codex",
+    "Manual protected merge"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "agent-team/src/bug-pipeline/models.mjs": "1a50e72a0f652622fea8bdde01bfcdbab4a91b1f017ac30eb5f0b4ccb183aca6",
+  "agent-team/src/bug-pipeline/workspace.mjs": "a333ed4c288e334d870c4bd0322044f0ad84e47ca903b762faf99d8dad94f50d",
+  "agent-team/src/bug-pipeline/process.mjs": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf",
+  ".github/workflows/bug-pipeline-tests.yml": "79114c4363dba61d96a45f73363ecef4d2f6c6ce5ac63f5d1f56801c2f23153b"
+}

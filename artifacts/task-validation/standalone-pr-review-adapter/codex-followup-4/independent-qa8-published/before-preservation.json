@@ -1,0 +1,14 @@
+{
+  "sourceSha": "210a257c96aea12e9386018fe9ce762715870447",
+  "sourceInputs": 26,
+  "changedPaths": 5,
+  "unchangedOtherInputs": 21,
+  "historicalProofs": 527,
+  "presentWorkingTree": 63,
+  "sparseVerifiedHeadGitBlobOnly": 464,
+  "authorEvidenceFiles": 15,
+  "trustedHarnessFiles": 3,
+  "authorStopSha256": "e1e353190129c9f1745723c6de90c19751f243107b3ef918f3a51c3b7e5dbcf9",
+  "sourceFreezeSha256": "37a7de35330b7d0af7f80fdc3ed3b853ed0872ad025db5f521221507536cfbe7",
+  "mismatches": []
+}

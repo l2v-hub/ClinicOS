@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "baseSha": "fcabd40713ad355c944d7aff3fcfa7852dce01e9",
+  "group": "manualBatches/standalone-pr-review-adapter",
+  "implementationRound": 5,
+  "files": {
+    "agent-team/src/bug-pipeline/attempt-budget.mjs": "a3205892bcdf9abd3b610cd9fcfe8acda20a5a94331886f387e30ef6916d329e",
+    "agent-team/src/bug-pipeline/cli.mjs": "4a50209ba73e6f29b9241f8d5eccf1b27e995f57e6f0f3e8bffef479c381da0a",
+    "agent-team/src/bug-pipeline/comment-review-handoff.mjs": "01bcdc649a2960340289b8627677e10b44a791fa36234a84f057b0557a853952",
+    "agent-team/src/bug-pipeline/contracts.mjs": "eef4bd3286750f986119b2e15409fffd118ca4e7bcf56d8d8f90b894946f7988",
+    "agent-team/src/bug-pipeline/external-review.mjs": "9ed96e962f51f1a3558343add2e3fe60a048497679afd4ec16cab94296411ff8",
+    "agent-team/src/bug-pipeline/github.mjs": "1cb6547405f3a0a2ebd66929d5a169ef9e9e85e844ea4ae9f27dcd9a4f5ea686",
+    "agent-team/src/bug-pipeline/issue-review-communication.mjs": "bb82e1b9bae1a135b8b57878367346db3f85390852e202a45e3c356f0dc5c765",
+    "agent-team/src/bug-pipeline/pipeline.mjs": "3fd5d8c51c3ffa8ec277346e1fe617b9778e44a5078d2631996ae6b3da870487",
+    "agent-team/src/bug-pipeline/review-handoff-cli.mjs": "309d09f58446aa99beb024139578c40277a1299de0465b6a2e73443abb45aebb",
+    "agent-team/src/bug-pipeline/review-policy.mjs": "25349a37209996e67d01da6646d58ceb10571b68deb5b87bec11ed3c06cae969",
+    "agent-team/src/bug-pipeline/standalone-review.mjs": "fcd2a1794a3165c750a8e2f30caa0f749a3cd7e8f433e41d60821ff928e477fc",
+    "agent-team/tests/bug-pipeline/attempt-budget.test.mjs": "ec41ee413bb52cbfd1b7c3c0c665f8180aa59d1f70913fb514a869717cef688f",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs": "6917559a7f3cd55dfaa6915e63965919f298174eb49001ada06f328e3ecca120",
+    "agent-team/tests/bug-pipeline/github.test.mjs": "1d036d947e50f38911765c96e4be00a831ae37295d1256fdab1920b317ff434a",
+    "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs": "9e69dd89da9fc9ab3053e55e06ec331b0f2f4eb7735a0203afe1165709ef3467",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs": "50637830c8966bfeefdbc80b6dbe30dfc7e6094b4a25bf7d208b38d5b248fba3",
+    "docs/claude-local-review-prompt.md": "770a39e1f89c966dacacdb34434c18ddebff126d8d3d8a6797296bbe2236b345",
+    "docs/codex-bug-workflow.md": "2c549fb37d070711e32afb6d7c821aadbc392f79270ac3a07c657e08e8efd2c7",
+    "docs/standalone-pr-review.md": "dce90a77e25765a7de06387d287a2a97da7ad421f4eb600074d552526edd72be",
+    "scripts/quality-gate/claude-bug-review.mjs": "4f34ad0bbb25600a06b1aa106fda94bf5de2344f19dbb0d0a9d4cad0ebc26354",
+    "scripts/quality-gate/claude-bug-review.test.mjs": "be3389b4b3d6ba6c1aea7ddeef764b40859a66238ec346ecec4bd84f4bbf6e70"
+  },
+  "sourceDigest": "940d4254e31568cdb108263bc7e01c428a2b17ce78af902c41989ffc840fd1ac"
+}

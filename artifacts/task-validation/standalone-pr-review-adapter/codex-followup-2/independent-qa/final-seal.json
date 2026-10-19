@@ -1,0 +1,15 @@
+{
+  "verdict": "READY FOR CODEX QA",
+  "sourceDigest": "940d4254e31568cdb108263bc7e01c428a2b17ce78af902c41989ffc840fd1ac",
+  "sourceFiles": 21,
+  "historicalProofFiles": 369,
+  "sourceAndHistoricalProofsUnchanged": true,
+  "artifactManifestSha256": "454a540b661d00db90c3174833eb61381b345a08b5f945c5b9440dcb1326519d",
+  "publicFilesIncludingManifestAndSeal": 36,
+  "publicFileMaxBytesObserved": 1251009,
+  "publicFilesMax25MiB": true,
+  "mediaDecodedAndZipMembersCRCCheckedAndScanned": true,
+  "actualGitHubStateModelProviderProductionCalls": 0,
+  "sourceEdits": 0,
+  "writePolicy": "All reviewer writes stop after this final seal. Root owns publication/release."
+}

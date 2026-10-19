@@ -678,3 +678,46 @@ test('post-Claude independent final QA leaves a real reviewed worktree clean for
   await workspace.prepare(batch);
   assert.equal((await git(cwd, 'rev-parse', 'HEAD')).trim(), batch.sha);
 });
+
+test('standalone final QA creates an exact detached source checkout without installing or executing PR code', async (t) => {
+  const { root } = await gitFixture(t);
+  const sha = (await git(root, 'rev-parse', 'HEAD')).trim();
+  const subject = {
+    id: 'standalone-pr-81',
+    sha,
+    baseSha: sha,
+    packet: { path: 'artifacts/task-validation/review-81', files: {} },
+    sourceManifest: [{ path: 'src/feature.ts' }],
+    implementation: [{ round: 1, status: 'passed', subjectSha: sha }],
+  };
+  const calls = [];
+  const workspace = createWorkspace({
+    root,
+    repo: 'l2v-hub/ClinicOS',
+    run: async (options) => {
+      calls.push(options);
+      assert.equal(options.command, 'git');
+      return safeGitRunner(options);
+    },
+    models: {
+      qa: async (options) => {
+        assert.equal((await git(options.cwd, 'rev-parse', 'HEAD')).trim(), sha);
+        assert.equal(options.plan.mode, 'standalone-read-only');
+        assert.equal(options.packet, subject.packet.path);
+        assert.match(options.plan.constraints, /Never execute PR code/);
+        return { status: 'verified', summary: 'Source and evidence only.' };
+      },
+    },
+  });
+  assert.equal((await workspace.finalQaStandalone(subject)).status, 'verified');
+  const checkout = calls.find((c) => c.args.includes('add'));
+  assert.ok(checkout.args.includes('--detach'));
+  assert.ok(checkout.args.includes('core.hooksPath=/dev/null'));
+  assert.equal(
+    calls.some((c) => c.command === 'npm'),
+    false,
+  );
+  const cwd = path.join(root, 'agent-team', '.worktrees', `${subject.id}-${sha}`);
+  await writeFile(path.join(cwd, 'untracked-sentinel'), 'owned test fixture');
+  await assert.rejects(workspace.finalQaStandalone(subject), /checkout changed/);
+});

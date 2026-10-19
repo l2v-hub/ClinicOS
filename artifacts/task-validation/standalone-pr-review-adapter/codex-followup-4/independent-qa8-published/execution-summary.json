@@ -1,0 +1,32 @@
+{
+  "sourceSha": "210a257c96aea12e9386018fe9ce762715870447",
+  "node": "v24.19.0",
+  "fullSuite": {
+    "tests": 762,
+    "passed": 759,
+    "failed": 0,
+    "skipped": 3,
+    "skipReason": "Windows-only executable cases"
+  },
+  "independentAdversarial": {
+    "tests": 33,
+    "passed": 33,
+    "failed": 0,
+    "skipped": 0
+  },
+  "browser": {
+    "actions": 7,
+    "reloadAssertions": 7,
+    "pageConsoleHTTPErrors": 0,
+    "exclusiveLabels": true,
+    "retainedHistoryBytes": 1049385,
+    "pinnedGitBlobReads": 29,
+    "ownedPortRefusedAfterCleanup": true
+  },
+  "hostedNode22Verified": false,
+  "actualClaudeReviewVerified": false,
+  "clinicalE2E": false,
+  "liveProvider": false,
+  "securityVerdict": "PASS within local scope",
+  "qaVerdict": "READY FOR CODEX QA \u2014 local gate only"
+}

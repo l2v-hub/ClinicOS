@@ -1,0 +1,46 @@
+{
+  "pr": 492,
+  "authorRound": 6,
+  "reservationNonce": "714022f3-a74f-43f5-9417-8140ae7d642d",
+  "contractSha256": "5ed94a5ae33bed116628fdbff51552282f00775e452aa566b34c64b15437c5b6",
+  "baseSha": "94fcaada4c224d3a3e472725c07a89b35c8dfe33",
+  "authorStopUtc": "2026-10-18T19:38:47Z",
+  "sourceInputClosure": {
+    "changedPaths": [
+      "agent-team/tests/bug-pipeline/standalone-review.test.mjs"
+    ],
+    "testSourceSha256": "a5c95fefc7a34c92f06ae02b954456230005ea55844632f1b65f911be22e893b",
+    "productionAuthSourcePath": "agent-team/src/bug-pipeline/review-handoff-cli.mjs",
+    "productionAuthSourceSha256": "309d09f58446aa99beb024139578c40277a1299de0465b6a2e73443abb45aebb",
+    "trackedDiffSha256": "e18cfd1984055fe3e2804a64f40608139908ae1c552ee09cbfe1d4b20f5caa67",
+    "trackedDiffBytes": 6525
+  },
+  "priorProofs": {
+    "manifestSha256": "030fbc1df290cefca0c88d93c07cfa16a36b5bb03257fb18c85840cb41ee74a1",
+    "entries": 347,
+    "unchanged": 347,
+    "missing": 0,
+    "mismatched": 0
+  },
+  "runEvidence": {
+    "focusedRawLog": {
+      "privatePath": "/workspace/.clinicos-cloud/492-test-auth-author-20261018/focused-final.txt",
+      "sha256": "d281c5db9468118f579dbecf7fb500043de5ccbfbb82fe7d73ab83a73d458a04"
+    },
+    "fullSuiteRawLog": {
+      "privatePath": "/workspace/.clinicos-cloud/492-test-auth-author-20261018/full-suite-final.txt",
+      "sha256": "1ae2e792ef99d57506f021d62410a50fc8745ba7245544f878622d78fef258cf"
+    },
+    "fullSuitePrivateRunnerReceipt": {
+      "privatePath": "/workspace/.clinicos-cloud/492-test-auth-author-20261018/full-suite-runner-receipt.json",
+      "sha256": "93f24bc48947c651c920cd87f0e4f3afe9891b9284c52dfd5ddbfbe01ed377d6"
+    },
+    "publicRunnerReceipt": "artifacts/task-validation/standalone-pr-review-adapter/codex-followup-2/author-runner-receipt.json",
+    "publicTestSummary": "artifacts/task-validation/standalone-pr-review-adapter/codex-followup-2/author-test-summary.json",
+    "rawLogsPublic": false,
+    "reason": "Raw runner output includes synthetic fixture state; only bounded summaries and the credential-free runner receipt are published."
+  },
+  "authorStopped": true,
+  "independentQaReserved": false,
+  "externalActionsPerformed": false
+}

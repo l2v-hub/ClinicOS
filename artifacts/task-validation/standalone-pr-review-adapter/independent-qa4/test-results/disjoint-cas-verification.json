@@ -1,0 +1,28 @@
+{
+  "result": "PASS_DISJOINT_GLOBAL_CAS_PRESERVES_COMPLETED_QA_AND_PEER_CLAIM",
+  "firstSubject": 81,
+  "secondSubject": 82,
+  "durableCodexStatus": "verified",
+  "secondReviewStatus": "running",
+  "syntheticQaCallbacks": 1,
+  "syntheticMergeCalls": 1,
+  "syntheticStateWrites": 7,
+  "strictCasConflicts": 1,
+  "repeatFinalizeWrites": 0,
+  "events": [
+    "state save 1",
+    "first subject actual production boundary QA callback entered",
+    "state save 2",
+    "state save 3",
+    "independent second subject request and claim saved",
+    "first subject QA callback returned verified",
+    "strict CAS rejected stale file SHA",
+    "state save 4",
+    "state save 5",
+    "state save 6",
+    "state save 7"
+  ],
+  "actualModels": 0,
+  "actualGitHubWrites": 0,
+  "actualLiveFailureRootCause": "Not established; isolated production-module regression only."
+}

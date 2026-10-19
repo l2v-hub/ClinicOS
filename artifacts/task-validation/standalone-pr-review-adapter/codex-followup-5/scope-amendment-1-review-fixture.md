@@ -1,0 +1,3 @@
+# Continuation9 scope amendment1 — existing legacy review fixture
+
+Before edits, root authorizes exactly one additional test path scripts/quality-gate/claude-bug-review.test.mjs. The required R3 validator correctly rejects its old PR-bound free-text authorizationRef fixture. Change only that legacy test setup to record an exact pinned legacy prefix or a genuinely synthetic complete verifier receipt; preserve assertions and test meaning, no production/verifier/auth/billing change. Original test hash be3389b4b3d6ba6c1aea7ddeef764b40859a66238ec346ecec4bd84f4bbf6e70. All26 earlier paths/oldproofs/8attempts unchanged. No new paid or live call, no actualgrantfiction. Author records exactdiff/newfreeze and fresh regression, independentQA stillrequired.

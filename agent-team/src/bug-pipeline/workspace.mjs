@@ -252,6 +252,48 @@ export function createWorkspace({ root, repo, run, models }) {
       safeText(result.summary);
       return result;
     },
+    async finalQaStandalone(subject) {
+      // This checkout is for read-only model inspection. Never install dependencies,
+      // execute tests, invoke Claude, stage, or publish code from a standalone PR.
+      const cwd = path.join(root, 'agent-team', '.worktrees', `${subject.id}-${subject.sha}`);
+      const entries = (await git(['worktree', 'list', '--porcelain'])).split('\n\n');
+      const registered = entries.find((e) => e.split('\n').includes(`worktree ${cwd}`));
+      if (!registered) {
+        if (await lstat(cwd).catch((e) => (e.code === 'ENOENT' ? null : Promise.reject(e))))
+          throw new Error('Standalone QA checkout is occupied');
+        await git(['fetch', '--no-tags', 'origin', subject.sha]);
+        await git([
+          '-c',
+          'core.hooksPath=/dev/null',
+          'worktree',
+          'add',
+          '--detach',
+          cwd,
+          subject.sha,
+        ]);
+      }
+      const assertClean = async () => {
+        if ((await git(['rev-parse', 'HEAD'], cwd)) !== subject.sha || (await status(cwd)))
+          throw new Error('Standalone QA checkout changed');
+      };
+      await assertClean();
+      const result = await models.qa({
+        cwd,
+        packet: subject.packet.path,
+        plan: {
+          mode: 'standalone-read-only',
+          baseSha: subject.baseSha,
+          scope: subject.sourceManifest.map((file) => file.path),
+          frozenPacket: subject.packet,
+          sourceManifest: subject.sourceManifest,
+          implementation: subject.implementation,
+          constraints:
+            'Inspect source and committed native-check evidence only. Never execute PR code or tests. Return blocked for missing evidence or findings. Privileged files require orchestrator-owned correction.',
+        },
+      });
+      await assertClean();
+      return result;
+    },
     verify,
     async checkpoint(batch) {
       const { cwd, packet } = coordinates(batch);

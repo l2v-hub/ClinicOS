@@ -1,0 +1,17 @@
+{
+  "kind": "current-publication-verdict",
+  "continuation": 8,
+  "sourceSha": "210a257c96aea12e9386018fe9ce762715870447",
+  "status": "VERIFIED_OFFLINE_PENDING_EXTERNAL_GATES",
+  "rootReport": "root-validation-report.md",
+  "independentReport": "independent-qa8-published/validation-report.md",
+  "independentReportSha256": "44c226ad6b4c71d8a666fab0b8baef1ebfc8e551d1b55ac2a4c012832d0fa2a4",
+  "qaStopSha256": "3eb62d1e9e57c5655268c06c686707eb35370c543896d553be5a8b3c6c6635af",
+  "authorReport": "validation-report.md",
+  "authorReportPreserved": true,
+  "oldReportsPreserved": true,
+  "githubReservationActuallyDurableBeforeQa": true,
+  "actualClaudeApproval": false,
+  "actualFinalCodexReview": false,
+  "at": "2026-10-18T21:37:50.825Z"
+}

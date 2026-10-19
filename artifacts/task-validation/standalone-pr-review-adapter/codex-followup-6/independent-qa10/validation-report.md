@@ -1,0 +1,27 @@
+# PR #492 continuation 10 independent QA
+
+Verdict: **READY FOR CODEX QA** for the bounded F1/F2 continuation. No meaningful new correctness or security finding was found. This does not certify native CI, Claude review, production integration, deployment, or merge readiness.
+
+Reserved before this dedicated independent session with nonce `a7271d4e-10d6-4993-96f3-4602797c11a4`. Reviewed actual frozen HEAD `7959282a635d64d25877c64ddf73e2e968f664fb`, source commit `3bffd0e9`, the new `codex-followup-6` packet, and the authentic Claude round-4 feedback comment `6256578731`. Author results were treated as claims and tests were executed independently.
+
+| Phase | Result | Evidence |
+|---|---|---|
+| Contract | PASS | New packet acceptance criteria checked against actual Claude F1/F2 feedback; private reservation verified |
+| Diff review | PASS | Exactly five source/documentation files plus six new packet files; no protected-policy, allowlist, authorization, budget, lease, provider, or clinical delta |
+| Tests | PASS within scope | Fresh credential-stripped focused suite: 134 pass, 0 fail, 0 skip. Actual native bug-pipeline plus quality-gate test command: 769 pass, 0 fail, 3 Windows-only skips |
+| Process/controller evidence | PASS within scope | 27 distinct adversarial boundaries validated; 28 probe executions over two attempts, including one retained harness-assumption failure and its focused correction |
+| Security | PASS | Finite diagnostics only, no raw refusal copied to error metadata; exact native identity and CAS guard retained; no new dependency, endpoint, authorization, logging, PHI, or production configuration change |
+
+F1 is satisfied at `github.mjs:112` and `standalone-review.mjs:876`: only the exact completed exit-1 GraphQL head-modified refusal, with no runner error and no non-whitespace stdout, gains finite refusal metadata. Actual child-process exit-1 results have `code: 1`, `error: null`, and empty stdout. Prefixes, appended diagnostics, transport wording, other GraphQL refusals or mutations, output, exit 2, timeout, spawn failure, transport flags, output limits, zero exit, projection, and generic mutation stay uncertain. LF and CRLF endings work. This intentionally bounded known phrase is consistent with the documented acceptance criteria.
+
+Independent controller probes confirmed fresh native reads both immediately after rejection and at archival persistence. Native head drift, closed/merged state, guard-time drift, and synthetic CAS conflict preserve the original merging reservation. A later exact merged receipt reconciles without another merge. Timeout, mixed diagnostics, and wrong-operation errors keep the reservation and reject ordinary resume. Exact rejection archives once, blocked finalization makes no further merge call, maintainer resume succeeds, and replay of that resume fails.
+
+The first probe incorrectly required a subsequent finalize after an explicit successful maintainer resume to remain permanently unable to merge. The existing documented recovery model intentionally returns to `waiting-review`; a trusted embedding with an injected allowlist may make a new guarded attempt after that explicit resume. The initial failing probe and output remain unchanged. A separate focused correction confirmed no second merge from the handler, blocked finalization, or resume itself, and confirmed a new nonce/history entry for a later explicitly reopened attempt. This is a probe assumption correction, not an ignored product failure. The shipped production allowlist remains empty.
+
+F2 is satisfied at `docs/standalone-pr-review.md:95`: every owner with pre-existing legacy free-text extensions must have the cutover pinned **before deploying** the controller. Missing cutover means a zero-length legacy prefix and fail-closed load/save. Validators and live state were not changed.
+
+The native suite ran locally on Node `v24.19.0`; CI pins Node 22. The three skips are the existing native Windows scheduler definitions, Windows ACL creation, and Windows bootstrap tests. No new acceptance test was skipped. Frontend build, clinical/browser surfaces, DB, provider calls, Claude, native CI, deployment, and live GitHub checks were outside the explicitly bounded task; no such capability is claimed. No reusable environment change was necessary.
+
+Preservation checks froze 6,098 source-tree files, all five changed-file copies and hashes, the Git tree/status, 525 public evidence Git entries, and 8,035 prior private evidence files before execution. Of the public Git entries, 502 were already absent in this sparse filesystem; their Git blob digests were recorded separately from filesystem presence. The test snapshot matches the frozen source. Final preservation results and exact HEAD are in `preservation-final.json`. Existing originals, prior attempts, source, Git state, public evidence and provider state were not edited. Raw logs and probes are private in this directory. Available disk remained above the 1 GiB floor.
+
+`attempts.json` preserves both independent suite executions. `probes.json` and `run-logs/probes.*` preserve the first probe attempt including its failure; `probe-resume-boundary.json` and `run-logs/resume-boundary.*` preserve the correction. `qa-stop.json`, `digests.json`, and `STOP-seal.json` bind the final private evidence. No Git/GitHub write, push, merge, publication, provider action, or deployment was performed.

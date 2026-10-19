@@ -1,0 +1,17 @@
+{
+  "author-test-results/budget-full.json": "f503b1ae67654589d731188c537e49ea844294eb3dfddfa1eb8679fb726b9cc3",
+  "author-test-results/budget-isolated.json": "0cd698f692ae3d754790b71a93e4589399cdde15e5a555a0de1eee91df399227",
+  "author-test-results/combined-full-2.json": "d1d192b0f44a72e3c3037cd18a0c374ee9b057ac224e5714858cd290fa7da561",
+  "author-test-results/final-full.json": "8906b99134243a80ead48ff9eb7cefcce9086ca16ab479a89f38feeac1ce38be",
+  "author-test-results/initial-combined.json": "201fb02e3d22c821ae4f88634a26258a3143522c9cffc2d7c1bdda3a69a9b76f",
+  "author-test-results/transport-handoff-1.json": "4b280bd5f1c8438aba19418fdca9146627ed8501efa1ee0c65f1c91233063f69",
+  "author-test-summary.json": "f2b65c268baf5ca96d6b9ff3059e4270052541d525ace33df21d308ab431bf95",
+  "authoritative-reports.jsonl": "9d498d7272a67dc4562f86b3a6c34522ec6cbac20f451f5a98c3d485e8638dff",
+  "plan.md": "36685b47abc4df171b9d84fae434c1996509c44eb039b72627ccd487048a45f3",
+  "preserved-controller-checks.json": "b32e49a8c45e411be65f58409fd6eec62ec03847794ee34feace1b1d2a434983",
+  "prior-proof-after.json": "deb146f6f8dd9ba8f0b311f52df3f11d579c3cb4b9f07722145e7407aa98b973",
+  "prior-proof-manifest.json": "c062c0bd3fe4c19b86b72feeb312fc2f1cdcbfa27f45458a75c283b698b19db9",
+  "source-freeze.json": "37a7de35330b7d0af7f80fdc3ed3b853ed0872ad025db5f521221507536cfbe7",
+  "task-contract.md": "2e452f496bde8a221c5d75f46aa13835a7072e49d4eaca1cd3b9852901640eba",
+  "validation-report.md": "81515e1a059f53b69f4dcde7a8eaab987032f55434e2b98991baac7d8c5240dc"
+}

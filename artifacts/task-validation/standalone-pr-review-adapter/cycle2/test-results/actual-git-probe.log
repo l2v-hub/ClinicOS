@@ -1,0 +1,32 @@
+[
+  {
+    "pr": 393,
+    "result": "PASS",
+    "sha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
+    "sourceDelta": 430,
+    "packetFiles": 18,
+    "implementationRounds": 3,
+    "validModerateReportChars": 15476,
+    "actualImportedSubjectChars": 106721,
+    "fourCumulativeReportSubjectChars": 460548,
+    "gitBlobReads": 323,
+    "syntheticStateWrites": 5,
+    "actualGitHubWrites": 0,
+    "nativeIdentityAndChecks": "synthetic fixture, not live readiness"
+  },
+  {
+    "pr": 491,
+    "result": "PASS",
+    "sha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6",
+    "sourceDelta": 47,
+    "packetFiles": 12,
+    "implementationRounds": 3,
+    "validModerateReportChars": 15476,
+    "actualImportedSubjectChars": 28918,
+    "fourCumulativeReportSubjectChars": 382745,
+    "gitBlobReads": 221,
+    "syntheticStateWrites": 5,
+    "actualGitHubWrites": 0,
+    "nativeIdentityAndChecks": "synthetic fixture, not live readiness"
+  }
+]

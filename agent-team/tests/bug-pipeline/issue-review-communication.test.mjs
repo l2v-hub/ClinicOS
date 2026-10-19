@@ -102,7 +102,7 @@ export function communicationFixture({ clock } = {}) {
     const endpoint = call.args[1];
     const method = call.args.includes('-X') ? call.args[call.args.indexOf('-X') + 1] : 'GET';
     if (failure?.(call))
-      return { ok: false, stderr: 'synthetic private provider body never logged' };
+      return { ok: false, error: 'timeout', stderr: 'synthetic private provider body never logged' };
     const clean = endpoint.split('?')[0];
     let value;
     if (method === 'GET') {
@@ -806,13 +806,15 @@ test('old-worker failed-no-report state is projected with one spent attempt, wit
   assert.equal(second.batches[0].comments, 0);
 });
 
-test('partial sync reports a safe error and never retries failed writes or invokes inference', async () => {
+test('partial sync retries only idempotent labels a bounded number of times and never invokes inference', async () => {
   const f = communicationFixture();
   f.fail((call) => call.args.includes('-X'));
   const result = await syncIssueReviews({ github: f.github, communication: f.communication });
   assert.equal(result.status, 'partial');
   assert.deepEqual(result.batches, [{ id: f.batch.id, status: 'blocked' }]);
-  assert.equal(f.calls.filter((call) => call.args.includes('-X')).length, 1);
+  const writes = f.calls.filter((call) => call.args.includes('-X'));
+  assert.equal(writes.length, 3);
+  assert.ok(writes.every((call) => call.args[1].includes('/labels')));
   assert.ok(!JSON.stringify(result).includes('private provider'));
 });
 
@@ -945,4 +947,23 @@ test('normal mirror/receipt/status publication survives final rechecks and remai
   assert.equal((await f.communication.publishState(f.batch)).comments, 0);
   assert.equal(f.writes.length, writes);
   assert.deepEqual(f.state(), before);
+});
+
+test('running and awaiting-QA continuations never project a ready review label', async () => {
+  const { historyDigest } = await import('../../src/bug-pipeline/attempt-budget.mjs');
+  const f = communicationFixture();
+  f.batch.implementation = [1, 2, 3, 4].map((round) => ({ round, status: 'failed' }));
+  for (const status of ['running', 'implemented-awaiting-independent-qa']) {
+    f.batch.operatorContinuations = [{ round: 5, status }];
+    assert.equal(reviewProjection(f.batch).label, 'codex-review-fixes');
+  }
+  f.batch.operatorContinuations = [{ round: 5, status: 'passed' }, { round: 6, status: 'running' }];
+  f.batch.budgetExtensions = [{ entityId: f.batch.id, pr: 81, kind: 'implementation',
+    previousLimit: 5, limit: 6, actor: 'operator', at: '2026-10-18T00:00:00Z', reason: 'Historical allowance',
+    authorizationRef: 'legacy-reference', nonce: 'extension6', historyLength: 5,
+    historyDigest: historyDigest([...f.batch.implementation, f.batch.operatorContinuations[0]]) }];
+  f.batch.budgetAuthorizationCutover = { schemaVersion: 1, legacyCount: 1,
+    legacyDigest: historyDigest(f.batch.budgetExtensions), actor: 'trusted-state-owner',
+    at: '2026-10-18T00:00:00Z', authorizationRef: 'test:legacy-cutover' };
+  assert.equal(reviewProjection(f.batch).label, 'codex-review-fixes');
 });

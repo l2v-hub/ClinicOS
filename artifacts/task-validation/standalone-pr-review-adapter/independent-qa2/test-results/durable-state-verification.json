@@ -1,0 +1,28 @@
+{
+  "acceptedStandaloneSubjects": 3,
+  "reportsPerSubject": 4,
+  "stateBytes": 1124638,
+  "eachReportCompactChars": 92506,
+  "standaloneStateValidation": "PASS",
+  "contentsMetadata": {
+    "type": "file",
+    "size": 1124638,
+    "sha": "f65c4201ffd27f4fbf72a8a9558df53fb24af14b",
+    "encoding": "none",
+    "content": ""
+  },
+  "availableGitBlob": {
+    "sha": "f65c4201ffd27f4fbf72a8a9558df53fb24af14b",
+    "encoding": "base64",
+    "size": 1124638
+  },
+  "actualGitHubWrites": 0,
+  "actualModels": 0,
+  "result": "REPRODUCED_VALID_LARGE_STATE_UNREADABLE",
+  "error": "GitHub returned invalid JSON for durable state",
+  "calls": [
+    "repos/l2v-hub/ClinicOS/git/ref/heads/codex/bug-control",
+    "repos/l2v-hub/ClinicOS/contents/.codex-bug-state.json?ref=codex%2Fbug-control"
+  ],
+  "blobFallbackRequested": false
+}

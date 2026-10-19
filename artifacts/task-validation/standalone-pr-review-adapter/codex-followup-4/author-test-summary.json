@@ -1,0 +1,72 @@
+{
+  "continuation": 8,
+  "node": "v24.19.0",
+  "finalRun": "final-full.json",
+  "tests": 762,
+  "passed": 759,
+  "failed": 0,
+  "skipped": 3,
+  "priorContinuation7Tests": 741,
+  "additionalTests": 21,
+  "runs": [
+    {
+      "run": "budget-full.json",
+      "exitCode": 0,
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "skipped": 0,
+      "sha256": "f503b1ae67654589d731188c537e49ea844294eb3dfddfa1eb8679fb726b9cc3"
+    },
+    {
+      "run": "budget-isolated.json",
+      "exitCode": 0,
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "skipped": 0,
+      "sha256": "0cd698f692ae3d754790b71a93e4589399cdde15e5a555a0de1eee91df399227"
+    },
+    {
+      "run": "combined-full-2.json",
+      "exitCode": 0,
+      "tests": 761,
+      "pass": 758,
+      "fail": 0,
+      "skipped": 3,
+      "sha256": "d1d192b0f44a72e3c3037cd18a0c374ee9b057ac224e5714858cd290fa7da561"
+    },
+    {
+      "run": "final-full.json",
+      "exitCode": 0,
+      "tests": 762,
+      "pass": 759,
+      "fail": 0,
+      "skipped": 3,
+      "sha256": "8906b99134243a80ead48ff9eb7cefcce9086ca16ab479a89f38feeac1ce38be"
+    },
+    {
+      "run": "initial-combined.json",
+      "exitCode": 1,
+      "tests": 758,
+      "pass": 750,
+      "fail": 5,
+      "skipped": 3,
+      "sha256": "201fb02e3d22c821ae4f88634a26258a3143522c9cffc2d7c1bdda3a69a9b76f"
+    },
+    {
+      "run": "transport-handoff-1.json",
+      "exitCode": 0,
+      "tests": 96,
+      "pass": 96,
+      "fail": 0,
+      "skipped": 0,
+      "sha256": "4b280bd5f1c8438aba19418fdca9146627ed8501efa1ee0c65f1c91233063f69"
+    }
+  ],
+  "preparationNotes": [
+    "One early diagnostic read of initial-combined.json occurred before its running test process completed, producing FileNotFoundError. No test result existed at that moment; the completed captured red run is retained unchanged.",
+    "Initial integration used a provisional current8MiB cap while imported4964MiB assertions were unresolved. Root explicitly chose8MiB state/16MiB transport; assertions and compact boundary arithmetic were updated within the allowed paths.",
+    "All test commands used the trusted verification runner. No direct candidate execution with credentials occurred."
+  ]
+}

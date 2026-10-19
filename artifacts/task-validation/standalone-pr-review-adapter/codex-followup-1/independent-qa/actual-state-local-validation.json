@@ -1,0 +1,32 @@
+{
+  "result": "PASS",
+  "source": "Root-supplied credential-free snapshot, private and omitted from publication",
+  "validator": "Actual candidate modules, no candidate authenticated execution",
+  "localGitPacketFiles": 46,
+  "localGitTrees": 3,
+  "syntheticMutableReads": 4,
+  "actual491": {
+    "legacyImplementation": 3,
+    "operatorContinuations": 1,
+    "spentImplementation": 4,
+    "effectiveImplementationLimit": 4,
+    "packetFiles": 34,
+    "preservedPackets": 1
+  },
+  "actual492": {
+    "legacyImplementation": 4,
+    "operatorContinuations": 1,
+    "activeContinuation": "implemented-awaiting-independent-qa",
+    "spentImplementation": 5
+  },
+  "negativeCases": [
+    "Changed legacy implementation digest rejects",
+    "PR overlap rejects",
+    "Branch overlap rejects",
+    "Issue overlap rejects",
+    "Missing continuation proof rejects"
+  ],
+  "actualNetworkCalls": 0,
+  "actualStateWrites": 0,
+  "privateSnapshotPublished": false
+}
