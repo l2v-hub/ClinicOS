@@ -8,7 +8,7 @@ on:
         type: string
         required: true
       operation:
-        description: Read-only demo preflight, or exact reviewed main deployment
+        description: Read-only preflight, or deploy with existing forward-only npm run db:migrate
         type: choice
         options: [preflight, deploy]
         default: preflight
@@ -17,9 +17,9 @@ on:
 permissions:
   contents: read
 
-# Shared with the legacy workflow. Pending order is not FIFO; stale main is rejected in code.
+# Demo writers share their own queue; native inventory also rejects an overlapping rollout.
 concurrency:
-  group: railway-backend
+  group: railway-demo
   cancel-in-progress: false
 
 jobs:
@@ -83,3 +83,13 @@ jobs:
           path: demo-deployment-receipt.json
           if-no-files-found: error
           retention-days: 30
+
+      # Failure progress contains only validated target/SHA/deployment identity and a fixed code.
+      - name: Preserve safe deployment progress even when proof fails
+        if: always() && inputs.operation == 'deploy'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: demo-deployment-progress-${{ github.run_id }}-${{ github.run_attempt }}
+          path: demo-deployment-progress.json
+          if-no-files-found: warn
+          retention-days: 7

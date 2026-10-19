@@ -1,5 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {
+  DEMO_TARGET,
+  DEMO_SOURCE_POLICIES,
+  verifyDemoPreflight,
+} from '../../src/bug-pipeline/demo-deployment.mjs';
 import { createGitHub } from '../../src/bug-pipeline/github.mjs';
 import {
   releaseBatch,
@@ -1256,4 +1261,74 @@ test('persisted transition identity is captured before save awaits, including pr
         assert.equal(f.getSaved().batches[0].implementation.length, 1);
         assert.equal(f.getSaved().batches[0].reviews.length, 1);
       });
+});
+
+test('an exact-only preflight cannot authorize the default backend release merge gate', async () => {
+  const f = backendFixture();
+  const routes = [];
+  const exactRun = {
+    id: 777,
+    run_attempt: 1,
+    status: 'completed',
+    conclusion: 'success',
+    head_branch: 'main',
+    head_sha: sha,
+    repository: { full_name: f.state.repository },
+    head_repository: { full_name: f.state.repository },
+    path: '.github/workflows/deploy-demo-exact-commit.yml',
+    event: 'workflow_dispatch',
+  };
+  const exactProof = {
+    receipt: {
+      schemaVersion: 1,
+      kind: 'clinicos-demo-preflight',
+      sourcePolicy: DEMO_SOURCE_POLICIES.exact,
+      repository: f.state.repository,
+      sourceRef: 'refs/heads/main',
+      mergeSha: sha,
+      reviewedSha: sha,
+      runId: 777,
+      runAttempt: 1,
+      target: { ...DEMO_TARGET },
+      verifiedAt: new Date().toISOString(),
+    },
+  };
+  const reader = {
+    getJson: async (route) => {
+      routes.push(route);
+      if (route === 'commits/main') return { sha };
+      if (route.includes('/deploy-backend.yml/')) return { workflow_runs: [] };
+      if (route.includes('/deploy-demo-exact-commit.yml/')) return { workflow_runs: [exactRun] };
+      throw new Error('Unexpected fixture route');
+    },
+    artifact: async () => exactProof,
+  };
+  assert.equal(
+    (await verifyDemoPreflight({ reader, sourcePolicy: DEMO_SOURCE_POLICIES.exact })).receipt
+      .sourcePolicy,
+    DEMO_SOURCE_POLICIES.exact,
+  );
+  routes.length = 0;
+  f.github.verifyDemoPreflight = () => verifyDemoPreflight({ reader });
+  await assert.rejects(
+    releaseBatch({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      reviewedSha: sha,
+      configured,
+      execute: true,
+    }),
+    /preflight/,
+  );
+  assert.equal(
+    f.calls.some(([call]) => call === 'merge'),
+    false,
+  );
+  assert.ok(routes.some((route) => route.includes('/deploy-backend.yml/')));
+  assert.equal(
+    routes.some((route) => route.includes('deploy-demo-exact-commit')),
+    false,
+  );
 });

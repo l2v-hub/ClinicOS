@@ -24,6 +24,37 @@ const API = 'https://api.github.com';
 const RAILWAY_API = 'https://backboard.railway.app/graphql/v2';
 const MAX_BYTES = 1024 * 1024;
 export class DemoProofError extends Error {}
+export class DemoTransientReadError extends DemoProofError {}
+// Includes initial inspections, 30s reads/main checks, 20s readiness and all delays/rechecks.
+export const DEMO_DEPLOY_BUDGET_MS = 25 * 60 * 1000;
+const SETTLED_STATUSES = ['SUCCESS', 'FAILED', 'CRASHED', 'REMOVED', 'SKIPPED'];
+function requireIdleDemo(data) {
+  const inventory = data?.deployments;
+  const active = data?.serviceInstance?.activeDeployments;
+  const latest = data?.serviceInstance?.latestDeployment;
+  if (
+    inventory?.pageInfo?.hasNextPage !== false ||
+    !Array.isArray(inventory.edges) ||
+    inventory.edges.length !== 0 ||
+    !Array.isArray(active) ||
+    active.length > 1 ||
+    active.some((d) => !UUID.test(d?.id ?? '') || d.status !== 'SUCCESS') ||
+    latest === undefined ||
+    (latest === null && active.length !== 0) ||
+    (latest !== null && (!UUID.test(latest?.id ?? '') || !SETTLED_STATUSES.includes(latest.status)))
+  )
+    fail(
+      'complete idle demo deployment inventory required; an overlapping rollout cannot be submitted',
+    );
+}
+function previousActive(data) {
+  const active = data.serviceInstance.activeDeployments;
+  if (active.length !== 1) return null;
+  return {
+    id: active[0].id,
+    commitHash: SHA.test(active[0].meta?.commitHash ?? '') ? active[0].meta.commitHash : null,
+  };
+}
 const fail = (message) => {
   throw new DemoProofError(`Demo deployment proof rejected: ${message}`);
 };
@@ -45,7 +76,10 @@ async function boundedBytes(response, max = MAX_BYTES) {
   return Buffer.concat(chunks);
 }
 
-export async function fetchJson(url, { fetchImpl = fetch, ...options } = {}) {
+export async function fetchJson(
+  url,
+  { fetchImpl = fetch, transientRead = false, ...options } = {},
+) {
   const response = await fetchImpl(url, {
     ...options,
     redirect: 'error',
@@ -53,7 +87,14 @@ export async function fetchJson(url, { fetchImpl = fetch, ...options } = {}) {
   });
   try {
     return JSON.parse((await boundedBytes(response)).toString('utf8'));
-  } catch {
+  } catch (error) {
+    if (
+      transientRead &&
+      (error instanceof TypeError || ['AbortError', 'TimeoutError'].includes(error?.name))
+    )
+      throw new DemoTransientReadError(
+        'Demo deployment proof rejected: transient Railway read unavailable',
+      );
     fail('invalid bounded JSON response');
   }
 }
@@ -92,7 +133,7 @@ export function validateTarget(data, policy = DEMO_SOURCE_POLICIES.trigger) {
     fail('complete source and domain inventory required');
   if (
     !Array.isArray(triggers) ||
-    (exact ? triggers.length > 1 : triggers.length !== 1) ||
+    (exact ? triggers.length !== 0 : triggers.length !== 1) ||
     triggers.some(
       (edge) =>
         edge?.node?.branch !== 'main' ||
@@ -214,7 +255,11 @@ const TARGET_QUERY = `query($projectId:String!,$environmentId:String!,$serviceId
   serviceInstance(environmentId:$environmentId,serviceId:$serviceId){
     serviceId environmentId source{repo}
     domains{serviceDomains{domain} customDomains{domain}}
-    activeDeployments{id status}
+    activeDeployments{id status meta}
+    latestDeployment{id status}
+  }
+  deployments(input:{projectId:$projectId,environmentId:$environmentId,serviceId:$serviceId,status:{notIn:[SUCCESS,FAILED,CRASHED,REMOVED,SKIPPED]}},first:1){
+    pageInfo{hasNextPage} edges{node{id status}}
   }
 }`;
 const DEPLOYMENT_QUERY = `query($projectId:String!,$environmentId:String!,$serviceId:String!,$id:String!){
@@ -223,7 +268,11 @@ const DEPLOYMENT_QUERY = `query($projectId:String!,$environmentId:String!,$servi
   serviceInstance(environmentId:$environmentId,serviceId:$serviceId){
     serviceId environmentId source{repo}
     domains{serviceDomains{domain} customDomains{domain}}
-    activeDeployments{id status}
+    activeDeployments{id status meta}
+    latestDeployment{id status}
+  }
+  deployments(input:{projectId:$projectId,environmentId:$environmentId,serviceId:$serviceId,status:{notIn:[SUCCESS,FAILED,CRASHED,REMOVED,SKIPPED]}},first:1){
+    pageInfo{hasNextPage} edges{node{id status}}
   }
   deployment(id:$id){id status projectId environmentId serviceId meta}
 }`;
@@ -232,7 +281,30 @@ export function createRailwayClient({ token, fetchImpl = fetch } = {}) {
   if (!token) fail('dedicated demo binding missing');
   return async (query, variables) => {
     const body = await fetchJson(RAILWAY_API, {
-      fetchImpl,
+      transientRead: !query.startsWith('mutation'),
+      fetchImpl: async (...args) => {
+        let response;
+        try {
+          response = await fetchImpl(...args);
+        } catch (error) {
+          if (
+            !query.startsWith('mutation') &&
+            (error instanceof TypeError || ['AbortError', 'TimeoutError'].includes(error?.name))
+          )
+            throw new DemoTransientReadError(
+              'Demo deployment proof rejected: transient Railway read unavailable',
+            );
+          fail('Railway transport unavailable');
+        }
+        if (
+          !query.startsWith('mutation') &&
+          [408, 429, 500, 502, 503, 504].includes(response.status)
+        )
+          throw new DemoTransientReadError(
+            'Demo deployment proof rejected: transient Railway read unavailable',
+          );
+        return response;
+      },
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Project-Access-Token': token },
       body: JSON.stringify({ query, variables }),
@@ -331,57 +403,134 @@ export async function deployDemo({
   fetchImpl = fetch,
   delay = (ms) => new Promise((r) => setTimeout(r, ms)),
   attempts = 180,
+  now = Date.now,
+  onProgress = async () => {},
   sourcePolicy: policy,
 } = {}) {
   policy = sourcePolicy(policy);
   const source = context(env, policy);
-  const assertCurrentMain = mainVerifier(env, source, policy, fetchImpl);
-  await assertCurrentMain();
-  client ??= createRailwayClient({ token: env.RAILWAY_TOKEN, fetchImpl });
-  await inspectDemo(client, policy);
-  // Unlike `railway up`, this official source-deploy mutation accepts an exact commitSha.
-  // Never change the source configuration or substitute an arbitrary deploy message as proof.
-  await assertCurrentMain();
-  const result = await client(
-    `mutation($environmentId:String!,$serviceId:String!,$commitSha:String){
-    serviceInstanceDeployV2(environmentId:$environmentId,serviceId:$serviceId,commitSha:$commitSha)
-  }`,
-    { ...DEMO_TARGET, commitSha: source.mergeSha },
-  );
-  const deploymentId = result.serviceInstanceDeployV2;
-  if (!UUID.test(deploymentId ?? '')) fail('Railway returned invalid deployment identity');
-  for (let attempt = 0; attempt < attempts; attempt++) {
-    const data = await client(DEPLOYMENT_QUERY, { ...DEMO_TARGET, id: deploymentId });
-    validateTarget(data, policy);
-    if (['FAILED', 'CRASHED', 'REMOVED', 'CANCELLED'].includes(data.deployment?.status))
-      fail('demo deployment failed');
-    if (data.deployment?.status === 'SUCCESS' && hasUniqueActiveDeployment(data, deploymentId)) {
-      const deployment = validateActiveDeployment(data, source.mergeSha, deploymentId, policy);
-      let ready;
-      try {
-        ready = await verifyLiveReady(deploymentId, { fetchImpl });
-      } catch {
-        // Routing can converge after Railway reports SUCCESS. Final failure stays closed.
-      }
-      if (ready) {
-        // Reinspect after readiness: a source/target or active-deployment change cannot issue proof.
-        await inspectDeployment(client, deploymentId, source.mergeSha, policy);
-        await assertCurrentMain();
-        return {
-          schemaVersion: 1,
-          kind: 'clinicos-demo-backend',
-          ...source,
-          sourcePolicy: policy,
-          target: structuredClone(DEMO_TARGET),
-          deployment,
-          ready,
-          verifiedAt: new Date().toISOString(),
-        };
+  const deadline = now() + DEMO_DEPLOY_BUDGET_MS;
+  const budget = (cost) => {
+    if (!Number.isFinite(now()) || now() + cost > deadline)
+      fail('aggregate deployment deadline exceeded');
+  };
+  let deploymentId = null,
+    reused = false;
+  const progress = async (status, errorCode = null) =>
+    onProgress({
+      schemaVersion: 1,
+      kind: 'clinicos-demo-deployment-progress',
+      target: structuredClone(DEMO_TARGET),
+      mergeSha: source.mergeSha,
+      deploymentId,
+      status,
+      errorCode,
+    });
+  await progress('checking');
+  try {
+    if (!integer(attempts) || attempts > 180) fail('bounded polling attempts required');
+    const assertCurrentMain = mainVerifier(env, source, policy, fetchImpl);
+    budget(30_000);
+    await assertCurrentMain();
+    client ??= createRailwayClient({ token: env.RAILWAY_TOKEN, fetchImpl });
+    budget(30_000);
+    const initial = await inspectDemo(client, policy);
+    let previous = null;
+    if (policy === DEMO_SOURCE_POLICIES.exact) {
+      requireIdleDemo(initial);
+      previous = previousActive(initial);
+      if (previous?.commitHash === source.mergeSha) {
+        deploymentId = previous.id;
+        reused = true;
       }
     }
-    if (attempt + 1 < attempts) await delay(10_000);
+    budget(30_000);
+    await assertCurrentMain();
+    if (!reused) {
+      // Only one mutation. A denied or uncertain submission is never retried.
+      budget(30_000);
+      const result = await client(
+        `mutation($environmentId:String!,$serviceId:String!,$commitSha:String){
+        serviceInstanceDeployV2(environmentId:$environmentId,serviceId:$serviceId,commitSha:$commitSha)
+      }`,
+        { ...DEMO_TARGET, commitSha: source.mergeSha },
+      );
+      if (!UUID.test(result?.serviceInstanceDeployV2 ?? ''))
+        fail('Railway returned invalid deployment identity');
+      deploymentId = result.serviceInstanceDeployV2;
+    }
+    await progress(reused ? 'verifying-existing' : 'submitted');
+    let transientErrors = 0;
+    for (let attempt = 0; attempt < attempts; attempt++) {
+      budget(30_000);
+      let data;
+      try {
+        data = await client(DEPLOYMENT_QUERY, { ...DEMO_TARGET, id: deploymentId });
+      } catch (error) {
+        if (!(error instanceof DemoTransientReadError) || ++transientErrors > 3) throw error;
+      }
+      if (data) {
+        validateTarget(data, policy);
+        if (
+          ['FAILED', 'CRASHED', 'REMOVED', 'CANCELLED', 'SKIPPED'].includes(data.deployment?.status)
+        )
+          fail('demo deployment failed');
+        if (
+          data.deployment?.status === 'SUCCESS' &&
+          hasUniqueActiveDeployment(data, deploymentId)
+        ) {
+          if (policy === DEMO_SOURCE_POLICIES.exact) requireIdleDemo(data);
+          const deployment = validateActiveDeployment(data, source.mergeSha, deploymentId, policy);
+          let ready;
+          budget(20_000 + 60_000);
+          try {
+            ready = await verifyLiveReady(deploymentId, { fetchImpl });
+          } catch {
+            // Routing can converge after Railway reports SUCCESS. Final failure stays closed.
+          }
+          if (ready) {
+            // Reinspect after readiness and recheck current main before issuing proof.
+            budget(60_000);
+            const final = await client(DEPLOYMENT_QUERY, { ...DEMO_TARGET, id: deploymentId });
+            validateActiveDeployment(final, source.mergeSha, deploymentId, policy);
+            if (policy === DEMO_SOURCE_POLICIES.exact) requireIdleDemo(final);
+            await assertCurrentMain();
+            await progress('verified');
+            return {
+              schemaVersion: 1,
+              kind: 'clinicos-demo-backend',
+              ...source,
+              sourcePolicy: policy,
+              target: structuredClone(DEMO_TARGET),
+              deployment,
+              ready,
+              ...(policy === DEMO_SOURCE_POLICIES.exact
+                ? {
+                    deploymentReused: reused,
+                    previousActiveDeployment: previous,
+                    migrations: {
+                      command: 'npm run db:migrate',
+                      direction: 'forward-only',
+                      delta: 'unproven',
+                      deploymentSubmittedByThisRun: !reused,
+                    },
+                  }
+                : {}),
+              verifiedAt: new Date().toISOString(),
+            };
+          }
+        }
+      }
+      if (attempt + 1 < attempts) {
+        budget(10_000 + 30_000);
+        await delay(10_000);
+      }
+    }
+    fail('exact deployment readiness timed out');
+  } catch (error) {
+    await progress('failed', 'DEPLOYMENT_PROOF_FAILED');
+    throw error;
   }
-  fail('exact deployment readiness timed out');
 }
 
 function validateRun(run, mergeSha, policy = DEMO_SOURCE_POLICIES.trigger) {
@@ -573,11 +722,10 @@ export function createProofReader({ token, fetchImpl = fetch } = {}) {
 }
 
 export async function verifyDemoPreflight({ reader, sourcePolicy: policy } = {}) {
-  if (policy !== undefined) sourcePolicy(policy);
+  policy = sourcePolicy(policy);
   const head = await reader.getJson('commits/main');
   if (!SHA.test(head.sha ?? '')) fail('trusted main head unavailable');
-  const policies =
-    policy === undefined ? [DEMO_SOURCE_POLICIES.exact, DEMO_SOURCE_POLICIES.trigger] : [policy];
+  const policies = [policy];
   for (const selected of policies) {
     const workflow = policyWorkflow(selected).split('/').at(-1);
     const list = await reader.getJson(
@@ -626,8 +774,15 @@ export async function verifyDemoRelease({
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  const operation = process.argv[2];
+  let cliProgress;
+  const saveProgress = async (progress) => {
+    cliProgress = progress;
+    await writeFile('demo-deployment-progress.json', `${JSON.stringify(progress, null, 2)}\n`, {
+      mode: 0o600,
+    });
+  };
   try {
-    const operation = process.argv[2];
     const receipt =
       operation === 'preflight' || operation === 'preflight-exact'
         ? await prepareDemo({
@@ -636,6 +791,7 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
         : operation === 'deploy' || operation === 'deploy-exact'
           ? await deployDemo({
               sourcePolicy: operation === 'deploy-exact' ? DEMO_SOURCE_POLICIES.exact : undefined,
+              ...(operation === 'deploy-exact' ? { onProgress: saveProgress } : {}),
             })
           : fail('unsupported operation');
     await writeFile(
@@ -651,6 +807,22 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
       }),
     );
   } catch (error) {
+    if (['preflight-exact', 'deploy-exact'].includes(operation) && !cliProgress) {
+      try {
+        const source = context(process.env, DEMO_SOURCE_POLICIES.exact);
+        await saveProgress({
+          schemaVersion: 1,
+          kind: 'clinicos-demo-deployment-progress',
+          target: structuredClone(DEMO_TARGET),
+          mergeSha: source.mergeSha,
+          deploymentId: null,
+          status: 'failed',
+          errorCode: 'DEPLOYMENT_PROOF_FAILED',
+        });
+      } catch {
+        /* Untrusted context or unavailable local artifact cannot supply deployment proof. */
+      }
+    }
     // Only constant proof errors are printable. Provider/network bodies may contain private data.
     console.error(
       error instanceof DemoProofError

@@ -22,6 +22,8 @@ import {
   verifyDemoPreflight,
   verifyDemoRelease,
   createRailwayClient,
+  DemoTransientReadError,
+  DEMO_DEPLOY_BUDGET_MS,
 } from '../../src/bug-pipeline/demo-deployment.mjs';
 
 const repo = 'l2v-hub/ClinicOS';
@@ -88,6 +90,8 @@ const exactReceipt = (kind) => ({ ...receipt(kind), sourcePolicy: exactPolicy, r
 function exactTargetData() {
   const data = targetData();
   data.deploymentTriggers = { edges: [], pageInfo: { hasNextPage: false } };
+  data.deployments = { edges: [], pageInfo: { hasNextPage: false } };
+  data.serviceInstance.latestDeployment = { id: deploymentId, status: 'SUCCESS' };
   return data;
 }
 function targetData() {
@@ -833,7 +837,8 @@ test('zero-trigger exact policy is explicit; complete fixed inventories retain s
   assert.deepEqual(validateTarget(data, exactPolicy), DEMO_TARGET);
   const one = targetData();
   one.deploymentTriggers.pageInfo = { hasNextPage: false };
-  assert.deepEqual(validateTarget(one, exactPolicy), DEMO_TARGET);
+  assert.throws(() => validateTarget(one, exactPolicy), /main repository trigger required/);
+  assert.deepEqual(validateTarget(one), DEMO_TARGET);
   const proof = await prepareDemo({
     env: exactEnv,
     sourcePolicy: exactPolicy,
@@ -1384,7 +1389,7 @@ globalThis.fetch = async (url, options) => {
     });
 });
 
-test('dedicated manual workflow restores old bytes, isolates proof and shares only serialized run concurrency', async () => {
+test('dedicated manual workflow preserves legacy bytes and isolates the demo writer queue', async () => {
   const legacy = await readFile(
     new URL('../../../.github/workflows/deploy-backend.yml', import.meta.url),
   );
@@ -1397,7 +1402,18 @@ test('dedicated manual workflow restores old bytes, isolates proof and shares on
   assert.doesNotMatch(exact, /^  (?:push|pull_request|schedule|workflow_run):/m);
   assert.match(exact, /reviewed_sha:[\s\S]*?type: string\n        required: true/);
   assert.match(exact, /permissions:\n  contents: read/);
-  assert.match(exact, /concurrency:\n  group: railway-backend\n  cancel-in-progress: false/);
+  assert.match(exact, /concurrency:\n  group: railway-demo\n  cancel-in-progress: false/);
+  assert.doesNotMatch(exact, /group: railway-backend/);
+  const configure = await readFile(
+    new URL('../../../.github/workflows/configure-demo-source.yml', import.meta.url),
+    'utf8',
+  );
+  assert.match(configure, /group: railway-demo\n  cancel-in-progress: false/);
+  assert.doesNotMatch(configure, /secrets\.RAILWAY_TOKEN\b|group: railway-backend/);
+  // The legacy dual-token workflow is immutable historical coupling, not a new demo writer.
+  assert.match(exact, /forward-only npm run db:migrate/);
+  assert.match(exact, /if: always\(\) && inputs.operation == 'deploy'/);
+  assert.match(exact, /path: demo-deployment-progress.json/);
   assert.match(
     legacy.toString(),
     /concurrency:\n  group: railway-backend\n  cancel-in-progress: false/,
@@ -1511,7 +1527,21 @@ test('real immutable preflight discovery selects only each policy fixed workflow
     [receipt('clinicos-demo-preflight'), 'deploy-backend.yml'],
   ]) {
     const f = proofHttp({ receiptBody: saved });
-    const proof = await verifyDemoPreflight({ reader: f.reader });
+    if (saved.sourcePolicy === exactPolicy) {
+      await assert.rejects(
+        verifyDemoPreflight({ reader: f.reader }),
+        /no successful demo target preflight/,
+      );
+      assert.ok(
+        f.requests
+          .filter((r) => r.url.includes('/actions/workflows/'))
+          .every((r) => r.url.includes('/deploy-backend.yml/')),
+      );
+    }
+    const proof = await verifyDemoPreflight({
+      reader: f.reader,
+      ...(saved.sourcePolicy === exactPolicy ? { sourcePolicy: exactPolicy } : {}),
+    });
     assert.equal(proof.receipt.mergeSha, sha);
     const selected = f.requests.filter((r) => r.url.includes('/actions/workflows/')).at(-1);
     assert.ok(selected.url.includes(`/${path}/runs?`));
@@ -1710,6 +1740,398 @@ globalThis.fetch = async (url, options) => {
           result.stdout + result.stderr,
           /synthetic-demo-binding|synthetic-readonly-github-binding/,
         );
+      } finally {
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
+});
+
+test('exact deploy rejects every incomplete or overlapping native rollout inventory before mutation', async (t) => {
+  for (const [label, change] of [
+    [
+      'missing deployments',
+      (d) => {
+        delete d.deployments;
+      },
+    ],
+    [
+      'missing edges',
+      (d) => {
+        delete d.deployments.edges;
+      },
+    ],
+    [
+      'missing pageInfo',
+      (d) => {
+        delete d.deployments.pageInfo;
+      },
+    ],
+    [
+      'unknown pagination',
+      (d) => {
+        d.deployments.pageInfo.hasNextPage = null;
+      },
+    ],
+    [
+      'more pages',
+      (d) => {
+        d.deployments.pageInfo.hasNextPage = true;
+      },
+    ],
+    [
+      'missing active',
+      (d) => {
+        delete d.serviceInstance.activeDeployments;
+      },
+    ],
+    [
+      'unknown active',
+      (d) => {
+        d.serviceInstance.activeDeployments[0].status = 'UNKNOWN';
+      },
+    ],
+    [
+      'ambiguous active',
+      (d) => {
+        d.serviceInstance.activeDeployments.push(d.serviceInstance.activeDeployments[0]);
+      },
+    ],
+    [
+      'missing latest',
+      (d) => {
+        delete d.serviceInstance.latestDeployment;
+      },
+    ],
+    [
+      'contradictory null latest',
+      (d) => {
+        d.serviceInstance.latestDeployment = null;
+      },
+    ],
+    ...[
+      'INITIALIZING',
+      'BUILDING',
+      'DEPLOYING',
+      'QUEUED',
+      'WAITING',
+      'NEEDS_APPROVAL',
+      'REMOVING',
+      'SLEEPING',
+      'UNKNOWN',
+    ].flatMap((status) => [
+      [
+        `native filtered ${status}`,
+        (d) => {
+          d.deployments.edges = [{ node: { id: deploymentId, status } }];
+        },
+      ],
+      [
+        `latest ${status}`,
+        (d) => {
+          d.serviceInstance.latestDeployment.status = status;
+        },
+      ],
+      [
+        `active ${status}`,
+        (d) => {
+          d.serviceInstance.activeDeployments[0].status = status;
+        },
+      ],
+    ]),
+  ])
+    await t.test(label, async () => {
+      let mutations = 0;
+      await assert.rejects(
+        deployDemo({
+          env: exactEnv,
+          sourcePolicy: exactPolicy,
+          fetchImpl: mainFetch(),
+          client: async (query) => {
+            if (query.startsWith('mutation')) {
+              mutations++;
+              return { serviceInstanceDeployV2: deploymentId };
+            }
+            assert.match(
+              query,
+              /deployments\(input:\{projectId:\$projectId,environmentId:\$environmentId,serviceId:\$serviceId,status:\{notIn:\[SUCCESS,FAILED,CRASHED,REMOVED,SKIPPED\]\}\},first:1\)/,
+            );
+            const data = exactTargetData();
+            change(data);
+            return data;
+          },
+        }),
+        /idle demo deployment inventory/,
+      );
+      assert.equal(mutations, 0);
+    });
+});
+
+test('a rerun reuses the unique active native SUCCESS exact SHA, proves it live and performs no migration mutation', async () => {
+  const progress = [];
+  let mutations = 0,
+    reads = 0,
+    ready = 0;
+  const proof = await deployDemo({
+    env: exactEnv,
+    sourcePolicy: exactPolicy,
+    client: async (query) => {
+      if (query.startsWith('mutation')) {
+        mutations++;
+        throw new Error('Duplicate mutation prohibited');
+      }
+      reads++;
+      const data = exactTargetData();
+      data.serviceInstance.activeDeployments[0].meta = { commitHash: sha };
+      return data;
+    },
+    fetchImpl: mainFetch(async () => {
+      ready++;
+      return response();
+    }),
+    onProgress: async (item) => progress.push(item),
+  });
+  assert.equal(mutations, 0);
+  assert.equal(reads, 3);
+  assert.equal(ready, 1);
+  assert.equal(proof.deploymentReused, true);
+  assert.deepEqual(proof.previousActiveDeployment, { id: deploymentId, commitHash: sha });
+  assert.deepEqual(proof.migrations, {
+    command: 'npm run db:migrate',
+    direction: 'forward-only',
+    delta: 'unproven',
+    deploymentSubmittedByThisRun: false,
+  });
+  assert.equal(progress.at(-1).status, 'verified');
+  validateReceipt(proof, exactRun, 'clinicos-demo-backend', Date.now(), exactPolicy);
+});
+
+test('normal exact deployment records previous active native SHA or explicit unknown without inventing migration delta', async (t) => {
+  for (const previousSha of [reviewedSha, undefined, 'invalid'])
+    await t.test(String(previousSha), async () => {
+      let mutations = 0;
+      const proof = await deployDemo({
+        env: exactEnv,
+        sourcePolicy: exactPolicy,
+        fetchImpl: mainFetch(),
+        client: async (query) => {
+          if (query.startsWith('mutation')) {
+            mutations++;
+            return { serviceInstanceDeployV2: deploymentId };
+          }
+          const data = exactTargetData();
+          data.serviceInstance.activeDeployments[0].meta = { commitHash: previousSha };
+          return data;
+        },
+      });
+      assert.equal(mutations, 1);
+      assert.deepEqual(proof.previousActiveDeployment, {
+        id: deploymentId,
+        commitHash: previousSha === reviewedSha ? reviewedSha : null,
+      });
+      assert.equal(proof.migrations.delta, 'unproven');
+      assert.equal(proof.migrations.deploymentSubmittedByThisRun, true);
+    });
+});
+
+test('bounded read-only transient poll retries recover but denial, malformed bodies and uncertain mutations never retry', async (t) => {
+  for (const failure of [
+    'network',
+    'timeout',
+    408,
+    429,
+    500,
+    502,
+    503,
+    504,
+    'denied',
+    'malformed',
+    'permanent',
+    'exhausted',
+    'mutation',
+  ])
+    await t.test(String(failure), async () => {
+      let mutations = 0,
+        polls = 0,
+        delays = 0;
+      const client = createRailwayClient({
+        token: 'synthetic-demo-binding',
+        fetchImpl: async (_url, options) => {
+          const { query } = JSON.parse(options.body);
+          if (query.startsWith('mutation')) {
+            mutations++;
+            if (failure === 'mutation')
+              throw new TypeError('PRIVATE_TOKEN_SENTINEL uncertain submission');
+            return response({ data: { serviceInstanceDeployV2: deploymentId } });
+          }
+          if (mutations && ++polls <= (failure === 'exhausted' ? 4 : 1)) {
+            if (failure === 'network' || failure === 'exhausted')
+              throw new TypeError('PRIVATE_TOKEN_SENTINEL');
+            if (failure === 'timeout')
+              throw new DOMException('PRIVATE_TOKEN_SENTINEL', 'TimeoutError');
+            if (typeof failure === 'number') return response({}, failure);
+            if (failure === 'denied')
+              return response({ errors: [{ message: 'PRIVATE_TOKEN_SENTINEL' }] });
+            if (failure === 'malformed') return new Response('PRIVATE_TOKEN_SENTINEL');
+            if (failure === 'permanent') return response({}, 403);
+          }
+          return response({ data: exactTargetData() });
+        },
+      });
+      const request = deployDemo({
+        env: exactEnv,
+        sourcePolicy: exactPolicy,
+        client,
+        fetchImpl: mainFetch(),
+        attempts: 5,
+        delay: async () => {
+          delays++;
+        },
+      });
+      if (['denied', 'malformed', 'permanent', 'exhausted', 'mutation'].includes(failure)) {
+        await assert.rejects(request, (error) => !error.message.includes('PRIVATE_TOKEN_SENTINEL'));
+        assert.equal(polls, failure === 'mutation' ? 0 : failure === 'exhausted' ? 4 : 1);
+      } else {
+        assert.equal((await request).deployment.id, deploymentId);
+        assert.equal(polls, 3, 'one failed poll, successful poll, final native recheck');
+        assert.equal(delays, 1);
+      }
+      assert.equal(mutations, 1);
+    });
+});
+
+test('aggregate injected-clock budget covers worst-case requests, ready, delays and final checks below workflow timeout', async () => {
+  assert.equal(DEMO_DEPLOY_BUDGET_MS, 25 * 60 * 1000);
+  assert.ok(DEMO_DEPLOY_BUDGET_MS < 40 * 60 * 1000);
+  let elapsed = 0,
+    mutations = 0,
+    polls = 0;
+  const progress = [];
+  await assert.rejects(
+    deployDemo({
+      env: exactEnv,
+      sourcePolicy: exactPolicy,
+      now: () => elapsed,
+      onProgress: async (p) => progress.push(p),
+      delay: async (ms) => {
+        elapsed += ms;
+      },
+      fetchImpl: async (url) => {
+        if (url === mainEndpoint) {
+          elapsed += 30_000;
+          return response(mainBody());
+        }
+        elapsed += 20_000;
+        return response({}, 503);
+      },
+      client: async (query) => {
+        elapsed += 30_000;
+        if (query.startsWith('mutation')) {
+          mutations++;
+          return { serviceInstanceDeployV2: deploymentId };
+        }
+        polls++;
+        return exactTargetData();
+      },
+    }),
+    /aggregate deployment deadline/,
+  );
+  assert.equal(mutations, 1);
+  assert.ok(polls > 1);
+  assert.ok(elapsed <= DEMO_DEPLOY_BUDGET_MS);
+  assert.equal(progress.at(-1).deploymentId, deploymentId);
+  assert.equal(progress.at(-1).errorCode, 'DEPLOYMENT_PROOF_FAILED');
+});
+
+test('safe failure progress preserves only validated identity and finite outcome, never provider payloads', async () => {
+  const progress = [];
+  let submitted = false;
+  await assert.rejects(
+    deployDemo({
+      env: exactEnv,
+      sourcePolicy: exactPolicy,
+      fetchImpl: mainFetch(),
+      onProgress: async (item) => progress.push(item),
+      client: async (query) => {
+        if (query.startsWith('mutation')) {
+          submitted = true;
+          return { serviceInstanceDeployV2: deploymentId, private: 'PRIVATE_SENTINEL' };
+        }
+        if (submitted) throw new Error('PRIVATE_SENTINEL provider payload');
+        return exactTargetData();
+      },
+    }),
+  );
+  assert.deepEqual(progress.at(-1), {
+    schemaVersion: 1,
+    kind: 'clinicos-demo-deployment-progress',
+    target: { ...DEMO_TARGET },
+    mergeSha: sha,
+    deploymentId,
+    status: 'failed',
+    errorCode: 'DEPLOYMENT_PROOF_FAILED',
+  });
+  assert.doesNotMatch(JSON.stringify(progress), /PRIVATE_SENTINEL|token|headers|response/i);
+});
+
+test('actual exact CLI saves private sanitized failure progress with validated deployment ID after submission', async (t) => {
+  for (const failure of ['poll-denied', 'invalid-id', 'preflight-denied'])
+    await t.test(failure, async () => {
+      const directory = await mkdtemp(join(tmpdir(), 'demo-failure-cli-'));
+      try {
+        const fixturePath = join(directory, 'fixture.mjs');
+        await writeFile(
+          fixturePath,
+          `
+let submitted = false;
+globalThis.fetch = async (url, options) => {
+  if (url === '${mainEndpoint}') return new Response(JSON.stringify(${JSON.stringify(mainBody())}));
+  if (url !== 'https://backboard.railway.app/graphql/v2') throw new Error('Unexpected external fetch');
+  const {query} = JSON.parse(options.body);
+  if (query.startsWith('mutation')) {
+    submitted = true;
+    return new Response(JSON.stringify({data:{serviceInstanceDeployV2:'${failure === 'invalid-id' ? 'PRIVATE_SENTINEL' : deploymentId}'}}));
+  }
+  if (submitted || '${failure}' === 'preflight-denied') return new Response(JSON.stringify({errors:[{message:'PRIVATE_SENTINEL'}]}));
+  return new Response(JSON.stringify({data:${JSON.stringify(exactTargetData())}}));
+};
+`,
+        );
+        const result = spawnSync(
+          process.execPath,
+          [
+            '--import',
+            fixturePath,
+            fileURLToPath(new URL('../../src/bug-pipeline/demo-deployment.mjs', import.meta.url)),
+            failure === 'preflight-denied' ? 'preflight-exact' : 'deploy-exact',
+          ],
+          {
+            cwd: directory,
+            env: { ...exactEnv, RAILWAY_TOKEN: 'synthetic-demo-binding' },
+            encoding: 'utf8',
+            timeout: 5000,
+          },
+        );
+        assert.equal(result.error, undefined);
+        assert.equal(result.status, 1);
+        assert.doesNotMatch(
+          result.stdout + result.stderr,
+          /PRIVATE_SENTINEL|synthetic-demo-binding/,
+        );
+        const progress = JSON.parse(
+          await readFile(join(directory, 'demo-deployment-progress.json'), 'utf8'),
+        );
+        assert.equal(progress.deploymentId, failure === 'poll-denied' ? deploymentId : null);
+        assert.equal(progress.mergeSha, sha);
+        assert.deepEqual(progress.target, DEMO_TARGET);
+        assert.equal(progress.errorCode, 'DEPLOYMENT_PROOF_FAILED');
+        assert.equal(progress.status, 'failed');
+        assert.doesNotMatch(JSON.stringify(progress), /PRIVATE_SENTINEL|token|headers|response/i);
+        const { stat } = await import('node:fs/promises');
+        if (process.platform !== 'win32')
+          assert.equal(
+            (await stat(join(directory, 'demo-deployment-progress.json'))).mode & 0o777,
+            0o600,
+          );
       } finally {
         await rm(directory, { recursive: true, force: true });
       }
