@@ -2,7 +2,7 @@
 import { spawnSync } from 'node:child_process';
 import { performance } from 'node:perf_hooks';
 import { pathToFileURL } from 'node:url';
-import { inspectStorageBinding } from './demo-storage-backups.mjs';
+import { inspectStorageBinding, verifyDatabaseMount } from './demo-storage-backups.mjs';
 import { TARGET } from './demo-patient-inventory.mjs';
 
 export const BRANCH = 'codex/demo-470-completion';
@@ -49,6 +49,15 @@ const exactVariables = (actual, expected) => plain(actual) &&
   Object.entries(expected).every(([key, value]) => actual[key] === value);
 const canonical = (value) => JSON.stringify(value, (_key, item) => plain(item)
   ? Object.fromEntries(Object.keys(item).sort().map((key) => [key, item[key]])) : item);
+const matchesPrivateDatabase = (left, right) => {
+  try {
+    const a = new URL(left), b = new URL(right);
+    return ['postgres:', 'postgresql:'].includes(a.protocol) &&
+      ['postgres:', 'postgresql:'].includes(b.protocol) && a.hostname === b.hostname &&
+      a.pathname === b.pathname && a.username === b.username && a.password === b.password &&
+      (a.port || '5432') === (b.port || '5432');
+  } catch { return false; }
+};
 
 class ReadError extends Error {
   constructor(code) { super(code); this.code = code; }
@@ -112,7 +121,8 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
   const state = { phase: 'CONTEXT', cliReads: 0, nativeReads: 0, githubReads: 0,
     bindingVerified: false, observations: {} };
   let step = 0, databaseCandidates = [], candidateIndex = 0, runtimeId, runtimeRead = false,
-    verifiedVolume, bindingPass = 0, privateReads = {}, firstBinding;
+    verifiedVolume, bindingPass = 0, privateReads = {}, privateValues = {}, firstBinding,
+    classificationPass = 0, firstClassification;
   const budget = () => {
     const remaining = Math.floor(deadline - now());
     requireRead(remaining > 0, 'READONLY_DEADLINE_EXCEEDED');
@@ -137,7 +147,8 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
     }
   };
   const assertBranch = async (after = false) => {
-    requireRead(after ? step === 9 && bindingPass === 2 && state.observations.bindingStable === true
+    requireRead(after ? step === 9 && ((bindingPass === 2 && state.observations.bindingStable === true) ||
+      (classificationPass === 2 && state.observations.volumeClassification?.stable === true))
       : step === 0, 'READONLY_SEQUENCE_REJECTED');
     start(after ? 'BRANCH_AFTER' : 'BRANCH_BEFORE', 'githubReads');
     const body = await request(HEAD_ENDPOINT, { method: 'GET', cache: 'no-store', headers: {
@@ -158,7 +169,9 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
     if (Array.isArray(volumes) && volumes.length <= 100 &&
       volumes.every((edge) => edge?.node?.environmentId === TARGET.environmentId &&
         uuid(edge.node.id) && uuid(edge.node.volumeId) &&
-        (edge.node.serviceId === null || uuid(edge.node.serviceId)))) {
+        (edge.node.serviceId === null || uuid(edge.node.serviceId))) &&
+      new Set(volumes.map(({ node }) => node.id)).size === volumes.length &&
+      new Set(volumes.map(({ node }) => node.volumeId)).size === volumes.length) {
       state.observations.volumeCount = volumes.length;
       state.observations.volumesObserved = volumes.map(({ node: v }) =>
         ({ volumeInstanceId: v.id, volumeId: v.volumeId, serviceId: v.serviceId }));
@@ -219,6 +232,7 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
           connection.edges.every((edge) => plain(edge) && plain(edge.node)), 'READONLY_DATA_INVALID');
       }
       privateReads.environment = canonical(body.data);
+      privateValues.environment = body.data.environment;
       observeEnvironment(body.data);
       step = 7;
     } else if (phase === 'SNAPSHOTS_BEFORE') step = 8;
@@ -270,6 +284,12 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
       'READONLY_CLI_RESULT_INVALID');
     // Config and mount/DB credentials remain private and are compared, never emitted.
     privateReads[`${phase}:${args[2]}`] = canonical(data);
+    if (phase === 'BACKEND_CONFIG') privateValues.backend = data;
+    else if (phase === 'SERVICE_CATALOG') privateValues.catalog = data;
+    else if (phase === 'DATABASE_CONFIG') {
+      privateValues.databaseConfigs ??= {};
+      privateValues.databaseConfigs[args[2]] = data;
+    }
     if (phase === 'BACKEND_IDENTITY') step = 3;
     else if (phase === 'BACKEND_CONFIG') step = 5;
     else if (phase === 'SERVICE_CATALOG') {
@@ -286,14 +306,129 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
     else if (phase === 'RUNTIME_CONFIG') { runtimeId = undefined; runtimeRead = true; }
     return data;
   };
+  const classifyUnclassifiedVolumes = () => {
+    requireRead(step === 7 && candidateIndex === databaseCandidates.length &&
+      plain(privateValues.databaseConfigs) &&
+      plain(privateValues.backend) && plain(privateValues.environment) &&
+      bindingPass === 0 && classificationPass < 2,
+    'READONLY_CLASSIFICATION_STATE_INVALID');
+    const backend = privateValues.backend;
+    const configs = privateValues.databaseConfigs ?? {};
+    const candidates = databaseCandidates.filter((serviceId) => {
+      const config = configs[serviceId];
+      return plain(config) && config.RAILWAY_PROJECT_ID === TARGET.projectId &&
+        config.RAILWAY_ENVIRONMENT_ID === TARGET.environmentId &&
+        config.RAILWAY_PRIVATE_DOMAIN === TARGET.databaseHost &&
+        matchesPrivateDatabase(backend.DATABASE_URL, config.DATABASE_URL);
+    });
+    requireRead(candidates.length === 1, 'READONLY_DATABASE_IDENTITY_UNVERIFIED');
+    const environment = privateValues.environment;
+    const volumeConnection = environment.volumeInstances;
+    const serviceConnection = environment.serviceInstances;
+    requireRead(environment.id === TARGET.environmentId && environment.projectId === TARGET.projectId &&
+      volumeConnection?.pageInfo?.hasNextPage === false && serviceConnection?.pageInfo?.hasNextPage === false &&
+      Array.isArray(volumeConnection.edges) && volumeConnection.edges.length > 0 &&
+      volumeConnection.edges.length <= 20 && Array.isArray(serviceConnection.edges) &&
+      serviceConnection.edges.length <= 100,
+    'READONLY_CLASSIFICATION_INVENTORY_INCOMPLETE');
+    const volumes = volumeConnection.edges.map((edge) => edge?.node);
+    const services = serviceConnection.edges.map((edge) => edge?.node);
+    requireRead(volumes.every((volume) => plain(volume) && volume.environmentId === TARGET.environmentId &&
+      uuid(volume.id) && uuid(volume.volumeId) &&
+      (volume.serviceId === null || uuid(volume.serviceId))) &&
+      new Set(volumes.map((volume) => volume.id)).size === volumes.length &&
+      new Set(volumes.map((volume) => volume.volumeId)).size === volumes.length &&
+      services.every((service) => plain(service) && service.environmentId === TARGET.environmentId &&
+        uuid(service.serviceId)) &&
+      new Set(services.map((service) => service.serviceId)).size === services.length,
+    'READONLY_CLASSIFICATION_INVENTORY_INVALID');
+    const catalog = privateValues.catalog;
+    requireRead(Array.isArray(catalog) && catalog.length > 0 && catalog.length <= 20 &&
+      catalog.every((service) => plain(service) && uuid(service.id) && typeof service.name === 'string') &&
+      new Set(catalog.map((service) => service.id)).size === catalog.length,
+    'READONLY_CLASSIFICATION_CATALOG_INVALID');
+    const instanceIds = new Set(volumes.map((volume) => volume.id));
+    const volumeIds = new Set(volumes.map((volume) => volume.volumeId));
+    const serviceIds = new Set([...catalog.map((service) => service.id),
+      ...volumes.map((volume) => volume.serviceId).filter(Boolean)]);
+    requireRead([...instanceIds].every((id) => !volumeIds.has(id) && !serviceIds.has(id)) &&
+      [...volumeIds].every((id) => !serviceIds.has(id)), 'READONLY_CLASSIFICATION_ID_ALIAS');
+    const databaseServiceId = candidates[0];
+    const databaseService = services.filter((service) => service.serviceId === databaseServiceId);
+    const databaseVolumes = volumes.filter((volume) => volume.serviceId === databaseServiceId);
+    requireRead(catalog.some((service) => service.id === databaseServiceId) &&
+      databaseService.length <= 1 && databaseVolumes.length === 1,
+    'READONLY_DATABASE_VOLUME_AMBIGUOUS');
+    const databaseVolume = databaseVolumes[0];
+    verifyDatabaseMount(databaseVolume, configs[databaseServiceId]);
+    const knownServiceIds = new Set(catalog.filter((service) =>
+      services.some((instance) => instance.serviceId === service.id)).map((service) => service.id));
+    const rows = volumes.map((volume) => {
+      let role = 'unknown-service-reference';
+      if (volume.id === databaseVolume.id) role = 'database-bound';
+      else if (volume.serviceId === null) role = 'unattached-unknown';
+      else if (volume.serviceId === TARGET.backendServiceId && knownServiceIds.has(volume.serviceId))
+        role = 'target-backend';
+      else if (knownServiceIds.has(volume.serviceId)) role = 'other-attached-service';
+      return { volumeInstanceId: volume.id, volumeId: volume.volumeId,
+        serviceId: volume.serviceId, role, mountVerified: role === 'database-bound',
+        mountClass: role === 'database-bound' ? 'database-pgdata-contained' : 'unverified' };
+    });
+    requireRead(rows.length === volumes.length && rows.filter((row) => row.role === 'database-bound').length === 1,
+      'READONLY_CLASSIFICATION_PROJECTION_INVALID');
+    const projection = { schemaVersion: 1, stable: false,
+      configuredDatabaseServiceId: databaseServiceId,
+      configuredDatabaseVolumeInstanceId: databaseVolume.id,
+      configuredDatabaseVolumeId: databaseVolume.volumeId,
+      observedVolumeCount: rows.length, mountVerifiedVolumeCount: 1,
+      unknownVolumeCount: rows.filter((row) => row.role !== 'database-bound').length,
+      databaseSnapshotScope: 'unobserved', otherSnapshotScope: 'unobserved', volumes: rows };
+    const signature = canonical({ reads: privateReads, projection });
+    if (classificationPass === 0) firstClassification = signature;
+    else {
+      state.phase = 'BINDING_COMPARE';
+      requireRead(signature === firstClassification, 'READONLY_CLASSIFICATION_DRIFT');
+      projection.stable = true;
+      state.phase = 'ENVIRONMENT_METADATA';
+      state.observations.volumeClassification = projection;
+      step = 9;
+    }
+    classificationPass++;
+    if (classificationPass === 1) {
+      step = 2; databaseCandidates = []; candidateIndex = 0; runtimeId = undefined;
+      runtimeRead = false; privateReads = {}; privateValues = {};
+    }
+  };
   const inspectBinding = async () => {
+    if (classificationPass === 1) {
+      try { await inspectStorageBinding(call, native); }
+      catch (error) {
+        requireRead(error?.message === 'UNCLASSIFIED_DEMO_VOLUMES' && state.phase === 'ENVIRONMENT_METADATA' &&
+          step === 7, 'READONLY_CLASSIFICATION_RECHECK_FAILED');
+        classifyUnclassifiedVolumes();
+        return false;
+      }
+      throw new ReadError('READONLY_CLASSIFICATION_RECHECK_FAILED');
+    }
     requireRead((step === 2 && bindingPass === 0) || (step === 9 && bindingPass === 1),
       'READONLY_SEQUENCE_REJECTED');
     if (bindingPass === 1) {
       step = 2; databaseCandidates = []; candidateIndex = 0; runtimeId = undefined;
-      runtimeRead = false; privateReads = {}; state.bindingVerified = false;
+      runtimeRead = false; privateReads = {}; privateValues = {}; state.bindingVerified = false;
     }
-    const binding = await inspectStorageBinding(call, native);
+    let binding;
+    try { binding = await inspectStorageBinding(call, native); }
+    catch (error) {
+      if (bindingPass !== 0 || error?.message !== 'UNCLASSIFIED_DEMO_VOLUMES' ||
+        state.phase !== 'ENVIRONMENT_METADATA' || step !== 7) throw error;
+      try { classifyUnclassifiedVolumes(); }
+      catch (classificationError) {
+        if (['READONLY_DATABASE_VOLUME_AMBIGUOUS', 'READONLY_CLASSIFICATION_ID_ALIAS']
+          .includes(classificationError?.code)) throw error;
+        throw classificationError;
+      }
+      return inspectBinding();
+    }
     state.phase = 'BINDING';
     requireRead(step === 7 && runtimeRead && !runtimeId && uuid(binding?.volume?.id) &&
       uuid(binding.volume.volumeId) && uuid(binding.volume.serviceId) &&
@@ -317,6 +452,7 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
     state.observations.verifiedBinding = { databaseServiceId: binding.volume.serviceId,
       volumeId: binding.volume.volumeId, volumeInstanceId: binding.volume.id,
       runtimeServiceId: binding.runtimeInstance.serviceId, mountVerified: true };
+    return true;
   };
   const readSnapshots = async () => {
     requireRead(state.bindingVerified && verifiedVolume, 'READONLY_BINDING_REQUIRED');
@@ -332,8 +468,12 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
     requireRead(equal(lists[0], lists[1]), 'READONLY_SNAPSHOT_DRIFT');
     state.observations.snapshots = { before: lists[0].length, after: lists[1].length, stable: true };
   };
+  const invalidateClassification = () => {
+    if (classificationPass === 2 && state.observations.volumeClassification)
+      state.observations.volumeClassification.stable = false;
+  };
   return { getState: () => structuredClone(state), assertBranch, native, call,
-    inspectBinding, readSnapshots };
+    inspectBinding, readSnapshots, invalidateClassification };
 }
 
 export async function inspectDemoStorage({ env = process.env, args = [], fetchImpl, spawnImpl, now,
@@ -345,15 +485,22 @@ export async function inspectDemoStorage({ env = process.env, args = [], fetchIm
     access = createReadOnlyAccess({ env, context, fetchImpl, spawnImpl, now });
     await access.assertBranch();
     await access.native(QUERIES.identity, {});
-    await access.inspectBinding();
-    await access.readSnapshots();
-    await access.inspectBinding();
-    await access.assertBranch(true);
-    outcome = 'inspected';
+    const bindingAvailable = await access.inspectBinding();
+    if (bindingAvailable) {
+      await access.readSnapshots();
+      await access.inspectBinding();
+      await access.assertBranch(true);
+      outcome = 'inspected';
+    } else {
+      phase = 'ENVIRONMENT_METADATA';
+      code = 'UNCLASSIFIED_DEMO_VOLUMES';
+      await access.assertBranch(true);
+    }
   } catch (error) {
     phase = access?.getState().phase ?? phase;
     code = error instanceof ReadError ? error.code : HELPER_CODES.has(error?.message)
       ? error.message : 'READONLY_INSPECT_UNEXPECTED_FAILURE';
+    if (phase === 'BRANCH_AFTER') access?.invalidateClassification();
   }
   const state = access?.getState();
   const receipt = {

@@ -138,6 +138,120 @@ test('actual immutable binding is exercised and only bounded reads return a safe
   assert.ok(Object.isFrozen(receipt.observations.verifiedBinding));
 });
 
+function threeVolumeFixture(change = () => {}) {
+  return fixture((data) => {
+    const otherService = { ...clone(data.environment.serviceInstances.edges[1].node),
+      id: '50000000-0000-4000-8000-000000000480', serviceId: IDS.other,
+      serviceName: 'unrelated-service' };
+    data.catalog.push({ id: IDS.other, name: 'unrelated-service' });
+    data.environment.serviceInstances.edges.push({ node: otherService });
+    data.environment.volumeInstances.edges.push(
+      { node: { id: '50000000-0000-4000-8000-000000000481',
+        volumeId: '50000000-0000-4000-8000-000000000482', serviceId: IDS.other,
+        environmentId: TARGET.environmentId, mountPath: '/private/other', state: 'READY' } },
+      { node: { id: '50000000-0000-4000-8000-000000000483',
+        volumeId: '50000000-0000-4000-8000-000000000484', serviceId: null,
+        environmentId: TARGET.environmentId, mountPath: '/private/unattached', state: 'READY' } },
+    );
+    change(data);
+  });
+}
+
+test('three-volume read-only classification identifies only the credential-matched DB mount', async () => {
+  const f = threeVolumeFixture();
+  const receipt = await run(f);
+  assert.equal(receipt.outcome, 'blocked');
+  assert.equal(receipt.phase, 'ENVIRONMENT_METADATA');
+  assert.equal(receipt.code, 'UNCLASSIFIED_DEMO_VOLUMES');
+  assert.equal(receipt.bindingVerified, false);
+  const classification = receipt.observations.volumeClassification;
+  assert.equal(classification.stable, true);
+  assert.equal(classification.configuredDatabaseServiceId, IDS.db);
+  assert.equal(classification.configuredDatabaseVolumeInstanceId, IDS.volumeInstance);
+  assert.equal(classification.observedVolumeCount, 3);
+  assert.equal(classification.mountVerifiedVolumeCount, 1);
+  assert.equal(classification.unknownVolumeCount, 2);
+  assert.equal(classification.databaseSnapshotScope, 'unobserved');
+  assert.equal(classification.otherSnapshotScope, 'unobserved');
+  assert.deepEqual(classification.volumes.map((row) => row.role), [
+    'database-bound', 'other-attached-service', 'unattached-unknown' ]);
+  assert.deepEqual(f.requests.filter(({ options }) => options.body?.includes('volumeInstanceBackupList')), []);
+  assert.equal(f.calls.length, 8);
+  assert.deepEqual(receipt.readRequests, { cli: 8, native: 5, github: 2 });
+  const text = safe(receipt);
+  for (const secret of ['unrelated-service', '/private/other', '/private/unattached',
+    '/var/lib/postgresql/data', 'private-password']) assert.equal(text.includes(secret), false, secret);
+});
+
+test('classification refuses ambiguous database attachments and preserves the original helper stop', async () => {
+  const f = fixture((d) => { d.environment.volumeInstances.edges.push({ node: {
+    ...d.environment.volumeInstances.edges[0].node, id: IDS.other, volumeId: '50000000-0000-4000-8000-000000000485' } }); });
+  const receipt = await run(f);
+  assert.equal(receipt.code, 'UNCLASSIFIED_DEMO_VOLUMES');
+  assert.equal(receipt.observations.volumeClassification, undefined);
+  assert.equal(receipt.bindingVerified, false);
+  safe(receipt);
+});
+
+test('classification mount failures remain blocked without a verified projection', async () => {
+  const f = threeVolumeFixture((d) => { d.db.PGDATA = '/unrelated'; });
+  const receipt = await run(f);
+  assert.equal(receipt.code, 'DATABASE_MOUNT_UNVERIFIED');
+  assert.equal(receipt.observations.volumeClassification, undefined);
+  assert.equal(receipt.bindingVerified, false);
+  safe(receipt);
+});
+
+test('classification compares fresh metadata and removes stable claim on drift', async () => {
+  const f = threeVolumeFixture();
+  let environments = 0;
+  const receipt = await run(f, { fetchImpl: async (url, options) => {
+    const response = await f.fetchImpl(url, options);
+    if (url === ENDPOINT && JSON.parse(options.body).query === QUERIES.environment && ++environments === 1)
+      f.data.environment.volumeInstances.edges[1].node.serviceId = null;
+    return response;
+  } });
+  assert.equal(receipt.code, 'READONLY_CLASSIFICATION_DRIFT');
+  assert.equal(receipt.phase, 'BINDING_COMPARE');
+  assert.equal(receipt.bindingVerified, false);
+  assert.equal(receipt.observations.volumeClassification, undefined);
+  safe(receipt);
+});
+
+test('classification refuses aliased provider UUIDs', async () => {
+  const f = threeVolumeFixture((d) => {
+    d.environment.volumeInstances.edges[1].node.volumeId = d.environment.volumeInstances.edges[1].node.id;
+  });
+  const receipt = await run(f);
+  assert.equal(receipt.code, 'UNCLASSIFIED_DEMO_VOLUMES');
+  assert.equal(receipt.observations.volumeClassification, undefined);
+  assert.equal(receipt.bindingVerified, false);
+  safe(receipt);
+});
+
+test('classification stable claim is removed if final source branch check drifts', async () => {
+  const f = threeVolumeFixture();
+  let heads = 0;
+  const receipt = await run(f, { fetchImpl: (url, options) => {
+    if (url === HEAD_ENDPOINT && ++heads === 2)
+      return json({ ref: `refs/heads/${BRANCH}`, object: { type: 'commit', sha: 'b'.repeat(40) } });
+    return f.fetchImpl(url, options);
+  } });
+  assert.equal(receipt.code, 'READONLY_BRANCH_DRIFT');
+  assert.equal(receipt.phase, 'BRANCH_AFTER');
+  assert.equal(receipt.observations.volumeClassification.stable, false);
+  assert.equal(receipt.bindingVerified, false);
+  safe(receipt);
+});
+
+test('classification projection is cleared when a public UUID reflects a credential', async () => {
+  const f = threeVolumeFixture();
+  const receipt = await run(f, { env: { ...ENV, RAILWAY_TOKEN: IDS.db } });
+  assert.equal(receipt.code, 'READONLY_RECEIPT_UNSAFE');
+  assert.deepEqual(receipt.observations, {});
+  assert.equal(safe(receipt).includes(IDS.db), false);
+});
+
 const guards = [
   ['DEMO_BINDING_IDENTITY_MISMATCH', (d) => { d.backend.RAILWAY_ENVIRONMENT_ID = IDS.other; }],
   ['DEMO_DATABASE_BINDING_INVALID', (d) => { d.backend.DATABASE_URL = 'invalid'; }],

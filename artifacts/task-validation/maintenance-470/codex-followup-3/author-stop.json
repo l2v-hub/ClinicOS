@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "round": 7,
+  "status": "author-stop",
+  "baseSha": "61d9793a9ae12252f1eb53e7082a855e8b0f8b4c",
+  "sourceScope": [
+    "scripts/maintenance/demo-storage-inspect.mjs",
+    "scripts/maintenance/demo-storage-inspect.test.mjs"
+  ],
+  "sourceSha256": {
+    "scripts/maintenance/demo-storage-inspect.mjs": "780f214ffc6b73aa8211d058f4c79e43ea0de5ed9db037e9838b9aaec00a00ef",
+    "scripts/maintenance/demo-storage-inspect.test.mjs": "36930825b8516c672143b0a516b3873efefe3d5389fe6cd21022f99485189721"
+  },
+  "immutableHelperSha256": {
+    "scripts/maintenance/demo-storage-backups.mjs": "f663075284f14b479fd4c5d2bb2dbf952c0b360fe3dc5582a3490a57dd0e5189",
+    "scripts/maintenance/demo-patient-inventory.mjs": "ea94b7ff88a2570eb57c7e86c2b5ff64544a99d67f6be42d2451d2ad8d833bb1"
+  },
+  "verification": {
+    "runner": "credential-stripped createRunner verification mode",
+    "testFile": "scripts/maintenance/demo-storage-inspect.test.mjs",
+    "total": 122,
+    "passed": 122,
+    "failed": 0,
+    "originalAssertionsPreserved": 115,
+    "networkOrProviderCalls": false,
+    "liveRequestCounts": { "provider": 0, "github": 0, "database": 0 }
+  },
+  "classification": {
+    "topLevelOutcome": "blocked",
+    "topLevelCode": "UNCLASSIFIED_DEMO_VOLUMES",
+    "bindingVerified": false,
+    "separateReadOnlyClassification": true,
+    "configuredDatabaseVolumeMountVerified": true,
+    "otherVolumesRetainedAsUnverified": true,
+    "databaseSnapshotScope": "unobserved",
+    "otherSnapshotScope": "unobserved",
+    "sourceStorageVerified": false,
+    "cleanupPerformed": false,
+    "deletionPerformed": false,
+    "redeployPerformed": false,
+    "projectWideVisibility": "unproven"
+  },
+  "preservation": {
+    "frozenPriorEvidenceFiles": 1121,
+    "unchangedHashAndInodeCount": 1119,
+    "authorizedSourceFilesChanged": 2,
+    "unexpectedChanges": 0,
+    "missingFiles": 0,
+    "sourceHardlinkCounts": 1
+  },
+  "priorHistory": {
+    "priorAuthorAttempts": 6,
+    "priorProofsPreserved": true,
+    "priorActualReadReceiptPreserved": true,
+    "priorActualReadRequestCounts": { "cli": 4, "native": 3, "github": 1 }
+  },
+  "actualReadRepeated": false,
+  "previousActualObservationVolumeCount": 3,
+  "syntheticThreeVolumeRows": { "databaseBound": 1, "otherUnverified": 2 },
+  "issueClosureAuthorized": false,
+  "remainingUnknowns": [
+    "The actual configured database volume has not been re-observed by this change.",
+    "Other attached and unattached volume contents remain unknown.",
+    "Snapshot metadata was not observed.",
+    "No result proves PHI absence, deletion, or provider-wide retention state."
+  ]
+}
