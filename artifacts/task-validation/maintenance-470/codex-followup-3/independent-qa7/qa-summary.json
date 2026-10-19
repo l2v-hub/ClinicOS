@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "task": "Issue 470 independent QA7 bounded volume classification",
+  "sourceSha": "fd656682d124f0d4c15944580cf4327eb5c57383",
+  "sourceWorktree": "/workspace/ClinicOS/agent-team/.worktrees/maintenance-470",
+  "result": "PASS_SCOPED_SYNTHETIC_QA",
+  "verification": {
+    "fullCheckout": { "tests": 122, "passed": 122, "failed": 0, "exitCode": 0 },
+    "maintenanceConeSparseCheckout": { "tests": 122, "passed": 122, "failed": 0, "exitCode": 0,
+      "cone": [".github/workflows", "scripts/maintenance"] },
+    "additionalPrivateClassificationProbes": { "tests": 4, "passed": 4, "failed": 0, "exitCode": 0,
+      "cases": ["mismatched private database credentials", "incomplete paginated inventory",
+        "non-READY database mount", "duplicate service instance identity"] }
+  },
+  "preservation": {
+    "authorPreservationComparison": "/workspace/.clinicos-cloud/470-classification-author7-20261019/preservation-comparison.json",
+    "baselineFiles": 1121,
+    "unchangedHashAndInode": 1119,
+    "changedExpectedSourceFiles": 2,
+    "unexpectedChanges": 0,
+    "sourceGitStatusAfterQa": "clean",
+    "fullCloneGitStatusAfterQa": "clean",
+    "sparseCloneGitStatusAfterQa": "clean",
+    "immutableStorageHelperSha256": "f663075284f14b479fd4c5d2bb2dbf952c0b360fe3dc5582a3490a57dd0e5189",
+    "immutablePatientInventorySha256": "ea94b7ff88a2570eb57c7e86c2b5ff64544a99d67f6be42d2451d2ad8d833bb1",
+    "workflowSha256": "80889c5eea0129659e0678403f6b22922469d3b525e5619e12fb9e9f40ed5ec2"
+  },
+  "boundary": {
+    "providerNetworkOrDatabaseActions": false,
+    "realCredentialsUsed": false,
+    "sourceCheckoutEdits": false,
+    "snapshotListsObserved": false,
+    "actualEnvironmentRerun": false,
+    "cleanupOrIssueClosureAuthorized": false,
+    "readyCertification": false
+  },
+  "finding": null,
+  "limitations": [
+    "This is local synthetic regression QA only; it does not establish current Railway state, volume contents, snapshot contents, PHI absence, deletion, or issue closure.",
+    "The new diagnostic intentionally leaves both database and other-volume snapshot scopes unobserved.",
+    "Root-owned actual-read-only dispatch and later review gates remain separate decisions."
+  ]
+}
