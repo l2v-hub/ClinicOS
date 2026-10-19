@@ -210,6 +210,39 @@ test('bindable therapy: only classic-mapper keys; hidden fields forced or refuse
     giorniSettimana: '',
   };
   assert.deepEqual(bindableTherapy(base), { ...base, stato: 'attiva', drugPackageRef: null });
+  const capturedMapperPayload = {
+    ...base,
+    pharmaceuticalForm: 'compressa',
+    commercialStrengthValue: '1000',
+    dataInizio: '2026-10-19',
+    doseMode: 'fixed',
+    schedules: [
+      {
+        time: '08:00',
+        quantityNumerator: 1,
+        quantityDenominator: 1,
+        administrationUnit: 'compressa',
+      },
+      {
+        time: '20:00',
+        quantityNumerator: 1,
+        quantityDenominator: 1,
+        administrationUnit: 'compressa',
+      },
+    ],
+  };
+  assert.deepEqual(bindableTherapy(capturedMapperPayload), {
+    ...capturedMapperPayload,
+    stato: 'attiva',
+    drugPackageRef: null,
+  });
+  for (const doseMode of ['glucose_scale', 'unknown', null, {}, '', undefined]) {
+    assert.equal(
+      bindableTherapy({ ...base, doseMode }),
+      null,
+      `unsupported explicit dose mode ${String(doseMode)}`,
+    );
+  }
   assert.equal(bindableTherapy({ ...base, prescrittore: 'Dr. X' }), null);
   assert.equal(bindableTherapy({ ...base, stato: 'sospesa' }), null);
   assert.equal(bindableTherapy({ ...base, drugPackageRef: 'AIC-1' }), null);

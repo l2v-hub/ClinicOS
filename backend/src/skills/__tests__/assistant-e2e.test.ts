@@ -205,6 +205,7 @@ test('C — Doctor sensitive write: preview → no write → explicit confirmati
     stato: 'attiva',
     commercialStrengthValue: '1000',
     commercialStrengthUnit: 'mg',
+    doseMode: 'fixed',
     schedules: [
       {
         time: '08:00',
