@@ -353,6 +353,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
   .giro-drug > .giro-row__act {
+    flex-wrap: wrap;
     justify-content: stretch;
   }
   .giro-drug > .giro-row__act > .giro-badge {
