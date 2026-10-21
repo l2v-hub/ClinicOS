@@ -71,7 +71,9 @@ function apiPath(args) {
 }
 
 function stateContents(state) {
-  return stateContentsBytes(Buffer.from(typeof state === 'string' ? state : JSON.stringify(state), 'utf8'));
+  return stateContentsBytes(
+    Buffer.from(typeof state === 'string' ? state : JSON.stringify(state), 'utf8'),
+  );
 }
 
 function stateContentsBytes(bytes) {
@@ -588,11 +590,7 @@ test('durable state rejects corrupt encoding, size, SHA, UTF-8, and oversized pa
     ['noncanonical base64', { ...valid, content: `${valid.content}!` }, /content is invalid/],
     ['declared size mismatch', { ...valid, size: valid.size + 1 }, /content is invalid/],
     ['SHA mismatch', { ...valid, sha: '0'.repeat(40) }, /SHA does not match/],
-    [
-      'invalid UTF-8',
-      stateContentsBytes(Buffer.from([0xff])),
-      /UTF-8/,
-    ],
+    ['invalid UTF-8', stateContentsBytes(Buffer.from([0xff])), /UTF-8/],
     ['oversized metadata', { ...valid, size: MAX_DURABLE_STATE_BYTES + 1 }, /regular file/],
   ];
   for (const [name, source, expectedError] of cases)
@@ -602,7 +600,8 @@ test('durable state rejects corrupt encoding, size, SHA, UTF-8, and oversized pa
         repo: 'l2v-hub/ClinicOS',
         run: async ({ args }) => {
           const path = apiPath(args);
-          if (path.includes('/git/ref/heads/')) return response({ object: { sha: 'a'.repeat(40) } });
+          if (path.includes('/git/ref/heads/'))
+            return response({ object: { sha: 'a'.repeat(40) } });
           if (path.includes('/contents/')) return response(source);
           throw new Error(`Unexpected route ${path}`);
         },
@@ -615,7 +614,11 @@ test('durable state blob fallback rejects unpinned or malformed data without tre
   const source = stateContents({ state: 'preserved' });
   for (const [name, fallback, expectedError] of [
     ['different SHA', blobFromContents(source, { sha: '0'.repeat(40) }), /pinned Contents object/],
-    ['different size', blobFromContents(source, { size: source.size + 1 }), /pinned Contents object/],
+    [
+      'different size',
+      blobFromContents(source, { size: source.size + 1 }),
+      /pinned Contents object/,
+    ],
     ['invalid base64', blobFromContents(source, { content: '!!!!' }), /content is invalid/],
   ])
     await t.test(name, async () => {
@@ -624,7 +627,8 @@ test('durable state blob fallback rejects unpinned or malformed data without tre
         repo: 'l2v-hub/ClinicOS',
         run: async ({ args }) => {
           const path = apiPath(args);
-          if (path.includes('/git/ref/heads/')) return response({ object: { sha: 'a'.repeat(40) } });
+          if (path.includes('/git/ref/heads/'))
+            return response({ object: { sha: 'a'.repeat(40) } });
           if (path.includes('/contents/'))
             return response({
               type: 'file',
@@ -675,7 +679,10 @@ test('oversized durable state is rejected before any remote mutation', async () 
   }).createStateStore();
   await store.load();
   const before = calls.length;
-  await assert.rejects(store.save({ history: 'x'.repeat(MAX_DURABLE_STATE_BYTES) }), /8 MiB save bound/);
+  await assert.rejects(
+    store.save({ history: 'x'.repeat(MAX_DURABLE_STATE_BYTES) }),
+    /8 MiB save bound/,
+  );
   assert.equal(calls.length, before);
 });
 
@@ -1505,10 +1512,7 @@ test('state save rejects >8MiB before any mutation/guard and exact8MiB remains r
   const exact = { payload: 'x'.repeat(MAX_DURABLE_STATE_BYTES - overhead) };
   await f.store.save(exact);
   assert.equal(f.metadata.size, MAX_DURABLE_STATE_BYTES);
-  assert.equal(
-    Buffer.byteLength(JSON.stringify(await f.store.load())),
-    MAX_DURABLE_STATE_BYTES,
-  );
+  assert.equal(Buffer.byteLength(JSON.stringify(await f.store.load())), MAX_DURABLE_STATE_BYTES);
 });
 
 test('blob-loaded state CAS failure retains the original metadata SHA and never retries without it', async () => {
@@ -1853,7 +1857,8 @@ test('F1/F3 native human approval requires current head, nonauthor User and enfo
 });
 
 test('GitHub failure semantics distinguish positive status evidence, default POST and merge uncertainty without raw diagnostics', async () => {
-  const { githubOperationError, githubApiOperation } = await import('../../src/bug-pipeline/github.mjs');
+  const { githubOperationError, githubApiOperation } =
+    await import('../../src/bug-pipeline/github.mjs');
   assert.equal(githubApiOperation({ body: { body: 'notice' } }), 'mutation');
   assert.equal(githubApiOperation({}), 'read');
   assert.equal(githubApiOperation({ method: 'GET', body: {} }), 'read');
@@ -1863,11 +1868,18 @@ test('GitHub failure semantics distinguish positive status evidence, default POS
     assert.equal(error.httpStatus, status);
   }
   for (const status of [408, 429, 500, 503])
-    assert.equal(githubOperationError({ stderr: `gh: rejected (HTTP ${status})` }).code, 'github-read-transient');
-  assert.equal(githubOperationError({ stderr: 'gh: API rate limit exceeded (HTTP 403)' }).code,
-    'github-read-transient');
+    assert.equal(
+      githubOperationError({ stderr: `gh: rejected (HTTP ${status})` }).code,
+      'github-read-transient',
+    );
+  assert.equal(
+    githubOperationError({ stderr: 'gh: API rate limit exceeded (HTTP 403)' }).code,
+    'github-read-transient',
+  );
   assert.equal(githubOperationError({ error: 'timeout' }).code, 'github-read-transient');
-  const unknown = githubOperationError({ stderr: 'synthetic patient 503 bearer PRIVATE_TOKEN ' + 'x'.repeat(100000) });
+  const unknown = githubOperationError({
+    stderr: 'synthetic patient 503 bearer PRIVATE_TOKEN ' + 'x'.repeat(100000),
+  });
   assert.equal(unknown.httpStatus, null);
   assert.equal(unknown.code, 'github-read-failed');
   assert.ok(JSON.stringify(unknown).length < 300);
@@ -1878,8 +1890,14 @@ test('GitHub failure semantics distinguish positive status evidence, default POS
     [{ stderr: 'gh: upstream (HTTP 503)' }, 'github-write-uncertain'],
   ]) {
     const calls = [];
-    const github = createGitHub({ repo: 'l2v-hub/ClinicOS', cwd: '/synthetic',
-      run: async (call) => { calls.push(call); return { ok: false, ...response }; } });
+    const github = createGitHub({
+      repo: 'l2v-hub/ClinicOS',
+      cwd: '/synthetic',
+      run: async (call) => {
+        calls.push(call);
+        return { ok: false, ...response };
+      },
+    });
     await assert.rejects(github.mergePullRequest(81, 'a'.repeat(40)), { code: expected });
     assert.equal(calls.length, 1, 'No blind second merge attempt');
     assert.equal(calls[0].timeoutMs, 30000);
@@ -1887,17 +1905,33 @@ test('GitHub failure semantics distinguish positive status evidence, default POS
     assert.ok(calls.at(-1).input, 'Comment request carries a mutation body');
   }
 
-  const refusal = 'GraphQL: Head branch was modified. Review and try the merge again. (mergePullRequest)';
+  const refusal =
+    'GraphQL: Head branch was modified. Review and try the merge again. (mergePullRequest)';
   for (const [result, expectedCode, expectedDiagnostic] of [
     [{ ok: false, code: 1, stderr: refusal }, 'github-write-rejected', 'graphql-merge-refusal'],
     [{ ok: false, code: 1, stderr: `prefix ${refusal}` }, 'github-write-uncertain', 'unknown'],
-    [{ ok: false, code: 1, stderr: `${refusal}\nGraphQL: another error (mergePullRequest)` }, 'github-write-uncertain', 'unknown'],
-    [{ ok: false, code: 1, stderr: refusal, error: 'spawn-failed' }, 'github-write-uncertain', 'unknown'],
-    [{ ok: false, code: null, stderr: refusal, error: 'timeout' }, 'github-write-uncertain', 'timeout'],
+    [
+      { ok: false, code: 1, stderr: `${refusal}\nGraphQL: another error (mergePullRequest)` },
+      'github-write-uncertain',
+      'unknown',
+    ],
+    [
+      { ok: false, code: 1, stderr: refusal, error: 'spawn-failed' },
+      'github-write-uncertain',
+      'unknown',
+    ],
+    [
+      { ok: false, code: null, stderr: refusal, error: 'timeout' },
+      'github-write-uncertain',
+      'timeout',
+    ],
     [{ ok: false, code: 0, stderr: refusal }, 'github-write-uncertain', 'unknown'],
   ]) {
-    const gh = createGitHub({ repo: 'l2v-hub/ClinicOS', cwd: '/synthetic',
-      run: async () => result });
+    const gh = createGitHub({
+      repo: 'l2v-hub/ClinicOS',
+      cwd: '/synthetic',
+      run: async () => result,
+    });
     await assert.rejects(gh.mergePullRequest(81, 'a'.repeat(40)), (error) => {
       assert.equal(error.code, expectedCode);
       assert.equal(error.diagnostic, expectedDiagnostic);
@@ -1907,23 +1941,114 @@ test('GitHub failure semantics distinguish positive status evidence, default POS
       return true;
     });
   }
-  const wrongOperation = createGitHub({ repo: 'l2v-hub/ClinicOS', cwd: '/synthetic',
-    run: async () => ({ ok: false, code: 1, stderr: refusal }) });
-  await assert.rejects(wrongOperation.commentPR(81, 'Synthetic notice'),
-    { code: 'github-write-uncertain', diagnostic: 'unknown' });
+  const wrongOperation = createGitHub({
+    repo: 'l2v-hub/ClinicOS',
+    cwd: '/synthetic',
+    run: async () => ({ ok: false, code: 1, stderr: refusal }),
+  });
+  await assert.rejects(wrongOperation.commentPR(81, 'Synthetic notice'), {
+    code: 'github-write-uncertain',
+    diagnostic: 'unknown',
+  });
 });
 
 test('strict integrated decoder rejects JSON scalars/arrays and oversized raw wrapping without permitting a save', async () => {
-  for (const contents of [stateContents(null), stateContents([]), stateContents(7),
-    { ...stateContents({}), content: stateContents({}).content + '\n'.repeat(12 * 1024 * 1024) }]) {
+  for (const contents of [
+    stateContents(null),
+    stateContents([]),
+    stateContents(7),
+    { ...stateContents({}), content: stateContents({}).content + '\n'.repeat(12 * 1024 * 1024) },
+  ]) {
     const writes = [];
-    const store = createGitHub({ repo: 'l2v-hub/ClinicOS', cwd: '/synthetic', run: async (call) => {
-      if (call.args.includes('PUT')) { writes.push(call); assert.fail('Invalid state must not authorize a save'); }
-      return response(apiPath(call.args).includes('/git/ref/heads/')
-        ? { object: { sha: 'a'.repeat(40) } } : contents);
-    } }).createStateStore();
+    const store = createGitHub({
+      repo: 'l2v-hub/ClinicOS',
+      cwd: '/synthetic',
+      run: async (call) => {
+        if (call.args.includes('PUT')) {
+          writes.push(call);
+          assert.fail('Invalid state must not authorize a save');
+        }
+        return response(
+          apiPath(call.args).includes('/git/ref/heads/')
+            ? { object: { sha: 'a'.repeat(40) } }
+            : contents,
+        );
+      },
+    }).createStateStore();
     await assert.rejects(store.load(), /JSON object|metadata is invalid/);
     await assert.rejects(store.save({ replacement: true }), /load durable state/);
     assert.equal(writes.length, 0);
+  }
+});
+
+test('evidence blobs accept the exact 32MiB ceiling with bounded base64 JSON transport', async () => {
+  const { MAX_EVIDENCE_BYTES, MAX_EVIDENCE_TRANSPORT_BYTES } =
+    await import('../../src/bug-pipeline/evidence-limits.mjs');
+  const bytes = Buffer.alloc(MAX_EVIDENCE_BYTES, 37);
+  const oid = createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
+  let limit;
+  const gh = createGitHub({
+    repo: 'l2v-hub/ClinicOS',
+    cwd: '/tmp',
+    run: async ({ args, maxOutputBytes }) => {
+      if (args[1].includes('/contents/'))
+        return response({ type: 'file', sha: oid, size: bytes.length });
+      limit = maxOutputBytes;
+      return response({
+        sha: oid,
+        encoding: 'base64',
+        size: bytes.length,
+        content: bytes.toString('base64').replace(/.{76}/g, '$&\n'),
+      });
+    },
+  });
+  const actual = await gh.readFileAtRevision('artifacts/trace.zip', 'a'.repeat(40));
+  assert.equal(actual.bytes, MAX_EVIDENCE_BYTES);
+  assert.equal(actual.sha256, createHash('sha256').update(bytes).digest('hex'));
+  assert.equal(actual.content, undefined);
+  assert.equal(limit, MAX_EVIDENCE_TRANSPORT_BYTES);
+});
+
+test('evidence blob ceiling, declared sizes, canonical base64 and object digest fail closed', async () => {
+  const { MAX_EVIDENCE_BYTES } = await import('../../src/bug-pipeline/evidence-limits.mjs');
+  const bytes = Buffer.alloc(32, 23);
+  const oid = createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
+  for (const change of [
+    'over-limit',
+    'metadata-size',
+    'blob-size',
+    'object-sha',
+    'payload-hash',
+    'base64',
+  ]) {
+    let blobReads = 0;
+    const metadata = { type: 'file', sha: oid, size: bytes.length };
+    const blob = {
+      sha: oid,
+      encoding: 'base64',
+      size: bytes.length,
+      content: bytes.toString('base64'),
+    };
+    if (change === 'over-limit') metadata.size = MAX_EVIDENCE_BYTES + 1;
+    if (change === 'metadata-size') metadata.size++;
+    if (change === 'blob-size') blob.size++;
+    if (change === 'object-sha') blob.sha = 'f'.repeat(40);
+    if (change === 'payload-hash') blob.content = Buffer.alloc(32, 24).toString('base64');
+    if (change === 'base64') blob.content += '!';
+    const gh = createGitHub({
+      repo: 'l2v-hub/ClinicOS',
+      cwd: '/tmp',
+      run: async ({ args }) => {
+        if (args[1].includes('/contents/')) return response(metadata);
+        blobReads++;
+        return response(blob);
+      },
+    });
+    await assert.rejects(
+      gh.readFileAtRevision('artifacts/trace.zip', 'a'.repeat(40)),
+      /size|base64/,
+      change,
+    );
+    if (change === 'over-limit') assert.equal(blobReads, 0);
   }
 });

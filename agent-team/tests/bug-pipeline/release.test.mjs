@@ -1334,40 +1334,74 @@ test('an exact-only preflight cannot authorize the default backend release merge
 });
 
 async function addContinuations(f, statuses) {
-  const { historyDigest, implementationAttempts } = await import('../../src/bug-pipeline/attempt-budget.mjs');
+  const { historyDigest, implementationAttempts } =
+    await import('../../src/bug-pipeline/attempt-budget.mjs');
   f.batch.implementation = [1, 2, 3, 4].map((round) => ({ round, status: 'failed' }));
-  f.state.operatorTakeover = { nonce: 'legacy-takeover', continuePastFourPreserveHistory: true,
-    subjects: [{ collection: 'batches', id: f.batch.id, pr: 9 }] };
+  f.state.operatorTakeover = {
+    nonce: 'legacy-takeover',
+    continuePastFourPreserveHistory: true,
+    subjects: [{ collection: 'batches', id: f.batch.id, pr: 9 }],
+  };
   f.batch.operatorContinuations = [];
   for (const [index, status] of statuses.entries()) {
     const round = 5 + index;
     if (index) {
       f.batch.budgetExtensions ??= [];
-      f.batch.budgetExtensions.push({ entityId: f.batch.id, pr: 9, kind: 'implementation',
-        previousLimit: round - 1, limit: round, actor: 'operator', at: '2026-10-18T00:00:00Z',
-        reason: 'Preserved legacy allowance', authorizationRef: 'legacy-source', nonce: `extension-${round}`,
-        historyLength: round - 1, historyDigest: historyDigest(implementationAttempts(f.batch)) });
+      f.batch.budgetExtensions.push({
+        entityId: f.batch.id,
+        pr: 9,
+        kind: 'implementation',
+        previousLimit: round - 1,
+        limit: round,
+        actor: 'operator',
+        at: '2026-10-18T00:00:00Z',
+        reason: 'Preserved legacy allowance',
+        authorizationRef: 'legacy-source',
+        nonce: `extension-${round}`,
+        historyLength: round - 1,
+        historyDigest: historyDigest(implementationAttempts(f.batch)),
+      });
     }
-    f.batch.operatorContinuations.push({ round, status,
+    f.batch.operatorContinuations.push({
+      round,
+      status,
       kind: index ? 'audited-budget-continuation' : 'explicit-operator-compatibility-continuation',
       ...(index ? { budgetExtensionNonce: `extension-${round}` } : {}),
-      owner: 'operator', nonce: `round-${round}`, startedAt: '2026-10-18T00:00:00Z',
-      reason: 'Preserve all consumed attempts', authorizationRef: 'legacy-takeover',
-      contractSha256: 'c'.repeat(64), preservedEntityDigest: 'd'.repeat(64),
+      owner: 'operator',
+      nonce: `round-${round}`,
+      startedAt: '2026-10-18T00:00:00Z',
+      reason: 'Preserve all consumed attempts',
+      authorizationRef: 'legacy-takeover',
+      contractSha256: 'c'.repeat(64),
+      preservedEntityDigest: 'd'.repeat(64),
       preservedLegacyImplementationDigest: historyDigest(f.batch.implementation),
-      preservedLegacyReviewsDigest: historyDigest(f.batch.reviews) });
+      preservedLegacyReviewsDigest: historyDigest(f.batch.reviews),
+    });
   }
-  if (f.batch.budgetExtensions) f.batch.budgetAuthorizationCutover = { schemaVersion: 1,
-    legacyCount: f.batch.budgetExtensions.length, legacyDigest: historyDigest(f.batch.budgetExtensions),
-    actor: 'trusted-state-owner', at: '2026-10-18T00:00:00Z', authorizationRef: 'test:legacy-cutover' };
+  if (f.batch.budgetExtensions)
+    f.batch.budgetAuthorizationCutover = {
+      schemaVersion: 1,
+      legacyCount: f.batch.budgetExtensions.length,
+      legacyDigest: historyDigest(f.batch.budgetExtensions),
+      actor: 'trusted-state-owner',
+      at: '2026-10-18T00:00:00Z',
+      authorizationRef: 'test:legacy-cutover',
+    };
 }
 
 test('actual release reserves and merges a passed continuation after four failed legacy attempts', async () => {
   const f = fixture();
   await addContinuations(f, ['failed', 'passed']);
   const before = structuredClone(f.batch.implementation);
-  const result = await releaseBatch({ repo: f.state.repository, github: f.github, store: f.store,
-    batchId: f.batch.id, reviewedSha: sha, configured, execute: true });
+  const result = await releaseBatch({
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    reviewedSha: sha,
+    configured,
+    execute: true,
+  });
   assert.equal(result.status, 'merged');
   assert.equal(f.calls.filter(([kind]) => kind === 'merge').length, 1);
   assert.deepEqual(f.getSaved().batches[0].implementation, before);
@@ -1378,8 +1412,402 @@ test('failed or active latest continuation blocks actual release even after a pa
   for (const status of ['failed', 'running', 'implemented-awaiting-independent-qa']) {
     const f = fixture();
     await addContinuations(f, ['passed', status]);
-    await assert.rejects(releaseBatch({ repo: f.state.repository, github: f.github, store: f.store,
-      batchId: f.batch.id, reviewedSha: sha, configured, execute: true }), /latest implementation/);
+    await assert.rejects(
+      releaseBatch({
+        repo: f.state.repository,
+        github: f.github,
+        store: f.store,
+        batchId: f.batch.id,
+        reviewedSha: sha,
+        configured,
+        execute: true,
+      }),
+      /latest implementation/,
+    );
     assert.equal(f.calls.filter(([kind]) => kind === 'merge').length, 0);
+  }
+});
+
+function exactBackendFixture() {
+  const f = backendFixture();
+  let main = 'c'.repeat(40),
+    next = 900;
+  const runs = [];
+  const reader = {
+    async getJson(route) {
+      if (route === 'commits/main') return { sha: main };
+      if (route.startsWith('actions/runs/'))
+        return structuredClone(runs.find((r) => r.id === Number(route.split('/').at(-1))));
+      const requested = new URLSearchParams(route.split('?')[1]).get('head_sha');
+      const selected = runs.filter((r) => r.head_sha === requested);
+      return { total_count: selected.length, workflow_runs: structuredClone(selected) };
+    },
+    async artifact(run, kind) {
+      return {
+        artifactDigest: `sha256:${'7'.repeat(64)}`,
+        receiptSha256: '8'.repeat(64),
+        receipt: {
+          schemaVersion: 1,
+          kind,
+          sourcePolicy: DEMO_SOURCE_POLICIES.exact,
+          repository: f.state.repository,
+          sourceRef: 'refs/heads/main',
+          mergeSha: run.head_sha,
+          reviewedSha: run.head_sha,
+          runId: run.id,
+          runAttempt: 1,
+          target: { ...DEMO_TARGET },
+          verifiedAt: new Date().toISOString(),
+          deployment: {
+            id: '12345678-1234-4123-8123-123456789abc',
+            status: 'SUCCESS',
+            commitHash: run.head_sha,
+          },
+          ready: {
+            status: 'ready',
+            tier: 'demo',
+            deploymentId: '12345678-1234-4123-8123-123456789abc',
+          },
+        },
+      };
+    },
+  };
+  const oldMerge = f.github.mergePullRequest;
+  f.github.mergePullRequest = async (number, subject, { guard }) => {
+    await guard();
+    assert.equal(f.getSaved().batches[0].exactDemoDispatches.preflight.phase, 'succeeded');
+    assert.equal(runs.filter((r) => r.display_title.includes(' deploy ')).length, 0);
+    const result = await oldMerge(number, subject);
+    main = mergeSha;
+    f.feedback.state = 'MERGED';
+    f.feedback.mergeCommitSha = mergeSha;
+    return result;
+  };
+  return {
+    ...f,
+    reader,
+    runs,
+    setMain(value) {
+      main = value;
+    },
+    post: async (body) => {
+      const { operation, reviewed_sha: head, dispatch_id: id } = body.inputs;
+      assert.equal(body.ref, 'main');
+      assert.equal(head, main);
+      const durable = f.getSaved().batches[0];
+      assert.equal(durable.exactDemoDispatches[operation].phase, 'intent');
+      if (operation === 'deploy') assert.equal(durable.release.status, 'merged');
+      f.calls.push(['dispatch', operation, head]);
+      runs.push({
+        id: ++next,
+        run_attempt: 1,
+        status: 'completed',
+        conclusion: 'success',
+        head_branch: 'main',
+        head_sha: head,
+        repository: { full_name: f.state.repository },
+        head_repository: { full_name: f.state.repository },
+        event: 'workflow_dispatch',
+        path: '.github/workflows/deploy-demo-exact-commit.yml',
+        display_title: `demo-exact ${operation} ${head} ${id}`,
+      });
+    },
+  };
+}
+
+async function wireExact(f) {
+  const { createExactDemoDispatcher } =
+    await import('../../src/bug-pipeline/exact-demo-dispatch.mjs');
+  const dispatcher = createExactDemoDispatcher({ reader: f.reader, postDispatch: f.post });
+  f.github.ensureExactDemoRun = (input) => dispatcher.ensure(input);
+}
+const exactInput = (f) => ({
+  repo: f.state.repository,
+  github: f.github,
+  store: f.store,
+  batchId: f.batch.id,
+  reviewedSha: sha,
+  configured,
+  execute: true,
+  sourcePolicy: DEMO_SOURCE_POLICIES.exact,
+});
+
+test('explicit exact release persists current-main read-only preflight before merge and exact merged-SHA deployment after it', async () => {
+  const f = exactBackendFixture();
+  await wireExact(f);
+  const result = await releaseBatch(exactInput(f));
+  assert.equal(result.status, 'merged');
+  assert.equal(result.railwayRunUrl, 'https://github.com/l2v-hub/ClinicOS/actions/runs/902');
+  assert.deepEqual(
+    f.calls.filter(([call]) => call === 'dispatch').map((c) => c.slice(1)),
+    [
+      ['preflight', 'c'.repeat(40)],
+      ['deploy', mergeSha],
+    ],
+  );
+  assert.equal(f.getSaved().batches[0].release.sourcePolicy, DEMO_SOURCE_POLICIES.exact);
+  assert.equal(f.getSaved().batches[0].exactDemoDispatches.deploy.phase, 'succeeded');
+  const repeated = await releaseBatch(exactInput(f));
+  assert.equal(repeated.alreadyMerged, true);
+  assert.equal(f.calls.filter(([call]) => call === 'dispatch').length, 2);
+  assert.equal(f.calls.filter(([call]) => call === 'merge').length, 1);
+});
+
+test('invalid source policy is rejected before loading state, mutation or callback for every release boundary', async () => {
+  const { main, releaseSourcePolicy } = await import('../../src/bug-pipeline/release.mjs');
+  assert.equal(releaseSourcePolicy(), DEMO_SOURCE_POLICIES.trigger);
+  for (const policy of ['', null, 'exact', 'native-exact-commit-v2']) {
+    const f = backendFixture();
+    let loaded = false;
+    f.store.load = async () => {
+      loaded = true;
+      throw Error('must not load');
+    };
+    await assert.rejects(
+      releaseBatch({ ...exactInput(f), sourcePolicy: policy }),
+      /unknown demo source policy/,
+    );
+    await assert.rejects(recordDeployment({ sourcePolicy: policy }), /unknown demo source policy/);
+    await assert.rejects(
+      publishDeploymentCompletion({ sourcePolicy: policy }),
+      /unknown demo source policy/,
+    );
+    await assert.rejects(
+      main({ env: { BUG_PIPELINE_DEMO_SOURCE_POLICY: policy } }),
+      /unknown demo source policy/,
+    );
+    assert.equal(loaded, false);
+    assert.equal(f.calls.length, 0);
+  }
+});
+
+test('exact main dispatch requires trusted protected workflow and explicit scoped Actions binding', async () => {
+  const { main } = await import('../../src/bug-pipeline/release.mjs');
+  const env = {
+    BUG_PIPELINE_DEMO_SOURCE_POLICY: DEMO_SOURCE_POLICIES.exact,
+    BUG_PIPELINE_ACTIONS_TOKEN: 'fake-token',
+    GITHUB_REPOSITORY: 'l2v-hub/ClinicOS',
+    GITHUB_REF: 'refs/heads/main',
+    GITHUB_EVENT_NAME: 'workflow_dispatch',
+    GITHUB_WORKFLOW_REF: 'l2v-hub/ClinicOS/.github/workflows/codex-bug-release.yml@refs/heads/main',
+  };
+  for (const [key, value] of [
+    ['GITHUB_REF', 'refs/pull/9/merge'],
+    ['GITHUB_REPOSITORY', 'other/repo'],
+    ['GITHUB_WORKFLOW_REF', 'other.yml@refs/heads/main'],
+    ['GITHUB_EVENT_NAME', 'pull_request'],
+    ['BUG_PIPELINE_ACTIONS_TOKEN', ''],
+  ]) {
+    await assert.rejects(
+      main({ env: { ...env, [key]: value } }),
+      /fixed protected main|scoped Actions/,
+    );
+  }
+});
+
+test('exact release dry run cannot dispatch and missing exact proof never falls back to legacy', async () => {
+  const f = exactBackendFixture();
+  await wireExact(f);
+  await assert.rejects(releaseBatch({ ...exactInput(f), execute: false }), /execution flag/);
+  assert.equal(
+    f.calls.some(([call]) => ['dispatch', 'merge'].includes(call)),
+    false,
+  );
+  delete f.github.ensureExactDemoRun;
+  await assert.rejects(releaseBatch(exactInput(f)), /adapter unavailable/);
+  assert.equal(
+    f.calls.some(([call]) => call === 'demo-preflight'),
+    false,
+  );
+});
+
+test('main movement after protected merge retains merged progress and never dispatches wrong-SHA deployment', async () => {
+  const f = exactBackendFixture();
+  await wireExact(f);
+  const merge = f.github.mergePullRequest;
+  f.github.mergePullRequest = async (...args) => {
+    const result = await merge(...args);
+    f.setMain('d'.repeat(40));
+    return result;
+  };
+  await assert.rejects(releaseBatch(exactInput(f)), /main changed/);
+  assert.equal(f.getSaved().batches[0].release.status, 'merged');
+  assert.equal(f.getSaved().batches[0].exactDemoDispatches.preflight.phase, 'succeeded');
+  assert.equal(f.calls.filter(([call]) => call === 'dispatch').length, 1);
+  await assert.rejects(releaseBatch(exactInput(f)), /main changed/);
+  assert.equal(f.calls.filter(([call]) => call === 'merge').length, 1);
+});
+
+test('exact record and pending completion recheck pass the selected policy and bind durable dispatch', async () => {
+  const f = exactBackendFixture();
+  await wireExact(f);
+  const result = await releaseBatch(exactInput(f));
+  const policies = [];
+  const proof = {
+    ...f.proof,
+    runUrl: result.railwayRunUrl,
+    receipt: { ...f.proof.receipt, sourcePolicy: DEMO_SOURCE_POLICIES.exact },
+  };
+  f.github.verifyDemoRelease = async (input) => {
+    policies.push(input.sourcePolicy);
+    assert.equal(input.runUrl, result.railwayRunUrl);
+    return proof;
+  };
+  await assert.rejects(
+    recordDeployment({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      mergeSha,
+      railwayRunUrl: result.railwayRunUrl,
+    }),
+    /source policy mismatch/,
+  );
+  await assert.rejects(
+    recordDeployment({ ...exactInput(f), mergeSha, railwayRunUrl: railwayUrl }),
+    /durable successful dispatch/,
+  );
+  await recordDeployment({ ...exactInput(f), mergeSha, railwayRunUrl: result.railwayRunUrl });
+  assert.deepEqual(policies, [DEMO_SOURCE_POLICIES.exact, DEMO_SOURCE_POLICIES.exact]);
+  assert.equal(publicationComplete(f.getSaved().batches[0]), true);
+});
+
+test('release evidence metadata accepts exactly 32MiB, rejects over-limit and preserves size/hash checks', async () => {
+  const { MAX_EVIDENCE_BYTES } = await import('../../src/bug-pipeline/evidence-limits.mjs');
+  for (const scenario of ['limit', 'over-limit', 'size-mismatch', 'hash-mismatch']) {
+    const f = fixture();
+    const entry = f.batch.evidence[0].files.trace;
+    const saved = { ...entry };
+    try {
+      entry.bytes = MAX_EVIDENCE_BYTES + (scenario === 'over-limit' ? 1 : 0);
+      const original = f.github.readFileAtRevision;
+      f.github.readFileAtRevision = async (file) => {
+        const result = await original(file);
+        if (file !== tracePath) return result;
+        return {
+          ...result,
+          ...(scenario === 'size-mismatch' ? { bytes: result.bytes - 1 } : {}),
+          ...(scenario === 'hash-mismatch' ? { sha256: '0'.repeat(64) } : {}),
+        };
+      };
+      const input = {
+        repo: f.state.repository,
+        github: f.github,
+        store: f.store,
+        batchId: f.batch.id,
+        reviewedSha: sha,
+        configured,
+      };
+      if (scenario === 'limit')
+        assert.equal((await releaseBatch(input)).status, 'ready-to-release');
+      else await assert.rejects(releaseBatch(input), /invalid trace evidence|digest mismatch/);
+      assert.equal(
+        f.calls.some(([call]) => call === 'merge'),
+        false,
+      );
+    } finally {
+      Object.assign(entry, saved);
+    }
+  }
+});
+
+test('protected main orchestration keeps fixed exact policy, scoped Actions permission, distinct queues and dedicated demo environment', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const control = await readFile(
+    new URL('../../../.github/workflows/codex-bug-release.yml', import.meta.url),
+    'utf8',
+  );
+  const exact = await readFile(
+    new URL('../../../.github/workflows/deploy-demo-exact-commit.yml', import.meta.url),
+    'utf8',
+  );
+  assert.equal(
+    (control.match(/BUG_PIPELINE_DEMO_SOURCE_POLICY: native-exact-commit-v1/g) || []).length,
+    2,
+  );
+  assert.match(control, /jobs:\n  release:[\s\S]*?permissions:[\s\S]*?actions: write/);
+  assert.match(control, /BUG_PIPELINE_ACTIONS_TOKEN: \$\{\{ github.token \}\}/);
+  assert.doesNotMatch(control, /workflow deploy-backend.yml|RAILWAY_DEMO_CONFIGURED/);
+  assert.match(control, /group: codex-bug-pipeline-/);
+  assert.doesNotMatch(control, /group: railway-demo/);
+  assert.match(exact, /group: railway-demo/);
+  assert.match(
+    exact,
+    /run-name: demo-exact \$\{\{ inputs.operation \}\} \$\{\{ inputs.reviewed_sha \}\} \$\{\{ inputs.dispatch_id \}\}/,
+  );
+  assert.match(exact, /environment: 'glistening-friendship \/ demo'/);
+  assert.match(exact, /RAILWAY_TOKEN: \$\{\{ secrets.RAILWAY_DEMO_TOKEN \}\}/);
+  assert.match(exact, /assert.equal\(process.env.CLINICOS_REVIEWED_SHA, process.env.GITHUB_SHA\)/);
+  assert.match(exact, /assert.match\(process.env.CLINICOS_DISPATCH_ID/);
+});
+
+test('CLI exact live verifier rechecks protected main before and after proof while legacy default stays available', async () => {
+  const { verifyReleaseDemo } = await import('../../src/bug-pipeline/release.mjs');
+  for (const move of ['before', 'during', 'never']) {
+    let head = move === 'before' ? 'c'.repeat(40) : mergeSha,
+      verifications = 0,
+      reads = 0;
+    const reader = {
+      async getJson(route) {
+        if (route === 'actions/runs/55') return { id: 55, run_attempt: 1 };
+        assert.equal(route, 'commits/main');
+        reads++;
+        return { sha: head };
+      },
+    };
+    const input = {
+      sourcePolicy: DEMO_SOURCE_POLICIES.exact,
+      reader,
+      mergeSha,
+      runUrl: 'https://github.com/l2v-hub/ClinicOS/actions/runs/55',
+      verify: async (args) => {
+        verifications++;
+        assert.equal(args.sourcePolicy, DEMO_SOURCE_POLICIES.exact);
+        if (move === 'during') head = 'd'.repeat(40);
+        return { proof: true };
+      },
+    };
+    if (move === 'never') assert.deepEqual(await verifyReleaseDemo(input), { proof: true });
+    else await assert.rejects(verifyReleaseDemo(input), /current main changed/);
+    assert.equal(verifications, move === 'before' ? 0 : 1);
+    assert.equal(reads, move === 'before' ? 1 : 2);
+  }
+  const legacy = await verifyReleaseDemo({
+    reader: {
+      getJson() {
+        throw Error('legacy does not require exact main');
+      },
+    },
+    verify: async (input) => ({ policy: input.sourcePolicy }),
+  });
+  assert.equal(legacy.policy, DEMO_SOURCE_POLICIES.trigger);
+});
+
+test('CLI exact completion rejects a rerun before or during live proof verification', async () => {
+  const { verifyReleaseDemo } = await import('../../src/bug-pipeline/release.mjs');
+  for (const change of ['before', 'during']) {
+    let attempt = change === 'before' ? 2 : 1,
+      verified = 0;
+    const reader = {
+      async getJson(route) {
+        return route === 'commits/main' ? { sha: mergeSha } : { id: 55, run_attempt: attempt };
+      },
+    };
+    await assert.rejects(
+      verifyReleaseDemo({
+        sourcePolicy: DEMO_SOURCE_POLICIES.exact,
+        reader,
+        mergeSha,
+        runUrl: 'https://github.com/l2v-hub/ClinicOS/actions/runs/55',
+        verify: async () => {
+          verified++;
+          attempt = 2;
+          return { proof: true };
+        },
+      }),
+      /run attempt changed/,
+    );
+    assert.equal(verified, change === 'before' ? 0 : 1);
   }
 });

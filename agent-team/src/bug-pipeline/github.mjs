@@ -1,3 +1,4 @@
+import { MAX_EVIDENCE_BYTES, MAX_EVIDENCE_TRANSPORT_BYTES } from './evidence-limits.mjs';
 import { ENTITY_COLLECTIONS, attemptLimit } from './attempt-budget.mjs';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
@@ -16,11 +17,15 @@ export function recordTransientGitHubFailure(subject, clock) {
   const previous = subject.lastTransientFailure;
   const sameHead = previous?.subjectSha === subject.sha;
   const count = sameHead ? Math.min(previous.count + 1, 32) : 1;
-  const firstFailureAt = sameHead && Number.isFinite(previous.firstFailureAt)
-    ? previous.firstFailureAt : clock;
+  const firstFailureAt =
+    sameHead && Number.isFinite(previous.firstFailureAt) ? previous.firstFailureAt : clock;
   subject.lastTransientFailure = {
-    code: 'github-read-transient', operation: 'read', at: new Date(clock).toISOString(),
-    count, firstFailureAt, subjectSha: subject.sha,
+    code: 'github-read-transient',
+    operation: 'read',
+    at: new Date(clock).toISOString(),
+    count,
+    firstFailureAt,
+    subjectSha: subject.sha,
     nextRetryAt: clock + Math.min(60_000 * 2 ** Math.min(count - 1, 5), 30 * 60_000),
   };
   return clock - firstFailureAt >= GITHUB_TRANSIENT_WINDOW_MS;
@@ -105,27 +110,51 @@ export function stateError(code, message, cause) {
 // contain arbitrary clinical text and credentials, so it is never persisted or interpolated.
 export function githubOperationError(result, operation = 'read') {
   const detail = String(result?.stderr ?? '');
-  const statusMatch = /(?:\(HTTP ([45][0-9]{2})\)|^HTTP(?:\/\d(?:\.\d)?)?\s+([45][0-9]{2})\b)/m.exec(detail);
+  const statusMatch =
+    /(?:\(HTTP ([45][0-9]{2})\)|^HTTP(?:\/\d(?:\.\d)?)?\s+([45][0-9]{2})\b)/m.exec(detail);
   const status = statusMatch ? Number(statusMatch[1] ?? statusMatch[2]) : null;
-  const rateLimited = status === 403 && /(?:API rate limit exceeded|secondary rate limit)/i.test(detail);
+  const rateLimited =
+    status === 403 && /(?:API rate limit exceeded|secondary rate limit)/i.test(detail);
   const timeout = result?.error === 'timeout';
-  const graphqlMergeRefusal = operation === 'merge' && result?.code === 1 && !result?.error &&
+  const graphqlMergeRefusal =
+    operation === 'merge' &&
+    result?.code === 1 &&
+    !result?.error &&
     !String(result?.stdout ?? '').trim() &&
-    /^GraphQL: Head branch was modified\. Review and try the merge again\. \(mergePullRequest\)$/
-      .test(detail.trim());
+    /^GraphQL: Head branch was modified\. Review and try the merge again\. \(mergePullRequest\)$/.test(
+      detail.trim(),
+    );
   const transient = timeout || status === 408 || status === 429 || status >= 500 || rateLimited;
-  const code = operation === 'read'
-    ? transient ? 'github-read-transient' : status ? 'github-read-rejected' : 'github-read-failed'
-    : (status && status < 500 && status !== 408) || graphqlMergeRefusal
-      ? 'github-write-rejected' : 'github-write-uncertain';
-  return Object.assign(stateError(code, `GitHub operation failed${status ? ` (HTTP ${status})` : ''}`), {
-    operation, httpStatus: status, retryable: ['read', 'projection'].includes(operation) && transient,
-    diagnostic: timeout ? 'timeout' : rateLimited ? 'rate-limit' : status ? 'http-status' :
-      graphqlMergeRefusal ? 'graphql-merge-refusal' : 'unknown',
-  });
+  const code =
+    operation === 'read'
+      ? transient
+        ? 'github-read-transient'
+        : status
+          ? 'github-read-rejected'
+          : 'github-read-failed'
+      : (status && status < 500 && status !== 408) || graphqlMergeRefusal
+        ? 'github-write-rejected'
+        : 'github-write-uncertain';
+  return Object.assign(
+    stateError(code, `GitHub operation failed${status ? ` (HTTP ${status})` : ''}`),
+    {
+      operation,
+      httpStatus: status,
+      retryable: ['read', 'projection'].includes(operation) && transient,
+      diagnostic: timeout
+        ? 'timeout'
+        : rateLimited
+          ? 'rate-limit'
+          : status
+            ? 'http-status'
+            : graphqlMergeRefusal
+              ? 'graphql-merge-refusal'
+              : 'unknown',
+    },
+  );
 }
 export function githubApiOperation({ method, body } = {}) {
-  return ((!method && body === undefined) || method === 'GET') ? 'read' : 'mutation';
+  return (!method && body === undefined) || method === 'GET' ? 'read' : 'mutation';
 }
 export function isRetryableGitHubFailure(error) {
   return controllerFailureCode(error) === 'github-read-transient';
@@ -543,11 +572,15 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
   async function decodeDurableState(contents) {
     if (
       contents?.type !== 'file' ||
-      contents.target !== undefined || contents.submodule_git_url !== undefined ||
-      typeof contents.sha !== 'string' || !/^[a-f0-9]{40}$/i.test(contents.sha) ||
-      !Number.isSafeInteger(contents.size) || contents.size <= 0 ||
+      contents.target !== undefined ||
+      contents.submodule_git_url !== undefined ||
+      typeof contents.sha !== 'string' ||
+      !/^[a-f0-9]{40}$/i.test(contents.sha) ||
+      !Number.isSafeInteger(contents.size) ||
+      contents.size <= 0 ||
       contents.size > MAX_DURABLE_STATE_BYTES
-    ) throw new Error('Durable state path is not a regular file');
+    )
+      throw new Error('Durable state path is not a regular file');
     let record;
     if (contents.encoding === 'base64') record = contents;
     else if (contents.encoding === 'none') {
@@ -711,21 +744,24 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     if (typeof title !== 'string' || !title.trim() || typeof body !== 'string') {
       throw new TypeError('draft title and body are required');
     }
-    const response = await invoke([
-      'pr',
-      'create',
-      '--repo',
-      repo,
-      '--base',
-      'main',
-      '--head',
-      branch,
-      '--title',
-      title,
-      '--body',
-      body,
-      '--draft',
-    ], { operation: 'mutation' });
+    const response = await invoke(
+      [
+        'pr',
+        'create',
+        '--repo',
+        repo,
+        '--base',
+        'main',
+        '--head',
+        branch,
+        '--title',
+        title,
+        '--body',
+        body,
+        '--draft',
+      ],
+      { operation: 'mutation' },
+    );
     const url = response.stdout.trim();
     const match = url.match(/\/pull\/(\d+)\/?$/);
     if (!match) throw new Error('GitHub did not return a draft pull request URL');
@@ -1018,16 +1054,10 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     if (typeof sha !== 'string' || !/^[a-f0-9]{40}$/.test(sha))
       throw new TypeError('merge requires an exact reviewed SHA');
     if (guard !== undefined) await checkMutationGuard(guard);
-    await invoke([
-      'pr',
-      'merge',
-      String(number),
-      '--repo',
-      repo,
-      '--squash',
-      '--match-head-commit',
-      sha,
-    ], { operation: 'merge' });
+    await invoke(
+      ['pr', 'merge', String(number), '--repo', repo, '--squash', '--match-head-commit', sha],
+      { operation: 'merge' },
+    );
     const merged = await api(`repos/${repo}/pulls/${number}`);
     if (
       String(merged.value.state ?? '').toUpperCase() !== 'CLOSED' ||
@@ -1063,17 +1093,31 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       !/^[a-f0-9]{40}$/.test(metadata.value.sha ?? '') ||
       !Number.isSafeInteger(metadata.value.size) ||
       metadata.value.size < 0 ||
-      metadata.value.size > 25 * 1024 * 1024
+      metadata.value.size > MAX_EVIDENCE_BYTES
     ) {
       throw new Error(`remote evidence file is unavailable or outside size limits: ${file}`);
     }
     const blob = await api(`repos/${repo}/git/blobs/${metadata.value.sha}`, {
-      maxOutputBytes: 40 * 1024 * 1024,
+      maxOutputBytes: MAX_EVIDENCE_TRANSPORT_BYTES,
     });
-    if (blob.value?.encoding !== 'base64' || typeof blob.value.content !== 'string')
+    if (
+      blob.value?.encoding !== 'base64' ||
+      typeof blob.value.content !== 'string' ||
+      blob.value.content.length > MAX_EVIDENCE_TRANSPORT_BYTES ||
+      (blob.value.sha !== undefined && blob.value.sha !== metadata.value.sha)
+    )
       throw new Error(`remote evidence blob is not base64: ${file}`);
-    const bytes = Buffer.from(blob.value.content, 'base64');
-    if (bytes.length !== metadata.value.size || blob.value.size !== bytes.length)
+    const encodedBlob = blob.value.content.replace(/[\r\n]/g, '');
+    if (encodedBlob.length > Math.ceil(MAX_EVIDENCE_BYTES / 3) * 4)
+      throw new Error(`remote evidence blob exceeds size limits: ${file}`);
+    const bytes = Buffer.from(encodedBlob, 'base64');
+    if (
+      bytes.length !== metadata.value.size ||
+      blob.value.size !== bytes.length ||
+      bytes.toString('base64') !== encodedBlob ||
+      createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex') !==
+        metadata.value.sha
+    )
       throw new Error(`remote evidence size does not match GitHub metadata: ${file}`);
     return {
       path: file,

@@ -1,3 +1,4 @@
+import { MAX_EVIDENCE_BYTES } from './evidence-limits.mjs';
 import { implementationAttempts } from './attempt-budget.mjs';
 import path from 'node:path';
 import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
@@ -5,15 +6,69 @@ import { fileURLToPath } from 'node:url';
 import { createRunner } from './process.mjs';
 import { createGitHub } from './github.mjs';
 import {
+  DEMO_SOURCE_POLICIES,
   createProofReader,
   createRailwayClient,
   verifyDemoPreflight,
   verifyDemoRelease,
 } from './demo-deployment.mjs';
+import { createExactDemoDispatcher, createExactDispatchPoster } from './exact-demo-dispatch.mjs';
 import { feedbackFingerprint, sha256, validateState } from './contracts.mjs';
 
 const SHA_RE = /^[a-f0-9]{40}$/;
 const DIGEST_RE = /^[a-f0-9]{64}$/;
+
+export function releaseSourcePolicy(value = DEMO_SOURCE_POLICIES.trigger) {
+  if (!Object.values(DEMO_SOURCE_POLICIES).includes(value))
+    throw new TypeError('unknown demo source policy');
+  return value;
+}
+
+// The exact deployment must still be the current protected-main release when recording or closing.
+export async function verifyReleaseDemo({
+  sourcePolicy,
+  reader,
+  verify = verifyDemoRelease,
+  ...input
+}) {
+  sourcePolicy = releaseSourcePolicy(sourcePolicy);
+  const checkMain = async () => {
+    if (sourcePolicy !== DEMO_SOURCE_POLICIES.exact) return;
+    const head = await reader.getJson('commits/main');
+    if (!SHA_RE.test(input.mergeSha ?? '') || head?.sha !== input.mergeSha)
+      fail('current main changed before exact deployment completion');
+    const match = /^https:\/\/github\.com\/l2v-hub\/ClinicOS\/actions\/runs\/([1-9][0-9]*)$/.exec(
+      input.runUrl ?? '',
+    );
+    if (!match) fail('exact deployment run identity missing');
+    const run = await reader.getJson(`actions/runs/${match[1]}`);
+    if (run?.id !== Number(match[1]) || run.run_attempt !== 1)
+      fail('exact deployment run attempt changed');
+  };
+  await checkMain();
+  const proof = await verify({ ...input, reader, sourcePolicy });
+  await checkMain();
+  return proof;
+}
+
+function assertExactDispatchProof(batch, selected, mergeSha, runUrl) {
+  if (selected !== DEMO_SOURCE_POLICIES.exact) return;
+  const saved = batch.exactDemoDispatches?.deploy;
+  if (
+    saved?.phase !== 'succeeded' ||
+    saved.operation !== 'deploy' ||
+    saved.sha !== mergeSha ||
+    !Number.isSafeInteger(saved.runId) ||
+    saved.runId <= 0 ||
+    runUrl !== `https://github.com/l2v-hub/ClinicOS/actions/runs/${saved.runId}`
+  )
+    fail('exact release requires its durable successful dispatch proof');
+}
+
+function assertSavedPolicy(batch, selected) {
+  if (batch.release?.sourcePolicy !== undefined && batch.release.sourcePolicy !== selected)
+    fail('saved release source policy mismatch');
+}
 
 export class ReleaseGateError extends Error {
   constructor(message) {
@@ -210,7 +265,7 @@ async function verifyEvidence(batch, github) {
         !DIGEST_RE.test(saved.sha256 ?? '') ||
         !Number.isSafeInteger(saved.bytes) ||
         saved.bytes < 16 ||
-        saved.bytes > 25 * 1024 * 1024
+        saved.bytes > MAX_EVIDENCE_BYTES
       ) {
         fail(`invalid ${kind} evidence metadata for issue #${expected.issue}`);
       }
@@ -285,7 +340,7 @@ async function verifyCurrentCandidate({
   return { feedback, checks, deployments: appDeployments(batch) };
 }
 
-function assertDeploymentPrerequisites(deployments, configured) {
+function assertDeploymentPrerequisites(deployments, configured, sourcePolicy) {
   if (configured?.botToken !== true)
     fail(
       'CLINICOS_BOT_TOKEN is required before release so the main push triggers authorized CI/deploy workflows',
@@ -294,7 +349,10 @@ function assertDeploymentPrerequisites(deployments, configured) {
     fail(
       'Vercel production token and project bindings are required before merging frontend changes',
     );
-  if ((deployments.backend || deployments.runtime) && configured?.railway !== true)
+  if (
+    (deployments.runtime || (deployments.backend && sourcePolicy !== DEMO_SOURCE_POLICIES.exact)) &&
+    configured?.railway !== true
+  )
     fail('RAILWAY_TOKEN is required before merging Railway service changes');
 }
 
@@ -333,7 +391,11 @@ export async function releaseBatch({
   reviewedSha,
   execute = false,
   configured = {},
+  sourcePolicy,
 }) {
+  sourcePolicy = releaseSourcePolicy(sourcePolicy);
+  if (sourcePolicy === DEMO_SOURCE_POLICIES.exact && repo !== 'l2v-hub/ClinicOS')
+    fail('exact demo release requires the fixed repository');
   if (typeof repo !== 'string' || !repo.includes('/')) throw new TypeError('repo is required');
   if (typeof batchId !== 'string' || !/^bug-batch-[1-9][0-9]*$/.test(batchId))
     throw new TypeError('a valid batch_id is required');
@@ -346,7 +408,49 @@ export async function releaseBatch({
   const batch = structuredClone(initial.batches.find((candidate) => candidate.id === batchId));
   if (!batch) fail('batch is absent from durable state');
   assertNoReleaseHold(batch);
-  const guard = freshReleaseGuard({ batch, store, repo });
+  assertSavedPolicy(batch, sourcePolicy);
+  let guard = freshReleaseGuard({ batch, store, repo });
+  const exact = sourcePolicy === DEMO_SOURCE_POLICIES.exact;
+  const ensureExact = async (operation, expectedSha) => {
+    if (!execute && batch.exactDemoDispatches?.[operation] === undefined)
+      fail('execution flag required before exact workflow dispatch');
+    if (typeof github.ensureExactDemoRun !== 'function') fail('exact dispatch adapter unavailable');
+    return github.ensureExactDemoRun({
+      operation,
+      expectedSha,
+      progress: batch.exactDemoDispatches?.[operation],
+      guard: () => guard(),
+      saveProgress: async (progress) => {
+        if (JSON.stringify(batch.exactDemoDispatches?.[operation]) === JSON.stringify(progress))
+          return;
+        const oldGuard = guard;
+        const { state, current } = await oldGuard();
+        current.exactDemoDispatches = { ...current.exactDemoDispatches, [operation]: progress };
+        const saved = await persistReleaseTransition({
+          state,
+          batch: current,
+          guard: oldGuard,
+          store,
+          repo,
+        });
+        Object.assign(batch, saved);
+        guard = freshReleaseGuard({ batch, store, repo });
+      },
+    });
+  };
+  const preflight = async () => {
+    if (exact) return ensureExact('preflight');
+    if (typeof github.verifyDemoPreflight !== 'function')
+      fail('trusted demo preflight reader unavailable');
+    return github.verifyDemoPreflight({ sourcePolicy });
+  };
+  const finishMerged = async (result) => {
+    if (exact && result.deployments.backend) {
+      const proof = await ensureExact('deploy', result.mergeSha);
+      return { ...result, railwayRunUrl: proof.runUrl };
+    }
+    return result;
+  };
   if (batch.release?.status === 'deployed') {
     if (batch.release.reviewedSha !== reviewedSha)
       fail('batch is already deployed from a different reviewed revision');
@@ -381,11 +485,12 @@ export async function releaseBatch({
 
   const candidate = await verifyCurrentCandidate({ batch, sha: reviewedSha, repo, github });
   await guard();
-  assertDeploymentPrerequisites(candidate.deployments, configured);
+  assertDeploymentPrerequisites(candidate.deployments, configured, sourcePolicy);
   if (candidate.deployments.backend) {
-    if (typeof github.verifyDemoPreflight !== 'function')
-      fail('trusted demo preflight reader unavailable');
-    await github.verifyDemoPreflight();
+    if (exact && candidate.feedback.state === 'MERGED') {
+      if (batch.exactDemoDispatches?.preflight?.phase !== 'succeeded')
+        fail('exact merge recovery requires the saved successful preflight');
+    } else await preflight();
   }
   await guard();
   if (!execute)
@@ -404,14 +509,17 @@ export async function releaseBatch({
       fail('merged PR has no verifiable merge commit');
     const { state, current } = await guard();
     current.release = {
+      sourcePolicy,
       status: 'merged',
       reviewedSha,
       mergeSha: candidate.feedback.mergeCommitSha,
       prNumber: batch.pr.number,
       deployments: candidate.deployments,
     };
-    await persistReleaseTransition({ state, batch: current, guard, store, repo });
-    return {
+    const saved = await persistReleaseTransition({ state, batch: current, guard, store, repo });
+    Object.assign(batch, saved);
+    guard = freshReleaseGuard({ batch, store, repo });
+    return finishMerged({
       ok: true,
       status: 'merged',
       alreadyMerged: true,
@@ -419,7 +527,7 @@ export async function releaseBatch({
       reviewedSha,
       mergeSha: candidate.feedback.mergeCommitSha,
       deployments: candidate.deployments,
-    };
+    });
   }
 
   if (candidate.feedback.isDraft) {
@@ -438,29 +546,40 @@ export async function releaseBatch({
     verifyBlobs: false,
   });
   await guard();
-  if (finalCandidate.deployments.backend) await github.verifyDemoPreflight();
+  if (finalCandidate.deployments.backend) await preflight();
   await guard();
   if (finalCandidate.feedback.state !== 'OPEN' || finalCandidate.feedback.isDraft)
     fail('PR must be open and ready for review before merge');
 
-  const merge = await github.mergePullRequest(batch.pr.number, reviewedSha, { guard });
+  const mergeGuard =
+    exact && finalCandidate.deployments.backend
+      ? async () => {
+          await guard();
+          await preflight();
+          return guard();
+        }
+      : guard;
+  const merge = await github.mergePullRequest(batch.pr.number, reviewedSha, { guard: mergeGuard });
   const { state, current } = await guard();
   current.release = {
+    sourcePolicy,
     status: 'merged',
     reviewedSha,
     mergeSha: merge.mergeSha,
     prNumber: batch.pr.number,
     deployments: finalCandidate.deployments,
   };
-  await persistReleaseTransition({ state, batch: current, guard, store, repo });
-  return {
+  const saved = await persistReleaseTransition({ state, batch: current, guard, store, repo });
+  Object.assign(batch, saved);
+  guard = freshReleaseGuard({ batch, store, repo });
+  return finishMerged({
     ok: true,
     status: 'merged',
     batchId,
     reviewedSha,
     mergeSha: merge.mergeSha,
     deployments: finalCandidate.deployments,
-  };
+  });
 }
 
 function validateDeploymentUrl(value, kind) {
@@ -487,7 +606,9 @@ export async function recordDeployment({
   vercelUrl = '',
   railwayRunUrl = '',
   runtimeRunUrl = '',
+  sourcePolicy,
 }) {
+  sourcePolicy = releaseSourcePolicy(sourcePolicy);
   if (
     typeof batchId !== 'string' ||
     !/^bug-batch-[1-9][0-9]*$/.test(batchId) ||
@@ -503,6 +624,7 @@ export async function recordDeployment({
   )
     fail('deployment does not match a recorded production merge');
   assertNoReleaseHold(batch);
+  assertSavedPolicy(batch, sourcePolicy);
   if (
     batch.phase !== 'ready' ||
     batch.sha !== batch.release.reviewedSha ||
@@ -533,6 +655,7 @@ export async function recordDeployment({
   if (deployments.runtime && !validateDeploymentUrl(runtimeRunUrl, 'railway'))
     fail('successful Railway workflow URL is required for AI runtime changes');
 
+  if (deployments.backend) assertExactDispatchProof(batch, sourcePolicy, mergeSha, railwayRunUrl);
   let demo;
   if (deployments.backend) {
     if (typeof github.verifyDemoRelease !== 'function')
@@ -541,6 +664,7 @@ export async function recordDeployment({
       runUrl: railwayRunUrl,
       mergeSha,
       reviewedSha: batch.release.reviewedSha,
+      sourcePolicy,
     });
   }
   const { state, current } = await guard();
@@ -560,11 +684,13 @@ export async function recordDeployment({
   current.release.publication = publicationRecord(current, 'pending');
   const saved = await persistReleaseTransition({ state, batch: current, guard, store, repo });
 
-  await publishDeploymentCompletion({ batch: saved, github, store, repo });
+  await publishDeploymentCompletion({ batch: saved, github, store, repo, sourcePolicy });
   return { ok: true, status: current.release.deployment.status, batchId, mergeSha, deployments };
 }
 
-export async function publishDeploymentCompletion({ batch, github, store, repo }) {
+export async function publishDeploymentCompletion({ batch, github, store, repo, sourcePolicy }) {
+  sourcePolicy = releaseSourcePolicy(sourcePolicy);
+  assertSavedPolicy(batch, sourcePolicy);
   const suppliedBatch = batch;
   batch = structuredClone(batch);
   assertNoReleaseHold(batch);
@@ -598,6 +724,7 @@ export async function publishDeploymentCompletion({ batch, github, store, repo }
       deployment.demo.runUrl !== railwayRunUrl)
   )
     fail('completion requires the verified demo deployment receipt');
+  if (deployments.backend) assertExactDispatchProof(batch, sourcePolicy, mergeSha, railwayRunUrl);
   const fresh = freshReleaseGuard({ batch: store ? batch : suppliedBatch, store, repo });
   const guard = async () => {
     const verified = await fresh();
@@ -621,6 +748,7 @@ export async function publishDeploymentCompletion({ batch, github, store, repo }
       runUrl: railwayRunUrl,
       mergeSha,
       reviewedSha,
+      sourcePolicy,
     });
     if (
       currentProof.artifactDigest !== deployment.demo.artifactDigest ||
@@ -671,6 +799,23 @@ async function writeOutputs(outputs) {
 }
 
 export async function main({ env = process.env, args = process.argv.slice(2) } = {}) {
+  const sourcePolicy = releaseSourcePolicy(env.BUG_PIPELINE_DEMO_SOURCE_POLICY);
+  const mode = env.BUG_PIPELINE_RELEASE_ACTION || 'release';
+  if (
+    sourcePolicy === DEMO_SOURCE_POLICIES.exact &&
+    mode !== 'record' &&
+    !env.BUG_PIPELINE_ACTIONS_TOKEN
+  )
+    fail('scoped Actions dispatch binding required');
+  if (
+    sourcePolicy === DEMO_SOURCE_POLICIES.exact &&
+    (env.GITHUB_REPOSITORY !== 'l2v-hub/ClinicOS' ||
+      env.GITHUB_REF !== 'refs/heads/main' ||
+      env.GITHUB_WORKFLOW_REF !==
+        'l2v-hub/ClinicOS/.github/workflows/codex-bug-release.yml@refs/heads/main' ||
+      !['workflow_dispatch', 'workflow_run'].includes(env.GITHUB_EVENT_NAME))
+  )
+    fail('exact dispatch requires the fixed protected main release workflow');
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
   const runtimeRoot = path.join(
     env.RUNNER_TEMP || path.dirname(root),
@@ -682,14 +827,27 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
   const github = createGitHub({ cwd: root, repo, run });
   const store = github.createStateStore();
   const proofReader = () => createProofReader({ token: env.GH_TOKEN || env.GITHUB_TOKEN });
-  github.verifyDemoPreflight = () => verifyDemoPreflight({ reader: proofReader() });
+  github.verifyDemoPreflight = () => verifyDemoPreflight({ reader: proofReader(), sourcePolicy });
+  if (sourcePolicy === DEMO_SOURCE_POLICIES.exact && mode !== 'record') {
+    const dispatcher = createExactDemoDispatcher({
+      reader: proofReader(),
+      postDispatch: createExactDispatchPoster({
+        run: createRunner({
+          env: { ...env, GH_TOKEN: env.BUG_PIPELINE_ACTIONS_TOKEN, GITHUB_TOKEN: undefined },
+          runtimeRoot,
+        }),
+        cwd: root,
+      }),
+    });
+    github.ensureExactDemoRun = (input) => dispatcher.ensure(input);
+  }
   github.verifyDemoRelease = (input) =>
-    verifyDemoRelease({
+    verifyReleaseDemo({
       ...input,
+      sourcePolicy,
       reader: proofReader(),
       client: createRailwayClient({ token: env.RAILWAY_DEMO_TOKEN }),
     });
-  const mode = env.BUG_PIPELINE_RELEASE_ACTION || 'release';
 
   if (mode === 'record') {
     const result = await recordDeployment({
@@ -701,6 +859,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
       vercelUrl: env.VERCEL_DEPLOYMENT_URL || '',
       railwayRunUrl: env.RAILWAY_DEPLOYMENT_RUN_URL || '',
       runtimeRunUrl: env.RUNTIME_DEPLOYMENT_RUN_URL || '',
+      sourcePolicy,
     });
     console.log(JSON.stringify(result));
     return 0;
@@ -749,6 +908,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
     batchId,
     reviewedSha,
     execute: true,
+    sourcePolicy,
     configured: {
       botToken: env.CLINICOS_BOT_TOKEN_CONFIGURED === 'true',
       vercel: env.VERCEL_CONFIGURED === 'true',
@@ -763,6 +923,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
     frontend: String(result.deployments?.frontend === true),
     backend: String(result.deployments?.backend === true),
     runtime: String(result.deployments?.runtime === true),
+    railway_url: result.railwayRunUrl || '',
   });
   console.log(JSON.stringify(result));
   return 0;

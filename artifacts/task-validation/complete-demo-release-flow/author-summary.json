@@ -1,0 +1,24 @@
+{
+  "status": "AUTHOR_STOP_READY_FOR_INDEPENDENT_QA",
+  "at": "2026-10-21T20:16:22.298653+00:00",
+  "worktree": "/workspace/clinicos-release-integration",
+  "baseSha": "b07317f4d7eee2bd873ff465d0df317459fcde28",
+  "sourcePaths": 11,
+  "tests": {
+    "total": 1075,
+    "passed": 1072,
+    "failed": 0,
+    "skipped": 3,
+    "receipt": "full-3-final.json"
+  },
+  "authenticTrace": {
+    "bytes": 27606230,
+    "sha256": "1d926e21b02c8b3c68353c55bab71151b672c428fcc24359c49e4eb5c9f11102",
+    "receipt": "authentic-media/receipt.json",
+    "freshUiRun": false
+  },
+  "index": "root-confirmed stat refresh; stage-0 entries match HEAD; no byte-unchanged claim",
+  "independentQa": "pending separate reviewer",
+  "publication": "not performed",
+  "providerOrDeploymentProof": "not performed or claimed"
+}

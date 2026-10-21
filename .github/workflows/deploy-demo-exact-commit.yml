@@ -1,10 +1,15 @@
 name: Deploy exact demo commit to Railway
+run-name: demo-exact ${{ inputs.operation }} ${{ inputs.reviewed_sha }} ${{ inputs.dispatch_id }}
 
 on:
   workflow_dispatch:
     inputs:
       reviewed_sha:
         description: Full reviewed SHA of current protected main
+        type: string
+        required: true
+      dispatch_id:
+        description: Unique durable dispatch UUID from the protected release controller
         type: string
         required: true
       operation:
@@ -44,9 +49,13 @@ jobs:
       - name: Require the reviewed main workflow revision before credentials
         env:
           CLINICOS_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+          CLINICOS_DISPATCH_ID: ${{ inputs.dispatch_id }}
+          DEMO_OPERATION: ${{ inputs.operation }}
         run: |
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';
+          assert.match(process.env.CLINICOS_DISPATCH_ID || '', /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}(?![\s\S])/);
+          assert.ok(['preflight', 'deploy'].includes(process.env.DEMO_OPERATION));
           assert.match(process.env.CLINICOS_REVIEWED_SHA || '', /^[a-f0-9]{40}$/);
           assert.equal(process.env.CLINICOS_REVIEWED_SHA, process.env.GITHUB_SHA);
           assert.equal(process.env.GITHUB_REF, 'refs/heads/main');
