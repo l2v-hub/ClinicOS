@@ -1528,3 +1528,439 @@ test('ambiguous one-off recorded outcomes remain visible once per civil day and 
     await prisma.patientTherapy.deleteMany({ where: { id: { in: therapies.map((t) => t.id) } } });
   }
 });
+
+// Prepared by the author; real HTTP/PG execution belongs to independent QA.
+test('valid and repaired one-off clocks preserve authoritative legacy day outcomes and atomic correction', async () => {
+  const clinicalDate = '2033-04-07';
+  for (const repaired of [false, true])
+    for (const modern of [false, true])
+      for (const stato of ['erogata', 'non_erogata']) {
+        const name = `Synthetic valid legacy guard ${randomUUID()}`;
+        const therapy = await prisma.patientTherapy.create({
+          data: {
+            patientId,
+            farmacoNome: name,
+            dosaggio: '1 synthetic tablet',
+            tipo: 'una_tantum',
+            dataInizio: clinicalDate,
+            dataSomministrazione: clinicalDate,
+            orarioSomministrazione: repaired ? null : '11:30',
+            fasceMattina: false,
+          },
+        });
+        const historical = await prisma.medicationAdministration.create({
+          data: {
+            therapyId: modern ? therapy.id : null,
+            patientId,
+            farmacoNome: name,
+            farmacoDose: 'Historical synthetic dose',
+            date: clinicalDate,
+            fascia: 'notte',
+            ora: '00:15',
+            stato,
+            operatoreId: ownerOperatorId,
+            operatoreNome: 'Historical synthetic operator',
+            confirmedAt: stato === 'erogata' ? new Date('2033-04-06T22:15:00Z') : null,
+            motivo: stato === 'non_erogata' ? 'rifiutata_paziente' : null,
+          },
+        });
+        const request = {
+          patientId,
+          therapyId: therapy.id,
+          date: clinicalDate,
+          fascia: 'pranzo',
+          scheduledTime: '11:30',
+          expectedStato: 'da_erogare',
+        };
+        const post = (
+          endpoint: string,
+          patch: Record<string, unknown> = {},
+          operatorId = ownerOperatorId,
+        ) =>
+          fetch(`${base}/therapy-slots/${endpoint}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Operator-Id': operatorId,
+              'X-Operator-Role': 'operatore',
+            },
+            body: JSON.stringify({ ...request, motivo: 'rifiutata_paziente', ...patch }),
+          });
+        const rows = () =>
+          prisma.medicationAdministration.findMany({
+            where: { patientId, farmacoNome: name },
+            orderBy: { id: 'asc' },
+          });
+        const receipts = () =>
+          prisma.therapyAdministrationReceipt.findMany({
+            where: { patientId, result: { path: ['farmacoNome'], equals: name } },
+            orderBy: { requestId: 'asc' },
+          });
+        try {
+          const before = await rows();
+          const receiptsBefore = await receipts();
+          if (repaired) {
+            assert.equal((await post('confirm', { requestId: randomUUID() })).status, 409);
+            assert.deepEqual(await rows(), before);
+            assert.deepEqual(await receipts(), receiptsBefore);
+            await prisma.patientTherapy.update({
+              where: { id: therapy.id },
+              data: { orarioSomministrazione: '11:30' },
+            });
+          }
+          // A valid repaired clock reaches the authoritative record guard across bands.
+          for (const endpoint of ['confirm', 'not-administered']) {
+            assert.equal((await post(endpoint, { requestId: randomUUID() })).status, 409);
+            assert.deepEqual(await rows(), before);
+            assert.deepEqual(await receipts(), receiptsBefore);
+            assert.equal(
+              (await post(endpoint, { requestId: randomUUID() }, 'foreign-synthetic-operator'))
+                .status,
+              404,
+            );
+            assert.deepEqual(await rows(), before);
+            assert.deepEqual(await receipts(), receiptsBefore);
+          }
+          if (stato === 'non_erogata') {
+            assert.equal(
+              (await post('confirm', { expectedStato: undefined, requestId: randomUUID() })).status,
+              409,
+            );
+            assert.deepEqual(await rows(), before);
+            assert.deepEqual(await receipts(), receiptsBefore);
+          }
+          if (stato === 'erogata') {
+            for (const endpoint of ['confirm', 'not-administered']) {
+              assert.equal(
+                (await post(endpoint, { expectedStato: undefined, requestId: randomUUID() }))
+                  .status,
+                409,
+              );
+              assert.deepEqual(await rows(), before);
+              assert.deepEqual(await receipts(), receiptsBefore);
+            }
+            assert.equal(
+              (await post('confirm', { expectedStato: 'non_erogata', requestId: randomUUID() }))
+                .status,
+              409,
+            );
+            assert.deepEqual(await rows(), before);
+            assert.deepEqual(await receipts(), receiptsBefore);
+          } else {
+            const key = randomUUID();
+            const correction = { expectedStato: 'non_erogata', requestId: key };
+            const first = await post('confirm', correction);
+            assert.equal(first.status, 200, await first.clone().text());
+            const result = await first.json();
+            assert.equal(result.id, historical.id);
+            const persisted = await rows();
+            assert.equal(persisted.length, 1);
+            const row = persisted[0];
+            assert.equal(row.id, historical.id);
+            assert.equal(row.therapyId, historical.therapyId);
+            assert.equal(row.fascia, historical.fascia);
+            assert.equal(row.date, historical.date);
+            assert.deepEqual(row.createdAt, historical.createdAt);
+            assert.equal(row.stato, 'erogata');
+            assert.equal(row.operatoreId, ownerOperatorId);
+            assert.equal(row.operatoreNome, ownerOperatorId);
+            assert.ok(row.confirmedAt);
+            assert.equal(row.motivo, null);
+            assert.equal(row.note, null);
+            const savedReceipts = await receipts();
+            assert.equal(savedReceipts.length, 1);
+            assert.equal(savedReceipts[0].requestId, key);
+            assert.equal(savedReceipts[0].actorId, ownerOperatorId);
+            const replay = await post('confirm', correction);
+            assert.equal(replay.status, 200);
+            assert.equal(replay.headers.get('Idempotent-Replayed'), 'true');
+            assert.deepEqual(await replay.json(), result);
+            assert.deepEqual(await rows(), persisted);
+            assert.deepEqual(await receipts(), savedReceipts);
+            for (const patch of [
+              { expectedStato: 'non_erogata' },
+              { expectedStato: 'da_erogare' },
+              { expectedStato: undefined },
+              { ...correction, requestId: randomUUID() },
+            ]) {
+              assert.equal((await post('confirm', patch)).status, 409);
+              assert.deepEqual(await rows(), persisted);
+              assert.deepEqual(await receipts(), savedReceipts);
+            }
+            await prisma.patient.update({
+              where: { id: patientId },
+              data: { registeredById: null },
+            });
+            try {
+              assert.equal((await post('confirm', correction)).status, 404);
+            } finally {
+              await prisma.patient.update({
+                where: { id: patientId },
+                data: { registeredById: ownerOperatorId },
+              });
+            }
+            assert.deepEqual(await rows(), persisted);
+            assert.deepEqual(await receipts(), savedReceipts);
+          }
+        } finally {
+          await prisma.therapyAdministrationReceipt.deleteMany({
+            where: { patientId, result: { path: ['farmacoNome'], equals: name } },
+          });
+          await prisma.medicationAdministration.deleteMany({
+            where: { patientId, farmacoNome: name },
+          });
+          await prisma.patientTherapy.delete({ where: { id: therapy.id } });
+        }
+      }
+});
+
+test('one-off writer resolves contradictory and tied day records without rewriting other history', async () => {
+  const clinicalDate = '2033-04-08';
+  for (const scenario of ['legacy-given', 'modern-given', 'modern-refusal', 'legacy-refusal']) {
+    const name = 'Synthetic priority writer ' + randomUUID();
+    const therapy = await prisma.patientTherapy.create({
+      data: {
+        patientId,
+        farmacoNome: name,
+        dosaggio: '1 synthetic tablet',
+        tipo: 'una_tantum',
+        dataInizio: clinicalDate,
+        dataSomministrazione: clinicalDate,
+        orarioSomministrazione: '11:30',
+        fasceMattina: false,
+      },
+    });
+    const created: string[] = [];
+    const add = async (
+      idPrefix: string,
+      modern: boolean,
+      stato: string,
+      fascia: string,
+      ora: string,
+    ) => {
+      const row = await prisma.medicationAdministration.create({
+        data: {
+          id: idPrefix + randomUUID(),
+          patientId,
+          therapyId: modern ? therapy.id : null,
+          farmacoNome: name,
+          farmacoDose: 'Historical synthetic dose',
+          date: clinicalDate,
+          fascia,
+          ora,
+          stato,
+          operatoreNome: 'Historical synthetic operator',
+        },
+      });
+      created.push(row.id);
+      return row;
+    };
+    try {
+      const legacy = await add(
+        'a-',
+        false,
+        scenario === 'legacy-given' ? 'erogata' : 'non_erogata',
+        'notte',
+        '00:15',
+      );
+      await add('b-', false, 'non_erogata', 'mattina', '08:00');
+      const modern =
+        scenario === 'legacy-refusal'
+          ? null
+          : await add(
+              'z-',
+              true,
+              scenario === 'modern-given' ? 'erogata' : 'non_erogata',
+              'sera',
+              '20:00',
+            );
+      const rows = () =>
+        prisma.medicationAdministration.findMany({
+          where: { patientId, farmacoNome: name },
+          orderBy: { id: 'asc' },
+        });
+      const receipts = () =>
+        prisma.therapyAdministrationReceipt.findMany({
+          where: { patientId, result: { path: ['farmacoNome'], equals: name } },
+          orderBy: { requestId: 'asc' },
+        });
+      const before = await rows();
+      const receiptBefore = await receipts();
+      const post = (endpoint: string, expectedStato: string) =>
+        fetch(`${base}/therapy-slots/${endpoint}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Operator-Id': ownerOperatorId,
+            'X-Operator-Role': 'operatore',
+          },
+          body: JSON.stringify({
+            therapyId: therapy.id,
+            patientId,
+            date: clinicalDate,
+            fascia: 'pranzo',
+            scheduledTime: '11:30',
+            motivo: 'rifiutata_paziente',
+            expectedStato,
+            requestId: randomUUID(),
+          }),
+        });
+      for (const endpoint of ['confirm', 'not-administered']) {
+        assert.equal((await post(endpoint, 'da_erogare')).status, 409);
+        assert.deepEqual(await rows(), before);
+        assert.deepEqual(await receipts(), receiptBefore);
+      }
+      const correction = await post('confirm', 'non_erogata');
+      if (scenario.endsWith('given')) {
+        assert.equal(correction.status, 409);
+        assert.deepEqual(await rows(), before);
+        assert.deepEqual(await receipts(), receiptBefore);
+      } else {
+        assert.equal(correction.status, 200, await correction.clone().text());
+        const selected = scenario === 'modern-refusal' ? modern! : legacy;
+        assert.equal((await correction.json()).id, selected.id);
+        const after = await rows();
+        assert.equal(after.length, before.length);
+        assert.deepEqual(
+          after.filter((row) => row.id !== selected.id),
+          before.filter((row) => row.id !== selected.id),
+        );
+        assert.equal(after.find((row) => row.id === selected.id)?.stato, 'erogata');
+        assert.equal(after.find((row) => row.id === selected.id)?.operatoreId, ownerOperatorId);
+        assert.equal((await receipts()).length, 1);
+        assert.equal((await post('confirm', 'non_erogata')).status, 409);
+        assert.deepEqual(await rows(), after);
+      }
+    } finally {
+      await prisma.therapyAdministrationReceipt.deleteMany({
+        where: { patientId, result: { path: ['farmacoNome'], equals: name } },
+      });
+      await prisma.medicationAdministration.deleteMany({ where: { id: { in: created } } });
+      await prisma.patientTherapy.delete({ where: { id: therapy.id } });
+    }
+  }
+});
+
+test('one-off day identity excludes other patient, date, drug, non-null therapy and unknown outcomes', async () => {
+  const clinicalDate = '2033-04-09';
+  const name = 'Synthetic exact identity ' + randomUUID();
+  const foreignPatient = await prisma.patient.create({
+    data: {
+      medicalRecordNumber: 'MRN-IDENTITY-' + randomUUID(),
+      firstName: 'Synthetic',
+      lastName: 'Other',
+      dateOfBirth: new Date('1970-01-01'),
+      sex: 'F',
+      registeredById: ownerOperatorId,
+    },
+  });
+  const target = await prisma.patientTherapy.create({
+    data: {
+      patientId,
+      farmacoNome: name,
+      dosaggio: '1 synthetic tablet',
+      tipo: 'una_tantum',
+      dataInizio: clinicalDate,
+      dataSomministrazione: clinicalDate,
+      orarioSomministrazione: '11:30',
+      fasceMattina: false,
+    },
+  });
+  const otherTherapy = await prisma.patientTherapy.create({
+    data: {
+      patientId,
+      farmacoNome: name,
+      dosaggio: '1 synthetic tablet',
+      dataInizio: clinicalDate,
+    },
+  });
+  const historicalIds: string[] = [];
+  const requestId = randomUUID();
+  try {
+    for (const patch of [
+      { patientId: foreignPatient.id },
+      { patientId: foreignPatient.id, therapyId: target.id },
+      { date: '2033-04-08' },
+      { farmacoNome: name.toLowerCase() },
+      { therapyId: otherTherapy.id },
+      { stato: 'unknown_synthetic' },
+    ]) {
+      const row = await prisma.medicationAdministration.create({
+        data: {
+          patientId,
+          therapyId: null,
+          farmacoNome: name,
+          farmacoDose: 'Historical synthetic dose',
+          date: clinicalDate,
+          fascia: 'notte',
+          ora: '00:15',
+          stato: 'erogata',
+          ...patch,
+        },
+      });
+      historicalIds.push(row.id);
+    }
+    const historicalRows = () =>
+      prisma.medicationAdministration.findMany({
+        where: { id: { in: historicalIds } },
+        orderBy: { id: 'asc' },
+      });
+    const targetRows = () =>
+      prisma.medicationAdministration.findMany({
+        where: { therapyId: target.id, patientId, date: clinicalDate },
+        orderBy: { id: 'asc' },
+      });
+    const receiptRows = () =>
+      prisma.therapyAdministrationReceipt.findMany({
+        where: { actorId: ownerOperatorId, requestId },
+        orderBy: { requestId: 'asc' },
+      });
+    const before = await historicalRows();
+    assert.deepEqual(await targetRows(), []);
+    assert.deepEqual(await receiptRows(), []);
+    const post = () =>
+      fetch(`${base}/therapy-slots/confirm`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Operator-Id': ownerOperatorId,
+          'X-Operator-Role': 'operatore',
+        },
+        body: JSON.stringify({
+          patientId,
+          therapyId: target.id,
+          date: clinicalDate,
+          fascia: 'pranzo',
+          scheduledTime: '11:30',
+          expectedStato: 'da_erogare',
+          requestId,
+        }),
+      });
+    const response = await post();
+    assert.equal(response.status, 200, await response.clone().text());
+    const result = await response.json();
+    const saved = await targetRows();
+    assert.equal(saved.length, 1);
+    assert.equal(saved[0].id, result.id);
+    assert.equal(saved[0].stato, 'erogata');
+    assert.equal(saved[0].operatoreId, ownerOperatorId);
+    assert.deepEqual(await historicalRows(), before);
+    assert.equal((await receiptRows()).length, 1);
+    const replay = await post();
+    assert.equal(replay.status, 200);
+    assert.equal(replay.headers.get('Idempotent-Replayed'), 'true');
+    assert.deepEqual(await replay.json(), result);
+    assert.deepEqual(await targetRows(), saved);
+    assert.deepEqual(await historicalRows(), before);
+    assert.equal((await receiptRows()).length, 1);
+  } finally {
+    await prisma.therapyAdministrationReceipt.deleteMany({
+      where: { actorId: ownerOperatorId, requestId },
+    });
+    await prisma.medicationAdministration.deleteMany({
+      where: { OR: [{ id: { in: historicalIds } }, { therapyId: target.id }] },
+    });
+    await prisma.patientTherapy.deleteMany({ where: { id: { in: [target.id, otherTherapy.id] } } });
+    await prisma.patient.delete({ where: { id: foreignPatient.id } });
+  }
+});

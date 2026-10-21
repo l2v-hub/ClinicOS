@@ -19,6 +19,7 @@ import {
   TherapyNotFoundError,
 } from './therapy-write.js';
 import { patientIsInOperatorScope } from '../patients/patient-scope.js';
+import { recordedOneTimeOutcome } from './slot-scheduling.js';
 
 /** The slot already holds an `erogata` record: it can be neither re-confirmed nor downgraded. */
 export class TherapyAlreadyAdministeredError extends Error {}
@@ -32,6 +33,8 @@ async function existingSlotRecord(
   tx: Prisma.TransactionClient,
   slot: {
     therapyId: string;
+    patientId: string;
+    farmacoNome: string;
     date: string;
     fascia: string;
     ora: string;
@@ -40,6 +43,20 @@ async function existingSlotRecord(
   },
 ) {
   const { therapyId, date, fascia, ora } = slot;
+  if (slot.singleDayDose) {
+    // Match the reader's civil-day identity, including legacy outcomes after a clock repair.
+    // Access and prescription validity have already been checked by the authoritative resolver.
+    const records = await tx.medicationAdministration.findMany({
+      where: {
+        patientId: slot.patientId,
+        date,
+        OR: [{ therapyId }, { therapyId: null, farmacoNome: slot.farmacoNome }],
+        stato: { in: ['erogata', 'non_erogata'] },
+      },
+      select: { id: true, therapyId: true, patientId: true, farmacoNome: true, stato: true },
+    });
+    return recordedOneTimeOutcome({ id: therapyId, ...slot }, records);
+  }
   if (!slot.singleBandDose && !slot.singleDayDose)
     return tx.medicationAdministration.findUnique({
       where: { therapyId_date_fascia_ora: { therapyId, date, fascia, ora } },
@@ -91,6 +108,8 @@ export async function confirmTherapyAdministration(
     } = authoritative;
     const existing = await existingSlotRecord(tx, {
       therapyId,
+      patientId,
+      farmacoNome,
       date,
       fascia,
       ora,
@@ -103,7 +122,12 @@ export async function confirmTherapyAdministration(
         'La dose rifiutata non è più disponibile: rileggi il registro.',
         409,
       );
-    if (input.expectedStato && existing && existing.stato !== input.expectedStato)
+    if (
+      (singleDayDose &&
+        existing?.stato === 'non_erogata' &&
+        input.expectedStato !== 'non_erogata') ||
+      (input.expectedStato && existing && existing.stato !== input.expectedStato)
+    )
       throw new TherapyWriteInputError(
         'La dose non è più da erogare: rileggi il giro prima di registrare.',
         409,
@@ -178,6 +202,8 @@ export async function recordTherapyNotAdministered(
     } = authoritative;
     const existing = await existingSlotRecord(tx, {
       therapyId,
+      patientId,
+      farmacoNome,
       date,
       fascia,
       ora,
