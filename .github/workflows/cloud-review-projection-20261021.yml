@@ -1,0 +1,30 @@
+name: Restore verified review comment projection
+on:
+  push:
+    branches: [codex/cloud-review-projection-20261021]
+permissions:
+  contents: read
+concurrency:
+  group: clinicos-root-review-projection-483
+  cancel-in-progress: false
+jobs:
+  project-483:
+    if: >-
+      github.repository == 'l2v-hub/ClinicOS' &&
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/codex/cloud-review-projection-20261021'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out only already reviewed trusted controller
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: fbaa78d8c7eacf8402db0c8fa2be276ae579a27c
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Reconcile existing verified PR483 request through trusted controller
+        env:
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+        run: node agent-team/src/bug-pipeline/review-handoff-cli.mjs reconcile --pr 483
