@@ -12,6 +12,8 @@ export const TARGET = Object.freeze({
   secretName: 'RAILWAY_DEMO_TOKEN',
 });
 
+export const PINNED_GH_VERSION = '2.103.0';
+
 const API = 'https://api.github.com';
 const API_VERSION = '2022-11-28';
 const MAX_RESPONSE_BYTES = 262_144;
@@ -311,16 +313,42 @@ const runnerSafeEnv = (env) => {
   return Object.fromEntries(allowed.filter((key) => typeof env[key] === 'string').map((key) => [key, env[key]]));
 };
 
+export function isPinnedGhVersionOutput(output) {
+  if (typeof output !== 'string') return false;
+  const firstLine = output.split(/\r?\n/, 1)[0];
+  const expected = `gh version ${PINNED_GH_VERSION}`;
+  return firstLine === expected || firstLine.startsWith(`${expected} `);
+}
+
 export async function writeEnvironmentSecretWithGh({ secretValue, env = process.env, runnerFactory = createRunner }) {
   if (!secretValuePresent(secretValue)) fail('ENVIRONMENT_BINDING_MISSING');
   const ghToken = env.GH_TOKEN;
   if (typeof ghToken !== 'string' || ghToken.length === 0) fail('BOT_TOKEN_REQUIRED');
+  const executable = env.PROTECT_DEMO_GH_PATH;
+  if (typeof executable !== 'string' || !executable.startsWith('/') || /[\r\n\0]/.test(executable))
+    fail('GH_PINNED_BINARY_REQUIRED');
+  let versionResult;
+  try {
+    const versionRunner = runnerFactory({ env: runnerSafeEnv(env), runtimeRoot: '/tmp/protect-demo-secret-runtime' });
+    versionResult = await versionRunner({
+      command: executable,
+      args: ['--version'],
+      cwd: process.cwd(),
+      timeoutMs: 30_000,
+      maxOutputBytes: 16_384,
+      envMode: 'verification',
+    });
+  } catch {
+    fail('GH_VERSION_CHECK_FAILED');
+  }
+  if (versionResult?.ok !== true) fail('GH_VERSION_CHECK_FAILED');
+  if (!isPinnedGhVersionOutput(versionResult.stdout)) fail('GH_VERSION_MISMATCH');
   const childEnv = { ...runnerSafeEnv(env), GH_TOKEN: ghToken };
   const runner = runnerFactory({ env: childEnv, runtimeRoot: '/tmp/protect-demo-secret-runtime' });
   let result;
   try {
     result = await runner({
-      command: 'gh',
+      command: executable,
       args: ['secret', 'set', TARGET.secretName, '--env', TARGET.environmentName, '--repo', TARGET.repository],
       cwd: process.cwd(),
       input: secretValue,

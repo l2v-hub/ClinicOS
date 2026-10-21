@@ -8,6 +8,7 @@ import {
   ProtectionError,
   TARGET,
   ensureEnvironmentSecret,
+  isPinnedGhVersionOutput,
   main,
   removeRepositorySecret,
   validateInventoryPage,
@@ -329,17 +330,37 @@ test('uncertain delete and recreated secret fail without a second delete attempt
   });
 });
 
-test('actual gh writer sends value only on stdin and gives child a stripped safe environment', async (t) => {
+test('pinned gh version parsing accepts only the expected exact release', () => {
+  assert.equal(isPinnedGhVersionOutput('gh version 2.103.0 (2026-10-15)\n'), true);
+  assert.equal(isPinnedGhVersionOutput('gh version 2.103.0\n'), true);
+  assert.equal(isPinnedGhVersionOutput('gh version 2.103.1 (2026-10-15)\n'), false);
+  assert.equal(isPinnedGhVersionOutput('gh version 2.103.0-custom\n'), false);
+  assert.equal(isPinnedGhVersionOutput('not gh version 2.103.0\n'), false);
+});
+
+test('writer requires the workflow-provided absolute pinned binary path', async () => {
+  let runnerCreated = false;
+  await codes(writeEnvironmentSecretWithGh({
+    secretValue: sentinel,
+    env: { GH_TOKEN: 'test-bot-token', PATH: process.env.PATH },
+    runnerFactory: () => { runnerCreated = true; return async () => ({ ok: true, stdout: 'gh version 2.103.0' }); },
+  }), 'GH_PINNED_BINARY_REQUIRED');
+  assert.equal(runnerCreated, false);
+});
+
+test('actual gh writer verifies version without a token, then sends value only on stdin', async (t) => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'protect-demo-secret-test-'));
   t.after(() => rm(root, { recursive: true, force: true }));
   const capture = path.join(root, 'capture.json');
+  const versionCapture = path.join(root, 'version-capture.json');
   const executable = path.join(root, 'gh');
-  await writeFile(executable, `#!/usr/bin/env node\nlet input='';process.stdin.setEncoding('utf8');process.stdin.on('data',chunk=>input+=chunk);process.stdin.on('end',()=>require('fs').writeFileSync(${JSON.stringify(capture)},JSON.stringify({args:process.argv.slice(2),keys:Object.keys(process.env).sort(),input})));\n`);
+  await writeFile(executable, `#!/usr/bin/env node\nlet input='';process.stdin.setEncoding('utf8');process.stdin.on('data',chunk=>input+=chunk);process.stdin.on('end',()=>{const fs=require('fs');const args=process.argv.slice(2);if(args.length===1&&args[0]==='--version'){fs.writeFileSync(${JSON.stringify(versionCapture)},JSON.stringify({args,keys:Object.keys(process.env).sort(),input}));process.stdout.write('gh version 2.103.0 (2026-10-15)\\n');return;}fs.writeFileSync(${JSON.stringify(capture)},JSON.stringify({args,keys:Object.keys(process.env).sort(),input}));});\n`);
   await chmod(executable, 0o700);
   await writeEnvironmentSecretWithGh({
     secretValue: sentinel,
     env: {
       GH_TOKEN: 'test-bot-token',
+      PROTECT_DEMO_GH_PATH: executable,
       RAILWAY_DEMO_TOKEN: sentinel,
       RAILWAY_TOKEN: 'other-provider-test-value',
       ANTHROPIC_API_KEY: 'test-model-value',
@@ -347,6 +368,12 @@ test('actual gh writer sends value only on stdin and gives child a stripped safe
       HOME: root,
     },
   });
+  const versionCheck = JSON.parse(await readFile(versionCapture, 'utf8'));
+  assert.deepEqual(versionCheck.args, ['--version']);
+  assert.equal(versionCheck.input, '');
+  assert.ok(!versionCheck.keys.includes('GH_TOKEN'));
+  for (const key of ['RAILWAY_DEMO_TOKEN', 'RAILWAY_TOKEN', 'ANTHROPIC_API_KEY', 'GITHUB_TOKEN'])
+    assert.ok(!versionCheck.keys.includes(key));
   const child = JSON.parse(await readFile(capture, 'utf8'));
   assert.deepEqual(child.args, ['secret', 'set', TARGET.secretName, '--env', TARGET.environmentName, '--repo', TARGET.repository]);
   assert.equal(child.input, sentinel);
@@ -354,6 +381,42 @@ test('actual gh writer sends value only on stdin and gives child a stripped safe
   for (const key of ['RAILWAY_DEMO_TOKEN', 'RAILWAY_TOKEN', 'ANTHROPIC_API_KEY', 'GITHUB_TOKEN'])
     assert.ok(!child.keys.includes(key));
   assert.ok(!child.args.join(' ').includes(sentinel));
+});
+
+test('gh version mismatch fails before the write process receives secret stdin', async (t) => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'protect-demo-secret-mismatch-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const capture = path.join(root, 'write-capture.json');
+  const versionCapture = path.join(root, 'version-capture.json');
+  const executable = path.join(root, 'gh');
+  await writeFile(executable, `#!/usr/bin/env node\nlet input='';process.stdin.setEncoding('utf8');process.stdin.on('data',chunk=>input+=chunk);process.stdin.on('end',()=>{const fs=require('fs');const args=process.argv.slice(2);if(args.length===1&&args[0]==='--version'){fs.writeFileSync(${JSON.stringify(versionCapture)},JSON.stringify({args,keys:Object.keys(process.env).sort(),input}));process.stdout.write('gh version 2.102.9 (test)\\n');return;}fs.writeFileSync(${JSON.stringify(capture)},JSON.stringify({args,input}));});\n`);
+  await chmod(executable, 0o700);
+  await codes(writeEnvironmentSecretWithGh({
+    secretValue: sentinel,
+    env: { GH_TOKEN: 'test-bot-token', PROTECT_DEMO_GH_PATH: executable, PATH: `${root}${path.delimiter}${process.env.PATH}` },
+  }), 'GH_VERSION_MISMATCH');
+  const versionCheck = JSON.parse(await readFile(versionCapture, 'utf8'));
+  assert.equal(versionCheck.input, '');
+  assert.ok(!versionCheck.keys.includes('GH_TOKEN'));
+  await assert.rejects(readFile(capture, 'utf8'), { code: 'ENOENT' });
+});
+
+test('failed gh version check stops before the write process receives secret stdin', async (t) => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'protect-demo-secret-version-failure-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const capture = path.join(root, 'write-capture.json');
+  const versionCapture = path.join(root, 'version-capture.json');
+  const executable = path.join(root, 'gh');
+  await writeFile(executable, `#!/usr/bin/env node\nlet input='';process.stdin.setEncoding('utf8');process.stdin.on('data',chunk=>input+=chunk);process.stdin.on('end',()=>{const fs=require('fs');const args=process.argv.slice(2);if(args.length===1&&args[0]==='--version'){fs.writeFileSync(${JSON.stringify(versionCapture)},JSON.stringify({args,keys:Object.keys(process.env).sort(),input}));process.stdout.write('gh version 2.103.0 (test)\\n');process.exitCode=9;return;}fs.writeFileSync(${JSON.stringify(capture)},JSON.stringify({args,input}));});\n`);
+  await chmod(executable, 0o700);
+  await codes(writeEnvironmentSecretWithGh({
+    secretValue: sentinel,
+    env: { GH_TOKEN: 'test-bot-token', PROTECT_DEMO_GH_PATH: executable, PATH: `${root}${path.delimiter}${process.env.PATH}` },
+  }), 'GH_VERSION_CHECK_FAILED');
+  const versionCheck = JSON.parse(await readFile(versionCapture, 'utf8'));
+  assert.equal(versionCheck.input, '');
+  assert.ok(!versionCheck.keys.includes('GH_TOKEN'));
+  await assert.rejects(readFile(capture, 'utf8'), { code: 'ENOENT' });
 });
 
 test('main validates workflow context before creating an API client from credentials', async () => {
@@ -403,6 +466,11 @@ test('workflow is manual-only, pinned, and sequences two fresh protected-environ
   assert.match(workflow, /^name:[^\n]+\non:\n  workflow_dispatch:/);
   assert.doesNotMatch(workflow, /^  (?:push|pull_request|schedule):/m);
   assert.equal((workflow.match(/^    environment: 'glistening-friendship \/ demo'$/gm) ?? []).length, 2);
+  assert.equal((workflow.match(/Install and verify pinned GitHub CLI/g) ?? []).length, 3);
+  assert.equal((workflow.match(/version='2\.103\.0'/g) ?? []).length, 3);
+  assert.equal((workflow.match(/gh_\$\{version\}_linux_amd64\.tar\.gz/g) ?? []).length, 6);
+  assert.equal((workflow.match(/fdd768eb70f6409f80fcfa9f3a1c0adf0fc98d827ab3ce0bed2ac22762c5d786/g) ?? []).length, 3);
+  assert.equal((workflow.match(/PROTECT_DEMO_GH_PATH=%s/g) ?? []).length, 3);
   assert.match(workflow, /remove_repository_copy:\n    needs: ensure_environment_copy/);
   assert.equal((workflow.match(/actions\/checkout@11bd71901bbe5b1630ceea73d27597364c9af683/g) ?? []).length, 3);
   assert.equal((workflow.match(/actions\/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020/g) ?? []).length, 3);
