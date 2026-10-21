@@ -1,7 +1,7 @@
 # Current review packet
 
-[Review packet7](review-packet-7/current-packet-index.md) is the current PR #498 entry point.
+[Review packet8](review-packet-8/current-packet-index.md) is the current PR #498 entry point.
 
-Root [task-contract.md](task-contract.md) and [validation-report.md](validation-report.md) are **historical and superseded**, preserved with original hashes. [Packet5](review-packet-5/) and [packet6](review-packet-6/) preserve prior implementations and QA unchanged.
+Root [task-contract.md](task-contract.md) and [validation-report.md](validation-report.md) are **historical and superseded**, preserved with original hashes. Packets5,6,7 preserve authenticated prior implementations and QA.
 
-Packet7 adds only safe diagnostics after the actual admin attempt failed. Offline QA passed; actual admin REST, native checks, Claude/final Codex and provider release remain separate gates.
+Packet8 handles the observed null-policy bootstrap without treating404 as empty. Offline QA85+15+1 passed; actual admin settings, native6, actualClaude/finalCodex and provider release remain separate gates.
