@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "baseSha": "e895b503f653eda3c02cdcd3bb3c36bceef9269a",
+  "reservationNonce": "dbe546dd-0205-43a4-91a4-d71cfaf8efed",
+  "source": [
+    {
+      "path": ".github/workflows/bug-pipeline-tests.yml",
+      "sha256": "94188327c10dd06db63c07f8f478486930f1bb8ebb3bb9f796cca27146f17ff8",
+      "bytes": 13407
+    },
+    {
+      "path": "scripts/quality-gate/configure-bug-repository.mjs",
+      "sha256": "3429889391689f2981c37030e7792726c84b8055b23d68bcbe4eb698ad7e4db7",
+      "bytes": 18200
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+      "sha256": "b81fd0b492024fd0f563f70e5254aeef0fe2945e9e046c3bf55858ba13fc4e03",
+      "bytes": 32424
+    }
+  ],
+  "testedCommand": "node --test agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+  "runtime": "Node v24.19.0",
+  "tests": {
+    "passed": 80,
+    "failed": 0,
+    "skipped": 0
+  },
+  "independent": false,
+  "settingsApplied": false
+}
