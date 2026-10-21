@@ -1,0 +1,58 @@
+{
+  "status": "STOP \u2014 scoped independent QA PASS; overall gates PARTIAL",
+  "agent": "/root/qa497_integration11",
+  "qaNonce": "e9e6115d-9f5b-4a0f-82fa-a5e0858d31c3",
+  "grantNonce": "1e13ebab-a3a9-4b07-b91e-71735b43f938",
+  "sourceSha": "f394e3a77925e96a2b54e63485fb45ad44678f54",
+  "mergeParents": [
+    "74b260cdbcf36b1f7395477f4e35d07aba7fcf90",
+    "4983de2bdb6ea571053f03a508c919d27ff1771b"
+  ],
+  "actualCounts": {
+    "pure": 30,
+    "httpPostgres": 19,
+    "temporaryPsDatabase": 2,
+    "totalTests": 51,
+    "pass": 51,
+    "fail": 0,
+    "skipped": 0,
+    "typesPass": true,
+    "actualRowLockInterleavings": 4
+  },
+  "sourceUnchanged": true,
+  "indexUnchanged": true,
+  "sourceAndPriorProofMismatches": 0,
+  "recordedPrivateHttpBindException": true,
+  "failedHarnessAttemptsPreserved": true,
+  "runtimeHandedBack": true,
+  "resourceHandback": "resource-handback.json",
+  "resourceHandbackSha256": "04ed53548faa4630e6f65c4dc997795ad687bec1209206083dea5472cc51fd51",
+  "allOwnedContainersNetworksProcessesRemoved": true,
+  "portsFree": [
+    55432,
+    3447,
+    5447,
+    8432
+  ],
+  "flockFree": true,
+  "baselineFullId": "9000f70d4ee95b9e3bde723796daa050081db4274d20c97888413479232949ad",
+  "baselineHealthyUnchanged": true,
+  "providerActions": 0,
+  "sourceOrGitWrites": 0,
+  "report": "validation-report.md",
+  "reportSha256": "806f5a953e4a747ae7fb8b2846c7a7841104317509656fc8241160700f554b0d",
+  "summary": "summary.json",
+  "summarySha256": "54f329cef03d2cf3ef4c0939f6e5e418f53615f6d2aac25735e17f521bdf2260",
+  "proofManifest": "proof-manifest.json",
+  "proofManifestSha256": "caf9f1501585e044239df4e3a58fd44f221511e79fc5f15b021475bd3941e2fe",
+  "seal": "seal.json",
+  "sealSha256": "bae2afa8ed49a37749a475d4156a20e26c4c7f46cfb5a4c546ead85055a6456a",
+  "pendingRootGates": [
+    "native6 exact publication",
+    "parent actual Claude5",
+    "child first actual Claude"
+  ],
+  "noFreshUiDeployClosureClaim": true,
+  "rootMayReadBackAndResumeAuthorizedWork": true,
+  "at": "2026-10-21T19:18:58.550375+00:00"
+}

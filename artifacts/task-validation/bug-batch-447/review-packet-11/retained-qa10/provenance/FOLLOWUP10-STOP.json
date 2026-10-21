@@ -1,0 +1,59 @@
+{
+  "status": "STOP — PASS",
+  "agent": "/root/qa497_browser10_luna",
+  "sourceSha": "74b260cdbcf36b1f7395477f4e35d07aba7fcf90",
+  "qaNonce": "f0c25356-7f94-45d5-a0e7-48c0c8ed0dae",
+  "grantNonce": "e6ce576f-9b62-4fc4-8798-355c32d14053",
+  "amendmentNonce": "6bd95f4e-981f-404f-a8de-42c0f86b1a34",
+  "reason": "One corrected CI-parity actual browser journey passed both desktop and tablet saved-summary → Verifica → allergy dialog persistence checks with exact hints.",
+  "actualCounts": {
+    "browserInvocations": 1,
+    "viewports": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "prismaMigrationsPassed": 1,
+    "syntheticSeedPassed": 1,
+    "documentJobsSubmitted": 4,
+    "documentJobsReachedMockRuntime": 4,
+    "screenshots": 16,
+    "traces": 2
+  },
+  "provenance": {
+    "attempt": "attempt-006",
+    "sourcePath": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447",
+    "sourceCommit": "74b260cdbcf36b1f7395477f4e35d07aba7fcf90",
+    "executedE2E": "attempt-005/snapshot/e2e/import-happy-path.mjs",
+    "sourceTestSha256": "f728aa6066a3b4d4c984e3023eb405981cb0b7a3cf42c8d87a9de118881292b5",
+    "runnerReceipts": "attempt-006/output/test-results/runner-receipts.json",
+    "screenshots": "16 in attempt-006/output/evidence",
+    "traces": "2 in attempt-006/output/evidence"
+  },
+  "preservation": {
+    "sourceUnchanged": true,
+    "snapshotUnchanged": true,
+    "sealedProofUnchanged": true,
+    "sourceFilesCompared": 1803,
+    "sealedProofFilesCompared": 39,
+    "sourceTestHash": "f728aa6066a3b4d4c984e3023eb405981cb0b7a3cf42c8d87a9de118881292b5",
+    "snapshotTestHash": "f728aa6066a3b4d4c984e3023eb405981cb0b7a3cf42c8d87a9de118881292b5"
+  },
+  "resourceHandback": {
+    "ownedContainerRemoved": true,
+    "ownedPortsFree": true,
+    "qaLockFree": true,
+    "baselineContainerId": "9000f70d4ee95b9e3bde723796daa050081db4274d20c97888413479232949ad",
+    "baselineStillRunning": true,
+    "privateRuntimeHandedBack": true
+  },
+  "unrun": [
+    "unchanged broad frontend/backend suites",
+    "native release checks",
+    "author-reported pure journey unit test rerun (reported 2 pass / 1 stale accept-demographics assertion failure; test was already absent before edit)",
+    "any provider or external application actions"
+  ],
+  "priorFailedAttemptsRetained": true,
+  "noGitOrSourceWrites": true,
+  "noProviderActions": true,
+  "rootMayResumeOtherAuthorizedWork": true
+}

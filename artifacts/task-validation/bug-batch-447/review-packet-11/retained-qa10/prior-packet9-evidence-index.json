@@ -1,0 +1,237 @@
+{
+  "packet": "review-packet-9",
+  "issues": [
+    {
+      "issue": 447,
+      "summary": "Compact chart context, today doses/diary/vitals, day calendar and persisted safe actions",
+      "sourceAcceptance": "AC447.1\u2013AC447.6",
+      "evidenceClass": "QA4 independent canonical PASS_SCENARIO, 9 receipts; QA5 retained proof plus fresh readonly lifecycle/session/date coverage.",
+      "primaryProofs": [
+        "provenance/qa4-final-review-report.json",
+        "provenance/qa5-final-report.json",
+        "provenance/qa5-final-STOP.json"
+      ],
+      "sourceContractPath": "artifacts/task-validation/bug-batch-447/task-contract.md",
+      "claimLimit": "Independent QA4 canonical issue #447 is PASS_SCENARIO with its listed receipts; it remains retained, not rerun by QA5. QA4 aggregate still failed on actual Milo #486. Do not infer release or issue closure from scenario PASS alone.",
+      "independentQA4CanonicalScenario": {
+        "status": "PASS_SCENARIO",
+        "receipts": 9,
+        "summaryLedger": "provenance/qa4-canonical-seven-receipt-summary.json",
+        "canonicalRunnerResults": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/results.json",
+        "checkpointReadback": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/checkpoint-readback.json",
+        "sourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+        "retentionBasis": "QA5 runtime-preparation.json establishes exact-byte identity for relevant production/input graphs: frontend/src 903/903, therapies 37/37, routes 68/68, authz 18/18. These are retained independent QA4 scenario passes, not author-only evidence; QA5 did not rerun them."
+      },
+      "authorEvidenceCaveat": "Author-cycle receipts are supplementary and are not needed to support the QA4 independent PASS_SCENARIO."
+    },
+    {
+      "issue": 451,
+      "summary": "Observation entry, truthful partial NEWS2, verified save and safe next-patient behavior",
+      "sourceAcceptance": "AC451.1\u2013AC451.6",
+      "evidenceClass": "QA4 independent canonical PASS_SCENARIO, 2 receipts incl actual save failure/retry and 51-patient pagination; QA5 fresh readonly lifecycle/session coverage.",
+      "primaryProofs": [
+        "provenance/qa4-final-review-report.json",
+        "provenance/qa5-final-report.json",
+        "provenance/qa5-final-STOP.json"
+      ],
+      "sourceContractPath": "artifacts/task-validation/bug-batch-447/task-contract.md",
+      "claimLimit": "Independent QA4 canonical issue #451 is PASS_SCENARIO with its listed receipts; it remains retained, not rerun by QA5. QA4 aggregate still failed on actual Milo #486. Do not infer release or issue closure from scenario PASS alone.",
+      "independentQA4CanonicalScenario": {
+        "status": "PASS_SCENARIO",
+        "receipts": 2,
+        "summaryLedger": "provenance/qa4-canonical-seven-receipt-summary.json",
+        "canonicalRunnerResults": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/results.json",
+        "checkpointReadback": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/checkpoint-readback.json",
+        "sourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+        "retentionBasis": "QA5 runtime-preparation.json establishes exact-byte identity for relevant production/input graphs: frontend/src 903/903, therapies 37/37, routes 68/68, authz 18/18. These are retained independent QA4 scenario passes, not author-only evidence; QA5 did not rerun them."
+      },
+      "authorEvidenceCaveat": "Author-cycle receipts are supplementary and are not needed to support the QA4 independent PASS_SCENARIO."
+    },
+    {
+      "issue": 452,
+      "summary": "Compact patient/agenda lists, empty states, error and responsive behavior",
+      "sourceAcceptance": "AC452.1\u2013AC452.6",
+      "evidenceClass": "QA4 independent canonical PASS_SCENARIO, 2 receipts plus separate four-viewport focused #452; QA5 fresh ward cursor-click/reload.",
+      "primaryProofs": [
+        "provenance/qa4-final-review-report.json",
+        "provenance/qa5-final-report.json",
+        "provenance/qa5-final-STOP.json"
+      ],
+      "sourceContractPath": "artifacts/task-validation/bug-batch-447/task-contract.md",
+      "claimLimit": "Independent QA4 canonical issue #452 is PASS_SCENARIO with its listed receipts; it remains retained, not rerun by QA5. QA4 aggregate still failed on actual Milo #486. Do not infer release or issue closure from scenario PASS alone.",
+      "independentQA4CanonicalScenario": {
+        "status": "PASS_SCENARIO",
+        "receipts": 2,
+        "summaryLedger": "provenance/qa4-canonical-seven-receipt-summary.json",
+        "canonicalRunnerResults": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/results.json",
+        "checkpointReadback": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/checkpoint-readback.json",
+        "sourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+        "retentionBasis": "QA5 runtime-preparation.json establishes exact-byte identity for relevant production/input graphs: frontend/src 903/903, therapies 37/37, routes 68/68, authz 18/18. These are retained independent QA4 scenario passes, not author-only evidence; QA5 did not rerun them."
+      },
+      "authorEvidenceCaveat": "Author-cycle receipts are supplementary and are not needed to support the QA4 independent PASS_SCENARIO."
+    },
+    {
+      "issue": 453,
+      "summary": "Safe quick prescription, exact schedule/payload summary and recorded allergy-policy decision",
+      "sourceAcceptance": "AC453.1\u2013AC453.6",
+      "evidenceClass": "QA4 independent canonical PASS_SCENARIO, 1 receipt with explicit allergy acknowledgement policy; QA5 fresh Milo automatic payload route regression.",
+      "primaryProofs": [
+        "provenance/qa4-final-review-report.json",
+        "provenance/qa5-final-report.json",
+        "provenance/qa5-final-STOP.json"
+      ],
+      "sourceContractPath": "artifacts/task-validation/bug-batch-447/task-contract.md",
+      "claimLimit": "Independent QA4 canonical issue #453 is PASS_SCENARIO with its listed receipts; it remains retained, not rerun by QA5. QA4 aggregate still failed on actual Milo #486. Do not infer release or issue closure from scenario PASS alone.",
+      "independentQA4CanonicalScenario": {
+        "status": "PASS_SCENARIO",
+        "receipts": 1,
+        "summaryLedger": "provenance/qa4-canonical-seven-receipt-summary.json",
+        "canonicalRunnerResults": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/results.json",
+        "checkpointReadback": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/checkpoint-readback.json",
+        "sourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+        "retentionBasis": "QA5 runtime-preparation.json establishes exact-byte identity for relevant production/input graphs: frontend/src 903/903, therapies 37/37, routes 68/68, authz 18/18. These are retained independent QA4 scenario passes, not author-only evidence; QA5 did not rerun them."
+      },
+      "authorEvidenceCaveat": "Author-cycle receipts are supplementary and are not needed to support the QA4 independent PASS_SCENARIO."
+    },
+    {
+      "issue": 454,
+      "summary": "Current-time Giro, compact controls and exact-dose/role-safe administration",
+      "sourceAcceptance": "AC454.1\u2013AC454.5",
+      "evidenceClass": "QA4 independent canonical PASS_SCENARIO, 1 receipt including actual exact-dose persistence and calendar scroll; QA5 fresh recorded role/lifecycle coverage.",
+      "primaryProofs": [
+        "provenance/qa4-final-review-report.json",
+        "provenance/qa5-final-report.json",
+        "provenance/qa5-final-STOP.json"
+      ],
+      "sourceContractPath": "artifacts/task-validation/bug-batch-447/task-contract.md",
+      "claimLimit": "Independent QA4 canonical issue #454 is PASS_SCENARIO with its listed receipts; it remains retained, not rerun by QA5. QA4 aggregate still failed on actual Milo #486. Do not infer release or issue closure from scenario PASS alone.",
+      "independentQA4CanonicalScenario": {
+        "status": "PASS_SCENARIO",
+        "receipts": 1,
+        "summaryLedger": "provenance/qa4-canonical-seven-receipt-summary.json",
+        "canonicalRunnerResults": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/results.json",
+        "checkpointReadback": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/checkpoint-readback.json",
+        "sourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+        "retentionBasis": "QA5 runtime-preparation.json establishes exact-byte identity for relevant production/input graphs: frontend/src 903/903, therapies 37/37, routes 68/68, authz 18/18. These are retained independent QA4 scenario passes, not author-only evidence; QA5 did not rerun them."
+      },
+      "authorEvidenceCaveat": "Author-cycle receipts are supplementary and are not needed to support the QA4 independent PASS_SCENARIO."
+    },
+    {
+      "issue": 456,
+      "summary": "Urgent diary/handover queue and actionable supervisor view",
+      "sourceAcceptance": "AC456.1\u2013AC456.5",
+      "evidenceClass": "QA4 independent canonical PASS_SCENARIO, 1 receipt; QA5 fresh recorded-matrix/lifecycle regression.",
+      "primaryProofs": [
+        "provenance/qa4-final-review-report.json",
+        "provenance/qa5-final-report.json",
+        "provenance/qa5-final-STOP.json"
+      ],
+      "sourceContractPath": "artifacts/task-validation/bug-batch-447/task-contract.md",
+      "claimLimit": "Independent QA4 canonical issue #456 is PASS_SCENARIO with its listed receipts; it remains retained, not rerun by QA5. QA4 aggregate still failed on actual Milo #486. Do not infer release or issue closure from scenario PASS alone.",
+      "independentQA4CanonicalScenario": {
+        "status": "PASS_SCENARIO",
+        "receipts": 1,
+        "summaryLedger": "provenance/qa4-canonical-seven-receipt-summary.json",
+        "canonicalRunnerResults": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/results.json",
+        "checkpointReadback": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/checkpoint-readback.json",
+        "sourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+        "retentionBasis": "QA5 runtime-preparation.json establishes exact-byte identity for relevant production/input graphs: frontend/src 903/903, therapies 37/37, routes 68/68, authz 18/18. These are retained independent QA4 scenario passes, not author-only evidence; QA5 did not rerun them."
+      },
+      "authorEvidenceCaveat": "Author-cycle receipts are supplementary and are not needed to support the QA4 independent PASS_SCENARIO."
+    },
+    {
+      "issue": 457,
+      "summary": "Accurate print context and explicit PS exit/return policy and authorization",
+      "sourceAcceptance": "AC457.1\u2013AC457.6",
+      "evidenceClass": "QA4 independent canonical PASS_SCENARIO, 1 receipt with explicit approved-and-exercised PS pause decision; QA5 fresh no-write/denied-scope lifecycle.",
+      "primaryProofs": [
+        "provenance/qa4-final-review-report.json",
+        "provenance/qa5-final-report.json",
+        "provenance/qa5-final-STOP.json"
+      ],
+      "sourceContractPath": "artifacts/task-validation/bug-batch-447/task-contract.md",
+      "claimLimit": "Independent QA4 canonical issue #457 is PASS_SCENARIO with its listed receipts; it remains retained, not rerun by QA5. QA4 aggregate still failed on actual Milo #486. Do not infer release or issue closure from scenario PASS alone.",
+      "independentQA4CanonicalScenario": {
+        "status": "PASS_SCENARIO",
+        "receipts": 1,
+        "summaryLedger": "provenance/qa4-canonical-seven-receipt-summary.json",
+        "canonicalRunnerResults": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/results.json",
+        "checkpointReadback": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/checkpoint-readback.json",
+        "sourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+        "retentionBasis": "QA5 runtime-preparation.json establishes exact-byte identity for relevant production/input graphs: frontend/src 903/903, therapies 37/37, routes 68/68, authz 18/18. These are retained independent QA4 scenario passes, not author-only evidence; QA5 did not rerun them."
+      },
+      "authorEvidenceCaveat": "Author-cycle receipts are supplementary and are not needed to support the QA4 independent PASS_SCENARIO."
+    },
+    {
+      "issue": 486,
+      "summary": "Actual Milo automatic prescription proposal preserves explicit-route and confirmation boundary",
+      "sourceAcceptance": "followup5 acceptance",
+      "evidenceClass": "QA4 browser/API failure and correction addendum; QA5 11 HTTP pass, actual Milo UI 3 pass, route matrix and SQL/reload.",
+      "primaryProofs": [
+        "provenance/qa4-final-review-report.json",
+        "provenance/qa5-final-report.json",
+        "provenance/qa5-final-STOP.json"
+      ],
+      "sourceContractPath": "artifacts/task-validation/bug-batch-447/task-contract.md",
+      "claimLimit": "Preserve overall QA4 actual product failure. QA5 scoped correction pass is fresh but not PR approval/deployment.",
+      "independentQA4CanonicalScenario": {
+        "status": "PARTIAL_WITH_CONFIRMED_FAILURE",
+        "passedRoute486Subpaths": 7,
+        "failedActualMiloRoute": "preview_mismatch on valid doseMode fixed mapper payload; zero writes",
+        "qa4SourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+        "qa5FreshCorrection": "doseMode fixed allowlist compatibility independently passed in QA5 HTTP/UI/matrix"
+      }
+    }
+  ],
+  "freshQA5": {
+    "status": "SCOPED_REGRESSION_PASS_WITH_DISCLOSED_UNRUN",
+    "sourceSha": "b76eb6baf5e87dcdb9b89a580ef48baf26e1bb7a",
+    "report": "provenance/qa5-final-report.json",
+    "stop": "provenance/qa5-final-STOP.json",
+    "milo": "11 affected assistant HTTP pass / 0 fail; actual Milo and route matrix 3 pass, actual doseMode fixed, perOS route orale, valid 9/9 and invalid 21/21, missing route no confirmation/no writes",
+    "recordedMatrix": "8 criteria pass; 18 denied writes; real cursor click/reload",
+    "recordedLifecycle": "6 criteria pass; actual readonly operator/admin route click and reload"
+  },
+  "retainedQA4": {
+    "status": "FAILED \u2014 stopped on confirmed product defect",
+    "relevantPasses": [
+      "criterion 1 preservation/source identity",
+      "criterion 2 grant",
+      "criterion 3 isolation/cleanup",
+      "criterion 4 452 four-viewports, DB33, build, canonical7",
+      "seven other route486 subpaths"
+    ],
+    "failure": "Milo actual browser/API valid fixed-mode payload returned preview_mismatch",
+    "correction": "append-only addendum verifies missing doseMode fixed in allowlist; original QA4 report unchanged",
+    "freshness": "retained, not rerun by QA5"
+  },
+  "unrunFromQA5": [
+    "individual scheduled-dose panel unmounted",
+    "missing-operator-metadata and separate civil-date padding browser supplement",
+    "assistant facility snapshot / queue / skill parity supplement",
+    "external OCR/provider extraction (intentionally outside synthetic scope)",
+    "root final review, native gates, deployment and issue closure"
+  ],
+  "failedAttemptDisposition": "QA4 six runner failures and QA5 attempts 1\u20134 remain in immutable original reports; final pass does not erase them. Raw traces intentionally excluded.",
+  "retainedQA4CanonicalSeven": {
+    "sourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+    "runnerResultsPath": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/results.json",
+    "checkpointPath": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/checkpoint-readback.json",
+    "status": "all seven canonical scenarios PASS_SCENARIO; 17 receipts total; source fingerprint before==after; affected DB33 PASS33/33; build pass",
+    "perIssueReceiptCount": {
+      "447": 9,
+      "451": 2,
+      "452": 2,
+      "453": 1,
+      "454": 1,
+      "456": 1,
+      "457": 1
+    },
+    "sourceIdentity": "QA5 runtime-preparation.json confirms relevant issue input graphs byte-identical between QA4 and tested source; three changed skills files are outside those graphs. This is retained independent evidence and was not rerun by QA5."
+  },
+  "readinessAssessment": {
+    "originalAcceptanceEvidence": "No unmet original issue-specific criterion is identified from the sealed task contract plus independent QA4 canonical-seven PASS_SCENARIO receipts and fresh QA5 #486 correction/recorded regressions. QA4 remains aggregate FAILED historically because actual Milo failed then; QA5 now exercises that correction.",
+    "nonGateDisclosures": "The individual scheduled-dose panel was an additional QA5 supplement and was unmounted; original QA4 independent #447 and #454 canonical receipts separately pass actual today dose persistence. Missing-metadata and assistant/queue/skill-parity are explicitly listed unrun per original overall criterion6. External OCR/provider was explicitly outside the synthetic boundary.",
+    "releaseReadiness": "Root review, native source-SHA gates, exact-SHA Claude review, deployment proof and issue-closure decision remain pending root-owned release gates; these are not product acceptance failures."
+  }
+}

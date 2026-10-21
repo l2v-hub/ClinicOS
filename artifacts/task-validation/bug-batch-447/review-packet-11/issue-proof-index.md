@@ -1,0 +1,14 @@
+# Eight original issue acceptances and scoped integration
+
+| Issue | Original acceptance and media | Current additional verification |
+|---|---|---|
+| #447 | [Retained acceptance matrix](retained-qa10/acceptance-matrix.json), [original immutable packet9](https://github.com/l2v-hub/ClinicOS/tree/84402577c0ae313e57dcdb22c1a8102ae16d6b46/artifacts/task-validation/bug-batch-447/review-packet-9) | Source unchanged for feature; retained acceptance provenance |
+| #451 | [Retained acceptance matrix](retained-qa10/acceptance-matrix.json), [original immutable packet9](https://github.com/l2v-hub/ClinicOS/tree/84402577c0ae313e57dcdb22c1a8102ae16d6b46/artifacts/task-validation/bug-batch-447/review-packet-9) | Source unchanged for feature; retained acceptance provenance |
+| #452 | [Retained acceptance matrix](retained-qa10/acceptance-matrix.json), [original immutable packet9](https://github.com/l2v-hub/ClinicOS/tree/84402577c0ae313e57dcdb22c1a8102ae16d6b46/artifacts/task-validation/bug-batch-447/review-packet-9) | Source unchanged for feature; retained acceptance provenance |
+| #453 | [Retained acceptance matrix](retained-qa10/acceptance-matrix.json), [original immutable packet9](https://github.com/l2v-hub/ClinicOS/tree/84402577c0ae313e57dcdb22c1a8102ae16d6b46/artifacts/task-validation/bug-batch-447/review-packet-9) | [Combined legacy/PS backend51PASS](independent-qa11/validation-report.md) |
+| #454 | [Retained acceptance matrix](retained-qa10/acceptance-matrix.json), [original immutable packet9](https://github.com/l2v-hub/ClinicOS/tree/84402577c0ae313e57dcdb22c1a8102ae16d6b46/artifacts/task-validation/bug-batch-447/review-packet-9) | [Combined legacy/PS backend51PASS](independent-qa11/validation-report.md) |
+| #456 | [Retained acceptance matrix](retained-qa10/acceptance-matrix.json), [original immutable packet9](https://github.com/l2v-hub/ClinicOS/tree/84402577c0ae313e57dcdb22c1a8102ae16d6b46/artifacts/task-validation/bug-batch-447/review-packet-9) | Source unchanged for feature; retained acceptance provenance |
+| #457 | [Retained acceptance matrix](retained-qa10/acceptance-matrix.json), [original immutable packet9](https://github.com/l2v-hub/ClinicOS/tree/84402577c0ae313e57dcdb22c1a8102ae16d6b46/artifacts/task-validation/bug-batch-447/review-packet-9) | [Combined legacy/PS backend51PASS](independent-qa11/validation-report.md) |
+| #486 | [Retained acceptance matrix](retained-qa10/acceptance-matrix.json), [original immutable packet9](https://github.com/l2v-hub/ClinicOS/tree/84402577c0ae313e57dcdb22c1a8102ae16d6b46/artifacts/task-validation/bug-batch-447/review-packet-9) | [Combined legacy/PS backend51PASS](independent-qa11/validation-report.md) |
+
+All rows preserve exact original source attribution and failures. [Actual import desktop/tablet proof](retained-qa10/provenance/FOLLOWUP10-REPORT.md) follows persisted inline allergy summary and explicit Verifica dialog; not a new whole8UI suite. Ready/release/closure remain pending.

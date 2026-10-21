@@ -1,0 +1,158 @@
+{
+  "qa4Overall": "FAILED \u2014 stopped on actual Milo defect; this per-issue ledger contains independent PASS_SCENARIO results, not closure claims.",
+  "sourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+  "sourceFingerprint": "63e2e74038c24883a4df1b1955607b43e7d36308654de1839bdc68dbff9a1863 (before==after)",
+  "sourceResultsPath": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/results.json",
+  "sourceResultsSha256": "d4533a67cfe478b2dda27a97430de0aa2915772fee12db61ca325080fb6754cc",
+  "checkpointPath": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/checkpoint-readback.json",
+  "checkpointSha256": "efd28c4d3b37abe6fdd4105a7589ea485068c8a04b3f4f7cd1d60e7a3e28c661",
+  "checkpoint": {
+    "freshDB33": "PASS33/33",
+    "canonicalIssueScenarios": 7,
+    "receiptCount": 17,
+    "sourceStable": true
+  },
+  "issueResults": [
+    {
+      "issue": 447,
+      "status": "PASS_SCENARIO",
+      "receiptCount": 9,
+      "receipts": [
+        "Oggi",
+        "Dati di ingresso",
+        "Clinica",
+        "Terapia",
+        "Parametri",
+        "Moduli",
+        "Documenti",
+        "Dimissione",
+        "aggregate geometry/persistence/role-negative"
+      ],
+      "keyAssertions": {
+        "all8sectionsMeasuredAtViewport1180x820Scroll0": true,
+        "firstMeaningfulContentTopRangePx": [
+          131,
+          157
+        ],
+        "todayDosePersisted": true,
+        "urgencyPersisted": true,
+        "roleNegative": "OSS therapy hidden; PS print blocked without clinical fetches"
+      },
+      "media": "evidence/media/qa4-canonical-issue-447.png"
+    },
+    {
+      "issue": 451,
+      "status": "PASS_SCENARIO",
+      "receiptCount": 2,
+      "keyAssertions": {
+        "savedValues": {
+          "temperature": "39.2",
+          "oxygen": "room air"
+        },
+        "nextPatientAdvanced": true,
+        "failedSaveDidNotAdvance": true,
+        "uncertainRetryIdenticalBodyExactlyOnce": true,
+        "paginationPageSizes": [
+          25,
+          25,
+          1
+        ],
+        "crossedDistinctCursors": 2,
+        "completedIntermediateUnchanged": 49,
+        "firstPersistedExactlyOnce": true
+      },
+      "media": "evidence/media/qa4-canonical-issue-451.png"
+    },
+    {
+      "issue": 452,
+      "status": "PASS_SCENARIO",
+      "receiptCount": 2,
+      "keyAssertions": {
+        "zeroAppointments": true,
+        "scheduledGiroTimes": [
+          "08:00",
+          "20:00"
+        ],
+        "newsHistoryOver50PagesAndRecovery": true,
+        "knownCompletePreserved": true,
+        "aggregateUnknownCount": 1,
+        "bedFirst": true,
+        "missingDataPerRow": false,
+        "incompleteFooterCount": 1,
+        "compactClinicalEmpty": true,
+        "exactScheduledActionsInGiro": true
+      },
+      "expectedFaults": [
+        "controlled 503 for therapy-slots/page",
+        "controlled 503 for parameter-readings"
+      ],
+      "media": "evidence/media/qa4-canonical-issue-452.png"
+    },
+    {
+      "issue": 453,
+      "status": "PASS_SCENARIO",
+      "receiptCount": 1,
+      "keyAssertions": {
+        "negativeInteractionsAfterPackageSelection": 4,
+        "positiveInteractionsAfterPackageSelection": 5,
+        "exactScheduleTimes": [
+          "08:00",
+          "20:00"
+        ],
+        "allergyPolicy": "explicit compatibility acknowledgement; actual source; no invented drug matching",
+        "patientProductFormStrengthAllergyRevisionAndReloadInvalidate": true,
+        "externalAllergyPreflightNoPOST": true,
+        "unknownNeverNegative": true,
+        "uncertainRetryCreatesExactlyOnePrescriptionWithIdenticalPayload": true
+      },
+      "media": "evidence/media/qa4-canonical-issue-453.png"
+    },
+    {
+      "issue": 454,
+      "status": "PASS_SCENARIO",
+      "receiptCount": 1,
+      "keyAssertions": {
+        "initialFacilityCurrentTime": "02:00",
+        "primaryControlRows": 1,
+        "actualDosePersisted": true,
+        "calendarScrolledToFirstRelevantDose": true,
+        "scrollTopPx": 87
+      },
+      "media": "evidence/media/qa4-canonical-issue-454.png"
+    },
+    {
+      "issue": 456,
+      "status": "PASS_SCENARIO",
+      "receiptCount": 1,
+      "keyAssertions": {
+        "urgentDiaryAndHandover": 2,
+        "tomorrowExcluded": true,
+        "actualShiftVerified": true,
+        "occupancy": "1/1"
+      },
+      "media": "evidence/media/qa4-canonical-issue-456.png"
+    },
+    {
+      "issue": 457,
+      "status": "PASS_SCENARIO",
+      "receiptCount": 1,
+      "keyAssertions": {
+        "editableReason": true,
+        "actualDoseTimes": [
+          "2026-10-19T02:40",
+          "2026-10-19T02:38"
+        ],
+        "printPDFBytes": 54107,
+        "printHasZeroExitWrites": true,
+        "explicitPauseAndContinue": true,
+        "uncertainExitRetryExactlyOnce": true,
+        "scheduledAndPRNServerPause": true,
+        "unauthorizedAndTamperDenied": true,
+        "reloadShowsAuthoritativePause": true,
+        "nextDayReturnDoesNotReopenGivenDose": true,
+        "therapyPauseDecision": "approved-and-exercised"
+      },
+      "media": "evidence/media/qa4-canonical-issue-457.png"
+    }
+  ]
+}

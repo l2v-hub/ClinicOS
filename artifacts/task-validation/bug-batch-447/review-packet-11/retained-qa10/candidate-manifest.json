@@ -1,0 +1,182 @@
+{
+  "algorithm": "SHA-256",
+  "packet": "PR497-original8-review-packet10",
+  "sourceSha": "74b260cdbcf36b1f7395477f4e35d07aba7fcf90",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 794,
+      "sha256": "a5fcbe86173b3af267286b3bf306650f9705521f788a3ed3ae243e65f6dc3ebe"
+    },
+    {
+      "path": "acceptance-matrix.json",
+      "bytes": 20968,
+      "sha256": "fdba797db5d563d9593447e5cd16d320db33a43764dfdb637b95d94512c2d53c"
+    },
+    {
+      "path": "contract.md",
+      "bytes": 3179,
+      "sha256": "aad5a1ee2499a52786ed3164aff5721912d357c1ea0f6c9b8db56bcdbe2f5ec8"
+    },
+    {
+      "path": "evidence/import-followup/req020-desktop-5-riepilogo.png",
+      "bytes": 92624,
+      "sha256": "2e8c07eb4f762bd299c612792c4d8fc09c1b44311b34cc499183013e7f745fe7"
+    },
+    {
+      "path": "evidence/import-followup/req020-desktop-9-reload-allergies-dialog.png",
+      "bytes": 116512,
+      "sha256": "5287530a6083f60b1ed6417a9bc1f0b1b205d342731c05ebbc19dc2bc4aba469"
+    },
+    {
+      "path": "evidence/import-followup/req020-tablet-5-riepilogo.png",
+      "bytes": 92984,
+      "sha256": "fd3594733848b0ad1f508e10bacff7750fc25eae2bb9c06713f697ecee9ada9f"
+    },
+    {
+      "path": "evidence/import-followup/req020-tablet-9-reload-allergies-dialog.png",
+      "bytes": 103816,
+      "sha256": "6d3a0f7fadab07462a9828915833c0c8c4ee8456c3045bfc1cc28c27a3b3c5d9"
+    },
+    {
+      "path": "evidence/prior-qa4/issue-447.png",
+      "bytes": 115649,
+      "sha256": "7bcf997bb0af3d010b25215188828544d565f5653c6262952bf266ae752c69c2"
+    },
+    {
+      "path": "evidence/prior-qa4/issue-451.png",
+      "bytes": 150661,
+      "sha256": "4b76b6adb2cbf22b36e14df93060bbc5e5271b853f64ddf1848a940930729afc"
+    },
+    {
+      "path": "evidence/prior-qa4/issue-452.png",
+      "bytes": 128760,
+      "sha256": "1cc37c6874c90b6061202933d1f42b13fb7e2f5654928cb96bd05e493b18971a"
+    },
+    {
+      "path": "evidence/prior-qa4/issue-453.png",
+      "bytes": 107967,
+      "sha256": "0aee9c68c433d8e9429074ce9fbd190abc430529524b9396c980783aca52a557"
+    },
+    {
+      "path": "evidence/prior-qa4/issue-454.png",
+      "bytes": 108231,
+      "sha256": "c5f66b3acd21a22f2d62868e8c951269d4fac18a0bff3dc9bf1cb6c36d004609"
+    },
+    {
+      "path": "evidence/prior-qa4/issue-456.png",
+      "bytes": 157594,
+      "sha256": "22d1ddd5d4dcbee91933a7d3d1f9172be8e03bce59540f6a7ad900eca676f5e3"
+    },
+    {
+      "path": "evidence/prior-qa4/issue-457.png",
+      "bytes": 206296,
+      "sha256": "b597c41dcc969f08e4322d2d0a858560accc9115edadaa613f37d34651c624f2"
+    },
+    {
+      "path": "evidence-index.json",
+      "bytes": 8118,
+      "sha256": "f160feb49d8513b2fece889f7fac0e447074c62bd7c6410275f5130269aea1ce"
+    },
+    {
+      "path": "prior-packet9-evidence-index.json",
+      "bytes": 17516,
+      "sha256": "099c630d807c33992be906ee027d66ee128c7673ca3d4579e8447e5d1adb3e1a"
+    },
+    {
+      "path": "prior-packet9-media-index.json",
+      "bytes": 5511,
+      "sha256": "e8880661a89ec3de6570f3433479f1ac4338d1737de0c8ff90395fce90c296be"
+    },
+    {
+      "path": "prior-packet9-report.json",
+      "bytes": 4320,
+      "sha256": "3bcab56656afa100b30aad86a9c2b72bb2d50cf21240f5652a423a899a0f649d"
+    },
+    {
+      "path": "provenance/FOLLOWUP10-REPORT.json",
+      "bytes": 8740,
+      "sha256": "f5ca7c8032c4d6bece552a555f3acfee494bc6ec9f8972d0605d7df148eb6cd9"
+    },
+    {
+      "path": "provenance/FOLLOWUP10-REPORT.md",
+      "bytes": 1478,
+      "sha256": "156503be8bdd7db6900050083f9bc2d1017a366a90a8acdc20208085c6cc4b73"
+    },
+    {
+      "path": "provenance/FOLLOWUP10-STOP.json",
+      "bytes": 2410,
+      "sha256": "7c325d42435cb798df6e7ad47c7de5e989b55298edc023a22b4075a2925c90ae"
+    },
+    {
+      "path": "provenance/FOLLOWUP10-seal.json",
+      "bytes": 5848,
+      "sha256": "32cd5fca1ecdfde70fee23a2de56d47b0b182663c46f6562702a2cb4475fbdd2"
+    },
+    {
+      "path": "provenance/followup6-analysis.md",
+      "bytes": 1325,
+      "sha256": "8dcf045b82be5fc65f96527cd7dce7ff5f5cf94f5fcaca6d9c51995f1aa87db1"
+    },
+    {
+      "path": "provenance/followup6-author-report.md",
+      "bytes": 1645,
+      "sha256": "95e33ebda5ea1489ef11b2898aecc9b7255fcf298032a8850e94f77512b10e37"
+    },
+    {
+      "path": "provenance/followup6-source-hashes.json",
+      "bytes": 4529,
+      "sha256": "dfa02516cc4963066129e80b21c07dc1e2edee423f7eb40fe92ae2bbdda19c45"
+    },
+    {
+      "path": "provenance/followup6-task-contract.md",
+      "bytes": 4027,
+      "sha256": "a2cd89ab805c0677f16f6797007ad1c3f157b913f3f96ade2eae3242eb6bb43f"
+    },
+    {
+      "path": "provenance/qa4-STOP.json",
+      "bytes": 1302,
+      "sha256": "bec50b2a516ddd620040cfb79a50a9cc16551b2d3253e74a4688ebd39501a750"
+    },
+    {
+      "path": "provenance/qa4-canonical-seven-receipt-summary.json",
+      "bytes": 5159,
+      "sha256": "d35b90202914acd2a1019f81605212e61253e801683dc3298f668f5cdee24672"
+    },
+    {
+      "path": "provenance/qa4-final-review-report.json",
+      "bytes": 6790,
+      "sha256": "8264196c688d077a5cf885c4944d55ea08b9a6f709e9c8cda3cd678b756dc130"
+    },
+    {
+      "path": "provenance/qa4-root-cause-correction-addendum.json",
+      "bytes": 1478,
+      "sha256": "fe991e9c0670f03ca93076353338da24853076d0bd5fc6495086d277f4191d90"
+    },
+    {
+      "path": "provenance/qa5-evidence-checksums.json",
+      "bytes": 30524,
+      "sha256": "fb3cab236758f0d9621a819d995fb279f5cb32818c4b79f35a7b3d824b064f9d"
+    },
+    {
+      "path": "provenance/qa5-final-STOP.json",
+      "bytes": 668,
+      "sha256": "91c1406115f709e0d8ff9bbfcb60793c1e310298a663da259067cb87035dddc0"
+    },
+    {
+      "path": "provenance/qa5-final-report.json",
+      "bytes": 6349,
+      "sha256": "741c8574063d97cb720adf80b07fec68c58ea259f3fd515afec11adf89bdf4e4"
+    },
+    {
+      "path": "report.md",
+      "bytes": 2915,
+      "sha256": "c26e91c7820ec3a2048c715d239caf4820bfe4360629ed7663f696bd4d59c75b"
+    },
+    {
+      "path": "source-preservation-before.json",
+      "bytes": 18248,
+      "sha256": "7b6688ed7eb9c3bd54890cf233d82ea683b5be1ed635cd75e68e2d7f7fab4ad5"
+    }
+  ]
+}

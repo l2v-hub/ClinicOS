@@ -1,0 +1,238 @@
+{
+  "status": "STOP — PASS (targeted actual browser acceptance)",
+  "agent": "/root/qa497_browser10_luna",
+  "sourceSha": "74b260cdbcf36b1f7395477f4e35d07aba7fcf90",
+  "qaNonce": "f0c25356-7f94-45d5-a0e7-48c0c8ed0dae",
+  "grantNonce": "e6ce576f-9b62-4fc4-8798-355c32d14053",
+  "amendmentNonce": "6bd95f4e-981f-404f-a8de-42c0f86b1a34",
+  "attempt": "attempt-006",
+  "scope": "One actual e2e/import-happy-path.mjs browser journey at desktop and tablet viewports against private synthetic PostgreSQL, compiled backend, and mock AI runtime; prebuilt frontend preview.",
+  "actualCounts": {
+    "browserInvocations": 1,
+    "viewports": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "prismaMigrationsPassed": 1,
+    "syntheticSeedPassed": 1,
+    "documentJobsSubmitted": 4,
+    "documentJobsReachedMockRuntime": 4,
+    "screenshots": 16,
+    "traces": 2
+  },
+  "acceptance": {
+    "desktop": {
+      "savedSummary": "Paziente nega allergie",
+      "dialog": "Allergie e Intolleranze",
+      "selectedRadio": "paziente_nega aria-checked=true",
+      "exactHint": "Paziente nega allergie",
+      "apiPersisted": true,
+      "consoleErrors": 0,
+      "httpFailures": 0
+    },
+    "tablet": {
+      "savedSummary": "Allergie assenti (verificato)",
+      "dialog": "Allergie e Intolleranze",
+      "selectedRadio": "assenti aria-checked=true",
+      "exactHint": "Allergie assenti — verificato dall’operatore.",
+      "apiPersisted": true,
+      "consoleErrors": 0,
+      "httpFailures": 0
+    }
+  },
+  "provenance": {
+    "sourcePath": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447",
+    "sourceCommit": "74b260cdbcf36b1f7395477f4e35d07aba7fcf90",
+    "sourceTestSha256": "f728aa6066a3b4d4c984e3023eb405981cb0b7a3cf42c8d87a9de118881292b5",
+    "executedTest": "attempt-005/snapshot/e2e/import-happy-path.mjs",
+    "testSha256": "f728aa6066a3b4d4c984e3023eb405981cb0b7a3cf42c8d87a9de118881292b5",
+    "runner": "/workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs createRunner envMode=verification",
+    "runnerReceipts": "attempt-006/output/test-results/runner-receipts.json",
+    "runtime": {
+      "backend": "node backend/dist/server.js at 127.0.0.1:3447",
+      "frontend": "existing Vite production preview at 127.0.0.1:5447; no rebuild in attempt006",
+      "aiRuntime": "python -m clinicos_ai.main at 127.0.0.1:8432; AI_PROVIDER=mock",
+      "database": "private PostgreSQL 16 container on 127.0.0.1:55432 with tmpfs; container removed after run",
+      "environmentAllowlistKeys": [
+        "PATH",
+        "HOME",
+        "TMPDIR",
+        "LANG",
+        "LC_ALL",
+        "CI",
+        "DISABLE_AUTOUPDATER",
+        "NODE_ENV",
+        "AUTH_MODE",
+        "AI_PROVIDER",
+        "AI_RUNTIME_URL",
+        "AI_RUNTIME_SERVICE_TOKEN",
+        "AI_OCR_MODEL",
+        "AI_EXTRACTION_MODEL",
+        "AI_AGENT_MODEL",
+        "AI_REPAIR_MODEL",
+        "PORT",
+        "QA_BACKEND_URL",
+        "QA_FRONTEND_URL",
+        "VITE_API_URL",
+        "FRONTEND_URL",
+        "QA_LOCAL_OFFLINE_FONTS",
+        "NODE_OPTIONS",
+        "PLAYWRIGHT_BROWSERS_PATH",
+        "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH",
+        "DATABASE_URL"
+      ],
+      "journeyEnvironment": {
+        "E2E_BACKEND_URL": "http://127.0.0.1:3447",
+        "E2E_FRONTEND_URL": "http://127.0.0.1:5447",
+        "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH": "/usr/bin/chromium",
+        "QA_LOCAL_OFFLINE_FONTS": "true",
+        "localhostOnly": true
+      },
+      "unset": [
+        "AI_WORKER_INLINE",
+        "ROLE_SIMULATOR_ENABLED",
+        "AI_FACILITY_QUERIES_ENABLED"
+      ],
+      "secretValuesOmitted": true
+    },
+    "receipts": [
+      {
+        "label": "prisma-migrate",
+        "code": 0,
+        "ok": true
+      },
+      {
+        "label": "seed",
+        "code": 0,
+        "ok": true
+      },
+      {
+        "label": "real-e2e/import-happy-path.mjs",
+        "code": 0,
+        "ok": true
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-1-upload.png",
+      "bytes": 63079,
+      "sha256": "bd5cdf1bff8c07405d2ffa3fae1e3d3a6bbc108ddab8de6ddca700cc1ca17469"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-2-review.png",
+      "bytes": 78292,
+      "sha256": "3609251ff59077d05c2ed3d0ab890484c866285ba202c75e6146ac98f4c7270f"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-3-prefilled.png",
+      "bytes": 87524,
+      "sha256": "4806c4d1c37b213b87215973bafc3548586692221466146a7c8de7122a532aed"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-4-step3-clinica.png",
+      "bytes": 92624,
+      "sha256": "2e8c07eb4f762bd299c612792c4d8fc09c1b44311b34cc499183013e7f745fe7"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-5-riepilogo.png",
+      "bytes": 92624,
+      "sha256": "2e8c07eb4f762bd299c612792c4d8fc09c1b44311b34cc499183013e7f745fe7"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-7-created.png",
+      "bytes": 69471,
+      "sha256": "ac7661dabfbdb4fc756598a1e3cbf737639b4d4c6d2a98d966e33159e67c3d70"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-8-reload-detail.png",
+      "bytes": 80366,
+      "sha256": "cf99096830d416caa082ea50b580ab43305b8261f0816626da9cac891f2a2647"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-9-reload-allergies-dialog.png",
+      "bytes": 116512,
+      "sha256": "5287530a6083f60b1ed6417a9bc1f0b1b205d342731c05ebbc19dc2bc4aba469"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-trace.zip",
+      "bytes": 5078308,
+      "sha256": "94b16dd3eb30a544e6a0adfeda3bada70074a0864f8ede9541c13969801a9631"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-1-upload.png",
+      "bytes": 61086,
+      "sha256": "24c3a3f41cfd5f2400ac06f818e2abb6d541ce589938cdd7d58a03e30f3b64d6"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-2-review.png",
+      "bytes": 75766,
+      "sha256": "b82d50287784a5dd7c3c926105d16ad05dbc2e8ba61cf726bf82e6a3593f3206"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-3-prefilled.png",
+      "bytes": 84059,
+      "sha256": "89d3d7fc7c7abb863e91c927cc5908fc0a76b5490b2ad662899a33af56a1211e"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-4-step3-clinica.png",
+      "bytes": 92984,
+      "sha256": "fd3594733848b0ad1f508e10bacff7750fc25eae2bb9c06713f697ecee9ada9f"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-5-riepilogo.png",
+      "bytes": 92984,
+      "sha256": "fd3594733848b0ad1f508e10bacff7750fc25eae2bb9c06713f697ecee9ada9f"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-7-created.png",
+      "bytes": 64677,
+      "sha256": "84d4eb81413a96613ad42fcc907572c189b44d8f4556b859f45a66de425200ec"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-8-reload-detail.png",
+      "bytes": 75739,
+      "sha256": "75002f5e3b3b02d2a8887570e017cdaf44e7486c868f3925f136f3312b6f8a27"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-9-reload-allergies-dialog.png",
+      "bytes": 103816,
+      "sha256": "6d3a0f7fadab07462a9828915833c0c8c4ee8456c3045bfc1cc28c27a3b3c5d9"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-trace.zip",
+      "bytes": 7155859,
+      "sha256": "c95202efd929f0554c0e91589cfa4d1000b5cea00f755445ac2d651283c8e907"
+    }
+  ],
+  "preservation": {
+    "sourceUnchanged": true,
+    "snapshotUnchanged": true,
+    "sealedProofUnchanged": true,
+    "sourceFilesCompared": 1803,
+    "sealedProofFilesCompared": 39,
+    "sourceTestHash": "f728aa6066a3b4d4c984e3023eb405981cb0b7a3cf42c8d87a9de118881292b5",
+    "snapshotTestHash": "f728aa6066a3b4d4c984e3023eb405981cb0b7a3cf42c8d87a9de118881292b5"
+  },
+  "resourceHandback": {
+    "ownedContainerRemoved": true,
+    "ownedPortsFree": true,
+    "qaLockFree": true,
+    "baselineContainerId": "9000f70d4ee95b9e3bde723796daa050081db4274d20c97888413479232949ad",
+    "baselineStillRunning": true,
+    "privateRuntimeHandedBack": true
+  },
+  "unrun": [
+    "unchanged broad frontend/backend suites",
+    "native release checks",
+    "author-reported pure journey unit test rerun (reported 2 pass / 1 stale accept-demographics assertion failure; test was already absent before edit)",
+    "any provider or external application actions"
+  ],
+  "priorAttemptsPreserved": [
+    "attempt-004 initial role-selection failure before import",
+    "attempt-005 actual extraction 0/2 caused by AI_WORKER_INLINE=false mismatch; not counted as product acceptance"
+  ],
+  "noGitOrSourceWrites": true,
+  "noProviderActions": true,
+  "rootMayResumeOtherAuthorizedWork": true
+}
