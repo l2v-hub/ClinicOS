@@ -332,12 +332,14 @@ function demoFixture({
     policies: structuredClone(policies),
     customRules: structuredClone(customRules),
   };
-  const reads = [],
+  const events = [],
+    reads = [],
     writes = [];
   const request = async (method, route, body) => {
     const url = new URL(route, 'https://api.github.com');
     const path = url.pathname;
     let result;
+    events.push({ method, route, ...(body ? { body: structuredClone(body) } : {}) });
     if (method === 'GET') reads.push(route);
     else {
       writes.push({ method, route, body: structuredClone(body) });
@@ -363,13 +365,13 @@ function demoFixture({
         state.environment.protection_rules = prior.filter(
           (rule) => !['required_reviewers', 'wait_timer', 'branch_policy'].includes(rule.type),
         );
-        if (body.wait_timer)
+        if (Object.hasOwn(body, 'wait_timer'))
           state.environment.protection_rules.push({
             ...(prior.find((rule) => rule.type === 'wait_timer') ?? {}),
             type: 'wait_timer',
             wait_timer: body.wait_timer,
           });
-        if (body.reviewers?.length)
+        if (Object.hasOwn(body, 'reviewers'))
           state.environment.protection_rules.push({
             ...(prior.find((rule) => rule.type === 'required_reviewers') ?? {}),
             type: 'required_reviewers',
@@ -393,6 +395,8 @@ function demoFixture({
         result = structuredClone(mainPolicy);
       } else {
         assert.equal(method, 'GET', 'Existing policies must never be deleted or modified');
+        if (state.environment.deployment_branch_policy === null)
+          throw Object.assign(new Error('HTTP 404'), { status: 404 });
         result = paginated(state.policies, 'branch_policies');
       }
     } else if (method === 'GET' && path === customRoute)
@@ -406,6 +410,7 @@ function demoFixture({
   };
   return {
     state,
+    events,
     reads,
     writes,
     request,
@@ -464,7 +469,6 @@ test('demo administrator identity, repository, exact environment ID/name and eve
       `${demoBase}/collaborators/l2v-hub/permission`,
       demoBase,
       demoRoute,
-      policyRoute,
       customRoute,
       `${demoBase}/actions/secrets`,
       `${demoRoute}/secrets`,
@@ -474,6 +478,15 @@ test('demo administrator identity, repository, exact environment ID/name and eve
         return result;
       },
     })),
+    {
+      environment: {
+        deployment_branch_policy: { protected_branches: false, custom_branch_policies: true },
+      },
+      transform: (_method, route, result) => {
+        if (route.split('?')[0] === policyRoute) throw new Error('preflight unavailable');
+        return result;
+      },
+    },
   ];
   for (const [i, option] of options.entries())
     await t.test(String(i), async () => {
@@ -553,6 +566,49 @@ test('demo restriction preserves reviewers, self-review, timer, bypass and custo
   assert.ok(!Object.hasOwn(empty.writes[0].body, 'reviewers'), 'No new approval requirement');
 });
 
+test('an exact null policy bootstraps before actual policy inventory and verifies preservation immediately', async () => {
+  const protections = [
+    { id: 1, type: 'wait_timer', wait_timer: 0 },
+    {
+      id: 2,
+      type: 'required_reviewers',
+      prevent_self_review: true,
+      reviewers: [{ type: 'Team', reviewer: { id: 31 } }],
+    },
+  ];
+  const customRules = [{ id: 5, app: { id: 9, slug: 'existing-protection' } }];
+  const f = demoFixture({
+    environment: { protection_rules: protections, can_admins_bypass: true },
+    customRules,
+  });
+  const result = await f.configure();
+  assert.equal(result.status, 'verified');
+  assert.deepEqual(f.writes.map(({ method, route }) => [method, route]), [
+    ['PUT', demoRoute],
+    ['POST', policyRoute],
+  ]);
+  const firstPolicyRead = f.events.findIndex(
+    (event) => event.method === 'GET' && event.route.startsWith(policyRoute),
+  );
+  const put = f.events.findIndex((event) => event.method === 'PUT' && event.route === demoRoute);
+  assert.ok(put >= 0);
+  assert.ok(firstPolicyRead > put, 'null-policy inventory must wait for the PUT');
+  assert.equal(f.events[put + 1].method, 'GET');
+  assert.equal(f.events[put + 1].route, demoRoute, 'PUT must be followed by environment readback');
+  assert.deepEqual(f.events[put].body, {
+    deployment_branch_policy: { protected_branches: false, custom_branch_policies: true },
+    wait_timer: 0,
+    prevent_self_review: true,
+    reviewers: [{ type: 'Team', id: 31 }],
+    can_admins_bypass: true,
+  });
+  assert.deepEqual(
+    f.state.environment.protection_rules.filter((rule) => rule.type !== 'branch_policy'),
+    protections,
+  );
+  assert.deepEqual(f.state.customRules, customRules);
+});
+
 test('pre-existing main policy and protected-branches modes converge without duplicate policies', async () => {
   for (const policy of [
     null,
@@ -592,11 +648,56 @@ test('conflicting, duplicate, wildcard, tag and malformed policies are never del
       type: 'branch',
     })),
   ]) {
-    const f = demoFixture({ policies });
+    const f = demoFixture({
+      policies,
+      environment: {
+        deployment_branch_policy: { protected_branches: false, custom_branch_policies: true },
+      },
+    });
     await assert.rejects(f.configure());
     assert.deepEqual(f.writes, []);
     if (policies.length === 101) assert.ok(f.reads.includes(`${policyRoute}?per_page=100&page=2`));
   }
+});
+
+test('conflicting policies discovered after null-policy enablement stop without another write', async () => {
+  for (const policies of [
+    [{ ...mainPolicy, name: 'maintenance' }],
+    [{ ...mainPolicy, name: '*' }],
+    [{ ...mainPolicy, name: 'main*' }],
+    [{ ...mainPolicy, type: 'tag' }],
+    [{ ...mainPolicy, type: undefined }],
+    [{ ...mainPolicy, id: undefined }],
+    [mainPolicy, { ...mainPolicy, id: 72 }],
+  ]) {
+    const f = demoFixture({ policies });
+    await assert.rejects(f.configure());
+    assert.equal(f.writes.length, 1);
+    assert.equal(f.writes[0].method, 'PUT');
+    assert.equal(f.writes.some((write) => write.method === 'POST'), false);
+  }
+});
+
+test('null-policy post-enable inventory 404 and failed immediate readback stop after one PUT', async () => {
+  const unavailableInventory = demoFixture({
+    transform: (method, route, result) => {
+      if (method === 'GET' && route.startsWith(policyRoute))
+        throw Object.assign(new Error('HTTP 404'), { status: 404 });
+      return result;
+    },
+  });
+  await assert.rejects(unavailableInventory.configure(), /HTTP 404/);
+  assert.equal(unavailableInventory.writes.length, 1);
+  assert.equal(unavailableInventory.writes[0].method, 'PUT');
+  assert.equal(unavailableInventory.writes.some((write) => write.method === 'POST'), false);
+
+  const badReadback = demoFixture({
+    transform: (method, route, result, _state, _reads, writes) =>
+      method === 'GET' && route === demoRoute && writes.length ? { ...result, id: 1 } : result,
+  });
+  await assert.rejects(badReadback.configure(), /Unexpected demo environment identity/);
+  assert.equal(badReadback.writes.length, 1);
+  assert.equal(badReadback.reads.some((route) => route.startsWith(policyRoute)), false);
 });
 
 test('pagination is complete for policy, protection and secret inventories and has a fixed upper bound', async () => {
@@ -633,6 +734,15 @@ test('pagination is complete for policy, protection and secret inventories and h
       }),
     ]) {
       const bad = demoFixture({
+        environment:
+          route === policyRoute
+            ? {
+                deployment_branch_policy: {
+                  protected_branches: false,
+                  custom_branch_policies: true,
+                },
+              }
+            : {},
         transform: (_method, current, result) =>
           current.split('?')[0] === route ? broken(result) : result,
       });
@@ -870,6 +980,85 @@ test('demo CLI diagnostics classify denied reads and attempted writes without re
     const lines = result.stderr.trimEnd().split('\n');
     assert.equal(lines[0], 'Demo environment restriction blocked; no provider details are printed');
     assert.ok(lines[1]?.startsWith('Demo environment diagnostic: '), scenario.name);
+    const diagnostic = JSON.parse(lines[1].slice('Demo environment diagnostic: '.length));
+    assert.deepEqual(
+      [diagnostic.phase, diagnostic.code, diagnostic.status, diagnostic.readRequests, diagnostic.writeAttempts],
+      scenario.expected,
+      scenario.name,
+    );
+    assert.ok(!`${result.stdout}${result.stderr}`.includes(sentinel), scenario.name);
+    assert.ok(!/api\.github\.com|\/repos\/|x-api-key/i.test(`${result.stdout}${result.stderr}`), scenario.name);
+  }
+});
+
+test('demo CLI null-policy failures count the bootstrap PUT and stop after readback or inventory conflict', () => {
+  const sentinel = 'null-bootstrap-secret-sentinel';
+  const program = new URL('../../../scripts/quality-gate/configure-bug-repository.mjs', import.meta.url)
+    .pathname;
+  const cases = [
+    { name: 'inventory404', expected: ['policy_inventory', 'http_denied', 404, 8, 1] },
+    { name: 'inventoryConflict', expected: ['policy_inventory', 'validation', null, 8, 1] },
+    { name: 'readback404', expected: ['environment_metadata', 'http_denied', 404, 7, 1] },
+    { name: 'readbackMismatch', expected: ['environment_metadata', 'validation', null, 7, 1] },
+  ];
+  for (const scenario of cases) {
+    const preload = `
+      const bad = ${JSON.stringify(sentinel)};
+      const ok = (body) => ({ ok: true, status: 200, json: async () => body });
+      const denied = (status) => ({ ok: false, status, headers: new Headers({ authorization: bad }), json: async () => ({ message: bad }) });
+      let environmentReads = 0;
+      let customEnabled = false;
+      globalThis.fetch = async (url, options) => {
+        const requestUrl = new URL(url);
+        const route = requestUrl.pathname;
+        const method = options.method;
+        if (route.includes('/collaborators/')) return ok({ permission: 'admin', user: { login: 'l2v-hub' } });
+        if (route === '/repos/l2v-hub/ClinicOS') return ok({ full_name: 'l2v-hub/ClinicOS', default_branch: 'main' });
+        if (route === '/repos/l2v-hub/ClinicOS/environments/glistening-friendship%20%2F%20demo') {
+          if (method === 'PUT') { customEnabled = true; return ok({}); }
+          environmentReads += 1;
+          if (environmentReads === 1) return ok({ id: 20880188544, name: 'glistening-friendship / demo', protection_rules: [], deployment_branch_policy: null });
+          if (${JSON.stringify(scenario.name)} === 'readback404') return denied(404);
+          if (${JSON.stringify(scenario.name)} === 'readbackMismatch') return ok({ id: 1, name: 'glistening-friendship / demo', protection_rules: [], deployment_branch_policy: { protected_branches: false, custom_branch_policies: true } });
+          if (!customEnabled) throw new Error('environment readback must precede inventory');
+          return ok({ id: 20880188544, name: 'glistening-friendship / demo', protection_rules: [{ type: 'branch_policy', id: 9 }], deployment_branch_policy: { protected_branches: false, custom_branch_policies: true } });
+        }
+        if (route.endsWith('/deployment_protection_rules')) return ok({ total_count: 0, custom_deployment_protection_rules: [] });
+        if (route.endsWith('/secrets')) return ok({ total_count: 0, secrets: [] });
+        if (route.endsWith('/deployment-branch-policies')) {
+          if (!customEnabled) return denied(404);
+          if (${JSON.stringify(scenario.name)} === 'inventory404') return denied(404);
+          if (${JSON.stringify(scenario.name)} === 'inventoryConflict') return ok({ total_count: 1, branch_policies: [{ id: 7, name: 'main*', type: 'branch' }] });
+          return ok({ total_count: 0, branch_policies: [] });
+        }
+        throw new Error(bad + ' unexpected route');
+      };
+    `;
+    const result = spawnSync(
+      process.execPath,
+      [`--import=data:text/javascript,${encodeURIComponent(preload)}`, program],
+      {
+        encoding: 'utf8',
+        env: {
+          GH_TOKEN: sentinel,
+          CLINICOS_RESTRICT_DEMO_ENVIRONMENT: 'true',
+          CLINICOS_CONFIGURE_REPOSITORY: 'false',
+          CLINICOS_REVIEWED_SHA: sha,
+          GITHUB_SHA: sha,
+          GITHUB_WORKFLOW_SHA: sha,
+          GITHUB_ACTOR: demoContext.actor,
+          GITHUB_TRIGGERING_ACTOR: demoContext.triggeringActor,
+          GITHUB_REF: demoContext.ref,
+          GITHUB_WORKFLOW_REF: demoContext.workflowRef,
+          GITHUB_EVENT_NAME: 'workflow_dispatch',
+          GITHUB_REPOSITORY: demoContext.repository,
+        },
+      },
+    );
+    assert.equal(result.status, 1, scenario.name);
+    assert.equal(result.stdout, '', scenario.name);
+    const lines = result.stderr.trimEnd().split('\n');
+    assert.equal(lines[0], 'Demo environment restriction blocked; no provider details are printed');
     const diagnostic = JSON.parse(lines[1].slice('Demo environment diagnostic: '.length));
     assert.deepEqual(
       [diagnostic.phase, diagnostic.code, diagnostic.status, diagnostic.readRequests, diagnostic.writeAttempts],

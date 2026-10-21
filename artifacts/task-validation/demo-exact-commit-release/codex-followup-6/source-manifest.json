@@ -1,0 +1,40 @@
+{
+  "baseSha": "5940f563f48f9a1eae44d6e2dc2cfa989144a3ee",
+  "sourceScope": {
+    "scripts/quality-gate/configure-bug-repository.mjs": {
+      "sha256": "8a6ead7250d6468c958fd1f40fa6782703df674713c2efbb90114ed1b9b9bb5a",
+      "bytes": 21133,
+      "inode": 594640,
+      "nlink": 1,
+      "mode": 384,
+      "beforeSha256": "254b308b597e9ba50bbc00c76ddc80535d67524cba971ef721f5b120d40f8445",
+      "beforeBytes": 20030,
+      "beforeInode": 594640,
+      "beforeNlink": 1
+    },
+    "agent-team/tests/bug-pipeline/repository-settings.test.mjs": {
+      "sha256": "1f1ee8a29b700dd0be827c24abb62b8d694ee56eff9e56b2317a2d82593446d1",
+      "bytes": 48146,
+      "inode": 329821,
+      "nlink": 1,
+      "mode": 384,
+      "beforeSha256": "c66f86627102eddec6b005b7364dda36eb87228e8744d25ce6b2d37c763f02b6",
+      "beforeBytes": 39014,
+      "beforeInode": 329821,
+      "beforeNlink": 1
+    }
+  },
+  "legacyConfigureRepository": {
+    "sha256": "a64ad850bf45fde82fc3e470e3c4b9ac26c28cd330694ea0c73035629bfccfad",
+    "bytes": 5668,
+    "preservedByteIdentical": true
+  },
+  "priorEvidence": {
+    "filesChecked": 127,
+    "unchanged": true,
+    "mismatches": [],
+    "qa7OriginalProofsPreserved": true
+  },
+  "diffCheck": "passed",
+  "targetedValidationReceipt": "/workspace/.clinicos-cloud/498-null-policy-author8-20261021/repository-settings-attempt3-receipt.json"
+}

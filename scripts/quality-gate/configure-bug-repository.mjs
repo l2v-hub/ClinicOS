@@ -144,22 +144,35 @@ export async function restrictDemoEnvironment({ request, ...context }) {
   assert.equal(repository.default_branch, 'main');
   const before = await request('GET', DEMO_ROUTE);
   verifyEnvironment(before); // A missing or renamed environment must NEVER be created by PUT.
-  const policies = await listEnvironmentMetadata(
-    request,
-    `${DEMO_ROUTE}/deployment-branch-policies`,
-    'branch_policies',
-  );
-  validateMainPolicies(policies); // Never delete an existing conflicting policy.
+  const bootstrapNullPolicy = before.deployment_branch_policy === null;
+  // Keep the existing pre-write policy conflict guard and diagnostics for readable modes.
+  // Only an exact null policy takes the bounded bootstrap path below.
+  let policies = null;
+  if (!bootstrapNullPolicy) {
+    policies = await listEnvironmentMetadata(
+      request,
+      `${DEMO_ROUTE}/deployment-branch-policies`,
+      'branch_policies',
+    );
+    validateMainPolicies(policies); // Never delete an existing conflicting policy.
+  }
   const customRules = await listEnvironmentMetadata(
     request,
     `${DEMO_ROUTE}/deployment_protection_rules`,
     'custom_deployment_protection_rules',
+  );
+  assert.ok(
+    customRules.every((rule) => rule && typeof rule === 'object' && !Array.isArray(rule)),
+    'Unreadable custom deployment protection metadata',
   );
   const body = environmentUpdate(before);
   const secrets = {
     repository: await secretPresence(request, `${base}/actions/secrets`),
     environment: await secretPresence(request, `${DEMO_ROUTE}/secrets`),
   };
+  // GitHub does not expose branch-policy inventory while custom policies are disabled.
+  // Keep pre-write conflict inspection for readable policy modes; for exact null, first
+  // validate every other control and the complete preserving PUT body above.
   let environmentUpdated = false;
   let policyCreated = false;
   if (before.deployment_branch_policy?.custom_branch_policies !== true) {
@@ -170,6 +183,16 @@ export async function restrictDemoEnvironment({ request, ...context }) {
     verifyEnvironment(enabled);
     assert.deepEqual(enabled.deployment_branch_policy, body.deployment_branch_policy);
     assert.deepEqual(unrelatedEnvironmentSettings(enabled), unrelatedEnvironmentSettings(before));
+  }
+  if (bootstrapNullPolicy) {
+    // Only a successful identity/policy/protection readback makes inventory meaningful.
+    // A 404 here remains a failure; it is never interpreted as an empty policy set.
+    policies = await listEnvironmentMetadata(
+      request,
+      `${DEMO_ROUTE}/deployment-branch-policies`,
+      'branch_policies',
+    );
+    validateMainPolicies(policies);
   }
   if (!policies.length) {
     await request('POST', `${DEMO_ROUTE}/deployment-branch-policies`, {

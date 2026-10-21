@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-21T18:14:41.674Z",
+  "runId": 39649785587,
+  "jobId": 119394782991,
+  "headSha": "5940f563f48f9a1eae44d6e2dc2cfa989144a3ee",
+  "conclusion": "failure",
+  "diagnostic": {
+    "phase": "policy_inventory",
+    "code": "http_denied",
+    "status": 404,
+    "readRequests": 4,
+    "writeAttempts": 0
+  },
+  "environment": {
+    "id": 20880188544,
+    "name": "glistening-friendship / demo",
+    "policy": null,
+    "updatedAt": "2026-08-30T15:49:17Z"
+  },
+  "logSha256": "fcac54b2ba8b4e3c9d028256116a88769896782184e435b71c6490c8582b7f32",
+  "noMutationVerified": true
+}
