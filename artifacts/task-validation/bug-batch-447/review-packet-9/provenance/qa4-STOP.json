@@ -1,0 +1,41 @@
+{
+  "at": "2026-10-19T01:03:41.137728+00:00",
+  "status": "STOPPED_AND_HANDED_BACK",
+  "qaNonce": "85916d83-e6f7-4593-92f9-207d751d1d61",
+  "resourceNonce": "d8036c7a-57d0-475a-99f1-a4d10b995dc2",
+  "ownerBeforeHandback": "/root/uxqa4_luna_resume",
+  "handedBackTo": "/root",
+  "sourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+  "confirmedProductDefect": "Milo prescription payload wrapper mismatch; see final-review-report.json",
+  "ownedPorts": {
+    "3447": "clear",
+    "5447": "clear",
+    "55432": "clear",
+    "8432": "clear"
+  },
+  "qaLock": {
+    "path": "/tmp/clinicos-browser-qa.lock",
+    "available": true,
+    "holder": null
+  },
+  "baselineContainer": {
+    "id": "9000f70d4ee95b9e3bde723796daa050081db4274d20c97888413479232949ad",
+    "status": "running",
+    "hostPort": 5432,
+    "untouched": true
+  },
+  "ownedSyntheticDatabase": {
+    "status": "removed",
+    "cleanupErrors": []
+  },
+  "gitAndSource": {
+    "sourceShaUnchanged": true,
+    "gitStatusUnchanged": true,
+    "sourceEdits": 0
+  },
+  "finalIntegrityReadback": "integrity-readback-resumed-010306.json",
+  "report": "final-review-report.json",
+  "reportSha256": "8264196c688d077a5cf885c4944d55ea08b9a6f709e9c8cda3cd678b756dc130",
+  "originalResourceGrantModified": false,
+  "historicalArtifactsModified": false
+}

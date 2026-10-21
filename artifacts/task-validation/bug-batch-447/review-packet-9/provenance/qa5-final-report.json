@@ -1,0 +1,205 @@
+{
+  "status": "SCOPED_REGRESSION_PASS_WITH_DISCLOSED_UNRUN",
+  "overallClosureClaimed": false,
+  "sourceSha": "b76eb6baf5e87dcdb9b89a580ef48baf26e1bb7a",
+  "qaNonce": "1d18e822-6631-4608-bc52-a120aff2ccaf",
+  "grantNonce": "83def427-95c7-4769-b60f-7219ba571d02",
+  "at": "2026-10-21T17:21:34.570825+00:00",
+  "freshResults": {
+    "affectedAssistantHTTP": {
+      "pass": 11,
+      "fail": 0,
+      "attempt": 1
+    },
+    "actualMiloAndRouteMatrix": {
+      "pass": 3,
+      "attempt": 2,
+      "actualDoseMode": "fixed",
+      "perOsMappedRoute": "orale",
+      "confirmTherapies": 1,
+      "confirmDiaryDelta": 1,
+      "reload": true,
+      "missingRouteNoConfirmNoWrites": true,
+      "invalidHTTP": 21,
+      "invalidTools": 21,
+      "validHTTP": 9,
+      "validTools": 9,
+      "restrictedForeignOwnerToolDenied": true
+    },
+    "recordedMatrix": {
+      "passingCriteria": 8,
+      "firstFiveAttempt": 2,
+      "calendarAttempt": 3,
+      "dashboardAttempt": 4,
+      "wardWithRealPaginationAttempt": 5,
+      "deniedWrites": 18,
+      "fullSQLRowsAndReceiptsUnchanged": true,
+      "selectedPatientAndWardReload": true
+    },
+    "recordedLifecycle": {
+      "attempt": 5,
+      "passingCriteria": 6,
+      "results": [
+        {
+          "name": "operator-actual-App-cold-reload-selected-day-view-return-paginated-readonly",
+          "pass": true,
+          "verification": 5,
+          "timedCards": 0,
+          "administrationPosts": 0,
+          "terapiaContinuationRealClick": true
+        },
+        {
+          "name": "admin-actual-App-cold-reload-selected-day-view-return-paginated-readonly",
+          "pass": true,
+          "verification": 5,
+          "timedCards": 0,
+          "administrationPosts": 0,
+          "terapiaContinuationRealClick": true
+        },
+        {
+          "name": "real-App-initial-503-append-503-403-retry-and-out-of-order-day-append",
+          "pass": true,
+          "interceptionsDisclosed": true,
+          "oldNamesAbsent": true
+        },
+        {
+          "name": "actual-admin-free-cell-create-dialog-cancel-during-clinical-feed-503",
+          "pass": true,
+          "dedicatedNewButtonAbsent": true,
+          "appointmentRowsExactlyUnchanged": true,
+          "appointmentPosts": 0,
+          "administrationPosts": 0
+        },
+        {
+          "name": "real-roster-epoch-409-recovery-retains-selected-day",
+          "pass": true
+        },
+        {
+          "name": "real-logout-new-role-during-held-old-session-read",
+          "pass": true,
+          "oldSnapshotItemDeletedInOwnedFixture": true,
+          "newCount": 4
+        }
+      ],
+      "sql": [
+        {
+          "name": "recorded-lifecycle-fixture",
+          "expectedAdministered": 3,
+          "expectedNotAdministered": 2
+        },
+        {
+          "name": "real-sql-five-readonly-items-and-acl",
+          "verification": 5,
+          "deniedWrites": 10,
+          "administrations": 7,
+          "firstPageVerificationDetails": 1,
+          "hasMore": true
+        },
+        {
+          "name": "actual-Agenda-readonly-after-all-browser-cases",
+          "administrations": 7,
+          "receiptCount": 0
+        },
+        {
+          "name": "no-browser-write-SQL-delta",
+          "onlyIntentionalDeletedTherapySetNull": true
+        }
+      ]
+    }
+  },
+  "retainedPriorEvidence": {
+    "qa5Static": "nine skills unit cases and backend types PASS; static-results/summary.json",
+    "qa4": "canonical7, affected DB33, builds, four viewport452, seven route486 paths; relevant input graphs byte-identical per runtime-preparation.json",
+    "freshness": "retained evidence is not claimed rerun"
+  },
+  "failedAttemptsPreserved": [
+    {
+      "attempt": 1,
+      "kind": "setup",
+      "cause": "missing mock-runtime cwd, affected HTTP11 passed before stop",
+      "productFinding": false
+    },
+    {
+      "attempt": 2,
+      "kind": "real rate-limit stress observation",
+      "requests": 222,
+      "uniqueNames": 111,
+      "http200": 60,
+      "http429": 162,
+      "loopObserved": false,
+      "clinicalOutcomesAndReloadAssertionsPassedBeforeStrictErrorFailure": true
+    },
+    {
+      "attempt": 3,
+      "kind": "real shared per-IP rate-limit accumulation",
+      "calendar200": 20,
+      "dashboardRequests": 52,
+      "dashboard429": 12,
+      "defaultPerMinute": 60,
+      "strictErrorFailurePreserved": true
+    },
+    {
+      "attempt": 4,
+      "kind": "private harness omitted actual ward lazy-pagination click",
+      "actualPreciseCount": 9,
+      "loadedDetails": 0,
+      "pageConsoleHTTPerrors": 0,
+      "productFinding": false
+    }
+  ],
+  "fixtureAndPacingCorrections": {
+    "all111TherapyIDsRetained": true,
+    "recordedNineNamesUnchanged": true,
+    "102PaginationFillerRowsShareOneDrugName": true,
+    "lifecycle102FillerRowsShareOneDrugName": true,
+    "realRateLimitsUnchanged": true,
+    "strictErrorsUnchanged": true,
+    "61SecondWindowPacing": true,
+    "noClinicalAPIMocksOutsideDisclosedNegativeErrorInjections": true,
+    "wardActualCursor200ClickAndReload": true
+  },
+  "unrun": [
+    "Individual scheduled-dose panel is unmounted; no substitute claimed",
+    "Supplementary missing-operator-metadata fixture and separate civil-date padding browser scenario",
+    "Assistant facility snapshot / queue / skill parity supplement",
+    "Actual external OCR/provider extraction; intentionally disabled synthetic boundary",
+    "Root-owned final review, native gates, deployment and issue closure"
+  ],
+  "preservation": {
+    "qa4": {
+      "files": 2338,
+      "differences": []
+    },
+    "author9": {
+      "files": 21,
+      "differences": []
+    },
+    "sourceScoped": {
+      "files": 3,
+      "differences": []
+    },
+    "originalQa5Snapshot": {
+      "files": 2070,
+      "differences": []
+    }
+  },
+  "finalFrozenSourceHarnessFiles": 2194,
+  "frozenMetadataDifferences": [],
+  "trackedSourceStatus": "",
+  "sourceOrGitOrGHMutations": false,
+  "cleanup": {
+    "portsFree": [
+      55432,
+      3447,
+      5447,
+      8432
+    ],
+    "flockFree": true,
+    "remainingContainers": "9000f70d4ee9 clinicos-postgres 0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp\n",
+    "baseline5432Untouched": true,
+    "noQueuedRuntimeJobs": true,
+    "resourceHandbackReady": true
+  },
+  "mediaIndex": "media-index.json",
+  "evidenceSeal": "evidence-checksums.json"
+}
