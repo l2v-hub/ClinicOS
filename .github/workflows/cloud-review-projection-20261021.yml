@@ -1,30 +1,41 @@
-name: Request verified standalone review
+name: Inspect demo secret exposure without values
 on:
   push:
     branches: [codex/cloud-review-projection-20261021]
 permissions:
   contents: read
 concurrency:
-  group: clinicos-root-review-projection-498
+  group: clinicos-root-demo-secret-presence-probe
   cancel-in-progress: false
 jobs:
-  request-498:
+  inspect-ambient-availability:
     if: >-
       github.repository == 'l2v-hub/ClinicOS' &&
       github.event_name == 'push' &&
       github.ref == 'refs/heads/codex/cloud-review-projection-20261021'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
-      - name: Check out only already reviewed trusted controller
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          ref: fbaa78d8c7eacf8402db0c8fa2be276ae579a27c
-          persist-credentials: false
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
-        with:
-          node-version: 22
-      - name: Request actual review of independently verified PR498
+      # No environment, checkout, provider call, credential value or application code.
+      - name: Check ambient availability as a boolean only
         env:
-          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
-        run: node agent-team/src/bug-pipeline/review-handoff-cli.mjs request --pr 498
+          DEMO_TOKEN_AVAILABLE_OUTSIDE_ENVIRONMENT: ${{ secrets.RAILWAY_DEMO_TOKEN != '' }}
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { writeFileSync } from 'node:fs';
+          const present = process.env.DEMO_TOKEN_AVAILABLE_OUTSIDE_ENVIRONMENT;
+          assert(['true', 'false'].includes(present));
+          const proof = { schemaVersion: 1, observedAt: new Date().toISOString(), repository: process.env.GITHUB_REPOSITORY, ref: process.env.GITHUB_REF, workflowRef: process.env.GITHUB_WORKFLOW_REF, workflowSha: process.env.GITHUB_SHA, event: process.env.GITHUB_EVENT_NAME, runId: process.env.GITHUB_RUN_ID, runAttempt: process.env.GITHUB_RUN_ATTEMPT, protectedEnvironmentAttached: false, ambientDemoTokenAvailable: present === 'true', credentialValuesReadOrPrinted: false, ownerType: 'User', organizationSecretInheritanceApplicable: false };
+          writeFileSync('demo-secret-exposure.json', JSON.stringify(proof, null, 2) + '\n');
+          console.log(JSON.stringify(proof));
+          assert.equal(present, 'false', 'Demo secret is accessible outside the protected environment; metadata-only proof failed');
+          JS
+      - name: Preserve metadata-only result
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: demo-secret-exposure-${{ github.run_id }}-${{ github.run_attempt }}
+          path: demo-secret-exposure.json
+          if-no-files-found: error
+          retention-days: 14
