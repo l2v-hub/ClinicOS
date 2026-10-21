@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 1,
+  "status": "AUTHOR_FOLLOWUP2_F12_SEALED_STOP",
+  "nonce": "c45b47e0-e827-4485-a53c-c3dddc9fe054",
+  "stateCommit": "0d0583b7233c7fe1fb73ce241147b40d714c8d9a",
+  "sourceBaseSha": "17a127c432f39e094f2746dc33c38bcb234ce719",
+  "priorSourceCandidate": "655fdc0ffd4e066e5c86bc8aea384f904c361255",
+  "actualPriorQaSealSha256": "e5b546a8cd5642d92ecc53e07746b9f3284024289e2cea53880df4781aef139f",
+  "targetedTestReceipt": "targeted-tests-final2.json",
+  "targetedTests": {
+    "count": 73,
+    "pass": 73,
+    "fail": 0
+  },
+  "typecheckReceipt": "typecheck.json",
+  "changedSourcePaths": [
+    "frontend/src/components/operator/TherapyGiroRows.tsx",
+    "frontend/src/components/operator/__tests__/claude1UiStaleConfirmation.test.ts"
+  ],
+  "sourceScopeOk": true,
+  "indexUnchanged": true,
+  "oldAuthorCorrectionAndQaFailureEvidenceUnchanged": true,
+  "immutableQaAdversarialTestUnchanged": true,
+  "externalOrClinicalRuntimeOperations": false,
+  "publicationClaim": false,
+  "requiresRootIntegrationAndIndependentFollowupQa": true,
+  "artifacts": [
+    {
+      "path": "STOP.json",
+      "sha256": "cbb1c3fdbf284a09da1e92ea9e9517522d172466a603f38e438486c17a0f77be",
+      "bytes": 610,
+      "inode": 1378813
+    },
+    {
+      "path": "after-freeze.json",
+      "sha256": "b82cf19ea43e2b9e5664cd4f6d5ca702d0896eb4715b3e6062b90ede1de22aba",
+      "bytes": 22095,
+      "inode": 1378809
+    },
+    {
+      "path": "diff-manifest.json",
+      "sha256": "fb009000d8113138e80014b834a53a31ab0c20234325f30ed6d0e7bdd26e7969",
+      "bytes": 7483,
+      "inode": 1378810
+    },
+    {
+      "path": "preservation.json",
+      "sha256": "3ccf81906630f0ddf95149254d1206c58aba003be6c0ba9d6e8aa797570ea723",
+      "bytes": 18048,
+      "inode": 1378785
+    },
+    {
+      "path": "preserved-source/frontend/src/components/admin/AdminAttentionList.css",
+      "sha256": "517b653c5236e6a7c9f9b54888d8396488a2944a5ab9f58963b3066cec735631",
+      "bytes": 2047,
+      "inode": 1378765
+    },
+    {
+      "path": "preserved-source/frontend/src/components/operator/ParameterReadingForm.css",
+      "sha256": "ff80c55768c90c0baf43b3b975036f5ebb210d5bc3556efc43d6f20e307678ee",
+      "bytes": 1918,
+      "inode": 1378767
+    },
+    {
+      "path": "preserved-source/frontend/src/components/operator/PatientRecordData.css",
+      "sha256": "f508e8cfb95fad213bc99d61cf0c20b14ae45ad5ae2c32dcdfd7aee5d1272f1e",
+      "bytes": 18049,
+      "inode": 1378768
+    },
+    {
+      "path": "preserved-source/frontend/src/components/operator/TherapyGiroRows.tsx",
+      "sha256": "e2a70b10ae4a888c1b92eaa77a7b2928fafbe90f4a26ff7266c65dc9bf2c5a3d",
+      "bytes": 21581,
+      "inode": 1378769
+    },
+    {
+      "path": "preserved-source/frontend/src/components/operator/TherapyPatientAllergies.tsx",
+      "sha256": "96ccd01f9a5f535f8f924a4f5d690d0341af53ad54e2bd9b25fa8e3811274631",
+      "bytes": 3821,
+      "inode": 1378770
+    },
+    {
+      "path": "preserved-source/frontend/src/components/operator/__tests__/claude1UiFindings.test.ts",
+      "sha256": "ef1ec78cb41947e2bec6e2eed960d423dd3f4182738a0d8176ef07a903883d4a",
+      "bytes": 9612,
+      "inode": 1378772
+    },
+    {
+      "path": "preserved-source/frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "sha256": "7e7c4eea2b40e411e8f97aa80e76fcd88963eafc88f82fc9db1d4778cba9a226",
+      "bytes": 46707,
+      "inode": 1378774
+    },
+    {
+      "path": "preserved-source/frontend/src/components/shared/PatientIdentity.tsx",
+      "sha256": "4bcd2207c7def4752d3bdffabe7e023d6fe9fcadb1a43f79971fe3b00d5cde9f",
+      "bytes": 2575,
+      "inode": 1378776
+    },
+    {
+      "path": "preserved-source/frontend/src/lib/__tests__/parameterRound451.test.ts",
+      "sha256": "0802a545341119753907ae1f5ed6bce659a0b19bc4c578f1f7d157af0f3f9ee6",
+      "bytes": 4102,
+      "inode": 1378779
+    },
+    {
+      "path": "preserved-source/frontend/src/lib/__tests__/patientListIdentityGuard.test.ts",
+      "sha256": "2069db89976059accf8640fbfe8332ef0633c45bdc1ad610ce1c1548cbe26e6c",
+      "bytes": 6584,
+      "inode": 1378780
+    },
+    {
+      "path": "preserved-source/frontend/src/lib/__tests__/therapyEntry454.test.ts",
+      "sha256": "2a0cac6c2367bb5f15ab5b7b4e913ccad6e06667e552d7fb3d730f333c9bc69e",
+      "bytes": 4841,
+      "inode": 1378781
+    },
+    {
+      "path": "preserved-source/frontend/src/lib/parameterRound.ts",
+      "sha256": "6b782026059189707fff60d8352546acd0406b12d7c734fd6c00cb4964ecef3f",
+      "bytes": 1869,
+      "inode": 1378782
+    },
+    {
+      "path": "preserved-source/frontend/src/lib/therapySlotPage.ts",
+      "sha256": "752230a5f4b3fc9c96782d91958f0289af60fe43f3bf0ce34e7c8553cd224989",
+      "bytes": 15241,
+      "inode": 1378783
+    },
+    {
+      "path": "preserved-source/frontend/src/types.ts",
+      "sha256": "284213a8871dbf2c6159430e77e1d51213bdaa672f57dd5751413c13a7cd37fe",
+      "bytes": 37318,
+      "inode": 1378784
+    },
+    {
+      "path": "report.md",
+      "sha256": "f2ed26f7ea5b5dd0252b4dff8554df00071e9a3c594861093cd07b35936e37ea",
+      "bytes": 2795,
+      "inode": 1378811
+    },
+    {
+      "path": "reservation.json",
+      "sha256": "afe13aa64a4381b5ee92cc89b36df8a88399e0a959b768e5b766cbf4001025b6",
+      "bytes": 1131,
+      "inode": 1378746
+    },
+    {
+      "path": "run-targeted.mjs",
+      "sha256": "2727c08735d7becd70609bf586be80c73325e88218bcd9bf3a19b80aa552d693",
+      "bytes": 1715,
+      "inode": 1378804
+    },
+    {
+      "path": "run-typecheck.mjs",
+      "sha256": "2a0c5f22b85a25ac3a15f9ae46bdf25a3c52ca44f22e59c20b46af961d05a0d5",
+      "bytes": 1167,
+      "inode": 1378800
+    },
+    {
+      "path": "runtime/frontend.tsbuildinfo",
+      "sha256": "b789dd9d2feae7aea9d27bd627dd489c0e30209a0724af8f73c729545e9fcd75",
+      "bytes": 171224,
+      "inode": 1378801
+    },
+    {
+      "path": "summary.json",
+      "sha256": "2cd8f456ab81cdc173d9b078e003920d43e9b4616804d04eda13992d024f00e7",
+      "bytes": 1356,
+      "inode": 1378812
+    },
+    {
+      "path": "targeted-tests-before-supervisor-unverified-case.json",
+      "sha256": "49b6774c44e8fcd6c77c5f225a7b6cbbb7b50c8a8f58ee5e0f550593eb50e314",
+      "bytes": 8281,
+      "inode": 1378803
+    },
+    {
+      "path": "targeted-tests-final.json",
+      "sha256": "49b6774c44e8fcd6c77c5f225a7b6cbbb7b50c8a8f58ee5e0f550593eb50e314",
+      "bytes": 8281,
+      "inode": 1378799
+    },
+    {
+      "path": "targeted-tests-final2.json",
+      "sha256": "31ad604caeebb53992312dd2ff14829adfa793c0605380fb407ad2c5cbce4567",
+      "bytes": 8271,
+      "inode": 1378805
+    },
+    {
+      "path": "targeted-tests-first.json",
+      "sha256": "8ee854bdfcab4dc8c2b1ac984a1cd4540021f1fdc1561f97f8bff68f37776f11",
+      "bytes": 8188,
+      "inode": 1378797
+    },
+    {
+      "path": "targeted-tests.json",
+      "sha256": "8ee854bdfcab4dc8c2b1ac984a1cd4540021f1fdc1561f97f8bff68f37776f11",
+      "bytes": 8188,
+      "inode": 1378796
+    },
+    {
+      "path": "task-contract.md",
+      "sha256": "3fe512da84f9f7feb3394f6825e64e052aa355af1af854e9770e7757ad74467c",
+      "bytes": 3519,
+      "inode": 1378745
+    },
+    {
+      "path": "typecheck-before-finalcase.json",
+      "sha256": "5bf8746c5839461e0114c704d576b7c95379571feddd57fa99edfd0875758a20",
+      "bytes": 535,
+      "inode": 1378814
+    },
+    {
+      "path": "typecheck.json",
+      "sha256": "5bf8746c5839461e0114c704d576b7c95379571feddd57fa99edfd0875758a20",
+      "bytes": 535,
+      "inode": 1378802
+    }
+  ]
+}

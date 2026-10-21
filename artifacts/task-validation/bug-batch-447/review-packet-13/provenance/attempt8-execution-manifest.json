@@ -1,0 +1,20 @@
+{
+  "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "grantNonce": "1b639688-715c-4edb-bf7a-db94485c3409",
+  "attempt": 8,
+  "sequence": [
+    "migration only",
+    "full genuine486 matrix",
+    "isolated actual503/200 recovery URL predicate probe"
+  ],
+  "sevenRerun": false,
+  "outputPhysical": "/tmp/clinicos-qa497-browser13-20261021/attempt8",
+  "preparedBeforeExecution": true,
+  "files": {
+    "runtime-worker8.mjs": "00932d582c47f87e2074a44f3a3a4d25ba6ffc65643bcb488a12b6c641e77b87",
+    "launch-runtime8.mjs": "a32f1d1a37fdc4408983665e66045e7a25ab191712c5408a22dcce74db4ecf74",
+    "snapshot/qa13-server8.mjs": "68b681ee1f63d2ec40eecc883a315ef3f9f6cb5e40777d3a18012a745bdb168c",
+    "snapshot/e2e/qa13-route486-6.mjs": "2b89c9820096e276d13f13fcd0ac68fb635d6d828f36fd0fd204e0c901895d18",
+    "snapshot/e2e/qa13-negative-only.mjs": "c873cf11b81f11fbf5d1695ae863f2f2c6216641d4c2bb99dc36088253fbdbe5"
+  }
+}

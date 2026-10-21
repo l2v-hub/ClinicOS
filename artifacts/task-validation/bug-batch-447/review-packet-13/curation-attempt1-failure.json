@@ -1,0 +1,5 @@
+{
+  "status": "FAILED_PATH_CONSTRUCTION_PRESERVED",
+  "problem": "Initial copier generated issue-447.trace.zip; source filename is issue-447-trace.zip. It stopped before completing media copy. Corrected copier uses exact source names and finalized-original #447 video.",
+  "sourceOrPriorProofChanged": false
+}

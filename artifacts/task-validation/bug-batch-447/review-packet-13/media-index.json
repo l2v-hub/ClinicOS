@@ -1,0 +1,87 @@
+[
+  {
+    "issue": 447,
+    "scenarioStatus": "PASS_SCENARIO",
+    "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+    "sourceReference": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-447.*",
+    "videoSource": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-447-finalized-original.webm",
+    "publishedVideo": "evidence/codex-followup-1/issue-447.webm",
+    "issue447VideoSelection": "verified completed finalized original; truncated issue-447.webm excluded",
+    "privacyReceipt": "provenance/issue-447-trace-privacy.json"
+  },
+  {
+    "issue": 451,
+    "scenarioStatus": "PASS_SCENARIO",
+    "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+    "sourceReference": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-451.*",
+    "videoSource": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-451.webm",
+    "publishedVideo": "evidence/codex-followup-1/issue-451.webm",
+    "issue447VideoSelection": null,
+    "privacyReceipt": "provenance/issue-451-trace-privacy.json"
+  },
+  {
+    "issue": 452,
+    "scenarioStatus": "PASS_SCENARIO",
+    "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+    "sourceReference": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-452.*",
+    "videoSource": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-452.webm",
+    "publishedVideo": "evidence/codex-followup-1/issue-452.webm",
+    "issue447VideoSelection": null,
+    "privacyReceipt": "provenance/issue-452-trace-privacy.json"
+  },
+  {
+    "issue": 453,
+    "scenarioStatus": "PASS_SCENARIO",
+    "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+    "sourceReference": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-453.*",
+    "videoSource": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-453.webm",
+    "publishedVideo": "evidence/codex-followup-1/issue-453.webm",
+    "issue447VideoSelection": null,
+    "privacyReceipt": "provenance/issue-453-trace-privacy.json"
+  },
+  {
+    "issue": 454,
+    "scenarioStatus": "PASS_SCENARIO",
+    "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+    "sourceReference": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-454.*",
+    "videoSource": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-454.webm",
+    "publishedVideo": "evidence/codex-followup-1/issue-454.webm",
+    "issue447VideoSelection": null,
+    "privacyReceipt": "provenance/issue-454-trace-privacy.json"
+  },
+  {
+    "issue": 456,
+    "scenarioStatus": "PASS_SCENARIO",
+    "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+    "sourceReference": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-456.*",
+    "videoSource": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-456.webm",
+    "publishedVideo": "evidence/codex-followup-1/issue-456.webm",
+    "issue447VideoSelection": null,
+    "privacyReceipt": "provenance/issue-456-trace-privacy.json"
+  },
+  {
+    "issue": 457,
+    "scenarioStatus": "PASS_SCENARIO",
+    "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+    "sourceReference": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-457.*",
+    "videoSource": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-457.webm",
+    "publishedVideo": "evidence/codex-followup-1/issue-457.webm",
+    "issue447VideoSelection": null,
+    "privacyReceipt": "provenance/issue-457-trace-privacy.json"
+  },
+  {
+    "issue": 486,
+    "scenarioStatus": "10/10 PASS",
+    "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+    "sourceReference": "/tmp/clinicos-qa497-browser13-20261021/attempt8/route486/issue-486.*",
+    "videoSource": "/tmp/clinicos-qa497-browser13-20261021/attempt8/route486/issue-486.webm",
+    "publishedVideo": "evidence/codex-followup-1/issue-486.webm",
+    "privacyReceipt": "provenance/issue-486-trace-privacy.json"
+  },
+  {
+    "scenario": "actual attempt9 sidecases",
+    "status": "PASS",
+    "path": "evidence/sidecases-attempt9",
+    "verification": "provenance/resumption-verification-report.json"
+  }
+]

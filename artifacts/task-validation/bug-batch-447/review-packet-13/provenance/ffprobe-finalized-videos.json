@@ -1,0 +1,94 @@
+{
+  "scope": "read-only ffprobe validation of exact copied candidate videos",
+  "environment": "PATH-only",
+  "results": [
+    {
+      "issue": 447,
+      "path": "evidence/codex-followup-1/issue-447.webm",
+      "sha256": "caff8f775471cbb70c4fedcc1aea327da3f34c30bc03e569ca62faead3b8f9fc",
+      "bytes": 1455486,
+      "ffprobeExitCode": 0,
+      "format": {
+        "duration": "21.160000",
+        "size": "1455486"
+      }
+    },
+    {
+      "issue": 451,
+      "path": "evidence/codex-followup-1/issue-451.webm",
+      "sha256": "abc3a37d5b0980c97f845626afe197f34ec0fd8a5d397b00bb6feacb92bb2b60",
+      "bytes": 813928,
+      "ffprobeExitCode": 0,
+      "format": {
+        "duration": "10.960000",
+        "size": "813928"
+      }
+    },
+    {
+      "issue": 452,
+      "path": "evidence/codex-followup-1/issue-452.webm",
+      "sha256": "b62f0ef9a9a56fbfca9437580225713cb979b05903bb3e7a691595076585058d",
+      "bytes": 1639762,
+      "ffprobeExitCode": 0,
+      "format": {
+        "duration": "15.960000",
+        "size": "1639762"
+      }
+    },
+    {
+      "issue": 453,
+      "path": "evidence/codex-followup-1/issue-453.webm",
+      "sha256": "3a63f31db2b4ec4ea00bed1486ea1b52d6426eebfef129cf4a472f1a0007a330",
+      "bytes": 3566801,
+      "ffprobeExitCode": 0,
+      "format": {
+        "duration": "59.120000",
+        "size": "3566801"
+      }
+    },
+    {
+      "issue": 454,
+      "path": "evidence/codex-followup-1/issue-454.webm",
+      "sha256": "2967280cb47227d6c57e0ce5070690ba271af6e22c22d592964d94c5e7964cb8",
+      "bytes": 368333,
+      "ffprobeExitCode": 0,
+      "format": {
+        "duration": "4.880000",
+        "size": "368333"
+      }
+    },
+    {
+      "issue": 456,
+      "path": "evidence/codex-followup-1/issue-456.webm",
+      "sha256": "0cf9b746b15235f7e5f5144d0b451f656b276e6a6df799d17d68dec9a16c3ea8",
+      "bytes": 404728,
+      "ffprobeExitCode": 0,
+      "format": {
+        "duration": "4.960000",
+        "size": "404728"
+      }
+    },
+    {
+      "issue": 457,
+      "path": "evidence/codex-followup-1/issue-457.webm",
+      "sha256": "b6d4ff1d26e2c9d0390ced3cea0726004930d19bd02356b3f1fb3d14672e45fd",
+      "bytes": 1743443,
+      "ffprobeExitCode": 0,
+      "format": {
+        "duration": "16.280000",
+        "size": "1743443"
+      }
+    },
+    {
+      "issue": 486,
+      "path": "evidence/codex-followup-1/issue-486.webm",
+      "sha256": "1ea09d2d54f18a02e2c613dc715d32b3e5ea3a828076fc5d19da9d662c3dcdc8",
+      "bytes": 3216288,
+      "ffprobeExitCode": 0,
+      "format": {
+        "duration": "34.560000",
+        "size": "3216288"
+      }
+    }
+  ]
+}

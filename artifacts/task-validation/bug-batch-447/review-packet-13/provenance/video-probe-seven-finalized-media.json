@@ -1,0 +1,179 @@
+{
+  "results": [
+    {
+      "file": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-447-finalized-original.webm",
+      "command": "credential-stripped env -u DATABASE_URL ffprobe",
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "stdout": "{\n    \"programs\": [\n\n    ],\n    \"stream_groups\": [\n\n    ],\n    \"streams\": [\n        {\n            \"codec_name\": \"vp8\",\n            \"width\": 800,\n            \"height\": 554,\n            \"nb_read_frames\": \"529\"\n        }\n    ],\n    \"format\": {\n        \"duration\": \"21.160000\",\n        \"size\": \"1455486\"\n    }\n}\n",
+      "stderr": "",
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554,
+            "nb_read_frames": "529"
+          }
+        ],
+        "format": {
+          "duration": "21.160000",
+          "size": "1455486"
+        }
+      }
+    },
+    {
+      "file": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-451.webm",
+      "command": "credential-stripped env -u DATABASE_URL ffprobe",
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "stdout": "{\n    \"programs\": [\n\n    ],\n    \"stream_groups\": [\n\n    ],\n    \"streams\": [\n        {\n            \"codec_name\": \"vp8\",\n            \"width\": 800,\n            \"height\": 554,\n            \"nb_read_frames\": \"274\"\n        }\n    ],\n    \"format\": {\n        \"duration\": \"10.960000\",\n        \"size\": \"813928\"\n    }\n}\n",
+      "stderr": "",
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554,
+            "nb_read_frames": "274"
+          }
+        ],
+        "format": {
+          "duration": "10.960000",
+          "size": "813928"
+        }
+      }
+    },
+    {
+      "file": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-452.webm",
+      "command": "credential-stripped env -u DATABASE_URL ffprobe",
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "stdout": "{\n    \"programs\": [\n\n    ],\n    \"stream_groups\": [\n\n    ],\n    \"streams\": [\n        {\n            \"codec_name\": \"vp8\",\n            \"width\": 800,\n            \"height\": 554,\n            \"nb_read_frames\": \"399\"\n        }\n    ],\n    \"format\": {\n        \"duration\": \"15.960000\",\n        \"size\": \"1639762\"\n    }\n}\n",
+      "stderr": "",
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554,
+            "nb_read_frames": "399"
+          }
+        ],
+        "format": {
+          "duration": "15.960000",
+          "size": "1639762"
+        }
+      }
+    },
+    {
+      "file": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-453.webm",
+      "command": "credential-stripped env -u DATABASE_URL ffprobe",
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "stdout": "{\n    \"programs\": [\n\n    ],\n    \"stream_groups\": [\n\n    ],\n    \"streams\": [\n        {\n            \"codec_name\": \"vp8\",\n            \"width\": 800,\n            \"height\": 554,\n            \"nb_read_frames\": \"1478\"\n        }\n    ],\n    \"format\": {\n        \"duration\": \"59.120000\",\n        \"size\": \"3566801\"\n    }\n}\n",
+      "stderr": "",
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554,
+            "nb_read_frames": "1478"
+          }
+        ],
+        "format": {
+          "duration": "59.120000",
+          "size": "3566801"
+        }
+      }
+    },
+    {
+      "file": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-454.webm",
+      "command": "credential-stripped env -u DATABASE_URL ffprobe",
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "stdout": "{\n    \"programs\": [\n\n    ],\n    \"stream_groups\": [\n\n    ],\n    \"streams\": [\n        {\n            \"codec_name\": \"vp8\",\n            \"width\": 800,\n            \"height\": 554,\n            \"nb_read_frames\": \"122\"\n        }\n    ],\n    \"format\": {\n        \"duration\": \"4.880000\",\n        \"size\": \"368333\"\n    }\n}\n",
+      "stderr": "",
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554,
+            "nb_read_frames": "122"
+          }
+        ],
+        "format": {
+          "duration": "4.880000",
+          "size": "368333"
+        }
+      }
+    },
+    {
+      "file": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-456.webm",
+      "command": "credential-stripped env -u DATABASE_URL ffprobe",
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "stdout": "{\n    \"programs\": [\n\n    ],\n    \"stream_groups\": [\n\n    ],\n    \"streams\": [\n        {\n            \"codec_name\": \"vp8\",\n            \"width\": 800,\n            \"height\": 554,\n            \"nb_read_frames\": \"124\"\n        }\n    ],\n    \"format\": {\n        \"duration\": \"4.960000\",\n        \"size\": \"404728\"\n    }\n}\n",
+      "stderr": "",
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554,
+            "nb_read_frames": "124"
+          }
+        ],
+        "format": {
+          "duration": "4.960000",
+          "size": "404728"
+        }
+      }
+    },
+    {
+      "file": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-457.webm",
+      "command": "credential-stripped env -u DATABASE_URL ffprobe",
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "stdout": "{\n    \"programs\": [\n\n    ],\n    \"stream_groups\": [\n\n    ],\n    \"streams\": [\n        {\n            \"codec_name\": \"vp8\",\n            \"width\": 800,\n            \"height\": 554,\n            \"nb_read_frames\": \"407\"\n        }\n    ],\n    \"format\": {\n        \"duration\": \"16.280000\",\n        \"size\": \"1743443\"\n    }\n}\n",
+      "stderr": "",
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554,
+            "nb_read_frames": "407"
+          }
+        ],
+        "format": {
+          "duration": "16.280000",
+          "size": "1743443"
+        }
+      }
+    }
+  ]
+}

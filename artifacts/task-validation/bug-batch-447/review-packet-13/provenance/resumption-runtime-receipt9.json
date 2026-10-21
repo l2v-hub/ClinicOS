@@ -1,0 +1,7 @@
+{
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "stdout": "{\"label\":\"migration\",\"code\":0,\"timedOut\":false,\"floorHit\":false,\"stdoutSha256\":\"62f2dcb588c6c238222ce2536554153355596cbf1de4dd32163202a55a0286bb\",\"stderrSha256\":\"e40df379b3ca806791529144da53b048cf1a232201fdfc817692665ba9ad0093\",\"at\":\"2026-10-21T23:04:42.820Z\",\"freeBytes\":1675395072}\n{\"label\":\"minimal-fixture\",\"code\":0,\"timedOut\":false,\"floorHit\":false,\"stdoutSha256\":\"ca09a416f5e5c187acae0f4cdbdabf0b6fcfd5ae04e504074129d52e07b2bddd\",\"stderrSha256\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"at\":\"2026-10-21T23:04:53.572Z\",\"freeBytes\":1675395072}\n{\"label\":\"negative-roster\",\"code\":0,\"timedOut\":false,\"floorHit\":false,\"stdoutSha256\":\"34c19759782ad0ba6c8f2bee23c97d75e08550911207d63b51010b07c73d44e2\",\"stderrSha256\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"at\":\"2026-10-21T23:05:04.858Z\",\"freeBytes\":1675395072}\n{\"label\":\"ps-readonly\",\"code\":0,\"timedOut\":false,\"floorHit\":false,\"stdoutSha256\":\"423b0a945a73ecb5ab748c7c796af9328a4639bf6921af982e71ad00924f46e9\",\"stderrSha256\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"at\":\"2026-10-21T23:05:21.145Z\",\"freeBytes\":1675378688}\nQA13 owned resources cleaned\n",
+  "stderr": ""
+}

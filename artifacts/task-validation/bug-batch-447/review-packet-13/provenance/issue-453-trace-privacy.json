@@ -1,0 +1,45 @@
+{
+  "policy": "exact synthetic session values only; no event or outcome removal",
+  "zipValidation": "CRC and residual signed-token scan passed",
+  "archives": [
+    {
+      "path": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-453-trace.zip",
+      "originalSha256": "0dcd30070ba6bdffb1ae2302e36be139f4b75551e91b1b6390a3678f28639cc9",
+      "sanitizedSha256": "db406fc5e61a2889b940d2e1ace5aa2d300b4e470a4a1cc94cb89cbc56a3b58a",
+      "sessionsRedacted": 5,
+      "entries": [
+        {
+          "entry": "trace.trace",
+          "replacements": 2
+        },
+        {
+          "entry": "trace.network",
+          "replacements": 324
+        },
+        {
+          "entry": "resources/40e838564a2d2dbf5acd7fffc7c6294a41115fa7.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/3de629daccd82376c8ad29eb83074e8057e8dda7.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/91ad56beee417563c56c70276bd0decd6ebbb44a.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/324aaa03c20f94cf061002dae3965c4f34558eb1.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/150b16ddc082abdc0a7a9a20fac0bed0e9e5bdaf.json",
+          "replacements": 1
+        }
+      ],
+      "tokensRemaining": 0,
+      "changed": true,
+      "originalRetainedPrivateOutsideRepository": true
+    }
+  ]
+}

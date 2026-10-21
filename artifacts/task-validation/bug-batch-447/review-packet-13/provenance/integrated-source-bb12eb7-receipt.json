@@ -1,0 +1,17 @@
+{
+  "before": "655fdc0ffd4e066e5c86bc8aea384f904c361255",
+  "sha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "changes": [
+    {
+      "path": "frontend/src/components/operator/TherapyGiroRows.tsx",
+      "sha256": "9b42aa04f39f22a88a4088ce9631c57c33c1aad0aba0431fd8bd6c2f659f636a"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/claude1UiStaleConfirmation.test.ts",
+      "sha256": "335709183179a819590973118d4a4889d9a63f34d4f458cf161d2b253392cde1"
+    }
+  ],
+  "independentUiQaSealSha256": "0ebb3593fccf911c3af841479bf1e0f38ccfbeb6018bb520a695b9e89be042f9",
+  "pushed": false,
+  "runtimeVerified": false
+}

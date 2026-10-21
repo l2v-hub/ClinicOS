@@ -1,0 +1,20 @@
+{
+  "algorithm": "sha256",
+  "files": {
+    "run.mjs": "4860225532cf3a5551b069d1093497a4a3fdf778f1315d755d744e1cc1395327",
+    "adversarial-final.json": "57c2d1c3219a920d6ac69b376efa9434cf751a7eab6f96d3d0c6e4eebbf86a19",
+    "adversarial.json": "53c1e20d34129d08c4bb254f2a627826c9d02c51b42fb3b316216155ee1ddc10",
+    "helper-syntax-fresh.json": "4b282d4a01d1d85f9238dd0b075dbf06b18a0a7ac61ea46ae49244a33d8968cf",
+    "types-fresh.json": "18bc31b1b87b14095bcf477ed4b7d6afe8fe1e59582a6b1a6c012a92e1de9a4e",
+    "freeze-before.json": "710554d9488b7012c78784d163d5aede098210fe9eed1c5d9f942f047cdf5743",
+    "commandreceipts.json": "5b43f141787e16588cd2cccb2d1bfc3a8ae8e2e507a0dbf6420907611131882e",
+    "freeze-after.json": "f78b67d9d5d0b44e51de8f8aca69be75d9cd60461a0467a1df757f22b281cae0",
+    "pure-fresh.json": "eb5aa0ce2daea33f0dc790690599cde7d8fa158410c9784b98194df0ce296fcb",
+    "summary.json": "c11f137e7d2c5ac9d0d7c8f0fdeb4f2c53442128fd2de713ad1cce9a408c248c",
+    "report.md": "b0a38907d2d9cee9caf8a11c1a6120383d506f96a893f294dc6c1fbfbefa615e",
+    "adversarial.test.mjs": "a56e04417d7d3d8d6161f098fb0ae3c34d554de3c3790feb9f4a14c415ee8a00",
+    "task-contract.md": "650d3904bf48d6b31036d3abcb5982bc5e72a04ec4530e660615a24dd8afd6db",
+    "reservation.json": "5e698d740454b4705aed7334bc9d6135c3fccb31a2ec94335b3a2b5c09749a7e",
+    "STOP.json": "c363035ae0deabfe4432720fb522edf3e24f60dc45b0ba39f7a3a18dfced8957"
+  }
+}

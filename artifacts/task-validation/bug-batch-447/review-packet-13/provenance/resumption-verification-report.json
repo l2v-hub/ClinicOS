@@ -1,0 +1,390 @@
+{
+  "status": "READY_FOR_INDEPENDENT_PUBLICATION_QA",
+  "verificationAt": "2026-10-21T23:13:23.428557+00:00",
+  "executionAttribution": "This resumption independently verified pre-existing actual receipts and media; it did not run browser, services, database or providers.",
+  "testedSourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "futurePublicationSha": null,
+  "oldRemoteSha": "17a127c432f39e094f2746dc33c38bcb234ce719",
+  "snapshotTrackedProductFilesVerified": 1942,
+  "sourceFreezeEntriesVerified": 1906,
+  "candidate2SealVerifiedSha256": "6904a3a274175ec69cb62a1886b2cdb40ad07d33536af14c350b2662a2ce2056",
+  "candidate2CopiedSourceRecordsVerified": 66,
+  "attempt6SevenPass": 7,
+  "attempt8Route486Pass": 10,
+  "attempt9NegativeRoster": "PASS_ACTUAL_503_TO_REAL_200_SAME_PATIENT",
+  "attempt9PsReadonly": "PASS_SOURCE_503_PRINT_PDF_REASON_LIMITS_ZERO_MUTATIONS",
+  "mediaChecks": [
+    {
+      "path": "evidence/codex-followup-1/issue-447-trace.zip",
+      "bytes": 10091085,
+      "sha256": "21c2cdebda6bc9ffa8ffc0c6f8268eddf2088fb5b33b6f81bd9ea5308a353d41",
+      "zipCRC": "PASS",
+      "signedJwtScan": "NONE"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-447.png",
+      "bytes": 116255,
+      "sha256": "137d8b76fbcfdc90bbe26a7af1d0c906556c20186cd2c1691a256b1ec3747eef",
+      "pngSignature": "PASS"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-447.webm",
+      "bytes": 1455486,
+      "sha256": "caff8f775471cbb70c4fedcc1aea327da3f34c30bc03e569ca62faead3b8f9fc",
+      "ffprobe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554
+          }
+        ],
+        "format": {
+          "duration": "21.160000"
+        }
+      }
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-451-trace.zip",
+      "bytes": 8752396,
+      "sha256": "fbd90e9cd0b1b509ae393f866bf4c13830c956a577a9441c985436d5db826786",
+      "zipCRC": "PASS",
+      "signedJwtScan": "NONE"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-451.png",
+      "bytes": 152120,
+      "sha256": "ebd020e0c852899590de206f5a3c557a08845dd9f71e5c310a63851211c8f150",
+      "pngSignature": "PASS"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-451.webm",
+      "bytes": 813928,
+      "sha256": "abc3a37d5b0980c97f845626afe197f34ec0fd8a5d397b00bb6feacb92bb2b60",
+      "ffprobe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554
+          }
+        ],
+        "format": {
+          "duration": "10.960000"
+        }
+      }
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-452-trace.zip",
+      "bytes": 11587795,
+      "sha256": "54b65f585885f89230597afe6dc4cdf3c587067577ca50de6b536ec52226f591",
+      "zipCRC": "PASS",
+      "signedJwtScan": "NONE"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-452.png",
+      "bytes": 128950,
+      "sha256": "4e4d6fb4b7ae63e390d27d42a831bd01b7ead9969936436346af59edcace07f8",
+      "pngSignature": "PASS"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-452.webm",
+      "bytes": 1639762,
+      "sha256": "b62f0ef9a9a56fbfca9437580225713cb979b05903bb3e7a691595076585058d",
+      "ffprobe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554
+          }
+        ],
+        "format": {
+          "duration": "15.960000"
+        }
+      }
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-453-trace.zip",
+      "bytes": 24762937,
+      "sha256": "db406fc5e61a2889b940d2e1ace5aa2d300b4e470a4a1cc94cb89cbc56a3b58a",
+      "zipCRC": "PASS",
+      "signedJwtScan": "NONE"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-453.png",
+      "bytes": 108444,
+      "sha256": "ebfd4cfe326da243f043eef119b50e721a841706d05ed98aa9da6155c3c3a544",
+      "pngSignature": "PASS"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-453.webm",
+      "bytes": 3566801,
+      "sha256": "3a63f31db2b4ec4ea00bed1486ea1b52d6426eebfef129cf4a472f1a0007a330",
+      "ffprobe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554
+          }
+        ],
+        "format": {
+          "duration": "59.120000"
+        }
+      }
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-454-trace.zip",
+      "bytes": 3536514,
+      "sha256": "bb04c5e7c692edb07badd29a1349fe3b27b31c17d666c701bf17aca51e8bf9c8",
+      "zipCRC": "PASS",
+      "signedJwtScan": "NONE"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-454.png",
+      "bytes": 107187,
+      "sha256": "6d9a0e1ffed6bdcab54b41783cab22b04bbf46b40c18a89ca8783681a6278f61",
+      "pngSignature": "PASS"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-454.webm",
+      "bytes": 368333,
+      "sha256": "2967280cb47227d6c57e0ce5070690ba271af6e22c22d592964d94c5e7964cb8",
+      "ffprobe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554
+          }
+        ],
+        "format": {
+          "duration": "4.880000"
+        }
+      }
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-456-trace.zip",
+      "bytes": 4534269,
+      "sha256": "0af9be0b7e9f12c32a4bfde924e67ff3245c27bf5da1ce99609049f54d2d1011",
+      "zipCRC": "PASS",
+      "signedJwtScan": "NONE"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-456.png",
+      "bytes": 146389,
+      "sha256": "defd68a3e89a6f89fadf87385f8b890df5c1129184b16e39f18cfca87cb2d80b",
+      "pngSignature": "PASS"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-456.webm",
+      "bytes": 404728,
+      "sha256": "0cf9b746b15235f7e5f5144d0b451f656b276e6a6df799d17d68dec9a16c3ea8",
+      "ffprobe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554
+          }
+        ],
+        "format": {
+          "duration": "4.960000"
+        }
+      }
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-457-trace.zip",
+      "bytes": 12265746,
+      "sha256": "265b6dba5f72b542411ad06373e0288a3a0b3869b16c0327e58c29274e7cc5dc",
+      "zipCRC": "PASS",
+      "signedJwtScan": "NONE"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-457.png",
+      "bytes": 207375,
+      "sha256": "842dad049cbd69047d0031b15d6d7ced2ebd531e61fa1878e2c35b904594a280",
+      "pngSignature": "PASS"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-457.webm",
+      "bytes": 1743443,
+      "sha256": "b6d4ff1d26e2c9d0390ced3cea0726004930d19bd02356b3f1fb3d14672e45fd",
+      "ffprobe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554
+          }
+        ],
+        "format": {
+          "duration": "16.280000"
+        }
+      }
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-486-trace.zip",
+      "bytes": 23750833,
+      "sha256": "c5f1198dcc69befce68ae45945b4fe2d876262f6de1e3dfa3e636a2f8b142893",
+      "zipCRC": "PASS",
+      "signedJwtScan": "NONE"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-486.png",
+      "bytes": 100872,
+      "sha256": "f4cd979f6e6fe088a5f60e7e8f2480258594c6259534f0d432cee59c0ec1f8e5",
+      "pngSignature": "PASS"
+    },
+    {
+      "path": "evidence/codex-followup-1/issue-486.webm",
+      "bytes": 3216288,
+      "sha256": "1ea09d2d54f18a02e2c613dc715d32b3e5ea3a828076fc5d19da9d662c3dcdc8",
+      "ffprobe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554
+          }
+        ],
+        "format": {
+          "duration": "34.560000"
+        }
+      }
+    },
+    {
+      "path": "evidence/sidecases-attempt9/negative-roster/results.json",
+      "bytes": 715,
+      "sha256": "7ffb32061cc68414aeecc2270edfa4e5b36664468caf6f3eca3e07279403578a"
+    },
+    {
+      "path": "evidence/sidecases-attempt9/negative-roster/roster-actual503-unknown.png",
+      "bytes": 92896,
+      "sha256": "2c8701a3ff5ce53c5555f28fe82be2fc32cb5c44306a8f07cbe7fd8b3ccd8981",
+      "pngSignature": "PASS"
+    },
+    {
+      "path": "evidence/sidecases-attempt9/negative-roster/roster-negative-trace-privacy.json",
+      "bytes": 974,
+      "sha256": "b5e2bb518ff140ec4cc3ef1f7cd0f04a392794ec1f49271ae7bbd677bcc058cc"
+    },
+    {
+      "path": "evidence/sidecases-attempt9/negative-roster/roster-negative-trace.zip",
+      "bytes": 1891381,
+      "sha256": "9e3615d3f6993211530123fbb32bb7cc4ea865703b82399856a58e6da8d2c7b8",
+      "zipCRC": "PASS",
+      "signedJwtScan": "NONE"
+    },
+    {
+      "path": "evidence/sidecases-attempt9/negative-roster/roster-negative.webm",
+      "bytes": 286236,
+      "sha256": "de54c6e9d86f1774639e8f173ef65376c7986ba59f263b8b0d6a0756224517d4",
+      "ffprobe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554
+          }
+        ],
+        "format": {
+          "duration": "5.000000"
+        }
+      }
+    },
+    {
+      "path": "evidence/sidecases-attempt9/negative-roster/roster-real200-verified.png",
+      "bytes": 85439,
+      "sha256": "704b268d917eccc2bd77b7274703eca11b9f1d022f35d3d5d3fe1d38e8b21710",
+      "pngSignature": "PASS"
+    },
+    {
+      "path": "evidence/sidecases-attempt9/ps-readonly/final-state.png",
+      "bytes": 161013,
+      "sha256": "59f84b5ae9f6735f3976820658dbd27dc9967967f60847ae20db64ef59644a61",
+      "pngSignature": "PASS"
+    },
+    {
+      "path": "evidence/sidecases-attempt9/ps-readonly/ps-failed-context-12000-limit.png",
+      "bytes": 160874,
+      "sha256": "52168160c3396337889185a69f601ab7c34f02c534c1594e5e9ffbe3a8fc5f7d",
+      "pngSignature": "PASS"
+    },
+    {
+      "path": "evidence/sidecases-attempt9/ps-readonly/ps-failed-context-print.pdf",
+      "bytes": 58031,
+      "sha256": "dc00d38940634e78a3ffd6f534d6ac21d4d76706c91104ee0eb122e984a1e885"
+    },
+    {
+      "path": "evidence/sidecases-attempt9/ps-readonly/ps-readonly-trace-privacy.json",
+      "bytes": 839,
+      "sha256": "059bf20fd9ec44b5a9b499394cd26320749a5facbe478cdd96a02edb3e97cffe"
+    },
+    {
+      "path": "evidence/sidecases-attempt9/ps-readonly/ps-readonly-trace.zip",
+      "bytes": 2758414,
+      "sha256": "05f8b0212518ca1bcb4a649e7176b255a8e966e97f0d37fbc115e04e892db51b",
+      "zipCRC": "PASS",
+      "signedJwtScan": "NONE"
+    },
+    {
+      "path": "evidence/sidecases-attempt9/ps-readonly/ps-readonly.webm",
+      "bytes": 415197,
+      "sha256": "61a4ca2053c604f7848c1ac5f9fb595a3a1a14a1e37ac2b2e0d0f78bf7a573ed",
+      "ffprobe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 800,
+            "height": 554
+          }
+        ],
+        "format": {
+          "duration": "5.480000"
+        }
+      }
+    },
+    {
+      "path": "evidence/sidecases-attempt9/ps-readonly/results.json",
+      "bytes": 2939,
+      "sha256": "31c744cfdf1e098b27ab538861b5079d9ccb1b067f9acc027559e034c7ead127"
+    }
+  ],
+  "handback9Verified": true,
+  "rootPackRestorationReceiptSha256": "19a47263abb3fb6ee3ae89754e55fa83a138ae569525bb4ad341d28772e13704",
+  "history": "Prior setup, fixture, private harness and curation FAIL/UNRUN receipts preserved unchanged. Attempt8 first-match selector failure is retained; attempt9 adds actual scoped recovery proof. No product failure established by those harness failures.",
+  "unrun": [
+    "actual external OCR/provider extraction",
+    "new publication-head native checks",
+    "actual Claude2 review",
+    "deployment",
+    "issue closure"
+  ],
+  "sourceGitProviderRuntimeWrites": false,
+  "visualInspection": {
+    "roster-real200-verified.png": "Synthetic QA Route486 row and Nessuna segnalazione nelle fonti verificate visible.",
+    "ps-failed-context-12000-limit.png": "Print/PDF enabled, registration disabled, manual verification warning visible."
+  }
+}
