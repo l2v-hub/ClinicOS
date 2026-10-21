@@ -20,12 +20,13 @@ const patient = {
   codiceFiscale: null,
   location: { status: 'unassigned', source: null, room: null, bed: null, asOf: '2026-10-17' },
 } as Paziente;
-test('compact identity hides repeated missing prose but preserves accessible disambiguation', () => {
+test('compact identity shows a stable visible identifier without repeating missing-data prose', () => {
   const html = renderToStaticMarkup(
     React.createElement(PatientIdentity, { patient, compact: true }),
   );
   assert.doesNotMatch(html, /patient-identity__incomplete|patient-identity__location/);
-  assert.match(html, /class="ds-sr-only"/);
+  assert.match(html, /class="patient-identity__identifier">Identificativo QA1<\/span>/);
+  assert.doesNotMatch(html, /class="ds-sr-only"/);
   assert.match(html, /Identity, Synthetic/);
 });
 test('patient roster leads with bed, hides globally empty optional columns and aggregates incomplete identity once', () => {
