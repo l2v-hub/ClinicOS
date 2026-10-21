@@ -1,41 +1,53 @@
-name: Inspect demo secret exposure without values
+name: Publish verified metadata and completed Codex review v2
 on:
   push:
     branches: [codex/cloud-review-projection-20261021]
 permissions:
   contents: read
 concurrency:
-  group: clinicos-root-demo-secret-presence-probe
+  group: clinicos-root-fixed-metadata-publication
   cancel-in-progress: false
 jobs:
-  inspect-ambient-availability:
-    if: >-
-      github.repository == 'l2v-hub/ClinicOS' &&
-      github.event_name == 'push' &&
-      github.ref == 'refs/heads/codex/cloud-review-projection-20261021'
+  publish-fixed-metadata:
+    if: github.repository == 'l2v-hub/ClinicOS' && github.event_name == 'push' && github.ref == 'refs/heads/codex/cloud-review-projection-20261021'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
-      # No environment, checkout, provider call, credential value or application code.
-      - name: Check ambient availability as a boolean only
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Read only the fixed metadata artifact and publish authorized GitHub status
         env:
-          DEMO_TOKEN_AVAILABLE_OUTSIDE_ENVIRONMENT: ${{ secrets.RAILWAY_DEMO_TOKEN != '' }}
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
         run: |
+          set -euo pipefail
+          if ! gh run download 39667459014 --repo l2v-hub/ClinicOS --name demo-secret-exposure-39667459014-1 --dir "$RUNNER_TEMP/fixed-metadata-probe" > "$RUNNER_TEMP/fixed-artifact-read.stdout" 2> "$RUNNER_TEMP/fixed-artifact-read.stderr"; then
+            echo FIXED_METADATA_ARTIFACT_READ_FAILED >&2
+            exit 1
+          fi
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';
-          import { writeFileSync } from 'node:fs';
-          const present = process.env.DEMO_TOKEN_AVAILABLE_OUTSIDE_ENVIRONMENT;
-          assert(['true', 'false'].includes(present));
-          const proof = { schemaVersion: 1, observedAt: new Date().toISOString(), repository: process.env.GITHUB_REPOSITORY, ref: process.env.GITHUB_REF, workflowRef: process.env.GITHUB_WORKFLOW_REF, workflowSha: process.env.GITHUB_SHA, event: process.env.GITHUB_EVENT_NAME, runId: process.env.GITHUB_RUN_ID, runAttempt: process.env.GITHUB_RUN_ATTEMPT, protectedEnvironmentAttached: false, ambientDemoTokenAvailable: present === 'true', credentialValuesReadOrPrinted: false, ownerType: 'User', organizationSecretInheritanceApplicable: false };
-          writeFileSync('demo-secret-exposure.json', JSON.stringify(proof, null, 2) + '\n');
-          console.log(JSON.stringify(proof));
-          assert.equal(present, 'false', 'Demo secret is accessible outside the protected environment; metadata-only proof failed');
+          import { readFileSync, lstatSync, writeFileSync } from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const base='https://api.github.com/repos/l2v-hub/ClinicOS';
+          async function api(route,method='GET',body){assert(/^\/[A-Za-z0-9_?&=.%/-]+$/.test(route));const r=await fetch(base+route,{method,headers:{Authorization:'Bearer '+process.env.GH_TOKEN,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'},...(body===undefined?{}:{body:JSON.stringify(body)})});assert(r.ok,'FIXED_GITHUB_OPERATION_FAILED_'+r.status);return r.status===204?null:r.json();}
+          async function assert483(){const p=await api('/pulls/483');assert.equal(p.head.sha,'4983de2bdb6ea571053f03a508c919d27ff1771b');assert.equal(p.state,'open');}
+          const file=process.env.RUNNER_TEMP+'/fixed-metadata-probe/demo-secret-exposure.json',info=lstatSync(file);assert(info.isFile()&&!info.isSymbolicLink()&&info.size<8192);const raw=readFileSync(file,'utf8');
+          // Preserve exact original; the first probe formatter appended a literal slash-n.
+          let normalizedLiteralNewline=false,text=raw;try{JSON.parse(text);}catch{assert(text.endsWith(String.fromCharCode(92)+'n'));text=text.slice(0,-2);normalizedLiteralNewline=true;}
+          const p=JSON.parse(text);assert.equal(p.schemaVersion,1);assert.equal(p.repository,'l2v-hub/ClinicOS');assert.equal(p.ref,'refs/heads/codex/cloud-review-projection-20261021');assert.equal(p.workflowSha,'02eb222106ed11e832590916ddf8d55d5cc549f4');assert.equal(p.event,'push');assert.equal(p.runId,'39667459014');assert.equal(p.runAttempt,'1');assert.equal(p.workflowRef,'l2v-hub/ClinicOS/.github/workflows/cloud-review-projection-20261021.yml@refs/heads/codex/cloud-review-projection-20261021');assert.equal(p.protectedEnvironmentAttached,false);assert.equal(typeof p.ambientDemoTokenAvailable,'boolean');assert.equal(p.credentialValuesReadOrPrinted,false);assert.equal(p.ownerType,'User');assert.equal(p.organizationSecretInheritanceApplicable,false);assert(Number.isFinite(Date.parse(p.observedAt)));
+          const run=await api('/actions/runs/39667459014');assert.equal(run.head_sha,p.workflowSha);assert.equal(run.event,'push');assert.equal(run.run_attempt,1);assert.equal(run.path,'.github/workflows/cloud-review-projection-20261021.yml');assert.equal(run.status,'completed');const expectedKeys=['schemaVersion','observedAt','repository','ref','workflowRef','workflowSha','event','runId','runAttempt','protectedEnvironmentAttached','ambientDemoTokenAvailable','credentialValuesReadOrPrinted','ownerType','organizationSecretInheritanceApplicable'];assert.deepEqual(Object.keys(p).sort(),expectedKeys.slice().sort());const metadata={...Object.fromEntries(expectedKeys.map(k=>[k,p[k]])),artifactSha256:createHash('sha256').update(raw).digest('hex'),originalBytes:info.size,normalizedLiteralNewline,runConclusion:run.conclusion,scope:'Ambient availability only; not a secret-name inventory or protected-environment presence proof.'};
+          const marker='<!-- clinicos-actual-demo-secret-probe:39667459014 -->';const body=marker+'\nActual metadata-only check after Claude finding on PR498. No credential value was loaded or printed.\n\nRun: https://github.com/l2v-hub/ClinicOS/actions/runs/39667459014\n\n~~~json\n'+JSON.stringify(metadata,null,2)+'\n~~~\n\n'+(p.ambientDemoTokenAvailable?'The demo token is actually available outside the protected environment. Main-only environment policy alone does not restrict this accessible repository secret. The owner is a personal User, so organization secret inheritance does not apply. Moving/removing the repository-level copy requires Secrets write permission; the prior bot inventory returned unknown, never absent. No token has been copied, exposed or deleted.':'The demo token was unavailable to a same-repository non-environment branch job at the observed time. This proves no accessible ambient repository/org copy for that execution. Protected-environment presence and successful Railway identity remain separate and unproven.');
+          const comments=await api('/issues/498/comments?per_page=100');let comment=comments.find(c=>c.user?.login==='l2v-hub'&&c.body?.startsWith(marker));if(!comment)comment=await api('/issues/498/comments','POST',{body});
+          const pr=await api('/pulls/483');assert.equal(pr.head.sha,'4983de2bdb6ea571053f03a508c919d27ff1771b');assert.equal(pr.state,'open');const finalMarker='<!-- clinicos-final-codex:483:4983de2b:Claude5 -->';const finalBody=finalMarker+'\nCodex final review after actual Claude5 approval is complete: 63 fresh targeted tests and backend types PASS, zero findings. Previous P1 diagnostic now rejects four cases without new rows. Exact reviewed SHA4983de2bdb6ea571053f03a508c919d27ff1771b; all six native checks PASS. Final report SHA256226a4a0d9070d3009bd68b10bd2d9cfabc54a4ee24cdfc9735266f9233a2f971; seal38c6e8703b50cbab21d1dcd61b5f5609820cde0ac98a375fe5b8032e3b3b6be7. Historical failures retained. Code reviews complete; exact protected deployment preflight/release and online verification remain pending. No repeat Claude review for unchanged approved code. No deployment or issue closure claimed.';const finals=await api('/issues/483/comments?per_page=100');if(!finals.some(c=>c.user?.login==='l2v-hub'&&c.body?.startsWith(finalMarker))){await assert483();await api('/issues/483/comments','POST',{body:finalBody});}
+          await assert483();await api('/issues/483/labels','POST',{labels:['codex-release-pending']});const labels=await api('/issues/483/labels');for(const label of labels.filter(x=>['claude-review-ready','claude-reviewing','codex-review-ready','codex-review-fixes'].includes(x.name))){await assert483();await api('/issues/483/labels/'+encodeURIComponent(label.name),'DELETE');}
+          const dashboard=Buffer.from('PCEtLSBjbGluaWNvcy1hbGwyMy1saXZlLXByb2dyZXNzOjIwMjYxMDIxIC0tPgoqKlZlcmlmaWNhdG8gMjAyNi0xMC0yMVQyMDowNDo1Ni45ODc5NzcrMDA6MDAg4oCUIDIzIGlzc3VlIGFwZXJ0ZS4gTmVzc3VuIG51b3ZvIHJpbGFzY2lvIGNsaW5pY28gbyBjaGl1c3VyYSBjb25mZXJtYXRvLioqCgp8IEdydXBwbyB8IFBSIHwgU3RhdG8gZWZmZXR0aXZvIHwgUHJvc3NpbW8gcGFzc2FnZ2lvIHwKfC0tLXwtLS18LS0tfC0tLXwKfCA0NTAsIDQ3MiwgNDczLCA0NzUsIDQ3NiB8IFs0ODFdKGh0dHBzOi8vZ2l0aHViLmNvbS9sMnYtaHViL0NsaW5pY09TL3B1bGwvNDgxKSB8IENsYXVkZSBlIENvZGV4IGFwcHJvdmFubzsgc2VpIGNoZWNrIFBBU1MgYDZkMmNjNzkxYCB8IFJpbGFzY2lvIGNvbiBwcm92YSBvbmxpbmU7IGFwcHJvdmF6aW9uZSBjb25zZXJ2YXRhIHwKfCA0MzIsIDQ0MSwgNDQyLCA0NjAsIDQ2MywgNDY0LCA0NjcgfCBbNDgzXShodHRwczovL2dpdGh1Yi5jb20vbDJ2LWh1Yi9DbGluaWNPUy9wdWxsLzQ4MykgfCAqKkNsYXVkZTUgQVBQUk9WRUQqKiwgemVybyByaWxpZXZpLCBjb21tZW50byBbNjMyNDg4NDMzN10oaHR0cHM6Ly9naXRodWIuY29tL2wydi1odWIvQ2xpbmljT1MvcHVsbC80ODMjaXNzdWVjb21tZW50LTYzMjQ4ODQzMzcpLCBlc2F0dG8gYDQ5ODNkZTJiYDsgc2VpIGNoZWNrIFBBU1M7IGxhYmVsICoqY29kZXgtcmVsZWFzZS1wZW5kaW5nKiogfCAqKkNvZGV4IGZpbmFsZSBpbmRpcGVuZGVudGUgQVBQUk9WRUQ6NjMgdGVzdCBtaXJhdGkgZSB0aXBpIFBBU1MsIHplcm8gcmlsaWV2aSoqOyBuZXNzdW5hIG51b3ZhIHJldmlldyBDbGF1ZGUgc3VsIGNvZGljZSBhcHByb3ZhdG8gaW52YXJpYXRvIHwKfCA0NDcsIDQ1MSwgNDUyLCA0NTMsIDQ1NCwgNDU2LCA0NTcsIDQ4NiB8IFs0OTddKGh0dHBzOi8vZ2l0aHViLmNvbS9sMnYtaHViL0NsaW5pY09TL3B1bGwvNDk3KSB8IGA0M2I1MTUzMGA6ICoqNTEgdGVzdCBjb21iaW5hdGkgaW5kaXBlbmRlbnRpICsgdGlwaSBQQVNTOyBzZWkgY2hlY2sgbmF0aXZpIFBBU1MqKi4gSW1wb3J0YXppb25lIGRlc2t0b3AvdGFibGV0IGdpw6AgcHJvdmF0YS4gQ29sbGVnYW1lbnRvIGF1dGVudGljbyBhIDggc2NyZWVuc2hvdCwgOCB2aWRlbyBlIDggdHJhY2UgcHJvbnRvLCB2ZXJpZmljYSBpbmRpcGVuZGVudGUgZGVsbGEgcHViYmxpY2F6aW9uZSBpbiBwcmVwYXJhemlvbmUgfCBQdWJibGljYXppb25lIGRlbGxlIHJlZ2lzdHJhemlvbmkgZSBtYW5pZmVzdCBwcmltYSBkZWwgcHJpbW8gQ2xhdWRlLiBUcmFjZTQ1MyBjb21wbGV0byAyNy42TUIgcmljaGllZGUgbGltaXRlIHZlcmlmaWNhdG8zMk1pQjsgbmVzc3VuIHRhZyBhbnRpY2lwYXRvIHwKfCA0ODUgfCBbNDkzXShodHRwczovL2dpdGh1Yi5jb20vbDJ2LWh1Yi9DbGluaWNPUy9wdWxsLzQ5MykgfCBDbGF1ZGUgZSBDb2RleCBhcHByb3Zhbm8gYDAzZmZlZjQ3YDsgc2VpIGNoZWNrIFBBU1MgfCBSaWxhc2NpbyBkb3BvNDgxIGUgdmVyaWZpY2Egb25saW5lOyBuZXNzdW5hIG51b3ZhIHJldmlldyB8CnwgNDcwIHwgW0lzc3VlXShodHRwczovL2dpdGh1Yi5jb20vbDJ2LWh1Yi9DbGluaWNPUy9pc3N1ZXMvNDcwKSB8IFB1bGl6aWEgU1FMIHN0b3JpY2EgZ2nDoCBlc2VndWl0YTsgbmVzc3VuIERFTEVURSByaXBldHV0bzsgQ29kZXgvQ2xhdWRlIGFwcHJvdmFubyBzb3JnZW50ZTkyOTMxZTYwIHwgTGV0dHVyYSBSYWlsd2F5IGlkZW50aXTDoC92b2x1bWkvYmFja3VwIGFuY29yYSBub24gcml1c2NpdGE7IHVsdGltYSBxdWVyeSByaWZpdXRhdGEgY29uIHplcm8gbXV0YXppb25pOyBjYXVzYSBub24gZGltb3N0cmF0YSB8CnwgNDU1IHwgW0VwaWNdKGh0dHBzOi8vZ2l0aHViLmNvbS9sMnYtaHViL0NsaW5pY09TL2lzc3Vlcy80NTUpIHwgVGllbmUgaWwgcmlzY29udHJvIGRlbGxlMjMgaXNzdWUgfCBDaGl1c3VyYSBkb3BvIHZlcmlmaWNhIGUgcmlsYXNjaW8gZGVpIGZpZ2xpIHwKCioqSW5mcmFzdHJ1dHR1cmEgcmlsYXNjaW8gWzQ5OF0oaHR0cHM6Ly9naXRodWIuY29tL2wydi1odWIvQ2xpbmljT1MvcHVsbC80OTgpOioqIHNlaSBjaGVjayBQQVNTIHN1IGBiMDczMTdmNGAuIENsYXVkZSBoYSBjb25jbHVzbyBsYSBwcmltYSByZXZpZXcgdmluY29sYXRhLCBjb24gdW4gcmlsaWV2byBiYXNzbzogZGltb3N0cmFyZSBjaGUgaWwgdG9rZW4gZGVtbyBzaWEgZGlzcG9uaWJpbGUgc29sdGFudG8gbmVsbCdhbWJpZW50ZSBwcm90ZXR0by4gTWFpbi1vbmx5IHJlYWxtZW50ZSBhcHBsaWNhdG8gZSB2ZXJpZmljYXRvOyBpbnZlbnRhcmlvIHNlZ3JldGkgbm9uIGxlZ2dpYmlsZS4gQ29kZXggc3RhIHZlcmlmaWNhbmRvIGwnZWZmZXR0aXZhIGRpc3BvbmliaWxpdMOgIHNlbnphIGxlZ2dlcmUgdmFsb3JpIG8gaW52ZW50YXJlIGF0dGVzdGF6aW9uaS4gTGFiZWwgKipjb2RleC1yZXZpZXctcmVhZHkqKi4KCioqQ29sbGVnYW1lbnRvIGRlbCByaWxhc2NpbyBlc2F0dG86KiogbGF2b3JvIGlzb2xhdG8gaW4gY29yc28sIHNlbnphIG1vZGlmaWNhcmUgaSBjb21taXQgaW4gcmV2aWV3OiBwcmVmbGlnaHQgcHJvdGV0dG8gcHJpbWEgZGVsIG1lcmdlLCBkZXBsb3kgZXNhdHRvIGRvcG8gaWwgbWVyZ2UsIGlkZW50aWZpY2F6aW9uZSB1bml2b2NhIGRlbCBqb2IgZSBjb25mZXJtYSBlZmZldHRpdmEgcHJpbWEgZGkgY2hpdWRlcmUgbGUgaXNzdWUuIENvbnRlbXBvcmFuZWFtZW50ZSBsaW1pdGUzMk1pQiBwZXIgY29uc2VydmFyZSBpbnRlZ3JhbG1lbnRlIGxhIHZlcmEgcmVnaXN0cmF6aW9uZTQ1My4gU2VndWlyYW5ubyBRQSBpbmRpcGVuZGVudGUgZSByZXZpZXcuCgpMZSBQUiBhcHByb3ZhdGU0ODEsNDkzLDM5MyBtYW50ZW5nb25vIGxlIGFwcHJvdmF6aW9uaS4gMzkzIMOoIGVzdGVybmEgYWxsZTIzIGUgQXp1cmUgcmVzdGEgZGlzYWJpbGl0YXRvIGZpbm8gYWxsYSB2ZXJpZmljYSByZWFsZS4gNDkyLDQ5NSw0OTYgZ2nDoCBtZXJnaWF0ZS4gSWwgc2l0byBwdWJibGljbyByaXNwb25kZTIwMCBtYSBsJ3VsdGltbyBidW5kbGUgbGV0dG8gZGljaGlhcmEgYW5jb3JhIGBkZjFiZjY5ZmA6ICoqbm9uIMOoIHByb3ZhIGRlbCBkZXBsb3kgZGVsbGUgY29ycmV6aW9uaSBudW92ZSoqLgoKQ29kZXgg4oaSIGBjbGF1ZGUtcmV2aWV3LXJlYWR5YCBzdWxsbyBTSEEgdmVyaWZpY2F0byDihpIgY29tbWVudG8gQ2xhdWRlICsgYGNvZGV4LXJldmlldy1yZWFkeWAg4oaSIGNvcnJlemlvbmUgbyB2ZXJpZmljYSBmaW5hbGUgQ29kZXgg4oaSIG1lcmdlIHByb3RldHRvIOKGkiBkZXBsb3kgdmVyaWZpY2F0byDihpIgcHJvdmUgaW4gaXNzdWUg4oaSIGNoaXVzdXJhLgo=','base64').toString('utf8')+'\n\n**Actual probe:** '+(p.ambientDemoTokenAvailable?'RAILWAY_DEMO_TOKEN disponibile anche fuori dall’ambiente protetto: copia a livello repository da rimuovere/spostare con permesso Secrets write.':'RAILWAY_DEMO_TOKEN assente nel job senza ambiente; presenza nell’ambiente protetto ancora distinta da verificare.')+' [Risultato effettivo]('+comment.html_url+').';const saved=await api('/issues/comments/6255929384');assert.equal(saved.user.login,'l2v-hub');assert(saved.body.startsWith('<!-- clinicos-all23-live-progress:20261021 -->'));await api('/issues/comments/6255929384','PATCH',{body:dashboard});writeFileSync(process.env.RUNNER_TEMP+'/metadata-relay-result.json',JSON.stringify({metadata,commentId:comment.id,commentUrl:comment.html_url,pr483FinalPublished:true,dashboardUpdated:true},null,2));console.log(JSON.stringify({ambientDemoTokenAvailable:p.ambientDemoTokenAvailable,probeCommentId:comment.id,pr483FinalPublished:true,dashboardUpdated:true}));
           JS
-      - name: Preserve metadata-only result
+      - name: Preserve only safe metadata publication result
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: demo-secret-exposure-${{ github.run_id }}-${{ github.run_attempt }}
-          path: demo-secret-exposure.json
-          if-no-files-found: error
+          name: metadata-relay-result-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/metadata-relay-result.json
+          if-no-files-found: warn
           retention-days: 14
