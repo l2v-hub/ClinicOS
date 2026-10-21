@@ -363,21 +363,59 @@ export async function configureRepository({ request, actor, expectedSha, actualS
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const demoMode = process.env.CLINICOS_RESTRICT_DEMO_ENVIRONMENT === 'true';
+  const demoDiagnostic = {
+    phase: 'context',
+    code: 'validation',
+    status: null,
+    readRequests: 0,
+    writeAttempts: 0,
+  };
+  const demoPhase = (method, route) => {
+    const base = `/repos/${REPO}`;
+    const pathname = route.split('?', 1)[0];
+    if (pathname.includes('/collaborators/')) return 'authorization';
+    if (pathname === base) return 'repository_identity';
+    if (pathname === DEMO_ROUTE)
+      return method === 'PUT' ? 'UPDATEENV' : 'environment_metadata';
+    if (pathname.startsWith(`${DEMO_ROUTE}/deployment-branch-policies`))
+      return method === 'POST' ? 'CREATEMAIN' : 'policy_inventory';
+    if (pathname.startsWith(`${DEMO_ROUTE}/deployment_protection_rules`))
+      return 'custom_protections';
+    if (pathname.endsWith('/secrets')) return 'repoenvsecretnames';
+    return 'context';
+  };
+  const safeHttpStatus = (status) =>
+    Number.isInteger(status) && status >= 100 && status <= 599 ? status : null;
   try {
     assert.ok(process.env.GH_TOKEN, 'The repository bot credential is unavailable');
     const request = async (method, route, body) => {
-      const response = await fetch(`https://api.github.com${route}`, {
-        method,
-        headers: {
-          Authorization: `Bearer ${process.env.GH_TOKEN}`,
-          Accept: 'application/vnd.github+json',
-          'X-GitHub-Api-Version': '2022-11-28',
-          ...(body ? { 'Content-Type': 'application/json' } : {}),
-        },
-        body: body ? JSON.stringify(body) : undefined,
-        signal: AbortSignal.timeout(30000),
-        redirect: 'error',
-      });
+      if (demoMode) {
+        demoDiagnostic.phase = demoPhase(method, route);
+        demoDiagnostic.code = 'validation';
+        demoDiagnostic.status = null;
+        if (method === 'GET')
+          demoDiagnostic.readRequests = Math.min(1000, demoDiagnostic.readRequests + 1);
+        else demoDiagnostic.writeAttempts = Math.min(1000, demoDiagnostic.writeAttempts + 1);
+      }
+      let response;
+      try {
+        response = await fetch(`https://api.github.com${route}`, {
+          method,
+          headers: {
+            Authorization: `Bearer ${process.env.GH_TOKEN}`,
+            Accept: 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+            ...(body ? { 'Content-Type': 'application/json' } : {}),
+          },
+          body: body ? JSON.stringify(body) : undefined,
+          signal: AbortSignal.timeout(30000),
+          redirect: 'error',
+        });
+      } catch (error) {
+        if (demoMode) demoDiagnostic.code = 'transport';
+        throw error;
+      }
       if (!response.ok) {
         const details = await response.json().catch(() => ({}));
         const reason =
@@ -391,9 +429,19 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
           `GitHub ${method} ${route}: HTTP ${response.status}; ${reason}; repository Administration write access is required`,
         );
         error.status = response.status;
+        if (demoMode) {
+          demoDiagnostic.code = 'http_denied';
+          demoDiagnostic.status = safeHttpStatus(response.status);
+        }
         throw error;
       }
-      return response.status === 204 ? null : response.json();
+      if (response.status === 204) return null;
+      try {
+        return await response.json();
+      } catch (error) {
+        if (demoMode) demoDiagnostic.code = 'transport';
+        throw error;
+      }
     };
     const context = {
       request,
@@ -401,7 +449,6 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       expectedSha: process.env.CLINICOS_REVIEWED_SHA,
       actualSha: process.env.GITHUB_SHA,
     };
-    const demoMode = process.env.CLINICOS_RESTRICT_DEMO_ENVIRONMENT === 'true';
     const result = demoMode
       ? await restrictDemoEnvironment({
           ...context,
@@ -418,11 +465,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.log(JSON.stringify(result));
   } catch (error) {
     // The new privileged mode never serializes provider/transport/assertion bodies.
-    console.error(
-      process.env.CLINICOS_RESTRICT_DEMO_ENVIRONMENT === 'true'
-        ? 'Demo environment restriction blocked; no provider details are printed'
-        : `Repository configuration blocked: ${error.message}`,
-    );
+    if (demoMode) {
+      console.error('Demo environment restriction blocked; no provider details are printed');
+      console.error(`Demo environment diagnostic: ${JSON.stringify(demoDiagnostic)}`);
+    } else console.error(`Repository configuration blocked: ${error.message}`);
     process.exitCode = 1;
   }
 }

@@ -775,9 +775,110 @@ test('demo CLI never reflects provider errors or credentials and performs no rea
   assert.equal(result.stdout, '');
   assert.match(
     result.stderr,
-    /^Demo environment restriction blocked; no provider details are printed\s*$/,
+    /^Demo environment restriction blocked; no provider details are printed\nDemo environment diagnostic: (.+)\s*$/,
   );
+  const diagnostic = JSON.parse(result.stderr.split('\n')[1].replace('Demo environment diagnostic: ', ''));
+  assert.deepEqual(diagnostic, {
+    phase: 'authorization',
+    code: 'transport',
+    status: null,
+    readRequests: 1,
+    writeAttempts: 0,
+  });
   assert.ok(!`${result.stdout}${result.stderr}`.includes(sentinel));
+});
+
+test('demo CLI diagnostics classify denied reads and attempted writes without reflecting provider data', () => {
+  const sentinel = 'never-print-this-token-"escaped"-Authorization-Bearer';
+  const program = new URL('../../../scripts/quality-gate/configure-bug-repository.mjs', import.meta.url)
+    .pathname;
+  const cases = [
+    { name: 'environment403', expected: ['environment_metadata', 'http_denied', 403, 3, 0] },
+    { name: 'policy404', expected: ['policy_inventory', 'http_denied', 404, 4, 0] },
+    { name: 'put403', expected: ['UPDATEENV', 'http_denied', 403, 7, 1] },
+    { name: 'post403', expected: ['CREATEMAIN', 'http_denied', 403, 8, 2] },
+    { name: 'repositorySecrets503', expected: ['repoenvsecretnames', 'http_denied', 503, 6, 0] },
+    { name: 'environmentSecrets503', expected: ['repoenvsecretnames', 'http_denied', 503, 7, 0] },
+    { name: 'malformedStatus', expected: ['authorization', 'http_denied', null, 1, 0] },
+    { name: 'validation', expected: ['authorization', 'validation', null, 1, 0] },
+    { name: 'transport', expected: ['authorization', 'transport', null, 1, 0] },
+    { name: 'context', expected: ['context', 'validation', null, 0, 0] },
+  ];
+  for (const scenario of cases) {
+    const preload = `
+      const bad = ${JSON.stringify(sentinel)};
+      const ok = (body) => ({ ok: true, status: 200, json: async () => body });
+      const denied = (status) => ({ ok: false, status, headers: new Headers({ authorization: bad, 'x-api-key': bad }), json: async () => ({ message: bad, token: bad }) });
+      let environmentReads = 0;
+      globalThis.fetch = async (url, options) => {
+        const requestUrl = new URL(url);
+        const route = requestUrl.pathname;
+        const method = options.method;
+        if (${JSON.stringify(scenario.name)} === 'transport') throw new Error(bad + '\\u0022');
+        if (${JSON.stringify(scenario.name)} === 'malformedStatus') return denied('403 ' + bad);
+        if (route.includes('/collaborators/')) return ${scenario.name === 'validation' ? "ok({ permission: 'write', user: { login: 'l2v-hub' } })" : 'ok({ permission: \'admin\', user: { login: \'l2v-hub\' } })'};
+        if (route === '/repos/l2v-hub/ClinicOS') return ok({ full_name: 'l2v-hub/ClinicOS', default_branch: 'main' });
+        if (route === '/repos/l2v-hub/ClinicOS/environments/glistening-friendship%20%2F%20demo' && method === 'GET') {
+          if (${JSON.stringify(scenario.name)} === 'environment403') return denied(403);
+          environmentReads += 1;
+          if (${JSON.stringify(scenario.name)} === 'post403' && environmentReads > 1) return ok({ id: 20880188544, name: 'glistening-friendship / demo', protection_rules: [], deployment_branch_policy: { protected_branches: false, custom_branch_policies: true } });
+          if (${JSON.stringify(scenario.name)} === 'post403') return ok({ id: 20880188544, name: 'glistening-friendship / demo', protection_rules: [], deployment_branch_policy: { protected_branches: true, custom_branch_policies: false } });
+          if (${JSON.stringify(scenario.name)} === 'put403') return ok({ id: 20880188544, name: 'glistening-friendship / demo', protection_rules: [], deployment_branch_policy: { protected_branches: true, custom_branch_policies: false } });
+          return ok({ id: 20880188544, name: 'glistening-friendship / demo', protection_rules: [], deployment_branch_policy: { protected_branches: true, custom_branch_policies: false } });
+        }
+        if (route.endsWith('/deployment-branch-policies')) {
+          if (${JSON.stringify(scenario.name)} === 'policy404') return denied(404);
+          if (method === 'POST') return denied(403);
+          return ok({ total_count: 0, branch_policies: [] });
+        }
+        if (route.endsWith('/deployment_protection_rules')) return ok({ total_count: 0, custom_deployment_protection_rules: [] });
+        if (route.endsWith('/secrets')) {
+          if (${JSON.stringify(scenario.name)} === 'repositorySecrets503' || ${JSON.stringify(scenario.name)} === 'environmentSecrets503') {
+            if (requestUrl.search !== '?per_page=100&page=1') throw new Error('unexpected secret inventory query');
+            if (${JSON.stringify(scenario.name)} === 'repositorySecrets503' && route.endsWith('/actions/secrets')) return denied(503);
+            if (${JSON.stringify(scenario.name)} === 'environmentSecrets503' && route.includes('/environments/')) return denied(503);
+          }
+          return ok({ total_count: 0, secrets: [] });
+        }
+        if (method === 'PUT') return ${scenario.name === 'post403' ? "ok({})" : 'denied(403)'};
+        throw new Error(bad + ' unexpected route');
+      };
+    `;
+    const result = spawnSync(
+      process.execPath,
+      [`--import=data:text/javascript,${encodeURIComponent(preload)}`, program],
+      {
+        encoding: 'utf8',
+        env: {
+          GH_TOKEN: sentinel,
+          CLINICOS_RESTRICT_DEMO_ENVIRONMENT: 'true',
+          CLINICOS_CONFIGURE_REPOSITORY: 'false',
+          CLINICOS_REVIEWED_SHA: sha,
+          GITHUB_SHA: sha,
+          GITHUB_WORKFLOW_SHA: sha,
+          GITHUB_ACTOR: demoContext.actor,
+          GITHUB_TRIGGERING_ACTOR: scenario.name === 'context' ? 'other-actor' : demoContext.triggeringActor,
+          GITHUB_REF: demoContext.ref,
+          GITHUB_WORKFLOW_REF: demoContext.workflowRef,
+          GITHUB_EVENT_NAME: 'workflow_dispatch',
+          GITHUB_REPOSITORY: demoContext.repository,
+        },
+      },
+    );
+    assert.equal(result.status, 1, scenario.name);
+    assert.equal(result.stdout, '', scenario.name);
+    const lines = result.stderr.trimEnd().split('\n');
+    assert.equal(lines[0], 'Demo environment restriction blocked; no provider details are printed');
+    assert.ok(lines[1]?.startsWith('Demo environment diagnostic: '), scenario.name);
+    const diagnostic = JSON.parse(lines[1].slice('Demo environment diagnostic: '.length));
+    assert.deepEqual(
+      [diagnostic.phase, diagnostic.code, diagnostic.status, diagnostic.readRequests, diagnostic.writeAttempts],
+      scenario.expected,
+      scenario.name,
+    );
+    assert.ok(!`${result.stdout}${result.stderr}`.includes(sentinel), scenario.name);
+    assert.ok(!/api\.github\.com|\/repos\/|x-api-key/i.test(`${result.stdout}${result.stderr}`), scenario.name);
+  }
 });
 
 test('demo workflow selects one explicit mode before the bot credential and stays in existing native CI', async () => {
