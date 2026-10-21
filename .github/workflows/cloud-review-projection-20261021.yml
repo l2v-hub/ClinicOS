@@ -1,14 +1,14 @@
-name: Restore verified review comment projection
+name: Request verified standalone review
 on:
   push:
     branches: [codex/cloud-review-projection-20261021]
 permissions:
   contents: read
 concurrency:
-  group: clinicos-root-review-projection-483
+  group: clinicos-root-review-projection-498
   cancel-in-progress: false
 jobs:
-  project-483:
+  request-498:
     if: >-
       github.repository == 'l2v-hub/ClinicOS' &&
       github.event_name == 'push' &&
@@ -24,7 +24,7 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22
-      - name: Reconcile existing verified PR483 request through trusted controller
+      - name: Request actual review of independently verified PR498
         env:
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
-        run: node agent-team/src/bug-pipeline/review-handoff-cli.mjs reconcile --pr 483
+        run: node agent-team/src/bug-pipeline/review-handoff-cli.mjs request --pr 498
