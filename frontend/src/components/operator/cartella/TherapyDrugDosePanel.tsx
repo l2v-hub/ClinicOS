@@ -102,9 +102,9 @@ function ScheduledPanel({
   onRecorded?: () => void;
 }) {
   const [revision, setRevision] = useExitRevision(patientId);
-  const key = `${patientId}|${therapy.id}|${date}|${revision}`;
+  const key = `${patientId}|${therapy.id}|${date}`;
   const [loaded, setLoaded] = useState<
-    | { key: string; status: 'ready'; slots: TherapyReadGroup[] }
+    | { key: string; status: 'ready'; slots: TherapyReadGroup[]; refreshError?: boolean }
     | { key: string; status: 'error' }
     | null
   >(null);
@@ -121,13 +121,14 @@ function ScheduledPanel({
           if (active) setLoaded({ key, status: 'ready', slots });
         },
         () => {
-          if (active) setLoaded({ key, status: 'error' });
+          if (active) setLoaded((previous) => previous?.key === key && previous.status === 'ready'
+            ? { ...previous, refreshError: true } : { key, status: 'error' });
         },
       );
     return () => {
       active = false;
     };
-  }, [date, key]);
+  }, [date, key, revision]);
 
   const times =
     state.status === 'ready' ? patientDrugTimes(state.slots, patientId, therapy.id) : [];
@@ -173,7 +174,7 @@ function ScheduledPanel({
     <div ref={rootRef}>
       <h5 className="drug-dose-panel__title">Dosi di {formatDay(date)}</h5>
       {state.status === 'loading' && <p role="status">Caricamento delle dosi…</p>}
-      {state.status === 'error' && (
+      {(state.status === 'error' || (state.status === 'ready' && state.refreshError)) && (
         <div role="alert" className="drug-dose-panel__msg">
           Impossibile caricare le dosi del giorno.{' '}
           <button
@@ -255,11 +256,12 @@ function PrnPanel({
   onRecorded?: () => void;
 }) {
   const [revision, setRevision] = useExitRevision(patientId);
-  const key = `${patientId}|${therapy.id}|${revision}`;
+  const key = `${patientId}|${therapy.id}`;
   const [loaded, setLoaded] = useState<
     | {
         key: string;
         status: 'ready';
+        refreshError?: boolean;
         items: PrnAdministration[];
         temporaryPsExit: TemporaryPsExit | null;
       }
@@ -302,11 +304,12 @@ function PrnPanel({
             setLoaded({ key, status: 'ready', items, temporaryPsExit });
         },
         () => {
-          if (!controller.signal.aborted) setLoaded({ key, status: 'error' });
+          if (!controller.signal.aborted) setLoaded((previous) => previous?.key === key && previous.status === 'ready'
+            ? { ...previous, refreshError: true } : { key, status: 'error' });
         },
       );
     return () => controller.abort();
-  }, [patientId, key]);
+  }, [patientId, key, revision]);
 
   const doses =
     state.status === 'ready' ? state.items.filter((item) => item.therapyId === therapy.id) : [];
@@ -361,7 +364,7 @@ function PrnPanel({
         </p>
       )}
       {state.status === 'loading' && <p role="status">Caricamento delle dosi al bisogno…</p>}
-      {state.status === 'error' && (
+      {(state.status === 'error' || (state.status === 'ready' && state.refreshError)) && (
         <p role="alert" className="drug-dose-panel__msg">
           Impossibile caricare le dosi al bisogno di oggi.
         </p>
@@ -461,22 +464,42 @@ function formatDay(date: string) {
   });
 }
 
-function useExitRevision(patientId: string) {
+const invalidatedRefreshes = new WeakSet<Event>();
+
+/** Revalidate without changing the identity of dose rows or their local drafts. */
+export function useExitRevision(patientId: string) {
   const state = useState(0);
   const setRevision = state[1];
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let lastFocus = -Infinity;
     const refresh = (event: Event) => {
       if (
         event.type !== 'focus' &&
         (event as CustomEvent<{ patientId: string }>).detail?.patientId !== patientId
-      )
-        return;
-      invalidateCachedGet(`${API_URL}/therapy-slots`);
-      setRevision((value) => value + 1);
+      ) return;
+      const apply = () => {
+        if (!invalidatedRefreshes.has(event)) {
+          invalidatedRefreshes.add(event);
+          invalidateCachedGet(`${API_URL}/therapy-slots`);
+        }
+        setRevision((value) => value + 1);
+      };
+      if (event.type !== 'focus') {
+        clearTimeout(timer);
+        apply();
+      } else if (Date.now() - lastFocus >= 1000) {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          lastFocus = Date.now();
+          apply();
+        }, 250);
+      }
     };
     window.addEventListener(TEMPORARY_PS_EXIT_CHANGED, refresh);
     window.addEventListener('focus', refresh);
     return () => {
+      clearTimeout(timer);
       window.removeEventListener(TEMPORARY_PS_EXIT_CHANGED, refresh);
       window.removeEventListener('focus', refresh);
     };

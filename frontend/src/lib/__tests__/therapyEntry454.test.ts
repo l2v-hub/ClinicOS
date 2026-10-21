@@ -38,7 +38,6 @@ import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { TherapyRoundsPage } from '../../components/operator/TherapyRoundsPage';
 import { setCurrentOperator, getCurrentOperator } from '../operatorSession';
-import { readFileSync } from 'node:fs';
 
 Object.assign(globalThis, { React });
 const emptyProps = {
@@ -88,10 +87,19 @@ test('loaded days, explicit deep links and restored calendar dates keep their pr
   }).includes('value="2026-02-12"'));
 });
 
-test('App therapy defaults and room-assignment day use the same facility date without changing appointment defaults', () => {
-  const app = readFileSync(new URL('../../App.tsx', import.meta.url), 'utf8');
-  assert.match(app, /therapyDateRef = useRef\(facilityLocalDate\(\)\)/);
-  assert.match(app, /\[therapyDate, setTherapyDate\] = useState\(facilityLocalDate\)/);
-  assert.match(app, /async function syncCameraAssignment[\s\S]*?const today = facilityLocalDate\(\)/);
-  assert.match(app, /const loadAppuntamenti[\s\S]*?const today = localIsoDate\(\)/);
+test('actual therapy entry defaults to the facility calendar day when no date source is supplied', (t) => {
+  const previousZone = process.env.TZ;
+  const previousOperator = getCurrentOperator();
+  t.mock.timers.enable({ apis: ['Date'], now: new Date('2026-10-18T22:30:00Z') });
+  try {
+    setCurrentOperator({ id: 'synthetic-nurse-default', role: 'operatore' });
+    process.env.TZ = 'UTC';
+    const html = renderToStaticMarkup(React.createElement(TherapyRoundsPage, emptyProps));
+    assert.match(html, /value="2026-10-19"/);
+  } finally {
+    setCurrentOperator(previousOperator);
+    if (previousZone === undefined) delete process.env.TZ;
+    else process.env.TZ = previousZone;
+    t.mock.timers.reset();
+  }
 });

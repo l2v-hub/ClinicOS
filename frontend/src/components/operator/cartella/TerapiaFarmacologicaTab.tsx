@@ -96,6 +96,23 @@ interface Props {
 type TherapyForm = TherapyFormValue;
 type CalendarFocus = { requestId: number; date?: string; time?: string };
 
+export async function completeAllergyReadForSave<T>(
+  read: Promise<T>,
+  isCurrent: () => boolean,
+  onSuperseded: (message: string) => void,
+  continueWithFreshContext: (value: T) => void,
+): Promise<boolean> {
+  const value = await read;
+  if (!isCurrent()) {
+    onSuperseded(
+      'La lettura delle allergie è stata aggiornata durante il salvataggio. Verifica e salva di nuovo.',
+    );
+    return false;
+  }
+  continueWithFreshContext(value);
+  return true;
+}
+
 export function TerapiaFarmacologicaTab({
   paziente,
   operatoreNome,
@@ -452,18 +469,28 @@ export function TerapiaFarmacologicaTab({
         allergySaveController.current = controller;
         const sequence = ++allergySequence.current;
         const timeout = window.setTimeout(() => controller.abort(), 10000);
+        const freshRead = readGiroAllergies(paziente.id, controller.signal).then(
+          (snapshot): PrescriptionAllergyContext => ({ phase: 'ready', snapshot }),
+          (): PrescriptionAllergyContext => ({ phase: 'error' }),
+        );
         try {
-          freshContext = {
-            phase: 'ready',
-            snapshot: await readGiroAllergies(paziente.id, controller.signal),
-          };
-        } catch {
-          freshContext = { phase: 'error' };
+          const current = await completeAllergyReadForSave(
+            freshRead,
+            () =>
+              sequence === allergySequence.current &&
+              requestedSelection === currentSelection.current,
+            setSaveError,
+            (context) => {
+              freshContext = context;
+            },
+          );
+          if (!current) return;
         } finally {
           window.clearTimeout(timeout);
         }
-        if (sequence !== allergySequence.current || requestedSelection !== currentSelection.current)
+        if (requestedSelection !== currentSelection.current) {
           return;
+        }
       }
       if (requestedSelection !== currentSelection.current) return;
       setAllergyRead({ key: allergyReadKey, context: freshContext });
@@ -859,7 +886,7 @@ export function TerapiaFarmacologicaTab({
         data-testid="therapy-allergy-warning"
         style={
           prescriptionAllergyWarning(allergyContext)
-            ? { borderLeft: '3px solid var(--amber, #c77700)' }
+            ? { borderLeft: '3px solid var(--amber)' }
             : undefined
         }
       >

@@ -596,13 +596,13 @@
   font: inherit;
   font-size: 12px;
   text-align: left;
-  background: #fff2df;
-  color: #805000;
+  background: var(--amber-bg);
+  color: var(--amber);
   cursor: pointer;
 }
 .patient-topbar-title .cr-alert-strip--severe {
-  background: #fdecee;
-  color: #a92235;
+  background: var(--red-bg);
+  color: var(--red);
 }
 .patient-topbar-title .cr-alert-strip__ico,
 .patient-topbar-title .cr-alert-strip__link {

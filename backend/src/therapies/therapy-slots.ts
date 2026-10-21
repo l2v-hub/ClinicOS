@@ -26,7 +26,7 @@ import {
   legacyAdministrationKey,
 } from './therapy-administration-page.js';
 import { TherapySlotCapacityError } from './therapy-capacity.js';
-import { currentTemporaryPsExit, type TemporaryPsExit } from '../patients/temporary-ps-exits.js';
+import { temporaryPsExitReadState, type TemporaryPsExit } from '../patients/temporary-ps-exits.js';
 import {
   therapyWhereForAccess,
   therapyBandEnabledSql,
@@ -82,6 +82,7 @@ export interface SlotPatient {
   bed: string;
   administrations: SlotAdministration[];
   temporaryPsExit: TemporaryPsExit | null;
+  temporaryPsExitUnverified?: true;
 }
 
 export interface TherapyRecordedOutcome {
@@ -394,7 +395,7 @@ async function buildTherapySlotSourcePage(
         select: { patientId: true, data: true },
       })
     : [];
-  const exits = new Map(exitRows.map((row) => [row.patientId, currentTemporaryPsExit(row.data)]));
+  const exits = new Map(exitRows.map((row) => [row.patientId, temporaryPsExitReadState(row.data)]));
   const administrations = await findTherapyPageAdministrations(
     date,
     validTherapies.map((therapy) => ({
@@ -538,7 +539,7 @@ async function buildTherapySlotSourcePage(
             room,
             bed,
             administrations: [],
-            temporaryPsExit: exits.get(pt.patientId) ?? null,
+            ...(exits.get(pt.patientId) ?? { temporaryPsExit: null }),
           });
         }
         patientMap.get(pt.patientId)!.administrations.push(administrationEntry);
@@ -583,7 +584,7 @@ async function buildTherapySlotSourcePage(
         location,
         room: location.room ?? 'Non assegnato',
         bed: location.bed ?? 'Non assegnato',
-        temporaryPsExit: exits.get(therapy.patientId) ?? null,
+        ...(exits.get(therapy.patientId) ?? { temporaryPsExit: null }),
         items: [],
       });
     }

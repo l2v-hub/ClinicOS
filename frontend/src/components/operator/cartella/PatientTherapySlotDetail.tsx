@@ -25,7 +25,7 @@ import './PatientTherapySlotDetail.css';
 
 // Lo stato vale solo per la richiesta da cui è nato (paziente, data, ora, ricarica).
 type LoadState =
-  { key: string; status: 'error' } | { key: string; status: 'ready'; time: GiroTime | null };
+  { key: string; status: 'error' } | { key: string; status: 'ready'; time: GiroTime | null; refreshError?: boolean };
 
 interface Props {
   patientId: string;
@@ -38,6 +38,8 @@ interface Props {
   bringIntoView?: boolean;
   /** Modal already supplies its own title and close action. */
   embedded?: boolean;
+  /** Revalidation is separate from row identity so local dose drafts survive focus. */
+  refreshRevision?: number;
   onClose: () => void;
   /** Dopo ogni registrazione riuscita (il calendario rilegge gli stati). */
   onRecorded?: () => void;
@@ -51,6 +53,7 @@ export function PatientTherapySlotDetail({
   focusTherapyId,
   bringIntoView = false,
   embedded = false,
+  refreshRevision = 0,
   onClose,
   onRecorded,
 }: Props) {
@@ -64,7 +67,7 @@ export function PatientTherapySlotDetail({
     canConfirm && canRecordNot && (decided || getCurrentOperator()?.role !== 'admin');
   const needsConfirmation = useRequiresConfirmation('administration.confirm');
   const [revision, setRevision] = useState(0);
-  const requestKey = `${patientId}|${date}|${time}|${revision}`;
+  const requestKey = `${patientId}|${date}|${time}`;
   const [loaded, setLoaded] = useState<LoadState | null>(null);
   const state = loaded?.key === requestKey ? loaded : { status: 'loading' as const };
   const [feedback, setFeedback] = useState<{ tone: 'ok' | 'error'; text: string } | null>(null);
@@ -95,13 +98,14 @@ export function PatientTherapySlotDetail({
             });
         },
         () => {
-          if (active) setLoaded({ key: requestKey, status: 'error' });
+          if (active) setLoaded((previous) => previous?.key === requestKey && previous.status === 'ready'
+            ? { ...previous, refreshError: true } : { key: requestKey, status: 'error' });
         },
       );
     return () => {
       active = false;
     };
-  }, [patientId, date, time, requestKey]);
+  }, [patientId, date, time, requestKey, revision, refreshRevision]);
 
   async function record(
     info: TherapyActionInfo,
@@ -245,7 +249,7 @@ export function PatientTherapySlotDetail({
         </ul>
       )}
       {state.status === 'loading' && <p role="status">Caricamento dello stato…</p>}
-      {state.status === 'error' && (
+      {(state.status === 'error' || (state.status === 'ready' && state.refreshError)) && (
         <div role="alert" className="patient-therapy-slot-detail__msg">
           Impossibile caricare lo stato della somministrazione.{' '}
           <button

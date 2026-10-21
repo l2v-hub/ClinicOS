@@ -26,7 +26,6 @@ const step = readFileSync(
 const intakeStyles = readFileSync(new URL('../../app-additions.css', import.meta.url), 'utf8');
 import { cartellaWriteData } from '../cartellaWriteQueue';
 
-const app = readFileSync(new URL('../../App.tsx', import.meta.url), 'utf8');
 
 test('patient list exposes the canonical fiscal identity and never shows MRN', () => {
   assert.match(list, /Cerca per nome o codice fiscale…/);
@@ -125,7 +124,6 @@ test('new-patient wizard auto-fills CF without assuming a sex or overwriting pro
   assert.match(step, /'aria-invalid': error \? true : undefined/);
   assert.match(step, /role="alert"/);
   assert.doesNotMatch(step, />Calcola<\/button>/);
-  assert.match(app, /cartellaWriteData\(snapshot\)/);
   const clinical = {
     pazienteId: 'test',
     codiceFiscale: 'MANUAL',

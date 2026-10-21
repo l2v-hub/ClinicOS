@@ -2,6 +2,9 @@
 // This is the trusted backend boundary (like the read gateway): it touches the DB; the "model" never
 // does. Each method writes only whitelisted fields and returns the new/updated recordId for audit.
 
+import { Prisma } from '@prisma/client';
+import { hasFacilityPatientScope } from '../../patients/patient-scope.js';
+import { preserveTemporaryPsExits } from '../../patients/temporary-ps-exits.js';
 import { randomUUID } from 'node:crypto';
 import { prisma } from '../../lib/prisma.js';
 import { validatePatientPhone } from '../../lib/patient-phone.js';
@@ -36,26 +39,35 @@ function rilevatoFrom(meta: WriteMeta, timeHHMM: unknown): string {
 
 export const prismaVoiceWriter: VoiceWriter = {
   async createVitalSign(patientId, fields, meta) {
-    const existing = await prisma.cartella.findUnique({ where: { patientId } });
-    const data = asCartella(existing?.data);
-    const id = randomUUID();
-    const entry: VitalItem = {
-      id,
-      etichetta: String(fields.etichetta ?? ''),
-      valore: String(fields.valore ?? ''),
-      unita: String(fields.unita ?? ''),
-      stato: '',
-      rilevato: rilevatoFrom(meta, fields.timeHHMM),
-    };
-    (entry as Record<string, unknown>).rilevatoDa = meta.operatorName;
-    const parametriVitali = [...(data.parametriVitali ?? []), entry];
-    const next = { ...data, parametriVitali };
-    await prisma.cartella.upsert({
-      where: { patientId },
-      create: { patientId, data: next as object },
-      update: { data: next as object },
+    return prisma.$transaction(async (tx) => {
+      const patients = await tx.$queryRaw<Array<{ id: string }>>(Prisma.sql`
+      SELECT p.id FROM "Patient" p WHERE p.id = ${patientId}
+      ${hasFacilityPatientScope(meta.operatorRole ?? 'operatore') ? Prisma.empty : Prisma.sql`AND p."registeredById" = ${meta.operatorId}`}
+      FOR UPDATE OF p`);
+      if (!patients.length) throw new VoiceError('not_executable', 'Paziente non trovato');
+      const rows = await tx.$queryRaw<Array<{ data: Prisma.JsonValue }>>`
+      SELECT data FROM "Cartella" WHERE "patientId" = ${patientId} FOR UPDATE`;
+      const existing = rows[0];
+      const data = asCartella(existing?.data);
+      const id = randomUUID();
+      const entry: VitalItem = {
+        id,
+        etichetta: String(fields.etichetta ?? ''),
+        valore: String(fields.valore ?? ''),
+        unita: String(fields.unita ?? ''),
+        stato: '',
+        rilevato: rilevatoFrom(meta, fields.timeHHMM),
+      };
+      (entry as Record<string, unknown>).rilevatoDa = meta.operatorName;
+      const parametriVitali = [...(data.parametriVitali ?? []), entry];
+      const next = preserveTemporaryPsExits(existing?.data, { ...data, parametriVitali });
+      await tx.cartella.upsert({
+        where: { patientId },
+        create: { patientId, data: next as object },
+        update: { data: next as object },
+      });
+      return id;
     });
-    return id;
   },
 
   async updateDemographics(patientId, field, value, _meta) {

@@ -129,7 +129,7 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
         ? 'NEWS2 non caricato'
         : latest
           ? `NEWS2 ${latest.result.total} · ${news2When(latest.reading.measuredAt)}${staleness.stale ? ' · da aggiornare' : ''}`
-          : 'NEWS2 non calcolabile';
+          : snapshot.verificationIncomplete ? 'NEWS2 da verificare' : 'NEWS2 non calcolabile';
   const compactLabel =
     state === 'loading'
       ? 'NEWS2 …'
@@ -137,14 +137,16 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
         ? 'NEWS2 ?'
         : latest
           ? `NEWS2 ${latest.result.total} · ${news2When(latest.reading.measuredAt)}${staleness.stale ? ' · da aggiornare' : ''}`
-          : 'NEWS2 non calcolabile';
+          : snapshot.verificationIncomplete ? 'NEWS2 da verificare' : 'NEWS2 non calcolabile';
   const title =
     state === 'error'
       ? 'Non è stato possibile caricare le rilevazioni. Tocca per riprovare.'
       : latest
         ? `${staleness.stale ? 'Da aggiornare. ' : ''}${latest.result.response}. Rilevazione del ${readingTime(latest.reading.measuredAt)}.${staleness.newerIncomplete ? ` Dopo questa ${incompleteText(staleness.newerIncomplete)}.` : ''} Tocca per lo storico.`
         : state === 'ready'
-          ? 'Nessuna rilevazione con tutti i sette parametri (FR, SpO₂, O₂, PA, FC, coscienza, TC). Tocca per lo storico.'
+          ? snapshot.verificationIncomplete
+            ? 'Verifica NEWS2 incompleta. Apri lo storico e carica le rilevazioni precedenti.'
+            : 'Nessuna rilevazione con tutti i sette parametri (FR, SpO₂, O₂, PA, FC, coscienza, TC). Tocca per lo storico.'
           : undefined;
 
   function retry() {
@@ -161,6 +163,7 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
         patientName={patientName}
         state={state}
         points={points}
+        verificationIncomplete={Boolean(snapshot.verificationIncomplete)}
         staleness={staleness}
         canLoadMore={!!cursor}
         loadingMore={loadingMore}
@@ -178,6 +181,7 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
         <VitalsOverview
           state={state}
           readings={readings}
+          verificationIncomplete={Boolean(snapshot.verificationIncomplete)}
           stale={staleness.stale}
           onRetry={retry}
           onOpenHistory={() => setOpen(true)}
@@ -221,6 +225,7 @@ function News2History({
   patientName,
   state,
   points,
+  verificationIncomplete,
   staleness,
   canLoadMore,
   loadingMore,
@@ -232,6 +237,7 @@ function News2History({
   patientName: string;
   state: 'loading' | 'ready' | 'error';
   points: News2Point[];
+  verificationIncomplete: boolean;
   staleness: ReturnType<typeof news2Staleness>;
   canLoadMore: boolean;
   loadingMore: boolean;
@@ -309,7 +315,9 @@ function News2History({
         </p>
       ) : (
         <p className="news2-dialog__now news2-dialog__now--none">
-          Nessuna rilevazione con tutti i sette parametri: il NEWS2 non è calcolabile.
+          {verificationIncomplete
+            ? 'Verifica NEWS2 incompleta: carica le rilevazioni precedenti per verificare il punteggio.'
+            : 'Nessuna rilevazione con tutti i sette parametri: il NEWS2 non è calcolabile.'}
         </p>
       )}
       <News2Chart points={points} />

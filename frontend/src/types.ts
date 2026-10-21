@@ -1160,6 +1160,8 @@ export interface TherapySlotPatient {
   bed: string;
   administrations: TherapyAdministration[];
   temporaryPsExit?: TemporaryPsExit | null;
+  /** Managed PS-exit metadata was malformed; this patient alone must not be acted on. */
+  temporaryPsExitUnverified?: boolean;
 }
 
 export interface TherapySlotSummary {

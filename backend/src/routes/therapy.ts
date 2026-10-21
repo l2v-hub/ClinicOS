@@ -1,6 +1,6 @@
 import { Router, type Response } from 'express';
 import { prisma } from '../lib/prisma.js';
-import { readTemporaryPsExit } from '../patients/temporary-ps-exits.js';
+import { TemporaryPsExitError, readTemporaryPsExit } from '../patients/temporary-ps-exits.js';
 import { requireOperator, type AuthedRequest, type Operator } from '../ai/auth.js';
 import {
   buildTherapySlotPage,
@@ -105,6 +105,10 @@ router.get('/', async (req, res) => {
     const date = parseIsoCalendarDate(req.query.date, 'date');
     res.status(200).json(await buildTherapySlots(date, patientAccess(req as AuthedRequest)));
   } catch (error) {
+    if (error instanceof TemporaryPsExitError) {
+      res.status(error.status).json({ error: error.message, code: error.code });
+      return;
+    }
     if (error instanceof AppointmentListInputError) {
       res.status(400).json({ error: error.message });
       return;
@@ -264,6 +268,10 @@ router.get('/prn', async (req, res) => {
     ]);
     res.status(200).json({ date, items, temporaryPsExit });
   } catch (error) {
+    if (error instanceof TemporaryPsExitError) {
+      res.status(error.status).json({ error: error.message, code: error.code });
+      return;
+    }
     if (error instanceof AppointmentListInputError) {
       res.status(400).json({ error: error.message });
       return;

@@ -8,6 +8,10 @@ import { useCan } from '../../lib/capabilities';
 import { getCurrentOperator } from '../../lib/operatorSession';
 import {
   loadEmergencyTransferSources,
+  emptyEmergencyTransferSources,
+  emergencySourceMessage,
+  type EmergencySourceKey,
+  type EmergencySourceStatus,
   type EmergencyTransferSources,
 } from '../../lib/emergencyTransferContext';
 import { formatFacilityLocalMinute } from '../../lib/facilityTime';
@@ -56,6 +60,61 @@ export function verifyPsExitReceipt(
   return verifyTemporaryPsExitReceipt(chart, patientId, actorId, command);
 }
 
+export function EmergencySourceNotice({
+  source,
+  status,
+}: {
+  source: EmergencySourceKey;
+  status: EmergencySourceStatus;
+}) {
+  return (
+    <p data-ps-source={source} data-ps-source-state={status.state}>
+      {emergencySourceMessage(status)}
+    </p>
+  );
+}
+
+export function EmergencyReasonField({
+  reason,
+  disabled,
+  onChange,
+}: {
+  reason: string;
+  disabled: boolean;
+  onChange: (reason: string) => void;
+}) {
+  return (
+    <>
+      <label className="no-print" htmlFor="invio-ps-reason">
+        Motivo dell'invio (modificabile)
+      </label>
+      <textarea
+        id="invio-ps-reason"
+        className="form-input no-print"
+        data-invio-ps-reason
+        rows={4}
+        value={reason}
+        disabled={disabled}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder="Descrivi il motivo dell'invio e le condizioni osservate"
+      />
+      {reason.length > 2000 && (
+        <p className="no-print" role="alert" data-ps-reason-limit>
+          Il motivo supera il limite di 2000 caratteri per registrare una nuova uscita PS (
+          {reason.length} caratteri). Il testo completo è conservato e può essere stampato.
+        </p>
+      )}
+      <p
+        className="fm-row__val"
+        style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}
+        data-invio-ps-reason-print
+      >
+        {reason || 'Motivo da completare prima della stampa.'}
+      </p>
+    </>
+  );
+}
+
 // ── Component ──────────────────────────────────────────────────────────────────
 
 export default function InvioPSModal(props: InvioPSModalProps) {
@@ -92,7 +151,6 @@ function InvioPSContent({ paziente, cartella, onClose, onTemporaryPsExit }: Invi
   const canPrn = useCan('administration.list_slots');
   const canReadings = useCan('parameters.list_readings');
   const canDiary = useCan('diary.list');
-  const authorized = canTherapy && canHistory && canPrn && canReadings && canDiary;
   const canSaveChart = useCan('clinical_record.save');
   const actorId = getCurrentOperator()?.id;
   const activeExit = cartella.liberatoria?.temporaryPsExit;
@@ -108,15 +166,21 @@ function InvioPSContent({ paziente, cartella, onClose, onTemporaryPsExit }: Invi
 
   useEffect(() => {
     const controller = new AbortController();
-    setSources(null);
     setLoading(true);
     setFetchError('');
-    if (!authorized) {
-      setFetchError('Il tuo ruolo non può consultare tutte le fonti necessarie alla scheda PS.');
-      setLoading(false);
-      return () => controller.abort();
-    }
-    void loadEmergencyTransferSources(paziente.id, controller.signal)
+    setSources(emptyEmergencyTransferSources(paziente.id));
+    void loadEmergencyTransferSources(paziente.id, controller.signal, new Date(), {
+      allowed: {
+        therapies: canTherapy,
+        scheduled: canHistory,
+        prn: canPrn,
+        readings: canReadings,
+        diary: canDiary,
+      },
+      onProgress: (data) => {
+        if (!controller.signal.aborted) setSources(data);
+      },
+    })
       .then((data) => {
         if (!controller.signal.aborted) {
           setSources(data);
@@ -130,7 +194,7 @@ function InvioPSContent({ paziente, cartella, onClose, onTemporaryPsExit }: Invi
         }
       });
     return () => controller.abort();
-  }, [paziente.id, loadRevision, authorized]);
+  }, [paziente.id, loadRevision, canTherapy, canHistory, canPrn, canReadings, canDiary]);
 
   const model = buildInvioPSModel(paziente, cartella, sources?.therapies ?? [], sources);
   const reason = reasonOverride ?? model.emergency.reason;
@@ -142,17 +206,17 @@ function InvioPSContent({ paziente, cartella, onClose, onTemporaryPsExit }: Invi
   const allergyUnknown =
     model.patient.allergie.length === 0 &&
     !['assenti', 'paziente_nega'].includes(cartella.allergieStatus ?? '');
-  const missingVitals =
-    model.emergency.vitals.every((row) => row.value === null) &&
-    model.emergency.legacyVitals.length === 0;
-  const printBlocked =
-    loading ||
-    Boolean(fetchError) ||
-    !authorized ||
-    !sources ||
-    !reason.trim() ||
-    (allergyUnknown && !allergyNote.trim()) ||
-    (missingVitals && !vitalNote.trim());
+  const printBlocked = !reason.trim();
+  const sourceStatus = (key: EmergencySourceKey) =>
+    sources?.status?.[key] ?? {
+      state: 'loading' as const,
+      detail: 'Lettura non completata; dato da verificare manualmente.',
+    };
+  const sourceNotice = (key: EmergencySourceKey) => (
+    <EmergencySourceNotice source={key} status={sourceStatus(key)} />
+  );
+  const dosesVerified =
+    sourceStatus('scheduled').state === 'verified' && sourceStatus('prn').state === 'verified';
 
   async function recordExitDecision() {
     if (!canRecordExit || !onTemporaryPsExit || !actorId || exitInFlight.current) return;
@@ -227,11 +291,7 @@ function InvioPSContent({ paziente, cartella, onClose, onTemporaryPsExit }: Invi
               }}
               disabled={printBlocked}
               data-invio-ps-print
-              title={
-                printBlocked
-                  ? 'Carica tutte le fonti e completa motivo, stato allergie e parametri mancanti prima della stampa'
-                  : undefined
-              }
+              title={printBlocked ? 'Completa il motivo prima della stampa' : undefined}
               style={{ display: 'flex', alignItems: 'center', gap: 6 }}
             >
               <svg
@@ -358,13 +418,18 @@ function InvioPSContent({ paziente, cartella, onClose, onTemporaryPsExit }: Invi
               </p>
             )}
           </section>
-          {fetchError && (
+          {(fetchError ||
+            (!loading &&
+              Object.values(sources?.status ?? {}).some(
+                (status) => status.state !== 'verified',
+              ))) && (
             <div
               className="alert alert--error no-print"
               role="alert"
               style={{ color: 'var(--red, #DC2626)', fontSize: 12, marginBottom: 8 }}
             >
-              {fetchError}. La stampa è bloccata finché tutte le fonti cliniche non sono complete.{' '}
+              {fetchError || 'Alcune fonti cliniche sono parziali o non verificabili.'} La stampa è
+              disponibile con il motivo; verifica e completa a mano le sezioni indicate.{' '}
               <button
                 className="btn-secondary btn-sm"
                 onClick={() => setLoadRevision((v) => v + 1)}
@@ -406,33 +471,25 @@ function InvioPSContent({ paziente, cartella, onClose, onTemporaryPsExit }: Invi
 
             <section className="fm-section" data-invio-ps-reason-section>
               <h2 className="fm-section-title">Motivo dell'invio</h2>
-              <label className="no-print" htmlFor="invio-ps-reason">
-                Motivo dell'invio (modificabile)
-              </label>
-              <textarea
-                id="invio-ps-reason"
-                className="form-input no-print"
-                data-invio-ps-reason
-                rows={4}
-                value={reason}
+              <EmergencyReasonField
+                reason={reason}
                 disabled={exitSaving || exitUncertain}
-                onChange={(event) => setReasonOverride(event.target.value)}
-                maxLength={10000}
-                placeholder="Descrivi il motivo dell'invio e le condizioni osservate"
+                onChange={setReasonOverride}
               />
-              <p
-                className="fm-row__val"
-                style={{ whiteSpace: 'pre-wrap' }}
-                data-invio-ps-reason-print
-              >
-                {reason || 'Motivo da completare prima della stampa.'}
-              </p>
               {model.emergency.urgentNote && (
                 <p>
                   <strong>Ultima nota urgente nelle 24 ore:</strong>{' '}
                   {model.emergency.urgentNote.content} ·{' '}
                   {formatFacilityLocalMinute(model.emergency.urgentNote.at)}
                 </p>
+              )}
+            </section>
+
+            <section className="fm-section" data-invio-ps-diary-status>
+              <h2 className="fm-section-title">Fonte diario clinico</h2>
+              {sourceNotice('diary')}
+              {!model.emergency.urgentNote && (
+                <p>Nota urgente non disponibile nelle fonti lette; verificare manualmente.</p>
               )}
             </section>
 
@@ -471,12 +528,13 @@ function InvioPSContent({ paziente, cartella, onClose, onTemporaryPsExit }: Invi
                 <p>
                   {allergyNote
                     ? `Integrazione manuale allergie: ${allergyNote}`
-                    : 'Stato allergie da completare prima della stampa.'}
+                    : 'Stato allergie non verificabile, compilare a mano.'}
                 </p>
               </section>
             )}
             <section className="fm-section" data-invio-ps-vitals>
               <h2 className="fm-section-title">Ultimi parametri rilevati</h2>
+              {sourceNotice('readings')}
               <table className="fm-table">
                 <thead>
                   <tr>
@@ -490,7 +548,9 @@ function InvioPSContent({ paziente, cartella, onClose, onTemporaryPsExit }: Invi
                     <tr key={row.key} data-ps-vital={row.key}>
                       <td>{row.label}</td>
                       <td>
-                        {row.value === null ? 'Non rilevato' : `${row.value} ${row.unit}`.trim()}
+                        {row.value === null
+                          ? 'Dato non disponibile: da verificare'
+                          : `${row.value} ${row.unit}`.trim()}
                       </td>
                       <td>
                         {row.measuredAt
@@ -532,6 +592,8 @@ function InvioPSContent({ paziente, cartella, onClose, onTemporaryPsExit }: Invi
             </section>
             <section className="fm-section" data-invio-ps-given>
               <h2 className="fm-section-title">Ultime dosi effettivamente somministrate</h2>
+              {sourceNotice('scheduled')}
+              {sourceNotice('prn')}
               <p>
                 Registrazioni con orario effettivo nelle ultime 24 ore. Eventuali dati storici senza
                 ora sono indicati separatamente e non confermano l’orario della dose.
@@ -563,11 +625,9 @@ function InvioPSContent({ paziente, cartella, onClose, onTemporaryPsExit }: Invi
                 </table>
               ) : (
                 <p>
-                  {loading
-                    ? 'Caricamento delle somministrazioni…'
-                    : fetchError
-                      ? 'Dosi non verificabili: stampa bloccata.'
-                      : 'Nessuna dose effettivamente somministrata risulta nelle fonti lette per le ultime 24 ore.'}
+                  {dosesVerified
+                    ? 'Nessuna dose effettivamente somministrata risulta nelle fonti lette per le ultime 24 ore.'
+                    : 'Somministrazioni non verificabili o parziali: compilare a mano; assenza di dosi non verificata.'}
                 </p>
               )}
               <label className="no-print" htmlFor="invio-ps-dose-note">
@@ -739,8 +799,9 @@ function InvioPSContent({ paziente, cartella, onClose, onTemporaryPsExit }: Invi
             {/* ── Sezione Terapia ── */}
             <div className="fm-section">
               <div className="fm-section-title">Terapia Farmacologica Attiva</div>
-              {loading ? (
-                <div className="fm-row no-print">
+              {sourceNotice('therapies')}
+              {sourceStatus('therapies').state === 'loading' ? (
+                <div className="fm-row">
                   <span className="fm-row__val" style={{ fontStyle: 'italic', color: '#666' }}>
                     Caricamento in corso…
                   </span>
@@ -748,9 +809,9 @@ function InvioPSContent({ paziente, cartella, onClose, onTemporaryPsExit }: Invi
               ) : model.terapie.length === 0 ? (
                 <div className="fm-row">
                   <span className="fm-row__val" style={{ fontStyle: 'italic', color: '#666' }}>
-                    {fetchError
-                      ? 'Prescrizioni non verificabili: stampa bloccata.'
-                      : 'Nessuna terapia attiva registrata nelle fonti lette.'}
+                    {sourceStatus('therapies').state === 'verified'
+                      ? 'Nessuna terapia attiva registrata nelle fonti lette.'
+                      : 'Prescrizioni non verificabili o parziali: compilare a mano; assenza di terapie non verificata.'}
                   </span>
                 </div>
               ) : (

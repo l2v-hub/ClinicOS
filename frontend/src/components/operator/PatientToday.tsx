@@ -20,9 +20,7 @@ import { postUrgencyAck, URGENCY_ACKNOWLEDGED_EVENT } from '../../lib/urgency';
 import type { UnreadDiaryEntry } from '../../lib/diaryUnreadQueue';
 import { UrgencyNotice } from '../shared/UrgencyNotice';
 import { PatientTherapySlotDetail } from './cartella/PatientTherapySlotDetail';
-import { TherapyDrugDosePanel } from './cartella/TherapyDrugDosePanel';
-import { TEMPORARY_PS_EXIT_CHANGED } from '../../lib/temporaryPsExit';
-import { invalidateCachedGet } from '../../lib/cachedFetch';
+import { TherapyDrugDosePanel, useExitRevision } from './cartella/TherapyDrugDosePanel';
 
 export function todayReadings(readings: PatientParameterReading[], day: string) {
   return readings.filter((r) => facilityLocalMinute(new Date(r.measuredAt)).slice(0, 10) === day);
@@ -96,26 +94,9 @@ export function PatientToday({
     therapyError: boolean;
     vitalError: boolean;
   } | null>(null);
-  const [revision, setRevision] = useState(0),
+  const [revision, setRevision] = useExitRevision(patientId),
     [ack, setAck] = useState(''),
     [ackError, setAckError] = useState('');
-  useEffect(() => {
-    const refresh = (event: Event) => {
-      if (
-        event.type === 'focus' ||
-        (event as CustomEvent<{ patientId: string }>).detail?.patientId === patientId
-      ) {
-        invalidateCachedGet(`${API_URL}/therapy-slots`);
-        setRevision((value) => value + 1);
-      }
-    };
-    window.addEventListener(TEMPORARY_PS_EXIT_CHANGED, refresh);
-    window.addEventListener('focus', refresh);
-    return () => {
-      window.removeEventListener(TEMPORARY_PS_EXIT_CHANGED, refresh);
-      window.removeEventListener('focus', refresh);
-    };
-  }, [patientId]);
   useEffect(() => {
     const c = new AbortController();
     void Promise.allSettled([
@@ -123,13 +104,13 @@ export function PatientToday({
       canVitals ? loadTodayReadings(patientId, date, c.signal) : Promise.resolve([]),
     ]).then(([t, v]) => {
       if (!c.signal.aborted)
-        setState({
+        setState((previous) => ({
           key,
-          therapies: t.status === 'fulfilled' ? t.value : [],
-          readings: v.status === 'fulfilled' ? v.value : [],
+          therapies: t.status === 'fulfilled' ? t.value : previous?.key === key ? previous.therapies : [],
+          readings: v.status === 'fulfilled' ? v.value : previous?.key === key ? previous.readings : [],
           therapyError: t.status === 'rejected',
           vitalError: v.status === 'rejected',
-        });
+        }));
     });
     return () => c.abort();
   }, [patientId, key, revision, canTherapy, canVitals]);
@@ -164,20 +145,21 @@ export function PatientToday({
           <h3>Terapia di oggi</h3>
           {!current ? (
             <p role="status">Caricamento terapie…</p>
-          ) : current.therapyError ? (
-            <p role="alert">
-              Terapie non disponibili.{' '}
-              <button className="ds-link" onClick={() => setRevision((r) => r + 1)}>
-                Riprova
-              </button>
-            </p>
           ) : (
             <>
-              {!day.events.length && !day.unscheduled.length && (
+              {current.therapyError && (
+                <p role="alert">
+                  Aggiornamento terapie non disponibile.{' '}
+                  <button className="ds-link" onClick={() => setRevision((r) => r + 1)}>
+                    Riprova
+                  </button>
+                </p>
+              )}
+              {!current.therapyError && !day.events.length && !day.unscheduled.length && (
                 <p>Nessuna terapia programmata oggi.</p>
               )}
               {times.map((time) => (
-                <div key={`${key}:${revision}:${time}`} className="patient-today__time">
+                <div key={`${key}:${time}`} className="patient-today__time">
                   <h4>Ore {time}</h4>
                   <PatientTherapySlotDetail
                     patientId={patientId}
@@ -185,6 +167,7 @@ export function PatientToday({
                     time={time}
                     events={day.events.filter((e) => e.time === time)}
                     embedded
+                    refreshRevision={revision}
                     onClose={() => {}}
                   />
                 </div>

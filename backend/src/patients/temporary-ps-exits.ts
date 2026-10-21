@@ -4,6 +4,7 @@ import type { Operator } from '../ai/auth.js';
 import { prisma } from '../lib/prisma.js';
 import { facilityClock } from '../lib/facility-time.js';
 import { hasFacilityPatientScope } from './patient-scope.js';
+import { recordOperationalAudit } from '../ai/audit-store.js';
 import { TherapyWriteInputError } from '../therapies/therapy-write.js';
 
 export class TemporaryPsExitError extends TherapyWriteInputError {
@@ -134,6 +135,18 @@ export function currentTemporaryPsExit(data: unknown): TemporaryPsExit | null {
     departedAt: active.departedAt,
   };
 }
+/** Multi-patient reads isolate unverifiable state; administration commands still use the strict reader. */
+export function temporaryPsExitReadState(data: unknown): {
+  temporaryPsExit: TemporaryPsExit | null;
+  temporaryPsExitUnverified?: true;
+} {
+  try {
+    return { temporaryPsExit: currentTemporaryPsExit(data) };
+  } catch (error) {
+    if (!(error instanceof TemporaryPsExitError)) throw error;
+    return { temporaryPsExit: null, temporaryPsExitUnverified: true };
+  }
+}
 export async function readTemporaryPsExit(tx: Prisma.TransactionClient, patientId: string) {
   const row = await tx.cartella.findUnique({ where: { patientId }, select: { data: true } });
   return currentTemporaryPsExit(row?.data);
@@ -157,7 +170,11 @@ export function preserveTemporaryPsExits(current: unknown, incoming: JsonObject)
   const managed = Array.isArray(before.usciteLog)
     ? before.usciteLog.filter((row) => object(row) && Object.hasOwn(row, 'psExit'))
     : [];
-  const rawRows = Array.isArray(after.usciteLog) ? after.usciteLog : [];
+  const rawRows = Array.isArray(after.usciteLog)
+    ? after.usciteLog
+    : !Object.hasOwn(after, 'usciteLog') && Array.isArray(before.usciteLog)
+      ? before.usciteLog
+      : [];
   const managedIds = new Set(managed.map((row) => (row as JsonObject).id));
   if (
     (managed.length || Object.hasOwn(before, 'temporaryPsExit')) &&
@@ -186,7 +203,9 @@ export function preserveTemporaryPsExits(current: unknown, incoming: JsonObject)
       ...(Object.hasOwn(before, 'temporaryPsExit')
         ? { temporaryPsExit: before.temporaryPsExit }
         : {}),
-      usciteLog: [...rawRows.filter((row) => !object(row) || !managedIds.has(row.id)), ...managed],
+      usciteLog: !Object.hasOwn(after, 'usciteLog')
+        ? rawRows
+        : [...rawRows.filter((row) => !object(row) || !managedIds.has(row.id)), ...managed],
     },
   };
 }
@@ -194,9 +213,23 @@ export function preserveTemporaryPsExits(current: unknown, incoming: JsonObject)
 export async function executeTemporaryPsExit(patientId: string, value: unknown, actor: Operator) {
   const command = parseTemporaryPsExitCommand(value);
   const requestHash = createHash('sha256').update(JSON.stringify(command)).digest('hex');
-  return prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx) => {
+    // Parent version write is also the first lock, preserving the stale-snapshot protocol.
+    // Any status refusal below rolls back this write together with the transaction.
     await serializeTemporaryPsPatient(tx, patientId, actor);
-    const stored = await tx.cartella.findUnique({ where: { patientId } });
+    const charts = await tx.$queryRaw<Array<{ data: Prisma.JsonValue }>>`
+      SELECT data FROM "Cartella" WHERE "patientId" = ${patientId} FOR UPDATE`;
+    const stored = charts[0];
+    if (
+      command.action === 'depart' &&
+      object(stored?.data) &&
+      ['dimesso', 'archiviato'].includes(String(stored.data.statoRicovero))
+    )
+      throw new TemporaryPsExitError(
+        'Il paziente è dimesso.',
+        409,
+        'temporary_ps_exit_patient_discharged',
+      );
     const data: JsonObject = object(stored?.data) ? stored.data : {};
     const lib: JsonObject = object(data.liberatoria) ? data.liberatoria : {};
     if (
@@ -275,4 +308,18 @@ export async function executeTemporaryPsExit(patientId: string, value: unknown, 
     });
     return { patientId, data: saved.data, replayed: false };
   });
+  recordOperationalAudit({
+    requestId: command.requestId,
+    actorId: actor.id,
+    actorRole: actor.role,
+    patientId,
+    action: `temporary_ps_exit.${command.action}`,
+    kind: 'action',
+    fields:
+      command.action === 'depart'
+        ? ['temporaryPsExit', 'usciteLog', `decision:${command.decision}`]
+        : ['temporaryPsExit', 'usciteLog'],
+    outcome: result.replayed ? 'deduped' : 'ok',
+  });
+  return result;
 }

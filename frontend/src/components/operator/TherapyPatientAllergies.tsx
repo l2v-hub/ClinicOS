@@ -15,6 +15,27 @@ interface ReadState {
   snapshot?: GiroAllergySnapshot;
 }
 
+export function TherapyAllergyDocumentation({
+  items,
+}: {
+  items: GiroAllergySnapshot['items'];
+}) {
+  return (
+    <>
+      {items.map((item, index) => (
+        <div key={index} className="giro-allergies__documentation">
+          <strong>{item.allergene}</strong>
+          <p>
+            Documentazione: {item.documentato || 'non indicata'} · Autore:{' '}
+            {item.documentatoDa || 'non indicato'}
+          </p>
+          <p>Note: {item.note || 'non indicate'}</p>
+        </div>
+      ))}
+    </>
+  );
+}
+
 export function TherapyPatientAllergies({ patientId, patientName, contextKey }: Props) {
   const allowed = useCan('clinical_record.get');
   const operator = getCurrentOperator();
@@ -85,16 +106,7 @@ export function TherapyPatientAllergies({ patientId, patientName, contextKey }: 
         <details key={key} className="giro-allergies__details">
           <summary>Documentazione delle allergie</summary>
 
-          {snapshot.items.map((item, index) => (
-            <div key={index} className="giro-allergies__documentation">
-              <span>Voce {index + 1}</span>
-              <p>
-                Documentazione: {item.documentato || 'non indicata'} · Autore:{' '}
-                {item.documentatoDa || 'non indicato'}
-              </p>
-              <p>Note: {item.note || 'non indicate'}</p>
-            </div>
-          ))}
+          <TherapyAllergyDocumentation items={snapshot.items} />
         </details>
       )}
     </section>

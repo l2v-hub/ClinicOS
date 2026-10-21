@@ -1,3 +1,4 @@
+import { temporaryPsAdministrationAllowedSql } from '../patients/temporary-ps-query.js';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 import { facilityClock } from '../lib/facility-time.js';
@@ -125,7 +126,7 @@ export async function findTherapiesDue(
       ) room ON TRUE
       LEFT JOIN "Cartella" cartella ON cartella."patientId" = pt."patientId"
       WHERE pt.stato = 'attiva'
-        AND COALESCE(cartella.data #>> '{liberatoria,temporaryPsExit,decision}', '') <> 'pause'
+        AND ${temporaryPsAdministrationAllowedSql(Prisma.sql`cartella.data`)}
         AND pt.tipo <> 'al_bisogno'
         AND (
           (pt.tipo = 'una_tantum' AND pt."dataSomministrazione" = ${date})

@@ -18,6 +18,7 @@ import {
   type GiroTime,
 } from '../../lib/therapyGiro';
 import { doseStatus } from '../../lib/therapyDoseStatus';
+import { birthDateValue, formatBirthDate } from '../../lib/patientDemographics';
 import { IcoCheck } from '../../icons';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { GlucoseAdministrationControl } from './cartella/GlucoseAdministrationControl';
@@ -180,7 +181,14 @@ export function TherapyGiroRows({
         {groups.map(({ p, items }) => {
           const identity = { ...p, id: p.patientId };
           const name = patientIdentityName(identity);
+          const location = parsePatientLocation(p.location);
+          const hasVisibleBed = location?.status === 'assigned' && !!location.bed;
+          const needsFallbackIdentity = !identity.codiceFiscale?.trim() && !hasVisibleBed;
+          const fallbackIdentity = birthDateValue(identity.dateOfBirth)
+            ? `Nato/a il ${formatBirthDate(identity.dateOfBirth)}`
+            : `Identificativo ${identity.id}`;
           const allDone = items.every((item) => item.a.status !== 'pending');
+          const psExitUnverified = p.temporaryPsExitUnverified === true;
           return (
             <li
               key={p.patientId}
@@ -198,14 +206,13 @@ export function TherapyGiroRows({
                   <div className="giro-row__who">
                     <span className="giro-row__name">{name}</span>
                     <span className="giro-row__cap">
-                      {parsePatientLocation(p.location)?.status === 'assigned' ? roomLabel(p) : ''}
+                      {location?.status === 'assigned' ? roomLabel(p) : ''}
                       {identity.codiceFiscale?.trim() ? ` · CF ${identity.codiceFiscale}` : ''}
+                      {needsFallbackIdentity ? ` · ${fallbackIdentity}` : ''}
                     </span>
-                    <span className="ds-sr-only">
-                      {identity.dateOfBirth
-                        ? `Nato/a il ${identity.dateOfBirth}`
-                        : `Identificativo ${identity.id}`}
-                    </span>
+                    {!needsFallbackIdentity && (
+                      <span className="ds-sr-only">{fallbackIdentity}</span>
+                    )}
                   </div>
                 </div>
               )}
@@ -220,6 +227,11 @@ export function TherapyGiroRows({
                 <p role="status">
                   Somministrazioni in pausa durante l’uscita PS. Registra il rientro prima di
                   erogare.
+                </p>
+              )}
+              {psExitUnverified && (
+                <p role="status">
+                  Stato uscita PS da verificare. Verifica i dati prima di procedere.
                 </p>
               )}
               <ul className="giro-drugs" aria-label={`Farmaci di ${name} delle ${time.ora}`}>
@@ -287,7 +299,12 @@ export function TherapyGiroRows({
                             <button
                               type="button"
                               className="ds-btn ds-btn--secondary"
-                              aria-label={`Non erogata: ${actionTarget}`}
+                              aria-label={
+                                psExitUnverified
+                                  ? `Stato uscita PS da verificare. Non erogata: ${actionTarget}`
+                                  : `Non erogata: ${actionTarget}`
+                              }
+                              disabled={psExitUnverified}
                               aria-expanded={expanded}
                               onClick={() => {
                                 if (expanded) closeReasons();
@@ -300,12 +317,21 @@ export function TherapyGiroRows({
                             >
                               Non somm.
                             </button>
-                            {p.temporaryPsExit?.decision === 'pause' ? (
+                            {psExitUnverified ? (
                               <button
                                 type="button"
                                 className="ds-btn ds-btn--primary"
                                 disabled
-                                aria-label={`Erogata: ${actionTarget}`}
+                                aria-label={`Stato uscita PS da verificare: ${actionTarget}`}
+                              >
+                                Stato uscita PS da verificare
+                              </button>
+                            ) : p.temporaryPsExit?.decision === 'pause' ? (
+                              <button
+                                type="button"
+                                className="ds-btn ds-btn--primary"
+                                disabled
+                                aria-label={`Somministrazione in pausa per uscita PS: ${actionTarget}`}
                               >
                                 In pausa per uscita PS
                               </button>

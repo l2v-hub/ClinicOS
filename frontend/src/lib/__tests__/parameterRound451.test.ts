@@ -67,6 +67,35 @@ test('advance reaches the unfinished patient after an entirely completed interme
   assert.equal(next?.patient.id, 'last');
   assert.deepEqual(calls, ['second', 'third']);
 });
+
+test('advance searches later pages before wrapping to an unfinished earlier patient', async () => {
+  const next = await nextParameterPatientAcrossPages(
+    [row('skipped', 0), row('saved', 1)],
+    'saved',
+    day,
+    'second',
+    async () => ({ items: [row('later', 0)], nextCursor: null }),
+    () => true,
+  );
+  assert.equal(next?.patient.id, 'later');
+});
+
+test('advance wraps to an earlier unfinished patient only after the remaining pages are exhausted', async () => {
+  let calls = 0;
+  const next = await nextParameterPatientAcrossPages(
+    [row('skipped', 0), row('saved', 1)],
+    'saved',
+    day,
+    'second',
+    async () => {
+      calls++;
+      return { items: [row('complete-later', 1)], nextCursor: null };
+    },
+    () => true,
+  );
+  assert.equal(calls, 1);
+  assert.equal(next?.patient.id, 'skipped');
+});
 test('advance stops on cursor loops, unavailable pages and changed day or selection', async () => {
   await assert.rejects(
     nextParameterPatientAcrossPages(

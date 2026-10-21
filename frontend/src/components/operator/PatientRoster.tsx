@@ -51,13 +51,19 @@ function PatientSignals({
     patientAnomalies.totale > 0 ||
     openHandovers > 0;
 
-  if (!hasSignals) return null;
+  const unverified = !summary || anomalies.fallito || anomalies.verificaIncompleta || anomalies.inCorso;
+  if (!hasSignals && !unverified) return null;
 
   return (
     <div
       className="patient-signals"
       aria-label={`Segnalazioni per ${patient.firstName} ${patient.lastName}`}
     >
+      {unverified && (
+        <span className="ds-badge ds-badge--stale" title="Segnalazioni cliniche non ancora verificate">
+          Da verificare
+        </span>
+      )}
       {summary?.hasCriticalVitals && (
         <SignalChip
           className="alert-chip alert-chip--red"

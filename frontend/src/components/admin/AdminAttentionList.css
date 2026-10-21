@@ -39,7 +39,7 @@
   border-left-color: var(--red);
 }
 .admin-attention__row--scheduled {
-  border-left-color: var(--medical-blue, #2563eb);
+  border-left-color: var(--blue);
 }
 .admin-attention__content {
   min-width: 0;

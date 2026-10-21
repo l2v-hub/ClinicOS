@@ -26,8 +26,17 @@ import {
 } from '../patients/parameters-update.js';
 import { requirePatientScope } from '../patients/access.js';
 import { loadScopedPatientClinicalSummaries } from '../patients/clinical-summary-service.js';
-import { CartellaUpdateError, saveCartella } from '../patients/cartella-update.js';
-import { executeTemporaryPsExit, TemporaryPsExitError } from '../patients/temporary-ps-exits.js';
+import {
+  preserveTinettiHistory,
+  preserveNrsHistory,
+  CartellaUpdateError,
+  saveCartella,
+} from '../patients/cartella-update.js';
+import {
+  preserveTemporaryPsExits,
+  executeTemporaryPsExit,
+  TemporaryPsExitError,
+} from '../patients/temporary-ps-exits.js';
 import { hasFacilityPatientScope } from '../patients/patient-scope.js';
 
 const router = Router();
@@ -901,10 +910,22 @@ router.post('/demo-setup', requireRole('admin', 'manager'), async (_req, res) =>
     };
 
     // Upsert cartella
-    await prisma.cartella.upsert({
-      where: { patientId: patient.id },
-      create: { patientId: patient.id, data: cartella as object },
-      update: { data: cartella as object },
+    await prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM "Patient" WHERE id = ${patient.id} FOR UPDATE`;
+      const rows = await tx.$queryRaw<Array<{ data: Prisma.JsonValue }>>`
+        SELECT data FROM "Cartella" WHERE "patientId" = ${patient.id} FOR UPDATE`;
+      const current = rows[0]?.data;
+      // Demo initialization obeys the same managed-state and legacy-history protection.
+      const incoming = cartella;
+      const protectedData = preserveTemporaryPsExits(
+        current,
+        preserveNrsHistory(current, preserveTinettiHistory(current, incoming)),
+      );
+      await tx.cartella.upsert({
+        where: { patientId: patient.id },
+        create: { patientId: patient.id, data: protectedData as Prisma.InputJsonObject },
+        update: { data: protectedData as Prisma.InputJsonObject },
+      });
     });
 
     console.log(

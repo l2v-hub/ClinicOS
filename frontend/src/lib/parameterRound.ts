@@ -5,9 +5,13 @@ export function nextParameterPatient(
   items: PatientParametersPageItem[],
   savedId: string,
   day: string,
+  wrap = true,
 ): PatientParametersPageItem | null {
   const index = items.findIndex((item) => item.patient.id === savedId);
-  const ordered = [...items.slice(index + 1), ...items.slice(0, Math.max(0, index))];
+  const ordered =
+    index < 0
+      ? items
+      : [...items.slice(index + 1), ...(wrap ? items.slice(0, index) : [])];
   return (
     ordered.find(
       (item) =>
@@ -33,7 +37,7 @@ export async function nextParameterPatientAcrossPages(
   loadPage: (cursor: string) => Promise<ParameterRoundPage | undefined>,
   isCurrent: () => boolean,
 ): Promise<PatientParametersPageItem | null> {
-  let next = nextParameterPatient(items, savedId, day);
+  let next = nextParameterPatient(items, savedId, day, false);
   const visited = new Set<string>();
   while (!next && cursor && isCurrent()) {
     if (visited.has(cursor))
@@ -41,8 +45,11 @@ export async function nextParameterPatientAcrossPages(
     visited.add(cursor);
     const page = await loadPage(cursor);
     if (!isCurrent() || !page) return null;
-    next = nextParameterPatient(page.items, savedId, day);
+    next = nextParameterPatient(page.items, savedId, day, false);
     cursor = page.nextCursor;
+  }
+  if (!next && isCurrent() && cursor === null) {
+    next = nextParameterPatient(items, savedId, day, true);
   }
   return isCurrent() ? next : null;
 }

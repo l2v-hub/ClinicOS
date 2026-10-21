@@ -163,16 +163,17 @@ test('457 source collection uses authenticated reads only, including both civil 
   });
 });
 
-test('457 PRN capped or malformed source blocks printable context instead of reporting an empty complete history', async () => {
+test('457 malformed PRN source is explicitly unverifiable while other printable context remains available', async () => {
   for (const items of [undefined, 'bad-shape', new Array(200).fill({})])
     await withEmergencyApi(items, async () => {
-      await assert.rejects(
-        loadEmergencyTransferSources(
-          psPatient.id,
-          new AbortController().signal,
-          new Date('2026-10-17T10:00:00Z'),
-        ),
-        /Completezza|non valide/,
+      const result = await loadEmergencyTransferSources(
+        psPatient.id,
+        new AbortController().signal,
+        new Date('2026-10-17T10:00:00Z'),
       );
+      assert.equal(result.status?.prn.state, 'unverifiable');
+      assert.match(result.status!.prn.detail, /Nessuna assenza clinica verificata/);
+      assert.equal(result.status?.therapies.state, 'verified');
+      assert.deepEqual(result.prn, []);
     });
 });

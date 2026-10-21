@@ -34,19 +34,16 @@ export function PatientIdentity({
   const location = parsePatientLocation(patient.location);
   const showDate = location && location.asOf !== facilityLocalMinute().slice(0, 10);
   const fromChart = location?.status === 'assigned' && location.source === 'cartella';
+  const identifier =
+    compact && !patient.codiceFiscale?.trim()
+      ? birthDateValue(patient.dateOfBirth)
+        ? `Nato/a il ${formatBirthDate(patient.dateOfBirth)}`
+        : `Identificativo ${patient.id}`
+      : patientIdentifier(patient);
   return (
     <span className="patient-identity">
       <strong className="patient-identity__name">{patientIdentityName(patient)}</strong>
-      {showIdentifier && (!compact || patient.codiceFiscale?.trim()) && (
-        <PatientIdentifier patient={patient} />
-      )}
-      {compact && !patient.codiceFiscale?.trim() && (
-        <span className="ds-sr-only">
-          {birthDateValue(patient.dateOfBirth)
-            ? `Nato/a il ${formatBirthDate(patient.dateOfBirth)}`
-            : `Identificativo ${patient.id}`}
-        </span>
-      )}
+      {showIdentifier && <span className="patient-identity__identifier">{identifier}</span>}
       {!compact && patientIdentityIncomplete(patient) && (
         <span className="patient-identity__incomplete">Anagrafica da completare</span>
       )}
