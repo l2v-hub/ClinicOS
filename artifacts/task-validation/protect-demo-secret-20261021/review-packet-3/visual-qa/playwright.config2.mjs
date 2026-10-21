@@ -1,0 +1,4 @@
+import {defineConfig} from '/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/node_modules/playwright/test.mjs';
+import {fileURLToPath} from 'node:url';
+const out=fileURLToPath(new URL('.',import.meta.url));
+export default defineConfig({testDir:out+'browser-tests2',testMatch:'internal-helper.spec.mjs',timeout:60000,retries:0,workers:1,fullyParallel:false,outputDir:out+'browser-attempt2/test-results',reporter:[['line'],['html',{outputFolder:out+'browser-attempt2/playwright-report',open:'never'}],['json',{outputFile:out+'browser-attempt2/playwright-results.json'}]],use:{headless:true,browserName:'chromium',viewport:{width:1440,height:1280},trace:'on',video:{mode:'on',size:{width:1440,height:1280}},screenshot:'only-on-failure',launchOptions:{executablePath:'/usr/bin/chromium',args:['--disable-background-networking','--disable-component-update','--disable-domain-reliability','--disable-sync','--no-first-run','--host-resolver-rules=MAP * 0.0.0.0']}}});

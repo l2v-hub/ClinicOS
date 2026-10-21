@@ -1,0 +1,416 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; connect-src 'none'; base-uri 'none'"><title>Synthetic helper QA · #499</title><style>*{box-sizing:border-box}body{margin:0;background:#f4f6fa;color:#182b43;font:16px/1.5 system-ui,sans-serif}main{max-width:1280px;margin:auto;padding:40px 32px}header{margin-bottom:24px}.eyebrow{font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#34516f;font-size:13px}h1{font-size:34px;line-height:1.2;margin:8px 0 12px}p{margin:8px 0}.notice{border:1px solid #b6c7dc;background:#eaf1fa;border-radius:12px;padding:14px 18px;color:#243f60}.binding{font-size:13px;color:#4c617b;word-break:break-all}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:white;border:1px solid #d6dfeb;border-radius:16px;padding:22px;box-shadow:0 3px 12px #17335508}.card h2{font-size:19px;line-height:1.35;margin:0 0 10px}.card p{font-size:14px;color:#4c617b;min-height:42px}.head{display:flex;gap:14px;justify-content:space-between;align-items:flex-start}.pass{font-size:12px;font-weight:800;color:#145e44;background:#e2f4ec;padding:5px 10px;border-radius:20px}.facts{display:grid;grid-template-columns:1fr 1fr;margin-top:16px;gap:10px}.fact{background:#f5f8fc;border:1px solid #e2e9f2;padding:10px 12px;border-radius:9px;overflow-wrap:anywhere}.fact dt{font-size:12px;color:#526b86}.fact dd{margin:4px 0 0;font-size:14px;font-weight:700}details{margin-top:14px;font-size:13px;color:#36516e}pre{white-space:pre-wrap;font-size:11px}footer{margin-top:24px;font-size:13px;color:#526b86}@media(max-width:800px){.grid{grid-template-columns:1fr}main{padding:24px 16px}}</style><main data-qa-source="34996816c9b8149a4a90f9ccfc7eabec230d2828"><header><div class="eyebrow">Independent QA · internal helper · issue #499</div><h1>Synthetic helper QA</h1><p class="notice" data-synthetic-notice><strong>No migration performed.</strong> Results below come from actual <code>main(env, dependencies)</code> execution with in-memory APIs and a fake command runner. No GitHub requests or writer processes ran.</p><p class="binding" data-source-binding>Source 34996816c9b8149a4a90f9ccfc7eabec230d2828 · pinned CLI 2.103.0 · 4 asserted scenarios</p></header><div class="grid"><section class="card" data-case="repo-only"><div class="head"><h2>Repository copy retained until fresh verification</h2><span class="pass" data-result>PASS</span></div><p>Ensure preserves the repository copy; stale verification blocks deletion; a separate fresh invocation deletes once.</p><dl class="facts"><div class="fact"><dt>After ensure</dt><dd data-fact="0" data-value="true">Repository retained</dd></div><div class="fact"><dt>Stale verification</dt><dd data-fact="1" data-value="blocked">FRESH_MAIN_SHA_MISMATCH</dd></div><div class="fact"><dt>Final repository</dt><dd data-fact="2" data-value="false">Absent after fresh verification</dd></div><div class="fact"><dt>Environment writes / repo deletes</dt><dd data-fact="3" data-value="1 / 1">1 / 1</dd></div></dl><details><summary>Actual synthetic execution metadata</summary><pre>{
+  &quot;id&quot;: &quot;repo-only&quot;,
+  &quot;title&quot;: &quot;Repository copy retained until fresh verification&quot;,
+  &quot;result&quot;: &quot;PASS&quot;,
+  &quot;summary&quot;: &quot;Ensure preserves the repository copy; stale verification blocks deletion; a separate fresh invocation deletes once.&quot;,
+  &quot;afterEnsure&quot;: {
+    &quot;repoPresent&quot;: true,
+    &quot;environmentPresent&quot;: true,
+    &quot;versionChecks&quot;: 1,
+    &quot;secretSetCalls&quot;: 1,
+    &quot;deletes&quot;: 0,
+    &quot;apiCalls&quot;: 9
+  },
+  &quot;staleVerificationCode&quot;: &quot;FRESH_MAIN_SHA_MISMATCH&quot;,
+  &quot;afterStale&quot;: {
+    &quot;repoPresent&quot;: true,
+    &quot;environmentPresent&quot;: true,
+    &quot;versionChecks&quot;: 1,
+    &quot;secretSetCalls&quot;: 1,
+    &quot;deletes&quot;: 0,
+    &quot;apiCalls&quot;: 15
+  },
+  &quot;final&quot;: {
+    &quot;repoPresent&quot;: false,
+    &quot;environmentPresent&quot;: true,
+    &quot;versionChecks&quot;: 1,
+    &quot;secretSetCalls&quot;: 1,
+    &quot;deletes&quot;: 1,
+    &quot;apiCalls&quot;: 26
+  },
+  &quot;receipts&quot;: [
+    {
+      &quot;schemaVersion&quot;: 1,
+      &quot;operation&quot;: &quot;ensure-environment&quot;,
+      &quot;result&quot;: &quot;written-and-listed&quot;,
+      &quot;writes&quot;: 1
+    },
+    {
+      &quot;schemaVersion&quot;: 1,
+      &quot;operation&quot;: &quot;remove-repository&quot;,
+      &quot;result&quot;: &quot;deleted-and-absent&quot;,
+      &quot;deletes&quot;: 1
+    }
+  ],
+  &quot;events&quot;: [
+    {
+      &quot;sequence&quot;: 1,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;repository-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 2,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;environment-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 3,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;fresh-environment-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 4,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;fresh-policy-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 5,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;fresh-admin-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 6,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;fresh-main-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 7,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;repository-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 8,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;environment-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 9,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;synthetic-version-check&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 10,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;synthetic-environment-write&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 11,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;environment-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 12,
+      &quot;phase&quot;: &quot;stale-remove&quot;,
+      &quot;operation&quot;: &quot;repository-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 13,
+      &quot;phase&quot;: &quot;stale-remove&quot;,
+      &quot;operation&quot;: &quot;environment-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 14,
+      &quot;phase&quot;: &quot;stale-remove&quot;,
+      &quot;operation&quot;: &quot;fresh-environment-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 15,
+      &quot;phase&quot;: &quot;stale-remove&quot;,
+      &quot;operation&quot;: &quot;fresh-policy-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 16,
+      &quot;phase&quot;: &quot;stale-remove&quot;,
+      &quot;operation&quot;: &quot;fresh-admin-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 17,
+      &quot;phase&quot;: &quot;stale-remove&quot;,
+      &quot;operation&quot;: &quot;fresh-main-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 18,
+      &quot;phase&quot;: &quot;fresh-remove&quot;,
+      &quot;operation&quot;: &quot;repository-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 19,
+      &quot;phase&quot;: &quot;fresh-remove&quot;,
+      &quot;operation&quot;: &quot;environment-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 20,
+      &quot;phase&quot;: &quot;fresh-remove&quot;,
+      &quot;operation&quot;: &quot;fresh-environment-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 21,
+      &quot;phase&quot;: &quot;fresh-remove&quot;,
+      &quot;operation&quot;: &quot;fresh-policy-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 22,
+      &quot;phase&quot;: &quot;fresh-remove&quot;,
+      &quot;operation&quot;: &quot;fresh-admin-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 23,
+      &quot;phase&quot;: &quot;fresh-remove&quot;,
+      &quot;operation&quot;: &quot;fresh-main-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 24,
+      &quot;phase&quot;: &quot;fresh-remove&quot;,
+      &quot;operation&quot;: &quot;repository-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 25,
+      &quot;phase&quot;: &quot;fresh-remove&quot;,
+      &quot;operation&quot;: &quot;environment-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 26,
+      &quot;phase&quot;: &quot;fresh-remove&quot;,
+      &quot;operation&quot;: &quot;repository-delete&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 27,
+      &quot;phase&quot;: &quot;fresh-remove&quot;,
+      &quot;operation&quot;: &quot;repository-inventory&quot;,
+      &quot;repoPresent&quot;: false,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 28,
+      &quot;phase&quot;: &quot;fresh-remove&quot;,
+      &quot;operation&quot;: &quot;environment-inventory&quot;,
+      &quot;repoPresent&quot;: false,
+      &quot;environmentPresent&quot;: true
+    }
+  ]
+}</pre></details></section><section class="card" data-case="already-present"><div class="head"><h2>Existing environment copy is never overwritten</h2><span class="pass" data-result>PASS</span></div><p>An existing environment binding stays intact; the repository copy is preserved.</p><dl class="facts"><div class="fact"><dt>Result</dt><dd data-fact="0" data-value="already-present">already-present</dd></div><div class="fact"><dt>Environment writes</dt><dd data-fact="1" data-value="0">0</dd></div><div class="fact"><dt>Repository retained</dt><dd data-fact="2" data-value="true">true</dd></div></dl><details><summary>Actual synthetic execution metadata</summary><pre>{
+  &quot;id&quot;: &quot;already-present&quot;,
+  &quot;title&quot;: &quot;Existing environment copy is never overwritten&quot;,
+  &quot;result&quot;: &quot;PASS&quot;,
+  &quot;summary&quot;: &quot;An existing environment binding stays intact; the repository copy is preserved.&quot;,
+  &quot;receipt&quot;: {
+    &quot;schemaVersion&quot;: 1,
+    &quot;operation&quot;: &quot;ensure-environment&quot;,
+    &quot;result&quot;: &quot;already-present&quot;,
+    &quot;writes&quot;: 0
+  },
+  &quot;final&quot;: {
+    &quot;repoPresent&quot;: true,
+    &quot;environmentPresent&quot;: true,
+    &quot;versionChecks&quot;: 0,
+    &quot;secretSetCalls&quot;: 0,
+    &quot;deletes&quot;: 0,
+    &quot;apiCalls&quot;: 8
+  },
+  &quot;events&quot;: [
+    {
+      &quot;sequence&quot;: 1,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;repository-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 2,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;environment-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 3,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;fresh-environment-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 4,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;fresh-policy-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 5,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;fresh-admin-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 6,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;fresh-main-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 7,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;repository-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    },
+    {
+      &quot;sequence&quot;: 8,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;environment-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: true
+    }
+  ]
+}</pre></details></section><section class="card" data-case="version-failure"><div class="head"><h2>Version-check failure stops the writer</h2><span class="pass" data-result>PASS</span></div><p>The actual writer gate reaches only a simulated credential-free version check; no secret-set command runs.</p><dl class="facts"><div class="fact"><dt>Version checks</dt><dd data-fact="0" data-value="1">1</dd></div><div class="fact"><dt>Secret-set commands</dt><dd data-fact="1" data-value="0">0</dd></div><div class="fact"><dt>Version gate</dt><dd data-fact="2" data-value="GH_VERSION_CHECK_FAILED">GH_VERSION_CHECK_FAILED</dd></div><div class="fact"><dt>Repository retained</dt><dd data-fact="3" data-value="true">true</dd></div></dl><details><summary>Actual synthetic execution metadata</summary><pre>{
+  &quot;id&quot;: &quot;version-failure&quot;,
+  &quot;title&quot;: &quot;Version-check failure stops the writer&quot;,
+  &quot;result&quot;: &quot;PASS&quot;,
+  &quot;summary&quot;: &quot;The actual writer gate reaches only a simulated credential-free version check; no secret-set command runs.&quot;,
+  &quot;mainCode&quot;: &quot;ENVIRONMENT_WRITE_UNCERTAIN&quot;,
+  &quot;versionGateCode&quot;: &quot;GH_VERSION_CHECK_FAILED&quot;,
+  &quot;final&quot;: {
+    &quot;repoPresent&quot;: true,
+    &quot;environmentPresent&quot;: false,
+    &quot;versionChecks&quot;: 1,
+    &quot;secretSetCalls&quot;: 0,
+    &quot;deletes&quot;: 0,
+    &quot;apiCalls&quot;: 8
+  },
+  &quot;events&quot;: [
+    {
+      &quot;sequence&quot;: 1,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;repository-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 2,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;environment-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 3,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;fresh-environment-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 4,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;fresh-policy-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 5,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;fresh-admin-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 6,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;fresh-main-read&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 7,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;repository-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 8,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;environment-inventory&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    },
+    {
+      &quot;sequence&quot;: 9,
+      &quot;phase&quot;: &quot;ensure&quot;,
+      &quot;operation&quot;: &quot;synthetic-version-check&quot;,
+      &quot;repoPresent&quot;: true,
+      &quot;environmentPresent&quot;: false
+    }
+  ]
+}</pre></details></section><section class="card" data-case="non-main"><div class="head"><h2>Non-main context is rejected before API access</h2><span class="pass" data-result>PASS</span></div><p>Context validation refuses the request before reading API dependencies or invoking a process.</p><dl class="facts"><div class="fact"><dt>API dependency reads</dt><dd data-fact="0" data-value="0">0</dd></div><div class="fact"><dt>API calls</dt><dd data-fact="1" data-value="0">0</dd></div><div class="fact"><dt>Context error</dt><dd data-fact="2" data-value="TRUSTED_MAIN_CONTEXT_REQUIRED">TRUSTED_MAIN_CONTEXT_REQUIRED</dd></div><div class="fact"><dt>Secret-set commands</dt><dd data-fact="3" data-value="0">0</dd></div></dl><details><summary>Actual synthetic execution metadata</summary><pre>{
+  &quot;id&quot;: &quot;non-main&quot;,
+  &quot;title&quot;: &quot;Non-main context is rejected before API access&quot;,
+  &quot;result&quot;: &quot;PASS&quot;,
+  &quot;summary&quot;: &quot;Context validation refuses the request before reading API dependencies or invoking a process.&quot;,
+  &quot;mainCode&quot;: &quot;TRUSTED_MAIN_CONTEXT_REQUIRED&quot;,
+  &quot;apiDependencyReads&quot;: 0,
+  &quot;final&quot;: {
+    &quot;repoPresent&quot;: true,
+    &quot;environmentPresent&quot;: false,
+    &quot;versionChecks&quot;: 0,
+    &quot;secretSetCalls&quot;: 0,
+    &quot;deletes&quot;: 0,
+    &quot;apiCalls&quot;: 0
+  },
+  &quot;events&quot;: []
+}</pre></details></section></div><footer><p><strong>Evidence scope:</strong> metadata and counts only. Values, value hashes and fingerprints are excluded. This page is a QA artifact, not a product screen or proof of a live secret migration.</p><p data-browser-status>Browser capture: UNRUN — pending root reservation and serialized runtime grant.</p></footer></main></html>

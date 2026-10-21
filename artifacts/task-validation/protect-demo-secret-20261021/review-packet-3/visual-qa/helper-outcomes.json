@@ -1,0 +1,433 @@
+{
+  "schemaVersion": 1,
+  "scope": "SYNTHETIC_HELPER_QA_NO_MIGRATION",
+  "sourceSha": "34996816c9b8149a4a90f9ccfc7eabec230d2828",
+  "sourcePath": "scripts/automation/protect-demo-secret.mjs",
+  "sourceSha256": "64bf22312e4f83f0e8c49bddae1c20b17ff3ea4a4f45cb922eb4413b06687dfa",
+  "pinnedGhVersion": "2.103.0",
+  "generatedAt": "2026-10-21T22:55:10.845Z",
+  "realGitHubApiCalls": 0,
+  "realWriterProcesses": 0,
+  "browser": "UNRUN",
+  "cases": [
+    {
+      "id": "repo-only",
+      "title": "Repository copy retained until fresh verification",
+      "result": "PASS",
+      "summary": "Ensure preserves the repository copy; stale verification blocks deletion; a separate fresh invocation deletes once.",
+      "afterEnsure": {
+        "repoPresent": true,
+        "environmentPresent": true,
+        "versionChecks": 1,
+        "secretSetCalls": 1,
+        "deletes": 0,
+        "apiCalls": 9
+      },
+      "staleVerificationCode": "FRESH_MAIN_SHA_MISMATCH",
+      "afterStale": {
+        "repoPresent": true,
+        "environmentPresent": true,
+        "versionChecks": 1,
+        "secretSetCalls": 1,
+        "deletes": 0,
+        "apiCalls": 15
+      },
+      "final": {
+        "repoPresent": false,
+        "environmentPresent": true,
+        "versionChecks": 1,
+        "secretSetCalls": 1,
+        "deletes": 1,
+        "apiCalls": 26
+      },
+      "receipts": [
+        {
+          "schemaVersion": 1,
+          "operation": "ensure-environment",
+          "result": "written-and-listed",
+          "writes": 1
+        },
+        {
+          "schemaVersion": 1,
+          "operation": "remove-repository",
+          "result": "deleted-and-absent",
+          "deletes": 1
+        }
+      ],
+      "events": [
+        {
+          "sequence": 1,
+          "phase": "ensure",
+          "operation": "repository-inventory",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 2,
+          "phase": "ensure",
+          "operation": "environment-inventory",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 3,
+          "phase": "ensure",
+          "operation": "fresh-environment-read",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 4,
+          "phase": "ensure",
+          "operation": "fresh-policy-read",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 5,
+          "phase": "ensure",
+          "operation": "fresh-admin-read",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 6,
+          "phase": "ensure",
+          "operation": "fresh-main-read",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 7,
+          "phase": "ensure",
+          "operation": "repository-inventory",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 8,
+          "phase": "ensure",
+          "operation": "environment-inventory",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 9,
+          "phase": "ensure",
+          "operation": "synthetic-version-check",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 10,
+          "phase": "ensure",
+          "operation": "synthetic-environment-write",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 11,
+          "phase": "ensure",
+          "operation": "environment-inventory",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 12,
+          "phase": "stale-remove",
+          "operation": "repository-inventory",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 13,
+          "phase": "stale-remove",
+          "operation": "environment-inventory",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 14,
+          "phase": "stale-remove",
+          "operation": "fresh-environment-read",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 15,
+          "phase": "stale-remove",
+          "operation": "fresh-policy-read",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 16,
+          "phase": "stale-remove",
+          "operation": "fresh-admin-read",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 17,
+          "phase": "stale-remove",
+          "operation": "fresh-main-read",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 18,
+          "phase": "fresh-remove",
+          "operation": "repository-inventory",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 19,
+          "phase": "fresh-remove",
+          "operation": "environment-inventory",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 20,
+          "phase": "fresh-remove",
+          "operation": "fresh-environment-read",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 21,
+          "phase": "fresh-remove",
+          "operation": "fresh-policy-read",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 22,
+          "phase": "fresh-remove",
+          "operation": "fresh-admin-read",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 23,
+          "phase": "fresh-remove",
+          "operation": "fresh-main-read",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 24,
+          "phase": "fresh-remove",
+          "operation": "repository-inventory",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 25,
+          "phase": "fresh-remove",
+          "operation": "environment-inventory",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 26,
+          "phase": "fresh-remove",
+          "operation": "repository-delete",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 27,
+          "phase": "fresh-remove",
+          "operation": "repository-inventory",
+          "repoPresent": false,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 28,
+          "phase": "fresh-remove",
+          "operation": "environment-inventory",
+          "repoPresent": false,
+          "environmentPresent": true
+        }
+      ]
+    },
+    {
+      "id": "already-present",
+      "title": "Existing environment copy is never overwritten",
+      "result": "PASS",
+      "summary": "An existing environment binding stays intact; the repository copy is preserved.",
+      "receipt": {
+        "schemaVersion": 1,
+        "operation": "ensure-environment",
+        "result": "already-present",
+        "writes": 0
+      },
+      "final": {
+        "repoPresent": true,
+        "environmentPresent": true,
+        "versionChecks": 0,
+        "secretSetCalls": 0,
+        "deletes": 0,
+        "apiCalls": 8
+      },
+      "events": [
+        {
+          "sequence": 1,
+          "phase": "ensure",
+          "operation": "repository-inventory",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 2,
+          "phase": "ensure",
+          "operation": "environment-inventory",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 3,
+          "phase": "ensure",
+          "operation": "fresh-environment-read",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 4,
+          "phase": "ensure",
+          "operation": "fresh-policy-read",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 5,
+          "phase": "ensure",
+          "operation": "fresh-admin-read",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 6,
+          "phase": "ensure",
+          "operation": "fresh-main-read",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 7,
+          "phase": "ensure",
+          "operation": "repository-inventory",
+          "repoPresent": true,
+          "environmentPresent": true
+        },
+        {
+          "sequence": 8,
+          "phase": "ensure",
+          "operation": "environment-inventory",
+          "repoPresent": true,
+          "environmentPresent": true
+        }
+      ]
+    },
+    {
+      "id": "version-failure",
+      "title": "Version-check failure stops the writer",
+      "result": "PASS",
+      "summary": "The actual writer gate reaches only a simulated credential-free version check; no secret-set command runs.",
+      "mainCode": "ENVIRONMENT_WRITE_UNCERTAIN",
+      "versionGateCode": "GH_VERSION_CHECK_FAILED",
+      "final": {
+        "repoPresent": true,
+        "environmentPresent": false,
+        "versionChecks": 1,
+        "secretSetCalls": 0,
+        "deletes": 0,
+        "apiCalls": 8
+      },
+      "events": [
+        {
+          "sequence": 1,
+          "phase": "ensure",
+          "operation": "repository-inventory",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 2,
+          "phase": "ensure",
+          "operation": "environment-inventory",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 3,
+          "phase": "ensure",
+          "operation": "fresh-environment-read",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 4,
+          "phase": "ensure",
+          "operation": "fresh-policy-read",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 5,
+          "phase": "ensure",
+          "operation": "fresh-admin-read",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 6,
+          "phase": "ensure",
+          "operation": "fresh-main-read",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 7,
+          "phase": "ensure",
+          "operation": "repository-inventory",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 8,
+          "phase": "ensure",
+          "operation": "environment-inventory",
+          "repoPresent": true,
+          "environmentPresent": false
+        },
+        {
+          "sequence": 9,
+          "phase": "ensure",
+          "operation": "synthetic-version-check",
+          "repoPresent": true,
+          "environmentPresent": false
+        }
+      ]
+    },
+    {
+      "id": "non-main",
+      "title": "Non-main context is rejected before API access",
+      "result": "PASS",
+      "summary": "Context validation refuses the request before reading API dependencies or invoking a process.",
+      "mainCode": "TRUSTED_MAIN_CONTEXT_REQUIRED",
+      "apiDependencyReads": 0,
+      "final": {
+        "repoPresent": true,
+        "environmentPresent": false,
+        "versionChecks": 0,
+        "secretSetCalls": 0,
+        "deletes": 0,
+        "apiCalls": 0
+      },
+      "events": []
+    }
+  ]
+}
