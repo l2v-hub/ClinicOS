@@ -1,14 +1,14 @@
-name: Bind actual completed Codex final review
+name: Publish reviewed demo-scope draft and synchronize review status
 on:
   push:
     branches: [codex/cloud-review-projection-20261021]
 permissions:
   contents: read
 concurrency:
-  group: clinicos-root-verified-final483-binding
+  group: clinicos-root-fixed-helper-publication
   cancel-in-progress: false
 jobs:
-  verified-handoff:
+  publish-fixed-draft:
     if: github.repository == 'l2v-hub/ClinicOS' && github.event_name == 'push' && github.ref == 'refs/heads/codex/cloud-review-projection-20261021'
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -20,31 +20,46 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22
-      - name: Bind actual completed independent Codex result without another review
+      - name: Publish only fixed draft and verified review labels and owned dashboard
         env:
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
         run: |
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';
-          import os from 'node:os';
-          import path from 'node:path';
-          import { createRunner } from './agent-team/src/bug-pipeline/process.mjs';
-          import { createGitHub } from './agent-team/src/bug-pipeline/github.mjs';
-          import { feedbackFingerprint, sha256 } from './agent-team/src/bug-pipeline/contracts.mjs';
-          const repo='l2v-hub/ClinicOS',sha='4983de2bdb6ea571053f03a508c919d27ff1771b';
-          const run=createRunner({runtimeRoot:path.join(os.tmpdir(),'fixed-codex-final483-binding')}),gh=createGitHub({repo,cwd:process.cwd(),run}),store=gh.createStateStore();
-          const api=async(route,method='GET',body)=>{assert(new RegExp('^repos/l2v-hub/ClinicOS/[A-Za-z0-9_?&=.%/-]+$').test(route));const r=await run({command:'gh',args:['api','--method',method,route,...(body===undefined?[]:['--input','-'])],...(body===undefined?{}:{input:JSON.stringify(body)}),cwd:process.cwd(),envMode:'controller',maxOutputBytes:2*1024*1024});assert(r.ok,'Fixed GitHub metadata operation failed');return r.stdout.trim()?JSON.parse(r.stdout):null;};
-          const before=await store.load(),state=structuredClone(before),batch=state.batches.find(b=>b.id==='bug-batch-432');
-          assert.equal(batch.sha,sha);assert.equal(batch.approvedSha,sha);assert.equal(batch.reviews.at(-1).status,'approved');assert.equal(batch.reviews.at(-1).subjectSha,sha);assert.equal(batch.externalReview.status,'published');assert.equal(batch.externalReview.reportComment,6324884337);assert.equal(batch.externalReview.feedbackChanged,false);
-          const final=batch.operatorFinalReviews.at(-1);assert.equal(final.nonce,'aab85ba4-680a-4265-9d8c-64ad4e159932');assert.equal(final.status,'verified');assert.equal(final.subjectSha,sha);assert.equal(final.freshTargetedPass,63);assert.equal(final.sealSha256,'38c6e8703b50cbab21d1dcd61b5f5609820cde0ac98a375fe5b8032e3b3b6be7');
-          const report=await api('repos/'+repo+'/issues/comments/6324884337');assert.equal(report.user.login,'l2v-hub');assert.equal(sha256(report.body),batch.externalReview.reportBodySha256);
-          const comments=await api('repos/'+repo+'/issues/483/comments?per_page=100');const marker='<!-- clinicos-final-codex:483:4983de2b:Claude5 -->',protocol='<!-- codex-bug-pipeline:final-codex:483:4983de2b -->';const own=comments.filter(c=>c.user.login==='l2v-hub'&&(c.body.startsWith(marker)||c.body.startsWith(protocol)));assert.equal(own.length,1);assert(Number.isSafeInteger(own[0].id));assert(own[0].body.includes(sha));
-          const head=await gh.reviewFeedback(483);assert.equal(head.head,sha);assert.equal(head.unresolved,false);assert.equal(head.changesRequested,false);
-          // Preserve the actual final comment's text, marking this owned status notice as protocol.
-          if(!own[0].body.startsWith(protocol))await api('repos/'+repo+'/issues/comments/'+own[0].id,'PATCH',{body:protocol+'\n'+own[0].body});
-          const current=await gh.reviewFeedback(483),fingerprint=feedbackFingerprint(current);assert.equal(current.head,sha);assert.equal(current.unresolved,false);assert.equal(current.changesRequested,false);assert.equal(fingerprint,batch.externalReview.feedbackFingerprint,'Additional PR feedback changed; no silent reapproval');assert((await gh.requiredChecks(483)).ok);
-          if(batch.codexFinalReview&&batch.codexFinalReview.subjectSha!==sha){batch.operatorPriorCodexFinalReviews??=[];batch.operatorPriorCodexFinalReviews.push(structuredClone(batch.codexFinalReview));}
-          batch.codexFinalReview={subjectSha:sha,claudeRound:5,status:'verified',summary:'Actual independent final Codex:63 targeted and backendtypesPASS, four previousP1 repro cases denied without new rows; report '+final.reportSha256,operatorReservationNonce:final.nonce,actualEvidenceSealSha256:final.sealSha256};batch.feedbackFingerprint=fingerprint;
-          batch.operatorFinalReleaseBinding={at:new Date().toISOString(),subjectSha:sha,actualClaudeReportComment:6324884337,actualCodexReservation:final.nonce,fingerprint,releaseHoldPreserved:Boolean(batch.releaseHold),noNewReviewOrImplementation:true};state.updatedAt=new Date().toISOString();
-          await store.save(state,{guard:async()=>{assert.deepEqual(await store.load(),before);const latest=await gh.reviewFeedback(483);assert.equal(latest.head,sha);assert.equal(feedbackFingerprint(latest),fingerprint);return true;}});assert.deepEqual(await store.load(),state);console.log(JSON.stringify({pr:483,sha,actualCodexFinalBound:true,feedbackUnchanged:true,releaseHoldPreserved:Boolean(batch.releaseHold)}));
+          import os from 'node:os';import path from 'node:path';import{writeFileSync}from'node:fs';
+          import{createRunner}from'./agent-team/src/bug-pipeline/process.mjs';
+          import{createGitHub}from'./agent-team/src/bug-pipeline/github.mjs';
+          import{createIssueReviewCommunication}from'./agent-team/src/bug-pipeline/issue-review-communication.mjs';
+          import{externalReport}from'./agent-team/src/bug-pipeline/external-review.mjs';
+          import{feedbackFingerprint}from'./agent-team/src/bug-pipeline/contracts.mjs';
+          const repo='l2v-hub/ClinicOS',expectedHead='561428ddab27578eb8b79b9eeb17c5e8fff44c6c',source='24dca690a3982f4d8d3caccd969849bb72d278ec',base='fbaa78d8c7eacf8402db0c8fa2be276ae579a27c',branch='codex/protect-demo-secret',run=createRunner({runtimeRoot:path.join(os.tmpdir(),'fixed-publish-secret-helper')}),github=createGitHub({repo,cwd:process.cwd(),run});
+          const api=async(route,method='GET',body)=>{assert(route==='user'||/^repos\/l2v-hub\/ClinicOS\/[A-Za-z0-9_?&=.%/-]+$/.test(route));const r=await run({command:'gh',args:['api','--method',method,route,...(body===undefined?[]:['--input','-'])],...(body===undefined?{}:{input:JSON.stringify(body)}),cwd:process.cwd(),envMode:'controller',maxOutputBytes:2*1024*1024});assert(r.ok,'FIXED_GITHUB_METADATA_OPERATION_FAILED');return r.stdout.trim()?JSON.parse(r.stdout):null;};
+          assert.equal((await api('user')).login,'l2v-hub');assert(await github.authorized('l2v-hub'));const prefix='repos/'+repo;
+          assert.equal((await api(prefix+'/git/ref/heads/main')).object.sha,base,'Main advanced: root must reconcile');
+          assert.equal((await api(prefix+'/git/ref/heads/codex/protect-demo-secret')).object.sha,expectedHead);
+          const commit=await api(prefix+'/commits/'+expectedHead);assert.equal(commit.parents.length,1);assert.equal(commit.parents[0].sha,source);
+          let matches=await api(prefix+'/pulls?state=open&head=l2v-hub%3Acodex%2Fprotect-demo-secret&base=main&per_page=100');assert(matches.length<=1);let pr=matches[0];
+          if(!pr)pr=await api(prefix+'/pulls','POST',{title:'Preserve protected demo credential before removing repository scope',head:branch,base:'main',draft:true,body:'Actual Claude review on #498 found that RAILWAY_DEMO_TOKEN remains accessible outside the protected demo environment. Add a manual workflow that preserves the environment copy in one protected main job, then verifies it in a fresh protected job before removing only the repository copy. Fixed repository, environment, actor and reviewed current-main SHA are checked before writes; existing environment secrets are never deliberately overwritten. GitHub offers no atomic secret CAS, so cooperative exclusive ownership is required.\n\nValidation: helper34tests and independent17safe probes passed; exact combined CI command803passed,0failed,3existing Windows skips. Original implementation findings and missing-fixture first run are retained in the frozen review packet. This PR has not performed a migration or deployment. Native CI and actual Claude/Codex review must finish before merge. Actual execution needs Secrets Read and write on the existing bot.\n\n[Review packet](https://github.com/l2v-hub/ClinicOS/tree/'+expectedHead+'/artifacts/task-validation/protect-demo-secret-20261021/review-packet-1).'});
+          pr=await api(prefix+'/pulls/'+pr.number);assert.equal(pr.head.sha,expectedHead);assert.equal(pr.head.repo.full_name,repo);assert.equal(pr.head.ref,branch);assert.equal(pr.base.ref,'main');assert.equal(pr.state,'open');assert.equal(pr.draft,true);assert.equal(pr.html_url,'https://github.com/'+repo+'/pull/'+pr.number);
+          await api(prefix+'/issues/'+pr.number+'/labels','POST',{labels:['In progress']});
+          // Synchronize a live claimed/result handoff, without requesting or spending another review.
+          const verified497=async()=>{const state=await github.createStateStore().load(),batch=state.batches.find(b=>b.id==='bug-batch-447'),sha='17a127c432f39e094f2746dc33c38bcb234ce719';assert.equal(batch.sha,sha);assert.equal(batch.externalReview.subjectSha,sha);assert(['comment-running','published','finished'].includes(batch.externalReview.status),'Unknown review state: do not invent a publishing phase');assert.equal(batch.reviews.length,1);const live=await api(prefix+'/pulls/497');assert.equal(live.head.sha,sha);assert.equal(live.state,'open');const raw=await api(prefix+'/commits/'+sha+'/check-runs?per_page=100');assert.equal(raw.total_count,raw.check_runs.length,'Incomplete check inventory');for(const name of['bug-pipeline-tests','secret-scan','frontend-tests','archive-tests','gate','browser-e2e']){const c=raw.check_runs.filter(x=>x.name===name&&x.head_sha===sha&&x.app?.id===15368).sort((a,b)=>b.id-a.id)[0];assert.equal(c?.status,'completed',name);assert.equal(c.conclusion,'success',name);}const latest=(await github.createStateStore().load()).batches.find(b=>b.id==='bug-batch-447');assert.deepEqual(latest,batch,'Review state changed during verification');return batch;};
+          const b497=await verified497();await createIssueReviewCommunication({github,repo,cwd:process.cwd(),run,readReport:externalReport}).publishState(b497);
+          // Already approved source remains in the release queue on both PR and source issues.
+          const guard483=async()=>{const s=await github.createStateStore().load(),b=s.batches.find(x=>x.id==='bug-batch-432');assert.equal(b.sha,'4983de2bdb6ea571053f03a508c919d27ff1771b');assert.equal(b.approvedSha,b.sha);assert.equal(b.codexFinalReview.status,'verified');assert.equal(b.codexFinalReview.subjectSha,b.sha);assert.equal(b.externalReview.reportComment,6324884337);assert.equal((await api(prefix+'/pulls/483')).head.sha,b.sha);const feedback=await github.reviewFeedback(483);assert.equal(feedback.head,b.sha);assert.equal(feedback.unresolved,false);assert.equal(feedback.changesRequested,false);assert.equal(feedbackFingerprint(feedback),b.feedbackFingerprint);return b;};
+          const approved=await guard483();assert.deepEqual([...approved.issues].sort((a,b)=>a-b),[432,441,442,460,463,464,467]);
+          for(const n of[483,432,441,442,460,463,464,467]){await guard483();await api(prefix+'/issues/'+n+'/labels','POST',{labels:['codex-release-pending']});const labels=await api(prefix+'/issues/'+n+'/labels');for(const label of labels.filter(x=>['claude-review-ready','claude-reviewing','codex-review-ready','codex-review-fixes','review-blocked','claude-reviewed'].includes(x.name))){await guard483();await api(prefix+'/issues/'+n+'/labels/'+encodeURIComponent(label.name),'DELETE');}}
+          const current=await verified497(),queue=await api(prefix+'/issues?state=open&per_page=100');assert(queue.length<100,'Incomplete queue');const count=queue.filter(x=>!x.pull_request).length;
+          const stages={'comment-running':'Claude review 1 in corso dal21:02UTC; nessun nuovo ciclo richiesto',published:'Claude ha consegnato il report a Codex',finished:'Report Claude valido in pubblicazione'};assert(Object.hasOwn(stages,current.externalReview.status));const stage=stages[current.externalReview.status];
+          const dashboard='<!-- clinicos-all23-live-progress:20261021 -->\n**Verificato '+new Date().toISOString()+' — '+count+' issue aperte. Nessun nuovo rilascio clinico o chiusura dichiarato.**\n\n| Gruppo | PR | Stato effettivo | Prossimo passaggio |\n|---|---|---|---|\n|450,472,473,475,476|[481](https://github.com/'+repo+'/pull/481)|Claude e Codex approvano6d2cc791; approvazioni conservate|Preflight, rilascio e verifica online|\n|432,441,442,460,463,464,467|[483](https://github.com/'+repo+'/pull/483)|Claude5 APPROVED e Codex finale63PASS su4983de2b; codex-release-pending anche nelle issue|Rilascio protetto, nessuna nuova review del codice invariato|\n|447,451,452,453,454,456,457,486|[497](https://github.com/'+repo+'/pull/497)|'+stage+' su17a127c4; sei check nativi PASS; 8screenshot/8video/8tracce autentici|Report via commenti e codex-review-ready; poi verifica finale Codex|\n|485|[493](https://github.com/'+repo+'/pull/493)|Claude e Codex approvano03ffef47|Rilascio dopo481 e verifica online|\n|470|[Issue](https://github.com/'+repo+'/issues/470)|Pulizia SQL storica eseguita; nessun DELETE ripetuto|Verifica Railway identita, volumi e backup ancora non riuscita|\n|455|[Epic](https://github.com/'+repo+'/issues/455)|Riscontro delle issue figlie|Chiusura dopo verifica e rilascio|\n\n**Infrastruttura498:** sei check PASS b07317f4; rilievo Claude reale sul token disponibile fuori dall ambiente protetto, [prova6325638743](https://github.com/'+repo+'/pull/498#issuecomment-6325638743). Correzione separata [PR'+pr.number+']('+pr.html_url+') pubblicata in draft: sorgente24dca690,803testPASS/0FAIL/3skipWindows preesistenti e17probe indipendenti PASS; native CI e review ancora da completare. Nessuna migrazione eseguita; permesso Secrets Read and write sul bot ancora da verificare.\n\n**Rilascio esatto e tracce32MiB:** branch5c069498 verificata indipendentemente1072PASS+8probe, non mergiata. Serve per conservare integralmente la traccia453 e collegare preflight, merge, deploy e prove allo stesso commit.\n\nLe approvazioni481,483,493,393 sono conservate.393 e esterna alle23 e Azure resta disabilitato fino alla prova reale. Nessun nuovo deploy clinico verificato. Tre workflow automatici restano sospesi durante il coordinamento di Codex: il flusso non e ancora completamente autonomo.\n\nCodex → claude-review-ready sul commit verificato → commento Claude e codex-review-ready → verifica finale Codex → merge protetto → deploy verificato → prove nelle issue → chiusura.\n';
+          const saved=await api(prefix+'/issues/comments/6255929384');assert.equal(saved.user.login,'l2v-hub');assert(saved.body.startsWith('<!-- clinicos-all23-live-progress:20261021 -->'));await api(prefix+'/issues/comments/6255929384','PATCH',{body:dashboard});
+          writeFileSync(process.env.RUNNER_TEMP+'/publish-secret-helper-result.json',JSON.stringify({pr:pr.number,url:pr.html_url,head:expectedHead,draft:true,dashboardUpdated:true,pr483SourceIssuesReleaseLabelsSynced:true,pr497ProjectionOnly:true,noNewReview:true,noCanonicalWrite:true},null,2));console.log(JSON.stringify({pr:pr.number,url:pr.html_url,head:expectedHead,draft:true,dashboardUpdated:true,noNewReview:true}));
           JS
+      - name: Preserve safe publication result
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: publish-secret-helper-result-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/publish-secret-helper-result.json
+          if-no-files-found: warn
+          retention-days: 14
