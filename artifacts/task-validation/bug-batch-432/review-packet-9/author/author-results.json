@@ -1,0 +1,149 @@
+{
+  "status": "IMPLEMENTED — NOT VERIFIED",
+  "disposition": "STOP — return to root for independent QA",
+  "reservationNonce": "9416360d-a145-4c48-b5f5-7790b93aa525",
+  "baseSha": "c02e34c0041752eb4f4772255580807201f2c863",
+  "continuation": 1,
+  "reason": "Root static review found omitted expectedStato could correct one-off refusal without explicit observation",
+  "privateEvidence": "/workspace/.clinicos-cloud/483-legacy-writer-author9-20261021/continuation-1",
+  "previousAuthorAttempt": {
+    "preserved": true,
+    "root": "/workspace/.clinicos-cloud/483-legacy-writer-author9-20261021",
+    "sealSha256": "d7f3e947737c1b7cf2e52e139d3a9840728cb1ba78eac662789524b559035d5c",
+    "sealedFiles": 666
+  },
+  "source": {
+    "backend/src/therapies/administration-record.ts": {
+      "sha256": "77fd8f40c3e45036d151d884ff84ffac4ff6fa7777503e79073f410a50fab543",
+      "bytes": 11467,
+      "inode": 540261,
+      "nlink": 1
+    },
+    "backend/src/therapies/__tests__/legacy-administration-record.test.ts": {
+      "sha256": "128daad60eac7a72676377d1b03fd9c269f331425160d2974d1cb6cb9f9df50d",
+      "bytes": 17206,
+      "inode": 540254,
+      "nlink": 1
+    },
+    "backend/src/routes/__tests__/therapy-authoritative-write.test.ts": {
+      "sha256": "086ce8aa74a0eabe4c96c3438b87d6c799ac566f99e9249f4dfe35eacfcc0893",
+      "bytes": 69747,
+      "inode": 592952,
+      "nlink": 1
+    }
+  },
+  "checks": {
+    "old-omitted-regression-attempt1": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "--test-name-pattern",
+        "omitted expected state",
+        "src/therapies/__tests__/legacy-administration-record.test.ts"
+      ],
+      "cwd": "/workspace/.clinicos-cloud/483-legacy-writer-author9-20261021/continuation-1/old-runtime/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": false,
+      "code": 1,
+      "error": null,
+      "counts": {
+        "tests": 3,
+        "suites": 0,
+        "pass": 1,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "b81e8c9b1af22014999d20d2ea9a4863a5f7f4ce9ed6638fbaa0d5705e2b1565",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:28:10.901Z"
+    },
+    "final-targeted-attempt1": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "src/therapies/__tests__/legacy-administration-record.test.ts",
+        "src/therapies/__tests__/slot-scheduling.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "counts": {
+        "tests": 19,
+        "suites": 0,
+        "pass": 19,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "96b3df54875aacea226595bb10aa2b4e559661ff8ecf74703a6227ee0f55a9c0",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:28:41.954Z"
+    },
+    "backend-types-attempt1": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "counts": {},
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:29:33.114Z"
+    }
+  },
+  "sameTestBytes": true,
+  "integrity": {
+    "checked": 14103,
+    "unexpectedChanges": 0,
+    "oldProofsAndAuthorOutputPreserved": true
+  },
+  "finalCounts": {
+    "actualWriterTests": 15,
+    "slotSchedulingTests": 4,
+    "tests": 19,
+    "pass": 19,
+    "fail": 0,
+    "skipped": 0
+  },
+  "oldOmittedRegression": {
+    "tests": 3,
+    "pass": 1,
+    "fail": 2,
+    "skipped": 0,
+    "expectedFailure": true
+  },
+  "runtime": {
+    "database": "UNRUN",
+    "http": "UNRUN",
+    "browser": "UNRUN",
+    "preparedNewHttpPgTests": 3,
+    "servicesStarted": 0,
+    "queued": false
+  },
+  "extraAdHocTestTypeCheck": "Previous attempt FAIL retained; stdout identical to original baseline. No unrelated type corrections made.",
+  "gitIndexRefCommitPushWrites": false,
+  "githubStateProviderWrites": false,
+  "selfCertification": false
+}

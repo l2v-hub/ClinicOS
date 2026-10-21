@@ -1,0 +1,36 @@
+{
+  "sourceQa9MediaManifest": "483-independent-qa9-20261021/media-integrity.json",
+  "selection": {
+    "media/corrected-repaired-after-reload.png": {
+      "type": "PNG",
+      "sha256": "8eeee032aa734deef6ce7e440ca55d7a806cd13f563c123cddec79d8911302d2",
+      "bytes": 114239,
+      "decoded": true
+    },
+    "media/corrected-valid-after-reload.png": {
+      "type": "PNG",
+      "sha256": "e397ace415fb109090587f05a05cc59414844d6f37de82e2d3992c0eb3006d4c",
+      "bytes": 115659,
+      "decoded": true
+    },
+    "media/valid-repaired-after-reload.png": {
+      "type": "PNG",
+      "sha256": "c9e0d8876bb1d3df65fb5669bfa0f3e4a0c60d553fe75edbbdb6a39c65f54146",
+      "bytes": 116828,
+      "decoded": true
+    },
+    "media/valid-repaired-given-refused.png": {
+      "type": "PNG",
+      "sha256": "da71587c0847d0533c79fd3569e76e55709ee31ef2a09839ac6930d6b39dc566",
+      "bytes": 116811,
+      "decoded": true
+    },
+    "media/qa9-selected-runtime.webm": {
+      "type": "WEBM",
+      "sha256": "c5151990e1a9ef9115ef87191a9303158e2ae617230ab1c0a43da16d620bd384",
+      "bytes": 606146,
+      "decoded": true
+    }
+  },
+  "selectionNote": "Four decoded synthetic screenshots and one fully decoded selected-runtime video. The raw trace is excluded; its 77 synthetic bearer occurrences were redacted during QA, and no raw trace, raw SQL, runtime logs or request headers are included."
+}
