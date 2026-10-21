@@ -1,0 +1,177 @@
+{
+  "testedSourceSha": "ae12862e8ff9ce03f117fc646ecd11a4a8a8bb56",
+  "qaNonce": "9a656727-60d1-4c04-91c6-b62ce2fb9214",
+  "receipts": {
+    "original-inventory.json": {
+      "phaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/inventory-browser/results.json",
+      "sha256": "604e37508139c30fc8223943e5157346e0e8150dd6dd7b0f562fbbe8f856c8e5",
+      "publishedSummary": "original-inventory.json"
+    },
+    "original-retry.json": {
+      "phaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/retry-browser/results.json",
+      "sha256": "dba2a0836231c691746ada7ede01a8a7bab56fd3319edb62da9910b4e7da36df",
+      "publishedSummary": "original-retry.json"
+    },
+    "original-additional.json": {
+      "phaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/test-results/additional-browser-results.json",
+      "sha256": "f829bcebe56a905efb70501127b10d711e4eca40f5000e10319c8d4043540c5c",
+      "publishedSummary": "original-additional.json"
+    },
+    "original-internal-measurements.json": {
+      "phaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/test-results/internal-measured-results.json",
+      "sha256": "2615fdef80938e99dbe6fdbf9e41723d5afc12c02fbc949286ea5032bba42d12",
+      "publishedSummary": "original-internal-measurements.json"
+    },
+    "original-import.json": {
+      "phaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/test-results/therapy-import-results.json",
+      "sha256": "e349dc09460bf2deae52c5110fe990ccc48ad6617552248cac813993cc9593d0",
+      "publishedSummary": "original-import.json"
+    },
+    "F1F2.json": {
+      "phaseRelativePath": "continuation-1/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-1/F1F2/results.json",
+      "sha256": "592f1856a7bb60580a95c451a84243757b9ea4af785ea18f9bad54c98ef2ef70",
+      "publishedSummary": "F1F2.json"
+    },
+    "actual-AppAgenda.json": {
+      "phaseRelativePath": "continuation-1/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-1/actual-AppAgenda/results.json",
+      "sha256": "a58efd98c01b10c2de1d6d0aea7a7299587a3da380f0d9db8039347dd595e535",
+      "publishedSummary": "actual-AppAgenda.json"
+    },
+    "operator-recorded-lifecycle.json": {
+      "phaseRelativePath": "continuation-1/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-1/recorded-agenda-lifecycle/failure.json",
+      "sha256": "0c209cc6cd41998595150fb40ed54bf14d56effd035b32e33d292cf4bac04f17",
+      "publishedSummary": "operator-recorded-lifecycle.json"
+    },
+    "admin-recorded-lifecycle.json": {
+      "phaseRelativePath": "continuation-2/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-2/recorded-agenda-lifecycle/failure.json",
+      "sha256": "10f64c9d36b3a671ab3e94443020f6e2ac09ab8c5f9b5621ee914b59c790de8e",
+      "publishedSummary": "admin-recorded-lifecycle.json"
+    },
+    "both-role-history.json": {
+      "phaseRelativePath": "continuation-3/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-3/navigation/results.json",
+      "sha256": "d2b5be541b60439b79da2ee3ec1ed37d5c2a2b4642a4b0cee59ef770e62821a0",
+      "publishedSummary": "both-role-history.json"
+    },
+    "recorded-database.json": {
+      "phaseRelativePath": "continuation-3/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-3/recorded-outcomes/results.json",
+      "sha256": "adb54d3b712eced8f17052e812a542b7ebd331d6e4d5288cfabe426585ee679e",
+      "publishedSummary": "recorded-database.json"
+    },
+    "remaining-UI.json": {
+      "phaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/results.json",
+      "sha256": "cb22bcac8d798007b09279cacb2dea0b5c44a8d92e371f01163dd61dfed51b90",
+      "publishedSummary": "remaining-UI.json"
+    },
+    "fresh-affected4.json": {
+      "phaseRelativePath": "fresh-affected4.json",
+      "sha256": "f6fb887cc6586bbcf6c3c1e44f3d9a38e6714c628237da7f0c1a92e92abf81ab",
+      "publishedSummary": "fresh-affected4.json"
+    },
+    "retained-QA7-provenance.json": {
+      "phaseRelativePath": "retained-phase-provenance.json",
+      "sha256": "e9bf9d3504246eafca46b36cf74ea3c56b01b9d76e9e1b89c79c2add697c6900",
+      "publishedSummary": "retained-QA7-provenance.json"
+    }
+  },
+  "qa8ReportSha256": "49806bd749864955a33ce324ea3fe0bc01945ae9f2731017c4e33c725a83e772",
+  "qa8StopSha256": "9050f5303c89eb9ba28aaa1af767cc4fa64575c0efc7edf79878e2e69ab47fa0",
+  "qa7StatusImmutable": "FAILED VALIDATION",
+  "qa8Aggregate": "Remaining UI phase PASS with historical failures retained; no one-clean-suite claim",
+  "historicalAndRetainedResults": [
+    {
+      "phase": "QA7 retained static checks",
+      "status": "historical passes, not fresh QA8 execution",
+      "frontendPasses": 1405,
+      "backendPasses": 1933,
+      "backendOptionalSkips": 5,
+      "buildAndTypes": "historical pass; source identity retained",
+      "priorGlobalStatus": "FAILED VALIDATION; stale guard remains recorded",
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa7-20261019/"
+    },
+    {
+      "phase": "QA8 original invocation",
+      "status": "FAILED VALIDATION",
+      "freshAffected": {
+        "pass": 4,
+        "fail": 0,
+        "skip": 0
+      },
+      "browserE2e": "failed after actual assertions; fresh backend log absent; not fabricated",
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/report.json",
+      "sha256": "da97eef57622ef6b1957eb0b415e3824af51f32b1c234e52b289a4b73d466c0d"
+    },
+    {
+      "phase": "QA8 continuation 1",
+      "status": "FAILED VALIDATION",
+      "retainedPasses": [
+        "measured internal renderer",
+        "F1F2",
+        "actual AppAgenda"
+      ],
+      "failure": "recorded-agenda-lifecycle admin button expectation (0 == true)",
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/continuation-1/report.json",
+      "sha256": "f388e62ea5925c8a0bc4177822289e7738be76def882d505777b992dec87b1d7"
+    },
+    {
+      "phase": "QA8 continuation 2",
+      "status": "FAILED VALIDATION",
+      "actualAdminNegativeCasesPassed": 3,
+      "failure": "owned fixture restoration createdAt timestamp equality",
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/continuation-2/report.json",
+      "sha256": "c5cd33c6f1a3d47611287db3745b85722410c4b5e463a3489499a20d83237988"
+    },
+    {
+      "phase": "QA8 continuation 3",
+      "status": "FAILED VALIDATION",
+      "recordedOutcomes": {
+        "pass": 4,
+        "fail": 1
+      },
+      "failure": "display-date assertion expected 5/4/2033; actual UI string was 05/04/2033",
+      "navigationSupplement": "PASS for operator and admin browser history",
+      "retainedSqlReceipt": {
+        "verification": {
+          "total": 9,
+          "verification": 9,
+          "administered": 4,
+          "notAdministered": 4,
+          "unrecorded": 1
+        },
+        "deniedWrites": 18,
+        "deniedStatus": 409,
+        "rowsUnchanged": true
+      },
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/continuation-3/report.json",
+      "sha256": "f43239a648030a6fa78b0f72a07ae88c5ece704779f57c42b36adfbaa1b6c039"
+    },
+    {
+      "phase": "QA8 continuation 4",
+      "status": "HARNESS_SETUP_FAILURE_BEFORE_TESTS",
+      "reason": "outer wrapper held the same nonwaiting flock the harness acquires; no runtime or tests started",
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/continuation-4/runner-runtime.json",
+      "sha256": "c7c0d22634e2e667a99ef02484003770e787e891b010876c89545e5bd0061dde"
+    },
+    {
+      "phase": "QA8 continuation 6",
+      "status": "PATH_PREFLIGHT_FAILURE_BEFORE_SERVICES",
+      "reason": "source-root guard expected a path without trailing separator; continuation 8 compares normalized paths",
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/continuation-6/runner-runtime.json",
+      "sha256": "b9f3f45fb2116adc28b117475d593296cf2165f09383f7990e4cea687fc971ff"
+    },
+    {
+      "phase": "QA8 continuation 8",
+      "status": "PASS_FOR_REMAINING_UI_PHASE",
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/results.json",
+      "sha256": "cb22bcac8d798007b09279cacb2dea0b5c44a8d92e371f01163dd61dfed51b90"
+    }
+  ],
+  "notLaunchedPreparations": [
+    "continuations 5 and 7 were frozen path-correction copies, superseded before a runtime invocation; no test outcomes claimed"
+  ],
+  "limitations": [
+    "Scheduled individual drug-dose detail remains UNRUN because there is no actual App mount; no synthetic substitute was used.",
+    "A missing recordedAt row is not database-schema-valid; nullable metadata behavior remains unit evidence.",
+    "Current fresh QA8 completion covers only the remaining UI surfaces. QA7 retained tests, earlier QA8 phases, the fresh affected4 and original canonical assertions keep their own provenance.",
+    "No provider/network/real-credential, release, Git reference, GitHub, or state-writer operations were performed."
+  ]
+}

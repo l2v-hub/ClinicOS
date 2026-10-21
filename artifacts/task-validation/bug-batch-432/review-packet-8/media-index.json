@@ -1,0 +1,358 @@
+{
+  "media": {
+    "issue-432-import-saved.png": {
+      "sourcePhase": "original QA8 (overall FAILED)",
+      "sourcePhaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/evidence/issue-432-import-saved.png",
+      "sha256": "696ea957172d4d4ba7f684e8044ff082cc76f393b09b4e8d192c05f98de7d91d",
+      "bytes": 80986,
+      "purpose": "Actual application screenshot; see issue index for assertion provenance.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "issue-432-print.png": {
+      "sourcePhase": "original QA8 (overall FAILED)",
+      "sourcePhaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/evidence/issue-432-print.png",
+      "sha256": "8c076ac7136de10f01050ae3da551aa4e05bf4ec05c8da9b12887fa11c8d198e",
+      "bytes": 385142,
+      "purpose": "Actual application screenshot; see issue index for assertion provenance.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "issue-432-switch-mobile.png": {
+      "sourcePhase": "original QA8 (overall FAILED)",
+      "sourcePhaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/evidence/issue-432-switch-mobile.png",
+      "sha256": "2d72676eeabdc1efd4dbdb469377e255fdbba6800f919f65b69606dbef34fbfa",
+      "bytes": 58421,
+      "purpose": "Actual application screenshot; see issue index for assertion provenance.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "issue-441.png": {
+      "sourcePhase": "original QA8 (overall FAILED)",
+      "sourcePhaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/evidence/issue-441.png",
+      "sha256": "0afc797505037ef6ea3af07153cb72991343161d7045273832e5aa120e559302",
+      "bytes": 165352,
+      "purpose": "Actual application screenshot; see issue index for assertion provenance.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "issue-460.png": {
+      "sourcePhase": "original QA8 (overall FAILED)",
+      "sourcePhaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/evidence/issue-460.png",
+      "sha256": "709283886f04d56843ba36ec03d15fd19ae886ed5ab8ae2cb7ed2133a1a38e4c",
+      "bytes": 120283,
+      "purpose": "Actual application screenshot; see issue index for assertion provenance.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "issue-463.png": {
+      "sourcePhase": "original QA8 (overall FAILED)",
+      "sourcePhaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/evidence/issue-463.png",
+      "sha256": "8512659d22e149dd61d99715687be2479dd0ae3690b0fe78ed161bd73998ddd4",
+      "bytes": 112932,
+      "purpose": "Actual application screenshot; see issue index for assertion provenance.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "distinct-doses-mobile.png": {
+      "sourcePhase": "original QA8 (overall FAILED)",
+      "sourcePhaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/inventory-browser/mobile-distinct-doses.png",
+      "sha256": "971d45d1ca8f02b702c0d67d647873270ae969c4eee833368d60e95a8122153d",
+      "bytes": 215578,
+      "purpose": "Original full-page mobile distinct-dose capture; intrinsic size requires zoom. Clear actual recorded-outcome screens and shared inventory video are the primary issue467 visual proof.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "issue-442.png": {
+      "sourcePhase": "continuation1 (overall FAILED)",
+      "sourcePhaseRelativePath": "continuation-1/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-1/internal-measured-evidence/issue-442.png",
+      "sha256": "2f9566fdc705b741df5aca1b39515bd98cf315b1ba83e41d46de10dae863584e",
+      "bytes": 35305,
+      "purpose": "Explicit measured internal receipt renderer, not a clinical application screen; original real runtime measurements retained.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "issue-464.png": {
+      "sourcePhase": "continuation1 (overall FAILED)",
+      "sourcePhaseRelativePath": "continuation-1/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-1/internal-measured-evidence/issue-464.png",
+      "sha256": "eca8ded3eeddd97df089229cb10440302d6d19fe3a1aafb889d6250cb93491e2",
+      "bytes": 34702,
+      "purpose": "Explicit measured internal receipt renderer, not a clinical application screen; original real runtime measurements retained.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "F1-refusal-corrected.png": {
+      "sourcePhase": "continuation1 (overall FAILED)",
+      "sourcePhaseRelativePath": "continuation-1/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-1/F1F2/correction/refusal-corrected-after-reload.png",
+      "sha256": "01e4ca309c469f9d6d8b2919f815de7a48ba5eabdb190c6759b1489ed75e5788",
+      "bytes": 122106,
+      "purpose": "Actual correction after reload.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "operator-history-back.png": {
+      "sourcePhase": "continuation3 (overall FAILED)",
+      "sourcePhaseRelativePath": "continuation-3/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-3/navigation/operator-navigation-supplement/native-browser-back-real-readonly.png",
+      "sha256": "68626f7f8966596f72c74ef05581d80c707a20d88afaea356d66c8714810b4f0",
+      "bytes": 135132,
+      "purpose": "Actual browser history navigation; both-role navigation phase PASS.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "admin-history-back.png": {
+      "sourcePhase": "continuation3 (overall FAILED)",
+      "sourcePhaseRelativePath": "continuation-3/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-3/navigation/admin-navigation-supplement/native-browser-back-real-readonly.png",
+      "sha256": "1c1b01ae587c463333869b35cea50bbdb5a86fa8936e7c3a819239e25a68d1ed",
+      "bytes": 135585,
+      "purpose": "Actual browser history navigation; both-role navigation phase PASS.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "operator-recorded-reload.png": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/operator/actual-agenda-recorded-reloaded.png",
+      "sha256": "ca2882372c633432e769924cb66bb02c7f107e1521c78f8d4f98ff3e046a1018",
+      "bytes": 234386,
+      "purpose": "Actual application screenshot; synthetic recorded outcomes and read-only state.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "admin-recorded-reload.png": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/admin/actual-agenda-recorded-reloaded.png",
+      "sha256": "d891acd811e3134d73514401ed040b1ebb1bad59a81910a9c1f948f9158009b8",
+      "bytes": 236472,
+      "purpose": "Actual application screenshot; synthetic recorded outcomes and read-only state.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "operator-missing-operator.png": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/operator-null-operator/recorded-null-operator-after-reload.png",
+      "sha256": "82877bda0e702f1c910bf539bda7141eedd2ded3ed1e407292f089a7f6e245f8",
+      "bytes": 230756,
+      "purpose": "Actual application screenshot; synthetic recorded outcomes and read-only state.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "admin-missing-operator.png": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/admin-null-operator/recorded-null-operator-after-reload.png",
+      "sha256": "4f006c623dcf7d4702cd3ed1abdb9a088eada7440487bb7030770e3b4ec865cd",
+      "bytes": 232715,
+      "purpose": "Actual application screenshot; synthetic recorded outcomes and read-only state.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "civil-operator.png": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/civil-operator/civil-recorded-actual.png",
+      "sha256": "2f4ece08ea63f44be22e3d4d4cddafaac08387fc60249b69e28be9ea990f5f5d",
+      "bytes": 122494,
+      "purpose": "Actual application screenshot; synthetic recorded outcomes and read-only state.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "civil-admin.png": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/civil-admin/civil-recorded-actual.png",
+      "sha256": "1a42be98a6f6fe525e5db01a5cfa3894b34ef86d885ed2e0318e36bf3edbd8ad",
+      "bytes": 121382,
+      "purpose": "Actual application screenshot; synthetic recorded outcomes and read-only state.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "civil-ward-continuation.png": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/civil-giro-ward/civil-ward-after-real-continuation.png",
+      "sha256": "fd037cbe89556938aa6c9696b7d20fd328e772c9ea4560701c9ccc1d41236a16",
+      "bytes": 174779,
+      "purpose": "Actual application screenshot; synthetic recorded outcomes and read-only state.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "recorded-giro.png": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/giro/recorded-giro.png",
+      "sha256": "04590048da4f7f11314865658b537a3b5230e8914e85372182bf2d4f8718afbc",
+      "bytes": 241171,
+      "purpose": "Actual application screenshot; synthetic recorded outcomes and read-only state.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "patient-calendar-day.png": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/patient-calendar/recorded-Giorno.png",
+      "sha256": "5158e33e3df061ce166e8e51851ff5fe9f59579337cafd1c7f4a08464c44045b",
+      "bytes": 130159,
+      "purpose": "Actual application screenshot; synthetic recorded outcomes and read-only state.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "patient-calendar-week.png": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/patient-calendar/recorded-Settimana.png",
+      "sha256": "f84d0b2371dc3e65e9b60bcb28ed325ff39e51e365e6c01816e732ff17222ba4",
+      "bytes": 131341,
+      "purpose": "Actual application screenshot; synthetic recorded outcomes and read-only state.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "recorded-dashboard.png": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/dashboard/recorded-dashboard.png",
+      "sha256": "63a416f9bb165413c1a2f65ed662b7cb1354dfb877fda11ea22f9fac84611197",
+      "bytes": 229935,
+      "purpose": "Actual application screenshot; synthetic recorded outcomes and read-only state.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "ward-week.png": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/ward-week/ward-week-actual.png",
+      "sha256": "a38995edbdf9dabeb2f173233f2249a929e15331f3009b946fb75f90b53d6008",
+      "bytes": 245836,
+      "purpose": "Actual application screenshot; synthetic recorded outcomes and read-only state.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "original-inventory.webm": {
+      "sourcePhase": "original QA8 (overall FAILED)",
+      "sourcePhaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/inventory-browser/flow.webm",
+      "sha256": "e5444404565a3974107b068ede5b0e2f16097b518af7e34ceec6bf4cd837563f",
+      "bytes": 1086342,
+      "purpose": "Shared actual inventory/one-off/multidose/catalog flow for issues432/441/463/467; stored once.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "original-import.webm": {
+      "sourcePhase": "original QA8 (overall FAILED)",
+      "sourcePhaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/evidence/issue-432-import.webm",
+      "sha256": "e2070cd06c9d32ff798544dd4de9b7bca5a9ab802f1736b9bb63d79e620bdd60",
+      "bytes": 323293,
+      "purpose": "Actual import review, persisted therapies and reload.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "original-retry.webm": {
+      "sourcePhase": "original QA8 (overall FAILED)",
+      "sourcePhaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/retry-browser/flow.webm",
+      "sha256": "5d8100a6589a5f077020415eb045ff0b627fc283d9d1bc8e0aa1fcffaa2064f1",
+      "bytes": 712312,
+      "purpose": "Actual transport loss/reload/retry; intentional two network aborts retained.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "original-additional.webm": {
+      "sourcePhase": "original QA8 (overall FAILED)",
+      "sourcePhaseRelativePath": "snapshot/artifacts/task-validation/bug-batch-432/qa8-runtime/additional-video/page@c22fa5cc7f16942ac0bbc1b0959ae94c.webm",
+      "sha256": "ad09957921b877e8889faf9a73de1cc86f2ba3160269a9e6c246faae456ceae4",
+      "bytes": 894295,
+      "purpose": "13 passing additional assertions, including internal barrier/facility-clock measured checks.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "actual-agenda-races.webm": {
+      "sourcePhase": "continuation1 (overall FAILED)",
+      "sourcePhaseRelativePath": "continuation-1/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-1/actual-AppAgenda/lifecycle-negatives/flow.webm",
+      "sha256": "ab749f623650c837690db5bd88e9e4dc6320c69080be85761f8de4ed595cbd57",
+      "bytes": 1012015,
+      "purpose": "Actual App error/denial/races/epoch/session cases; interceptions disclosed.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "admin-recorded-races.webm": {
+      "sourcePhase": "continuation2 (overall FAILED)",
+      "sourcePhaseRelativePath": "continuation-2/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-2/recorded-agenda-lifecycle/admin-recorded-lifecycle-negatives/flow.webm",
+      "sha256": "e6325a7c0c8302bf61a60f663ba7ed547ddb2571bf30b12dc1dfb735a8925a7a",
+      "bytes": 1575938,
+      "purpose": "Three admin negative cases passed, followed by fixture-restoration failure.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "F1-correction.webm": {
+      "sourcePhase": "continuation1 (overall FAILED)",
+      "sourcePhaseRelativePath": "continuation-1/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-1/F1F2/correction/flow.webm",
+      "sha256": "730d76d0e4f731671196c935619b8e7fd4192e86fa2eeab0798c3f0654c87630",
+      "bytes": 832971,
+      "purpose": "Actual refusal to given explicit correction/reload/replay.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "F2-verification.webm": {
+      "sourcePhase": "continuation1 (overall FAILED)",
+      "sourcePhaseRelativePath": "continuation-1/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-1/F1F2/verification/flow.webm",
+      "sha256": "9ef3a3555a1d2fa0a7382be16736a7916a62ba39fbb0cb19a2ed3fde50619dfb",
+      "bytes": 586022,
+      "purpose": "Actual calendar/Giro/dashboard/assistant read-only verification.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "operator-recorded.webm": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/operator/video/page@4d23e1d1d69084ba42eb30792549131b.webm",
+      "sha256": "41c8818ca22b390192016abe1dea5944bb2b51d4efedb97a501d60b078003b1c",
+      "bytes": 557235,
+      "purpose": "Actual mounted application flow; no individual scheduled-dose branch claimed.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "admin-recorded.webm": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/admin/video/page@b8be38270a980c89bc41b726273afea8.webm",
+      "sha256": "e0a2681a9ee950b79919665af14a1850a6e3ed6a22c9caf80568612a043b0c8a",
+      "bytes": 483755,
+      "purpose": "Actual mounted application flow; no individual scheduled-dose branch claimed.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "civil-date.webm": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/civil-operator/video/page@0fec22134d690d52dc61e1a4c4a08df8.webm",
+      "sha256": "7d02bc590f7b9def75100b58b1b9de32f984dc394707d830b873a3b2296fe811",
+      "bytes": 549804,
+      "purpose": "Actual mounted application flow; no individual scheduled-dose branch claimed.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "patient-calendar.webm": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/patient-calendar/video/page@3bd33f4b4a0b43ee2d9b33d401178db1.webm",
+      "sha256": "b4ba5ac2df40708315c7970013225d1aa7c2d9c30fa044cf95d6c0d4ac31af3a",
+      "bytes": 409905,
+      "purpose": "Actual mounted application flow; no individual scheduled-dose branch claimed.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "giro-recorded.webm": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/giro/video/page@3924136369e8d3394df58019ef7fac1e.webm",
+      "sha256": "b6a0426796a56dcb43960753992f4289c5df9f0a96714a5296d0c65886e4e870",
+      "bytes": 559756,
+      "purpose": "Actual mounted application flow; no individual scheduled-dose branch claimed.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "dashboard-recorded.webm": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/dashboard/video/page@89c0a0db880e5412cc1b21f477805edc.webm",
+      "sha256": "5a62e21364736e6d74a0ae9b36d2dd1808372c7178bb1ffa9da097adfcde4a09",
+      "bytes": 459365,
+      "purpose": "Actual mounted application flow; no individual scheduled-dose branch claimed.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    },
+    "ward-week.webm": {
+      "sourcePhase": "continuation8 remaining UI PASS",
+      "sourcePhaseRelativePath": "continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/ward-week/video/page@32ebcf3477c4a7fefe1106199fbc82c4.webm",
+      "sha256": "affe8dcff1aba01091a13a618b1fb74ade12d024bb476d8acf9dd152a656973a",
+      "bytes": 588951,
+      "purpose": "Actual mounted application flow; no individual scheduled-dose branch claimed.",
+      "syntheticOnly": true,
+      "unchangedCopy": true
+    }
+  },
+  "totalBytes": 14564909,
+  "budgetBytes": 26214400,
+  "privacy": "Selected media comes from disposable synthetic QA fixtures. No trace archives, raw logs, SQL rows, request credentials, cookies or tokens are copied. Receipt renderers for442/464 are labeled as internal measurements."
+}

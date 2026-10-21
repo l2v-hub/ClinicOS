@@ -1,0 +1,22 @@
+{
+  "status": "STOP",
+  "nonce": "9a656727-60d1-4c04-91c6-b62ce2fb9214",
+  "sourceSha": "ae12862e8ff9ce03f117fc646ecd11a4a8a8bb56",
+  "resourceHandback": true,
+  "runtimeOwner": null,
+  "portsFree": {
+    "55432": true,
+    "3447": true,
+    "5447": true,
+    "8432": true
+  },
+  "qaLockFree": true,
+  "ownedDisposableContainerAbsent": true,
+  "baseline5432Untouched": true,
+  "sourceStatus": "clean",
+  "sourceShaUnchanged": true,
+  "providerCalls": 0,
+  "externalWrites": 0,
+  "releasedAtUtc": "2026-10-19T01:37:35.460890+00:00",
+  "finalReport": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/FINALQA8-report.json"
+}

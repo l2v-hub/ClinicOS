@@ -1,0 +1,10 @@
+{
+  "sourceSha": "ae12862e8ff9ce03f117fc646ecd11a4a8a8bb56",
+  "command": "node --import tsx --test src/routes/__tests__/therapy-slot-scope-contract.test.ts",
+  "ok": true,
+  "code": 0,
+  "passed": 4,
+  "failed": 0,
+  "skipped": 0,
+  "note": "Fresh independent QA8 execution; full suites not rerun."
+}

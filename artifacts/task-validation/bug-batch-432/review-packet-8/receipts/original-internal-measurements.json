@@ -1,0 +1,29 @@
+{
+  "issue442": {
+    "completed": "COMPLETED",
+    "lateCorrection": "COMPLETED",
+    "replay": "COMPLETED",
+    "clinicalWrites": 1,
+    "persistedValue": "120/80",
+    "author": "SIM-NURSE-1"
+  },
+  "issue464": {
+    "clinicalDay": "2026-10-13",
+    "at0030": {
+      "overdue": 0,
+      "dueSoon": 1,
+      "scheduled": "00:45",
+      "minutesUntil": 15
+    },
+    "at0046": {
+      "overdue": 1,
+      "minutesLate": 1
+    },
+    "dstMinutes": [
+      90,
+      210,
+      150,
+      150
+    ]
+  }
+}

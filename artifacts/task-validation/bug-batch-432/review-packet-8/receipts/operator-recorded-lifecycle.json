@@ -1,0 +1,56 @@
+{
+  "results": [
+    {
+      "name": "operator-actual-App-cold-reload-selected-day-view-return-paginated-readonly",
+      "pass": true,
+      "verification": 5,
+      "timedCards": 0,
+      "administrationPosts": 0,
+      "terapiaContinuationRealClick": true
+    },
+    {
+      "name": "admin-actual-App-cold-reload-selected-day-view-return-paginated-readonly",
+      "pass": true,
+      "verification": 5,
+      "timedCards": 0,
+      "administrationPosts": 0,
+      "terapiaContinuationRealClick": true
+    },
+    {
+      "name": "operator-recorded-real-App-initial-503-append-503-403-retry-and-out-of-order-day-append",
+      "pass": true,
+      "interceptionsDisclosed": true,
+      "oldNamesAbsent": true
+    },
+    {
+      "name": "operator-recorded-real-roster-epoch-409-recovery-retains-selected-day",
+      "pass": true
+    },
+    {
+      "name": "operator-recorded-real-logout-new-role-during-held-old-session-read",
+      "pass": true,
+      "oldSnapshotItemDeletedInOwnedFixture": true,
+      "newCount": 4
+    }
+  ],
+  "phases": [
+    "operator-cold-entry",
+    "admin-cold-entry",
+    "operator-recorded-negative-errors-races-roster-session",
+    "admin-recorded-negative-errors-races-roster-session"
+  ],
+  "originalOverallVerdict": "FAILED VALIDATION",
+  "failureSummary": "Admin button expectation 0 == true",
+  "sql": [
+    {
+      "name": "real-sql-five-readonly-items-and-acl",
+      "verification": 5,
+      "deniedWrites": 10,
+      "administrations": 2,
+      "preexistingFixtureOutcomes": 2,
+      "fullRowsUnchangedAfterDeniedWrites": true,
+      "firstPageVerificationDetails": 1,
+      "hasMore": true
+    }
+  ]
+}

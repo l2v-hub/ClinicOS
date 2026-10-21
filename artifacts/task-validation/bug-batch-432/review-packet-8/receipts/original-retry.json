@@ -1,0 +1,16 @@
+{
+  "pass": true,
+  "clinicalRecords": 1,
+  "receipts": 1,
+  "recordUnchanged": true,
+  "noRepeatActionAfterReload": true,
+  "visibleRetryAfterReload": {
+    "pass": true,
+    "sameRequestId": true,
+    "clinicalRecords": 1,
+    "receipts": 1
+  },
+  "intentionalNetworkFailures": 2,
+  "expectedConsoleNetworkAbort": 2,
+  "browserRetryBoundary": "Committed response-loss replays through the real shared client module because UI correctly removes its action; a separate pre-write transport loss retries through the visible UI after reload with the same persisted requestId."
+}

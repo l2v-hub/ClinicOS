@@ -1,0 +1,180 @@
+{
+  "sourceSha": "ae12862e8ff9ce03f117fc646ecd11a4a8a8bb56",
+  "issues": {
+    "432": {
+      "criteria": [
+        "AC432.1",
+        "AC432.2",
+        "AC432.3",
+        "AC432.4",
+        "AC432.5"
+      ],
+      "evidence": [
+        "original-inventory.json",
+        "original-additional.json",
+        "original-import.json"
+      ],
+      "media": [
+        "issue-432-import-saved.png",
+        "issue-432-print.png",
+        "issue-432-switch-mobile.png",
+        "original-inventory.webm",
+        "original-import.webm"
+      ],
+      "result": "Runtime portions PASS across original QA8 individual assertions:106 prescriptions/105active, PRN day/week, missing feed read-only, short/foreign-page fail closed with retry, patient switch,105-print, import5detected/3persisted/2explicit-deferred and idempotent replay. Broad unit safety remains retained QA7. AC432.5 independent runtime/reload evidence exists, but exact review/deployment/issue closure remain PENDING."
+    },
+    "441": {
+      "criteria": [
+        "AC441.1",
+        "AC441.2"
+      ],
+      "evidence": [
+        "original-inventory.json",
+        "actual-AppAgenda.json",
+        "retained-QA7-provenance.json"
+      ],
+      "media": [
+        "issue-441.png",
+        "original-inventory.webm"
+      ],
+      "result": "Fresh explicit11:30 one-off with empty flags and real administration PASS; SQL/API authority/negative cases retain exact-identity QA7 individual test provenance, not a fresh full suite."
+    },
+    "442": {
+      "criteria": [
+        "AC442.1",
+        "AC442.2"
+      ],
+      "evidence": [
+        "original-internal-measurements.json",
+        "original-additional.json",
+        "retained-QA7-provenance.json"
+      ],
+      "media": [
+        "issue-442.png",
+        "original-additional.webm"
+      ],
+      "result": "Fresh actual backend correction barrier/late correction/replay:COMPLETED,1clinical write,120/80. PNG is an explicitly labeled measured receipt renderer. Full-backend-load regression belongs to retained QA7 individual passes; QA7 aggregate1933PASS/1staleSQLFAIL/5SKIP unchanged."
+    },
+    "460": {
+      "criteria": [
+        "AC460.1",
+        "AC460.2",
+        "AC460.3"
+      ],
+      "evidence": [
+        "original-retry.json",
+        "F1F2.json",
+        "retained-QA7-provenance.json"
+      ],
+      "media": [
+        "issue-460.png",
+        "original-retry.webm",
+        "F1-refusal-corrected.png",
+        "F1-correction.webm"
+      ],
+      "result": "Fresh committed response-loss replay through shared client and separate visible pre-write-loss retry after reload preserve same requestId,1administration/1receipt/full record unchanged; F1 explicit refusal correction/replay PASS. Payload conflict/ACL/concurrency/session unit/API cases retain QA7 provenance. Two intentional transport aborts are expected, not clean-network claims."
+    },
+    "463": {
+      "criteria": [
+        "AC463.1",
+        "AC463.2"
+      ],
+      "evidence": [
+        "original-inventory.json",
+        "original-additional.json",
+        "retained-QA7-provenance.json"
+      ],
+      "media": [
+        "issue-463.png",
+        "original-inventory.webm",
+        "original-additional.webm"
+      ],
+      "result": "Fresh empty catalog across complete inventory and four roles:0automatic searches; available/malformed/unreachable retain2searches each. Two deliberate unreachable-status failures recorded. Strict parser/public-limit bounds retain QA7 provenance."
+    },
+    "464": {
+      "criteria": [
+        "AC464.1",
+        "AC464.2"
+      ],
+      "evidence": [
+        "original-internal-measurements.json",
+        "original-additional.json",
+        "recorded-database.json",
+        "remaining-UI.json",
+        "retained-QA7-provenance.json"
+      ],
+      "media": [
+        "issue-464.png",
+        "civil-operator.png",
+        "civil-admin.png",
+        "civil-ward-continuation.png",
+        "civil-date.webm"
+      ],
+      "result": "Fresh original real backend at00:30:0overdue/1dueSoon/00:45/15min;00:46:1overdue/1minlate; DST values90/210/150/150. PNG464 explicitly labeled internal measured receipt. Continuation8 actual Rome civil-day display05/04/2033 00:10 for UTC2033-04-04T22:10:00Z and unchanged SQL rows PASS. Wider timezone-boundary tests retained QA7."
+    },
+    "467": {
+      "criteria": [
+        "AC467.1",
+        "AC467.2"
+      ],
+      "evidence": [
+        "original-inventory.json",
+        "recorded-database.json",
+        "remaining-UI.json",
+        "F1F2.json",
+        "retained-QA7-provenance.json"
+      ],
+      "media": [
+        "distinct-doses-mobile.png",
+        "original-inventory.webm",
+        "operator-recorded-reload.png",
+        "admin-recorded-reload.png",
+        "operator-recorded.webm",
+        "admin-recorded.webm"
+      ],
+      "result": "Fresh original given one-off remains given after band edit/reload and later-dose confirmation leaves earlier dose pending PASS. Current ambiguous one-off9verification:4administered/4notAdministered/1unrecorded,18writes denied409/fullrows unchanged; both actual Agenda roles/Giro/calendar/dashboard/ward read-only after reload PASS. Refused shift and all exact quantity/identity safety assertions retain QA7 provenance. Scheduled individual-dose actual detail mount remains UNRUN."
+    }
+  },
+  "F1": {
+    "result": "PASS in continuation1, whose overall verdict remains FAILED",
+    "receipts": [
+      "F1F2.json"
+    ],
+    "meaning": "Explicit refusal-to-given correction, reload and idempotent replay; pending-only request cannot overwrite observed refusal remains retained safety evidence."
+  },
+  "F2": {
+    "result": "PASS in continuation1, whose overall verdict remains FAILED",
+    "receipts": [
+      "F1F2.json",
+      "actual-AppAgenda.json",
+      "recorded-database.json",
+      "remaining-UI.json"
+    ],
+    "meaning": "Untimed verification stays read-only across actual surfaces, no invented hourly slot/action and no reopened recorded outcome."
+  },
+  "runtimeCoverage": {
+    "actualAppAgendaBothRoles": [
+      "actual-AppAgenda.json",
+      "remaining-UI.json"
+    ],
+    "reloadBothRoles": [
+      "remaining-UI.json"
+    ],
+    "errorsDenialsRacesEpochSession": [
+      "actual-AppAgenda.json",
+      "operator-recorded-lifecycle.json",
+      "admin-recorded-lifecycle.json"
+    ],
+    "nativeHistoryBothRoles": [
+      "both-role-history.json"
+    ],
+    "giroPatientCalendarDayWeekDashboardWardWeek": [
+      "remaining-UI.json"
+    ],
+    "deniedWritesFullRowsUnchanged": [
+      "recorded-database.json"
+    ],
+    "scheduledIndividualDrugDose": "UNRUN: no actual App mount",
+    "missingRecordedAt": "Unit only: schema-invalid for actual DB row"
+  }
+}
