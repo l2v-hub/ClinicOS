@@ -1,0 +1,68 @@
+{
+  "results": [
+    {
+      "name": "complete105-print-through-real-paginated-API",
+      "pass": true,
+      "count": 105
+    },
+    {
+      "name": "foreign-patient-print-blocked-retry-fetches-repaired-complete105",
+      "pass": true
+    },
+    {
+      "name": "short-page-fails-closed-and-visible-retry-restores105",
+      "pass": true
+    },
+    {
+      "name": "patient-switch-no-previous-prescriptions-mobile",
+      "pass": true,
+      "count": 2
+    },
+    {
+      "name": "import5-detected3-reviewed-persisted2-explicit-deferred-replay-visible-after-reload",
+      "pass": true
+    },
+    {
+      "name": "catalog-available-real-name-search-retained",
+      "pass": true,
+      "searches": 2,
+      "deliberateStatusFailures": 0
+    },
+    {
+      "name": "catalog-malformed-real-name-search-retained",
+      "pass": true,
+      "searches": 2,
+      "deliberateStatusFailures": 0
+    },
+    {
+      "name": "catalog-unreachable-real-name-search-retained",
+      "pass": true,
+      "searches": 2,
+      "deliberateStatusFailures": 2
+    },
+    {
+      "name": "empty-catalog-role-Infermiere 1",
+      "pass": true,
+      "searches": 0
+    },
+    {
+      "name": "empty-catalog-role-Medico 1",
+      "pass": true,
+      "searches": 0
+    },
+    {
+      "name": "empty-catalog-role-OSS 1",
+      "pass": true,
+      "searches": 0
+    },
+    {
+      "name": "empty-catalog-role-Supervisore 1",
+      "pass": true,
+      "searches": 0
+    },
+    {
+      "name": "real-runtime-correction-barrier-one-write-and-facility-clock",
+      "pass": true
+    }
+  ]
+}

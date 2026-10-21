@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "name": "admin-recorded-real-App-initial-503-append-503-403-retry-and-out-of-order-day-append",
+      "pass": true,
+      "interceptionsDisclosed": true,
+      "oldNamesAbsent": true
+    },
+    {
+      "name": "admin-recorded-real-roster-epoch-409-recovery-retains-selected-day",
+      "pass": true
+    },
+    {
+      "name": "admin-recorded-real-logout-new-role-during-held-old-session-read",
+      "pass": true,
+      "oldSnapshotItemDeletedInOwnedFixture": true,
+      "newCount": 4
+    }
+  ],
+  "phases": [
+    "admin-recorded-negative-errors-races-roster-session"
+  ],
+  "originalOverallVerdict": "FAILED VALIDATION",
+  "failureSummary": "Owned fixture restoration createdAt equality mismatch; three admin negative cases passed before assertion failure.",
+  "sql": []
+}

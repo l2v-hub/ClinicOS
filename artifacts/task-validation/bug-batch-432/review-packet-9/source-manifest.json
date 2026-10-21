@@ -1,0 +1,21 @@
+{
+  "testedSourceSha": "e405399427e7c738dc32070b17a50494b629608b",
+  "sourceStatus": "clean",
+  "sourceScope": "The independent QA source is the clean checkout at the exact tested SHA. Only these three production/test paths differ from the retained QA8 source; frontend files are byte-identical.",
+  "changedFiles": {
+    "backend/src/therapies/administration-record.ts": {
+      "sha256": "77fd8f40c3e45036d151d884ff84ffac4ff6fa7777503e79073f410a50fab543",
+      "bytes": 11467
+    },
+    "backend/src/therapies/__tests__/legacy-administration-record.test.ts": {
+      "sha256": "128daad60eac7a72676377d1b03fd9c269f331425160d2974d1cb6cb9f9df50d",
+      "bytes": 17206
+    },
+    "backend/src/routes/__tests__/therapy-authoritative-write.test.ts": {
+      "sha256": "086ce8aa74a0eabe4c96c3438b87d6c799ac566f99e9249f4dfe35eacfcc0893",
+      "bytes": 69747
+    }
+  },
+  "retainedQa8SourceSha": "ae12862e8ff9ce03f117fc646ecd11a4a8a8bb56",
+  "baseForPriorApproval": "c02e34c0041752eb4f4772255580807201f2c863"
+}

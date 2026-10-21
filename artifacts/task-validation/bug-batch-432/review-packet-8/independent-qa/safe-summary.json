@@ -1,0 +1,33 @@
+{
+  "status": "REMAINING_QA8_UI_PASS_WITH_HISTORICAL_FAILURES_RETAINED",
+  "nonce": "9a656727-60d1-4c04-91c6-b62ce2fb9214",
+  "sourceSha": "ae12862e8ff9ce03f117fc646ecd11a4a8a8bb56",
+  "currentUi": {
+    "pass": 8,
+    "fail": 0,
+    "unrun": 1,
+    "strictRomeDate": "05/04/2033 00:10"
+  },
+  "historicalValidationFailuresRetained": 4,
+  "setupOrPathPreflightFailuresRetained": 2,
+  "retainedQa7Counts": {
+    "frontend": 1405,
+    "backend": 1933,
+    "optionalSkips": 5,
+    "freshQa8Affected": {
+      "pass": 4,
+      "fail": 0,
+      "skip": 0
+    }
+  },
+  "media": {
+    "syntheticPngsDecoded": 14,
+    "zipArchivesValidated": 39,
+    "videosDecoded": 11,
+    "mediaErrors": 0,
+    "currentBrowserEvents": "all 11 contexts had empty error/write arrays",
+    "privateTraces": "redacted by the recorded harness; archive integrity checked"
+  },
+  "resourcesReturned": true,
+  "report": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/FINALQA8-report.json"
+}

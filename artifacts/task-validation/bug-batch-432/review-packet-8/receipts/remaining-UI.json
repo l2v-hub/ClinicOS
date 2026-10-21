@@ -1,0 +1,61 @@
+{
+  "sourceSha": "ae12862e8ff9ce03f117fc646ecd11a4a8a8bb56",
+  "results": [
+    {
+      "name": "actual civil-day UI and timezone given/refused metadata on both Agenda roles, Giro and ward >105 continuation",
+      "status": "PASS"
+    },
+    {
+      "name": "operator actual AppAgenda cold entry, >105 pagination, recorded outcomes and reload zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "admin actual AppAgenda cold entry, >105 pagination, recorded outcomes and reload zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "both actual Agenda roles preserve real given/refused records with missing operator after reload",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Giro recorded outcomes read-only and reload",
+      "status": "PASS"
+    },
+    {
+      "name": "actual selected-patient calendar day/week retains recorded outcomes, no invented hourly slots",
+      "status": "PASS"
+    },
+    {
+      "name": "actual dashboard recorded count and panel",
+      "status": "PASS"
+    },
+    {
+      "name": "individual scheduled drug-dose detail",
+      "status": "UNRUN",
+      "reason": "Exact-source TherapyDrugDosePanel scheduled branch is not mounted by actual prescription-detail UI; no synthetic substitute claimed. Actual selected-patient calendar tested independently."
+    },
+    {
+      "name": "actual ward week calendar preserves untimed outcomes without hourly administration keys",
+      "status": "PASS"
+    }
+  ],
+  "receipts": [
+    {
+      "name": "civil-browser-actual-four-surfaces",
+      "selectedCivilDate": "2033-04-05",
+      "browserUtcClock": "2033-04-04T22:30:00Z",
+      "actualRecordedAt": "2033-04-04T22:10:00.000Z",
+      "renderedRomeDate": "05/04/2033",
+      "renderedRomeTime": "00:10",
+      "missingOperators": true,
+      "candidates": 108,
+      "wardContinuationActuallyClicked": true,
+      "fullRowsUnchanged": true
+    }
+  ],
+  "errors": [],
+  "unrun": [
+    "actual missing recordedAt is not schema-valid (updatedAt mandatory); legacy absent metadata remains unit-covered",
+    "scheduled individual drug-dose branch has no actual App mount; no substitute claimed"
+  ]
+}

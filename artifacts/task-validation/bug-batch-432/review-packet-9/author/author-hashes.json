@@ -1,0 +1,96 @@
+{
+  "source": {
+    "backend/src/therapies/administration-record.ts": {
+      "sha256": "77fd8f40c3e45036d151d884ff84ffac4ff6fa7777503e79073f410a50fab543",
+      "bytes": 11467,
+      "inode": 540261,
+      "nlink": 1
+    },
+    "backend/src/therapies/__tests__/legacy-administration-record.test.ts": {
+      "sha256": "128daad60eac7a72676377d1b03fd9c269f331425160d2974d1cb6cb9f9df50d",
+      "bytes": 17206,
+      "inode": 540254,
+      "nlink": 1
+    },
+    "backend/src/routes/__tests__/therapy-authoritative-write.test.ts": {
+      "sha256": "086ce8aa74a0eabe4c96c3438b87d6c799ac566f99e9249f4dfe35eacfcc0893",
+      "bytes": 69747,
+      "inode": 592952,
+      "nlink": 1
+    }
+  },
+  "privateEvidence": {
+    "old-omitted-regression-attempt1/command.json": {
+      "sha256": "5a3f17ec40ea934bca90cf55e56b109267f07951dc05410b941de84c1b55fc41",
+      "bytes": 501
+    },
+    "old-omitted-regression-attempt1/harness-freeze.json": {
+      "sha256": "7f603fb8fced5908293be43c11c4bd1ad46b0da1cadce71aaf84dcfb52cbd7ae",
+      "bytes": 1264
+    },
+    "old-omitted-regression-attempt1/stdout.txt": {
+      "sha256": "b81e8c9b1af22014999d20d2ea9a4863a5f7f4ce9ed6638fbaa0d5705e2b1565",
+      "bytes": 2073
+    },
+    "old-omitted-regression-attempt1/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "old-omitted-regression-attempt1/receipt.json": {
+      "sha256": "6470b6753c4408a3961afb1d5ab13501b6e93e67b55e47e94a5d97a59699859a",
+      "bytes": 850
+    },
+    "final-targeted-attempt1/command.json": {
+      "sha256": "c61431a0c48e9fa2a89c7ae0a8f2ae990425ea85ace3923fd87252c9f6a4ef5e",
+      "bytes": 466
+    },
+    "final-targeted-attempt1/harness-freeze.json": {
+      "sha256": "88963df6db7bf336e3f29aa3f02ef56e31aede179a6257c7203a3d26dc5ce463",
+      "bytes": 1196
+    },
+    "final-targeted-attempt1/stdout.txt": {
+      "sha256": "96b3df54875aacea226595bb10aa2b4e559661ff8ecf74703a6227ee0f55a9c0",
+      "bytes": 1917
+    },
+    "final-targeted-attempt1/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "final-targeted-attempt1/receipt.json": {
+      "sha256": "6f556d774dbfeb8d4b9ad81ea8e23c4753c07c636007dfd92fab03fdc58331d6",
+      "bytes": 816
+    },
+    "backend-types-attempt1/command.json": {
+      "sha256": "0777ff586871a6871483bd3d6cd08972bdbc6167a61ef490c19be17bfe7eac82",
+      "bytes": 444
+    },
+    "backend-types-attempt1/harness-freeze.json": {
+      "sha256": "88963df6db7bf336e3f29aa3f02ef56e31aede179a6257c7203a3d26dc5ce463",
+      "bytes": 1196
+    },
+    "backend-types-attempt1/stdout.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "backend-types-attempt1/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "backend-types-attempt1/receipt.json": {
+      "sha256": "1ce6c146c538cd9903a7d876d892a3050a3cd6dc9e35923a63840a3e53c13111",
+      "bytes": 674
+    },
+    "freeze-before.json": {
+      "sha256": "50d84119da33c42b528127e325d11c4252c1b883d61a79d1143ea5c1d35cb7b7",
+      "bytes": 4741272
+    },
+    "freeze-after.json": {
+      "sha256": "1889b3709842db44b3146f60b1b002e233dc7b05145f6e4667543fef47fbf7c2",
+      "bytes": 4741272
+    },
+    "integrity-comparison.json": {
+      "sha256": "fac47af7377cde3bf176a5905dce0c0f1d2c710a217eee1fb3c094be8ac1b561",
+      "bytes": 2117
+    }
+  }
+}

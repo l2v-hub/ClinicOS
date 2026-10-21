@@ -1,0 +1,55 @@
+{
+  "results": [
+    {
+      "name": "exact new recorded outcomes9/4/4/1, pagination2, due query only unrecorded, intersecting ACL",
+      "status": "PASS"
+    },
+    {
+      "name": "actual HTTP18 denied writes, full SQL rows and receipt counts unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "actual deterministic assistant facility and operator queues exclude all eight recorded one-offs",
+      "status": "PASS"
+    },
+    {
+      "name": "actual civil-day and missing operator metadata retained without prescription-time invention",
+      "status": "PASS"
+    }
+  ],
+  "namedRecordedSqlCounts": {
+    "total": 9,
+    "verification": 9,
+    "administered": 4,
+    "notAdministered": 4,
+    "unrecorded": 1
+  },
+  "deniedWrites": {
+    "count": 18,
+    "statuses": [
+      409,
+      409,
+      409,
+      409,
+      409,
+      409,
+      409,
+      409,
+      409,
+      409,
+      409,
+      409,
+      409,
+      409,
+      409,
+      409,
+      409,
+      409
+    ],
+    "fullSqlRowsUnchanged": true,
+    "receiptCount": 0
+  },
+  "phaseOverallVerdict": "FAILED VALIDATION",
+  "followingFailure": "UI date format expected 5/4/2033; actual display 05/04/2033. Correct strict civil-date browser assertion subsequently passed in continuation8.",
+  "privacy": "Full SQL rows, synthetic IDs, raw assistant answers, traces and stack traces remain private."
+}

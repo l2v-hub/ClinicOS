@@ -1,0 +1,118 @@
+{
+  "role": "implementation author, not independent QA",
+  "status": "IMPLEMENTED \u2014 NOT VERIFIED",
+  "results": {
+    "baseline": {
+      "startedAt": "2026-10-21T19:05:11.546Z",
+      "finishedAt": "2026-10-21T19:05:12.927Z",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "src/therapies/__tests__/legacy-administration-record.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend",
+      "envMode": "verification",
+      "ok": false,
+      "code": 1,
+      "error": null,
+      "tests": 15,
+      "pass": 0,
+      "fail": 15,
+      "skipped": 0,
+      "diagnosis": "Parent transaction double lacks child scoped row-version lock query method."
+    },
+    "green": {
+      "startedAt": "2026-10-21T19:05:56.520Z",
+      "finishedAt": "2026-10-21T19:05:57.427Z",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "src/therapies/__tests__/legacy-administration-record.test.ts",
+        "src/therapies/__tests__/slot-scheduling.test.ts",
+        "src/routes/__tests__/therapy-slot-scope-contract.test.ts",
+        "src/patients/__tests__/temporary-ps-exits.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend",
+      "envMode": "verification",
+      "ok": false,
+      "code": 1,
+      "error": null,
+      "tests": 30,
+      "pass": 28,
+      "fail": 2,
+      "skipped": 0,
+      "diagnosis": "All 15 original clinical tests pass; two newly added probes incorrectly expected PS admission checks for refusal writer. Production child semantics preserve refusal recording; probes corrected."
+    },
+    "green-corrected": {
+      "startedAt": "2026-10-21T19:06:25.259Z",
+      "finishedAt": "2026-10-21T19:06:26.253Z",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "src/therapies/__tests__/legacy-administration-record.test.ts",
+        "src/therapies/__tests__/slot-scheduling.test.ts",
+        "src/routes/__tests__/therapy-slot-scope-contract.test.ts",
+        "src/patients/__tests__/temporary-ps-exits.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend",
+      "envMode": "verification",
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "tests": 30,
+      "pass": 30,
+      "fail": 0,
+      "skipped": 0
+    },
+    "types": {
+      "startedAt": "2026-10-21T19:06:29.689Z",
+      "finishedAt": "2026-10-21T19:06:50.150Z",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend",
+      "envMode": "verification",
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "diagnosis": "Official backend TypeScript project passes without emitting outputs."
+    }
+  },
+  "preservation": {
+    "childConcurrentConflictFunctionExact": true,
+    "bothWriterSerializationRetained": true,
+    "confirmPsAdmissionRetained": true,
+    "parentRecordedOutcomeLookupExact": true,
+    "all15OriginalClinicalTestBodiesAndDenialAssertionsExact": true,
+    "mergedHttpSuiteAuthorUnchanged": true,
+    "slotScopeTestExactChild": true,
+    "sourcePathsChangedFromChild": [
+      "backend/src/routes/__tests__/therapy-authoritative-write.test.ts",
+      "backend/src/therapies/__tests__/legacy-administration-record.test.ts",
+      "backend/src/therapies/administration-record.ts"
+    ],
+    "sourceScopeValid": true,
+    "priorDiagnosticCorrection": "First structural comparison accidentally included parent isConcurrentWriteConflict in existingSlotRecord slice; actual writer clinical lookup was unchanged."
+  },
+  "frozenProofPreservation": {
+    "files": 3479,
+    "mismatches": []
+  },
+  "pending": [
+    "Independent integration HTTP/PostgreSQL QA",
+    "Native6 on exact publication",
+    "Parent actual Claude5 approval",
+    "Child first actual Claude review"
+  ],
+  "privateFailureEvidencePreserved": true
+}

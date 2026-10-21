@@ -1,0 +1,221 @@
+{
+  "status": "FAILED VALIDATION",
+  "record": "FINAL_CODEX_AFTER_CLAUDE4",
+  "nonce": "93ef1e53-a027-4db4-85cb-b7c178595f83",
+  "subjectSha": "c02e34c0041752eb4f4772255580807201f2c863",
+  "testedSourceSha": "ae12862e8ff9ce03f117fc646ecd11a4a8a8bb56",
+  "actualClaude": {
+    "commentId": 6322587090,
+    "subjectSha": "c02e34c0041752eb4f4772255580807201f2c863",
+    "verdict": "approved",
+    "findings": 0,
+    "bodySha256": "2b093537fba1acac3738b8030a2546ab1389782679e56e2fca9a8890a6bd6908",
+    "independentFinalFindingOverridesReleaseReadiness": true
+  },
+  "scope": {
+    "issues": [
+      432,
+      441,
+      442,
+      460,
+      463,
+      464,
+      467
+    ],
+    "base": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
+    "deltaBase": "bc90e86847de0bb17f06f0353c2f217e29eb5d14",
+    "sourceEdits": 0,
+    "gitMutations": 0,
+    "providerCalls": 0,
+    "githubCalls": 0,
+    "clinicalRuntimeStarts": 0,
+    "databaseQueries": 0,
+    "issueClosure": false,
+    "merge": false,
+    "deployment": false
+  },
+  "freshChecks": [
+    {
+      "name": "fresh-sql-contract",
+      "ok": true,
+      "code": 0,
+      "counts": {
+        "tests": 4,
+        "suites": 0,
+        "pass": 4,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt": "fresh-sql-contract/receipt.json",
+      "stdoutSha256": "9c38cbb586b8648e33387fe994cdd72de3da2fadb5e528080f0e667e37296232"
+    },
+    {
+      "name": "fresh-slot-scheduling",
+      "ok": true,
+      "code": 0,
+      "counts": {
+        "tests": 4,
+        "suites": 0,
+        "pass": 4,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt": "fresh-slot-scheduling/receipt.json",
+      "stdoutSha256": "d558aaad1b0765c4ee87e052b4f8eec71cc8f18e85239cb38e86ef41cbe72c24"
+    },
+    {
+      "name": "fresh-frontend-focused-attempt2",
+      "ok": true,
+      "code": 0,
+      "counts": {
+        "tests": 40,
+        "suites": 0,
+        "pass": 40,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt": "fresh-frontend-focused-attempt2/receipt.json",
+      "stdoutSha256": "dad440582fbac640f1d78af8357aadde888c9d5a74b5976a0ca6b411dd379d03"
+    }
+  ],
+  "freshPassingExistingTests": 48,
+  "diagnostic": {
+    "kind": "pure transaction-double diagnostic of unchanged real writer and read helper; no DB/API/browser; network connection forbidden",
+    "cases": 4,
+    "legacyBugReproductions": 2,
+    "modernNegativeControls": 2,
+    "receipt": "legacy-oneoff-diagnostic-attempt3/receipt.json",
+    "receiptSha256": "f6b76b0eeb28033393e72b273876126be8a10bdf5a48cee1ab6b9dc29359c6b0",
+    "stdout": "legacy-oneoff-diagnostic-attempt3/stdout.txt",
+    "stdoutSha256": "a8af62c1947d082fe3345cf4f6bedcd3f7daf86da2c56d095cd57f2b6c0d04e9",
+    "probe": "legacy-oneoff-probe-attempt3.mjs",
+    "probeSha256": "28801dded0d69557ca8047f88202edd1b55b6427b8d65280b5eb7d83b8e7388a"
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "priority": "P1",
+      "category": "clinical-write-safety",
+      "title": "Legacy day outcomes do not participate in the authoritative one-off write guard",
+      "file": "backend/src/therapies/administration-record.ts",
+      "line": 49,
+      "related": [
+        {
+          "file": "backend/src/therapies/administration-record.ts",
+          "line": 106
+        },
+        {
+          "file": "backend/src/therapies/administration-record.ts",
+          "line": 129
+        },
+        {
+          "file": "backend/src/therapies/therapy-query.ts",
+          "line": 118
+        },
+        {
+          "file": "backend/src/routes/__tests__/therapy-authoritative-write.test.ts",
+          "line": 1350
+        }
+      ],
+      "acceptance": [
+        "AC467.1",
+        "codex-followup-3 AC1/AC4"
+      ],
+      "trigger": "A same-patient/date/drug legacy row (therapyId=null), already given or refused at 00:15 in notte; the one-off prescription has or is repaired to valid 11:30 in pranzo. A new pending-only confirmation is sent by a stale/direct authorized client.",
+      "actual": "Readers resolve the legacy outcome across bands. existingSlotRecord filters by modern therapyId only, returns null, and the real confirmTherapyAdministration function enters create. Given legacy permits an extra given row; refused legacy permits a pending-only given row without observed-refusal correction.",
+      "expected": "Already-given remains immutable/no second dose; a legacy refusal rejects pending-only confirmation and supports only explicit validated observed-refusal correction.",
+      "evidence": {
+        "kind": "pure transaction-double diagnostic of unchanged real writer and read helper; no DB/API/browser; network connection forbidden",
+        "cases": 4,
+        "legacyBugReproductions": 2,
+        "modernNegativeControls": 2,
+        "receipt": "legacy-oneoff-diagnostic-attempt3/receipt.json",
+        "receiptSha256": "f6b76b0eeb28033393e72b273876126be8a10bdf5a48cee1ab6b9dc29359c6b0",
+        "stdout": "legacy-oneoff-diagnostic-attempt3/stdout.txt",
+        "stdoutSha256": "a8af62c1947d082fe3345cf4f6bedcd3f7daf86da2c56d095cd57f2b6c0d04e9",
+        "probe": "legacy-oneoff-probe-attempt3.mjs",
+        "probeSha256": "28801dded0d69557ca8047f88202edd1b55b6427b8d65280b5eb7d83b8e7388a"
+      },
+      "coverageGap": "Current DB legacy-given/refused fixtures use null prescription clocks, so denied writes are rejected before this guard. They do not cover the clock-repaired valid one-off transition.",
+      "recommendation": "Resolve one authoritative civil-day outcome inside the write transaction using the same patient/day/modern-therapy-or-null-therapy-plus-drug identity and given-wins, modern-before-legacy, stable-id priority as readers. Given must block all new writes, pending-only must reject legacy refused, explicit expectedStato=non_erogata correction of the observed refusal must remain possible. Preserve patient/day/drug scope, legacy attribution/history and deterministic ties; fail closed on unresolved ambiguity. Keep receipts atomic and scoped; do not infer a new dose or relax invalid-clock denial."
+    }
+  ],
+  "integrity": {
+    "frozenFiles": 13349,
+    "hashBytesInodesUnchanged": true,
+    "sourceFiles": 5773,
+    "sourceMismatches": [],
+    "priorProofs": 7442,
+    "priorProofMismatches": [],
+    "receiptHashesMatched": 14,
+    "mediaOriginalAndCopyHashesBytesMatched": 39,
+    "qa8ReportExactCopy": true,
+    "qa8StopExactCopy": true,
+    "actualClaudeBodyHashMatches": true,
+    "sourceAe128ToC02": "artifacts-only; all 5773 manifest source bytes match working HEAD; clean Git before/after"
+  },
+  "retainedEvidence": {
+    "qa7": {
+      "frontendPass": 1405,
+      "backendPass": 1933,
+      "backendFail": 1,
+      "backendSkip": 5,
+      "aggregate": "FAILED VALIDATION unchanged",
+      "buildAndTypes": "historical PASS through exact production source identity"
+    },
+    "qa8": {
+      "remainingUiPass": 8,
+      "remainingUiFail": 0,
+      "remainingUiUnrun": 1,
+      "browserContexts": 11,
+      "originalSevenIssueAssertions": "individual phases retained, not rerun",
+      "recordedOutcomeCounts": {
+        "total": 9,
+        "verification": 9,
+        "administered": 4,
+        "notAdministered": 4,
+        "unrecorded": 1
+      },
+      "deniedWrites409": 18,
+      "failures": "Original invocation and continuations1/2/3 FAILED;4/6 preflight failures;5/7 not launched. Original hashes verified.",
+      "limitations": [
+        "Scheduled individual drug-dose detail has no actual App mount: UNRUN.",
+        "Missing recordedAt is not schema-valid: nullable absence only unit-covered.",
+        "No single complete clean-suite claim."
+      ]
+    },
+    "nativeCurrentSha": "Root reports six current-SHA native checks PASS; actual saved Claude comment also records green CI. Not re-queried or independently rerun in this session."
+  },
+  "localHarnessHistory": [
+    {
+      "attempt": "fresh-frontend-focused",
+      "result": "bootstrap module-resolution failure before application tests;7 file-worker failures;0 product assertions passed",
+      "supersededBy": "fresh-frontend-focused-attempt2"
+    },
+    {
+      "attempt": "legacy-oneoff-diagnostic-attempt1",
+      "result": "diagnostic assertion failed because the mock incorrectly required a registrant filter for facility-wide operatore scope"
+    },
+    {
+      "attempt": "legacy-oneoff-diagnostic-attempt2",
+      "result": "same mock assertion error observed and preserved;zero writer queries"
+    },
+    {
+      "attempt": "legacy-oneoff-diagnostic-attempt3",
+      "result": "corrected mock respects real scope query; bug reproduced in2legacy cases,2modern controls rejected as expected;exit0 denotes successful diagnosis"
+    }
+  ],
+  "limitations": [
+    "No fresh full backend/frontend/build/types/browser/DB execution; these were outside this reserved focused scope.",
+    "Pure diagnostic proves the source control flow with a faithful in-memory transaction double; no new real HTTP/DB reproduction is claimed.",
+    "Evidence packet integrity and successful focused tests do not resolve the P1."
+  ],
+  "decision": "Reject release readiness of c02e34c0; return to root sole implementer/publisher. No issue closure, merge or deployment.",
+  "createdAt": "2026-10-21T18:08:17.371Z"
+}
