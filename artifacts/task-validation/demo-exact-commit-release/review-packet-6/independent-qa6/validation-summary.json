@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "reservationNonce": "2e39fb08-577e-443d-831f-325a3110c7fd",
+  "sourceSha": "0bb595288a5b0f4ae15d70247a4291ec7a1f386d",
+  "implementationSha": "1d48231f42f36920085c039833d78a4f21957450",
+  "offlineVerdict": "PASS",
+  "overallStatus": "PARTIAL \u2014 live administrator REST behavior unproven",
+  "findings": [],
+  "operationalUnknowns": [
+    {
+      "observation": "Read-only root receipt inspected offline: normal integration sees exact existing environment ID20880188544 and null branch policy; branch-policy list returns HTTP404; custom protection inventory returns200 with total_count0.",
+      "reproduction": "Actual CLI with synthetic HTTP404 policy-list transport exits1 with fixed safe error and zero mutations (2 cases: null/already restricted).",
+      "conclusion": "Fail closed confirmed. Whether real administrator bot can read this inventory before enabling custom policy is unproven. No source defect inferred from integration-scoped404.",
+      "rootReceiptSha256": "32e75b9ffddf28d4e75951b4b83aa2db18bcde482480623ebdbb010ea74d3934"
+    }
+  ],
+  "tests": [
+    {
+      "label": "targeted",
+      "attempt": 1,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "--test",
+        "agent-team/tests/bug-pipeline/repository-settings.test.mjs"
+      ],
+      "runtime": "v24.19.0",
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "counts": {
+        "tests": 80,
+        "pass": 80,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receiptSha256": "9289416051f9c1ed5df951082b6beaa4036ae61ad173b4cb1616e661247cbcec",
+      "tapSha256": "afde23ab061929fd7c83eda88e3803d7098062153c6fd5ff571ba60aab7721fe"
+    },
+    {
+      "label": "full-pipeline",
+      "attempt": 1,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "--test",
+        "agent-team/tests/bug-pipeline/*.test.mjs",
+        "scripts/quality-gate/claude-bug-review.test.mjs"
+      ],
+      "runtime": "v24.19.0",
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "counts": {
+        "tests": 1063,
+        "pass": 1060,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 3,
+        "todo": 0
+      },
+      "receiptSha256": "76928797fb14ea835bf381029fb90d5f7cbd1e7971c49e25410d2e09e105aa66",
+      "tapSha256": "5e1d475891fb4b97fd0bcc38f2fc6a27a3d31656520b2162a1beb12fc365a6e7"
+    },
+    {
+      "label": "independent",
+      "attempt": 1,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "--test",
+        "/workspace/.clinicos-cloud/demo-exact-independent-qa6-20261021/independent.test.mjs"
+      ],
+      "runtime": "v24.19.0",
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "counts": {
+        "tests": 43,
+        "pass": 43,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receiptSha256": "732c8f6893e1cc475186d7713e3d025353200fb792d6470637ace60e94f0b562",
+      "tapSha256": "3e86789dad1a9d7bfc56a8cd78233dee82fc19c2e27560d7d3d9e6db699b3463"
+    },
+    {
+      "label": "policy404",
+      "attempt": 1,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "--test",
+        "/workspace/.clinicos-cloud/demo-exact-independent-qa6-20261021/policy404.test.mjs"
+      ],
+      "runtime": "v24.19.0",
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "counts": {
+        "tests": 2,
+        "pass": 2,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receiptSha256": "7d8a2f22ae6a5618be358a0777c30bdcc7456b674e33b4b7a43bbea76ed811d8",
+      "tapSha256": "eb3b96371992409d729d7d5c16bcbaefc6a08bae67660b5a43a130f450a997a9"
+    }
+  ],
+  "totalInvocations": 4,
+  "totalPassedAcrossInvocations": 1185,
+  "totalFailedAcrossInvocations": 0,
+  "totalSkippedAcrossInvocations": 3,
+  "independentlyAuthoredProbeTests": 45,
+  "sourceReview": {
+    "sourceSha": "0bb595288a5b0f4ae15d70247a4291ec7a1f386d",
+    "sourceCount": 9,
+    "round6ChangedSourceCount": 3,
+    "allSixPriorSourcesUnchanged": true,
+    "existingConfigureRepositoryFunctionByteIdentical": true
+  },
+  "preservation": {
+    "frozenFiles": 3144,
+    "hashesAndInodesUnchanged": true,
+    "trackedWorkingTreeCleanAfterTests": true
+  },
+  "trackedStatusAfterTests": "",
+  "settingsApplied": false,
+  "providerWrites": false,
+  "networkCalls": false,
+  "realCredentialsUsed": false,
+  "gitIndexRefWrites": false,
+  "sourceEdits": false,
+  "nativeNode22Executed": false,
+  "configurationDraftSaved": false,
+  "sourceDigests": [
+    {
+      "path": ".github/workflows/bug-pipeline-tests.yml",
+      "sha256": "94188327c10dd06db63c07f8f478486930f1bb8ebb3bb9f796cca27146f17ff8",
+      "bytes": 13407,
+      "round6Changed": true
+    },
+    {
+      "path": ".github/workflows/configure-demo-source.yml",
+      "sha256": "34319447165b115b20c82e9b0c10393bbf189b8352867873ea3fb7948cb97875",
+      "bytes": 2276,
+      "round6Changed": false,
+      "unchangedFromQa5": true
+    },
+    {
+      "path": ".github/workflows/deploy-demo-exact-commit.yml",
+      "sha256": "c45b50ea6dca08a4c93c4a483d35ad3f2e1e8946bb7c6f3708b543d2dfae0e15",
+      "bytes": 3865,
+      "round6Changed": false,
+      "unchangedFromQa5": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "sha256": "c231c95f3b3c2e2b80d446a8ddf302530bab068c4f44d02f48afd7400009aeab",
+      "bytes": 34967,
+      "round6Changed": false,
+      "unchangedFromQa5": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "sha256": "1879f24e6adc1b1c9ed4be99027ddf03be61f8997679492b922a6e0acd765c0d",
+      "bytes": 93688,
+      "round6Changed": false,
+      "unchangedFromQa5": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "sha256": "50ff593ef913b2fc9fbcb330da4e50b2f91803b00f024b015ae6f312b4c844de",
+      "bytes": 44275,
+      "round6Changed": false,
+      "unchangedFromQa5": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+      "sha256": "b81fd0b492024fd0f563f70e5254aeef0fe2945e9e046c3bf55858ba13fc4e03",
+      "bytes": 32424,
+      "round6Changed": true
+    },
+    {
+      "path": "scripts/automation/configure-demo-source.test.mjs",
+      "sha256": "a1f670d8441ef4d489f3e0ac1079c0db936894c768842c9fb82287fa7c79a8c7",
+      "bytes": 37037,
+      "round6Changed": false,
+      "unchangedFromQa5": true
+    },
+    {
+      "path": "scripts/quality-gate/configure-bug-repository.mjs",
+      "sha256": "3429889391689f2981c37030e7792726c84b8055b23d68bcbe4eb698ad7e4db7",
+      "bytes": 18200,
+      "round6Changed": true
+    }
+  ],
+  "nativeNode22": "Not executed locally; Node v24.19.0 used. Current native Node22 CI remains root-owned.",
+  "scope": "Bounded offline independent QA; no application/clinical services, installs, or configuration changes."
+}
