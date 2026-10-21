@@ -59,7 +59,7 @@ jobs:
           bi0yMDI2MTAyMSc7CmNvbnN0IFdPUktGTE9XX1BBVEggPSAnLmdpdGh1Yi93b3JrZmxvd3MvY2xvdWQtcmV2aWV3LXByb2plY3Rp
           b24tMjAyNjEwMjEueW1sJzsKY29uc3QgTUFOSUZFU1RfU0hBMjU2ID0gJzQyYTc1OGRlYWI3OTlhMDQ5NzY3NTlmY2FkMTA0MmVh
           MWFjYmI3OGEzZmZmZDE3NDNmMzkxNzc5ZDc0YTUxYWQnOwpjb25zdCBTVUJKRUNUUyA9IE9iamVjdC5mcmVlemUoewogIDQ5Nzog
-          eyBzaGE6ICcxYmNjMTJmZmIzMWQ0N2E0NmU5MTEzYTdlNTRjNmY3MmZiODQ2MTkxJywgYnJhbmNoOiAnY29kZXgvYnVnLWJhdGNo
+          eyBzaGE6ICdhM2RlZGZkNjcxOTNiYjNiYjI2NDgyYWI2MzAwNTM3NjYzNTJjNDhiJywgYnJhbmNoOiAnY29kZXgvYnVnLWJhdGNo
           LTQ0NycgfSwKICA0OTk6IHsgc2hhOiAnMzQzNmQ2YzkxOGUwNWZkYzRmOTllYWUwYjNiMjQ3ZjU4NzY4NTE2OScsIGJyYW5jaDog
           J2NvZGV4L3Byb3RlY3QtZGVtby1zZWNyZXQnIH0sCn0pOwpjb25zdCBFWFBFQ1RFRF9DSEVDS1MgPSBPYmplY3QuZnJlZXplKFsK
           ICAnYnVnLXBpcGVsaW5lLXRlc3RzJywKICAnc2VjcmV0LXNjYW4nLAogICdmcm9udGVuZC10ZXN0cycsCiAgJ2FyY2hpdmUtdGVz
@@ -68,13 +68,13 @@ jobs:
           NTU5MjkzODQ7CmNvbnN0IERBU0hCT0FSRF9NQVJLRVIgPSAnPCEtLSBjbGluaWNvcy1hbGwyMy1saXZlLXByb2dyZXNzOjIwMjYx
           MDIxIC0tPic7CmNvbnN0IElTU1VFX0dST1VQID0gT2JqZWN0LmZyZWV6ZShbNDQ3LCA0NTEsIDQ1MiwgNDUzLCA0NTQsIDQ1Niwg
           NDU3LCA0ODZdKTsKY29uc3QgSVNTVUVfTUFSS0VSID0gKGlzc3VlKSA9PiBgPCEtLSBjbGluaWNvcy12ZXJpZmllZC1wcm9ncmVz
-          cy1yZWxheTExOjQ5Nzoke2lzc3VlfToke1NVQkpFQ1RTWzQ5N10uc2hhfSAtLT5gOwpjb25zdCBQUjQ5N19NQVJLRVIgPSBgPCEt
-          LSBjbGluaWNvcy12ZXJpZmllZC1wcm9ncmVzcy1yZWxheTExOjQ5Nzoke1NVQkpFQ1RTWzQ5N10uc2hhfSAtLT5gOwpjb25zdCBQ
-          UjQ5OV9NQVJLRVIgPSBgPCEtLSBjbGluaWNvcy12ZXJpZmllZC1wcm9ncmVzcy1yZWxheTExOjQ5OToke1NVQkpFQ1RTWzQ5OV0u
+          cy1yZWxheTEzOjQ5Nzoke2lzc3VlfToke1NVQkpFQ1RTWzQ5N10uc2hhfSAtLT5gOwpjb25zdCBQUjQ5N19NQVJLRVIgPSBgPCEt
+          LSBjbGluaWNvcy12ZXJpZmllZC1wcm9ncmVzcy1yZWxheTEzOjQ5Nzoke1NVQkpFQ1RTWzQ5N10uc2hhfSAtLT5gOwpjb25zdCBQ
+          UjQ5OV9NQVJLRVIgPSBgPCEtLSBjbGluaWNvcy12ZXJpZmllZC1wcm9ncmVzcy1yZWxheTEzOjQ5OToke1NVQkpFQ1RTWzQ5OV0u
           c2hhfSAtLT5gOwpjb25zdCBydW50aW1lUm9vdCA9IHBhdGguam9pbihvcy50bXBkaXIoKSwgJ2NsaW5pY29zLXR3by12ZXJpZmll
-          ZC1yZXZpZXctaGFuZG9mZnMtcmVsYXkxMicpOwpjb25zdCB3b3Jrc3BhY2UgPSBwcm9jZXNzLmVudi5HSVRIVUJfV09SS1NQQUNF
+          ZC1yZXZpZXctaGFuZG9mZnMtcmVsYXkxMycpOwpjb25zdCB3b3Jrc3BhY2UgPSBwcm9jZXNzLmVudi5HSVRIVUJfV09SS1NQQUNF
           Owpjb25zdCBzdGFnZVBhdGggPSBwYXRoLmpvaW4ocHJvY2Vzcy5lbnYuUlVOTkVSX1RFTVAgfHwgb3MudG1wZGlyKCksICd2ZXJp
-          ZmllZC1yZXZpZXctaGFuZG9mZi1yZWxheTEyLXN0YWdlLmpzb24nKTsKY29uc3Qgc3RhZ2UgPSB7CiAgc2NoZW1hVmVyc2lvbjog
+          ZmllZC1yZXZpZXctaGFuZG9mZi1yZWxheTEzLXN0YWdlLmpzb24nKTsKY29uc3Qgc3RhZ2UgPSB7CiAgc2NoZW1hVmVyc2lvbjog
           MSwKICB3b3JrZmxvdzogV09SS0ZMT1dfUEFUSCwKICB0cnVzdGVkTWFpbjogVFJVU1RFRF9NQUlOLAogIGV2ZW50U2hhOiBwcm9j
           ZXNzLmVudi5HSVRIVUJfU0hBIHx8IG51bGwsCiAgc3RhdHVzZXM6IHsgcHJvZ3Jlc3M6ICdwZW5kaW5nJywgZGFzaGJvYXJkQmVm
           b3JlV2FpdDogJ3BlbmRpbmcnLCBuYXRpdmU6ICdwZW5kaW5nJywgcHI0OTk6ICdwZW5kaW5nJywgcHI0OTc6ICdwZW5kaW5nJywg
@@ -356,9 +356,9 @@ jobs:
           Nyk7CiAgYXNzZXJ0KGJhdGNoLCAnUFI0OTcgY2Fub25pY2FsIGJhdGNoIG1pc3NpbmcnKTsKICBhc3NlcnQuZXF1YWwoYmF0Y2gu
           c2hhLCBTVUJKRUNUU1s0OTddLnNoYSk7CiAgYXNzZXJ0LmRlZXBFcXVhbChiYXRjaC5pc3N1ZXMsIFsuLi5JU1NVRV9HUk9VUF0p
           OwogIGNvbnN0IGNvbnRpbnVhdGlvbiA9IGJhdGNoLm9wZXJhdG9yQ29udGludWF0aW9ucz8uYXQoLTEpOwogIGFzc2VydC5lcXVh
-          bChjb250aW51YXRpb24/LnJvdW5kLCAxMik7CiAgYXNzZXJ0LmVxdWFsKGNvbnRpbnVhdGlvbj8uc3RhdHVzLCAncGFzc2VkJyk7
-          CiAgYXNzZXJ0LmVxdWFsKGNvbnRpbnVhdGlvbj8uc3ViamVjdFNoYSwgJ2JiMTJlYjczODgxN2JmMWM2NGVkMDg4NDRmMTYyZWE0
-          Y2NmN2U0NzMnKTsKICByZXR1cm4gYmF0Y2g7Cn0KYXN5bmMgZnVuY3Rpb24gcmVxdWVzdE9yUHJlc2VydmU0OTkoeyBzdGFuZGFs
+          bChjb250aW51YXRpb24/LnJvdW5kLCAxMyk7CiAgYXNzZXJ0LmVxdWFsKGNvbnRpbnVhdGlvbj8uc3RhdHVzLCAncGFzc2VkJyk7
+          CiAgYXNzZXJ0LmVxdWFsKGNvbnRpbnVhdGlvbj8uc3ViamVjdFNoYSwgJzJkNTlhZTY5MTdlNWEzNWQxODEyN2UxMzM3YzJiMWY4
+          ZjExMzFjZWQnKTsKICByZXR1cm4gYmF0Y2g7Cn0KYXN5bmMgZnVuY3Rpb24gcmVxdWVzdE9yUHJlc2VydmU0OTkoeyBzdGFuZGFs
           b25lLCBzdG9yZSwgYXBpLCBtYW5pZmVzdCB9KSB7CiAgYXdhaXQgYXNzZXJ0TmF0aXZlTm93KGFwaSwgNDk5KTsKICBjb25zdCBz
           dGF0ZUJlZm9yZSA9IGF3YWl0IHN0b3JlLmxvYWQoKTsKICBjb25zdCBzdWJqZWN0QmVmb3JlID0gYXNzZXJ0SW5pdGlhbEhpc3Rv
           cnkoc3RhdGVCZWZvcmUsIG1hbmlmZXN0KTsKICBpZiAoc3ViamVjdEJlZm9yZS5zaGEgIT09IG1hbmlmZXN0LnNoYSkgewogICAg
@@ -459,7 +459,7 @@ jobs:
           IGNvbnN0IGNhbm9uaWNhbDQ5NyA9IGluaXRpYWwuYmF0Y2hlcz8uZmluZCgoaXRlbSkgPT4gaXRlbS5wcj8ubnVtYmVyID09PSA0
           OTcpOwogIGNvbnN0IGN1cnJlbnQ0OTlIaXN0b3J5T2sgPSBlbGlnaWJsZTQ5OUhpc3RvcnkoaW5pdGlhbCwgbWFuaWZlc3QpOwog
           IGlmICghY2Fub25pY2FsNDk3IHx8IGNhbm9uaWNhbDQ5Ny5zaGEgIT09IFNVQkpFQ1RTWzQ5N10uc2hhIHx8IGNhbm9uaWNhbDQ5
-          Ny5vcGVyYXRvckNvbnRpbnVhdGlvbnM/LmF0KC0xKT8ucm91bmQgIT09IDEyIHx8IGNhbm9uaWNhbDQ5Ny5vcGVyYXRvckNvbnRp
+          Ny5vcGVyYXRvckNvbnRpbnVhdGlvbnM/LmF0KC0xKT8ucm91bmQgIT09IDEzIHx8IGNhbm9uaWNhbDQ5Ny5vcGVyYXRvckNvbnRp
           bnVhdGlvbnM/LmF0KC0xKT8uc3RhdHVzICE9PSAncGFzc2VkJykgewogICAgc3RhZ2Uuc3RhdHVzZXMucHI0OTcgPSAnU0tJUFBF
           RF9OQVRJVkVfRkFJTEVEX09SX0NIQU5HRUQnOwogIH0KICBpZiAoIWN1cnJlbnQ0OTlIaXN0b3J5T2spIHN0YWdlLnN0YXR1c2Vz
           LnByNDk5ID0gJ1NLSVBQRURfTkFUSVZFX0ZBSUxFRF9PUl9DSEFOR0VEJzsKICAvLyBBcHByb3ZhbCByZWNvcmRzIGhhdmUgbXVs
@@ -476,7 +476,7 @@ jobs:
           dWxlLmV4dGVybmFsUmVwb3J0IH0pOwoKICAvLyBQdWJsaXNoIGJvdW5kZWQgZXhhY3QtU0hBIHByb2dyZXNzIGJlZm9yZSB3YWl0
           aW5nLCBpbmNsdWRpbmcgY3VycmVudCBmYWlsdXJlcy4KICBjb25zdCBoZWFkcyA9IGF3YWl0IGN1cnJlbnRIZWFkcyhhcGkpOwog
           IGlmICghY2Fub25pY2FsNDk3IHx8IGNhbm9uaWNhbDQ5Ny5zaGEgIT09IFNVQkpFQ1RTWzQ5N10uc2hhIHx8IGNhbm9uaWNhbDQ5
-          Ny5vcGVyYXRvckNvbnRpbnVhdGlvbnM/LmF0KC0xKT8ucm91bmQgIT09IDEyIHx8IGNhbm9uaWNhbDQ5Ny5vcGVyYXRvckNvbnRp
+          Ny5vcGVyYXRvckNvbnRpbnVhdGlvbnM/LmF0KC0xKT8ucm91bmQgIT09IDEzIHx8IGNhbm9uaWNhbDQ5Ny5vcGVyYXRvckNvbnRp
           bnVhdGlvbnM/LmF0KC0xKT8uc3RhdHVzICE9PSAncGFzc2VkJykgaGVhZHNbJzQ5NyddID0gJ2NoYW5nZWQnOwogIGlmICghY3Vy
           cmVudDQ5OUhpc3RvcnlPaykgaGVhZHNbJzQ5OSddID0gJ2NoYW5nZWQnOwogIGNvbnN0IGJlZm9yZVNuYXBzaG90ID0gYXdhaXQg
           bmF0aXZlU25hcHNob3QoYXBpKTsKICBuYXRpdmVTdGFnZShiZWZvcmVTbmFwc2hvdCk7CiAgYXdhaXQgcHVibGlzaFByb2dyZXNz
@@ -1036,7 +1036,7 @@ jobs:
           RELAY11_MANIFEST_B64
           base64 --decode "$RUNNER_TEMP/relay11/script.b64" > "$RUNNER_TEMP/relay11/prepare-two-review-handoffs.mjs"
           base64 --decode "$RUNNER_TEMP/relay11/manifest.b64" > "$RUNNER_TEMP/relay11/manifest499.json"
-          printf '%s  %s\n' '4ca6b15aaf2fed544aab151c66dd036b5f94e4e8135972cc17aed2594fc1c8ad' "$RUNNER_TEMP/relay11/prepare-two-review-handoffs.mjs" | sha256sum --check --status
+          printf '%s  %s\n' '9cc4b0a908c1d17542233464ff8c5b63867d7fa70c3a9f2ef7b061713e2ed291' "$RUNNER_TEMP/relay11/prepare-two-review-handoffs.mjs" | sha256sum --check --status
           printf '%s  %s\n' '42a758deab799a04976759fcad1042ea1acbb78a3fffd1743f391779d74a51ad' "$RUNNER_TEMP/relay11/manifest499.json" | sha256sum --check --status
           node --check "$RUNNER_TEMP/relay11/prepare-two-review-handoffs.mjs"
           node "$RUNNER_TEMP/relay11/prepare-two-review-handoffs.mjs"
@@ -1044,7 +1044,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: verified-review-handoff-relay12-stage
-          path: ${{ runner.temp }}/verified-review-handoff-relay12-stage.json
+          name: verified-review-handoff-relay13-stage
+          path: ${{ runner.temp }}/verified-review-handoff-relay13-stage.json
           if-no-files-found: warn
           retention-days: 14
