@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "sourcePublicationSha": "228a627ca284ebd2fdda4130f1f71383f719d003",
+  "scope": "Byte-identical aliases of independently verified current packet13 evidence inside the controller-required batch evidence directory; no source or proof bytes changed.",
+  "files": [
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-447.png",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-447.png",
+      "blob": "5dd170d83f414410278a4e4db61090ca9b763718",
+      "sha256": "137d8b76fbcfdc90bbe26a7af1d0c906556c20186cd2c1691a256b1ec3747eef",
+      "bytes": 116255
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-447-trace.zip",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-447-trace.zip",
+      "blob": "e1a3609cfe29b2748dac45a07c386433f14a1a9f",
+      "sha256": "21c2cdebda6bc9ffa8ffc0c6f8268eddf2088fb5b33b6f81bd9ea5308a353d41",
+      "bytes": 10091085
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-447.webm",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-447.webm",
+      "blob": "e683abb962ef52210ab38efb14e6f5cb799adf10",
+      "sha256": "caff8f775471cbb70c4fedcc1aea327da3f34c30bc03e569ca62faead3b8f9fc",
+      "bytes": 1455486
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-451.png",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-451.png",
+      "blob": "502ceae9b450881ae23f799b5b7eb5a8e0fa8bff",
+      "sha256": "ebd020e0c852899590de206f5a3c557a08845dd9f71e5c310a63851211c8f150",
+      "bytes": 152120
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-451-trace.zip",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-451-trace.zip",
+      "blob": "a53f69d3edd9fd9d618a4c4b494e5da377d16fc3",
+      "sha256": "fbd90e9cd0b1b509ae393f866bf4c13830c956a577a9441c985436d5db826786",
+      "bytes": 8752396
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-451.webm",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-451.webm",
+      "blob": "3e9c6daad73a6310fef4c8316bfa55442d29b16e",
+      "sha256": "abc3a37d5b0980c97f845626afe197f34ec0fd8a5d397b00bb6feacb92bb2b60",
+      "bytes": 813928
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-452.png",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-452.png",
+      "blob": "f1a87dd82cddfc662b7ad8fe38ea0688eab68987",
+      "sha256": "4e4d6fb4b7ae63e390d27d42a831bd01b7ead9969936436346af59edcace07f8",
+      "bytes": 128950
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-452-trace.zip",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-452-trace.zip",
+      "blob": "8ef9fb4b9cf03f53c74e84edadb574647724f8fa",
+      "sha256": "54b65f585885f89230597afe6dc4cdf3c587067577ca50de6b536ec52226f591",
+      "bytes": 11587795
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-452.webm",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-452.webm",
+      "blob": "df7de2629adb82e7b579923de504d369b1e1f97b",
+      "sha256": "b62f0ef9a9a56fbfca9437580225713cb979b05903bb3e7a691595076585058d",
+      "bytes": 1639762
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-453.png",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-453.png",
+      "blob": "c1c5fcbc0977b06d1f1564e113cda913f6b57fa5",
+      "sha256": "ebfd4cfe326da243f043eef119b50e721a841706d05ed98aa9da6155c3c3a544",
+      "bytes": 108444
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-453-trace.zip",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-453-trace.zip",
+      "blob": "12e2e5d5fe0544ac5eb4a9f0afc860f844808b70",
+      "sha256": "db406fc5e61a2889b940d2e1ace5aa2d300b4e470a4a1cc94cb89cbc56a3b58a",
+      "bytes": 24762937
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-453.webm",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-453.webm",
+      "blob": "e84438eea99b120430bf92e9da14c88f32e0af06",
+      "sha256": "3a63f31db2b4ec4ea00bed1486ea1b52d6426eebfef129cf4a472f1a0007a330",
+      "bytes": 3566801
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-454.png",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-454.png",
+      "blob": "62d6266a7571b64d947c890f8ff176fd54c6b0b6",
+      "sha256": "6d9a0e1ffed6bdcab54b41783cab22b04bbf46b40c18a89ca8783681a6278f61",
+      "bytes": 107187
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-454-trace.zip",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-454-trace.zip",
+      "blob": "c1e69fb7114152bc1c9f69515df7f1b4e85d230a",
+      "sha256": "bb04c5e7c692edb07badd29a1349fe3b27b31c17d666c701bf17aca51e8bf9c8",
+      "bytes": 3536514
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-454.webm",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-454.webm",
+      "blob": "f49a108f0c3608544f88baadcec50267c805ac31",
+      "sha256": "2967280cb47227d6c57e0ce5070690ba271af6e22c22d592964d94c5e7964cb8",
+      "bytes": 368333
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-456.png",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-456.png",
+      "blob": "5060541e27a6817888e235afad0e816fd6725ab3",
+      "sha256": "defd68a3e89a6f89fadf87385f8b890df5c1129184b16e39f18cfca87cb2d80b",
+      "bytes": 146389
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-456-trace.zip",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-456-trace.zip",
+      "blob": "3e3505c1c4ce57921ead98360dfa3a146d5d96d0",
+      "sha256": "0af9be0b7e9f12c32a4bfde924e67ff3245c27bf5da1ce99609049f54d2d1011",
+      "bytes": 4534269
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-456.webm",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-456.webm",
+      "blob": "bc77b81874c70e34985a598bd3140449cc05588f",
+      "sha256": "0cf9b746b15235f7e5f5144d0b451f656b276e6a6df799d17d68dec9a16c3ea8",
+      "bytes": 404728
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-457.png",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-457.png",
+      "blob": "f6931131a1bda8b79a4a8a8011d349596352375a",
+      "sha256": "842dad049cbd69047d0031b15d6d7ced2ebd531e61fa1878e2c35b904594a280",
+      "bytes": 207375
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-457-trace.zip",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-457-trace.zip",
+      "blob": "f9c32b40c666227492b31082b5f7c54cc03aecb2",
+      "sha256": "265b6dba5f72b542411ad06373e0288a3a0b3869b16c0327e58c29274e7cc5dc",
+      "bytes": 12265746
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-457.webm",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-457.webm",
+      "blob": "75dce518dec9aaf0eb794a19abe283edcfe48d25",
+      "sha256": "b6d4ff1d26e2c9d0390ced3cea0726004930d19bd02356b3f1fb3d14672e45fd",
+      "bytes": 1743443
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-486.png",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-486.png",
+      "blob": "d42e911d60d7fc0eacbc5912b3b815e5de9881ba",
+      "sha256": "f4cd979f6e6fe088a5f60e7e8f2480258594c6259534f0d432cee59c0ec1f8e5",
+      "bytes": 100872
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-486-trace.zip",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-486-trace.zip",
+      "blob": "4da128ddb61f78945afbe905d4036ba2094a64d4",
+      "sha256": "c5f1198dcc69befce68ae45945b4fe2d876262f6de1e3dfa3e636a2f8b142893",
+      "bytes": 23750833
+    },
+    {
+      "source": "artifacts/task-validation/bug-batch-447/review-packet-13/evidence/codex-followup-1/issue-486.webm",
+      "path": "artifacts/task-validation/bug-batch-447/evidence/claude1-followup12/issue-486.webm",
+      "blob": "533332ffbc750397395b26dbf90f03f73975932a",
+      "sha256": "1ea09d2d54f18a02e2c613dc715d32b3e5ea3a828076fc5d19da9d662c3dcdc8",
+      "bytes": 3216288
+    }
+  ]
+}
