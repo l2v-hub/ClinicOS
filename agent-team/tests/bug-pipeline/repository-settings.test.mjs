@@ -1,7 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { configureRepository } from '../../../scripts/quality-gate/configure-bug-repository.mjs';
+import { spawnSync } from 'node:child_process';
+import {
+  configureRepository,
+  restrictDemoEnvironment,
+} from '../../../scripts/quality-gate/configure-bug-repository.mjs';
 
 const sha = 'a'.repeat(40);
 const name = 'ClinicOS Codex: bug-pipeline-tests';
@@ -282,4 +286,562 @@ test('wrong required app binding on a later effective-rules page blocks every mu
   await assert.rejects(f.configure(), /browser-e2e/);
   assert.equal(f.writes.length, 0);
   assert.ok(f.reads.some((route) => route.endsWith('/rules/branches/main?per_page=100&page=2')));
+});
+
+const demoBase = '/repos/l2v-hub/ClinicOS';
+const demoRoute = `${demoBase}/environments/glistening-friendship%20%2F%20demo`;
+const policyRoute = `${demoRoute}/deployment-branch-policies`;
+const customRoute = `${demoRoute}/deployment_protection_rules`;
+const mainPolicy = { id: 71, name: 'main', type: 'branch' };
+const demoContext = {
+  restrictDemoEnvironment: true,
+  configureRepository: false,
+  actor: 'l2v-hub',
+  triggeringActor: 'l2v-hub',
+  expectedSha: sha,
+  actualSha: sha,
+  workflowSha: sha,
+  eventName: 'workflow_dispatch',
+  repository: 'l2v-hub/ClinicOS',
+  ref: 'refs/heads/reviewed-admin-bootstrap',
+  workflowRef:
+    'l2v-hub/ClinicOS/.github/workflows/bug-pipeline-tests.yml@refs/heads/reviewed-admin-bootstrap',
+};
+
+function demoFixture({
+  environment = {},
+  policies = [],
+  permission = 'admin',
+  permissionLogin = demoContext.actor,
+  repository = {},
+  customRules = [],
+  repositorySecrets = [],
+  environmentSecrets = [],
+  transform = (_method, _route, result) => result,
+  mutate = () => {},
+} = {}) {
+  const state = {
+    environment: {
+      id: 20880188544,
+      name: 'glistening-friendship / demo',
+      deployment_branch_policy: null,
+      protection_rules: [],
+      can_admins_bypass: false,
+      ...structuredClone(environment),
+    },
+    policies: structuredClone(policies),
+    customRules: structuredClone(customRules),
+  };
+  const reads = [],
+    writes = [];
+  const request = async (method, route, body) => {
+    const url = new URL(route, 'https://api.github.com');
+    const path = url.pathname;
+    let result;
+    if (method === 'GET') reads.push(route);
+    else {
+      writes.push({ method, route, body: structuredClone(body) });
+      mutate(method, route, body, state);
+    }
+    const page = Number(url.searchParams.get('page'));
+    const paginated = (items, key) => {
+      assert.equal(url.searchParams.get('per_page'), '100');
+      assert.ok(page >= 1 && page <= 100);
+      return {
+        total_count: items.length,
+        [key]: structuredClone(items.slice((page - 1) * 100, page * 100)),
+      };
+    };
+    if (method === 'GET' && path === `${demoBase}/collaborators/l2v-hub/permission`)
+      result = { permission, user: { login: permissionLogin } };
+    else if (method === 'GET' && path === demoBase)
+      result = { full_name: 'l2v-hub/ClinicOS', default_branch: 'main', ...repository };
+    else if (path === demoRoute) {
+      if (method === 'PUT') {
+        // Model GitHub's PUT defaults so accidentally omitted controls cause a real failure.
+        const prior = state.environment.protection_rules;
+        state.environment.protection_rules = prior.filter(
+          (rule) => !['required_reviewers', 'wait_timer', 'branch_policy'].includes(rule.type),
+        );
+        if (body.wait_timer)
+          state.environment.protection_rules.push({
+            ...(prior.find((rule) => rule.type === 'wait_timer') ?? {}),
+            type: 'wait_timer',
+            wait_timer: body.wait_timer,
+          });
+        if (body.reviewers?.length)
+          state.environment.protection_rules.push({
+            ...(prior.find((rule) => rule.type === 'required_reviewers') ?? {}),
+            type: 'required_reviewers',
+            prevent_self_review: body.prevent_self_review ?? false,
+            reviewers: body.reviewers.map(({ type, id }) => ({ type, reviewer: { id } })),
+          });
+        state.environment.protection_rules.push({ type: 'branch_policy', id: 900 });
+        state.environment.deployment_branch_policy = structuredClone(body.deployment_branch_policy);
+        if (Object.hasOwn(body, 'can_admins_bypass'))
+          state.environment.can_admins_bypass = body.can_admins_bypass;
+      } else assert.equal(method, 'GET', 'No environment deletion or creation route');
+      result = structuredClone(state.environment);
+    } else if (path === policyRoute) {
+      if (method === 'POST') {
+        assert.deepEqual(body, { name: 'main', type: 'branch' });
+        assert.deepEqual(state.environment.deployment_branch_policy, {
+          protected_branches: false,
+          custom_branch_policies: true,
+        });
+        state.policies.push(structuredClone(mainPolicy));
+        result = structuredClone(mainPolicy);
+      } else {
+        assert.equal(method, 'GET', 'Existing policies must never be deleted or modified');
+        result = paginated(state.policies, 'branch_policies');
+      }
+    } else if (method === 'GET' && path === customRoute)
+      result = paginated(state.customRules, 'custom_deployment_protection_rules');
+    else if (method === 'GET' && path === `${demoBase}/actions/secrets`)
+      result = paginated(repositorySecrets, 'secrets');
+    else if (method === 'GET' && path === `${demoRoute}/secrets`)
+      result = paginated(environmentSecrets, 'secrets');
+    else throw new Error(`Unexpected API route: ${method} ${route}`);
+    return transform(method, route, result, state, reads, writes);
+  };
+  return {
+    state,
+    reads,
+    writes,
+    request,
+    configure: (overrides = {}) =>
+      restrictDemoEnvironment({ request, ...demoContext, ...overrides }),
+  };
+}
+
+test('demo restriction rejects every untrusted dispatch context before any credential request', async (t) => {
+  for (const overrides of [
+    { restrictDemoEnvironment: false },
+    { restrictDemoEnvironment: undefined },
+    { configureRepository: true },
+    { configureRepository: undefined },
+    { actualSha: 'b'.repeat(40) },
+    { workflowSha: 'b'.repeat(40) },
+    { expectedSha: `${sha}\n`, actualSha: `${sha}\n` },
+    { expectedSha: 'A'.repeat(40) },
+    { actor: '../outside' },
+    { actor: 'l2v-hub\n' },
+    { actor: 'l2v-hub\n', triggeringActor: 'l2v-hub\n' },
+    { triggeringActor: 'another-admin' },
+    { eventName: 'pull_request' },
+    { repository: 'other/ClinicOS' },
+    { workflowRef: 'l2v-hub/ClinicOS/.github/workflows/other.yml@refs/heads/main' },
+    {
+      ref: 'refs/tags/main',
+      workflowRef: 'l2v-hub/ClinicOS/.github/workflows/bug-pipeline-tests.yml@refs/tags/main',
+    },
+    {
+      ref: 'refs/heads/main\n',
+      workflowRef: 'l2v-hub/ClinicOS/.github/workflows/bug-pipeline-tests.yml@refs/heads/main\n',
+    },
+  ]) {
+    await t.test(JSON.stringify(overrides), async () => {
+      const f = demoFixture();
+      await assert.rejects(f.configure(overrides));
+      assert.deepEqual(f.reads, []);
+      assert.deepEqual(f.writes, []);
+    });
+  }
+});
+
+test('demo administrator identity, repository, exact environment ID/name and every preflight read fail closed', async (t) => {
+  const options = [
+    { permission: 'write' },
+    { permissionLogin: 'another-admin' },
+    { repository: { full_name: 'other/ClinicOS' } },
+    { repository: { default_branch: 'maintenance' } },
+    { environment: { id: 20880188545 } },
+    { environment: { id: '20880188544' } },
+    { environment: { name: 'production' } },
+    { environment: { deployment_branch_policy: undefined } },
+    { environment: { protection_rules: undefined } },
+    ...[
+      `${demoBase}/collaborators/l2v-hub/permission`,
+      demoBase,
+      demoRoute,
+      policyRoute,
+      customRoute,
+      `${demoBase}/actions/secrets`,
+      `${demoRoute}/secrets`,
+    ].map((denied) => ({
+      transform: (_method, route, result) => {
+        if (route.split('?')[0] === denied) throw new Error('preflight unavailable');
+        return result;
+      },
+    })),
+  ];
+  for (const [i, option] of options.entries())
+    await t.test(String(i), async () => {
+      const f = demoFixture(option);
+      await assert.rejects(f.configure());
+      assert.deepEqual(f.writes, []);
+    });
+});
+
+test('demo restriction changes only the fixed environment, verifies exact main and is idempotent', async () => {
+  const f = demoFixture();
+  const result = await f.configure({
+    environmentName: 'production',
+    environmentId: 1,
+    branch: '*',
+    route: '/elsewhere',
+  });
+  assert.equal(result.status, 'verified');
+  assert.equal(result.environmentId, 20880188544);
+  assert.equal(result.previousBranchPolicy, null);
+  assert.equal(result.previousMainPolicyPresent, false);
+  assert.equal(result.mainBranchOnly, true);
+  assert.deepEqual(f.writes, [
+    {
+      method: 'PUT',
+      route: demoRoute,
+      body: {
+        deployment_branch_policy: { protected_branches: false, custom_branch_policies: true },
+        can_admins_bypass: false,
+      },
+    },
+    { method: 'POST', route: policyRoute, body: { name: 'main', type: 'branch' } },
+  ]);
+  assert.deepEqual(f.state.policies, [mainPolicy]);
+  const repeated = await f.configure();
+  assert.equal(repeated.environmentUpdated, false);
+  assert.equal(repeated.policyCreated, false);
+  assert.equal(repeated.previousMainPolicyPresent, true);
+  assert.equal(f.writes.length, 2);
+});
+
+test('demo restriction preserves reviewers, self-review, timer, bypass and custom protections', async () => {
+  const protections = [
+    { id: 4, type: 'custom_rule', app: { id: 8 } },
+    { id: 2, type: 'wait_timer', wait_timer: 25 },
+    {
+      id: 3,
+      type: 'required_reviewers',
+      prevent_self_review: true,
+      reviewers: [
+        { type: 'Team', reviewer: { id: 21 } },
+        { type: 'User', reviewer: { id: 22 } },
+      ],
+    },
+  ];
+  const customRules = [{ id: 5, app: { id: 9, slug: 'existing-protection' } }];
+  const f = demoFixture({
+    environment: { protection_rules: protections, can_admins_bypass: true },
+    customRules,
+  });
+  const result = await f.configure();
+  assert.equal(result.protectionsPreserved, true);
+  assert.equal(f.writes[0].body.wait_timer, 25);
+  assert.equal(f.writes[0].body.prevent_self_review, true);
+  assert.deepEqual(f.writes[0].body.reviewers, [
+    { type: 'Team', id: 21 },
+    { type: 'User', id: 22 },
+  ]);
+  assert.equal(f.writes[0].body.can_admins_bypass, true);
+  assert.deepEqual(
+    f.state.environment.protection_rules.filter((rule) => rule.type !== 'branch_policy'),
+    protections,
+  );
+  assert.deepEqual(f.state.customRules, customRules);
+  const empty = demoFixture();
+  await empty.configure();
+  assert.ok(!Object.hasOwn(empty.writes[0].body, 'reviewers'), 'No new approval requirement');
+});
+
+test('pre-existing main policy and protected-branches modes converge without duplicate policies', async () => {
+  for (const policy of [
+    null,
+    { protected_branches: true, custom_branch_policies: false },
+    { protected_branches: false, custom_branch_policies: true },
+  ]) {
+    const f = demoFixture({
+      environment: { deployment_branch_policy: policy },
+      policies: [mainPolicy],
+    });
+    await f.configure();
+    assert.equal(f.writes.filter((write) => write.method === 'POST').length, 0);
+    assert.equal(f.writes.length, policy?.custom_branch_policies ? 0 : 1);
+  }
+  const f = demoFixture({
+    environment: {
+      deployment_branch_policy: { protected_branches: false, custom_branch_policies: true },
+    },
+  });
+  await f.configure();
+  assert.equal(f.writes.length, 1);
+  assert.equal(f.writes[0].method, 'POST');
+});
+
+test('conflicting, duplicate, wildcard, tag and malformed policies are never deleted or mutated', async () => {
+  for (const policies of [
+    [{ ...mainPolicy, name: 'maintenance' }],
+    [{ ...mainPolicy, name: '*' }],
+    [{ ...mainPolicy, name: 'main*' }],
+    [{ ...mainPolicy, type: 'tag' }],
+    [{ ...mainPolicy, type: undefined }],
+    [{ ...mainPolicy, id: undefined }],
+    [mainPolicy, { ...mainPolicy, id: 72 }],
+    Array.from({ length: 101 }, (_, id) => ({
+      id,
+      name: id === 100 ? 'other' : 'main',
+      type: 'branch',
+    })),
+  ]) {
+    const f = demoFixture({ policies });
+    await assert.rejects(f.configure());
+    assert.deepEqual(f.writes, []);
+    if (policies.length === 101) assert.ok(f.reads.includes(`${policyRoute}?per_page=100&page=2`));
+  }
+});
+
+test('pagination is complete for policy, protection and secret inventories and has a fixed upper bound', async () => {
+  const hundred = Array.from({ length: 100 }, (_, id) => ({ id, name: `OTHER_${id}` }));
+  const f = demoFixture({
+    repositorySecrets: [...hundred, { name: 'RAILWAY_DEMO_TOKEN' }],
+    environmentSecrets: [...hundred, { name: 'RAILWAY_DEMO_TOKEN' }],
+    customRules: Array.from({ length: 101 }, (_, id) => ({ id })),
+  });
+  const result = await f.configure();
+  assert.deepEqual(result.secrets, {
+    repository: { readable: true, present: true },
+    environment: { readable: true, present: true },
+  });
+  for (const route of [customRoute, `${demoBase}/actions/secrets`, `${demoRoute}/secrets`])
+    assert.ok(f.reads.includes(`${route}?per_page=100&page=2`));
+  for (const route of [
+    policyRoute,
+    customRoute,
+    `${demoBase}/actions/secrets`,
+    `${demoRoute}/secrets`,
+  ]) {
+    for (const broken of [
+      (result) => ({ ...result, total_count: 10001 }),
+      (result) => ({ ...result, total_count: -1 }),
+      (result) => ({ ...result, total_count: 1.5 }),
+      (result) => ({ ...result, total_count: 1 }),
+      (result) => ({
+        ...result,
+        total_count: 0,
+        branch_policies: [mainPolicy],
+        secrets: hundred,
+        custom_deployment_protection_rules: hundred,
+      }),
+    ]) {
+      const bad = demoFixture({
+        transform: (_method, current, result) =>
+          current.split('?')[0] === route ? broken(result) : result,
+      });
+      await assert.rejects(bad.configure());
+      assert.deepEqual(bad.writes, []);
+    }
+  }
+  const changed = demoFixture({
+    repositorySecrets: [...hundred, { name: 'RAILWAY_DEMO_TOKEN' }],
+    transform: (_method, route, result) =>
+      route === `${demoBase}/actions/secrets?per_page=100&page=2`
+        ? { ...result, total_count: 102 }
+        : result,
+  });
+  await assert.rejects(changed.configure(), /changed during pagination/);
+  assert.deepEqual(changed.writes, []);
+});
+
+test('readback detects changed identity, controls, custom rules and non-main policies', async () => {
+  for (const breakReadback of [
+    (route, result) => (route === demoRoute ? { ...result, id: 1 } : result),
+    (route, result) => (route === demoRoute ? { ...result, can_admins_bypass: true } : result),
+    (route, result) =>
+      route === demoRoute ? { ...result, deployment_branch_policy: null } : result,
+    (route, result) =>
+      route === demoRoute
+        ? { ...result, protection_rules: [{ type: 'required_reviewers' }] }
+        : result,
+    (route, result) =>
+      route.split('?')[0] === policyRoute
+        ? { total_count: 1, branch_policies: [{ ...mainPolicy, type: 'tag' }] }
+        : result,
+    (route, result) =>
+      route.split('?')[0] === policyRoute ? { total_count: 0, branch_policies: [] } : result,
+    (route, result) =>
+      route.split('?')[0] === customRoute
+        ? { total_count: 1, custom_deployment_protection_rules: [{ id: 999 }] }
+        : result,
+  ]) {
+    const f = demoFixture({
+      transform: (method, route, result, _state, _reads, writes) =>
+        method === 'GET' && writes.length ? breakReadback(route, result) : result,
+    });
+    await assert.rejects(f.configure());
+    assert.ok(f.writes.length <= 2);
+  }
+});
+
+test('failed mutations are attempted once and stop later writes without a blind retry', async () => {
+  for (const failRoute of [demoRoute, policyRoute]) {
+    const f = demoFixture({
+      mutate: (_method, route) => {
+        if (route === failRoute) throw new Error('HTTP 503');
+      },
+    });
+    await assert.rejects(f.configure(), /HTTP 503/);
+    assert.equal(f.writes.filter((write) => write.route === failRoute).length, 1);
+    assert.equal(f.writes.length, failRoute === demoRoute ? 1 : 2);
+  }
+});
+
+test('secret reports distinguish repository exposure from environment restriction and never emit values', async () => {
+  const sentinel = 'synthetic-secret-must-never-appear';
+  for (const repositoryPresent of [true, false])
+    for (const environmentPresent of [true, false]) {
+      const f = demoFixture({
+        repositorySecrets: repositoryPresent
+          ? [{ name: 'RAILWAY_DEMO_TOKEN', value: sentinel }]
+          : [],
+        environmentSecrets: environmentPresent
+          ? [{ name: 'RAILWAY_DEMO_TOKEN', value: sentinel }]
+          : [],
+        environment: {
+          arbitrary_provider_metadata: sentinel,
+          deployment_branch_policy: {
+            protected_branches: true,
+            custom_branch_policies: false,
+            extra: sentinel,
+          },
+        },
+      });
+      const result = await f.configure();
+      assert.deepEqual(result.secrets, {
+        repository: { readable: true, present: repositoryPresent },
+        environment: { readable: true, present: environmentPresent },
+      });
+      assert.equal(result.repositorySecretsAreNotRestrictedByEnvironmentPolicy, true);
+      assert.ok(!JSON.stringify(result).includes(sentinel));
+      assert.ok(f.writes.every((write) => !write.route.includes('/secrets')));
+    }
+  for (const denied of [403, 404]) {
+    const f = demoFixture({
+      transform: (_method, route, result) => {
+        if (route.includes('/secrets?'))
+          throw Object.assign(new Error('metadata unavailable'), { status: denied });
+        return result;
+      },
+    });
+    const result = await f.configure();
+    assert.deepEqual(result.secrets, {
+      repository: { readable: false },
+      environment: { readable: false },
+    });
+    assert.ok(
+      !Object.hasOwn(result.secrets.repository, 'present'),
+      'Unreadable is never reported as absent',
+    );
+  }
+});
+
+test('demo CLI never reflects provider errors or credentials and performs no real network calls', () => {
+  const sentinel = 'synthetic-secret-reflection-sentinel';
+  const preload = `globalThis.fetch = async () => { throw new Error(${JSON.stringify(sentinel)}); };`;
+  const result = spawnSync(
+    process.execPath,
+    [
+      `--import=data:text/javascript,${encodeURIComponent(preload)}`,
+      new URL('../../../scripts/quality-gate/configure-bug-repository.mjs', import.meta.url)
+        .pathname,
+    ],
+    {
+      encoding: 'utf8',
+      env: {
+        GH_TOKEN: sentinel,
+        CLINICOS_RESTRICT_DEMO_ENVIRONMENT: 'true',
+        CLINICOS_CONFIGURE_REPOSITORY: 'false',
+        CLINICOS_REVIEWED_SHA: sha,
+        GITHUB_SHA: sha,
+        GITHUB_WORKFLOW_SHA: sha,
+        GITHUB_ACTOR: demoContext.actor,
+        GITHUB_TRIGGERING_ACTOR: demoContext.triggeringActor,
+        GITHUB_REF: demoContext.ref,
+        GITHUB_WORKFLOW_REF: demoContext.workflowRef,
+        GITHUB_EVENT_NAME: 'workflow_dispatch',
+        GITHUB_REPOSITORY: demoContext.repository,
+      },
+    },
+  );
+  assert.equal(result.status, 1);
+  assert.equal(result.stdout, '');
+  assert.match(
+    result.stderr,
+    /^Demo environment restriction blocked; no provider details are printed\s*$/,
+  );
+  assert.ok(!`${result.stdout}${result.stderr}`.includes(sentinel));
+});
+
+test('demo workflow selects one explicit mode before the bot credential and stays in existing native CI', async () => {
+  const workflow = await readFile(
+    new URL('../../../.github/workflows/bug-pipeline-tests.yml', import.meta.url),
+    'utf8',
+  );
+  assert.match(
+    workflow,
+    /restrict_demo_environment:\n\s+description:.*\n\s+type: boolean\n\s+default: false/,
+  );
+  assert.match(workflow, /inputs.configure_repository \|\| inputs.restrict_demo_environment/);
+  const job = workflow.match(/^  configure-repository:\n([\s\S]*?)(?=^  bug-pipeline-tests:)/m)[1];
+  const validation = job.indexOf('Validate the explicit administration mode');
+  const credential = job.indexOf('GH_TOKEN:');
+  assert.ok(validation >= 0 && validation < credential);
+  assert.match(job.slice(validation, credential), /assert.notEqual\(configure, demo/);
+  assert.match(job.slice(validation, credential), /validateDemoEnvironmentDispatch/);
+  assert.doesNotMatch(job, /RAILWAY(?:_DEMO)?_TOKEN|environment:\s|persist-credentials: true/);
+  assert.match(workflow, /node --test agent-team\/tests\/bug-pipeline\/\*\.test\.mjs/);
+});
+
+test('actual credential-free workflow validation executes both modes and rejects ambiguous or stale dispatches', async () => {
+  const workflow = await readFile(
+    new URL('../../../.github/workflows/bug-pipeline-tests.yml', import.meta.url),
+    'utf8',
+  );
+  const section = workflow.slice(
+    workflow.indexOf('- name: Validate the explicit administration mode'),
+  );
+  const source = section
+    .match(/node --input-type=module <<'JS'\n([\s\S]*?)\n\s+JS/)[1]
+    .split('\n')
+    .map((line) => line.replace(/^          /, ''))
+    .join('\n');
+  const defaults = {
+    CLINICOS_REVIEWED_SHA: sha,
+    GITHUB_SHA: sha,
+    GITHUB_WORKFLOW_SHA: sha,
+    GITHUB_ACTOR: demoContext.actor,
+    GITHUB_TRIGGERING_ACTOR: demoContext.triggeringActor,
+    GITHUB_REF: demoContext.ref,
+    GITHUB_WORKFLOW_REF: demoContext.workflowRef,
+    GITHUB_EVENT_NAME: 'workflow_dispatch',
+    GITHUB_REPOSITORY: demoContext.repository,
+    CLINICOS_CONFIGURE_REPOSITORY: 'false',
+    CLINICOS_RESTRICT_DEMO_ENVIRONMENT: 'true',
+  };
+  for (const [overrides, expected] of [
+    [{}, 0],
+    [{ CLINICOS_CONFIGURE_REPOSITORY: 'true', CLINICOS_RESTRICT_DEMO_ENVIRONMENT: 'false' }, 0],
+    [{ CLINICOS_CONFIGURE_REPOSITORY: 'true' }, 1],
+    [{ CLINICOS_RESTRICT_DEMO_ENVIRONMENT: 'false' }, 1],
+    [{ GITHUB_SHA: 'b'.repeat(40) }, 1],
+    [{ GITHUB_WORKFLOW_SHA: 'b'.repeat(40) }, 1],
+    [{ GITHUB_EVENT_NAME: 'pull_request' }, 1],
+    [{ GITHUB_REPOSITORY: 'other/ClinicOS' }, 1],
+    [{ GITHUB_TRIGGERING_ACTOR: 'other-admin' }, 1],
+  ]) {
+    const result = spawnSync(process.execPath, ['--input-type=module', '--eval', source], {
+      cwd: new URL('../../../', import.meta.url),
+      encoding: 'utf8',
+      env: { ...defaults, ...overrides },
+    });
+    assert.equal(result.status, expected, result.stderr);
+  }
 });
