@@ -1,0 +1,32 @@
+{
+  "kind": "exact synthetic session-token redaction only",
+  "rawSource": {
+    "path": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-2/output/milo-ui/private-trace.zip",
+    "sha256": "a96cce1e23ae94fc0fb00dd12459a1438739835c359b39d719f4487e213a9bdc",
+    "bytes": 7804883
+  },
+  "publishedSanitizedDerivative": {
+    "path": "/workspace/.clinicos-cloud/497-release-media-binding-20261021/candidate/payload/artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-486-trace.zip",
+    "sha256": "d6d7fb7fc9ab945c83644d8090017345402523daafa1a8ea5d0018acc1759719",
+    "bytes": 7799221
+  },
+  "copiedSanitizedDerivative": {
+    "path": "/workspace/.clinicos-cloud/497-publication12-20261021/payload/artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-486-trace.zip",
+    "sha256": "d6d7fb7fc9ab945c83644d8090017345402523daafa1a8ea5d0018acc1759719",
+    "bytes": 7799221
+  },
+  "entryCount": 302,
+  "allEntriesRetained": true,
+  "distinctSyntheticValuesRedacted": 3,
+  "occurrencesRedacted": 108,
+  "crc": "PASS",
+  "residualSignedTokenCount": 0,
+  "residualNonMarkerBearerCount": 0,
+  "rawArchiveRemainsPrivateAndUnmodified": true,
+  "redactedSessionValueSha256": [
+    "0d0a2a552fc46c6f4beabe586574b6c8a685ebfbded59d8cbbcf238cef62a13f",
+    "1c5aab436d2f943d7ac7438fb0023456c76bbf9e9345a3999270edf19867da71",
+    "e446915ee4e55a4991e0ee4c783c7243f02b0001b36b51ea7f5e90ec6aa549c5"
+  ],
+  "redactionMarkerOccurrencesVerified": 108
+}

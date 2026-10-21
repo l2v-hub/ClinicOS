@@ -1,0 +1,220 @@
+{
+  "kind": "publication12-public-safe-provenance",
+  "sources": {
+    "kind": "review-packet-12-evidence-source-manifest",
+    "publicationSource": {
+      "sha": "43b51530214c1e09035091b7fe36dd0b0577bf1a",
+      "worktree": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447",
+      "statusCleanAtCurationStart": true
+    },
+    "testedSource": {
+      "sha": "f394e3a77925e96a2b54e63485fb45ad44678f54",
+      "scope": "independent backend51 only; not fresh UI"
+    },
+    "qa4": {
+      "sourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+      "resultsPath": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/results.json",
+      "resultsSha256": "d4533a67cfe478b2dda27a97430de0aa2915772fee12db61ca325080fb6754cc",
+      "resultsBytes": 56137,
+      "scope": "seven canonical issue scenarios",
+      "reportedStatuses": {
+        "PASS_SCENARIO": 7
+      },
+      "aggregateFailed": true,
+      "allEightCoverage": false,
+      "failureAttribution": "original actual Milo route #486; dedicated QA5 coverage follows"
+    },
+    "qa5": {
+      "captureSourceSha": "b76eb6baf5e87dcdb9b89a580ef48baf26e1bb7a",
+      "capturePath": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-2/output/milo-ui",
+      "capture2Seal": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-2/evidence-seal.json",
+        "sha256": "c7f8549729c3c1dbf1c629e50e268708fd18e66717e53214a7ab4b23b66d45ef",
+        "bytes": 6935,
+        "status": "STOP_FAILED_VALIDATION_PRESERVED"
+      },
+      "laterScopedReport": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-5/report.json",
+        "sha256": "741c8574063d97cb720adf80b07fec68c58ea259f3fd515afec11adf89bdf4e4",
+        "bytes": 6349,
+        "status": "SCOPED_REGRESSION_PASS_WITH_DISCLOSED_UNRUN",
+        "freshResults": {
+          "affectedAssistantHTTP": {
+            "pass": 11,
+            "fail": 0,
+            "attempt": 1
+          },
+          "actualMiloAndRouteMatrix": {
+            "pass": 3,
+            "attempt": 2,
+            "actualDoseMode": "fixed",
+            "perOsMappedRoute": "orale",
+            "confirmTherapies": 1,
+            "confirmDiaryDelta": 1,
+            "reload": true,
+            "missingRouteNoConfirmNoWrites": true,
+            "invalidHTTP": 21,
+            "invalidTools": 21,
+            "validHTTP": 9,
+            "validTools": 9,
+            "restrictedForeignOwnerToolDenied": true
+          },
+          "recordedMatrix": {
+            "passingCriteria": 8,
+            "firstFiveAttempt": 2,
+            "calendarAttempt": 3,
+            "dashboardAttempt": 4,
+            "wardWithRealPaginationAttempt": 5,
+            "deniedWrites": 18,
+            "fullSQLRowsAndReceiptsUnchanged": true,
+            "selectedPatientAndWardReload": true
+          },
+          "recordedLifecycle": {
+            "attempt": 5,
+            "passingCriteria": 6,
+            "results": [
+              {
+                "name": "operator-actual-App-cold-reload-selected-day-view-return-paginated-readonly",
+                "pass": true,
+                "verification": 5,
+                "timedCards": 0,
+                "administrationPosts": 0,
+                "terapiaContinuationRealClick": true
+              },
+              {
+                "name": "admin-actual-App-cold-reload-selected-day-view-return-paginated-readonly",
+                "pass": true,
+                "verification": 5,
+                "timedCards": 0,
+                "administrationPosts": 0,
+                "terapiaContinuationRealClick": true
+              },
+              {
+                "name": "real-App-initial-503-append-503-403-retry-and-out-of-order-day-append",
+                "pass": true,
+                "interceptionsDisclosed": true,
+                "oldNamesAbsent": true
+              },
+              {
+                "name": "actual-admin-free-cell-create-dialog-cancel-during-clinical-feed-503",
+                "pass": true,
+                "dedicatedNewButtonAbsent": true,
+                "appointmentRowsExactlyUnchanged": true,
+                "appointmentPosts": 0,
+                "administrationPosts": 0
+              },
+              {
+                "name": "real-roster-epoch-409-recovery-retains-selected-day",
+                "pass": true
+              },
+              {
+                "name": "real-logout-new-role-during-held-old-session-read",
+                "pass": true,
+                "oldSnapshotItemDeletedInOwnedFixture": true,
+                "newCount": 4
+              }
+            ],
+            "sql": [
+              {
+                "name": "recorded-lifecycle-fixture",
+                "expectedAdministered": 3,
+                "expectedNotAdministered": 2
+              },
+              {
+                "name": "real-sql-five-readonly-items-and-acl",
+                "verification": 5,
+                "deniedWrites": 10,
+                "administrations": 7,
+                "firstPageVerificationDetails": 1,
+                "hasMore": true
+              },
+              {
+                "name": "actual-Agenda-readonly-after-all-browser-cases",
+                "administrations": 7,
+                "receiptCount": 0
+              },
+              {
+                "name": "no-browser-write-SQL-delta",
+                "onlyIntentionalDeletedTherapySetNull": true
+              }
+            ]
+          }
+        }
+      },
+      "mediaIndexPath": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-5/media-index.json",
+      "mediaIndexSha256": "7a38ae34dc5b54a958d07d07868bfa4be52e59be6e944cc273c30b3004aabbd1",
+      "reportIsCaptureReferenceNotNewCapture": true
+    },
+    "currentBackendOnly": {
+      "report": "review-packet-11/independent-qa11/validation-report.md",
+      "sourceSha": "f394e3a77925e96a2b54e63485fb45ad44678f54",
+      "results": "30 pure + 19 HTTP/PostgreSQL + 2 PSDB = 51 PASS",
+      "notFreshUI": true
+    },
+    "retainedImportUI": {
+      "report": "review-packet-11/retained-qa10/provenance/FOLLOWUP10-REPORT.md",
+      "sourceSha": "74b260cdbcf36b1f7395477f4e35d07aba7fcf90",
+      "desktopTablet": "2 PASS",
+      "notFreshUI": true
+    },
+    "mediaIndex": "media-index.json",
+    "mediaCount": 24,
+    "manifestPath": "artifacts/task-validation/bug-batch-447/evidence-manifest.json",
+    "sizeLimitBytes": 26214400,
+    "issue453TraceBytes": 27606230,
+    "issue453CurrentMainVerifier": "BLOCKED_OVER_25_MIB"
+  },
+  "privacyReceipts": [
+    {
+      "issue": 447,
+      "packetPath": "provenance/qa4-issue-447-trace-privacy.json",
+      "sha256": "814f8d94b2a49016500bc7b1bd15cba4459cd420ff03d7593a6447dc16e7ad75",
+      "bytes": 988
+    },
+    {
+      "issue": 451,
+      "packetPath": "provenance/qa4-issue-451-trace-privacy.json",
+      "sha256": "0716c62eba7282cfc4d69053d16c5d7989ef3bd553896d34bb454f5cb0e6a9a4",
+      "bytes": 1197
+    },
+    {
+      "issue": 452,
+      "packetPath": "provenance/qa4-issue-452-trace-privacy.json",
+      "sha256": "b196b00cd4e65a7fe84f8f013910422b73b3cbc0871c045baad4863de13b8b69",
+      "bytes": 1369
+    },
+    {
+      "issue": 453,
+      "packetPath": "provenance/qa4-issue-453-trace-privacy.json",
+      "sha256": "4a60f1cba6575079e9ba62286e1c69fd1c92148f165f1a737e8bdddea63c02f2",
+      "bytes": 1452
+    },
+    {
+      "issue": 454,
+      "packetPath": "provenance/qa4-issue-454-trace-privacy.json",
+      "sha256": "8ae28ce290455321528d0045ea3d02659a901fa3f5016b76fef637ab407bc591",
+      "bytes": 1070
+    },
+    {
+      "issue": 456,
+      "packetPath": "provenance/qa4-issue-456-trace-privacy.json",
+      "sha256": "acc3cf8841f20823663bd68e31a798e6daf46cd872c7e60ad6d61652dc48b333",
+      "bytes": 860
+    },
+    {
+      "issue": 457,
+      "packetPath": "provenance/qa4-issue-457-trace-privacy.json",
+      "sha256": "c8d8e3d1fae2fa97537dd97a893d0830813694b2c96a37c66160503b1c4b4850",
+      "bytes": 1453
+    },
+    {
+      "issue": 486,
+      "packetPath": "provenance/qa5-486-trace-redaction.json",
+      "sha256": "9d4d3560b40f4353595512f1017e141bc703b99b2694cd73e5f31017b968ad96",
+      "bytes": 1202
+    }
+  ],
+  "publishedMedia": "media-index.json",
+  "originalsRemainPrivate": true,
+  "rawLogsSqlCookiesCredentialsExcluded": true
+}

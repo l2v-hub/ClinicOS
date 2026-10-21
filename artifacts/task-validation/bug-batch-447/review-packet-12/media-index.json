@@ -1,0 +1,443 @@
+[
+  {
+    "issue": 447,
+    "acceptance": "QA4 canonical-seven PASS_SCENARIO",
+    "captureSourceCommit": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+    "captureSources": {
+      "screenshot": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-447.png",
+        "sha256": "7bcf997bb0af3d010b25215188828544d565f5653c6262952bf266ae752c69c2",
+        "bytes": 115649
+      },
+      "video": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-447.webm",
+        "sha256": "3340c8fc4b7ec6dce102f9ff1f539cace5b3fad9198c5604f81a0e2037888156",
+        "bytes": 1325290
+      },
+      "traceSanitized": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-447-trace.zip",
+        "sha256": "1636ecd335c10eebac19e3e93bd4f0f6aee363e565cbb618c0acd7116c9fdf7b",
+        "bytes": 19643990,
+        "originalSha256": "ed24af8e44083631933846c5e4801e6621c1676d608bff281b8591a2228074d2",
+        "originalRetainedPrivate": true
+      }
+    },
+    "publishedCopies": {
+      "screenshot": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-447.png",
+        "sha256": "7bcf997bb0af3d010b25215188828544d565f5653c6262952bf266ae752c69c2",
+        "bytes": 115649
+      },
+      "trace": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-447-trace.zip",
+        "sha256": "1636ecd335c10eebac19e3e93bd4f0f6aee363e565cbb618c0acd7116c9fdf7b",
+        "bytes": 19643990
+      },
+      "video": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-447.webm",
+        "sha256": "3340c8fc4b7ec6dce102f9ff1f539cace5b3fad9198c5604f81a0e2037888156",
+        "bytes": 1325290
+      }
+    },
+    "privacyReceipt": {
+      "packetPath": "provenance/qa4-issue-447-trace-privacy.json",
+      "sha256": "814f8d94b2a49016500bc7b1bd15cba4459cd420ff03d7593a6447dc16e7ad75",
+      "bytes": 988,
+      "sourceSessionsRedacted": 2,
+      "sourceEntryReplacementCounts": 110,
+      "remainingTokenCount": 0,
+      "crcAndResidualScan": "CRC and residual signed-token scan passed"
+    }
+  },
+  {
+    "issue": 451,
+    "acceptance": "QA4 canonical-seven PASS_SCENARIO",
+    "captureSourceCommit": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+    "captureSources": {
+      "screenshot": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-451.png",
+        "sha256": "4b76b6adb2cbf22b36e14df93060bbc5e5271b853f64ddf1848a940930729afc",
+        "bytes": 150661
+      },
+      "video": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-451.webm",
+        "sha256": "5b1bf1fb1a5e06fbb318d4067a989c6ad53005e139e4670e6df3ac650bb8a641",
+        "bytes": 848271
+      },
+      "traceSanitized": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-451-trace.zip",
+        "sha256": "69c8d4facf34caf7d6efa1e9d3a5257e46cf5afcadd6a75a0705117caf53a5fe",
+        "bytes": 9457648,
+        "originalSha256": "8f6623fe379b0b39daf577fbd17c9bff8a92bc98a6bc70c9ed87b4cbf7be56be",
+        "originalRetainedPrivate": true
+      }
+    },
+    "publishedCopies": {
+      "screenshot": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-451.png",
+        "sha256": "4b76b6adb2cbf22b36e14df93060bbc5e5271b853f64ddf1848a940930729afc",
+        "bytes": 150661
+      },
+      "trace": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-451-trace.zip",
+        "sha256": "69c8d4facf34caf7d6efa1e9d3a5257e46cf5afcadd6a75a0705117caf53a5fe",
+        "bytes": 9457648
+      },
+      "video": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-451.webm",
+        "sha256": "5b1bf1fb1a5e06fbb318d4067a989c6ad53005e139e4670e6df3ac650bb8a641",
+        "bytes": 848271
+      }
+    },
+    "privacyReceipt": {
+      "packetPath": "provenance/qa4-issue-451-trace-privacy.json",
+      "sha256": "0716c62eba7282cfc4d69053d16c5d7989ef3bd553896d34bb454f5cb0e6a9a4",
+      "bytes": 1197,
+      "sourceSessionsRedacted": 3,
+      "sourceEntryReplacementCounts": 73,
+      "remainingTokenCount": 0,
+      "crcAndResidualScan": "CRC and residual signed-token scan passed"
+    }
+  },
+  {
+    "issue": 452,
+    "acceptance": "QA4 canonical-seven PASS_SCENARIO",
+    "captureSourceCommit": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+    "captureSources": {
+      "screenshot": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-452.png",
+        "sha256": "1cc37c6874c90b6061202933d1f42b13fb7e2f5654928cb96bd05e493b18971a",
+        "bytes": 128760
+      },
+      "video": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-452.webm",
+        "sha256": "ec328d66de63fcfc15dc760bc5f5052fd616a53cf7ec3c44b9ea73fbe885755e",
+        "bytes": 1684448
+      },
+      "traceSanitized": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-452-trace.zip",
+        "sha256": "9b7b87c3b180889b36e2935d2e13ea4825aed8ae4e33fe24a9e85a5b5d2ab835",
+        "bytes": 13219586,
+        "originalSha256": "929207ebb48750677a39ff6ad4b09e033d7a9af476023441bbe14e220d1938ae",
+        "originalRetainedPrivate": true
+      }
+    },
+    "publishedCopies": {
+      "screenshot": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-452.png",
+        "sha256": "1cc37c6874c90b6061202933d1f42b13fb7e2f5654928cb96bd05e493b18971a",
+        "bytes": 128760
+      },
+      "trace": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-452-trace.zip",
+        "sha256": "9b7b87c3b180889b36e2935d2e13ea4825aed8ae4e33fe24a9e85a5b5d2ab835",
+        "bytes": 13219586
+      },
+      "video": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-452.webm",
+        "sha256": "ec328d66de63fcfc15dc760bc5f5052fd616a53cf7ec3c44b9ea73fbe885755e",
+        "bytes": 1684448
+      }
+    },
+    "privacyReceipt": {
+      "packetPath": "provenance/qa4-issue-452-trace-privacy.json",
+      "sha256": "b196b00cd4e65a7fe84f8f013910422b73b3cbc0871c045baad4863de13b8b69",
+      "bytes": 1369,
+      "sourceSessionsRedacted": 5,
+      "sourceEntryReplacementCounts": 321,
+      "remainingTokenCount": 0,
+      "crcAndResidualScan": "CRC and residual signed-token scan passed"
+    }
+  },
+  {
+    "issue": 453,
+    "acceptance": "QA4 canonical-seven PASS_SCENARIO",
+    "captureSourceCommit": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+    "captureSources": {
+      "screenshot": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-453.png",
+        "sha256": "0aee9c68c433d8e9429074ce9fbd190abc430529524b9396c980783aca52a557",
+        "bytes": 107967
+      },
+      "video": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-453.webm",
+        "sha256": "83607311dea39d98e02f840c410554f226b92218931ce854da0c6377ff79f8c8",
+        "bytes": 3035278
+      },
+      "traceSanitized": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-453-trace.zip",
+        "sha256": "1d926e21b02c8b3c68353c55bab71151b672c428fcc24359c49e4eb5c9f11102",
+        "bytes": 27606230,
+        "originalSha256": "567b1de83a210160dd6ee1a0c1633e06d411d17faf47d899db6c1fbbea3a8791",
+        "originalRetainedPrivate": true
+      }
+    },
+    "publishedCopies": {
+      "screenshot": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-453.png",
+        "sha256": "0aee9c68c433d8e9429074ce9fbd190abc430529524b9396c980783aca52a557",
+        "bytes": 107967
+      },
+      "trace": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-453-trace.zip",
+        "sha256": "1d926e21b02c8b3c68353c55bab71151b672c428fcc24359c49e4eb5c9f11102",
+        "bytes": 27606230
+      },
+      "video": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-453.webm",
+        "sha256": "83607311dea39d98e02f840c410554f226b92218931ce854da0c6377ff79f8c8",
+        "bytes": 3035278
+      }
+    },
+    "privacyReceipt": {
+      "packetPath": "provenance/qa4-issue-453-trace-privacy.json",
+      "sha256": "4a60f1cba6575079e9ba62286e1c69fd1c92148f165f1a737e8bdddea63c02f2",
+      "bytes": 1452,
+      "sourceSessionsRedacted": 5,
+      "sourceEntryReplacementCounts": 328,
+      "remainingTokenCount": 0,
+      "crcAndResidualScan": "CRC and residual signed-token scan passed"
+    }
+  },
+  {
+    "issue": 454,
+    "acceptance": "QA4 canonical-seven PASS_SCENARIO",
+    "captureSourceCommit": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+    "captureSources": {
+      "screenshot": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-454.png",
+        "sha256": "c5f66b3acd21a22f2d62868e8c951269d4fac18a0bff3dc9bf1cb6c36d004609",
+        "bytes": 108231
+      },
+      "video": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-454.webm",
+        "sha256": "53eb5b09539ae60dd7c456f17f1127770a5fe0f834722dfeac1250f7cc9a9817",
+        "bytes": 473562
+      },
+      "traceSanitized": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-454-trace.zip",
+        "sha256": "9a263c6412525ff6bc6788ada3554b5540da3d89efd20db98c61d698e82d81f1",
+        "bytes": 3926192,
+        "originalSha256": "7c83cab8655607e217cefefd0680652d3ee3e7739960ccd53fa20e5621d22250",
+        "originalRetainedPrivate": true
+      }
+    },
+    "publishedCopies": {
+      "screenshot": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-454.png",
+        "sha256": "c5f66b3acd21a22f2d62868e8c951269d4fac18a0bff3dc9bf1cb6c36d004609",
+        "bytes": 108231
+      },
+      "trace": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-454-trace.zip",
+        "sha256": "9a263c6412525ff6bc6788ada3554b5540da3d89efd20db98c61d698e82d81f1",
+        "bytes": 3926192
+      },
+      "video": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-454.webm",
+        "sha256": "53eb5b09539ae60dd7c456f17f1127770a5fe0f834722dfeac1250f7cc9a9817",
+        "bytes": 473562
+      }
+    },
+    "privacyReceipt": {
+      "packetPath": "provenance/qa4-issue-454-trace-privacy.json",
+      "sha256": "8ae28ce290455321528d0045ea3d02659a901fa3f5016b76fef637ab407bc591",
+      "bytes": 1070,
+      "sourceSessionsRedacted": 2,
+      "sourceEntryReplacementCounts": 63,
+      "remainingTokenCount": 0,
+      "crcAndResidualScan": "CRC and residual signed-token scan passed"
+    }
+  },
+  {
+    "issue": 456,
+    "acceptance": "QA4 canonical-seven PASS_SCENARIO",
+    "captureSourceCommit": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+    "captureSources": {
+      "screenshot": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-456.png",
+        "sha256": "22d1ddd5d4dcbee91933a7d3d1f9172be8e03bce59540f6a7ad900eca676f5e3",
+        "bytes": 157594
+      },
+      "video": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-456.webm",
+        "sha256": "b4205ba00e7f3c2f4ddbcdef0b2dc0639ef2a79f760ffe4af049b95e207d3be2",
+        "bytes": 781959
+      },
+      "traceSanitized": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-456-trace.zip",
+        "sha256": "e10aac73198973c0f21d803f6fe197e6f3bde0062a603dd33087d8a694ff8b04",
+        "bytes": 5505332,
+        "originalSha256": "4ca66f675be68a72b47f1516c18554e716e9ef75ee60cf757daf5dfb48c7537e",
+        "originalRetainedPrivate": true
+      }
+    },
+    "publishedCopies": {
+      "screenshot": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-456.png",
+        "sha256": "22d1ddd5d4dcbee91933a7d3d1f9172be8e03bce59540f6a7ad900eca676f5e3",
+        "bytes": 157594
+      },
+      "trace": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-456-trace.zip",
+        "sha256": "e10aac73198973c0f21d803f6fe197e6f3bde0062a603dd33087d8a694ff8b04",
+        "bytes": 5505332
+      },
+      "video": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-456.webm",
+        "sha256": "b4205ba00e7f3c2f4ddbcdef0b2dc0639ef2a79f760ffe4af049b95e207d3be2",
+        "bytes": 781959
+      }
+    },
+    "privacyReceipt": {
+      "packetPath": "provenance/qa4-issue-456-trace-privacy.json",
+      "sha256": "acc3cf8841f20823663bd68e31a798e6daf46cd872c7e60ad6d61652dc48b333",
+      "bytes": 860,
+      "sourceSessionsRedacted": 1,
+      "sourceEntryReplacementCounts": 65,
+      "remainingTokenCount": 0,
+      "crcAndResidualScan": "CRC and residual signed-token scan passed"
+    }
+  },
+  {
+    "issue": 457,
+    "acceptance": "QA4 canonical-seven PASS_SCENARIO",
+    "captureSourceCommit": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+    "captureSources": {
+      "screenshot": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-457.png",
+        "sha256": "b597c41dcc969f08e4322d2d0a858560accc9115edadaa613f37d34651c624f2",
+        "bytes": 206296
+      },
+      "video": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-457.webm",
+        "sha256": "aebb197efcf146a8a6b22adc5419ea169afc83d95bd130ead4d1b53e423766e6",
+        "bytes": 1921792
+      },
+      "traceSanitized": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-457-trace.zip",
+        "sha256": "f567792efa3a559b4c21f133a0e9afcec59a8fa80d452939a93a91b5ec97f20b",
+        "bytes": 12192816,
+        "originalSha256": "891f1bfc5d1cc57fcb0206b8cc10b3d7b95eeabf756eb3dc9ff046a6a1fc5340",
+        "originalRetainedPrivate": true
+      }
+    },
+    "publishedCopies": {
+      "screenshot": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-457.png",
+        "sha256": "b597c41dcc969f08e4322d2d0a858560accc9115edadaa613f37d34651c624f2",
+        "bytes": 206296
+      },
+      "trace": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-457-trace.zip",
+        "sha256": "f567792efa3a559b4c21f133a0e9afcec59a8fa80d452939a93a91b5ec97f20b",
+        "bytes": 12192816
+      },
+      "video": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-457.webm",
+        "sha256": "aebb197efcf146a8a6b22adc5419ea169afc83d95bd130ead4d1b53e423766e6",
+        "bytes": 1921792
+      }
+    },
+    "privacyReceipt": {
+      "packetPath": "provenance/qa4-issue-457-trace-privacy.json",
+      "sha256": "c8d8e3d1fae2fa97537dd97a893d0830813694b2c96a37c66160503b1c4b4850",
+      "bytes": 1453,
+      "sourceSessionsRedacted": 5,
+      "sourceEntryReplacementCounts": 309,
+      "remainingTokenCount": 0,
+      "crcAndResidualScan": "CRC and residual signed-token scan passed"
+    }
+  },
+  {
+    "issue": 486,
+    "acceptance": "QA5 actual Milo/route regression (3 actual cases pass; continuation-5 scoped report with disclosed UNRUN)",
+    "recordingSourceCommit": "b76eb6baf5e87dcdb9b89a580ef48baf26e1bb7a",
+    "captureAttempt": "continuation-20261021-2; continuation-5 is a later scoped report referencing this capture, not a new recording",
+    "captureSources": {
+      "screenshot": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-2/output/milo-ui/milo-explicit-route-reloaded.png",
+        "sha256": "fb1fe6d5b8cd9372657020d93dc9d162d285e38e8f8fc91a8b5c6d86a92c8a78",
+        "bytes": 66737
+      },
+      "video": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-2/output/milo-ui/video/page@a54b28c07da3f14932236dfa458b66c2.webm",
+        "sha256": "3d1a60ccdaa377cd93228a9970b8ca434ba48193aa82a324f90413f2b37e8cf4",
+        "bytes": 1339977
+      },
+      "traceRawPrivate": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-2/output/milo-ui/private-trace.zip",
+        "sha256": "a96cce1e23ae94fc0fb00dd12459a1438739835c359b39d719f4487e213a9bdc",
+        "bytes": 7804883
+      }
+    },
+    "reportSources": {
+      "continuation2Seal": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-2/evidence-seal.json",
+        "sha256": "c7f8549729c3c1dbf1c629e50e268708fd18e66717e53214a7ab4b23b66d45ef",
+        "bytes": 6935,
+        "status": "STOP_FAILED_VALIDATION_PRESERVED"
+      },
+      "continuation5Report": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-5/report.json",
+        "sha256": "741c8574063d97cb720adf80b07fec68c58ea259f3fd515afec11adf89bdf4e4",
+        "bytes": 6349,
+        "status": "SCOPED_REGRESSION_PASS_WITH_DISCLOSED_UNRUN"
+      },
+      "continuation5MediaIndex": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-5/media-index.json",
+        "sha256": "7a38ae34dc5b54a958d07d07868bfa4be52e59be6e944cc273c30b3004aabbd1",
+        "bytes": 17169
+      }
+    },
+    "privacyDerivative": {
+      "kind": "exact synthetic session-token redaction only",
+      "rawSource": {
+        "path": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-2/output/milo-ui/private-trace.zip",
+        "sha256": "a96cce1e23ae94fc0fb00dd12459a1438739835c359b39d719f4487e213a9bdc",
+        "bytes": 7804883
+      },
+      "publishedSanitizedDerivative": {
+        "path": "/workspace/.clinicos-cloud/497-release-media-binding-20261021/candidate/payload/artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-486-trace.zip",
+        "sha256": "d6d7fb7fc9ab945c83644d8090017345402523daafa1a8ea5d0018acc1759719",
+        "bytes": 7799221
+      },
+      "copiedSanitizedDerivative": {
+        "path": "/workspace/.clinicos-cloud/497-publication12-20261021/payload/artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-486-trace.zip",
+        "sha256": "d6d7fb7fc9ab945c83644d8090017345402523daafa1a8ea5d0018acc1759719",
+        "bytes": 7799221
+      },
+      "entryCount": 302,
+      "allEntriesRetained": true,
+      "distinctSyntheticValuesRedacted": 3,
+      "occurrencesRedacted": 108,
+      "crc": "PASS",
+      "residualSignedTokenCount": 0,
+      "residualNonMarkerBearerCount": 0,
+      "rawArchiveRemainsPrivateAndUnmodified": true,
+      "redactedSessionValueSha256": [
+        "0d0a2a552fc46c6f4beabe586574b6c8a685ebfbded59d8cbbcf238cef62a13f",
+        "1c5aab436d2f943d7ac7438fb0023456c76bbf9e9345a3999270edf19867da71",
+        "e446915ee4e55a4991e0ee4c783c7243f02b0001b36b51ea7f5e90ec6aa549c5"
+      ],
+      "redactionMarkerOccurrencesVerified": 108
+    },
+    "publishedCopies": {
+      "screenshot": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-486.png",
+        "sha256": "fb1fe6d5b8cd9372657020d93dc9d162d285e38e8f8fc91a8b5c6d86a92c8a78",
+        "bytes": 66737
+      },
+      "trace": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-486-trace.zip",
+        "sha256": "d6d7fb7fc9ab945c83644d8090017345402523daafa1a8ea5d0018acc1759719",
+        "bytes": 7799221
+      },
+      "video": {
+        "path": "artifacts/task-validation/bug-batch-447/evidence/codex-followup-1/issue-486.webm",
+        "sha256": "3d1a60ccdaa377cd93228a9970b8ca434ba48193aa82a324f90413f2b37e8cf4",
+        "bytes": 1339977
+      }
+    }
+  }
+]
