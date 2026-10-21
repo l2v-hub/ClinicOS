@@ -1,11 +1,11 @@
-name: Handoff verified eight-issue packet to Claude
+name: Bind actual completed Codex final review
 on:
   push:
     branches: [codex/cloud-review-projection-20261021]
 permissions:
   contents: read
 concurrency:
-  group: clinicos-root-verified-handoff-497
+  group: clinicos-root-verified-final483-binding
   cancel-in-progress: false
 jobs:
   verified-handoff:
@@ -20,28 +20,6 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22
-      - name: Request first actual Claude review only on verified live commit
-        env:
-          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
-        run: |
-          node --input-type=module <<'JS'
-          import assert from 'node:assert/strict';
-          import os from 'node:os';
-          import path from 'node:path';
-          import { createRunner } from './agent-team/src/bug-pipeline/process.mjs';
-          import { createGitHub } from './agent-team/src/bug-pipeline/github.mjs';
-          import { createCommentReviewHandoff } from './agent-team/src/bug-pipeline/comment-review-handoff.mjs';
-          import { createIssueReviewCommunication } from './agent-team/src/bug-pipeline/issue-review-communication.mjs';
-          import { externalReport } from './agent-team/src/bug-pipeline/external-review.mjs';
-          const repo='l2v-hub/ClinicOS',sha='17a127c432f39e094f2746dc33c38bcb234ce719',cwd=process.cwd();
-          const run=createRunner({runtimeRoot:path.join(os.tmpdir(),'fixed-first-Claude497')}),github=createGitHub({repo,cwd,run});
-          const api=async(route)=>{const r=await run({command:'gh',args:['api',route],cwd,envMode:'controller',maxOutputBytes:2*1024*1024});assert(r.ok);return JSON.parse(r.stdout);};
-          const native=async()=>{const p=await api('repos/'+repo+'/pulls/497');assert.equal(p.head.sha,sha);assert.equal(p.head.repo.full_name,repo);assert.equal(p.base.ref,'main');assert.equal(p.state,'open');const c=await api('repos/'+repo+'/commits/'+sha+'/check-runs?per_page=100');for(const name of ['bug-pipeline-tests','secret-scan','frontend-tests','archive-tests','gate','browser-e2e']){const r=c.check_runs.filter(x=>x.name===name&&x.head_sha===sha&&x.app?.id===15368).sort((a,b)=>b.id-a.id)[0];assert.equal(r?.status,'completed',name);assert.equal(r.conclusion,'success',name);}return p;};
-          const handoff=createCommentReviewHandoff({github,run,cwd});const loaded=await handoff.load(497);assert.equal(loaded.batch.sha,sha);assert.equal(loaded.batch.reviews.length,0);assert.equal(loaded.batch.implementation.at(-1).status,'passed');assert.equal(loaded.batch.independentQa.status,'verified');assert.equal(loaded.batch.evidence.length,8);assert.equal(loaded.batch.operatorPublication.publishedSha,sha);
-          const p=await native();if(p.draft){await native();const ready=await run({command:'gh',args:['pr','ready','497','--repo',repo],cwd,envMode:'controller'});assert(ready.ok);}
-          await native();const notice='<!-- codex-bug-pipeline:publication12:497:'+sha+' -->';const comments=await api('repos/'+repo+'/issues/497/comments?per_page=100');if(!comments.some(c=>c.user.login==='l2v-hub'&&c.body.startsWith(notice))){await native();await github.commentPR(497,notice+'\nPrima review Claude sul commit verificato '+sha+'. Sei check nativi PASS. Fonteclinica invariata: integrazione indipendente51testPASS su f394e3a7, import desktop/tablet precedente conservato. [Pacchetto12 e prove autentiche degli8bug](https://github.com/'+repo+'/tree/'+sha+'/artifacts/task-validation/bug-batch-447/review-packet-12), [manifest screenshot/video/Playwright](https://github.com/'+repo+'/blob/'+sha+'/artifacts/task-validation/bug-batch-447/evidence-manifest.json). Provenienza486 corretta: cattura continuazione2, rapporto successivo5 distinto. Parent483: Claude5 e Codexfinale63PASS. Rilascio distinto: supporto32MiB verificatoindipendentemente maancoranonmergiato. Nessun nuovo testUI/deploy/chiusura dichiarato.');}
-          await native();const batch=await handoff.request(497);assert.equal(batch.sha,sha);assert.equal(batch.externalReview.status,'comment-requested');await createIssueReviewCommunication({github,repo,cwd,run,readReport:externalReport}).publishState(batch);console.log(JSON.stringify({pr:497,sha,firstActualClaudeRequest:true,requestId:batch.externalReview.requestId,phase:batch.phase}));
-          JS
       - name: Bind actual completed independent Codex result without another review
         env:
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
