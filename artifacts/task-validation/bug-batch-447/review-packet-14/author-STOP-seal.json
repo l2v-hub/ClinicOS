@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "status": "STOP_FROZEN_PENDING_INDEPENDENT_QA",
+  "reservationNonce": "5f471e85-2984-44ed-9318-0fcbb249098e",
+  "sourceBase": "1bcc12ffb31d47a46e9113a7e54c6f72fb846191",
+  "taskContractSha256": "7400dfbf73983711441abfb5fc4d4618d46d0c62ddc36bc012b54a195772e4b3",
+  "files": {
+    "task-contract.md": {
+      "bytes": 2982,
+      "sha256": "7400dfbf73983711441abfb5fc4d4618d46d0c62ddc36bc012b54a195772e4b3"
+    },
+    "reservation.json": {
+      "bytes": 1883,
+      "sha256": "cc0e8d0587cd7fca897b529d9b02cb0f7a335a372a387c0659955e69b8a88382"
+    },
+    "author-diff.patch": {
+      "bytes": 3136,
+      "sha256": "d5a1410151d7aca4e60d0cfca383d657148180587fb83064d309d729c7f508cc"
+    },
+    "author-receipt.json": {
+      "bytes": 2107,
+      "sha256": "d32126b56b3b02f79250d1ccc7a420b31627b8df6af1af25fc25dc42cb109439"
+    },
+    "baseline/frontend/src/components/operator/__tests__/operationalLists452.test.ts": {
+      "bytes": 10076,
+      "sha256": "b9b5f3eadd063358b40bbddeb816f8f6bc9683e8a14b5621b1f95a16361821c5"
+    },
+    "baseline/frontend/src/lib/__tests__/therapyPages.test.ts": {
+      "bytes": 10053,
+      "sha256": "bb28571bba6b39d8e5c2ec8fe8d45a24acbc58c2a14b216f9262be4193e83058"
+    },
+    "targeted-tests.log": {
+      "bytes": 4757,
+      "sha256": "30d1eb9087e8d62394ffdcd66a2fa3e22f780378ea5ec5fbaf82f8011de9caa6"
+    },
+    "full-frontend.log": {
+      "bytes": 146199,
+      "sha256": "e41940780a3e513bd1a1b69df92f0e8de06922cc81537f6adbf3fd072bf17af7"
+    }
+  },
+  "scope": "Only the two reserved test files changed in the private source snapshot. No runtime/config/dependency/Git/provider/browser/database operations. Actual native CI, Claude review and publication remain pending."
+}
