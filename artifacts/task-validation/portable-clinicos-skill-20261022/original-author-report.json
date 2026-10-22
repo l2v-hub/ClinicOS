@@ -1,0 +1,39 @@
+{
+  "task": "Portable ClinicOS skill documentation preparation",
+  "reservationNonce": "0348b0cc-2e1d-46d7-aeae-e269e8173ee7",
+  "baseSha": "453ade1a06cd79e1924de523c5fd2cdec51f4fd4",
+  "scope": [
+    ".claude/skills/clinicos/SKILL.md",
+    ".claude/skills/clinicos/references/bug-delivery.md"
+  ],
+  "changes": [
+    "Added adaptive Luna/6.1 selection, independent ownership and default-four with verified authorized continuation guidance.",
+    "Added exact-source packet/history rules, byte-bound evidence reuse, CLI checksum/absolute path and cache diagnostics, DB-fixture, browser and privacy safeguards.",
+    "Added exact-SHA/native-check/actual-Claude handoff, idempotent provider mutation/recovery, Vercel deployment identity/asset hash, backend backup/target and truthful release/closure criteria."
+  ],
+  "validation": {
+    "frontmatter": "PASS for SKILL.md",
+    "headings": "PASS",
+    "relativeSkillPackageLink": "PASS",
+    "exactProposedScope": "PASS (two docs only)",
+    "wrapper": "unchanged byte-for-byte",
+    "tests": "NOT RUN; Markdown-only change, per contract"
+  },
+  "preservedValidationAttempt": "author/validation-attempt1.txt",
+  "companionConflictNote": "author/root-companion-notes.md",
+  "publication": "PENDING root review, actual Claude review, independent final Codex QA, native checks, and protected publication",
+  "sourceHashes": {
+    ".claude/skills/clinicos/SKILL.md": {
+      "baseSha256": "06049ed0fa6136ede4f4a8b437beb92c0e2819789ab16d82285f3d19059ba892",
+      "proposedSha256": "98031fcd0aa7ada6f5989f77a4e59b74f61d91867def6a4ea5303be53fe916a9",
+      "baseBytes": 5052,
+      "proposedBytes": 6046
+    },
+    ".claude/skills/clinicos/references/bug-delivery.md": {
+      "baseSha256": "7e81198c2c354bdca277667b1c4949f06ffc438db74834ad9402f5bef2498683",
+      "proposedSha256": "b83accaf6625665bff02142d453cd777d61191f8bca2f6f3bb4403d95f45429c",
+      "baseBytes": 13152,
+      "proposedBytes": 18761
+    }
+  }
+}

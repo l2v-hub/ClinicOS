@@ -1,0 +1,28 @@
+{
+  "task": "Portable ClinicOS skill companion budget alignment",
+  "reservationNonce": "7d7e9789-d1b6-4d34-8fd9-65bd778e1ab6",
+  "stateCommit": "225ce138e412318bd526e20f2cbe4416af34f80b",
+  "baseSha": "453ade1a06cd79e1924de523c5fd2cdec51f4fd4",
+  "scope": [
+    ".claude/skills/clinicos/SKILL.md",
+    ".claude/skills/clinicos/references/bug-delivery.md",
+    ".agents/skills/codex-bug-triage/SKILL.md",
+    ".claude/skills/bug-final-review/SKILL.md",
+    "docs/codex-bug-workflow.md"
+  ],
+  "summary": "Aligned the three companion documents and canonical pair on four default implementation attempts and four default reviews as separate budgets. Only a one-unit-at-a-time typed extension with verified external authorization, exact entity/action/SHA/history binding, durable reservation, and available controller capacity can continue past the default. The initial failed-infrastructure recovery consumes an available review and does not extend the budget.",
+  "sourceInspection": "Read-only inspection of attempt-budget, operator-authorization, comment-review-handoff, standalone-review, review-handoff-cli, and the trusted review test confirmed injected verifier requirements and bounded effective limits. The current standalone CLI does not configure a default grant verifier; docs keep extension blocked when a trusted verifier is unavailable. No manual bypass lane is asserted.",
+  "validation": {
+    "frontmatter": "PASS for all three SKILL docs",
+    "canonicalRelativeLink": "PASS",
+    "exactFivePathScope": "PASS",
+    "absoluteFourConflictScan": "PASS",
+    "readOnlyAllowedTools": "PASS; Read, Glob, Grep unchanged",
+    "defaultBudgetVsExtensionDistinction": "PASS",
+    "failedRecoveryDoesNotExtendBudget": "PASS",
+    "initialTwoDocProposalAndSeal": "PASS; hashes unchanged",
+    "markdownTests": "NOT RUN per documentation-only contract"
+  },
+  "knownExistingIssue": "docs/codex-bug-workflow.md contains an unchanged relative link to claude-local-review-prompt.md whose target is absent from the supplied current-main five-file projection; flagged for root review.",
+  "publication": "PENDING root review, actual Claude review, independent final Codex QA, native checks, and protected publication."
+}

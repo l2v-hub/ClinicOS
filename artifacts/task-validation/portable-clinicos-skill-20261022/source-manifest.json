@@ -1,0 +1,63 @@
+{
+  "baseSha": "453ade1a06cd79e1924de523c5fd2cdec51f4fd4",
+  "sourceCommit": "eee7816b855545c86faddee83a41672ce69d3f99",
+  "files": {
+    ".claude/skills/clinicos/SKILL.md": {
+      "sha256": "e9a3ea995030179e31666fde876697eb46795f12311f2e30550f25a5c9946e87",
+      "bytes": 6315
+    },
+    ".claude/skills/clinicos/references/bug-delivery.md": {
+      "sha256": "0797ccd937514b039d9e7dbc365afbdca5fb1b4fd53d37ef5e55067eddddc815",
+      "bytes": 19497
+    },
+    ".agents/skills/codex-bug-triage/SKILL.md": {
+      "sha256": "fcf2ff2f803b3fec5fd18c0b9032d7f1da555ded3aeac209f3504aadd9f90ea9",
+      "bytes": 15245
+    },
+    ".claude/skills/bug-final-review/SKILL.md": {
+      "sha256": "cbe3064a2673c32c776a71fd1109c197ace6fd7d7067730338124357143b65c5",
+      "bytes": 2306
+    },
+    "docs/codex-bug-workflow.md": {
+      "sha256": "3ee42b3bc227985b1bb953ec5c32c8b7aa60cb6f347ff3375235e9779116d618",
+      "bytes": 27565
+    }
+  },
+  "sourceManifest": [
+    {
+      "path": ".claude/skills/clinicos/SKILL.md",
+      "blob": "1f6ca2a951426c16df7ae475d04255bbcf08142d",
+      "mode": "100644",
+      "baseBlob": "25e8fc153c2009b178c28a62d8bd9eae293301af",
+      "baseMode": "100644"
+    },
+    {
+      "path": ".claude/skills/clinicos/references/bug-delivery.md",
+      "blob": "42c425eeb5c0d182b31db4b7144a72648931e6a3",
+      "mode": "100644",
+      "baseBlob": "1b77f1a7000f0b39a894ec6c8dd72b7975bcd408",
+      "baseMode": "100644"
+    },
+    {
+      "path": ".agents/skills/codex-bug-triage/SKILL.md",
+      "blob": "0eb4b21f22c5468b5461a0a5c1beaf35fecac105",
+      "mode": "100644",
+      "baseBlob": "f118c6b5fe1c87bcd985d548efd11e826405be73",
+      "baseMode": "100644"
+    },
+    {
+      "path": ".claude/skills/bug-final-review/SKILL.md",
+      "blob": "eb79e215d07e5c69f2cc971ab4dddac49de4837e",
+      "mode": "100644",
+      "baseBlob": "e9f0b08cbecd7d514ed50945bbdf3097e826ffc6",
+      "baseMode": "100644"
+    },
+    {
+      "path": "docs/codex-bug-workflow.md",
+      "blob": "8e7981e86a3003d6916649f67bde8f869cdbb3a4",
+      "mode": "100644",
+      "baseBlob": "6899b712eb80f5e87a39a40ac59245214e7c175e",
+      "baseMode": "100644"
+    }
+  ]
+}

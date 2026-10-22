@@ -1,0 +1,25 @@
+[
+  {
+    "id": "DOC-TRUST-ROOT-1",
+    "severity": "low",
+    "file": ".claude/skills/clinicos/references/bug-delivery.md",
+    "line": 210,
+    "problem": "Il nuovo playbook portabile presenta il gate prima del merge come check/review/protezioni e regole main, senza esplicitare il vincolo sorgente indipendente per trust-root. I percorsi .agents/.claude di questa stessa proposta sono human-protected anche quando branch protection non richiede una review. La sequenza Claude+Codex+merge protetto descritta non documenta la native current-head approval da umano indipendente e il rinvio permanente del merge automatico per quei percorsi.",
+    "evidence": [
+      "453ade agent-team/src/bug-pipeline/review-policy.mjs:2-27 classifica .agents/**,.claude/**,.github/**,agent-team/src/**,scripts/quality-gate/** e file prompt/policy pinning come human-protected-trust-root.",
+      "453ade standalone-review.mjs:1043-1052 legge nativeReviewAuthorization e ritorna sempre la ragione trust-root;1071-1078 ritorna ready-to-merge con humanReviewRequired:true.",
+      "453ade docs/standalone-pr-review.md richiede manual protected merge e native current-head approving review da User indipendente per i trust-root, senza admin/allowlist/protection-read bypass."
+    ],
+    "requestedChange": "Aggiungere nel gate merge del playbook il vincolo trust-root esplicito, indipendente da branch-protection configuration: vera native current-head approving review di umano autorizzato indipendente; Claude/static/model/Codex/grant non la sostituiscono; il controller resta ready-to-merge/humanReviewRequired e serve normale percorso manuale protetto, senza admin/bypass/allowlist override. Aggiungere brevi rimandi coerenti negli entrypoint portabili, senza cambiare policy o runtime.",
+    "suggestedMinimalScope": {
+      "requiredPrimary": ".claude/skills/clinicos/references/bug-delivery.md:210",
+      "entrypointPointers": [
+        ".agents/skills/codex-bug-triage/SKILL.md:199",
+        ".claude/skills/clinicos/SKILL.md (sequenza review/merge)"
+      ],
+      "optionalConsistencyPointer": "docs/codex-bug-workflow.md (rinvio a docs/standalone-pr-review.md/review-policy.mjs)",
+      "noNecessaryRewrite": ".claude/skills/bug-final-review/SKILL.md rimane reviewer read-only; nessun nuovo tool/claim/native approval inventato."
+    },
+    "validationExpected": "Nuova review documentale statica: leggere source policy e native-review authorization su actual base; confermare distinzione model approval/native human e manual protected lane. Nessun test Markdown o modifica sorgente necessaria."
+  }
+]

@@ -1,0 +1,5 @@
+# Analysis
+
+The prior portable skill omitted practical onboarding, aggregation, isolated QA, source-bound evidence and provider release lessons. Companion guides also described four cycles as an absolute limit despite typed, verified per-action continuations. Independent review found a LOW omission of the current human-protected trust-root policy, then two LOW clarifications: failed-review recovery always requires injected verified authorization even under the default budget, and readiness changes depend on actual feedback fingerprints rather than every status comment. All findings are corrected in the final five-document candidate without changing executable source or policy. Both failed independent reports and all four author candidates remain preserved.
+
+The old author note about a missing local-review-prompt link referred only to absence from a five-file projection. The target exists in the complete actual-main Git tree; independent QA confirmed it. The historical note remains unchanged and is not a current finding.
