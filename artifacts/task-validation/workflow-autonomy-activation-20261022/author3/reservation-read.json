@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "nonce": "c7ddc739-ee71-49b6-bd1c-a3e8d6e2a6f2",
+  "source3IsExactSource2Copy": true,
+  "qa2FailedSealVerified": "58b274424fc6f336a3244c9eb87e4fbbc079275e629a1c9695e3192ecf45112c",
+  "contractBindingVerified": true,
+  "sourceOrCanonicalWritesBeforeReservation": false
+}

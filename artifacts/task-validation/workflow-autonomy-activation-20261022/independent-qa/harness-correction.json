@@ -1,0 +1,1 @@
+{"kind":"QA-only fixture correction","initialRun":{"tests":15,"pass":9,"fail":6},"harnessFailures":4,"actualSourceFindings":2,"cause":"Replacing actual operatorTakeover discarded continuation authorization metadata. Final probes merge handback/global-pause fields into the original takeover instead.","initialEvidenceRetained":true,"sourceChanged":false,"assertionsWeakened":false}

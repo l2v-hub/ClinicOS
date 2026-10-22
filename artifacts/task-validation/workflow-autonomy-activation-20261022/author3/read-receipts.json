@@ -1,0 +1,17 @@
+{
+  "nonce": "c7ddc739-ee71-49b6-bd1c-a3e8d6e2a6f2",
+  "reservationStateCommit": "affad69853ec2388db583163c9355e32f4e1b42e",
+  "reservationSha256": "1914157775c5e827d78a4c752cc5aa125b4fe4fc7f9267131d0f753d925eaffe",
+  "additionalContract": "../scope-amendment-4.md",
+  "additionalContractSha256": "cb30ce9e540413d46dd26cd9fa9811e165930efb0e87d94f7237aa71323a2f49",
+  "generalTaskContractSha256": "8027f2e048850b1273ef9ac486cafb99eb0a34438b8b8b3f5f9dfd87648b9dad",
+  "qa2FailedSealSha256": "58b274424fc6f336a3244c9eb87e4fbbc079275e629a1c9695e3192ecf45112c",
+  "qa2ReportSha256": "91b3d65c99a46e03962d948019e312add47a60062b16b11dfe283e9462763510",
+  "qa2AllSealedInputsVerifiedUnchanged": true,
+  "author1Author2AllSealedEvidenceVerifiedUnchanged": true,
+  "source2SnapshotAllBytesUnchanged": true,
+  "source3OnlyEightAllowedPathsChanged": true,
+  "originalProbesSha256": "2d97e33e403c0f1fe7b241c66caedf5b746c8bd4ab1e34a2ee1e4415783ac68a",
+  "authorCopyProbesSha256": "daad4d8e10557001367ad156585d03bc67ce1eb212751c907f46632dc1b4b133",
+  "liveGitCanonicalProviderCredentialOperations": false
+}

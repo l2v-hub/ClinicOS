@@ -1,0 +1,77 @@
+--- a/.claude/skills/clinicos/references/bug-delivery.md
++++ b/.claude/skills/clinicos/references/bug-delivery.md
+@@ -191,9 +191,19 @@
+ sullo SHA aggiornato. L'approvazione dello SHA corrente in attesa di release resta valida se
+ non è cambiato il codice/configurazione e non è arrivato feedback che la invalida.
+ 
++Se un operatore prende in carico un gruppo attivo, sospendi l'automazione finché il controller
++non registra un handback esplicito e supportato, limitato a lavoro nuovo e non assegnato. La
++presa in carico conserva history, report, tentativi e identità dei soggetti protetti; mantiene
++occupati gli scope già assegnati e non li rende disponibili a un secondo worker. Ogni entrypoint
++automatico ricontrolla la proprietà osservata prima di proiettare stato, invocare modelli o
++rilasciare. L'handoff Claude in sola lettura resta un percorso distinto: deve essere autorizzato
++esplicitamente e legato allo SHA esatto.
++
+ Codex legge tutti i commenti/review/thread pertinenti, documenta ogni finding e la sua
+ risoluzione, corregge, testa, semplifica, passa il gate e pubblica il nuovo SHA verificato.
+ Solo allora richiede il round successivo. Un'approvazione sul vecchio SHA non approva il nuovo.
++Dopo ogni review proveniente da un canale esterno, Codex esegue una QA finale indipendente sullo
++SHA corrente; il handoff non sostituisce questa verifica.
+ Un report assente, fallito, obsoleto o senza evidenza non è approvazione; non rilanciare uno
+ SHA fallito invariato e non dichiarare la causa di un errore se i log non la provano.
+ Al budget effettivamente esaurito usa solo un'allowance verificata e prenotata oppure lascia
+@@ -201,6 +211,14 @@
+ 
+ ## 8. Stato, dashboard, merge e rilascio
+ 
++Quando si parla di attivazione, distinguere label e metadati dall'inferenza effettiva, dalla
++review di un modello e dall'abilitazione dei workflow. Verificare il codice corrente, attivarlo,
++revisionarlo e provarlo prima di dichiarare abilitato il workflow; deploy e chiusura delle issue
++sono passaggi successivi e distinti. Una configurazione o un test con adapter simulato non prova
++una chiamata reale. Il runner Actions non fornisce una sessione Claude Max: la review Max deve
++essere eseguita sull'host autenticato supportato. Non instradare Max tramite Anthropic API né
++eseguire Claude Max dentro Actions.
++
+ Dopo la presa in carico durevole imposta `In progress`; per impedimenti reali usa `Bloccato`
+ con causa verificata e condizione di sblocco. Il controller mantiene stato e contatori;
+ label e commenti non li sostituiscono. La dashboard deve mostrare gruppo/issue, fase,
+--- a/docs/codex-bug-workflow.md
++++ b/docs/codex-bug-workflow.md
+@@ -8,6 +8,13 @@
+ 
+ GitHub Actions avvia il controller, serializzato per repository. Le sessioni e i terminali sono processi CLI nuovi nel runner, con risultati nei log Actions e nelle issue. Codex gira nel runner Actions; Claude usa il cron sul terminale personale già autenticato, come scelto dall’utente. La riconciliazione periodica ogni 15 minuti recupera la coda e i commenti PR se un evento viene accorpato dalla concorrenza di Actions.
+ 
++Una presa in carico operatore di un batch attivo ne sospende l'automazione. La ripresa richiede
++un handback esplicito supportato, limitato a lavoro nuovo e non assegnato. Si conservano history,
++report, tentativi, identità dei soggetti protetti e scope occupati; non si libera uno scope attivo
++per assegnarlo a un altro worker. Prima di proiettare lo stato, invocare un modello o rilasciare,
++ogni entrypoint automatico ricontrolla la proprietà osservata. L'handoff Claude locale in sola
++lettura resta separato e richiede autorizzazione esplicita vincolata allo SHA esatto.
++
+ ```mermaid
+ flowchart TD
+   I[Issue: /codex fix oppure codex-run] --> A[Verifica permessi]
+@@ -57,6 +64,9 @@
+ 
+ Prima della PR e dopo ogni correzione, una sessione Codex nuova e indipendente dall'esecutore applica la skill QA al diff, ai criteri e ai risultati generati dal controller. È in sola lettura e può bloccare il gruppo; il suo report viene conservato nel pacchetto. Un gate QA fallito rientra nel budget del tentativo corrente, senza aprire la PR o azzerare i contatori.
+ 
++Per ogni review su un canale esterno, Codex esegue anche la QA finale indipendente sullo SHA
++corrente prima di proseguire verso il rilascio.
++
+ ## Review e recupero
+ 
+ ### Stati issue e dashboard operativa
+@@ -147,6 +157,13 @@
+ 
+ CLI fissate: Codex 0.159.2, Claude Code 2.1.301. Installazione fuori dal checkout; autenticazione tramite binding supportati, mai copiata nel repository. Il controller cloud usa gli alias `CLINICOS_PLANNER_MODEL` e `CLINICOS_EXECUTOR_MODEL`; il reviewer esterno usa la sessione personale Claude Code. Il draft cloud e i secret di GitHub Actions sono configurazioni distinte.
+ 
++Una label o metadato non dimostra un'inferenza; un'inferenza non dimostra una review conclusa,
++e una review non dimostra che i workflow siano abilitati. Prima di dichiarare l'attivazione,
++ispezionare e provare il codice corrente; poi distinguere l'abilitazione effettiva dei workflow
++da deploy e chiusura, che richiedono verifiche successive. Test con adapter simulati non provano
++una chiamata reale. Claude Max deve essere eseguito sull'host autenticato supportato: Actions non
++ospita quella sessione. Non usare Anthropic API per Max e non eseguire Max dentro Actions.
++
+ ```bash
+ node agent-team/src/bug-pipeline/cli.mjs --doctor
+ node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs

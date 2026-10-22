@@ -1,0 +1,7 @@
+{
+  "status": "STOP",
+  "reason": "Author2 two-path sync extension and frozen-source validation complete; awaiting independent QA, no self-approval or live continuation.",
+  "nonce": "85786314-5242-4020-b821-db00c2b40b61",
+  "sourceEditsStopped": true,
+  "source": "/tmp/clinicos-autonomy-activation-20261022/source2"
+}

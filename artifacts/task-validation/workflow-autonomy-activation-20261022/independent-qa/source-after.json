@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-22T22:05:34.207Z",
+  "frozenSourceFilesVerified": 546,
+  "qaSourceFiles": 137,
+  "gitBlobBindings": 12,
+  "author1CoreFilesUnchanged": 10,
+  "authorSealsVerified": [
+    {
+      "folder": "author",
+      "sealSha256": "6b2fb75324dc5a76d4fa6655013b9d345d2ed5c322e65041f49587a70e147b22",
+      "sealedFilesVerified": 17
+    },
+    {
+      "folder": "author2",
+      "sealSha256": "9ce02b5722a168333d77caefdcf4147dd130bffa3f4f5aba150310c49f510f1f",
+      "sealedFilesVerified": 18
+    }
+  ],
+  "actualHistoricalSubjectHashesMatch": 22,
+  "inputSha256": {
+    "canonicalReadback": "352b521f92e321fb2d093c78d485b150dc9a3f1b3c51b1944ac10fce8c313da2",
+    "ownershipProjection": "a8aa3a7a90a1efd76d0ff53c6e81fe76369ea5603e7915275970bcf6a78cec6e"
+  },
+  "sourceMutations": false
+}

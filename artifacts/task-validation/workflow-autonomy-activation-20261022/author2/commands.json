@@ -1,0 +1,9 @@
+{
+  "cwd": "/tmp/clinicos-autonomy-activation-20261022/source2",
+  "node": "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+  "focused": "/tmp/clinicos-node22-native12/node_modules/node/bin/node --test agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+  "syntax": "node --check on the two reserved changed MJS files",
+  "format": "Existing repository Prettier config, with baseline-only whitespace changes restored before final tests.",
+  "inheritance": "Local byte hashes against author1/seal.json and source-manifest.json; no517-case rerun.",
+  "gitMutationsOrProviderCalls": 0
+}

@@ -1,0 +1,26 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs"
+  ],
+  "cwd": "/tmp/clinicos-autonomy-activation-20261022/source3",
+  "env": {
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/author3/owned-tmp",
+    "LANG": "C.UTF-8",
+    "GIT_CONFIG_GLOBAL": "/dev/null",
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "GIT_CONFIG_COUNT": "2",
+    "GIT_CONFIG_KEY_0": "core.hooksPath",
+    "GIT_CONFIG_VALUE_0": "/dev/null",
+    "GIT_CONFIG_KEY_1": "protocol.allow",
+    "GIT_CONFIG_VALUE_1": "never"
+  },
+  "homeOrCodexHomeRepurposed": false,
+  "allModelAndGitHubEffectsInjected": true
+}

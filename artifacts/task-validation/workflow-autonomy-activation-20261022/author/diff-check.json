@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "changedSourceTrailingWhitespaceLines": [],
+  "allowedChangedPaths": 10,
+  "outsideScopeUnchanged": true,
+  "claudeCronBytesUnchanged": true,
+  "releaseScope": "Import plus automatic selector exclusion only; explicit release gates unchanged."
+}

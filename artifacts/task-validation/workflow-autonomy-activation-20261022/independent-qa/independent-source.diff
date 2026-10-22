@@ -1,0 +1,2026 @@
+--- baseline/agent-team/src/bug-pipeline/external-review.mjs
++++ candidate2/agent-team/src/bug-pipeline/external-review.mjs
+@@ -50,7 +50,11 @@
+   save,
+   report,
+   block,
+-  communication = createIssueReviewCommunication({ github: gh, repo, readReport: externalReport }),
++  communication = createIssueReviewCommunication({
++    github: gh,
++    repo,
++    readReport: externalReport,
++  }),
+ }) {
+   const observedAt = new Date().toISOString();
+   // Informational publication is recoverable by the sibling. It must not consume
+@@ -97,31 +101,104 @@
+   const handoff = batch.externalReview;
+   if (handoff?.status === 'finished') return notify(); // Publication is retried by the external harness.
+   if (handoff?.status === 'published') {
++    // A running final session remains owned even if new feedback arrives.
++    if (batch.codexFinalReview?.status === 'running')
++      return blocked('Interrupted independent Codex review requires recovery');
++    if (handoff.subjectSha !== batch.sha) return blocked('External review handoff SHA changed');
+     const verdict = externalReport(batch);
+     if (verdict.verdict === 'blocked')
+       return blocked('External Claude reviewer blocked the change');
+     let changed = handoff.feedbackChanged || fingerprint !== handoff.feedbackFingerprint;
+-    if (verdict.verdict === 'approved' && !changed && handoff.channel === 'github-comments') {
++    if (verdict.verdict === 'approved' && !changed) {
++      if (
++        feedback.unresolved ||
++        feedback.changesRequested ||
++        !(await gh.requiredChecks(batch.pr.number)).ok
++      ) {
++        batch.phase = 'waiting-checks';
++        batch.approvedSha = null;
++        await save();
++        return notify();
++      }
+       const prior = batch.codexFinalReview;
+-      if (!prior || prior.subjectSha !== batch.sha || prior.claudeRound !== batch.reviews.length) {
++      if (
++        !prior ||
++        prior.subjectSha !== batch.sha ||
++        prior.claudeRound !== batch.reviews.length ||
++        prior.feedbackFingerprint !== fingerprint ||
++        prior.status === 'waiting-checks'
++      ) {
++        if (prior) {
++          batch.codexFinalReviewHistory ??= [];
++          batch.codexFinalReviewHistory.push(prior);
++        }
+         batch.codexFinalReview = {
+           subjectSha: batch.sha,
+           claudeRound: batch.reviews.length,
++          feedbackFingerprint: fingerprint,
+           status: 'running',
++          reservedAt: new Date().toISOString(),
++          nonce: randomUUID(),
+         };
++        batch.approvedSha = null;
+         await save();
+         await workspace.prepare(batch);
+-        const qa = await workspace.finalQa(batch);
+-        batch.codexFinalReview.status = qa.status === 'verified' ? 'verified' : 'changes-requested';
+-        batch.codexFinalReview.summary = qa.summary;
++        const beforeQa = await gh.reviewFeedback(batch.pr.number);
++        if (
++          beforeQa.head !== batch.sha ||
++          beforeQa.state !== 'OPEN' ||
++          beforeQa.headRef !== batch.branch ||
++          beforeQa.headRepo !== repo ||
++          beforeQa.headIsFork ||
++          beforeQa.baseRef !== 'main' ||
++          feedbackFingerprint(beforeQa) !== fingerprint ||
++          beforeQa.unresolved ||
++          beforeQa.changesRequested
++        ) {
++          batch.codexFinalReview.status = 'blocked';
++          await save();
++          return blocked('PR identity or feedback changed before independent Codex review');
++        }
++        if (!(await gh.requiredChecks(batch.pr.number)).ok) {
++          batch.codexFinalReview.status = 'waiting-checks';
++          batch.phase = 'waiting-checks';
++          await save();
++          return notify();
++        }
++        try {
++          const qa = await workspace.finalQa(batch);
++          batch.codexFinalReview.status =
++            qa.status === 'verified' ? 'verified' : 'changes-requested';
++          batch.codexFinalReview.summary = qa.summary;
++        } catch (error) {
++          batch.codexFinalReview.status = 'failed';
++          await save();
++          throw error;
++        }
+         await save();
+       }
+-      if (batch.codexFinalReview.status === 'running')
+-        return blocked('Interrupted independent Codex review requires recovery');
+       changed = batch.codexFinalReview.status !== 'verified';
+-      if (!changed) {
+-        const current = await gh.reviewFeedback(batch.pr.number);
+-        changed = current.head !== batch.sha || feedbackFingerprint(current) !== fingerprint;
++      const current = await gh.reviewFeedback(batch.pr.number);
++      if (
++        current.state !== 'OPEN' ||
++        current.head !== batch.sha ||
++        current.headRef !== batch.branch ||
++        current.headRepo !== repo ||
++        current.headIsFork ||
++        current.baseRef !== 'main'
++      )
++        return blocked('PR identity changed during independent Codex review');
++      if (
++        feedbackFingerprint(current) !== fingerprint ||
++        current.unresolved ||
++        current.changesRequested
++      )
++        return blocked('PR feedback changed during independent Codex review');
++      if (!(await gh.requiredChecks(batch.pr.number)).ok) {
++        batch.phase = 'waiting-checks';
++        batch.approvedSha = null;
++        await save();
++        return notify();
+       }
+     }
+     if (verdict.verdict === 'approved' && !changed) {
+
+--- baseline/agent-team/src/bug-pipeline/github.mjs
++++ candidate2/agent-team/src/bug-pipeline/github.mjs
+@@ -558,11 +558,18 @@
+     return false;
+   }
+ 
+-  async function discoverQueue({ normalize = false } = {}) {
++  async function discoverQueue({ normalize = false, excludeIssues = [] } = {}) {
++    if (
++      !Array.isArray(excludeIssues) ||
++      excludeIssues.length > 100000 ||
++      excludeIssues.some((number) => !Number.isSafeInteger(number) || number < 1)
++    )
++      throw new TypeError('Invalid excluded queue issue numbers');
++    const excluded = new Set(excludeIssues);
+     const issues = await apiList(`repos/${repo}/issues?state=open&labels=codex-run&per_page=100`);
+     const queued = [];
+     for (const issue of issues) {
+-      if (issue.pull_request) continue;
++      if (issue.pull_request || excluded.has(issue.number)) continue;
+       const labels = new Set((issue.labels ?? []).map((label) => label.name));
+       if ([...BLOCKING_LABELS].some((label) => labels.has(label))) continue;
+       if (!(await latestAuthorizedRunEvent(issueNumber(issue)))) continue;
+
+--- baseline/agent-team/src/bug-pipeline/issue-review-sync.mjs
++++ candidate2/agent-team/src/bug-pipeline/issue-review-sync.mjs
+@@ -8,6 +8,7 @@
+ import { validateState } from './contracts.mjs';
+ import { externalReport } from './external-review.mjs';
+ import { createIssueReviewCommunication } from './issue-review-communication.mjs';
++import { operatorOwns } from './operator-ownership.mjs';
+ 
+ const FILE = fileURLToPath(import.meta.url);
+ const REPO = 'l2v-hub/ClinicOS';
+@@ -18,15 +19,24 @@
+   validateState(state, REPO);
+   const results = [];
+   const subjects = ['batches', 'standaloneReviews'].flatMap((collection) =>
+-    (state[collection] ?? []).map((batch) => ({ collection, batch })));
+-  const ids = new Set(), prs = new Set();
++    (state[collection] ?? []).map((batch) => ({ collection, batch })),
++  );
++  const ids = new Set(),
++    prs = new Set();
+   for (const { batch } of subjects) {
+-    assert.ok(!ids.has(batch.id) && (!batch.pr || !prs.has(batch.pr.number)), 'Duplicate durable review subject');
++    assert.ok(
++      !ids.has(batch.id) && (!batch.pr || !prs.has(batch.pr.number)),
++      'Duplicate durable review subject',
++    );
+     ids.add(batch.id);
+     if (batch.pr) prs.add(batch.pr.number);
+   }
+   for (const { collection, batch } of subjects) {
+     if (!batch.pr || !batch.sha || ['merged', 'deployed'].includes(batch.release?.status)) continue;
++    if (operatorOwns(state, collection, batch)) {
++      results.push({ id: batch.id, status: 'skipped', reason: 'operator-owned' });
++      continue;
++    }
+     try {
+       const feedback = collection === 'batches' ? await communication.mirrorFeedback(batch) : {};
+       const projection = await communication.publishState(batch, { collection });
+@@ -41,7 +51,12 @@
+     }
+   }
+   return {
+-    status: results.some((item) => item.status === 'blocked') ? 'partial' : 'synced',
++    status: results.some((item) => item.status === 'blocked')
++      ? 'partial'
++      : results.some((item) => item.reason === 'operator-owned') &&
++          !results.some((item) => item.status === 'synced')
++        ? 'skipped'
++        : 'synced',
+     batches: results,
+   };
+ }
+
+--- baseline/agent-team/src/bug-pipeline/operator-ownership.mjs
++++ candidate2/agent-team/src/bug-pipeline/operator-ownership.mjs
+@@ -0,0 +1,69 @@
++// Automatic controllers never inherit an operator's subjects or release authority.
++export const OWNERSHIP_COLLECTIONS = ['batches', 'manualBatches', 'standaloneReviews'];
++
++const subjectKey = ({ collection, id }) => `${collection}:${id}`;
++const validIdentity = (entry) =>
++  entry &&
++  OWNERSHIP_COLLECTIONS.includes(entry.collection) &&
++  typeof entry.id === 'string' &&
++  entry.id.length > 0;
++
++export function automationPaused(state) {
++  if (!state.operatorTakeover?.active) return false;
++  const handback = state.operatorTakeover.automation;
++  return !(
++    handback?.enabled === true &&
++    handback.mode === 'new-unclaimed-only' &&
++    Array.isArray(handback.protectedSubjects) &&
++    handback.protectedSubjects.every(validIdentity)
++  );
++}
++
++export function operatorOwns(state, collection, subject) {
++  if (automationPaused(state)) return true;
++  const takeover = state.operatorTakeover;
++  const key = subjectKey({ collection, id: subject.id });
++  if (
++    [...(takeover?.subjects ?? []), ...(takeover?.automation?.protectedSubjects ?? [])].some(
++      (entry) => validIdentity(entry) && subjectKey(entry) === key,
++    )
++  )
++    return true;
++  if (subject.operatorCoordination?.active === true) return true;
++  const release = subject.operatorReleaseCoordination;
++  return Boolean(
++    release &&
++    !(
++      release.status === 'finished' ||
++      release.stage === 'finished' ||
++      (typeof release.finishedAt === 'string' && release.finishedAt.trim())
++    ),
++  );
++}
++
++export function claimedIssues(state) {
++  return new Set(
++    OWNERSHIP_COLLECTIONS.flatMap((collection) =>
++      (state[collection] ?? []).flatMap((subject) => subject.issues ?? []),
++    ),
++  );
++}
++
++export function occupiedSubjects(state) {
++  return OWNERSHIP_COLLECTIONS.flatMap((collection) =>
++    (state[collection] ?? [])
++      .filter((subject) => !['merged', 'deployed'].includes(subject.release?.status))
++      .map((subject) => ({
++        collection,
++        id: subject.id,
++        issues: subject.issues ?? [],
++        feature: subject.plan?.feature ?? '',
++        scope: [
++          ...new Set([
++            ...(subject.plan?.scope ?? []),
++            ...(subject.sourceManifest ?? []).map((file) => file.path),
++          ]),
++        ],
++      })),
++  );
++}
+
+--- baseline/agent-team/src/bug-pipeline/pipeline.mjs
++++ candidate2/agent-team/src/bug-pipeline/pipeline.mjs
+@@ -1,3 +1,9 @@
++import {
++  automationPaused,
++  operatorOwns,
++  claimedIssues,
++  occupiedSubjects,
++} from './operator-ownership.mjs';
+ import {
+   attemptLimit,
+   implementationAttempts,
+@@ -8,7 +14,11 @@
+ import { planSchema, validatePlan, validateState, feedbackFingerprint } from './contracts.mjs';
+ import { externalReviewStep } from './external-review.mjs';
+ import { validateStandaloneState, finalizeStandaloneSubject } from './standalone-review.mjs';
+-import { controllerFailureCode, isRetryableGitHubFailure, recordTransientGitHubFailure } from './github.mjs';
++import {
++  controllerFailureCode,
++  isRetryableGitHubFailure,
++  recordTransientGitHubFailure,
++} from './github.mjs';
+ 
+ function eligibleIssue(issue) {
+   const labels = (issue.labels ?? []).map((l) => (typeof l === 'string' ? l : l.name));
+@@ -51,11 +61,13 @@
+   if (!['internal', 'external'].includes(reviewMode)) throw new Error('Unknown review mode');
+   if (!Number.isSafeInteger(triageWindowMs) || triageWindowMs < 0 || triageWindowMs > 600_000)
+     throw new Error('Invalid triage collection window');
+-  await gh.intake(event);
+   let state = validateState(
+     (await store.load()) ?? { schemaVersion: 1, repository: repo, batches: [] },
+     repo,
+   );
++  // Ownership must be loaded before intake can normalize labels or touch old subjects.
++  if (automationPaused(state)) return state;
++  let processingSubject = null;
+   let persistenceFailed = false;
+   const save = async (options) => {
+     try {
+@@ -66,6 +78,18 @@
+         rebaseIndependentSubjects: (merged) => {
+           validateState(merged, repo);
+           if (merged.standaloneReviews) validateStandaloneState(merged);
++          if (
++            automationPaused(merged) ||
++            (processingSubject &&
++              operatorOwns(
++                merged,
++                processingSubject.collection,
++                merged[processingSubject.collection]?.find(
++                  (item) => item.id === processingSubject.id,
++                ) ?? processingSubject,
++              ))
++          )
++            throw new Error('Automatic ownership changed during state reconciliation');
+         },
+       });
+     } catch (error) {
+@@ -75,17 +99,23 @@
+   };
+   if (state.standaloneReviews?.length) {
+     validateStandaloneState(state);
+-    if (!standaloneController)
+-      throw new Error('Standalone subjects require their trusted controller');
+     // Snapshot identities, never object references: a failed CAS reload replaces all
+     // canonical objects. Later subjects must resolve against the refreshed state.
+     const subjectIds = state.standaloneReviews.map((subject) => subject.id);
+     for (const id of subjectIds) {
+       let subject = state.standaloneReviews.find((item) => item.id === id);
+-      if (!subject || subject.release?.status === 'merged' ||
+-        (subject.phase === 'blocked' && subject.release?.status !== 'merging')) continue;
++      if (
++        !subject ||
++        operatorOwns(state, 'standaloneReviews', subject) ||
++        subject.release?.status === 'merged' ||
++        (subject.phase === 'blocked' && subject.release?.status !== 'merging')
++      )
++        continue;
+       const transient = subject.lastTransientFailure;
+       if (transient?.subjectSha === subject.sha && transient.nextRetryAt > now()) continue;
++      if (!standaloneController)
++        throw new Error('Standalone subjects require their trusted controller');
++      processingSubject = { collection: 'standaloneReviews', id };
+       try {
+         await finalizeStandaloneSubject({
+           subject, controller: standaloneController, github: gh, workspace, save,
+@@ -102,7 +132,7 @@
+         state = validateState(await store.load(), repo);
+         if (state.standaloneReviews) validateStandaloneState(state);
+         subject = state.standaloneReviews?.find((item) => item.id === id);
+-        if (!subject) continue;
++        if (!subject || operatorOwns(state, 'standaloneReviews', subject)) continue;
+         const code = controllerFailureCode(error);
+         if (isRetryableGitHubFailure(error)) {
+           if (recordTransientGitHubFailure(subject, now())) {
+@@ -127,6 +157,8 @@
+     }
+   }
+ 
++  processingSubject = null;
++  if (automationPaused(state)) return state;
+   const report = async (batch, text) => {
+     for (const n of batch.issues)
+       await gh.commentIssue(n, `<!-- codex-bug-pipeline:status -->\n${text}`);
+@@ -141,15 +173,20 @@
+       `**BLOCKED** — ${reason}. Budget sviluppo ${spentAttempts(batch, 'implementation')}/${attemptLimit(batch, 'implementation')}, review ${batch.reviews.length}/${attemptLimit(batch, 'reviews')}. Il budget non viene azzerato da nuovi comandi.`,
+     );
+   };
+-  const claimed = new Set(state.batches.flatMap((b) => b.issues));
++  const claimed = claimedIssues(state);
++  // A command targeting an already owned issue cannot even normalize its labels.
++  if (!event?.issue || !claimed.has(event.issue.number)) await gh.intake(event);
+   // Only the protected release confirmation job publishes deployed completion.
+   // It owns live demo credentials and retries durable pending publication without model work.
+   for (const batch of state.batches) {
+-    if (batch.release?.status === 'deployed') continue;
++    if (operatorOwns(state, 'batches', batch) || batch.release?.status === 'deployed') continue;
+     const status = batch.phase === 'blocked' ? 'Bloccato' : 'In progress';
+     for (const number of batch.issues) await gh.setIssueStatus(number, status);
+   }
+-  const queue = await gh.discoverQueue({ normalize: true });
++  const queue = await gh.discoverQueue({
++    normalize: true,
++    excludeIssues: [...claimed],
++  });
+   let selected = [];
+   for (const item of queue) {
+     const issue = await gh.viewIssue(typeof item === 'number' ? item : item.number);
+@@ -199,7 +236,10 @@
+         throw new Error('Selected issue authorization or ownership changed before claim');
+     if (!state.pendingTriage) {
+       delete state.triageQueue;
+-      state.pendingTriage = { issues: selected.map((i) => i.number), status: 'claiming' };
++      state.pendingTriage = {
++        issues: selected.map((i) => i.number),
++        status: 'claiming',
++      };
+       await save();
+     }
+     for (const issue of selected) await gh.setIssueStatus(issue.number, 'In progress');
+@@ -208,34 +248,27 @@
+         throw new Error('Selected issue authorization or ownership changed before triage');
+     state.pendingTriage.status = 'running';
+     await save();
++    if (selected.some((issue) => claimedIssues(state).has(issue.number)))
++      throw new Error('Selected issue acquired another durable owner before triage');
+     const plan = validatePlan(
+       await models.plan({
+         cwd: workspace.root,
+         issues: selected,
+         scopeSchema: planSchema,
+         packet: {
+-          activeBatches: state.batches
+-            .filter((batch) => batch.release?.status !== 'deployed')
+-            .map((batch) => ({
+-              id: batch.id,
+-              issues: batch.issues,
+-              feature: batch.plan?.feature ?? '',
+-              scope: batch.plan?.scope ?? [],
+-            })),
++          activeBatches: occupiedSubjects(state),
+         },
+       }),
+       selected,
+     );
+-    const existingBatches = [...state.batches];
++    const existingBatches = occupiedSubjects(state);
+     for (const group of plan.groups) {
+       const id = `bug-batch-${Math.min(...group.issues)}`;
+       // Older installed external-review workers validate plan with a closed schema.
+       // Keep the frozen plan wire format compatible and store new grouping alongside it.
+       const { fileMap, separationReason, ...frozenPlan } = group;
+-      const overlaps = existingBatches.filter(
+-        (batch) =>
+-          batch.release?.status !== 'deployed' &&
+-          batch.plan?.scope.some((file) => group.scope.includes(file)),
++      const overlaps = existingBatches.filter((batch) =>
++        batch.scope.some((file) => group.scope.includes(file)),
+       );
+       state.batches.push({
+         id,
+@@ -284,15 +317,27 @@
+       );
+   }
+   for (const batch of state.batches) {
++    if (operatorOwns(state, 'batches', batch)) continue;
++    processingSubject = { collection: 'batches', id: batch.id };
+     if (['merged', 'deployed'].includes(batch.release?.status)) continue;
+     if (batch.phase === 'blocked') continue;
+     if (reviewMode === 'external' && batch.externalReview?.status === 'running') continue;
+     if (reviewMode === 'external' && batch.pr) {
+       try {
+-        await externalReviewStep({ repo, batch, gh, workspace, save, report, block });
++        await externalReviewStep({
++          repo,
++          batch,
++          gh,
++          workspace,
++          save,
++          report,
++          block,
++        });
+       } catch (error) {
+         if (persistenceFailed)
+-          throw new Error('External review reconciliation persistence failed', { cause: error });
++          throw new Error('External review reconciliation persistence failed', {
++            cause: error,
++          });
+         batch.failureCode = controllerFailureCode(error);
+         await block(
+           batch,
+@@ -412,7 +457,15 @@
+         await report(batch, await workspace.issueEvidence(batch));
+       }
+       if (reviewMode === 'external') {
+-        await externalReviewStep({ repo, batch, gh, workspace, save, report, block });
++        await externalReviewStep({
++          repo,
++          batch,
++          gh,
++          workspace,
++          save,
++          report,
++          block,
++        });
+         continue;
+       }
+       // New PR feedback is handled once, in a new executor session, before the next review.
+
+--- baseline/agent-team/src/bug-pipeline/release.mjs
++++ candidate2/agent-team/src/bug-pipeline/release.mjs
+@@ -1,3 +1,4 @@
++import { automationPaused, operatorOwns } from './operator-ownership.mjs';
+ import { randomUUID } from 'node:crypto';
+ import { exactBlockCode, archiveRecovery, verifyReleaseAncestry } from './exact-demo-recovery.mjs';
+ import { MAX_EVIDENCE_BYTES } from './evidence-limits.mjs';
+@@ -127,10 +128,12 @@
+ }
+ 
+ export function selectAutoReleaseBatch(state) {
++  if (automationPaused(state)) return null;
+   return (
+     state.batches
+       .filter(
+         (batch) =>
++          !operatorOwns(state, 'batches', batch) &&
+           batch.phase === 'ready' &&
+           !hasReleaseHold(batch) &&
+           !batch.releaseBlock &&
+@@ -525,7 +528,12 @@
+   const oldExclusions = structuredClone(batch.exactDemoRecovery?.excludedDispatches ?? []);
+   const verifyOldRuns = async (retirementProof) => {
+     if (!Object.keys(oldDispatches).length && !oldRecoveries.length && !oldExclusions.length)
+-      return { retiredRunIds: [], noRunProofs: [], retiredRuns: [], lateRetiredRunIds: [] };
++      return {
++        retiredRunIds: [],
++        noRunProofs: [],
++        retiredRuns: [],
++        lateRetiredRunIds: [],
++      };
+     if (typeof github.verifyExactRecoveryRuns !== 'function')
+       fail('retired run verification required');
+     return github.verifyExactRecoveryRuns({
+@@ -557,8 +565,10 @@
+   const archive = archiveRecovery(batch, {
+     actor,
+     deploymentSha,
+-    extraRunIds: [...retirementProof.retiredRunIds,
+-      ...retirementProof.lateRetiredRunIds.map((proof) => proof.runId)],
++    extraRunIds: [
++      ...retirementProof.retiredRunIds,
++      ...retirementProof.lateRetiredRunIds.map((proof) => proof.runId),
++    ],
+     retirementProof,
+     newId,
+     now,
+@@ -925,7 +935,10 @@
+       production = await waitForProductionBackend({
+         ...productionWait,
+         verify: () =>
+-          github.verifyProductionBackend({ deploymentSha, runUrl: productionRailwayRunUrl }),
++          github.verifyProductionBackend({
++            deploymentSha,
++            runUrl: productionRailwayRunUrl,
++          }),
+         guard: async () => {
+           await guard();
+           await verifyExactReleaseTarget({ batch, github, sourcePolicy });
+
+--- baseline/agent-team/tests/bug-pipeline/external-review.test.mjs
++++ candidate2/agent-team/tests/bug-pipeline/external-review.test.mjs
+@@ -10,10 +10,13 @@
+   claudeFailureCode,
+ } from '../../src/bug-pipeline/claude-review-cron.mjs';
+ import { runProcess } from '../../src/adapters/process-runner.mjs';
+-import { feedbackFingerprint } from '../../src/bug-pipeline/contracts.mjs';
++import { feedbackFingerprint, sha256 } from '../../src/bug-pipeline/contracts.mjs';
+ import { doctor } from '../../src/bug-pipeline/cli.mjs';
+ 
+-const communication = { publishState: async () => {}, mirrorFeedback: async () => {} };
++const communication = {
++  publishState: async () => {},
++  mirrorFeedback: async () => {},
++};
+ const externalReviewStep = (args) => actualExternalReviewStep({ communication, ...args });
+ const reviewExternalBatch = (args) => actualReviewExternalBatch({ communication, ...args });
+ 
+@@ -227,7 +230,13 @@
+     repo,
+     batch: f.batch,
+     gh: f.github,
+-    workspace: {},
++    workspace: {
++      prepare: async () => {},
++      finalQa: async () => ({
++        status: 'verified',
++        summary: 'Fresh independent QA',
++      }),
++    },
+     save: async () => {},
+     report: async () => {},
+     block: async () => assert.fail('approval blocked'),
+@@ -298,7 +307,10 @@
+     comments: [{ id: 99, body: 'Please fix this edge case' }],
+   });
+   const last = f.batch.reviews[0];
+-  f.batch.reviews = Array.from({ length: 4 }, (_, index) => ({ ...last, round: index + 1 }));
++  f.batch.reviews = Array.from({ length: 4 }, (_, index) => ({
++    ...last,
++    round: index + 1,
++  }));
+   const content = f.batch.reviewReports['claude-review-1.json'];
+   f.batch.reviewReports['claude-review-4.json'] = content;
+   f.batch.reviewLedger.rounds = Array.from({ length: 4 }, (_, index) => ({
+@@ -335,10 +347,16 @@
+ 
+ test('draft or foreign PRs and an exhausted external budget never start a model', async (t) => {
+   const f = await workerFixture(t);
+-  f.github.reviewFeedback = async () => ({ ...feedback(f.batch), isDraft: true });
++  f.github.reviewFeedback = async () => ({
++    ...feedback(f.batch),
++    isDraft: true,
++  });
+   await assert.rejects(reviewExternalBatch(f));
+   assert.equal(f.calls(), 0);
+-  f.github.reviewFeedback = async () => ({ ...feedback(f.batch), headRepo: 'attacker/fork' });
++  f.github.reviewFeedback = async () => ({
++    ...feedback(f.batch),
++    headRepo: 'attacker/fork',
++  });
+   await assert.rejects(reviewExternalBatch(f));
+   assert.equal(f.calls(), 0);
+   f.github.reviewFeedback = async () => feedback(f.batch);
+@@ -420,15 +438,24 @@
+     [{ ok: true, stdout: 'not json' }, 'claude-invalid-json'],
+     [{ ok: true, stdout: '{"subtype":"error_max_turns"}' }, 'claude-turn-limit'],
+     [
+-      { ok: true, stdout: '{"is_error":true,"error":{"type":"authentication_error"}}' },
++      {
++        ok: true,
++        stdout: '{"is_error":true,"error":{"type":"authentication_error"}}',
++      },
+       'claude-authentication-error',
+     ],
+     [
+-      { ok: true, stdout: '{"is_error":true,"error":{"type":"rate_limit_error"}}' },
++      {
++        ok: true,
++        stdout: '{"is_error":true,"error":{"type":"rate_limit_error"}}',
++      },
+       'claude-rate-limit',
+     ],
+     [
+-      { ok: true, stdout: '{"is_error":true,"error":{"type":"overloaded_error"}}' },
++      {
++        ok: true,
++        stdout: '{"is_error":true,"error":{"type":"overloaded_error"}}',
++      },
+       'claude-overloaded',
+     ],
+     [
+@@ -533,7 +560,10 @@
+       prepare: async () => calls.push('prepare'),
+       finalQa: async () => {
+         calls.push('codex-qa');
+-        return { status: 'verified', summary: 'Independent synthetic review PASS' };
++        return {
++          status: 'verified',
++          summary: 'Independent synthetic review PASS',
++        };
+       },
+     },
+     save: async () => calls.push('save'),
+@@ -556,3 +586,290 @@
+     'same immutable approval must not spend another QA session',
+   );
+ });
++
++function approvedExternalArgs() {
++  const batch = batchFixture();
++  const raw = JSON.stringify({
++    subject_sha: batch.sha,
++    verdict: 'approved',
++    summary: 'Synthetic review',
++    findings: [],
++  });
++  batch.reviews = [{ round: 1, status: 'approved', subjectSha: batch.sha }];
++  batch.reviewReports = { 'claude-review-1.json': raw };
++  batch.reviewLedger = {
++    rounds: [
++      {
++        round: 1,
++        verdict: 'approved',
++        subject_sha: batch.sha,
++        review_sha256: sha256(raw),
++      },
++    ],
++  };
++  batch.externalReview = {
++    status: 'published',
++    subjectSha: batch.sha,
++    feedbackFingerprint: feedbackFingerprint(feedback(batch)),
++    feedbackChanged: false,
++  };
++  const log = [];
++  const args = {
++    repo,
++    batch,
++    gh: {
++      viewIssue: async () => ({ state: 'open' }),
++      reviewFeedback: async () => feedback(batch),
++      requiredChecks: async () => ({ ok: true }),
++    },
++    workspace: {
++      prepare: async () => log.push('prepare'),
++      finalQa: async () => {
++        assert.equal(batch.codexFinalReview.status, 'running');
++        assert.equal(
++          batch.codexFinalReview.feedbackFingerprint,
++          batch.externalReview.feedbackFingerprint,
++        );
++        assert.ok(log.includes('save:running'), 'durable reservation must precede fresh inference');
++        log.push('qa');
++        return { status: 'verified', summary: 'Independent final QA' };
++      },
++    },
++    save: async () => log.push(`save:${batch.codexFinalReview?.status}`),
++    report: async () => {},
++    block: async (_, reason) => {
++      batch.phase = 'blocked';
++      batch.reason = reason;
++      batch.approvedSha = null;
++      log.push('blocked');
++    },
++  };
++  return { args, batch, log };
++}
++
++test('standard external approval requires one fresh durable SHA/round/feedback-bound final QA', async () => {
++  const { args, batch, log } = approvedExternalArgs();
++  await externalReviewStep(args);
++  assert.equal(batch.phase, 'ready');
++  assert.equal(batch.codexFinalReview.subjectSha, batch.sha);
++  assert.equal(batch.codexFinalReview.claudeRound, 1);
++  assert.match(batch.codexFinalReview.nonce, /^[a-f0-9-]{36}$/);
++  await externalReviewStep(args);
++  assert.equal(log.filter((x) => x === 'qa').length, 1);
++});
++
++test('pending native checks or unresolved feedback never invoke final QA or transfer approval', async () => {
++  for (const kind of ['checks', 'unresolved', 'changesRequested']) {
++    const { args, batch, log } = approvedExternalArgs();
++    if (kind === 'checks') args.gh.requiredChecks = async () => ({ ok: false });
++    else {
++      const f = { ...feedback(batch), [kind]: true };
++      batch.externalReview.feedbackFingerprint = feedbackFingerprint(f);
++      args.gh.reviewFeedback = async () => f;
++    }
++    await externalReviewStep(args);
++    assert.equal(batch.phase, 'waiting-checks');
++    assert.equal(batch.codexFinalReview, undefined);
++    assert.equal(log.includes('qa'), false);
++    assert.notEqual(batch.approvedSha, batch.sha);
++  }
++});
++
++test('stale final QA bindings require a fresh session and retain previous evidence', async () => {
++  for (const stale of [
++    { subjectSha: 'b'.repeat(40) },
++    { claudeRound: 0 },
++    { feedbackFingerprint: 'old-feedback' },
++  ]) {
++    const { args, batch, log } = approvedExternalArgs();
++    const old = {
++      status: 'verified',
++      subjectSha: batch.sha,
++      claudeRound: 1,
++      feedbackFingerprint: batch.externalReview.feedbackFingerprint,
++      summary: 'Old QA',
++      ...stale,
++    };
++    batch.codexFinalReview = structuredClone(old);
++    await externalReviewStep(args);
++    assert.equal(log.filter((x) => x === 'qa').length, 1);
++    assert.deepEqual(batch.codexFinalReviewHistory, [old]);
++    assert.equal(batch.phase, 'ready');
++  }
++});
++
++test('running final QA ownership is not restarted even when its SHA is stale', async () => {
++  const { args, batch, log } = approvedExternalArgs();
++  const running = {
++    status: 'running',
++    subjectSha: 'b'.repeat(40),
++    claudeRound: 1,
++  };
++  batch.codexFinalReview = structuredClone(running);
++  await externalReviewStep(args);
++  assert.deepEqual(batch.codexFinalReview, running);
++  assert.equal(log.includes('qa'), false);
++  assert.equal(batch.phase, 'blocked');
++});
++
++test('native checks or PR identity/feedback changing during final QA cannot become ready', async () => {
++  for (const kind of ['checks', 'head', 'baseRef', 'headRepo', 'headIsFork', 'comments']) {
++    const { args, batch, log } = approvedExternalArgs();
++    let changed = false;
++    const qa = args.workspace.finalQa;
++    args.workspace.finalQa = async () => {
++      const result = await qa();
++      changed = true;
++      return result;
++    };
++    args.gh.requiredChecks = async () => ({
++      ok: !changed || kind !== 'checks',
++    });
++    args.gh.reviewFeedback = async () => ({
++      ...feedback(batch),
++      ...(changed
++        ? {
++            head: kind === 'head' ? 'b'.repeat(40) : batch.sha,
++            baseRef: kind === 'baseRef' ? 'other' : 'main',
++            headRepo: kind === 'headRepo' ? 'foreign/repo' : repo,
++            headIsFork: kind === 'headIsFork',
++            comments:
++              kind === 'comments'
++                ? [
++                    {
++                      id: 1,
++                      body: 'new actionable feedback',
++                      user: { login: 'human' },
++                    },
++                  ]
++                : [],
++          }
++        : {}),
++    });
++    await externalReviewStep(args);
++    assert.equal(log.filter((x) => x === 'qa').length, 1);
++    assert.notEqual(batch.approvedSha, batch.sha);
++    assert.equal(batch.phase, kind === 'checks' ? 'waiting-checks' : 'blocked');
++  }
++});
++
++test('final QA exception is recorded without hiding a model retry or granting approval', async () => {
++  const { args, batch, log } = approvedExternalArgs();
++  args.workspace.finalQa = async () => {
++    log.push('qa');
++    throw new Error('synthetic model failure');
++  };
++  await assert.rejects(externalReviewStep(args), /synthetic model failure/);
++  assert.equal(batch.codexFinalReview.status, 'failed');
++  assert.equal(log.filter((x) => x === 'qa').length, 1);
++  assert.notEqual(batch.approvedSha, batch.sha);
++  assert.equal(batch.implementation.length, 1);
++});
++
++test('final QA findings use the existing consumed correction budget and new-SHA review request', async () => {
++  const { args, batch, log } = approvedExternalArgs();
++  args.workspace.finalQa = async () => ({
++    status: 'blocked',
++    summary: 'Correct regression first',
++  });
++  args.workspace.execute = async (_, options) => {
++    assert.equal(options.phase, 'external-review-correction');
++    assert.equal(options.feedback.codex.status, 'changes-requested');
++    log.push('correction');
++    return { status: 'implemented' };
++  };
++  args.workspace.verify = async () => {};
++  args.workspace.simplify = async () => ({ status: 'implemented' });
++  args.workspace.qa = async () => ({ status: 'verified' });
++  args.workspace.checkpoint = async () => 'b'.repeat(40);
++  args.workspace.publish = async () => {};
++  args.workspace.issueEvidence = async () => 'Synthetic evidence';
++  await externalReviewStep(args);
++  assert.equal(batch.implementation.length, 2);
++  assert.equal(batch.implementation[1].status, 'passed');
++  assert.equal(batch.reviews.length, 1);
++  assert.equal(batch.externalReview.status, 'requested');
++  assert.equal(batch.externalReview.subjectSha, 'b'.repeat(40));
++  assert.notEqual(batch.approvedSha, batch.sha);
++});
++
++test('native checks becoming pending before QA wait with no inference and resume after checks recover', async () => {
++  const { args, batch, log } = approvedExternalArgs();
++  let pending = false;
++  args.workspace.prepare = async () => {
++    pending = true;
++  };
++  args.gh.requiredChecks = async () => ({ ok: !pending });
++  await externalReviewStep(args);
++  assert.equal(batch.phase, 'waiting-checks');
++  assert.equal(batch.codexFinalReview.status, 'waiting-checks');
++  assert.equal(log.includes('qa'), false);
++  pending = false;
++  args.workspace.prepare = async () => {};
++  await externalReviewStep(args);
++  assert.equal(batch.phase, 'ready');
++  assert.equal(log.filter((x) => x === 'qa').length, 1);
++  assert.equal(batch.codexFinalReviewHistory[0].status, 'waiting-checks');
++});
++
++test('stale published handoff cannot invoke QA or transfer an otherwise valid old report', async () => {
++  const { args, batch, log } = approvedExternalArgs();
++  batch.externalReview.subjectSha = 'c'.repeat(40);
++  await externalReviewStep(args);
++  assert.equal(batch.phase, 'blocked');
++  assert.equal(log.includes('qa'), false);
++  assert.notEqual(batch.approvedSha, batch.sha);
++});
++
++test('final QA findings cannot renew exhausted implementation or review budgets', async () => {
++  for (const exhausted of ['implementation', 'reviews']) {
++    const { args, batch, log } = approvedExternalArgs();
++    if (exhausted === 'implementation')
++      batch.implementation = [1, 2, 3, 4].map((round) => ({
++        round,
++        status: 'passed',
++      }));
++    else {
++      const report = batch.reviewReports['claude-review-1.json'];
++      batch.reviews = [1, 2, 3, 4].map((round) => ({
++        round,
++        status: 'approved',
++        subjectSha: batch.sha,
++      }));
++      batch.reviewReports['claude-review-4.json'] = report;
++      batch.reviewLedger.rounds = [1, 2, 3, 4].map((round) => ({
++        round,
++        verdict: 'approved',
++        subject_sha: batch.sha,
++        review_sha256: sha256(report),
++      }));
++    }
++    const history = structuredClone(batch[exhausted]);
++    args.workspace.finalQa = async () => ({
++      status: 'blocked',
++      summary: 'Concrete finding',
++    });
++    args.workspace.execute = async () => assert.fail('exhausted correction cannot execute');
++    await externalReviewStep(args);
++    assert.equal(batch.phase, 'blocked');
++    assert.deepEqual(batch[exhausted], history);
++    assert.notEqual(batch.approvedSha, batch.sha);
++  }
++});
++
++test('new feedback cannot start a correction while the prior final QA session remains running', async () => {
++  const { args, batch, log } = approvedExternalArgs();
++  batch.codexFinalReview = {
++    status: 'running',
++    subjectSha: batch.sha,
++    claudeRound: 1,
++  };
++  batch.externalReview.feedbackChanged = true;
++  args.workspace.execute = async () =>
++    assert.fail('live QA ownership prevents concurrent correction');
++  await externalReviewStep(args);
++  assert.equal(batch.phase, 'blocked');
++  assert.equal(batch.implementation.length, 1);
++  assert.equal(log.includes('qa'), false);
++  assert.equal(batch.codexFinalReview.status, 'running');
++});
+
+--- baseline/agent-team/tests/bug-pipeline/github.test.mjs
++++ candidate2/agent-team/tests/bug-pipeline/github.test.mjs
+@@ -2198,3 +2198,69 @@
+     else assert.equal(await github.authorizeReleaseRecovery(input), 'l2v-hub');
+   }
+ });
++
++test('queue exclusions prevent normalization and authorization reads on claimed issues while new missed events recover', async () => {
++  const calls = [];
++  const gh = createGitHub({
++    cwd: '/tmp',
++    repo: 'l2v-hub/ClinicOS',
++    run: async ({ args, input }) => {
++      const route = apiPath(args);
++      calls.push({ route, args, input });
++      if (route.includes('/issues?'))
++        return response([
++          [17, 18].map((number) => ({
++            number,
++            labels: [{ name: 'codex-run' }],
++          })),
++        ]);
++      if (route.includes('/events?')) {
++        assert.ok(
++          !route.includes('/17/'),
++          'owned issue must be filtered before any normalization work',
++        );
++        return response([
++          [
++            {
++              event: 'labeled',
++              label: { name: 'codex-run' },
++              actor: { login: 'alice', type: 'User' },
++              created_at: '2026-10-22T00:00:00Z',
++            },
++          ],
++        ]);
++      }
++      if (route.endsWith('/collaborators/alice/permission'))
++        return response({ permission: 'write' });
++      if (route.includes('/labels/')) return response({});
++      if (route.endsWith('/issues/18/labels') && args.includes('POST')) return response({});
++      assert.fail('Unexpected route ' + route);
++    },
++  });
++  assert.deepEqual(
++    (await gh.discoverQueue({ normalize: true, excludeIssues: [17] })).map((x) => x.number),
++    [18],
++  );
++  assert.deepEqual(
++    calls.filter((x) => x.args.includes('POST')).map((x) => x.route),
++    ['repos/l2v-hub/ClinicOS/issues/18/labels'],
++  );
++});
++test('malformed queue exclusions fail closed before any GitHub read or label write', async () => {
++  const gh = createGitHub({
++    cwd: '/tmp',
++    repo: 'l2v-hub/ClinicOS',
++    run: async () => assert.fail('no transport'),
++  });
++  for (const excludeIssues of [
++    null,
++    {},
++    '17',
++    [0],
++    [-1],
++    [1.5],
++    ['17'],
++    [Number.MAX_SAFE_INTEGER + 1],
++  ])
++    await assert.rejects(gh.discoverQueue({ normalize: true, excludeIssues }), /Invalid excluded/);
++});
+
+--- baseline/agent-team/tests/bug-pipeline/issue-review-sync.test.mjs
++++ candidate2/agent-team/tests/bug-pipeline/issue-review-sync.test.mjs
+@@ -1,17 +1,257 @@
+ import test from 'node:test';
+ import assert from 'node:assert/strict';
+ import { syncIssueReviews } from '../../src/bug-pipeline/issue-review-sync.mjs';
+-const repo='l2v-hub/ClinicOS';
+-const standalone=()=>({id:'standalone-pr-81',pr:{number:81},sha:'a'.repeat(40),implementation:[],reviews:[],issues:[]});
+-test('sync discovers standalone without processing, mirroring, saving or restarting it',async()=>{
+- const subject=standalone(), state={schemaVersion:1,repository:repo,batches:[],standaloneReviews:[subject]},before=structuredClone(state),calls=[];
+- const result=await syncIssueReviews({github:{createStateStore:()=>({load:async()=>state,save:()=>assert.fail('save')})},communication:{mirrorFeedback:()=>assert.fail('standalone mirror'),publishState:async(s,options)=>{calls.push({s,options});return{label:'codex-review-ready'}}}});
+- assert.equal(calls.length,1);assert.deepEqual(calls[0].options,{collection:'standaloneReviews'});assert.equal(result.batches[0].label,'codex-review-ready');assert.deepEqual(state,before);
+-});
+-test('sync rejects duplicate standalone identities before any projection',async()=>{
+- const a=standalone();const state={schemaVersion:1,repository:repo,batches:[],standaloneReviews:[a,{...a,id:'other'}]};
+- await assert.rejects(syncIssueReviews({github:{createStateStore:()=>({load:async()=>state})},communication:{publishState:()=>assert.fail('write')}}),/Duplicate/);
+-});
+-test('sync skips merged and deployed standalone subjects',async()=>{
+- const a=standalone();for(const status of ['merged','deployed']){const state={schemaVersion:1,repository:repo,batches:[],standaloneReviews:[{...a,release:{status}}]};const r=await syncIssueReviews({github:{createStateStore:()=>({load:async()=>state})},communication:{publishState:()=>assert.fail('write')}});assert.equal(r.batches.length,0)}
+-});
++const repo = 'l2v-hub/ClinicOS';
++const standalone = () => ({
++  id: 'standalone-pr-81',
++  pr: { number: 81 },
++  sha: 'a'.repeat(40),
++  implementation: [],
++  reviews: [],
++  issues: [],
++});
++test('sync discovers standalone without processing, mirroring, saving or restarting it', async () => {
++  const subject = standalone(),
++    state = { schemaVersion: 1, repository: repo, batches: [], standaloneReviews: [subject] },
++    before = structuredClone(state),
++    calls = [];
++  const result = await syncIssueReviews({
++    github: {
++      createStateStore: () => ({ load: async () => state, save: () => assert.fail('save') }),
++    },
++    communication: {
++      mirrorFeedback: () => assert.fail('standalone mirror'),
++      publishState: async (s, options) => {
++        calls.push({ s, options });
++        return { label: 'codex-review-ready' };
++      },
++    },
++  });
++  assert.equal(calls.length, 1);
++  assert.deepEqual(calls[0].options, { collection: 'standaloneReviews' });
++  assert.equal(result.batches[0].label, 'codex-review-ready');
++  assert.deepEqual(state, before);
++});
++test('sync rejects duplicate standalone identities before any projection', async () => {
++  const a = standalone();
++  const state = {
++    schemaVersion: 1,
++    repository: repo,
++    batches: [],
++    standaloneReviews: [a, { ...a, id: 'other' }],
++  };
++  await assert.rejects(
++    syncIssueReviews({
++      github: { createStateStore: () => ({ load: async () => state }) },
++      communication: { publishState: () => assert.fail('write') },
++    }),
++    /Duplicate/,
++  );
++});
++test('sync skips merged and deployed standalone subjects', async () => {
++  const a = standalone();
++  for (const status of ['merged', 'deployed']) {
++    const state = {
++      schemaVersion: 1,
++      repository: repo,
++      batches: [],
++      standaloneReviews: [{ ...a, release: { status } }],
++    };
++    const r = await syncIssueReviews({
++      github: { createStateStore: () => ({ load: async () => state }) },
++      communication: { publishState: () => assert.fail('write') },
++    });
++    assert.equal(r.batches.length, 0);
++  }
++});
++
++const syncBatch = (number = 17) => ({
++  id: `bug-batch-${number}`,
++  branch: `codex/bug-batch-${number}`,
++  issues: [number],
++  phase: 'blocked',
++  implementation: [{ round: 1, status: 'failed' }],
++  reviews: [],
++  pr: { number: number + 100 },
++  sha: 'b'.repeat(40),
++  reason: 'Synthetic retained finding',
++});
++const newOnly = (protectedSubjects = []) => ({
++  active: true,
++  automation: { enabled: true, mode: 'new-unclaimed-only', protectedSubjects },
++});
++async function observedSync(state, publish) {
++  const before = JSON.stringify(state),
++    calls = [];
++  const result = await syncIssueReviews({
++    github: {
++      createStateStore: () => ({
++        load: async () => state,
++        save: () => assert.fail('sync never saves canonical state'),
++      }),
++    },
++    communication: {
++      mirrorFeedback: async (subject) => {
++        calls.push(`mirror:${subject.id}`);
++        return { forwarded: 1 };
++      },
++      publishState: async (subject, options) => {
++        calls.push(`publish:${options.collection}:${subject.id}`);
++        return publish ? publish(subject) : { label: 'review-blocked' };
++      },
++    },
++  });
++  assert.equal(
++    JSON.stringify(state),
++    before,
++    'canonical entities, claims, approvals and budgets stay byte-identical',
++  );
++  return { result, calls };
++}
++
++test('active global takeover skips every eligible subject before any feedback mirror or projection', async () => {
++  const a = syncBatch(),
++    b = standalone();
++  const state = {
++    schemaVersion: 1,
++    repository: repo,
++    batches: [a],
++    standaloneReviews: [b],
++    operatorTakeover: { active: true },
++  };
++  const { result, calls } = await observedSync(state);
++  assert.deepEqual(calls, []);
++  assert.equal(result.status, 'skipped');
++  assert.deepEqual(
++    result.batches,
++    [a, b].map((subject) => ({ id: subject.id, status: 'skipped', reason: 'operator-owned' })),
++  );
++});
++
++test('recognized new-only handback preserves protected subjects while ordinary unowned feedback still synchronizes', async () => {
++  const held = syncBatch(),
++    fresh = syncBatch(18),
++    review = standalone();
++  const state = {
++    schemaVersion: 1,
++    repository: repo,
++    batches: [held, fresh],
++    standaloneReviews: [review],
++    operatorTakeover: newOnly([
++      { collection: 'batches', id: held.id },
++      { collection: 'standaloneReviews', id: review.id },
++    ]),
++  };
++  const { result, calls } = await observedSync(state);
++  assert.deepEqual(calls, [`mirror:${fresh.id}`, `publish:batches:${fresh.id}`]);
++  assert.equal(result.status, 'synced');
++  assert.equal(result.batches.find((row) => row.id === fresh.id).forwarded, 1);
++  for (const subject of [held, review])
++    assert.deepEqual(
++      result.batches.find((row) => row.id === subject.id),
++      { id: subject.id, status: 'skipped', reason: 'operator-owned' },
++    );
++});
++
++test('takeover subject identities remain protected despite changed SHA and an explicit new-queue handback', async () => {
++  const subject = syncBatch();
++  const takeover = newOnly();
++  takeover.subjects = [{ collection: 'batches', id: subject.id, sha: 'a'.repeat(40) }];
++  const { result, calls } = await observedSync({
++    schemaVersion: 1,
++    repository: repo,
++    batches: [subject],
++    operatorTakeover: takeover,
++  });
++  assert.deepEqual(calls, []);
++  assert.equal(result.batches[0].reason, 'operator-owned');
++});
++
++test('active subject coordination and unfinished release coordination independently prevent sync', async () => {
++  for (const coordination of [
++    { operatorCoordination: { active: true, finishedAt: 'historical-but-still-active' } },
++    { operatorReleaseCoordination: { stage: 'awaiting-provider-proof' } },
++  ]) {
++    const batch = { ...syncBatch(), ...coordination };
++    const { result, calls } = await observedSync({
++      schemaVersion: 1,
++      repository: repo,
++      batches: [batch],
++      operatorTakeover: newOnly(),
++    });
++    assert.deepEqual(calls, []);
++    assert.equal(result.batches[0].status, 'skipped');
++    assert.equal(result.batches[0].reason, 'operator-owned');
++  }
++});
++
++test('finished coordination allows existing unowned sync without weakening feedback processing', async () => {
++  const batch = {
++    ...syncBatch(),
++    operatorCoordination: { active: false },
++    operatorReleaseCoordination: { stage: 'finished' },
++  };
++  const { result, calls } = await observedSync({
++    schemaVersion: 1,
++    repository: repo,
++    batches: [batch],
++    operatorTakeover: newOnly(),
++  });
++  assert.deepEqual(calls, [`mirror:${batch.id}`, `publish:batches:${batch.id}`]);
++  assert.equal(result.batches[0].status, 'synced');
++  assert.equal(result.batches[0].forwarded, 1);
++});
++
++test('malformed or disabled automation handback cannot silently enable owned synchronization', async () => {
++  for (const automation of [
++    undefined,
++    {},
++    { enabled: true, mode: 'all', protectedSubjects: [] },
++    { enabled: false, mode: 'new-unclaimed-only', protectedSubjects: [] },
++  ]) {
++    const { result, calls } = await observedSync({
++      schemaVersion: 1,
++      repository: repo,
++      batches: [syncBatch()],
++      operatorTakeover: { active: true, automation },
++    });
++    assert.deepEqual(calls, []);
++    assert.equal(result.status, 'skipped');
++  }
++});
++
++test('released subjects remain omitted and closed unowned subjects retain their original disposition', async () => {
++  for (const status of ['merged', 'deployed']) {
++    const subject = { ...standalone(), release: { status } };
++    const { result, calls } = await observedSync({
++      schemaVersion: 1,
++      repository: repo,
++      batches: [],
++      standaloneReviews: [subject],
++      operatorTakeover: { active: true },
++    });
++    assert.deepEqual(result.batches, []);
++    assert.deepEqual(calls, []);
++  }
++  const subject = standalone();
++  const { result } = await observedSync(
++    { schemaVersion: 1, repository: repo, batches: [], standaloneReviews: [subject] },
++    async () => {
++      throw Object.assign(new Error('synthetic closed'), { code: 'review-subject-closed' });
++    },
++  );
++  assert.equal(result.status, 'synced');
++  assert.deepEqual(result.batches, [{ id: subject.id, status: 'skipped', reason: 'closed' }]);
++});
++
++test('unowned projection failure remains partial and never publishes private error text', async () => {
++  const { result } = await observedSync(
++    { schemaVersion: 1, repository: repo, batches: [syncBatch()] },
++    async () => {
++      throw new Error('synthetic private provider body');
++    },
++  );
++  assert.equal(result.status, 'partial');
++  assert.deepEqual(result.batches, [{ id: 'bug-batch-17', status: 'blocked' }]);
++  assert.ok(!JSON.stringify(result).includes('private provider'));
++});
+
+--- baseline/agent-team/tests/bug-pipeline/operator-ownership.test.mjs
++++ candidate2/agent-team/tests/bug-pipeline/operator-ownership.test.mjs
+@@ -0,0 +1,115 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import {
++  automationPaused,
++  operatorOwns,
++  claimedIssues,
++  occupiedSubjects,
++} from '../../src/bug-pipeline/operator-ownership.mjs';
++
++const handback = () => ({
++  active: true,
++  automation: {
++    enabled: true,
++    mode: 'new-unclaimed-only',
++    protectedSubjects: [],
++  },
++});
++test('active takeover is paused until exact explicit handback; no default or malformed substitute', () => {
++  assert.equal(automationPaused({}), false);
++  for (const automation of [
++    undefined,
++    {},
++    { enabled: 'true', mode: 'new-unclaimed-only', protectedSubjects: [] },
++    { enabled: true, mode: 'all', protectedSubjects: [] },
++    { enabled: true, mode: 'new-unclaimed-only' },
++    {
++      enabled: true,
++      mode: 'new-unclaimed-only',
++      protectedSubjects: [{ collection: 'unknown', id: 'old' }],
++    },
++  ]) {
++    assert.equal(automationPaused({ operatorTakeover: { active: true, automation } }), true);
++  }
++  assert.equal(automationPaused({ operatorTakeover: handback() }), false);
++});
++test('subject identity protections are a union and never keyed by mutable SHA', () => {
++  const takeover = handback();
++  takeover.subjects = [{ collection: 'batches', id: 'old', sha: 'old-head' }];
++  takeover.automation.protectedSubjects.push({
++    collection: 'manualBatches',
++    id: 'manual',
++  });
++  const state = { operatorTakeover: takeover };
++  assert.equal(operatorOwns(state, 'batches', { id: 'old', sha: 'new-head' }), true);
++  assert.equal(operatorOwns(state, 'manualBatches', { id: 'manual' }), true);
++  assert.equal(operatorOwns(state, 'standaloneReviews', { id: 'old' }), false);
++  assert.equal(
++    operatorOwns(state, 'batches', {
++      id: 'new',
++      operatorCoordination: { active: true, finishedAt: 'historical' },
++    }),
++    true,
++  );
++  assert.equal(
++    operatorOwns(state, 'batches', {
++      id: 'new',
++      operatorCoordination: { active: false },
++    }),
++    false,
++  );
++});
++test('non-finished operator release ownership is retained independently of handback', () => {
++  const state = { operatorTakeover: handback() };
++  for (const release of [{}, { stage: 'awaiting-proof' }, { finishedAt: '' }])
++    assert.equal(
++      operatorOwns(state, 'batches', {
++        id: 'old',
++        operatorReleaseCoordination: release,
++      }),
++      true,
++    );
++  for (const release of [
++    { status: 'finished' },
++    { stage: 'finished' },
++    { finishedAt: '2026-10-22T00:00:00Z' },
++  ])
++    assert.equal(
++      operatorOwns(state, 'batches', {
++        id: 'old',
++        operatorReleaseCoordination: release,
++      }),
++      false,
++    );
++});
++test('all collections retain terminal claimed issues and nonterminal exact scope occupancy without mutation', () => {
++  const state = {
++    batches: [
++      {
++        id: 'old',
++        issues: [1],
++        release: { status: 'deployed' },
++        plan: { scope: ['retired.ts'] },
++      },
++    ],
++    manualBatches: [
++      {
++        id: 'manual',
++        issues: [2],
++        plan: { scope: ['shared.ts'] },
++        sourceManifest: [{ path: 'helper.ts' }],
++      },
++    ],
++    standaloneReviews: [{ id: 'review', issues: [3], sourceManifest: [{ path: 'feature.ts' }] }],
++  };
++  const before = JSON.stringify(state);
++  assert.deepEqual([...claimedIssues(state)], [1, 2, 3]);
++  assert.deepEqual(
++    occupiedSubjects(state).map((x) => [x.collection, x.id, x.scope]),
++    [
++      ['manualBatches', 'manual', ['shared.ts', 'helper.ts']],
++      ['standaloneReviews', 'review', ['feature.ts']],
++    ],
++  );
++  assert.equal(JSON.stringify(state), before);
++});
+
+--- baseline/agent-team/tests/bug-pipeline/pipeline.test.mjs
++++ candidate2/agent-team/tests/bug-pipeline/pipeline.test.mjs
+@@ -48,7 +48,10 @@
+           },
+         ],
+         verification: [
+-          { command: 'node', args: ['--test', 'frontend/src/features/patients/filter.test.mjs'] },
++          {
++            command: 'node',
++            args: ['--test', 'frontend/src/features/patients/filter.test.mjs'],
++          },
+           { command: 'npm', args: ['--prefix', 'frontend', 'run', 'build'] },
+         ],
+         evidence: issues.map((issue) => ({
+@@ -112,7 +115,14 @@
+ } = {}) {
+   const log = [];
+   const stateRef = { value: clone(initialState) };
+-  const counts = { plan: 0, execute: 0, simplify: 0, verify: 0, review: 0, checks: 0 };
++  const counts = {
++    plan: 0,
++    execute: 0,
++    simplify: 0,
++    verify: 0,
++    review: 0,
++    checks: 0,
++  };
+   let saveCount = 0;
+   const hydrated = [];
+   const issueComments = [];
+@@ -158,7 +168,11 @@
+         body: `Hydrated issue body for #${number}`,
+         labels: [{ name: 'bug' }, { name: 'codex-triage' }, { name: 'codex-run' }],
+         comments: [
+-          { id: number * 10, body: `Hydrated comment for #${number}`, user: { login: 'reporter' } },
++          {
++            id: number * 10,
++            body: `Hydrated comment for #${number}`,
++            user: { login: 'reporter' },
++          },
+         ],
+       };
+       hydrated.push(item);
+@@ -199,7 +213,10 @@
+     root: '/tmp/clinicos-pipeline-test',
+     async qa() {
+       log.push('workspace.qa');
+-      return { status: 'verified', summary: 'Independent acceptance/evidence review.' };
++      return {
++        status: 'verified',
++        summary: 'Independent acceptance/evidence review.',
++      };
+     },
+     async prepare(batch) {
+       log.push('workspace.prepare');
+@@ -287,7 +304,17 @@
+     issueComments,
+     planningInput,
+     run: (event = { action: 'test' }, reviewMode = 'internal') =>
+-      runPipeline({ repo, event, gh, models, workspace, store, reviewMode, now, triageWindowMs }),
++      runPipeline({
++        repo,
++        event,
++        gh,
++        models,
++        workspace,
++        store,
++        reviewMode,
++        now,
++        triageWindowMs,
++      }),
+   };
+ }
+ 
+@@ -304,7 +331,12 @@
+   batch.reviewReports = { 'claude-review-1.json': report };
+   batch.reviewLedger = {
+     rounds: [
+-      { round: 1, subject_sha: batch.sha, verdict: 'approved', review_sha256: sha256(report) },
++      {
++        round: 1,
++        subject_sha: batch.sha,
++        verdict: 'approved',
++        review_sha256: sha256(report),
++      },
+     ],
+   };
+   batch.feedbackFingerprint = feedbackFingerprint(openFeedback(batch));
+@@ -325,7 +357,10 @@
+ test('merged and deployed batches remain terminal and never restart implementation', async () => {
+   for (const status of ['merged', 'deployed']) {
+     const batch = reviewedTerminalBatch(status);
+-    const h = harness({ initialState: { ...blankState(), batches: [batch] }, queue: [] });
++    const h = harness({
++      initialState: { ...blankState(), batches: [batch] },
++      queue: [],
++    });
+     const result = await h.run();
+     assert.equal(result.batches[0].release.status, status);
+     assert.equal(h.counts.execute, 0);
+@@ -480,7 +515,9 @@
+ });
+ 
+ test('unchanged unresolved human review waits without spending another Claude attempt', async () => {
+-  const batch = batchFor({ reviews: [{ round: 1, status: 'approved', subjectSha: sha('a') }] });
++  const batch = batchFor({
++    reviews: [{ round: 1, status: 'approved', subjectSha: sha('a') }],
++  });
+   batch.approvedSha = batch.sha;
+   const feedback = openFeedback(batch, { unresolved: true });
+   batch.feedbackFingerprint = feedbackFingerprint(feedback);
+@@ -501,8 +538,16 @@
+   const final = await h.run();
+   assert.equal(h.counts.plan, 1);
+   assert.deepEqual(h.planningInput, [
+-    { number: 17, body: 'Hydrated issue body for #17', comment: 'Hydrated comment for #17' },
+-    { number: 18, body: 'Hydrated issue body for #18', comment: 'Hydrated comment for #18' },
++    {
++      number: 17,
++      body: 'Hydrated issue body for #17',
++      comment: 'Hydrated comment for #17',
++    },
++    {
++      number: 18,
++      body: 'Hydrated issue body for #18',
++      comment: 'Hydrated comment for #18',
++    },
+   ]);
+   assert.deepEqual(
+     h.hydrated.map((issue) => issue.number),
+@@ -612,7 +657,9 @@
+     queue: [17],
+     initialState: state,
+     feedback: ({ batch: current }) =>
+-      openFeedback(current, { comments: [{ id: 999, body: 'New PR request' }] }),
++      openFeedback(current, {
++        comments: [{ id: 999, body: 'New PR request' }],
++      }),
+   });
+   const final = await h.run();
+   assert.equal(final.batches[0].phase, 'blocked');
+@@ -629,7 +676,11 @@
+     head: sha('a'),
+     reviews: [{ round: 1, status: 'approved', subjectSha: sha('a') }],
+   });
+-  const originalFeedback = { comments: [], unresolved: false, changesRequested: false };
++  const originalFeedback = {
++    comments: [],
++    unresolved: false,
++    changesRequested: false,
++  };
+   batch.feedbackFingerprint = feedbackFingerprint(originalFeedback);
+   batch.approvedSha = batch.sha;
+   const h = harness({
+@@ -637,7 +688,9 @@
+     queue: [17],
+     initialState: { schemaVersion: 1, repository: repo, batches: [batch] },
+     feedback: ({ batch: current }) =>
+-      openFeedback(current, { comments: [{ id: 222, body: 'Please handle this review note' }] }),
++      openFeedback(current, {
++        comments: [{ id: 222, body: 'Please handle this review note' }],
++      }),
+   });
+   const final = await h.run();
+   assert.equal(h.counts.execute, 1);
+@@ -670,7 +723,11 @@
+ });
+ 
+ test('pending required checks remain waiting and can become ready without resetting review or implementation budgets', async () => {
+-  const h = harness({ issues: [17], queue: [17], checks: [false, false, true] });
++  const h = harness({
++    issues: [17],
++    queue: [17],
++    checks: [false, false, true],
++  });
+   let state = await h.run();
+   assert.equal(state.batches[0].phase, 'waiting-checks');
+   assert.equal(state.batches[0].reviews.length, 1);
+@@ -748,7 +805,10 @@
+   };
+   batch.release.deployment.railwayRunUrl = railwayRunUrl;
+   batch.release.deployment.demo = proof;
+-  const h = harness({ initialState: { ...blankState(), batches: [batch] }, queue: [] });
++  const h = harness({
++    initialState: { ...blankState(), batches: [batch] },
++    queue: [],
++  });
+   const requests = [],
+     comments = [],
+     closed = new Set();
+@@ -784,7 +844,14 @@
+   gh.intake = async () => [];
+   gh.discoverQueue = async () => [];
+   const controller = () =>
+-    runPipeline({ repo, event: {}, gh, models: h.models, workspace: h.workspace, store: h.store });
++    runPipeline({
++      repo,
++      event: {},
++      gh,
++      models: h.models,
++      workspace: h.workspace,
++      store: h.store,
++    });
+   const beforeBudget = clone(h.stateRef.value.batches[0].implementation);
+   await controller();
+   assert.equal(
+@@ -849,7 +916,10 @@
+         state: 'MERGED',
+         mergeCommitSha: sha('b'),
+       }),
+-    requiredChecks: async () => ({ ok: true, details: ['all required checks: SUCCESS'] }),
++    requiredChecks: async () => ({
++      ok: true,
++      details: ['all required checks: SUCCESS'],
++    }),
+     readFileAtRevision: async (file) =>
+       file.endsWith('evidence-manifest.json')
+         ? { content: JSON.stringify(batch.evidence) }
+@@ -881,7 +951,11 @@
+     execute: true,
+   });
+   assert.equal(released.status, 'deployed');
+-  assert.deepEqual(released.deployments, { frontend: false, backend: false, runtime: false });
++  assert.deepEqual(released.deployments, {
++    frontend: false,
++    backend: false,
++    runtime: false,
++  });
+   await recordDeployment({
+     repo,
+     github: protectedGh,
+@@ -906,3 +980,206 @@
+   await controller();
+   assert.equal(requests.length, after);
+ });
++
++const takeoverHandback = (protectedSubjects = []) => ({
++  active: true,
++  automation: { enabled: true, mode: 'new-unclaimed-only', protectedSubjects },
++});
++
++function ownedStandalone(number = 99, issues = [90]) {
++  return {
++    kind: 'standalone-pr-review',
++    schemaVersion: 1,
++    repository: repo,
++    id: `standalone-pr-${number}`,
++    pr: { number, url: `https://github.com/${repo}/pull/${number}` },
++    sha: sha('c'),
++    baseSha: sha('b'),
++    baseRef: 'main',
++    branch: `manual/review-${number}`,
++    phase: 'waiting-review',
++    issues,
++    packet: {
++      path: `artifacts/task-validation/standalone-review-${number}`,
++      files: Object.fromEntries(
++        [
++          'task-contract.md',
++          'analysis.md',
++          'implementation-plan.md',
++          'validation-report.md',
++          'imported-history.json',
++        ].map((p) => [p, '1'.repeat(64)]),
++      ),
++    },
++    sourceManifest: [
++      {
++        path: 'frontend/src/owned.ts',
++        blob: sha('c'),
++        mode: '100644',
++        baseBlob: sha('b'),
++        baseMode: '100644',
++      },
++    ],
++    implementation: [
++      {
++        round: 1,
++        status: 'passed',
++        subjectSha: sha('c'),
++        evidence: 'validation-report.md',
++      },
++    ],
++    reviews: [],
++    reviewReports: {},
++    adoption: {
++      actor: 'synthetic',
++      at: '2026-10-22T00:00:00Z',
++      manifestSha256: '2'.repeat(64),
++    },
++    operatorCoordination: { active: true },
++  };
++}
++
++test('active takeover pauses before intake or any state/status/model mutation', async () => {
++  const state = {
++    ...blankState(),
++    batches: [batchFor()],
++    operatorTakeover: { active: true },
++  };
++  const h = harness({ initialState: state });
++  const result = await h.run();
++  assert.deepEqual(result, state);
++  assert.deepEqual(h.log, ['store.load']);
++  assert.deepEqual(h.stateRef.value, state);
++});
++
++test('explicit new-only handback processes a new issue without touching protected batch/manual/standalone subjects', async () => {
++  const oldBatch = batchFor({ issues: [71], phase: 'implementing' });
++  oldBatch.pr = { number: 171, url: `https://github.com/${repo}/pull/171` };
++  oldBatch.implementation = [{ round: 1, status: 'running' }];
++  const manual = {
++    id: 'manual-owned',
++    issues: [72],
++    operatorCoordination: { active: true },
++    plan: { scope: ['frontend/src/manual.ts'] },
++    implementation: [{ round: 1, status: 'running' }],
++    reviews: [],
++  };
++  const standalone = ownedStandalone();
++  const state = {
++    ...blankState(),
++    batches: [oldBatch],
++    manualBatches: [manual],
++    standaloneReviews: [standalone],
++    operatorTakeover: takeoverHandback([{ collection: 'batches', id: oldBatch.id }]),
++  };
++  const h = harness({
++    issues: [17],
++    initialState: state,
++    queue: [71, 72, 90, 17],
++  });
++  // Keep the incoming scope separate from every retained owner.
++  state.batches[0].plan.scope = ['frontend/src/previous.ts'];
++  state.batches[0].plan.tasks[0].files = ['frontend/src/previous.ts'];
++  state.batches[0].plan.fileMap = [{ issue: 71, files: ['frontend/src/previous.ts'] }];
++  h.stateRef.value = clone(state);
++  const result = await h.run();
++  assert.deepEqual(result.batches[0], state.batches[0]);
++  assert.deepEqual(result.manualBatches, state.manualBatches);
++  assert.deepEqual(result.standaloneReviews, state.standaloneReviews);
++  assert.equal(h.counts.execute, 1);
++  assert.equal(result.batches[1].phase, 'ready');
++  assert.ok(
++    h.log
++      .filter((x) => /gh\.(setIssueStatus|commentIssue):/.test(x))
++      .every((x) => !/:(71|72|90)(:|$)/.test(x)),
++  );
++});
++
++test('manual and standalone frozen scope occupancy blocks an overlapping new plan without changing owners', async () => {
++  for (const collection of ['manualBatches', 'standaloneReviews']) {
++    const owner =
++      collection === 'manualBatches'
++        ? {
++            id: 'manual',
++            issues: [90],
++            operatorCoordination: { active: true },
++            implementation: [],
++            reviews: [],
++            sourceManifest: [{ path: planFor([17]).groups[0].scope[0] }],
++          }
++        : ownedStandalone();
++    if (collection === 'standaloneReviews')
++      owner.sourceManifest[0].path = planFor([17]).groups[0].scope[0];
++    const state = {
++      ...blankState(),
++      [collection]: [owner],
++      operatorTakeover: takeoverHandback(),
++    };
++    const h = harness({ issues: [17], initialState: state });
++    const result = await h.run();
++    assert.deepEqual(result[collection], state[collection]);
++    assert.equal(result.batches[0].phase, 'blocked');
++    assert.match(result.batches[0].reason, /overlaps existing/);
++    assert.equal(h.counts.execute, 0);
++  }
++});
++
++test('claimed terminal manual issue is excluded before intake and queue normalization', async () => {
++  const owner = {
++    id: 'old-manual',
++    issues: [17],
++    release: { status: 'deployed' },
++    implementation: [],
++    reviews: [],
++  };
++  const state = { ...blankState(), manualBatches: [owner] };
++  const h = harness({ issues: [17], initialState: state });
++  h.gh.intake = async () => assert.fail('claimed event cannot normalize labels');
++  h.gh.discoverQueue = async (options) => {
++    assert.deepEqual(options, { normalize: true, excludeIssues: [17] });
++    return [];
++  };
++  const result = await h.run({ issue: { number: 17 } });
++  assert.deepEqual(result, state);
++  assert.equal(h.counts.plan, 0);
++});
++
++test('a CAS-reconciled takeover stops before the next model and never diagnoses or restarts the old claim', async () => {
++  const state = { ...blankState(), operatorTakeover: takeoverHandback() };
++  const h = harness({ issues: [17], initialState: state });
++  const original = h.store.save;
++  h.store.save = async (value, options) => {
++    const merged = clone(value);
++    merged.operatorTakeover.automation.enabled = false;
++    await options.rebaseIndependentSubjects(merged);
++    return original(value);
++  };
++  await assert.rejects(h.run(), /Automatic ownership changed/);
++  assert.equal(h.counts.plan, 0);
++  assert.deepEqual(h.stateRef.value, state);
++});
++
++test('CAS ownership acquired on the current batch rejects its pending reservation before execution', async () => {
++  const h = harness({ issues: [17], initialState: blankState() });
++  const save = h.store.save;
++  let remoteOwned;
++  h.store.save = async (value, options) => {
++    if (value.batches[0]?.phase === 'implementing') {
++      remoteOwned = clone(h.stateRef.value);
++      remoteOwned.batches[0].operatorCoordination = {
++        active: true,
++        owner: 'synthetic-operator',
++      };
++      h.stateRef.value = clone(remoteOwned);
++      const merged = clone(value);
++      merged.batches[0].operatorCoordination = clone(remoteOwned.batches[0].operatorCoordination);
++      await options.rebaseIndependentSubjects(merged);
++      assert.fail('owned correction reservation must not persist');
++    }
++    return save(value);
++  };
++  await assert.rejects(h.run(), /Automatic ownership changed/);
++  assert.equal(h.counts.execute, 0);
++  assert.deepEqual(h.stateRef.value, remoteOwned);
++  assert.equal(remoteOwned.batches[0].implementation.length, 0);
++});
+
+--- baseline/agent-team/tests/bug-pipeline/release.test.mjs
++++ candidate2/agent-team/tests/bug-pipeline/release.test.mjs
+@@ -2358,7 +2358,13 @@
+         name: 'deploy',
+         status: 'completed',
+         conclusion: 'success',
+-        steps: [{ name: 'Deploy to Railway', status: 'completed', conclusion: 'success' }],
++        steps: [
++          {
++            name: 'Deploy to Railway',
++            status: 'completed',
++            conclusion: 'success',
++          },
++        ],
+       };
+       const reader = {
+         getJson: async (route) =>
+@@ -2462,7 +2468,12 @@
+         offset += ms;
+       };
+       f.github.verifyExactRecoveryRuns = (input) =>
+-        verifyRetiredExactDispatches({ ...input, reader: f.reader, now: clock, delay });
++        verifyRetiredExactDispatches({
++          ...input,
++          reader: f.reader,
++          now: clock,
++          delay,
++        });
+       const poster = createExactDispatchPoster({
+         cwd: '/tmp',
+         run: async () => {
+@@ -2570,11 +2581,21 @@
+     await options.guard?.();
+     return save(value);
+   };
+-  f.github.verifyExactRecoveryRuns = (input) => verifyRetiredExactDispatches({
+-    ...input, reader: f.reader, now: clock, delay: async (ms) => { offset += ms; },
++  f.github.verifyExactRecoveryRuns = (input) =>
++    verifyRetiredExactDispatches({
++      ...input,
++      reader: f.reader,
++      now: clock,
++      delay: async (ms) => {
++        offset += ms;
++      },
++    });
++  const rejected = createExactDemoDispatcher({
++    reader: f.reader,
++    postDispatch: async () => {
++      throw Error('synthetic rejected POST');
++    },
+   });
+-  const rejected = createExactDemoDispatcher({ reader: f.reader,
+-    postDispatch: async () => { throw Error('synthetic rejected POST'); } });
+   f.github.ensureExactDemoRun = (input) => rejected.ensure(input);
+   await assert.rejects(releaseBatch(exactInput(f)), /rejected POST/);
+   const original = structuredClone(f.getSaved().batches[0]);
+@@ -2588,9 +2609,14 @@
+     head_repository: { full_name: f.state.repository },
+     path: '.github/workflows/deploy-demo-exact-commit.yml', event: 'workflow_dispatch',
+     display_title: `demo-exact preflight ${old.sha} ${old.dispatchId}`,
+-    status: 'in_progress', conclusion: null };
++    status: 'in_progress',
++    conclusion: null,
++  };
+   f.runs.push(late);
+-  const dispatcher = createExactDemoDispatcher({ reader: f.reader, postDispatch: f.post });
++  const dispatcher = createExactDemoDispatcher({
++    reader: f.reader,
++    postDispatch: f.post,
++  });
+   f.github.ensureExactDemoRun = (input) => dispatcher.ensure(input);
+   await assert.rejects(releaseBatch(exactInput(f)), /late excluded/);
+   assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 0);
+@@ -2644,10 +2670,27 @@
+ });
+ 
+ test('late retirement controller refuses ambiguous, malformed, incomplete or changed proofs at actual recovery save', async (t) => {
+-  for (const mode of ['ambiguous', 'head repository', 'repository', 'SHA', 'workflow', 'event',
+-    'branch', 'attempt', 'conclusion', 'incomplete', 'detail drift', 'save active',
+-    'save conclusion', 'save disappeared', 'save duplicate', 'save main', 'save block',
+-    'save authorization', 'save original no-run proof'])
++  for (const mode of [
++    'ambiguous',
++    'head repository',
++    'repository',
++    'SHA',
++    'workflow',
++    'event',
++    'branch',
++    'attempt',
++    'conclusion',
++    'incomplete',
++    'detail drift',
++    'save active',
++    'save conclusion',
++    'save disappeared',
++    'save duplicate',
++    'save main',
++    'save block',
++    'save authorization',
++    'save original no-run proof',
++  ])
+     await t.test(mode, async () => {
+       const f = await lateRetirementFixture();
+       f.late.status = 'completed'; f.late.conclusion = 'success';
+@@ -2731,8 +2774,44 @@
+   assert.equal(batch.exactDemoRecovery.excludedDispatches.length, 1);
+   batch.exactReleaseRecoveries = [];
+   const before = structuredClone(batch);
+-  await assert.rejects(recoverExactRelease({ ...recoveryInput(f), now: f.clock }),
+-    /excluded dispatch missing archived identity/);
++  await assert.rejects(
++    recoverExactRelease({ ...recoveryInput(f), now: f.clock }),
++    /excluded dispatch missing archived identity/,
++  );
+   assert.deepEqual(f.getSaved().batches[0], before);
+   assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 0);
+ });
++
++test('automatic release honors global pause, explicit subject handback and independent active operator holds', () => {
++  const f = fixture();
++  const before = JSON.stringify(f.batch);
++  f.state.operatorTakeover = { active: true };
++  assert.equal(selectAutoReleaseBatch(f.state), null);
++  f.state.operatorTakeover.automation = {
++    enabled: true,
++    mode: 'new-unclaimed-only',
++    protectedSubjects: [],
++  };
++  assert.equal(selectAutoReleaseBatch(f.state), f.batch);
++  f.state.operatorTakeover.subjects = [
++    { collection: 'batches', id: f.batch.id, sha: 'historical-sha' },
++  ];
++  assert.equal(selectAutoReleaseBatch(f.state), null);
++  delete f.state.operatorTakeover.subjects;
++  f.state.operatorTakeover.automation.protectedSubjects.push({
++    collection: 'batches',
++    id: f.batch.id,
++  });
++  assert.equal(selectAutoReleaseBatch(f.state), null);
++  f.state.operatorTakeover.automation.protectedSubjects = [];
++  f.batch.operatorCoordination = {
++    active: true,
++    finishedAt: 'historical-but-still-active',
++  };
++  assert.equal(selectAutoReleaseBatch(f.state), null);
++  delete f.batch.operatorCoordination;
++  f.batch.operatorReleaseCoordination = { stage: 'awaiting-provider-proof' };
++  assert.equal(selectAutoReleaseBatch(f.state), null);
++  delete f.batch.operatorReleaseCoordination;
++  assert.equal(JSON.stringify(f.batch), before);
++});

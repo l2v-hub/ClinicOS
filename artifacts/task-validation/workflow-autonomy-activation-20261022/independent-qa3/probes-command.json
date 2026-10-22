@@ -1,0 +1,11 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "/tmp/clinicos-autonomy-activation-20261022/independent-qa3/probes.mjs"
+  ],
+  "exitCode": 0,
+  "seconds": 1.821926472010091,
+  "assertions": "Unchanged QA2 original15; private import path only"
+}
