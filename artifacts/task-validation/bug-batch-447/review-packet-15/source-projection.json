@@ -1,0 +1,22 @@
+{
+  "sourceSha": "3ed93b5682cce505ba3a67796b1f81aaabd62877",
+  "baseSha": "a3dedfd67193bb3bb26482ab630053766352c48b",
+  "actualEarlierE2eSource": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "currentTestOnlyFile": {
+    "path": "backend/src/routes/__tests__/patient-route-scope-contract.test.ts",
+    "sha256": "ec08d68ff7aa322db96b5d03c0dcc4115dad9459c080ab40148ca80e10a9f1f3",
+    "bytes": 1822,
+    "blob": "7ce08ef98861844bcbb9977eba2c61e51f6375d1"
+  },
+  "allTestOnlyChangesSinceEarlierE2e": [
+    "backend/src/routes/__tests__/patient-route-scope-contract.test.ts",
+    "frontend/src/components/operator/__tests__/operationalLists452.test.ts",
+    "frontend/src/lib/__tests__/therapyPages.test.ts"
+  ],
+  "allOtherTrackedNonArtifactFilesByteIdenticalToEarlierE2eSource": true,
+  "earlierEightE2eReusedWithOriginalSourceAttribution": true,
+  "freshE2eOnTestOnlyCommit": false,
+  "authorSealSha256": "940526740a4f1384ebde6a7969e334bf0c4a852a3581fdb225b0a41eddd0e2e2",
+  "independentQaSealSha256": "9520aca3349479a0584aa57aa075a4665de8bf40a3ff9a47b8b1399ccbf70ede",
+  "nativeFullGitCheckoutStillRequired": true
+}

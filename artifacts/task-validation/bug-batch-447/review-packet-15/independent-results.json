@@ -1,0 +1,170 @@
+{
+  "status": "PASS",
+  "tests": [
+    {
+      "case": "baseline",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "--test",
+        "/tmp/clinicos-497-native-backend-fixture14-qa1/baseline/backend/src/routes/__tests__/patient-route-scope-contract.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend",
+      "environmentKeys": [
+        "PATH"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.348,
+      "firstNamedSecurityTest": "PASS",
+      "secondNamedOwnershipTest": "PASS",
+      "expected": "PASS",
+      "logSha256": "02dc4006cbfe9c2af0b8ff5c9c467f81f93d699acd0e5fe9f73980c21e95ce67"
+    },
+    {
+      "case": "remove-patient-id-binding",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "--test",
+        "/tmp/clinicos-497-native-backend-fixture14-qa1/remove-patient-id-binding/backend/src/routes/__tests__/patient-route-scope-contract.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend",
+      "environmentKeys": [
+        "PATH"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 0.333,
+      "firstNamedSecurityTest": "FAIL",
+      "secondNamedOwnershipTest": "PASS",
+      "expected": "FAIL_FIRST_PASS_SECOND",
+      "logSha256": "465cd8516ffd1f320f1aa7e24b46404f604e995409564b785f882eb831c8b308"
+    },
+    {
+      "case": "remove-role-scope-condition",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "--test",
+        "/tmp/clinicos-497-native-backend-fixture14-qa1/remove-role-scope-condition/backend/src/routes/__tests__/patient-route-scope-contract.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend",
+      "environmentKeys": [
+        "PATH"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 0.336,
+      "firstNamedSecurityTest": "FAIL",
+      "secondNamedOwnershipTest": "PASS",
+      "expected": "FAIL_FIRST_PASS_SECOND",
+      "logSha256": "d43224c1ea3027bde3dfed437586a2bc2c64a930f0b6031cb1c8cd44380d3014"
+    },
+    {
+      "case": "remove-registeredby-predicate",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "--test",
+        "/tmp/clinicos-497-native-backend-fixture14-qa1/remove-registeredby-predicate/backend/src/routes/__tests__/patient-route-scope-contract.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend",
+      "environmentKeys": [
+        "PATH"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 0.318,
+      "firstNamedSecurityTest": "FAIL",
+      "secondNamedOwnershipTest": "PASS",
+      "expected": "FAIL_FIRST_PASS_SECOND",
+      "logSha256": "c1d32a6cbedcdda7c5e4bbf854b4fd94d2a626c90df7f1295d09d516180413a1"
+    },
+    {
+      "case": "change-registeredby-binding",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "--test",
+        "/tmp/clinicos-497-native-backend-fixture14-qa1/change-registeredby-binding/backend/src/routes/__tests__/patient-route-scope-contract.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend",
+      "environmentKeys": [
+        "PATH"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 0.402,
+      "firstNamedSecurityTest": "FAIL",
+      "secondNamedOwnershipTest": "PASS",
+      "expected": "FAIL_FIRST_PASS_SECOND",
+      "logSha256": "30dce9d2490e520ecebb3d22d53e60de68f9f90e348655f68360432e60008df0"
+    },
+    {
+      "case": "remove-patient-row-lock",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "--test",
+        "/tmp/clinicos-497-native-backend-fixture14-qa1/remove-patient-row-lock/backend/src/routes/__tests__/patient-route-scope-contract.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend",
+      "environmentKeys": [
+        "PATH"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 0.307,
+      "firstNamedSecurityTest": "FAIL",
+      "secondNamedOwnershipTest": "PASS",
+      "expected": "FAIL_FIRST_PASS_SECOND",
+      "logSha256": "837739c420a3a72b480fef1729784aea2d6c44ddef95de0793e6e071d411a491"
+    },
+    {
+      "case": "remove-missing-patient-rejection",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "--test",
+        "/tmp/clinicos-497-native-backend-fixture14-qa1/remove-missing-patient-rejection/backend/src/routes/__tests__/patient-route-scope-contract.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend",
+      "environmentKeys": [
+        "PATH"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 0.355,
+      "firstNamedSecurityTest": "FAIL",
+      "secondNamedOwnershipTest": "PASS",
+      "expected": "FAIL_FIRST_PASS_SECOND",
+      "logSha256": "ccdbe311a8ceb1d42f3b983226bac5d6c16c5e3fec530a48e98058836534903e"
+    },
+    {
+      "case": "move-missing-rejection-after-cartella",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "--test",
+        "/tmp/clinicos-497-native-backend-fixture14-qa1/move-missing-rejection-after-cartella/backend/src/routes/__tests__/patient-route-scope-contract.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend",
+      "environmentKeys": [
+        "PATH"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 0.345,
+      "firstNamedSecurityTest": "FAIL",
+      "secondNamedOwnershipTest": "PASS",
+      "expected": "FAIL_FIRST_PASS_SECOND",
+      "logSha256": "81690d929aa5caf7ae24173a266fe98a459d31656b5660ff11d5c67a06bb1e8d"
+    }
+  ],
+  "freshPurePassed": 2,
+  "mutationCases": 7,
+  "allMutationsFailIntendedFirstAndPassSecond": true,
+  "environment": "PATH only; no DB or secret variables",
+  "scope": "Source-only tests; no imported product code or runtime execution"
+}
