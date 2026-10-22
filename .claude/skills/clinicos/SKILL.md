@@ -50,6 +50,22 @@ Contiene profondità minima dell'analisi, packet, budget, test, sicurezza, comun
 Codex–Claude, stati e condizioni di chiusura. Non saltare le fasi per urgenza o per ottenere
 un esito verde. Un blocco dimostrato è un risultato valido, non una risoluzione.
 
+Il percorso è: contratto e prenotazione durevole → esecutore scelto in base a rischio e carico
+osservato → QA indipendente con prove legate ai sorgenti → pubblicazione dello SHA verificato
+e check nativi → review Claude reale tramite il canale autorizzato → nuova sessione Codex finale
+→ merge protetto e prova del rilascio. Le label descrivono questa sequenza; non sostituiscono i
+gate. Una PR approvata sullo SHA attuale e in attesa di rilascio conserva la review se non sono
+cambiati sorgenti, configurazioni o feedback rilevante. Le modifiche al trust root richiedono
+anche la review nativa corrente di una persona indipendente e autorizzata e il merge manuale
+protetto; report di modello, QA o budget grant non la sostituiscono. Vedi il gate dettagliato nel
+[playbook](references/bug-delivery.md).
+
+Il budget predefinito è di quattro tentativi implementativi e quattro review, conteggiati
+separatamente. Se l'utente ha già autorizzato continuazioni, mantieni tale autorizzazione e usa
+solo le allowance tipizzate, verificate e prenotate dal controller. Conserva ogni identità,
+tentativo e FAIL; non azzerare contatori o duplicare lavoro con un nuovo nome o PR. Il limite,
+le capacità del controller e i gate di rilascio restano vincolanti.
+
 Quando il repository è disponibile leggi anche:
 
 - `.agents/skills/codex-bug-triage/SKILL.md`: comandi, aggregazione e supervisore attuali.

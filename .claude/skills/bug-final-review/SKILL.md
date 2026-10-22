@@ -1,6 +1,6 @@
 ---
 name: bug-final-review
-description: Read-only final review of a Codex-implemented bug batch against its plan, source issues and validation evidence. Claude reviews only; Codex applies changes. Maximum four review/correction rounds per batch.
+description: Read-only final review of a Codex-implemented bug batch against its plan, source issues and validation evidence. Claude reviews only; Codex applies changes. Four rounds by default; any extension must be authorized and recorded by the trusted controller.
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -25,6 +25,10 @@ the supplied subject SHA, `approved` / `changes-requested` / `blocked`, a concis
 actionable findings (severity, file, line, problem, requested change, test expectation).
 Approval requires zero actionable findings and evidence supporting the acceptance criteria.
 
-Codex applies corrections and may request the next review. The same batch has at most four
-rounds in total. Remaining findings at the fourth round leave the work blocked; do not weaken
-criteria to produce an approval or claim the code is perfect.
+Codex applies corrections and may request another review only within the effective allowance
+recorded by the trusted controller. The default is four rounds, separate from implementation
+attempts. A continuation requires the existing user authorization and a separately verified,
+durably recorded controller allowance for that entity and review action; a failed infrastructure
+recovery does not create one. If the verifier or allowance is unavailable, the extension fails
+closed and remaining findings leave the work blocked. Preserve all rounds and reports; do not
+use review tools, approve by inference, weaken criteria or claim the code is perfect.

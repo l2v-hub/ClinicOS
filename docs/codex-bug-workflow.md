@@ -15,18 +15,18 @@ flowchart TD
   T --> P[Worktree e piano dettagliato per gruppo]
   P --> E[Codex: esecuzione diretta o delegata]
   E --> V[Test e prove sintetiche]
-  V -->|Fallisce: massimo 4 tentativi| E
+  V -->|Fallisce: quattro tentativi predefiniti, poi solo allowance verificata e prenotata| E
   V --> S[Semplificazione e nuova verifica]
   S --> QI[Sessione Codex indipendente: QA su diff e prove]
   QI --> D[Branch pubblicato e PR in bozza]
   D --> RC[Controlli verdi: PR Ready for review]
   RC --> C[Cron Claude Code: review in sola lettura]
-  C -->|Rilievi/commenti: massimo 4 review totali| F[Esecutore: correzioni, test e semplificazione]
+  C -->|Rilievi/commenti: quattro review predefinite, poi solo allowance verificata e prenotata| F[Esecutore: correzioni, test e semplificazione]
   F --> C
   C -->|SHA approvato e controlli richiesti verdi| Q[Gate di rilascio]
   Q -->|Rilascio configurato e autorizzato| R[Merge della stessa revisione e deploy]
-  V -->|Limite raggiunto| B[BLOCKED]
-  C -->|Limite raggiunto| B
+  V -->|Allowance effettiva esaurita o verifier non disponibile| B[BLOCKED]
+  C -->|Allowance effettiva esaurita o verifier non disponibile| B
 ```
 
 La PR richiede un branch remoto per ricevere la review. Per questo la pubblicazione del branch precede Claude; il merge in `main` e il deploy avvengono soltanto dopo i gate. Nessuna fase promette codice perfetto: un problema residuo lascia il gruppo bloccato.
@@ -67,9 +67,9 @@ Dopo la conferma del rilascio della revisione verificata, il controller pubblica
 
 La dashboard operativa si avvia con `node agent-team/src/bug-pipeline/dashboard-server.mjs` e ascolta solo su `http://127.0.0.1:4317`. Mostra coda autorizzata, issue gestite da altri flussi, fase registrata, gruppi, PR e tentativi utilizzati. Legge GitHub ogni 15 secondi tramite autenticazione del server; non trasferisce token, corpi issue o report dei modelli al browser. Errori e dati non aggiornati restano visibili. È una superficie locale di monitoraggio, separata dall'app clinica pubblica; l'apertura nel pannello Codex richiede la disponibilità del collegamento alla macchina cloud.
 
-La skill `.claude/skills/bug-final-review/SKILL.md` mantiene Claude in sola lettura con Read/Glob/Grep, senza MCP. Il controller riutilizza `scripts/quality-gate/claude-bug-review.mjs`, il suo schema e il legame con lo SHA. La review viene pubblicata sulla PR; gli esecutori applicano le correzioni e ricreano tutte le prove. Anche commenti o review PR successivi all'approvazione invalidano la readiness e richiedono un altro giro disponibile. Thread irrisolti e review con richiesta di modifiche impediscono il rilascio; il bot non approva al posto di un reviewer umano.
+La skill `.claude/skills/bug-final-review/SKILL.md` mantiene Claude in sola lettura con Read/Glob/Grep, senza MCP. Il controller riutilizza `scripts/quality-gate/claude-bug-review.mjs`, il suo schema e il legame con lo SHA. La review viene pubblicata sulla PR; gli esecutori applicano le correzioni e ricreano tutte le prove. Nuovi feedback invalidano la readiness quando cambiano il fingerprint autenticato considerato dal controller; sono esclusi soltanto i commenti protocollo/stato riconosciuti dal controller in base ad autore e marker, non i commenti utente o quelli che si limitano a contenere un marker. Thread irrisolti e review con richiesta di modifiche impediscono il rilascio; il bot non approva al posto di un reviewer umano.
 
-I limiti sono separati: **4 tentativi di implementazione/verifica** e **4 review finali totali**, comprese quelle richieste da commenti successivi. I tentativi vengono prenotati prima della chiamata al modello e le chiamate fallite consumano il budget. Il preflight avviene prima di avviare il batch. Un'interruzione resta bloccata per recupero esplicito: niente quinto giro, cancellazione del registro o nuovo batch per aggirare il limite.
+I budget predefiniti sono separati: **4 tentativi di implementazione/verifica** e **4 review finali**. Ogni tentativo viene prenotato prima dell'azione; un esito fallito resta consumato. Se l'utente ha autorizzato continuazioni, il controller può consumare un'allowance tipizzata per volta, legata allo specifico batch/PR o issue, azione, SHA, limite precedente e digest dello storico. Le estensioni di implementazione e review sono distinte; ogni nuova unità richiede la propria autorizzazione verificata e prenotazione durevole, conserva gli array storici e non supera i limiti strutturali correnti. Non si ripete la richiesta all'utente per un'autorizzazione già valida, ma un testo, label, manifest o commento non sostituisce la verifica esterna e il consumo del nonce. La CLI corrente non configura un verificatore grant predefinito: senza un trusted host che verifichi l'autorizzazione, l'estensione fallisce chiusa e il batch resta **Bloccato**. Il recupero di un fallimento infrastrutturale conserva e consuma l'attempt; da solo non concede un quinto tentativo o una nuova review. Vietati reset, duplicazione del batch o retry nascosti.
 
 Il registro durevole è `.codex-bug-state.json` nel branch `codex/bug-control`, aggiornato tramite compare-and-swap. I report Claude e i digest rimangono nel registro e nei commenti PR per non cambiare lo SHA appena approvato. Worktree e file `.local` sono dati operativi; il registro GitHub non deve essere cancellato. Un errore CAS interrompe il controller. Il recupero richiede ispezionare stato, branch, HEAD, lock e tentativi prima di correggere la fase nello stesso registro; non è implementato un reset automatico.
 
@@ -132,7 +132,12 @@ Il comando processa al massimo una richiesta per esecuzione. Usa `gh` già auten
 
 Il reviewer prepara un worktree temporaneo sul commit esatto, applica la skill di sola lettura e prenota il tentativo remoto **prima** della chiamata. Salva report e digest nel registro esistente e pubblica una review GitHub `COMMENT` legata al commit: non impersona approvazioni umane. Un POST fallito viene ripetuto senza una nuova inferenza. Per la PR di installazione471 riutilizza il registro `setupReview471`, incluso il primo tentativo fallito; non riparte da zero.
 
-Gli eventi review/commento e la riconciliazione ogni15minuti riportano il controllo a Codex. Codex accetta soltanto un report strutturato verificato nel registro, mai la parola “approved” in un commento. Rilievi o commenti nuovi avviano correzione, test, semplificazione, QA, nuove prove e un nuovo SHA, quindi un’altra richiesta al cron. Una review pulita consente il gate di rilascio solo se coincidono SHA, commenti, check e protezioni. Le issue ricevono il riepilogo dell’esito; la dashboard mostra attesa cron e review in corso. Il limite predefinito resta quattro, senza retry di modelli nascosti. Un maintainer può registrare un solo ulteriore tentativo per autorizzazione esplicita tramite extend-budget, conservando identità, ogni tentativo/report e metadati storici; manifest e commenti non estendono il budget. Le operatorContinuations contano come tentativi spesi senza riscrivere gli array legacy. I worker legacy installati mantengono il proprio limite finché non aggiornati e verificati; il canale commenti usa il limite durevole effettivo.
+Gli eventi review/commento e la riconciliazione ogni 15 minuti riportano il controllo a Codex. Codex accetta soltanto un report strutturato verificato nel registro, mai la parola “approved” in un commento. Nuovi feedback che cambiano il fingerprint autenticato considerato dal controller avviano correzione, test, semplificazione, QA, nuove prove e un nuovo SHA, quindi un’altra richiesta al cron; il controller esclude soltanto i commenti protocollo/stato riconosciuti in base ad autore e marker, senza ignorare feedback utente o commenti che si limitano a contenere un marker. Una review pulita consente il gate di rilascio solo se coincidono SHA, commenti, check e protezioni. Le issue ricevono il riepilogo dell’esito; la dashboard mostra attesa cron e review in corso. Il limite predefinito resta quattro, senza retry di modelli nascosti. `extend-budget` può aumentare di una sola unità il limite di implementazione o review in una chiamata, dopo avere terminato i worker attivi e verificato con il grant verifier l'autorizzazione distinta per quell'azione, la cui binding copre entità, SHA, budget precedente e storico. Le continuazioni contano come tentativi spesi e non riscrivono gli array legacy. Il verifier è iniettato da un host fidato; la CLI standalone non lo configura di default e deve fallire chiusa se non è disponibile. I worker legacy installati mantengono il proprio limite finché non aggiornati e verificati; il canale commenti usa il limite durevole effettivo. L'estensione non approva codice, non crea una review o approvazione umana e non autorizza merge o deploy.
+
+Un report o una review ottenuti fuori dal protocollo automatico, senza claim e importazione
+durevoli, restano evidenza esterna non acquisita dal ledger. Non crearne retroattivamente un
+requestId, claimId, round, owner o approvazione umana. Lo stato automatico resta bloccato finché
+il controller non può verificare il percorso autorizzato; non è definito qui un bypass manuale.
 
 Il token di fallback `github.token` permette la coda, i commenti e la PR, ma i suoi push non avviano automaticamente altri workflow. I controlli richiesti assenti o non completati bloccano la readiness: non vengono interpretati come successo. Configurare branch protection e i check richiesti su `main`. Il token di bot deve avere contents/issues/pull requests e i permessi strettamente necessari al monitoraggio CI; i secrets non entrano nell'ambiente delle shell dei modelli o dei test.
 
@@ -167,10 +172,18 @@ prima della readiness al rilascio. Le protezioni e il gate di deploy restano obb
 
 La richiesta esplicita dell'utente consente il recupero infrastrutturale iniziale con
 `request --pr N --recover-failed`: conserva il tentativo fallito e riserva il successivo, anche
-sullo stesso SHA quando nessuna review sostanziale è stata prodotta. Non è un reset o retry
-automatico; dopo un finding o al limite di quattro serve il normale percorso previsto.
+sullo stesso SHA quando nessuna review sostanziale è stata prodotta. Ogni recupero richiede comunque
+un verifier di autorizzazione iniettato da un host fidato, un riferimento `--authorization` e il
+consumo dell'azione esatta `retry-failed-review`, anche entro il budget predefinito. La CLI
+standalone non configura il verifier: senza tale integrazione il recupero resta bloccato, e il flag
+o il testo di autorizzazione da soli non lo verificano. Il recupero consuma una review disponibile
+e non estende il budget; dopo un finding non si ripete sullo stesso SHA. L'estensione tipizzata è
+separata, esternamente verificata e prenotata come descritto sopra. Non è un reset o retry automatico.
 Il CLI non esegue modelli, non mergea e non distribuisce; il controller di rilascio è l'unico
-proprietario di merge/deploy/chiusura. Snapshot tra risorse GitHub e CAS del ledger non sono
+proprietario di merge/deploy/chiusura. Per il trust root (`.agents/`, `.claude/`, `.github/`,
+controller e quality gate) la policy richiede una review nativa sullo SHA corrente da una persona
+autorizzata indipendente e un merge manuale normale protetto; report automatici e grant non
+sostituiscono questa approvazione (dettagli nel playbook ClinicOS). Snapshot tra risorse GitHub e CAS del ledger non sono
 una transazione atomica con la PR; le verifiche ripetute riducono finestre di concorrenza senza
 promettere atomicità del provider.
 
