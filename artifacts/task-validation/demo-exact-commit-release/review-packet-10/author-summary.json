@@ -1,0 +1,42 @@
+{
+  "status": "PASS_AUTHOR_COMPLETE",
+  "implementationRound": 10,
+  "nonce": "b69a1851-65ab-4356-86e9-27ad1be7fe4c",
+  "integrationTree": "ba7a004ce299fbaa5bfb67fc67c8f0d81528b493",
+  "changedFiles": [
+    "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/src/bug-pipeline/issue-review-communication.mjs"
+  ],
+  "unchangedFiles": 257,
+  "tests": {
+    "focusedFiles": [
+      "issue-review-communication.test.mjs",
+      "github.test.mjs",
+      "release.test.mjs",
+      "exact-demo-dispatch.test.mjs"
+    ],
+    "pass": 449,
+    "fail": 0,
+    "skip": 0,
+    "newExecution": true
+  },
+  "regressionOriginalSource": {
+    "expectedFailure": true,
+    "code": 1,
+    "correctedSourceRestored": true
+  },
+  "knownSecretFindingResolved": false,
+  "liveSecretOperationsRun": false,
+  "wholeSuiteRun": false,
+  "priorWholeSuiteAttribution": {
+    "source": "5c0694987b43bb76810d144cb32b88acb1e90824",
+    "pass": 1072,
+    "skip": 3,
+    "adversarialPass": 8,
+    "newExecutionClaim": false,
+    "provenance": "Root contract records prior independent seal45194048797d7f4b38bf6fcce2aa3312022915dc081d04523b900346f7811c90; not independently reexecuted or revalidated in this author task."
+  },
+  "findings": [],
+  "readyForIndependentQA": true
+}

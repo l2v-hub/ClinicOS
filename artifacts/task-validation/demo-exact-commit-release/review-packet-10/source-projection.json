@@ -1,0 +1,37 @@
+{
+  "sourceSha": "42ecd1f9ecdaad7f9bdc847ec065ed6473725b3f",
+  "integratedTree": "ba7a004ce299fbaa5bfb67fc67c8f0d81528b493",
+  "parents": [
+    "5c0694987b43bb76810d144cb32b88acb1e90824",
+    "b062de3324661cf07fdd929b9bac48a27626f1e5"
+  ],
+  "previousPrHead": "b07317f4d7eee2bd873ff465d0df317459fcde28",
+  "sourceFiles": {
+    "agent-team/src/bug-pipeline/issue-review-communication.mjs": {
+      "sha256": "ff3b30f5fdb8df7bcd07377057eba95e57f170217c51db0f683ea11e52520e7f",
+      "bytes": 21396,
+      "blob": "e72b8f5430cc8edfd7d3d9c11e649df759485196"
+    },
+    "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs": {
+      "sha256": "bf3c3a11b633735a8022068089545945c730036fbc53680baf233e34c1b37df6",
+      "bytes": 40029,
+      "blob": "c4d232ac4e9b662616b0ec2158161f1151700a26"
+    },
+    "agent-team/tests/bug-pipeline/github.test.mjs": {
+      "sha256": "fd4befa7bd8164bb7a7a8e92033239c5f0be011f175fa475a500023e8bf732c5",
+      "bytes": 74608,
+      "blob": "16ffb6b6005b8fb69b030bd63c8eb3af548034ec"
+    }
+  },
+  "existingReleaseSource": "5c0694987b43bb76810d144cb32b88acb1e90824",
+  "existingReleaseIndependentQaSeal": "45194048797d7f4b38bf6fcce2aa3312022915dc081d04523b900346f7811c90",
+  "currentAuthorSealSha256": "42f976b8bee34e4e2588837c9a6a06f740520a335a5b9440485de48658a7f30b",
+  "currentIndependentQaSealSha256": "2f9a920b64eba0492b5d70bc8b902ac10fa52c58c253bf224714b8a319668ddd",
+  "freshFocusedPassed": 449,
+  "actualFull1072Rerun": false,
+  "knownSecretFindingResolved": false,
+  "actualMigrationConfirmed": false,
+  "actualOutsideEnvironmentNegativeProof": false,
+  "actualClaudeApproval": false,
+  "actualProviderDeployment": false
+}
