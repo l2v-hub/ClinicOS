@@ -4,6 +4,7 @@ on:
     branches: [codex/cloud-native-gate-diagnostic-20261022]
 permissions:
   contents: read
+  actions: read
 jobs:
   diagnose:
     if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/codex/cloud-native-gate-diagnostic-20261022' && github.actor == 'l2v-hub' && github.triggering_actor == 'l2v-hub'
@@ -12,7 +13,7 @@ jobs:
     steps:
       - name: Read only the fixed completed job log
         env:
-          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
@@ -31,6 +32,12 @@ jobs:
           const body = '<!-- codex-bug-pipeline:native-backend-diagnostic:497:1bcc12ffb31d47a46e9113a7e54c6f72fb846191 -->\n\nDiagnosi in sola lettura del precedente check backend fallito; nessuna modifica al codice o alla review.\n\n```json\n' + JSON.stringify(summary, null, 2) + '\n```';
           await writeFile(process.env.RUNNER_TEMP + '/native-backend-diagnostic-comment.json', JSON.stringify({ body }));
           NODE
+      - name: Publish only bounded diagnostic metadata
+        env:
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
           gh api repos/l2v-hub/ClinicOS/issues/497/comments --method POST --input "$RUNNER_TEMP/native-backend-diagnostic-comment.json" --silent
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
