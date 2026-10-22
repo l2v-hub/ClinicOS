@@ -123,7 +123,7 @@ jobs:
           JS
       # Built-in Node tests, synthetic repositories and mock providers; no app install or secrets.
       - name: Test queue, sessions, evidence, budgets and release guards
-        run: node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs
+        run: node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs scripts/automation/protect-demo-secret.test.mjs
 
       # Exercise the actual sandbox on a clean runner; no model call or secrets are needed.
       - name: Install pinned Codex CLI for runner readiness

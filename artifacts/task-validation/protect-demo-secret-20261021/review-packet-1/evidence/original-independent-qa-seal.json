@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "status": "INDEPENDENT_SECURITY_QA_FAIL",
+  "at": "2026-10-21T20:35:28.537805+00:00",
+  "artifacts": {
+    "STOP.md": {
+      "sha256": "c2dea976f9e880dfccf4201a06b7054673cfe4c6af2c0cc7207bccfc3342f262",
+      "bytes": 610
+    },
+    "adversarial-final.json": {
+      "sha256": "42e8971cb3cc8e2bf324c040953d7e0c285b6955ac4c70de1004606568b5df0d",
+      "bytes": 1574
+    },
+    "adversarial.json": {
+      "sha256": "0ac5688e29bde3be1993661397b964fc65d21796f527e16a0aa40ca8b35c89e5",
+      "bytes": 1578
+    },
+    "adversarial.test.mjs": {
+      "sha256": "cf3a139539725e79381039f2c5e8d202e2baee44bbb297b623929e664a5ada3f",
+      "bytes": 7324
+    },
+    "after.json": {
+      "sha256": "04ffab054aa2b9b3d6d5fb64259db66c5bedb4fc1d62b378bced5a08702d31e9",
+      "bytes": 62273
+    },
+    "author-pure.json": {
+      "sha256": "8d9864faef7acc4ddf5b2e8a34ff998fb0332cef940c14d7265b81f98a5547de",
+      "bytes": 2760
+    },
+    "before.json": {
+      "sha256": "a5acc0d48055db44b944ae1ecd3289f1965b53d38076758bb6a6da67a5e15bc2",
+      "bytes": 62273
+    },
+    "freeze-comparison.json": {
+      "sha256": "420f9fc5071cb41087fce79735ba13e0c7c46ed2b484b70c498aad14655b784e",
+      "bytes": 66
+    },
+    "freeze.py": {
+      "sha256": "b572ba90dd9b8273a8d4782c77139d849541a95ebb77ffb07914f92386bd93e6",
+      "bytes": 1960
+    },
+    "report.md": {
+      "sha256": "ec285e3fc40a24147da374a7cf1b87a3ddc7f17c484ddb0fc5899f75b2d56482",
+      "bytes": 10427
+    },
+    "reservation.json": {
+      "sha256": "fe94ce47a9b8b5cf3c8542fe19226f0f27b6a1f4d5df407e0dae6a05344daf1f",
+      "bytes": 1494
+    },
+    "summary.json": {
+      "sha256": "3d929052ac954db839f92d001ab1ef9a35d5457344443b491f9515e4bceb1941",
+      "bytes": 1784
+    },
+    "verify.mjs": {
+      "sha256": "577c90564af12bbd76cb97f7cb6c0d1acd552c60c0415315f44c0f6e417ce133",
+      "bytes": 884
+    },
+    "workflow-preflight-import.json": {
+      "sha256": "cb81c9a1b7c804c57992b2e72e5d5d629e88de8910529079de1e7e61d6cec799",
+      "bytes": 1056
+    }
+  },
+  "sourceManifestSha256": "eb2ec6123893c07066dfd2c5f87a8551928fba491833fe191094e0c510590be5",
+  "authorSealSha256": "6a669cb47b2d84703cc7cf245f26a9178d75833ee90f41f571349a92cff4ab8a",
+  "contractSha256": "63c81b926c3e89f62370032645ccb903f3f75efb7b6252bce1292617ec11389f"
+}

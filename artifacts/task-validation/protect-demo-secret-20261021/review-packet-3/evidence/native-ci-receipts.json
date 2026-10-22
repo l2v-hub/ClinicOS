@@ -1,0 +1,35 @@
+{
+  "finalReceiptSha256": "2fe48babb2bbf62709272a98b5d824a77f92f6ab498f6ae7a0a4da1015b941ec",
+  "finalCounts": {
+    "total": 806,
+    "passed": 803,
+    "failed": 0,
+    "skipped": 3,
+    "exitCode": 0
+  },
+  "testFiles": 24,
+  "helperTestsIncluded": true,
+  "firstAttemptReceiptSha256": "83b8af41d107e9f4fc19f80b9b6246c72f2ebc75b3f511b8a99a2ce0ab965e93",
+  "firstAttemptCounts": {
+    "total": 806,
+    "passed": 799,
+    "failed": 4,
+    "skipped": 3,
+    "exitCode": 1
+  },
+  "restoredOriginalFixtures": [
+    {
+      "path": "artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/result.png",
+      "bytes": 131348,
+      "sha256": "b22057bfb3c8af76226d1bd4b4c2f14e27b6ecaa632852f9f90710b3ec1b6ebb",
+      "source": "fbaa78d8c7eacf8402db0c8fa2be276ae579a27c:artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/result.png"
+    },
+    {
+      "path": "artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip",
+      "bytes": 175354,
+      "sha256": "008d36bda06472a22c86244c8e06bdad0bde622bce35f637058c13cd977545eb",
+      "source": "fbaa78d8c7eacf8402db0c8fa2be276ae579a27c:artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip"
+    }
+  ],
+  "summaryAndReceiptVerifiedAgainstNativeQaSeal": true
+}

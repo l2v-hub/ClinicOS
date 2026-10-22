@@ -1,0 +1,14 @@
+{
+  "sourceReceiptSha256": "41f5dc8a8de10bcff55020180de4a40faac37dca7f71a146664e4a455bccfb24",
+  "envMode": "verification",
+  "ok": true,
+  "exitCode": 0,
+  "counts": [
+    34,
+    0,
+    34,
+    0,
+    0,
+    0
+  ]
+}

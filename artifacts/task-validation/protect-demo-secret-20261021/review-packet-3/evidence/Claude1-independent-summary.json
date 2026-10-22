@@ -1,0 +1,21 @@
+{
+  "status": "PASS_OPTION_B_PINNED_CLI_SOURCE_EVIDENCE",
+  "blockingFindings": [],
+  "freshAuthorTests": {
+    "pass": 38,
+    "fail": 0
+  },
+  "independentAdversarial": {
+    "pass": 9,
+    "fail": 0
+  },
+  "actualChecksumBoundBinaryVersion": "2.103.0 (2026-10-21)",
+  "realBinaryVersionReceipt": "real-gh-version.json",
+  "optionalPublicRefetch": "FAIL_DNS_PRESERVED",
+  "liveSecretOperations": "NEVER_RUN",
+  "sourceAndProofUnchanged": true,
+  "sourceFiles": 4,
+  "authorProofFiles": 31,
+  "historicProofFiles": 160,
+  "report": "report.md"
+}

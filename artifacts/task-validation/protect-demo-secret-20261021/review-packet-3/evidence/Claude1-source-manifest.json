@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "nonce": "4bb52efa-1d5c-4bb8-9e33-f57e6214aa88",
+  "stateCommit": "0382d96eed257f84053353923ee2584a3f25cfea",
+  "baseSha": "561428ddab27578eb8b79b9eeb17c5e8fff44c6c",
+  "sourceChanges": [
+    {
+      "path": "scripts/automation/protect-demo-secret.mjs",
+      "beforeSha256": "f27c6b50dcd5a4aff527c79bbaf4f92c980ee40f8a4965e7219549f197ff8a3f",
+      "afterSha256": "64bf22312e4f83f0e8c49bddae1c20b17ff3ea4a4f45cb922eb4413b06687dfa",
+      "beforeBytes": 14541,
+      "afterBytes": 15622,
+      "beforeInode": 330662,
+      "afterInode": 330662,
+      "addedLines": 29,
+      "deletedLines": 1,
+      "changed": true
+    },
+    {
+      "path": "scripts/automation/protect-demo-secret.test.mjs",
+      "beforeSha256": "77c28b93e2c60f9fe3ce9cc48ff274b78d829de75e15562da2ab9bf8560c83aa",
+      "afterSha256": "30bf1fa8d0b5c1850dff92a28d8b3b8d5c1f8d5717879cf13663500202318f9c",
+      "beforeBytes": 19748,
+      "afterBytes": 24826,
+      "beforeInode": 329766,
+      "afterInode": 329766,
+      "addedLines": 70,
+      "deletedLines": 2,
+      "changed": true
+    },
+    {
+      "path": ".github/workflows/protect-demo-secret.yml",
+      "beforeSha256": "46705882615908b94a558b3a96120d53208dc4ac64d65a462621c7bd22c76f5e",
+      "afterSha256": "ed56dbc4402058e75d6bb5c940cef53131793882b3834cf37dcd1567d87cb5e7",
+      "beforeBytes": 4309,
+      "afterBytes": 6937,
+      "beforeInode": 329869,
+      "afterInode": 329869,
+      "addedLines": 45,
+      "deletedLines": 0,
+      "changed": true
+    },
+    {
+      "path": "scripts/automation/evidence/gh-cli-v2.103.0.md",
+      "beforeSha256": null,
+      "afterSha256": "a7d7c9f612812aedecc4d0b669c916b5944ef4122f0693aeadaf651ce5b50974",
+      "beforeBytes": 0,
+      "afterBytes": 3200,
+      "beforeInode": null,
+      "afterInode": 330829,
+      "addedLines": 14,
+      "deletedLines": 0,
+      "changed": true,
+      "new": true
+    }
+  ],
+  "changedSourcePaths": [
+    "scripts/automation/protect-demo-secret.mjs",
+    "scripts/automation/protect-demo-secret.test.mjs",
+    ".github/workflows/protect-demo-secret.yml",
+    "scripts/automation/evidence/gh-cli-v2.103.0.md"
+  ],
+  "allowedSourcePaths": [
+    ".github/workflows/protect-demo-secret.yml",
+    "scripts/automation/evidence/gh-cli-v2.103.0.md",
+    "scripts/automation/protect-demo-secret.mjs",
+    "scripts/automation/protect-demo-secret.test.mjs"
+  ],
+  "sourceScopeOk": true,
+  "indexUnchanged": true,
+  "oldPrivateEvidenceUnchanged": true,
+  "oldPublicPacketTreeFilesPreserved": 80,
+  "upstreamCliVersion": "v2.103.0",
+  "upstreamCliCommit": "7948e8056e45ac3c729b829e0eafe2d0797a95c6",
+  "upstreamAssetSha256": "fdd768eb70f6409f80fcfa9f3a1c0adf0fc98d827ab3ce0bed2ac22762c5d786",
+  "officialChecksumMatched": true,
+  "upstreamFiles": [
+    {
+      "path": "internal/safeurl/safeurl.go",
+      "localFile": "safeurl.go",
+      "sha256": "c1ca226d347cf04c304af02f8dfb85bbc4504335ce5ce2bad7c10b639e6158ec",
+      "bytes": 6717,
+      "verified": true
+    },
+    {
+      "path": "pkg/cmd/secret/set/http.go",
+      "localFile": "secret-http.go",
+      "sha256": "dab7a5ecddcedca78c0e927b4ce9cc48e3245a84969d8d2fa6e69529346896e8",
+      "bytes": 4462,
+      "verified": true
+    },
+    {
+      "path": "pkg/cmd/secret/set/set.go",
+      "localFile": "secret-set.go",
+      "sha256": "956ec69b02ac2612735ea8b5804a2e2eafdfaeb97a9536c132a5f004327b0b3b",
+      "bytes": 14290,
+      "verified": true
+    },
+    {
+      "path": "go.mod",
+      "localFile": "go.mod",
+      "sha256": "5445d61d1235bdd6d767d23e8c55ba189d1bfb9dc9480baf41886123504a3ecd",
+      "bytes": 8753,
+      "verified": true
+    },
+    {
+      "path": "internal/safeurl/safeurl_test.go",
+      "localFile": "safeurl-test.go",
+      "sha256": "4b91c010ab96655ba7c968fae7825d29b73f2afc510c3a95fa3ec975715c38cc",
+      "bytes": 8014,
+      "verified": true
+    }
+  ]
+}

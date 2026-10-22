@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "task": "protect-demo-secret-20261021",
+  "sealedAt": "2026-10-21T20:29:59Z",
+  "status": "source-ready-awaiting-independent-review",
+  "sourceBaseSha": "fbaa78d8c7eacf8402db0c8fa2be276ae579a27c",
+  "sourceFiles": [
+    {
+      "path": "scripts/automation/protect-demo-secret.mjs",
+      "bytes": 13839,
+      "sha256": "630f42c3631600564b42f7e998decc2118310da6ec278567ac9737069f89977a"
+    },
+    {
+      "path": "scripts/automation/protect-demo-secret.test.mjs",
+      "bytes": 15511,
+      "sha256": "2e285596b6d5626216b0217e93d297f4db1577884c6bcf18160969fdf111003e"
+    },
+    {
+      "path": ".github/workflows/protect-demo-secret.yml",
+      "bytes": 4309,
+      "sha256": "46705882615908b94a558b3a96120d53208dc4ac64d65a462621c7bd22c76f5e"
+    }
+  ],
+  "trustedTestReceiptSha256": "30ccd4177598800f000fb946ffa4fac514272f111e93e816fa422b1fe76866bb",
+  "evidenceSha256": {
+    "report.md": "6b3f99b5a56515b457f5702a817dbe78cecb2898e27cf83c6a728e3a11e5dffd",
+    "summary.json": "22cce3be403906e336bb6df1e19e113688f46cea4e7abe8c395eb1aa090e9faa",
+    "STOP.json": "674573cf3dbcfe8be0f35986a236d7d8803d294959a64910e476803e4d6e7b38",
+    "diff-manifest.json": "eb2ec6123893c07066dfd2c5f87a8551928fba491833fe191094e0c510590be5",
+    "command-receipts.json": "be74f677585c0ead6db45ea23a5e0cb09c75b32cc4d14629f90ec05b1cf9d20b",
+    "trusted-runner-receipt.json": "4a468a45aac2081734b676897815cb83ef235f71c226a9bfeb5128b6de73e412",
+    "trusted-runner-receipt-final.json": "30ccd4177598800f000fb946ffa4fac514272f111e93e816fa422b1fe76866bb"
+  },
+  "operationsPerformed": {
+    "gitWrite": false,
+    "githubWrite": false,
+    "providerCall": false,
+    "actualSecretOperation": false,
+    "clinicalRuntimeCall": false
+  }
+}

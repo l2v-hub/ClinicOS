@@ -1,0 +1,143 @@
+{
+  "config": {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/node_modules/playwright/cli.js",
+      "test",
+      "--config=/workspace/.clinicos-cloud/499-Claude1-followup-20261021/internal-visual-qa1/playwright.config2.mjs"
+    ],
+    "configFile": "/workspace/.clinicos-cloud/499-Claude1-followup-20261021/internal-visual-qa1/playwright.config2.mjs",
+    "rootDir": "/workspace/.clinicos-cloud/499-Claude1-followup-20261021/internal-visual-qa1/browser-tests2",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/.clinicos-cloud/499-Claude1-followup-20261021/internal-visual-qa1/browser-attempt2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/workspace/.clinicos-cloud/499-Claude1-followup-20261021/internal-visual-qa1/browser-tests2",
+        "testIgnore": [],
+        "testMatch": [
+          "internal-helper.spec.mjs"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "line",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/workspace/.clinicos-cloud/499-Claude1-followup-20261021/internal-visual-qa1/browser-attempt2/playwright-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/workspace/.clinicos-cloud/499-Claude1-followup-20261021/internal-visual-qa1/browser-attempt2/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "internal-helper.spec.mjs",
+      "file": "internal-helper.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "actual synthetic helper outcomes remain visible and unchanged after reload",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2081,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T23:00:10.113Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-synthetic-helper-outcomes",
+                      "contentType": "application/json",
+                      "body": "ewogICJzb3VyY2VTaGEiOiAiMzQ5OTY4MTZjOWI4MTQ5YTRhOTBmOWNjZmM3ZWFiZWMyMzBkMjgyOCIsCiAgInNjb3BlIjogIlNZTlRIRVRJQ19IRUxQRVJfUUFfTk9fTUlHUkFUSU9OIiwKICAic2NlbmFyaW9Db3VudCI6IDQsCiAgInJlbG9hZFZhbHVlc1VuY2hhbmdlZCI6IHRydWUsCiAgImNvbnNvbGVFcnJvcnMiOiBbXSwKICAicGFnZUVycm9ycyI6IFtdLAogICJiYWRSZXNwb25zZXMiOiBbXSwKICAidW5leHBlY3RlZE5ldHdvcmsiOiBbXSwKICAibG9jYWxTdGF0aWNQYWdlUmVhZHMiOiAyLAogICJyZWFsTWlncmF0aW9uUGVyZm9ybWVkIjogZmFsc2UsCiAgImJyb3dzZXIiOiAiQ2hyb21pdW0iLAogICJyZXN1bHQiOiAiUEFTUyIKfQ=="
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/workspace/.clinicos-cloud/499-Claude1-followup-20261021/internal-visual-qa1/browser-attempt2/test-results/internal-helper-actual-syn-6827f--and-unchanged-after-reload/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/.clinicos-cloud/499-Claude1-followup-20261021/internal-visual-qa1/browser-attempt2/test-results/internal-helper-actual-syn-6827f--and-unchanged-after-reload/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6b1c8214914c6acc40a5-77dc181be189a5011ef6",
+          "file": "internal-helper.spec.mjs",
+          "line": 6,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-21T23:00:09.495Z",
+    "duration": 3222.5420000000004,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
