@@ -1,0 +1,73 @@
+{
+  "status": "FINAL_PUBLIC_CANDIDATE_PENDING_ROOT_QA",
+  "pullRequest": 497,
+  "preparedSource": "4c85fdf5a97eea10c8efcc6d105cd32de054e030",
+  "parentSource": "e5bd9d0ac17af79dd3f9de696bbf15231c65598f",
+  "currentRemoteAtPreparation": "f26625a12bba1052da5b9af88bad88c1bf12420c",
+  "preparedTree": "0bdffc7060e94fc6db4f3404f9bd8f3548d6c678",
+  "finalChangedPaths": [
+    "frontend/src/components/operator/PatientRecordData.css",
+    "frontend/src/components/operator/TherapyGiroRows.tsx",
+    "frontend/src/components/operator/__tests__/claude1UiFindings.test.ts",
+    "frontend/src/components/operator/__tests__/claude1UiStaleConfirmation.test.ts"
+  ],
+  "backendByteEquivalentToConcurrencyTestSource": true,
+  "concurrencyTestSource": "f26625a12bba1052da5b9af88bad88c1bf12420c",
+  "sourceFilesFromIntegrationReceipt": {
+    "frontend/src/components/operator/PatientRecordData.css": {
+      "sha256": "ff97cfb46b5d9a9e82d667a123a7f043bb7004a6d6fdfa3ce62ffcda5f430100",
+      "blob": "4855526a4adc5a3582126452e574b22f19aab73d"
+    },
+    "frontend/src/components/operator/__tests__/claude1UiFindings.test.ts": {
+      "sha256": "fb338cbd58eaf04b4a2b4c35003582c117018646139b1235ca6ddea2a21b6590",
+      "blob": "1e999e8235c637ba08fed7fd08e5db03545aa4cb"
+    }
+  },
+  "reviewFinding": {
+    "commentId": 6330482468,
+    "subjectSha": "f26625a12bba1052da5b9af88bad88c1bf12420c",
+    "bodySha256": "c3ac893c300cac980230f759453078ad2b4268e3e75bfe7fab50a7027f11c9f6",
+    "verdict": "changes-requested"
+  },
+  "privateEvidenceSealHashes": {
+    "ui15Author": "f2ba0f878b96dd6b7a7f99542b244c91e251aacaffea59f2240a466680292daf",
+    "ui15IndependentFailure": "186769ed934d8d0f9ef6fdda9be0eb6ef0a3d2f34723a3c1014007d9ea034893",
+    "ui16Author": "6e55879262b91bf8cf6fe7e3c640235c1471669ac6a0dad64a86ce886a8b6f28",
+    "ui16Independent": "2d5ad881847e6d80d4e3877586d58964a8ccd03b50519ddae6e7f29b4cb4fb51",
+    "concurrencyRuntime2": "7cfda9f14a56c395e5962511857669ea14b168bd2a5dce99ee235dbc78e649ba"
+  },
+  "limits": [
+    "Runtime5 did not rerun the historical eight bb12 cases.",
+    "The concurrency evidence is real Assistant Tool HTTP boundary evidence, not a full natural-language or executeSkill retry proof.",
+    "The concurrency run used the base source; backend byte-equivalence to prepared UI source is separately attested.",
+    "The candidate is not published and the private seals are provenance references only."
+  ],
+  "browserRuntime5": {
+    "status": "PASS",
+    "testedSourceSha": "4c85fdf5a97eea10c8efcc6d105cd32de054e030",
+    "privateSealSha256": "fb9b9998531f1ca348ee456131af9c7ec333c8589fe18c478a0c929b4bc309b3",
+    "app": {
+      "classification": "actual frontend app, real HTTP and owned PostgreSQL",
+      "contrastGroups": 12,
+      "minimumContrastRatio": 14.3803630256408,
+      "ordinaryConfirmationHTTPStatus": 200,
+      "exactlyOneOwnedSQLAdministration": true,
+      "persistedConfirmedAtAndReload": "PASS",
+      "scoped503NoActionsNoWrites": "PASS_NOT_PS_STATE_PROOF"
+    },
+    "component": {
+      "classification": "actual production React component with synthetic prop rerenders and callback recorder; not clinical HTTP/PG E2E",
+      "allowedCallbacks": 1,
+      "blockedCallbacks": 0,
+      "nonAssetHttpRequests": 0
+    },
+    "mediaVerification": "PASS_TWO_FINALIZED_VIDEOS_TWO_SANITIZED_CRC_VALID_TRACES"
+  },
+  "pendingGates": [
+    "publication-head native checks",
+    "new actual Claude review",
+    "final Codex review",
+    "deployment",
+    "closure"
+  ]
+}

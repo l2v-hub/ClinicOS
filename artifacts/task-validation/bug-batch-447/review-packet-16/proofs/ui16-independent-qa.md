@@ -1,0 +1,15 @@
+# Independent UI16 QA: PASS
+
+Reviewed exact local integrated source `4c85fdf5a97eea10c8efcc6d105cd32de054e030`, independently from the author. No findings. UI15's medium severe-allergy contrast regression is resolved in UI16; the UI15 failed review/report/seal remains unchanged.
+
+All five relevant normal/severe allergy and compact-topbar rules now use existing --text (#16202e). Resolved sRGB text contrast is **14.916:1 on --amber-bg (#fdf3e2)** and **14.380:1 on --red-bg (#fdecee)**, exceeding4.5:1 for normal-size text. The more-specific three-class severe selector and two-class compact-header selectors agree on readable text. Later header rules alter flex/min-height rather than color. Warning/severity backgrounds remain amber/red, the allergy left-border remains amber and severe borders remain red, including the declared hover backgrounds. No new global token or raw color was introduced. App.css remains byte-identical.
+
+The existing test parses actual App.css token values and relevant CSS rules, enforces background preservation and measured contrast, and explicitly identifies the old accent pairings as below4.5. The new existing design test fails against actual UI15 CSS in the independent private copy. A separate independent parser resolves each CSS rule's actual foreground/background tokens and fails on UI15's measured3.147/3.955 ratios, proving the negative result is genuinely about unreadable colors rather than only obsolete token-string assertions. Both failures are preserved; corrected CSS was restored byte-exactly.
+
+Fresh independent five-file execution: **33 PASS,0 FAIL,0 SKIP**. Frontend noEmit types PASS. Suites: claude1UiFindings, claude1UiStaleConfirmation, consegneGiroUi, therapyGiro, operationalLists452. Functional UI15 shared pendingConfirmMessage and stale/RBAC/no-write guards are unchanged, and their regressions pass again. Author full1550 remains separately attributed sealed author evidence; no independent whole-suite rerun is claimed.
+
+Verified author seal6e55879262b91bf8cf6fe7e3c640235c1471669ac6a0dad64a86ce886a8b6f28 and all sealed author files. Exact integrated Git blob bytes match allfour changed files plus App.css. Only CSS and the existing design test differ from UI15, and exactlyfour authorized files differ fromf266. Backend/dependencies/config/App.css remain unchanged. All1656 regular source files in both frozen author and independent QA snapshots remain unchanged after review; old QA15 failed seal186769ed934d8d0f9ef6fdda9be0eb6ef0a3d2f34723a3c1014007d9ea034893 remains intact.
+
+No browser, native CI, Claude review, deployment, network, database, provider, dependency installation, or Git mutation ran. Color/cascade findings are static source measurements, not computed-browser claims. Fresh integrated browser proof remains separately required. The medium PostgreSQL proof finding remains separately owned and is not resolved by this UI verdict.
+
+STOP: independent review complete and source frozen. Root owns integration and further gates.

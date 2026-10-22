@@ -1,0 +1,53 @@
+{
+  "status": "FINAL_CANDIDATE_INPUTS_HASHED",
+  "inputs": {
+    "taskContract": {
+      "bytes": 4033,
+      "sha256": "5842e17fcef23128a1a284445bd953f49f7f8812281e88c436f3b7aca9886ef1"
+    },
+    "candidateReservation": {
+      "bytes": 800,
+      "sha256": "c3565c68d07d9f9d54fa274ab99c9328f92161e95b456efd8040af961af4da9e"
+    },
+    "preparedSource": {
+      "bytes": 1206,
+      "sha256": "318521e5e20f33df912cb9e09e60e6794ef82e7ec2c3822a2eea3dc0e2979559"
+    },
+    "actualClaude2Report": {
+      "bytes": 8779,
+      "sha256": "6f2e66aa583a46600b733e9c6c11c3afa37732784373262b02549ee409e193c5"
+    },
+    "ui16AuthorSeal": {
+      "bytes": 2618,
+      "sha256": "6e55879262b91bf8cf6fe7e3c640235c1471669ac6a0dad64a86ce886a8b6f28"
+    },
+    "ui16IndependentSeal": {
+      "bytes": 2031,
+      "sha256": "2d5ad881847e6d80d4e3877586d58964a8ccd03b50519ddae6e7f29b4cb4fb51"
+    },
+    "ui15IndependentFailureSeal": {
+      "bytes": 1528,
+      "sha256": "186769ed934d8d0f9ef6fdda9be0eb6ef0a3d2f34723a3c1014007d9ea034893"
+    },
+    "concurrencyRuntime2Seal": {
+      "bytes": 8108,
+      "sha256": "7cfda9f14a56c395e5962511857669ea14b168bd2a5dce99ee235dbc78e649ba"
+    },
+    "browserRuntime5Seal": {
+      "bytes": 1604,
+      "sha256": "fb9b9998531f1ca348ee456131af9c7ec333c8589fe18c478a0c929b4bc309b3"
+    },
+    "browserRuntime5Report": {
+      "bytes": 2844,
+      "sha256": "02aa9c30d2704b67505c16764fe72e78c5607fb8bccd0529e34077bd92841e2a"
+    },
+    "browserMediaVerification": {
+      "bytes": 5869,
+      "sha256": "42b421dcec529f54bf50cb1bb27d9b60835888123a02bc3ad25cf1f75b1914af"
+    },
+    "browserActualOutputManifest": {
+      "bytes": 10834,
+      "sha256": "13746be16de348ac1a0b7fc5e367230cb5c4fc2754f200e9b78f2dcc7e2d1b41"
+    }
+  }
+}

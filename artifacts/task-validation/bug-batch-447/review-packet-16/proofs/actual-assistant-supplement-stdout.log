@@ -1,0 +1,3 @@
+{"status":"PASS_PENDING_EXTERNAL_PG_SQLSTATE_CORRELATION","waiterPid":121,"blockerPid":118,"conflictStatus":409,"positiveStatus":200,"importRefusals":2}
+
+STDERR
