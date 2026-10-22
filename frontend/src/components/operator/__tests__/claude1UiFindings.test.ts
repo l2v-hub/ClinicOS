@@ -236,17 +236,55 @@ test('all changed design rules use existing tokens instead of invalid vars or ne
   const tab = readFileSync(new URL('../cartella/TerapiaFarmacologicaTab.tsx', import.meta.url), 'utf8');
   assert.doesNotMatch(admin, /var\(--medical-blue|var\(--bg-subtle|var\(--blue-bg/);
   assert.match(admin, /border-left-color: var\(--blue\)/);
-  assert.match(record, /\.patient-topbar-title \.cr-alert-strip \{[^}]*background: var\(--amber-bg\);[^}]*color: var\(--amber\);/s);
-  assert.match(record, /\.patient-topbar-title \.cr-alert-strip--severe \{[^}]*background: var\(--red-bg\);[^}]*color: var\(--red\);/s);
+  assert.match(record, /\.patient-topbar-title \.cr-alert-strip \{[^}]*background: var\(--amber-bg\);[^}]*color: var\(--text\);/s);
+  assert.match(record, /\.patient-topbar-title \.cr-alert-strip--severe \{[^}]*background: var\(--red-bg\);[^}]*color: var\(--text\);/s);
   assert.match(parameter, /\.parameter-reading-form__input--attention \{[^}]*border-color: var\(--amber\);[^}]*box-shadow: 0 0 0 1px var\(--amber\);/s);
   assert.match(parameter, /\.parameter-oxygen-choices button\[aria-pressed='true'\] \{[^}]*background: var\(--blue-dim\);[^}]*border-color: var\(--blue\);/s);
   assert.match(tab, /borderLeft: '3px solid var\(--amber\)'/);
   assert.doesNotMatch(tab, /borderLeft: '3px solid var\(--amber, #/);
   assert.match(record, /\.patient-record-view \.diario-card\.diario-card--urgent \{[^}]*border-left: 4px solid var\(--red\);[^}]*background: var\(--red-bg\);/s);
   assert.match(record, /\.patient-record-view \.diario-card\.diario-card--taken \{[^}]*border-left: 4px solid var\(--text-muted\);/s);
-  assert.match(record, /\.patient-record-view \.cr-alert-strip--allergie \{[^}]*color: var\(--amber\);[^}]*background: var\(--amber-bg\);[^}]*border: 1px solid var\(--border\);/s);
-  assert.match(record, /\.patient-record-view \.cr-alert-strip--allergie\.cr-alert-strip--severe \{[^}]*color: var\(--red\);[^}]*background: var\(--red-bg\);/s);
-  assert.match(record, /\.patient-record-view \.patient-allergy-strip \{[^}]*background: var\(--amber-bg\);[^}]*border-color: var\(--border\);[^}]*color: var\(--amber\);/s);
+  assert.match(record, /\.patient-record-view \.cr-alert-strip--allergie \{[^}]*color: var\(--text\);[^}]*background: var\(--amber-bg\);[^}]*border: 1px solid var\(--border\);/s);
+  assert.match(record, /\.patient-record-view \.cr-alert-strip--allergie\.cr-alert-strip--severe \{[^}]*color: var\(--text\);[^}]*background: var\(--red-bg\);/s);
+  assert.match(record, /\.patient-record-view \.patient-allergy-strip \{[^}]*background: var\(--amber-bg\);[^}]*border-color: var\(--border\);[^}]*color: var\(--text\);/s);
   assert.match(record, /\.patient-today__vitals \{[^}]*background: var\(--bg\);/s);
   assert.doesNotMatch(record, /#(?:b42335|fffafb|8291a6|8f5500|fdf3e2|ead0a7|fae9cc|fdecee|efc3cb|fbe0e5)|var\(--bg-subtle/);
+
+  const app = readFileSync(new URL('../../../App.css', import.meta.url), 'utf8');
+  const token = (name: string) => {
+    const value = app.match(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6})\\s*;`))?.[1];
+    assert.ok(value, `global --${name} color token exists`);
+    return value;
+  };
+  const block = (selector: string) => {
+    const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const css = record.match(new RegExp(`${escaped}\\s*\\{([^}]*)\\}`))?.[1];
+    assert.ok(css, `CSS rule exists for ${selector}`);
+    return css;
+  };
+  const luminance = (hex: string) => {
+    const channels = hex.slice(1).match(/../g)!.map((part) => parseInt(part, 16) / 255)
+      .map((channel) => channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4);
+    return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+  };
+  const contrast = (foreground: string, background: string) => {
+    const values = [luminance(foreground), luminance(background)].sort((a, b) => b - a);
+    return (values[0] + 0.05) / (values[1] + 0.05);
+  };
+  const readableText = token('text');
+  for (const [selector, backgroundToken] of [
+    ['.patient-record-view .cr-alert-strip--allergie', 'amber-bg'],
+    ['.patient-record-view .cr-alert-strip--allergie.cr-alert-strip--severe', 'red-bg'],
+    ['.patient-record-view .patient-allergy-strip', 'amber-bg'],
+    ['.patient-topbar-title .cr-alert-strip', 'amber-bg'],
+    ['.patient-topbar-title .cr-alert-strip--severe', 'red-bg'],
+  ] as const) {
+    const css = block(selector);
+    assert.match(css, /(?:^|;)\s*color:\s*var\(--text\)\s*;/);
+    const bg = css.match(/(?:^|;)\s*background:\s*var\(--([\w-]+)\)\s*;/)?.[1];
+    assert.equal(bg, backgroundToken, `${selector} keeps its intended background`);
+    assert.ok(contrast(readableText, token(backgroundToken)) >= 4.5, `${selector} small text meets WCAG AA`);
+  }
+  assert.ok(contrast(token('red'), token('red-bg')) < 4.5, 'the former severe-alert pairing fails small-text WCAG AA');
+  assert.ok(contrast(token('amber'), token('amber-bg')) < 4.5, 'the former regular-alert pairing fails small-text WCAG AA');
 });
