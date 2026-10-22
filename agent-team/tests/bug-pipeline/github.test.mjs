@@ -33,7 +33,10 @@ test('issue lifecycle uses additive managed labels and closes resolved issues as
   await gh.setIssueStatus(17, 'Risolto');
   const patches = calls.filter((call) => call.args.includes('PATCH'));
   assert.equal(patches.length, 2);
-  assert.deepEqual(patches[1].body, { state: 'closed', state_reason: 'completed' });
+  assert.deepEqual(patches[1].body, {
+    state: 'closed',
+    state_reason: 'completed',
+  });
   assert.ok(
     calls
       .filter((call) => call.args.includes('DELETE'))
@@ -158,7 +161,10 @@ test('scheduled normalization recovers codex-run without bug only after authoriz
             { number: 17, labels: [{ name: 'codex-run' }] },
             { number: 18, labels: [{ name: 'codex-run' }] },
             { number: 19, labels: [{ name: 'codex-run' }], pull_request: {} },
-            { number: 20, labels: [{ name: 'codex-run' }, { name: 'ready-for-qa' }] },
+            {
+              number: 20,
+              labels: [{ name: 'codex-run' }, { name: 'ready-for-qa' }],
+            },
           ],
         ]);
       if (route.includes('/events?'))
@@ -176,7 +182,9 @@ test('scheduled normalization recovers codex-run without bug only after authoriz
           ],
         ]);
       if (route.includes('/collaborators/'))
-        return response({ permission: route.includes('/alice/') ? 'write' : 'triage' });
+        return response({
+          permission: route.includes('/alice/') ? 'write' : 'triage',
+        });
       if (route.includes('/labels/')) return response({});
       throw new Error(`Unexpected route ${route}`);
     },
@@ -306,7 +314,9 @@ test('intake requires exact command and authorized actor before adding all queue
   const apply = calls.find(
     (call) => call.args[0] === 'api' && call.args[1] === 'repos/l2v-hub/ClinicOS/issues/17/labels',
   );
-  assert.deepEqual(JSON.parse(apply.input), { labels: ['bug', 'codex-triage', 'codex-run'] });
+  assert.deepEqual(JSON.parse(apply.input), {
+    labels: ['bug', 'codex-triage', 'codex-run'],
+  });
   assert.equal(
     calls.some((call) => call.args.includes('shell')),
     false,
@@ -458,7 +468,11 @@ test('durable state initializes only its branch from main and uses returned Cont
       return response({}, { ok: false, code: 1, stderr: 'HTTP 404' });
     throw new Error(`unexpected ${args.join(' ')}`);
   };
-  const store = createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run }).createStateStore();
+  const store = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run,
+  }).createStateStore();
   assert.equal(await store.load(), null);
   await store.save({ attempts: { batch: 1 } });
   const branchCreate = calls.find(
@@ -488,7 +502,11 @@ test('failed state CAS keeps the remembered SHA and never retries without it', a
     }
     throw new Error(`unexpected ${args.join(' ')}`);
   };
-  const store = createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run }).createStateStore();
+  const store = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run,
+  }).createStateStore();
   assert.deepEqual(await store.load(), { count: 1 });
   await assert.rejects(store.save({ count: 2 }), /compare-and-swap/);
   await assert.rejects(store.save({ count: 3 }), /compare-and-swap/);
@@ -557,7 +575,9 @@ test('small valid inline durable state does not read a Git blob', async () => {
 });
 
 test('dashboard state reads use the same pinned blob fallback without branch initialization', async () => {
-  const expected = { batches: [{ id: 'dashboard-state', history: ['first', 'second'] }] };
+  const expected = {
+    batches: [{ id: 'dashboard-state', history: ['first', 'second'] }],
+  };
   const source = stateContents(expected);
   const calls = [];
   const gh = createGitHub({
@@ -770,9 +790,11 @@ test('review feedback binds to PR head, tracks current reviews, unresolved threa
       ]);
     throw new Error(`unexpected ${args.join(' ')}`);
   };
-  const result = await createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run }).reviewFeedback(
-    42,
-  );
+  const result = await createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run,
+  }).reviewFeedback(42);
   assert.equal(result.head, 'c'.repeat(40));
   assert.equal(result.headIsFork, false);
   assert.equal(result.unresolved, true);
@@ -821,9 +843,11 @@ test('review feedback fails closed when more than 100 review threads are returne
     if (path.includes('/reviews?') || path.includes('/comments?')) return response([[]]);
     throw new Error(`unexpected ${args.join(' ')}`);
   };
-  const result = await createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run }).reviewFeedback(
-    42,
-  );
+  const result = await createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run,
+  }).reviewFeedback(42);
   assert.equal(result.unresolved, true);
 });
 
@@ -835,7 +859,9 @@ test('a commented review cannot clear an earlier request for changes; explicit a
         return response({
           data: {
             repository: {
-              pullRequest: { reviewThreads: { pageInfo: { hasNextPage: false }, nodes: [] } },
+              pullRequest: {
+                reviewThreads: { pageInfo: { hasNextPage: false }, nodes: [] },
+              },
             },
           },
         });
@@ -913,9 +939,11 @@ test('review feedback identifies a merged PR from the real REST state and merge 
     if (path.includes('/reviews?') || path.includes('/comments?')) return response([[]]);
     throw new Error(`unexpected ${args.join(' ')}`);
   };
-  const result = await createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run }).reviewFeedback(
-    42,
-  );
+  const result = await createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run,
+  }).reviewFeedback(42);
   assert.equal(result.state, 'MERGED');
   assert.equal(result.mergeCommitSha, 'd'.repeat(40));
 });
@@ -968,7 +996,13 @@ function guardedLifecycle({
                   : method === 'PATCH'
                     ? 'close'
                     : 'comment';
-      calls.push({ step, method, route, held, body: input ? JSON.parse(input) : null });
+      calls.push({
+        step,
+        method,
+        route,
+        held,
+        body: input ? JSON.parse(input) : null,
+      });
       await Promise.resolve();
       if (after === step && !triggered) {
         held = true;
@@ -1058,7 +1092,9 @@ test('actual comment request accepts the optional fresh guard, rejects errors/fa
     /fresh durable hold/,
   );
   await assert.rejects(
-    f.gh.commentIssue(17, 'Verified deployment facts', { guard: async () => false }),
+    f.gh.commentIssue(17, 'Verified deployment facts', {
+      guard: async () => false,
+    }),
     /rejected/,
   );
   await assert.rejects(
@@ -1373,7 +1409,13 @@ function stateBlobFixture(state = { payload: '文'.repeat(375000) }) {
   f.setRaw = (bytes) => {
     raw = Buffer.from(bytes);
     oid = createHash('sha1').update(`blob ${raw.length}\0`).update(raw).digest('hex');
-    f.metadata = { type: 'file', size: raw.length, sha: oid, encoding: 'none', content: '' };
+    f.metadata = {
+      type: 'file',
+      size: raw.length,
+      sha: oid,
+      encoding: 'none',
+      content: '',
+    };
     f.blob = {
       sha: oid,
       size: raw.length,
@@ -1406,7 +1448,11 @@ function stateBlobFixture(state = { payload: '文'.repeat(375000) }) {
     }
     assert.fail('Unexpected state endpoint ' + endpoint);
   };
-  f.store = createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run: f.run }).createStateStore();
+  f.store = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: f.run,
+  }).createStateStore();
   return f;
 }
 
@@ -1431,7 +1477,11 @@ test('large durable state loads from authenticated blob SHA and preserves Conten
 test('read-only dashboard uses the same large-state blob decoder without branch initialization or writes', async () => {
   const state = { payload: '文'.repeat(375000) };
   const f = stateBlobFixture(state);
-  const github = createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run: f.run });
+  const github = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: f.run,
+  });
   assert.deepEqual(await github.readDashboardState(), state);
   assert.ok(
     f.calls.every((call) => !call.args[1].includes('/git/ref/') && !call.args.includes('-X')),
@@ -1559,7 +1609,11 @@ const entityValidator = (state) => {
 
 test('explicit disjoint rebase saves a NEW validated body and preserves nested caller object/array references', async () => {
   const f = stateBlobFixture(entityState()),
-    other = createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run: f.run }).createStateStore();
+    other = createGitHub({
+      cwd: '/tmp',
+      repo: 'l2v-hub/ClinicOS',
+      run: f.run,
+    }).createStateStore();
   const ours = await f.store.load(),
     theirs = await other.load();
   const arrays = [ours.batches, ours.manualBatches, ours.standaloneReviews],
@@ -1649,7 +1703,11 @@ test('strict default still rejects disjoint409 and opt-in rejects same entity, c
 
 test('rebase reruns authorization guard and refuses nonce/subject changes instead of replaying stale authority', async () => {
   const f = stateBlobFixture(entityState()),
-    other = createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run: f.run }).createStateStore();
+    other = createGitHub({
+      cwd: '/tmp',
+      repo: 'l2v-hub/ClinicOS',
+      run: f.run,
+    }).createStateStore();
   const a = await f.store.load(),
     b = await other.load();
   a.batches[0].local = true;
@@ -1668,7 +1726,11 @@ test('rebase reruns authorization guard and refuses nonce/subject changes instea
   assert.equal(guardCalls, 2);
   assert.equal(f.writes.length, 2, 'Retry guard prevents second PUT');
   const g = stateBlobFixture(entityState()),
-    peer = createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run: g.run }).createStateStore();
+    peer = createGitHub({
+      cwd: '/tmp',
+      repo: 'l2v-hub/ClinicOS',
+      run: g.run,
+    }).createStateStore();
   const x = await g.store.load(),
     y = await peer.load();
   x.standaloneReviews[0].claimId = 'old-claim';
@@ -1682,7 +1744,11 @@ test('rebase reruns authorization guard and refuses nonce/subject changes instea
 
 test('rebase uses fresh serialized snapshots even when guards reload a third disjoint state, with bounded retries', async () => {
   const f = stateBlobFixture(entityState()),
-    other = createGitHub({ cwd: '/tmp', repo: 'l2v-hub/ClinicOS', run: f.run }).createStateStore();
+    other = createGitHub({
+      cwd: '/tmp',
+      repo: 'l2v-hub/ClinicOS',
+      run: f.run,
+    }).createStateStore();
   const a = await f.store.load(),
     b = await other.load();
   a.batches[0].local = true;
@@ -1723,7 +1789,13 @@ test('rebase uses fresh serialized snapshots even when guards reload a third dis
 
 test('capacity counts simultaneous running reviews and Codex QA across every entity collection before any PUT or guard', async () => {
   const state = {
-    batches: [{ id: 'a', reviews: [{ status: 'running' }], externalReview: { status: 'running' } }],
+    batches: [
+      {
+        id: 'a',
+        reviews: [{ status: 'running' }],
+        externalReview: { status: 'running' },
+      },
+    ],
     manualBatches: [{ id: 'b', reviews: [{ status: 'running' }] }],
     standaloneReviews: [{ id: 'c', reviews: [], codexFinalReview: { status: 'running' } }],
   };
@@ -1801,7 +1873,11 @@ test('F5 state writes distinguish confirmed409, definite502 and uncertain timeou
     const store = gh.createStateStore();
     await store.load();
     await assert.rejects(
-      store.save({ schemaVersion: 1, repository: 'l2v-hub/ClinicOS', batches: [] }),
+      store.save({
+        schemaVersion: 1,
+        repository: 'l2v-hub/ClinicOS',
+        batches: [],
+      }),
       (error) => controllerFailureCode(error) === expected,
     );
     assert.equal(puts, 1);
@@ -1823,7 +1899,11 @@ test('F1/F3 native human approval requires current head, nonauthor User and enfo
     run: async ({ args }) => {
       const route = args[1];
       if (route.endsWith('/pulls/81'))
-        return response({ state: 'open', head: { sha: head }, user: { login: 'author' } });
+        return response({
+          state: 'open',
+          head: { sha: head },
+          user: { login: 'author' },
+        });
       if (route.includes('/reviews?')) return response([[review]]);
       if (route.endsWith('/protection'))
         return protectedMain
@@ -1843,7 +1923,11 @@ test('F1/F3 native human approval requires current head, nonauthor User and enfo
   });
   assert.equal((await gh.nativeReviewAuthorization(81, head)).humanApproved, true);
   assert.equal(
-    (await gh.nativeReviewAuthorization(81, head, { excludedLogins: ['human'] })).humanApproved,
+    (
+      await gh.nativeReviewAuthorization(81, head, {
+        excludedLogins: ['human'],
+      })
+    ).humanApproved,
     false,
   );
   for (const mutation of [
@@ -1869,7 +1953,9 @@ test('GitHub failure semantics distinguish positive status evidence, default POS
   assert.equal(githubApiOperation({}), 'read');
   assert.equal(githubApiOperation({ method: 'GET', body: {} }), 'read');
   for (const status of [401, 403, 404, 422]) {
-    const error = githubOperationError({ stderr: `gh: denied (HTTP ${status})` });
+    const error = githubOperationError({
+      stderr: `gh: denied (HTTP ${status})`,
+    });
     assert.equal(error.code, 'github-read-rejected');
     assert.equal(error.httpStatus, status);
   }
@@ -1904,10 +1990,14 @@ test('GitHub failure semantics distinguish positive status evidence, default POS
         return { ok: false, ...response };
       },
     });
-    await assert.rejects(github.mergePullRequest(81, 'a'.repeat(40)), { code: expected });
+    await assert.rejects(github.mergePullRequest(81, 'a'.repeat(40)), {
+      code: expected,
+    });
     assert.equal(calls.length, 1, 'No blind second merge attempt');
     assert.equal(calls[0].timeoutMs, 30000);
-    await assert.rejects(github.commentPR(81, 'Synthetic notice'), { code: expected });
+    await assert.rejects(github.commentPR(81, 'Synthetic notice'), {
+      code: expected,
+    });
     assert.ok(calls.at(-1).input, 'Comment request carries a mutation body');
   }
 
@@ -1917,7 +2007,11 @@ test('GitHub failure semantics distinguish positive status evidence, default POS
     [{ ok: false, code: 1, stderr: refusal }, 'github-write-rejected', 'graphql-merge-refusal'],
     [{ ok: false, code: 1, stderr: `prefix ${refusal}` }, 'github-write-uncertain', 'unknown'],
     [
-      { ok: false, code: 1, stderr: `${refusal}\nGraphQL: another error (mergePullRequest)` },
+      {
+        ok: false,
+        code: 1,
+        stderr: `${refusal}\nGraphQL: another error (mergePullRequest)`,
+      },
       'github-write-uncertain',
       'unknown',
     ],
@@ -1963,7 +2057,10 @@ test('strict integrated decoder rejects JSON scalars/arrays and oversized raw wr
     stateContents(null),
     stateContents([]),
     stateContents(7),
-    { ...stateContents({}), content: stateContents({}).content + '\n'.repeat(12 * 1024 * 1024) },
+    {
+      ...stateContents({}),
+      content: stateContents({}).content + '\n'.repeat(12 * 1024 * 1024),
+    },
   ]) {
     const writes = [];
     const store = createGitHub({
@@ -2056,5 +2153,48 @@ test('evidence blob ceiling, declared sizes, canonical base64 and object digest 
       change,
     );
     if (change === 'over-limit') assert.equal(blobReads, 0);
+  }
+});
+
+test('recovery authorization requires actual authenticated owner/admin and fixed manual main workflow identity', async () => {
+  const context = {
+    repository: 'l2v-hub/ClinicOS',
+    eventName: 'workflow_dispatch',
+    ref: 'refs/heads/main',
+    workflowRef: 'l2v-hub/ClinicOS/.github/workflows/codex-bug-release.yml@refs/heads/main',
+    actor: 'l2v-hub',
+    triggeringActor: 'l2v-hub',
+    sha: 'a'.repeat(40),
+    workflowSha: 'a'.repeat(40),
+  };
+  for (const change of [
+    null,
+    'user',
+    'permission',
+    'actor',
+    'trigger',
+    'event',
+    'ref',
+    'workflow',
+    'sha',
+    'repo',
+  ]) {
+    let login = 'l2v-hub',
+      permission = 'admin';
+    const input = { ...context };
+    if (change === 'user') login = 'impostor';
+    if (change === 'permission') permission = 'maintain';
+    if (change === 'actor') input.actor = 'other';
+    if (change === 'trigger') input.triggeringActor = 'other';
+    if (change === 'event') input.eventName = 'workflow_run';
+    if (change === 'ref') input.ref = 'refs/heads/feature';
+    if (change === 'workflow') input.workflowRef = 'other.yml';
+    if (change === 'sha') input.workflowSha = 'b'.repeat(40);
+    if (change === 'repo') input.repository = 'other/repo';
+    const run = async ({ args }) =>
+      response(args[1] === 'user' ? { login } : { permission, user: { login: 'l2v-hub' } });
+    const github = createGitHub({ repo: 'l2v-hub/ClinicOS', cwd: '/tmp', run });
+    if (change) await assert.rejects(github.authorizeReleaseRecovery(input));
+    else assert.equal(await github.authorizeReleaseRecovery(input), 'l2v-hub');
   }
 });

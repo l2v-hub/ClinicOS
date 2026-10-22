@@ -39,8 +39,16 @@ function fixture(operation = 'preflight') {
     runAttempt: 1,
     target: { ...DEMO_TARGET },
     verifiedAt: new Date(clock).toISOString(),
-    deployment: { id: '12345678-1234-4123-8123-123456789def', status: 'SUCCESS', commitHash: sha },
-    ready: { status: 'ready', tier: 'demo', deploymentId: '12345678-1234-4123-8123-123456789def' },
+    deployment: {
+      id: '12345678-1234-4123-8123-123456789def',
+      status: 'SUCCESS',
+      commitHash: sha,
+    },
+    ready: {
+      status: 'ready',
+      tier: 'demo',
+      deploymentId: '12345678-1234-4123-8123-123456789def',
+    },
   };
   const requests = [],
     saved = [];
@@ -254,11 +262,30 @@ test('fixed dispatch transport has bounded output, one literal endpoint and no r
   ]);
   assert.equal(calls[0].maxOutputBytes, 64 * 1024);
   const failed = createExactDispatchPoster({
-    run: async () => ({ ok: false, stdout: '', stderr: 'secret should not escape' }),
+    run: async () => ({
+      ok: false,
+      stdout: '',
+      stderr: 'secret should not escape',
+    }),
   });
   await assert.rejects(
-    failed({ ref: 'main', inputs: { reviewed_sha: sha, operation: 'preflight', dispatch_id: id } }),
+    failed({
+      ref: 'main',
+      inputs: { reviewed_sha: sha, operation: 'preflight', dispatch_id: id },
+    }),
     /acknowledgement uncertain/,
   );
   await assert.rejects(post({ ref: 'other', inputs: {} }), /fixed main/);
+});
+
+test('new authorized intent excludes archived runs and cannot reuse an archived dispatch UUID', async () => {
+  const f = fixture();
+  await assert.rejects(f.ensure({ excludedDispatchIds: [id] }), /correlation/);
+  assert.equal(f.posted, 0);
+  const g = fixture();
+  await g.ensure({ excludedRunIds: [44] });
+  assert.ok(g.progress.priorRunIds.includes(44));
+  const tampered = { ...g.progress, priorRunIds: [] };
+  await assert.rejects(g.ensure({ progress: tampered, excludedRunIds: [44] }), /saved dispatch/);
+  assert.equal(g.posted, 1);
 });

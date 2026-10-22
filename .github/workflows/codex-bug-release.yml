@@ -11,6 +11,16 @@ on:
         description: Exact full PR commit SHA approved by Claude
         required: true
         type: string
+      release_action:
+        description: Release normally, or explicitly authorize recovery of one blocked intent
+        required: true
+        type: choice
+        options: [release, recover]
+        default: release
+      recovery_block_id:
+        description: Exact durable releaseBlock UUID required for recovery
+        required: false
+        type: string
   workflow_run:
     workflows: [Codex bug pipeline]
     types: [completed]
@@ -49,6 +59,7 @@ jobs:
       status: ${{ steps.release.outputs.status }}
       batch_id: ${{ steps.release.outputs.batch_id }}
       merge_sha: ${{ steps.release.outputs.merge_sha }}
+      deployment_sha: ${{ steps.release.outputs.deployment_sha }}
       vercel_url: ${{ steps.vercel.outputs.url }}
       railway_url: ${{ steps.release.outputs.railway_url }}
       runtime_url: ${{ steps.runtime.outputs.url }}
@@ -57,7 +68,7 @@ jobs:
       - name: Checkout trusted default branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: refs/heads/main
+          ref: ${{ github.sha }}
           path: control
           persist-credentials: false
 
@@ -75,6 +86,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
           BUG_PIPELINE_RELEASE_EXECUTE: 'true'
+          BUG_PIPELINE_RELEASE_ACTION: ${{ inputs.release_action || 'release' }}
+          BUG_PIPELINE_RECOVERY_BLOCK_ID: ${{ inputs.recovery_block_id }}
           BUG_PIPELINE_DEMO_SOURCE_POLICY: native-exact-commit-v1
           BUG_PIPELINE_ACTIONS_TOKEN: ${{ github.token }}
           BUG_PIPELINE_AUTO_RELEASE: ${{ vars.BUG_PIPELINE_AUTO_RELEASE }}
@@ -89,7 +102,7 @@ jobs:
         if: steps.release.outputs.status == 'merged'
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ steps.release.outputs.merge_sha }}
+          ref: ${{ steps.release.outputs.deployment_sha }}
           path: deployment
           persist-credentials: false
 
@@ -110,12 +123,14 @@ jobs:
 
       # release.mjs awaits the correlated exact demo run after persisting its merge.
       # confirm-demo independently verifies its immutable receipt and live provider identity.
+      # Recording also requires a successful exact-SHA production deploy-backend deploy job.
+      # Missing production proof blocks; this workflow never implicitly dispatches production.
       - name: Wait for Railway runtime deployment of the merged commit
         id: runtime
         if: steps.release.outputs.status == 'merged' && steps.release.outputs.runtime == 'true'
         env:
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
-          MERGE_SHA: ${{ steps.release.outputs.merge_sha }}
+          MERGE_SHA: ${{ steps.release.outputs.deployment_sha }}
         shell: bash
         run: |
           set -euo pipefail
@@ -153,7 +168,7 @@ jobs:
       - name: Checkout trusted default branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: refs/heads/main
+          ref: ${{ github.sha }}
           path: control
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
@@ -166,6 +181,7 @@ jobs:
           BUG_PIPELINE_DEMO_SOURCE_POLICY: native-exact-commit-v1
           BUG_PIPELINE_BATCH_ID: ${{ needs.release.outputs.batch_id }}
           BUG_PIPELINE_MERGE_SHA: ${{ needs.release.outputs.merge_sha }}
+          BUG_PIPELINE_DEPLOYMENT_SHA: ${{ needs.release.outputs.deployment_sha }}
           VERCEL_DEPLOYMENT_URL: ${{ needs.release.outputs.vercel_url }}
           RAILWAY_DEPLOYMENT_RUN_URL: ${{ needs.release.outputs.railway_url }}
           RUNTIME_DEPLOYMENT_RUN_URL: ${{ needs.release.outputs.runtime_url }}

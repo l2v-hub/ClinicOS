@@ -86,7 +86,9 @@ function headerCredential(raw) {
     // that the HTTP transport rejects. Retain its alias even when failing closed.
     const effective = new Headers({ 'Project-Access-Token': raw }).get('Project-Access-Token');
     return { raw, effective, valid: !/[\x00-\x08\x0a-\x1f\x7f]/.test(raw) };
-  } catch { return { raw, valid: false }; }
+  } catch {
+    return { raw, valid: false };
+  }
 }
 
 function captureDemoBindings(env) {
@@ -352,7 +354,10 @@ export function createRailwayClient({ token, fetchImpl = fetch } = {}) {
         return response;
       },
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Project-Access-Token': token },
+      headers: {
+        'Content-Type': 'application/json',
+        'Project-Access-Token': token,
+      },
       body: JSON.stringify({ query, variables }),
     });
     if (body.errors || !body.data) fail('Railway request denied or unsupported');
@@ -367,7 +372,10 @@ export async function inspectDemo(client, policy) {
 }
 
 export async function inspectDeployment(client, deploymentId, mergeSha, policy) {
-  const data = await client(DEPLOYMENT_QUERY, { ...DEMO_TARGET, id: deploymentId });
+  const data = await client(DEPLOYMENT_QUERY, {
+    ...DEMO_TARGET,
+    id: deploymentId,
+  });
   return validateActiveDeployment(data, mergeSha, deploymentId, policy);
 }
 
@@ -432,10 +440,16 @@ export async function prepareDemo({
 } = {}) {
   policy = sourcePolicy(policy);
   const source = context(env, policy);
-  serializeDemoMetadata({ source, target: DEMO_TARGET }, { forbiddenValues: bindings.forbiddenValues });
+  serializeDemoMetadata(
+    { source, target: DEMO_TARGET },
+    { forbiddenValues: bindings.forbiddenValues },
+  );
   requireValidBindings(bindings);
   await mainVerifier(bindings, source, policy, fetchImpl)();
-  await inspectDemo(client ?? createRailwayClient({ token: bindings.railwayToken, fetchImpl }), policy);
+  await inspectDemo(
+    client ?? createRailwayClient({ token: bindings.railwayToken, fetchImpl }),
+    policy,
+  );
   return {
     schemaVersion: 1,
     kind: 'clinicos-demo-preflight',
@@ -532,7 +546,10 @@ export async function deployDemo({
       budget(30_000);
       let data;
       try {
-        data = await client(DEPLOYMENT_QUERY, { ...DEMO_TARGET, id: deploymentId });
+        data = await client(DEPLOYMENT_QUERY, {
+          ...DEMO_TARGET,
+          id: deploymentId,
+        });
       } catch (error) {
         if (!(error instanceof DemoTransientReadError) || ++transientErrors > 3) throw error;
       }
@@ -558,7 +575,10 @@ export async function deployDemo({
           if (ready) {
             // Reinspect after readiness and recheck current main before issuing proof.
             budget(60_000);
-            const final = await client(DEPLOYMENT_QUERY, { ...DEMO_TARGET, id: deploymentId });
+            const final = await client(DEPLOYMENT_QUERY, {
+              ...DEMO_TARGET,
+              id: deploymentId,
+            });
             validateActiveDeployment(final, source.mergeSha, deploymentId, policy);
             if (policy === DEMO_SOURCE_POLICIES.exact) requireIdleDemo(final);
             await assertCurrentMain();
@@ -719,13 +739,18 @@ export function extractReceipt(zip, expectedName) {
     bytes =
       method === 0
         ? zip.subarray(start, start + compressed)
-        : inflateRawSync(zip.subarray(start, start + compressed), { maxOutputLength: 32_768 });
+        : inflateRawSync(zip.subarray(start, start + compressed), {
+            maxOutputLength: 32_768,
+          });
   } catch {
     fail('invalid compressed receipt');
   }
   if (bytes.length !== size) fail('receipt size mismatch');
   try {
-    return { receipt: JSON.parse(bytes.toString('utf8')), receiptSha256: digest(bytes) };
+    return {
+      receipt: JSON.parse(bytes.toString('utf8')),
+      receiptSha256: digest(bytes),
+    };
   } catch {
     fail('invalid receipt JSON');
   }
@@ -777,7 +802,10 @@ export function createProofReader({ token, fetchImpl = fetch } = {}) {
       fail('artifact redirect outside trusted storage');
     // Signed storage URL receives no GitHub Authorization header. Never log it.
     const zip = await boundedBytes(
-      await fetchImpl(destination, { redirect: 'error', signal: AbortSignal.timeout(30_000) }),
+      await fetchImpl(destination, {
+        redirect: 'error',
+        signal: AbortSignal.timeout(30_000),
+      }),
     );
     if (`sha256:${digest(zip)}` !== saved.digest) fail('artifact archive digest mismatch');
     const extracted = extractReceipt(
@@ -805,7 +833,10 @@ export async function verifyDemoPreflight({ reader, sourcePolicy: policy } = {})
         validateRun(run, head.sha, selected);
         const proof = await reader.artifact(run, 'clinicos-demo-preflight');
         validateReceipt(proof.receipt, run, 'clinicos-demo-preflight', Date.now(), selected);
-        return { ...proof, runUrl: `https://github.com/${REPO}/actions/runs/${run.id}` };
+        return {
+          ...proof,
+          runUrl: `https://github.com/${REPO}/actions/runs/${run.id}`,
+        };
       } catch {
         /* A receipt can authorize only its policy's fixed workflow. */
       }
@@ -911,4 +942,116 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
     }
     process.exitCode = 1;
   }
+}
+
+// Production and demo are separate gates. This reader never dispatches or reruns a workflow.
+export async function verifyProductionBackend({ reader, deploymentSha, runUrl = '' }) {
+  const blocked = (code) => {
+    const error = new Error(code);
+    error.code = code;
+    throw error;
+  };
+  if (!SHA.test(deploymentSha ?? '') || !reader?.getJson) blocked('PRODUCTION_PROOF_FAILED');
+  const newest = async () => {
+    const list = await reader.getJson(
+      `actions/workflows/deploy-backend.yml/runs?branch=main&head_sha=${deploymentSha}&per_page=100`,
+    );
+    if (
+      !Array.isArray(list?.workflow_runs) ||
+      !Number.isSafeInteger(list.total_count) ||
+      list.total_count > 100 ||
+      list.total_count < 0 ||
+      list.workflow_runs.length !== list.total_count ||
+      new Set(list.workflow_runs.map((run) => run.id)).size !== list.total_count ||
+      list.workflow_runs.some(
+        (run) =>
+          !integer(run.id) ||
+          run.head_sha !== deploymentSha ||
+          run.repository?.full_name !== REPO ||
+          run.head_repository?.full_name !== REPO ||
+          run.path !== WORKFLOW ||
+          run.head_branch !== 'main' ||
+          !['push', 'workflow_dispatch'].includes(run.event),
+      )
+    )
+      blocked('PRODUCTION_PROOF_FAILED');
+    if (!list.workflow_runs.length) blocked('PRODUCTION_RUN_REQUIRED');
+    return [...list.workflow_runs].sort((a, b) => b.id - a.id)[0];
+  };
+  const latest = await newest();
+  let id = latest.id;
+  if (runUrl) {
+    const match = /^https:\/\/github\.com\/l2v-hub\/ClinicOS\/actions\/runs\/([1-9][0-9]*)$/.exec(
+      runUrl,
+    );
+    if (!match || Number(match[1]) !== id) blocked('PRODUCTION_PROOF_FAILED');
+  }
+  const read = async () => {
+    const run = await reader.getJson(`actions/runs/${id}`);
+    if (
+      !integer(id) ||
+      run?.id !== id ||
+      run.run_attempt !== 1 ||
+      run.head_sha !== deploymentSha ||
+      run.repository?.full_name !== REPO ||
+      run.head_repository?.full_name !== REPO ||
+      run.path !== WORKFLOW ||
+      run.head_branch !== 'main' ||
+      !['push', 'workflow_dispatch'].includes(run.event) ||
+      run.status !== 'completed' ||
+      run.conclusion !== 'success'
+    )
+      blocked('PRODUCTION_PROOF_FAILED');
+    const jobs = await reader.getJson(`actions/runs/${id}/jobs?filter=latest&per_page=100`);
+    if (
+      !Array.isArray(jobs?.jobs) ||
+      jobs.total_count !== jobs.jobs.length ||
+      jobs.total_count > 100
+    )
+      blocked('PRODUCTION_PROOF_FAILED');
+    const matches = jobs.jobs.filter((job) => job.name === 'deploy');
+    const job = matches[0];
+    if (
+      matches.length !== 1 ||
+      !integer(job.id) ||
+      job.run_id !== id ||
+      job.run_attempt !== 1 ||
+      job.head_sha !== deploymentSha ||
+      job.status !== 'completed' ||
+      job.conclusion !== 'success' ||
+      !Array.isArray(job.steps) ||
+      !job.steps.some(
+        (step) =>
+          step.name === 'Deploy to Railway' &&
+          step.status === 'completed' &&
+          step.conclusion === 'success',
+      )
+    )
+      blocked('PRODUCTION_PROOF_FAILED');
+    return {
+      repository: REPO,
+      sha: deploymentSha,
+      runId: id,
+      runAttempt: 1,
+      jobId: job.id,
+      path: WORKFLOW,
+      event: run.event,
+      status: 'success',
+      runUrl: `https://github.com/${REPO}/actions/runs/${id}`,
+    };
+  };
+  const proof = await read();
+  if (JSON.stringify(proof) !== JSON.stringify(await read())) blocked('PRODUCTION_PROOF_FAILED');
+  const finalLatest = await newest();
+  if (
+    finalLatest.id !== id ||
+    finalLatest.run_attempt !== 1 ||
+    finalLatest.status !== 'completed' ||
+    finalLatest.conclusion !== 'success'
+  )
+    blocked('PRODUCTION_PROOF_FAILED');
+  return {
+    ...proof,
+    proofSha256: createHash('sha256').update(JSON.stringify(proof)).digest('hex'),
+  };
 }

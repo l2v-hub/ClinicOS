@@ -13,6 +13,7 @@ import {
   recordDeployment,
   ReleaseGateError,
   publishDeploymentCompletion,
+  recoverExactRelease,
 } from '../../src/bug-pipeline/release.mjs';
 import { feedbackFingerprint, sha256 } from '../../src/bug-pipeline/contracts.mjs';
 
@@ -63,7 +64,13 @@ function fixture(scope = ['frontend/src/Patient.jsx']) {
       issues: [5],
       scope,
       acceptance: [{ issue: 5, criteria: ['Rows render'] }],
-      tasks: [{ title: 'Render rows', files: [scope[0]], steps: ['Update component'] }],
+      tasks: [
+        {
+          title: 'Render rows',
+          files: [scope[0]],
+          steps: ['Update component'],
+        },
+      ],
       verification: [
         { command: 'npm', args: ['--prefix', 'frontend', 'run', 'build'] },
         { command: 'node', args: ['--test', 'patient.test.mjs'] },
@@ -79,11 +86,22 @@ function fixture(scope = ['frontend/src/Patient.jsx']) {
     evidence: recorded,
     reviewReports: { 'claude-review-1.json': report },
     reviewLedger: {
-      rounds: [{ round: 1, subject_sha: sha, verdict: 'approved', review_sha256: sha256(report) }],
+      rounds: [
+        {
+          round: 1,
+          subject_sha: sha,
+          verdict: 'approved',
+          review_sha256: sha256(report),
+        },
+      ],
     },
     feedbackFingerprint: feedbackFingerprint(feedback),
   };
-  const state = { schemaVersion: 1, repository: 'l2v-hub/ClinicOS', batches: [batch] };
+  const state = {
+    schemaVersion: 1,
+    repository: 'l2v-hub/ClinicOS',
+    batches: [batch],
+  };
   let saved = state;
   const calls = [];
   const github = {
@@ -126,7 +144,15 @@ function fixture(scope = ['frontend/src/Patient.jsx']) {
       saved = structuredClone(value);
     },
   };
-  return { batch, feedback, state, github, store, calls, getSaved: () => saved };
+  return {
+    batch,
+    feedback,
+    state,
+    github,
+    store,
+    calls,
+    getSaved: () => saved,
+  };
 }
 
 const configured = { botToken: true, vercel: true, railway: true };
@@ -195,14 +221,20 @@ test('release blocks stale SHA, missing review proof, and absent required deploy
     [
       'pending checks',
       (f) => {
-        f.github.requiredChecks = async () => ({ ok: false, details: ['build: pending'] });
+        f.github.requiredChecks = async () => ({
+          ok: false,
+          details: ['build: pending'],
+        });
       },
       configured,
     ],
     [
       'fork PR',
       (f) => {
-        f.github.reviewFeedback = async () => ({ ...f.feedback, headIsFork: true });
+        f.github.reviewFeedback = async () => ({
+          ...f.feedback,
+          headIsFork: true,
+        });
       },
       configured,
     ],
@@ -323,6 +355,15 @@ test('completion comment failure never closes an issue and terminal publication 
 const railwayUrl = 'https://github.com/l2v-hub/ClinicOS/actions/runs/123';
 function backendFixture() {
   const f = fixture(['backend/src/routes/patients.ts']);
+  f.production = {
+    sha: mergeSha,
+    runUrl: 'https://github.com/l2v-hub/ClinicOS/actions/runs/321',
+    proofSha256: '9'.repeat(64),
+  };
+  f.github.verifyProductionBackend = async ({ deploymentSha }) => ({
+    ...f.production,
+    sha: deploymentSha,
+  });
   const proof = {
     receipt: { mergeSha },
     reviewedSha: sha,
@@ -414,7 +455,12 @@ test('legacy backend deployment without demo proof cannot publish completion', a
     status: 'deployed',
     mergeSha,
     reviewedSha: sha,
-    deployment: { status: 'deployed', mergeSha, reviewedSha: sha, railwayRunUrl: railwayUrl },
+    deployment: {
+      status: 'deployed',
+      mergeSha,
+      reviewedSha: sha,
+      railwayRunUrl: railwayUrl,
+    },
   };
   await assert.rejects(
     publishDeploymentCompletion({ batch: f.batch, github: f.github }),
@@ -428,7 +474,9 @@ test('legacy backend deployment without demo proof cannot publish completion', a
 
 test('durable release hold blocks automatic choice, direct merge and recording', async () => {
   const f = backendFixture();
-  f.batch.releaseHold = { reason: 'Verify mandatory demo target before release' };
+  f.batch.releaseHold = {
+    reason: 'Verify mandatory demo target before release',
+  };
   assert.equal(selectAutoReleaseBatch(f.state), null);
   await assert.rejects(
     releaseBatch({
@@ -593,7 +641,13 @@ function realPublicationFixture({
                         : method === 'PATCH'
                           ? 'close'
                           : 'unexpected';
-      requests.push({ step, method, route, body, held: !!f.getSaved().batches[0]?.releaseHold });
+      requests.push({
+        step,
+        method,
+        route,
+        body,
+        held: !!f.getSaved().batches[0]?.releaseHold,
+      });
       let result = { ok: true, code: 0, stdout: '{}', stderr: '' };
       if (step === 'issue-read') result.stdout = JSON.stringify({ number: 5, state: issueState });
       else if (step === 'issue-labels-read')
@@ -774,7 +828,10 @@ test('final actual close boundary binds current deployment, PR identity, source 
 });
 
 test('state-read failure after actual adapter awaits prevents all later mutations', async () => {
-  const f = realPublicationFixture({ after: 'delete-progress', failGuardRead: true });
+  const f = realPublicationFixture({
+    after: 'delete-progress',
+    failGuardRead: true,
+  });
   await assert.rejects(f.publish(), /HTTP403/);
   assert.equal(
     f.requests.some((r) => r.step === 'delete-blocked' || r.step === 'close'),
@@ -839,7 +896,11 @@ test('already deployed recovery retains full exact review/evidence checks and ne
   };
   f.feedback.state = 'MERGED';
   f.feedback.mergeCommitSha = mergeSha;
-  f.github.viewIssue = async (number) => ({ number, state: 'closed', comments: [] });
+  f.github.viewIssue = async (number) => ({
+    number,
+    state: 'closed',
+    comments: [],
+  });
   const result = await releaseBatch({
     repo: f.state.repository,
     github: f.github,
@@ -849,7 +910,11 @@ test('already deployed recovery retains full exact review/evidence checks and ne
     execute: true,
   });
   assert.equal(result.status, 'deployed');
-  assert.deepEqual(result.deployments, { frontend: false, backend: false, runtime: false });
+  assert.deepEqual(result.deployments, {
+    frontend: false,
+    backend: false,
+    runtime: false,
+  });
   assert.equal(
     f.calls.some(([type]) => type === 'merge' || type === 'status'),
     false,
@@ -912,7 +977,10 @@ const subjectChanges = [
     (b) => {
       b.issues.push(6);
       b.plan.issues.push(6);
-      b.plan.acceptance.push({ issue: 6, criteria: ['Unverified additional issue'] });
+      b.plan.acceptance.push({
+        issue: 6,
+        criteria: ['Unverified additional issue'],
+      });
       b.plan.evidence.push({
         issue: 6,
         screenshot: screenshotPath.replace('5.png', '6.png'),
@@ -1098,7 +1166,12 @@ test('full verified subject remains frozen at actual merge, record and recovery 
           f.feedback.mergeCommitSha = mergeSha;
         }
         if (['record-proof', 'deployed-recovery', 'publication-proof'].includes(window))
-          f.batch.release = { status: 'merged', reviewedSha: sha, mergeSha, prNumber: 9 };
+          f.batch.release = {
+            status: 'merged',
+            reviewedSha: sha,
+            mergeSha,
+            prNumber: 9,
+          };
         if (['deployed-recovery', 'publication-proof'].includes(window)) {
           f.batch.release.status = 'deployed';
           f.batch.release.deployment = {
@@ -1107,14 +1180,27 @@ test('full verified subject remains frozen at actual merge, record and recovery 
             mergeSha,
             railwayRunUrl: railwayUrl,
             demo: structuredClone(f.proof),
+            production: structuredClone(f.production),
+            productionRailwayRunUrl: f.production.runUrl,
           };
         }
         const action =
           window === 'record-proof'
-            ? () => recordDeployment({ ...input, mergeSha, railwayRunUrl: railwayUrl })
+            ? () =>
+                recordDeployment({
+                  ...input,
+                  mergeSha,
+                  railwayRunUrl: railwayUrl,
+                })
             : window === 'publication-proof'
               ? () => publishDeploymentCompletion({ ...input, batch: f.batch })
-              : () => releaseBatch({ ...input, reviewedSha: sha, execute: true, configured });
+              : () =>
+                  releaseBatch({
+                    ...input,
+                    reviewedSha: sha,
+                    execute: true,
+                    configured,
+                  });
         await assert.rejects(action(), /identity changed|releaseHold/);
         assert.equal(f.changed(), true, 'Exercise the intended asynchronous race');
         const merges = f.requests.filter(({ args }) => args[0] === 'pr' && args[1] === 'merge');
@@ -1219,7 +1305,12 @@ test('persisted transition identity is captured before save awaits, including pr
           f.feedback.mergeCommitSha = mergeSha;
         }
         if (mode === 'record' || mode === 'publication')
-          f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha, prNumber: 9 };
+          f.batch.release = {
+            status: 'merged',
+            mergeSha,
+            reviewedSha: sha,
+            prNumber: 9,
+          };
         if (mode === 'publication') {
           f.batch.release.status = 'deployed';
           f.batch.release.deployment = {
@@ -1228,6 +1319,8 @@ test('persisted transition identity is captured before save awaits, including pr
             reviewedSha: sha,
             railwayRunUrl: railwayUrl,
             demo: structuredClone(f.proof),
+            production: structuredClone(f.production),
+            productionRailwayRunUrl: f.production.runUrl,
           };
         }
         const save = f.store.save;
@@ -1247,10 +1340,21 @@ test('persisted transition identity is captured before save awaits, including pr
         };
         const action =
           mode === 'record'
-            ? () => recordDeployment({ ...input, mergeSha, railwayRunUrl: railwayUrl })
+            ? () =>
+                recordDeployment({
+                  ...input,
+                  mergeSha,
+                  railwayRunUrl: railwayUrl,
+                })
             : mode === 'publication'
               ? () => publishDeploymentCompletion({ ...input, batch: f.batch })
-              : () => releaseBatch({ ...input, reviewedSha: sha, execute: true, configured });
+              : () =>
+                  releaseBatch({
+                    ...input,
+                    reviewedSha: sha,
+                    execute: true,
+                    configured,
+                  });
         await assert.rejects(action(), /identity changed|releaseHold/);
         assert.equal(saves, 1);
         if (mode === 'record')
@@ -1304,8 +1408,12 @@ test('an exact-only preflight cannot authorize the default backend release merge
     artifact: async () => exactProof,
   };
   assert.equal(
-    (await verifyDemoPreflight({ reader, sourcePolicy: DEMO_SOURCE_POLICIES.exact })).receipt
-      .sourcePolicy,
+    (
+      await verifyDemoPreflight({
+        reader,
+        sourcePolicy: DEMO_SOURCE_POLICIES.exact,
+      })
+    ).receipt.sourcePolicy,
     DEMO_SOURCE_POLICIES.exact,
   );
   routes.length = 0;
@@ -1336,7 +1444,10 @@ test('an exact-only preflight cannot authorize the default backend release merge
 async function addContinuations(f, statuses) {
   const { historyDigest, implementationAttempts } =
     await import('../../src/bug-pipeline/attempt-budget.mjs');
-  f.batch.implementation = [1, 2, 3, 4].map((round) => ({ round, status: 'failed' }));
+  f.batch.implementation = [1, 2, 3, 4].map((round) => ({
+    round,
+    status: 'failed',
+  }));
   f.state.operatorTakeover = {
     nonce: 'legacy-takeover',
     continuePastFourPreserveHistory: true,
@@ -1433,6 +1544,7 @@ function exactBackendFixture() {
   let main = 'c'.repeat(40),
     next = 900;
   const runs = [];
+  f.github.currentReleaseMain = async () => main;
   const reader = {
     async getJson(route) {
       if (route === 'commits/main') return { sha: main };
@@ -1440,7 +1552,10 @@ function exactBackendFixture() {
         return structuredClone(runs.find((r) => r.id === Number(route.split('/').at(-1))));
       const requested = new URLSearchParams(route.split('?')[1]).get('head_sha');
       const selected = runs.filter((r) => r.head_sha === requested);
-      return { total_count: selected.length, workflow_runs: structuredClone(selected) };
+      return {
+        total_count: selected.length,
+        workflow_runs: structuredClone(selected),
+      };
     },
     async artifact(run, kind) {
       return {
@@ -1518,7 +1633,10 @@ function exactBackendFixture() {
 async function wireExact(f) {
   const { createExactDemoDispatcher } =
     await import('../../src/bug-pipeline/exact-demo-dispatch.mjs');
-  const dispatcher = createExactDemoDispatcher({ reader: f.reader, postDispatch: f.post });
+  const dispatcher = createExactDemoDispatcher({
+    reader: f.reader,
+    postDispatch: f.post,
+  });
   f.github.ensureExactDemoRun = (input) => dispatcher.ensure(input);
 }
 const exactInput = (f) => ({
@@ -1634,7 +1752,7 @@ test('main movement after protected merge retains merged progress and never disp
   assert.equal(f.getSaved().batches[0].release.status, 'merged');
   assert.equal(f.getSaved().batches[0].exactDemoDispatches.preflight.phase, 'succeeded');
   assert.equal(f.calls.filter(([call]) => call === 'dispatch').length, 1);
-  await assert.rejects(releaseBatch(exactInput(f)), /main changed/);
+  await assert.rejects(releaseBatch(exactInput(f)), /releaseHold/);
   assert.equal(f.calls.filter(([call]) => call === 'merge').length, 1);
 });
 
@@ -1668,7 +1786,11 @@ test('exact record and pending completion recheck pass the selected policy and b
     recordDeployment({ ...exactInput(f), mergeSha, railwayRunUrl: railwayUrl }),
     /durable successful dispatch/,
   );
-  await recordDeployment({ ...exactInput(f), mergeSha, railwayRunUrl: result.railwayRunUrl });
+  await recordDeployment({
+    ...exactInput(f),
+    mergeSha,
+    railwayRunUrl: result.railwayRunUrl,
+  });
   assert.deepEqual(policies, [DEMO_SOURCE_POLICIES.exact, DEMO_SOURCE_POLICIES.exact]);
   assert.equal(publicationComplete(f.getSaved().batches[0]), true);
 });
@@ -1809,5 +1931,380 @@ test('CLI exact completion rejects a rerun before or during live proof verificat
       /run attempt changed/,
     );
     assert.equal(verified, change === 'before' ? 0 : 1);
+  }
+});
+
+const recoveryContext = {
+  repository: 'l2v-hub/ClinicOS',
+  eventName: 'workflow_dispatch',
+  ref: 'refs/heads/main',
+  workflowRef: 'l2v-hub/ClinicOS/.github/workflows/codex-bug-release.yml@refs/heads/main',
+  actor: 'l2v-hub',
+  triggeringActor: 'l2v-hub',
+  sha: 'd'.repeat(40),
+  workflowSha: 'd'.repeat(40),
+};
+async function wireRecovery(f) {
+  const { verifyReleaseAncestry } = await import('../../src/bug-pipeline/exact-demo-recovery.mjs');
+  const { verifyRetiredExactDispatches } =
+    await import('../../src/bug-pipeline/exact-demo-dispatch.mjs');
+  const read = f.reader.getJson;
+  f.reader.getJson = async (route) =>
+    route.startsWith('compare/')
+      ? {
+          base_commit: { sha: mergeSha },
+          merge_base_commit: { sha: mergeSha },
+          status: 'ahead',
+          ahead_by: 1,
+          behind_by: 0,
+          commits: [{ sha: 'd'.repeat(40) }],
+        }
+      : read(route);
+  f.github.authorizeReleaseRecovery = async () => 'l2v-hub';
+  f.github.verifyReleaseAncestry = (input) => verifyReleaseAncestry({ ...input, reader: f.reader });
+  f.github.verifyExactRecoveryRuns = (input) =>
+    verifyRetiredExactDispatches({ ...input, reader: f.reader });
+  const { verifyProductionBackend } = await import('../../src/bug-pipeline/demo-deployment.mjs');
+  f.github.verifyProductionBackend = async (input) => {
+    const target = await f.github.currentReleaseMain();
+    const run = {
+      id: 321,
+      run_attempt: 1,
+      head_sha: target,
+      head_branch: 'main',
+      repository: { full_name: 'l2v-hub/ClinicOS' },
+      head_repository: { full_name: 'l2v-hub/ClinicOS' },
+      path: '.github/workflows/deploy-backend.yml',
+      event: 'push',
+      status: 'completed',
+      conclusion: 'success',
+    };
+    const job = {
+      id: 421,
+      run_id: 321,
+      run_attempt: 1,
+      head_sha: target,
+      name: 'deploy',
+      status: 'completed',
+      conclusion: 'success',
+      steps: [
+        {
+          name: 'Deploy to Railway',
+          status: 'completed',
+          conclusion: 'success',
+        },
+      ],
+    };
+    const reader = {
+      getJson: async (route) =>
+        route.includes('/jobs?')
+          ? { total_count: 1, jobs: [job] }
+          : route === 'actions/runs/321'
+            ? run
+            : { total_count: 1, workflow_runs: [run] },
+    };
+    return verifyProductionBackend({ ...input, reader });
+  };
+}
+const recoveryInput = (f) => ({
+  ...exactInput(f),
+  blockId: f.getSaved().batches[0].releaseBlock.id,
+  context: recoveryContext,
+});
+
+test('four actual release failures durably block PR/issues; plain retries never POST; explicit recovery archives and permits one fresh intent per operation', async (t) => {
+  for (const scenario of [
+    'premerge main movement',
+    'expired preflight',
+    'failed deploy',
+    'main movement before record',
+  ])
+    await t.test(scenario, async () => {
+      const f = exactBackendFixture();
+      await wireExact(f);
+      await wireRecovery(f);
+      if (scenario === 'main movement before record')
+        f.batch.plan.scope.push('frontend/src/Patient.tsx');
+      const originalHistories = JSON.stringify({
+        implementation: f.batch.implementation,
+        reviews: f.batch.reviews,
+        ledger: f.batch.reviewLedger,
+        reports: f.batch.reviewReports,
+      });
+      let undo = () => {};
+      if (scenario === 'premerge main movement') {
+        const check = f.github.requiredChecks;
+        let reads = 0;
+        f.github.requiredChecks = async () => {
+          const result = await check();
+          if (++reads === 2) f.setMain('d'.repeat(40));
+          return result;
+        };
+        undo = () => {
+          f.github.requiredChecks = check;
+        };
+      } else if (scenario === 'expired preflight') {
+        const artifact = f.reader.artifact;
+        f.reader.artifact = async (...args) => {
+          const proof = await artifact(...args);
+          proof.receipt.verifiedAt = '2020-01-01T00:00:00Z';
+          return proof;
+        };
+        undo = () => {
+          f.reader.artifact = artifact;
+        };
+      } else if (scenario === 'failed deploy') {
+        const post = f.post;
+        f.post = async (body) => {
+          await post(body);
+          if (body.inputs.operation === 'deploy') f.runs.at(-1).conclusion = 'failure';
+        };
+        await wireExact(f);
+        undo = () => {
+          f.post = post;
+        };
+      }
+      if (scenario === 'main movement before record') {
+        const result = await releaseBatch(exactInput(f));
+        f.setMain('d'.repeat(40));
+        await assert.rejects(
+          recordDeployment({
+            ...exactInput(f),
+            mergeSha,
+            railwayRunUrl: result.railwayRunUrl,
+            vercelUrl: 'https://old-target.vercel.app',
+          }),
+        );
+      } else await assert.rejects(releaseBatch(exactInput(f)));
+      undo();
+      await wireExact(f);
+      const blocked = structuredClone(f.getSaved().batches[0]);
+      assert.ok(blocked.releaseBlock);
+      assert.equal(blocked.releaseHold, 'exact-release-block');
+      const posts = f.calls.filter((c) => c[0] === 'dispatch').length;
+      assert.equal(selectAutoReleaseBatch(f.getSaved()), null);
+      await assert.rejects(releaseBatch(exactInput(f)), /releaseHold/);
+      assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, posts);
+      assert.ok(
+        f.calls.some(
+          (c) => c[0] === 'comment' && c[1] === 9 && c[2].includes(blocked.releaseBlock.code),
+        ),
+      );
+      assert.ok(f.calls.some((c) => c[0] === 'status' && c[1] === 5 && c[2] === 'Bloccato'));
+      assert.ok(!f.calls.some((c) => c[0] === 'status' && c[2] === 'Risolto'));
+      if (blocked.release) f.setMain('d'.repeat(40));
+      const request = recoveryInput(f);
+      const result = await recoverExactRelease(request);
+      assert.equal(result.status, 'recovered');
+      const recovered = f.getSaved().batches[0];
+      assert.equal(recovered.exactReleaseRecoveries.length, 1);
+      assert.deepEqual(recovered.exactReleaseRecoveries[0].dispatches, blocked.exactDemoDispatches);
+      assert.equal(
+        JSON.stringify({
+          implementation: recovered.implementation,
+          reviews: recovered.reviews,
+          ledger: recovered.reviewLedger,
+          reports: recovered.reviewReports,
+        }),
+        originalHistories,
+      );
+      const recoveredSnapshot = JSON.stringify(recovered);
+      await assert.rejects(recoverExactRelease(request));
+      assert.equal(
+        JSON.stringify(f.getSaved().batches[0]),
+        recoveredSnapshot,
+        'replaying consumed block ID cannot archive or allocate again',
+      );
+      const released = await releaseBatch(exactInput(f));
+      const freshDispatches = f.calls.filter((c) => c[0] === 'dispatch').slice(posts);
+      assert.equal(freshDispatches.filter((c) => c[1] === 'preflight').length, 1);
+      assert.equal(freshDispatches.filter((c) => c[1] === 'deploy').length, 1);
+      const again = await releaseBatch(exactInput(f));
+      assert.equal(again.mergeSha, mergeSha);
+      assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, posts + 2);
+      const current = f.getSaved().batches[0];
+      for (const p of Object.values(current.exactDemoDispatches)) {
+        assert.ok(
+          !Object.values(blocked.exactDemoDispatches).some(
+            (old) => old.dispatchId === p.dispatchId,
+          ),
+        );
+        assert.ok(
+          recovered.exactDemoRecovery.excludedRunIds.every((id) => p.priorRunIds.includes(id)),
+        );
+      }
+      const target = released.deploymentSha ?? mergeSha;
+      f.github.verifyDemoRelease = async ({ runUrl, mergeSha: actual }) => ({
+        ...f.proof,
+        runUrl,
+        reviewedSha: sha,
+        receipt: { ...f.proof.receipt, mergeSha: actual },
+      });
+      await recordDeployment({
+        ...exactInput(f),
+        mergeSha,
+        deploymentSha: target,
+        railwayRunUrl: released.railwayRunUrl,
+        vercelUrl: 'https://fresh-target.vercel.app',
+      });
+      const completed = f.getSaved().batches[0];
+      assert.equal(completed.release.mergeSha, mergeSha);
+      assert.equal(completed.release.deployment.deploymentSha, target);
+      assert.equal(completed.release.deployment.production.sha, target);
+      assert.equal(completed.release.deployment.demo.receipt.mergeSha, target);
+      assert.equal(completed.release.status, 'deployed');
+      if (scenario === 'main movement before record') {
+        assert.equal(completed.release.deployment.vercelUrl, 'https://fresh-target.vercel.app');
+        assert.ok(!JSON.stringify(completed.release.deployment).includes('old-target'));
+      }
+      const comment = f.calls.find(
+        (c) => c[0] === 'comment' && c[2].includes('Rilascio verificato'),
+      );
+      assert.match(comment[2], /Railway produzione verificato/);
+      assert.match(comment[2], /Railway demo verificato/);
+    });
+});
+
+test('exact backend requires production binding before merge and production proof before record', async () => {
+  const unconfigured = exactBackendFixture();
+  await wireExact(unconfigured);
+  await assert.rejects(
+    releaseBatch({
+      ...exactInput(unconfigured),
+      configured: { ...configured, railway: false },
+    }),
+    /RAILWAY_TOKEN/,
+  );
+  assert.equal(unconfigured.calls.filter((c) => c[0] === 'merge' || c[0] === 'dispatch').length, 0);
+  for (const code of ['PRODUCTION_RUN_REQUIRED', 'PRODUCTION_PROOF_FAILED']) {
+    const f = exactBackendFixture();
+    await wireExact(f);
+    const result = await releaseBatch(exactInput(f));
+    f.github.verifyProductionBackend = async () => {
+      const error = new Error(code);
+      error.code = code;
+      throw error;
+    };
+    await assert.rejects(
+      recordDeployment({
+        ...exactInput(f),
+        mergeSha,
+        railwayRunUrl: result.railwayRunUrl,
+      }),
+      new RegExp(code),
+    );
+    assert.equal(f.getSaved().batches[0].releaseBlock.code, code);
+    assert.ok(!f.calls.some((c) => c[0] === 'status' && c[2] === 'Risolto'));
+    const count = f.calls.filter((c) => c[0] === 'dispatch').length;
+    await assert.rejects(releaseBatch(exactInput(f)), /releaseHold/);
+    assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, count);
+  }
+});
+
+test('explicit recovery rejects denied authorization, stale source, nonancestor, active/uncertain old runs and concurrent ownership without new intent', async (t) => {
+  for (const name of [
+    'no authority',
+    'changed head',
+    'unapproved source',
+    'nonancestor',
+    'concurrent ownership',
+    'active run',
+    'run tamper',
+    'uncertain run',
+    'wrong block',
+    'cross repository',
+  ])
+    await t.test(name, async () => {
+      const f = exactBackendFixture();
+      await wireExact(f);
+      await wireRecovery(f);
+      const artifact = f.reader.artifact;
+      f.reader.artifact = async (...args) => {
+        const proof = await artifact(...args);
+        proof.receipt.verifiedAt = '2020-01-01';
+        return proof;
+      };
+      await assert.rejects(releaseBatch(exactInput(f)));
+      f.reader.artifact = artifact;
+      const input = recoveryInput(f);
+      const blocked = f.getSaved().batches[0];
+      if (name === 'no authority')
+        f.github.authorizeReleaseRecovery = async () => {
+          throw Error('denied');
+        };
+      if (name === 'changed head') f.feedback.head = 'e'.repeat(40);
+      if (name === 'unapproved source') blocked.approvedSha = 'e'.repeat(40);
+      if (name === 'nonancestor') {
+        blocked.release = {
+          sourcePolicy: DEMO_SOURCE_POLICIES.exact,
+          status: 'merged',
+          mergeSha,
+          reviewedSha: sha,
+        };
+        f.feedback.state = 'MERGED';
+        f.feedback.mergeCommitSha = mergeSha;
+        f.setMain('d'.repeat(40));
+        const read = f.reader.getJson;
+        f.reader.getJson = async (route) =>
+          route.startsWith('compare/')
+            ? {
+                base_commit: { sha: mergeSha },
+                merge_base_commit: { sha: 'e'.repeat(40) },
+                status: 'diverged',
+              }
+            : read(route);
+      }
+      if (name === 'concurrent ownership') {
+        const read = f.github.currentReleaseMain;
+        f.github.currentReleaseMain = async () => {
+          blocked.plan.title = 'Different durable owner';
+          return read();
+        };
+      }
+      if (name === 'active run') f.runs[0].status = 'in_progress';
+      if (name === 'run tamper') f.runs[0].run_attempt = 2;
+      if (name === 'uncertain run') {
+        delete blocked.exactDemoDispatches.preflight.runId;
+        f.runs.length = 0;
+      }
+      if (name === 'wrong block') input.blockId = 'wrong';
+      if (name === 'cross repository') input.repo = 'attacker/repo';
+      const posts = f.calls.filter((c) => c[0] === 'dispatch').length,
+        saves = f.calls.filter((c) => c[0] === 'save').length;
+      await assert.rejects(recoverExactRelease(input));
+      assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, posts);
+      assert.equal(f.calls.filter((c) => c[0] === 'save').length, saves);
+      assert.equal(blocked.exactReleaseRecoveries, undefined);
+    });
+});
+
+test('recovery mutation guard rechecks retired runs and durable ownership at the actual store save', async () => {
+  for (const change of ['active run', 'ownership']) {
+    const f = exactBackendFixture();
+    await wireExact(f);
+    await wireRecovery(f);
+    const artifact = f.reader.artifact;
+    f.reader.artifact = async (...args) => {
+      const proof = await artifact(...args);
+      proof.receipt.verifiedAt = '2020-01-01';
+      return proof;
+    };
+    await assert.rejects(releaseBatch(exactInput(f)));
+    f.reader.artifact = artifact;
+    const request = recoveryInput(f),
+      save = f.store.save;
+    const before = structuredClone(f.getSaved().batches[0]);
+    let invoked = false;
+    f.store.save = async (value, { guard }) => {
+      invoked = true;
+      if (change === 'active run') f.runs[0].status = 'in_progress';
+      else f.getSaved().batches[0].plan.title = 'Concurrent operator update';
+      await guard();
+      return save(value);
+    };
+    await assert.rejects(recoverExactRelease(request));
+    assert.equal(invoked, true);
+    assert.equal(f.getSaved().batches[0].exactReleaseRecoveries, undefined);
+    assert.deepEqual(f.getSaved().batches[0].releaseBlock, before.releaseBlock);
   }
 });

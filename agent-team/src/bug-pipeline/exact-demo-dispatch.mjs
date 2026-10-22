@@ -97,12 +97,26 @@ export function createExactDemoDispatcher({
     return list.workflow_runs;
   };
   return {
-    async ensure({ operation, expectedSha, progress, saveProgress, guard = async () => {} }) {
+    async ensure({
+      operation,
+      expectedSha,
+      progress,
+      saveProgress,
+      excludedRunIds = [],
+      excludedDispatchIds = [],
+      guard = async () => {},
+    }) {
       if (
         !['preflight', 'deploy'].includes(operation) ||
         (expectedSha !== undefined && !SHA.test(expectedSha)) ||
         (operation === 'deploy' && expectedSha === undefined) ||
-        typeof saveProgress !== 'function'
+        typeof saveProgress !== 'function' ||
+        !Array.isArray(excludedDispatchIds) ||
+        excludedDispatchIds.length > 100 ||
+        excludedDispatchIds.some((id) => !UUID.test(id)) ||
+        !Array.isArray(excludedRunIds) ||
+        excludedRunIds.length > 100 ||
+        excludedRunIds.some((id) => !integer(id))
       )
         throw new TypeError('fixed operation and exact merged SHA required');
       const started = now();
@@ -117,6 +131,8 @@ export function createExactDemoDispatcher({
           !Array.isArray(progress.priorRunIds) ||
           progress.priorRunIds.length > 100 ||
           progress.priorRunIds.some((id) => !integer(id)) ||
+          excludedRunIds.some((id) => !progress.priorRunIds.includes(id)) ||
+          excludedDispatchIds.includes(progress.dispatchId) ||
           (progress.runId !== undefined && !integer(progress.runId))
         )
           fail('saved dispatch identity mismatch');
@@ -124,14 +140,16 @@ export function createExactDemoDispatcher({
       } else {
         const prior = await runs(sha);
         const dispatchId = newId();
-        if (!UUID.test(dispatchId)) fail('invalid correlation identity');
+        if (!UUID.test(dispatchId) || excludedDispatchIds.includes(dispatchId))
+          fail('invalid correlation identity');
         progress = {
           operation,
           sha,
           dispatchId,
           phase: 'intent',
-          priorRunIds: prior.map((run) => run.id),
+          priorRunIds: [...new Set([...prior.map((run) => run.id), ...excludedRunIds])],
         };
+        if (progress.priorRunIds.length > 100) fail('bounded excluded run inventory required');
         await saveProgress(progress); // Durable intent precedes the one possible mutation.
         await guard();
         await currentMain(sha);
@@ -189,4 +207,52 @@ export function createExactDemoDispatcher({
       }
     },
   };
+}
+
+// An explicit recovery cannot abandon a still-active or uncertain provider-capable run.
+export async function verifyRetiredExactDispatches({ reader, dispatches = {} }) {
+  const retiredRunIds = [];
+  for (const progress of Object.values(dispatches)) {
+    if (
+      !['preflight', 'deploy'].includes(progress?.operation) ||
+      !SHA.test(progress.sha ?? '') ||
+      !UUID.test(progress.dispatchId ?? '') ||
+      !Array.isArray(progress.priorRunIds)
+    )
+      fail('retired dispatch identity mismatch');
+    let run;
+    if (progress.runId) run = await reader.getJson(`actions/runs/${progress.runId}`);
+    else {
+      const list = await reader.getJson(
+        `actions/workflows/deploy-demo-exact-commit.yml/runs?branch=main&event=workflow_dispatch&head_sha=${progress.sha}&per_page=100`,
+      );
+      if (
+        !Array.isArray(list?.workflow_runs) ||
+        list.total_count !== list.workflow_runs.length ||
+        list.total_count > 100
+      )
+        fail('retired run inventory unavailable');
+      const matches = list.workflow_runs.filter((run) => run.display_title === title(progress));
+      if (matches.length !== 1) fail('uncertain old dispatch cannot be recovered');
+      run = matches[0];
+    }
+    validateRun(run, progress);
+    if (run.status !== 'completed') fail('active old dispatch cannot be recovered');
+    if (
+      ![
+        'success',
+        'failure',
+        'cancelled',
+        'timed_out',
+        'action_required',
+        'neutral',
+        'skipped',
+        'stale',
+        'startup_failure',
+      ].includes(run.conclusion)
+    )
+      fail('unsettled old dispatch cannot be recovered');
+    retiredRunIds.push(run.id);
+  }
+  return retiredRunIds;
 }

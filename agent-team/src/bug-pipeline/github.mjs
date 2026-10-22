@@ -104,7 +104,9 @@ export function controllerFailureCode(error) {
   return 'controller-execution-failed';
 }
 export function stateError(code, message, cause) {
-  return Object.assign(new Error(message, cause ? { cause } : undefined), { code });
+  return Object.assign(new Error(message, cause ? { cause } : undefined), {
+    code,
+  });
 }
 // Only finite diagnostic metadata crosses the controller boundary. Provider stderr can
 // contain arbitrary clinical text and credentials, so it is never persisted or interpolated.
@@ -424,7 +426,12 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       ...(maxOutputBytes === undefined ? {} : { maxOutputBytes }),
     });
     if (!result.ok && allowFailure) return { ok: false, status: result.code, value: null, result };
-    return { ok: true, status: result.code, value: parseJson(result.stdout, path), result };
+    return {
+      ok: true,
+      status: result.code,
+      value: parseJson(result.stdout, path),
+      result,
+    };
   }
 
   async function apiList(path) {
@@ -468,7 +475,11 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     if (!notFound(check)) throw new Error(`Cannot inspect GitHub label ${label}`);
     const created = await api(`repos/${repo}/labels`, {
       method: 'POST',
-      body: { name: label, color: '1D76DB', description: 'Codex bug pipeline queue' },
+      body: {
+        name: label,
+        color: '1D76DB',
+        description: 'Codex bug pipeline queue',
+      },
       allowFailure: true,
       guard,
     });
@@ -605,7 +616,9 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       const existing = await api(refPath, { allowFailure: true });
       if (existing.ok) return;
       if (!notFound(existing)) throw new Error('Cannot inspect durable state branch');
-      const main = await api(`repos/${repo}/git/ref/heads/main`, { allowFailure: true });
+      const main = await api(`repos/${repo}/git/ref/heads/main`, {
+        allowFailure: true,
+      });
       if (!main.ok)
         throw new Error('Cannot initialize durable state: main branch ref is unavailable');
       const sha = main.value?.object?.sha;
@@ -846,7 +859,11 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       merged: Boolean(pr.merged),
       draft: pr.draft,
       check: latest
-        ? { status: latest.status, conclusion: latest.conclusion, url: latest.html_url }
+        ? {
+            status: latest.status,
+            conclusion: latest.conclusion,
+            url: latest.html_url,
+          }
         : null,
     };
   }
@@ -898,7 +915,9 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
   }
 
   async function reviewFeedback(pr) {
-    const number = issueNumber({ number: typeof pr === 'object' ? pr.number : pr });
+    const number = issueNumber({
+      number: typeof pr === 'object' ? pr.number : pr,
+    });
     const details = await api(`repos/${repo}/pulls/${number}`);
     const [reviews, reviewComments, issueComments, user] = await Promise.all([
       apiList(`repos/${repo}/pulls/${number}/reviews?per_page=100`),
@@ -1002,7 +1021,9 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       )
         latest.set(login, review);
     }
-    const protection = await api(`repos/${repo}/branches/main/protection`, { allowFailure: true });
+    const protection = await api(`repos/${repo}/branches/main/protection`, {
+      allowFailure: true,
+    });
     const rule = protection.value?.required_pull_request_reviews;
     const classic =
       protection.ok &&
@@ -1043,14 +1064,20 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
   }
 
   async function draftReady(pr, { guard } = {}) {
-    const number = issueNumber({ number: typeof pr === 'object' ? pr.number : pr });
+    const number = issueNumber({
+      number: typeof pr === 'object' ? pr.number : pr,
+    });
     if (guard !== undefined) await checkMutationGuard(guard);
-    await invoke(['pr', 'ready', String(number), '--repo', repo], { operation: 'projection' });
+    await invoke(['pr', 'ready', String(number), '--repo', repo], {
+      operation: 'projection',
+    });
     return (await api(`repos/${repo}/pulls/${number}`)).value;
   }
 
   async function mergePullRequest(pr, sha, { guard } = {}) {
-    const number = issueNumber({ number: typeof pr === 'object' ? pr.number : pr });
+    const number = issueNumber({
+      number: typeof pr === 'object' ? pr.number : pr,
+    });
     if (typeof sha !== 'string' || !/^[a-f0-9]{40}$/.test(sha))
       throw new TypeError('merge requires an exact reviewed SHA');
     if (guard !== undefined) await checkMutationGuard(guard);
@@ -1133,7 +1160,9 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
    * is configured, so callers must treat it as a configuration failure and verify protection.
    */
   async function requiredChecks(pr) {
-    const number = issueNumber({ number: typeof pr === 'object' ? pr.number : pr });
+    const number = issueNumber({
+      number: typeof pr === 'object' ? pr.number : pr,
+    });
     const result = await invoke(
       ['pr', 'checks', String(number), '--repo', repo, '--required', '--json', 'name,state,bucket'],
       { allowFailure: true },
@@ -1165,7 +1194,32 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     return { ok: result.ok && passing, details };
   }
 
+  async function authorizeReleaseRecovery(context) {
+    if (
+      repo !== 'l2v-hub/ClinicOS' ||
+      context?.repository !== repo ||
+      context.eventName !== 'workflow_dispatch' ||
+      context.ref !== 'refs/heads/main' ||
+      context.workflowRef !== `${repo}/.github/workflows/codex-bug-release.yml@refs/heads/main` ||
+      context.actor !== 'l2v-hub' ||
+      context.triggeringActor !== context.actor ||
+      !/^[a-f0-9]{40}$/.test(context.sha ?? '') ||
+      context.workflowSha !== context.sha
+    )
+      throw Error('explicit trusted owner recovery required');
+    const user = await api('user');
+    const permission = await api(`repos/${repo}/collaborators/l2v-hub/permission`);
+    if (
+      actorLogin(user.value) !== context.actor ||
+      permission.value?.permission !== 'admin' ||
+      permission.value?.user?.login !== context.actor
+    )
+      throw Error('authenticated recovery admin required');
+    return context.actor;
+  }
+
   return {
+    authorizeReleaseRecovery,
     authorized,
     authorizedMaintainer,
     intake,

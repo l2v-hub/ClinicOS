@@ -87,12 +87,19 @@ function mainFetch(
     return response(mainBody());
   };
 }
-const exactReceipt = (kind) => ({ ...receipt(kind), sourcePolicy: exactPolicy, reviewedSha: sha });
+const exactReceipt = (kind) => ({
+  ...receipt(kind),
+  sourcePolicy: exactPolicy,
+  reviewedSha: sha,
+});
 function exactTargetData() {
   const data = targetData();
   data.deploymentTriggers = { edges: [], pageInfo: { hasNextPage: false } };
   data.deployments = { edges: [], pageInfo: { hasNextPage: false } };
-  data.serviceInstance.latestDeployment = { id: deploymentId, status: 'SUCCESS' };
+  data.serviceInstance.latestDeployment = {
+    id: deploymentId,
+    status: 'SUCCESS',
+  };
   return data;
 }
 function targetData() {
@@ -101,15 +108,25 @@ function targetData() {
       project: { id: DEMO_TARGET.projectId },
       environment: { id: DEMO_TARGET.environmentId, name: 'demo' },
     },
-    deploymentTriggers: { edges: [{ node: { ...DEMO_TARGET, repository: repo, branch: 'main' } }] },
+    deploymentTriggers: {
+      edges: [{ node: { ...DEMO_TARGET, repository: repo, branch: 'main' } }],
+    },
     serviceInstance: {
       serviceId: DEMO_TARGET.serviceId,
       environmentId: DEMO_TARGET.environmentId,
       source: { repo },
-      domains: { serviceDomains: [{ domain: DEMO_TARGET.domain }], customDomains: [] },
+      domains: {
+        serviceDomains: [{ domain: DEMO_TARGET.domain }],
+        customDomains: [],
+      },
       activeDeployments: [{ id: deploymentId, status: 'SUCCESS' }],
     },
-    deployment: { ...DEMO_TARGET, id: deploymentId, status: 'SUCCESS', meta: { commitHash: sha } },
+    deployment: {
+      ...DEMO_TARGET,
+      id: deploymentId,
+      status: 'SUCCESS',
+      meta: { commitHash: sha },
+    },
   };
 }
 const readyBody = () => ({
@@ -410,7 +427,9 @@ test('public readiness needs no-store, correct deployment identity and real depe
   ])
     await t.test(label, () =>
       assert.rejects(
-        verifyLiveReady(deploymentId, { fetchImpl: async () => response(body, status, headers) }),
+        verifyLiveReady(deploymentId, {
+          fetchImpl: async () => response(body, status, headers),
+        }),
       ),
     );
 });
@@ -554,7 +573,10 @@ function proofHttp({
     if (String(url) === 'https://production.blob.core.windows.net/signed')
       return new Response(corrupt ? Buffer.from('tampered') : zip);
     if (String(url).endsWith('/zip'))
-      return new Response(null, { status: 302, headers: { location: redirect } });
+      return new Response(null, {
+        status: 302,
+        headers: { location: redirect },
+      });
     if (String(url).includes('/artifacts?')) return response({ artifacts: [artifact] });
     if (String(url).endsWith('/commits/main')) return response({ sha });
     if (String(url).includes('/actions/workflows/'))
@@ -602,7 +624,15 @@ test('trusted workflow and immutable artifact mismatch matrix fails closed', asy
     ['wrong workflow', { modifyRun: (r) => ({ ...r, path: '.github/workflows/attacker.yml' }) }],
     ['wrong branch', { modifyRun: (r) => ({ ...r, head_branch: 'preview' }) }],
     ['wrong repository', { modifyRun: (r) => ({ ...r, repository: { full_name: 'other/repo' } }) }],
-    ['fork', { modifyRun: (r) => ({ ...r, head_repository: { full_name: 'other/repo' } }) }],
+    [
+      'fork',
+      {
+        modifyRun: (r) => ({
+          ...r,
+          head_repository: { full_name: 'other/repo' },
+        }),
+      },
+    ],
     ['wrong SHA', { modifyRun: (r) => ({ ...r, head_sha: reviewedSha }) }],
     ['expired artifact', { modifyArtifact: (a) => ({ ...a, expired: true }) }],
     [
@@ -612,7 +642,12 @@ test('trusted workflow and immutable artifact mismatch matrix fails closed', asy
     ['missing archive digest', { modifyArtifact: (a) => ({ ...a, digest: undefined }) }],
     [
       'wrong artifact workflow SHA',
-      { modifyArtifact: (a) => ({ ...a, workflow_run: { id: 123, head_sha: reviewedSha } }) },
+      {
+        modifyArtifact: (a) => ({
+          ...a,
+          workflow_run: { id: 123, head_sha: reviewedSha },
+        }),
+      },
     ],
     ['tampered archive', { corrupt: true }],
     ['untrusted redirect', { redirect: 'https://attacker.example/zip' }],
@@ -672,7 +707,12 @@ test('deployment workflow isolates demo credentials, defaults dispatch to read-o
     new URL('../../../.github/workflows/codex-bug-release.yml', import.meta.url),
     'utf8',
   );
-  const [production, demo] = backend.split('  demo:');
+  const production = backend;
+  const demo = await readFile(
+    new URL('../../../.github/workflows/deploy-demo-exact-commit.yml', import.meta.url),
+    'utf8',
+  );
+  assert.doesNotMatch(backend, /^  demo:/m);
   assert.match(production, /default: preflight/);
   assert.doesNotMatch(production, /secrets\.RAILWAY_DEMO_TOKEN/);
   assert.match(demo, /environment: 'glistening-friendship \/ demo'/);
@@ -684,7 +724,7 @@ test('deployment workflow isolates demo credentials, defaults dispatch to read-o
   assert.doesNotMatch(backend, /preflight-exact|deploy-exact/);
   assert.match(backend, /permissions:\n  contents: read/);
   assert.match(backend, /concurrency:\n  group: railway-backend\n  cancel-in-progress: false/);
-  assert.match(demo, /if: github.event_name == 'push' \|\| inputs.operation == 'deploy'/);
+  assert.doesNotMatch(demo, /^  push:/m);
   const [releaseJob, confirm] = release.split('  confirm-demo:');
   assert.doesNotMatch(releaseJob, /BUG_PIPELINE_RELEASE_ACTION: record/);
   assert.doesNotMatch(releaseJob, /secrets\.RAILWAY_DEMO_TOKEN/);
@@ -979,7 +1019,9 @@ test('exact policy rejects incomplete or hostile source inventories', async (t) 
       'foreign trigger repository',
       (d) => {
         d.deploymentTriggers.edges = [
-          { node: { ...DEMO_TARGET, repository: 'other/repo', branch: 'main' } },
+          {
+            node: { ...DEMO_TARGET, repository: 'other/repo', branch: 'main' },
+          },
         ];
       },
     ],
@@ -987,7 +1029,14 @@ test('exact policy rejects incomplete or hostile source inventories', async (t) 
       'foreign trigger target',
       (d) => {
         d.deploymentTriggers.edges = [
-          { node: { ...DEMO_TARGET, environmentId: 'other', repository: repo, branch: 'main' } },
+          {
+            node: {
+              ...DEMO_TARGET,
+              environmentId: 'other',
+              repository: repo,
+              branch: 'main',
+            },
+          },
         ];
       },
     ],
@@ -1212,7 +1261,10 @@ test('exact policy rejects native provenance and source drift after mutation wit
     [
       'ambiguous active deployment',
       (d) => {
-        d.serviceInstance.activeDeployments.push({ id: deploymentId, status: 'SUCCESS' });
+        d.serviceInstance.activeDeployments.push({
+          id: deploymentId,
+          status: 'SUCCESS',
+        });
       },
     ],
   ])
@@ -1390,11 +1442,11 @@ globalThis.fetch = async (url, options) => {
     });
 });
 
-test('dedicated manual workflow preserves legacy bytes and isolates the demo writer queue', async () => {
+test('dedicated manual workflow preserves production job bytes and isolates the demo writer queue', async () => {
   const legacy = await readFile(
     new URL('../../../.github/workflows/deploy-backend.yml', import.meta.url),
   );
-  assert.equal(hash(legacy), '6743d823679a9c1076c85dfcb5e5b9a8f96705849123b3091cac5d00cadaa3f9');
+  assert.equal(hash(legacy), '8520e8d32b7ee84d38524d18a507ebd728238815d58d7c1a5064847b7f118c75');
   const exact = await readFile(
     new URL('../../../.github/workflows/deploy-demo-exact-commit.yml', import.meta.url),
     'utf8',
@@ -1411,7 +1463,7 @@ test('dedicated manual workflow preserves legacy bytes and isolates the demo wri
   );
   assert.match(configure, /group: railway-demo\n  cancel-in-progress: false/);
   assert.doesNotMatch(configure, /secrets\.RAILWAY_TOKEN\b|group: railway-backend/);
-  // The legacy dual-token workflow is immutable historical coupling, not a new demo writer.
+  // The old dual-token job is removed; production bytes remain unchanged.
   assert.match(exact, /forward-only npm run db:migrate/);
   assert.match(exact, /if: always\(\) && inputs.operation == 'deploy'/);
   assert.match(exact, /path: demo-deployment-progress.json/);
@@ -1719,7 +1771,11 @@ globalThis.fetch = async (url, options) => {
           ['--import', fixturePath, modulePath, operation],
           {
             cwd: directory,
-            env: { ...exactEnv, ...overrides, RAILWAY_TOKEN: 'synthetic-demo-binding' },
+            env: {
+              ...exactEnv,
+              ...overrides,
+              RAILWAY_TOKEN: 'synthetic-demo-binding',
+            },
             encoding: 'utf8',
             timeout: 30_000,
           },
@@ -1895,7 +1951,10 @@ test('a rerun reuses the unique active native SUCCESS exact SHA, proves it live 
   assert.equal(reads, 3);
   assert.equal(ready, 1);
   assert.equal(proof.deploymentReused, true);
-  assert.deepEqual(proof.previousActiveDeployment, { id: deploymentId, commitHash: sha });
+  assert.deepEqual(proof.previousActiveDeployment, {
+    id: deploymentId,
+    commitHash: sha,
+  });
   assert.deepEqual(proof.migrations, {
     command: 'npm run db:migrate',
     direction: 'forward-only',
@@ -1920,7 +1979,9 @@ test('normal exact deployment records previous active native SHA or explicit unk
             return { serviceInstanceDeployV2: deploymentId };
           }
           const data = exactTargetData();
-          data.serviceInstance.activeDeployments[0].meta = { commitHash: previousSha };
+          data.serviceInstance.activeDeployments[0].meta = {
+            commitHash: previousSha,
+          };
           return data;
         },
       });
@@ -1962,7 +2023,9 @@ test('bounded read-only transient poll retries recover but denial, malformed bod
             mutations++;
             if (failure === 'mutation')
               throw new TypeError('PRIVATE_TOKEN_SENTINEL uncertain submission');
-            return response({ data: { serviceInstanceDeployV2: deploymentId } });
+            return response({
+              data: { serviceInstanceDeployV2: deploymentId },
+            });
           }
           if (mutations && ++polls <= (failure === 'exhausted' ? 4 : 1)) {
             if (failure === 'network' || failure === 'exhausted')
@@ -1971,7 +2034,9 @@ test('bounded read-only transient poll retries recover but denial, malformed bod
               throw new DOMException('PRIVATE_TOKEN_SENTINEL', 'TimeoutError');
             if (typeof failure === 'number') return response({}, failure);
             if (failure === 'denied')
-              return response({ errors: [{ message: 'PRIVATE_TOKEN_SENTINEL' }] });
+              return response({
+                errors: [{ message: 'PRIVATE_TOKEN_SENTINEL' }],
+              });
             if (failure === 'malformed') return new Response('PRIVATE_TOKEN_SENTINEL');
             if (failure === 'permanent') return response({}, 403);
           }
@@ -2055,7 +2120,10 @@ test('safe failure progress preserves only validated identity and finite outcome
       client: async (query) => {
         if (query.startsWith('mutation')) {
           submitted = true;
-          return { serviceInstanceDeployV2: deploymentId, private: 'PRIVATE_SENTINEL' };
+          return {
+            serviceInstanceDeployV2: deploymentId,
+            private: 'PRIVATE_SENTINEL',
+          };
         }
         if (submitted) throw new Error('PRIVATE_SENTINEL provider payload');
         return exactTargetData();
@@ -2285,9 +2353,19 @@ test('actual CLI excludes bound credential reflection across initial, mutation, 
       reflect: 'safe-failure',
       mutations: 1,
     },
-    { label: 'safe-normal-success', reflect: 'safe-success', mutations: 1, success: true },
+    {
+      label: 'safe-normal-success',
+      reflect: 'safe-success',
+      mutations: 1,
+      success: true,
+    },
     { label: 'safe-normal-failure', reflect: 'safe-failure', mutations: 1 },
-    { label: 'safe-native-reuse', reflect: 'safe-reuse', mutations: 0, success: true },
+    {
+      label: 'safe-native-reuse',
+      reflect: 'safe-reuse',
+      mutations: 0,
+      success: true,
+    },
   ];
   for (const scenario of cases)
     await t.test(scenario.label, async () => {
@@ -2427,47 +2505,120 @@ test('actual HTTP credential aliases share transport and output guards for both 
   const cases = [];
   for (const binding of ['RAILWAY_TOKEN', 'GITHUB_TOKEN']) {
     for (const [label, prefix, suffix] of [
-      ['leading-space', ' ', ''], ['trailing-space', '', ' '],
-      ['leading-tab', '\t', ''], ['trailing-tab', '', '\t'],
+      ['leading-space', ' ', ''],
+      ['trailing-space', '', ' '],
+      ['leading-tab', '\t', ''],
+      ['trailing-tab', '', '\t'],
       ['mixed-whitespace', ' \t', '\t '],
-    ]) for (const reflection of ['mutation', 'reuse', 'previous'])
-      cases.push({ label: `${binding}:${label}:${reflection}`, binding,
-        raw: prefix + uuidCredential + suffix, reflection, mutations: reflection === 'mutation' ? 1 : 0 });
-    cases.push({ label: `${binding}:context-alias`, binding, raw: ` \t${sha}\t `, reflection: 'context', mutations: 0, noArtifacts: true });
-    cases.push({ label: `${binding}:fallback-target-alias`, binding, raw: ` \t${DEMO_TARGET.projectId}\t `, reflection: 'context', mutations: 0, noArtifacts: true });
-    cases.push({ label: `${binding}:failure-code-alias`, binding, raw: ' DEPLOYMENT_PROOF_FAILED\t ', reflection: 'failure-code', mutations: 1 });
-    for (const invalid of ['internal\nnewline', 'internal\rcarriage', 'internal\u000bvertical', 'internal\u007fdelete', 'unicode\u0100value'])
-      cases.push({ label: `${binding}:invalid-header-${cases.length}`, binding, raw: invalid, reflection: 'invalid', mutations: 0 });
-    cases.push({ label: `${binding}:rejected-newline-fallback-alias`, binding, raw: `\n${DEMO_TARGET.projectId}\r`, reflection: 'context', mutations: 0, noArtifacts: true });
+    ])
+      for (const reflection of ['mutation', 'reuse', 'previous'])
+        cases.push({
+          label: `${binding}:${label}:${reflection}`,
+          binding,
+          raw: prefix + uuidCredential + suffix,
+          reflection,
+          mutations: reflection === 'mutation' ? 1 : 0,
+        });
+    cases.push({
+      label: `${binding}:context-alias`,
+      binding,
+      raw: ` \t${sha}\t `,
+      reflection: 'context',
+      mutations: 0,
+      noArtifacts: true,
+    });
+    cases.push({
+      label: `${binding}:fallback-target-alias`,
+      binding,
+      raw: ` \t${DEMO_TARGET.projectId}\t `,
+      reflection: 'context',
+      mutations: 0,
+      noArtifacts: true,
+    });
+    cases.push({
+      label: `${binding}:failure-code-alias`,
+      binding,
+      raw: ' DEPLOYMENT_PROOF_FAILED\t ',
+      reflection: 'failure-code',
+      mutations: 1,
+    });
+    for (const invalid of [
+      'internal\nnewline',
+      'internal\rcarriage',
+      'internal\u000bvertical',
+      'internal\u007fdelete',
+      'unicode\u0100value',
+    ])
+      cases.push({
+        label: `${binding}:invalid-header-${cases.length}`,
+        binding,
+        raw: invalid,
+        reflection: 'invalid',
+        mutations: 0,
+      });
+    cases.push({
+      label: `${binding}:rejected-newline-fallback-alias`,
+      binding,
+      raw: `\n${DEMO_TARGET.projectId}\r`,
+      reflection: 'context',
+      mutations: 0,
+      noArtifacts: true,
+    });
   }
   for (const binding of ['RAILWAY_TOKEN', 'GITHUB_TOKEN'])
-    cases.push({ label: `${binding}:immutable-guard-after-environment-mutation`, binding,
-      raw: ` \t${uuidCredential}\t `, reflection: 'snapshot-mutation', mutations: 1 });
-  cases.push({ label: 'immutable-canonical-snapshot-despite-environment-mutation', reflection: 'snapshot', mutations: 1, success: true });
-  for (const scenario of cases) await t.test(scenario.label, async () => {
-    const directory = await mkdtemp(join(tmpdir(), 'demo-http-alias-'));
-    try {
-      const childEnv = { ...exactEnv, RAILWAY_TOKEN: 'synthetic-demo-binding', ...(scenario.binding ? { [scenario.binding]: scenario.raw } : {}) };
-      if (scenario.reflection === 'snapshot') {
-        childEnv.RAILWAY_TOKEN = ` \t${uuidCredential}\t `;
-        childEnv.GITHUB_TOKEN = ' 88888888-2222-4222-8222-666666666666\t';
-      }
-      const aliases = {};
-      for (const binding of ['RAILWAY_TOKEN', 'GITHUB_TOKEN']) {
-        try { aliases[binding] = new Headers({ credential: childEnv[binding] }).get('credential'); }
-        catch { aliases[binding] = null; }
-      }
-      if (scenario.binding && scenario.reflection !== 'invalid') assert.notEqual(aliases[scenario.binding], scenario.raw);
-      const initial = exactTargetData();
-      initial.serviceInstance.activeDeployments[0].meta = { commitHash: reviewedSha };
-      if (['reuse', 'previous'].includes(scenario.reflection)) {
-        initial.serviceInstance.activeDeployments[0].id = aliases[scenario.binding];
-        initial.serviceInstance.latestDeployment.id = aliases[scenario.binding];
-        if (scenario.reflection === 'reuse') initial.serviceInstance.activeDeployments[0].meta.commitHash = sha;
-      }
-      const fixturePath = join(directory, 'fixture.mjs');
-      const counterPath = join(directory, 'counts.json');
-      await writeFile(fixturePath, `
+    cases.push({
+      label: `${binding}:immutable-guard-after-environment-mutation`,
+      binding,
+      raw: ` \t${uuidCredential}\t `,
+      reflection: 'snapshot-mutation',
+      mutations: 1,
+    });
+  cases.push({
+    label: 'immutable-canonical-snapshot-despite-environment-mutation',
+    reflection: 'snapshot',
+    mutations: 1,
+    success: true,
+  });
+  for (const scenario of cases)
+    await t.test(scenario.label, async () => {
+      const directory = await mkdtemp(join(tmpdir(), 'demo-http-alias-'));
+      try {
+        const childEnv = {
+          ...exactEnv,
+          RAILWAY_TOKEN: 'synthetic-demo-binding',
+          ...(scenario.binding ? { [scenario.binding]: scenario.raw } : {}),
+        };
+        if (scenario.reflection === 'snapshot') {
+          childEnv.RAILWAY_TOKEN = ` \t${uuidCredential}\t `;
+          childEnv.GITHUB_TOKEN = ' 88888888-2222-4222-8222-666666666666\t';
+        }
+        const aliases = {};
+        for (const binding of ['RAILWAY_TOKEN', 'GITHUB_TOKEN']) {
+          try {
+            aliases[binding] = new Headers({
+              credential: childEnv[binding],
+            }).get('credential');
+          } catch {
+            aliases[binding] = null;
+          }
+        }
+        if (scenario.binding && scenario.reflection !== 'invalid')
+          assert.notEqual(aliases[scenario.binding], scenario.raw);
+        const initial = exactTargetData();
+        initial.serviceInstance.activeDeployments[0].meta = {
+          commitHash: reviewedSha,
+        };
+        if (['reuse', 'previous'].includes(scenario.reflection)) {
+          initial.serviceInstance.activeDeployments[0].id = aliases[scenario.binding];
+          initial.serviceInstance.latestDeployment.id = aliases[scenario.binding];
+          if (scenario.reflection === 'reuse')
+            initial.serviceInstance.activeDeployments[0].meta.commitHash = sha;
+        }
+        const fixturePath = join(directory, 'fixture.mjs');
+        const counterPath = join(directory, 'counts.json');
+        await writeFile(
+          fixturePath,
+          `
 import assert from 'node:assert/strict';
 import { writeFileSync } from 'node:fs';
 const scenario = ${JSON.stringify(scenario)};
@@ -2513,66 +2664,307 @@ globalThis.fetch = async (url, options) => {
     return new Response(JSON.stringify({errors:[{message:'synthetic private denial'}]}));
   return new Response(JSON.stringify({data:counts.mutations ? native : initial}));
 };
-`);
-      const result = spawnSync(process.execPath, ['--import', fixturePath,
-        fileURLToPath(new URL('../../src/bug-pipeline/demo-deployment.mjs', import.meta.url)), 'deploy-exact'], {
-        cwd: directory, env: childEnv, encoding: 'utf8', timeout: 5000,
-      });
-      assert.equal(result.error, undefined);
-      assert.equal(result.status, scenario.success ? 0 : 1, result.stderr);
-      const counts = JSON.parse(await readFile(counterPath, 'utf8'));
-      assert.equal(counts.mutations, scenario.mutations);
-      if (['context', 'invalid'].includes(scenario.reflection)) assert.equal(counts.requests, 0);
-      if (['mutation', 'snapshot-mutation'].includes(scenario.reflection)) assert.equal(counts.reads, 1, 'forbidden returned alias cannot be polled');
-      const artifacts = (await readdir(directory)).filter((name) => name.startsWith('demo-') && name.endsWith('.json'));
-      const output = [result.stdout, result.stderr, ...await Promise.all(artifacts.map((name) => readFile(join(directory, name), 'utf8')))];
-      for (const secret of [...Object.values(aliases), childEnv.RAILWAY_TOKEN, childEnv.GITHUB_TOKEN].filter(Boolean)) for (const text of output) {
-        assert.equal(text.includes(secret), false, 'raw or effective HTTP credential must not be emitted');
-        assert.equal(text.includes(JSON.stringify(secret).slice(1, -1)), false, 'escaped raw or effective HTTP credential must not be emitted');
+`,
+        );
+        const result = spawnSync(
+          process.execPath,
+          [
+            '--import',
+            fixturePath,
+            fileURLToPath(new URL('../../src/bug-pipeline/demo-deployment.mjs', import.meta.url)),
+            'deploy-exact',
+          ],
+          {
+            cwd: directory,
+            env: childEnv,
+            encoding: 'utf8',
+            timeout: 5000,
+          },
+        );
+        assert.equal(result.error, undefined);
+        assert.equal(result.status, scenario.success ? 0 : 1, result.stderr);
+        const counts = JSON.parse(await readFile(counterPath, 'utf8'));
+        assert.equal(counts.mutations, scenario.mutations);
+        if (['context', 'invalid'].includes(scenario.reflection)) assert.equal(counts.requests, 0);
+        if (['mutation', 'snapshot-mutation'].includes(scenario.reflection))
+          assert.equal(counts.reads, 1, 'forbidden returned alias cannot be polled');
+        const artifacts = (await readdir(directory)).filter(
+          (name) => name.startsWith('demo-') && name.endsWith('.json'),
+        );
+        const output = [
+          result.stdout,
+          result.stderr,
+          ...(await Promise.all(artifacts.map((name) => readFile(join(directory, name), 'utf8')))),
+        ];
+        for (const secret of [
+          ...Object.values(aliases),
+          childEnv.RAILWAY_TOKEN,
+          childEnv.GITHUB_TOKEN,
+        ].filter(Boolean))
+          for (const text of output) {
+            assert.equal(
+              text.includes(secret),
+              false,
+              'raw or effective HTTP credential must not be emitted',
+            );
+            assert.equal(
+              text.includes(JSON.stringify(secret).slice(1, -1)),
+              false,
+              'escaped raw or effective HTTP credential must not be emitted',
+            );
+          }
+        assert.equal(artifacts.includes('demo-deployment-receipt.json'), Boolean(scenario.success));
+        if (scenario.noArtifacts)
+          assert.equal(
+            artifacts.length,
+            0,
+            'fallback cannot restore an effective credential alias',
+          );
+        else {
+          const progress = JSON.parse(
+            await readFile(join(directory, 'demo-deployment-progress.json'), 'utf8'),
+          );
+          assert.equal(
+            progress.status,
+            scenario.success
+              ? 'verified'
+              : scenario.reflection === 'failure-code'
+                ? 'submitted'
+                : 'failed',
+          );
+          if (!scenario.success && scenario.reflection !== 'failure-code')
+            assert.equal(progress.deploymentId, null);
+        }
+        if (scenario.success) {
+          const receipt = JSON.parse(
+            await readFile(join(directory, 'demo-deployment-receipt.json'), 'utf8'),
+          );
+          validateReceipt(receipt, exactRun, 'clinicos-demo-backend', Date.now(), exactPolicy);
+          assert.equal(counts.main, 3);
+        }
+      } finally {
+        await rm(directory, { recursive: true, force: true });
       }
-      assert.equal(artifacts.includes('demo-deployment-receipt.json'), Boolean(scenario.success));
-      if (scenario.noArtifacts) assert.equal(artifacts.length, 0, 'fallback cannot restore an effective credential alias');
-      else {
-        const progress = JSON.parse(await readFile(join(directory, 'demo-deployment-progress.json'), 'utf8'));
-        assert.equal(progress.status, scenario.success ? 'verified' : scenario.reflection === 'failure-code' ? 'submitted' : 'failed');
-        if (!scenario.success && scenario.reflection !== 'failure-code') assert.equal(progress.deploymentId, null);
-      }
-      if (scenario.success) {
-        const receipt = JSON.parse(await readFile(join(directory, 'demo-deployment-receipt.json'), 'utf8'));
-        validateReceipt(receipt, exactRun, 'clinicos-demo-backend', Date.now(), exactPolicy);
-        assert.equal(counts.main, 3);
-      }
-    } finally { await rm(directory, { recursive: true, force: true }); }
-  });
+    });
 });
 
 test('standalone Railway transport canonicalizes HTTP whitespace and rejects invalid headers with constant errors', async () => {
   let calls = 0;
-  const client = createRailwayClient({ token: ' \tsynthetic-canonical-binding\t ', fetchImpl: async (url, options) => {
-    calls++;
-    assert.equal(new Request(url, options).headers.get('Project-Access-Token'), 'synthetic-canonical-binding');
-    assert.equal(options.headers['Project-Access-Token'], 'synthetic-canonical-binding');
-    return response({ data: { safe: true } });
-  } });
+  const client = createRailwayClient({
+    token: ' \tsynthetic-canonical-binding\t ',
+    fetchImpl: async (url, options) => {
+      calls++;
+      assert.equal(
+        new Request(url, options).headers.get('Project-Access-Token'),
+        'synthetic-canonical-binding',
+      );
+      assert.equal(options.headers['Project-Access-Token'], 'synthetic-canonical-binding');
+      return response({ data: { safe: true } });
+    },
+  });
   assert.deepEqual(await client('query{safe}', {}), { safe: true });
   assert.equal(calls, 1);
-  assert.throws(() => createRailwayClient({ token: 'synthetic\ninvalid' }), /valid HTTP credential bindings required/);
+  assert.throws(
+    () => createRailwayClient({ token: 'synthetic\ninvalid' }),
+    /valid HTTP credential bindings required/,
+  );
 });
 
 test('HTTP control and non-ByteString bindings fail before callbacks or transport for either credential', async () => {
   for (const binding of ['RAILWAY_TOKEN', 'GITHUB_TOKEN']) {
-    for (const raw of ['synthetic\u0000nul', 'synthetic\u0001control', 'synthetic\u000bvertical', 'synthetic\u007fdelete', '\nsynthetic\r', 'synthetic\u0100unicode']) {
+    for (const raw of [
+      'synthetic\u0000nul',
+      'synthetic\u0001control',
+      'synthetic\u000bvertical',
+      'synthetic\u007fdelete',
+      '\nsynthetic\r',
+      'synthetic\u0100unicode',
+    ]) {
       let calls = 0;
-      const unexpected = async () => { calls++; throw new Error('must fail before external work'); };
-      await assert.rejects(deployDemo({
-        env: { ...exactEnv, RAILWAY_TOKEN: 'synthetic-demo-binding', [binding]: raw },
-        sourcePolicy: exactPolicy, client: unexpected, fetchImpl: unexpected, onProgress: unexpected,
-      }), /valid HTTP credential bindings required/);
-      await assert.rejects(prepareDemo({
-        env: { ...exactEnv, RAILWAY_TOKEN: 'synthetic-demo-binding', [binding]: raw },
-        sourcePolicy: exactPolicy, client: unexpected, fetchImpl: unexpected,
-      }), /valid HTTP credential bindings required/);
+      const unexpected = async () => {
+        calls++;
+        throw new Error('must fail before external work');
+      };
+      await assert.rejects(
+        deployDemo({
+          env: {
+            ...exactEnv,
+            RAILWAY_TOKEN: 'synthetic-demo-binding',
+            [binding]: raw,
+          },
+          sourcePolicy: exactPolicy,
+          client: unexpected,
+          fetchImpl: unexpected,
+          onProgress: unexpected,
+        }),
+        /valid HTTP credential bindings required/,
+      );
+      await assert.rejects(
+        prepareDemo({
+          env: {
+            ...exactEnv,
+            RAILWAY_TOKEN: 'synthetic-demo-binding',
+            [binding]: raw,
+          },
+          sourcePolicy: exactPolicy,
+          client: unexpected,
+          fetchImpl: unexpected,
+        }),
+        /valid HTTP credential bindings required/,
+      );
       assert.equal(calls, 0);
     }
+  }
+});
+
+test('production proof authenticates exact successful main deploy job independently from demo', async (t) => {
+  const { verifyProductionBackend } = await import('../../src/bug-pipeline/demo-deployment.mjs');
+  const sha = 'a'.repeat(40);
+  function fixture() {
+    const run = {
+      id: 71,
+      run_attempt: 1,
+      head_sha: sha,
+      head_branch: 'main',
+      repository: { full_name: 'l2v-hub/ClinicOS' },
+      head_repository: { full_name: 'l2v-hub/ClinicOS' },
+      path: '.github/workflows/deploy-backend.yml',
+      event: 'push',
+      status: 'completed',
+      conclusion: 'success',
+    };
+    const job = {
+      id: 81,
+      run_id: 71,
+      run_attempt: 1,
+      head_sha: sha,
+      name: 'deploy',
+      status: 'completed',
+      conclusion: 'success',
+      steps: [
+        {
+          name: 'Deploy to Railway',
+          status: 'completed',
+          conclusion: 'success',
+        },
+      ],
+    };
+    const reader = {
+      getJson: async (route) =>
+        route.includes('/jobs?')
+          ? { total_count: 1, jobs: [job] }
+          : route === 'actions/runs/71'
+            ? run
+            : { total_count: 1, workflow_runs: [run] },
+    };
+    return { run, job, reader };
+  }
+  for (const event of ['push', 'workflow_dispatch'])
+    await t.test(event, async () => {
+      const f = fixture();
+      f.run.event = event;
+      const proof = await verifyProductionBackend({
+        reader: f.reader,
+        deploymentSha: sha,
+      });
+      assert.equal(proof.sha, sha);
+      assert.equal(proof.jobId, 81);
+      assert.match(proof.proofSha256, /^[a-f0-9]{64}$/);
+    });
+  const bad = [
+    ['wrong SHA', (f) => (f.run.head_sha = 'b'.repeat(40))],
+    ['wrong workflow', (f) => (f.run.path = '.github/workflows/deploy-demo-exact-commit.yml')],
+    ['wrong event', (f) => (f.run.event = 'pull_request')],
+    ['rerun', (f) => (f.run.run_attempt = 2)],
+    ['cross repo', (f) => (f.run.head_repository.full_name = 'evil/repo')],
+    ['wrong ref', (f) => (f.run.head_branch = 'feature')],
+    ['failed', (f) => (f.run.conclusion = 'failure')],
+    ['skipped production', (f) => (f.job.conclusion = 'skipped')],
+    ['wrong job', (f) => (f.job.name = 'preflight')],
+    ['job rerun', (f) => (f.job.run_attempt = 2)],
+    ['job other run', (f) => (f.job.run_id = 72)],
+    ['job wrong SHA', (f) => (f.job.head_sha = 'b'.repeat(40))],
+    ['step skipped', (f) => (f.job.steps[0].conclusion = 'skipped')],
+  ];
+  for (const [name, change] of bad)
+    await t.test(name, async () => {
+      const f = fixture();
+      change(f);
+      await assert.rejects(
+        verifyProductionBackend({
+          reader: f.reader,
+          deploymentSha: sha,
+          runUrl: 'https://github.com/l2v-hub/ClinicOS/actions/runs/71',
+        }),
+        /PRODUCTION_PROOF_FAILED/,
+      );
+    });
+  await t.test('missing run never dispatches', async () => {
+    const reader = {
+      getJson: async () => ({ total_count: 0, workflow_runs: [] }),
+    };
+    await assert.rejects(
+      verifyProductionBackend({ reader, deploymentSha: sha }),
+      /PRODUCTION_RUN_REQUIRED/,
+    );
+  });
+  await t.test('identity changed on final read', async () => {
+    const f = fixture();
+    let reads = 0;
+    const read = f.reader.getJson;
+    f.reader.getJson = async (route) => {
+      if (route === 'actions/runs/71' && ++reads === 2) f.run.run_attempt = 2;
+      return read(route);
+    };
+    await assert.rejects(
+      verifyProductionBackend({ reader: f.reader, deploymentSha: sha }),
+      /PRODUCTION_PROOF_FAILED/,
+    );
+  });
+});
+
+test('newer failed, pending or rerun production run prevents selecting an older successful same-SHA run', async () => {
+  const { verifyProductionBackend } = await import('../../src/bug-pipeline/demo-deployment.mjs');
+  const sha = 'a'.repeat(40);
+  const run = {
+    id: 71,
+    run_attempt: 1,
+    head_sha: sha,
+    head_branch: 'main',
+    repository: { full_name: 'l2v-hub/ClinicOS' },
+    head_repository: { full_name: 'l2v-hub/ClinicOS' },
+    path: '.github/workflows/deploy-backend.yml',
+    event: 'push',
+    status: 'completed',
+    conclusion: 'success',
+  };
+  for (const patch of [
+    { status: 'queued', conclusion: null },
+    { conclusion: 'failure' },
+    { run_attempt: 2 },
+  ]) {
+    const newest = { ...run, id: 72, ...patch };
+    let requests = 0;
+    const reader = {
+      getJson: async (route) => {
+        requests++;
+        if (route.includes('/runs?')) return { total_count: 2, workflow_runs: [run, newest] };
+        if (route === 'actions/runs/72') return newest;
+        throw Error('older successful run must not be consulted');
+      },
+    };
+    await assert.rejects(
+      verifyProductionBackend({ reader, deploymentSha: sha }),
+      /PRODUCTION_PROOF_FAILED/,
+    );
+    await assert.rejects(
+      verifyProductionBackend({
+        reader,
+        deploymentSha: sha,
+        runUrl: 'https://github.com/l2v-hub/ClinicOS/actions/runs/71',
+      }),
+      /PRODUCTION_PROOF_FAILED/,
+    );
+    assert.ok(requests > 0);
   }
 });
