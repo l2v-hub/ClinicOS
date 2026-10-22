@@ -1,0 +1,72 @@
+{
+  "parentEntityId": "maintenance-470",
+  "parentIssues": [
+    470
+  ],
+  "parentSourceShaPreserved": "92931e60fee3a6bd9f9333e3cc82b3e9a26e1730",
+  "parentActualCanonical": "e2595ba418f1234823fabed25bff557e2be37996",
+  "parentEntityDigestAtReservation": "9682b8d6a550ba0fb3690d76c94b37e50b25ed7ebe078aad646ebf07842675be",
+  "parentBudgetNeverReset": true,
+  "implementationRound": 8,
+  "implementationNonce": "b90f75b0-029a-4d44-818d-9a856410864e",
+  "authorRefinementNonce": "81599d71-f483-46bd-8605-8ab3cf897677",
+  "independentQaNonce": "92d9a146-aa3a-43ad-b24c-02e8f2558ffe",
+  "priorRounds": [
+    {
+      "round": 1,
+      "status": "failed",
+      "subjectSha": null,
+      "evidence": null,
+      "recordDigest": "03b0a86c9356ff4e18c137066d6fda311893fc46cebf14c222fae934bc272cc4"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "subjectSha": null,
+      "evidence": null,
+      "recordDigest": "558a37dce9f8fc417450b997c0f65e849123c351097f019cc0a7f224688f6a97"
+    },
+    {
+      "round": 3,
+      "status": "failed",
+      "subjectSha": null,
+      "evidence": null,
+      "recordDigest": "3c3b75a2316dd9542555a98f0d027822fadb7cb215ff0c80e3474a117cee31c1"
+    },
+    {
+      "round": 4,
+      "status": "failed",
+      "subjectSha": null,
+      "evidence": null,
+      "recordDigest": "902c26af189a9e557d9740c48c16eb9b7061fa91b0bae419af48d38ec001b23d"
+    },
+    {
+      "round": 5,
+      "status": "failed",
+      "subjectSha": "ce7da2f7f5f3f149e4a5a16046843f067252e807",
+      "evidence": "artifacts/task-validation/maintenance-470/codex-followup-1/independent-qa/validation-report.md",
+      "recordDigest": "d9144cec32ca6ebbf01ba3cafd00f58568e491659889bfd2e5416192b87a4253"
+    },
+    {
+      "round": 6,
+      "status": "passed",
+      "subjectSha": "a9377cf2f2e66e42de246a604ce902496e4358da",
+      "evidence": "artifacts/task-validation/maintenance-470/codex-followup-2/independent-qa/validation-report.md",
+      "recordDigest": "7604d09171d10699fc49f4b7fcc15b93f21a8e860916e7f8bfee90c9c9a05af2"
+    },
+    {
+      "round": 7,
+      "status": "passed",
+      "subjectSha": "fd656682d124f0d4c15944580cf4327eb5c57383",
+      "evidence": "artifacts/task-validation/maintenance-470/codex-followup-3/independent-qa7/qa-report.md",
+      "recordDigest": "8b77ddbd01b93f160bde1918b1f617faadba2d66a736b672be9f0bbe2db00663"
+    }
+  ],
+  "currentParent8SourceCommit": "8872007729f75f678cc6b649c9b526c7ee2cc81f",
+  "childScope": "Only publication/review/merge of five new read-only enabling files. Child issues[] prevents duplicate maintenance470ownership. This initial publication verification does not reset parent8 or repeatSQLcleanup.",
+  "runtimeNotRun": true,
+  "cleanupAlreadyVerifiedRun": 39020438022,
+  "lastFailedReadOnlyRun": 39640686826,
+  "lastFailureCause": "TOKEN_IDENTITY:READONLY_GRAPHQL_REJECTED; underlying cause unknown",
+  "actualProviderCallsThisChange": 0
+}

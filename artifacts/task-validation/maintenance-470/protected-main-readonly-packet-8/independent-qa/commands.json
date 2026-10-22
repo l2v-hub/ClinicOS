@@ -1,0 +1,62 @@
+[
+  {
+    "name": "contract",
+    "argv": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "scripts/quality-gate/validate-task-contract.js",
+      "/tmp/clinicos470-protected-inventory8-20261022/independent-qa"
+    ],
+    "cwd": "/tmp/clinicos470-protected-inventory8-independent",
+    "envKeys": [
+      "PATH",
+      "TMPDIR"
+    ],
+    "status": 1,
+    "durationMs": 55
+  },
+  {
+    "name": "contract-amended",
+    "argv": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "scripts/quality-gate/validate-task-contract.js",
+      "/tmp/clinicos470-protected-inventory8-20261022/independent-qa"
+    ],
+    "cwd": "/tmp/clinicos470-protected-inventory8-independent",
+    "envKeys": [
+      "PATH",
+      "TMPDIR"
+    ],
+    "status": 0,
+    "durationMs": 50
+  },
+  {
+    "name": "focused",
+    "argv": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--test",
+      "scripts/maintenance/demo-storage-inspect.test.mjs",
+      "scripts/maintenance/demo-storage-workflow.test.mjs"
+    ],
+    "cwd": "/tmp/clinicos470-protected-inventory8-independent",
+    "envKeys": [
+      "PATH",
+      "TMPDIR"
+    ],
+    "status": 0,
+    "durationMs": 734
+  },
+  {
+    "name": "independent-probes",
+    "argv": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "/tmp/clinicos470-independent8/probes.mjs"
+    ],
+    "cwd": "/tmp/clinicos470-protected-inventory8-independent",
+    "envKeys": [
+      "PATH",
+      "TMPDIR"
+    ],
+    "status": 0,
+    "durationMs": 159
+  }
+]

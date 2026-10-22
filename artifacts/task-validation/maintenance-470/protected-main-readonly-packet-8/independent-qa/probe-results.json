@@ -1,0 +1,122 @@
+{
+  "status": "PASS",
+  "scope": "Independent functional probes of unchanged helper with wholly synthetic provider/CLI/clock",
+  "results": [
+    {
+      "name": "project-token explicit successful read-only nonzero backups",
+      "status": "PASS"
+    },
+    {
+      "name": "account-bearer explicit successful read-only nonzero backups",
+      "status": "PASS"
+    },
+    {
+      "name": "context refuses GITHUB_ACTOR",
+      "status": "PASS"
+    },
+    {
+      "name": "context refuses GITHUB_TRIGGERING_ACTOR",
+      "status": "PASS"
+    },
+    {
+      "name": "context refuses GITHUB_REF",
+      "status": "PASS"
+    },
+    {
+      "name": "context refuses GITHUB_WORKFLOW_SHA",
+      "status": "PASS"
+    },
+    {
+      "name": "context refuses DEMO_STORAGE_ENVIRONMENT",
+      "status": "PASS"
+    },
+    {
+      "name": "context refuses DEMO_STORAGE_REVIEWED_SHA",
+      "status": "PASS"
+    },
+    {
+      "name": "context refuses DEMO_STORAGE_AUTH_MODE",
+      "status": "PASS"
+    },
+    {
+      "name": "context refuses GITHUB_REPOSITORY",
+      "status": "PASS"
+    },
+    {
+      "name": "dual credential mode refuses without access",
+      "status": "PASS"
+    },
+    {
+      "name": "account canAccess exact boolean false",
+      "status": "PASS"
+    },
+    {
+      "name": "account canAccess exact boolean true",
+      "status": "PASS"
+    },
+    {
+      "name": "account canAccess exact boolean null",
+      "status": "PASS"
+    },
+    {
+      "name": "account403 no fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "GraphQL errors never trusted",
+      "status": "PASS"
+    },
+    {
+      "name": "oversized API cap",
+      "status": "PASS"
+    },
+    {
+      "name": "deadline after first body",
+      "status": "PASS"
+    },
+    {
+      "name": "network error redaction",
+      "status": "PASS"
+    },
+    {
+      "name": "CLI error redaction",
+      "status": "PASS"
+    },
+    {
+      "name": "private DB credential mismatch",
+      "status": "PASS"
+    },
+    {
+      "name": "PGDATA prefix confusion",
+      "status": "PASS"
+    },
+    {
+      "name": "mount traversal",
+      "status": "PASS"
+    },
+    {
+      "name": "volume pagination incomplete",
+      "status": "PASS"
+    },
+    {
+      "name": "head drift before provider",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown detached volume remains unknown and snapshots unobserved",
+      "status": "PASS"
+    },
+    {
+      "name": "binding drift after snapshots blocks without clean claim",
+      "status": "PASS"
+    },
+    {
+      "name": "snapshot deletion drift blocks descriptive proof",
+      "status": "PASS"
+    },
+    {
+      "name": "capability denies mutation command and arbitrary query without transport",
+      "status": "PASS"
+    }
+  ]
+}

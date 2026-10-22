@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "findings": [],
+  "independence": "Reviewer did not author maintenance470 implementation8; earlier498 authorship is outside this task",
+  "focused": {
+    "tests": 152,
+    "pass": 152,
+    "fail": 0,
+    "skipped": 0,
+    "runs": 1
+  },
+  "independentFunctionalProbes": {
+    "tests": 29,
+    "pass": 29,
+    "fail": 0
+  },
+  "contractValidator": "PASS after root administrative amendment",
+  "preservedFailures": [
+    {
+      "name": "initial contract Gate literal rejected",
+      "productFailure": false,
+      "log": "contract.log",
+      "amendment": "contract-amendment.json"
+    },
+    {
+      "name": "actual Linux receipt shell synthetic exit17",
+      "expected": true,
+      "testOutcome": "PASS",
+      "log": "focused.log"
+    }
+  ],
+  "staticChecks": "PASS YAML/bash/import/identity/artifact",
+  "sourceIntegrity": "PASS270unchanged,5newpaths",
+  "nodeVersion": "v22.23.4",
+  "nodeBinarySha256": "94efd062ed066c1a0b332e18249859c905e920eeada5df55d24c99b919629a90",
+  "actualProviderCalls": 0,
+  "actualDatabaseCalls": 0,
+  "sourceEdits": 0,
+  "limitations": [
+    "Synthetic tests do not establish current credential/provider/schema access",
+    "No current production/site-clean, cleanup, deployment, closure or approval claim",
+    "Root remains sole live writer"
+  ]
+}

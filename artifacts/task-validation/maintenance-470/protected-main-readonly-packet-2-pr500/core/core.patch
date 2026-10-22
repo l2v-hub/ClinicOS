@@ -1,0 +1,266 @@
+--- a/.github/workflows/inspect-demo-storage.yml
++++ b/.github/workflows/inspect-demo-storage.yml
+@@ -62,7 +62,17 @@
+           node-version: 22
+       - name: Install fixed read-only CLI without credentials
+         timeout-minutes: 1
+-        run: npm install -g @railway/cli@5.66.0
++        shell: bash
++        run: |
++          set -euo pipefail
++          executable="$(node --input-type=module -e "import { verifiedRailwayPath } from './scripts/maintenance/demo-storage-inspect.mjs'; process.stdout.write(verifiedRailwayPath(process.env.RUNNER_TEMP))")"
++          archive="$RUNNER_TEMP/clinicos-railway-5.66.0.tar.gz"
++          curl --fail --location --silent --show-error 'https://github.com/railwayapp/cli/releases/download/v5.66.0/railway-v5.66.0-x86_64-unknown-linux-gnu.tar.gz' --output "$archive"
++          printf '%s  %s\n' '5b3f4e77ddf986161fb760842d718b23ab587a59f9badf610c1fb7b80bcbcb3e' "$archive" | sha256sum --check --status
++          mkdir -p "$(dirname "$executable")"
++          tar -xzf "$archive" -C "$(dirname "$executable")" railway
++          test -x "$executable"
++          "$executable" --version | grep -Eq '^railway 5\.66\.0$'
+       - name: Inspect only fixed demo binding and descriptive snapshot counts
+         env:
+           RAILWAY_TOKEN: ${{ inputs.auth_mode == 'project-token' && secrets.RAILWAY_DEMO_TOKEN || '' }}
+--- a/scripts/maintenance/demo-storage-inspect.mjs
++++ b/scripts/maintenance/demo-storage-inspect.mjs
+@@ -2,6 +2,7 @@
+ import { spawnSync } from 'node:child_process';
+ import { performance } from 'node:perf_hooks';
+ import { pathToFileURL } from 'node:url';
++import { posix } from 'node:path';
+ import { TARGET, inspectStorageBinding, verifyDatabaseMount } from './demo-storage-binding-readonly.mjs';
+ 
+ export const BRANCH = 'main';
+@@ -66,6 +67,16 @@
+   constructor(code) { super(code); this.code = code; }
+ }
+ const requireRead = (condition, code) => { if (!condition) throw new ReadError(code); };
++
++// Both the credential-free installer and the transport derive this exact binary.
++export function verifiedRailwayPath(runtimeTemp) {
++  requireRead(typeof runtimeTemp === 'string' && /^\/[A-Za-z0-9_./-]+$/.test(runtimeTemp) &&
++    runtimeTemp !== '/' && !runtimeTemp.endsWith('/') && posix.normalize(runtimeTemp) === runtimeTemp &&
++    !runtimeTemp.split('/').some((part) => part === '.' || part === '..'),
++  'READONLY_RUNTIME_TEMP_INVALID');
++  return `${runtimeTemp}/clinicos-railway-5.66.0/railway`;
++}
++
+ const freeze = (v) => {
+   if (v && typeof v === 'object') {
+     for (const child of Object.values(v)) freeze(child);
+@@ -92,7 +103,8 @@
+   requireRead(validToken(credential) && !inactive && validToken(env.GITHUB_TOKEN), 'READONLY_BINDING_MISSING');
+   const context = freeze({ repository: REPOSITORY, branch: BRANCH, reviewedSha: env.GITHUB_SHA,
+     runId: env.GITHUB_RUN_ID, runAttempt: env.GITHUB_RUN_ATTEMPT, authMode: env.DEMO_STORAGE_AUTH_MODE,
+-    workflowRef: WORKFLOW_REF, protectedEnvironment: PROTECTED_ENVIRONMENT });
++    workflowRef: WORKFLOW_REF, protectedEnvironment: PROTECTED_ENVIRONMENT,
++    cliPath: verifiedRailwayPath(env.RUNNER_TEMP) });
+   contexts.add(context);
+   return context;
+ }
+@@ -128,7 +140,8 @@
+   now = () => performance.now() }) {
+   validateContext(env);
+   requireRead(contexts.has(context) && context.reviewedSha === env.GITHUB_SHA &&
+-    context.authMode === env.DEMO_STORAGE_AUTH_MODE,
++    context.authMode === env.DEMO_STORAGE_AUTH_MODE &&
++    context.cliPath === verifiedRailwayPath(env.RUNNER_TEMP),
+     'READONLY_CONTEXT_REQUIRED');
+   const deadline = now() + 8 * 60 * 1000;
+   const state = { phase: 'CONTEXT', cliReads: 0, nativeReads: 0, githubReads: 0,
+@@ -274,19 +287,21 @@
+   const call = (args, options = {}) => {
+     requireRead(Array.isArray(args) && options.json === true &&
+       Object.keys(options).every((key) => key === 'json'), 'READONLY_COMMAND_REJECTED');
++    const variableArgs = (serviceId, identity = false) => context.authMode === 'account-bearer'
++      ? ['variables', '--service', serviceId, '--project', TARGET.projectId,
++        '--environment', TARGET.environmentId, '--json']
++      : identity ? ['variables', '--service', serviceId, '--json']
++        : ['variables', '--service', serviceId, '--environment', TARGET.environmentId, '--json'];
+     let phase;
+-    if (step === 2 && equal(args, ['variables', '--service', TARGET.backendServiceId, '--json']))
++    if (step === 2 && equal(args, variableArgs(TARGET.backendServiceId, true)))
+       phase = 'BACKEND_IDENTITY';
+-    else if (step === 4 && equal(args, ['variables', '--service', TARGET.backendServiceId,
+-      '--environment', TARGET.environmentId, '--json'])) phase = 'BACKEND_CONFIG';
++    else if (step === 4 && equal(args, variableArgs(TARGET.backendServiceId))) phase = 'BACKEND_CONFIG';
+     else if (step === 5 && equal(args, ['service', 'list', '--project', TARGET.projectId,
+       '--environment', TARGET.environmentId, '--json'])) phase = 'SERVICE_CATALOG';
+-    else if (step === 6 && candidateIndex < databaseCandidates.length && equal(args,
+-      ['variables', '--service', databaseCandidates[candidateIndex], '--environment', TARGET.environmentId,
+-        '--json'])) phase = 'DATABASE_CONFIG';
+-    else if (step === 7 && runtimeId && !state.bindingVerified && equal(args,
+-      ['variables', '--service', runtimeId, '--environment', TARGET.environmentId, '--json']))
+-      phase = 'RUNTIME_CONFIG';
++    else if (step === 6 && candidateIndex < databaseCandidates.length &&
++      equal(args, variableArgs(databaseCandidates[candidateIndex]))) phase = 'DATABASE_CONFIG';
++    else if (step === 7 && runtimeId && !state.bindingVerified &&
++      equal(args, variableArgs(runtimeId))) phase = 'RUNTIME_CONFIG';
+     requireRead(Boolean(phase), 'READONLY_COMMAND_REJECTED');
+     start(phase, 'cliReads');
+     const childEnv = { [context.authMode === 'project-token' ? 'RAILWAY_TOKEN' : 'RAILWAY_API_TOKEN']:
+@@ -296,7 +311,7 @@
+       if (typeof env[key] === 'string') childEnv[key] = env[key];
+     }
+     let result;
+-    try { result = spawnImpl('railway', args, { shell: false, encoding: 'utf8',
++    try { result = spawnImpl(context.cliPath, args, { shell: false, encoding: 'utf8',
+       stdio: ['ignore', 'pipe', 'pipe'], timeout: budget(), maxBuffer: MAX_BYTES, env: childEnv }); }
+     catch (error) {
+       throw new ReadError(error?.code === 'ETIMEDOUT' ? 'READONLY_CLI_TIMEOUT' : 'READONLY_CLI_SPAWN_FAILED');
+@@ -338,6 +353,20 @@
+     } else if (phase === 'DATABASE_CONFIG') candidateIndex++;
+     else if (phase === 'RUNTIME_CONFIG') { runtimeId = undefined; runtimeRead = true; }
+     return data;
++  };
++  // Only the trusted pure binding module receives this adapter. Public call()
++  // always requires the explicit account project/environment argv above.
++  const bindingCall = (args, options) => {
++    if (context.authMode !== 'account-bearer' || args?.[0] !== 'variables')
++      return call(args, options);
++    const serviceId = step === 2 || step === 4 ? TARGET.backendServiceId
++      : step === 6 ? databaseCandidates[candidateIndex]
++        : step === 7 && !state.bindingVerified ? runtimeId : undefined;
++    const original = step === 2 ? ['variables', '--service', serviceId, '--json']
++      : ['variables', '--service', serviceId, '--environment', TARGET.environmentId, '--json'];
++    requireRead(Boolean(serviceId) && equal(args, original), 'READONLY_COMMAND_REJECTED');
++    return call(['variables', '--service', serviceId, '--project', TARGET.projectId,
++      '--environment', TARGET.environmentId, '--json'], options);
+   };
+   const classifyUnclassifiedVolumes = () => {
+     requireRead(step === 7 && candidateIndex === databaseCandidates.length &&
+@@ -434,7 +463,7 @@
+   };
+   const inspectBinding = async () => {
+     if (classificationPass === 1) {
+-      try { await inspectStorageBinding(call, native); }
++      try { await inspectStorageBinding(bindingCall, native); }
+       catch (error) {
+         requireRead(error?.message === 'UNCLASSIFIED_DEMO_VOLUMES' && state.phase === 'ENVIRONMENT_METADATA' &&
+           step === 7, 'READONLY_CLASSIFICATION_RECHECK_FAILED');
+@@ -450,7 +479,7 @@
+       runtimeRead = false; privateReads = {}; privateValues = {}; state.bindingVerified = false;
+     }
+     let binding;
+-    try { binding = await inspectStorageBinding(call, native); }
++    try { binding = await inspectStorageBinding(bindingCall, native); }
+     catch (error) {
+       if (bindingPass !== 0 || error?.message !== 'UNCLASSIFIED_DEMO_VOLUMES' ||
+         state.phase !== 'ENVIRONMENT_METADATA' || step !== 7) throw error;
+--- a/scripts/maintenance/demo-storage-inspect.test.mjs
++++ b/scripts/maintenance/demo-storage-inspect.test.mjs
+@@ -5,7 +5,7 @@
+ import { spawnSync } from 'node:child_process';
+ import { fileURLToPath } from 'node:url';
+ import { TARGET } from './demo-storage-binding-readonly.mjs';
+-import { BRANCH, REPOSITORY, WORKFLOW_REF, PROTECTED_ENVIRONMENT, ENDPOINT, HEAD_ENDPOINT, QUERIES, validateContext,
++import { BRANCH, REPOSITORY, WORKFLOW_REF, PROTECTED_ENVIRONMENT, ENDPOINT, HEAD_ENDPOINT, QUERIES, verifiedRailwayPath, validateContext,
+   createReadOnlyAccess, inspectDemoStorage, serializeReceipt, main } from './demo-storage-inspect.mjs';
+ 
+ const IDS = Object.freeze({ db: '50000000-0000-4000-8000-000000000472',
+@@ -22,7 +22,7 @@
+   DEMO_STORAGE_ENVIRONMENT: PROTECTED_ENVIRONMENT, DEMO_STORAGE_AUTH_MODE: 'project-token',
+   GITHUB_REF: `refs/heads/${BRANCH}`, GITHUB_REF_NAME: BRANCH, GITHUB_SHA: 'a'.repeat(40),
+   DEMO_STORAGE_REVIEWED_SHA: 'a'.repeat(40), DEMO_STORAGE_OPERATION: 'demo-storage-inspect',
+-  GITHUB_RUN_ID: '39020438022', GITHUB_RUN_ATTEMPT: '1', RAILWAY_TOKEN: TOKEN, GITHUB_TOKEN: GH_TOKEN });
++  RUNNER_TEMP: '/tmp/clinicos500-fixture-runtime', GITHUB_RUN_ID: '39020438022', GITHUB_RUN_ATTEMPT: '1', RAILWAY_TOKEN: TOKEN, GITHUB_TOKEN: GH_TOKEN });
+ const STAMP = '2026-10-18T20:30:00.000Z';
+ const json = (value, status = 200) => new Response(JSON.stringify(value), { status });
+ const clone = (v) => structuredClone(v);
+@@ -118,7 +118,7 @@
+   assert.equal(receipt.observations.volumeCount, 1);
+   assert.equal(receipt.observations.backendInstances.running, 1);
+   for (const call of f.calls) {
+-    assert.equal(call.binary, 'railway');
++    assert.equal(call.binary, verifiedRailwayPath(ENV.RUNNER_TEMP));
+     assert.equal(call.options.shell, false);
+     assert.deepEqual(call.options.stdio, ['ignore', 'pipe', 'pipe']);
+     assert.ok(call.options.timeout <= 30000 && call.options.timeout > 0);
+@@ -650,7 +650,7 @@
+  const f=fixture();const receipt=await run(f,{env:ACCOUNT_ENV});assert.equal(receipt.outcome,'inspected');
+  assert.equal(receipt.credentialKind,'account-bearer');assert.equal(receipt.projectTokenVerified,false);assert.equal(receipt.targetReadAccess,true);assert.equal(receipt.bindingVerified,true);
+  assert.deepEqual(receipt.readRequests,{cli:10,native:8,github:2});assert(!safe(receipt).includes('synthetic-user-never-publish'));
+- for(const c of f.calls){assert.equal(c.options.env.RAILWAY_API_TOKEN,TOKEN);assert.equal(c.options.env.RAILWAY_TOKEN,undefined);assert.equal(c.options.env.GITHUB_TOKEN,undefined);}
++ for(const c of f.calls){assert.equal(c.binary,verifiedRailwayPath(ACCOUNT_ENV.RUNNER_TEMP));assert.equal(c.args[c.args.indexOf('--project')+1],TARGET.projectId);assert.equal(c.args[c.args.indexOf('--environment')+1],TARGET.environmentId);assert(c.args.includes('--project')&&c.args.includes('--environment'));assert.equal(c.options.env.RAILWAY_API_TOKEN,TOKEN);assert.equal(c.options.env.RAILWAY_TOKEN,undefined);assert.equal(c.options.env.GITHUB_TOKEN,undefined);}
+  for(const r of f.requests.filter(r=>r.url===ENDPOINT)){assert.equal(r.options.headers.Authorization,`Bearer ${TOKEN}`);assert.equal(r.options.headers['Project-Access-Token'],undefined);assert.notEqual(JSON.parse(r.options.body).query,QUERIES.identity);}
+  assert.deepEqual(f.requests.filter(r=>r.url===ENDPOINT).slice(0,2).map(r=>JSON.parse(r.options.body).query),[QUERIES.accountIdentity,QUERIES.accountAccess]);
+ });
+@@ -691,3 +691,22 @@
+ test('project stage cannot invoke bearer identity or access queries',async()=>{
+  const f=fixture();const a=createReadOnlyAccess({env:ENV,context:validateContext(ENV),fetchImpl:f.fetchImpl,spawnImpl:f.spawnImpl});await a.assertBranch();for(const [q,v] of [[QUERIES.accountIdentity,{}],[QUERIES.accountAccess,{projectId:TARGET.projectId,environmentId:TARGET.environmentId}]])await assert.rejects(a.native(q,v),errorCode('READONLY_QUERY_REJECTED'));assert.equal(f.requests.length,1);
+ });
++
++test('fixed verified executable path rejects unsafe runtime roots and ignores PATH override',async()=>{
++ assert.equal(verifiedRailwayPath('/home/runner/work/_temp'),'/home/runner/work/_temp/clinicos-railway-5.66.0/railway');
++ for(const path of [undefined,'','/','relative','/tmp/../other','/tmp/./other','/tmp//other','/tmp/trailing/','/tmp/with space','/tmp/$(command)','/tmp/x\nother'])assert.throws(()=>verifiedRailwayPath(path),errorCode('READONLY_RUNTIME_TEMP_INVALID'));
++ const f=fixture();const r=await run(f,{env:{...ENV,PATH:'/untrusted/bin',RAILWAY_CLI_PATH:'/untrusted/railway'}});assert.equal(r.outcome,'inspected');assert(f.calls.every(c=>c.binary===verifiedRailwayPath(ENV.RUNNER_TEMP)));
++});
++test('account public decoder refuses unscoped and partially scoped variables after real auth stages',async()=>{
++ const f=fixture(),a=createReadOnlyAccess({env:ACCOUNT_ENV,context:validateContext(ACCOUNT_ENV),fetchImpl:f.fetchImpl,spawnImpl:f.spawnImpl});await a.assertBranch();await a.native(QUERIES.accountIdentity,{});await a.native(QUERIES.accountAccess,{projectId:TARGET.projectId,environmentId:TARGET.environmentId});
++ for(const args of [
++  ['variables','--service',TARGET.backendServiceId,'--json'],
++  ['variables','--service',TARGET.backendServiceId,'--environment',TARGET.environmentId,'--json'],
++  ['variables','--service',TARGET.backendServiceId,'--project',TARGET.projectId,'--json'],
++  ['variables','--service',TARGET.backendServiceId,'--project',IDS.other,'--environment',TARGET.environmentId,'--json'],
++ ])assert.throws(()=>a.call(args,{json:true}),errorCode('READONLY_COMMAND_REJECTED'));
++ assert.equal(f.calls.length,0);a.call(['variables','--service',TARGET.backendServiceId,'--project',TARGET.projectId,'--environment',TARGET.environmentId,'--json'],{json:true});assert.equal(f.calls.length,1);
++});
++test('runtime-root drift after a minted context cannot select another executable',()=>{
++ const context=validateContext(ENV);assert.throws(()=>createReadOnlyAccess({env:{...ENV,RUNNER_TEMP:'/tmp/other'},context}),errorCode('READONLY_CONTEXT_REQUIRED'));
++});
+--- a/scripts/maintenance/demo-storage-workflow.test.mjs
++++ b/scripts/maintenance/demo-storage-workflow.test.mjs
+@@ -1,19 +1,20 @@
+ import test from 'node:test';import assert from 'node:assert/strict';import{readFileSync}from'node:fs';
+ const read=n=>readFileSync(new URL(n,import.meta.url),'utf8');
++const stepScript=(workflow,name)=>{const start=workflow.indexOf('      - name: '+name+'\n');assert(start>=0);const tail=workflow.slice(start);const step=tail.slice(0,tail.indexOf('\n      - ',1)<0?tail.length:tail.indexOf('\n      - ',1));assert(step.includes('shell: bash'));const block=step.split('        run: |\n')[1];assert(block);return block.split('\n').map(line=>line.startsWith('          ')?line.slice(10):line).join('\n');};
+ test('dedicated workflow fixes main identity/environment/sha and isolates the only secret step',()=>{
+  const w=read('../../.github/workflows/inspect-demo-storage.yml');const live=w.slice(w.indexOf('  inspect:\n'));
+  for(const text of ["github.event_name == 'workflow_dispatch'","github.repository == 'l2v-hub/ClinicOS'","github.ref == 'refs/heads/main'","github.ref_name == 'main'","github.workflow_ref == 'l2v-hub/ClinicOS/.github/workflows/inspect-demo-storage.yml@refs/heads/main'","github.actor == 'l2v-hub'",'github.triggering_actor == github.actor','github.sha == github.workflow_sha','inputs.reviewed_sha == github.sha',"environment: 'glistening-friendship / demo'",'contents: read','ref: ${{ github.sha }}','persist-credentials: false','timeout-minutes: 10','group: demo-storage-inspect','cancel-in-progress: false','options: [project-token, account-bearer]'])assert(w.includes(text),text);
+- assert(w.includes('pull_request:'));assert(w.includes('needs: test'));assert(!w.includes('pull_request_target'));assert(!w.includes('workflow_call:'));assert(!w.includes('write'));
++ assert(w.includes('pull_request:'));assert(w.includes('needs: test'));assert(!w.includes('pull_request_target'));assert(!w.includes('workflow_call:'));assert(!/^\s+(?:contents|actions|issues|pull-requests):\s*write\s*$/m.test(w));
+  assert.equal((w.match(/secrets\./g)??[]).length,2);const secretStep=live.slice(live.indexOf('      - name: Inspect only'));
+  assert.equal((secretStep.match(/secrets.RAILWAY_DEMO_TOKEN/g)??[]).length,2);assert(secretStep.includes("inputs.auth_mode == 'project-token' && secrets.RAILWAY_DEMO_TOKEN || ''"));assert(secretStep.includes("inputs.auth_mode == 'account-bearer' && secrets.RAILWAY_DEMO_TOKEN || ''"));
+- assert(live.indexOf('npm install -g @railway/cli@5.66.0')<live.indexOf('secrets.'));assert(!live.slice(0,live.indexOf('      - name: Inspect only')).includes('secrets.'));
++ assert(!live.includes('npm install -g @railway/cli'));assert(live.indexOf('sha256sum --check --status')<live.indexOf('secrets.'));assert(!live.slice(0,live.indexOf('      - name: Inspect only')).includes('secrets.'));
+  for(const pin of ['actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683','actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020'])assert(w.includes(pin));
+  for(const text of ['--erase','demo-cleanup','demo-storage-backups','demo-patient-inventory','configure-demo-source','secrets.RAILWAY_TOKEN','production'])assert(!w.includes(text),text);
+ });
+ test('live import graph contains only builtins and the pure extracted binding module',()=>{
+  const s=read('./demo-storage-inspect.mjs'),b=read('./demo-storage-binding-readonly.mjs');
+  const imports=[...s.matchAll(/from '([^']+)'/g)].map(m=>m[1]);assert.deepEqual(imports.filter(x=>!x.startsWith('node:')),['./demo-storage-binding-readonly.mjs']);assert([...b.matchAll(/from '([^']+)'/g)].every(m=>m[1].startsWith('node:')));
+- for(const text of ['demo-storage-backups','demo-patient-inventory','configure-demo-source','eraseVerifiedSnapshots','runStorageMaintenance','purgeTemporarySources','serviceCreate','serviceDelete','deploymentRedeploy','volumeInstanceBackupDelete','SQL','shell: true'])assert(!s.includes(text)&&!b.includes(text),text);
++ for(const text of ['demo-storage-backups','demo-patient-inventory','configure-demo-source','eraseVerifiedSnapshots','runStorageMaintenance','purgeTemporarySources','serviceCreate','serviceDelete','deploymentRedeploy','volumeInstanceBackupDelete','SQL','shell: true','SAFE_REPLACEMENT_ERRORS','REDEPLOY','REPLACEMENT'])assert(!s.includes(text)&&!b.includes(text),text);
+  assert(!b.includes('spawn'));assert(!b.includes('fetch'));assert(!b.includes('process.env'));assert(!b.includes('node:fs'));assert(!b.includes('node:child_process'));
+ });
+ 
+@@ -35,8 +36,30 @@
+  const root=mkdtempSync(join(process.env.TMPDIR??tmpdir(),'receipt-shell-'));
+  try{
+   const bin=join(root,'bin');mkdirSync(bin);writeFileSync(join(bin,'node'),'#!/bin/bash\nprintf \'CLINICOS_DEMO_STORAGE_INSPECT {"outcome":"blocked"}\\n\'\nprintf \'private-synthetic-stderr\\n\' >&2\nexit 17\n',{mode:0o700});
+-  const w=read('../../.github/workflows/inspect-demo-storage.yml');const script=w.split('        shell: bash\n        run: |\n')[1].split('      - name: Retain only')[0].split('\n').map(l=>l.startsWith('          ')?l.slice(10):l).join('\n');
++  const w=read('../../.github/workflows/inspect-demo-storage.yml');const script=stepScript(w,'Inspect only fixed demo binding and descriptive snapshot counts');
+   const r=spawnSync('/bin/bash',['-c',script],{env:{PATH:bin+':/usr/bin:/bin',RUNNER_TEMP:root},encoding:'utf8'});
+   assert.equal(r.status,17);const content=readFileSync(join(root,'demo-storage-receipt.txt'),'utf8');assert.equal(content,'CLINICOS_DEMO_STORAGE_INSPECT {"outcome":"blocked"}\n');assert(!content.includes('private-synthetic-stderr'));assert(r.stderr.includes('private-synthetic-stderr'));
+  }finally{rmSync(root,{recursive:true,force:true});}
+ });
++
++test('installer fixes official GNU archive checksum and version before any secrets',()=>{
++ const w=read('../../.github/workflows/inspect-demo-storage.yml');const s=stepScript(w,'Install fixed read-only CLI without credentials');
++ for(const text of ["https://github.com/railwayapp/cli/releases/download/v5.66.0/railway-v5.66.0-x86_64-unknown-linux-gnu.tar.gz",'5b3f4e77ddf986161fb760842d718b23ab587a59f9badf610c1fb7b80bcbcb3e','sha256sum --check --status','verifiedRailwayPath(process.env.RUNNER_TEMP)','test -x "$executable"',"grep -Eq '^railway 5\\.66\\.0$'",'tar -xzf "$archive" -C "$(dirname "$executable")" railway'])assert(s.includes(text),text);
++ assert(s.indexOf('sha256sum --check --status')<s.indexOf('tar -xzf'));assert(s.indexOf('tar -xzf')<s.indexOf('"$executable" --version'));assert(!s.includes('secrets.'));assert(!s.includes('npm '));
++ const source=read('./demo-storage-inspect.mjs');assert(source.includes('spawnImpl(context.cliPath, args'));assert(!source.includes("spawnImpl('railway'"));
++});
++test('genuine installer shell rejects checksum mismatch before extraction or execution',async(t)=>{
++ const {mkdtempSync,mkdirSync,writeFileSync,existsSync,rmSync}=await import('node:fs');const{join,dirname}=await import('node:path');const{tmpdir}=await import('node:os');const{spawnSync}=await import('node:child_process');
++ const root=mkdtempSync(join(process.env.TMPDIR??tmpdir(),'installer-checksum-'));
++ try{
++  const bin=join(root,'bin'),sentinel=join(root,'extracted-or-executed');mkdirSync(bin);
++  writeFileSync(join(bin,'curl'),'#!/bin/bash\nset -eu\nwhile [ "$#" -gt 0 ]; do if [ "$1" = --output ]; then printf invalid-archive-bytes > "$2"; exit 0; fi; shift; done\nexit 91\n',{mode:0o700});
++  writeFileSync(join(bin,'tar'),'#!/bin/bash\nprintf unexpected > "'+sentinel+'"\nexit 92\n',{mode:0o700});
++  const script=stepScript(read('../../.github/workflows/inspect-demo-storage.yml'),'Install fixed read-only CLI without credentials');
++  const cwd=new URL('../../',import.meta.url).pathname;const r=spawnSync('/bin/bash',['-c',script],{cwd,env:{PATH:bin+':'+dirname(process.execPath)+':/usr/bin:/bin',RUNNER_TEMP:root},encoding:'utf8'});
++  assert.equal(r.status,1);assert(!existsSync(sentinel));assert(!existsSync(join(root,'clinicos-railway-5.66.0')));assert(existsSync(join(root,'clinicos-railway-5.66.0.tar.gz')));assert(!r.stderr.includes('ERR_MODULE_NOT_FOUND'));assert(!r.stderr.includes('not found'));
++  // Checksum diagnostics are safe here: the entire archive is a synthetic fixture.
++  assert.equal(r.stdout,'');assert.equal(r.stderr,'');
++  t.diagnostic(JSON.stringify({case:'actual-installer-checksum-mismatch',exit:r.status,stdout:r.stdout,stderr:r.stderr,extractionOrExecution:false,syntheticArchiveOnly:true}));
++ }finally{rmSync(root,{recursive:true,force:true});}
++});

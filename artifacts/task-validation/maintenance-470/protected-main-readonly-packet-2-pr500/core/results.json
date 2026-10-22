@@ -1,0 +1,43 @@
+{
+  "status": "AUTHOR_STOPPED_FOR_INDEPENDENT_QA",
+  "childPr": 500,
+  "implementation": 2,
+  "coreNonce": "cd13b3a7-8601-4d6b-afc6-d855485bb86a",
+  "actualClaudeComment": 6344231265,
+  "focusedTests": {
+    "node": "22.23.4",
+    "pass": 157,
+    "fail": 0,
+    "skip": 0
+  },
+  "firstRun": {
+    "pass": 155,
+    "fail": 2,
+    "retained": true,
+    "causes": [
+      "actual missing trailing-slash runtime-root guard, corrected",
+      "overbroad old static write substring assertion matching stdout.write, corrected to YAML write-permission check"
+    ]
+  },
+  "installerChecksumNegative": {
+    "actualShellExit": 1,
+    "actualStdout": "",
+    "actualStderr": "",
+    "extractionOrExecution": false,
+    "fakeDownloadOnly": true
+  },
+  "coreAuthoredPaths": [
+    ".github/workflows/inspect-demo-storage.yml",
+    "scripts/maintenance/demo-storage-inspect.mjs",
+    "scripts/maintenance/demo-storage-inspect.test.mjs",
+    "scripts/maintenance/demo-storage-workflow.test.mjs"
+  ],
+  "rootMergedLowPath": "scripts/maintenance/demo-storage-binding-readonly.mjs",
+  "combinedSourceFiles": 270,
+  "allOther265PathsUnchanged": true,
+  "yamlBashContract": "PASS",
+  "actualProviderCalls": 0,
+  "actualNetworkCalls": 0,
+  "actualInstallOrGitCanonicalModelOperations": 0,
+  "independentQaActualClaude2FinalRelease": "UNRUN"
+}

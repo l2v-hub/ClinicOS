@@ -1,0 +1,17 @@
+{
+  "nonce": "402aea2e-40ba-4641-af2f-4d34a962b8d3",
+  "status": "reserved-before-session",
+  "reservedAt": "2026-10-22T15:40:44.047Z",
+  "reservedBeforeSession": true,
+  "agent": "/root/diagnose497_native_frontend",
+  "model": "gpt-6.1-sol",
+  "contractSha256": "acfa98f9f8fbe3906a05d787e2f9a6b233b1c6a01e2e657eb651dcf41c30f6ad",
+  "sourceSnapshot": "/tmp/clinicos500-independent2-source",
+  "privateOutput": "/tmp/clinicos500-Claude1-followup2-20261022/independent-qa",
+  "coreSealSha256": "6898cb22a1509b345780cebe9844483b3adba1d72f9e25f8a441cd7e5c464bfd",
+  "lowSealSha256": "28a9df44784bd5c49993f2062a2f72cc58dc9a90c27c74ffba60646fca2ecf81",
+  "sourceEditsAllowed": false,
+  "liveActionsAllowed": false,
+  "stateCommit": "0ea7bb1de01d0317bf7046a1e94b2390f6605d07",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/898e0496-df39-4388-b641-324a06edfc43/accepted.json"
+}

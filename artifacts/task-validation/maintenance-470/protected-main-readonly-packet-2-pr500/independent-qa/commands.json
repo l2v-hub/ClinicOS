@@ -1,0 +1,60 @@
+[
+  {
+    "name": "contract",
+    "argv": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "scripts/quality-gate/validate-task-contract.js",
+      "/tmp/clinicos500-Claude1-followup2-20261022/independent-qa"
+    ],
+    "cwd": "/tmp/clinicos500-independent2-source",
+    "envKeys": [
+      "PATH",
+      "TMPDIR"
+    ],
+    "status": 0,
+    "durationMs": 253
+  },
+  {
+    "name": "focused",
+    "argv": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--test",
+      "scripts/maintenance/demo-storage-inspect.test.mjs",
+      "scripts/maintenance/demo-storage-workflow.test.mjs"
+    ],
+    "cwd": "/tmp/clinicos500-independent2-source",
+    "envKeys": [
+      "PATH",
+      "TMPDIR"
+    ],
+    "status": 0,
+    "durationMs": 2113
+  },
+  {
+    "name": "newdelta-probes",
+    "argv": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "/tmp/clinicos500-independent2/probes.mjs"
+    ],
+    "envKeys": [
+      "PATH",
+      "TMPDIR"
+    ],
+    "status": 0,
+    "durationMs": 248
+  },
+  {
+    "name": "static-review-and-actual-installer-path-negative",
+    "argv": [
+      "python3",
+      "/tmp/clinicos500-independent2/static.py"
+    ],
+    "status": 0,
+    "installerShellEnvKeys": [
+      "PATH",
+      "TMPDIR",
+      "RUNNER_TEMP"
+    ],
+    "staticReview": "read-only YAML/source parse and bash -n"
+  }
+]

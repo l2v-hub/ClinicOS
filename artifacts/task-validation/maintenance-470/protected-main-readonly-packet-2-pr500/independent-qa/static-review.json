@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "yaml": "BaseLoader",
+  "allShellSyntax": [
+    {
+      "name": "Test without credentials or provider access",
+      "status": 0
+    },
+    {
+      "name": "Install fixed read-only CLI without credentials",
+      "status": 0
+    },
+    {
+      "name": "Inspect only fixed demo binding and descriptive snapshot counts",
+      "status": 0
+    }
+  ],
+  "actionPins": [
+    "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+    "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+    "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+    "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+    "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02"
+  ],
+  "installerChecksBeforeSecret": "PASS",
+  "actualInstallerInvalidRoot": {
+    "exit": 1,
+    "networkOrExtractionOrExecution": false
+  },
+  "absoluteBinaryNoPATHFallback": "PASS",
+  "privateBindingAdapterAndScope": "PASS",
+  "readOnlyImportClosure": "PASS",
+  "unusedSetRemovedTerminalRetained": "PASS",
+  "windowsCollection": {
+    "newBashTestLinuxOnly": true,
+    "dedicatedWorkflow": "ubuntu-latest",
+    "existingWindowsCICollectsMaintenanceTests": false,
+    "actualWindowsExecution": "UNRUN"
+  },
+  "inheritedOfflineProof": {
+    "sha256": "3da21dcda735b459d555c2bebd56ec71465ae55dafb92a37d1bbd86b071589f7",
+    "archiveHashVerifiedLocally": true,
+    "versionAndHelpNotRerun": true
+  }
+}

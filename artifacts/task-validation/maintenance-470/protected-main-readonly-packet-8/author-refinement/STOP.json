@@ -1,0 +1,9 @@
+{
+  "status": "AUTHOR_STOPPED_FOR_INDEPENDENT_QA",
+  "parentImplementation": 8,
+  "refinement": 1,
+  "sourceFrozen": true,
+  "changedFiles": 2,
+  "affectedTestsPass": 4,
+  "actualProviderCalls": 0
+}

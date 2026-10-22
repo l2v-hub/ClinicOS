@@ -1,0 +1,7 @@
+{
+  "algorithm": "sha256",
+  "inventoryPath": "file-inventory.json",
+  "inventorySha256": "955c1cda82c0bea58f9e9222547fe7e9266944c44a80635b1a61211c37c02c28",
+  "fileCount": 8,
+  "sourceSha256": "5458e519575d0f47d9ad542d4a8fd150b85f73110dc6a4f1c788e0b0cd9a7759"
+}

@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "coreSealSha256": "6898cb22a1509b345780cebe9844483b3adba1d72f9e25f8a441cd7e5c464bfd",
+  "lowSealSha256": "28a9df44784bd5c49993f2062a2f72cc58dc9a90c27c74ffba60646fca2ecf81",
+  "sourceFiles": 270,
+  "offlineBinaryProofSha256": "3da21dcda735b459d555c2bebd56ec71465ae55dafb92a37d1bbd86b071589f7",
+  "archiveSha256": "5b3f4e77ddf986161fb760842d718b23ab587a59f9badf610c1fb7b80bcbcb3e",
+  "historicalFailuresPreserved": [
+    "core/focused-first.log",
+    "core/freeze-assembly-first-stop.json"
+  ]
+}

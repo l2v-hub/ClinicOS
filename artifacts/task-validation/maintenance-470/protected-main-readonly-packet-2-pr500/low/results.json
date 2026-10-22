@@ -1,0 +1,7 @@
+{
+  "command": "env -i PATH=/usr/bin:/bin /tmp/clinicos-node22-native12/node_modules/node/bin/node --check scripts/maintenance/demo-storage-binding-readonly.mjs",
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "",
+  "scopeCheck": "One file only; TERMINAL remains referenced; SAFE_REPLACEMENT_ERRORS removed."
+}
