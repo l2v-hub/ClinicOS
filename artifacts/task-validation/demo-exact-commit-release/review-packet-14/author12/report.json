@@ -1,0 +1,35 @@
+{
+  "status": "STOP_READY_FOR_INDEPENDENT_QA",
+  "reservationNonce": "f89a686e-13fe-49da-baa1-7fe06693fad4",
+  "sourceBase": "23eacd2a5672c5e8d713417ef2c6a82bbba004fe",
+  "sourceSnapshot": "/tmp/clinicos-498-fixture12",
+  "immutableImplementation11": "/tmp/clinicos-498-Claude2-fix11",
+  "sourceFileCounts": {
+    "implementation11": 263,
+    "candidate": 264
+  },
+  "changedPathsFromImplementation11": [
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip"
+  ],
+  "scopedSourceChange": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+  "restoredImmutableFixture": {
+    "path": "artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip",
+    "sha256": "008d36bda06472a22c86244c8e06bdad0bde622bce35f637058c13cd977545eb",
+    "bytes": 175354
+  },
+  "actualChecks": {
+    "taskContractValidator": "PASS (trusted script from immutable base)",
+    "targetedPipelineSuite": {
+      "command": "env -i PATH=\"$PATH\" TMPDIR=/tmp/clinicos-498-fixture12-luna/tmp node --test agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "tests": 20,
+      "pass": 20,
+      "fail": 0,
+      "skipped": 0,
+      "exitCode": 0
+    },
+    "genuineVerifier": "Imported verifyProductionBackend and passed strict synthetic responses only for fixed workflow run list, run details, and deploy-job routes; unexpected routes throw.",
+    "preservedRetryAssertions": "First protected publication attempt receives expected HTTP 503; retry completes with no models, merge, or redeploy; original assertions retained."
+  },
+  "limitations": "Synthetic workflow metadata is a unit-test fixture, not provider deployment evidence. No GitHub, runtime, DB, Docker, browser, deployment, or closure action."
+}

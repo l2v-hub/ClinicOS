@@ -1,0 +1,38 @@
+{
+  "status": "STOP_READY_FOR_INDEPENDENT_QA",
+  "reservationNonce": "2f8aac7c-a4f1-4af1-a867-4e477c1894f6",
+  "parentNonce": "c58aace7-e3be-4b21-a37e-a5f1d66ce039",
+  "priorCandidateSealSha256": "58c113a0ee617c7f0d685385ede4c81867be80bb88c20a8f4df6d6f3e9595b82",
+  "candidateFiles": [
+    {
+      "path": ".github/workflows/deploy-backend.yml",
+      "baselineSha256": "6743d823679a9c1076c85dfcb5e5b9a8f96705849123b3091cac5d00cadaa3f9",
+      "candidateSha256": "8520e8d32b7ee84d38524d18a507ebd728238815d58d7c1a5064847b7f118c75",
+      "bytes": 2415
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/demo-workflow-policy.test.mjs",
+      "baselineSha256": null,
+      "candidateSha256": "775c01039118c70d88989c217c83b5fc1c6b70fc7332373f4384a4d56d96ac9f",
+      "bytes": 2501
+    }
+  ],
+  "checks": {
+    "productionWorkflowByteUnchangedFromCandidate1": true,
+    "productionWorkflowPrefixByteIdenticalToBaseline": true,
+    "missingPreflightPrivateFixtureRejected": true,
+    "oldBackendWorkflowNegativeControlRejectedAtLegacyDemoJob": true,
+    "targetedTest": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "trustedSevenSectionValidator": {
+      "command": "node /tmp/clinicos-498-Claude2-base11/scripts/quality-gate/validate-task-contract.js /workspace/.clinicos-cloud/498-Claude2-followup11-20261022/luna-workflow2",
+      "pass": true
+    },
+    "nodeSyntaxCheck": true,
+    "onlyAuthorizedTestFileChangedSinceCandidate1": true
+  },
+  "limitations": "Structural test correction only. No CI/native checks, runtime, deployment, or release actions."
+}
