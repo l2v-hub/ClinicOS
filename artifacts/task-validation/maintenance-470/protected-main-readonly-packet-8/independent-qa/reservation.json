@@ -1,0 +1,18 @@
+{
+  "nonce": "92d9a146-aa3a-43ad-b24c-02e8f2558ffe",
+  "status": "reserved-before-session",
+  "reservedAt": "2026-10-22T14:04:55.124Z",
+  "reservedBeforeSession": true,
+  "parentNonce": "b90f75b0-029a-4d44-818d-9a856410864e",
+  "agent": "/root/diagnose497_native_frontend",
+  "model": "gpt-6.1-sol",
+  "sourceSnapshot": "/tmp/clinicos470-protected-inventory8-independent",
+  "privateOutput": "/tmp/clinicos470-protected-inventory8-20261022/independent-qa",
+  "contractSha256": "f9c85565ad4c8da16dd44142b97ade64378459dbbed420c80bc2aa7b833d1b17",
+  "sourceFreezeRawSha256": "f392bcfd87da558cf90d13b2f6464c9a78408234b814276299ce71707e977905",
+  "sourceEditsAllowed": false,
+  "providerActionsAllowed": false,
+  "stateCommit": "44863bab0f64c56117cb6bd0168d75ddef31df43",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/917cdea0-3916-44d5-b22b-5b18cd6635a0/accepted.json",
+  "stateReadbackVerified": true
+}

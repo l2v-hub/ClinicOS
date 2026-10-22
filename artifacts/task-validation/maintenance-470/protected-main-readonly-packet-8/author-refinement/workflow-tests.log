@@ -1,0 +1,34 @@
+TAP version 13
+# Subtest: dedicated workflow fixes main identity/environment/sha and isolates the only secret step
+ok 1 - dedicated workflow fixes main identity/environment/sha and isolates the only secret step
+  ---
+  duration_ms: 2.839981
+  type: 'test'
+  ...
+# Subtest: live import graph contains only builtins and the pure extracted binding module
+ok 2 - live import graph contains only builtins and the pure extracted binding module
+  ---
+  duration_ms: 9.086402
+  type: 'test'
+  ...
+# Subtest: safe receipt artifact is an exact separate pinned upload, never raw streams or credentials
+ok 3 - safe receipt artifact is an exact separate pinned upload, never raw streams or credentials
+  ---
+  duration_ms: 1.013865
+  type: 'test'
+  ...
+# Subtest: actual receipt shell preserves failing helper status and excludes stderr from the file
+ok 4 - actual receipt shell preserves failing helper status and excludes stderr from the file
+  ---
+  duration_ms: 33.491643
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 193.874793

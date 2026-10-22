@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "yamlParser": "PyYAML BaseLoader",
+  "shellSyntax": [
+    {
+      "name": "Test without credentials or provider access",
+      "syntaxStatus": 0
+    },
+    {
+      "name": "Install fixed read-only CLI without credentials",
+      "syntaxStatus": 0
+    },
+    {
+      "name": "Inspect only fixed demo binding and descriptive snapshot counts",
+      "syntaxStatus": 0
+    }
+  ],
+  "importClosure": [
+    {
+      "file": "scripts/maintenance/demo-storage-inspect.mjs",
+      "imports": [
+        "node:child_process",
+        "node:perf_hooks",
+        "node:url",
+        "./demo-storage-binding-readonly.mjs"
+      ]
+    },
+    {
+      "file": "scripts/maintenance/demo-storage-binding-readonly.mjs",
+      "imports": [
+        "node:path",
+        "node:crypto"
+      ]
+    }
+  ],
+  "workflowIdentityEnvironmentCredentialsArtifact": "PASS",
+  "sourceRequestCapsDeadlinesAndNoRetriesReviewed": "PASS",
+  "noMutationTransportClosure": "PASS"
+}

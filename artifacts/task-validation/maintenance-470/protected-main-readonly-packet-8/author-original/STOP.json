@@ -1,0 +1,10 @@
+{
+  "status": "AUTHOR_STOPPED_FOR_INDEPENDENT_QA",
+  "parentIssue": 470,
+  "implementation": 8,
+  "snapshotFrozen": true,
+  "sourceScopeFiles": 5,
+  "testsPass": 150,
+  "actualProviderCalls": 0,
+  "noClosureClaim": true
+}

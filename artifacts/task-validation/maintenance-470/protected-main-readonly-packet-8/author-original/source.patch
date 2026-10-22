@@ -1,0 +1,1694 @@
+--- /dev/null
++++ b/.github/workflows/inspect-demo-storage.yml
+@@ -0,0 +1,75 @@
++name: Inspect protected demo storage read-only
++on:
++  pull_request:
++    paths:
++      - '.github/workflows/inspect-demo-storage.yml'
++      - 'scripts/maintenance/demo-storage-*'
++  workflow_dispatch:
++    inputs:
++      reviewed_sha:
++        description: Exact reviewed current main SHA
++        type: string
++        required: true
++      auth_mode:
++        description: Explicit credential transport; never automatically retried or switched
++        type: choice
++        options: [project-token, account-bearer]
++        default: project-token
++        required: true
++permissions:
++  contents: read
++concurrency:
++  group: demo-storage-inspect
++  cancel-in-progress: false
++jobs:
++  test:
++    if: github.repository == 'l2v-hub/ClinicOS'
++    runs-on: ubuntu-latest
++    timeout-minutes: 5
++    steps:
++      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
++        with:
++          ref: ${{ github.sha }}
++          persist-credentials: false
++      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
++        with:
++          node-version: 22
++      - name: Test without credentials or provider access
++        run: node --test scripts/maintenance/demo-storage-inspect.test.mjs scripts/maintenance/demo-storage-workflow.test.mjs
++  inspect:
++    needs: test
++    if: >-
++      github.event_name == 'workflow_dispatch' &&
++      github.repository == 'l2v-hub/ClinicOS' &&
++      github.ref == 'refs/heads/main' &&
++      github.ref_name == 'main' &&
++      github.workflow_ref == 'l2v-hub/ClinicOS/.github/workflows/inspect-demo-storage.yml@refs/heads/main' &&
++      github.actor == 'l2v-hub' &&
++      github.triggering_actor == github.actor &&
++      github.sha == github.workflow_sha &&
++      inputs.reviewed_sha == github.sha &&
++      (inputs.auth_mode == 'project-token' || inputs.auth_mode == 'account-bearer')
++    runs-on: ubuntu-latest
++    environment: 'glistening-friendship / demo'
++    timeout-minutes: 10
++    steps:
++      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
++        with:
++          ref: ${{ github.sha }}
++          persist-credentials: false
++      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
++        with:
++          node-version: 22
++      - name: Install fixed read-only CLI without credentials
++        timeout-minutes: 1
++        run: npm install -g @railway/cli@5.66.0
++      - name: Inspect only fixed demo binding and descriptive snapshot counts
++        env:
++          RAILWAY_TOKEN: ${{ inputs.auth_mode == 'project-token' && secrets.RAILWAY_DEMO_TOKEN || '' }}
++          RAILWAY_API_TOKEN: ${{ inputs.auth_mode == 'account-bearer' && secrets.RAILWAY_DEMO_TOKEN || '' }}
++          GITHUB_TOKEN: ${{ github.token }}
++          DEMO_STORAGE_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
++          DEMO_STORAGE_AUTH_MODE: ${{ inputs.auth_mode }}
++          DEMO_STORAGE_OPERATION: demo-storage-inspect
++          DEMO_STORAGE_ENVIRONMENT: 'glistening-friendship / demo'
++        run: node scripts/maintenance/demo-storage-inspect.mjs
+--- /dev/null
++++ b/scripts/maintenance/demo-storage-binding-readonly.mjs
+@@ -0,0 +1,292 @@
++// Pure binding checks extracted from reviewed maintenance92931e60. No live transports or cleanup entrypoints.
++import { posix } from 'node:path';
++import { createHash } from 'node:crypto';
++export const TARGET = Object.freeze({
++  projectId: 'bddf5d1b-ee83-4362-8238-a79721f795e5',
++  environmentId: '8021987e-8eaa-4bc8-a102-20566db5e6b4',
++  environmentName: 'demo',
++  backendServiceId: 'c000f011-0349-4ea9-9b56-13c625b5767b',
++  backendServiceName: 'clinicos-backend',
++  domain: 'clinicos-backend-demo.up.railway.app',
++  databaseHost: 'postgres.railway.internal',
++  database: 'railway',
++});
++const check = (value, code) => {
++  if (!value) throw new Error(code);
++};
++const uuid = (value) =>
++  typeof value === 'string' && /^[a-f\d]{8}(?:-[a-f\d]{4}){3}-[a-f\d]{12}$/i.test(value);
++
++function verifyDatabaseUrl(raw) {
++  let url;
++  try {
++    url = new URL(raw);
++  } catch {
++    throw new Error('DEMO_DATABASE_BINDING_INVALID');
++  }
++  check(
++    ['postgres:', 'postgresql:'].includes(url.protocol) &&
++      url.hostname === TARGET.databaseHost &&
++      url.pathname === '/' + TARGET.database &&
++      Boolean(url.username) &&
++      Boolean(url.password),
++    'DEMO_DATABASE_BINDING_MISMATCH',
++  );
++}
++
++export async function verifyDemoBinding(call, api) {
++  const config = call(['variables', '--service', TARGET.backendServiceId, '--json'], {
++    json: true,
++  });
++  check(
++    config.RAILWAY_PROJECT_ID === TARGET.projectId &&
++      config.RAILWAY_ENVIRONMENT_ID === TARGET.environmentId &&
++      config.RAILWAY_ENVIRONMENT_NAME === TARGET.environmentName &&
++      config.RAILWAY_SERVICE_ID === TARGET.backendServiceId &&
++      config.RAILWAY_SERVICE_NAME === TARGET.backendServiceName,
++    'DEMO_BINDING_IDENTITY_MISMATCH',
++  );
++  verifyDatabaseUrl(config.DATABASE_URL);
++  const data = await api(
++    'query($environmentId:String!,$serviceId:String!){serviceInstance(environmentId:$environmentId,serviceId:$serviceId){domains{serviceDomains{domain} customDomains{domain}}}}',
++    { environmentId: TARGET.environmentId, serviceId: TARGET.backendServiceId },
++  );
++  const domains = data.serviceInstance?.domains;
++  check(
++    Array.isArray(domains?.serviceDomains) && Array.isArray(domains?.customDomains),
++    'DEMO_DOMAIN_RESULT_INVALID',
++  );
++  check(
++    [...domains.serviceDomains, ...domains.customDomains].some((d) => d.domain === TARGET.domain),
++    'DEMO_BACKEND_DOMAIN_MISMATCH',
++  );
++}
++
++function matchingDatabase(left, right) {
++  try {
++    const a = new URL(left),
++      b = new URL(right);
++    return (
++      ['postgres:', 'postgresql:'].includes(b.protocol) &&
++      a.hostname === b.hostname &&
++      a.pathname === b.pathname &&
++      a.username === b.username &&
++      a.password === b.password &&
++      (a.port || '5432') === (b.port || '5432')
++    );
++  } catch {
++    return false;
++  }
++}
++export async function inspectStorageBinding(call, native) {
++  await verifyDemoBinding(call, native);
++  const backend = call(
++    [
++      'variables',
++      '--service',
++      TARGET.backendServiceId,
++      '--environment',
++      TARGET.environmentId,
++      '--json',
++    ],
++    { json: true },
++  );
++  check(
++    !backend.AI_UPLOAD_DIR || backend.AI_UPLOAD_DIR === '/tmp/clinicos-imports',
++    'CUSTOM_SOURCE_DIRECTORY_REQUIRES_REVIEW',
++  );
++  const services = call(
++    [
++      'service',
++      'list',
++      '--project',
++      TARGET.projectId,
++      '--environment',
++      TARGET.environmentId,
++      '--json',
++    ],
++    { json: true },
++  );
++  check(
++    Array.isArray(services) && services.length > 0 && services.length <= 20,
++    'SERVICE_CATALOG_INVALID',
++  );
++  const databases = [];
++  let databaseConfig;
++  for (const service of services.filter((s) => /^postgres(?:ql)?$/i.test(s.name))) {
++    const config = call(
++      ['variables', '--service', service.id, '--environment', TARGET.environmentId, '--json'],
++      { json: true },
++    );
++    if (
++      config.RAILWAY_PROJECT_ID === TARGET.projectId &&
++      config.RAILWAY_ENVIRONMENT_ID === TARGET.environmentId &&
++      config.RAILWAY_PRIVATE_DOMAIN === TARGET.databaseHost &&
++      matchingDatabase(backend.DATABASE_URL, config.DATABASE_URL)
++    ) {
++      databases.push(service.id);
++      databaseConfig = config;
++    }
++  }
++  check(databases.length === 1, 'SOURCE_DATABASE_SERVICE_AMBIGUOUS');
++  const data = await native(
++    'query($id:String!){environment(id:$id){id projectId volumeInstances(first:100){pageInfo{hasNextPage} edges{node{id volumeId serviceId environmentId mountPath state}}} serviceInstances(first:100){pageInfo{hasNextPage} edges{node{id serviceId serviceName environmentId source{repo image} rootDirectory buildCommand startCommand builder healthcheckPath restartPolicyType restartPolicyMaxRetries numReplicas activeDeployments{id} latestDeployment{id instances{id status}} domains{serviceDomains{domain} customDomains{domain}}}}}}}',
++    { id: TARGET.environmentId },
++  );
++  const environment = data.environment;
++  check(
++    environment?.id === TARGET.environmentId &&
++      environment.projectId === TARGET.projectId &&
++      environment.volumeInstances?.pageInfo?.hasNextPage === false &&
++      environment.serviceInstances?.pageInfo?.hasNextPage === false &&
++      Array.isArray(environment.volumeInstances?.edges) &&
++      Array.isArray(environment.serviceInstances?.edges),
++    'STORAGE_ENVIRONMENT_UNVERIFIED',
++  );
++  const volumes = environment.volumeInstances.edges.map((e) => e.node);
++  check(
++    volumes.every(
++      (v) => v.environmentId === TARGET.environmentId && uuid(v.id) && uuid(v.volumeId),
++    ),
++    'VOLUME_ENVIRONMENT_MISMATCH',
++  );
++  const databaseVolumes = volumes.filter((v) => v.serviceId === databases[0]);
++  // Do not erase unclassified backup/application volumes or claim them empty.
++  check(volumes.length === 1 && databaseVolumes.length === 1, 'UNCLASSIFIED_DEMO_VOLUMES');
++  verifyDatabaseMount(databaseVolumes[0], databaseConfig);
++  const instances = environment.serviceInstances.edges.map((e) => e.node);
++  check(
++    instances.every((s) => s.environmentId === TARGET.environmentId),
++    'SERVICE_ENVIRONMENT_MISMATCH',
++  );
++  const backendInstance = instances.find((s) => s.serviceId === TARGET.backendServiceId);
++  check(backendInstance?.source?.repo === 'l2v-hub/ClinicOS', 'BACKEND_SOURCE_UNVERIFIED');
++  const runtime = instances.filter((s) => s.serviceName === 'clinicos-ai-runtime');
++  check(
++    backendInstance?.latestDeployment?.id &&
++      runtime.length === 1 &&
++      runtime[0].latestDeployment?.id,
++    'RUNTIME_DEPLOYMENT_UNVERIFIED',
++  );
++  for (const instance of [backendInstance, runtime[0]]) {
++    check(
++      Array.isArray(instance.activeDeployments) &&
++        instance.activeDeployments.length === 1 &&
++        instance.activeDeployments[0].id === instance.latestDeployment.id &&
++        Array.isArray(instance.latestDeployment.instances),
++      'AMBIGUOUS_ACTIVE_DEPLOYMENT',
++    );
++    const running = instance.latestDeployment.instances.filter((i) => i.status === 'RUNNING');
++    check(
++      running.length === 1 &&
++        typeof running[0].id === 'string' &&
++        running[0].id.length > 0 &&
++        instance.latestDeployment.instances.every(
++          (i) => i.status === 'RUNNING' || TERMINAL.has(i.status),
++        ),
++      'MULTIPLE_OR_TRANSITIONAL_SERVICE_INSTANCES',
++    );
++    instance.verifiedInstanceId = running[0].id;
++  }
++  const runtimeConfig = call(
++    [
++      'variables',
++      '--service',
++      runtime[0].serviceId,
++      '--environment',
++      TARGET.environmentId,
++      '--json',
++    ],
++    { json: true },
++  );
++  let runtimeOrigin;
++  try {
++    runtimeOrigin = new URL(backend.AI_RUNTIME_URL);
++  } catch {
++    throw new Error('RUNTIME_ORIGIN_UNVERIFIED');
++  }
++  const runtimeDomains = runtime[0].domains;
++  const publicRuntimeHost =
++    Array.isArray(runtimeDomains?.serviceDomains) &&
++    Array.isArray(runtimeDomains?.customDomains) &&
++    [...runtimeDomains.serviceDomains, ...runtimeDomains.customDomains].some(
++      (d) => d.domain === runtimeOrigin.hostname,
++    );
++  check(
++    runtimeConfig.RAILWAY_PROJECT_ID === TARGET.projectId &&
++      runtimeConfig.RAILWAY_ENVIRONMENT_ID === TARGET.environmentId &&
++      !runtimeOrigin.username &&
++      !runtimeOrigin.password &&
++      ((runtimeOrigin.hostname === runtimeConfig.RAILWAY_PRIVATE_DOMAIN &&
++        ['http:', 'https:'].includes(runtimeOrigin.protocol)) ||
++        (publicRuntimeHost && runtimeOrigin.protocol === 'https:')),
++    'RUNTIME_BINDING_MISMATCH',
++  );
++  check(
++    !runtimeConfig.DATABASE_URL && !runtimeConfig.AGNO_DB_URL && !runtimeConfig.STORAGE_URL,
++    'EXTERNAL_RUNTIME_PERSISTENCE_REQUIRES_REVIEW',
++  );
++  return {
++    volume: databaseVolumes[0],
++    backendInstance,
++    runtimeInstance: runtime[0],
++    runtimeOrigin: runtimeOrigin.origin,
++    runtimePrivate: runtimeOrigin.hostname === runtimeConfig.RAILWAY_PRIVATE_DOMAIN,
++    backendConfigHash: configurationHash(backend),
++    runtimeConfigHash: configurationHash(runtimeConfig),
++  };
++}
++const TERMINAL = new Set(['CRASHED', 'EXITED', 'REMOVED', 'SKIPPED', 'STOPPED']);
++const SAFE_REPLACEMENT_ERRORS = new Set([
++  'STORAGE_API_NOT_AUTHORIZED',
++  'STORAGE_API_UNSUPPORTED_OPERATION',
++  'STORAGE_API_REJECTED',
++  'STORAGE_DEADLINE_EXCEEDED',
++  'DEPLOYMENT_TARGET_MISMATCH',
++  'DEPLOYMENT_SOURCE_CONFIG_CHANGED',
++  'REDEPLOY_UNVERIFIED',
++  'REPLACEMENT_NOT_CONVERGED',
++  'BACKEND_HEALTH_INVALID',
++  'RUNTIME_HEALTH_INVALID',
++  'PRIVATE_HEALTH_PROBE_FAILED',
++]);
++const canonical = (value) =>
++  JSON.stringify(value, (_key, item) =>
++    item && typeof item === 'object' && !Array.isArray(item)
++      ? Object.fromEntries(
++          Object.keys(item)
++            .sort()
++            .map((k) => [k, item[k]]),
++        )
++      : item,
++  );
++const hash = (value) => createHash('sha256').update(canonical(value)).digest('hex');
++function configurationHash(config) {
++  return hash(
++    Object.fromEntries(Object.entries(config).filter(([key]) => !key.startsWith('RAILWAY_'))),
++  );
++}
++function canonicalAbsolute(value) {
++  check(
++    typeof value === 'string' && value.startsWith('/') && value !== '/' && !/[\\\x00$]/.test(value),
++    'DATABASE_MOUNT_UNVERIFIED',
++  );
++  const clean = value.replace(/\/$/, '');
++  check(
++    posix.normalize(clean) === clean && !clean.split('/').includes('..'),
++    'DATABASE_MOUNT_UNVERIFIED',
++  );
++  return clean;
++}
++export function verifyDatabaseMount(volume, config) {
++  const mount = canonicalAbsolute(volume?.mountPath),
++    data = canonicalAbsolute(config?.PGDATA),
++    injected = canonicalAbsolute(config?.RAILWAY_VOLUME_MOUNT_PATH);
++  check(
++    volume.state === 'READY' &&
++      injected === mount &&
++      (data === mount || data.startsWith(mount + '/')),
++    'DATABASE_MOUNT_UNVERIFIED',
++  );
++  return { mountPath: mount, dataDirectory: data };
++}
+--- /dev/null
++++ b/scripts/maintenance/demo-storage-inspect.mjs
+@@ -0,0 +1,601 @@
++// Dedicated diagnostic. All provider access passes finite read-only allowlists.
++import { spawnSync } from 'node:child_process';
++import { performance } from 'node:perf_hooks';
++import { pathToFileURL } from 'node:url';
++import { TARGET, inspectStorageBinding, verifyDatabaseMount } from './demo-storage-binding-readonly.mjs';
++
++export const BRANCH = 'main';
++export const WORKFLOW_REF = 'l2v-hub/ClinicOS/.github/workflows/inspect-demo-storage.yml@refs/heads/main';
++export const PROTECTED_ENVIRONMENT = 'glistening-friendship / demo';
++export const REPOSITORY = 'l2v-hub/ClinicOS';
++export const ENDPOINT = 'https://backboard.railway.app/graphql/v2';
++export const HEAD_ENDPOINT = `https://api.github.com/repos/${REPOSITORY}/git/ref/heads/${BRANCH}`;
++export const QUERIES = Object.freeze({
++  identity: 'query{projectToken{project{id} environment{id name}}}',
++  accountIdentity: 'query{me{id}}',
++  accountAccess: 'query($projectId:String!,$environmentId:String!){project(id:$projectId){id} environment(id:$environmentId,projectId:$projectId){id projectId name canAccess}}',
++  domain: 'query($environmentId:String!,$serviceId:String!){serviceInstance(environmentId:$environmentId,serviceId:$serviceId){domains{serviceDomains{domain} customDomains{domain}}}}',
++  environment: 'query($id:String!){environment(id:$id){id projectId volumeInstances(first:100){pageInfo{hasNextPage} edges{node{id volumeId serviceId environmentId mountPath state}}} serviceInstances(first:100){pageInfo{hasNextPage} edges{node{id serviceId serviceName environmentId source{repo image} rootDirectory buildCommand startCommand builder healthcheckPath restartPolicyType restartPolicyMaxRetries numReplicas activeDeployments{id} latestDeployment{id instances{id status}} domains{serviceDomains{domain} customDomains{domain}}}}}}}',
++  snapshots: 'query($id:String!){volumeInstanceBackupList(volumeInstanceId:$id){id}}',
++});
++const HELPER_CODES = new Set([
++  'BACKEND_SOURCE_UNVERIFIED', 'DEMO_BINDING_IDENTITY_MISMATCH', 'DEMO_DATABASE_BINDING_INVALID',
++  'DEMO_DATABASE_BINDING_MISMATCH', 'DEMO_DOMAIN_RESULT_INVALID',
++  'DEMO_BACKEND_DOMAIN_MISMATCH', 'CUSTOM_SOURCE_DIRECTORY_REQUIRES_REVIEW',
++  'SERVICE_CATALOG_INVALID', 'SOURCE_DATABASE_SERVICE_AMBIGUOUS',
++  'STORAGE_ENVIRONMENT_UNVERIFIED', 'VOLUME_ENVIRONMENT_MISMATCH',
++  'UNCLASSIFIED_DEMO_VOLUMES', 'DATABASE_MOUNT_UNVERIFIED',
++  'SERVICE_ENVIRONMENT_MISMATCH', 'RUNTIME_DEPLOYMENT_UNVERIFIED',
++  'AMBIGUOUS_ACTIVE_DEPLOYMENT', 'MULTIPLE_OR_TRANSITIONAL_SERVICE_INSTANCES',
++  'RUNTIME_ORIGIN_UNVERIFIED', 'RUNTIME_BINDING_MISMATCH',
++  'EXTERNAL_RUNTIME_PERSISTENCE_REQUIRES_REVIEW',
++]);
++const PHASES = new Set([
++  'CONTEXT', 'BRANCH_BEFORE', 'TOKEN_IDENTITY', 'ACCOUNT_IDENTITY', 'ACCOUNT_ACCESS', 'BACKEND_IDENTITY', 'BACKEND_DOMAIN',
++  'BACKEND_CONFIG', 'SERVICE_CATALOG', 'DATABASE_CONFIG', 'ENVIRONMENT_METADATA',
++  'RUNTIME_CONFIG', 'BINDING', 'BINDING_COMPARE', 'SNAPSHOTS_BEFORE', 'SNAPSHOTS_AFTER', 'BRANCH_AFTER',
++  'RECEIPT',
++]);
++const UUID = /^[a-f\d]{8}(?:-[a-f\d]{4}){3}-[a-f\d]{12}(?![\s\S])/i;
++const SHA = /^[a-f\d]{40}(?![\s\S])/;
++const POSITIVE = /^[1-9][0-9]{0,19}(?![\s\S])/;
++const SECRET = /(?:gh[pousr]_|github_pat_|sk-(?:ant-|proj-)|eyJ[A-Za-z0-9_-]{10,}\.)/;
++const MAX_BYTES = 4 * 1024 * 1024;
++const TERMINAL = new Set(['CRASHED', 'EXITED', 'REMOVED', 'SKIPPED', 'STOPPED']);
++const receipts = new WeakMap();
++const contexts = new WeakSet();
++const plain = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
++const uuid = (v) => typeof v === 'string' && UUID.test(v);
++const equal = (a, b) => JSON.stringify(a) === JSON.stringify(b);
++const exactVariables = (actual, expected) => plain(actual) &&
++  Object.keys(actual).length === Object.keys(expected).length &&
++  Object.entries(expected).every(([key, value]) => actual[key] === value);
++const canonical = (value) => JSON.stringify(value, (_key, item) => plain(item)
++  ? Object.fromEntries(Object.keys(item).sort().map((key) => [key, item[key]])) : item);
++const matchesPrivateDatabase = (left, right) => {
++  try {
++    const a = new URL(left), b = new URL(right);
++    return ['postgres:', 'postgresql:'].includes(a.protocol) &&
++      ['postgres:', 'postgresql:'].includes(b.protocol) && a.hostname === b.hostname &&
++      a.pathname === b.pathname && a.username === b.username && a.password === b.password &&
++      (a.port || '5432') === (b.port || '5432');
++  } catch { return false; }
++};
++
++class ReadError extends Error {
++  constructor(code) { super(code); this.code = code; }
++}
++const requireRead = (condition, code) => { if (!condition) throw new ReadError(code); };
++const freeze = (v) => {
++  if (v && typeof v === 'object') {
++    for (const child of Object.values(v)) freeze(child);
++    Object.freeze(v);
++  }
++  return v;
++};
++
++export function validateContext(env, args = []) {
++  requireRead(args.length === 0 && env.GITHUB_EVENT_NAME === 'workflow_dispatch' &&
++    env.GITHUB_REPOSITORY === REPOSITORY && env.GITHUB_REF === `refs/heads/${BRANCH}` &&
++    env.GITHUB_REF_NAME === BRANCH && env.GITHUB_WORKFLOW_REF === WORKFLOW_REF &&
++    env.GITHUB_WORKFLOW_SHA === env.GITHUB_SHA && env.GITHUB_ACTOR === 'l2v-hub' &&
++    env.GITHUB_TRIGGERING_ACTOR === env.GITHUB_ACTOR &&
++    env.DEMO_STORAGE_ENVIRONMENT === PROTECTED_ENVIRONMENT &&
++    ['project-token', 'account-bearer'].includes(env.DEMO_STORAGE_AUTH_MODE) && env.DEMO_STORAGE_OPERATION === 'demo-storage-inspect' &&
++    SHA.test(env.GITHUB_SHA ?? '') && env.DEMO_STORAGE_REVIEWED_SHA === env.GITHUB_SHA &&
++    POSITIVE.test(env.GITHUB_RUN_ID ?? '') && POSITIVE.test(env.GITHUB_RUN_ATTEMPT ?? ''),
++  'READONLY_CONTEXT_REQUIRED');
++  const account = env.DEMO_STORAGE_AUTH_MODE === 'account-bearer';
++  const credential = account ? env.RAILWAY_API_TOKEN : env.RAILWAY_TOKEN;
++  const inactive = account ? env.RAILWAY_TOKEN : env.RAILWAY_API_TOKEN;
++  const validToken = (v) => typeof v === 'string' && v.trim().length > 0 && v.length <= 8192 && !/[\r\n]/.test(v);
++  requireRead(validToken(credential) && !inactive && validToken(env.GITHUB_TOKEN), 'READONLY_BINDING_MISSING');
++  const context = freeze({ repository: REPOSITORY, branch: BRANCH, reviewedSha: env.GITHUB_SHA,
++    runId: env.GITHUB_RUN_ID, runAttempt: env.GITHUB_RUN_ATTEMPT, authMode: env.DEMO_STORAGE_AUTH_MODE,
++    workflowRef: WORKFLOW_REF, protectedEnvironment: PROTECTED_ENVIRONMENT });
++  contexts.add(context);
++  return context;
++}
++
++async function boundedJson(response, endpoint, budget) {
++  requireRead(response && response.redirected !== true &&
++    (!response.url || response.url === endpoint), 'READONLY_REDIRECT_REFUSED');
++  if (response.ok !== true) {
++    const status = response.status;
++    throw new ReadError([400, 401, 403, 404, 429].includes(status)
++      ? `READONLY_HTTP_${status}` : Number.isInteger(status) && status >= 500 && status <= 599
++        ? 'READONLY_HTTP_5XX' : 'READONLY_HTTP_OTHER');
++  }
++  requireRead(response.body && typeof response.body[Symbol.asyncIterator] === 'function',
++    'READONLY_RESPONSE_INVALID');
++  const chunks = [];
++  let bytes = 0;
++  for await (const chunk of response.body) {
++    budget();
++    bytes += chunk.byteLength;
++    requireRead(bytes <= MAX_BYTES, 'READONLY_RESPONSE_TOO_LARGE');
++    chunks.push(Buffer.from(chunk));
++  }
++  let body;
++  try { body = JSON.parse(Buffer.concat(chunks).toString('utf8')); }
++  catch { throw new ReadError('READONLY_JSON_INVALID'); }
++  requireRead(plain(body), 'READONLY_RESPONSE_INVALID');
++  return body;
++}
++
++// The only live transports. No mutation-capable helper transport is imported.
++export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImpl = spawnSync,
++  now = () => performance.now() }) {
++  validateContext(env);
++  requireRead(contexts.has(context) && context.reviewedSha === env.GITHUB_SHA &&
++    context.authMode === env.DEMO_STORAGE_AUTH_MODE,
++    'READONLY_CONTEXT_REQUIRED');
++  const deadline = now() + 8 * 60 * 1000;
++  const state = { phase: 'CONTEXT', cliReads: 0, nativeReads: 0, githubReads: 0,
++    bindingVerified: false, projectTokenVerified: false, accountAccessVerified: false, observations: {} };
++  let step = 0, accountStage = 0, databaseCandidates = [], candidateIndex = 0, runtimeId, runtimeRead = false,
++    verifiedVolume, bindingPass = 0, privateReads = {}, privateValues = {}, firstBinding,
++    classificationPass = 0, firstClassification;
++  const budget = () => {
++    const remaining = Math.floor(deadline - now());
++    requireRead(remaining > 0, 'READONLY_DEADLINE_EXCEEDED');
++    return Math.min(remaining, 30000);
++  };
++  const start = (phase, kind) => {
++    state.phase = phase;
++    budget();
++    requireRead(state.cliReads + state.nativeReads + state.githubReads < 100,
++      'READONLY_REQUEST_LIMIT');
++    state[kind]++;
++  };
++  const request = async (url, options) => {
++    try {
++      const response = await fetchImpl(url, { ...options, redirect: 'error',
++        signal: AbortSignal.timeout(budget()) });
++      return await boundedJson(response, url, budget);
++    } catch (error) {
++      if (error instanceof ReadError) throw error;
++      throw new ReadError(['TimeoutError', 'AbortError'].includes(error?.name)
++        ? 'READONLY_REQUEST_TIMEOUT' : 'READONLY_NETWORK_FAILED');
++    }
++  };
++  const assertBranch = async (after = false) => {
++    requireRead(after ? step === 9 && ((bindingPass === 2 && state.observations.bindingStable === true) ||
++      (classificationPass === 2 && state.observations.volumeClassification?.stable === true))
++      : step === 0, 'READONLY_SEQUENCE_REJECTED');
++    start(after ? 'BRANCH_AFTER' : 'BRANCH_BEFORE', 'githubReads');
++    const body = await request(HEAD_ENDPOINT, { method: 'GET', cache: 'no-store', headers: {
++      Authorization: `Bearer ${env.GITHUB_TOKEN}`, Accept: 'application/vnd.github+json',
++      'X-GitHub-Api-Version': '2022-11-28', 'Cache-Control': 'no-cache',
++      'User-Agent': 'ClinicOS-readonly-storage-inspection',
++    } });
++    requireRead(body.ref === `refs/heads/${BRANCH}` && body.object?.type === 'commit' &&
++      SHA.test(body.object.sha ?? ''), 'READONLY_BRANCH_RESULT_INVALID');
++    requireRead(body.object.sha === context.reviewedSha, 'READONLY_BRANCH_DRIFT');
++    if (!after) step = 1;
++    else step = 10;
++  };
++  const observeEnvironment = (data) => {
++    const e = data.environment;
++    if (e?.id !== TARGET.environmentId || e.projectId !== TARGET.projectId) return;
++    const volumes = e.volumeInstances?.edges, instances = e.serviceInstances?.edges;
++    if (Array.isArray(volumes) && volumes.length <= 100 &&
++      volumes.every((edge) => edge?.node?.environmentId === TARGET.environmentId &&
++        uuid(edge.node.id) && uuid(edge.node.volumeId) &&
++        (edge.node.serviceId === null || uuid(edge.node.serviceId))) &&
++      new Set(volumes.map(({ node }) => node.id)).size === volumes.length &&
++      new Set(volumes.map(({ node }) => node.volumeId)).size === volumes.length) {
++      state.observations.volumeCount = volumes.length;
++      state.observations.volumesObserved = volumes.map(({ node: v }) =>
++        ({ volumeInstanceId: v.id, volumeId: v.volumeId, serviceId: v.serviceId }));
++    }
++    if (!Array.isArray(instances) || instances.length > 100) return;
++    if (!instances.every((edge) => edge?.node?.environmentId === TARGET.environmentId &&
++      uuid(edge.node.serviceId)) || new Set(instances.map(({ node }) => node.serviceId)).size !== instances.length)
++      return;
++    state.observations.serviceInstanceCount = instances.length;
++    const runtimes = instances.filter(({ node }) => node.serviceName === 'clinicos-ai-runtime');
++    if (runtimes.length === 1) runtimeId = runtimes[0].node.serviceId;
++    for (const [key, instance] of [
++      ['backend', instances.find(({ node }) => node.serviceId === TARGET.backendServiceId)?.node],
++      ['runtime', runtimes.length === 1 ? runtimes[0].node : undefined],
++    ]) {
++      const running = instance?.latestDeployment?.instances;
++      if (!Array.isArray(instance?.activeDeployments) || instance.activeDeployments.length > 100 ||
++        !Array.isArray(running) || running.length > 100 ||
++        !running.every((i) => i && (i.status === 'RUNNING' || TERMINAL.has(i.status)))) continue;
++      state.observations[`${key}Instances`] = { serviceId: instance.serviceId,
++        activeDeployments: instance.activeDeployments.length, running: running.filter((i) =>
++          i.status === 'RUNNING').length, terminal: running.filter((i) => TERMINAL.has(i.status)).length };
++    }
++  };
++  const native = async (query, variables) => {
++    let phase;
++    if (context.authMode === 'project-token' && query === QUERIES.identity && exactVariables(variables, {}) && step === 1)
++      phase = 'TOKEN_IDENTITY';
++    else if (context.authMode === 'account-bearer' && query === QUERIES.accountIdentity &&
++      exactVariables(variables, {}) && step === 1 && accountStage === 0) phase = 'ACCOUNT_IDENTITY';
++    else if (context.authMode === 'account-bearer' && query === QUERIES.accountAccess &&
++      exactVariables(variables, { projectId: TARGET.projectId, environmentId: TARGET.environmentId }) &&
++      step === 1 && accountStage === 1) phase = 'ACCOUNT_ACCESS';
++    else if (query === QUERIES.domain && step === 3 && exactVariables(variables,
++      { environmentId: TARGET.environmentId, serviceId: TARGET.backendServiceId }))
++      phase = 'BACKEND_DOMAIN';
++    else if (query === QUERIES.environment && step === 6 && candidateIndex === databaseCandidates.length &&
++      exactVariables(variables, { id: TARGET.environmentId })) phase = 'ENVIRONMENT_METADATA';
++    else if (query === QUERIES.snapshots && state.bindingVerified && verifiedVolume &&
++      (step === 7 || step === 8) && exactVariables(variables, { id: verifiedVolume.id }))
++      phase = step === 7 ? 'SNAPSHOTS_BEFORE' : 'SNAPSHOTS_AFTER';
++    requireRead(Boolean(phase), 'READONLY_QUERY_REJECTED');
++    start(phase, 'nativeReads');
++    const body = await request(ENDPOINT, { method: 'POST', headers: {
++      'Content-Type': 'application/json',
++      ...(context.authMode === 'project-token' ? { 'Project-Access-Token': env.RAILWAY_TOKEN }
++        : { Authorization: `Bearer ${env.RAILWAY_API_TOKEN}` }),
++    }, body: JSON.stringify({ query, variables }) });
++    requireRead(!Object.hasOwn(body, 'errors'), 'READONLY_GRAPHQL_REJECTED');
++    requireRead(plain(body.data), 'READONLY_DATA_INVALID');
++    if (phase === 'TOKEN_IDENTITY') {
++      const token = body.data.projectToken;
++      requireRead(token?.project?.id === TARGET.projectId &&
++        token?.environment?.id === TARGET.environmentId && token.environment.name === 'demo',
++      'READONLY_TOKEN_TARGET_MISMATCH');
++      state.projectTokenVerified = true;
++      step = 2;
++    } else if (phase === 'ACCOUNT_IDENTITY') {
++      requireRead(typeof body.data.me?.id === 'string' && /^[A-Za-z0-9_:/+=.-]{1,200}$/.test(body.data.me.id),
++        'READONLY_ACCOUNT_IDENTITY_INVALID');
++      // User identity is intentionally discarded, never copied to observations.
++      accountStage = 1;
++    } else if (phase === 'ACCOUNT_ACCESS') {
++      const target = body.data.environment;
++      requireRead(body.data.project?.id === TARGET.projectId && target?.id === TARGET.environmentId &&
++        target.projectId === TARGET.projectId && target.name === 'demo' && target.canAccess === true,
++        'READONLY_ACCOUNT_TARGET_MISMATCH');
++      state.accountAccessVerified = true; accountStage = 2; step = 2;
++    } else if (phase === 'BACKEND_DOMAIN') {
++      privateReads.domain = canonical(body.data);
++      step = 4;
++    }
++    else if (phase === 'ENVIRONMENT_METADATA') {
++      for (const connection of [body.data.environment?.volumeInstances,
++        body.data.environment?.serviceInstances]) {
++        if (Array.isArray(connection?.edges)) requireRead(connection.edges.length <= 100 &&
++          connection.edges.every((edge) => plain(edge) && plain(edge.node)), 'READONLY_DATA_INVALID');
++      }
++      privateReads.environment = canonical(body.data);
++      privateValues.environment = body.data.environment;
++      observeEnvironment(body.data);
++      step = 7;
++    } else if (phase === 'SNAPSHOTS_BEFORE') step = 8;
++    else if (phase === 'SNAPSHOTS_AFTER') step = 9;
++    return body.data;
++  };
++  const call = (args, options = {}) => {
++    requireRead(Array.isArray(args) && options.json === true &&
++      Object.keys(options).every((key) => key === 'json'), 'READONLY_COMMAND_REJECTED');
++    let phase;
++    if (step === 2 && equal(args, ['variables', '--service', TARGET.backendServiceId, '--json']))
++      phase = 'BACKEND_IDENTITY';
++    else if (step === 4 && equal(args, ['variables', '--service', TARGET.backendServiceId,
++      '--environment', TARGET.environmentId, '--json'])) phase = 'BACKEND_CONFIG';
++    else if (step === 5 && equal(args, ['service', 'list', '--project', TARGET.projectId,
++      '--environment', TARGET.environmentId, '--json'])) phase = 'SERVICE_CATALOG';
++    else if (step === 6 && candidateIndex < databaseCandidates.length && equal(args,
++      ['variables', '--service', databaseCandidates[candidateIndex], '--environment', TARGET.environmentId,
++        '--json'])) phase = 'DATABASE_CONFIG';
++    else if (step === 7 && runtimeId && !state.bindingVerified && equal(args,
++      ['variables', '--service', runtimeId, '--environment', TARGET.environmentId, '--json']))
++      phase = 'RUNTIME_CONFIG';
++    requireRead(Boolean(phase), 'READONLY_COMMAND_REJECTED');
++    start(phase, 'cliReads');
++    const childEnv = { [context.authMode === 'project-token' ? 'RAILWAY_TOKEN' : 'RAILWAY_API_TOKEN']:
++      context.authMode === 'project-token' ? env.RAILWAY_TOKEN : env.RAILWAY_API_TOKEN, CI: 'true', NO_COLOR: '1' };
++    for (const key of ['PATH', 'HOME', 'HTTPS_PROXY', 'HTTP_PROXY', 'NO_PROXY',
++      'SSL_CERT_FILE', 'SSL_CERT_DIR', 'NODE_EXTRA_CA_CERTS']) {
++      if (typeof env[key] === 'string') childEnv[key] = env[key];
++    }
++    let result;
++    try { result = spawnImpl('railway', args, { shell: false, encoding: 'utf8',
++      stdio: ['ignore', 'pipe', 'pipe'], timeout: budget(), maxBuffer: MAX_BYTES, env: childEnv }); }
++    catch (error) {
++      throw new ReadError(error?.code === 'ETIMEDOUT' ? 'READONLY_CLI_TIMEOUT' : 'READONLY_CLI_SPAWN_FAILED');
++    }
++    budget();
++    if (result?.error) throw new ReadError(result.error.code === 'ETIMEDOUT' ? 'READONLY_CLI_TIMEOUT'
++      : result.error.code === 'ENOBUFS' ? 'READONLY_CLI_RESPONSE_TOO_LARGE' : 'READONLY_CLI_SPAWN_FAILED');
++    requireRead(!result?.signal, 'READONLY_CLI_INTERRUPTED');
++    requireRead(result && !result.error && !result.signal && result.status === 0,
++      'READONLY_CLI_FAILED');
++    requireRead(typeof result.stdout === 'string' && Buffer.byteLength(result.stdout) <= MAX_BYTES &&
++      (typeof result.stderr !== 'string' || Buffer.byteLength(result.stderr) <= MAX_BYTES),
++    'READONLY_CLI_RESPONSE_TOO_LARGE');
++    let data;
++    try { data = JSON.parse(result.stdout); }
++    catch { throw new ReadError('READONLY_CLI_JSON_INVALID'); }
++    requireRead(phase === 'SERVICE_CATALOG' ? (plain(data) || Array.isArray(data)) : plain(data),
++      'READONLY_CLI_RESULT_INVALID');
++    // Config and mount/DB credentials remain private and are compared, never emitted.
++    privateReads[`${phase}:${args[2]}`] = canonical(data);
++    if (phase === 'BACKEND_CONFIG') privateValues.backend = data;
++    else if (phase === 'SERVICE_CATALOG') privateValues.catalog = data;
++    else if (phase === 'DATABASE_CONFIG') {
++      privateValues.databaseConfigs ??= {};
++      privateValues.databaseConfigs[args[2]] = data;
++    }
++    if (phase === 'BACKEND_IDENTITY') step = 3;
++    else if (phase === 'BACKEND_CONFIG') step = 5;
++    else if (phase === 'SERVICE_CATALOG') {
++      if (Array.isArray(data) && data.length <= 20) {
++        state.observations.serviceCatalogCount = data.length;
++        requireRead(data.every((s) => plain(s) && uuid(s.id) && typeof s.name === 'string' &&
++          s.name.length <= 200) && new Set(data.map((s) => s.id)).size === data.length,
++        'READONLY_SERVICE_CATALOG_INVALID');
++        databaseCandidates = data.filter((s) => /^postgres(?:ql)?$/i.test(s.name)).map((s) => s.id);
++        state.observations.databaseCandidateCount = databaseCandidates.length;
++      }
++      step = 6;
++    } else if (phase === 'DATABASE_CONFIG') candidateIndex++;
++    else if (phase === 'RUNTIME_CONFIG') { runtimeId = undefined; runtimeRead = true; }
++    return data;
++  };
++  const classifyUnclassifiedVolumes = () => {
++    requireRead(step === 7 && candidateIndex === databaseCandidates.length &&
++      plain(privateValues.databaseConfigs) &&
++      plain(privateValues.backend) && plain(privateValues.environment) &&
++      bindingPass === 0 && classificationPass < 2,
++    'READONLY_CLASSIFICATION_STATE_INVALID');
++    const backend = privateValues.backend;
++    const configs = privateValues.databaseConfigs ?? {};
++    const candidates = databaseCandidates.filter((serviceId) => {
++      const config = configs[serviceId];
++      return plain(config) && config.RAILWAY_PROJECT_ID === TARGET.projectId &&
++        config.RAILWAY_ENVIRONMENT_ID === TARGET.environmentId &&
++        config.RAILWAY_PRIVATE_DOMAIN === TARGET.databaseHost &&
++        matchesPrivateDatabase(backend.DATABASE_URL, config.DATABASE_URL);
++    });
++    requireRead(candidates.length === 1, 'READONLY_DATABASE_IDENTITY_UNVERIFIED');
++    const environment = privateValues.environment;
++    const volumeConnection = environment.volumeInstances;
++    const serviceConnection = environment.serviceInstances;
++    requireRead(environment.id === TARGET.environmentId && environment.projectId === TARGET.projectId &&
++      volumeConnection?.pageInfo?.hasNextPage === false && serviceConnection?.pageInfo?.hasNextPage === false &&
++      Array.isArray(volumeConnection.edges) && volumeConnection.edges.length > 0 &&
++      volumeConnection.edges.length <= 20 && Array.isArray(serviceConnection.edges) &&
++      serviceConnection.edges.length <= 100,
++    'READONLY_CLASSIFICATION_INVENTORY_INCOMPLETE');
++    const volumes = volumeConnection.edges.map((edge) => edge?.node);
++    const services = serviceConnection.edges.map((edge) => edge?.node);
++    requireRead(volumes.every((volume) => plain(volume) && volume.environmentId === TARGET.environmentId &&
++      uuid(volume.id) && uuid(volume.volumeId) &&
++      (volume.serviceId === null || uuid(volume.serviceId))) &&
++      new Set(volumes.map((volume) => volume.id)).size === volumes.length &&
++      new Set(volumes.map((volume) => volume.volumeId)).size === volumes.length &&
++      services.every((service) => plain(service) && service.environmentId === TARGET.environmentId &&
++        uuid(service.serviceId)) &&
++      new Set(services.map((service) => service.serviceId)).size === services.length,
++    'READONLY_CLASSIFICATION_INVENTORY_INVALID');
++    const catalog = privateValues.catalog;
++    requireRead(Array.isArray(catalog) && catalog.length > 0 && catalog.length <= 20 &&
++      catalog.every((service) => plain(service) && uuid(service.id) && typeof service.name === 'string') &&
++      new Set(catalog.map((service) => service.id)).size === catalog.length,
++    'READONLY_CLASSIFICATION_CATALOG_INVALID');
++    const instanceIds = new Set(volumes.map((volume) => volume.id));
++    const volumeIds = new Set(volumes.map((volume) => volume.volumeId));
++    const serviceIds = new Set([...catalog.map((service) => service.id),
++      ...volumes.map((volume) => volume.serviceId).filter(Boolean)]);
++    requireRead([...instanceIds].every((id) => !volumeIds.has(id) && !serviceIds.has(id)) &&
++      [...volumeIds].every((id) => !serviceIds.has(id)), 'READONLY_CLASSIFICATION_ID_ALIAS');
++    const databaseServiceId = candidates[0];
++    const databaseService = services.filter((service) => service.serviceId === databaseServiceId);
++    const databaseVolumes = volumes.filter((volume) => volume.serviceId === databaseServiceId);
++    requireRead(catalog.some((service) => service.id === databaseServiceId) &&
++      databaseService.length <= 1 && databaseVolumes.length === 1,
++    'READONLY_DATABASE_VOLUME_AMBIGUOUS');
++    const databaseVolume = databaseVolumes[0];
++    verifyDatabaseMount(databaseVolume, configs[databaseServiceId]);
++    const knownServiceIds = new Set(catalog.filter((service) =>
++      services.some((instance) => instance.serviceId === service.id)).map((service) => service.id));
++    const rows = volumes.map((volume) => {
++      let role = 'unknown-service-reference';
++      if (volume.id === databaseVolume.id) role = 'database-bound';
++      else if (volume.serviceId === null) role = 'unattached-unknown';
++      else if (volume.serviceId === TARGET.backendServiceId && knownServiceIds.has(volume.serviceId))
++        role = 'target-backend';
++      else if (knownServiceIds.has(volume.serviceId)) role = 'other-attached-service';
++      return { volumeInstanceId: volume.id, volumeId: volume.volumeId,
++        serviceId: volume.serviceId, role, mountVerified: role === 'database-bound',
++        mountClass: role === 'database-bound' ? 'database-pgdata-contained' : 'unverified' };
++    });
++    requireRead(rows.length === volumes.length && rows.filter((row) => row.role === 'database-bound').length === 1,
++      'READONLY_CLASSIFICATION_PROJECTION_INVALID');
++    const projection = { schemaVersion: 1, stable: false,
++      configuredDatabaseServiceId: databaseServiceId,
++      configuredDatabaseVolumeInstanceId: databaseVolume.id,
++      configuredDatabaseVolumeId: databaseVolume.volumeId,
++      observedVolumeCount: rows.length, mountVerifiedVolumeCount: 1,
++      unknownVolumeCount: rows.filter((row) => row.role !== 'database-bound').length,
++      databaseSnapshotScope: 'unobserved', otherSnapshotScope: 'unobserved', volumes: rows };
++    const signature = canonical({ reads: privateReads, projection });
++    if (classificationPass === 0) firstClassification = signature;
++    else {
++      state.phase = 'BINDING_COMPARE';
++      requireRead(signature === firstClassification, 'READONLY_CLASSIFICATION_DRIFT');
++      projection.stable = true;
++      state.phase = 'ENVIRONMENT_METADATA';
++      state.observations.volumeClassification = projection;
++      step = 9;
++    }
++    classificationPass++;
++    if (classificationPass === 1) {
++      step = 2; databaseCandidates = []; candidateIndex = 0; runtimeId = undefined;
++      runtimeRead = false; privateReads = {}; privateValues = {};
++    }
++  };
++  const inspectBinding = async () => {
++    if (classificationPass === 1) {
++      try { await inspectStorageBinding(call, native); }
++      catch (error) {
++        requireRead(error?.message === 'UNCLASSIFIED_DEMO_VOLUMES' && state.phase === 'ENVIRONMENT_METADATA' &&
++          step === 7, 'READONLY_CLASSIFICATION_RECHECK_FAILED');
++        classifyUnclassifiedVolumes();
++        return false;
++      }
++      throw new ReadError('READONLY_CLASSIFICATION_RECHECK_FAILED');
++    }
++    requireRead((step === 2 && bindingPass === 0) || (step === 9 && bindingPass === 1),
++      'READONLY_SEQUENCE_REJECTED');
++    if (bindingPass === 1) {
++      step = 2; databaseCandidates = []; candidateIndex = 0; runtimeId = undefined;
++      runtimeRead = false; privateReads = {}; privateValues = {}; state.bindingVerified = false;
++    }
++    let binding;
++    try { binding = await inspectStorageBinding(call, native); }
++    catch (error) {
++      if (bindingPass !== 0 || error?.message !== 'UNCLASSIFIED_DEMO_VOLUMES' ||
++        state.phase !== 'ENVIRONMENT_METADATA' || step !== 7) throw error;
++      try { classifyUnclassifiedVolumes(); }
++      catch (classificationError) {
++        if (['READONLY_DATABASE_VOLUME_AMBIGUOUS', 'READONLY_CLASSIFICATION_ID_ALIAS']
++          .includes(classificationError?.code)) throw error;
++        throw classificationError;
++      }
++      return inspectBinding();
++    }
++    state.phase = 'BINDING';
++    requireRead(step === 7 && runtimeRead && !runtimeId && uuid(binding?.volume?.id) &&
++      uuid(binding.volume.volumeId) && uuid(binding.volume.serviceId) &&
++      databaseCandidates.includes(binding.volume.serviceId) &&
++      binding.volume.environmentId === TARGET.environmentId &&
++      binding.backendInstance?.serviceId === TARGET.backendServiceId &&
++      uuid(binding.runtimeInstance?.serviceId), 'READONLY_BINDING_RESULT_INVALID');
++    privateReads.binding = canonical(binding);
++    const observation = canonical(privateReads);
++    if (bindingPass === 0) firstBinding = observation;
++    else {
++      state.phase = 'BINDING_COMPARE';
++      requireRead(observation === firstBinding, 'READONLY_BINDING_DRIFT');
++      state.observations.bindingStable = true;
++      step = 9;
++    }
++    bindingPass++;
++    state.observations.bindingObservations = bindingPass;
++    verifiedVolume = { id: binding.volume.id };
++    state.bindingVerified = true;
++    state.observations.verifiedBinding = { databaseServiceId: binding.volume.serviceId,
++      volumeId: binding.volume.volumeId, volumeInstanceId: binding.volume.id,
++      runtimeServiceId: binding.runtimeInstance.serviceId, mountVerified: true };
++    return true;
++  };
++  const readSnapshots = async () => {
++    requireRead(state.bindingVerified && verifiedVolume, 'READONLY_BINDING_REQUIRED');
++    const lists = [];
++    for (let i = 0; i < 2; i++) {
++      const data = await native(QUERIES.snapshots, { id: verifiedVolume.id });
++      const values = data.volumeInstanceBackupList;
++      requireRead(Array.isArray(values) && values.length <= 1000 &&
++        values.every((s) => uuid(s?.id)) && new Set(values.map((s) => s.id)).size === values.length,
++      'READONLY_SNAPSHOT_LIST_INVALID');
++      lists.push(values.map((s) => s.id).sort());
++    }
++    requireRead(equal(lists[0], lists[1]), 'READONLY_SNAPSHOT_DRIFT');
++    state.observations.snapshots = { before: lists[0].length, after: lists[1].length, stable: true };
++  };
++  const invalidateClassification = () => {
++    if (classificationPass === 2 && state.observations.volumeClassification)
++      state.observations.volumeClassification.stable = false;
++  };
++  return { getState: () => structuredClone(state), assertBranch, native, call,
++    inspectBinding, readSnapshots, invalidateClassification };
++}
++
++export async function inspectDemoStorage({ env = process.env, args = [], fetchImpl, spawnImpl, now,
++  capturedAt = () => new Date().toISOString() } = {}) {
++  let context, access;
++  let phase = 'CONTEXT', code = null, outcome = 'blocked';
++  try {
++    context = validateContext(env, args);
++    access = createReadOnlyAccess({ env, context, fetchImpl, spawnImpl, now });
++    await access.assertBranch();
++    if (context.authMode === 'project-token') await access.native(QUERIES.identity, {});
++    else {
++      await access.native(QUERIES.accountIdentity, {});
++      await access.native(QUERIES.accountAccess, { projectId: TARGET.projectId, environmentId: TARGET.environmentId });
++    }
++    const bindingAvailable = await access.inspectBinding();
++    if (bindingAvailable) {
++      await access.readSnapshots();
++      await access.inspectBinding();
++      await access.assertBranch(true);
++      outcome = 'inspected';
++    } else {
++      phase = 'ENVIRONMENT_METADATA';
++      code = 'UNCLASSIFIED_DEMO_VOLUMES';
++      await access.assertBranch(true);
++    }
++  } catch (error) {
++    phase = access?.getState().phase ?? phase;
++    code = error instanceof ReadError ? error.code : HELPER_CODES.has(error?.message)
++      ? error.message : 'READONLY_INSPECT_UNEXPECTED_FAILURE';
++    if (phase === 'BRANCH_AFTER') access?.invalidateClassification();
++  }
++  const state = access?.getState();
++  const receipt = {
++    schemaVersion: 1, repository: REPOSITORY, branch: BRANCH,
++    authMode: context?.authMode ?? null, workflowRef: context?.workflowRef ?? null,
++    protectedEnvironment: context?.protectedEnvironment ?? null,
++    reviewedSha: context?.reviewedSha ?? null, runId: context?.runId ?? null,
++    runAttempt: context?.runAttempt ?? null, capturedAt: capturedAt(),
++    projectId: TARGET.projectId, environmentId: TARGET.environmentId,
++    backendServiceId: TARGET.backendServiceId, operation: 'demo-storage-inspect',
++    outcome, phase: outcome === 'inspected' ? 'BRANCH_AFTER' : phase, code,
++    credentialKind: context?.authMode ?? 'unattested',
++    projectTokenVerified: state?.projectTokenVerified === true,
++    targetReadAccess: state?.bindingVerified === true &&
++      (state?.projectTokenVerified === true || state?.accountAccessVerified === true),
++    bindingVerified: state?.bindingVerified === true,
++    readRequests: { cli: state?.cliReads ?? 0, native: state?.nativeReads ?? 0,
++      github: state?.githubReads ?? 0 }, observations: state?.observations ?? {},
++    sourceStorageVerified: false, cleanupPerformed: false, deletionPerformed: false,
++    redeployPerformed: false, projectWideVisibility: 'unproven',
++  };
++  // No provider object or config is retained, only the explicit projection above.
++  const secrets = [env.RAILWAY_TOKEN, env.RAILWAY_API_TOKEN, env.GITHUB_TOKEN].filter((v) => typeof v === 'string' && v);
++  const json = JSON.stringify(receipt);
++  if (SECRET.test(json) || secrets.some((value) => json.includes(value))) {
++    receipt.outcome = 'blocked'; receipt.phase = 'RECEIPT'; receipt.code = 'READONLY_RECEIPT_UNSAFE';
++    receipt.observations = {}; receipt.bindingVerified = false;
++    receipt.projectTokenVerified = false; receipt.targetReadAccess = false;
++  }
++  freeze(receipt);
++  receipts.set(receipt, secrets);
++  return receipt;
++}
++
++export function serializeReceipt(receipt) {
++  requireRead(receipts.has(receipt) && Object.isFrozen(receipt) && PHASES.has(receipt.phase) &&
++    typeof receipt.capturedAt === 'string' &&
++    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z(?![\s\S])/.test(receipt.capturedAt),
++  'READONLY_RECEIPT_INVALID');
++  const json = JSON.stringify(receipt);
++  requireRead(Buffer.byteLength(json) <= 131072 && !SECRET.test(json) &&
++    !receipts.get(receipt).some((secret) => json.includes(secret)), 'READONLY_RECEIPT_UNSAFE');
++  return json;
++}
++
++export async function main({ env = process.env, args = process.argv.slice(2),
++  output = (line) => console.log(line), ...options } = {}) {
++  try {
++    const receipt = await inspectDemoStorage({ env, args, ...options });
++    const json = serializeReceipt(receipt);
++    if (receipt.outcome === 'blocked')
++      output(`::error title=Demo storage inspection::${receipt.phase}:${receipt.code}`);
++    output(`CLINICOS_DEMO_STORAGE_INSPECT ${json}`);
++    return receipt.outcome === 'inspected' ? 0 : 1;
++  } catch {
++    output('::error title=Demo storage inspection::RECEIPT:READONLY_RECEIPT_INVALID');
++    return 1;
++  }
++}
++if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href)
++  process.exitCode = await main();
+--- /dev/null
++++ b/scripts/maintenance/demo-storage-inspect.test.mjs
+@@ -0,0 +1,693 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { createHash } from 'node:crypto';
++import { readFileSync } from 'node:fs';
++import { spawnSync } from 'node:child_process';
++import { fileURLToPath } from 'node:url';
++import { TARGET } from './demo-storage-binding-readonly.mjs';
++import { BRANCH, REPOSITORY, WORKFLOW_REF, PROTECTED_ENVIRONMENT, ENDPOINT, HEAD_ENDPOINT, QUERIES, validateContext,
++  createReadOnlyAccess, inspectDemoStorage, serializeReceipt, main } from './demo-storage-inspect.mjs';
++
++const IDS = Object.freeze({ db: '50000000-0000-4000-8000-000000000472',
++  runtime: '50000000-0000-4000-8000-000000000473',
++  volume: '50000000-0000-4000-8000-000000000474',
++  volumeInstance: '50000000-0000-4000-8000-000000000475',
++  backup: '50000000-0000-4000-8000-000000000476',
++  other: '50000000-0000-4000-8000-000000000477' });
++const TOKEN = 'synthetic-railway-credential-do-not-print';
++const GH_TOKEN = 'synthetic-github-credential-do-not-print';
++const ENV = Object.freeze({ GITHUB_EVENT_NAME: 'workflow_dispatch', GITHUB_REPOSITORY: REPOSITORY,
++  GITHUB_WORKFLOW_REF: WORKFLOW_REF, GITHUB_WORKFLOW_SHA: 'a'.repeat(40),
++  GITHUB_ACTOR: 'l2v-hub', GITHUB_TRIGGERING_ACTOR: 'l2v-hub',
++  DEMO_STORAGE_ENVIRONMENT: PROTECTED_ENVIRONMENT, DEMO_STORAGE_AUTH_MODE: 'project-token',
++  GITHUB_REF: `refs/heads/${BRANCH}`, GITHUB_REF_NAME: BRANCH, GITHUB_SHA: 'a'.repeat(40),
++  DEMO_STORAGE_REVIEWED_SHA: 'a'.repeat(40), DEMO_STORAGE_OPERATION: 'demo-storage-inspect',
++  GITHUB_RUN_ID: '39020438022', GITHUB_RUN_ATTEMPT: '1', RAILWAY_TOKEN: TOKEN, GITHUB_TOKEN: GH_TOKEN });
++const STAMP = '2026-10-18T20:30:00.000Z';
++const json = (value, status = 200) => new Response(JSON.stringify(value), { status });
++const clone = (v) => structuredClone(v);
++const errorCode = (code) => (error) => error?.message === code;
++const digest = (v) => createHash('sha256').update(v).digest('hex');
++
++function fixture(change = () => {}) {
++  const common = { RAILWAY_PROJECT_ID: TARGET.projectId, RAILWAY_ENVIRONMENT_ID: TARGET.environmentId,
++    RAILWAY_ENVIRONMENT_NAME: 'demo' };
++  const backend = { ...common, RAILWAY_SERVICE_ID: TARGET.backendServiceId,
++    RAILWAY_SERVICE_NAME: TARGET.backendServiceName,
++    DATABASE_URL: 'postgresql://synthetic:private-password@postgres.railway.internal/railway',
++    AI_RUNTIME_URL: 'http://ai.railway.internal:8000' };
++  const db = { ...common, RAILWAY_PRIVATE_DOMAIN: TARGET.databaseHost,
++    DATABASE_URL: backend.DATABASE_URL, PGDATA: '/var/lib/postgresql/data/pgdata',
++    RAILWAY_VOLUME_MOUNT_PATH: '/var/lib/postgresql/data' };
++  const runtime = { ...common, RAILWAY_PRIVATE_DOMAIN: 'ai.railway.internal' };
++  const catalog = [{ id: TARGET.backendServiceId, name: TARGET.backendServiceName },
++    { id: IDS.db, name: 'Postgres' }, { id: IDS.runtime, name: 'clinicos-ai-runtime' }];
++  const instance = (id, name) => ({ id: IDS.other, serviceId: id, serviceName: name,
++    environmentId: TARGET.environmentId, source: { repo: 'l2v-hub/ClinicOS', image: null },
++    rootDirectory: 'private-directory-do-not-print', buildCommand: 'private-build-do-not-print',
++    startCommand: 'private-start-do-not-print', builder: 'RAILPACK', healthcheckPath: '/health',
++    restartPolicyType: 'ON_FAILURE', restartPolicyMaxRetries: 3, numReplicas: 1,
++    activeDeployments: [{ id: IDS.other }], latestDeployment: { id: IDS.other,
++      instances: [{ id: 'private-container-do-not-print', status: 'RUNNING' }] },
++    domains: { serviceDomains: [], customDomains: [] } });
++  const environment = { id: TARGET.environmentId, projectId: TARGET.projectId,
++    volumeInstances: { pageInfo: { hasNextPage: false }, edges: [{ node: {
++      id: IDS.volumeInstance, volumeId: IDS.volume, serviceId: IDS.db,
++      environmentId: TARGET.environmentId, mountPath: '/var/lib/postgresql/data', state: 'READY' } }] },
++    serviceInstances: { pageInfo: { hasNextPage: false }, edges: [
++      { node: instance(TARGET.backendServiceId, TARGET.backendServiceName) },
++      { node: instance(IDS.runtime, 'clinicos-ai-runtime') },
++    ] } };
++  const data = { backend, db, runtime, catalog, environment,
++    identity: { project: { id: TARGET.projectId }, environment: { id: TARGET.environmentId, name: 'demo' } },
++    domains: { serviceDomains: [{ domain: TARGET.domain }], customDomains: [] }, snapshots: [[], []] };
++  change(data);
++  const calls = [], requests = [];
++  let snapshotRead = 0;
++  const spawnImpl = (binary, args, options) => {
++    calls.push({ binary, args: clone(args), options });
++    const value = args[0] === 'service' ? data.catalog : args[2] === TARGET.backendServiceId
++      ? data.backend : args[2] === IDS.runtime ? data.runtime : data.db;
++    return { status: 0, signal: null, stdout: JSON.stringify(value), stderr: '' };
++  };
++  const fetchImpl = async (url, options) => {
++    requests.push({ url, options });
++    if (url === HEAD_ENDPOINT)
++      return json({ ref: `refs/heads/${BRANCH}`, object: { type: 'commit', sha: ENV.GITHUB_SHA } });
++    assert.equal(url, ENDPOINT);
++    const { query } = JSON.parse(options.body);
++    const body = query === QUERIES.accountIdentity ? { me: data.accountIdentity ?? {id:'synthetic-user-never-publish'} }
++      : query === QUERIES.accountAccess ? (data.accountAccess ?? {project:{id:TARGET.projectId},environment:{id:TARGET.environmentId,projectId:TARGET.projectId,name:'demo',canAccess:true}})
++      : query === QUERIES.identity ? { projectToken: data.identity }
++      : query === QUERIES.domain ? { serviceInstance: { domains: data.domains } }
++        : query === QUERIES.environment ? { environment: data.environment }
++          : query === QUERIES.snapshots
++            ? { volumeInstanceBackupList: data.snapshots[snapshotRead++] } : assert.fail('unknown query');
++    return json({ data: body });
++  };
++  return { data, calls, requests, spawnImpl, fetchImpl };
++}
++const run = (f = fixture(), options = {}) => inspectDemoStorage({ env: ENV, fetchImpl: f.fetchImpl,
++  spawnImpl: f.spawnImpl, capturedAt: () => STAMP, ...options });
++const safe = (receipt) => {
++  const text = serializeReceipt(receipt);
++  for (const secret of [TOKEN, GH_TOKEN, 'private-password', 'postgresql://', 'ai.railway.internal',
++    'private-directory', 'private-build', 'private-start', 'private-container'])
++    assert.equal(text.includes(secret), false, secret);
++  assert.equal(receipt.cleanupPerformed, false);
++  assert.equal(receipt.sourceStorageVerified, false);
++  assert.equal(receipt.deletionPerformed, false);
++  assert.equal(receipt.redeployPerformed, false);
++  assert.equal(receipt.projectWideVisibility, 'unproven');
++  return text;
++};
++
++test('ported pure binding is exercised and only bounded reads return a safe receipt', async () => {
++  const f = fixture();
++  const receipt = await run(f);
++  assert.equal(receipt.outcome, 'inspected');
++  assert.equal(receipt.bindingVerified, true);
++  assert.deepEqual(receipt.readRequests, { cli: 10, native: 7, github: 2 });
++  assert.equal(receipt.observations.bindingObservations, 2);
++  assert.equal(receipt.observations.bindingStable, true);
++  assert.deepEqual(receipt.observations.verifiedBinding, { databaseServiceId: IDS.db,
++    volumeId: IDS.volume, volumeInstanceId: IDS.volumeInstance,
++    runtimeServiceId: IDS.runtime, mountVerified: true });
++  assert.deepEqual(receipt.observations.snapshots, { before: 0, after: 0, stable: true });
++  assert.equal(receipt.observations.databaseCandidateCount, 1);
++  assert.equal(receipt.observations.volumeCount, 1);
++  assert.equal(receipt.observations.backendInstances.running, 1);
++  for (const call of f.calls) {
++    assert.equal(call.binary, 'railway');
++    assert.equal(call.options.shell, false);
++    assert.deepEqual(call.options.stdio, ['ignore', 'pipe', 'pipe']);
++    assert.ok(call.options.timeout <= 30000 && call.options.timeout > 0);
++    assert.equal(call.options.maxBuffer, 4194304);
++    assert.equal(call.options.env.RAILWAY_TOKEN, TOKEN);
++    assert.equal(call.options.env.GITHUB_TOKEN, undefined);
++    assert.equal(call.options.env.RAILWAY_API_TOKEN, undefined);
++  }
++  for (const { url, options } of f.requests) {
++    assert.equal(options.redirect, 'error');
++    assert.ok(options.signal instanceof AbortSignal);
++    if (url === ENDPOINT) {
++      assert.equal(options.method, 'POST');
++      assert.deepEqual(options.headers, { 'Content-Type': 'application/json', 'Project-Access-Token': TOKEN });
++      assert.ok(Object.values(QUERIES).includes(JSON.parse(options.body).query));
++    } else {
++      assert.equal(options.headers.Authorization, `Bearer ${GH_TOKEN}`);
++      assert.equal(options.headers['Project-Access-Token'], undefined);
++    }
++  }
++  safe(receipt);
++  assert.ok(Object.isFrozen(receipt.observations.verifiedBinding));
++});
++
++function threeVolumeFixture(change = () => {}) {
++  return fixture((data) => {
++    const otherService = { ...clone(data.environment.serviceInstances.edges[1].node),
++      id: '50000000-0000-4000-8000-000000000480', serviceId: IDS.other,
++      serviceName: 'unrelated-service' };
++    data.catalog.push({ id: IDS.other, name: 'unrelated-service' });
++    data.environment.serviceInstances.edges.push({ node: otherService });
++    data.environment.volumeInstances.edges.push(
++      { node: { id: '50000000-0000-4000-8000-000000000481',
++        volumeId: '50000000-0000-4000-8000-000000000482', serviceId: IDS.other,
++        environmentId: TARGET.environmentId, mountPath: '/private/other', state: 'READY' } },
++      { node: { id: '50000000-0000-4000-8000-000000000483',
++        volumeId: '50000000-0000-4000-8000-000000000484', serviceId: null,
++        environmentId: TARGET.environmentId, mountPath: '/private/unattached', state: 'READY' } },
++    );
++    change(data);
++  });
++}
++
++test('three-volume read-only classification identifies only the credential-matched DB mount', async () => {
++  const f = threeVolumeFixture();
++  const receipt = await run(f);
++  assert.equal(receipt.outcome, 'blocked');
++  assert.equal(receipt.phase, 'ENVIRONMENT_METADATA');
++  assert.equal(receipt.code, 'UNCLASSIFIED_DEMO_VOLUMES');
++  assert.equal(receipt.bindingVerified, false);
++  const classification = receipt.observations.volumeClassification;
++  assert.equal(classification.stable, true);
++  assert.equal(classification.configuredDatabaseServiceId, IDS.db);
++  assert.equal(classification.configuredDatabaseVolumeInstanceId, IDS.volumeInstance);
++  assert.equal(classification.observedVolumeCount, 3);
++  assert.equal(classification.mountVerifiedVolumeCount, 1);
++  assert.equal(classification.unknownVolumeCount, 2);
++  assert.equal(classification.databaseSnapshotScope, 'unobserved');
++  assert.equal(classification.otherSnapshotScope, 'unobserved');
++  assert.deepEqual(classification.volumes.map((row) => row.role), [
++    'database-bound', 'other-attached-service', 'unattached-unknown' ]);
++  assert.deepEqual(f.requests.filter(({ options }) => options.body?.includes('volumeInstanceBackupList')), []);
++  assert.equal(f.calls.length, 8);
++  assert.deepEqual(receipt.readRequests, { cli: 8, native: 5, github: 2 });
++  const text = safe(receipt);
++  for (const secret of ['unrelated-service', '/private/other', '/private/unattached',
++    '/var/lib/postgresql/data', 'private-password']) assert.equal(text.includes(secret), false, secret);
++});
++
++test('classification refuses ambiguous database attachments and preserves the original helper stop', async () => {
++  const f = fixture((d) => { d.environment.volumeInstances.edges.push({ node: {
++    ...d.environment.volumeInstances.edges[0].node, id: IDS.other, volumeId: '50000000-0000-4000-8000-000000000485' } }); });
++  const receipt = await run(f);
++  assert.equal(receipt.code, 'UNCLASSIFIED_DEMO_VOLUMES');
++  assert.equal(receipt.observations.volumeClassification, undefined);
++  assert.equal(receipt.bindingVerified, false);
++  safe(receipt);
++});
++
++test('classification mount failures remain blocked without a verified projection', async () => {
++  const f = threeVolumeFixture((d) => { d.db.PGDATA = '/unrelated'; });
++  const receipt = await run(f);
++  assert.equal(receipt.code, 'DATABASE_MOUNT_UNVERIFIED');
++  assert.equal(receipt.observations.volumeClassification, undefined);
++  assert.equal(receipt.bindingVerified, false);
++  safe(receipt);
++});
++
++test('classification compares fresh metadata and removes stable claim on drift', async () => {
++  const f = threeVolumeFixture();
++  let environments = 0;
++  const receipt = await run(f, { fetchImpl: async (url, options) => {
++    const response = await f.fetchImpl(url, options);
++    if (url === ENDPOINT && JSON.parse(options.body).query === QUERIES.environment && ++environments === 1)
++      f.data.environment.volumeInstances.edges[1].node.serviceId = null;
++    return response;
++  } });
++  assert.equal(receipt.code, 'READONLY_CLASSIFICATION_DRIFT');
++  assert.equal(receipt.phase, 'BINDING_COMPARE');
++  assert.equal(receipt.bindingVerified, false);
++  assert.equal(receipt.observations.volumeClassification, undefined);
++  safe(receipt);
++});
++
++test('classification refuses aliased provider UUIDs', async () => {
++  const f = threeVolumeFixture((d) => {
++    d.environment.volumeInstances.edges[1].node.volumeId = d.environment.volumeInstances.edges[1].node.id;
++  });
++  const receipt = await run(f);
++  assert.equal(receipt.code, 'UNCLASSIFIED_DEMO_VOLUMES');
++  assert.equal(receipt.observations.volumeClassification, undefined);
++  assert.equal(receipt.bindingVerified, false);
++  safe(receipt);
++});
++
++test('classification stable claim is removed if final source branch check drifts', async () => {
++  const f = threeVolumeFixture();
++  let heads = 0;
++  const receipt = await run(f, { fetchImpl: (url, options) => {
++    if (url === HEAD_ENDPOINT && ++heads === 2)
++      return json({ ref: `refs/heads/${BRANCH}`, object: { type: 'commit', sha: 'b'.repeat(40) } });
++    return f.fetchImpl(url, options);
++  } });
++  assert.equal(receipt.code, 'READONLY_BRANCH_DRIFT');
++  assert.equal(receipt.phase, 'BRANCH_AFTER');
++  assert.equal(receipt.observations.volumeClassification.stable, false);
++  assert.equal(receipt.bindingVerified, false);
++  safe(receipt);
++});
++
++test('classification projection is cleared when a public UUID reflects a credential', async () => {
++  const f = threeVolumeFixture();
++  const receipt = await run(f, { env: { ...ENV, RAILWAY_TOKEN: IDS.db } });
++  assert.equal(receipt.code, 'READONLY_RECEIPT_UNSAFE');
++  assert.deepEqual(receipt.observations, {});
++  assert.equal(safe(receipt).includes(IDS.db), false);
++});
++
++const guards = [
++  ['DEMO_BINDING_IDENTITY_MISMATCH', (d) => { d.backend.RAILWAY_ENVIRONMENT_ID = IDS.other; }],
++  ['DEMO_DATABASE_BINDING_INVALID', (d) => { d.backend.DATABASE_URL = 'invalid'; }],
++  ['DEMO_DATABASE_BINDING_MISMATCH', (d) => { d.backend.DATABASE_URL = 'postgres://u:p@foreign/db'; }],
++  ['DEMO_DOMAIN_RESULT_INVALID', (d) => { d.domains.customDomains = null; }],
++  ['DEMO_BACKEND_DOMAIN_MISMATCH', (d) => { d.domains.serviceDomains = []; }],
++  ['CUSTOM_SOURCE_DIRECTORY_REQUIRES_REVIEW', (d) => { d.backend.AI_UPLOAD_DIR = '/private'; }],
++  ['SERVICE_CATALOG_INVALID', (d) => { d.catalog = []; }],
++  ['SOURCE_DATABASE_SERVICE_AMBIGUOUS', (d) => { d.db.DATABASE_URL = d.db.DATABASE_URL.replace('private-password', 'other'); }],
++  ['STORAGE_ENVIRONMENT_UNVERIFIED', (d) => { d.environment.projectId = IDS.other; }],
++  ['VOLUME_ENVIRONMENT_MISMATCH', (d) => { d.environment.volumeInstances.edges[0].node.environmentId = IDS.other; }],
++  ['UNCLASSIFIED_DEMO_VOLUMES', (d) => { d.environment.volumeInstances.edges.push({ node: {
++    ...d.environment.volumeInstances.edges[0].node, id: IDS.other, volumeId: IDS.other } }); }],
++  ['DATABASE_MOUNT_UNVERIFIED', (d) => { d.db.PGDATA = '/unrelated'; }],
++  ['SERVICE_ENVIRONMENT_MISMATCH', (d) => { d.environment.serviceInstances.edges[0].node.environmentId = IDS.other; }],
++  ['RUNTIME_DEPLOYMENT_UNVERIFIED', (d) => { d.environment.serviceInstances.edges[1].node.latestDeployment = null; }],
++  ['AMBIGUOUS_ACTIVE_DEPLOYMENT', (d) => { d.environment.serviceInstances.edges[0].node.activeDeployments.push({ id: IDS.other }); }],
++  ['MULTIPLE_OR_TRANSITIONAL_SERVICE_INSTANCES', (d) => { d.environment.serviceInstances.edges[0].node.latestDeployment.instances.push({ id: 'other', status: 'STARTING' }); }],
++  ['RUNTIME_ORIGIN_UNVERIFIED', (d) => { d.backend.AI_RUNTIME_URL = 'invalid'; }],
++  ['RUNTIME_BINDING_MISMATCH', (d) => { d.runtime.RAILWAY_PROJECT_ID = IDS.other; }],
++  ['EXTERNAL_RUNTIME_PERSISTENCE_REQUIRES_REVIEW', (d) => { d.runtime.STORAGE_URL = 'private-storage-value'; }],
++];
++for (const [code, change] of guards) {
++  test(`actual helper guard ${code} remains observable and blocks snapshot access`, async () => {
++    const f = fixture(change);
++    const receipt = await run(f);
++    assert.equal(receipt.code, code);
++    assert.equal(receipt.outcome, 'blocked');
++    assert.equal(receipt.bindingVerified, false);
++    assert.equal(f.requests.some(({ options }) => options.body?.includes('volumeInstanceBackupList')), false);
++    safe(receipt);
++  });
++}
++
++for (const [key, value] of Object.entries({ GITHUB_EVENT_NAME: 'push', GITHUB_REPOSITORY: 'other/repo',
++  GITHUB_REF: 'refs/heads/codex/demo-470-completion', GITHUB_REF_NAME: 'codex/demo-470-completion', GITHUB_SHA: 'invalid',
++  DEMO_STORAGE_REVIEWED_SHA: 'b'.repeat(40), DEMO_STORAGE_OPERATION: 'demo-cleanup',
++  GITHUB_RUN_ID: '0', GITHUB_RUN_ATTEMPT: '0' })) {
++  test(`context ${key} rejects before either transport`, async () => {
++    const f = fixture();
++    const receipt = await run(f, { env: { ...ENV, [key]: value } });
++    assert.equal(receipt.code, 'READONLY_CONTEXT_REQUIRED');
++    assert.equal(f.calls.length + f.requests.length, 0);
++    safe(receipt);
++  });
++}
++for (const key of ['RAILWAY_TOKEN', 'GITHUB_TOKEN']) {
++  test(`missing ${key} blocks all requests`, async () => {
++    const f = fixture();
++    assert.equal((await run(f, { env: { ...ENV, [key]: '' } })).code, 'READONLY_BINDING_MISSING');
++    assert.equal(f.calls.length + f.requests.length, 0);
++  });
++}
++test('extra arguments cannot select erase or another mode', async () => {
++  const f = fixture();
++  assert.equal((await run(f, { args: ['--erase'] })).code, 'READONLY_CONTEXT_REQUIRED');
++  assert.equal(f.calls.length + f.requests.length, 0);
++});
++test('forged contexts and forged receipts cannot cross provenance boundaries', async () => {
++  assert.throws(() => createReadOnlyAccess({ env: ENV, context: { repository: REPOSITORY,
++    branch: BRANCH, reviewedSha: ENV.GITHUB_SHA } }), errorCode('READONLY_CONTEXT_REQUIRED'));
++  const receipt = await run();
++  assert.throws(() => serializeReceipt(clone(receipt)), errorCode('READONLY_RECEIPT_INVALID'));
++  assert.throws(() => { receipt.bindingVerified = false; }, TypeError);
++});
++
++async function accessAtIdentity(f = fixture()) {
++  const access = createReadOnlyAccess({ env: ENV, context: validateContext(ENV),
++    fetchImpl: f.fetchImpl, spawnImpl: f.spawnImpl });
++  await access.assertBranch();
++  await access.native(QUERIES.identity, {});
++  return { access, f };
++}
++test('snapshot access requires actual full binding and offers no forged binding setter', async () => {
++  const { access, f } = await accessAtIdentity();
++  assert.equal(access.finishBinding, undefined);
++  await assert.rejects(access.readSnapshots(), errorCode('READONLY_BINDING_REQUIRED'));
++  await assert.rejects(access.native(QUERIES.snapshots, { id: IDS.volumeInstance }),
++    errorCode('READONLY_QUERY_REJECTED'));
++  assert.equal(f.requests.length, 2);
++  const state = access.getState();
++  state.bindingVerified = true;
++  await assert.rejects(access.readSnapshots(), errorCode('READONLY_BINDING_REQUIRED'));
++});
++
++const forbiddenCommands = [ ['up', '/tmp', '--yes'], ['ssh', '--service', TARGET.backendServiceId],
++  ['logs', '--json'], ['run', 'env'], ['deployment', 'restart'], ['service', 'delete', IDS.db],
++  ['variables', 'set', 'KEY=value'], ['variables', '--service', TARGET.backendServiceId],
++  ['variables', '--service', IDS.other, '--json'],
++  ['variables', '--service', TARGET.backendServiceId, '--json', '--environment', IDS.other],
++  ['variables', '--service', TARGET.backendServiceId + ';echo secret', '--json'],
++  ['variables', '--service', TARGET.backendServiceId, '--json', '--set', 'X=Y'] ];
++for (const args of forbiddenCommands) {
++  test(`CLI rejects nonliteral command ${JSON.stringify(args)} before spawn`, async () => {
++    const { access, f } = await accessAtIdentity();
++    assert.throws(() => access.call(args, { json: true }), errorCode('READONLY_COMMAND_REJECTED'));
++    assert.equal(f.calls.length, 0);
++  });
++}
++test('CLI cannot inherit extra options or access candidate variables before catalog provenance', async () => {
++  const { access, f } = await accessAtIdentity();
++  const args = ['variables', '--service', TARGET.backendServiceId, '--json'];
++  assert.throws(() => access.call(args, { json: true, timeout: 30000 }), errorCode('READONLY_COMMAND_REJECTED'));
++  assert.throws(() => access.call(['variables', '--service', IDS.db, '--environment', TARGET.environmentId,
++    '--json'], { json: true }), errorCode('READONLY_COMMAND_REJECTED'));
++  assert.equal(f.calls.length, 0);
++});
++
++for (const [query, variables] of [
++  ['mutation{serviceDelete(id:"foreign")}', {}],
++  [QUERIES.domain + ' ', { environmentId: TARGET.environmentId, serviceId: TARGET.backendServiceId }],
++  [QUERIES.identity, { extra: true }],
++  [QUERIES.environment, { id: IDS.other }],
++  [QUERIES.snapshots, { id: IDS.other }],
++  ['query{alias:projectToken{project{id}}}', {}],
++]) {
++  test(`GraphQL rejects nonliteral query/variables ${query.slice(0, 28)}`, async () => {
++    const f = fixture();
++    const access = createReadOnlyAccess({ env: ENV, context: validateContext(ENV),
++      fetchImpl: f.fetchImpl, spawnImpl: f.spawnImpl });
++    await access.assertBranch();
++    await assert.rejects(access.native(query, variables), errorCode('READONLY_QUERY_REJECTED'));
++    assert.equal(f.requests.length, 1);
++  });
++}
++
++for (const [label, change, code] of [
++  ['token belongs to production', (d) => { d.identity.environment.id = IDS.other; }, 'READONLY_TOKEN_TARGET_MISMATCH'],
++  ['malformed candidate ID', (d) => { d.catalog[1].id = '$(secret)'; }, 'READONLY_SERVICE_CATALOG_INVALID'],
++  ['duplicate catalog IDs', (d) => { d.catalog[1].id = d.catalog[0].id; }, 'READONLY_SERVICE_CATALOG_INVALID'],
++  ['invalid config response', (d) => { d.backend = []; }, 'READONLY_CLI_RESULT_INVALID'],
++  ['malformed metadata edge', (d) => { d.environment.volumeInstances.edges = [null]; }, 'READONLY_DATA_INVALID'],
++]) {
++  test(label, async () => {
++    const f = fixture(change);
++    const receipt = await run(f);
++    assert.equal(receipt.code, code);
++    assert.equal(receipt.bindingVerified, false);
++    if (code === 'READONLY_TOKEN_TARGET_MISMATCH') assert.equal(f.calls.length, 0);
++    safe(receipt);
++  });
++}
++
++test('multiple matching database candidates are refused by actual helper', async () => {
++  const receipt = await run(fixture((d) => { d.catalog.push({ id: IDS.other, name: 'PostgreSQL' }); }));
++  assert.equal(receipt.code, 'SOURCE_DATABASE_SERVICE_AMBIGUOUS');
++});
++test('foreign variables and commands are rejected at their otherwise valid stages', async () => {
++  const { access, f } = await accessAtIdentity();
++  access.call(['variables', '--service', TARGET.backendServiceId, '--json'], { json: true });
++  const before = f.requests.length;
++  for (const variables of [
++    { environmentId: IDS.other, serviceId: TARGET.backendServiceId },
++    { environmentId: TARGET.environmentId, serviceId: IDS.other },
++    { environmentId: TARGET.environmentId, serviceId: TARGET.backendServiceId, extra: 'value' },
++  ]) await assert.rejects(access.native(QUERIES.domain, variables), errorCode('READONLY_QUERY_REJECTED'));
++  assert.equal(f.requests.length, before);
++  await access.native(QUERIES.domain, { environmentId: TARGET.environmentId,
++    serviceId: TARGET.backendServiceId });
++  access.call(['variables', '--service', TARGET.backendServiceId, '--environment', TARGET.environmentId,
++    '--json'], { json: true });
++  assert.throws(() => access.call(['service', 'list', '--project', IDS.other,
++    '--environment', TARGET.environmentId, '--json'], { json: true }), errorCode('READONLY_COMMAND_REJECTED'));
++  access.call(['service', 'list', '--project', TARGET.projectId, '--environment', TARGET.environmentId,
++    '--json'], { json: true });
++  assert.throws(() => access.call(['variables', '--service', IDS.other, '--environment', TARGET.environmentId,
++    '--json'], { json: true }), errorCode('READONLY_COMMAND_REJECTED'));
++  access.call(['variables', '--service', IDS.db, '--environment', TARGET.environmentId, '--json'], { json: true });
++  await assert.rejects(access.native(QUERIES.environment, { id: IDS.other }), errorCode('READONLY_QUERY_REJECTED'));
++  await access.native(QUERIES.environment, { id: TARGET.environmentId });
++  assert.throws(() => access.call(['variables', '--service', IDS.other, '--environment', TARGET.environmentId,
++    '--json'], { json: true }), errorCode('READONLY_COMMAND_REJECTED'));
++});
++test('foreign snapshot identity rejects even after actual complete binding', async () => {
++  const { access, f } = await accessAtIdentity();
++  await access.inspectBinding();
++  const before = f.requests.length;
++  await assert.rejects(access.native(QUERIES.snapshots, { id: IDS.other }), errorCode('READONLY_QUERY_REJECTED'));
++  assert.equal(f.requests.length, before);
++});
++test('context and candidate UUID validation reject trailing newlines', async () => {
++  for (const key of ['GITHUB_SHA', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT']) {
++    const f = fixture();
++    const env = { ...ENV, [key]: ENV[key] + '\n' };
++    if (key === 'GITHUB_SHA') env.DEMO_STORAGE_REVIEWED_SHA = env.GITHUB_SHA;
++    assert.equal((await run(f, { env })).code, 'READONLY_CONTEXT_REQUIRED');
++    assert.equal(f.requests.length + f.calls.length, 0);
++  }
++  const receipt = await run(fixture((d) => { d.catalog[1].id += '\n'; }));
++  assert.equal(receipt.code, 'READONLY_SERVICE_CATALOG_INVALID');
++  safe(receipt);
++});
++test('secret reflection in dynamic UUIDs blocks public projection', async () => {
++  const f = fixture();
++  const receipt = await run(f, { env: { ...ENV, RAILWAY_TOKEN: IDS.volume } });
++  assert.equal(receipt.code, 'READONLY_RECEIPT_UNSAFE');
++  assert.deepEqual(receipt.observations, {});
++  assert.equal(serializeReceipt(receipt).includes(IDS.volume), false);
++});
++
++for (const [label, result, code] of [
++  ['nonzero exit', { status: 1, stdout: TOKEN, stderr: TOKEN }, 'READONLY_CLI_FAILED'],
++  ['timeout', { status: null, error: { code: 'ETIMEDOUT', message: TOKEN } }, 'READONLY_CLI_TIMEOUT'],
++  ['buffer overflow', { status: null, error: { code: 'ENOBUFS', message: TOKEN } }, 'READONLY_CLI_RESPONSE_TOO_LARGE'],
++  ['missing binary', { status: null, error: { code: 'ENOENT', message: TOKEN } }, 'READONLY_CLI_SPAWN_FAILED'],
++  ['signal', { status: 0, signal: 'SIGTERM', stdout: TOKEN }, 'READONLY_CLI_INTERRUPTED'],
++  ['invalid JSON', { status: 0, stdout: TOKEN, stderr: '' }, 'READONLY_CLI_JSON_INVALID'],
++  ['oversize stdout', { status: 0, stdout: 'x'.repeat(4194305), stderr: '' }, 'READONLY_CLI_RESPONSE_TOO_LARGE'],
++]) {
++  test(`captured CLI ${label} has a constant cause without child output`, async () => {
++    const f = fixture();
++    const receipt = await run(f, { spawnImpl: () => result });
++    assert.equal(receipt.code, code);
++    assert.equal(receipt.phase, 'BACKEND_IDENTITY');
++    safe(receipt);
++  });
++}
++test('thrown CLI errors do not disclose exception messages', async () => {
++  const receipt = await run(fixture(), { spawnImpl: () => { throw new Error(TOKEN); } });
++  assert.equal(receipt.code, 'READONLY_CLI_SPAWN_FAILED');
++  safe(receipt);
++});
++test('unknown internal errors use a constant without reflecting even uppercase messages', async () => {
++  const receipt = await run(fixture(), { now: () => { throw new Error('PRIVATE_UPPERCASE_SECRET'); } });
++  assert.equal(receipt.code, 'READONLY_INSPECT_UNEXPECTED_FAILURE');
++  assert.equal(safe(receipt).includes('PRIVATE_UPPERCASE_SECRET'), false);
++});
++
++for (const status of [400, 401, 403, 404, 429, 500, 503, 418]) {
++  test(`HTTP ${status} is distinct from GraphQL/network/timeout`, async () => {
++    const f = fixture();
++    const receipt = await run(f, { fetchImpl: (url, options) => url === ENDPOINT
++      ? json({ message: TOKEN }, status) : f.fetchImpl(url, options) });
++    assert.equal(receipt.code, status >= 500 ? 'READONLY_HTTP_5XX'
++      : status === 418 ? 'READONLY_HTTP_OTHER' : `READONLY_HTTP_${status}`);
++    assert.equal(receipt.phase, 'TOKEN_IDENTITY');
++    assert.equal(f.calls.length, 0);
++    safe(receipt);
++  });
++}
++for (const [label, response, code] of [
++  ['GraphQL error with partial data', () => json({ data: { projectToken: {} }, errors: [{ message: TOKEN }] }), 'READONLY_GRAPHQL_REJECTED'],
++  ['missing data', () => json({ unexpected: TOKEN }), 'READONLY_DATA_INVALID'],
++  ['malformed JSON', () => new Response(TOKEN), 'READONLY_JSON_INVALID'],
++  ['non-object JSON', () => json([]), 'READONLY_RESPONSE_INVALID'],
++  ['oversize body', () => new Response('x'.repeat(4194305)), 'READONLY_RESPONSE_TOO_LARGE'],
++  ['redirected response', () => ({ redirected: true }), 'READONLY_REDIRECT_REFUSED'],
++  ['foreign response URL', () => ({ url: 'https://foreign.invalid', ok: true }), 'READONLY_REDIRECT_REFUSED'],
++  ['missing body', () => ({ ok: true }), 'READONLY_RESPONSE_INVALID'],
++]) {
++  test(`native ${label} has a constant phase and no raw response`, async () => {
++    const f = fixture();
++    const receipt = await run(f, { fetchImpl: (url, options) => url === ENDPOINT
++      ? response() : f.fetchImpl(url, options) });
++    assert.equal(receipt.code, code);
++    assert.equal(receipt.phase, 'TOKEN_IDENTITY');
++    safe(receipt);
++  });
++}
++for (const [name, code] of [['TimeoutError', 'READONLY_REQUEST_TIMEOUT'], ['AbortError', 'READONLY_REQUEST_TIMEOUT'],
++  ['TypeError', 'READONLY_NETWORK_FAILED'], ['UnknownSecretCause', 'READONLY_NETWORK_FAILED']]) {
++  test(`native thrown ${name} maps to safe cause`, async () => {
++    const receipt = await run(fixture(), { fetchImpl: () => { throw Object.assign(new Error(TOKEN), { name }); } });
++    assert.equal(receipt.code, code);
++    safe(receipt);
++  });
++}
++test('total deadline expires before additional CLI or native calls', async () => {
++  const f = fixture();
++  let clock = 0;
++  const receipt = await run(f, { now: () => clock, fetchImpl: async (url, options) => {
++    const r = await f.fetchImpl(url, options);
++    if (url === ENDPOINT) clock = 480001;
++    return r;
++  } });
++  assert.equal(receipt.code, 'READONLY_DEADLINE_EXCEEDED');
++  assert.equal(f.calls.length, 0);
++  safe(receipt);
++});
++
++for (const after of [false, true]) {
++  test(`branch drift ${after ? 'after' : 'before'} inspection prevents success`, async () => {
++    const f = fixture();
++    let github = 0;
++    const receipt = await run(f, { fetchImpl: (url, options) => {
++      if (url === HEAD_ENDPOINT && (++github === (after ? 2 : 1)))
++        return json({ ref: `refs/heads/${BRANCH}`, object: { type: 'commit', sha: 'b'.repeat(40) } });
++      return f.fetchImpl(url, options);
++    } });
++    assert.equal(receipt.code, 'READONLY_BRANCH_DRIFT');
++    assert.equal(receipt.phase, after ? 'BRANCH_AFTER' : 'BRANCH_BEFORE');
++    if (!after) assert.equal(f.calls.length, 0);
++    safe(receipt);
++  });
++}
++
++test('stable nonzero native snapshots are counted without deletion or backup identifiers', async () => {
++  const receipt = await run(fixture((d) => { d.snapshots = [[{ id: IDS.backup }], [{ id: IDS.backup }]]; }));
++  assert.equal(receipt.outcome, 'inspected');
++  assert.deepEqual(receipt.observations.snapshots, { before: 1, after: 1, stable: true });
++  assert.equal(safe(receipt).includes(IDS.backup), false);
++});
++for (const [label, change] of [
++  ['backend config', (d) => { d.backend.PRIVATE_SETTING = TOKEN; }],
++  ['credential equality preserved but credential changed', (d) => {
++    d.backend.DATABASE_URL = d.backend.DATABASE_URL.replace('private-password', 'another-private-password');
++    d.db.DATABASE_URL = d.backend.DATABASE_URL;
++  }],
++  ['PGDATA remains within mount but changed', (d) => { d.db.PGDATA += '/changed'; }],
++  ['volume identity', (d) => { d.environment.volumeInstances.edges[0].node.volumeId = IDS.other; }],
++  ['volume instance identity', (d) => { d.environment.volumeInstances.edges[0].node.id = IDS.other; }],
++  ['deployment identity', (d) => {
++    d.environment.serviceInstances.edges[0].node.activeDeployments = [{ id: IDS.volume }];
++    d.environment.serviceInstances.edges[0].node.latestDeployment.id = IDS.volume;
++  }],
++  ['runtime container identity', (d) => {
++    d.environment.serviceInstances.edges[1].node.latestDeployment.instances[0].id = 'different-private-container';
++  }],
++  ['observed build config', (d) => { d.environment.serviceInstances.edges[0].node.buildCommand = TOKEN; }],
++  ['runtime effective config', (d) => { d.runtime.PRIVATE_SETTING = TOKEN; }],
++  ['service catalog', (d) => { d.catalog.push({ id: IDS.other, name: 'unrelated' }); }],
++]) {
++  test(`two complete observations block private binding drift: ${label}`, async () => {
++    const f = fixture();
++    let snapshots = 0;
++    const receipt = await run(f, { fetchImpl: async (url, options) => {
++      const response = await f.fetchImpl(url, options);
++      if (url === ENDPOINT && JSON.parse(options.body).query === QUERIES.snapshots && ++snapshots === 2)
++        change(f.data);
++      return response;
++    } });
++    assert.equal(receipt.code, 'READONLY_BINDING_DRIFT');
++    assert.equal(receipt.phase, 'BINDING_COMPARE');
++    assert.equal(receipt.bindingVerified, false);
++    assert.equal(receipt.observations.bindingObservations, 1);
++    safe(receipt);
++  });
++}
++test('second complete binding observation retains the actual failing guard', async () => {
++  const f = fixture();
++  let snapshots = 0;
++  const receipt = await run(f, { fetchImpl: async (url, options) => {
++    const response = await f.fetchImpl(url, options);
++    if (url === ENDPOINT && JSON.parse(options.body).query === QUERIES.snapshots && ++snapshots === 2)
++      f.data.db.PGDATA = '/unrelated';
++    return response;
++  } });
++  assert.equal(receipt.code, 'DATABASE_MOUNT_UNVERIFIED');
++  assert.equal(receipt.phase, 'ENVIRONMENT_METADATA');
++  assert.equal(receipt.bindingVerified, false);
++  safe(receipt);
++});
++for (const [label, snapshots, code] of [
++  ['snapshot drift', [[{ id: IDS.backup }], []], 'READONLY_SNAPSHOT_DRIFT'],
++  ['duplicate snapshots', [[{ id: IDS.backup }, { id: IDS.backup }], []], 'READONLY_SNAPSHOT_LIST_INVALID'],
++  ['malformed snapshot', [[{ id: TOKEN }], []], 'READONLY_SNAPSHOT_LIST_INVALID'],
++  ['oversize snapshot list', [Array.from({ length: 1001 }, () => ({ id: IDS.backup })), []], 'READONLY_SNAPSHOT_LIST_INVALID'],
++]) {
++  test(label, async () => {
++    const receipt = await run(fixture((d) => { d.snapshots = snapshots; }));
++    assert.equal(receipt.code, code);
++    assert.equal(receipt.bindingVerified, true);
++    safe(receipt);
++  });
++}
++test('console receipt and annotation expose exact safe original guard only', async () => {
++  const f = fixture((d) => { d.db.PGDATA = '/unrelated'; });
++  const lines = [];
++  const status = await main({ env: ENV, args: [], fetchImpl: f.fetchImpl, spawnImpl: f.spawnImpl,
++    capturedAt: () => STAMP, output: (line) => lines.push(line) });
++  assert.equal(status, 1);
++  assert.equal(lines[0], '::error title=Demo storage inspection::ENVIRONMENT_METADATA:DATABASE_MOUNT_UNVERIFIED');
++  assert.match(lines[1], /^CLINICOS_DEMO_STORAGE_INSPECT /);
++  const parsed = JSON.parse(lines[1].slice('CLINICOS_DEMO_STORAGE_INSPECT '.length));
++  assert.equal(parsed.code, 'DATABASE_MOUNT_UNVERIFIED');
++  assert.equal(lines.join('\n').includes(TOKEN), false);
++});
++test('actual CLI rejects untrusted context offline without stack trace', () => {
++  const child = spawnSync(process.execPath, [fileURLToPath(new URL('./demo-storage-inspect.mjs', import.meta.url))],
++    { encoding: 'utf8', timeout: 5000, env: { PATH: process.env.PATH } });
++  assert.equal(child.status, 1);
++  assert.equal(child.stderr, '');
++  assert.match(child.stdout, /CONTEXT:READONLY_CONTEXT_REQUIRED/);
++  assert.equal(JSON.parse(child.stdout.split('CLINICOS_DEMO_STORAGE_INSPECT ')[1]).outcome, 'blocked');
++});
++
++
++const ACCOUNT_ENV = Object.freeze({...ENV, DEMO_STORAGE_AUTH_MODE:'account-bearer',
++  RAILWAY_TOKEN:undefined,RAILWAY_API_TOKEN:TOKEN});
++test('account bearer uses actual me/access then full identical binding and descriptive snapshots',async()=>{
++ const f=fixture();const receipt=await run(f,{env:ACCOUNT_ENV});assert.equal(receipt.outcome,'inspected');
++ assert.equal(receipt.credentialKind,'account-bearer');assert.equal(receipt.projectTokenVerified,false);assert.equal(receipt.targetReadAccess,true);assert.equal(receipt.bindingVerified,true);
++ assert.deepEqual(receipt.readRequests,{cli:10,native:8,github:2});assert(!safe(receipt).includes('synthetic-user-never-publish'));
++ for(const c of f.calls){assert.equal(c.options.env.RAILWAY_API_TOKEN,TOKEN);assert.equal(c.options.env.RAILWAY_TOKEN,undefined);assert.equal(c.options.env.GITHUB_TOKEN,undefined);}
++ for(const r of f.requests.filter(r=>r.url===ENDPOINT)){assert.equal(r.options.headers.Authorization,`Bearer ${TOKEN}`);assert.equal(r.options.headers['Project-Access-Token'],undefined);assert.notEqual(JSON.parse(r.options.body).query,QUERIES.identity);}
++ assert.deepEqual(f.requests.filter(r=>r.url===ENDPOINT).slice(0,2).map(r=>JSON.parse(r.options.body).query),[QUERIES.accountIdentity,QUERIES.accountAccess]);
++});
++for(const [key,value] of Object.entries({GITHUB_WORKFLOW_REF:'other',GITHUB_WORKFLOW_SHA:'b'.repeat(40),GITHUB_ACTOR:'other',GITHUB_TRIGGERING_ACTOR:'other',DEMO_STORAGE_ENVIRONMENT:'production',DEMO_STORAGE_AUTH_MODE:'auto'}))
++ test(`new trusted context ${key} rejects before any provider call`,async()=>{const f=fixture();const r=await run(f,{env:{...ENV,[key]:value}});assert.equal(r.code,'READONLY_CONTEXT_REQUIRED');assert.equal(f.calls.length+f.requests.length,0)});
++for(const env of [{...ENV,RAILWAY_API_TOKEN:TOKEN},{...ACCOUNT_ENV,RAILWAY_TOKEN:TOKEN},{...ACCOUNT_ENV,RAILWAY_API_TOKEN:undefined},{...ENV,RAILWAY_TOKEN:'token\nvalue'}])
++ test('mixed/missing/invalid mode credentials reject before transport',async()=>{const f=fixture();const r=await run(f,{env});assert.equal(r.code,'READONLY_BINDING_MISSING');assert.equal(f.calls.length+f.requests.length,0)});
++test('minted context cannot be reused with injected auth mode or mixed credentials',()=>{
++ const context=validateContext(ENV);assert.throws(()=>createReadOnlyAccess({env:ACCOUNT_ENV,context}),errorCode('READONLY_CONTEXT_REQUIRED'));
++ assert.throws(()=>createReadOnlyAccess({env:{...ENV,RAILWAY_API_TOKEN:TOKEN},context}),errorCode('READONLY_BINDING_MISSING'));
++});
++for(const [label,change] of [
++ ['me missing',d=>d.accountIdentity={}],['wrongproject',d=>d.accountAccess={project:{id:IDS.other},environment:{id:TARGET.environmentId,projectId:TARGET.projectId,name:'demo',canAccess:true}}],
++ ['wrongenv',d=>d.accountAccess={project:{id:TARGET.projectId},environment:{id:IDS.other,projectId:TARGET.projectId,name:'demo',canAccess:true}}],
++ ['wronglink',d=>d.accountAccess={project:{id:TARGET.projectId},environment:{id:TARGET.environmentId,projectId:IDS.other,name:'demo',canAccess:true}}],
++ ['production',d=>d.accountAccess={project:{id:TARGET.projectId},environment:{id:TARGET.environmentId,projectId:TARGET.projectId,name:'production',canAccess:true}}],
++ ['accessfalse',d=>d.accountAccess={project:{id:TARGET.projectId},environment:{id:TARGET.environmentId,projectId:TARGET.projectId,name:'demo',canAccess:false}}],
++ ['source',d=>d.environment.serviceInstances.edges[0].node.source.repo='other/repo'],['domain',d=>d.domains.serviceDomains=[]],
++ ['privatedb',d=>d.db.DATABASE_URL='postgresql://other:password@postgres.railway.internal/railway'],['mount',d=>d.db.PGDATA='/other'],
++ ]) test(`account ${label} fails closed with zero writes and no scope attestation`,async()=>{const f=fixture(change);const r=await run(f,{env:ACCOUNT_ENV});assert.equal(r.outcome,'blocked');assert.equal(r.projectTokenVerified,false);assert.equal(r.targetReadAccess,false);assert.equal(r.bindingVerified,false);assert(!f.requests.some(x=>JSON.parse(x.options.body??'{}').query===QUERIES.snapshots));safe(r)});
++test('account denial is a typed STOP without project auth fallback or CLI',async()=>{
++ const f=fixture();const fetchImpl=async(url,options)=>{if(url===ENDPOINT){f.requests.push({url,options});return json({errors:[{message:TOKEN+' rawprivate error'}]});}return f.fetchImpl(url,options)};
++ const r=await run(f,{env:ACCOUNT_ENV,fetchImpl});assert.equal(r.phase,'ACCOUNT_IDENTITY');assert.equal(r.code,'READONLY_GRAPHQL_REJECTED');assert.equal(f.calls.length,0);assert.equal(f.requests.filter(r=>r.url===ENDPOINT).length,1);safe(r);
++});
++test('account capabilities refuse project identity, access-before-me and arbitrary variables',async()=>{
++ const f=fixture();const a=createReadOnlyAccess({env:ACCOUNT_ENV,context:validateContext(ACCOUNT_ENV),fetchImpl:f.fetchImpl,spawnImpl:f.spawnImpl});await a.assertBranch();
++ for(const [query,vars] of [[QUERIES.identity,{}],[QUERIES.accountAccess,{projectId:TARGET.projectId,environmentId:TARGET.environmentId}],[QUERIES.accountIdentity,{extra:'value'}]])await assert.rejects(a.native(query,vars),errorCode('READONLY_QUERY_REJECTED'));
++ assert.equal(f.requests.length,1);await a.native(QUERIES.accountIdentity,{});
++ await assert.rejects(a.native(QUERIES.accountAccess,{projectId:IDS.other,environmentId:TARGET.environmentId}),errorCode('READONLY_QUERY_REJECTED'));assert.equal(f.requests.length,2);
++});
++test('project source repository mismatch fails without snapshot reads',async()=>{const f=fixture(d=>d.environment.serviceInstances.edges[0].node.source.repo='other/repo');const r=await run(f);assert.equal(r.code,'BACKEND_SOURCE_UNVERIFIED');assert.equal(r.bindingVerified,false);safe(r)});
++test('account unknown detached volumes remain unknown with unobserved snapshot scopes',async()=>{
++ const f=threeVolumeFixture();const r=await run(f,{env:ACCOUNT_ENV});assert.equal(r.outcome,'blocked');assert.equal(r.code,'UNCLASSIFIED_DEMO_VOLUMES');assert.equal(r.targetReadAccess,false);assert.equal(r.observations.volumeClassification.databaseSnapshotScope,'unobserved');assert.equal(r.observations.volumeClassification.otherSnapshotScope,'unobserved');assert(r.observations.volumeClassification.volumes.some(v=>v.role==='unattached-unknown'));assert(!f.requests.some(x=>JSON.parse(x.options.body??'{}').query===QUERIES.snapshots));safe(r);
++});
++test('account nonzero snapshots are descriptive, me identity is discarded even if credential-like',async()=>{
++ const f=fixture(d=>{d.accountIdentity={id:TOKEN};d.snapshots=[[{id:IDS.backup}],[{id:IDS.backup}]]});const r=await run(f,{env:ACCOUNT_ENV});assert.equal(r.outcome,'inspected');assert.deepEqual(r.observations.snapshots,{before:1,after:1,stable:true});assert.equal(r.projectTokenVerified,false);assert.equal(r.projectWideVisibility,'unproven');safe(r);
++});
++test('project stage cannot invoke bearer identity or access queries',async()=>{
++ const f=fixture();const a=createReadOnlyAccess({env:ENV,context:validateContext(ENV),fetchImpl:f.fetchImpl,spawnImpl:f.spawnImpl});await a.assertBranch();for(const [q,v] of [[QUERIES.accountIdentity,{}],[QUERIES.accountAccess,{projectId:TARGET.projectId,environmentId:TARGET.environmentId}]])await assert.rejects(a.native(q,v),errorCode('READONLY_QUERY_REJECTED'));assert.equal(f.requests.length,1);
++});
+--- /dev/null
++++ b/scripts/maintenance/demo-storage-workflow.test.mjs
+@@ -0,0 +1,18 @@
++import test from 'node:test';import assert from 'node:assert/strict';import{readFileSync}from'node:fs';
++const read=n=>readFileSync(new URL(n,import.meta.url),'utf8');
++test('dedicated workflow fixes main identity/environment/sha and isolates the only secret step',()=>{
++ const w=read('../../.github/workflows/inspect-demo-storage.yml');const live=w.slice(w.indexOf('  inspect:\n'));
++ for(const text of ["github.event_name == 'workflow_dispatch'","github.repository == 'l2v-hub/ClinicOS'","github.ref == 'refs/heads/main'","github.ref_name == 'main'","github.workflow_ref == 'l2v-hub/ClinicOS/.github/workflows/inspect-demo-storage.yml@refs/heads/main'","github.actor == 'l2v-hub'",'github.triggering_actor == github.actor','github.sha == github.workflow_sha','inputs.reviewed_sha == github.sha',"environment: 'glistening-friendship / demo'",'contents: read','ref: ${{ github.sha }}','persist-credentials: false','timeout-minutes: 10','group: demo-storage-inspect','cancel-in-progress: false','options: [project-token, account-bearer]'])assert(w.includes(text),text);
++ assert(w.includes('pull_request:'));assert(w.includes('needs: test'));assert(!w.includes('pull_request_target'));assert(!w.includes('workflow_call:'));assert(!w.includes('write'));
++ assert.equal((w.match(/secrets\./g)??[]).length,2);const secretStep=live.slice(live.indexOf('      - name: Inspect only'));
++ assert.equal((secretStep.match(/secrets.RAILWAY_DEMO_TOKEN/g)??[]).length,2);assert(secretStep.includes("inputs.auth_mode == 'project-token' && secrets.RAILWAY_DEMO_TOKEN || ''"));assert(secretStep.includes("inputs.auth_mode == 'account-bearer' && secrets.RAILWAY_DEMO_TOKEN || ''"));
++ assert(live.indexOf('npm install -g @railway/cli@5.66.0')<live.indexOf('secrets.'));assert(!live.slice(0,live.indexOf('      - name: Inspect only')).includes('secrets.'));
++ for(const pin of ['actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683','actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020'])assert(w.includes(pin));
++ for(const text of ['--erase','demo-cleanup','demo-storage-backups','demo-patient-inventory','configure-demo-source','secrets.RAILWAY_TOKEN','production','upload-artifact'])assert(!w.includes(text),text);
++});
++test('live import graph contains only builtins and the pure extracted binding module',()=>{
++ const s=read('./demo-storage-inspect.mjs'),b=read('./demo-storage-binding-readonly.mjs');
++ const imports=[...s.matchAll(/from '([^']+)'/g)].map(m=>m[1]);assert.deepEqual(imports.filter(x=>!x.startsWith('node:')),['./demo-storage-binding-readonly.mjs']);assert([...b.matchAll(/from '([^']+)'/g)].every(m=>m[1].startsWith('node:')));
++ for(const text of ['demo-storage-backups','demo-patient-inventory','configure-demo-source','eraseVerifiedSnapshots','runStorageMaintenance','purgeTemporarySources','serviceCreate','serviceDelete','deploymentRedeploy','volumeInstanceBackupDelete','SQL','shell: true'])assert(!s.includes(text)&&!b.includes(text),text);
++ assert(!b.includes('spawn'));assert(!b.includes('fetch'));assert(!b.includes('process.env'));assert(!b.includes('node:fs'));assert(!b.includes('node:child_process'));
++});

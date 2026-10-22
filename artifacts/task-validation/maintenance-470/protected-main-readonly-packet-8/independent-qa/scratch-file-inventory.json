@@ -1,0 +1,25 @@
+{
+  "root": "/tmp/clinicos470-independent8",
+  "files": {
+    "probes.mjs": {
+      "sha256": "f6d6ca7751068f5ca3c3631b0de869fb397537891c6263b00f89e16e488518e9",
+      "bytes": 11271
+    },
+    "run-final.py": {
+      "sha256": "94298d34a2dafe746a8d132a4846b503dade2c31e3b5ab9c4fd042739ff19127",
+      "bytes": 1159
+    },
+    "run-focused.py": {
+      "sha256": "be53c9dc802886956fe06201efd0d99582403998260c5782f608c432ad2eb4c7",
+      "bytes": 1799
+    },
+    "seal.py": {
+      "sha256": "ca04b01ddd54b2c4c0a6373cc1405ef42296468aa3370154cf6c08c74013c38a",
+      "bytes": 7216
+    },
+    "static.py": {
+      "sha256": "65a58c8cbb355f75c34eff1d293223ad5b6f863d8d115a6a1bb87fa9a15f2bd4",
+      "bytes": 3482
+    }
+  }
+}
