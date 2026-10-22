@@ -1,180 +1,41 @@
-name: Publish verified PR497 review handoff
+name: Inspect demo secret exposure without values
 on:
   push:
     branches: [codex/cloud-review-projection-20261021]
 permissions:
   contents: read
 concurrency:
-  group: clinicos-verified-two-review-handoffs-relay11
+  group: clinicos-root-demo-secret-presence-probe
   cancel-in-progress: false
 jobs:
-  verified-review-handoff:
-    if: github.repository == 'l2v-hub/ClinicOS' && github.event_name == 'push' && github.ref == 'refs/heads/codex/cloud-review-projection-20261021' && github.actor == 'l2v-hub' && github.triggering_actor == 'l2v-hub'
+  inspect-ambient-availability:
+    if: >-
+      github.repository == 'l2v-hub/ClinicOS' &&
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/codex/cloud-review-projection-20261021'
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          ref: b062de3324661cf07fdd929b9bac48a27626f1e5
-          persist-credentials: false
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
-        with:
-          node-version: 24
-      - name: Run the fixed metadata handoff using trusted main modules
+      # No environment, checkout, provider call, credential value or application code.
+      - name: Check ambient availability as a boolean only
         env:
-          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_EVENT_NAME: ${{ github.event_name }}
-          GITHUB_REF: ${{ github.ref }}
-          GITHUB_SHA: ${{ github.sha }}
-          GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TRIGGERING_ACTOR: ${{ github.triggering_actor }}
-          GITHUB_WORKFLOW_REF: ${{ github.workflow_ref }}
+          DEMO_TOKEN_AVAILABLE_OUTSIDE_ENVIRONMENT: ${{ secrets.RAILWAY_DEMO_TOKEN != '' }}
         run: |
-          set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/relay16"
-          cat > "$RUNNER_TEMP/relay16/script.b64" <<'RELAY16_SCRIPT_B64'
-          aW1wb3J0IGFzc2VydCBmcm9tICdub2RlOmFzc2VydC9zdHJpY3QnOwppbXBvcnQgeyB3cml0ZUZpbGUgfSBmcm9tICdub2RlOmZz
-          L3Byb21pc2VzJzsKaW1wb3J0IHBhdGggZnJvbSAnbm9kZTpwYXRoJzsKaW1wb3J0IHsgcGF0aFRvRmlsZVVSTCB9IGZyb20gJ25v
-          ZGU6dXJsJzsKY29uc3QgUkVQTz0nbDJ2LWh1Yi9DbGluaWNPUycsU0hBPSdmNjlmMWI4NDQxZjllMjc0YzgzZWVlNjQ4YTcyYWEz
-          MzhkZmMyMDczJyxTT1VSQ0U9JzRjODVmZGY1YTk3ZWVhMTBjOGVmY2M2ZDEwNWNkMzJkZTA1NGUwMzAnOwpjb25zdCBSRUY9J3Jl
-          ZnMvaGVhZHMvY29kZXgvY2xvdWQtcmV2aWV3LXByb2plY3Rpb24tMjAyNjEwMjEnLFdPUktGTE9XPScuZ2l0aHViL3dvcmtmbG93
-          cy9jbG91ZC1yZXZpZXctcHJvamVjdGlvbi0yMDI2MTAyMS55bWwnOwpjb25zdCBJU1NVRVM9WzQ0Nyw0NTEsNDUyLDQ1Myw0NTQs
-          NDU2LDQ1Nyw0ODZdLE5BTUVTPVsnYnVnLXBpcGVsaW5lLXRlc3RzJywnc2VjcmV0LXNjYW4nLCdmcm9udGVuZC10ZXN0cycsJ2Fy
-          Y2hpdmUtdGVzdHMnLCdnYXRlJywnYnJvd3Nlci1lMmUnXTsKY29uc3QgUFJFU0VSVkVEPVszOTMsNDgxLDQ4Myw0OTMsNDk4LDQ5
-          OV0sQkFTRT0ncmVwb3MvJytSRVBPOwpjb25zdCByZWNlaXB0UGF0aD1wYXRoLmpvaW4ocHJvY2Vzcy5lbnYuUlVOTkVSX1RFTVA/
-          PycvdG1wJywndmVyaWZpZWQtcmV2aWV3LWhhbmRvZmYtcmVsYXkxNi1zdGFnZS5qc29uJyk7CmNvbnN0IHN0YWdlPXtzaGE6U0hB
-          LHN0YXR1czonc3RhcnRpbmcnLG5hdGl2ZTpbXSxhY3R1YWxDbGF1ZGVPdXRjb21lOidub3QtY2xhaW1lZCd9Owpjb25zdCBzYXZl
-          PSgpPT53cml0ZUZpbGUocmVjZWlwdFBhdGgsSlNPTi5zdHJpbmdpZnkoc3RhZ2UsbnVsbCwyKSsnXG4nKTsKZnVuY3Rpb24gaWRl
-          bnRpdHkoKXtmb3IoY29uc3Rbayx2XW9mIE9iamVjdC5lbnRyaWVzKHtHSVRIVUJfQUNUSU9OUzondHJ1ZScsR0lUSFVCX1JFUE9T
-          SVRPUlk6UkVQTyxHSVRIVUJfRVZFTlRfTkFNRToncHVzaCcsR0lUSFVCX1JFRjpSRUYsR0lUSFVCX0FDVE9SOidsMnYtaHViJyxH
-          SVRIVUJfVFJJR0dFUklOR19BQ1RPUjonbDJ2LWh1YicsR0lUSFVCX1dPUktGTE9XX1JFRjpSRVBPKycvJytXT1JLRkxPVysnQCcr
-          UkVGfSkpYXNzZXJ0LmVxdWFsKHByb2Nlc3MuZW52W2tdLHYsayk7YXNzZXJ0KHByb2Nlc3MuZW52LkdIX1RPS0VOKTthc3NlcnQo
-          cHJvY2Vzcy5lbnYuR0lUSFVCX1dPUktTUEFDRT8uc3RhcnRzV2l0aCgnLycpKTt9CmNvbnN0IG1vZHVsZUF0PXJlbGF0aXZlPT5p
-          bXBvcnQocGF0aFRvRmlsZVVSTChwYXRoLmpvaW4ocHJvY2Vzcy5lbnYuR0lUSFVCX1dPUktTUEFDRSxyZWxhdGl2ZSkpLmhyZWYp
-          Owpjb25zdCBbcG0sZ20saG0sY20sZW1dPWF3YWl0IFByb21pc2UuYWxsKFsncHJvY2VzcycsJ2dpdGh1YicsJ2NvbW1lbnQtcmV2
-          aWV3LWhhbmRvZmYnLCdpc3N1ZS1yZXZpZXctY29tbXVuaWNhdGlvbicsJ2V4dGVybmFsLXJldmlldyddLm1hcChuPT5tb2R1bGVB
-          dCgnYWdlbnQtdGVhbS9zcmMvYnVnLXBpcGVsaW5lLycrbisnLm1qcycpKSk7CmlkZW50aXR5KCk7YXdhaXQgc2F2ZSgpOwpjb25z
-          dCBydW49cG0uY3JlYXRlUnVubmVyKHtlbnY6cHJvY2Vzcy5lbnYscnVudGltZVJvb3Q6cGF0aC5qb2luKHByb2Nlc3MuZW52LlJV
-          Tk5FUl9URU1QLCd2ZXJpZmllZC1oYW5kb2ZmMTYtcnVudGltZScpfSksZ2l0aHViPWdtLmNyZWF0ZUdpdEh1Yih7cmVwbzpSRVBP
-          LGN3ZDpwcm9jZXNzLmVudi5HSVRIVUJfV09SS1NQQUNFLHJ1bn0pLHN0b3JlPWdpdGh1Yi5jcmVhdGVTdGF0ZVN0b3JlKCk7CmFz
-          eW5jIGZ1bmN0aW9uIGFwaShyb3V0ZSxtZXRob2Q9J0dFVCcsYm9keSl7CiBjb25zdCBhbGxvd2VkPW1ldGhvZD09PSdHRVQnJiYo
-          cm91dGU9PT0ndXNlcid8fHJvdXRlPT09QkFTRSsnL2lzc3Vlcy9jb21tZW50cy82MjU1OTI5Mzg0J3x8L15yZXBvc1wvbDJ2LWh1
-          YlwvQ2xpbmljT1NcL2lzc3Vlc1w/c3RhdGU9b3BlbiZwZXJfcGFnZT0xMDAkLy50ZXN0KHJvdXRlKXx8L15yZXBvc1wvbDJ2LWh1
-          YlwvQ2xpbmljT1NcL3B1bGxzXC80OTckLy50ZXN0KHJvdXRlKXx8L15yZXBvc1wvbDJ2LWh1YlwvQ2xpbmljT1NcL2NvbW1pdHNc
-          L2Y2OWYxYjg0NDFmOWUyNzRjODNlZWU2NDhhNzJhYTMzOGRmYzIwNzNcL2NoZWNrLXJ1bnNcP3Blcl9wYWdlPTEwMCQvLnRlc3Qo
-          cm91dGUpfHwvXnJlcG9zXC9sMnYtaHViXC9DbGluaWNPU1wvaXNzdWVzXC8oNDQ3fDQ1MXw0NTJ8NDUzfDQ1NHw0NTZ8NDU3fDQ4
-          Nnw0OTcpKD86XC9jb21tZW50c1w/cGVyX3BhZ2U9MTAwJnBhZ2U9WzEtOV1bMC05XT8pPyQvLnRlc3Qocm91dGUpKXx8bWV0aG9k
-          PT09J1BBVENIJyYmcm91dGU9PT1CQVNFKycvaXNzdWVzL2NvbW1lbnRzLzYyNTU5MjkzODQnfHxbJ1BPU1QnLCdERUxFVEUnXS5p
-          bmNsdWRlcyhtZXRob2QpJiYvXnJlcG9zXC9sMnYtaHViXC9DbGluaWNPU1wvaXNzdWVzXC8oNDQ3fDQ1MXw0NTJ8NDUzfDQ1NHw0
-          NTZ8NDU3fDQ4Nnw0OTcpXC8oPzpjb21tZW50c3xsYWJlbHMoPzpcLyg/OmNsYXVkZS1yZXZpZXctcmVhZHl8Y2xhdWRlLXJldmll
-          d2luZ3xjb2RleC1yZXZpZXctcmVhZHl8Y29kZXgtcmV2aWV3LWZpeGVzfHJldmlldy1ibG9ja2VkfGNsYXVkZS1yZXZpZXdlZCkp
-          PykkLy50ZXN0KHJvdXRlKTsKIGFzc2VydChhbGxvd2VkLCdPdXRzaWRlIGZpeGVkIG1ldGFkYXRhIGFsbG93bGlzdCcpOwogY29u
-          c3Qgcj1hd2FpdCBydW4oe2NvbW1hbmQ6J2doJyxhcmdzOlsnYXBpJyxyb3V0ZSwuLi4obWV0aG9kPT09J0dFVCc/W106WyctWCcs
-          bWV0aG9kXSksLi4uKGJvZHk9PT11bmRlZmluZWQ/W106WyctLWlucHV0JywnLSddKV0sLi4uKGJvZHk9PT11bmRlZmluZWQ/e306
-          e2lucHV0OkpTT04uc3RyaW5naWZ5KGJvZHkpfSksY3dkOnByb2Nlc3MuZW52LkdJVEhVQl9XT1JLU1BBQ0UsZW52TW9kZTonY29u
-          dHJvbGxlcicsbWF4T3V0cHV0Qnl0ZXM6NCoxMDI0KjEwMjQsdGltZW91dE1zOjMwMDAwfSk7YXNzZXJ0KHIub2ssJ01ldGFkYXRh
-          IG9wZXJhdGlvbiBmYWlsZWQ7IHJlY29uY2lsZSBiZWZvcmUgcmV0cnknKTtyZXR1cm4gci5zdGRvdXQudHJpbSgpP0pTT04ucGFy
-          c2Uoci5zdGRvdXQpOm51bGw7Cn0KYXN5bmMgZnVuY3Rpb24gbGl2ZSgpe2NvbnN0IHA9YXdhaXQgYXBpKEJBU0UrJy9wdWxscy80
-          OTcnKTthc3NlcnQocC5udW1iZXI9PT00OTcmJnAuc3RhdGU9PT0nb3BlbicmJiFwLm1lcmdlZCYmIXAuZHJhZnQmJnAuaGVhZC5z
-          aGE9PT1TSEEmJnAuaGVhZC5yZWY9PT0nY29kZXgvYnVnLWJhdGNoLTQ0NycmJnAuaGVhZC5yZXBvLmZ1bGxfbmFtZT09PVJFUE8m
-          JiFwLmhlYWQucmVwby5mb3JrJiZwLmJhc2UucmVmPT09J21haW4nJiZwLmJhc2UucmVwby5mdWxsX25hbWU9PT1SRVBPLCdMaXZl
-          IHN1YmplY3QgY2hhbmdlZCcpO3JldHVybiBwO30KYXN5bmMgZnVuY3Rpb24gYmF0Y2goKXtjb25zdCBzPWF3YWl0IHN0b3JlLmxv
-          YWQoKSxiPXMuYmF0Y2hlcy5maW5kKHg9PngucHIubnVtYmVyPT09NDk3KTthc3NlcnQuZXF1YWwoYi5zaGEsU0hBKTthc3NlcnQu
-          ZGVlcEVxdWFsKGIuaXNzdWVzLElTU1VFUyk7YXNzZXJ0LmVxdWFsKGIub3BlcmF0b3JDb250aW51YXRpb25zLmF0KC0xKS5yb3Vu
-          ZCwxNik7YXNzZXJ0LmVxdWFsKGIub3BlcmF0b3JDb250aW51YXRpb25zLmF0KC0xKS5zdGF0dXMsJ3Bhc3NlZCcpO2Fzc2VydC5l
-          cXVhbChiLm9wZXJhdG9yQ29udGludWF0aW9ucy5hdCgtMSkuc3ViamVjdFNoYSxTT1VSQ0UpO2Fzc2VydCghWydtZXJnZWQnLCdk
-          ZXBsb3llZCddLmluY2x1ZGVzKGIucmVsZWFzZT8uc3RhdHVzKSk7cmV0dXJuIGI7fQphc3luYyBmdW5jdGlvbiBuYXRpdmUoKXth
-          d2FpdCBsaXZlKCk7Y29uc3QgcD1hd2FpdCBhcGkoQkFTRSsnL2NvbW1pdHMvJytTSEErJy9jaGVjay1ydW5zP3Blcl9wYWdlPTEw
-          MCcpO2Fzc2VydChwLnRvdGFsX2NvdW50PDEwMCYmcC5jaGVja19ydW5zLmxlbmd0aD09PXAudG90YWxfY291bnQsJ0luY29tcGxl
-          dGUgY2hlY2tzJyk7Y29uc3QgbmV3ZXN0PW5ldyBNYXAoKTtmb3IoY29uc3QgYyBvZiBwLmNoZWNrX3J1bnMpaWYoYy5hcHAuaWQ9
-          PT0xNTM2OCYmTkFNRVMuaW5jbHVkZXMoYy5uYW1lKSYmKCFuZXdlc3QuaGFzKGMubmFtZSl8fG5ld2VzdC5nZXQoYy5uYW1lKS5p
-          ZDxjLmlkKSluZXdlc3Quc2V0KGMubmFtZSxjKTtzdGFnZS5uYXRpdmU9TkFNRVMubWFwKG5hbWU9Pih7bmFtZSxzdGF0dXM6bmV3
-          ZXN0LmdldChuYW1lKT8uc3RhdHVzPz8nbWlzc2luZycsY29uY2x1c2lvbjpuZXdlc3QuZ2V0KG5hbWUpPy5jb25jbHVzaW9uPz9u
-          dWxsfSkpO2F3YWl0IHNhdmUoKTtyZXR1cm57ZmFpbGVkOnN0YWdlLm5hdGl2ZS5zb21lKGM9PmMuc3RhdHVzPT09J2NvbXBsZXRl
-          ZCcmJmMuY29uY2x1c2lvbiE9PSdzdWNjZXNzJykscGFzc2VkOnN0YWdlLm5hdGl2ZS5ldmVyeShjPT5jLnN0YXR1cz09PSdjb21w
-          bGV0ZWQnJiZjLmNvbmNsdXNpb249PT0nc3VjY2VzcycpfTt9CmFzeW5jIGZ1bmN0aW9uIGd1YXJkZWRQcm9qZWN0aW9uKG51bWJl
-          cil7CiBmb3IobGV0IGF0dGVtcHQ9MDthdHRlbXB0PDE2O2F0dGVtcHQrKyl7CiAgY29uc3QgYj1hd2FpdCBiYXRjaCgpO2F3YWl0
-          IGxpdmUoKTthc3NlcnQoKGF3YWl0IG5hdGl2ZSgpKS5wYXNzZWQsJ05hdGl2ZSBjaGVja3MgY2hhbmdlZCcpO2Fzc2VydChhd2Fp
-          dCBnaXRodWIuYXV0aG9yaXplZCgnbDJ2LWh1YicpKTtjb25zdCBwcm9qZWN0aW9uPWNtLnJldmlld1Byb2plY3Rpb24oYixlbS5l
-          eHRlcm5hbFJlcG9ydCk7YXNzZXJ0KFsnY2xhdWRlLXJldmlldy1yZWFkeScsJ2NsYXVkZS1yZXZpZXdpbmcnLCdjb2RleC1yZXZp
-          ZXctcmVhZHknLCdyZXZpZXctYmxvY2tlZCcsJ2NvZGV4LXJldmlldy1maXhlcycsJ2NsYXVkZS1yZXZpZXdlZCddLmluY2x1ZGVz
-          KHByb2plY3Rpb24ubGFiZWwpKTsKICBjb25zdCBpc3N1ZT1hd2FpdCBhcGkoQkFTRSsnL2lzc3Vlcy8nK251bWJlcik7YXNzZXJ0
-          KGlzc3VlLnN0YXRlPT09J29wZW4nJiZCb29sZWFuKGlzc3VlLnB1bGxfcmVxdWVzdCk9PT0obnVtYmVyPT09NDk3KSk7Y29uc3Qg
-          bGFiZWxzPWlzc3VlLmxhYmVscy5tYXAoeD0+dHlwZW9mIHg9PT0nc3RyaW5nJz94OngubmFtZSk7CiAgY29uc3QgYWdhaW49YXdh
-          aXQgYmF0Y2goKTthc3NlcnQuZXF1YWwoYWdhaW4uZXh0ZXJuYWxSZXZpZXc/LnJlcXVlc3RJZCxiLmV4dGVybmFsUmV2aWV3Py5y
-          ZXF1ZXN0SWQpO2lmKGNtLnJldmlld1Byb2plY3Rpb24oYWdhaW4sZW0uZXh0ZXJuYWxSZXBvcnQpLmxhYmVsIT09cHJvamVjdGlv
-          bi5sYWJlbCljb250aW51ZTsKICBpZighbGFiZWxzLmluY2x1ZGVzKHByb2plY3Rpb24ubGFiZWwpKXthd2FpdCBhcGkoQkFTRSsn
-          L2lzc3Vlcy8nK251bWJlcisnL2xhYmVscycsJ1BPU1QnLHtsYWJlbHM6W3Byb2plY3Rpb24ubGFiZWxdfSk7Y29udGludWU7fQog
-          IGNvbnN0IHN0YWxlPWxhYmVscy5maW5kKHg9PmNtLlJFVklFV19MQUJFTFMuaW5jbHVkZXMoeCkmJnghPT1wcm9qZWN0aW9uLmxh
-          YmVsKTtpZihzdGFsZSl7YXdhaXQgYXBpKEJBU0UrJy9pc3N1ZXMvJytudW1iZXIrJy9sYWJlbHMvJytlbmNvZGVVUklDb21wb25l
-          bnQoc3RhbGUpLCdERUxFVEUnKTtjb250aW51ZTt9cmV0dXJuOwogfWFzc2VydC5mYWlsKCdQcm9qZWN0aW9uIGNoYW5nZWQgcmVw
-          ZWF0ZWRseTsgcHJlc2VydmUgc3RhdGUnKTsKfQphc3luYyBmdW5jdGlvbiBkYXNoYm9hcmQoKXtjb25zdCBiPWF3YWl0IGJhdGNo
-          KCksb2xkPWF3YWl0IGFwaShCQVNFKycvaXNzdWVzL2NvbW1lbnRzLzYyNTU5MjkzODQnKTthc3NlcnQuZXF1YWwob2xkLnVzZXIu
-          bG9naW4sJ2wydi1odWInKTthc3NlcnQob2xkLmJvZHkuc3RhcnRzV2l0aCgnPCEtLSBjbGluaWNvcy1hbGwyMy1saXZlLXByb2dy
-          ZXNzOjIwMjYxMDIxIC0tPicpKTtjb25zdCBvcGVuPWF3YWl0IGFwaShCQVNFKycvaXNzdWVzP3N0YXRlPW9wZW4mcGVyX3BhZ2U9
-          MTAwJyk7YXNzZXJ0KG9wZW4ubGVuZ3RoPDEwMCk7Y29uc3QgaWRzPVs0NTAsNDcyLDQ3Myw0NzUsNDc2LDQzMiw0NDEsNDQyLDQ2
-          MCw0NjMsNDY0LDQ2Nyw0ODUsLi4uSVNTVUVTLDQ1NSw0NzBdLGNvdW50PWlkcy5maWx0ZXIobj0+b3Blbi5zb21lKHg9PngubnVt
-          YmVyPT09biYmIXgucHVsbF9yZXF1ZXN0KSkubGVuZ3RoOwogY29uc3QgYm9keT1gPCEtLSBjbGluaWNvcy1hbGwyMy1saXZlLXBy
-          b2dyZXNzOjIwMjYxMDIxIC0tPlxuXG5BZ2dpb3JuYXRhICR7bmV3IERhdGUoKS50b0lTT1N0cmluZygpfS4gKioke2NvdW50fS8y
-          MyBpc3N1ZSBvcmlnaW5hbGkgYW5jb3JhIGFwZXJ0ZSoqLlxuXG58IENvZGEgfCBGYXNlIHZlcmlmaWNhdGEgfCBQcm9zc2ltbyBw
-          YXNzbyB8XG58IC0tLSB8IC0tLSB8IC0tLSB8XG58ICM0OTcg4oCUIDggaXNzdWUgfCBDb21taXQgJHtTSEF9OyBuYXRpdmkgJHtz
-          dGFnZS5uYXRpdmUuZmlsdGVyKGM9PmMuY29uY2x1c2lvbj09PSdzdWNjZXNzJykubGVuZ3RofS82LiBIYW5kb2ZmOiAke2IuZXh0
-          ZXJuYWxSZXZpZXc/LnN0YXR1cz8/J25vbiBhbmNvcmEgcmljaGllc3RvJ30uIFVJMTY6IDEuNTUwIHRlc3QgZnJvbnRlbmQ7IFFB
-          IGluZGlwZW5kZW50ZSAzMyBlIHRpcGkgUEFTUy4gUG9zdGdyZVNRTCByZWFsZTogNDAwMDHihpI0MDkgc2VuemEgc2NyaXR0dXJl
-          LCBjb250cm9sbG8gMjAwLiBCcm93c2VyIGZyZXNjbzogY29udHJhc3RvIG1pbmltbyAxNCwzOCwgdW5hIGRvc2UgcGVyc2lzdGl0
-          YSBkb3BvIHJlbG9hZC4gfCBDbGF1ZGUgc3VsIHNvbG8gU0hBIHZlcmlmaWNhdG87IGVzaXRvIG5laSBjb21tZW50aSBlIGNvZGV4
-          LXJldmlldy1yZWFkeS4gfFxufCAjNDgxLCAjNDgzLCAjNDkzIOKAlCAxMyBpc3N1ZSB8IFJldmlldyBhcHByb3ZhdGUsIGNvbnNl
-          cnZhdGUuIHwgUmlsYXNjaW8gdmVyaWZpY2F0byBzZW56YSBudW92YSByZXZpZXcuIHxcbnwgIzQ5OSB8IE1lcmdpYXRhIHN1IG1h
-          aW4gYjA2MmRlMzMgZG9wbyBDbGF1ZGUyIGUgQ29kZXggZmluYWxlLiBFc2VjdXppb25lIHJlYWxlOiBwcmVmbGlnaHQgUEFTUywg
-          ZW52aXJvbm1lbnQgRkFJTCwgY2FuY2VsbGF6aW9uZSByZXBvc2l0b3J5IG5vbiBlc2VndWl0YS4gfCBQZXJtZXNzaSBTZWNyZXRz
-          IGVkIEVudmlyb25tZW50cyBzdWwgdG9rZW4gZXNpc3RlbnRlOyBwb2kgbWlncmF6aW9uZSBlIHByb3ZhIG5lZ2F0aXZhIHJlYWxp
-          LiB8XG58ICM0OTggfCBDb21taXQgYThiYzdhOTY6IHNlaSBjaGVjayBuYXRpdmkgUEFTUzsgcmVzdGEgaWwgcmlsaWV2byBkaSBh
-          Y2Nlc3NvIGFsbGEgY3JlZGVuemlhbGUuIHwgUmlzb2x2ZXJlIGlsIHJpbGlldm8gZ2nDoCBub3RvIHByaW1hIGRpIG51b3ZhIHJl
-          dmlldy4gfFxufCAjNDcwIHwgUHVsaXppYSBnacOgIGVzZWd1aXRhOyB2ZXJpZmljYSBpbmZyYXN0cnV0dHVyYWxlIHJlc2lkdWEu
-          IHwgTm9uIHJpcGV0ZXJlIGxhIGNhbmNlbGxhemlvbmUuIHxcbnwgIzQ1NSB8IENvb3JkaW5hbWVudG8uIHwgQ2hpdXN1cmEgZG9w
-          byBpIHJpc3VsdGF0aSBkZWxsZSBpc3N1ZSBmaWdsaWUuIHxcbnwgIzM5MyB8IEZ1b3JpIGRhbGxlIDIzOyBhcHByb3ZhdGEsIHJp
-          bGFzY2lvIGluIGF0dGVzYS4gfCBDb25zZXJ2YXJlIGFwcHJvdmF6aW9uZS4gfFxuXG5MZSBvdHRvIHByb3ZlIGNsaW5pY2hlIHBy
-          ZWNlZGVudGkgcmVzdGFubyBhdHRyaWJ1aXRlIGFsIHNvcmdlbnRlIGJiMTJlYjcgZSBzb25vIGNvbnNlcnZhdGUuIExhIG51b3Zh
-          IHByb3ZhIGJyb3dzZXIgZGVsbGUgbW9kaWZpY2hlIFVJIMOoIHN1bCBzb3JnZW50ZSA0Yzg1ZmRmOyBub24gZGljaGlhcmEgdW5h
-          IG51b3ZhIGVzZWN1emlvbmUgZGkgdHV0dGUgZSBvdHRvLiBOZXNzdW4gbnVvdm8gZGVwbG95IG8gY2hpdXN1cmEgZGljaGlhcmF0
-          aS5cblxuPCEtLSBjb2RleC1idWctcGlwZWxpbmU6b3duZWQtZGFzaGJvYXJkOjQ1NSAtLT5gOwogYXdhaXQgYXBpKEJBU0UrJy9p
-          c3N1ZXMvY29tbWVudHMvNjI1NTkyOTM4NCcsJ1BBVENIJyx7Ym9keX0pOwp9CnRyeXsKIGNvbnN0IHdobz1hd2FpdCBhcGkoJ3Vz
-          ZXInKTthc3NlcnQuZXF1YWwod2hvLmxvZ2luLCdsMnYtaHViJyk7YXNzZXJ0KGF3YWl0IGdpdGh1Yi5hdXRob3JpemVkKHdoby5s
-          b2dpbikpO2F3YWl0IGxpdmUoKTthd2FpdCBiYXRjaCgpO2NvbnN0IG9yaWdpbmFsPWF3YWl0IHN0b3JlLmxvYWQoKSxzYXZlZD1u
-          ZXcgTWFwKFBSRVNFUlZFRC5tYXAobj0+e2NvbnN0IHg9Wy4uLm9yaWdpbmFsLmJhdGNoZXMsLi4ub3JpZ2luYWwuc3RhbmRhbG9u
-          ZVJldmlld3NdLmZpbmQoeD0+eC5wci5udW1iZXI9PT1uKTthc3NlcnQoeCk7cmV0dXJuW24sSlNPTi5zdHJpbmdpZnkoeCldO30p
-          KTsKIGNvbnN0IGRlYWRsaW5lPURhdGUubm93KCkrMzAqNjAqMTAwMDt3aGlsZSh0cnVlKXtjb25zdCBuPWF3YWl0IG5hdGl2ZSgp
-          O2lmKG4uZmFpbGVkKXtzdGFnZS5zdGF0dXM9J25hdGl2ZS1mYWlsZWQtbm8tcmVxdWVzdCc7YXdhaXQgc2F2ZSgpO2F3YWl0IGRh
-          c2hib2FyZCgpO3Byb2Nlc3MuZXhpdENvZGU9MTticmVhazt9aWYobi5wYXNzZWQpYnJlYWs7aWYoRGF0ZS5ub3coKT49ZGVhZGxp
-          bmUpe3N0YWdlLnN0YXR1cz0nbmF0aXZlLXRpbWVvdXQtbm8tcmVxdWVzdCc7YXdhaXQgc2F2ZSgpO2F3YWl0IGRhc2hib2FyZCgp
-          O3Byb2Nlc3MuZXhpdENvZGU9MTticmVhazt9YXdhaXQgbmV3IFByb21pc2Uocj0+c2V0VGltZW91dChyLDMwMDAwKSk7fQogaWYo
-          IXByb2Nlc3MuZXhpdENvZGUpe2xldCBiPWF3YWl0IGJhdGNoKCk7Y29uc3QgaGFuZG9mZj1obS5jcmVhdGVDb21tZW50UmV2aWV3
-          SGFuZG9mZih7Z2l0aHViLHJ1bixjd2Q6cHJvY2Vzcy5lbnYuR0lUSFVCX1dPUktTUEFDRX0pO2lmKCFiLmV4dGVybmFsUmV2aWV3
-          KXthc3NlcnQoKGF3YWl0IG5hdGl2ZSgpKS5wYXNzZWQpO2F3YWl0IGhhbmRvZmYucmVxdWVzdCg0OTcpO31iPWF3YWl0IGJhdGNo
-          KCk7YXNzZXJ0LmVxdWFsKGIuZXh0ZXJuYWxSZXZpZXcuc3ViamVjdFNoYSxTSEEpO2Fzc2VydChbJ2NvbW1lbnQtcmVxdWVzdGVk
-          JywnY29tbWVudC1ydW5uaW5nJywnZmluaXNoZWQnLCdwdWJsaXNoZWQnLCdmYWlsZWQnXS5pbmNsdWRlcyhiLmV4dGVybmFsUmV2
-          aWV3LnN0YXR1cykpO3N0YWdlLnJlcXVlc3RJZD1iLmV4dGVybmFsUmV2aWV3LnJlcXVlc3RJZDtzdGFnZS5zdGF0dXM9J3N0YW5k
-          YXJkLXJlcXVlc3QtaXNzdWVkLW9yLWV4aXN0aW5nLXByZXNlcnZlZCc7YXdhaXQgc2F2ZSgpOwogIC8vIFByb3RvY29sIHJlcXVl
-          c3QgY29tbWVudCBpcyBwb3N0ZWQgYnkgdHJ1c3RlZCBoYW5kb2ZmLiBMYWJlbHMgYWxvbmUgYXJlIHByb2plY3RlZCBoZXJlOgog
-          IC8vIHN0YXR1cyBjb21tZW50cyBwb3N0ZWQgYWZ0ZXIgYSBsaXZlIGNsYWltIGNvdWxkIGFsdGVyIHRoZSByZXZpZXcgZmluZ2Vy
-          cHJpbnQuCiAgZm9yKGNvbnN0IG4gb2ZbLi4uSVNTVUVTLDQ5N10pYXdhaXQgZ3VhcmRlZFByb2plY3Rpb24obik7Y29uc3QgYWZ0
-          ZXI9YXdhaXQgc3RvcmUubG9hZCgpO2Zvcihjb25zdFtuLHRleHRdb2Ygc2F2ZWQpYXNzZXJ0LmVxdWFsKEpTT04uc3RyaW5naWZ5
-          KFsuLi5hZnRlci5iYXRjaGVzLC4uLmFmdGVyLnN0YW5kYWxvbmVSZXZpZXdzXS5maW5kKHg9PngucHIubnVtYmVyPT09bikpLHRl
-          eHQsJ1VucmVsYXRlZCBhcHByb3ZhbCBjaGFuZ2VkJyk7c3RhZ2Uuc3RhdHVzPSdyZXF1ZXN0LWFuZC1saXZlLWxhYmVscy1jb25m
-          aXJtZWQnO2F3YWl0IHNhdmUoKTthd2FpdCBkYXNoYm9hcmQoKTsKIH0KfWNhdGNoKGVycm9yKXtzdGFnZS5zdGF0dXM9J2ZhaWxl
-          ZC1wcmVzZXJ2ZWQnO3N0YWdlLmVycm9yPSdWZXJpZmllZCBoYW5kb2ZmIGZhaWxlZDsgaW5zcGVjdCB0aGUgcHJpdmF0ZSBqb2Ig
-          YW5kIHJlY29uY2lsZSBiZWZvcmUgcmV0cnknO2F3YWl0IHNhdmUoKTt0aHJvdyBlcnJvcjt9Cg==
-          RELAY16_SCRIPT_B64
-          base64 --decode "$RUNNER_TEMP/relay16/script.b64" > "$RUNNER_TEMP/relay16/prepare-497-handoff.mjs"
-          printf '%s  %s\n' 'f599b835a2dd80146980c4db31c83b26da6396de1880a251366ed81a8ca414ca' "$RUNNER_TEMP/relay16/prepare-497-handoff.mjs" | sha256sum --check --status
-          node --check "$RUNNER_TEMP/relay16/prepare-497-handoff.mjs"
-          node "$RUNNER_TEMP/relay16/prepare-497-handoff.mjs"
-      - name: Retain safe handoff receipt
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { writeFileSync } from 'node:fs';
+          const present = process.env.DEMO_TOKEN_AVAILABLE_OUTSIDE_ENVIRONMENT;
+          assert(['true', 'false'].includes(present));
+          const proof = { schemaVersion: 1, observedAt: new Date().toISOString(), repository: process.env.GITHUB_REPOSITORY, ref: process.env.GITHUB_REF, workflowRef: process.env.GITHUB_WORKFLOW_REF, workflowSha: process.env.GITHUB_SHA, event: process.env.GITHUB_EVENT_NAME, runId: process.env.GITHUB_RUN_ID, runAttempt: process.env.GITHUB_RUN_ATTEMPT, protectedEnvironmentAttached: false, ambientDemoTokenAvailable: present === 'true', credentialValuesReadOrPrinted: false, ownerType: 'User', organizationSecretInheritanceApplicable: false };
+          writeFileSync('demo-secret-exposure.json', JSON.stringify(proof, null, 2) + '\n');
+          console.log(JSON.stringify(proof));
+          assert.equal(present, 'false', 'Demo secret is accessible outside the protected environment; metadata-only proof failed');
+          JS
+      - name: Preserve metadata-only result
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: verified-review-handoff-relay16-stage
-          path: ${{ runner.temp }}/verified-review-handoff-relay16-stage.json
-          if-no-files-found: warn
+          name: demo-secret-exposure-${{ github.run_id }}-${{ github.run_attempt }}
+          path: demo-secret-exposure.json
+          if-no-files-found: error
           retention-days: 14
