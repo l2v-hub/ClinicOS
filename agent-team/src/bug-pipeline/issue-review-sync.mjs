@@ -8,6 +8,7 @@ import { createGitHub } from './github.mjs';
 import { validateState } from './contracts.mjs';
 import { externalReport } from './external-review.mjs';
 import { createIssueReviewCommunication } from './issue-review-communication.mjs';
+import { operatorOwns } from './operator-ownership.mjs';
 
 const FILE = fileURLToPath(import.meta.url);
 const REPO = 'l2v-hub/ClinicOS';
@@ -18,15 +19,24 @@ export async function syncIssueReviews({ github, communication }) {
   validateState(state, REPO);
   const results = [];
   const subjects = ['batches', 'standaloneReviews'].flatMap((collection) =>
-    (state[collection] ?? []).map((batch) => ({ collection, batch })));
-  const ids = new Set(), prs = new Set();
+    (state[collection] ?? []).map((batch) => ({ collection, batch })),
+  );
+  const ids = new Set(),
+    prs = new Set();
   for (const { batch } of subjects) {
-    assert.ok(!ids.has(batch.id) && (!batch.pr || !prs.has(batch.pr.number)), 'Duplicate durable review subject');
+    assert.ok(
+      !ids.has(batch.id) && (!batch.pr || !prs.has(batch.pr.number)),
+      'Duplicate durable review subject',
+    );
     ids.add(batch.id);
     if (batch.pr) prs.add(batch.pr.number);
   }
   for (const { collection, batch } of subjects) {
     if (!batch.pr || !batch.sha || ['merged', 'deployed'].includes(batch.release?.status)) continue;
+    if (operatorOwns(state, collection, batch)) {
+      results.push({ id: batch.id, status: 'skipped', reason: 'operator-owned' });
+      continue;
+    }
     try {
       const feedback = collection === 'batches' ? await communication.mirrorFeedback(batch) : {};
       const projection = await communication.publishState(batch, { collection });
@@ -41,7 +51,12 @@ export async function syncIssueReviews({ github, communication }) {
     }
   }
   return {
-    status: results.some((item) => item.status === 'blocked') ? 'partial' : 'synced',
+    status: results.some((item) => item.status === 'blocked')
+      ? 'partial'
+      : results.some((item) => item.reason === 'operator-owned') &&
+          !results.some((item) => item.status === 'synced')
+        ? 'skipped'
+        : 'synced',
     batches: results,
   };
 }
