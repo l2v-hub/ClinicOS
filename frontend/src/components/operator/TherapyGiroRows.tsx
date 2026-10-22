@@ -133,6 +133,9 @@ export function TherapyGiroRows({
   const pendingConfirmBlocked = Boolean(
     pendingConfirm && !actionAllowed(pendingConfirm.key, pendingConfirm.context, 'administer'),
   );
+  const pendingConfirmMessage = pendingConfirm
+    ? `${pendingConfirm.label}, ore ${pendingConfirm.info.ora}. Il tuo ruolo registra la somministrazione con conferma esplicita.${pendingConfirmBlocked ? ' Stato uscita PS da verificare o paziente non più disponibile; conferma non disponibile.' : ''}`
+    : '';
   // Gli invii in corso valgono solo per lo stato dell'ora su cui sono partiti: ogni nuovo stato
   // (conferma, errore con ricarica, cambio data) libera i pulsanti, così un farmaco tornato
   // "da erogare" dopo un errore non resta bloccato su "Invio…".
@@ -221,9 +224,7 @@ export function TherapyGiroRows({
         <ConfirmDialog
           open={pendingConfirm !== null}
           title="Confermi la somministrazione?"
-          message={pendingConfirm
-            ? `${pendingConfirm.label}, ore ${pendingConfirm.info.ora}. Il tuo ruolo registra la somministrazione con conferma esplicita. Stato uscita PS da verificare o paziente non più disponibile; conferma non disponibile.`
-            : ''}
+          message={pendingConfirmMessage}
           confirmLabel="Conferma somministrazione"
           tone="primary"
           confirmDisabled={pendingConfirmBlocked}
@@ -539,11 +540,7 @@ export function TherapyGiroRows({
       <ConfirmDialog
         open={pendingConfirm !== null}
         title="Confermi la somministrazione?"
-        message={
-          pendingConfirm
-            ? `${pendingConfirm.label}, ore ${pendingConfirm.info.ora}. Il tuo ruolo registra la somministrazione con conferma esplicita.${pendingConfirmBlocked ? ' Stato uscita PS da verificare o paziente non più disponibile; conferma non disponibile.' : ''}`
-            : ''
-        }
+        message={pendingConfirmMessage}
         confirmLabel="Conferma somministrazione"
         tone="primary"
         confirmDisabled={pendingConfirmBlocked}

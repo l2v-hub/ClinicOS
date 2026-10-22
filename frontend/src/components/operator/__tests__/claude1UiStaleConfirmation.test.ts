@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { TherapyGiroRows } from '../TherapyGiroRows';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
 
@@ -129,6 +130,47 @@ test('an open supervisor confirmation is disabled after patient removal and its 
   assert.match(String(dialog?.props.message), /paziente non più disponibile/);
   staleConfirm();
   assert.equal(writes, 0);
+});
+
+test('a filtered pending confirmation only says unavailable when current PS state blocks it', () => {
+  const allowedRender = controlledRender();
+  const allowedWrites: string[] = [];
+  const allowedProps = {
+    requiresConfirmation: true,
+    onConfirm: (info: { patientId: string }) => { allowedWrites.push(info.patientId); },
+  };
+  const allowedPatient = patient('patient-filtered');
+  let tree = allowedRender(props(giro(allowedPatient), allowedProps));
+  elements(tree).find((e) => e.type === 'button' && String(e.props['aria-label']).startsWith('Erogata:'))!.props.onClick();
+  tree = allowedRender(props(giro(allowedPatient), { ...allowedProps, filtro: 'administered' }));
+  const allowedDialog = elements(tree).find((e) => e.type === ConfirmDialog && e.props.open)!;
+  assert.equal(allowedDialog.props.confirmDisabled, false);
+  assert.doesNotMatch(String(allowedDialog.props.message), /conferma non disponibile/);
+  const allowedHtml = renderToStaticMarkup(React.createElement(ConfirmDialog, allowedDialog.props));
+  const allowedButton = allowedHtml.match(/<button[^>]*>[\s\S]*?Conferma somministrazione[\s\S]*?<\/button>/)?.[0];
+  assert.ok(allowedButton);
+  assert.doesNotMatch(allowedButton, /\sdisabled=/);
+  allowedDialog.props.onConfirm();
+  assert.deepEqual(allowedWrites, ['patient-filtered']);
+
+  const blockedRender = controlledRender();
+  let blockedWrites = 0;
+  const blockedProps = { requiresConfirmation: true, onConfirm: () => { blockedWrites++; } };
+  tree = blockedRender(props(giro(patient('patient-unverified')), blockedProps));
+  elements(tree).find((e) => e.type === 'button' && String(e.props['aria-label']).startsWith('Erogata:'))!.props.onClick();
+  tree = blockedRender(props(
+    giro(patient('patient-unverified', { temporaryPsExitUnverified: true })),
+    { ...blockedProps, filtro: 'administered' },
+  ));
+  const blockedDialog = elements(tree).find((e) => e.type === ConfirmDialog && e.props.open)!;
+  assert.equal(blockedDialog.props.confirmDisabled, true);
+  assert.match(String(blockedDialog.props.message), /conferma non disponibile/);
+  const blockedHtml = renderToStaticMarkup(React.createElement(ConfirmDialog, blockedDialog.props));
+  const blockedButton = blockedHtml.match(/<button[^>]*>[\s\S]*?Conferma somministrazione[\s\S]*?<\/button>/)?.[0];
+  assert.ok(blockedButton);
+  assert.match(blockedButton, /\sdisabled=""/);
+  blockedDialog.props.onConfirm();
+  assert.equal(blockedWrites, 0);
 });
 
 test('a supervisor confirmation cannot cross into a different date context', () => {

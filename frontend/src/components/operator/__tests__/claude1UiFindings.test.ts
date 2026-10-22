@@ -242,4 +242,11 @@ test('all changed design rules use existing tokens instead of invalid vars or ne
   assert.match(parameter, /\.parameter-oxygen-choices button\[aria-pressed='true'\] \{[^}]*background: var\(--blue-dim\);[^}]*border-color: var\(--blue\);/s);
   assert.match(tab, /borderLeft: '3px solid var\(--amber\)'/);
   assert.doesNotMatch(tab, /borderLeft: '3px solid var\(--amber, #/);
+  assert.match(record, /\.patient-record-view \.diario-card\.diario-card--urgent \{[^}]*border-left: 4px solid var\(--red\);[^}]*background: var\(--red-bg\);/s);
+  assert.match(record, /\.patient-record-view \.diario-card\.diario-card--taken \{[^}]*border-left: 4px solid var\(--text-muted\);/s);
+  assert.match(record, /\.patient-record-view \.cr-alert-strip--allergie \{[^}]*color: var\(--amber\);[^}]*background: var\(--amber-bg\);[^}]*border: 1px solid var\(--border\);/s);
+  assert.match(record, /\.patient-record-view \.cr-alert-strip--allergie\.cr-alert-strip--severe \{[^}]*color: var\(--red\);[^}]*background: var\(--red-bg\);/s);
+  assert.match(record, /\.patient-record-view \.patient-allergy-strip \{[^}]*background: var\(--amber-bg\);[^}]*border-color: var\(--border\);[^}]*color: var\(--amber\);/s);
+  assert.match(record, /\.patient-today__vitals \{[^}]*background: var\(--bg\);/s);
+  assert.doesNotMatch(record, /#(?:b42335|fffafb|8291a6|8f5500|fdf3e2|ead0a7|fae9cc|fdecee|efc3cb|fbe0e5)|var\(--bg-subtle/);
 });

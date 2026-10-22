@@ -449,11 +449,11 @@
 }
 /* Temporal urgency is separate from author role and historical acknowledgement. */
 .patient-record-view .diario-card.diario-card--urgent {
-  border-left: 4px solid #b42335;
-  background: #fffafb;
+  border-left: 4px solid var(--red);
+  background: var(--red-bg);
 }
 .patient-record-view .diario-card.diario-card--taken {
-  border-left: 4px solid #8291a6;
+  border-left: 4px solid var(--text-muted);
 }
 .patient-record-view .cr-alert-band {
   margin: 16px 0 24px;
@@ -551,22 +551,22 @@
   line-height: 1.5;
 }
 .patient-record-view .cr-alert-strip--allergie {
-  color: #8f5500;
-  background: #fdf3e2;
-  border: 1px solid #ead0a7;
-  border-left: 4px solid #8f5500;
+  color: var(--amber);
+  background: var(--amber-bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--amber);
 }
 .patient-record-view .cr-alert-strip--allergie:hover {
-  background: #fae9cc;
+  background: var(--amber-bg);
 }
 .patient-record-view .cr-alert-strip--allergie.cr-alert-strip--severe {
-  color: #b42335;
-  background: #fdecee;
-  border-color: #efc3cb;
-  border-left-color: #b42335;
+  color: var(--red);
+  background: var(--red-bg);
+  border-color: var(--red);
+  border-left-color: var(--red);
 }
 .patient-record-view .cr-alert-strip--allergie.cr-alert-strip--severe:hover {
-  background: #fbe0e5;
+  background: var(--red-bg);
 }
 .patient-record-view .cr-alert-strip > span {
   overflow-wrap: anywhere;
@@ -574,9 +574,9 @@
 .patient-record-view .patient-allergy-strip {
   margin-bottom: 20px;
   padding: 12px 16px;
-  background: #fdf3e2;
-  border-color: #ead0a7;
-  color: #8f5500;
+  background: var(--amber-bg);
+  border-color: var(--border);
+  color: var(--amber);
 }
 
 /* Compact chart header: names remain readable and actionable in every section. */
@@ -642,7 +642,7 @@
 }
 .patient-today__vitals {
   padding: 8px;
-  background: var(--bg-subtle, #f5f7fa);
+  background: var(--bg);
 }
 
 .clinical-empty-row {
