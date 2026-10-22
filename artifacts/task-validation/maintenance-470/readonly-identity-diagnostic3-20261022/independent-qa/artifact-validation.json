@@ -1,0 +1,16 @@
+{
+  "pngDecodedHeader": [
+    1250,
+    1600
+  ],
+  "traceZipIntegrity": "PASS",
+  "traceEntries": [
+    "trace.trace",
+    "trace.network",
+    "resources/page@b42fafe918e67751ed9728cc11942ed7-1792694091349.jpeg",
+    "resources/page@b42fafe918e67751ed9728cc11942ed7-1792694091445.jpeg",
+    "resources/page@b42fafe918e67751ed9728cc11942ed7-1792694092303.jpeg",
+    "trace.stacks",
+    "resources/src@329125ee11ab8266b77410b7d6cd83a5a7e2f325.txt"
+  ]
+}

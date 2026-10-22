@@ -710,3 +710,47 @@ test('account public decoder refuses unscoped and partially scoped variables aft
 test('runtime-root drift after a minted context cannot select another executable',()=>{
  const context=validateContext(ENV);assert.throws(()=>createReadOnlyAccess({env:{...ENV,RUNNER_TEMP:'/tmp/other'},context}),errorCode('READONLY_CONTEXT_REQUIRED'));
 });
+
+for (const [label, payload, shape, category] of [
+  ['null errors', null, 'null', 'no-details'],
+  ['empty errors', [], 'empty-array', 'no-details'],
+  ['recognized token message', [{ message: 'Project token not found' }], 'nonempty-array', 'project-token-not-found'],
+  ['recognized authorization code', [{ message: 'private authorization detail', extensions: { code: 'FORBIDDEN', workspaceName: TOKEN } }], 'nonempty-array', 'not-authorized'],
+  ['schema validation', [{ message: 'Cannot query field privateField on type PrivateType' }], 'nonempty-array', 'schema-validation'],
+  ['rate limit code', [{ message: 'private limit detail', extensions: { code: 'RATE_LIMITED' } }], 'nonempty-array', 'rate-limited'],
+  ['unknown message', [{ message: 'private error sentinel' }], 'nonempty-array', 'unknown'],
+  ['mixed categories', [{ message: 'not authorized' }, { message: 'Project token not found' }], 'nonempty-array', 'mixed'],
+  ['malformed container', 'private malformed sentinel', 'malformed', 'unknown'],
+  ['malformed member', [{ message: 'not authorized' }, 'private malformed member'], 'malformed', 'unknown'],
+  ['oversized message', [{ message: 'private-oversize-' + 'x'.repeat(600) }], 'malformed', 'unknown'],
+  ['too many entries', Array.from({ length: 21 }, () => ({ message: 'not authorized' })), 'malformed', 'unknown'],
+  ['malformed extension', [{ message: 'not authorized', extensions: 'private extension' }], 'malformed', 'unknown'],
+  ['unknown code', [{ message: 'not authorized', extensions: { code: 'PRIVATE_CODE' } }], 'nonempty-array', 'unknown'],
+]) {
+  for (const [mode, env] of [['project-token', ENV], ['account-bearer', ACCOUNT_ENV]]) {
+    test(`GraphQL failure projection ${label} in ${mode} mode stays blocked and read-bounded`, async () => {
+      const f = fixture();
+      const fetchImpl = async (url, options) => {
+        if (url === ENDPOINT) {
+          f.requests.push({ url, options });
+          return json({ errors: payload });
+        }
+        return f.fetchImpl(url, options);
+      };
+      const receipt = await run(f, { env, fetchImpl });
+      assert.equal(receipt.outcome, 'blocked');
+      assert.equal(receipt.phase, mode === 'project-token' ? 'TOKEN_IDENTITY' : 'ACCOUNT_IDENTITY');
+      assert.equal(receipt.code, 'READONLY_GRAPHQL_REJECTED');
+      assert.deepEqual(receipt.observations.graphqlFailure, { errorsShape: shape, category });
+      assert.deepEqual(receipt.readRequests, { cli: 0, native: 1, github: 1 });
+      assert.equal(f.calls.length, 0);
+      assert.equal(f.requests.filter((r) => r.url === ENDPOINT).length, 1);
+      assert.equal(f.requests.some((r) => r.options.body?.includes('volumeInstanceBackupList')), false);
+      const text = safe(receipt);
+      for (const sentinel of [TOKEN, 'private malformed sentinel', 'private authorization detail',
+        'private error sentinel', 'private malformed member', 'private extension', 'PRIVATE_CODE'])
+        assert.equal(text.includes(sentinel), false, sentinel);
+      assert.deepEqual(Object.keys(receipt.observations.graphqlFailure).sort(), ['category', 'errorsShape']);
+    });
+  }
+}

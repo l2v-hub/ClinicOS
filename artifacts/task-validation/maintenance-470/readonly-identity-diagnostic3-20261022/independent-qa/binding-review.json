@@ -1,0 +1,26 @@
+{
+  "freezeHashes": "PASS",
+  "scope": "exactly two files",
+  "files": {
+    ".github/workflows/inspect-demo-storage.yml": {
+      "sha256": "d0d7e71f76860370e89e8c8ff2f2100a340e9e3311bb4ca4b00c3d6e980557b7",
+      "mode": "0o600"
+    },
+    "scripts/maintenance/demo-storage-binding-readonly.mjs": {
+      "sha256": "5458e519575d0f47d9ad542d4a8fd150b85f73110dc6a4f1c788e0b0cd9a7759",
+      "mode": "0o600"
+    },
+    "scripts/maintenance/demo-storage-workflow.test.mjs": {
+      "sha256": "ebc4b8153fb9e113dd6d3c3899868f864f49cf7a9182d371c1f43ef86c0954e9",
+      "mode": "0o600"
+    },
+    "scripts/maintenance/demo-storage-inspect.test.mjs": {
+      "sha256": "7c4943cbe43af548b3290466cf475175ec89729b4377dd31db8de92334dc463a",
+      "mode": "0o600"
+    },
+    "scripts/maintenance/demo-storage-inspect.mjs": {
+      "sha256": "d3e863ec13752634de88db7a9e9029478c3bcb0c15d5d233defb88070fa931ad",
+      "mode": "0o600"
+    }
+  }
+}

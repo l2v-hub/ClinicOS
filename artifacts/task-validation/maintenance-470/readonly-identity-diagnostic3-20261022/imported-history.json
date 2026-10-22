@@ -1,0 +1,223 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "56c96d37-0846-48cf-9e53-bf3bb530131b",
+      "baseSha": "b062de3324661cf07fdd929b9bac48a27626f1e5",
+      "subjectSha": "8872007729f75f678cc6b649c9b526c7ee2cc81f",
+      "evidence": "validation-report.md",
+      "reason": "Initial publication verification of separately scoped read-only enabling child; actual maintenance470parent attempt8/history remain preserved, no cleanup repeated",
+      "parentEntityId": "maintenance-470",
+      "parentImplementationRound": 8,
+      "parentImplementationNonce": "b90f75b0-029a-4d44-818d-9a856410864e",
+      "independentQaNonce": "92d9a146-aa3a-43ad-b24c-02e8f2558ffe",
+      "independentQaSealSha256": "c81634f23aee9b868d1f8ee6533581fcc952bc188d01346c1e7d28d80fb3d5ef",
+      "completedAt": "2026-10-22T14:13:09.261734+00:00"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "kind": "explicit-operator-compatibility-continuation",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "cc56617d-71cc-4f01-9a01-6d35850f3b4a",
+      "startedAt": "2026-10-22T15:32:21.833Z",
+      "reason": "Actual Claude1 HIGH unverified binary/MEDIUM account scope/LOW unused set; original child1 and parent470 attempt8 preserved",
+      "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+      "contractSha256": "e9ca22909d784bd86c687a72ffcca4342ca31fe249a638eb386ccc32206a1374",
+      "baseSha": "2db189ec7098c595259c0a721edd137efdac1e4f",
+      "sourceScope": [
+        ".github/workflows/inspect-demo-storage.yml",
+        "scripts/maintenance/demo-storage-inspect.mjs",
+        "scripts/maintenance/demo-storage-binding-readonly.mjs",
+        "scripts/maintenance/demo-storage-inspect.test.mjs",
+        "scripts/maintenance/demo-storage-workflow.test.mjs"
+      ],
+      "model": "gpt-6.1-sol",
+      "agent": "/root/qa497_publication13",
+      "privateOutput": "/tmp/clinicos500-Claude1-followup2-20261022",
+      "sourceSnapshot": "/tmp/clinicos500-core2-source",
+      "reservedBeforeSession": true,
+      "preservedEntityDigest": "60c2b9b21197d46a3448ff5929fefe12ffa89a1505762943a86266bb6424ec49",
+      "preservedLegacyImplementationDigest": "b499f325755067fcb89c492fa9d75998dd8b774997a331cd6adf9e07a4c3949e",
+      "preservedLegacyReviewsDigest": "dcd1246c33a3d5fe616e8f22d4fdb29427e1aed4d0c9cdae874eabe5b575e35b",
+      "actualClaudeComment": 6344231265,
+      "actualClaudeCommentSha256": "50e8126f34fe374cb88bb623cf9629507dcb4fd46b76449222cf451ac3ce9b59",
+      "core": {
+        "nonce": "cd13b3a7-8601-4d6b-afc6-d855485bb86a",
+        "status": "passed",
+        "contractSha256": "e9ca22909d784bd86c687a72ffcca4342ca31fe249a638eb386ccc32206a1374",
+        "agent": "/root/qa497_publication13",
+        "model": "gpt-6.1-sol",
+        "completedAt": "2026-10-22T15:40:44.047Z",
+        "sealSha256": "6898cb22a1509b345780cebe9844483b3adba1d72f9e25f8a441cd7e5c464bfd",
+        "tests": 157,
+        "initialFailuresPreserved": 2,
+        "authorStopped": true
+      },
+      "low": {
+        "nonce": "98c136ea-f17d-4dfc-830c-ecec8fedceaf",
+        "status": "passed",
+        "contractSha256": "ff90d79586509dbe74331ab8be3582e8a74f198b208f8c49ad0384c76e58fcd8",
+        "agent": "/root/packet499_author3",
+        "model": "gpt-6-luna",
+        "scope": [
+          "scripts/maintenance/demo-storage-binding-readonly.mjs"
+        ],
+        "privateOutput": "/tmp/clinicos500-Claude1-followup2-20261022/low",
+        "sourceSnapshot": "/tmp/clinicos500-low2-source",
+        "completedAt": "2026-10-22T15:40:44.047Z",
+        "sealSha256": "28a9df44784bd5c49993f2062a2f72cc58dc9a90c27c74ffba60646fca2ecf81",
+        "syntaxPassed": true,
+        "authorStopped": true
+      },
+      "authorStopped": true,
+      "authorStoppedAt": "2026-10-22T15:40:44.047Z",
+      "independentQaReservation": {
+        "nonce": "402aea2e-40ba-4641-af2f-4d34a962b8d3",
+        "status": "passed",
+        "reservedAt": "2026-10-22T15:40:44.047Z",
+        "reservedBeforeSession": true,
+        "agent": "/root/diagnose497_native_frontend",
+        "model": "gpt-6.1-sol",
+        "contractSha256": "acfa98f9f8fbe3906a05d787e2f9a6b233b1c6a01e2e657eb651dcf41c30f6ad",
+        "sourceSnapshot": "/tmp/clinicos500-independent2-source",
+        "privateOutput": "/tmp/clinicos500-Claude1-followup2-20261022/independent-qa",
+        "coreSealSha256": "6898cb22a1509b345780cebe9844483b3adba1d72f9e25f8a441cd7e5c464bfd",
+        "lowSealSha256": "28a9df44784bd5c49993f2062a2f72cc58dc9a90c27c74ffba60646fca2ecf81",
+        "sourceEditsAllowed": false,
+        "liveActionsAllowed": false,
+        "completedAt": "2026-10-22T15:46:20.670Z",
+        "sealSha256": "4590c98cbc31774d6c5610fa908ae0577ceecabfecbd1b672ce2857ae11bfa37"
+      },
+      "completedAt": "2026-10-22T15:46:28.366Z",
+      "subjectSha": "e53abe27e66c531f446a325fe8a17a17aeaf0826",
+      "evidence": "followup2-report.md",
+      "sourceFreezeSha256": "d99e7c8187de2f85e788e4fc02be0c4015360fea6f05b28396005e9392cb9e0d"
+    },
+    {
+      "round": 3,
+      "status": "passed",
+      "owner": "codex-cloud-root",
+      "nonce": "a5396252-001c-433f-9809-1f9145e70a30",
+      "model": "gpt-6-luna",
+      "baseSha": "8e3c5fd48682766dbb34eb4b95699145b2d56965",
+      "subjectSha": "fa88482503e08b191395473a599325831f7e4bd7",
+      "evidence": "continuation3-validation-report.md",
+      "reason": "Minimal protected fail-closed diagnostic after two nondiscriminating real provider failures; actual independent185tests+40mainprivacy cases+synthetic visual QA PASS",
+      "independentQaNonce": "489c1094-3cf8-4665-9128-535b213cdde1",
+      "independentQaSealSha256": "e784cdc4f611cc256ea00d249a228d14a8f21c14006b99441757ff12794c2fd1",
+      "completedAt": "2026-10-22T18:38:28.645761+00:00"
+    }
+  ],
+  "reviews": [
+    {
+      "round": 1,
+      "status": "changes-requested",
+      "subjectSha": "2db189ec7098c595259c0a721edd137efdac1e4f"
+    },
+    {
+      "round": 2,
+      "status": "approved",
+      "subjectSha": "cab5f4a562e9c201cabeb7981b71c4b2d89b099d"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "changes-requested",
+        "subject_sha": "2db189ec7098c595259c0a721edd137efdac1e4f",
+        "review_sha256": "1677aae0f7fd27a6f6f1bbfa6f7a13b4cffd5ca346c7534be3fb162cd85df330"
+      },
+      {
+        "round": 2,
+        "verdict": "approved",
+        "subject_sha": "cab5f4a562e9c201cabeb7981b71c4b2d89b099d",
+        "review_sha256": "cf1d2659e6fbe44c9e3812761f2d4782d952b2180644924fec77b4dc483734be"
+      }
+    ]
+  },
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"2db189ec7098c595259c0a721edd137efdac1e4f\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"Read-only review (git reads in blobless clone, gh read-only queries; no code or tests executed by the reviewer). Diff vs controller base b062de33: 5 new source files plus an evidence packet under artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8. demo-storage-inspect.mjs vs approved 92931e60: (1) helper imports switch from demo-storage-backups.mjs/demo-patient-inventory.mjs to the new pure module demo-storage-binding-readonly.mjs; (2) BRANCH moves to main, and validateContext now also requires GITHUB_WORKFLOW_REF, GITHUB_WORKFLOW_SHA==GITHUB_SHA, actor l2v-hub == triggering actor, DEMO_STORAGE_ENVIRONMENT and an explicit auth mode, with the inactive credential required to be empty and tokens bounded (no CR/LF, at most 8192 chars); (3) a new account-bearer mode adds two fixed GraphQL reads (query{me{id}} with the identity discarded; project/environment canAccess with exact variables) gated by accountStage/step, sends an Authorization Bearer header instead of Project-Access-Token, and hands the CLI child RAILWAY_API_TOKEN only; (4) receipt adds authMode/workflowRef/protectedEnvironment/credentialKind/projectTokenVerified/targetReadAccess, and the secret scrub now includes RAILWAY_API_TOKEN; (5) BACKEND_SOURCE_UNVERIFIED is added to the constant helper codes. The exact argv allowlist, query set (no mutations), double binding read, classifier after UNCLASSIFIED_DEMO_VOLUMES, two snapshot lists, constant codes and the no-cleanup receipt are unchanged. demo-storage-binding-readonly.mjs: inspectStorageBinding and verifyDatabaseMount are byte-identical to the 92931e60 demo-storage-backups.mjs versions, and verifyDemoBinding/verifyDatabaseUrl/TARGET are identical to demo-patient-inventory.mjs. The only change is one additional check (backend source.repo == l2v-hub/ClinicOS -> BACKEND_SOURCE_UNVERIFIED), so it is at least as strict. Its only imports are node:path and node:crypto. It has no spawn, fetch, fs, env, SQL, erase, delete, redeploy or variable writes, and its GraphQL strings are two read queries that already match QUERIES.domain/environment in the transport allowlist. Workflow: workflow_dispatch plus pull_request (paths-limited, test job only, no secrets). The inspect job is gated on event, repo, ref main, workflow_ref, actor, triggering_actor, workflow_sha == sha, reviewed_sha == sha and the auth_mode enum. Permissions are contents: read. Actions are pinned by SHA with persist-credentials false. Tests run in a credential-free job before the inspect job (needs: test). Concurrency group demo-storage-inspect (not railway-backend), cancel-in-progress false. Timeouts are 5/10/1 min. The secret is referenced only in the inspect step env. The artifact holds only the stdout receipt (stderr excluded, 7-day retention), and the receipt carries only ids/counts/booleans/constant codes. Verified via gh API: Environment 'glistening-friendship / demo' has a branch policy limited to main, and RAILWAY_DEMO_TOKEN is environment-scoped; the repo-level RAILWAY_TOKEN is not referenced. CI at the subject SHA: test pass (26s), inspect skipping (expected, dispatch-only), secret-scan, gate, frontend/browser/archive tests pass. The packet claims 152 focused tests and 29 synthetic probes PASS; it is synthetic only, and no live provider observation has been made (stated in the packet). Blocking issue: the Railway CLI that receives the demo credential is installed by npm version pin only, with no checksum, although a checksum-verified install precedent exists in protect-demo-secret.yml. Also, the account-bearer CLI path issues an environment-unscoped variables read.\",\n  \"findings\": [\n    {\n      \"severity\": \"high\",\n      \"file\": \".github/workflows/inspect-demo-storage.yml\",\n      \"line\": 65,\n      \"problem\": \"The Railway CLI is installed with `npm install -g @railway/cli@5.66.0`, pinned only by npm version: there is no artifact checksum, lifecycle scripts run, and a binary is downloaded at install time. The next step runs this unverified `railway` executable, resolved via PATH, with RAILWAY_DEMO_TOKEN in its environment (the token may be an account-wide bearer token in account-bearer mode). The required 'pinned Railway CLI install with checksum before secrets' is not met, although main already has a checksum-verified install pattern (protect-demo-secret.yml lines 35-49 for gh).\",\n      \"requested_change\": \"Download a fixed Railway CLI release archive for linux x86_64 by exact URL, verify it with a hard-coded sha256 (sha256sum --check --status) before extraction, check --version against 5.66.0, and expose the verified absolute path (for example via GITHUB_ENV, or a fixed path that demo-storage-inspect.mjs spawns instead of a bare 'railway' PATH lookup). Do this in a step with no secrets, before the inspect step. Alternatively, use npm with --ignore-scripts plus a verified tarball integrity, but the binary itself must still be checksum-verified.\",\n      \"test_expectation\": \"demo-storage-workflow.test.mjs asserts that the install step contains the fixed release URL, a 64-hex sha256 literal, sha256sum --check, and a version check; that no 'npm install -g @railway/cli' remains; that the verification step precedes the first 'secrets.' reference; and that the spawned CLI path is the verified one.\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"scripts/maintenance/demo-storage-inspect.mjs\",\n      \"line\": 278,\n      \"problem\": \"The BACKEND_IDENTITY argv `variables --service <backend> --json` has no --environment and no --project. With a project token, the token pins the demo environment. In the new account-bearer mode, RAILWAY_API_TOKEN is account-wide and the CI checkout has no railway link. The CLI will therefore either fail (making account-bearer mode non-functional, though it fails closed with READONLY_CLI_FAILED) or resolve some non-demo environment of the shared project and load that environment's variables, possibly production DATABASE_URL, into process memory before the identity check rejects them. Tests mock spawn, so neither behaviour is exercised.\",\n      \"requested_change\": \"Make the account-bearer mode explicitly scope every CLI read to the demo target. For example, allow BACKEND_IDENTITY only as `variables --service <backend> --environment <demo env> --json` when authMode is account-bearer, and pass the project explicitly or via a fixed, validated non-secret link mechanism. Otherwise, remove account-bearer mode until a live observation shows it works, keeping project-token only (least privilege, since an account token is broader than the demo environment).\",\n      \"test_expectation\": \"A test with ACCOUNT_ENV asserts that every spawned argv includes --environment <TARGET.environmentId> (and the project scoping, if added), and that the unscoped `variables --service <backend> --json` argv is rejected with READONLY_COMMAND_REJECTED in account-bearer mode, while project-token behaviour is unchanged.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"scripts/maintenance/demo-storage-binding-readonly.mjs\",\n      \"line\": 240,\n      \"problem\": \"The supposedly pure read-only extraction carries over the unused SAFE_REPLACEMENT_ERRORS set, which contains replacement/redeploy-era codes (REDEPLOY_UNVERIFIED, DEPLOYMENT_SOURCE_CONFIG_CHANGED, REPLACEMENT_NOT_CONVERGED, ...). This is dead code that implies mutation capability in a module whose contract is 'no cleanup entrypoints'. The line-1 comment also has a typo ('maintenance92931e60').\",\n      \"requested_change\": \"Delete SAFE_REPLACEMENT_ERRORS (it is never referenced) and fix the header comment so the module contains only the extracted read-only checks.\",\n      \"test_expectation\": \"demo-storage-workflow.test.mjs forbidden-token list adds 'SAFE_REPLACEMENT_ERRORS', 'REDEPLOY', and 'REPLACEMENT' for demo-storage-binding-readonly.mjs; all existing focused tests still pass.\"\n    }\n  ]\n}\n",
+    "claude-review-2.json": "{\n  \"subject_sha\": \"cab5f4a562e9c201cabeb7981b71c4b2d89b099d\",\n  \"verdict\": \"approved\",\n  \"summary\": \"Round 2 (read-only). The delta 2db189ec7..cab5f4a56 mostly merges current main (#498 and its history, 5aed5435). The #500-specific source change is commit e53abe27 (5 files, +105/-37): .github/workflows/inspect-demo-storage.yml, scripts/maintenance/demo-storage-binding-readonly.mjs, scripts/maintenance/demo-storage-inspect.mjs and the two test files. cab5f4a5 adds evidence only.\\n\\nRound-1 findings:\\n1. HIGH — unverified `npm install -g @railway/cli@5.66.0` and a PATH-resolved binary run with RAILWAY_DEMO_TOKEN (inspect-demo-storage.yml:65): RESOLVED. The credential-free install step now downloads the fixed release asset https://github.com/railwayapp/cli/releases/download/v5.66.0/railway-v5.66.0-x86_64-unknown-linux-gnu.tar.gz with curl --fail, checks SHA-256 5b3f4e77ddf986161fb760842d718b23ab587a59f9badf610c1fb7b80bcbcb3e with sha256sum --check before extracting, extracts only `railway`, and requires `railway 5.66.0` from --version. The binary path is derived by verifiedRailwayPath(RUNNER_TEMP) (strict absolute, normalized path; no '.', '..' or trailing slash). The same function is enforced at runtime: validateContext pins cliPath, createReadOnlyAccess re-checks it, and spawn uses context.cliPath instead of `railway` from PATH. I verified this independently against the primary source, read-only through the GitHub API: railwayapp/cli release v5.66.0 (published 2026-10-12) reports digest sha256:5b3f4e77ddf986161fb760842d718b23ab587a59f9badf610c1fb7b80bcbcb3e for that exact asset, identical to the pin.\\n2. MEDIUM — account-bearer variables reads not scoped to the demo project and environment (demo-storage-inspect.mjs:278): RESOLVED. In account-bearer mode, every allowed variables command (BACKEND_IDENTITY, BACKEND_CONFIG, DATABASE_CONFIG, RUNTIME_CONFIG) must be exactly `variables --service <id> --project <TARGET.projectId> --environment <TARGET.environmentId> --json`. The project-token mode keeps the previously approved argv. The unchanged pure binding module still issues its original argv. A private bindingCall adapter accepts only the exact original argv for the current step's expected service, rewrites it to the scoped form, and routes it through the same allowlisted call(). The public call() never accepts an unscoped account read. Tests cover the scoped argv for both modes and the rejection of unscoped account reads.\\n3. LOW — unused SAFE_REPLACEMENT_ERRORS set with redeploy/replacement codes in the read-only module, and a header typo: RESOLVED. The set is removed and the comment fixed. The module remains pure, importing only node:path and node:crypto.\\n\\nUnchanged and still holding from round 1: manual dispatch only on main with the reviewed SHA and actor guards; the PR trigger runs tests only, without secrets; contents: read; SHA-pinned actions; persist-credentials false; tests in a separate credential-free job; own concurrency group demo-storage-inspect (not railway-backend); a receipt-only artifact (IDs, counts, flags, constant codes); RAILWAY_DEMO_TOKEN environment-scoped behind the main-only demo environment; read-only command and query allowlist; double binding reads, classifier and no-cleanup receipt identical in behaviour to the version approved on issue #470 (92931e60).\\n\\nCI on cab5f4a56: test, gate, secret-scan, frontend-tests, browser-e2e, archive-tests, bug-pipeline-tests, real-provider, windows-review-setup and Vercel all pass. inspect, configure-repository and verify-provider-access are skipped by design (dispatch-only).\\n\\nLimit: the evidence is synthetic (fake CLI and providers). No real Railway inspection has run yet; the first real dispatch will show whether CLI 5.66.0 accepts `variables --project --environment` with an account token. The workflow fails closed with constant codes if it does not.\\n\\nRead with git (blobless clone) and the GitHub API; no PR code or tests were run by the reviewer.\",\n  \"findings\": []\n}\n"
+  },
+  "sourceManifest": [
+    {
+      "path": "scripts/maintenance/demo-storage-inspect.mjs",
+      "blob": "c9531956a7fe483f41e6624b4992f5c070792e2e",
+      "mode": "100644",
+      "baseBlob": "2061de183f8ee8937f856b08d5138737c447777f",
+      "baseMode": "100644"
+    },
+    {
+      "path": "scripts/maintenance/demo-storage-inspect.test.mjs",
+      "blob": "1da90096e78b9ea7dd00ccc995bb4e3004245b02",
+      "mode": "100644",
+      "baseBlob": "66560ac55f03cde2c5b83dc94f4bfa830c0853a7",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "README.md": "60c64e80763b528577c06639e92c40d03ac83eac73ebd0c4d4eb1f43e7f8b775",
+    "analysis.md": "0ef9656cb6236ec228629cba8b9a47bf78576aeb9e1c139f0d772ebe654dd919",
+    "author/STOP.json": "f6becfeba5b2dce6240ce3c1e51f0cab54fb82fab70eebce67c4378ffd8d8bf9",
+    "author/contract-validation.log": "95e31c577475031eac4bae7ae8aa5e226edef519aa9d64bf27ca38e1ddc199a9",
+    "author/design-ack.json": "f2717c154f75b48823158d5bf969c4dc9b966d63eb600864b0ed7bf7f01e2ea3",
+    "author/focused-tests.log": "4e79c5a473670a3be451ca4ece87e45964633f99711feed3b91cec05d925825c",
+    "author/focused-tests.status": "29d2201a2befb989890429def16a43d1ccf5d72739236c22ae1731ea89cb719b",
+    "author/node-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "author/node-check.status": "ffa94303c627756c67f2538d0ebdbedbcd7c6b63f331e050fa53a5a23a7014f7",
+    "author/report.md": "4a2e4a6708c8c920d2d2d3fe27b662333452ed2adf08c0ee4838d490edc0c4af",
+    "author/results.json": "525e9db94a327135146c4ea1ccb28a84e8e827fbfb176d3ffe5eb26398e5ce06",
+    "author/seal.json": "6bbf3bc2e3503b78606374907722037a280dc54ddc3d06c37954f6959d31cfdd",
+    "author/source-after.sha256": "6ab306203d32ce8796036fa203c9d4871b9252e1008e95c405bd15b9b6ded1ff",
+    "author/source-before.sha256": "74db75c11726f002191eabbb17e7cb176319107e525de58787fa77ca3e7b14da",
+    "author/source.patch": "19852e80fc17abc689561c3d0d2ac1d4a700c29fba1522323946552a20f692b2",
+    "author/task-contract.md": "35dd84544a8d5a330e7559e14d39d8dccc58cb8de6f9ab0317414b2d7573e8cf",
+    "continuation3-validation-report.md": "1a7517a4393844fadb0c8624855fc409771f360d39fae99bbc5841f7e59edc31",
+    "followup2-report.md": "3ace595cd9454f0c77562cdacfeb326c05979562c4502012be2fa150ac30eda3",
+    "implementation-plan.md": "a487e4eadbe9f09f8cb28f88b1bf0edc17b1abb5a19d332d921b0c357f8f2855",
+    "independent-qa/STOP.json": "781d0d61ce3f53151328dcb55666e7612cecdea61a80a4210a7bc00102128ab2",
+    "independent-qa/artifact-validation.json": "16cc69a9d433ca2516b161a366ee5221e2852d7615c59340e516766e290f09a2",
+    "independent-qa/baseline-tests.log": "ac22fb1633f67e064323cf22d85e13c43b6d81e7962adf5cddb6ba8ed3eac5af",
+    "independent-qa/binding-review.json": "e46b416aa6db031b0e21e5def5b11ddbb6cf8275f997d067e13e97bc60dc7085",
+    "independent-qa/browser-results.json": "2d1cbf1af50325c8cf72b761543bbbd139125f9966a5e146634f17338a34b71f",
+    "independent-qa/browser-setcontent.cjs": "c6fee617ff36de7a17ae6f8165d40c777891aeb3cc67618202869f7a1afeb4c3",
+    "independent-qa/browser-setcontent.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "independent-qa/browser.cjs": "4a6c980b5280521830f4224a67a72a71bda426f78bcadba26cb11444331a8c3e",
+    "independent-qa/browser.log": "f0506b305626178ebab4af62ce7af11b50b64eaee53027171e0c577c29a17132",
+    "independent-qa/commands.md": "e9b948cbd7c29181a263f2fe887b2e570b01e089b69f613c023ac42e59696731",
+    "independent-qa/contract.log": "6d3009053a5884c0faac7ebd0933effaf66411e8e3e910e317b44707c9461be6",
+    "independent-qa/git-bindings.json": "0ffb55c50a3745e2396c28fed8383a80849f0181b7d62c4a12d83eaf13d11a0b",
+    "independent-qa/hash-after.json": "cd5c584cdc70b9fb73b07abb9227528c7021ab93a35e57ad238cd82f82903aba",
+    "independent-qa/hash-before.json": "cd5c584cdc70b9fb73b07abb9227528c7021ab93a35e57ad238cd82f82903aba",
+    "independent-qa/matrix-results.json": "37d9febb45e95ac8dd284e98f59d2acd3b8c4401900e2f8f507b2e2960969e53",
+    "independent-qa/probes.log": "6407904998d2e448cc39ea34203440f9f9330dd086f746647f664e27780aebd2",
+    "independent-qa/probes.mjs": "72bc474db8474c0361948a6df2cf0869116fbb5acba72196697809917c56a6c4",
+    "independent-qa/report.md": "5edc3c985920336db78aaa6a3aef56e7a31a36def19eefeca0ffa9d95c2b7e56",
+    "independent-qa/reservation.json": "94021fdf3f78349e72ef99c7646ad12934890fa287a65d35c1397d44efa0dfb4",
+    "independent-qa/results.json": "2cf683e9f1bf7e09b1c8b1a353b1cc7cd1a165b6b634d673bf86101a714402cb",
+    "independent-qa/scope.txt": "c4a93d5d743ef453fe6a386222ce30667d2f4bccc0fee473aadbeccef7b86539",
+    "independent-qa/screenshot.png": "27cf21c0c54483f2c32b3bc93c5079c5f039e37ec0aa521e4623f641ff0b9a0a",
+    "independent-qa/seal.json": "e784cdc4f611cc256ea00d249a228d14a8f21c14006b99441757ff12794c2fd1",
+    "independent-qa/surface.html": "2041ce3f26810067cb88f9f80f9795d68a733324057b8a0ae63cd967922bc63d",
+    "independent-qa/task-contract.md": "4f39258f7ae5c5109bdb1823ec922cab0ef9c471729b60c1ea4790544a82b67d",
+    "independent-qa/trace.zip": "947eba8dfc77bd25172b083c0ca102854160963f8fb063fbb16a680f54d683f9",
+    "independent-qa/validation-report.md": "5edc3c985920336db78aaa6a3aef56e7a31a36def19eefeca0ffa9d95c2b7e56",
+    "independent-qa/whole-source.diff": "6e242e10f484fe96189e9e55b6ba5b5383fcbb8601c6f1f9853887b86080918d",
+    "lineage/actual-account-inspection-typed-failure.json": "43258438b1cc06d96dc5298325260faf90b2b875bbf56f46c5933e601b7de2a6",
+    "lineage/actual-project-inspection-typed-failure.json": "b0f1af14806d11e16af415c003c049916b6267ff43412e3578a1f8e7dae9c4ef",
+    "lineage/claude-review-1.json": "1677aae0f7fd27a6f6f1bbfa6f7a13b4cffd5ca346c7534be3fb162cd85df330",
+    "lineage/claude-review-2.json": "cf1d2659e6fbe44c9e3812761f2d4782d952b2180644924fec77b4dc483734be",
+    "lineage/previous-packets-reference.json": "4e96fc4c72b6597e677b5f2143b585927de86ea0b4c22a046b794947896c5289",
+    "lineage/previous-subject.json": "08de9b064c5568210db3fcf22a35ade00b0d02880bb6086bd79bd282ea309eb7",
+    "lineage/representation-map.json": "5c25d34476ee4175eebf0c621691581981795f1028096d2bf499e96103369029",
+    "source-manifest.json": "7ea445a8add402d4fd2d26e41adbd185e59238b34e375dd7ef0cc0b696ad1434",
+    "task-contract.md": "62ea34a1d2d9b6a26fd465ded7e68cd41a83af0984f6c204aeb3f78c36d47bcf",
+    "validation-report.md": "d2c6ec86a0e4fb3ec9052a22473a8678725f8ce37afa77afc9bfab0368b71656"
+  }
+}

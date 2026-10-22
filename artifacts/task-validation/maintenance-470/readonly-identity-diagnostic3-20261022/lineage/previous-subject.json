@@ -1,0 +1,861 @@
+{
+  "schemaVersion": 1,
+  "repository": "l2v-hub/ClinicOS",
+  "pr": {
+    "number": 500,
+    "url": "https://github.com/l2v-hub/ClinicOS/pull/500"
+  },
+  "baseRef": "main",
+  "branch": "codex/demo-storage-readonly-main-470",
+  "issues": [],
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "56c96d37-0846-48cf-9e53-bf3bb530131b",
+      "baseSha": "b062de3324661cf07fdd929b9bac48a27626f1e5",
+      "subjectSha": "8872007729f75f678cc6b649c9b526c7ee2cc81f",
+      "evidence": "validation-report.md",
+      "reason": "Initial publication verification of separately scoped read-only enabling child; actual maintenance470parent attempt8/history remain preserved, no cleanup repeated",
+      "parentEntityId": "maintenance-470",
+      "parentImplementationRound": 8,
+      "parentImplementationNonce": "b90f75b0-029a-4d44-818d-9a856410864e",
+      "independentQaNonce": "92d9a146-aa3a-43ad-b24c-02e8f2558ffe",
+      "independentQaSealSha256": "c81634f23aee9b868d1f8ee6533581fcc952bc188d01346c1e7d28d80fb3d5ef",
+      "completedAt": "2026-10-22T14:13:09.261734+00:00"
+    }
+  ],
+  "reviews": [
+    {
+      "round": 1,
+      "status": "changes-requested",
+      "subjectSha": "2db189ec7098c595259c0a721edd137efdac1e4f"
+    },
+    {
+      "round": 2,
+      "status": "approved",
+      "subjectSha": "cab5f4a562e9c201cabeb7981b71c4b2d89b099d"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "changes-requested",
+        "subject_sha": "2db189ec7098c595259c0a721edd137efdac1e4f",
+        "review_sha256": "1677aae0f7fd27a6f6f1bbfa6f7a13b4cffd5ca346c7534be3fb162cd85df330"
+      },
+      {
+        "round": 2,
+        "verdict": "approved",
+        "subject_sha": "cab5f4a562e9c201cabeb7981b71c4b2d89b099d",
+        "review_sha256": "cf1d2659e6fbe44c9e3812761f2d4782d952b2180644924fec77b4dc483734be"
+      }
+    ]
+  },
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"2db189ec7098c595259c0a721edd137efdac1e4f\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"Read-only review (git reads in blobless clone, gh read-only queries; no code or tests executed by the reviewer). Diff vs controller base b062de33: 5 new source files plus an evidence packet under artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8. demo-storage-inspect.mjs vs approved 92931e60: (1) helper imports switch from demo-storage-backups.mjs/demo-patient-inventory.mjs to the new pure module demo-storage-binding-readonly.mjs; (2) BRANCH moves to main, and validateContext now also requires GITHUB_WORKFLOW_REF, GITHUB_WORKFLOW_SHA==GITHUB_SHA, actor l2v-hub == triggering actor, DEMO_STORAGE_ENVIRONMENT and an explicit auth mode, with the inactive credential required to be empty and tokens bounded (no CR/LF, at most 8192 chars); (3) a new account-bearer mode adds two fixed GraphQL reads (query{me{id}} with the identity discarded; project/environment canAccess with exact variables) gated by accountStage/step, sends an Authorization Bearer header instead of Project-Access-Token, and hands the CLI child RAILWAY_API_TOKEN only; (4) receipt adds authMode/workflowRef/protectedEnvironment/credentialKind/projectTokenVerified/targetReadAccess, and the secret scrub now includes RAILWAY_API_TOKEN; (5) BACKEND_SOURCE_UNVERIFIED is added to the constant helper codes. The exact argv allowlist, query set (no mutations), double binding read, classifier after UNCLASSIFIED_DEMO_VOLUMES, two snapshot lists, constant codes and the no-cleanup receipt are unchanged. demo-storage-binding-readonly.mjs: inspectStorageBinding and verifyDatabaseMount are byte-identical to the 92931e60 demo-storage-backups.mjs versions, and verifyDemoBinding/verifyDatabaseUrl/TARGET are identical to demo-patient-inventory.mjs. The only change is one additional check (backend source.repo == l2v-hub/ClinicOS -> BACKEND_SOURCE_UNVERIFIED), so it is at least as strict. Its only imports are node:path and node:crypto. It has no spawn, fetch, fs, env, SQL, erase, delete, redeploy or variable writes, and its GraphQL strings are two read queries that already match QUERIES.domain/environment in the transport allowlist. Workflow: workflow_dispatch plus pull_request (paths-limited, test job only, no secrets). The inspect job is gated on event, repo, ref main, workflow_ref, actor, triggering_actor, workflow_sha == sha, reviewed_sha == sha and the auth_mode enum. Permissions are contents: read. Actions are pinned by SHA with persist-credentials false. Tests run in a credential-free job before the inspect job (needs: test). Concurrency group demo-storage-inspect (not railway-backend), cancel-in-progress false. Timeouts are 5/10/1 min. The secret is referenced only in the inspect step env. The artifact holds only the stdout receipt (stderr excluded, 7-day retention), and the receipt carries only ids/counts/booleans/constant codes. Verified via gh API: Environment 'glistening-friendship / demo' has a branch policy limited to main, and RAILWAY_DEMO_TOKEN is environment-scoped; the repo-level RAILWAY_TOKEN is not referenced. CI at the subject SHA: test pass (26s), inspect skipping (expected, dispatch-only), secret-scan, gate, frontend/browser/archive tests pass. The packet claims 152 focused tests and 29 synthetic probes PASS; it is synthetic only, and no live provider observation has been made (stated in the packet). Blocking issue: the Railway CLI that receives the demo credential is installed by npm version pin only, with no checksum, although a checksum-verified install precedent exists in protect-demo-secret.yml. Also, the account-bearer CLI path issues an environment-unscoped variables read.\",\n  \"findings\": [\n    {\n      \"severity\": \"high\",\n      \"file\": \".github/workflows/inspect-demo-storage.yml\",\n      \"line\": 65,\n      \"problem\": \"The Railway CLI is installed with `npm install -g @railway/cli@5.66.0`, pinned only by npm version: there is no artifact checksum, lifecycle scripts run, and a binary is downloaded at install time. The next step runs this unverified `railway` executable, resolved via PATH, with RAILWAY_DEMO_TOKEN in its environment (the token may be an account-wide bearer token in account-bearer mode). The required 'pinned Railway CLI install with checksum before secrets' is not met, although main already has a checksum-verified install pattern (protect-demo-secret.yml lines 35-49 for gh).\",\n      \"requested_change\": \"Download a fixed Railway CLI release archive for linux x86_64 by exact URL, verify it with a hard-coded sha256 (sha256sum --check --status) before extraction, check --version against 5.66.0, and expose the verified absolute path (for example via GITHUB_ENV, or a fixed path that demo-storage-inspect.mjs spawns instead of a bare 'railway' PATH lookup). Do this in a step with no secrets, before the inspect step. Alternatively, use npm with --ignore-scripts plus a verified tarball integrity, but the binary itself must still be checksum-verified.\",\n      \"test_expectation\": \"demo-storage-workflow.test.mjs asserts that the install step contains the fixed release URL, a 64-hex sha256 literal, sha256sum --check, and a version check; that no 'npm install -g @railway/cli' remains; that the verification step precedes the first 'secrets.' reference; and that the spawned CLI path is the verified one.\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"scripts/maintenance/demo-storage-inspect.mjs\",\n      \"line\": 278,\n      \"problem\": \"The BACKEND_IDENTITY argv `variables --service <backend> --json` has no --environment and no --project. With a project token, the token pins the demo environment. In the new account-bearer mode, RAILWAY_API_TOKEN is account-wide and the CI checkout has no railway link. The CLI will therefore either fail (making account-bearer mode non-functional, though it fails closed with READONLY_CLI_FAILED) or resolve some non-demo environment of the shared project and load that environment's variables, possibly production DATABASE_URL, into process memory before the identity check rejects them. Tests mock spawn, so neither behaviour is exercised.\",\n      \"requested_change\": \"Make the account-bearer mode explicitly scope every CLI read to the demo target. For example, allow BACKEND_IDENTITY only as `variables --service <backend> --environment <demo env> --json` when authMode is account-bearer, and pass the project explicitly or via a fixed, validated non-secret link mechanism. Otherwise, remove account-bearer mode until a live observation shows it works, keeping project-token only (least privilege, since an account token is broader than the demo environment).\",\n      \"test_expectation\": \"A test with ACCOUNT_ENV asserts that every spawned argv includes --environment <TARGET.environmentId> (and the project scoping, if added), and that the unscoped `variables --service <backend> --json` argv is rejected with READONLY_COMMAND_REJECTED in account-bearer mode, while project-token behaviour is unchanged.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"scripts/maintenance/demo-storage-binding-readonly.mjs\",\n      \"line\": 240,\n      \"problem\": \"The supposedly pure read-only extraction carries over the unused SAFE_REPLACEMENT_ERRORS set, which contains replacement/redeploy-era codes (REDEPLOY_UNVERIFIED, DEPLOYMENT_SOURCE_CONFIG_CHANGED, REPLACEMENT_NOT_CONVERGED, ...). This is dead code that implies mutation capability in a module whose contract is 'no cleanup entrypoints'. The line-1 comment also has a typo ('maintenance92931e60').\",\n      \"requested_change\": \"Delete SAFE_REPLACEMENT_ERRORS (it is never referenced) and fix the header comment so the module contains only the extracted read-only checks.\",\n      \"test_expectation\": \"demo-storage-workflow.test.mjs forbidden-token list adds 'SAFE_REPLACEMENT_ERRORS', 'REDEPLOY', and 'REPLACEMENT' for demo-storage-binding-readonly.mjs; all existing focused tests still pass.\"\n    }\n  ]\n}\n",
+    "claude-review-2.json": "{\n  \"subject_sha\": \"cab5f4a562e9c201cabeb7981b71c4b2d89b099d\",\n  \"verdict\": \"approved\",\n  \"summary\": \"Round 2 (read-only). The delta 2db189ec7..cab5f4a56 mostly merges current main (#498 and its history, 5aed5435). The #500-specific source change is commit e53abe27 (5 files, +105/-37): .github/workflows/inspect-demo-storage.yml, scripts/maintenance/demo-storage-binding-readonly.mjs, scripts/maintenance/demo-storage-inspect.mjs and the two test files. cab5f4a5 adds evidence only.\\n\\nRound-1 findings:\\n1. HIGH — unverified `npm install -g @railway/cli@5.66.0` and a PATH-resolved binary run with RAILWAY_DEMO_TOKEN (inspect-demo-storage.yml:65): RESOLVED. The credential-free install step now downloads the fixed release asset https://github.com/railwayapp/cli/releases/download/v5.66.0/railway-v5.66.0-x86_64-unknown-linux-gnu.tar.gz with curl --fail, checks SHA-256 5b3f4e77ddf986161fb760842d718b23ab587a59f9badf610c1fb7b80bcbcb3e with sha256sum --check before extracting, extracts only `railway`, and requires `railway 5.66.0` from --version. The binary path is derived by verifiedRailwayPath(RUNNER_TEMP) (strict absolute, normalized path; no '.', '..' or trailing slash). The same function is enforced at runtime: validateContext pins cliPath, createReadOnlyAccess re-checks it, and spawn uses context.cliPath instead of `railway` from PATH. I verified this independently against the primary source, read-only through the GitHub API: railwayapp/cli release v5.66.0 (published 2026-10-12) reports digest sha256:5b3f4e77ddf986161fb760842d718b23ab587a59f9badf610c1fb7b80bcbcb3e for that exact asset, identical to the pin.\\n2. MEDIUM — account-bearer variables reads not scoped to the demo project and environment (demo-storage-inspect.mjs:278): RESOLVED. In account-bearer mode, every allowed variables command (BACKEND_IDENTITY, BACKEND_CONFIG, DATABASE_CONFIG, RUNTIME_CONFIG) must be exactly `variables --service <id> --project <TARGET.projectId> --environment <TARGET.environmentId> --json`. The project-token mode keeps the previously approved argv. The unchanged pure binding module still issues its original argv. A private bindingCall adapter accepts only the exact original argv for the current step's expected service, rewrites it to the scoped form, and routes it through the same allowlisted call(). The public call() never accepts an unscoped account read. Tests cover the scoped argv for both modes and the rejection of unscoped account reads.\\n3. LOW — unused SAFE_REPLACEMENT_ERRORS set with redeploy/replacement codes in the read-only module, and a header typo: RESOLVED. The set is removed and the comment fixed. The module remains pure, importing only node:path and node:crypto.\\n\\nUnchanged and still holding from round 1: manual dispatch only on main with the reviewed SHA and actor guards; the PR trigger runs tests only, without secrets; contents: read; SHA-pinned actions; persist-credentials false; tests in a separate credential-free job; own concurrency group demo-storage-inspect (not railway-backend); a receipt-only artifact (IDs, counts, flags, constant codes); RAILWAY_DEMO_TOKEN environment-scoped behind the main-only demo environment; read-only command and query allowlist; double binding reads, classifier and no-cleanup receipt identical in behaviour to the version approved on issue #470 (92931e60).\\n\\nCI on cab5f4a56: test, gate, secret-scan, frontend-tests, browser-e2e, archive-tests, bug-pipeline-tests, real-provider, windows-review-setup and Vercel all pass. inspect, configure-repository and verify-provider-access are skipped by design (dispatch-only).\\n\\nLimit: the evidence is synthetic (fake CLI and providers). No real Railway inspection has run yet; the first real dispatch will show whether CLI 5.66.0 accepts `variables --project --environment` with an account token. The workflow fails closed with constant codes if it does not.\\n\\nRead with git (blobless clone) and the GitHub API; no PR code or tests were run by the reviewer.\",\n  \"findings\": []\n}\n"
+  },
+  "releaseHold": {
+    "reason": "Enabling read-only infrastructure only; no automatic provider deploy or cleanup. Ordinary explicitly authorized protected merge after actualClaude+finalCodex; maintenance470closure remains gated on actualruntime proof."
+  },
+  "sha": "cab5f4a562e9c201cabeb7981b71c4b2d89b099d",
+  "baseSha": "453ade1a06cd79e1924de523c5fd2cdec51f4fd4",
+  "packet": {
+    "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-2-pr500",
+    "files": {
+      "README.md": "db4cd42d32a05f55590c0d8a4c76a17008062129277aea0ce05029cccf1def32",
+      "analysis.md": "408a395ec397832ccb90749e8f1b2834bc7660af212d3b28eec3f5103ff76123",
+      "core/STOP.json": "efa2d7477b1d3b3ea76869dfc923e80ec832632443e960499b312e42173c9be1",
+      "core/contract-validation.log": "61b7931726052ea3cc97c698ea9994a812a95880517cba1220dae4f385d3ceb4",
+      "core/core.patch": "12c1900c582a5172dccfd154f66528fb24dfed6875d4d2891bd746ad391bc35a",
+      "core/design-ack.json": "6ca993164744da9e59c08a5c6970b51ffc4b3ca8aea08f721124f2918bf41d87",
+      "core/focused-final.log": "e1f3ee16c5543b93f5ce7c0314942e08c24920e4a4cf2d379dee15b15a97478c",
+      "core/focused-first.log": "3bd3457b4329cfb8e7a90c7b1e0cd89996c41007f78f5581cf10a35a4c4a4519",
+      "core/freeze-assembly-first-stop.json": "f50fc2f2d58ce2a564cb217aecde1eec8398b2496ea538b074f4a48816145d2e",
+      "core/report.md": "e6ffa1a4e6f1166487de9bfb061ba5fb765d780bb7d4e0fae6ab49e60e7616d3",
+      "core/results.json": "c69731e6a8457151874b39f022fbe37d0d240eeaee60512c9db5ec61b9bf70e1",
+      "core/seal.json": "6898cb22a1509b345780cebe9844483b3adba1d72f9e25f8a441cd7e5c464bfd",
+      "core/source-before.json": "d38d5ab56454aabc84dc828e3f70e50174f184f6101481ef62cf3916566664d8",
+      "core/source-freeze.json": "d99e7c8187de2f85e788e4fc02be0c4015360fea6f05b28396005e9392cb9e0d",
+      "core/source.patch": "c3bf296bc31d4bcb4db05f7f0ec5c3465b5bd57d8d3e5d7fdb805012ab33513a",
+      "core/static-results.json": "fcbeec7ad96645b687100f97d515c99486d6e682184694680d65904e80587bbc",
+      "core/task-contract.md": "e9ca22909d784bd86c687a72ffcca4342ca31fe249a638eb386ccc32206a1374",
+      "followup2-report.md": "3ace595cd9454f0c77562cdacfeb326c05979562c4502012be2fa150ac30eda3",
+      "implementation-plan.md": "bb5520311dd4d0c5ea6cad6319d3227334b475c10421078bb2de1fad2751e498",
+      "independent-qa/STOP.json": "1a224e16e0c617239c14d01e80cd873f1996ab6ef182d19ed9a2b1f7a64d0011",
+      "independent-qa/actual-installer-path-negative.log": "ccf3408134652d7fe51adb2fade3c1f7d52acca9e59f8c3193f6e785cb376eeb",
+      "independent-qa/archive-binary-binding.json": "619660e6832765284a5104222b1ba974426f0cf55fd5d186503a5266ff9aef17",
+      "independent-qa/commands.json": "824e20d40c8071a5215100b821406e5d6819cf689a458cf6735c257d0cf399b7",
+      "independent-qa/contract.log": "1dfc6e5946c7534080df86e8f6c145fa4935e7b83bc5563f64954b841886d2fe",
+      "independent-qa/focused.log": "bb491f768cd9109ec3311da694b1ba5955900fd524b185d08ff3cd252b4176d1",
+      "independent-qa/independent-probes.log": "9f4136be62bf8fc0b6a795c704d764ed0ee0a6a46b3e6a862584f9eafc0dfc1e",
+      "independent-qa/input-integrity.json": "86315ea76364727b22f4aeb113ef370a259a84835eeb6d0dc1f4b70e505b4ad4",
+      "independent-qa/probe-results.json": "e1380ae65bfb667ff87b84cc331a2c0055c7b8d29adfce0a749161f79227de31",
+      "independent-qa/probes.mjs": "ecadb1150fdea2d39a495260177e5033b98574edc7e6fbfda43e1b995a821416",
+      "independent-qa/report.md": "d80f41a1c3f85e99b34e4e744f066f2cad91a49dc15a4e82b3787920ac55cba6",
+      "independent-qa/reservation.json": "61302867b701d5ba8562a63023b16ad1b63868479b81409c9d4faf184636ab31",
+      "independent-qa/results.json": "08fc2bc57ea2e7e32c8d8ef5dc49c8558e055dd5e0f52a9aa42fd326cdc1a355",
+      "independent-qa/review-provenance.json": "a12d7691abc9f0b16d00c68a45d66d0c451f174491712fdf3a302bc7d4a29279",
+      "independent-qa/run.py": "1d5f652d5703f30519799f2ac4af4e719dc028ee9118fff181a6e7b359973d6c",
+      "independent-qa/seal.json": "4590c98cbc31774d6c5610fa908ae0577ceecabfecbd1b672ce2857ae11bfa37",
+      "independent-qa/source-after.json": "ab38fea614250073a666d69b674e9808a0e8b8288d24d14e5696020211c902b6",
+      "independent-qa/source-before.json": "26ed37038bef6f777bd14762e6536a4b5993303d4becde1eff0989d2a70bc62b",
+      "independent-qa/source-freeze.json": "53f9c7ed632dac0ffb572a55cb14edfa9b8d5034b5ad039f52ac5e0b7a2d2514",
+      "independent-qa/source-integrity.json": "304c8ef366920788ecab5c7078db7ded0a3fedd62c0a1978178f0905940be41d",
+      "independent-qa/static-review.json": "66ce0c104f2121551256cbd0f8e3f2f7605044bdd640558591fa5f7b2e974c37",
+      "independent-qa/static.py": "433beb307d7ec2b6840bda0f3b57d8510883ca3114f5ffa1dc3c0c01ba8bf4fc",
+      "independent-qa/task-contract.md": "acfa98f9f8fbe3906a05d787e2f9a6b233b1c6a01e2e657eb651dcf41c30f6ad",
+      "low/STOP.txt": "5ea83bc347b174c1ac82a6b591ee366b9dae07f5851d419c1512e78e832f0a30",
+      "low/logs/node22-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "low/pre-edit/demo-storage-binding-readonly.mjs": "72aa0010a7de89498fc39930dd7a1141ababfcf5f5b332dd3eb2bcbceb033712",
+      "low/report.json": "254cc375add5c6baddb157fba5822de9321c8ea17e69b1e4624fd0e5c14e66a8",
+      "low/reservation-readback.json": "36492e655e5d3c979fd16f07bc8ff3f78962b7393d0a59b6e7e37ca7784c010e",
+      "low/results.json": "489cf708ba3faed750fb6828210d4959781d2c8f62ee0bf3ebe931b23e8021cc",
+      "low/seal.json": "28a9df44784bd5c49993f2062a2f72cc58dc9a90c27c74ffba60646fca2ecf81",
+      "low/source.patch": "4e0938e62ee284b2e5a8785dc22503f0ef7a0fabf3167e99bdd4752c1ac048d8",
+      "low/task-contract.md": "ff90d79586509dbe74331ab8be3582e8a74f198b208f8c49ad0384c76e58fcd8",
+      "publication-contract.md": "e25a1f1df59345bfeb7953d54f18b4dd66aa2f27f1bdf3504646add8a3b2f774",
+      "review-history-provenance.json": "739e39662eef2d29435e98721cff8be4da2f5615b35b4d67849e4f9c00b84897",
+      "root-provenance/actual-Claude1-comment.json": "d77b82c5f0b803e467e7670e968cd9a49ddea0e04163adf1d27c552c0337ecc7",
+      "root-provenance/actual-binary-verified-readonly-help.json": "3da21dcda735b459d555c2bebd56ec71465ae55dafb92a37d1bbd86b071589f7",
+      "root-provenance/base-to-main453-source-identity.json": "40f84f11deadb9a5a9b2a5e8431f2bb1d895987998fa29192d69758e4b3427f5",
+      "task-contract.md": "e9ca22909d784bd86c687a72ffcca4342ca31fe249a638eb386ccc32206a1374",
+      "validation-report.md": "d2c6ec86a0e4fb3ec9052a22473a8678725f8ce37afa77afc9bfab0368b71656",
+      "imported-history.json": "e74b3842598ed2229934cfaf6383b8b8d5f0632a26200ac0ed6465a7f991fe30"
+    }
+  },
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/inspect-demo-storage.yml",
+      "blob": "d16243b4dcda0f5c13ba7e192aa3161788d6f68b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/README.md",
+      "blob": "6aedb70adf5f7ed4ac69e25609f5fa819d0138cb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/analysis.md",
+      "blob": "032e5d65e4cf16680d62c10179bff7efa9449c21",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/STOP.json",
+      "blob": "ca5db60391c764ccfd41e5cefb76ca6a53c80055",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/baseline-inventory.json",
+      "blob": "8f6846273d4b017e905114933480d8c3e860f357",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/contract-validation.log",
+      "blob": "486ef12021ca8b8cba87420eb6628121ba12ec5b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/design-ack.json",
+      "blob": "d77dfc5319fc2a732289a0afb5462fa76b180022",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/design-before-edit.md",
+      "blob": "2f3594808c56fb151defdfe1d8804970a8b22e54",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/focused-final.log",
+      "blob": "4b1e2e95c03421539692c87eeacb24dde4547ebd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/focused-first.log",
+      "blob": "775d627d60cf1b6e8f9a4d4f66e3240e9a64e7d0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/focused-second.log",
+      "blob": "0f76d89a9f77438295cdcbafda59ec3f69cd7169",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/report.md",
+      "blob": "369b848154e0d15ecc552eaff0d6e7aa401564cc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/reservation.json",
+      "blob": "0691ac6b7b318c499253cca67ced1cff2e2266d3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/results.json",
+      "blob": "4115eddb10dedefaf7c8e09e2a91845914629068",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/seal.json",
+      "blob": "b2baaddf45dcc6182a4f5694349557578a35e123",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/source-freeze.json",
+      "blob": "ab53aa123121058ec63239d8db9627ea0779e4f7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/source.patch",
+      "blob": "e27cb319158c6698a6b36fc97db1f1c998e80f50",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/task-contract.md",
+      "blob": "e38a9f99b9edc314c96d19c41b495e9c29deb2dc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-original/workflow-static.json",
+      "blob": "5d864fb418e1389824d7b9ef034bce9d652a7499",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-refinement/STOP.json",
+      "blob": "109d27934fe9fde3b9e3fb6a3e6c930a69b8d59e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-refinement/contract-validation.log",
+      "blob": "12a59bf121bf056d168e82297213cfbe7cd2a0d9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-refinement/report.md",
+      "blob": "e97e6886f99a2e2a7970b150e5716ac8b96e3607",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-refinement/reservation.json",
+      "blob": "52e30cdbbd6739ea33aa7be713ca5fc100b8db63",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-refinement/results.json",
+      "blob": "02dcfd1be7452729c37788fd9ee37e85ed88d0bf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-refinement/seal.json",
+      "blob": "65a89195134f50e4b33f288c71b587878bc3ad8e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-refinement/snapshot-ready.json",
+      "blob": "11294c1ddc538b49f4f4b16487bb2833c4e50a00",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-refinement/source-freeze.json",
+      "blob": "7d34c5e148dfe5da10f8fde9780a78835b3dadc1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-refinement/source.patch",
+      "blob": "e034df28bf6e23afa840f2fc0c8ed84bd53d2e36",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-refinement/static-validation.json",
+      "blob": "5c5c8f0bf7217d389ccfa8983b9cc656bb41de55",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-refinement/task-contract.md",
+      "blob": "45937284ffad0b8265b6418200e75cf56e775fbb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/author-refinement/workflow-tests.log",
+      "blob": "2e3b9a08cabd29c49958103f517eb4acec527330",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/implementation-plan.md",
+      "blob": "152f8933a7ae568db5bc1e9d37d3ea91030aa121",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/imported-history.json",
+      "blob": "b6e151ecef18d4ad31365fc10cf07e8558cca8f8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/STOP.json",
+      "blob": "9d5a1f096eb350abf0b219d2e32ef7efc57cab30",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/author-seals.json",
+      "blob": "30fa42f42ddf7ca5aa0870b8f6f6276580a22f46",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/commands.json",
+      "blob": "c23fc84f196aae7ba578ef36b035ba29c5ed98bb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/contract-amended.log",
+      "blob": "5c9e58be7c84140136ae9ca2c09cfe6643d1d90e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/contract-amendment.json",
+      "blob": "7e037336ab9d97b77f35b7cd82067e88df4c2348",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/contract.log",
+      "blob": "7f19303711a19b25e6fb896d85c47782b6a1dfcf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/focused.log",
+      "blob": "f68b7affd699df8efed6e16cc211acd0134210bb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/independent-probes.log",
+      "blob": "d21ad4eba62b384b9992746b80695eec06f776c2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/probe-results.json",
+      "blob": "3d11b35e0705ab65c6c0d1804f8eb9a3df9fa782",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/probes.mjs",
+      "blob": "19653cb854c68be153fa8d243e111fc9c4dad3f1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/report.md",
+      "blob": "ee929865c15e0b7a1a9e395bb1e74cfdb7a3b58e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/reservation.json",
+      "blob": "5ecc957513bcfb84ec4f529776fda087fef53731",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/results.json",
+      "blob": "2aaa505f747e47cffe58cc195503dd1a2e0617d3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/run-final.py",
+      "blob": "a5676da59c91ceff4beb6bfbda051c161ea2dadd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/run-focused.py",
+      "blob": "eabbb942c41dc7cfd14be04702c635aebfa0a700",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/scratch-file-inventory.json",
+      "blob": "8df95a47b666d91a28ca73f30910f1be2a3acdbf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/seal.json",
+      "blob": "0e777d3ddc756f31560b42be58a5adb830cb3986",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/snapshot-ready.json",
+      "blob": "baadaf988aa99c1a310d0c702e722bd84583ca20",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/source-after.json",
+      "blob": "85e53556e671b45c6f28dfc107418a5ed78f190c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/source-before.json",
+      "blob": "85e53556e671b45c6f28dfc107418a5ed78f190c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/source-integrity.json",
+      "blob": "eafacb99433c98bbf8a564501ff5b13354a8cf3d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/static-review.json",
+      "blob": "585c3a051dbd8c63dde74c14aa8662d13780bc54",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/static.py",
+      "blob": "198c93449c7e1b99153e58f61045a89cea3b3dbd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/task-contract-original-gate-rejected.md",
+      "blob": "20820b03a1821724d273dc62f697ea8cb0614e2f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/independent-qa/task-contract.md",
+      "blob": "a1d432292c343c5cd99a600d1c1ccdfde5d809f5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/parent-attempt-provenance.json",
+      "blob": "afb118aae494d39fe78696bb8c6be4402814afe5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/task-contract.md",
+      "blob": "45937284ffad0b8265b6418200e75cf56e775fbb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8/validation-report.md",
+      "blob": "0a5298a3b1adfb39bfee3c8256026990b6d7256a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/maintenance/demo-storage-binding-readonly.mjs",
+      "blob": "e7daa43c92c5388e57baa8ae7cb9b7bc971304f2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/maintenance/demo-storage-inspect.mjs",
+      "blob": "2061de183f8ee8937f856b08d5138737c447777f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/maintenance/demo-storage-inspect.test.mjs",
+      "blob": "66560ac55f03cde2c5b83dc94f4bfa830c0853a7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/maintenance/demo-storage-workflow.test.mjs",
+      "blob": "1b92aadcb5f30d9ee795304ab0afee0bf3b9601d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "operatorContinuations": [
+    {
+      "round": 2,
+      "status": "passed",
+      "kind": "explicit-operator-compatibility-continuation",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "cc56617d-71cc-4f01-9a01-6d35850f3b4a",
+      "startedAt": "2026-10-22T15:32:21.833Z",
+      "reason": "Actual Claude1 HIGH unverified binary/MEDIUM account scope/LOW unused set; original child1 and parent470 attempt8 preserved",
+      "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+      "contractSha256": "e9ca22909d784bd86c687a72ffcca4342ca31fe249a638eb386ccc32206a1374",
+      "baseSha": "2db189ec7098c595259c0a721edd137efdac1e4f",
+      "sourceScope": [
+        ".github/workflows/inspect-demo-storage.yml",
+        "scripts/maintenance/demo-storage-inspect.mjs",
+        "scripts/maintenance/demo-storage-binding-readonly.mjs",
+        "scripts/maintenance/demo-storage-inspect.test.mjs",
+        "scripts/maintenance/demo-storage-workflow.test.mjs"
+      ],
+      "model": "gpt-6.1-sol",
+      "agent": "/root/qa497_publication13",
+      "privateOutput": "/tmp/clinicos500-Claude1-followup2-20261022",
+      "sourceSnapshot": "/tmp/clinicos500-core2-source",
+      "reservedBeforeSession": true,
+      "preservedEntityDigest": "60c2b9b21197d46a3448ff5929fefe12ffa89a1505762943a86266bb6424ec49",
+      "preservedLegacyImplementationDigest": "b499f325755067fcb89c492fa9d75998dd8b774997a331cd6adf9e07a4c3949e",
+      "preservedLegacyReviewsDigest": "dcd1246c33a3d5fe616e8f22d4fdb29427e1aed4d0c9cdae874eabe5b575e35b",
+      "actualClaudeComment": 6344231265,
+      "actualClaudeCommentSha256": "50e8126f34fe374cb88bb623cf9629507dcb4fd46b76449222cf451ac3ce9b59",
+      "core": {
+        "nonce": "cd13b3a7-8601-4d6b-afc6-d855485bb86a",
+        "status": "passed",
+        "contractSha256": "e9ca22909d784bd86c687a72ffcca4342ca31fe249a638eb386ccc32206a1374",
+        "agent": "/root/qa497_publication13",
+        "model": "gpt-6.1-sol",
+        "completedAt": "2026-10-22T15:40:44.047Z",
+        "sealSha256": "6898cb22a1509b345780cebe9844483b3adba1d72f9e25f8a441cd7e5c464bfd",
+        "tests": 157,
+        "initialFailuresPreserved": 2,
+        "authorStopped": true
+      },
+      "low": {
+        "nonce": "98c136ea-f17d-4dfc-830c-ecec8fedceaf",
+        "status": "passed",
+        "contractSha256": "ff90d79586509dbe74331ab8be3582e8a74f198b208f8c49ad0384c76e58fcd8",
+        "agent": "/root/packet499_author3",
+        "model": "gpt-6-luna",
+        "scope": [
+          "scripts/maintenance/demo-storage-binding-readonly.mjs"
+        ],
+        "privateOutput": "/tmp/clinicos500-Claude1-followup2-20261022/low",
+        "sourceSnapshot": "/tmp/clinicos500-low2-source",
+        "completedAt": "2026-10-22T15:40:44.047Z",
+        "sealSha256": "28a9df44784bd5c49993f2062a2f72cc58dc9a90c27c74ffba60646fca2ecf81",
+        "syntaxPassed": true,
+        "authorStopped": true
+      },
+      "authorStopped": true,
+      "authorStoppedAt": "2026-10-22T15:40:44.047Z",
+      "independentQaReservation": {
+        "nonce": "402aea2e-40ba-4641-af2f-4d34a962b8d3",
+        "status": "passed",
+        "reservedAt": "2026-10-22T15:40:44.047Z",
+        "reservedBeforeSession": true,
+        "agent": "/root/diagnose497_native_frontend",
+        "model": "gpt-6.1-sol",
+        "contractSha256": "acfa98f9f8fbe3906a05d787e2f9a6b233b1c6a01e2e657eb651dcf41c30f6ad",
+        "sourceSnapshot": "/tmp/clinicos500-independent2-source",
+        "privateOutput": "/tmp/clinicos500-Claude1-followup2-20261022/independent-qa",
+        "coreSealSha256": "6898cb22a1509b345780cebe9844483b3adba1d72f9e25f8a441cd7e5c464bfd",
+        "lowSealSha256": "28a9df44784bd5c49993f2062a2f72cc58dc9a90c27c74ffba60646fca2ecf81",
+        "sourceEditsAllowed": false,
+        "liveActionsAllowed": false,
+        "completedAt": "2026-10-22T15:46:20.670Z",
+        "sealSha256": "4590c98cbc31774d6c5610fa908ae0577ceecabfecbd1b672ce2857ae11bfa37"
+      },
+      "completedAt": "2026-10-22T15:46:28.366Z",
+      "subjectSha": "e53abe27e66c531f446a325fe8a17a17aeaf0826",
+      "evidence": "followup2-report.md",
+      "sourceFreezeSha256": "d99e7c8187de2f85e788e4fc02be0c4015360fea6f05b28396005e9392cb9e0d"
+    }
+  ],
+  "operatorCoordination": {
+    "active": false,
+    "stage": "source-merged-real-readonly-provider-inspection-pending",
+    "implementationStarted": true,
+    "implementationRound": 2,
+    "reservationNonce": "cc56617d-71cc-4f01-9a01-6d35850f3b4a",
+    "finishedAt": "2026-10-22T17:54:20.988Z"
+  },
+  "kind": "standalone-pr-review",
+  "id": "standalone-pr-500",
+  "phase": "ready",
+  "adoption": {
+    "actor": "l2v-hub",
+    "at": "2026-10-22T16:13:05.810Z",
+    "subjectSha": "cab5f4a562e9c201cabeb7981b71c4b2d89b099d",
+    "importedReviewCount": 1,
+    "manifestSha256": "bd960189f2909ac5da8d0a0d63da622e3ed021b76f47edf99cac550deb6c81ac"
+  },
+  "preservedPackets": [
+    {
+      "path": "artifacts/task-validation/maintenance-470/protected-main-readonly-packet-8",
+      "files": {
+        "README.md": "36fa91f23f27136868c72b63152ba415a119225b0da33149e78ff3d480334cd6",
+        "analysis.md": "a5a194e00d86d1e1332ea8b56b63d50a32bb147b5097082ddf520da439d6dc31",
+        "author-original/STOP.json": "143ca32e64795eca44e33aa9fe87d5ec8b0ffb08bb1c1afa9aef610413c3bd3e",
+        "author-original/baseline-inventory.json": "0fb36738e9825dd198eacb163b4ed9913767546ca084992cb9b74caefbc459e5",
+        "author-original/contract-validation.log": "3986b2ffb78c243fe76c89db583acab6e3c7af912703755f375dcd2f6c96e6e3",
+        "author-original/design-ack.json": "b2f29a8a40c5256554b79c6564a8a47a21b73cd23abda71182d6282fe57d2f6b",
+        "author-original/design-before-edit.md": "053d3992e493698951fe9581a3ccfe7d2bee45d7d2c40057064959d543383081",
+        "author-original/focused-final.log": "d0a1de8b15240686ec55a82d1011d23dd3ede2380a090d5e10e949510f00a373",
+        "author-original/focused-first.log": "9ab8eac5a8bd468777e74d0acdd6fc55d547ebb0841ded0452e62c8589780ce7",
+        "author-original/focused-second.log": "2d9389b4486575a697e8f74d35a58a979ad22415347a4e8365480a9831c46e41",
+        "author-original/report.md": "3d302338204ce4c2ba12d0c8b57b2e63d94023553da5292b34793eb55d1c882f",
+        "author-original/reservation.json": "826c43e6d47fe54d184394b4979aa54e253d42c7415038e7307c4f42b141a4e1",
+        "author-original/results.json": "5889a71fd49d25726ae836f0bc3e27930a0ff6cfff50eaf1b507550a8957d697",
+        "author-original/seal.json": "efc61fa8a19dfc63a60c54bf77cd9ef65f868a69b7252a9eea3366ab9c15c8d9",
+        "author-original/source-freeze.json": "9ab016998c00b6e4cb4cb67a8d3194914f16848ce0027c361103ea8d56e4c206",
+        "author-original/source.patch": "22f008fde12b7368fcdbbdcb50894269e3f4d88afb76ee569640afaa2a2be2b1",
+        "author-original/task-contract.md": "a778966755ac012d7bb0127533276c7f8537196f8a13f77105bc67f4617ab40c",
+        "author-original/workflow-static.json": "cd44954879bb9ea6cf08418176850a366e82fd279386532bf9720833dcf06b0e",
+        "author-refinement/STOP.json": "fc18d1560bdb10b350c0c6807282fdd75a68e0a4ce18ecb3de15e3e4c9b40592",
+        "author-refinement/contract-validation.log": "6771d6301e49746cf07798f11da4427ed338cfb087ca4fc49d4767fd8943b83a",
+        "author-refinement/report.md": "18a4b7b6bdd970aaa6ccaa9b007ddb4404d22957a8e0c3a0d2643ec80cbc54d6",
+        "author-refinement/reservation.json": "2a9aa56d12dcb1b91ccc3b41a75d19509961492c6458b07c33dd1e9a2436471c",
+        "author-refinement/results.json": "9869fa633d6c080384b05a1b325616b520caca4055e79bf454bc16910dba11c0",
+        "author-refinement/seal.json": "276b7632b5168c9f84fd7c33066b501e443cd0f39dfd4882739156b30101fe60",
+        "author-refinement/snapshot-ready.json": "5440bf9d0c3cf4781ebbb64450cbc423d8f2f7e6adb78544f8a1d125693d524b",
+        "author-refinement/source-freeze.json": "f392bcfd87da558cf90d13b2f6464c9a78408234b814276299ce71707e977905",
+        "author-refinement/source.patch": "11774b16bb1d9edf3586978803d375cdec0efa4043e4c3adb03faba4925ba434",
+        "author-refinement/static-validation.json": "64208cb96b6568e1779c5744756d94d775751f9254e450c7a39f3cb4e077bb07",
+        "author-refinement/task-contract.md": "508f117024f4d9dabcaacbbcb46d4d4d5dcd4357d0f463f1a6b217d1626da7a7",
+        "author-refinement/workflow-tests.log": "52c5129cfea724bfb43752b0d0d8c49f58df0c61b5daeb4847a5b501eacf6b69",
+        "implementation-plan.md": "21af181ccda4a91545fba2e1c00c0515bd69474f49f714224b4183caafce85f2",
+        "independent-qa/STOP.json": "66aa20771c10c162d11b5d4bfdca197eb4bece0a00943b506ff3c70ab821f803",
+        "independent-qa/author-seals.json": "ead7967f661d9b59ba8c797903bb8db63fd02d0089edddb8ff1b706728e20f06",
+        "independent-qa/commands.json": "12c59ab97e92499a31186e2f4f637e62923a3a0888ef92a1fc695288d4d89fbc",
+        "independent-qa/contract-amended.log": "e5bf5fe5abcf32d242b614db6184638e176c4dc89583b1ca8621f9288c3cd823",
+        "independent-qa/contract-amendment.json": "8d8d93bfd208d8de9fa4f18ba192753423f5ff6300717580db6f3f75fde0401f",
+        "independent-qa/contract.log": "52f563432228807676fdfcf9374fa1cacdd850a12938704fddadcb4eabe6e41d",
+        "independent-qa/focused.log": "f3f0ba7941ea2d161a311abbafb974e0fe3a20d33f598cb7fe7a1278d7e60155",
+        "independent-qa/independent-probes.log": "6dd7bb269320f8660db6073a6523a74fbff13a0b74418f961a645511084ec598",
+        "independent-qa/probe-results.json": "0b5be65d9e97c355f877294521b005a2e779db82b3f3a6cf8d01c269f716eab4",
+        "independent-qa/probes.mjs": "f6d6ca7751068f5ca3c3631b0de869fb397537891c6263b00f89e16e488518e9",
+        "independent-qa/report.md": "353f1b90696bd0f23dd2e10f6b518b32a002d36ba1867b80e399ae881db026b6",
+        "independent-qa/reservation.json": "278f09c5a76d275fc6499a1f9446dfaa7416e0a3c66151a71a819f4d0febcfd2",
+        "independent-qa/results.json": "8fa1d7b66bdd78aeb502b1f6fb564a6781d5d28097508f02455f8025a7301299",
+        "independent-qa/run-final.py": "94298d34a2dafe746a8d132a4846b503dade2c31e3b5ab9c4fd042739ff19127",
+        "independent-qa/run-focused.py": "be53c9dc802886956fe06201efd0d99582403998260c5782f608c432ad2eb4c7",
+        "independent-qa/scratch-file-inventory.json": "f2757f2d6f4e60802929a9851bd73729a65699ef56cdf6c78e9cfaeff44ed4d4",
+        "independent-qa/seal.json": "c81634f23aee9b868d1f8ee6533581fcc952bc188d01346c1e7d28d80fb3d5ef",
+        "independent-qa/snapshot-ready.json": "9262efca18d0c82c2b49f67c3247dfa9a3d13336c09d658a2600a4ff338b7ff7",
+        "independent-qa/source-after.json": "58550c70c079cae2f74ea72b24e5c5d3093d49fd463264fb0bb0eaafed8cd0cf",
+        "independent-qa/source-before.json": "58550c70c079cae2f74ea72b24e5c5d3093d49fd463264fb0bb0eaafed8cd0cf",
+        "independent-qa/source-integrity.json": "ada4bd3017603a6b2b764cafc7fa1c4b47d464d6509b17f97b80497533085c54",
+        "independent-qa/static-review.json": "2aac59c8705eea0d641afffd53f569c29e441f0c87fe8c22c778b3e856dac490",
+        "independent-qa/static.py": "65a58c8cbb355f75c34eff1d293223ad5b6f863d8d115a6a1bb87fa9a15f2bd4",
+        "independent-qa/task-contract-original-gate-rejected.md": "f9c85565ad4c8da16dd44142b97ade64378459dbbed420c80bc2aa7b833d1b17",
+        "independent-qa/task-contract.md": "7008f9d9278fc7ccc0fb6c299ecf2877fef90d71e563bee7cf63b6451da01710",
+        "parent-attempt-provenance.json": "a984b4f05bd2c0453642b1b7d756803c79101dd24426470a7176c3a979c353d0",
+        "task-contract.md": "508f117024f4d9dabcaacbbcb46d4d4d5dcd4357d0f463f1a6b217d1626da7a7",
+        "validation-report.md": "d2c6ec86a0e4fb3ec9052a22473a8678725f8ce37afa77afc9bfab0368b71656",
+        "imported-history.json": "f8d38c78b8ba026c9f36bde4f52104140ca741ac56a72c2dba324d6505f7ac69"
+      }
+    }
+  ],
+  "adoptionHistory": [
+    {
+      "actor": "l2v-hub",
+      "at": "2026-10-22T14:57:52.049Z",
+      "subjectSha": "2db189ec7098c595259c0a721edd137efdac1e4f",
+      "importedReviewCount": 0,
+      "manifestSha256": "b0b29e58c55884d0d5494424fbdc6d0a081df742d8775ce73944aea5c34cb1f0"
+    }
+  ],
+  "reviewHandoffHistory": [
+    {
+      "at": "2026-10-22T16:17:37.493Z",
+      "actor": "l2v-hub",
+      "previous": null,
+      "recovery": false,
+      "spentReviews": 1
+    }
+  ],
+  "externalReview": {
+    "channel": "github-comments",
+    "status": "published",
+    "subjectSha": "cab5f4a562e9c201cabeb7981b71c4b2d89b099d",
+    "requestId": "4a6a4141-4dcf-4042-9e07-23060f8a8083",
+    "requestedAt": "2026-10-22T16:17:37.495Z",
+    "requestedBy": "l2v-hub",
+    "owner": "l2v-hub",
+    "claimId": "27da56a2-84cb-4bce-a702-51bbe31e53cc",
+    "startedAt": "2026-10-22T17:12:20.903Z",
+    "feedbackFingerprint": "f89ef132a6873ed965447c02758c6263bb83775f3b877cd68f3b2e42a274c35d",
+    "reportComment": 6346766217,
+    "reportBodySha256": "80b542a55040d640e7bb6c174117b109df29607fda8ee563bd05b402c41a5fff",
+    "completedAt": "2026-10-22T17:17:21.174Z",
+    "feedbackChanged": false
+  },
+  "reviewChannel": "github-comments",
+  "codexFinalReview": {
+    "status": "verified",
+    "subjectSha": "cab5f4a562e9c201cabeb7981b71c4b2d89b099d",
+    "claudeRound": 2,
+    "nonce": "6878ba12-480d-485c-8d48-65e411400899",
+    "owner": "codex-cloud-root",
+    "startedAt": "2026-10-22T17:29:58.222Z",
+    "reservedBeforeSession": true,
+    "agent": "/root/finalize497_evidence",
+    "model": "gpt-6.1-sol",
+    "contractSha256": "6d6a1e6a93ec7a410bfd8abfe9332af059f81ac96546061ce5ff7dfbc7acd1b6",
+    "feedbackFingerprint": "f89ef132a6873ed965447c02758c6263bb83775f3b877cd68f3b2e42a274c35d",
+    "actualClaudeComment": 6346766217,
+    "privateOutput": "/tmp/clinicos500-final-Codex-after-actual-Claude2-20261022/review",
+    "sourceEditsAllowed": false,
+    "liveActionsAllowed": false,
+    "completedAt": "2026-10-22T17:49:48.033Z",
+    "findings": 0,
+    "summary": "Fresh independent Codex final security/evidence review verified with zero findings after genuine claimed Claude2. Source/evidence only; no live provider result or native human approval claimed.",
+    "reportSha256": "488438562742f42054085b020d80ab2c248e5fa1e2ddc5b025c6849aa63e47e3",
+    "sealSha256": "6d74476ee97039b4e50f9f38a263c102ebe50a515824e7831810b00e0b82c92a",
+    "testsRerun": 0,
+    "sourceMatched": true
+  },
+  "approvedSha": "cab5f4a562e9c201cabeb7981b71c4b2d89b099d",
+  "feedbackFingerprint": "f89ef132a6873ed965447c02758c6263bb83775f3b877cd68f3b2e42a274c35d",
+  "reason": "Actual claimed Claude2 and fresh independent final Codex verified; all6native. Ordinary explicitly user-directed protected manual merge only; source controller policy/releaseHold unchanged, no fabricated human approval or deployment.",
+  "operatorProtectedMerge": {
+    "nonce": "c083edf0-217b-4ec8-afee-70f786e80f8b",
+    "status": "merged",
+    "owner": "codex-cloud-root",
+    "reservedAt": "2026-10-22T17:49:48.033Z",
+    "reservedBeforePost": true,
+    "subjectSha": "cab5f4a562e9c201cabeb7981b71c4b2d89b099d",
+    "expectedMain": "453ade1a06cd79e1924de523c5fd2cdec51f4fd4",
+    "expectedTree": "e36e8350ef639825c64643d595cf8ebaebc584c4",
+    "mode": "ordinary-user-directed-protected-manual-merge",
+    "mergeMethod": "merge",
+    "adminBypass": false,
+    "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+    "actualClaudeComment": 6346766217,
+    "actualClaudeClaimId": "27da56a2-84cb-4bce-a702-51bbe31e53cc",
+    "actualFinalCodexNonce": "6878ba12-480d-485c-8d48-65e411400899",
+    "actualFinalCodexSealSha256": "6d74476ee97039b4e50f9f38a263c102ebe50a515824e7831810b00e0b82c92a",
+    "actualRequiredNativeChecks": [
+      "bug-pipeline-tests",
+      "secret-scan",
+      "frontend-tests",
+      "archive-tests",
+      "gate",
+      "browser-e2e"
+    ],
+    "actualRulesRequireHumanReview": false,
+    "nativeHumanApprovalClaimed": false,
+    "automaticControllerEligibilityClaimed": false,
+    "mergeSha": "c92c2590b26179d18f96801d943b6e732437753a",
+    "nativeMergedAt": "2026-10-22T17:51:19Z",
+    "confirmedAt": "2026-10-22T17:54:20.988Z",
+    "expectedTreeVerified": true
+  },
+  "release": {
+    "status": "merged",
+    "prNumber": 500,
+    "reviewedSha": "cab5f4a562e9c201cabeb7981b71c4b2d89b099d",
+    "mergeSha": "c92c2590b26179d18f96801d943b6e732437753a",
+    "confirmedAt": "2026-10-22T17:54:20.988Z",
+    "mode": "ordinary-user-directed-protected-manual-merge",
+    "adminBypass": false,
+    "nativeHumanApprovalClaimed": false
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "baseSha": "8e3c5fd48682766dbb34eb4b95699145b2d56965",
+  "sourceCommit": "fa88482503e08b191395473a599325831f7e4bd7",
+  "sourceManifest": [
+    {
+      "path": "scripts/maintenance/demo-storage-inspect.mjs",
+      "blob": "c9531956a7fe483f41e6624b4992f5c070792e2e",
+      "mode": "100644",
+      "baseBlob": "2061de183f8ee8937f856b08d5138737c447777f",
+      "baseMode": "100644"
+    },
+    {
+      "path": "scripts/maintenance/demo-storage-inspect.test.mjs",
+      "blob": "1da90096e78b9ea7dd00ccc995bb4e3004245b02",
+      "mode": "100644",
+      "baseBlob": "66560ac55f03cde2c5b83dc94f4bfa830c0853a7",
+      "baseMode": "100644"
+    }
+  ],
+  "testedFiles": [
+    {
+      "path": "scripts/maintenance/demo-storage-inspect.mjs",
+      "blob": "c9531956a7fe483f41e6624b4992f5c070792e2e",
+      "sha256": "d3e863ec13752634de88db7a9e9029478c3bcb0c15d5d233defb88070fa931ad",
+      "bytes": 38685
+    },
+    {
+      "path": "scripts/maintenance/demo-storage-inspect.test.mjs",
+      "blob": "1da90096e78b9ea7dd00ccc995bb4e3004245b02",
+      "sha256": "7c4943cbe43af548b3290466cf475175ec89729b4377dd31db8de92334dc463a",
+      "bytes": 48954
+    },
+    {
+      "path": "scripts/maintenance/demo-storage-workflow.test.mjs",
+      "blob": "1b92aadcb5f30d9ee795304ab0afee0bf3b9601d",
+      "sha256": "ebc4b8153fb9e113dd6d3c3899868f864f49cf7a9182d371c1f43ef86c0954e9",
+      "bytes": 9073
+    },
+    {
+      "path": "scripts/maintenance/demo-storage-binding-readonly.mjs",
+      "blob": "e7daa43c92c5388e57baa8ae7cb9b7bc971304f2",
+      "sha256": "5458e519575d0f47d9ad542d4a8fd150b85f73110dc6a4f1c788e0b0cd9a7759",
+      "bytes": 10296
+    },
+    {
+      "path": ".github/workflows/inspect-demo-storage.yml",
+      "blob": "d16243b4dcda0f5c13ba7e192aa3161788d6f68b",
+      "sha256": "d0d7e71f76860370e89e8c8ff2f2100a340e9e3311bb4ca4b00c3d6e980557b7",
+      "bytes": 4303
+    }
+  ]
+}

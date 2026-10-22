@@ -1,0 +1,2 @@
+scripts/maintenance/demo-storage-inspect.mjs
+scripts/maintenance/demo-storage-inspect.test.mjs

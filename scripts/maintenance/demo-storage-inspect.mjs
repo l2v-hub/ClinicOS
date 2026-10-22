@@ -68,6 +68,48 @@ class ReadError extends Error {
 }
 const requireRead = (condition, code) => { if (!condition) throw new ReadError(code); };
 
+// This projection deliberately keeps only fixed enum values. Provider supplied
+// messages, codes, paths, extensions, and counts never enter receipt state.
+function projectGraphqlFailure(errors) {
+  const result = { errorsShape: 'malformed', category: 'unknown' };
+  if (errors === null) return { errorsShape: 'null', category: 'no-details' };
+  if (Array.isArray(errors) && errors.length === 0)
+    return { errorsShape: 'empty-array', category: 'no-details' };
+  if (!Array.isArray(errors) || errors.length > 20) return result;
+  result.errorsShape = 'nonempty-array';
+  const categories = new Set();
+  for (const error of errors) {
+    if (!plain(error) || typeof error.message !== 'string' || error.message.length > 512)
+      return { errorsShape: 'malformed', category: 'unknown' };
+    const extensions = Object.hasOwn(error, 'extensions') ? error.extensions : undefined;
+    if (extensions !== undefined && !plain(extensions))
+      return { errorsShape: 'malformed', category: 'unknown' };
+    let code;
+    if (extensions && Object.hasOwn(extensions, 'code')) {
+      code = extensions.code;
+      if (typeof code !== 'string' || code.length > 64)
+        return { errorsShape: 'malformed', category: 'unknown' };
+      if (!['UNAUTHENTICATED', 'FORBIDDEN', 'GRAPHQL_VALIDATION_FAILED',
+        'GRAPHQL_PARSE_FAILED', 'RATE_LIMITED', 'TOO_MANY_REQUESTS'].includes(code))
+        categories.add('unknown');
+      else if (code === 'UNAUTHENTICATED') categories.add('not-authorized');
+      else if (code === 'FORBIDDEN') categories.add('not-authorized');
+      else if (code === 'GRAPHQL_VALIDATION_FAILED' || code === 'GRAPHQL_PARSE_FAILED') categories.add('schema-validation');
+      else categories.add('rate-limited');
+      continue;
+    }
+    const message = error.message;
+    const lower = message.toLowerCase();
+    if (lower === 'project token not found') categories.add('project-token-not-found');
+    else if (lower === 'not authorized') categories.add('not-authorized');
+    else if (lower === 'two factor authentication required') categories.add('two-factor-required');
+    else if (/^(cannot query field|unknown argument|unknown type)\b/i.test(message)) categories.add('schema-validation');
+    else categories.add('unknown');
+  }
+  result.category = categories.size === 1 ? [...categories][0] : 'mixed';
+  return result;
+}
+
 // Both the credential-free installer and the transport derive this exact binary.
 export function verifiedRailwayPath(runtimeTemp) {
   requireRead(typeof runtimeTemp === 'string' && /^\/[A-Za-z0-9_./-]+$/.test(runtimeTemp) &&
@@ -246,7 +288,10 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
       ...(context.authMode === 'project-token' ? { 'Project-Access-Token': env.RAILWAY_TOKEN }
         : { Authorization: `Bearer ${env.RAILWAY_API_TOKEN}` }),
     }, body: JSON.stringify({ query, variables }) });
-    requireRead(!Object.hasOwn(body, 'errors'), 'READONLY_GRAPHQL_REJECTED');
+    if (Object.hasOwn(body, 'errors')) {
+      state.observations.graphqlFailure = projectGraphqlFailure(body.errors);
+      requireRead(false, 'READONLY_GRAPHQL_REJECTED');
+    }
     requireRead(plain(body.data), 'READONLY_DATA_INVALID');
     if (phase === 'TOKEN_IDENTITY') {
       const token = body.data.projectToken;
