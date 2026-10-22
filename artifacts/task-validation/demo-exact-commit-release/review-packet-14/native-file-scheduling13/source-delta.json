@@ -1,0 +1,20 @@
+{
+  "status": "prepared-awaiting-combined-independent-qa",
+  "files": [
+    {
+      "path": ".github/workflows/bug-pipeline-tests.yml",
+      "artifact": "bug-pipeline-tests.yml",
+      "before": "ed0f5745eb934cdec7399efe5461671ea164f4816d247deb413763673c5b792c",
+      "after": "ee99dadf18b78104743ec263fd624b395bea84619c627d2767d8da74f6fe51a9"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+      "artifact": "repository-settings.test.mjs",
+      "before": "1f1ee8a29b700dd0be827c24abb62b8d694ee56eff9e56b2317a2d82593446d1",
+      "after": "2c32394e7f033306ab5ff969be628a76a7c95883f8cd00e00f396040635d9caa"
+    }
+  ],
+  "scope": "Only add fileparallelism1 to existing full pure command and strengthen one existing workflow assertion accordingly. All test globs, timeouts, nativeWindows/sandbox/service/browser/secret checks unchanged.",
+  "freshFullQaAndNativeUnrun": true,
+  "at": "2026-10-22T09:42:57.965Z"
+}

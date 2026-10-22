@@ -1,0 +1,66 @@
+{
+  "status": "READY FOR CODEX QA",
+  "sourceBase": "45033a3949742218b1c9d23a37a0c94776cd5bd5",
+  "reservationNonce": "286d4e5e-1a0f-4f3f-9a97-19ddd709d5ab",
+  "taskContractSha256": "b7192a1735daf07ecfc0815ca7fedd79a56b58b5264325b70b8ffbbe0b42da2f",
+  "files": [
+    {
+      "path": ".github/workflows/deploy-backend.yml",
+      "bytes": 4353,
+      "sha256": "1d916e93b26134e800335e02a5bebc6d2b28dda020ec47effd0d8b7f84c53db2"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "bytes": 23418,
+      "sha256": "212df6288a3fdf29f49dd08b7a1497dcf32548304d3551e0fa9d50be49c2bd62"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "bytes": 42497,
+      "sha256": "b42026d4ea10e6c49a78f3718e79fa1fdd5cde75ffd5f5e78f4c683552fe842b"
+    }
+  ],
+  "productionJobAndWorkflowPrefix": {
+    "byteIdentical": true,
+    "sha256": "8520e8d32b7ee84d38524d18a507ebd728238815d58d7c1a5064847b7f118c75"
+  },
+  "historicalProofs": {
+    "trackedProofDiffEmpty": true,
+    "hydratedTracePath": "artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip",
+    "hydratedTraceSha256": "008d36bda06472a22c86244c8e06bdad0bde622bce35f637058c13cd977545eb"
+  },
+  "validation": {
+    "nodeVersion": "v24.19.0",
+    "focused": {
+      "tests": 150,
+      "pass": 150,
+      "fail": 0,
+      "skip": 0
+    },
+    "fullWorkflowTestCommand": {
+      "tests": 725,
+      "pass": 722,
+      "fail": 0,
+      "skip": 3,
+      "skips": "native Windows only"
+    },
+    "hostedNode22Executed": false,
+    "actualProviderCalls": 0,
+    "actualDeployments": 0,
+    "productionBytesPreserved": true,
+    "trackedScopeExactlyThree": true
+  },
+  "remainingGates": [
+    "fresh independent QA",
+    "actual Claude review",
+    "fresh final Codex review",
+    "six required native checks",
+    "ordinary protected main merge",
+    "actual native exact-commit deployment and independent live proof"
+  ],
+  "limits": [
+    "Synthetic fixture success does not prove provider authorization or deployment acceptance.",
+    "No trigger writes, source connection changes, account API calls, or credential fallback.",
+    "Author has not run hosted Node 22 or native Windows checks."
+  ]
+}

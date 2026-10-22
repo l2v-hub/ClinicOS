@@ -1,0 +1,1 @@
+The five actual Claude findings are addressed by dedicated demo serialization, explicit exact-policy selection, bounded resume/progress, zero-trigger proof and migration metadata. QA3/QA4 counterexamples are retained, with effective Headers/Request credential normalization guarded in followup5. Full postmerge pipeline integration and actual provider success remain unproven.

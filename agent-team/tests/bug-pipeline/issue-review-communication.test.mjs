@@ -13,6 +13,7 @@ import {
 import { externalReport, externalReviewStep } from '../../src/bug-pipeline/external-review.mjs';
 import { syncIssueReviews, main as syncMain } from '../../src/bug-pipeline/issue-review-sync.mjs';
 import { feedbackFingerprint, sha256 } from '../../src/bug-pipeline/contracts.mjs';
+import { createGitHub } from '../../src/bug-pipeline/github.mjs';
 
 const repo = 'l2v-hub/ClinicOS';
 const sha = 'a'.repeat(40);
@@ -289,6 +290,10 @@ test('requested/running/findings/approved/failed lifecycle is exclusive on every
       );
       assert.ok(labels.includes('In progress') && labels.includes('clinical-unrelated'));
       assert.ok(f.issues.get(number).comments.at(-1).body.includes(sha));
+      assert.match(
+        f.issues.get(number).comments.at(-1).body,
+        /^<!-- clinicos-issue-review:status:[^\n]+ -->\n<!-- codex-bug-pipeline:issue-review-status -->\n/,
+      );
       assert.ok(f.issues.get(number).comments.at(-1).body.includes('1/4') || step === 0);
       if (step === 2 || step === 3)
         assert.match(f.issues.get(number).comments.at(-1).body, /Codex.*review/i);
@@ -303,6 +308,81 @@ test('requested/running/findings/approved/failed lifecycle is exclusive on every
   }
   assert.ok(f.issues.get(17).comments.at(-1).body.includes('tentativo rimane consumato'));
   assert.equal(f.batch.reviews.length, 1);
+});
+
+test('generated status arriving after a claim preserves actual feedback fingerprint while user, source and forged feedback remain substantive', async () => {
+  const f = communicationFixture();
+  const run = async (call) => {
+    const endpoint = call.args[1];
+    const response = (value) => ({ ok: true, stdout: JSON.stringify(value) });
+    if (endpoint === 'graphql')
+      return response({ data: { repository: { pullRequest: {
+        reviewThreads: { pageInfo: { hasNextPage: false }, nodes: [] },
+      } } } });
+    if (endpoint === `repos/${repo}/pulls/81/reviews?per_page=100` ||
+        endpoint === `repos/${repo}/pulls/81/comments?per_page=100`)
+      return response([[]]);
+    return f.run(call);
+  };
+  const github = createGitHub({ cwd: '/tmp', repo, run });
+  const claimed = await github.reviewFeedback(81);
+  const claimedFingerprint = feedbackFingerprint(claimed);
+
+  f.batch.reviews = [{ round: 1, subjectSha: sha, status: 'running' }];
+  f.batch.phase = 'reviewing';
+  f.batch.externalReview.status = 'running';
+  f.persist();
+  await f.communication.publishState(f.batch);
+  const status = f.issues.get(17).comments.at(-1).body;
+  // Reproduce the status landing in PR feedback after the claim's snapshot.
+  f.source(81, status, 'review-bot');
+  assert.equal(feedbackFingerprint(await github.reviewFeedback(81)), claimedFingerprint);
+  assert.equal((await f.communication.publishState(f.batch)).comments, 0);
+
+  const user = f.source(81, 'The current source still needs a regression fix.');
+  const withUser = await github.reviewFeedback(81);
+  assert.notEqual(feedbackFingerprint(withUser), claimedFingerprint);
+  assert.ok(withUser.comments.some((item) => item.id === user.id));
+
+  const forged = f.source(81, status, 'another-maintainer');
+  const withForged = await github.reviewFeedback(81);
+  assert.notEqual(feedbackFingerprint(withForged), feedbackFingerprint(withUser));
+  assert.ok(withForged.comments.some((item) => item.id === forged.id));
+
+  f.source(17, 'Source issue reports a reproducible source regression.');
+  await f.communication.mirrorFeedback(f.batch);
+  const mirror = f.issues.get(81).comments.find((item) => item.body.startsWith(SOURCE_FEEDBACK_MARKER));
+  assert.ok(mirror);
+  assert.doesNotMatch(mirror.body, /<!-- codex-bug-pipeline:/);
+  const withSource = await github.reviewFeedback(81);
+  assert.notEqual(feedbackFingerprint(withSource), feedbackFingerprint(withForged));
+  assert.ok(withSource.comments.some((item) => item.id === mirror.id));
+});
+
+test('every report chunk retains its leading identity and metadata marker with deterministic idempotence', async () => {
+  const f = communicationFixture();
+  report(f);
+  const value = JSON.parse(f.batch.reviewReports['claude-review-1.json']);
+  value.summary = 'Bounded synthetic review detail. '.repeat(1500);
+  const content = JSON.stringify(value);
+  f.batch.reviewReports['claude-review-1.json'] = content;
+  f.batch.reviewLedger.rounds[0].review_sha256 = sha256(content);
+  f.persist();
+  assert.equal((await f.communication.publishState(f.batch)).comments, 4);
+  for (const number of f.batch.issues) {
+    const bodies = f.issues.get(number).comments.map((item) => item.body);
+    assert.equal(bodies.length, 2);
+    for (const [index, body] of bodies.entries()) {
+      assert.ok(body.startsWith(ISSUE_REVIEW_MARKER));
+      assert.equal((body.match(/<!-- codex-bug-pipeline:issue-review-status -->/g) ?? []).length, 1);
+      assert.ok(body.includes(`Report (${index + 1}/2)`));
+      assert.ok(body.includes(f.batch.reviewLedger.rounds[0].review_sha256));
+      assert.ok(body.length <= 60000);
+    }
+  }
+  const before = clone(f.writes);
+  assert.equal((await f.communication.publishState(f.batch)).comments, 0);
+  assert.deepEqual(f.writes, before);
 });
 
 test('findings are present on each source issue and their report digest is verified; freeform approval is no proof', async () => {
@@ -966,4 +1046,44 @@ test('running and awaiting-QA continuations never project a ready review label',
     legacyDigest: historyDigest(f.batch.budgetExtensions), actor: 'trusted-state-owner',
     at: '2026-10-18T00:00:00Z', authorizationRef: 'test:legacy-cutover' };
   assert.equal(reviewProjection(f.batch).label, 'codex-review-fixes');
+});
+
+test('standalone communication projects exact collection PR-only and rejects collection drift', async()=>{
+ const f=communicationFixture();f.batch.issues=[];f.state().batches=[];f.state().standaloneReviews=[clone(f.batch)];
+ const before=clone(f.state());
+ assert.equal((await f.communication.publishState(f.batch,{collection:'standaloneReviews'})).label,'claude-review-ready');
+ assert(f.writes.every(w=>!w.endpoint.includes('/issues/17')&&!w.endpoint.includes('/issues/18')));
+ const count=f.writes.length;await f.communication.publishState(f.batch,{collection:'standaloneReviews'});assert.equal(f.writes.length,count);assert.deepEqual(f.state(),before);
+ f.state().batches=[{...clone(f.batch),issues:[17,18]}];f.state().standaloneReviews=[];
+ await assert.rejects(f.communication.publishState(f.batch,{collection:'standaloneReviews'}),/collection changed/);assert.equal(f.writes.length,count);
+});
+test('standalone nonempty cohort is explicitly unsupported without transport',async()=>{
+ const f=communicationFixture();const r=await f.communication.publishState(f.batch,{collection:'standaloneReviews'});assert.equal(r.status,'unsupported');assert.equal(f.calls.length,0);
+});
+test('exact final approval is preserved during release hold and active continuation wins',()=>{
+ const f=communicationFixture();report(f,'approved');f.batch.approvedSha=sha;f.batch.phase='blocked';f.batch.releaseHold={reason:'release pending'};f.batch.codexFinalReview={status:'verified',subjectSha:sha,claudeRound:1};
+ assert.equal(reviewProjection(f.batch,externalReport).outcome,'approval-preserved');
+ f.batch.operatorContinuations=[{round:13,status:'running'}];assert.equal(reviewProjection(f.batch,externalReport).label,'codex-review-fixes');
+ f.batch.operatorContinuations=[];f.batch.approvedSha='b'.repeat(40);assert.throws(()=>reviewProjection(f.batch,externalReport),/stale SHA/);
+});
+test('static actual-comment approval remains no-op without a fabricated structured report',()=>{
+ const f=communicationFixture();const b=f.batch;const digest='c'.repeat(64);b.approvedSha=sha;b.externalReview={status:'published',subjectSha:sha,structuredReview:false,claimMade:false,requestId:'real-request',reportCommentId:42,verdict:'approved',findings:0};
+ b.operatorActualClaudeReviews=[{kind:'actual-static-comment-fallback',subjectSha:sha,verdict:'approved',findings:0,claimMade:false,structuredReview:false,requestId:'real-request',commentId:42,actor:'l2v-hub',bodySha256:digest,url:`https://github.com/${repo}/pull/81#issuecomment-42`}];
+ b.operatorFinalCodexReviews=[{subjectSha:sha,actualClaudeCommentId:42,findings:0,sourceMatched:true,reportSha256:digest,sealSha256:digest}];b.operatorFinalCodexReservation={status:'verified',sourceSha:sha,actualClaudeCommentId:42,reportSha256:digest,sealSha256:digest};
+ assert.equal(reviewProjection(b,()=>assert.fail('fake structured report')).outcome,'approval-preserved');assert.equal(b.reviewLedger,undefined);b.operatorActualClaudeReviews[0].subjectSha='b'.repeat(40);assert.throws(()=>reviewProjection(b),/Static approval/);
+});
+
+test('standalone final write guards reject head, canonical fingerprint and authorization drift',async()=>{
+ for(const kind of ['head','fingerprint','authorization']){
+  const f=communicationFixture();f.batch.issues=[];f.state().batches=[];f.state().standaloneReviews=[clone(f.batch)];
+  let injected=false;f.hook(call=>{if(!injected&&call.args[1]===`repos/${repo}/labels?per_page=100`){injected=true;if(kind==='head')f.pr.head.sha='b'.repeat(40);if(kind==='fingerprint')f.state().standaloneReviews[0].ownership='changed';if(kind==='authorization')f.authorized.clear();}});
+  await assert.rejects(f.communication.publishState(f.batch,{collection:'standaloneReviews'}));assert(injected);assert.equal(f.writes.length,0);
+ }
+});
+test('closed standalone is a read-only skipped sync result',async()=>{
+ const f=communicationFixture();f.batch.issues=[];f.state().batches=[];f.state().standaloneReviews=[clone(f.batch)];f.pr.state='closed';
+ const result=await syncIssueReviews({github:f.github,communication:f.communication});assert.equal(result.batches[0].status,'skipped');assert.equal(f.writes.length,0);
+});
+test('operator final-Codex provenance preserves exact approval without rewriting histories',()=>{
+ const f=communicationFixture();report(f,'approved');const b=f.batch;b.approvedSha=sha;b.externalReview.reportComment=42;b.externalReview.reportBodySha256='d'.repeat(64);b.operatorFinalReviews=[{status:'verified',subjectSha:sha,verdict:'approved',findings:0,actualClaudeCommentId:42,actualClaudeCommentSha256:'d'.repeat(64),reportSha256:'e'.repeat(64),sealSha256:'f'.repeat(64)}];const before=clone(b);assert.equal(reviewProjection(b,externalReport).skip,true);assert.deepEqual(b,before);
 });

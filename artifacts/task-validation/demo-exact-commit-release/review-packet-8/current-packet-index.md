@@ -1,0 +1,1 @@
+Current PR498 packet8: null-policy bootstrap and independentQA8. Root task-contract/validation-report are historical/superseded; prior packets5,6,7 and original failures remain immutable. Passed prior report replicas satisfy existing literal evidence-key convention. Native594failure preserved; no live admin settings, permission, provider deployment or clinical closure claim.

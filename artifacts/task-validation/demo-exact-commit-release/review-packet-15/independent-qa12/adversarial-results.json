@@ -1,0 +1,162 @@
+[
+  {
+    "name": "durable main block, status failure and ordinary retry POST0",
+    "status": "PASS"
+  },
+  {
+    "name": "durable expired block, status failure and ordinary retry POST0",
+    "status": "PASS"
+  },
+  {
+    "name": "durable deploy block, status failure and ordinary retry POST0",
+    "status": "PASS"
+  },
+  {
+    "name": "durable record block, status failure and ordinary retry POST0",
+    "status": "PASS"
+  },
+  {
+    "name": "block saved even if first status publication fails; ordinary retry cannot dispatch",
+    "status": "PASS"
+  },
+  {
+    "name": "recovery rejects unrelated hold manual-release-hold",
+    "status": "PASS"
+  },
+  {
+    "name": "recovery rejects unrelated hold other-block",
+    "status": "PASS"
+  },
+  {
+    "name": "recovery rejects unrelated hold true",
+    "status": "PASS"
+  },
+  {
+    "name": "recovery CAS rejects concurrently changed hold during save guard",
+    "status": "PASS"
+  },
+  {
+    "name": "authorized recovery archives consumed history; replay denied; new intent one POST per operation",
+    "status": "PASS"
+  },
+  {
+    "name": "retired missing provider intent cannot be abandoned",
+    "status": "PASS"
+  },
+  {
+    "name": "retired in_progress provider intent cannot be abandoned",
+    "status": "PASS"
+  },
+  {
+    "name": "retired uncertain provider intent cannot be abandoned",
+    "status": "PASS"
+  },
+  {
+    "name": "nonancestor and main race ancestry rejects",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader good",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader newer-pending",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader newer-failure",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader newer-rerun",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader path",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader sha",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader event",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader attempt",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader job-run",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader job-head",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader job-step",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader incomplete",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader over100",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader read-race",
+    "status": "PASS"
+  },
+  {
+    "name": "production reader final-newer",
+    "status": "PASS"
+  },
+  {
+    "name": "genuine GitHub recovery auth wrong-actor",
+    "status": "PASS"
+  },
+  {
+    "name": "genuine GitHub recovery auth wrong-admin",
+    "status": "PASS"
+  },
+  {
+    "name": "genuine GitHub recovery auth wrong-source",
+    "status": "PASS"
+  },
+  {
+    "name": "genuine GitHub recovery auth changed-workflow",
+    "status": "PASS"
+  },
+  {
+    "name": "dispatcher incomplete cannot POST",
+    "status": "PASS"
+  },
+  {
+    "name": "dispatcher over100 cannot POST",
+    "status": "PASS"
+  },
+  {
+    "name": "dispatcher blocked-guard cannot POST",
+    "status": "PASS"
+  },
+  {
+    "name": "production configuration missing rejects before any preflight/merge/POST",
+    "status": "PASS"
+  },
+  {
+    "name": "descendant record and publication descendant",
+    "status": "PASS"
+  },
+  {
+    "name": "descendant record and publication changed-production",
+    "status": "PASS"
+  },
+  {
+    "name": "descendant record and publication changed-demo",
+    "status": "PASS"
+  }
+]

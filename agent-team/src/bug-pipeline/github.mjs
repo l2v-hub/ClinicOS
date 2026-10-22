@@ -1,3 +1,4 @@
+import { MAX_EVIDENCE_BYTES, MAX_EVIDENCE_TRANSPORT_BYTES } from './evidence-limits.mjs';
 import { ENTITY_COLLECTIONS, attemptLimit } from './attempt-budget.mjs';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
@@ -16,11 +17,15 @@ export function recordTransientGitHubFailure(subject, clock) {
   const previous = subject.lastTransientFailure;
   const sameHead = previous?.subjectSha === subject.sha;
   const count = sameHead ? Math.min(previous.count + 1, 32) : 1;
-  const firstFailureAt = sameHead && Number.isFinite(previous.firstFailureAt)
-    ? previous.firstFailureAt : clock;
+  const firstFailureAt =
+    sameHead && Number.isFinite(previous.firstFailureAt) ? previous.firstFailureAt : clock;
   subject.lastTransientFailure = {
-    code: 'github-read-transient', operation: 'read', at: new Date(clock).toISOString(),
-    count, firstFailureAt, subjectSha: subject.sha,
+    code: 'github-read-transient',
+    operation: 'read',
+    at: new Date(clock).toISOString(),
+    count,
+    firstFailureAt,
+    subjectSha: subject.sha,
     nextRetryAt: clock + Math.min(60_000 * 2 ** Math.min(count - 1, 5), 30 * 60_000),
   };
   return clock - firstFailureAt >= GITHUB_TRANSIENT_WINDOW_MS;
@@ -99,33 +104,59 @@ export function controllerFailureCode(error) {
   return 'controller-execution-failed';
 }
 export function stateError(code, message, cause) {
-  return Object.assign(new Error(message, cause ? { cause } : undefined), { code });
+  return Object.assign(new Error(message, cause ? { cause } : undefined), {
+    code,
+  });
 }
 // Only finite diagnostic metadata crosses the controller boundary. Provider stderr can
 // contain arbitrary clinical text and credentials, so it is never persisted or interpolated.
 export function githubOperationError(result, operation = 'read') {
   const detail = String(result?.stderr ?? '');
-  const statusMatch = /(?:\(HTTP ([45][0-9]{2})\)|^HTTP(?:\/\d(?:\.\d)?)?\s+([45][0-9]{2})\b)/m.exec(detail);
+  const statusMatch =
+    /(?:\(HTTP ([45][0-9]{2})\)|^HTTP(?:\/\d(?:\.\d)?)?\s+([45][0-9]{2})\b)/m.exec(detail);
   const status = statusMatch ? Number(statusMatch[1] ?? statusMatch[2]) : null;
-  const rateLimited = status === 403 && /(?:API rate limit exceeded|secondary rate limit)/i.test(detail);
+  const rateLimited =
+    status === 403 && /(?:API rate limit exceeded|secondary rate limit)/i.test(detail);
   const timeout = result?.error === 'timeout';
-  const graphqlMergeRefusal = operation === 'merge' && result?.code === 1 && !result?.error &&
+  const graphqlMergeRefusal =
+    operation === 'merge' &&
+    result?.code === 1 &&
+    !result?.error &&
     !String(result?.stdout ?? '').trim() &&
-    /^GraphQL: Head branch was modified\. Review and try the merge again\. \(mergePullRequest\)$/
-      .test(detail.trim());
+    /^GraphQL: Head branch was modified\. Review and try the merge again\. \(mergePullRequest\)$/.test(
+      detail.trim(),
+    );
   const transient = timeout || status === 408 || status === 429 || status >= 500 || rateLimited;
-  const code = operation === 'read'
-    ? transient ? 'github-read-transient' : status ? 'github-read-rejected' : 'github-read-failed'
-    : (status && status < 500 && status !== 408) || graphqlMergeRefusal
-      ? 'github-write-rejected' : 'github-write-uncertain';
-  return Object.assign(stateError(code, `GitHub operation failed${status ? ` (HTTP ${status})` : ''}`), {
-    operation, httpStatus: status, retryable: ['read', 'projection'].includes(operation) && transient,
-    diagnostic: timeout ? 'timeout' : rateLimited ? 'rate-limit' : status ? 'http-status' :
-      graphqlMergeRefusal ? 'graphql-merge-refusal' : 'unknown',
-  });
+  const code =
+    operation === 'read'
+      ? transient
+        ? 'github-read-transient'
+        : status
+          ? 'github-read-rejected'
+          : 'github-read-failed'
+      : (status && status < 500 && status !== 408) || graphqlMergeRefusal
+        ? 'github-write-rejected'
+        : 'github-write-uncertain';
+  return Object.assign(
+    stateError(code, `GitHub operation failed${status ? ` (HTTP ${status})` : ''}`),
+    {
+      operation,
+      httpStatus: status,
+      retryable: ['read', 'projection'].includes(operation) && transient,
+      diagnostic: timeout
+        ? 'timeout'
+        : rateLimited
+          ? 'rate-limit'
+          : status
+            ? 'http-status'
+            : graphqlMergeRefusal
+              ? 'graphql-merge-refusal'
+              : 'unknown',
+    },
+  );
 }
 export function githubApiOperation({ method, body } = {}) {
-  return ((!method && body === undefined) || method === 'GET') ? 'read' : 'mutation';
+  return (!method && body === undefined) || method === 'GET' ? 'read' : 'mutation';
 }
 export function isRetryableGitHubFailure(error) {
   return controllerFailureCode(error) === 'github-read-transient';
@@ -395,7 +426,12 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       ...(maxOutputBytes === undefined ? {} : { maxOutputBytes }),
     });
     if (!result.ok && allowFailure) return { ok: false, status: result.code, value: null, result };
-    return { ok: true, status: result.code, value: parseJson(result.stdout, path), result };
+    return {
+      ok: true,
+      status: result.code,
+      value: parseJson(result.stdout, path),
+      result,
+    };
   }
 
   async function apiList(path) {
@@ -439,7 +475,11 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     if (!notFound(check)) throw new Error(`Cannot inspect GitHub label ${label}`);
     const created = await api(`repos/${repo}/labels`, {
       method: 'POST',
-      body: { name: label, color: '1D76DB', description: 'Codex bug pipeline queue' },
+      body: {
+        name: label,
+        color: '1D76DB',
+        description: 'Codex bug pipeline queue',
+      },
       allowFailure: true,
       guard,
     });
@@ -543,11 +583,15 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
   async function decodeDurableState(contents) {
     if (
       contents?.type !== 'file' ||
-      contents.target !== undefined || contents.submodule_git_url !== undefined ||
-      typeof contents.sha !== 'string' || !/^[a-f0-9]{40}$/i.test(contents.sha) ||
-      !Number.isSafeInteger(contents.size) || contents.size <= 0 ||
+      contents.target !== undefined ||
+      contents.submodule_git_url !== undefined ||
+      typeof contents.sha !== 'string' ||
+      !/^[a-f0-9]{40}$/i.test(contents.sha) ||
+      !Number.isSafeInteger(contents.size) ||
+      contents.size <= 0 ||
       contents.size > MAX_DURABLE_STATE_BYTES
-    ) throw new Error('Durable state path is not a regular file');
+    )
+      throw new Error('Durable state path is not a regular file');
     let record;
     if (contents.encoding === 'base64') record = contents;
     else if (contents.encoding === 'none') {
@@ -572,7 +616,9 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       const existing = await api(refPath, { allowFailure: true });
       if (existing.ok) return;
       if (!notFound(existing)) throw new Error('Cannot inspect durable state branch');
-      const main = await api(`repos/${repo}/git/ref/heads/main`, { allowFailure: true });
+      const main = await api(`repos/${repo}/git/ref/heads/main`, {
+        allowFailure: true,
+      });
       if (!main.ok)
         throw new Error('Cannot initialize durable state: main branch ref is unavailable');
       const sha = main.value?.object?.sha;
@@ -711,21 +757,24 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     if (typeof title !== 'string' || !title.trim() || typeof body !== 'string') {
       throw new TypeError('draft title and body are required');
     }
-    const response = await invoke([
-      'pr',
-      'create',
-      '--repo',
-      repo,
-      '--base',
-      'main',
-      '--head',
-      branch,
-      '--title',
-      title,
-      '--body',
-      body,
-      '--draft',
-    ], { operation: 'mutation' });
+    const response = await invoke(
+      [
+        'pr',
+        'create',
+        '--repo',
+        repo,
+        '--base',
+        'main',
+        '--head',
+        branch,
+        '--title',
+        title,
+        '--body',
+        body,
+        '--draft',
+      ],
+      { operation: 'mutation' },
+    );
     const url = response.stdout.trim();
     const match = url.match(/\/pull\/(\d+)\/?$/);
     if (!match) throw new Error('GitHub did not return a draft pull request URL');
@@ -810,7 +859,11 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       merged: Boolean(pr.merged),
       draft: pr.draft,
       check: latest
-        ? { status: latest.status, conclusion: latest.conclusion, url: latest.html_url }
+        ? {
+            status: latest.status,
+            conclusion: latest.conclusion,
+            url: latest.html_url,
+          }
         : null,
     };
   }
@@ -862,7 +915,9 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
   }
 
   async function reviewFeedback(pr) {
-    const number = issueNumber({ number: typeof pr === 'object' ? pr.number : pr });
+    const number = issueNumber({
+      number: typeof pr === 'object' ? pr.number : pr,
+    });
     const details = await api(`repos/${repo}/pulls/${number}`);
     const [reviews, reviewComments, issueComments, user] = await Promise.all([
       apiList(`repos/${repo}/pulls/${number}/reviews?per_page=100`),
@@ -966,7 +1021,9 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       )
         latest.set(login, review);
     }
-    const protection = await api(`repos/${repo}/branches/main/protection`, { allowFailure: true });
+    const protection = await api(`repos/${repo}/branches/main/protection`, {
+      allowFailure: true,
+    });
     const rule = protection.value?.required_pull_request_reviews;
     const classic =
       protection.ok &&
@@ -1007,27 +1064,27 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
   }
 
   async function draftReady(pr, { guard } = {}) {
-    const number = issueNumber({ number: typeof pr === 'object' ? pr.number : pr });
+    const number = issueNumber({
+      number: typeof pr === 'object' ? pr.number : pr,
+    });
     if (guard !== undefined) await checkMutationGuard(guard);
-    await invoke(['pr', 'ready', String(number), '--repo', repo], { operation: 'projection' });
+    await invoke(['pr', 'ready', String(number), '--repo', repo], {
+      operation: 'projection',
+    });
     return (await api(`repos/${repo}/pulls/${number}`)).value;
   }
 
   async function mergePullRequest(pr, sha, { guard } = {}) {
-    const number = issueNumber({ number: typeof pr === 'object' ? pr.number : pr });
+    const number = issueNumber({
+      number: typeof pr === 'object' ? pr.number : pr,
+    });
     if (typeof sha !== 'string' || !/^[a-f0-9]{40}$/.test(sha))
       throw new TypeError('merge requires an exact reviewed SHA');
     if (guard !== undefined) await checkMutationGuard(guard);
-    await invoke([
-      'pr',
-      'merge',
-      String(number),
-      '--repo',
-      repo,
-      '--squash',
-      '--match-head-commit',
-      sha,
-    ], { operation: 'merge' });
+    await invoke(
+      ['pr', 'merge', String(number), '--repo', repo, '--squash', '--match-head-commit', sha],
+      { operation: 'merge' },
+    );
     const merged = await api(`repos/${repo}/pulls/${number}`);
     if (
       String(merged.value.state ?? '').toUpperCase() !== 'CLOSED' ||
@@ -1063,17 +1120,31 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       !/^[a-f0-9]{40}$/.test(metadata.value.sha ?? '') ||
       !Number.isSafeInteger(metadata.value.size) ||
       metadata.value.size < 0 ||
-      metadata.value.size > 25 * 1024 * 1024
+      metadata.value.size > MAX_EVIDENCE_BYTES
     ) {
       throw new Error(`remote evidence file is unavailable or outside size limits: ${file}`);
     }
     const blob = await api(`repos/${repo}/git/blobs/${metadata.value.sha}`, {
-      maxOutputBytes: 40 * 1024 * 1024,
+      maxOutputBytes: MAX_EVIDENCE_TRANSPORT_BYTES,
     });
-    if (blob.value?.encoding !== 'base64' || typeof blob.value.content !== 'string')
+    if (
+      blob.value?.encoding !== 'base64' ||
+      typeof blob.value.content !== 'string' ||
+      blob.value.content.length > MAX_EVIDENCE_TRANSPORT_BYTES ||
+      (blob.value.sha !== undefined && blob.value.sha !== metadata.value.sha)
+    )
       throw new Error(`remote evidence blob is not base64: ${file}`);
-    const bytes = Buffer.from(blob.value.content, 'base64');
-    if (bytes.length !== metadata.value.size || blob.value.size !== bytes.length)
+    const encodedBlob = blob.value.content.replace(/[\r\n]/g, '');
+    if (encodedBlob.length > Math.ceil(MAX_EVIDENCE_BYTES / 3) * 4)
+      throw new Error(`remote evidence blob exceeds size limits: ${file}`);
+    const bytes = Buffer.from(encodedBlob, 'base64');
+    if (
+      bytes.length !== metadata.value.size ||
+      blob.value.size !== bytes.length ||
+      bytes.toString('base64') !== encodedBlob ||
+      createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex') !==
+        metadata.value.sha
+    )
       throw new Error(`remote evidence size does not match GitHub metadata: ${file}`);
     return {
       path: file,
@@ -1089,7 +1160,9 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
    * is configured, so callers must treat it as a configuration failure and verify protection.
    */
   async function requiredChecks(pr) {
-    const number = issueNumber({ number: typeof pr === 'object' ? pr.number : pr });
+    const number = issueNumber({
+      number: typeof pr === 'object' ? pr.number : pr,
+    });
     const result = await invoke(
       ['pr', 'checks', String(number), '--repo', repo, '--required', '--json', 'name,state,bucket'],
       { allowFailure: true },
@@ -1121,7 +1194,32 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     return { ok: result.ok && passing, details };
   }
 
+  async function authorizeReleaseRecovery(context) {
+    if (
+      repo !== 'l2v-hub/ClinicOS' ||
+      context?.repository !== repo ||
+      context.eventName !== 'workflow_dispatch' ||
+      context.ref !== 'refs/heads/main' ||
+      context.workflowRef !== `${repo}/.github/workflows/codex-bug-release.yml@refs/heads/main` ||
+      context.actor !== 'l2v-hub' ||
+      context.triggeringActor !== context.actor ||
+      !/^[a-f0-9]{40}$/.test(context.sha ?? '') ||
+      context.workflowSha !== context.sha
+    )
+      throw Error('explicit trusted owner recovery required');
+    const user = await api('user');
+    const permission = await api(`repos/${repo}/collaborators/l2v-hub/permission`);
+    if (
+      actorLogin(user.value) !== context.actor ||
+      permission.value?.permission !== 'admin' ||
+      permission.value?.user?.login !== context.actor
+    )
+      throw Error('authenticated recovery admin required');
+    return context.actor;
+  }
+
   return {
+    authorizeReleaseRecovery,
     authorized,
     authorizedMaintainer,
     intake,

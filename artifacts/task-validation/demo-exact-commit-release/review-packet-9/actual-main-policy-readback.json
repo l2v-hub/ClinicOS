@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-21T18:39:49.972Z",
+  "runId": 39654495449,
+  "jobId": 119411058289,
+  "subjectSha": "361d2ede1ef51f17e6926a30b376da803f5ffa5b",
+  "jobConclusion": "success",
+  "environment": {
+    "id": 20880188544,
+    "name": "glistening-friendship / demo",
+    "policy": {
+      "protected_branches": false,
+      "custom_branch_policies": true
+    },
+    "canAdminsBypass": true,
+    "protectionRules": [
+      {
+        "id": 69627372,
+        "node_id": "GA_kwDOSt4Zr84EJm3s",
+        "type": "branch_policy"
+      }
+    ],
+    "updatedAt": "2026-08-30T15:49:17Z"
+  },
+  "policies": {
+    "total_count": 1,
+    "branch_policies": [
+      {
+        "id": 63876052,
+        "node_id": "MDE2OkdhdGVCcmFuY2hQb2xpY3k2Mzg3NjA1Mg==",
+        "name": "main",
+        "type": "branch"
+      }
+    ]
+  },
+  "mainOnlyVerified": true,
+  "noClinicalOrRailwayMutation": true,
+  "actualClaudeApproval": false,
+  "nativeSixStillRequired": true
+}

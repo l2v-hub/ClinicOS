@@ -1,0 +1,60 @@
+{
+  "runId": 39730182635,
+  "attempt": 1,
+  "status": "completed",
+  "conclusion": "success",
+  "headSha": "bc697a95814a9aedff70eab190e500b333c7fdbd",
+  "workflowPath": ".github/workflows/cloud-review-projection-20261021.yml",
+  "createdAt": "2026-10-22T05:49:01Z",
+  "updatedAt": "2026-10-22T05:49:08Z",
+  "runNumber": 17,
+  "workflowId": 392095240,
+  "job": {
+    "id": 119663185102,
+    "name": "inspect-ambient-availability",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-22T05:49:03Z",
+    "completedAt": "2026-10-22T05:49:07Z",
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check ambient availability as a boolean only",
+        "conclusion": "success"
+      },
+      {
+        "name": "Preserve metadata-only result",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "assertion": {
+    "step": "Check ambient availability as a boolean only",
+    "conclusion": "success",
+    "requiredAmbientTokenUnavailable": true,
+    "passed": true,
+    "protectedEnvironmentAttached": false,
+    "workflowUsesBooleanComparisonOnly": true,
+    "queuedAfterMigrationJobsCompleted": true,
+    "parentMigrationRunId": 39729875897
+  },
+  "artifact": {
+    "id": 12404642402,
+    "name": "demo-secret-exposure-39730182635-1",
+    "sizeBytes": 516,
+    "uploadPassed": true,
+    "rawDownloadAttempted": true,
+    "rawDownloadHttpStatus": 403,
+    "rawContentsRead": false
+  },
+  "secretValuesReadOrPrinted": false,
+  "priorPositiveExposureRunPreserved": 39667459014,
+  "sourceWorkflowSha256": "08073a4f53196fb98c683ad22eb76298dcacd2fef8a81812bac1600710585edb"
+}

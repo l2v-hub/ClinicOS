@@ -794,8 +794,53 @@ test('actual controller defers pending backend completion to protected confirmat
   );
   assert.equal(gh.verifyDemoRelease, undefined);
   assert.equal(selectAutoReleaseBatch(h.stateRef.value).id, batch.id);
+  const { verifyProductionBackend } = await import('../../src/bug-pipeline/demo-deployment.mjs');
+  const productionRun = {
+    id: 321,
+    run_attempt: 1,
+    head_sha: sha('b'),
+    head_branch: 'main',
+    repository: { full_name: repo },
+    head_repository: { full_name: repo },
+    path: '.github/workflows/deploy-backend.yml',
+    event: 'push',
+    status: 'completed',
+    conclusion: 'success',
+  };
+  const productionJob = {
+    id: 421,
+    run_id: 321,
+    run_attempt: 1,
+    head_sha: sha('b'),
+    name: 'deploy',
+    status: 'completed',
+    conclusion: 'success',
+    steps: [{ name: 'Deploy to Railway', status: 'completed', conclusion: 'success' }],
+  };
+  const productionResponses = {
+    [`actions/workflows/deploy-backend.yml/runs?branch=main&head_sha=${sha('b')}&per_page=100`]: {
+      total_count: 1,
+      workflow_runs: [productionRun],
+    },
+    'actions/runs/321': productionRun,
+    'actions/runs/321/jobs?filter=latest&per_page=100': {
+      total_count: 1,
+      jobs: [productionJob],
+    },
+  };
+  const productionReader = {
+    async getJson(route) {
+      assert.ok(
+        Object.hasOwn(productionResponses, route),
+        `unexpected synthetic production proof route: ${route}`,
+      );
+      return clone(productionResponses[route]);
+    },
+  };
   const protectedGh = {
     ...gh,
+    // Synthetic metadata exercises the genuine verifier; this is not a provider deployment.
+    verifyProductionBackend: (input) => verifyProductionBackend({ ...input, reader: productionReader }),
     verifyDemoRelease: async () => proof,
     reviewFeedback: async () =>
       openFeedback(batch, {

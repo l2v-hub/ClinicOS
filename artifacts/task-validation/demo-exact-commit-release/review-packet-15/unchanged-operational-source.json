@@ -1,0 +1,36 @@
+{
+  "operationallyExecutedSha": "361d2ede1ef51f17e6926a30b376da803f5ffa5b",
+  "testedSha": "57c192513dcf7cf55853381ac7337926cbdc90cb",
+  "unchanged": [
+    {
+      "path": ".github/workflows/configure-demo-source.yml",
+      "sha256": "34319447165b115b20c82e9b0c10393bbf189b8352867873ea3fb7948cb97875",
+      "bytes": 2276
+    },
+    {
+      "path": ".github/workflows/deploy-demo-exact-commit.yml",
+      "sha256": "c45b50ea6dca08a4c93c4a483d35ad3f2e1e8946bb7c6f3708b543d2dfae0e15",
+      "bytes": 3865
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "sha256": "c231c95f3b3c2e2b80d446a8ddf302530bab068c4f44d02f48afd7400009aeab",
+      "bytes": 34967
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "sha256": "1879f24e6adc1b1c9ed4be99027ddf03be61f8997679492b922a6e0acd765c0d",
+      "bytes": 93688
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "sha256": "50ff593ef913b2fc9fbcb330da4e50b2f91803b00f024b015ae6f312b4c844de",
+      "bytes": 44275
+    },
+    {
+      "path": "scripts/automation/configure-demo-source.test.mjs",
+      "sha256": "a1f670d8441ef4d489f3e0ac1079c0db936894c768842c9fb82287fa7c79a8c7",
+      "bytes": 37037
+    }
+  ]
+}

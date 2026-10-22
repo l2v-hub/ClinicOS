@@ -1,0 +1,44 @@
+{
+  "qaNonce": "505e8560-f65a-44d9-9082-fc8ec31b4a94",
+  "grantNonce": "dfedb28a-7355-4955-8813-0fa2c7eb6633",
+  "sourceSha": "57c192513dcf7cf55853381ac7337926cbdc90cb",
+  "status": "STOP_FOCUSED_QA_COMPLETE",
+  "disposition": "READY_FOR_CODEX_QA",
+  "report": "validation-report.md",
+  "summary": "summary.json",
+  "attemptIndex": "attempt-index.json",
+  "proofs": {
+    "parentStopSha256": "9e47413a80ba4b4ef55e50ebbc157079ef956aa04cea0bf1b6d53bf4aa21de67",
+    "resourceHandbackSha256": "32605fba42f754e2a3139fd22c73db9d188eac9d9c0bb53bb372e73f4ce792c2",
+    "reservationSha256": "6aff922914ed8400b61aa385f0ab59da4b3f68215b4b7592efe59beef5396df5",
+    "resourceGrantSha256": "663b8ba575ee33b98c8ec6ad9abcf65c02a5928729dd586decfaa072e8678fb1",
+    "authorSealSha256": "22f5c361de2115ad7abfc7d024a33466293fdf00a9a1d1088b757de5845cf497",
+    "authorPreservationManifestSha256": "7fcdd706cf23ba07d61ea83f1cba7bb3ce33b50e1c1d11448dee294e158f24ac",
+    "authorStaticValidationReceiptSha256": "93f42d1095614c6ca04b7422d435f715ee18d82e8b8951a8d3807a8975219fc9",
+    "testTargetSha256": "81d10c2fa518edfe76625dbcbd5ccd8404d0a00750abb22a32e630ab83d0cd90",
+    "testRunReceiptSha256": "f68771bd26ecb3e685de0c7dbe5f5728d034702e4cfe9ca3db2830019e2f0b48",
+    "auditWatcherSha256": "9d3e8e4240faae237c8f01fd1c5f2c844f72c8f247e3d3cfb762787f784509b8",
+    "bootstrapLiveReadbackSha256": "0349bcd7c5ae507aca5c17a2c89b9ee7ba086ffbd5baddd2e1d94e4a53a4e27b",
+    "bootstrapCanonicalResultSha256": "43f3f3b00e3c8c6b8d6e34cdc8f50fcb87ea66f0edf06ab5efce41aa7ac525f5"
+  },
+  "finalChecks": {
+    "sourceWorktreeClean": true,
+    "ownedContainerRemoved": true,
+    "ownedNetworkRemoved": true,
+    "portsFree": [
+      55432,
+      3447,
+      5447,
+      8432
+    ],
+    "exclusiveLockFree": true,
+    "baselineUnchangedHealthy": true,
+    "noFurtherRuntimeRequested": true
+  },
+  "scopeLimit": "One existing proactive-e2e test file only. No full backend/frontend/browser/native suite, provider actions, merge, deployment, or clinical issue closure claim.",
+  "packetDigests": {
+    "validation-report.md": "75d3f1c7a0b4af39b8a817045db113833736244d61023d7183032dcdc2459bf0",
+    "summary.json": "a2216a710447adb54c3c4617f6d1fb2e7b264db484a0001d6afb873e8d5701fa",
+    "attempt-index.json": "d77adef73d557440f26113323ea5beca9ce465fdcf9f9d62daccb60a1aff69c2"
+  }
+}

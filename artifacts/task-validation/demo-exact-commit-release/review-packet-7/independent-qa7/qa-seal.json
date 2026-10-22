@@ -1,0 +1,23 @@
+{
+  "nonce": "f1fe59c6-1a63-423e-adcd-9d2ee108a21d",
+  "priorQaNonce": "a3e8c3ed-c1ba-46ba-9bb5-8cac9dd7f758",
+  "status": "sealed",
+  "sealedAt": "2026-10-21T17:53:06Z",
+  "sourceSha": "e703807d83bcb00bfd1226651cc8d84f7fecf8a3",
+  "verdict": "PASS",
+  "report": "validation-report.md",
+  "reportSha256": "da1475e365c194a1b978abfe320cf0fef15d5c8a1fe9a668fdba08a0df4b46ef",
+  "summary": "validation-summary.json",
+  "summarySha256": "61396341a977a3937ab1b3bc6aabf22a86de766946bb8ed1bdee16aa73505985",
+  "evidenceChecksumManifest": "evidence-checksums.json",
+  "evidenceChecksumManifestSha256": "ebc92e176f174ae0123bf25431adb624d77890490e0f37749d7429c6a6dc3b4b",
+  "freshTargetedSuiteCount": 1,
+  "passedTests": 81,
+  "failedTests": 0,
+  "durableCliProbeCount": 10,
+  "attempt3RunnerExitCode": 0,
+  "sourceEdits": false,
+  "providerAction": false,
+  "network": false,
+  "privateOutputOnly": true
+}

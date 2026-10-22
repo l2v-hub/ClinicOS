@@ -1,0 +1,73 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "286d4e5e-1a0f-4f3f-9a97-19ddd709d5ab",
+      "contractSha256": "b7192a1735daf07ecfc0815ca7fedd79a56b58b5264325b70b8ffbbe0b42da2f",
+      "baseSha": "45033a3949742218b1c9d23a37a0c94776cd5bd5",
+      "subjectSha": "630bef997a53a2d335b1f4a775151a7e8c604d81",
+      "evidence": "author-2/qa1-failed-validation-report.md",
+      "reason": "IndependentQA1F1legacywholeworkflowreceiptdependency",
+      "independentQaReportSha256": "221e1e8fc8c28faf1fd04bd5cd2ba48b6801ce8caae52312b6542da5c41b9468",
+      "completedAt": "2026-10-18T23:26:32.002234+00:00"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "59e03b2b-4cb5-4673-ae2d-c428a7371a03",
+      "contractSha256": "c46b2dc801a3d5e0972834274fe42f85ef266f2ff91f85bc7eec237c532c1b70",
+      "baseSha": "630bef997a53a2d335b1f4a775151a7e8c604d81",
+      "subjectSha": "bb196b215cadce3ad0594dc3c06bc6d36e32c26f",
+      "evidence": "independent-qa2/validation-report.md",
+      "reason": "Isolatedmanualfixed-demoexactcommitworkflow;actualproviderunproven",
+      "independentQaNonce": "f73892e7-0594-4c0c-87cd-3e4c738674fd",
+      "independentQaSealSha256": "98e6afec3abdd9bbb4ccf27c03042aa9f80f753364bbb1f00e827d950037a6e2",
+      "completedAt": "2026-10-18T23:42:36.396153+00:00"
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/deploy-demo-exact-commit.yml",
+      "blob": "58417fb9344ffe3cd56d5477138352709d7b04b8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "blob": "7c8589c66ba2a705d65e32e5f2dbca226d8aa51f",
+      "mode": "100644",
+      "baseBlob": "9a744ca5b2a84e5fd8bbfd2d97776fafc4f906e7",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "blob": "a0d4f6ce31a094ff4a4d2b1bb173cf4235dea925",
+      "mode": "100644",
+      "baseBlob": "3f94806073eede78df3eaef50bc029f4a898dd39",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "analysis.md": "3aa140eab2abb1f2446c757e2efd9a42abcaf9a7d44d54c69a2514a8dea446e8",
+    "author-1/author-report.md": "346a0e7b07011db9aa646c1961c2ee0b4485c0305f63bdc276b933f847394a7e",
+    "author-1/source-manifest.json": "aa31b53c946e833345b0fb5801865b10a5756a74c0173ae1c264fb440316d081",
+    "author-1/task-contract-v1-preflight.md": "b98f496bc2b7a84481c6f37f8f4f89da772f9db336c4e5293d245684e6ee9ac2",
+    "author-1/task-contract.md": "b7192a1735daf07ecfc0815ca7fedd79a56b58b5264325b70b8ffbbe0b42da2f",
+    "author-2/author-report.md": "5a1ffc9b0ec7fa2b2e3b8e8d2a1d4d4f2a348be8a83116bc601e327ac70bc171",
+    "author-2/qa1-failed-validation-report.md": "221e1e8fc8c28faf1fd04bd5cd2ba48b6801ce8caae52312b6542da5c41b9468",
+    "author-2/source-manifest.json": "31357809a5e56036958668e220e3535dc3ae1461a6730193e273d87e3c61fa90",
+    "author-2/task-contract.md": "c46b2dc801a3d5e0972834274fe42f85ef266f2ff91f85bc7eec237c532c1b70",
+    "implementation-plan.md": "0918b480c8ceafe9b9393fc88c0e4d03a636229ea7af08000e80d3e9b3e59c3e",
+    "independent-qa2/qa-stop-witness.json": "ed54c12bba80c015abbff4d0812b696c562e6cc3692a6b3da5e87ad02253cad0",
+    "independent-qa2/validation-report.md": "db246b8a526fe8c7ba2f62d772855e87c9caa05dc4f3a78a7bcc91da1dcb347f",
+    "task-contract.md": "c46b2dc801a3d5e0972834274fe42f85ef266f2ff91f85bc7eec237c532c1b70",
+    "validation-report.md": "a24514a9f599c9956414fa7ac63337decd354d92f3ccac9465898b353e568688"
+  }
+}

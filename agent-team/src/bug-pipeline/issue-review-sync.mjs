@@ -17,13 +17,25 @@ export async function syncIssueReviews({ github, communication }) {
   if (!state) return { status: 'empty', batches: [] };
   validateState(state, REPO);
   const results = [];
-  for (const batch of state.batches) {
+  const subjects = ['batches', 'standaloneReviews'].flatMap((collection) =>
+    (state[collection] ?? []).map((batch) => ({ collection, batch })));
+  const ids = new Set(), prs = new Set();
+  for (const { batch } of subjects) {
+    assert.ok(!ids.has(batch.id) && (!batch.pr || !prs.has(batch.pr.number)), 'Duplicate durable review subject');
+    ids.add(batch.id);
+    if (batch.pr) prs.add(batch.pr.number);
+  }
+  for (const { collection, batch } of subjects) {
     if (!batch.pr || !batch.sha || ['merged', 'deployed'].includes(batch.release?.status)) continue;
     try {
-      const feedback = await communication.mirrorFeedback(batch);
-      const projection = await communication.publishState(batch);
+      const feedback = collection === 'batches' ? await communication.mirrorFeedback(batch) : {};
+      const projection = await communication.publishState(batch, { collection });
       results.push({ id: batch.id, status: 'synced', ...feedback, ...projection });
-    } catch {
+    } catch (error) {
+      if (error?.code === 'review-subject-closed') {
+        results.push({ id: batch.id, status: 'skipped', reason: 'closed' });
+        continue;
+      }
       // Never log provider output, feedback text or patient information.
       results.push({ id: batch.id, status: 'blocked' });
     }

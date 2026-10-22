@@ -1,0 +1,50 @@
+{
+  "status": "STOP_READY_FOR_INDEPENDENT_QA",
+  "reservationNonce": "2e0be858-824f-45bc-9d56-595cae8bf7ea",
+  "parentNonce": "52d724aa-355e-4cf3-a739-e7602a222fbc",
+  "stateCommit": "27e73194f4b3fd816bdf7a0d2dc3595577a78aec",
+  "sourceSha": "73775bbf7ddb2eabc61e2f1ea78b21895ab4c4a4",
+  "changedSourcePaths": [
+    ".github/workflows/deploy-backend.yml",
+    "agent-team/tests/bug-pipeline/demo-workflow-policy.test.mjs"
+  ],
+  "old737ManualDispatchInput": "REMOVED",
+  "manualDispatchSemantics": "workflow_dispatch has no inputs and deploy job condition is exact refs/heads/main; on main dispatch deploys production",
+  "wrongMainNegativeControl": "PASS (rejected with deploy job main-only guard)",
+  "legacyDemoNegativeControl": "PASS (rejected because backend must contain only production deploy job)",
+  "old737WorkflowNegativeControl": "PASS (rejected specifically by manual dispatch input guard)",
+  "productionCommandsEnvPermissionsActionsConcurrencyAndPushPaths": "UNCHANGED (workflow transformation equality verified)",
+  "testResult": {
+    "command": "env -i PATH=\"$PATH\" TMPDIR=/tmp/clinicos-498-luna-workflow13/tmp DEMO_WORKFLOW_POLICY_BACKEND_PATH=/tmp/clinicos-498-Claude3-workflow13/.github/workflows/deploy-backend.yml node --test /tmp/clinicos-498-Claude3-workflow13/agent-team/tests/bug-pipeline/demo-workflow-policy.test.mjs",
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "trustedTaskContractValidator": "PASS",
+  "nodeSyntaxCheck": "PASS",
+  "workflowYamlStaticCheck": "PASS via PyYAML BaseLoader",
+  "initialStaticCheckFailure": "Preserved in yaml-parser-assumption-failure.json; PyYAML safe_load treated Actions on as boolean; no source change was made for that failed check.",
+  "liveOrProviderOperations": "NONE",
+  "deploymentOrClosure": "NOT_CLAIMED",
+  "inputFiles": {
+    "workflow": {
+      "bytes": 2415,
+      "sha256": "8520e8d32b7ee84d38524d18a507ebd728238815d58d7c1a5064847b7f118c75"
+    },
+    "test": {
+      "bytes": 2501,
+      "sha256": "775c01039118c70d88989c217c83b5fc1c6b70fc7332373f4384a4d56d96ac9f"
+    }
+  },
+  "finalFiles": {
+    "workflow": {
+      "bytes": 2124,
+      "sha256": "32fc288e0695ac27f25c06774d152cc7c75452083f740fbe7b11c10748edcf9b"
+    },
+    "test": {
+      "bytes": 4474,
+      "sha256": "717c3c4aa4c7f526248e0f7a9cbb9ba50148f4bdb41176d038831248d3c52755"
+    }
+  }
+}

@@ -721,3 +721,65 @@ test('standalone final QA creates an exact detached source checkout without inst
   await writeFile(path.join(cwd, 'untracked-sentinel'), 'owned test fixture');
   await assert.rejects(workspace.finalQaStandalone(subject), /checkout changed/);
 });
+
+// A valid stored ZIP with recorded actions and a large resource, without fixture credentials.
+function boundedTrace(size) {
+  const action = Buffer.from('{"type":"before","apiName":"page.goto"}\n{"type":"after"}\n');
+  const names = ['test.trace', 'resources/synthetic.bin'];
+  const overhead =
+    22 + names.reduce((n, name) => n + 30 + 46 + 2 * Buffer.byteLength(name), 0) + action.length;
+  const payloads = [action, Buffer.alloc(size - overhead, 17)];
+  let offset = 0;
+  const locals = [],
+    central = [];
+  for (let i = 0; i < names.length; i++) {
+    const name = Buffer.from(names[i]),
+      payload = payloads[i],
+      crc = crc32(payload);
+    const local = Buffer.alloc(30 + name.length);
+    local.writeUInt32LE(0x04034b50);
+    local.writeUInt16LE(20, 4);
+    local.writeUInt32LE(crc, 14);
+    local.writeUInt32LE(payload.length, 18);
+    local.writeUInt32LE(payload.length, 22);
+    local.writeUInt16LE(name.length, 26);
+    name.copy(local, 30);
+    const entry = Buffer.alloc(46 + name.length);
+    entry.writeUInt32LE(0x02014b50);
+    entry.writeUInt16LE(20, 4);
+    entry.writeUInt16LE(20, 6);
+    entry.writeUInt32LE(crc, 16);
+    entry.writeUInt32LE(payload.length, 20);
+    entry.writeUInt32LE(payload.length, 24);
+    entry.writeUInt16LE(name.length, 28);
+    entry.writeUInt32LE(offset, 42);
+    name.copy(entry, 46);
+    locals.push(local, payload);
+    central.push(entry);
+    offset += local.length + payload.length;
+  }
+  const directory = Buffer.concat(central),
+    end = Buffer.alloc(22);
+  end.writeUInt32LE(0x06054b50);
+  end.writeUInt16LE(names.length, 8);
+  end.writeUInt16LE(names.length, 10);
+  end.writeUInt32LE(directory.length, 12);
+  end.writeUInt32LE(offset, 16);
+  return Buffer.concat([...locals, directory, end]);
+}
+
+test('evidence collector accepts valid trace at 32MiB and rejects a byte above it before ZIP parsing', async (t) => {
+  const { MAX_EVIDENCE_BYTES } = await import('../../src/bug-pipeline/evidence-limits.mjs');
+  const root = await tempDir(t),
+    plan = evidencePlan(5);
+  await makeEvidence(root, plan, { trace: false });
+  const target = path.join(root, plan.evidence[0].trace);
+  await mkdir(path.dirname(target), { recursive: true });
+  const bytes = boundedTrace(MAX_EVIDENCE_BYTES);
+  await writeFile(target, bytes);
+  const collected = await validateEvidence(root, plan);
+  assert.equal(collected[0].files.trace.bytes, MAX_EVIDENCE_BYTES);
+  assert.match(collected[0].files.trace.sha256, /^[a-f0-9]{64}$/);
+  await writeFile(target, Buffer.concat([bytes, Buffer.from([0])]));
+  await assert.rejects(validateEvidence(root, plan), /exceeds GitHub size budget/);
+});

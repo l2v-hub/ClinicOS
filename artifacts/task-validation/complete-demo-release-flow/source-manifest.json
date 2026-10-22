@@ -1,0 +1,68 @@
+[
+  {
+    "path": "agent-team/src/bug-pipeline/release.mjs",
+    "before": "a5928d1d00018c0d9f04d254590771d5ba902fad4fe138d829693358928d5ffe",
+    "after": "1f5c90f339ffb8223e05bab06647806f2ee726abc0fd3b75eaf7d884cd713b46",
+    "bytes": 34596
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/github.mjs",
+    "before": "0d787aaffb7584f9e13e34aa16319db84cd8a4d13be7b632c028dfdc98b0948a",
+    "after": "d42262fe9b8e9bb856da29fbe7048ff84ff0954f4cabcbd70f4324070f04d6f3",
+    "bytes": 45594
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/workspace.mjs",
+    "before": "a333ed4c288e334d870c4bd0322044f0ad84e47ca903b762faf99d8dad94f50d",
+    "after": "19226375342db63cef4c5c0d8611b33a858a2adb4880914fd05e01b2126985ce",
+    "bytes": 18013
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/evidence-limits.mjs",
+    "before": null,
+    "after": "78ddc3908b941ef895aeef8e6416b68e1e110d0852b57f0f331b42fe127d237b",
+    "bytes": 186
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/exact-demo-dispatch.mjs",
+    "before": null,
+    "after": "0e7ba9072d20b9ca1341863b051c613a55fa005d0dae9ebc0678281053e8be39",
+    "bytes": 7618
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+    "before": "50ff593ef913b2fc9fbcb330da4e50b2f91803b00f024b015ae6f312b4c844de",
+    "after": "8b0dbb556c986bf8d9238206f507dc2f85bb0e4efbdc2e058ea67f0e4245678a",
+    "bytes": 59124
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+    "before": "8c51f3671ac2229421ad4e91ff84a1bcd42375c6c6a25a8c11df11977d77a388",
+    "after": "0814d6d93026f3f9e4741e885200b7995b2e2da954a347f1e6b3f064133c9987",
+    "bytes": 74338
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/workspace.test.mjs",
+    "before": "873dc275015fda9285d85bfabcbb090c0e136191528e60430e22fcf58bbfc301",
+    "after": "3a6965e952212875cb78438df0f988a7ec87c7b5a793ab96ae298878e81e8084",
+    "bytes": 30739
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs",
+    "before": null,
+    "after": "de29ecdebcf70bd9e2c69c33baf38ab6268021278a9c2040162377c8591649b2",
+    "bytes": 8315
+  },
+  {
+    "path": ".github/workflows/codex-bug-release.yml",
+    "before": "aba0ae7af2185330789d6666c1958e15acee4ce36ffa3f0814c2c92a3e31b55e",
+    "after": "d3c4de323d4d520d71d519b1949990fb3d3ed4ff5b2426fdf1bd7502331e2c08",
+    "bytes": 7888
+  },
+  {
+    "path": ".github/workflows/deploy-demo-exact-commit.yml",
+    "before": "c45b50ea6dca08a4c93c4a483d35ad3f2e1e8946bb7c6f3708b543d2dfae0e15",
+    "after": "4caf8d8c4d1bb7d596fc31fde9bb4a083c52d7235365cffb3b508d64fc87172d",
+    "bytes": 4451
+  }
+]

@@ -16,8 +16,12 @@ on:
         description: Enable Actions PR creation/approval and add the required main check without replacing protections
         type: boolean
         default: false
+      restrict_demo_environment:
+        description: Restrict only the existing demo environment to main; mutually exclusive with configure_repository
+        type: boolean
+        default: false
       reviewed_sha:
-        description: Exact reviewed workflow commit, required only for repository configuration
+        description: Exact reviewed workflow commit, required for either administration mode
         type: string
         default: ''
       verify_provider_access:
@@ -69,7 +73,7 @@ jobs:
           JS
 
   configure-repository:
-    if: github.event_name == 'workflow_dispatch' && inputs.configure_repository && github.repository == 'l2v-hub/ClinicOS'
+    if: github.event_name == 'workflow_dispatch' && (inputs.configure_repository || inputs.restrict_demo_environment) && github.repository == 'l2v-hub/ClinicOS'
     runs-on: ubuntu-22.04
     timeout-minutes: 5
     concurrency:
@@ -82,10 +86,38 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22
-      - name: Apply and verify the explicitly authorized repository settings
+      - name: Validate the explicit administration mode before loading the bot credential
+        env:
+          CLINICOS_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+          CLINICOS_CONFIGURE_REPOSITORY: ${{ inputs.configure_repository }}
+          CLINICOS_RESTRICT_DEMO_ENVIRONMENT: ${{ inputs.restrict_demo_environment }}
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { validateDemoEnvironmentDispatch } from './scripts/quality-gate/configure-bug-repository.mjs';
+          const configure = process.env.CLINICOS_CONFIGURE_REPOSITORY === 'true';
+          const demo = process.env.CLINICOS_RESTRICT_DEMO_ENVIRONMENT === 'true';
+          assert.notEqual(configure, demo, 'Select exactly one administration mode');
+          assert.equal(process.env.GITHUB_EVENT_NAME, 'workflow_dispatch');
+          assert.equal(process.env.GITHUB_REPOSITORY, 'l2v-hub/ClinicOS');
+          assert.match(process.env.CLINICOS_REVIEWED_SHA || '', /^[a-f0-9]{40}$/);
+          assert.equal(process.env.CLINICOS_REVIEWED_SHA.length, 40);
+          assert.equal(process.env.GITHUB_SHA, process.env.CLINICOS_REVIEWED_SHA);
+          if (demo) validateDemoEnvironmentDispatch({
+            restrictDemoEnvironment: demo, configureRepository: configure,
+            eventName: process.env.GITHUB_EVENT_NAME, repository: process.env.GITHUB_REPOSITORY,
+            expectedSha: process.env.CLINICOS_REVIEWED_SHA, actualSha: process.env.GITHUB_SHA,
+            workflowSha: process.env.GITHUB_WORKFLOW_SHA, workflowRef: process.env.GITHUB_WORKFLOW_REF,
+            ref: process.env.GITHUB_REF, actor: process.env.GITHUB_ACTOR,
+            triggeringActor: process.env.GITHUB_TRIGGERING_ACTOR,
+          });
+          JS
+      - name: Apply and verify the explicitly authorized settings
         env:
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
           CLINICOS_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+          CLINICOS_CONFIGURE_REPOSITORY: ${{ inputs.configure_repository }}
+          CLINICOS_RESTRICT_DEMO_ENVIRONMENT: ${{ inputs.restrict_demo_environment }}
         run: node scripts/quality-gate/configure-bug-repository.mjs
 
   bug-pipeline-tests:
@@ -123,7 +155,7 @@ jobs:
           JS
       # Built-in Node tests, synthetic repositories and mock providers; no app install or secrets.
       - name: Test queue, sessions, evidence, budgets and release guards
-        run: node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs scripts/automation/protect-demo-secret.test.mjs
+        run: node --test --test-concurrency=1 agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs scripts/automation/protect-demo-secret.test.mjs
 
       # Exercise the actual sandbox on a clean runner; no model call or secrets are needed.
       - name: Install pinned Codex CLI for runner readiness

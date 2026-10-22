@@ -1,3 +1,4 @@
+import { MAX_EVIDENCE_BYTES } from './evidence-limits.mjs';
 import { mkdir, readFile, writeFile, lstat, realpath, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { runBugReview } from '../../../scripts/quality-gate/claude-bug-review.mjs';
@@ -24,9 +25,11 @@ export async function validateEvidence(cwd, plan) {
     for (const kind of ['screenshot', 'trace', 'video']) {
       if (!item[kind] && kind === 'video') continue;
       const { target, info } = await regularFile(cwd, item[kind]);
-      if (info.size < 16 || info.size > 25 * 1024 * 1024)
+      if (info.size < 16 || info.size > MAX_EVIDENCE_BYTES)
         throw new Error('evidence is empty or exceeds GitHub size budget');
       const bytes = await readFile(target);
+      if (bytes.length !== info.size || bytes.length > MAX_EVIDENCE_BYTES)
+        throw new Error('evidence size changed during collection');
       if (kind === 'screenshot') validatePng(bytes);
       if (kind === 'trace') validateTrace(bytes);
       if (

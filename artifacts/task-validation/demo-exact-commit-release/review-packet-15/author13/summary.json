@@ -1,0 +1,108 @@
+{
+  "status": "AUTHOR_COMPLETE_FOCUSED_PASS_PRESERVED_TIMEOUT_FAILURE",
+  "baseSha": "73775bbf7ddb2eabc61e2f1ea78b21895ab4c4a4",
+  "implementationRound": 13,
+  "nonce": "52d724aa-355e-4cf3-a739-e7602a222fbc",
+  "actualClaude3Comment": 6337108420,
+  "actualClaude3BodySha256": "3a01aabd3f2d30185860c1a6b13cda29329ff219c4ce135f1b2436b48bf7c576",
+  "baselinePaths": 264,
+  "changedPaths": [
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs",
+    "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/src/bug-pipeline/exact-demo-recovery.mjs",
+    "agent-team/src/bug-pipeline/exact-demo-dispatch.mjs",
+    "agent-team/src/bug-pipeline/demo-deployment.mjs",
+    ".github/workflows/codex-bug-release.yml"
+  ],
+  "sourceInventory": "source-freeze-after.json",
+  "sourceInventorySha256": "bfbff659497cac16ebbebda051d69d7e89bb5ac18b48e500ee90675fe4c5daa6",
+  "scopeVerified": true,
+  "lunaPathsUnchangedHere": true,
+  "protectedValidatorsBudgetsEvidenceUnchanged": true,
+  "executions": [
+    {
+      "receipt": "focused1.json",
+      "tests": 739,
+      "pass": 736,
+      "fail": 3,
+      "skipped": 0,
+      "durationMs": 14634.205595
+    },
+    {
+      "receipt": "focused2.json",
+      "tests": 739,
+      "pass": 739,
+      "fail": 0,
+      "skipped": 0,
+      "durationMs": 12989.465933
+    },
+    {
+      "receipt": "focused-final.json",
+      "tests": 742,
+      "pass": 742,
+      "fail": 0,
+      "skipped": 0,
+      "durationMs": 11476.23858
+    },
+    {
+      "receipt": "focused-final2.json",
+      "tests": 743,
+      "pass": 743,
+      "fail": 0,
+      "skipped": 0,
+      "durationMs": 16144.286718
+    },
+    {
+      "receipt": "focused-final3.json",
+      "tests": 743,
+      "pass": 740,
+      "fail": 3,
+      "skipped": 0,
+      "durationMs": 43059.54725
+    },
+    {
+      "receipt": "focused-final-serial.json",
+      "tests": 743,
+      "pass": 743,
+      "fail": 0,
+      "skipped": 0,
+      "durationMs": 16435.730941
+    }
+  ],
+  "finalExecution": {
+    "tests": 743,
+    "pass": 743,
+    "fail": 0,
+    "skip": 0,
+    "testConcurrency": 1,
+    "receipt": "focused-final-serial.json",
+    "sourceHashesVerified": true
+  },
+  "contractValidator": {
+    "status": "PASS",
+    "receipt": "contract-final3.json"
+  },
+  "negativeCoverage": [
+    "production absent/running/success vs completedfailure/timeout/identity/rerun/incompleteinventory",
+    "strict immediate publication re-read rejects newpending",
+    "pending inventory lag waited only after full identity validation",
+    "intent/submitted timestamp/order/future/clock checks",
+    "15min latesttrusted origin and two10s-separated complete empty inventories",
+    "legacy trustedblock time conservative and untimed/future invalid reject",
+    "POST rejection/prePOSTmainmovement/uncertain acknowledgement generate durable block, retryPOST0",
+    "explicit no-run recovery archives proof/history and permits one freshPOST per operation",
+    "late oldtitle at recovery saveguard or prePOST rejected",
+    "late rerun on earlier retired SHA rejected even for known oldrunID"
+  ],
+  "preservedFailure": "focused-final3: two pre-existing immutable-HTTP-alias subprocesses exceeded their unchanged5000ms timeout, causing3 counted failures including parent. Cause not established. Same-source corrected harness concurrency1 final743PASS; no timeout or gate weakened.",
+  "wholePureNativeBrowserProvider": "NOT_RUN",
+  "sourceEditsOutsideScope": false,
+  "remainingGates": [
+    "Root separate authors combined snapshot",
+    "Independent fullpure parity and adversarial QA",
+    "Actual newsource native6 and actual Claude4",
+    "Final independent Codex and separately authorized runtime/release operations"
+  ]
+}

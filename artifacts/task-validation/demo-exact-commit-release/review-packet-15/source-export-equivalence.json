@@ -1,0 +1,29 @@
+{
+  "source": "15f9835c311b301b978816bbbb1d7f68c5eb8e7c",
+  "testedFiles": 265,
+  "rawByteMatches": 262,
+  "unchangedArchiveTransforms": [
+    {
+      "path": "scripts/automation/setup-claude-review-windows.ps1",
+      "gitBlobSha256": "4ce32c8cbdbb8c5c41478361615d0bdbc392d5163457580ef2be59a274a87dc6",
+      "archiveSha256": "716a6281632940c72fbb12650675e2fa96106e52056a281c2267244d89951f22",
+      "kind": "existing-git-archive-eol-crlf",
+      "unchangedProduct": true
+    },
+    {
+      "path": "scripts/process-requirement.ps1",
+      "gitBlobSha256": "7500a4a5a90fb3fc2a5a694bec78cdcf08534b14c7e989e1557589495efc746e",
+      "archiveSha256": "0ff6b2efc78b4fd81ab99fe7099cc53b1559226cbaad8d576ad7dbb01c98cc87",
+      "kind": "existing-git-archive-eol-crlf",
+      "unchangedProduct": true
+    },
+    {
+      "path": "scripts/voice/make-fixtures.ps1",
+      "gitBlobSha256": "5b36eb8ce1d7de4b4d229fb7fd43d3558c79040462d1e501e747074fb2c83f5f",
+      "archiveSha256": "911db4b2cb678724cd8656b7ded1184292fb6b837086272ecf69977e1af8f745",
+      "kind": "existing-git-archive-eol-crlf",
+      "unchangedProduct": true
+    }
+  ],
+  "all265MaterializedHashesVerified": true
+}

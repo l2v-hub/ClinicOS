@@ -1,0 +1,1295 @@
+--- a/agent-team/tests/bug-pipeline/release.test.mjs
++++ b/agent-team/tests/bug-pipeline/release.test.mjs
+@@ -2185,15 +2185,26 @@
+       error.code = code;
+       throw error;
+     };
++    let clock = Date.now();
++    const expectedCode =
++      code === 'PRODUCTION_RUN_REQUIRED' ? 'PRODUCTION_RUN_PENDING_TIMEOUT' : code;
+     await assert.rejects(
+       recordDeployment({
+         ...exactInput(f),
+         mergeSha,
+         railwayRunUrl: result.railwayRunUrl,
++        productionWait: {
++          now: () => clock,
++          delay: async (ms) => {
++            clock += ms;
++          },
++          timeoutMs: 20,
++          pollMs: 10,
++        },
+       }),
+-      new RegExp(code),
++      new RegExp(expectedCode),
+     );
+-    assert.equal(f.getSaved().batches[0].releaseBlock.code, code);
++    assert.equal(f.getSaved().batches[0].releaseBlock.code, expectedCode);
+     assert.ok(!f.calls.some((c) => c[0] === 'status' && c[2] === 'Risolto'));
+     const count = f.calls.filter((c) => c[0] === 'dispatch').length;
+     await assert.rejects(releaseBatch(exactInput(f)), /releaseHold/);
+@@ -2308,3 +2319,241 @@
+     assert.deepEqual(f.getSaved().batches[0].releaseBlock, before.releaseBlock);
+   }
+ });
++
++test('actual record controller waits absent→running→success without blocking or production dispatch; failures/timeouts block once with explicit guidance', async (t) => {
++  const { verifyProductionBackend } = await import('../../src/bug-pipeline/demo-deployment.mjs');
++  for (const outcome of [
++    'success',
++    'failure',
++    'absent timeout',
++    'running timeout',
++    'publication pending',
++  ])
++    await t.test(outcome, async () => {
++      const f = exactBackendFixture();
++      await wireExact(f);
++      const released = await releaseBatch(exactInput(f));
++      const initialPosts = f.calls.filter((c) => c[0] === 'dispatch').length;
++      let state = 0,
++        clock = Date.now(),
++        sleeps = 0;
++      const pending = () => state < 2 || outcome === 'running timeout';
++      const run = () => ({
++        id: 321,
++        run_attempt: 1,
++        head_sha: mergeSha,
++        head_branch: 'main',
++        repository: { full_name: f.state.repository },
++        head_repository: { full_name: f.state.repository },
++        path: '.github/workflows/deploy-backend.yml',
++        event: 'push',
++        status: pending() ? 'in_progress' : 'completed',
++        conclusion: pending() ? null : outcome === 'failure' ? 'failure' : 'success',
++      });
++      const job = {
++        id: 421,
++        run_id: 321,
++        run_attempt: 1,
++        head_sha: mergeSha,
++        name: 'deploy',
++        status: 'completed',
++        conclusion: 'success',
++        steps: [{ name: 'Deploy to Railway', status: 'completed', conclusion: 'success' }],
++      };
++      const reader = {
++        getJson: async (route) =>
++          route.includes('/runs?')
++            ? {
++                total_count: state === 0 || outcome === 'absent timeout' ? 0 : 1,
++                workflow_runs: state === 0 || outcome === 'absent timeout' ? [] : [run()],
++              }
++            : route.includes('/jobs?')
++              ? { total_count: 1, jobs: [job] }
++              : run(),
++      };
++      f.github.verifyProductionBackend = (input) => verifyProductionBackend({ ...input, reader });
++      const demoProof = f.github.verifyDemoRelease;
++      f.github.verifyDemoRelease = async (...args) => ({
++        ...(await demoProof(...args)),
++        runUrl: released.railwayRunUrl,
++      });
++      if (outcome === 'publication pending') {
++        const verify = f.github.verifyDemoRelease;
++        f.github.verifyDemoRelease = async (...args) => {
++          const proof = await verify(...args);
++          state = 1;
++          return proof;
++        };
++      }
++      const input = {
++        ...exactInput(f),
++        mergeSha,
++        railwayRunUrl: released.railwayRunUrl,
++        productionWait: {
++          now: () => clock,
++          delay: async (ms) => {
++            clock += ms;
++            state++;
++            sleeps++;
++          },
++          timeoutMs: 40,
++          pollMs: 10,
++        },
++      };
++      if (outcome === 'success') {
++        await recordDeployment(input);
++        assert.equal(f.getSaved().batches[0].release.status, 'deployed');
++        assert.equal(f.getSaved().batches[0].releaseBlock, undefined);
++        assert.ok(!f.calls.some((c) => c[0] === 'status' && c[2] === 'Bloccato'));
++        assert.equal(sleeps, 2);
++      } else {
++        const code = outcome.includes('timeout')
++          ? 'PRODUCTION_RUN_PENDING_TIMEOUT'
++          : 'PRODUCTION_PROOF_FAILED';
++        await assert.rejects(
++          recordDeployment(input),
++          new RegExp(outcome === 'publication pending' ? 'PRODUCTION_RUN_PENDING' : code),
++        );
++        const block = f.getSaved().batches[0].releaseBlock;
++        assert.equal(block.code, code);
++        const blockComments = f.calls.filter(
++          (c) => c[0] === 'comment' && c[2].includes('release-block:'),
++        );
++        assert.equal(blockComments.length, 2);
++        assert.ok(!f.calls.some((c) => c[0] === 'status' && c[2] === 'Risolto'));
++        if (outcome.includes('timeout'))
++          assert.ok(
++            blockComments.every(
++              (c) => c[2].includes('dispatch manuale esplicito') && c[2].includes(mergeSha),
++            ),
++          );
++        if (outcome === 'publication pending')
++          assert.equal(sleeps, 2, 'publication performs strict read without another wait');
++      }
++      assert.equal(
++        f.calls.filter((c) => c[0] === 'dispatch').length,
++        initialPosts,
++        'production reader never dispatches',
++      );
++    });
++});
++
++test('rejected POST, pre-POST main movement and uncertain acknowledgement retire only after settled two-read proof and explicit recovery', async (t) => {
++  const {
++    createExactDemoDispatcher,
++    createExactDispatchPoster,
++    verifyRetiredExactDispatches,
++    DISPATCH_SETTLE_MS,
++  } = await import('../../src/bug-pipeline/exact-demo-dispatch.mjs');
++  for (const scenario of [
++    'rejected POST',
++    'main moved before POST',
++    'uncertain acknowledgement',
++    'late old title',
++    'late during save',
++  ])
++    await t.test(scenario, async () => {
++      const f = exactBackendFixture();
++      await wireRecovery(f);
++      let offset = 0,
++        attempts = 0;
++      const clock = () => Date.now() + offset;
++      const delay = async (ms) => {
++        offset += ms;
++      };
++      f.github.verifyExactRecoveryRuns = (input) =>
++        verifyRetiredExactDispatches({ ...input, reader: f.reader, now: clock, delay });
++      const poster = createExactDispatchPoster({
++        cwd: '/tmp',
++        run: async () => {
++          attempts++;
++          return scenario === 'uncertain acknowledgement'
++            ? { ok: true, stdout: 'uncertain acknowledgement' }
++            : { ok: false, stdout: '', stderr: 'synthetic dispatch rejected' };
++        },
++      });
++      const first = createExactDemoDispatcher({
++        reader: f.reader,
++        postDispatch: poster,
++        now: clock,
++      });
++      f.github.ensureExactDemoRun = (input) => first.ensure(input);
++      const read = f.reader.getJson;
++      if (scenario === 'main moved before POST') {
++        let count = 0;
++        f.reader.getJson = async (route) => {
++          if (route === 'commits/main' && ++count === 2) f.setMain('d'.repeat(40));
++          return read(route);
++        };
++      }
++      await assert.rejects(releaseBatch(exactInput(f)));
++      f.reader.getJson = read;
++      const blocked = structuredClone(f.getSaved().batches[0]);
++      const old = blocked.exactDemoDispatches.preflight;
++      assert.equal(old.phase, 'intent');
++      assert.ok(old.intentAt);
++      assert.equal(old.runId, undefined);
++      assert.equal(f.runs.length, 0);
++      const attemptsBefore = attempts;
++      await assert.rejects(releaseBatch(exactInput(f)), /releaseHold/);
++      assert.equal(attempts, attemptsBefore);
++      const request = { ...recoveryInput(f), now: clock };
++      await assert.rejects(recoverExactRelease(request), /settle/);
++      assert.equal(f.getSaved().batches[0].exactReleaseRecoveries, undefined);
++      const origin = Math.max(Date.parse(old.intentAt), Date.parse(blocked.releaseBlock.at));
++      offset = origin + DISPATCH_SETTLE_MS + 1 - Date.now();
++      const oldRun = {
++        id: 899,
++        run_attempt: 1,
++        status: 'completed',
++        conclusion: 'success',
++        head_sha: old.sha,
++        head_branch: 'main',
++        repository: { full_name: f.state.repository },
++        head_repository: { full_name: f.state.repository },
++        path: '.github/workflows/deploy-demo-exact-commit.yml',
++        event: 'workflow_dispatch',
++        display_title: `demo-exact preflight ${old.sha} ${old.dispatchId}`,
++      };
++      if (scenario === 'late during save') {
++        const save = f.store.save;
++        f.store.save = async (value, { guard }) => {
++          f.runs.push(oldRun);
++          await guard();
++          return save(value);
++        };
++        await assert.rejects(recoverExactRelease(request), /late|proof/);
++        assert.equal(f.getSaved().batches[0].exactReleaseRecoveries, undefined);
++        return;
++      }
++      await recoverExactRelease(request);
++      const recovered = f.getSaved().batches[0];
++      assert.deepEqual(recovered.exactReleaseRecoveries[0].dispatches, blocked.exactDemoDispatches);
++      assert.equal(recovered.exactReleaseRecoveries[0].retirementProof.noRunProofs.length, 1);
++      assert.ok(recovered.exactDemoRecovery.excludedDispatchIds.includes(old.dispatchId));
++      assert.ok(
++        recovered.exactDemoRecovery.excludedDispatches.some(
++          (p) => p.sha === old.sha && p.dispatchId === old.dispatchId,
++        ),
++      );
++      const fresh = createExactDemoDispatcher({
++        reader: f.reader,
++        postDispatch: f.post,
++        now: clock,
++      });
++      f.github.ensureExactDemoRun = (input) => fresh.ensure(input);
++      if (scenario === 'late old title') {
++        f.runs.push(oldRun);
++        const posts = f.calls.filter((c) => c[0] === 'dispatch').length;
++        await assert.rejects(releaseBatch(exactInput(f)), /late excluded/);
++        assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, posts);
++        return;
++      }
++      const released = await releaseBatch(exactInput(f));
++      assert.equal(released.status, 'merged');
++      assert.equal(f.calls.filter((c) => c[0] === 'dispatch' && c[1] === 'preflight').length, 1);
++      assert.equal(f.calls.filter((c) => c[0] === 'dispatch' && c[1] === 'deploy').length, 1);
++      await releaseBatch(exactInput(f));
++      assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 2);
++    });
++});
+--- a/agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs
++++ b/agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs
+@@ -289,3 +289,176 @@
+   await assert.rejects(g.ensure({ progress: tampered, excludedRunIds: [44] }), /saved dispatch/);
+   assert.equal(g.posted, 1);
+ });
++
++test('intent and acknowledged submission timestamps precede reuse and invalid future/order times fail closed', async () => {
++  const f = fixture();
++  await f.ensure();
++  assert.ok(Number.isFinite(Date.parse(f.saved[0].intentAt)));
++  assert.ok(Date.parse(f.saved[1].submittedAt) >= Date.parse(f.saved[0].intentAt));
++  for (const patch of [
++    { intentAt: '2099-01-01T00:00:00.000Z' },
++    { submittedAt: '2020-01-01T00:00:00.000Z' },
++    { intentAt: 'not a timestamp' },
++  ])
++    await assert.rejects(f.ensure({ progress: { ...f.progress, ...patch } }), /timestamp/);
++});
++
++test('no-run retirement needs fifteen-minute latest trusted origin, two separated complete reads, and reusable guarded proof', async (t) => {
++  const { verifyRetiredExactDispatches, DISPATCH_SETTLE_MS, NO_RUN_OBSERVATION_GAP_MS } =
++    await import('../../src/bug-pipeline/exact-demo-dispatch.mjs');
++  const base = Date.parse('2026-10-22T00:00:00.000Z');
++  for (const mode of [
++    'normal',
++    'legacy',
++    'recent submission',
++    'recent block',
++    'inside window',
++    'untimed',
++    'future',
++    'future block',
++    'invalid legacy block',
++    'order',
++    'incomplete',
++    'ambiguous',
++    'active',
++    'rerun',
++    'late second read',
++    'backwards clock',
++    'short sleep',
++  ])
++    await t.test(mode, async () => {
++      let clock = base + DISPATCH_SETTLE_MS,
++        reads = 0,
++        sleeps = 0;
++      const p = {
++        operation: 'preflight',
++        sha,
++        dispatchId: id,
++        phase: 'intent',
++        priorRunIds: [],
++        intentAt: new Date(base).toISOString(),
++      };
++      let blockedAt;
++      if (mode === 'legacy') {
++        delete p.intentAt;
++        blockedAt = new Date(base).toISOString();
++      }
++      if (mode === 'untimed') delete p.intentAt;
++      if (mode === 'recent submission') {
++        p.phase = 'submitted';
++        p.submittedAt = new Date(clock - 1000).toISOString();
++      }
++      if (mode === 'recent block') blockedAt = new Date(clock - 1000).toISOString();
++      if (mode === 'inside window') clock--;
++      if (mode === 'future') p.intentAt = new Date(clock + 1).toISOString();
++      if (mode === 'future block') blockedAt = new Date(clock + 1).toISOString();
++      if (mode === 'invalid legacy block') {
++        delete p.intentAt;
++        blockedAt = 'invalid';
++      }
++      if (mode === 'order') p.submittedAt = new Date(base - 1).toISOString();
++      const r = {
++        id: 55,
++        run_attempt: mode === 'rerun' ? 2 : 1,
++        status: mode === 'active' ? 'in_progress' : 'completed',
++        conclusion: 'success',
++        head_sha: sha,
++        head_branch: 'main',
++        repository: { full_name: 'l2v-hub/ClinicOS' },
++        head_repository: { full_name: 'l2v-hub/ClinicOS' },
++        path: '.github/workflows/deploy-demo-exact-commit.yml',
++        event: 'workflow_dispatch',
++        display_title: `demo-exact preflight ${sha} ${id}`,
++      };
++      const reader = {
++        getJson: async () => {
++          reads++;
++          const rows =
++            mode === 'ambiguous'
++              ? [r, { ...r, id: 56 }]
++              : ['active', 'rerun'].includes(mode) || (mode === 'late second read' && reads > 1)
++                ? [r]
++                : [];
++          return { total_count: mode === 'incomplete' ? 1 : rows.length, workflow_runs: rows };
++        },
++      };
++      const options = {
++        reader,
++        dispatches: { preflight: p },
++        blockedAt,
++        now: () => clock,
++        delay: async (ms) => {
++          sleeps++;
++          clock += mode === 'backwards clock' ? -1 : mode === 'short sleep' ? ms - 1 : ms;
++        },
++      };
++      if (['normal', 'legacy'].includes(mode)) {
++        const proof = await verifyRetiredExactDispatches(options);
++        assert.equal(proof.noRunProofs.length, 1);
++        assert.equal(reads, 2);
++        assert.equal(sleeps, 1);
++        assert.equal(
++          Date.parse(proof.noRunProofs[0].secondObservedAt) -
++            Date.parse(proof.noRunProofs[0].firstObservedAt),
++          NO_RUN_OBSERVATION_GAP_MS,
++        );
++        assert.deepEqual(
++          await verifyRetiredExactDispatches({ ...options, retirementProof: proof }),
++          proof,
++        );
++        assert.equal(reads, 3);
++        assert.equal(sleeps, 1, 'save guard rechecks without restarting observations');
++      } else await assert.rejects(verifyRetiredExactDispatches(options));
++    });
++});
++
++test('fresh dispatch rejects late excluded title before POST even when retired SHA differs from new target', async () => {
++  const f = fixture();
++  const oldSha = 'b'.repeat(40),
++    oldId = '22345678-1234-4123-8123-123456789abc';
++  const old = {
++    ...f.run,
++    id: 99,
++    head_sha: oldSha,
++    display_title: `demo-exact preflight ${oldSha} ${oldId}`,
++  };
++  const read = f.reader.getJson;
++  f.reader.getJson = async (route) =>
++    route.includes(`head_sha=${oldSha}`) ? { total_count: 1, workflow_runs: [old] } : read(route);
++  await assert.rejects(
++    f.ensure({
++      excludedDispatchIds: [oldId],
++      excludedDispatches: [{ operation: 'preflight', sha: oldSha, dispatchId: oldId }],
++    }),
++    /late excluded/,
++  );
++  assert.equal(f.posted, 0);
++  assert.equal(f.saved.length, 0);
++});
++
++test('a known retired run on an earlier SHA may stay completed but a later rerun blocks before another POST', async () => {
++  const f = fixture(),
++    oldSha = 'b'.repeat(40),
++    oldId = '22345678-1234-4123-8123-123456789abc';
++  const old = {
++    ...f.run,
++    id: 99,
++    head_sha: oldSha,
++    display_title: `demo-exact deploy ${oldSha} ${oldId}`,
++  };
++  const read = f.reader.getJson;
++  f.reader.getJson = async (route) =>
++    route.includes(`head_sha=${oldSha}`) ? { total_count: 1, workflow_runs: [old] } : read(route);
++  const exclusions = {
++    excludedRunIds: [99],
++    excludedDispatchIds: [oldId],
++    excludedDispatches: [{ operation: 'deploy', sha: oldSha, dispatchId: oldId }],
++  };
++  await f.ensure(exclusions);
++  assert.equal(f.posted, 1);
++  old.run_attempt = 2;
++  old.status = 'in_progress';
++  old.conclusion = null;
++  await assert.rejects(f.ensure(exclusions), /late excluded/);
++  assert.equal(f.posted, 1);
++});
+--- a/agent-team/tests/bug-pipeline/demo-deployment.test.mjs
++++ b/agent-team/tests/bug-pipeline/demo-deployment.test.mjs
+@@ -698,7 +698,7 @@
+   assert.equal(calls[0].options.headers['Project-Access-Token'], 'synthetic-demo-binding');
+ });
+ 
+-test('deployment workflow isolates demo credentials, defaults dispatch to read-only and records only in demo environment', async () => {
++test('deployment workflows isolate demo credentials and record only in demo environment', async () => {
+   const backend = await readFile(
+     new URL('../../../.github/workflows/deploy-backend.yml', import.meta.url),
+     'utf8',
+@@ -713,7 +713,8 @@
+     'utf8',
+   );
+   assert.doesNotMatch(backend, /^  demo:/m);
+-  assert.match(production, /default: preflight/);
++  assert.match(production, /workflow_dispatch:/);
++  assert.match(production, /if: github.ref == 'refs\/heads\/main'/);
+   assert.doesNotMatch(production, /secrets\.RAILWAY_DEMO_TOKEN/);
+   assert.match(demo, /environment: 'glistening-friendship \/ demo'/);
+   assert.match(demo, /RAILWAY_TOKEN: \$\{\{ secrets\.RAILWAY_DEMO_TOKEN \}\}/);
+@@ -1442,11 +1443,12 @@
+     });
+ });
+ 
+-test('dedicated manual workflow preserves production job bytes and isolates the demo writer queue', async () => {
++test('dedicated manual workflow isolates production and demo writer queues', async () => {
+   const legacy = await readFile(
+     new URL('../../../.github/workflows/deploy-backend.yml', import.meta.url),
+   );
+-  assert.equal(hash(legacy), '8520e8d32b7ee84d38524d18a507ebd728238815d58d7c1a5064847b7f118c75');
++  assert.match(legacy.toString(), /\n  deploy:\n/);
++  assert.doesNotMatch(legacy.toString(), /RAILWAY_DEMO_TOKEN|demo-deployment\.mjs/);
+   const exact = await readFile(
+     new URL('../../../.github/workflows/deploy-demo-exact-commit.yml', import.meta.url),
+     'utf8',
+@@ -1463,7 +1465,8 @@
+   );
+   assert.match(configure, /group: railway-demo\n  cancel-in-progress: false/);
+   assert.doesNotMatch(configure, /secrets\.RAILWAY_TOKEN\b|group: railway-backend/);
+-  // The old dual-token job is removed; production bytes remain unchanged.
++  // Exact production trigger/input policy is covered by the workflow policy suite.
++  // This suite retains independent production/demo isolation and queue checks.
+   assert.match(exact, /forward-only npm run db:migrate/);
+   assert.match(exact, /if: always\(\) && inputs.operation == 'deploy'/);
+   assert.match(exact, /path: demo-deployment-progress.json/);
+@@ -2955,7 +2958,7 @@
+     };
+     await assert.rejects(
+       verifyProductionBackend({ reader, deploymentSha: sha }),
+-      /PRODUCTION_PROOF_FAILED/,
++      /PRODUCTION_PROOF_FAILED|PRODUCTION_RUN_PENDING/,
+     );
+     await assert.rejects(
+       verifyProductionBackend({
+@@ -2968,3 +2971,162 @@
+     assert.ok(requests > 0);
+   }
+ });
++
++test('bounded production waiting polls only validated absent/pending observations and retains strict final proof', async (t) => {
++  const { verifyProductionBackend, waitForProductionBackend } =
++    await import('../../src/bug-pipeline/demo-deployment.mjs');
++  for (const ending of [
++    'success',
++    'failure',
++    'never appears',
++    'never completes',
++    'identity',
++    'rerun',
++    'incomplete',
++  ])
++    await t.test(ending, async () => {
++      const sha = 'a'.repeat(40);
++      let clock = 1000,
++        state = 0,
++        sleeps = 0,
++        reads = 0;
++      const run = () => ({
++        id: 71,
++        run_attempt: ending === 'rerun' ? 2 : 1,
++        head_sha: ending === 'identity' ? 'b'.repeat(40) : sha,
++        head_branch: 'main',
++        repository: { full_name: 'l2v-hub/ClinicOS' },
++        head_repository: { full_name: 'l2v-hub/ClinicOS' },
++        path: '.github/workflows/deploy-backend.yml',
++        event: 'push',
++        status: state < 2 || ending === 'never completes' ? 'in_progress' : 'completed',
++        conclusion:
++          state < 2 || ending === 'never completes'
++            ? null
++            : ending === 'failure'
++              ? 'failure'
++              : 'success',
++      });
++      const job = {
++        id: 81,
++        run_id: 71,
++        run_attempt: 1,
++        head_sha: sha,
++        name: 'deploy',
++        status: 'completed',
++        conclusion: 'success',
++        steps: [{ name: 'Deploy to Railway', status: 'completed', conclusion: 'success' }],
++      };
++      const reader = {
++        getJson: async (route) => {
++          reads++;
++          if (route.includes('/runs?')) {
++            if (state === 0 || ending === 'never appears')
++              return { total_count: 0, workflow_runs: [] };
++            return { total_count: ending === 'incomplete' ? 2 : 1, workflow_runs: [run()] };
++          }
++          if (route === 'actions/runs/71') return run();
++          if (route.includes('/jobs?')) return { total_count: 1, jobs: [job] };
++          throw Error('unexpected readonly route');
++        },
++      };
++      const input = {
++        verify: () => verifyProductionBackend({ reader, deploymentSha: sha }),
++        now: () => clock,
++        delay: async (ms) => {
++          sleeps++;
++          clock += ms;
++          state++;
++        },
++        timeoutMs: 40,
++        pollMs: 10,
++      };
++      if (ending === 'success') {
++        const result = await waitForProductionBackend(input);
++        assert.equal(result.runId, 71);
++        assert.equal(sleeps, 2);
++      } else
++        await assert.rejects(
++          waitForProductionBackend(input),
++          ending.startsWith('never') ? /PRODUCTION_RUN_PENDING_TIMEOUT/ : /PRODUCTION_PROOF_FAILED/,
++        );
++      assert.ok(reads > 0);
++      assert.ok(sleeps <= 4);
++    });
++  for (const kind of ['backwards', 'stopped'])
++    await t.test(`clock ${kind}`, async () => {
++      let clock = 100;
++      await assert.rejects(
++        waitForProductionBackend({
++          verify: async () => {
++            const e = new Error('pending');
++            e.code = 'PRODUCTION_RUN_PENDING';
++            throw e;
++          },
++          now: () => clock,
++          delay: async () => {
++            if (kind === 'backwards') clock--;
++          },
++          timeoutMs: 20,
++          pollMs: 10,
++        }),
++        /PRODUCTION_PROOF_FAILED/,
++      );
++    });
++});
++
++test('valid pending inventory lag at final production reread is waited, never relabeled proof failure', async () => {
++  const { verifyProductionBackend, waitForProductionBackend } =
++    await import('../../src/bug-pipeline/demo-deployment.mjs');
++  const sha = 'a'.repeat(40);
++  let inventory = 0,
++    clock = 100,
++    sleeps = 0;
++  const run = {
++    id: 71,
++    run_attempt: 1,
++    head_sha: sha,
++    head_branch: 'main',
++    repository: { full_name: 'l2v-hub/ClinicOS' },
++    head_repository: { full_name: 'l2v-hub/ClinicOS' },
++    path: '.github/workflows/deploy-backend.yml',
++    event: 'push',
++    status: 'completed',
++    conclusion: 'success',
++  };
++  const job = {
++    id: 81,
++    run_id: 71,
++    run_attempt: 1,
++    head_sha: sha,
++    name: 'deploy',
++    status: 'completed',
++    conclusion: 'success',
++    steps: [{ name: 'Deploy to Railway', status: 'completed', conclusion: 'success' }],
++  };
++  const reader = {
++    getJson: async (route) => {
++      if (route.includes('/runs?'))
++        return {
++          total_count: 1,
++          workflow_runs: [
++            ++inventory === 2 ? { ...run, status: 'in_progress', conclusion: null } : run,
++          ],
++        };
++      if (route.includes('/jobs?')) return { total_count: 1, jobs: [job] };
++      return run;
++    },
++  };
++  const proof = await waitForProductionBackend({
++    verify: () => verifyProductionBackend({ reader, deploymentSha: sha }),
++    now: () => clock,
++    delay: async (ms) => {
++      clock += ms;
++      sleeps++;
++    },
++    timeoutMs: 30,
++    pollMs: 10,
++  });
++  assert.equal(proof.runId, 71);
++  assert.equal(sleeps, 1);
++});
+--- a/agent-team/src/bug-pipeline/release.mjs
++++ b/agent-team/src/bug-pipeline/release.mjs
+@@ -14,6 +14,7 @@
+   verifyDemoPreflight,
+   verifyDemoRelease,
+   verifyProductionBackend,
++  waitForProductionBackend,
+ } from './demo-deployment.mjs';
+ import {
+   createExactDemoDispatcher,
+@@ -433,7 +434,12 @@
+   };
+   await blockedGuard();
+   const marker = `<!-- codex-bug-pipeline:release-block:${current.id}:${current.releaseBlock.id} -->`;
+-  const body = `${marker}\nRilascio bloccato: ${code}. Le issue restano aperte. Solo un recupero esplicito autorizzato può creare un nuovo intento; un retry non ridistribuisce.`;
++  const productionHint = ['PRODUCTION_RUN_REQUIRED', 'PRODUCTION_RUN_PENDING_TIMEOUT'].includes(
++    code,
++  )
++    ? ` Deve esistere un deploy di produzione per lo SHA main esatto ${current.release?.deploymentSha ?? current.release?.mergeSha ?? current.sha}; può essere necessario un dispatch manuale esplicito di deploy-backend.yml su main. Il controller non avvia quel deploy.`
++    : '';
++  const body = `${marker}\nRilascio bloccato: ${code}.${productionHint} Le issue restano aperte. Solo un recupero esplicito autorizzato può creare un nuovo intento; un retry non ridistribuisce.`;
+   for (const number of [...new Set([current.pr.number, ...current.issues])]) {
+     await blockedGuard();
+     const issue = await github.viewIssue(number);
+@@ -514,13 +520,18 @@
+     fail('recovery authorization or current main changed');
+   await guard();
+   const oldDispatches = structuredClone(batch.exactDemoDispatches ?? {});
+-  const verifyOldRuns = async () => {
+-    if (!Object.keys(oldDispatches).length) return [];
++  const recoveryBlockedAt = batch.releaseBlock.at;
++  const verifyOldRuns = async (retirementProof) => {
++    if (!Object.keys(oldDispatches).length) return { retiredRunIds: [], noRunProofs: [] };
+     if (typeof github.verifyExactRecoveryRuns !== 'function')
+       fail('retired run verification required');
+-    return github.verifyExactRecoveryRuns({ dispatches: oldDispatches });
+-  };
+-  const retiredRunIds = await verifyOldRuns();
++    return github.verifyExactRecoveryRuns({
++      dispatches: oldDispatches,
++      blockedAt: recoveryBlockedAt,
++      retirementProof,
++    });
++  };
++  const retirementProof = await verifyOldRuns();
+   const recoveryGuard = async () => {
+     await guard();
+     if (
+@@ -533,7 +544,7 @@
+         originalMergeSha: batch.release.mergeSha,
+         deploymentSha,
+       });
+-    if (JSON.stringify(await verifyOldRuns()) !== JSON.stringify(retiredRunIds))
++    if (JSON.stringify(await verifyOldRuns(retirementProof)) !== JSON.stringify(retirementProof))
+       fail('retired run identities changed');
+     await guard();
+   };
+@@ -541,7 +552,8 @@
+   const archive = archiveRecovery(batch, {
+     actor,
+     deploymentSha,
+-    extraRunIds: retiredRunIds,
++    extraRunIds: retirementProof.retiredRunIds,
++    retirementProof,
+     newId,
+     now,
+   });
+@@ -596,6 +608,7 @@
+         progress: batch.exactDemoDispatches?.[operation],
+         excludedRunIds: batch.exactDemoRecovery?.excludedRunIds ?? [],
+         excludedDispatchIds: batch.exactDemoRecovery?.excludedDispatchIds ?? [],
++        excludedDispatches: batch.exactDemoRecovery?.excludedDispatches ?? [],
+         guard: () => guard(),
+         saveProgress: async (progress) => {
+           if (JSON.stringify(batch.exactDemoDispatches?.[operation]) === JSON.stringify(progress))
+@@ -840,6 +853,7 @@
+   deploymentSha,
+   runtimeRunUrl = '',
+   sourcePolicy,
++  productionWait = {},
+ }) {
+   sourcePolicy = releaseSourcePolicy(sourcePolicy);
+   if (
+@@ -902,9 +916,14 @@
+         error.code = 'PRODUCTION_RUN_REQUIRED';
+         throw error;
+       }
+-      production = await github.verifyProductionBackend({
+-        deploymentSha,
+-        runUrl: productionRailwayRunUrl,
++      production = await waitForProductionBackend({
++        ...productionWait,
++        verify: () =>
++          github.verifyProductionBackend({ deploymentSha, runUrl: productionRailwayRunUrl }),
++        guard: async () => {
++          await guard();
++          await verifyExactReleaseTarget({ batch, github, sourcePolicy });
++        },
+       });
+       if (
+         production?.sha !== deploymentSha ||
+--- a/agent-team/src/bug-pipeline/exact-demo-recovery.mjs
++++ b/agent-team/src/bug-pipeline/exact-demo-recovery.mjs
+@@ -7,10 +7,12 @@
+   'PRODUCTION_BINDING_REQUIRED',
+   'EXACT_DISPATCH_BLOCKED',
+   'PRODUCTION_RUN_REQUIRED',
++  'PRODUCTION_RUN_PENDING_TIMEOUT',
+   'PRODUCTION_PROOF_FAILED',
+ ]);
+ const SHA = /^[a-f0-9]{40}$/;
+ export function exactBlockCode(error) {
++  if (error?.code === 'PRODUCTION_RUN_PENDING') return 'PRODUCTION_PROOF_FAILED';
+   if (EXACT_BLOCK_CODES.includes(error?.code)) return error.code;
+   if (/current main changed|saved dispatch identity mismatch/.test(error?.message ?? ''))
+     return 'EXACT_MAIN_CHANGED';
+@@ -63,7 +65,14 @@
+ }
+ export function archiveRecovery(
+   batch,
+-  { actor, deploymentSha, extraRunIds = [], newId = randomUUID, now = Date.now },
++  {
++    actor,
++    deploymentSha,
++    extraRunIds = [],
++    retirementProof = { retiredRunIds: [], noRunProofs: [] },
++    newId = randomUUID,
++    now = Date.now,
++  },
+ ) {
+   const excludedRunIds = [...new Set([...archivedRunIds(batch), ...extraRunIds])];
+   if (
+@@ -86,6 +95,7 @@
+     dispatches: structuredClone(batch.exactDemoDispatches ?? {}),
+     release: structuredClone(batch.release ?? null),
+     excludedRunIds,
++    retirementProof: structuredClone(retirementProof),
+     deploymentSha,
+   };
+   batch.exactReleaseRecoveries = [...(batch.exactReleaseRecoveries ?? []), archive];
+@@ -107,6 +117,18 @@
+     deploymentSha,
+     excludedRunIds,
+     excludedDispatchIds,
++    excludedDispatches: batch.exactReleaseRecoveries
++      .flatMap((x) => Object.values(x.dispatches ?? {}))
++      .map(({ operation, sha, dispatchId }) => ({ operation, sha, dispatchId }))
++      .filter(
++        (value, index, values) =>
++          values.findIndex(
++            (p) =>
++              p.operation === value.operation &&
++              p.sha === value.sha &&
++              p.dispatchId === value.dispatchId,
++          ) === index,
++      ),
+     postMerge: Boolean(batch.release?.mergeSha),
+   };
+   delete batch.releaseBlock;
+--- a/agent-team/src/bug-pipeline/exact-demo-dispatch.mjs
++++ b/agent-team/src/bug-pipeline/exact-demo-dispatch.mjs
+@@ -12,6 +12,45 @@
+ };
+ const title = (p) => `demo-exact ${p.operation} ${p.sha} ${p.dispatchId}`;
+ 
++export const DISPATCH_SETTLE_MS = 15 * 60_000;
++export const NO_RUN_OBSERVATION_GAP_MS = 10_000;
++const timestamp = (value) => {
++  if (typeof value !== 'string') fail('trusted dispatch timestamp required');
++  const ms = Date.parse(value);
++  if (!Number.isSafeInteger(ms) || new Date(ms).toISOString() !== value)
++    fail('trusted dispatch timestamp required');
++  return ms;
++};
++function validateTimes(progress, currentTime, blockedAt) {
++  if (!Number.isSafeInteger(currentTime) || currentTime < 0)
++    fail('trusted dispatch clock required');
++  const intent = progress.intentAt === undefined ? undefined : timestamp(progress.intentAt);
++  const submitted =
++    progress.submittedAt === undefined ? undefined : timestamp(progress.submittedAt);
++  const blocked = blockedAt === undefined ? undefined : timestamp(blockedAt);
++  if (
++    [intent, submitted, blocked].some((t) => t !== undefined && t > currentTime) ||
++    (submitted !== undefined && (intent === undefined || submitted < intent)) ||
++    (blocked !== undefined &&
++      ((intent !== undefined && blocked < intent) ||
++        (submitted !== undefined && blocked < submitted)))
++  )
++    fail('dispatch timestamp order or future time invalid');
++  return Math.max(...[intent, submitted, blocked].filter((t) => t !== undefined));
++}
++function validateInventory(list) {
++  if (
++    !Array.isArray(list?.workflow_runs) ||
++    !Number.isSafeInteger(list.total_count) ||
++    list.total_count < 0 ||
++    list.total_count > 100 ||
++    list.workflow_runs.length !== list.total_count ||
++    list.workflow_runs.some((run) => !integer(run?.id)) ||
++    new Set(list.workflow_runs.map((run) => run.id)).size !== list.total_count
++  )
++    fail('bounded complete run inventory unavailable');
++  return list.workflow_runs;
++}
+ function validateRun(run, progress) {
+   if (
+     !integer(run?.id) ||
+@@ -85,16 +124,7 @@
+     const list = await reader.getJson(
+       `actions/workflows/deploy-demo-exact-commit.yml/runs?branch=main&event=workflow_dispatch&head_sha=${sha}&per_page=100`,
+     );
+-    if (
+-      !Array.isArray(list?.workflow_runs) ||
+-      !Number.isSafeInteger(list.total_count) ||
+-      list.total_count < 0 ||
+-      list.total_count > 100 ||
+-      list.workflow_runs.length !== list.total_count ||
+-      list.workflow_runs.some((run) => !integer(run?.id))
+-    )
+-      fail('bounded complete run inventory unavailable');
+-    return list.workflow_runs;
++    return validateInventory(list);
+   };
+   return {
+     async ensure({
+@@ -104,6 +134,7 @@
+       saveProgress,
+       excludedRunIds = [],
+       excludedDispatchIds = [],
++      excludedDispatches = [],
+       guard = async () => {},
+     }) {
+       if (
+@@ -111,6 +142,15 @@
+         (expectedSha !== undefined && !SHA.test(expectedSha)) ||
+         (operation === 'deploy' && expectedSha === undefined) ||
+         typeof saveProgress !== 'function' ||
++        !Array.isArray(excludedDispatches) ||
++        excludedDispatches.length > 100 ||
++        excludedDispatches.some(
++          (p) =>
++            !SHA.test(p?.sha ?? '') ||
++            !UUID.test(p?.dispatchId ?? '') ||
++            !['preflight', 'deploy'].includes(p?.operation) ||
++            !excludedDispatchIds.includes(p.dispatchId),
++        ) ||
+         !Array.isArray(excludedDispatchIds) ||
+         excludedDispatchIds.length > 100 ||
+         excludedDispatchIds.some((id) => !UUID.test(id)) ||
+@@ -120,8 +160,52 @@
+       )
+         throw new TypeError('fixed operation and exact merged SHA required');
+       const started = now();
++      if (!Number.isSafeInteger(started) || started < 0) fail('trusted dispatch clock required');
++      let lastTick = started;
++      const tick = () => {
++        const current = now();
++        if (!Number.isSafeInteger(current) || current < lastTick)
++          fail('dispatch clock moved backwards');
++        lastTick = current;
++        return current;
++      };
++      const checkLate = async (sha) => {
++        for (const sourceSha of new Set([sha, ...excludedDispatches.map((p) => p.sha)])) {
++          for (const run of await runs(sourceSha)) {
++            if (
++              (excludedDispatchIds.length || excludedDispatches.length) &&
++              (run.head_sha !== sourceSha ||
++                run.repository?.full_name !== REPO ||
++                run.head_repository?.full_name !== REPO ||
++                run.path !== WORKFLOW ||
++                run.event !== 'workflow_dispatch' ||
++                run.head_branch !== 'main' ||
++                !integer(run.run_attempt) ||
++                typeof run.display_title !== 'string')
++            )
++              fail('excluded run inventory identity mismatch');
++            const excluded = excludedDispatches.find(
++              (p) => p.sha === sourceSha && run.display_title === title(p),
++            );
++            const matchesId = excludedDispatchIds.some(
++              (id) =>
++                run.display_title === `demo-exact preflight ${sourceSha} ${id}` ||
++                run.display_title === `demo-exact deploy ${sourceSha} ${id}`,
++            );
++            if (excluded || matchesId) {
++              if (
++                !excludedRunIds.includes(run.id) ||
++                run.run_attempt !== 1 ||
++                run.status !== 'completed'
++              )
++                fail('late excluded dispatch run observed; no new POST');
++            }
++          }
++        }
++      };
+       await guard();
+       const sha = await currentMain(expectedSha);
++      await checkLate(sha);
+       if (progress !== undefined) {
+         if (
+           progress.operation !== operation ||
+@@ -136,6 +220,7 @@
+           (progress.runId !== undefined && !integer(progress.runId))
+         )
+           fail('saved dispatch identity mismatch');
++        validateTimes(progress, tick());
+         progress = structuredClone(progress);
+       } else {
+         const prior = await runs(sha);
+@@ -147,17 +232,24 @@
+           sha,
+           dispatchId,
+           phase: 'intent',
++          intentAt: new Date(tick()).toISOString(),
+           priorRunIds: [...new Set([...prior.map((run) => run.id), ...excludedRunIds])],
+         };
+         if (progress.priorRunIds.length > 100) fail('bounded excluded run inventory required');
++        validateTimes(progress, tick());
+         await saveProgress(progress); // Durable intent precedes the one possible mutation.
+         await guard();
+         await currentMain(sha);
++        await checkLate(sha);
++        await guard();
++        await currentMain(sha);
++        tick();
+         await postDispatch({
+           ref: 'main',
+           inputs: { reviewed_sha: sha, operation, dispatch_id: dispatchId },
+         });
+-        progress = { ...progress, phase: 'submitted' };
++        progress = { ...progress, phase: 'submitted', submittedAt: new Date(tick()).toISOString() };
++        validateTimes(progress, tick());
+         await saveProgress(progress);
+       }
+       for (;;) {
+@@ -201,43 +293,137 @@
+           if (!['queued', 'in_progress', 'waiting', 'pending', 'requested'].includes(run.status))
+             fail('unrecognized run status');
+         }
+-        if (now() - started >= timeoutMs)
++        if (tick() - started >= timeoutMs)
+           fail('run discovery or completion timed out; no redispatch');
+-        await delay(Math.min(pollMs, timeoutMs - (now() - started)));
++        await delay(Math.min(pollMs, timeoutMs - (tick() - started)));
+       }
+     },
+   };
+ }
+ 
+-// An explicit recovery cannot abandon a still-active or uncertain provider-capable run.
+-export async function verifyRetiredExactDispatches({ reader, dispatches = {} }) {
+-  const retiredRunIds = [];
+-  for (const progress of Object.values(dispatches)) {
++// Only an explicit, authenticated recovery may retire a settled no-run intent.
++export async function verifyRetiredExactDispatches({
++  reader,
++  dispatches = {},
++  blockedAt,
++  now = Date.now,
++  delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
++  retirementProof,
++}) {
++  const retiredRunIds = [],
++    noRunProofs = [];
++  let lastClock = now();
++  const clock = () => {
++    const value = now();
++    if (!Number.isSafeInteger(value) || value < lastClock) fail('retirement clock invalid');
++    lastClock = value;
++    return value;
++  };
++  if (!Number.isSafeInteger(lastClock) || lastClock < 0 || typeof delay !== 'function')
++    fail('retirement clock invalid');
++  for (const [operation, progress] of Object.entries(dispatches)) {
+     if (
++      operation !== progress?.operation ||
+       !['preflight', 'deploy'].includes(progress?.operation) ||
+       !SHA.test(progress.sha ?? '') ||
+       !UUID.test(progress.dispatchId ?? '') ||
+-      !Array.isArray(progress.priorRunIds)
++      !Array.isArray(progress.priorRunIds) ||
++      progress.priorRunIds.length > 100 ||
++      progress.priorRunIds.some((id) => !integer(id)) ||
++      (progress.runId !== undefined && !integer(progress.runId)) ||
++      !['intent', 'submitted', 'observed', 'succeeded'].includes(progress.phase)
+     )
+       fail('retired dispatch identity mismatch');
++    const origin = validateTimes(progress, clock(), blockedAt);
++    const inventory = async () => {
++      const rows = validateInventory(
++        await reader.getJson(
++          `actions/workflows/deploy-demo-exact-commit.yml/runs?branch=main&event=workflow_dispatch&head_sha=${progress.sha}&per_page=100`,
++        ),
++      );
++      if (
++        rows.some(
++          (run) =>
++            run.head_sha !== progress.sha ||
++            run.repository?.full_name !== REPO ||
++            run.head_repository?.full_name !== REPO ||
++            run.path !== WORKFLOW ||
++            run.event !== 'workflow_dispatch' ||
++            run.head_branch !== 'main' ||
++            !integer(run.run_attempt) ||
++            typeof run.display_title !== 'string',
++        )
++      )
++        fail('retired inventory identity mismatch');
++      return rows;
++    };
++    const matches = async () =>
++      (await inventory()).filter((run) => run.display_title === title(progress));
+     let run;
+     if (progress.runId) run = await reader.getJson(`actions/runs/${progress.runId}`);
+     else {
+-      const list = await reader.getJson(
+-        `actions/workflows/deploy-demo-exact-commit.yml/runs?branch=main&event=workflow_dispatch&head_sha=${progress.sha}&per_page=100`,
++      const priorProof = retirementProof?.noRunProofs?.find(
++        (p) =>
++          p.sha === progress.sha &&
++          p.operation === progress.operation &&
++          p.dispatchId === progress.dispatchId,
+       );
+-      if (
+-        !Array.isArray(list?.workflow_runs) ||
+-        list.total_count !== list.workflow_runs.length ||
+-        list.total_count > 100
+-      )
+-        fail('retired run inventory unavailable');
+-      const matches = list.workflow_runs.filter((run) => run.display_title === title(progress));
+-      if (matches.length !== 1) fail('uncertain old dispatch cannot be recovered');
+-      run = matches[0];
++      const correlated = await matches();
++      if (correlated.length > 1) fail('ambiguous old dispatch cannot be recovered');
++      if (priorProof) {
++        const first = timestamp(priorProof.firstObservedAt),
++          second = timestamp(priorProof.secondObservedAt);
++        if (
++          !Number.isFinite(origin) ||
++          priorProof.originAt !== new Date(origin).toISOString() ||
++          priorProof.settleMs !== DISPATCH_SETTLE_MS ||
++          priorProof.observationGapMs !== NO_RUN_OBSERVATION_GAP_MS ||
++          first < origin + DISPATCH_SETTLE_MS ||
++          second < first + NO_RUN_OBSERVATION_GAP_MS ||
++          second > clock() ||
++          correlated.length
++        )
++          fail('retired no-run proof changed or late run observed');
++        noRunProofs.push(structuredClone(priorProof));
++        continue;
++      }
++      if (correlated.length === 1) run = correlated[0];
++      else {
++        if (
++          !['intent', 'submitted'].includes(progress.phase) ||
++          !Number.isFinite(origin) ||
++          clock() - origin < DISPATCH_SETTLE_MS
++        )
++          fail('uncertain old dispatch is inside settle window or untimed');
++        const first = clock();
++        await delay(NO_RUN_OBSERVATION_GAP_MS);
++        const second = clock();
++        if (second - first < NO_RUN_OBSERVATION_GAP_MS)
++          fail('retirement observations must be separated in time');
++        const secondMatches = await matches();
++        clock();
++        if (secondMatches.length) fail('late or ambiguous old dispatch cannot be retired');
++        noRunProofs.push({
++          operation: progress.operation,
++          sha: progress.sha,
++          dispatchId: progress.dispatchId,
++          originAt: new Date(origin).toISOString(),
++          firstObservedAt: new Date(first).toISOString(),
++          secondObservedAt: new Date(second).toISOString(),
++          settleMs: DISPATCH_SETTLE_MS,
++          observationGapMs: NO_RUN_OBSERVATION_GAP_MS,
++          origin:
++            progress.intentAt === undefined
++              ? 'durable-block-time'
++              : 'latest-trusted-dispatch-or-block-time',
++        });
++        continue;
++      }
+     }
+     validateRun(run, progress);
+     if (run.status !== 'completed') fail('active old dispatch cannot be recovered');
++    if (progress.phase === 'succeeded' && run.conclusion !== 'success')
++      fail('retired successful dispatch changed');
+     if (
+       ![
+         'success',
+@@ -254,5 +440,11 @@
+       fail('unsettled old dispatch cannot be recovered');
+     retiredRunIds.push(run.id);
+   }
+-  return retiredRunIds;
+-}
++  if (
++    retirementProof &&
++    (JSON.stringify(retiredRunIds) !== JSON.stringify(retirementProof.retiredRunIds) ||
++      JSON.stringify(noRunProofs) !== JSON.stringify(retirementProof.noRunProofs))
++  )
++    fail('retired dispatch proof identities changed');
++  return { retiredRunIds, noRunProofs };
++}
+--- a/agent-team/src/bug-pipeline/demo-deployment.mjs
++++ b/agent-team/src/bug-pipeline/demo-deployment.mjs
+@@ -966,6 +966,7 @@
+       list.workflow_runs.some(
+         (run) =>
+           !integer(run.id) ||
++          run.run_attempt !== 1 ||
+           run.head_sha !== deploymentSha ||
+           run.repository?.full_name !== REPO ||
+           run.head_repository?.full_name !== REPO ||
+@@ -997,10 +998,14 @@
+       run.head_repository?.full_name !== REPO ||
+       run.path !== WORKFLOW ||
+       run.head_branch !== 'main' ||
+-      !['push', 'workflow_dispatch'].includes(run.event) ||
+-      run.status !== 'completed' ||
+-      run.conclusion !== 'success'
++      !['push', 'workflow_dispatch'].includes(run.event)
+     )
++      blocked('PRODUCTION_PROOF_FAILED');
++    if (['queued', 'in_progress', 'waiting', 'pending', 'requested'].includes(run.status)) {
++      if (run.conclusion !== null) blocked('PRODUCTION_PROOF_FAILED');
++      blocked('PRODUCTION_RUN_PENDING');
++    }
++    if (run.status !== 'completed' || run.conclusion !== 'success')
+       blocked('PRODUCTION_PROOF_FAILED');
+     const jobs = await reader.getJson(`actions/runs/${id}/jobs?filter=latest&per_page=100`);
+     if (
+@@ -1044,6 +1049,11 @@
+   if (JSON.stringify(proof) !== JSON.stringify(await read())) blocked('PRODUCTION_PROOF_FAILED');
+   const finalLatest = await newest();
+   if (
++    ['queued', 'in_progress', 'waiting', 'pending', 'requested'].includes(finalLatest.status) &&
++    finalLatest.conclusion === null
++  )
++    blocked('PRODUCTION_RUN_PENDING');
++  if (
+     finalLatest.id !== id ||
+     finalLatest.run_attempt !== 1 ||
+     finalLatest.status !== 'completed' ||
+@@ -1055,3 +1065,59 @@
+     proofSha256: createHash('sha256').update(JSON.stringify(proof)).digest('hex'),
+   };
+ }
++
++export async function waitForProductionBackend({
++  verify,
++  guard = async () => {},
++  now = Date.now,
++  delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
++  timeoutMs = 60 * 60_000,
++  pollMs = 10_000,
++}) {
++  const failWait = (code) => {
++    const error = new Error(code);
++    error.code = code;
++    throw error;
++  };
++  if (
++    typeof verify !== 'function' ||
++    typeof guard !== 'function' ||
++    typeof delay !== 'function' ||
++    !Number.isFinite(timeoutMs) ||
++    timeoutMs <= 0 ||
++    timeoutMs > 60 * 60_000 ||
++    !Number.isFinite(pollMs) ||
++    pollMs <= 0 ||
++    pollMs > 60_000
++  )
++    throw new TypeError('bounded production wait dependencies required');
++  const started = now();
++  let previous = started;
++  if (!Number.isSafeInteger(started) || started < 0) failWait('PRODUCTION_PROOF_FAILED');
++  const clock = () => {
++    const value = now();
++    if (!Number.isSafeInteger(value) || value < previous) failWait('PRODUCTION_PROOF_FAILED');
++    previous = value;
++    return value;
++  };
++  for (let polls = 0; polls <= Math.ceil(timeoutMs / pollMs); polls++) {
++    await guard();
++    clock();
++    try {
++      const proof = await verify();
++      await guard();
++      if (clock() - started > timeoutMs) failWait('PRODUCTION_RUN_PENDING_TIMEOUT');
++      return proof;
++    } catch (error) {
++      // Only identity-validated missing/pending observations may be polled.
++      if (!['PRODUCTION_RUN_REQUIRED', 'PRODUCTION_RUN_PENDING'].includes(error?.code)) throw error;
++    }
++    await guard();
++    const remaining = timeoutMs - (clock() - started);
++    if (remaining <= 0) failWait('PRODUCTION_RUN_PENDING_TIMEOUT');
++    const beforeSleep = previous;
++    await delay(Math.min(pollMs, remaining));
++    if (clock() <= beforeSleep) failWait('PRODUCTION_PROOF_FAILED');
++  }
++  failWait('PRODUCTION_RUN_PENDING_TIMEOUT');
++}
+--- a/.github/workflows/codex-bug-release.yml
++++ b/.github/workflows/codex-bug-release.yml
+@@ -124,7 +124,7 @@
+       # release.mjs awaits the correlated exact demo run after persisting its merge.
+       # confirm-demo independently verifies its immutable receipt and live provider identity.
+       # Recording also requires a successful exact-SHA production deploy-backend deploy job.
+-      # Missing production proof blocks; this workflow never implicitly dispatches production.
++      # Recording waits read-only up to 60 minutes for exact-SHA production; no production dispatch.
+       - name: Wait for Railway runtime deployment of the merged commit
+         id: runtime
+         if: steps.release.outputs.status == 'merged' && steps.release.outputs.runtime == 'true'
+@@ -163,6 +163,7 @@
+     needs: release
+     if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/main' && needs.release.result == 'success' && (needs.release.outputs.status == 'merged' || needs.release.outputs.status == 'deployed')
+     runs-on: ubuntu-latest
++    timeout-minutes: 90
+     environment: 'glistening-friendship / demo'
+     steps:
+       - name: Checkout trusted default branch

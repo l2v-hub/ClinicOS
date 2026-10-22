@@ -1,0 +1,31 @@
+{
+  "runId": 39700640337,
+  "attempt": 5,
+  "commentId": 6333761827,
+  "createdAt": "2026-10-22T05:49:02Z",
+  "bodySha256": "69980bbd03e2c5f1083ccc6fafc2b5601de86922d8d07f57cc66b43db175315b",
+  "probes": [
+    {
+      "scope": "repository-secret",
+      "httpStatus": 200,
+      "readSucceeded": true,
+      "demoSecretNamePresent": false,
+      "total": 7
+    },
+    {
+      "scope": "environment-secret",
+      "httpStatus": 200,
+      "readSucceeded": true,
+      "demoSecretNamePresent": true,
+      "total": 1
+    },
+    {
+      "scope": "environment-policy",
+      "httpStatus": 200,
+      "readSucceeded": true,
+      "expectedEnvironmentIdentity": true
+    }
+  ],
+  "secretValuesRead": false,
+  "secretWrites": 0
+}

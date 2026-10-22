@@ -1,0 +1,19 @@
+{
+  "filesSha256": {
+    "validation-report.md": "75d3f1c7a0b4af39b8a817045db113833736244d61023d7183032dcdc2459bf0",
+    "summary.json": "a2216a710447adb54c3c4617f6d1fb2e7b264db484a0001d6afb873e8d5701fa",
+    "attempt-index.json": "d77adef73d557440f26113323ea5beca9ce465fdcf9f9d62daccb60a1aff69c2",
+    "seal.json": "99fb055594f78c26f10bf660576fd07813312dd971dc0f2d7a0fba8c1449976d",
+    "actualTestReceipt": "f68771bd26ecb3e685de0c7dbe5f5728d034702e4cfe9ca3db2830019e2f0b48",
+    "auditWatcherReceipt": "9d3e8e4240faae237c8f01fd1c5f2c844f72c8f247e3d3cfb762787f784509b8",
+    "authorSeal": "22f5c361de2115ad7abfc7d024a33466293fdf00a9a1d1088b757de5845cf497",
+    "authorPreservationManifest": "7fcdd706cf23ba07d61ea83f1cba7bb3ce33b50e1c1d11448dee294e158f24ac",
+    "sourceTestTarget": "81d10c2fa518edfe76625dbcbd5ccd8404d0a00750abb22a32e630ab83d0cd90"
+  },
+  "testReceiptParsed": {
+    "exitCode": 0,
+    "tests": 23,
+    "passed": 23,
+    "failed": 0
+  }
+}

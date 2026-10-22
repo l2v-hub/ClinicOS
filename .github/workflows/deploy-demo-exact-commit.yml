@@ -1,0 +1,104 @@
+name: Deploy exact demo commit to Railway
+run-name: demo-exact ${{ inputs.operation }} ${{ inputs.reviewed_sha }} ${{ inputs.dispatch_id }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      reviewed_sha:
+        description: Full reviewed SHA of current protected main
+        type: string
+        required: true
+      dispatch_id:
+        description: Unique durable dispatch UUID from the protected release controller
+        type: string
+        required: true
+      operation:
+        description: Read-only preflight, or deploy with existing forward-only npm run db:migrate
+        type: choice
+        options: [preflight, deploy]
+        default: preflight
+        required: true
+
+permissions:
+  contents: read
+
+# Demo writers share their own queue; native inventory also rejects an overlapping rollout.
+concurrency:
+  group: railway-demo
+  cancel-in-progress: false
+
+jobs:
+  demo:
+    if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    environment: 'glistening-friendship / demo'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+
+      - name: Test exact demo release guards without credentials
+        run: node --test agent-team/tests/bug-pipeline/demo-deployment.test.mjs
+
+      - name: Require the reviewed main workflow revision before credentials
+        env:
+          CLINICOS_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+          CLINICOS_DISPATCH_ID: ${{ inputs.dispatch_id }}
+          DEMO_OPERATION: ${{ inputs.operation }}
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          assert.match(process.env.CLINICOS_DISPATCH_ID || '', /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}(?![\s\S])/);
+          assert.ok(['preflight', 'deploy'].includes(process.env.DEMO_OPERATION));
+          assert.match(process.env.CLINICOS_REVIEWED_SHA || '', /^[a-f0-9]{40}$/);
+          assert.equal(process.env.CLINICOS_REVIEWED_SHA, process.env.GITHUB_SHA);
+          assert.equal(process.env.GITHUB_REF, 'refs/heads/main');
+          assert.equal(process.env.GITHUB_REPOSITORY, 'l2v-hub/ClinicOS');
+          assert.equal(process.env.GITHUB_EVENT_NAME, 'workflow_dispatch');
+          assert.equal(process.env.GITHUB_WORKFLOW_REF, 'l2v-hub/ClinicOS/.github/workflows/deploy-demo-exact-commit.yml@refs/heads/main');
+          JS
+
+      - name: Verify fixed demo target and optionally deploy the exact reviewed commit
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+          CLINICOS_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+          DEMO_OPERATION: ${{ inputs.operation }}
+        run: |
+          node agent-team/src/bug-pipeline/demo-deployment.mjs preflight-exact
+          if [ "$DEMO_OPERATION" = deploy ]; then
+            node agent-team/src/bug-pipeline/demo-deployment.mjs deploy-exact
+          fi
+
+      - name: Publish immutable read-only target preflight
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: demo-preflight-${{ github.run_id }}-${{ github.run_attempt }}
+          path: demo-preflight-receipt.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Publish immutable live demo deployment proof
+        if: inputs.operation == 'deploy'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: demo-deployment-${{ github.run_id }}-${{ github.run_attempt }}
+          path: demo-deployment-receipt.json
+          if-no-files-found: error
+          retention-days: 30
+
+      # Failure progress contains only validated target/SHA/deployment identity and a fixed code.
+      - name: Preserve safe deployment progress even when proof fails
+        if: always() && inputs.operation == 'deploy'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: demo-deployment-progress-${{ github.run_id }}-${{ github.run_attempt }}
+          path: demo-deployment-progress.json
+          if-no-files-found: warn
+          retention-days: 7
