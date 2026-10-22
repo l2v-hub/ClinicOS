@@ -2,6 +2,7 @@
 import { spawnSync } from 'node:child_process';
 import { performance } from 'node:perf_hooks';
 import { pathToFileURL } from 'node:url';
+import { posix } from 'node:path';
 import { TARGET, inspectStorageBinding, verifyDatabaseMount } from './demo-storage-binding-readonly.mjs';
 
 export const BRANCH = 'main';
@@ -66,6 +67,16 @@ class ReadError extends Error {
   constructor(code) { super(code); this.code = code; }
 }
 const requireRead = (condition, code) => { if (!condition) throw new ReadError(code); };
+
+// Both the credential-free installer and the transport derive this exact binary.
+export function verifiedRailwayPath(runtimeTemp) {
+  requireRead(typeof runtimeTemp === 'string' && /^\/[A-Za-z0-9_./-]+$/.test(runtimeTemp) &&
+    runtimeTemp !== '/' && !runtimeTemp.endsWith('/') && posix.normalize(runtimeTemp) === runtimeTemp &&
+    !runtimeTemp.split('/').some((part) => part === '.' || part === '..'),
+  'READONLY_RUNTIME_TEMP_INVALID');
+  return `${runtimeTemp}/clinicos-railway-5.66.0/railway`;
+}
+
 const freeze = (v) => {
   if (v && typeof v === 'object') {
     for (const child of Object.values(v)) freeze(child);
@@ -92,7 +103,8 @@ export function validateContext(env, args = []) {
   requireRead(validToken(credential) && !inactive && validToken(env.GITHUB_TOKEN), 'READONLY_BINDING_MISSING');
   const context = freeze({ repository: REPOSITORY, branch: BRANCH, reviewedSha: env.GITHUB_SHA,
     runId: env.GITHUB_RUN_ID, runAttempt: env.GITHUB_RUN_ATTEMPT, authMode: env.DEMO_STORAGE_AUTH_MODE,
-    workflowRef: WORKFLOW_REF, protectedEnvironment: PROTECTED_ENVIRONMENT });
+    workflowRef: WORKFLOW_REF, protectedEnvironment: PROTECTED_ENVIRONMENT,
+    cliPath: verifiedRailwayPath(env.RUNNER_TEMP) });
   contexts.add(context);
   return context;
 }
@@ -128,7 +140,8 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
   now = () => performance.now() }) {
   validateContext(env);
   requireRead(contexts.has(context) && context.reviewedSha === env.GITHUB_SHA &&
-    context.authMode === env.DEMO_STORAGE_AUTH_MODE,
+    context.authMode === env.DEMO_STORAGE_AUTH_MODE &&
+    context.cliPath === verifiedRailwayPath(env.RUNNER_TEMP),
     'READONLY_CONTEXT_REQUIRED');
   const deadline = now() + 8 * 60 * 1000;
   const state = { phase: 'CONTEXT', cliReads: 0, nativeReads: 0, githubReads: 0,
@@ -274,19 +287,21 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
   const call = (args, options = {}) => {
     requireRead(Array.isArray(args) && options.json === true &&
       Object.keys(options).every((key) => key === 'json'), 'READONLY_COMMAND_REJECTED');
+    const variableArgs = (serviceId, identity = false) => context.authMode === 'account-bearer'
+      ? ['variables', '--service', serviceId, '--project', TARGET.projectId,
+        '--environment', TARGET.environmentId, '--json']
+      : identity ? ['variables', '--service', serviceId, '--json']
+        : ['variables', '--service', serviceId, '--environment', TARGET.environmentId, '--json'];
     let phase;
-    if (step === 2 && equal(args, ['variables', '--service', TARGET.backendServiceId, '--json']))
+    if (step === 2 && equal(args, variableArgs(TARGET.backendServiceId, true)))
       phase = 'BACKEND_IDENTITY';
-    else if (step === 4 && equal(args, ['variables', '--service', TARGET.backendServiceId,
-      '--environment', TARGET.environmentId, '--json'])) phase = 'BACKEND_CONFIG';
+    else if (step === 4 && equal(args, variableArgs(TARGET.backendServiceId))) phase = 'BACKEND_CONFIG';
     else if (step === 5 && equal(args, ['service', 'list', '--project', TARGET.projectId,
       '--environment', TARGET.environmentId, '--json'])) phase = 'SERVICE_CATALOG';
-    else if (step === 6 && candidateIndex < databaseCandidates.length && equal(args,
-      ['variables', '--service', databaseCandidates[candidateIndex], '--environment', TARGET.environmentId,
-        '--json'])) phase = 'DATABASE_CONFIG';
-    else if (step === 7 && runtimeId && !state.bindingVerified && equal(args,
-      ['variables', '--service', runtimeId, '--environment', TARGET.environmentId, '--json']))
-      phase = 'RUNTIME_CONFIG';
+    else if (step === 6 && candidateIndex < databaseCandidates.length &&
+      equal(args, variableArgs(databaseCandidates[candidateIndex]))) phase = 'DATABASE_CONFIG';
+    else if (step === 7 && runtimeId && !state.bindingVerified &&
+      equal(args, variableArgs(runtimeId))) phase = 'RUNTIME_CONFIG';
     requireRead(Boolean(phase), 'READONLY_COMMAND_REJECTED');
     start(phase, 'cliReads');
     const childEnv = { [context.authMode === 'project-token' ? 'RAILWAY_TOKEN' : 'RAILWAY_API_TOKEN']:
@@ -296,7 +311,7 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
       if (typeof env[key] === 'string') childEnv[key] = env[key];
     }
     let result;
-    try { result = spawnImpl('railway', args, { shell: false, encoding: 'utf8',
+    try { result = spawnImpl(context.cliPath, args, { shell: false, encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'], timeout: budget(), maxBuffer: MAX_BYTES, env: childEnv }); }
     catch (error) {
       throw new ReadError(error?.code === 'ETIMEDOUT' ? 'READONLY_CLI_TIMEOUT' : 'READONLY_CLI_SPAWN_FAILED');
@@ -338,6 +353,20 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
     } else if (phase === 'DATABASE_CONFIG') candidateIndex++;
     else if (phase === 'RUNTIME_CONFIG') { runtimeId = undefined; runtimeRead = true; }
     return data;
+  };
+  // Only the trusted pure binding module receives this adapter. Public call()
+  // always requires the explicit account project/environment argv above.
+  const bindingCall = (args, options) => {
+    if (context.authMode !== 'account-bearer' || args?.[0] !== 'variables')
+      return call(args, options);
+    const serviceId = step === 2 || step === 4 ? TARGET.backendServiceId
+      : step === 6 ? databaseCandidates[candidateIndex]
+        : step === 7 && !state.bindingVerified ? runtimeId : undefined;
+    const original = step === 2 ? ['variables', '--service', serviceId, '--json']
+      : ['variables', '--service', serviceId, '--environment', TARGET.environmentId, '--json'];
+    requireRead(Boolean(serviceId) && equal(args, original), 'READONLY_COMMAND_REJECTED');
+    return call(['variables', '--service', serviceId, '--project', TARGET.projectId,
+      '--environment', TARGET.environmentId, '--json'], options);
   };
   const classifyUnclassifiedVolumes = () => {
     requireRead(step === 7 && candidateIndex === databaseCandidates.length &&
@@ -434,7 +463,7 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
   };
   const inspectBinding = async () => {
     if (classificationPass === 1) {
-      try { await inspectStorageBinding(call, native); }
+      try { await inspectStorageBinding(bindingCall, native); }
       catch (error) {
         requireRead(error?.message === 'UNCLASSIFIED_DEMO_VOLUMES' && state.phase === 'ENVIRONMENT_METADATA' &&
           step === 7, 'READONLY_CLASSIFICATION_RECHECK_FAILED');
@@ -450,7 +479,7 @@ export function createReadOnlyAccess({ env, context, fetchImpl = fetch, spawnImp
       runtimeRead = false; privateReads = {}; privateValues = {}; state.bindingVerified = false;
     }
     let binding;
-    try { binding = await inspectStorageBinding(call, native); }
+    try { binding = await inspectStorageBinding(bindingCall, native); }
     catch (error) {
       if (bindingPass !== 0 || error?.message !== 'UNCLASSIFIED_DEMO_VOLUMES' ||
         state.phase !== 'ENVIRONMENT_METADATA' || step !== 7) throw error;

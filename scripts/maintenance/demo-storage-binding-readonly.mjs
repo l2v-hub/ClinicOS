@@ -1,4 +1,4 @@
-// Pure binding checks extracted from reviewed maintenance92931e60. No live transports or cleanup entrypoints.
+// Pure binding checks extracted from reviewed maintenance 92931e60. No live transports or cleanup entrypoints.
 import { posix } from 'node:path';
 import { createHash } from 'node:crypto';
 export const TARGET = Object.freeze({
@@ -237,19 +237,6 @@ export async function inspectStorageBinding(call, native) {
   };
 }
 const TERMINAL = new Set(['CRASHED', 'EXITED', 'REMOVED', 'SKIPPED', 'STOPPED']);
-const SAFE_REPLACEMENT_ERRORS = new Set([
-  'STORAGE_API_NOT_AUTHORIZED',
-  'STORAGE_API_UNSUPPORTED_OPERATION',
-  'STORAGE_API_REJECTED',
-  'STORAGE_DEADLINE_EXCEEDED',
-  'DEPLOYMENT_TARGET_MISMATCH',
-  'DEPLOYMENT_SOURCE_CONFIG_CHANGED',
-  'REDEPLOY_UNVERIFIED',
-  'REPLACEMENT_NOT_CONVERGED',
-  'BACKEND_HEALTH_INVALID',
-  'RUNTIME_HEALTH_INVALID',
-  'PRIVATE_HEALTH_PROBE_FAILED',
-]);
 const canonical = (value) =>
   JSON.stringify(value, (_key, item) =>
     item && typeof item === 'object' && !Array.isArray(item)

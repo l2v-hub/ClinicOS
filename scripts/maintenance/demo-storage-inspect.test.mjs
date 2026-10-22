@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { TARGET } from './demo-storage-binding-readonly.mjs';
-import { BRANCH, REPOSITORY, WORKFLOW_REF, PROTECTED_ENVIRONMENT, ENDPOINT, HEAD_ENDPOINT, QUERIES, validateContext,
+import { BRANCH, REPOSITORY, WORKFLOW_REF, PROTECTED_ENVIRONMENT, ENDPOINT, HEAD_ENDPOINT, QUERIES, verifiedRailwayPath, validateContext,
   createReadOnlyAccess, inspectDemoStorage, serializeReceipt, main } from './demo-storage-inspect.mjs';
 
 const IDS = Object.freeze({ db: '50000000-0000-4000-8000-000000000472',
@@ -22,7 +22,7 @@ const ENV = Object.freeze({ GITHUB_EVENT_NAME: 'workflow_dispatch', GITHUB_REPOS
   DEMO_STORAGE_ENVIRONMENT: PROTECTED_ENVIRONMENT, DEMO_STORAGE_AUTH_MODE: 'project-token',
   GITHUB_REF: `refs/heads/${BRANCH}`, GITHUB_REF_NAME: BRANCH, GITHUB_SHA: 'a'.repeat(40),
   DEMO_STORAGE_REVIEWED_SHA: 'a'.repeat(40), DEMO_STORAGE_OPERATION: 'demo-storage-inspect',
-  GITHUB_RUN_ID: '39020438022', GITHUB_RUN_ATTEMPT: '1', RAILWAY_TOKEN: TOKEN, GITHUB_TOKEN: GH_TOKEN });
+  RUNNER_TEMP: '/tmp/clinicos500-fixture-runtime', GITHUB_RUN_ID: '39020438022', GITHUB_RUN_ATTEMPT: '1', RAILWAY_TOKEN: TOKEN, GITHUB_TOKEN: GH_TOKEN });
 const STAMP = '2026-10-18T20:30:00.000Z';
 const json = (value, status = 200) => new Response(JSON.stringify(value), { status });
 const clone = (v) => structuredClone(v);
@@ -118,7 +118,7 @@ test('ported pure binding is exercised and only bounded reads return a safe rece
   assert.equal(receipt.observations.volumeCount, 1);
   assert.equal(receipt.observations.backendInstances.running, 1);
   for (const call of f.calls) {
-    assert.equal(call.binary, 'railway');
+    assert.equal(call.binary, verifiedRailwayPath(ENV.RUNNER_TEMP));
     assert.equal(call.options.shell, false);
     assert.deepEqual(call.options.stdio, ['ignore', 'pipe', 'pipe']);
     assert.ok(call.options.timeout <= 30000 && call.options.timeout > 0);
@@ -650,7 +650,7 @@ test('account bearer uses actual me/access then full identical binding and descr
  const f=fixture();const receipt=await run(f,{env:ACCOUNT_ENV});assert.equal(receipt.outcome,'inspected');
  assert.equal(receipt.credentialKind,'account-bearer');assert.equal(receipt.projectTokenVerified,false);assert.equal(receipt.targetReadAccess,true);assert.equal(receipt.bindingVerified,true);
  assert.deepEqual(receipt.readRequests,{cli:10,native:8,github:2});assert(!safe(receipt).includes('synthetic-user-never-publish'));
- for(const c of f.calls){assert.equal(c.options.env.RAILWAY_API_TOKEN,TOKEN);assert.equal(c.options.env.RAILWAY_TOKEN,undefined);assert.equal(c.options.env.GITHUB_TOKEN,undefined);}
+ for(const c of f.calls){assert.equal(c.binary,verifiedRailwayPath(ACCOUNT_ENV.RUNNER_TEMP));assert.equal(c.args[c.args.indexOf('--project')+1],TARGET.projectId);assert.equal(c.args[c.args.indexOf('--environment')+1],TARGET.environmentId);assert(c.args.includes('--project')&&c.args.includes('--environment'));assert.equal(c.options.env.RAILWAY_API_TOKEN,TOKEN);assert.equal(c.options.env.RAILWAY_TOKEN,undefined);assert.equal(c.options.env.GITHUB_TOKEN,undefined);}
  for(const r of f.requests.filter(r=>r.url===ENDPOINT)){assert.equal(r.options.headers.Authorization,`Bearer ${TOKEN}`);assert.equal(r.options.headers['Project-Access-Token'],undefined);assert.notEqual(JSON.parse(r.options.body).query,QUERIES.identity);}
  assert.deepEqual(f.requests.filter(r=>r.url===ENDPOINT).slice(0,2).map(r=>JSON.parse(r.options.body).query),[QUERIES.accountIdentity,QUERIES.accountAccess]);
 });
@@ -690,4 +690,23 @@ test('account nonzero snapshots are descriptive, me identity is discarded even i
 });
 test('project stage cannot invoke bearer identity or access queries',async()=>{
  const f=fixture();const a=createReadOnlyAccess({env:ENV,context:validateContext(ENV),fetchImpl:f.fetchImpl,spawnImpl:f.spawnImpl});await a.assertBranch();for(const [q,v] of [[QUERIES.accountIdentity,{}],[QUERIES.accountAccess,{projectId:TARGET.projectId,environmentId:TARGET.environmentId}]])await assert.rejects(a.native(q,v),errorCode('READONLY_QUERY_REJECTED'));assert.equal(f.requests.length,1);
+});
+
+test('fixed verified executable path rejects unsafe runtime roots and ignores PATH override',async()=>{
+ assert.equal(verifiedRailwayPath('/home/runner/work/_temp'),'/home/runner/work/_temp/clinicos-railway-5.66.0/railway');
+ for(const path of [undefined,'','/','relative','/tmp/../other','/tmp/./other','/tmp//other','/tmp/trailing/','/tmp/with space','/tmp/$(command)','/tmp/x\nother'])assert.throws(()=>verifiedRailwayPath(path),errorCode('READONLY_RUNTIME_TEMP_INVALID'));
+ const f=fixture();const r=await run(f,{env:{...ENV,PATH:'/untrusted/bin',RAILWAY_CLI_PATH:'/untrusted/railway'}});assert.equal(r.outcome,'inspected');assert(f.calls.every(c=>c.binary===verifiedRailwayPath(ENV.RUNNER_TEMP)));
+});
+test('account public decoder refuses unscoped and partially scoped variables after real auth stages',async()=>{
+ const f=fixture(),a=createReadOnlyAccess({env:ACCOUNT_ENV,context:validateContext(ACCOUNT_ENV),fetchImpl:f.fetchImpl,spawnImpl:f.spawnImpl});await a.assertBranch();await a.native(QUERIES.accountIdentity,{});await a.native(QUERIES.accountAccess,{projectId:TARGET.projectId,environmentId:TARGET.environmentId});
+ for(const args of [
+  ['variables','--service',TARGET.backendServiceId,'--json'],
+  ['variables','--service',TARGET.backendServiceId,'--environment',TARGET.environmentId,'--json'],
+  ['variables','--service',TARGET.backendServiceId,'--project',TARGET.projectId,'--json'],
+  ['variables','--service',TARGET.backendServiceId,'--project',IDS.other,'--environment',TARGET.environmentId,'--json'],
+ ])assert.throws(()=>a.call(args,{json:true}),errorCode('READONLY_COMMAND_REJECTED'));
+ assert.equal(f.calls.length,0);a.call(['variables','--service',TARGET.backendServiceId,'--project',TARGET.projectId,'--environment',TARGET.environmentId,'--json'],{json:true});assert.equal(f.calls.length,1);
+});
+test('runtime-root drift after a minted context cannot select another executable',()=>{
+ const context=validateContext(ENV);assert.throws(()=>createReadOnlyAccess({env:{...ENV,RUNNER_TEMP:'/tmp/other'},context}),errorCode('READONLY_CONTEXT_REQUIRED'));
 });
