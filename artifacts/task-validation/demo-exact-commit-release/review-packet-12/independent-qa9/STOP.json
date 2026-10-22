@@ -1,0 +1,33 @@
+{
+  "state": "STOPPED_COMPLETE",
+  "qaNonce": "505e8560-f65a-44d9-9082-fc8ec31b4a94",
+  "grantNonce": "dfedb28a-7355-4955-8813-0fa2c7eb6633",
+  "sourceSha": "57c192513dcf7cf55853381ac7337926cbdc90cb",
+  "result": "READY_FOR_CODEX_QA",
+  "seal": "seal.json",
+  "summary": "summary.json",
+  "validationReport": "validation-report.md",
+  "attemptIndex": "attempt-index.json",
+  "resourceHandback": {
+    "ownedContainerRemoved": true,
+    "ownedNetworkRemoved": true,
+    "portsFree": [
+      55432,
+      3447,
+      5447,
+      8432
+    ],
+    "lockFree": true,
+    "baselineContainerId": "9000f70d4ee95b9e3bde723796daa050081db4274d20c97888413479232949ad",
+    "baselineHealthyAndUnchanged": true
+  },
+  "limitations": [
+    "The clean test database had no prior matching denied audit row, so the stale-history race was not reproduced.",
+    "Watcher was auxiliary; the exact request-id and persisted-row assertion inside test U is the primary evidence.",
+    "Two preserved setup-only failures; only the third attempt ran the test file.",
+    "No full suite, browser, provider, merge, deployment, or clinical closure claim."
+  ],
+  "finalIntegrity": "final-integrity.json",
+  "finalIntegritySha256": "a05bc762a2b6328f3c040a589dcbad2625d3b0e9e00c972b4dbda46aab75a3d7",
+  "sealSha256": "99fb055594f78c26f10bf660576fd07813312dd971dc0f2d7a0fba8c1449976d"
+}

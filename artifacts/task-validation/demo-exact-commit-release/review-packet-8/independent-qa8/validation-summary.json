@@ -1,0 +1,111 @@
+{
+  "status": "STOP \u2014 OFFLINE TARGETED QA PASS; OPERATIONAL PARTIAL",
+  "verdict": "PASS for bounded offline implementation behavior; no operational authorization conclusion",
+  "nonce": "2c9357bb-7926-4478-9ba8-140d767da5be",
+  "reservedBeforeSession": true,
+  "sourceSha": "0ae514c420e6c9a4e6500180617d1bb0a37349a6",
+  "sourceWorktree": "/workspace/clinicos-demo-exact-release",
+  "targetedSuite": {
+    "freshExecutions": 1,
+    "command": "node --test agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+    "runner": "/workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs",
+    "runnerMode": "verification",
+    "tests": 85,
+    "passed": 85,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "receipt": "repository-settings.receipt.json",
+    "receiptSha256": "12b50e792caeecc10555ceba5b27b6120baa93e7b595edff3bde6ee673d80fb3"
+  },
+  "independentFakeApiProbes": {
+    "registrations": 15,
+    "scenarioResults": 15,
+    "passed": true,
+    "receipt": "actual-function-api-probes.receipt.json",
+    "covered": [
+      "null policy inventory is not called before PUT",
+      "immediate identity and unrelated-control readback precedes complete inventory",
+      "exact preservation body and custom protections",
+      "post-enable 404 and failed readback stop after one PUT",
+      "five conflict shapes after PUT and same five conflicts prewrite for existing custom-policy mode",
+      "verified main idempotence zero writes",
+      "partial POST error records exactly PUT+POST and no retry"
+    ]
+  },
+  "actualCliFakeFetch": {
+    "caseCount": 1,
+    "passed": true,
+    "exitCode": 1,
+    "readRequests": 8,
+    "writeAttempts": 1,
+    "diagnostic": "phase policy_inventory / http_denied / 404 / 8 reads / 1 attempted write",
+    "secretAndProviderBodyReflected": false,
+    "allRequestsInterceptedByFakeFetch": true,
+    "receipt": "actual-cli-fake-fetch.receipt.json"
+  },
+  "integrity": {
+    "frozenExistingFiles": 154,
+    "unchanged": 154,
+    "mismatches": 0,
+    "sourceUnchanged": true,
+    "headUnchanged": true,
+    "gitStatusClean": true,
+    "legacyConfigureRepositoryByteIdentical": true,
+    "legacyBytes": 5668,
+    "legacySha256": "a64ad850bf45fde82fc3e470e3c4b9ac26c28cd330694ea0c73035629bfccfad"
+  },
+  "priorActualDiagnostic": {
+    "runId": 39649785587,
+    "jobId": 119394782991,
+    "phase": "policy_inventory",
+    "code": "http_denied",
+    "status": 404,
+    "readRequests": 4,
+    "writeAttempts": 0,
+    "environmentPolicy": null,
+    "interpretation": "does not diagnose token permissions"
+  },
+  "priorFailureHistory": [
+    {
+      "artifact": "/workspace/.clinicos-cloud/498-null-policy-author8-20261021/repository-settings-receipt.json",
+      "result": "author targeted attempt 1 failed in a fake-response assertion; its raw receipt remains preserved"
+    },
+    {
+      "artifact": "/workspace/.clinicos-cloud/498-null-policy-author8-20261021/author-targeted-checks-attempt2.mjs",
+      "result": "corrected author attempt passed 85/85; raw receipt preserved"
+    },
+    {
+      "artifact": "/workspace/.clinicos-cloud/498-null-policy-author8-20261021/author-targeted-checks-attempt3.mjs",
+      "result": "subsequent author attempt passed 85/85; raw receipt preserved"
+    },
+    {
+      "artifact": "targeted-summary.json",
+      "result": "initial parser recorded 0 counters because it expected # instead of \u2139; raw runner receipt is unchanged and authoritative 85/85 counts are in targeted-counts-derived.json"
+    },
+    {
+      "artifact": "prior run 39649206485",
+      "result": "native proactive-e2e mismatch was known before QA; browser evidence skipped; not rerun or reclassified"
+    }
+  ],
+  "notRun": [
+    "live provider REST/admin invocation",
+    "six native checks",
+    "Claude review",
+    "final Codex review",
+    "1,060-test pipeline",
+    "clinical/browser/runtime suites"
+  ],
+  "providerAction": false,
+  "network": false,
+  "credentialsRead": false,
+  "settingsApplied": false,
+  "sourceEdits": false,
+  "openGates": [
+    "live admin permission remains unproven",
+    "native checks unresolved including previously known proactive-e2e failure",
+    "actual Claude and final Codex review remain future gates"
+  ],
+  "privateOutput": "/workspace/.clinicos-cloud/498-null-policy-independent-qa8-20261021/attempt-001"
+}

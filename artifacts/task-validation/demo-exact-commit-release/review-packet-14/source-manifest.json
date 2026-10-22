@@ -1,0 +1,1864 @@
+[
+  {
+    "path": ".github/workflows/bug-pipeline-tests.yml",
+    "blob": "f08b8aa6b4a0386bfc8c9f4009e5533cc0b6e4e7",
+    "mode": "100644",
+    "baseBlob": "8286264ab8cb9eea2b19f42473d187306922c0b9",
+    "baseMode": "100644"
+  },
+  {
+    "path": ".github/workflows/codex-bug-release.yml",
+    "blob": "7e7ed3ee29aa8764f9b3002bf3b143f443f9285e",
+    "mode": "100644",
+    "baseBlob": "9da01fa13905e6dad37445c7bceba7bd47079458",
+    "baseMode": "100644"
+  },
+  {
+    "path": ".github/workflows/configure-demo-source.yml",
+    "blob": "44073c12df8c178f4ee6fd50cdaa5b3e1eb7af26",
+    "mode": "100644",
+    "baseBlob": "083a6d5fec406034d57b85401001c66d7427ded5",
+    "baseMode": "100644"
+  },
+  {
+    "path": ".github/workflows/deploy-backend.yml",
+    "blob": "2b301856e10c2f65f9172ea6cbbc480724e3883c",
+    "mode": "100644",
+    "baseBlob": "f23648ba12ba93e58c7254f7beb2afba6cf65f3d",
+    "baseMode": "100644"
+  },
+  {
+    "path": ".github/workflows/deploy-demo-exact-commit.yml",
+    "blob": "75b3d02cca51b72f97519c477a9868203fb3acb7",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+    "blob": "c6ddf59b8d8f5a8718f64a981cd685b95f7534af",
+    "mode": "100644",
+    "baseBlob": "9a744ca5b2a84e5fd8bbfd2d97776fafc4f906e7",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/evidence-limits.mjs",
+    "blob": "826ae616cc159e2168740d5efcf4e24e58326ba3",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/exact-demo-dispatch.mjs",
+    "blob": "2c13e68b4a687c84545f438a89d9fe80cf9a8520",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/exact-demo-recovery.mjs",
+    "blob": "8508413f0c56e4bd75b130b396b9e514d929b841",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/github.mjs",
+    "blob": "58831f6d36f29580975fb9052abb1836a54a72ac",
+    "mode": "100644",
+    "baseBlob": "d450e5b6b71ed17a283fdb1f277f7fef6a5db921",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+    "blob": "b5150f1a0da7573ec3f5ec924cd61ccf62bf9fd2",
+    "mode": "100644",
+    "baseBlob": "0b4399c8b9c9a8f146c05d4077bba8bbc3de9c83",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+    "blob": "d537be36def6b2b20fc2ea55514e2f6bc186663f",
+    "mode": "100644",
+    "baseBlob": "01d1980939ee11889dd48b11d71137404d2010db",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/release.mjs",
+    "blob": "359d3cabb14cae1abfd9c0bbb85f797adfac0ab6",
+    "mode": "100644",
+    "baseBlob": "2220dce2ae611e92b4d5b16d66b022054c4c0933",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+    "blob": "8f87543ed92814ae71abbc2a1c9af8e6866247a6",
+    "mode": "100644",
+    "baseBlob": "c4b49309fe8f3c0d8e36f19756ef25264b388ed0",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/workspace.mjs",
+    "blob": "eb9ce66afcc709a5ef076026a61fc38ec90f2fa3",
+    "mode": "100644",
+    "baseBlob": "afe70a0e2aaa623b654480013d50fa3d2df6f748",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+    "blob": "9d35246880acd54aa6acc93dbdddd34668bfbf5a",
+    "mode": "100644",
+    "baseBlob": "3f94806073eede78df3eaef50bc029f4a898dd39",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/demo-workflow-policy.test.mjs",
+    "blob": "c329d7ab4f59158982e28313a30be3e9b36d96ea",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs",
+    "blob": "0bc08515ab63f230e27998dce86fe3e3776176a8",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/exact-demo-recovery.test.mjs",
+    "blob": "f2d7d802edf8e4c953285e6ef3f2beb350fdbdc6",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+    "blob": "585c4a9325b8283c6ad1ab17716e54c0a4e3671f",
+    "mode": "100644",
+    "baseBlob": "9f28e4e6d1d0a96b32492e6770743c50feaedd51",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+    "blob": "cfc4da2ae8df4652947d8188c353c106e77a4d58",
+    "mode": "100644",
+    "baseBlob": "4d047725d34c1b2a7b9a7b95d4d0cf1cc357b5cd",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+    "blob": "ec0b9fb440321aac5e62e14d4ad54e0bfb12e0a0",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "blob": "498a8ddafff9a13b1dbfb940422c0d5937d4f430",
+    "mode": "100644",
+    "baseBlob": "b5b747904d68225c02a8aaf9f86696e968d74b32",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+    "blob": "37a592129fbbaab4e4032e2ff03015ff19f60b78",
+    "mode": "100644",
+    "baseBlob": "8e32274bbb1328727f56d7f67c17e624f70736bf",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+    "blob": "f6c432a27e047bc295cda99f383bac98982ea466",
+    "mode": "100644",
+    "baseBlob": "c4bb5305f1cf055a9e4899f7d16a099ad1e3bed9",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "blob": "472a374ec57c1aa3c770dcf5952cc576e819162b",
+    "mode": "100644",
+    "baseBlob": "9d65209a5dde8cf367a744c26e15556c2cfe9d8a",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/workspace.test.mjs",
+    "blob": "36426932dd957ad937a6ab8287d38df69e45a3d1",
+    "mode": "100644",
+    "baseBlob": "60186c2aceadd3e7341c8790c6e99cca7ac037f6",
+    "baseMode": "100644"
+  },
+  {
+    "path": "artifacts/task-validation/complete-demo-release-flow/README.md",
+    "blob": "c32fbd71c386cae1794720e8815e8995840b647d",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/complete-demo-release-flow/author-report.md",
+    "blob": "4f9c24c140f474d319ee1183948f7e2cb27b6368",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/complete-demo-release-flow/author-summary.json",
+    "blob": "587beafb764186d8da6f508a6dd040e19bcb9cc0",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/complete-demo-release-flow/independent-qa-seal.json",
+    "blob": "6011d041d587c07f842f32ea645c750bdacc94f5",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/complete-demo-release-flow/independent-qa-summary.json",
+    "blob": "b4220ba741c4e147edfa37fcf4c4b8dc1eee5975",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/complete-demo-release-flow/scope-amendment-correlation.json",
+    "blob": "532c9bb2c3bc7fd1dce004967328d1be044bfc0f",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/complete-demo-release-flow/source-manifest.json",
+    "blob": "64236d53b53c3381f812157cd5faf33aa2ffb65a",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/complete-demo-release-flow/task-contract.md",
+    "blob": "ba1b361b9f160b5d7e1d25f2615c46d1fc18260e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/complete-demo-release-flow/validation-report.md",
+    "blob": "5d4d24b22b598f54efd4ee7f5f905a6cfe579dba",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/README.md",
+    "blob": "c25c33b970f285327a4ca78b37af193eec6533c5",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/analysis.md",
+    "blob": "fc9a8b214cf3bb602378fb170a88ee2436e81797",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/author-1/author-report.md",
+    "blob": "349ad6186027a467a7ebebf4178e987d04afcac4",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/author-1/source-manifest.json",
+    "blob": "892a8aff82b523028382837fc00dcaf6d1faa7f9",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/author-1/task-contract-v1-preflight.md",
+    "blob": "9a81b06727f6fd38a72a615e10bc2816ae78047c",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/author-1/task-contract.md",
+    "blob": "25e4141e3e00c148a2552f65bc3e5ccd7c675e18",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/author-2/author-report.md",
+    "blob": "e9e8b5fceb6c526e93018a2d6657bdeb1c4fe5b8",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/author-2/qa1-failed-validation-report.md",
+    "blob": "2a5dd5e51bb9436be04104ee6a64fed588afcb84",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/author-2/source-manifest.json",
+    "blob": "30a569b1b1b88d07767085b12b386f9a9270b846",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/author-2/task-contract.md",
+    "blob": "caa5c7d52bccd03d6088fb278f3b899673198d63",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-1/author-report.md",
+    "blob": "9727c01a455fb54da76acd70c76d75b906923ba4",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-1/implementation-notes.md",
+    "blob": "9dd4e5e1dc00ee84ce289cbf22205cd580e66371",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-1/source-freeze.json",
+    "blob": "5dbb7adc90890c3e8c00031cf95567774ae3bea9",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-1/task-contract.md",
+    "blob": "2f0d1fe57510cb8a2cc28be8cd689cf20138a406",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-1/test-summary.json",
+    "blob": "47fc905b2b4522784ffabaaa08543d6a5aeb36c2",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-2/author-report.md",
+    "blob": "56090c444e20189dc69646ad7b5a229650df1be3",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-2/implementation-notes.md",
+    "blob": "30b753f98626b8b035a54619bfb07bfdc353e418",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-2/source-freeze.json",
+    "blob": "2fb0b5ba6e34c47869f0c610ecd2aeca8fde97dd",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-2/task-contract.md",
+    "blob": "16af326eac46a0a30e4c5b30ed27bea35ef30990",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-2/test-summary.json",
+    "blob": "6fb8af2d0b7d081a65be74e2c612e33e00b4c095",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-3/task-contract.md",
+    "blob": "f4bf669f6c33f24514de05f201165b7a21bbde17",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-3/validation-report.md",
+    "blob": "8405a17cf4072b64d0ba772c7ff705b9a918d56e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-3/validation-results.json",
+    "blob": "ad17f67de446107f5744e7aa7ae813c13b7e5d67",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-4/author-report.md",
+    "blob": "e43154ddf59e1fe35a2acb01369909463ea6d746",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-4/current-packet-index.md",
+    "blob": "87a56c63366588b591298b48e930088daa8b8c93",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-4/source-manifest.json",
+    "blob": "69178bc2e51195c011f1bec8b1c7d2904521cba8",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-4/task-contract.md",
+    "blob": "b342f05daaf8896aa854cfa8ce7c3a92feb15f08",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-4/validation-report.md",
+    "blob": "f498eb0158ddb04b3fde934caddc4d27b76532b3",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/author-report-revision-2.md",
+    "blob": "2b8f7ed8058dd7e7560dfa5c8718d38141091f1d",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/author-report.md",
+    "blob": "61a719d3e44db62ab4285cf2ed845deedf6ad766",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/source-manifest-revision-2.json",
+    "blob": "0ca13438ea796d32fde65e7f11e03322128bb618",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/source-manifest.json",
+    "blob": "931688fc48f0e7b37d7daf2c65519519762ebb20",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/task-contract.md",
+    "blob": "8c6466ed0d6329a09b7c8cd2d1d48967b7eee375",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/validation-report-revision-2.md",
+    "blob": "0c0eba20b11d3ede165175a2a8446576957d4221",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/validation-report.md",
+    "blob": "6a034a6dfa66b7659b9d971074d603d008fd25cb",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-6/actual-diagnostic7-result.json",
+    "blob": "c542a4bc8ab937124c6e42960cadd034fb1e1af3",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-6/analysis.md",
+    "blob": "8ba70ff58bf8775e3e5212d3e7fa4cb638aab2cd",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-6/author-report.md",
+    "blob": "191bf24d03610a0c7d7d454f7d95ee75f57c2d8f",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-6/source-manifest.json",
+    "blob": "2edc1f34824f281e1ff1ae5fad21a88235f245e2",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-6/task-contract.md",
+    "blob": "10036fbf135ba955e9cdecf9488f5bed2b6e9541",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-7/author-report.md",
+    "blob": "319d0bf40bc4682b1d4289c95ad1f460a5ed40b4",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-7/source-manifest.json",
+    "blob": "11a6f461988a2db43d50a9708c0ee55a4768bd47",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-7/task-contract.md",
+    "blob": "629ed05703b12768f7c39d8bbbfed62f2036b1a7",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/implementation-plan.md",
+    "blob": "1217ba6ce9b9f08af34bd1b126f7b9c37510403f",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/imported-history.json",
+    "blob": "80fdaaa63733e07715fb5290f4472cf7d480a908",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/independent-qa2/qa-stop-witness.json",
+    "blob": "171d32f6766df62010c62333835c31c5f684f786",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/independent-qa2/validation-report.md",
+    "blob": "8d252382ac96878c6037c3a09d01e93b0c4fc74e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-10/README.md",
+    "blob": "a6935483b995caf03446d3800d8b05e5c8f16ab3",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-10/analysis.md",
+    "blob": "fc35ff789bc8ca98c51e21711ba0057fae317c16",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-10/author-report.md",
+    "blob": "298e11d9d9c65a0f0f96a3dd26526f902404ca45",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-10/author-summary.json",
+    "blob": "463255522e4946fb0411fd8c9775fe3859a805b3",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-10/implementation-plan.md",
+    "blob": "a1f51775df4f630c1fc5b3ad26a3040054395021",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-10/independent-qa-seal.json",
+    "blob": "aa5d8a54aea913a78a82301b73df0ae9a6f91e3c",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-10/source-projection.json",
+    "blob": "16100d422a6946ae25b7c7bd6d78ba591b18475a",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-10/task-contract.md",
+    "blob": "9c3924cf328adf6a9098355857a72d5fe9d7ab98",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-10/validation-report.md",
+    "blob": "884ba30a670e8cade10b2fb613d5cf3165dd5ca9",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/README.md",
+    "blob": "a04d80acc469de53211c20e6b1737a9f5b84cc04",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/actual-main-policy-command-result.json",
+    "blob": "bc3eab1ea5c784ab3e1c5b0e0fbbca36aef900bd",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/actual-main-policy-readback.json",
+    "blob": "e26b75835e583ee7675da0d57d17cdfb092a54cb",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/analysis.md",
+    "blob": "ad58a5ad0c4502bcb12198c171f7167b9b4d2e74",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/artifacts/task-validation/demo-exact-commit-release/review-packet-10/validation-report.md",
+    "blob": "884ba30a670e8cade10b2fb613d5cf3165dd5ca9",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-report.md",
+    "blob": "b53f9d38abc7299055ffe99b28be27a94c97f7d1",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/author-2/qa1-failed-validation-report.md",
+    "blob": "2a5dd5e51bb9436be04104ee6a64fed588afcb84",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/current-packet-index.md",
+    "blob": "7efd89249c21fa3a7fe4b7db983d1997fc97da3d",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/historical/original-packet-9/analysis.md",
+    "blob": "0fc73e104067868bafee2e4fa6821d276fdd2d72",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/historical/original-packet-9/implementation-plan.md",
+    "blob": "5986af354059cab5ae6316f601c385736ac1564a",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/historical/original-packet-9/imported-history.json",
+    "blob": "b74257e7a877e919645694a5860c43856f8eb98d",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/historical/original-packet-9/task-contract.md",
+    "blob": "629ed05703b12768f7c39d8bbbfed62f2036b1a7",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/historical/original-packet-9/validation-report.md",
+    "blob": "6e9e079247d6d18a42be92f9cf1c969e20140e35",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/implementation-plan.md",
+    "blob": "e358443075696da8b3e78d6983c973a6cef84235",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/imported-history.json",
+    "blob": "96b4971c2780cc832f01a53d6a22f9a804b12d57",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/independent-qa2/validation-report.md",
+    "blob": "8d252382ac96878c6037c3a09d01e93b0c4fc74e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/independent-qa6/validation-report.md",
+    "blob": "f214c4e1b685ad3afef9abab695a0441c976b158",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/independent-qa7/validation-report.md",
+    "blob": "aa3150956fd1462a3393bedaae496ff41440244f",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/independent-qa8/validation-report.md",
+    "blob": "26faccd56e898fcedfa10288991390145857c44b",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/independent-qa9/STOP.json",
+    "blob": "fe3ffbd9e118b414fc0b49bda19e669c4a08a2ab",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/independent-qa9/attempt-index.json",
+    "blob": "596b7de7d4a73e30258dd9275fb00270451e1a27",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/independent-qa9/final-integrity.json",
+    "blob": "3f30fdcbcc72ce7220ea1f9bdb7e5a78b4b41c31",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/independent-qa9/seal.json",
+    "blob": "ae3d794a551106a228b8bd30067ba4c39cab5ce5",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/independent-qa9/summary.json",
+    "blob": "165841d78005563ec3b5e81f29391ffd63d6eb57",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/independent-qa9/validation-report.md",
+    "blob": "7a8ce293c5f56575587fa0ade38108eae1e4238d",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/migration/actual-migration4-three-jobs-success.json",
+    "blob": "1b8bcbba14e8ff566a358df9661006c14ec69871",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/migration/actual-post-migration-placement-metadata5.json",
+    "blob": "f27236bf30f9f1058f62c0d2df898622edcad920",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/migration/migration-summary.json",
+    "blob": "00420892f031c64c1119f8bfd3aeae653cbeb1c3",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/migration/placement-summary.json",
+    "blob": "da3d27e8520e3d7157fea005d004c9ef16c5cc83",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/negative-probe/actual-negative-assertion-proof.json",
+    "blob": "b4e335ae4505d8a597e0aa900e76b528d6c35c89",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/negative-probe/actual-run-summary.json",
+    "blob": "4451085131c2b42c936c58b10d4021848f26a0b4",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/negative-probe/workflow.yml",
+    "blob": "5351abfd64ac86c0745f4b1e919065b2c208bac6",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/source-manifest.json",
+    "blob": "7e0514c5a281a769cb235eaf0403d6d6970a76a5",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/task-contract.md",
+    "blob": "fb8bf8b6af6e53720c4ec4b5d51ee5d5b2b4e2a8",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/unchanged-operational-source.json",
+    "blob": "a6d3c5cb1af4d6ade45d4426d9eb7bad41bc4f23",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-11/validation-report.md",
+    "blob": "a87f9ef8ee10fe0450fb122a7cbf028193e09b5d",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/README.md",
+    "blob": "4b93c149b973a260067c71c6e4ad9c2af129ff40",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/actual-Claude2-comment.json",
+    "blob": "54ad8a9ac93a9850814a772c69586a9ac4c8822b",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/actual-main-policy-command-result.json",
+    "blob": "bc3eab1ea5c784ab3e1c5b0e0fbbca36aef900bd",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/actual-main-policy-readback.json",
+    "blob": "e26b75835e583ee7675da0d57d17cdfb092a54cb",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/analysis.md",
+    "blob": "1d1155f61cb0554423416741ac851ce7627fcdb0",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/artifacts/task-validation/demo-exact-commit-release/review-packet-10/validation-report.md",
+    "blob": "884ba30a670e8cade10b2fb613d5cf3165dd5ca9",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-report.md",
+    "blob": "b53f9d38abc7299055ffe99b28be27a94c97f7d1",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/author-2/qa1-failed-validation-report.md",
+    "blob": "2a5dd5e51bb9436be04104ee6a64fed588afcb84",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/author11/report.md",
+    "blob": "1c3be822d07307b8ae5bf04e662b6dccac76b568",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/author11/source.patch",
+    "blob": "51b31ce9c3c9d0c7af34e55abecb8f7c71a646f0",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/author11/summary.json",
+    "blob": "d99d97040d5c007abe5ddd117ab1bf8b9f9b3c8a",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/author12/pipeline-test.patch",
+    "blob": "50081302165e117cf223a4253290c4c15f68f491",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/author12/report.json",
+    "blob": "b5965c2ec417c45de8aefa792ce5b40975158326",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/current-packet-index.md",
+    "blob": "5d03035cdeffd8c8e3096bd033c31a22a46d86c5",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/historical/original-packet-11/analysis.md",
+    "blob": "ad58a5ad0c4502bcb12198c171f7167b9b4d2e74",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/historical/original-packet-11/implementation-plan.md",
+    "blob": "e358443075696da8b3e78d6983c973a6cef84235",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/historical/original-packet-11/imported-history.json",
+    "blob": "96b4971c2780cc832f01a53d6a22f9a804b12d57",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/historical/original-packet-11/task-contract.md",
+    "blob": "fb8bf8b6af6e53720c4ec4b5d51ee5d5b2b4e2a8",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/historical/original-packet-11/validation-report.md",
+    "blob": "a87f9ef8ee10fe0450fb122a7cbf028193e09b5d",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/historical/original-packet-9/analysis.md",
+    "blob": "0fc73e104067868bafee2e4fa6821d276fdd2d72",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/historical/original-packet-9/implementation-plan.md",
+    "blob": "5986af354059cab5ae6316f601c385736ac1564a",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/historical/original-packet-9/imported-history.json",
+    "blob": "b74257e7a877e919645694a5860c43856f8eb98d",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/historical/original-packet-9/task-contract.md",
+    "blob": "629ed05703b12768f7c39d8bbbfed62f2036b1a7",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/historical/original-packet-9/validation-report.md",
+    "blob": "6e9e079247d6d18a42be92f9cf1c969e20140e35",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/implementation-plan.md",
+    "blob": "d227287761dd855d2d6f1dce9b384c0bc9129cd7",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/imported-history.json",
+    "blob": "b6529d5ad57ad77d7fbb12c716d7e9cb5e1b68bb",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa11/results.json",
+    "blob": "ae6f7ba56d14b7e1dabf5348709ddbc96038db5c",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa11/validation-report.md",
+    "blob": "6b3ac358965130128e1575bb1df926b809a95552",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa12/adversarial-results.json",
+    "blob": "65bca855324b8263bb1dbe5c851869b84d929c24",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa12/full-command.json",
+    "blob": "484e5240d4fc699920f3e1c786e700dcf88c7395",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa12/full-exit.json",
+    "blob": "e2f7e0f06738372db9043cdce4e3d9d8ade0e988",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa12/results.json",
+    "blob": "23cca84671e4b86e2d6ac145ecbaae3733779a89",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa12/validation-report.md",
+    "blob": "3b792235c56d0fb13427ea3d2be5d81470e7c4cf",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa2/validation-report.md",
+    "blob": "8d252382ac96878c6037c3a09d01e93b0c4fc74e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa6/validation-report.md",
+    "blob": "f214c4e1b685ad3afef9abab695a0441c976b158",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa7/validation-report.md",
+    "blob": "aa3150956fd1462a3393bedaae496ff41440244f",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa8/validation-report.md",
+    "blob": "26faccd56e898fcedfa10288991390145857c44b",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa9/STOP.json",
+    "blob": "fe3ffbd9e118b414fc0b49bda19e669c4a08a2ab",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa9/attempt-index.json",
+    "blob": "596b7de7d4a73e30258dd9275fb00270451e1a27",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa9/final-integrity.json",
+    "blob": "3f30fdcbcc72ce7220ea1f9bdb7e5a78b4b41c31",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa9/seal.json",
+    "blob": "ae3d794a551106a228b8bd30067ba4c39cab5ce5",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa9/summary.json",
+    "blob": "165841d78005563ec3b5e81f29391ffd63d6eb57",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/independent-qa9/validation-report.md",
+    "blob": "7a8ce293c5f56575587fa0ade38108eae1e4238d",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/luna-workflow2/report.json",
+    "blob": "4d43e498ac771d8b6eb1908bed1241216cae9d00",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/migration/actual-migration4-three-jobs-success.json",
+    "blob": "1b8bcbba14e8ff566a358df9661006c14ec69871",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/migration/actual-post-migration-placement-metadata5.json",
+    "blob": "f27236bf30f9f1058f62c0d2df898622edcad920",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/migration/migration-summary.json",
+    "blob": "00420892f031c64c1119f8bfd3aeae653cbeb1c3",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/migration/placement-summary.json",
+    "blob": "da3d27e8520e3d7157fea005d004c9ef16c5cc83",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/negative-probe/actual-negative-assertion-proof.json",
+    "blob": "b4e335ae4505d8a597e0aa900e76b528d6c35c89",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/negative-probe/actual-run-summary.json",
+    "blob": "4451085131c2b42c936c58b10d4021848f26a0b4",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/negative-probe/workflow.yml",
+    "blob": "5351abfd64ac86c0745f4b1e919065b2c208bac6",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/source-export-equivalence.json",
+    "blob": "b3b3ce33e16e247866c37d64a3a60a5b4bf98b21",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/source-manifest.json",
+    "blob": "0390b7696049c20479ee113f8637a5be959d0dc9",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/task-contract.md",
+    "blob": "b5dd406249edbc1d98ecf91d55ef5a8a67b189ca",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/unchanged-operational-source.json",
+    "blob": "a6d3c5cb1af4d6ade45d4426d9eb7bad41bc4f23",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-12/validation-report.md",
+    "blob": "70f9995c29c037b1ef45b69cc118a1aff64c4807",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/analysis.md",
+    "blob": "c9776472e03261f692215df9eab15d11e54a77eb",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/author-2/qa1-failed-validation-report.md",
+    "blob": "2a5dd5e51bb9436be04104ee6a64fed588afcb84",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/implementation-plan.md",
+    "blob": "12bcd36259a80df5d38398b8a28b95ac3b5c1449",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/imported-history.json",
+    "blob": "56cbfe423715a0fb01d9229edf4fd5a2f432309b",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa2/validation-report.md",
+    "blob": "8d252382ac96878c6037c3a09d01e93b0c4fc74e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-report.md",
+    "blob": "b53f9d38abc7299055ffe99b28be27a94c97f7d1",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-summary.json",
+    "blob": "7cc7d417d46163894c9312ef7eb2fd968f4f456f",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/source-manifest.json",
+    "blob": "2baf21009139092cd78ccbdc816c77735c203c21",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/task-contract.md",
+    "blob": "148d23283f809704314df6a20b1f89dec8eda951",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/validation-report.md",
+    "blob": "829a696d29aa79ab94ec0136258d5eed8683ebfe",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/analysis.md",
+    "blob": "bae1491f648b2ad20492c62f005e8e4329b057be",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-report.md",
+    "blob": "b53f9d38abc7299055ffe99b28be27a94c97f7d1",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/author-2/qa1-failed-validation-report.md",
+    "blob": "2a5dd5e51bb9436be04104ee6a64fed588afcb84",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/current-packet-index.md",
+    "blob": "a41af606e0379f4030e3050c22bb7d5e3277710e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/implementation-plan.md",
+    "blob": "44731f075bc7c8b435d8c70adb9f2a478d916764",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/imported-history.json",
+    "blob": "0edbeab5f927668b87482fb0dc62711241351062",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/independent-qa2/validation-report.md",
+    "blob": "8d252382ac96878c6037c3a09d01e93b0c4fc74e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/independent-qa6/validation-report.md",
+    "blob": "f214c4e1b685ad3afef9abab695a0441c976b158",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/independent-qa6/validation-summary.json",
+    "blob": "c06c496c74e045eb6e3f11eb8a7bc4003a9fab8f",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/source-manifest.json",
+    "blob": "776fe03d002dd5ee1a3094db0a8c1187111efd50",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/task-contract.md",
+    "blob": "b342f05daaf8896aa854cfa8ce7c3a92feb15f08",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/validation-report.md",
+    "blob": "909541ef088ed2285f0916212bd6ce514d1ea86f",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/analysis.md",
+    "blob": "882044a8f8727057420f04734602fe16d9da5ef4",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-report.md",
+    "blob": "b53f9d38abc7299055ffe99b28be27a94c97f7d1",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/author-2/qa1-failed-validation-report.md",
+    "blob": "2a5dd5e51bb9436be04104ee6a64fed588afcb84",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/current-packet-index.md",
+    "blob": "d77b591c257b054520d0fd2d659d3e6881754dce",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/implementation-plan.md",
+    "blob": "35414d29cdf9a34b9b99727e35ef487949950dbb",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/imported-history.json",
+    "blob": "e5e0a8ea133efee359a130aac37ad2c99ec16ef9",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/independent-qa2/validation-report.md",
+    "blob": "8d252382ac96878c6037c3a09d01e93b0c4fc74e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/independent-qa6/validation-report.md",
+    "blob": "f214c4e1b685ad3afef9abab695a0441c976b158",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/independent-qa7/evidence-checksums.json",
+    "blob": "792a44c5862940e28c1bba250d4b284172743abd",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/independent-qa7/initial-tool-only-report.md",
+    "blob": "614a037bf0e8468964af4229e9103b996c61e5dc",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/independent-qa7/qa-seal.json",
+    "blob": "2eb1eddf912f51a65e1b716ddba4a44234fb8fd4",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/independent-qa7/validation-report.md",
+    "blob": "aa3150956fd1462a3393bedaae496ff41440244f",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/independent-qa7/validation-summary.json",
+    "blob": "2cfb8426ee68ac9b82c9b6e64724999b68f4f39e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/source-manifest.json",
+    "blob": "864c8496c73bd6cce885e774d2c5d9f7c3cff1b0",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/task-contract.md",
+    "blob": "8c6466ed0d6329a09b7c8cd2d1d48967b7eee375",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/validation-report.md",
+    "blob": "bfba65034c56418241578789f39d6c424fd79c91",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/analysis.md",
+    "blob": "9d8946703546804603fd5204cb049bd3ba8f3cb9",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-report.md",
+    "blob": "b53f9d38abc7299055ffe99b28be27a94c97f7d1",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/author-2/qa1-failed-validation-report.md",
+    "blob": "2a5dd5e51bb9436be04104ee6a64fed588afcb84",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/current-packet-index.md",
+    "blob": "4a9a79ed961f6b16c01103f23f78e81cbbcd1979",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/implementation-plan.md",
+    "blob": "7949bebd46636b11799741bebca2fe1f973809c5",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/imported-history.json",
+    "blob": "5374dc7c98a11954a0fe9bebd4e9d421b70905f2",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/independent-qa2/validation-report.md",
+    "blob": "8d252382ac96878c6037c3a09d01e93b0c4fc74e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/independent-qa6/validation-report.md",
+    "blob": "f214c4e1b685ad3afef9abab695a0441c976b158",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/independent-qa7/validation-report.md",
+    "blob": "aa3150956fd1462a3393bedaae496ff41440244f",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/independent-qa8/STOP.json",
+    "blob": "0a99fd2606844a9a33e5b7fc269730c9aba05b8e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/independent-qa8/evidence-digests.json",
+    "blob": "34b6a9e02b981cd870a3789119304b65eab62306",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/independent-qa8/qa-seal.json",
+    "blob": "afb4abfe99591ad384bef2970ff024559db6d56f",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/independent-qa8/validation-report.md",
+    "blob": "26faccd56e898fcedfa10288991390145857c44b",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/independent-qa8/validation-summary.json",
+    "blob": "4d3ad33e7a05c8bbced853c5419d2ac430b1b7bf",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/source-manifest.json",
+    "blob": "cb82d6ed9942ebe7f94d8109672dcabdd8fb7da0",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/task-contract.md",
+    "blob": "10036fbf135ba955e9cdecf9488f5bed2b6e9541",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-8/validation-report.md",
+    "blob": "4ac9919400246a163203a1137b1972ba4c98403b",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/actual-main-policy-command-result.json",
+    "blob": "bc3eab1ea5c784ab3e1c5b0e0fbbca36aef900bd",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/actual-main-policy-readback.json",
+    "blob": "e26b75835e583ee7675da0d57d17cdfb092a54cb",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/analysis.md",
+    "blob": "0fc73e104067868bafee2e4fa6821d276fdd2d72",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-report.md",
+    "blob": "b53f9d38abc7299055ffe99b28be27a94c97f7d1",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/author-2/qa1-failed-validation-report.md",
+    "blob": "2a5dd5e51bb9436be04104ee6a64fed588afcb84",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/current-packet-index.md",
+    "blob": "7efd89249c21fa3a7fe4b7db983d1997fc97da3d",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/implementation-plan.md",
+    "blob": "5986af354059cab5ae6316f601c385736ac1564a",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/imported-history.json",
+    "blob": "b74257e7a877e919645694a5860c43856f8eb98d",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/independent-qa2/validation-report.md",
+    "blob": "8d252382ac96878c6037c3a09d01e93b0c4fc74e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/independent-qa6/validation-report.md",
+    "blob": "f214c4e1b685ad3afef9abab695a0441c976b158",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/independent-qa7/validation-report.md",
+    "blob": "aa3150956fd1462a3393bedaae496ff41440244f",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/independent-qa8/validation-report.md",
+    "blob": "26faccd56e898fcedfa10288991390145857c44b",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/independent-qa9/STOP.json",
+    "blob": "fe3ffbd9e118b414fc0b49bda19e669c4a08a2ab",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/independent-qa9/attempt-index.json",
+    "blob": "596b7de7d4a73e30258dd9275fb00270451e1a27",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/independent-qa9/final-integrity.json",
+    "blob": "3f30fdcbcc72ce7220ea1f9bdb7e5a78b4b41c31",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/independent-qa9/seal.json",
+    "blob": "ae3d794a551106a228b8bd30067ba4c39cab5ce5",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/independent-qa9/summary.json",
+    "blob": "165841d78005563ec3b5e81f29391ffd63d6eb57",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/independent-qa9/validation-report.md",
+    "blob": "7a8ce293c5f56575587fa0ade38108eae1e4238d",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/source-manifest.json",
+    "blob": "7e0514c5a281a769cb235eaf0403d6d6970a76a5",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/task-contract.md",
+    "blob": "629ed05703b12768f7c39d8bbbfed62f2036b1a7",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/unchanged-operational-source.json",
+    "blob": "a6d3c5cb1af4d6ade45d4426d9eb7bad41bc4f23",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-9/validation-report.md",
+    "blob": "6e9e079247d6d18a42be92f9cf1c969e20140e35",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/task-contract.md",
+    "blob": "caa5c7d52bccd03d6088fb278f3b899673198d63",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/demo-exact-commit-release/validation-report.md",
+    "blob": "3c8046d2235544e536f18c3c31570a4655bf41c5",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "backend/src/proactive/__tests__/proactive-e2e.test.ts",
+    "blob": "30c4315286f3c3bf9984dae13a343d5158a9379e",
+    "mode": "100644",
+    "baseBlob": "75e2fe3f92e6f948de23e226bfd9025459d58839",
+    "baseMode": "100644"
+  },
+  {
+    "path": "scripts/automation/configure-demo-source.test.mjs",
+    "blob": "b5cc12e0259134eb2e48bd06dfafa176b07843d2",
+    "mode": "100644",
+    "baseBlob": "a1b9ba80a36573b99e63f50504e1ac22cd414606",
+    "baseMode": "100644"
+  },
+  {
+    "path": "scripts/quality-gate/configure-bug-repository.mjs",
+    "blob": "5531bd2d8bb914e8c6ccefe52ab2d76b56f8ceaa",
+    "mode": "100644",
+    "baseBlob": "8b84f0b549c9e4713b0227b3b5b188694774f159",
+    "baseMode": "100644"
+  }
+]

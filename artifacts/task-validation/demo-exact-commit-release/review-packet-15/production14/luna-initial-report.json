@@ -1,0 +1,21 @@
+{
+  "task": "Claude4 follow-up 14 production run inventory attempt selection",
+  "reservationNonce": "026f3945-fa2f-41a6-9983-3fabb57db0b2",
+  "parentReservationStateCommit": "7d1c30d1c6ec57d59b18d47f836c94f07594e0bb",
+  "sourceSnapshot": "/tmp/clinicos-498-Claude4-production14",
+  "immutableBaseline": "/tmp/clinicos-498-Claude4-base14",
+  "scope": [
+    "agent-team/src/bug-pipeline/demo-deployment.mjs",
+    "agent-team/tests/bug-pipeline/demo-deployment.test.mjs"
+  ],
+  "behavior": "Inventory rows retain strict full identity and positive integer attempt validation. Older attempt>1 rows are accepted only if completed; active/queued older reruns block as pending when their status and null conclusion match a pending state. The selected newest run and all re-reads still require attempt 1 and the exact successful deploy job.",
+  "validation": {
+    "sevenHeaderContractValidator": "PASS",
+    "focusedCommand": "Node 22 --test agent-team/tests/bug-pipeline/demo-deployment.test.mjs with environment cleared except PATH and task TMPDIR",
+    "focusedTests": 363,
+    "focusedPass": 363,
+    "focusedFail": 0,
+    "negativeControl": "PASS: the added regression test fails against the original implementation because completed older attempt 2 is rejected; newest attempt 2 and malformed/non-positive attempt rejection assertions remain covered."
+  },
+  "realProductionProof": "NOT RUN; no deployment or CI evidence was produced by this task."
+}

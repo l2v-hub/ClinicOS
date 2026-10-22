@@ -1,11 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
+import { mkdtemp, readFile, writeFile, rm, readdir } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { deflateRawSync } from 'node:zlib';
 import { createServer } from 'node:http';
 import {
   DEMO_TARGET,
+  DEMO_SOURCE_POLICIES,
   validateTarget,
   validateActiveDeployment,
   verifyLiveReady,
@@ -17,6 +22,9 @@ import {
   verifyDemoPreflight,
   verifyDemoRelease,
   createRailwayClient,
+  DemoTransientReadError,
+  DEMO_DEPLOY_BUDGET_MS,
+  serializeDemoMetadata,
 } from '../../src/bug-pipeline/demo-deployment.mjs';
 
 const repo = 'l2v-hub/ClinicOS';
@@ -41,22 +49,84 @@ const env = {
   GITHUB_SHA: sha,
   GITHUB_RUN_ID: '123',
   GITHUB_RUN_ATTEMPT: '2',
+  GITHUB_ACTIONS: 'true',
+  GITHUB_EVENT_NAME: 'push',
+  GITHUB_WORKFLOW_REF: `${repo}/.github/workflows/deploy-backend.yml@refs/heads/main`,
 };
+const exactEnv = {
+  ...env,
+  GITHUB_EVENT_NAME: 'workflow_dispatch',
+  GITHUB_WORKFLOW_REF: `${repo}/.github/workflows/deploy-demo-exact-commit.yml@refs/heads/main`,
+  CLINICOS_REVIEWED_SHA: sha,
+  GITHUB_TOKEN: 'synthetic-readonly-github-binding',
+};
+const exactRun = {
+  ...run,
+  path: '.github/workflows/deploy-demo-exact-commit.yml',
+  event: 'workflow_dispatch',
+};
+const exactPolicy = DEMO_SOURCE_POLICIES.exact;
+const mainEndpoint = 'https://api.github.com/repos/l2v-hub/ClinicOS/git/ref/heads/main';
+const mainBody = (current = sha) => ({
+  ref: 'refs/heads/main',
+  object: { type: 'commit', sha: current },
+});
+function mainFetch(
+  readyFetch = async (url) => {
+    assert.equal(url, `https://${DEMO_TARGET.domain}/ready`);
+    return response();
+  },
+) {
+  return async (url, options) => {
+    if (url !== mainEndpoint) return readyFetch(url, options);
+    assert.equal(options.headers.Authorization, 'Bearer synthetic-readonly-github-binding');
+    assert.equal(options.headers['Project-Access-Token'], undefined);
+    assert.equal(options.redirect, 'error');
+    assert.equal(options.cache, 'no-store');
+    assert.equal(options.headers['Cache-Control'], 'no-cache');
+    return response(mainBody());
+  };
+}
+const exactReceipt = (kind) => ({
+  ...receipt(kind),
+  sourcePolicy: exactPolicy,
+  reviewedSha: sha,
+});
+function exactTargetData() {
+  const data = targetData();
+  data.deploymentTriggers = { edges: [], pageInfo: { hasNextPage: false } };
+  data.deployments = { edges: [], pageInfo: { hasNextPage: false } };
+  data.serviceInstance.latestDeployment = {
+    id: deploymentId,
+    status: 'SUCCESS',
+  };
+  return data;
+}
 function targetData() {
   return {
     projectToken: {
       project: { id: DEMO_TARGET.projectId },
       environment: { id: DEMO_TARGET.environmentId, name: 'demo' },
     },
-    deploymentTriggers: { edges: [{ node: { ...DEMO_TARGET, repository: repo, branch: 'main' } }] },
+    deploymentTriggers: {
+      edges: [{ node: { ...DEMO_TARGET, repository: repo, branch: 'main' } }],
+    },
     serviceInstance: {
       serviceId: DEMO_TARGET.serviceId,
       environmentId: DEMO_TARGET.environmentId,
       source: { repo },
-      domains: { serviceDomains: [{ domain: DEMO_TARGET.domain }], customDomains: [] },
+      domains: {
+        serviceDomains: [{ domain: DEMO_TARGET.domain }],
+        customDomains: [],
+      },
       activeDeployments: [{ id: deploymentId, status: 'SUCCESS' }],
     },
-    deployment: { ...DEMO_TARGET, id: deploymentId, status: 'SUCCESS', meta: { commitHash: sha } },
+    deployment: {
+      ...DEMO_TARGET,
+      id: deploymentId,
+      status: 'SUCCESS',
+      meta: { commitHash: sha },
+    },
   };
 }
 const readyBody = () => ({
@@ -357,7 +427,9 @@ test('public readiness needs no-store, correct deployment identity and real depe
   ])
     await t.test(label, () =>
       assert.rejects(
-        verifyLiveReady(deploymentId, { fetchImpl: async () => response(body, status, headers) }),
+        verifyLiveReady(deploymentId, {
+          fetchImpl: async () => response(body, status, headers),
+        }),
       ),
     );
 });
@@ -479,11 +551,17 @@ function proofHttp({
   modifyArtifact = (a) => a,
   corrupt = false,
   redirect = 'https://production.blob.core.windows.net/signed',
+  receiptBody = receipt(),
 } = {}) {
-  const zip = zipReceipt(receipt());
+  const fixtureRun = receiptBody.sourcePolicy === exactPolicy ? exactRun : run;
+  const preflight = receiptBody.kind === 'clinicos-demo-preflight';
+  const zip = zipReceipt(
+    receiptBody,
+    preflight ? 'demo-preflight-receipt.json' : 'demo-deployment-receipt.json',
+  );
   const artifact = modifyArtifact({
     id: 456,
-    name: `demo-deployment-${run.id}-${run.run_attempt}`,
+    name: `${preflight ? 'demo-preflight' : 'demo-deployment'}-${run.id}-${run.run_attempt}`,
     expired: false,
     digest: `sha256:${hash(zip)}`,
     size_in_bytes: zip.length,
@@ -495,9 +573,20 @@ function proofHttp({
     if (String(url) === 'https://production.blob.core.windows.net/signed')
       return new Response(corrupt ? Buffer.from('tampered') : zip);
     if (String(url).endsWith('/zip'))
-      return new Response(null, { status: 302, headers: { location: redirect } });
+      return new Response(null, {
+        status: 302,
+        headers: { location: redirect },
+      });
     if (String(url).includes('/artifacts?')) return response({ artifacts: [artifact] });
-    if (String(url).includes('/actions/runs/123')) return response(modifyRun(structuredClone(run)));
+    if (String(url).endsWith('/commits/main')) return response({ sha });
+    if (String(url).includes('/actions/workflows/'))
+      return response({
+        workflow_runs: String(url).includes(`/${fixtureRun.path.split('/').at(-1)}/runs?`)
+          ? [modifyRun(structuredClone(fixtureRun))]
+          : [],
+      });
+    if (String(url).includes('/actions/runs/123'))
+      return response(modifyRun(structuredClone(fixtureRun)));
     if (String(url).endsWith('/ready')) return response();
     throw new Error('Unexpected URL');
   };
@@ -535,7 +624,15 @@ test('trusted workflow and immutable artifact mismatch matrix fails closed', asy
     ['wrong workflow', { modifyRun: (r) => ({ ...r, path: '.github/workflows/attacker.yml' }) }],
     ['wrong branch', { modifyRun: (r) => ({ ...r, head_branch: 'preview' }) }],
     ['wrong repository', { modifyRun: (r) => ({ ...r, repository: { full_name: 'other/repo' } }) }],
-    ['fork', { modifyRun: (r) => ({ ...r, head_repository: { full_name: 'other/repo' } }) }],
+    [
+      'fork',
+      {
+        modifyRun: (r) => ({
+          ...r,
+          head_repository: { full_name: 'other/repo' },
+        }),
+      },
+    ],
     ['wrong SHA', { modifyRun: (r) => ({ ...r, head_sha: reviewedSha }) }],
     ['expired artifact', { modifyArtifact: (a) => ({ ...a, expired: true }) }],
     [
@@ -545,7 +642,12 @@ test('trusted workflow and immutable artifact mismatch matrix fails closed', asy
     ['missing archive digest', { modifyArtifact: (a) => ({ ...a, digest: undefined }) }],
     [
       'wrong artifact workflow SHA',
-      { modifyArtifact: (a) => ({ ...a, workflow_run: { id: 123, head_sha: reviewedSha } }) },
+      {
+        modifyArtifact: (a) => ({
+          ...a,
+          workflow_run: { id: 123, head_sha: reviewedSha },
+        }),
+      },
     ],
     ['tampered archive', { corrupt: true }],
     ['untrusted redirect', { redirect: 'https://attacker.example/zip' }],
@@ -596,7 +698,7 @@ test('Railway API client sends credentials only to fixed official origin and nev
   assert.equal(calls[0].options.headers['Project-Access-Token'], 'synthetic-demo-binding');
 });
 
-test('deployment workflow isolates demo credentials, defaults dispatch to read-only and records only in demo environment', async () => {
+test('deployment workflows isolate demo credentials and record only in demo environment', async () => {
   const backend = await readFile(
     new URL('../../../.github/workflows/deploy-backend.yml', import.meta.url),
     'utf8',
@@ -605,8 +707,14 @@ test('deployment workflow isolates demo credentials, defaults dispatch to read-o
     new URL('../../../.github/workflows/codex-bug-release.yml', import.meta.url),
     'utf8',
   );
-  const [production, demo] = backend.split('  demo:');
-  assert.match(production, /default: preflight/);
+  const production = backend;
+  const demo = await readFile(
+    new URL('../../../.github/workflows/deploy-demo-exact-commit.yml', import.meta.url),
+    'utf8',
+  );
+  assert.doesNotMatch(backend, /^  demo:/m);
+  assert.match(production, /workflow_dispatch:/);
+  assert.match(production, /if: github.ref == 'refs\/heads\/main'/);
   assert.doesNotMatch(production, /secrets\.RAILWAY_DEMO_TOKEN/);
   assert.match(demo, /environment: 'glistening-friendship \/ demo'/);
   assert.match(demo, /RAILWAY_TOKEN: \$\{\{ secrets\.RAILWAY_DEMO_TOKEN \}\}/);
@@ -614,7 +722,10 @@ test('deployment workflow isolates demo credentials, defaults dispatch to read-o
   assert.ok(
     demo.indexOf('demo-deployment.mjs preflight') < demo.indexOf('demo-deployment.mjs deploy'),
   );
-  assert.match(demo, /if: github.event_name == 'push' \|\| inputs.operation == 'deploy'/);
+  assert.doesNotMatch(backend, /preflight-exact|deploy-exact/);
+  assert.match(backend, /permissions:\n  contents: read/);
+  assert.match(backend, /concurrency:\n  group: railway-backend\n  cancel-in-progress: false/);
+  assert.doesNotMatch(demo, /^  push:/m);
   const [releaseJob, confirm] = release.split('  confirm-demo:');
   assert.doesNotMatch(releaseJob, /BUG_PIPELINE_RELEASE_ACTION: record/);
   assert.doesNotMatch(releaseJob, /secrets\.RAILWAY_DEMO_TOKEN/);
@@ -760,4 +871,2345 @@ test('persistent old/new overlap cannot issue a receipt despite healthy public r
     /readiness timed out/,
   );
   assert.equal(readinessCalls, 0);
+});
+
+test('zero-trigger exact policy is explicit; complete fixed inventories retain strict defaults', async () => {
+  const data = exactTargetData();
+  assert.throws(() => validateTarget(data), /main repository trigger required/);
+  assert.deepEqual(validateTarget(data, exactPolicy), DEMO_TARGET);
+  const one = targetData();
+  one.deploymentTriggers.pageInfo = { hasNextPage: false };
+  assert.throws(() => validateTarget(one, exactPolicy), /main repository trigger required/);
+  assert.deepEqual(validateTarget(one), DEMO_TARGET);
+  const proof = await prepareDemo({
+    env: exactEnv,
+    sourcePolicy: exactPolicy,
+    fetchImpl: mainFetch(),
+    client: async (query) => {
+      assert.match(query, /pageInfo\{hasNextPage\}/);
+      return data;
+    },
+  });
+  assert.equal(proof.sourcePolicy, exactPolicy);
+  validateReceipt(proof, exactRun, 'clinicos-demo-preflight', Date.now(), exactPolicy);
+  // Historical receipts without the field remain strict and independently verifiable.
+  validateReceipt(receipt(), run);
+});
+
+test('exact policy rejects incomplete or hostile source inventories', async (t) => {
+  for (const [label, mutate, policy = exactPolicy] of [
+    ['unknown policy', () => {}, 'native-exact-commit-v2'],
+    ['null policy', () => {}, null],
+    [
+      'missing trigger collection',
+      (d) => {
+        delete d.deploymentTriggers;
+      },
+    ],
+    [
+      'missing edges',
+      (d) => {
+        delete d.deploymentTriggers.edges;
+      },
+    ],
+    [
+      'null edges',
+      (d) => {
+        d.deploymentTriggers.edges = null;
+      },
+    ],
+    [
+      'hidden next page',
+      (d) => {
+        d.deploymentTriggers.pageInfo.hasNextPage = true;
+      },
+    ],
+    [
+      'missing pageInfo',
+      (d) => {
+        delete d.deploymentTriggers.pageInfo;
+      },
+    ],
+    [
+      'missing pagination boolean',
+      (d) => {
+        delete d.deploymentTriggers.pageInfo.hasNextPage;
+      },
+    ],
+    [
+      'false-like pagination',
+      (d) => {
+        d.deploymentTriggers.pageInfo.hasNextPage = 'false';
+      },
+    ],
+    [
+      'missing service domains',
+      (d) => {
+        delete d.serviceInstance.domains.serviceDomains;
+      },
+    ],
+    [
+      'missing custom domains',
+      (d) => {
+        delete d.serviceInstance.domains.customDomains;
+      },
+    ],
+    [
+      'missing domains',
+      (d) => {
+        delete d.serviceInstance.domains;
+      },
+    ],
+    [
+      'wrong domain',
+      (d) => {
+        d.serviceInstance.domains.serviceDomains[0].domain = 'foreign.example';
+      },
+    ],
+    [
+      'wrong repository',
+      (d) => {
+        d.serviceInstance.source.repo = 'foreign/repo';
+      },
+    ],
+    [
+      'missing source',
+      (d) => {
+        delete d.serviceInstance.source;
+      },
+    ],
+    [
+      'wrong token project',
+      (d) => {
+        d.projectToken.project.id = 'other';
+      },
+    ],
+    [
+      'wrong token environment',
+      (d) => {
+        d.projectToken.environment.id = 'other';
+      },
+    ],
+    [
+      'wrong environment name',
+      (d) => {
+        d.projectToken.environment.name = 'production';
+      },
+    ],
+    [
+      'wrong service',
+      (d) => {
+        d.serviceInstance.serviceId = 'other';
+      },
+    ],
+    [
+      'wrong instance environment',
+      (d) => {
+        d.serviceInstance.environmentId = 'other';
+      },
+    ],
+    [
+      'foreign branch',
+      (d) => {
+        d.deploymentTriggers.edges = [
+          { node: { ...DEMO_TARGET, repository: repo, branch: 'preview' } },
+        ];
+      },
+    ],
+    [
+      'foreign trigger repository',
+      (d) => {
+        d.deploymentTriggers.edges = [
+          {
+            node: { ...DEMO_TARGET, repository: 'other/repo', branch: 'main' },
+          },
+        ];
+      },
+    ],
+    [
+      'foreign trigger target',
+      (d) => {
+        d.deploymentTriggers.edges = [
+          {
+            node: {
+              ...DEMO_TARGET,
+              environmentId: 'other',
+              repository: repo,
+              branch: 'main',
+            },
+          },
+        ];
+      },
+    ],
+    [
+      'null trigger',
+      (d) => {
+        d.deploymentTriggers.edges = [null];
+      },
+    ],
+    [
+      'duplicate triggers',
+      (d) => {
+        const edge = targetData().deploymentTriggers.edges[0];
+        d.deploymentTriggers.edges = [edge, edge];
+      },
+    ],
+  ])
+    await t.test(label, async () => {
+      const data = exactTargetData();
+      mutate(data);
+      assert.throws(() => validateTarget(data, policy));
+      let mutations = 0;
+      await assert.rejects(
+        deployDemo({
+          env: exactEnv,
+          sourcePolicy: policy,
+          fetchImpl: mainFetch(),
+          client: async (query) => {
+            if (query.startsWith('mutation')) mutations++;
+            return data;
+          },
+          attempts: 1,
+        }),
+      );
+      assert.equal(mutations, 0);
+    });
+});
+
+test('only the fixed main Actions deployment workflow may select exact policy', async (t) => {
+  for (const [key, value] of [
+    ['GITHUB_ACTIONS', undefined],
+    ['GITHUB_WORKFLOW_REF', undefined],
+    ['GITHUB_WORKFLOW_REF', `${repo}/.github/workflows/foreign.yml@refs/heads/main`],
+    ['GITHUB_WORKFLOW_REF', `${repo}/.github/workflows/deploy-backend.yml@refs/heads/preview`],
+    ['GITHUB_EVENT_NAME', 'pull_request_target'],
+    ['GITHUB_EVENT_NAME', 'pull_request'],
+    ['GITHUB_EVENT_NAME', 'push'],
+    ['GITHUB_WORKFLOW_REF', env.GITHUB_WORKFLOW_REF],
+    ['CLINICOS_REVIEWED_SHA', undefined],
+    ['CLINICOS_REVIEWED_SHA', reviewedSha],
+    ['GITHUB_REPOSITORY', 'foreign/repo'],
+    ['GITHUB_REF', 'refs/heads/preview'],
+    ['GITHUB_SHA', 'not-a-sha'],
+    ['GITHUB_RUN_ID', '0'],
+    ['GITHUB_RUN_ATTEMPT', '0'],
+  ])
+    await t.test(`${key}=${value}`, async () => {
+      let calls = 0;
+      const options = {
+        env: { ...exactEnv, [key]: value },
+        sourcePolicy: exactPolicy,
+        fetchImpl: mainFetch(),
+        client: async () => {
+          calls++;
+          return exactTargetData();
+        },
+      };
+      await assert.rejects(prepareDemo(options));
+      await assert.rejects(deployDemo(options));
+      assert.equal(calls, 0);
+    });
+  assert.equal(
+    (
+      await prepareDemo({
+        env: { ...exactEnv, GITHUB_EVENT_NAME: 'workflow_dispatch' },
+        sourcePolicy: exactPolicy,
+        fetchImpl: mainFetch(),
+        client: async () => exactTargetData(),
+      })
+    ).sourcePolicy,
+    exactPolicy,
+  );
+});
+
+test('native exact policy binds one exact mutation, native metadata, readiness and final target inspection', async () => {
+  const calls = [];
+  let ready = false;
+  const proof = await deployDemo({
+    env: exactEnv,
+    sourcePolicy: exactPolicy,
+    attempts: 1,
+    client: async (query, variables) => {
+      calls.push({ query, variables, ready });
+      if (query.startsWith('mutation')) {
+        assert.match(
+          query,
+          /serviceInstanceDeployV2\(environmentId:\$environmentId,serviceId:\$serviceId,commitSha:\$commitSha\)/,
+        );
+        assert.deepEqual(variables, { ...DEMO_TARGET, commitSha: sha });
+        assert.doesNotMatch(query, /latestCommit|serviceConnect|deploymentTrigger/);
+        return { serviceInstanceDeployV2: deploymentId };
+      }
+      return exactTargetData();
+    },
+    fetchImpl: mainFetch(async (url, options) => {
+      assert.equal(url, `https://${DEMO_TARGET.domain}/ready`);
+      assert.equal(options.redirect, 'error');
+      assert.equal(options.headers['Cache-Control'], 'no-cache');
+      ready = true;
+      return response();
+    }),
+  });
+  assert.equal(calls.filter((c) => c.query.startsWith('mutation')).length, 1);
+  assert.equal(
+    calls.length,
+    4,
+    'fresh preflight, single mutation, native poll, post-ready inspection',
+  );
+  assert.equal(calls.at(-1).ready, true);
+  assert.equal(proof.sourcePolicy, exactPolicy);
+  assert.equal(proof.deployment.commitHash, sha);
+  assert.equal(proof.ready.deploymentId, deploymentId);
+  validateReceipt(proof, exactRun, undefined, Date.now(), exactPolicy);
+});
+
+test('source policy is bound through artifact receipt and independent native verification', async (t) => {
+  const f = proofHttp({ receiptBody: exactReceipt() });
+  let inspections = 0;
+  const proof = await verifyDemoRelease({
+    reader: f.reader,
+    fetchImpl: f.fetchImpl,
+    runUrl: `https://github.com/${repo}/actions/runs/123`,
+    mergeSha: sha,
+    reviewedSha,
+    client: async () => {
+      inspections++;
+      return exactTargetData();
+    },
+    sourcePolicy: exactPolicy,
+  });
+  assert.equal(proof.receipt.sourcePolicy, exactPolicy);
+  assert.equal(inspections, 2);
+  for (const [label, receiptPolicy, expected, data] of [
+    ['unknown receipt', 'unknown', undefined, exactTargetData()],
+    ['explicit null receipt', null, undefined, exactTargetData()],
+    ['mismatch strict expectation', exactPolicy, DEMO_SOURCE_POLICIES.trigger, exactTargetData()],
+    ['mismatch exact expectation', DEMO_SOURCE_POLICIES.trigger, exactPolicy, targetData()],
+    ['legacy receipt cannot authorize zero triggers', undefined, undefined, exactTargetData()],
+    ['unknown expected policy', exactPolicy, 'unknown', exactTargetData()],
+  ])
+    await t.test(label, async () => {
+      const saved = {
+        ...receipt(),
+        ...(receiptPolicy === undefined ? {} : { sourcePolicy: receiptPolicy }),
+        ...(receiptPolicy === exactPolicy ? { reviewedSha: sha } : {}),
+      };
+      const http = proofHttp({ receiptBody: saved });
+      await assert.rejects(
+        verifyDemoRelease({
+          reader: http.reader,
+          fetchImpl: http.fetchImpl,
+          runUrl: `https://github.com/${repo}/actions/runs/123`,
+          mergeSha: sha,
+          reviewedSha,
+          client: async () => data,
+          sourcePolicy: expected,
+        }),
+      );
+    });
+  const preflight = exactReceipt('clinicos-demo-preflight');
+  const reader = {
+    getJson: async (route) => (route === 'commits/main' ? { sha } : { workflow_runs: [exactRun] }),
+    artifact: async () => ({ receipt: preflight }),
+  };
+  assert.equal(
+    (await verifyDemoPreflight({ reader, sourcePolicy: exactPolicy })).receipt.sourcePolicy,
+    exactPolicy,
+  );
+  await assert.rejects(verifyDemoPreflight({ reader, sourcePolicy: DEMO_SOURCE_POLICIES.trigger }));
+});
+
+test('exact policy rejects native provenance and source drift after mutation without mutation retry', async (t) => {
+  for (const [label, mutate] of [
+    [
+      'foreign source',
+      (d) => {
+        d.serviceInstance.source.repo = 'foreign/repo';
+      },
+    ],
+    [
+      'new foreign trigger',
+      (d) => {
+        d.deploymentTriggers.edges = [
+          { node: { ...DEMO_TARGET, repository: repo, branch: 'preview' } },
+        ];
+      },
+    ],
+    [
+      'incomplete next page',
+      (d) => {
+        d.deploymentTriggers.pageInfo.hasNextPage = true;
+      },
+    ],
+    [
+      'wrong target',
+      (d) => {
+        d.deployment.environmentId = 'other';
+      },
+    ],
+    [
+      'wrong native commit',
+      (d) => {
+        d.deployment.meta.commitHash = reviewedSha;
+      },
+    ],
+    [
+      'missing native commit',
+      (d) => {
+        d.deployment.meta = { message: sha };
+      },
+    ],
+    [
+      'ambiguous active deployment',
+      (d) => {
+        d.serviceInstance.activeDeployments.push({
+          id: deploymentId,
+          status: 'SUCCESS',
+        });
+      },
+    ],
+  ])
+    await t.test(label, async () => {
+      let mutations = 0;
+      let queries = 0;
+      await assert.rejects(
+        deployDemo({
+          env: exactEnv,
+          sourcePolicy: exactPolicy,
+          attempts: 1,
+          client: async (query) => {
+            if (query.startsWith('mutation')) {
+              mutations++;
+              return { serviceInstanceDeployV2: deploymentId };
+            }
+            const data = exactTargetData();
+            if (++queries > 1) mutate(data);
+            return data;
+          },
+          fetchImpl: mainFetch(),
+        }),
+      );
+      assert.equal(mutations, 1);
+    });
+  let mutations = 0;
+  let ready = false;
+  await assert.rejects(
+    deployDemo({
+      env: exactEnv,
+      sourcePolicy: exactPolicy,
+      attempts: 1,
+      client: async (query) => {
+        if (query.startsWith('mutation')) {
+          mutations++;
+          return { serviceInstanceDeployV2: deploymentId };
+        }
+        const data = exactTargetData();
+        if (ready) data.serviceInstance.source.repo = 'drift/after-ready';
+        return data;
+      },
+      fetchImpl: mainFetch(async () => {
+        ready = true;
+        return response();
+      }),
+    }),
+    /source, or target mismatch/,
+  );
+  assert.equal(mutations, 1);
+});
+
+test('uncertain or denied exact mutation and polling errors stop after one submission', async (t) => {
+  for (const failure of ['transport', 'denied', 'invalid-id', 'polling'])
+    await t.test(failure, async () => {
+      let mutations = 0;
+      let requests = 0;
+      const client = createRailwayClient({
+        token: 'synthetic-demo-binding',
+        fetchImpl: async (_url, options) => {
+          requests++;
+          const { query } = JSON.parse(options.body);
+          if (query.startsWith('mutation')) {
+            mutations++;
+            if (failure === 'transport') throw new Error('synthetic uncertain network');
+            if (failure === 'denied')
+              return response({ errors: [{ message: 'synthetic denial' }] });
+            return response({
+              data: {
+                serviceInstanceDeployV2: failure === 'invalid-id' ? 'invalid' : deploymentId,
+              },
+            });
+          }
+          if (mutations) throw new Error('synthetic polling unavailable');
+          return response({ data: exactTargetData() });
+        },
+      });
+      await assert.rejects(
+        deployDemo({
+          env: exactEnv,
+          sourcePolicy: exactPolicy,
+          client,
+          attempts: 2,
+          fetchImpl: mainFetch(),
+        }),
+      );
+      assert.equal(mutations, 1);
+      assert.equal(requests, failure === 'polling' ? 3 : 2);
+    });
+});
+
+test('actual exact CLI operations use bounded Web Responses, fixed headers, and no external credentials', async (t) => {
+  const modulePath = fileURLToPath(
+    new URL('../../src/bug-pipeline/demo-deployment.mjs', import.meta.url),
+  );
+  for (const operation of ['preflight-exact', 'deploy-exact', 'preflight', 'deploy'])
+    await t.test(operation, async () => {
+      const directory = await mkdtemp(join(tmpdir(), 'demo-exact-cli-'));
+      try {
+        const fixturePath = join(directory, 'fetch-fixture.mjs');
+        const logPath = join(directory, 'requests.jsonl');
+        const fixture = `import assert from 'node:assert/strict';
+import { appendFileSync } from 'node:fs';
+const data = ${JSON.stringify(exactTargetData())};
+const ready = ${JSON.stringify(readyBody())};
+globalThis.fetch = async (url, options) => {
+  assert.equal(options.redirect, 'error');
+  if (url === '${mainEndpoint}') {
+    assert.equal(options.headers.Authorization, 'Bearer synthetic-readonly-github-binding');
+    assert.equal(options.headers['Project-Access-Token'], undefined);
+    assert.equal(options.cache, 'no-store');
+    appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ main: true }) + '\\n');
+    return new Response(JSON.stringify(${JSON.stringify(mainBody())}));
+  }
+  if (url === 'https://${DEMO_TARGET.domain}/ready') {
+    assert.equal(options.headers['Cache-Control'], 'no-cache');
+    appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ ready: true }) + '\\n');
+    return new Response(JSON.stringify(ready), { headers: { 'Cache-Control': 'no-store' } });
+  }
+  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(options.headers['Project-Access-Token'], 'synthetic-demo-binding');
+  assert.equal(options.headers.Authorization, undefined);
+  const { query, variables } = JSON.parse(options.body);
+  const mutation = query.startsWith('mutation');
+  if (mutation) {
+    assert.match(query, /serviceInstanceDeployV2/);
+    assert.equal(variables.commitSha, '${sha}');
+    assert.equal(variables.serviceId, '${DEMO_TARGET.serviceId}');
+    assert.equal(variables.environmentId, '${DEMO_TARGET.environmentId}');
+  } else assert.match(query, /pageInfo\\{hasNextPage\\}/);
+  appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ mutation }) + '\\n');
+  return new Response(JSON.stringify({ data: mutation ? { serviceInstanceDeployV2: '${deploymentId}' } : data }));
+};\n`;
+        await writeFile(fixturePath, fixture);
+        const result = spawnSync(
+          process.execPath,
+          ['--import', fixturePath, modulePath, operation],
+          {
+            cwd: directory,
+            env: {
+              ...(operation.endsWith('-exact') ? exactEnv : env),
+              RAILWAY_TOKEN: 'synthetic-demo-binding',
+            },
+            encoding: 'utf8',
+            timeout: 30_000,
+          },
+        );
+        assert.equal(result.error, undefined);
+        const requests = (await readFile(logPath, 'utf8')).trim().split('\n').map(JSON.parse);
+        if (operation.endsWith('-exact')) {
+          assert.equal(result.status, 0, result.stderr);
+          const filename = operation.startsWith('preflight')
+            ? 'demo-preflight-receipt.json'
+            : 'demo-deployment-receipt.json';
+          const saved = JSON.parse(await readFile(join(directory, filename), 'utf8'));
+          assert.equal(saved.sourcePolicy, exactPolicy);
+          assert.equal(saved.mergeSha, sha);
+          validateReceipt(saved, exactRun, saved.kind, Date.now(), exactPolicy);
+          assert.equal(requests.filter((r) => r.main).length, operation === 'deploy-exact' ? 3 : 1);
+          assert.equal(
+            requests.filter((r) => r.mutation).length,
+            operation === 'deploy-exact' ? 1 : 0,
+          );
+          assert.equal(
+            requests.filter((r) => r.ready).length,
+            operation === 'deploy-exact' ? 1 : 0,
+          );
+        } else {
+          assert.equal(result.status, 1);
+          assert.match(result.stderr, /main repository trigger required/);
+          assert.equal(requests.filter((r) => r.mutation).length, 0);
+        }
+      } finally {
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
+});
+
+test('dedicated manual workflow isolates production and demo writer queues', async () => {
+  const legacy = await readFile(
+    new URL('../../../.github/workflows/deploy-backend.yml', import.meta.url),
+  );
+  assert.match(legacy.toString(), /\n  deploy:\n/);
+  assert.doesNotMatch(legacy.toString(), /RAILWAY_DEMO_TOKEN|demo-deployment\.mjs/);
+  const exact = await readFile(
+    new URL('../../../.github/workflows/deploy-demo-exact-commit.yml', import.meta.url),
+    'utf8',
+  );
+  assert.match(exact, /on:\n  workflow_dispatch:/);
+  assert.doesNotMatch(exact, /^  (?:push|pull_request|schedule|workflow_run):/m);
+  assert.match(exact, /reviewed_sha:[\s\S]*?type: string\n        required: true/);
+  assert.match(exact, /permissions:\n  contents: read/);
+  assert.match(exact, /concurrency:\n  group: railway-demo\n  cancel-in-progress: false/);
+  assert.doesNotMatch(exact, /group: railway-backend/);
+  const configure = await readFile(
+    new URL('../../../.github/workflows/configure-demo-source.yml', import.meta.url),
+    'utf8',
+  );
+  assert.match(configure, /group: railway-demo\n  cancel-in-progress: false/);
+  assert.doesNotMatch(configure, /secrets\.RAILWAY_TOKEN\b|group: railway-backend/);
+  // Exact production trigger/input policy is covered by the workflow policy suite.
+  // This suite retains independent production/demo isolation and queue checks.
+  assert.match(exact, /forward-only npm run db:migrate/);
+  assert.match(exact, /if: always\(\) && inputs.operation == 'deploy'/);
+  assert.match(exact, /path: demo-deployment-progress.json/);
+  assert.match(
+    legacy.toString(),
+    /concurrency:\n  group: railway-backend\n  cancel-in-progress: false/,
+  );
+  assert.match(
+    exact,
+    /if: github.repository == 'l2v-hub\/ClinicOS' && github.ref == 'refs\/heads\/main' && github.event_name == 'workflow_dispatch'/,
+  );
+  assert.equal(
+    (exact.match(/^  [a-z][a-z-]*:\n    if:/gm) ?? []).length,
+    1,
+    'one demo job has no sibling dependency',
+  );
+  assert.doesNotMatch(
+    exact,
+    /railway up|secrets\.RAILWAY_TOKEN\b|serviceConnect|deploymentTrigger/,
+  );
+  assert.match(exact, /ref: \$\{\{ github.sha \}\}\n          persist-credentials: false/);
+  assert.match(exact, /GITHUB_TOKEN: \$\{\{ github.token \}\}/);
+  assert.equal((exact.match(/secrets\.RAILWAY_DEMO_TOKEN/g) ?? []).length, 1);
+  const tests = exact.indexOf(
+    'run: node --test agent-team/tests/bug-pipeline/demo-deployment.test.mjs',
+  );
+  const reviewedGate = exact.indexOf(
+    'assert.equal(process.env.CLINICOS_REVIEWED_SHA, process.env.GITHUB_SHA)',
+  );
+  const secret = exact.indexOf('secrets.RAILWAY_DEMO_TOKEN');
+  assert.ok(tests >= 0 && tests < reviewedGate && reviewedGate < secret);
+  assert.ok(
+    exact.indexOf('demo-deployment.mjs preflight-exact') <
+      exact.indexOf('demo-deployment.mjs deploy-exact'),
+  );
+  assert.match(exact, /if: inputs.operation == 'deploy'/);
+  for (const match of exact.matchAll(/uses: ([^\n]+)/g)) assert.match(match[1], /@[a-f0-9]{40}$/);
+  // The infrastructure diff against 45033 excludes every legacy push path.
+  const infrastructure = [
+    'agent-team/src/bug-pipeline/demo-deployment.mjs',
+    'agent-team/tests/bug-pipeline/demo-deployment.test.mjs',
+    '.github/workflows/deploy-demo-exact-commit.yml',
+    'artifacts/task-validation/demo-exact-commit-release/author-2/author-report.md',
+  ];
+  const filters = [...legacy.toString().matchAll(/^      - '([^']+)'$/gm)].map((m) => m[1]);
+  assert.ok(filters.length > 0);
+  for (const path of infrastructure)
+    for (const filter of filters) {
+      assert.equal(
+        filter.endsWith('/**') ? path.startsWith(filter.slice(0, -2)) : path === filter,
+        false,
+        `${path} matches ${filter}`,
+      );
+    }
+});
+
+test('receipt source policy is exclusive to its fixed workflow and manual exact event', async (t) => {
+  for (const [label, saved, nativeRun] of [
+    ['exact in old workflow', exactReceipt(), run],
+    ['legacy in new workflow', receipt(), exactRun],
+    [
+      'explicit strict in new workflow',
+      { ...receipt(), sourcePolicy: DEMO_SOURCE_POLICIES.trigger },
+      exactRun,
+    ],
+    ['exact push event', exactReceipt(), { ...exactRun, event: 'push' }],
+    [
+      'exact foreign workflow',
+      exactReceipt(),
+      { ...exactRun, path: '.github/workflows/foreign.yml' },
+    ],
+    ['missing reviewed workflow SHA', { ...exactReceipt(), reviewedSha: undefined }, exactRun],
+    ['different reviewed workflow SHA', { ...exactReceipt(), reviewedSha }, exactRun],
+  ])
+    await t.test(label, async () => {
+      assert.throws(() => validateReceipt(saved, nativeRun));
+      const f = proofHttp({ receiptBody: saved, modifyRun: () => nativeRun });
+      let nativeReads = 0;
+      await assert.rejects(
+        verifyDemoRelease({
+          reader: f.reader,
+          fetchImpl: f.fetchImpl,
+          runUrl: `https://github.com/${repo}/actions/runs/123`,
+          mergeSha: sha,
+          reviewedSha,
+          client: async () => {
+            nativeReads++;
+            return exactTargetData();
+          },
+        }),
+      );
+      assert.equal(nativeReads, 0);
+    });
+  let providerReads = 0;
+  await assert.rejects(
+    prepareDemo({
+      env: exactEnv,
+      client: async () => {
+        providerReads++;
+        return targetData();
+      },
+      fetchImpl: async () => {
+        throw new Error('must not fetch');
+      },
+    }),
+    /fixed main deployment workflow/,
+  );
+  assert.equal(providerReads, 0, 'strict producer cannot run in the exact workflow');
+});
+
+test('real immutable preflight discovery selects only each policy fixed workflow', async () => {
+  for (const [saved, path] of [
+    [exactReceipt('clinicos-demo-preflight'), 'deploy-demo-exact-commit.yml'],
+    [receipt('clinicos-demo-preflight'), 'deploy-backend.yml'],
+  ]) {
+    const f = proofHttp({ receiptBody: saved });
+    if (saved.sourcePolicy === exactPolicy) {
+      await assert.rejects(
+        verifyDemoPreflight({ reader: f.reader }),
+        /no successful demo target preflight/,
+      );
+      assert.ok(
+        f.requests
+          .filter((r) => r.url.includes('/actions/workflows/'))
+          .every((r) => r.url.includes('/deploy-backend.yml/')),
+      );
+    }
+    const proof = await verifyDemoPreflight({
+      reader: f.reader,
+      ...(saved.sourcePolicy === exactPolicy ? { sourcePolicy: exactPolicy } : {}),
+    });
+    assert.equal(proof.receipt.mergeSha, sha);
+    const selected = f.requests.filter((r) => r.url.includes('/actions/workflows/')).at(-1);
+    assert.ok(selected.url.includes(`/${path}/runs?`));
+    assert.ok(f.requests.some((r) => r.url.endsWith('/zip')));
+  }
+  const wrong = proofHttp({
+    receiptBody: exactReceipt('clinicos-demo-preflight'),
+    modifyRun: () => run,
+  });
+  await assert.rejects(verifyDemoPreflight({ reader: wrong.reader, sourcePolicy: exactPolicy }));
+  const f = proofHttp({ receiptBody: exactReceipt() });
+  const reader = {
+    ...f.reader,
+    getJson: async (route) => {
+      assert.notEqual(route, 'actions/runs/999', 'separate failed legacy run is irrelevant');
+      return f.reader.getJson(route);
+    },
+  };
+  const proof = await verifyDemoRelease({
+    reader,
+    fetchImpl: f.fetchImpl,
+    mergeSha: sha,
+    reviewedSha,
+    runUrl: `https://github.com/${repo}/actions/runs/123`,
+    client: async () => exactTargetData(),
+  });
+  assert.equal(proof.receipt.sourcePolicy, exactPolicy);
+});
+
+test('fresh main is checked before provider reads, directly before mutation and after readiness', async (t) => {
+  for (const [label, failAt, expectedMutations] of [
+    ['stale before provider', 1, 0],
+    ['main advanced during preflight', 2, 0],
+    ['main advanced during readiness', 3, 1],
+    ['unchanged reviewed current main', 0, 1],
+  ])
+    await t.test(label, async () => {
+      const events = [];
+      let checks = 0;
+      const options = {
+        env: exactEnv,
+        sourcePolicy: exactPolicy,
+        attempts: 1,
+        client: async (query) => {
+          const mutation = query.startsWith('mutation');
+          events.push(
+            mutation ? 'mutation' : query.includes('deployment(id:') ? 'native' : 'target',
+          );
+          return mutation ? { serviceInstanceDeployV2: deploymentId } : exactTargetData();
+        },
+        fetchImpl: async (url, request) => {
+          if (url === mainEndpoint) {
+            assert.equal(request.headers.Authorization, 'Bearer synthetic-readonly-github-binding');
+            assert.equal(request.headers['Project-Access-Token'], undefined);
+            assert.equal(request.redirect, 'error');
+            assert.equal(request.cache, 'no-store');
+            events.push('main');
+            return response(mainBody(++checks === failAt ? reviewedSha : sha));
+          }
+          assert.equal(url, `https://${DEMO_TARGET.domain}/ready`);
+          events.push('ready');
+          return response();
+        },
+      };
+      if (failAt) await assert.rejects(deployDemo(options), /current main unavailable or changed/);
+      else assert.equal((await deployDemo(options)).reviewedSha, sha);
+      assert.equal(events.filter((event) => event === 'mutation').length, expectedMutations);
+      assert.equal(events[0], 'main');
+      if (failAt === 1) assert.deepEqual(events, ['main']);
+      if (failAt === 2) assert.deepEqual(events, ['main', 'target', 'main']);
+      if (expectedMutations) {
+        const mutation = events.indexOf('mutation');
+        assert.equal(events[mutation - 1], 'main');
+        assert.deepEqual(events.slice(-3), ['ready', 'native', 'main']);
+      }
+    });
+});
+
+test('reviewed SHA and unavailable or malformed current main fail before provider inspection', async (t) => {
+  const missingToken = { ...exactEnv, GITHUB_TOKEN: undefined };
+  for (const [label, overrides, result] of [
+    ['missing reviewed SHA', { CLINICOS_REVIEWED_SHA: undefined }, mainBody()],
+    ['wrong reviewed SHA', { CLINICOS_REVIEWED_SHA: reviewedSha }, mainBody()],
+    ['malformed reviewed SHA', { CLINICOS_REVIEWED_SHA: sha + '\n' }, mainBody()],
+    ['missing GitHub binding', missingToken, mainBody()],
+    ['wrong main ref', {}, { ...mainBody(), ref: 'refs/heads/preview' }],
+    ['main is a tag', {}, { ...mainBody(), object: { type: 'tag', sha } }],
+    ['malformed current SHA', {}, mainBody(sha + '\n')],
+    ['main unavailable', {}, null],
+    ['oversized current main', {}, 'x'.repeat(262_145)],
+  ])
+    await t.test(label, async () => {
+      let providers = 0;
+      const options = {
+        env: { ...exactEnv, ...overrides },
+        sourcePolicy: exactPolicy,
+        client: async () => {
+          providers++;
+          return exactTargetData();
+        },
+        fetchImpl: async (url) => {
+          assert.equal(url, mainEndpoint);
+          return typeof result === 'string'
+            ? new Response(result)
+            : response(result, result ? 200 : 403);
+        },
+      };
+      await assert.rejects(prepareDemo(options));
+      await assert.rejects(deployDemo(options));
+      assert.equal(providers, 0);
+    });
+});
+
+test('actual CLI rejects stale queued main and cross-workflow producers without issuing a receipt', async (t) => {
+  const modulePath = fileURLToPath(
+    new URL('../../src/bug-pipeline/demo-deployment.mjs', import.meta.url),
+  );
+  for (const [label, operation, overrides, failAt, mutations, providerReads] of [
+    ['stale queued SHA', 'deploy-exact', {}, 1, 0, 0],
+    ['main moved during preflight', 'deploy-exact', {}, 2, 0, 1],
+    ['main moved after readiness', 'deploy-exact', {}, 3, 1, 4],
+    ['wrong reviewed SHA', 'deploy-exact', { CLINICOS_REVIEWED_SHA: reviewedSha }, 0, 0, 0],
+    [
+      'old workflow exact policy',
+      'deploy-exact',
+      { GITHUB_WORKFLOW_REF: env.GITHUB_WORKFLOW_REF },
+      0,
+      0,
+      0,
+    ],
+    ['new workflow strict policy', 'deploy', {}, 0, 0, 0],
+    ['push exact policy', 'deploy-exact', { GITHUB_EVENT_NAME: 'push' }, 0, 0, 0],
+  ])
+    await t.test(label, async () => {
+      const directory = await mkdtemp(join(tmpdir(), 'demo-exact-cli-reject-'));
+      try {
+        const fixturePath = join(directory, 'fetch-fixture.mjs');
+        const logPath = join(directory, 'requests.jsonl');
+        await writeFile(
+          fixturePath,
+          `import assert from 'node:assert/strict';
+import { appendFileSync } from 'node:fs';
+let mainReads = 0;
+globalThis.fetch = async (url, options) => {
+  assert.equal(options.redirect, 'error');
+  if (url === '${mainEndpoint}') {
+    assert.equal(options.headers.Authorization, 'Bearer synthetic-readonly-github-binding');
+    assert.equal(options.headers['Project-Access-Token'], undefined);
+    appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ main: true }) + '\\n');
+    const sha = ++mainReads === ${failAt} ? '${reviewedSha}' : '${sha}';
+    return new Response(JSON.stringify({ ref: 'refs/heads/main', object: { type: 'commit', sha } }));
+  }
+  if (url === 'https://${DEMO_TARGET.domain}/ready') {
+    appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ ready: true }) + '\\n');
+    return new Response(JSON.stringify(${JSON.stringify(readyBody())}), { headers: { 'Cache-Control': 'no-store' } });
+  }
+  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(options.headers['Project-Access-Token'], 'synthetic-demo-binding');
+  assert.equal(options.headers.Authorization, undefined);
+  const { query, variables } = JSON.parse(options.body);
+  const mutation = query.startsWith('mutation');
+  if (mutation) {
+    assert.match(query, /serviceInstanceDeployV2/);
+    assert.equal(variables.commitSha, '${sha}');
+    assert.equal(variables.serviceId, '${DEMO_TARGET.serviceId}');
+    assert.equal(variables.environmentId, '${DEMO_TARGET.environmentId}');
+  }
+  appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ provider: true, mutation }) + '\\n');
+  return new Response(JSON.stringify({ data: mutation ? { serviceInstanceDeployV2: '${deploymentId}' } : ${JSON.stringify(exactTargetData())} }));
+};\n`,
+        );
+        const result = spawnSync(
+          process.execPath,
+          ['--import', fixturePath, modulePath, operation],
+          {
+            cwd: directory,
+            env: {
+              ...exactEnv,
+              ...overrides,
+              RAILWAY_TOKEN: 'synthetic-demo-binding',
+            },
+            encoding: 'utf8',
+            timeout: 30_000,
+          },
+        );
+        assert.equal(result.error, undefined);
+        assert.equal(result.status, 1, result.stderr);
+        const log = await readFile(logPath, 'utf8').catch((error) => {
+          assert.equal(error.code, 'ENOENT');
+          return '';
+        });
+        const requests = log.trim() ? log.trim().split('\n').map(JSON.parse) : [];
+        assert.equal(requests.filter((r) => r.mutation).length, mutations);
+        assert.equal(requests.filter((r) => r.provider).length, providerReads);
+        if (failAt === 0) assert.equal(requests.length, 0);
+        await assert.rejects(readFile(join(directory, 'demo-deployment-receipt.json')), {
+          code: 'ENOENT',
+        });
+        assert.doesNotMatch(
+          result.stdout + result.stderr,
+          /synthetic-demo-binding|synthetic-readonly-github-binding/,
+        );
+      } finally {
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
+});
+
+test('exact deploy rejects every incomplete or overlapping native rollout inventory before mutation', async (t) => {
+  for (const [label, change] of [
+    [
+      'missing deployments',
+      (d) => {
+        delete d.deployments;
+      },
+    ],
+    [
+      'missing edges',
+      (d) => {
+        delete d.deployments.edges;
+      },
+    ],
+    [
+      'missing pageInfo',
+      (d) => {
+        delete d.deployments.pageInfo;
+      },
+    ],
+    [
+      'unknown pagination',
+      (d) => {
+        d.deployments.pageInfo.hasNextPage = null;
+      },
+    ],
+    [
+      'more pages',
+      (d) => {
+        d.deployments.pageInfo.hasNextPage = true;
+      },
+    ],
+    [
+      'missing active',
+      (d) => {
+        delete d.serviceInstance.activeDeployments;
+      },
+    ],
+    [
+      'unknown active',
+      (d) => {
+        d.serviceInstance.activeDeployments[0].status = 'UNKNOWN';
+      },
+    ],
+    [
+      'ambiguous active',
+      (d) => {
+        d.serviceInstance.activeDeployments.push(d.serviceInstance.activeDeployments[0]);
+      },
+    ],
+    [
+      'missing latest',
+      (d) => {
+        delete d.serviceInstance.latestDeployment;
+      },
+    ],
+    [
+      'contradictory null latest',
+      (d) => {
+        d.serviceInstance.latestDeployment = null;
+      },
+    ],
+    ...[
+      'INITIALIZING',
+      'BUILDING',
+      'DEPLOYING',
+      'QUEUED',
+      'WAITING',
+      'NEEDS_APPROVAL',
+      'REMOVING',
+      'SLEEPING',
+      'UNKNOWN',
+    ].flatMap((status) => [
+      [
+        `native filtered ${status}`,
+        (d) => {
+          d.deployments.edges = [{ node: { id: deploymentId, status } }];
+        },
+      ],
+      [
+        `latest ${status}`,
+        (d) => {
+          d.serviceInstance.latestDeployment.status = status;
+        },
+      ],
+      [
+        `active ${status}`,
+        (d) => {
+          d.serviceInstance.activeDeployments[0].status = status;
+        },
+      ],
+    ]),
+  ])
+    await t.test(label, async () => {
+      let mutations = 0;
+      await assert.rejects(
+        deployDemo({
+          env: exactEnv,
+          sourcePolicy: exactPolicy,
+          fetchImpl: mainFetch(),
+          client: async (query) => {
+            if (query.startsWith('mutation')) {
+              mutations++;
+              return { serviceInstanceDeployV2: deploymentId };
+            }
+            assert.match(
+              query,
+              /deployments\(input:\{projectId:\$projectId,environmentId:\$environmentId,serviceId:\$serviceId,status:\{notIn:\[SUCCESS,FAILED,CRASHED,REMOVED,SKIPPED\]\}\},first:1\)/,
+            );
+            const data = exactTargetData();
+            change(data);
+            return data;
+          },
+        }),
+        /idle demo deployment inventory/,
+      );
+      assert.equal(mutations, 0);
+    });
+});
+
+test('a rerun reuses the unique active native SUCCESS exact SHA, proves it live and performs no migration mutation', async () => {
+  const progress = [];
+  let mutations = 0,
+    reads = 0,
+    ready = 0;
+  const proof = await deployDemo({
+    env: exactEnv,
+    sourcePolicy: exactPolicy,
+    client: async (query) => {
+      if (query.startsWith('mutation')) {
+        mutations++;
+        throw new Error('Duplicate mutation prohibited');
+      }
+      reads++;
+      const data = exactTargetData();
+      data.serviceInstance.activeDeployments[0].meta = { commitHash: sha };
+      return data;
+    },
+    fetchImpl: mainFetch(async () => {
+      ready++;
+      return response();
+    }),
+    onProgress: async (item) => progress.push(item),
+  });
+  assert.equal(mutations, 0);
+  assert.equal(reads, 3);
+  assert.equal(ready, 1);
+  assert.equal(proof.deploymentReused, true);
+  assert.deepEqual(proof.previousActiveDeployment, {
+    id: deploymentId,
+    commitHash: sha,
+  });
+  assert.deepEqual(proof.migrations, {
+    command: 'npm run db:migrate',
+    direction: 'forward-only',
+    delta: 'unproven',
+    deploymentSubmittedByThisRun: false,
+  });
+  assert.equal(progress.at(-1).status, 'verified');
+  validateReceipt(proof, exactRun, 'clinicos-demo-backend', Date.now(), exactPolicy);
+});
+
+test('normal exact deployment records previous active native SHA or explicit unknown without inventing migration delta', async (t) => {
+  for (const previousSha of [reviewedSha, undefined, 'invalid'])
+    await t.test(String(previousSha), async () => {
+      let mutations = 0;
+      const proof = await deployDemo({
+        env: exactEnv,
+        sourcePolicy: exactPolicy,
+        fetchImpl: mainFetch(),
+        client: async (query) => {
+          if (query.startsWith('mutation')) {
+            mutations++;
+            return { serviceInstanceDeployV2: deploymentId };
+          }
+          const data = exactTargetData();
+          data.serviceInstance.activeDeployments[0].meta = {
+            commitHash: previousSha,
+          };
+          return data;
+        },
+      });
+      assert.equal(mutations, 1);
+      assert.deepEqual(proof.previousActiveDeployment, {
+        id: deploymentId,
+        commitHash: previousSha === reviewedSha ? reviewedSha : null,
+      });
+      assert.equal(proof.migrations.delta, 'unproven');
+      assert.equal(proof.migrations.deploymentSubmittedByThisRun, true);
+    });
+});
+
+test('bounded read-only transient poll retries recover but denial, malformed bodies and uncertain mutations never retry', async (t) => {
+  for (const failure of [
+    'network',
+    'timeout',
+    408,
+    429,
+    500,
+    502,
+    503,
+    504,
+    'denied',
+    'malformed',
+    'permanent',
+    'exhausted',
+    'mutation',
+  ])
+    await t.test(String(failure), async () => {
+      let mutations = 0,
+        polls = 0,
+        delays = 0;
+      const client = createRailwayClient({
+        token: 'synthetic-demo-binding',
+        fetchImpl: async (_url, options) => {
+          const { query } = JSON.parse(options.body);
+          if (query.startsWith('mutation')) {
+            mutations++;
+            if (failure === 'mutation')
+              throw new TypeError('PRIVATE_TOKEN_SENTINEL uncertain submission');
+            return response({
+              data: { serviceInstanceDeployV2: deploymentId },
+            });
+          }
+          if (mutations && ++polls <= (failure === 'exhausted' ? 4 : 1)) {
+            if (failure === 'network' || failure === 'exhausted')
+              throw new TypeError('PRIVATE_TOKEN_SENTINEL');
+            if (failure === 'timeout')
+              throw new DOMException('PRIVATE_TOKEN_SENTINEL', 'TimeoutError');
+            if (typeof failure === 'number') return response({}, failure);
+            if (failure === 'denied')
+              return response({
+                errors: [{ message: 'PRIVATE_TOKEN_SENTINEL' }],
+              });
+            if (failure === 'malformed') return new Response('PRIVATE_TOKEN_SENTINEL');
+            if (failure === 'permanent') return response({}, 403);
+          }
+          return response({ data: exactTargetData() });
+        },
+      });
+      const request = deployDemo({
+        env: exactEnv,
+        sourcePolicy: exactPolicy,
+        client,
+        fetchImpl: mainFetch(),
+        attempts: 5,
+        delay: async () => {
+          delays++;
+        },
+      });
+      if (['denied', 'malformed', 'permanent', 'exhausted', 'mutation'].includes(failure)) {
+        await assert.rejects(request, (error) => !error.message.includes('PRIVATE_TOKEN_SENTINEL'));
+        assert.equal(polls, failure === 'mutation' ? 0 : failure === 'exhausted' ? 4 : 1);
+      } else {
+        assert.equal((await request).deployment.id, deploymentId);
+        assert.equal(polls, 3, 'one failed poll, successful poll, final native recheck');
+        assert.equal(delays, 1);
+      }
+      assert.equal(mutations, 1);
+    });
+});
+
+test('aggregate injected-clock budget covers worst-case requests, ready, delays and final checks below workflow timeout', async () => {
+  assert.equal(DEMO_DEPLOY_BUDGET_MS, 25 * 60 * 1000);
+  assert.ok(DEMO_DEPLOY_BUDGET_MS < 40 * 60 * 1000);
+  let elapsed = 0,
+    mutations = 0,
+    polls = 0;
+  const progress = [];
+  await assert.rejects(
+    deployDemo({
+      env: exactEnv,
+      sourcePolicy: exactPolicy,
+      now: () => elapsed,
+      onProgress: async (p) => progress.push(p),
+      delay: async (ms) => {
+        elapsed += ms;
+      },
+      fetchImpl: async (url) => {
+        if (url === mainEndpoint) {
+          elapsed += 30_000;
+          return response(mainBody());
+        }
+        elapsed += 20_000;
+        return response({}, 503);
+      },
+      client: async (query) => {
+        elapsed += 30_000;
+        if (query.startsWith('mutation')) {
+          mutations++;
+          return { serviceInstanceDeployV2: deploymentId };
+        }
+        polls++;
+        return exactTargetData();
+      },
+    }),
+    /aggregate deployment deadline/,
+  );
+  assert.equal(mutations, 1);
+  assert.ok(polls > 1);
+  assert.ok(elapsed <= DEMO_DEPLOY_BUDGET_MS);
+  assert.equal(progress.at(-1).deploymentId, deploymentId);
+  assert.equal(progress.at(-1).errorCode, 'DEPLOYMENT_PROOF_FAILED');
+});
+
+test('safe failure progress preserves only validated identity and finite outcome, never provider payloads', async () => {
+  const progress = [];
+  let submitted = false;
+  await assert.rejects(
+    deployDemo({
+      env: exactEnv,
+      sourcePolicy: exactPolicy,
+      fetchImpl: mainFetch(),
+      onProgress: async (item) => progress.push(item),
+      client: async (query) => {
+        if (query.startsWith('mutation')) {
+          submitted = true;
+          return {
+            serviceInstanceDeployV2: deploymentId,
+            private: 'PRIVATE_SENTINEL',
+          };
+        }
+        if (submitted) throw new Error('PRIVATE_SENTINEL provider payload');
+        return exactTargetData();
+      },
+    }),
+  );
+  assert.deepEqual(progress.at(-1), {
+    schemaVersion: 1,
+    kind: 'clinicos-demo-deployment-progress',
+    target: { ...DEMO_TARGET },
+    mergeSha: sha,
+    deploymentId,
+    status: 'failed',
+    errorCode: 'DEPLOYMENT_PROOF_FAILED',
+  });
+  assert.doesNotMatch(JSON.stringify(progress), /PRIVATE_SENTINEL|token|headers|response/i);
+});
+
+test('actual exact CLI saves private sanitized failure progress with validated deployment ID after submission', async (t) => {
+  for (const failure of ['poll-denied', 'invalid-id', 'preflight-denied'])
+    await t.test(failure, async () => {
+      const directory = await mkdtemp(join(tmpdir(), 'demo-failure-cli-'));
+      try {
+        const fixturePath = join(directory, 'fixture.mjs');
+        await writeFile(
+          fixturePath,
+          `
+let submitted = false;
+globalThis.fetch = async (url, options) => {
+  if (url === '${mainEndpoint}') return new Response(JSON.stringify(${JSON.stringify(mainBody())}));
+  if (url !== 'https://backboard.railway.app/graphql/v2') throw new Error('Unexpected external fetch');
+  const {query} = JSON.parse(options.body);
+  if (query.startsWith('mutation')) {
+    submitted = true;
+    return new Response(JSON.stringify({data:{serviceInstanceDeployV2:'${failure === 'invalid-id' ? 'PRIVATE_SENTINEL' : deploymentId}'}}));
+  }
+  if (submitted || '${failure}' === 'preflight-denied') return new Response(JSON.stringify({errors:[{message:'PRIVATE_SENTINEL'}]}));
+  return new Response(JSON.stringify({data:${JSON.stringify(exactTargetData())}}));
+};
+`,
+        );
+        const result = spawnSync(
+          process.execPath,
+          [
+            '--import',
+            fixturePath,
+            fileURLToPath(new URL('../../src/bug-pipeline/demo-deployment.mjs', import.meta.url)),
+            failure === 'preflight-denied' ? 'preflight-exact' : 'deploy-exact',
+          ],
+          {
+            cwd: directory,
+            env: { ...exactEnv, RAILWAY_TOKEN: 'synthetic-demo-binding' },
+            encoding: 'utf8',
+            timeout: 5000,
+          },
+        );
+        assert.equal(result.error, undefined);
+        assert.equal(result.status, 1);
+        assert.doesNotMatch(
+          result.stdout + result.stderr,
+          /PRIVATE_SENTINEL|synthetic-demo-binding/,
+        );
+        const progress = JSON.parse(
+          await readFile(join(directory, 'demo-deployment-progress.json'), 'utf8'),
+        );
+        assert.equal(progress.deploymentId, failure === 'poll-denied' ? deploymentId : null);
+        assert.equal(progress.mergeSha, sha);
+        assert.deepEqual(progress.target, DEMO_TARGET);
+        assert.equal(progress.errorCode, 'DEPLOYMENT_PROOF_FAILED');
+        assert.equal(progress.status, 'failed');
+        assert.doesNotMatch(JSON.stringify(progress), /PRIVATE_SENTINEL|token|headers|response/i);
+        const { stat } = await import('node:fs/promises');
+        if (process.platform !== 'win32')
+          assert.equal(
+            (await stat(join(directory, 'demo-deployment-progress.json'))).mode & 0o777,
+            0o600,
+          );
+      } finally {
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
+});
+
+test('metadata serializer rejects either nonempty bound credential in values or keys, including JSON escaping', () => {
+  for (const secret of [
+    '99999999-2222-4222-8222-777777777777',
+    'f'.repeat(40),
+    'synthetic\n"credential\\value',
+    '\u0000\tcredential',
+    '\ud800credential',
+  ]) {
+    for (const value of [
+      { nested: { id: secret } },
+      { [secret]: 'value' },
+      { nested: `before:${secret}:after` },
+    ]) {
+      for (const forbiddenValues of [
+        [secret, 'unrelated-binding'],
+        ['unrelated-binding', secret],
+      ]) {
+        assert.throws(
+          () => serializeDemoMetadata(value, { forbiddenValues }),
+          /credential-free metadata required/,
+        );
+      }
+    }
+  }
+  const safe = {
+    deploymentId,
+    previousActiveDeployment: { id: deploymentId, commitHash: reviewedSha },
+  };
+  assert.deepEqual(
+    JSON.parse(
+      serializeDemoMetadata(safe, {
+        forbiddenValues: [undefined, null, '', 'synthetic-safe-binding'],
+      }),
+    ),
+    safe,
+  );
+});
+
+test('callback guard rejects reflected identity before assignment and never restores it on failure', async () => {
+  const syntheticToken = '99999999-2222-4222-8222-777777777777';
+  let mutations = 0;
+  const progress = [];
+  await assert.rejects(
+    deployDemo({
+      env: { ...exactEnv, RAILWAY_TOKEN: syntheticToken },
+      sourcePolicy: exactPolicy,
+      fetchImpl: mainFetch(),
+      onProgress: async (item) => {
+        progress.push(item);
+        assert.equal(JSON.stringify(item).includes(syntheticToken), false);
+      },
+      client: async (query) => {
+        if (query.startsWith('mutation')) {
+          mutations++;
+          return { serviceInstanceDeployV2: syntheticToken };
+        }
+        return exactTargetData();
+      },
+    }),
+    /credential-free metadata required/,
+  );
+  assert.equal(mutations, 1);
+  assert.equal(progress.at(-1).deploymentId, null);
+  assert.equal(progress.at(-1).status, 'failed');
+});
+
+test('actual CLI excludes bound credential reflection across initial, mutation, receipt, progress and fallback boundaries', async (t) => {
+  const uuidCredential = '99999999-2222-4222-8222-777777777777';
+  const cases = [
+    ...['RAILWAY_TOKEN', 'GITHUB_TOKEN'].flatMap((binding) => [
+      {
+        label: `${binding}:mutation-uuid`,
+        binding,
+        secret: uuidCredential,
+        reflect: 'mutation',
+        mutations: 1,
+      },
+      {
+        label: `${binding}:reuse-uuid`,
+        binding,
+        secret: uuidCredential,
+        reflect: 'reuse',
+        mutations: 0,
+      },
+      {
+        label: `${binding}:previous-active-uuid`,
+        binding,
+        secret: uuidCredential,
+        reflect: 'previous-id',
+        mutations: 0,
+      },
+      {
+        label: `${binding}:previous-native-sha`,
+        binding,
+        secret: reviewedSha,
+        reflect: 'previous-sha',
+        mutations: 0,
+      },
+      {
+        label: `${binding}:current-sha`,
+        binding,
+        secret: sha,
+        reflect: 'context',
+        mutations: 0,
+        omitProgress: true,
+      },
+      {
+        label: `${binding}:preflight-current-sha`,
+        binding,
+        secret: sha,
+        reflect: 'context',
+        mutations: 0,
+        omitProgress: true,
+        operation: 'preflight-exact',
+      },
+      {
+        label: `${binding}:fixed-target`,
+        binding,
+        secret: DEMO_TARGET.projectId,
+        reflect: 'context',
+        mutations: 0,
+        omitProgress: true,
+      },
+      {
+        label: `${binding}:escaped-final-receipt`,
+        binding,
+        secret: 'synthetic"receipt\\credential',
+        reflect: 'receipt',
+        mutations: 1,
+      },
+      {
+        label: `${binding}:escaped-preflight-receipt`,
+        binding,
+        secret: 'synthetic"preflight\\credential',
+        reflect: 'receipt',
+        mutations: 0,
+        operation: 'preflight-exact',
+      },
+    ]),
+    {
+      label: 'fixed-diagnostic-matches-bound-credential',
+      binding: 'RAILWAY_TOKEN',
+      secret: 'proof',
+      reflect: 'safe-failure',
+      mutations: 1,
+    },
+    {
+      label: 'safe-normal-success',
+      reflect: 'safe-success',
+      mutations: 1,
+      success: true,
+    },
+    { label: 'safe-normal-failure', reflect: 'safe-failure', mutations: 1 },
+    {
+      label: 'safe-native-reuse',
+      reflect: 'safe-reuse',
+      mutations: 0,
+      success: true,
+    },
+  ];
+  for (const scenario of cases)
+    await t.test(scenario.label, async () => {
+      const directory = await mkdtemp(join(tmpdir(), 'demo-secret-boundary-'));
+      try {
+        const childEnv = {
+          ...exactEnv,
+          RAILWAY_TOKEN: 'synthetic-demo-binding',
+          ...(scenario.binding ? { [scenario.binding]: scenario.secret } : {}),
+        };
+        const initial = exactTargetData();
+        if (['reuse', 'previous-id'].includes(scenario.reflect)) {
+          initial.serviceInstance.activeDeployments[0].id = scenario.secret;
+          initial.serviceInstance.latestDeployment.id = scenario.secret;
+        }
+        initial.serviceInstance.activeDeployments[0].meta = {
+          commitHash: ['reuse', 'safe-reuse'].includes(scenario.reflect)
+            ? sha
+            : scenario.reflect === 'previous-sha'
+              ? scenario.secret
+              : reviewedSha,
+        };
+        const fixturePath = join(directory, 'fixture.mjs');
+        const counterPath = join(directory, 'counts.json');
+        await writeFile(
+          fixturePath,
+          `
+import assert from 'node:assert/strict';
+import { writeFileSync } from 'node:fs';
+const scenario = ${JSON.stringify(scenario)};
+const initial = ${JSON.stringify(initial)};
+const native = ${JSON.stringify(exactTargetData())};
+const counts = {mutations:0, main:0, reads:0};
+const save = () => writeFileSync(${JSON.stringify(counterPath)}, JSON.stringify(counts));
+save();
+if (scenario.reflect === 'receipt') Date.prototype.toISOString = () => scenario.secret;
+globalThis.fetch = async (url, options) => {
+  assert.equal(options.redirect, 'error');
+  if (url === '${mainEndpoint}') {
+    counts.main++; save();
+    assert.equal(options.headers.Authorization, 'Bearer ' + process.env.GITHUB_TOKEN);
+    return new Response(JSON.stringify(${JSON.stringify(mainBody())}));
+  }
+  if (url === 'https://${DEMO_TARGET.domain}/ready')
+    return new Response(JSON.stringify(${JSON.stringify(readyBody())}), {headers:{'Cache-Control':'no-store'}});
+  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(options.headers['Project-Access-Token'], process.env.RAILWAY_TOKEN);
+  const {query, variables} = JSON.parse(options.body);
+  if (query.startsWith('mutation')) {
+    counts.mutations++; save();
+    assert.equal(variables.commitSha, '${sha}');
+    return new Response(JSON.stringify({data:{serviceInstanceDeployV2:scenario.reflect === 'mutation' ? scenario.secret : '${deploymentId}'}}));
+  }
+  counts.reads++; save();
+  if (scenario.reflect === 'safe-failure' && counts.mutations)
+    return new Response(JSON.stringify({errors:[{message:'synthetic private provider failure'}]}));
+  return new Response(JSON.stringify({data:counts.mutations || (scenario.reflect === 'safe-reuse' && counts.reads > 1) ? native : initial}));
+};
+`,
+        );
+        const result = spawnSync(
+          process.execPath,
+          [
+            '--import',
+            fixturePath,
+            fileURLToPath(new URL('../../src/bug-pipeline/demo-deployment.mjs', import.meta.url)),
+            scenario.operation ?? 'deploy-exact',
+          ],
+          {
+            cwd: directory,
+            env: childEnv,
+            encoding: 'utf8',
+            timeout: 5000,
+          },
+        );
+        assert.equal(result.error, undefined);
+        assert.equal(result.status, scenario.success ? 0 : 1, result.stderr);
+        const counts = JSON.parse(await readFile(counterPath, 'utf8'));
+        assert.equal(counts.mutations, scenario.mutations);
+        if (scenario.reflect === 'context') assert.equal(counts.main + counts.reads, 0);
+        const filenames = await readdir(directory);
+        const artifacts = filenames.filter(
+          (name) => name.startsWith('demo-') && name.endsWith('.json'),
+        );
+        const output = [
+          result.stdout,
+          result.stderr,
+          ...(await Promise.all(artifacts.map((name) => readFile(join(directory, name), 'utf8')))),
+        ];
+        for (const secret of [childEnv.RAILWAY_TOKEN, childEnv.GITHUB_TOKEN])
+          for (const text of output) {
+            assert.equal(text.includes(secret), false, 'raw bound credential must not be emitted');
+            assert.equal(
+              text.includes(JSON.stringify(secret).slice(1, -1)),
+              false,
+              'JSON-escaped bound credential must not be emitted',
+            );
+          }
+        const receiptName = 'demo-deployment-receipt.json';
+        assert.equal(artifacts.includes(receiptName), Boolean(scenario.success));
+        if (scenario.omitProgress)
+          assert.equal(
+            artifacts.length,
+            0,
+            'credential-bearing context cannot be saved by fallback',
+          );
+        else {
+          const progress = JSON.parse(
+            await readFile(join(directory, 'demo-deployment-progress.json'), 'utf8'),
+          );
+          assert.equal(progress.status, scenario.success ? 'verified' : 'failed');
+          if (
+            !scenario.success &&
+            ['mutation', 'reuse', 'previous-id', 'previous-sha', 'receipt'].includes(
+              scenario.reflect,
+            )
+          )
+            assert.equal(
+              progress.deploymentId,
+              scenario.reflect === 'receipt' && !scenario.operation ? deploymentId : null,
+            );
+        }
+        if (scenario.success) {
+          const receipt = JSON.parse(await readFile(join(directory, receiptName), 'utf8'));
+          validateReceipt(receipt, exactRun, 'clinicos-demo-backend', Date.now(), exactPolicy);
+          assert.equal(receipt.deploymentReused, scenario.reflect === 'safe-reuse');
+          assert.equal(receipt.migrations.delta, 'unproven');
+        }
+      } finally {
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
+});
+
+test('actual HTTP credential aliases share transport and output guards for both bindings', async (t) => {
+  const uuidCredential = '99999999-2222-4222-8222-777777777777';
+  const cases = [];
+  for (const binding of ['RAILWAY_TOKEN', 'GITHUB_TOKEN']) {
+    for (const [label, prefix, suffix] of [
+      ['leading-space', ' ', ''],
+      ['trailing-space', '', ' '],
+      ['leading-tab', '\t', ''],
+      ['trailing-tab', '', '\t'],
+      ['mixed-whitespace', ' \t', '\t '],
+    ])
+      for (const reflection of ['mutation', 'reuse', 'previous'])
+        cases.push({
+          label: `${binding}:${label}:${reflection}`,
+          binding,
+          raw: prefix + uuidCredential + suffix,
+          reflection,
+          mutations: reflection === 'mutation' ? 1 : 0,
+        });
+    cases.push({
+      label: `${binding}:context-alias`,
+      binding,
+      raw: ` \t${sha}\t `,
+      reflection: 'context',
+      mutations: 0,
+      noArtifacts: true,
+    });
+    cases.push({
+      label: `${binding}:fallback-target-alias`,
+      binding,
+      raw: ` \t${DEMO_TARGET.projectId}\t `,
+      reflection: 'context',
+      mutations: 0,
+      noArtifacts: true,
+    });
+    cases.push({
+      label: `${binding}:failure-code-alias`,
+      binding,
+      raw: ' DEPLOYMENT_PROOF_FAILED\t ',
+      reflection: 'failure-code',
+      mutations: 1,
+    });
+    for (const invalid of [
+      'internal\nnewline',
+      'internal\rcarriage',
+      'internal\u000bvertical',
+      'internal\u007fdelete',
+      'unicode\u0100value',
+    ])
+      cases.push({
+        label: `${binding}:invalid-header-${cases.length}`,
+        binding,
+        raw: invalid,
+        reflection: 'invalid',
+        mutations: 0,
+      });
+    cases.push({
+      label: `${binding}:rejected-newline-fallback-alias`,
+      binding,
+      raw: `\n${DEMO_TARGET.projectId}\r`,
+      reflection: 'context',
+      mutations: 0,
+      noArtifacts: true,
+    });
+  }
+  for (const binding of ['RAILWAY_TOKEN', 'GITHUB_TOKEN'])
+    cases.push({
+      label: `${binding}:immutable-guard-after-environment-mutation`,
+      binding,
+      raw: ` \t${uuidCredential}\t `,
+      reflection: 'snapshot-mutation',
+      mutations: 1,
+    });
+  cases.push({
+    label: 'immutable-canonical-snapshot-despite-environment-mutation',
+    reflection: 'snapshot',
+    mutations: 1,
+    success: true,
+  });
+  for (const scenario of cases)
+    await t.test(scenario.label, async () => {
+      const directory = await mkdtemp(join(tmpdir(), 'demo-http-alias-'));
+      try {
+        const childEnv = {
+          ...exactEnv,
+          RAILWAY_TOKEN: 'synthetic-demo-binding',
+          ...(scenario.binding ? { [scenario.binding]: scenario.raw } : {}),
+        };
+        if (scenario.reflection === 'snapshot') {
+          childEnv.RAILWAY_TOKEN = ` \t${uuidCredential}\t `;
+          childEnv.GITHUB_TOKEN = ' 88888888-2222-4222-8222-666666666666\t';
+        }
+        const aliases = {};
+        for (const binding of ['RAILWAY_TOKEN', 'GITHUB_TOKEN']) {
+          try {
+            aliases[binding] = new Headers({
+              credential: childEnv[binding],
+            }).get('credential');
+          } catch {
+            aliases[binding] = null;
+          }
+        }
+        if (scenario.binding && scenario.reflection !== 'invalid')
+          assert.notEqual(aliases[scenario.binding], scenario.raw);
+        const initial = exactTargetData();
+        initial.serviceInstance.activeDeployments[0].meta = {
+          commitHash: reviewedSha,
+        };
+        if (['reuse', 'previous'].includes(scenario.reflection)) {
+          initial.serviceInstance.activeDeployments[0].id = aliases[scenario.binding];
+          initial.serviceInstance.latestDeployment.id = aliases[scenario.binding];
+          if (scenario.reflection === 'reuse')
+            initial.serviceInstance.activeDeployments[0].meta.commitHash = sha;
+        }
+        const fixturePath = join(directory, 'fixture.mjs');
+        const counterPath = join(directory, 'counts.json');
+        await writeFile(
+          fixturePath,
+          `
+import assert from 'node:assert/strict';
+import { writeFileSync } from 'node:fs';
+const scenario = ${JSON.stringify(scenario)};
+const expected = ${JSON.stringify(aliases)};
+const initial = ${JSON.stringify(initial)};
+const native = ${JSON.stringify(exactTargetData())};
+const counts = {mutations:0, main:0, reads:0, ready:0, requests:0};
+const save = () => writeFileSync(${JSON.stringify(counterPath)}, JSON.stringify(counts));
+let observedGithub;
+save();
+globalThis.fetch = async (url, options) => {
+  counts.requests++; save();
+  const request = new Request(url, options);
+  const headers = new Headers(options.headers);
+  assert.equal(options.redirect, 'error');
+  if (url === '${mainEndpoint}') {
+    counts.main++; save();
+    assert.equal(request.headers.get('authorization'), 'Bearer ' + expected.GITHUB_TOKEN);
+    assert.equal(headers.get('authorization'), 'Bearer ' + expected.GITHUB_TOKEN);
+    observedGithub = request.headers.get('authorization').slice('Bearer '.length);
+    if (scenario.reflection.startsWith('snapshot')) {
+      process.env.RAILWAY_TOKEN = 'changed-railway-binding';
+      process.env.GITHUB_TOKEN = 'changed-github-binding';
+    }
+    return new Response(JSON.stringify(${JSON.stringify(mainBody())}));
+  }
+  if (url === 'https://${DEMO_TARGET.domain}/ready') {
+    counts.ready++; save();
+    return new Response(JSON.stringify(${JSON.stringify(readyBody())}), {headers:{'Cache-Control':'no-store'}});
+  }
+  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(request.headers.get('Project-Access-Token'), expected.RAILWAY_TOKEN);
+  assert.equal(headers.get('Project-Access-Token'), expected.RAILWAY_TOKEN);
+  const {query, variables} = JSON.parse(options.body);
+  if (query.startsWith('mutation')) {
+    counts.mutations++; save();
+    assert.equal(variables.commitSha, '${sha}');
+    const effectiveAlias = scenario.binding === 'RAILWAY_TOKEN' ? request.headers.get('Project-Access-Token') : observedGithub;
+    return new Response(JSON.stringify({data:{serviceInstanceDeployV2:['mutation', 'snapshot-mutation'].includes(scenario.reflection) ? effectiveAlias : '${deploymentId}'}}));
+  }
+  counts.reads++; save();
+  if (scenario.reflection === 'failure-code' && counts.mutations)
+    return new Response(JSON.stringify({errors:[{message:'synthetic private denial'}]}));
+  return new Response(JSON.stringify({data:counts.mutations ? native : initial}));
+};
+`,
+        );
+        const result = spawnSync(
+          process.execPath,
+          [
+            '--import',
+            fixturePath,
+            fileURLToPath(new URL('../../src/bug-pipeline/demo-deployment.mjs', import.meta.url)),
+            'deploy-exact',
+          ],
+          {
+            cwd: directory,
+            env: childEnv,
+            encoding: 'utf8',
+            timeout: 5000,
+          },
+        );
+        assert.equal(result.error, undefined);
+        assert.equal(result.status, scenario.success ? 0 : 1, result.stderr);
+        const counts = JSON.parse(await readFile(counterPath, 'utf8'));
+        assert.equal(counts.mutations, scenario.mutations);
+        if (['context', 'invalid'].includes(scenario.reflection)) assert.equal(counts.requests, 0);
+        if (['mutation', 'snapshot-mutation'].includes(scenario.reflection))
+          assert.equal(counts.reads, 1, 'forbidden returned alias cannot be polled');
+        const artifacts = (await readdir(directory)).filter(
+          (name) => name.startsWith('demo-') && name.endsWith('.json'),
+        );
+        const output = [
+          result.stdout,
+          result.stderr,
+          ...(await Promise.all(artifacts.map((name) => readFile(join(directory, name), 'utf8')))),
+        ];
+        for (const secret of [
+          ...Object.values(aliases),
+          childEnv.RAILWAY_TOKEN,
+          childEnv.GITHUB_TOKEN,
+        ].filter(Boolean))
+          for (const text of output) {
+            assert.equal(
+              text.includes(secret),
+              false,
+              'raw or effective HTTP credential must not be emitted',
+            );
+            assert.equal(
+              text.includes(JSON.stringify(secret).slice(1, -1)),
+              false,
+              'escaped raw or effective HTTP credential must not be emitted',
+            );
+          }
+        assert.equal(artifacts.includes('demo-deployment-receipt.json'), Boolean(scenario.success));
+        if (scenario.noArtifacts)
+          assert.equal(
+            artifacts.length,
+            0,
+            'fallback cannot restore an effective credential alias',
+          );
+        else {
+          const progress = JSON.parse(
+            await readFile(join(directory, 'demo-deployment-progress.json'), 'utf8'),
+          );
+          assert.equal(
+            progress.status,
+            scenario.success
+              ? 'verified'
+              : scenario.reflection === 'failure-code'
+                ? 'submitted'
+                : 'failed',
+          );
+          if (!scenario.success && scenario.reflection !== 'failure-code')
+            assert.equal(progress.deploymentId, null);
+        }
+        if (scenario.success) {
+          const receipt = JSON.parse(
+            await readFile(join(directory, 'demo-deployment-receipt.json'), 'utf8'),
+          );
+          validateReceipt(receipt, exactRun, 'clinicos-demo-backend', Date.now(), exactPolicy);
+          assert.equal(counts.main, 3);
+        }
+      } finally {
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
+});
+
+test('standalone Railway transport canonicalizes HTTP whitespace and rejects invalid headers with constant errors', async () => {
+  let calls = 0;
+  const client = createRailwayClient({
+    token: ' \tsynthetic-canonical-binding\t ',
+    fetchImpl: async (url, options) => {
+      calls++;
+      assert.equal(
+        new Request(url, options).headers.get('Project-Access-Token'),
+        'synthetic-canonical-binding',
+      );
+      assert.equal(options.headers['Project-Access-Token'], 'synthetic-canonical-binding');
+      return response({ data: { safe: true } });
+    },
+  });
+  assert.deepEqual(await client('query{safe}', {}), { safe: true });
+  assert.equal(calls, 1);
+  assert.throws(
+    () => createRailwayClient({ token: 'synthetic\ninvalid' }),
+    /valid HTTP credential bindings required/,
+  );
+});
+
+test('HTTP control and non-ByteString bindings fail before callbacks or transport for either credential', async () => {
+  for (const binding of ['RAILWAY_TOKEN', 'GITHUB_TOKEN']) {
+    for (const raw of [
+      'synthetic\u0000nul',
+      'synthetic\u0001control',
+      'synthetic\u000bvertical',
+      'synthetic\u007fdelete',
+      '\nsynthetic\r',
+      'synthetic\u0100unicode',
+    ]) {
+      let calls = 0;
+      const unexpected = async () => {
+        calls++;
+        throw new Error('must fail before external work');
+      };
+      await assert.rejects(
+        deployDemo({
+          env: {
+            ...exactEnv,
+            RAILWAY_TOKEN: 'synthetic-demo-binding',
+            [binding]: raw,
+          },
+          sourcePolicy: exactPolicy,
+          client: unexpected,
+          fetchImpl: unexpected,
+          onProgress: unexpected,
+        }),
+        /valid HTTP credential bindings required/,
+      );
+      await assert.rejects(
+        prepareDemo({
+          env: {
+            ...exactEnv,
+            RAILWAY_TOKEN: 'synthetic-demo-binding',
+            [binding]: raw,
+          },
+          sourcePolicy: exactPolicy,
+          client: unexpected,
+          fetchImpl: unexpected,
+        }),
+        /valid HTTP credential bindings required/,
+      );
+      assert.equal(calls, 0);
+    }
+  }
+});
+
+test('production proof authenticates exact successful main deploy job independently from demo', async (t) => {
+  const { verifyProductionBackend } = await import('../../src/bug-pipeline/demo-deployment.mjs');
+  const sha = 'a'.repeat(40);
+  function fixture() {
+    const run = {
+      id: 71,
+      run_attempt: 1,
+      head_sha: sha,
+      head_branch: 'main',
+      repository: { full_name: 'l2v-hub/ClinicOS' },
+      head_repository: { full_name: 'l2v-hub/ClinicOS' },
+      path: '.github/workflows/deploy-backend.yml',
+      event: 'push',
+      status: 'completed',
+      conclusion: 'success',
+    };
+    const job = {
+      id: 81,
+      run_id: 71,
+      run_attempt: 1,
+      head_sha: sha,
+      name: 'deploy',
+      status: 'completed',
+      conclusion: 'success',
+      steps: [
+        {
+          name: 'Deploy to Railway',
+          status: 'completed',
+          conclusion: 'success',
+        },
+      ],
+    };
+    const reader = {
+      getJson: async (route) =>
+        route.includes('/jobs?')
+          ? { total_count: 1, jobs: [job] }
+          : route === 'actions/runs/71'
+            ? run
+            : { total_count: 1, workflow_runs: [run] },
+    };
+    return { run, job, reader };
+  }
+  for (const event of ['push', 'workflow_dispatch'])
+    await t.test(event, async () => {
+      const f = fixture();
+      f.run.event = event;
+      const proof = await verifyProductionBackend({
+        reader: f.reader,
+        deploymentSha: sha,
+      });
+      assert.equal(proof.sha, sha);
+      assert.equal(proof.jobId, 81);
+      assert.match(proof.proofSha256, /^[a-f0-9]{64}$/);
+    });
+  const bad = [
+    ['wrong SHA', (f) => (f.run.head_sha = 'b'.repeat(40))],
+    ['wrong workflow', (f) => (f.run.path = '.github/workflows/deploy-demo-exact-commit.yml')],
+    ['wrong event', (f) => (f.run.event = 'pull_request')],
+    ['rerun', (f) => (f.run.run_attempt = 2)],
+    ['cross repo', (f) => (f.run.head_repository.full_name = 'evil/repo')],
+    ['wrong ref', (f) => (f.run.head_branch = 'feature')],
+    ['failed', (f) => (f.run.conclusion = 'failure')],
+    ['skipped production', (f) => (f.job.conclusion = 'skipped')],
+    ['wrong job', (f) => (f.job.name = 'preflight')],
+    ['job rerun', (f) => (f.job.run_attempt = 2)],
+    ['job other run', (f) => (f.job.run_id = 72)],
+    ['job wrong SHA', (f) => (f.job.head_sha = 'b'.repeat(40))],
+    ['step skipped', (f) => (f.job.steps[0].conclusion = 'skipped')],
+  ];
+  for (const [name, change] of bad)
+    await t.test(name, async () => {
+      const f = fixture();
+      change(f);
+      await assert.rejects(
+        verifyProductionBackend({
+          reader: f.reader,
+          deploymentSha: sha,
+          runUrl: 'https://github.com/l2v-hub/ClinicOS/actions/runs/71',
+        }),
+        /PRODUCTION_PROOF_FAILED/,
+      );
+    });
+  await t.test('missing run never dispatches', async () => {
+    const reader = {
+      getJson: async () => ({ total_count: 0, workflow_runs: [] }),
+    };
+    await assert.rejects(
+      verifyProductionBackend({ reader, deploymentSha: sha }),
+      /PRODUCTION_RUN_REQUIRED/,
+    );
+  });
+  await t.test('identity changed on final read', async () => {
+    const f = fixture();
+    let reads = 0;
+    const read = f.reader.getJson;
+    f.reader.getJson = async (route) => {
+      if (route === 'actions/runs/71' && ++reads === 2) f.run.run_attempt = 2;
+      return read(route);
+    };
+    await assert.rejects(
+      verifyProductionBackend({ reader: f.reader, deploymentSha: sha }),
+      /PRODUCTION_PROOF_FAILED/,
+    );
+  });
+});
+
+test('newer failed, pending or rerun production run prevents selecting an older successful same-SHA run', async () => {
+  const { verifyProductionBackend } = await import('../../src/bug-pipeline/demo-deployment.mjs');
+  const sha = 'a'.repeat(40);
+  const run = {
+    id: 71,
+    run_attempt: 1,
+    head_sha: sha,
+    head_branch: 'main',
+    repository: { full_name: 'l2v-hub/ClinicOS' },
+    head_repository: { full_name: 'l2v-hub/ClinicOS' },
+    path: '.github/workflows/deploy-backend.yml',
+    event: 'push',
+    status: 'completed',
+    conclusion: 'success',
+  };
+  for (const patch of [
+    { status: 'queued', conclusion: null },
+    { conclusion: 'failure' },
+    { run_attempt: 2 },
+  ]) {
+    const newest = { ...run, id: 72, ...patch };
+    let requests = 0;
+    const reader = {
+      getJson: async (route) => {
+        requests++;
+        if (route.includes('/runs?')) return { total_count: 2, workflow_runs: [run, newest] };
+        if (route === 'actions/runs/72') return newest;
+        throw Error('older successful run must not be consulted');
+      },
+    };
+    await assert.rejects(
+      verifyProductionBackend({ reader, deploymentSha: sha }),
+      /PRODUCTION_PROOF_FAILED|PRODUCTION_RUN_PENDING/,
+    );
+    await assert.rejects(
+      verifyProductionBackend({
+        reader,
+        deploymentSha: sha,
+        runUrl: 'https://github.com/l2v-hub/ClinicOS/actions/runs/71',
+      }),
+      /PRODUCTION_PROOF_FAILED/,
+    );
+    assert.ok(requests > 0);
+  }
+});
+
+test('completed older production reruns do not hide a newer successful first attempt', async (t) => {
+  const { verifyProductionBackend } = await import('../../src/bug-pipeline/demo-deployment.mjs');
+  const sha = 'a'.repeat(40);
+  const makeRun = (id, attempt, status, conclusion) => ({
+    id,
+    run_attempt: attempt,
+    head_sha: sha,
+    head_branch: 'main',
+    repository: { full_name: 'l2v-hub/ClinicOS' },
+    head_repository: { full_name: 'l2v-hub/ClinicOS' },
+    path: '.github/workflows/deploy-backend.yml',
+    event: 'workflow_dispatch',
+    status,
+    conclusion,
+  });
+  const newest = makeRun(72, 1, 'completed', 'success');
+  const olderCompletedRerun = makeRun(71, 2, 'completed', 'failure');
+  const job = {
+    id: 82,
+    run_id: newest.id,
+    run_attempt: 1,
+    head_sha: sha,
+    name: 'deploy',
+    status: 'completed',
+    conclusion: 'success',
+    steps: [{ name: 'Deploy to Railway', status: 'completed', conclusion: 'success' }],
+  };
+  const readerFor = (older) => ({
+    getJson: async (route) =>
+      route.includes('/jobs?')
+        ? { total_count: 1, jobs: [job] }
+        : route === `actions/runs/${newest.id}`
+          ? newest
+          : route === `actions/runs/${older.id}`
+            ? older
+            : { total_count: 2, workflow_runs: [older, newest] },
+  });
+
+  await t.test('completed attempt 2 followed by latest attempt 1 proves latest only', async () => {
+    const proof = await verifyProductionBackend({
+      reader: readerFor(olderCompletedRerun),
+      deploymentSha: sha,
+      runUrl: 'https://github.com/l2v-hub/ClinicOS/actions/runs/72',
+    });
+    assert.equal(proof.runId, newest.id);
+    assert.equal(proof.runAttempt, 1);
+    assert.equal(proof.jobId, job.id);
+  });
+
+  await t.test('an older active rerun blocks proof as pending', async () => {
+    const active = makeRun(71, 2, 'in_progress', null);
+    await assert.rejects(
+      verifyProductionBackend({ reader: readerFor(active), deploymentSha: sha }),
+      /PRODUCTION_RUN_PENDING/,
+    );
+  });
+
+  await t.test('an older active first attempt must settle before proving a newer deployment', async () => {
+    const older = makeRun(71, 1, 'in_progress', null);
+    await assert.rejects(
+      verifyProductionBackend({ reader: readerFor(older), deploymentSha: sha }),
+      /PRODUCTION_RUN_PENDING/,
+    );
+    const completed = { ...older, status: 'completed', conclusion: 'success' };
+    const proof = await verifyProductionBackend({
+      reader: readerFor(completed), deploymentSha: sha,
+    });
+    assert.equal(proof.runId, newest.id);
+    assert.equal(proof.runAttempt, 1);
+  });
+
+  await t.test('malformed or non-positive inventory attempts fail closed', async () => {
+    for (const attempt of [0, -1, 1.5, '1', null]) {
+      const malformed = { ...olderCompletedRerun, run_attempt: attempt };
+      await assert.rejects(
+        verifyProductionBackend({ reader: readerFor(malformed), deploymentSha: sha }),
+        /PRODUCTION_PROOF_FAILED/,
+        `run_attempt ${String(attempt)} must be rejected`,
+      );
+    }
+  });
+});
+
+test('bounded production waiting polls only validated absent/pending observations and retains strict final proof', async (t) => {
+  const { verifyProductionBackend, waitForProductionBackend } =
+    await import('../../src/bug-pipeline/demo-deployment.mjs');
+  for (const ending of [
+    'success',
+    'failure',
+    'never appears',
+    'never completes',
+    'identity',
+    'rerun',
+    'incomplete',
+  ])
+    await t.test(ending, async () => {
+      const sha = 'a'.repeat(40);
+      let clock = 1000,
+        state = 0,
+        sleeps = 0,
+        reads = 0;
+      const run = () => ({
+        id: 71,
+        run_attempt: ending === 'rerun' ? 2 : 1,
+        head_sha: ending === 'identity' ? 'b'.repeat(40) : sha,
+        head_branch: 'main',
+        repository: { full_name: 'l2v-hub/ClinicOS' },
+        head_repository: { full_name: 'l2v-hub/ClinicOS' },
+        path: '.github/workflows/deploy-backend.yml',
+        event: 'push',
+        status: state < 2 || ending === 'never completes' ? 'in_progress' : 'completed',
+        conclusion:
+          state < 2 || ending === 'never completes'
+            ? null
+            : ending === 'failure'
+              ? 'failure'
+              : 'success',
+      });
+      const job = {
+        id: 81,
+        run_id: 71,
+        run_attempt: 1,
+        head_sha: sha,
+        name: 'deploy',
+        status: 'completed',
+        conclusion: 'success',
+        steps: [{ name: 'Deploy to Railway', status: 'completed', conclusion: 'success' }],
+      };
+      const reader = {
+        getJson: async (route) => {
+          reads++;
+          if (route.includes('/runs?')) {
+            if (state === 0 || ending === 'never appears')
+              return { total_count: 0, workflow_runs: [] };
+            return { total_count: ending === 'incomplete' ? 2 : 1, workflow_runs: [run()] };
+          }
+          if (route === 'actions/runs/71') return run();
+          if (route.includes('/jobs?')) return { total_count: 1, jobs: [job] };
+          throw Error('unexpected readonly route');
+        },
+      };
+      const input = {
+        verify: () => verifyProductionBackend({ reader, deploymentSha: sha }),
+        now: () => clock,
+        delay: async (ms) => {
+          sleeps++;
+          clock += ms;
+          state++;
+        },
+        timeoutMs: 40,
+        pollMs: 10,
+      };
+      if (ending === 'success') {
+        const result = await waitForProductionBackend(input);
+        assert.equal(result.runId, 71);
+        assert.equal(sleeps, 2);
+      } else
+        await assert.rejects(
+          waitForProductionBackend(input),
+          ending.startsWith('never') ? /PRODUCTION_RUN_PENDING_TIMEOUT/ : /PRODUCTION_PROOF_FAILED/,
+        );
+      assert.ok(reads > 0);
+      assert.ok(sleeps <= 4);
+    });
+  for (const kind of ['backwards', 'stopped'])
+    await t.test(`clock ${kind}`, async () => {
+      let clock = 100;
+      await assert.rejects(
+        waitForProductionBackend({
+          verify: async () => {
+            const e = new Error('pending');
+            e.code = 'PRODUCTION_RUN_PENDING';
+            throw e;
+          },
+          now: () => clock,
+          delay: async () => {
+            if (kind === 'backwards') clock--;
+          },
+          timeoutMs: 20,
+          pollMs: 10,
+        }),
+        /PRODUCTION_PROOF_FAILED/,
+      );
+    });
+});
+
+test('valid pending inventory lag at final production reread is waited, never relabeled proof failure', async () => {
+  const { verifyProductionBackend, waitForProductionBackend } =
+    await import('../../src/bug-pipeline/demo-deployment.mjs');
+  const sha = 'a'.repeat(40);
+  let inventory = 0,
+    clock = 100,
+    sleeps = 0;
+  const run = {
+    id: 71,
+    run_attempt: 1,
+    head_sha: sha,
+    head_branch: 'main',
+    repository: { full_name: 'l2v-hub/ClinicOS' },
+    head_repository: { full_name: 'l2v-hub/ClinicOS' },
+    path: '.github/workflows/deploy-backend.yml',
+    event: 'push',
+    status: 'completed',
+    conclusion: 'success',
+  };
+  const job = {
+    id: 81,
+    run_id: 71,
+    run_attempt: 1,
+    head_sha: sha,
+    name: 'deploy',
+    status: 'completed',
+    conclusion: 'success',
+    steps: [{ name: 'Deploy to Railway', status: 'completed', conclusion: 'success' }],
+  };
+  const reader = {
+    getJson: async (route) => {
+      if (route.includes('/runs?'))
+        return {
+          total_count: 1,
+          workflow_runs: [
+            ++inventory === 2 ? { ...run, status: 'in_progress', conclusion: null } : run,
+          ],
+        };
+      if (route.includes('/jobs?')) return { total_count: 1, jobs: [job] };
+      return run;
+    },
+  };
+  const proof = await waitForProductionBackend({
+    verify: () => verifyProductionBackend({ reader, deploymentSha: sha }),
+    now: () => clock,
+    delay: async (ms) => {
+      clock += ms;
+      sleeps++;
+    },
+    timeoutMs: 30,
+    pollMs: 10,
+  });
+  assert.equal(proof.runId, 71);
+  assert.equal(sleeps, 1);
 });

@@ -1,0 +1,27 @@
+{
+  "status": "STOP_FAILED_FULL_PURE_GATE",
+  "counts": {
+    "tests": 1170,
+    "pass": 1162,
+    "fail": 5,
+    "skipped": 3
+  },
+  "actionableIntegrationRegression": {
+    "file": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "line": 729,
+    "expected": "recordDeployment reaches existing HTTP503 publication retry",
+    "actual": "PRODUCTION_RUN_REQUIRED before HTTP503 due missing production verifier fixture",
+    "scope": "Update synthetic protected controller fixture to genuine production proof adapter and preserve original retry/no-model/no-remerge/no-redeploy assertions; do not weaken production gate."
+  },
+  "snapshotFixtureFailures": {
+    "count": 4,
+    "file": "artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip",
+    "reason": "Not materialized in 263-file pure source snapshot; no synthetic replacement created."
+  },
+  "holdScopeReadReview": "recoverExactRelease requires exact generated hold string and matching block reviewedSha/id, with full subject CAS rechecked through store.save guard; unrelated/manual or concurrently changed holds fail closed. archiveRecovery has no direct controller bypass identified.",
+  "independentAdversarialExecution": "Not started: stopped after full suite failure as contract requires.",
+  "sourceFiles": 263,
+  "sourceUnchanged": true,
+  "nativeOrProviderOperations": false,
+  "finalApproval": false
+}

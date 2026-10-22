@@ -618,7 +618,8 @@ test('manual workflow retains protected exact-main binding, no secret test step 
     /npm |railway up|serviceConnect|deploymentTriggerCreate|deploymentTriggerDelete/,
   );
   assert.match(yaml, /persist-credentials: false/);
-  assert.match(yaml, /group: railway-backend/);
+  assert.match(yaml, /group: railway-demo/);
+  assert.doesNotMatch(yaml, /group: railway-backend/);
 });
 
 function missingFixture(rootDirectory = '/') {

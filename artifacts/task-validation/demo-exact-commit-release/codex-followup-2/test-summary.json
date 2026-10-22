@@ -1,0 +1,113 @@
+{
+  "status": "IMPLEMENTED-NOT-INDEPENDENTLYVERIFIED",
+  "sourceFreezeSha256": "f3ec1d4a2d325e4169fbab982646b240762ee4e4ef81d17472d22487835808f5",
+  "credentialBoundary": "Unchanged trusted clinicos-review-handoff createRunner with PATH-only parent and envMode verification; real credentials/proxies excluded; synthetic Web Response fixtures only.",
+  "runs": [
+    {
+      "attempt": "focused-baseline",
+      "ok": true,
+      "code": 0,
+      "nodeVersion": "v24.19.0",
+      "args": [
+        "--test",
+        "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+        "agent-team/tests/bug-pipeline/release.test.mjs",
+        "scripts/automation/configure-demo-source.test.mjs"
+      ],
+      "counts": {
+        "tests": 668,
+        "pass": 668,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "privateEvidenceSha256": "807e35a4539cd8cf120a1a0a2e0b24c3039d2fb15bfc4b9bf000110228e03771"
+    },
+    {
+      "attempt": "focused-reflection-1",
+      "ok": true,
+      "code": 0,
+      "nodeVersion": "v24.19.0",
+      "args": [
+        "--test",
+        "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+        "agent-team/tests/bug-pipeline/release.test.mjs",
+        "scripts/automation/configure-demo-source.test.mjs"
+      ],
+      "counts": {
+        "tests": 692,
+        "pass": 692,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "privateEvidenceSha256": "70a2ba0a77adc36ee299b5dabcf620e7c53a420f46133c5a5044fb1ddb195612"
+    },
+    {
+      "attempt": "full-final",
+      "ok": true,
+      "code": 0,
+      "nodeVersion": "v24.19.0",
+      "args": [
+        "--test",
+        "agent-team/tests/bug-pipeline/*.test.mjs",
+        "scripts/quality-gate/claude-bug-review.test.mjs",
+        "scripts/automation/configure-demo-source.test.mjs"
+      ],
+      "counts": {
+        "tests": 958,
+        "pass": 955,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 3,
+        "todo": 0
+      },
+      "privateEvidenceSha256": "607b7b67f3934c67f01ec06c90f9276439b3214f19b50995d7fab7a5f7f58428"
+    }
+  ],
+  "actualCliReflectionCasesFinal": 22,
+  "skipped": [
+    "Native PowerShell scheduler parse (Windows only)",
+    "Native Windows private ACL enforcement (Windows only)",
+    "Native Windows dedicated bootstrap checkout protections (Windows only)"
+  ],
+  "preservedSource": [
+    {
+      "path": ".github/workflows/deploy-backend.yml",
+      "sha256": "6743d823679a9c1076c85dfcb5e5b9a8f96705849123b3091cac5d00cadaa3f9",
+      "matchesHead": true
+    },
+    {
+      "path": ".github/workflows/deploy-demo-exact-commit.yml",
+      "sha256": "c45b50ea6dca08a4c93c4a483d35ad3f2e1e8946bb7c6f3708b543d2dfae0e15",
+      "matchesHead": true
+    },
+    {
+      "path": ".github/workflows/configure-demo-source.yml",
+      "sha256": "34319447165b115b20c82e9b0c10393bbf189b8352867873ea3fb7948cb97875",
+      "matchesHead": true
+    },
+    {
+      "path": "scripts/automation/configure-demo-source.mjs",
+      "sha256": "c674e302471ea8b95154aa7e440761d0ca188475bdaffd294e9f4d3ad9c4536a",
+      "matchesHead": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/release.mjs",
+      "sha256": "49ca26c74122204ad21d9cf94279d867384ed781b01d4ef62eb2d37b5c18430e",
+      "matchesHead": true
+    },
+    {
+      "path": "railway.json",
+      "sha256": "65850d88875ed9859f5d39894eb24d69da8d97b5d1f57b957d9abad4d4051a3c",
+      "matchesHead": true
+    }
+  ],
+  "oldPublicPacketFilesPreserved": 20,
+  "gitDiffCheck": "passed",
+  "scopeCheck": "two authorized source paths plus new codex-followup-2 packet",
+  "providerActions": false,
+  "independentQA": false
+}

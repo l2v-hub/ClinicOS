@@ -1,0 +1,57 @@
+{
+  "status": "INDEPENDENT_QA_PASS",
+  "at": "2026-10-21T20:21:47.015596+00:00",
+  "reservationNonce": "88caeb69-7abd-4b98-9a43-c3e9dc8b4477",
+  "reservationStateCommit": "fe5831f23686142edf600abb8d157e58ff0551a5",
+  "worktree": "/workspace/clinicos-release-integration",
+  "baseSha": "b07317f4d7eee2bd873ff465d0df317459fcde28",
+  "sourceManifestSha256": "eaa26b22a86f5d22434877050c4c4ffb538c1f0817237498a13b1bd2e179325a",
+  "authorSealVerifiedSha256": "5b402e6826468229fa6fbb99b777a213be7b4cdd363cee241b8e065a3b18e6ab",
+  "blockingFindings": [],
+  "freshTests": {
+    "focused": {
+      "passed": 423,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "focused.json"
+    },
+    "full": {
+      "total": 1075,
+      "passed": 1072,
+      "failed": 0,
+      "skipped": 3,
+      "receipt": "full.json"
+    },
+    "independentAdversarial": {
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "adversarial.json"
+    }
+  },
+  "countsOverlap": "focused overlaps full",
+  "freezeUnchanged": true,
+  "sourceEdits": false,
+  "credentialStrippedVerificationRunner": true,
+  "authenticTrace": {
+    "bytes": 27606230,
+    "sha256": "1d926e21b02c8b3c68353c55bab71151b672c428fcc24359c49e4eb5c9f11102",
+    "freshValidation": true,
+    "freshUiRun": false,
+    "originalUnchanged": true,
+    "receipt": "authentic-media-receipt.json"
+  },
+  "priorEvidence": "author receipts sealed and preserved, not independent executions",
+  "unrun": [
+    "actual Actions dispatch",
+    "hosted Node22",
+    "production/environment approval",
+    "real provider preflight",
+    "remote merge",
+    "provider deployment",
+    "live UI run",
+    "publication",
+    "issue closure"
+  ],
+  "publisher": "root only"
+}

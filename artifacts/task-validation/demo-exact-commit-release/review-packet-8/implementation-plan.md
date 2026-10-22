@@ -1,0 +1,1 @@
+Publish verified0ae source plus this evidence, relevant5native checks then one root-owned explicitly authorized controlled admin bootstrap. Preserve all protections and partial-write counters; no blind retry. Full currentnative6, actualClaude and finalCodex before ordinary merge; provider/demo release and online clinical proof remain later.

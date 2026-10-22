@@ -1,0 +1,87 @@
+{
+  "status": "STOPPED_AUTHOR_COMPLETE_PENDING_INTEGRATION_AND_INDEPENDENT_QA",
+  "round": 5,
+  "nonce": "83822aa8-b804-4f52-933b-bda9a461cb7a",
+  "baseSha": "d6681287161a769d82d2bc7b77fe06fa925e4ff7",
+  "canonicalReservationUnchanged": true,
+  "sourceFiles": [
+    {
+      "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "sha256": "c231c95f3b3c2e2b80d446a8ddf302530bab068c4f44d02f48afd7400009aeab",
+      "inode": 329524,
+      "linkCount": 1
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "sha256": "1879f24e6adc1b1c9ed4be99027ddf03be61f8997679492b922a6e0acd765c0d",
+      "inode": 329717,
+      "linkCount": 1
+    }
+  ],
+  "attempts": [
+    {
+      "label": "focused-1",
+      "ok": false,
+      "exitCode": 1,
+      "runnerError": null,
+      "counts": {
+        "tests": 742,
+        "pass": 734,
+        "fail": 8,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "privateResultSha256": "4411d816f301ee963704ac522d66471dadd1354ddb8d8dbcebee7458ea14db19"
+    },
+    {
+      "label": "focused-2",
+      "ok": true,
+      "exitCode": 0,
+      "runnerError": null,
+      "counts": {
+        "tests": 745,
+        "pass": 745,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "privateResultSha256": "4ba0c526baa11307c552a9b97180c7e3ebfee4f4e661c08cdc897f6a8982e08d"
+    },
+    {
+      "label": "focused-3-final",
+      "ok": true,
+      "exitCode": 0,
+      "runnerError": null,
+      "counts": {
+        "tests": 747,
+        "pass": 747,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "privateResultSha256": "b39f72353337fe506ca5bd60d77bc178b394c9a5b4634fbebaff13365bd6eec0"
+    }
+  ],
+  "preservation": {
+    "checkedFiles": 1858,
+    "sha256InodeLinkCountUnchanged": true,
+    "beforeManifestSha256": "ce0e9e266bb4d929876f0ad82e5a24605c634498fd95444464d5b09dc0b4c416",
+    "originalSourceManifestSha256": "aac165066751257f875f90f472c0eafe387a747a4a6c2e7b56784c6c181f11c9",
+    "qa4HighFindingPreserved": true
+  },
+  "trustedRunner": "/workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs",
+  "envMode": "verification; PATH-only runner parent environment",
+  "nodeVersion": "v24.19.0",
+  "syntheticOnly": true,
+  "realCredentialsUsed": false,
+  "realProviderCalls": 0,
+  "gitRefsGhStateWrites": 0,
+  "remainingGates": [
+    "Root integrates current main fbaa after author STOP.",
+    "Fresh independent QA on the resulting combined source, including full regression.",
+    "Actual Claude2, native6 and final Codex review; protected merge and provider gates remain pending."
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "status": "READY FOR CODEX QA",
+  "sourceBase": "630bef997a53a2d335b1f4a775151a7e8c604d81",
+  "round": 2,
+  "reservationNonce": "59e03b2b-4cb5-4673-ae2d-c428a7371a03",
+  "taskContractSha256": "c46b2dc801a3d5e0972834274fe42f85ef266f2ff91f85bc7eec237c532c1b70",
+  "files": [
+    {
+      "path": ".github/workflows/deploy-backend.yml",
+      "bytes": 4195,
+      "sha256": "6743d823679a9c1076c85dfcb5e5b9a8f96705849123b3091cac5d00cadaa3f9"
+    },
+    {
+      "path": ".github/workflows/deploy-demo-exact-commit.yml",
+      "bytes": 3342,
+      "sha256": "2a88c9af414a13f5084ee5823960788f7a021969288496daa21f0a3b85b2f5a1"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "bytes": 25367,
+      "sha256": "e7b9827568214a03ba269575e8878451f2ad170bcf6610857f23acabaa3e10fe"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "bytes": 59128,
+      "sha256": "815dc23420f0e22651176b1cc937c8cce5f2d04a7ea7f2afc36f3d4b529d1c77"
+    }
+  ],
+  "priorQa1ReportSha256": "221e1e8fc8c28faf1fd04bd5cd2ba48b6801ce8caae52312b6542da5c41b9468",
+  "integrity": {
+    "oldProofEntriesPreserved": 7239,
+    "legacyWorkflowExact45033": true,
+    "immutableHelperSha256": "c674e302471ea8b95154aa7e440761d0ca188475bdaffd294e9f4d3ad9c4536a",
+    "finalNetPathsDoNotMatchLegacyPushFilters": true,
+    "actualNetPathsAgainst45033": [
+      "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "artifacts/task-validation/demo-exact-commit-release/author-1/author-report.md",
+      "artifacts/task-validation/demo-exact-commit-release/author-1/source-manifest.json",
+      "artifacts/task-validation/demo-exact-commit-release/author-1/task-contract-v1-preflight.md",
+      "artifacts/task-validation/demo-exact-commit-release/author-1/task-contract.md",
+      ".github/workflows/deploy-demo-exact-commit.yml"
+    ]
+  },
+  "validation": {
+    "nodeVersion": "v24.19.0",
+    "focused": {
+      "tests": 187,
+      "pass": 187,
+      "fail": 0,
+      "skip": 0
+    },
+    "fullWorkflowUnitStep": {
+      "tests": 762,
+      "pass": 759,
+      "fail": 0,
+      "skip": 3,
+      "skipReason": "native Windows checks"
+    },
+    "hostedNode22Executed": false,
+    "actualExternalRequests": 0,
+    "actualProviderMutations": 0,
+    "yamlParsed": true,
+    "formattingAndContractAndDiffChecksPassed": true
+  },
+  "remainingGates": [
+    "fresh independent QA2",
+    "actual Claude review",
+    "fresh final Codex review",
+    "six required native checks",
+    "ordinary protected main merge",
+    "root drains existing running and pending legacy writers before first dispatch",
+    "actual native exact-commit mutation acceptance and independent deployed/live proof"
+  ],
+  "limits": [
+    "Current-main reads are snapshots, not an atomic lock with the provider mutation.",
+    "Shared concurrency is not FIFO and cannot prevent future deployment drift.",
+    "Native provider acceptance and GitHub-source permission remain unproven.",
+    "Hosted Node22 and native Windows checks were not executed by the author."
+  ],
+  "erratum": "The root-owned author-2 contract historical 151 reference is a typo; immutable author1/QA1 evidence says 150 focused tests. Old proof text was not rewritten."
+}

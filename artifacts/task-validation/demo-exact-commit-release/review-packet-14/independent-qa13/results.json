@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "fullPure": {
+    "tests": 1225,
+    "pass": 1222,
+    "fail": 0,
+    "skipped": 3,
+    "attempts": 1,
+    "node": "22.23.4",
+    "testConcurrency": 1,
+    "seconds": 45.6570827960968
+  },
+  "independentSyntheticProbes": {
+    "pass": 49,
+    "fail": 0,
+    "initial": 42,
+    "supplementalRecovery": 3,
+    "actualApprovedMetadataThroughSync": 4
+  },
+  "actionableSourceFindings": [],
+  "sourceUnchanged": true,
+  "sourceFiles": 265,
+  "changedSourcePaths": 18,
+  "sourceFreezeSha256": "9dd89ad93edd7c691475733bd2bbbb5c09ed8e84e7c17072a0f2bb9460d98a73",
+  "sourceSnapshot": "/tmp/clinicos-498-independent13",
+  "originalSource": "/tmp/clinicos-498-combined13",
+  "newNativeChecks": "UNRUN",
+  "Claude4": "UNRUN",
+  "providerDeployOrClosure": "UNRUN",
+  "finalReleaseApproval": false,
+  "qaCheckerCorrection": "One static replace-all assumption failed, retained in bulk scope-checker-attempt1.json; corrected comparison only, no source defect or repeated suite.",
+  "priorFailures": "QA11 and author failures preserved; no first-native cause inferred."
+}

@@ -22,7 +22,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: railway-backend
+  group: railway-demo
   cancel-in-progress: false
 
 jobs:

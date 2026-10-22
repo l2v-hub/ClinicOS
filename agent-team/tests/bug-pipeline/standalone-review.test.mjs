@@ -2417,3 +2417,11 @@ test('definite merge rejection cannot archive a reservation after native head/st
     assert.notEqual(blocked.failureCode, 'github-merge-rejected');
   }
 });
+
+test('standalone publisher explicitly rejects source cohorts without projecting labels',async()=>{
+ const f=fixture();await f.controller.adopt(f.manifest);const subject=await f.controller.request(81);
+ // The durable subject remains byte-identical to the explicit nonempty fixture.
+ subject.issues=[17];f.remote().standaloneReviews[0].issues=[17];
+ const before=f.labels.slice();const result=await f.controller.publishState(subject);
+ assert.equal(result.status,'unsupported');assert.deepEqual(f.labels,before);
+});

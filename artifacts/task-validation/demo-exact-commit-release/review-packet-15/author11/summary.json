@@ -1,0 +1,106 @@
+{
+  "status": "AUTHOR_COMPLETE_PASS_FOCUSED",
+  "baseSha": "23eacd2a5672c5e8d713417ef2c6a82bbba004fe",
+  "implementationRound": 11,
+  "nonce": "c58aace7-e3be-4b21-a37e-a5f1d66ce039",
+  "sourceFiles": [
+    "agent-team/src/bug-pipeline/exact-demo-dispatch.mjs",
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/src/bug-pipeline/demo-deployment.mjs",
+    "agent-team/src/bug-pipeline/exact-demo-recovery.mjs",
+    "agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+    "agent-team/tests/bug-pipeline/exact-demo-recovery.test.mjs",
+    ".github/workflows/codex-bug-release.yml"
+  ],
+  "scopeVerified": true,
+  "protectedReceiptValidatorsUnchanged": true,
+  "tests": [
+    {
+      "receipt": "focused1.json",
+      "tests": 735,
+      "pass": 685,
+      "fail": 50,
+      "skipped": 0
+    },
+    {
+      "receipt": "focused2.json",
+      "tests": 735,
+      "pass": 734,
+      "fail": 1,
+      "skipped": 0
+    },
+    {
+      "receipt": "focused3.json",
+      "tests": 774,
+      "pass": 774,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "receipt": "focused4.json",
+      "tests": 775,
+      "pass": 775,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "receipt": "focused-final.json",
+      "tests": 776,
+      "pass": 775,
+      "fail": 1,
+      "skipped": 0
+    },
+    {
+      "receipt": "focused-final2.json",
+      "tests": 776,
+      "pass": 776,
+      "fail": 0,
+      "skipped": 0
+    }
+  ],
+  "finalFocused": {
+    "tests": 776,
+    "pass": 776,
+    "fail": 0,
+    "skipped": 0,
+    "receipt": "focused-final2.json",
+    "sourceHashesVerified": true
+  },
+  "contractValidator": {
+    "status": "PASS",
+    "receipt": "contract-final.json"
+  },
+  "cases": [
+    "four actual release failure scenarios persist blocked status and retry POST0",
+    "explicit recovery through actual release+dispatcher completes premerge and authenticated descendant postmerge targets",
+    "original merge/review/history identities preserved; old progress and IDs archived",
+    "new UUIDs/run exclusion, consumed block replay denial",
+    "actual owner/admin API and fixed context negatives",
+    "changed head/unapproved source/nonancestor/CAS ownership/active and uncertain old run/run tamper reject",
+    "production binding false rejects before merge",
+    "production missing/failed/wrong SHA/path/event/attempt/job/step cannot record/close",
+    "newest production run prevents old-success fallback",
+    "production reader immutable proof bound to descendant target; separate production/demo completion links",
+    "fresh frontend target URL; prior facts not carried",
+    "32MiB evidence and original strict receipt/source policy guards unchanged"
+  ],
+  "lunaPathsExcluded": {
+    ".github/workflows/deploy-backend.yml": "8520e8d32b7ee84d38524d18a507ebd728238815d58d7c1a5064847b7f118c75",
+    "agent-team/tests/bug-pipeline/demo-workflow-policy.test.mjs": "775c01039118c70d88989c217c83b5fc1c6b70fc7332373f4384a4d56d96ac9f"
+  },
+  "knownSecretFindingResolved": "Earlier live migration/negative proof, not performed or revalidated by this source task.",
+  "actualTopologyReaderFailure": "Earlier run39734902538 failure remains preserved/unresolved; this author did not access or retry it.",
+  "liveOperationsRun": false,
+  "wholePipelineRun": false,
+  "nativeOrClaudeReview": "NOT_RUN",
+  "remainingGates": [
+    "Independent QA/adversarial review including Luna candidate2",
+    "Root full pure-pipeline checks and actual new-head native checks",
+    "New packet and actual Claude3 after root acceptance",
+    "Explicit authorized operational recovery/production/deployment only under separate runtime grants"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "exitCode": 0,
+  "results": [
+    {
+      "status": "verified",
+      "repository": "l2v-hub/ClinicOS",
+      "environment": "glistening-friendship / demo",
+      "environmentId": 20880188544,
+      "previousBranchPolicy": null,
+      "previousMainPolicyPresent": false,
+      "deploymentBranchPolicy": {
+        "protected_branches": false,
+        "custom_branch_policies": true
+      },
+      "mainBranchOnly": true,
+      "environmentUpdated": true,
+      "policyCreated": true,
+      "protectionsPreserved": true,
+      "secrets": {
+        "repository": {
+          "readable": false
+        },
+        "environment": {
+          "readable": false
+        }
+      },
+      "repositorySecretsAreNotRestrictedByEnvironmentPolicy": true
+    }
+  ],
+  "logSha256": "70e760fa5974aa1b169fa8402d85321fa0f2a4cf2cd1ef47f6acd3f01e5ac8cb"
+}

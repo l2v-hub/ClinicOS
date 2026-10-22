@@ -1,0 +1,252 @@
+--- a/agent-team/src/bug-pipeline/issue-review-communication.mjs
++++ b/agent-team/src/bug-pipeline/issue-review-communication.mjs
+@@ -90,6 +90,50 @@
+     .replace(/@(?=[A-Za-z0-9_-])/g, '@\u200b');
+ }
+ 
++// Projection only: these receipts never authorize a release or change durable state.
++function preservedApproval(subject, readReport) {
++  if (subject.approvedSha == null) return false;
++  assert.equal(subject.approvedSha, subject.sha, 'Approval has a stale SHA');
++  const handoff = subject.externalReview;
++  assert.equal(handoff?.status, 'published', 'Approval requires a published review');
++  assert.equal(handoff.subjectSha, subject.sha, 'Approval review has a stale SHA');
++  if (handoff.structuredReview === false) {
++    const actual = subject.operatorActualClaudeReviews?.at(-1);
++    const final = subject.operatorFinalCodexReviews?.at(-1);
++    const reservation = subject.operatorFinalCodexReservation;
++    assert.ok(actual?.kind === 'actual-static-comment-fallback' &&
++      actual.subjectSha === subject.sha && actual.verdict === 'approved' && actual.findings === 0 &&
++      actual.claimMade === false && actual.structuredReview === false &&
++      actual.requestId === handoff.requestId && actual.commentId === handoff.reportCommentId &&
++      actual.actor === 'l2v-hub' && /^[a-f0-9]{64}$/.test(actual.bodySha256 ?? '') &&
++      actual.url === `https://github.com/${REPO}/pull/${subject.pr.number}#issuecomment-${actual.commentId}` &&
++      handoff.verdict === 'approved' && handoff.findings === 0 && handoff.claimMade === false &&
++      reservation?.status === 'verified' && reservation.sourceSha === subject.sha &&
++      reservation.actualClaudeCommentId === actual.commentId &&
++      final?.subjectSha === subject.sha && final.actualClaudeCommentId === actual.commentId &&
++      final.findings === 0 && final.sourceMatched === true &&
++      /^[a-f0-9]{64}$/.test(final.reportSha256 ?? '') &&
++      /^[a-f0-9]{64}$/.test(final.sealSha256 ?? '') &&
++      reservation.reportSha256 === final.reportSha256 && reservation.sealSha256 === final.sealSha256,
++      'Static approval provenance is invalid');
++    return true;
++  }
++  assert.equal(typeof readReport, 'function');
++  assert.equal(readReport(subject).verdict, 'approved', 'Approval report is not approved');
++  const final = subject.codexFinalReview;
++  const operator = subject.operatorFinalReviews?.at(-1);
++  assert.ok((final?.status === 'verified' && final.subjectSha === subject.sha &&
++      final.claudeRound === subject.reviews.length) ||
++    (operator?.status === 'verified' && operator.subjectSha === subject.sha &&
++      operator.verdict === 'approved' && operator.findings === 0 &&
++      operator.actualClaudeCommentId === handoff.reportComment &&
++      operator.actualClaudeCommentSha256 === handoff.reportBodySha256 &&
++      /^[a-f0-9]{64}$/.test(operator.reportSha256 ?? '') &&
++      /^[a-f0-9]{64}$/.test(operator.sealSha256 ?? '')),
++    'Final approval provenance is invalid');
++  return true;
++}
++
+ export function reviewProjection(batch, readReport) {
+   assert.match(batch.sha ?? '', /^[a-f0-9]{40}$/);
+   assert.ok(
+@@ -105,7 +149,10 @@
+     report: null,
+     digest: null,
+   };
++  if (activeImplementation(batch)) return result;
+   if (handoff) assert.equal(handoff.subjectSha, batch.sha, 'Review handoff has a stale SHA');
++  if (preservedApproval(batch, readReport))
++    return { ...result, label: null, outcome: 'approval-preserved', skip: true };
+   if (
+     (batch.phase === 'blocked' && handoff?.status !== 'published') ||
+     handoff?.status === 'failed'
+@@ -196,6 +243,7 @@
+   assert.equal(typeof github.createStateStore, 'function');
+   const store = github.createStateStore(); // Read only: this module never calls save().
+   let actor;
++  const collections = new WeakMap();
+ 
+   async function invoke(args, input) {
+     const result = await run({
+@@ -232,11 +280,16 @@
+     }
+     return actor;
+   }
+-  async function subject(expected) {
++  async function subject(expected, collection = collections.get(expected)) {
+     const stateSubject = async () => {
+       const state = await store.load();
+       validateState(state, repo);
+-      const current = state.batches.find((item) => item.id === expected.id);
++      const matches = ['batches', 'standaloneReviews'].flatMap((key) =>
++        (state[key] ?? []).filter((item) => item.id === expected.id || item.pr?.number === expected.pr.number)
++          .map((item) => ({ key, item })));
++      assert.equal(matches.length, 1, 'Duplicate or missing durable review subject');
++      const { key, item: current } = matches[0];
++      assert.ok(!collection || key === collection, 'Durable review collection changed');
+       assert.ok(
+         current && fingerprint(current) === fingerprint(expected),
+         'Durable review subject changed',
+@@ -254,6 +307,8 @@
+     );
+     assert.ok(expected.issues.length <= 25, 'Review cohort exceeds its bound');
+     const pr = await get(`repos/${repo}/pulls/${expected.pr.number}`);
++    if (pr.number === expected.pr.number && (pr.state === 'closed' || pr.merged))
++      throw Object.assign(new Error('Review PR is closed'), { code: 'review-subject-closed' });
+     assert.ok(
+       pr.number === expected.pr.number && pr.state === 'open' && !pr.merged,
+       'Review PR is no longer open',
+@@ -379,10 +434,15 @@
+     assert.fail('Review label projection did not converge');
+   }
+ 
+-  async function publishState(batch) {
++  async function publishState(batch, { collection = 'batches' } = {}) {
++    assert.ok(['batches', 'standaloneReviews'].includes(collection));
+     const expected = clone(batch);
++    collections.set(expected, collection);
+     const projection = reviewProjection(expected, readReport);
++    if (collection === 'standaloneReviews' && expected.issues.length)
++      return { outcome: 'unsupported-standalone-issues', status: 'unsupported' };
+     const current = await subject(expected);
++    if (projection.skip) return projection;
+     await ensureLabel(expected, projection.label);
+     const messages = statusMessages(expected, projection);
+     let comments = 0;
+@@ -399,7 +459,11 @@
+ 
+   async function mirrorFeedback(batch) {
+     const expected = clone(batch);
++    collections.set(expected, 'batches');
+     const { issues, pr } = await subject(expected);
++    if (!activeImplementation(expected) && expected.externalReview?.structuredReview === false &&
++        preservedApproval(expected, readReport))
++      return { mirrored: 0, outcome: 'approval-preserved' };
+     const me = await identity();
+     // Git author/committer dates are attacker-controlled metadata. Use a stable
+     // controller-owned snapshot boundary; old workers use GitHub's PR receipt time.
+--- a/agent-team/src/bug-pipeline/issue-review-sync.mjs
++++ b/agent-team/src/bug-pipeline/issue-review-sync.mjs
+@@ -17,13 +17,25 @@
+   if (!state) return { status: 'empty', batches: [] };
+   validateState(state, REPO);
+   const results = [];
+-  for (const batch of state.batches) {
++  const subjects = ['batches', 'standaloneReviews'].flatMap((collection) =>
++    (state[collection] ?? []).map((batch) => ({ collection, batch })));
++  const ids = new Set(), prs = new Set();
++  for (const { batch } of subjects) {
++    assert.ok(!ids.has(batch.id) && (!batch.pr || !prs.has(batch.pr.number)), 'Duplicate durable review subject');
++    ids.add(batch.id);
++    if (batch.pr) prs.add(batch.pr.number);
++  }
++  for (const { collection, batch } of subjects) {
+     if (!batch.pr || !batch.sha || ['merged', 'deployed'].includes(batch.release?.status)) continue;
+     try {
+-      const feedback = await communication.mirrorFeedback(batch);
+-      const projection = await communication.publishState(batch);
++      const feedback = collection === 'batches' ? await communication.mirrorFeedback(batch) : {};
++      const projection = await communication.publishState(batch, { collection });
+       results.push({ id: batch.id, status: 'synced', ...feedback, ...projection });
+-    } catch {
++    } catch (error) {
++      if (error?.code === 'review-subject-closed') {
++        results.push({ id: batch.id, status: 'skipped', reason: 'closed' });
++        continue;
++      }
+       // Never log provider output, feedback text or patient information.
+       results.push({ id: batch.id, status: 'blocked' });
+     }
+--- a/agent-team/src/bug-pipeline/standalone-review.mjs
++++ b/agent-team/src/bug-pipeline/standalone-review.mjs
+@@ -733,6 +733,8 @@
+     const expected = clone(subject);
+     await current(expected);
+     const projection = reviewProjection(expected, externalReport);
++    if (projection.skip) return projection;
++    if (expected.issues.length) return { status: 'unsupported', outcome: 'unsupported-standalone-issues' };
+     const actor = await handoff.actor();
+     async function write(endpoint, method, body) {
+       const started = performance.now();
+--- a/agent-team/tests/bug-pipeline/issue-review-communication.test.mjs
++++ b/agent-team/tests/bug-pipeline/issue-review-communication.test.mjs
+@@ -1047,3 +1047,43 @@
+     at: '2026-10-18T00:00:00Z', authorizationRef: 'test:legacy-cutover' };
+   assert.equal(reviewProjection(f.batch).label, 'codex-review-fixes');
+ });
++
++test('standalone communication projects exact collection PR-only and rejects collection drift', async()=>{
++ const f=communicationFixture();f.batch.issues=[];f.state().batches=[];f.state().standaloneReviews=[clone(f.batch)];
++ const before=clone(f.state());
++ assert.equal((await f.communication.publishState(f.batch,{collection:'standaloneReviews'})).label,'claude-review-ready');
++ assert(f.writes.every(w=>!w.endpoint.includes('/issues/17')&&!w.endpoint.includes('/issues/18')));
++ const count=f.writes.length;await f.communication.publishState(f.batch,{collection:'standaloneReviews'});assert.equal(f.writes.length,count);assert.deepEqual(f.state(),before);
++ f.state().batches=[{...clone(f.batch),issues:[17,18]}];f.state().standaloneReviews=[];
++ await assert.rejects(f.communication.publishState(f.batch,{collection:'standaloneReviews'}),/collection changed/);assert.equal(f.writes.length,count);
++});
++test('standalone nonempty cohort is explicitly unsupported without transport',async()=>{
++ const f=communicationFixture();const r=await f.communication.publishState(f.batch,{collection:'standaloneReviews'});assert.equal(r.status,'unsupported');assert.equal(f.calls.length,0);
++});
++test('exact final approval is preserved during release hold and active continuation wins',()=>{
++ const f=communicationFixture();report(f,'approved');f.batch.approvedSha=sha;f.batch.phase='blocked';f.batch.releaseHold={reason:'release pending'};f.batch.codexFinalReview={status:'verified',subjectSha:sha,claudeRound:1};
++ assert.equal(reviewProjection(f.batch,externalReport).outcome,'approval-preserved');
++ f.batch.operatorContinuations=[{round:13,status:'running'}];assert.equal(reviewProjection(f.batch,externalReport).label,'codex-review-fixes');
++ f.batch.operatorContinuations=[];f.batch.approvedSha='b'.repeat(40);assert.throws(()=>reviewProjection(f.batch,externalReport),/stale SHA/);
++});
++test('static actual-comment approval remains no-op without a fabricated structured report',()=>{
++ const f=communicationFixture();const b=f.batch;const digest='c'.repeat(64);b.approvedSha=sha;b.externalReview={status:'published',subjectSha:sha,structuredReview:false,claimMade:false,requestId:'real-request',reportCommentId:42,verdict:'approved',findings:0};
++ b.operatorActualClaudeReviews=[{kind:'actual-static-comment-fallback',subjectSha:sha,verdict:'approved',findings:0,claimMade:false,structuredReview:false,requestId:'real-request',commentId:42,actor:'l2v-hub',bodySha256:digest,url:`https://github.com/${repo}/pull/81#issuecomment-42`}];
++ b.operatorFinalCodexReviews=[{subjectSha:sha,actualClaudeCommentId:42,findings:0,sourceMatched:true,reportSha256:digest,sealSha256:digest}];b.operatorFinalCodexReservation={status:'verified',sourceSha:sha,actualClaudeCommentId:42,reportSha256:digest,sealSha256:digest};
++ assert.equal(reviewProjection(b,()=>assert.fail('fake structured report')).outcome,'approval-preserved');assert.equal(b.reviewLedger,undefined);b.operatorActualClaudeReviews[0].subjectSha='b'.repeat(40);assert.throws(()=>reviewProjection(b),/Static approval/);
++});
++
++test('standalone final write guards reject head, canonical fingerprint and authorization drift',async()=>{
++ for(const kind of ['head','fingerprint','authorization']){
++  const f=communicationFixture();f.batch.issues=[];f.state().batches=[];f.state().standaloneReviews=[clone(f.batch)];
++  let injected=false;f.hook(call=>{if(!injected&&call.args[1]===`repos/${repo}/labels?per_page=100`){injected=true;if(kind==='head')f.pr.head.sha='b'.repeat(40);if(kind==='fingerprint')f.state().standaloneReviews[0].ownership='changed';if(kind==='authorization')f.authorized.clear();}});
++  await assert.rejects(f.communication.publishState(f.batch,{collection:'standaloneReviews'}));assert(injected);assert.equal(f.writes.length,0);
++ }
++});
++test('closed standalone is a read-only skipped sync result',async()=>{
++ const f=communicationFixture();f.batch.issues=[];f.state().batches=[];f.state().standaloneReviews=[clone(f.batch)];f.pr.state='closed';
++ const result=await syncIssueReviews({github:f.github,communication:f.communication});assert.equal(result.batches[0].status,'skipped');assert.equal(f.writes.length,0);
++});
++test('operator final-Codex provenance preserves exact approval without rewriting histories',()=>{
++ const f=communicationFixture();report(f,'approved');const b=f.batch;b.approvedSha=sha;b.externalReview.reportComment=42;b.externalReview.reportBodySha256='d'.repeat(64);b.operatorFinalReviews=[{status:'verified',subjectSha:sha,verdict:'approved',findings:0,actualClaudeCommentId:42,actualClaudeCommentSha256:'d'.repeat(64),reportSha256:'e'.repeat(64),sealSha256:'f'.repeat(64)}];const before=clone(b);assert.equal(reviewProjection(b,externalReport).skip,true);assert.deepEqual(b,before);
++});
+--- /dev/null
++++ b/agent-team/tests/bug-pipeline/issue-review-sync.test.mjs
+@@ -0,0 +1,17 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { syncIssueReviews } from '../../src/bug-pipeline/issue-review-sync.mjs';
++const repo='l2v-hub/ClinicOS';
++const standalone=()=>({id:'standalone-pr-81',pr:{number:81},sha:'a'.repeat(40),implementation:[],reviews:[],issues:[]});
++test('sync discovers standalone without processing, mirroring, saving or restarting it',async()=>{
++ const subject=standalone(), state={schemaVersion:1,repository:repo,batches:[],standaloneReviews:[subject]},before=structuredClone(state),calls=[];
++ const result=await syncIssueReviews({github:{createStateStore:()=>({load:async()=>state,save:()=>assert.fail('save')})},communication:{mirrorFeedback:()=>assert.fail('standalone mirror'),publishState:async(s,options)=>{calls.push({s,options});return{label:'codex-review-ready'}}}});
++ assert.equal(calls.length,1);assert.deepEqual(calls[0].options,{collection:'standaloneReviews'});assert.equal(result.batches[0].label,'codex-review-ready');assert.deepEqual(state,before);
++});
++test('sync rejects duplicate standalone identities before any projection',async()=>{
++ const a=standalone();const state={schemaVersion:1,repository:repo,batches:[],standaloneReviews:[a,{...a,id:'other'}]};
++ await assert.rejects(syncIssueReviews({github:{createStateStore:()=>({load:async()=>state})},communication:{publishState:()=>assert.fail('write')}}),/Duplicate/);
++});
++test('sync skips merged and deployed standalone subjects',async()=>{
++ const a=standalone();for(const status of ['merged','deployed']){const state={schemaVersion:1,repository:repo,batches:[],standaloneReviews:[{...a,release:{status}}]};const r=await syncIssueReviews({github:{createStateStore:()=>({load:async()=>state})},communication:{publishState:()=>assert.fail('write')}});assert.equal(r.batches.length,0)}
++});
+--- a/agent-team/tests/bug-pipeline/standalone-review.test.mjs
++++ b/agent-team/tests/bug-pipeline/standalone-review.test.mjs
+@@ -2417,3 +2417,11 @@
+     assert.notEqual(blocked.failureCode, 'github-merge-rejected');
+   }
+ });
++
++test('standalone publisher explicitly rejects source cohorts without projecting labels',async()=>{
++ const f=fixture();await f.controller.adopt(f.manifest);const subject=await f.controller.request(81);
++ // The durable subject remains byte-identical to the explicit nonempty fixture.
++ subject.issues=[17];f.remote().standaloneReviews[0].issues=[17];
++ const before=f.labels.slice();const result=await f.controller.publishState(subject);
++ assert.equal(result.status,'unsupported');assert.deepEqual(f.labels,before);
++});

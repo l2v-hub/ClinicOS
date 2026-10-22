@@ -1,0 +1,27 @@
+{
+  "nonce": "1afdf870-9367-46aa-90bf-dc054d3eeb45",
+  "amendment": {
+    "nonce": "36ebb206-d7fc-4cf2-b312-2e4170db2ba6",
+    "at": "2026-10-21T20:03:19.199Z",
+    "path": ".github/workflows/deploy-demo-exact-commit.yml",
+    "beforeContractSha256": "c22822f57793bb16c683c1591a62092a780e0364fa21ea9ce00e4f60d8a0b2ea",
+    "afterContractSha256": "2f78250d0f24deafae0d8bce19efc96cb6b70310e848e5ea4117c237ae70ecaa",
+    "reason": "Correlate operation/SHA/unique dispatch identity in authenticated Actions run metadata; author identified gap before editing. User already authorizes complete release workflow setup."
+  },
+  "scope": [
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/src/bug-pipeline/workspace.mjs",
+    "agent-team/src/bug-pipeline/evidence-limits.mjs",
+    "agent-team/src/bug-pipeline/exact-demo-dispatch.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/tests/bug-pipeline/workspace.test.mjs",
+    "agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs",
+    ".github/workflows/codex-bug-release.yml",
+    ".github/workflows/deploy-demo-exact-commit.yml"
+  ],
+  "stateCommit": "7fff22625148436fb6e35aefcfd9a2409d920f32",
+  "transportReceipt": "/workspace/.clinicos-cloud/codex-after-claude-20261018/git-state-transport/c94010de-20fa-4813-927b-37e6e6fa8fb8/accepted.json",
+  "stateReadbackVerified": true
+}

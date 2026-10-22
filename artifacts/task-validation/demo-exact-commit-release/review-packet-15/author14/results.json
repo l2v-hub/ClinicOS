@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "focused": {
+    "tests": 413,
+    "pass": 413,
+    "fail": 0,
+    "skipped": 0,
+    "fileConcurrency": 1
+  },
+  "contractValidator": "PASS",
+  "orphanNegativeBeforeFix": {
+    "expectedFailure": true,
+    "error": "Missing expected rejection",
+    "timing": "Before separate child reservation, under initial attempt14; preserved truthfully"
+  },
+  "originalCandidate1": {
+    "testsPassed": 412,
+    "sourceAndSealUnchanged": true,
+    "sealSha256": "8712291b6b9a83afae2147753afec5dd6ab49d60be648dbcf24ee18576fdb47f"
+  },
+  "sourceRoot": "/tmp/clinicos-498-Claude4-fix14-refinement1",
+  "sourceFileCount": 265,
+  "sourceInventorySha256": "bedb223d63980b54ba50fb96a942e758f45eca4a03989eb8a90877f5f2990cdc",
+  "changedPathsVsCandidate1": [
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs"
+  ],
+  "findings": [],
+  "liveOperationsExecuted": false,
+  "independentCombinedQAPending": true
+}

@@ -1,0 +1,31 @@
+{
+  "baseSha": "9bf62a27df909d53b9607d1e766723978d98ada0",
+  "currentSources": [
+    {
+      "path": "scripts/quality-gate/configure-bug-repository.mjs",
+      "sha256": "62cbb44fb34613f56b6bb69874c3aa01064d9c3d3854d9b0f9a3303b910743cf",
+      "bytes": 19957
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+      "sha256": "d0264772911db4002a6b08092211483dbf857b733f2440b3107db63c4029665e",
+      "bytes": 38218
+    }
+  ],
+  "preEditSources": [
+    {
+      "path": "scripts/quality-gate/configure-bug-repository.mjs",
+      "sha256": "3429889391689f2981c37030e7792726c84b8055b23d68bcbe4eb698ad7e4db7",
+      "snapshotMatches": true,
+      "linksBefore": 1
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+      "sha256": "b81fd0b492024fd0f563f70e5254aeef0fe2945e9e046c3bf55858ba13fc4e03",
+      "snapshotMatches": true,
+      "linksBefore": 1
+    }
+  ],
+  "preservedArtifactCount": 27,
+  "preservedArtifactsSha256": "77dc6b9fb7f954671cc25d08d5eb900c45fd03f5f6ada7ae6c1b77f5dcd5133d"
+}
