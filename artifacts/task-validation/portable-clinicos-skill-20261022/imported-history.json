@@ -1,0 +1,109 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "blocked",
+      "owner": "codex-cloud-portable-skill",
+      "nonce": "0348b0cc-2e1d-46d7-aeae-e269e8173ee7",
+      "baseSha": "453ade1a06cd79e1924de523c5fd2cdec51f4fd4",
+      "subjectSha": null,
+      "evidence": "original-author-report.json",
+      "reason": "Root found conflicting absolute-four companion rules before integration; author static checks alone were not independent QA.",
+      "uncommitted": true,
+      "sourceManifestSha256": "95aad4e67a476f9b393da755525ab7ae187beee9ee835c28532f99ea12838bce"
+    },
+    {
+      "round": 2,
+      "status": "failed",
+      "owner": "codex-cloud-portable-skill",
+      "nonce": "7d7e9789-d1b6-4d34-8fd9-65bd778e1ab6",
+      "baseSha": "453ade1a06cd79e1924de523c5fd2cdec51f4fd4",
+      "subjectSha": null,
+      "evidence": "prior-independent-review-report.md",
+      "reason": "Independent QA1 found one LOW missing native human trust-root gate.",
+      "uncommitted": true,
+      "sourceManifestSha256": "3cfde9fee7ef8f0080260b795d6d6edcc4ed9be913c5fa39b834228cf369dc16"
+    },
+    {
+      "round": 3,
+      "status": "failed",
+      "owner": "codex-cloud-portable-skill",
+      "nonce": "6eac562e-15dc-4e6d-96fb-c55c551cb3bc",
+      "baseSha": "453ade1a06cd79e1924de523c5fd2cdec51f4fd4",
+      "subjectSha": null,
+      "evidence": "prior-independent-review-2-report.md",
+      "reason": "Independent QA2 resolved trust-root finding but found two LOW recovery authorization/feedback-scope mismatches.",
+      "uncommitted": true,
+      "sourceManifestSha256": "3d4b190d362b96cb1affcd2cf898ac94ce4953483f0feff02206d6973e881db7"
+    },
+    {
+      "round": 4,
+      "status": "passed",
+      "owner": "codex-cloud-portable-skill",
+      "nonce": "f5fe52fe-b069-4ff1-b371-9c229738c531",
+      "baseSha": "453ade1a06cd79e1924de523c5fd2cdec51f4fd4",
+      "subjectSha": "eee7816b855545c86faddee83a41672ce69d3f99",
+      "evidence": "validation-report.md",
+      "reason": "Independent final static QA PASS after both precise protocol corrections; no code tests claimed.",
+      "completedAt": "2026-10-22T17:04:01.081175+00:00"
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "sourceManifest": [
+    {
+      "path": ".claude/skills/clinicos/SKILL.md",
+      "blob": "1f6ca2a951426c16df7ae475d04255bbcf08142d",
+      "mode": "100644",
+      "baseBlob": "25e8fc153c2009b178c28a62d8bd9eae293301af",
+      "baseMode": "100644"
+    },
+    {
+      "path": ".claude/skills/clinicos/references/bug-delivery.md",
+      "blob": "42c425eeb5c0d182b31db4b7144a72648931e6a3",
+      "mode": "100644",
+      "baseBlob": "1b77f1a7000f0b39a894ec6c8dd72b7975bcd408",
+      "baseMode": "100644"
+    },
+    {
+      "path": ".agents/skills/codex-bug-triage/SKILL.md",
+      "blob": "0eb4b21f22c5468b5461a0a5c1beaf35fecac105",
+      "mode": "100644",
+      "baseBlob": "f118c6b5fe1c87bcd985d548efd11e826405be73",
+      "baseMode": "100644"
+    },
+    {
+      "path": ".claude/skills/bug-final-review/SKILL.md",
+      "blob": "eb79e215d07e5c69f2cc971ab4dddac49de4837e",
+      "mode": "100644",
+      "baseBlob": "e9f0b08cbecd7d514ed50945bbdf3097e826ffc6",
+      "baseMode": "100644"
+    },
+    {
+      "path": "docs/codex-bug-workflow.md",
+      "blob": "8e7981e86a3003d6916649f67bde8f869cdbb3a4",
+      "mode": "100644",
+      "baseBlob": "6899b712eb80f5e87a39a40ac59245214e7c175e",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "alignment-author-report.json": "c5bd4bcc207c4289d5065fda1cb69541a6e402ac32add87eaf2c22901ec306e9",
+    "analysis.md": "dc4e70c72bf085e6999d36f8dfc12857058c50e1021445a021ba5ba52803b50b",
+    "correction-author-report.md": "02a50feeaf883f3d6fae171e66a268207375eee04d448a68297146e2c28df45a",
+    "implementation-plan.md": "431af8b23ca262c78f9679b95b2f6a560940db7e1d33a2c599f3a90892d730f6",
+    "independent-qa/report.md": "9547121bfe87981d604fd6f736f80f2a684d51bf47d08919fdc84ab957648b99",
+    "independent-qa/results.json": "9cc8f3f450a63fbd46f58b5dba77845bc2992e20a65276e5a634a3d08108dada",
+    "original-author-report.json": "f8d04d1e639abb85e2f17e4ce78841daba867c8429db6b77ca3d477b2aea1491",
+    "preparation-history.json": "92ab6870a6f3f7728983a37935430d60ea00843466efceb9030e949b101f36c0",
+    "prior-independent-review-2-findings.json": "952def89c6b858e97fd6777e9754d43b39c9fd8a1caf29e3fe984d005e1f6cde",
+    "prior-independent-review-2-report.md": "a6138249cc787462ce0b3d299e62ed5e753b1cdc2ec7a3ee861df6699a9033af",
+    "prior-independent-review-findings.json": "c44f0c41b28be96e7ec51cd69c6732cd39fc1086415297c7af436c6cfa6e1589",
+    "prior-independent-review-report.md": "944fc31ea66c52bd9204f101e8cdc1b3287aeaafebded38997491e813fe76f45",
+    "source-manifest.json": "b9aede5b6b7da49113d2d1d5fe1a1e7070b976bb8d8340436c9f013b0d22d777",
+    "task-contract.md": "73cc6e48f3ae0ef6fcc026c2366cf30a12253365a92b564ced88670a2b3079f6",
+    "trustroot-author-report.md": "252e08b7c05c504afd2797ed575d8f54e5aa172de15182a04a6cf7d969f41ec1",
+    "validation-report.md": "675725c460223ead2cb69119ba57a347a073be83aaed61365527502f27fda6d0"
+  }
+}

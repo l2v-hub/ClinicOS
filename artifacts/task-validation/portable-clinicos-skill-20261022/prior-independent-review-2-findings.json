@@ -1,0 +1,38 @@
+[
+  {
+    "id": "DOC-RECOVERY-VERIFIER-2",
+    "severity": "low",
+    "file": "docs/codex-bug-workflow.md",
+    "line": 173,
+    "relatedLocations": [
+      ".agents/skills/codex-bug-triage/SKILL.md:205",
+      ".claude/skills/clinicos/references/bug-delivery.md (coordinatore locale, recupero iniziale)"
+    ],
+    "problem": "Il comando request --recover-failed \u00e8 descritto come recupero eseguibile in base alla richiesta utente; il testo associa la limitazione verifier in modo esplicito alle estensioni/budget esaurito. In actual453 anche retry-failed-review sotto il limite richiede sempre host verifier, authorization reference e consumo separato del nonce. La CLI ordinaria non li configura: il solo comando/standing prose non pu\u00f2 effettuare il recupero.",
+    "evidence": [
+      "comment-review-handoff.mjs:224-227 invoca authorization(...retry-failed-review...) ogni volta che recoverFailed=true.",
+      "operator-authorization.mjs:40-57 richiede verifier callable, reference, binding, consume:true e provenance verificata.",
+      "review-handoff-cli.mjs:85-86 dependencies.authorizationVerifier \u00e8 solo injected;144-146 passa il flag --authorization al request."
+    ],
+    "requestedChange": "Qualificare tutti i passaggi recover-failed: nessuna nuova allowance, ma sempre action authorization/verifier/reference e consumo distinti, anche entro4. CLI senza trusted host resta BLOCKED; --authorization o testo locale da soli non attestano nulla. Conservare standing user authorization senza richiederla di nuovo e senza attribuirle capability CLI inesistente.",
+    "validationExpected": "Static source cross-check dei tre moduli/flag e tutti i rimandi recovery nei5docs; nessun test/runtime o nuova integrazione."
+  },
+  {
+    "id": "DOC-FEEDBACK-SCOPE-3",
+    "severity": "low",
+    "file": ".agents/skills/codex-bug-triage/SKILL.md",
+    "line": 160,
+    "relatedLocations": [
+      "docs/codex-bug-workflow.md:70",
+      "docs/codex-bug-workflow.md:135"
+    ],
+    "problem": "Le frasi assolute su nuovi commenti/review che invalidano readiness e richiedono un nuovo round includono anche metadati propri che il controller esclude dal fingerprint. Contraddicono il playbook che conserva approvazione senza feedback rilevante e possono indurre correzioni/review inutili o consumo round per semplici notifiche automatiche.",
+    "evidence": [
+      "github.mjs:944-967 ignora isOwnProtocolComment solo per ownLogin/github-actions[bot] e BOT_PROTOCOL_MARKER; utenti/marker stranieri restano feedback.",
+      "issue-review-communication.mjs:226-230 aggiunge marker status per non mutare feedback con notifiche proprie.",
+      "comment-review-handoff.mjs:20-35 filtra solo pubblicazioni protocollo dell\u2019owner/publisher correlate."
+    ],
+    "requestedChange": "Allineare le frasi ai commenti/review che il controller considera feedback e che cambiano fingerprint/invalidano la review, escludendo solo metadati di protocollo propri effettivamente autenticati. Non introdurre una valutazione soggettiva che ignori commenti utenti, non eliminare feedback sostanziale e non fidarsi di marker copiati da altri. Notifiche own valide non richiedono nuovo round; una vera modifica/feedback invalidante conserva tutti i gate/budget.",
+    "validationExpected": "Static comparison con filtro autore/marker e fingerprint reali; preservare no fake reports/approvals, no schema/controller edits."
+  }
+]
