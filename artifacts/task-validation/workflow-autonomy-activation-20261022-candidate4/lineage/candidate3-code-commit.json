@@ -1,0 +1,144 @@
+{
+  "base": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+  "codeSha": "93b0c72877bd58c2dd3769d0942d737ef9f96ac0",
+  "parent": "2e4a635ad5f34bb6f886342d15eaed63674d3dae",
+  "tree": "10a6c3008e2a17ba40d2610e883e9f159b6cd477",
+  "changedPaths": [
+    ".claude/skills/clinicos/references/bug-delivery.md",
+    "agent-team/src/bug-pipeline/external-review.mjs",
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+    "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+    "agent-team/src/bug-pipeline/operator-ownership.mjs",
+    "agent-team/src/bug-pipeline/pipeline.mjs",
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+    "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "docs/codex-bug-workflow.md"
+  ],
+  "bindings": [
+    {
+      "path": ".claude/skills/clinicos/references/bug-delivery.md",
+      "blob": "18687f0f524fe737aaba7d6f45cd50f98e686d3e",
+      "sha256": "997e5f8fc4b0f7454f21673f7181ddb0ee536e9d16b3c04b82b94203a1433a17",
+      "bytes": 20934,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/external-review.mjs",
+      "blob": "d1488a64ad38a25486bd52a10dd2a5422f0ab899",
+      "sha256": "b673e52a4d971c1716dcf26ba1b5eac39932917b4b0029192738f5f06e69398a",
+      "bytes": 11638,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/github.mjs",
+      "blob": "c375d8ac525b767508a0aa2630e08e53db37c770",
+      "sha256": "c1c90264665033751f06723d3492c1b9ba33ae4ea15d4ec3c942e246b4385895",
+      "bytes": 47116,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "blob": "f78abc8efe4c5c9f19960949bd0bdf2d6c67d255",
+      "sha256": "44a1caf63b8bf114a1bbc8a7d6915e1c0f11282cc1e9574caa9de2c8f466a7b9",
+      "bytes": 26331,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+      "blob": "b7eeccc3ea0a263240e287969c56807278c61f83",
+      "sha256": "1d98e29b111875ae90d902a684c9b7ebcdf126455e4e1a3281d3f1a7a2671cba",
+      "bytes": 3968,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/operator-ownership.mjs",
+      "blob": "3ca76515f06a5488abbd9343c9a1a0e6667be479",
+      "sha256": "cbefcd2039d7e47fbffc1d467be547b9cec2c8df1ff1eb9b11d9db13de8d8225",
+      "bytes": 2239,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "blob": "ec973657ce02e2f9c9d767f6a6ab2e0db54ee7c3",
+      "sha256": "9b5ae267c96ee27094e931f1d201bcf1f7e99fc751b0a520bd5de4e3eeea502b",
+      "bytes": 23627,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/release.mjs",
+      "blob": "fde7e371fccaf57966d5a6a7dae559f5f8c78f62",
+      "sha256": "4da1d537bb8b72b95790c7676ef289db8e87abd5c509b1c09571fe194ac9545c",
+      "bytes": 49700,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "blob": "ee70c7d6574e1c09c37c3cbcf2cbf63a546282a7",
+      "sha256": "be602c4fa1d961cb1bb505442bdedf321fbbc35cd869b07cf5758b88f821859a",
+      "bytes": 32016,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "blob": "a0780abdf0b2d8d981bd261f5e7b7326f7098641",
+      "sha256": "fe1bb34ffc4ab8ce575df9a9fc5766cf6e269052107bded284959dffdbcb9d85",
+      "bytes": 78896,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      "blob": "0ba98cbe7d0ba24036705838b180b76ccf9b4ba2",
+      "sha256": "8867f01e01e5b6a960f4ecfc8d4c975eb4a639bfac699fa03ad494c658be18d4",
+      "bytes": 48099,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+      "blob": "c7b5b6962d6169613110e9b0889ece315e0d2ac5",
+      "sha256": "a8e3722d6d1ca745adb4d677cd4ee5f30a20c1cbffa1dd900d3a6fc8b56f58b0",
+      "bytes": 11122,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+      "blob": "47b6504c56775557273859f173cf4552c535973a",
+      "sha256": "e2136df1037762194974f22a195240021ea07f7da84070fab229626375ef31c7",
+      "bytes": 3580,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "blob": "5fd4238c792f51df6ac2e0ef86c59c92a6952184",
+      "sha256": "dfca9cf3678f054b5429d6c577824a7338b3d476b19bc12b3beabb0aa79f59e9",
+      "bytes": 41792,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "blob": "ffdc2c9e0b15b23c492717e45c85dc8122e3c734",
+      "sha256": "6a3758008a487fb04c19a77bd42fd2058acdf0ca5cfe39754618bc2ab22da5a1",
+      "bytes": 96414,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/codex-bug-workflow.md",
+      "blob": "653d3c83b04ded7e17f058476a20ca3d13a80a4f",
+      "sha256": "371d25d4a2a459512afe05c3c1fb54bc27b92e7fe30736228e5a80f875f026c2",
+      "bytes": 28853,
+      "mode": "100644"
+    }
+  ],
+  "sourceFiles": 138,
+  "author3SealSha256": "fd1a0bb7d16ecfccc28c0d0a75ee5cbb973979121254577ad7143fdc6ffd696b",
+  "docs1SealSha256": "1825c08c9066a6a80caa73913f1e02fd04ed34a46f0f9066c0eac5ebbc943492",
+  "docsCorrectionSealSha256": "d6e99d3d2eb3d194b3cc466215df2992a788cc4d2f1d70216ac9c7d99f1efae1",
+  "combinedManifestSha256": "32f561431d5906cbb4e2b42f721474e037774de9abe140b9e9718218dfa723a6",
+  "independentQaPerformed": false
+}

@@ -1,0 +1,35 @@
+{
+  "nonce": "1c075aa7-d2a3-4760-985f-08d32550d573",
+  "initialCanonicalReservation": "5bbda544b8d300765a1cf22b409cd1aa660f6e99",
+  "initialReservationSha256": "63f679d0f0b1f8951e7b4fd95bc5851cccbaf38bbfe7ba65612fda59573157c9",
+  "amendment7CanonicalReservation": "ec3af930bdf18a8a8afb7617028da2303b0e51a4",
+  "amendment7ReservationSha256": "8c405cf3160cb7b96b7a5ecfdac835b1859c6edc9a85e1ef5cf8b564a697d5ba",
+  "contracts": [
+    {
+      "path": "task-contract.md",
+      "sha256": "8027f2e048850b1273ef9ac486cafb99eb0a34438b8b8b3f5f9dfd87648b9dad"
+    },
+    {
+      "path": "scope-amendment-6.md",
+      "sha256": "ed3fdaf3cffa4f0ac6deb81038062791fbe40cee441aeb1842bc2886d12d9e50"
+    },
+    {
+      "path": "scope-amendment-7.md",
+      "sha256": "515e719d3277d73bfea50b986f23992bdd3e8b6318dfa03116389dc04d33493c"
+    }
+  ],
+  "oldSealsVerifiedUnchanged": {
+    "author": "6b2fb75324dc5a76d4fa6655013b9d345d2ed5c322e65041f49587a70e147b22",
+    "author2": "9ce02b5722a168333d77caefdcf4147dd130bffa3f4f5aba150310c49f510f1f",
+    "author3": "fd1a0bb7d16ecfccc28c0d0a75ee5cbb973979121254577ad7143fdc6ffd696b",
+    "independent-qa": "58b274424fc6f336a3244c9eb87e4fbbc079275e629a1c9695e3192ecf45112c",
+    "independent-qa3": "d9ad31f41c6654abba35f9d5bc747e5932814a8653a2be0b27e2de4d44c94693",
+    "standalone-release-probe1": "bce487135e880b82cadc25266428209d041bb491c71ce6fb26aa4a91002bbcbd"
+  },
+  "combined3All138FilesVerifiedUnchanged": true,
+  "source4NineReservedDeltaPaths": true,
+  "source4CLIAndContractsTestUnchanged": true,
+  "inheritedTwoDocsUnchanged": true,
+  "originalDiagnosticAssertionsUnmodified": "Copied probe/fixtures imports target source4; original sealed diagnostic remains FAILED.",
+  "authorGitApiProviderModelCredentialOperations": false
+}

@@ -1,0 +1,70 @@
+{
+  "status": "IMPLEMENTED_AWAITING_INDEPENDENT_QA",
+  "attempt": 4,
+  "nonce": "1c075aa7-d2a3-4760-985f-08d32550d573",
+  "source": "/tmp/clinicos-autonomy-activation-20261022/source4",
+  "model": "gpt-6.1-sol",
+  "publishedGitParent": "9a6cc35c32d91e3ae2aae2debc6fdcff089cd90f",
+  "actualDeltaPaths": [
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "agent-team/src/bug-pipeline/standalone-review.mjs",
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/src/bug-pipeline/pipeline.mjs",
+    "agent-team/src/bug-pipeline/external-review.mjs",
+    "agent-team/src/bug-pipeline/comment-review-handoff.mjs"
+  ],
+  "actualDeltaCount": 9,
+  "allowedCount": 12,
+  "cumulativePaths": 20,
+  "inheritedDocs": 2,
+  "actualFocusedTests": {
+    "tests": 538,
+    "pass": 538,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "actualOriginalSafetyReproductions": {
+    "tests": 2,
+    "pass": 2,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "syntax": {
+    "passed": 9,
+    "failed": 0
+  },
+  "authorFailures": [],
+  "S1AuthorObservation": {
+    "observedTakeover": true,
+    "labels": [],
+    "models": 0,
+    "pipelineError": null
+  },
+  "R1AuthorObservation": {
+    "storeReads": 2,
+    "merges": [],
+    "mainResult": null,
+    "abortReason": "Automatic release subject is operator-owned",
+    "adapterCallbackNotReachedInOriginalRepro": true
+  },
+  "separateNativeCallbackLateOwnershipTestPassed": true,
+  "prebuiltConcurrentDefaultExceptionIsolationTested": true,
+  "explicitMaxRequestClaimAndMaintainerReleaseTested": true,
+  "reservationAndPendingCompletionFactsPreserved": true,
+  "oldQA3AndLaterFailedDiagnosticBothPreserved": true,
+  "source1Source2Source3Combined3Unchanged": true,
+  "sourceManifestSha256": "1a3acae6a6ec42aaf4e91c23ea1efc0f6943af05f779731fc4046f3fbc0c6d87",
+  "independentQaApprovalClaimed": false,
+  "actualNativeOrModelApprovalForSource4Claimed": false,
+  "activationDeploymentClosureClaimed": false,
+  "paidModelOrLiveApiCalls": 0,
+  "canonicalOrUserRepositoryGitMutations": 0,
+  "crossResourceAtomicityClaimed": false
+}

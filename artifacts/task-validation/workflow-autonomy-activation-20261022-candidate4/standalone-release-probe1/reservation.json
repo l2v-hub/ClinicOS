@@ -1,0 +1,16 @@
+{
+  "nonce": "b7f5a08f-fb07-44f5-8052-37fcde7c9555",
+  "status": "reserved-before-independent-diagnostic",
+  "reservedAt": "2026-10-22T22:39:36.640Z",
+  "reservedBeforeSession": true,
+  "agent": "/root/activation_followup_qa",
+  "model": "gpt-6.1-sol",
+  "sourceSha": "93b0c72877bd58c2dd3769d0942d737ef9f96ac0",
+  "source": "/tmp/clinicos-autonomy-activation-20261022/qa-source3",
+  "output": "/tmp/clinicos-autonomy-activation-20261022/standalone-release-probe1",
+  "contractSha256": "89826bf7c2e524bcbe09a20d5d899df6339ee30338adf993e33c4698a6ca2c66",
+  "sourceEditsAllowed": false,
+  "liveOperationsAllowed": false,
+  "priorQa3SealPreserved": true,
+  "stateCommit": "ac51898ec6000814c265aea608427a7ffe499e3c"
+}

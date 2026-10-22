@@ -1,0 +1,5 @@
+{
+  "firstRun": "Both2 source hypotheses CONFIRMED, zero harness failures; preserved in first-* files",
+  "retestReason": "Strengthen observed fresh-load evidence and execute native release callback guard at synthetic merge boundary, as real adapter does",
+  "sourceOrSafetyAssertionChanged": false
+}

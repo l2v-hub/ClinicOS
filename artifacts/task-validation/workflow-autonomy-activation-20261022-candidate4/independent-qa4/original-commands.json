@@ -1,0 +1,41 @@
+[
+  {
+    "name": "original15",
+    "command": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--experimental-vm-modules",
+      "--test",
+      "--test-reporter=tap",
+      "/tmp/clinicos-autonomy-activation-20261022/independent-qa4/original15.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 2.5423896279535256,
+    "assertions": "Unchanged from sealed prior proof; source import path only changed"
+  },
+  {
+    "name": "additional8",
+    "command": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--experimental-vm-modules",
+      "--test",
+      "--test-reporter=tap",
+      "/tmp/clinicos-autonomy-activation-20261022/independent-qa4/additional8.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.3245218319934793,
+    "assertions": "Unchanged from sealed prior proof; source import path only changed"
+  },
+  {
+    "name": "original-s1-r1",
+    "command": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--experimental-vm-modules",
+      "--test",
+      "--test-reporter=tap",
+      "/tmp/clinicos-autonomy-activation-20261022/independent-qa4/original-s1-r1.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.4680565409944393,
+    "assertions": "Unchanged from sealed prior proof; source import path only changed"
+  }
+]

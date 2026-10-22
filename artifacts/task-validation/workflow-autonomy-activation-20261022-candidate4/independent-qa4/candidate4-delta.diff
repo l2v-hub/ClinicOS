@@ -1,0 +1,867 @@
+--- qa-source3/agent-team/src/bug-pipeline/comment-review-handoff.mjs
++++ candidate4/agent-team/src/bug-pipeline/comment-review-handoff.mjs
+@@ -1,3 +1,4 @@
++import { operatorOwns } from './operator-ownership.mjs';
+ import { authorizationBinding, consumeOperatorAuthorization } from './operator-authorization.mjs';
+ import {
+   attemptLimit,
+@@ -42,7 +43,9 @@
+   subjectAdapter,
+   authorizationVerifier,
+   operationTimeouts = {},
++  automatic = () => false,
+ }) {
++  assert.equal(typeof automatic, 'function');
+   const store = github.createStateStore();
+   const timeouts = Object.freeze({ ...operationTimeouts,
+     merge: Math.max(MERGE_RESERVATION_LEASE_MS, operationTimeouts.merge ?? 0) });
+@@ -67,6 +70,7 @@
+     return login;
+   }
+   async function live(batch) {
++    if (automatic()) await load(batch.pr.number);
+     if (subjectAdapter) await subjectAdapter.live(batch);
+     const feedback = await github.reviewFeedback(batch.pr.number);
+     assert.ok(
+@@ -98,6 +102,15 @@
+         : [...state.batches, ...(includeManual ? (state.manualBatches ?? []) : [])]
+     ).find((item) => item.pr?.number === pr);
+     assert.ok(batch && batch.sha, 'PR has no controller-owned implementation/evidence packet');
++    if (automatic()) {
++      const collection = ['batches', 'manualBatches', 'standaloneReviews'].find((key) =>
++        (state[key] ?? []).some((item) => item.id === batch.id),
++      );
++      if (operatorOwns(state, collection, batch))
++        throw Object.assign(new Error('Automatic review subject is operator-owned'), {
++          code: 'review-operator-owned',
++        });
++    }
+     return { state, batch };
+   }
+   async function save(state, batch, login, { guard, recoveryHead } = {}) {
+@@ -107,6 +120,18 @@
+     await store.save(state, {
+       rebaseIndependentSubjects: async (merged) => {
+         validateState(merged, REPO);
++        if (automatic()) {
++          const current = ['batches', 'manualBatches', 'standaloneReviews'].flatMap((collection) =>
++            (merged[collection] ?? [])
++              .filter((item) => item.id === batch.id)
++              .map((item) => ({ collection, item })),
++          );
++          assert.equal(current.length, 1, 'Automatic handoff owner changed');
++          if (operatorOwns(merged, current[0].collection, current[0].item))
++            throw Object.assign(new Error('Automatic review subject is operator-owned'), {
++              code: 'review-operator-owned',
++            });
++        }
+         if (merged.standaloneReviews) {
+           const { validateStandaloneState } = await import('./standalone-review.mjs');
+           validateStandaloneState(merged);
+@@ -124,6 +149,7 @@
+           await subjectAdapter.reservationGuard(batch);
+         assert.equal(JSON.stringify(batch), expected, 'Handoff subject mutated');
+         assert.ok(await github.authorized(login), 'Handoff actor lost authorization');
++        if (automatic()) await load(batch.pr.number);
+         assert.ok(performance.now() - started <= 60000, 'Handoff guard expired');
+       },
+     });
+@@ -148,6 +174,7 @@
+       assert.deepEqual(current, batch, 'Durable handoff changed before comment');
+       await live(batch);
+       assert.ok(await github.authorized(payload.actor), 'Comment actor lost authorization');
++      if (automatic()) await load(batch.pr.number);
+       await github.commentPR(batch.pr.number, body);
+     }
+   }
+@@ -307,6 +334,7 @@
+     return { status: 'submitted', pr, sha: batch.sha, round: batch.reviews.length };
+   }
+   async function reconcile(batch, persist, { repairNotice = false } = {}) {
++    if (automatic()) await load(batch.pr.number);
+     if (!channel(batch)) return false;
+     if (batch.externalReview.status === 'comment-requested') {
+       if (repairNotice) await requestNotice(batch, await actor());
+--- qa-source3/agent-team/src/bug-pipeline/external-review.mjs
++++ candidate4/agent-team/src/bug-pipeline/external-review.mjs
+@@ -69,6 +69,7 @@
+   };
+   if (batch.externalReview?.channel === 'github-comments') {
+     const receiver = createCommentReviewHandoff({
++      automatic: () => true,
+       github: gh,
+       cwd: process.cwd(),
+       run: createRunner({
+--- qa-source3/agent-team/src/bug-pipeline/pipeline.mjs
++++ candidate4/agent-team/src/bug-pipeline/pipeline.mjs
+@@ -118,8 +118,14 @@
+       processingSubject = { collection: 'standaloneReviews', id };
+       try {
+         await finalizeStandaloneSubject({
+-          subject, controller: standaloneController, github: gh, workspace, save,
+-          infrastructureFiles: standaloneInfrastructureFiles, now: () => new Date(now()),
++          automatic: true,
++          subject,
++          controller: standaloneController,
++          github: gh,
++          workspace,
++          save,
++          infrastructureFiles: standaloneInfrastructureFiles,
++          now: () => new Date(now()),
+         });
+         if (subject.lastTransientFailure) {
+           delete subject.lastTransientFailure;
+@@ -132,7 +138,12 @@
+         state = validateState(await store.load(), repo);
+         if (state.standaloneReviews) validateStandaloneState(state);
+         subject = state.standaloneReviews?.find((item) => item.id === id);
+-        if (!subject || operatorOwns(state, 'standaloneReviews', subject)) continue;
++        if (
++          error?.code === 'review-operator-owned' ||
++          !subject ||
++          operatorOwns(state, 'standaloneReviews', subject)
++        )
++          continue;
+         const code = controllerFailureCode(error);
+         if (isRetryableGitHubFailure(error)) {
+           if (recordTransientGitHubFailure(subject, now())) {
+--- qa-source3/agent-team/src/bug-pipeline/release.mjs
++++ candidate4/agent-team/src/bug-pipeline/release.mjs
+@@ -377,12 +377,20 @@
+   return JSON.stringify(batch);
+ }
+ 
+-function freshReleaseGuard({ batch, store, repo }) {
++function assertAutomaticReleaseOwnership(state, batch, automatic) {
++  if (automatic && (automationPaused(state) || (batch && operatorOwns(state, 'batches', batch))))
++    throw Object.assign(new ReleaseGateError('Automatic release subject is operator-owned'), {
++      code: 'release-operator-owned',
++    });
++}
++
++function freshReleaseGuard({ batch, store, repo, automatic = false }) {
+   const batchId = batch.id;
+   const expected = releaseSubject(batch);
+   return async () => {
+     const state = store ? structuredClone(validateState(await store.load(), repo)) : null;
+     const current = state ? state.batches.find((item) => item.id === batchId) : batch;
++    if (state) assertAutomaticReleaseOwnership(state, current, automatic);
+     assertNoReleaseHold(current);
+     if (!current || releaseSubject(current) !== expected)
+       fail('verified release identity changed during asynchronous verification');
+@@ -390,9 +398,9 @@
+   };
+ }
+ 
+-async function persistReleaseTransition({ state, batch, guard, store, repo }) {
++async function persistReleaseTransition({ state, batch, guard, store, repo, automatic = false }) {
+   const saved = structuredClone(batch);
+-  const afterSave = freshReleaseGuard({ batch: saved, store, repo });
++  const afterSave = freshReleaseGuard({ batch: saved, store, repo, automatic });
+   await store.save(structuredClone(state), { guard });
+   await afterSave();
+   return saved;
+@@ -594,7 +602,10 @@
+   execute = false,
+   configured = {},
+   sourcePolicy,
++  automatic = false,
+ }) {
++  if (typeof automatic !== 'boolean')
++    throw new TypeError('automatic release context must be boolean');
+   sourcePolicy = releaseSourcePolicy(sourcePolicy);
+   if (sourcePolicy === DEMO_SOURCE_POLICIES.exact && repo !== 'l2v-hub/ClinicOS')
+     fail('exact demo release requires the fixed repository');
+@@ -609,9 +620,10 @@
+   const initial = validateState(await store.load(), repo);
+   const batch = structuredClone(initial.batches.find((candidate) => candidate.id === batchId));
+   if (!batch) fail('batch is absent from durable state');
++  assertAutomaticReleaseOwnership(initial, batch, automatic);
+   assertNoReleaseHold(batch);
+   assertSavedPolicy(batch, sourcePolicy);
+-  let guard = freshReleaseGuard({ batch, store, repo });
++  let guard = freshReleaseGuard({ batch, store, repo, automatic });
+   const exact = sourcePolicy === DEMO_SOURCE_POLICIES.exact;
+   const ensureExact = async (operation, expectedSha) => {
+     if (!execute && batch.exactDemoDispatches?.[operation] === undefined)
+@@ -641,12 +653,14 @@
+             guard: oldGuard,
+             store,
+             repo,
++            automatic,
+           });
+           Object.assign(batch, saved);
+-          guard = freshReleaseGuard({ batch, store, repo });
++          guard = freshReleaseGuard({ batch, store, repo, automatic });
+         },
+       });
+     } catch (error) {
++      if (error?.code === 'release-operator-owned') throw error;
+       await persistExactBlock({
+         batch,
+         store,
+@@ -768,9 +782,10 @@
+       guard,
+       store,
+       repo,
++      automatic,
+     });
+     Object.assign(batch, saved);
+-    guard = freshReleaseGuard({ batch, store, repo });
++    guard = freshReleaseGuard({ batch, store, repo, automatic });
+     return finishMerged({
+       ok: true,
+       status: 'merged',
+@@ -829,9 +844,10 @@
+     guard,
+     store,
+     repo,
++    automatic,
+   });
+   Object.assign(batch, saved);
+-  guard = freshReleaseGuard({ batch, store, repo });
++  guard = freshReleaseGuard({ batch, store, repo, automatic });
+   return finishMerged({
+     ok: true,
+     status: 'merged',
+@@ -870,7 +886,10 @@
+   runtimeRunUrl = '',
+   sourcePolicy,
+   productionWait = {},
++  automatic = false,
+ }) {
++  if (typeof automatic !== 'boolean')
++    throw new TypeError('automatic release context must be boolean');
+   sourcePolicy = releaseSourcePolicy(sourcePolicy);
+   if (
+     typeof batchId !== 'string' ||
+@@ -886,6 +905,7 @@
+     batch.release.mergeSha !== mergeSha
+   )
+     fail('deployment does not match a recorded production merge');
++  assertAutomaticReleaseOwnership(initial, batch, automatic);
+   assertNoReleaseHold(batch);
+   assertSavedPolicy(batch, sourcePolicy);
+   if (
+@@ -897,7 +917,7 @@
+   )
+     fail('recorded release no longer matches its approved candidate');
+   verifyReviewProof(batch, batch.sha);
+-  const guard = freshReleaseGuard({ batch, store, repo });
++  const guard = freshReleaseGuard({ batch, store, repo, automatic });
+   if (publicationComplete(batch))
+     return {
+       ok: true,
+@@ -1001,6 +1021,7 @@
+     guard,
+     store,
+     repo,
++    automatic,
+   });
+ 
+   await publishDeploymentCompletion({
+@@ -1009,6 +1030,7 @@
+     store,
+     repo,
+     sourcePolicy,
++    automatic,
+   });
+   return {
+     ok: true,
+@@ -1019,7 +1041,18 @@
+   };
+ }
+ 
+-export async function publishDeploymentCompletion({ batch, github, store, repo, sourcePolicy }) {
++export async function publishDeploymentCompletion({
++  batch,
++  github,
++  store,
++  repo,
++  sourcePolicy,
++  automatic = false,
++}) {
++  if (typeof automatic !== 'boolean')
++    throw new TypeError('automatic release context must be boolean');
++  if (automatic && !store?.load)
++    throw new TypeError('automatic completion requires a durable store');
+   sourcePolicy = releaseSourcePolicy(sourcePolicy);
+   assertSavedPolicy(batch, sourcePolicy);
+   const suppliedBatch = batch;
+@@ -1064,6 +1097,7 @@
+     batch: store ? batch : suppliedBatch,
+     store,
+     repo,
++    automatic,
+   });
+   const guard = async () => {
+     const verified = await fresh();
+@@ -1084,6 +1118,7 @@
+           sourcePolicy,
+         });
+       } catch (error) {
++        if (error?.code === 'release-operator-owned') throw error;
+         if (sourcePolicy === DEMO_SOURCE_POLICIES.exact && store)
+           await persistExactBlock({
+             batch: current,
+@@ -1136,6 +1171,7 @@
+       )
+         fail('persisted demo receipt differs from trusted current proof');
+     } catch (error) {
++      if (error?.code === 'release-operator-owned') throw error;
+       if (sourcePolicy === DEMO_SOURCE_POLICIES.exact)
+         await persistExactBlock({
+           batch,
+@@ -1185,6 +1221,7 @@
+       guard,
+       store,
+       repo,
++      automatic,
+     });
+   }
+   return { status: 'published' };
+@@ -1277,6 +1314,7 @@
+       deploymentSha: env.BUG_PIPELINE_DEPLOYMENT_SHA || undefined,
+       runtimeRunUrl: env.RUNTIME_DEPLOYMENT_RUN_URL || '',
+       sourcePolicy,
++      automatic: env.GITHUB_EVENT_NAME === 'workflow_run',
+     });
+     console.log(JSON.stringify(result));
+     return 0;
+@@ -1358,6 +1396,7 @@
+     batchId,
+     reviewedSha,
+     execute: true,
++    automatic: env.GITHUB_EVENT_NAME === 'workflow_run',
+     sourcePolicy,
+     configured: {
+       botToken: env.CLINICOS_BOT_TOKEN_CONFIGURED === 'true',
+--- qa-source3/agent-team/src/bug-pipeline/standalone-review.mjs
++++ candidate4/agent-team/src/bug-pipeline/standalone-review.mjs
+@@ -1,4 +1,10 @@
+-import { githubOperationError, isRetryableGitHubFailure, recordTransientGitHubFailure, MERGE_PREPARATION_TIMEOUT_MS } from './github.mjs';
++import { AsyncLocalStorage } from 'node:async_hooks';
++import {
++  githubOperationError,
++  isRetryableGitHubFailure,
++  recordTransientGitHubFailure,
++  MERGE_PREPARATION_TIMEOUT_MS,
++} from './github.mjs';
+ import { randomUUID } from 'node:crypto';
+ import {
+   attemptLimit,
+@@ -266,6 +272,7 @@
+ 
+ export function createStandaloneReview({ github, run, cwd, now = () => new Date(), nonce, authorizationVerifier, operationTimeouts }) {
+   const store = github.createStateStore();
++  const automaticContext = new AsyncLocalStorage();
+   async function api(endpoint, method = 'GET', body) {
+     const result = await run({
+       command: 'gh',
+@@ -498,6 +505,7 @@
+     nonce,
+     authorizationVerifier,
+     operationTimeouts,
++    automatic: () => automaticContext.getStore() === true,
+     subjectAdapter: {
+       validate: validateStandaloneState,
+       subjects: (state) => state.standaloneReviews ?? [],
+@@ -616,10 +624,14 @@
+     });
+     return clone(subject);
+   }
++  async function ownership(subject) {
++    if (automaticContext.getStore() === true) await handoff.load(subject.pr.number);
++  }
+   async function current(expected) {
+     const { batch } = await handoff.load(expected.pr.number);
+     equal(batch, expected);
+     await native(batch);
++    await ownership(expected);
+     return batch;
+   }
+   async function mergeReceipt(expected) {
+@@ -669,6 +681,7 @@
+       );
+     } else await native(subject);
+     assert.ok(await github.authorized(login), 'Persistence actor lost authorization');
++    await ownership(subject);
+   }
+   async function finalize(pr, { workspace, infrastructureFiles }) {
+     let state = validateStandaloneState(await store.load());
+@@ -699,6 +712,7 @@
+           checks,
+           publishState,
+           guardSubject,
++          ownership,
+         },
+         github,
+         workspace,
+@@ -712,6 +726,8 @@
+       state = validateStandaloneState(await store.load());
+       subject = state.standaloneReviews?.find((item) => item.pr.number === pr);
+       assert.ok(subject, 'Finalize owner disappeared');
++      if (error?.code === 'review-operator-owned')
++        return { status: 'skipped', reason: 'operator-owned' };
+       if (isRetryableGitHubFailure(error)) {
+         if (!recordTransientGitHubFailure(subject, now().getTime())) { await save(); throw error; }
+         subject.failureCode = 'github-transient-exhausted';
+@@ -740,6 +756,7 @@
+       const started = performance.now();
+       await current(expected);
+       assert.ok(await github.authorized(actor));
++      await ownership(expected);
+       assert.ok(performance.now() - started <= 60000);
+       for (let retry = 0; ; retry++) {
+         try {
+@@ -749,6 +766,7 @@
+           await new Promise((resolve) => setTimeout(resolve, 25 * 2 ** retry));
+           await current(expected);
+           assert.ok(await github.authorized(actor));
++          await ownership(expected);
+         }
+       }
+     }
+@@ -795,6 +813,11 @@
+     verify: (...args) => operation(() => verify(...args)),
+     publishState: (...args) => operation(() => publishState(...args)),
+     operation,
++    automatic: (work) => {
++      assert.equal(typeof work, 'function');
++      return automaticContext.run(true, work);
++    },
++    ownership,
+     current,
+     checks,
+     mergeReceipt,
+@@ -803,7 +826,7 @@
+   };
+ }
+ 
+-export async function finalizeStandaloneSubject({
++async function finalizeStandaloneSubjectBody({
+   subject,
+   controller,
+   github,
+@@ -813,6 +836,7 @@
+   now = () => new Date(),
+ }) {
+   const login = await controller.actor();
++  await controller.ownership?.(subject);
+   const persist = async (options) => {
+     const expected = JSON.stringify(subject);
+     await save({
+@@ -924,6 +948,7 @@
+   const feedback = await github.reviewFeedback(subject.pr.number);
+   const fingerprint = feedbackFingerprint(feedback);
+   const block = async (reason) => {
++    await controller.ownership?.(subject);
+     subject.phase = 'blocked';
+     subject.reason = reason;
+     delete subject.approvedSha;
+@@ -951,8 +976,10 @@
+     await save(); // Persistent ownership before independent model invocation.
+     let qa;
+     try {
++      await controller.ownership?.(subject);
+       qa = await workspace.finalQaStandalone(subject);
+     } catch (error) {
++      if (error?.code === 'review-operator-owned') throw error;
+       subject.codexFinalReview.status = 'failed';
+       subject.codexFinalReview.failureCode = controllerFailureCode(error);
+       await save(); // The owning worker records its failed result and releases its allowance.
+@@ -1090,3 +1117,21 @@
+     },
+   });
+ }
++
++// Automatic mode is invocation-local even when a trusted controller was built earlier.
++export async function finalizeStandaloneSubject(options) {
++  const { automatic = false, controller } = options;
++  assert.equal(typeof automatic, 'boolean');
++  if (!automatic) return finalizeStandaloneSubjectBody(options);
++  assert.equal(
++    typeof controller.automatic,
++    'function',
++    'Automatic standalone controller context required',
++  );
++  assert.equal(
++    typeof controller.ownership,
++    'function',
++    'Automatic standalone ownership guard required',
++  );
++  return controller.automatic(() => finalizeStandaloneSubjectBody(options));
++}
+--- qa-source3/agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs
++++ candidate4/agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs
+@@ -46,7 +46,14 @@
+   ],
+ };
+ 
+-function fixture({ failed = false, reviewCount, actor = 'review-bot', authorizationVerifier = true, blobState = false } = {}) {
++function fixture({
++  failed = false,
++  reviewCount,
++  actor = 'review-bot',
++  authorizationVerifier = true,
++  blobState = false,
++  automatic = () => false,
++} = {}) {
+   let round = failed ? 1 : 0;
+   const batch = {
+     id: 'bug-batch-17',
+@@ -197,6 +204,7 @@
+   const handoff = createCommentReviewHandoff({
+     github,
+     run: apiRun,
++    automatic,
+     cwd: '/synthetic/worktree',
+     now: () => new Date('2026-10-17T00:00:00.000Z'),
+     nonce: () => `nonce-${++nonceValue}`,
+@@ -723,3 +731,33 @@
+   assert.equal(f.pr.comments.length, notices);
+   assert.deepEqual(f.remote.batches[0], previous);
+ });
++
++test('automatic native handoff reload rejects global or subject ownership without reinterpreting it as a failed review', async () => {
++  for (const kind of ['global', 'subject']) {
++    const f = fixture({ automatic: () => true });
++    await f.handoff.request(81);
++    if (kind === 'global') f.remote.operatorTakeover = { active: true };
++    else f.remote.batches[0].operatorCoordination = { active: true };
++    const before = clone(f.remote),
++      writes = f.writes.length;
++    await assert.rejects(f.handoff.load(81), (error) => error.code === 'review-operator-owned');
++    await assert.rejects(
++      f.handoff.reconcile(f.remote.batches[0], async () => assert.fail('no state write')),
++      (error) => error.code === 'review-operator-owned',
++    );
++    assert.deepEqual(f.remote, before);
++    assert.equal(f.writes.length, writes);
++  }
++});
++
++test('automatic handoff persistence observes a takeover during native source checks before CAS/comment effects', async () => {
++  const f = fixture({ automatic: () => true });
++  const before = clone(f.remote.batches[0]);
++  f.onViewIssue(() => {
++    f.remote.operatorTakeover = { active: true };
++  });
++  await assert.rejects(f.handoff.request(81), (error) => error.code === 'review-operator-owned');
++  assert.deepEqual(f.remote.batches[0], before);
++  assert.equal(f.writes.length, 0);
++  assert.equal(f.pr.comments.length, 0);
++});
+--- qa-source3/agent-team/tests/bug-pipeline/external-review.test.mjs
++++ candidate4/agent-team/tests/bug-pipeline/external-review.test.mjs
+@@ -555,7 +555,12 @@
+   const args = {
+     repo,
+     batch,
+-    gh: { ...fixture.github, createStateStore: () => ({}) },
++    gh: {
++      ...fixture.github,
++      createStateStore: () => ({
++        load: async () => ({ schemaVersion: 1, repository: repo, batches: [batch] }),
++      }),
++    },
+     workspace: {
+       prepare: async () => calls.push('prepare'),
+       finalQa: async () => {
+@@ -912,3 +917,26 @@
+     'already reserved claim is preserved, not relabelled failed',
+   );
+ });
++
++test('automatic external comment handoff inherits ownership context before native reconciliation or model work', async () => {
++  const { args, batch, log } = approvedExternalArgs();
++  batch.externalReview.channel = 'github-comments';
++  args.gh.createStateStore = () => ({
++    load: async () => ({
++      schemaVersion: 1,
++      repository: repo,
++      batches: [batch],
++      operatorTakeover: { active: true },
++    }),
++  });
++  args.communication = {
++    mirrorFeedback: async () => assert.fail('no later publication'),
++    publishState: async () => assert.fail('no later publication'),
++  };
++  args.block = async () => assert.fail('owner cannot receive generic blocked state');
++  const before = structuredClone(batch);
++  const result = await externalReviewStep(args);
++  assert.deepEqual(result, { status: 'skipped', reason: 'operator-owned' });
++  assert.deepEqual(batch, before);
++  assert.deepEqual(log, []);
++});
+--- qa-source3/agent-team/tests/bug-pipeline/release.test.mjs
++++ candidate4/agent-team/tests/bug-pipeline/release.test.mjs
+@@ -2815,3 +2815,136 @@
+   delete f.batch.operatorReleaseCoordination;
+   assert.equal(JSON.stringify(f.batch), before);
+ });
++
++test('automatic release rechecks ownership on native fresh loads instead of relying on initial selection', async () => {
++  for (const ownership of ['global', 'subject']) {
++    const f = fixture();
++    const load = f.store.load;
++    let reads = 0;
++    f.store.load = async () => {
++      const state = await load();
++      if (++reads >= 2) {
++        if (ownership === 'global') state.operatorTakeover = { active: true };
++        else state.batches[0].operatorCoordination = { active: true };
++      }
++      return state;
++    };
++    await assert.rejects(
++      releaseBatch({
++        repo: f.state.repository,
++        github: f.github,
++        store: f.store,
++        batchId: f.batch.id,
++        reviewedSha: sha,
++        configured,
++        execute: true,
++        automatic: true,
++      }),
++      (error) => error.code === 'release-operator-owned',
++    );
++    assert.equal(
++      f.calls.filter(([name]) => ['merge', 'save', 'ready', 'status', 'comment'].includes(name))
++        .length,
++      0,
++    );
++    assert.ok(reads >= 2);
++    assert.equal(f.getSaved().batches[0].phase, 'ready');
++  }
++});
++
++test('automatic native merge callback rejects late takeover and preserves the genuine existing reservation', async () => {
++  const f = fixture();
++  const reservation = {
++    status: 'merging',
++    nonce: 'synthetic-live-reservation',
++    reviewedSha: sha,
++    reservedAt: '2026-10-22T00:00:00Z',
++  };
++  f.batch.release = structuredClone(reservation);
++  let callbackChecked = false;
++  f.github.mergePullRequest = async (_, __, options) => {
++    f.getSaved().operatorTakeover = { active: true };
++    callbackChecked = true;
++    await options.guard();
++    assert.fail('native merge cannot proceed after observed handover');
++  };
++  await assert.rejects(
++    releaseBatch({
++      repo: f.state.repository,
++      github: f.github,
++      store: f.store,
++      batchId: f.batch.id,
++      reviewedSha: sha,
++      configured,
++      execute: true,
++      automatic: true,
++    }),
++    (error) => error.code === 'release-operator-owned',
++  );
++  assert.equal(callbackChecked, true);
++  assert.deepEqual(f.getSaved().batches[0].release, reservation);
++  assert.equal(
++    f.calls.filter(([name]) => ['merge', 'save', 'status', 'comment'].includes(name)).length,
++    0,
++  );
++});
++
++test('automatic release rejection does not leak into separately authorized explicit maintainer release', async () => {
++  const f = fixture();
++  f.state.operatorTakeover = { active: true };
++  const args = {
++    repo: f.state.repository,
++    github: f.github,
++    store: f.store,
++    batchId: f.batch.id,
++    reviewedSha: sha,
++    configured,
++    execute: true,
++  };
++  await assert.rejects(
++    releaseBatch({ ...args, automatic: true }),
++    (error) => error.code === 'release-operator-owned',
++  );
++  assert.equal(f.calls.length, 0);
++  const result = await releaseBatch(args);
++  assert.equal(result.status, 'merged');
++  assert.equal(f.calls.filter(([name]) => name === 'merge').length, 1);
++  assert.equal(f.getSaved().operatorTakeover.active, true);
++});
++
++test('automatic completion publication uses fresh ownership guards and retains pending deployment facts without issue writes', async () => {
++  const f = fixture();
++  await releaseBatch({
++    repo: f.state.repository,
++    github: f.github,
++    store: f.store,
++    batchId: f.batch.id,
++    reviewedSha: sha,
++    configured,
++    execute: true,
++  });
++  const batch = f.getSaved().batches[0];
++  batch.release.status = 'deployed';
++  batch.release.deployment = {
++    status: 'deployed',
++    reviewedSha: sha,
++    mergeSha,
++    vercelUrl: 'https://clinicos-eosin.vercel.app',
++  };
++  batch.release.publication = { status: 'pending' };
++  f.getSaved().operatorTakeover = { active: true };
++  const before = structuredClone(f.getSaved()),
++    count = f.calls.length;
++  await assert.rejects(
++    publishDeploymentCompletion({
++      repo: f.state.repository,
++      github: f.github,
++      store: f.store,
++      batch,
++      automatic: true,
++    }),
++    (error) => error.code === 'release-operator-owned',
++  );
++  assert.deepEqual(f.getSaved(), before);
++  assert.deepEqual(f.calls.slice(count), []);
++});
+--- qa-source3/agent-team/tests/bug-pipeline/standalone-review.test.mjs
++++ candidate4/agent-team/tests/bug-pipeline/standalone-review.test.mjs
+@@ -1932,7 +1932,11 @@
+   const github = { intake: async () => {}, discoverQueue: async () => [] };
+   let failureCode = 'github-read-transient';
+   const controller = {
+-    actor: async () => 'operator', guardSubject: async () => {}, publishState: async () => {},
++    automatic: (work) => work(),
++    ownership: async () => {},
++    actor: async () => 'operator',
++    guardSubject: async () => {},
++    publishState: async () => {},
+     reconcile: async (subject, save) => {
+       if (subject.pr.number === 81 && failureCode)
+         throw Object.assign(new Error('Synthetic read failure'), { code: failureCode });
+@@ -2425,3 +2429,115 @@
+  const before=f.labels.slice();const result=await f.controller.publishState(subject);
+  assert.equal(result.status,'unsupported');assert.deepEqual(f.labels,before);
+ });
++
++test('automatic pipeline with prebuilt native controller observes takeover without projection or owned diagnostics', async () => {
++  const f = fixture();
++  await f.controller.adopt(f.manifest);
++  await f.controller.request(81);
++  const before = clone(f.remote().standaloneReviews[0]);
++  f.labels.splice(0);
++  const authorized = f.github.authorized;
++  let armed = true;
++  f.github.authorized = async (...args) => {
++    if (armed) {
++      armed = false;
++      f.remote().operatorTakeover = { active: true };
++    }
++    return authorized(...args);
++  };
++  const state = await runPipeline({
++    repo,
++    event: {},
++    gh: { ...f.github, intake: async () => {}, discoverQueue: async () => [] },
++    store: f.github.createStateStore(),
++    models: {},
++    workspace: {},
++    reviewMode: 'external',
++    standaloneController: f.controller,
++  });
++  assert.deepEqual(f.labels, []);
++  assert.deepEqual(state.standaloneReviews[0], before);
++  assert.deepEqual(f.remote().standaloneReviews[0], before);
++  assert.equal(state.operatorTakeover.active, true);
++});
++
++test('prebuilt native controller isolates automatic context across concurrent explicit calls and exceptions', async () => {
++  const f = fixture();
++  await f.controller.adopt(f.manifest);
++  const subject = await f.controller.request(81);
++  f.remote().operatorTakeover = { active: true };
++  const result = await Promise.allSettled([
++    f.controller.automatic(() => f.controller.publishState(subject)),
++    f.controller.publishState(subject),
++  ]);
++  assert.equal(result[0].status, 'rejected');
++  assert.equal(result[0].reason.code, 'review-operator-owned');
++  assert.equal(result[1].status, 'fulfilled');
++  await assert.rejects(
++    f.controller.automatic(async () => {
++      throw new Error('synthetic scoped failure');
++    }),
++    /scoped failure/,
++  );
++  f.labels.splice(0);
++  await f.controller.publishState(subject);
++  assert.deepEqual(f.labels, ['claude-review-ready']);
++});
++
++test('automatic standalone last publication guard observes ownership acquired during authorization', async () => {
++  const f = fixture();
++  await f.controller.adopt(f.manifest);
++  const subject = await f.controller.request(81);
++  f.labels.splice(0);
++  const authorized = f.github.authorized;
++  let calls = 0;
++  f.github.authorized = async (...args) => {
++    if (++calls === 2) f.remote().operatorTakeover = { active: true };
++    return authorized(...args);
++  };
++  await assert.rejects(
++    f.controller.automatic(() => f.controller.publishState(subject)),
++    (error) => error.code === 'review-operator-owned',
++  );
++  assert.equal(calls, 2);
++  assert.deepEqual(f.labels, []);
++});
++
++test('automatic ownership loss after a genuine QA reservation retains its running tombstone without inference or block', async () => {
++  const f = fixture();
++  const subject = await published(f);
++  let qaCalls = 0;
++  const options = stepOptions(f, subject, async () => {
++    qaCalls++;
++    return { status: 'verified' };
++  });
++  const save = options.save;
++  options.save = async (...args) => {
++    await save(...args);
++    if (subject.codexFinalReview?.status === 'running')
++      f.remote().operatorTakeover = { active: true };
++  };
++  await assert.rejects(
++    f.controller.automatic(() => standaloneReviewStep(options)),
++    (error) => error.code === 'review-operator-owned',
++  );
++  const retained = f.remote().standaloneReviews[0];
++  assert.equal(qaCalls, 0);
++  assert.equal(retained.codexFinalReview.status, 'running');
++  assert.equal(retained.codexFinalReview.subjectSha, sha);
++  assert.equal(retained.failureCode, undefined);
++  assert.notEqual(retained.phase, 'blocked');
++});
++
++test('explicit authorized exact-SHA Max request and claim remain allowed during operator takeover', async () => {
++  const f = fixture();
++  await f.controller.adopt(f.manifest);
++  const history = clone(f.remote().standaloneReviews[0].implementation);
++  f.remote().operatorTakeover = { active: true };
++  const request = await f.controller.request(81);
++  const claim = await f.controller.claim(81);
++  assert.equal(request.sha, sha);
++  assert.equal(claim.reviews[0].subjectSha, sha);
++  assert.equal(claim.reviews[0].status, 'running');
++  assert.deepEqual(claim.implementation, history);
++});

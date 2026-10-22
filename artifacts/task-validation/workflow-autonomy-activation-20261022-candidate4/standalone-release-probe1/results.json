@@ -1,0 +1,175 @@
+{
+  "status": "FAILED VALIDATION",
+  "sourceSha": "93b0c72877bd58c2dd3769d0942d737ef9f96ac0",
+  "reservationNonce": "b7f5a08f-fb07-44f5-8052-37fcde7c9555",
+  "findings": [
+    {
+      "id": "S1",
+      "status": "CONFIRMED",
+      "severity": "high",
+      "source": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "lines": [
+        619,
+        732,
+        741,
+        852
+      ],
+      "caller": {
+        "source": "agent-team/src/bug-pipeline/pipeline.mjs",
+        "lines": [
+          109,
+          120
+        ]
+      },
+      "title": "Automatic standalone projection ignores fresh observed takeover outside unchanged subject",
+      "actualChain": "runPipeline -> finalizeStandaloneSubject -> native standalone controller.publishState -> current -> handoff.load",
+      "observed": {
+        "id": "S1",
+        "automaticChain": "runPipeline -> finalizeStandaloneSubject -> native standalone controller.publishState -> current -> handoff.load",
+        "newGlobalTakeover": true,
+        "nativeStoreReads": [
+          {
+            "operatorTakeoverActive": false
+          },
+          {
+            "operatorTakeoverActive": false
+          },
+          {
+            "operatorTakeoverActive": false
+          },
+          {
+            "operatorTakeoverActive": false
+          },
+          {
+            "operatorTakeoverActive": false
+          },
+          {
+            "operatorTakeoverActive": true
+          },
+          {
+            "operatorTakeoverActive": true
+          }
+        ],
+        "labels": [
+          "claude-review-ready"
+        ],
+        "pipelineError": null,
+        "models": 0
+      },
+      "expected": "Automatic controller must stop before projection after its own fresh store loads observe global pause or newly protected subject. Preserve explicitly authorized SHA-bound read-only handoff compatibility.",
+      "scope": "Observed one label write; no model/deploy/merge/clinical proof claimed"
+    },
+    {
+      "id": "R1",
+      "status": "CONFIRMED",
+      "severity": "high",
+      "source": "agent-team/src/bug-pipeline/release.mjs",
+      "lines": [
+        380,
+        609,
+        814,
+        1304,
+        1354
+      ],
+      "title": "Automatic workflow_run release loses ownership context after candidate selection",
+      "actualChain": "main workflow_run -> selectAutoReleaseBatch -> releaseBatch -> freshReleaseGuard",
+      "observed": {
+        "id": "R1",
+        "automaticChain": "main workflow_run -> selectAutoReleaseBatch -> releaseBatch -> freshReleaseGuard",
+        "storeReads": 10,
+        "readStates": [
+          {
+            "read": 1,
+            "operatorTakeoverActive": false
+          },
+          {
+            "read": 2,
+            "operatorTakeoverActive": true
+          },
+          {
+            "read": 3,
+            "operatorTakeoverActive": true
+          },
+          {
+            "read": 4,
+            "operatorTakeoverActive": true
+          },
+          {
+            "read": 5,
+            "operatorTakeoverActive": true
+          },
+          {
+            "read": 6,
+            "operatorTakeoverActive": true
+          },
+          {
+            "read": 7,
+            "operatorTakeoverActive": true
+          },
+          {
+            "read": 8,
+            "operatorTakeoverActive": true
+          },
+          {
+            "read": 9,
+            "operatorTakeoverActive": true
+          },
+          {
+            "read": 10,
+            "operatorTakeoverActive": true
+          }
+        ],
+        "adapterGuardChecked": true,
+        "selectionSawTakeover": false,
+        "laterReadsSawTakeover": true,
+        "merges": [
+          [
+            "merge",
+            9,
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          ]
+        ],
+        "mainResult": 0,
+        "error": null,
+        "sourceBytesUnmodified": true,
+        "sideEffectImportsInjected": [
+          "github",
+          "process",
+          "fs/promises"
+        ]
+      },
+      "expected": "Automatic provenance must propagate from workflow_run selection through native release entry and all fresh guards, preventing merge/provider writes when current state is owned. Existing explicit maintainer release remains a distinct supported path.",
+      "scope": "Observed one synthetic merge through actual automatic main and supplied native guard callback; no actual merge/provider/deploy occurred"
+    }
+  ],
+  "hypotheses": {
+    "standaloneAutomaticProjection": "CONFIRMED",
+    "automaticReleaseAfterSelection": "CONFIRMED"
+  },
+  "finalSafetyTests": {
+    "tests": 2,
+    "pass": 0,
+    "fail": 2,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "firstRun": {
+    "tests": 2,
+    "pass": 0,
+    "fail": 2,
+    "harnessFailures": 0,
+    "preserved": "first-*"
+  },
+  "retest": "Same two expected-safety assertions, strengthened read instrumentation and real supplied release callback guard invocation; still2 source failures,0 harness failures",
+  "harnessFailures": [],
+  "sourceEdits": false,
+  "all138SourceHashesUnchanged": true,
+  "priorQa3SealUnchanged": true,
+  "priorQa3Scope": "588+23 source tests PASS retained unchanged; these two targeted uncovered races are additional scope and block activation",
+  "liveWrites": false,
+  "modelOrProviderCalls": 0,
+  "actualNetwork": false,
+  "visual": "N/A bounded control-plane diagnostic; prohibited by contract",
+  "pending": "Root must reserve corrective implementation before actual Claude, merge or activation. No issue closure/deployment claim."
+}

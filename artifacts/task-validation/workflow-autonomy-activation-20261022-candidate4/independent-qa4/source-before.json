@@ -1,0 +1,1459 @@
+{
+  "sourceSha": "cb2d095926282918777b9dd73a37ef7d90bb7b2f",
+  "parent": "9a6cc35c32d91e3ae2aae2debc6fdcff089cd90f",
+  "files": 138,
+  "gitBlobBindings": 20,
+  "deltaPaths": [
+    "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+    "agent-team/src/bug-pipeline/external-review.mjs",
+    "agent-team/src/bug-pipeline/pipeline.mjs",
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/src/bug-pipeline/standalone-review.mjs",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs"
+  ],
+  "seals": [
+    {
+      "folder": "author4",
+      "sha256": "f286dc996932af42ef6472424f8770fd90cd62513c413f3cb90b1b599776fd42",
+      "files": 26
+    },
+    {
+      "folder": "independent-qa3",
+      "sha256": "d9ad31f41c6654abba35f9d5bc747e5932814a8653a2be0b27e2de4d44c94693",
+      "files": 29
+    },
+    {
+      "folder": "standalone-release-probe1",
+      "sha256": "bce487135e880b82cadc25266428209d041bb491c71ce6fb26aa4a91002bbcbd",
+      "files": 22
+    },
+    {
+      "folder": "independent-qa",
+      "sha256": "58b274424fc6f336a3244c9eb87e4fbbc079275e629a1c9695e3192ecf45112c",
+      "files": 29
+    }
+  ],
+  "snapshotManifest": {
+    ".claude/skills/agent-loop-quality-gate/SKILL.md": {
+      "sha256": "c4a7aced84d531987552f23645b051a652534eb386e673985a292195f5d80c2d",
+      "bytes": 3517
+    },
+    ".claude/skills/clinicos/references/bug-delivery.md": {
+      "sha256": "997e5f8fc4b0f7454f21673f7181ddb0ee536e9d16b3c04b82b94203a1433a17",
+      "bytes": 20934
+    },
+    ".claude/skills/qa-gate/SKILL.md": {
+      "sha256": "664ca4b5791d9464a99c7facb87380f20c091746c320ad07d5ccb33d5d62835e",
+      "bytes": 6884
+    },
+    ".github/workflows/activate-assistant-llm.yml": {
+      "sha256": "72d46284ba5a1fd9c85cacebdba221f0f0978af8333870e87c042d7a2fd03deb",
+      "bytes": 1888
+    },
+    ".github/workflows/ai-import-e2e.yml": {
+      "sha256": "533cd1e5ceb92f1b7120ad5bb7fbc0ffaddf823e8adbbf2c869725b19d9f86a7",
+      "bytes": 11503
+    },
+    ".github/workflows/ai-runtime-tests.yml": {
+      "sha256": "09a277f1018d94a117225b2ae943c8bf8e1b3b82c7afa4145dcde746d01d50fc",
+      "bytes": 1266
+    },
+    ".github/workflows/azure-static-web-apps-orange-hill-02285750f.yml.disabled": {
+      "sha256": "9bcaab2b94bb269d8e28fa0301633981b981eb3fa4bee3d46d39f8ca896e624c",
+      "bytes": 1376
+    },
+    ".github/workflows/bug-pipeline-tests.yml": {
+      "sha256": "ee99dadf18b78104743ec263fd624b395bea84619c627d2767d8da74f6fe51a9",
+      "bytes": 13476
+    },
+    ".github/workflows/codex-bug-pipeline.yml": {
+      "sha256": "265542dafb39489a2a64d87eec8b580306ad577392049227cc7fb88bae722315",
+      "bytes": 4020
+    },
+    ".github/workflows/codex-bug-release.yml": {
+      "sha256": "4236b484b4000b0017b99becdf7297b84bf02f6d397fc856d0dc8e13a579c8c8",
+      "bytes": 8790
+    },
+    ".github/workflows/codex-issue-review-sync.yml": {
+      "sha256": "f482c40f8f64991a6df91a0b1154a4bb1c51903fc948f4202f18749c8105cb34",
+      "bytes": 1182
+    },
+    ".github/workflows/configure-demo-source.yml": {
+      "sha256": "34319447165b115b20c82e9b0c10393bbf189b8352867873ea3fb7948cb97875",
+      "bytes": 2276
+    },
+    ".github/workflows/deploy-backend.yml": {
+      "sha256": "32fc288e0695ac27f25c06774d152cc7c75452083f740fbe7b11c10748edcf9b",
+      "bytes": 2124
+    },
+    ".github/workflows/deploy-demo-exact-commit.yml": {
+      "sha256": "4caf8d8c4d1bb7d596fc31fde9bb4a083c52d7235365cffb3b508d64fc87172d",
+      "bytes": 4451
+    },
+    ".github/workflows/deploy-runtime.yml": {
+      "sha256": "1d0acd74d7bbb425ff672a9bf1193f4b784dfc3189009902af16278db3e5bf8a",
+      "bytes": 1584
+    },
+    ".github/workflows/deploy-vercel.yml.disabled": {
+      "sha256": "125547cee32659e9f7f37f4541e99e7040c565d12edf8f29a21994f352adb484",
+      "bytes": 1249
+    },
+    ".github/workflows/frontend-secret-scan.yml": {
+      "sha256": "36a8e530392f4a3dad28cb4112913edd3a9d50d3012fe8677fdeb463166b5cb9",
+      "bytes": 1268
+    },
+    ".github/workflows/inspect-demo-bearer-readiness.yml": {
+      "sha256": "5d31e7aba6a9147244e36b4cad953f2155ab344ca2ee0797657daa76872266fb",
+      "bytes": 1391
+    },
+    ".github/workflows/inspect-demo-source-topology.yml": {
+      "sha256": "d12b84e4eba6c2eac2ab843b4c63bb46bdaecf9f0b47a0847666fd22fe3151b2",
+      "bytes": 1786
+    },
+    ".github/workflows/inspect-demo-storage.yml": {
+      "sha256": "d0d7e71f76860370e89e8c8ff2f2100a340e9e3311bb4ca4b00c3d6e980557b7",
+      "bytes": 4303
+    },
+    ".github/workflows/protect-demo-secret.yml": {
+      "sha256": "ed56dbc4402058e75d6bb5c940cef53131793882b3834cf37dcd1567d87cb5e7",
+      "bytes": 6937
+    },
+    ".github/workflows/railway-set-var.yml": {
+      "sha256": "86ebce31d030c61d8b420e5ba0efed398794b5798e180f72ed2e0ca53147489e",
+      "bytes": 1788
+    },
+    ".github/workflows/recover-demo-topology-receipt.yml": {
+      "sha256": "12429291df307ed11bfb13c73ca11dc3bea1b22f96cf1ec22adb30564f3de930",
+      "bytes": 1613
+    },
+    ".github/workflows/set-runtime-azure.yml": {
+      "sha256": "24aabe1f758a42078802f0877c0f985497eee325dd86fd44662f6c5e57c8baf4",
+      "bytes": 1934
+    },
+    ".github/workflows/set-runtime-model.yml": {
+      "sha256": "ad6fd885f07de130f2164fdcbfe64f855030922a1d4a08ca69c05231ee7a9dc6",
+      "bytes": 1411
+    },
+    "agent-team/src/adapters/git.mjs": {
+      "sha256": "78cac8a1db4e526c838da13f60c8b813a7d0ac9043fef1ef64fa68e549421c0c",
+      "bytes": 6626
+    },
+    "agent-team/src/adapters/github.mjs": {
+      "sha256": "820c6d602db73149bb592646a97beafd564903fa925eb45802f51bd0999630ce",
+      "bytes": 2792
+    },
+    "agent-team/src/adapters/process-runner.mjs": {
+      "sha256": "8bade29dd5161b5d8daf0038165a4138eabd34a4bf7e771f7f04d98177e541ae",
+      "bytes": 5071
+    },
+    "agent-team/src/bug-pipeline/attempt-budget.mjs": {
+      "sha256": "99066c62ffffb8b7a590a3a1f7a7291c4d7b16a3ae3ef638d07ef591655b3ca2",
+      "bytes": 10893
+    },
+    "agent-team/src/bug-pipeline/claude-review-cron.mjs": {
+      "sha256": "5d54688f8187d3fbffa2a1106b52343b3a223b53366119d4b2f7f8c8d49e9d03",
+      "bytes": 14709
+    },
+    "agent-team/src/bug-pipeline/cli.mjs": {
+      "sha256": "57d733cf7a6084a5cabd812b159e786b9c20ba3b9651281c4eb0678ad509ca27",
+      "bytes": 7059
+    },
+    "agent-team/src/bug-pipeline/comment-review-handoff.mjs": {
+      "sha256": "e7980d70b337e07fa09bc0c8e4b426b334cf192489c0b973e1dea8297003e804",
+      "bytes": 28413
+    },
+    "agent-team/src/bug-pipeline/contracts.mjs": {
+      "sha256": "eef4bd3286750f986119b2e15409fffd118ca4e7bcf56d8d8f90b894946f7988",
+      "bytes": 10741
+    },
+    "agent-team/src/bug-pipeline/dashboard/dashboard-client.js": {
+      "sha256": "3e9b4712eb50206547ae9ba88ad3aa46e4ae36e650e8e40e5be6015b06d8531a",
+      "bytes": 2535
+    },
+    "agent-team/src/bug-pipeline/dashboard/dashboard.css": {
+      "sha256": "3011dbd56f3de1ddc666b8216834d4e26f8eebbcc0f6b1635d5ba45e8ac9fea0",
+      "bytes": 2956
+    },
+    "agent-team/src/bug-pipeline/dashboard/dashboard.html": {
+      "sha256": "c31af67d7bcaec43c58b872ce67a5b2fe547cf36cfbfda3dd9e25636fc1945d5",
+      "bytes": 2303
+    },
+    "agent-team/src/bug-pipeline/dashboard-server.mjs": {
+      "sha256": "4e0061ea2ccbb30bf62c48f554b2cec43686a365599682d3f652830cd226f266",
+      "bytes": 3352
+    },
+    "agent-team/src/bug-pipeline/dashboard.mjs": {
+      "sha256": "d8792c7f2144ace7932ee264478576a26f61ed52a764e3e0cafada82921f7f39",
+      "bytes": 5930
+    },
+    "agent-team/src/bug-pipeline/demo-deployment.mjs": {
+      "sha256": "873f90f8885652f0533b1a5983f9f15fb61b5b578103bcbdc6ee7f9f0cd850cf",
+      "bytes": 41745
+    },
+    "agent-team/src/bug-pipeline/evidence-limits.mjs": {
+      "sha256": "78ddc3908b941ef895aeef8e6416b68e1e110d0852b57f0f331b42fe127d237b",
+      "bytes": 186
+    },
+    "agent-team/src/bug-pipeline/evidence.mjs": {
+      "sha256": "9ddfd51b9fa2bff9e4a626a11301457afa5ff3ed52b612205329c214af293d1b",
+      "bytes": 5156
+    },
+    "agent-team/src/bug-pipeline/exact-demo-dispatch.mjs": {
+      "sha256": "41967d487d283eda67a2052904c8116dc2fc04c5bb8df5cc575d039eed9bb673",
+      "bytes": 24277
+    },
+    "agent-team/src/bug-pipeline/exact-demo-recovery.mjs": {
+      "sha256": "9ec8ef543bca46fb0cfd88540aaf66de77d5b81dc9d9706286c3920bfa3673bd",
+      "bytes": 6176
+    },
+    "agent-team/src/bug-pipeline/external-review.mjs": {
+      "sha256": "af7853b4e4f4cce914675575cb0c4e28bc7ddfa6ba877b5da697c650b2f918d0",
+      "bytes": 11667
+    },
+    "agent-team/src/bug-pipeline/github.mjs": {
+      "sha256": "c1c90264665033751f06723d3492c1b9ba33ae4ea15d4ec3c942e246b4385895",
+      "bytes": 47116
+    },
+    "agent-team/src/bug-pipeline/issue-review-communication.mjs": {
+      "sha256": "44a1caf63b8bf114a1bbc8a7d6915e1c0f11282cc1e9574caa9de2c8f466a7b9",
+      "bytes": 26331
+    },
+    "agent-team/src/bug-pipeline/issue-review-sync.mjs": {
+      "sha256": "1d98e29b111875ae90d902a684c9b7ebcdf126455e4e1a3281d3f1a7a2671cba",
+      "bytes": 3968
+    },
+    "agent-team/src/bug-pipeline/models.mjs": {
+      "sha256": "1a50e72a0f652622fea8bdde01bfcdbab4a91b1f017ac30eb5f0b4ccb183aca6",
+      "bytes": 17733
+    },
+    "agent-team/src/bug-pipeline/operator-authorization.mjs": {
+      "sha256": "083a66043d4be386d37cece84ec601f390829d0bfd4998846fb8edc6e1dd73f1",
+      "bytes": 4018
+    },
+    "agent-team/src/bug-pipeline/operator-ownership.mjs": {
+      "sha256": "cbefcd2039d7e47fbffc1d467be547b9cec2c8df1ff1eb9b11d9db13de8d8225",
+      "bytes": 2239
+    },
+    "agent-team/src/bug-pipeline/pipeline.mjs": {
+      "sha256": "86d1da5954d7f357794570a7a2c6dc480b910138f6a9dfd8ac49b810d3861947",
+      "bytes": 23797
+    },
+    "agent-team/src/bug-pipeline/process.mjs": {
+      "sha256": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf",
+      "bytes": 6760
+    },
+    "agent-team/src/bug-pipeline/release.mjs": {
+      "sha256": "b50bfec4a0af33b7aec6075799f295c0724cd074c4e63fa6fa4f78bc7fb17ec9",
+      "bytes": 51248
+    },
+    "agent-team/src/bug-pipeline/review-handoff-cli.mjs": {
+      "sha256": "bf56832827bfb59c16eceb4c1e9569a95eb9f8bfc77c2fd9d3b69ce2ca79ec33",
+      "bytes": 9248
+    },
+    "agent-team/src/bug-pipeline/review-policy.mjs": {
+      "sha256": "500124168a97311d658e89f02fd64d88d1d00e562e17c2abf53c7d515d6cf080",
+      "bytes": 1197
+    },
+    "agent-team/src/bug-pipeline/routing.mjs": {
+      "sha256": "9c89cf5f3dcde5ff7423efd8110cb07b12a5a5077bba82c8d8ef5f60d053400c",
+      "bytes": 2096
+    },
+    "agent-team/src/bug-pipeline/standalone-review.mjs": {
+      "sha256": "bcf8b373ca682b7a2b7a8ea7218eb5846df5610b13f9bd78094ef1410a990d80",
+      "bytes": 44105
+    },
+    "agent-team/src/bug-pipeline/verification.mjs": {
+      "sha256": "4eb9a32abb129d74ee7694fbfac443f00da9ab2bdd10a6106d2423cb50a41b64",
+      "bytes": 3034
+    },
+    "agent-team/src/bug-pipeline/workspace.mjs": {
+      "sha256": "19226375342db63cef4c5c0d8611b33a858a2adb4880914fd05e01b2126985ce",
+      "bytes": 18013
+    },
+    "agent-team/src/cli.mjs": {
+      "sha256": "233f2a41c3a824600992d6ba51922a52e78bf0a4016b149c16cb50e111d12759",
+      "bytes": 869
+    },
+    "agent-team/src/commands/doctor-entry.mjs": {
+      "sha256": "6e9d365b9125b306f9eca589eefd4568ccc4aeaa5da9ad201bf361c465e8dcb8",
+      "bytes": 189
+    },
+    "agent-team/src/commands/doctor.mjs": {
+      "sha256": "a074a85c99653f8fe9a936b40ebb0d52e7a4a96f0b601b62f484c48c78c48b1d",
+      "bytes": 9617
+    },
+    "agent-team/src/commands/once.mjs": {
+      "sha256": "9c370637f1d5f97501689f4a733efe3c81e554363016a3633b3fa051d3252caa",
+      "bytes": 429
+    },
+    "agent-team/src/commands/start.mjs": {
+      "sha256": "b13cb5d95f1f13f42962ba983342f482174d3a75a9cbb35f69f5dc3dc80d1a79",
+      "bytes": 3593
+    },
+    "agent-team/src/commands/status.mjs": {
+      "sha256": "09739a02f6b6e76e26f72d9f35954eb73f517b6e0f9b8fd55ead68ab5a9b73c6",
+      "bytes": 1985
+    },
+    "agent-team/src/commands/stop.mjs": {
+      "sha256": "709332e3cd3333c2cdc2c265b68025c49dd1185c1175cc560e28d0674429da50",
+      "bytes": 1270
+    },
+    "agent-team/src/core/binding.mjs": {
+      "sha256": "0d83bc741ec263c9fcd30e0f5d46e496d6cd93100361d8b3c668f89e221f6866",
+      "bytes": 3082
+    },
+    "agent-team/src/core/config.mjs": {
+      "sha256": "2b94fcd55d07f4b0c937842bea00b6688a53c603a82b0abcc583e3f953563e9c",
+      "bytes": 3467
+    },
+    "agent-team/src/core/history.mjs": {
+      "sha256": "2e19eb304c1a2d37cad20b7200f236f9d03737f7c9fe06a9bc9317aa70087cb1",
+      "bytes": 2407
+    },
+    "agent-team/src/core/json-schema.mjs": {
+      "sha256": "ff1be260e9ba0450e8cbbe9079302ce538a652a35e479c90e4233bddb0198661",
+      "bytes": 1706
+    },
+    "agent-team/src/core/locks.mjs": {
+      "sha256": "36ac581e5eeda169945e9d0c9a3fde42368515cabe094f405d250b777f4027a1",
+      "bytes": 6142
+    },
+    "agent-team/src/core/protocol.mjs": {
+      "sha256": "08ac3816760976b9c46c94c2e13678d2f21ef934c23a7b683b8eaae012d4b62c",
+      "bytes": 1551
+    },
+    "agent-team/src/core/reconciler.mjs": {
+      "sha256": "ba67637b5d6d204bd65e82fcd139b0683bb583eb143ec1c6af93724505968cb5",
+      "bytes": 1459
+    },
+    "agent-team/src/core/recovery.mjs": {
+      "sha256": "94c346267779eaf231c446c8d2dd9627a4cbc9ac60826afbbc4da3fe82cfba00",
+      "bytes": 1131
+    },
+    "agent-team/src/core/remediation.mjs": {
+      "sha256": "76bf7352b95e909f17f65636837afa43d767d0080c66b605d268bea08e29bbbd",
+      "bytes": 474
+    },
+    "agent-team/src/core/sanitize.mjs": {
+      "sha256": "1a4d2b9565663b3ed5a593cdecf7cbadbd6f9cd6ef296a4b8c1c426b08ca042b",
+      "bytes": 1012
+    },
+    "agent-team/src/core/state-machine.mjs": {
+      "sha256": "9527dfa7db037d511665a940b05984b2c0074d07a40040939aa5c1f8e6aa192c",
+      "bytes": 1011
+    },
+    "agent-team/src/core/status-projection.mjs": {
+      "sha256": "c47f6411f6a893eff8d95ddd49e56e9b869fe1e0f880b0d1ad5755871406b33a",
+      "bytes": 2942
+    },
+    "agent-team/src/core/worker-policy.mjs": {
+      "sha256": "6e1d6faca8b501a520371e56ffb12e71a0aef6db575fa654d95a13f0ba020da8",
+      "bytes": 3554
+    },
+    "agent-team/src/runtime.mjs": {
+      "sha256": "5f819dd2fe9233da7c122c1b9e768ddcf871acac67cd9d3cd406334ebbe6b44b",
+      "bytes": 8876
+    },
+    "agent-team/src/workers/claude-development-worker.mjs": {
+      "sha256": "f10153df7632a7ad9780d0ed4517b844dd1fd6435adaa868d98f038c3d7ee71e",
+      "bytes": 3303
+    },
+    "agent-team/src/workers/codex-qa-worker.mjs": {
+      "sha256": "1db37d9d08a09cbd69fcc2c53f63ef46046c908bea8fd87c4d3b14e3b8019691",
+      "bytes": 2398
+    },
+    "agent-team/tests/bug-pipeline/attempt-budget.test.mjs": {
+      "sha256": "684e42761f5214a54b26ccf02d6f3e61ff320d670b440ff60451e8b19ca60466",
+      "bytes": 19017
+    },
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs": {
+      "sha256": "fe759e50cf2f31926998883dafe2c3fce93447494671ae8f727243e7f6c43bc1",
+      "bytes": 30616
+    },
+    "agent-team/tests/bug-pipeline/contracts.test.mjs": {
+      "sha256": "7f5e7b15a0c28d72c9356b2fc663086ca4491d655c3807b97ae4215e2878d5e3",
+      "bytes": 8876
+    },
+    "agent-team/tests/bug-pipeline/cron-install.test.mjs": {
+      "sha256": "28a181658c6f5c183108899e7f934b777a6e45be21b1c43b8cc62600b99a0a45",
+      "bytes": 9764
+    },
+    "agent-team/tests/bug-pipeline/dashboard.test.mjs": {
+      "sha256": "6bea50a41285d8c40948ed0a2ddd8f86c6136285621618da8ebf77cd4df99667",
+      "bytes": 8647
+    },
+    "agent-team/tests/bug-pipeline/demo-deployment.test.mjs": {
+      "sha256": "3273775b0d3256cb6c503cd47c02d84e07b4aa55ef4653963b1b5fb93f772699",
+      "bytes": 110226
+    },
+    "agent-team/tests/bug-pipeline/demo-workflow-policy.test.mjs": {
+      "sha256": "717c3c4aa4c7f526248e0f7a9cbb9ba50148f4bdb41176d038831248d3c52755",
+      "bytes": 4474
+    },
+    "agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs": {
+      "sha256": "d94846a258ab78d37cb8169ebd5544c2eb4db1933ef5861bb252fd581c66449b",
+      "bytes": 16262
+    },
+    "agent-team/tests/bug-pipeline/exact-demo-recovery.test.mjs": {
+      "sha256": "22452e7639c009db46d6cfd7e6a1fae198a10e1455180b4181fb33d84fb1384d",
+      "bytes": 3033
+    },
+    "agent-team/tests/bug-pipeline/external-review.test.mjs": {
+      "sha256": "2b58e72fec3907212da5e4be7bbf164c70b2b84c686ae8442a5f62828f513363",
+      "bytes": 33039
+    },
+    "agent-team/tests/bug-pipeline/github.test.mjs": {
+      "sha256": "fe1bb34ffc4ab8ce575df9a9fc5766cf6e269052107bded284959dffdbcb9d85",
+      "bytes": 78896
+    },
+    "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs": {
+      "sha256": "8867f01e01e5b6a960f4ecfc8d4c975eb4a639bfac699fa03ad494c658be18d4",
+      "bytes": 48099
+    },
+    "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs": {
+      "sha256": "a8e3722d6d1ca745adb4d677cd4ee5f30a20c1cbffa1dd900d3a6fc8b56f58b0",
+      "bytes": 11122
+    },
+    "agent-team/tests/bug-pipeline/models.test.mjs": {
+      "sha256": "05a0d314b0e65a9b0623088923165d29653543cf938a9ad13ae0aa4c9ba73137",
+      "bytes": 10480
+    },
+    "agent-team/tests/bug-pipeline/operator-authorization.test.mjs": {
+      "sha256": "0741a48f6b6bb158ba295064f9be3f42a085b00942d7f67c02087b79853bf283",
+      "bytes": 3986
+    },
+    "agent-team/tests/bug-pipeline/operator-ownership.test.mjs": {
+      "sha256": "e2136df1037762194974f22a195240021ea07f7da84070fab229626375ef31c7",
+      "bytes": 3580
+    },
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs": {
+      "sha256": "dfca9cf3678f054b5429d6c577824a7338b3d476b19bc12b3beabb0aa79f59e9",
+      "bytes": 41792
+    },
+    "agent-team/tests/bug-pipeline/release.test.mjs": {
+      "sha256": "b59ddc56bd4bf143baf9b9724ca84b92632d27123df1775cc97d3ab9fbb04968",
+      "bytes": 100513
+    },
+    "agent-team/tests/bug-pipeline/repository-settings.test.mjs": {
+      "sha256": "2c32394e7f033306ab5ff969be628a76a7c95883f8cd00e00f396040635d9caa",
+      "bytes": 48167
+    },
+    "agent-team/tests/bug-pipeline/routing.test.mjs": {
+      "sha256": "a8ee77e83ed96a56b3cb01ad2e8bae66f3111e852e82d1485080ef2498ec135b",
+      "bytes": 6589
+    },
+    "agent-team/tests/bug-pipeline/setup-review.test.mjs": {
+      "sha256": "df2adafb2833464cf9adc739c23ea0fd3a4a2791243a24eb9eae5d53b322d0d5",
+      "bytes": 8782
+    },
+    "agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs": {
+      "sha256": "f63d27a700430522a3a0c052297cfca218d82ca09edc9e79c8e3e647c47b5da1",
+      "bytes": 14145
+    },
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs": {
+      "sha256": "421bc323f67c1614bab5f872299a4f92a68ac04f02e2baf398decc44338e5bc2",
+      "bytes": 100389
+    },
+    "agent-team/tests/bug-pipeline/subscription-auth.test.mjs": {
+      "sha256": "e9eb4f6ff375adadb84be813f47e6a6bda40dcfcb92a798bc95c6c31567a4776",
+      "bytes": 5184
+    },
+    "agent-team/tests/bug-pipeline/windows-review.test.mjs": {
+      "sha256": "082762f220976a73978ce5fb2deca9657eecaf7adb996552c9b5697b49f9cc1f",
+      "bytes": 21659
+    },
+    "agent-team/tests/bug-pipeline/workflow-intake.test.mjs": {
+      "sha256": "e24c8ec2e8c862634f73ca5d3f03b1c1531b18295f03ac09ad4a45edbe978b60",
+      "bytes": 761
+    },
+    "agent-team/tests/bug-pipeline/workspace.test.mjs": {
+      "sha256": "3a6965e952212875cb78438df0f988a7ec87c7b5a793ab96ae298878e81e8084",
+      "bytes": 30739
+    },
+    "docs/codex-bug-workflow.md": {
+      "sha256": "371d25d4a2a459512afe05c3c1fb54bc27b92e7fe30736228e5a80f875f026c2",
+      "bytes": 28853
+    },
+    "package-lock.json": {
+      "sha256": "a2e80872c9085f8ec028c968ef0f6d0f6622235c649bf081f7289f5cde6593f6",
+      "bytes": 268150
+    },
+    "package.json": {
+      "sha256": "e7d8062faaa67db5dd7544b4c4f063ec1878ffdb232222ff3e21e31456bf30a9",
+      "bytes": 3216
+    },
+    "scripts/automation/claude-review.crontab": {
+      "sha256": "eb3501caab54e8d71a8b5f6b90218bb22e453f503c6544b286a8bf0d03e179d9",
+      "bytes": 169
+    },
+    "scripts/automation/configure-demo-source.mjs": {
+      "sha256": "3bac135aaecfe5c95b48f38f613f27a0326d8ebb905a4753cb5ecc0d1513264b",
+      "bytes": 17195
+    },
+    "scripts/automation/configure-demo-source.test.mjs": {
+      "sha256": "489ca22bed0947c9fb64d23a11350eb6ad0455b42e95ef2dafd0681952cb4918",
+      "bytes": 38065
+    },
+    "scripts/automation/evidence/gh-cli-v2.103.0.md": {
+      "sha256": "a7d7c9f612812aedecc4d0b669c916b5944ef4122f0693aeadaf651ce5b50974",
+      "bytes": 3200
+    },
+    "scripts/automation/inspect-demo-bearer-readiness.mjs": {
+      "sha256": "f94bfdb0f8c633b0f61b556458b7953e8cfc4c788c8f370ca79833e10d2ada47",
+      "bytes": 11296
+    },
+    "scripts/automation/inspect-demo-bearer-readiness.test.mjs": {
+      "sha256": "559d978bb01b5cb1004a16c975fdcc07f7185b94f575c01436ef4b136777ef20",
+      "bytes": 20375
+    },
+    "scripts/automation/inspect-demo-source-topology.mjs": {
+      "sha256": "005f4a72f1be0fafaed29013702307fbe4d3f1f291032eed4cb1c1a79a00f488",
+      "bytes": 13592
+    },
+    "scripts/automation/inspect-demo-source-topology.test.mjs": {
+      "sha256": "2fbc450bd71b83ea3fe4c3ff96818f43317c13cf4099d4d2c5601a3003932a75",
+      "bytes": 24698
+    },
+    "scripts/automation/install-claude-review-cron.mjs": {
+      "sha256": "1f02b680941ec5b44eebd0821a2008798261474472691a17a8822c859b137f36",
+      "bytes": 13331
+    },
+    "scripts/automation/install-claude-review-windows.mjs": {
+      "sha256": "7331d589994af57187bedee93bc90e67d919e71c235cf3d9bc1b7b8328c38bba",
+      "bytes": 13884
+    },
+    "scripts/automation/protect-demo-secret.mjs": {
+      "sha256": "64bf22312e4f83f0e8c49bddae1c20b17ff3ea4a4f45cb922eb4413b06687dfa",
+      "bytes": 15622
+    },
+    "scripts/automation/protect-demo-secret.test.mjs": {
+      "sha256": "30bf1fa8d0b5c1850dff92a28d8b3b8d5c1f8d5717879cf13663500202318f9c",
+      "bytes": 24826
+    },
+    "scripts/automation/recover-demo-topology-receipt.py": {
+      "sha256": "122affc111f4c59b451580fff592c78182f9814aa8f9491b44e54e862032ef66",
+      "bytes": 31683
+    },
+    "scripts/automation/recover-demo-topology-receipt.test.py": {
+      "sha256": "0ed587c3ffb1facaadfef4b818f14a6e569e8bebc055e0700e3ad039ab0db3ee",
+      "bytes": 41028
+    },
+    "scripts/automation/run-claude-review-windows.mjs": {
+      "sha256": "204a3ddfcb3530961b96cb0afa1b29affbfdd742ab486203c0fe7d474f45debb",
+      "bytes": 3757
+    },
+    "scripts/automation/setup-claude-review-windows.ps1": {
+      "sha256": "716a6281632940c72fbb12650675e2fa96106e52056a281c2267244d89951f22",
+      "bytes": 3083
+    },
+    "scripts/quality-gate/check-closure.js": {
+      "sha256": "a05e153161797a26f52e282102ba406ec412b864387357699168b93d3aa31383",
+      "bytes": 2183
+    },
+    "scripts/quality-gate/claude-bug-review.mjs": {
+      "sha256": "4f34ad0bbb25600a06b1aa106fda94bf5de2344f19dbb0d0a9d4cad0ebc26354",
+      "bytes": 13221
+    },
+    "scripts/quality-gate/claude-bug-review.test.mjs": {
+      "sha256": "b3fc368c4d48b5c4e057b81e96bec14b5dec9c9afd4cd41ba6a3ec7f2070414a",
+      "bytes": 11510
+    },
+    "scripts/quality-gate/configure-bug-repository.mjs": {
+      "sha256": "8a6ead7250d6468c958fd1f40fa6782703df674713c2efbb90114ed1b9b9bb5a",
+      "bytes": 21133
+    },
+    "scripts/quality-gate/create-task-contract.js": {
+      "sha256": "94c7978fb9460f3a28b6fb1bb871cd9b9e39bfaae45485ad5370feea4c408a68",
+      "bytes": 4211
+    },
+    "scripts/quality-gate/install-verification-tools.sh": {
+      "sha256": "bde6ff12e145165faf3153810b0aa6939a6805842e094b9fdfe6e970233d94ee",
+      "bytes": 1653
+    },
+    "scripts/quality-gate/lib.js": {
+      "sha256": "b458fd997450dd83b07e8748d20c7e1be72ac6ca8fc587015e2107d779a7816a",
+      "bytes": 1856
+    },
+    "scripts/quality-gate/review-bug-setup.mjs": {
+      "sha256": "e959277f3bb82a0a8f206025b19b15375678743017be62ec032e3a5aa5f485a0",
+      "bytes": 8307
+    },
+    "scripts/quality-gate/validate-task-contract.js": {
+      "sha256": "900fa505a20e9de567aaa8eb9ac01786945be4458a2e400482a76e6ef983a906",
+      "bytes": 1416
+    },
+    "scripts/quality-gate/verify-isolated-services.mjs": {
+      "sha256": "681a3e387e603edc99c7b3a2ec3246b6b82445ee2459446de83380a2178cefb2",
+      "bytes": 8086
+    }
+  },
+  "historicalPublicPacket": [
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/analysis.md",
+      "sha256": "03f914c41bd47b8f82da5849fb3ab6c650b5d41e3c3699870a466a4adc03d42e",
+      "blob": "b6f70610234fa9b44d3137fc134407e0942170f9",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/STOP.json",
+      "sha256": "ddbfbb83a3be18a28f27a4e5d397cca7dbe37a8de1b12dc706242336cd724e59",
+      "blob": "f45f7875f7f2d01f1acf616e3f80965c23f75287",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/commands.json",
+      "sha256": "1ae7a2e5266dd66a314fddd9413dd6935a8cef7d6c9cc94c60a7870842bfd84d",
+      "blob": "fdce58a4cd17dad084f8e59f9e46b004fb933303",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/diff-check.json",
+      "sha256": "1dca92e672b31d51be34b9a1fe0729429db249e90b30260fd801d76e4182c258",
+      "blob": "ca473601ff608f968161f62c26adf8dd7b9d00e3",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/focused-final.log",
+      "sha256": "0917eb99e7d8bcfa750e162384f1f494f0ae63e3f1020955a7c3f7bba7a5b775",
+      "blob": "6552191a7c6a6d721f145de06d1b01a394af6a44",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/focused-first.log",
+      "sha256": "c5cec75f734a00a1e64dd86cebfdf6c69f0753049522eaf336d6a35cee905e35",
+      "blob": "1c80796ea7b76c618bcdff61c2dd118c12ccce2b",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/focused-frozen.log",
+      "sha256": "2a4593ea6d6a780b77bfa2f52ff27ada40926e3d91603e1a1690f94bced3b057",
+      "blob": "d1a39311fad20b06788990e3c1b30c97c32c12ec",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/focused-second.log",
+      "sha256": "98307b6d99c073a2c60e123884a7ff0fa5ae9cae0d2c9f6a5636f444219f8397",
+      "blob": "7e48ea377060a7e48d2a9491b56498a957472c48",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/format-repository-config.log",
+      "sha256": "a21ec0c153c02b5bf5be99dba4b9467609759d0e77fea8243e8b6e9e4d77c255",
+      "blob": "4209e7d8767a8299480441e2eca77062baed5951",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/format-scope.json",
+      "sha256": "2039f45d69d0c992a0f5b218bd111e259671f735cd31d0b57e13ef7bbd1970ff",
+      "blob": "a946ca3cbe08015406abc40f72f5a4f6638b3fa7",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/format.log",
+      "sha256": "82863028eafa040d0e38037d5d68a80d2fa93b18a78da7b6a18b74378e382b51",
+      "blob": "f48307ea8411a9e752b4b76c531f01de8ea0169d",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/read-receipts.json",
+      "sha256": "4163f3c8ee74e7ddceb1a037051d16122386da688a43fd1424cda3eb228643fb",
+      "blob": "dd0fd718209f387f70ceb576507e89c3fbd8f0c0",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/report.md",
+      "sha256": "f8c0dc6033a8d21e4f92d096843c154eb16c650bfae5fbc458fb01fdc9a4eb3e",
+      "blob": "607f96d04f06650895d0fb19df278bb20f51eca2",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/results.json",
+      "sha256": "df8a384a9ea0d7a99960e7445fc8b4e2966ce102ad1e99b4d1b6ad4f3db0dd3a",
+      "blob": "210d575c4d4753ae351068d72e6cb2c3f13a6d38",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/seal.json",
+      "sha256": "6b2fb75324dc5a76d4fa6655013b9d345d2ed5c322e65041f49587a70e147b22",
+      "blob": "f79ef604128b1b45831cdfb5fb07b06db8fdd047",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/source-manifest.json",
+      "sha256": "1ab049351a0cd25313d4646b43afe068f87f3fe3ca3d2aada0646f7d1281dc47",
+      "blob": "2456dec58239fe2e3e755710cb5b6cdb52247b75",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/source.patch",
+      "sha256": "1fca643d5d0388c0a50b775173838e0a549cd0281ddc448e261d2b5a9d0fa3f1",
+      "blob": "12711b483329410b6ded8689fa3775916010dddd",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/syntax.json",
+      "sha256": "9498f49097c3d49a83ad454e187c45a6bb1628a46895592a0f6aeea308e3f03b",
+      "blob": "97acc9f55cb3415ef30a08e3b6db84bff98fb1df",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/test-results.json",
+      "sha256": "8058554d86fb53a227eba142597dbb5523e691c7afc476d4c0544cfabe4fb4ed",
+      "blob": "390c628076eb84da1deb951b2a79cbf456cd849b",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/STOP.json",
+      "sha256": "ef782007037b31c313af88ef303d2d1dae4940042bfbd1aa87151a5998daa3d9",
+      "blob": "d161edd4a95d2b5d9083b42edc62f28622ce70c7",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/binding-first-failure.json",
+      "sha256": "d2412f8017305c2e3c0d50b86b4df0aba8b451f35d0b0caa324362b9e2d4c199",
+      "blob": "6486754717baf752495ee99a6ff98223690e4199",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/binding-resolution.json",
+      "sha256": "c01eeeb14e63cb62168b92fde8de0a4bbbc69852bb62e5eb7247d5a18d06e026",
+      "blob": "6e48555a5ab0c9fa10c543bb4ce9b6a65d888c63",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/commands.json",
+      "sha256": "5ea1828cf74ecaf83e38fe146c028bd6d25390dd023976a8cae0cdf4b721ce76",
+      "blob": "2c21a37982b68a50a474b3e43886ab515c9fb6e2",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/focused-first.log",
+      "sha256": "71e0ba4d3d95c60f65b9fc05194d5abee430bf56a08ba93635bba68c28becd43",
+      "blob": "cf92ff32571cb03e75e833c692cc0fa018a42cc4",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/focused-frozen.log",
+      "sha256": "2d86172ab35e04f5ba3652f56f74b4a378745d17cbe2d4ba586e80736b4aeb68",
+      "blob": "bedbf0b48b0e21a4c7567680517017c752c80bc0",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/format-scope.json",
+      "sha256": "bfa0133ca913d1f699e1b72a1c5085c568acd7a6576b75f7e239aac497653cc6",
+      "blob": "4e41750d5bc5c198327f9bcc815b3bac96827430",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/format.log",
+      "sha256": "6e228e077397250e1ca9699561bd174ee41301965cea4fc18c08e9840ec273ee",
+      "blob": "bf95f22a73d090196d101c3c854bbabefb4135ba",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/inherited-core-proof.json",
+      "sha256": "8e55d59d690b397930af2c0a8192b2674e58ec0ee52fdca3752319b6c4f259c2",
+      "blob": "b3c60d951062380fd23ce43a8b270201f124bb68",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/initial-tooling-failure.json",
+      "sha256": "1575c807c64dda8df7e6e926f52e167ece286be6dd91af96a6757cff5ebc7b7e",
+      "blob": "4629fc05eecea0111edf004f885e481206dd6b4c",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/read-receipts.json",
+      "sha256": "f8ace157b00344b2ea07dc9c6589cb2de07e3b9c5e8d017ffeb441eee03885fa",
+      "blob": "be3bf52eff3b45908bbd519153e1fe691c14b48b",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/report.md",
+      "sha256": "f97bbd9529264d189ec68dc999907666994fa9c8d120b9fa2cf3b098a9314463",
+      "blob": "6a0903b66b43950a40ddbbe313e4ab853fa18bdb",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/results.json",
+      "sha256": "4087211c1ccca83d78c8201f9167815d7163ecedbeafef40534ada58d05e6f06",
+      "blob": "d309a121d9763949e8122bbc0f4e0d3c3fff7118",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/seal.json",
+      "sha256": "9ce02b5722a168333d77caefdcf4147dd130bffa3f4f5aba150310c49f510f1f",
+      "blob": "da01d05ea1a9b951518c03a82cce85284738d9d0",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/source-before.json",
+      "sha256": "fc1abd5bffd7c32559420d82050127ea13f49dc341f5e1c4c14c9f635cab36b3",
+      "blob": "db8787b7a9545d8e10a798fee937c3ff5ead4e11",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/source-manifest.json",
+      "sha256": "d7f9d6c151572e31e2c95564aab07c0d4520179bb6b6631f3423e242ecd531f7",
+      "blob": "2cf0ab23297305fb9f6e50d1909ac97ad45e7f33",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/source.patch",
+      "sha256": "2a535b3a37877347885c9ae5083c309d08009de60e81b68377b040620d37cee1",
+      "blob": "16ffce99ac1c09f0cc6ab8d7fa88ced49f175cb4",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/syntax.json",
+      "sha256": "6e77902a8f9f8cce42c829551ff8c7cfe4e72a28ec9715222636fe8e12bb62c0",
+      "blob": "0bf8065cf9c142bd403a6c12e60a3c3251cb75c8",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/test-results.json",
+      "sha256": "608ab55c6b47279af24cd7f0d58fffdfd60e8c4be17b27aa389fa0727560d456",
+      "blob": "e586d85e812f66645b7603d6779dc60570da1940",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/STOP.json",
+      "sha256": "dfee0c2622a386bfbb72b76502f0af0b43ec1fa5424bfff92e4b08b71747e9b1",
+      "blob": "7bfc619c36a8c135e72996a5b447a8b3914d73f8",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/diff-check.json",
+      "sha256": "13db46956727d16a9264e862c0d6fc43223aa4a9fb6cf1123d774e903165dfcf",
+      "blob": "95fe4b4afab81dc4be4c18940b32f5ea11bd5547",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/execution-policy.json",
+      "sha256": "06aa0daa52eecbfa3bcbd4ef38443b892534fc025dd9d19b8b8860774276b5b6",
+      "blob": "3d699a943910be12541068ff6781ea1e303792b8",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/focused-first-command.json",
+      "sha256": "5839a96624a4d8ae645015f1f9514c9947f819df8ee58be37bb94fccdbb4ba14",
+      "blob": "93b6a094d149e9191f74a4b89ab26673756d53d7",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/focused-first.log",
+      "sha256": "c2c2ec614046f15e6ccfb149ab670eee2de42c603a3d6ed4cb68aa41f0984d77",
+      "blob": "be16098026abfa6718f6a84538735c9a6f7aef74",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/focused-frozen-command.json",
+      "sha256": "3cbc31abb7fe0467a1a921b62b125285d50f3d055bbd441b04faff2a8a7c04f0",
+      "blob": "cac1943d9dedefce8ab4fcad38538996e7bd212e",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/focused-frozen.log",
+      "sha256": "2b0f70ec0647e426ce39ad0c3b1132b3cfd08ff401261701ac762809cffcac1c",
+      "blob": "b5fa3cd813702532cd40902e90259926b0b025ff",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/focused-pre-byte-restoration.log",
+      "sha256": "d0a52be7097e667420b831b34e4bc292a2c4b599d8495ae5050267385050dd3e",
+      "blob": "d0f9f188a2d42e570b7566c5ffe82490522d75e8",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/format-scope.json",
+      "sha256": "7592f229097eb1f71f00069524fd0a9ba282916433e3e83a64772b670d75f356",
+      "blob": "74a318c2fdd850e108f53a6fa82bf02a7bad26c6",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/format.log",
+      "sha256": "c8134793d73322683b77d797a8e0c3474950107a16a785880b729d38857801ad",
+      "blob": "2d839124b73009079a4124e9d5da21c452a43ee3",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/probe-results-first.json",
+      "sha256": "b1309790678add792266992a94887d411e702006d4579cf3b1916b0b55892620",
+      "blob": "fb09eb2ee816651f36216ee56995b4688bf2071a",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/probe-results.json",
+      "sha256": "b1309790678add792266992a94887d411e702006d4579cf3b1916b0b55892620",
+      "blob": "fb09eb2ee816651f36216ee56995b4688bf2071a",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/qa2-reproductions-command.json",
+      "sha256": "95776477c9859088de7cedd67f0802ebc603cc10748cf758511d68169d6e5d68",
+      "blob": "cfbadee36cfe9bea5fa864176e7c5c8920f47387",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/qa2-reproductions-first.log",
+      "sha256": "08128f54c76962acee3e802608e5762cf37da92b8a6373c470758a950af4f0d8",
+      "blob": "3a022d84f439a5bf316ca8748c50a7bb106af643",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/qa2-reproductions-frozen.log",
+      "sha256": "df6d81c11ab5dedbb382e6c2cea9baf318245295cddf0563a13fe3a7b57dbbb8",
+      "blob": "f05c7ba96d488fe0ce20d450553e4147a66de9d7",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/qa2-reproductions.mjs",
+      "sha256": "daad4d8e10557001367ad156585d03bc67ce1eb212751c907f46632dc1b4b133",
+      "blob": "a7836c1046bd191607aa4cfa55009d15047ed599",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/read-receipts.json",
+      "sha256": "5464ba4aa7af7c3f71cbb122b1a24d843486d225f72e913dd97a41b5c9a2c8af",
+      "blob": "d621ff99890fca442dec5f474d09c89e8c347f44",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/report.md",
+      "sha256": "771fe43265efbf2940000bc5f731edd47b5567d5b2b6ad3834983b7de6b065b9",
+      "blob": "0f85a414e8ee19352b2f2587207b5e6d776f490a",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/reservation-read.json",
+      "sha256": "68a298fbc545be8daad65977d196e48ca71f2e47884256ee3f3ab316fc64a02a",
+      "blob": "067e8412df5505fdeeba3437a17b1246469029d3",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/results.json",
+      "sha256": "2f702f485d2a896820e375ce5c49bc17cf666a1abe4349b4da6a1bca418e1e7c",
+      "blob": "87039419d820aeddd5f7c1ec71fdbeada5d71e68",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/seal.json",
+      "sha256": "fd1a0bb7d16ecfccc28c0d0a75ee5cbb973979121254577ad7143fdc6ffd696b",
+      "blob": "485348a40394d1bcb2411c3994a832497f6faa17",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/source-before.json",
+      "sha256": "ede3e6c87b8744c350b7dfb3718df9a110f4afb572170edd98fa8387f4a70d19",
+      "blob": "bade3a94f315dad7250856930446fc0620b4978b",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/source-manifest.json",
+      "sha256": "0dd2333526a6d9cee4ac72fea4cde621056408c354b302e8b7d72e2eb2b15e2b",
+      "blob": "e4ef47a27d535a0c87c9afbfa755badcbb1730aa",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/source.patch",
+      "sha256": "afc481efbab8c2b91fafe974585fca64a4e879659c0d7b563d251885f936828d",
+      "blob": "ad6dbf03b247d0ea89cb082eb63857259bbf1eca",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/syntax.json",
+      "sha256": "01bc3046cf00c51b2ee52541ed9350ee4f4a823a22de9e4c08e476aa894be2cf",
+      "blob": "12d592f53c7cf42e8c349ec545796d1849a1dd1f",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/test-results.json",
+      "sha256": "a0453669ef6ea8b7625a65298169e051d550649203c37424a937fd775676fd22",
+      "blob": "84ea7a119e6724819a048414fdc7b01d82f3fb40",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/candidate1-code-commit.json",
+      "sha256": "e32e9d4b03ba2b4c24fd8c9ae8bfbcca63611d90c02c8ace22287ad48ae35ea9",
+      "blob": "ac7c335f7552b7881c0e358a5f7f935734fb4bb5",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/candidate2-code-commit.json",
+      "sha256": "243adfa88b17e36a96b34261dbf6283a8126538203ce8963fd9949e418ba9a33",
+      "blob": "a58d8d599102677eb58e36c9e418afb572947272",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/candidate3-code-commit.json",
+      "sha256": "7a5b78064843c2b221efd686ec0d088ef9a9d0e22f7a6dcd98fe2c49906c91e1",
+      "blob": "24dfe9e5b46904096b82e5a5ac2800926d384e7c",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/docs-author/amendment5.patch",
+      "sha256": "b6018d559c4122d09b34b1debf2d25f447ebfe07c677de4d4f956983f5747cff",
+      "blob": "d1f02a4798adb76139ad794b41929374c3836c34",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/docs-author/report.md",
+      "sha256": "e6f93632212ed925a72e993280d15708ac38a439029063bbc435ab9b99a675bc",
+      "blob": "abd99d1236951176104341a57178c70b271cb742",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/docs-author/seal.json",
+      "sha256": "1825c08c9066a6a80caa73913f1e02fd04ed34a46f0f9066c0eac5ebbc943492",
+      "blob": "6dd9eead81fd405e7ab5ea7e7c923103234ec1fd",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/docs-root-correction/results.json",
+      "sha256": "1db74ae078f19801c8d48b6f3471ea0159397d668110059c3e04ea273d3cce1b",
+      "blob": "878725d12896c71fceb65755615b0043393f0728",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/docs-root-correction/seal.json",
+      "sha256": "d6e99d3d2eb3d194b3cc466215df2992a788cc4d2f1d70216ac9c7d99f1efae1",
+      "blob": "b729f55bf2e90b95a6ecb6829921630aea2b8256",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/docs-root-correction/source.patch",
+      "sha256": "ebdcfe175114d281b072f3cd31aa8c6295182c271c2445304d4737330806dd79",
+      "blob": "25ebff6dd6a8a86e4aabec28c6b39b6ede47cab8",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/implementation-plan.md",
+      "sha256": "60b09fed609c986a5f5571a830bac3dd42d0effa7ae46fce2196196b1a98004d",
+      "blob": "46eb5c5256f8fb55fec3296eaff23651001c5e8c",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/imported-history.json",
+      "sha256": "279fb07eecd0098d85948f355eafd8a2d044c6db5e6a66d19a559a937e58e2f5",
+      "blob": "0d8f00ee127333e0763de014f29432dd92957210",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/STOP.json",
+      "sha256": "9d5841e40d772dd90accbe61f9f7523f086cbb149cebb0768815d36ea3fd57b5",
+      "blob": "8e62067d8bccbe1c1a7b954b0dd1714ea72f840c",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/actual-shape-hash-verification.json",
+      "sha256": "20e50183014ad2de29e3e9b28e8245d4fd1c0c44bd40d7ac50e77be2624610b0",
+      "blob": "db3f572052255fe47571a827a542fb931294de28",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/execution-policy.json",
+      "sha256": "9593686de9bc90bc9d969eb66b5bc3274b18d1fb85a0a9ac0074069143c41a7a",
+      "blob": "eea30f593fb4326c13406579047cd2ca8e9e1c13",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/finalize-first-failure.json",
+      "sha256": "7b10b61e6442ffde059063081af5369947316759e08c594fcaa849cc42087fdd",
+      "blob": "10ba4abab1e0f269c29d0f282dcaf21c889c74e6",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/finalize-first.mjs",
+      "sha256": "04131361422b420df31871b6d80a2d7e5fc66df43f5882109da9751430868fc9",
+      "blob": "da6c2e242dc4928c848dbb1e16865ccbd7a27224",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/finalize-second-failure.json",
+      "sha256": "b75864bc5216459f838a039995d5d7baf7db891c403884bb8f89445090348fd9",
+      "blob": "5faeedecb51bf6bdf4a0c460ad90a391af9a3c33",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/finalize-second.mjs",
+      "sha256": "02cfebaaa7e7252b182f794efefb30c0b0fe121b1e4786fab410aad02ed8b18e",
+      "blob": "dd8009d8d3cde993cea9f069ced125165f21033c",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/finalize.mjs",
+      "sha256": "273fba52a228ce55ec7a8a40bd5b67bbc46cfb7848825cb5d46f3ad5ef6aea89",
+      "blob": "3483ed97af0a8c0b93ba552f75671022a8595ac1",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/findings.json",
+      "sha256": "d67b2dda18cde2fe9337c4bd86a82134c68f6bcf76deaa62199aca4521a43913",
+      "blob": "473d062f62149f861c7bdd88ffd652b8df7814b1",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/focused-command.json",
+      "sha256": "140521b0e2ac480f1e216d2be2f2a07035ba6358b739d6cfe5a063bf335764a2",
+      "blob": "b60b58e10e4a506b3e543b1460b0744331a729c6",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/focused.log",
+      "sha256": "4c7c9fd30cb616682d502cb932a1920ad003667e690fcf091cafef4aa5ee0120",
+      "blob": "3cd95f91bd729046c7bc02b038ff1eb38e62a311",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/harness-correction.json",
+      "sha256": "f5fb4132dee74776b72ab2a6c745911181bcf1a36d35209c9a48272c18deb3ce",
+      "blob": "ce172e25f0d120c8597a57cae66a6ea06cb06128",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/independent-source.diff",
+      "sha256": "1f5adef354e48e7edc4afc8d47ee9005b8aec42d56902e7fd00d9e80c72969f0",
+      "blob": "6420587961f3c0d465101fcdefb6cb5fe0c72f10",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probe-results-initial.json",
+      "sha256": "74088d259e10e632c1a1fed1c0c49343ec258c1291090df6513267a2c5ffdf22",
+      "blob": "343293c4e40368dfd9104ab38d6830119aa3aaec",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probe-results.json",
+      "sha256": "051eeba81a9cbb98f1ef4d81158cf0cb28e1bbd747df14c5aee64cb0704d74a4",
+      "blob": "2bd6e2ab90a6d41e057816714cd5c2aab8fcb87e",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probes-command-initial.json",
+      "sha256": "eb30580200936c24987d983056559037c42451efd57fdb409516d51927f9e345",
+      "blob": "abbead5181ff55bf95b302485218f3fd461bc864",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probes-command.json",
+      "sha256": "321756b1df084912afdb574dc581331d2bb3880a788b20b6f27120dad906e3fe",
+      "blob": "fdf5c46a46495806b399c4954cc89b2c4944bc69",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probes-initial.log",
+      "sha256": "a9738cdb9985c44fb1d2d08b59a4a1d55c0d7efe5b8d2a9090ee7e547fd73fde",
+      "blob": "4ca40062ceec3e409e233293e861dcac34880b88",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probes-initial.mjs",
+      "sha256": "b9d27dd470d54a7c47876ae0147f73171635533d3c2da7ebe5114e381c8c9fd3",
+      "blob": "84dbf956dcb16c7725e794f98e5d9464f91ba05f",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probes.log",
+      "sha256": "61fdc93b4c5e7006e9e65a2f05ec9f63853048250f9132c126693a5c1fdd87c3",
+      "blob": "6030bfb0521af246b16ceb08c8caf8fef36a4ed6",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probes.mjs",
+      "sha256": "2d97e33e403c0f1fe7b241c66caedf5b746c8bd4ab1e34a2ee1e4415783ac68a",
+      "blob": "ed6d578327ef87e9f839e5336a08bada2d2bfd6d",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/report.md",
+      "sha256": "91b3d65c99a46e03962d948019e312add47a60062b16b11dfe283e9462763510",
+      "blob": "b40112d24282680da6509f8a25f2348e75315ded",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/reservation.json",
+      "sha256": "2a4aee29f638cc0af87583dfd64abbbf984bae7d1dd064b14bb1fd67c7a53d0a",
+      "blob": "b292215101caef44f81143d315e8661928b2d4af",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/results.json",
+      "sha256": "f2363ab8bd5135a327b2784e7445093b4fb3df630cfddb9c70e739b610b846df",
+      "blob": "e536f552fba347dac36852408957508c0b99059f",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/run-focused.py",
+      "sha256": "6a99d53a28f6975f214c6ec621cc2470c481d6d9f3ed90148191554da84f1f02",
+      "blob": "cb2593b880c1c48ded9531253e85a99507628f27",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/seal.json",
+      "sha256": "58b274424fc6f336a3244c9eb87e4fbbc079275e629a1c9695e3192ecf45112c",
+      "blob": "7a2cdc72d7e1fb69b11e7b502564ec03349893c7",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/source-after.json",
+      "sha256": "ff555f5e02ed390ed9d7237bca4bd7990ea3bfe4cf4801f5aaffb5e255bfbf65",
+      "blob": "454720fb835d0647ca7b1c4e493ac5e0addd10e9",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/source-before.json",
+      "sha256": "f278ccfb9c9c96252ef551c06d4938cb0ce0103efa3d6a11ed89925be6311bc7",
+      "blob": "f1165e060aae76ee8d84adc0d6ad38649db1d081",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/task-contract.md",
+      "sha256": "ae6a34a25abd301ac928f12416a866a839030f5ff167e3367624e215cb38b8a3",
+      "blob": "6ef1212d5f5af2fa44d7647b3dd8a4e6d25f9550",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/verify-inputs.py",
+      "sha256": "e7ee04d21adac3d38fe440d77a8baab68f382afcfc2d54b4bf4bcf04286ed535",
+      "blob": "0662b2082c606429a99ac200565d0837d8404ffd",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/STOP.json",
+      "sha256": "4023013bbc5160105aa03cd6a7b731ca101c06095c086f6726f6f99685c40a0b",
+      "blob": "75e1f7d8e586a9d15c873022c465eebfcab229f2",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/actual-shape-integrity.json",
+      "sha256": "7566f56d89767f09a541f264babf1189f0056481755d7d7f28507671edceeddc",
+      "blob": "e1c9aec4494ab88239674e3f3bcedb2ad021a903",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/additional-command.json",
+      "sha256": "b283534c058941782fc4bfc110999381b33bfea9737a57e33f572ded07b865a3",
+      "blob": "87e0d3e70da268d5c88bef4689fcdb1902ef1bae",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/additional-probes.log",
+      "sha256": "6d9380c030ed7e27b2768a0f8c136dd695c7e115e1bf9a39712e9c7e194ea7e4",
+      "blob": "0f29d495d9cce9f870b3a4ce3a8945a667327b14",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/additional-probes.mjs",
+      "sha256": "d7a01bfd2cdd2f12de628f30e25f9fe5ac2045ba69ec9c4ebf1430912766b214",
+      "blob": "279ee0e4e013192c6cf690311d09b8172e1de100",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/candidate3-delta.diff",
+      "sha256": "5c0f53dc3056dcf72e31e9c54cd7a170e08f407e2375e2405120d6460d839c6b",
+      "blob": "4264536e35e9826488e583b6ff2ec8cebdf5200c",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/communication-fixture.mjs",
+      "sha256": "f0898bb8234fcf19dd98a67b54794676b4d5b24deb1aeddf8d8502bae8d42f6a",
+      "blob": "b4005f70c795b54b5809bd98ff98c779fc736ec5",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/execution-policy.json",
+      "sha256": "5feb59451af76326d2860a50b9003185307a9221ab510b1d58612cdf9359a615",
+      "blob": "43219518e776240528d92383b73e8a7edb92eb35",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/finalize.py",
+      "sha256": "d48c3585f4d0372fbb9e775303636c5338a83c29c5a9eb600785d0ce479ce63a",
+      "blob": "565ffb5c2db6c9c8ca3fee0e1f8c4fe0a008fa37",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/findings.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "blob": "fe51488c7066f6687ef680d6bfaa4f7768ef205c",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/focused-command.json",
+      "sha256": "701346e562c71ee35f9cd75b586872fc700e0c827bfd48c27fe39917ac77149f",
+      "blob": "9027756c4bebcd1ac0e7a4b04b34bd5db2ce21ea",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/focused.log",
+      "sha256": "bd133905b7d6e922563df63d6f92d634b95db90dfe657af827fcfb915e8486dd",
+      "blob": "97c295ccc9f05b4d7d963a8971aaf9837b6b87db",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/harness-failure-history.json",
+      "sha256": "6c0b12617cac862280bf595da98597e1045d6afc14a978a3d55ba966f7daf9ea",
+      "blob": "aebd0802e9a8bb5241aa72ac4c4b0c651cc44087",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/independent-source.diff",
+      "sha256": "fceaea078d011c6e34b77a4f6374357bb2fc6023fa6424ca50294dce466f0ecc",
+      "blob": "73229ffeb407c8cd9589fb2573e26230288e3eff",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/probe-results.json",
+      "sha256": "71f0ab0b1fbda392ec185722f0361fc4d446e889da897d56d01138bcf6a2cdf2",
+      "blob": "0125dd9c261e8b9075dcb7ce381ea583807b935d",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/probes-command.json",
+      "sha256": "71c5ef86ccdabf8a37ec7ee8c1a5ff203d9f091a86a874718b560d800e6a860c",
+      "blob": "d549c493640c67d27143e2425ab63ca3b360d465",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/probes.log",
+      "sha256": "1ceb7f8801f1f3bf229af17e1d91e17e48d18dae6ce4ba41c5bcf9310c4c5bf6",
+      "blob": "613a066c70770b44a388b620e6a7e9895dc28ac9",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/probes.mjs",
+      "sha256": "b671056cad6700cb2f536d096a7e3c7ed7b6e0e8de8d2a08f43a7b091664a01a",
+      "blob": "4dd07405f90260d51f7190d3b29f6ee0494db838",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/report.md",
+      "sha256": "edb3a44f4372d9b556130142c13f97c9af9fef61e23462057031aa09c4874945",
+      "blob": "da16ba36b993df7064fe491e63c8ebb8f101d780",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/reservation.json",
+      "sha256": "cf7a6354e317198160af58bf3689c1543da8daae06a990378e680dc3da73a1bb",
+      "blob": "18dac7e29ec536a6a4cb5ae971ad0cf74e622c5a",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/results.json",
+      "sha256": "a9da1a795fa691e47b6c45f0dbc2f6c1f3ce521d565671dae50918f20ded70c7",
+      "blob": "62f2cad62c647eba9b4e63d0f4102a3a001ae30c",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/run-focused.py",
+      "sha256": "713ea8273e2ce44789ebc0091e0fd04c6ffb44b5765375ce30a23864d6b276ef",
+      "blob": "a66d235f707edac89741a77911cfb93e05bb178b",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/seal.json",
+      "sha256": "d9ad31f41c6654abba35f9d5bc747e5932814a8653a2be0b27e2de4d44c94693",
+      "blob": "052da3f4a481c24a27afa888399f3f3a57acbc42",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/source-after.json",
+      "sha256": "ddf8100e543f5d0dc70d549a4224c2563a3b78eb025c35cd44f8206f763725dd",
+      "blob": "fee2b29da9b364edf7579eecef2450d677070e3d",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/source-before.json",
+      "sha256": "e57ce860520dd8f454dfcb5ba8651ee10dbc6dcef93282cfe7e36e2e58368142",
+      "blob": "032ae0064aa8f9b0fd496afb63cbcbd9ede71a0c",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/syntax.json",
+      "sha256": "2c2a5f9e8cc3a713f92413ce32ca73d0c28aaba9477124b0d9f77bbbea5daa4d",
+      "blob": "ea929592172cee9560a580945555f03335fae44c",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/task-contract.md",
+      "sha256": "0dfbf40165fe90f8f0e0c80d98b73f5abbbdbcb055bed68543175e92b1f5219c",
+      "blob": "6dcde8e69d2bbe52439cb5fa7ef3c827ee707ef8",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/validation-report.md",
+      "sha256": "edb3a44f4372d9b556130142c13f97c9af9fef61e23462057031aa09c4874945",
+      "blob": "da16ba36b993df7064fe491e63c8ebb8f101d780",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/verify-final.py",
+      "sha256": "dde9c3ab4c27087a76db5972fdb1feecf382e1e843c115beb5b3f2094282eda6",
+      "blob": "ce070ebcea0174b44d4740e212433d529bb4476b",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/verify-inputs.py",
+      "sha256": "81d2bb5613c30b150643a4a46b8a6900b90a3c7b4632dd163969b9df3006ce12",
+      "blob": "4cac5edf15a995e8746cc4bd93194bba53190ca3",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/record-author3-docs1-preflight-failure.json",
+      "sha256": "7edc6f5140854dbb40c85b9aeb5eaeefbe6df3abaa24ee7f3a7fd2f3d8b6c6a7",
+      "blob": "8dfc3662ad7f782d5d3b9437805956ea7f88fb5c",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/scope-amendment-1.md",
+      "sha256": "75abf03868282b5513e293be4f4dd47266e90f4aee5aa149cfc96317e58b31a6",
+      "blob": "6dc1b81ccc6349cc4c6d2887d4c4f5fe2b8fefae",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/scope-amendment-2.md",
+      "sha256": "e912089cf19c0a1053a8aa631111638bcccbd80721eb5cb2c35c37713d04027b",
+      "blob": "952b4643794a8d84e24fda4b018cf5220caa21a4",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/scope-amendment-3.md",
+      "sha256": "def8c1ddc4385479b1d55c7482f79e9f90e643e2817cdb13436dcedb9e9e3c41",
+      "blob": "1135daaeba25ccea28ac1e6dce679061774651d6",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/scope-amendment-4.md",
+      "sha256": "cb30ce9e540413d46dd26cd9fa9811e165930efb0e87d94f7237aa71323a2f49",
+      "blob": "b4c7333987701678d80d42d22010aefa9915a6ee",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/scope-amendment-5-docs.md",
+      "sha256": "6677c7943c9f9d2edc7a511bafed4612b1a8c208394e0abfad1febe8f6ebfdbf",
+      "blob": "43739ecb1695083b138e89e85b5bc97378669074",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/source-manifest.json",
+      "sha256": "ab5b6883a0ee627677eeda7ecdb03ab4200fab0e80fa2714f7769f7545f61a01",
+      "blob": "3d89350c121c0d553c40887e2c3d26b635e47dd2",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/task-contract.md",
+      "sha256": "8027f2e048850b1273ef9ac486cafb99eb0a34438b8b8b3f5f9dfd87648b9dad",
+      "blob": "ec560238141af0f04557852fe89ced646ee6f465",
+      "mode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/validation-report.md",
+      "sha256": "e66e71a9505846d35221f3f70abe6ee6464fa75ccc041cda7a0842c928918e3c",
+      "blob": "7dfe4c71a38a8b6bad4479519e31c2b7fbeb39fa",
+      "mode": "100644"
+    }
+  ]
+}
