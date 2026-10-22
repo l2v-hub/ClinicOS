@@ -68,6 +68,50 @@ function validateRun(run, progress) {
     fail('run identity mismatch');
 }
 
+function runProof(run) {
+  return {
+    runId: run.id,
+    runAttempt: run.run_attempt,
+    sha: run.head_sha,
+    repository: run.repository?.full_name,
+    headRepository: run.head_repository?.full_name,
+    workflow: run.path,
+    event: run.event,
+    branch: run.head_branch,
+    displayTitle: run.display_title,
+    status: run.status,
+    conclusion: run.conclusion,
+  };
+}
+const sameProof = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+function validateCompleted(run) {
+  if (run.status !== 'completed') fail('active old dispatch cannot be recovered');
+  if (!['success', 'failure', 'cancelled', 'timed_out', 'action_required', 'neutral',
+    'skipped', 'stale', 'startup_failure'].includes(run.conclusion))
+    fail('unsettled old dispatch cannot be recovered');
+}
+async function dispatchInventory(reader, sha) {
+  const rows = validateInventory(await reader.getJson(
+    `actions/workflows/deploy-demo-exact-commit.yml/runs?branch=main&event=workflow_dispatch&head_sha=${sha}&per_page=100`,
+  ));
+  if (rows.some((run) => run.head_sha !== sha || run.repository?.full_name !== REPO ||
+    run.head_repository?.full_name !== REPO || run.path !== WORKFLOW ||
+    run.event !== 'workflow_dispatch' || run.head_branch !== 'main' ||
+    !integer(run.run_attempt) || typeof run.display_title !== 'string'))
+    fail('retired inventory identity mismatch');
+  return rows;
+}
+function validateNoRunProof(proof, progress, blockedAt, currentTime) {
+  const origin = validateTimes(progress, currentTime, blockedAt);
+  const first = timestamp(proof.firstObservedAt), second = timestamp(proof.secondObservedAt);
+  if (!Number.isFinite(origin) || proof.originAt !== new Date(origin).toISOString() ||
+    proof.operation !== progress.operation || proof.sha !== progress.sha ||
+    proof.dispatchId !== progress.dispatchId || proof.settleMs !== DISPATCH_SETTLE_MS ||
+    proof.observationGapMs !== NO_RUN_OBSERVATION_GAP_MS ||
+    first < origin + DISPATCH_SETTLE_MS || second < first + NO_RUN_OBSERVATION_GAP_MS ||
+    second > currentTime) fail('retired no-run proof changed or late run observed');
+}
+
 // This adapter has one literal dispatch endpoint, a fixed main ref and bounded output.
 // A successful POST only acknowledges submission; ensure() requires the actual run and receipt.
 export function createExactDispatchPoster({ run, cwd }) {
@@ -149,7 +193,8 @@ export function createExactDemoDispatcher({
             !SHA.test(p?.sha ?? '') ||
             !UUID.test(p?.dispatchId ?? '') ||
             !['preflight', 'deploy'].includes(p?.operation) ||
-            !excludedDispatchIds.includes(p.dispatchId),
+            !excludedDispatchIds.includes(p.dispatchId) ||
+            (p.runId !== undefined && (!integer(p.runId) || !excludedRunIds.includes(p.runId))),
         ) ||
         !Array.isArray(excludedDispatchIds) ||
         excludedDispatchIds.length > 100 ||
@@ -171,7 +216,21 @@ export function createExactDemoDispatcher({
       };
       const checkLate = async (sha) => {
         for (const sourceSha of new Set([sha, ...excludedDispatches.map((p) => p.sha)])) {
-          for (const run of await runs(sourceSha)) {
+          const inventory = await runs(sourceSha);
+          for (const excluded of excludedDispatches.filter((p) => p.sha === sourceSha)) {
+            const matches = inventory.filter((run) => run.display_title === title(excluded));
+            if (matches.length > 1 || (excluded.runId !== undefined &&
+              (matches.length !== 1 || matches[0].id !== excluded.runId)))
+              fail('late excluded dispatch identity missing or ambiguous; no new POST');
+            if (excluded.runId !== undefined) {
+              const detail = await reader.getJson(`actions/runs/${excluded.runId}`);
+              validateRun(detail, { ...excluded, priorRunIds: [] });
+              if (!sameProof(runProof(detail), runProof(matches[0])) ||
+                (excluded.run && !sameProof(excluded.run, runProof(detail))))
+                fail('late excluded dispatch proof changed; no new POST');
+            }
+          }
+          for (const run of inventory) {
             if (
               (excludedDispatchIds.length || excludedDispatches.length) &&
               (run.head_sha !== sourceSha ||
@@ -309,9 +368,10 @@ export async function verifyRetiredExactDispatches({
   now = Date.now,
   delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
   retirementProof,
+  recoveries = [],
+  excludedDispatches = [],
 }) {
-  const retiredRunIds = [],
-    noRunProofs = [];
+  const retiredRunIds = [], retiredRuns = [], noRunProofs = [];
   let lastClock = now();
   const clock = () => {
     const value = now();
@@ -335,33 +395,18 @@ export async function verifyRetiredExactDispatches({
     )
       fail('retired dispatch identity mismatch');
     const origin = validateTimes(progress, clock(), blockedAt);
-    const inventory = async () => {
-      const rows = validateInventory(
-        await reader.getJson(
-          `actions/workflows/deploy-demo-exact-commit.yml/runs?branch=main&event=workflow_dispatch&head_sha=${progress.sha}&per_page=100`,
-        ),
-      );
-      if (
-        rows.some(
-          (run) =>
-            run.head_sha !== progress.sha ||
-            run.repository?.full_name !== REPO ||
-            run.head_repository?.full_name !== REPO ||
-            run.path !== WORKFLOW ||
-            run.event !== 'workflow_dispatch' ||
-            run.head_branch !== 'main' ||
-            !integer(run.run_attempt) ||
-            typeof run.display_title !== 'string',
-        )
-      )
-        fail('retired inventory identity mismatch');
-      return rows;
-    };
+    const inventory = () => dispatchInventory(reader, progress.sha);
     const matches = async () =>
       (await inventory()).filter((run) => run.display_title === title(progress));
     let run;
-    if (progress.runId) run = await reader.getJson(`actions/runs/${progress.runId}`);
-    else {
+    if (progress.runId) {
+      const correlated = await matches();
+      if (correlated.length !== 1 || correlated[0].id !== progress.runId)
+        fail('known retired dispatch missing or ambiguous');
+      run = await reader.getJson(`actions/runs/${progress.runId}`);
+      if (!sameProof(runProof(run ?? {}), runProof(correlated[0])))
+        fail('retired run inventory/detail proof changed');
+    } else {
       const priorProof = retirementProof?.noRunProofs?.find(
         (p) =>
           p.sha === progress.sha &&
@@ -371,23 +416,16 @@ export async function verifyRetiredExactDispatches({
       const correlated = await matches();
       if (correlated.length > 1) fail('ambiguous old dispatch cannot be recovered');
       if (priorProof) {
-        const first = timestamp(priorProof.firstObservedAt),
-          second = timestamp(priorProof.secondObservedAt);
-        if (
-          !Number.isFinite(origin) ||
-          priorProof.originAt !== new Date(origin).toISOString() ||
-          priorProof.settleMs !== DISPATCH_SETTLE_MS ||
-          priorProof.observationGapMs !== NO_RUN_OBSERVATION_GAP_MS ||
-          first < origin + DISPATCH_SETTLE_MS ||
-          second < first + NO_RUN_OBSERVATION_GAP_MS ||
-          second > clock() ||
-          correlated.length
-        )
-          fail('retired no-run proof changed or late run observed');
+        validateNoRunProof(priorProof, progress, blockedAt, clock());
+        if (correlated.length) fail('retired no-run proof changed or late run observed');
         noRunProofs.push(structuredClone(priorProof));
         continue;
       }
-      if (correlated.length === 1) run = correlated[0];
+      if (correlated.length === 1) {
+        run = await reader.getJson(`actions/runs/${correlated[0].id}`);
+        if (!sameProof(runProof(run ?? {}), runProof(correlated[0])))
+          fail('retired run inventory/detail proof changed');
+      }
       else {
         if (
           !['intent', 'submitted'].includes(progress.phase) ||
@@ -421,30 +459,92 @@ export async function verifyRetiredExactDispatches({
       }
     }
     validateRun(run, progress);
-    if (run.status !== 'completed') fail('active old dispatch cannot be recovered');
+    validateCompleted(run);
     if (progress.phase === 'succeeded' && run.conclusion !== 'success')
       fail('retired successful dispatch changed');
-    if (
-      ![
-        'success',
-        'failure',
-        'cancelled',
-        'timed_out',
-        'action_required',
-        'neutral',
-        'skipped',
-        'stale',
-        'startup_failure',
-      ].includes(run.conclusion)
-    )
-      fail('unsettled old dispatch cannot be recovered');
+    retiredRuns.push(runProof(run));
     retiredRunIds.push(run.id);
   }
-  if (
-    retirementProof &&
-    (JSON.stringify(retiredRunIds) !== JSON.stringify(retirementProof.retiredRunIds) ||
-      JSON.stringify(noRunProofs) !== JSON.stringify(retirementProof.noRunProofs))
-  )
+  const lateRetiredRunIds = await verifyArchivedDispatches({ reader, recoveries,
+    excludedDispatches, clock });
+  const identities = new Map();
+  for (const proof of [...retiredRuns, ...lateRetiredRunIds.map((p) => p.run)]) {
+    if (identities.has(proof.runId) && !sameProof(identities.get(proof.runId), proof))
+      fail('same retired run ID has inconsistent dispatch identity');
+    identities.set(proof.runId, proof);
+  }
+  const result = { retiredRunIds, noRunProofs, retiredRuns, lateRetiredRunIds };
+  if (retirementProof && !sameProof(result, retirementProof))
     fail('retired dispatch proof identities changed');
-  return { retiredRunIds, noRunProofs };
+  return result;
+}
+
+// Historical no-run observations stay immutable. A later explicit recovery may
+// additionally retire their single authenticated completed run, never retry POST.
+async function verifyArchivedDispatches({ reader, recoveries, excludedDispatches, clock }) {
+  if (!Array.isArray(recoveries) || recoveries.length > 100 ||
+    !Array.isArray(excludedDispatches) || excludedDispatches.length > 100)
+    fail('bounded archived dispatch inventory required');
+  const entries = new Map(), knownIds = new Map();
+  const key = (p) => `${p.operation}/${p.sha}/${p.dispatchId}`;
+  for (const archive of recoveries) {
+    for (const [operation, progress] of Object.entries(archive.dispatches ?? {})) {
+      if (operation !== progress?.operation || !['preflight', 'deploy'].includes(operation) ||
+        !SHA.test(progress.sha ?? '') || !UUID.test(progress.dispatchId ?? '') ||
+        !Array.isArray(progress.priorRunIds) || progress.priorRunIds.length > 100 ||
+        progress.priorRunIds.some((id) => !integer(id)) ||
+        !['intent', 'submitted', 'observed', 'succeeded'].includes(progress.phase) ||
+        (progress.runId !== undefined && !integer(progress.runId)))
+        fail('archived dispatch identity mismatch');
+      const k = key(progress);
+      if (entries.has(k)) fail('duplicate archived dispatch identity');
+      const noRun = archive.retirementProof?.noRunProofs?.find((p) => key(p) === k);
+      if (noRun) validateNoRunProof(noRun, progress, archive.block?.at, clock());
+      const known = archive.retirementProof?.retiredRuns?.find((p) => p.displayTitle === title(progress));
+      entries.set(k, { progress, noRun, known, runId: progress.runId ?? known?.runId });
+    }
+  }
+  for (const archive of recoveries) {
+    for (const proof of archive.retirementProof?.lateRetiredRunIds ?? []) {
+      const entry = entries.get(key(proof));
+      if (!entry || !integer(proof.runId) ||
+        (entry.runId !== undefined && entry.runId !== proof.runId) ||
+        (entry.known && !sameProof(entry.known, proof.run)))
+        fail('archived late run proof identity mismatch');
+      entry.runId = proof.runId;
+      entry.known = proof.run;
+    }
+  }
+  for (const p of excludedDispatches) {
+    const entry = entries.get(key(p));
+    if (!entry || (p.runId !== undefined && entry.runId !== p.runId) ||
+      (p.run !== undefined && !sameProof(p.run, entry.known)))
+      fail('excluded dispatch missing archived identity');
+  }
+  if (entries.size > 100) fail('bounded archived dispatch inventory required');
+  const result = [];
+  for (const [k, { progress, noRun, known, runId }] of entries) {
+    const rows = await dispatchInventory(reader, progress.sha);
+    const matches = rows.filter((run) => run.display_title === title(progress));
+    if (matches.length > 1 || (runId !== undefined &&
+      (matches.length !== 1 || matches[0].id !== runId)))
+      fail('known archived dispatch missing or ambiguous');
+    if (!matches.length) {
+      if (!noRun) fail('archived dispatch has no authenticated no-run proof');
+      continue;
+    }
+    const run = await reader.getJson(`actions/runs/${matches[0].id}`);
+    validateRun(run, { ...progress, ...(runId === undefined ? {} : { runId }) });
+    validateCompleted(run);
+    const proof = runProof(run);
+    if (!sameProof(proof, runProof(matches[0])) || (known && !sameProof(known, proof)) ||
+      (progress.phase === 'succeeded' && run.conclusion !== 'success'))
+      fail('archived run proof changed');
+    if (knownIds.has(run.id) && knownIds.get(run.id) !== k)
+      fail('same archived run ID has inconsistent dispatch identity');
+    knownIds.set(run.id, k);
+    result.push({ operation: progress.operation, sha: progress.sha,
+      dispatchId: progress.dispatchId, runId: run.id, run: proof });
+  }
+  return result;
 }

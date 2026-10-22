@@ -2557,3 +2557,182 @@ test('rejected POST, pre-POST main movement and uncertain acknowledgement retire
       assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 2);
     });
 });
+
+async function lateRetirementFixture() {
+  const { createExactDemoDispatcher, verifyRetiredExactDispatches, DISPATCH_SETTLE_MS } =
+    await import('../../src/bug-pipeline/exact-demo-dispatch.mjs');
+  const f = exactBackendFixture();
+  await wireRecovery(f);
+  let offset = 0;
+  const clock = () => Date.now() + offset;
+  const save = f.store.save;
+  f.store.save = async (value, options = {}) => {
+    await options.guard?.();
+    return save(value);
+  };
+  f.github.verifyExactRecoveryRuns = (input) => verifyRetiredExactDispatches({
+    ...input, reader: f.reader, now: clock, delay: async (ms) => { offset += ms; },
+  });
+  const rejected = createExactDemoDispatcher({ reader: f.reader,
+    postDispatch: async () => { throw Error('synthetic rejected POST'); } });
+  f.github.ensureExactDemoRun = (input) => rejected.ensure(input);
+  await assert.rejects(releaseBatch(exactInput(f)), /rejected POST/);
+  const original = structuredClone(f.getSaved().batches[0]);
+  const old = original.exactDemoDispatches.preflight;
+  offset = Math.max(Date.parse(old.intentAt), Date.parse(original.releaseBlock.at)) +
+    DISPATCH_SETTLE_MS + 1 - Date.now();
+  await recoverExactRelease({ ...recoveryInput(f), now: clock });
+  const noRunArchive = structuredClone(f.getSaved().batches[0].exactReleaseRecoveries[0]);
+  const late = { id: 899, run_attempt: 1, head_sha: old.sha, head_branch: 'main',
+    repository: { full_name: f.state.repository },
+    head_repository: { full_name: f.state.repository },
+    path: '.github/workflows/deploy-demo-exact-commit.yml', event: 'workflow_dispatch',
+    display_title: `demo-exact preflight ${old.sha} ${old.dispatchId}`,
+    status: 'in_progress', conclusion: null };
+  f.runs.push(late);
+  const dispatcher = createExactDemoDispatcher({ reader: f.reader, postDispatch: f.post });
+  f.github.ensureExactDemoRun = (input) => dispatcher.ensure(input);
+  await assert.rejects(releaseBatch(exactInput(f)), /late excluded/);
+  assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 0);
+  return { ...f, late, old, clock, noRunArchive, dispatcher };
+}
+
+test('controller recovery absorbs a completed late no-run dispatch, permits exactly one fresh ensure and preserves exclusions through another recovery', async () => {
+  const f = await lateRetirementFixture();
+  const request = { ...recoveryInput(f), now: f.clock };
+  await assert.rejects(recoverExactRelease(request), /active old dispatch/);
+  assert.equal(f.getSaved().batches[0].exactReleaseRecoveries.length, 1);
+  f.late.status = 'completed'; f.late.conclusion = 'success';
+  await recoverExactRelease(request);
+  let batch = f.getSaved().batches[0];
+  assert.deepEqual(batch.exactReleaseRecoveries[0], f.noRunArchive);
+  assert.ok(batch.exactDemoRecovery.excludedRunIds.includes(899));
+  const proof = batch.exactReleaseRecoveries[1].retirementProof.lateRetiredRunIds;
+  assert.equal(proof.length, 1);
+  assert.equal(proof[0].runId, 899);
+  assert.equal(proof[0].dispatchId, f.old.dispatchId);
+  assert.equal(proof[0].run.conclusion, 'success');
+  const exclusions = structuredClone(batch.exactDemoRecovery);
+  const ensure = () => f.dispatcher.ensure({ operation: 'preflight',
+    expectedSha: f.old.sha, progress: f.getSaved().batches[0].exactDemoDispatches?.preflight,
+    excludedRunIds: exclusions.excludedRunIds,
+    excludedDispatchIds: exclusions.excludedDispatchIds,
+    excludedDispatches: exclusions.excludedDispatches,
+    saveProgress: async (progress) => {
+      const state = await f.store.load();
+      state.batches[0].exactDemoDispatches.preflight = progress;
+      await f.store.save(state);
+    },
+  });
+  await ensure();
+  await ensure();
+  assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 1);
+  const artifact = f.reader.artifact;
+  f.reader.artifact = async (...args) => {
+    const value = await artifact(...args); value.receipt.verifiedAt = '2020-01-01'; return value;
+  };
+  await assert.rejects(releaseBatch(exactInput(f)), /expired/);
+  f.reader.artifact = artifact;
+  await recoverExactRelease({ ...recoveryInput(f), now: f.clock });
+  batch = f.getSaved().batches[0];
+  assert.equal(batch.exactReleaseRecoveries.length, 3);
+  assert.deepEqual(batch.exactReleaseRecoveries[0], f.noRunArchive);
+  assert.ok(batch.exactDemoRecovery.excludedRunIds.includes(899));
+  assert.ok(batch.exactDemoRecovery.excludedRunIds.includes(901));
+  assert.equal(batch.exactReleaseRecoveries[2].retirementProof.lateRetiredRunIds[0].runId, 899);
+  assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 1);
+});
+
+test('late retirement controller refuses ambiguous, malformed, incomplete or changed proofs at actual recovery save', async (t) => {
+  for (const mode of ['ambiguous', 'head repository', 'repository', 'SHA', 'workflow', 'event',
+    'branch', 'attempt', 'conclusion', 'incomplete', 'detail drift', 'save active',
+    'save conclusion', 'save disappeared', 'save duplicate', 'save main', 'save block',
+    'save authorization', 'save original no-run proof'])
+    await t.test(mode, async () => {
+      const f = await lateRetirementFixture();
+      f.late.status = 'completed'; f.late.conclusion = 'success';
+      const before = structuredClone(f.getSaved().batches[0]);
+      if (mode === 'ambiguous') f.runs.push({ ...f.late, id: 898 });
+      if (mode === 'head repository') f.late.head_repository = { full_name: 'foreign/repo' };
+      if (mode === 'repository') f.late.repository = { full_name: 'foreign/repo' };
+      if (mode === 'SHA') f.late.head_sha = 'e'.repeat(40);
+      if (mode === 'workflow') f.late.path = '.github/workflows/foreign.yml';
+      if (mode === 'event') f.late.event = 'push';
+      if (mode === 'branch') f.late.head_branch = 'foreign';
+      if (mode === 'attempt') f.late.run_attempt = 2;
+      if (mode === 'conclusion') f.late.conclusion = null;
+      const read = f.reader.getJson;
+      f.reader.getJson = async (route) => {
+        const result = await read(route);
+        if (mode === 'SHA' && route.includes(`head_sha=${f.old.sha}`))
+          return { total_count: 1, workflow_runs: [structuredClone(f.late)] };
+        if (mode === 'incomplete' && route.includes('/runs?')) result.total_count++;
+        if (mode === 'detail drift' && route === 'actions/runs/899') result.conclusion = 'failure';
+        return result;
+      };
+      let reachedSave = false;
+      if (mode.startsWith('save ')) {
+        const save = f.store.save;
+        f.store.save = async (value, options) => {
+          reachedSave = true;
+          if (mode === 'save active') { f.late.status = 'in_progress'; f.late.conclusion = null; }
+          if (mode === 'save conclusion') f.late.conclusion = 'failure';
+          if (mode === 'save disappeared') f.runs.length = 0;
+          if (mode === 'save duplicate') f.runs.push({ ...f.late, id: 898 });
+          if (mode === 'save main') f.setMain('e'.repeat(40));
+          if (mode === 'save block') f.getSaved().batches[0].releaseBlock.id = 'changed';
+          if (mode === 'save authorization') f.github.authorizeReleaseRecovery = async () => 'foreign';
+          if (mode === 'save original no-run proof')
+            f.getSaved().batches[0].exactReleaseRecoveries[0].retirementProof.noRunProofs[0].originAt =
+              '2020-01-01T00:00:00.000Z';
+          return save(value, options);
+        };
+      }
+      await assert.rejects(recoverExactRelease({ ...recoveryInput(f), now: f.clock }));
+      if (mode.startsWith('save ')) assert.equal(reachedSave, true);
+      assert.equal(f.getSaved().batches[0].exactReleaseRecoveries.length, 1);
+      if (!['save block', 'save original no-run proof'].includes(mode))
+        assert.deepEqual(f.getSaved().batches[0], before);
+      assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 0);
+    });
+});
+
+test('known late run disappearance or proof drift blocks both later recovery and dispatcher without a new POST', async (t) => {
+  for (const mode of ['missing', 'identity', 'attempt', 'conclusion', 'detail drift'])
+    await t.test(mode, async () => {
+      const f = await lateRetirementFixture();
+      f.late.status = 'completed'; f.late.conclusion = 'success';
+      await recoverExactRelease({ ...recoveryInput(f), now: f.clock });
+      const savedArchive = structuredClone(f.getSaved().batches[0].exactReleaseRecoveries[0]);
+      if (mode === 'missing') f.runs.length = 0;
+      if (mode === 'identity') f.late.display_title += ' changed';
+      if (mode === 'attempt') f.late.run_attempt = 2;
+      if (mode === 'conclusion') f.late.conclusion = 'failure';
+      if (mode === 'detail drift') {
+        const read = f.reader.getJson;
+        f.reader.getJson = async (route) => {
+          const value = await read(route);
+          if (route === 'actions/runs/899') value.conclusion = 'failure';
+          return value;
+        };
+      }
+      await assert.rejects(releaseBatch(exactInput(f)));
+      await assert.rejects(recoverExactRelease({ ...recoveryInput(f), now: f.clock }));
+      assert.deepEqual(f.getSaved().batches[0].exactReleaseRecoveries[0], savedArchive);
+      assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 0);
+      assert.equal(f.getSaved().batches[0].exactReleaseRecoveries.length, 2);
+    });
+});
+
+test('recovery refuses orphan excluded dispatch descriptors even with no current dispatches or archives', async () => {
+  const f = await lateRetirementFixture();
+  const batch = f.getSaved().batches[0];
+  assert.deepEqual(batch.exactDemoDispatches, {});
+  assert.equal(batch.exactDemoRecovery.excludedDispatches.length, 1);
+  batch.exactReleaseRecoveries = [];
+  const before = structuredClone(batch);
+  await assert.rejects(recoverExactRelease({ ...recoveryInput(f), now: f.clock }),
+    /excluded dispatch missing archived identity/);
+  assert.deepEqual(f.getSaved().batches[0], before);
+  assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 0);
+});

@@ -2972,6 +2972,89 @@ test('newer failed, pending or rerun production run prevents selecting an older 
   }
 });
 
+test('completed older production reruns do not hide a newer successful first attempt', async (t) => {
+  const { verifyProductionBackend } = await import('../../src/bug-pipeline/demo-deployment.mjs');
+  const sha = 'a'.repeat(40);
+  const makeRun = (id, attempt, status, conclusion) => ({
+    id,
+    run_attempt: attempt,
+    head_sha: sha,
+    head_branch: 'main',
+    repository: { full_name: 'l2v-hub/ClinicOS' },
+    head_repository: { full_name: 'l2v-hub/ClinicOS' },
+    path: '.github/workflows/deploy-backend.yml',
+    event: 'workflow_dispatch',
+    status,
+    conclusion,
+  });
+  const newest = makeRun(72, 1, 'completed', 'success');
+  const olderCompletedRerun = makeRun(71, 2, 'completed', 'failure');
+  const job = {
+    id: 82,
+    run_id: newest.id,
+    run_attempt: 1,
+    head_sha: sha,
+    name: 'deploy',
+    status: 'completed',
+    conclusion: 'success',
+    steps: [{ name: 'Deploy to Railway', status: 'completed', conclusion: 'success' }],
+  };
+  const readerFor = (older) => ({
+    getJson: async (route) =>
+      route.includes('/jobs?')
+        ? { total_count: 1, jobs: [job] }
+        : route === `actions/runs/${newest.id}`
+          ? newest
+          : route === `actions/runs/${older.id}`
+            ? older
+            : { total_count: 2, workflow_runs: [older, newest] },
+  });
+
+  await t.test('completed attempt 2 followed by latest attempt 1 proves latest only', async () => {
+    const proof = await verifyProductionBackend({
+      reader: readerFor(olderCompletedRerun),
+      deploymentSha: sha,
+      runUrl: 'https://github.com/l2v-hub/ClinicOS/actions/runs/72',
+    });
+    assert.equal(proof.runId, newest.id);
+    assert.equal(proof.runAttempt, 1);
+    assert.equal(proof.jobId, job.id);
+  });
+
+  await t.test('an older active rerun blocks proof as pending', async () => {
+    const active = makeRun(71, 2, 'in_progress', null);
+    await assert.rejects(
+      verifyProductionBackend({ reader: readerFor(active), deploymentSha: sha }),
+      /PRODUCTION_RUN_PENDING/,
+    );
+  });
+
+  await t.test('an older active first attempt must settle before proving a newer deployment', async () => {
+    const older = makeRun(71, 1, 'in_progress', null);
+    await assert.rejects(
+      verifyProductionBackend({ reader: readerFor(older), deploymentSha: sha }),
+      /PRODUCTION_RUN_PENDING/,
+    );
+    const completed = { ...older, status: 'completed', conclusion: 'success' };
+    const proof = await verifyProductionBackend({
+      reader: readerFor(completed), deploymentSha: sha,
+    });
+    assert.equal(proof.runId, newest.id);
+    assert.equal(proof.runAttempt, 1);
+  });
+
+  await t.test('malformed or non-positive inventory attempts fail closed', async () => {
+    for (const attempt of [0, -1, 1.5, '1', null]) {
+      const malformed = { ...olderCompletedRerun, run_attempt: attempt };
+      await assert.rejects(
+        verifyProductionBackend({ reader: readerFor(malformed), deploymentSha: sha }),
+        /PRODUCTION_PROOF_FAILED/,
+        `run_attempt ${String(attempt)} must be rejected`,
+      );
+    }
+  });
+});
+
 test('bounded production waiting polls only validated absent/pending observations and retains strict final proof', async (t) => {
   const { verifyProductionBackend, waitForProductionBackend } =
     await import('../../src/bug-pipeline/demo-deployment.mjs');

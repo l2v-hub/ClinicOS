@@ -462,3 +462,25 @@ test('a known retired run on an earlier SHA may stay completed but a later rerun
   await assert.rejects(f.ensure(exclusions), /late excluded/);
   assert.equal(f.posted, 1);
 });
+
+test('retirement refuses a reused run ID bound to different current and archived SHA/title identities', async () => {
+  const { verifyRetiredExactDispatches } = await import('../../src/bug-pipeline/exact-demo-dispatch.mjs');
+  const f = fixture();
+  const oldSha = 'b'.repeat(40), oldId = '22345678-1234-4123-8123-123456789abc';
+  const current = { operation: 'preflight', sha, dispatchId: id,
+    phase: 'intent', priorRunIds: [] };
+  const old = { operation: 'preflight', sha: oldSha, dispatchId: oldId,
+    phase: 'intent', priorRunIds: [] };
+  const runs = [current, old].map((p) => ({ ...f.run, id: 55, head_sha: p.sha,
+    display_title: `demo-exact ${p.operation} ${p.sha} ${p.dispatchId}` }));
+  let detail = runs[0];
+  const reader = { getJson: async (route) => {
+    if (route === 'actions/runs/55') return structuredClone(detail);
+    detail = route.includes(`head_sha=${oldSha}`) ? runs[1] : runs[0];
+    return { total_count: 1, workflow_runs: [structuredClone(detail)] };
+  } };
+  await assert.rejects(verifyRetiredExactDispatches({ reader,
+    dispatches: { preflight: current },
+    recoveries: [{ dispatches: { preflight: old } }],
+  }), /same retired run ID has inconsistent/);
+});

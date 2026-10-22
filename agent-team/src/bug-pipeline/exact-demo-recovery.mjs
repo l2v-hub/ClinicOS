@@ -26,14 +26,19 @@ export function archivedRunIds(batch) {
     ...(batch.exactReleaseRecoveries ?? []).map((x) => x.dispatches),
   ];
   const ids = [
-    ...new Set(
-      values.flatMap((value) =>
+    ...new Set([
+      ...(batch.exactDemoRecovery?.excludedRunIds ?? []),
+      ...(batch.exactReleaseRecoveries ?? []).flatMap((archive) => [
+        ...(archive.excludedRunIds ?? []),
+        ...(archive.retirementProof?.lateRetiredRunIds ?? []).map((proof) => proof.runId),
+      ]),
+      ...values.flatMap((value) =>
         Object.values(value ?? {}).flatMap((p) => [
           ...(p.priorRunIds ?? []),
           ...(p.runId ? [p.runId] : []),
         ]),
       ),
-    ),
+    ]),
   ];
   if (ids.length > 100 || ids.some((id) => !Number.isSafeInteger(id) || id <= 0))
     throw Error('bounded excluded run inventory required');
@@ -119,7 +124,18 @@ export function archiveRecovery(
     excludedDispatchIds,
     excludedDispatches: batch.exactReleaseRecoveries
       .flatMap((x) => Object.values(x.dispatches ?? {}))
-      .map(({ operation, sha, dispatchId }) => ({ operation, sha, dispatchId }))
+      .map(({ operation, sha, dispatchId, runId }) => {
+        const late = batch.exactReleaseRecoveries.flatMap(
+          (x) => x.retirementProof?.lateRetiredRunIds ?? [],
+        ).find((p) => p.operation === operation && p.sha === sha && p.dispatchId === dispatchId);
+        const known = late?.run ?? batch.exactReleaseRecoveries.flatMap(
+          (x) => x.retirementProof?.retiredRuns ?? [],
+        ).find((p) => p.displayTitle === `demo-exact ${operation} ${sha} ${dispatchId}`);
+        const knownId = late?.runId ?? runId ?? known?.runId;
+        return { operation, sha, dispatchId,
+          ...(knownId === undefined ? {} : { runId: knownId }),
+          ...(known === undefined ? {} : { run: structuredClone(known) }) };
+      })
       .filter(
         (value, index, values) =>
           values.findIndex(

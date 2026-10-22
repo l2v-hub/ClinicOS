@@ -521,12 +521,17 @@ export async function recoverExactRelease({
   await guard();
   const oldDispatches = structuredClone(batch.exactDemoDispatches ?? {});
   const recoveryBlockedAt = batch.releaseBlock.at;
+  const oldRecoveries = structuredClone(batch.exactReleaseRecoveries ?? []);
+  const oldExclusions = structuredClone(batch.exactDemoRecovery?.excludedDispatches ?? []);
   const verifyOldRuns = async (retirementProof) => {
-    if (!Object.keys(oldDispatches).length) return { retiredRunIds: [], noRunProofs: [] };
+    if (!Object.keys(oldDispatches).length && !oldRecoveries.length && !oldExclusions.length)
+      return { retiredRunIds: [], noRunProofs: [], retiredRuns: [], lateRetiredRunIds: [] };
     if (typeof github.verifyExactRecoveryRuns !== 'function')
       fail('retired run verification required');
     return github.verifyExactRecoveryRuns({
       dispatches: oldDispatches,
+      recoveries: oldRecoveries,
+      excludedDispatches: oldExclusions,
       blockedAt: recoveryBlockedAt,
       retirementProof,
     });
@@ -552,7 +557,8 @@ export async function recoverExactRelease({
   const archive = archiveRecovery(batch, {
     actor,
     deploymentSha,
-    extraRunIds: retirementProof.retiredRunIds,
+    extraRunIds: [...retirementProof.retiredRunIds,
+      ...retirementProof.lateRetiredRunIds.map((proof) => proof.runId)],
     retirementProof,
     newId,
     now,

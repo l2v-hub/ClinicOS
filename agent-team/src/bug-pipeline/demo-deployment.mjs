@@ -966,7 +966,7 @@ export async function verifyProductionBackend({ reader, deploymentSha, runUrl = 
       list.workflow_runs.some(
         (run) =>
           !integer(run.id) ||
-          run.run_attempt !== 1 ||
+          !integer(run.run_attempt) ||
           run.head_sha !== deploymentSha ||
           run.repository?.full_name !== REPO ||
           run.head_repository?.full_name !== REPO ||
@@ -977,7 +977,18 @@ export async function verifyProductionBackend({ reader, deploymentSha, runUrl = 
     )
       blocked('PRODUCTION_PROOF_FAILED');
     if (!list.workflow_runs.length) blocked('PRODUCTION_RUN_REQUIRED');
-    return [...list.workflow_runs].sort((a, b) => b.id - a.id)[0];
+    const ordered = [...list.workflow_runs].sort((a, b) => b.id - a.id);
+    for (const older of ordered.slice(1)) {
+      if (older.status !== 'completed') {
+        if (
+          ['queued', 'in_progress', 'waiting', 'pending', 'requested'].includes(older.status) &&
+          older.conclusion === null
+        )
+          blocked('PRODUCTION_RUN_PENDING');
+        blocked('PRODUCTION_PROOF_FAILED');
+      }
+    }
+    return ordered[0];
   };
   const latest = await newest();
   let id = latest.id;
