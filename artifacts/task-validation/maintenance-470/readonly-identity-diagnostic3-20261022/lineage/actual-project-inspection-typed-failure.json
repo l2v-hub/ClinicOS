@@ -1,0 +1,16 @@
+{
+  "runId": 39829997131,
+  "jobId": 120003557227,
+  "attempt": 1,
+  "head": "c92c2590b26179d18f96801d943b6e732437753a",
+  "conclusion": "failure",
+  "phase": "TOKEN_IDENTITY",
+  "code": "READONLY_GRAPHQL_REJECTED",
+  "logSha256": "202f22d32752ad7b56227888512ecee54fe35437734d8804858391c05c6abd89",
+  "testPassed": true,
+  "pinnedBinaryInstallPassed": true,
+  "providerWrites": 0,
+  "sqlCleanupRepeated": false,
+  "credentialInvalidityOrExpiryProven": false,
+  "meaning": "Existing demo Environment credential was rejected for project-token identity GraphQL as well as account-profile protocol; neither usable identity established. Generic bounded error does not establish expiration, schema cause, provider message, or transport header defect. No automatic retry or credential copying."
+}

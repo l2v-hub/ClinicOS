@@ -1,0 +1,12 @@
+{
+  "status": "implemented-awaiting-independent-QA",
+  "contractValidation": "passed",
+  "node22SyntaxCheck": "passed",
+  "focusedTests": { "passed": 185, "failed": 0, "originalBaseline": 157, "added": 28 },
+  "actualPriorFailuresPreserved": [
+    { "runId": "39827112860", "authMode": "account-bearer", "phase": "ACCOUNT_IDENTITY", "code": "READONLY_GRAPHQL_REJECTED", "status": "failure" },
+    { "runId": "39829997131", "authMode": "project-token", "phase": "TOKEN_IDENTITY", "code": "READONLY_GRAPHQL_REJECTED", "status": "failure" }
+  ],
+  "liveActions": false,
+  "releaseClaim": false
+}

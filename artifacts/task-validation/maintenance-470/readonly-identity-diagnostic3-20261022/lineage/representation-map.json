@@ -1,0 +1,33 @@
+{
+  "previousEntityId": "standalone-pr-500",
+  "previousPR": 500,
+  "previousHead": "cab5f4a562e9c201cabeb7981b71c4b2d89b099d",
+  "previousSubjectFileSha256": "08de9b064c5568210db3fcf22a35ade00b0d02880bb6086bd79bd282ea309eb7",
+  "previousCanonical": "ed798e1080bb0d22b98d0a51ea3a85bd93aae5a9",
+  "previousImplementationCount": 2,
+  "previousReviewCount": 2,
+  "currentImplementationCount": 3,
+  "currentImportedReviewCount": 2,
+  "mapping": [
+    {
+      "fromCollection": "implementation",
+      "fromIndex": 0,
+      "toCollection": "implementation",
+      "toIndex": 0,
+      "round": 1,
+      "unchangedEntrySha256": "f1d05c2a26391de7fd1c2fb30ecf8690c6b9e2b0061a0674325747f7f689b938"
+    },
+    {
+      "fromCollection": "operatorContinuations",
+      "fromIndex": 0,
+      "toCollection": "implementation",
+      "toIndex": 1,
+      "round": 2,
+      "unchangedEntrySha256": "0f8768f02820a46ae75ac1ffca66dd3d276a0d28d4f39572f40f20853eec6aa8"
+    }
+  ],
+  "originalCollectionsPreservedExactly": true,
+  "newBudget": false,
+  "reset": false,
+  "explanation": "Only representation of ordered native implementation import changes; entries copied verbatim, complete original separate arrays and every other field preserved in previous-subject.json. No new approval/claim or grant is invented."
+}

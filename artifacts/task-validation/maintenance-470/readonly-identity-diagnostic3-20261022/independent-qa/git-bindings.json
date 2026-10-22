@@ -1,0 +1,32 @@
+[
+  {
+    "path": "scripts/maintenance/demo-storage-inspect.mjs",
+    "baseline": "100644 blob 2061de183f8ee8937f856b08d5138737c447777f\tscripts/maintenance/demo-storage-inspect.mjs",
+    "source": "100644 blob c9531956a7fe483f41e6624b4992f5c070792e2e\tscripts/maintenance/demo-storage-inspect.mjs",
+    "sameBlob": false
+  },
+  {
+    "path": "scripts/maintenance/demo-storage-inspect.test.mjs",
+    "baseline": "100644 blob 66560ac55f03cde2c5b83dc94f4bfa830c0853a7\tscripts/maintenance/demo-storage-inspect.test.mjs",
+    "source": "100644 blob 1da90096e78b9ea7dd00ccc995bb4e3004245b02\tscripts/maintenance/demo-storage-inspect.test.mjs",
+    "sameBlob": false
+  },
+  {
+    "path": "scripts/maintenance/demo-storage-workflow.test.mjs",
+    "baseline": "100644 blob 1b92aadcb5f30d9ee795304ab0afee0bf3b9601d\tscripts/maintenance/demo-storage-workflow.test.mjs",
+    "source": "100644 blob 1b92aadcb5f30d9ee795304ab0afee0bf3b9601d\tscripts/maintenance/demo-storage-workflow.test.mjs",
+    "sameBlob": true
+  },
+  {
+    "path": "scripts/maintenance/demo-storage-binding-readonly.mjs",
+    "baseline": "100644 blob e7daa43c92c5388e57baa8ae7cb9b7bc971304f2\tscripts/maintenance/demo-storage-binding-readonly.mjs",
+    "source": "100644 blob e7daa43c92c5388e57baa8ae7cb9b7bc971304f2\tscripts/maintenance/demo-storage-binding-readonly.mjs",
+    "sameBlob": true
+  },
+  {
+    "path": ".github/workflows/inspect-demo-storage.yml",
+    "baseline": "100644 blob d16243b4dcda0f5c13ba7e192aa3161788d6f68b\t.github/workflows/inspect-demo-storage.yml",
+    "source": "100644 blob d16243b4dcda0f5c13ba7e192aa3161788d6f68b\t.github/workflows/inspect-demo-storage.yml",
+    "sameBlob": true
+  }
+]

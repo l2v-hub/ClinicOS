@@ -1,0 +1,402 @@
+[
+  {
+    "label": "null",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "null",
+    "category": "no-details",
+    "outcome": "blocked",
+    "outputBytes": 1146,
+    "status": "PASS"
+  },
+  {
+    "label": "empty",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "empty-array",
+    "category": "no-details",
+    "outcome": "blocked",
+    "outputBytes": 1153,
+    "status": "PASS"
+  },
+  {
+    "label": "object",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1148,
+    "status": "PASS"
+  },
+  {
+    "label": "oversized-array",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1148,
+    "status": "PASS"
+  },
+  {
+    "label": "missing-message",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1148,
+    "status": "PASS"
+  },
+  {
+    "label": "empty-message",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1153,
+    "status": "PASS"
+  },
+  {
+    "label": "oversized-message",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1148,
+    "status": "PASS"
+  },
+  {
+    "label": "extensions-null",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1148,
+    "status": "PASS"
+  },
+  {
+    "label": "code-object",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1148,
+    "status": "PASS"
+  },
+  {
+    "label": "code-array",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1148,
+    "status": "PASS"
+  },
+  {
+    "label": "long-code",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1148,
+    "status": "PASS"
+  },
+  {
+    "label": "misleading-code",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1153,
+    "status": "PASS"
+  },
+  {
+    "label": "schema-boundary",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1153,
+    "status": "PASS"
+  },
+  {
+    "label": "schema-prefix",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "schema-validation",
+    "outcome": "blocked",
+    "outputBytes": 1163,
+    "status": "PASS"
+  },
+  {
+    "label": "known-code",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "not-authorized",
+    "outcome": "blocked",
+    "outputBytes": 1160,
+    "status": "PASS"
+  },
+  {
+    "label": "two-factor",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "two-factor-required",
+    "outcome": "blocked",
+    "outputBytes": 1165,
+    "status": "PASS"
+  },
+  {
+    "label": "rate-limit",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "rate-limited",
+    "outcome": "blocked",
+    "outputBytes": 1158,
+    "status": "PASS"
+  },
+  {
+    "label": "mixed",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "mixed",
+    "outcome": "blocked",
+    "outputBytes": 1151,
+    "status": "PASS"
+  },
+  {
+    "label": "twenty-boundary",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "not-authorized",
+    "outcome": "blocked",
+    "outputBytes": 1160,
+    "status": "PASS"
+  },
+  {
+    "label": "message512",
+    "mode": "project-token",
+    "phase": "TOKEN_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1153,
+    "status": "PASS"
+  },
+  {
+    "label": "null",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "null",
+    "category": "no-details",
+    "outcome": "blocked",
+    "outputBytes": 1152,
+    "status": "PASS"
+  },
+  {
+    "label": "empty",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "empty-array",
+    "category": "no-details",
+    "outcome": "blocked",
+    "outputBytes": 1159,
+    "status": "PASS"
+  },
+  {
+    "label": "object",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1154,
+    "status": "PASS"
+  },
+  {
+    "label": "oversized-array",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1154,
+    "status": "PASS"
+  },
+  {
+    "label": "missing-message",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1154,
+    "status": "PASS"
+  },
+  {
+    "label": "empty-message",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1159,
+    "status": "PASS"
+  },
+  {
+    "label": "oversized-message",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1154,
+    "status": "PASS"
+  },
+  {
+    "label": "extensions-null",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1154,
+    "status": "PASS"
+  },
+  {
+    "label": "code-object",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1154,
+    "status": "PASS"
+  },
+  {
+    "label": "code-array",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1154,
+    "status": "PASS"
+  },
+  {
+    "label": "long-code",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "malformed",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1154,
+    "status": "PASS"
+  },
+  {
+    "label": "misleading-code",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1159,
+    "status": "PASS"
+  },
+  {
+    "label": "schema-boundary",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1159,
+    "status": "PASS"
+  },
+  {
+    "label": "schema-prefix",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "schema-validation",
+    "outcome": "blocked",
+    "outputBytes": 1169,
+    "status": "PASS"
+  },
+  {
+    "label": "known-code",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "not-authorized",
+    "outcome": "blocked",
+    "outputBytes": 1166,
+    "status": "PASS"
+  },
+  {
+    "label": "two-factor",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "two-factor-required",
+    "outcome": "blocked",
+    "outputBytes": 1171,
+    "status": "PASS"
+  },
+  {
+    "label": "rate-limit",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "rate-limited",
+    "outcome": "blocked",
+    "outputBytes": 1164,
+    "status": "PASS"
+  },
+  {
+    "label": "mixed",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "mixed",
+    "outcome": "blocked",
+    "outputBytes": 1157,
+    "status": "PASS"
+  },
+  {
+    "label": "twenty-boundary",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "not-authorized",
+    "outcome": "blocked",
+    "outputBytes": 1166,
+    "status": "PASS"
+  },
+  {
+    "label": "message512",
+    "mode": "account-bearer",
+    "phase": "ACCOUNT_IDENTITY",
+    "errorsShape": "nonempty-array",
+    "category": "unknown",
+    "outcome": "blocked",
+    "outputBytes": 1159,
+    "status": "PASS"
+  }
+]

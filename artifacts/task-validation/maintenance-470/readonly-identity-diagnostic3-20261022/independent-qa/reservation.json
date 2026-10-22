@@ -1,0 +1,16 @@
+{
+  "nonce": "489c1094-3cf8-4665-9128-535b213cdde1",
+  "status": "running",
+  "reservedAt": "2026-10-22T18:32:22.822Z",
+  "reservedBeforeSession": true,
+  "agent": "/root/identity_diagnostic3_qa",
+  "model": "gpt-6.1-sol",
+  "contractSha256": "4f39258f7ae5c5109bdb1823ec922cab0ef9c471729b60c1ea4790544a82b67d",
+  "sourceSha": "fa88482503e08b191395473a599325831f7e4bd7",
+  "sourceSnapshot": "/tmp/clinicos500-identity-diagnostic3-qa-source",
+  "privateOutput": "/tmp/clinicos500-identity-diagnostic3-20261022/independent-qa",
+  "sourceEditsAllowed": false,
+  "liveActionsAllowed": false,
+  "stateCommit": "e4ca98fd41b10f9c8f32f1bd45e9fa7bbeae1ed7",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/d09b459d-512f-4da7-b0f7-67d88eb8a5b4/accepted.json"
+}

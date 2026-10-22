@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "assertedRows": 40,
+  "assertedValues": 240,
+  "consoleErrors": [],
+  "badHttp": [],
+  "requests": [],
+  "syntheticOnly": true
+}

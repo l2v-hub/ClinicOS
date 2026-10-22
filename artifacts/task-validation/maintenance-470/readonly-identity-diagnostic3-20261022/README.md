@@ -1,0 +1,7 @@
+# Read-only identity diagnostic continuation3
+
+This is lineage of merged PR500, not a fresh budget or a provider repair. Only two source files change. Any own GraphQL errors property still fails closed with the same original code, including null/empty errors; two fixed enum values now retain a safe discriminant. No endpoint/query/auth mode/request count, workflow, installer, SQL, config, deployment or clinical behavior changes.
+
+`validation-report.md` is the immutable original attempt1 report and `followup2-report.md` the immutable attempt2 report, retained because their original attempt objects name those files. **Current continuation3 QA is `continuation3-validation-report.md` and `independent-qa/validation-report.md`.** The screenshot/trace are synthetic local diagnostic evidence, not online Railway evidence.
+
+Original implementation1 and exact compatibility continuation2 are carried verbatim into the ordered three-entry native implementation import. Their original two separate collections, all reviews/claims/ledgers/recovery/FAIL and terminal release facts remain byte-preserved in `lineage/previous-subject.json`; `lineage/representation-map.json` maps the representation without dropping or modifying any consumed entry. The next actual external review is3, on this new PR SHA; old approvals refer to old PR500 subjects only. Current source SHA fa88482503e08b191395473a599325831f7e4bd7.

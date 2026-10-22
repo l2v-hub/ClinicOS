@@ -1,0 +1,16 @@
+{
+  "verdict": "READY FOR CODEX QA",
+  "phases": {
+    "0": "PASS",
+    "1": "PASS",
+    "2": "PASS",
+    "3": "PASS",
+    "4": "PASS"
+  },
+  "existingTests": 185,
+  "independentMainCases": 40,
+  "sourceUnchanged": true,
+  "browserInitialFailure": "file URL blocked by administrator; preserved; setContent retry PASS",
+  "syntheticOnly": true,
+  "liveValidation": false
+}
