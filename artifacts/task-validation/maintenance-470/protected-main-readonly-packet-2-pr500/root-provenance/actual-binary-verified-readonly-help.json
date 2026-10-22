@@ -1,0 +1,41 @@
+{
+  "at": "2026-10-22T15:32:00Z",
+  "archive": "/tmp/clinicos-railway566-linux-gnu.tar.gz",
+  "url": "https://github.com/railwayapp/cli/releases/download/v5.66.0/railway-v5.66.0-x86_64-unknown-linux-gnu.tar.gz",
+  "archiveSha256": "5b3f4e77ddf986161fb760842d718b23ab587a59f9badf610c1fb7b80bcbcb3e",
+  "archiveMembers": [
+    "railway"
+  ],
+  "binarySha256": "f54008fab1b49710958f63d290ed7256e2115d4d7036ea18452f5d6fe1243eb6",
+  "providerCalls": 0,
+  "credentialsUsed": false,
+  "commands": [
+    {
+      "args": [
+        "--version"
+      ],
+      "exit": 0,
+      "stdout": "railway 5.66.0\n\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "variables",
+        "--help"
+      ],
+      "exit": 0,
+      "stdout": "Manage environment variables for a service\n\nUsage: railway variable [OPTIONS] [COMMAND]\n\nCommands:\n  list    List variables for a service [aliases: ls]\n  set     Set a variable\n  delete  Delete a variable [aliases: rm, remove]\n  edit    Bulk-edit variables in $EDITOR, then confirm an IaC-style diff\n  help    Print this message or the help of the given subcommand(s)\n\nOptions:\n  -s, --service <SERVICE>          The service to show/set variables for\n  -e, --environment <ENVIRONMENT>  The environment to show/set variables for\n  -p, --project <PROJECT_ID>       Project ID to use (defaults to linked project)\n  -k, --kv                         Show variables in KV format. This prints raw values\n      --set <SET>                  The \"{key}={value}\" environment variable pair to set the service variables (legacy, use 'variable set' instead)\n      --set-from-stdin <KEY>       Set a variable with the value read from stdin (legacy, use 'variable set --stdin' instead)\n      --json                       Output in JSON format. Variable list JSON includes raw values\n      --skip-deploys               Skip triggering deploys when setting variables\n  -h, --help                       Print help\n  -V, --version                    Print version\n\nExamples:\n\n  railway variable list --service api --json\n  railway variable list --service api --kv\n  railway variable set API_URL=https://example.com --skip-deploys --json\n  echo \"secret\" | railway variable set API_KEY --stdin --skip-deploys --json\n  railway variable delete API_KEY --service api --json\n  railway variable edit\n  railway variable edit --demo\n\nAutomation notes:\n  JSON and KV output include raw variable values. Avoid sharing command output from secret-bearing variable commands.\n  For idempotent deletes, list variables first, check whether the key exists, then delete it.\n  Sealed variables are listed by name with no value (null in JSON, <sealed> in the table). They are already set and nobody can read them back - do not recreate them.\n  `variable edit` opens $EDITOR, then shows an IaC-style diff and asks for confirmation before applying.\n\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "service",
+        "list",
+        "--help"
+      ],
+      "exit": 0,
+      "stdout": "List services in the current environment\n\nUsage: railway service list [OPTIONS]\n\nOptions:\n  -e, --environment <ENVIRONMENT>  Environment to list services from (defaults to linked environment)\n  -p, --project <PROJECT_ID>       Project ID to use (defaults to linked project)\n      --json                       Output in JSON format\n  -h, --help                       Print help\n  -V, --version                    Print version\n\n",
+      "stderr": ""
+    }
+  ]
+}

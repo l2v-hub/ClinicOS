@@ -1,0 +1,14 @@
+exit=1
+stdout=
+stderr=file:///tmp/clinicos500-independent2-source/scripts/maintenance/demo-storage-inspect.mjs:69
+const requireRead = (condition, code) => { if (!condition) throw new ReadError(code); };
+                                                                 ^
+
+ReadError: READONLY_RUNTIME_TEMP_INVALID
+    at requireRead (file:///tmp/clinicos500-independent2-source/scripts/maintenance/demo-storage-inspect.mjs:69:66)
+    at verifiedRailwayPath (file:///tmp/clinicos500-independent2-source/scripts/maintenance/demo-storage-inspect.mjs:73:3)
+    at file:///tmp/clinicos500-independent2-source/[eval1]:1:108 {
+  code: 'READONLY_RUNTIME_TEMP_INVALID'
+}
+
+Node.js v22.23.4

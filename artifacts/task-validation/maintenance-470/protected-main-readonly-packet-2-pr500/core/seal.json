@@ -1,0 +1,71 @@
+{
+  "status": "AUTHOR_STOPPED_FOR_INDEPENDENT_QA",
+  "sourceSnapshot": "/tmp/clinicos500-core2-source",
+  "sourceFreezeSha256": "d99e7c8187de2f85e788e4fc02be0c4015360fea6f05b28396005e9392cb9e0d",
+  "sourcePatchSha256": "c3bf296bc31d4bcb4db05f7f0ec5c3465b5bd57d8d3e5d7fdb805012ab33513a",
+  "corePatchSha256": "12c1900c582a5172dccfd154f66528fb24dfed6875d4d2891bd746ad391bc35a",
+  "rootMergedLowSha256": "5458e519575d0f47d9ad542d4a8fd150b85f73110dc6a4f1c788e0b0cd9a7759",
+  "files": {
+    "STOP.json": {
+      "sha256": "efa2d7477b1d3b3ea76869dfc923e80ec832632443e960499b312e42173c9be1",
+      "bytes": 202
+    },
+    "contract-validation.log": {
+      "sha256": "61b7931726052ea3cc97c698ea9994a812a95880517cba1220dae4f385d3ceb4",
+      "bytes": 83
+    },
+    "core.patch": {
+      "sha256": "12c1900c582a5172dccfd154f66528fb24dfed6875d4d2891bd746ad391bc35a",
+      "bytes": 23243
+    },
+    "design-ack.json": {
+      "sha256": "6ca993164744da9e59c08a5c6970b51ffc4b3ca8aea08f721124f2918bf41d87",
+      "bytes": 371
+    },
+    "focused-final.log": {
+      "sha256": "e1f3ee16c5543b93f5ce7c0314942e08c24920e4a4cf2d379dee15b15a97478c",
+      "bytes": 33832
+    },
+    "focused-first.log": {
+      "sha256": "3bd3457b4329cfb8e7a90c7b1e0cd89996c41007f78f5581cf10a35a4c4a4519",
+      "bytes": 35279
+    },
+    "freeze-assembly-first-stop.json": {
+      "sha256": "f50fc2f2d58ce2a564cb217aecde1eec8398b2496ea538b074f4a48816145d2e",
+      "bytes": 302
+    },
+    "report.md": {
+      "sha256": "e6ffa1a4e6f1166487de9bfb061ba5fb765d780bb7d4e0fae6ab49e60e7616d3",
+      "bytes": 3531
+    },
+    "results.json": {
+      "sha256": "c69731e6a8457151874b39f022fbe37d0d240eeaee60512c9db5ec61b9bf70e1",
+      "bytes": 1323
+    },
+    "source-before.json": {
+      "sha256": "d38d5ab56454aabc84dc828e3f70e50174f184f6101481ef62cf3916566664d8",
+      "bytes": 44266
+    },
+    "source-freeze.json": {
+      "sha256": "d99e7c8187de2f85e788e4fc02be0c4015360fea6f05b28396005e9392cb9e0d",
+      "bytes": 44804
+    },
+    "source.patch": {
+      "sha256": "c3bf296bc31d4bcb4db05f7f0ec5c3465b5bd57d8d3e5d7fdb805012ab33513a",
+      "bytes": 24370
+    },
+    "static-results.json": {
+      "sha256": "fcbeec7ad96645b687100f97d515c99486d6e682184694680d65904e80587bbc",
+      "bytes": 552
+    },
+    "task-contract.md": {
+      "sha256": "e9ca22909d784bd86c687a72ffcca4342ca31fe249a638eb386ccc32206a1374",
+      "bytes": 3059
+    }
+  },
+  "focusedTests": {
+    "pass": 157,
+    "fail": 0
+  },
+  "actualProviderCalls": 0
+}

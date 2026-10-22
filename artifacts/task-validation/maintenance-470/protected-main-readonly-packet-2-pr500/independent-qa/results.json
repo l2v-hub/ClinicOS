@@ -1,0 +1,39 @@
+{
+  "verdict": "PASS",
+  "status": "PASS",
+  "findings": [],
+  "focused": {
+    "tests": 157,
+    "pass": 157,
+    "fail": 0,
+    "skipped": 0,
+    "runs": 1
+  },
+  "independentNewDeltaProbes": {
+    "tests": 13,
+    "pass": 13,
+    "fail": 0
+  },
+  "independentActualShellNegative": {
+    "case": "invalid runtime root before download",
+    "exit": 1,
+    "expected": true,
+    "networkOrExtractionOrExecution": false
+  },
+  "contract": "PASS",
+  "staticReview": "PASS",
+  "sourcePaths": 270,
+  "sourceBeforeAfterUnchanged": true,
+  "coreAndLowSealsUnchanged": true,
+  "nodeVersion": "v22.23.4",
+  "nodeSha256": "94efd062ed066c1a0b332e18249859c905e920eeada5df55d24c99b919629a90",
+  "actualProviderCalls": 0,
+  "actualNetworkCalls": 0,
+  "sourceEdits": 0,
+  "windowsExecution": "UNRUN; current Windows job does not collect maintenance tests",
+  "evidenceLimits": [
+    "Fake provider/native tests do not establish provider/auth/schema access",
+    "Root offline checksum/version/help inherited after archive/member/binary hash verification, not rerun",
+    "No actual native CI/provider/deploy/cleanup/siteclean/approval claim"
+  ]
+}

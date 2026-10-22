@@ -1,0 +1,58 @@
+{
+  "status": "PASS",
+  "scope": "Independent new Claude1-fix2 security delta only; synthetic transports",
+  "results": [
+    {
+      "name": "runtime path rejected \"//server/share\"",
+      "status": "PASS"
+    },
+    {
+      "name": "runtime path rejected \"C:/runner/temp\"",
+      "status": "PASS"
+    },
+    {
+      "name": "runtime path rejected \"/tmp/%2e%2e/bin\"",
+      "status": "PASS"
+    },
+    {
+      "name": "runtime path rejected \"/tmp/a\\rbin\"",
+      "status": "PASS"
+    },
+    {
+      "name": "runtime path rejected \"/tmp/a\\u0000bin\"",
+      "status": "PASS"
+    },
+    {
+      "name": "runtime path rejected \"/tmp/a\\\\bin\"",
+      "status": "PASS"
+    },
+    {
+      "name": "runtime path rejected \"/tmp/a;echo\"",
+      "status": "PASS"
+    },
+    {
+      "name": "runtime path rejected \"/tmp/è\"",
+      "status": "PASS"
+    },
+    {
+      "name": "absolute executable cannot be overridden by PATH or alternate variable",
+      "status": "PASS"
+    },
+    {
+      "name": "missing absolute executable never falls back to PATH or another command",
+      "status": "PASS"
+    },
+    {
+      "name": "account public decoder scopes every variable phase and rejects wrong scope without spawn",
+      "status": "PASS"
+    },
+    {
+      "name": "private binding adapter scopes all account reads across both complete observations",
+      "status": "PASS"
+    },
+    {
+      "name": "project token argv compatibility remains exact while executable is absolute",
+      "status": "PASS"
+    }
+  ]
+}

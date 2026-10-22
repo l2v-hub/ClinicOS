@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "yaml": "BaseLoader",
+  "bashSyntaxSteps": 3,
+  "permissions": {
+    "contents": "read"
+  },
+  "credentialFreeInstallerBeforeSecret": true,
+  "fixedArchiveSha256": "5b3f4e77ddf986161fb760842d718b23ab587a59f9badf610c1fb7b80bcbcb3e",
+  "frozenLowSha256": "5458e519575d0f47d9ad542d4a8fd150b85f73110dc6a4f1c788e0b0cd9a7759",
+  "rootRealBinaryProofSha256": "3da21dcda735b459d555c2bebd56ec71465ae55dafb92a37d1bbd86b071589f7",
+  "rootSourceMainIdentityProofSha256": "40f84f11deadb9a5a9b2a5e8431f2bb1d895987998fa29192d69758e4b3427f5"
+}

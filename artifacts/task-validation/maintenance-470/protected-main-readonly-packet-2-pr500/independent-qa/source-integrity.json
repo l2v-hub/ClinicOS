@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "beforeAfterIdentical": true,
+  "sourceCount": 270,
+  "coreFrozenSourceUnchanged": true,
+  "lowSourceSha256": "5458e519575d0f47d9ad542d4a8fd150b85f73110dc6a4f1c788e0b0cd9a7759",
+  "coreSealUnchanged": "6898cb22a1509b345780cebe9844483b3adba1d72f9e25f8a441cd7e5c464bfd",
+  "lowSealUnchanged": "28a9df44784bd5c49993f2062a2f72cc58dc9a90c27c74ffba60646fca2ecf81",
+  "sourceInventorySha256": "53f9c7ed632dac0ffb572a55cb14edfa9b8d5034b5ad039f52ac5e0b7a2d2514",
+  "rootMain453LineEndingsProofSha256": "40f84f11deadb9a5a9b2a5e8431f2bb1d895987998fa29192d69758e4b3427f5"
+}

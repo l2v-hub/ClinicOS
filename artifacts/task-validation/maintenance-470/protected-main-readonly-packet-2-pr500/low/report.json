@@ -1,0 +1,19 @@
+{
+  "task": "PR500 Claude1 follow-up low implementation",
+  "reservationNonce": "98c136ea-f17d-4dfc-830c-ecec8fedceaf",
+  "stateCommit": "daddccf6ab93652cd917b5820fab7b6f19962b3e",
+  "sourceSnapshot": "/tmp/clinicos500-low2-source",
+  "scope": ["scripts/maintenance/demo-storage-binding-readonly.mjs"],
+  "changes": [
+    "Removed the unused SAFE_REPLACEMENT_ERRORS set.",
+    "Corrected the header reference to 'maintenance 92931e60'.",
+    "Preserved the used TERMINAL set and all behavior/API surfaces."
+  ],
+  "validation": {
+    "node22Check": {"command": "node --check scripts/maintenance/demo-storage-binding-readonly.mjs", "exit": 0},
+    "diffReview": "PASS: exact one-file diff is limited to header typo correction and removal of the unused set.",
+    "tests": "Not run per contract."
+  },
+  "sourceSha256": "5458e519575d0f47d9ad542d4a8fd150b85f73110dc6a4f1c788e0b0cd9a7759",
+  "sourcePatchSha256": "4e0938e62ee284b2e5a8785dc22503f0ef7a0fabf3167e99bdd4752c1ac048d8"
+}

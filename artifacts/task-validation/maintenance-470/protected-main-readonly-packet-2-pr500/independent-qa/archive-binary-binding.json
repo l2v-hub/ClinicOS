@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "archiveSha256": "5b3f4e77ddf986161fb760842d718b23ab587a59f9badf610c1fb7b80bcbcb3e",
+  "member": "railway",
+  "regularFile": true,
+  "binarySha256": "f54008fab1b49710958f63d290ed7256e2115d4d7036ea18452f5d6fe1243eb6",
+  "offlineProofBound": true,
+  "binaryExecutedByQA": false
+}

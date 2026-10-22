@@ -1,0 +1,8 @@
+{
+  "rootAckBeforeSourceEdits": true,
+  "design": "Four files: verified fixed GNU archive/path and account strict decoder with private binding adapter",
+  "coreNonce": "cd13b3a7-8601-4d6b-afc6-d855485bb86a",
+  "rootCopiedLowBeforeFocusedTests": true,
+  "lowSha256": "5458e519575d0f47d9ad542d4a8fd150b85f73110dc6a4f1c788e0b0cd9a7759",
+  "noSourceEditsToLowByCore": true
+}

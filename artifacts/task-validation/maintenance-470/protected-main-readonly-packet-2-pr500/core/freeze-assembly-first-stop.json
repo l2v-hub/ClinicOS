@@ -1,0 +1,6 @@
+{
+  "phase": "private report assembly",
+  "cause": "First inventory already captured root-copied LOW; expected five delta against it incorrectly. Actual four core changes; fifth combined LOW delta is against immutable original source.",
+  "sourceUnchangedByAssembly": true,
+  "productFailure": false
+}

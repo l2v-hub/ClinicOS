@@ -1,0 +1,8 @@
+{
+  "status": "STOP",
+  "verdict": "PASS",
+  "at": "2026-10-22T15:45:58.581955+00:00",
+  "findings": [],
+  "sourceUnchanged": true,
+  "sourceInventorySha256": "53f9c7ed632dac0ffb572a55cb14edfa9b8d5034b5ad039f52ac5e0b7a2d2514"
+}
