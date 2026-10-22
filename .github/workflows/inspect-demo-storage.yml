@@ -1,0 +1,86 @@
+name: Inspect protected demo storage read-only
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/inspect-demo-storage.yml'
+      - 'scripts/maintenance/demo-storage-*'
+  workflow_dispatch:
+    inputs:
+      reviewed_sha:
+        description: Exact reviewed current main SHA
+        type: string
+        required: true
+      auth_mode:
+        description: Explicit credential transport; never automatically retried or switched
+        type: choice
+        options: [project-token, account-bearer]
+        default: project-token
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: demo-storage-inspect
+  cancel-in-progress: false
+jobs:
+  test:
+    if: github.repository == 'l2v-hub/ClinicOS'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Test without credentials or provider access
+        run: node --test scripts/maintenance/demo-storage-inspect.test.mjs scripts/maintenance/demo-storage-workflow.test.mjs
+  inspect:
+    needs: test
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      github.repository == 'l2v-hub/ClinicOS' &&
+      github.ref == 'refs/heads/main' &&
+      github.ref_name == 'main' &&
+      github.workflow_ref == 'l2v-hub/ClinicOS/.github/workflows/inspect-demo-storage.yml@refs/heads/main' &&
+      github.actor == 'l2v-hub' &&
+      github.triggering_actor == github.actor &&
+      github.sha == github.workflow_sha &&
+      inputs.reviewed_sha == github.sha &&
+      (inputs.auth_mode == 'project-token' || inputs.auth_mode == 'account-bearer')
+    runs-on: ubuntu-latest
+    environment: 'glistening-friendship / demo'
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Install fixed read-only CLI without credentials
+        timeout-minutes: 1
+        run: npm install -g @railway/cli@5.66.0
+      - name: Inspect only fixed demo binding and descriptive snapshot counts
+        env:
+          RAILWAY_TOKEN: ${{ inputs.auth_mode == 'project-token' && secrets.RAILWAY_DEMO_TOKEN || '' }}
+          RAILWAY_API_TOKEN: ${{ inputs.auth_mode == 'account-bearer' && secrets.RAILWAY_DEMO_TOKEN || '' }}
+          GITHUB_TOKEN: ${{ github.token }}
+          DEMO_STORAGE_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+          DEMO_STORAGE_AUTH_MODE: ${{ inputs.auth_mode }}
+          DEMO_STORAGE_OPERATION: demo-storage-inspect
+          DEMO_STORAGE_ENVIRONMENT: 'glistening-friendship / demo'
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/maintenance/demo-storage-inspect.mjs | tee "$RUNNER_TEMP/demo-storage-receipt.txt"
+      - name: Retain only the safe bounded inspection receipt
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: demo-storage-receipt-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/demo-storage-receipt.txt
+          retention-days: 7
+          if-no-files-found: warn
