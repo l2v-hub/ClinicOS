@@ -46,7 +46,14 @@ const validPlan = {
   ],
 };
 
-function fixture({ failed = false, reviewCount, actor = 'review-bot', authorizationVerifier = true, blobState = false } = {}) {
+function fixture({
+  failed = false,
+  reviewCount,
+  actor = 'review-bot',
+  authorizationVerifier = true,
+  blobState = false,
+  automatic = () => false,
+} = {}) {
   let round = failed ? 1 : 0;
   const batch = {
     id: 'bug-batch-17',
@@ -197,6 +204,7 @@ function fixture({ failed = false, reviewCount, actor = 'review-bot', authorizat
   const handoff = createCommentReviewHandoff({
     github,
     run: apiRun,
+    automatic,
     cwd: '/synthetic/worktree',
     now: () => new Date('2026-10-17T00:00:00.000Z'),
     nonce: () => `nonce-${++nonceValue}`,
@@ -722,4 +730,34 @@ test('background normal waiting reconciliation never repairs notices across acco
   assert.equal(f.calls.length, callCount, 'No actor or notice API in the background reconciliation');
   assert.equal(f.pr.comments.length, notices);
   assert.deepEqual(f.remote.batches[0], previous);
+});
+
+test('automatic native handoff reload rejects global or subject ownership without reinterpreting it as a failed review', async () => {
+  for (const kind of ['global', 'subject']) {
+    const f = fixture({ automatic: () => true });
+    await f.handoff.request(81);
+    if (kind === 'global') f.remote.operatorTakeover = { active: true };
+    else f.remote.batches[0].operatorCoordination = { active: true };
+    const before = clone(f.remote),
+      writes = f.writes.length;
+    await assert.rejects(f.handoff.load(81), (error) => error.code === 'review-operator-owned');
+    await assert.rejects(
+      f.handoff.reconcile(f.remote.batches[0], async () => assert.fail('no state write')),
+      (error) => error.code === 'review-operator-owned',
+    );
+    assert.deepEqual(f.remote, before);
+    assert.equal(f.writes.length, writes);
+  }
+});
+
+test('automatic handoff persistence observes a takeover during native source checks before CAS/comment effects', async () => {
+  const f = fixture({ automatic: () => true });
+  const before = clone(f.remote.batches[0]);
+  f.onViewIssue(() => {
+    f.remote.operatorTakeover = { active: true };
+  });
+  await assert.rejects(f.handoff.request(81), (error) => error.code === 'review-operator-owned');
+  assert.deepEqual(f.remote.batches[0], before);
+  assert.equal(f.writes.length, 0);
+  assert.equal(f.pr.comments.length, 0);
 });

@@ -377,12 +377,20 @@ function releaseSubject(batch) {
   return JSON.stringify(batch);
 }
 
-function freshReleaseGuard({ batch, store, repo }) {
+function assertAutomaticReleaseOwnership(state, batch, automatic) {
+  if (automatic && (automationPaused(state) || (batch && operatorOwns(state, 'batches', batch))))
+    throw Object.assign(new ReleaseGateError('Automatic release subject is operator-owned'), {
+      code: 'release-operator-owned',
+    });
+}
+
+function freshReleaseGuard({ batch, store, repo, automatic = false }) {
   const batchId = batch.id;
   const expected = releaseSubject(batch);
   return async () => {
     const state = store ? structuredClone(validateState(await store.load(), repo)) : null;
     const current = state ? state.batches.find((item) => item.id === batchId) : batch;
+    if (state) assertAutomaticReleaseOwnership(state, current, automatic);
     assertNoReleaseHold(current);
     if (!current || releaseSubject(current) !== expected)
       fail('verified release identity changed during asynchronous verification');
@@ -390,9 +398,9 @@ function freshReleaseGuard({ batch, store, repo }) {
   };
 }
 
-async function persistReleaseTransition({ state, batch, guard, store, repo }) {
+async function persistReleaseTransition({ state, batch, guard, store, repo, automatic = false }) {
   const saved = structuredClone(batch);
-  const afterSave = freshReleaseGuard({ batch: saved, store, repo });
+  const afterSave = freshReleaseGuard({ batch: saved, store, repo, automatic });
   await store.save(structuredClone(state), { guard });
   await afterSave();
   return saved;
@@ -594,7 +602,10 @@ export async function releaseBatch({
   execute = false,
   configured = {},
   sourcePolicy,
+  automatic = false,
 }) {
+  if (typeof automatic !== 'boolean')
+    throw new TypeError('automatic release context must be boolean');
   sourcePolicy = releaseSourcePolicy(sourcePolicy);
   if (sourcePolicy === DEMO_SOURCE_POLICIES.exact && repo !== 'l2v-hub/ClinicOS')
     fail('exact demo release requires the fixed repository');
@@ -609,9 +620,10 @@ export async function releaseBatch({
   const initial = validateState(await store.load(), repo);
   const batch = structuredClone(initial.batches.find((candidate) => candidate.id === batchId));
   if (!batch) fail('batch is absent from durable state');
+  assertAutomaticReleaseOwnership(initial, batch, automatic);
   assertNoReleaseHold(batch);
   assertSavedPolicy(batch, sourcePolicy);
-  let guard = freshReleaseGuard({ batch, store, repo });
+  let guard = freshReleaseGuard({ batch, store, repo, automatic });
   const exact = sourcePolicy === DEMO_SOURCE_POLICIES.exact;
   const ensureExact = async (operation, expectedSha) => {
     if (!execute && batch.exactDemoDispatches?.[operation] === undefined)
@@ -641,12 +653,14 @@ export async function releaseBatch({
             guard: oldGuard,
             store,
             repo,
+            automatic,
           });
           Object.assign(batch, saved);
-          guard = freshReleaseGuard({ batch, store, repo });
+          guard = freshReleaseGuard({ batch, store, repo, automatic });
         },
       });
     } catch (error) {
+      if (error?.code === 'release-operator-owned') throw error;
       await persistExactBlock({
         batch,
         store,
@@ -768,9 +782,10 @@ export async function releaseBatch({
       guard,
       store,
       repo,
+      automatic,
     });
     Object.assign(batch, saved);
-    guard = freshReleaseGuard({ batch, store, repo });
+    guard = freshReleaseGuard({ batch, store, repo, automatic });
     return finishMerged({
       ok: true,
       status: 'merged',
@@ -829,9 +844,10 @@ export async function releaseBatch({
     guard,
     store,
     repo,
+    automatic,
   });
   Object.assign(batch, saved);
-  guard = freshReleaseGuard({ batch, store, repo });
+  guard = freshReleaseGuard({ batch, store, repo, automatic });
   return finishMerged({
     ok: true,
     status: 'merged',
@@ -870,7 +886,10 @@ export async function recordDeployment({
   runtimeRunUrl = '',
   sourcePolicy,
   productionWait = {},
+  automatic = false,
 }) {
+  if (typeof automatic !== 'boolean')
+    throw new TypeError('automatic release context must be boolean');
   sourcePolicy = releaseSourcePolicy(sourcePolicy);
   if (
     typeof batchId !== 'string' ||
@@ -886,6 +905,7 @@ export async function recordDeployment({
     batch.release.mergeSha !== mergeSha
   )
     fail('deployment does not match a recorded production merge');
+  assertAutomaticReleaseOwnership(initial, batch, automatic);
   assertNoReleaseHold(batch);
   assertSavedPolicy(batch, sourcePolicy);
   if (
@@ -897,7 +917,7 @@ export async function recordDeployment({
   )
     fail('recorded release no longer matches its approved candidate');
   verifyReviewProof(batch, batch.sha);
-  const guard = freshReleaseGuard({ batch, store, repo });
+  const guard = freshReleaseGuard({ batch, store, repo, automatic });
   if (publicationComplete(batch))
     return {
       ok: true,
@@ -1001,6 +1021,7 @@ export async function recordDeployment({
     guard,
     store,
     repo,
+    automatic,
   });
 
   await publishDeploymentCompletion({
@@ -1009,6 +1030,7 @@ export async function recordDeployment({
     store,
     repo,
     sourcePolicy,
+    automatic,
   });
   return {
     ok: true,
@@ -1019,7 +1041,18 @@ export async function recordDeployment({
   };
 }
 
-export async function publishDeploymentCompletion({ batch, github, store, repo, sourcePolicy }) {
+export async function publishDeploymentCompletion({
+  batch,
+  github,
+  store,
+  repo,
+  sourcePolicy,
+  automatic = false,
+}) {
+  if (typeof automatic !== 'boolean')
+    throw new TypeError('automatic release context must be boolean');
+  if (automatic && !store?.load)
+    throw new TypeError('automatic completion requires a durable store');
   sourcePolicy = releaseSourcePolicy(sourcePolicy);
   assertSavedPolicy(batch, sourcePolicy);
   const suppliedBatch = batch;
@@ -1064,6 +1097,7 @@ export async function publishDeploymentCompletion({ batch, github, store, repo, 
     batch: store ? batch : suppliedBatch,
     store,
     repo,
+    automatic,
   });
   const guard = async () => {
     const verified = await fresh();
@@ -1084,6 +1118,7 @@ export async function publishDeploymentCompletion({ batch, github, store, repo, 
           sourcePolicy,
         });
       } catch (error) {
+        if (error?.code === 'release-operator-owned') throw error;
         if (sourcePolicy === DEMO_SOURCE_POLICIES.exact && store)
           await persistExactBlock({
             batch: current,
@@ -1136,6 +1171,7 @@ export async function publishDeploymentCompletion({ batch, github, store, repo, 
       )
         fail('persisted demo receipt differs from trusted current proof');
     } catch (error) {
+      if (error?.code === 'release-operator-owned') throw error;
       if (sourcePolicy === DEMO_SOURCE_POLICIES.exact)
         await persistExactBlock({
           batch,
@@ -1185,6 +1221,7 @@ export async function publishDeploymentCompletion({ batch, github, store, repo, 
       guard,
       store,
       repo,
+      automatic,
     });
   }
   return { status: 'published' };
@@ -1277,6 +1314,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
       deploymentSha: env.BUG_PIPELINE_DEPLOYMENT_SHA || undefined,
       runtimeRunUrl: env.RUNTIME_DEPLOYMENT_RUN_URL || '',
       sourcePolicy,
+      automatic: env.GITHUB_EVENT_NAME === 'workflow_run',
     });
     console.log(JSON.stringify(result));
     return 0;
@@ -1358,6 +1396,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
     batchId,
     reviewedSha,
     execute: true,
+    automatic: env.GITHUB_EVENT_NAME === 'workflow_run',
     sourcePolicy,
     configured: {
       botToken: env.CLINICOS_BOT_TOKEN_CONFIGURED === 'true',

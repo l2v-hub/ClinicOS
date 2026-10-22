@@ -1,3 +1,4 @@
+import { operatorOwns } from './operator-ownership.mjs';
 import { authorizationBinding, consumeOperatorAuthorization } from './operator-authorization.mjs';
 import {
   attemptLimit,
@@ -42,7 +43,9 @@ export function createCommentReviewHandoff({
   subjectAdapter,
   authorizationVerifier,
   operationTimeouts = {},
+  automatic = () => false,
 }) {
+  assert.equal(typeof automatic, 'function');
   const store = github.createStateStore();
   const timeouts = Object.freeze({ ...operationTimeouts,
     merge: Math.max(MERGE_RESERVATION_LEASE_MS, operationTimeouts.merge ?? 0) });
@@ -67,6 +70,7 @@ export function createCommentReviewHandoff({
     return login;
   }
   async function live(batch) {
+    if (automatic()) await load(batch.pr.number);
     if (subjectAdapter) await subjectAdapter.live(batch);
     const feedback = await github.reviewFeedback(batch.pr.number);
     assert.ok(
@@ -98,6 +102,15 @@ export function createCommentReviewHandoff({
         : [...state.batches, ...(includeManual ? (state.manualBatches ?? []) : [])]
     ).find((item) => item.pr?.number === pr);
     assert.ok(batch && batch.sha, 'PR has no controller-owned implementation/evidence packet');
+    if (automatic()) {
+      const collection = ['batches', 'manualBatches', 'standaloneReviews'].find((key) =>
+        (state[key] ?? []).some((item) => item.id === batch.id),
+      );
+      if (operatorOwns(state, collection, batch))
+        throw Object.assign(new Error('Automatic review subject is operator-owned'), {
+          code: 'review-operator-owned',
+        });
+    }
     return { state, batch };
   }
   async function save(state, batch, login, { guard, recoveryHead } = {}) {
@@ -107,6 +120,18 @@ export function createCommentReviewHandoff({
     await store.save(state, {
       rebaseIndependentSubjects: async (merged) => {
         validateState(merged, REPO);
+        if (automatic()) {
+          const current = ['batches', 'manualBatches', 'standaloneReviews'].flatMap((collection) =>
+            (merged[collection] ?? [])
+              .filter((item) => item.id === batch.id)
+              .map((item) => ({ collection, item })),
+          );
+          assert.equal(current.length, 1, 'Automatic handoff owner changed');
+          if (operatorOwns(merged, current[0].collection, current[0].item))
+            throw Object.assign(new Error('Automatic review subject is operator-owned'), {
+              code: 'review-operator-owned',
+            });
+        }
         if (merged.standaloneReviews) {
           const { validateStandaloneState } = await import('./standalone-review.mjs');
           validateStandaloneState(merged);
@@ -124,6 +149,7 @@ export function createCommentReviewHandoff({
           await subjectAdapter.reservationGuard(batch);
         assert.equal(JSON.stringify(batch), expected, 'Handoff subject mutated');
         assert.ok(await github.authorized(login), 'Handoff actor lost authorization');
+        if (automatic()) await load(batch.pr.number);
         assert.ok(performance.now() - started <= 60000, 'Handoff guard expired');
       },
     });
@@ -148,6 +174,7 @@ export function createCommentReviewHandoff({
       assert.deepEqual(current, batch, 'Durable handoff changed before comment');
       await live(batch);
       assert.ok(await github.authorized(payload.actor), 'Comment actor lost authorization');
+      if (automatic()) await load(batch.pr.number);
       await github.commentPR(batch.pr.number, body);
     }
   }
@@ -307,6 +334,7 @@ export function createCommentReviewHandoff({
     return { status: 'submitted', pr, sha: batch.sha, round: batch.reviews.length };
   }
   async function reconcile(batch, persist, { repairNotice = false } = {}) {
+    if (automatic()) await load(batch.pr.number);
     if (!channel(batch)) return false;
     if (batch.externalReview.status === 'comment-requested') {
       if (repairNotice) await requestNotice(batch, await actor());

@@ -69,6 +69,7 @@ async function runExternalReviewStep({
   };
   if (batch.externalReview?.channel === 'github-comments') {
     const receiver = createCommentReviewHandoff({
+      automatic: () => true,
       github: gh,
       cwd: process.cwd(),
       run: createRunner({

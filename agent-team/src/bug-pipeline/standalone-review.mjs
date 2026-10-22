@@ -1,4 +1,10 @@
-import { githubOperationError, isRetryableGitHubFailure, recordTransientGitHubFailure, MERGE_PREPARATION_TIMEOUT_MS } from './github.mjs';
+import { AsyncLocalStorage } from 'node:async_hooks';
+import {
+  githubOperationError,
+  isRetryableGitHubFailure,
+  recordTransientGitHubFailure,
+  MERGE_PREPARATION_TIMEOUT_MS,
+} from './github.mjs';
 import { randomUUID } from 'node:crypto';
 import {
   attemptLimit,
@@ -266,6 +272,7 @@ export function validateStandaloneState(state) {
 
 export function createStandaloneReview({ github, run, cwd, now = () => new Date(), nonce, authorizationVerifier, operationTimeouts }) {
   const store = github.createStateStore();
+  const automaticContext = new AsyncLocalStorage();
   async function api(endpoint, method = 'GET', body) {
     const result = await run({
       command: 'gh',
@@ -498,6 +505,7 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
     nonce,
     authorizationVerifier,
     operationTimeouts,
+    automatic: () => automaticContext.getStore() === true,
     subjectAdapter: {
       validate: validateStandaloneState,
       subjects: (state) => state.standaloneReviews ?? [],
@@ -616,10 +624,14 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
     });
     return clone(subject);
   }
+  async function ownership(subject) {
+    if (automaticContext.getStore() === true) await handoff.load(subject.pr.number);
+  }
   async function current(expected) {
     const { batch } = await handoff.load(expected.pr.number);
     equal(batch, expected);
     await native(batch);
+    await ownership(expected);
     return batch;
   }
   async function mergeReceipt(expected) {
@@ -669,6 +681,7 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
       );
     } else await native(subject);
     assert.ok(await github.authorized(login), 'Persistence actor lost authorization');
+    await ownership(subject);
   }
   async function finalize(pr, { workspace, infrastructureFiles }) {
     let state = validateStandaloneState(await store.load());
@@ -699,6 +712,7 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
           checks,
           publishState,
           guardSubject,
+          ownership,
         },
         github,
         workspace,
@@ -712,6 +726,8 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
       state = validateStandaloneState(await store.load());
       subject = state.standaloneReviews?.find((item) => item.pr.number === pr);
       assert.ok(subject, 'Finalize owner disappeared');
+      if (error?.code === 'review-operator-owned')
+        return { status: 'skipped', reason: 'operator-owned' };
       if (isRetryableGitHubFailure(error)) {
         if (!recordTransientGitHubFailure(subject, now().getTime())) { await save(); throw error; }
         subject.failureCode = 'github-transient-exhausted';
@@ -740,6 +756,7 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
       const started = performance.now();
       await current(expected);
       assert.ok(await github.authorized(actor));
+      await ownership(expected);
       assert.ok(performance.now() - started <= 60000);
       for (let retry = 0; ; retry++) {
         try {
@@ -749,6 +766,7 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
           await new Promise((resolve) => setTimeout(resolve, 25 * 2 ** retry));
           await current(expected);
           assert.ok(await github.authorized(actor));
+          await ownership(expected);
         }
       }
     }
@@ -795,6 +813,11 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
     verify: (...args) => operation(() => verify(...args)),
     publishState: (...args) => operation(() => publishState(...args)),
     operation,
+    automatic: (work) => {
+      assert.equal(typeof work, 'function');
+      return automaticContext.run(true, work);
+    },
+    ownership,
     current,
     checks,
     mergeReceipt,
@@ -803,7 +826,7 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
   };
 }
 
-export async function finalizeStandaloneSubject({
+async function finalizeStandaloneSubjectBody({
   subject,
   controller,
   github,
@@ -813,6 +836,7 @@ export async function finalizeStandaloneSubject({
   now = () => new Date(),
 }) {
   const login = await controller.actor();
+  await controller.ownership?.(subject);
   const persist = async (options) => {
     const expected = JSON.stringify(subject);
     await save({
@@ -924,6 +948,7 @@ export async function standaloneReviewStep({
   const feedback = await github.reviewFeedback(subject.pr.number);
   const fingerprint = feedbackFingerprint(feedback);
   const block = async (reason) => {
+    await controller.ownership?.(subject);
     subject.phase = 'blocked';
     subject.reason = reason;
     delete subject.approvedSha;
@@ -951,8 +976,10 @@ export async function standaloneReviewStep({
     await save(); // Persistent ownership before independent model invocation.
     let qa;
     try {
+      await controller.ownership?.(subject);
       qa = await workspace.finalQaStandalone(subject);
     } catch (error) {
+      if (error?.code === 'review-operator-owned') throw error;
       subject.codexFinalReview.status = 'failed';
       subject.codexFinalReview.failureCode = controllerFailureCode(error);
       await save(); // The owning worker records its failed result and releases its allowance.
@@ -1089,4 +1116,22 @@ export async function mergeStandaloneReview({
       );
     },
   });
+}
+
+// Automatic mode is invocation-local even when a trusted controller was built earlier.
+export async function finalizeStandaloneSubject(options) {
+  const { automatic = false, controller } = options;
+  assert.equal(typeof automatic, 'boolean');
+  if (!automatic) return finalizeStandaloneSubjectBody(options);
+  assert.equal(
+    typeof controller.automatic,
+    'function',
+    'Automatic standalone controller context required',
+  );
+  assert.equal(
+    typeof controller.ownership,
+    'function',
+    'Automatic standalone ownership guard required',
+  );
+  return controller.automatic(() => finalizeStandaloneSubjectBody(options));
 }

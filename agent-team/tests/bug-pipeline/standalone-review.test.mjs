@@ -1932,7 +1932,11 @@ async function fairSubjects() {
   const github = { intake: async () => {}, discoverQueue: async () => [] };
   let failureCode = 'github-read-transient';
   const controller = {
-    actor: async () => 'operator', guardSubject: async () => {}, publishState: async () => {},
+    automatic: (work) => work(),
+    ownership: async () => {},
+    actor: async () => 'operator',
+    guardSubject: async () => {},
+    publishState: async () => {},
     reconcile: async (subject, save) => {
       if (subject.pr.number === 81 && failureCode)
         throw Object.assign(new Error('Synthetic read failure'), { code: failureCode });
@@ -2424,4 +2428,116 @@ test('standalone publisher explicitly rejects source cohorts without projecting 
  subject.issues=[17];f.remote().standaloneReviews[0].issues=[17];
  const before=f.labels.slice();const result=await f.controller.publishState(subject);
  assert.equal(result.status,'unsupported');assert.deepEqual(f.labels,before);
+});
+
+test('automatic pipeline with prebuilt native controller observes takeover without projection or owned diagnostics', async () => {
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  await f.controller.request(81);
+  const before = clone(f.remote().standaloneReviews[0]);
+  f.labels.splice(0);
+  const authorized = f.github.authorized;
+  let armed = true;
+  f.github.authorized = async (...args) => {
+    if (armed) {
+      armed = false;
+      f.remote().operatorTakeover = { active: true };
+    }
+    return authorized(...args);
+  };
+  const state = await runPipeline({
+    repo,
+    event: {},
+    gh: { ...f.github, intake: async () => {}, discoverQueue: async () => [] },
+    store: f.github.createStateStore(),
+    models: {},
+    workspace: {},
+    reviewMode: 'external',
+    standaloneController: f.controller,
+  });
+  assert.deepEqual(f.labels, []);
+  assert.deepEqual(state.standaloneReviews[0], before);
+  assert.deepEqual(f.remote().standaloneReviews[0], before);
+  assert.equal(state.operatorTakeover.active, true);
+});
+
+test('prebuilt native controller isolates automatic context across concurrent explicit calls and exceptions', async () => {
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  const subject = await f.controller.request(81);
+  f.remote().operatorTakeover = { active: true };
+  const result = await Promise.allSettled([
+    f.controller.automatic(() => f.controller.publishState(subject)),
+    f.controller.publishState(subject),
+  ]);
+  assert.equal(result[0].status, 'rejected');
+  assert.equal(result[0].reason.code, 'review-operator-owned');
+  assert.equal(result[1].status, 'fulfilled');
+  await assert.rejects(
+    f.controller.automatic(async () => {
+      throw new Error('synthetic scoped failure');
+    }),
+    /scoped failure/,
+  );
+  f.labels.splice(0);
+  await f.controller.publishState(subject);
+  assert.deepEqual(f.labels, ['claude-review-ready']);
+});
+
+test('automatic standalone last publication guard observes ownership acquired during authorization', async () => {
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  const subject = await f.controller.request(81);
+  f.labels.splice(0);
+  const authorized = f.github.authorized;
+  let calls = 0;
+  f.github.authorized = async (...args) => {
+    if (++calls === 2) f.remote().operatorTakeover = { active: true };
+    return authorized(...args);
+  };
+  await assert.rejects(
+    f.controller.automatic(() => f.controller.publishState(subject)),
+    (error) => error.code === 'review-operator-owned',
+  );
+  assert.equal(calls, 2);
+  assert.deepEqual(f.labels, []);
+});
+
+test('automatic ownership loss after a genuine QA reservation retains its running tombstone without inference or block', async () => {
+  const f = fixture();
+  const subject = await published(f);
+  let qaCalls = 0;
+  const options = stepOptions(f, subject, async () => {
+    qaCalls++;
+    return { status: 'verified' };
+  });
+  const save = options.save;
+  options.save = async (...args) => {
+    await save(...args);
+    if (subject.codexFinalReview?.status === 'running')
+      f.remote().operatorTakeover = { active: true };
+  };
+  await assert.rejects(
+    f.controller.automatic(() => standaloneReviewStep(options)),
+    (error) => error.code === 'review-operator-owned',
+  );
+  const retained = f.remote().standaloneReviews[0];
+  assert.equal(qaCalls, 0);
+  assert.equal(retained.codexFinalReview.status, 'running');
+  assert.equal(retained.codexFinalReview.subjectSha, sha);
+  assert.equal(retained.failureCode, undefined);
+  assert.notEqual(retained.phase, 'blocked');
+});
+
+test('explicit authorized exact-SHA Max request and claim remain allowed during operator takeover', async () => {
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  const history = clone(f.remote().standaloneReviews[0].implementation);
+  f.remote().operatorTakeover = { active: true };
+  const request = await f.controller.request(81);
+  const claim = await f.controller.claim(81);
+  assert.equal(request.sha, sha);
+  assert.equal(claim.reviews[0].subjectSha, sha);
+  assert.equal(claim.reviews[0].status, 'running');
+  assert.deepEqual(claim.implementation, history);
 });

@@ -118,8 +118,14 @@ export async function runPipeline({
       processingSubject = { collection: 'standaloneReviews', id };
       try {
         await finalizeStandaloneSubject({
-          subject, controller: standaloneController, github: gh, workspace, save,
-          infrastructureFiles: standaloneInfrastructureFiles, now: () => new Date(now()),
+          automatic: true,
+          subject,
+          controller: standaloneController,
+          github: gh,
+          workspace,
+          save,
+          infrastructureFiles: standaloneInfrastructureFiles,
+          now: () => new Date(now()),
         });
         if (subject.lastTransientFailure) {
           delete subject.lastTransientFailure;
@@ -132,7 +138,12 @@ export async function runPipeline({
         state = validateState(await store.load(), repo);
         if (state.standaloneReviews) validateStandaloneState(state);
         subject = state.standaloneReviews?.find((item) => item.id === id);
-        if (!subject || operatorOwns(state, 'standaloneReviews', subject)) continue;
+        if (
+          error?.code === 'review-operator-owned' ||
+          !subject ||
+          operatorOwns(state, 'standaloneReviews', subject)
+        )
+          continue;
         const code = controllerFailureCode(error);
         if (isRetryableGitHubFailure(error)) {
           if (recordTransientGitHubFailure(subject, now())) {

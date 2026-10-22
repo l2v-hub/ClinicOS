@@ -2815,3 +2815,136 @@ test('automatic release honors global pause, explicit subject handback and indep
   delete f.batch.operatorReleaseCoordination;
   assert.equal(JSON.stringify(f.batch), before);
 });
+
+test('automatic release rechecks ownership on native fresh loads instead of relying on initial selection', async () => {
+  for (const ownership of ['global', 'subject']) {
+    const f = fixture();
+    const load = f.store.load;
+    let reads = 0;
+    f.store.load = async () => {
+      const state = await load();
+      if (++reads >= 2) {
+        if (ownership === 'global') state.operatorTakeover = { active: true };
+        else state.batches[0].operatorCoordination = { active: true };
+      }
+      return state;
+    };
+    await assert.rejects(
+      releaseBatch({
+        repo: f.state.repository,
+        github: f.github,
+        store: f.store,
+        batchId: f.batch.id,
+        reviewedSha: sha,
+        configured,
+        execute: true,
+        automatic: true,
+      }),
+      (error) => error.code === 'release-operator-owned',
+    );
+    assert.equal(
+      f.calls.filter(([name]) => ['merge', 'save', 'ready', 'status', 'comment'].includes(name))
+        .length,
+      0,
+    );
+    assert.ok(reads >= 2);
+    assert.equal(f.getSaved().batches[0].phase, 'ready');
+  }
+});
+
+test('automatic native merge callback rejects late takeover and preserves the genuine existing reservation', async () => {
+  const f = fixture();
+  const reservation = {
+    status: 'merging',
+    nonce: 'synthetic-live-reservation',
+    reviewedSha: sha,
+    reservedAt: '2026-10-22T00:00:00Z',
+  };
+  f.batch.release = structuredClone(reservation);
+  let callbackChecked = false;
+  f.github.mergePullRequest = async (_, __, options) => {
+    f.getSaved().operatorTakeover = { active: true };
+    callbackChecked = true;
+    await options.guard();
+    assert.fail('native merge cannot proceed after observed handover');
+  };
+  await assert.rejects(
+    releaseBatch({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      reviewedSha: sha,
+      configured,
+      execute: true,
+      automatic: true,
+    }),
+    (error) => error.code === 'release-operator-owned',
+  );
+  assert.equal(callbackChecked, true);
+  assert.deepEqual(f.getSaved().batches[0].release, reservation);
+  assert.equal(
+    f.calls.filter(([name]) => ['merge', 'save', 'status', 'comment'].includes(name)).length,
+    0,
+  );
+});
+
+test('automatic release rejection does not leak into separately authorized explicit maintainer release', async () => {
+  const f = fixture();
+  f.state.operatorTakeover = { active: true };
+  const args = {
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    reviewedSha: sha,
+    configured,
+    execute: true,
+  };
+  await assert.rejects(
+    releaseBatch({ ...args, automatic: true }),
+    (error) => error.code === 'release-operator-owned',
+  );
+  assert.equal(f.calls.length, 0);
+  const result = await releaseBatch(args);
+  assert.equal(result.status, 'merged');
+  assert.equal(f.calls.filter(([name]) => name === 'merge').length, 1);
+  assert.equal(f.getSaved().operatorTakeover.active, true);
+});
+
+test('automatic completion publication uses fresh ownership guards and retains pending deployment facts without issue writes', async () => {
+  const f = fixture();
+  await releaseBatch({
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    reviewedSha: sha,
+    configured,
+    execute: true,
+  });
+  const batch = f.getSaved().batches[0];
+  batch.release.status = 'deployed';
+  batch.release.deployment = {
+    status: 'deployed',
+    reviewedSha: sha,
+    mergeSha,
+    vercelUrl: 'https://clinicos-eosin.vercel.app',
+  };
+  batch.release.publication = { status: 'pending' };
+  f.getSaved().operatorTakeover = { active: true };
+  const before = structuredClone(f.getSaved()),
+    count = f.calls.length;
+  await assert.rejects(
+    publishDeploymentCompletion({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batch,
+      automatic: true,
+    }),
+    (error) => error.code === 'release-operator-owned',
+  );
+  assert.deepEqual(f.getSaved(), before);
+  assert.deepEqual(f.calls.slice(count), []);
+});

@@ -555,7 +555,12 @@ test('Claude approval on comment channel requires a new independent Codex QA bef
   const args = {
     repo,
     batch,
-    gh: { ...fixture.github, createStateStore: () => ({}) },
+    gh: {
+      ...fixture.github,
+      createStateStore: () => ({
+        load: async () => ({ schemaVersion: 1, repository: repo, batches: [batch] }),
+      }),
+    },
     workspace: {
       prepare: async () => calls.push('prepare'),
       finalQa: async () => {
@@ -911,4 +916,27 @@ test('ownership loss in automatic informational publication is not swallowed bef
     'running',
     'already reserved claim is preserved, not relabelled failed',
   );
+});
+
+test('automatic external comment handoff inherits ownership context before native reconciliation or model work', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  batch.externalReview.channel = 'github-comments';
+  args.gh.createStateStore = () => ({
+    load: async () => ({
+      schemaVersion: 1,
+      repository: repo,
+      batches: [batch],
+      operatorTakeover: { active: true },
+    }),
+  });
+  args.communication = {
+    mirrorFeedback: async () => assert.fail('no later publication'),
+    publishState: async () => assert.fail('no later publication'),
+  };
+  args.block = async () => assert.fail('owner cannot receive generic blocked state');
+  const before = structuredClone(batch);
+  const result = await externalReviewStep(args);
+  assert.deepEqual(result, { status: 'skipped', reason: 'operator-owned' });
+  assert.deepEqual(batch, before);
+  assert.deepEqual(log, []);
 });
