@@ -1,0 +1,16 @@
+{
+  "nonce": "97660da3-3367-4b9e-bee0-7a9d03832f5d",
+  "status": "running",
+  "reservedAt": "2026-10-22T20:04:18.032Z",
+  "reservedBeforeSession": true,
+  "agent": "/root/identity_diagnostic3_qa",
+  "model": "gpt-6.1-sol",
+  "contractSha256": "1fff57c3c24b7512f1e5ea18c82cfc127ce95f1757a5ac6f796475f8ecad3b1a",
+  "sourceSha": "6c1a283e3b272edf9638ae6c7c67be96e4542910",
+  "sourceSnapshot": "/tmp/clinicos-railway-official-host-continuation4-20261022/qa-source",
+  "privateOutput": "/tmp/clinicos-railway-official-host-continuation4-20261022/independent-qa",
+  "sourceEditsAllowed": false,
+  "liveActionsAllowed": false,
+  "stateCommit": "14a45a05eb1fcec73f173711b185d6d2276510e5",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/e5edd13b-62ef-41eb-823e-bc4fcc43bcd1/accepted.json"
+}

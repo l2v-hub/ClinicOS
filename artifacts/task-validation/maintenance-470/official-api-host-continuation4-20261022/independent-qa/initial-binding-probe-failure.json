@@ -1,0 +1,10 @@
+{
+  "assertion": "all165snapshotfiles equal original Git blobs",
+  "mismatches": [
+    {
+      "path": "scripts/automation/setup-claude-review-windows.ps1",
+      "snapshotBlob": "4c2597006d9f30a7a2c8e737d4ac9fe5417b7c0a",
+      "gitBlob": "a72aaff45f5531fb86ee55ba26339c18579896ef"
+    }
+  ]
+}

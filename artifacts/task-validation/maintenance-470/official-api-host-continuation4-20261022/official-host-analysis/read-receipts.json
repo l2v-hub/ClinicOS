@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "nonce": "74ec6d07-792c-45a9-a6d1-546c897ca071",
+  "canonicalReservationCommit": "b987ec1800a92557889b8e6e1547894f87eacffd",
+  "method": "Static local file reads and git show/grep only. Hashing is evidence bookkeeping, not application execution or tests.",
+  "reads": [
+    {
+      "path": "/tmp/clinicos-railway-official-host-analysis-20261022/task-contract.md",
+      "sha256": "235d5fc9ff90cb28391e717e5eb55e77ca164ea180f5a997566a67c60211fde5",
+      "bytes": 2945,
+      "readOnly": true
+    },
+    {
+      "path": "/tmp/clinicos-railway-official-host-analysis-20261022/reservation.json",
+      "sha256": "44824360e525827f482ed985258cf80b9fd832d42a423e35fb951049012d1eed",
+      "bytes": 957,
+      "readOnly": true
+    },
+    {
+      "path": "/tmp/clinicos-railway566-config.rs",
+      "sha256": "c521226c418d54dec3445dfcd788f3e04f289b0ae89ab75e75476efbfaacaae0",
+      "bytes": 44923,
+      "readOnly": true
+    },
+    {
+      "path": "/tmp/clinicos-railway566-source-tree.json",
+      "sha256": "3a232631254afc40ee651e368837ef6104eb836cdaf13e5050387c1fbe44872e",
+      "bytes": 174241,
+      "readOnly": true
+    },
+    {
+      "path": "/tmp/clinicos502-final-Codex-after-actual-Claude3-20261022/root-merge/actual-project-inspection-receipt.json",
+      "sha256": "4b0ac3886e3a522f9b66c6e170d49b194d90866a0e2a681b355ae37daca7378b",
+      "bytes": 1594,
+      "readOnly": true
+    },
+    {
+      "gitCommit": "c05ce82edcf6c3b7da5396b3bed3bf1c85396ca4",
+      "path": "scripts/maintenance/demo-storage-inspect.mjs",
+      "sha256": "d3e863ec13752634de88db7a9e9029478c3bcb0c15d5d233defb88070fa931ad",
+      "bytes": 38685,
+      "gitBlob": "c9531956a7fe483f41e6624b4992f5c070792e2e",
+      "readOnly": true
+    },
+    {
+      "gitCommit": "c05ce82edcf6c3b7da5396b3bed3bf1c85396ca4",
+      "path": "scripts/automation/configure-demo-source.mjs",
+      "sha256": "c674e302471ea8b95154aa7e440761d0ca188475bdaffd294e9f4d3ad9c4536a",
+      "bytes": 17195,
+      "gitBlob": "593a54bc803808038c87d645c1b0b669dfea1056",
+      "readOnly": true
+    },
+    {
+      "gitCommit": "c05ce82edcf6c3b7da5396b3bed3bf1c85396ca4",
+      "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "sha256": "d3ca01d92e350c21fa7f0dfe952762ba41840faa4da13c259f34fb80352f5112",
+      "bytes": 41745,
+      "gitBlob": "daa1ae57f2f81346f383bb25735f29866f0cdb92",
+      "readOnly": true
+    },
+    {
+      "gitCommit": "c05ce82edcf6c3b7da5396b3bed3bf1c85396ca4",
+      "path": "scripts/maintenance/demo-storage-inspect.test.mjs",
+      "sha256": "7c4943cbe43af548b3290466cf475175ec89729b4377dd31db8de92334dc463a",
+      "bytes": 48954,
+      "gitBlob": "1da90096e78b9ea7dd00ccc995bb4e3004245b02",
+      "readOnly": true
+    },
+    {
+      "gitCommit": "c05ce82edcf6c3b7da5396b3bed3bf1c85396ca4",
+      "path": "scripts/automation/configure-demo-source.test.mjs",
+      "sha256": "a1f670d8441ef4d489f3e0ac1079c0db936894c768842c9fb82287fa7c79a8c7",
+      "bytes": 37037,
+      "gitBlob": "b5cc12e0259134eb2e48bd06dfafa176b07843d2",
+      "readOnly": true
+    },
+    {
+      "gitCommit": "c05ce82edcf6c3b7da5396b3bed3bf1c85396ca4",
+      "path": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "sha256": "2af048d815ebbbf2e0b37bb5a0bc67b554cb7eb00a64bae4ece0d47326a94339",
+      "bytes": 109210,
+      "gitBlob": "11093425731fb2865d71a627870e99a0bfc7752f",
+      "readOnly": true
+    }
+  ],
+  "officialBinding": {
+    "commit": "a12a2571c87027655e8aeeb6b7d4519766aaa2be",
+    "treeEntry": "src/config.rs",
+    "expectedBlob": "b92c4187ff823d96ab602122f3fe773a33b9ed71",
+    "independentlyCalculatedBlob": "b92c4187ff823d96ab602122f3fe773a33b9ed71",
+    "matches": true
+  }
+}

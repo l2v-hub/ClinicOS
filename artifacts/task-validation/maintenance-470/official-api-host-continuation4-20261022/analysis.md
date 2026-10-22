@@ -1,0 +1,3 @@
+# Analysis
+
+Independent source-bound official API host discrepancy proved using fixed CLI5.66 config.rs defaultProduction and get_backboard, unlike the earlier account UI helper. Aligning all3 constants is coherent minimal scope: storageinspection, sourceconfiguration and exactdeployment native client. Only3 production literal changes and3 test files. No shared helper/export/dependency/workflow/policy change. The official diagnosis does not establish actual unknown provider rejectioncause or validate credentials. All3 earlier actual failed identity runs remain failures; private target and CLI reads were0 in diagnostic3. Production Invalid RAILWAY_TOKEN remains distinct.

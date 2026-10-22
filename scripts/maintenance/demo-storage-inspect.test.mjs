@@ -87,6 +87,30 @@ function fixture(change = () => {}) {
   };
   return { data, calls, requests, spawnImpl, fetchImpl };
 }
+
+test('public storage inspection sends scoped project and account requests only to the official API host', async () => {
+  const official = 'https://backboard.railway.com/graphql/v2';
+  for (const [mode, env, tokenHeader] of [
+    ['project-token', ENV, { 'Project-Access-Token': TOKEN }],
+    ['account-bearer', ACCOUNT_ENV, { Authorization: `Bearer ${TOKEN}` }],
+  ]) {
+    const f = fixture();
+    const receipt = await run(f, { env });
+    assert.equal(receipt.outcome, 'inspected');
+    const graphql = f.requests.filter(({ url }) => url !== HEAD_ENDPOINT);
+    assert.ok(graphql.length > 0);
+    assert.ok(graphql.every(({ url }) => url === official));
+    assert.equal(f.requests.some(({ url }) => url === 'https://backboard.railway.app/graphql/v2'), false);
+    assert.ok(graphql.every(({ options }) => options.method === 'POST' && options.redirect === 'error'));
+    assert.ok(graphql.every(({ options }) => JSON.stringify(options.headers) === JSON.stringify({
+      'Content-Type': 'application/json', ...tokenHeader,
+    })));
+    const firstQuery = JSON.parse(graphql[0].options.body).query;
+    assert.equal(firstQuery, mode === 'project-token' ? QUERIES.identity : QUERIES.accountIdentity);
+    if (mode === 'account-bearer')
+      assert.equal(JSON.parse(graphql[1].options.body).query, QUERIES.accountAccess);
+  }
+});
 const run = (f = fixture(), options = {}) => inspectDemoStorage({ env: ENV, fetchImpl: f.fetchImpl,
   spawnImpl: f.spawnImpl, capturedAt: () => STAMP, ...options });
 const safe = (receipt) => {

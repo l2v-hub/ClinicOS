@@ -10,7 +10,7 @@ export const TARGET = Object.freeze({
   branch: 'main',
   domain: 'clinicos-backend-demo.up.railway.app',
 });
-export const ENDPOINT = 'https://backboard.railway.app/graphql/v2';
+export const ENDPOINT = 'https://backboard.railway.com/graphql/v2';
 export const INVENTORY_QUERY = `query($projectId:String!,$environmentId:String!,$serviceId:String!){
   projectToken{project{id} environment{id name}}
   serviceInstance(environmentId:$environmentId,serviceId:$serviceId){

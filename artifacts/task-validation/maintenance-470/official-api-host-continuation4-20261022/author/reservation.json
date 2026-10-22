@@ -1,0 +1,31 @@
+{
+  "id": "500-official-api-host-continuation4-20261022",
+  "nonce": "55538a67-d8bf-4eaa-9075-ffcb8f1c3450",
+  "status": "implementation-reserved",
+  "reservedAt": "2026-10-22T20:00:16.825Z",
+  "reservedBeforeSession": true,
+  "owner": "codex-cloud-root",
+  "agent": "/root/identity_diagnostic3_author",
+  "model": "gpt-6-luna",
+  "main": "c05ce82edcf6c3b7da5396b3bed3bf1c85396ca4",
+  "continuationImplementationRound": 4,
+  "previousSubjectPr": 502,
+  "previousSubjectSha": "ba721c3f178cb6cff73e9d075aa1808e70a9ce9b",
+  "priorConsumedImplementations": 3,
+  "priorConsumedReviews": 3,
+  "scope": [
+    "scripts/maintenance/demo-storage-inspect.mjs",
+    "scripts/maintenance/demo-storage-inspect.test.mjs",
+    "scripts/automation/configure-demo-source.mjs",
+    "scripts/automation/configure-demo-source.test.mjs",
+    "agent-team/src/bug-pipeline/demo-deployment.mjs",
+    "agent-team/tests/bug-pipeline/demo-deployment.test.mjs"
+  ],
+  "contractSha256": "55274e3bca6ebf6d16ff9839796251adb79d23d69dc4459a577ba1a29031bf48",
+  "officialHostAnalysisSealSha256": "d98f9119e24ba5ad88e6e1864f8a5bc39fbfd6133c09a3c33aa69b962b30d4a5",
+  "privateOutput": "/tmp/clinicos-railway-official-host-continuation4-20261022",
+  "liveActionsAllowed": false,
+  "testsScope": "four related credential-free suites only; fixedNode22",
+  "stateCommit": "35cb944d8dbd826ab8fc6937414571e05af07805",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/9ede1d0a-7a7f-43dd-a11b-8cbcfc7de599/accepted.json"
+}

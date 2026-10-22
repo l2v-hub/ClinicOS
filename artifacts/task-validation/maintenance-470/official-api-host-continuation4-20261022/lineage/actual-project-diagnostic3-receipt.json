@@ -1,0 +1,49 @@
+{
+  "runId": 39843385618,
+  "jobId": 120050401543,
+  "archiveSha256": "d0c2990e28b901fb21c72b084aa0bd2d6921865e141801945e4a7990e0bd4d75",
+  "archiveBytes": 53709,
+  "receiptEntries": [
+    "0_inspect.txt",
+    "inspect/5_Inspect only fixed demo binding and descriptive snapshot counts.txt"
+  ],
+  "receipt": {
+    "schemaVersion": 1,
+    "repository": "l2v-hub/ClinicOS",
+    "branch": "main",
+    "authMode": "project-token",
+    "workflowRef": "l2v-hub/ClinicOS/.github/workflows/inspect-demo-storage.yml@refs/heads/main",
+    "protectedEnvironment": "glistening-friendship / demo",
+    "reviewedSha": "c05ce82edcf6c3b7da5396b3bed3bf1c85396ca4",
+    "runId": "39843385618",
+    "runAttempt": "1",
+    "capturedAt": "2026-10-22T19:50:06.109Z",
+    "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+    "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+    "backendServiceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+    "operation": "demo-storage-inspect",
+    "outcome": "blocked",
+    "phase": "TOKEN_IDENTITY",
+    "code": "READONLY_GRAPHQL_REJECTED",
+    "credentialKind": "project-token",
+    "projectTokenVerified": false,
+    "targetReadAccess": false,
+    "bindingVerified": false,
+    "readRequests": {
+      "cli": 0,
+      "native": 1,
+      "github": 1
+    },
+    "observations": {
+      "graphqlFailure": {
+        "errorsShape": "nonempty-array",
+        "category": "unknown"
+      }
+    },
+    "sourceStorageVerified": false,
+    "cleanupPerformed": false,
+    "deletionPerformed": false,
+    "redeployPerformed": false,
+    "projectWideVisibility": "unproven"
+  }
+}
