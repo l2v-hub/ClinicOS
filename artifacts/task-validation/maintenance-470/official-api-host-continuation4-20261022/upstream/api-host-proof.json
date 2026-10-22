@@ -1,0 +1,11 @@
+{
+  "version": "5.66.0",
+  "commit": "a12a2571c87027655e8aeeb6b7d4519766aaa2be",
+  "path": "src/config.rs",
+  "blob": "b92c4187ff823d96ab602122f3fe773a33b9ed71",
+  "sha256": "c521226c418d54dec3445dfcd788f3e04f289b0ae89ab75e75476efbfaacaae0",
+  "bytes": 44923,
+  "url": "https://github.com/railwayapp/cli/blob/a12a2571c87027655e8aeeb6b7d4519766aaa2be/src/config.rs#L395",
+  "defaultProduction": true,
+  "actualApiEndpoint": "https://backboard.railway.com/graphql/v2"
+}

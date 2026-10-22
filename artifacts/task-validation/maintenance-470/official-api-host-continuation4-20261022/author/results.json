@@ -1,0 +1,23 @@
+{
+  "status": "implemented-awaiting-independent-QA",
+  "changedFiles": [
+    "scripts/maintenance/demo-storage-inspect.mjs",
+    "scripts/maintenance/demo-storage-inspect.test.mjs",
+    "scripts/automation/configure-demo-source.mjs",
+    "scripts/automation/configure-demo-source.test.mjs",
+    "agent-team/src/bug-pipeline/demo-deployment.mjs",
+    "agent-team/tests/bug-pipeline/demo-deployment.test.mjs"
+  ],
+  "snapshotSetUnchanged": true,
+  "syntaxChecks": { "passed": 3, "failed": 0 },
+  "focusedSuites": { "testsReported": 659, "passed": 659, "failed": 0 },
+  "initialAuthorFailures": [],
+  "actualPriorFailuresPreserved": [
+    { "runId": "39843385618", "authMode": "project-token", "phase": "TOKEN_IDENTITY", "code": "READONLY_GRAPHQL_REJECTED", "errorsShape": "nonempty-array", "category": "unknown", "status": "failure" },
+    { "runId": "39827112860", "authMode": "account-bearer", "phase": "ACCOUNT_IDENTITY", "code": "READONLY_GRAPHQL_REJECTED", "status": "failure" },
+    { "runId": "39829997131", "authMode": "project-token", "phase": "TOKEN_IDENTITY", "code": "READONLY_GRAPHQL_REJECTED", "status": "failure" }
+  ],
+  "liveActions": false,
+  "independentQaClaimed": false,
+  "releaseClaimed": false
+}

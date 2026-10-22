@@ -1,0 +1,35 @@
+{
+  "main": "c05ce82edcf6c3b7da5396b3bed3bf1c85396ca4",
+  "files": {
+    "scripts/maintenance/demo-storage-inspect.mjs": {
+      "sha256": "d3e863ec13752634de88db7a9e9029478c3bcb0c15d5d233defb88070fa931ad",
+      "bytes": 38685,
+      "mode": "0o600"
+    },
+    "scripts/maintenance/demo-storage-inspect.test.mjs": {
+      "sha256": "7c4943cbe43af548b3290466cf475175ec89729b4377dd31db8de92334dc463a",
+      "bytes": 48954,
+      "mode": "0o600"
+    },
+    "scripts/automation/configure-demo-source.mjs": {
+      "sha256": "c674e302471ea8b95154aa7e440761d0ca188475bdaffd294e9f4d3ad9c4536a",
+      "bytes": 17195,
+      "mode": "0o600"
+    },
+    "scripts/automation/configure-demo-source.test.mjs": {
+      "sha256": "a1f670d8441ef4d489f3e0ac1079c0db936894c768842c9fb82287fa7c79a8c7",
+      "bytes": 37037,
+      "mode": "0o600"
+    },
+    "agent-team/src/bug-pipeline/demo-deployment.mjs": {
+      "sha256": "d3ca01d92e350c21fa7f0dfe952762ba41840faa4da13c259f34fb80352f5112",
+      "bytes": 41745,
+      "mode": "0o600"
+    },
+    "agent-team/tests/bug-pipeline/demo-deployment.test.mjs": {
+      "sha256": "2af048d815ebbbf2e0b37bb5a0bc67b554cb7eb00a64bae4ece0d47326a94339",
+      "bytes": 109210,
+      "mode": "0o600"
+    }
+  }
+}

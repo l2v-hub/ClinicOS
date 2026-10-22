@@ -1,0 +1,18 @@
+{
+  "reservationNonce": "97660da3-3367-4b9e-bee0-7a9d03832f5d",
+  "canonicalReservation": "14a45a05eb1fcec73f173711b185d6d2276510e5",
+  "sourceSha": "6c1a283e3b272edf9638ae6c7c67be96e4542910",
+  "reviewed": [
+    "contract/reservation/source-freeze",
+    "complete six-file Git diff",
+    "all nine frozen context hash/byte bindings",
+    "whole three production file byte-equivalence against baseline except exact endpoint literal",
+    "configure bounded reader/client",
+    "deployment bounded reader/fetch/client/inspectDemo",
+    "inspector main/identity transport/projection/context",
+    "official host analysis report",
+    "author seal/results/commands/syntax status/focused test summary/source-after"
+  ],
+  "snapshotBindings": "164 exact Git blobs;1 unchanged CRLF Windows helper normalized-equivalent",
+  "authorSealAllFiles": "PASS"
+}

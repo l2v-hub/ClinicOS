@@ -1,0 +1,8 @@
+{
+  "path": "scripts/automation/setup-claude-review-windows.ps1",
+  "snapshotBytes": 3083,
+  "gitBytes": 3038,
+  "snapshotCRLF": 45,
+  "gitCRLF": 0,
+  "lfNormalizedEqual": true
+}

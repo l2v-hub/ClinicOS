@@ -1,0 +1,8 @@
+{
+  "status": "STOP",
+  "reason": "Bounded static analysis complete. Root owns any implementation, validation, model review, merge and separately reserved live diagnosis. No further analysis or live action started.",
+  "allowedOutputDirectory": "/tmp/clinicos-railway-official-host-analysis-20261022",
+  "sourceOrProviderModified": false,
+  "testsExecuted": false,
+  "nonce": "74ec6d07-792c-45a9-a6d1-546c897ca071"
+}

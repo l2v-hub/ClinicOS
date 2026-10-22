@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "status": "STATIC_ANALYSIS_COMPLETE",
+  "main": "c05ce82edcf6c3b7da5396b3bed3bf1c85396ca4",
+  "nonce": "74ec6d07-792c-45a9-a6d1-546c897ca071",
+  "canonicalReservationCommit": "b987ec1800a92557889b8e6e1547894f87eacffd",
+  "officialApiHostMismatchProven": true,
+  "officialApiEndpoint": "https://backboard.railway.com/graphql/v2",
+  "officialDefaultProductionVerified": true,
+  "officialBlobVerified": true,
+  "actualFailureCauseProven": false,
+  "credentialInvalidityProven": false,
+  "providerSuccessProven": false,
+  "recommendedScope": {
+    "source": [
+      "scripts/maintenance/demo-storage-inspect.mjs",
+      "scripts/automation/configure-demo-source.mjs",
+      "agent-team/src/bug-pipeline/demo-deployment.mjs"
+    ],
+    "tests": [
+      "scripts/maintenance/demo-storage-inspect.test.mjs",
+      "scripts/automation/configure-demo-source.test.mjs",
+      "agent-team/tests/bug-pipeline/demo-deployment.test.mjs"
+    ],
+    "sourceChange": "Three existing API host constants only",
+    "newSharedHelper": false,
+    "productionExportsForTests": false,
+    "workflowChanges": false,
+    "otherDependencyRequired": false
+  },
+  "inspectOnlyAlternative": {
+    "valid": true,
+    "files": 2,
+    "remainingClientsOnOldHost": 2
+  },
+  "unchangedBoundaries": [
+    "credential modes and headers",
+    "query bodies and variables",
+    "target allowlists and IDs",
+    "redirect refusal",
+    "bounded transport and response handling",
+    "read retry budgets",
+    "no host fallback",
+    "no source trigger/deploy activation",
+    "non-backboard application domains"
+  ],
+  "distinctUnresolvedPrerequisite": "Production CLI Invalid RAILWAY_TOKEN is not resolved by native API host update.",
+  "history": {
+    "existingImplementations": 3,
+    "existingReviews": 3,
+    "prospectiveImplementation": 4,
+    "reset": false,
+    "oldSubjectsMutable": false
+  },
+  "testsExecuted": false,
+  "networkCalls": 0,
+  "providerWrites": 0,
+  "sourceWrites": 0,
+  "gitWrites": 0,
+  "canonicalWrites": 0,
+  "modelReviewOrApproval": false,
+  "clinicalReleaseProof": false
+}

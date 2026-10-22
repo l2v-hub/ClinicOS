@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "nonce": "74ec6d07-792c-45a9-a6d1-546c897ca071",
+  "files": {
+    "task-contract.md": {
+      "sha256": "235d5fc9ff90cb28391e717e5eb55e77ca164ea180f5a997566a67c60211fde5",
+      "bytes": 2945
+    },
+    "reservation.json": {
+      "sha256": "44824360e525827f482ed985258cf80b9fd832d42a423e35fb951049012d1eed",
+      "bytes": 957
+    },
+    "read-receipts.json": {
+      "sha256": "140a275daf1c6e350b254beb1698da4b4f89a91104c75ec08e77977d9c01e556",
+      "bytes": 3696
+    },
+    "report.md": {
+      "sha256": "e20ad99f98578527ac29eaae8058fcd5ad4c52c1a45a79875ccd61f5bb004817",
+      "bytes": 6615
+    },
+    "results.json": {
+      "sha256": "f9f5a11bd63c673e6ce69e5fb8f53c64cd8898dd7268ada355cbb5de69b9f95a",
+      "bytes": 2092
+    },
+    "STOP.json": {
+      "sha256": "42f07bb49f6708a52863810d0102030cabb37aa5260a0eadcc1d774c1cf6ea91",
+      "bytes": 417
+    }
+  }
+}

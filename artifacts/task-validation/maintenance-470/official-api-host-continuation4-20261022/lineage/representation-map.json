@@ -1,0 +1,40 @@
+{
+  "previousEntityId": "standalone-pr-502",
+  "previousPR": 502,
+  "previousHead": "ba721c3f178cb6cff73e9d075aa1808e70a9ce9b",
+  "previousSubjectFileSha256": "a839f53c41759dc608457ab5b250ba402cfe4b39aa4fa443b60614d294d6b8c4",
+  "previousCanonical": "35cb944d8dbd826ab8fc6937414571e05af07805",
+  "previousImplementationCount": 3,
+  "previousReviewCount": 3,
+  "currentImplementationCount": 4,
+  "currentImportedReviewCount": 3,
+  "mapping": [
+    {
+      "fromCollection": "implementation",
+      "fromIndex": 0,
+      "toCollection": "implementation",
+      "toIndex": 0,
+      "round": 1,
+      "unchanged": true
+    },
+    {
+      "fromCollection": "implementation",
+      "fromIndex": 1,
+      "toCollection": "implementation",
+      "toIndex": 1,
+      "round": 2,
+      "unchanged": true
+    },
+    {
+      "fromCollection": "implementation",
+      "fromIndex": 2,
+      "toCollection": "implementation",
+      "toIndex": 2,
+      "round": 3,
+      "unchanged": true
+    }
+  ],
+  "originalCollectionsPreservedExactly": true,
+  "newBudget": false,
+  "reset": false
+}

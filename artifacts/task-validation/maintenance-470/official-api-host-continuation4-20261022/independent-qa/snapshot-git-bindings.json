@@ -1,0 +1,827 @@
+[
+  {
+    "path": ".github/workflows/activate-assistant-llm.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/ai-import-e2e.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/ai-runtime-tests.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/azure-static-web-apps-orange-hill-02285750f.yml.disabled",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/bug-pipeline-tests.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/codex-bug-pipeline.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/codex-bug-release.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/codex-issue-review-sync.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/configure-demo-source.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/deploy-backend.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/deploy-demo-exact-commit.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/deploy-runtime.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/deploy-vercel.yml.disabled",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/frontend-secret-scan.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/inspect-demo-bearer-readiness.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/inspect-demo-source-topology.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/inspect-demo-storage.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/protect-demo-secret.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/railway-set-var.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/recover-demo-topology-receipt.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/set-runtime-azure.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": ".github/workflows/set-runtime-model.yml",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/README.md",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/config/config.schema.json",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/config/default.json",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/prompts/claude-development.md",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/prompts/codex-qa.md",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/protocol/schemas/artifact-manifest.schema.json",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/protocol/schemas/claim.schema.json",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/protocol/schemas/development-handoff.schema.json",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/protocol/schemas/evidence-binding.schema.json",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/protocol/schemas/message.schema.json",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/protocol/schemas/qa-result.schema.json",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/protocol/schemas/worker-blocked.schema.json",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/adapters/git.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/adapters/github.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/adapters/process-runner.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/attempt-budget.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/claude-review-cron.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/cli.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/contracts.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/dashboard/dashboard-client.js",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/dashboard/dashboard.css",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/dashboard/dashboard.html",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/dashboard-server.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/dashboard.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/evidence-limits.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/evidence.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/exact-demo-dispatch.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/exact-demo-recovery.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/external-review.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/github.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/models.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/operator-authorization.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/process.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/release.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/review-handoff-cli.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/review-policy.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/routing.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/verification.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/workspace.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/cli.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/commands/doctor-entry.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/commands/doctor.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/commands/once.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/commands/start.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/commands/status.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/commands/stop.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/core/binding.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/core/config.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/core/history.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/core/json-schema.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/core/locks.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/core/protocol.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/core/reconciler.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/core/recovery.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/core/remediation.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/core/sanitize.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/core/state-machine.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/core/status-projection.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/core/worker-policy.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/runtime.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/workers/claude-development-worker.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/src/workers/codex-qa-worker.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/attempt-budget.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/contracts.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/cron-install.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/dashboard.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/demo-workflow-policy.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/exact-demo-recovery.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/models.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/operator-authorization.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/routing.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/setup-review.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/subscription-auth.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/windows-review.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/workflow-intake.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/workspace.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/fixtures/exit-orphan-host.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/integration/evidence-binding.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/integration/once-failure-reporting.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/integration/process-exit-ownership.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/integration/prohibited-actions.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/integration/remediation-loop.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/integration/supervisor-lifecycle.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/integration/supervisor.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/ci-browser-e2e-config.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/claim-lifecycle.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/claim-worktree-authority.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/claude-development-worker.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/codex-qa-worker.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/config.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/doctor.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/e2e-import-journey.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/git-worktree-recovery.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/github.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/history.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/lease-heartbeat.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/locks.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/process-ownership.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/process-runner.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/protocol.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/remediation.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/state-machine.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/worker-operability.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "agent-team/tests/unit/worker-policy.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/claude-review.crontab",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/configure-demo-source.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/configure-demo-source.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/evidence/gh-cli-v2.103.0.md",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/inspect-demo-bearer-readiness.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/inspect-demo-bearer-readiness.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/inspect-demo-source-topology.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/inspect-demo-source-topology.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/install-claude-review-cron.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/install-claude-review-windows.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/protect-demo-secret.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/protect-demo-secret.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/recover-demo-topology-receipt.py",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/recover-demo-topology-receipt.test.py",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/run-claude-review-windows.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/automation/setup-claude-review-windows.ps1",
+    "exactGitBlob": false,
+    "binding": "CRLF checkout normalization only; non-runtime Windows helper"
+  },
+  {
+    "path": "scripts/maintenance/demo-storage-binding-readonly.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/maintenance/demo-storage-inspect.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/maintenance/demo-storage-inspect.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/maintenance/demo-storage-workflow.test.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  },
+  {
+    "path": "scripts/maintenance/production-db-inventory.mjs",
+    "exactGitBlob": true,
+    "binding": "exact"
+  }
+]
