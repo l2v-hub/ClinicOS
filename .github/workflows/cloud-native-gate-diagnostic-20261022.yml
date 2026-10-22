@@ -1,0 +1,41 @@
+name: Read fixed prior native backend failure
+on:
+  push:
+    branches: [codex/cloud-native-gate-diagnostic-20261022]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/codex/cloud-native-gate-diagnostic-20261022' && github.actor == 'l2v-hub' && github.triggering_actor == 'l2v-hub'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Read only the fixed completed job log
+        env:
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api repos/l2v-hub/ClinicOS/actions/jobs/119546786374/logs > "$RUNNER_TEMP/previous-native-gate.log" 2> "$RUNNER_TEMP/read-log.stderr"
+          node --input-type=module <<'NODE'
+          import { readFile, writeFile } from 'node:fs/promises';
+          const text = await readFile(process.env.RUNNER_TEMP + '/previous-native-gate.log', 'utf8');
+          if (Buffer.byteLength(text) > 33554432) throw new Error('LOG_TOO_LARGE');
+          const lines = text.split(/\r?\n/).map(line => line.replace(/^\S+Z\s+/, ''));
+          const failures = lines.filter(line => /^\s*not ok \d+ - /.test(line)).map(line => line.trim().slice(0, 240));
+          const counters = lines.filter(line => /^# (tests|pass|fail|skipped|duration_ms) /.test(line)).map(line => line.slice(0, 120));
+          const locations = lines.filter(line => /^\s*(location:|code:|failureType:)/.test(line)).map(line => line.trim().slice(0, 240));
+          if (failures.length > 100 || locations.length > 300 || counters.length > 100) throw new Error('DIAGNOSTIC_LIMIT');
+          const summary = { sourceSha: '1bcc12ffb31d47a46e9113a7e54c6f72fb846191', job: 119546786374, failures, counters, locations, rawLogPublished: false, sourceExecuted: false };
+          await writeFile(process.env.RUNNER_TEMP + '/native-backend-diagnostic.json', JSON.stringify(summary, null, 2));
+          const body = '<!-- codex-bug-pipeline:native-backend-diagnostic:497:1bcc12ffb31d47a46e9113a7e54c6f72fb846191 -->\n\nDiagnosi in sola lettura del precedente check backend fallito; nessuna modifica al codice o alla review.\n\n```json\n' + JSON.stringify(summary, null, 2) + '\n```';
+          await writeFile(process.env.RUNNER_TEMP + '/native-backend-diagnostic-comment.json', JSON.stringify({ body }));
+          NODE
+          gh api repos/l2v-hub/ClinicOS/issues/497/comments --method POST --input "$RUNNER_TEMP/native-backend-diagnostic-comment.json" --silent
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: fixed-native-backend-diagnostic
+          path: ${{ runner.temp }}/native-backend-diagnostic.json
+          if-no-files-found: warn
+          retention-days: 14
