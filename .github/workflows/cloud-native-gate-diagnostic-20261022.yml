@@ -17,19 +17,58 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gh api repos/l2v-hub/ClinicOS/actions/jobs/119546786374/logs > "$RUNNER_TEMP/previous-native-gate.log" 2> "$RUNNER_TEMP/read-log.stderr"
+          if gh run view --repo l2v-hub/ClinicOS --job 119546786374 --log-failed > "$RUNNER_TEMP/previous-native-gate.log" 2> "$RUNNER_TEMP/read-log.stderr"; then
+            export CLINICOS_FIXED_LOG_READ_FAILED=0
+          else
+            export CLINICOS_FIXED_LOG_READ_FAILED=1
+          fi
           node --input-type=module <<'NODE'
           import { readFile, writeFile } from 'node:fs/promises';
-          const text = await readFile(process.env.RUNNER_TEMP + '/previous-native-gate.log', 'utf8');
+          const failed = process.env.CLINICOS_FIXED_LOG_READ_FAILED === '1';
+          const text = failed ? '' : await readFile(process.env.RUNNER_TEMP + '/previous-native-gate.log', 'utf8');
+          const diagnostic = failed ? await readFile(process.env.RUNNER_TEMP + '/read-log.stderr', 'utf8') : '';
+          const code = diagnostic.match(/HTTP\s*(\d{3})/)?.[1] ?? null;
           if (Buffer.byteLength(text) > 33554432) throw new Error('LOG_TOO_LARGE');
-          const lines = text.split(/\r?\n/).map(line => line.replace(/^\S+Z\s+/, ''));
+          const lines = text.split(/\r?\n/).map(line => line.replace(/^.*?\d{4}-\d{2}-\d{2}T\S+Z\s*/, ''));
           const failures = lines.filter(line => /^\s*not ok \d+ - /.test(line)).map(line => line.trim().slice(0, 240));
           const counters = lines.filter(line => /^# (tests|pass|fail|skipped|duration_ms) /.test(line)).map(line => line.slice(0, 120));
           const locations = lines.filter(line => /^\s*(location:|code:|failureType:)/.test(line)).map(line => line.trim().slice(0, 240));
           if (failures.length > 100 || locations.length > 300 || counters.length > 100) throw new Error('DIAGNOSTIC_LIMIT');
-          const summary = { sourceSha: '1bcc12ffb31d47a46e9113a7e54c6f72fb846191', job: 119546786374, failures, counters, locations, rawLogPublished: false, sourceExecuted: false };
+          const summary = { sourceSha: '1bcc12ffb31d47a46e9113a7e54c6f72fb846191', job: 119546786374, failures, counters, locations, logReadFailed: failed, logReadHttpStatus: code, rawLogPublished: false, sourceExecuted: false };
           await writeFile(process.env.RUNNER_TEMP + '/native-backend-diagnostic.json', JSON.stringify(summary, null, 2));
           const body = '<!-- codex-bug-pipeline:native-backend-diagnostic:497:1bcc12ffb31d47a46e9113a7e54c6f72fb846191 -->\n\nDiagnosi in sola lettura del precedente check backend fallito; nessuna modifica al codice o alla review.\n\n```json\n' + JSON.stringify(summary, null, 2) + '\n```';
+          await writeFile(process.env.RUNNER_TEMP + '/native-backend-diagnostic-comment.json', JSON.stringify({ body }));
+          NODE
+      - name: Read fixed credential metadata permissions without values
+        env:
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import { spawnSync } from 'node:child_process';
+          import { readFile, writeFile } from 'node:fs/promises';
+          const scopes = [
+            ['repository-secret', 'repos/l2v-hub/ClinicOS/actions/secrets?per_page=100'],
+            ['environment-secret', 'repos/l2v-hub/ClinicOS/environments/glistening-friendship%20%2F%20demo/secrets?per_page=100'],
+            ['environment-policy', 'repos/l2v-hub/ClinicOS/environments/glistening-friendship%20%2F%20demo'],
+          ];
+          const probes = [];
+          for (const [scope, route] of scopes) {
+            const result = spawnSync('gh', ['api', route, '--include'], { encoding: 'utf8', timeout: 30000, maxBuffer: 1048576, stdio: ['ignore', 'pipe', 'pipe'] });
+            const text = result.stdout ?? '';
+            const status = Number(text.match(/^HTTP\/[^ ]+\s+(\d{3})/m)?.[1] ?? (result.stderr ?? '').match(/HTTP\s*(\d{3})/)?.[1] ?? 0);
+            let value;
+            if (result.status === 0) { try { value = JSON.parse(text.slice(text.search(/\r?\n\r?\n/) + (text.includes('\r\n\r\n') ? 4 : 2))); } catch {} }
+            probes.push({ scope, httpStatus: status, readSucceeded: result.status === 0 && !!value, ...(Array.isArray(value?.secrets) ? { demoSecretNamePresent: value.secrets.some(item => item.name === 'RAILWAY_DEMO_TOKEN'), total: value.total_count } : {}), ...(scope === 'environment-policy' && value?.id ? { expectedEnvironmentIdentity: value.id === 20880188544 && value.name === 'glistening-friendship / demo' } : {}) });
+          }
+          const path = process.env.RUNNER_TEMP + '/native-backend-diagnostic.json';
+          const summary = JSON.parse(await readFile(path, 'utf8'));
+          summary.credentialMetadataProbes = probes;
+          summary.secretValuesRead = false;
+          summary.secretWrites = 0;
+          await writeFile(path, JSON.stringify(summary, null, 2));
+          const body = '<!-- codex-bug-pipeline:native-backend-diagnostic:497:1bcc12ffb31d47a46e9113a7e54c6f72fb846191 -->\n\nDiagnosi del precedente check backend e verifica dei soli permessi sui metadati; nessuna modifica al codice, alle credenziali o alla review.\n\n```json\n' + JSON.stringify(summary, null, 2) + '\n```';
           await writeFile(process.env.RUNNER_TEMP + '/native-backend-diagnostic-comment.json', JSON.stringify({ body }));
           NODE
       - name: Publish only bounded diagnostic metadata
