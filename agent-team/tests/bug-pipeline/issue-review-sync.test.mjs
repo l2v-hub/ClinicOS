@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createIssueReviewCommunication } from '../../src/bug-pipeline/issue-review-communication.mjs';
 import { syncIssueReviews } from '../../src/bug-pipeline/issue-review-sync.mjs';
 const repo = 'l2v-hub/ClinicOS';
 const standalone = () => ({
@@ -28,7 +29,7 @@ test('sync discovers standalone without processing, mirroring, saving or restart
     },
   });
   assert.equal(calls.length, 1);
-  assert.deepEqual(calls[0].options, { collection: 'standaloneReviews' });
+  assert.deepEqual(calls[0].options, { collection: 'standaloneReviews', automatic: true });
   assert.equal(result.batches[0].label, 'codex-review-ready');
   assert.deepEqual(state, before);
 });
@@ -254,4 +255,60 @@ test('unowned projection failure remains partial and never publishes private err
   assert.equal(result.status, 'partial');
   assert.deepEqual(result.batches, [{ id: 'bug-batch-17', status: 'blocked' }]);
   assert.ok(!JSON.stringify(result).includes('private provider'));
+});
+
+test('actual communication reload observing global takeover skips sync before any projection effects', async () => {
+  const subject = {
+    ...syncBatch(),
+    pr: { number: 117, url: `https://github.com/${repo}/pull/117` },
+  };
+  const state = { schemaVersion: 1, repository: repo, batches: [subject] };
+  let reads = 0;
+  const github = {
+    createStateStore: () => ({
+      load: async () => {
+        if (++reads === 2) state.operatorTakeover = { active: true };
+        return structuredClone(state);
+      },
+      save: () => assert.fail('no canonical mutation'),
+    }),
+    authorized: async () => true,
+  };
+  const communication = createIssueReviewCommunication({
+    github,
+    cwd: '/synthetic',
+    run: async () => assert.fail('no GitHub effect after observed takeover'),
+  });
+  const result = await syncIssueReviews({ github, communication });
+  assert.equal(reads, 2);
+  assert.equal(result.status, 'skipped');
+  assert.deepEqual(result.batches, [
+    { id: subject.id, status: 'skipped', reason: 'operator-owned' },
+  ]);
+  assert.deepEqual(state.batches, [subject]);
+});
+
+test('sync opts both methods into automatic guards and skips a late ownership error without blocked-state writes', async () => {
+  const subject = syncBatch();
+  const state = { schemaVersion: 1, repository: repo, batches: [subject] };
+  const before = JSON.stringify(state),
+    calls = [];
+  const result = await syncIssueReviews({
+    github: { createStateStore: () => ({ load: async () => state }) },
+    communication: {
+      mirrorFeedback: async (_, options) => {
+        assert.deepEqual(options, { automatic: true });
+        calls.push('mirror');
+        return {};
+      },
+      publishState: async (_, options) => {
+        assert.deepEqual(options, { collection: 'batches', automatic: true });
+        calls.push('publish');
+        throw Object.assign(new Error('synthetic owner'), { code: 'review-operator-owned' });
+      },
+    },
+  });
+  assert.deepEqual(calls, ['mirror', 'publish']);
+  assert.equal(result.batches[0].reason, 'operator-owned');
+  assert.equal(JSON.stringify(state), before);
 });

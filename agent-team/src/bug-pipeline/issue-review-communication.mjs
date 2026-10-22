@@ -1,3 +1,4 @@
+import { operatorOwns } from './operator-ownership.mjs';
 import { githubOperationError } from './github.mjs';
 import { attemptLimit, spentAttempts, activeImplementation } from './attempt-budget.mjs';
 import assert from 'node:assert/strict';
@@ -244,6 +245,7 @@ export function createIssueReviewCommunication({
   const store = github.createStateStore(); // Read only: this module never calls save().
   let actor;
   const collections = new WeakMap();
+  const automaticSubjects = new WeakSet();
 
   async function invoke(args, input) {
     const result = await run({
@@ -280,26 +282,32 @@ export function createIssueReviewCommunication({
     }
     return actor;
   }
-  async function subject(expected, collection = collections.get(expected)) {
-    const stateSubject = async () => {
-      const state = await store.load();
-      validateState(state, repo);
-      const matches = ['batches', 'standaloneReviews'].flatMap((key) =>
-        (state[key] ?? []).filter((item) => item.id === expected.id || item.pr?.number === expected.pr.number)
-          .map((item) => ({ key, item })));
-      assert.equal(matches.length, 1, 'Duplicate or missing durable review subject');
-      const { key, item: current } = matches[0];
-      assert.ok(!collection || key === collection, 'Durable review collection changed');
-      assert.ok(
-        current && fingerprint(current) === fingerprint(expected),
-        'Durable review subject changed',
-      );
-      assert.ok(
-        !['merged', 'deployed'].includes(current.release?.status),
-        'Released issue cohort is not writable',
-      );
-    };
-    await stateSubject();
+  async function stateSubject(expected, collection = collections.get(expected)) {
+    const state = await store.load();
+    validateState(state, repo);
+    const matches = ['batches', 'standaloneReviews'].flatMap((key) =>
+      (state[key] ?? [])
+        .filter((item) => item.id === expected.id || item.pr?.number === expected.pr.number)
+        .map((item) => ({ key, item })),
+    );
+    assert.equal(matches.length, 1, 'Duplicate or missing durable review subject');
+    const { key, item: current } = matches[0];
+    if (automaticSubjects.has(expected) && operatorOwns(state, key, current))
+      throw Object.assign(new Error('Automatic issue-review subject is operator-owned'), {
+        code: 'review-operator-owned',
+      });
+    assert.ok(!collection || key === collection, 'Durable review collection changed');
+    assert.ok(
+      current && fingerprint(current) === fingerprint(expected),
+      'Durable review subject changed',
+    );
+    assert.ok(
+      !['merged', 'deployed'].includes(current.release?.status),
+      'Released issue cohort is not writable',
+    );
+  }
+  async function subject(expected) {
+    await stateSubject(expected);
     assert.equal(
       expected.pr.url,
       `https://github.com/${repo}/pull/${expected.pr.number}`,
@@ -344,7 +352,7 @@ export function createIssueReviewCommunication({
       'Review PR changed during cohort verification',
     );
     // Changes during the preceding network awaits cannot reuse the old ownership proof.
-    await stateSubject();
+    await stateSubject(expected);
     return { issues, pr, prIssue };
   }
   async function write(expected, endpoint, method, body, sourceGuard, retry = 0) {
@@ -358,6 +366,9 @@ export function createIssueReviewCommunication({
     // atomic transaction. Recheck the policies that preceded the cohort awaits.
     if (sourceGuard) await sourceGuard();
     assert.ok(await github.authorized(await identity()), 'Issue-review actor lost authorization');
+    // The last observed state must still permit this automatic write. Other GitHub
+    // resources may change afterwards; this is not an atomic cross-resource transaction.
+    await stateSubject(expected);
     const age = clock() - started;
     assert.ok(
       Number.isFinite(age) && age >= 0 && age <= COMMUNICATION_GUARD_MAX_AGE_MS,
@@ -434,10 +445,12 @@ export function createIssueReviewCommunication({
     assert.fail('Review label projection did not converge');
   }
 
-  async function publishState(batch, { collection = 'batches' } = {}) {
+  async function publishState(batch, { collection = 'batches', automatic = false } = {}) {
+    assert.equal(typeof automatic, 'boolean');
     assert.ok(['batches', 'standaloneReviews'].includes(collection));
     const expected = clone(batch);
     collections.set(expected, collection);
+    if (automatic) automaticSubjects.add(expected);
     const projection = reviewProjection(expected, readReport);
     if (collection === 'standaloneReviews' && expected.issues.length)
       return { outcome: 'unsupported-standalone-issues', status: 'unsupported' };
@@ -457,9 +470,11 @@ export function createIssueReviewCommunication({
     return { label: projection.label, outcome: projection.outcome, comments };
   }
 
-  async function mirrorFeedback(batch) {
+  async function mirrorFeedback(batch, { automatic = false } = {}) {
+    assert.equal(typeof automatic, 'boolean');
     const expected = clone(batch);
     collections.set(expected, 'batches');
+    if (automatic) automaticSubjects.add(expected);
     const { issues, pr } = await subject(expected);
     if (!activeImplementation(expected) && expected.externalReview?.structuredReview === false &&
         preservedApproval(expected, readReport))

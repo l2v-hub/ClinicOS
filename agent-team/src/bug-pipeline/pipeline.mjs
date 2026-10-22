@@ -194,6 +194,10 @@ export async function runPipeline({
     if (!eligibleIssue(issue)) continue;
     selected.push(issue);
   }
+  const assertSelectedUnclaimed = () => {
+    if (automationPaused(state) || selected.some((issue) => claimedIssues(state).has(issue.number)))
+      throw new Error('Selected issue acquired another durable owner before triage');
+  };
   if (state.pendingTriage) {
     if (state.pendingTriage.status !== 'claiming')
       throw new Error('Interrupted triage requires operator recovery; no automatic model restart');
@@ -215,6 +219,7 @@ export async function runPipeline({
         changedAt: timestamp,
       };
       await save();
+      assertSelectedUnclaimed();
     }
     const collection = state.triageQueue;
     if (
@@ -227,6 +232,7 @@ export async function runPipeline({
     await save();
   }
   if (selected.length) {
+    assertSelectedUnclaimed();
     // Recheck authorization and live labels after collection, before taking ownership.
     const authorized = new Set(
       (await gh.discoverQueue()).map((item) => (typeof item === 'number' ? item : item.number)),
@@ -242,14 +248,17 @@ export async function runPipeline({
       };
       await save();
     }
-    for (const issue of selected) await gh.setIssueStatus(issue.number, 'In progress');
+    assertSelectedUnclaimed();
+    for (const issue of selected) {
+      assertSelectedUnclaimed();
+      await gh.setIssueStatus(issue.number, 'In progress');
+    }
     for (const issue of selected)
       if (!eligibleIssue(await gh.viewIssue(issue.number)))
         throw new Error('Selected issue authorization or ownership changed before triage');
     state.pendingTriage.status = 'running';
     await save();
-    if (selected.some((issue) => claimedIssues(state).has(issue.number)))
-      throw new Error('Selected issue acquired another durable owner before triage');
+    assertSelectedUnclaimed();
     const plan = validatePlan(
       await models.plan({
         cwd: workspace.root,

@@ -38,10 +38,17 @@ export async function syncIssueReviews({ github, communication }) {
       continue;
     }
     try {
-      const feedback = collection === 'batches' ? await communication.mirrorFeedback(batch) : {};
-      const projection = await communication.publishState(batch, { collection });
+      const feedback =
+        collection === 'batches'
+          ? await communication.mirrorFeedback(batch, { automatic: true })
+          : {};
+      const projection = await communication.publishState(batch, { collection, automatic: true });
       results.push({ id: batch.id, status: 'synced', ...feedback, ...projection });
     } catch (error) {
+      if (error?.code === 'review-operator-owned') {
+        results.push({ id: batch.id, status: 'skipped', reason: 'operator-owned' });
+        continue;
+      }
       if (error?.code === 'review-subject-closed') {
         results.push({ id: batch.id, status: 'skipped', reason: 'closed' });
         continue;

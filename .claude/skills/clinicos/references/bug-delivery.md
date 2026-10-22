@@ -191,15 +191,33 @@ un'esecuzione o approvazione. Una modifica dopo il report richiede nuova validaz
 sullo SHA aggiornato. L'approvazione dello SHA corrente in attesa di release resta valida se
 non è cambiato il codice/configurazione e non è arrivato feedback che la invalida.
 
+Se un operatore prende in carico un gruppo attivo, sospendi l'automazione finché il controller
+non registra un handback esplicito e supportato, limitato a lavoro nuovo e non assegnato. La
+presa in carico conserva history, report, tentativi e identità dei soggetti protetti; mantiene
+occupati gli scope già assegnati e non li rende disponibili a un secondo worker. Ogni entrypoint
+automatico ricontrolla la proprietà osservata prima di proiettare stato, invocare modelli o
+rilasciare. L'handoff Claude in sola lettura resta un percorso distinto: deve essere autorizzato
+esplicitamente e legato allo SHA esatto.
+
 Codex legge tutti i commenti/review/thread pertinenti, documenta ogni finding e la sua
 risoluzione, corregge, testa, semplifica, passa il gate e pubblica il nuovo SHA verificato.
 Solo allora richiede il round successivo. Un'approvazione sul vecchio SHA non approva il nuovo.
+Dopo ogni review proveniente da un canale esterno, Codex esegue una QA finale indipendente sullo
+SHA corrente; l’handoff non sostituisce questa verifica.
 Un report assente, fallito, obsoleto o senza evidenza non è approvazione; non rilanciare uno
 SHA fallito invariato e non dichiarare la causa di un errore se i log non la provano.
 Al budget effettivamente esaurito usa solo un'allowance verificata e prenotata oppure lascia
 bloccato il gruppo. Nessun round consente di promettere codice «perfetto».
 
 ## 8. Stato, dashboard, merge e rilascio
+
+Quando si parla di attivazione, distinguere label e metadati dall'inferenza effettiva, dalla
+review di un modello e dall'abilitazione dei workflow. Verificare, revisionare e testare il codice corrente prima di attivare i workflow; poi
+provare un evento reale prima di dichiarare l’avvio automatico verificato. Deploy e chiusura delle issue
+sono passaggi successivi e distinti. Una configurazione o un test con adapter simulato non prova
+una chiamata reale. Il runner Actions non fornisce una sessione Claude Max: la review Max deve
+essere eseguita sull'host autenticato supportato. Non instradare Max tramite Anthropic API né
+eseguire Claude Max dentro Actions.
 
 Dopo la presa in carico durevole imposta `In progress`; per impedimenti reali usa `Bloccato`
 con causa verificata e condizione di sblocco. Il controller mantiene stato e contatori;

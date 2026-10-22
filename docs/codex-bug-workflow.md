@@ -8,6 +8,13 @@ Apri una issue e scrivi **`/codex fix`**, oppure applica **`codex-run`**. Il com
 
 GitHub Actions avvia il controller, serializzato per repository. Le sessioni e i terminali sono processi CLI nuovi nel runner, con risultati nei log Actions e nelle issue. Codex gira nel runner Actions; Claude usa il cron sul terminale personale già autenticato, come scelto dall’utente. La riconciliazione periodica ogni 15 minuti recupera la coda e i commenti PR se un evento viene accorpato dalla concorrenza di Actions.
 
+Una presa in carico operatore di un batch attivo ne sospende l'automazione. La ripresa richiede
+un handback esplicito supportato, limitato a lavoro nuovo e non assegnato. Si conservano history,
+report, tentativi, identità dei soggetti protetti e scope occupati; non si libera uno scope attivo
+per assegnarlo a un altro worker. Prima di proiettare lo stato, invocare un modello o rilasciare,
+ogni entrypoint automatico ricontrolla la proprietà osservata. L'handoff Claude locale in sola
+lettura resta separato e richiede autorizzazione esplicita vincolata allo SHA esatto.
+
 ```mermaid
 flowchart TD
   I[Issue: /codex fix oppure codex-run] --> A[Verifica permessi]
@@ -56,6 +63,9 @@ Il controller esegue i comandi del piano nel sandbox Codex, verifica gli exit co
 Prima di ogni verifica le vecchie evidenze vengono rimosse: per ogni issue i test devono rigenerare PNG e trace Playwright, con video opzionale. I test browser devono asserire comportamento e valori attesi, controllare errori console/HTTP e verificare la persistenza dove necessaria, secondo la skill QA. Il controller controlla percorso, tipo, dimensione e digest dei file; questi controlli non sostituiscono le assertion del test. Le issue ricevono screenshot incorporati in Markdown e link immutabili a piano, risultati, trace e video associati allo SHA pubblicato. Solo dati sintetici: mai cartelle cliniche o credenziali nelle prove.
 
 Prima della PR e dopo ogni correzione, una sessione Codex nuova e indipendente dall'esecutore applica la skill QA al diff, ai criteri e ai risultati generati dal controller. È in sola lettura e può bloccare il gruppo; il suo report viene conservato nel pacchetto. Un gate QA fallito rientra nel budget del tentativo corrente, senza aprire la PR o azzerare i contatori.
+
+Per ogni review su un canale esterno, Codex esegue anche la QA finale indipendente sullo SHA
+corrente prima di proseguire verso il rilascio.
 
 ## Review e recupero
 
@@ -146,6 +156,13 @@ Il workflow `codex-bug-release.yml` fornisce il rilascio separato, con ambiente 
 ## Ambiente cloud e diagnostica
 
 CLI fissate: Codex 0.159.2, Claude Code 2.1.301. Installazione fuori dal checkout; autenticazione tramite binding supportati, mai copiata nel repository. Il controller cloud usa gli alias `CLINICOS_PLANNER_MODEL` e `CLINICOS_EXECUTOR_MODEL`; il reviewer esterno usa la sessione personale Claude Code. Il draft cloud e i secret di GitHub Actions sono configurazioni distinte.
+
+Una label o metadato non dimostra un'inferenza; un'inferenza non dimostra una review conclusa,
+e una review non dimostra che i workflow siano abilitati. Prima di dichiarare l'attivazione,
+ispezionare e provare il codice corrente; poi distinguere l'abilitazione effettiva dei workflow
+da deploy e chiusura, che richiedono verifiche successive. Test con adapter simulati non provano
+una chiamata reale. Claude Max deve essere eseguito sull'host autenticato supportato: Actions non
+ospita quella sessione. Non usare Anthropic API per Max e non eseguire Max dentro Actions.
 
 ```bash
 node agent-team/src/bug-pipeline/cli.mjs --doctor

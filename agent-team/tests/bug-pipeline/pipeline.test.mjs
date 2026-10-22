@@ -1183,3 +1183,40 @@ test('CAS ownership acquired on the current batch rejects its pending reservatio
   assert.deepEqual(h.stateRef.value, remoteOwned);
   assert.equal(remoteOwned.batches[0].implementation.length, 0);
 });
+
+test('successful triage CAS handover prevents issue status writes before the later model boundary', async () => {
+  for (const boundary of ['queue', 'claiming']) {
+    const h = harness({
+      issues: [17],
+      initialState: { ...blankState(), operatorTakeover: takeoverHandback() },
+    });
+    const owner = {
+      id: 'manual-race',
+      issues: [17],
+      implementation: [],
+      reviews: [],
+      operatorCoordination: { active: true },
+    };
+    const save = h.store.save;
+    let injected = false;
+    h.store.save = async (value, options) => {
+      const target =
+        boundary === 'queue'
+          ? Boolean(value.triageQueue)
+          : value.pendingTriage?.status === 'claiming';
+      if (!injected && target) {
+        injected = true;
+        const merged = clone(value);
+        merged.manualBatches = [clone(owner)];
+        await options.rebaseIndependentSubjects(merged);
+        Object.assign(value, clone(merged));
+      }
+      return save(value);
+    };
+    await assert.rejects(h.run(), /another durable owner/);
+    assert.equal(h.counts.plan, 0);
+    assert.equal(h.log.filter((x) => x.startsWith('gh.setIssueStatus:17:')).length, 0);
+    assert.deepEqual(h.stateRef.value.manualBatches, [owner]);
+    assert.equal(h.stateRef.value.batches.length, 0);
+  }
+});

@@ -42,7 +42,7 @@ export function externalReport(batch) {
   return report;
 }
 
-export async function externalReviewStep({
+async function runExternalReviewStep({
   repo,
   batch,
   gh,
@@ -59,7 +59,10 @@ export async function externalReviewStep({
   const observedAt = new Date().toISOString();
   // Informational publication is recoverable by the sibling. It must not consume
   // an implementation attempt that was reserved for a real code correction.
-  const notify = () => communication.publishState(batch).catch(() => {});
+  const notify = () =>
+    communication.publishState(batch, { automatic: true }).catch((error) => {
+      if (error?.code === 'review-operator-owned') throw error;
+    });
   const blocked = async (reason) => {
     await block(batch, reason);
     await notify();
@@ -86,7 +89,7 @@ export async function externalReviewStep({
     return blocked('Interrupted Codex correction requires explicit recovery');
   // The real PR mirror also reaches an older installed Max worker, without changing
   // the PR feedback fingerprint format or treating issue text as approval.
-  await communication.mirrorFeedback(batch);
+  await communication.mirrorFeedback(batch, { automatic: true });
   const feedback = await gh.reviewFeedback(batch.pr.number);
   if (
     feedback.state !== 'OPEN' ||
@@ -296,4 +299,15 @@ export async function externalReviewStep({
     batch,
     `PR ${batch.pr.url}: **Ready for review** su \`${batch.sha}\`. In attesa del cron Claude Code; review utilizzate ${batch.reviews.length}/${attemptLimit(batch, 'reviews')}. Commenti e richieste di modifica torneranno a Codex tramite GitHub.`,
   );
+}
+
+// Ownership loss is a skip, never permission to block, relabel or correct that subject.
+export async function externalReviewStep(options) {
+  try {
+    return await runExternalReviewStep(options);
+  } catch (error) {
+    if (error?.code === 'review-operator-owned')
+      return { status: 'skipped', reason: 'operator-owned' };
+    throw error;
+  }
 }

@@ -1087,3 +1087,84 @@ test('closed standalone is a read-only skipped sync result',async()=>{
 test('operator final-Codex provenance preserves exact approval without rewriting histories',()=>{
  const f=communicationFixture();report(f,'approved');const b=f.batch;b.approvedSha=sha;b.externalReview.reportComment=42;b.externalReview.reportBodySha256='d'.repeat(64);b.operatorFinalReviews=[{status:'verified',subjectSha:sha,verdict:'approved',findings:0,actualClaudeCommentId:42,actualClaudeCommentSha256:'d'.repeat(64),reportSha256:'e'.repeat(64),sealSha256:'f'.repeat(64)}];const before=clone(b);assert.equal(reviewProjection(b,externalReport).skip,true);assert.deepEqual(b,before);
 });
+
+test('automatic method calls reject currently owned subjects while default explicit authorized publication remains supported', async () => {
+  for (const method of ['mirrorFeedback', 'publishState']) {
+    const f = communicationFixture();
+    f.state().operatorTakeover = { active: true };
+    const before = JSON.stringify(f.state());
+    await assert.rejects(
+      f.communication[method](f.batch, { automatic: true }),
+      (error) => error.code === 'review-operator-owned',
+    );
+    assert.deepEqual(f.writes, []);
+    assert.deepEqual(f.calls, []);
+    assert.equal(JSON.stringify(f.state()), before);
+  }
+  const explicit = communicationFixture();
+  explicit.state().operatorTakeover = { active: true };
+  await explicit.communication.publishState(explicit.batch);
+  assert.ok(
+    explicit.writes.length > 0,
+    'trusted explicit caller retains existing authenticated SHA guards',
+  );
+});
+
+test('automatic last write guard rechecks takeover after its final authorization await', async () => {
+  const f = communicationFixture();
+  let authorizations = 0;
+  f.github.authorized = async () => {
+    if (++authorizations === 3) f.state().operatorTakeover = { active: true };
+    return true;
+  };
+  await assert.rejects(
+    f.communication.publishState(f.batch, { automatic: true }),
+    (error) => error.code === 'review-operator-owned',
+  );
+  assert.deepEqual(f.writes, []);
+  assert.ok(f.reads() >= 3);
+});
+
+test('automatic source feedback guard observes ownership acquired during provenance verification without forwarding or acknowledgment', async () => {
+  const f = communicationFixture();
+  const source = f.source(17, 'Synthetic actionable regression');
+  let provenanceReads = 0;
+  f.hook(async (call) => {
+    if (call.args[1].endsWith(`/issues/comments/${source.id}`) && ++provenanceReads === 2)
+      f.state().operatorTakeover = { active: true };
+  });
+  await assert.rejects(
+    f.communication.mirrorFeedback(f.batch, { automatic: true }),
+    (error) => error.code === 'review-operator-owned',
+  );
+  assert.equal(provenanceReads, 2);
+  assert.deepEqual(f.writes, []);
+});
+
+test('automatic communication distinguishes a newly acquired subject owner from generic fingerprint drift', async () => {
+  const f = communicationFixture();
+  let nativeReads = 0;
+  f.hook(async (call) => {
+    if (call.args[1].endsWith('/pulls/81') && ++nativeReads === 2)
+      f.state().batches[0].operatorCoordination = { active: true };
+  });
+  await assert.rejects(
+    f.communication.publishState(f.batch, { automatic: true }),
+    (error) => error.code === 'review-operator-owned',
+  );
+  assert.deepEqual(f.writes, []);
+});
+
+test('per-method automatic mode works on prebuilt communication and does not leak into a later explicit call', async () => {
+  const f = communicationFixture();
+  await f.communication.publishState(f.batch, { automatic: true });
+  const previousWrites = f.writes.length;
+  f.state().operatorTakeover = { active: true };
+  f.issues.get(17).labels = f.issues
+    .get(17)
+    .labels.filter((label) => label.name !== 'claude-review-ready');
+  await f.communication.publishState(f.batch);
+  assert.ok(f.writes.length > previousWrites);
+  for (const automatic of ['true', 1, null])
+    await assert.rejects(f.communication.publishState(f.batch, { automatic }), /boolean/);
+});

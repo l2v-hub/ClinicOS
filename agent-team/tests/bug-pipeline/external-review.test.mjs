@@ -873,3 +873,42 @@ test('new feedback cannot start a correction while the prior final QA session re
   assert.equal(log.includes('qa'), false);
   assert.equal(batch.codexFinalReview.status, 'running');
 });
+
+test('automatic external review ownership loss skips without correction, status block or model effects', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  const before = structuredClone(batch);
+  args.communication = {
+    mirrorFeedback: async (_, options) => {
+      assert.deepEqual(options, { automatic: true });
+      throw Object.assign(new Error('synthetic handover'), { code: 'review-operator-owned' });
+    },
+    publishState: async () => assert.fail('no retry publication'),
+  };
+  args.block = async () => assert.fail('new owner cannot receive generic blocked state');
+  const result = await externalReviewStep(args);
+  assert.deepEqual(result, { status: 'skipped', reason: 'operator-owned' });
+  assert.deepEqual(batch, before);
+  assert.deepEqual(log, []);
+});
+
+test('ownership loss in automatic informational publication is not swallowed before a correction model', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  batch.externalReview.feedbackChanged = true;
+  args.communication = {
+    mirrorFeedback: async (_, options) => assert.equal(options.automatic, true),
+    publishState: async (_, options) => {
+      assert.equal(options.automatic, true);
+      throw Object.assign(new Error('synthetic handover'), { code: 'review-operator-owned' });
+    },
+  };
+  args.workspace.execute = async () => assert.fail('model cannot start after observed handover');
+  args.block = async () => assert.fail('no block to new operator owner');
+  const result = await externalReviewStep(args);
+  assert.deepEqual(result, { status: 'skipped', reason: 'operator-owned' });
+  assert.equal(log.includes('qa'), false);
+  assert.equal(
+    batch.implementation.at(-1).status,
+    'running',
+    'already reserved claim is preserved, not relabelled failed',
+  );
+});
