@@ -558,11 +558,18 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     return false;
   }
 
-  async function discoverQueue({ normalize = false } = {}) {
+  async function discoverQueue({ normalize = false, excludeIssues = [] } = {}) {
+    if (
+      !Array.isArray(excludeIssues) ||
+      excludeIssues.length > 100000 ||
+      excludeIssues.some((number) => !Number.isSafeInteger(number) || number < 1)
+    )
+      throw new TypeError('Invalid excluded queue issue numbers');
+    const excluded = new Set(excludeIssues);
     const issues = await apiList(`repos/${repo}/issues?state=open&labels=codex-run&per_page=100`);
     const queued = [];
     for (const issue of issues) {
-      if (issue.pull_request) continue;
+      if (issue.pull_request || excluded.has(issue.number)) continue;
       const labels = new Set((issue.labels ?? []).map((label) => label.name));
       if ([...BLOCKING_LABELS].some((label) => labels.has(label))) continue;
       if (!(await latestAuthorizedRunEvent(issueNumber(issue)))) continue;

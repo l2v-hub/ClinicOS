@@ -1,4 +1,10 @@
 import {
+  automationPaused,
+  operatorOwns,
+  claimedIssues,
+  occupiedSubjects,
+} from './operator-ownership.mjs';
+import {
   attemptLimit,
   implementationAttempts,
   activeImplementation,
@@ -8,7 +14,11 @@ import {
 import { planSchema, validatePlan, validateState, feedbackFingerprint } from './contracts.mjs';
 import { externalReviewStep } from './external-review.mjs';
 import { validateStandaloneState, finalizeStandaloneSubject } from './standalone-review.mjs';
-import { controllerFailureCode, isRetryableGitHubFailure, recordTransientGitHubFailure } from './github.mjs';
+import {
+  controllerFailureCode,
+  isRetryableGitHubFailure,
+  recordTransientGitHubFailure,
+} from './github.mjs';
 
 function eligibleIssue(issue) {
   const labels = (issue.labels ?? []).map((l) => (typeof l === 'string' ? l : l.name));
@@ -51,11 +61,13 @@ export async function runPipeline({
   if (!['internal', 'external'].includes(reviewMode)) throw new Error('Unknown review mode');
   if (!Number.isSafeInteger(triageWindowMs) || triageWindowMs < 0 || triageWindowMs > 600_000)
     throw new Error('Invalid triage collection window');
-  await gh.intake(event);
   let state = validateState(
     (await store.load()) ?? { schemaVersion: 1, repository: repo, batches: [] },
     repo,
   );
+  // Ownership must be loaded before intake can normalize labels or touch old subjects.
+  if (automationPaused(state)) return state;
+  let processingSubject = null;
   let persistenceFailed = false;
   const save = async (options) => {
     try {
@@ -66,6 +78,18 @@ export async function runPipeline({
         rebaseIndependentSubjects: (merged) => {
           validateState(merged, repo);
           if (merged.standaloneReviews) validateStandaloneState(merged);
+          if (
+            automationPaused(merged) ||
+            (processingSubject &&
+              operatorOwns(
+                merged,
+                processingSubject.collection,
+                merged[processingSubject.collection]?.find(
+                  (item) => item.id === processingSubject.id,
+                ) ?? processingSubject,
+              ))
+          )
+            throw new Error('Automatic ownership changed during state reconciliation');
         },
       });
     } catch (error) {
@@ -75,17 +99,23 @@ export async function runPipeline({
   };
   if (state.standaloneReviews?.length) {
     validateStandaloneState(state);
-    if (!standaloneController)
-      throw new Error('Standalone subjects require their trusted controller');
     // Snapshot identities, never object references: a failed CAS reload replaces all
     // canonical objects. Later subjects must resolve against the refreshed state.
     const subjectIds = state.standaloneReviews.map((subject) => subject.id);
     for (const id of subjectIds) {
       let subject = state.standaloneReviews.find((item) => item.id === id);
-      if (!subject || subject.release?.status === 'merged' ||
-        (subject.phase === 'blocked' && subject.release?.status !== 'merging')) continue;
+      if (
+        !subject ||
+        operatorOwns(state, 'standaloneReviews', subject) ||
+        subject.release?.status === 'merged' ||
+        (subject.phase === 'blocked' && subject.release?.status !== 'merging')
+      )
+        continue;
       const transient = subject.lastTransientFailure;
       if (transient?.subjectSha === subject.sha && transient.nextRetryAt > now()) continue;
+      if (!standaloneController)
+        throw new Error('Standalone subjects require their trusted controller');
+      processingSubject = { collection: 'standaloneReviews', id };
       try {
         await finalizeStandaloneSubject({
           subject, controller: standaloneController, github: gh, workspace, save,
@@ -102,7 +132,7 @@ export async function runPipeline({
         state = validateState(await store.load(), repo);
         if (state.standaloneReviews) validateStandaloneState(state);
         subject = state.standaloneReviews?.find((item) => item.id === id);
-        if (!subject) continue;
+        if (!subject || operatorOwns(state, 'standaloneReviews', subject)) continue;
         const code = controllerFailureCode(error);
         if (isRetryableGitHubFailure(error)) {
           if (recordTransientGitHubFailure(subject, now())) {
@@ -127,6 +157,8 @@ export async function runPipeline({
     }
   }
 
+  processingSubject = null;
+  if (automationPaused(state)) return state;
   const report = async (batch, text) => {
     for (const n of batch.issues)
       await gh.commentIssue(n, `<!-- codex-bug-pipeline:status -->\n${text}`);
@@ -141,15 +173,20 @@ export async function runPipeline({
       `**BLOCKED** — ${reason}. Budget sviluppo ${spentAttempts(batch, 'implementation')}/${attemptLimit(batch, 'implementation')}, review ${batch.reviews.length}/${attemptLimit(batch, 'reviews')}. Il budget non viene azzerato da nuovi comandi.`,
     );
   };
-  const claimed = new Set(state.batches.flatMap((b) => b.issues));
+  const claimed = claimedIssues(state);
+  // A command targeting an already owned issue cannot even normalize its labels.
+  if (!event?.issue || !claimed.has(event.issue.number)) await gh.intake(event);
   // Only the protected release confirmation job publishes deployed completion.
   // It owns live demo credentials and retries durable pending publication without model work.
   for (const batch of state.batches) {
-    if (batch.release?.status === 'deployed') continue;
+    if (operatorOwns(state, 'batches', batch) || batch.release?.status === 'deployed') continue;
     const status = batch.phase === 'blocked' ? 'Bloccato' : 'In progress';
     for (const number of batch.issues) await gh.setIssueStatus(number, status);
   }
-  const queue = await gh.discoverQueue({ normalize: true });
+  const queue = await gh.discoverQueue({
+    normalize: true,
+    excludeIssues: [...claimed],
+  });
   let selected = [];
   for (const item of queue) {
     const issue = await gh.viewIssue(typeof item === 'number' ? item : item.number);
@@ -199,7 +236,10 @@ export async function runPipeline({
         throw new Error('Selected issue authorization or ownership changed before claim');
     if (!state.pendingTriage) {
       delete state.triageQueue;
-      state.pendingTriage = { issues: selected.map((i) => i.number), status: 'claiming' };
+      state.pendingTriage = {
+        issues: selected.map((i) => i.number),
+        status: 'claiming',
+      };
       await save();
     }
     for (const issue of selected) await gh.setIssueStatus(issue.number, 'In progress');
@@ -208,34 +248,27 @@ export async function runPipeline({
         throw new Error('Selected issue authorization or ownership changed before triage');
     state.pendingTriage.status = 'running';
     await save();
+    if (selected.some((issue) => claimedIssues(state).has(issue.number)))
+      throw new Error('Selected issue acquired another durable owner before triage');
     const plan = validatePlan(
       await models.plan({
         cwd: workspace.root,
         issues: selected,
         scopeSchema: planSchema,
         packet: {
-          activeBatches: state.batches
-            .filter((batch) => batch.release?.status !== 'deployed')
-            .map((batch) => ({
-              id: batch.id,
-              issues: batch.issues,
-              feature: batch.plan?.feature ?? '',
-              scope: batch.plan?.scope ?? [],
-            })),
+          activeBatches: occupiedSubjects(state),
         },
       }),
       selected,
     );
-    const existingBatches = [...state.batches];
+    const existingBatches = occupiedSubjects(state);
     for (const group of plan.groups) {
       const id = `bug-batch-${Math.min(...group.issues)}`;
       // Older installed external-review workers validate plan with a closed schema.
       // Keep the frozen plan wire format compatible and store new grouping alongside it.
       const { fileMap, separationReason, ...frozenPlan } = group;
-      const overlaps = existingBatches.filter(
-        (batch) =>
-          batch.release?.status !== 'deployed' &&
-          batch.plan?.scope.some((file) => group.scope.includes(file)),
+      const overlaps = existingBatches.filter((batch) =>
+        batch.scope.some((file) => group.scope.includes(file)),
       );
       state.batches.push({
         id,
@@ -284,15 +317,27 @@ export async function runPipeline({
       );
   }
   for (const batch of state.batches) {
+    if (operatorOwns(state, 'batches', batch)) continue;
+    processingSubject = { collection: 'batches', id: batch.id };
     if (['merged', 'deployed'].includes(batch.release?.status)) continue;
     if (batch.phase === 'blocked') continue;
     if (reviewMode === 'external' && batch.externalReview?.status === 'running') continue;
     if (reviewMode === 'external' && batch.pr) {
       try {
-        await externalReviewStep({ repo, batch, gh, workspace, save, report, block });
+        await externalReviewStep({
+          repo,
+          batch,
+          gh,
+          workspace,
+          save,
+          report,
+          block,
+        });
       } catch (error) {
         if (persistenceFailed)
-          throw new Error('External review reconciliation persistence failed', { cause: error });
+          throw new Error('External review reconciliation persistence failed', {
+            cause: error,
+          });
         batch.failureCode = controllerFailureCode(error);
         await block(
           batch,
@@ -412,7 +457,15 @@ export async function runPipeline({
         await report(batch, await workspace.issueEvidence(batch));
       }
       if (reviewMode === 'external') {
-        await externalReviewStep({ repo, batch, gh, workspace, save, report, block });
+        await externalReviewStep({
+          repo,
+          batch,
+          gh,
+          workspace,
+          save,
+          report,
+          block,
+        });
         continue;
       }
       // New PR feedback is handled once, in a new executor session, before the next review.

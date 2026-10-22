@@ -50,7 +50,11 @@ export async function externalReviewStep({
   save,
   report,
   block,
-  communication = createIssueReviewCommunication({ github: gh, repo, readReport: externalReport }),
+  communication = createIssueReviewCommunication({
+    github: gh,
+    repo,
+    readReport: externalReport,
+  }),
 }) {
   const observedAt = new Date().toISOString();
   // Informational publication is recoverable by the sibling. It must not consume
@@ -97,31 +101,104 @@ export async function externalReviewStep({
   const handoff = batch.externalReview;
   if (handoff?.status === 'finished') return notify(); // Publication is retried by the external harness.
   if (handoff?.status === 'published') {
+    // A running final session remains owned even if new feedback arrives.
+    if (batch.codexFinalReview?.status === 'running')
+      return blocked('Interrupted independent Codex review requires recovery');
+    if (handoff.subjectSha !== batch.sha) return blocked('External review handoff SHA changed');
     const verdict = externalReport(batch);
     if (verdict.verdict === 'blocked')
       return blocked('External Claude reviewer blocked the change');
     let changed = handoff.feedbackChanged || fingerprint !== handoff.feedbackFingerprint;
-    if (verdict.verdict === 'approved' && !changed && handoff.channel === 'github-comments') {
+    if (verdict.verdict === 'approved' && !changed) {
+      if (
+        feedback.unresolved ||
+        feedback.changesRequested ||
+        !(await gh.requiredChecks(batch.pr.number)).ok
+      ) {
+        batch.phase = 'waiting-checks';
+        batch.approvedSha = null;
+        await save();
+        return notify();
+      }
       const prior = batch.codexFinalReview;
-      if (!prior || prior.subjectSha !== batch.sha || prior.claudeRound !== batch.reviews.length) {
+      if (
+        !prior ||
+        prior.subjectSha !== batch.sha ||
+        prior.claudeRound !== batch.reviews.length ||
+        prior.feedbackFingerprint !== fingerprint ||
+        prior.status === 'waiting-checks'
+      ) {
+        if (prior) {
+          batch.codexFinalReviewHistory ??= [];
+          batch.codexFinalReviewHistory.push(prior);
+        }
         batch.codexFinalReview = {
           subjectSha: batch.sha,
           claudeRound: batch.reviews.length,
+          feedbackFingerprint: fingerprint,
           status: 'running',
+          reservedAt: new Date().toISOString(),
+          nonce: randomUUID(),
         };
+        batch.approvedSha = null;
         await save();
         await workspace.prepare(batch);
-        const qa = await workspace.finalQa(batch);
-        batch.codexFinalReview.status = qa.status === 'verified' ? 'verified' : 'changes-requested';
-        batch.codexFinalReview.summary = qa.summary;
+        const beforeQa = await gh.reviewFeedback(batch.pr.number);
+        if (
+          beforeQa.head !== batch.sha ||
+          beforeQa.state !== 'OPEN' ||
+          beforeQa.headRef !== batch.branch ||
+          beforeQa.headRepo !== repo ||
+          beforeQa.headIsFork ||
+          beforeQa.baseRef !== 'main' ||
+          feedbackFingerprint(beforeQa) !== fingerprint ||
+          beforeQa.unresolved ||
+          beforeQa.changesRequested
+        ) {
+          batch.codexFinalReview.status = 'blocked';
+          await save();
+          return blocked('PR identity or feedback changed before independent Codex review');
+        }
+        if (!(await gh.requiredChecks(batch.pr.number)).ok) {
+          batch.codexFinalReview.status = 'waiting-checks';
+          batch.phase = 'waiting-checks';
+          await save();
+          return notify();
+        }
+        try {
+          const qa = await workspace.finalQa(batch);
+          batch.codexFinalReview.status =
+            qa.status === 'verified' ? 'verified' : 'changes-requested';
+          batch.codexFinalReview.summary = qa.summary;
+        } catch (error) {
+          batch.codexFinalReview.status = 'failed';
+          await save();
+          throw error;
+        }
         await save();
       }
-      if (batch.codexFinalReview.status === 'running')
-        return blocked('Interrupted independent Codex review requires recovery');
       changed = batch.codexFinalReview.status !== 'verified';
-      if (!changed) {
-        const current = await gh.reviewFeedback(batch.pr.number);
-        changed = current.head !== batch.sha || feedbackFingerprint(current) !== fingerprint;
+      const current = await gh.reviewFeedback(batch.pr.number);
+      if (
+        current.state !== 'OPEN' ||
+        current.head !== batch.sha ||
+        current.headRef !== batch.branch ||
+        current.headRepo !== repo ||
+        current.headIsFork ||
+        current.baseRef !== 'main'
+      )
+        return blocked('PR identity changed during independent Codex review');
+      if (
+        feedbackFingerprint(current) !== fingerprint ||
+        current.unresolved ||
+        current.changesRequested
+      )
+        return blocked('PR feedback changed during independent Codex review');
+      if (!(await gh.requiredChecks(batch.pr.number)).ok) {
+        batch.phase = 'waiting-checks';
+        batch.approvedSha = null;
+        await save();
+        return notify();
       }
     }
     if (verdict.verdict === 'approved' && !changed) {

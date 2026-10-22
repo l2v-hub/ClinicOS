@@ -1,3 +1,4 @@
+import { automationPaused, operatorOwns } from './operator-ownership.mjs';
 import { randomUUID } from 'node:crypto';
 import { exactBlockCode, archiveRecovery, verifyReleaseAncestry } from './exact-demo-recovery.mjs';
 import { MAX_EVIDENCE_BYTES } from './evidence-limits.mjs';
@@ -127,10 +128,12 @@ export function publicationComplete(batch) {
 }
 
 export function selectAutoReleaseBatch(state) {
+  if (automationPaused(state)) return null;
   return (
     state.batches
       .filter(
         (batch) =>
+          !operatorOwns(state, 'batches', batch) &&
           batch.phase === 'ready' &&
           !hasReleaseHold(batch) &&
           !batch.releaseBlock &&
@@ -525,7 +528,12 @@ export async function recoverExactRelease({
   const oldExclusions = structuredClone(batch.exactDemoRecovery?.excludedDispatches ?? []);
   const verifyOldRuns = async (retirementProof) => {
     if (!Object.keys(oldDispatches).length && !oldRecoveries.length && !oldExclusions.length)
-      return { retiredRunIds: [], noRunProofs: [], retiredRuns: [], lateRetiredRunIds: [] };
+      return {
+        retiredRunIds: [],
+        noRunProofs: [],
+        retiredRuns: [],
+        lateRetiredRunIds: [],
+      };
     if (typeof github.verifyExactRecoveryRuns !== 'function')
       fail('retired run verification required');
     return github.verifyExactRecoveryRuns({
@@ -557,8 +565,10 @@ export async function recoverExactRelease({
   const archive = archiveRecovery(batch, {
     actor,
     deploymentSha,
-    extraRunIds: [...retirementProof.retiredRunIds,
-      ...retirementProof.lateRetiredRunIds.map((proof) => proof.runId)],
+    extraRunIds: [
+      ...retirementProof.retiredRunIds,
+      ...retirementProof.lateRetiredRunIds.map((proof) => proof.runId),
+    ],
     retirementProof,
     newId,
     now,
@@ -925,7 +935,10 @@ export async function recordDeployment({
       production = await waitForProductionBackend({
         ...productionWait,
         verify: () =>
-          github.verifyProductionBackend({ deploymentSha, runUrl: productionRailwayRunUrl }),
+          github.verifyProductionBackend({
+            deploymentSha,
+            runUrl: productionRailwayRunUrl,
+          }),
         guard: async () => {
           await guard();
           await verifyExactReleaseTarget({ batch, github, sourcePolicy });

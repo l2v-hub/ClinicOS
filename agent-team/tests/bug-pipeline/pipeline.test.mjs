@@ -48,7 +48,10 @@ function planFor(issues = [17, 18]) {
           },
         ],
         verification: [
-          { command: 'node', args: ['--test', 'frontend/src/features/patients/filter.test.mjs'] },
+          {
+            command: 'node',
+            args: ['--test', 'frontend/src/features/patients/filter.test.mjs'],
+          },
           { command: 'npm', args: ['--prefix', 'frontend', 'run', 'build'] },
         ],
         evidence: issues.map((issue) => ({
@@ -112,7 +115,14 @@ function harness({
 } = {}) {
   const log = [];
   const stateRef = { value: clone(initialState) };
-  const counts = { plan: 0, execute: 0, simplify: 0, verify: 0, review: 0, checks: 0 };
+  const counts = {
+    plan: 0,
+    execute: 0,
+    simplify: 0,
+    verify: 0,
+    review: 0,
+    checks: 0,
+  };
   let saveCount = 0;
   const hydrated = [];
   const issueComments = [];
@@ -158,7 +168,11 @@ function harness({
         body: `Hydrated issue body for #${number}`,
         labels: [{ name: 'bug' }, { name: 'codex-triage' }, { name: 'codex-run' }],
         comments: [
-          { id: number * 10, body: `Hydrated comment for #${number}`, user: { login: 'reporter' } },
+          {
+            id: number * 10,
+            body: `Hydrated comment for #${number}`,
+            user: { login: 'reporter' },
+          },
         ],
       };
       hydrated.push(item);
@@ -199,7 +213,10 @@ function harness({
     root: '/tmp/clinicos-pipeline-test',
     async qa() {
       log.push('workspace.qa');
-      return { status: 'verified', summary: 'Independent acceptance/evidence review.' };
+      return {
+        status: 'verified',
+        summary: 'Independent acceptance/evidence review.',
+      };
     },
     async prepare(batch) {
       log.push('workspace.prepare');
@@ -287,7 +304,17 @@ function harness({
     issueComments,
     planningInput,
     run: (event = { action: 'test' }, reviewMode = 'internal') =>
-      runPipeline({ repo, event, gh, models, workspace, store, reviewMode, now, triageWindowMs }),
+      runPipeline({
+        repo,
+        event,
+        gh,
+        models,
+        workspace,
+        store,
+        reviewMode,
+        now,
+        triageWindowMs,
+      }),
   };
 }
 
@@ -304,7 +331,12 @@ function reviewedTerminalBatch(status = 'deployed') {
   batch.reviewReports = { 'claude-review-1.json': report };
   batch.reviewLedger = {
     rounds: [
-      { round: 1, subject_sha: batch.sha, verdict: 'approved', review_sha256: sha256(report) },
+      {
+        round: 1,
+        subject_sha: batch.sha,
+        verdict: 'approved',
+        review_sha256: sha256(report),
+      },
     ],
   };
   batch.feedbackFingerprint = feedbackFingerprint(openFeedback(batch));
@@ -325,7 +357,10 @@ function reviewedTerminalBatch(status = 'deployed') {
 test('merged and deployed batches remain terminal and never restart implementation', async () => {
   for (const status of ['merged', 'deployed']) {
     const batch = reviewedTerminalBatch(status);
-    const h = harness({ initialState: { ...blankState(), batches: [batch] }, queue: [] });
+    const h = harness({
+      initialState: { ...blankState(), batches: [batch] },
+      queue: [],
+    });
     const result = await h.run();
     assert.equal(result.batches[0].release.status, status);
     assert.equal(h.counts.execute, 0);
@@ -480,7 +515,9 @@ test('failed claim publication prevents triage and retains its remote claim with
 });
 
 test('unchanged unresolved human review waits without spending another Claude attempt', async () => {
-  const batch = batchFor({ reviews: [{ round: 1, status: 'approved', subjectSha: sha('a') }] });
+  const batch = batchFor({
+    reviews: [{ round: 1, status: 'approved', subjectSha: sha('a') }],
+  });
   batch.approvedSha = batch.sha;
   const feedback = openFeedback(batch, { unresolved: true });
   batch.feedbackFingerprint = feedbackFingerprint(feedback);
@@ -501,8 +538,16 @@ test('successful grouped flow hydrates every issue, validates, simplifies, reval
   const final = await h.run();
   assert.equal(h.counts.plan, 1);
   assert.deepEqual(h.planningInput, [
-    { number: 17, body: 'Hydrated issue body for #17', comment: 'Hydrated comment for #17' },
-    { number: 18, body: 'Hydrated issue body for #18', comment: 'Hydrated comment for #18' },
+    {
+      number: 17,
+      body: 'Hydrated issue body for #17',
+      comment: 'Hydrated comment for #17',
+    },
+    {
+      number: 18,
+      body: 'Hydrated issue body for #18',
+      comment: 'Hydrated comment for #18',
+    },
   ]);
   assert.deepEqual(
     h.hydrated.map((issue) => issue.number),
@@ -612,7 +657,9 @@ test('later PR comments cannot restart an exhausted Claude review budget', async
     queue: [17],
     initialState: state,
     feedback: ({ batch: current }) =>
-      openFeedback(current, { comments: [{ id: 999, body: 'New PR request' }] }),
+      openFeedback(current, {
+        comments: [{ id: 999, body: 'New PR request' }],
+      }),
   });
   const final = await h.run();
   assert.equal(final.batches[0].phase, 'blocked');
@@ -629,7 +676,11 @@ test('a new comment on an approved ready PR triggers correction, revalidation an
     head: sha('a'),
     reviews: [{ round: 1, status: 'approved', subjectSha: sha('a') }],
   });
-  const originalFeedback = { comments: [], unresolved: false, changesRequested: false };
+  const originalFeedback = {
+    comments: [],
+    unresolved: false,
+    changesRequested: false,
+  };
   batch.feedbackFingerprint = feedbackFingerprint(originalFeedback);
   batch.approvedSha = batch.sha;
   const h = harness({
@@ -637,7 +688,9 @@ test('a new comment on an approved ready PR triggers correction, revalidation an
     queue: [17],
     initialState: { schemaVersion: 1, repository: repo, batches: [batch] },
     feedback: ({ batch: current }) =>
-      openFeedback(current, { comments: [{ id: 222, body: 'Please handle this review note' }] }),
+      openFeedback(current, {
+        comments: [{ id: 222, body: 'Please handle this review note' }],
+      }),
   });
   const final = await h.run();
   assert.equal(h.counts.execute, 1);
@@ -670,7 +723,11 @@ test('external PR head or fork identity blocks before any executor or review mod
 });
 
 test('pending required checks remain waiting and can become ready without resetting review or implementation budgets', async () => {
-  const h = harness({ issues: [17], queue: [17], checks: [false, false, true] });
+  const h = harness({
+    issues: [17],
+    queue: [17],
+    checks: [false, false, true],
+  });
   let state = await h.run();
   assert.equal(state.batches[0].phase, 'waiting-checks');
   assert.equal(state.batches[0].reviews.length, 1);
@@ -748,7 +805,10 @@ test('actual controller defers pending backend completion to protected confirmat
   };
   batch.release.deployment.railwayRunUrl = railwayRunUrl;
   batch.release.deployment.demo = proof;
-  const h = harness({ initialState: { ...blankState(), batches: [batch] }, queue: [] });
+  const h = harness({
+    initialState: { ...blankState(), batches: [batch] },
+    queue: [],
+  });
   const requests = [],
     comments = [],
     closed = new Set();
@@ -784,7 +844,14 @@ test('actual controller defers pending backend completion to protected confirmat
   gh.intake = async () => [];
   gh.discoverQueue = async () => [];
   const controller = () =>
-    runPipeline({ repo, event: {}, gh, models: h.models, workspace: h.workspace, store: h.store });
+    runPipeline({
+      repo,
+      event: {},
+      gh,
+      models: h.models,
+      workspace: h.workspace,
+      store: h.store,
+    });
   const beforeBudget = clone(h.stateRef.value.batches[0].implementation);
   await controller();
   assert.equal(
@@ -849,7 +916,10 @@ test('actual controller defers pending backend completion to protected confirmat
         state: 'MERGED',
         mergeCommitSha: sha('b'),
       }),
-    requiredChecks: async () => ({ ok: true, details: ['all required checks: SUCCESS'] }),
+    requiredChecks: async () => ({
+      ok: true,
+      details: ['all required checks: SUCCESS'],
+    }),
     readFileAtRevision: async (file) =>
       file.endsWith('evidence-manifest.json')
         ? { content: JSON.stringify(batch.evidence) }
@@ -881,7 +951,11 @@ test('actual controller defers pending backend completion to protected confirmat
     execute: true,
   });
   assert.equal(released.status, 'deployed');
-  assert.deepEqual(released.deployments, { frontend: false, backend: false, runtime: false });
+  assert.deepEqual(released.deployments, {
+    frontend: false,
+    backend: false,
+    runtime: false,
+  });
   await recordDeployment({
     repo,
     github: protectedGh,
@@ -905,4 +979,207 @@ test('actual controller defers pending backend completion to protected confirmat
   const after = requests.length;
   await controller();
   assert.equal(requests.length, after);
+});
+
+const takeoverHandback = (protectedSubjects = []) => ({
+  active: true,
+  automation: { enabled: true, mode: 'new-unclaimed-only', protectedSubjects },
+});
+
+function ownedStandalone(number = 99, issues = [90]) {
+  return {
+    kind: 'standalone-pr-review',
+    schemaVersion: 1,
+    repository: repo,
+    id: `standalone-pr-${number}`,
+    pr: { number, url: `https://github.com/${repo}/pull/${number}` },
+    sha: sha('c'),
+    baseSha: sha('b'),
+    baseRef: 'main',
+    branch: `manual/review-${number}`,
+    phase: 'waiting-review',
+    issues,
+    packet: {
+      path: `artifacts/task-validation/standalone-review-${number}`,
+      files: Object.fromEntries(
+        [
+          'task-contract.md',
+          'analysis.md',
+          'implementation-plan.md',
+          'validation-report.md',
+          'imported-history.json',
+        ].map((p) => [p, '1'.repeat(64)]),
+      ),
+    },
+    sourceManifest: [
+      {
+        path: 'frontend/src/owned.ts',
+        blob: sha('c'),
+        mode: '100644',
+        baseBlob: sha('b'),
+        baseMode: '100644',
+      },
+    ],
+    implementation: [
+      {
+        round: 1,
+        status: 'passed',
+        subjectSha: sha('c'),
+        evidence: 'validation-report.md',
+      },
+    ],
+    reviews: [],
+    reviewReports: {},
+    adoption: {
+      actor: 'synthetic',
+      at: '2026-10-22T00:00:00Z',
+      manifestSha256: '2'.repeat(64),
+    },
+    operatorCoordination: { active: true },
+  };
+}
+
+test('active takeover pauses before intake or any state/status/model mutation', async () => {
+  const state = {
+    ...blankState(),
+    batches: [batchFor()],
+    operatorTakeover: { active: true },
+  };
+  const h = harness({ initialState: state });
+  const result = await h.run();
+  assert.deepEqual(result, state);
+  assert.deepEqual(h.log, ['store.load']);
+  assert.deepEqual(h.stateRef.value, state);
+});
+
+test('explicit new-only handback processes a new issue without touching protected batch/manual/standalone subjects', async () => {
+  const oldBatch = batchFor({ issues: [71], phase: 'implementing' });
+  oldBatch.pr = { number: 171, url: `https://github.com/${repo}/pull/171` };
+  oldBatch.implementation = [{ round: 1, status: 'running' }];
+  const manual = {
+    id: 'manual-owned',
+    issues: [72],
+    operatorCoordination: { active: true },
+    plan: { scope: ['frontend/src/manual.ts'] },
+    implementation: [{ round: 1, status: 'running' }],
+    reviews: [],
+  };
+  const standalone = ownedStandalone();
+  const state = {
+    ...blankState(),
+    batches: [oldBatch],
+    manualBatches: [manual],
+    standaloneReviews: [standalone],
+    operatorTakeover: takeoverHandback([{ collection: 'batches', id: oldBatch.id }]),
+  };
+  const h = harness({
+    issues: [17],
+    initialState: state,
+    queue: [71, 72, 90, 17],
+  });
+  // Keep the incoming scope separate from every retained owner.
+  state.batches[0].plan.scope = ['frontend/src/previous.ts'];
+  state.batches[0].plan.tasks[0].files = ['frontend/src/previous.ts'];
+  state.batches[0].plan.fileMap = [{ issue: 71, files: ['frontend/src/previous.ts'] }];
+  h.stateRef.value = clone(state);
+  const result = await h.run();
+  assert.deepEqual(result.batches[0], state.batches[0]);
+  assert.deepEqual(result.manualBatches, state.manualBatches);
+  assert.deepEqual(result.standaloneReviews, state.standaloneReviews);
+  assert.equal(h.counts.execute, 1);
+  assert.equal(result.batches[1].phase, 'ready');
+  assert.ok(
+    h.log
+      .filter((x) => /gh\.(setIssueStatus|commentIssue):/.test(x))
+      .every((x) => !/:(71|72|90)(:|$)/.test(x)),
+  );
+});
+
+test('manual and standalone frozen scope occupancy blocks an overlapping new plan without changing owners', async () => {
+  for (const collection of ['manualBatches', 'standaloneReviews']) {
+    const owner =
+      collection === 'manualBatches'
+        ? {
+            id: 'manual',
+            issues: [90],
+            operatorCoordination: { active: true },
+            implementation: [],
+            reviews: [],
+            sourceManifest: [{ path: planFor([17]).groups[0].scope[0] }],
+          }
+        : ownedStandalone();
+    if (collection === 'standaloneReviews')
+      owner.sourceManifest[0].path = planFor([17]).groups[0].scope[0];
+    const state = {
+      ...blankState(),
+      [collection]: [owner],
+      operatorTakeover: takeoverHandback(),
+    };
+    const h = harness({ issues: [17], initialState: state });
+    const result = await h.run();
+    assert.deepEqual(result[collection], state[collection]);
+    assert.equal(result.batches[0].phase, 'blocked');
+    assert.match(result.batches[0].reason, /overlaps existing/);
+    assert.equal(h.counts.execute, 0);
+  }
+});
+
+test('claimed terminal manual issue is excluded before intake and queue normalization', async () => {
+  const owner = {
+    id: 'old-manual',
+    issues: [17],
+    release: { status: 'deployed' },
+    implementation: [],
+    reviews: [],
+  };
+  const state = { ...blankState(), manualBatches: [owner] };
+  const h = harness({ issues: [17], initialState: state });
+  h.gh.intake = async () => assert.fail('claimed event cannot normalize labels');
+  h.gh.discoverQueue = async (options) => {
+    assert.deepEqual(options, { normalize: true, excludeIssues: [17] });
+    return [];
+  };
+  const result = await h.run({ issue: { number: 17 } });
+  assert.deepEqual(result, state);
+  assert.equal(h.counts.plan, 0);
+});
+
+test('a CAS-reconciled takeover stops before the next model and never diagnoses or restarts the old claim', async () => {
+  const state = { ...blankState(), operatorTakeover: takeoverHandback() };
+  const h = harness({ issues: [17], initialState: state });
+  const original = h.store.save;
+  h.store.save = async (value, options) => {
+    const merged = clone(value);
+    merged.operatorTakeover.automation.enabled = false;
+    await options.rebaseIndependentSubjects(merged);
+    return original(value);
+  };
+  await assert.rejects(h.run(), /Automatic ownership changed/);
+  assert.equal(h.counts.plan, 0);
+  assert.deepEqual(h.stateRef.value, state);
+});
+
+test('CAS ownership acquired on the current batch rejects its pending reservation before execution', async () => {
+  const h = harness({ issues: [17], initialState: blankState() });
+  const save = h.store.save;
+  let remoteOwned;
+  h.store.save = async (value, options) => {
+    if (value.batches[0]?.phase === 'implementing') {
+      remoteOwned = clone(h.stateRef.value);
+      remoteOwned.batches[0].operatorCoordination = {
+        active: true,
+        owner: 'synthetic-operator',
+      };
+      h.stateRef.value = clone(remoteOwned);
+      const merged = clone(value);
+      merged.batches[0].operatorCoordination = clone(remoteOwned.batches[0].operatorCoordination);
+      await options.rebaseIndependentSubjects(merged);
+      assert.fail('owned correction reservation must not persist');
+    }
+    return save(value);
+  };
+  await assert.rejects(h.run(), /Automatic ownership changed/);
+  assert.equal(h.counts.execute, 0);
+  assert.deepEqual(h.stateRef.value, remoteOwned);
+  assert.equal(remoteOwned.batches[0].implementation.length, 0);
 });

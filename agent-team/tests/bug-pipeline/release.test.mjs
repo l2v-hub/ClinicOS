@@ -2358,7 +2358,13 @@ test('actual record controller waits absent→running→success without blocking
         name: 'deploy',
         status: 'completed',
         conclusion: 'success',
-        steps: [{ name: 'Deploy to Railway', status: 'completed', conclusion: 'success' }],
+        steps: [
+          {
+            name: 'Deploy to Railway',
+            status: 'completed',
+            conclusion: 'success',
+          },
+        ],
       };
       const reader = {
         getJson: async (route) =>
@@ -2462,7 +2468,12 @@ test('rejected POST, pre-POST main movement and uncertain acknowledgement retire
         offset += ms;
       };
       f.github.verifyExactRecoveryRuns = (input) =>
-        verifyRetiredExactDispatches({ ...input, reader: f.reader, now: clock, delay });
+        verifyRetiredExactDispatches({
+          ...input,
+          reader: f.reader,
+          now: clock,
+          delay,
+        });
       const poster = createExactDispatchPoster({
         cwd: '/tmp',
         run: async () => {
@@ -2570,11 +2581,21 @@ async function lateRetirementFixture() {
     await options.guard?.();
     return save(value);
   };
-  f.github.verifyExactRecoveryRuns = (input) => verifyRetiredExactDispatches({
-    ...input, reader: f.reader, now: clock, delay: async (ms) => { offset += ms; },
+  f.github.verifyExactRecoveryRuns = (input) =>
+    verifyRetiredExactDispatches({
+      ...input,
+      reader: f.reader,
+      now: clock,
+      delay: async (ms) => {
+        offset += ms;
+      },
+    });
+  const rejected = createExactDemoDispatcher({
+    reader: f.reader,
+    postDispatch: async () => {
+      throw Error('synthetic rejected POST');
+    },
   });
-  const rejected = createExactDemoDispatcher({ reader: f.reader,
-    postDispatch: async () => { throw Error('synthetic rejected POST'); } });
   f.github.ensureExactDemoRun = (input) => rejected.ensure(input);
   await assert.rejects(releaseBatch(exactInput(f)), /rejected POST/);
   const original = structuredClone(f.getSaved().batches[0]);
@@ -2588,9 +2609,14 @@ async function lateRetirementFixture() {
     head_repository: { full_name: f.state.repository },
     path: '.github/workflows/deploy-demo-exact-commit.yml', event: 'workflow_dispatch',
     display_title: `demo-exact preflight ${old.sha} ${old.dispatchId}`,
-    status: 'in_progress', conclusion: null };
+    status: 'in_progress',
+    conclusion: null,
+  };
   f.runs.push(late);
-  const dispatcher = createExactDemoDispatcher({ reader: f.reader, postDispatch: f.post });
+  const dispatcher = createExactDemoDispatcher({
+    reader: f.reader,
+    postDispatch: f.post,
+  });
   f.github.ensureExactDemoRun = (input) => dispatcher.ensure(input);
   await assert.rejects(releaseBatch(exactInput(f)), /late excluded/);
   assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 0);
@@ -2644,10 +2670,27 @@ test('controller recovery absorbs a completed late no-run dispatch, permits exac
 });
 
 test('late retirement controller refuses ambiguous, malformed, incomplete or changed proofs at actual recovery save', async (t) => {
-  for (const mode of ['ambiguous', 'head repository', 'repository', 'SHA', 'workflow', 'event',
-    'branch', 'attempt', 'conclusion', 'incomplete', 'detail drift', 'save active',
-    'save conclusion', 'save disappeared', 'save duplicate', 'save main', 'save block',
-    'save authorization', 'save original no-run proof'])
+  for (const mode of [
+    'ambiguous',
+    'head repository',
+    'repository',
+    'SHA',
+    'workflow',
+    'event',
+    'branch',
+    'attempt',
+    'conclusion',
+    'incomplete',
+    'detail drift',
+    'save active',
+    'save conclusion',
+    'save disappeared',
+    'save duplicate',
+    'save main',
+    'save block',
+    'save authorization',
+    'save original no-run proof',
+  ])
     await t.test(mode, async () => {
       const f = await lateRetirementFixture();
       f.late.status = 'completed'; f.late.conclusion = 'success';
@@ -2731,8 +2774,44 @@ test('recovery refuses orphan excluded dispatch descriptors even with no current
   assert.equal(batch.exactDemoRecovery.excludedDispatches.length, 1);
   batch.exactReleaseRecoveries = [];
   const before = structuredClone(batch);
-  await assert.rejects(recoverExactRelease({ ...recoveryInput(f), now: f.clock }),
-    /excluded dispatch missing archived identity/);
+  await assert.rejects(
+    recoverExactRelease({ ...recoveryInput(f), now: f.clock }),
+    /excluded dispatch missing archived identity/,
+  );
   assert.deepEqual(f.getSaved().batches[0], before);
   assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 0);
+});
+
+test('automatic release honors global pause, explicit subject handback and independent active operator holds', () => {
+  const f = fixture();
+  const before = JSON.stringify(f.batch);
+  f.state.operatorTakeover = { active: true };
+  assert.equal(selectAutoReleaseBatch(f.state), null);
+  f.state.operatorTakeover.automation = {
+    enabled: true,
+    mode: 'new-unclaimed-only',
+    protectedSubjects: [],
+  };
+  assert.equal(selectAutoReleaseBatch(f.state), f.batch);
+  f.state.operatorTakeover.subjects = [
+    { collection: 'batches', id: f.batch.id, sha: 'historical-sha' },
+  ];
+  assert.equal(selectAutoReleaseBatch(f.state), null);
+  delete f.state.operatorTakeover.subjects;
+  f.state.operatorTakeover.automation.protectedSubjects.push({
+    collection: 'batches',
+    id: f.batch.id,
+  });
+  assert.equal(selectAutoReleaseBatch(f.state), null);
+  f.state.operatorTakeover.automation.protectedSubjects = [];
+  f.batch.operatorCoordination = {
+    active: true,
+    finishedAt: 'historical-but-still-active',
+  };
+  assert.equal(selectAutoReleaseBatch(f.state), null);
+  delete f.batch.operatorCoordination;
+  f.batch.operatorReleaseCoordination = { stage: 'awaiting-provider-proof' };
+  assert.equal(selectAutoReleaseBatch(f.state), null);
+  delete f.batch.operatorReleaseCoordination;
+  assert.equal(JSON.stringify(f.batch), before);
 });

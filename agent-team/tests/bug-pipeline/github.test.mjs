@@ -2198,3 +2198,69 @@ test('recovery authorization requires actual authenticated owner/admin and fixed
     else assert.equal(await github.authorizeReleaseRecovery(input), 'l2v-hub');
   }
 });
+
+test('queue exclusions prevent normalization and authorization reads on claimed issues while new missed events recover', async () => {
+  const calls = [];
+  const gh = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async ({ args, input }) => {
+      const route = apiPath(args);
+      calls.push({ route, args, input });
+      if (route.includes('/issues?'))
+        return response([
+          [17, 18].map((number) => ({
+            number,
+            labels: [{ name: 'codex-run' }],
+          })),
+        ]);
+      if (route.includes('/events?')) {
+        assert.ok(
+          !route.includes('/17/'),
+          'owned issue must be filtered before any normalization work',
+        );
+        return response([
+          [
+            {
+              event: 'labeled',
+              label: { name: 'codex-run' },
+              actor: { login: 'alice', type: 'User' },
+              created_at: '2026-10-22T00:00:00Z',
+            },
+          ],
+        ]);
+      }
+      if (route.endsWith('/collaborators/alice/permission'))
+        return response({ permission: 'write' });
+      if (route.includes('/labels/')) return response({});
+      if (route.endsWith('/issues/18/labels') && args.includes('POST')) return response({});
+      assert.fail('Unexpected route ' + route);
+    },
+  });
+  assert.deepEqual(
+    (await gh.discoverQueue({ normalize: true, excludeIssues: [17] })).map((x) => x.number),
+    [18],
+  );
+  assert.deepEqual(
+    calls.filter((x) => x.args.includes('POST')).map((x) => x.route),
+    ['repos/l2v-hub/ClinicOS/issues/18/labels'],
+  );
+});
+test('malformed queue exclusions fail closed before any GitHub read or label write', async () => {
+  const gh = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async () => assert.fail('no transport'),
+  });
+  for (const excludeIssues of [
+    null,
+    {},
+    '17',
+    [0],
+    [-1],
+    [1.5],
+    ['17'],
+    [Number.MAX_SAFE_INTEGER + 1],
+  ])
+    await assert.rejects(gh.discoverQueue({ normalize: true, excludeIssues }), /Invalid excluded/);
+});
