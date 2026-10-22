@@ -90,6 +90,50 @@ export function communicationText(value) {
     .replace(/@(?=[A-Za-z0-9_-])/g, '@\u200b');
 }
 
+// Projection only: these receipts never authorize a release or change durable state.
+function preservedApproval(subject, readReport) {
+  if (subject.approvedSha == null) return false;
+  assert.equal(subject.approvedSha, subject.sha, 'Approval has a stale SHA');
+  const handoff = subject.externalReview;
+  assert.equal(handoff?.status, 'published', 'Approval requires a published review');
+  assert.equal(handoff.subjectSha, subject.sha, 'Approval review has a stale SHA');
+  if (handoff.structuredReview === false) {
+    const actual = subject.operatorActualClaudeReviews?.at(-1);
+    const final = subject.operatorFinalCodexReviews?.at(-1);
+    const reservation = subject.operatorFinalCodexReservation;
+    assert.ok(actual?.kind === 'actual-static-comment-fallback' &&
+      actual.subjectSha === subject.sha && actual.verdict === 'approved' && actual.findings === 0 &&
+      actual.claimMade === false && actual.structuredReview === false &&
+      actual.requestId === handoff.requestId && actual.commentId === handoff.reportCommentId &&
+      actual.actor === 'l2v-hub' && /^[a-f0-9]{64}$/.test(actual.bodySha256 ?? '') &&
+      actual.url === `https://github.com/${REPO}/pull/${subject.pr.number}#issuecomment-${actual.commentId}` &&
+      handoff.verdict === 'approved' && handoff.findings === 0 && handoff.claimMade === false &&
+      reservation?.status === 'verified' && reservation.sourceSha === subject.sha &&
+      reservation.actualClaudeCommentId === actual.commentId &&
+      final?.subjectSha === subject.sha && final.actualClaudeCommentId === actual.commentId &&
+      final.findings === 0 && final.sourceMatched === true &&
+      /^[a-f0-9]{64}$/.test(final.reportSha256 ?? '') &&
+      /^[a-f0-9]{64}$/.test(final.sealSha256 ?? '') &&
+      reservation.reportSha256 === final.reportSha256 && reservation.sealSha256 === final.sealSha256,
+      'Static approval provenance is invalid');
+    return true;
+  }
+  assert.equal(typeof readReport, 'function');
+  assert.equal(readReport(subject).verdict, 'approved', 'Approval report is not approved');
+  const final = subject.codexFinalReview;
+  const operator = subject.operatorFinalReviews?.at(-1);
+  assert.ok((final?.status === 'verified' && final.subjectSha === subject.sha &&
+      final.claudeRound === subject.reviews.length) ||
+    (operator?.status === 'verified' && operator.subjectSha === subject.sha &&
+      operator.verdict === 'approved' && operator.findings === 0 &&
+      operator.actualClaudeCommentId === handoff.reportComment &&
+      operator.actualClaudeCommentSha256 === handoff.reportBodySha256 &&
+      /^[a-f0-9]{64}$/.test(operator.reportSha256 ?? '') &&
+      /^[a-f0-9]{64}$/.test(operator.sealSha256 ?? '')),
+    'Final approval provenance is invalid');
+  return true;
+}
+
 export function reviewProjection(batch, readReport) {
   assert.match(batch.sha ?? '', /^[a-f0-9]{40}$/);
   assert.ok(
@@ -105,7 +149,10 @@ export function reviewProjection(batch, readReport) {
     report: null,
     digest: null,
   };
+  if (activeImplementation(batch)) return result;
   if (handoff) assert.equal(handoff.subjectSha, batch.sha, 'Review handoff has a stale SHA');
+  if (preservedApproval(batch, readReport))
+    return { ...result, label: null, outcome: 'approval-preserved', skip: true };
   if (
     (batch.phase === 'blocked' && handoff?.status !== 'published') ||
     handoff?.status === 'failed'
@@ -196,6 +243,7 @@ export function createIssueReviewCommunication({
   assert.equal(typeof github.createStateStore, 'function');
   const store = github.createStateStore(); // Read only: this module never calls save().
   let actor;
+  const collections = new WeakMap();
 
   async function invoke(args, input) {
     const result = await run({
@@ -232,11 +280,16 @@ export function createIssueReviewCommunication({
     }
     return actor;
   }
-  async function subject(expected) {
+  async function subject(expected, collection = collections.get(expected)) {
     const stateSubject = async () => {
       const state = await store.load();
       validateState(state, repo);
-      const current = state.batches.find((item) => item.id === expected.id);
+      const matches = ['batches', 'standaloneReviews'].flatMap((key) =>
+        (state[key] ?? []).filter((item) => item.id === expected.id || item.pr?.number === expected.pr.number)
+          .map((item) => ({ key, item })));
+      assert.equal(matches.length, 1, 'Duplicate or missing durable review subject');
+      const { key, item: current } = matches[0];
+      assert.ok(!collection || key === collection, 'Durable review collection changed');
       assert.ok(
         current && fingerprint(current) === fingerprint(expected),
         'Durable review subject changed',
@@ -254,6 +307,8 @@ export function createIssueReviewCommunication({
     );
     assert.ok(expected.issues.length <= 25, 'Review cohort exceeds its bound');
     const pr = await get(`repos/${repo}/pulls/${expected.pr.number}`);
+    if (pr.number === expected.pr.number && (pr.state === 'closed' || pr.merged))
+      throw Object.assign(new Error('Review PR is closed'), { code: 'review-subject-closed' });
     assert.ok(
       pr.number === expected.pr.number && pr.state === 'open' && !pr.merged,
       'Review PR is no longer open',
@@ -379,10 +434,15 @@ export function createIssueReviewCommunication({
     assert.fail('Review label projection did not converge');
   }
 
-  async function publishState(batch) {
+  async function publishState(batch, { collection = 'batches' } = {}) {
+    assert.ok(['batches', 'standaloneReviews'].includes(collection));
     const expected = clone(batch);
+    collections.set(expected, collection);
     const projection = reviewProjection(expected, readReport);
+    if (collection === 'standaloneReviews' && expected.issues.length)
+      return { outcome: 'unsupported-standalone-issues', status: 'unsupported' };
     const current = await subject(expected);
+    if (projection.skip) return projection;
     await ensureLabel(expected, projection.label);
     const messages = statusMessages(expected, projection);
     let comments = 0;
@@ -399,7 +459,11 @@ export function createIssueReviewCommunication({
 
   async function mirrorFeedback(batch) {
     const expected = clone(batch);
+    collections.set(expected, 'batches');
     const { issues, pr } = await subject(expected);
+    if (!activeImplementation(expected) && expected.externalReview?.structuredReview === false &&
+        preservedApproval(expected, readReport))
+      return { mirrored: 0, outcome: 'approval-preserved' };
     const me = await identity();
     // Git author/committer dates are attacker-controlled metadata. Use a stable
     // controller-owned snapshot boundary; old workers use GitHub's PR receipt time.

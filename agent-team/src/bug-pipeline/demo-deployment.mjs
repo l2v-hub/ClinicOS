@@ -966,6 +966,7 @@ export async function verifyProductionBackend({ reader, deploymentSha, runUrl = 
       list.workflow_runs.some(
         (run) =>
           !integer(run.id) ||
+          run.run_attempt !== 1 ||
           run.head_sha !== deploymentSha ||
           run.repository?.full_name !== REPO ||
           run.head_repository?.full_name !== REPO ||
@@ -997,10 +998,14 @@ export async function verifyProductionBackend({ reader, deploymentSha, runUrl = 
       run.head_repository?.full_name !== REPO ||
       run.path !== WORKFLOW ||
       run.head_branch !== 'main' ||
-      !['push', 'workflow_dispatch'].includes(run.event) ||
-      run.status !== 'completed' ||
-      run.conclusion !== 'success'
+      !['push', 'workflow_dispatch'].includes(run.event)
     )
+      blocked('PRODUCTION_PROOF_FAILED');
+    if (['queued', 'in_progress', 'waiting', 'pending', 'requested'].includes(run.status)) {
+      if (run.conclusion !== null) blocked('PRODUCTION_PROOF_FAILED');
+      blocked('PRODUCTION_RUN_PENDING');
+    }
+    if (run.status !== 'completed' || run.conclusion !== 'success')
       blocked('PRODUCTION_PROOF_FAILED');
     const jobs = await reader.getJson(`actions/runs/${id}/jobs?filter=latest&per_page=100`);
     if (
@@ -1044,6 +1049,11 @@ export async function verifyProductionBackend({ reader, deploymentSha, runUrl = 
   if (JSON.stringify(proof) !== JSON.stringify(await read())) blocked('PRODUCTION_PROOF_FAILED');
   const finalLatest = await newest();
   if (
+    ['queued', 'in_progress', 'waiting', 'pending', 'requested'].includes(finalLatest.status) &&
+    finalLatest.conclusion === null
+  )
+    blocked('PRODUCTION_RUN_PENDING');
+  if (
     finalLatest.id !== id ||
     finalLatest.run_attempt !== 1 ||
     finalLatest.status !== 'completed' ||
@@ -1054,4 +1064,60 @@ export async function verifyProductionBackend({ reader, deploymentSha, runUrl = 
     ...proof,
     proofSha256: createHash('sha256').update(JSON.stringify(proof)).digest('hex'),
   };
+}
+
+export async function waitForProductionBackend({
+  verify,
+  guard = async () => {},
+  now = Date.now,
+  delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+  timeoutMs = 60 * 60_000,
+  pollMs = 10_000,
+}) {
+  const failWait = (code) => {
+    const error = new Error(code);
+    error.code = code;
+    throw error;
+  };
+  if (
+    typeof verify !== 'function' ||
+    typeof guard !== 'function' ||
+    typeof delay !== 'function' ||
+    !Number.isFinite(timeoutMs) ||
+    timeoutMs <= 0 ||
+    timeoutMs > 60 * 60_000 ||
+    !Number.isFinite(pollMs) ||
+    pollMs <= 0 ||
+    pollMs > 60_000
+  )
+    throw new TypeError('bounded production wait dependencies required');
+  const started = now();
+  let previous = started;
+  if (!Number.isSafeInteger(started) || started < 0) failWait('PRODUCTION_PROOF_FAILED');
+  const clock = () => {
+    const value = now();
+    if (!Number.isSafeInteger(value) || value < previous) failWait('PRODUCTION_PROOF_FAILED');
+    previous = value;
+    return value;
+  };
+  for (let polls = 0; polls <= Math.ceil(timeoutMs / pollMs); polls++) {
+    await guard();
+    clock();
+    try {
+      const proof = await verify();
+      await guard();
+      if (clock() - started > timeoutMs) failWait('PRODUCTION_RUN_PENDING_TIMEOUT');
+      return proof;
+    } catch (error) {
+      // Only identity-validated missing/pending observations may be polled.
+      if (!['PRODUCTION_RUN_REQUIRED', 'PRODUCTION_RUN_PENDING'].includes(error?.code)) throw error;
+    }
+    await guard();
+    const remaining = timeoutMs - (clock() - started);
+    if (remaining <= 0) failWait('PRODUCTION_RUN_PENDING_TIMEOUT');
+    const beforeSleep = previous;
+    await delay(Math.min(pollMs, remaining));
+    if (clock() <= beforeSleep) failWait('PRODUCTION_PROOF_FAILED');
+  }
+  failWait('PRODUCTION_RUN_PENDING_TIMEOUT');
 }

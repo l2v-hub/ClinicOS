@@ -27,13 +27,6 @@ on:
       - 'package-lock.json'
       - '.github/workflows/deploy-backend.yml'
   workflow_dispatch:
-    inputs:
-      operation:
-        description: Read-only target preflight, or deployment of this exact main commit
-        type: choice
-        options: [preflight, deploy]
-        default: preflight
-        required: true
 
 permissions:
   contents: read
@@ -44,7 +37,7 @@ concurrency:
 
 jobs:
   deploy:
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || inputs.operation == 'deploy')
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

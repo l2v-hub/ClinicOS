@@ -124,7 +124,7 @@ jobs:
       # release.mjs awaits the correlated exact demo run after persisting its merge.
       # confirm-demo independently verifies its immutable receipt and live provider identity.
       # Recording also requires a successful exact-SHA production deploy-backend deploy job.
-      # Missing production proof blocks; this workflow never implicitly dispatches production.
+      # Recording waits read-only up to 60 minutes for exact-SHA production; no production dispatch.
       - name: Wait for Railway runtime deployment of the merged commit
         id: runtime
         if: steps.release.outputs.status == 'merged' && steps.release.outputs.runtime == 'true'
@@ -163,6 +163,7 @@ jobs:
     needs: release
     if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/main' && needs.release.result == 'success' && (needs.release.outputs.status == 'merged' || needs.release.outputs.status == 'deployed')
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     environment: 'glistening-friendship / demo'
     steps:
       - name: Checkout trusted default branch

@@ -1047,3 +1047,43 @@ test('running and awaiting-QA continuations never project a ready review label',
     at: '2026-10-18T00:00:00Z', authorizationRef: 'test:legacy-cutover' };
   assert.equal(reviewProjection(f.batch).label, 'codex-review-fixes');
 });
+
+test('standalone communication projects exact collection PR-only and rejects collection drift', async()=>{
+ const f=communicationFixture();f.batch.issues=[];f.state().batches=[];f.state().standaloneReviews=[clone(f.batch)];
+ const before=clone(f.state());
+ assert.equal((await f.communication.publishState(f.batch,{collection:'standaloneReviews'})).label,'claude-review-ready');
+ assert(f.writes.every(w=>!w.endpoint.includes('/issues/17')&&!w.endpoint.includes('/issues/18')));
+ const count=f.writes.length;await f.communication.publishState(f.batch,{collection:'standaloneReviews'});assert.equal(f.writes.length,count);assert.deepEqual(f.state(),before);
+ f.state().batches=[{...clone(f.batch),issues:[17,18]}];f.state().standaloneReviews=[];
+ await assert.rejects(f.communication.publishState(f.batch,{collection:'standaloneReviews'}),/collection changed/);assert.equal(f.writes.length,count);
+});
+test('standalone nonempty cohort is explicitly unsupported without transport',async()=>{
+ const f=communicationFixture();const r=await f.communication.publishState(f.batch,{collection:'standaloneReviews'});assert.equal(r.status,'unsupported');assert.equal(f.calls.length,0);
+});
+test('exact final approval is preserved during release hold and active continuation wins',()=>{
+ const f=communicationFixture();report(f,'approved');f.batch.approvedSha=sha;f.batch.phase='blocked';f.batch.releaseHold={reason:'release pending'};f.batch.codexFinalReview={status:'verified',subjectSha:sha,claudeRound:1};
+ assert.equal(reviewProjection(f.batch,externalReport).outcome,'approval-preserved');
+ f.batch.operatorContinuations=[{round:13,status:'running'}];assert.equal(reviewProjection(f.batch,externalReport).label,'codex-review-fixes');
+ f.batch.operatorContinuations=[];f.batch.approvedSha='b'.repeat(40);assert.throws(()=>reviewProjection(f.batch,externalReport),/stale SHA/);
+});
+test('static actual-comment approval remains no-op without a fabricated structured report',()=>{
+ const f=communicationFixture();const b=f.batch;const digest='c'.repeat(64);b.approvedSha=sha;b.externalReview={status:'published',subjectSha:sha,structuredReview:false,claimMade:false,requestId:'real-request',reportCommentId:42,verdict:'approved',findings:0};
+ b.operatorActualClaudeReviews=[{kind:'actual-static-comment-fallback',subjectSha:sha,verdict:'approved',findings:0,claimMade:false,structuredReview:false,requestId:'real-request',commentId:42,actor:'l2v-hub',bodySha256:digest,url:`https://github.com/${repo}/pull/81#issuecomment-42`}];
+ b.operatorFinalCodexReviews=[{subjectSha:sha,actualClaudeCommentId:42,findings:0,sourceMatched:true,reportSha256:digest,sealSha256:digest}];b.operatorFinalCodexReservation={status:'verified',sourceSha:sha,actualClaudeCommentId:42,reportSha256:digest,sealSha256:digest};
+ assert.equal(reviewProjection(b,()=>assert.fail('fake structured report')).outcome,'approval-preserved');assert.equal(b.reviewLedger,undefined);b.operatorActualClaudeReviews[0].subjectSha='b'.repeat(40);assert.throws(()=>reviewProjection(b),/Static approval/);
+});
+
+test('standalone final write guards reject head, canonical fingerprint and authorization drift',async()=>{
+ for(const kind of ['head','fingerprint','authorization']){
+  const f=communicationFixture();f.batch.issues=[];f.state().batches=[];f.state().standaloneReviews=[clone(f.batch)];
+  let injected=false;f.hook(call=>{if(!injected&&call.args[1]===`repos/${repo}/labels?per_page=100`){injected=true;if(kind==='head')f.pr.head.sha='b'.repeat(40);if(kind==='fingerprint')f.state().standaloneReviews[0].ownership='changed';if(kind==='authorization')f.authorized.clear();}});
+  await assert.rejects(f.communication.publishState(f.batch,{collection:'standaloneReviews'}));assert(injected);assert.equal(f.writes.length,0);
+ }
+});
+test('closed standalone is a read-only skipped sync result',async()=>{
+ const f=communicationFixture();f.batch.issues=[];f.state().batches=[];f.state().standaloneReviews=[clone(f.batch)];f.pr.state='closed';
+ const result=await syncIssueReviews({github:f.github,communication:f.communication});assert.equal(result.batches[0].status,'skipped');assert.equal(f.writes.length,0);
+});
+test('operator final-Codex provenance preserves exact approval without rewriting histories',()=>{
+ const f=communicationFixture();report(f,'approved');const b=f.batch;b.approvedSha=sha;b.externalReview.reportComment=42;b.externalReview.reportBodySha256='d'.repeat(64);b.operatorFinalReviews=[{status:'verified',subjectSha:sha,verdict:'approved',findings:0,actualClaudeCommentId:42,actualClaudeCommentSha256:'d'.repeat(64),reportSha256:'e'.repeat(64),sealSha256:'f'.repeat(64)}];const before=clone(b);assert.equal(reviewProjection(b,externalReport).skip,true);assert.deepEqual(b,before);
+});

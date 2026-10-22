@@ -7,10 +7,12 @@ export const EXACT_BLOCK_CODES = Object.freeze([
   'PRODUCTION_BINDING_REQUIRED',
   'EXACT_DISPATCH_BLOCKED',
   'PRODUCTION_RUN_REQUIRED',
+  'PRODUCTION_RUN_PENDING_TIMEOUT',
   'PRODUCTION_PROOF_FAILED',
 ]);
 const SHA = /^[a-f0-9]{40}$/;
 export function exactBlockCode(error) {
+  if (error?.code === 'PRODUCTION_RUN_PENDING') return 'PRODUCTION_PROOF_FAILED';
   if (EXACT_BLOCK_CODES.includes(error?.code)) return error.code;
   if (/current main changed|saved dispatch identity mismatch/.test(error?.message ?? ''))
     return 'EXACT_MAIN_CHANGED';
@@ -63,7 +65,14 @@ export async function verifyReleaseAncestry({ reader, originalMergeSha, deployme
 }
 export function archiveRecovery(
   batch,
-  { actor, deploymentSha, extraRunIds = [], newId = randomUUID, now = Date.now },
+  {
+    actor,
+    deploymentSha,
+    extraRunIds = [],
+    retirementProof = { retiredRunIds: [], noRunProofs: [] },
+    newId = randomUUID,
+    now = Date.now,
+  },
 ) {
   const excludedRunIds = [...new Set([...archivedRunIds(batch), ...extraRunIds])];
   if (
@@ -86,6 +95,7 @@ export function archiveRecovery(
     dispatches: structuredClone(batch.exactDemoDispatches ?? {}),
     release: structuredClone(batch.release ?? null),
     excludedRunIds,
+    retirementProof: structuredClone(retirementProof),
     deploymentSha,
   };
   batch.exactReleaseRecoveries = [...(batch.exactReleaseRecoveries ?? []), archive];
@@ -107,6 +117,18 @@ export function archiveRecovery(
     deploymentSha,
     excludedRunIds,
     excludedDispatchIds,
+    excludedDispatches: batch.exactReleaseRecoveries
+      .flatMap((x) => Object.values(x.dispatches ?? {}))
+      .map(({ operation, sha, dispatchId }) => ({ operation, sha, dispatchId }))
+      .filter(
+        (value, index, values) =>
+          values.findIndex(
+            (p) =>
+              p.operation === value.operation &&
+              p.sha === value.sha &&
+              p.dispatchId === value.dispatchId,
+          ) === index,
+      ),
     postMerge: Boolean(batch.release?.mergeSha),
   };
   delete batch.releaseBlock;

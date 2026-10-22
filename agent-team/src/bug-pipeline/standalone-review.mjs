@@ -733,6 +733,8 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
     const expected = clone(subject);
     await current(expected);
     const projection = reviewProjection(expected, externalReport);
+    if (projection.skip) return projection;
+    if (expected.issues.length) return { status: 'unsupported', outcome: 'unsupported-standalone-issues' };
     const actor = await handoff.actor();
     async function write(endpoint, method, body) {
       const started = performance.now();

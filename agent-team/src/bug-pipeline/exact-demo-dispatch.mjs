@@ -12,6 +12,45 @@ const fail = (message) => {
 };
 const title = (p) => `demo-exact ${p.operation} ${p.sha} ${p.dispatchId}`;
 
+export const DISPATCH_SETTLE_MS = 15 * 60_000;
+export const NO_RUN_OBSERVATION_GAP_MS = 10_000;
+const timestamp = (value) => {
+  if (typeof value !== 'string') fail('trusted dispatch timestamp required');
+  const ms = Date.parse(value);
+  if (!Number.isSafeInteger(ms) || new Date(ms).toISOString() !== value)
+    fail('trusted dispatch timestamp required');
+  return ms;
+};
+function validateTimes(progress, currentTime, blockedAt) {
+  if (!Number.isSafeInteger(currentTime) || currentTime < 0)
+    fail('trusted dispatch clock required');
+  const intent = progress.intentAt === undefined ? undefined : timestamp(progress.intentAt);
+  const submitted =
+    progress.submittedAt === undefined ? undefined : timestamp(progress.submittedAt);
+  const blocked = blockedAt === undefined ? undefined : timestamp(blockedAt);
+  if (
+    [intent, submitted, blocked].some((t) => t !== undefined && t > currentTime) ||
+    (submitted !== undefined && (intent === undefined || submitted < intent)) ||
+    (blocked !== undefined &&
+      ((intent !== undefined && blocked < intent) ||
+        (submitted !== undefined && blocked < submitted)))
+  )
+    fail('dispatch timestamp order or future time invalid');
+  return Math.max(...[intent, submitted, blocked].filter((t) => t !== undefined));
+}
+function validateInventory(list) {
+  if (
+    !Array.isArray(list?.workflow_runs) ||
+    !Number.isSafeInteger(list.total_count) ||
+    list.total_count < 0 ||
+    list.total_count > 100 ||
+    list.workflow_runs.length !== list.total_count ||
+    list.workflow_runs.some((run) => !integer(run?.id)) ||
+    new Set(list.workflow_runs.map((run) => run.id)).size !== list.total_count
+  )
+    fail('bounded complete run inventory unavailable');
+  return list.workflow_runs;
+}
 function validateRun(run, progress) {
   if (
     !integer(run?.id) ||
@@ -85,16 +124,7 @@ export function createExactDemoDispatcher({
     const list = await reader.getJson(
       `actions/workflows/deploy-demo-exact-commit.yml/runs?branch=main&event=workflow_dispatch&head_sha=${sha}&per_page=100`,
     );
-    if (
-      !Array.isArray(list?.workflow_runs) ||
-      !Number.isSafeInteger(list.total_count) ||
-      list.total_count < 0 ||
-      list.total_count > 100 ||
-      list.workflow_runs.length !== list.total_count ||
-      list.workflow_runs.some((run) => !integer(run?.id))
-    )
-      fail('bounded complete run inventory unavailable');
-    return list.workflow_runs;
+    return validateInventory(list);
   };
   return {
     async ensure({
@@ -104,6 +134,7 @@ export function createExactDemoDispatcher({
       saveProgress,
       excludedRunIds = [],
       excludedDispatchIds = [],
+      excludedDispatches = [],
       guard = async () => {},
     }) {
       if (
@@ -111,6 +142,15 @@ export function createExactDemoDispatcher({
         (expectedSha !== undefined && !SHA.test(expectedSha)) ||
         (operation === 'deploy' && expectedSha === undefined) ||
         typeof saveProgress !== 'function' ||
+        !Array.isArray(excludedDispatches) ||
+        excludedDispatches.length > 100 ||
+        excludedDispatches.some(
+          (p) =>
+            !SHA.test(p?.sha ?? '') ||
+            !UUID.test(p?.dispatchId ?? '') ||
+            !['preflight', 'deploy'].includes(p?.operation) ||
+            !excludedDispatchIds.includes(p.dispatchId),
+        ) ||
         !Array.isArray(excludedDispatchIds) ||
         excludedDispatchIds.length > 100 ||
         excludedDispatchIds.some((id) => !UUID.test(id)) ||
@@ -120,8 +160,52 @@ export function createExactDemoDispatcher({
       )
         throw new TypeError('fixed operation and exact merged SHA required');
       const started = now();
+      if (!Number.isSafeInteger(started) || started < 0) fail('trusted dispatch clock required');
+      let lastTick = started;
+      const tick = () => {
+        const current = now();
+        if (!Number.isSafeInteger(current) || current < lastTick)
+          fail('dispatch clock moved backwards');
+        lastTick = current;
+        return current;
+      };
+      const checkLate = async (sha) => {
+        for (const sourceSha of new Set([sha, ...excludedDispatches.map((p) => p.sha)])) {
+          for (const run of await runs(sourceSha)) {
+            if (
+              (excludedDispatchIds.length || excludedDispatches.length) &&
+              (run.head_sha !== sourceSha ||
+                run.repository?.full_name !== REPO ||
+                run.head_repository?.full_name !== REPO ||
+                run.path !== WORKFLOW ||
+                run.event !== 'workflow_dispatch' ||
+                run.head_branch !== 'main' ||
+                !integer(run.run_attempt) ||
+                typeof run.display_title !== 'string')
+            )
+              fail('excluded run inventory identity mismatch');
+            const excluded = excludedDispatches.find(
+              (p) => p.sha === sourceSha && run.display_title === title(p),
+            );
+            const matchesId = excludedDispatchIds.some(
+              (id) =>
+                run.display_title === `demo-exact preflight ${sourceSha} ${id}` ||
+                run.display_title === `demo-exact deploy ${sourceSha} ${id}`,
+            );
+            if (excluded || matchesId) {
+              if (
+                !excludedRunIds.includes(run.id) ||
+                run.run_attempt !== 1 ||
+                run.status !== 'completed'
+              )
+                fail('late excluded dispatch run observed; no new POST');
+            }
+          }
+        }
+      };
       await guard();
       const sha = await currentMain(expectedSha);
+      await checkLate(sha);
       if (progress !== undefined) {
         if (
           progress.operation !== operation ||
@@ -136,6 +220,7 @@ export function createExactDemoDispatcher({
           (progress.runId !== undefined && !integer(progress.runId))
         )
           fail('saved dispatch identity mismatch');
+        validateTimes(progress, tick());
         progress = structuredClone(progress);
       } else {
         const prior = await runs(sha);
@@ -147,17 +232,24 @@ export function createExactDemoDispatcher({
           sha,
           dispatchId,
           phase: 'intent',
+          intentAt: new Date(tick()).toISOString(),
           priorRunIds: [...new Set([...prior.map((run) => run.id), ...excludedRunIds])],
         };
         if (progress.priorRunIds.length > 100) fail('bounded excluded run inventory required');
+        validateTimes(progress, tick());
         await saveProgress(progress); // Durable intent precedes the one possible mutation.
         await guard();
         await currentMain(sha);
+        await checkLate(sha);
+        await guard();
+        await currentMain(sha);
+        tick();
         await postDispatch({
           ref: 'main',
           inputs: { reviewed_sha: sha, operation, dispatch_id: dispatchId },
         });
-        progress = { ...progress, phase: 'submitted' };
+        progress = { ...progress, phase: 'submitted', submittedAt: new Date(tick()).toISOString() };
+        validateTimes(progress, tick());
         await saveProgress(progress);
       }
       for (;;) {
@@ -201,43 +293,137 @@ export function createExactDemoDispatcher({
           if (!['queued', 'in_progress', 'waiting', 'pending', 'requested'].includes(run.status))
             fail('unrecognized run status');
         }
-        if (now() - started >= timeoutMs)
+        if (tick() - started >= timeoutMs)
           fail('run discovery or completion timed out; no redispatch');
-        await delay(Math.min(pollMs, timeoutMs - (now() - started)));
+        await delay(Math.min(pollMs, timeoutMs - (tick() - started)));
       }
     },
   };
 }
 
-// An explicit recovery cannot abandon a still-active or uncertain provider-capable run.
-export async function verifyRetiredExactDispatches({ reader, dispatches = {} }) {
-  const retiredRunIds = [];
-  for (const progress of Object.values(dispatches)) {
+// Only an explicit, authenticated recovery may retire a settled no-run intent.
+export async function verifyRetiredExactDispatches({
+  reader,
+  dispatches = {},
+  blockedAt,
+  now = Date.now,
+  delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+  retirementProof,
+}) {
+  const retiredRunIds = [],
+    noRunProofs = [];
+  let lastClock = now();
+  const clock = () => {
+    const value = now();
+    if (!Number.isSafeInteger(value) || value < lastClock) fail('retirement clock invalid');
+    lastClock = value;
+    return value;
+  };
+  if (!Number.isSafeInteger(lastClock) || lastClock < 0 || typeof delay !== 'function')
+    fail('retirement clock invalid');
+  for (const [operation, progress] of Object.entries(dispatches)) {
     if (
+      operation !== progress?.operation ||
       !['preflight', 'deploy'].includes(progress?.operation) ||
       !SHA.test(progress.sha ?? '') ||
       !UUID.test(progress.dispatchId ?? '') ||
-      !Array.isArray(progress.priorRunIds)
+      !Array.isArray(progress.priorRunIds) ||
+      progress.priorRunIds.length > 100 ||
+      progress.priorRunIds.some((id) => !integer(id)) ||
+      (progress.runId !== undefined && !integer(progress.runId)) ||
+      !['intent', 'submitted', 'observed', 'succeeded'].includes(progress.phase)
     )
       fail('retired dispatch identity mismatch');
+    const origin = validateTimes(progress, clock(), blockedAt);
+    const inventory = async () => {
+      const rows = validateInventory(
+        await reader.getJson(
+          `actions/workflows/deploy-demo-exact-commit.yml/runs?branch=main&event=workflow_dispatch&head_sha=${progress.sha}&per_page=100`,
+        ),
+      );
+      if (
+        rows.some(
+          (run) =>
+            run.head_sha !== progress.sha ||
+            run.repository?.full_name !== REPO ||
+            run.head_repository?.full_name !== REPO ||
+            run.path !== WORKFLOW ||
+            run.event !== 'workflow_dispatch' ||
+            run.head_branch !== 'main' ||
+            !integer(run.run_attempt) ||
+            typeof run.display_title !== 'string',
+        )
+      )
+        fail('retired inventory identity mismatch');
+      return rows;
+    };
+    const matches = async () =>
+      (await inventory()).filter((run) => run.display_title === title(progress));
     let run;
     if (progress.runId) run = await reader.getJson(`actions/runs/${progress.runId}`);
     else {
-      const list = await reader.getJson(
-        `actions/workflows/deploy-demo-exact-commit.yml/runs?branch=main&event=workflow_dispatch&head_sha=${progress.sha}&per_page=100`,
+      const priorProof = retirementProof?.noRunProofs?.find(
+        (p) =>
+          p.sha === progress.sha &&
+          p.operation === progress.operation &&
+          p.dispatchId === progress.dispatchId,
       );
-      if (
-        !Array.isArray(list?.workflow_runs) ||
-        list.total_count !== list.workflow_runs.length ||
-        list.total_count > 100
-      )
-        fail('retired run inventory unavailable');
-      const matches = list.workflow_runs.filter((run) => run.display_title === title(progress));
-      if (matches.length !== 1) fail('uncertain old dispatch cannot be recovered');
-      run = matches[0];
+      const correlated = await matches();
+      if (correlated.length > 1) fail('ambiguous old dispatch cannot be recovered');
+      if (priorProof) {
+        const first = timestamp(priorProof.firstObservedAt),
+          second = timestamp(priorProof.secondObservedAt);
+        if (
+          !Number.isFinite(origin) ||
+          priorProof.originAt !== new Date(origin).toISOString() ||
+          priorProof.settleMs !== DISPATCH_SETTLE_MS ||
+          priorProof.observationGapMs !== NO_RUN_OBSERVATION_GAP_MS ||
+          first < origin + DISPATCH_SETTLE_MS ||
+          second < first + NO_RUN_OBSERVATION_GAP_MS ||
+          second > clock() ||
+          correlated.length
+        )
+          fail('retired no-run proof changed or late run observed');
+        noRunProofs.push(structuredClone(priorProof));
+        continue;
+      }
+      if (correlated.length === 1) run = correlated[0];
+      else {
+        if (
+          !['intent', 'submitted'].includes(progress.phase) ||
+          !Number.isFinite(origin) ||
+          clock() - origin < DISPATCH_SETTLE_MS
+        )
+          fail('uncertain old dispatch is inside settle window or untimed');
+        const first = clock();
+        await delay(NO_RUN_OBSERVATION_GAP_MS);
+        const second = clock();
+        if (second - first < NO_RUN_OBSERVATION_GAP_MS)
+          fail('retirement observations must be separated in time');
+        const secondMatches = await matches();
+        clock();
+        if (secondMatches.length) fail('late or ambiguous old dispatch cannot be retired');
+        noRunProofs.push({
+          operation: progress.operation,
+          sha: progress.sha,
+          dispatchId: progress.dispatchId,
+          originAt: new Date(origin).toISOString(),
+          firstObservedAt: new Date(first).toISOString(),
+          secondObservedAt: new Date(second).toISOString(),
+          settleMs: DISPATCH_SETTLE_MS,
+          observationGapMs: NO_RUN_OBSERVATION_GAP_MS,
+          origin:
+            progress.intentAt === undefined
+              ? 'durable-block-time'
+              : 'latest-trusted-dispatch-or-block-time',
+        });
+        continue;
+      }
     }
     validateRun(run, progress);
     if (run.status !== 'completed') fail('active old dispatch cannot be recovered');
+    if (progress.phase === 'succeeded' && run.conclusion !== 'success')
+      fail('retired successful dispatch changed');
     if (
       ![
         'success',
@@ -254,5 +440,11 @@ export async function verifyRetiredExactDispatches({ reader, dispatches = {} }) 
       fail('unsettled old dispatch cannot be recovered');
     retiredRunIds.push(run.id);
   }
-  return retiredRunIds;
+  if (
+    retirementProof &&
+    (JSON.stringify(retiredRunIds) !== JSON.stringify(retirementProof.retiredRunIds) ||
+      JSON.stringify(noRunProofs) !== JSON.stringify(retirementProof.noRunProofs))
+  )
+    fail('retired dispatch proof identities changed');
+  return { retiredRunIds, noRunProofs };
 }

@@ -1087,7 +1087,7 @@ test('demo workflow selects one explicit mode before the bot credential and stay
   assert.match(job.slice(validation, credential), /assert.notEqual\(configure, demo/);
   assert.match(job.slice(validation, credential), /validateDemoEnvironmentDispatch/);
   assert.doesNotMatch(job, /RAILWAY(?:_DEMO)?_TOKEN|environment:\s|persist-credentials: true/);
-  assert.match(workflow, /node --test agent-team\/tests\/bug-pipeline\/\*\.test\.mjs/);
+  assert.match(workflow, /node --test --test-concurrency=1 agent-team\/tests\/bug-pipeline\/\*\.test\.mjs/);
 });
 
 test('actual credential-free workflow validation executes both modes and rejects ambiguous or stale dispatches', async () => {

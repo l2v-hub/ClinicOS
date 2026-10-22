@@ -2185,15 +2185,26 @@ test('exact backend requires production binding before merge and production proo
       error.code = code;
       throw error;
     };
+    let clock = Date.now();
+    const expectedCode =
+      code === 'PRODUCTION_RUN_REQUIRED' ? 'PRODUCTION_RUN_PENDING_TIMEOUT' : code;
     await assert.rejects(
       recordDeployment({
         ...exactInput(f),
         mergeSha,
         railwayRunUrl: result.railwayRunUrl,
+        productionWait: {
+          now: () => clock,
+          delay: async (ms) => {
+            clock += ms;
+          },
+          timeoutMs: 20,
+          pollMs: 10,
+        },
       }),
-      new RegExp(code),
+      new RegExp(expectedCode),
     );
-    assert.equal(f.getSaved().batches[0].releaseBlock.code, code);
+    assert.equal(f.getSaved().batches[0].releaseBlock.code, expectedCode);
     assert.ok(!f.calls.some((c) => c[0] === 'status' && c[2] === 'Risolto'));
     const count = f.calls.filter((c) => c[0] === 'dispatch').length;
     await assert.rejects(releaseBatch(exactInput(f)), /releaseHold/);
@@ -2307,4 +2318,242 @@ test('recovery mutation guard rechecks retired runs and durable ownership at the
     assert.equal(f.getSaved().batches[0].exactReleaseRecoveries, undefined);
     assert.deepEqual(f.getSaved().batches[0].releaseBlock, before.releaseBlock);
   }
+});
+
+test('actual record controller waits absent→running→success without blocking or production dispatch; failures/timeouts block once with explicit guidance', async (t) => {
+  const { verifyProductionBackend } = await import('../../src/bug-pipeline/demo-deployment.mjs');
+  for (const outcome of [
+    'success',
+    'failure',
+    'absent timeout',
+    'running timeout',
+    'publication pending',
+  ])
+    await t.test(outcome, async () => {
+      const f = exactBackendFixture();
+      await wireExact(f);
+      const released = await releaseBatch(exactInput(f));
+      const initialPosts = f.calls.filter((c) => c[0] === 'dispatch').length;
+      let state = 0,
+        clock = Date.now(),
+        sleeps = 0;
+      const pending = () => state < 2 || outcome === 'running timeout';
+      const run = () => ({
+        id: 321,
+        run_attempt: 1,
+        head_sha: mergeSha,
+        head_branch: 'main',
+        repository: { full_name: f.state.repository },
+        head_repository: { full_name: f.state.repository },
+        path: '.github/workflows/deploy-backend.yml',
+        event: 'push',
+        status: pending() ? 'in_progress' : 'completed',
+        conclusion: pending() ? null : outcome === 'failure' ? 'failure' : 'success',
+      });
+      const job = {
+        id: 421,
+        run_id: 321,
+        run_attempt: 1,
+        head_sha: mergeSha,
+        name: 'deploy',
+        status: 'completed',
+        conclusion: 'success',
+        steps: [{ name: 'Deploy to Railway', status: 'completed', conclusion: 'success' }],
+      };
+      const reader = {
+        getJson: async (route) =>
+          route.includes('/runs?')
+            ? {
+                total_count: state === 0 || outcome === 'absent timeout' ? 0 : 1,
+                workflow_runs: state === 0 || outcome === 'absent timeout' ? [] : [run()],
+              }
+            : route.includes('/jobs?')
+              ? { total_count: 1, jobs: [job] }
+              : run(),
+      };
+      f.github.verifyProductionBackend = (input) => verifyProductionBackend({ ...input, reader });
+      const demoProof = f.github.verifyDemoRelease;
+      f.github.verifyDemoRelease = async (...args) => ({
+        ...(await demoProof(...args)),
+        runUrl: released.railwayRunUrl,
+      });
+      if (outcome === 'publication pending') {
+        const verify = f.github.verifyDemoRelease;
+        f.github.verifyDemoRelease = async (...args) => {
+          const proof = await verify(...args);
+          state = 1;
+          return proof;
+        };
+      }
+      const input = {
+        ...exactInput(f),
+        mergeSha,
+        railwayRunUrl: released.railwayRunUrl,
+        productionWait: {
+          now: () => clock,
+          delay: async (ms) => {
+            clock += ms;
+            state++;
+            sleeps++;
+          },
+          timeoutMs: 40,
+          pollMs: 10,
+        },
+      };
+      if (outcome === 'success') {
+        await recordDeployment(input);
+        assert.equal(f.getSaved().batches[0].release.status, 'deployed');
+        assert.equal(f.getSaved().batches[0].releaseBlock, undefined);
+        assert.ok(!f.calls.some((c) => c[0] === 'status' && c[2] === 'Bloccato'));
+        assert.equal(sleeps, 2);
+      } else {
+        const code = outcome.includes('timeout')
+          ? 'PRODUCTION_RUN_PENDING_TIMEOUT'
+          : 'PRODUCTION_PROOF_FAILED';
+        await assert.rejects(
+          recordDeployment(input),
+          new RegExp(outcome === 'publication pending' ? 'PRODUCTION_RUN_PENDING' : code),
+        );
+        const block = f.getSaved().batches[0].releaseBlock;
+        assert.equal(block.code, code);
+        const blockComments = f.calls.filter(
+          (c) => c[0] === 'comment' && c[2].includes('release-block:'),
+        );
+        assert.equal(blockComments.length, 2);
+        assert.ok(!f.calls.some((c) => c[0] === 'status' && c[2] === 'Risolto'));
+        if (outcome.includes('timeout'))
+          assert.ok(
+            blockComments.every(
+              (c) => c[2].includes('dispatch manuale esplicito') && c[2].includes(mergeSha),
+            ),
+          );
+        if (outcome === 'publication pending')
+          assert.equal(sleeps, 2, 'publication performs strict read without another wait');
+      }
+      assert.equal(
+        f.calls.filter((c) => c[0] === 'dispatch').length,
+        initialPosts,
+        'production reader never dispatches',
+      );
+    });
+});
+
+test('rejected POST, pre-POST main movement and uncertain acknowledgement retire only after settled two-read proof and explicit recovery', async (t) => {
+  const {
+    createExactDemoDispatcher,
+    createExactDispatchPoster,
+    verifyRetiredExactDispatches,
+    DISPATCH_SETTLE_MS,
+  } = await import('../../src/bug-pipeline/exact-demo-dispatch.mjs');
+  for (const scenario of [
+    'rejected POST',
+    'main moved before POST',
+    'uncertain acknowledgement',
+    'late old title',
+    'late during save',
+  ])
+    await t.test(scenario, async () => {
+      const f = exactBackendFixture();
+      await wireRecovery(f);
+      let offset = 0,
+        attempts = 0;
+      const clock = () => Date.now() + offset;
+      const delay = async (ms) => {
+        offset += ms;
+      };
+      f.github.verifyExactRecoveryRuns = (input) =>
+        verifyRetiredExactDispatches({ ...input, reader: f.reader, now: clock, delay });
+      const poster = createExactDispatchPoster({
+        cwd: '/tmp',
+        run: async () => {
+          attempts++;
+          return scenario === 'uncertain acknowledgement'
+            ? { ok: true, stdout: 'uncertain acknowledgement' }
+            : { ok: false, stdout: '', stderr: 'synthetic dispatch rejected' };
+        },
+      });
+      const first = createExactDemoDispatcher({
+        reader: f.reader,
+        postDispatch: poster,
+        now: clock,
+      });
+      f.github.ensureExactDemoRun = (input) => first.ensure(input);
+      const read = f.reader.getJson;
+      if (scenario === 'main moved before POST') {
+        let count = 0;
+        f.reader.getJson = async (route) => {
+          if (route === 'commits/main' && ++count === 2) f.setMain('d'.repeat(40));
+          return read(route);
+        };
+      }
+      await assert.rejects(releaseBatch(exactInput(f)));
+      f.reader.getJson = read;
+      const blocked = structuredClone(f.getSaved().batches[0]);
+      const old = blocked.exactDemoDispatches.preflight;
+      assert.equal(old.phase, 'intent');
+      assert.ok(old.intentAt);
+      assert.equal(old.runId, undefined);
+      assert.equal(f.runs.length, 0);
+      const attemptsBefore = attempts;
+      await assert.rejects(releaseBatch(exactInput(f)), /releaseHold/);
+      assert.equal(attempts, attemptsBefore);
+      const request = { ...recoveryInput(f), now: clock };
+      await assert.rejects(recoverExactRelease(request), /settle/);
+      assert.equal(f.getSaved().batches[0].exactReleaseRecoveries, undefined);
+      const origin = Math.max(Date.parse(old.intentAt), Date.parse(blocked.releaseBlock.at));
+      offset = origin + DISPATCH_SETTLE_MS + 1 - Date.now();
+      const oldRun = {
+        id: 899,
+        run_attempt: 1,
+        status: 'completed',
+        conclusion: 'success',
+        head_sha: old.sha,
+        head_branch: 'main',
+        repository: { full_name: f.state.repository },
+        head_repository: { full_name: f.state.repository },
+        path: '.github/workflows/deploy-demo-exact-commit.yml',
+        event: 'workflow_dispatch',
+        display_title: `demo-exact preflight ${old.sha} ${old.dispatchId}`,
+      };
+      if (scenario === 'late during save') {
+        const save = f.store.save;
+        f.store.save = async (value, { guard }) => {
+          f.runs.push(oldRun);
+          await guard();
+          return save(value);
+        };
+        await assert.rejects(recoverExactRelease(request), /late|proof/);
+        assert.equal(f.getSaved().batches[0].exactReleaseRecoveries, undefined);
+        return;
+      }
+      await recoverExactRelease(request);
+      const recovered = f.getSaved().batches[0];
+      assert.deepEqual(recovered.exactReleaseRecoveries[0].dispatches, blocked.exactDemoDispatches);
+      assert.equal(recovered.exactReleaseRecoveries[0].retirementProof.noRunProofs.length, 1);
+      assert.ok(recovered.exactDemoRecovery.excludedDispatchIds.includes(old.dispatchId));
+      assert.ok(
+        recovered.exactDemoRecovery.excludedDispatches.some(
+          (p) => p.sha === old.sha && p.dispatchId === old.dispatchId,
+        ),
+      );
+      const fresh = createExactDemoDispatcher({
+        reader: f.reader,
+        postDispatch: f.post,
+        now: clock,
+      });
+      f.github.ensureExactDemoRun = (input) => fresh.ensure(input);
+      if (scenario === 'late old title') {
+        f.runs.push(oldRun);
+        const posts = f.calls.filter((c) => c[0] === 'dispatch').length;
+        await assert.rejects(releaseBatch(exactInput(f)), /late excluded/);
+        assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, posts);
+        return;
+      }
+      const released = await releaseBatch(exactInput(f));
+      assert.equal(released.status, 'merged');
+      assert.equal(f.calls.filter((c) => c[0] === 'dispatch' && c[1] === 'preflight').length, 1);
+      assert.equal(f.calls.filter((c) => c[0] === 'dispatch' && c[1] === 'deploy').length, 1);
+      await releaseBatch(exactInput(f));
+      assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 2);
+    });
 });

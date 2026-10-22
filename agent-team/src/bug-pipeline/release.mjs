@@ -14,6 +14,7 @@ import {
   verifyDemoPreflight,
   verifyDemoRelease,
   verifyProductionBackend,
+  waitForProductionBackend,
 } from './demo-deployment.mjs';
 import {
   createExactDemoDispatcher,
@@ -433,7 +434,12 @@ async function persistExactBlock({ batch, store, github, repo, guard, code }) {
   };
   await blockedGuard();
   const marker = `<!-- codex-bug-pipeline:release-block:${current.id}:${current.releaseBlock.id} -->`;
-  const body = `${marker}\nRilascio bloccato: ${code}. Le issue restano aperte. Solo un recupero esplicito autorizzato può creare un nuovo intento; un retry non ridistribuisce.`;
+  const productionHint = ['PRODUCTION_RUN_REQUIRED', 'PRODUCTION_RUN_PENDING_TIMEOUT'].includes(
+    code,
+  )
+    ? ` Deve esistere un deploy di produzione per lo SHA main esatto ${current.release?.deploymentSha ?? current.release?.mergeSha ?? current.sha}; può essere necessario un dispatch manuale esplicito di deploy-backend.yml su main. Il controller non avvia quel deploy.`
+    : '';
+  const body = `${marker}\nRilascio bloccato: ${code}.${productionHint} Le issue restano aperte. Solo un recupero esplicito autorizzato può creare un nuovo intento; un retry non ridistribuisce.`;
   for (const number of [...new Set([current.pr.number, ...current.issues])]) {
     await blockedGuard();
     const issue = await github.viewIssue(number);
@@ -514,13 +520,18 @@ export async function recoverExactRelease({
     fail('recovery authorization or current main changed');
   await guard();
   const oldDispatches = structuredClone(batch.exactDemoDispatches ?? {});
-  const verifyOldRuns = async () => {
-    if (!Object.keys(oldDispatches).length) return [];
+  const recoveryBlockedAt = batch.releaseBlock.at;
+  const verifyOldRuns = async (retirementProof) => {
+    if (!Object.keys(oldDispatches).length) return { retiredRunIds: [], noRunProofs: [] };
     if (typeof github.verifyExactRecoveryRuns !== 'function')
       fail('retired run verification required');
-    return github.verifyExactRecoveryRuns({ dispatches: oldDispatches });
+    return github.verifyExactRecoveryRuns({
+      dispatches: oldDispatches,
+      blockedAt: recoveryBlockedAt,
+      retirementProof,
+    });
   };
-  const retiredRunIds = await verifyOldRuns();
+  const retirementProof = await verifyOldRuns();
   const recoveryGuard = async () => {
     await guard();
     if (
@@ -533,7 +544,7 @@ export async function recoverExactRelease({
         originalMergeSha: batch.release.mergeSha,
         deploymentSha,
       });
-    if (JSON.stringify(await verifyOldRuns()) !== JSON.stringify(retiredRunIds))
+    if (JSON.stringify(await verifyOldRuns(retirementProof)) !== JSON.stringify(retirementProof))
       fail('retired run identities changed');
     await guard();
   };
@@ -541,7 +552,8 @@ export async function recoverExactRelease({
   const archive = archiveRecovery(batch, {
     actor,
     deploymentSha,
-    extraRunIds: retiredRunIds,
+    extraRunIds: retirementProof.retiredRunIds,
+    retirementProof,
     newId,
     now,
   });
@@ -596,6 +608,7 @@ export async function releaseBatch({
         progress: batch.exactDemoDispatches?.[operation],
         excludedRunIds: batch.exactDemoRecovery?.excludedRunIds ?? [],
         excludedDispatchIds: batch.exactDemoRecovery?.excludedDispatchIds ?? [],
+        excludedDispatches: batch.exactDemoRecovery?.excludedDispatches ?? [],
         guard: () => guard(),
         saveProgress: async (progress) => {
           if (JSON.stringify(batch.exactDemoDispatches?.[operation]) === JSON.stringify(progress))
@@ -840,6 +853,7 @@ export async function recordDeployment({
   deploymentSha,
   runtimeRunUrl = '',
   sourcePolicy,
+  productionWait = {},
 }) {
   sourcePolicy = releaseSourcePolicy(sourcePolicy);
   if (
@@ -902,9 +916,14 @@ export async function recordDeployment({
         error.code = 'PRODUCTION_RUN_REQUIRED';
         throw error;
       }
-      production = await github.verifyProductionBackend({
-        deploymentSha,
-        runUrl: productionRailwayRunUrl,
+      production = await waitForProductionBackend({
+        ...productionWait,
+        verify: () =>
+          github.verifyProductionBackend({ deploymentSha, runUrl: productionRailwayRunUrl }),
+        guard: async () => {
+          await guard();
+          await verifyExactReleaseTarget({ batch, github, sourcePolicy });
+        },
       });
       if (
         production?.sha !== deploymentSha ||

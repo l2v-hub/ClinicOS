@@ -289,3 +289,176 @@ test('new authorized intent excludes archived runs and cannot reuse an archived 
   await assert.rejects(g.ensure({ progress: tampered, excludedRunIds: [44] }), /saved dispatch/);
   assert.equal(g.posted, 1);
 });
+
+test('intent and acknowledged submission timestamps precede reuse and invalid future/order times fail closed', async () => {
+  const f = fixture();
+  await f.ensure();
+  assert.ok(Number.isFinite(Date.parse(f.saved[0].intentAt)));
+  assert.ok(Date.parse(f.saved[1].submittedAt) >= Date.parse(f.saved[0].intentAt));
+  for (const patch of [
+    { intentAt: '2099-01-01T00:00:00.000Z' },
+    { submittedAt: '2020-01-01T00:00:00.000Z' },
+    { intentAt: 'not a timestamp' },
+  ])
+    await assert.rejects(f.ensure({ progress: { ...f.progress, ...patch } }), /timestamp/);
+});
+
+test('no-run retirement needs fifteen-minute latest trusted origin, two separated complete reads, and reusable guarded proof', async (t) => {
+  const { verifyRetiredExactDispatches, DISPATCH_SETTLE_MS, NO_RUN_OBSERVATION_GAP_MS } =
+    await import('../../src/bug-pipeline/exact-demo-dispatch.mjs');
+  const base = Date.parse('2026-10-22T00:00:00.000Z');
+  for (const mode of [
+    'normal',
+    'legacy',
+    'recent submission',
+    'recent block',
+    'inside window',
+    'untimed',
+    'future',
+    'future block',
+    'invalid legacy block',
+    'order',
+    'incomplete',
+    'ambiguous',
+    'active',
+    'rerun',
+    'late second read',
+    'backwards clock',
+    'short sleep',
+  ])
+    await t.test(mode, async () => {
+      let clock = base + DISPATCH_SETTLE_MS,
+        reads = 0,
+        sleeps = 0;
+      const p = {
+        operation: 'preflight',
+        sha,
+        dispatchId: id,
+        phase: 'intent',
+        priorRunIds: [],
+        intentAt: new Date(base).toISOString(),
+      };
+      let blockedAt;
+      if (mode === 'legacy') {
+        delete p.intentAt;
+        blockedAt = new Date(base).toISOString();
+      }
+      if (mode === 'untimed') delete p.intentAt;
+      if (mode === 'recent submission') {
+        p.phase = 'submitted';
+        p.submittedAt = new Date(clock - 1000).toISOString();
+      }
+      if (mode === 'recent block') blockedAt = new Date(clock - 1000).toISOString();
+      if (mode === 'inside window') clock--;
+      if (mode === 'future') p.intentAt = new Date(clock + 1).toISOString();
+      if (mode === 'future block') blockedAt = new Date(clock + 1).toISOString();
+      if (mode === 'invalid legacy block') {
+        delete p.intentAt;
+        blockedAt = 'invalid';
+      }
+      if (mode === 'order') p.submittedAt = new Date(base - 1).toISOString();
+      const r = {
+        id: 55,
+        run_attempt: mode === 'rerun' ? 2 : 1,
+        status: mode === 'active' ? 'in_progress' : 'completed',
+        conclusion: 'success',
+        head_sha: sha,
+        head_branch: 'main',
+        repository: { full_name: 'l2v-hub/ClinicOS' },
+        head_repository: { full_name: 'l2v-hub/ClinicOS' },
+        path: '.github/workflows/deploy-demo-exact-commit.yml',
+        event: 'workflow_dispatch',
+        display_title: `demo-exact preflight ${sha} ${id}`,
+      };
+      const reader = {
+        getJson: async () => {
+          reads++;
+          const rows =
+            mode === 'ambiguous'
+              ? [r, { ...r, id: 56 }]
+              : ['active', 'rerun'].includes(mode) || (mode === 'late second read' && reads > 1)
+                ? [r]
+                : [];
+          return { total_count: mode === 'incomplete' ? 1 : rows.length, workflow_runs: rows };
+        },
+      };
+      const options = {
+        reader,
+        dispatches: { preflight: p },
+        blockedAt,
+        now: () => clock,
+        delay: async (ms) => {
+          sleeps++;
+          clock += mode === 'backwards clock' ? -1 : mode === 'short sleep' ? ms - 1 : ms;
+        },
+      };
+      if (['normal', 'legacy'].includes(mode)) {
+        const proof = await verifyRetiredExactDispatches(options);
+        assert.equal(proof.noRunProofs.length, 1);
+        assert.equal(reads, 2);
+        assert.equal(sleeps, 1);
+        assert.equal(
+          Date.parse(proof.noRunProofs[0].secondObservedAt) -
+            Date.parse(proof.noRunProofs[0].firstObservedAt),
+          NO_RUN_OBSERVATION_GAP_MS,
+        );
+        assert.deepEqual(
+          await verifyRetiredExactDispatches({ ...options, retirementProof: proof }),
+          proof,
+        );
+        assert.equal(reads, 3);
+        assert.equal(sleeps, 1, 'save guard rechecks without restarting observations');
+      } else await assert.rejects(verifyRetiredExactDispatches(options));
+    });
+});
+
+test('fresh dispatch rejects late excluded title before POST even when retired SHA differs from new target', async () => {
+  const f = fixture();
+  const oldSha = 'b'.repeat(40),
+    oldId = '22345678-1234-4123-8123-123456789abc';
+  const old = {
+    ...f.run,
+    id: 99,
+    head_sha: oldSha,
+    display_title: `demo-exact preflight ${oldSha} ${oldId}`,
+  };
+  const read = f.reader.getJson;
+  f.reader.getJson = async (route) =>
+    route.includes(`head_sha=${oldSha}`) ? { total_count: 1, workflow_runs: [old] } : read(route);
+  await assert.rejects(
+    f.ensure({
+      excludedDispatchIds: [oldId],
+      excludedDispatches: [{ operation: 'preflight', sha: oldSha, dispatchId: oldId }],
+    }),
+    /late excluded/,
+  );
+  assert.equal(f.posted, 0);
+  assert.equal(f.saved.length, 0);
+});
+
+test('a known retired run on an earlier SHA may stay completed but a later rerun blocks before another POST', async () => {
+  const f = fixture(),
+    oldSha = 'b'.repeat(40),
+    oldId = '22345678-1234-4123-8123-123456789abc';
+  const old = {
+    ...f.run,
+    id: 99,
+    head_sha: oldSha,
+    display_title: `demo-exact deploy ${oldSha} ${oldId}`,
+  };
+  const read = f.reader.getJson;
+  f.reader.getJson = async (route) =>
+    route.includes(`head_sha=${oldSha}`) ? { total_count: 1, workflow_runs: [old] } : read(route);
+  const exclusions = {
+    excludedRunIds: [99],
+    excludedDispatchIds: [oldId],
+    excludedDispatches: [{ operation: 'deploy', sha: oldSha, dispatchId: oldId }],
+  };
+  await f.ensure(exclusions);
+  assert.equal(f.posted, 1);
+  old.run_attempt = 2;
+  old.status = 'in_progress';
+  old.conclusion = null;
+  await assert.rejects(f.ensure(exclusions), /late excluded/);
+  assert.equal(f.posted, 1);
+});

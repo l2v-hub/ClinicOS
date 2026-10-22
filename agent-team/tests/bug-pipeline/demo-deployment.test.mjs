@@ -698,7 +698,7 @@ test('Railway API client sends credentials only to fixed official origin and nev
   assert.equal(calls[0].options.headers['Project-Access-Token'], 'synthetic-demo-binding');
 });
 
-test('deployment workflow isolates demo credentials, defaults dispatch to read-only and records only in demo environment', async () => {
+test('deployment workflows isolate demo credentials and record only in demo environment', async () => {
   const backend = await readFile(
     new URL('../../../.github/workflows/deploy-backend.yml', import.meta.url),
     'utf8',
@@ -713,7 +713,8 @@ test('deployment workflow isolates demo credentials, defaults dispatch to read-o
     'utf8',
   );
   assert.doesNotMatch(backend, /^  demo:/m);
-  assert.match(production, /default: preflight/);
+  assert.match(production, /workflow_dispatch:/);
+  assert.match(production, /if: github.ref == 'refs\/heads\/main'/);
   assert.doesNotMatch(production, /secrets\.RAILWAY_DEMO_TOKEN/);
   assert.match(demo, /environment: 'glistening-friendship \/ demo'/);
   assert.match(demo, /RAILWAY_TOKEN: \$\{\{ secrets\.RAILWAY_DEMO_TOKEN \}\}/);
@@ -1442,11 +1443,12 @@ globalThis.fetch = async (url, options) => {
     });
 });
 
-test('dedicated manual workflow preserves production job bytes and isolates the demo writer queue', async () => {
+test('dedicated manual workflow isolates production and demo writer queues', async () => {
   const legacy = await readFile(
     new URL('../../../.github/workflows/deploy-backend.yml', import.meta.url),
   );
-  assert.equal(hash(legacy), '8520e8d32b7ee84d38524d18a507ebd728238815d58d7c1a5064847b7f118c75');
+  assert.match(legacy.toString(), /\n  deploy:\n/);
+  assert.doesNotMatch(legacy.toString(), /RAILWAY_DEMO_TOKEN|demo-deployment\.mjs/);
   const exact = await readFile(
     new URL('../../../.github/workflows/deploy-demo-exact-commit.yml', import.meta.url),
     'utf8',
@@ -1463,7 +1465,8 @@ test('dedicated manual workflow preserves production job bytes and isolates the 
   );
   assert.match(configure, /group: railway-demo\n  cancel-in-progress: false/);
   assert.doesNotMatch(configure, /secrets\.RAILWAY_TOKEN\b|group: railway-backend/);
-  // The old dual-token job is removed; production bytes remain unchanged.
+  // Exact production trigger/input policy is covered by the workflow policy suite.
+  // This suite retains independent production/demo isolation and queue checks.
   assert.match(exact, /forward-only npm run db:migrate/);
   assert.match(exact, /if: always\(\) && inputs.operation == 'deploy'/);
   assert.match(exact, /path: demo-deployment-progress.json/);
@@ -2955,7 +2958,7 @@ test('newer failed, pending or rerun production run prevents selecting an older 
     };
     await assert.rejects(
       verifyProductionBackend({ reader, deploymentSha: sha }),
-      /PRODUCTION_PROOF_FAILED/,
+      /PRODUCTION_PROOF_FAILED|PRODUCTION_RUN_PENDING/,
     );
     await assert.rejects(
       verifyProductionBackend({
@@ -2967,4 +2970,163 @@ test('newer failed, pending or rerun production run prevents selecting an older 
     );
     assert.ok(requests > 0);
   }
+});
+
+test('bounded production waiting polls only validated absent/pending observations and retains strict final proof', async (t) => {
+  const { verifyProductionBackend, waitForProductionBackend } =
+    await import('../../src/bug-pipeline/demo-deployment.mjs');
+  for (const ending of [
+    'success',
+    'failure',
+    'never appears',
+    'never completes',
+    'identity',
+    'rerun',
+    'incomplete',
+  ])
+    await t.test(ending, async () => {
+      const sha = 'a'.repeat(40);
+      let clock = 1000,
+        state = 0,
+        sleeps = 0,
+        reads = 0;
+      const run = () => ({
+        id: 71,
+        run_attempt: ending === 'rerun' ? 2 : 1,
+        head_sha: ending === 'identity' ? 'b'.repeat(40) : sha,
+        head_branch: 'main',
+        repository: { full_name: 'l2v-hub/ClinicOS' },
+        head_repository: { full_name: 'l2v-hub/ClinicOS' },
+        path: '.github/workflows/deploy-backend.yml',
+        event: 'push',
+        status: state < 2 || ending === 'never completes' ? 'in_progress' : 'completed',
+        conclusion:
+          state < 2 || ending === 'never completes'
+            ? null
+            : ending === 'failure'
+              ? 'failure'
+              : 'success',
+      });
+      const job = {
+        id: 81,
+        run_id: 71,
+        run_attempt: 1,
+        head_sha: sha,
+        name: 'deploy',
+        status: 'completed',
+        conclusion: 'success',
+        steps: [{ name: 'Deploy to Railway', status: 'completed', conclusion: 'success' }],
+      };
+      const reader = {
+        getJson: async (route) => {
+          reads++;
+          if (route.includes('/runs?')) {
+            if (state === 0 || ending === 'never appears')
+              return { total_count: 0, workflow_runs: [] };
+            return { total_count: ending === 'incomplete' ? 2 : 1, workflow_runs: [run()] };
+          }
+          if (route === 'actions/runs/71') return run();
+          if (route.includes('/jobs?')) return { total_count: 1, jobs: [job] };
+          throw Error('unexpected readonly route');
+        },
+      };
+      const input = {
+        verify: () => verifyProductionBackend({ reader, deploymentSha: sha }),
+        now: () => clock,
+        delay: async (ms) => {
+          sleeps++;
+          clock += ms;
+          state++;
+        },
+        timeoutMs: 40,
+        pollMs: 10,
+      };
+      if (ending === 'success') {
+        const result = await waitForProductionBackend(input);
+        assert.equal(result.runId, 71);
+        assert.equal(sleeps, 2);
+      } else
+        await assert.rejects(
+          waitForProductionBackend(input),
+          ending.startsWith('never') ? /PRODUCTION_RUN_PENDING_TIMEOUT/ : /PRODUCTION_PROOF_FAILED/,
+        );
+      assert.ok(reads > 0);
+      assert.ok(sleeps <= 4);
+    });
+  for (const kind of ['backwards', 'stopped'])
+    await t.test(`clock ${kind}`, async () => {
+      let clock = 100;
+      await assert.rejects(
+        waitForProductionBackend({
+          verify: async () => {
+            const e = new Error('pending');
+            e.code = 'PRODUCTION_RUN_PENDING';
+            throw e;
+          },
+          now: () => clock,
+          delay: async () => {
+            if (kind === 'backwards') clock--;
+          },
+          timeoutMs: 20,
+          pollMs: 10,
+        }),
+        /PRODUCTION_PROOF_FAILED/,
+      );
+    });
+});
+
+test('valid pending inventory lag at final production reread is waited, never relabeled proof failure', async () => {
+  const { verifyProductionBackend, waitForProductionBackend } =
+    await import('../../src/bug-pipeline/demo-deployment.mjs');
+  const sha = 'a'.repeat(40);
+  let inventory = 0,
+    clock = 100,
+    sleeps = 0;
+  const run = {
+    id: 71,
+    run_attempt: 1,
+    head_sha: sha,
+    head_branch: 'main',
+    repository: { full_name: 'l2v-hub/ClinicOS' },
+    head_repository: { full_name: 'l2v-hub/ClinicOS' },
+    path: '.github/workflows/deploy-backend.yml',
+    event: 'push',
+    status: 'completed',
+    conclusion: 'success',
+  };
+  const job = {
+    id: 81,
+    run_id: 71,
+    run_attempt: 1,
+    head_sha: sha,
+    name: 'deploy',
+    status: 'completed',
+    conclusion: 'success',
+    steps: [{ name: 'Deploy to Railway', status: 'completed', conclusion: 'success' }],
+  };
+  const reader = {
+    getJson: async (route) => {
+      if (route.includes('/runs?'))
+        return {
+          total_count: 1,
+          workflow_runs: [
+            ++inventory === 2 ? { ...run, status: 'in_progress', conclusion: null } : run,
+          ],
+        };
+      if (route.includes('/jobs?')) return { total_count: 1, jobs: [job] };
+      return run;
+    },
+  };
+  const proof = await waitForProductionBackend({
+    verify: () => verifyProductionBackend({ reader, deploymentSha: sha }),
+    now: () => clock,
+    delay: async (ms) => {
+      clock += ms;
+      sleeps++;
+    },
+    timeoutMs: 30,
+    pollMs: 10,
+  });
+  assert.equal(proof.runId, 71);
+  assert.equal(sleeps, 1);
 });
