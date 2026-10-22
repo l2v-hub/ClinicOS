@@ -19,10 +19,20 @@ test('patient detail and mutation routes use the same non-enumerating scope guar
     assert.ok(route.includes(signature), `${signature} must be scoped`);
   }
   assert.match(route, /router\.delete\(\s*'\/:id',[\s\S]+?requirePatientScope/);
-  assert.match(
-    parametersUpdate,
-    /findFirst\(\{\s*where: \{ id: patientId, \.\.\.patientScopeWhere\(actor\) \}/s,
+  const scopedPatientLock = parametersUpdate.match(
+    /const patients = await tx\.\$queryRaw<Array<\{ id: string \}>>\(Prisma\.sql`([\s\S]*?)`\);\s*if \(!patients\.length\) throw new PatientParametersNotFoundError\(\);\s*const rows = await tx\.\$queryRaw/,
   );
+  assert.ok(
+    scopedPatientLock,
+    'the scoped patient lock and missing-patient rejection must happen before Cartella access',
+  );
+  const scopedQuery = scopedPatientLock[1];
+  assert.match(scopedQuery, /SELECT p\.id FROM "Patient" p WHERE p\.id = \$\{patientId\}/);
+  assert.match(
+    scopedQuery,
+    /hasFacilityPatientScope\(actor\.role\)\s*\?\s*Prisma\.empty\s*:\s*Prisma\.sql`AND p\."registeredById" = \$\{actor\.id\}`/,
+  );
+  assert.match(scopedQuery, /FOR UPDATE OF p/);
 });
 
 test('patient ownership and conflict responses are server-authoritative', () => {
