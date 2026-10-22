@@ -21,7 +21,7 @@ export const DEMO_SOURCE_POLICIES = Object.freeze({
   exact: 'native-exact-commit-v1',
 });
 const API = 'https://api.github.com';
-const RAILWAY_API = 'https://backboard.railway.app/graphql/v2';
+const RAILWAY_API = 'https://backboard.railway.com/graphql/v2';
 const MAX_BYTES = 1024 * 1024;
 export class DemoProofError extends Error {}
 export class DemoTransientReadError extends DemoProofError {}

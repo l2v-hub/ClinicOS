@@ -693,9 +693,29 @@ test('Railway API client sends credentials only to fixed official origin and nev
     client('query{projectToken{id}}', {}),
     (error) => !error.message.includes('private service detail'),
   );
-  assert.equal(calls[0].url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(calls[0].url, 'https://backboard.railway.com/graphql/v2');
   assert.equal(calls[0].options.redirect, 'error');
   assert.equal(calls[0].options.headers['Project-Access-Token'], 'synthetic-demo-binding');
+});
+
+test('public deployment client targets the official Railway API host without redirect or fallback', async () => {
+  const calls = [];
+  const client = createRailwayClient({
+    token: 'synthetic-deployment-binding',
+    fetchImpl: async (url, options) => {
+      calls.push({ url: String(url), options });
+      return response({ data: { probe: { ok: true } } });
+    },
+  });
+  assert.deepEqual(await client('query{probe{ok}}', {}), { probe: { ok: true } });
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].url, 'https://backboard.railway.com/graphql/v2');
+  assert.notEqual(calls[0].url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(calls[0].options.method, 'POST');
+  assert.equal(calls[0].options.redirect, 'error');
+  assert.equal(calls[0].options.headers['Project-Access-Token'], 'synthetic-deployment-binding');
+  assert.equal(calls[0].options.headers.Authorization, undefined);
+  assert.deepEqual(JSON.parse(calls[0].options.body), { query: 'query{probe{ok}}', variables: {} });
 });
 
 test('deployment workflows isolate demo credentials and record only in demo environment', async () => {
@@ -1384,7 +1404,7 @@ globalThis.fetch = async (url, options) => {
     appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ ready: true }) + '\\n');
     return new Response(JSON.stringify(ready), { headers: { 'Cache-Control': 'no-store' } });
   }
-  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(url, 'https://backboard.railway.com/graphql/v2');
   assert.equal(options.headers['Project-Access-Token'], 'synthetic-demo-binding');
   assert.equal(options.headers.Authorization, undefined);
   const { query, variables } = JSON.parse(options.body);
@@ -1754,7 +1774,7 @@ globalThis.fetch = async (url, options) => {
     appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ ready: true }) + '\\n');
     return new Response(JSON.stringify(${JSON.stringify(readyBody())}), { headers: { 'Cache-Control': 'no-store' } });
   }
-  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(url, 'https://backboard.railway.com/graphql/v2');
   assert.equal(options.headers['Project-Access-Token'], 'synthetic-demo-binding');
   assert.equal(options.headers.Authorization, undefined);
   const { query, variables } = JSON.parse(options.body);
@@ -2157,7 +2177,7 @@ test('actual exact CLI saves private sanitized failure progress with validated d
 let submitted = false;
 globalThis.fetch = async (url, options) => {
   if (url === '${mainEndpoint}') return new Response(JSON.stringify(${JSON.stringify(mainBody())}));
-  if (url !== 'https://backboard.railway.app/graphql/v2') throw new Error('Unexpected external fetch');
+  if (url !== 'https://backboard.railway.com/graphql/v2') throw new Error('Unexpected external fetch');
   const {query} = JSON.parse(options.body);
   if (query.startsWith('mutation')) {
     submitted = true;
@@ -2414,7 +2434,7 @@ globalThis.fetch = async (url, options) => {
   }
   if (url === 'https://${DEMO_TARGET.domain}/ready')
     return new Response(JSON.stringify(${JSON.stringify(readyBody())}), {headers:{'Cache-Control':'no-store'}});
-  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(url, 'https://backboard.railway.com/graphql/v2');
   assert.equal(options.headers['Project-Access-Token'], process.env.RAILWAY_TOKEN);
   const {query, variables} = JSON.parse(options.body);
   if (query.startsWith('mutation')) {
@@ -2652,7 +2672,7 @@ globalThis.fetch = async (url, options) => {
     counts.ready++; save();
     return new Response(JSON.stringify(${JSON.stringify(readyBody())}), {headers:{'Cache-Control':'no-store'}});
   }
-  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(url, 'https://backboard.railway.com/graphql/v2');
   assert.equal(request.headers.get('Project-Access-Token'), expected.RAILWAY_TOKEN);
   assert.equal(headers.get('Project-Access-Token'), expected.RAILWAY_TOKEN);
   const {query, variables} = JSON.parse(options.body);

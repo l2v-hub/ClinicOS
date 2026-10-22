@@ -9,7 +9,7 @@ export const BRANCH = 'main';
 export const WORKFLOW_REF = 'l2v-hub/ClinicOS/.github/workflows/inspect-demo-storage.yml@refs/heads/main';
 export const PROTECTED_ENVIRONMENT = 'glistening-friendship / demo';
 export const REPOSITORY = 'l2v-hub/ClinicOS';
-export const ENDPOINT = 'https://backboard.railway.app/graphql/v2';
+export const ENDPOINT = 'https://backboard.railway.com/graphql/v2';
 export const HEAD_ENDPOINT = `https://api.github.com/repos/${REPOSITORY}/git/ref/heads/${BRANCH}`;
 export const QUERIES = Object.freeze({
   identity: 'query{projectToken{project{id} environment{id name}}}',

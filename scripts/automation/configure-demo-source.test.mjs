@@ -21,6 +21,25 @@ import {
   validateContext,
 } from './configure-demo-source.mjs';
 
+test('public source client sends its credential only to the official Railway API host', async () => {
+  const calls = [];
+  const client = createClient({ token: 'synthetic-source-binding', fetchImpl: async (url, options) => {
+    calls.push({ url: String(url), options });
+    return Response.json({ data: { probe: { ok: true } } });
+  } });
+  assert.deepEqual(await client('query{probe{ok}}', {}), { probe: { ok: true } });
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].url, 'https://backboard.railway.com/graphql/v2');
+  assert.notEqual(calls[0].url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(calls[0].options.method, 'POST');
+  assert.equal(calls[0].options.redirect, 'error');
+  assert.deepEqual(calls[0].options.headers, {
+    'Content-Type': 'application/json', 'Project-Access-Token': 'synthetic-source-binding',
+  });
+  assert.equal(calls[0].options.headers.Authorization, undefined);
+  assert.deepEqual(JSON.parse(calls[0].options.body), { query: 'query{probe{ok}}', variables: {} });
+});
+
 const triggerId = '11111111-1111-4111-8111-111111111111';
 const clone = (value) => structuredClone(value);
 function fixture(branch = 'old-demo-branch') {
