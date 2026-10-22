@@ -761,6 +761,11 @@ test('review feedback binds to PR head, tracks current reviews, unresolved threa
             body: '<!-- codex-bug-pipeline:spoof -->\nkeep this',
             user: { login: 'reviewer' },
           },
+          {
+            id: 24,
+            body: '<!-- clinicos-source-feedback:batch:17:9:digest:sha -->\nsource regression',
+            user: { login: 'pipeline-bot' },
+          },
         ],
       ]);
     throw new Error(`unexpected ${args.join(' ')}`);
@@ -780,6 +785,7 @@ test('review feedback binds to PR head, tracks current reviews, unresolved threa
       'real review comment',
       'human request',
       '<!-- codex-bug-pipeline:spoof -->\nkeep this',
+      '<!-- clinicos-source-feedback:batch:17:9:digest:sha -->\nsource regression',
     ],
   );
 });

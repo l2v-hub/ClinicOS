@@ -1,0 +1,10 @@
+{
+  "nonce": "a7dd0a46-2153-460a-b915-3d53e274adc9",
+  "status": "HANDBACK",
+  "at": "2026-10-21T22:58:02.356Z",
+  "browserRunnerExited": true,
+  "runnerExitCode": 1,
+  "ownedServersCreated": 0,
+  "ownedDatabasesCreated": 0,
+  "noFurtherBrowserAttempts": true
+}

@@ -1,0 +1,24 @@
+import {test,expect} from '/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/node_modules/playwright/test.mjs';
+import fs from 'node:fs/promises';
+import {fileURLToPath,pathToFileURL} from 'node:url';
+const out=fileURLToPath(new URL('../',import.meta.url));
+const sha='34996816c9b8149a4a90f9ccfc7eabec230d2828';
+test('actual synthetic helper outcomes remain visible and unchanged after reload',async({page,context},testInfo)=>{
+ const consoleErrors=[],pageErrors=[],badResponses=[],network=[],localRequests=[]; const allowed=new Set(['http://127.0.0.1:5499/helper-qa.html','http://127.0.0.1:5499/favicon.ico']);
+ page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});page.on('pageerror',error=>pageErrors.push(error.message));page.on('response',response=>{if(response.status()>=400)badResponses.push({url:response.url(),status:response.status()});});page.on('request',request=>{if(!allowed.has(request.url()))network.push(request.url());else localRequests.push(request.url());});
+ await context.route('**/*',route=>allowed.has(route.request().url())?route.continue():route.abort('blockedbyclient'));
+ const outcomes=JSON.parse(await fs.readFile(out+'helper-outcomes.json','utf8'));expect(outcomes.sourceSha).toBe(sha);expect(outcomes.scope).toBe('SYNTHETIC_HELPER_QA_NO_MIGRATION');expect(outcomes.cases).toHaveLength(4);
+ await page.goto('http://127.0.0.1:5499/helper-qa.html',{waitUntil:'load'});
+ const assertValues=async()=>{
+  await expect(page.getByRole('heading',{level:1,name:'Synthetic helper QA'})).toBeVisible();await expect(page.locator('[data-synthetic-notice]')).toContainText('No migration performed.');await expect(page.locator('[data-source-binding]')).toContainText(sha);
+  for(const item of outcomes.cases){const card=page.locator(`[data-case="${item.id}"]`);await expect(card).toBeVisible();await expect(card.locator('[data-result]')).toHaveText('PASS');}
+  const repo=page.locator('[data-case="repo-only"]');await expect(repo.locator('[data-fact="0"]')).toHaveText('Repository retained');await expect(repo.locator('[data-fact="0"]')).toHaveAttribute('data-value','true');await expect(repo.locator('[data-fact="1"]')).toHaveText('FRESH_MAIN_SHA_MISMATCH');await expect(repo.locator('[data-fact="2"]')).toHaveText('Absent after fresh verification');await expect(repo.locator('[data-fact="2"]')).toHaveAttribute('data-value','false');await expect(repo.locator('[data-fact="3"]')).toHaveText('1 / 1');
+  const existing=page.locator('[data-case="already-present"]');await expect(existing.locator('[data-fact="0"]')).toHaveText('already-present');await expect(existing.locator('[data-fact="1"]')).toHaveText('0');await expect(existing.locator('[data-fact="2"]')).toHaveText('true');
+  const version=page.locator('[data-case="version-failure"]');await expect(version.locator('[data-fact="0"]')).toHaveText('1');await expect(version.locator('[data-fact="1"]')).toHaveText('0');await expect(version.locator('[data-fact="2"]')).toHaveText('GH_VERSION_CHECK_FAILED');await expect(version.locator('[data-fact="3"]')).toHaveText('true');
+  const nonmain=page.locator('[data-case="non-main"]');await expect(nonmain.locator('[data-fact="0"]')).toHaveText('0');await expect(nonmain.locator('[data-fact="1"]')).toHaveText('0');await expect(nonmain.locator('[data-fact="2"]')).toHaveText('TRUSTED_MAIN_CONTEXT_REQUIRED');await expect(nonmain.locator('[data-fact="3"]')).toHaveText('0');
+ };
+ await assertValues();const before=await page.locator('[data-case]').allTextContents();await page.reload({waitUntil:'load'});await assertValues();expect(await page.locator('[data-case]').allTextContents()).toEqual(before);expect(consoleErrors).toEqual([]);expect(pageErrors).toEqual([]);expect(badResponses).toEqual([]);expect(network).toEqual([]);expect(localRequests.filter(url=>url.endsWith('/helper-qa.html')).length).toBeGreaterThanOrEqual(2);
+ await page.locator('[data-browser-status]').evaluate(node=>{node.textContent='Browser assertions passed for all 4 synthetic scenarios and after reload. No migration performed.';});await expect(page.locator('[data-browser-status]')).toHaveText('Browser assertions passed for all 4 synthetic scenarios and after reload. No migration performed.');
+ await page.screenshot({path:out+'browser-attempt2/screenshots/helper-results.png',fullPage:true});
+ const observed={sourceSha:sha,scope:outcomes.scope,scenarioCount:4,reloadValuesUnchanged:true,consoleErrors,pageErrors,badResponses,unexpectedNetwork:network,localStaticPageReads:localRequests.filter(url=>url.endsWith('/helper-qa.html')).length,realMigrationPerformed:false,browser:'Chromium',result:'PASS'};await fs.writeFile(out+'browser-attempt2/browser-observed.json',JSON.stringify(observed,null,2)+'\n');await testInfo.attach('actual-synthetic-helper-outcomes',{body:JSON.stringify(observed,null,2),contentType:'application/json'});
+});

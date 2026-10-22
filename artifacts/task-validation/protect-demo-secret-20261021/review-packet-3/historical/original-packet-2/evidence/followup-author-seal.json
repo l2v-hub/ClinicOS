@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "task": "protect-demo-secret-20261021-followup2",
+  "reservationNonce": "3084b83a-77f1-4d94-a2b9-cdbc69df1d05",
+  "sealedAt": "2026-10-21T20:53:33Z",
+  "status": "source-ready-awaiting-targeted-independent-review",
+  "baseSha": "fbaa78d8c7eacf8402db0c8fa2be276ae579a27c",
+  "sourceFiles": [
+    {
+      "path": "scripts/automation/protect-demo-secret.mjs",
+      "bytes": 14541,
+      "sha256": "f27c6b50dcd5a4aff527c79bbaf4f92c980ee40f8a4965e7219549f197ff8a3f"
+    },
+    {
+      "path": "scripts/automation/protect-demo-secret.test.mjs",
+      "bytes": 19748,
+      "sha256": "77c28b93e2c60f9fe3ce9cc48ff274b78d829de75e15562da2ab9bf8560c83aa"
+    },
+    {
+      "path": ".github/workflows/protect-demo-secret.yml",
+      "bytes": 4309,
+      "sha256": "46705882615908b94a558b3a96120d53208dc4ac64d65a462621c7bd22c76f5e"
+    }
+  ],
+  "originalSourceSnapshotSha256": [
+    "630f42c3631600564b42f7e998decc2118310da6ec278567ac9737069f89977a",
+    "2e285596b6d5626216b0217e93d297f4db1577884c6bcf18160969fdf111003e",
+    "46705882615908b94a558b3a96120d53208dc4ac64d65a462621c7bd22c76f5e"
+  ],
+  "trustedTestReceiptSha256": "41f5dc8a8de10bcff55020180de4a40faac37dca7f71a146664e4a455bccfb24",
+  "evidenceSha256": {
+    "report.md": "46aadb4caa4bbd53fc51ddcf65a850c60a30331c2317804bb8c9400ac9b27d3c",
+    "summary.json": "b5673cd2aa016e2065910476ba8c9b7942587e6608d75aab9d3c5461983aa176",
+    "STOP.json": "3916ecfe6562204f3e08e7eb8cb67cc339f6289a6f634ef4bcd386f58b92afe1",
+    "diff-manifest.json": "32f80166373409e92a1f2bf9e9b42bb660e4757eb1541cd460c339e7a765e17f",
+    "command-receipts.json": "3860852d90736a0561ea254f022b1d16a3e988bf5d78a0b92362e31d637aa1af",
+    "prechange-preservation.json": "7c40b7591009dd243870ce1e22bd4bb2b1abf2d40aa07eb8be1952b5c539fa13",
+    "preservation-check.json": "a2f3070733041ea93f2493e1bd544a9b6d962e57fff9169d6fbfbdf7d092d0ad",
+    "prior-directory-preservation.json": "40be7579d30955b18b8ef38ab751baef55bcaf44b37af874e4a3054b7606ea06",
+    "trusted-runner-receipt.json": "41f5dc8a8de10bcff55020180de4a40faac37dca7f71a146664e4a455bccfb24"
+  },
+  "priorPacketsUnchanged": true,
+  "operationsPerformed": {
+    "gitWrite": false,
+    "githubWrite": false,
+    "providerCall": false,
+    "actualSecretOperation": false,
+    "clinicalRuntimeCall": false
+  }
+}

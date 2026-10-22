@@ -1,0 +1,16 @@
+{
+  "adversarialReceiptSha256": "961c1efb8ebaa2980d52b4762432fab02cf7eafaa96c98718ee9a793417c9dae",
+  "counts": [
+    17,
+    0,
+    17,
+    0,
+    0,
+    0
+  ],
+  "actualWorkflowPreflightReceiptSha256": "067e20db1f79e2cbf0452aca63c3a739e6b296deece5dcf3fdd6f1a8676023a2",
+  "workflowPreflightExitCode": 0,
+  "status": "INDEPENDENT_TARGETED_QA_PASS",
+  "exclusiveOperationalOwnershipRequired": true,
+  "githubSecretCASAvailable": false
+}

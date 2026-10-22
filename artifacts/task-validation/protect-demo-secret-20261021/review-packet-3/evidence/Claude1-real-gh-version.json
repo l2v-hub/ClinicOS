@@ -1,0 +1,19 @@
+{
+  "request": {
+    "command": "/workspace/.clinicos-cloud/499-Claude1-followup-20261021/root-gh-binary-check/gh_2.103.0_linux_amd64/bin/gh",
+    "args": [
+      "--version"
+    ],
+    "cwd": "/workspace/clinicos-demo-secret-scope",
+    "envMode": "verification",
+    "timeoutMs": 60000,
+    "maxOutputBytes": 500000
+  },
+  "result": {
+    "ok": true,
+    "code": 0,
+    "error": null,
+    "stdout": "gh version 2.103.0 (2026-10-21)\nhttps://github.com/cli/cli/releases/tag/v2.103.0\n",
+    "stderr": ""
+  }
+}

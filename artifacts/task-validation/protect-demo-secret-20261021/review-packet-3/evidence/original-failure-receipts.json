@@ -1,0 +1,25 @@
+{
+  "receiptSummary": {
+    "workflowImportReceiptSha256": "cb81c9a1b7c804c57992b2e72e5d5d629e88de8910529079de1e7e61d6cec799",
+    "exitCode": 1,
+    "finding": "F1: module import under node --input-type=module -e failed because process.argv[1] was undefined",
+    "adversarialReceiptSha256": "42e8971cb3cc8e2bf324c040953d7e0c285b6955ac4c70de1004606568b5df0d",
+    "adversarialCounts": [
+      11,
+      0,
+      11,
+      0,
+      0,
+      0
+    ],
+    "findings": [
+      "F1 workflow import failure",
+      "F2 stale absence inventory allowed overwrite when environment copy appeared during awaited checks",
+      "F3 stale environment inventory allowed repo deletion and false success when environment copy disappeared"
+    ]
+  },
+  "sourceSeals": [
+    "original-independent-qa-seal.json",
+    "original-author-seal.json"
+  ]
+}

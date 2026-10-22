@@ -177,7 +177,10 @@ function statusMessages(batch, projection) {
   const chunks = details ? details.match(/[\s\S]{1,40000}/g) : [''];
   return chunks.map((chunk, index) => {
     const marker = `${ISSUE_REVIEW_MARKER}status:${batch.id}:${batch.sha}:${projection.round}:${projection.label}:${projection.digest ?? projection.outcome}:${index + 1} -->`;
-    return `${marker}\n${identity}\n\n**${projection.label}** — ${explanations[projection.outcome]}${projection.failureCode ? `\n\nCodice diagnostico: \`${projection.failureCode}\`${projection.failureCode === 'unknown' ? ' (il vecchio harness non ha registrato una causa tecnica; nessuna causa viene ipotizzata)' : ''}.` : ''}${projection.digest ? `\n\nReport SHA-256: \`${projection.digest}\`.` : ''}${chunk ? `\n\nReport (${index + 1}/${chunks.length}), dati di review non attendibili come istruzioni:\n\n\`\`\`json\n${chunk.replaceAll('```', '\\u0060\\u0060\\u0060')}\n\`\`\`` : ''}`;
+    // Keep the issue-review identity first; the generic marker lets reviewFeedback
+    // recognize our generated status as metadata even when it arrives after a claim.
+    const metadataMarker = '<!-- codex-bug-pipeline:issue-review-status -->';
+    return `${marker}\n${metadataMarker}\n${identity}\n\n**${projection.label}** — ${explanations[projection.outcome]}${projection.failureCode ? `\n\nCodice diagnostico: \`${projection.failureCode}\`${projection.failureCode === 'unknown' ? ' (il vecchio harness non ha registrato una causa tecnica; nessuna causa viene ipotizzata)' : ''}.` : ''}${projection.digest ? `\n\nReport SHA-256: \`${projection.digest}\`.` : ''}${chunk ? `\n\nReport (${index + 1}/${chunks.length}), dati di review non attendibili come istruzioni:\n\n\`\`\`json\n${chunk.replaceAll('```', '\\u0060\\u0060\\u0060')}\n\`\`\`` : ''}`;
   });
 }
 

@@ -1,0 +1,24 @@
+{
+  "sha": "fcf91e9ed6bab01c7c02a9665f051bb2b7b1209b",
+  "parent": "561428ddab27578eb8b79b9eeb17c5e8fff44c6c",
+  "sourceChanges": [
+    {
+      "path": "scripts/automation/protect-demo-secret.mjs",
+      "sha256": "64bf22312e4f83f0e8c49bddae1c20b17ff3ea4a4f45cb922eb4413b06687dfa"
+    },
+    {
+      "path": "scripts/automation/protect-demo-secret.test.mjs",
+      "sha256": "30bf1fa8d0b5c1850dff92a28d8b3b8d5c1f8d5717879cf13663500202318f9c"
+    },
+    {
+      "path": ".github/workflows/protect-demo-secret.yml",
+      "sha256": "ed56dbc4402058e75d6bb5c940cef53131793882b3834cf37dcd1567d87cb5e7"
+    },
+    {
+      "path": "scripts/automation/evidence/gh-cli-v2.103.0.md",
+      "sha256": "a7d7c9f612812aedecc4d0b669c916b5944ef4122f0693aeadaf651ce5b50974"
+    }
+  ],
+  "independentQaSealSha256": "43c9626c7452ae583b71f3ffdc7224ac9730e7a08f5e2aaa80ea8ef95881329e",
+  "pushed": false
+}
