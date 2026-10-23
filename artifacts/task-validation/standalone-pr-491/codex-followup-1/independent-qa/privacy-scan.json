@@ -1,0 +1,10 @@
+{
+  "filesScanned": 22,
+  "archiveMembersScanned": 52,
+  "decodedPngs": 10,
+  "maxArtifactBytes": 4023289,
+  "perArtifactLimitBytes": 26214400,
+  "oversizedArtifacts": [],
+  "privacyPatternHits": [],
+  "result": "PASS"
+}

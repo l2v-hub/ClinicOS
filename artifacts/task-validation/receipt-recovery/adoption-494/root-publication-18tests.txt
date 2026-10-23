@@ -1,0 +1,23 @@
+test_actual_archive_digest_never_accepts_synthetic_or_mutated_data (__main__.IndependentSecurity.test_actual_archive_digest_never_accepts_synthetic_or_mutated_data) ... ok
+test_archive_central_local_filename_and_comment_rejected (__main__.IndependentSecurity.test_archive_central_local_filename_and_comment_rejected) ... ok
+test_authenticated_destination_and_redirect_policy_before_io (__main__.IndependentSecurity.test_authenticated_destination_and_redirect_policy_before_io) ... ok
+test_bound_token_never_reflected_from_title_or_message (__main__.IndependentSecurity.test_bound_token_never_reflected_from_title_or_message) ... ok
+test_conflict_on_later_page_cannot_publish (__main__.IndependentSecurity.test_conflict_on_later_page_cannot_publish) ... ok
+test_encoded_traversal_drive_letter_query_and_column_bounds (__main__.IndependentSecurity.test_encoded_traversal_drive_letter_query_and_column_bounds) ... ok
+test_fake_nested_command_duplicate_summary_and_control_rejected (__main__.IndependentSecurity.test_fake_nested_command_duplicate_summary_and_control_rejected) ... ok
+test_gzip_truncated_multimember_and_crc_rejected (__main__.IndependentSecurity.test_gzip_truncated_multimember_and_crc_rejected) ... ok
+test_independent_happy_path_and_exact_public_projection (__main__.IndependentSecurity.test_independent_happy_path_and_exact_public_projection) ... ok
+test_job_metadata_drift_after_download_and_main_drift_before_write (__main__.IndependentSecurity.test_job_metadata_drift_after_download_and_main_drift_before_write) ... ok
+test_main_errors_emit_constant_code_without_exception_details (__main__.IndependentSecurity.test_main_errors_emit_constant_code_without_exception_details) ... ok
+test_missing_duplicate_json_and_surrogate_never_publish (__main__.IndependentSecurity.test_missing_duplicate_json_and_surrogate_never_publish) ... ok
+test_second_page_marker_and_duplicate_conflict (__main__.IndependentSecurity.test_second_page_marker_and_duplicate_conflict) ... ok
+test_unallowlisted_error_and_failure_type_reduce_to_constants (__main__.IndependentSecurity.test_unallowlisted_error_and_failure_type_reduce_to_constants) ... ok
+test_unknown_mode_values_no_api_call (__main__.IndependentSecurity.test_unknown_mode_values_no_api_call) ... ok
+test_write_lost_response_rerun_does_not_duplicate (__main__.IndependentSecurity.test_write_lost_response_rerun_does_not_duplicate) ... ok
+test_write_malformed_ack_rerun_does_not_duplicate (__main__.IndependentSecurity.test_write_malformed_ack_rerun_does_not_duplicate) ... ok
+test_wrong_repository_id_and_job_step_boolean_rejected_before_fetch (__main__.IndependentSecurity.test_wrong_repository_id_and_job_step_boolean_rejected_before_fetch) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.039s
+
+OK

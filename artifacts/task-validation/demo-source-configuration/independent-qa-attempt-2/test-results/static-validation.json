@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "node": "v24.19.0",
+  "sourceHashes": {
+    ".github/workflows/configure-demo-source.yml": "08d627e26623c70f35041f51d64ea80a7e52c9d9d3c46f4d0e09b585ed0ebfde",
+    "scripts/automation/configure-demo-source.mjs": "c674e302471ea8b95154aa7e440761d0ca188475bdaffd294e9f4d3ad9c4536a",
+    "scripts/automation/configure-demo-source.test.mjs": "5da3aa8f5865c3b7d47d210a95ae56bef6e856a0d6f07cac494328fb3f32896a"
+  },
+  "yamlProtectedMain": true,
+  "typescriptAstParseErrors": 0,
+  "preservedOriginal57Statements": true,
+  "officialSchema": {
+    "sha256": "3c3d1448f2a746d6e5977ba3aa205889f959c427be5cfe37c72e79b1fa65f2be",
+    "graphqlDocuments": [
+      "INVENTORY_QUERY",
+      "UPDATE_BRANCH",
+      "CREATE_MAIN"
+    ],
+    "providerType": "String!",
+    "providerLiteralUnverified": true,
+    "creationRootNullable": true
+  },
+  "historicalEvidenceNotModified": true,
+  "noFrontendSourceTouched": true,
+  "noProviderCall": true
+}

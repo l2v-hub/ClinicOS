@@ -1,0 +1,79 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "e5ea75a1-9706-4392-ba85-e58c3251e157",
+      "startedAt": "2026-10-18T17:56:37.609Z",
+      "baseSha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
+      "contractSha256": "47eaf91e4336741c3a96ae22e9022bae35aa2c392bf56f83cd28088a39528200",
+      "reason": "New bounded metadata-evidence transport task after real artifact redirect403; no clinical regrouping or inherited review.",
+      "sourceFreezeSha256": "e15710a60770e1481272a67cac7031e64dae2315e51084a667b624dc491380f5",
+      "authorStoppedAt": "2026-10-18T18:08:40.850Z",
+      "subjectSha": "bcd81a524d42bb36305cdd080acf61e40f77c55d",
+      "evidence": "independent-qa/validation-report.md",
+      "completedAt": "2026-10-18T18:14:38.704Z",
+      "independentQaReportSha256": "38c5c36e2a76cfcd329c4dd0bffa207716985ff87ad8ebc3c93aea07c777fc26",
+      "independentQaSealSha256": "c9019f3e60cf02a287b3e388af1b887f06c021a876ff41c79a55301d485b766e",
+      "rootVerification": {
+        "status": "verified",
+        "focusedTestsPassed": 18,
+        "priorPacketFilesMatched": 8,
+        "qaArtifactsMatched": 9,
+        "sourceInputsMatched": 3,
+        "browserScreenshotInspected": true
+      }
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "operatorContinuations": [],
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/recover-demo-topology-receipt.yml",
+      "blob": "f94a64d5a076d17259942ac84c5be920fddbf8f7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/recover-demo-topology-receipt.py",
+      "blob": "d8ff41a7b21fa967c02488b8213f515259397e2b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/recover-demo-topology-receipt.test.py",
+      "blob": "690522b49894e96941fc41657bed74100851e52e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "author-offline-tests-2.txt": "fb85309a0b638e2f56e12cc2f70f6fd806b6ce52c536743a2ff74be27b81a004",
+    "author-offline-tests.txt": "5d5a881250cc9c4c9f8ea106a3ba4c7f79f9340653ef91905387fc198b06bac0",
+    "author-report-2.md": "7cf55418661481130d0b40e993263306531f53dfb1fc7de9d83be5a98dccb788",
+    "author-report.md": "352f71e1d0e897f094541fd4b3dc389652c15965fe95043d8a51efaeab03bd17",
+    "codex-verification.md": "fe74c7743011eaeb33e027f6b2573b8ea1bd38dafbfe80011d6c599aa86b8c34",
+    "independent-qa/artifact-manifest.json": "bbde4ef8ac22941cf01e2c073b7ed722c8fdce597d2011c514a64d9e9e61abec",
+    "independent-qa/author-suite-rerun.txt": "45590ff216bd4468b46ddd9d8a616d81d2bd37188e4dfbd4bb211d14f40289f6",
+    "independent-qa/final-seal.json": "c9019f3e60cf02a287b3e388af1b887f06c021a876ff41c79a55301d485b766e",
+    "independent-qa/findings.json": "d0f147a7bff6b6f9ad314bfdda7777f23f6abc45fe8819c6897503a6d759bfa2",
+    "independent-qa/independent-negative-cases.py": "58f2e0f48ef0a992f3c4c7394ad66ef6654f0480e574c9b9be772a98b35cf483",
+    "independent-qa/independent-negative-results.txt": "041dc810aede48f3f0fee2db95f02e6a1c60012067cea6c22592a5a0ad41fcc9",
+    "independent-qa/runtime-and-repository.txt": "9460a7de4a0180914b7b2ceda1119ab880db9a69cf78c36eb6c530b73e88e658",
+    "independent-qa/secret-scan.json": "bb7e44d2abf18e9d6ddaeef29d1993c2a01876564cc928af9f5691861629d79e",
+    "independent-qa/source-integrity-before.json": "5df53dbd4c01a371ef1e833fc470c86617fcb8b9f02859980b6dac391b9fea21",
+    "independent-qa/source-integrity.json": "1ac50d35a79de0ee29630dd8deadbfadea14a81124b366b3ec76b01f1dab0960",
+    "independent-qa/validation-report.md": "38c5c36e2a76cfcd329c4dd0bffa207716985ff87ad8ebc3c93aea07c777fc26",
+    "root-independent-probes.txt": "c213cd408c0502bf2f4e881896bd12dd84e406464f1f4ffba2c30678c086ac93",
+    "scope-amendment-1.md": "889482a49cab1820b1722c11d5b2d8b4d1f1e9d06fc7e1f5f679ec0af55a1aa2",
+    "source-freeze-2.json": "e15710a60770e1481272a67cac7031e64dae2315e51084a667b624dc491380f5",
+    "source-freeze.json": "6261ef744a1a7884827554cbf8d067b51788e90ef220b1b055f7b52b37a3eea1",
+    "task-contract.md": "47eaf91e4336741c3a96ae22e9022bae35aa2c392bf56f83cd28088a39528200"
+  }
+}

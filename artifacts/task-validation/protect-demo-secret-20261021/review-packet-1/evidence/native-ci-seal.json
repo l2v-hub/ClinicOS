@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "status": "INDEPENDENT_NATIVE_CI_WIRING_PASS",
+  "at": "2026-10-21T21:12:21.107177+00:00",
+  "artifacts": {
+    "STOP.md": {
+      "sha256": "2864a9e092f7b6a0c24f88ab99823ebdca646b35f80ab55fe7ca312bdacf4719",
+      "bytes": 576
+    },
+    "after.json": {
+      "sha256": "fbc64fe30ce83a8260fcb35d75458684e65e5b1945e4beaf7349a64180dcbaee",
+      "bytes": 90509
+    },
+    "before.json": {
+      "sha256": "439350e62af3d0a4ed63c97d0916eac55200302c33c5ae1d1054aa5b9f3b91c9",
+      "bytes": 90509
+    },
+    "combined-ci-first-attempt.json": {
+      "sha256": "83b8af41d107e9f4fc19f80b9b6246c72f2ebc75b3f511b8a99a2ce0ab965e93",
+      "bytes": 83315
+    },
+    "combined-ci.json": {
+      "sha256": "2fe48babb2bbf62709272a98b5d824a77f92f6ab498f6ae7a0a4da1015b941ec",
+      "bytes": 78736
+    },
+    "first-attempt-after.json": {
+      "sha256": "07a4c977f652a266cd93fefb29202a1d9d4ad9e73d7a2e5e101da20fe66cbfa9",
+      "bytes": 89657
+    },
+    "first-attempt-before.json": {
+      "sha256": "55c9c6e9a9764808631d2177fc553e79ac6a3ce83266deadb46154eac9ac6731",
+      "bytes": 89657
+    },
+    "first-attempt-freeze-comparison.json": {
+      "sha256": "8de9ca7d62be871c116d153151aac8cf4611c466ce8e1057c0d4cc14102d1172",
+      "bytes": 72
+    },
+    "freeze-comparison.json": {
+      "sha256": "8de9ca7d62be871c116d153151aac8cf4611c466ce8e1057c0d4cc14102d1172",
+      "bytes": 72
+    },
+    "freeze.py": {
+      "sha256": "693c975ef679cd64e689d624f0367a2fd248184d8dcf8082de82272b609e9acc",
+      "bytes": 3153
+    },
+    "report.md": {
+      "sha256": "f858e7b2d85fe9239d1c2971e6bfd9ed66cb5e0d0b6c44ba2fd952c5f79d52a6",
+      "bytes": 5849
+    },
+    "reservation.json": {
+      "sha256": "c495c545b989c3dccb57a02284ac9b571d9f3ab2952cdaf9c47e0bef2e814398",
+      "bytes": 1261
+    },
+    "reviewed.diff": {
+      "sha256": "d5333ccd9197ce80d48927fdc4a68fb0e21415caf7796ff17a37a4e5a4eb11bc",
+      "bytes": 693
+    },
+    "root-fixture-setup-transition.json": {
+      "sha256": "116807466803be05250a17d9565019ad3ad21aceb2ac3b5c0116792c79494112",
+      "bytes": 305
+    },
+    "run-combined.mjs": {
+      "sha256": "d314bd516ccfda6add5299a1c902bd1520877635e4e757fcd29e42363e141262",
+      "bytes": 1592
+    },
+    "static-review.json": {
+      "sha256": "c76cf43a8fbd582621c83713320805b5e548ad41e39bee42fc4a864aa0f65dc5",
+      "bytes": 1474
+    },
+    "summary.json": {
+      "sha256": "197b49c1cca667bbd27ced970479f2de46ead63b706b1fff5febfccc7fbbbb32",
+      "bytes": 1503
+    }
+  },
+  "contractSha256": "2a4afdd98829e08eda2459db39a3352d3ecc9e72b5e5bed98f52cf9b868ffb54",
+  "sourceFileSha256": "1d7a3a075e665dc85d12f7aad1ee31ff3652dd75e703e3df1a2a49b55858f45e",
+  "priorIndependentPassSealSha256": "7f208e03e22409910e585368a51f0a544a238bc3e7fedb6d8846df565128e702"
+}

@@ -1,0 +1,14 @@
+{
+  "reportChars": 50106,
+  "reportBytes": 150106,
+  "schemaValid": true,
+  "submit": true,
+  "imported": false,
+  "submittedCommentChars": 50373,
+  "error": "Stored review exceeds bound",
+  "durableReviewStatus": "running",
+  "shortReplacementSubmitted": true,
+  "shortReplacementImported": false,
+  "shortReplacementError": "Stored review exceeds bound",
+  "durableReviewStatusAfterReplacement": "running"
+}

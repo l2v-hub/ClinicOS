@@ -1,0 +1,3 @@
+# Problem and behavior
+
+Railway rejected trigger creation once; a later readonly identity query also failed. Neither proves credential kind or permission. The documented native V2 source deployment accepts an exact commit SHA, which existing code already uses, so an explicit independently reviewed zero-trigger policy can preserve target/source/native deployed-SHA/live readiness guards. QA1 found a legacy sibling-job dependency; the final candidate uses a separate manual-only fixed-demo workflow with current-main verification before provider access, immediately before the sole mutation and after readiness. The existing production workflow is unchanged. Provider capability remains unverified until the actual protected dispatch.

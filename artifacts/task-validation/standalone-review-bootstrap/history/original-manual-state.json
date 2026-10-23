@@ -1,0 +1,63 @@
+{
+  "id": "standalone-pr-review-adapter",
+  "issues": [],
+  "phase": "implementing",
+  "branch": "codex/standalone-pr-review",
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "recordedAt": "2026-10-17T16:40:48.598Z",
+      "owner": "standalone_review_adapter",
+      "reason": "Historical import of pre-reserved local author cycle1; fresh independent QA found two reproducible defects; no reset.",
+      "subjectSha": null,
+      "uncommitted": true,
+      "independentQaReportSha256": "9056e07c0433d3c0c723ad1a47baa4caabb13faa1b3e0c4339a7bc4544a80289",
+      "independentQaSealSha256": "e535d76405b097e6a7351ed5211d5b754e7215dfe74fdfcf28506d37768d078e",
+      "sourceManifestSha256": "a075ddec60d5059005494fc9ba4b3b9c4e53e691627b7e200a3bd7c755c7974f"
+    },
+    {
+      "round": 2,
+      "status": "failed",
+      "reservedAt": "2026-10-17T16:40:48.598Z",
+      "reservedBeforeSourceEdits": true,
+      "owner": "standalone_review_adapter",
+      "reason": "Fix actual report aggregate bound and historical evidence immutability; wire fixed trusted infrastructure release after actual dual review.",
+      "finishedAt": "2026-10-17T17:03:05.744Z",
+      "subjectSha": null,
+      "uncommitted": true,
+      "sourceManifestSha256": "7451927efd684e6978b96299501e5b69b6160b605ecc4701dc4b6a7b8250a9a1",
+      "independentQaReportSha256": "b103b1e9c72a9760bf4b325f116c06471c06ad0680a3347f8eb15c33f05aa713",
+      "independentQaSealSha256": "7d134f6bea468d8d8a5af569ebbea561636cf7f3491d226fd5f2bcd62b830e0a",
+      "failure": "Accepted Unicode report fails byte-based storage bound; large valid state cannot load GitHub encoding:none contents."
+    },
+    {
+      "round": 3,
+      "status": "failed",
+      "reservedAt": "2026-10-17T17:03:05.744Z",
+      "reservedBeforeSourceEdits": true,
+      "owner": "standalone_review_adapter",
+      "reason": "Only Unicode-safe report storage and bounded SHA-verified large-state blob fallback/save preflight; preserve all previous failures.",
+      "finishedAt": "2026-10-17T17:32:45.005Z",
+      "subjectSha": null,
+      "uncommitted": true,
+      "sourceManifestSha256": "7dd41bf20229026e85bff335d4a7749cd748a5a119cbe74cfe9cd69b73275bf2",
+      "independentQaReportSha256": "db7e4c6839fcf13d92fcb20d1f0e052f31c06755c3368e8e3399ea1804bc5c01",
+      "independentQaSealSha256": "7920efe7f45e25653258c12d1f25791e62f7a6eab082f2b5095176024b97dd56",
+      "failure": "Independent QA3 reproduced exhausted durable report capacity after claim and disjoint-subject CAS loss leaving a running final QA. No actual hosted-failure causation asserted."
+    },
+    {
+      "round": 4,
+      "status": "running",
+      "reservedAt": "2026-10-17T17:28:09.765020+00:00",
+      "recordedAt": "2026-10-17T17:32:45.005Z",
+      "reservedBeforeSourceEdits": true,
+      "owner": "standalone_review_adapter",
+      "localReservationSha256": "f5c4f7f425d62464f7a0fedc46f39ed6d3a2f7882d37210c558d24b9bb51f5cf",
+      "reason": "Only proven F5 pre-inference report/result capacity reservation and F6 guarded disjoint-subject state rebase, preserving strict default CAS and all prior failures. Add sanitized known error codes for future controller diagnosis.",
+      "registrationNote": "Actual local wx reservation preceded source edits; GitHub registration delayed until clinical controller39053232445 completed to preserve its strict-CAS result."
+    }
+  ],
+  "reviews": [],
+  "maxImplementationAttempts": 4
+}

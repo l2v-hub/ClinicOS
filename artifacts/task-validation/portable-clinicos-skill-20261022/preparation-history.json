@@ -1,0 +1,207 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "blocked",
+      "owner": "codex-cloud-portable-skill",
+      "nonce": "0348b0cc-2e1d-46d7-aeae-e269e8173ee7",
+      "baseSha": "453ade1a06cd79e1924de523c5fd2cdec51f4fd4",
+      "subjectSha": null,
+      "evidence": "original-author-report.json",
+      "reason": "Root found conflicting absolute-four companion rules before integration; author static checks alone were not independent QA.",
+      "uncommitted": true,
+      "sourceManifestSha256": "95aad4e67a476f9b393da755525ab7ae187beee9ee835c28532f99ea12838bce"
+    },
+    {
+      "round": 2,
+      "status": "failed",
+      "owner": "codex-cloud-portable-skill",
+      "nonce": "7d7e9789-d1b6-4d34-8fd9-65bd778e1ab6",
+      "baseSha": "453ade1a06cd79e1924de523c5fd2cdec51f4fd4",
+      "subjectSha": null,
+      "evidence": "prior-independent-review-report.md",
+      "reason": "Independent QA1 found one LOW missing native human trust-root gate.",
+      "uncommitted": true,
+      "sourceManifestSha256": "3cfde9fee7ef8f0080260b795d6d6edcc4ed9be913c5fa39b834228cf369dc16"
+    },
+    {
+      "round": 3,
+      "status": "failed",
+      "owner": "codex-cloud-portable-skill",
+      "nonce": "6eac562e-15dc-4e6d-96fb-c55c551cb3bc",
+      "baseSha": "453ade1a06cd79e1924de523c5fd2cdec51f4fd4",
+      "subjectSha": null,
+      "evidence": "prior-independent-review-2-report.md",
+      "reason": "Independent QA2 resolved trust-root finding but found two LOW recovery authorization/feedback-scope mismatches.",
+      "uncommitted": true,
+      "sourceManifestSha256": "3d4b190d362b96cb1affcd2cf898ac94ce4953483f0feff02206d6973e881db7"
+    },
+    {
+      "round": 4,
+      "status": "passed",
+      "owner": "codex-cloud-portable-skill",
+      "nonce": "f5fe52fe-b069-4ff1-b371-9c229738c531",
+      "baseSha": "453ade1a06cd79e1924de523c5fd2cdec51f4fd4",
+      "subjectSha": "eee7816b855545c86faddee83a41672ce69d3f99",
+      "evidence": "validation-report.md",
+      "reason": "Independent final static QA PASS after both precise protocol corrections; no code tests claimed.",
+      "completedAt": "2026-10-22T17:04:01.081175+00:00"
+    }
+  ],
+  "versions": [
+    {
+      "round": 1,
+      "nonce": "0348b0cc-2e1d-46d7-aeae-e269e8173ee7",
+      "status": "blocked",
+      "sourceManifest": [
+        {
+          "path": ".claude/skills/clinicos/SKILL.md",
+          "blob": "164863bca353809564f9f76fabdfe3004de439e2",
+          "mode": "100644",
+          "baseBlob": "25e8fc153c2009b178c28a62d8bd9eae293301af",
+          "baseMode": "100644"
+        },
+        {
+          "path": ".claude/skills/clinicos/references/bug-delivery.md",
+          "blob": "4a1820f566549fdc669bfadc2c0c4a8e62df0c6a",
+          "mode": "100644",
+          "baseBlob": "1b77f1a7000f0b39a894ec6c8dd72b7975bcd408",
+          "baseMode": "100644"
+        }
+      ],
+      "sourceManifestSha256": "95aad4e67a476f9b393da755525ab7ae187beee9ee835c28532f99ea12838bce"
+    },
+    {
+      "round": 2,
+      "nonce": "7d7e9789-d1b6-4d34-8fd9-65bd778e1ab6",
+      "status": "failed",
+      "sourceManifest": [
+        {
+          "path": ".claude/skills/clinicos/SKILL.md",
+          "blob": "164863bca353809564f9f76fabdfe3004de439e2",
+          "mode": "100644",
+          "baseBlob": "25e8fc153c2009b178c28a62d8bd9eae293301af",
+          "baseMode": "100644"
+        },
+        {
+          "path": ".claude/skills/clinicos/references/bug-delivery.md",
+          "blob": "4a1820f566549fdc669bfadc2c0c4a8e62df0c6a",
+          "mode": "100644",
+          "baseBlob": "1b77f1a7000f0b39a894ec6c8dd72b7975bcd408",
+          "baseMode": "100644"
+        },
+        {
+          "path": ".agents/skills/codex-bug-triage/SKILL.md",
+          "blob": "55195e4bf4c2203f168dd96b3d1db25c0134ec72",
+          "mode": "100644",
+          "baseBlob": "f118c6b5fe1c87bcd985d548efd11e826405be73",
+          "baseMode": "100644"
+        },
+        {
+          "path": ".claude/skills/bug-final-review/SKILL.md",
+          "blob": "eb79e215d07e5c69f2cc971ab4dddac49de4837e",
+          "mode": "100644",
+          "baseBlob": "e9f0b08cbecd7d514ed50945bbdf3097e826ffc6",
+          "baseMode": "100644"
+        },
+        {
+          "path": "docs/codex-bug-workflow.md",
+          "blob": "149d3cefbd44fedfd9ce94ab0fa69f0034762ec0",
+          "mode": "100644",
+          "baseBlob": "6899b712eb80f5e87a39a40ac59245214e7c175e",
+          "baseMode": "100644"
+        }
+      ],
+      "sourceManifestSha256": "3cfde9fee7ef8f0080260b795d6d6edcc4ed9be913c5fa39b834228cf369dc16"
+    },
+    {
+      "round": 3,
+      "nonce": "6eac562e-15dc-4e6d-96fb-c55c551cb3bc",
+      "status": "failed",
+      "sourceManifest": [
+        {
+          "path": ".claude/skills/clinicos/SKILL.md",
+          "blob": "1f6ca2a951426c16df7ae475d04255bbcf08142d",
+          "mode": "100644",
+          "baseBlob": "25e8fc153c2009b178c28a62d8bd9eae293301af",
+          "baseMode": "100644"
+        },
+        {
+          "path": ".claude/skills/clinicos/references/bug-delivery.md",
+          "blob": "42c425eeb5c0d182b31db4b7144a72648931e6a3",
+          "mode": "100644",
+          "baseBlob": "1b77f1a7000f0b39a894ec6c8dd72b7975bcd408",
+          "baseMode": "100644"
+        },
+        {
+          "path": ".agents/skills/codex-bug-triage/SKILL.md",
+          "blob": "025b972abefc37573fb3967fee2564bef2052a38",
+          "mode": "100644",
+          "baseBlob": "f118c6b5fe1c87bcd985d548efd11e826405be73",
+          "baseMode": "100644"
+        },
+        {
+          "path": ".claude/skills/bug-final-review/SKILL.md",
+          "blob": "eb79e215d07e5c69f2cc971ab4dddac49de4837e",
+          "mode": "100644",
+          "baseBlob": "e9f0b08cbecd7d514ed50945bbdf3097e826ffc6",
+          "baseMode": "100644"
+        },
+        {
+          "path": "docs/codex-bug-workflow.md",
+          "blob": "1b262c89a58e781eca9837040067cbbb56df3f23",
+          "mode": "100644",
+          "baseBlob": "6899b712eb80f5e87a39a40ac59245214e7c175e",
+          "baseMode": "100644"
+        }
+      ],
+      "sourceManifestSha256": "3d4b190d362b96cb1affcd2cf898ac94ce4953483f0feff02206d6973e881db7"
+    },
+    {
+      "round": 4,
+      "nonce": "f5fe52fe-b069-4ff1-b371-9c229738c531",
+      "status": "passed",
+      "sourceManifest": [
+        {
+          "path": ".claude/skills/clinicos/SKILL.md",
+          "blob": "1f6ca2a951426c16df7ae475d04255bbcf08142d",
+          "mode": "100644",
+          "baseBlob": "25e8fc153c2009b178c28a62d8bd9eae293301af",
+          "baseMode": "100644"
+        },
+        {
+          "path": ".claude/skills/clinicos/references/bug-delivery.md",
+          "blob": "42c425eeb5c0d182b31db4b7144a72648931e6a3",
+          "mode": "100644",
+          "baseBlob": "1b77f1a7000f0b39a894ec6c8dd72b7975bcd408",
+          "baseMode": "100644"
+        },
+        {
+          "path": ".agents/skills/codex-bug-triage/SKILL.md",
+          "blob": "0eb4b21f22c5468b5461a0a5c1beaf35fecac105",
+          "mode": "100644",
+          "baseBlob": "f118c6b5fe1c87bcd985d548efd11e826405be73",
+          "baseMode": "100644"
+        },
+        {
+          "path": ".claude/skills/bug-final-review/SKILL.md",
+          "blob": "eb79e215d07e5c69f2cc971ab4dddac49de4837e",
+          "mode": "100644",
+          "baseBlob": "e9f0b08cbecd7d514ed50945bbdf3097e826ffc6",
+          "baseMode": "100644"
+        },
+        {
+          "path": "docs/codex-bug-workflow.md",
+          "blob": "8e7981e86a3003d6916649f67bde8f869cdbb3a4",
+          "mode": "100644",
+          "baseBlob": "6899b712eb80f5e87a39a40ac59245214e7c175e",
+          "baseMode": "100644"
+        }
+      ],
+      "sourceManifestSha256": "63fd89f0558f412253a6ca2bbd51d67385fc9060f1d8b52f82fca35030fabdf5"
+    }
+  ],
+  "defaultImplementationBudget": 4,
+  "reset": false,
+  "realClaudeReviewRounds": 0
+}

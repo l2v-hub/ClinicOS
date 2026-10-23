@@ -1,0 +1,23 @@
+{
+  "verdict": "READY FOR CODEX QA",
+  "scope": "independent local continuation7 only",
+  "sourceSha": "00749f3669d8757ead35efbde1fd0a751bee72b4",
+  "suite": {
+    "tests": 741,
+    "passed": 738,
+    "failed": 0,
+    "skipped": 3
+  },
+  "additionalAdversarial": {
+    "tests": 5,
+    "passed": 5
+  },
+  "browser": "PASS",
+  "privateCanonicalSchema": "PASS",
+  "priorProofsUnchanged": 485,
+  "sourceInputsUnchanged": 26,
+  "frozenHarnessesUnchanged": 2,
+  "githubReservationReconciled": false,
+  "externalFinalGates": "pending root",
+  "node": "v24.19.0"
+}

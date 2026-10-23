@@ -1,0 +1,104 @@
+{
+  "baseSha": "c05ce82edcf6c3b7da5396b3bed3bf1c85396ca4",
+  "sourceCommit": "6c1a283e3b272edf9638ae6c7c67be96e4542910",
+  "sourceManifest": [
+    {
+      "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "blob": "058615770fc98417ed01176b6da7b5e714f96338",
+      "mode": "100644",
+      "baseBlob": "daa1ae57f2f81346f383bb25735f29866f0cdb92",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "blob": "5991b5613a2b889cc7aadb87870eafda41b31123",
+      "mode": "100644",
+      "baseBlob": "11093425731fb2865d71a627870e99a0bfc7752f",
+      "baseMode": "100644"
+    },
+    {
+      "path": "scripts/automation/configure-demo-source.mjs",
+      "blob": "ceff8e4720f1a3e3192a41790d739981922b113f",
+      "mode": "100644",
+      "baseBlob": "593a54bc803808038c87d645c1b0b669dfea1056",
+      "baseMode": "100644"
+    },
+    {
+      "path": "scripts/automation/configure-demo-source.test.mjs",
+      "blob": "53327ed054e977244073369cf3a78dd783a621bb",
+      "mode": "100644",
+      "baseBlob": "b5cc12e0259134eb2e48bd06dfafa176b07843d2",
+      "baseMode": "100644"
+    },
+    {
+      "path": "scripts/maintenance/demo-storage-inspect.mjs",
+      "blob": "a8bf0363ff133b0e49cc8efa819eab5f2484c4b7",
+      "mode": "100644",
+      "baseBlob": "c9531956a7fe483f41e6624b4992f5c070792e2e",
+      "baseMode": "100644"
+    },
+    {
+      "path": "scripts/maintenance/demo-storage-inspect.test.mjs",
+      "blob": "aa0dfdfd7bd7b6069f5eeb9b117f6878677ca471",
+      "mode": "100644",
+      "baseBlob": "1da90096e78b9ea7dd00ccc995bb4e3004245b02",
+      "baseMode": "100644"
+    }
+  ],
+  "testedFiles": [
+    {
+      "path": "scripts/maintenance/demo-storage-inspect.mjs",
+      "blob": "a8bf0363ff133b0e49cc8efa819eab5f2484c4b7",
+      "sha256": "ee9509f631f7f7d69bacecc9fa4d50937b410b1a57b054da1a79cba82c12e5a7",
+      "bytes": 38685
+    },
+    {
+      "path": "scripts/maintenance/demo-storage-inspect.test.mjs",
+      "blob": "aa0dfdfd7bd7b6069f5eeb9b117f6878677ca471",
+      "sha256": "f9c8f67a9a658c0ac4b4417ade9d8888122f723168596bbc831b863ed6a9fc7f",
+      "bytes": 50288
+    },
+    {
+      "path": "scripts/automation/configure-demo-source.mjs",
+      "blob": "ceff8e4720f1a3e3192a41790d739981922b113f",
+      "sha256": "3bac135aaecfe5c95b48f38f613f27a0326d8ebb905a4753cb5ecc0d1513264b",
+      "bytes": 17195
+    },
+    {
+      "path": "scripts/automation/configure-demo-source.test.mjs",
+      "blob": "53327ed054e977244073369cf3a78dd783a621bb",
+      "sha256": "489ca22bed0947c9fb64d23a11350eb6ad0455b42e95ef2dafd0681952cb4918",
+      "bytes": 38065
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "blob": "058615770fc98417ed01176b6da7b5e714f96338",
+      "sha256": "873f90f8885652f0533b1a5983f9f15fb61b5b578103bcbdc6ee7f9f0cd850cf",
+      "bytes": 41745
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "blob": "5991b5613a2b889cc7aadb87870eafda41b31123",
+      "sha256": "3273775b0d3256cb6c503cd47c02d84e07b4aa55ef4653963b1b5fb93f772699",
+      "bytes": 110226
+    },
+    {
+      "path": "scripts/maintenance/demo-storage-workflow.test.mjs",
+      "blob": "1b92aadcb5f30d9ee795304ab0afee0bf3b9601d",
+      "sha256": "ebc4b8153fb9e113dd6d3c3899868f864f49cf7a9182d371c1f43ef86c0954e9",
+      "bytes": 9073
+    },
+    {
+      "path": "scripts/maintenance/demo-storage-binding-readonly.mjs",
+      "blob": "e7daa43c92c5388e57baa8ae7cb9b7bc971304f2",
+      "sha256": "5458e519575d0f47d9ad542d4a8fd150b85f73110dc6a4f1c788e0b0cd9a7759",
+      "bytes": 10296
+    },
+    {
+      "path": ".github/workflows/inspect-demo-storage.yml",
+      "blob": "d16243b4dcda0f5c13ba7e192aa3161788d6f68b",
+      "sha256": "d0d7e71f76860370e89e8c8ff2f2100a340e9e3311bb4ca4b00c3d6e980557b7",
+      "bytes": 4303
+    }
+  ]
+}

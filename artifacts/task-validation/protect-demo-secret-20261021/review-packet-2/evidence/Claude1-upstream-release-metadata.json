@@ -1,0 +1,14 @@
+{
+  "tag": "v2.103.0",
+  "commit": "7948e8056e45ac3c729b829e0eafe2d0797a95c6",
+  "assetName": "gh_2.103.0_linux_amd64.tar.gz",
+  "assetUrl": "https://github.com/cli/cli/releases/download/v2.103.0/gh_2.103.0_linux_amd64.tar.gz",
+  "assetBytes": 15030338,
+  "assetSha256": "fdd768eb70f6409f80fcfa9f3a1c0adf0fc98d827ab3ce0bed2ac22762c5d786",
+  "releaseApiSha256": "sha256:fdd768eb70f6409f80fcfa9f3a1c0adf0fc98d827ab3ce0bed2ac22762c5d786",
+  "releaseApiResponseSha256": "9d9a2adb614962c5b68670e9c64a280b775a03babad9c3c5d275db508a333dc8",
+  "checksumsBytes": 1971,
+  "checksumsSha256": "075bb954e2b113d0d2ac788d318b516280cb87103e601e788c34f3557acb15df",
+  "officialChecksumMatched": true,
+  "checksumsFileSha256": "075bb954e2b113d0d2ac788d318b516280cb87103e601e788c34f3557acb15df"
+}

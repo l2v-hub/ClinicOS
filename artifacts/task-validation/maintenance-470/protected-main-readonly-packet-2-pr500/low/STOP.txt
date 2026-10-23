@@ -1,0 +1,1 @@
+STOP — one-file low-impact change frozen. No tests, network, provider, Git, canonical state, or broader source changes were performed. Root may proceed with its independent focused QA and integration.

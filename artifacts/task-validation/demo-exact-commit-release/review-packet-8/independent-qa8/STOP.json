@@ -1,0 +1,57 @@
+{
+  "status": "STOP \u2014 OFFLINE TARGETED QA PASS; OPERATIONAL PARTIAL",
+  "agent": "/root/qa498_null8_luna",
+  "sourceSha": "0ae514c420e6c9a4e6500180617d1bb0a37349a6",
+  "nonce": "2c9357bb-7926-4478-9ba8-140d767da5be",
+  "reason": "The bounded offline suite, fake-provider operation-order/preservation probes, and actual CLI secret-reflection probe passed. Live administrator permission and remaining native/review gates are unverified.",
+  "actualCounts": {
+    "targetedTests": 85,
+    "passed": 85,
+    "failed": 0,
+    "skipped": 0,
+    "apiProbeInvocations": 15,
+    "apiScenarioResults": 15,
+    "actualCliFakeFetchCases": 1,
+    "actualCliReads": 8,
+    "actualCliWrites": 1
+  },
+  "evidence": {
+    "report": "validation-report.md",
+    "summary": "validation-summary.json",
+    "seal": "qa-seal.json",
+    "sealSha256": "61b974cfa6b70097df9b764faf1e63a4ee95367bd5f6b2fe9b6a1e452a74b392",
+    "evidenceDigests": "evidence-digests.json",
+    "evidenceDigestsSha256": "52a6aa5bec909a67932b5ec8fc72e85e437cd3c5ed2561943a40548604c971f4",
+    "integrity": "integrity-after.json",
+    "integritySha256": "3cb8ddbd5906c26e8aed848884c4a3c1d4ff1474a9f4d816632baf11f9386e5a"
+  },
+  "preservation": {
+    "sourceHeadUnchanged": true,
+    "gitStatusClean": true,
+    "sourceEdits": false,
+    "frozenFiles": 154,
+    "unchanged": 154,
+    "mismatches": 0,
+    "legacyConfigureRepositoryByteIdentical": true
+  },
+  "priorDiagnostic": {
+    "runId": 39649785587,
+    "phase": "policy_inventory",
+    "status": 404,
+    "readRequests": 4,
+    "writeAttempts": 0,
+    "tokenPermissionConclusion": "unknown"
+  },
+  "notRun": [
+    "live REST/provider action",
+    "six native checks",
+    "actual Claude review",
+    "final Codex review",
+    "full 1,060-test/clinical suites"
+  ],
+  "providerAction": false,
+  "network": false,
+  "settingsApplied": false,
+  "credentialsRead": false,
+  "rootMayResumeOtherAuthorizedWork": true
+}

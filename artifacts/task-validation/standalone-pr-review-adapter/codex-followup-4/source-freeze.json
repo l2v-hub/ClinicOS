@@ -1,0 +1,54 @@
+{
+  "baseline": "32403b5d874c897457bdb7fe44db7ab2d132262f",
+  "integrationSource": "19d0db6ae2f345d7ac8c03a0ee9e9dabbc969c86",
+  "continuation": 8,
+  "reservation": "d45af236-926e-4695-8216-878f7595360f",
+  "node": "v24.19.0",
+  "modifiedPaths": [
+    "agent-team/src/bug-pipeline/attempt-budget.mjs",
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/tests/bug-pipeline/attempt-budget.test.mjs",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs"
+  ],
+  "files": {
+    "agent-team/src/bug-pipeline/github.mjs": "ed84ea138d74fdebbe2a9fcc9eb520e7e6b1a75ea46378fc3cfe89550b08a30d",
+    "agent-team/src/bug-pipeline/pipeline.mjs": "c2f8fb6d72d878f0fb5fc79bec0e431cc2d75a6358a117a11599aef7d53144e2",
+    "agent-team/src/bug-pipeline/standalone-review.mjs": "18ea211ef39afd39b61606a156e54ee6d6905dd0711262a3cb1f8912043f9d3c",
+    "agent-team/src/bug-pipeline/comment-review-handoff.mjs": "8158a4935f0a7e84471522a39b72feaa71b0cf8278a847bd966da51827049f46",
+    "agent-team/src/bug-pipeline/review-handoff-cli.mjs": "bf56832827bfb59c16eceb4c1e9569a95eb9f8bfc77c2fd9d3b69ce2ca79ec33",
+    "agent-team/src/bug-pipeline/attempt-budget.mjs": "e2e40299a1f100538103be649e9cc685f8412b40d33b26759167fc61fc2d98ca",
+    "agent-team/src/bug-pipeline/review-policy.mjs": "30ed88217d3401d88ddb6c3671f94c91d5c1d6cde06f98802f927ebbdc481e5c",
+    "agent-team/src/bug-pipeline/release.mjs": "a5928d1d00018c0d9f04d254590771d5ba902fad4fe138d829693358928d5ffe",
+    "agent-team/src/bug-pipeline/issue-review-communication.mjs": "5355a530f7bd7997f6386cc67893ee21447ec238be8156c0eb304bc6bafa34b9",
+    "agent-team/src/bug-pipeline/cli.mjs": "57d733cf7a6084a5cabd812b159e786b9c20ba3b9651281c4eb0678ad509ca27",
+    "agent-team/src/bug-pipeline/dashboard.mjs": "d8792c7f2144ace7932ee264478576a26f61ed52a764e3e0cafada82921f7f39",
+    "agent-team/src/bug-pipeline/contracts.mjs": "eef4bd3286750f986119b2e15409fffd118ca4e7bcf56d8d8f90b894946f7988",
+    "agent-team/src/bug-pipeline/operator-authorization.mjs": "083a66043d4be386d37cece84ec601f390829d0bfd4998846fb8edc6e1dd73f1",
+    "agent-team/tests/bug-pipeline/github.test.mjs": "d00394814f3660e7820deda97dbbc79c56c802151a57883ba4ef5b3292241a4c",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs": "6102d7239d792ddf1fc1f225b902cff268443ad362c8413499bb8ba990d2a08c",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs": "80d68d9211a7083a9fc0e6d753afc67703762f8d4a210b1757ba82085ab193ab",
+    "agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs": "f63d27a700430522a3a0c052297cfca218d82ca09edc9e79c8e3e647c47b5da1",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs": "f447547172e6f9f3c05443608f965d74fe7c9ccae79a425ef1696d0886b1e495",
+    "agent-team/tests/bug-pipeline/attempt-budget.test.mjs": "a6b8f6f4a78bfdeccbf5ce0f58620ff70a34dbe022c4493237abb60a182cb385",
+    "agent-team/tests/bug-pipeline/release.test.mjs": "29e8d0c6cf1c991ba2a9882b4717ca9c34e293d14b5ccccb6f814c8223a74baf",
+    "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs": "2b16a158b1348abc3af5eeb1a608681caee205ee8cd80ad3ebd6ef5fbe476c50",
+    "agent-team/tests/bug-pipeline/dashboard.test.mjs": "a9bd48c12b60c48971defbaf0d55c1277c17930e81ddc7480c70f81655325e1f",
+    "agent-team/tests/bug-pipeline/routing.test.mjs": "a8ee77e83ed96a56b3cb01ad2e8bae66f3111e852e82d1485080ef2498ec135b",
+    "agent-team/tests/bug-pipeline/operator-authorization.test.mjs": "0741a48f6b6bb158ba295064f9be3f42a085b00942d7f67c02087b79853bf283",
+    "docs/standalone-pr-review.md": "90da36a799508c321d0a14ddc07b67cb262f651e3b123d33934b83d49919450a",
+    "docs/claude-local-review-prompt.md": "6d9b828976113e2f3a5afedf1044af7b2f5ce42f87039510cd47218db7e97ef8"
+  },
+  "harness": {
+    "/workspace/.clinicos-cloud/492-continuation8-author-20261018/run-tests.mjs": "3957ab19a65c2f94350e07b57e9fb9772b17a78ee7a4895102f8ff5effde3655",
+    "/workspace/.clinicos-cloud/492-continuation8-author-20261018/budget-isolated.test.mjs": "09c20afe968af9e7bfbad689280dcc5571534cb9dbe50bb2ec7939431d641d22",
+    "/workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf"
+  },
+  "priorProofCount": 527,
+  "priorProofPreservation": {
+    "presentWorkingTree": 63,
+    "sparseVerifiedHeadGitBlob": 464,
+    "mismatches": 0
+  },
+  "priorProofManifestSha256": "c062c0bd3fe4c19b86b72feeb312fc2f1cdcbfa27f45458a75c283b698b19db9"
+}

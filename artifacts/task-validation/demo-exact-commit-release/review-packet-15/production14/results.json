@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "executor": "root gpt-6.1-sol adaptive fallback after actual Luna capacity-unavailable",
+  "source": "/tmp/clinicos-498-Claude4-production14-refinement1",
+  "baseline": "/tmp/clinicos-498-Claude4-base14",
+  "scope": [
+    "agent-team/src/bug-pipeline/demo-deployment.mjs",
+    "agent-team/tests/bug-pipeline/demo-deployment.test.mjs"
+  ],
+  "sourceFiles": 265,
+  "changedFiles": [
+    "agent-team/src/bug-pipeline/demo-deployment.mjs",
+    "agent-team/tests/bug-pipeline/demo-deployment.test.mjs"
+  ],
+  "fullFocused": {
+    "tests": 364,
+    "pass": 364,
+    "fail": 0,
+    "skip": 0,
+    "exit": 0,
+    "node": "22.23.4"
+  },
+  "negativeControl": {
+    "initialLunaSourceWithNewTests": "expected assertion failure: Missing expected rejection in older active attempt1 case",
+    "exit": 1,
+    "meaningful": true
+  },
+  "initial363PassAndSealPreserved": true,
+  "noProviderOperations": true,
+  "noNativeOrDeployProofClaimed": true,
+  "sourceEditsFrozen": true
+}

@@ -1,0 +1,178 @@
+[
+  {
+    "client": "inspect-project",
+    "case": "redirect",
+    "status": "PASS",
+    "requests": 2,
+    "native": 1,
+    "cli": 0,
+    "code": "READONLY_HTTP_OTHER",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "inspect-project",
+    "case": "graphql",
+    "status": "PASS",
+    "requests": 2,
+    "native": 1,
+    "cli": 0,
+    "code": "READONLY_GRAPHQL_REJECTED",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "inspect-project",
+    "case": "malformed",
+    "status": "PASS",
+    "requests": 2,
+    "native": 1,
+    "cli": 0,
+    "code": "READONLY_JSON_INVALID",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "inspect-project",
+    "case": "network",
+    "status": "PASS",
+    "requests": 2,
+    "native": 1,
+    "cli": 0,
+    "code": "READONLY_NETWORK_FAILED",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "inspect-account",
+    "case": "redirect",
+    "status": "PASS",
+    "requests": 2,
+    "native": 1,
+    "cli": 0,
+    "code": "READONLY_HTTP_OTHER",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "inspect-account",
+    "case": "graphql",
+    "status": "PASS",
+    "requests": 2,
+    "native": 1,
+    "cli": 0,
+    "code": "READONLY_GRAPHQL_REJECTED",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "inspect-account",
+    "case": "malformed",
+    "status": "PASS",
+    "requests": 2,
+    "native": 1,
+    "cli": 0,
+    "code": "READONLY_JSON_INVALID",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "inspect-account",
+    "case": "network",
+    "status": "PASS",
+    "requests": 2,
+    "native": 1,
+    "cli": 0,
+    "code": "READONLY_NETWORK_FAILED",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "configure",
+    "case": "redirect",
+    "status": "PASS",
+    "requests": 1,
+    "native": 1,
+    "cli": 0,
+    "code": "DEMO_SOURCE_REQUEST_FAILED",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "configure",
+    "case": "graphql",
+    "status": "PASS",
+    "requests": 1,
+    "native": 1,
+    "cli": 0,
+    "code": "DEMO_SOURCE_API_REJECTED",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "configure",
+    "case": "malformed",
+    "status": "PASS",
+    "requests": 1,
+    "native": 1,
+    "cli": 0,
+    "code": "DEMO_SOURCE_INVALID_RESPONSE",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "configure",
+    "case": "network",
+    "status": "PASS",
+    "requests": 1,
+    "native": 1,
+    "cli": 0,
+    "code": "DEMO_SOURCE_REQUEST_FAILED",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "deployment",
+    "case": "redirect",
+    "status": "PASS",
+    "requests": 1,
+    "native": 1,
+    "cli": 0,
+    "code": "Demo deployment proof rejected: invalid bounded JSON response",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "deployment",
+    "case": "graphql",
+    "status": "PASS",
+    "requests": 1,
+    "native": 1,
+    "cli": 0,
+    "code": "Demo deployment proof rejected: Railway request denied or unsupported",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "deployment",
+    "case": "malformed",
+    "status": "PASS",
+    "requests": 1,
+    "native": 1,
+    "cli": 0,
+    "code": "Demo deployment proof rejected: invalid bounded JSON response",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  },
+  {
+    "client": "deployment",
+    "case": "network",
+    "status": "PASS",
+    "requests": 1,
+    "native": 1,
+    "cli": 0,
+    "code": "Demo deployment proof rejected: transient Railway read unavailable",
+    "privacy": "PASS",
+    "fallbackRequests": 0
+  }
+]

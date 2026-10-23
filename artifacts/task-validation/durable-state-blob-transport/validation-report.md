@@ -1,0 +1,5 @@
+# Current transport candidate validation
+
+VERIFIED OFFLINE onsource19d0db6ae2f345d7ac8c03a0ee9e9dabbc969c86, pending remote reconciliation, native GitHubCI and actual Claude/fresh final Codex review. Fresh independent660total657PASS0FAIL3WindowsSkip,12adversarialscenarios including1,913,844-byte16000-record fullhistoryequality,actualQA-onlyresultviewer browserPASS. independent-qa/validation-report.md andfinal-seal.json bind original outcomes. Rawtrace/video remainprivate.
+
+Three authorizedpaths only; actualmetadata fixturesupdated underappend-onlyamendment. Initialfailedpre-amendmentauthorruns retained privately; two broaderunit source-lockfailures reproducedcleanbase andunchanged applicationinputs. Exactnativecommanddoesnotinclude thoseout-of-scopeunittests. No liveGitHub/providercredentialaccess/deployclaim. The rootremoteamendmentandQA reservationarelocallydurablebutnotGitHubreconciledafterHTTP401; originalremotetaskreservationretained. Alluser SQL/worktrees/historypreserved.

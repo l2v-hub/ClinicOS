@@ -1,3 +1,4 @@
+import { spentAttempts, activeImplementation } from './attempt-budget.mjs';
 import { validateState } from './contracts.mjs';
 
 const PHASES = {
@@ -62,7 +63,7 @@ export function dashboardSnapshot({ repo, state, issues, queue, setup, now = new
         : batch?.release?.status === 'merged'
           ? 'Deploy in corso'
           : batch
-            ? PHASES[batch.phase]
+            ? activeImplementation(batch) ? 'Implementazione e verifica QA in corso' : PHASES[batch.phase]
             : pending
               ? 'Triage e accorpamento'
               : external
@@ -72,14 +73,25 @@ export function dashboardSnapshot({ repo, state, issues, queue, setup, now = new
                     ? 'Raccolta issue per accorpamento'
                     : 'In attesa del controller'
                   : 'Aggiungere codex-run o /codex fix';
+      const handoff = batch?.externalReview;
+      const handoffPhase =
+        handoff?.channel === 'github-comments' && !activeImplementation(batch)
+          ? handoff.status === 'comment-requested'
+            ? 'claude-review-ready · attesa Claude locale'
+            : handoff.status === 'comment-running'
+              ? 'claude-reviewing · review Claude in corso'
+              : handoff.status === 'published' && batch.phase === 'waiting-review'
+                ? 'codex-review-ready · controllo Codex'
+                : phase
+          : phase;
       return {
         number: issue.number,
         url: `https://github.com/${repo}/issues/${issue.number}`,
         status,
-        phase,
+        phase: handoffPhase,
         batch: batch?.id ?? null,
         // Titles/bodies, raw model reports and credentials are never part of this DTO.
-        implementation: batch?.implementation.length ?? 0,
+        implementation: batch ? spentAttempts(batch, 'implementation') : 0,
         reviews: batch?.reviews.length ?? 0,
         sha: batch?.sha ?? null,
         pr: batch?.pr?.number ?? null,

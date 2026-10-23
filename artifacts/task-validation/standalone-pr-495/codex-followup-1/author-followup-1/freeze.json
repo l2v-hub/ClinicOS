@@ -1,0 +1,43 @@
+{
+  "status": "AUTHOR_STOP",
+  "base": "702c46779dc3212c2f1938746b482743aca7da64",
+  "trackedPresentBaselineFiles": 5872,
+  "changedTrackedPaths": [
+    ".github/workflows/inspect-demo-bearer-readiness.yml",
+    "scripts/automation/inspect-demo-bearer-readiness.mjs",
+    "scripts/automation/inspect-demo-bearer-readiness.test.mjs"
+  ],
+  "priorProofFiles": 24,
+  "priorProofsUnchanged": true,
+  "inputSha256": {
+    ".github/workflows/inspect-demo-bearer-readiness.yml": "5d31e7aba6a9147244e36b4cad953f2155ab344ca2ee0797657daa76872266fb",
+    "scripts/automation/inspect-demo-bearer-readiness.mjs": "57c26489cd0fd2f9afd4036faf5e6ae07d0737a76ac01bcbfd7f150588e19cca",
+    "scripts/automation/inspect-demo-bearer-readiness.test.mjs": "5a85d2733c566c0fc7bdadc6ac4302dc8b5b73c942a256e019f78e96d1ba62d3",
+    "scripts/automation/configure-demo-source.mjs": "c674e302471ea8b95154aa7e440761d0ca188475bdaffd294e9f4d3ad9c4536a",
+    "scripts/automation/configure-demo-source.test.mjs": "5da3aa8f5865c3b7d47d210a95ae56bef6e856a0d6f07cac494328fb3f32896a",
+    "scripts/automation/inspect-demo-source-topology.mjs": "005f4a72f1be0fafaed29013702307fbe4d3f1f291032eed4cb1c1a79a00f488",
+    "scripts/automation/inspect-demo-source-topology.test.mjs": "2fbc450bd71b83ea3fe4c3ff96818f43317c13cf4099d4d2c5601a3003932a75",
+    ".github/workflows/deploy-backend.yml": "6743d823679a9c1076c85dfcb5e5b9a8f96705849123b3091cac5d00cadaa3f9",
+    "artifacts/task-validation/standalone-pr-495/codex-followup-1/task-contract.md": "07cb554af17678afd64b892fba44501557ee5b4c79ef8bc728d4e9310535aaa7",
+    "artifacts/task-validation/standalone-pr-495/codex-followup-1/plan.md": "f2b88f1d94634a7da18935cbe5fdb003f7cfa28261c0074b4bb68bf020bb9f10",
+    "artifacts/task-validation/standalone-pr-495/codex-followup-1/claude-review-6254585844.md": "54acc886130a51419907e2d28c4237a9acea8d643fb2be20e3c491a665558929",
+    "artifacts/task-validation/standalone-pr-495/codex-followup-1/prior-proof-manifest.json": "828c745b853f7d46064b01759333e32dbb93cc6fa6fd3b9382701efe346542ca",
+    "/workspace/.clinicos-cloud/demo-bearer-readiness-author2-20261018/candidate.tap": "ec0e4afc956ef8e96cc939c70a5f4c26cb0ab029c50757db312f5960901c2765",
+    "/workspace/.clinicos-cloud/demo-bearer-readiness-author2-20261018/regressions.tap": "d9bc1a437f3593e839c4f224aa976b5002cbbd69062b031da5bcc4f9382fb66f",
+    "/workspace/.clinicos-cloud/demo-bearer-readiness-author2-20261018/baseline.json": "7278b966f1a14a3b899b6efe0a05628df3ce102344865634b263cd83f92274f0"
+  },
+  "candidate": {
+    "passed": 122,
+    "failed": 0,
+    "skipped": 0
+  },
+  "regressions": {
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0
+  },
+  "authenticatedNetworkCalls": 0,
+  "secretReads": 0,
+  "gitHubWrites": 0,
+  "commits": 0
+}

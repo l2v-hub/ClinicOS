@@ -1,0 +1,5 @@
+# Current continuation3 validation
+
+Source fa88482503e08b191395473a599325831f7e4bd7 on base 8e3c5fd48682766dbb34eb4b95699145b2d56965. Independent QA verdict READY FOR CODEX QA, all five phases PASS.185focused tests independently PASS;40independent adversarial cases execute complete main stdout/errorannotation and enforce exact fixed target/identityquery/headers/redirect,1native+1GitHub request,0CLI/private reads. Synthetic local browser40rows/240values asserted, screenshot/trace verified, no console/relevantHTTP errors. Initial administrator-blocked fileURI attempt preserved and safe setContent passed; no hidden source fix or fake provider proof. Author and QA source hashes unchanged.
+
+Seals: author 6bbf3bc2e3503b78606374907722037a280dc54ddc3d06c37954f6959d31cfdd, independentQA e784cdc4f611cc256ea00d249a228d14a8f21c14006b99441757ff12794c2fd1. Native GitHub, Claude3, fresh finalCodex, protected merge and live provider discrimination are separate pending gates. Actual account/project failures remain failures. No deployment, cleanup or clinical issue closure claimed.

@@ -1,0 +1,15 @@
+{
+  "sourceReceiptSha256": "30ccd4177598800f000fb946ffa4fac514272f111e93e816fa422b1fe76866bb",
+  "command": "node --test scripts/automation/protect-demo-secret.test.mjs",
+  "envMode": "verification",
+  "ok": true,
+  "exitCode": 0,
+  "counts": [
+    30,
+    0,
+    30,
+    0,
+    0,
+    0
+  ]
+}

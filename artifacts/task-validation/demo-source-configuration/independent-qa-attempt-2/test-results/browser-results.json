@@ -1,0 +1,483 @@
+{
+  "passed": true,
+  "scenarios": 19,
+  "executions": 20,
+  "assertions": 207,
+  "consoleErrors": [],
+  "httpErrors": [],
+  "serverErrors": [],
+  "networkDestinations": [
+    "127.0.0.1"
+  ],
+  "results": [
+    {
+      "outcome": "trigger-created",
+      "scenario": "create",
+      "reads": 3,
+      "writes": 1,
+      "mainReads": 3,
+      "branch": "main",
+      "rootDirectory": "/backend",
+      "checkSuites": true,
+      "override": null,
+      "domainCount": 1,
+      "receipt": {
+        "schemaVersion": 1,
+        "repository": "l2v-hub/ClinicOS",
+        "reviewedSha": "cccccccccccccccccccccccccccccccccccccccc",
+        "runId": "9001",
+        "runAttempt": "1",
+        "capturedAt": "2026-10-17T11:11:53.411Z",
+        "operation": "create-main",
+        "outcome": "trigger-created",
+        "previousInventorySha256": "6407374f65449494d7cf08d92bff5719b6559a5e6bfd680075d085ae010326dd",
+        "inventory": {
+          "schemaVersion": 1,
+          "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+          "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+          "environmentName": "demo",
+          "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+          "repository": "l2v-hub/ClinicOS",
+          "rootDirectory": "/backend",
+          "domains": [
+            {
+              "kind": "customDomains",
+              "domain": "qa.example.test"
+            },
+            {
+              "kind": "serviceDomains",
+              "domain": "clinicos-backend-demo.up.railway.app"
+            }
+          ],
+          "triggers": [
+            {
+              "id": "qa-new-trigger-002",
+              "provider": "GitHub",
+              "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+              "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+              "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+              "repository": "l2v-hub/ClinicOS",
+              "branch": "main",
+              "checkSuites": true,
+              "baseEnvironmentOverrideId": null
+            }
+          ],
+          "hasMoreTriggers": false
+        },
+        "inventorySha256": "38183a667a2fed65e2dd160f988148d9332d14ff585e831c1c88d8c258bd4080"
+      }
+    },
+    {
+      "outcome": "trigger-created",
+      "scenario": "null-root",
+      "reads": 3,
+      "writes": 1,
+      "mainReads": 3,
+      "branch": "main",
+      "rootDirectory": null,
+      "checkSuites": true,
+      "override": null,
+      "domainCount": 1,
+      "receipt": {
+        "schemaVersion": 1,
+        "repository": "l2v-hub/ClinicOS",
+        "reviewedSha": "cccccccccccccccccccccccccccccccccccccccc",
+        "runId": "9001",
+        "runAttempt": "1",
+        "capturedAt": "2026-10-17T11:11:53.843Z",
+        "operation": "create-main",
+        "outcome": "trigger-created",
+        "previousInventorySha256": "4d32eb7d2f340e0afe42b569e3371aa3e8684d508506df01226d81a74257088d",
+        "inventory": {
+          "schemaVersion": 1,
+          "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+          "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+          "environmentName": "demo",
+          "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+          "repository": "l2v-hub/ClinicOS",
+          "rootDirectory": null,
+          "domains": [
+            {
+              "kind": "customDomains",
+              "domain": "qa.example.test"
+            },
+            {
+              "kind": "serviceDomains",
+              "domain": "clinicos-backend-demo.up.railway.app"
+            }
+          ],
+          "triggers": [
+            {
+              "id": "qa-new-trigger-002",
+              "provider": "GitHub",
+              "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+              "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+              "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+              "repository": "l2v-hub/ClinicOS",
+              "branch": "main",
+              "checkSuites": true,
+              "baseEnvironmentOverrideId": null
+            }
+          ],
+          "hasMoreTriggers": false
+        },
+        "inventorySha256": "f0c3644d240ea151199262b50237720be2b0dcf020a196c6f1ee9f8263701501"
+      }
+    },
+    {
+      "outcome": "unchanged",
+      "scenario": "existing-compliant",
+      "reads": 2,
+      "writes": 0,
+      "mainReads": 3,
+      "branch": "main",
+      "rootDirectory": "/backend",
+      "checkSuites": true,
+      "override": null,
+      "domainCount": 1,
+      "receipt": {
+        "schemaVersion": 1,
+        "repository": "l2v-hub/ClinicOS",
+        "reviewedSha": "cccccccccccccccccccccccccccccccccccccccc",
+        "runId": "9001",
+        "runAttempt": "1",
+        "capturedAt": "2026-10-17T11:11:54.220Z",
+        "operation": "create-main",
+        "outcome": "unchanged",
+        "inventory": {
+          "schemaVersion": 1,
+          "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+          "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+          "environmentName": "demo",
+          "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+          "repository": "l2v-hub/ClinicOS",
+          "rootDirectory": "/backend",
+          "domains": [
+            {
+              "kind": "customDomains",
+              "domain": "qa.example.test"
+            },
+            {
+              "kind": "serviceDomains",
+              "domain": "clinicos-backend-demo.up.railway.app"
+            }
+          ],
+          "triggers": [
+            {
+              "id": "qa-new-trigger-002",
+              "provider": "GitHub",
+              "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+              "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+              "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+              "repository": "l2v-hub/ClinicOS",
+              "branch": "main",
+              "checkSuites": true,
+              "baseEnvironmentOverrideId": null
+            }
+          ],
+          "hasMoreTriggers": false
+        },
+        "inventorySha256": "38183a667a2fed65e2dd160f988148d9332d14ff585e831c1c88d8c258bd4080"
+      }
+    },
+    {
+      "outcome": "branch-updated",
+      "scenario": "branch-update",
+      "reads": 3,
+      "writes": 1,
+      "mainReads": 3,
+      "branch": "main",
+      "rootDirectory": "/backend",
+      "checkSuites": false,
+      "override": "qa-keep-inheritance",
+      "domainCount": 1,
+      "receipt": {
+        "schemaVersion": 1,
+        "repository": "l2v-hub/ClinicOS",
+        "reviewedSha": "cccccccccccccccccccccccccccccccccccccccc",
+        "runId": "9001",
+        "runAttempt": "1",
+        "capturedAt": "2026-10-17T11:11:54.605Z",
+        "operation": "set-main",
+        "outcome": "branch-updated",
+        "previousInventorySha256": "04109079262785ee8d6e2d3ca512fec43976f299e9655e6b33e4bb5da3549614",
+        "inventory": {
+          "schemaVersion": 1,
+          "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+          "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+          "environmentName": "demo",
+          "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+          "repository": "l2v-hub/ClinicOS",
+          "rootDirectory": "/backend",
+          "domains": [
+            {
+              "kind": "customDomains",
+              "domain": "qa.example.test"
+            },
+            {
+              "kind": "serviceDomains",
+              "domain": "clinicos-backend-demo.up.railway.app"
+            }
+          ],
+          "triggers": [
+            {
+              "id": "qa-new-trigger-002",
+              "provider": "GitHub",
+              "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+              "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+              "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+              "repository": "l2v-hub/ClinicOS",
+              "branch": "main",
+              "checkSuites": false,
+              "baseEnvironmentOverrideId": "qa-keep-inheritance"
+            }
+          ],
+          "hasMoreTriggers": false
+        },
+        "inventorySha256": "b69cd7e85637598d2e3509fc787f683ba53086995ad0602e9ff4eb867ddb612a"
+      }
+    },
+    {
+      "outcome": "DEMO_SOURCE_INVENTORY_DRIFT",
+      "scenario": "stale-digest",
+      "reads": 1,
+      "writes": 0,
+      "mainReads": 1,
+      "branch": "absent",
+      "rootDirectory": "/backend",
+      "checkSuites": null,
+      "override": null,
+      "domainCount": 1
+    },
+    {
+      "outcome": "DEMO_SOURCE_INVENTORY_DRIFT",
+      "scenario": "double-read-drift",
+      "reads": 2,
+      "writes": 0,
+      "mainReads": 2,
+      "branch": "absent",
+      "rootDirectory": "/concurrent",
+      "checkSuites": null,
+      "override": null,
+      "domainCount": 1
+    },
+    {
+      "outcome": "DEMO_SOURCE_INVENTORY_DRIFT",
+      "scenario": "concurrent-trigger",
+      "reads": 2,
+      "writes": 0,
+      "mainReads": 2,
+      "branch": "main",
+      "rootDirectory": "/backend",
+      "checkSuites": true,
+      "override": null,
+      "domainCount": 1
+    },
+    {
+      "outcome": "DEMO_SOURCE_CREATE_CONFLICT",
+      "scenario": "existing-wrong-policy",
+      "reads": 1,
+      "writes": 0,
+      "mainReads": 1,
+      "branch": "main",
+      "rootDirectory": "/backend",
+      "checkSuites": false,
+      "override": null,
+      "domainCount": 1
+    },
+    {
+      "outcome": "DEMO_SOURCE_DUPLICATE_TRIGGERS",
+      "scenario": "duplicate",
+      "reads": 1,
+      "writes": 0,
+      "mainReads": 1,
+      "branch": "main",
+      "rootDirectory": "/backend",
+      "checkSuites": true,
+      "override": null,
+      "domainCount": 1
+    },
+    {
+      "outcome": "DEMO_SOURCE_FOREIGN_REPOSITORY",
+      "scenario": "foreign-repository",
+      "reads": 1,
+      "writes": 0,
+      "mainReads": 1,
+      "branch": "main",
+      "rootDirectory": "/backend",
+      "checkSuites": true,
+      "override": null,
+      "domainCount": 1
+    },
+    {
+      "outcome": "DEMO_SOURCE_DUPLICATE_TRIGGERS",
+      "scenario": "truncated",
+      "reads": 1,
+      "writes": 0,
+      "mainReads": 1,
+      "branch": "absent",
+      "rootDirectory": "/backend",
+      "checkSuites": null,
+      "override": null,
+      "domainCount": 1
+    },
+    {
+      "outcome": "DEMO_SOURCE_CURRENT_MAIN_DRIFT",
+      "scenario": "main-before-write",
+      "reads": 1,
+      "writes": 0,
+      "mainReads": 2,
+      "branch": "absent",
+      "rootDirectory": "/backend",
+      "checkSuites": null,
+      "override": null,
+      "domainCount": 1
+    },
+    {
+      "outcome": "DEMO_SOURCE_CURRENT_MAIN_DRIFT",
+      "scenario": "main-after-write",
+      "reads": 3,
+      "writes": 1,
+      "mainReads": 3,
+      "branch": "main",
+      "rootDirectory": "/backend",
+      "checkSuites": true,
+      "override": null,
+      "domainCount": 1
+    },
+    {
+      "outcome": "DEMO_SOURCE_POST_CREATE_DRIFT",
+      "scenario": "reply-wrong-id",
+      "reads": 3,
+      "writes": 1,
+      "mainReads": 2,
+      "branch": "main",
+      "rootDirectory": "/backend",
+      "checkSuites": true,
+      "override": null,
+      "domainCount": 1
+    },
+    {
+      "outcome": "DEMO_SOURCE_CREATE_UNCONFIRMED",
+      "scenario": "reply-wrong-policy",
+      "reads": 2,
+      "writes": 1,
+      "mainReads": 2,
+      "branch": "main",
+      "rootDirectory": "/backend",
+      "checkSuites": true,
+      "override": null,
+      "domainCount": 1
+    },
+    {
+      "outcome": "DEMO_SOURCE_POST_CREATE_DRIFT",
+      "scenario": "post-domain-drift",
+      "reads": 3,
+      "writes": 1,
+      "mainReads": 2,
+      "branch": "main",
+      "rootDirectory": "/backend",
+      "checkSuites": true,
+      "override": null,
+      "domainCount": 2
+    },
+    {
+      "outcome": "DEMO_SOURCE_API_REJECTED",
+      "scenario": "provider-rejects",
+      "reads": 2,
+      "writes": 1,
+      "mainReads": 2,
+      "branch": "absent",
+      "rootDirectory": "/backend",
+      "checkSuites": null,
+      "override": null,
+      "domainCount": 1
+    },
+    {
+      "outcome": "DEMO_SOURCE_API_REJECTED",
+      "scenario": "post-read-fails",
+      "reads": 3,
+      "writes": 1,
+      "mainReads": 2,
+      "branch": "main",
+      "rootDirectory": "/backend",
+      "checkSuites": true,
+      "override": null,
+      "domainCount": 1
+    },
+    {
+      "outcome": "DEMO_SOURCE_INVALID_RECEIPT",
+      "scenario": "receipt-reflection",
+      "reads": 3,
+      "writes": 1,
+      "mainReads": 3,
+      "branch": "main",
+      "rootDirectory": "/backend",
+      "checkSuites": true,
+      "override": null,
+      "domainCount": 1
+    },
+    {
+      "outcome": "trigger-created",
+      "scenario": "create",
+      "reads": 3,
+      "writes": 1,
+      "mainReads": 3,
+      "branch": "main",
+      "rootDirectory": "/backend",
+      "checkSuites": true,
+      "override": null,
+      "domainCount": 1,
+      "receipt": {
+        "schemaVersion": 1,
+        "repository": "l2v-hub/ClinicOS",
+        "reviewedSha": "cccccccccccccccccccccccccccccccccccccccc",
+        "runId": "9001",
+        "runAttempt": "1",
+        "capturedAt": "2026-10-17T11:11:59.965Z",
+        "operation": "create-main",
+        "outcome": "trigger-created",
+        "previousInventorySha256": "6407374f65449494d7cf08d92bff5719b6559a5e6bfd680075d085ae010326dd",
+        "inventory": {
+          "schemaVersion": 1,
+          "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+          "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+          "environmentName": "demo",
+          "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+          "repository": "l2v-hub/ClinicOS",
+          "rootDirectory": "/backend",
+          "domains": [
+            {
+              "kind": "customDomains",
+              "domain": "qa.example.test"
+            },
+            {
+              "kind": "serviceDomains",
+              "domain": "clinicos-backend-demo.up.railway.app"
+            }
+          ],
+          "triggers": [
+            {
+              "id": "qa-new-trigger-002",
+              "provider": "GitHub",
+              "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+              "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+              "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+              "repository": "l2v-hub/ClinicOS",
+              "branch": "main",
+              "checkSuites": true,
+              "baseEnvironmentOverrideId": null
+            }
+          ],
+          "hasMoreTriggers": false
+        },
+        "inventorySha256": "38183a667a2fed65e2dd160f988148d9332d14ff585e831c1c88d8c258bd4080"
+      }
+    }
+  ],
+  "actualModule": true,
+  "actualChromium": true,
+  "actualLoopbackHttp": true,
+  "realProviderRequests": 0,
+  "persistenceAfterReload": true
+}

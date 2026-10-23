@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       operation:
-        description: Inspect metadata, or set only the unique existing demo trigger branch
+        description: Inspect, update a unique trigger branch, or explicitly create one missing demo trigger
         type: choice
-        options: [inspect, set-main]
+        options: [inspect, set-main, create-main]
         default: inspect
         required: true
       reviewed_sha:
@@ -14,7 +14,7 @@ on:
         type: string
         required: true
       expected_inventory_digest:
-        description: SHA-256 from a prior inspection; mandatory for set-main
+        description: SHA-256 from a prior inspection; mandatory for set-main and create-main
         type: string
         required: false
 
@@ -22,7 +22,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: railway-backend
+  group: railway-demo
   cancel-in-progress: false
 
 jobs:
@@ -45,9 +45,10 @@ jobs:
           node-version: 22
       - name: Verify operational configuration tests without credentials
         run: node --test scripts/automation/configure-demo-source.test.mjs
-      - name: Inspect or update the existing demo trigger branch
+      - name: Inspect or explicitly configure the verified demo trigger
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
           CONFIGURE_DEMO_OPERATION: ${{ inputs.operation }}
           CONFIGURE_DEMO_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
           CONFIGURE_DEMO_EXPECTED_DIGEST: ${{ inputs.expected_inventory_digest }}

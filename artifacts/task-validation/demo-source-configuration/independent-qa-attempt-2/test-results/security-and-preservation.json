@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "scannedEntries": 400,
+  "zipMembers": 341,
+  "scannedBytes": 41178864,
+  "findings": [],
+  "unchangedSourceFiles": 3,
+  "unchangedFrozenContracts": 3,
+  "unchangedPreexistingEvidenceFiles": 38,
+  "historicalAttempt1Files": 29,
+  "actualProviderRequests": 0,
+  "databaseAccess": false,
+  "syntheticFixturesOnly": true,
+  "liveCredentialValuesPrinted": false,
+  "checklist": {
+    "secrets": "PASS: bounded receipt and fixed diagnostics; local bound credential scan zero",
+    "PHI": "PASS: synthetic fixture metadata only",
+    "logging": "PASS: metadata ids/outcomes only; actual bound value reflection rejected",
+    "inputValidation": "PASS: schema, bounded response/body, exact target and digest",
+    "authorization": "PASS: manual protected exact-current-main and read-only GitHub token",
+    "injection": "PASS: fixed queries, GraphQL variables; no DB SQL/UI production surface",
+    "dependencies": "PASS: no new packages",
+    "configuration": "PASS: unchanged release guards, scopes and budgets; no direct deploy/storage/patient operation"
+  }
+}

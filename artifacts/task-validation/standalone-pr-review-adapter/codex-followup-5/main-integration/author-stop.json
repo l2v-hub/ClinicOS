@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "status": "AUTHOR_STOP",
+  "reservationNonce": "8069b115-efd5-44f6-8e0c-239cd13f8287",
+  "authorCheckpointSha": "c64364023cc5fff1db7c01f794165c539f68c815",
+  "mainSha": "45033a3949742218b1c9d23a37a0c94776cd5bd5",
+  "sourceFreezeSha256": "38ee81c3d9adbe1d36787651751c987adc56e3c507418be0671336156edda286",
+  "scope": [
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs"
+  ],
+  "all27PreviousSourceHashesMatch": true,
+  "resolvedScopeByteIdenticalToCheckpoint": true,
+  "verification": {
+    "node": "v24.19.0",
+    "focused": {
+      "tests": 91,
+      "pass": 91,
+      "fail": 0,
+      "skip": 0
+    },
+    "workflow": {
+      "tests": 771,
+      "pass": 768,
+      "fail": 0,
+      "skip": 3
+    },
+    "imported495Automation": {
+      "tests": 142,
+      "pass": 142,
+      "fail": 0,
+      "skip": 0
+    }
+  },
+  "preservation": {
+    "beforeTrackedEntries": 13600,
+    "unchangedOutsideResolutionScope": 13597,
+    "sparseDiskAbsentOutsideScope": 7743,
+    "outsideScopeChangedPaths": [],
+    "originalUntrackedQaProofFilesPreserved": 26,
+    "previous27SourceHashesPreserved": true,
+    "allEarlierPacketsUnchanged": true,
+    "indexResolutionLeftToRoot": true
+  },
+  "gitIndexStateProviderMutationByAuthor": false,
+  "rootMustStageAndCommit": true,
+  "finalIndependentQaComplete": false,
+  "nextGates": [
+    "Root stage and commit exact-main merge",
+    "Fresh independent QA on resulting commit",
+    "Hosted Node22/native required checks",
+    "Actual Claude review",
+    "Fresh final Codex",
+    "Protected merge"
+  ]
+}

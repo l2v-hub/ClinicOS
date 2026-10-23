@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "fullPure": {
+    "tests": 1259,
+    "pass": 1256,
+    "fail": 0,
+    "skipped": 3,
+    "attempts": 1,
+    "node": "22.23.4",
+    "testConcurrency": 1,
+    "seconds": 38.25808525085449
+  },
+  "independentSyntheticProbes": {
+    "pass": 37,
+    "fail": 0,
+    "attempts": 1
+  },
+  "actionableSourceFindings": [],
+  "sourceUnchanged": true,
+  "sourceFiles": 265,
+  "changedSourcePaths": 7,
+  "sourceFreezeSha256": "ca2e55012232473ff35705866fa85281ec0274d30ff87adbd32f55c2f925cb40",
+  "sourceSnapshot": "/tmp/clinicos-498-independent14",
+  "originalSource": "/tmp/clinicos-498-combined14",
+  "newNativeChecks": "UNRUN",
+  "Claude5": "UNRUN",
+  "providerDeployOrClosure": "UNRUN",
+  "finalReleaseApproval": false,
+  "qaTestFailures": [],
+  "priorEvidence": "Original core411/412 and refinement413; Luna363 and root fallback364 retained. Negative regressions and pre-child orphan edit timing preserved and attributed, not additive QA counts.",
+  "inspectionNote": "One optional inventory filename lookup corrected; no test failure/setup rejection."
+}

@@ -8,14 +8,37 @@ import {
   ENDPOINT,
   INVENTORY_QUERY,
   UPDATE_BRANCH,
+  CREATE_MAIN,
+  MAIN_ENDPOINT,
   ConfigurationError,
   classify,
   configure,
   createClient,
+  createMainVerifier,
   inventoryDigest,
   projectInventory,
+  serializeReceipt,
   validateContext,
 } from './configure-demo-source.mjs';
+
+test('public source client sends its credential only to the official Railway API host', async () => {
+  const calls = [];
+  const client = createClient({ token: 'synthetic-source-binding', fetchImpl: async (url, options) => {
+    calls.push({ url: String(url), options });
+    return Response.json({ data: { probe: { ok: true } } });
+  } });
+  assert.deepEqual(await client('query{probe{ok}}', {}), { probe: { ok: true } });
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].url, 'https://backboard.railway.com/graphql/v2');
+  assert.notEqual(calls[0].url, 'https://backboard.railway.app/graphql/v2');
+  assert.equal(calls[0].options.method, 'POST');
+  assert.equal(calls[0].options.redirect, 'error');
+  assert.deepEqual(calls[0].options.headers, {
+    'Content-Type': 'application/json', 'Project-Access-Token': 'synthetic-source-binding',
+  });
+  assert.equal(calls[0].options.headers.Authorization, undefined);
+  assert.deepEqual(JSON.parse(calls[0].options.body), { query: 'query{probe{ok}}', variables: {} });
+});
 
 const triggerId = '11111111-1111-4111-8111-111111111111';
 const clone = (value) => structuredClone(value);
@@ -614,5 +637,515 @@ test('manual workflow retains protected exact-main binding, no secret test step 
     /npm |railway up|serviceConnect|deploymentTriggerCreate|deploymentTriggerDelete/,
   );
   assert.match(yaml, /persist-credentials: false/);
-  assert.match(yaml, /group: railway-backend/);
+  assert.match(yaml, /group: railway-demo/);
+  assert.doesNotMatch(yaml, /group: railway-backend/);
+});
+
+function missingFixture(rootDirectory = '/') {
+  const data = fixture();
+  data.serviceInstance.rootDirectory = rootDirectory;
+  data.deploymentTriggers.edges = [];
+  return data;
+}
+const createdNode = () => clone(fixture('main').deploymentTriggers.edges[0].node);
+const creationResponse = (node = createdNode()) => ({ deploymentTriggerCreate: node });
+
+for (const rootDirectory of ['/', '/backend', '', null]) {
+  test(`create-main preserves exact inspected root ${JSON.stringify(rootDirectory)} and waits for CI`, async () => {
+    const before = missingFixture(rootDirectory);
+    const after = fixture('main');
+    after.serviceInstance.rootDirectory = rootDirectory;
+    const api = scripted([before, before, creationResponse(), after]);
+    const result = await configure({
+      client: api.client,
+      operation: 'create-main',
+      expectedDigest: digest(before),
+    });
+    assert.equal(result.outcome, 'trigger-created');
+    assert.equal(result.previousInventorySha256, digest(before));
+    assert.equal(result.inventorySha256, digest(after));
+    assert.deepEqual(
+      api.calls.map(({ query }) => query),
+      [INVENTORY_QUERY, INVENTORY_QUERY, CREATE_MAIN, INVENTORY_QUERY],
+    );
+    assert.deepEqual(api.calls[2].variables, {
+      input: {
+        projectId: TARGET.projectId,
+        environmentId: TARGET.environmentId,
+        serviceId: TARGET.serviceId,
+        repository: TARGET.repository,
+        branch: 'main',
+        provider: 'github',
+        checkSuites: true,
+        rootDirectory,
+      },
+    });
+    assert.deepEqual(result.inventory, projectInventory(after));
+  });
+}
+
+test('create-main with a fully matching existing trigger is a zero-write idempotent read', async () => {
+  const data = fixture('main');
+  const api = scripted([data, data]);
+  const result = await configure({
+    client: api.client,
+    operation: 'create-main',
+    expectedDigest: digest(data),
+  });
+  assert.equal(result.outcome, 'unchanged');
+  assert.equal(api.calls.length, 2);
+  assert.ok(api.calls.every(({ query }) => query === INVENTORY_QUERY));
+});
+
+for (const [name, mutate, code] of [
+  [
+    'existing other branch',
+    (data) => {
+      data.deploymentTriggers.edges = fixture().deploymentTriggers.edges;
+    },
+    'DEMO_SOURCE_CREATE_CONFLICT',
+  ],
+  [
+    'existing main without Wait for CI',
+    (data) => {
+      data.deploymentTriggers.edges = fixture('main').deploymentTriggers.edges;
+      data.deploymentTriggers.edges[0].node.checkSuites = false;
+    },
+    'DEMO_SOURCE_CREATE_CONFLICT',
+  ],
+  [
+    'existing inherited override',
+    (data) => {
+      data.deploymentTriggers.edges = fixture('main').deploymentTriggers.edges;
+      data.deploymentTriggers.edges[0].node.baseEnvironmentOverrideId = TARGET.environmentId;
+    },
+    'DEMO_SOURCE_CREATE_CONFLICT',
+  ],
+  [
+    'truncated empty page',
+    (data) => {
+      data.deploymentTriggers.pageInfo.hasNextPage = true;
+    },
+    'DEMO_SOURCE_DUPLICATE_TRIGGERS',
+  ],
+  [
+    'existing foreign repository',
+    (data) => {
+      data.deploymentTriggers.edges = fixture('main').deploymentTriggers.edges;
+      data.deploymentTriggers.edges[0].node.repository = 'foreign/repo';
+    },
+    'DEMO_SOURCE_FOREIGN_REPOSITORY',
+  ],
+]) {
+  test(`create-main blocks ${name} with zero writes`, async () => {
+    const data = missingFixture();
+    mutate(data);
+    const api = scripted([data]);
+    const expectedDigest =
+      code === 'DEMO_SOURCE_FOREIGN_REPOSITORY' ? '0'.repeat(64) : digest(data);
+    await assert.rejects(
+      configure({ client: api.client, operation: 'create-main', expectedDigest }),
+      rejectCode(code),
+    );
+    assert.equal(api.calls.length, 1);
+    assert.equal(api.calls[0].query, INVENTORY_QUERY);
+  });
+}
+
+for (const expectedDigest of [undefined, '', '0'.repeat(63), `${'0'.repeat(64)}\n`]) {
+  test(`create-main invalid digest ${JSON.stringify(expectedDigest)} makes no request`, async () => {
+    const api = scripted([]);
+    await assert.rejects(
+      configure({ client: api.client, operation: 'create-main', expectedDigest }),
+      rejectCode('DEMO_SOURCE_EXPECTED_DIGEST_REQUIRED'),
+    );
+    assert.equal(api.calls.length, 0);
+  });
+}
+
+for (const [name, mutate] of [
+  [
+    'new concurrent trigger',
+    (data) => {
+      data.deploymentTriggers.edges = fixture('main').deploymentTriggers.edges;
+    },
+  ],
+  [
+    'root directory changed',
+    (data) => {
+      data.serviceInstance.rootDirectory = '/different';
+    },
+  ],
+  [
+    'extra domain binding',
+    (data) => {
+      data.serviceInstance.domains.customDomains.push({ domain: 'other.example.test' });
+    },
+  ],
+]) {
+  test(`create-main detects ${name} before mutation`, async () => {
+    const before = missingFixture();
+    const fresh = clone(before);
+    mutate(fresh);
+    const api = scripted([before, fresh]);
+    await assert.rejects(
+      configure({ client: api.client, operation: 'create-main', expectedDigest: digest(before) }),
+      rejectCode('DEMO_SOURCE_INVENTORY_DRIFT'),
+    );
+    assert.equal(api.calls.length, 2);
+    assert.ok(api.calls.every(({ query }) => query === INVENTORY_QUERY));
+  });
+}
+
+for (const [name, mutate] of [
+  [
+    'missing identity',
+    (node) => {
+      delete node.id;
+    },
+  ],
+  [
+    'foreign target',
+    (node) => {
+      node.environmentId = 'foreign';
+    },
+  ],
+  [
+    'foreign repository',
+    (node) => {
+      node.repository = 'foreign/repo';
+    },
+  ],
+  [
+    'foreign provider',
+    (node) => {
+      node.provider = 'gitlab';
+    },
+  ],
+  [
+    'wrong branch',
+    (node) => {
+      node.branch = 'feature';
+    },
+  ],
+  [
+    'Wait for CI disabled',
+    (node) => {
+      node.checkSuites = false;
+    },
+  ],
+  [
+    'inherited override',
+    (node) => {
+      node.baseEnvironmentOverrideId = TARGET.environmentId;
+    },
+  ],
+]) {
+  test(`create-main rejects an unconfirmed reply with ${name}; never retries`, async () => {
+    const before = missingFixture();
+    const node = createdNode();
+    mutate(node);
+    const api = scripted([before, before, creationResponse(node)]);
+    await assert.rejects(
+      configure({ client: api.client, operation: 'create-main', expectedDigest: digest(before) }),
+      rejectCode('DEMO_SOURCE_CREATE_UNCONFIRMED'),
+    );
+    assert.equal(api.calls.length, 3);
+    assert.equal(api.calls.filter(({ query }) => query === CREATE_MAIN).length, 1);
+  });
+}
+
+test('create-main API rejection is sanitized and makes one mutation attempt only', async () => {
+  const before = missingFixture();
+  const queries = [];
+  const client = createClient({
+    token: 'synthetic-railway-token',
+    fetchImpl: async (url, options) => {
+      assert.equal(url, ENDPOINT);
+      const { query } = JSON.parse(options.body);
+      queries.push(query);
+      return query === CREATE_MAIN
+        ? Response.json({ errors: [{ message: 'PRIVATE_PROVIDER_BODY' }] })
+        : Response.json({ data: before });
+    },
+  });
+  await assert.rejects(
+    configure({ client, operation: 'create-main', expectedDigest: digest(before) }),
+    rejectCode('DEMO_SOURCE_API_REJECTED'),
+  );
+  assert.deepEqual(queries, [INVENTORY_QUERY, INVENTORY_QUERY, CREATE_MAIN]);
+});
+
+for (const [name, mutate] of [
+  [
+    'different created identity',
+    (data) => {
+      data.deploymentTriggers.edges[0].node.id = 'other-opaque-id';
+    },
+  ],
+  [
+    'root directory',
+    (data) => {
+      data.serviceInstance.rootDirectory = '/wrong';
+    },
+  ],
+  [
+    'extra domain',
+    (data) => {
+      data.serviceInstance.domains.customDomains.push({ domain: 'other.example.test' });
+    },
+  ],
+  [
+    'missing expected domain',
+    (data) => {
+      data.serviceInstance.domains.serviceDomains = [];
+    },
+  ],
+  [
+    'Wait for CI',
+    (data) => {
+      data.deploymentTriggers.edges[0].node.checkSuites = false;
+    },
+  ],
+  [
+    'repository',
+    (data) => {
+      data.deploymentTriggers.edges[0].node.repository = 'foreign/repo';
+    },
+  ],
+  [
+    'branch',
+    (data) => {
+      data.deploymentTriggers.edges[0].node.branch = 'wrong';
+    },
+  ],
+  [
+    'unexpected duplicate',
+    (data) => {
+      const second = clone(data.deploymentTriggers.edges[0]);
+      second.node.id = 'another-trigger';
+      data.deploymentTriggers.edges.push(second);
+    },
+  ],
+]) {
+  test(`create-main post-write ${name} drift blocks success without retry or rollback`, async () => {
+    const before = missingFixture();
+    const after = fixture('main');
+    mutate(after);
+    const api = scripted([before, before, creationResponse(), after]);
+    await assert.rejects(
+      configure({ client: api.client, operation: 'create-main', expectedDigest: digest(before) }),
+      (error) => error instanceof ConfigurationError,
+    );
+    assert.equal(api.calls.length, 4);
+    assert.equal(api.calls.filter(({ query }) => query === CREATE_MAIN).length, 1);
+    assert.ok(api.calls.every(({ query }) => query === INVENTORY_QUERY || query === CREATE_MAIN));
+  });
+}
+
+test('fixed GitHub main verifier uses automatic GitHub token without sending Railway headers', async () => {
+  let calls = 0;
+  const verify = createMainVerifier({
+    token: 'synthetic-github-token',
+    reviewedSha: validContext.GITHUB_SHA,
+    fetchImpl: async (url, options) => {
+      calls++;
+      assert.equal(url, MAIN_ENDPOINT);
+      assert.equal(options.method, 'GET');
+      assert.equal(options.redirect, 'error');
+      assert.equal(options.cache, 'no-store');
+      assert.equal(options.headers['Cache-Control'], 'no-cache');
+      assert.ok(options.signal instanceof AbortSignal);
+      assert.equal(options.headers.Authorization, 'Bearer synthetic-github-token');
+      assert.equal(options.headers['Project-Access-Token'], undefined);
+      assert.equal(options.body, undefined);
+      return Response.json({
+        ref: 'refs/heads/main',
+        object: { type: 'commit', sha: validContext.GITHUB_SHA },
+        privateField: 'NEVER_PUBLISH_THIS',
+      });
+    },
+  });
+  await verify();
+  assert.equal(calls, 1);
+});
+
+for (const [name, fetchImpl, code] of [
+  [
+    'new main commit',
+    async () =>
+      Response.json({ ref: 'refs/heads/main', object: { type: 'commit', sha: 'b'.repeat(40) } }),
+    'DEMO_SOURCE_CURRENT_MAIN_DRIFT',
+  ],
+  [
+    'API failure',
+    async () => new Response('PRIVATE_PROVIDER_BODY', { status: 403 }),
+    'DEMO_SOURCE_MAIN_HEAD_UNAVAILABLE',
+  ],
+  [
+    'malformed ref',
+    async () =>
+      Response.json({
+        ref: 'refs/heads/foreign',
+        object: { type: 'commit', sha: validContext.GITHUB_SHA },
+      }),
+    'DEMO_SOURCE_MAIN_HEAD_UNAVAILABLE',
+  ],
+  [
+    'malformed commit',
+    async () =>
+      Response.json({ ref: 'refs/heads/main', object: { type: 'commit', sha: 'invalid' } }),
+    'DEMO_SOURCE_MAIN_HEAD_UNAVAILABLE',
+  ],
+  [
+    'oversize response',
+    async () => new Response('x'.repeat(262_145)),
+    'DEMO_SOURCE_MAIN_HEAD_UNAVAILABLE',
+  ],
+  [
+    'network error',
+    async () => {
+      throw new Error('PRIVATE_PROVIDER_BODY');
+    },
+    'DEMO_SOURCE_MAIN_HEAD_UNAVAILABLE',
+  ],
+]) {
+  test(`main verifier ${name} blocks with a fixed non-disclosing diagnostic`, async () => {
+    await assert.rejects(
+      createMainVerifier({
+        token: 'synthetic-github-token',
+        reviewedSha: validContext.GITHUB_SHA,
+        fetchImpl,
+      })(),
+      rejectCode(code),
+    );
+  });
+}
+
+for (const operation of ['create-main', 'set-main']) {
+  test(`${operation} stops before mutation if protected main advances during preparation`, async () => {
+    const before = operation === 'create-main' ? missingFixture() : fixture();
+    const api = scripted([before]);
+    let checks = 0;
+    const assertFreshContext = async () => {
+      if (++checks === 2) throw new ConfigurationError('DEMO_SOURCE_CURRENT_MAIN_DRIFT');
+    };
+    await assert.rejects(
+      configure({
+        client: api.client,
+        operation,
+        expectedDigest: digest(before),
+        assertFreshContext,
+      }),
+      rejectCode('DEMO_SOURCE_CURRENT_MAIN_DRIFT'),
+    );
+    assert.equal(api.calls.length, 1);
+    assert.equal(api.calls[0].query, INVENTORY_QUERY);
+  });
+  test(`${operation} after-write main drift is uncertain and never retried`, async () => {
+    const before = operation === 'create-main' ? missingFixture() : fixture();
+    const response =
+      operation === 'create-main'
+        ? creationResponse()
+        : { deploymentTriggerUpdate: { id: triggerId, branch: 'main' } };
+    const api = scripted([before, before, response, fixture('main')]);
+    let checks = 0;
+    const assertFreshContext = async () => {
+      if (++checks === 3) throw new ConfigurationError('DEMO_SOURCE_CURRENT_MAIN_DRIFT');
+    };
+    await assert.rejects(
+      configure({
+        client: api.client,
+        operation,
+        expectedDigest: digest(before),
+        assertFreshContext,
+      }),
+      rejectCode('DEMO_SOURCE_CURRENT_MAIN_DRIFT'),
+    );
+    assert.equal(api.calls.length, 4);
+    assert.equal(api.calls.filter(({ query }) => query !== INVENTORY_QUERY).length, 1);
+  });
+}
+
+test('inspector refuses even a read receipt if main advances while metadata is loading', async () => {
+  let checks = 0;
+  const api = scripted([missingFixture()]);
+  await assert.rejects(
+    configure({
+      client: api.client,
+      assertFreshContext: async () => {
+        if (++checks === 2) throw new ConfigurationError('DEMO_SOURCE_CURRENT_MAIN_DRIFT');
+      },
+    }),
+    rejectCode('DEMO_SOURCE_CURRENT_MAIN_DRIFT'),
+  );
+  assert.equal(api.calls.length, 1);
+});
+
+test('bounded log receipt reprojects only known metadata and binds its exact inventory digest', async () => {
+  const result = await configure({ client: scripted([missingFixture(null)]).client });
+  const withExtras = clone(result);
+  withExtras.privateProviderResponse = 'NEVER_PUBLISH_THIS';
+  withExtras.inventory.privateVariables = 'NEVER_PUBLISH_THIS';
+  withExtras.inventory.domains[0].privateHeader = 'NEVER_PUBLISH_THIS';
+  const context = { ...validateContext(validContext), privateToken: 'NEVER_PUBLISH_THIS' };
+  const json = serializeReceipt(context, withExtras, { capturedAt: '2026-10-17T10:00:00.000Z' });
+  const receipt = JSON.parse(json);
+  assert.doesNotMatch(
+    json,
+    /NEVER_PUBLISH_THIS|privateProviderResponse|privateVariables|privateHeader|privateToken/,
+  );
+  assert.ok(Buffer.byteLength(json) <= 32_768);
+  assert.doesNotMatch(json, /[\r\n]/);
+  assert.equal(receipt.inventorySha256, inventoryDigest(receipt.inventory));
+  assert.equal(receipt.inventory.rootDirectory, null);
+  assert.equal(receipt.reviewedSha, validContext.GITHUB_SHA);
+});
+
+test('receipt refuses reflection of an actual bound credential even without a known token prefix', async () => {
+  const data = fixture('opaque-reflected-token-value');
+  const result = await configure({ client: scripted([data]).client });
+  assert.throws(
+    () =>
+      serializeReceipt(validateContext(validContext), result, {
+        forbiddenValues: ['opaque-reflected-token-value'],
+      }),
+    rejectCode('DEMO_SOURCE_INVALID_RECEIPT'),
+  );
+});
+
+test('receipt refuses a tampered hash and never accepts unknown outcome text', async () => {
+  const result = await configure({ client: scripted([missingFixture()]).client });
+  for (const change of [{ inventorySha256: '0'.repeat(64) }, { outcome: 'PRIVATE_PROVIDER_BODY' }])
+    assert.throws(
+      () => serializeReceipt(validateContext(validContext), { ...result, ...change }),
+      rejectCode('DEMO_SOURCE_INVALID_RECEIPT'),
+    );
+});
+
+test('creation receipt includes exact returned trigger and prior digest, ignoring reply extensions', async () => {
+  const before = missingFixture();
+  const node = { ...createdNode(), privateProviderBody: 'NEVER_PUBLISH_THIS' };
+  const result = await configure({
+    client: scripted([before, before, creationResponse(node), fixture('main')]).client,
+    operation: 'create-main',
+    expectedDigest: digest(before),
+  });
+  const json = serializeReceipt(validateContext(validContext), result);
+  assert.doesNotMatch(json, /NEVER_PUBLISH_THIS|privateProviderBody/);
+  const receipt = JSON.parse(json);
+  assert.equal(receipt.previousInventorySha256, digest(before));
+  assert.equal(receipt.inventory.triggers[0].id, triggerId);
+  assert.equal(receipt.inventory.triggers[0].checkSuites, true);
+});
+
+test('attempt2 workflow explicitly exposes create-main and supplies only automatic GitHub token for main freshness', async () => {
+  const yaml = await readFile(
+    new URL('../../.github/workflows/configure-demo-source.yml', import.meta.url),
+    'utf8',
+  );
+  assert.match(yaml, /options: \[inspect, set-main, create-main\]/);
+  assert.match(yaml, /GITHUB_TOKEN: \$\{\{ github\.token \}\}/);
+  assert.equal((yaml.match(/secrets\./g) ?? []).length, 1);
+  assert.match(yaml, /RAILWAY_TOKEN: \$\{\{ secrets\.RAILWAY_DEMO_TOKEN \}\}/);
 });

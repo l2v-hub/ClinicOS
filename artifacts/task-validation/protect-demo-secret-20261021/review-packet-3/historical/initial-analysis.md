@@ -1,0 +1,9 @@
+# Analysis
+
+The initial helper passed its 30-test suite, but independent security QA correctly stopped publication with three findings. F1 showed the credential-free workflow's `node --input-type=module -e` import crashed because `process.argv[1]` was undefined. F2 reproduced an environment secret appearing during awaited authority checks and being overwritten. F3 reproduced the environment copy disappearing before repository deletion, allowing a false success with neither copy remaining. The preserved first QA receipt passes because its assertions reproduced unsafe behavior; it is a failure record, not a safety approval.
+
+The reviewed follow-up guards the module entry path, adds an actual `node -e` context regression, refreshes complete secret-name inventories directly before mutation after authority checks, refuses the observed F2/F3 drift, and verifies both post-delete conditions. Independent targeted QA passed the amended source contract with explicit exclusive operational ownership. GitHub offers no CAS for these secret writes, so the implementation does not claim protection from an uncooperative administrator racing after the last inventory read.
+
+The operational trigger is the established probe: the actual Claude issue 498 finding (comment `6325255403`) and the separate probe showing the demo secret available outside the protected environment (comment `6325638743`). These are prior operational observations, not rerun here. Authentic issue links: [finding](https://github.com/l2v-hub/ClinicOS/issues/498#issuecomment-6325255403) and [scope probe](https://github.com/l2v-hub/ClinicOS/issues/498#issuecomment-6325638743).
+
+No environment-policy, provider, database, browser, runtime, or migration changes are in scope. The user's existing bot Secrets Read and Write grant is still pending/unverified. Actual operation is blocked until required protected-main approval and that grant; this packet does not perform or claim it.

@@ -1,0 +1,79 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "subjectSha": null,
+      "uncommitted": true,
+      "sourceManifestSha256": "eb2ec6123893c07066dfd2c5f87a8551928fba491833fe191094e0c510590be5",
+      "evidence": "evidence/original-independent-report.md",
+      "reservationNonce": "f60d52a7-bebe-4139-9534-677b14d5443c",
+      "reason": "Original author30PASS; actual independent findings F1/F2/F3 preserved."
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "subjectSha": "24dca690a3982f4d8d3caccd969849bb72d278ec",
+      "evidence": "evidence/followup-independent-report.md",
+      "reservationNonce": "3084b83a-77f1-4d94-a2b9-cdbc69df1d05",
+      "nativeWiringEvidence": "evidence/native-ci-report.md",
+      "summary": "Actual author34pure, independent34pure+17safe probes+workflowNode-e, finalcombined803PASS0FAIL3existingWindows skips. No live credential operation."
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/bug-pipeline-tests.yml",
+      "blob": "8286264ab8cb9eea2b19f42473d187306922c0b9",
+      "mode": "100644",
+      "baseBlob": "a9005def7c7a0333c208e1f2dded3c541a744588",
+      "baseMode": "100644"
+    },
+    {
+      "path": ".github/workflows/protect-demo-secret.yml",
+      "blob": "4a0a4209cdd22da6ffcb16b4a5efe577b56c91dc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/protect-demo-secret.mjs",
+      "blob": "4893ccca8ee29e8936c31b788177ca6bacebf571",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/protect-demo-secret.test.mjs",
+      "blob": "d32d554de1034d9292844ad936f5303e332b6beb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "analysis.md": "e5ca93aef85884c56278b4dbd4831263f91d666a444a7bfe1ccdc59c6fee2798",
+    "evidence/followup-author-receipt.json": "64b13de2c7706e3828ac62e07fd5ea608c1d40e4f623b1add58596b8a44c874a",
+    "evidence/followup-author-seal.json": "3b2a224da52f91d1c7ff2dced928894a86f93168fb4843883bdbc8f8c858469c",
+    "evidence/followup-independent-report.md": "13946a082534e60789e1fe3b164ba4518677e751f952ae7995f2be718f6a8e2f",
+    "evidence/followup-qa-receipts.json": "45d8971e9c50f0e9dc139d3c92b4742d32d3b93d5ba7512cd9dd66d782f6a634",
+    "evidence/followup-qa-seal.json": "7f208e03e22409910e585368a51f0a544a238bc3e7fedb6d8846df565128e702",
+    "evidence/issue-evidence.md": "d91e04b18866df125a5c533813397aeb87d6e2f40a4d353ea4079135bc06f9f4",
+    "evidence/native-ci-receipts.json": "c1ffd4112fcbfb7bbc9e23805ed7347f22a20fa51b6e0eb1bfd9a1f516561ac9",
+    "evidence/native-ci-report.md": "f858e7b2d85fe9239d1c2971e6bfd9ed66cb5e0d0b6c44ba2fd952c5f79d52a6",
+    "evidence/native-ci-seal.json": "3db85708f8d2dfe2ba657a305862b9d10fee15cfeadef215b80b43676a15b984",
+    "evidence/original-author-receipt.json": "a754f2771ba865e0e77f583890dc871a31d8a13ccef03ee721e4aa9c76675191",
+    "evidence/original-author-seal.json": "6a669cb47b2d84703cc7cf245f26a9178d75833ee90f41f571349a92cff4ab8a",
+    "evidence/original-failure-receipts.json": "c96257c20b646e6a83df73226ec8407452913dbfcc8556a2f3c4aebc50d3cb4b",
+    "evidence/original-independent-qa-seal.json": "01d7fe044a7e2e068d76cb0d3a369f99512bf083e390d128a021f6f9f5489db5",
+    "evidence/original-independent-report.md": "ec285e3fc40a24147da374a7cf1b87a3ddc7f17c484ddb0fc5899f75b2d56482",
+    "implementation-plan.md": "be3a450450d005ac5d7809bd7db422122366afe008a4b77807d8c6ebb7b6a29f",
+    "original-source/.github/workflows/protect-demo-secret.yml": "46705882615908b94a558b3a96120d53208dc4ac64d65a462621c7bd22c76f5e",
+    "original-source/scripts/automation/protect-demo-secret.mjs": "630f42c3631600564b42f7e998decc2118310da6ec278567ac9737069f89977a",
+    "original-source/scripts/automation/protect-demo-secret.test.mjs": "2e285596b6d5626216b0217e93d297f4db1577884c6bcf18160969fdf111003e",
+    "task-contract.md": "7f53042b5eca87d6ebc07360c83679a6fdc19d1cfae5e624f15a8b885f45ed47",
+    "validation-report.md": "9f3d291a3044c76d9a21f7423265dc2385a0e271f9eb163d10a0589329de24de"
+  }
+}

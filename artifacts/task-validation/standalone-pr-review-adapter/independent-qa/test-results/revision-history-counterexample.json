@@ -1,0 +1,7 @@
+{
+  "result": "ACCEPTED_REWRITTEN_HISTORY",
+  "implementationRounds": 3,
+  "oldEvidenceDigest": "2b70e424c87b6d63b55efea3dcd1be9707b335013cadf88ffee66536250ac6fd",
+  "newEvidenceDigest": "80c706672147d741b3fec958d890cbd30d68643c08fe15ec5b93854d53c652df",
+  "writes": 2
+}

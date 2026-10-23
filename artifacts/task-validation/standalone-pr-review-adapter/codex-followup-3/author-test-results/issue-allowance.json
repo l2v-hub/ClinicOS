@@ -1,0 +1,7 @@
+{
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "stdout": "✔ explicit root compatibility continuation counts round5 without folding or rewriting legacy arrays (12.198633ms)\n✔ one append-only audited extension permits exactly round6; wrong authority, changed history and larger jump reject (10.505414ms)\n✔ legacy entities retain default4; unaudited fifth implementation and cross-entity compatibility authorization reject (0.413785ms)\n✔ F6 application provider key never becomes Codex API auth; missing or conflicting auth blocks before inference (10.579961ms)\n✔ issue-only manual allowance keeps five spent attempts and binds exact real issue and external grant (2.725782ms)\nℹ tests 5\nℹ suites 0\nℹ pass 5\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 135.048182\n",
+  "stderr": ""
+}

@@ -1,0 +1,17 @@
+{
+  "subjects": 91,
+  "initialStateBytes": 8358608,
+  "runningStateBytes": 8359824,
+  "maximumStateBytes": 8388608,
+  "validState": true,
+  "actualGitHubWrites": 0,
+  "actualModels": 0,
+  "acceptedCommentChars": 378,
+  "import": "REJECTED",
+  "error": "Durable state exceeds 8 MiB save bound",
+  "durableReviewStatus": "running",
+  "replacementImport": "REJECTED",
+  "replacementError": "Durable state exceeds 8 MiB save bound",
+  "durableReviewStatusAfterReplacement": "running",
+  "syntheticStateWrites": 2
+}

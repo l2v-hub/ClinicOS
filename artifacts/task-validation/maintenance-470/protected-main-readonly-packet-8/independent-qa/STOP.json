@@ -1,0 +1,8 @@
+{
+  "status": "STOP",
+  "result": "PASS",
+  "at": "2026-10-22T14:10:35.381353+00:00",
+  "sourceUnchanged": true,
+  "sourcePaths": 270,
+  "actualProviderCalls": 0
+}

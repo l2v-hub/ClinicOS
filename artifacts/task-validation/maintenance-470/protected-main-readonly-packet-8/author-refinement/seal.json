@@ -1,0 +1,59 @@
+{
+  "status": "AUTHOR_STOPPED_FOR_INDEPENDENT_QA",
+  "sourceSnapshot": "/tmp/clinicos470-protected-inventory8-source-refinement1",
+  "originalAuthorSealSha256": "efc61fa8a19dfc63a60c54bf77cd9ef65f868a69b7252a9eea3366ab9c15c8d9",
+  "sourceFreezeSha256": "f392bcfd87da558cf90d13b2f6464c9a78408234b814276299ce71707e977905",
+  "sourcePatchSha256": "11774b16bb1d9edf3586978803d375cdec0efa4043e4c3adb03faba4925ba434",
+  "files": {
+    "STOP.json": {
+      "sha256": "fc18d1560bdb10b350c0c6807282fdd75a68e0a4ce18ecb3de15e3e4c9b40592",
+      "bytes": 199
+    },
+    "contract-validation.log": {
+      "sha256": "6771d6301e49746cf07798f11da4427ed338cfb087ca4fc49d4767fd8943b83a",
+      "bytes": 100
+    },
+    "report.md": {
+      "sha256": "18a4b7b6bdd970aaa6ccaa9b007ddb4404d22957a8e0c3a0d2643ec80cbc54d6",
+      "bytes": 1896
+    },
+    "reservation.json": {
+      "sha256": "2a9aa56d12dcb1b91ccc3b41a75d19509961492c6458b07c33dd1e9a2436471c",
+      "bytes": 1192
+    },
+    "results.json": {
+      "sha256": "9869fa633d6c080384b05a1b325616b520caca4055e79bf454bc16910dba11c0",
+      "bytes": 838
+    },
+    "snapshot-ready.json": {
+      "sha256": "5440bf9d0c3cf4781ebbb64450cbc423d8f2f7e6adb78544f8a1d125693d524b",
+      "bytes": 159
+    },
+    "source-freeze.json": {
+      "sha256": "f392bcfd87da558cf90d13b2f6464c9a78408234b814276299ce71707e977905",
+      "bytes": 44539
+    },
+    "source.patch": {
+      "sha256": "11774b16bb1d9edf3586978803d375cdec0efa4043e4c3adb03faba4925ba434",
+      "bytes": 5478
+    },
+    "static-validation.json": {
+      "sha256": "64208cb96b6568e1779c5744756d94d775751f9254e450c7a39f3cb4e077bb07",
+      "bytes": 515
+    },
+    "task-contract.md": {
+      "sha256": "508f117024f4d9dabcaacbbcb46d4d4d5dcd4357d0f463f1a6b217d1626da7a7",
+      "bytes": 9173
+    },
+    "workflow-tests.log": {
+      "sha256": "52c5129cfea724bfb43752b0d0d8c49f58df0c61b5daeb4847a5b501eacf6b69",
+      "bytes": 1088
+    }
+  },
+  "affectedTests": {
+    "pass": 4,
+    "fail": 0
+  },
+  "helperSuiteReruns": 0,
+  "actualProviderCalls": 0
+}

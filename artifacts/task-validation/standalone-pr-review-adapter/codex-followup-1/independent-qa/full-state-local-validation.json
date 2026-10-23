@@ -1,0 +1,66 @@
+{
+  "result": "PASS",
+  "scope": "Full root-supplied credential-free actual state after audited archival; private snapshot omitted",
+  "collections": {
+    "batches": 4,
+    "manualBatches": 8,
+    "standaloneReviews": 2,
+    "controllerTransferArchives": 2
+  },
+  "archives": [
+    {
+      "id": "bug-batch-432",
+      "recordDigestVerified": true,
+      "canonicalDigestsVerified": true,
+      "legacyImplementationPrefixPreserved": true,
+      "legacyReviewsAndReportBytesPreserved": true,
+      "samePrBranchIssues": true,
+      "restoredDuplicateRejected": true
+    },
+    {
+      "id": "bug-batch-450",
+      "recordDigestVerified": true,
+      "canonicalDigestsVerified": true,
+      "legacyImplementationPrefixPreserved": true,
+      "legacyReviewsAndReportBytesPreserved": true,
+      "samePrBranchIssues": true,
+      "restoredDuplicateRejected": true
+    }
+  ],
+  "standalonePacketVerification": [
+    {
+      "pr": 393,
+      "result": "PASS",
+      "legacyImplementation": 3,
+      "operatorContinuations": 1,
+      "spentImplementation": 4,
+      "effectiveImplementationLimit": 4,
+      "packetFiles": 139,
+      "preservedPackets": 1,
+      "localGitFileReads": 157
+    },
+    {
+      "pr": 491,
+      "result": "PASS",
+      "legacyImplementation": 3,
+      "operatorContinuations": 1,
+      "spentImplementation": 4,
+      "effectiveImplementationLimit": 4,
+      "packetFiles": 34,
+      "preservedPackets": 1,
+      "localGitFileReads": 46
+    }
+  ],
+  "active432": {
+    "spentImplementation": 5,
+    "effectiveImplementationLimit": 5,
+    "activeOwnership": true,
+    "phase": "blocked"
+  },
+  "localGitFileReads": 203,
+  "localGitTreeReads": 6,
+  "syntheticMutableReads": 8,
+  "privateFixturePublished": false,
+  "actualNetworkCalls": 0,
+  "actualStateWrites": 0
+}

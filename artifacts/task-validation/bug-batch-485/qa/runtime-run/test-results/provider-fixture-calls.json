@@ -1,0 +1,18 @@
+[
+  {
+    "operation": "create",
+    "files": 1
+  },
+  {
+    "operation": "ocr",
+    "attempt": 1
+  },
+  {
+    "operation": "create",
+    "files": 0
+  },
+  {
+    "operation": "extraction",
+    "attempt": 1
+  }
+]

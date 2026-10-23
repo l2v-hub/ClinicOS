@@ -1,0 +1,28 @@
+{
+  "status": "VERIFIED",
+  "reservationNonce": "5a00ab87-a065-4506-92df-a0d9d05cd997",
+  "sourceSha": "0f91a96e0a89010a6abc6a2e1d7319ceafe27933",
+  "sourceAndHarnessStopped": true,
+  "stoppedUtc": "2026-10-18T19:42:13.042114+00:00",
+  "publicFiles": {
+    "qa-summary.json": "1857a76e096be540473ded00d1dc37440ebeb7ae156dfee4072a5cdb5b764110",
+    "poison-summary.json": "e67aa0e3056b29ebc3f45f474bc757c4a8da3a6d4c7fe246f5486914e968a130",
+    "qa-report.md": "405248704ed6891ea66fe05af0528ee6e32298a46f0c2288326652b8475ae7ab",
+    "runner-receipt.json": "f6283873e0ae710b786e1a15296b1b1d1d68ebc1bcdc3fc04edb3a29785b70b1"
+  },
+  "privateEvidenceHashes": {
+    "qa-run.mjs": "b08fa453b5767f9610f856e38cdde70d324d696a4a5d515ae73224cec810c192",
+    "poison-check.mjs": "00287af1c501196e7e3bf1355bf8be2d0aae20f4b9e7952602cd7ddd6ad0e18d",
+    "closure-before.json": "17fecddd35804e21d455c2f9ef68d1fb9079e57ca6801016ac505db6226b90fd",
+    "closure-after.json": "17fecddd35804e21d455c2f9ef68d1fb9079e57ca6801016ac505db6226b90fd",
+    "full.stdout.log": "6971156ad4ca8865badbe18cdad913c79d66e9a21a850a7d1a2985a4a59fddf4",
+    "full.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "poison.stdout.log": "23bd212ff377b220cde924de680c08fb9e7596ce73f053449c00973fc3273348",
+    "poison.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bootstrap-failure.log": "6b7e276b7244c991272d3378ae351909a253b1c84f41dac598048e8ad308e8ea",
+    "reporter-parse-failure.log": "0ca21798b155fc12e76f8f74fd314a088b38fb691ace8d8ca09957b1261f2b4a",
+    "first-passing-full.stdout.log": "81abf5d13317a27a4fd3d7b11bbc5e65392d5ffc6b649e434dce203788e54333"
+  },
+  "publicBytesBeforeSeal": 9001,
+  "priorProofMapsRecheckedAfter": true
+}

@@ -112,13 +112,19 @@ and observed capacity errors; it never invents global provider load. A fixed exe
 can keep all development in gpt-6.1-sol. Add meaningful regression coverage, run the
 relevant tests and required build/runtime checks, and store actual outputs in the packet.
 Changes to backend/schema require the bug scope to justify them. Never use a production database
-for development or testing. Permit at most four implementation/validation attempts per group.
+for development or testing. The default is four implementation/validation attempts per group.
+If a standing user authorization allows continuation, use only a separately consumed, typed
+controller allowance tied to the exact entity, action, SHA and history, then reserve the next
+attempt normally. Each extension increases one relevant limit by one; implementation and review
+budgets remain separate. Preserve every failed attempt. An initial infrastructure recovery does
+not extend either budget. If the trusted authorization verifier or controller capacity is absent,
+remain blocked; do not create a parallel manual worker, reset the ledger or retry invisibly.
 After behavior passes, simplify without widening scope, then repeat the required tests and
 regenerate evidence. Publish a draft branch/PR before Claude's PR review. Embed immutable
 Markdown screenshots and trace/video links in every source issue, bound to the tested SHA.
 Commit code, frozen plan and test evidence in the group's branch before review.
 
-## 5. Claude review, at most four rounds
+## 5. Claude review, four rounds by default
 
 Production uses the user's external Claude Code cron harness. Codex makes the tested PR
 Ready for review and persists a SHA-bound `externalReview` request. It must not require Max
@@ -151,13 +157,18 @@ limit, or invoke Claude outside the helper for extra reviews.
 - `approved`: no actionable findings remain at that reviewed SHA. Codex verifies the actual required
   checks and acceptance criteria; reviewer approval alone is not proof that tests ran.
 - Code changes after approval invalidate that approval and require another available review round.
-- New PR comments invalidate readiness and require correction, validation, simplification and
-  another available review; they do not reset the four-round budget. Human unresolved threads
-  or changes-requested reviews block release until the responsible reviewer resolves them.
+- New PR feedback invalidates readiness when it changes the authenticated feedback fingerprint
+  used by the controller, requiring correction, validation, simplification and another available
+  review; it does not reset consumed rounds. The controller excludes only protocol/status comments it recognizes from the author and marker;
+  it does not ignore user feedback or comments merely because they contain a marker.
+  Human unresolved threads or changes-requested reviews block release until the responsible
+  reviewer resolves them.
 - A failed review execution consumes its reserved attempt. Missing authentication before invocation
   does not. Unknown output, a changed worktree or a stale SHA never count as approval.
-- At round four, residual findings or failed validation mean `BLOCKED` / `FAILED VALIDATION`.
-  Stop and report remaining findings. Never promise that any code is “perfect”.
+- When the effective review allowance is exhausted, residual findings or failed validation mean
+  `BLOCKED` / `FAILED VALIDATION` unless a separately authorized, externally verified controller
+  extension is available. The verifier must bind and consume that action; if it is unavailable,
+  stop and report the block. Never promise that any code is “perfect”.
 
 Copy only sanitized review reports into the final evidence. The local ledger/lock are ignored;
 retain them in the worktree. Documentation/evidence commits after approval must be identified as
@@ -174,3 +185,34 @@ release controller confirms the tested deployment. Approval or merge alone must 
 
 Report exactly what ran and what remains blocked. A queued issue, a prepared plan, a written fix,
 a review approval and a verified runtime are different outcomes.
+
+## Explicit GitHub-comment handoff (local Claude coordinator)
+
+For the user-authorized `github-comments` channel use the trusted-main
+`agent-team/src/bug-pipeline/review-handoff-cli.mjs` and
+`docs/claude-local-review-prompt.md`. Project `claude-review-ready` on both PR and source issues;
+claim durably before analysis (`comment-running` / `claude-reviewing`). A schema-valid,
+authorized, nonce/round/current-SHA-bound report is imported from the PR comment, hashed into
+the existing ledger and handed to Codex as `codex-review-ready`. Ordinary labels/comments never
+approve code. The coordinator may execute this trusted CLI and write its temporary report;
+the code-review operation itself remains read-only and cannot execute PR code or use secrets.
+
+Codex responds to findings with its adaptive executor, verification, simplification, fresh
+independent QA and a new SHA; the selected channel persists across rounds. After a clean Claude
+report, a separate Codex QA must pass on that SHA before release readiness. Only the trusted
+release controller merges and confirms deployment/issue closure under actual protections. For
+changes to the controller's trust root, the current policy requires a native approval on the
+current head from an independent authorized human and leaves the PR for the normal manual
+protected merge; Claude/Codex reports, static QA and budget grants are not that approval. See the
+canonical [ClinicOS merge gate](../../../.claude/skills/clinicos/references/bug-delivery.md).
+The user explicitly authorized initial infrastructure-failure recovery: `request --recover-failed`
+retains the failed attempt and can request the next round on the same SHA when no substantive
+review existed. Every recovery still requires a trusted host's injected authorization verifier,
+an `--authorization` reference, and consumption of the exact `retry-failed-review` action. The
+current standalone CLI has no default verifier, so recovery is blocked without that host
+integration; the flag or standing authorization text alone cannot verify or consume it. Recovery
+uses an available review round and never extends the budget. This exception does not permit replay
+after findings, resetting budgets or autonomous retry.
+Extensions, when a trusted external verifier is configured, require a separate exact-bound
+authorization and reservation. The current CLI supplies no default grant verifier, so an
+unverifiable extension must fail closed. No Anthropic API fallback.

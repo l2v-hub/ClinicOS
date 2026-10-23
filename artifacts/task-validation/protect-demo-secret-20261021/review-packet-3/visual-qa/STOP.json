@@ -1,0 +1,13 @@
+{
+  "status": "READY_FOR_CODEX_QA_STOP_HANDBACK",
+  "scope": "Independent synthetic internal visual helper QA",
+  "sourceSha": "34996816c9b8149a4a90f9ccfc7eabec230d2828",
+  "attempt2Nonce": "3792204d-9713-4e16-9319-36e705861752",
+  "browserAttempt2": "PASS",
+  "firstFailurePreserved": true,
+  "resourceHandback": true,
+  "noActualMigration": true,
+  "nativeSuitesRerun": 0,
+  "rootSolePublisher": true,
+  "at": "2026-10-21T23:01:51.034963+00:00"
+}

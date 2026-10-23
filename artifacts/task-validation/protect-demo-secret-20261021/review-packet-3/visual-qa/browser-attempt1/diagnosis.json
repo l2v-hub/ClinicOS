@@ -1,0 +1,12 @@
+{
+  "status": "BLOCKED_BROWSER_POLICY",
+  "firstFailurePreserved": true,
+  "error": "net::ERR_BLOCKED_BY_ADMINISTRATOR",
+  "trigger": "first navigation to file:///workspace/.clinicos-cloud/499-Claude1-followup-20261021/internal-visual-qa1/helper-qa.html",
+  "sourceDefect": false,
+  "helperPureScenarios": "PASS_4",
+  "browserResultAssertions": "UNRUN_AFTER_NAVIGATION_BLOCK",
+  "retryUnderCurrentGrantAllowed": false,
+  "browserClosedAndLockReleased": true,
+  "at": "2026-10-21T22:58:28.783198+00:00"
+}

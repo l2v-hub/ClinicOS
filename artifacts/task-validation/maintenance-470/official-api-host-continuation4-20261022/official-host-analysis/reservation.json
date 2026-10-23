@@ -1,0 +1,20 @@
+{
+  "id": "railway-official-api-host-bounded-analysis-20261022",
+  "nonce": "74ec6d07-792c-45a9-a6d1-546c897ca071",
+  "status": "analysis-reserved",
+  "reservedAt": "2026-10-22T19:55:45.549Z",
+  "reservedBeforeSession": true,
+  "owner": "codex-cloud-root",
+  "agent": "/root/adaptive_qa",
+  "main": "c05ce82edcf6c3b7da5396b3bed3bf1c85396ca4",
+  "actualPrecedingFailure": 39843385618,
+  "officialConfigCommit": "a12a2571c87027655e8aeeb6b7d4519766aaa2be",
+  "officialConfigBlob": "b92c4187ff823d96ab602122f3fe773a33b9ed71",
+  "contractSha256": "235d5fc9ff90cb28391e717e5eb55e77ca164ea180f5a997566a67c60211fde5",
+  "privateOutput": "/tmp/clinicos-railway-official-host-analysis-20261022",
+  "sourceEditsAllowed": false,
+  "providerCallsAllowed": false,
+  "testsAllowed": false,
+  "stateCommit": "b987ec1800a92557889b8e6e1547894f87eacffd",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/28a53777-367c-4079-a2b6-908e0cc9119c/accepted.json"
+}

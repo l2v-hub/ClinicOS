@@ -1,0 +1,16 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: No owned review reservation
+    at Object.submit (file:///workspace/clinicos-standalone-pr-review/agent-team/src/bug-pipeline/comment-review-handoff.mjs:228:12)
+    at async file:///workspace/clinicos-standalone-pr-review/artifacts/task-validation/standalone-pr-review-adapter/independent-qa3/capacity-probe.mjs:24:1 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

@@ -1,0 +1,89 @@
+[
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/src/bug-pipeline/external-review.mjs"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/src/bug-pipeline/claude-review-cron.mjs"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/src/bug-pipeline/issue-review-communication.mjs"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/src/bug-pipeline/issue-review-sync.mjs"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/tests/bug-pipeline/external-review.test.mjs"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "/workspace/ClinicOS/node_modules/.bin/prettier",
+      "--check",
+      "agent-team/src/bug-pipeline/external-review.mjs",
+      "agent-team/src/bug-pipeline/claude-review-cron.mjs",
+      "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+      "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      ".github/workflows/codex-issue-review-sync.yml"
+    ],
+    "exit": 0,
+    "output": "Checking formatting...\nAll matched files use Prettier code style!\n"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "scripts/quality-gate/validate-task-contract.js",
+      "/workspace/ClinicOS/agent-team/.worktrees/issue-review-communication/artifacts/task-validation/issue-review-communication/task-contract.md"
+    ],
+    "exit": 0,
+    "output": "CONTRACT VALIDO: /workspace/ClinicOS/agent-team/.worktrees/issue-review-communication/artifacts/task-validation/issue-review-communication/task-contract.md\n"
+  }
+]

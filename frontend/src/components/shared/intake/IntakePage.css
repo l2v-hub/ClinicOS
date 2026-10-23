@@ -2,9 +2,6 @@
    Indice a sinistra con lo stato delle sezioni e le azioni; sezioni una sotto l'altra al centro.
    Solo layout e superfici: i controlli sono quelli del design system. */
 .import-modal--intake.intake-page {
-  width: min(1440px, calc(100vw - 32px));
-  max-width: 1440px;
-  height: calc(100svh - 32px);
   padding: 0;
   gap: 0;
 }
@@ -41,8 +38,8 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  max-width: 880px;
-  margin: 0 auto;
+  min-width: 0;
+  margin: 0;
 }
 .intake-section {
   scroll-margin-top: 16px;
@@ -440,13 +437,6 @@
 
 /* ── Tablet e telefono: indice in alto (scorre di lato), azioni in una barra in basso ─────── */
 @media (max-width: 1023px) {
-  .import-modal--intake.intake-page {
-    width: 100vw;
-    max-width: 100vw;
-    height: 100svh;
-    max-height: 100svh;
-    border-radius: 0;
-  }
   .intake-page__grid {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto minmax(0, 1fr);
@@ -522,7 +512,7 @@
   }
 }
 
-.import-modal--intake.intake-page--import {
+.import-modal--intake.intake-page {
   overflow: clip;
   position: fixed;
   inset: 0;
@@ -579,7 +569,10 @@
 @media (max-width: 600px) {
   .intake-page--import .intake-page__grid--doc {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: 150px minmax(0, 1fr) 50dvh;
+    grid-template-rows: max-content minmax(240px, 50dvh) max-content;
+    overflow-x: hidden;
+    overflow-y: auto;
+    align-content: start;
   }
   .intake-page--import .intake-page__grid--doc .intake-index {
     max-height: 150px;
@@ -621,4 +614,30 @@
 }
 .intake-page--import .document-pdf-preview__toolbar {
   gap: 4px;
+}
+
+@media (max-width: 600px) {
+  .intake-page--import .intake-doc-panel__head,
+  .intake-page--import .intake-doc-panel__tabs,
+  .intake-page--import .document-pdf-preview__toolbar,
+  .intake-page--import .import-page-preview > a {
+    flex-shrink: 0;
+  }
+  .intake-page--import .intake-doc-panel__body,
+  .intake-page--import .intake-doc-panel__body > .import-page-preview,
+  .intake-page--import .document-pdf-preview {
+    flex: 0 0 auto;
+  }
+  .intake-page.intake-page--import
+    .intake-doc-panel
+    .document-pdf-preview__toolbar
+    button:not(#ds) {
+    scroll-margin-block: 0;
+  }
+  .intake-page--import .document-pdf-preview__stage {
+    box-sizing: border-box;
+    flex: none;
+    height: clamp(192px, 40dvh, 320px);
+    padding: 8px;
+  }
 }

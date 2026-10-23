@@ -1,0 +1,25 @@
+{
+  "verdict": "FAILED VALIDATION",
+  "reviewer": "/root/standalone_adapter_independent_qa2",
+  "createdAt": "2026-10-17T17:02:40.730339+00:00",
+  "baseline": "d1324cb3",
+  "sourceFiles": 13,
+  "sourceMismatches": [],
+  "priorProofFiles": 50,
+  "priorProofMismatches": [],
+  "sourceFreezeSha256": "7451927efd684e6978b96299501e5b69b6160b605ecc4701dc4b6a7b8250a9a1",
+  "authorReportSha256": "2d908fa5480f472ca4defbce204a89a018ca029c2e948956b4a629f233847d10",
+  "sourceManifestSha256": "05901de8c935a6530a9f70f0b96412abecd06a9ed2c2b6f4f9a7ef3bdeabd856",
+  "priorProofManifestSha256": "12832389c6eac5786d63098bf57db27b185368515e6ab192cd2f87528478c05c",
+  "evidenceManifestSha256": "f06bd3f4f47e1e3d7cd831712f37d1d52df2813d50f5804d14248981f5459b5f",
+  "validationReportSha256": "b103b1e9c72a9760bf4b325f116c06471c06ad0680a3347f8eb15c33f05aa713",
+  "evidenceFiles": 49,
+  "findings": [
+    "F3 accepted Unicode report cannot import or recover via shorter report",
+    "F4 accepted state above1MiB cannot load when Contents encoding none"
+  ],
+  "actualGitHubWrites": 0,
+  "actualModelCalls": 0,
+  "actualDeployments": 0,
+  "externalLiveReadOnlyReceipt": "Root-owned receipt only; QA2 did not repeat live calls"
+}

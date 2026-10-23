@@ -1,0 +1,26 @@
+        match std::env::var("RAILWAY_ENV")
+            .map(|env| env.to_lowercase())
+            .as_deref()
+        {
+            Ok("production") => Environment::Production,
+            Ok("staging") => Environment::Staging,
+            Ok("dev") => Environment::Dev,
+            Ok("develop") => Environment::Dev,
+            _ => Environment::Production,
+        }
+    }
+
+    pub fn get_host(&self) -> &'static str {
+        match Self::get_environment_id() {
+            Environment::Production => "railway.com",
+            Environment::Staging => "railway-staging.com",
+            Environment::Dev => "railway-develop.com",
+        }
+    }
+
+    pub fn get_backboard(&self) -> String {
+        if let Some(url) = &self.backboard_url_override {
+            return url.clone();
+        }
+        format!("https://backboard.{}/graphql/v2", self.get_host())
+    }

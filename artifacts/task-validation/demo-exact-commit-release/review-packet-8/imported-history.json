@@ -1,0 +1,1291 @@
+{
+  "schemaVersion": 1,
+  "entityId": "standalone-pr-498",
+  "previousEntitySha": "5940f563f48f9a1eae44d6e2dc2cfa989144a3ee",
+  "previousEntityDigest": "f274e89932e3cf3add9e08e4f7df3cdbc53f4be4494326651fa0cdde0528863d",
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "286d4e5e-1a0f-4f3f-9a97-19ddd709d5ab",
+      "contractSha256": "b7192a1735daf07ecfc0815ca7fedd79a56b58b5264325b70b8ffbbe0b42da2f",
+      "baseSha": "45033a3949742218b1c9d23a37a0c94776cd5bd5",
+      "subjectSha": "630bef997a53a2d335b1f4a775151a7e8c604d81",
+      "evidence": "author-2/qa1-failed-validation-report.md",
+      "reason": "IndependentQA1F1legacywholeworkflowreceiptdependency",
+      "independentQaReportSha256": "221e1e8fc8c28faf1fd04bd5cd2ba48b6801ce8caae52312b6542da5c41b9468",
+      "completedAt": "2026-10-18T23:26:32.002234+00:00"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "59e03b2b-4cb5-4673-ae2d-c428a7371a03",
+      "contractSha256": "c46b2dc801a3d5e0972834274fe42f85ef266f2ff91f85bc7eec237c532c1b70",
+      "baseSha": "630bef997a53a2d335b1f4a775151a7e8c604d81",
+      "subjectSha": "bb196b215cadce3ad0594dc3c06bc6d36e32c26f",
+      "evidence": "independent-qa2/validation-report.md",
+      "reason": "Isolatedmanualfixed-demoexactcommitworkflow;actualproviderunproven",
+      "independentQaNonce": "f73892e7-0594-4c0c-87cd-3e4c738674fd",
+      "independentQaSealSha256": "98e6afec3abdd9bbb4ccf27c03042aa9f80f753364bbb1f00e827d950037a6e2",
+      "completedAt": "2026-10-18T23:42:36.396153+00:00"
+    }
+  ],
+  "operatorContinuations": [
+    {
+      "round": 3,
+      "status": "failed",
+      "kind": "explicit-operator-compatibility-continuation",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "2f3159cd-28fd-4059-b6b5-a124ef2222f6",
+      "startedAt": "2026-10-19T00:04:50.357Z",
+      "reason": "ActualClaude1 queue/defaultgate/resume/exacttrigger/migrationfindings",
+      "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+      "contractSha256": "2e0df4b87787a605519895bee79168bb2e5f033560037b0f602dac7f02af2bc4",
+      "baseSha": "f8890678378c3cd8c59a1a3c2c29e0e4aad3fff4",
+      "sourceScope": [
+        ".github/workflows/deploy-demo-exact-commit.yml",
+        ".github/workflows/configure-demo-source.yml",
+        "agent-team/src/bug-pipeline/demo-deployment.mjs",
+        "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+        "agent-team/tests/bug-pipeline/release.test.mjs",
+        "scripts/automation/configure-demo-source.test.mjs"
+      ],
+      "model": "gpt-6.1-sol",
+      "preservedEntityDigest": "b2c7c4e5c584e9955a6f479fa444258aef0f9102d55942b2228557686595ded3",
+      "preservedLegacyImplementationDigest": "f50eed9162f39921c629039dced395c841c1d226850d85c50a08b195ac8a8581",
+      "preservedLegacyReviewsDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "testedSourceSha": "3fc38d3dc867b73baa26ef5dfd14f3f9e11c36aa",
+      "authorStopped": true,
+      "authorChecks": {
+        "passed": 930,
+        "failed": 0,
+        "skipped": 3,
+        "independent": false
+      },
+      "independentQaReservation": {
+        "status": "failed",
+        "nonce": "633f55df-ee56-4b41-a440-c2d89b2fad1f",
+        "reservedAt": "2026-10-19T00:14:00.759Z",
+        "reservedBeforeSession": true,
+        "sourceSha": "3fc38d3dc867b73baa26ef5dfd14f3f9e11c36aa",
+        "sourceWorktree": "/workspace/clinicos-demo-exact-release",
+        "privateOutput": "/workspace/.clinicos-cloud/demo-exact-independent-qa3-20261019",
+        "agent": "/root/qa_demo_exact_release",
+        "sourceEditsAllowed": false,
+        "providerActionAllowed": false,
+        "completedAt": "2026-10-19T00:25:11.104Z",
+        "sealSha256": "7691a5650fb2162699d5884cf64e1991706a5434a877ee8e31300e7c1a75bfe1",
+        "reportSha256": "6b5994564b5e830b01802579739b699b5b24fab293793ab54fe9a7b2eb431362",
+        "finding": "HIGH boundcredentialreflectioninuploadedprogressandreceipt"
+      },
+      "completedAt": "2026-10-19T00:25:11.104Z",
+      "sourceSha": "3fc38d3dc867b73baa26ef5dfd14f3f9e11c36aa",
+      "failure": "IndependentQA3HIGHcredentialreflection; syntheticonly"
+    },
+    {
+      "round": 4,
+      "status": "failed",
+      "kind": "audited-budget-continuation",
+      "budgetSource": "default-four",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "c7cd3f6b-cace-4038-815c-fbbe0034e629",
+      "startedAt": "2026-10-19T00:25:11.104Z",
+      "reason": "ActualindependentQA3HIGH, guardedserializationallpaths",
+      "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+      "contractSha256": "117165512966cd91f536c13a21ddc4c4263f4920a16ba4f9263340736e5d3b17",
+      "baseSha": "3fc38d3dc867b73baa26ef5dfd14f3f9e11c36aa",
+      "sourceScope": [
+        "agent-team/src/bug-pipeline/demo-deployment.mjs",
+        "agent-team/tests/bug-pipeline/demo-deployment.test.mjs"
+      ],
+      "model": "gpt-6.1-sol",
+      "preservedEntityDigest": "87aaf59c9501d1f8794157dc10f3f6aa7fa0bcdc0eef76ca3bb9971817e074be",
+      "preservedLegacyImplementationDigest": "f50eed9162f39921c629039dced395c841c1d226850d85c50a08b195ac8a8581",
+      "preservedLegacyReviewsDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "testedSourceSha": "d6681287161a769d82d2bc7b77fe06fa925e4ff7",
+      "authorStopped": true,
+      "authorChecks": {
+        "passed": 955,
+        "failed": 0,
+        "skipped": 3,
+        "actualCliCases": 22,
+        "independent": false
+      },
+      "independentQaReservation": {
+        "nonce": "34a951b3-b4a0-494a-ba79-690593ba1272",
+        "status": "failed",
+        "reservedAt": "2026-10-19T00:31:43.782Z",
+        "reservedBeforeSession": true,
+        "sourceSha": "d6681287161a769d82d2bc7b77fe06fa925e4ff7",
+        "sourceWorktree": "/workspace/clinicos-demo-exact-release",
+        "agent": "/root/qa_demo_exact_release",
+        "privateOutput": "/workspace/.clinicos-cloud/demo-exact-independent-qa4-20261019",
+        "sourceEditsAllowed": false,
+        "providerActionAllowed": false,
+        "completedAt": "2026-10-19T00:40:06.679575+00:00",
+        "sealSha256": "915447088755203ef36477e1c6f1f1f49cb2dbb11b700f24895dba3a12b03935",
+        "reportSha256": "7a8eb12845e9506d53ef68dd1f0058898b23d981779340d4f373422bb8a1e6b4",
+        "finding": "HIGH Q4-F1 HTTP canonical credential alias in uploaded progress"
+      },
+      "completedAt": "2026-10-19T00:40:06.679575+00:00",
+      "sourceSha": "d6681287161a769d82d2bc7b77fe06fa925e4ff7",
+      "failure": "Independent QA4 HIGH HTTP header normalized usable credential reflection; synthetic only"
+    },
+    {
+      "round": 5,
+      "status": "passed",
+      "kind": "audited-budget-continuation",
+      "budgetExtensionNonce": "cd24d699-6b0d-4e20-9135-e5f2a74240af",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "83822aa8-b804-4f52-933b-bda9a461cb7a",
+      "startedAt": "2026-10-19T00:44:39.770Z",
+      "reason": "Fix independently reproduced Q4-F1 effective HTTP credential alias",
+      "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+      "contractSha256": "5e45ff18ded00cd18c759ea27e3451a6d5e619349e8f4735dbb49e2f629da91c",
+      "baseSha": "d6681287161a769d82d2bc7b77fe06fa925e4ff7",
+      "sourceScope": [
+        "agent-team/src/bug-pipeline/demo-deployment.mjs",
+        "agent-team/tests/bug-pipeline/demo-deployment.test.mjs"
+      ],
+      "model": "gpt-6.1-sol",
+      "preservedEntityDigest": "cbb608a5a51e981001d2d052ac24cdbd71f0b45b06fce6984f106d7178b781aa",
+      "preservedLegacyImplementationDigest": "f50eed9162f39921c629039dced395c841c1d226850d85c50a08b195ac8a8581",
+      "preservedLegacyReviewsDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sessionResumptions": [
+        {
+          "at": "2026-10-19T00:52:47.951Z",
+          "priorAgent": "/root/author_demo_exact_followup3",
+          "newAgent": "/root/author498_5_resume",
+          "reason": "Selected model at capacity; keep same implementation/QA nonce and all actual files/results, no reset or invented terminal success",
+          "model": "gpt-6.1-sol",
+          "reservedBeforeReplacementSession": true
+        }
+      ],
+      "agent": "/root/author498_5_resume",
+      "authorStopped": true,
+      "authorStoppedAt": "2026-10-19T00:56:13.260Z",
+      "authorSourceCommit": "9fd5f48c",
+      "integratedMainSha": "fbaa78d8c7eacf8402db0c8fa2be276ae579a27c",
+      "testedSourceSha": "17d3f5a7bef0565db1992221a41b9f924037195c",
+      "authorStopSha256": "a7c0b6265e7e06db54886312b5de36e7194cc29d236fc28136dc2607acba947c",
+      "authorChecks": {
+        "focusedPassed": 747,
+        "failed": 0,
+        "skipped": 0,
+        "postMainIntegrationFresh": false,
+        "independent": false
+      },
+      "independentQaReservation": {
+        "nonce": "b65205a9-8794-48b0-a482-7f5067c7e77d",
+        "status": "verified",
+        "reservedAt": "2026-10-19T00:56:13.260Z",
+        "reservedBeforeSession": true,
+        "sourceSha": "17d3f5a7bef0565db1992221a41b9f924037195c",
+        "sourceWorktree": "/workspace/clinicos-demo-exact-release",
+        "privateOutput": "/workspace/.clinicos-cloud/demo-exact-independent-qa5-20261019",
+        "agent": "/root/qa498_5_sol",
+        "model": "gpt-6.1-sol",
+        "sourceEditsAllowed": false,
+        "providerActionAllowed": false,
+        "completedAt": "2026-10-19T01:01:20.447622+00:00",
+        "reportSha256": "f91603d678dc2972f452a7c5bfa6c2b43f6a9e7aa1cc85f316afb46e99ce4dbb",
+        "sealSha256": "fd1122358402d7ab1e175faad3b9659646a36890bcc23f86df5bb6a8f1f18ab6"
+      },
+      "subjectSha": "17d3f5a7bef0565db1992221a41b9f924037195c",
+      "completedAt": "2026-10-19T01:01:20.447622+00:00",
+      "evidence": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-report.md",
+      "independentQaReportSha256": "f91603d678dc2972f452a7c5bfa6c2b43f6a9e7aa1cc85f316afb46e99ce4dbb",
+      "independentQaSealSha256": "fd1122358402d7ab1e175faad3b9659646a36890bcc23f86df5bb6a8f1f18ab6"
+    },
+    {
+      "round": 6,
+      "status": "passed",
+      "kind": "audited-budget-continuation",
+      "budgetExtensionNonce": "ce687b86-fd4e-4e36-81be-822a0aae743d",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "dbe546dd-0205-43a4-91a4-d71cfaf8efed",
+      "startedAt": "2026-10-21T17:00:40.884Z",
+      "reason": "Actual Claude2 N1 bounded demo environment main-only admin bootstrap, N2 current packet index",
+      "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+      "contractSha256": "2cbe3a7ac96cd473e5712f5229b8f12094e7ee7ded825912673076883280df31",
+      "baseSha": "e895b503f653eda3c02cdcd3bb3c36bceef9269a",
+      "sourceScope": [
+        ".github/workflows/bug-pipeline-tests.yml",
+        "scripts/quality-gate/configure-bug-repository.mjs",
+        "agent-team/tests/bug-pipeline/repository-settings.test.mjs"
+      ],
+      "model": "gpt-6.1-sol",
+      "agent": "/root/author498_6_admin",
+      "preservedEntityDigest": "84d7f3694523dbdc950c29d6d5f60f3ddc54684c3ee2a0eb75ea7402c547a4b9",
+      "preservedLegacyImplementationDigest": "f50eed9162f39921c629039dced395c841c1d226850d85c50a08b195ac8a8581",
+      "preservedLegacyReviewsDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "authorStopped": true,
+      "authorStoppedAt": "2026-10-21T17:10:30.314836+00:00",
+      "testedSourceSha": "0bb595288a5b0f4ae15d70247a4291ec7a1f386d",
+      "authorSealSha256": "f10029a98b43a7e5c774859f72743d7afba694f4b3f5d7f43e96b5e339e7e39a",
+      "authorChecks": {
+        "command": "node --test agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+        "runtime": "Node v24.19.0",
+        "passed": 80,
+        "failed": 0,
+        "skipped": 0,
+        "independent": false
+      },
+      "independentQaReservation": {
+        "nonce": "2e39fb08-577e-443d-831f-325a3110c7fd",
+        "status": "verified",
+        "reservedAt": "2026-10-21T17:11:56.887Z",
+        "reservedBeforeSession": true,
+        "sourceSha": "0bb595288a5b0f4ae15d70247a4291ec7a1f386d",
+        "sourceWorktree": "/workspace/clinicos-demo-exact-release",
+        "privateOutput": "/workspace/.clinicos-cloud/demo-exact-independent-qa6-20261021",
+        "agent": "/root/qa498_6_admin",
+        "model": "gpt-6.1-sol",
+        "sourceEditsAllowed": false,
+        "providerActionAllowed": false,
+        "completedAt": "2026-10-21T17:18:13.519741+00:00",
+        "reportSha256": "9dd12949fc45e0c47343b29106327323df5cf9aa6a0e379b6b7edaf9fd791e2f",
+        "sealSha256": "a465c43eb197001eb16aaa389939f28a503657ab72ca71aa5106e262d33bd445",
+        "offlineOnly": true,
+        "liveAdminRestVerified": false
+      },
+      "subjectSha": "0bb595288a5b0f4ae15d70247a4291ec7a1f386d",
+      "evidence": "independent-qa6/validation-report.md",
+      "completedAt": "2026-10-21T17:18:13.519741+00:00",
+      "independentQaReportSha256": "9dd12949fc45e0c47343b29106327323df5cf9aa6a0e379b6b7edaf9fd791e2f",
+      "independentQaSealSha256": "a465c43eb197001eb16aaa389939f28a503657ab72ca71aa5106e262d33bd445",
+      "offlineOnly": true,
+      "liveAdminRestVerified": false
+    },
+    {
+      "round": 7,
+      "status": "passed",
+      "kind": "audited-budget-continuation",
+      "budgetExtensionNonce": "29be479f-4740-4a6c-8be0-d2e488337599",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "c48bce89-584e-4d50-95b2-fc840fb0f3bf",
+      "startedAt": "2026-10-21T17:36:38.928Z",
+      "reason": "Actual admin bootstrap fails without observable phase; bounded nonreflecting diagnostics only",
+      "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+      "contractSha256": "af1aaca672574230f07faa7187cbb4f535ad555a2905e17397905547a12d7fc1",
+      "baseSha": "9bf62a27df909d53b9607d1e766723978d98ada0",
+      "sourceScope": [
+        "scripts/quality-gate/configure-bug-repository.mjs",
+        "agent-team/tests/bug-pipeline/repository-settings.test.mjs"
+      ],
+      "model": "gpt-6-luna",
+      "agent": "/root/author498_7_diagnostics_luna",
+      "preservedEntityDigest": "e0960853a675ca7d305b09873a5b67b976a269fc1a89c623795efda6444aa1c5",
+      "preservedLegacyImplementationDigest": "f50eed9162f39921c629039dced395c841c1d226850d85c50a08b195ac8a8581",
+      "preservedLegacyReviewsDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "authorReviewFeedback": [
+        {
+          "nonce": "f2ab009b-9644-4e2f-b3b0-b6b7fb3fc104",
+          "at": "2026-10-21T17:43:06.159Z",
+          "reservedBeforeSession": true,
+          "agent": "/root/author498_7_diagnostics_luna",
+          "scopeUnchanged": true,
+          "finding": "Root static review: generated secret metadata URLs include ?per_page=100&page=1, so route.endsWith(/secrets) classifies both inventories as context. Normalize only classifier pathname or match exact known route prefix before query; no request behavior change.",
+          "expectedRegression": "Actual CLI repository and environment secret-list503 yield finite repoenvsecretnames phase with zero writes; preserve original implementation-seal and first author docs byte-identical, create revised seal/doc in NEW paths."
+        }
+      ],
+      "authorStopped": true,
+      "authorStoppedAt": "2026-10-21T17:45:32.299Z",
+      "testedSourceSha": "e703807d83bcb00bfd1226651cc8d84f7fecf8a3",
+      "authorSealSha256": "8485079448423cbb4cbaafe624947446549b03a773f39d08c1550d71da0ee9ab",
+      "authorChecks": {
+        "passed": 81,
+        "failed": 0,
+        "skipped": 0,
+        "independent": false,
+        "legacyConfigureRepositoryUnchanged": true,
+        "requestBehaviorUnchanged": true
+      },
+      "independentQaReservation": {
+        "nonce": "a3e8c3ed-c1ba-46ba-9bb5-8cac9dd7f758",
+        "status": "verified",
+        "reservedAt": "2026-10-21T17:45:32.299Z",
+        "reservedBeforeSession": true,
+        "sourceSha": "e703807d83bcb00bfd1226651cc8d84f7fecf8a3",
+        "sourceWorktree": "/workspace/clinicos-demo-exact-release",
+        "privateOutput": "/workspace/.clinicos-cloud/demo-exact-independent-qa7-20261021",
+        "agent": "/root/qa498_7_diagnostics_luna",
+        "model": "gpt-6-luna",
+        "sourceEditsAllowed": false,
+        "providerActionAllowed": false,
+        "scope": "Narrow existing81 plus independentactualCLI finitephase/HTTPstatus/secretreflection/writeattempt counters. RetainQA6full1060/3WindowsSkip, no repeated unchanged full/clinical suite.",
+        "sessionResumptions": [
+          {
+            "nonce": "f1fe59c6-1a63-423e-adcd-9d2ee108a21d",
+            "at": "2026-10-21T17:49:10.604Z",
+            "agent": "/root/qa498_7_diagnostics_luna",
+            "reservedBeforeReplacementSession": true,
+            "reason": "Initial independent QA7 records actual tool-output81PASS and malformed-JSON correction but original stdout/exit receipts/harness source not persisted. Preserve first seal/report; capture fresh narrow verification into durable private logs and source files before publication, same QA/source nonce; no full-suite repeat."
+          }
+        ],
+        "completedAt": "2026-10-21T17:53:06Z",
+        "reportSha256": "da1475e365c194a1b978abfe320cf0fef15d5c8a1fe9a668fdba08a0df4b46ef",
+        "sealSha256": "6e8b3c2f848f076aa1692efd3ca085e669473799b07ce7b283bd604929f13bd1",
+        "durabilityFollowupNonce": "f1fe59c6-1a63-423e-adcd-9d2ee108a21d",
+        "durabilityEvidenceEntriesVerified": 67,
+        "actualTargetedPassed": 81,
+        "actualCliProbes": 10,
+        "priorReportPreserved": true,
+        "offlineOnly": true,
+        "liveAdminRestVerified": false
+      },
+      "subjectSha": "e703807d83bcb00bfd1226651cc8d84f7fecf8a3",
+      "evidence": "independent-qa7/validation-report.md",
+      "completedAt": "2026-10-21T17:53:06Z",
+      "independentQaReportSha256": "da1475e365c194a1b978abfe320cf0fef15d5c8a1fe9a668fdba08a0df4b46ef",
+      "independentQaSealSha256": "6e8b3c2f848f076aa1692efd3ca085e669473799b07ce7b283bd604929f13bd1",
+      "offlineOnly": true,
+      "liveAdminRestVerified": false
+    },
+    {
+      "round": 8,
+      "status": "passed",
+      "kind": "audited-budget-continuation",
+      "budgetExtensionNonce": "10ace777-97e2-4702-a728-5cff6d6b68fc",
+      "owner": "codex-cloud-after-claude",
+      "nonce": "7095efe5-1644-4a82-9f2f-65dc159e1b46",
+      "startedAt": "2026-10-21T18:16:02.264Z",
+      "reason": "Actual safe diagnostic proves disabled null policy inventory404; bootstrap explicitnull using preserved settings and post-enable actual inventory",
+      "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+      "contractSha256": "5d074afa1e22e98c66cda12fa79a2930dfcd56ee9c6731edf205b211fcf976c7",
+      "baseSha": "5940f563f48f9a1eae44d6e2dc2cfa989144a3ee",
+      "sourceScope": [
+        "scripts/quality-gate/configure-bug-repository.mjs",
+        "agent-team/tests/bug-pipeline/repository-settings.test.mjs"
+      ],
+      "model": "gpt-6-luna",
+      "agent": "/root/author498_null8_luna",
+      "preservedEntityDigest": "e028da2311938abf2a824b7d154bd6a595e87fb627950da1b94b2bae816e5b6e",
+      "preservedLegacyImplementationDigest": "f50eed9162f39921c629039dced395c841c1d226850d85c50a08b195ac8a8581",
+      "preservedLegacyReviewsDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "authorStopped": true,
+      "authorStoppedAt": "2026-10-21T18:22:40.859Z",
+      "authorStopProvenance": "Actual completed author498_null8_luna final response; root source/hash handback verified, no fabricated author seal",
+      "testedSourceSha": "0ae514c420e6c9a4e6500180617d1bb0a37349a6",
+      "authorChecks": {
+        "passed": 85,
+        "failed": 0,
+        "syntax": true,
+        "receiptSha256": "ebd7d06a081ff5c51c8a7f82f2051e1b22043987e10c6f2da9c4abe4d2f1c5b2",
+        "independent": false
+      },
+      "authorManifestSha256": "4b8e3a582b62a02bff29bbbe41e76209e2c0fab6943a45a9b97bfd25b04f7e35",
+      "independentQaReservation": {
+        "nonce": "2c9357bb-7926-4478-9ba8-140d767da5be",
+        "status": "verified",
+        "reservedAt": "2026-10-21T18:22:40.859Z",
+        "reservedBeforeSession": true,
+        "sourceSha": "0ae514c420e6c9a4e6500180617d1bb0a37349a6",
+        "sourceWorktree": "/workspace/clinicos-demo-exact-release",
+        "privateOutput": "/workspace/.clinicos-cloud/498-null-policy-independent-qa8-20261021",
+        "agent": "/root/qa498_null8_luna",
+        "model": "gpt-6-luna",
+        "sourceEditsAllowed": false,
+        "providerActionAllowed": false,
+        "scope": "Narrow85actualsettings suite + independent actualCLI null-beforePUT404 semantics/order/readback/conflict/partial-write counters/idempotence/protection preservation. No unchangedfull1060/clinical suites. Actual liveadmin, native6 and Claude/finalCodex remain future gates.",
+        "completedAt": "2026-10-21T18:30:03.868Z",
+        "reportSha256": "5d401d651c2ebc7f3e08f6be9199660607174c45e0b2516d8c4f50d70a73a16a",
+        "sealSha256": "61b974cfa6b70097df9b764faf1e63a4ee95367bd5f6b2fe9b6a1e452a74b392",
+        "evidenceEntriesVerified": 23,
+        "actualTargetedPassed": 85,
+        "actualApiScenarioInvocations": 15,
+        "actualCliCases": 1,
+        "priorReportPreserved": true,
+        "offlineOnly": true,
+        "liveAdminRestVerified": false
+      },
+      "subjectSha": "0ae514c420e6c9a4e6500180617d1bb0a37349a6",
+      "evidence": "independent-qa8/validation-report.md",
+      "completedAt": "2026-10-21T18:30:03.864Z",
+      "independentQaReportSha256": "5d401d651c2ebc7f3e08f6be9199660607174c45e0b2516d8c4f50d70a73a16a",
+      "independentQaSealSha256": "61b974cfa6b70097df9b764faf1e63a4ee95367bd5f6b2fe9b6a1e452a74b392",
+      "offlineOnly": true,
+      "liveAdminRestVerified": false
+    }
+  ],
+  "reviews": [],
+  "reviewReports": {},
+  "reviewHandoffHistory": [
+    {
+      "at": "2026-10-18T23:55:48.468Z",
+      "actor": "l2v-hub",
+      "previous": null,
+      "spentReviews": 0,
+      "reason": "Actual read-only Claude requested after fresh independentQA; native CI runs in parallel. All six native contexts remain mandatory before merge; no hosted success claimed."
+    },
+    {
+      "at": "2026-10-19T00:04:50.357Z",
+      "actor": "l2v-hub",
+      "previous": {
+        "channel": "github-comments",
+        "status": "comment-requested",
+        "subjectSha": "f8890678378c3cd8c59a1a3c2c29e0e4aad3fff4",
+        "requestId": "781858a5-e812-4edd-84cd-1299d575aa96",
+        "requestedAt": "2026-10-18T23:55:48.468Z"
+      },
+      "reason": "ActualClaude1 findings owned byCodex",
+      "actualFeedbackCommentId": 6256790782
+    },
+    {
+      "at": "2026-10-19T01:08:38.965Z",
+      "actor": "l2v-hub",
+      "previous": null,
+      "spentReviews": 0,
+      "reason": "New actual Claude review on new live SHA after QA5; no previous approval inherited."
+    },
+    {
+      "at": "2026-10-21T17:24:17.794Z",
+      "actor": "l2v-hub",
+      "previous": {
+        "channel": "github-comments",
+        "status": "published",
+        "subjectSha": "e895b503f653eda3c02cdcd3bb3c36bceef9269a",
+        "requestId": "00c87b86-8933-4ae5-8608-7b401e634bba",
+        "requestedAt": "2026-10-19T01:08:38.965Z",
+        "actualCommentId": 6257748710,
+        "actualCommentSha256": "824718d8bae3f2aa1a1a9d277a36818f78db8956f21c606fc482d7e8b8f677b5",
+        "verdict": "changes-requested",
+        "structuredReview": false
+      },
+      "reason": "New source requires native checks and actual Claude; actual second changes-requested comment preserved."
+    }
+  ],
+  "budgetExtensions": [
+    {
+      "entityId": "standalone-pr-498",
+      "pr": 498,
+      "kind": "implementation",
+      "previousLimit": 4,
+      "limit": 5,
+      "actor": "l2v-hub",
+      "at": "2026-10-19T00:44:39.770Z",
+      "reason": "Fix independently reproduced Q4-F1 effective HTTP credential alias",
+      "authorizationRef": "codex-session:01a1418a-4353-75ac-a256-6799edd61072:continue-until-resolution",
+      "authorization": {
+        "provenance": "user-session",
+        "grantId": "5ef4558e-2243-4380-8330-453cfa1df672",
+        "consumptionNonce": "22b8cf36-d86a-41eb-83d3-97b4301c48ca",
+        "sourceRef": "codex-thread:01a1418a-4353-75ac-a256-6799edd61072/user-continue-resolution",
+        "binding": {
+          "version": 1,
+          "repository": "l2v-hub/ClinicOS",
+          "collection": "standaloneReviews",
+          "entityId": "standalone-pr-498",
+          "pr": 498,
+          "reviewIssue": null,
+          "actor": "l2v-hub",
+          "action": "extend-budget",
+          "subjectSha": "f8890678378c3cd8c59a1a3c2c29e0e4aad3fff4",
+          "historyDigest": "c77b748b8fb5c6264573937666f813d6e367309dcea255754d31e2045aee8424",
+          "reservation": null,
+          "budget": {
+            "kind": "implementation",
+            "previousLimit": 4,
+            "limit": 5
+          }
+        },
+        "bindingDigest": "f72b2f93c01bd07a8633b958ca416e6d7eb1e22f62f12a449a1982300f358bf0"
+      },
+      "nonce": "cd24d699-6b0d-4e20-9135-e5f2a74240af",
+      "historyLength": 4,
+      "historyDigest": "2afb5e774356d54f2fb3e87dfc9ccc02eb530dc1042ee18596be8b5de5f0cca6"
+    },
+    {
+      "entityId": "standalone-pr-498",
+      "pr": 498,
+      "kind": "implementation",
+      "previousLimit": 5,
+      "limit": 6,
+      "actor": "l2v-hub",
+      "at": "2026-10-21T17:00:40.884Z",
+      "reason": "Actual Claude2 N1 bounded demo environment main-only admin bootstrap, N2 current packet index",
+      "authorizationRef": "codex-session:01a1418a-4353-75ac-a256-6799edd61072:continue-until-resolution",
+      "authorization": {
+        "provenance": "user-session",
+        "grantId": "5ef4558e-2243-4380-8330-453cfa1df672",
+        "consumptionNonce": "44d26bd4-7b1a-4477-8ecd-62e9de47f38e",
+        "sourceRef": "codex-thread:01a1418a-4353-75ac-a256-6799edd61072/user-continue-resolution",
+        "binding": {
+          "version": 1,
+          "repository": "l2v-hub/ClinicOS",
+          "collection": "standaloneReviews",
+          "entityId": "standalone-pr-498",
+          "pr": 498,
+          "reviewIssue": null,
+          "actor": "l2v-hub",
+          "action": "extend-budget",
+          "subjectSha": "e895b503f653eda3c02cdcd3bb3c36bceef9269a",
+          "historyDigest": "b0dde1f9c156e2cba16da2db4bfbc4ce85e74462ee25d64f0556a1c554a22488",
+          "reservation": null,
+          "budget": {
+            "kind": "implementation",
+            "previousLimit": 5,
+            "limit": 6
+          }
+        },
+        "bindingDigest": "e5203cafded052cacf7c773670f36dacf1a39f8d3addf0fafe072575c5588cf3"
+      },
+      "nonce": "ce687b86-fd4e-4e36-81be-822a0aae743d",
+      "historyLength": 5,
+      "historyDigest": "c0d11507c5427a07dfa86ae15f6bc4e0d920c050a4ea1b332f794406ac9d49c7"
+    },
+    {
+      "entityId": "standalone-pr-498",
+      "pr": 498,
+      "kind": "implementation",
+      "previousLimit": 6,
+      "limit": 7,
+      "actor": "l2v-hub",
+      "at": "2026-10-21T17:36:38.928Z",
+      "reason": "Actual admin bootstrap fails without observable phase; bounded nonreflecting diagnostics only",
+      "authorizationRef": "codex-session:01a1418a-4353-75ac-a256-6799edd61072:continue-until-resolution",
+      "authorization": {
+        "provenance": "user-session",
+        "grantId": "5ef4558e-2243-4380-8330-453cfa1df672",
+        "consumptionNonce": "5031fe16-f648-49c5-92e6-9f283562973e",
+        "sourceRef": "codex-thread:01a1418a-4353-75ac-a256-6799edd61072/user-continue-resolution",
+        "binding": {
+          "version": 1,
+          "repository": "l2v-hub/ClinicOS",
+          "collection": "standaloneReviews",
+          "entityId": "standalone-pr-498",
+          "pr": 498,
+          "reviewIssue": null,
+          "actor": "l2v-hub",
+          "action": "extend-budget",
+          "subjectSha": "9bf62a27df909d53b9607d1e766723978d98ada0",
+          "historyDigest": "e381ac93c2611c8c8f930096f7b5d69e3c5f52495fd2ba84e04d26f34998c6e8",
+          "reservation": null,
+          "budget": {
+            "kind": "implementation",
+            "previousLimit": 6,
+            "limit": 7
+          }
+        },
+        "bindingDigest": "4ccb6c09d7d467b0d11f53be74f0c10174acbede89855e36804e139283e77f0c"
+      },
+      "nonce": "29be479f-4740-4a6c-8be0-d2e488337599",
+      "historyLength": 6,
+      "historyDigest": "ce26df92169ca8ffa8b3032d0e7074c4b8edce44c9db4b4cbfe414b90e96cbb8"
+    },
+    {
+      "entityId": "standalone-pr-498",
+      "collection": "standaloneReviews",
+      "pr": 498,
+      "kind": "implementation",
+      "previousLimit": 7,
+      "limit": 8,
+      "actor": "l2v-hub",
+      "at": "2026-10-21T18:16:02.264Z",
+      "reason": "Actual safe diagnostic proves disabled null policy inventory404; bootstrap explicitnull using preserved settings and post-enable actual inventory",
+      "authorizationRef": "codex-session:01a1418a-4353-75ac-a256-6799edd61072:continue-until-resolution",
+      "authorization": {
+        "provenance": "user-session",
+        "grantId": "5ef4558e-2243-4380-8330-453cfa1df672",
+        "consumptionNonce": "1aa9d3d6-b3b2-4d95-913c-f34d7a3a2a4a",
+        "sourceRef": "codex-thread:01a1418a-4353-75ac-a256-6799edd61072/user-continue-resolution",
+        "binding": {
+          "version": 1,
+          "repository": "l2v-hub/ClinicOS",
+          "collection": "standaloneReviews",
+          "entityId": "standalone-pr-498",
+          "pr": 498,
+          "reviewIssue": null,
+          "actor": "l2v-hub",
+          "action": "extend-budget",
+          "subjectSha": "5940f563f48f9a1eae44d6e2dc2cfa989144a3ee",
+          "historyDigest": "d89c44e39b3484a009a279015dbe0f43e46cebb6c7375dddb6791a7666ff8299",
+          "reservation": null,
+          "budget": {
+            "kind": "implementation",
+            "previousLimit": 7,
+            "limit": 8
+          }
+        },
+        "bindingDigest": "6e23046326568c56c39deb4f247fc997062a9e507f23cc3e4575ffed12244220"
+      },
+      "nonce": "10ace777-97e2-4702-a728-5cff6d6b68fc",
+      "historyLength": 7,
+      "historyDigest": "7b830e55de4c5897a40d6cdda3f78b9e94210fd510acaaab581e04ea1439c8a3"
+    }
+  ],
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/bug-pipeline-tests.yml",
+      "blob": "731b632d8302b4750178d7ba7311d1e27f46ffeb",
+      "mode": "100644",
+      "baseBlob": "a9005def7c7a0333c208e1f2dded3c541a744588",
+      "baseMode": "100644"
+    },
+    {
+      "path": ".github/workflows/configure-demo-source.yml",
+      "blob": "44073c12df8c178f4ee6fd50cdaa5b3e1eb7af26",
+      "mode": "100644",
+      "baseBlob": "083a6d5fec406034d57b85401001c66d7427ded5",
+      "baseMode": "100644"
+    },
+    {
+      "path": ".github/workflows/deploy-demo-exact-commit.yml",
+      "blob": "a6df41d8f12027047a3a3315701c128ebea908a2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "blob": "7395cc587247190a88ed33457d510774f37e735f",
+      "mode": "100644",
+      "baseBlob": "9a744ca5b2a84e5fd8bbfd2d97776fafc4f906e7",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "blob": "c451a55ff4869e33ebe5d6a193dd147d5dad9861",
+      "mode": "100644",
+      "baseBlob": "3f94806073eede78df3eaef50bc029f4a898dd39",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "blob": "315f7389226b5acda42ecdfbce01e06c997066c5",
+      "mode": "100644",
+      "baseBlob": "8e32274bbb1328727f56d7f67c17e624f70736bf",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+      "blob": "bbd9c1ce06f1ca13358329748f12e87fce445623",
+      "mode": "100644",
+      "baseBlob": "c4bb5305f1cf055a9e4899f7d16a099ad1e3bed9",
+      "baseMode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/README.md",
+      "blob": "891dd9074ab3bcb6e549b51a3dd38f95f7993bd1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/analysis.md",
+      "blob": "fc9a8b214cf3bb602378fb170a88ee2436e81797",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/author-1/author-report.md",
+      "blob": "349ad6186027a467a7ebebf4178e987d04afcac4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/author-1/source-manifest.json",
+      "blob": "892a8aff82b523028382837fc00dcaf6d1faa7f9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/author-1/task-contract-v1-preflight.md",
+      "blob": "9a81b06727f6fd38a72a615e10bc2816ae78047c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/author-1/task-contract.md",
+      "blob": "25e4141e3e00c148a2552f65bc3e5ccd7c675e18",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/author-2/author-report.md",
+      "blob": "e9e8b5fceb6c526e93018a2d6657bdeb1c4fe5b8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/author-2/qa1-failed-validation-report.md",
+      "blob": "2a5dd5e51bb9436be04104ee6a64fed588afcb84",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/author-2/source-manifest.json",
+      "blob": "30a569b1b1b88d07767085b12b386f9a9270b846",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/author-2/task-contract.md",
+      "blob": "caa5c7d52bccd03d6088fb278f3b899673198d63",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-1/author-report.md",
+      "blob": "9727c01a455fb54da76acd70c76d75b906923ba4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-1/implementation-notes.md",
+      "blob": "9dd4e5e1dc00ee84ce289cbf22205cd580e66371",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-1/source-freeze.json",
+      "blob": "5dbb7adc90890c3e8c00031cf95567774ae3bea9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-1/task-contract.md",
+      "blob": "2f0d1fe57510cb8a2cc28be8cd689cf20138a406",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-1/test-summary.json",
+      "blob": "47fc905b2b4522784ffabaaa08543d6a5aeb36c2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-2/author-report.md",
+      "blob": "56090c444e20189dc69646ad7b5a229650df1be3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-2/implementation-notes.md",
+      "blob": "30b753f98626b8b035a54619bfb07bfdc353e418",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-2/source-freeze.json",
+      "blob": "2fb0b5ba6e34c47869f0c610ecd2aeca8fde97dd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-2/task-contract.md",
+      "blob": "16af326eac46a0a30e4c5b30ed27bea35ef30990",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-2/test-summary.json",
+      "blob": "6fb8af2d0b7d081a65be74e2c612e33e00b4c095",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-3/task-contract.md",
+      "blob": "f4bf669f6c33f24514de05f201165b7a21bbde17",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-3/validation-report.md",
+      "blob": "8405a17cf4072b64d0ba772c7ff705b9a918d56e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-3/validation-results.json",
+      "blob": "ad17f67de446107f5744e7aa7ae813c13b7e5d67",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-4/author-report.md",
+      "blob": "e43154ddf59e1fe35a2acb01369909463ea6d746",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-4/current-packet-index.md",
+      "blob": "87a56c63366588b591298b48e930088daa8b8c93",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-4/source-manifest.json",
+      "blob": "69178bc2e51195c011f1bec8b1c7d2904521cba8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-4/task-contract.md",
+      "blob": "b342f05daaf8896aa854cfa8ce7c3a92feb15f08",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-4/validation-report.md",
+      "blob": "f498eb0158ddb04b3fde934caddc4d27b76532b3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/author-report-revision-2.md",
+      "blob": "2b8f7ed8058dd7e7560dfa5c8718d38141091f1d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/author-report.md",
+      "blob": "61a719d3e44db62ab4285cf2ed845deedf6ad766",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/source-manifest-revision-2.json",
+      "blob": "0ca13438ea796d32fde65e7f11e03322128bb618",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/source-manifest.json",
+      "blob": "931688fc48f0e7b37d7daf2c65519519762ebb20",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/task-contract.md",
+      "blob": "8c6466ed0d6329a09b7c8cd2d1d48967b7eee375",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/validation-report-revision-2.md",
+      "blob": "0c0eba20b11d3ede165175a2a8446576957d4221",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/validation-report.md",
+      "blob": "6a034a6dfa66b7659b9d971074d603d008fd25cb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-6/actual-diagnostic7-result.json",
+      "blob": "c542a4bc8ab937124c6e42960cadd034fb1e1af3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-6/analysis.md",
+      "blob": "8ba70ff58bf8775e3e5212d3e7fa4cb638aab2cd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-6/author-report.md",
+      "blob": "191bf24d03610a0c7d7d454f7d95ee75f57c2d8f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-6/source-manifest.json",
+      "blob": "2edc1f34824f281e1ff1ae5fad21a88235f245e2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-6/task-contract.md",
+      "blob": "10036fbf135ba955e9cdecf9488f5bed2b6e9541",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/implementation-plan.md",
+      "blob": "1217ba6ce9b9f08af34bd1b126f7b9c37510403f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/imported-history.json",
+      "blob": "80fdaaa63733e07715fb5290f4472cf7d480a908",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/independent-qa2/qa-stop-witness.json",
+      "blob": "171d32f6766df62010c62333835c31c5f684f786",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/independent-qa2/validation-report.md",
+      "blob": "8d252382ac96878c6037c3a09d01e93b0c4fc74e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/analysis.md",
+      "blob": "c9776472e03261f692215df9eab15d11e54a77eb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/author-2/qa1-failed-validation-report.md",
+      "blob": "2a5dd5e51bb9436be04104ee6a64fed588afcb84",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/implementation-plan.md",
+      "blob": "12bcd36259a80df5d38398b8a28b95ac3b5c1449",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/imported-history.json",
+      "blob": "56cbfe423715a0fb01d9229edf4fd5a2f432309b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa2/validation-report.md",
+      "blob": "8d252382ac96878c6037c3a09d01e93b0c4fc74e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-report.md",
+      "blob": "b53f9d38abc7299055ffe99b28be27a94c97f7d1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-summary.json",
+      "blob": "7cc7d417d46163894c9312ef7eb2fd968f4f456f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/source-manifest.json",
+      "blob": "2baf21009139092cd78ccbdc816c77735c203c21",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/task-contract.md",
+      "blob": "148d23283f809704314df6a20b1f89dec8eda951",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-5/validation-report.md",
+      "blob": "829a696d29aa79ab94ec0136258d5eed8683ebfe",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/analysis.md",
+      "blob": "bae1491f648b2ad20492c62f005e8e4329b057be",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-report.md",
+      "blob": "b53f9d38abc7299055ffe99b28be27a94c97f7d1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/author-2/qa1-failed-validation-report.md",
+      "blob": "2a5dd5e51bb9436be04104ee6a64fed588afcb84",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/current-packet-index.md",
+      "blob": "a41af606e0379f4030e3050c22bb7d5e3277710e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/implementation-plan.md",
+      "blob": "44731f075bc7c8b435d8c70adb9f2a478d916764",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/imported-history.json",
+      "blob": "0edbeab5f927668b87482fb0dc62711241351062",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/independent-qa2/validation-report.md",
+      "blob": "8d252382ac96878c6037c3a09d01e93b0c4fc74e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/independent-qa6/validation-report.md",
+      "blob": "f214c4e1b685ad3afef9abab695a0441c976b158",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/independent-qa6/validation-summary.json",
+      "blob": "c06c496c74e045eb6e3f11eb8a7bc4003a9fab8f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/source-manifest.json",
+      "blob": "776fe03d002dd5ee1a3094db0a8c1187111efd50",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/task-contract.md",
+      "blob": "b342f05daaf8896aa854cfa8ce7c3a92feb15f08",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-6/validation-report.md",
+      "blob": "909541ef088ed2285f0916212bd6ce514d1ea86f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/analysis.md",
+      "blob": "882044a8f8727057420f04734602fe16d9da5ef4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-report.md",
+      "blob": "b53f9d38abc7299055ffe99b28be27a94c97f7d1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/author-2/qa1-failed-validation-report.md",
+      "blob": "2a5dd5e51bb9436be04104ee6a64fed588afcb84",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/current-packet-index.md",
+      "blob": "d77b591c257b054520d0fd2d659d3e6881754dce",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/implementation-plan.md",
+      "blob": "35414d29cdf9a34b9b99727e35ef487949950dbb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/imported-history.json",
+      "blob": "e5e0a8ea133efee359a130aac37ad2c99ec16ef9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/independent-qa2/validation-report.md",
+      "blob": "8d252382ac96878c6037c3a09d01e93b0c4fc74e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/independent-qa6/validation-report.md",
+      "blob": "f214c4e1b685ad3afef9abab695a0441c976b158",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/independent-qa7/evidence-checksums.json",
+      "blob": "792a44c5862940e28c1bba250d4b284172743abd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/independent-qa7/initial-tool-only-report.md",
+      "blob": "614a037bf0e8468964af4229e9103b996c61e5dc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/independent-qa7/qa-seal.json",
+      "blob": "2eb1eddf912f51a65e1b716ddba4a44234fb8fd4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/independent-qa7/validation-report.md",
+      "blob": "aa3150956fd1462a3393bedaae496ff41440244f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/independent-qa7/validation-summary.json",
+      "blob": "2cfb8426ee68ac9b82c9b6e64724999b68f4f39e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/source-manifest.json",
+      "blob": "864c8496c73bd6cce885e774d2c5d9f7c3cff1b0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/task-contract.md",
+      "blob": "8c6466ed0d6329a09b7c8cd2d1d48967b7eee375",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/review-packet-7/validation-report.md",
+      "blob": "bfba65034c56418241578789f39d6c424fd79c91",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/task-contract.md",
+      "blob": "caa5c7d52bccd03d6088fb278f3b899673198d63",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/validation-report.md",
+      "blob": "3c8046d2235544e536f18c3c31570a4655bf41c5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/configure-demo-source.test.mjs",
+      "blob": "b5cc12e0259134eb2e48bd06dfafa176b07843d2",
+      "mode": "100644",
+      "baseBlob": "a1b9ba80a36573b99e63f50504e1ac22cd414606",
+      "baseMode": "100644"
+    },
+    {
+      "path": "scripts/quality-gate/configure-bug-repository.mjs",
+      "blob": "5531bd2d8bb914e8c6ccefe52ab2d76b56f8ceaa",
+      "mode": "100644",
+      "baseBlob": "8b84f0b549c9e4713b0227b3b5b188694774f159",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "analysis.md": "e0bdb0210c288974136170b9ba8e6bbb589c1d7473fc77a59f70801f3581aa57",
+    "artifacts/task-validation/demo-exact-commit-release/review-packet-5/independent-qa5/validation-report.md": "f91603d678dc2972f452a7c5bfa6c2b43f6a9e7aa1cc85f316afb46e99ce4dbb",
+    "author-2/qa1-failed-validation-report.md": "221e1e8fc8c28faf1fd04bd5cd2ba48b6801ce8caae52312b6542da5c41b9468",
+    "current-packet-index.md": "6d171c8ef43aa1a9975f4d8eba1ae7d8e34c67231b94f492e1da72fae397402e",
+    "implementation-plan.md": "524b7b2e582ab11d6bd18678e3a9e7121933dc77a72511bec5848db0532753f0",
+    "independent-qa2/validation-report.md": "db246b8a526fe8c7ba2f62d772855e87c9caa05dc4f3a78a7bcc91da1dcb347f",
+    "independent-qa6/validation-report.md": "9dd12949fc45e0c47343b29106327323df5cf9aa6a0e379b6b7edaf9fd791e2f",
+    "independent-qa7/validation-report.md": "da1475e365c194a1b978abfe320cf0fef15d5c8a1fe9a668fdba08a0df4b46ef",
+    "independent-qa8/STOP.json": "3c1cb6a0c3dd8b950e50cc30892c382f42e9d05d60df8c5a657fff3ea755b96d",
+    "independent-qa8/evidence-digests.json": "52a6aa5bec909a67932b5ec8fc72e85e437cd3c5ed2561943a40548604c971f4",
+    "independent-qa8/qa-seal.json": "61b974cfa6b70097df9b764faf1e63a4ee95367bd5f6b2fe9b6a1e452a74b392",
+    "independent-qa8/validation-report.md": "5d401d651c2ebc7f3e08f6be9199660607174c45e0b2516d8c4f50d70a73a16a",
+    "independent-qa8/validation-summary.json": "2146438ad7a69c846a10b4f1558c7bfe65073f95de4c0e45fcc66726de4bfebf",
+    "source-manifest.json": "c3429e40cda49c40f6c24e09c760d7e890546ff0f09ba0e22c493739b1073777",
+    "task-contract.md": "5d074afa1e22e98c66cda12fa79a2930dfcd56ee9c6731edf205b211fcf976c7",
+    "validation-report.md": "61b10a41ff86aedce80e340eebc449ca17806bb3fa12aa580d260d552962c04d"
+  },
+  "allAttemptsPreserved": true
+}

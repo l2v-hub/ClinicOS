@@ -1,0 +1,105 @@
+{
+  "status": "VERIFIED",
+  "sourceSha": "0f91a96e0a89010a6abc6a2e1d7319ceafe27933",
+  "testSha256": "a5c95fefc7a34c92f06ae02b954456230005ea55844632f1b65f911be22e893b",
+  "authSha256": "309d09f58446aa99beb024139578c40277a1299de0465b6a2e73443abb45aebb",
+  "inputClosure": {
+    "files": 13099,
+    "beforeSha256": "17fecddd35804e21d455c2f9ef68d1fb9079e57ca6801016ac505db6226b90fd",
+    "afterSha256": "17fecddd35804e21d455c2f9ef68d1fb9079e57ca6801016ac505db6226b90fd",
+    "unchanged": true
+  },
+  "proofs": {
+    "/workspace/clinicos-standalone-pr-review/artifacts/task-validation/standalone-pr-review-adapter/codex-followup-2/prior-proof-manifest.json": {
+      "entries": 347,
+      "mismatches": [],
+      "manifestSha256": "030fbc1df290cefca0c88d93c07cfa16a36b5bb03257fb18c85840cb41ee74a1"
+    },
+    "/workspace/.clinicos-cloud/codex-after-claude-20261018/prior-proofs-492.json": {
+      "entries": 369,
+      "mismatches": [],
+      "manifestSha256": "26e83912c5c5db8bdc482bccdcc2d1a897a93d5ac69fb04345d2d7a064883c70"
+    }
+  },
+  "receipt": {
+    "runner": "/workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs#createRunner",
+    "trustedRunnerSha256": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf",
+    "envMode": "verification",
+    "command": "node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs",
+    "prefix": "rmdir \"$CODEX_HOME\"; unset CODEX_HOME; test ! -e \"$HOME/.codex\" || exit 96; exec ",
+    "credentialFree": true,
+    "childEnvironmentKeys": [
+      "AI_PROVIDER",
+      "AI_RUNTIME_SERVICE_TOKEN",
+      "AI_RUNTIME_URL",
+      "AUTH_MODE",
+      "CI",
+      "CLAUDE_CONFIG_DIR",
+      "CODEX_HOME",
+      "DATABASE_URL",
+      "DISABLE_AUTOUPDATER",
+      "HOME",
+      "LANG",
+      "NODE_ENV",
+      "PATH",
+      "VITE_API_URL"
+    ],
+    "homeIsolated": true,
+    "codexHomeRemovedBeforeTests": true,
+    "ok": true,
+    "code": 0,
+    "error": null,
+    "counts": {
+      "tests": 715,
+      "pass": 712,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 3,
+      "todo": 0
+    },
+    "stdoutSha256": "6971156ad4ca8865badbe18cdad913c79d66e9a21a850a7d1a2985a4a59fddf4",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "skips": [
+      "﹣ PowerShell scheduler definitions parse on Windows and use actual task action/trigger/principal objects (0.492625ms) # SKIP",
+      "﹣ native Windows ACL creation is private and rejects a later public access rule (0.238492ms) # SKIP",
+      "﹣ native Windows bootstrap preserves dirty, foreign, wrong-branch and diverged work and fast-forwards only its dedicated checkout (0.17366ms) # SKIP"
+    ]
+  },
+  "cases": [
+    {
+      "label": "empty isolated HOME rejects before dependencies",
+      "result": "PASS"
+    },
+    {
+      "label": "missing explicit path",
+      "result": "PASS"
+    },
+    {
+      "label": "file path",
+      "result": "PASS"
+    },
+    {
+      "label": "synthetic ambient directory fallback accepted",
+      "result": "PASS"
+    },
+    {
+      "label": "explicit missing path overrides existing synthetic ambient directory",
+      "result": "PASS"
+    },
+    {
+      "label": "symlink rejected by lstat directory guard",
+      "result": "PASS"
+    },
+    {
+      "label": "API key conflict despite available directory",
+      "result": "PASS"
+    },
+    {
+      "label": "API conflict prevents dependency callbacks",
+      "result": "PASS"
+    }
+  ],
+  "syntheticFixtureCleanup": true,
+  "qaStopUtc": "2026-10-18T19:41:39.429Z",
+  "sourceAndHarnessStopped": true
+}

@@ -1,0 +1,13 @@
+{
+  "adversarial-distinct-actor.log": "fbe6bb22f2af2e929a85f9c2ca5b96735cf15d4950236ff86933612d2be82317",
+  "adversarial-real-workspace.log": "324651fa5b343e9b9ea60291ef5ce6d6c937cff68436ea3a6d16bab9c4422755",
+  "adversarial-real-workspace.mjs": "b09bbcb208a47723c3a0cdfabd02686e138a2b007f7317c8c72d163f854a900f",
+  "build.log": "08ca6d601ddfabe6e4de4adf43f5d9dae574d694916b8209ee01ae31139d5d61",
+  "qa-fixture.mjs": "00bcf75cd643941373a2eeb6abd4e858f898680d54f71d3bc1bae5ab17ff7c1e",
+  "regression.log": "208d787406a5b427c5e1f69a0e0b501e660da674ec527fae50e2aef72121319b",
+  "source-hashes.json": "e2f7690b455ad118ee56a437edba2ffe99ee1832d1288d3ae29bd318169a34d9",
+  "task-contract.md": "fbe2e62e5ab994d1cbd728e2aef59668936a7f5abc4f020b01db0edd307fd367",
+  "tracked-diff.patch": "f103806b1499467d9e9c92d6376ffadd42bc5f39525aeaee34935b9903241947",
+  "types.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "validation-report.md": "730362989f482cad14a02c7527d020686ff875f2a854bb8e49a3c3d34e6f6478"
+}

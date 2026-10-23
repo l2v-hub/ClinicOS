@@ -1,0 +1,180 @@
+{
+  "algorithm": "SHA-256",
+  "nonce": "2c9357bb-7926-4478-9ba8-140d767da5be",
+  "sourceSha": "0ae514c420e6c9a4e6500180617d1bb0a37349a6",
+  "runner": {
+    "path": "/workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs",
+    "bytes": 6760,
+    "sha256": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf"
+  },
+  "files": [
+    {
+      "path": "actual-cli-fake-fetch.mjs",
+      "bytes": 4475,
+      "sha256": "b1674d747344114a9d609be092b74247119c47d76fed0590c9a90d3c52ddfcda",
+      "inode": 1376359,
+      "nlink": 1
+    },
+    {
+      "path": "actual-cli-fake-fetch.receipt.json",
+      "bytes": 1818,
+      "sha256": "83f42f32a6af5763384152634e8401d09fa266d8d5ed659cee306e0a3ad07934",
+      "inode": 1376372,
+      "nlink": 1
+    },
+    {
+      "path": "actual-function-api-probes.receipt.json",
+      "bytes": 4768,
+      "sha256": "1a36acd6f1af62567e1d1c0fa987aa3da935688e99a179bc78a25ac663e99e9f",
+      "inode": 1376368,
+      "nlink": 1
+    },
+    {
+      "path": "executed-harness-freeze.json",
+      "bytes": 517,
+      "sha256": "bd48735f5bd714a496c60da0796748e9aac2687c4d06d7701ef9435ccac3f9db",
+      "inode": 1376331,
+      "nlink": 1
+    },
+    {
+      "path": "independent-api-probes.mjs",
+      "bytes": 8601,
+      "sha256": "5edf118a7dd3d64e0177588ca47feb4af3fbfd801fc78bd2883168a54c51ed13",
+      "inode": 1376358,
+      "nlink": 1
+    },
+    {
+      "path": "independent-probe-input.json",
+      "bytes": 1528,
+      "sha256": "906d2fdd20c3a9c55232d16372ab421ed860335904e9053b03d7db15a11d4f9e",
+      "inode": 1376361,
+      "nlink": 1
+    },
+    {
+      "path": "independent-probes-driver.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "inode": 1376363,
+      "nlink": 1
+    },
+    {
+      "path": "independent-probes-driver.stdout",
+      "bytes": 167,
+      "sha256": "21399781f62acba7a4707b6adc661f679b7372eeaec1d57bd9c66e168381d7f6",
+      "inode": 1376362,
+      "nlink": 1
+    },
+    {
+      "path": "independent-probes-summary.json",
+      "bytes": 263,
+      "sha256": "3a7587ab9d09165f43088a15a8a3a860fd5903c5f97bf3979a25561dd93340e1",
+      "inode": 1376373,
+      "nlink": 1
+    },
+    {
+      "path": "input-manifest.json",
+      "bytes": 635,
+      "sha256": "9691f46b70b2f69aa38ad9ac7d960fa9c96ae5d7c51a6c32ad3772cc52352633",
+      "inode": 1376309,
+      "nlink": 1
+    },
+    {
+      "path": "integrity-after.json",
+      "bytes": 1132,
+      "sha256": "3cb8ddbd5906c26e8aed848884c4a3c1d4ff1474a9f4d816632baf11f9386e5a",
+      "inode": 1376377,
+      "nlink": 1
+    },
+    {
+      "path": "pre-execution-freeze.json",
+      "bytes": 49022,
+      "sha256": "2298341c5ab4539ed99684e820f51b11d79bc223180d3099f0603be025b27d39",
+      "inode": 1376308,
+      "nlink": 1
+    },
+    {
+      "path": "repository-settings.receipt.json",
+      "bytes": 6261,
+      "sha256": "12b50e792caeecc10555ceba5b27b6120baa93e7b595edff3bde6ee673d80fb3",
+      "inode": 1376343,
+      "nlink": 1
+    },
+    {
+      "path": "run-independent-probes.mjs",
+      "bytes": 1513,
+      "sha256": "2ba33f28565dc9beee049a492f3e87068b82411e34c739c6fb3f0410959de640",
+      "inode": 1376360,
+      "nlink": 1
+    },
+    {
+      "path": "run-targeted.mjs",
+      "bytes": 1676,
+      "sha256": "35c84a5ed56f0182d0d21bfe0941f3243e2cc5baebd81207996e8467fc0fdb3c",
+      "inode": 1376330,
+      "nlink": 1
+    },
+    {
+      "path": "source-syntax.receipt.json",
+      "bytes": 106,
+      "sha256": "2871e74fd399c95a61c6e426984700f6f5f09a3010949e0497e491f14543bc96",
+      "inode": 1376341,
+      "nlink": 1
+    },
+    {
+      "path": "targeted-counts-derived.json",
+      "bytes": 356,
+      "sha256": "21b2f50d24de7c75bc8b1458d1adc5a195032103e8fedae26f1c0a7404e7a692",
+      "inode": 1376378,
+      "nlink": 1
+    },
+    {
+      "path": "targeted-driver.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "inode": 1376333,
+      "nlink": 1
+    },
+    {
+      "path": "targeted-driver.stdout",
+      "bytes": 256,
+      "sha256": "0f906c6d6f15960518befdf4b73bc79f122d17a52a7cc05ffa168379e19fb0ff",
+      "inode": 1376332,
+      "nlink": 1
+    },
+    {
+      "path": "targeted-summary.json",
+      "bytes": 427,
+      "sha256": "0c61891c49ef4b55dc913c1c9bb3199913855664a66250c1e62efda16c2f3221",
+      "inode": 1376344,
+      "nlink": 1
+    },
+    {
+      "path": "test-syntax.receipt.json",
+      "bytes": 104,
+      "sha256": "e50c9e261084f6ee880e14163a96ce82e564154d6f016e8c3d33364cb7549d31",
+      "inode": 1376342,
+      "nlink": 1
+    },
+    {
+      "path": "validation-report.md",
+      "bytes": 4920,
+      "sha256": "5d401d651c2ebc7f3e08f6be9199660607174c45e0b2516d8c4f50d70a73a16a",
+      "inode": 1376390,
+      "nlink": 1
+    },
+    {
+      "path": "validation-summary.json",
+      "bytes": 4350,
+      "sha256": "2146438ad7a69c846a10b4f1558c7bfe65073f95de4c0e45fcc66726de4bfebf",
+      "inode": 1376391,
+      "nlink": 1
+    }
+  ],
+  "sourceManifest": {
+    "path": "/workspace/clinicos-demo-exact-release/artifacts/task-validation/demo-exact-commit-release/codex-followup-6/source-manifest.json",
+    "bytes": 1366,
+    "sha256": "4b8e3a582b62a02bff29bbbe41e76209e2c0fab6943a45a9b97bfd25b04f7e35",
+    "inode": 808435,
+    "nlink": 1
+  }
+}

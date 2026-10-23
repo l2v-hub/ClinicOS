@@ -1,0 +1,16 @@
+{
+  "reviewer": "/root/topology_independent_qa",
+  "startedAt": "2026-10-17T15:38:49.496Z",
+  "baseline": "299ba8ff8d048631cdb969f26656d02de981da83",
+  "sourceManifestSha256": "ec6267fa6002af6620226dc89092092830a84be6068b0ef78448d767d303ca10",
+  "frozenSourceCount": 3,
+  "frozenContractCount": 4,
+  "verifiedUnchangedLegacy": 22,
+  "phase": "review-reserved-before-validation",
+  "restrictions": [
+    "local fixtures only",
+    "no credentials or external API",
+    "no source or contract edits",
+    "no publication or state mutation"
+  ]
+}

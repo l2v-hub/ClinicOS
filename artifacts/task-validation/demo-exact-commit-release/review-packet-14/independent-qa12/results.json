@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "fullPure": {
+    "tests": 1170,
+    "pass": 1167,
+    "fail": 0,
+    "skipped": 3,
+    "attempts": 1
+  },
+  "independentSyntheticProbes": {
+    "pass": 40,
+    "fail": 0
+  },
+  "actionableSourceFindings": [],
+  "sourceFiles": 264,
+  "sourceUnchanged": true,
+  "priorQA11": "Preserved failed1170/1162/5/3; controller test fixture corrected, exact trace restored.",
+  "independentHarnessFailure": "Initial descendant probe used nonexistent runtime path ai-runtime/src/router.ts; corrected only private fixture to clinicos-ai-runtime/main.py, then40PASS. Failed log preserved.",
+  "contractHistoricalTypo": "Actual negative exposure run39730182635, not contract prose39730182645. Original receipt authoritative.",
+  "finalCodeApproval": false,
+  "actualNativeClaudeProviderDeploy": "UNRUN"
+}

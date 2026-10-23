@@ -1,0 +1,9 @@
+# Maintenance470 attempt8 receipt refinement1: stopped for independent QA
+
+Only two authorized paths differ from frozen original270-file source: dedicated workflow and workflow-policy tests. Helper, pure binding and helper tests remain byte-identical; original source/seal efc61f..., original150PASS run, first145PASS/2ported-fixtureFAIL and intermediate147PASS proofs remain unchanged.
+
+The credential-bearing step now explicitly uses bash and set -euo pipefail, piping only helper stdout through tee to the exact runner temporary receipt file. It does not merge stderr or suppress failure. A separate upload-artifact action is pinned to ea165f8d65b6e75b540449e92b4886f43607fa02, uses always(), uploads only that literal file, names it with run ID/attempt, retains7days and warns on missing file. It has no credential environment or wildcard/directory upload. Only the existing bounded safe JSON/finite annotation stream is retained, not raw CLI/provider stderr or patient/config/token data.
+
+Actual affected Node22.23.4 workflow test run:4PASS/0FAIL/0SKIP. One test executes the actual extracted receipt shell with a harmless private fake node: synthetic helper exit17 remains shell exit17, safe stdout is retained and synthetic private stderr is absent from the file. That intentional fixture failure is expected shell verification, not a product/provider failure. YAML BaseLoader, all shell syntax, contract validation and unchanged import-graph policy pass. No full helper rerun or combined test total is claimed for this refinement.
+
+All270 files are frozen in source-freeze.json; exactly two scoped deltas are in source.patch. No real network/provider/runtime/SQL, install, Git/canonical/model or issue operation occurred. Root alone independently reviews, publishes and performs future protected-main read-only dispatch. This is author validation, not independent QA or closure approval.

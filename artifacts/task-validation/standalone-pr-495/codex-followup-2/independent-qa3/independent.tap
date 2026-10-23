@@ -1,0 +1,33 @@
+✔ actual CLI: duplicate-distinct (87.639406ms)
+✔ actual CLI: duplicate-identical (76.72438ms)
+✔ actual CLI: pagination-incomplete (83.5945ms)
+✔ actual CLI: pagination-edges-object (98.824171ms)
+✔ actual CLI: pagination-too-many (90.157892ms)
+✔ actual CLI: pagination-flag-malformed (108.669905ms)
+✔ actual CLI: domain-missing (85.90099ms)
+✔ actual CLI: domain-duplicate (79.007883ms)
+✔ actual CLI: domain-poison (84.908123ms)
+✔ actual CLI: domain-shape (84.293292ms)
+✔ actual CLI: environment-poison (93.326134ms)
+✔ actual CLI: project-mismatch (89.15473ms)
+✔ actual CLI: service-mismatch (79.343185ms)
+✔ actual CLI: trigger-target (83.347299ms)
+✔ actual CLI: missing-me (77.327939ms)
+✔ actual CLI: null-me (128.863417ms)
+✔ actual CLI: missing-id (143.055616ms)
+✔ actual CLI: malformed-node (81.809762ms)
+✔ actual CLI: foreign-projection-poison (96.051779ms)
+✔ actual CLI: foreign-lookalike-safe-code (109.777457ms)
+✔ actual CLI: foreign-provider-poison (87.424492ms)
+✔ actual CLI: graphql-provider-poison (101.287201ms)
+✔ success exact projection, identity discarded, flags false and exclusive file (86.729141ms)
+✔ false environment access skips inventory, remains non-authorizing (90.890278ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2326.402239
+

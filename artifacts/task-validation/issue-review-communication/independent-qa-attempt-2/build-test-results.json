@@ -1,0 +1,24 @@
+[
+  {
+    "name": "full-regression",
+    "exit": 0,
+    "tests": 628,
+    "passed": 625,
+    "skippedNativeWindows": 3
+  },
+  {
+    "name": "types",
+    "exit": 0,
+    "projects": [
+      "tsconfig.app.json",
+      "tsconfig.node.json"
+    ],
+    "note": "Wrong initial relative binary path preserved in types-preflight-wrong-binary.log; corrected absolute compiler and both noEmit project checks pass."
+  },
+  {
+    "name": "build",
+    "exit": 0,
+    "modules": 740,
+    "seconds": 35.74
+  }
+]

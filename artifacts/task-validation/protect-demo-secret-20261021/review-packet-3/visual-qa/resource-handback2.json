@@ -1,0 +1,12 @@
+{
+  "nonce": "3792204d-9713-4e16-9319-36e705861752",
+  "status": "HANDBACK",
+  "at": "2026-10-21T23:00:12.777Z",
+  "browserRunnerExited": true,
+  "runnerExitCode": 0,
+  "ownedStaticServerClosed": true,
+  "portReleased": 5499,
+  "ownedApplicationServersCreated": 0,
+  "ownedDatabasesCreated": 0,
+  "noFurtherBrowserAttempts": true
+}

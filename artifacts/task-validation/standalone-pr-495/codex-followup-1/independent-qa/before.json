@@ -1,0 +1,11 @@
+{
+  ".github/workflows/inspect-demo-bearer-readiness.yml": "4454f79a5b9b5782467d18d97b257831dadd80a6d8cb2e11bbd9e792d43d93ca",
+  "scripts/automation/inspect-demo-bearer-readiness.mjs": "fad62e85316fa388a9cb007aaed8607e412b84604db19414d8d3e26a83275ad9",
+  "scripts/automation/inspect-demo-bearer-readiness.test.mjs": "e354ed48a7bba0a761b20b33832ef16bed62b1a8935e916bbb592e261773878f",
+  "scripts/automation/configure-demo-source.mjs": "c674e302471ea8b95154aa7e440761d0ca188475bdaffd294e9f4d3ad9c4536a",
+  "scripts/automation/configure-demo-source.test.mjs": "5da3aa8f5865c3b7d47d210a95ae56bef6e856a0d6f07cac494328fb3f32896a",
+  "artifacts/task-validation/demo-bearer-readiness/task-contract.md": "6bcfcb1759939cb3817554d69c98194006914ed529b45ab8e38a5e7ca20ca67f",
+  "artifacts/task-validation/demo-bearer-readiness/plan.md": "9e5a4cda18d7a1c8a8fa1a03014b6486b12be4358273457eb0037e978a5359c6",
+  "/workspace/.clinicos-cloud/demo-bearer-readiness-author-20261018/tests.tap": "110926f632367cfb0c17611c6d0765e0e44acb4adb4ad94e8a43003c670a4455",
+  "/workspace/.clinicos-cloud/demo-bearer-readiness-author-20261018/before.sha256": "f78bc71786bd556f48c0d6403752e8ab27336f1a0413c43a6e50ed64fc7649bc"
+}

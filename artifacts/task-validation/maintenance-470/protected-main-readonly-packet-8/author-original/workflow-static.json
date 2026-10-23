@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "yaml": "BaseLoader",
+  "events": [
+    "pull_request",
+    "workflow_dispatch"
+  ],
+  "permissions": {
+    "contents": "read"
+  },
+  "environment": "glistening-friendship / demo",
+  "credentialSteps": 1,
+  "shells": [
+    {
+      "run": "node --test scripts/maintenance/demo-storage-inspect.test.mjs scripts/maintenance/demo-storage-workflow.test.mjs",
+      "bashSyntax": "PASS"
+    },
+    {
+      "run": "npm install -g @railway/cli@5.66.0",
+      "bashSyntax": "PASS"
+    },
+    {
+      "run": "node scripts/maintenance/demo-storage-inspect.mjs",
+      "bashSyntax": "PASS"
+    }
+  ]
+}

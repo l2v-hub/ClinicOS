@@ -1,0 +1,20 @@
+{
+  "snapshotFiles": 165,
+  "frozen9": "PASS",
+  "authorSealAndEveryFile": "PASS",
+  "author659SummaryAnd3Syntax": "PASS",
+  "productionProof": [
+    {
+      "path": "scripts/maintenance/demo-storage-inspect.mjs",
+      "entireFileComparison": "exactly one official endpoint literal replacement; all other bytes identical"
+    },
+    {
+      "path": "scripts/automation/configure-demo-source.mjs",
+      "entireFileComparison": "exactly one official endpoint literal replacement; all other bytes identical"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "entireFileComparison": "exactly one official endpoint literal replacement; all other bytes identical"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "status": "PASS",
+  "realProductionRunner": true,
+  "sourceHash": "e885289d27cc6c315f8fb252e367f7062243ce2117625383106eae486805713f",
+  "executions": 1,
+  "persistenceAfterReload": true,
+  "domValueAssertions": 12,
+  "assertions": [
+    {
+      "stage": "before reload",
+      "id": "count",
+      "value": "2"
+    },
+    {
+      "stage": "before reload",
+      "id": "writer",
+      "value": "writer-end"
+    },
+    {
+      "stage": "before reload",
+      "id": "reader",
+      "value": "reader-verified"
+    },
+    {
+      "stage": "before reload",
+      "id": "exit",
+      "value": "0"
+    },
+    {
+      "stage": "before reload",
+      "id": "executions",
+      "value": "1"
+    },
+    {
+      "stage": "before reload",
+      "id": "sha",
+      "value": "e885289d27cc6c315f8fb252e367f7062243ce2117625383106eae486805713f"
+    },
+    {
+      "stage": "after reload",
+      "id": "count",
+      "value": "2"
+    },
+    {
+      "stage": "after reload",
+      "id": "writer",
+      "value": "writer-end"
+    },
+    {
+      "stage": "after reload",
+      "id": "reader",
+      "value": "reader-verified"
+    },
+    {
+      "stage": "after reload",
+      "id": "exit",
+      "value": "0"
+    },
+    {
+      "stage": "after reload",
+      "id": "executions",
+      "value": "1"
+    },
+    {
+      "stage": "after reload",
+      "id": "sha",
+      "value": "e885289d27cc6c315f8fb252e367f7062243ce2117625383106eae486805713f"
+    }
+  ],
+  "errors": [],
+  "syntheticOnly": true,
+  "noDatabase": true
+}

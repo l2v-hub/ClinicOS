@@ -1,0 +1,44 @@
+{
+  "sourceSha": "34996816c9b8149a4a90f9ccfc7eabec230d2828",
+  "sourceFiles": {
+    "scripts/automation/protect-demo-secret.mjs": "64bf22312e4f83f0e8c49bddae1c20b17ff3ea4a4f45cb922eb4413b06687dfa",
+    "scripts/automation/protect-demo-secret.test.mjs": "30bf1fa8d0b5c1850dff92a28d8b3b8d5c1f8d5717879cf13663500202318f9c",
+    ".github/workflows/protect-demo-secret.yml": "ed56dbc4402058e75d6bb5c940cef53131793882b3834cf37dcd1567d87cb5e7",
+    "scripts/automation/evidence/gh-cli-v2.103.0.md": "a7d7c9f612812aedecc4d0b669c916b5944ef4122f0693aeadaf651ce5b50974"
+  },
+  "trustedSkills": {
+    "commit": "fbaa78d8c7eacf8402db0c8fa2be276ae579a27c",
+    "files": {
+      ".claude/skills/playwright-evidence/SKILL.md": "29bd1d29c9404655e6638d0f8bca864e51f6964f1b6f6a554c2f3df18811bb7c",
+      ".claude/skills/qa-gate/SKILL.md": "664ca4b5791d9464a99c7facb87380f20c091746c320ad07d5ccb33d5d62835e",
+      ".claude/skills/parallel-evidence-remediation/SKILL.md": "61cdfd618f0ff3111257473e4b5b470182e7a03e32c17397d0ced68d516eec85"
+    }
+  },
+  "binaryProofReference": {
+    "archiveProof": "/workspace/.clinicos-cloud/499-Claude1-followup-20261021/root-gh-binary-check/archive-verified.json",
+    "archiveProofSha256": "8b156f7a00ef61ef9dbd177b5b623a51c868ba955207ebffd7c241ad4b970dc6",
+    "realVersionReceipt": "/workspace/clinicos-demo-secret-scope/artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-real-gh-version.json",
+    "realVersionReceiptSha256": "ed0f782cf52f1ac179a4f51925b6956eb7112aa7055ebf5e8a684558f527103e",
+    "executedByThisReviewer": false
+  },
+  "currentBrowserStatus": "UNRUN_BEFORE_LAUNCH",
+  "preparedFiles": {
+    "generate-surface.mjs": "73faae89b776b90790a8b72d8a4a686c6b6b5ed376ea51a6d19fd09bd61e15a8",
+    "helper-outcomes.json": "47fbdb8f4085e2ed2d9601aa63163fe2c45c1ab142985e16e028f9911ed0c72b",
+    "resource-grant.json": "48facfc5029535cd33407bf74044a1e1366d05012baa806099bc978a7104f3a1",
+    "freeze-before.json": "03019e3f505a0a5aeb7be5e9c33d1da56fa288eada981f7a509f2c947fb7a334",
+    "browser-worker.mjs": "d27bf8ebf5b7a3bc3061b235e6ad244206d7bad84fa684e7bc6980bb531f4e97",
+    "launch-browser.mjs": "389c167df02ccd7128d27aa986cdc89998d836b1971b611ab2c1652976d1e83e",
+    "generation-receipt.json": "3969058a8fc17e28e899a48d6c67acb99cc3aca15154e8d091f409c6ccc3df2a",
+    "run-prepare.mjs": "e3e884cab2a5e03e5a8c565d77c08326997b9173807a670a1f7558849dae1140",
+    "prepare-command-receipt.json": "0d2bf6b42be527a6992c90d7c405c5075015b314d44a34d29a0942065f65c58c",
+    "task-contract.md": "18c4aba7c2b8d45b7961a14da450e614c8d3b60579678ad53d7e42688061d4c3",
+    "playwright.config.mjs": "58ffc0ad189e0bf156de02c12e472a0bc18233f63baf15a51b380bc7b6d97665",
+    "helper-qa.html": "51339d8b9ab05c7e4859f175b24f8af1d322c9236e275590029306cf81dcf3de",
+    "browser-tests/internal-helper.spec.mjs": "f2053c2c7fb2d53a049ec047577319155efb030a189c2001e7d16a9fd3b49d3b",
+    "trusted-skills/parallel-evidence-remediation/SKILL.md": "61cdfd618f0ff3111257473e4b5b470182e7a03e32c17397d0ced68d516eec85",
+    "trusted-skills/qa-gate/SKILL.md": "664ca4b5791d9464a99c7facb87380f20c091746c320ad07d5ccb33d5d62835e",
+    "trusted-skills/playwright-evidence/SKILL.md": "29bd1d29c9404655e6638d0f8bca864e51f6964f1b6f6a554c2f3df18811bb7c"
+  },
+  "expectedRunnableCommand": "node /workspace/.clinicos-cloud/499-Claude1-followup-20261021/internal-visual-qa1/launch-browser.mjs"
+}

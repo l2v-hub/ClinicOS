@@ -1,0 +1,30 @@
+{
+  "baseSha": "361d2ede1ef51f17e6926a30b376da803f5ffa5b",
+  "sourcePath": "backend/src/proactive/__tests__/proactive-e2e.test.ts",
+  "sourceSha256": "81d10c2fa518edfe76625dbcbd5ccd8404d0a00750abb22a32e630ab83d0cd90",
+  "frozenPreEditSha256": "e7b11cb0b0ee49854add0cc6a6d3d56d8bf9be44a413a26fa3801017cf4fa014",
+  "changedSourceFiles": [
+    "backend/src/proactive/__tests__/proactive-e2e.test.ts"
+  ],
+  "staticChecks": [
+    {
+      "name": "typescript-transpile-syntax",
+      "ok": true,
+      "exitCode": 0
+    },
+    {
+      "name": "git-diff-whitespace",
+      "ok": true,
+      "exitCode": 0
+    },
+    {
+      "name": "diff-scope",
+      "ok": true,
+      "exitCode": 0
+    }
+  ],
+  "runtimeTest": "UNRUN \u2014 reserved to independent QA session",
+  "preservedEvidenceFilesUnchanged": 101,
+  "preservationManifestSha256": "7fcdd706cf23ba07d61ea83f1cba7bb3ce33b50e1c1d11448dee294e158f24ac",
+  "validationReceiptSha256": "93f42d1095614c6ca04b7422d435f715ee18d82e8b8951a8d3807a8975219fc9"
+}

@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "code": 0,
+  "node": "v24.19.0",
+  "envMode": "verification",
+  "trustedRunner": "/workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs",
+  "tail": "\u2714 /workspace/.clinicos-cloud/492-continuation7-independent-qa-20261018/browser.mjs (1964.96946ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 1974.390466\n",
+  "stderr": ""
+}

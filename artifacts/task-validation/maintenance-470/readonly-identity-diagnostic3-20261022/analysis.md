@@ -1,0 +1,5 @@
+# Analysis
+
+The two separately reserved protected actual account/project identity runs39827112860 and39829997131 failed before target reads with READONLY_GRAPHQL_REJECTED. A source-bound independent analysis found no evidenced request/host/header/query defect and no basis to infer expiry/invalidity. The safe receipt discarded error shape/category, so the minimal next discriminant is a fixed enum projection. This diagnostic preserves the same refusal boundary and does not accept empty/null errors. Unknown remains unknown. Original failed runs remain failures; provider diagnosis still pending after real model/native review and protected source merge.
+
+Detailed contract in author/task-contract.md; independent QA185focused+40main adversarial cases, synthetic local browser evidence40rows/240values. First browser fileURI probe was blocked by administrator and is retained; same local HTML via setContent passed without network or source change. No app/source consumer changes and no liveprovider call. Current and historical validation filenames distinguished in README.

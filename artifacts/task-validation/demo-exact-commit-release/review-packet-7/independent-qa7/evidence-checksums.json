@@ -1,0 +1,474 @@
+{
+  "createdAt": "2026-10-21T17:53:06Z",
+  "entries": [
+    {
+      "path": "attempt-1/after-proof.json",
+      "sha256": "2a6127f07a34407b39353b7ae5387dcbb6dcc0f898d01687b2efb0847557acc0",
+      "bytes": 10216,
+      "inode": 1355275,
+      "links": 1
+    },
+    {
+      "path": "attempt-1/before-proof.json",
+      "sha256": "2a6127f07a34407b39353b7ae5387dcbb6dcc0f898d01687b2efb0847557acc0",
+      "bytes": 10216,
+      "inode": 1355269,
+      "links": 1
+    },
+    {
+      "path": "attempt-1/cli-environment403.json",
+      "sha256": "83fcdfacb452cf1ccf3197144e843487d33027575c4d3de973b357233fd2db0c",
+      "bytes": 5473,
+      "inode": 1355274,
+      "links": 1
+    },
+    {
+      "path": "attempt-1/diff-check-command.json",
+      "sha256": "f613f108840ef4dea3c79577144c8f833f9504235d76242589537353862c7076",
+      "bytes": 338,
+      "inode": 1355273,
+      "links": 1
+    },
+    {
+      "path": "attempt-1/node-check-source.json",
+      "sha256": "a5786823933f0099aea53dfb30e162facd9bf4a6b980dc9f3ec40c03db274c74",
+      "bytes": 219,
+      "inode": 1355271,
+      "links": 1
+    },
+    {
+      "path": "attempt-1/node-check-test.json",
+      "sha256": "8336d01b84dafbaff888fb56b93021339dd9ae0057c2a32bdebf4f704c28ac29",
+      "bytes": 228,
+      "inode": 1355272,
+      "links": 1
+    },
+    {
+      "path": "attempt-1/runner-exit.json",
+      "sha256": "ca4b50a6aabd8c09a9998c501233e663a1a779dee115f77beed1cc4e481ab5c3",
+      "bytes": 15,
+      "inode": 1355277,
+      "links": 1
+    },
+    {
+      "path": "attempt-1/runner-result.json",
+      "sha256": "85588ecffe1b8590ef86ef4a550053bfc096716d5201aa83f1ed7ceb847220bd",
+      "bytes": 1050,
+      "inode": 1355276,
+      "links": 1
+    },
+    {
+      "path": "attempt-1/runner-source.mjs",
+      "sha256": "d39df369fe906fec679bb032a974eed6a6dd203b4cc5493dc641af7e8431dde2",
+      "bytes": 15204,
+      "inode": 1355279,
+      "links": 1
+    },
+    {
+      "path": "attempt-1/runner.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "inode": 1355264,
+      "links": 1
+    },
+    {
+      "path": "attempt-1/runner.stdout",
+      "sha256": "d14f908e4888afb4e098c5067e01a8ce04a49f3fc94f0e68145a8816239449ed",
+      "bytes": 940,
+      "inode": 1355263,
+      "links": 1
+    },
+    {
+      "path": "attempt-1/targeted-suite-command.json",
+      "sha256": "c102e8bb02dfaa12f7c8b3443bd3d2dd748ec0109fed5d8a21b063216456f5e0",
+      "bytes": 5929,
+      "inode": 1355270,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/after-proof.json",
+      "sha256": "2a6127f07a34407b39353b7ae5387dcbb6dcc0f898d01687b2efb0847557acc0",
+      "bytes": 10216,
+      "inode": 1355295,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/before-proof.json",
+      "sha256": "2a6127f07a34407b39353b7ae5387dcbb6dcc0f898d01687b2efb0847557acc0",
+      "bytes": 10216,
+      "inode": 1355288,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/cli-environment403.json",
+      "sha256": "a6bb7c33b849ac4868f043c4acd18a334d5ded85a5a7fd8b02329e30e76b7f72",
+      "bytes": 5558,
+      "inode": 1355294,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/diff-check-command.json",
+      "sha256": "f613f108840ef4dea3c79577144c8f833f9504235d76242589537353862c7076",
+      "bytes": 338,
+      "inode": 1355292,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/harness-source.json",
+      "sha256": "8f0702a634255a4e6923151b349dbae6fdd220f4c6705201b26ead049827f0a5",
+      "bytes": 200,
+      "inode": 1355285,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/node-check-source.json",
+      "sha256": "a5786823933f0099aea53dfb30e162facd9bf4a6b980dc9f3ec40c03db274c74",
+      "bytes": 219,
+      "inode": 1355290,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/node-check-test.json",
+      "sha256": "8336d01b84dafbaff888fb56b93021339dd9ae0057c2a32bdebf4f704c28ac29",
+      "bytes": 228,
+      "inode": 1355291,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/runner-exit.json",
+      "sha256": "ca4b50a6aabd8c09a9998c501233e663a1a779dee115f77beed1cc4e481ab5c3",
+      "bytes": 15,
+      "inode": 1355300,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/runner-result.json",
+      "sha256": "6149fdac0e3f358c40a3beb68aa2ae569af8c0ad82655f79c102a594cf2bdd0f",
+      "bytes": 745,
+      "inode": 1355296,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/runner-source-hash.json",
+      "sha256": "fc694001281c27c57195c744cce9e22b160366f0d62f41547b79eaa63c63fb91",
+      "bytes": 132,
+      "inode": 1355302,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/runner-source.mjs",
+      "sha256": "44d25e74c08ef9bb77a0cd72e4f6ec0d98009ac9f6520c32e78e45356aa4cafa",
+      "bytes": 15651,
+      "inode": 1355301,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/runner.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "inode": 1355287,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/runner.stdout",
+      "sha256": "fe41acc81351b2e4fd92fbd6792596e17f54d1272f0271a28b7de8e1e420c20e",
+      "bytes": 635,
+      "inode": 1355286,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/targeted-suite-command.json",
+      "sha256": "c102e8bb02dfaa12f7c8b3443bd3d2dd748ec0109fed5d8a21b063216456f5e0",
+      "bytes": 5929,
+      "inode": 1355289,
+      "links": 1
+    },
+    {
+      "path": "attempt-2/trace-environment403.json",
+      "sha256": "e3980e8eac10ceb9137973fafa78ebf9de3fbe41da278367604e0cec715e4f9c",
+      "bytes": 181,
+      "inode": 1355293,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/after-proof.json",
+      "sha256": "2a6127f07a34407b39353b7ae5387dcbb6dcc0f898d01687b2efb0847557acc0",
+      "bytes": 10216,
+      "inode": 1355338,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/before-proof.json",
+      "sha256": "2a6127f07a34407b39353b7ae5387dcbb6dcc0f898d01687b2efb0847557acc0",
+      "bytes": 10216,
+      "inode": 1355307,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/cli-context.json",
+      "sha256": "a01c6fa2bc0d21a8db086079d7b53aed8fa590fdac5e66a884ac262c25fff3c3",
+      "bytes": 5591,
+      "inode": 1355337,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/cli-environment403.json",
+      "sha256": "03410ba37297a1edf12ec290e36f53c3d4a6a980bb3eb41ec19b51b330930782",
+      "bytes": 5620,
+      "inode": 1355316,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/cli-environmentSecrets503.json",
+      "sha256": "4247e57eff9a6d0c40b4061e7c0adb140ba3721c437c8cb46a074aa05c7d98d1",
+      "bytes": 5639,
+      "inode": 1355326,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/cli-malformedJSON.json",
+      "sha256": "5368088130a3e82e54ffb5f0fed83af9618de6b8082307ee8d275e223dc19866",
+      "bytes": 5609,
+      "inode": 1355335,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/cli-malformedStatus.json",
+      "sha256": "19cfecf57b1faa1f24013dc4963a0abd7e46fc2000d8d7cf06810f4a23c9a909",
+      "bytes": 5617,
+      "inode": 1355328,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/cli-policy404.json",
+      "sha256": "b097c8ccdf2552995a870fc4eea4e0f5e5db07a1efbf089908a5e37e338b1d97",
+      "bytes": 5601,
+      "inode": 1355318,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/cli-post403.json",
+      "sha256": "37af1b30baba84801ddc566fd09bc95d952cf1fb995c201ea24d615b932845ad",
+      "bytes": 5589,
+      "inode": 1355322,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/cli-put403.json",
+      "sha256": "7bba23c666f81168f45f05ffb0d1d15e85d188972cbab3b109dc9ee074b51a4f",
+      "bytes": 5585,
+      "inode": 1355320,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/cli-repositorySecrets503.json",
+      "sha256": "011e9af23d8bea813d6376096c0f017ac49ef828478162ba48222dd1c98ecfa7",
+      "bytes": 5636,
+      "inode": 1355324,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/cli-transport.json",
+      "sha256": "f710e0af1f4094ed5e47e6434f6d18c661bcd2d5458761fa3209fba5b330a8c6",
+      "bytes": 5597,
+      "inode": 1355333,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/diff-check-command.json",
+      "sha256": "f613f108840ef4dea3c79577144c8f833f9504235d76242589537353862c7076",
+      "bytes": 338,
+      "inode": 1355311,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/harness-source.json",
+      "sha256": "20733b5fb1a40183f99e4b2bb23231ed2627fb3cad6d30755c15e0f7264d49a2",
+      "bytes": 200,
+      "inode": 1355304,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/node-check-source.json",
+      "sha256": "a5786823933f0099aea53dfb30e162facd9bf4a6b980dc9f3ec40c03db274c74",
+      "bytes": 219,
+      "inode": 1355309,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/node-check-test.json",
+      "sha256": "8336d01b84dafbaff888fb56b93021339dd9ae0057c2a32bdebf4f704c28ac29",
+      "bytes": 228,
+      "inode": 1355310,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/runner-exit.json",
+      "sha256": "3edd82d4e49f89c30270dee752ac018539f4dc6848d7a33b1553404e6f8b58af",
+      "bytes": 15,
+      "inode": 1355340,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/runner-result.json",
+      "sha256": "509125c37e1e9acc1a80de04c18634aac5889889c6cbba12d8063fc0959413dd",
+      "bytes": 3158,
+      "inode": 1355339,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/runner.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "inode": 1355306,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/runner.stdout",
+      "sha256": "05a96289ce19282ff8430bee0c04fbd97c5f55026ed30d68e86d79bc3d420632",
+      "bytes": 2070,
+      "inode": 1355305,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/targeted-suite-command.json",
+      "sha256": "c102e8bb02dfaa12f7c8b3443bd3d2dd748ec0109fed5d8a21b063216456f5e0",
+      "bytes": 5929,
+      "inode": 1355308,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/trace-context.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "bytes": 2,
+      "inode": 1355336,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/trace-environment403.json",
+      "sha256": "8fb677fed3a13eb9efd9735ff8b9b09d13b64efa6943c017c7be0f5e1effd571",
+      "bytes": 523,
+      "inode": 1355312,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/trace-environmentSecrets503.json",
+      "sha256": "15ef4f26a1332f69231cf55bc5a4af6cca96238a828061770fc5a56d648f4e19",
+      "bytes": 1414,
+      "inode": 1355325,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/trace-malformedJSON.json",
+      "sha256": "e3980e8eac10ceb9137973fafa78ebf9de3fbe41da278367604e0cec715e4f9c",
+      "bytes": 181,
+      "inode": 1355334,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/trace-malformedStatus.json",
+      "sha256": "e3980e8eac10ceb9137973fafa78ebf9de3fbe41da278367604e0cec715e4f9c",
+      "bytes": 181,
+      "inode": 1355327,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/trace-policy404.json",
+      "sha256": "644f4a77387e6025393c0af112307c774fbde1d9ca84c753c71a221ddda8611a",
+      "bytes": 765,
+      "inode": 1355317,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/trace-post403.json",
+      "sha256": "c1e27324d5809f72f552791216b2203b046993eb6825267cc0a3b28dabc281fa",
+      "bytes": 2155,
+      "inode": 1355321,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/trace-put403.json",
+      "sha256": "dd5d71f962b0aa57a4187165b90d26670ce931f670d19722b77e9f8d20a9cdc5",
+      "bytes": 1700,
+      "inode": 1355319,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/trace-repositorySecrets503.json",
+      "sha256": "c4af59af248bb439efa0bba517e792c1effa40c18bfaa82fed2050b08a09e13f",
+      "bytes": 1191,
+      "inode": 1355323,
+      "links": 1
+    },
+    {
+      "path": "attempt-3/trace-transport.json",
+      "sha256": "e3980e8eac10ceb9137973fafa78ebf9de3fbe41da278367604e0cec715e4f9c",
+      "bytes": 181,
+      "inode": 1355332,
+      "links": 1
+    },
+    {
+      "path": "legacy-configure-compare-command.json",
+      "sha256": "5324d65debf0808ac459b80b3b5241cff79c4a11bbaa8e16dfc09dcc85858334",
+      "bytes": 446,
+      "inode": 1355349,
+      "links": 1
+    },
+    {
+      "path": "legacy-configure-compare.exit.json",
+      "sha256": "3edd82d4e49f89c30270dee752ac018539f4dc6848d7a33b1553404e6f8b58af",
+      "bytes": 15,
+      "inode": 1355348,
+      "links": 1
+    },
+    {
+      "path": "legacy-configure-compare.mjs",
+      "sha256": "2a2d3ba3e11f0ab903c9fa15bf1c4262e0cf3b91c7480f5d40463a3769a484d0",
+      "bytes": 962,
+      "inode": 1355341,
+      "links": 1
+    },
+    {
+      "path": "legacy-configure-compare.mjs.sha256.json",
+      "sha256": "de66e62e6b142bfaab9dfb51a04a1705ecf7b0c0cbea7dac1c691dbaa1527356",
+      "bytes": 157,
+      "inode": 1355342,
+      "links": 1
+    },
+    {
+      "path": "legacy-configure-compare.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "inode": 1355344,
+      "links": 1
+    },
+    {
+      "path": "legacy-configure-compare.stdout",
+      "sha256": "7ab5a65897542f4bd814fed068fe0a99b76c5709527017092fa04a9255af6e70",
+      "bytes": 89,
+      "inode": 1355343,
+      "links": 1
+    },
+    {
+      "path": "resumption-reservation-preservation.json",
+      "sha256": "474bf5db3ca8cde7366f1d9ad5ba09762d403bef62ac83dbf1a9bf2ddfcfe91e",
+      "bytes": 272,
+      "inode": 1355351,
+      "links": 1
+    },
+    {
+      "path": "run-qa7-durable.mjs",
+      "sha256": "9d094a1e8f7f17ba64a536483fa1905625ad1e071bc8b3195bb3b003f9445b98",
+      "bytes": 15719,
+      "inode": 1355262,
+      "links": 1
+    },
+    {
+      "path": "runner-invocations.json",
+      "sha256": "21a26bac488a8bc951439f8eacb5deded754e4e4a2ad08da3847a26089c17b16",
+      "bytes": 5467,
+      "inode": 1355350,
+      "links": 1
+    }
+  ]
+}

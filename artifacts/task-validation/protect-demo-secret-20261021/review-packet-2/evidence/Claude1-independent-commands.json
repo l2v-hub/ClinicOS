@@ -1,0 +1,26 @@
+[
+  {
+    "path": "real-gh-version.json",
+    "sha256": "ed0f782cf52f1ac179a4f51925b6956eb7112aa7055ebf5e8a684558f527103e",
+    "ok": true,
+    "code": 0
+  },
+  {
+    "path": "adversarial.json",
+    "sha256": "d89ee1ced3c75f344bc7e9c336d404f2f2becf17479152f7cd4761009dfc0918",
+    "ok": true,
+    "code": 0
+  },
+  {
+    "path": "upstream-fresh.json",
+    "sha256": "0628e2db7889113ea850548ae36e975a7dda39c719bdfec54c4118b4a8e699c1",
+    "ok": false,
+    "code": 1
+  },
+  {
+    "path": "tests-fresh.json",
+    "sha256": "b46d72c0275eebb3695ba3467afa60b6a3d44863090d3a37f50433179a7718c5",
+    "ok": true,
+    "code": 0
+  }
+]

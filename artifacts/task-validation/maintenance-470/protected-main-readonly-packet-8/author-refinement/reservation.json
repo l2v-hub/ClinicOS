@@ -1,0 +1,23 @@
+{
+  "nonce": "81599d71-f483-46bd-8605-8ab3cf897677",
+  "status": "reserved-before-session",
+  "reservedAt": "2026-10-22T13:54:45.802Z",
+  "reservedBeforeSession": true,
+  "parentNonce": "b90f75b0-029a-4d44-818d-9a856410864e",
+  "model": "gpt-6.1-sol",
+  "agent": "/root/qa497_publication13",
+  "sourceSnapshot": "/tmp/clinicos470-protected-inventory8-source-refinement1",
+  "privateOutput": "/tmp/clinicos470-protected-inventory8-20261022/author/refinement1",
+  "contractSha256": "508f117024f4d9dabcaacbbcb46d4d4d5dcd4357d0f463f1a6b217d1626da7a7",
+  "initialAuthorSealSha256": "efc61fa8a19dfc63a60c54bf77cd9ef65f868a69b7252a9eea3366ab9c15c8d9",
+  "scope": [
+    ".github/workflows/inspect-demo-storage.yml",
+    "scripts/maintenance/demo-storage-workflow.test.mjs"
+  ],
+  "sourceEditsAllowed": true,
+  "providerRuntimeAllowed": false,
+  "reason": "Safe fixed runtime receipt artifact avoids inaccessible joblog dependency; preserves original CLI failure and secret isolation",
+  "stateCommit": "e78c9e4b23fea1e7a260cfcb4384e694d4632a6b",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/045c2edd-24a8-484d-9a09-bd556560e6a4/accepted.json",
+  "stateReadbackVerified": true
+}

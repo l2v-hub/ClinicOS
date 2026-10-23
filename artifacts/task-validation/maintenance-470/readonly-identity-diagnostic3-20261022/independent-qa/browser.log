@@ -1,0 +1,10 @@
+page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at file:///tmp/clinicos500-identity-diagnostic3-20261022/independent-qa/surface.html
+Call log:
+[2m  - navigating to "file:///tmp/clinicos500-identity-diagnostic3-20261022/independent-qa/surface.html", waiting until "load"[22m
+
+    at /tmp/clinicos500-identity-diagnostic3-20261022/independent-qa/browser.cjs:2:1476 {
+  log: [
+    '  - navigating to "file:///tmp/clinicos500-identity-diagnostic3-20261022/independent-qa/surface.html", waiting until "load"'
+  ],
+  name: 'Error'
+}

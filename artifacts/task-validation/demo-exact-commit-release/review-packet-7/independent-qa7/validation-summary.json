@@ -1,0 +1,52 @@
+{
+  "review": "QA7 durability follow-up",
+  "verdict": "PASS",
+  "findings": [],
+  "sourceSha": "e703807d83bcb00bfd1226651cc8d84f7fecf8a3",
+  "priorQaNonce": "a3e8c3ed-c1ba-46ba-9bb5-8cac9dd7f758",
+  "durabilityFollowupNonce": "f1fe59c6-1a63-423e-adcd-9d2ee108a21d",
+  "targetedSuite": {
+    "freshDurableExecutionCount": 1,
+    "attempt": "attempt-1",
+    "exitCode": 0,
+    "tests": 81,
+    "passed": 81,
+    "failed": 0,
+    "skipped": 0,
+    "receipt": "attempt-1/targeted-suite-command.json"
+  },
+  "durableActualCliProbes": {
+    "attempt": "attempt-3",
+    "count": 10,
+    "allPassed": true,
+    "cases": [
+      "environment 403 zero writes",
+      "policy 404 zero writes",
+      "failed PUT one attempt",
+      "failed POST after PUT two total attempts without retry",
+      "repository secret inventory 503 on query-bearing route",
+      "environment secret inventory 503 on query-bearing route",
+      "malformed HTTP status",
+      "transport failure",
+      "malformed JSON response",
+      "pre-request context validation"
+    ]
+  },
+  "legacyConfigureRepositoryByteIdentical": true,
+  "legacyFunctionBytes": 5667,
+  "sourceAndProofPreservation": "passed before/after hashes, bytes, inodes, links, and clean git state",
+  "publicProofArtifactsPreserved": 27,
+  "originalFollowup5ArtifactsPreserved": 3,
+  "priorQa7FilesPreserved": 5,
+  "preservedFirstDurableAttempts": [
+    {"attempt": "attempt-1", "runnerExitCode": 1, "reason": "duplicate scenario declaration in fake-fetch preload"},
+    {"attempt": "attempt-2", "runnerExitCode": 1, "reason": "missing scenario binding in fake-fetch preload"}
+  ],
+  "attempt3RunnerExitCode": 0,
+  "evidenceChecksumManifest": "evidence-checksums.json",
+  "providerAction": false,
+  "network": false,
+  "settingsApplied": false,
+  "providerPermissionConclusion": "unknown",
+  "nativeSixStillRequired": true
+}

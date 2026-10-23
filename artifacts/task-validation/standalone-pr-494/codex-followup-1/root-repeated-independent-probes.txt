@@ -1,0 +1,14 @@
+
+test_expiry_before_archive (__main__.Cases.test_expiry_before_archive) ... ok
+test_fetched_raw_digest_independent (__main__.Cases.test_fetched_raw_digest_independent) ... ok
+test_hostile_controls (__main__.Cases.test_hostile_controls) ... ok
+test_http_codes_and_suppression (__main__.Cases.test_http_codes_and_suppression) ... ok
+test_idempotence_foreign_conflict_freshness_lost_post (__main__.Cases.test_idempotence_foreign_conflict_freshness_lost_post) ... ok
+test_limits_compression (__main__.Cases.test_limits_compression) ... ok
+test_plain_colored_gzip (__main__.Cases.test_plain_colored_gzip) ... ok
+test_sgr_bounds (__main__.Cases.test_sgr_bounds) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.027s
+
+OK

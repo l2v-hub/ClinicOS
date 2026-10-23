@@ -1,0 +1,48 @@
+{
+  "baseSha": "f8890678378c3cd8c59a1a3c2c29e0e4aad3fff4",
+  "status": "IMPLEMENTED-NOT-INDEPENDENTLYVERIFIED",
+  "files": [
+    {
+      "path": ".github/workflows/deploy-demo-exact-commit.yml",
+      "sha256": "c45b50ea6dca08a4c93c4a483d35ad3f2e1e8946bb7c6f3708b543d2dfae0e15",
+      "bytes": 3865,
+      "sourceLinkCount": 1,
+      "frozenCopyLinkCount": 1
+    },
+    {
+      "path": ".github/workflows/configure-demo-source.yml",
+      "sha256": "34319447165b115b20c82e9b0c10393bbf189b8352867873ea3fb7948cb97875",
+      "bytes": 2276,
+      "sourceLinkCount": 1,
+      "frozenCopyLinkCount": 1
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "sha256": "916ba95a7653aea0ada2b7c562b81c908c4cc1b17a6ca05ed59e69f3069b1111",
+      "bytes": 31630,
+      "sourceLinkCount": 1,
+      "frozenCopyLinkCount": 1
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "sha256": "621d250efebb0cd7f602d62ee2ecf6b1ca686e61a60c630d8edb293723109f73",
+      "bytes": 73318,
+      "sourceLinkCount": 1,
+      "frozenCopyLinkCount": 1
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "sha256": "c94998da029adfc32a1083b84da7b21892b28306ced18b4bdca484929b8fcdcd",
+      "bytes": 41117,
+      "sourceLinkCount": 1,
+      "frozenCopyLinkCount": 1
+    },
+    {
+      "path": "scripts/automation/configure-demo-source.test.mjs",
+      "sha256": "a1f670d8441ef4d489f3e0ac1079c0db936894c768842c9fb82287fa7c79a8c7",
+      "bytes": 37037,
+      "sourceLinkCount": 1,
+      "frozenCopyLinkCount": 1
+    }
+  ]
+}

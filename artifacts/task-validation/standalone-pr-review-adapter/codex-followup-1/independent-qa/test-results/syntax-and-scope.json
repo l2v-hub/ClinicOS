@@ -1,0 +1,80 @@
+{
+  "node": "v24.19.0",
+  "syntaxChecks": [
+    {
+      "file": "agent-team/src/bug-pipeline/attempt-budget.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/cli.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/contracts.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/external-review.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/github.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/review-handoff-cli.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/review-policy.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/attempt-budget.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/quality-gate/claude-bug-review.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "scripts/quality-gate/claude-bug-review.test.mjs",
+      "exitCode": 0
+    }
+  ],
+  "applicationDependencyWorkflowDiff": [],
+  "installs": 0,
+  "builds": "Not run: controller-only source and no application/dependency/workflow diff"
+}

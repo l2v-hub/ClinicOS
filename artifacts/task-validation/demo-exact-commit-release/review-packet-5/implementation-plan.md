@@ -1,0 +1,1 @@
+Source changes are complete. Publish the exact tested source plus safe evidence; request actual Claude on the live PR SHA. Preserve all comments/rounds, await six native checks and fresh final Codex before protected merge. Execute an explicit exact-policy preflight/deploy only after these gates, then online verification before clinical closure.

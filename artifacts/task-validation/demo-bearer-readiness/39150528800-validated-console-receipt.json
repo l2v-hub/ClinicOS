@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "repository": "l2v-hub/ClinicOS",
+  "reviewedSha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
+  "runId": "39150528800",
+  "runAttempt": "1",
+  "capturedAt": "2026-10-18T17:39:03.518Z",
+  "operation": "inspect",
+  "outcome": "inspected-visibility-unproven",
+  "inventory": {
+    "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+    "environments": [
+      {
+        "id": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+        "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+        "name": "demo",
+        "canAccess": true,
+        "isEphemeral": false,
+        "sourceEnvironmentId": null,
+        "instances": [
+          {
+            "id": "0003e624-983d-4592-8ad6-4eb2d1902e08",
+            "serviceId": "11a104b2-9788-4a70-94e8-38a95e4fdb6b",
+            "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+            "repository": null,
+            "rootDirectory": null
+          },
+          {
+            "id": "41d37ce0-37c3-4ad5-972d-60528c2859cb",
+            "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+            "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+            "repository": "l2v-hub/ClinicOS",
+            "rootDirectory": ""
+          },
+          {
+            "id": "6fdf2f46-bc75-434b-aa5a-d250e4caa708",
+            "serviceId": "2fa67280-a68f-4ed7-89e3-80280843dde4",
+            "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+            "repository": null,
+            "rootDirectory": "/clinicos-ai-runtime"
+          },
+          {
+            "id": "872a8992-55a3-4882-83ec-6b35d1686189",
+            "serviceId": "7faa56dd-708b-4aed-9dd2-d291d6bb6aa6",
+            "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+            "repository": null,
+            "rootDirectory": null
+          }
+        ],
+        "triggers": []
+      }
+    ],
+    "services": [
+      {
+        "id": "11a104b2-9788-4a70-94e8-38a95e4fdb6b",
+        "name": "Postgres",
+        "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5"
+      },
+      {
+        "id": "2fa67280-a68f-4ed7-89e3-80280843dde4",
+        "name": "clinicos-ai-runtime",
+        "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5"
+      },
+      {
+        "id": "7faa56dd-708b-4aed-9dd2-d291d6bb6aa6",
+        "name": "Postgres-bbbY",
+        "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5"
+      },
+      {
+        "id": "b65352bb-1f3b-4f8b-b055-88885b16bc4e",
+        "name": "clinicos-readonly-38742154518",
+        "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5"
+      },
+      {
+        "id": "c000f011-0349-4ea9-9b56-13c625b5767b",
+        "name": "clinicos-backend",
+        "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5"
+      }
+    ],
+    "scopedInventory": {
+      "schemaVersion": 1,
+      "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+      "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "environmentName": "demo",
+      "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+      "repository": "l2v-hub/ClinicOS",
+      "rootDirectory": "",
+      "domains": [
+        {
+          "kind": "serviceDomains",
+          "domain": "clinicos-backend-demo.up.railway.app"
+        }
+      ],
+      "triggers": [],
+      "hasMoreTriggers": false
+    },
+    "scopedInventorySha256": "bb0843673ebc593892cc8bdabddca75746f06676e0c141f3bb4ea0ee70d05a5f",
+    "paginationComplete": true,
+    "allVisibleEnvironmentsAccessible": true,
+    "observedConstraints": [
+      "MISSING_TARGET_TRIGGER"
+    ],
+    "credentialScope": "project-environment",
+    "projectWideVisibility": "unproven",
+    "serviceConnectAllowed": false,
+    "refusalReason": "PROJECT_WIDE_VISIBILITY_UNPROVEN"
+  },
+  "inventorySha256": "4cc9c7a9b7c4dd94742a6d33d7f5df2592c40c2327d058901040e43b9ff47f19",
+  "readRequests": 10
+}

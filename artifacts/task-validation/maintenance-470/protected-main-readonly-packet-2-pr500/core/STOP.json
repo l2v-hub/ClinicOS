@@ -1,0 +1,9 @@
+{
+  "status": "AUTHOR_STOPPED_FOR_INDEPENDENT_QA",
+  "childPr": 500,
+  "implementation": 2,
+  "sourceFrozen": true,
+  "focusedTestsPass": 157,
+  "actualProviderCalls": 0,
+  "rootOnlyLiveWriter": true
+}

@@ -1,0 +1,35 @@
+{
+  "baseSha": "a29896d144cfd1a3a186e931357aef235984af72",
+  "files": [
+    {
+      "path": "agent-team/src/bug-pipeline/github.mjs",
+      "baseGitBlob": "a4e478c04de2bfacd294e3a1ff4c504b889ff4f7",
+      "frozenOriginalSha256": "4af3436a7cd44270a1543a7ff84b05ca57ad947ad87c7ad940e223ef20208ebd",
+      "finalSha256": "0d787aaffb7584f9e13e34aa16319db84cd8a4d13be7b632c028dfdc98b0948a"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "baseGitBlob": "847983d15006c7ea9b06d8b7598f2221a96dbd51",
+      "frozenOriginalSha256": "e6a938c2bed4c7f87f223d734e5f39895c623ef3ec46ef6cc8eabf45f28cab48",
+      "finalSha256": "8ada242cc5975b331cb9b081a5e9a07e565313d90a1ae377fbbc195bcaae4c9a"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "baseGitBlob": "4b74379aa6ff79f5c51673257d637775a8a55da2",
+      "frozenOriginalSha256": "5237393fc6d1c3d59ade41f0447c0446c4e93e409b02048edb7249f6f0e641e6",
+      "finalSha256": "a9fa56f4d72d750f19bf76b290696cfd00f83bc92cc83337856f434b87df858a"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "baseGitBlob": "2fb87102eda83e7a03a8e1ef92465b468fff467c",
+      "frozenOriginalSha256": "d00394814f3660e7820deda97dbbc79c56c802151a57883ba4ef5b3292241a4c",
+      "finalSha256": "8c51f3671ac2229421ad4e91ff84a1bcd42375c6c6a25a8c11df11977d77a388"
+    },
+    {
+      "path": "docs/standalone-pr-review.md",
+      "baseGitBlob": "330bc14061ac49396079f7073133f6965fd531a3",
+      "frozenOriginalSha256": "d76561cc5f03377d085e45920d2a44d2420079c3968ceafc3cb92d10433e9bad",
+      "finalSha256": "271def56cd267e89e22a95ebacb2e71907cc6edb08eb59e09ed3399686d2e885"
+    }
+  ]
+}

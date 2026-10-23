@@ -1,0 +1,7 @@
+{
+  "status": "acknowledged-before-edits",
+  "reservation": "ed798e1080bb0d22b98d0a51ea3a85bd93aae5a9",
+  "nonce": "a5396252-001c-433f-9809-1f9145e70a30",
+  "contractSha256": "35dd84544a8d5a330e7559e14d39d8dccc58cb8de6f9ab0317414b2d7573e8cf",
+  "design": "Preserve rejection of every own errors property and add only a fixed two-enum diagnostic projection at that rejection boundary. No retries, extra reads, auth acceptance, or transport/workflow changes."
+}

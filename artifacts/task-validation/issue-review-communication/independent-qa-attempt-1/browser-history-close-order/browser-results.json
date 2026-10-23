@@ -1,0 +1,78 @@
+{
+  "safeSurface": "actual module + loopback HTTP GitHub fixture",
+  "externalRequests": 0,
+  "results": [
+    {
+      "scenario": "ready",
+      "status": "PASS",
+      "writes": 4,
+      "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "scenario": "reload persists projection",
+      "status": "PASS"
+    },
+    {
+      "scenario": "running",
+      "status": "PASS",
+      "writes": 10,
+      "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "scenario": "findings",
+      "status": "PASS",
+      "writes": 16,
+      "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "scenario": "feedback",
+      "status": "PASS",
+      "writes": 18,
+      "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "scenario": "correct",
+      "status": "PASS",
+      "writes": 26,
+      "sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "scenario": "failed",
+      "status": "PASS",
+      "writes": 32,
+      "sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "scenario": "sync",
+      "status": "PASS",
+      "writes": 32,
+      "sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "scenario": "reject-role",
+      "status": "PASS",
+      "writes": 32,
+      "sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "scenario": "reject-head",
+      "status": "PASS",
+      "writes": 32,
+      "sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "scenario": "race-role",
+      "status": "PASS",
+      "writes": 1,
+      "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "scenario": "race-source",
+      "status": "PASS",
+      "writes": 1,
+      "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "errors": [],
+  "acceptanceFinding": "Last two scenarios reproduce failures and are not acceptance passes."
+}

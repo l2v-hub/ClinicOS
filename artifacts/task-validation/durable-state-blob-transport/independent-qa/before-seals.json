@@ -1,0 +1,5 @@
+{
+  "agent-team/src/bug-pipeline/github.mjs": "1419fd31f6344c024abebd1d0f3136947455f96b5b63f83c67e52c2760cc3b29",
+  "agent-team/tests/bug-pipeline/github.test.mjs": "ae6ddd66e1a080be1d8d655928e9ccc36ddb6e56f35f56305ff119376440acd2",
+  "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs": "438382fbfbe96dbe97d71442d7493bc92ecdd1c593adff9af0495c2d5e010009"
+}

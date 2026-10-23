@@ -1,0 +1,49 @@
+{
+  "round": 7,
+  "revision": 2,
+  "baseSha": "9bf62a27df909d53b9607d1e766723978d98ada0",
+  "currentSources": [
+    {
+      "path": "scripts/quality-gate/configure-bug-repository.mjs",
+      "sha256": "254b308b597e9ba50bbc00c76ddc80535d67524cba971ef721f5b120d40f8445",
+      "bytes": 20030
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+      "sha256": "c66f86627102eddec6b005b7364dda36eb87228e8744d25ce6b2d37c763f02b6",
+      "bytes": 39014
+    }
+  ],
+  "preEditSources": [
+    {
+      "path": "scripts/quality-gate/configure-bug-repository.mjs",
+      "sha256": "3429889391689f2981c37030e7792726c84b8055b23d68bcbe4eb698ad7e4db7",
+      "snapshotMatches": true,
+      "linksBefore": 1
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+      "sha256": "b81fd0b492024fd0f563f70e5254aeef0fe2945e9e046c3bf55858ba13fc4e03",
+      "snapshotMatches": true,
+      "linksBefore": 1
+    }
+  ],
+  "preservedOriginalPacketHashes": [
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/author-report.md",
+      "sha256": "ae882d5d21f8faabe8bdc037e90258a6d78698fe4d287713d46feaf0ae8956be"
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/validation-report.md",
+      "sha256": "8172b61108ee6ca55f0ba27cfdddc7700ae9ac95e2fc359255c73980fba8db18"
+    },
+    {
+      "path": "artifacts/task-validation/demo-exact-commit-release/codex-followup-5/source-manifest.json",
+      "sha256": "d8f157186779204b0fd0ab52ac21ad6dc41c7c1fed4a94b43ad2f82f1506f75d"
+    }
+  ],
+  "preservedOriginalImplementationSealSha256": "abb0366a9cc50ba50e4a7280d9e06603403f2ea0e55ac8c1ad881dae21577d6b",
+  "preservedArtifactCount": 27,
+  "preservedArtifactsSha256": "77dc6b9fb7f954671cc25d08d5eb900c45fd03f5f6ada7ae6c1b77f5dcd5133d",
+  "privateSealSha256": "8485079448423cbb4cbaafe624947446549b03a773f39d08c1550d71da0ee9ab"
+}

@@ -1,0 +1,51 @@
+{
+  "verdict": "FAILED VALIDATION",
+  "findings": [
+    "F5 global durable capacity strands accepted report and replacement",
+    "F6 disjoint shared state CAS strands successfully completed Codex QA"
+  ],
+  "timestamp": "2026-10-17T17:26:47.286150+00:00",
+  "branch": "codex/standalone-pr-review",
+  "baseline": "d1324cb3dd9ac2a9eafdc7eb3d88abc399da7f55",
+  "sourceFreezeSha256": "7dd41bf20229026e85bff335d4a7749cd748a5a119cbe74cfe9cd69b73275bf2",
+  "sourceFiles": {
+    "agent-team/src/bug-pipeline/cli.mjs": "660ced030d46e1899759bdfa4bf6d7333ed0735f9233c10e7c8fe06c1e30fa7e",
+    "agent-team/src/bug-pipeline/comment-review-handoff.mjs": "2513cce87ca931de08725530df6014b34b8f6ea48540c44acb0375b6142fa7bd",
+    "agent-team/src/bug-pipeline/github.mjs": "54d4270d7e280318b561495d158e1ab3c1115ad32adb5bfe6afd5b1d124d640e",
+    "agent-team/src/bug-pipeline/models.mjs": "cbf1c9cd993e424d707ca7451947044f0618ce9acfffdda15a75a6c445f985a7",
+    "agent-team/src/bug-pipeline/pipeline.mjs": "b0a59bbb8c749745fa0a132cd1cee90b92eec18c5bbf35d3a2ab70f404cfb7ac",
+    "agent-team/src/bug-pipeline/review-handoff-cli.mjs": "39481797a4034ae8e9b94602b11e21944ca63fa50805f375f3f483fb15d44d8f",
+    "agent-team/src/bug-pipeline/standalone-review.mjs": "22d9f48a52b1a811e3b64922a3bb731475274c1e41fbfc6f0b9f6d71121d1345",
+    "agent-team/src/bug-pipeline/workspace.mjs": "a333ed4c288e334d870c4bd0322044f0ad84e47ca903b762faf99d8dad94f50d",
+    "agent-team/tests/bug-pipeline/github.test.mjs": "7e7788a66dc99284bacf03eff06b405bbe44d891f91c4129e3c729f177a627c5",
+    "agent-team/tests/bug-pipeline/models.test.mjs": "05a0d314b0e65a9b0623088923165d29653543cf938a9ad13ae0aa4c9ba73137",
+    "agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs": "fb823de49efdc77f3bbf236e2e4e033fdd7dc7a3c18ddad3ac6c0e994d5a4690",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs": "06e43ff2e837999edfdca2a57c1e8cb2f33fff1a36820e1f3fbe9c8c15c200c4",
+    "agent-team/tests/bug-pipeline/workspace.test.mjs": "873dc275015fda9285d85bfabcbb090c0e136191528e60430e22fcf58bbfc301",
+    "docs/claude-local-review-prompt.md": "2b4e33c55388bb28f086bba15ff540ee4ef0b1ba9e692dd2ec79d3307e23f2f5",
+    "docs/standalone-pr-review.md": "f551e78d4b6b6980042b7fa833fb0701dc416c368122953d08b037a7aad17a26"
+  },
+  "authorReportSha256": "311770087b6f700350c1123f11503a9b0c8dd7dc02f99f9db5e02cabc11f8ea8",
+  "validationReportSha256": "db7e4c6839fcf13d92fcb20d1f0e052f31c06755c3368e8e3399ea1804bc5c01",
+  "evidenceManifestSha256": "718fa00ea7eafbc921c0879e9cb7f1654dfbaa500e2c9efe4d23f37f69eeb2db",
+  "evidenceFiles": 73,
+  "priorImmutableFilesVerified": 121,
+  "sourceMutation": false,
+  "actualGitHubWrites": 0,
+  "actualModels": 0,
+  "actualDeployments": 0,
+  "media": {
+    "PNG": 7,
+    "videos": 3,
+    "traceZIP": 3,
+    "credentialFindings": 0
+  },
+  "tests": {
+    "total": 670,
+    "pass": 667,
+    "fail": 0,
+    "existingWindowsSkips": 3,
+    "extraBoundaryRevisionPass": 47
+  },
+  "hostedFailureCauseEstablished": false
+}

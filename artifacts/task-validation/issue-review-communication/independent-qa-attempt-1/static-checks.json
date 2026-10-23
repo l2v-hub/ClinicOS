@@ -1,0 +1,71 @@
+[
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/src/bug-pipeline/external-review.mjs"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/src/bug-pipeline/claude-review-cron.mjs"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/src/bug-pipeline/issue-review-communication.mjs"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/src/bug-pipeline/issue-review-sync.mjs"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/tests/bug-pipeline/external-review.test.mjs"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": "prettier --check seven frozen source files",
+    "exit": 0,
+    "output": "Checking formatting...\nAll matched files use Prettier code style!\n"
+  },
+  {
+    "command": "git diff --check",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": "validate-task-contract",
+    "exit": 0,
+    "output": "CONTRACT VALIDO: /workspace/ClinicOS/agent-team/.worktrees/issue-review-communication/artifacts/task-validation/issue-review-communication/task-contract.md\n"
+  }
+]

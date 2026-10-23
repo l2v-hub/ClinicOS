@@ -1,0 +1,11 @@
+{
+  "zipCRCAllEntries": "PASS",
+  "entries": 35,
+  "decodedTextResources": 11,
+  "tracePNGResources": 0,
+  "uncompressedBytes": 1323388,
+  "sensitivePatternFindings": 0,
+  "syntheticSentinels": "PASS",
+  "rawTracePublication": false,
+  "maxPublicFileBytes": 26214400
+}

@@ -1,0 +1,3991 @@
+TAP version 13
+# Subtest: target validation distinguishes environments sharing the same project/service and fails closed
+    # Subtest: production token
+    ok 1 - production token
+      ---
+      duration_ms: 3.338017
+      type: 'test'
+      ...
+    # Subtest: wrong project
+    ok 2 - wrong project
+      ---
+      duration_ms: 0.521328
+      type: 'test'
+      ...
+    # Subtest: wrong service
+    ok 3 - wrong service
+      ---
+      duration_ms: 0.251622
+      type: 'test'
+      ...
+    # Subtest: wrong environment name
+    ok 4 - wrong environment name
+      ---
+      duration_ms: 0.215998
+      type: 'test'
+      ...
+    # Subtest: wrong domain
+    ok 5 - wrong domain
+      ---
+      duration_ms: 0.293765
+      type: 'test'
+      ...
+    # Subtest: wrong source repo
+    ok 6 - wrong source repo
+      ---
+      duration_ms: 0.914997
+      type: 'test'
+      ...
+    # Subtest: missing source
+    ok 7 - missing source
+      ---
+      duration_ms: 0.309926
+      type: 'test'
+      ...
+    # Subtest: nonmain branch
+    ok 8 - nonmain branch
+      ---
+      duration_ms: 0.435327
+      type: 'test'
+      ...
+    # Subtest: ambiguous triggers
+    ok 9 - ambiguous triggers
+      ---
+      duration_ms: 0.901143
+      type: 'test'
+      ...
+    # Subtest: missing trigger
+    ok 10 - missing trigger
+      ---
+      duration_ms: 1.180143
+      type: 'test'
+      ...
+    1..10
+ok 1 - target validation distinguishes environments sharing the same project/service and fails closed
+  ---
+  duration_ms: 14.435244
+  type: 'test'
+  ...
+# Subtest: active deployment requires successful exact native commit metadata, target and routing identity
+    # Subtest: missing commit metadata
+    ok 1 - missing commit metadata
+      ---
+      duration_ms: 0.535922
+      type: 'test'
+      ...
+    # Subtest: message is not provenance
+    ok 2 - message is not provenance
+      ---
+      duration_ms: 0.514608
+      type: 'test'
+      ...
+    # Subtest: wrong SHA
+    ok 3 - wrong SHA
+      ---
+      duration_ms: 0.498469
+      type: 'test'
+      ...
+    # Subtest: failed deployment
+    ok 4 - failed deployment
+      ---
+      duration_ms: 0.208982
+      type: 'test'
+      ...
+    # Subtest: inactive deployment
+    ok 5 - inactive deployment
+      ---
+      duration_ms: 0.180564
+      type: 'test'
+      ...
+    # Subtest: wrong environment
+    ok 6 - wrong environment
+      ---
+      duration_ms: 0.153862
+      type: 'test'
+      ...
+    # Subtest: wrong service
+    ok 7 - wrong service
+      ---
+      duration_ms: 0.625967
+      type: 'test'
+      ...
+    1..7
+ok 2 - active deployment requires successful exact native commit metadata, target and routing identity
+  ---
+  duration_ms: 5.207636
+  type: 'test'
+  ...
+# Subtest: read-only preflight never requests mutation; rejects untrusted Actions contexts before calling API
+ok 3 - read-only preflight never requests mutation; rejects untrusted Actions contexts before calling API
+  ---
+  duration_ms: 2.533338
+  type: 'test'
+  ...
+# Subtest: deployment requests exact supported commitSha and waits for matching healthy public instance
+ok 4 - deployment requests exact supported commitSha and waits for matching healthy public instance
+  ---
+  duration_ms: 11.017418
+  type: 'test'
+  ...
+# Subtest: wrong target preflight prevents the deploy mutation entirely
+ok 5 - wrong target preflight prevents the deploy mutation entirely
+  ---
+  duration_ms: 0.599994
+  type: 'test'
+  ...
+# Subtest: missing native commit metadata never becomes a receipt
+ok 6 - missing native commit metadata never becomes a receipt
+  ---
+  duration_ms: 0.853766
+  type: 'test'
+  ...
+# Subtest: public readiness needs no-store, correct deployment identity and real dependency success
+    # Subtest: old instance
+    ok 1 - old instance
+      ---
+      duration_ms: 1.404762
+      type: 'test'
+      ...
+    # Subtest: unavailable database
+    ok 2 - unavailable database
+      ---
+      duration_ms: 0.663532
+      type: 'test'
+      ...
+    # Subtest: production tier
+    ok 3 - production tier
+      ---
+      duration_ms: 1.032664
+      type: 'test'
+      ...
+    # Subtest: cacheable response
+    ok 4 - cacheable response
+      ---
+      duration_ms: 0.384232
+      type: 'test'
+      ...
+    # Subtest: HTTP503
+    ok 5 - HTTP503
+      ---
+      duration_ms: 0.275029
+      type: 'test'
+      ...
+    1..5
+ok 7 - public readiness needs no-store, correct deployment identity and real dependency success
+  ---
+  duration_ms: 5.799674
+  type: 'test'
+  ...
+# Subtest: real local HTTP readiness rejects redirects and oversized bodies using the production fetch options
+ok 8 - real local HTTP readiness rejects redirects and oversized bodies using the production fetch options
+  ---
+  duration_ms: 151.515224
+  type: 'test'
+  ...
+# Subtest: receipt validation binds repo/main/attempt/target/SHA and expires read-only preflights
+    # Subtest: different run
+    ok 1 - different run
+      ---
+      duration_ms: 4.569499
+      type: 'test'
+      ...
+    # Subtest: different attempt
+    ok 2 - different attempt
+      ---
+      duration_ms: 0.213733
+      type: 'test'
+      ...
+    # Subtest: different repository
+    ok 3 - different repository
+      ---
+      duration_ms: 0.147022
+      type: 'test'
+      ...
+    # Subtest: preview ref
+    ok 4 - preview ref
+      ---
+      duration_ms: 0.162667
+      type: 'test'
+      ...
+    # Subtest: different SHA
+    ok 5 - different SHA
+      ---
+      duration_ms: 0.740077
+      type: 'test'
+      ...
+    # Subtest: different environment
+    ok 6 - different environment
+      ---
+      duration_ms: 0.185455
+      type: 'test'
+      ...
+    # Subtest: different live instance
+    ok 7 - different live instance
+      ---
+      duration_ms: 0.147406
+      type: 'test'
+      ...
+    # Subtest: future timestamp
+    ok 8 - future timestamp
+      ---
+      duration_ms: 0.559484
+      type: 'test'
+      ...
+    1..8
+ok 9 - receipt validation binds repo/main/attempt/target/SHA and expires read-only preflights
+  ---
+  duration_ms: 8.932756
+  type: 'test'
+  ...
+# Subtest: receipt archive parser accepts one exact small JSON entry and rejects paths or oversized entries
+ok 10 - receipt archive parser accepts one exact small JSON entry and rejects paths or oversized entries
+  ---
+  duration_ms: 20.484795
+  type: 'test'
+  ...
+# Subtest: release verifies real API workflow identity, archive digest, native deployment and public readiness
+ok 11 - release verifies real API workflow identity, archive digest, native deployment and public readiness
+  ---
+  duration_ms: 9.95471
+  type: 'test'
+  ...
+# Subtest: trusted workflow and immutable artifact mismatch matrix fails closed
+    # Subtest: failed run
+    ok 1 - failed run
+      ---
+      duration_ms: 1.798092
+      type: 'test'
+      ...
+    # Subtest: pending run
+    ok 2 - pending run
+      ---
+      duration_ms: 1.305123
+      type: 'test'
+      ...
+    # Subtest: wrong workflow
+    ok 3 - wrong workflow
+      ---
+      duration_ms: 5.697169
+      type: 'test'
+      ...
+    # Subtest: wrong branch
+    ok 4 - wrong branch
+      ---
+      duration_ms: 1.147499
+      type: 'test'
+      ...
+    # Subtest: wrong repository
+    ok 5 - wrong repository
+      ---
+      duration_ms: 6.946835
+      type: 'test'
+      ...
+    # Subtest: fork
+    ok 6 - fork
+      ---
+      duration_ms: 1.568983
+      type: 'test'
+      ...
+    # Subtest: wrong SHA
+    ok 7 - wrong SHA
+      ---
+      duration_ms: 0.789339
+      type: 'test'
+      ...
+    # Subtest: expired artifact
+    ok 8 - expired artifact
+      ---
+      duration_ms: 1.095184
+      type: 'test'
+      ...
+    # Subtest: wrong attempt artifact
+    ok 9 - wrong attempt artifact
+      ---
+      duration_ms: 0.991247
+      type: 'test'
+      ...
+    # Subtest: missing archive digest
+    ok 10 - missing archive digest
+      ---
+      duration_ms: 0.84861
+      type: 'test'
+      ...
+    # Subtest: wrong artifact workflow SHA
+    ok 11 - wrong artifact workflow SHA
+      ---
+      duration_ms: 5.057002
+      type: 'test'
+      ...
+    # Subtest: tampered archive
+    ok 12 - tampered archive
+      ---
+      duration_ms: 0.99966
+      type: 'test'
+      ...
+    # Subtest: untrusted redirect
+    ok 13 - untrusted redirect
+      ---
+      duration_ms: 0.750044
+      type: 'test'
+      ...
+    1..13
+ok 12 - trusted workflow and immutable artifact mismatch matrix fails closed
+  ---
+  duration_ms: 34.752003
+  type: 'test'
+  ...
+# Subtest: premerge uses actual successful preflight artifact of current trusted main, never historical production URL
+ok 13 - premerge uses actual successful preflight artifact of current trusted main, never historical production URL
+  ---
+  duration_ms: 0.704886
+  type: 'test'
+  ...
+# Subtest: Railway API client sends credentials only to fixed official origin and never logs error bodies
+ok 14 - Railway API client sends credentials only to fixed official origin and never logs error bodies
+  ---
+  duration_ms: 1.062522
+  type: 'test'
+  ...
+# Subtest: public deployment client targets the official Railway API host without redirect or fallback
+ok 15 - public deployment client targets the official Railway API host without redirect or fallback
+  ---
+  duration_ms: 0.672634
+  type: 'test'
+  ...
+# Subtest: deployment workflows isolate demo credentials and record only in demo environment
+ok 16 - deployment workflows isolate demo credentials and record only in demo environment
+  ---
+  duration_ms: 53.126098
+  type: 'test'
+  ...
+# Subtest: readiness requires an exact unquoted no-store directive, including comma and whitespace grammar
+    # Subtest: reject public, max-age=3600, x-no-store-extension=1
+    ok 1 - reject public, max-age=3600, x-no-store-extension=1
+      ---
+      duration_ms: 0.379759
+      type: 'test'
+      ...
+    # Subtest: reject public, max-age=3600, no-store-extension
+    ok 2 - reject public, max-age=3600, no-store-extension
+      ---
+      duration_ms: 0.461088
+      type: 'test'
+      ...
+    # Subtest: reject public, max-age=3600, extension="no-store"
+    ok 3 - reject public, max-age=3600, extension="no-store"
+      ---
+      duration_ms: 0.284848
+      type: 'test'
+      ...
+    # Subtest: reject extension="x,no-store,y", max-age=3600
+    ok 4 - reject extension="x,no-store,y", max-age=3600
+      ---
+      duration_ms: 0.167878
+      type: 'test'
+      ...
+    # Subtest: reject extension="x, no-store ,y", public
+    ok 5 - reject extension="x, no-store ,y", public
+      ---
+      duration_ms: 0.106624
+      type: 'test'
+      ...
+    # Subtest: reject prefix-no-store
+    ok 6 - reject prefix-no-store
+      ---
+      duration_ms: 0.086036
+      type: 'test'
+      ...
+    # Subtest: reject no-store-suffix
+    ok 7 - reject no-store-suffix
+      ---
+      duration_ms: 0.153066
+      type: 'test'
+      ...
+    # Subtest: reject no-store=1
+    ok 8 - reject no-store=1
+      ---
+      duration_ms: 0.090542
+      type: 'test'
+      ...
+    # Subtest: reject extension="unfinished, no-store
+    ok 9 - reject extension="unfinished, no-store
+      ---
+      duration_ms: 0.290387
+      type: 'test'
+      ...
+    # Subtest: reject no-store, extension="unterminated
+    ok 10 - reject no-store, extension="unterminated
+      ---
+      duration_ms: 0.292618
+      type: 'test'
+      ...
+    # Subtest: reject no-store, extension=bad value
+    ok 11 - reject no-store, extension=bad value
+      ---
+      duration_ms: 0.167859
+      type: 'test'
+      ...
+    # Subtest: reject no-store, extension="valid" trailing
+    ok 12 - reject no-store, extension="valid" trailing
+      ---
+      duration_ms: 0.096604
+      type: 'test'
+      ...
+    # Subtest: reject no-store,,private
+    ok 13 - reject no-store,,private
+      ---
+      duration_ms: 0.088162
+      type: 'test'
+      ...
+    # Subtest: accept no-store
+    ok 14 - accept no-store
+      ---
+      duration_ms: 0.402381
+      type: 'test'
+      ...
+    # Subtest: accept NO-STORE
+    ok 15 - accept NO-STORE
+      ---
+      duration_ms: 0.344091
+      type: 'test'
+      ...
+    # Subtest: accept private, no-store
+    ok 16 - accept private, no-store
+      ---
+      duration_ms: 0.34245
+      type: 'test'
+      ...
+    # Subtest: accept private, \\tNo-StOrE \\t, max-age=0
+    ok 17 - accept private, \\tNo-StOrE \\t, max-age=0
+      ---
+      duration_ms: 0.163874
+      type: 'test'
+      ...
+    # Subtest: accept extension="x,y", no-store
+    ok 18 - accept extension="x,y", no-store
+      ---
+      duration_ms: 0.195387
+      type: 'test'
+      ...
+    # Subtest: accept no-store, extension="literal no-store"
+    ok 19 - accept no-store, extension="literal no-store"
+      ---
+      duration_ms: 8.512561
+      type: 'test'
+      ...
+    1..19
+ok 17 - readiness requires an exact unquoted no-store directive, including comma and whitespace grammar
+  ---
+  duration_ms: 13.790525
+  type: 'test'
+  ...
+# Subtest: active proof rejects old and new coexistence, duplicate IDs and transitional statuses
+    # Subtest: old and new
+    ok 1 - old and new
+      ---
+      duration_ms: 0.276159
+      type: 'test'
+      ...
+    # Subtest: duplicate new ID
+    ok 2 - duplicate new ID
+      ---
+      duration_ms: 0.194205
+      type: 'test'
+      ...
+    # Subtest: new transitional status
+    ok 3 - new transitional status
+      ---
+      duration_ms: 0.137768
+      type: 'test'
+      ...
+    # Subtest: mixed duplicate status
+    ok 4 - mixed duplicate status
+      ---
+      duration_ms: 0.0995
+      type: 'test'
+      ...
+    1..4
+ok 18 - active proof rejects old and new coexistence, duplicate IDs and transitional statuses
+  ---
+  duration_ms: 1.689034
+  type: 'test'
+  ...
+# Subtest: deploy polling waits until the old deployment disappears before checking readiness and issuing receipt
+ok 19 - deploy polling waits until the old deployment disappears before checking readiness and issuing receipt
+  ---
+  duration_ms: 0.91027
+  type: 'test'
+  ...
+# Subtest: persistent old/new overlap cannot issue a receipt despite healthy public readiness
+ok 20 - persistent old/new overlap cannot issue a receipt despite healthy public readiness
+  ---
+  duration_ms: 0.665229
+  type: 'test'
+  ...
+# Subtest: zero-trigger exact policy is explicit; complete fixed inventories retain strict defaults
+ok 21 - zero-trigger exact policy is explicit; complete fixed inventories retain strict defaults
+  ---
+  duration_ms: 6.25351
+  type: 'test'
+  ...
+# Subtest: exact policy rejects incomplete or hostile source inventories
+    # Subtest: unknown policy
+    ok 1 - unknown policy
+      ---
+      duration_ms: 0.442961
+      type: 'test'
+      ...
+    # Subtest: null policy
+    ok 2 - null policy
+      ---
+      duration_ms: 0.234158
+      type: 'test'
+      ...
+    # Subtest: missing trigger collection
+    ok 3 - missing trigger collection
+      ---
+      duration_ms: 5.426482
+      type: 'test'
+      ...
+    # Subtest: missing edges
+    ok 4 - missing edges
+      ---
+      duration_ms: 0.708918
+      type: 'test'
+      ...
+    # Subtest: null edges
+    ok 5 - null edges
+      ---
+      duration_ms: 0.705203
+      type: 'test'
+      ...
+    # Subtest: hidden next page
+    ok 6 - hidden next page
+      ---
+      duration_ms: 0.583987
+      type: 'test'
+      ...
+    # Subtest: missing pageInfo
+    ok 7 - missing pageInfo
+      ---
+      duration_ms: 5.167574
+      type: 'test'
+      ...
+    # Subtest: missing pagination boolean
+    ok 8 - missing pagination boolean
+      ---
+      duration_ms: 5.103113
+      type: 'test'
+      ...
+    # Subtest: false-like pagination
+    ok 9 - false-like pagination
+      ---
+      duration_ms: 0.983148
+      type: 'test'
+      ...
+    # Subtest: missing service domains
+    ok 10 - missing service domains
+      ---
+      duration_ms: 0.91104
+      type: 'test'
+      ...
+    # Subtest: missing custom domains
+    ok 11 - missing custom domains
+      ---
+      duration_ms: 0.736195
+      type: 'test'
+      ...
+    # Subtest: missing domains
+    ok 12 - missing domains
+      ---
+      duration_ms: 0.502704
+      type: 'test'
+      ...
+    # Subtest: wrong domain
+    ok 13 - wrong domain
+      ---
+      duration_ms: 0.496398
+      type: 'test'
+      ...
+    # Subtest: wrong repository
+    ok 14 - wrong repository
+      ---
+      duration_ms: 0.661016
+      type: 'test'
+      ...
+    # Subtest: missing source
+    ok 15 - missing source
+      ---
+      duration_ms: 0.493908
+      type: 'test'
+      ...
+    # Subtest: wrong token project
+    ok 16 - wrong token project
+      ---
+      duration_ms: 4.486365
+      type: 'test'
+      ...
+    # Subtest: wrong token environment
+    ok 17 - wrong token environment
+      ---
+      duration_ms: 0.704305
+      type: 'test'
+      ...
+    # Subtest: wrong environment name
+    ok 18 - wrong environment name
+      ---
+      duration_ms: 0.663749
+      type: 'test'
+      ...
+    # Subtest: wrong service
+    ok 19 - wrong service
+      ---
+      duration_ms: 0.969742
+      type: 'test'
+      ...
+    # Subtest: wrong instance environment
+    ok 20 - wrong instance environment
+      ---
+      duration_ms: 1.43652
+      type: 'test'
+      ...
+    # Subtest: foreign branch
+    ok 21 - foreign branch
+      ---
+      duration_ms: 0.731006
+      type: 'test'
+      ...
+    # Subtest: foreign trigger repository
+    ok 22 - foreign trigger repository
+      ---
+      duration_ms: 0.751302
+      type: 'test'
+      ...
+    # Subtest: foreign trigger target
+    ok 23 - foreign trigger target
+      ---
+      duration_ms: 0.552597
+      type: 'test'
+      ...
+    # Subtest: null trigger
+    ok 24 - null trigger
+      ---
+      duration_ms: 0.625429
+      type: 'test'
+      ...
+    # Subtest: duplicate triggers
+    ok 25 - duplicate triggers
+      ---
+      duration_ms: 0.634328
+      type: 'test'
+      ...
+    1..25
+ok 22 - exact policy rejects incomplete or hostile source inventories
+  ---
+  duration_ms: 38.262161
+  type: 'test'
+  ...
+# Subtest: only the fixed main Actions deployment workflow may select exact policy
+    # Subtest: GITHUB_ACTIONS=undefined
+    ok 1 - GITHUB_ACTIONS=undefined
+      ---
+      duration_ms: 0.530468
+      type: 'test'
+      ...
+    # Subtest: GITHUB_WORKFLOW_REF=undefined
+    ok 2 - GITHUB_WORKFLOW_REF=undefined
+      ---
+      duration_ms: 0.202908
+      type: 'test'
+      ...
+    # Subtest: GITHUB_WORKFLOW_REF=l2v-hub/ClinicOS/.github/workflows/foreign.yml@refs/heads/main
+    ok 3 - GITHUB_WORKFLOW_REF=l2v-hub/ClinicOS/.github/workflows/foreign.yml@refs/heads/main
+      ---
+      duration_ms: 0.294982
+      type: 'test'
+      ...
+    # Subtest: GITHUB_WORKFLOW_REF=l2v-hub/ClinicOS/.github/workflows/deploy-backend.yml@refs/heads/preview
+    ok 4 - GITHUB_WORKFLOW_REF=l2v-hub/ClinicOS/.github/workflows/deploy-backend.yml@refs/heads/preview
+      ---
+      duration_ms: 0.177359
+      type: 'test'
+      ...
+    # Subtest: GITHUB_EVENT_NAME=pull_request_target
+    ok 5 - GITHUB_EVENT_NAME=pull_request_target
+      ---
+      duration_ms: 0.156973
+      type: 'test'
+      ...
+    # Subtest: GITHUB_EVENT_NAME=pull_request
+    ok 6 - GITHUB_EVENT_NAME=pull_request
+      ---
+      duration_ms: 0.181022
+      type: 'test'
+      ...
+    # Subtest: GITHUB_EVENT_NAME=push
+    ok 7 - GITHUB_EVENT_NAME=push
+      ---
+      duration_ms: 0.204974
+      type: 'test'
+      ...
+    # Subtest: GITHUB_WORKFLOW_REF=l2v-hub/ClinicOS/.github/workflows/deploy-backend.yml@refs/heads/main
+    ok 8 - GITHUB_WORKFLOW_REF=l2v-hub/ClinicOS/.github/workflows/deploy-backend.yml@refs/heads/main
+      ---
+      duration_ms: 0.131502
+      type: 'test'
+      ...
+    # Subtest: CLINICOS_REVIEWED_SHA=undefined
+    ok 9 - CLINICOS_REVIEWED_SHA=undefined
+      ---
+      duration_ms: 0.188896
+      type: 'test'
+      ...
+    # Subtest: CLINICOS_REVIEWED_SHA=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    ok 10 - CLINICOS_REVIEWED_SHA=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+      ---
+      duration_ms: 0.161557
+      type: 'test'
+      ...
+    # Subtest: GITHUB_REPOSITORY=foreign/repo
+    ok 11 - GITHUB_REPOSITORY=foreign/repo
+      ---
+      duration_ms: 0.35144
+      type: 'test'
+      ...
+    # Subtest: GITHUB_REF=refs/heads/preview
+    ok 12 - GITHUB_REF=refs/heads/preview
+      ---
+      duration_ms: 0.163747
+      type: 'test'
+      ...
+    # Subtest: GITHUB_SHA=not-a-sha
+    ok 13 - GITHUB_SHA=not-a-sha
+      ---
+      duration_ms: 1.534048
+      type: 'test'
+      ...
+    # Subtest: GITHUB_RUN_ID=0
+    ok 14 - GITHUB_RUN_ID=0
+      ---
+      duration_ms: 0.175987
+      type: 'test'
+      ...
+    # Subtest: GITHUB_RUN_ATTEMPT=0
+    ok 15 - GITHUB_RUN_ATTEMPT=0
+      ---
+      duration_ms: 0.309108
+      type: 'test'
+      ...
+    1..15
+ok 23 - only the fixed main Actions deployment workflow may select exact policy
+  ---
+  duration_ms: 6.930195
+  type: 'test'
+  ...
+# Subtest: native exact policy binds one exact mutation, native metadata, readiness and final target inspection
+ok 24 - native exact policy binds one exact mutation, native metadata, readiness and final target inspection
+  ---
+  duration_ms: 2.252591
+  type: 'test'
+  ...
+# Subtest: source policy is bound through artifact receipt and independent native verification
+    # Subtest: unknown receipt
+    ok 1 - unknown receipt
+      ---
+      duration_ms: 1.175189
+      type: 'test'
+      ...
+    # Subtest: explicit null receipt
+    ok 2 - explicit null receipt
+      ---
+      duration_ms: 3.895717
+      type: 'test'
+      ...
+    # Subtest: mismatch strict expectation
+    ok 3 - mismatch strict expectation
+      ---
+      duration_ms: 0.973092
+      type: 'test'
+      ...
+    # Subtest: mismatch exact expectation
+    ok 4 - mismatch exact expectation
+      ---
+      duration_ms: 2.844005
+      type: 'test'
+      ...
+    # Subtest: legacy receipt cannot authorize zero triggers
+    ok 5 - legacy receipt cannot authorize zero triggers
+      ---
+      duration_ms: 1.042194
+      type: 'test'
+      ...
+    # Subtest: unknown expected policy
+    ok 6 - unknown expected policy
+      ---
+      duration_ms: 0.607687
+      type: 'test'
+      ...
+    1..6
+ok 25 - source policy is bound through artifact receipt and independent native verification
+  ---
+  duration_ms: 14.875163
+  type: 'test'
+  ...
+# Subtest: exact policy rejects native provenance and source drift after mutation without mutation retry
+    # Subtest: foreign source
+    ok 1 - foreign source
+      ---
+      duration_ms: 1.028684
+      type: 'test'
+      ...
+    # Subtest: new foreign trigger
+    ok 2 - new foreign trigger
+      ---
+      duration_ms: 1.383467
+      type: 'test'
+      ...
+    # Subtest: incomplete next page
+    ok 3 - incomplete next page
+      ---
+      duration_ms: 0.702977
+      type: 'test'
+      ...
+    # Subtest: wrong target
+    ok 4 - wrong target
+      ---
+      duration_ms: 0.863026
+      type: 'test'
+      ...
+    # Subtest: wrong native commit
+    ok 5 - wrong native commit
+      ---
+      duration_ms: 2.81935
+      type: 'test'
+      ...
+    # Subtest: missing native commit
+    ok 6 - missing native commit
+      ---
+      duration_ms: 1.082785
+      type: 'test'
+      ...
+    # Subtest: ambiguous active deployment
+    ok 7 - ambiguous active deployment
+      ---
+      duration_ms: 0.998651
+      type: 'test'
+      ...
+    1..7
+ok 26 - exact policy rejects native provenance and source drift after mutation without mutation retry
+  ---
+  duration_ms: 11.864601
+  type: 'test'
+  ...
+# Subtest: uncertain or denied exact mutation and polling errors stop after one submission
+    # Subtest: transport
+    ok 1 - transport
+      ---
+      duration_ms: 1.294065
+      type: 'test'
+      ...
+    # Subtest: denied
+    ok 2 - denied
+      ---
+      duration_ms: 1.234282
+      type: 'test'
+      ...
+    # Subtest: invalid-id
+    ok 3 - invalid-id
+      ---
+      duration_ms: 1.002826
+      type: 'test'
+      ...
+    # Subtest: polling
+    ok 4 - polling
+      ---
+      duration_ms: 1.580563
+      type: 'test'
+      ...
+    1..4
+ok 27 - uncertain or denied exact mutation and polling errors stop after one submission
+  ---
+  duration_ms: 5.878817
+  type: 'test'
+  ...
+# Subtest: actual exact CLI operations use bounded Web Responses, fixed headers, and no external credentials
+    # Subtest: preflight-exact
+    ok 1 - preflight-exact
+      ---
+      duration_ms: 266.778233
+      type: 'test'
+      ...
+    # Subtest: deploy-exact
+    ok 2 - deploy-exact
+      ---
+      duration_ms: 177.498497
+      type: 'test'
+      ...
+    # Subtest: preflight
+    ok 3 - preflight
+      ---
+      duration_ms: 99.115688
+      type: 'test'
+      ...
+    # Subtest: deploy
+    ok 4 - deploy
+      ---
+      duration_ms: 93.249494
+      type: 'test'
+      ...
+    1..4
+ok 28 - actual exact CLI operations use bounded Web Responses, fixed headers, and no external credentials
+  ---
+  duration_ms: 637.726438
+  type: 'test'
+  ...
+# Subtest: dedicated manual workflow isolates production and demo writer queues
+ok 29 - dedicated manual workflow isolates production and demo writer queues
+  ---
+  duration_ms: 6.677645
+  type: 'test'
+  ...
+# Subtest: receipt source policy is exclusive to its fixed workflow and manual exact event
+    # Subtest: exact in old workflow
+    ok 1 - exact in old workflow
+      ---
+      duration_ms: 1.237055
+      type: 'test'
+      ...
+    # Subtest: legacy in new workflow
+    ok 2 - legacy in new workflow
+      ---
+      duration_ms: 0.968186
+      type: 'test'
+      ...
+    # Subtest: explicit strict in new workflow
+    ok 3 - explicit strict in new workflow
+      ---
+      duration_ms: 0.470837
+      type: 'test'
+      ...
+    # Subtest: exact push event
+    ok 4 - exact push event
+      ---
+      duration_ms: 0.431565
+      type: 'test'
+      ...
+    # Subtest: exact foreign workflow
+    ok 5 - exact foreign workflow
+      ---
+      duration_ms: 0.490676
+      type: 'test'
+      ...
+    # Subtest: missing reviewed workflow SHA
+    ok 6 - missing reviewed workflow SHA
+      ---
+      duration_ms: 0.360327
+      type: 'test'
+      ...
+    # Subtest: different reviewed workflow SHA
+    ok 7 - different reviewed workflow SHA
+      ---
+      duration_ms: 2.079807
+      type: 'test'
+      ...
+    1..7
+ok 30 - receipt source policy is exclusive to its fixed workflow and manual exact event
+  ---
+  duration_ms: 6.746541
+  type: 'test'
+  ...
+# Subtest: real immutable preflight discovery selects only each policy fixed workflow
+ok 31 - real immutable preflight discovery selects only each policy fixed workflow
+  ---
+  duration_ms: 7.417385
+  type: 'test'
+  ...
+# Subtest: fresh main is checked before provider reads, directly before mutation and after readiness
+    # Subtest: stale before provider
+    ok 1 - stale before provider
+      ---
+      duration_ms: 0.562677
+      type: 'test'
+      ...
+    # Subtest: main advanced during preflight
+    ok 2 - main advanced during preflight
+      ---
+      duration_ms: 0.429532
+      type: 'test'
+      ...
+    # Subtest: main advanced during readiness
+    ok 3 - main advanced during readiness
+      ---
+      duration_ms: 0.73162
+      type: 'test'
+      ...
+    # Subtest: unchanged reviewed current main
+    ok 4 - unchanged reviewed current main
+      ---
+      duration_ms: 0.656655
+      type: 'test'
+      ...
+    1..4
+ok 32 - fresh main is checked before provider reads, directly before mutation and after readiness
+  ---
+  duration_ms: 2.816577
+  type: 'test'
+  ...
+# Subtest: reviewed SHA and unavailable or malformed current main fail before provider inspection
+    # Subtest: missing reviewed SHA
+    ok 1 - missing reviewed SHA
+      ---
+      duration_ms: 0.24599
+      type: 'test'
+      ...
+    # Subtest: wrong reviewed SHA
+    ok 2 - wrong reviewed SHA
+      ---
+      duration_ms: 0.123688
+      type: 'test'
+      ...
+    # Subtest: malformed reviewed SHA
+    ok 3 - malformed reviewed SHA
+      ---
+      duration_ms: 0.078099
+      type: 'test'
+      ...
+    # Subtest: missing GitHub binding
+    ok 4 - missing GitHub binding
+      ---
+      duration_ms: 0.122679
+      type: 'test'
+      ...
+    # Subtest: wrong main ref
+    ok 5 - wrong main ref
+      ---
+      duration_ms: 0.538723
+      type: 'test'
+      ...
+    # Subtest: main is a tag
+    ok 6 - main is a tag
+      ---
+      duration_ms: 0.356955
+      type: 'test'
+      ...
+    # Subtest: malformed current SHA
+    ok 7 - malformed current SHA
+      ---
+      duration_ms: 0.250919
+      type: 'test'
+      ...
+    # Subtest: main unavailable
+    ok 8 - main unavailable
+      ---
+      duration_ms: 0.194239
+      type: 'test'
+      ...
+    # Subtest: oversized current main
+    ok 9 - oversized current main
+      ---
+      duration_ms: 0.848524
+      type: 'test'
+      ...
+    1..9
+ok 33 - reviewed SHA and unavailable or malformed current main fail before provider inspection
+  ---
+  duration_ms: 3.409034
+  type: 'test'
+  ...
+# Subtest: actual CLI rejects stale queued main and cross-workflow producers without issuing a receipt
+    # Subtest: stale queued SHA
+    ok 1 - stale queued SHA
+      ---
+      duration_ms: 97.021446
+      type: 'test'
+      ...
+    # Subtest: main moved during preflight
+    ok 2 - main moved during preflight
+      ---
+      duration_ms: 101.511857
+      type: 'test'
+      ...
+    # Subtest: main moved after readiness
+    ok 3 - main moved after readiness
+      ---
+      duration_ms: 121.615701
+      type: 'test'
+      ...
+    # Subtest: wrong reviewed SHA
+    ok 4 - wrong reviewed SHA
+      ---
+      duration_ms: 157.402203
+      type: 'test'
+      ...
+    # Subtest: old workflow exact policy
+    ok 5 - old workflow exact policy
+      ---
+      duration_ms: 203.331245
+      type: 'test'
+      ...
+    # Subtest: new workflow strict policy
+    ok 6 - new workflow strict policy
+      ---
+      duration_ms: 153.90491
+      type: 'test'
+      ...
+    # Subtest: push exact policy
+    ok 7 - push exact policy
+      ---
+      duration_ms: 91.484523
+      type: 'test'
+      ...
+    1..7
+ok 34 - actual CLI rejects stale queued main and cross-workflow producers without issuing a receipt
+  ---
+  duration_ms: 931.883559
+  type: 'test'
+  ...
+# Subtest: exact deploy rejects every incomplete or overlapping native rollout inventory before mutation
+    # Subtest: missing deployments
+    ok 1 - missing deployments
+      ---
+      duration_ms: 1.356894
+      type: 'test'
+      ...
+    # Subtest: missing edges
+    ok 2 - missing edges
+      ---
+      duration_ms: 2.311708
+      type: 'test'
+      ...
+    # Subtest: missing pageInfo
+    ok 3 - missing pageInfo
+      ---
+      duration_ms: 0.511681
+      type: 'test'
+      ...
+    # Subtest: unknown pagination
+    ok 4 - unknown pagination
+      ---
+      duration_ms: 0.458321
+      type: 'test'
+      ...
+    # Subtest: more pages
+    ok 5 - more pages
+      ---
+      duration_ms: 0.593985
+      type: 'test'
+      ...
+    # Subtest: missing active
+    ok 6 - missing active
+      ---
+      duration_ms: 0.378006
+      type: 'test'
+      ...
+    # Subtest: unknown active
+    ok 7 - unknown active
+      ---
+      duration_ms: 0.824701
+      type: 'test'
+      ...
+    # Subtest: ambiguous active
+    ok 8 - ambiguous active
+      ---
+      duration_ms: 0.56284
+      type: 'test'
+      ...
+    # Subtest: missing latest
+    ok 9 - missing latest
+      ---
+      duration_ms: 0.325278
+      type: 'test'
+      ...
+    # Subtest: contradictory null latest
+    ok 10 - contradictory null latest
+      ---
+      duration_ms: 0.332701
+      type: 'test'
+      ...
+    # Subtest: native filtered INITIALIZING
+    ok 11 - native filtered INITIALIZING
+      ---
+      duration_ms: 0.369202
+      type: 'test'
+      ...
+    # Subtest: latest INITIALIZING
+    ok 12 - latest INITIALIZING
+      ---
+      duration_ms: 0.296555
+      type: 'test'
+      ...
+    # Subtest: active INITIALIZING
+    ok 13 - active INITIALIZING
+      ---
+      duration_ms: 0.266185
+      type: 'test'
+      ...
+    # Subtest: native filtered BUILDING
+    ok 14 - native filtered BUILDING
+      ---
+      duration_ms: 0.272306
+      type: 'test'
+      ...
+    # Subtest: latest BUILDING
+    ok 15 - latest BUILDING
+      ---
+      duration_ms: 0.205452
+      type: 'test'
+      ...
+    # Subtest: active BUILDING
+    ok 16 - active BUILDING
+      ---
+      duration_ms: 0.180939
+      type: 'test'
+      ...
+    # Subtest: native filtered DEPLOYING
+    ok 17 - native filtered DEPLOYING
+      ---
+      duration_ms: 0.478683
+      type: 'test'
+      ...
+    # Subtest: latest DEPLOYING
+    ok 18 - latest DEPLOYING
+      ---
+      duration_ms: 0.295059
+      type: 'test'
+      ...
+    # Subtest: active DEPLOYING
+    ok 19 - active DEPLOYING
+      ---
+      duration_ms: 0.518047
+      type: 'test'
+      ...
+    # Subtest: native filtered QUEUED
+    ok 20 - native filtered QUEUED
+      ---
+      duration_ms: 0.633806
+      type: 'test'
+      ...
+    # Subtest: latest QUEUED
+    ok 21 - latest QUEUED
+      ---
+      duration_ms: 0.396948
+      type: 'test'
+      ...
+    # Subtest: active QUEUED
+    ok 22 - active QUEUED
+      ---
+      duration_ms: 0.413578
+      type: 'test'
+      ...
+    # Subtest: native filtered WAITING
+    ok 23 - native filtered WAITING
+      ---
+      duration_ms: 0.511385
+      type: 'test'
+      ...
+    # Subtest: latest WAITING
+    ok 24 - latest WAITING
+      ---
+      duration_ms: 0.494369
+      type: 'test'
+      ...
+    # Subtest: active WAITING
+    ok 25 - active WAITING
+      ---
+      duration_ms: 0.310469
+      type: 'test'
+      ...
+    # Subtest: native filtered NEEDS_APPROVAL
+    ok 26 - native filtered NEEDS_APPROVAL
+      ---
+      duration_ms: 0.213077
+      type: 'test'
+      ...
+    # Subtest: latest NEEDS_APPROVAL
+    ok 27 - latest NEEDS_APPROVAL
+      ---
+      duration_ms: 0.186201
+      type: 'test'
+      ...
+    # Subtest: active NEEDS_APPROVAL
+    ok 28 - active NEEDS_APPROVAL
+      ---
+      duration_ms: 0.25232
+      type: 'test'
+      ...
+    # Subtest: native filtered REMOVING
+    ok 29 - native filtered REMOVING
+      ---
+      duration_ms: 0.188602
+      type: 'test'
+      ...
+    # Subtest: latest REMOVING
+    ok 30 - latest REMOVING
+      ---
+      duration_ms: 0.163408
+      type: 'test'
+      ...
+    # Subtest: active REMOVING
+    ok 31 - active REMOVING
+      ---
+      duration_ms: 0.163494
+      type: 'test'
+      ...
+    # Subtest: native filtered SLEEPING
+    ok 32 - native filtered SLEEPING
+      ---
+      duration_ms: 0.156246
+      type: 'test'
+      ...
+    # Subtest: latest SLEEPING
+    ok 33 - latest SLEEPING
+      ---
+      duration_ms: 0.344237
+      type: 'test'
+      ...
+    # Subtest: active SLEEPING
+    ok 34 - active SLEEPING
+      ---
+      duration_ms: 0.378711
+      type: 'test'
+      ...
+    # Subtest: native filtered UNKNOWN
+    ok 35 - native filtered UNKNOWN
+      ---
+      duration_ms: 0.468734
+      type: 'test'
+      ...
+    # Subtest: latest UNKNOWN
+    ok 36 - latest UNKNOWN
+      ---
+      duration_ms: 0.263923
+      type: 'test'
+      ...
+    # Subtest: active UNKNOWN
+    ok 37 - active UNKNOWN
+      ---
+      duration_ms: 0.210855
+      type: 'test'
+      ...
+    1..37
+ok 35 - exact deploy rejects every incomplete or overlapping native rollout inventory before mutation
+  ---
+  duration_ms: 26.386456
+  type: 'test'
+  ...
+# Subtest: a rerun reuses the unique active native SUCCESS exact SHA, proves it live and performs no migration mutation
+ok 36 - a rerun reuses the unique active native SUCCESS exact SHA, proves it live and performs no migration mutation
+  ---
+  duration_ms: 0.969216
+  type: 'test'
+  ...
+# Subtest: normal exact deployment records previous active native SHA or explicit unknown without inventing migration delta
+    # Subtest: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    ok 1 - bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+      ---
+      duration_ms: 0.65143
+      type: 'test'
+      ...
+    # Subtest: undefined
+    ok 2 - undefined
+      ---
+      duration_ms: 0.622701
+      type: 'test'
+      ...
+    # Subtest: invalid
+    ok 3 - invalid
+      ---
+      duration_ms: 0.384975
+      type: 'test'
+      ...
+    1..3
+ok 37 - normal exact deployment records previous active native SHA or explicit unknown without inventing migration delta
+  ---
+  duration_ms: 1.997527
+  type: 'test'
+  ...
+# Subtest: bounded read-only transient poll retries recover but denial, malformed bodies and uncertain mutations never retry
+    # Subtest: network
+    ok 1 - network
+      ---
+      duration_ms: 1.371415
+      type: 'test'
+      ...
+    # Subtest: timeout
+    ok 2 - timeout
+      ---
+      duration_ms: 0.923667
+      type: 'test'
+      ...
+    # Subtest: 408
+    ok 3 - 408
+      ---
+      duration_ms: 1.465145
+      type: 'test'
+      ...
+    # Subtest: 429
+    ok 4 - 429
+      ---
+      duration_ms: 0.820644
+      type: 'test'
+      ...
+    # Subtest: 500
+    ok 5 - 500
+      ---
+      duration_ms: 0.848761
+      type: 'test'
+      ...
+    # Subtest: 502
+    ok 6 - 502
+      ---
+      duration_ms: 9.708919
+      type: 'test'
+      ...
+    # Subtest: 503
+    ok 7 - 503
+      ---
+      duration_ms: 0.808465
+      type: 'test'
+      ...
+    # Subtest: 504
+    ok 8 - 504
+      ---
+      duration_ms: 0.75864
+      type: 'test'
+      ...
+    # Subtest: denied
+    ok 9 - denied
+      ---
+      duration_ms: 0.984997
+      type: 'test'
+      ...
+    # Subtest: malformed
+    ok 10 - malformed
+      ---
+      duration_ms: 0.607631
+      type: 'test'
+      ...
+    # Subtest: permanent
+    ok 11 - permanent
+      ---
+      duration_ms: 0.551558
+      type: 'test'
+      ...
+    # Subtest: exhausted
+    ok 12 - exhausted
+      ---
+      duration_ms: 0.848302
+      type: 'test'
+      ...
+    # Subtest: mutation
+    ok 13 - mutation
+      ---
+      duration_ms: 0.783516
+      type: 'test'
+      ...
+    1..13
+ok 38 - bounded read-only transient poll retries recover but denial, malformed bodies and uncertain mutations never retry
+  ---
+  duration_ms: 21.448996
+  type: 'test'
+  ...
+# Subtest: aggregate injected-clock budget covers worst-case requests, ready, delays and final checks below workflow timeout
+ok 39 - aggregate injected-clock budget covers worst-case requests, ready, delays and final checks below workflow timeout
+  ---
+  duration_ms: 4.09602
+  type: 'test'
+  ...
+# Subtest: safe failure progress preserves only validated identity and finite outcome, never provider payloads
+ok 40 - safe failure progress preserves only validated identity and finite outcome, never provider payloads
+  ---
+  duration_ms: 1.308607
+  type: 'test'
+  ...
+# Subtest: actual exact CLI saves private sanitized failure progress with validated deployment ID after submission
+    # Subtest: poll-denied
+    ok 1 - poll-denied
+      ---
+      duration_ms: 127.466123
+      type: 'test'
+      ...
+    # Subtest: invalid-id
+    ok 2 - invalid-id
+      ---
+      duration_ms: 139.575274
+      type: 'test'
+      ...
+    # Subtest: preflight-denied
+    ok 3 - preflight-denied
+      ---
+      duration_ms: 326.256514
+      type: 'test'
+      ...
+    1..3
+ok 41 - actual exact CLI saves private sanitized failure progress with validated deployment ID after submission
+  ---
+  duration_ms: 595.102906
+  type: 'test'
+  ...
+# Subtest: metadata serializer rejects either nonempty bound credential in values or keys, including JSON escaping
+ok 42 - metadata serializer rejects either nonempty bound credential in values or keys, including JSON escaping
+  ---
+  duration_ms: 2.486548
+  type: 'test'
+  ...
+# Subtest: callback guard rejects reflected identity before assignment and never restores it on failure
+ok 43 - callback guard rejects reflected identity before assignment and never restores it on failure
+  ---
+  duration_ms: 17.522018
+  type: 'test'
+  ...
+# Subtest: actual CLI excludes bound credential reflection across initial, mutation, receipt, progress and fallback boundaries
+    # Subtest: RAILWAY_TOKEN:mutation-uuid
+    ok 1 - RAILWAY_TOKEN:mutation-uuid
+      ---
+      duration_ms: 261.325868
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:reuse-uuid
+    ok 2 - RAILWAY_TOKEN:reuse-uuid
+      ---
+      duration_ms: 110.601725
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:previous-active-uuid
+    ok 3 - RAILWAY_TOKEN:previous-active-uuid
+      ---
+      duration_ms: 110.02978
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:previous-native-sha
+    ok 4 - RAILWAY_TOKEN:previous-native-sha
+      ---
+      duration_ms: 92.639622
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:current-sha
+    ok 5 - RAILWAY_TOKEN:current-sha
+      ---
+      duration_ms: 76.437602
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:preflight-current-sha
+    ok 6 - RAILWAY_TOKEN:preflight-current-sha
+      ---
+      duration_ms: 96.155754
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:fixed-target
+    ok 7 - RAILWAY_TOKEN:fixed-target
+      ---
+      duration_ms: 153.714427
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:escaped-final-receipt
+    ok 8 - RAILWAY_TOKEN:escaped-final-receipt
+      ---
+      duration_ms: 161.841502
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:escaped-preflight-receipt
+    ok 9 - RAILWAY_TOKEN:escaped-preflight-receipt
+      ---
+      duration_ms: 134.685421
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:mutation-uuid
+    ok 10 - GITHUB_TOKEN:mutation-uuid
+      ---
+      duration_ms: 117.310215
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:reuse-uuid
+    ok 11 - GITHUB_TOKEN:reuse-uuid
+      ---
+      duration_ms: 104.09736
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:previous-active-uuid
+    ok 12 - GITHUB_TOKEN:previous-active-uuid
+      ---
+      duration_ms: 81.049282
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:previous-native-sha
+    ok 13 - GITHUB_TOKEN:previous-native-sha
+      ---
+      duration_ms: 143.014572
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:current-sha
+    ok 14 - GITHUB_TOKEN:current-sha
+      ---
+      duration_ms: 99.895897
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:preflight-current-sha
+    ok 15 - GITHUB_TOKEN:preflight-current-sha
+      ---
+      duration_ms: 230.04435
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:fixed-target
+    ok 16 - GITHUB_TOKEN:fixed-target
+      ---
+      duration_ms: 101.77432
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:escaped-final-receipt
+    ok 17 - GITHUB_TOKEN:escaped-final-receipt
+      ---
+      duration_ms: 108.845678
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:escaped-preflight-receipt
+    ok 18 - GITHUB_TOKEN:escaped-preflight-receipt
+      ---
+      duration_ms: 95.701362
+      type: 'test'
+      ...
+    # Subtest: fixed-diagnostic-matches-bound-credential
+    ok 19 - fixed-diagnostic-matches-bound-credential
+      ---
+      duration_ms: 114.154934
+      type: 'test'
+      ...
+    # Subtest: safe-normal-success
+    ok 20 - safe-normal-success
+      ---
+      duration_ms: 96.008004
+      type: 'test'
+      ...
+    # Subtest: safe-normal-failure
+    ok 21 - safe-normal-failure
+      ---
+      duration_ms: 100.620896
+      type: 'test'
+      ...
+    # Subtest: safe-native-reuse
+    ok 22 - safe-native-reuse
+      ---
+      duration_ms: 92.795789
+      type: 'test'
+      ...
+    1..22
+ok 44 - actual CLI excludes bound credential reflection across initial, mutation, receipt, progress and fallback boundaries
+  ---
+  duration_ms: 2703.28427
+  type: 'test'
+  ...
+# Subtest: actual HTTP credential aliases share transport and output guards for both bindings
+    # Subtest: RAILWAY_TOKEN:leading-space:mutation
+    ok 1 - RAILWAY_TOKEN:leading-space:mutation
+      ---
+      duration_ms: 84.816767
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:leading-space:reuse
+    ok 2 - RAILWAY_TOKEN:leading-space:reuse
+      ---
+      duration_ms: 87.803344
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:leading-space:previous
+    ok 3 - RAILWAY_TOKEN:leading-space:previous
+      ---
+      duration_ms: 124.756859
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:trailing-space:mutation
+    ok 4 - RAILWAY_TOKEN:trailing-space:mutation
+      ---
+      duration_ms: 192.611356
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:trailing-space:reuse
+    ok 5 - RAILWAY_TOKEN:trailing-space:reuse
+      ---
+      duration_ms: 141.182888
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:trailing-space:previous
+    ok 6 - RAILWAY_TOKEN:trailing-space:previous
+      ---
+      duration_ms: 90.685706
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:leading-tab:mutation
+    ok 7 - RAILWAY_TOKEN:leading-tab:mutation
+      ---
+      duration_ms: 77.432615
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:leading-tab:reuse
+    ok 8 - RAILWAY_TOKEN:leading-tab:reuse
+      ---
+      duration_ms: 96.818917
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:leading-tab:previous
+    ok 9 - RAILWAY_TOKEN:leading-tab:previous
+      ---
+      duration_ms: 158.398135
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:trailing-tab:mutation
+    ok 10 - RAILWAY_TOKEN:trailing-tab:mutation
+      ---
+      duration_ms: 92.842894
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:trailing-tab:reuse
+    ok 11 - RAILWAY_TOKEN:trailing-tab:reuse
+      ---
+      duration_ms: 106.874158
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:trailing-tab:previous
+    ok 12 - RAILWAY_TOKEN:trailing-tab:previous
+      ---
+      duration_ms: 78.711026
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:mixed-whitespace:mutation
+    ok 13 - RAILWAY_TOKEN:mixed-whitespace:mutation
+      ---
+      duration_ms: 77.257462
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:mixed-whitespace:reuse
+    ok 14 - RAILWAY_TOKEN:mixed-whitespace:reuse
+      ---
+      duration_ms: 83.981021
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:mixed-whitespace:previous
+    ok 15 - RAILWAY_TOKEN:mixed-whitespace:previous
+      ---
+      duration_ms: 87.549954
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:context-alias
+    ok 16 - RAILWAY_TOKEN:context-alias
+      ---
+      duration_ms: 92.391621
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:fallback-target-alias
+    ok 17 - RAILWAY_TOKEN:fallback-target-alias
+      ---
+      duration_ms: 73.535493
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:failure-code-alias
+    ok 18 - RAILWAY_TOKEN:failure-code-alias
+      ---
+      duration_ms: 81.221664
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:invalid-header-18
+    ok 19 - RAILWAY_TOKEN:invalid-header-18
+      ---
+      duration_ms: 86.996515
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:invalid-header-19
+    ok 20 - RAILWAY_TOKEN:invalid-header-19
+      ---
+      duration_ms: 106.061105
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:invalid-header-20
+    ok 21 - RAILWAY_TOKEN:invalid-header-20
+      ---
+      duration_ms: 84.652282
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:invalid-header-21
+    ok 22 - RAILWAY_TOKEN:invalid-header-21
+      ---
+      duration_ms: 85.359804
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:invalid-header-22
+    ok 23 - RAILWAY_TOKEN:invalid-header-22
+      ---
+      duration_ms: 100.019853
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:rejected-newline-fallback-alias
+    ok 24 - RAILWAY_TOKEN:rejected-newline-fallback-alias
+      ---
+      duration_ms: 110.469797
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:leading-space:mutation
+    ok 25 - GITHUB_TOKEN:leading-space:mutation
+      ---
+      duration_ms: 84.948516
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:leading-space:reuse
+    ok 26 - GITHUB_TOKEN:leading-space:reuse
+      ---
+      duration_ms: 125.168752
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:leading-space:previous
+    ok 27 - GITHUB_TOKEN:leading-space:previous
+      ---
+      duration_ms: 98.857211
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:trailing-space:mutation
+    ok 28 - GITHUB_TOKEN:trailing-space:mutation
+      ---
+      duration_ms: 90.46045
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:trailing-space:reuse
+    ok 29 - GITHUB_TOKEN:trailing-space:reuse
+      ---
+      duration_ms: 74.62742
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:trailing-space:previous
+    ok 30 - GITHUB_TOKEN:trailing-space:previous
+      ---
+      duration_ms: 78.145827
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:leading-tab:mutation
+    ok 31 - GITHUB_TOKEN:leading-tab:mutation
+      ---
+      duration_ms: 83.845967
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:leading-tab:reuse
+    ok 32 - GITHUB_TOKEN:leading-tab:reuse
+      ---
+      duration_ms: 90.053265
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:leading-tab:previous
+    ok 33 - GITHUB_TOKEN:leading-tab:previous
+      ---
+      duration_ms: 108.331045
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:trailing-tab:mutation
+    ok 34 - GITHUB_TOKEN:trailing-tab:mutation
+      ---
+      duration_ms: 84.771527
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:trailing-tab:reuse
+    ok 35 - GITHUB_TOKEN:trailing-tab:reuse
+      ---
+      duration_ms: 74.963409
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:trailing-tab:previous
+    ok 36 - GITHUB_TOKEN:trailing-tab:previous
+      ---
+      duration_ms: 79.600245
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:mixed-whitespace:mutation
+    ok 37 - GITHUB_TOKEN:mixed-whitespace:mutation
+      ---
+      duration_ms: 76.930737
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:mixed-whitespace:reuse
+    ok 38 - GITHUB_TOKEN:mixed-whitespace:reuse
+      ---
+      duration_ms: 94.985149
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:mixed-whitespace:previous
+    ok 39 - GITHUB_TOKEN:mixed-whitespace:previous
+      ---
+      duration_ms: 90.410788
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:context-alias
+    ok 40 - GITHUB_TOKEN:context-alias
+      ---
+      duration_ms: 70.369458
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:fallback-target-alias
+    ok 41 - GITHUB_TOKEN:fallback-target-alias
+      ---
+      duration_ms: 67.765736
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:failure-code-alias
+    ok 42 - GITHUB_TOKEN:failure-code-alias
+      ---
+      duration_ms: 84.619575
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:invalid-header-42
+    ok 43 - GITHUB_TOKEN:invalid-header-42
+      ---
+      duration_ms: 92.815866
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:invalid-header-43
+    ok 44 - GITHUB_TOKEN:invalid-header-43
+      ---
+      duration_ms: 74.674476
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:invalid-header-44
+    ok 45 - GITHUB_TOKEN:invalid-header-44
+      ---
+      duration_ms: 97.791768
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:invalid-header-45
+    ok 46 - GITHUB_TOKEN:invalid-header-45
+      ---
+      duration_ms: 91.309995
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:invalid-header-46
+    ok 47 - GITHUB_TOKEN:invalid-header-46
+      ---
+      duration_ms: 79.141967
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:rejected-newline-fallback-alias
+    ok 48 - GITHUB_TOKEN:rejected-newline-fallback-alias
+      ---
+      duration_ms: 81.629188
+      type: 'test'
+      ...
+    # Subtest: RAILWAY_TOKEN:immutable-guard-after-environment-mutation
+    ok 49 - RAILWAY_TOKEN:immutable-guard-after-environment-mutation
+      ---
+      duration_ms: 99.056562
+      type: 'test'
+      ...
+    # Subtest: GITHUB_TOKEN:immutable-guard-after-environment-mutation
+    ok 50 - GITHUB_TOKEN:immutable-guard-after-environment-mutation
+      ---
+      duration_ms: 94.180073
+      type: 'test'
+      ...
+    # Subtest: immutable-canonical-snapshot-despite-environment-mutation
+    ok 51 - immutable-canonical-snapshot-despite-environment-mutation
+      ---
+      duration_ms: 98.981424
+      type: 'test'
+      ...
+    1..51
+ok 45 - actual HTTP credential aliases share transport and output guards for both bindings
+  ---
+  duration_ms: 4781.091792
+  type: 'test'
+  ...
+# Subtest: standalone Railway transport canonicalizes HTTP whitespace and rejects invalid headers with constant errors
+ok 46 - standalone Railway transport canonicalizes HTTP whitespace and rejects invalid headers with constant errors
+  ---
+  duration_ms: 3.408307
+  type: 'test'
+  ...
+# Subtest: HTTP control and non-ByteString bindings fail before callbacks or transport for either credential
+ok 47 - HTTP control and non-ByteString bindings fail before callbacks or transport for either credential
+  ---
+  duration_ms: 2.541452
+  type: 'test'
+  ...
+# Subtest: production proof authenticates exact successful main deploy job independently from demo
+    # Subtest: push
+    ok 1 - push
+      ---
+      duration_ms: 2.401959
+      type: 'test'
+      ...
+    # Subtest: workflow_dispatch
+    ok 2 - workflow_dispatch
+      ---
+      duration_ms: 0.412957
+      type: 'test'
+      ...
+    # Subtest: wrong SHA
+    ok 3 - wrong SHA
+      ---
+      duration_ms: 0.267994
+      type: 'test'
+      ...
+    # Subtest: wrong workflow
+    ok 4 - wrong workflow
+      ---
+      duration_ms: 0.2102
+      type: 'test'
+      ...
+    # Subtest: wrong event
+    ok 5 - wrong event
+      ---
+      duration_ms: 0.101967
+      type: 'test'
+      ...
+    # Subtest: rerun
+    ok 6 - rerun
+      ---
+      duration_ms: 1.135759
+      type: 'test'
+      ...
+    # Subtest: cross repo
+    ok 7 - cross repo
+      ---
+      duration_ms: 0.515671
+      type: 'test'
+      ...
+    # Subtest: wrong ref
+    ok 8 - wrong ref
+      ---
+      duration_ms: 0.163447
+      type: 'test'
+      ...
+    # Subtest: failed
+    ok 9 - failed
+      ---
+      duration_ms: 1.259695
+      type: 'test'
+      ...
+    # Subtest: skipped production
+    ok 10 - skipped production
+      ---
+      duration_ms: 0.173417
+      type: 'test'
+      ...
+    # Subtest: wrong job
+    ok 11 - wrong job
+      ---
+      duration_ms: 1.099313
+      type: 'test'
+      ...
+    # Subtest: job rerun
+    ok 12 - job rerun
+      ---
+      duration_ms: 0.496541
+      type: 'test'
+      ...
+    # Subtest: job other run
+    ok 13 - job other run
+      ---
+      duration_ms: 0.300984
+      type: 'test'
+      ...
+    # Subtest: job wrong SHA
+    ok 14 - job wrong SHA
+      ---
+      duration_ms: 0.128298
+      type: 'test'
+      ...
+    # Subtest: step skipped
+    ok 15 - step skipped
+      ---
+      duration_ms: 0.14378
+      type: 'test'
+      ...
+    # Subtest: missing run never dispatches
+    ok 16 - missing run never dispatches
+      ---
+      duration_ms: 0.224433
+      type: 'test'
+      ...
+    # Subtest: identity changed on final read
+    ok 17 - identity changed on final read
+      ---
+      duration_ms: 0.306071
+      type: 'test'
+      ...
+    1..17
+ok 48 - production proof authenticates exact successful main deploy job independently from demo
+  ---
+  duration_ms: 13.193646
+  type: 'test'
+  ...
+# Subtest: newer failed, pending or rerun production run prevents selecting an older successful same-SHA run
+ok 49 - newer failed, pending or rerun production run prevents selecting an older successful same-SHA run
+  ---
+  duration_ms: 1.273476
+  type: 'test'
+  ...
+# Subtest: completed older production reruns do not hide a newer successful first attempt
+    # Subtest: completed attempt 2 followed by latest attempt 1 proves latest only
+    ok 1 - completed attempt 2 followed by latest attempt 1 proves latest only
+      ---
+      duration_ms: 0.45623
+      type: 'test'
+      ...
+    # Subtest: an older active rerun blocks proof as pending
+    ok 2 - an older active rerun blocks proof as pending
+      ---
+      duration_ms: 0.186819
+      type: 'test'
+      ...
+    # Subtest: an older active first attempt must settle before proving a newer deployment
+    ok 3 - an older active first attempt must settle before proving a newer deployment
+      ---
+      duration_ms: 1.315769
+      type: 'test'
+      ...
+    # Subtest: malformed or non-positive inventory attempts fail closed
+    ok 4 - malformed or non-positive inventory attempts fail closed
+      ---
+      duration_ms: 0.347927
+      type: 'test'
+      ...
+    1..4
+ok 50 - completed older production reruns do not hide a newer successful first attempt
+  ---
+  duration_ms: 2.852867
+  type: 'test'
+  ...
+# Subtest: bounded production waiting polls only validated absent/pending observations and retains strict final proof
+    # Subtest: success
+    ok 1 - success
+      ---
+      duration_ms: 0.783621
+      type: 'test'
+      ...
+    # Subtest: failure
+    ok 2 - failure
+      ---
+      duration_ms: 0.264872
+      type: 'test'
+      ...
+    # Subtest: never appears
+    ok 3 - never appears
+      ---
+      duration_ms: 0.347595
+      type: 'test'
+      ...
+    # Subtest: never completes
+    ok 4 - never completes
+      ---
+      duration_ms: 0.335444
+      type: 'test'
+      ...
+    # Subtest: identity
+    ok 5 - identity
+      ---
+      duration_ms: 0.103621
+      type: 'test'
+      ...
+    # Subtest: rerun
+    ok 6 - rerun
+      ---
+      duration_ms: 0.089616
+      type: 'test'
+      ...
+    # Subtest: incomplete
+    ok 7 - incomplete
+      ---
+      duration_ms: 0.224527
+      type: 'test'
+      ...
+    # Subtest: clock backwards
+    ok 8 - clock backwards
+      ---
+      duration_ms: 0.224218
+      type: 'test'
+      ...
+    # Subtest: clock stopped
+    ok 9 - clock stopped
+      ---
+      duration_ms: 0.183408
+      type: 'test'
+      ...
+    1..9
+ok 51 - bounded production waiting polls only validated absent/pending observations and retains strict final proof
+  ---
+  duration_ms: 3.504853
+  type: 'test'
+  ...
+# Subtest: valid pending inventory lag at final production reread is waited, never relabeled proof failure
+ok 52 - valid pending inventory lag at final production reread is waited, never relabeled proof failure
+  ---
+  duration_ms: 0.543472
+  type: 'test'
+  ...
+# Subtest: public source client sends its credential only to the official Railway API host
+ok 53 - public source client sends its credential only to the official Railway API host
+  ---
+  duration_ms: 20.113216
+  type: 'test'
+  ...
+# Subtest: inspection reads once, emits only immutable allowlisted metadata, and never updates
+ok 54 - inspection reads once, emits only immutable allowlisted metadata, and never updates
+  ---
+  duration_ms: 2.353454
+  type: 'test'
+  ...
+# Subtest: unique existing trigger changes only branch, after two fresh reads and exact after-read
+ok 55 - unique existing trigger changes only branch, after two fresh reads and exact after-read
+  ---
+  duration_ms: 1.31915
+  type: 'test'
+  ...
+# Subtest: already-main is idempotent with two reads and zero writes
+ok 56 - already-main is idempotent with two reads and zero writes
+  ---
+  duration_ms: 0.740318
+  type: 'test'
+  ...
+# Subtest: opaque GraphQL trigger IDs are preserved exactly without assuming UUID storage
+ok 57 - opaque GraphQL trigger IDs are preserved exactly without assuming UUID storage
+  ---
+  duration_ms: 0.520737
+  type: 'test'
+  ...
+# Subtest: forbidden operation "deploy" makes no request
+ok 58 - forbidden operation "deploy" makes no request
+  ---
+  duration_ms: 0.381445
+  type: 'test'
+  ...
+# Subtest: forbidden operation "create" makes no request
+ok 59 - forbidden operation "create" makes no request
+  ---
+  duration_ms: 0.190479
+  type: 'test'
+  ...
+# Subtest: forbidden operation "delete" makes no request
+ok 60 - forbidden operation "delete" makes no request
+  ---
+  duration_ms: 0.098092
+  type: 'test'
+  ...
+# Subtest: forbidden operation "serviceConnect" makes no request
+ok 61 - forbidden operation "serviceConnect" makes no request
+  ---
+  duration_ms: 0.32257
+  type: 'test'
+  ...
+# Subtest: forbidden operation "inspect\\n" makes no request
+ok 62 - forbidden operation "inspect\\n" makes no request
+  ---
+  duration_ms: 0.519822
+  type: 'test'
+  ...
+# Subtest: invalid update digest undefined blocks before read
+ok 63 - invalid update digest undefined blocks before read
+  ---
+  duration_ms: 0.545219
+  type: 'test'
+  ...
+# Subtest: invalid update digest "" blocks before read
+ok 64 - invalid update digest "" blocks before read
+  ---
+  duration_ms: 2.056344
+  type: 'test'
+  ...
+# Subtest: invalid update digest "000000000000000000000000000000000000000000000000000000000000000" blocks before read
+ok 65 - invalid update digest "000000000000000000000000000000000000000000000000000000000000000" blocks before read
+  ---
+  duration_ms: 0.298525
+  type: 'test'
+  ...
+# Subtest: invalid update digest "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" blocks before read
+ok 66 - invalid update digest "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" blocks before read
+  ---
+  duration_ms: 0.101445
+  type: 'test'
+  ...
+# Subtest: invalid update digest "0000000000000000000000000000000000000000000000000000000000000000\\n" blocks before read
+ok 67 - invalid update digest "0000000000000000000000000000000000000000000000000000000000000000\\n" blocks before read
+  ---
+  duration_ms: 0.117465
+  type: 'test'
+  ...
+# Subtest: stale expected inventory blocks before mutation
+ok 68 - stale expected inventory blocks before mutation
+  ---
+  duration_ms: 0.520804
+  type: 'test'
+  ...
+# Subtest: fresh branch drift aborts before write
+ok 69 - fresh branch drift aborts before write
+  ---
+  duration_ms: 0.540813
+  type: 'test'
+  ...
+# Subtest: fresh check policy drift aborts before write
+ok 70 - fresh check policy drift aborts before write
+  ---
+  duration_ms: 1.793328
+  type: 'test'
+  ...
+# Subtest: fresh root directory drift aborts before write
+ok 71 - fresh root directory drift aborts before write
+  ---
+  duration_ms: 0.363054
+  type: 'test'
+  ...
+# Subtest: fresh domain mapping drift aborts before write
+ok 72 - fresh domain mapping drift aborts before write
+  ---
+  duration_ms: 12.055362
+  type: 'test'
+  ...
+# Subtest: missing trigger is inspectable but update blocks before write
+ok 73 - missing trigger is inspectable but update blocks before write
+  ---
+  duration_ms: 0.696178
+  type: 'test'
+  ...
+# Subtest: duplicate trigger is inspectable but update blocks before write
+ok 74 - duplicate trigger is inspectable but update blocks before write
+  ---
+  duration_ms: 0.526335
+  type: 'test'
+  ...
+# Subtest: more pages trigger is inspectable but update blocks before write
+ok 75 - more pages trigger is inspectable but update blocks before write
+  ---
+  duration_ms: 0.224053
+  type: 'test'
+  ...
+# Subtest: project token blocks without returning provider metadata
+ok 76 - project token blocks without returning provider metadata
+  ---
+  duration_ms: 0.227019
+  type: 'test'
+  ...
+# Subtest: environment name blocks without returning provider metadata
+ok 77 - environment name blocks without returning provider metadata
+  ---
+  duration_ms: 0.118819
+  type: 'test'
+  ...
+# Subtest: service blocks without returning provider metadata
+ok 78 - service blocks without returning provider metadata
+  ---
+  duration_ms: 0.100465
+  type: 'test'
+  ...
+# Subtest: source repository blocks without returning provider metadata
+ok 79 - source repository blocks without returning provider metadata
+  ---
+  duration_ms: 0.095985
+  type: 'test'
+  ...
+# Subtest: domain blocks without returning provider metadata
+ok 80 - domain blocks without returning provider metadata
+  ---
+  duration_ms: 0.101661
+  type: 'test'
+  ...
+# Subtest: foreign trigger environment blocks without returning provider metadata
+ok 81 - foreign trigger environment blocks without returning provider metadata
+  ---
+  duration_ms: 0.1092
+  type: 'test'
+  ...
+# Subtest: foreign trigger repository blocks without returning provider metadata
+ok 82 - foreign trigger repository blocks without returning provider metadata
+  ---
+  duration_ms: 0.101054
+  type: 'test'
+  ...
+# Subtest: foreign provider blocks without returning provider metadata
+ok 83 - foreign provider blocks without returning provider metadata
+  ---
+  duration_ms: 0.099569
+  type: 'test'
+  ...
+# Subtest: missing check metadata blocks without returning provider metadata
+ok 84 - missing check metadata blocks without returning provider metadata
+  ---
+  duration_ms: 0.186422
+  type: 'test'
+  ...
+# Subtest: malformed ID blocks without returning provider metadata
+ok 85 - malformed ID blocks without returning provider metadata
+  ---
+  duration_ms: 0.146012
+  type: 'test'
+  ...
+# Subtest: secret-shaped branch blocks without returning provider metadata
+ok 86 - secret-shaped branch blocks without returning provider metadata
+  ---
+  duration_ms: 0.119296
+  type: 'test'
+  ...
+# Subtest: trigger and domain ordering do not create a false inventory drift
+ok 87 - trigger and domain ordering do not create a false inventory drift
+  ---
+  duration_ms: 0.25485
+  type: 'test'
+  ...
+# Subtest: post-update metadata drift cannot report success or retry/rollback automatically
+ok 88 - post-update metadata drift cannot report success or retry/rollback automatically
+  ---
+  duration_ms: 0.688828
+  type: 'test'
+  ...
+# Subtest: unconfirmed update response blocks success, without automatic mutation retry
+ok 89 - unconfirmed update response blocks success, without automatic mutation retry
+  ---
+  duration_ms: 0.903933
+  type: 'test'
+  ...
+# Subtest: client uses only fixed HTTPS endpoint, dedicated header, redirect refusal and finite timeout
+ok 90 - client uses only fixed HTTPS endpoint, dedicated header, redirect refusal and finite timeout
+  ---
+  duration_ms: 0.712801
+  type: 'test'
+  ...
+# Subtest: actual loopback HTTP transport exercises inspect, digest, branch-only update and verified after-read
+ok 91 - actual loopback HTTP transport exercises inspect, digest, branch-only update and verified after-read
+  ---
+  duration_ms: 134.303489
+  type: 'test'
+  ...
+# Subtest: client HTTP error uses a constant diagnostic and discloses no provider body
+ok 92 - client HTTP error uses a constant diagnostic and discloses no provider body
+  ---
+  duration_ms: 0.453327
+  type: 'test'
+  ...
+# Subtest: client GraphQL error uses a constant diagnostic and discloses no provider body
+ok 93 - client GraphQL error uses a constant diagnostic and discloses no provider body
+  ---
+  duration_ms: 0.645583
+  type: 'test'
+  ...
+# Subtest: client invalid JSON uses a constant diagnostic and discloses no provider body
+ok 94 - client invalid JSON uses a constant diagnostic and discloses no provider body
+  ---
+  duration_ms: 0.714219
+  type: 'test'
+  ...
+# Subtest: client absent data uses a constant diagnostic and discloses no provider body
+ok 95 - client absent data uses a constant diagnostic and discloses no provider body
+  ---
+  duration_ms: 0.370179
+  type: 'test'
+  ...
+# Subtest: client network error uses a constant diagnostic and discloses no provider body
+ok 96 - client network error uses a constant diagnostic and discloses no provider body
+  ---
+  duration_ms: 0.148055
+  type: 'test'
+  ...
+# Subtest: client oversized body uses a constant diagnostic and discloses no provider body
+ok 97 - client oversized body uses a constant diagnostic and discloses no provider body
+  ---
+  duration_ms: 0.782572
+  type: 'test'
+  ...
+# Subtest: client redirect uses a constant diagnostic and discloses no provider body
+ok 98 - client redirect uses a constant diagnostic and discloses no provider body
+  ---
+  duration_ms: 0.137678
+  type: 'test'
+  ...
+# Subtest: missing token blocks without performing a request
+ok 99 - missing token blocks without performing a request
+  ---
+  duration_ms: 0.13661
+  type: 'test'
+  ...
+# Subtest: trusted exact main manual context is accepted without copying unrelated env
+ok 100 - trusted exact main manual context is accepted without copying unrelated env
+  ---
+  duration_ms: 0.190473
+  type: 'test'
+  ...
+# Subtest: untrusted context GITHUB_EVENT_NAME is rejected
+ok 101 - untrusted context GITHUB_EVENT_NAME is rejected
+  ---
+  duration_ms: 0.078179
+  type: 'test'
+  ...
+# Subtest: untrusted context GITHUB_REPOSITORY is rejected
+ok 102 - untrusted context GITHUB_REPOSITORY is rejected
+  ---
+  duration_ms: 0.043142
+  type: 'test'
+  ...
+# Subtest: untrusted context GITHUB_REF is rejected
+ok 103 - untrusted context GITHUB_REF is rejected
+  ---
+  duration_ms: 0.039652
+  type: 'test'
+  ...
+# Subtest: untrusted context CONFIGURE_DEMO_REVIEWED_SHA is rejected
+ok 104 - untrusted context CONFIGURE_DEMO_REVIEWED_SHA is rejected
+  ---
+  duration_ms: 0.073603
+  type: 'test'
+  ...
+# Subtest: untrusted context GITHUB_SHA is rejected
+ok 105 - untrusted context GITHUB_SHA is rejected
+  ---
+  duration_ms: 0.041766
+  type: 'test'
+  ...
+# Subtest: untrusted context GITHUB_RUN_ID is rejected
+ok 106 - untrusted context GITHUB_RUN_ID is rejected
+  ---
+  duration_ms: 0.056337
+  type: 'test'
+  ...
+# Subtest: untrusted context GITHUB_RUN_ATTEMPT is rejected
+ok 107 - untrusted context GITHUB_RUN_ATTEMPT is rejected
+  ---
+  duration_ms: 0.050085
+  type: 'test'
+  ...
+# Subtest: actual CLI refuses untrusted context with a fixed diagnostic before contacting provider
+ok 108 - actual CLI refuses untrusted context with a fixed diagnostic before contacting provider
+  ---
+  duration_ms: 90.479561
+  type: 'test'
+  ...
+# Subtest: actual CLI with trusted context and absent binding fails without dumping its environment
+ok 109 - actual CLI with trusted context and absent binding fails without dumping its environment
+  ---
+  duration_ms: 102.891716
+  type: 'test'
+  ...
+# Subtest: manual workflow retains protected exact-main binding, no secret test step or shell-input interpolation
+ok 110 - manual workflow retains protected exact-main binding, no secret test step or shell-input interpolation
+  ---
+  duration_ms: 16.044899
+  type: 'test'
+  ...
+# Subtest: create-main preserves exact inspected root "/" and waits for CI
+ok 111 - create-main preserves exact inspected root "/" and waits for CI
+  ---
+  duration_ms: 10.302003
+  type: 'test'
+  ...
+# Subtest: create-main preserves exact inspected root "/backend" and waits for CI
+ok 112 - create-main preserves exact inspected root "/backend" and waits for CI
+  ---
+  duration_ms: 0.977257
+  type: 'test'
+  ...
+# Subtest: create-main preserves exact inspected root "" and waits for CI
+ok 113 - create-main preserves exact inspected root "" and waits for CI
+  ---
+  duration_ms: 0.673839
+  type: 'test'
+  ...
+# Subtest: create-main preserves exact inspected root null and waits for CI
+ok 114 - create-main preserves exact inspected root null and waits for CI
+  ---
+  duration_ms: 0.513403
+  type: 'test'
+  ...
+# Subtest: create-main with a fully matching existing trigger is a zero-write idempotent read
+ok 115 - create-main with a fully matching existing trigger is a zero-write idempotent read
+  ---
+  duration_ms: 0.692551
+  type: 'test'
+  ...
+# Subtest: create-main blocks existing other branch with zero writes
+ok 116 - create-main blocks existing other branch with zero writes
+  ---
+  duration_ms: 0.700395
+  type: 'test'
+  ...
+# Subtest: create-main blocks existing main without Wait for CI with zero writes
+ok 117 - create-main blocks existing main without Wait for CI with zero writes
+  ---
+  duration_ms: 0.291936
+  type: 'test'
+  ...
+# Subtest: create-main blocks existing inherited override with zero writes
+ok 118 - create-main blocks existing inherited override with zero writes
+  ---
+  duration_ms: 0.283986
+  type: 'test'
+  ...
+# Subtest: create-main blocks truncated empty page with zero writes
+ok 119 - create-main blocks truncated empty page with zero writes
+  ---
+  duration_ms: 0.462723
+  type: 'test'
+  ...
+# Subtest: create-main blocks existing foreign repository with zero writes
+ok 120 - create-main blocks existing foreign repository with zero writes
+  ---
+  duration_ms: 1.271668
+  type: 'test'
+  ...
+# Subtest: create-main invalid digest undefined makes no request
+ok 121 - create-main invalid digest undefined makes no request
+  ---
+  duration_ms: 0.281908
+  type: 'test'
+  ...
+# Subtest: create-main invalid digest "" makes no request
+ok 122 - create-main invalid digest "" makes no request
+  ---
+  duration_ms: 0.23842
+  type: 'test'
+  ...
+# Subtest: create-main invalid digest "000000000000000000000000000000000000000000000000000000000000000" makes no request
+ok 123 - create-main invalid digest "000000000000000000000000000000000000000000000000000000000000000" makes no request
+  ---
+  duration_ms: 0.120333
+  type: 'test'
+  ...
+# Subtest: create-main invalid digest "0000000000000000000000000000000000000000000000000000000000000000\\n" makes no request
+ok 124 - create-main invalid digest "0000000000000000000000000000000000000000000000000000000000000000\\n" makes no request
+  ---
+  duration_ms: 0.460626
+  type: 'test'
+  ...
+# Subtest: create-main detects new concurrent trigger before mutation
+ok 125 - create-main detects new concurrent trigger before mutation
+  ---
+  duration_ms: 0.480867
+  type: 'test'
+  ...
+# Subtest: create-main detects root directory changed before mutation
+ok 126 - create-main detects root directory changed before mutation
+  ---
+  duration_ms: 0.803471
+  type: 'test'
+  ...
+# Subtest: create-main detects extra domain binding before mutation
+ok 127 - create-main detects extra domain binding before mutation
+  ---
+  duration_ms: 0.514087
+  type: 'test'
+  ...
+# Subtest: create-main rejects an unconfirmed reply with missing identity; never retries
+ok 128 - create-main rejects an unconfirmed reply with missing identity; never retries
+  ---
+  duration_ms: 1.003897
+  type: 'test'
+  ...
+# Subtest: create-main rejects an unconfirmed reply with foreign target; never retries
+ok 129 - create-main rejects an unconfirmed reply with foreign target; never retries
+  ---
+  duration_ms: 3.68944
+  type: 'test'
+  ...
+# Subtest: create-main rejects an unconfirmed reply with foreign repository; never retries
+ok 130 - create-main rejects an unconfirmed reply with foreign repository; never retries
+  ---
+  duration_ms: 1.045652
+  type: 'test'
+  ...
+# Subtest: create-main rejects an unconfirmed reply with foreign provider; never retries
+ok 131 - create-main rejects an unconfirmed reply with foreign provider; never retries
+  ---
+  duration_ms: 0.281512
+  type: 'test'
+  ...
+# Subtest: create-main rejects an unconfirmed reply with wrong branch; never retries
+ok 132 - create-main rejects an unconfirmed reply with wrong branch; never retries
+  ---
+  duration_ms: 0.219089
+  type: 'test'
+  ...
+# Subtest: create-main rejects an unconfirmed reply with Wait for CI disabled; never retries
+ok 133 - create-main rejects an unconfirmed reply with Wait for CI disabled; never retries
+  ---
+  duration_ms: 0.925443
+  type: 'test'
+  ...
+# Subtest: create-main rejects an unconfirmed reply with inherited override; never retries
+ok 134 - create-main rejects an unconfirmed reply with inherited override; never retries
+  ---
+  duration_ms: 0.828811
+  type: 'test'
+  ...
+# Subtest: create-main API rejection is sanitized and makes one mutation attempt only
+ok 135 - create-main API rejection is sanitized and makes one mutation attempt only
+  ---
+  duration_ms: 1.327106
+  type: 'test'
+  ...
+# Subtest: create-main post-write different created identity drift blocks success without retry or rollback
+ok 136 - create-main post-write different created identity drift blocks success without retry or rollback
+  ---
+  duration_ms: 0.736449
+  type: 'test'
+  ...
+# Subtest: create-main post-write root directory drift blocks success without retry or rollback
+ok 137 - create-main post-write root directory drift blocks success without retry or rollback
+  ---
+  duration_ms: 0.432841
+  type: 'test'
+  ...
+# Subtest: create-main post-write extra domain drift blocks success without retry or rollback
+ok 138 - create-main post-write extra domain drift blocks success without retry or rollback
+  ---
+  duration_ms: 0.37515
+  type: 'test'
+  ...
+# Subtest: create-main post-write missing expected domain drift blocks success without retry or rollback
+ok 139 - create-main post-write missing expected domain drift blocks success without retry or rollback
+  ---
+  duration_ms: 0.746478
+  type: 'test'
+  ...
+# Subtest: create-main post-write Wait for CI drift blocks success without retry or rollback
+ok 140 - create-main post-write Wait for CI drift blocks success without retry or rollback
+  ---
+  duration_ms: 0.32782
+  type: 'test'
+  ...
+# Subtest: create-main post-write repository drift blocks success without retry or rollback
+ok 141 - create-main post-write repository drift blocks success without retry or rollback
+  ---
+  duration_ms: 0.347337
+  type: 'test'
+  ...
+# Subtest: create-main post-write branch drift blocks success without retry or rollback
+ok 142 - create-main post-write branch drift blocks success without retry or rollback
+  ---
+  duration_ms: 0.739866
+  type: 'test'
+  ...
+# Subtest: create-main post-write unexpected duplicate drift blocks success without retry or rollback
+ok 143 - create-main post-write unexpected duplicate drift blocks success without retry or rollback
+  ---
+  duration_ms: 0.445015
+  type: 'test'
+  ...
+# Subtest: fixed GitHub main verifier uses automatic GitHub token without sending Railway headers
+ok 144 - fixed GitHub main verifier uses automatic GitHub token without sending Railway headers
+  ---
+  duration_ms: 0.817829
+  type: 'test'
+  ...
+# Subtest: main verifier new main commit blocks with a fixed non-disclosing diagnostic
+ok 145 - main verifier new main commit blocks with a fixed non-disclosing diagnostic
+  ---
+  duration_ms: 0.511977
+  type: 'test'
+  ...
+# Subtest: main verifier API failure blocks with a fixed non-disclosing diagnostic
+ok 146 - main verifier API failure blocks with a fixed non-disclosing diagnostic
+  ---
+  duration_ms: 0.309853
+  type: 'test'
+  ...
+# Subtest: main verifier malformed ref blocks with a fixed non-disclosing diagnostic
+ok 147 - main verifier malformed ref blocks with a fixed non-disclosing diagnostic
+  ---
+  duration_ms: 0.336065
+  type: 'test'
+  ...
+# Subtest: main verifier malformed commit blocks with a fixed non-disclosing diagnostic
+ok 148 - main verifier malformed commit blocks with a fixed non-disclosing diagnostic
+  ---
+  duration_ms: 0.368286
+  type: 'test'
+  ...
+# Subtest: main verifier oversize response blocks with a fixed non-disclosing diagnostic
+ok 149 - main verifier oversize response blocks with a fixed non-disclosing diagnostic
+  ---
+  duration_ms: 3.757637
+  type: 'test'
+  ...
+# Subtest: main verifier network error blocks with a fixed non-disclosing diagnostic
+ok 150 - main verifier network error blocks with a fixed non-disclosing diagnostic
+  ---
+  duration_ms: 0.260465
+  type: 'test'
+  ...
+# Subtest: create-main stops before mutation if protected main advances during preparation
+ok 151 - create-main stops before mutation if protected main advances during preparation
+  ---
+  duration_ms: 0.702183
+  type: 'test'
+  ...
+# Subtest: create-main after-write main drift is uncertain and never retried
+ok 152 - create-main after-write main drift is uncertain and never retried
+  ---
+  duration_ms: 0.723077
+  type: 'test'
+  ...
+# Subtest: set-main stops before mutation if protected main advances during preparation
+ok 153 - set-main stops before mutation if protected main advances during preparation
+  ---
+  duration_ms: 0.199133
+  type: 'test'
+  ...
+# Subtest: set-main after-write main drift is uncertain and never retried
+ok 154 - set-main after-write main drift is uncertain and never retried
+  ---
+  duration_ms: 0.413457
+  type: 'test'
+  ...
+# Subtest: inspector refuses even a read receipt if main advances while metadata is loading
+ok 155 - inspector refuses even a read receipt if main advances while metadata is loading
+  ---
+  duration_ms: 0.509184
+  type: 'test'
+  ...
+# Subtest: bounded log receipt reprojects only known metadata and binds its exact inventory digest
+ok 156 - bounded log receipt reprojects only known metadata and binds its exact inventory digest
+  ---
+  duration_ms: 4.054391
+  type: 'test'
+  ...
+# Subtest: receipt refuses reflection of an actual bound credential even without a known token prefix
+ok 157 - receipt refuses reflection of an actual bound credential even without a known token prefix
+  ---
+  duration_ms: 0.73149
+  type: 'test'
+  ...
+# Subtest: receipt refuses a tampered hash and never accepts unknown outcome text
+ok 158 - receipt refuses a tampered hash and never accepts unknown outcome text
+  ---
+  duration_ms: 6.600481
+  type: 'test'
+  ...
+# Subtest: creation receipt includes exact returned trigger and prior digest, ignoring reply extensions
+ok 159 - creation receipt includes exact returned trigger and prior digest, ignoring reply extensions
+  ---
+  duration_ms: 2.075431
+  type: 'test'
+  ...
+# Subtest: attempt2 workflow explicitly exposes create-main and supplies only automatic GitHub token for main freshness
+ok 160 - attempt2 workflow explicitly exposes create-main and supplies only automatic GitHub token for main freshness
+  ---
+  duration_ms: 41.975793
+  type: 'test'
+  ...
+# Subtest: public storage inspection sends scoped project and account requests only to the official API host
+ok 161 - public storage inspection sends scoped project and account requests only to the official API host
+  ---
+  duration_ms: 75.348422
+  type: 'test'
+  ...
+# Subtest: ported pure binding is exercised and only bounded reads return a safe receipt
+ok 162 - ported pure binding is exercised and only bounded reads return a safe receipt
+  ---
+  duration_ms: 10.790809
+  type: 'test'
+  ...
+# Subtest: three-volume read-only classification identifies only the credential-matched DB mount
+ok 163 - three-volume read-only classification identifies only the credential-matched DB mount
+  ---
+  duration_ms: 14.586385
+  type: 'test'
+  ...
+# Subtest: classification refuses ambiguous database attachments and preserves the original helper stop
+ok 164 - classification refuses ambiguous database attachments and preserves the original helper stop
+  ---
+  duration_ms: 5.158477
+  type: 'test'
+  ...
+# Subtest: classification mount failures remain blocked without a verified projection
+ok 165 - classification mount failures remain blocked without a verified projection
+  ---
+  duration_ms: 7.477956
+  type: 'test'
+  ...
+# Subtest: classification compares fresh metadata and removes stable claim on drift
+ok 166 - classification compares fresh metadata and removes stable claim on drift
+  ---
+  duration_ms: 18.377962
+  type: 'test'
+  ...
+# Subtest: classification refuses aliased provider UUIDs
+ok 167 - classification refuses aliased provider UUIDs
+  ---
+  duration_ms: 4.14458
+  type: 'test'
+  ...
+# Subtest: classification stable claim is removed if final source branch check drifts
+ok 168 - classification stable claim is removed if final source branch check drifts
+  ---
+  duration_ms: 6.073974
+  type: 'test'
+  ...
+# Subtest: classification projection is cleared when a public UUID reflects a credential
+ok 169 - classification projection is cleared when a public UUID reflects a credential
+  ---
+  duration_ms: 14.371825
+  type: 'test'
+  ...
+# Subtest: actual helper guard DEMO_BINDING_IDENTITY_MISMATCH remains observable and blocks snapshot access
+ok 170 - actual helper guard DEMO_BINDING_IDENTITY_MISMATCH remains observable and blocks snapshot access
+  ---
+  duration_ms: 1.703657
+  type: 'test'
+  ...
+# Subtest: actual helper guard DEMO_DATABASE_BINDING_INVALID remains observable and blocks snapshot access
+ok 171 - actual helper guard DEMO_DATABASE_BINDING_INVALID remains observable and blocks snapshot access
+  ---
+  duration_ms: 1.588895
+  type: 'test'
+  ...
+# Subtest: actual helper guard DEMO_DATABASE_BINDING_MISMATCH remains observable and blocks snapshot access
+ok 172 - actual helper guard DEMO_DATABASE_BINDING_MISMATCH remains observable and blocks snapshot access
+  ---
+  duration_ms: 1.47589
+  type: 'test'
+  ...
+# Subtest: actual helper guard DEMO_DOMAIN_RESULT_INVALID remains observable and blocks snapshot access
+ok 173 - actual helper guard DEMO_DOMAIN_RESULT_INVALID remains observable and blocks snapshot access
+  ---
+  duration_ms: 1.283192
+  type: 'test'
+  ...
+# Subtest: actual helper guard DEMO_BACKEND_DOMAIN_MISMATCH remains observable and blocks snapshot access
+ok 174 - actual helper guard DEMO_BACKEND_DOMAIN_MISMATCH remains observable and blocks snapshot access
+  ---
+  duration_ms: 1.539972
+  type: 'test'
+  ...
+# Subtest: actual helper guard CUSTOM_SOURCE_DIRECTORY_REQUIRES_REVIEW remains observable and blocks snapshot access
+ok 175 - actual helper guard CUSTOM_SOURCE_DIRECTORY_REQUIRES_REVIEW remains observable and blocks snapshot access
+  ---
+  duration_ms: 1.553603
+  type: 'test'
+  ...
+# Subtest: actual helper guard SERVICE_CATALOG_INVALID remains observable and blocks snapshot access
+ok 176 - actual helper guard SERVICE_CATALOG_INVALID remains observable and blocks snapshot access
+  ---
+  duration_ms: 2.977087
+  type: 'test'
+  ...
+# Subtest: actual helper guard SOURCE_DATABASE_SERVICE_AMBIGUOUS remains observable and blocks snapshot access
+ok 177 - actual helper guard SOURCE_DATABASE_SERVICE_AMBIGUOUS remains observable and blocks snapshot access
+  ---
+  duration_ms: 2.529628
+  type: 'test'
+  ...
+# Subtest: actual helper guard STORAGE_ENVIRONMENT_UNVERIFIED remains observable and blocks snapshot access
+ok 178 - actual helper guard STORAGE_ENVIRONMENT_UNVERIFIED remains observable and blocks snapshot access
+  ---
+  duration_ms: 1.867937
+  type: 'test'
+  ...
+# Subtest: actual helper guard VOLUME_ENVIRONMENT_MISMATCH remains observable and blocks snapshot access
+ok 179 - actual helper guard VOLUME_ENVIRONMENT_MISMATCH remains observable and blocks snapshot access
+  ---
+  duration_ms: 2.492279
+  type: 'test'
+  ...
+# Subtest: actual helper guard UNCLASSIFIED_DEMO_VOLUMES remains observable and blocks snapshot access
+ok 180 - actual helper guard UNCLASSIFIED_DEMO_VOLUMES remains observable and blocks snapshot access
+  ---
+  duration_ms: 1.80098
+  type: 'test'
+  ...
+# Subtest: actual helper guard DATABASE_MOUNT_UNVERIFIED remains observable and blocks snapshot access
+ok 181 - actual helper guard DATABASE_MOUNT_UNVERIFIED remains observable and blocks snapshot access
+  ---
+  duration_ms: 16.333225
+  type: 'test'
+  ...
+# Subtest: actual helper guard SERVICE_ENVIRONMENT_MISMATCH remains observable and blocks snapshot access
+ok 182 - actual helper guard SERVICE_ENVIRONMENT_MISMATCH remains observable and blocks snapshot access
+  ---
+  duration_ms: 1.533452
+  type: 'test'
+  ...
+# Subtest: actual helper guard RUNTIME_DEPLOYMENT_UNVERIFIED remains observable and blocks snapshot access
+ok 183 - actual helper guard RUNTIME_DEPLOYMENT_UNVERIFIED remains observable and blocks snapshot access
+  ---
+  duration_ms: 1.692121
+  type: 'test'
+  ...
+# Subtest: actual helper guard AMBIGUOUS_ACTIVE_DEPLOYMENT remains observable and blocks snapshot access
+ok 184 - actual helper guard AMBIGUOUS_ACTIVE_DEPLOYMENT remains observable and blocks snapshot access
+  ---
+  duration_ms: 3.229545
+  type: 'test'
+  ...
+# Subtest: actual helper guard MULTIPLE_OR_TRANSITIONAL_SERVICE_INSTANCES remains observable and blocks snapshot access
+ok 185 - actual helper guard MULTIPLE_OR_TRANSITIONAL_SERVICE_INSTANCES remains observable and blocks snapshot access
+  ---
+  duration_ms: 1.784376
+  type: 'test'
+  ...
+# Subtest: actual helper guard RUNTIME_ORIGIN_UNVERIFIED remains observable and blocks snapshot access
+ok 186 - actual helper guard RUNTIME_ORIGIN_UNVERIFIED remains observable and blocks snapshot access
+  ---
+  duration_ms: 1.659108
+  type: 'test'
+  ...
+# Subtest: actual helper guard RUNTIME_BINDING_MISMATCH remains observable and blocks snapshot access
+ok 187 - actual helper guard RUNTIME_BINDING_MISMATCH remains observable and blocks snapshot access
+  ---
+  duration_ms: 1.854455
+  type: 'test'
+  ...
+# Subtest: actual helper guard EXTERNAL_RUNTIME_PERSISTENCE_REQUIRES_REVIEW remains observable and blocks snapshot access
+ok 188 - actual helper guard EXTERNAL_RUNTIME_PERSISTENCE_REQUIRES_REVIEW remains observable and blocks snapshot access
+  ---
+  duration_ms: 2.155097
+  type: 'test'
+  ...
+# Subtest: context GITHUB_EVENT_NAME rejects before either transport
+ok 189 - context GITHUB_EVENT_NAME rejects before either transport
+  ---
+  duration_ms: 0.417562
+  type: 'test'
+  ...
+# Subtest: context GITHUB_REPOSITORY rejects before either transport
+ok 190 - context GITHUB_REPOSITORY rejects before either transport
+  ---
+  duration_ms: 0.196567
+  type: 'test'
+  ...
+# Subtest: context GITHUB_REF rejects before either transport
+ok 191 - context GITHUB_REF rejects before either transport
+  ---
+  duration_ms: 0.32536
+  type: 'test'
+  ...
+# Subtest: context GITHUB_REF_NAME rejects before either transport
+ok 192 - context GITHUB_REF_NAME rejects before either transport
+  ---
+  duration_ms: 0.152542
+  type: 'test'
+  ...
+# Subtest: context GITHUB_SHA rejects before either transport
+ok 193 - context GITHUB_SHA rejects before either transport
+  ---
+  duration_ms: 0.137381
+  type: 'test'
+  ...
+# Subtest: context DEMO_STORAGE_REVIEWED_SHA rejects before either transport
+ok 194 - context DEMO_STORAGE_REVIEWED_SHA rejects before either transport
+  ---
+  duration_ms: 0.134135
+  type: 'test'
+  ...
+# Subtest: context DEMO_STORAGE_OPERATION rejects before either transport
+ok 195 - context DEMO_STORAGE_OPERATION rejects before either transport
+  ---
+  duration_ms: 0.426461
+  type: 'test'
+  ...
+# Subtest: context GITHUB_RUN_ID rejects before either transport
+ok 196 - context GITHUB_RUN_ID rejects before either transport
+  ---
+  duration_ms: 0.193672
+  type: 'test'
+  ...
+# Subtest: context GITHUB_RUN_ATTEMPT rejects before either transport
+ok 197 - context GITHUB_RUN_ATTEMPT rejects before either transport
+  ---
+  duration_ms: 0.145195
+  type: 'test'
+  ...
+# Subtest: missing RAILWAY_TOKEN blocks all requests
+ok 198 - missing RAILWAY_TOKEN blocks all requests
+  ---
+  duration_ms: 0.277982
+  type: 'test'
+  ...
+# Subtest: missing GITHUB_TOKEN blocks all requests
+ok 199 - missing GITHUB_TOKEN blocks all requests
+  ---
+  duration_ms: 0.137307
+  type: 'test'
+  ...
+# Subtest: extra arguments cannot select erase or another mode
+ok 200 - extra arguments cannot select erase or another mode
+  ---
+  duration_ms: 0.47715
+  type: 'test'
+  ...
+# Subtest: forged contexts and forged receipts cannot cross provenance boundaries
+ok 201 - forged contexts and forged receipts cannot cross provenance boundaries
+  ---
+  duration_ms: 9.179847
+  type: 'test'
+  ...
+# Subtest: snapshot access requires actual full binding and offers no forged binding setter
+ok 202 - snapshot access requires actual full binding and offers no forged binding setter
+  ---
+  duration_ms: 1.827678
+  type: 'test'
+  ...
+# Subtest: CLI rejects nonliteral command ["up","/tmp","--yes"] before spawn
+ok 203 - CLI rejects nonliteral command ["up","/tmp","--yes"] before spawn
+  ---
+  duration_ms: 1.884486
+  type: 'test'
+  ...
+# Subtest: CLI rejects nonliteral command ["ssh","--service","c000f011-0349-4ea9-9b56-13c625b5767b"] before spawn
+ok 204 - CLI rejects nonliteral command ["ssh","--service","c000f011-0349-4ea9-9b56-13c625b5767b"] before spawn
+  ---
+  duration_ms: 2.475338
+  type: 'test'
+  ...
+# Subtest: CLI rejects nonliteral command ["logs","--json"] before spawn
+ok 205 - CLI rejects nonliteral command ["logs","--json"] before spawn
+  ---
+  duration_ms: 1.003343
+  type: 'test'
+  ...
+# Subtest: CLI rejects nonliteral command ["run","env"] before spawn
+ok 206 - CLI rejects nonliteral command ["run","env"] before spawn
+  ---
+  duration_ms: 0.752254
+  type: 'test'
+  ...
+# Subtest: CLI rejects nonliteral command ["deployment","restart"] before spawn
+ok 207 - CLI rejects nonliteral command ["deployment","restart"] before spawn
+  ---
+  duration_ms: 0.749377
+  type: 'test'
+  ...
+# Subtest: CLI rejects nonliteral command ["service","delete","50000000-0000-4000-8000-000000000472"] before spawn
+ok 208 - CLI rejects nonliteral command ["service","delete","50000000-0000-4000-8000-000000000472"] before spawn
+  ---
+  duration_ms: 0.436833
+  type: 'test'
+  ...
+# Subtest: CLI rejects nonliteral command ["variables","set","KEY=value"] before spawn
+ok 209 - CLI rejects nonliteral command ["variables","set","KEY=value"] before spawn
+  ---
+  duration_ms: 0.608619
+  type: 'test'
+  ...
+# Subtest: CLI rejects nonliteral command ["variables","--service","c000f011-0349-4ea9-9b56-13c625b5767b"] before spawn
+ok 210 - CLI rejects nonliteral command ["variables","--service","c000f011-0349-4ea9-9b56-13c625b5767b"] before spawn
+  ---
+  duration_ms: 0.802621
+  type: 'test'
+  ...
+# Subtest: CLI rejects nonliteral command ["variables","--service","50000000-0000-4000-8000-000000000477","--json"] before spawn
+ok 211 - CLI rejects nonliteral command ["variables","--service","50000000-0000-4000-8000-000000000477","--json"] before spawn
+  ---
+  duration_ms: 0.518573
+  type: 'test'
+  ...
+# Subtest: CLI rejects nonliteral command ["variables","--service","c000f011-0349-4ea9-9b56-13c625b5767b","--json","--environment","50000000-0000-4000-8000-000000000477"] before spawn
+ok 212 - CLI rejects nonliteral command ["variables","--service","c000f011-0349-4ea9-9b56-13c625b5767b","--json","--environment","50000000-0000-4000-8000-000000000477"] before spawn
+  ---
+  duration_ms: 0.585477
+  type: 'test'
+  ...
+# Subtest: CLI rejects nonliteral command ["variables","--service","c000f011-0349-4ea9-9b56-13c625b5767b;echo secret","--json"] before spawn
+ok 213 - CLI rejects nonliteral command ["variables","--service","c000f011-0349-4ea9-9b56-13c625b5767b;echo secret","--json"] before spawn
+  ---
+  duration_ms: 0.608376
+  type: 'test'
+  ...
+# Subtest: CLI rejects nonliteral command ["variables","--service","c000f011-0349-4ea9-9b56-13c625b5767b","--json","--set","X=Y"] before spawn
+ok 214 - CLI rejects nonliteral command ["variables","--service","c000f011-0349-4ea9-9b56-13c625b5767b","--json","--set","X=Y"] before spawn
+  ---
+  duration_ms: 0.949035
+  type: 'test'
+  ...
+# Subtest: CLI cannot inherit extra options or access candidate variables before catalog provenance
+ok 215 - CLI cannot inherit extra options or access candidate variables before catalog provenance
+  ---
+  duration_ms: 1.038048
+  type: 'test'
+  ...
+# Subtest: GraphQL rejects nonliteral query/variables mutation{serviceDelete(id:"f
+ok 216 - GraphQL rejects nonliteral query/variables mutation{serviceDelete(id:"f
+  ---
+  duration_ms: 0.642431
+  type: 'test'
+  ...
+# Subtest: GraphQL rejects nonliteral query/variables query($environmentId:String!
+ok 217 - GraphQL rejects nonliteral query/variables query($environmentId:String!
+  ---
+  duration_ms: 0.683666
+  type: 'test'
+  ...
+# Subtest: GraphQL rejects nonliteral query/variables query{projectToken{project{i
+ok 218 - GraphQL rejects nonliteral query/variables query{projectToken{project{i
+  ---
+  duration_ms: 0.436066
+  type: 'test'
+  ...
+# Subtest: GraphQL rejects nonliteral query/variables query($id:String!){environme
+ok 219 - GraphQL rejects nonliteral query/variables query($id:String!){environme
+  ---
+  duration_ms: 0.791183
+  type: 'test'
+  ...
+# Subtest: GraphQL rejects nonliteral query/variables query($id:String!){volumeIns
+ok 220 - GraphQL rejects nonliteral query/variables query($id:String!){volumeIns
+  ---
+  duration_ms: 0.356987
+  type: 'test'
+  ...
+# Subtest: GraphQL rejects nonliteral query/variables query{alias:projectToken{pro
+ok 221 - GraphQL rejects nonliteral query/variables query{alias:projectToken{pro
+  ---
+  duration_ms: 0.691348
+  type: 'test'
+  ...
+# Subtest: token belongs to production
+ok 222 - token belongs to production
+  ---
+  duration_ms: 0.687565
+  type: 'test'
+  ...
+# Subtest: malformed candidate ID
+ok 223 - malformed candidate ID
+  ---
+  duration_ms: 1.144796
+  type: 'test'
+  ...
+# Subtest: duplicate catalog IDs
+ok 224 - duplicate catalog IDs
+  ---
+  duration_ms: 1.513516
+  type: 'test'
+  ...
+# Subtest: invalid config response
+ok 225 - invalid config response
+  ---
+  duration_ms: 0.671318
+  type: 'test'
+  ...
+# Subtest: malformed metadata edge
+ok 226 - malformed metadata edge
+  ---
+  duration_ms: 1.788792
+  type: 'test'
+  ...
+# Subtest: multiple matching database candidates are refused by actual helper
+ok 227 - multiple matching database candidates are refused by actual helper
+  ---
+  duration_ms: 1.409138
+  type: 'test'
+  ...
+# Subtest: foreign variables and commands are rejected at their otherwise valid stages
+ok 228 - foreign variables and commands are rejected at their otherwise valid stages
+  ---
+  duration_ms: 4.884837
+  type: 'test'
+  ...
+# Subtest: foreign snapshot identity rejects even after actual complete binding
+ok 229 - foreign snapshot identity rejects even after actual complete binding
+  ---
+  duration_ms: 2.294219
+  type: 'test'
+  ...
+# Subtest: context and candidate UUID validation reject trailing newlines
+ok 230 - context and candidate UUID validation reject trailing newlines
+  ---
+  duration_ms: 1.297203
+  type: 'test'
+  ...
+# Subtest: secret reflection in dynamic UUIDs blocks public projection
+ok 231 - secret reflection in dynamic UUIDs blocks public projection
+  ---
+  duration_ms: 3.928446
+  type: 'test'
+  ...
+# Subtest: captured CLI nonzero exit has a constant cause without child output
+ok 232 - captured CLI nonzero exit has a constant cause without child output
+  ---
+  duration_ms: 0.631974
+  type: 'test'
+  ...
+# Subtest: captured CLI timeout has a constant cause without child output
+ok 233 - captured CLI timeout has a constant cause without child output
+  ---
+  duration_ms: 0.615888
+  type: 'test'
+  ...
+# Subtest: captured CLI buffer overflow has a constant cause without child output
+ok 234 - captured CLI buffer overflow has a constant cause without child output
+  ---
+  duration_ms: 0.733615
+  type: 'test'
+  ...
+# Subtest: captured CLI missing binary has a constant cause without child output
+ok 235 - captured CLI missing binary has a constant cause without child output
+  ---
+  duration_ms: 0.548659
+  type: 'test'
+  ...
+# Subtest: captured CLI signal has a constant cause without child output
+ok 236 - captured CLI signal has a constant cause without child output
+  ---
+  duration_ms: 0.631874
+  type: 'test'
+  ...
+# Subtest: captured CLI invalid JSON has a constant cause without child output
+ok 237 - captured CLI invalid JSON has a constant cause without child output
+  ---
+  duration_ms: 0.874647
+  type: 'test'
+  ...
+# Subtest: captured CLI oversize stdout has a constant cause without child output
+ok 238 - captured CLI oversize stdout has a constant cause without child output
+  ---
+  duration_ms: 5.481963
+  type: 'test'
+  ...
+# Subtest: thrown CLI errors do not disclose exception messages
+ok 239 - thrown CLI errors do not disclose exception messages
+  ---
+  duration_ms: 0.981024
+  type: 'test'
+  ...
+# Subtest: unknown internal errors use a constant without reflecting even uppercase messages
+ok 240 - unknown internal errors use a constant without reflecting even uppercase messages
+  ---
+  duration_ms: 0.35744
+  type: 'test'
+  ...
+# Subtest: HTTP 400 is distinct from GraphQL/network/timeout
+ok 241 - HTTP 400 is distinct from GraphQL/network/timeout
+  ---
+  duration_ms: 0.816067
+  type: 'test'
+  ...
+# Subtest: HTTP 401 is distinct from GraphQL/network/timeout
+ok 242 - HTTP 401 is distinct from GraphQL/network/timeout
+  ---
+  duration_ms: 0.426699
+  type: 'test'
+  ...
+# Subtest: HTTP 403 is distinct from GraphQL/network/timeout
+ok 243 - HTTP 403 is distinct from GraphQL/network/timeout
+  ---
+  duration_ms: 0.486109
+  type: 'test'
+  ...
+# Subtest: HTTP 404 is distinct from GraphQL/network/timeout
+ok 244 - HTTP 404 is distinct from GraphQL/network/timeout
+  ---
+  duration_ms: 0.644139
+  type: 'test'
+  ...
+# Subtest: HTTP 429 is distinct from GraphQL/network/timeout
+ok 245 - HTTP 429 is distinct from GraphQL/network/timeout
+  ---
+  duration_ms: 0.493069
+  type: 'test'
+  ...
+# Subtest: HTTP 500 is distinct from GraphQL/network/timeout
+ok 246 - HTTP 500 is distinct from GraphQL/network/timeout
+  ---
+  duration_ms: 0.548577
+  type: 'test'
+  ...
+# Subtest: HTTP 503 is distinct from GraphQL/network/timeout
+ok 247 - HTTP 503 is distinct from GraphQL/network/timeout
+  ---
+  duration_ms: 0.629825
+  type: 'test'
+  ...
+# Subtest: HTTP 418 is distinct from GraphQL/network/timeout
+ok 248 - HTTP 418 is distinct from GraphQL/network/timeout
+  ---
+  duration_ms: 0.600641
+  type: 'test'
+  ...
+# Subtest: native GraphQL error with partial data has a constant phase and no raw response
+ok 249 - native GraphQL error with partial data has a constant phase and no raw response
+  ---
+  duration_ms: 1.535076
+  type: 'test'
+  ...
+# Subtest: native missing data has a constant phase and no raw response
+ok 250 - native missing data has a constant phase and no raw response
+  ---
+  duration_ms: 0.8023
+  type: 'test'
+  ...
+# Subtest: native malformed JSON has a constant phase and no raw response
+ok 251 - native malformed JSON has a constant phase and no raw response
+  ---
+  duration_ms: 0.648214
+  type: 'test'
+  ...
+# Subtest: native non-object JSON has a constant phase and no raw response
+ok 252 - native non-object JSON has a constant phase and no raw response
+  ---
+  duration_ms: 0.904391
+  type: 'test'
+  ...
+# Subtest: native oversize body has a constant phase and no raw response
+ok 253 - native oversize body has a constant phase and no raw response
+  ---
+  duration_ms: 12.72842
+  type: 'test'
+  ...
+# Subtest: native redirected response has a constant phase and no raw response
+ok 254 - native redirected response has a constant phase and no raw response
+  ---
+  duration_ms: 0.895256
+  type: 'test'
+  ...
+# Subtest: native foreign response URL has a constant phase and no raw response
+ok 255 - native foreign response URL has a constant phase and no raw response
+  ---
+  duration_ms: 0.630177
+  type: 'test'
+  ...
+# Subtest: native missing body has a constant phase and no raw response
+ok 256 - native missing body has a constant phase and no raw response
+  ---
+  duration_ms: 0.532352
+  type: 'test'
+  ...
+# Subtest: native thrown TimeoutError maps to safe cause
+ok 257 - native thrown TimeoutError maps to safe cause
+  ---
+  duration_ms: 0.547453
+  type: 'test'
+  ...
+# Subtest: native thrown AbortError maps to safe cause
+ok 258 - native thrown AbortError maps to safe cause
+  ---
+  duration_ms: 0.289842
+  type: 'test'
+  ...
+# Subtest: native thrown TypeError maps to safe cause
+ok 259 - native thrown TypeError maps to safe cause
+  ---
+  duration_ms: 0.40548
+  type: 'test'
+  ...
+# Subtest: native thrown UnknownSecretCause maps to safe cause
+ok 260 - native thrown UnknownSecretCause maps to safe cause
+  ---
+  duration_ms: 0.47757
+  type: 'test'
+  ...
+# Subtest: total deadline expires before additional CLI or native calls
+ok 261 - total deadline expires before additional CLI or native calls
+  ---
+  duration_ms: 0.892788
+  type: 'test'
+  ...
+# Subtest: branch drift before inspection prevents success
+ok 262 - branch drift before inspection prevents success
+  ---
+  duration_ms: 0.529501
+  type: 'test'
+  ...
+# Subtest: branch drift after inspection prevents success
+ok 263 - branch drift after inspection prevents success
+  ---
+  duration_ms: 6.072001
+  type: 'test'
+  ...
+# Subtest: stable nonzero native snapshots are counted without deletion or backup identifiers
+ok 264 - stable nonzero native snapshots are counted without deletion or backup identifiers
+  ---
+  duration_ms: 4.752672
+  type: 'test'
+  ...
+# Subtest: two complete observations block private binding drift: backend config
+ok 265 - two complete observations block private binding drift: backend config
+  ---
+  duration_ms: 48.691634
+  type: 'test'
+  ...
+# Subtest: two complete observations block private binding drift: credential equality preserved but credential changed
+ok 266 - two complete observations block private binding drift: credential equality preserved but credential changed
+  ---
+  duration_ms: 3.969737
+  type: 'test'
+  ...
+# Subtest: two complete observations block private binding drift: PGDATA remains within mount but changed
+ok 267 - two complete observations block private binding drift: PGDATA remains within mount but changed
+  ---
+  duration_ms: 3.588898
+  type: 'test'
+  ...
+# Subtest: two complete observations block private binding drift: volume identity
+ok 268 - two complete observations block private binding drift: volume identity
+  ---
+  duration_ms: 2.544824
+  type: 'test'
+  ...
+# Subtest: two complete observations block private binding drift: volume instance identity
+ok 269 - two complete observations block private binding drift: volume instance identity
+  ---
+  duration_ms: 3.975552
+  type: 'test'
+  ...
+# Subtest: two complete observations block private binding drift: deployment identity
+ok 270 - two complete observations block private binding drift: deployment identity
+  ---
+  duration_ms: 2.703199
+  type: 'test'
+  ...
+# Subtest: two complete observations block private binding drift: runtime container identity
+ok 271 - two complete observations block private binding drift: runtime container identity
+  ---
+  duration_ms: 3.107982
+  type: 'test'
+  ...
+# Subtest: two complete observations block private binding drift: observed build config
+ok 272 - two complete observations block private binding drift: observed build config
+  ---
+  duration_ms: 4.515941
+  type: 'test'
+  ...
+# Subtest: two complete observations block private binding drift: runtime effective config
+ok 273 - two complete observations block private binding drift: runtime effective config
+  ---
+  duration_ms: 3.561713
+  type: 'test'
+  ...
+# Subtest: two complete observations block private binding drift: service catalog
+ok 274 - two complete observations block private binding drift: service catalog
+  ---
+  duration_ms: 2.92299
+  type: 'test'
+  ...
+# Subtest: second complete binding observation retains the actual failing guard
+ok 275 - second complete binding observation retains the actual failing guard
+  ---
+  duration_ms: 5.211023
+  type: 'test'
+  ...
+# Subtest: snapshot drift
+ok 276 - snapshot drift
+  ---
+  duration_ms: 3.561138
+  type: 'test'
+  ...
+# Subtest: duplicate snapshots
+ok 277 - duplicate snapshots
+  ---
+  duration_ms: 2.00885
+  type: 'test'
+  ...
+# Subtest: malformed snapshot
+ok 278 - malformed snapshot
+  ---
+  duration_ms: 1.842816
+  type: 'test'
+  ...
+# Subtest: oversize snapshot list
+ok 279 - oversize snapshot list
+  ---
+  duration_ms: 2.05134
+  type: 'test'
+  ...
+# Subtest: console receipt and annotation expose exact safe original guard only
+ok 280 - console receipt and annotation expose exact safe original guard only
+  ---
+  duration_ms: 2.520688
+  type: 'test'
+  ...
+# Subtest: actual CLI rejects untrusted context offline without stack trace
+ok 281 - actual CLI rejects untrusted context offline without stack trace
+  ---
+  duration_ms: 154.434383
+  type: 'test'
+  ...
+# Subtest: account bearer uses actual me/access then full identical binding and descriptive snapshots
+ok 282 - account bearer uses actual me/access then full identical binding and descriptive snapshots
+  ---
+  duration_ms: 5.456936
+  type: 'test'
+  ...
+# Subtest: new trusted context GITHUB_WORKFLOW_REF rejects before any provider call
+ok 283 - new trusted context GITHUB_WORKFLOW_REF rejects before any provider call
+  ---
+  duration_ms: 0.292496
+  type: 'test'
+  ...
+# Subtest: new trusted context GITHUB_WORKFLOW_SHA rejects before any provider call
+ok 284 - new trusted context GITHUB_WORKFLOW_SHA rejects before any provider call
+  ---
+  duration_ms: 0.092254
+  type: 'test'
+  ...
+# Subtest: new trusted context GITHUB_ACTOR rejects before any provider call
+ok 285 - new trusted context GITHUB_ACTOR rejects before any provider call
+  ---
+  duration_ms: 0.061528
+  type: 'test'
+  ...
+# Subtest: new trusted context GITHUB_TRIGGERING_ACTOR rejects before any provider call
+ok 286 - new trusted context GITHUB_TRIGGERING_ACTOR rejects before any provider call
+  ---
+  duration_ms: 0.055999
+  type: 'test'
+  ...
+# Subtest: new trusted context DEMO_STORAGE_ENVIRONMENT rejects before any provider call
+ok 287 - new trusted context DEMO_STORAGE_ENVIRONMENT rejects before any provider call
+  ---
+  duration_ms: 0.254483
+  type: 'test'
+  ...
+# Subtest: new trusted context DEMO_STORAGE_AUTH_MODE rejects before any provider call
+ok 288 - new trusted context DEMO_STORAGE_AUTH_MODE rejects before any provider call
+  ---
+  duration_ms: 0.165476
+  type: 'test'
+  ...
+# Subtest: mixed/missing/invalid mode credentials reject before transport
+ok 289 - mixed/missing/invalid mode credentials reject before transport
+  ---
+  duration_ms: 0.262347
+  type: 'test'
+  ...
+# Subtest: mixed/missing/invalid mode credentials reject before transport
+ok 290 - mixed/missing/invalid mode credentials reject before transport
+  ---
+  duration_ms: 0.065033
+  type: 'test'
+  ...
+# Subtest: mixed/missing/invalid mode credentials reject before transport
+ok 291 - mixed/missing/invalid mode credentials reject before transport
+  ---
+  duration_ms: 0.050782
+  type: 'test'
+  ...
+# Subtest: mixed/missing/invalid mode credentials reject before transport
+ok 292 - mixed/missing/invalid mode credentials reject before transport
+  ---
+  duration_ms: 0.687373
+  type: 'test'
+  ...
+# Subtest: minted context cannot be reused with injected auth mode or mixed credentials
+ok 293 - minted context cannot be reused with injected auth mode or mixed credentials
+  ---
+  duration_ms: 0.337386
+  type: 'test'
+  ...
+# Subtest: account me missing fails closed with zero writes and no scope attestation
+ok 294 - account me missing fails closed with zero writes and no scope attestation
+  ---
+  duration_ms: 0.825704
+  type: 'test'
+  ...
+# Subtest: account wrongproject fails closed with zero writes and no scope attestation
+ok 295 - account wrongproject fails closed with zero writes and no scope attestation
+  ---
+  duration_ms: 0.848319
+  type: 'test'
+  ...
+# Subtest: account wrongenv fails closed with zero writes and no scope attestation
+ok 296 - account wrongenv fails closed with zero writes and no scope attestation
+  ---
+  duration_ms: 0.690959
+  type: 'test'
+  ...
+# Subtest: account wronglink fails closed with zero writes and no scope attestation
+ok 297 - account wronglink fails closed with zero writes and no scope attestation
+  ---
+  duration_ms: 0.740295
+  type: 'test'
+  ...
+# Subtest: account production fails closed with zero writes and no scope attestation
+ok 298 - account production fails closed with zero writes and no scope attestation
+  ---
+  duration_ms: 3.842939
+  type: 'test'
+  ...
+# Subtest: account accessfalse fails closed with zero writes and no scope attestation
+ok 299 - account accessfalse fails closed with zero writes and no scope attestation
+  ---
+  duration_ms: 0.830013
+  type: 'test'
+  ...
+# Subtest: account source fails closed with zero writes and no scope attestation
+ok 300 - account source fails closed with zero writes and no scope attestation
+  ---
+  duration_ms: 1.960642
+  type: 'test'
+  ...
+# Subtest: account domain fails closed with zero writes and no scope attestation
+ok 301 - account domain fails closed with zero writes and no scope attestation
+  ---
+  duration_ms: 0.612691
+  type: 'test'
+  ...
+# Subtest: account privatedb fails closed with zero writes and no scope attestation
+ok 302 - account privatedb fails closed with zero writes and no scope attestation
+  ---
+  duration_ms: 3.461497
+  type: 'test'
+  ...
+# Subtest: account mount fails closed with zero writes and no scope attestation
+ok 303 - account mount fails closed with zero writes and no scope attestation
+  ---
+  duration_ms: 1.220681
+  type: 'test'
+  ...
+# Subtest: account denial is a typed STOP without project auth fallback or CLI
+ok 304 - account denial is a typed STOP without project auth fallback or CLI
+  ---
+  duration_ms: 0.880372
+  type: 'test'
+  ...
+# Subtest: account capabilities refuse project identity, access-before-me and arbitrary variables
+ok 305 - account capabilities refuse project identity, access-before-me and arbitrary variables
+  ---
+  duration_ms: 0.70448
+  type: 'test'
+  ...
+# Subtest: project source repository mismatch fails without snapshot reads
+ok 306 - project source repository mismatch fails without snapshot reads
+  ---
+  duration_ms: 1.365032
+  type: 'test'
+  ...
+# Subtest: account unknown detached volumes remain unknown with unobserved snapshot scopes
+ok 307 - account unknown detached volumes remain unknown with unobserved snapshot scopes
+  ---
+  duration_ms: 5.382833
+  type: 'test'
+  ...
+# Subtest: account nonzero snapshots are descriptive, me identity is discarded even if credential-like
+ok 308 - account nonzero snapshots are descriptive, me identity is discarded even if credential-like
+  ---
+  duration_ms: 3.467869
+  type: 'test'
+  ...
+# Subtest: project stage cannot invoke bearer identity or access queries
+ok 309 - project stage cannot invoke bearer identity or access queries
+  ---
+  duration_ms: 0.552962
+  type: 'test'
+  ...
+# Subtest: fixed verified executable path rejects unsafe runtime roots and ignores PATH override
+ok 310 - fixed verified executable path rejects unsafe runtime roots and ignores PATH override
+  ---
+  duration_ms: 2.687861
+  type: 'test'
+  ...
+# Subtest: account public decoder refuses unscoped and partially scoped variables after real auth stages
+ok 311 - account public decoder refuses unscoped and partially scoped variables after real auth stages
+  ---
+  duration_ms: 1.214998
+  type: 'test'
+  ...
+# Subtest: runtime-root drift after a minted context cannot select another executable
+ok 312 - runtime-root drift after a minted context cannot select another executable
+  ---
+  duration_ms: 0.321509
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection null errors in project-token mode stays blocked and read-bounded
+ok 313 - GraphQL failure projection null errors in project-token mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.730623
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection null errors in account-bearer mode stays blocked and read-bounded
+ok 314 - GraphQL failure projection null errors in account-bearer mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.500639
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection empty errors in project-token mode stays blocked and read-bounded
+ok 315 - GraphQL failure projection empty errors in project-token mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.423411
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection empty errors in account-bearer mode stays blocked and read-bounded
+ok 316 - GraphQL failure projection empty errors in account-bearer mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.89254
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection recognized token message in project-token mode stays blocked and read-bounded
+ok 317 - GraphQL failure projection recognized token message in project-token mode stays blocked and read-bounded
+  ---
+  duration_ms: 1.049192
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection recognized token message in account-bearer mode stays blocked and read-bounded
+ok 318 - GraphQL failure projection recognized token message in account-bearer mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.596209
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection recognized authorization code in project-token mode stays blocked and read-bounded
+ok 319 - GraphQL failure projection recognized authorization code in project-token mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.664785
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection recognized authorization code in account-bearer mode stays blocked and read-bounded
+ok 320 - GraphQL failure projection recognized authorization code in account-bearer mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.9195
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection schema validation in project-token mode stays blocked and read-bounded
+ok 321 - GraphQL failure projection schema validation in project-token mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.455475
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection schema validation in account-bearer mode stays blocked and read-bounded
+ok 322 - GraphQL failure projection schema validation in account-bearer mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.66009
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection rate limit code in project-token mode stays blocked and read-bounded
+ok 323 - GraphQL failure projection rate limit code in project-token mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.643189
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection rate limit code in account-bearer mode stays blocked and read-bounded
+ok 324 - GraphQL failure projection rate limit code in account-bearer mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.934716
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection unknown message in project-token mode stays blocked and read-bounded
+ok 325 - GraphQL failure projection unknown message in project-token mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.330223
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection unknown message in account-bearer mode stays blocked and read-bounded
+ok 326 - GraphQL failure projection unknown message in account-bearer mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.316144
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection mixed categories in project-token mode stays blocked and read-bounded
+ok 327 - GraphQL failure projection mixed categories in project-token mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.268989
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection mixed categories in account-bearer mode stays blocked and read-bounded
+ok 328 - GraphQL failure projection mixed categories in account-bearer mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.625826
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection malformed container in project-token mode stays blocked and read-bounded
+ok 329 - GraphQL failure projection malformed container in project-token mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.385878
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection malformed container in account-bearer mode stays blocked and read-bounded
+ok 330 - GraphQL failure projection malformed container in account-bearer mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.474372
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection malformed member in project-token mode stays blocked and read-bounded
+ok 331 - GraphQL failure projection malformed member in project-token mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.357547
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection malformed member in account-bearer mode stays blocked and read-bounded
+ok 332 - GraphQL failure projection malformed member in account-bearer mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.432379
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection oversized message in project-token mode stays blocked and read-bounded
+ok 333 - GraphQL failure projection oversized message in project-token mode stays blocked and read-bounded
+  ---
+  duration_ms: 1.164683
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection oversized message in account-bearer mode stays blocked and read-bounded
+ok 334 - GraphQL failure projection oversized message in account-bearer mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.529268
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection too many entries in project-token mode stays blocked and read-bounded
+ok 335 - GraphQL failure projection too many entries in project-token mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.939251
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection too many entries in account-bearer mode stays blocked and read-bounded
+ok 336 - GraphQL failure projection too many entries in account-bearer mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.416458
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection malformed extension in project-token mode stays blocked and read-bounded
+ok 337 - GraphQL failure projection malformed extension in project-token mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.349446
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection malformed extension in account-bearer mode stays blocked and read-bounded
+ok 338 - GraphQL failure projection malformed extension in account-bearer mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.681714
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection unknown code in project-token mode stays blocked and read-bounded
+ok 339 - GraphQL failure projection unknown code in project-token mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.847599
+  type: 'test'
+  ...
+# Subtest: GraphQL failure projection unknown code in account-bearer mode stays blocked and read-bounded
+ok 340 - GraphQL failure projection unknown code in account-bearer mode stays blocked and read-bounded
+  ---
+  duration_ms: 0.71895
+  type: 'test'
+  ...
+# Subtest: dedicated workflow fixes main identity/environment/sha and isolates the only secret step
+ok 341 - dedicated workflow fixes main identity/environment/sha and isolates the only secret step
+  ---
+  duration_ms: 2.146543
+  type: 'test'
+  ...
+# Subtest: live import graph contains only builtins and the pure extracted binding module
+ok 342 - live import graph contains only builtins and the pure extracted binding module
+  ---
+  duration_ms: 5.59842
+  type: 'test'
+  ...
+# Subtest: safe receipt artifact is an exact separate pinned upload, never raw streams or credentials
+ok 343 - safe receipt artifact is an exact separate pinned upload, never raw streams or credentials
+  ---
+  duration_ms: 0.891313
+  type: 'test'
+  ...
+# Subtest: actual receipt shell preserves failing helper status and excludes stderr from the file
+ok 344 - actual receipt shell preserves failing helper status and excludes stderr from the file
+  ---
+  duration_ms: 24.260207
+  type: 'test'
+  ...
+# Subtest: installer fixes official GNU archive checksum and version before any secrets
+ok 345 - installer fixes official GNU archive checksum and version before any secrets
+  ---
+  duration_ms: 0.448102
+  type: 'test'
+  ...
+# Subtest: genuine installer shell rejects checksum mismatch before extraction or execution
+ok 346 - genuine installer shell rejects checksum mismatch before extraction or execution
+  ---
+  duration_ms: 113.459764
+  type: 'test'
+  ...
+# {"case":"actual-installer-checksum-mismatch","exit":1,"stdout":"","stderr":"","extractionOrExecution":false,"syntheticArchiveOnly":true}
+1..346
+# tests 659
+# suites 0
+# pass 659
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10510.297525

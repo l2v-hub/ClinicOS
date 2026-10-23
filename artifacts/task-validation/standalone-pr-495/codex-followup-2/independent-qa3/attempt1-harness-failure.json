@@ -1,0 +1,1 @@
+{"type":"QA harness parser failure","underlyingCommandExit":0,"actualTests":122,"actualPass":122,"actualFail":0,"reason":"Node v24 default spec reporter uses ℹ summaries; parser expected TAP # prefix","correction":"accept both spec and TAP summary prefixes; preserve all first attempt files; freeze corrected harness before rerun"}

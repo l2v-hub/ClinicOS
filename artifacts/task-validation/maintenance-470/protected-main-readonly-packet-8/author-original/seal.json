@@ -1,0 +1,74 @@
+{
+  "status": "AUTHOR_STOPPED_FOR_INDEPENDENT_QA",
+  "scope": "Maintenance470 parentimplementation8 five-file read-only inventory enablement",
+  "sourceSnapshot": "/tmp/clinicos470-protected-inventory8-source",
+  "sourceFreezeSha256": "9ab016998c00b6e4cb4cb67a8d3194914f16848ce0027c361103ea8d56e4c206",
+  "sourcePatchSha256": "22f008fde12b7368fcdbbdcb50894269e3f4d88afb76ee569640afaa2a2be2b1",
+  "tests": {
+    "pass": 150,
+    "fail": 0
+  },
+  "files": {
+    "STOP.json": {
+      "sha256": "143ca32e64795eca44e33aa9fe87d5ec8b0ffb08bb1c1afa9aef610413c3bd3e",
+      "bytes": 222
+    },
+    "baseline-inventory.json": {
+      "sha256": "0fb36738e9825dd198eacb163b4ed9913767546ca084992cb9b74caefbc459e5",
+      "bytes": 43437
+    },
+    "contract-validation.log": {
+      "sha256": "3986b2ffb78c243fe76c89db583acab6e3c7af912703755f375dcd2f6c96e6e3",
+      "bytes": 88
+    },
+    "design-ack.json": {
+      "sha256": "b2f29a8a40c5256554b79c6564a8a47a21b73cd23abda71182d6282fe57d2f6b",
+      "bytes": 373
+    },
+    "design-before-edit.md": {
+      "sha256": "053d3992e493698951fe9581a3ccfe7d2bee45d7d2c40057064959d543383081",
+      "bytes": 1173
+    },
+    "focused-final.log": {
+      "sha256": "d0a1de8b15240686ec55a82d1011d23dd3ede2380a090d5e10e949510f00a373",
+      "bytes": 32017
+    },
+    "focused-first.log": {
+      "sha256": "9ab8eac5a8bd468777e74d0acdd6fc55d547ebb0841ded0452e62c8589780ce7",
+      "bytes": 32744
+    },
+    "focused-second.log": {
+      "sha256": "2d9389b4486575a697e8f74d35a58a979ad22415347a4e8365480a9831c46e41",
+      "bytes": 31348
+    },
+    "report.md": {
+      "sha256": "3d302338204ce4c2ba12d0c8b57b2e63d94023553da5292b34793eb55d1c882f",
+      "bytes": 4224
+    },
+    "reservation.json": {
+      "sha256": "826c43e6d47fe54d184394b4979aa54e253d42c7415038e7307c4f42b141a4e1",
+      "bytes": 2108
+    },
+    "results.json": {
+      "sha256": "5889a71fd49d25726ae836f0bc3e27930a0ff6cfff50eaf1b507550a8957d697",
+      "bytes": 1277
+    },
+    "source-freeze.json": {
+      "sha256": "9ab016998c00b6e4cb4cb67a8d3194914f16848ce0027c361103ea8d56e4c206",
+      "bytes": 44705
+    },
+    "source.patch": {
+      "sha256": "22f008fde12b7368fcdbbdcb50894269e3f4d88afb76ee569640afaa2a2be2b1",
+      "bytes": 96730
+    },
+    "task-contract.md": {
+      "sha256": "a778966755ac012d7bb0127533276c7f8537196f8a13f77105bc67f4617ab40c",
+      "bytes": 7885
+    },
+    "workflow-static.json": {
+      "sha256": "cd44954879bb9ea6cf08418176850a366e82fd279386532bf9720833dcf06b0e",
+      "bytes": 614
+    }
+  },
+  "actualProviderCalls": 0
+}

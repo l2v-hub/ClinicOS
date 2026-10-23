@@ -1,0 +1,7 @@
+{
+  "total": 527,
+  "presentWorkingTree": 63,
+  "verifiedViaHeadGitBlob": 464,
+  "mismatches": 0,
+  "note": "Sparse Git blobs were read and hashed in place;464 files were not materialized locally."
+}

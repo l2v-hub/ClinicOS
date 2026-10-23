@@ -1,0 +1,16 @@
+{
+  "sourceSha": "bb196b215cadce3ad0594dc3c06bc6d36e32c26f",
+  "reportSha256": "db246b8a526fe8c7ba2f62d772855e87c9caa05dc4f3a78a7bcc91da1dcb347f",
+  "originalPrivateSealSha256": "98e6afec3abdd9bbb4ccf27c03042aa9f80f753364bbb1f00e827d950037a6e2",
+  "actualProviderRequests": 0,
+  "actualDeployments": 0,
+  "sourceQa": "PASS",
+  "full": {
+    "pass": 759,
+    "skip": 3,
+    "fail": 0
+  },
+  "focusedPass": 187,
+  "independentTargetedPass": 95,
+  "rawLogsPrivate": true
+}

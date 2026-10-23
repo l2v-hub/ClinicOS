@@ -1,0 +1,16 @@
+{
+  "runId": 39827112860,
+  "jobId": 119993474633,
+  "attempt": 1,
+  "head": "c92c2590b26179d18f96801d943b6e732437753a",
+  "conclusion": "failure",
+  "phase": "ACCOUNT_IDENTITY",
+  "code": "READONLY_GRAPHQL_REJECTED",
+  "logSha256": "1a6febe680f9aa67e1c476b494daadd8497ee0ce7439ca6c852bdc77fb820d22",
+  "testPassed": true,
+  "pinnedBinaryInstallPassed": true,
+  "providerWrites": 0,
+  "sqlCleanupRepeated": false,
+  "credentialInvalidityOrExpiryProven": false,
+  "meaning": "Existing demo Environment credential was rejected for account-profile GraphQL. It may be a project-scoped credential; underlying reason is not disclosed by bounded diagnostic."
+}

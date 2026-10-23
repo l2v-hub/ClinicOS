@@ -11,6 +11,16 @@ on:
         description: Exact full PR commit SHA approved by Claude
         required: true
         type: string
+      release_action:
+        description: Release normally, or explicitly authorize recovery of one blocked intent
+        required: true
+        type: choice
+        options: [release, recover]
+        default: release
+      recovery_block_id:
+        description: Exact durable releaseBlock UUID required for recovery
+        required: false
+        type: string
   workflow_run:
     workflows: [Codex bug pipeline]
     types: [completed]
@@ -32,9 +42,16 @@ jobs:
   release:
     if: >-
       ${{
+        github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/main' && (
         (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
-        (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && vars.BUG_PIPELINE_AUTO_RELEASE == 'true')
+        (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && vars.BUG_PIPELINE_AUTO_RELEASE == 'true'))
       }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      actions: write
+      checks: read
     runs-on: ubuntu-latest
     timeout-minutes: 120
     environment: production
@@ -42,15 +59,16 @@ jobs:
       status: ${{ steps.release.outputs.status }}
       batch_id: ${{ steps.release.outputs.batch_id }}
       merge_sha: ${{ steps.release.outputs.merge_sha }}
+      deployment_sha: ${{ steps.release.outputs.deployment_sha }}
       vercel_url: ${{ steps.vercel.outputs.url }}
-      railway_url: ${{ steps.railway.outputs.url }}
+      railway_url: ${{ steps.release.outputs.railway_url }}
       runtime_url: ${{ steps.runtime.outputs.url }}
     steps:
       # Workflow-run and manual releases always execute trusted main code. No PR ref is checked out.
       - name: Checkout trusted default branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ github.event.repository.default_branch }}
+          ref: ${{ github.sha }}
           path: control
           persist-credentials: false
 
@@ -68,6 +86,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
           BUG_PIPELINE_RELEASE_EXECUTE: 'true'
+          BUG_PIPELINE_RELEASE_ACTION: ${{ inputs.release_action || 'release' }}
+          BUG_PIPELINE_RECOVERY_BLOCK_ID: ${{ inputs.recovery_block_id }}
+          BUG_PIPELINE_DEMO_SOURCE_POLICY: native-exact-commit-v1
+          BUG_PIPELINE_ACTIONS_TOKEN: ${{ github.token }}
           BUG_PIPELINE_AUTO_RELEASE: ${{ vars.BUG_PIPELINE_AUTO_RELEASE }}
           CLINICOS_BOT_TOKEN_CONFIGURED: ${{ secrets.CLINICOS_BOT_TOKEN != '' }}
           VERCEL_CONFIGURED: ${{ secrets.VERCEL_TOKEN != '' && vars.VERCEL_ORG_ID != '' && vars.VERCEL_PROJECT_ID != '' }}
@@ -80,7 +102,7 @@ jobs:
         if: steps.release.outputs.status == 'merged'
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ steps.release.outputs.merge_sha }}
+          ref: ${{ steps.release.outputs.deployment_sha }}
           path: deployment
           persist-credentials: false
 
@@ -99,39 +121,16 @@ jobs:
           url="$(node -e 'const s=process.argv[1]; const u=[...s.matchAll(/https:\/\/[A-Za-z0-9.-]+\.vercel\.app/g)].map(x=>x[0]); if(!u.length) process.exit(1); process.stdout.write(u.at(-1));' "$output")"
           printf 'url=%s\n' "$url" >> "$GITHUB_OUTPUT"
 
-      # Success alone is not deployment proof: the record step verifies this run's
-      # immutable demo receipt, exact source/target and active public deployment identity.
-      - name: Wait for Railway deployment of the merged commit
-        id: railway
-        if: steps.release.outputs.status == 'merged' && steps.release.outputs.backend == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
-          MERGE_SHA: ${{ steps.release.outputs.merge_sha }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          for attempt in $(seq 1 60); do
-            runs="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow deploy-backend.yml --commit "$MERGE_SHA" --json status,conclusion,url --limit 5)"
-            status="$(node -e 'const a=JSON.parse(process.argv[1]);const r=a.find(x=>x.status==="completed")||a[0];process.stdout.write(r?JSON.stringify(r):"{}");' "$runs")"
-            state="$(node -e 'const r=JSON.parse(process.argv[1]);process.stdout.write(r.status||"");' "$status")"
-            if [[ "$state" == completed ]]; then
-              conclusion="$(node -e 'const r=JSON.parse(process.argv[1]);process.stdout.write(r.conclusion||"");' "$status")"
-              if [[ "$conclusion" != success ]]; then echo 'Railway deployment did not succeed.' >&2; exit 1; fi
-              url="$(node -e 'const r=JSON.parse(process.argv[1]);if(!/^https:\/\/github\.com\//.test(r.url||""))process.exit(1);process.stdout.write(r.url);' "$status")"
-              printf 'url=%s\n' "$url" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-            sleep 60
-          done
-          echo 'Timed out waiting for Railway deployment.' >&2
-          exit 1
-
+      # release.mjs awaits the correlated exact demo run after persisting its merge.
+      # confirm-demo independently verifies its immutable receipt and live provider identity.
+      # Recording also requires a successful exact-SHA production deploy-backend deploy job.
+      # Recording waits read-only up to 60 minutes for exact-SHA production; no production dispatch.
       - name: Wait for Railway runtime deployment of the merged commit
         id: runtime
         if: steps.release.outputs.status == 'merged' && steps.release.outputs.runtime == 'true'
         env:
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
-          MERGE_SHA: ${{ steps.release.outputs.merge_sha }}
+          MERGE_SHA: ${{ steps.release.outputs.deployment_sha }}
         shell: bash
         run: |
           set -euo pipefail
@@ -162,14 +161,15 @@ jobs:
 
   confirm-demo:
     needs: release
-    if: needs.release.result == 'success' && (needs.release.outputs.status == 'merged' || needs.release.outputs.status == 'deployed')
+    if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/main' && needs.release.result == 'success' && (needs.release.outputs.status == 'merged' || needs.release.outputs.status == 'deployed')
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     environment: 'glistening-friendship / demo'
     steps:
       - name: Checkout trusted default branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ github.event.repository.default_branch }}
+          ref: ${{ github.sha }}
           path: control
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
@@ -179,8 +179,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
           BUG_PIPELINE_RELEASE_ACTION: record
+          BUG_PIPELINE_DEMO_SOURCE_POLICY: native-exact-commit-v1
           BUG_PIPELINE_BATCH_ID: ${{ needs.release.outputs.batch_id }}
           BUG_PIPELINE_MERGE_SHA: ${{ needs.release.outputs.merge_sha }}
+          BUG_PIPELINE_DEPLOYMENT_SHA: ${{ needs.release.outputs.deployment_sha }}
           VERCEL_DEPLOYMENT_URL: ${{ needs.release.outputs.vercel_url }}
           RAILWAY_DEPLOYMENT_RUN_URL: ${{ needs.release.outputs.railway_url }}
           RUNTIME_DEPLOYMENT_RUN_URL: ${{ needs.release.outputs.runtime_url }}

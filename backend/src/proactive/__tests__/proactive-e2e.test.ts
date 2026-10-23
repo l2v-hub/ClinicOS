@@ -787,11 +787,22 @@ test('T — free text typed in a prescription (drug name) never reaches the LLM 
 });
 
 test('U — the denied-access summary keeps its ack until a NEW denial happens (QA finding 5)', async () => {
-  await call(base, oss, 'POST', '/tools/therapy.create/invoke', {
+  const denied = await call(base, oss, 'POST', '/tools/therapy.create/invoke', {
     input: { patientId: ids.oO, body: {} },
     confirmed: true,
   });
-  await waitForAudit({ operatorId: 'SIM-OSS-1', outcome: 'denied' });
+  assert.equal(denied.status, 403);
+  assert.equal(denied.body.ok, false);
+  assert.equal(denied.body.error?.code, 'forbidden');
+  assert.equal(typeof denied.body.requestId, 'string');
+  assert.ok(denied.body.requestId.trim().length > 0, 'denied tool response requestId');
+  const deniedAudit = await waitForAudit({
+    operatorId: 'SIM-OSS-1',
+    outcome: 'denied',
+    requestId: denied.body.requestId,
+  });
+  assert.ok(deniedAudit, 'audit row for the denied tool request');
+  assert.equal(deniedAudit!.requestId, denied.body.requestId);
   const s1 = (await inbox(admin)).signals.find((s) => s.eventType === 'access.denied_summary');
   assert.ok(s1);
   await call(base, admin, 'POST', '/skills/proactive/ack', {

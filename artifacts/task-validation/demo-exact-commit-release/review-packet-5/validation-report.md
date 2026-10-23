@@ -1,0 +1,1 @@
+Fresh independent QA5 PASS on 17d3f5a7bef0565db1992221a41b9f924037195c. Full suite1121PASS/3nativeWindowsSkip; focused329PASS;105CLI+24direct security,49functional/proof and60offline schema checks PASS. Evidence-only publication preserves all six source blobs. Actual Claude2/finalCodex/native CI/provider authorization/deployment remain pending.

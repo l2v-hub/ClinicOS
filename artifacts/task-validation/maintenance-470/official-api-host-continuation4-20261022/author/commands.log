@@ -1,0 +1,5 @@
+NODE=/tmp/clinicos-node22-native12/node_modules/node/bin/node
+node --check scripts/maintenance/demo-storage-inspect.mjs
+node --check scripts/automation/configure-demo-source.mjs
+node --check agent-team/src/bug-pipeline/demo-deployment.mjs
+node --test scripts/maintenance/demo-storage-inspect.test.mjs scripts/maintenance/demo-storage-workflow.test.mjs scripts/automation/configure-demo-source.test.mjs agent-team/tests/bug-pipeline/demo-deployment.test.mjs

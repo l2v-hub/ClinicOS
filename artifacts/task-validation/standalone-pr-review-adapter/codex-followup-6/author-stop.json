@@ -1,0 +1,48 @@
+{
+  "round": 10,
+  "nonce": "c8924c72-1326-4af3-b7c2-3290e5c4fa50",
+  "status": "STOP",
+  "baseSha": "a29896d144cfd1a3a186e931357aef235984af72",
+  "implementation": "IMPLEMENTED \u2014 NOT INDEPENDENTLY VERIFIED",
+  "scopeFiles": [
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/src/bug-pipeline/standalone-review.mjs",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "docs/standalone-pr-review.md"
+  ],
+  "attempts": {
+    "round10": 1,
+    "priorRoundsPreserved": 9,
+    "independentQaAttempts": 0
+  },
+  "skips": {
+    "nativeSuitePlatformSkipped": 3,
+    "nativeSuiteSkippedTestNames": [
+      "PowerShell scheduler definitions parse on Windows and use actual task action/trigger/principal objects",
+      "native Windows ACL creation is private and rejects a later public access rule",
+      "native Windows bootstrap preserves dirty, foreign, wrong-branch and diverged work and fast-forwards only its dedicated checkout"
+    ],
+    "acceptanceChecksSkipped": 0,
+    "independentQaPending": true
+  },
+  "commands": [
+    {
+      "runner": "createRunner from /workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs; envMode=verification; env={PATH only}; cwd=/workspace/clinicos-standalone-pr-review",
+      "command": "node --test agent-team/tests/bug-pipeline/github.test.mjs agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "result": "PASS: 134 tests, 134 pass, 0 fail, 0 skipped"
+    },
+    {
+      "runner": "createRunner from /workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs; envMode=verification; env={PATH only}; cwd=/workspace/clinicos-standalone-pr-review",
+      "command": "node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs",
+      "result": "PASS: 772 tests, 769 pass, 0 fail, 3 skipped; local Node v24.19.0, CI pins Node 22"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "protectedPolicyAllowlistAuthBudgetLeaseChanged": false,
+  "rawLogs": "private at /workspace/.clinicos-cloud/492-continuation10-author-20261019/run-logs/",
+  "independentQa": "Required next; author stops here."
+}

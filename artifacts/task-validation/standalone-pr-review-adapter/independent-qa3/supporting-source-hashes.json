@@ -1,0 +1,7 @@
+{
+  "agent-team/src/bug-pipeline/contracts.mjs": "cd650b0eddf19ea47d592b6db7770e2c4863e769f01441e17258c57aab516f69",
+  "agent-team/src/bug-pipeline/external-review.mjs": "beae109efa0f4f4b62e51c4f3974bf3165411e2d0d8e757063b2463e169f1364",
+  "agent-team/src/bug-pipeline/process.mjs": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf",
+  "agent-team/src/bug-pipeline/issue-review-communication.mjs": "abd03086220b27de9ad6d82d886d0ed8b78fbaab935c42a8e1ff0b6b96c13593",
+  "scripts/quality-gate/claude-bug-review.mjs": "cc4b2c29eeb016a3e8aa89ba0c474f198113fb815e8064b8a7af4d875909708a"
+}

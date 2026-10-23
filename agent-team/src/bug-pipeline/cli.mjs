@@ -1,12 +1,28 @@
 #!/usr/bin/env node
 import path from 'node:path';
+import { spentAttempts } from './attempt-budget.mjs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { createRunner } from './process.mjs';
-import { createGitHub } from './github.mjs';
+import { createGitHub, controllerFailureCode } from './github.mjs';
 import { createModels } from './models.mjs';
 import { createWorkspace } from './workspace.mjs';
 import { runPipeline } from './pipeline.mjs';
+import { requiresHumanReview } from './review-policy.mjs';
+import { createStandaloneReview } from './standalone-review.mjs';
+
+// Trusted reviewed-main policy. Neither PR manifests nor environment flags can add files.
+export const STANDALONE_INFRASTRUCTURE_FILES = Object.freeze(
+  [
+    'agent-team/tests/bug-pipeline/models.test.mjs',
+    'agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs',
+    'agent-team/tests/bug-pipeline/standalone-review.test.mjs',
+    'agent-team/tests/bug-pipeline/workspace.test.mjs',
+    'agent-team/tests/bug-pipeline/github.test.mjs',
+    'docs/claude-local-review-prompt.md',
+    'docs/standalone-pr-review.md',
+  ].filter((file) => !requiresHumanReview(file)),
+);
 
 export async function doctor({ run, models, env = process.env, cwd }) {
   const codex = await models.preflight();
@@ -53,7 +69,6 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
   // Cloud secret targets cannot use reserved CODEX_/OPENAI_ names. Only process-local aliases.
   env = {
     ...env,
-    CODEX_API_KEY: env.CODEX_API_KEY || env.CLINICOS_OPENAI_API_KEY,
     ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY || env.CLINICOS_ANTHROPIC_API_KEY,
     CODEX_PLANNER_MODEL: env.CODEX_PLANNER_MODEL || env.CLINICOS_PLANNER_MODEL || 'gpt-6.1-sol',
     CODEX_EXECUTOR_MODEL: env.CODEX_EXECUTOR_MODEL || env.CLINICOS_EXECUTOR_MODEL || 'auto',
@@ -106,6 +121,8 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
       workspace,
       store,
       reviewMode: env.BUG_PIPELINE_REVIEW_MODE,
+      standaloneController: createStandaloneReview({ github: gh, run, cwd: root }),
+      standaloneInfrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
     });
     const blocked = state.batches.filter((b) => b.phase === 'blocked').length;
     const summary = {
@@ -114,9 +131,19 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
       batches: state.batches.map((b) => ({
         id: b.id,
         phase: b.phase,
-        implementation: b.implementation.length,
+        implementation: spentAttempts(b, 'implementation'),
         reviews: b.reviews.length,
         sha: b.sha ?? null,
+        failureCode: b.failureCode,
+      })),
+      standaloneReviews: (state.standaloneReviews ?? []).map((s) => ({
+        id: s.id,
+        pr: s.pr.number,
+        sha: s.sha,
+        phase: s.phase,
+        implementation: spentAttempts(s, 'implementation'),
+        reviews: s.reviews.length,
+        releaseHold: s.releaseHold,
       })),
     };
     await writeFile(
@@ -127,12 +154,13 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
     // batches are reported explicitly and cannot release; they do not starve unrelated ready batches.
     console.log(JSON.stringify(summary));
     return 0;
-  } catch {
+  } catch (error) {
     await writeFile(
       path.join(diagnosticRoot, 'diagnostic.json'),
       JSON.stringify(
         {
           status: 'blocked-controller',
+          failureCode: controllerFailureCode(error),
           reason:
             'Inspect GitHub permissions, durable state and pending triage; no automatic budget reset.',
         },

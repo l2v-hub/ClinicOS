@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "files": {
+    "author-suite-rerun.txt": {
+      "bytes": 3601,
+      "sha256": "45590ff216bd4468b46ddd9d8a616d81d2bd37188e4dfbd4bb211d14f40289f6"
+    },
+    "findings.json": {
+      "bytes": 627,
+      "sha256": "d0f147a7bff6b6f9ad314bfdda7777f23f6abc45fe8819c6897503a6d759bfa2"
+    },
+    "independent-negative-cases.py": {
+      "bytes": 13024,
+      "sha256": "58f2e0f48ef0a992f3c4c7394ad66ef6654f0480e574c9b9be772a98b35cf483"
+    },
+    "independent-negative-results.txt": {
+      "bytes": 2805,
+      "sha256": "041dc810aede48f3f0fee2db95f02e6a1c60012067cea6c22592a5a0ad41fcc9"
+    },
+    "runtime-and-repository.txt": {
+      "bytes": 434,
+      "sha256": "9460a7de4a0180914b7b2ceda1119ab880db9a69cf78c36eb6c530b73e88e658"
+    },
+    "secret-scan.json": {
+      "bytes": 829,
+      "sha256": "bb7e44d2abf18e9d6ddaeef29d1993c2a01876564cc928af9f5691861629d79e"
+    },
+    "source-integrity-before.json": {
+      "bytes": 2107,
+      "sha256": "5df53dbd4c01a371ef1e833fc470c86617fcb8b9f02859980b6dac391b9fea21"
+    },
+    "source-integrity.json": {
+      "bytes": 2309,
+      "sha256": "1ac50d35a79de0ee29630dd8deadbfadea14a81124b366b3ec76b01f1dab0960"
+    },
+    "validation-report.md": {
+      "bytes": 7113,
+      "sha256": "38c5c36e2a76cfcd329c4dd0bffa207716985ff87ad8ebc3c93aea07c777fc26"
+    }
+  },
+  "excludedSelfReferences": [
+    "artifact-manifest.json",
+    "final-seal.json"
+  ],
+  "totalPayloadBytes": 32849
+}

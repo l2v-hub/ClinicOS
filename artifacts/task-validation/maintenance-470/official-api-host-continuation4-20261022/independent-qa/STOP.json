@@ -1,0 +1,9 @@
+{
+  "status": "STOP",
+  "verdict": "READY FOR CODEX QA",
+  "sourceSha": "6c1a283e3b272edf9638ae6c7c67be96e4542910",
+  "nonce": "97660da3-3367-4b9e-bee0-7a9d03832f5d",
+  "sourceUnchanged": true,
+  "liveActions": false,
+  "findings": []
+}

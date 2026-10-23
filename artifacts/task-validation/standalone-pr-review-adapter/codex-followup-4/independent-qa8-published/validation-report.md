@@ -1,0 +1,19 @@
+Final Decision: READY FOR CODEX QA — local gate only; corrected safe publication candidate.
+
+Exact tested source: `210a257c96aea12e9386018fe9ce762715870447`. Original QA8 STOP SHA256: `3457a300408ec2fd6ea99e40584fa9852da516a58eef153d1725ebbf7e3214bd`. This new report corrects publication transport only. Original source, harness, report, planned manifest and STOP remain unchanged. Root found ten ignored raw logs before any commit/push; see [layout correction](publication-layout-correction.md). No raw output or trace is included here.
+
+| Gate | Result | Safe evidence |
+| --- | --- | --- |
+| Frozen full regression | 762 total:759 pass,0 fail,3 Windows-only skips; local Node24.19.0 | [Execution summary](execution-summary.json), [private output digests](private-output-provenance.json) |
+| Fresh independent adversarial | 33 separate passes,0 fail,0 skips | [Execution summary](execution-summary.json), [sealed harness](harness-freeze.json) |
+| QA-only browser | Seven actions and seven reloads; exclusive labels; zero page/console/HTTP errors; cleanup and port refusal pass | [Browser summary](browser-summary.json), [screenshot](screenshots/controller-final.png) |
+| Codec, budgets and security | PASS locally; strict pinned GitBlob transport,8MiB/reservation bounds, default3/4 audit, denied5 without verified grant, exact verified5 grants no sixth; post-await revocation/CAS and replay reject | [Security/diff review](security-and-diff-review.md), [harness](harness/adversarial.test.mjs) |
+| Complete canonical schema | PASS read-only;4 normal,7 manual,5 standalone; actual records not published | [Counts/digest](canonical-schema-summary.json) |
+| Original proof and source preservation |26 inputs;exact5 authorized changes/21 unchanged;527 historical proofs (63 filesystem,464 HEAD Git blobs);15 author evidence files;original36 QA files and seven QA harness files unchanged | [Fresh transport preservation](transport-preservation-check.json) |
+| Evidence security | PNG CRC/decode, trace ZIP CRC/text/sentinels and23 trace JPEG decodes pass; raw trace stays private | [Media checks](media-validation.json), [trace scan](trace-security-scan.json), [image decode](trace-image-validation.json) |
+
+The behavioral verdicts still apply to the original main/continuation7/continuation8 contracts: immutable native adoption/history, bounded authenticated claim/import and exclusive labels; finite N1 classification, guarded CAS, uncertain merge recovery and disjoint rebase; default-four continuations with same-owner lineage and distinct reservations; external exact-bound authorization for further attempts, fail-closed CLI without a configured live verifier; preserved legacy history and issue-only470 identity. The actual full command was `node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs` through the trusted credential-free verification runner. Raw command output remains private; each of the ten exact SHA256 hashes is listed in private-output-provenance.json. Safe summaries contain outcomes rather than raw text. No counts from repeated runs are combined.
+
+This amendment ran only read-only byte-integrity/publication checks and safe packaging, with no code/harness mutation and no test/runtime/browser rerun. The new public manifest lists each existing payload and the new STOP binds its digest. Every publication candidate file is below25MiB and passes Git ignore and secret/PHI preflight. Root must verify the final staged Git objects and owns commit/push.
+
+Limits remain: hosted current-head Node22 CI, genuine exact-SHA Claude review, root final Codex review and protected publication/merge are separate gates. Synthetic verifier/controller/browser checks are not live grant authentication, clinical E2E, provider behavior, deployment or issue closure. No GitHub/provider/model/DB/credential/state write, commit or push was performed by QA.

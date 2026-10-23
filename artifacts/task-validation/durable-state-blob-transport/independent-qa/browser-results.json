@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "assertions": 9,
+  "consoleErrors": 0,
+  "httpErrors": 0,
+  "reload": true,
+  "qaOnly": true
+}

@@ -1,0 +1,121 @@
+{
+  "status": "author-stop-pending-new-independent-qa",
+  "baseline": "8124b1bc88c0f086b1ee328214f87f4802005d11",
+  "implementationAttempt": 1,
+  "sourceFiles": 7,
+  "guardSourcesUnchanged": 19,
+  "focusedTests": {
+    "total": 45,
+    "passed": 45,
+    "failed": 0,
+    "skipped": 0
+  },
+  "fullRegression": {
+    "total": 622,
+    "passed": 619,
+    "failed": 0,
+    "skipped": 3
+  },
+  "sourceManifestSha256": "ee950d8c2403885facb1d27105011fb1505619a5aadcdb1bc7e5b7d2a4f20c8c",
+  "contractManifestSha256": "458620e9d8c0f6e6ae0fd7779eca1d979a12aa3720e7ee1e7ba0a09940cc151f",
+  "evidenceFiles": [
+    {
+      "file": "analysis.md",
+      "bytes": 998,
+      "sha256": "afe206b2b975669fcf059c07031270560d51a64ee8c5020eb3ed7c255c7c6d70"
+    },
+    {
+      "file": "author-tests/contract-validation.log",
+      "bytes": 156,
+      "sha256": "d917229a790c5713c4795dfedf8418a01d9e220c88cd9825388503cc20845cc3"
+    },
+    {
+      "file": "author-tests/deny-provider-bin/claude",
+      "bytes": 61,
+      "sha256": "da2e44439f004eb4220b6ce16230db7dd14a5b9035afa481da962b5c8b1d1f71"
+    },
+    {
+      "file": "author-tests/deny-provider-bin/codex",
+      "bytes": 61,
+      "sha256": "da2e44439f004eb4220b6ce16230db7dd14a5b9035afa481da962b5c8b1d1f71"
+    },
+    {
+      "file": "author-tests/deny-provider-bin/gh",
+      "bytes": 61,
+      "sha256": "da2e44439f004eb4220b6ce16230db7dd14a5b9035afa481da962b5c8b1d1f71"
+    },
+    {
+      "file": "author-tests/focused.log",
+      "bytes": 5158,
+      "sha256": "bd4311ddc882c5d588cca0f9c342a4865f1d70c44ce94a348a132b0ec2a4f0ec"
+    },
+    {
+      "file": "author-tests/full-regression.log",
+      "bytes": 43463,
+      "sha256": "e20e2751c2836bc151837396afaa32c5a7e9aab5cd9776ac33e6b88695e6df0e"
+    },
+    {
+      "file": "author-tests/pre-final-regression.log",
+      "bytes": 43020,
+      "sha256": "e595508c01d898128d338ba4fc52499f2426a71be45c8a45c25123f4c56f8d85"
+    },
+    {
+      "file": "author-tests/pre-guard-refinement-regression.log",
+      "bytes": 43279,
+      "sha256": "b89bafd371e734c1f9c83c09132312f6ea76fbf369ad10f334abfe59adad7ddb"
+    },
+    {
+      "file": "author-tests/static-checks.json",
+      "bytes": 966,
+      "sha256": "834d9ac5be342470528c64efc9dcc55ba0e45db18e5557e23675b2172b25707d"
+    },
+    {
+      "file": "contract-hashes.json",
+      "bytes": 274,
+      "sha256": "458620e9d8c0f6e6ae0fd7779eca1d979a12aa3720e7ee1e7ba0a09940cc151f"
+    },
+    {
+      "file": "guard19-unchanged.json",
+      "bytes": 5398,
+      "sha256": "9dd8769231447ac1f495720aaf811183d377e79346fcf404a38b5de94a1b15af"
+    },
+    {
+      "file": "implementation-handoff.md",
+      "bytes": 6214,
+      "sha256": "07874ee9689c43cbe7bd987979be4c0803362ce5bba43c39c81bd7f2e0414aff"
+    },
+    {
+      "file": "implementation-plan.md",
+      "bytes": 2431,
+      "sha256": "92eaa03161ca24fddb8fa075ae67038f39e7a6171fb675b013e3e3ef984c3f80"
+    },
+    {
+      "file": "privacy-audit.json",
+      "bytes": 323,
+      "sha256": "310ee12e512ece167fd8c2b54cbab716fb910e22f9c0f30a03a07d8623565b58"
+    },
+    {
+      "file": "scope-audit.json",
+      "bytes": 950,
+      "sha256": "0d01da3802758d2b187be47217290669d1e003f726a2ac92d9fd12e0cc43b4bd"
+    },
+    {
+      "file": "source-hashes.json",
+      "bytes": 1395,
+      "sha256": "ee950d8c2403885facb1d27105011fb1505619a5aadcdb1bc7e5b7d2a4f20c8c"
+    },
+    {
+      "file": "task-contract.md",
+      "bytes": 4512,
+      "sha256": "80d72fe00d383ce3c7c22b619ab0b87e998a456504870e2c746710cd750876f2"
+    },
+    {
+      "file": "validation-report.md",
+      "bytes": 677,
+      "sha256": "461f29d30c4c7f2897945c443cde363378bfdb27eedb1593c2ade411a9a55813"
+    }
+  ],
+  "providerOrGitHubMutations": 0,
+  "commitsOrPushes": 0,
+  "independentQaPerformedByAuthor": false
+}

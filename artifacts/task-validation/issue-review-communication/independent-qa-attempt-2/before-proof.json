@@ -1,0 +1,253 @@
+{
+  "sources": {
+    "baseline": "8124b1bc88c0f086b1ee328214f87f4802005d11",
+    "implementationAttempt": 2,
+    "files": [
+      {
+        "file": "agent-team/src/bug-pipeline/external-review.mjs",
+        "bytes": 6645,
+        "sha256": "a699190f148e036e6430e01451482ab3131deb36e8c1f7d2ade7be552893fe56"
+      },
+      {
+        "file": "agent-team/src/bug-pipeline/claude-review-cron.mjs",
+        "bytes": 14709,
+        "sha256": "5d54688f8187d3fbffa2a1106b52343b3a223b53366119d4b2f7f8c8d49e9d03"
+      },
+      {
+        "file": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+        "bytes": 19241,
+        "sha256": "b07d4b815aa034c852064594728257f3af3aa11ea85cf4bdd0f29841fc8fa57f"
+      },
+      {
+        "file": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+        "bytes": 2700,
+        "sha256": "469dd18b7083d6e0b52b94a7d1291b18dfa87d8f4ff10a861fc49e71db2e8993"
+      },
+      {
+        "file": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+        "bytes": 17379,
+        "sha256": "c9ee849dc705b79366453212de5072d9c45dc0d3d780104e3e3fc1340b935101"
+      },
+      {
+        "file": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+        "bytes": 31627,
+        "sha256": "1f3cab08b220a282905be2f277a5acb3f73ed3de3206fe8f5bb7570ef71ad845"
+      },
+      {
+        "file": ".github/workflows/codex-issue-review-sync.yml",
+        "bytes": 1182,
+        "sha256": "f482c40f8f64991a6df91a0b1154a4bb1c51903fc948f4202f18749c8105cb34"
+      }
+    ]
+  },
+  "contracts": {
+    "task-contract.md": "80d72fe00d383ce3c7c22b619ab0b87e998a456504870e2c746710cd750876f2",
+    "implementation-plan.md": "92eaa03161ca24fddb8fa075ae67038f39e7a6171fb675b013e3e3ef984c3f80",
+    "analysis.md": "afe206b2b975669fcf059c07031270560d51a64ee8c5020eb3ed7c255c7c6d70",
+    "implementation-cycle-2-final-communication-guard.md": "859b4ef5e04e517dddfa75441eab5aa424f1aaf484056559aca021a3cab2673f"
+  },
+  "guards": [
+    {
+      "file": ".github/workflows/deploy-backend.yml",
+      "expectedSha256": "6743d823679a9c1076c85dfcb5e5b9a8f96705849123b3091cac5d00cadaa3f9",
+      "actualSha256": "6743d823679a9c1076c85dfcb5e5b9a8f96705849123b3091cac5d00cadaa3f9",
+      "unchanged": true
+    },
+    {
+      "file": ".github/workflows/codex-bug-release.yml",
+      "expectedSha256": "aba0ae7af2185330789d6666c1958e15acee4ce36ffa3f0814c2c92a3e31b55e",
+      "actualSha256": "aba0ae7af2185330789d6666c1958e15acee4ce36ffa3f0814c2c92a3e31b55e",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/release.mjs",
+      "expectedSha256": "49ca26c74122204ad21d9cf94279d867384ed781b01d4ef62eb2d37b5c18430e",
+      "actualSha256": "49ca26c74122204ad21d9cf94279d867384ed781b01d4ef62eb2d37b5c18430e",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "expectedSha256": "44855bee987e57b36e4acf47a4de95da19c75558a3975b3d443faa263776f43f",
+      "actualSha256": "44855bee987e57b36e4acf47a4de95da19c75558a3975b3d443faa263776f43f",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "expectedSha256": "134299131f264135dba3e75211b02dd6c07954d56447820065973a3b0fa1b5ae",
+      "actualSha256": "134299131f264135dba3e75211b02dd6c07954d56447820065973a3b0fa1b5ae",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "expectedSha256": "cb27b28624b83aa37aa6e5f25b0393c7e7698f647257cc53664d36d93131c68c",
+      "actualSha256": "cb27b28624b83aa37aa6e5f25b0393c7e7698f647257cc53664d36d93131c68c",
+      "unchanged": true
+    },
+    {
+      "file": "backend/src/lib/readiness.ts",
+      "expectedSha256": "f7a1338c5934bee0821fa9af5c30d64a732dbd5bec54131cf6569471f6e31461",
+      "actualSha256": "f7a1338c5934bee0821fa9af5c30d64a732dbd5bec54131cf6569471f6e31461",
+      "unchanged": true
+    },
+    {
+      "file": "backend/src/lib/__tests__/readiness-deployment.test.ts",
+      "expectedSha256": "fe79ec9c73c499350826d537cc0b45514ead967e5b640c84eb469bed1a1a9389",
+      "actualSha256": "fe79ec9c73c499350826d537cc0b45514ead967e5b640c84eb469bed1a1a9389",
+      "unchanged": true
+    },
+    {
+      "file": "scripts/quality-gate/configure-bug-repository.mjs",
+      "expectedSha256": "83359916abe7447d4107fba032f53b444a81e702073eae0fdfcecc16bdfb8fdf",
+      "actualSha256": "83359916abe7447d4107fba032f53b444a81e702073eae0fdfcecc16bdfb8fdf",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/repository-settings.test.mjs",
+      "expectedSha256": "23e7639f39ed2dab384e76fb97faf6d7e7f2115d4b1223b32c0b458e8cd356ac",
+      "actualSha256": "23e7639f39ed2dab384e76fb97faf6d7e7f2115d4b1223b32c0b458e8cd356ac",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/github.mjs",
+      "expectedSha256": "39e04254403105d90220119778ef137698a230ccf15b2937d4f4a1daebd5722d",
+      "actualSha256": "39e04254403105d90220119778ef137698a230ccf15b2937d4f4a1daebd5722d",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "expectedSha256": "cbbe764826f7ffad3bd7c21451e0d6bfeec4ab718c8f61033c8e6561dfca80df",
+      "actualSha256": "cbbe764826f7ffad3bd7c21451e0d6bfeec4ab718c8f61033c8e6561dfca80df",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/process.mjs",
+      "expectedSha256": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf",
+      "actualSha256": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/workspace.test.mjs",
+      "expectedSha256": "930257f4aac3e63b7548fb59512130a15848caa8164a2a635cd1d2f58e185d2c",
+      "actualSha256": "930257f4aac3e63b7548fb59512130a15848caa8164a2a635cd1d2f58e185d2c",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "expectedSha256": "b2c0d18b93d65a526838ec3f8a4852fbe309d42dbf67bb005f1b646703cf7749",
+      "actualSha256": "b2c0d18b93d65a526838ec3f8a4852fbe309d42dbf67bb005f1b646703cf7749",
+      "unchanged": true
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "expectedSha256": "6102d7239d792ddf1fc1f225b902cff268443ad362c8413499bb8ba990d2a08c",
+      "actualSha256": "6102d7239d792ddf1fc1f225b902cff268443ad362c8413499bb8ba990d2a08c",
+      "unchanged": true
+    },
+    {
+      "file": ".github/workflows/codex-bug-pipeline.yml",
+      "expectedSha256": "265542dafb39489a2a64d87eec8b580306ad577392049227cc7fb88bae722315",
+      "actualSha256": "265542dafb39489a2a64d87eec8b580306ad577392049227cc7fb88bae722315",
+      "unchanged": true
+    },
+    {
+      "file": ".github/workflows/bug-pipeline-tests.yml",
+      "expectedSha256": "79114c4363dba61d96a45f73363ecef4d2f6c6ce5ac63f5d1f56801c2f23153b",
+      "actualSha256": "79114c4363dba61d96a45f73363ecef4d2f6c6ce5ac63f5d1f56801c2f23153b",
+      "unchanged": true
+    },
+    {
+      "file": "scripts/quality-gate/verify-isolated-services.mjs",
+      "expectedSha256": "681a3e387e603edc99c7b3a2ec3246b6b82445ee2459446de83380a2178cefb2",
+      "actualSha256": "681a3e387e603edc99c7b3a2ec3246b6b82445ee2459446de83380a2178cefb2",
+      "unchanged": true
+    }
+  ],
+  "historicalFiles": {
+    "artifacts/task-validation/issue-review-communication/scope-audit.json": "0d01da3802758d2b187be47217290669d1e003f726a2ac92d9fd12e0cc43b4bd",
+    "artifacts/task-validation/issue-review-communication/implementation-handoff.md": "07874ee9689c43cbe7bd987979be4c0803362ce5bba43c39c81bd7f2e0414aff",
+    "artifacts/task-validation/issue-review-communication/validation-report.md": "461f29d30c4c7f2897945c443cde363378bfdb27eedb1593c2ade411a9a55813",
+    "artifacts/task-validation/issue-review-communication/source-hashes.json": "ee950d8c2403885facb1d27105011fb1505619a5aadcdb1bc7e5b7d2a4f20c8c",
+    "artifacts/task-validation/issue-review-communication/implementation-plan.md": "92eaa03161ca24fddb8fa075ae67038f39e7a6171fb675b013e3e3ef984c3f80",
+    "artifacts/task-validation/issue-review-communication/analysis.md": "afe206b2b975669fcf059c07031270560d51a64ee8c5020eb3ed7c255c7c6d70",
+    "artifacts/task-validation/issue-review-communication/privacy-audit.json": "310ee12e512ece167fd8c2b54cbab716fb910e22f9c0f30a03a07d8623565b58",
+    "artifacts/task-validation/issue-review-communication/candidate-seal.json": "8407c6efd99a25846b2ae1654b9abf3538b25e88b90e444460134cbd1f24c1bb",
+    "artifacts/task-validation/issue-review-communication/guard19-unchanged.json": "9dd8769231447ac1f495720aaf811183d377e79346fcf404a38b5de94a1b15af",
+    "artifacts/task-validation/issue-review-communication/contract-hashes.json": "458620e9d8c0f6e6ae0fd7779eca1d979a12aa3720e7ee1e7ba0a09940cc151f",
+    "artifacts/task-validation/issue-review-communication/implementation-cycle-2-final-communication-guard.md": "859b4ef5e04e517dddfa75441eab5aa424f1aaf484056559aca021a3cab2673f",
+    "artifacts/task-validation/issue-review-communication/task-contract.md": "80d72fe00d383ce3c7c22b619ab0b87e998a456504870e2c746710cd750876f2",
+    "artifacts/task-validation/issue-review-communication/implementation-cycle-2/scope-audit.json": "e8e6360bc825478f33a2032645522f5cd554e1b3fccaedac93d78f79acd49570",
+    "artifacts/task-validation/issue-review-communication/implementation-cycle-2/implementation-handoff.md": "2643da72bd621704152a922f1e9ac195248b33a8be1c1eee359d43acadec920e",
+    "artifacts/task-validation/issue-review-communication/implementation-cycle-2/source-hashes.json": "a0f05a1d59c0d2dec0b0c0ed89dbcd25c252275130c53915801fc6d1b0c43682",
+    "artifacts/task-validation/issue-review-communication/implementation-cycle-2/privacy-audit.json": "0cb84d33e35b8bd7486169137d62743c71f0b46f373b1b0de6f238b223239d69",
+    "artifacts/task-validation/issue-review-communication/implementation-cycle-2/candidate-seal.json": "8f56db3393dcf7557ebe5144f3062e5568fcbba57926d108f7e82aea225d87ef",
+    "artifacts/task-validation/issue-review-communication/implementation-cycle-2/contract-hashes.json": "9871d1939be7d3dc2cc07837391fc6dc851bb1708b7548d56a9b70c4e0298c64",
+    "artifacts/task-validation/issue-review-communication/implementation-cycle-2/preservation-check.json": "015e26133aa941695726ca4e53854890804c8efd30c93a5c27679034f8e0a572",
+    "artifacts/task-validation/issue-review-communication/author-tests/static-checks.json": "834d9ac5be342470528c64efc9dcc55ba0e45db18e5557e23675b2172b25707d",
+    "artifacts/task-validation/issue-review-communication/author-tests/focused.log": "bd4311ddc882c5d588cca0f9c342a4865f1d70c44ce94a348a132b0ec2a4f0ec",
+    "artifacts/task-validation/issue-review-communication/author-tests/pre-final-regression.log": "e595508c01d898128d338ba4fc52499f2426a71be45c8a45c25123f4c56f8d85",
+    "artifacts/task-validation/issue-review-communication/author-tests/pre-guard-refinement-regression.log": "b89bafd371e734c1f9c83c09132312f6ea76fbf369ad10f334abfe59adad7ddb",
+    "artifacts/task-validation/issue-review-communication/author-tests/contract-validation.log": "d917229a790c5713c4795dfedf8418a01d9e220c88cd9825388503cc20845cc3",
+    "artifacts/task-validation/issue-review-communication/author-tests/full-regression.log": "e20e2751c2836bc151837396afaa32c5a7e9aab5cd9776ac33e6b88695e6df0e",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/types.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/validation-report.md": "aa2ae81d49b05f9303061caef75f36a0484773aa31d6b62c783d2bdddfd0d929",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/qa-fixture.mjs": "a4362ea6205d11ce8b914fd5a32459c985573186944eaf8dadd1fda486a59173",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-results.json": "8cd63f3bfb6244191ad41a370c0b2905d295673cc6b456888db59abab685dff6",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/build-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/source-preservation-check.json": "e39d748f0627d9f633d55626a6ce3e9ac86da7950d3e15912445b0890c5e7191",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/phase0-contract.md": "3c969a790c642151ab66770a29d08c550c907d3964efa77aa23b8862ce2e8c29",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/finding-source-race.png": "e4c067b8db4dc557604f7c1d187ebf5d759a5a6835def66be6f5c1c73221d4ac",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/diff-security-review.md": "fd89491c60c7efddf1bfeaa8a61b1c9473e97785a8220d69f086ddb3dcb93d83",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/privacy-audit.json": "e3a399d153d264b513c4457c0c5b8f1abb7ece5b9222c3ba298bfa6f559df525",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/static-checks.json": "ca59551420ca63b76425d2012cd67db3f8327dac6fa52f2707273bcb236b6d67",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/qa-artifact-manifest.json": "d333ba820f4da91c6005ed009323a0e879ad7e64561865ee4e814d51f18d0026",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/build.log": "e02faed58138e2a4017b2fb3ca0d58951baa4b782cc4fec40dfc0bd81cbe1c0c",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/full-regression-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-qa.mjs": "ac7f4f7b579d017fa8c49a99c31b12047739434c5aa017c9efee158fe1715740",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/independent-probes.json": "a60bfe7126d7e4d623145196071798f0ac8b1e36e3a2fe5e13243a2282115b3a",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/independent-probes.mjs": "bd6c06bd1bfe5d29dafd5b1762e6566431f3e39ad2afdbf234771c1b679408a3",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/video-verification.json": "d2a262ba08c251904b654fc52db21931637cd8cb1d128aefe08fb900a079b539",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/qa-receipt.json": "50180c0c3c8ecfd064ce0ff9752b8ce443913939f5d9d820ed2801dd34c57788",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/new-sha-ready.png": "19d3a86ec8316227f3e7c11163f39c2ce4be9b2e5657c814acc4fdcdded30599",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/before-proof.json": "2bd462710eb0b9da75ab9f5c47b2978514262ae694c2b63622af34e914890dd6",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/review-bridge.webm": "fb492f5782b69de8915fff113b77539eb6d5c5c9d2013bee1a8250745c4b9fce",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/trace.zip": "44f3946dc00c98e68c08e928046debd05c4f73d3069a5efa381db845766d3ff5",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/types-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/finding-role-race.png": "80db8b451a9543132a869ecea7db085b8250d35050cefa0db16275be03f01dad",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/full-regression.log": "e66004a74cde8ecf74e402b66058b8f36acf1c5c5067794ac45fed758877fd12",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/blocked-review-preserved.png": "a5512650c77d57597e36dac04c37db3dc1f399335a7bf147867614fb83121a67",
+    "artifacts/task-validation/issue-review-communication/implementation-cycle-2/test-results/static-checks.json": "834d9ac5be342470528c64efc9dcc55ba0e45db18e5557e23675b2172b25707d",
+    "artifacts/task-validation/issue-review-communication/implementation-cycle-2/test-results/focused.log": "2f720e0036689535e23762a6732d3d387dc22ce9f8b42b0a91b399c0d67b92f3",
+    "artifacts/task-validation/issue-review-communication/implementation-cycle-2/test-results/corrected-replay.log": "4b840868f7dfe2b3f27a8c4fe67038abdf35e473655741f5744a00d5c98bde86",
+    "artifacts/task-validation/issue-review-communication/implementation-cycle-2/test-results/corrected-replay.json": "514e472244e6e6b309e0193b01b9015f6f1347ae7179c2ccaf74a175c0903905",
+    "artifacts/task-validation/issue-review-communication/implementation-cycle-2/test-results/corrected-replay.mjs": "9fd7ca2b011889b217c30d478cfe9c4af08ba0494d7da28c4d6e66fac6f152dd",
+    "artifacts/task-validation/issue-review-communication/implementation-cycle-2/test-results/full-regression.log": "acd1d144aab670d8bbd869d105d27d1fcbe19590ddd26e459dfddfb983a8025c",
+    "artifacts/task-validation/issue-review-communication/author-tests/deny-provider-bin/codex": "da2e44439f004eb4220b6ce16230db7dd14a5b9035afa481da962b5c8b1d1f71",
+    "artifacts/task-validation/issue-review-communication/author-tests/deny-provider-bin/gh": "da2e44439f004eb4220b6ce16230db7dd14a5b9035afa481da962b5c8b1d1f71",
+    "artifacts/task-validation/issue-review-communication/author-tests/deny-provider-bin/claude": "da2e44439f004eb4220b6ce16230db7dd14a5b9035afa481da962b5c8b1d1f71",
+    "artifacts/task-validation/issue-review-communication/history/attempt-1-source/.github/workflows/codex-issue-review-sync.yml": "f482c40f8f64991a6df91a0b1154a4bb1c51903fc948f4202f18749c8105cb34",
+    "artifacts/task-validation/issue-review-communication/history/attempt-1-source/agent-team/src/bug-pipeline/claude-review-cron.mjs": "5d54688f8187d3fbffa2a1106b52343b3a223b53366119d4b2f7f8c8d49e9d03",
+    "artifacts/task-validation/issue-review-communication/history/attempt-1-source/agent-team/src/bug-pipeline/external-review.mjs": "a699190f148e036e6430e01451482ab3131deb36e8c1f7d2ade7be552893fe56",
+    "artifacts/task-validation/issue-review-communication/history/attempt-1-source/agent-team/src/bug-pipeline/issue-review-sync.mjs": "469dd18b7083d6e0b52b94a7d1291b18dfa87d8f4ff10a861fc49e71db2e8993",
+    "artifacts/task-validation/issue-review-communication/history/attempt-1-source/agent-team/src/bug-pipeline/issue-review-communication.mjs": "fc712d9f78508e7afbe44d670e270cc9895c20089fd3fd7bdea194a70204060d",
+    "artifacts/task-validation/issue-review-communication/history/attempt-1-source/agent-team/tests/bug-pipeline/external-review.test.mjs": "c9ee849dc705b79366453212de5072d9c45dc0d3d780104e3e3fc1340b935101",
+    "artifacts/task-validation/issue-review-communication/history/attempt-1-source/agent-team/tests/bug-pipeline/issue-review-communication.test.mjs": "3643b63d3700302b96c5ee71977e08350b30cbeda58f17e60900498b3ccee550",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/deny-provider-bin/codex": "d936abe7cfc058b865a5045e39210fa2207d0edaad6c1024d26c78f3b59ba72a",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/deny-provider-bin/gh": "d936abe7cfc058b865a5045e39210fa2207d0edaad6c1024d26c78f3b59ba72a",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/deny-provider-bin/claude": "d936abe7cfc058b865a5045e39210fa2207d0edaad6c1024d26c78f3b59ba72a",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-history-preflight/failure-notes.json": "a7e81c2e70f3debc2f3314bb5a46a0acfd736e01bfb74c2cc9e9abb9f907ea07",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-history-preflight/new-sha-ready.png": "19d3a86ec8316227f3e7c11163f39c2ce4be9b2e5657c814acc4fdcdded30599",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-history-preflight/blocked-review-preserved.png": "a5512650c77d57597e36dac04c37db3dc1f399335a7bf147867614fb83121a67",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/video/page@8cf104fc645f6a3d6966dad4f3051752.webm": "fb492f5782b69de8915fff113b77539eb6d5c5c9d2013bee1a8250745c4b9fce",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-history-close-order/browser-results.json": "8cd63f3bfb6244191ad41a370c0b2905d295673cc6b456888db59abab685dff6",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-history-close-order/finding-source-race.png": "e4c067b8db4dc557604f7c1d187ebf5d759a5a6835def66be6f5c1c73221d4ac",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-history-close-order/run-status.json": "609355e0c7ce891c80881daebaaef04fba762279c092f45e7df582affe79b8a2",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-history-close-order/new-sha-ready.png": "19d3a86ec8316227f3e7c11163f39c2ce4be9b2e5657c814acc4fdcdded30599",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-history-close-order/review-bridge.webm": "45ca2770916d1aafd046cea1161e4775117ae3cf98c8a04204334170a07cc3e1",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-history-close-order/trace.zip": "07a8a6e209128fe7a44adc46a02be7447fbfd74da8b457f9f17067f7c6a111b3",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-history-close-order/finding-role-race.png": "80db8b451a9543132a869ecea7db085b8250d35050cefa0db16275be03f01dad",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-history-close-order/blocked-review-preserved.png": "a5512650c77d57597e36dac04c37db3dc1f399335a7bf147867614fb83121a67",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-history-preflight/video/page@ed93032ac9790c87301bae7ce38cae21.webm": "de843aa0e35a958e1c627ee8ee8ddfaf725ec8bec89d5bc1fcc6cc5edeaa5f29",
+    "artifacts/task-validation/issue-review-communication/independent-qa-attempt-1/browser-history-close-order/video/page@f86001b0f008a5168663a2256207f33a.webm": "45ca2770916d1aafd046cea1161e4775117ae3cf98c8a04204334170a07cc3e1"
+  }
+}

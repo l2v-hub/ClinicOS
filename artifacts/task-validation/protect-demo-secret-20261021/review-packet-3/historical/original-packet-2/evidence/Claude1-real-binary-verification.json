@@ -1,0 +1,9 @@
+{
+  "archive": "/workspace/.clinicos-cloud/499-Claude1-followup-20261021/root-gh-binary-check/gh_2.103.0_linux_amd64.tar.gz",
+  "bytes": 15030338,
+  "archiveSha256": "fdd768eb70f6409f80fcfa9f3a1c0adf0fc98d827ab3ce0bed2ac22762c5d786",
+  "binary": "/workspace/.clinicos-cloud/499-Claude1-followup-20261021/root-gh-binary-check/gh_2.103.0_linux_amd64/bin/gh",
+  "binarySha256": "011adf6809c50c89a70f2e367f2658a2fd7c2fcf7dfc705bfe8049e6e4c731b2",
+  "binaryMatchesVerifiedArchiveMember": true,
+  "source": "new root public download at2026-10-21T22:18:16.711Z; not an author execution claim"
+}

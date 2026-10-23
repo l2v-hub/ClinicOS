@@ -1,0 +1,10 @@
+{
+  "rootAcknowledgedFiveFileProjectDesign": true,
+  "rootAcknowledgedFunctionalAccountDesign": true,
+  "accountSchemaSources": [
+    "old/scripts/maintenance/demo-storage-inspect.mjs QUERIES.environment/snapshots",
+    "main/scripts/automation/inspect-demo-bearer-readiness.mjs QUERIES.IDENTITY/ACCESS"
+  ],
+  "noAutomaticFallback": true,
+  "readOnlyLiveAuthorCalls": 0
+}

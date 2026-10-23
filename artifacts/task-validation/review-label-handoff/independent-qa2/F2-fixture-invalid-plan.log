@@ -1,0 +1,22 @@
+Preparing worktree (new branch 'codex/bug-batch-17')
+{"probe":"actual-workspace-post-approval-qa","qa":"changes-requested","dirty":"","error":"Cannot read properties of undefined (reading 'join')"}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: A Codex finding must be correctable through the actual workspace, not deadlock on its own QA report
++ actual - expected
+
++ "Cannot read properties of undefined (reading 'join')"
+- undefined
+
+    at file:///workspace/clinicos-review-handoff/artifacts/task-validation/review-label-handoff/independent-qa2/F2-actual-current-green.mjs:29:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: "Cannot read properties of undefined (reading 'join')",
+  expected: undefined,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

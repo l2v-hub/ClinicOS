@@ -1,0 +1,12 @@
+{
+  "outcome": "PASS",
+  "checks": [
+    "valid YAML 1.2",
+    "dispatch only and reviewed SHA sole input",
+    "read contents only",
+    "legacy deployment mutex",
+    "tests before sole existing-token step",
+    "all actions SHA pinned",
+    "checkout credentials disabled"
+  ]
+}

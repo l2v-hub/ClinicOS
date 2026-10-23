@@ -1,0 +1,34 @@
+{
+  "attempt-history.md": {
+    "bytes": 2443,
+    "sha256": "ff929d34466119bfddd9ab495270600013d126fbdc237104a242922ec8fde7cd"
+  },
+  "validation-report.md": {
+    "bytes": 1199,
+    "sha256": "538bd7fdb834b036fc828838d64e9ec92171ebc1f22e591249b2c1f4c8df09a5"
+  },
+  "browser-summary.json": {
+    "bytes": 2669,
+    "sha256": "40c9d60425325810091203045f517419af0d1a0955bb0b43557f093b4e904e77"
+  },
+  "original-validation-report.md": {
+    "bytes": 8298,
+    "sha256": "3e5fed60c166d2610b40936562790f79e02725edbe77f7516a64d408f5f6706e"
+  },
+  "root-publication-summary.json": {
+    "bytes": 1084,
+    "sha256": "8e072f22704f7f5c8144941589c33d6a4bc3d76d2a815c0c5cac358f1b3380af"
+  },
+  "qa-stop.json": {
+    "bytes": 1883,
+    "sha256": "472c2b6aa86c201f6d80a6f620d762a196da5794ced419c98bf0f8a09fc04ef2"
+  },
+  "source-security-review.md": {
+    "bytes": 3807,
+    "sha256": "5997772a5a87c129c8457e4d54464267c86d3e28aca3f7bf956dc5e0efcb463b"
+  },
+  "controller-final.png": {
+    "bytes": 136814,
+    "sha256": "3af1ca84897741c3175de7a28cf74340a38b64f0a08df338f9e36f1f49fda8a9"
+  }
+}

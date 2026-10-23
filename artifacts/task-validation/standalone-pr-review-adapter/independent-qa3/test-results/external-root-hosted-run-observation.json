@@ -1,0 +1,78 @@
+{
+  "provenance": "Root supplied real read-only artifacts. QA3 inspected sanitized scalars only; actual hosted failure cause remains unproven.",
+  "files": [
+    {
+      "path": "/workspace/.clinicos-cloud/codex-controller-39052835436-failed.log",
+      "sha256": "88a94c745eb803dce07179131c54d50fae3d242a51e36343321541204353edfb",
+      "bytes": 2700
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/controller-failure-control-state.b64",
+      "sha256": "f7d7672d286aa75f1b7576ce660d1a189c57cb10084b5e5b63701f729cb1fcdb",
+      "bytes": 381219
+    }
+  ],
+  "diagnosticLines": [
+    "process\tRun serialized issue and review controller\t2026-10-17T17:19:06.1584700Z ##[error]Process completed with exit code 1."
+  ],
+  "batches": [
+    {
+      "id": "bug-batch-450",
+      "pr": 481,
+      "phase": "implementing",
+      "implementationRounds": [
+        {
+          "round": 1,
+          "status": "failed"
+        },
+        {
+          "round": 2,
+          "status": "passed"
+        },
+        {
+          "round": 3,
+          "status": "running"
+        }
+      ],
+      "reviews": [
+        {
+          "round": 1,
+          "status": "failed"
+        },
+        {
+          "round": 2,
+          "status": "changes-requested"
+        }
+      ]
+    },
+    {
+      "id": "bug-batch-432",
+      "pr": 483,
+      "phase": "waiting-review",
+      "implementationRounds": [
+        {
+          "round": 1,
+          "status": "failed"
+        },
+        {
+          "round": 2,
+          "status": "failed"
+        },
+        {
+          "round": 3,
+          "status": "passed"
+        }
+      ],
+      "reviews": [
+        {
+          "round": 1,
+          "status": "failed"
+        },
+        {
+          "round": 2,
+          "status": "changes-requested"
+        }
+      ]
+    }
+  ]
+}

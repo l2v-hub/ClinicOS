@@ -1,0 +1,21 @@
+{
+  "overflow": {
+    "html": 390,
+    "body": 390,
+    "viewport": 390
+  },
+  "elements": [
+    {
+      "tag": "BUTTON",
+      "className": "btn-success",
+      "x": 288.03125,
+      "y": 3368.59375,
+      "right": 410.015625,
+      "width": 121.984375,
+      "scrollWidth": 118,
+      "clientWidth": 118,
+      "overflowX": "visible",
+      "text": "Crea paziente"
+    }
+  ]
+}

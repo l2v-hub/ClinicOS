@@ -1,0 +1,36 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "result": "setup failed before test file",
+      "failure": "Prisma P1001: private database was on an internal-only Docker bridge and host loopback could not connect",
+      "primaryReceipt": "attempts/runtime-001/014-migrate-deploy-owned-database.json",
+      "cleanup": "attempts/runtime-001/015-remove-owned-postgres.json through 020-owned-network-absent.json"
+    },
+    {
+      "attempt": 2,
+      "result": "setup failed before migrations or test file",
+      "failure": "external probe could not resolve package pg (ERR_MODULE_NOT_FOUND)",
+      "primaryReceipt": "attempts/runtime-002/015-database-loopback-connectivity.json",
+      "cleanup": "attempts/runtime-002/016-remove-owned-postgres.json through 021-owned-network-absent.json"
+    },
+    {
+      "attempt": 3,
+      "result": "passed",
+      "database": "clinicos_pr498_qa9 on 127.0.0.1:55432",
+      "migrations": "58 applied",
+      "testFile": "backend/src/proactive/__tests__/proactive-e2e.test.ts",
+      "testCount": 23,
+      "pass": 23,
+      "fail": 0,
+      "exitCode": 0,
+      "primaryReceipt": "attempts/runtime-003/017-single-existing-proactive-http-pg-file.json",
+      "primaryReceiptSha256": "f68771bd26ecb3e685de0c7dbe5f5728d034702e4cfe9ca3db2830019e2f0b48",
+      "auditWatcherReceipt": "attempts/runtime-003/audit-watch.jsonl",
+      "auditWatcherSha256": "9d3e8e4240faae237c8f01fd1c5f2c844f72c8f247e3d3cfb762787f784509b8",
+      "auditWatcherInterpretation": "initialCount 0; one current denied row observed; supplemental only, exact request correlation and persistence assertion passed inside test U"
+    }
+  ],
+  "aggregateLifecyclePathLimitation": "qa9-lifecycle.mjs wrote aggregate output to attempts/runtime-001/lifecycle-result.json for all runs. Per-command receipts are the authoritative attempt evidence; no output has been reconstructed.",
+  "onlyTestFileExecutions": 1
+}

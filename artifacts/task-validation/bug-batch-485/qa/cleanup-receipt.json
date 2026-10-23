@@ -1,0 +1,16 @@
+{
+  "owner": "clinicos-qa-issue485-cycle4-qa-20261018",
+  "ownedContainerAbsent": true,
+  "ownedPortsClosed": {
+    "55485": true,
+    "3485": true,
+    "5485": true,
+    "5486": true,
+    "8785": true
+  },
+  "wholeLifecycleLockAvailable": true,
+  "ownedRuntimeTempRemoved": true,
+  "existing5432Container": "9000f70d4ee9 clinicos-postgres",
+  "noGenericKill": true,
+  "no5432OrUserViteStop": true
+}

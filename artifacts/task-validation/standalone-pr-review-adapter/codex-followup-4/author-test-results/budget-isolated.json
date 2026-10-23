@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "stdout": "✔ default four supports separately audited continuations3 and4 after compatibility2 without granting attempt5 (6.115483ms)\n✔ within-default audit marker cannot forge owner, replay a nonce, fake an extension or authorize round5 (3.615874ms)\nℹ tests 2\nℹ suites 0\nℹ pass 2\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 91.917567\n",
+  "stderr": "",
+  "node": "v24.19.0",
+  "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+  "args": [
+    "--test",
+    "/workspace/.clinicos-cloud/492-continuation8-author-20261018/budget-isolated.test.mjs"
+  ],
+  "envMode": "verification",
+  "trustedRunner": "/workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs"
+}

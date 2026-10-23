@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "status": "INDEPENDENT_TARGETED_QA_PASS",
+  "at": "2026-10-21T20:58:24.750324+00:00",
+  "artifacts": {
+    "STOP.md": {
+      "sha256": "32ec7a15ec522ca473dca518e2c854b10b4f1d35102c72ada1ee0677e009d334",
+      "bytes": 712
+    },
+    "actual-workflow-preflight-receipt.json": {
+      "sha256": "067e20db1f79e2cbf0452aca63c3a739e6b296deece5dcf3fdd6f1a8676023a2",
+      "bytes": 1702
+    },
+    "adversarial-safe-final.json": {
+      "sha256": "961c1efb8ebaa2980d52b4762432fab02cf7eafaa96c98718ee9a793417c9dae",
+      "bytes": 2242
+    },
+    "adversarial-safe-first-attempt.test.mjs": {
+      "sha256": "30320a69c59e90dd43228c50fbc2f53f753f5c8f15d9c72d959cfbf3735f8a56",
+      "bytes": 10699
+    },
+    "adversarial-safe.json": {
+      "sha256": "700b0a2e10eaad141b24eeee831101c05ad7f6c18834efb6310a5dd27f0c1019",
+      "bytes": 3126
+    },
+    "adversarial-safe.test.mjs": {
+      "sha256": "6e7471bfa0fec4a9f45278b635b24fe7323596cfb13c153eac216e646957d6bf",
+      "bytes": 10703
+    },
+    "after.json": {
+      "sha256": "2885b3bf96a5cfd0a92f1c8d8d22167dc8c7bec8b0868edad78888a7fd01694a",
+      "bytes": 83886
+    },
+    "before.json": {
+      "sha256": "0459d7d40bd5c90c789bcba3b6fcabc49d97ab3bd08e225cd3373b5837e0cf55",
+      "bytes": 83886
+    },
+    "freeze-comparison.json": {
+      "sha256": "d24357b077da1ef6e7cc2b88b7e738d246a699f0a5f71eb9b436b73d54b80b13",
+      "bytes": 122
+    },
+    "freeze.py": {
+      "sha256": "f4bcb48b91d9623cddb86bc7fee939b64c71c874a06fb7ace74a0d5e2509af76",
+      "bytes": 2708
+    },
+    "report.md": {
+      "sha256": "13946a082534e60789e1fe3b164ba4518677e751f952ae7995f2be718f6a8e2f",
+      "bytes": 10100
+    },
+    "reservation.json": {
+      "sha256": "a0236b9b664829788c760416bdb932f9b6d6b73f75b7ee7a80465cf06133e460",
+      "bytes": 1341
+    },
+    "reviewed-followup.diff": {
+      "sha256": "d0bb03649c687e98fc0f4050e7579257b237ab881efa5bb15a26584c74a75b6d",
+      "bytes": 9774
+    },
+    "source-pure.json": {
+      "sha256": "35c9c634aaaa58d6eb140935cbbd759c5fdfdcc35c718396a51079d62508ccc4",
+      "bytes": 3145
+    },
+    "summary.json": {
+      "sha256": "821c0012341d94085eba2ec343ec38d13951c49d8b6f0dbfab11411c9f87afdd",
+      "bytes": 2052
+    },
+    "verify.mjs": {
+      "sha256": "f97187185b7b475653d3ee9b4b6bdd0d89ca62e7594bed46b43eebbbed038f19",
+      "bytes": 894
+    },
+    "workflow-preflight-import.json": {
+      "sha256": "66526f6016c8098196e08eed0a31d7d60239901d4d5e9671b3971cac0b4db561",
+      "bytes": 425
+    }
+  },
+  "sourceManifestSha256": "32f80166373409e92a1f2bf9e9b42bb660e4757eb1541cd460c339e7a765e17f",
+  "authorSealSha256": "3b2a224da52f91d1c7ff2dced928894a86f93168fb4843883bdbc8f8c858469c",
+  "contractSha256": "92a4fcf57c7f3b76c4abb9e86d271cdc949bb543bf968fbfb56e42bd47c0a2ae",
+  "originalFailedQaSealSha256": "01d7fe044a7e2e068d76cb0d3a369f99512bf083e390d128a021f6f9f5489db5"
+}

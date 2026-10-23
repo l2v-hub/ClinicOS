@@ -1,0 +1,20 @@
+{
+  "baseSha": "3fc38d3dc867b73baa26ef5dfd14f3f9e11c36aa",
+  "status": "IMPLEMENTED-NOT-INDEPENDENTLYVERIFIED",
+  "files": [
+    {
+      "path": "agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "sha256": "ead396b2950bee858136b0a478a66e9ae6a83195b3e0ee187e5c8fb765400742",
+      "bytes": 33446,
+      "sourceLinkCount": 1,
+      "frozenCopyLinkCount": 1
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/demo-deployment.test.mjs",
+      "sha256": "2d7d3c02db2a0daf795557d8c47d0893542da10333c67e45e8a034955d03e093",
+      "bytes": 83550,
+      "sourceLinkCount": 1,
+      "frozenCopyLinkCount": 1
+    }
+  ]
+}

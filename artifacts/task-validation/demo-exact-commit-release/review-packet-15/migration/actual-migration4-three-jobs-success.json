@@ -1,0 +1,26 @@
+{
+  "runId": 39729875897,
+  "sourceMainSha": "b062de3324661cf07fdd929b9bac48a27626f1e5",
+  "completedAt": "2026-10-22T05:47:31Z",
+  "jobs": [
+    {
+      "name": "preflight",
+      "id": 119662217494,
+      "completedAt": "2026-10-22T05:46:18Z"
+    },
+    {
+      "name": "ensure_environment_copy",
+      "id": 119662370420,
+      "completedAt": "2026-10-22T05:46:56Z"
+    },
+    {
+      "name": "remove_repository_copy",
+      "id": 119662556585,
+      "completedAt": "2026-10-22T05:47:31Z"
+    }
+  ],
+  "protectedEnvironmentCopyEnsured": true,
+  "repositoryCopyDeletedAfterFreshEnvironmentReadback": true,
+  "secretValuesReadOrPrintedByRoot": false,
+  "actualOutsideEnvironmentNegativeProof": false
+}

@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "files": 270,
+  "bytesUnchanged": true,
+  "newPathsVsBase": [
+    ".github/workflows/inspect-demo-storage.yml",
+    "scripts/maintenance/demo-storage-binding-readonly.mjs",
+    "scripts/maintenance/demo-storage-inspect.mjs",
+    "scripts/maintenance/demo-storage-inspect.test.mjs",
+    "scripts/maintenance/demo-storage-workflow.test.mjs"
+  ],
+  "modifiedBaselinePaths": [],
+  "deletedBaselinePaths": [],
+  "authorSealsUnchanged": [
+    {
+      "directory": "/tmp/clinicos470-protected-inventory8-20261022/author",
+      "sealSha256": "efc61fa8a19dfc63a60c54bf77cd9ef65f868a69b7252a9eea3366ab9c15c8d9",
+      "sealedFiles": 15,
+      "sourcePaths": 270,
+      "status": "PASS"
+    },
+    {
+      "directory": "/tmp/clinicos470-protected-inventory8-20261022/author/refinement1",
+      "sealSha256": "276b7632b5168c9f84fd7c33066b501e443cd0f39dfd4882739156b30101fe60",
+      "sealedFiles": 11,
+      "sourcePaths": 270,
+      "status": "PASS"
+    }
+  ],
+  "sourceBeforeSha256": "58550c70c079cae2f74ea72b24e5c5d3093d49fd463264fb0bb0eaafed8cd0cf",
+  "sourceAfterSha256": "58550c70c079cae2f74ea72b24e5c5d3093d49fd463264fb0bb0eaafed8cd0cf"
+}

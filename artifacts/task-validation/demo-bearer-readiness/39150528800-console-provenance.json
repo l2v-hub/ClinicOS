@@ -1,0 +1,39 @@
+{
+  "status": "validated-original-run-console-receipt",
+  "repository": "l2v-hub/ClinicOS",
+  "sourceSha": "729e6144b9d5a924874843ba264819d4bd1a6dca",
+  "runId": 39150528800,
+  "runAttempt": 1,
+  "nativeRunStatus": "success",
+  "retrievedAt": "2026-10-18T19:36:02.616025+00:00",
+  "origin": "single JSON emitted by reviewed inspector original run; authenticated GitHub run log, not artifact archive",
+  "privateLogBytes": 96297,
+  "privateLogSha256": "9682f0c2e12cc1155f994649c55c770ae614631fc039e2599f1c7d03a8723b2e",
+  "consoleReceiptBytes": 2823,
+  "consoleReceiptSha256": "ec08c0e0cfa8e2a71ceb6ab3c2e184de21b51f796ce525b771173917b2d5ad02",
+  "inventorySha256": "4cc9c7a9b7c4dd94742a6d33d7f5df2592c40c2327d058901040e43b9ff47f19",
+  "scopedInventorySha256": "bb0843673ebc593892cc8bdabddca75746f06676e0c141f3bb4ea0ee70d05a5f",
+  "capturedAt": "2026-10-18T17:39:03.518Z",
+  "environmentCount": 1,
+  "visibleServices": 5,
+  "environmentSummary": [
+    {
+      "name": "demo",
+      "id": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+      "canAccess": true,
+      "instances": 4,
+      "triggers": 0
+    }
+  ],
+  "fixedDemoTriggerCount": 0,
+  "fixedDemoMainTriggerCount": 0,
+  "fixedRepository": "l2v-hub/ClinicOS",
+  "rootDirectory": "",
+  "paginationComplete": true,
+  "credentialScope": "project-environment",
+  "projectWideVisibility": "unproven",
+  "serviceConnectAllowed": false,
+  "readRequests": 10,
+  "artifactArchiveDigestNotVerified": true,
+  "deployVerified": false
+}

@@ -1,0 +1,806 @@
+{
+  "previousPacket": {
+    "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1",
+    "files": {
+      "analysis.md": "e5ca93aef85884c56278b4dbd4831263f91d666a444a7bfe1ccdc59c6fee2798",
+      "evidence/followup-author-receipt.json": "64b13de2c7706e3828ac62e07fd5ea608c1d40e4f623b1add58596b8a44c874a",
+      "evidence/followup-author-seal.json": "3b2a224da52f91d1c7ff2dced928894a86f93168fb4843883bdbc8f8c858469c",
+      "evidence/followup-independent-report.md": "13946a082534e60789e1fe3b164ba4518677e751f952ae7995f2be718f6a8e2f",
+      "evidence/followup-qa-receipts.json": "45d8971e9c50f0e9dc139d3c92b4742d32d3b93d5ba7512cd9dd66d782f6a634",
+      "evidence/followup-qa-seal.json": "7f208e03e22409910e585368a51f0a544a238bc3e7fedb6d8846df565128e702",
+      "evidence/issue-evidence.md": "d91e04b18866df125a5c533813397aeb87d6e2f40a4d353ea4079135bc06f9f4",
+      "evidence/native-ci-receipts.json": "c1ffd4112fcbfb7bbc9e23805ed7347f22a20fa51b6e0eb1bfd9a1f516561ac9",
+      "evidence/native-ci-report.md": "f858e7b2d85fe9239d1c2971e6bfd9ed66cb5e0d0b6c44ba2fd952c5f79d52a6",
+      "evidence/native-ci-seal.json": "3db85708f8d2dfe2ba657a305862b9d10fee15cfeadef215b80b43676a15b984",
+      "evidence/original-author-receipt.json": "a754f2771ba865e0e77f583890dc871a31d8a13ccef03ee721e4aa9c76675191",
+      "evidence/original-author-seal.json": "6a669cb47b2d84703cc7cf245f26a9178d75833ee90f41f571349a92cff4ab8a",
+      "evidence/original-failure-receipts.json": "c96257c20b646e6a83df73226ec8407452913dbfcc8556a2f3c4aebc50d3cb4b",
+      "evidence/original-independent-qa-seal.json": "01d7fe044a7e2e068d76cb0d3a369f99512bf083e390d128a021f6f9f5489db5",
+      "evidence/original-independent-report.md": "ec285e3fc40a24147da374a7cf1b87a3ddc7f17c484ddb0fc5899f75b2d56482",
+      "implementation-plan.md": "be3a450450d005ac5d7809bd7db422122366afe008a4b77807d8c6ebb7b6a29f",
+      "imported-history.json": "9c38311ff7206dc057b3a061db2e7f53186dbb145302d0773253ed87a305eb79",
+      "original-source/.github/workflows/protect-demo-secret.yml": "46705882615908b94a558b3a96120d53208dc4ac64d65a462621c7bd22c76f5e",
+      "original-source/scripts/automation/protect-demo-secret.mjs": "630f42c3631600564b42f7e998decc2118310da6ec278567ac9737069f89977a",
+      "original-source/scripts/automation/protect-demo-secret.test.mjs": "2e285596b6d5626216b0217e93d297f4db1577884c6bcf18160969fdf111003e",
+      "task-contract.md": "7f53042b5eca87d6ebc07360c83679a6fdc19d1cfae5e624f15a8b885f45ed47",
+      "validation-report.md": "9f3d291a3044c76d9a21f7423265dc2385a0e271f9eb163d10a0589329de24de"
+    }
+  },
+  "legacyImplementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "subjectSha": null,
+      "uncommitted": true,
+      "sourceManifestSha256": "eb2ec6123893c07066dfd2c5f87a8551928fba491833fe191094e0c510590be5",
+      "evidence": "evidence/original-independent-report.md",
+      "reservationNonce": "f60d52a7-bebe-4139-9534-677b14d5443c",
+      "reason": "Original author30PASS; actual independent findings F1/F2/F3 preserved."
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "subjectSha": "24dca690a3982f4d8d3caccd969849bb72d278ec",
+      "evidence": "evidence/followup-independent-report.md",
+      "reservationNonce": "3084b83a-77f1-4d94-a2b9-cdbc69df1d05",
+      "nativeWiringEvidence": "evidence/native-ci-report.md",
+      "summary": "Actual author34pure, independent34pure+17safe probes+workflowNode-e, finalcombined803PASS0FAIL3existingWindows skips. No live credential operation."
+    }
+  ],
+  "operatorContinuations": [
+    {
+      "round": 3,
+      "status": "passed",
+      "startedAt": "2026-10-21T22:06:16.742Z",
+      "nonce": "4bb52efa-1d5c-4bb8-9e33-f57e6214aa88",
+      "owner": "codex-cloud-after-claude",
+      "model": "gpt-6-luna",
+      "baseSha": "561428ddab27578eb8b79b9eeb17c5e8fff44c6c",
+      "privateOutput": "/workspace/.clinicos-cloud/499-Claude1-followup-20261021/author",
+      "contractSha256": "d5e35c8ebd7fa543fcde6bdcdfc7f949aa5725389a451ba3a881c3d68c5c3332",
+      "actualClaudeReportComment": 6327476006,
+      "actualClaudeReportBodySha256": "1ba0f7b1e2ba4a1ebdec9835d831a60554d27a8096847f1ff8ee9f430b121a8f",
+      "sourceEditsAllowed": true,
+      "githubWritesAllowed": false,
+      "providerMutationAllowed": false,
+      "clinicalRuntimeAllowed": false,
+      "authorStopped": true,
+      "authorSealSha256": "f63f8e33b9a14be60b83c4b5ab5e87dc30c0bbef8885175ae630e1b408dede49",
+      "authorTargetedPass": 38,
+      "independentQa": {
+        "nonce": "98b192c7-d114-4f04-844b-cb1fc7ec9d0a",
+        "status": "passed",
+        "reservedAt": "2026-10-21T22:15:05.507Z",
+        "reservedBeforeSession": true,
+        "agent": "/root/author497_backend_review1",
+        "model": "gpt-6.1-sol",
+        "sourceWorktree": "/workspace/clinicos-demo-secret-scope",
+        "privateOutput": "/workspace/.clinicos-cloud/499-Claude1-followup-20261021/independent-qa3",
+        "contractSha256": "ea96cf5ac455593865e4b2a7d853130ffd6e32301d476ffccdd24a45265cc95c",
+        "sourceEditsAllowed": false,
+        "githubWritesAllowed": false,
+        "providerMutationAllowed": false,
+        "clinicalRuntimeAllowed": false,
+        "completedAt": "2026-10-21T22:21:11.312Z",
+        "sealSha256": "43c9626c7452ae583b71f3ffdc7224ac9730e7a08f5e2aaa80ea8ef95881329e",
+        "actualPurePass": 38,
+        "actualAdversarialPass": 9,
+        "actualPinnedBinaryVersionPass": true
+      },
+      "kind": "explicit-operator-compatibility-continuation",
+      "subjectSha": "fcf91e9ed6bab01c7c02a9665f051bb2b7b1209b",
+      "author": "/root/author_protect_demo_secret",
+      "reason": "ActualClaude1finding fixed using pinned verifiedgh; independent38+9and realchecksumboundbinaryversionPASS. Preserveoriginalin-flightthirdreservation andallhistory; no livecredentialoperation.",
+      "authorizationRef": "5ef4558e-2243-4380-8330-453cfa1df672",
+      "preservedEntityDigest": "9344672fca293bf20bb27028ef2599da9a6db65f1cd65c8450d7fa6b14eb534d",
+      "preservedLegacyImplementationDigest": "aec9744d38992c189dea5396bf49f2db640256222fbb245340005cbd3b70affc",
+      "preservedLegacyReviewsDigest": "3144012f763b8ae80cccbe3f79e5db4aebc2641f481c1fea6de4340fab4353fb",
+      "evidence": "evidence/Claude1-independent-report.md",
+      "completedAt": "2026-10-21T22:21:11.312Z",
+      "qaSealSha256": "43c9626c7452ae583b71f3ffdc7224ac9730e7a08f5e2aaa80ea8ef95881329e",
+      "sourcePublished": false
+    }
+  ],
+  "reviews": [
+    {
+      "round": 1,
+      "status": "changes-requested",
+      "subjectSha": "561428ddab27578eb8b79b9eeb17c5e8fff44c6c"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "changes-requested",
+        "subject_sha": "561428ddab27578eb8b79b9eeb17c5e8fff44c6c",
+        "review_sha256": "50c4cb877d23e2ba63b933b5a62f2aa69919b0e0ddbc957c346feba25ecbff86"
+      }
+    ]
+  },
+  "sourceSha": "fcf91e9ed6bab01c7c02a9665f051bb2b7b1209b",
+  "oldFailuresRetained": true,
+  "actualSecretOperation": false,
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/bug-pipeline-tests.yml",
+      "blob": "8286264ab8cb9eea2b19f42473d187306922c0b9",
+      "mode": "100644",
+      "baseBlob": "a9005def7c7a0333c208e1f2dded3c541a744588",
+      "baseMode": "100644"
+    },
+    {
+      "path": ".github/workflows/protect-demo-secret.yml",
+      "blob": "3f691d3ad87e7e663c851c76ae71859cc45a406c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/analysis.md",
+      "blob": "2dba30ddc65de4031a8a3ce29361984a7dc0a19d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/evidence/followup-author-receipt.json",
+      "blob": "7589f6fc2715481f719faf8cbb3ca3a27375d6c7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/evidence/followup-author-seal.json",
+      "blob": "589dcfeecf51cdc778e32f4e7b32e008dce21d63",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/evidence/followup-independent-report.md",
+      "blob": "e7799e9b3aa0ea95ab957f215e1393685c60def4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/evidence/followup-qa-receipts.json",
+      "blob": "6594b17a78854221fe15d5ec50b5588c667570dd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/evidence/followup-qa-seal.json",
+      "blob": "0d58291add07c28a8f489179e39fb07d415d9c8b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/evidence/issue-evidence.md",
+      "blob": "781e55b90efddafb746f106106865f151341fe7b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/evidence/native-ci-receipts.json",
+      "blob": "ce88c9e080e847b4fd235d37cd6d42bf0ff848f8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/evidence/native-ci-report.md",
+      "blob": "ca26dff1b7a4a806dc3ff11861e14eca5d3d0fb3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/evidence/native-ci-seal.json",
+      "blob": "04b1340a16b0c47e7c7193fe0d722f89ec988d12",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/evidence/original-author-receipt.json",
+      "blob": "fe103100f37f2c9b9eb9e5114e9e750c199be259",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/evidence/original-author-seal.json",
+      "blob": "6a61f96b7bbf67c54c4682b3148ffb42e4d67cc7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/evidence/original-failure-receipts.json",
+      "blob": "9595f891dce51fce3e79f75a14a53c396171f429",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/evidence/original-independent-qa-seal.json",
+      "blob": "ffd6cb67f1fbfe070d4453b9b9f5c528e4f72037",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/evidence/original-independent-report.md",
+      "blob": "3ff0df9b9917e42f30897435905c3e01bdbd3967",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/implementation-plan.md",
+      "blob": "d5e5b50c9b1de7221167dd9fd666897b01e6b8d7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/imported-history.json",
+      "blob": "170ec300c6250883dab5c99c5b1b8e94c2b872f7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/original-source/.github/workflows/protect-demo-secret.yml",
+      "blob": "4a0a4209cdd22da6ffcb16b4a5efe577b56c91dc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/original-source/scripts/automation/protect-demo-secret.mjs",
+      "blob": "c5b913a84e5bb4fda129913257c51146705e3699",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/original-source/scripts/automation/protect-demo-secret.test.mjs",
+      "blob": "c1db81263782fdb4ff9fd4da65dadac72e9424fe",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/task-contract.md",
+      "blob": "fe428289a31241e617223b86e04c3035acd50b68",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-1/validation-report.md",
+      "blob": "cd0b587a371bd48024ca8084d4f4d49f48f20948",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/analysis.md",
+      "blob": "ee21edcce169a0fafb3f3eb07a9cfd2a4488825a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-actual-report.json",
+      "blob": "8bb21762ee942951db085b4a773deb3c8c247e38",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-author-report.md",
+      "blob": "3e0a8ba4260d663d10fd7ed37b10a7c98ad4f051",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-author-seal.json",
+      "blob": "7d50b01d5a6b6fccf38e38767b5684ccf3c77db4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-independent-commands.json",
+      "blob": "c93a727de1517432f5fbc03f1b8f3ba287f29428",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-independent-report.md",
+      "blob": "a24f1913a72d6c2a7b00496e9c54e420a61b401b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-independent-seal.json",
+      "blob": "b4fe6ab613f4ea1ac03c88f5c17b3dc7ca2321e0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-independent-summary.json",
+      "blob": "c27792287d86bca8c2dc98feb5227705454be8b7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-real-binary-verification.json",
+      "blob": "b7d9f3dfcff04ffe5abd72e5b622572aa9873212",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-real-gh-version.json",
+      "blob": "f9d653f62e7a65a39ba8ad6afcc1e7162d388c65",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-source-commit.json",
+      "blob": "adf9658966cea4f3ce501b5bd9101cc46bafb2b6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-source-manifest.json",
+      "blob": "142ebb59de1cb354e2f03117abbce79f1bf52e16",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-upstream-DNS-failure.json",
+      "blob": "bc7b09f3c2bc4cb57c0ca71fe14cd402e03a511c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-upstream-release-metadata.json",
+      "blob": "c255bcb1e25e73e3a8ad8b6703e66c212bfd67b4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/Claude1-upstream-source-hashes.json",
+      "blob": "6105a1ff79b467de1b4265dd9ce2c20a94eaeec0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/followup-author-receipt.json",
+      "blob": "7589f6fc2715481f719faf8cbb3ca3a27375d6c7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/followup-author-seal.json",
+      "blob": "589dcfeecf51cdc778e32f4e7b32e008dce21d63",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/followup-independent-report.md",
+      "blob": "e7799e9b3aa0ea95ab957f215e1393685c60def4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/followup-qa-receipts.json",
+      "blob": "6594b17a78854221fe15d5ec50b5588c667570dd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/followup-qa-seal.json",
+      "blob": "0d58291add07c28a8f489179e39fb07d415d9c8b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/issue-evidence.md",
+      "blob": "781e55b90efddafb746f106106865f151341fe7b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/native-ci-receipts.json",
+      "blob": "ce88c9e080e847b4fd235d37cd6d42bf0ff848f8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/native-ci-report.md",
+      "blob": "ca26dff1b7a4a806dc3ff11861e14eca5d3d0fb3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/native-ci-seal.json",
+      "blob": "04b1340a16b0c47e7c7193fe0d722f89ec988d12",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/original-author-receipt.json",
+      "blob": "fe103100f37f2c9b9eb9e5114e9e750c199be259",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/original-author-seal.json",
+      "blob": "6a61f96b7bbf67c54c4682b3148ffb42e4d67cc7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/original-failure-receipts.json",
+      "blob": "9595f891dce51fce3e79f75a14a53c396171f429",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/original-independent-qa-seal.json",
+      "blob": "ffd6cb67f1fbfe070d4453b9b9f5c528e4f72037",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/evidence/original-independent-report.md",
+      "blob": "3ff0df9b9917e42f30897435905c3e01bdbd3967",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/historical/initial-analysis.md",
+      "blob": "2dba30ddc65de4031a8a3ce29361984a7dc0a19d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/historical/initial-implementation-plan.md",
+      "blob": "d5e5b50c9b1de7221167dd9fd666897b01e6b8d7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/historical/initial-imported-history.json",
+      "blob": "170ec300c6250883dab5c99c5b1b8e94c2b872f7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/historical/initial-task-contract.md",
+      "blob": "fe428289a31241e617223b86e04c3035acd50b68",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/historical/initial-validation-report.md",
+      "blob": "cd0b587a371bd48024ca8084d4f4d49f48f20948",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/implementation-plan.md",
+      "blob": "ea1a0a2f03dde8575561a6ddcecc6b44f7f268c3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/imported-history.json",
+      "blob": "a2c02a61e5d3a733e5a31a58c9bfcf5f4c9a0d5e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/original-source/.github/workflows/protect-demo-secret.yml",
+      "blob": "4a0a4209cdd22da6ffcb16b4a5efe577b56c91dc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/original-source/scripts/automation/protect-demo-secret.mjs",
+      "blob": "c5b913a84e5bb4fda129913257c51146705e3699",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/original-source/scripts/automation/protect-demo-secret.test.mjs",
+      "blob": "c1db81263782fdb4ff9fd4da65dadac72e9424fe",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/task-contract.md",
+      "blob": "717ac98f102759ea3deee45942785bbe16ec4c05",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/protect-demo-secret-20261021/review-packet-2/validation-report.md",
+      "blob": "2323454f208648968cff0f6caa52c646fc44987b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/evidence/gh-cli-v2.103.0.md",
+      "blob": "3d604d43aab11ff3e2dcc5e5a52f64783f41ee2f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/protect-demo-secret.mjs",
+      "blob": "e1a5856d1ab4b558bfafe0be380babd97be3081a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/protect-demo-secret.test.mjs",
+      "blob": "b69ef91622ba249ed5a072356ff35f78790cf506",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "sourceManifestBaseSha": "fbaa78d8c7eacf8402db0c8fa2be276ae579a27c",
+  "sourceManifestHeadSha": "34996816c9b8149a4a90f9ccfc7eabec230d2828",
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "subjectSha": null,
+      "uncommitted": true,
+      "sourceManifestSha256": "eb2ec6123893c07066dfd2c5f87a8551928fba491833fe191094e0c510590be5",
+      "evidence": "evidence/original-independent-report.md",
+      "reservationNonce": "f60d52a7-bebe-4139-9534-677b14d5443c",
+      "reason": "Original author30PASS; actual independent findings F1/F2/F3 preserved."
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "subjectSha": "24dca690a3982f4d8d3caccd969849bb72d278ec",
+      "evidence": "evidence/followup-independent-report.md",
+      "reservationNonce": "3084b83a-77f1-4d94-a2b9-cdbc69df1d05",
+      "nativeWiringEvidence": "evidence/native-ci-report.md",
+      "summary": "Actual author34pure, independent34pure+17safe probes+workflowNode-e, finalcombined803PASS0FAIL3existingWindows skips. No live credential operation."
+    }
+  ],
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"561428ddab27578eb8b79b9eeb17c5e8fff44c6c\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"Read-only review of PR #499 at 561428dd (base fbaa78d8, 2 commits). Nothing from the PR was executed and no tests were run by the reviewer. Design: manual workflow_dispatch only; every job is guarded on repository, refs/heads/main, the fixed workflow_ref, actor == triggering_actor == 'l2v-hub', sha == workflow_sha == inputs.reviewed_sha. The script re-checks all of this and also checks fresh main SHA, admin permission, environment id/name and a main-only custom branch policy. Top-level permissions are contents: read. Actions are pinned by SHA, persist-credentials is false, and the concurrency group is dedicated ('protect-demo-secret-scope', not railway-backend). Credential-free tests run in a preflight job before any secret-bearing job. Secret resolution is handled soundly. In the environment-bound jobs, secrets.RAILWAY_DEMO_TOKEN resolves to the environment copy when one exists, otherwise to the repository copy. The code writes only when the environment copy is absent, so a stale repo value can never overwrite an existing environment value. The only value written is the one consumers already read through repo fallback. At this SHA every consumer of RAILWAY_DEMO_TOKEN (deploy-backend, codex-bug-release, configure-demo-source, inspect-demo-source-topology) runs in 'glistening-friendship / demo'. So when the environment copy exists it is already the effective value, and deleting the repo copy cannot change what any consumer receives. That covers the env-only, repo-only, both-equal and both-different cases. Before deleting, the code requires the environment copy to be listed, both in a fresh inventory and after re-checking main, admin and the environment. Delete happens at most once, followed by a readback. An uncertain write or delete fails closed with no delete. Verification is by name only: no value, hash or fingerprint is computed, logged or emitted. The receipt is printed as JSON with no value, errors are printed only as codes, and GitHub masks the secret automatically. The value goes to the child process only on stdin. The child env is allowlisted (PATH, HOME, proxies, CA, GH_TOKEN) and excludes RAILWAY_DEMO_TOKEN. Crypto is delegated to the runner-preinstalled gh CLI ('gh secret set --env'), which seals the value with the environment public key and key_id. No crypto code is fetched at runtime, but the gh version is the runner image's, not pinned. Org-level secrets: GET users/l2v-hub reports type User, so no org secret scope exists. The bug-pipeline-tests.yml change only appends the credential-free helper test to the existing node --test command. Evidence binding: the sha256 of the shipped workflow, script and test match followup-author-seal.json, and bug-pipeline-tests.yml matches native-ci-seal.json (1d7a3a07...). CI at the SHA: all GitHub checks pass (archive-tests, browser-e2e, bug-pipeline-tests, frontend-tests, gate, real-provider, secret-scan, windows-review-setup). Vercel failed on a free-tier rate limit, which is unrelated. One functional gap remains in the only path that writes, see the finding. It is fail-closed (no delete happens), but the repo-only migration path is never exercised against a real gh CLI or API, and the environment name contains ' / '.\",\n  \"findings\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \"scripts/automation/protect-demo-secret.mjs\",\n      \"line\": 324,\n      \"problem\": \"The only write path, used in the repo-only case, which is the very case this PR exists for, runs 'gh secret set RAILWAY_DEMO_TOKEN --env \\\"glistening-friendship / demo\\\"' through the unpinned gh preinstalled on the runner. gh builds the environment public-key and secret routes by interpolating the environment name into the REST path. Nothing shows that the installed gh URL-escapes a name containing a space and a slash, while this script's own API client deliberately uses encodeURIComponent for the same name. If gh does not escape it, the request goes to /environments/glistening-friendship%20/%20demo/... and fails, or targets a wrong route. The job then stops with ENVIRONMENT_WRITE_UNCERTAIN. That is safe, because nothing is deleted, but the migration can never complete. The only test of the writer uses a fake 'gh' script that records argv, so the encoding, sealed-box and key_id behaviour of the real writer is unverified, and the gh/crypto implementation version is not pinned or recorded.\",\n      \"requested_change\": \"Do one of these. (a) Perform the write through the script's own REST client: GET the environment secrets public-key, then PUT secrets/RAILWAY_DEMO_TOKEN with encrypted_value and key_id, both on routes using encodeURIComponent(environmentName). Do the sealed-box encryption with a vendored or lockfile-pinned, integrity-checked libsodium/tweetnacl. (b) Keep gh, but pin and verify its version in the job (e.g. assert 'gh --version' against an expected value). Then add evidence, such as a gh source reference for that version or a dry-run against a disposable environment whose name contains ' / ', that it escapes the environment name and uses the matching public key_id.\",\n      \"test_expectation\": \"There is a unit test showing that the write request targets /repos/l2v-hub/ClinicOS/environments/glistening-friendship%20%2F%20demo/secrets/... with the key_id taken from the environment's public-key response. The test also checks that the ciphertext opens with the matching secret key under a fixed test keypair, and that the plaintext never appears in argv, env, stdout or stderr. Alternatively, the job asserts a pinned gh version, with recorded evidence that this version escapes environment names. Existing fail-closed tests continue to pass.\"\n    }\n  ]\n}\n"
+  },
+  "packet3Preparation": {
+    "sourceManifestRepair": "Complete 68-path diff from base through current published head, including immutable packet1 and packet2 artifacts.",
+    "currentPublishedHead": "34996816c9b8149a4a90f9ccfc7eabec230d2828",
+    "nextPublication": "PENDING root publication; native six checks and actual Claude2 remain pending."
+  },
+  "packetFiles": {
+    "analysis.md": "2d29dcc8e02751c2e13490ca3efdb139ca6757c55bb4fecf3d01bdf174394bdb",
+    "evidence/Claude1-actual-report.json": "50c4cb877d23e2ba63b933b5a62f2aa69919b0e0ddbc957c346feba25ecbff86",
+    "evidence/Claude1-author-report.md": "225f518dd3a8becdd85aeaba0b09383b61804fd54d7210ebfa08eb50a6eb2cc6",
+    "evidence/Claude1-author-seal.json": "f63f8e33b9a14be60b83c4b5ab5e87dc30c0bbef8885175ae630e1b408dede49",
+    "evidence/Claude1-independent-commands.json": "e5a96c21a3756c242d198f30e4ccc16386820bfb835bad3eac7b1d6e1aa74a7c",
+    "evidence/Claude1-independent-report.md": "c8dda635f06ffe7e9f9a52c21ff6c02ad6e2ea40c2475ce9399cdc11010b81b5",
+    "evidence/Claude1-independent-seal.json": "43c9626c7452ae583b71f3ffdc7224ac9730e7a08f5e2aaa80ea8ef95881329e",
+    "evidence/Claude1-independent-summary.json": "1d10bf66db27f099868ff8c84063b73a17189243548b772fc5246eb49780d91f",
+    "evidence/Claude1-real-binary-verification.json": "c62c904ec2727fd3946d62528bde6dd41b867f69062f2a440a781222f02c4c73",
+    "evidence/Claude1-real-gh-version.json": "ed0f782cf52f1ac179a4f51925b6956eb7112aa7055ebf5e8a684558f527103e",
+    "evidence/Claude1-source-commit.json": "f2c4212412608611253d73e268adcc7bfe7d6a62d177b44fd2e6fa3d104bd18f",
+    "evidence/Claude1-source-manifest.json": "26da865adefade7bb39fffe31facc92b5d46c5074a75e3b15c82e0c764da2151",
+    "evidence/Claude1-upstream-DNS-failure.json": "0628e2db7889113ea850548ae36e975a7dda39c719bdfec54c4118b4a8e699c1",
+    "evidence/Claude1-upstream-release-metadata.json": "5f2bdce019b28448c32b48c69d99ead450442ef09cfde0f21494cdd036f66f5b",
+    "evidence/Claude1-upstream-source-hashes.json": "4194d321d431a917ec959d3fb1ad4e850c1066598c000a3b80e705c7f33abddd",
+    "evidence/followup-author-receipt.json": "64b13de2c7706e3828ac62e07fd5ea608c1d40e4f623b1add58596b8a44c874a",
+    "evidence/followup-author-seal.json": "3b2a224da52f91d1c7ff2dced928894a86f93168fb4843883bdbc8f8c858469c",
+    "evidence/followup-independent-report.md": "13946a082534e60789e1fe3b164ba4518677e751f952ae7995f2be718f6a8e2f",
+    "evidence/followup-qa-receipts.json": "45d8971e9c50f0e9dc139d3c92b4742d32d3b93d5ba7512cd9dd66d782f6a634",
+    "evidence/followup-qa-seal.json": "7f208e03e22409910e585368a51f0a544a238bc3e7fedb6d8846df565128e702",
+    "evidence/issue-evidence.md": "d91e04b18866df125a5c533813397aeb87d6e2f40a4d353ea4079135bc06f9f4",
+    "evidence/native-ci-receipts.json": "c1ffd4112fcbfb7bbc9e23805ed7347f22a20fa51b6e0eb1bfd9a1f516561ac9",
+    "evidence/native-ci-report.md": "f858e7b2d85fe9239d1c2971e6bfd9ed66cb5e0d0b6c44ba2fd952c5f79d52a6",
+    "evidence/native-ci-seal.json": "3db85708f8d2dfe2ba657a305862b9d10fee15cfeadef215b80b43676a15b984",
+    "evidence/original-author-receipt.json": "a754f2771ba865e0e77f583890dc871a31d8a13ccef03ee721e4aa9c76675191",
+    "evidence/original-author-seal.json": "6a669cb47b2d84703cc7cf245f26a9178d75833ee90f41f571349a92cff4ab8a",
+    "evidence/original-failure-receipts.json": "c96257c20b646e6a83df73226ec8407452913dbfcc8556a2f3c4aebc50d3cb4b",
+    "evidence/original-independent-qa-seal.json": "01d7fe044a7e2e068d76cb0d3a369f99512bf083e390d128a021f6f9f5489db5",
+    "evidence/original-independent-report.md": "ec285e3fc40a24147da374a7cf1b87a3ddc7f17c484ddb0fc5899f75b2d56482",
+    "historical/initial-analysis.md": "e5ca93aef85884c56278b4dbd4831263f91d666a444a7bfe1ccdc59c6fee2798",
+    "historical/initial-implementation-plan.md": "be3a450450d005ac5d7809bd7db422122366afe008a4b77807d8c6ebb7b6a29f",
+    "historical/initial-imported-history.json": "9c38311ff7206dc057b3a061db2e7f53186dbb145302d0773253ed87a305eb79",
+    "historical/initial-task-contract.md": "7f53042b5eca87d6ebc07360c83679a6fdc19d1cfae5e624f15a8b885f45ed47",
+    "historical/initial-validation-report.md": "9f3d291a3044c76d9a21f7423265dc2385a0e271f9eb163d10a0589329de24de",
+    "historical/original-packet-2/analysis.md": "d5ee73ddcc42ab777eacb9f01bbaf0fbabbd711e2b98278cc71528daba6a5828",
+    "historical/original-packet-2/evidence/Claude1-actual-report.json": "50c4cb877d23e2ba63b933b5a62f2aa69919b0e0ddbc957c346feba25ecbff86",
+    "historical/original-packet-2/evidence/Claude1-author-report.md": "225f518dd3a8becdd85aeaba0b09383b61804fd54d7210ebfa08eb50a6eb2cc6",
+    "historical/original-packet-2/evidence/Claude1-author-seal.json": "f63f8e33b9a14be60b83c4b5ab5e87dc30c0bbef8885175ae630e1b408dede49",
+    "historical/original-packet-2/evidence/Claude1-independent-commands.json": "e5a96c21a3756c242d198f30e4ccc16386820bfb835bad3eac7b1d6e1aa74a7c",
+    "historical/original-packet-2/evidence/Claude1-independent-report.md": "c8dda635f06ffe7e9f9a52c21ff6c02ad6e2ea40c2475ce9399cdc11010b81b5",
+    "historical/original-packet-2/evidence/Claude1-independent-seal.json": "43c9626c7452ae583b71f3ffdc7224ac9730e7a08f5e2aaa80ea8ef95881329e",
+    "historical/original-packet-2/evidence/Claude1-independent-summary.json": "1d10bf66db27f099868ff8c84063b73a17189243548b772fc5246eb49780d91f",
+    "historical/original-packet-2/evidence/Claude1-real-binary-verification.json": "c62c904ec2727fd3946d62528bde6dd41b867f69062f2a440a781222f02c4c73",
+    "historical/original-packet-2/evidence/Claude1-real-gh-version.json": "ed0f782cf52f1ac179a4f51925b6956eb7112aa7055ebf5e8a684558f527103e",
+    "historical/original-packet-2/evidence/Claude1-source-commit.json": "f2c4212412608611253d73e268adcc7bfe7d6a62d177b44fd2e6fa3d104bd18f",
+    "historical/original-packet-2/evidence/Claude1-source-manifest.json": "26da865adefade7bb39fffe31facc92b5d46c5074a75e3b15c82e0c764da2151",
+    "historical/original-packet-2/evidence/Claude1-upstream-DNS-failure.json": "0628e2db7889113ea850548ae36e975a7dda39c719bdfec54c4118b4a8e699c1",
+    "historical/original-packet-2/evidence/Claude1-upstream-release-metadata.json": "5f2bdce019b28448c32b48c69d99ead450442ef09cfde0f21494cdd036f66f5b",
+    "historical/original-packet-2/evidence/Claude1-upstream-source-hashes.json": "4194d321d431a917ec959d3fb1ad4e850c1066598c000a3b80e705c7f33abddd",
+    "historical/original-packet-2/evidence/followup-author-receipt.json": "64b13de2c7706e3828ac62e07fd5ea608c1d40e4f623b1add58596b8a44c874a",
+    "historical/original-packet-2/evidence/followup-author-seal.json": "3b2a224da52f91d1c7ff2dced928894a86f93168fb4843883bdbc8f8c858469c",
+    "historical/original-packet-2/evidence/followup-independent-report.md": "13946a082534e60789e1fe3b164ba4518677e751f952ae7995f2be718f6a8e2f",
+    "historical/original-packet-2/evidence/followup-qa-receipts.json": "45d8971e9c50f0e9dc139d3c92b4742d32d3b93d5ba7512cd9dd66d782f6a634",
+    "historical/original-packet-2/evidence/followup-qa-seal.json": "7f208e03e22409910e585368a51f0a544a238bc3e7fedb6d8846df565128e702",
+    "historical/original-packet-2/evidence/issue-evidence.md": "d91e04b18866df125a5c533813397aeb87d6e2f40a4d353ea4079135bc06f9f4",
+    "historical/original-packet-2/evidence/native-ci-receipts.json": "c1ffd4112fcbfb7bbc9e23805ed7347f22a20fa51b6e0eb1bfd9a1f516561ac9",
+    "historical/original-packet-2/evidence/native-ci-report.md": "f858e7b2d85fe9239d1c2971e6bfd9ed66cb5e0d0b6c44ba2fd952c5f79d52a6",
+    "historical/original-packet-2/evidence/native-ci-seal.json": "3db85708f8d2dfe2ba657a305862b9d10fee15cfeadef215b80b43676a15b984",
+    "historical/original-packet-2/evidence/original-author-receipt.json": "a754f2771ba865e0e77f583890dc871a31d8a13ccef03ee721e4aa9c76675191",
+    "historical/original-packet-2/evidence/original-author-seal.json": "6a669cb47b2d84703cc7cf245f26a9178d75833ee90f41f571349a92cff4ab8a",
+    "historical/original-packet-2/evidence/original-failure-receipts.json": "c96257c20b646e6a83df73226ec8407452913dbfcc8556a2f3c4aebc50d3cb4b",
+    "historical/original-packet-2/evidence/original-independent-qa-seal.json": "01d7fe044a7e2e068d76cb0d3a369f99512bf083e390d128a021f6f9f5489db5",
+    "historical/original-packet-2/evidence/original-independent-report.md": "ec285e3fc40a24147da374a7cf1b87a3ddc7f17c484ddb0fc5899f75b2d56482",
+    "historical/original-packet-2/historical/initial-analysis.md": "e5ca93aef85884c56278b4dbd4831263f91d666a444a7bfe1ccdc59c6fee2798",
+    "historical/original-packet-2/historical/initial-implementation-plan.md": "be3a450450d005ac5d7809bd7db422122366afe008a4b77807d8c6ebb7b6a29f",
+    "historical/original-packet-2/historical/initial-imported-history.json": "9c38311ff7206dc057b3a061db2e7f53186dbb145302d0773253ed87a305eb79",
+    "historical/original-packet-2/historical/initial-task-contract.md": "7f53042b5eca87d6ebc07360c83679a6fdc19d1cfae5e624f15a8b885f45ed47",
+    "historical/original-packet-2/historical/initial-validation-report.md": "9f3d291a3044c76d9a21f7423265dc2385a0e271f9eb163d10a0589329de24de",
+    "historical/original-packet-2/implementation-plan.md": "1b1cb68a45f0a7a10b00aa4c5fb5251b3c5bd86f9aec346c022b6d13be712f89",
+    "historical/original-packet-2/imported-history.json": "8c3f5c2203fcdcde1c089b89fa3bd5bda53cebb4f9d41cc7988cba3f63ed0968",
+    "historical/original-packet-2/original-source/.github/workflows/protect-demo-secret.yml": "46705882615908b94a558b3a96120d53208dc4ac64d65a462621c7bd22c76f5e",
+    "historical/original-packet-2/original-source/scripts/automation/protect-demo-secret.mjs": "630f42c3631600564b42f7e998decc2118310da6ec278567ac9737069f89977a",
+    "historical/original-packet-2/original-source/scripts/automation/protect-demo-secret.test.mjs": "2e285596b6d5626216b0217e93d297f4db1577884c6bcf18160969fdf111003e",
+    "historical/original-packet-2/task-contract.md": "e7dcd4f0ff9b499f604681c511ce51e1a7733383ed3d611583b25eac3b713b99",
+    "historical/original-packet-2/validation-report.md": "120e32da657c474676affb533855edb917937f5b42095f875c40fa1622269517",
+    "implementation-plan.md": "cbda14b1b7fcea77b2a9d2db6684cf6321440ee4bc4bd52cfd50259f37bd49d7",
+    "original-source/.github/workflows/protect-demo-secret.yml": "46705882615908b94a558b3a96120d53208dc4ac64d65a462621c7bd22c76f5e",
+    "original-source/scripts/automation/protect-demo-secret.mjs": "630f42c3631600564b42f7e998decc2118310da6ec278567ac9737069f89977a",
+    "original-source/scripts/automation/protect-demo-secret.test.mjs": "2e285596b6d5626216b0217e93d297f4db1577884c6bcf18160969fdf111003e",
+    "task-contract.md": "8d5fabc47518bf8a2ccd01e9064cf604f36a7aa9c162dba6d5405ca12b0e32c5",
+    "validation-report.md": "d615224225acfb70f260c74c0263ae0890712b89f198adfa6c5d12c5c564df5f",
+    "visual-qa/README.md": "ebdaa4def4470fee2744102cf1c93f7cf2a0d316f95372e3c50ec12c4c0b48ce",
+    "visual-qa/STOP.json": "b814e186bf2a85a240cd15fcad6e8ee871ca61baf6ffa1ad0f78281fb8fedde1",
+    "visual-qa/browser-attempt1/diagnosis.json": "c56430a4c3fd5bd45c8266593572daba02f37e06900d46c9247af77e221a294c",
+    "visual-qa/browser-attempt1/seal.json": "bda6973f48a4e9bf6114aca5608e67bbc40b39eb48164a43c8108c969cd0a25c",
+    "visual-qa/browser-attempt2/playwright-report/data/7738a135a8d1f44dc3003ec55830699d91dad0bb.zip": "37ac14f69478a7e134c0347a39ae349c56656e44ab732e42e4eb61fa98f39667",
+    "visual-qa/browser-attempt2/playwright-report/data/fa7832b4bb683dc035238108e70a6dca20214ec0.webm": "93c9a882bb09f53a8b9af23753b8c3a68219416c880025173b42e853b2bb4148",
+    "visual-qa/browser-attempt2/playwright-report/index.html": "79a98060619d7cbf67d40c158048500aeabdbcb05e24fd130b93281a832551d2",
+    "visual-qa/browser-attempt2/playwright-report/trace/assets/codeMirrorModule-LEHpjmcn.js": "e3d682edfb4dd1fa17882466dd15058120278b27ff1101785a57b6df4db7ada5",
+    "visual-qa/browser-attempt2/playwright-report/trace/assets/defaultSettingsView-BNmKHKpQ.js": "f21839cd274944763d12ad24529345b9f8ebf339409f51f4dbe52f9d9baeb09c",
+    "visual-qa/browser-attempt2/playwright-report/trace/assets/urlMatch-BYQrIQwR.js": "168c4dee4815ea8d3c131a504033cd23d4b15aefa0209dd10ad3f643e8f1d8a7",
+    "visual-qa/browser-attempt2/playwright-report/trace/codeMirrorModule.DYBRYzYX.css": "70bf421a13e87857ca684bfa2cc55f06d7c5a50f71253a3ff1d74769b14a957e",
+    "visual-qa/browser-attempt2/playwright-report/trace/codicon.DCmgc-ay.ttf": "0f1d5219934e96e83b8db162d60b4d8c09b5de1e7d38031cbafe4a3c0f2889c9",
+    "visual-qa/browser-attempt2/playwright-report/trace/defaultSettingsView.CjdS-WJx.css": "de9c068d0e8043820fe42f30558e972eb7e2a8a45a34f65c7c8f73fa2dbc9fd0",
+    "visual-qa/browser-attempt2/playwright-report/trace/index.CzXZzn5A.css": "4ec2a3d49db259ce9025cb4fa48d73b1afd58215e567eef3b4a4cbf76c1674d9",
+    "visual-qa/browser-attempt2/playwright-report/trace/index.DMMX1gXU.js": "f33ceae71f13fde446a244c113548fec5ef890bf7b93ded7b861bebcebaa3e23",
+    "visual-qa/browser-attempt2/playwright-report/trace/index.html": "5ced36d3feb5bbbc0e8350330be0a293a1b4784ddecb6e58e1851323a93640cc",
+    "visual-qa/browser-attempt2/playwright-report/trace/manifest.webmanifest": "d8540500603a32a39fe7e5a0375dc0f9ebafd11118e06a846db7efc608223ab9",
+    "visual-qa/browser-attempt2/playwright-report/trace/playwright-logo.svg": "6b0a4367bdeab10995bc239278f04c68c10e48adbec15e799e01909a0d66dcb9",
+    "visual-qa/browser-attempt2/playwright-report/trace/snapshot.html": "11c80efe4f4424fa59004bcc71fed77a420d2da5f199790e355c30a5b965d0cd",
+    "visual-qa/browser-attempt2/playwright-report/trace/snapshot.v8KI4P3m.js": "97a3cd6d67aaac66efc838d7d743ac51bbf7d272e1287981c11758fca21a0657",
+    "visual-qa/browser-attempt2/playwright-report/trace/sw.bundle.js": "5237c6c68ba1f3591caf8cf951be4873192342a72fbcc31e5a667f7a7904c624",
+    "visual-qa/browser-attempt2/playwright-report/trace/uiMode.BZQ54Kgt.css": "a548cd88f2041433da2d60fd3a33ef23af2fb8ddf2557b7bef79806364498e57",
+    "visual-qa/browser-attempt2/playwright-report/trace/uiMode.Ut8wwJNp.js": "0ab1e917250833c3f6b3ed3ae3f359158bf68cd2d9951163ee6edff9b8ed1e5b",
+    "visual-qa/browser-attempt2/playwright-report/trace/uiMode.html": "95bf648d76d380b779770aae1c560b58ee456096b2b3b02922e629af29e3d492",
+    "visual-qa/browser-attempt2/playwright-report/trace/xtermModule.DYP7pi_n.css": "7c5a01f382f76539fc9b4db6b18e18a7035741845fd14968c5cdc0a7e373d817",
+    "visual-qa/browser-attempt2/playwright-results.json": "c00798ec5cb521f1d2d892ab90d13f6555096aff59ad97b3e0c0edfc3d4ef069",
+    "visual-qa/browser-attempt2/screenshots/helper-results.png": "acb40fe3f7b12e0c965a149e0ac0123c94fb50d009fa02c7ac92a4ab2fb84f0d",
+    "visual-qa/browser-attempt2/trace/trace.zip": "37ac14f69478a7e134c0347a39ae349c56656e44ab732e42e4eb61fa98f39667",
+    "visual-qa/browser-attempt2/video/helper-results.webm": "93c9a882bb09f53a8b9af23753b8c3a68219416c880025173b42e853b2bb4148",
+    "visual-qa/browser-tests2/internal-helper.spec.mjs": "14ab771e56db42d97e69636a1cf3571949bc7ac5d88a1e863874944496c78993",
+    "visual-qa/freeze-comparison.json": "c917855f602f42a648ee8a0cec082e9c7b726ea893cc295607baa104875a0dee",
+    "visual-qa/generate-surface.mjs": "73faae89b776b90790a8b72d8a4a686c6b6b5ed376ea51a6d19fd09bd61e15a8",
+    "visual-qa/helper-outcomes.json": "47fbdb8f4085e2ed2d9601aa63163fe2c45c1ab142985e16e028f9911ed0c72b",
+    "visual-qa/helper-qa.html": "51339d8b9ab05c7e4859f175b24f8af1d322c9236e275590029306cf81dcf3de",
+    "visual-qa/playwright.config2.mjs": "35313094ec3e0ebbbd9873853e8911ab6a1f4d7019f820783b46dae1ed717cc3",
+    "visual-qa/pre-browser-manifest.json": "ac3a630d22744d8f40a41d82eba2d3b80ef504148786cfb43b9605b401105201",
+    "visual-qa/publication-manifest.json": "ccbeeda948156f59f23685b333f5a1772deb72082b82d2375ad2ca69e39689b8",
+    "visual-qa/resource-grant.json": "48facfc5029535cd33407bf74044a1e1366d05012baa806099bc978a7104f3a1",
+    "visual-qa/resource-grant2.json": "b7b823a596837f5f2f8fd46c37121d2c31f67d1cf10b014f1178864959b7b5af",
+    "visual-qa/resource-handback.json": "a511248febaa8a6097f4258da7226afcf96b08757d3e5f0f41817fb3eefb3746",
+    "visual-qa/resource-handback2.json": "54497439c967fd7da0f77899978b7d9fee353bd5776a7f88b4ae62232a98bd17",
+    "visual-qa/summary.json": "01e8888bce302241ceb05f2601feb433019c3f4e00fe1feb2077cbcf1424f8c9",
+    "visual-qa/task-contract.md": "18c4aba7c2b8d45b7961a14da450e614c8d3b60579678ad53d7e42688061d4c3",
+    "visual-qa/validation-report.md": "79ba305b37b7021aa00fe88e463ed7f1cc9db4c249515e74dd06394c745a753b"
+  },
+  "packet2ImmutableCopy": "historical/original-packet-2",
+  "packet2Files": {
+    "analysis.md": "d5ee73ddcc42ab777eacb9f01bbaf0fbabbd711e2b98278cc71528daba6a5828",
+    "evidence/Claude1-actual-report.json": "50c4cb877d23e2ba63b933b5a62f2aa69919b0e0ddbc957c346feba25ecbff86",
+    "evidence/Claude1-author-report.md": "225f518dd3a8becdd85aeaba0b09383b61804fd54d7210ebfa08eb50a6eb2cc6",
+    "evidence/Claude1-author-seal.json": "f63f8e33b9a14be60b83c4b5ab5e87dc30c0bbef8885175ae630e1b408dede49",
+    "evidence/Claude1-independent-commands.json": "e5a96c21a3756c242d198f30e4ccc16386820bfb835bad3eac7b1d6e1aa74a7c",
+    "evidence/Claude1-independent-report.md": "c8dda635f06ffe7e9f9a52c21ff6c02ad6e2ea40c2475ce9399cdc11010b81b5",
+    "evidence/Claude1-independent-seal.json": "43c9626c7452ae583b71f3ffdc7224ac9730e7a08f5e2aaa80ea8ef95881329e",
+    "evidence/Claude1-independent-summary.json": "1d10bf66db27f099868ff8c84063b73a17189243548b772fc5246eb49780d91f",
+    "evidence/Claude1-real-binary-verification.json": "c62c904ec2727fd3946d62528bde6dd41b867f69062f2a440a781222f02c4c73",
+    "evidence/Claude1-real-gh-version.json": "ed0f782cf52f1ac179a4f51925b6956eb7112aa7055ebf5e8a684558f527103e",
+    "evidence/Claude1-source-commit.json": "f2c4212412608611253d73e268adcc7bfe7d6a62d177b44fd2e6fa3d104bd18f",
+    "evidence/Claude1-source-manifest.json": "26da865adefade7bb39fffe31facc92b5d46c5074a75e3b15c82e0c764da2151",
+    "evidence/Claude1-upstream-DNS-failure.json": "0628e2db7889113ea850548ae36e975a7dda39c719bdfec54c4118b4a8e699c1",
+    "evidence/Claude1-upstream-release-metadata.json": "5f2bdce019b28448c32b48c69d99ead450442ef09cfde0f21494cdd036f66f5b",
+    "evidence/Claude1-upstream-source-hashes.json": "4194d321d431a917ec959d3fb1ad4e850c1066598c000a3b80e705c7f33abddd",
+    "evidence/followup-author-receipt.json": "64b13de2c7706e3828ac62e07fd5ea608c1d40e4f623b1add58596b8a44c874a",
+    "evidence/followup-author-seal.json": "3b2a224da52f91d1c7ff2dced928894a86f93168fb4843883bdbc8f8c858469c",
+    "evidence/followup-independent-report.md": "13946a082534e60789e1fe3b164ba4518677e751f952ae7995f2be718f6a8e2f",
+    "evidence/followup-qa-receipts.json": "45d8971e9c50f0e9dc139d3c92b4742d32d3b93d5ba7512cd9dd66d782f6a634",
+    "evidence/followup-qa-seal.json": "7f208e03e22409910e585368a51f0a544a238bc3e7fedb6d8846df565128e702",
+    "evidence/issue-evidence.md": "d91e04b18866df125a5c533813397aeb87d6e2f40a4d353ea4079135bc06f9f4",
+    "evidence/native-ci-receipts.json": "c1ffd4112fcbfb7bbc9e23805ed7347f22a20fa51b6e0eb1bfd9a1f516561ac9",
+    "evidence/native-ci-report.md": "f858e7b2d85fe9239d1c2971e6bfd9ed66cb5e0d0b6c44ba2fd952c5f79d52a6",
+    "evidence/native-ci-seal.json": "3db85708f8d2dfe2ba657a305862b9d10fee15cfeadef215b80b43676a15b984",
+    "evidence/original-author-receipt.json": "a754f2771ba865e0e77f583890dc871a31d8a13ccef03ee721e4aa9c76675191",
+    "evidence/original-author-seal.json": "6a669cb47b2d84703cc7cf245f26a9178d75833ee90f41f571349a92cff4ab8a",
+    "evidence/original-failure-receipts.json": "c96257c20b646e6a83df73226ec8407452913dbfcc8556a2f3c4aebc50d3cb4b",
+    "evidence/original-independent-qa-seal.json": "01d7fe044a7e2e068d76cb0d3a369f99512bf083e390d128a021f6f9f5489db5",
+    "evidence/original-independent-report.md": "ec285e3fc40a24147da374a7cf1b87a3ddc7f17c484ddb0fc5899f75b2d56482",
+    "historical/initial-analysis.md": "e5ca93aef85884c56278b4dbd4831263f91d666a444a7bfe1ccdc59c6fee2798",
+    "historical/initial-implementation-plan.md": "be3a450450d005ac5d7809bd7db422122366afe008a4b77807d8c6ebb7b6a29f",
+    "historical/initial-imported-history.json": "9c38311ff7206dc057b3a061db2e7f53186dbb145302d0773253ed87a305eb79",
+    "historical/initial-task-contract.md": "7f53042b5eca87d6ebc07360c83679a6fdc19d1cfae5e624f15a8b885f45ed47",
+    "historical/initial-validation-report.md": "9f3d291a3044c76d9a21f7423265dc2385a0e271f9eb163d10a0589329de24de",
+    "implementation-plan.md": "1b1cb68a45f0a7a10b00aa4c5fb5251b3c5bd86f9aec346c022b6d13be712f89",
+    "imported-history.json": "8c3f5c2203fcdcde1c089b89fa3bd5bda53cebb4f9d41cc7988cba3f63ed0968",
+    "original-source/.github/workflows/protect-demo-secret.yml": "46705882615908b94a558b3a96120d53208dc4ac64d65a462621c7bd22c76f5e",
+    "original-source/scripts/automation/protect-demo-secret.mjs": "630f42c3631600564b42f7e998decc2118310da6ec278567ac9737069f89977a",
+    "original-source/scripts/automation/protect-demo-secret.test.mjs": "2e285596b6d5626216b0217e93d297f4db1577884c6bcf18160969fdf111003e",
+    "task-contract.md": "e7dcd4f0ff9b499f604681c511ce51e1a7733383ed3d611583b25eac3b713b99",
+    "validation-report.md": "120e32da657c474676affb533855edb917937f5b42095f875c40fa1622269517"
+  }
+}

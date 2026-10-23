@@ -1,3 +1,4 @@
+import { MAX_EVIDENCE_BYTES } from './evidence-limits.mjs';
 import { mkdir, readFile, writeFile, lstat, realpath, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { runBugReview } from '../../../scripts/quality-gate/claude-bug-review.mjs';
@@ -24,9 +25,11 @@ export async function validateEvidence(cwd, plan) {
     for (const kind of ['screenshot', 'trace', 'video']) {
       if (!item[kind] && kind === 'video') continue;
       const { target, info } = await regularFile(cwd, item[kind]);
-      if (info.size < 16 || info.size > 25 * 1024 * 1024)
+      if (info.size < 16 || info.size > MAX_EVIDENCE_BYTES)
         throw new Error('evidence is empty or exceeds GitHub size budget');
       const bytes = await readFile(target);
+      if (bytes.length !== info.size || bytes.length > MAX_EVIDENCE_BYTES)
+        throw new Error('evidence size changed during collection');
       if (kind === 'screenshot') validatePng(bytes);
       if (kind === 'trace') validateTrace(bytes);
       if (
@@ -244,6 +247,54 @@ export function createWorkspace({ root, repo, run, models }) {
         packetFile(batch, 'codex-independent-qa.md'),
         `# Independent Codex QA\n\n${result.status}\n\n${result.summary}\n`,
       );
+      return result;
+    },
+    async finalQa(batch) {
+      // A finding must leave the reviewed worktree clean for prepare/correction.
+      const result = await models.qa({ ...coordinates(batch), plan: batch.plan });
+      safeText(result.summary);
+      return result;
+    },
+    async finalQaStandalone(subject) {
+      // This checkout is for read-only model inspection. Never install dependencies,
+      // execute tests, invoke Claude, stage, or publish code from a standalone PR.
+      const cwd = path.join(root, 'agent-team', '.worktrees', `${subject.id}-${subject.sha}`);
+      const entries = (await git(['worktree', 'list', '--porcelain'])).split('\n\n');
+      const registered = entries.find((e) => e.split('\n').includes(`worktree ${cwd}`));
+      if (!registered) {
+        if (await lstat(cwd).catch((e) => (e.code === 'ENOENT' ? null : Promise.reject(e))))
+          throw new Error('Standalone QA checkout is occupied');
+        await git(['fetch', '--no-tags', 'origin', subject.sha]);
+        await git([
+          '-c',
+          'core.hooksPath=/dev/null',
+          'worktree',
+          'add',
+          '--detach',
+          cwd,
+          subject.sha,
+        ]);
+      }
+      const assertClean = async () => {
+        if ((await git(['rev-parse', 'HEAD'], cwd)) !== subject.sha || (await status(cwd)))
+          throw new Error('Standalone QA checkout changed');
+      };
+      await assertClean();
+      const result = await models.qa({
+        cwd,
+        packet: subject.packet.path,
+        plan: {
+          mode: 'standalone-read-only',
+          baseSha: subject.baseSha,
+          scope: subject.sourceManifest.map((file) => file.path),
+          frozenPacket: subject.packet,
+          sourceManifest: subject.sourceManifest,
+          implementation: subject.implementation,
+          constraints:
+            'Inspect source and committed native-check evidence only. Never execute PR code or tests. Return blocked for missing evidence or findings. Privileged files require orchestrator-owned correction.',
+        },
+      });
+      await assertClean();
       return result;
     },
     verify,

@@ -1,0 +1,94 @@
+{
+  "status": "author-stop-pending-new-independent-qa2",
+  "baseline": "8124b1bc88c0f086b1ee328214f87f4802005d11",
+  "implementationAttempt": 2,
+  "sourceFiles": 7,
+  "sourceFilesChangedSinceAttempt1": 2,
+  "guardSourcesUnchanged": 19,
+  "frozenContracts": 4,
+  "focusedTests": {
+    "total": 51,
+    "passed": 51,
+    "failed": 0,
+    "skipped": 0
+  },
+  "correctedHttpReplay": {
+    "total": 9,
+    "passed": 9,
+    "failed": 0,
+    "originalQa1RedPreserved": true
+  },
+  "fullRegression": {
+    "total": 628,
+    "passed": 625,
+    "failed": 0,
+    "skipped": 3
+  },
+  "sourceManifestSha256": "a0f05a1d59c0d2dec0b0c0ed89dbcd25c252275130c53915801fc6d1b0c43682",
+  "contractManifestSha256": "9871d1939be7d3dc2cc07837391fc6dc851bb1708b7548d56a9b70c4e0298c64",
+  "evidenceFiles": [
+    {
+      "file": "contract-hashes.json",
+      "bytes": 399,
+      "sha256": "9871d1939be7d3dc2cc07837391fc6dc851bb1708b7548d56a9b70c4e0298c64"
+    },
+    {
+      "file": "implementation-handoff.md",
+      "bytes": 4000,
+      "sha256": "2643da72bd621704152a922f1e9ac195248b33a8be1c1eee359d43acadec920e"
+    },
+    {
+      "file": "preservation-check.json",
+      "bytes": 582,
+      "sha256": "015e26133aa941695726ca4e53854890804c8efd30c93a5c27679034f8e0a572"
+    },
+    {
+      "file": "privacy-audit.json",
+      "bytes": 346,
+      "sha256": "0cb84d33e35b8bd7486169137d62743c71f0b46f373b1b0de6f238b223239d69"
+    },
+    {
+      "file": "scope-audit.json",
+      "bytes": 922,
+      "sha256": "e8e6360bc825478f33a2032645522f5cd554e1b3fccaedac93d78f79acd49570"
+    },
+    {
+      "file": "source-hashes.json",
+      "bytes": 1425,
+      "sha256": "a0f05a1d59c0d2dec0b0c0ed89dbcd25c252275130c53915801fc6d1b0c43682"
+    },
+    {
+      "file": "test-results/corrected-replay.json",
+      "bytes": 1217,
+      "sha256": "514e472244e6e6b309e0193b01b9015f6f1347ae7179c2ccaf74a175c0903905"
+    },
+    {
+      "file": "test-results/corrected-replay.log",
+      "bytes": 1055,
+      "sha256": "4b840868f7dfe2b3f27a8c4fe67038abdf35e473655741f5744a00d5c98bde86"
+    },
+    {
+      "file": "test-results/corrected-replay.mjs",
+      "bytes": 4460,
+      "sha256": "9fd7ca2b011889b217c30d478cfe9c4af08ba0494d7da28c4d6e66fac6f152dd"
+    },
+    {
+      "file": "test-results/focused.log",
+      "bytes": 5812,
+      "sha256": "2f720e0036689535e23762a6732d3d387dc22ce9f8b42b0a91b399c0d67b92f3"
+    },
+    {
+      "file": "test-results/full-regression.log",
+      "bytes": 44187,
+      "sha256": "acd1d144aab670d8bbd869d105d27d1fcbe19590ddd26e459dfddfb983a8025c"
+    },
+    {
+      "file": "test-results/static-checks.json",
+      "bytes": 966,
+      "sha256": "834d9ac5be342470528c64efc9dcc55ba0e45db18e5557e23675b2172b25707d"
+    }
+  ],
+  "providerOrGitHubMutations": 0,
+  "commitsOrPushes": 0,
+  "independentQaPerformedByAuthor": false
+}

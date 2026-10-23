@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-17T16:55:05.091Z",
+  "reads": 82,
+  "results": [
+    {
+      "pr": 393,
+      "sha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
+      "actualGitHubReadOnlyVerification": "PASS",
+      "packetFiles": 18,
+      "requiredAndCurrentChecks": true,
+      "realAdoptionPerformed": false
+    },
+    {
+      "pr": 491,
+      "sha": "c7ccc7b5a88ca4c6cb1276319f084293f780e5c6",
+      "actualGitHubReadOnlyVerification": "PASS",
+      "packetFiles": 12,
+      "requiredAndCurrentChecks": true,
+      "realAdoptionPerformed": false
+    }
+  ],
+  "writes": 0,
+  "modelCalls": 0,
+  "providerCalls": 0
+}

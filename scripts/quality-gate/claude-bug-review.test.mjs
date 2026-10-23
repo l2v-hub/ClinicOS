@@ -224,3 +224,57 @@ test('a tracked prerequisite symlink cannot read an external implementation plan
   await assert.rejects(f.review(), /prerequisites must be regular files/);
   assert.equal(f.calls.length, 0);
 });
+
+test('an explicitly audited effective allowance permits round5 and preserves historical max_rounds4 and reports', async (t) => {
+  const { historyDigest } = await import('../../agent-team/src/bug-pipeline/attempt-budget.mjs');
+  const f = await fixture(t);
+  for (let round = 1; round <= 4; round++) {
+    if (round > 1) await f.change(round);
+    await f.review();
+  }
+  const ledger = await f.state();
+  const files = [];
+  for (let round = 1; round <= 4; round++)
+    files.push(await readFile(path.join(f.cwd, f.packet, `claude-review-${round}.json`), 'utf8'));
+  const reviews = ledger.rounds.map((entry) => ({
+    round: entry.round,
+    status: entry.verdict,
+    subjectSha: entry.subject_sha,
+  }));
+  const budgetSubject = {
+    id: 'bug-batch-1',
+    pr: { number: 81 },
+    implementation: [],
+    reviews,
+    reviewLedger: ledger,
+    budgetExtensions: [
+      {
+        entityId: 'bug-batch-1',
+        pr: 81,
+        kind: 'reviews',
+        previousLimit: 4,
+        limit: 5,
+        actor: 'maintainer',
+        at: '2026-10-18T01:00:00Z',
+        reason: 'Explicit owner continuation',
+        authorizationRef: 'owner-command',
+        nonce: 'next-allowance',
+        historyLength: 4,
+        historyDigest: historyDigest(reviews),
+      },
+    ],
+  };
+  budgetSubject.budgetAuthorizationCutover = { schemaVersion: 1, legacyCount: 1,
+    legacyDigest: historyDigest(budgetSubject.budgetExtensions), actor: 'trusted-state-owner',
+    at: '2026-10-18T00:00:00Z', authorizationRef: 'test:legacy-cutover' };
+  await f.change(5);
+  const result = await runBugReview({ cwd: f.cwd, packet: f.packet, run: f.run, budgetSubject });
+  assert.equal(result.round, 5);
+  assert.equal((await f.state()).max_rounds, 4);
+  assert.deepEqual((await f.state()).rounds.slice(0, 4), ledger.rounds);
+  for (let round = 1; round <= 4; round++)
+    assert.equal(
+      await readFile(path.join(f.cwd, f.packet, `claude-review-${round}.json`), 'utf8'),
+      files[round - 1],
+    );
+});

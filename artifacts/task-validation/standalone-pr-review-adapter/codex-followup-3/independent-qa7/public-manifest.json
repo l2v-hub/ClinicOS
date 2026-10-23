@@ -1,0 +1,78 @@
+{
+  "whitelist": {
+    "adversarial-result.json": {
+      "sha256": "b0639f44cf1d842d4fbe3d08c8b41c8971544abca2517c7670ef91589adb6acf",
+      "bytes": 828
+    },
+    "adversarial.test.mjs": {
+      "sha256": "3620a51e6196799878d4a44b9b2b45b5ada195e4733560819e198a87ae85f7f3",
+      "bytes": 3258
+    },
+    "after-preservation.json": {
+      "sha256": "d8934c791d23d09cfe43742783d546a7bdec156e0e3d13568a5e941d5a77749e",
+      "bytes": 84
+    },
+    "before-preservation.json": {
+      "sha256": "2a010ac803b53672f8537ccab33931952d443f45da3283709c513921c7895685",
+      "bytes": 70
+    },
+    "browser-cache-attempt-result.json": {
+      "sha256": "daee10b9c9835f21e16a34526ac55302d4dadea23055132890a49766c27c1d4a",
+      "bytes": 2477
+    },
+    "browser-initial-result.json": {
+      "sha256": "fe393e6d4201fc3cc32cf85104d2ca6b4d7e038d28c7d20e9b51b6e9c5d1d5ff",
+      "bytes": 2477
+    },
+    "browser-result.json": {
+      "sha256": "1df75a8d8b15a8fc5219dab21e3607f1dd73d7385d832a98879b3dc9e4cbdb48",
+      "bytes": 459
+    },
+    "browser-summary.json": {
+      "sha256": "ebe70b678888a188413c8a357f8179b3db429a394d9169e8c1a517d7b2e05f0c",
+      "bytes": 1011
+    },
+    "browser.mjs": {
+      "sha256": "b34da93eaeed63710ca2863c1a87318f23e2628005c3a4cbded9d04d3756d096",
+      "bytes": 3957
+    },
+    "compatibility-result.json": {
+      "sha256": "178f8f741f6dbedd1307c0b3f832d100ad8f858d791269465f31bbe83454e77b",
+      "bytes": 625
+    },
+    "controller-final.png": {
+      "sha256": "c96ac380891b0f0147886763b12bf304be34ac9762bb5a7332a2489525d7353e",
+      "bytes": 29897
+    },
+    "controller-video.webm": {
+      "sha256": "3300091bbd4f4a9e5f02b78f29167a629fc64477b8f95a86b2238b056434c7f2",
+      "bytes": 37184
+    },
+    "fixture.mjs": {
+      "sha256": "6f134b20a32cd8ff5f3143a0c5597cbfeca8c52429245fd9925cc2e226ab86f1",
+      "bytes": 9804
+    },
+    "full-result.json": {
+      "sha256": "661be0f1a7142536991c7926e6f6b921f6d557bf1e17af04141c5bfe178fcd14",
+      "bytes": 2900
+    },
+    "qa-summary.json": {
+      "sha256": "cd2def752a1f18d6c151e5a3c72024f7c56ad0556a0e6588227b335ebe412645",
+      "bytes": 557
+    },
+    "run-tests.mjs": {
+      "sha256": "cf86873f45882081bf31c9bfc0c4b200bae291998873eb08ca812af5ae565aed",
+      "bytes": 1055
+    },
+    "trace-validation.json": {
+      "sha256": "4809c495d9ff5b41c8a719b751d0d04bcd3a58c009a9d8a40dd9ff1126e984c9",
+      "bytes": 178
+    },
+    "validation-report.md": {
+      "sha256": "45a196c07f12344e97a508f886dfa7663d5b15e188c358536d2911b3d8593d0f",
+      "bytes": 5507
+    }
+  },
+  "actualStateRecordsIncluded": false,
+  "tracePrivate": true
+}

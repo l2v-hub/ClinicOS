@@ -1,0 +1,66 @@
+{
+  "status": "sealed",
+  "authorStatus": "implemented-awaiting-independent-QA",
+  "files": {
+    "STOP.json": {
+      "sha256": "cc72fb12963012c3f2723469aea7d624f0610af11014e7cd42be1de43d4c512a",
+      "bytes": 243
+    },
+    "commands.log": {
+      "sha256": "ffb6da5514c31b8afd48a29bbd61a261f5d83dac4156d1dadc0996c4c382838f",
+      "bytes": 457
+    },
+    "focused-tests.log": {
+      "sha256": "aa51c20eac00d0bc2e89c65739f35254363621039a3bd322aaf066ff737c7bfa",
+      "bytes": 122567
+    },
+    "focused-tests.status": {
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061",
+      "bytes": 7
+    },
+    "report.md": {
+      "sha256": "53f2eade5eb08847658943d594676ca209d80e4930c85dd992f71d329a9459a1",
+      "bytes": 2203
+    },
+    "reservation.json": {
+      "sha256": "b2443787e733ad9e5b6174e7064abf586d893c314097e1e7524d334e3a018148",
+      "bytes": 1496
+    },
+    "results.json": {
+      "sha256": "1decf5c6a1ca6b4cbfefe3d5beb745e65feec99d1cb069f6a2967d615ba50d58",
+      "bytes": 1218
+    },
+    "source-after.json": {
+      "sha256": "461a904d5145a96020985bf1d28d0ea15668bdce21211120031566e2052dc891",
+      "bytes": 1232
+    },
+    "source-before.json": {
+      "sha256": "4413d0172519800cb68e3fc1da81d55f298b74d1f5b7bc83968f12a9178a660b",
+      "bytes": 1232
+    },
+    "source.patch": {
+      "sha256": "c46b4b8aa7f68b653a1300e4791040a4f7828730a4dd718e9bc87d6d3b6fbc0b",
+      "bytes": 9206
+    },
+    "syntax-configure.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "syntax-deployment.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "syntax-storage.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "syntax.status": {
+      "sha256": "431d124d96fb72dcb8bd766f21d83e3c5935fc88a466455b397d31a0db57366d",
+      "bytes": 35
+    },
+    "task-contract.md": {
+      "sha256": "55274e3bca6ebf6d16ff9839796251adb79d23d69dc4459a577ba1a29031bf48",
+      "bytes": 6724
+    }
+  }
+}

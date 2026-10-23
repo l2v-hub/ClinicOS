@@ -1,0 +1,186 @@
+diff --git a/agent-team/src/bug-pipeline/demo-deployment.mjs b/agent-team/src/bug-pipeline/demo-deployment.mjs
+index daa1ae57f..058615770 100644
+--- a/agent-team/src/bug-pipeline/demo-deployment.mjs
++++ b/agent-team/src/bug-pipeline/demo-deployment.mjs
+@@ -21,7 +21,7 @@ export const DEMO_SOURCE_POLICIES = Object.freeze({
+   exact: 'native-exact-commit-v1',
+ });
+ const API = 'https://api.github.com';
+-const RAILWAY_API = 'https://backboard.railway.app/graphql/v2';
++const RAILWAY_API = 'https://backboard.railway.com/graphql/v2';
+ const MAX_BYTES = 1024 * 1024;
+ export class DemoProofError extends Error {}
+ export class DemoTransientReadError extends DemoProofError {}
+diff --git a/agent-team/tests/bug-pipeline/demo-deployment.test.mjs b/agent-team/tests/bug-pipeline/demo-deployment.test.mjs
+index 110934257..5991b5613 100644
+--- a/agent-team/tests/bug-pipeline/demo-deployment.test.mjs
++++ b/agent-team/tests/bug-pipeline/demo-deployment.test.mjs
+@@ -693,11 +693,31 @@ test('Railway API client sends credentials only to fixed official origin and nev
+     client('query{projectToken{id}}', {}),
+     (error) => !error.message.includes('private service detail'),
+   );
+-  assert.equal(calls[0].url, 'https://backboard.railway.app/graphql/v2');
++  assert.equal(calls[0].url, 'https://backboard.railway.com/graphql/v2');
+   assert.equal(calls[0].options.redirect, 'error');
+   assert.equal(calls[0].options.headers['Project-Access-Token'], 'synthetic-demo-binding');
+ });
+ 
++test('public deployment client targets the official Railway API host without redirect or fallback', async () => {
++  const calls = [];
++  const client = createRailwayClient({
++    token: 'synthetic-deployment-binding',
++    fetchImpl: async (url, options) => {
++      calls.push({ url: String(url), options });
++      return response({ data: { probe: { ok: true } } });
++    },
++  });
++  assert.deepEqual(await client('query{probe{ok}}', {}), { probe: { ok: true } });
++  assert.equal(calls.length, 1);
++  assert.equal(calls[0].url, 'https://backboard.railway.com/graphql/v2');
++  assert.notEqual(calls[0].url, 'https://backboard.railway.app/graphql/v2');
++  assert.equal(calls[0].options.method, 'POST');
++  assert.equal(calls[0].options.redirect, 'error');
++  assert.equal(calls[0].options.headers['Project-Access-Token'], 'synthetic-deployment-binding');
++  assert.equal(calls[0].options.headers.Authorization, undefined);
++  assert.deepEqual(JSON.parse(calls[0].options.body), { query: 'query{probe{ok}}', variables: {} });
++});
++
+ test('deployment workflows isolate demo credentials and record only in demo environment', async () => {
+   const backend = await readFile(
+     new URL('../../../.github/workflows/deploy-backend.yml', import.meta.url),
+@@ -1384,7 +1404,7 @@ globalThis.fetch = async (url, options) => {
+     appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ ready: true }) + '\\n');
+     return new Response(JSON.stringify(ready), { headers: { 'Cache-Control': 'no-store' } });
+   }
+-  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
++  assert.equal(url, 'https://backboard.railway.com/graphql/v2');
+   assert.equal(options.headers['Project-Access-Token'], 'synthetic-demo-binding');
+   assert.equal(options.headers.Authorization, undefined);
+   const { query, variables } = JSON.parse(options.body);
+@@ -1754,7 +1774,7 @@ globalThis.fetch = async (url, options) => {
+     appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ ready: true }) + '\\n');
+     return new Response(JSON.stringify(${JSON.stringify(readyBody())}), { headers: { 'Cache-Control': 'no-store' } });
+   }
+-  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
++  assert.equal(url, 'https://backboard.railway.com/graphql/v2');
+   assert.equal(options.headers['Project-Access-Token'], 'synthetic-demo-binding');
+   assert.equal(options.headers.Authorization, undefined);
+   const { query, variables } = JSON.parse(options.body);
+@@ -2157,7 +2177,7 @@ test('actual exact CLI saves private sanitized failure progress with validated d
+ let submitted = false;
+ globalThis.fetch = async (url, options) => {
+   if (url === '${mainEndpoint}') return new Response(JSON.stringify(${JSON.stringify(mainBody())}));
+-  if (url !== 'https://backboard.railway.app/graphql/v2') throw new Error('Unexpected external fetch');
++  if (url !== 'https://backboard.railway.com/graphql/v2') throw new Error('Unexpected external fetch');
+   const {query} = JSON.parse(options.body);
+   if (query.startsWith('mutation')) {
+     submitted = true;
+@@ -2414,7 +2434,7 @@ globalThis.fetch = async (url, options) => {
+   }
+   if (url === 'https://${DEMO_TARGET.domain}/ready')
+     return new Response(JSON.stringify(${JSON.stringify(readyBody())}), {headers:{'Cache-Control':'no-store'}});
+-  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
++  assert.equal(url, 'https://backboard.railway.com/graphql/v2');
+   assert.equal(options.headers['Project-Access-Token'], process.env.RAILWAY_TOKEN);
+   const {query, variables} = JSON.parse(options.body);
+   if (query.startsWith('mutation')) {
+@@ -2652,7 +2672,7 @@ globalThis.fetch = async (url, options) => {
+     counts.ready++; save();
+     return new Response(JSON.stringify(${JSON.stringify(readyBody())}), {headers:{'Cache-Control':'no-store'}});
+   }
+-  assert.equal(url, 'https://backboard.railway.app/graphql/v2');
++  assert.equal(url, 'https://backboard.railway.com/graphql/v2');
+   assert.equal(request.headers.get('Project-Access-Token'), expected.RAILWAY_TOKEN);
+   assert.equal(headers.get('Project-Access-Token'), expected.RAILWAY_TOKEN);
+   const {query, variables} = JSON.parse(options.body);
+diff --git a/scripts/automation/configure-demo-source.mjs b/scripts/automation/configure-demo-source.mjs
+index 593a54bc8..ceff8e472 100644
+--- a/scripts/automation/configure-demo-source.mjs
++++ b/scripts/automation/configure-demo-source.mjs
+@@ -10,7 +10,7 @@ export const TARGET = Object.freeze({
+   branch: 'main',
+   domain: 'clinicos-backend-demo.up.railway.app',
+ });
+-export const ENDPOINT = 'https://backboard.railway.app/graphql/v2';
++export const ENDPOINT = 'https://backboard.railway.com/graphql/v2';
+ export const INVENTORY_QUERY = `query($projectId:String!,$environmentId:String!,$serviceId:String!){
+   projectToken{project{id} environment{id name}}
+   serviceInstance(environmentId:$environmentId,serviceId:$serviceId){
+diff --git a/scripts/automation/configure-demo-source.test.mjs b/scripts/automation/configure-demo-source.test.mjs
+index b5cc12e02..53327ed05 100644
+--- a/scripts/automation/configure-demo-source.test.mjs
++++ b/scripts/automation/configure-demo-source.test.mjs
+@@ -21,6 +21,25 @@ import {
+   validateContext,
+ } from './configure-demo-source.mjs';
+ 
++test('public source client sends its credential only to the official Railway API host', async () => {
++  const calls = [];
++  const client = createClient({ token: 'synthetic-source-binding', fetchImpl: async (url, options) => {
++    calls.push({ url: String(url), options });
++    return Response.json({ data: { probe: { ok: true } } });
++  } });
++  assert.deepEqual(await client('query{probe{ok}}', {}), { probe: { ok: true } });
++  assert.equal(calls.length, 1);
++  assert.equal(calls[0].url, 'https://backboard.railway.com/graphql/v2');
++  assert.notEqual(calls[0].url, 'https://backboard.railway.app/graphql/v2');
++  assert.equal(calls[0].options.method, 'POST');
++  assert.equal(calls[0].options.redirect, 'error');
++  assert.deepEqual(calls[0].options.headers, {
++    'Content-Type': 'application/json', 'Project-Access-Token': 'synthetic-source-binding',
++  });
++  assert.equal(calls[0].options.headers.Authorization, undefined);
++  assert.deepEqual(JSON.parse(calls[0].options.body), { query: 'query{probe{ok}}', variables: {} });
++});
++
+ const triggerId = '11111111-1111-4111-8111-111111111111';
+ const clone = (value) => structuredClone(value);
+ function fixture(branch = 'old-demo-branch') {
+diff --git a/scripts/maintenance/demo-storage-inspect.mjs b/scripts/maintenance/demo-storage-inspect.mjs
+index c9531956a..a8bf0363f 100644
+--- a/scripts/maintenance/demo-storage-inspect.mjs
++++ b/scripts/maintenance/demo-storage-inspect.mjs
+@@ -9,7 +9,7 @@ export const BRANCH = 'main';
+ export const WORKFLOW_REF = 'l2v-hub/ClinicOS/.github/workflows/inspect-demo-storage.yml@refs/heads/main';
+ export const PROTECTED_ENVIRONMENT = 'glistening-friendship / demo';
+ export const REPOSITORY = 'l2v-hub/ClinicOS';
+-export const ENDPOINT = 'https://backboard.railway.app/graphql/v2';
++export const ENDPOINT = 'https://backboard.railway.com/graphql/v2';
+ export const HEAD_ENDPOINT = `https://api.github.com/repos/${REPOSITORY}/git/ref/heads/${BRANCH}`;
+ export const QUERIES = Object.freeze({
+   identity: 'query{projectToken{project{id} environment{id name}}}',
+diff --git a/scripts/maintenance/demo-storage-inspect.test.mjs b/scripts/maintenance/demo-storage-inspect.test.mjs
+index 1da90096e..aa0dfdfd7 100644
+--- a/scripts/maintenance/demo-storage-inspect.test.mjs
++++ b/scripts/maintenance/demo-storage-inspect.test.mjs
+@@ -87,6 +87,30 @@ function fixture(change = () => {}) {
+   };
+   return { data, calls, requests, spawnImpl, fetchImpl };
+ }
++
++test('public storage inspection sends scoped project and account requests only to the official API host', async () => {
++  const official = 'https://backboard.railway.com/graphql/v2';
++  for (const [mode, env, tokenHeader] of [
++    ['project-token', ENV, { 'Project-Access-Token': TOKEN }],
++    ['account-bearer', ACCOUNT_ENV, { Authorization: `Bearer ${TOKEN}` }],
++  ]) {
++    const f = fixture();
++    const receipt = await run(f, { env });
++    assert.equal(receipt.outcome, 'inspected');
++    const graphql = f.requests.filter(({ url }) => url !== HEAD_ENDPOINT);
++    assert.ok(graphql.length > 0);
++    assert.ok(graphql.every(({ url }) => url === official));
++    assert.equal(f.requests.some(({ url }) => url === 'https://backboard.railway.app/graphql/v2'), false);
++    assert.ok(graphql.every(({ options }) => options.method === 'POST' && options.redirect === 'error'));
++    assert.ok(graphql.every(({ options }) => JSON.stringify(options.headers) === JSON.stringify({
++      'Content-Type': 'application/json', ...tokenHeader,
++    })));
++    const firstQuery = JSON.parse(graphql[0].options.body).query;
++    assert.equal(firstQuery, mode === 'project-token' ? QUERIES.identity : QUERIES.accountIdentity);
++    if (mode === 'account-bearer')
++      assert.equal(JSON.parse(graphql[1].options.body).query, QUERIES.accountAccess);
++  }
++});
+ const run = (f = fixture(), options = {}) => inspectDemoStorage({ env: ENV, fetchImpl: f.fetchImpl,
+   spawnImpl: f.spawnImpl, capturedAt: () => STAMP, ...options });
+ const safe = (receipt) => {

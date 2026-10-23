@@ -1,0 +1,19 @@
+{
+  "verdict": "local acceptance verified",
+  "qaReviewer": "qa_gate_issue485_cycle4",
+  "qaReportSha256": "04a5af87d6a8c8f7dd0932fee9252d9aa70ddf694008c7e4379a0d68d64fb59a",
+  "qaSealSha256": "ef70ff5be0a6d0684aaa8e0a3752c1959517603f296c18da1e8f0cbfb8f4aeeb",
+  "rootRehashedArtifacts": 121,
+  "rootRehashedSourceFiles": 13011,
+  "rootVisuallyReviewed": [
+    "manual-1903.png",
+    "manual-draft-reloaded-1903.png",
+    "readonly-320x568-zoom-reading.png",
+    "short-editing-320x568-return-zoom-reading.png",
+    "long-draft-resume-174.png",
+    "import-draft-reloaded-320.png"
+  ],
+  "noNewRuntimeClaim": true,
+  "externalReviewReleaseClosurePending": true,
+  "codeSha": "8e4edf3a3a9fe25044024e53918d6c7aa8053a14"
+}

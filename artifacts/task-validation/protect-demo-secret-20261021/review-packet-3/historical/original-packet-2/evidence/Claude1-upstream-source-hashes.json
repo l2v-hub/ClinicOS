@@ -1,0 +1,41 @@
+{
+  "tag": "v2.103.0",
+  "commit": "7948e8056e45ac3c729b829e0eafe2d0797a95c6",
+  "files": [
+    {
+      "path": "internal/safeurl/safeurl.go",
+      "localFile": "safeurl.go",
+      "bytes": 6717,
+      "sha256": "c1ca226d347cf04c304af02f8dfb85bbc4504335ce5ce2bad7c10b639e6158ec",
+      "url": "https://github.com/cli/cli/blob/7948e8056e45ac3c729b829e0eafe2d0797a95c6/internal/safeurl/safeurl.go"
+    },
+    {
+      "path": "pkg/cmd/secret/set/http.go",
+      "localFile": "secret-http.go",
+      "bytes": 4462,
+      "sha256": "dab7a5ecddcedca78c0e927b4ce9cc48e3245a84969d8d2fa6e69529346896e8",
+      "url": "https://github.com/cli/cli/blob/7948e8056e45ac3c729b829e0eafe2d0797a95c6/pkg/cmd/secret/set/http.go"
+    },
+    {
+      "path": "pkg/cmd/secret/set/set.go",
+      "localFile": "secret-set.go",
+      "bytes": 14290,
+      "sha256": "956ec69b02ac2612735ea8b5804a2e2eafdfaeb97a9536c132a5f004327b0b3b",
+      "url": "https://github.com/cli/cli/blob/7948e8056e45ac3c729b829e0eafe2d0797a95c6/pkg/cmd/secret/set/set.go"
+    },
+    {
+      "path": "go.mod",
+      "localFile": "go.mod",
+      "bytes": 8753,
+      "sha256": "5445d61d1235bdd6d767d23e8c55ba189d1bfb9dc9480baf41886123504a3ecd",
+      "url": "https://github.com/cli/cli/blob/7948e8056e45ac3c729b829e0eafe2d0797a95c6/go.mod"
+    },
+    {
+      "path": "internal/safeurl/safeurl_test.go",
+      "localFile": "safeurl-test.go",
+      "bytes": 8014,
+      "sha256": "4b91c010ab96655ba7c968fae7825d29b73f2afc510c3a95fa3ec975715c38cc",
+      "url": "https://github.com/cli/cli/blob/7948e8056e45ac3c729b829e0eafe2d0797a95c6/internal/safeurl/safeurl_test.go"
+    }
+  ]
+}

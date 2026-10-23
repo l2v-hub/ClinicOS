@@ -1,0 +1,10 @@
+{
+  "scope": "standalone-pr-review-adapter",
+  "maxAttempts": 4,
+  "priorFailedAttempts": 3,
+  "attempt": 4,
+  "status": "author-passed-awaiting-independent-qa",
+  "actualPreEditReservation": "root-reservation.json",
+  "noFifthAttempt": true,
+  "sourceFreezeSha256": "d88c088fe9a38d16c9c89d4e7263643a878a779ae98c558e6b74da4693d10a08"
+}

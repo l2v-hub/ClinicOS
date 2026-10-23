@@ -1,0 +1,44 @@
+{
+  "runner": "/workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs#createRunner",
+  "trustedRunnerSha256": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf",
+  "envMode": "verification",
+  "command": "node --test agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs",
+  "prefix": "rmdir \"$CODEX_HOME\"; unset CODEX_HOME; test ! -e \"$HOME/.codex\" || exit 96; exec ",
+  "credentialFree": true,
+  "childEnvironmentKeys": [
+    "AI_PROVIDER",
+    "AI_RUNTIME_SERVICE_TOKEN",
+    "AI_RUNTIME_URL",
+    "AUTH_MODE",
+    "CI",
+    "CLAUDE_CONFIG_DIR",
+    "CODEX_HOME",
+    "DATABASE_URL",
+    "DISABLE_AUTOUPDATER",
+    "HOME",
+    "LANG",
+    "NODE_ENV",
+    "PATH",
+    "VITE_API_URL"
+  ],
+  "homeIsolated": true,
+  "codexHomeRemovedBeforeTests": true,
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "counts": {
+    "tests": 715,
+    "pass": 712,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 3,
+    "todo": 0
+  },
+  "stdoutSha256": "6971156ad4ca8865badbe18cdad913c79d66e9a21a850a7d1a2985a4a59fddf4",
+  "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "skips": [
+    "﹣ PowerShell scheduler definitions parse on Windows and use actual task action/trigger/principal objects (0.492625ms) # SKIP",
+    "﹣ native Windows ACL creation is private and rejects a later public access rule (0.238492ms) # SKIP",
+    "﹣ native Windows bootstrap preserves dirty, foreign, wrong-branch and diverged work and fast-forwards only its dedicated checkout (0.17366ms) # SKIP"
+  ]
+}

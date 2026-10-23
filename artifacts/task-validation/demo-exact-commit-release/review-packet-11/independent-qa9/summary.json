@@ -1,0 +1,52 @@
+{
+  "task": "ClinicOS PR498 independent QA9 focused runtime verification",
+  "result": "READY_FOR_CODEX_QA",
+  "source": {
+    "repository": "/workspace/clinicos-demo-exact-release",
+    "head": "57c192513dcf7cf55853381ac7337926cbdc90cb",
+    "finalWorktreeClean": true,
+    "sourceEditsMade": false,
+    "target": "backend/src/proactive/__tests__/proactive-e2e.test.ts",
+    "targetSha256": "81d10c2fa518edfe76625dbcbd5ccd8404d0a00750abb22a32e630ab83d0cd90"
+  },
+  "run": {
+    "testFileExecutions": 1,
+    "tests": 23,
+    "passed": 23,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "exitCode": 0,
+    "receipt": "attempts/runtime-003/017-single-existing-proactive-http-pg-file.json",
+    "receiptSha256": "f68771bd26ecb3e685de0c7dbe5f5728d034702e4cfe9ca3db2830019e2f0b48",
+    "testU": "passed; exact forbidden response requestId and persisted matching audit row were asserted in-test before original s1 assertions",
+    "database": "owned tmpfs PostgreSQL 16; synthetic database clinicos_pr498_qa9; 58 migrations applied",
+    "providerOrCredentials": false
+  },
+  "limitations": [
+    "A stale matching denied audit row was not present in this clean isolated database; the historical race was not reproduced.",
+    "Audit watcher is auxiliary only; initial count was 0 and it observed one current denied row.",
+    "No full backend, frontend, browser, native suite, provider, merge, deployment, or clinical closure claim."
+  ],
+  "setupAttempts": {
+    "total": 3,
+    "setupOnlyFailures": 2,
+    "successfulTestFileExecutions": 1,
+    "aggregateLifecyclePathCollision": true,
+    "perCommandReceiptsAuthoritative": true
+  },
+  "resources": {
+    "ownedContainerRemoved": true,
+    "ownedNetworkRemoved": true,
+    "portsFree": [55432, 3447, 5447, 8432],
+    "flockFree": true,
+    "baselineContainerId": "9000f70d4ee95b9e3bde723796daa050081db4274d20c97888413479232949ad",
+    "baselineHealthyAndUnchanged": true
+  },
+  "primaryEvidence": {
+    "report": "validation-report.md",
+    "attemptIndex": "attempt-index.json",
+    "testReceipt": "attempts/runtime-003/017-single-existing-proactive-http-pg-file.json",
+    "watcherReceipt": "attempts/runtime-003/audit-watch.jsonl"
+  }
+}

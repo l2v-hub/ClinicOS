@@ -1,0 +1,173 @@
+{
+  "scope": "Fresh synthetic actual CLI only; not clinical/provider/deploy proof",
+  "sentinel": "QA495_FRESH_SYNTHETIC_ONLY_889f5d9f",
+  "results": [
+    {
+      "case": "duplicate-distinct",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_DUPLICATE_TRIGGERS",
+      "receiptWritten": false
+    },
+    {
+      "case": "duplicate-identical",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_DUPLICATE_TRIGGERS",
+      "receiptWritten": false
+    },
+    {
+      "case": "pagination-incomplete",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_TRIGGERS",
+      "receiptWritten": false
+    },
+    {
+      "case": "pagination-edges-object",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_TRIGGERS",
+      "receiptWritten": false
+    },
+    {
+      "case": "pagination-too-many",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_TRIGGERS",
+      "receiptWritten": false
+    },
+    {
+      "case": "pagination-flag-malformed",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_METADATA",
+      "receiptWritten": false
+    },
+    {
+      "case": "domain-missing",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_DOMAINS",
+      "receiptWritten": false
+    },
+    {
+      "case": "domain-duplicate",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_DOMAINS",
+      "receiptWritten": false
+    },
+    {
+      "case": "domain-poison",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_METADATA",
+      "receiptWritten": false
+    },
+    {
+      "case": "domain-shape",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_METADATA",
+      "receiptWritten": false
+    },
+    {
+      "case": "environment-poison",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_TARGET",
+      "receiptWritten": false
+    },
+    {
+      "case": "project-mismatch",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_TARGET",
+      "receiptWritten": false
+    },
+    {
+      "case": "service-mismatch",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_TARGET",
+      "receiptWritten": false
+    },
+    {
+      "case": "trigger-target",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_TARGET",
+      "receiptWritten": false
+    },
+    {
+      "case": "missing-me",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_IDENTITY_RESPONSE_INVALID",
+      "receiptWritten": false
+    },
+    {
+      "case": "null-me",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_IDENTITY_RESPONSE_INVALID",
+      "receiptWritten": false
+    },
+    {
+      "case": "missing-id",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_METADATA",
+      "receiptWritten": false
+    },
+    {
+      "case": "malformed-node",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_INVENTORY_RESPONSE_INVALID",
+      "receiptWritten": false
+    },
+    {
+      "case": "foreign-projection-poison",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_IDENTITY_RESPONSE_INVALID",
+      "receiptWritten": false
+    },
+    {
+      "case": "foreign-lookalike-safe-code",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_IDENTITY_RESPONSE_INVALID",
+      "receiptWritten": false
+    },
+    {
+      "case": "foreign-provider-poison",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_IDENTITY_NETWORK",
+      "receiptWritten": false
+    },
+    {
+      "case": "graphql-provider-poison",
+      "status": 1,
+      "stdoutBytes": 0,
+      "stderrCode": "DEMO_BEARER_IDENTITY_GRAPHQL_REJECTED",
+      "receiptWritten": false
+    },
+    {
+      "case": "success",
+      "status": 0,
+      "receiptWritten": true,
+      "identityDiscarded": true,
+      "authorizationFlagsFalse": true
+    },
+    {
+      "case": "false-access",
+      "status": 0,
+      "receiptWritten": true,
+      "inventory": null
+    }
+  ]
+}

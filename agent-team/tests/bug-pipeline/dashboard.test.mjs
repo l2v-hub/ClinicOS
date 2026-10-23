@@ -138,3 +138,40 @@ test('refresh failure preserves the previous snapshot, reports staleness and nev
   assert.match(failed.error, /non confermato/);
   assert.doesNotMatch(JSON.stringify(failed), /sk-private-token/);
 });
+
+test('dashboard displays six spent implementations and active continuation instead of a ready review label', async () => {
+  const { historyDigest } = await import('../../src/bug-pipeline/attempt-budget.mjs');
+  const implementation = [1, 2, 3, 4].map((round) => ({ round, status: 'failed' }));
+  const batch = { id: 'bug-batch-17', branch: 'codex/bug-batch-17', issues: [17],
+    pr: { number: 81 }, sha: 'a'.repeat(40), phase: 'waiting-review', implementation, reviews: [],
+    externalReview: { channel: 'github-comments', status: 'comment-requested' },
+    plan: { title: 'Synthetic continuation', feature: 'Status', rationale: 'Display real attempts',
+      analysis: 'Preserve all historical attempts', issues: [17], scope: ['feature.ts'],
+      execution: { difficulty: 'low', mode: 'direct', reason: 'Bounded fixture' },
+      acceptance: [{ issue: 17, criteria: ['Show spent attempts'] }],
+      tasks: [{ title: 'Display attempts', files: ['feature.ts'], steps: ['Count effective attempts'] }],
+      verification: [{ command: 'node', args: ['--test', 'feature.test.mjs'] },
+        { command: 'npm', args: ['--prefix', 'frontend', 'run', 'build'] }],
+      evidence: [{ issue: 17, screenshot: 'artifacts/task-validation/bug-batch-17/evidence/17.png',
+        trace: 'artifacts/task-validation/bug-batch-17/evidence/17.zip', video: '' }] } };
+  const base = { owner: 'operator', startedAt: '2026-10-18T00:00:00Z', reason: 'Preserved attempts',
+    authorizationRef: 'takeover', contractSha256: 'b'.repeat(64), preservedEntityDigest: 'c'.repeat(64),
+    preservedLegacyImplementationDigest: historyDigest(implementation), preservedLegacyReviewsDigest: historyDigest([]) };
+  batch.operatorContinuations = [
+    { ...base, round: 5, status: 'failed', nonce: 'round5', kind: 'explicit-operator-compatibility-continuation' },
+    { ...base, round: 6, status: 'implemented-awaiting-independent-qa', nonce: 'round6',
+      kind: 'audited-budget-continuation', budgetExtensionNonce: 'extension6' },
+  ];
+  batch.budgetExtensions = [{ entityId: batch.id, pr: 81, kind: 'implementation', previousLimit: 5, limit: 6,
+    actor: 'operator', at: base.startedAt, reason: base.reason, authorizationRef: 'legacy-reference', nonce: 'extension6',
+    historyLength: 5, historyDigest: historyDigest([...implementation, batch.operatorContinuations[0]]) }];
+  batch.budgetAuthorizationCutover = { schemaVersion: 1, legacyCount: 1,
+    legacyDigest: historyDigest(batch.budgetExtensions), actor: 'trusted-state-owner',
+    at: '2026-10-18T00:00:00Z', authorizationRef: 'test:legacy-cutover' };
+  const state = { ...empty, batches: [batch], operatorTakeover: { nonce: 'takeover',
+    continuePastFourPreserveHistory: true, subjects: [{ collection: 'batches', id: batch.id, pr: 81 }] } };
+  const snapshot = dashboardSnapshot({ repo, state, issues: [{ number: 17 }], queue: [] });
+  assert.equal(snapshot.rows[0].implementation, 6);
+  assert.equal(snapshot.rows[0].status, 'In progress');
+  assert.doesNotMatch(snapshot.rows[0].phase, /ready|attesa Claude/i);
+});

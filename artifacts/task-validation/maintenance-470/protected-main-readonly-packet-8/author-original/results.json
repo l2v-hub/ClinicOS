@@ -1,0 +1,38 @@
+{
+  "status": "AUTHOR_VALIDATION_PASS_AWAITING_INDEPENDENT_QA",
+  "parentIssue": 470,
+  "parentImplementation": 8,
+  "tests": {
+    "node": "22.23.4",
+    "pass": 150,
+    "fail": 0,
+    "skip": 0
+  },
+  "firstRun": {
+    "pass": 145,
+    "fail": 2,
+    "cause": "Ported invalid-ref fixtures still supplied main, now valid; assertions corrected to oldmaintenancebranch, source not weakened"
+  },
+  "intermediate": {
+    "pass": 147,
+    "fail": 0
+  },
+  "staticYamlAndBash": "PASS",
+  "contract": "PASS",
+  "changedPaths": [
+    ".github/workflows/inspect-demo-storage.yml",
+    "scripts/maintenance/demo-storage-binding-readonly.mjs",
+    "scripts/maintenance/demo-storage-inspect.mjs",
+    "scripts/maintenance/demo-storage-inspect.test.mjs",
+    "scripts/maintenance/demo-storage-workflow.test.mjs"
+  ],
+  "baselineFiles": 265,
+  "finalFiles": 270,
+  "unrelatedBaselineBytesUnchanged": true,
+  "projectTokenPath": "Synthetic fullbinding/snapshot PASS",
+  "accountBearerPath": "Synthetic me/access+fullbinding/snapshot PASS; target-read-access only; no projectToken or projectwide attestation",
+  "actualProviderCalls": 0,
+  "actualProductOrNativeSuites": 0,
+  "installOrGitOrCanonicalWrites": 0,
+  "independentQaActualClaudeFinalCodexProtectedMergeLiveInventory": "UNRUN"
+}
