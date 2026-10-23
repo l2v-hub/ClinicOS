@@ -1,3 +1,4 @@
+import { validateObservationResume } from './operator-authorization.mjs';
 import { MAX_EVIDENCE_BYTES } from './evidence-limits.mjs';
 import { mkdir, readFile, writeFile, lstat, realpath, rm } from 'node:fs/promises';
 import path from 'node:path';
@@ -169,8 +170,64 @@ export function createWorkspace({ root, repo, run, models }) {
       JSON.stringify(batch.evidence, null, 2) + '\n',
     );
   }
+  async function captureCheckpoint(batch) {
+    const { cwd } = coordinates(batch);
+    const entries = (await git(['worktree', 'list', '--porcelain'])).split('\n\n');
+    const registered = entries.find((e) => e.split('\n').includes(`worktree ${cwd}`));
+    if (!registered?.split('\n').includes(`branch refs/heads/${batch.branch}`))
+      throw new Error('Controller checkpoint requires the registered owned worktree');
+    if ((await realpath(cwd)) !== cwd || (await lstat(cwd)).isSymbolicLink())
+      throw new Error('Controller worktree identity changed');
+    await assertScope(batch);
+    const files = [
+      ...new Set(
+        [
+          ...(await git(['diff', '--name-only', batch.baseSha], cwd)).split('\n'),
+          ...(await git(['ls-files', '--others', '--exclude-standard'], cwd)).split('\n'),
+        ].filter(Boolean),
+      ),
+    ].sort();
+    const output = {};
+    for (const file of files) {
+      relativeFile(file);
+      const info = await lstat(path.join(cwd, file)).catch((e) =>
+        e.code === 'ENOENT' ? null : Promise.reject(e),
+      );
+      if (!info) {
+        output[file] = null;
+        continue;
+      }
+      const { target } = await regularFile(cwd, file);
+      output[file] = {
+        sha256: sha256(await readFile(target)),
+        bytes: info.size,
+        executable: Boolean(info.mode & 0o111),
+      };
+    }
+    return {
+      schemaVersion: 1,
+      cwd,
+      branch: batch.branch,
+      head: await git(['rev-parse', 'HEAD'], cwd),
+      baseSha: batch.baseSha,
+      planSha256: sha256(JSON.stringify(batch.plan)),
+      packetHashes: structuredClone(batch.packetHashes),
+      output,
+    };
+  }
   return {
     root,
+    captureCheckpoint,
+    async resume(batch, checkpoint) {
+      if (
+        !checkpoint ||
+        checkpoint.schemaVersion !== 1 ||
+        JSON.stringify(await captureCheckpoint(batch)) !== JSON.stringify(checkpoint)
+      )
+        throw new Error(
+          'Exact retained controller checkpoint is missing or changed; no model replay',
+        );
+    },
     async prepare(batch) {
       const { cwd, packet } = coordinates(batch);
       await git(['fetch', 'origin', 'main']);
@@ -385,4 +442,91 @@ export function createWorkspace({ root, repo, run, models }) {
     reviewBody: (b, r) =>
       `<!-- codex-bug-pipeline:review -->\nClaude review ${b.reviews.length}/4 on \`${r.subject_sha}\`: **${r.verdict}**.\n\n${r.summary}\n\n${r.findings.map((f) => `- ${f.file}:${f.line} (${f.severity}): ${f.problem}\n  Correction: ${f.requested_change}\n  Verification: ${f.test_expectation}`).join('\n')}`,
   };
+}
+
+// A finite implementation journal records completed operations, never their replay.
+// Only a trusted explicit recovery can re-enter an interrupted attempt, and only
+// while its exact registered worktree/output checkpoint remains available.
+export async function runImplementationStages({ batch, workspace, save, context, beforeStage }) {
+  const steps = [
+    'execute',
+    'verify-before',
+    'simplify',
+    'verify-after',
+    'qa',
+    'checkpoint',
+    'publish',
+  ];
+  let progress = batch.controllerProgress;
+  if (progress?.status === 'interrupted') {
+    validateObservationResume(batch);
+    if (
+      !progress.resumeAuthorization ||
+      progress.flow !== context.phase ||
+      progress.round !== context.round ||
+      progress.feedbackSha256 !== sha256(JSON.stringify(context.feedback ?? null)) ||
+      progress.planSha256 !== sha256(JSON.stringify(batch.plan))
+    )
+      throw new Error('Implementation recovery identity changed');
+    if (typeof workspace.resume !== 'function')
+      throw new Error('Retained controller worktree verifier unavailable');
+    await workspace.resume(batch, progress.checkpoint);
+    progress.status = 'running';
+    delete progress.resumeAuthorization;
+  } else {
+    if (progress?.status === 'running')
+      throw new Error('Unknown implementation outcome requires explicit recovery');
+    progress = batch.controllerProgress = {
+      schemaVersion: 1,
+      flow: context.phase,
+      round: context.round,
+      sourceSha: batch.sha ?? null,
+      planSha256: sha256(JSON.stringify(batch.plan)),
+      feedbackSha256: sha256(JSON.stringify(context.feedback ?? null)),
+      feedback: structuredClone(context.feedback ?? null),
+      status: 'running',
+      next: 0,
+      completed: [],
+    };
+    if (typeof workspace.captureCheckpoint === 'function')
+      progress.checkpoint = await workspace.captureCheckpoint(batch);
+  }
+  for (let index = progress.next; index < steps.length; index++) {
+    const step = steps[index];
+    batch.phase =
+      step === 'execute'
+        ? 'implementing'
+        : step === 'simplify'
+          ? 'simplifying'
+          : ['checkpoint', 'publish'].includes(step)
+            ? 'publishing'
+            : 'validating';
+    progress.pending = step;
+    await save();
+    await beforeStage?.(step);
+    let result;
+    if (step === 'execute') {
+      result = await workspace.execute(batch, context);
+      if (result?.status !== 'implemented') throw new Error('Executor blocked');
+    } else if (step === 'simplify') {
+      result = await workspace.simplify(batch);
+      if (result?.status !== 'implemented') throw new Error('Simplification blocked');
+    } else if (step === 'qa') {
+      result = await workspace.qa(batch);
+      if (result?.status !== 'verified') throw new Error('Independent QA blocked');
+    } else if (step === 'checkpoint') {
+      result = await workspace.checkpoint(batch);
+      batch.sha = result;
+    } else if (step === 'publish') await workspace.publish(batch);
+    else await workspace.verify(batch);
+    progress.completed.push({ step, ...(step === 'checkpoint' ? { sha: result } : {}) });
+    progress.next = index + 1;
+    delete progress.pending;
+    if (typeof workspace.captureCheckpoint === 'function')
+      progress.checkpoint = await workspace.captureCheckpoint(batch);
+    await save();
+  }
+  progress.status = 'completed';
+  delete progress.resumeAuthorization;
+  await save();
 }

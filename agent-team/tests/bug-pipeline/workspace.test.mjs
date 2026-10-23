@@ -783,3 +783,216 @@ test('evidence collector accepts valid trace at 32MiB and rejects a byte above i
   await writeFile(target, Buffer.concat([bytes, Buffer.from([0])]));
   await assert.rejects(validateEvidence(root, plan), /exceeds GitHub size budget/);
 });
+
+test('Author7 F3 retained controller checkpoint accepts exact dirty output and rejects changed, unknown, frozen or lost output', async (t) => {
+  const { root } = await gitFixture(t),
+    plan = implementationPlan([17]);
+  const batch = {
+    id: 'bug-batch-17',
+    branch: 'codex/bug-batch-17',
+    issues: [17],
+    plan,
+    implementation: [],
+    reviews: [],
+    sha: null,
+  };
+  const workspace = createWorkspace({
+    root,
+    repo: 'l2v-hub/ClinicOS',
+    run: safeGitRunner,
+    models: {},
+  });
+  await workspace.prepare(batch);
+  const cwd = path.join(root, 'agent-team/.worktrees', batch.id),
+    file = path.join(cwd, plan.scope[0]);
+  await writeFile(file, 'export const filter="controller output";\n');
+  const checkpoint = await workspace.captureCheckpoint(batch);
+  await workspace.resume(batch, checkpoint);
+  await assert.rejects(
+    workspace.prepare(batch),
+    /clean expected batch/,
+    'Ordinary prepare still rejects dirty output',
+  );
+  await writeFile(file, 'export const filter="foreign dirt";\n');
+  await assert.rejects(workspace.resume(batch, checkpoint), /missing or changed/);
+  await writeFile(file, 'export const filter="controller output";\n');
+  const unknown = path.join(cwd, 'foreign.ts');
+  await writeFile(unknown, 'foreign');
+  await assert.rejects(workspace.resume(batch, checkpoint), /outside accepted/);
+  await rm(unknown);
+  const frozen = path.join(cwd, 'artifacts/task-validation', batch.id, 'implementation-plan.md');
+  await writeFile(frozen, 'changed frozen plan');
+  await assert.rejects(workspace.resume(batch, checkpoint), /frozen contract or plan/);
+  await rm(cwd, { recursive: true, force: true });
+  await assert.rejects(workspace.resume(batch, checkpoint));
+});
+
+async function author7RetainedWorktree(t, lost = false) {
+  const { runPipeline } = await import('../../src/bug-pipeline/pipeline.mjs');
+  const { authorizeObservationResume } =
+    await import('../../src/bug-pipeline/operator-authorization.mjs');
+  const { root } = await gitFixture(t),
+    plan = implementationPlan([17]),
+    repo = 'l2v-hub/ClinicOS';
+  plan.verification.push({ command: 'npm', args: ['--prefix', 'frontend', 'run', 'build'] });
+  const batch = {
+    id: 'bug-batch-17',
+    branch: 'codex/bug-batch-17',
+    issues: [17],
+    plan,
+    phase: 'planned',
+    implementation: [],
+    reviews: [],
+    sha: null,
+    pr: null,
+  };
+  let remote = { schemaVersion: 1, repository: repo, batches: [batch] },
+    execute = 0,
+    simplify = 0,
+    fail = true;
+  const copy = (v) => structuredClone(v);
+  const store = {
+    load: async () => copy(remote),
+    save: async (state) => {
+      remote = copy(state);
+    },
+    observe: async () => {
+      if (fail && remote.batches[0].phase === 'validating') {
+        fail = false;
+        throw Object.assign(new Error('sanitized observation timeout'), {
+          code: 'github-read-transient',
+          retryable: true,
+          operation: 'read',
+        });
+      }
+      return copy(remote);
+    },
+  };
+  const workspace = createWorkspace({
+    root,
+    repo,
+    run: async (call) => {
+      if (call.command === 'codex') {
+        await makeEvidence(call.cwd, plan);
+        return { ok: true, code: 0, stdout: '# tests 1\n# pass 1\n', stderr: '' };
+      }
+      return safeGitRunner(call);
+    },
+    models: {
+      execute: async ({ cwd }) => {
+        execute++;
+        await writeFile(path.join(cwd, plan.scope[0]), 'export const filter="fixed";\n');
+        return { status: 'implemented' };
+      },
+      simplify: async () => {
+        simplify++;
+        return { status: 'implemented' };
+      },
+      qa: async () => ({ status: 'verified', summary: 'Exact synthetic evidence' }),
+    },
+  });
+  workspace.review = async (b) => ({
+    subject_sha: b.sha,
+    verdict: 'approved',
+    summary: 'Synthetic independent review',
+    findings: [],
+  });
+  const gh = {
+    intake: async () => {},
+    discoverQueue: async () => [],
+    setIssueStatus: async () => {},
+    commentIssue: async () => {},
+    commentPR: async () => {},
+    viewIssue: async (n) => ({ number: n, state: 'open', labels: ['bug', 'codex-run'] }),
+    createDraft: async () => ({ number: 81, url: `https://github.com/${repo}/pull/81` }),
+    reviewFeedback: async () => {
+      const b = remote.batches[0];
+      return {
+        state: 'OPEN',
+        head: b.sha,
+        headRef: b.branch,
+        headRepo: repo,
+        headIsFork: false,
+        baseRef: 'main',
+        comments: [],
+        unresolved: false,
+        changesRequested: false,
+      };
+    },
+    requiredChecks: async () => ({ ok: true }),
+  };
+  await runPipeline({ repo, event: {}, gh, workspace, models: {}, store, triageWindowMs: 0 });
+  let current = remote.batches[0];
+  assert.equal(execute, 1);
+  assert.equal(simplify, 0);
+  assert.equal(current.implementation.length, 1);
+  assert.equal(current.implementation[0].status, 'running');
+  assert.equal(current.controllerProgress.next, 1);
+  assert.equal(current.phase, 'blocked');
+  assert.equal(current.controllerProgress.status, 'interrupted');
+  const frozen = copy(remote);
+  await assert.rejects(
+    authorizeObservationResume({
+      state: remote,
+      subject: current,
+      actor: 'maintainer',
+      reference: 'test:resume',
+      reason: 'Retained exact output',
+    }),
+    /verifier unavailable/,
+  );
+  assert.deepEqual(remote, frozen);
+  await authorizeObservationResume({
+    state: remote,
+    subject: current,
+    actor: 'maintainer',
+    reference: 'test:resume',
+    reason: 'Retained exact output',
+    verifier: async ({ binding }) => ({
+      provenance: 'user-session',
+      grantId: 'test:grant',
+      sourceRef: 'test:session',
+      consumptionNonce: 'test:consume-resume',
+      binding,
+    }),
+  });
+  await assert.rejects(
+    authorizeObservationResume({
+      state: remote,
+      subject: current,
+      actor: 'maintainer',
+      reference: 'test:resume',
+      reason: 'No replay',
+    }),
+    /already authorized/,
+  );
+  if (lost)
+    await rm(path.join(root, 'agent-team/.worktrees', batch.id), { recursive: true, force: true });
+  await runPipeline({ repo, event: {}, gh, workspace, models: {}, store, triageWindowMs: 0 });
+  current = remote.batches[0];
+  if (lost) {
+    assert.equal(execute, 1);
+    assert.equal(simplify, 0);
+    assert.equal(current.implementation.length, 1);
+    assert.equal(current.phase, 'blocked');
+    assert.notEqual(current.controllerProgress.status, 'completed');
+    return;
+  }
+  assert.equal(execute, 1, 'Completed execute is not repeated');
+  assert.equal(simplify, 1);
+  assert.equal(current.implementation.length, 1);
+  assert.equal(current.implementation[0].status, 'passed');
+  assert.equal(current.phase, 'ready');
+  assert.equal(current.controllerProgress.status, 'completed');
+}
+
+test(
+  'Author7 F3 real retained worktree resumes the same attempt after execute without replaying its paid model',
+  { timeout: 10000 },
+  (t) => author7RetainedWorktree(t),
+);
+test(
+  'Author7 F3 lost Actions worktree fails closed after authorized recovery without replaying a completed model',
+  { timeout: 10000 },
+  (t) => author7RetainedWorktree(t, true),
+);

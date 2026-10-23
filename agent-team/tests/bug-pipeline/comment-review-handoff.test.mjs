@@ -910,3 +910,253 @@ test('QA6-F3 actual authorized typed QA recovery retains one legacy spend and pe
   assert.equal(new Set(final.codexFinalQaInfrastructure.attempts.map((x) => x.nonce)).size, 3);
   assert.equal(final.codexFinalReview.failureCode, 'final-qa-infrastructure-exhausted');
 });
+
+async function author7ApprovedFixture(options = {}) {
+  const f = fixture(options);
+  f.setPermission('maintain');
+  const b = f.remote.batches[0];
+  const fingerprint = feedbackFingerprint(await f.github.reviewFeedback(81));
+  const report = JSON.stringify({
+    subject_sha: b.sha,
+    verdict: 'approved',
+    summary: 'Synthetic approved',
+    findings: [],
+  });
+  b.reviews = [{ round: 1, status: 'approved', subjectSha: b.sha }];
+  b.reviewLedger = {
+    rounds: [
+      {
+        round: 1,
+        verdict: 'approved',
+        subject_sha: b.sha,
+        review_sha256: createHash('sha256').update(report).digest('hex'),
+      },
+    ],
+  };
+  b.reviewReports = { 'claude-review-1.json': report };
+  b.phase = 'blocked';
+  b.externalReview = { status: 'published', subjectSha: b.sha, feedbackFingerprint: fingerprint };
+  return { f, b, fingerprint };
+}
+function author7QaArgs(f, model) {
+  const batch = clone(f.remote.batches[0]);
+  return {
+    repo,
+    batch,
+    gh: f.github,
+    communication: { mirrorFeedback: async () => {}, publishState: async () => {} },
+    workspace: {
+      prepare: async () => {},
+      finalQa: model,
+      execute: async () => assert.fail('No implementation'),
+    },
+    save: async () => {
+      const store = f.github.createStateStore(),
+        state = await store.load();
+      state.batches[0] = clone(batch);
+      await store.save(state);
+    },
+    block: async (_batch, reason) => {
+      batch.phase = 'blocked';
+      batch.reason = reason;
+      const store = f.github.createStateStore(),
+        state = await store.load();
+      state.batches[0] = clone(batch);
+      await store.save(state);
+    },
+    report: async () => {},
+  };
+}
+test('Author7 F1 exhausted allowance requires exact trusted one-unit grant and actually runs only one additional QA', async () => {
+  const { f, b, fingerprint } = await author7ApprovedFixture();
+  const original = Array.from({ length: 3 }, (_, i) => ({
+    status: 'failed',
+    subjectSha: b.sha,
+    claudeRound: 1,
+    feedbackFingerprint: fingerprint,
+    nonce: `spent-${i}`,
+    reservedAt: '2026-10-17T00:00:00.000Z',
+  }));
+  b.qaHistory = clone(original);
+  b.codexFinalReview = {
+    subjectSha: b.sha,
+    claudeRound: 1,
+    feedbackFingerprint: fingerprint,
+    status: 'blocked',
+    failureCode: 'final-qa-infrastructure-exhausted',
+  };
+  const opts = {
+    action: 'extend-final-qa',
+    expectedSha: b.sha,
+    token: undefined,
+    reason: 'One actual trusted recovery unit',
+    authorizationRef: 'test:qa-grant',
+  };
+  const { historyDigest } = await import('../../src/bug-pipeline/attempt-budget.mjs');
+  opts.token = historyDigest(b.codexFinalReview);
+  await assert.rejects(
+    f.handoff.recover(81, { ...opts, expectedSha: 'b'.repeat(40) }),
+    /durable subject SHA/,
+  );
+  await f.handoff.recover(81, opts);
+  assert.equal(f.remote.batches[0].finalQaAllowances.length, 1);
+  assert.equal(f.remote.batches[0].finalQaAllowances[0].limit, 4);
+  assert.deepEqual(f.remote.batches[0].qaHistory.slice(0, 3), original);
+  let qa = 0;
+  await assert.rejects(
+    externalReviewStep(
+      author7QaArgs(f, async () => {
+        qa++;
+        throw Error('synthetic inference outage');
+      }),
+    ),
+    /synthetic inference outage/,
+  );
+  let current = f.remote.batches[0];
+  await f.handoff.recover(81, {
+    action: 'release-qa-reservation',
+    expectedSha: b.sha,
+    token: current.codexFinalReview.nonce,
+    reason: 'Preserve actual failed unit',
+    authorizationRef: 'test:release-unit',
+  });
+  await externalReviewStep(
+    author7QaArgs(f, async () => {
+      qa++;
+      return { status: 'verified', summary: 'must not run' };
+    }),
+  );
+  assert.equal(qa, 1);
+  assert.equal(
+    f.remote.batches[0].codexFinalReview.failureCode,
+    'final-qa-infrastructure-exhausted',
+  );
+  assert.equal(f.remote.batches[0].implementation.length, 1);
+  await assert.rejects(f.handoff.recover(81, opts), /identity changed/);
+});
+test('Author7 F1 malformed modern history is not legacy; trusted recovery seals spent allowance before one-unit extension', async () => {
+  const { f, b, fingerprint } = await author7ApprovedFixture();
+  const malformed = {
+    subjectSha: b.sha,
+    claudeRound: 1,
+    status: 'failed',
+    summary: 'Modern missing nonce',
+    feedbackFingerprint: fingerprint,
+  };
+  b.qaHistory = [clone(malformed)];
+  b.codexFinalReview = {
+    subjectSha: b.sha,
+    claudeRound: 1,
+    feedbackFingerprint: fingerprint,
+    status: 'blocked',
+  };
+  const { historyDigest } = await import('../../src/bug-pipeline/attempt-budget.mjs');
+  const recover = () =>
+    f.handoff.recover(81, {
+      action: 'recover-final-qa',
+      expectedSha: b.sha,
+      token: historyDigest(f.remote.batches[0].codexFinalReview ?? null),
+      reason: 'Actual trusted exact ambiguous history recovery',
+      authorizationRef: 'test:seal-ambiguous',
+    });
+  await recover();
+  assert.equal(f.remote.batches[0].finalQaHistoryResolutions[0].sealedLimit, 3);
+  let qa = 0;
+  await externalReviewStep(
+    author7QaArgs(f, async () => {
+      qa++;
+      return { status: 'verified', summary: 'No free retry' };
+    }),
+  );
+  assert.equal(qa, 0);
+  assert.deepEqual(f.remote.batches[0].qaHistory[0], malformed);
+  const current = f.remote.batches[0];
+  await f.handoff.recover(81, {
+    action: 'extend-final-qa',
+    expectedSha: b.sha,
+    token: historyDigest(current.codexFinalReview ?? null),
+    reason: 'One new unit after honest history seal',
+    authorizationRef: 'test:new-unit',
+  });
+  await externalReviewStep(
+    author7QaArgs(f, async () => {
+      qa++;
+      return { status: 'verified', summary: 'New authorized exact unit' };
+    }),
+  );
+  assert.equal(qa, 1);
+  assert.equal(f.remote.batches[0].phase, 'ready');
+});
+test('Author7 F1 blocked pre-QA recovery actually progresses and no default verifier grants it', async () => {
+  for (const allowed of [false, true]) {
+    const { f, b, fingerprint } = await author7ApprovedFixture({ authorizationVerifier: allowed });
+    b.codexFinalReview = {
+      subjectSha: b.sha,
+      claudeRound: 1,
+      feedbackFingerprint: fingerprint,
+      status: 'blocked',
+    };
+    const { historyDigest } = await import('../../src/bug-pipeline/attempt-budget.mjs');
+    const op = f.handoff.recover(81, {
+      action: 'recover-final-qa',
+      expectedSha: b.sha,
+      token: historyDigest(b.codexFinalReview),
+      reason: 'Pre-inference identity recovered',
+      authorizationRef: 'test:preqa',
+    });
+    if (!allowed) {
+      await assert.rejects(op, /verifier unavailable/);
+      continue;
+    }
+    await op;
+    let calls = 0;
+    await externalReviewStep(
+      author7QaArgs(f, async () => {
+        calls++;
+        return { status: 'verified', summary: 'Actual recovered QA' };
+      }),
+    );
+    assert.equal(calls, 1);
+    assert.equal(f.remote.batches[0].phase, 'ready');
+  }
+});
+
+test('Author7 F3 completed modern final QA survives post-inference observation recovery without another inference even at exhausted allowance', async () => {
+  const { f, b, fingerprint } = await author7ApprovedFixture();
+  const completed = {
+    status: 'verified',
+    subjectSha: b.sha,
+    claudeRound: 1,
+    feedbackFingerprint: fingerprint,
+    nonce: 'actual-completed-qa',
+    reservedAt: '2026-10-17T00:00:00Z',
+    summary: 'Actual completed independent final QA',
+  };
+  b.codexFinalReview = clone(completed);
+  b.codexFinalQaInfrastructure = {
+    attempts: [
+      ...['first', 'second'].map((nonce) => ({ ...completed, status: 'failed', nonce })),
+      clone(completed),
+    ],
+  };
+  b.failureCode = 'github-read-transient';
+  await f.handoff.recover(81, {
+    action: 'recover-final-qa',
+    expectedSha: b.sha,
+    token: completed.nonce,
+    reason: 'Publication observation failed after actual QA completed',
+    authorizationRef: 'test:postqa',
+  });
+  assert.deepEqual(f.remote.batches[0].codexFinalReview, completed);
+  let calls = 0;
+  await externalReviewStep(
+    author7QaArgs(f, async () => {
+      calls++;
+      assert.fail('Completed QA must not replay');
+    }),
+  );
+  assert.equal(calls, 0);
+  assert.equal(f.remote.batches[0].phase, 'ready');
+  assert.deepEqual(f.remote.batches[0].codexFinalReview, completed);
+  assert.equal(f.remote.batches[0].codexFinalQaInfrastructure.attempts.length, 3);
+});

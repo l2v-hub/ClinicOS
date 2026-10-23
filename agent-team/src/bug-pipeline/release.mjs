@@ -26,6 +26,7 @@ import { feedbackFingerprint, sha256, validateState } from './contracts.mjs';
 
 const SHA_RE = /^[a-f0-9]{40}$/;
 const DIGEST_RE = /^[a-f0-9]{64}$/;
+export const RELEASE_PROOF_CUTOFF = '2ee298957c3e1733b01a4b4aca4b48b890032f69';
 
 export function releaseSourcePolicy(value = DEMO_SOURCE_POLICIES.trigger) {
   if (!Object.values(DEMO_SOURCE_POLICIES).includes(value))
@@ -139,7 +140,9 @@ export function selectAutoReleaseBatch(state) {
           !batch.releaseBlock &&
           batch.sha &&
           batch.approvedSha === batch.sha &&
-          hasFinalCodexProof(batch, batch.sha) &&
+          (isRecordedMerge(batch)
+            ? hasRecordedReleaseProof(state, batch)
+            : hasFinalCodexProof(batch, batch.sha)) &&
           (batch.release?.status !== 'deployed' || !publicationComplete(batch)),
       )
       .sort((a, b) => Math.min(...a.issues) - Math.min(...b.issues))[0] ?? null
@@ -201,7 +204,6 @@ function validateIssuePullUrl(url, repo, number) {
 function hasFinalCodexProof(batch, sha) {
   // Both comment handoffs and the original external worker persist externalReview;
   // the channel value is not an authorization switch.
-  if (!batch.externalReview) return true;
   const proof = batch.codexFinalReview;
   return Boolean(
     proof?.status === 'verified' &&
@@ -211,17 +213,18 @@ function hasFinalCodexProof(batch, sha) {
     typeof batch.feedbackFingerprint === 'string' &&
     batch.feedbackFingerprint.length > 0 &&
     proof.feedbackFingerprint === batch.feedbackFingerprint &&
-    batch.externalReview.subjectSha === sha &&
-    batch.externalReview.feedbackFingerprint === batch.feedbackFingerprint,
+    (!batch.externalReview ||
+      (batch.externalReview.subjectSha === sha &&
+        batch.externalReview.feedbackFingerprint === batch.feedbackFingerprint)),
   );
 }
 function verifyFinalCodexProof(batch, sha) {
   if (!hasFinalCodexProof(batch, sha))
-    fail('external review requires verified final Codex proof for this SHA, round and feedback');
+    fail('release requires verified final Codex proof for this SHA, round and feedback');
 }
 
-function verifyReviewProof(batch, sha) {
-  verifyFinalCodexProof(batch, sha);
+function verifyReviewProof(batch, sha, { merged = false } = {}) {
+  if (!merged) verifyFinalCodexProof(batch, sha);
   const lastReview = batch.reviews.at(-1);
   if (
     !lastReview ||
@@ -261,6 +264,210 @@ function verifyReviewProof(batch, sha) {
   ) {
     fail('the persisted Claude review report is not a clean approval for the reviewed revision');
   }
+}
+
+// Receipt identity is immutable after merge. The current final-QA pointer may be archived.
+function isRecordedMerge(subject) {
+  return ['merged', 'deployed'].includes(subject.release?.status);
+}
+function hasMergeReservation(subject) {
+  return subject.release?.status === 'merging' && Boolean(subject.release.reviewProof);
+}
+export function captureReleaseReviewProof(subject, { repository, collection = 'batches' }) {
+  verifyReviewProof(subject, subject.sha);
+  const identity = {
+    schemaVersion: 1,
+    repository,
+    collection,
+    id: subject.id,
+    prNumber: subject.pr.number,
+    reviewedSha: subject.sha,
+    claudeRound: subject.reviews.length,
+    feedbackFingerprint: subject.feedbackFingerprint,
+    finalCodexReview: structuredClone(subject.codexFinalReview),
+    claudeReviewSha256: subject.reviewLedger.rounds.at(-1).review_sha256,
+  };
+  return { ...identity, reviewIdentitySha256: sha256(JSON.stringify(identity)) };
+}
+function verifyRecordedReviewProof(subject, repository, collection = 'batches') {
+  const proof = subject.release?.reviewProof;
+  if (!proof) fail('immutable final Codex merge proof is required');
+  const frozen = { ...subject, codexFinalReview: proof.finalCodexReview };
+  const expected = captureReleaseReviewProof(frozen, { repository, collection });
+  if (
+    JSON.stringify(expected) !== JSON.stringify(proof) ||
+    subject.release.reviewedSha !== subject.sha ||
+    subject.release.prNumber !== subject.pr.number
+  )
+    fail('immutable final Codex merge proof identity changed');
+  return proof;
+}
+function historicalEntry(state, subject, collection = 'batches') {
+  const cutover = state?.releaseProofCutover;
+  if (
+    !isRecordedMerge(subject) ||
+    cutover?.schemaVersion !== 1 ||
+    cutover.repository !== 'l2v-hub/ClinicOS' ||
+    cutover.mainSha !== RELEASE_PROOF_CUTOFF ||
+    !SHA_RE.test(cutover.stateCommit ?? '') ||
+    typeof cutover.actor !== 'string' ||
+    !cutover.actor.trim() ||
+    !Number.isFinite(Date.parse(cutover.recordedAt)) ||
+    typeof cutover.authorizationRef !== 'string' ||
+    !cutover.authorizationRef.trim() ||
+    !Array.isArray(cutover.entries)
+  )
+    fail('finite audited historical release cutover required');
+  const matches = cutover.entries.filter(
+    (entry) => entry.collection === collection && entry.id === subject.id,
+  );
+  if (matches.length !== 1) fail('historical release cutover identity missing or duplicated');
+  const entry = matches[0];
+  if (
+    entry.pr !== subject.pr?.number ||
+    entry.reviewedSha !== subject.sha ||
+    entry.reviewedSha !== subject.release.reviewedSha ||
+    entry.mergeSha !== subject.release.mergeSha ||
+    !SHA_RE.test(entry.mergeSha ?? '') ||
+    !DIGEST_RE.test(entry.releaseSha256 ?? '') ||
+    !DIGEST_RE.test(entry.mergedReceiptSha256 ?? '') ||
+    !DIGEST_RE.test(entry.ancestryReceiptSha256 ?? '') ||
+    sha256(JSON.stringify(entry.originalRelease)) !== entry.releaseSha256 ||
+    entry.originalRelease?.reviewedSha !== entry.reviewedSha ||
+    entry.originalRelease?.mergeSha !== entry.mergeSha ||
+    (entry.originalRelease.prNumber !== undefined && entry.originalRelease.prNumber !== entry.pr)
+  )
+    fail('historical release cutover exact identity mismatch');
+  // Later deployment/publication fields may advance; the original release is never rewritten.
+  for (const [key, value] of Object.entries(entry.originalRelease)) {
+    if (key === 'status' && value === 'merged' && subject.release.status === 'deployed') continue;
+    if (key === 'deployment' || key === 'publication') continue;
+    if (JSON.stringify(subject.release[key]) !== JSON.stringify(value))
+      fail('historical original release changed');
+  }
+  return entry;
+}
+function hasRecordedReleaseProof(state, subject) {
+  try {
+    if (subject.release?.reviewProof) verifyRecordedReviewProof(subject, state.repository);
+    else historicalEntry(state, subject);
+    return true;
+  } catch {
+    return false;
+  }
+}
+// Normalize the authenticated native response in the exact root audit key order.
+export async function readReleaseMergeReceipt({ reader, repository, number }) {
+  if (repository !== 'l2v-hub/ClinicOS' || !Number.isSafeInteger(number) || number <= 0)
+    fail('fixed historical native repository identity required');
+  const pr = await reader.getJson(`pulls/${number}`);
+  if (
+    pr?.number !== number ||
+    pr.head?.repo?.fork !== false ||
+    pr.base?.repo?.full_name !== repository
+  )
+    fail('historical native repository identity changed');
+  return {
+    repository,
+    number: pr.number,
+    state: pr.state,
+    merged: pr.merged,
+    mergedAt: pr.merged_at,
+    mergeSha: pr.merge_commit_sha,
+    reviewedSha: pr.head?.sha,
+    baseRef: pr.base?.ref,
+    headRef: pr.head?.ref,
+    headRepository: pr.head?.repo?.full_name,
+    url: pr.html_url,
+  };
+}
+// Historical ancestry is pinned to an existing cutoff even after main advances.
+export async function verifyHistoricalReleaseAncestry({
+  reader,
+  originalMergeSha,
+  cutoffSha = RELEASE_PROOF_CUTOFF,
+}) {
+  if (cutoffSha !== RELEASE_PROOF_CUTOFF || !SHA_RE.test(originalMergeSha ?? ''))
+    fail('fixed historical release cutoff required');
+  if ((await reader.getJson(`commits/${RELEASE_PROOF_CUTOFF}`))?.sha !== RELEASE_PROOF_CUTOFF)
+    fail('historical cutoff commit identity changed');
+  if (originalMergeSha !== RELEASE_PROOF_CUTOFF) {
+    const proof = await reader.getJson(`compare/${originalMergeSha}...${RELEASE_PROOF_CUTOFF}`);
+    if (
+      proof?.base_commit?.sha !== originalMergeSha ||
+      proof.merge_base_commit?.sha !== originalMergeSha ||
+      proof.status !== 'ahead' ||
+      !Number.isSafeInteger(proof.ahead_by) ||
+      proof.ahead_by < 1 ||
+      proof.behind_by !== 0 ||
+      !Array.isArray(proof.commits) ||
+      proof.commits.at(-1)?.sha !== RELEASE_PROOF_CUTOFF
+    )
+      fail('merge is not an authenticated ancestor of the fixed historical cutoff');
+  }
+  return { ancestor: originalMergeSha, descendant: RELEASE_PROOF_CUTOFF };
+}
+export async function verifyMergedReleaseProof({
+  state,
+  subject,
+  github,
+  repository,
+  collection = 'batches',
+}) {
+  if (!isRecordedMerge(subject) && !hasMergeReservation(subject))
+    fail('postmerge proof cannot authorize a new merge');
+  if (subject.release.reviewProof) verifyRecordedReviewProof(subject, repository, collection);
+  const feedback = await github.reviewFeedback(subject.pr.number);
+  if (
+    feedback.state !== 'MERGED' ||
+    feedback.number !== subject.pr.number ||
+    feedback.url !== subject.pr.url ||
+    feedback.head !== subject.sha ||
+    feedback.headRef !== subject.branch ||
+    feedback.headRepo !== repository ||
+    feedback.headIsFork !== false ||
+    feedback.baseRef !== 'main' ||
+    ((!hasMergeReservation(subject) || subject.release.mergeSha !== undefined) &&
+      feedback.mergeCommitSha !== subject.release.mergeSha) ||
+    !SHA_RE.test(feedback.mergeCommitSha ?? '')
+  )
+    fail('postmerge native MERGED receipt identity changed');
+  if (!subject.release.reviewProof) {
+    if (repository !== 'l2v-hub/ClinicOS') fail('historical cutover repository mismatch');
+    const entry = historicalEntry(state, subject, collection);
+    if (
+      typeof github.readReleaseMergeReceipt !== 'function' ||
+      typeof github.verifyHistoricalReleaseAncestry !== 'function'
+    )
+      fail('authenticated historical release proof readers required');
+    const native = await github.readReleaseMergeReceipt(subject.pr.number);
+    if (
+      native?.repository !== repository ||
+      native.number !== entry.pr ||
+      native.state !== 'closed' ||
+      native.merged !== true ||
+      native.reviewedSha !== entry.reviewedSha ||
+      native.mergeSha !== entry.mergeSha ||
+      native.headRef !== subject.branch ||
+      native.headRepository !== repository ||
+      native.baseRef !== 'main' ||
+      native.url !== subject.pr.url ||
+      !Number.isFinite(Date.parse(native.mergedAt)) ||
+      sha256(JSON.stringify(native)) !== entry.mergedReceiptSha256
+    )
+      fail('historical native MERGED receipt does not match audited identity');
+    const ancestry = await github.verifyHistoricalReleaseAncestry({
+      originalMergeSha: entry.mergeSha,
+      cutoffSha: RELEASE_PROOF_CUTOFF,
+    });
+    if (
+      ancestry?.ancestor !== entry.mergeSha ||
+      ancestry.descendant !== RELEASE_PROOF_CUTOFF ||
+      sha256(JSON.stringify(ancestry)) !== entry.ancestryReceiptSha256
+    )
+      fail('historical ancestry receipt does not match audited identity');
+  }
+  return feedback;
 }
 
 async function verifyEvidence(batch, github) {
@@ -338,13 +545,15 @@ async function verifyCurrentCandidate({
   github,
   verifyBlobs = true,
   allowClosedIssues = false,
+  requireOpen = false,
 }) {
   assertNoReleaseHold(batch);
   if (batch.phase !== 'ready' || batch.sha !== sha || batch.approvedSha !== sha)
     fail('batch is not ready and approved for the supplied reviewed SHA');
   if (implementationAttempts(batch).at(-1)?.status !== 'passed')
     fail('latest implementation attempt did not pass validation');
-  verifyReviewProof(batch, sha);
+  const postMerge = !requireOpen && (isRecordedMerge(batch) || hasMergeReservation(batch));
+  verifyReviewProof(batch, sha, { merged: postMerge });
   if (!batch.pr || !validateIssuePullUrl(batch.pr.url, repo, batch.pr.number))
     fail('durable PR identity does not match this repository');
   if (verifyBlobs) await verifyEvidence(batch, github);
@@ -368,12 +577,15 @@ async function verifyCurrentCandidate({
   ) {
     fail('pull request repository, branch, base, fork status, or head SHA changed');
   }
+  if (requireOpen && (feedback.state !== 'OPEN' || feedback.isDraft))
+    fail('PR must be open and ready for review before merge');
   if (!['OPEN', 'MERGED'].includes(feedback.state))
     fail('pull request is closed without a confirmed merge');
   if (
-    feedback.unresolved ||
-    feedback.changesRequested ||
-    feedbackFingerprint(feedback) !== batch.feedbackFingerprint
+    !postMerge &&
+    (feedback.unresolved ||
+      feedback.changesRequested ||
+      feedbackFingerprint(feedback) !== batch.feedbackFingerprint)
   ) {
     fail('new, unresolved, or changes-requested PR feedback invalidates the Claude approval');
   }
@@ -398,7 +610,9 @@ function assertDeploymentPrerequisites(deployments, configured, sourcePolicy) {
 // Freeze the entire authorized subject, including plan, evidence and review ledgers.
 // Remote verification must never acquire a newly loaded PR or source-issue set.
 function releaseSubject(batch) {
-  return JSON.stringify(batch);
+  if (!isRecordedMerge(batch) && !hasMergeReservation(batch)) return JSON.stringify(batch);
+  const { codexFinalReview, ...identity } = batch;
+  return JSON.stringify(identity);
 }
 
 function assertAutomaticReleaseOwnership(state, batch, automatic) {
@@ -416,7 +630,12 @@ function freshReleaseGuard({ batch, store, repo, automatic = false }) {
     const current = state ? state.batches.find((item) => item.id === batchId) : batch;
     if (state) assertAutomaticReleaseOwnership(state, current, automatic);
     assertNoReleaseHold(current);
-    if (current) verifyFinalCodexProof(current, current.sha);
+    if (current) {
+      if (isRecordedMerge(current) || hasMergeReservation(current)) {
+        if (current.release.reviewProof) verifyRecordedReviewProof(current, repo);
+        else historicalEntry(state, current);
+      } else verifyFinalCodexProof(current, current.sha);
+    }
     if (!current || releaseSubject(current) !== expected)
       fail('verified release identity changed during asynchronous verification');
     return { state, current };
@@ -647,7 +866,15 @@ export async function releaseBatch({
   if (!batch) fail('batch is absent from durable state');
   assertAutomaticReleaseOwnership(initial, batch, automatic);
   assertNoReleaseHold(batch);
-  verifyFinalCodexProof(batch, reviewedSha);
+  if (
+    batch.release?.status === 'merging' &&
+    (!hasMergeReservation(batch) ||
+      (await github.reviewFeedback(batch.pr.number)).state !== 'MERGED')
+  )
+    fail('existing merge reservation requires exact native merge recovery');
+  if (isRecordedMerge(batch) || hasMergeReservation(batch))
+    await verifyMergedReleaseProof({ state: initial, subject: batch, github, repository: repo });
+  else verifyFinalCodexProof(batch, reviewedSha);
   assertSavedPolicy(batch, sourcePolicy);
   let guard = freshReleaseGuard({ batch, store, repo, automatic });
   const exact = sourcePolicy === DEMO_SOURCE_POLICIES.exact;
@@ -793,7 +1020,10 @@ export async function releaseBatch({
     if (!SHA_RE.test(candidate.feedback.mergeCommitSha ?? ''))
       fail('merged PR has no verifiable merge commit');
     const { state, current } = await guard();
+    if (!isRecordedMerge(batch) && !hasMergeReservation(batch))
+      fail('unrecorded merge requires an immutable premerge reservation');
     current.release = {
+      ...batch.release,
       sourcePolicy,
       status: 'merged',
       reviewedSha,
@@ -844,19 +1074,56 @@ export async function releaseBatch({
   if (finalCandidate.feedback.state !== 'OPEN' || finalCandidate.feedback.isDraft)
     fail('PR must be open and ready for review before merge');
 
-  const mergeGuard =
-    exact && finalCandidate.deployments.backend
-      ? async () => {
-          await guard();
-          await preflight();
-          return guard();
-        }
-      : guard;
+  const reviewProof = captureReleaseReviewProof(batch, { repository: repo });
+  if (batch.release?.status === 'merging')
+    fail('existing merge reservation requires exact native merge recovery');
+  {
+    const { state, current } = await guard();
+    current.release = {
+      sourcePolicy,
+      status: 'merging',
+      reviewedSha,
+      prNumber: batch.pr.number,
+      nonce: randomUUID(),
+      reservedAt: new Date().toISOString(),
+      reviewProof,
+    };
+    const saved = await persistReleaseTransition({
+      state,
+      batch: current,
+      guard,
+      store,
+      repo,
+      automatic,
+    });
+    Object.assign(batch, saved);
+    guard = freshReleaseGuard({ batch, store, repo, automatic });
+  }
+  const mergeGuard = async () => {
+    const verified = await guard();
+    await verifyCurrentCandidate({
+      batch: verified.current,
+      sha: reviewedSha,
+      repo,
+      github,
+      verifyBlobs: false,
+      requireOpen: true,
+    });
+    if (exact && finalCandidate.deployments.backend) await preflight();
+    const fresh = await guard();
+    if (
+      JSON.stringify(captureReleaseReviewProof(fresh.current, { repository: repo })) !==
+      JSON.stringify(reviewProof)
+    )
+      fail('final Codex proof changed before native merge');
+    return fresh;
+  };
   const merge = await github.mergePullRequest(batch.pr.number, reviewedSha, {
     guard: mergeGuard,
   });
   const { state, current } = await guard();
   current.release = {
+    ...batch.release,
     sourcePolicy,
     status: 'merged',
     reviewedSha,
@@ -864,6 +1131,7 @@ export async function releaseBatch({
     prNumber: batch.pr.number,
     deployments: finalCandidate.deployments,
   };
+  await verifyMergedReleaseProof({ state, subject: current, github, repository: repo });
   const saved = await persistReleaseTransition({
     state,
     batch: current,
@@ -942,7 +1210,8 @@ export async function recordDeployment({
     (batch.release.prNumber !== undefined && batch.release.prNumber !== batch.pr?.number)
   )
     fail('recorded release no longer matches its approved candidate');
-  verifyReviewProof(batch, batch.sha);
+  await verifyMergedReleaseProof({ state: initial, subject: batch, github, repository: repo });
+  verifyReviewProof(batch, batch.sha, { merged: true });
   const guard = freshReleaseGuard({ batch, store, repo, automatic });
   if (publicationComplete(batch))
     return {
@@ -1080,6 +1349,7 @@ export async function publishDeploymentCompletion({
   if (automatic && !store?.load)
     throw new TypeError('automatic completion requires a durable store');
   sourcePolicy = releaseSourcePolicy(sourcePolicy);
+  repo ??= batch.release?.reviewProof?.repository;
   assertSavedPolicy(batch, sourcePolicy);
   const suppliedBatch = batch;
   batch = structuredClone(batch);
@@ -1135,7 +1405,13 @@ export async function publishDeploymentCompletion({
       implementationAttempts(current).at(-1)?.status !== 'passed'
     )
       fail('verified release identity changed before issue publication or closure');
-    verifyReviewProof(current, reviewedSha);
+    await verifyMergedReleaseProof({
+      state: verified.state,
+      subject: current,
+      github,
+      repository: repo,
+    });
+    verifyReviewProof(current, reviewedSha, { merged: true });
     if (deployments.backend) {
       try {
         await verifyExactReleaseTarget({
@@ -1314,6 +1590,10 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
   }
   github.verifyExactRecoveryRuns = (input) =>
     verifyRetiredExactDispatches({ ...input, reader: proofReader() });
+  github.readReleaseMergeReceipt = (number) =>
+    readReleaseMergeReceipt({ reader: proofReader(), repository: repo, number });
+  github.verifyHistoricalReleaseAncestry = (input) =>
+    verifyHistoricalReleaseAncestry({ ...input, reader: proofReader() });
   github.currentReleaseMain = async () => (await proofReader().getJson('commits/main')).sha;
   github.verifyReleaseAncestry = (input) =>
     verifyReleaseAncestry({ ...input, reader: proofReader() });

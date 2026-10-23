@@ -206,7 +206,6 @@ promettere atomicità del provider.
 
 Prompt completo da dare a Claude Max sul PC: [claude-local-review-prompt.md](claude-local-review-prompt.md).
 
-
 L'handback canonico `operatorTakeover.automation` richiede `enabled: true`,
 `mode: "new-unclaimed-only"`, `takeoverNonce` uguale al nonce non vuoto della presa in carico,
 `authorizedActor` non vuoto, `handedBackAt` come timestamp UTC ISO valido e `protectedSubjects`
@@ -237,3 +236,46 @@ QA, privi di intento di inferenza, non consumano slot. Uno storico di sessioni s
 ferma i ritentativi e non diventa una richiesta di modifica al codice. Il recupero specializzato
 `release-qa-reservation` mantiene la propria autorizzazione verificata dall'host fidato; queste
 correzioni non concedono un verificatore predefinito né modificano le regole di `resume`.
+
+Il vecchio record finale composto esattamente da `subjectSha`, `claudeRound`, `status` e
+`summary`, con verdetto completato valido, conta una sessione già spesa per quel SHA/round.
+Il contenuto originale resta identico; `legacyOrigins` registra separatamente la provenienza,
+senza inventare nonce, timestamp o fingerprint. Record moderni incompleti restano ambigui.
+`recover --action recover-final-qa` richiede un grant esterno consumato sull'identità e sulla
+cronologia esatte. Se lo storico è ambiguo, lo sigilla come allowance già esaurita; non concede
+un tentativo gratuito. `extend-final-qa` aggiunge una sola sessione per grant verificato in
+`finalQaAllowances`, separatamente dai budget implementazione/review. Una QA moderna già
+`verified` sull'attuale SHA/round/fingerprint viene riutilizzata se è fallita solo la pubblicazione:
+non si ripete l'inferenza completata. Le sessioni vive o con esito incerto mantengono le protezioni
+di lease e recupero esplicito esistenti.
+
+Un errore di osservazione GitHub prima dell'effetto può sospendere l'operazione corrente senza
+trasformarla in un fallimento del codice. Il journal `controllerProgress` conserva i sette passi
+execute, verifica, semplificazione, verifica, QA, checkpoint e push; il passo completato non viene
+rieseguito. `controllerInterruption` conserva il codice/diagnostico finito originale, senza stderr
+privato. Anche un errore di trasporto non classificato può essere sospeso, ma non viene chiamato
+transitorio né ritentato automaticamente. Autenticazione rifiutata, stato/hash/schema invalidi e
+scritture incerte restano errori fatali; non aprono quattro nuovi tentativi implementativi.
+
+`recover --action resume-observation` per una PR esistente richiede il token
+`controllerInterruption.progressSha256` e un'autorizzazione verificata dall'host. Prima della PR,
+lo stesso host canonico può usare `authorizeObservationResume` con il soggetto iniziale esatto
+e salvare tramite CAS. Nessun verifier è configurato automaticamente dalla CLI. La ripresa
+verifica il worktree registrato, branch, HEAD, baseline, piano/packet congelati, scope e digest
+esatto di ogni output del controller. Non accetta file sporchi generici e non reinstalla o resetta.
+Se un nuovo runner Actions ha perso il worktree, la ripresa si ferma: questa funzione non rende
+persistenti i worktree remoti e non ripete modelli già eseguiti o dal risultato incerto.
+
+Ogni nuovo merge deve conservare la prova Codex finale legata a SHA/round/fingerprint nella
+ricevuta di rilascio. Dopo il merge, il completamento usa la ricevuta congelata e l'identità
+GitHub `MERGED`, senza dipendere dal puntatore mutabile della QA. I soli merge storici già
+appartenenti al main fisso `2ee298957c3e1733b01a4b4aca4b48b890032f69` possono usare un
+cutover finito registrato dal writer fidato dopo verifica dei veri merge e dell'ancestry.
+Quel cutover non autorizza nuovi merge, non inventa QA storiche e non rimuove hold, native
+review, controlli provider o protezioni della sorgente. Prima del rollout il coordinatore deve
+registrare una prova fresca dell'assenza di vecchi handback globali: non viene migrata una
+struttura ipotetica né allentata la validazione stretta del takeover.
+
+Il worker Actions usa il canale `external`: la readiness del percorso interno di test, priva di
+una QA finale legata alla review Claude attuale, non concede da sola un nuovo merge automatico.
+Anche quel rilascio deve prima ottenere la prova finale richiesta dal gate.

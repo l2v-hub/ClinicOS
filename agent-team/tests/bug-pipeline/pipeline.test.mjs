@@ -4,6 +4,7 @@ import { runPipeline } from '../../src/bug-pipeline/pipeline.mjs';
 import { createGitHub } from '../../src/bug-pipeline/github.mjs';
 import {
   recordDeployment,
+  captureReleaseReviewProof,
   releaseBatch,
   selectAutoReleaseBatch,
   publicationComplete,
@@ -785,6 +786,18 @@ test('remote compare-and-swap failure while reserving an implementation attempt 
 
 test('actual controller defers pending backend completion to protected confirmation and retries without models, merge or deploy', async () => {
   const batch = reviewedTerminalBatch();
+  // This case covers a new merge with an immutable source-bound receipt.
+  // Genuine pre-cutover terminal subjects remain covered separately above.
+  batch.codexFinalReview = {
+    status: 'verified',
+    subjectSha: batch.sha,
+    claudeRound: batch.reviews.length,
+    feedbackFingerprint: batch.feedbackFingerprint,
+    nonce: 'synthetic-completed-qa',
+    reservedAt: '2026-10-23T00:00:00Z',
+  };
+  batch.release.prNumber = batch.pr.number;
+  batch.release.reviewProof = captureReleaseReviewProof(batch, { repository: repo });
   batch.plan.scope.push('backend/src/routes/patients.ts');
   batch.plan.tasks[0].files.push('backend/src/routes/patients.ts');
   batch.plan.fileMap.forEach((entry) => entry.files.push('backend/src/routes/patients.ts'));
@@ -1408,6 +1421,45 @@ test('QA6-F1 invalid active types never reach intake or discovery; legitimate in
   }
 });
 
+test('F5 draftReady proxy rechecks takeover before its GitHub effect', async () => {
+  const make = () => {
+    const batch = batchFor({ issues: [17], phase: 'waiting-review' });
+    const h = harness({
+      issues: [17],
+      queue: [],
+      initialState: { ...blankState(), batches: [batch] },
+    });
+    let calls = 0;
+    h.gh.draftReady = async () => {
+      calls += 1;
+      h.log.push('gh.draftReady');
+    };
+    return { h, batch, calls: () => calls };
+  };
+
+  const taken = make();
+  let owned;
+  taken.h.gh.reviewFeedback = async function () {
+    taken.h.stateRef.value.batches[0].operatorCoordination = { active: true };
+    taken.h.stateRef.value.batches[0].remoteNote = 'preserve operator data';
+    taken.h.stateRef.value.operatorTakeover = takeoverHandback([
+      { collection: 'batches', id: taken.batch.id },
+    ]);
+    owned = clone(taken.h.stateRef.value.batches[0]);
+    return this.draftReady(taken.batch.pr.number);
+  };
+  await taken.h.run().catch(() => {});
+  assert.equal(taken.calls(), 0, 'owned draft must not call the real draftReady effect');
+  assert.deepEqual(taken.h.stateRef.value.batches[0], owned);
+
+  const free = make();
+  free.h.gh.reviewFeedback = async function () {
+    return this.draftReady(free.batch.pr.number);
+  };
+  await free.h.run();
+  assert.equal(free.calls(), 1, 'unowned eligible draft still reaches draftReady');
+});
+
 test('QA6-F5 external ownership exception refreshes canonical A before independent B disposition', async () => {
   const a = batchFor({ issues: [17], phase: 'waiting-review' }),
     b = batchFor({ issues: [18], phase: 'waiting-review' });
@@ -1448,4 +1500,224 @@ test('QA6-F5 external ownership exception refreshes canonical A before independe
     false,
   );
   assert.equal(h.counts.execute, 0);
+});
+
+test('Author7 F3 observation failure before execute pauses the same unstarted attempt without model work', async () => {
+  const h = harness({ issues: [17] });
+  let failed = false;
+  h.store.observe = async () => {
+    if (!failed && h.stateRef.value?.batches[0]?.phase === 'implementing') {
+      failed = true;
+      throw Object.assign(new Error('synthetic timeout'), {
+        code: 'github-read-transient',
+        operation: 'read',
+        retryable: true,
+        diagnostic: 'timeout',
+      });
+    }
+    return clone(h.stateRef.value);
+  };
+  await h.run();
+  assert.equal(failed, true);
+  assert.equal(h.counts.execute, 0);
+  assert.equal(h.stateRef.value.batches[0].implementation.length, 1);
+  assert.equal(h.stateRef.value.batches[0].implementation[0].status, 'running');
+  assert.equal(h.stateRef.value.batches[0].failureCode, 'github-read-transient');
+});
+
+test('Author7 F4 ownership acquired while diagnosing a real failure preserves A and still reviews B', async () => {
+  const a = batchFor({ issues: [17], phase: 'waiting-checks' }),
+    b = batchFor({ issues: [18], phase: 'waiting-checks' });
+  b.pr = { number: 82, url: 'https://github.com/l2v-hub/ClinicOS/pull/82' };
+  for (const batch of [a, b]) batch.feedbackFingerprint = feedbackFingerprint(openFeedback(batch));
+  const h = harness({
+    issues: [17, 18],
+    queue: [],
+    initialState: { ...blankState(), batches: [a, b] },
+  });
+  let failed = false,
+    frozen;
+  h.workspace.prepare = async (batch) => {
+    if (batch.id === a.id) {
+      failed = true;
+      throw new Error('genuine preparation failure');
+    }
+  };
+  h.store.observe = async () => {
+    if (failed && !frozen) {
+      h.stateRef.value.batches[0].operatorCoordination = { active: true };
+      h.stateRef.value.batches[0].remoteNote = 'owner';
+      h.stateRef.value.operatorTakeover = takeoverHandback([{ collection: 'batches', id: a.id }]);
+      frozen = clone(h.stateRef.value.batches[0]);
+    }
+    return clone(h.stateRef.value);
+  };
+  h.gh.reviewFeedback = async (n) =>
+    openFeedback(h.stateRef.value.batches.find((x) => x.pr.number === n));
+  h.gh.commentPR = async () => {};
+  h.gh.requiredChecks = async () => ({ ok: true });
+  const reviewed = [];
+  h.workspace.review = async (batch) => {
+    reviewed.push(batch.id);
+    return { subject_sha: batch.sha, verdict: 'approved', summary: 'fixture', findings: [] };
+  };
+  const result = await h.run();
+  assert.deepEqual(result.batches[0], frozen);
+  assert.deepEqual(h.stateRef.value.batches[0], frozen);
+  assert.deepEqual(reviewed, [b.id]);
+  assert.equal(result.batches[1].phase, 'ready');
+});
+
+test('Author7 F3 pre-invocation unknown read transport pauses without pretending transient or retrying code', async () => {
+  const h = harness({ issues: [17] });
+  let failed = false;
+  h.store.observe = async () => {
+    if (!failed && h.stateRef.value?.batches[0]?.phase === 'implementing') {
+      failed = true;
+      throw Object.assign(Error('Sanitized unknown transport'), {
+        code: 'github-read-failed',
+        operation: 'read',
+        diagnostic: 'unknown',
+      });
+    }
+    return clone(h.stateRef.value);
+  };
+  await h.run();
+  const b = h.stateRef.value.batches[0];
+  assert.equal(h.counts.execute, 0);
+  assert.equal(b.implementation.length, 1);
+  assert.equal(b.implementation[0].status, 'running');
+  assert.equal(b.failureCode, 'github-read-failed');
+  assert.equal(b.phase, 'blocked');
+});
+test('Author7 F3 authentication refusal before model is fatal and never starts four code attempts', async () => {
+  const h = harness({ issues: [17] });
+  let failed = false;
+  h.store.observe = async () => {
+    if (!failed && h.stateRef.value?.batches[0]?.phase === 'implementing') {
+      failed = true;
+      throw Object.assign(Error('Sanitized auth refusal'), {
+        code: 'github-read-rejected',
+        operation: 'read',
+        httpStatus: 403,
+      });
+    }
+    return clone(h.stateRef.value);
+  };
+  await h.run();
+  const b = h.stateRef.value.batches[0];
+  assert.equal(h.counts.execute, 0);
+  assert.equal(b.implementation.length, 1);
+  assert.equal(b.phase, 'blocked');
+  assert.equal(b.controllerProgress.resumeAuthorization, undefined);
+  assert.equal(b.failureCode, 'github-read-rejected');
+});
+
+test('Author7 F3 malformed authenticated state is fatal before model and cannot consume repeated code attempts', async () => {
+  const h = harness({ issues: [17] });
+  let failed = false;
+  h.store.observe = async () => {
+    if (!failed && h.stateRef.value?.batches[0]?.phase === 'implementing') {
+      failed = true;
+      return { ...clone(h.stateRef.value), schemaVersion: 99 };
+    }
+    return clone(h.stateRef.value);
+  };
+  await h.run();
+  const b = h.stateRef.value.batches[0];
+  assert.equal(h.counts.execute, 0);
+  assert.equal(b.implementation.length, 1);
+  assert.equal(b.phase, 'blocked');
+  assert.equal(b.controllerProgress.resumeAuthorization, undefined);
+});
+
+test('Author7 F2 a durable native merge reservation is terminal to implementation while receipt reconciliation remains separate', async () => {
+  const b = batchFor({ issues: [17], phase: 'publishing' });
+  b.implementation = [{ round: 1, status: 'running' }];
+  b.release = {
+    status: 'merging',
+    reviewedSha: b.sha,
+    prNumber: b.pr.number,
+    nonce: 'actual-uncertain-merge',
+  };
+  const original = clone(b),
+    h = harness({ issues: [17], queue: [], initialState: { ...blankState(), batches: [b] } });
+  await h.run();
+  assert.deepEqual(h.stateRef.value.batches[0], original);
+  assert.equal(h.counts.execute, 0);
+  assert.equal(h.counts.review, 0);
+  assert.ok(!h.log.includes('workspace.prepare'));
+});
+
+test('Author7 F3 completed internal feedback stages resume only the unstarted publication after final save observation fails', async () => {
+  const b = batchFor({
+    issues: [17],
+    phase: 'waiting-checks',
+    head: sha('b'),
+    reviews: [{ round: 1, status: 'approved', subjectSha: sha('b') }],
+  });
+  b.feedbackFingerprint = feedbackFingerprint(openFeedback(b));
+  const h = harness({
+    issues: [17],
+    queue: [],
+    initialState: { ...blankState(), batches: [b] },
+    feedback: ({ batch }) =>
+      openFeedback(batch, { comments: [{ id: 1, body: 'Actual new note' }] }),
+  });
+  h.workspace.captureCheckpoint = async () => ({
+    schemaVersion: 1,
+    output: 'exact-synthetic-controller-output',
+  });
+  h.workspace.resume = async (_batch, checkpoint) =>
+    assert.equal(checkpoint.output, 'exact-synthetic-controller-output');
+  let failed = false;
+  h.store.observe = async () => {
+    const current = h.stateRef.value.batches[0];
+    if (!failed && current.controllerProgress?.next === 7) {
+      failed = true;
+      throw Object.assign(Error('Sanitized final-save timeout'), {
+        code: 'github-read-transient',
+        operation: 'read',
+      });
+    }
+    return clone(h.stateRef.value);
+  };
+  await h.run();
+  let current = h.stateRef.value.batches[0];
+  assert.equal(failed, true);
+  assert.equal(current.phase, 'blocked');
+  assert.equal(current.controllerProgress.status, 'interrupted');
+  assert.equal(h.counts.execute, 1);
+  assert.equal(h.counts.simplify, 1);
+  const { authorizeObservationResume } =
+    await import('../../src/bug-pipeline/operator-authorization.mjs');
+  await authorizeObservationResume({
+    state: h.stateRef.value,
+    subject: current,
+    actor: 'maintainer',
+    reference: 'test:internal-complete',
+    reason: 'Retained exact boundary checkpoint',
+    verifier: async ({ binding }) => ({
+      provenance: 'user-session',
+      grantId: 'test:grant',
+      consumptionNonce: 'test:internal-final-save',
+      sourceRef: 'test:host',
+      binding,
+    }),
+  });
+  await h.run();
+  current = h.stateRef.value.batches[0];
+  assert.equal(
+    current.phase,
+    'ready',
+    JSON.stringify({
+      reason: current.reason,
+      code: current.failureCode,
+      progress: current.controllerProgress,
+      log: h.log,
+    }),
+  );
+  assert.equal(h.counts.execute, 1);
+  assert.equal(h.counts.simplify, 1);
+  assert.equal(current.controllerProgress.status, 'completed');
 });

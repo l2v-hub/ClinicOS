@@ -1105,3 +1105,20 @@ test('QA6-F5 typed ownership loss inside correction preserves the already reserv
   await assert.rejects(externalReviewStep(args), (error) => error.code === 'review-operator-owned');
   assert.equal(batch.implementation.at(-1).status, 'running');
 });
+
+test('Author7 F1 exact original legacy verified QA is one spent session, not an unrecoverable ambiguity', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  const old = {
+    subjectSha: batch.sha,
+    claudeRound: 1,
+    status: 'verified',
+    summary: 'Original main independent QA',
+  };
+  batch.codexFinalReview = structuredClone(old);
+  await externalReviewStep(args);
+  assert.equal(batch.phase, 'ready');
+  assert.equal(log.filter((x) => x === 'qa').length, 1);
+  assert.deepEqual(batch.codexFinalReviewHistory[0], old);
+  assert.equal(batch.codexFinalQaInfrastructure.legacyOrigins.length, 1);
+  assert.deepEqual(batch.codexFinalQaInfrastructure.legacyOrigins[0].original, old);
+});

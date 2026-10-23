@@ -1,9 +1,14 @@
 import {
   attemptLimit,
+  finalQaAccounting,
+  finalQaLimit,
   activeImplementation,
+  implementationAttempts,
   reserveImplementation,
   spentAttempts,
 } from './attempt-budget.mjs';
+import { validateObservationResume } from './operator-authorization.mjs';
+import { runImplementationStages } from './workspace.mjs';
 import { feedbackFingerprint, sha256 } from './contracts.mjs';
 import { createIssueReviewCommunication } from './issue-review-communication.mjs';
 import { createCommentReviewHandoff } from './comment-review-handoff.mjs';
@@ -42,63 +47,6 @@ export function externalReport(batch) {
   return report;
 }
 
-// Recovery moves final-QA records between collections. Count the original intent,
-// not its current pointer or the number of archived copies. Originals stay untouched.
-function finalQaSpend(batch, prior, binding) {
-  const infrastructure = (batch.codexFinalQaInfrastructure ??= { attempts: [] });
-  if (
-    !Array.isArray(infrastructure.attempts) ||
-    (batch.qaHistory !== undefined && !Array.isArray(batch.qaHistory)) ||
-    (batch.codexFinalReviewHistory !== undefined && !Array.isArray(batch.codexFinalReviewHistory))
-  )
-    return { infrastructure, ambiguous: true };
-  const seen = new Set();
-  let ambiguous = false;
-  const spentStatus = (status) =>
-    ['running', 'failed', 'verified', 'changes-requested'].includes(status);
-  const differentIdentity = (entry) =>
-    (typeof entry.subjectSha === 'string' &&
-      /^[a-f0-9]{40}$/.test(entry.subjectSha) &&
-      entry.subjectSha !== binding.subjectSha) ||
-    (Number.isSafeInteger(entry.claudeRound) && entry.claudeRound !== binding.claudeRound) ||
-    (typeof entry.feedbackFingerprint === 'string' &&
-      entry.feedbackFingerprint.trim() &&
-      entry.feedbackFingerprint !== binding.feedbackFingerprint);
-  const include = (entry, origin, archived) => {
-    if (['waiting-checks', 'blocked'].includes(entry?.status)) return;
-    if (archived && !spentStatus(entry?.status)) return;
-    if (entry && differentIdentity(entry)) return;
-    if (
-      !entry ||
-      !spentStatus(entry.status) ||
-      !Object.keys(binding).every((key) => entry[key] === binding[key]) ||
-      typeof entry.nonce !== 'string' ||
-      !entry.nonce.trim() ||
-      typeof entry.reservedAt !== 'string' ||
-      !Number.isFinite(Date.parse(entry.reservedAt))
-    ) {
-      ambiguous = true;
-      return;
-    }
-    if (seen.has(entry.nonce)) return;
-    seen.add(entry.nonce);
-    if (archived)
-      infrastructure.attempts.push({
-        ...structuredClone(entry),
-        legacy: true,
-        importedFrom: origin,
-      });
-  };
-  for (const entry of infrastructure.attempts) include(entry, 'infrastructure', false);
-  for (const [origin, entries] of [
-    ['current', prior ? [prior] : []],
-    ['qaHistory', batch.qaHistory ?? []],
-    ['codexFinalReviewHistory', batch.codexFinalReviewHistory ?? []],
-  ])
-    for (const entry of entries) include(entry, origin, true);
-  return { infrastructure, spent: seen.size, ambiguous };
-}
-
 async function runExternalReviewStep({
   repo,
   batch,
@@ -114,6 +62,12 @@ async function runExternalReviewStep({
   }),
 }) {
   const observedAt = new Date().toISOString();
+  const resumingCorrection =
+    batch.controllerProgress?.status === 'interrupted' &&
+    batch.controllerProgress?.resumeAuthorization &&
+    batch.controllerProgress.flow === 'external-review-correction';
+  if (resumingCorrection) validateObservationResume(batch);
+  const reviewSubjectSha = resumingCorrection ? batch.controllerProgress.sourceSha : batch.sha;
   // Informational publication is recoverable by the sibling. It must not consume
   // an implementation attempt that was reserved for a real code correction.
   const notify = () =>
@@ -142,8 +96,9 @@ async function runExternalReviewStep({
       return block(batch, 'Source issue was closed or cancelled during external review');
   }
   if (
-    ['implementing', 'validating', 'simplifying', 'publishing'].includes(batch.phase) ||
-    activeImplementation(batch)
+    !batch.controllerProgress?.resumeAuthorization &&
+    (['implementing', 'validating', 'simplifying', 'publishing'].includes(batch.phase) ||
+      activeImplementation(batch))
   )
     return blocked('Interrupted Codex correction requires explicit recovery');
   // The real PR mirror also reaches an older installed Max worker, without changing
@@ -152,7 +107,7 @@ async function runExternalReviewStep({
   const feedback = await gh.reviewFeedback(batch.pr.number);
   if (
     feedback.state !== 'OPEN' ||
-    feedback.head !== batch.sha ||
+    feedback.head !== reviewSubjectSha ||
     feedback.headRef !== batch.branch ||
     feedback.headRepo !== repo ||
     feedback.headIsFork ||
@@ -166,8 +121,11 @@ async function runExternalReviewStep({
     // A running final session remains owned even if new feedback arrives.
     if (batch.codexFinalReview?.status === 'running')
       return blocked('Interrupted independent Codex review requires recovery');
-    if (handoff.subjectSha !== batch.sha) return blocked('External review handoff SHA changed');
-    const verdict = externalReport(batch);
+    if (handoff.subjectSha !== reviewSubjectSha)
+      return blocked('External review handoff SHA changed');
+    const verdict = externalReport(
+      resumingCorrection ? { ...batch, sha: reviewSubjectSha } : batch,
+    );
     if (verdict.verdict === 'blocked')
       return blocked('External Claude reviewer blocked the change');
     let changed = handoff.feedbackChanged || fingerprint !== handoff.feedbackFingerprint;
@@ -234,7 +192,9 @@ async function runExternalReviewStep({
           claudeRound: batch.reviews.length,
           feedbackFingerprint: fingerprint,
         };
-        const { infrastructure, spent, ambiguous } = finalQaSpend(batch, prior, binding);
+        const { infrastructure, spent, ambiguous } = finalQaAccounting(batch, prior, binding, {
+          recordOrigins: true,
+        });
         if (ambiguous) {
           batch.codexFinalReview.status = 'blocked';
           batch.codexFinalReview.failureCode = 'final-qa-infrastructure-history-ambiguous';
@@ -243,7 +203,7 @@ async function runExternalReviewStep({
             'Independent final QA inference history is ambiguous; explicit recovery required',
           );
         }
-        if (spent >= 3) {
+        if (spent >= finalQaLimit(batch, binding)) {
           batch.codexFinalReview.status = 'blocked';
           batch.codexFinalReview.failureCode = 'final-qa-infrastructure-exhausted';
           await save();
@@ -275,6 +235,18 @@ async function runExternalReviewStep({
           inference.status = batch.codexFinalReview.status;
         } catch (error) {
           if (error?.code === 'review-operator-owned') throw error;
+          if (error?.code === 'ownership-observation-failed' && error.beforeInvocation === true) {
+            inference.status = 'not-started';
+            inference.invocation = {
+              status: 'not-started',
+              boundary: 'ownership-observation',
+              nonce: inference.nonce,
+            };
+            batch.codexFinalReview.status = 'blocked';
+            batch.codexFinalReview.invocation = structuredClone(inference.invocation);
+            await save();
+            throw error;
+          }
           inference.status = 'failed';
           batch.codexFinalReview.status = 'failed';
           await save();
@@ -322,56 +294,51 @@ async function runExternalReviewStep({
     }
     if (batch.reviews.length >= attemptLimit(batch, 'reviews'))
       return blocked('Four external Claude review attempts exhausted');
-    if (spentAttempts(batch, 'implementation') >= attemptLimit(batch, 'implementation'))
+    if (
+      !batch.controllerProgress?.resumeAuthorization &&
+      spentAttempts(batch, 'implementation') >= attemptLimit(batch, 'implementation')
+    )
       return blocked('Four implementation/validation attempts exhausted');
-    await workspace.prepare(batch);
-    const attempt = reserveImplementation(batch);
-    batch.phase = 'implementing';
+    if (!batch.controllerProgress?.resumeAuthorization) await workspace.prepare(batch);
+    const attempt =
+      (batch.controllerProgress?.resumeAuthorization &&
+        implementationAttempts(batch).find(
+          (item) => item.round === batch.controllerProgress.round && item.status === 'running',
+        )) ||
+      reserveImplementation(batch);
     batch.approvedSha = null;
     batch.issueFeedbackSince ??= observedAt;
-    await save();
-    await notify();
     try {
-      if (
-        (
-          await workspace.execute(batch, {
-            phase: 'external-review-correction',
-            round: attempt.round,
-            feedback: {
-              claude: verdict,
-              github: feedback,
-              ...(batch.codexFinalReview ? { codex: batch.codexFinalReview } : {}),
-            },
-          })
-        ).status !== 'implemented'
-      )
-        throw new Error('Correction blocked');
-      batch.phase = 'validating';
-      await save();
-      await workspace.verify(batch);
-      batch.phase = 'simplifying';
-      await save();
-      if ((await workspace.simplify(batch)).status !== 'implemented')
-        throw new Error('Simplification blocked');
-      batch.phase = 'validating';
-      await save();
-      await workspace.verify(batch);
-      if ((await workspace.qa(batch)).status !== 'verified')
-        throw new Error('Independent QA blocked');
-      batch.phase = 'publishing';
-      await save();
-      const previous = batch.sha;
-      batch.sha = await workspace.checkpoint(batch);
+      const previous = reviewSubjectSha;
+      await runImplementationStages({
+        batch,
+        workspace,
+        save,
+        beforeStage: async (step) => {
+          if (step === 'execute') await notify();
+        },
+        context: {
+          phase: 'external-review-correction',
+          round: attempt.round,
+          feedback: resumingCorrection
+            ? batch.controllerProgress.feedback
+            : {
+                claude: verdict,
+                github: feedback,
+                ...(batch.codexFinalReview ? { codex: batch.codexFinalReview } : {}),
+              },
+        },
+      });
       if (batch.sha === previous)
         throw new Error('Correction did not produce a new reviewed revision');
-      await workspace.publish(batch);
       attempt.status = 'passed';
       batch.externalReview = null;
       batch.phase = 'waiting-checks';
       await save();
       await report(batch, await workspace.issueEvidence(batch));
     } catch (error) {
-      if (error?.code !== 'review-operator-owned') attempt.status = 'failed';
+      if (!['review-operator-owned', 'ownership-observation-failed'].includes(error?.code))
+        attempt.status = 'failed';
       throw error;
     }
   } else if (handoff?.status === 'requested' && handoff.subjectSha === batch.sha) {

@@ -2018,7 +2018,7 @@ test('GitHub failure semantics distinguish positive status evidence, default POS
     [
       { ok: false, code: 1, stderr: refusal, error: 'spawn-failed' },
       'github-write-uncertain',
-      'unknown',
+      'spawn-failed',
     ],
     [
       { ok: false, code: null, stderr: refusal, error: 'timeout' },
@@ -2357,4 +2357,44 @@ test('Claude1 F5 fresh owner hook is never used after auth failures, definite re
     assert.equal(ownershipChecks, 0);
     assert.deepEqual(await store.load(), entityState());
   }
+});
+
+test('Author7 F3 observer reads authenticated Contents without branch creation and caches only unchanged identity', async () => {
+  let state = {
+      schemaVersion: 1,
+      repository: 'l2v-hub/ClinicOS',
+      batches: [],
+      retained: 'x'.repeat(1024 * 1024 + 1),
+    },
+    blobs = 0;
+  const calls = [];
+  const gh = createGitHub({
+    repo: 'l2v-hub/ClinicOS',
+    cwd: '/synthetic',
+    run: async (call) => {
+      calls.push(call);
+      const endpoint = call.args[1];
+      assert.ok(
+        !endpoint.includes('/git/ref/') && !call.args.includes('POST'),
+        'Read-only observation never ensures/creates the branch',
+      );
+      const contents = stateContents(state);
+      if (endpoint.includes('/git/blobs/')) {
+        blobs++;
+        return response({ ...contents, encoding: 'base64' });
+      }
+      return response({ ...contents, encoding: 'none', content: '' });
+    },
+  });
+  const store = gh.createStateStore();
+  assert.deepEqual(await store.observe(), state);
+  assert.equal(blobs, 1);
+  const copy = await store.observe();
+  copy.retained = 'local-only';
+  assert.equal(blobs, 1);
+  assert.equal((await store.observe()).retained, state.retained);
+  state.note = 'fresh owner';
+  assert.equal((await store.observe()).note, 'fresh owner');
+  assert.equal(blobs, 2);
+  assert.equal(calls.filter((c) => c.args[1].includes('/contents/')).length, 4);
 });

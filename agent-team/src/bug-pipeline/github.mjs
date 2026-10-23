@@ -145,13 +145,17 @@ export function githubOperationError(result, operation = 'read') {
       retryable: ['read', 'projection'].includes(operation) && transient,
       diagnostic: timeout
         ? 'timeout'
-        : rateLimited
-          ? 'rate-limit'
-          : status
-            ? 'http-status'
-            : graphqlMergeRefusal
-              ? 'graphql-merge-refusal'
-              : 'unknown',
+        : result?.error === 'output-limit'
+          ? 'output-limit'
+          : result?.error === 'spawn-failed'
+            ? 'spawn-failed'
+            : rateLimited
+              ? 'rate-limit'
+              : status
+                ? 'http-status'
+                : graphqlMergeRefusal
+                  ? 'graphql-merge-refusal'
+                  : 'unknown',
     },
   );
 }
@@ -767,9 +771,39 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       }
     }
 
-    // Fresh ownership observations never promote this writer's expected Contents
-    // SHA or base snapshot. A later save must still reconcile a real remote CAS.
-    return { load, save, observe: () => createStateStore().load() };
+    let observed;
+    async function observe() {
+      // No ensureBranch here: a supposedly read-only guard may never initialize it.
+      const response = await api(
+        `repos/${repo}/contents/${STATE_PATH}?ref=${encodeURIComponent(STATE_BRANCH)}`,
+        { allowFailure: true, maxOutputBytes: STATE_OUTPUT_BYTES },
+      );
+      if (!response.ok) {
+        if (notFound(response) && fileSHA === null) return null;
+        throw githubOperationError(response.result, 'read');
+      }
+      const value = response.value;
+      if (
+        value?.type !== 'file' ||
+        value.target !== undefined ||
+        value.submodule_git_url !== undefined ||
+        typeof value.sha !== 'string' ||
+        !/^[a-f0-9]{40}$/i.test(value.sha) ||
+        !Number.isSafeInteger(value.size) ||
+        value.size <= 0 ||
+        value.size > MAX_DURABLE_STATE_BYTES ||
+        !['base64', 'none'].includes(value.encoding) ||
+        (value.encoding === 'none' && value.content !== '')
+      )
+        throw new Error('Durable observation metadata is invalid');
+      if (observed?.sha === value.sha && observed.size === value.size)
+        return structuredClone(observed.state);
+      const state = await decodeDurableState(value);
+      observed = { sha: value.sha, size: value.size, state: structuredClone(state) };
+      return state;
+    }
+    // Observations never alter the writer's remembered CAS SHA/base.
+    return { load, save, observe };
   }
 
   async function createDraft({ branch, title, body }) {

@@ -1,3 +1,4 @@
+import { captureReleaseReviewProof } from './release.mjs';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import {
   githubOperationError,
@@ -188,7 +189,8 @@ export function validateStandaloneSubject(subject) {
   attempts(subject.implementation, false, attemptLimit(subject, 'implementation'));
   assert.ok(subject.implementation.length > 0);
   assert.ok(
-    subject.operatorContinuations?.length || implementationAttempts(subject).at(-1).status === 'passed',
+    subject.operatorContinuations?.length ||
+      implementationAttempts(subject).at(-1).status === 'passed',
     'Implementation/evidence not verified',
   );
   for (const attempt of subject.implementation)
@@ -270,7 +272,15 @@ export function validateStandaloneState(state) {
   return state;
 }
 
-export function createStandaloneReview({ github, run, cwd, now = () => new Date(), nonce, authorizationVerifier, operationTimeouts }) {
+export function createStandaloneReview({
+  github,
+  run,
+  cwd,
+  now = () => new Date(),
+  nonce,
+  authorizationVerifier,
+  operationTimeouts,
+}) {
   const store = github.createStateStore();
   const automaticContext = new AsyncLocalStorage();
   async function api(endpoint, method = 'GET', body) {
@@ -288,7 +298,11 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
       maxOutputBytes: 16 * 1024 * 1024,
       envMode: 'controller',
     });
-    if (!result.ok) throw githubOperationError(result, method === 'GET' && body === undefined ? 'read' : 'projection');
+    if (!result.ok)
+      throw githubOperationError(
+        result,
+        method === 'GET' && body === undefined ? 'read' : 'projection',
+      );
     return result.stdout ? JSON.parse(result.stdout) : null;
   }
   async function native(subject) {
@@ -398,8 +412,11 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
   }
   async function verify(subject) {
     validateStandaloneSubject(subject);
-    assert.equal(implementationAttempts(subject).at(-1)?.status, 'passed',
-      'Latest implementation/evidence not verified');
+    assert.equal(
+      implementationAttempts(subject).at(-1)?.status,
+      'passed',
+      'Latest implementation/evidence not verified',
+    );
     for (const attempt of subject.operatorContinuations ?? [])
       assert.ok(
         ['passed', 'failed', 'blocked'].includes(attempt.status) &&
@@ -540,7 +557,12 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
     const subject = {
       ...clone(manifest),
       ...Object.fromEntries(
-        ['budgetExtensions', 'budgetAuthorizationCutover', 'operatorContinuations', 'operatorCoordination']
+        [
+          'budgetExtensions',
+          'budgetAuthorizationCutover',
+          'operatorContinuations',
+          'operatorCoordination',
+        ]
           .filter((key) => previous?.[key])
           .map((key) => [key, clone(previous[key])]),
       ),
@@ -591,9 +613,17 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
         'operatorCoordination',
         'recoveryHistory',
         'qaHistory',
+        'codexFinalReviewHistory',
+        'codexFinalQaInfrastructure',
+        'finalQaAllowances',
+        'finalQaHistoryResolutions',
         'mergeHistory',
       ])
         if (previous[key]) subject[key] = clone(previous[key]);
+      if (previous.codexFinalReview) {
+        subject.qaHistory ??= [];
+        subject.qaHistory.push(clone(previous.codexFinalReview));
+      }
       if (previous.release) {
         assert.equal(previous.release.status, 'merging', 'A merged subject is terminal');
         // verify() and the persistence guard authenticate an OPEN different head.
@@ -643,6 +673,13 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
       'merging',
       'Merge recovery requires its durable reservation',
     );
+    equal(
+      batch.release.reviewProof,
+      captureReleaseReviewProof(
+        { ...batch, codexFinalReview: batch.release.reviewProof?.finalCodexReview },
+        { repository: STANDALONE_REPO, collection: 'standaloneReviews' },
+      ),
+    );
     const pr = await api(`repos/${STANDALONE_REPO}/pulls/${expected.pr.number}`);
     assert.ok(
       pr.number === expected.pr.number &&
@@ -665,6 +702,13 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
   async function guardSubject(subject, login) {
     assert.equal(await handoff.actor(), login, 'Persistence actor changed');
     if (subject.release?.status === 'merged') {
+      equal(
+        subject.release.reviewProof,
+        captureReleaseReviewProof(
+          { ...subject, codexFinalReview: subject.release.reviewProof?.finalCodexReview },
+          { repository: STANDALONE_REPO, collection: 'standaloneReviews' },
+        ),
+      );
       const pr = await api(`repos/${STANDALONE_REPO}/pulls/${subject.pr.number}`);
       assert.ok(
         pr.number === subject.pr.number &&
@@ -688,8 +732,11 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
     let subject = state.standaloneReviews?.find((item) => item.pr.number === pr);
     assert.ok(subject, 'Finalize supports explicitly adopted standalone subjects only');
     await handoff.actor();
-    if (subject.lastTransientFailure?.subjectSha === subject.sha &&
-      subject.lastTransientFailure.nextRetryAt > now().getTime()) return clone(subject);
+    if (
+      subject.lastTransientFailure?.subjectSha === subject.sha &&
+      subject.lastTransientFailure.nextRetryAt > now().getTime()
+    )
+      return clone(subject);
     let persistenceFailed = false;
     const save = async (options) => {
       validateStandaloneState(state);
@@ -720,7 +767,10 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
         infrastructureFiles,
         now,
       });
-      if (subject.lastTransientFailure) { delete subject.lastTransientFailure; await save(); }
+      if (subject.lastTransientFailure) {
+        delete subject.lastTransientFailure;
+        await save();
+      }
     } catch (error) {
       if (persistenceFailed) throw error;
       state = validateStandaloneState(await store.load());
@@ -729,7 +779,10 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
       if (error?.code === 'review-operator-owned')
         return { status: 'skipped', reason: 'operator-owned' };
       if (isRetryableGitHubFailure(error)) {
-        if (!recordTransientGitHubFailure(subject, now().getTime())) { await save(); throw error; }
+        if (!recordTransientGitHubFailure(subject, now().getTime())) {
+          await save();
+          throw error;
+        }
         subject.failureCode = 'github-transient-exhausted';
       } else {
         subject.failureCode = controllerFailureCode(error);
@@ -750,7 +803,8 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
     await current(expected);
     const projection = reviewProjection(expected, externalReport);
     if (projection.skip) return projection;
-    if (expected.issues.length) return { status: 'unsupported', outcome: 'unsupported-standalone-issues' };
+    if (expected.issues.length)
+      return { status: 'unsupported', outcome: 'unsupported-standalone-issues' };
     const actor = await handoff.actor();
     async function write(endpoint, method, body) {
       const started = performance.now();
@@ -890,18 +944,38 @@ async function finalizeStandaloneSubjectBody({
       infrastructureFiles,
     });
     if (readiness.reason) return;
-    subject.release = { status: 'merging', reviewedSha: subject.sha, prNumber: subject.pr.number,
-      nonce: randomUUID(), reservedAt: now().toISOString() };
+    subject.release = {
+      status: 'merging',
+      reviewedSha: subject.sha,
+      prNumber: subject.pr.number,
+      nonce: randomUUID(),
+      reservedAt: now().toISOString(),
+      reviewProof: captureReleaseReviewProof(subject, {
+        repository: STANDALONE_REPO,
+        collection: 'standaloneReviews',
+      }),
+    };
     await persist();
     let receipt;
     try {
       receipt = await mergeStandaloneReview({
-        subject, controller, github, infrastructureFiles, execute: true, now,
+        subject,
+        controller,
+        github,
+        infrastructureFiles,
+        execute: true,
+        now,
       });
     } catch (error) {
-      if (error.code !== 'github-write-rejected' || error.operation !== 'merge' ||
-        !((error.httpStatus >= 400 && error.httpStatus < 500 && error.httpStatus !== 408) ||
-          error.diagnostic === 'graphql-merge-refusal')) throw error;
+      if (
+        error.code !== 'github-write-rejected' ||
+        error.operation !== 'merge' ||
+        !(
+          (error.httpStatus >= 400 && error.httpStatus < 500 && error.httpStatus !== 408) ||
+          error.diagnostic === 'graphql-merge-refusal'
+        )
+      )
+        throw error;
       // Only a definite rejection plus a fresh exact-head OPEN native observation
       // can end this reservation. Transport uncertainty retains its tombstone.
       await controller.current(subject);
@@ -970,6 +1044,7 @@ export async function standaloneReviewStep({
       status: 'running',
       subjectSha: subject.sha,
       claudeRound: subject.reviews.length,
+      feedbackFingerprint: fingerprint,
       reservedAt: now().toISOString(),
       nonce: nonce(),
     };
@@ -993,7 +1068,8 @@ export async function standaloneReviewStep({
   if (
     subject.codexFinalReview.status !== 'verified' ||
     subject.codexFinalReview.subjectSha !== subject.sha ||
-    subject.codexFinalReview.claudeRound !== subject.reviews.length
+    subject.codexFinalReview.claudeRound !== subject.reviews.length ||
+    subject.codexFinalReview.feedbackFingerprint !== fingerprint
   )
     return block(
       'Independent standalone Codex QA blocked or interrupted; explicit recovery required',
@@ -1027,8 +1103,10 @@ export async function mergeStandaloneReview({
   const preparationLive = () => {
     assert.equal(expected.release?.status, 'merging', 'Merge requires its durable reservation');
     const clock = now().getTime();
-    assert.ok(clock >= preparationStart && clock < preparationDeadline,
-      'Merge preparation deadline expired before command');
+    assert.ok(
+      clock >= preparationStart && clock < preparationDeadline,
+      'Merge preparation deadline expired before command',
+    );
   };
   const guard = async () => {
     await controller.current(expected);
@@ -1040,12 +1118,21 @@ export async function mergeStandaloneReview({
       'Standalone releaseHold prevents merge',
     );
     assert.equal(expected.phase, 'ready');
-    assert.equal(implementationAttempts(expected).at(-1)?.status, 'passed',
-      'Latest implementation attempt did not pass validation');
+    assert.equal(
+      implementationAttempts(expected).at(-1)?.status,
+      'passed',
+      'Latest implementation attempt did not pass validation',
+    );
     assert.equal(expected.approvedSha, expected.sha);
     assert.equal(expected.codexFinalReview?.status, 'verified');
     assert.equal(expected.codexFinalReview.subjectSha, expected.sha);
     assert.equal(expected.codexFinalReview.claudeRound, expected.reviews.length);
+    assert.equal(expected.codexFinalReview.feedbackFingerprint, expected.feedbackFingerprint);
+    const proof = captureReleaseReviewProof(expected, {
+      repository: STANDALONE_REPO,
+      collection: 'standaloneReviews',
+    });
+
     const report = externalReport(expected);
     assert.ok(
       report.verdict === 'approved' &&
@@ -1092,7 +1179,10 @@ export async function mergeStandaloneReview({
     );
     await controller.current(expected);
     assert.ok(await github.authorized(actor));
-    if (execute) preparationLive();
+    if (execute) {
+      preparationLive();
+      equal(expected.release.reviewProof, proof);
+    }
   };
   const reason = await guard();
   if (reason)

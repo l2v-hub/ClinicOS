@@ -11,7 +11,15 @@ import {
   reserveImplementation,
   spentAttempts,
 } from './attempt-budget.mjs';
-import { planSchema, validatePlan, validateState, feedbackFingerprint } from './contracts.mjs';
+import {
+  planSchema,
+  validatePlan,
+  validateState,
+  feedbackFingerprint,
+  sha256,
+} from './contracts.mjs';
+import { observationProgressDigest, validateObservationResume } from './operator-authorization.mjs';
+import { runImplementationStages } from './workspace.mjs';
 import { externalReviewStep } from './external-review.mjs';
 import { validateStandaloneState, finalizeStandaloneSubject } from './standalone-review.mjs';
 import {
@@ -88,15 +96,32 @@ export async function runPipeline({
       throw ownershipLost();
   };
   const freshOwnership = async () => {
-    const observed = validateState(
-      (await (store.observe ? store.observe() : store.load())) ?? {
-        schemaVersion: 1,
-        repository: repo,
-        batches: [],
-      },
-      repo,
-    );
-    if (observed.standaloneReviews) validateStandaloneState(observed);
+    let raw;
+    try {
+      raw = await (store.observe ? store.observe() : store.load());
+    } catch (error) {
+      if (isRetryableGitHubFailure(error) || error?.code === 'github-read-failed')
+        throw Object.assign(new Error('Fresh ownership observation unavailable before operation'), {
+          code: 'ownership-observation-failed',
+          beforeInvocation: true,
+          cause: error,
+        });
+      if (error?.code === 'github-read-rejected') throw error;
+      throw Object.assign(new Error('Fresh ownership state could not be validated'), {
+        code: 'ownership-observation-invalid',
+        cause: error,
+      });
+    }
+    let observed;
+    try {
+      observed = validateState(raw ?? { schemaVersion: 1, repository: repo, batches: [] }, repo);
+      if (observed.standaloneReviews) validateStandaloneState(observed);
+    } catch (error) {
+      throw Object.assign(new Error('Fresh ownership state could not be validated'), {
+        code: 'ownership-observation-invalid',
+        cause: error,
+      });
+    }
     assertOwnership(observed);
   };
   const recoverOwnership = async (error) => {
@@ -105,6 +130,63 @@ export async function runPipeline({
     // Uncertain writes and genuine CAS/integrity failures still halt the pass.
     state = validateState(await store.load(), repo);
     if (state.standaloneReviews) validateStandaloneState(state);
+    return true;
+  };
+  const pauseObservation = async (batch, error) => {
+    if (persistenceFailed || error?.code !== 'ownership-observation-failed') return false;
+    const progress = batch.controllerProgress;
+    if (
+      progress?.status === 'running' ||
+      (progress?.status === 'completed' &&
+        (implementationAttempts(batch).some(
+          (item) => item.round === progress.round && item.status === 'running',
+        ) ||
+          (!batch.pr && progress.flow === 'implementation') ||
+          ['implementing', 'validating', 'simplifying', 'publishing'].includes(batch.phase)))
+    )
+      progress.status = 'interrupted';
+    if (
+      batch.codexFinalReview?.status === 'running' &&
+      !batch.codexFinalQaInfrastructure?.attempts?.some(
+        (item) => item.nonce === batch.codexFinalReview.nonce,
+      )
+    ) {
+      batch.codexFinalReview.status = 'blocked';
+      batch.codexFinalReview.invocation = {
+        status: 'not-started',
+        boundary: 'ownership-observation',
+        nonce: batch.codexFinalReview.nonce,
+      };
+    }
+    batch.controllerInterruption = {
+      schemaVersion: 1,
+      code: 'ownership-observation-failed',
+      beforeInvocation: true,
+      transport: {
+        code: controllerFailureCode(error.cause),
+        diagnostic: [
+          'unknown',
+          'spawn-failed',
+          'output-limit',
+          'timeout',
+          'rate-limit',
+          'http-status',
+        ].includes(error.cause?.diagnostic)
+          ? error.cause.diagnostic
+          : 'unknown',
+        httpStatus: Number.isSafeInteger(error.cause?.httpStatus) ? error.cause.httpStatus : null,
+        operation: 'read',
+      },
+      subjectSha: batch.sha ?? null,
+      progressSha256: progress ? observationProgressDigest(progress) : sha256(JSON.stringify(null)),
+      at: new Date(now()).toISOString(),
+    };
+    batch.failureCode = controllerFailureCode(error.cause);
+    batch.phase = 'blocked';
+    delete batch.approvedSha;
+    // If persistence remains unavailable this throws, retaining the last genuine
+    // reservation. No durable diagnostic or completed operation is fabricated.
+    await save();
     return true;
   };
   const guarded = (target, methods) =>
@@ -122,6 +204,7 @@ export async function runPipeline({
   // feedback/review correction paths and prebuilt workspace implementations.
   workspace = guarded(workspace, [
     'prepare',
+    'resume',
     'execute',
     'verify',
     'simplify',
@@ -139,6 +222,7 @@ export async function runPipeline({
     'commentIssue',
     'commentPR',
     'createDraft',
+    'draftReady',
   ]);
   const save = async (options) => {
     try {
@@ -159,7 +243,8 @@ export async function runPipeline({
         },
       });
     } catch (error) {
-      if (error?.code !== 'review-operator-owned') persistenceFailed = true;
+      if (!['review-operator-owned', 'ownership-observation-failed'].includes(error?.code))
+        persistenceFailed = true;
       throw error;
     }
   };
@@ -419,7 +504,7 @@ export async function runPipeline({
     if (!batch || operatorOwns(state, 'batches', batch)) continue;
     processingSubject = { collection: 'batches', id: batch.id };
     try {
-      if (['merged', 'deployed'].includes(batch.release?.status)) continue;
+      if (['merging', 'merged', 'deployed'].includes(batch.release?.status)) continue;
       if (batch.phase === 'blocked') continue;
       if (reviewMode === 'external' && batch.externalReview?.status === 'running') continue;
       if (reviewMode === 'external' && batch.pr) {
@@ -435,24 +520,40 @@ export async function runPipeline({
           });
         } catch (error) {
           if (await recoverOwnership(error)) continue;
+          try {
+            if (await pauseObservation(batch, error)) continue;
+          } catch (pauseError) {
+            if (await recoverOwnership(pauseError)) continue;
+            throw pauseError;
+          }
           if (persistenceFailed)
             throw new Error('External review reconciliation persistence failed', {
               cause: error,
             });
           batch.failureCode = controllerFailureCode(error);
-          await block(
-            batch,
-            'External review consistency or correction failed; inspect the existing batch',
-          );
+          try {
+            await block(
+              batch,
+              'External review consistency or correction failed; inspect the existing batch',
+            );
+          } catch (blockingError) {
+            if (await recoverOwnership(blockingError)) continue;
+            throw blockingError;
+          }
         }
         continue;
       }
+      const resuming =
+        batch.controllerProgress?.status === 'interrupted' &&
+        Boolean(batch.controllerProgress.resumeAuthorization);
+      if (resuming) validateObservationResume(batch);
       if (
-        activeImplementation(batch) ||
-        batch.reviews.some((a) => a.status === 'running') ||
-        ['implementing', 'simplifying', 'validating', 'publishing', 'reviewing'].includes(
-          batch.phase,
-        )
+        !resuming &&
+        (activeImplementation(batch) ||
+          batch.reviews.some((a) => a.status === 'running') ||
+          ['implementing', 'simplifying', 'validating', 'publishing', 'reviewing'].includes(
+            batch.phase,
+          ))
       ) {
         await block(
           batch,
@@ -499,42 +600,50 @@ export async function runPipeline({
         if (!eligibleIssue(live))
           throw new Error('source issue is no longer authorized, open or available');
       }
-      await workspace.prepare(batch);
+      if (!resuming) await workspace.prepare(batch);
       await report(
         batch,
         `Codex ha raggruppato ${batch.issues.map((n) => `#${n}`).join(', ')}. Feature: ${batch.plan.feature.slice(0, 500)}. Motivo: ${batch.plan.rationale.slice(0, 2000)}\n\nMappa issue/file: ${JSON.stringify(batch.grouping?.fileMap ?? []).slice(0, 8000)}\n\nWorktree e piano: \`${batch.branch}\`. Esecutore configurato separatamente; Claude interviene nella review finale.`,
       );
-      if (!batch.sha) {
+      if (!batch.sha || (resuming && batch.controllerProgress.flow === 'implementation')) {
         let passed = false;
-        while (spentAttempts(batch, 'implementation') < attemptLimit(batch, 'implementation')) {
-          const attempt = reserveImplementation(batch, () => new Date(now()));
-          batch.phase = 'implementing';
-          await save();
+        while (
+          (resuming && batch.controllerProgress.flow === 'implementation') ||
+          spentAttempts(batch, 'implementation') < attemptLimit(batch, 'implementation')
+        ) {
+          const attempt =
+            (resuming &&
+              batch.controllerProgress.flow === 'implementation' &&
+              implementationAttempts(batch)[batch.controllerProgress.round - 1]) ||
+            reserveImplementation(batch, () => new Date(now()));
           try {
-            const outcome = await workspace.execute(batch, {
-              phase: 'implementation',
-              round: attempt.round,
-              feedback: batch.lastFailure ?? null,
+            await runImplementationStages({
+              batch,
+              workspace,
+              save,
+              context: {
+                phase: 'implementation',
+                round: attempt.round,
+                feedback: batch.lastFailure ?? null,
+              },
             });
-            if (outcome.status !== 'implemented') throw new Error('executor blocked');
-            batch.phase = 'validating';
-            await save();
-            await workspace.verify(batch);
-            batch.phase = 'simplifying';
-            await save();
-            if ((await workspace.simplify(batch)).status !== 'implemented')
-              throw new Error('simplification blocked');
-            batch.phase = 'validating';
-            await save();
-            await workspace.verify(batch);
-            if ((await workspace.qa(batch)).status !== 'verified')
-              throw new Error('independent Codex QA blocked');
             attempt.status = 'passed';
             passed = true;
             break;
           } catch (error) {
-            if (persistenceFailed || error?.code === 'review-operator-owned') throw error;
+            if (
+              persistenceFailed ||
+              resuming ||
+              /^github-/.test(error?.code ?? '') ||
+              [
+                'review-operator-owned',
+                'ownership-observation-failed',
+                'ownership-observation-invalid',
+              ].includes(error?.code)
+            )
+              throw error;
             attempt.status = 'failed';
+            if (batch.controllerProgress) batch.controllerProgress.status = 'failed';
             batch.lastFailure =
               'Implementation or required verification failed; inspect current local test-results.';
             batch.phase = 'planned';
@@ -542,13 +651,9 @@ export async function runPipeline({
           }
         }
         if (!passed) {
-          await block(batch, 'Four implementation attempts exhausted');
+          await block(batch, 'Implementation allowance exhausted');
           continue;
         }
-        batch.phase = 'publishing';
-        await save();
-        batch.sha = await workspace.checkpoint(batch);
-        await workspace.publish(batch);
         batch.pr = await gh.createDraft({
           branch: batch.branch,
           title: batch.plan.title,
@@ -572,30 +677,35 @@ export async function runPipeline({
       }
       // New PR feedback is handled once, in a new executor session, before the next review.
       if (feedback && feedbackFingerprint(feedback) !== batch.feedbackFingerprint) {
-        batch.phase = 'implementing';
+        await runImplementationStages({
+          batch,
+          workspace,
+          save,
+          context: {
+            phase: 'pr-feedback',
+            round: batch.reviews.length + 1,
+            feedback:
+              resuming && batch.controllerProgress.flow === 'pr-feedback'
+                ? batch.controllerProgress.feedback
+                : feedback,
+          },
+        });
+        await report(batch, await workspace.issueEvidence(batch));
+      }
+      if (resuming && batch.controllerProgress.flow === 'review-correction') {
+        await runImplementationStages({
+          batch,
+          workspace,
+          save,
+          context: {
+            phase: 'review-correction',
+            round: batch.controllerProgress.round,
+            feedback: batch.controllerProgress.feedback,
+          },
+        });
+        batch.approvedSha = null;
+        batch.phase = 'waiting-checks';
         await save();
-        if (
-          (
-            await workspace.execute(batch, {
-              phase: 'pr-feedback',
-              round: batch.reviews.length + 1,
-              feedback,
-            })
-          ).status !== 'implemented'
-        )
-          throw new Error('PR feedback correction blocked');
-        batch.phase = 'validating';
-        await save();
-        await workspace.verify(batch);
-        if ((await workspace.simplify(batch)).status !== 'implemented')
-          throw new Error('simplification blocked');
-        batch.phase = 'validating';
-        await save();
-        await workspace.verify(batch);
-        if ((await workspace.qa(batch)).status !== 'verified')
-          throw new Error('independent Codex QA blocked');
-        batch.sha = await workspace.checkpoint(batch);
-        await workspace.publish(batch);
         await report(batch, await workspace.issueEvidence(batch));
       }
       while (batch.reviews.length < attemptLimit(batch, 'reviews')) {
@@ -639,30 +749,16 @@ export async function runPipeline({
           await block(batch, 'Claude review remains blocked or four-review limit reached');
           break;
         }
-        batch.phase = 'implementing';
-        await save();
-        if (
-          (
-            await workspace.execute(batch, {
-              phase: 'review-correction',
-              round: attempt.round,
-              feedback: { claude: review, github: after },
-            })
-          ).status !== 'implemented'
-        )
-          throw new Error('review correction blocked');
-        batch.phase = 'validating';
-        await save();
-        await workspace.verify(batch);
-        if ((await workspace.simplify(batch)).status !== 'implemented')
-          throw new Error('simplification blocked');
-        batch.phase = 'validating';
-        await save();
-        await workspace.verify(batch);
-        if ((await workspace.qa(batch)).status !== 'verified')
-          throw new Error('independent Codex QA blocked');
-        batch.sha = await workspace.checkpoint(batch);
-        await workspace.publish(batch);
+        await runImplementationStages({
+          batch,
+          workspace,
+          save,
+          context: {
+            phase: 'review-correction',
+            round: attempt.round,
+            feedback: { claude: review, github: after },
+          },
+        });
         batch.approvedSha = null;
         await report(batch, await workspace.issueEvidence(batch));
         batch.phase = 'waiting-checks';
@@ -670,14 +766,25 @@ export async function runPipeline({
       }
     } catch (error) {
       if (await recoverOwnership(error)) continue;
+      try {
+        if (await pauseObservation(batch, error)) continue;
+      } catch (pauseError) {
+        if (await recoverOwnership(pauseError)) continue;
+        throw pauseError;
+      }
       if (persistenceFailed) throw error;
       batch.failureCode = controllerFailureCode(error);
       for (const a of [...implementationAttempts(batch), ...batch.reviews])
         if (a.status === 'running') a.status = 'failed';
-      await block(
-        batch,
-        'Execution, evidence, authentication or remote consistency check failed; inspect sanitized controller diagnostics',
-      );
+      try {
+        await block(
+          batch,
+          'Execution, evidence, authentication or remote consistency check failed; inspect sanitized controller diagnostics',
+        );
+      } catch (blockingError) {
+        if (await recoverOwnership(blockingError)) continue;
+        throw blockingError;
+      }
     }
   }
   return state;
