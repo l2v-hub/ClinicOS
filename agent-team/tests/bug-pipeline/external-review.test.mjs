@@ -890,8 +890,7 @@ test('automatic external review ownership loss skips without correction, status 
     publishState: async () => assert.fail('no retry publication'),
   };
   args.block = async () => assert.fail('new owner cannot receive generic blocked state');
-  const result = await externalReviewStep(args);
-  assert.deepEqual(result, { status: 'skipped', reason: 'operator-owned' });
+  await assert.rejects(externalReviewStep(args), (error) => error.code === 'review-operator-owned');
   assert.deepEqual(batch, before);
   assert.deepEqual(log, []);
 });
@@ -908,8 +907,7 @@ test('ownership loss in automatic informational publication is not swallowed bef
   };
   args.workspace.execute = async () => assert.fail('model cannot start after observed handover');
   args.block = async () => assert.fail('no block to new operator owner');
-  const result = await externalReviewStep(args);
-  assert.deepEqual(result, { status: 'skipped', reason: 'operator-owned' });
+  await assert.rejects(externalReviewStep(args), (error) => error.code === 'review-operator-owned');
   assert.equal(log.includes('qa'), false);
   assert.equal(
     batch.implementation.at(-1).status,
@@ -935,8 +933,7 @@ test('automatic external comment handoff inherits ownership context before nativ
   };
   args.block = async () => assert.fail('owner cannot receive generic blocked state');
   const before = structuredClone(batch);
-  const result = await externalReviewStep(args);
-  assert.deepEqual(result, { status: 'skipped', reason: 'operator-owned' });
+  await assert.rejects(externalReviewStep(args), (error) => error.code === 'review-operator-owned');
   assert.deepEqual(batch, before);
   assert.deepEqual(log, []);
 });
@@ -1011,4 +1008,100 @@ test('Claude1 F3 unusable final QA verdict is infrastructure failure and never a
   await assert.rejects(externalReviewStep(args), /no usable verdict/);
   assert.equal(batch.codexFinalReview.status, 'failed');
   assert.equal(batch.implementation.length, 1);
+});
+
+const qaIntent = (batch, nonce, status = 'failed') => ({
+  status,
+  nonce,
+  subjectSha: batch.sha,
+  claudeRound: batch.reviews.length,
+  feedbackFingerprint: batch.externalReview.feedbackFingerprint,
+  reservedAt: '2026-10-17T00:00:00.000Z',
+});
+test('QA6-F3 duplicate legacy intents across ledger and recovery histories count once, preserving originals', async () => {
+  const { args, batch } = approvedExternalArgs();
+  const legacy = qaIntent(batch, 'one-legacy-session');
+  batch.qaHistory = [structuredClone(legacy)];
+  batch.codexFinalReviewHistory = [structuredClone(legacy)];
+  batch.codexFinalQaInfrastructure = {
+    attempts: [structuredClone(legacy), structuredClone(legacy)],
+  };
+  const originalQaHistory = structuredClone(batch.qaHistory),
+    originalLedger = structuredClone(batch.codexFinalQaInfrastructure.attempts);
+  let calls = 0;
+  args.workspace.finalQa = async () => {
+    calls++;
+    throw new Error('synthetic infrastructure failure');
+  };
+  args.workspace.execute = async () => assert.fail('infrastructure is not a code correction');
+  for (let i = 0; i < 2; i++) {
+    batch.phase = 'waiting-review';
+    await assert.rejects(externalReviewStep(args), /synthetic infrastructure failure/);
+  }
+  batch.phase = 'waiting-review';
+  await externalReviewStep(args);
+  assert.equal(calls, 2);
+  assert.equal(batch.codexFinalReview.failureCode, 'final-qa-infrastructure-exhausted');
+  assert.deepEqual(batch.qaHistory, originalQaHistory);
+  assert.deepEqual(batch.codexFinalQaInfrastructure.attempts.slice(0, 2), originalLedger);
+  assert.deepEqual(batch.codexFinalReviewHistory[0], legacy);
+  assert.equal(new Set(batch.codexFinalQaInfrastructure.attempts.map((x) => x.nonce)).size, 3);
+  assert.equal(batch.implementation.length, 1);
+});
+test('QA6-F3 other identities and waiting/pre-QA blocked metadata never consume inference allowance', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  const metadata = ['waiting-checks', 'blocked'].map((status) =>
+    qaIntent(batch, 'metadata-' + status, status),
+  );
+  const other = [
+    { subjectSha: 'b'.repeat(40) },
+    { claudeRound: 9 },
+    { feedbackFingerprint: 'other-feedback' },
+  ].map((patch, i) => ({ ...qaIntent(batch, 'other-' + i), ...patch }));
+  batch.qaHistory = [...metadata, ...other];
+  batch.codexFinalReviewHistory = structuredClone(batch.qaHistory);
+  batch.codexFinalQaInfrastructure = { attempts: structuredClone(metadata) };
+  const original = structuredClone(batch.qaHistory);
+  await externalReviewStep(args);
+  assert.equal(batch.phase, 'ready');
+  assert.equal(log.filter((x) => x === 'qa').length, 1);
+  assert.deepEqual(batch.qaHistory, original);
+  assert.equal(
+    batch.codexFinalQaInfrastructure.attempts.filter((x) => x.status === 'verified').length,
+    1,
+  );
+});
+test('QA6-F3 ambiguous spent legacy intent cannot trigger inference or implementation retry', async () => {
+  for (const missing of [
+    'nonce',
+    'subjectSha',
+    'claudeRound',
+    'feedbackFingerprint',
+    'reservedAt',
+  ]) {
+    const { args, batch, log } = approvedExternalArgs();
+    const ambiguous = qaIntent(batch, 'missing');
+    delete ambiguous[missing];
+    batch.qaHistory = [structuredClone(ambiguous)];
+    args.workspace.execute = async () =>
+      assert.fail('ambiguous legacy intent is not a code finding');
+    await externalReviewStep(args);
+    assert.equal(batch.phase, 'blocked', missing);
+    assert.equal(batch.codexFinalReview.failureCode, 'final-qa-infrastructure-history-ambiguous');
+    assert.deepEqual(batch.qaHistory, [ambiguous]);
+    assert.equal(log.includes('qa'), false);
+    assert.equal(batch.implementation.length, 1);
+  }
+});
+
+test('QA6-F5 typed ownership loss inside correction preserves the already reserved running tombstone', async () => {
+  const { args, batch } = approvedExternalArgs();
+  batch.externalReview.feedbackChanged = true;
+  args.workspace.prepare = async () => {};
+  args.workspace.execute = async () => {
+    throw Object.assign(new Error('observed owner'), { code: 'review-operator-owned' });
+  };
+  args.block = async () => assert.fail('no operator block');
+  await assert.rejects(externalReviewStep(args), (error) => error.code === 'review-operator-owned');
+  assert.equal(batch.implementation.at(-1).status, 'running');
 });

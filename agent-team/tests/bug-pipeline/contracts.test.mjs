@@ -295,3 +295,19 @@ test('Claude1 F1 canonical handback schema preserves legacy/stale grants but rej
     );
   }
 });
+
+test('QA6-F1 explicit active must be boolean while inactive and legacy audit absence stay valid', () => {
+  const state = { schemaVersion: 1, repository: 'l2v-hub/ClinicOS', batches: [] };
+  for (const active of ['true', 'false', '', 0, 1, null, undefined, [], {}]) {
+    state.operatorTakeover = { active };
+    assert.throws(() => validateState(state, state.repository), /invalid operator takeover/);
+  }
+  for (const takeover of [null, false, 0, '', [], 'true']) {
+    state.operatorTakeover = takeover;
+    assert.throws(() => validateState(state, state.repository), /invalid operator takeover/);
+  }
+  for (const takeover of [{ active: false }, { nonce: 'legacy-budget-audit' }, { active: true }]) {
+    state.operatorTakeover = takeover;
+    assert.equal(validateState(state, state.repository), state);
+  }
+});

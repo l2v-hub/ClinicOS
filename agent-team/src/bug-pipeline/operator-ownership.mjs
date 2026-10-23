@@ -31,9 +31,25 @@ export function validAutomationHandback(handback) {
   );
 }
 
+export function validOperatorTakeover(takeover) {
+  return Boolean(
+    takeover &&
+    typeof takeover === 'object' &&
+    !Array.isArray(takeover) &&
+    (!Object.hasOwn(takeover, 'active') || typeof takeover.active === 'boolean') &&
+    (takeover.nonce === undefined ||
+      (typeof takeover.nonce === 'string' && takeover.nonce.trim())) &&
+    (takeover.automation === undefined || validAutomationHandback(takeover.automation)),
+  );
+}
+
 export function automationPaused(state) {
-  if (!state.operatorTakeover?.active) return false;
-  const handback = state.operatorTakeover.automation;
+  const takeover = state.operatorTakeover;
+  if (takeover === undefined) return false;
+  if (!validOperatorTakeover(takeover)) return true;
+  // Older budget-audit records without active are not an active takeover.
+  if (takeover.active !== true) return false;
+  const handback = takeover.automation;
   return !(
     validAutomationHandback(handback) &&
     handback.enabled === true &&

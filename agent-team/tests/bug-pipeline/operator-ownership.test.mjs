@@ -140,3 +140,19 @@ test('Claude1 F1 stale nonce and missing audit cannot replay an old handback', (
     assert.equal(automationPaused({ operatorTakeover: invalid }), true);
   }
 });
+
+test('QA6-F1 malformed takeover and active types fail closed even without schema validation', () => {
+  for (const active of ['true', 'false', '', 0, 1, null, undefined, [], {}]) {
+    const takeover = handback();
+    takeover.active = active;
+    assert.equal(automationPaused({ operatorTakeover: takeover }), true);
+    assert.equal(operatorOwns({ operatorTakeover: takeover }, 'batches', { id: 'new' }), true);
+  }
+  for (const takeover of [null, false, 0, '', [], 'true'])
+    assert.equal(automationPaused({ operatorTakeover: takeover }), true);
+  const inactive = handback();
+  inactive.active = false;
+  assert.equal(automationPaused({ operatorTakeover: inactive }), false);
+  assert.equal(automationPaused({ operatorTakeover: { nonce: 'legacy-budget-audit' } }), false);
+  assert.equal(automationPaused({ operatorTakeover: { active: true } }), true);
+});

@@ -42,6 +42,63 @@ export function externalReport(batch) {
   return report;
 }
 
+// Recovery moves final-QA records between collections. Count the original intent,
+// not its current pointer or the number of archived copies. Originals stay untouched.
+function finalQaSpend(batch, prior, binding) {
+  const infrastructure = (batch.codexFinalQaInfrastructure ??= { attempts: [] });
+  if (
+    !Array.isArray(infrastructure.attempts) ||
+    (batch.qaHistory !== undefined && !Array.isArray(batch.qaHistory)) ||
+    (batch.codexFinalReviewHistory !== undefined && !Array.isArray(batch.codexFinalReviewHistory))
+  )
+    return { infrastructure, ambiguous: true };
+  const seen = new Set();
+  let ambiguous = false;
+  const spentStatus = (status) =>
+    ['running', 'failed', 'verified', 'changes-requested'].includes(status);
+  const differentIdentity = (entry) =>
+    (typeof entry.subjectSha === 'string' &&
+      /^[a-f0-9]{40}$/.test(entry.subjectSha) &&
+      entry.subjectSha !== binding.subjectSha) ||
+    (Number.isSafeInteger(entry.claudeRound) && entry.claudeRound !== binding.claudeRound) ||
+    (typeof entry.feedbackFingerprint === 'string' &&
+      entry.feedbackFingerprint.trim() &&
+      entry.feedbackFingerprint !== binding.feedbackFingerprint);
+  const include = (entry, origin, archived) => {
+    if (['waiting-checks', 'blocked'].includes(entry?.status)) return;
+    if (archived && !spentStatus(entry?.status)) return;
+    if (entry && differentIdentity(entry)) return;
+    if (
+      !entry ||
+      !spentStatus(entry.status) ||
+      !Object.keys(binding).every((key) => entry[key] === binding[key]) ||
+      typeof entry.nonce !== 'string' ||
+      !entry.nonce.trim() ||
+      typeof entry.reservedAt !== 'string' ||
+      !Number.isFinite(Date.parse(entry.reservedAt))
+    ) {
+      ambiguous = true;
+      return;
+    }
+    if (seen.has(entry.nonce)) return;
+    seen.add(entry.nonce);
+    if (archived)
+      infrastructure.attempts.push({
+        ...structuredClone(entry),
+        legacy: true,
+        importedFrom: origin,
+      });
+  };
+  for (const entry of infrastructure.attempts) include(entry, 'infrastructure', false);
+  for (const [origin, entries] of [
+    ['current', prior ? [prior] : []],
+    ['qaHistory', batch.qaHistory ?? []],
+    ['codexFinalReviewHistory', batch.codexFinalReviewHistory ?? []],
+  ])
+    for (const entry of entries) include(entry, origin, true);
+  return { infrastructure, spent: seen.size, ambiguous };
+}
+
 async function runExternalReviewStep({
   repo,
   batch,
@@ -172,20 +229,21 @@ async function runExternalReviewStep({
         }
         // Count durably reserved inference sessions, not identity/check polling.
         // This allowance is independent of the implementation correction budget.
-        const infrastructure = (batch.codexFinalQaInfrastructure ??= { attempts: [] });
-        const matches = (entry) =>
-          entry.subjectSha === batch.sha &&
-          entry.claudeRound === batch.reviews.length &&
-          entry.feedbackFingerprint === fingerprint;
-        // A legacy failed session already represents one spent inference; do not
-        // silently erase that fact when introducing the separate retry ledger.
-        if (
-          prior?.status === 'failed' &&
-          matches(prior) &&
-          !infrastructure.attempts.some((entry) => entry.nonce === prior.nonce)
-        )
-          infrastructure.attempts.push({ ...prior, legacy: true });
-        if (infrastructure.attempts.filter(matches).length >= 3) {
+        const binding = {
+          subjectSha: batch.sha,
+          claudeRound: batch.reviews.length,
+          feedbackFingerprint: fingerprint,
+        };
+        const { infrastructure, spent, ambiguous } = finalQaSpend(batch, prior, binding);
+        if (ambiguous) {
+          batch.codexFinalReview.status = 'blocked';
+          batch.codexFinalReview.failureCode = 'final-qa-infrastructure-history-ambiguous';
+          await save();
+          return blocked(
+            'Independent final QA inference history is ambiguous; explicit recovery required',
+          );
+        }
+        if (spent >= 3) {
           batch.codexFinalReview.status = 'blocked';
           batch.codexFinalReview.failureCode = 'final-qa-infrastructure-exhausted';
           await save();
@@ -313,7 +371,7 @@ async function runExternalReviewStep({
       await save();
       await report(batch, await workspace.issueEvidence(batch));
     } catch (error) {
-      attempt.status = 'failed';
+      if (error?.code !== 'review-operator-owned') attempt.status = 'failed';
       throw error;
     }
   } else if (handoff?.status === 'requested' && handoff.subjectSha === batch.sha) {
@@ -347,13 +405,9 @@ async function runExternalReviewStep({
   );
 }
 
-// Ownership loss is a skip, never permission to block, relabel or correct that subject.
+// Preserve the finite ownership-loss classification until the controller reloads
+// canonical state. Returning a skip here would leave unsaved subject edits in its
+// writer snapshot and leak them into the next independent subject's save.
 export async function externalReviewStep(options) {
-  try {
-    return await runExternalReviewStep(options);
-  } catch (error) {
-    if (error?.code === 'review-operator-owned')
-      return { status: 'skipped', reason: 'operator-owned' };
-    throw error;
-  }
+  return runExternalReviewStep(options);
 }

@@ -310,3 +310,17 @@ consente al massimo tre sessioni di inferenza prenotate per SHA/round/fingerprin
 check senza inferenza non consumano slot. Non consuma tentativi implementativi; soltanto un
 verdetto Codex con richieste di modifica avvia una correzione. Una sessione `running` non viene
 duplicata e l'esaurimento richiede recupero esplicito senza azzerare lo storico.
+
+Il campo `operatorTakeover.active`, quando presente, deve essere booleano: anche valori falsy
+come `0` o stringa vuota sono metadati invalidi e fermano l'automazione. `false` è un takeover
+inattivo; l'assenza del campo nei vecchi record di audit del budget resta valida. Una perdita di
+ownership esterna propaga il codice tipizzato fino a Codex, che ricarica lo stato canonico e
+scarta le modifiche locali del soggetto prima di lavorare sul successivo.
+
+Il limite della QA finale conta le sessioni per nonce attraverso il record corrente, `qaHistory`,
+`codexFinalReviewHistory` e il registro infrastrutturale: una copia archiviata dal recupero non
+cancella la spesa né la conta due volte. Le attese dei check e i blocchi di identità prima della
+QA, privi di intento di inferenza, non consumano slot. Uno storico di sessioni spese ambiguo
+ferma i ritentativi e non diventa una richiesta di modifica al codice. Il recupero specializzato
+`release-qa-reservation` mantiene la propria autorizzazione verificata dall'host fidato; queste
+correzioni non concedono un verificatore predefinito né modificano le regole di `resume`.

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { createGitHub } from '../../src/bug-pipeline/github.mjs';
+import { externalReviewStep } from '../../src/bug-pipeline/external-review.mjs';
 import { feedbackFingerprint } from '../../src/bug-pipeline/contracts.mjs';
 import {
   COMMENT_REVIEW_MARKER,
@@ -92,8 +93,12 @@ function fixture({
         }
       : { externalReview: { status: 'requested', subjectSha: sha } }),
   };
-  const remote = { schemaVersion: 1, repository: repo, batches: [batch],
-    ...(blobState ? { retainedHistory: 'x'.repeat(1024 * 1024 + 128) } : {}) };
+  const remote = {
+    schemaVersion: 1,
+    repository: repo,
+    batches: [batch],
+    ...(blobState ? { retainedHistory: 'x'.repeat(1024 * 1024 + 128) } : {}),
+  };
   let actorName = actor;
   let permission = 'write';
   let revokeOnTree = false;
@@ -157,8 +162,18 @@ function fixture({
       const oid = gitBlobSHA(bytes);
       assert.equal(endpoint, `repos/${repo}/git/blobs/${oid}`);
       assert.equal(call.maxOutputBytes, 16 * 1024 * 1024);
-      return { ok: true, stdout: JSON.stringify({ sha: oid, size: bytes.length, encoding: 'base64',
-        content: bytes.toString('base64').match(/.{1,60}/g).join('\n') }) };
+      return {
+        ok: true,
+        stdout: JSON.stringify({
+          sha: oid,
+          size: bytes.length,
+          encoding: 'base64',
+          content: bytes
+            .toString('base64')
+            .match(/.{1,60}/g)
+            .join('\n'),
+        }),
+      };
     }
     if (endpoint.startsWith(`repos/${repo}/git/trees/`)) {
       if (revokeOnTree) permission = 'read';
@@ -200,7 +215,8 @@ function fixture({
     const body = `<!-- clinicos-claude-cron:${number}:${head}:${currentRound} -->\nClaude report ${report.verdict}`;
     feedback.comments.push({ id: ++commentId, author: actorName, body });
   };
-  let nonceValue = 0, authorizationNonce = 0;
+  let nonceValue = 0,
+    authorizationNonce = 0;
   const handoff = createCommentReviewHandoff({
     github,
     run: apiRun,
@@ -208,10 +224,15 @@ function fixture({
     cwd: '/synthetic/worktree',
     now: () => new Date('2026-10-17T00:00:00.000Z'),
     nonce: () => `nonce-${++nonceValue}`,
-    authorizationVerifier: authorizationVerifier ? async ({ binding }) => ({
-      provenance: 'user-session', grantId: 'synthetic-session', sourceRef: 'test:session',
-      consumptionNonce: `grant-${++authorizationNonce}`, binding,
-    }) : undefined,
+    authorizationVerifier: authorizationVerifier
+      ? async ({ binding }) => ({
+          provenance: 'user-session',
+          grantId: 'synthetic-session',
+          sourceRef: 'test:session',
+          consumptionNonce: `grant-${++authorizationNonce}`,
+          binding,
+        })
+      : undefined,
   });
   return {
     batch,
@@ -260,7 +281,10 @@ test('failed round recovery is explicit, preserves the spent round, ledger, rele
   const oldHold = clone(f.batch.releaseHold);
   await assert.rejects(f.handoff.request(81), /Explicit failed-execution recovery required/);
   assert.deepEqual(f.remote.batches[0], f.batch);
-  const requested = await f.handoff.request(81, { recoverFailed: true, authorizationRef: 'test:session' });
+  const requested = await f.handoff.request(81, {
+    recoverFailed: true,
+    authorizationRef: 'test:session',
+  });
   assert.equal(requested.reviews.length, 1);
   assert.equal(requested.reviews[0].status, 'failed');
   assert.deepEqual(requested.reviewLedger, oldLedger);
@@ -658,8 +682,15 @@ test('maintainer permission and a free-text instruction cannot extend budgets wi
   const f = fixture({ authorizationVerifier: false });
   f.setPermission('admin');
   const before = clone(f.remote);
-  await assert.rejects(f.handoff.extendBudget(81, { kind: 'implementation', limit: 5,
-    authorizationRef: 'I authorize myself', reason: 'Synthetic instruction' }), /verifier unavailable/);
+  await assert.rejects(
+    f.handoff.extendBudget(81, {
+      kind: 'implementation',
+      limit: 5,
+      authorizationRef: 'I authorize myself',
+      reason: 'Synthetic instruction',
+    }),
+    /verifier unavailable/,
+  );
   assert.deepEqual(f.remote, before);
 });
 
@@ -691,25 +722,46 @@ test('wrapped large Git blob state supports actual handoff request/reconcile/loa
 });
 
 test('default compatibility2 spends3/4 without extensions and same-account external verifier authorizes only the next5', async () => {
-  const { reserveImplementation, implementationAttempts, historyDigest, validateOperatorContinuations } =
-    await import('../../src/bug-pipeline/attempt-budget.mjs');
+  const {
+    reserveImplementation,
+    implementationAttempts,
+    historyDigest,
+    validateOperatorContinuations,
+  } = await import('../../src/bug-pipeline/attempt-budget.mjs');
   const f = fixture();
   f.setPermission('admin');
-  f.remote.operatorTakeover = { nonce: 'takeover-scope', continuePastFourPreserveHistory: true,
-    subjects: [{ collection: 'batches', id: f.batch.id, pr: 81 }] };
-  f.batch.operatorContinuations = [{ kind: 'explicit-operator-compatibility-continuation',
-    round: 2, status: 'passed', owner: 'review-bot', nonce: 'reservation2', startedAt: '2026-10-18T00:00:00Z',
-    reason: 'Observed scope authorization', authorizationRef: 'takeover-scope',
-    contractSha256: 'c'.repeat(64), preservedEntityDigest: 'd'.repeat(64),
-    preservedLegacyImplementationDigest: historyDigest(f.batch.implementation),
-    preservedLegacyReviewsDigest: historyDigest(f.batch.reviews) }];
+  f.remote.operatorTakeover = {
+    nonce: 'takeover-scope',
+    continuePastFourPreserveHistory: true,
+    subjects: [{ collection: 'batches', id: f.batch.id, pr: 81 }],
+  };
+  f.batch.operatorContinuations = [
+    {
+      kind: 'explicit-operator-compatibility-continuation',
+      round: 2,
+      status: 'passed',
+      owner: 'review-bot',
+      nonce: 'reservation2',
+      startedAt: '2026-10-18T00:00:00Z',
+      reason: 'Observed scope authorization',
+      authorizationRef: 'takeover-scope',
+      contractSha256: 'c'.repeat(64),
+      preservedEntityDigest: 'd'.repeat(64),
+      preservedLegacyImplementationDigest: historyDigest(f.batch.implementation),
+      preservedLegacyReviewsDigest: historyDigest(f.batch.reviews),
+    },
+  ];
   const prefix = clone(implementationAttempts(f.batch));
   reserveImplementation(f.batch).status = 'passed';
   reserveImplementation(f.batch).status = 'passed';
   validateOperatorContinuations(f.remote);
   assert.throws(() => reserveImplementation(f.batch), /allowance exhausted/);
-  const extended = await f.handoff.extendBudget(81, { kind: 'implementation', limit: 5,
-    authorizationRef: 'test:external-session-action5', reason: 'Actual scoped session verifier fixture' });
+  const extended = await f.handoff.extendBudget(81, {
+    kind: 'implementation',
+    limit: 5,
+    authorizationRef: 'test:external-session-action5',
+    reason: 'Actual scoped session verifier fixture',
+  });
   assert.equal(extended.budgetExtensions.length, 1);
   assert.equal(extended.budgetExtensions[0].authorization.provenance, 'user-session');
   assert.equal(extended.budgetExtensions[0].authorization.binding.actor, 'review-bot');
@@ -723,11 +775,24 @@ test('default compatibility2 spends3/4 without extensions and same-account exter
 test('background normal waiting reconciliation never repairs notices across accounts or transient reads', async () => {
   const f = fixture();
   await f.handoff.request(81);
-  const previous = clone(f.remote.batches[0]), callCount = f.calls.length, notices = f.pr.comments.length;
+  const previous = clone(f.remote.batches[0]),
+    callCount = f.calls.length,
+    notices = f.pr.comments.length;
   f.setActor('another-authorized-user');
-  f.github.viewIssue = async () => { throw Object.assign(new Error('Synthetic notice 503'), { code: 'github-read-transient' }); };
-  assert.equal(await f.handoff.reconcile(previous, async () => assert.fail('Waiting phase must remain unchanged')), false);
-  assert.equal(f.calls.length, callCount, 'No actor or notice API in the background reconciliation');
+  f.github.viewIssue = async () => {
+    throw Object.assign(new Error('Synthetic notice 503'), { code: 'github-read-transient' });
+  };
+  assert.equal(
+    await f.handoff.reconcile(previous, async () =>
+      assert.fail('Waiting phase must remain unchanged'),
+    ),
+    false,
+  );
+  assert.equal(
+    f.calls.length,
+    callCount,
+    'No actor or notice API in the background reconciliation',
+  );
   assert.equal(f.pr.comments.length, notices);
   assert.deepEqual(f.remote.batches[0], previous);
 });
@@ -760,4 +825,88 @@ test('automatic handoff persistence observes a takeover during native source che
   assert.deepEqual(f.remote.batches[0], before);
   assert.equal(f.writes.length, 0);
   assert.equal(f.pr.comments.length, 0);
+});
+
+test('QA6-F3 actual authorized typed QA recovery retains one legacy spend and permits only two new sessions', async () => {
+  const f = fixture();
+  f.setPermission('maintain');
+  const b = f.remote.batches[0];
+  const fingerprint = feedbackFingerprint(await f.github.reviewFeedback(81));
+  const report = JSON.stringify({
+    subject_sha: b.sha,
+    verdict: 'approved',
+    summary: 'Synthetic approved review',
+    findings: [],
+  });
+  b.reviews = [{ round: 1, status: 'approved', subjectSha: b.sha }];
+  b.reviewLedger = {
+    rounds: [
+      {
+        round: 1,
+        verdict: 'approved',
+        subject_sha: b.sha,
+        review_sha256: createHash('sha256').update(report).digest('hex'),
+      },
+    ],
+  };
+  b.reviewReports = { 'claude-review-1.json': report };
+  b.phase = 'blocked';
+  b.failureCode = 'controller-invariant';
+  b.externalReview = { status: 'published', subjectSha: b.sha, feedbackFingerprint: fingerprint };
+  const legacy = {
+    status: 'failed',
+    subjectSha: b.sha,
+    claudeRound: 1,
+    feedbackFingerprint: fingerprint,
+    nonce: 'legacy-spent',
+    reservedAt: '2026-10-17T00:00:00.000Z',
+  };
+  b.codexFinalReview = structuredClone(legacy);
+  const recover = async () => {
+    const current = f.remote.batches[0];
+    return f.handoff.recover(81, {
+      action: 'release-qa-reservation',
+      expectedSha: current.sha,
+      token: current.codexFinalReview.nonce,
+      reason: 'Synthetic authorized infrastructure recovery',
+      authorizationRef: 'test:trusted-host',
+    });
+  };
+  await recover();
+  let calls = 0;
+  for (let i = 0; i < 3; i++) {
+    const current = structuredClone(f.remote.batches[0]);
+    const args = {
+      repo,
+      batch: current,
+      gh: f.github,
+      communication: { mirrorFeedback: async () => {}, publishState: async () => {} },
+      workspace: {
+        prepare: async () => {},
+        execute: async () => assert.fail('no implementation'),
+        finalQa: async () => {
+          calls++;
+          throw new Error('synthetic infrastructure failure');
+        },
+      },
+      save: async () => {
+        const store = f.github.createStateStore();
+        const state = await store.load();
+        state.batches[0] = structuredClone(current);
+        await store.save(state);
+      },
+      block: async () => {},
+      report: async () => {},
+    };
+    if (i < 2) await assert.rejects(externalReviewStep(args), /synthetic infrastructure failure/);
+    else await externalReviewStep(args);
+    if (i < 2) await recover();
+  }
+  const final = f.remote.batches[0];
+  assert.equal(calls, 2);
+  assert.equal(final.implementation.length, 1);
+  assert.deepEqual(final.qaHistory[0], legacy);
+  assert.equal(final.qaHistory.length, 3);
+  assert.equal(new Set(final.codexFinalQaInfrastructure.attempts.map((x) => x.nonce)).size, 3);
+  assert.equal(final.codexFinalReview.failureCode, 'final-qa-infrastructure-exhausted');
 });

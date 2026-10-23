@@ -1389,3 +1389,63 @@ test('Claude1 F1 stale canonical handback pauses before intake, selection or any
   assert.deepEqual(h.log, ['store.load']);
   assert.equal(h.counts.plan, 0);
 });
+
+test('QA6-F1 invalid active types never reach intake or discovery; legitimate inactive/audit states do', async () => {
+  for (const active of ['true', 'false', '', 0, 1, null, [], {}]) {
+    const takeover = takeoverHandback();
+    takeover.active = active;
+    const h = harness({ initialState: { ...blankState(), operatorTakeover: takeover }, queue: [] });
+    await assert.rejects(h.run(), /invalid operator takeover/);
+    assert.deepEqual(h.log, ['store.load']);
+    assert.equal(h.counts.plan, 0);
+  }
+  for (const takeover of [{ active: false }, { nonce: 'legacy-budget-audit' }]) {
+    const h = harness({ initialState: { ...blankState(), operatorTakeover: takeover }, queue: [] });
+    await h.run();
+    assert.ok(h.log.includes('gh.intake'));
+    assert.ok(h.log.includes('gh.discoverQueue'));
+    assert.equal(h.counts.plan, 0);
+  }
+});
+
+test('QA6-F5 external ownership exception refreshes canonical A before independent B disposition', async () => {
+  const a = batchFor({ issues: [17], phase: 'waiting-review' }),
+    b = batchFor({ issues: [18], phase: 'waiting-review' });
+  a.externalReview = { status: 'published', subjectSha: a.sha };
+  b.externalReview = { status: 'published', subjectSha: b.sha };
+  const h = harness({
+    issues: [17, 18],
+    queue: [],
+    initialState: { ...blankState(), batches: [a, b] },
+  });
+  h.gh.createStateStore = () => h.store;
+  let frozenA, afterOwnership;
+  h.gh.viewIssue = async (number) => {
+    if (number === 17) {
+      h.stateRef.value.batches[0].operatorCoordination = { active: true };
+      h.stateRef.value.batches[0].remoteNote = 'preserve operator data';
+      h.stateRef.value.operatorTakeover = takeoverHandback([{ collection: 'batches', id: a.id }]);
+      frozenA = clone(h.stateRef.value.batches[0]);
+      afterOwnership = h.log.length;
+      throw Object.assign(new Error('observed ownership loss'), { code: 'review-operator-owned' });
+    }
+    assert.equal(number, 18);
+    return { state: 'closed' };
+  };
+  const result = await h.run({ action: 'test' }, 'external');
+  assert.deepEqual(result.batches[0], frozenA);
+  assert.deepEqual(h.stateRef.value.batches[0], frozenA);
+  assert.equal(
+    result.batches[1].phase,
+    'blocked',
+    'closed B is independently reconciled rather than aborted',
+  );
+  assert.match(result.batches[1].reason, /Source issue was closed/);
+  assert.equal(
+    h.log
+      .slice(afterOwnership)
+      .some((x) => x.startsWith('gh.commentIssue:17') || x.startsWith('gh.setIssueStatus:17:')),
+    false,
+  );
+  assert.equal(h.counts.execute, 0);
+});
