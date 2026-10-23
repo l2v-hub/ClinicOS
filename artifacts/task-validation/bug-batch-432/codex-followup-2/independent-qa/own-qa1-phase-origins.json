@@ -1,0 +1,55 @@
+{
+  "phaseOrigins": [
+    {
+      "label": "therapy-import-api",
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1",
+      "logSha256": "485390af49ceed63d5552b2d44458575e3709f256b35f2f9999c94db5d7c656f",
+      "entireOriginalClosureIdentical": true
+    },
+    {
+      "label": "frontend-types",
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "entireOriginalClosureIdentical": true
+    },
+    {
+      "label": "frontend-build",
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1",
+      "logSha256": "dc42d3d01ff944ff9a5d191add1d102d42ca8cd27918861138d04c28d0520ee0",
+      "entireOriginalClosureIdentical": true
+    },
+    {
+      "label": "frontend-unit",
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1",
+      "logSha256": "db26dc566c38c0760c191900b71715a1301198eaf84cad48945aca647aebb536",
+      "entireOriginalClosureIdentical": true
+    },
+    {
+      "label": "backend-unit",
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1",
+      "logSha256": "1d8995ea52b2d7ef23b0ef52204052c54862dcee323daed7579d307f600decab",
+      "entireOriginalClosureIdentical": true
+    },
+    {
+      "label": "browser-e2e",
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "entireOriginalClosureIdentical": true
+    },
+    {
+      "label": "clinical-followup-browser",
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "entireOriginalClosureIdentical": true
+    }
+  ],
+  "noAuthorOrQa5Inheritance": true,
+  "fullDependencyClosureVerified": true
+}

@@ -1,0 +1,207 @@
+{
+  "record": "FINALQA8",
+  "createdAtUtc": "2026-10-19T01:37:35.443167+00:00",
+  "nonce": "9a656727-60d1-4c04-91c6-b62ce2fb9214",
+  "sourceSha": "ae12862e8ff9ce03f117fc646ecd11a4a8a8bb56",
+  "overallStatus": "REMAINING_QA8_UI_PASS_WITH_HISTORICAL_FAILURES_RETAINED",
+  "overallScopeNote": "This record completes the outstanding UI phase. Earlier harness failures remain part of the QA8 history; the complete set is not represented as one clean suite run.",
+  "currentRun": {
+    "continuation": 8,
+    "runnerOk": true,
+    "code": 0,
+    "steps": {
+      "pass": 8,
+      "fail": 0,
+      "unrun": 1
+    },
+    "migration": "PASS",
+    "syntheticSeed": "PASS",
+    "sourceFingerprintPreserved": true,
+    "sourceGitStatus": "clean",
+    "strictDateReceipt": {
+      "selectedCivilDate": "2033-04-05",
+      "renderedRomeDate": "05/04/2033",
+      "renderedRomeTime": "00:10",
+      "recordedAtUtc": "2033-04-04T22:10:00.000Z",
+      "fullSqlRowsUnchanged": true
+    },
+    "events": {
+      "browserContexts": 11,
+      "pageErrors": 0,
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "administrationWrites": 0
+    },
+    "unrun": [
+      "actual missing recordedAt is not schema-valid (updatedAt mandatory); legacy absent metadata remains unit-covered",
+      "scheduled individual drug-dose branch has no actual App mount; no substitute claimed"
+    ]
+  },
+  "currentUiResults": [
+    {
+      "name": "actual civil-day UI and timezone given/refused metadata on both Agenda roles, Giro and ward >105 continuation",
+      "status": "PASS"
+    },
+    {
+      "name": "operator actual AppAgenda cold entry, >105 pagination, recorded outcomes and reload zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "admin actual AppAgenda cold entry, >105 pagination, recorded outcomes and reload zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "both actual Agenda roles preserve real given/refused records with missing operator after reload",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Giro recorded outcomes read-only and reload",
+      "status": "PASS"
+    },
+    {
+      "name": "actual selected-patient calendar day/week retains recorded outcomes, no invented hourly slots",
+      "status": "PASS"
+    },
+    {
+      "name": "actual dashboard recorded count and panel",
+      "status": "PASS"
+    },
+    {
+      "name": "individual scheduled drug-dose detail",
+      "status": "UNRUN"
+    },
+    {
+      "name": "actual ward week calendar preserves untimed outcomes without hourly administration keys",
+      "status": "PASS"
+    }
+  ],
+  "historicalAndRetainedResults": [
+    {
+      "phase": "QA7 retained static checks",
+      "status": "historical passes, not fresh QA8 execution",
+      "frontendPasses": 1405,
+      "backendPasses": 1933,
+      "backendOptionalSkips": 5,
+      "buildAndTypes": "historical pass; source identity retained",
+      "priorGlobalStatus": "FAILED VALIDATION; stale guard remains recorded",
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa7-20261019/"
+    },
+    {
+      "phase": "QA8 original invocation",
+      "status": "FAILED VALIDATION",
+      "freshAffected": {
+        "pass": 4,
+        "fail": 0,
+        "skip": 0
+      },
+      "browserE2e": "failed after actual assertions; fresh backend log absent; not fabricated",
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/report.json",
+      "sha256": "da97eef57622ef6b1957eb0b415e3824af51f32b1c234e52b289a4b73d466c0d"
+    },
+    {
+      "phase": "QA8 continuation 1",
+      "status": "FAILED VALIDATION",
+      "retainedPasses": [
+        "measured internal renderer",
+        "F1F2",
+        "actual AppAgenda"
+      ],
+      "failure": "recorded-agenda-lifecycle admin button expectation (0 == true)",
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/continuation-1/report.json",
+      "sha256": "f388e62ea5925c8a0bc4177822289e7738be76def882d505777b992dec87b1d7"
+    },
+    {
+      "phase": "QA8 continuation 2",
+      "status": "FAILED VALIDATION",
+      "actualAdminNegativeCasesPassed": 3,
+      "failure": "owned fixture restoration createdAt timestamp equality",
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/continuation-2/report.json",
+      "sha256": "c5cd33c6f1a3d47611287db3745b85722410c4b5e463a3489499a20d83237988"
+    },
+    {
+      "phase": "QA8 continuation 3",
+      "status": "FAILED VALIDATION",
+      "recordedOutcomes": {
+        "pass": 4,
+        "fail": 1
+      },
+      "failure": "display-date assertion expected 5/4/2033; actual UI string was 05/04/2033",
+      "navigationSupplement": "PASS for operator and admin browser history",
+      "retainedSqlReceipt": {
+        "verification": {
+          "total": 9,
+          "verification": 9,
+          "administered": 4,
+          "notAdministered": 4,
+          "unrecorded": 1
+        },
+        "deniedWrites": 18,
+        "deniedStatus": 409,
+        "rowsUnchanged": true
+      },
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/continuation-3/report.json",
+      "sha256": "f43239a648030a6fa78b0f72a07ae88c5ece704779f57c42b36adfbaa1b6c039"
+    },
+    {
+      "phase": "QA8 continuation 4",
+      "status": "HARNESS_SETUP_FAILURE_BEFORE_TESTS",
+      "reason": "outer wrapper held the same nonwaiting flock the harness acquires; no runtime or tests started",
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/continuation-4/runner-runtime.json",
+      "sha256": "c7c0d22634e2e667a99ef02484003770e787e891b010876c89545e5bd0061dde"
+    },
+    {
+      "phase": "QA8 continuation 6",
+      "status": "PATH_PREFLIGHT_FAILURE_BEFORE_SERVICES",
+      "reason": "source-root guard expected a path without trailing separator; continuation 8 compares normalized paths",
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/continuation-6/runner-runtime.json",
+      "sha256": "b9f3f45fb2116adc28b117475d593296cf2165f09383f7990e4cea687fc971ff"
+    },
+    {
+      "phase": "QA8 continuation 8",
+      "status": "PASS_FOR_REMAINING_UI_PHASE",
+      "reference": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/continuation-8/snapshot/artifacts/task-validation/bug-batch-432/qa8-continuation-8/recorded-outcomes/results.json",
+      "sha256": "cb22bcac8d798007b09279cacb2dea0b5c44a8d92e371f01163dd61dfed51b90"
+    }
+  ],
+  "notLaunchedPreparations": [
+    "continuations 5 and 7 were frozen path-correction copies, superseded before a runtime invocation; no test outcomes claimed"
+  ],
+  "mediaAndPrivacy": {
+    "syntheticPngsDecoded": 14,
+    "zipArchivesValidated": 39,
+    "videosDecoded": 11,
+    "mediaErrors": 0,
+    "currentBrowserEvents": "all 11 contexts had empty error/write arrays",
+    "privateTraces": "redacted by the recorded harness; archive integrity checked"
+  },
+  "integrity": {
+    "frozenSourceFiles": 4786,
+    "continuation3FilesPreserved": 5224,
+    "continuation4FilesPreserved": 5129,
+    "continuation5FilesPreserved": 5126,
+    "continuation6FilesPreserved": 5132,
+    "continuation7FilesPreserved": 5129,
+    "oldSourceProofsAndDependencies": "all preserved by integrity-after.json",
+    "sourceGitStatus": "clean"
+  },
+  "resourceHandback": {
+    "resourceHandback": true,
+    "portsFree": {
+      "55432": true,
+      "3447": true,
+      "5447": true,
+      "8432": true
+    },
+    "qaLockFree": true,
+    "ownedDisposableContainerAbsent": true,
+    "baselinePostgresStillPresent": "9000f70d4ee9 clinicos-postgres on 5432",
+    "sourceSha": "ae12862e8ff9ce03f117fc646ecd11a4a8a8bb56",
+    "noProviderCallsOrExternalWrites": true
+  },
+  "limitations": [
+    "Scheduled individual drug-dose detail remains UNRUN because there is no actual App mount; no synthetic substitute was used.",
+    "A missing recordedAt row is not database-schema-valid; nullable metadata behavior remains unit evidence.",
+    "Current fresh QA8 completion covers only the remaining UI surfaces. QA7 retained tests, earlier QA8 phases, the fresh affected4 and original canonical assertions keep their own provenance.",
+    "No provider/network/real-credential, release, Git reference, GitHub, or state-writer operations were performed."
+  ]
+}

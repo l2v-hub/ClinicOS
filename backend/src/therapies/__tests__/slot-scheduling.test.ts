@@ -1,0 +1,101 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {
+  normalizeTherapyClock,
+  recordedOneTimeOutcome,
+  oneTimeSlot,
+  oneTimeVerificationReason,
+} from '../slot-scheduling.js';
+import { parseTherapyAdministrationBody } from '../therapy-write.js';
+
+test('one-off spelling normalization never invents an invalid clock', () => {
+  for (const [raw, expected] of [
+    ['8:30', '08:30'],
+    [' 8:30 ', '08:30'],
+    ['00:15', '00:15'],
+    ['23:59', '23:59'],
+  ])
+    assert.equal(normalizeTherapyClock(raw), expected);
+  for (const raw of [null, '', '99:00', '24:00', '12:60', '8:3', '08:30:00'])
+    assert.equal(normalizeTherapyClock(raw), null);
+});
+
+test('one-off ambiguity is one verification category, independent of legacy flags', () => {
+  const base = { tipo: 'una_tantum', orarioSomministrazione: '8:30', schedules: [] };
+  assert.deepEqual(oneTimeSlot(base), { time: '08:30', fascia: 'mattina' });
+  assert.deepEqual(
+    oneTimeSlot({ ...base, schedules: [{ time: '08:30', fascia: 'mattina' }] }),
+    oneTimeSlot(base),
+  );
+  for (const schedules of [
+    [{ time: '09:30', fascia: 'mattina' }],
+    [{ time: '08:30', fascia: 'sera' }],
+    [{ time: '08:30' }, { time: '8:30' }],
+  ]) {
+    assert.equal(oneTimeVerificationReason({ ...base, schedules }), 'conflicting_schedule');
+    assert.equal(oneTimeSlot({ ...base, schedules }), null);
+  }
+  assert.equal(
+    oneTimeVerificationReason({ ...base, orarioSomministrazione: null }),
+    'missing_time',
+  );
+  assert.equal(
+    oneTimeVerificationReason({ ...base, orarioSomministrazione: '99:00' }),
+    'invalid_time',
+  );
+  assert.equal(oneTimeVerificationReason({ ...base, tipo: 'periodica' }), null);
+});
+
+test('only confirm accepts an observed refused state; pending-only remains explicit', () => {
+  const body = {
+    patientId: 'p1',
+    therapyId: 't1',
+    date: '2030-01-01',
+    fascia: 'mattina',
+    expectedStato: 'non_erogata',
+  };
+  assert.equal(parseTherapyAdministrationBody(body, false).expectedStato, 'non_erogata');
+  assert.throws(
+    () => parseTherapyAdministrationBody({ ...body, motivo: 'rifiuto' }, true),
+    /Stato atteso/,
+  );
+  assert.throws(
+    () => parseTherapyAdministrationBody({ ...body, expectedStato: 'erogata' }, false),
+    /Stato atteso/,
+  );
+  assert.equal(
+    parseTherapyAdministrationBody({ ...body, expectedStato: 'da_erogare' }, false).expectedStato,
+    'da_erogare',
+  );
+});
+
+test('single-day recorded outcome is patient-bound, given-wins across legacy bands, deterministic', () => {
+  const therapy = { id: 't1', patientId: 'p1', farmacoNome: 'Synthetic' };
+  const record = (id: string, stato: string, patch = {}) => ({
+    id,
+    stato,
+    therapyId: 't1',
+    patientId: 'p1',
+    farmacoNome: 'Synthetic',
+    fascia: 'mattina',
+    ...patch,
+  });
+  const refused = record('a', 'non_erogata');
+  const given = record('b', 'erogata', { fascia: 'sera' });
+  const legacy = record('c', 'erogata', { therapyId: null, fascia: 'notte' });
+  const foreign = record('0', 'erogata', { patientId: 'p2' });
+  const unrelated = record('0', 'erogata', { therapyId: 't2' });
+  for (const records of [
+    [refused, legacy, foreign, given, unrelated],
+    [given, legacy, refused, foreign, unrelated],
+  ])
+    assert.equal(recordedOneTimeOutcome(therapy, records)?.id, 'b');
+  assert.equal(recordedOneTimeOutcome(therapy, [refused, legacy])?.id, 'c');
+  assert.equal(recordedOneTimeOutcome(therapy, [refused])?.stato, 'non_erogata');
+  assert.equal(
+    recordedOneTimeOutcome(therapy, [foreign, unrelated, record('x', 'da_erogare')]),
+    null,
+  );
+  assert.equal(recordedOneTimeOutcome(therapy, [record('z', 'erogata'), given])?.id, 'b');
+  assert.equal(recordedOneTimeOutcome(therapy, []), null);
+});

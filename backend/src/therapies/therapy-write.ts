@@ -7,6 +7,7 @@ import {
   type ScheduleInput,
 } from '../lib/therapy-dose.js';
 import { therapyWhereForDate } from './therapy-query.js';
+import { normalizeTherapyClock, oneTimeSlot, therapyBandEnabled } from './slot-scheduling.js';
 import { hasFacilityPatientScope } from '../patients/patient-scope.js';
 import {
   extraDoseLabel,
@@ -62,6 +63,8 @@ const ACCEPTED_FIELDS = new Set([
   'date',
   'fascia',
   'scheduledTime',
+  'requestId',
+  'expectedStato',
   'motivo',
   'note',
   // Transitional display fields and legacy actor fields are accepted but never trusted.
@@ -80,6 +83,8 @@ export interface TherapyAdministrationInput {
   date: string;
   fascia: keyof typeof FASCIA_FLAGS;
   scheduledTime?: string;
+  requestId?: string;
+  expectedStato?: 'da_erogare' | 'non_erogata';
   motivo?: string;
   note?: string;
   measuredGlucose?: number;
@@ -92,6 +97,8 @@ export interface AuthoritativeTherapyAdministration extends TherapyAdministratio
   ora: string;
   /** One prescribed dose in this band: any record of the band is that dose, whatever its hour. */
   singleBandDose: boolean;
+  /** A one-off has just one dose on its date, including after an edit crosses bands. */
+  singleDayDose: boolean;
   doseContext?: {
     kind: 'blood_glucose';
     glucoseMgDl: number;
@@ -151,6 +158,15 @@ export function parseTherapyAdministrationBody(
   if (scheduledTime !== undefined && !/^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(scheduledTime))
     throw new TherapyWriteInputError('Orario di somministrazione non valido');
   const motivo = boundedString(body, 'motivo', 200, requireReason);
+  const requestId = boundedString(body, 'requestId', 128);
+  if (requestId !== undefined && !/^[A-Za-z0-9_-]{8,128}$/.test(requestId))
+    throw new TherapyWriteInputError('requestId non valido');
+  if (
+    body.expectedStato !== undefined &&
+    body.expectedStato !== 'da_erogare' &&
+    (body.expectedStato !== 'non_erogata' || requireReason)
+  )
+    throw new TherapyWriteInputError('Stato atteso non valido');
   const note = boundedString(body, 'note', 2_000);
   let measuredGlucose: number | undefined;
   if (body.measuredGlucose !== undefined) {
@@ -166,6 +182,10 @@ export function parseTherapyAdministrationBody(
     date,
     fascia: fascia as keyof typeof FASCIA_FLAGS,
     ...(scheduledTime !== undefined ? { scheduledTime } : {}),
+    ...(requestId !== undefined ? { requestId } : {}),
+    ...(body.expectedStato !== undefined
+      ? { expectedStato: body.expectedStato as TherapyAdministrationInput['expectedStato'] }
+      : {}),
     motivo,
     note,
     ...(measuredGlucose !== undefined ? { measuredGlucose } : {}),
@@ -196,6 +216,8 @@ export async function resolveAuthoritativeTherapy(
     },
     select: {
       farmacoNome: true,
+      tipo: true,
+      orarioSomministrazione: true,
       dosaggio: true,
       viaSomministrazione: true,
       giorniSettimana: true,
@@ -209,7 +231,6 @@ export async function resolveAuthoritativeTherapy(
       commercialStrengthValue: true,
       commercialStrengthUnit: true,
       schedules: {
-        where: { fascia: input.fascia },
         take: MAX_THERAPY_SCHEDULES + 1,
         orderBy: [{ time: 'asc' }, { id: 'asc' }],
         select: {
@@ -227,12 +248,19 @@ export async function resolveAuthoritativeTherapy(
     throw new TherapyNotDueError();
   }
   const flag = FASCIA_FLAGS[input.fascia];
-  const schedules = therapy.schedules as ScheduleInput[];
-  if (schedules.length > MAX_THERAPY_SCHEDULES)
+  if (therapy.schedules.length > MAX_THERAPY_SCHEDULES)
     throw new TherapyWriteInputError(
       'Pianificazione oltre il limite: verifica la prescrizione',
       409,
     );
+  const single = oneTimeSlot(therapy);
+  if (therapy.tipo === 'una_tantum' && !single) throw new TherapyNotDueError();
+  const fallbackTime = single?.time || FALLBACK_TIMES[input.fascia];
+  const schedules = (therapy.schedules as ScheduleInput[])
+    .map((s) =>
+      therapy.tipo === 'una_tantum' ? { ...s, time: normalizeTherapyClock(s.time) ?? s.time } : s,
+    )
+    .filter((s) => s.fascia === input.fascia);
   if (!input.scheduledTime && schedules.length > 1)
     throw new TherapyWriteInputError(
       'Seleziona l’orario esatto della dose: questa fascia contiene più somministrazioni',
@@ -249,12 +277,12 @@ export async function resolveAuthoritativeTherapy(
   if (
     input.scheduledTime &&
     ((schedules.length > 0 && !schedule) ||
-      (schedules.length === 0 && input.scheduledTime !== FALLBACK_TIMES[input.fascia]))
+      (schedules.length === 0 && input.scheduledTime !== fallbackTime))
   )
     throw new TherapyNotDueError();
   // The read model creates slots from the fascia flags. A write must be accepted only for an
   // administration the operator could actually see in that same read model.
-  if (!therapy[flag]) throw new TherapyNotDueError();
+  if (!therapyBandEnabled(therapy, input.fascia, therapy[flag])) throw new TherapyNotDueError();
   let conditionalDose: number | null = null;
   let doseContext: AuthoritativeTherapyAdministration['doseContext'];
   if (therapy.doseMode === 'glucose_scale' && options.requireDoseMeasurement !== false) {
@@ -293,7 +321,7 @@ export async function resolveAuthoritativeTherapy(
   }
   return {
     ...input,
-    scheduledTime: schedule?.time || FALLBACK_TIMES[input.fascia],
+    scheduledTime: schedule?.time || fallbackTime,
     farmacoNome: therapy.farmacoNome,
     farmacoDose:
       conditionalDose !== null
@@ -311,8 +339,9 @@ export async function resolveAuthoritativeTherapy(
               )) ||
             therapy.dosaggio,
     farmacoVia: therapy.viaSomministrazione || 'orale',
-    ora: schedule?.time || FALLBACK_TIMES[input.fascia],
+    ora: schedule?.time || fallbackTime,
     singleBandDose: schedules.length <= 1,
+    singleDayDose: therapy.tipo === 'una_tantum',
     ...(doseContext ? { doseContext } : {}),
   };
 }

@@ -1,5 +1,8 @@
 import type {
   TherapyAdministration,
+  TherapyRecordedOutcome,
+  TherapyReadGroup,
+  TherapyVerificationGroup,
   TherapySlot,
   TherapySlotPageResponse,
   TherapySlotPatient,
@@ -67,11 +70,14 @@ function parsePatient(value: unknown): TherapySlotPatient {
   };
 }
 
-function parseSlot(value: unknown): TherapySlot {
+function parseSlot(value: unknown): TherapyReadGroup {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     throw new Error('invalid therapy slot');
   }
   const row = value as Record<string, unknown>;
+  if (row.kind === 'verification') return parseVerificationGroup(row);
+  if (row.kind !== undefined && row.kind !== 'scheduled')
+    throw new Error('invalid therapy group kind');
   if (
     typeof row.id !== 'string' ||
     typeof row.fascia !== 'string' ||
@@ -100,8 +106,183 @@ function parseSlot(value: unknown): TherapySlot {
   };
 }
 
+function parseRecordedOutcome(
+  value: unknown,
+  therapyId: string,
+  patientId: string,
+  date: string,
+): TherapyRecordedOutcome | null {
+  // Older responses omit metadata: absence never implies an administered dose.
+  if (value === undefined || value === null) return null;
+  if (typeof value !== 'object' || Array.isArray(value))
+    throw new Error('invalid recorded outcome');
+  const record = value as Record<string, unknown>;
+  const keys = [
+    'administrationId',
+    'therapyId',
+    'patientId',
+    'date',
+    'status',
+    'recordedAt',
+    'recordedBy',
+    'notAdministeredReason',
+  ];
+  if (
+    Object.keys(record).length !== keys.length ||
+    Object.keys(record).some((key) => !keys.includes(key)) ||
+    typeof record.administrationId !== 'string' ||
+    !record.administrationId.trim() ||
+    record.therapyId !== therapyId ||
+    record.patientId !== patientId ||
+    record.date !== date ||
+    (record.status !== 'administered' && record.status !== 'not_administered') ||
+    !(
+      record.recordedAt === null ||
+      (typeof record.recordedAt === 'string' &&
+        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(record.recordedAt) &&
+        Number.isFinite(Date.parse(record.recordedAt)) &&
+        new Date(record.recordedAt).toISOString() === record.recordedAt)
+    ) ||
+    !(record.recordedBy === null || typeof record.recordedBy === 'string') ||
+    !(record.notAdministeredReason === null || typeof record.notAdministeredReason === 'string') ||
+    (record.status === 'administered' && record.notAdministeredReason !== null)
+  )
+    throw new Error('inconsistent recorded outcome');
+  return record as unknown as TherapyRecordedOutcome;
+}
+
+function parseVerificationGroup(row: Record<string, unknown>): TherapyVerificationGroup {
+  const summary = row.summary as Record<string, unknown> | undefined;
+  if (
+    row.id !== 'therapy-verification' ||
+    row.label !== 'Da verificare' ||
+    typeof row.date !== 'string' ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(row.date) ||
+    !Number.isFinite(Date.parse(`${row.date}T12:00:00Z`)) ||
+    new Date(`${row.date}T12:00:00Z`).toISOString().slice(0, 10) !== row.date ||
+    row.fascia !== null ||
+    row.ora !== null ||
+    !summary ||
+    !Array.isArray(row.patients)
+  )
+    throw new Error('invalid therapy verification group');
+  const total = finiteCount(summary.total);
+  if (finiteCount(summary.verification) !== total || 'pending' in summary)
+    throw new Error('invalid therapy verification summary');
+  const outcomeSummary = ['administered', 'notAdministered', 'unrecorded'];
+  const hasOutcomeSummary = outcomeSummary.some((key) => key in summary);
+  if (
+    hasOutcomeSummary &&
+    (outcomeSummary.some(
+      (key) =>
+        typeof summary[key] !== 'number' ||
+        !Number.isSafeInteger(summary[key]) ||
+        Number(summary[key]) < 0,
+    ) ||
+      outcomeSummary.reduce((sum, key) => sum + Number(summary[key]), 0) !== total)
+  )
+    throw new Error('invalid recorded outcome summary');
+  const identities = new Set<string>();
+  const loaded = { administered: 0, notAdministered: 0, unrecorded: 0 };
+  const patients = row.patients.map((value) => {
+    if (!value || typeof value !== 'object' || Array.isArray(value))
+      throw new Error('invalid verification patient');
+    const patient = value as Record<string, unknown>;
+    if (
+      typeof patient.patientId !== 'string' ||
+      !patient.patientId.trim() ||
+      !Array.isArray(patient.items) ||
+      'administrations' in patient
+    )
+      throw new Error('invalid verification items');
+    const { administrations: _ignored, ...identity } = parsePatient({
+      ...patient,
+      administrations: [],
+    });
+    const items = patient.items.map((raw) => {
+      if (!raw || typeof raw !== 'object' || Array.isArray(raw))
+        throw new Error('invalid verification item');
+      const item = raw as Record<string, unknown>;
+      if (
+        typeof item.therapyId !== 'string' ||
+        !item.therapyId ||
+        typeof item.drugName !== 'string' ||
+        item.status !== 'to_verify' ||
+        !['missing_time', 'invalid_time', 'conflicting_schedule'].includes(String(item.reason)) ||
+        item.scheduledTime !== null ||
+        item.quantityLabel !== null ||
+        item.dosage !== null ||
+        item.canAdminister !== false ||
+        ('fascia' in item && item.fascia !== null)
+      )
+        throw new Error('invalid verification item fields');
+      const allowedKeys = [
+        'therapyId',
+        'drugName',
+        'status',
+        'reason',
+        'scheduledTime',
+        'quantityLabel',
+        'dosage',
+        'canAdminister',
+        'fascia',
+        'recordedOutcome',
+      ];
+      if (Object.keys(item).some((key) => !allowedKeys.includes(key)))
+        throw new Error('unknown verification metadata');
+      const recordedOutcome = parseRecordedOutcome(
+        item.recordedOutcome,
+        item.therapyId,
+        identity.patientId,
+        row.date as string,
+      );
+      loaded[
+        recordedOutcome?.status === 'administered'
+          ? 'administered'
+          : recordedOutcome?.status === 'not_administered'
+            ? 'notAdministered'
+            : 'unrecorded'
+      ]++;
+      const key = item.therapyId;
+      if (identities.has(key)) throw new Error('duplicate verification item');
+      identities.add(key);
+      return {
+        ...item,
+        recordedOutcome,
+      } as unknown as TherapyVerificationGroup['patients'][number]['items'][number];
+    });
+    return { ...identity, items };
+  });
+  if (identities.size > total) throw new Error('invalid verification total');
+  if (
+    hasOutcomeSummary &&
+    outcomeSummary.some((key) => loaded[key as keyof typeof loaded] > Number(summary[key]))
+  )
+    throw new Error('recorded outcome exceeds summary');
+  return {
+    kind: 'verification',
+    id: 'therapy-verification',
+    date: row.date,
+    label: 'Da verificare',
+    fascia: null,
+    ora: null,
+    summary: {
+      total,
+      verification: total,
+      ...(hasOutcomeSummary
+        ? {
+            administered: Number(summary.administered),
+            notAdministered: Number(summary.notAdministered),
+            unrecorded: Number(summary.unrecorded),
+          }
+        : {}),
+    },
+    patients,
+  };
+}
+
 /** Complete legacy response: malformed data must never look like an empty clinical agenda. */
-export function parseTherapySlots(value: unknown): TherapySlot[] {
+export function parseTherapySlots(value: unknown): TherapyReadGroup[] {
   if (!Array.isArray(value)) throw new Error('invalid therapy slots');
   return value.map(parseSlot);
 }
@@ -138,15 +319,47 @@ export function parseTherapySlotPage(value: unknown): TherapySlotPageResponse {
 }
 
 export function mergeTherapySlotPages(
-  current: TherapySlot[],
-  incoming: TherapySlot[],
+  current: TherapyReadGroup[],
+  incoming: TherapyReadGroup[],
   replaceSummary = false,
-): TherapySlot[] {
+): TherapyReadGroup[] {
   const slots = new Map(current.map((slot) => [slot.id, slot]));
   for (const next of incoming) {
     const previous = slots.get(next.id);
     if (!previous) {
       slots.set(next.id, next);
+      continue;
+    }
+    if (next.kind === 'verification' || previous.kind === 'verification') {
+      if (
+        next.kind !== 'verification' ||
+        previous.kind !== 'verification' ||
+        next.date !== previous.date
+      )
+        throw new Error('therapy group identity changed');
+      const owners = new Map(
+        previous.patients.flatMap((patient) =>
+          patient.items.map((item) => [item.therapyId, patient.patientId] as const),
+        ),
+      );
+      const patients = new Map(previous.patients.map((patient) => [patient.patientId, patient]));
+      for (const patient of next.patients) {
+        for (const item of patient.items) {
+          if (owners.has(item.therapyId) && owners.get(item.therapyId) !== patient.patientId)
+            throw new Error('verification therapy patient changed');
+          owners.set(item.therapyId, patient.patientId);
+        }
+        const items = new Map(
+          (patients.get(patient.patientId)?.items ?? []).map((item) => [item.therapyId, item]),
+        );
+        for (const item of patient.items) items.set(item.therapyId, item);
+        patients.set(patient.patientId, { ...patient, items: [...items.values()] });
+      }
+      slots.set(next.id, {
+        ...next,
+        summary: replaceSummary ? next.summary : previous.summary,
+        patients: [...patients.values()],
+      });
       continue;
     }
     const patients = new Map(previous.patients.map((patient) => [patient.patientId, patient]));
@@ -157,10 +370,16 @@ export function mergeTherapySlotPages(
         continue;
       }
       const administrations = new Map(
-        previousPatient.administrations.map((row) => [row.therapyId, row]),
+        previousPatient.administrations.map((row) => [
+          `${row.therapyId}|${row.scheduledTime}`,
+          row,
+        ]),
       );
       for (const administration of nextPatient.administrations) {
-        administrations.set(administration.therapyId, administration);
+        administrations.set(
+          `${administration.therapyId}|${administration.scheduledTime}`,
+          administration,
+        );
       }
       patients.set(nextPatient.patientId, {
         ...nextPatient,

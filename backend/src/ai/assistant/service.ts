@@ -17,6 +17,7 @@ import {
   therapySource,
 } from '../gateway/sources.js';
 import { findTherapiesDue } from '../../therapies/due-therapy-query.js';
+import { facilityClock } from '../../lib/facility-time.js';
 import { dayKey, type ConsegnaRow, type TherapyDueItem } from './facility-signals.js';
 import { consegnaUrgencyActiveSql } from '../../lib/urgency.js';
 import {
@@ -202,8 +203,8 @@ const AI_CONSEGNA_COLUMNS = Prisma.raw(`
   c."operatoreAssegnatoId", c."creatoDaId"`);
 
 async function overdueConsegne(ctx: UserContext, now: Date) {
-  const today = dayKey(now);
-  const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const { date: today, minutes } = facilityClock(now);
+  const currentTime = `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
   // UX2 W8: a handover is a note; only an ACTIVE urgency (no «Ho capito» by a non-author yet)
   // is something left to do. Legacy aperta / in corso / completata never reach the assistant.
   const where = Prisma.sql`
@@ -315,6 +316,9 @@ async function facilitySnapshot(
     {
       generatedAt,
       occupancy: occ.data[0] ?? null,
+      therapiesToVerifyCount: therapies.toVerifyCount,
+      therapiesToVerifySampleCount: therapies.toVerify.length,
+      therapiesToVerify: therapies.toVerify,
       therapiesOverdueCount: therapies.overdueCount,
       therapiesOverdueSampleCount: therapiesOverdue.length,
       therapiesOverdue,
@@ -344,6 +348,17 @@ async function facilitySnapshot(
       'Somministrazioni in ritardo',
       `${therapies.overdueCount} somministrazioni ancora da erogare oltre l'orario previsto`,
       generatedAt,
+    ),
+  );
+  sourceRefs.push(
+    ...therapies.toVerify.map((t) =>
+      therapySource(
+        t.patientId,
+        t.therapyId,
+        `${t.drugName}: da verificare`,
+        `Programmazione da verificare (${t.patientName}); nessuna somministrazione disponibile.`,
+        undefined,
+      ),
     ),
   );
   sourceRefs.push(...therapiesOverdue.map(therapyItemSource));
@@ -404,6 +419,9 @@ async function operatorQueue(
       windowMinutes: QUEUE_WINDOW_MINUTES,
       operatorName: operatorName ?? null,
       scope: privilegedContext(ctx) ? 'reparto' : 'operatore',
+      therapiesToVerifyCount: therapies.toVerifyCount,
+      therapiesToVerifySampleCount: therapies.toVerify.length,
+      therapiesToVerify: therapies.toVerify,
       therapiesOverdueCount: therapies.overdueCount,
       therapiesOverdueSampleCount: therapiesOverdue.length,
       therapiesOverdue,
@@ -424,8 +442,17 @@ async function operatorQueue(
       '',
       'therapies-queue',
       'Somministrazioni da erogare',
-      `${therapies.overdueCount} in ritardo, ${therapies.dueSoonCount} entro ${QUEUE_WINDOW_MINUTES} minuti`,
+      `${therapies.overdueCount} in ritardo, ${therapies.dueSoonCount} entro ${QUEUE_WINDOW_MINUTES} minuti, ${therapies.toVerifyCount} da verificare`,
       generatedAt,
+    ),
+    ...therapies.toVerify.map((t) =>
+      therapySource(
+        t.patientId,
+        t.therapyId,
+        `${t.drugName}: da verificare`,
+        `Programmazione da verificare (${t.patientName}); nessuna somministrazione disponibile.`,
+        undefined,
+      ),
     ),
     ...therapiesOverdue.map(therapyItemSource),
     ...therapiesDueSoon.map(therapyItemSource),

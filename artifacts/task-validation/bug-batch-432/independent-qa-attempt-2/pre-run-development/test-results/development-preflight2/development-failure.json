@@ -1,0 +1,26 @@
+{
+  "verified": false,
+  "error": "additional-preflight failed; see test-results/additional-preflight.txt\n\n1 !== 0\n",
+  "results": [
+    {
+      "label": "migration",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "therapy-import-api",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "seed",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "additional-preflight",
+      "code": 1,
+      "signal": null
+    }
+  ]
+}

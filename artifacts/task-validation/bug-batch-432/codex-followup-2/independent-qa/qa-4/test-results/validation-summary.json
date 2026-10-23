@@ -1,0 +1,77 @@
+{
+  "verified": true,
+  "results": [
+    {
+      "label": "migration",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "backend-build",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "backend-font-assets",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "frontend-types-own-independent-QA1",
+      "code": 0,
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1"
+    },
+    {
+      "label": "frontend-build-own-independent-QA1",
+      "code": 0,
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1"
+    },
+    {
+      "label": "frontend-unit-own-independent-QA1",
+      "code": 0,
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1"
+    },
+    {
+      "label": "backend-unit-own-independent-QA1",
+      "code": 0,
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1"
+    },
+    {
+      "label": "therapy-import-api-own-independent-QA1",
+      "code": 0,
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1"
+    },
+    {
+      "label": "seed",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "browser-e2e-own-independent-QA1",
+      "code": 0,
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1"
+    },
+    {
+      "label": "clinical-followup-browser-own-independent-QA1",
+      "code": 0,
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup2-independent-qa-20261018/runs/qa-1"
+    },
+    {
+      "label": "agenda-verification-browser",
+      "code": 0,
+      "signal": null
+    }
+  ],
+  "evidence": "evidence/",
+  "lifecycleAndScopeClean": true,
+  "limitations": [
+    "Independent QA, exact-SHA Claude review and production deployment are separate root-owned gates."
+  ]
+}

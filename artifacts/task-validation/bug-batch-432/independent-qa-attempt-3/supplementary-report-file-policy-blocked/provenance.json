@@ -1,0 +1,5 @@
+{
+  "scope": "Only optional static HTML evidence-index viewer. No product test rerun or failure.",
+  "outcome": "Chromium managed policy rejects file:// navigation; no policy/flags/trust modified.",
+  "adaptation": "Use ordinary ephemeral HTTP server bound only to 127.0.0.1 for the same local static report. Canonical and all product acceptance remain PASS."
+}

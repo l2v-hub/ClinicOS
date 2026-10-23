@@ -1,0 +1,14 @@
+{
+  "verdict": "FAILED VALIDATION",
+  "sourceSha": "2c8a4b2b91fcda5e527b323031992a757e47fe90",
+  "sourceDigest": "333b7c06f4d16e1ba54f857f594093008758e2a2165c3962a623e82f9d6a57f0",
+  "independentQaSealSha256": "6a479c192cc0c64ca37e9c5d1e2fdc84660a5e0721ef27637b6182c2db3c5d08",
+  "independentQaReportSha256": "57c54824572e909b9848c7954c4e8605feadb55adc2b27caa86da7987011f36e",
+  "sourceFilesVerified": 41,
+  "inputFilesVerified": 4736,
+  "priorProofFilesVerified": 7119,
+  "independentPublicationFiles": 79,
+  "finding": "Actual OperatorAgenda/AdminAgenda omit authorized verification groups before and after reload; AC4 fails.",
+  "remotePublication": false,
+  "newAttemptRequiresReservation": true
+}

@@ -1,0 +1,64 @@
+Dashboard
+Operatori
+Agenda
+Terapia
+Posti Letto
+Orari
+Consegne
+Ruoli
+Milo
+Turno pomeriggio
+18:30
+Milo
+SIMULATORE
+S1
+Agenda Globale
+Domenica 18 Ottobre 2026
+Giorno
+Settimana
+Mese
+Oggi
+Appuntamenti nel periodo selezionato
+Tutti gli stati
+0
+Programmato
+In corso
+Completato
+Annullato
+Stati delle attività
+Completato
+In corso
+Programmato
+Annullato
+Disponibile
+Bianchi Laura
+Reparto A — Medicina Interna
+Rinaldi Marco
+Reparto B — Chirurgia
+Ferri Giulia
+Riabilitazione
+Demo Admin
+Amministrazione
+1 Medico
+Simulazione
+1 Infermiere
+Simulazione
+1 OSS
+Simulazione
+Amministratore
+Simulazione
+1 Supervisore
+Simulazione
+08:00
+09:00
+10:00
+11:00
+12:00
+13:00
+14:00
+15:00
+16:00
+17:00
+18:00
+19:00
+20:00

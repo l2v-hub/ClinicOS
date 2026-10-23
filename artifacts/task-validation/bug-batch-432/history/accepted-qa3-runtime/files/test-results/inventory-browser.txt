@@ -1,0 +1,59 @@
+[
+  {
+    "name": "106-prescription-inventory",
+    "pass": true,
+    "active": 105,
+    "requests": [
+      "?limit=100&status=tutte",
+      "?limit=100&status=attiva",
+      "?limit=100&status=tutte",
+      "?limit=100&status=attiva",
+      "?limit=100&status=tutte",
+      "?limit=100&status=tutte&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTE3VDEwOjA5OjIwLjc5OFoiLCJpZCI6IlFBLWNtdmM4aWt5dTAwMDB1bXA5aGRnM3lrMHEtMTAzIiwic3RhdHVzIjoidHV0dGUifQ",
+      "?limit=100&status=attiva&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTE3VDEwOjA5OjIwLjc5OFoiLCJpZCI6IlFBLWNtdmM4aWt5dTAwMDB1bXA5aGRnM3lrMHEtMTAyIiwic3RhdHVzIjoiYXR0aXZhIn0",
+      "?limit=100&status=attiva",
+      "?limit=100&status=attiva",
+      "?limit=100&status=attiva&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTE3VDEwOjA5OjIwLjc5OFoiLCJpZCI6IlFBLWNtdmM4aWt5dTAwMDB1bXA5aGRnM3lrMHEtMTAyIiwic3RhdHVzIjoiYXR0aXZhIn0",
+      "?limit=100&status=tutte",
+      "?limit=100&status=attiva",
+      "?limit=100&status=tutte",
+      "?limit=100&status=attiva",
+      "?limit=100&status=tutte",
+      "?limit=100&status=tutte&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTE3VDEwOjA5OjIwLjc5OFoiLCJpZCI6IlFBLWNtdmM4aWt5dTAwMDB1bXA5aGRnM3lrMHEtMTAzIiwic3RhdHVzIjoidHV0dGUifQ",
+      "?limit=100&status=attiva&cursor=eyJ2IjoxLCJjcmVhdGVkQXQiOiIyMDI2LTEwLTE3VDEwOjA5OjIwLjc5OFoiLCJpZCI6IlFBLWNtdmM4aWt5dTAwMDB1bXA5aGRnM3lrMHEtMTAyIiwic3RhdHVzIjoiYXR0aXZhIn0"
+    ]
+  },
+  {
+    "name": "suspended-prescription-visible",
+    "pass": true
+  },
+  {
+    "name": "PRN-visible-day-and-week",
+    "pass": true
+  },
+  {
+    "name": "missing-feed-prescription-read-only",
+    "pass": true
+  },
+  {
+    "name": "later-dose-confirmed-first-dose-still-pending",
+    "pass": true
+  },
+  {
+    "name": "one-off-explicit-clock-with-empty-flags",
+    "pass": true,
+    "scheduledTime": "11:30"
+  },
+  {
+    "name": "one-off-given-stays-given-after-band-shift-and-reload",
+    "pass": true
+  },
+  {
+    "name": "empty-catalog-no-automatic-name-searches",
+    "pass": true
+  },
+  {
+    "name": "mobile-and-javascript",
+    "pass": true
+  }
+]

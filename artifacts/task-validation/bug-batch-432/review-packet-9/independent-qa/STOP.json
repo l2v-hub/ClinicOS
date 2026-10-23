@@ -1,0 +1,99 @@
+{
+  "status": "STOP",
+  "at": "2026-10-21T18:46:13.318182+00:00",
+  "nonce": "546d53b9-f6f7-4ebb-b439-061c3184cda1",
+  "sourceSha": "e405399427e7c738dc32070b17a50494b629608b",
+  "verdict": "READY FOR CODEX QA",
+  "resourceHandback": true,
+  "portsFree": {
+    "3447": true,
+    "5447": true,
+    "8432": true,
+    "55432": true
+  },
+  "qaLockFree": true,
+  "ownedContainersAbsent": true,
+  "baseline5432Untouched": true,
+  "sourceStatus": "clean",
+  "counts": {
+    "contract": "PASS",
+    "staticDiffReview": "PASS",
+    "security": "PASS",
+    "pure": {
+      "tests": 19,
+      "pass": 19,
+      "fail": 0,
+      "skip": 0,
+      "actualWriterTests": 15,
+      "slotSchedulingTests": 4
+    },
+    "httpPg": {
+      "tests": 19,
+      "pass": 19,
+      "fail": 0,
+      "skip": 0,
+      "newTopLevelTests": 3,
+      "newOutcomeCases": 8,
+      "newPriorityCases": 4,
+      "newIdentityExclusionVariants": 6,
+      "countsNote": "8/4/6 are loop cases within the 3 new top-level tests, not additional Node test counts"
+    },
+    "backendOfficialTypes": "PASS",
+    "freshPrivateViteBuild": "PASS",
+    "selectedActualAppUi": {
+      "steps": 4,
+      "pass": 4,
+      "fail": 0,
+      "validRepairedLegacyOutcomeCases": 4,
+      "staleGuardRequests409": 14,
+      "deniedWriteFullSqlZeroChanges": true,
+      "explicitObservedCorrections": 2,
+      "eachCorrection": {
+        "rowsChanged": 1,
+        "clinicalRowsCreated": 0,
+        "receiptsCreated": 1,
+        "actor": "SIM-NURSE-1",
+        "sameHistoricalIdAndNullTherapyId": true,
+        "keyedReplayStable": true,
+        "nonkeyedRepeat409": true,
+        "persistedRenderedGivenAfterReload": true
+      },
+      "correctionTransport": "authenticated real HTTP after observing real rendered refusal; no UI correction-button claim",
+      "browserContexts": 1,
+      "pageErrors": 0,
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "uiAdministrationPosts": 0
+    },
+    "media": {
+      "decodedPngs": 4,
+      "validTraces": 1,
+      "fullyDecodedVideos": 1,
+      "errors": 0,
+      "syntheticBearerOccurrencesRedacted": 77
+    },
+    "integrity": {
+      "fileChecks": 61120,
+      "errors": 0,
+      "oldAuthor666AndContinuation624SealsVerified": true,
+      "priorPrivateProofFiles": 44950,
+      "sourceAndPacketFiles": 13294,
+      "executedSnapshotFiles": 1566,
+      "gitIndexUnchanged": true,
+      "readerResolverHttpToolCallerBytesIdenticalToQA8": true
+    }
+  },
+  "unrun": [
+    "Full unchanged backend and frontend suites were not rerun; original QA7/QA8 historical outcomes and failures remain unchanged with their own provenance.",
+    "Unchanged original seven-feature and full QA8 UI matrix not rerun; frontend bytes are identical.",
+    "Scheduled individual drug-dose detail still has no actual App mount; no substitute rendered surface claimed.",
+    "No provider/external-network/real-credential clinical validation, publication checks, new Claude review, final Codex, push, merge or deployment performed by this QA agent."
+  ],
+  "summarySha256": "cae1ac51912bc9228c78dc072f58feb64f0501e683dad88d8407390ef8885989",
+  "reportSha256": "70748864480505e1afeec5b01c6dce6628827cb29cf943008769b0edfadc662c",
+  "integrityAfterSha256": "745d58463a9a3e066cfcccc0292d4c87e24b3e0d6155501a8fa0db6db1490397",
+  "mediaIntegritySha256": "1fda3f25a157cd5765be0a27ef677ba911dcd3b002f590c8b3681b69a9d82af8",
+  "resourceHandbackSha256": "bbb4f5f81eb93c653d999e7464d0ec472f42bc1c7b7149ea2c7d05980cf538b4",
+  "noProviderCallsOrExternalWrites": true,
+  "runtimeOwner": null
+}

@@ -1,0 +1,178 @@
+{
+  "head": "938ae9c44d60b1d963873762f26677d6856f6d63",
+  "sourcePaths": 37,
+  "contractPaths": 7,
+  "allHashesUnchanged": true,
+  "outsideScope": [],
+  "historicalManifests": [
+    {
+      "manifest": "candidate-3/preserved-packet-hashes.json",
+      "records": 8,
+      "hashesMatch": true,
+      "mutableCanonicalPathsNowMappedToPreservedPreRunBytes": []
+    },
+    {
+      "manifest": "independent-qa-attempt-2/historical-preserved-manifest.json",
+      "records": 190,
+      "hashesMatch": true,
+      "mutableCanonicalPathsNowMappedToPreservedPreRunBytes": []
+    },
+    {
+      "manifest": "independent-qa-attempt-2/qa2-owned-new-artifact-manifest.json",
+      "records": 63,
+      "hashesMatch": true,
+      "mutableCanonicalPathsNowMappedToPreservedPreRunBytes": [
+        {
+          "oldCanonicalPath": "test-results/frontend-unit.txt",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/frontend-unit.txt"
+        },
+        {
+          "oldCanonicalPath": "test-results/validation-summary.json",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/validation-summary.json"
+        },
+        {
+          "oldCanonicalPath": "test-results/frontend-build.txt",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/frontend-build.txt"
+        },
+        {
+          "oldCanonicalPath": "test-results/migration.txt",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/migration.txt"
+        },
+        {
+          "oldCanonicalPath": "test-results/database-provenance.json",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/database-provenance.json"
+        },
+        {
+          "oldCanonicalPath": "test-results/source-fingerprints.json",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/source-fingerprints.json"
+        },
+        {
+          "oldCanonicalPath": "test-results/backend-unit.txt",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/backend-unit.txt"
+        },
+        {
+          "oldCanonicalPath": "test-results/mock-runtime.txt",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/mock-runtime.txt"
+        },
+        {
+          "oldCanonicalPath": "test-results/backend-build.txt",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/backend-build.txt"
+        },
+        {
+          "oldCanonicalPath": "test-results/failure.json",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/failure.json"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-fixture-archive.json",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-fixture-archive.json"
+        },
+        {
+          "oldCanonicalPath": "test-results/run-results.json",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/run-results.json"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/painad/painad-long.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/painad/painad-long.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/painad/painad-normal.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/painad/painad-normal.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/transfers/transfers-normal.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/transfers/transfers-normal.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/transfers/transfers-long.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/transfers/transfers-long.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/gds/gds15-normal.snapshot.json",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/gds/gds15-normal.snapshot.json"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/gds/gds15-normal.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/gds/gds15-normal.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/gds/gds15-long.snapshot.json",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/gds/gds15-long.snapshot.json"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/gds/gds15-long.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/gds/gds15-long.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/mna/mna-full-long.snapshot.json",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/mna/mna-full-long.snapshot.json"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/mna/mna-full-normal.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/mna/mna-full-normal.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/mna/mna-screening-partial.snapshot.json",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/mna/mna-screening-partial.snapshot.json"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/mna/mna-full-long.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/mna/mna-full-long.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/mna/mna-screening-partial.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/mna/mna-screening-partial.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/mna/mna-full-normal.snapshot.json",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/mna/mna-full-normal.snapshot.json"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/tinetti/tinetti-normal.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/tinetti/tinetti-normal.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-pdfs/tinetti/tinetti-long.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-pdfs/tinetti/tinetti-long.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-fixture-results/artifacts/task-validation/po-16-giro/backend/fresh-v2-proof.json",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-fixture-results/artifacts/task-validation/po-16-giro/backend/fresh-v2-proof.json"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-fixture-results/artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-v2-half-point.snapshot.json",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-fixture-results/artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-v2-half-point.snapshot.json"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-fixture-results/artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-v2-half-point.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-fixture-results/artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-v2-half-point.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/barthel-paper.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/barthel-paper.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/ucla_npi_sleep-paper.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/ucla_npi_sleep-paper.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/gds15-paper.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/gds15-paper.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/painad-paper.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/painad-paper.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/mna-paper.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/mna-paper.pdf"
+        },
+        {
+          "oldCanonicalPath": "test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/tinetti-paper.pdf",
+          "preservedSnapshot": "independent-qa-attempt-3/pre-run-development/test-results/generated-fixture-results/artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/tinetti-paper.pdf"
+        }
+      ]
+    }
+  ],
+  "freshCanonicalVerified": true,
+  "note": "The first history audit compared old manifest entries to newly overwritten canonical runtime filenames. Those entries are correctly validated against their exact pre-run historical snapshot, rather than pretending fresh output has old hashes."
+}

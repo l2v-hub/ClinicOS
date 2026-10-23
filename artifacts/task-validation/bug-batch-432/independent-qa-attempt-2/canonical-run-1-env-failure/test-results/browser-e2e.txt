@@ -1,0 +1,21 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+browserContext.newPage: Executable doesn't exist at /home/agent/.cache/ms-playwright/ffmpeg-1011/ffmpeg-linux
+╔═════════════════════════════════════════════════════════════════╗
+║ Video rendering requires ffmpeg binary.                         ║
+║ Downloading it will not affect any of the system-wide settings. ║
+║ Please run the following command:                               ║
+║                                                                 ║
+║     npx playwright install ffmpeg                               ║
+║                                                                 ║
+║ <3 Playwright Team                                              ║
+╚═════════════════════════════════════════════════════════════════╝
+    at runBrowserQa (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/e2e/qa-bug-batch-432-browser.mjs:355:32)
+    at async <anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/e2e/qa-bug-batch-432-browser.mjs:950:3) {
+  log: [],
+  name: 'Error'
+}
+
+Node.js v24.19.0

@@ -1,0 +1,141 @@
+{
+  "at": "2026-10-21T18:46:13.318182+00:00",
+  "verdict": "READY FOR CODEX QA",
+  "scope": "Independent surgical legacy one-off authoritative writer fix only; no release or global-suite certification",
+  "nonce": "546d53b9-f6f7-4ebb-b439-061c3184cda1",
+  "resourceGrantNonce": "6fc4a42e-7cb1-4369-9105-3fa9ce2eda88",
+  "sourceSha": "e405399427e7c738dc32070b17a50494b629608b",
+  "sourceStatus": "clean",
+  "findings": [],
+  "checks": {
+    "contract": "PASS",
+    "staticDiffReview": "PASS",
+    "security": "PASS",
+    "pure": {
+      "tests": 19,
+      "pass": 19,
+      "fail": 0,
+      "skip": 0,
+      "actualWriterTests": 15,
+      "slotSchedulingTests": 4
+    },
+    "httpPg": {
+      "tests": 19,
+      "pass": 19,
+      "fail": 0,
+      "skip": 0,
+      "newTopLevelTests": 3,
+      "newOutcomeCases": 8,
+      "newPriorityCases": 4,
+      "newIdentityExclusionVariants": 6,
+      "countsNote": "8/4/6 are loop cases within the 3 new top-level tests, not additional Node test counts"
+    },
+    "backendOfficialTypes": "PASS",
+    "freshPrivateViteBuild": "PASS",
+    "selectedActualAppUi": {
+      "steps": 4,
+      "pass": 4,
+      "fail": 0,
+      "validRepairedLegacyOutcomeCases": 4,
+      "staleGuardRequests409": 14,
+      "deniedWriteFullSqlZeroChanges": true,
+      "explicitObservedCorrections": 2,
+      "eachCorrection": {
+        "rowsChanged": 1,
+        "clinicalRowsCreated": 0,
+        "receiptsCreated": 1,
+        "actor": "SIM-NURSE-1",
+        "sameHistoricalIdAndNullTherapyId": true,
+        "keyedReplayStable": true,
+        "nonkeyedRepeat409": true,
+        "persistedRenderedGivenAfterReload": true
+      },
+      "correctionTransport": "authenticated real HTTP after observing real rendered refusal; no UI correction-button claim",
+      "browserContexts": 1,
+      "pageErrors": 0,
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "uiAdministrationPosts": 0
+    },
+    "media": {
+      "decodedPngs": 4,
+      "validTraces": 1,
+      "fullyDecodedVideos": 1,
+      "errors": 0,
+      "syntheticBearerOccurrencesRedacted": 77
+    },
+    "integrity": {
+      "fileChecks": 61120,
+      "errors": 0,
+      "oldAuthor666AndContinuation624SealsVerified": true,
+      "priorPrivateProofFiles": 44950,
+      "sourceAndPacketFiles": 13294,
+      "executedSnapshotFiles": 1566,
+      "gitIndexUnchanged": true,
+      "readerResolverHttpToolCallerBytesIdenticalToQA8": true
+    }
+  },
+  "historicalAttempts": [
+    {
+      "attempt": "preparation1",
+      "result": "metadata comparison assertion; .git pointer and nested artifacts fixture inventory differences resolved in separate continuation via historical Git bytes; no test or runtime result fabricated"
+    },
+    {
+      "attempt": "runtime1 selected-browser",
+      "result": "FAILED harness SQL snapshot before browser launch: nonexistent receipt id column; full stdout/stderr/exit/failure and original harness preserved; types/http19/private build already PASS"
+    },
+    {
+      "attempt": "runtime continuation1",
+      "result": "PASS remaining4 UI/HTTP/SQL steps; no rerun of passed types/http/build"
+    }
+  ],
+  "retained": {
+    "productionAndTestDeltaSinceQA8": [
+      "backend/src/routes/__tests__/therapy-authoritative-write.test.ts",
+      "backend/src/therapies/__tests__/legacy-administration-record.test.ts",
+      "backend/src/therapies/administration-record.ts"
+    ],
+    "frontendByteIdentical": true,
+    "priorQA8Report": "/workspace/.clinicos-cloud/483-independent-qa8-20261019/FINALQA8-report.json",
+    "priorQA8ReportSha256": "49806bd749864955a33ce324ea3fe0bc01945ae9f2731017c4e33c725a83e772",
+    "oldProofsFrozen": 44950,
+    "noClinicalRuntime": true,
+    "preparationAttempt1": "private manifest comparison failed: current inventory included .git pointer and nested artifacts fixture excluded from historical inventory; no tests or runtime had run",
+    "nestedFixtureHistoricalGitBytesVerified": true
+  },
+  "unrun": [
+    "Full unchanged backend and frontend suites were not rerun; original QA7/QA8 historical outcomes and failures remain unchanged with their own provenance.",
+    "Unchanged original seven-feature and full QA8 UI matrix not rerun; frontend bytes are identical.",
+    "Scheduled individual drug-dose detail still has no actual App mount; no substitute rendered surface claimed.",
+    "No provider/external-network/real-credential clinical validation, publication checks, new Claude review, final Codex, push, merge or deployment performed by this QA agent."
+  ],
+  "resourceHandback": {
+    "at": "2026-10-21T18:44:19.368Z",
+    "resourceHandback": true,
+    "portsFree": {
+      "3447": true,
+      "5447": true,
+      "8432": true,
+      "55432": true
+    },
+    "qaLockFree": true,
+    "ownedContainers": [
+      {
+        "containerId": "7ae1c1e113e1c73f109c45925b1530f7165c86ca7ccda832a41e83f85c49118b",
+        "absent": true
+      },
+      {
+        "containerId": "84d94f6832dea8496caabe55790b68dcf0fc6faf32eb838de5b71557929fb1bd",
+        "absent": true
+      }
+    ],
+    "baselineContainerId": "9000f70d4ee95b9e3bde723796daa050081db4274d20c97888413479232949ad",
+    "baselinePortManifestUnchanged": true,
+    "sourceSha": "e405399427e7c738dc32070b17a50494b629608b"
+  },
+  "providerCalls": 0,
+  "externalWrites": 0,
+  "sourceEdits": 0,
+  "gitIndexRefWrites": 0,
+  "report": "/workspace/.clinicos-cloud/483-independent-qa9-20261021/validation-report.md"
+}

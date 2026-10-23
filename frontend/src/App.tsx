@@ -1,3 +1,8 @@
+import type {
+  AgendaTherapyIdentity,
+  AgendaTherapyVerificationFeed,
+} from './components/shared/AgendaTherapyVerification';
+import type { TherapyVerificationGroup } from './types';
 import { parseTherapyCalendarState, type TherapyCalendarState } from './lib/therapyCalendarState';
 import {
   Component,
@@ -41,8 +46,8 @@ import {
   cartellaWriteData,
 } from './lib/cartellaWriteQueue';
 import { clearCachedGet, invalidateCachedGet } from './lib/cachedFetch';
-import { administrationErrorMessage } from './lib/therapyAdministrationWrite';
-import { clearSessionCache } from './lib/sessionCache';
+import { recordAdministration } from './lib/therapyAdministrationWrite';
+import { clearSessionCache, sessionCacheEpoch } from './lib/sessionCache';
 import { prefetchPatientListSnapshot } from './components/operator/usePatientListPage';
 import { prefetchPatientParametersSnapshot } from './lib/patientParametersPrefetch';
 import { fetchPatientById, fetchPatientPage } from './lib/patientPage';
@@ -128,7 +133,7 @@ import type {
   StatoNota,
   CartellaPaziente,
   ClinicalOverview,
-  TherapySlot,
+  TherapyReadGroup,
   MotivoNonErogazione,
   TipoIntervento,
   ConsegnaOverview,
@@ -709,7 +714,19 @@ export default function App() {
     hasMore: false,
     nextCursor: null,
   });
-  const [therapySlots, setTherapySlots] = useState<TherapySlot[]>([]);
+  const [therapySlots, setTherapySlots] = useState<TherapyReadGroup[]>([]);
+  const [therapyAcceptedIdentity, setTherapyAcceptedIdentity] =
+    useState<AgendaTherapyIdentity | null>(null);
+  const [therapyRequestedIdentity, setTherapyRequestedIdentity] =
+    useState<AgendaTherapyIdentity | null>(null);
+  const therapyScopeKey = JSON.stringify([
+    utente?.id,
+    utente?.ruolo,
+    authz?.appRole,
+    authz?.policyVersion,
+    sessionEpochRef.current,
+    rosterKey,
+  ]);
   // Giorno del giro caricato: la pagina Terapia riparte da qui quando viene rimontata.
   const [therapyDate, setTherapyDate] = useState(localIsoDate);
   const [loadingTherapySlots, setLoadingTherapySlots] = useState(true);
@@ -1196,17 +1213,21 @@ export default function App() {
   const loadTherapySlots = useCallback(
     async (date?: string, options: { append?: boolean; cursor?: string } = {}) => {
       const sessionEpoch = sessionEpochRef.current;
-      const request = ++therapyRequestSequenceRef.current;
       const d = date || therapyDateRef.current;
       const append = options.append === true;
+      const therapyKey = JSON.stringify([d, therapyScopeKey]);
+      if (append && loadedTherapyKeyRef.current !== therapyKey) return;
+      const request = ++therapyRequestSequenceRef.current;
+      const identity = { date: d, scopeKey: therapyScopeKey };
+      setTherapyRequestedIdentity(identity);
       therapyDateRef.current = d;
       setTherapyDate(d);
       therapyAbortControllerRef.current?.abort();
       const controller = new AbortController();
       therapyAbortControllerRef.current = controller;
-      const therapyKey = JSON.stringify([d, rosterRequest.requestKey]);
       // Stesso giorno gia' caricato: la pagina terapie resta visibile durante la rivalidazione.
       const sameDay = !append && loadedTherapyKeyRef.current === therapyKey;
+      if (!append) setLoadingMoreTherapySlots(false);
       if (append) {
         setLoadingMoreTherapySlots(true);
         setTherapyLoadMoreError(null);
@@ -1218,6 +1239,8 @@ export default function App() {
         setTherapyLoadError(null);
         setTherapyLoadMoreError(null);
         setTherapySlots([]);
+        setTherapyAcceptedIdentity(null);
+        loadedTherapyKeyRef.current = null;
         setTherapyPageInfo({
           hasMore: false,
           nextCursor: null,
@@ -1260,7 +1283,10 @@ export default function App() {
               ? current.summaryExact || page.pageInfo.summaryExact
               : page.pageInfo.summaryExact,
           }));
-          if (!append) loadedTherapyKeyRef.current = therapyKey;
+          if (!append) {
+            setTherapyAcceptedIdentity(identity);
+            loadedTherapyKeyRef.current = therapyKey;
+          }
         }
       } catch (error) {
         if (
@@ -1274,7 +1300,11 @@ export default function App() {
             ? 'Altre terapie non disponibili: i dati già caricati restano visibili'
             : 'Terapie non disponibili: riprova prima di registrare una somministrazione';
           if (append) setTherapyLoadMoreError(message);
-          else setTherapyLoadError(message);
+          else {
+            setTherapyLoadError(message);
+            setTherapyAcceptedIdentity(null);
+            loadedTherapyKeyRef.current = null;
+          }
           showToast(message);
         }
       } finally {
@@ -1288,16 +1318,25 @@ export default function App() {
         }
       }
     },
-    [rosterRequest, acceptRoster, recoverRoster],
+    [rosterRequest, acceptRoster, recoverRoster, therapyScopeKey],
   );
 
-  const loadMoreTherapySlots = useCallback(() => {
-    if (!therapyPageInfo.nextCursor || loadingMoreTherapySlots) return;
-    void loadTherapySlots(therapyDateRef.current, {
-      append: true,
-      cursor: therapyPageInfo.nextCursor,
-    });
-  }, [loadTherapySlots, loadingMoreTherapySlots, therapyPageInfo.nextCursor]);
+  const loadMoreTherapySlots = useCallback(
+    (date?: string) => {
+      if (
+        typeof date === 'string' &&
+        (date !== therapyDateRef.current ||
+          loadedTherapyKeyRef.current !== JSON.stringify([date, therapyScopeKey]))
+      )
+        return;
+      if (!therapyPageInfo.nextCursor || loadingMoreTherapySlots) return;
+      void loadTherapySlots(therapyDateRef.current, {
+        append: true,
+        cursor: therapyPageInfo.nextCursor,
+      });
+    },
+    [loadTherapySlots, loadingMoreTherapySlots, therapyPageInfo.nextCursor, therapyScopeKey],
+  );
 
   // ── Load appointments (API — SPEC-015 US4, sostituisce MOCK_APPUNTAMENTI) ──
 
@@ -1927,7 +1966,7 @@ export default function App() {
   // Prefetch a browser inattivo dei contesti piu' usati (prima pagina della lista pazienti,
   // directory operatori usata da consegne/note/agenda/scheda): la prima apertura trova i dati
   // gia' in cache di sessione e si rivalida in background. Il feed terapie NON viene
-  // precaricato: per contratto si legge solo sulla pagina Terapia.
+  // precaricato: lo richiedono soltanto Terapia o le verifiche dell'Agenda visibile.
   useEffect(() => {
     if (!utente) return;
     const timer = window.setTimeout(() => {
@@ -2022,7 +2061,7 @@ export default function App() {
     return () => window.clearTimeout(timer);
   }, [utente, navKey, loadSchedules]);
 
-  // Load the clinical feed only on the dedicated therapy page.
+  // Terapia owns this request; mounted Agenda verification blocks request their selected day.
   // Navigation also covers browser back/forward and a direct therapy hash.
   useEffect(() => {
     if (!utente || navKey !== 'terapie') return;
@@ -2173,6 +2212,8 @@ export default function App() {
     appointmentRequestSequenceRef.current += 1;
     therapyRequestSequenceRef.current += 1;
     therapyAbortControllerRef.current?.abort();
+    setTherapyAcceptedIdentity(null);
+    setTherapyRequestedIdentity(null);
     notesRequestSequenceRef.current += 1;
     notesAbortControllerRef.current?.abort();
     consegneRequestSequenceRef.current += 1;
@@ -2319,6 +2360,8 @@ export default function App() {
     appointmentRequestSequenceRef.current += 1;
     therapyRequestSequenceRef.current += 1;
     therapyAbortControllerRef.current?.abort();
+    setTherapyAcceptedIdentity(null);
+    setTherapyRequestedIdentity(null);
     patientNavigationSequenceRef.current += 1;
     notesRequestSequenceRef.current += 1;
     notesAbortControllerRef.current?.abort();
@@ -3195,28 +3238,13 @@ export default function App() {
   // ── Therapy CRUD (API-persisted with optimistic update) ─────────────────────
 
   async function confirmTherapy(info: TherapyActionInfo) {
+    const epoch = sessionCacheEpoch();
     try {
-      const res = await fetch(`${API_URL}/therapy-slots/confirm`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-        body: JSON.stringify({
-          patientId: info.patientId,
-          farmacoNome: info.drugName,
-          farmacoDose: info.dosage,
-          farmacoVia: info.route,
-          date: info.date,
-          fascia: info.fascia,
-          ora: info.ora,
-          operatoreId: utente?.id ?? '',
-          operatoreNome: utente?.nome ?? '',
-          therapyId: info.therapyId,
-          ...(info.scheduledTime !== undefined ? { scheduledTime: info.scheduledTime } : {}),
-          ...(info.measuredGlucose !== undefined ? { measuredGlucose: info.measuredGlucose } : {}),
-        }),
-      });
+      const result = await recordAdministration(info, { kind: 'administered' });
+      if (epoch !== sessionCacheEpoch()) return;
 
       // Il motivo del server distingue «già erogata» da «non prevista per questo slot» (entrambi 409).
-      showToast(res.ok ? 'Somministrazione confermata' : await administrationErrorMessage(res));
+      showToast(result.ok ? 'Somministrazione confermata' : result.message);
       loadTherapySlots(info.date);
     } catch {
       showToast('Errore di rete');
@@ -3231,28 +3259,16 @@ export default function App() {
     motivo: MotivoNonErogazione,
     noteText: string,
   ) {
+    const epoch = sessionCacheEpoch();
     try {
-      const res = await fetch(`${API_URL}/therapy-slots/not-administered`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-        body: JSON.stringify({
-          patientId: info.patientId,
-          farmacoNome: info.drugName,
-          farmacoDose: info.dosage,
-          farmacoVia: info.route,
-          date: info.date,
-          fascia: info.fascia,
-          ora: info.ora,
-          operatoreId: utente?.id ?? '',
-          operatoreNome: utente?.nome ?? '',
-          therapyId: info.therapyId,
-          ...(info.scheduledTime !== undefined ? { scheduledTime: info.scheduledTime } : {}),
-          motivo,
-          note: noteText,
-        }),
+      const result = await recordAdministration(info, {
+        kind: 'not_administered',
+        motivo,
+        note: noteText,
       });
+      if (epoch !== sessionCacheEpoch()) return;
 
-      showToast(res.ok ? 'Non somministrazione registrata' : await administrationErrorMessage(res));
+      showToast(result.ok ? 'Non somministrazione registrata' : result.message);
       loadTherapySlots(info.date);
     } catch {
       showToast('Errore di rete');
@@ -3274,6 +3290,22 @@ export default function App() {
   const isAdmin = utente?.ruolo === 'admin';
   // Capability della sessione: la GUI nasconde/disabilita, il backend applica la policy.
   const capabilities = authz?.capabilities ?? null;
+  const agendaVerificationFeed: AgendaTherapyVerificationFeed = {
+    groups: therapySlots.filter(
+      (group): group is TherapyVerificationGroup => group.kind === 'verification',
+    ),
+    accepted: therapyAcceptedIdentity,
+    requested: therapyRequestedIdentity,
+    scopeKey: therapyScopeKey,
+    allowed: can(capabilities, 'administration.list_slots'),
+    loading: loadingTherapySlots,
+    error: therapyLoadError,
+    pageInfo: therapyPageInfo,
+    loadingMore: loadingMoreTherapySlots,
+    loadMoreError: therapyLoadMoreError,
+    onLoad: loadTherapySlots,
+    onLoadMore: loadMoreTherapySlots,
+  };
   const canAdministerTherapy =
     can(capabilities, 'administration.confirm') &&
     can(capabilities, 'administration.record_not_administered');
@@ -3627,6 +3659,7 @@ export default function App() {
                         )}
                         {isAdmin && navKey === 'agenda-admin' && (
                           <AdminAgenda
+                            verificationFeed={agendaVerificationFeed}
                             operatori={operatori}
                             appuntamenti={appuntamenti}
                             onAddAppuntamento={addAppuntamento}
@@ -3885,6 +3918,7 @@ export default function App() {
                         )}
                         {!isAdmin && navKey === 'agenda-operatore' && (
                           <OperatorAgenda
+                            verificationFeed={agendaVerificationFeed}
                             operatoreId={utenteId}
                             nomeOperatore={utente.nome}
                             operatori={operatori}

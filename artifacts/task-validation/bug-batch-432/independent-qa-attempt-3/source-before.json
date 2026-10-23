@@ -1,0 +1,236 @@
+{
+  "status": "IMPLEMENTED_NOT_VERIFIED",
+  "implementationCycle": 3,
+  "reviewCycle": 0,
+  "candidate2Checkpoint": "5a250319bae5b3f61f2c5864aee438f04d948df5",
+  "scopeFiles": 37,
+  "changedFromCandidate2": [
+    "backend/src/skills/__tests__/skills-e2e.test.ts",
+    "e2e/qa-bug-batch-432-browser.mjs"
+  ],
+  "unchangedSourceFiles": 35,
+  "files": [
+    {
+      "path": "backend/src/ai/__tests__/facility-signals.test.ts",
+      "sha256": "1d23a39abd8f3a7c2a46559a9cacc0b1702a33defe70edb2618a27c479fc38ec",
+      "bytes": 8361,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/ai/assistant/facility-signals.ts",
+      "sha256": "393f1212cdb9b11a0811e0d209ffff9c47bb1d6d98134d796b5868d936462740",
+      "bytes": 7556,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/ai/assistant/service.ts",
+      "sha256": "a1a6c2c0ffbbe9bb39420458a3d368a9e82fb2f159dad8b02be560c45754b459",
+      "bytes": 27544,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/lib/__tests__/facility-time.test.ts",
+      "sha256": "da948ebbd50c9e818c7ae8ddffe6ef028f8ba4df1217d22227d2226032a6eaa5",
+      "bytes": 2227,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/lib/facility-time.ts",
+      "sha256": "2e6946361788f34e764afb66228c3af65d9b7e43c21dbbbc1f306db283233e95",
+      "bytes": 620,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/routes/__tests__/therapy-authoritative-write.test.ts",
+      "sha256": "e184da4716ceae5aead3a49ce9ccf2d79b5c0531aaf3ff29266563324619cf86",
+      "bytes": 36286,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/routes/__tests__/therapy-slot-scope-contract.test.ts",
+      "sha256": "a54a3b2be47d3d7a261e870205a4c7354172cc642419f47454f4cf6fea1efc63",
+      "bytes": 5016,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/routes/therapy.ts",
+      "sha256": "1a5150156033e0371ab48835777385364bd96ed54e24e8795dc0e1b72d320d2e",
+      "bytes": 12394,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/skills/__tests__/administration-dose.test.ts",
+      "sha256": "46ef017213a23beb8a34a0fa06122e177c1e84e3c546b921665c172436b6d6dc",
+      "bytes": 3359,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/skills/__tests__/skills-e2e.test.ts",
+      "sha256": "af85c1f5afc263949006db5ef0f8000c0a1bf9e04900f26ac93292563d1f9433",
+      "bytes": 36460,
+      "changedFromCandidate2": true
+    },
+    {
+      "path": "backend/src/skills/executors.ts",
+      "sha256": "ae88098037e202c4470bc66e44061479d70be0f304314ef1382e851f04e58988",
+      "bytes": 29512,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/therapies/administration-record.ts",
+      "sha256": "3d6e52034059a1cf41dcc6f8c8e7fae4fc31057ce6f247451da1eb76e65f189c",
+      "bytes": 10263,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/therapies/due-therapy-query.ts",
+      "sha256": "e59000621adaff51bc8e68661db8f2e073ff6bce7d6d0834c5165f25f909bf00",
+      "bytes": 9501,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/therapies/slot-scheduling.ts",
+      "sha256": "1a16c875dd8634f63ff74b3d2a09a719e016c98e2978ba432521328360cf3e01",
+      "bytes": 1936,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/therapies/therapy-administration-page.ts",
+      "sha256": "00265a79b503a7b3f50ba8c1691928dbc507dbb08551e2568126be9a6433a7be",
+      "bytes": 4033,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/therapies/therapy-query.ts",
+      "sha256": "4821a7b417114364571c96dd6d2af569fa3fafdcbbac1e6825b402303f2f7135",
+      "bytes": 2891,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/therapies/therapy-slots.ts",
+      "sha256": "73ccaa1cd1e543a85cc929d2b882905cc034f3ff6a4ab032a921c84b31e6b97e",
+      "bytes": 19971,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/therapies/therapy-write.ts",
+      "sha256": "396ae88305835cad4582c9d5ade8ee97e769ab8bf6bcddcb49e904d7d1b4ba5d",
+      "bytes": 11598,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "backend/src/tools/capabilities/therapy.ts",
+      "sha256": "b88d84278c4c63b0c3cf336dce37e42c64d78008d82ccd6628b9f65cda212892",
+      "bytes": 10215,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "e2e/qa-functional-api.mjs",
+      "sha256": "2b8722effb219342f362a91c1c3d35c83f90527195deaa7a72a79a4c73436e8e",
+      "bytes": 25075,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "e2e/qa-scheduled-retry-browser.mjs",
+      "sha256": "125c9645789758bf021e09dabf06d625b2b13720bea69305b542545adf84c709",
+      "bytes": 10545,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "e2e/qa-therapy-completeness-browser.mjs",
+      "sha256": "cd37a08f13c47d5569a151518f570e823a919fb38add00f4f71b005c20e5e43e",
+      "bytes": 11240,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "6035b0ecc0831796f058e64dc782bb2cd3efbb52e3d1e11a99d80feffd5f942f",
+      "bytes": 168470,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/farmacoRiferimento.ts",
+      "sha256": "492b4c26a36f3f51a3fcca8bb13dab1ab02c7c4e0576ca56ccb22f4a08187400",
+      "bytes": 8115,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "frontend/src/lib/__tests__/scheduledAdministrationRetries.test.ts",
+      "sha256": "ace1788bdfaceb630f3c45c781e89b06af0bda02b4bd70d4462a24048118c8e8",
+      "bytes": 4895,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyNavigationGuard.test.ts",
+      "sha256": "308bccbcf711db07b88fdeb15940685a02e14f3b0388b6a2ddbb6d2a4f3c09f8",
+      "bytes": 1449,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyW2InPlace.test.ts",
+      "sha256": "a51edf82f78b8d690ab946f00d9350f40beb51c5aeddf4d8aec2760770b7066d",
+      "bytes": 15199,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "frontend/src/lib/therapyAdministrationWrite.ts",
+      "sha256": "31d9b3b8c4283f6ca34dbb78a74c543977f8e083bd39698cb1e51a9fa2b874b8",
+      "bytes": 9010,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "prisma/migrations/20261012224500_scheduled_administration_receipts/migration.sql",
+      "sha256": "07703ba3726b084f24a0c8b179ddcae6d8e4fe7d6e03f1f2f4987a20fb921a93",
+      "bytes": 655,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "sha256": "f73f82133948fadc7e289baccd630fb490df2a25e43ace3dd7ef3085ad96b210",
+      "bytes": 39772,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/farmacoRiferimento.test.ts",
+      "sha256": "f84c0d28bba055e30e8e39daf8d967faea1eb4a7db8b57e04aed4fd7e9b8a06a",
+      "bytes": 5082,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyCompleteness.test.ts",
+      "sha256": "b256e3345a678373c47deb40148e7f8c32939fb0993ed48e3f77ac6a9431d60a",
+      "bytes": 6922,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyPages.test.ts",
+      "sha256": "2d241d580e2cb80e2eb821c8e7fc23d8f1de6947d170ef8230c54c290db10f85",
+      "bytes": 9898,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "frontend/src/lib/therapyPages.ts",
+      "sha256": "f2f52a1d7fc21f849ee89091ca6df36be9835609158ec3a1bd76b7e3ebe0e005",
+      "bytes": 5580,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "e2e/qa-bug-batch-432.mjs",
+      "sha256": "886c8b4276732ccc78451434c788d5c1553f1dee5bdc7f11a3de3bd4e3d25cb7",
+      "bytes": 17159,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "e2e/therapy-import-api.mjs",
+      "sha256": "e69159a75e8a77d07ba9ddb2c68f74e1b25dcfffbccd2208c4934faa599b0042",
+      "bytes": 12160,
+      "changedFromCandidate2": false
+    },
+    {
+      "path": "e2e/qa-bug-batch-432-browser.mjs",
+      "sha256": "3946a70fb69c238e3232c74485d6aa54021500c814c52e0126d0cd57029ee274",
+      "bytes": 39177,
+      "changedFromCandidate2": true
+    }
+  ]
+}

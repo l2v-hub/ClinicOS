@@ -1,0 +1,6 @@
+{
+  "uniqueImagesOcrScanned": 943,
+  "imageOccurrences": 1562,
+  "engine": "tesseract --psm 11, all unique published standalone and ZIP-member PNG/JPEG/WEBP",
+  "secretFindings": []
+}

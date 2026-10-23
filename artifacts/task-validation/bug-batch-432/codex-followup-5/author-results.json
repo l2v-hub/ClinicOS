@@ -1,0 +1,427 @@
+{
+  "status": "IMPLEMENTED — NOT VERIFIED",
+  "disposition": "STOP — return to root for independent QA",
+  "reservationNonce": "9416360d-a145-4c48-b5f5-7790b93aa525",
+  "baseSha": "c02e34c0041752eb4f4772255580807201f2c863",
+  "sourcePaths": [
+    "backend/src/therapies/administration-record.ts",
+    "backend/src/therapies/__tests__/legacy-administration-record.test.ts",
+    "backend/src/routes/__tests__/therapy-authoritative-write.test.ts"
+  ],
+  "privateEvidence": "/workspace/.clinicos-cloud/483-legacy-writer-author9-20261021",
+  "checks": {
+    "old-targeted-attempt1": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "src/therapies/__tests__/legacy-administration-record.test.ts"
+      ],
+      "cwd": "/workspace/.clinicos-cloud/483-legacy-writer-author9-20261021/old-runtime/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": false,
+      "code": 1,
+      "error": null,
+      "counts": {
+        "tests": 1,
+        "suites": 0,
+        "pass": 0,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "55ae0fa7768a117aaec80256a5e19fd9e7a7f9e3c62ccbb036f3aa2d870c8349",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:16:27.535Z"
+    },
+    "old-targeted-attempt2": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "src/therapies/__tests__/legacy-administration-record.test.ts"
+      ],
+      "cwd": "/workspace/.clinicos-cloud/483-legacy-writer-author9-20261021/old-runtime/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": false,
+      "code": 1,
+      "error": null,
+      "counts": {
+        "tests": 10,
+        "suites": 0,
+        "pass": 2,
+        "fail": 8,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "a6b6a51a1562dc889ac7f5cecf8bec16663cb1074c8744007a65d02dc12fce0c",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:16:43.597Z"
+    },
+    "old-targeted-attempt3": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "src/therapies/__tests__/legacy-administration-record.test.ts"
+      ],
+      "cwd": "/workspace/.clinicos-cloud/483-legacy-writer-author9-20261021/old-runtime/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": false,
+      "code": 1,
+      "error": null,
+      "counts": {
+        "tests": 10,
+        "suites": 0,
+        "pass": 4,
+        "fail": 6,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "8c93174b52f6b08b458dadd8db27cec7976a28f89b05305bd675c1bd87ad1cf3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:17:16.458Z"
+    },
+    "old-targeted-attempt4": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "src/therapies/__tests__/legacy-administration-record.test.ts"
+      ],
+      "cwd": "/workspace/.clinicos-cloud/483-legacy-writer-author9-20261021/old-runtime/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": false,
+      "code": 1,
+      "error": null,
+      "counts": {
+        "tests": 12,
+        "suites": 0,
+        "pass": 4,
+        "fail": 8,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "f090ee3188da3fb4c94b0d78c2d7e9bb362062e78f079f5d0ead0d1f94d97a09",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:21:34.334Z"
+    },
+    "final-targeted-attempt1": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "src/therapies/__tests__/legacy-administration-record.test.ts",
+        "src/therapies/__tests__/slot-scheduling.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": false,
+      "code": 1,
+      "error": null,
+      "counts": {
+        "tests": 14,
+        "suites": 0,
+        "pass": 12,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "3795b6cb5d42d73129d7b4309bbb56a6791ee64ae75eba1197622d01b666f6ce",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:17:35.577Z"
+    },
+    "final-targeted-attempt2": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "src/therapies/__tests__/legacy-administration-record.test.ts",
+        "src/therapies/__tests__/slot-scheduling.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "counts": {
+        "tests": 15,
+        "suites": 0,
+        "pass": 15,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "e3949f10c1a889e916aef024619bbfe7a3335949ea887e2da3a7c7aa63237f4c",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:19:59.155Z"
+    },
+    "final-targeted-attempt3": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "src/therapies/__tests__/legacy-administration-record.test.ts",
+        "src/therapies/__tests__/slot-scheduling.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "counts": {
+        "tests": 16,
+        "suites": 0,
+        "pass": 16,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "14607fa2fd3411f04de22b4d6c0ee29967131d47d819f34d9747ffc5674b0095",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:21:01.389Z"
+    },
+    "backend-types-attempt1": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "counts": {},
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:17:50.751Z"
+    },
+    "focused-tests-types-attempt1": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--target",
+        "ES2022",
+        "--module",
+        "NodeNext",
+        "--moduleResolution",
+        "NodeNext",
+        "--esModuleInterop",
+        "--skipLibCheck",
+        "--types",
+        "node",
+        "src/therapies/__tests__/legacy-administration-record.test.ts",
+        "src/routes/__tests__/therapy-authoritative-write.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": false,
+      "code": 1,
+      "error": null,
+      "counts": {},
+      "stdoutSha256": "5b766b55df5bc15c215149742c8fe88d72a584cb45f5422c7edca1594b6d0cb5",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:21:00.680Z"
+    },
+    "focused-tests-types-attempt2": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/typescript/bin/tsc",
+        "--ignoreConfig",
+        "--noEmit",
+        "--target",
+        "ES2022",
+        "--module",
+        "NodeNext",
+        "--moduleResolution",
+        "NodeNext",
+        "--esModuleInterop",
+        "--skipLibCheck",
+        "--types",
+        "node",
+        "src/therapies/__tests__/legacy-administration-record.test.ts",
+        "src/routes/__tests__/therapy-authoritative-write.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": false,
+      "code": 2,
+      "error": null,
+      "counts": {},
+      "stdoutSha256": "dc663ce3a9b1ca77fb9f001d1031ec9dcd7ba1e64f47077dce5d442963899363",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:21:44.698Z"
+    },
+    "new-pure-tests-types-attempt1": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/typescript/bin/tsc",
+        "--ignoreConfig",
+        "--noEmit",
+        "--target",
+        "ES2022",
+        "--module",
+        "NodeNext",
+        "--moduleResolution",
+        "NodeNext",
+        "--esModuleInterop",
+        "--skipLibCheck",
+        "--types",
+        "node",
+        "src/therapies/__tests__/legacy-administration-record.test.ts"
+      ],
+      "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "counts": {},
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:22:30.734Z"
+    },
+    "baseline-http-tests-types-attempt1": {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/typescript/bin/tsc",
+        "--ignoreConfig",
+        "--noEmit",
+        "--target",
+        "ES2022",
+        "--module",
+        "NodeNext",
+        "--moduleResolution",
+        "NodeNext",
+        "--esModuleInterop",
+        "--skipLibCheck",
+        "--types",
+        "node",
+        "src/routes/__tests__/therapy-authoritative-write.test.ts"
+      ],
+      "cwd": "/workspace/.clinicos-cloud/483-legacy-writer-author9-20261021/old-runtime/backend",
+      "envMode": "verification",
+      "timeoutMs": 60000,
+      "maxOutputBytes": 8388608,
+      "ok": false,
+      "code": 2,
+      "error": null,
+      "counts": {},
+      "stdoutSha256": "dc663ce3a9b1ca77fb9f001d1031ec9dcd7ba1e64f47077dce5d442963899363",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T18:22:40.505Z"
+    }
+  },
+  "oldAndFinalTestBytesMatch": true,
+  "source": {
+    "backend/src/therapies/administration-record.ts": {
+      "before": {
+        "sha256": "99582ff56b74bd47a555f38e10499ffc0b829f72d5c4034c770078288256b1b7",
+        "bytes": 10484,
+        "inode": 551377,
+        "device": 27,
+        "mode": 33152,
+        "nlink": 4
+      },
+      "after": {
+        "sha256": "54741b2cffae848591e444f485ab1ce6d01e762494741803022a95d946c6727c",
+        "bytes": 11334,
+        "inode": 540261,
+        "device": 27,
+        "nlink": 1
+      }
+    },
+    "backend/src/therapies/__tests__/legacy-administration-record.test.ts": {
+      "before": null,
+      "after": {
+        "sha256": "1dc83630654f3cbb13becd398c320545aef6d951f35bec55eecba51dbb93bdef",
+        "bytes": 14880,
+        "inode": 540254,
+        "device": 27,
+        "nlink": 1
+      }
+    },
+    "backend/src/routes/__tests__/therapy-authoritative-write.test.ts": {
+      "before": {
+        "sha256": "0d6851420609dfb20151882b62b4fb36563fd9744823c2a2b628d93e3d063a85",
+        "bytes": 52842,
+        "inode": 592952,
+        "device": 27,
+        "mode": 33152,
+        "nlink": 1
+      },
+      "after": {
+        "sha256": "30924b4198fb19e66bb76069557723de843da2d636229a74dc2473a40faa7e25",
+        "bytes": 69417,
+        "inode": 592952,
+        "device": 27,
+        "nlink": 1
+      }
+    }
+  },
+  "integrity": {
+    "checked": 13426,
+    "unexpectedChanges": [],
+    "priorProofsAndOtherSourcePreserved": true
+  },
+  "adHocTypeCheckBaseline": {
+    "identicalStdout": true,
+    "newAndBaselineSha256": "dc663ce3a9b1ca77fb9f001d1031ec9dcd7ba1e64f47077dce5d442963899363",
+    "baselineSha256": "dc663ce3a9b1ca77fb9f001d1031ec9dcd7ba1e64f47077dce5d442963899363",
+    "baselineSourceSha256": "0d6851420609dfb20151882b62b4fb36563fd9744823c2a2b628d93e3d063a85",
+    "originalSourceSha256": "0d6851420609dfb20151882b62b4fb36563fd9744823c2a2b628d93e3d063a85"
+  },
+  "runtime": {
+    "database": "UNRUN",
+    "http": "UNRUN",
+    "browser": "UNRUN",
+    "servicesStarted": 0,
+    "queuedRuntime": false
+  },
+  "remaining": [
+    "Independent actual HTTP/PG execution and representative rendered/SQL outcome validation after resource grant",
+    "Root current-publication native checks, actual Claude5 review and fresh independent final Codex"
+  ],
+  "noGitWrites": true,
+  "noProviderCalls": true,
+  "noIssueClosureMergeOrDeploy": true
+}

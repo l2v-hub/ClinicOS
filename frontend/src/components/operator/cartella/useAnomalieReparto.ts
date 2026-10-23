@@ -10,6 +10,8 @@
 // future o al bisogno non compaiono qui — restano visibili nella cartella del paziente, che legge
 // le proprie terapie per intero.
 
+import type { TherapyReadGroup } from '../../../types';
+import { parseTherapySlots } from '../../../lib/therapySlotPage';
 import { useEffect, useMemo, useState } from 'react';
 import { API_URL } from '../../../config';
 import { cachedGetJson, peekCachedGet } from '../../../lib/cachedFetch';
@@ -24,23 +26,6 @@ import {
 // Le somministrazioni del giorno cambiano durante il turno, ma l'insieme dei farmaci prescritti
 // no: un minuto di cache evita di ripetere la richiesta a ogni navigazione fra le schermate.
 const TTL_MS = 60 * 1000;
-
-interface SommministrazioneSlot {
-  drugName: string;
-  dosage: string | null;
-  therapyId?: string;
-}
-
-interface PazienteSlot {
-  patientId: string;
-  firstName: string;
-  lastName: string;
-  administrations: SommministrazioneSlot[];
-}
-
-interface Slot {
-  patients: PazienteSlot[];
-}
 
 export interface AnomalieReparto {
   /** Anomalie per paziente. I pazienti senza anomalie non compaiono. */
@@ -89,6 +74,43 @@ function oggi(): string {
   return `${year}-${month}-${day}`;
 }
 
+/** Catalog references only: verification rows carry the original drug name and no inferred dose. */
+export function therapyDrugReferences(groups: TherapyReadGroup[]) {
+  const righe: RigaDaRisolvere[] = [];
+  const perPaziente = new Map<string, RigaDaRisolvere[]>();
+  const nomi = new Map<string, string>();
+  const therapyIds = new Map<string, string>();
+
+  for (const slot of groups) {
+    const patients =
+      slot.kind === 'verification'
+        ? slot.patients.map((patient) => ({ ...patient, administrations: patient.items }))
+        : slot.patients;
+    for (const paziente of patients) {
+      nomi.set(paziente.patientId, `${paziente.lastName} ${paziente.firstName}`.trim());
+      const proprie = perPaziente.get(paziente.patientId) ?? [];
+      for (const somministrazione of paziente.administrations ?? []) {
+        if (!somministrazione.drugName) continue;
+        const key = therapyKey(paziente.patientId, somministrazione.drugName);
+        if (somministrazione.therapyId && !therapyIds.has(key))
+          therapyIds.set(key, somministrazione.therapyId);
+        const riga: RigaDaRisolvere = {
+          farmacoNome: somministrazione.drugName,
+          dosaggio: somministrazione.dosage,
+        };
+        // Lo stesso farmaco compare in ogni fascia della giornata: una riga per farmaco basta,
+        // e `anomalieDi` conterebbe comunque un'anomalia sola.
+        if (!proprie.some((r) => r.farmacoNome === riga.farmacoNome)) {
+          proprie.push(riga);
+          righe.push(riga);
+        }
+      }
+      perPaziente.set(paziente.patientId, proprie);
+    }
+  }
+  return { righe, perPaziente, nomi, therapyIds };
+}
+
 /**
  * Anomalie di terapia di tutto il reparto.
  *
@@ -100,11 +122,16 @@ export function useAnomalieReparto(attivoRichiesto = true): AnomalieReparto {
   const attivo = useCan('administration.list_slots') && attivoRichiesto;
   // Ultima risposta gia' vista in sessione (anche scaduta): la pagina si disegna con quella e
   // la rivalida sotto, invece di ripartire da "verifica in corso" a ogni cambio contesto.
-  const [slots, setSlots] = useState<Slot[] | null>(() => {
+  const [slots, setSlots] = useState<TherapyReadGroup[] | null>(() => {
     const noti = attivo
-      ? peekCachedGet<Slot[]>(`${API_URL}/therapy-slots?date=${oggi()}`)
+      ? peekCachedGet<unknown>(`${API_URL}/therapy-slots?date=${oggi()}`)
       : undefined;
-    return Array.isArray(noti) ? noti : null;
+    if (noti === undefined) return null;
+    try {
+      return parseTherapySlots(noti);
+    } catch {
+      return null;
+    }
   });
   const [fallito, setFallito] = useState(false);
 
@@ -112,9 +139,10 @@ export function useAnomalieReparto(attivoRichiesto = true): AnomalieReparto {
     if (!attivo) return;
     let annullato = false;
 
-    void cachedGetJson<Slot[]>(`${API_URL}/therapy-slots?date=${oggi()}`, TTL_MS)
+    void cachedGetJson<unknown>(`${API_URL}/therapy-slots?date=${oggi()}`, TTL_MS)
+      .then(parseTherapySlots)
       .then((dati) => {
-        if (!annullato) setSlots(Array.isArray(dati) ? dati : []);
+        if (!annullato) setSlots(dati);
       })
       .catch(() => {
         // Terapie non leggibili: nessuna anomalia dichiarata. Vedi AC10 in anomalieFarmaco.ts.
@@ -132,37 +160,7 @@ export function useAnomalieReparto(attivoRichiesto = true): AnomalieReparto {
     perPaziente: righePerPaziente,
     nomi,
     therapyIds,
-  } = useMemo(() => {
-    const righe: RigaDaRisolvere[] = [];
-    const perPaziente = new Map<string, RigaDaRisolvere[]>();
-    const nomi = new Map<string, string>();
-    const therapyIds = new Map<string, string>();
-
-    for (const slot of slots ?? []) {
-      for (const paziente of slot.patients ?? []) {
-        nomi.set(paziente.patientId, `${paziente.lastName} ${paziente.firstName}`.trim());
-        const proprie = perPaziente.get(paziente.patientId) ?? [];
-        for (const somministrazione of paziente.administrations ?? []) {
-          if (!somministrazione.drugName) continue;
-          const key = therapyKey(paziente.patientId, somministrazione.drugName);
-          if (somministrazione.therapyId && !therapyIds.has(key))
-            therapyIds.set(key, somministrazione.therapyId);
-          const riga: RigaDaRisolvere = {
-            farmacoNome: somministrazione.drugName,
-            dosaggio: somministrazione.dosage,
-          };
-          // Lo stesso farmaco compare in ogni fascia della giornata: una riga per farmaco basta,
-          // e `anomalieDi` conterebbe comunque un'anomalia sola.
-          if (!proprie.some((r) => r.farmacoNome === riga.farmacoNome)) {
-            proprie.push(riga);
-            righe.push(riga);
-          }
-        }
-        perPaziente.set(paziente.patientId, proprie);
-      }
-    }
-    return { righe, perPaziente, nomi, therapyIds };
-  }, [slots]);
+  } = useMemo(() => therapyDrugReferences(slots ?? []), [slots]);
 
   const risoluzioni = useRisoluzioniFarmaco(righe);
 

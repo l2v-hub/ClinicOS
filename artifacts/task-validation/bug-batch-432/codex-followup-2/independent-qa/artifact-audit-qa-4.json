@@ -1,0 +1,168 @@
+{
+  "artifacts": [
+    {
+      "path": "agenda-verification/admin-navigation-supplement/browser-events.json",
+      "size": 121,
+      "sha256": "0b9d3ffae77b0c1cc934731c19ceb26008a36ce2c5b28d9c370398c821d99b84"
+    },
+    {
+      "path": "agenda-verification/admin-navigation-supplement/flow.webm",
+      "size": 483197,
+      "sha256": "8de968b034dbb10fa53f944d47fd048df332cdc03c88b05172450af41c4e0b9f",
+      "videoFullyDecoded": true
+    },
+    {
+      "path": "agenda-verification/admin-navigation-supplement/font-mirror-provenance.json",
+      "size": 2803,
+      "sha256": "5dff3f6f66cbb60f58b5c19dd1fe9a328be82451b4cac3de98c30c43b52fb783"
+    },
+    {
+      "path": "agenda-verification/admin-navigation-supplement/native-browser-back-real-readonly.png",
+      "size": 127598,
+      "sha256": "11f833d5c90af3d749f3f70152b648169058c6a7c184fae7fafff64bf01f97d7",
+      "imageDecoded": true
+    },
+    {
+      "path": "agenda-verification/admin-navigation-supplement/previous-day-real-readonly.png",
+      "size": 127598,
+      "sha256": "11f833d5c90af3d749f3f70152b648169058c6a7c184fae7fafff64bf01f97d7",
+      "imageDecoded": true
+    },
+    {
+      "path": "agenda-verification/admin-navigation-supplement/trace.zip",
+      "size": 3084528,
+      "sha256": "af159e1f78cf8fd0ea6fc96f66025a378952234b52017c618794b068265db98a",
+      "zipMembers": 131,
+      "crcAllMembersChecked": true
+    },
+    {
+      "path": "agenda-verification/admin-navigation-supplement/video/page@65a4a3edd03cc43811d1af73ab29450e.webm",
+      "size": 483197,
+      "sha256": "8de968b034dbb10fa53f944d47fd048df332cdc03c88b05172450af41c4e0b9f",
+      "videoFullyDecoded": true
+    },
+    {
+      "path": "agenda-verification/operator-navigation-supplement/browser-events.json",
+      "size": 121,
+      "sha256": "0b9d3ffae77b0c1cc934731c19ceb26008a36ce2c5b28d9c370398c821d99b84"
+    },
+    {
+      "path": "agenda-verification/operator-navigation-supplement/flow.webm",
+      "size": 585427,
+      "sha256": "b162e740f8690cda4b9353055232f2b9883daf9ccf6329a9bf4d8853e4988333",
+      "videoFullyDecoded": true
+    },
+    {
+      "path": "agenda-verification/operator-navigation-supplement/font-mirror-provenance.json",
+      "size": 2803,
+      "sha256": "5dff3f6f66cbb60f58b5c19dd1fe9a328be82451b4cac3de98c30c43b52fb783"
+    },
+    {
+      "path": "agenda-verification/operator-navigation-supplement/native-browser-back-real-readonly.png",
+      "size": 126537,
+      "sha256": "885397919a03f9fb0054f37c002fb41e03b4da8a4139735c258391ca096db25d",
+      "imageDecoded": true
+    },
+    {
+      "path": "agenda-verification/operator-navigation-supplement/previous-day-real-readonly.png",
+      "size": 126535,
+      "sha256": "d58d7469e47dabd04480f483dc0d4b0634b0d6d2d68f6bb34076c6737069ef54",
+      "imageDecoded": true
+    },
+    {
+      "path": "agenda-verification/operator-navigation-supplement/trace.zip",
+      "size": 3238757,
+      "sha256": "66694ce734d6ac96760a71c735f6ee45e535951f48b053352b06fb885ac943a5",
+      "zipMembers": 195,
+      "crcAllMembersChecked": true
+    },
+    {
+      "path": "agenda-verification/operator-navigation-supplement/video/page@e48070fefe70bbd111c80900433f0767.webm",
+      "size": 585427,
+      "sha256": "b162e740f8690cda4b9353055232f2b9883daf9ccf6329a9bf4d8853e4988333",
+      "videoFullyDecoded": true
+    },
+    {
+      "path": "agenda-verification/results.json",
+      "size": 846,
+      "sha256": "d2b5be541b60439b79da2ee3ec1ed37d5c2a2b4642a4b0cee59ef770e62821a0"
+    },
+    {
+      "path": "plan-proposal.json",
+      "size": 348892,
+      "sha256": "2326fa63bf771e969787c2d1db9754babc0477a23bb32dfe86fba3d2f0d4a9fa"
+    },
+    {
+      "path": "test-results/agenda-verification-browser.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "test-results/backend-build.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "test-results/backend-font-assets.txt",
+      "size": 60,
+      "sha256": "2502ef00b7addbf9c894176a433b4a165f7736f2f0ff3387ed18f9bc7e868060"
+    },
+    {
+      "path": "test-results/backend-service.txt",
+      "size": 133,
+      "sha256": "fde19a55805e3cde9aac3966f276473316d48af157cf83f8531d94c66a76a53b"
+    },
+    {
+      "path": "test-results/database-provenance.json",
+      "size": 310,
+      "sha256": "4431f1698862f68b9cbafdc2621fd469b4b5c5acf1524d7e8d1d8e235d2b7051"
+    },
+    {
+      "path": "test-results/frontend-service.txt",
+      "size": 200,
+      "sha256": "bd34ef05e0f7218e32e445a97d194656a68d27d35348dd6fa52e37d4d169e8d5"
+    },
+    {
+      "path": "test-results/generated-fixture-archive.json",
+      "size": 20,
+      "sha256": "701646d47fe54d003c9c8d7cd2d988f806f4c751437fc1dff0fedf3f40eaa5a7"
+    },
+    {
+      "path": "test-results/migration.txt",
+      "size": 7994,
+      "sha256": "970569a48340b5765ef3a385adc60d6562b7a2f1ceba1f1b29925f8e58ce795f"
+    },
+    {
+      "path": "test-results/mock-runtime.txt",
+      "size": 754,
+      "sha256": "f48936bb641ea11e479e65e2a966055a24223c783f06fdf60a0eeb1c4136077e"
+    },
+    {
+      "path": "test-results/run-results.json",
+      "size": 1922,
+      "sha256": "8a62acceb509afbaecccd108811640096a600bc1fe17b95e1c8d5efbb9a9ca9a"
+    },
+    {
+      "path": "test-results/seed.txt",
+      "size": 770,
+      "sha256": "24aed4a0fb32ea2424ed318d1881ba9e7bc76715ea8d0b893edaa7272f163786"
+    },
+    {
+      "path": "test-results/source-fingerprints.json",
+      "size": 620934,
+      "sha256": "12e7e9f91b743e717f486c72896ec955ba9c18e9d417a4a939ffd3da27c48017"
+    },
+    {
+      "path": "test-results/validation-summary.json",
+      "size": 2130,
+      "sha256": "0f13b934a3fb2245f9d1e1c6acbc3427cce8110efd04dbb4f54b4c7125bc8fdc"
+    }
+  ],
+  "count": 29,
+  "allPublicFilesUnder25MiB": true,
+  "zipCrcAllMembers": true,
+  "zipMemberSecretScan": true,
+  "imagesDecoded": true,
+  "videosFullyDecoded": true,
+  "syntheticOnly": true
+}

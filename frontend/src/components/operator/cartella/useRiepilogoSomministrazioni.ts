@@ -12,7 +12,7 @@ import {
   therapyCalendar,
   type DashboardTherapySummary,
 } from '../../../lib/dashboardTherapies';
-import type { TherapySlot } from '../../../types';
+import type { TherapyReadGroup } from '../../../types';
 
 export type { RitardoVoce, RitardoPaziente } from '../../../lib/dashboardTherapies';
 
@@ -33,7 +33,7 @@ export interface RiepilogoSomministrazioni extends DashboardTherapySummary {
 
 interface DayState {
   date: string;
-  slots: TherapySlot[] | null;
+  slots: TherapyReadGroup[] | null;
   failed: boolean;
   refreshing: boolean;
   /** Revisione alla quale è partita la lettura che ha prodotto `slots` (-1 = seme di sessione). */

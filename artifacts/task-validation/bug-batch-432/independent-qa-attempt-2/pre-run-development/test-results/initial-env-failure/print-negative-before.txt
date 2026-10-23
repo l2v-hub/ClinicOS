@@ -1,0 +1,63 @@
+✔ therapy page loader returns the complete patient-scoped clinical list (37.07215ms)
+✔ therapy page loader rejects a repeating cursor instead of looping forever (1.555125ms)
+✔ therapy page loader carries every server filter on the first page (1.23874ms)
+✔ therapy plan and emergency print require every page, never a manual partial plan (15.651439ms)
+✔ therapy failures are announced and never rendered as empty clinical results (2.039181ms)
+✔ medication administration history follows the bounded opaque cursor feed (1.673397ms)
+✖ complete printable inventory rejects foreign patient (5.036205ms)
+✖ complete printable inventory rejects wrong state counts (0.734809ms)
+✖ complete printable inventory rejects repeated prescription (0.516178ms)
+✔ complete printable inventory rejects short terminal page (1.025932ms)
+✔ failed printable inventory can retry and never returns a partial page (0.92166ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 8
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 487.885365
+
+✖ failing tests:
+
+test at frontend/src/lib/__tests__/therapyPages.test.ts:1:5508
+✖ complete printable inventory rejects foreign patient (5.036205ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/frontend/src/lib/__tests__/therapyPages.test.ts:166:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at frontend/src/lib/__tests__/therapyPages.test.ts:1:5508
+✖ complete printable inventory rejects wrong state counts (0.734809ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/frontend/src/lib/__tests__/therapyPages.test.ts:166:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at frontend/src/lib/__tests__/therapyPages.test.ts:1:5508
+✖ complete printable inventory rejects repeated prescription (0.516178ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/frontend/src/lib/__tests__/therapyPages.test.ts:166:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }

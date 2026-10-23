@@ -1,0 +1,12 @@
+{
+  "source": "e2e/qa-bug-batch-432.mjs",
+  "sourceSha256": "886c8b4276732ccc78451434c788d5c1553f1dee5bdc7f11a3de3bd4e3d25cb7",
+  "adaptations": [
+    "Only QA-owned root/output paths changed",
+    "Existing build/client reused; full suites/import/seed not repeated",
+    "Same full-lifecycle flock, owned Docker/DB marker, actual migration/services, cleanup and source guard preserved",
+    "Only focused real mobile browser substituted",
+    "Focused output explicitly verified=false, focusedOnly=true to avoid claiming another full canonical"
+  ],
+  "productionSourceModified": false
+}

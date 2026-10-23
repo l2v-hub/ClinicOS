@@ -1,0 +1,71 @@
+{
+  "results": [
+    {
+      "label": "migration",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "backend-build-reused",
+      "code": 0,
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup-independent-qa-20261018/runs/qa-4",
+      "sourceIdentityVerified": true
+    },
+    {
+      "label": "backend-font-assets-reused",
+      "code": 0,
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup-independent-qa-20261018/runs/qa-4",
+      "sourceIdentityVerified": true
+    },
+    {
+      "label": "frontend-build-reused",
+      "code": 0,
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup-independent-qa-20261018/runs/qa-4",
+      "sourceIdentityVerified": true
+    },
+    {
+      "label": "frontend-unit-reused",
+      "code": 0,
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup-independent-qa-20261018/runs/qa-4",
+      "sourceIdentityVerified": true
+    },
+    {
+      "label": "backend-unit-reused",
+      "code": 0,
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup-independent-qa-20261018/runs/qa-4",
+      "sourceIdentityVerified": true
+    },
+    {
+      "label": "therapy-import-api",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "seed",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "browser-e2e-reused",
+      "code": 0,
+      "executedHere": false,
+      "sourceRun": "/workspace/.clinicos-cloud/pr483-followup-independent-qa-20261018/runs/qa-4",
+      "sourceIdentityVerified": true
+    },
+    {
+      "label": "clinical-followup-browser",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "independent-extra-browser",
+      "code": 1,
+      "signal": null
+    }
+  ]
+}

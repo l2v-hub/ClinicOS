@@ -1,0 +1,31 @@
+{
+  "standalonePublishedPngsVisuallyInspected": 19,
+  "publishedVideosFullyDecoded": 8,
+  "videoFramesVisuallyInspected": 24,
+  "videoFrameFractions": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "contactSheets": [
+    {
+      "privatePath": "/workspace/.clinicos-cloud/pr483-followup-independent-qa-20261018/analysis/media-inspection/contact-1.png",
+      "sha256": "869396df033959ecb01a28955ba34cc1e0597caf8feed15e77f3ccf1218c4a9d"
+    },
+    {
+      "privatePath": "/workspace/.clinicos-cloud/pr483-followup-independent-qa-20261018/analysis/media-inspection/contact-2.png",
+      "sha256": "053debad705386ccb55871b2a4a997ee936c880c037239ab75b14fdffb3385cd"
+    },
+    {
+      "privatePath": "/workspace/.clinicos-cloud/pr483-followup-independent-qa-20261018/analysis/media-inspection/contact-3.png",
+      "sha256": "ddffa769b044cbb69c9d5194256f6e301079b9504c6b0fca47efde3f5a3bfe6e"
+    }
+  ],
+  "additionalFullSizeInspection": [
+    "independent-extra/admin-agenda/admin-agenda-verification-omitted.png",
+    "independent-extra/operator-week-agenda/week-verification.png"
+  ],
+  "allUniquePublishedRasterImagesOcrScanned": 943,
+  "syntheticFixturesOnly": true,
+  "secretFindings": []
+}

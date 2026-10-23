@@ -1,3 +1,8 @@
+import { isScheduledTherapySlot, type TherapyReadGroup } from '../../types';
+import {
+  AgendaTherapyVerification,
+  type AgendaTherapyVerificationFeed,
+} from '../shared/AgendaTherapyVerification';
 import { useState, useMemo, Fragment, useEffect } from 'react';
 import { appointmentLanding, type PatientLanding } from '../../lib/patientTargetResolver';
 import type {
@@ -31,6 +36,7 @@ import { useRecencyClock } from '../../lib/useRecencyClock';
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
 
 interface OperatorAgendaProps {
+  verificationFeed: AgendaTherapyVerificationFeed;
   operatoreId: string;
   nomeOperatore: string;
   operatori: Operatore[];
@@ -43,7 +49,7 @@ interface OperatorAgendaProps {
   onRetryAppointments?: () => void;
   onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;
   onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
-  therapySlots?: TherapySlot[];
+  therapySlots?: TherapyReadGroup[];
   loadingTherapySlots?: boolean;
   therapyLoadError?: string | null;
   therapyLoadMoreError?: string | null;
@@ -124,7 +130,7 @@ export function OperatorAgenda({
   onRetryAppointments,
   onLoadAppointments,
   onSelectPaziente,
-  therapySlots,
+  therapySlots: therapyGroups,
   loadingTherapySlots = false,
   therapyLoadError = null,
   therapyLoadMoreError = null,
@@ -135,6 +141,7 @@ export function OperatorAgenda({
   onConfirmTherapy,
   onNotAdministeredTherapy,
   onLoadTherapySlots,
+  verificationFeed,
 }: OperatorAgendaProps) {
   // Creazione appuntamenti: la GUI la nasconde se il ruolo non la consente (il backend decide).
   const canCreateAppointment = useCan('appointments.create');
@@ -144,6 +151,7 @@ export function OperatorAgenda({
   const [filtroStato, setFiltroStato] = useState<FiltroStatoAppuntamento>('tutti');
   const [aptForm, setAptForm] = useState<{ data: string; ora: string } | null>(null);
   const [selectedAptId, setSelectedAptId] = useState<string | null>(null);
+  const therapySlots = therapyGroups?.filter(isScheduledTherapySlot);
   const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);
   const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
@@ -393,6 +401,11 @@ export function OperatorAgenda({
           </button>
         </div>
       )}
+      <AgendaTherapyVerification
+        active={view === 'giornaliero'}
+        date={isoDate(refDate)}
+        feed={verificationFeed}
+      />
       {loadingTherapySlots && <div className="empty-state-card">Caricamento terapie…</div>}
       {!loadingTherapySlots && therapyLoadError && (
         <div className="empty-state-card" role="alert">

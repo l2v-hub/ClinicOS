@@ -1,0 +1,28 @@
+{
+  "recordedAt": "2026-10-17T10:30:44.293031+00:00",
+  "recordType": "root-consolidation-of-independent-QA3-not-a-command-rerun",
+  "sourceCheckpoint": "938ae9c44d60b1d963873762f26677d6856f6d63",
+  "qaReport": "independent-qa-attempt-3/validation-report.md",
+  "qaReportSha256": "bc33538dbc638b37f1413b1dbcc8119bf05a01b6c06e8b346c4a7eea420f0c61",
+  "sourceHashes": 37,
+  "frontend": {
+    "pass": 1388,
+    "fail": 0,
+    "skip": 0
+  },
+  "backend": {
+    "pass": 1928,
+    "fail": 0,
+    "skip": 5,
+    "skips": "existing archive-original opt-in and four professional-profile428 opt-ins outside this batch"
+  },
+  "targetedPass": 37,
+  "independentActualHelperPass": 10,
+  "inventoryBrowserScenarios": 9,
+  "additionalMeasuredBrowserChecks": 13,
+  "transportFlows": 2,
+  "focusedMobileCases": 2,
+  "typesBuildPrivacy": "passed",
+  "providerBoundary": "Local mock extraction/runtime declared; real HTTP/DB/browser and clinical writes, no external paid provider inference claimed.",
+  "issueClosurePermitted": false
+}

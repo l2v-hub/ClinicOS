@@ -1,3 +1,4 @@
+import { TherapyVerificationPanel } from '../shared/TherapyVerificationPanel';
 import type { UtenteApp, SlotAgenda, ClinicalOverview, ConsegnaOverview } from '../../types';
 import type { NavKey } from '../../types';
 import { PageHeader } from '../shared/PageHeader';
@@ -202,6 +203,7 @@ export function OperatorDashboard({
       <PageHeader title="Il mio turno" subtitle={subtitle} />
 
       <TurnoActionChips chips={visibleChips} />
+      <TherapyVerificationPanel groups={somministrazioni.verificationGroups} />
       {variant !== 'infermiere' && (
         <TurnoUrgenti
           rows={variant === 'oss' ? urgentQueue.rows : []}
@@ -212,7 +214,7 @@ export function OperatorDashboard({
           onSelectPaziente={onSelectPaziente}
         />
       )}
-      {sospeso && (
+      {sospeso && somministrazioni.daVerificare === 0 && (
         <p className="turno-niente" role="status">
           Niente in sospeso: nessuna nota da leggere, nessun parametro critico, giro parametri
           completo.

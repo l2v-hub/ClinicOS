@@ -1,0 +1,58 @@
+{
+  "findings": [],
+  "textAndArchiveEntriesScanned": 9062,
+  "zipArchivesValidated": 33,
+  "redactedSyntheticBearerOccurrences": 2527,
+  "oversizeFiles": [],
+  "symlinks": [],
+  "nonCredentialSourceTemplateMatches": [
+    {
+      "path": "independent-qa-attempt-3/mobile-followup-stack.mjs",
+      "rule": "credentialed-database-uri",
+      "count": 1,
+      "classification": "Literal source interpolation of random per-run QA password; no credential value. Scope fixed to this exact copied QA driver."
+    }
+  ],
+  "source37AndContracts7StillUnchanged": true,
+  "outsideScope": [],
+  "requiredPngsValidated": 9,
+  "positiveVideoDurations": [
+    {
+      "path": "evidence/issue-432.webm",
+      "seconds": 30.84
+    },
+    {
+      "path": "evidence/issue-441.webm",
+      "seconds": 30.84
+    },
+    {
+      "path": "evidence/issue-442.webm",
+      "seconds": 1.48
+    },
+    {
+      "path": "evidence/issue-460.webm",
+      "seconds": 11.64
+    },
+    {
+      "path": "evidence/issue-463.webm",
+      "seconds": 30.84
+    },
+    {
+      "path": "evidence/issue-464.webm",
+      "seconds": 1.48
+    },
+    {
+      "path": "evidence/issue-467.webm",
+      "seconds": 30.84
+    },
+    {
+      "path": "independent-qa-attempt-3/mobile-followup/desktop-resize.webm",
+      "seconds": 21.04
+    },
+    {
+      "path": "independent-qa-attempt-3/mobile-followup/fresh-mobile.webm",
+      "seconds": 7.36
+    }
+  ],
+  "noMatchedCredentialValuesPrinted": true
+}

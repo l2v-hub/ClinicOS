@@ -1,0 +1,66 @@
+{
+  "authorStopSha256": "d8efc7e75d76a6ae4eb02e355f0542b595fe9ebed01e880f2a467d40bebfed29",
+  "baseSha": "bc90e86847de0bb17f06f0353c2f217e29eb5d14",
+  "changedFiles": {
+    "backend/src/routes/__tests__/therapy-authoritative-write.test.ts": "0d6851420609dfb20151882b62b4fb36563fd9744823c2a2b628d93e3d063a85",
+    "backend/src/therapies/__tests__/slot-scheduling.test.ts": "318df6c089d8f9a0d10228e792ff9280edea6263bea9ef5e6ecaa68b5fb27bda",
+    "backend/src/therapies/due-therapy-query.ts": "3ecf8c08f30bfebbbb4feb931c5b05bef956d909378973c6fc707ef38664dc7f",
+    "backend/src/therapies/slot-scheduling.ts": "dbe8667c9d03137c3b9e7efab34034e12065d2e76d1b58f9a671205b38455b99",
+    "backend/src/therapies/therapy-administration-page.ts": "583820df6f5945b2003a1f6a2019bbc5d93f7241b19e7f45950e610cdfcfe550",
+    "backend/src/therapies/therapy-query.ts": "38683cf5bb57569653f936babfc01baabcf1faef0b849a84977899aa81df2c54",
+    "backend/src/therapies/therapy-slots.ts": "966d80cf65f09fc2018c9ae22ef41180a5f44317a091d99cb148e6b0c59e7782",
+    "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx": "eff7a842158bfec9f4a92fe2c9b75b3657052ceb19eced7a9da16aff8520dfae",
+    "frontend/src/components/shared/TherapyVerificationPanel.tsx": "ec588e1c991405a093e34f067bc06c8b27e27c922888ab06b5938267ea213f5d",
+    "frontend/src/components/shared/__tests__/agendaTherapyVerification.test.ts": "65cebb704aa30ea0ebf8cf158f147affeb9477edde4c561da1d1373536f56b70",
+    "frontend/src/lib/__tests__/therapyVerification.test.ts": "e30084d985126f302e00db7ba55aa6393d79a39dc77f174811afc180ae18b665",
+    "frontend/src/lib/dashboardTherapies.ts": "01d3fa687c4b658bc7808ccc65e0caeff11212036f2e8b0fc182fa0540009ab6",
+    "frontend/src/lib/therapySlotPage.ts": "e08b87a112285e3bc6fdc3db5882fbd36b9efd132536d3c7b5208d89efddacfb",
+    "frontend/src/types.ts": "f4ce31f2ca61566d6e01d2b7059d2818633cd06558a6e3026325cbc877aefea5"
+  },
+  "checks": {
+    "actualBrowser": {
+      "executed": false
+    },
+    "backendFocused": {
+      "failed": 0,
+      "logSha256": "db624dc155dfe3cb2b33884ddff7f66e8891c7c4b0affa268ba04b3bea473e16",
+      "passed": 21,
+      "skipped": 0
+    },
+    "backendTypes": {
+      "logSha256": "350328d1d9e408e22490a89a31d05a23ea0d8d9edf1997cb89b986af32f9f79b",
+      "passed": true
+    },
+    "databaseRuntime": {
+      "executed": false
+    },
+    "diffCheck": {
+      "passed": true
+    },
+    "frontendFocused": {
+      "failed": 0,
+      "logSha256": "2f89daa8626838b6ebc26f4990d97646b3aea852035ce3c43b37c46b16da19c9",
+      "passed": 43,
+      "skipped": 0
+    },
+    "frontendTypes": {
+      "logSha256": "3d7599c81f42c8e12c2f439855273190735768db375bdf4877c39ad9f5e2fc74",
+      "passed": true
+    },
+    "optionalWholeHistoricalDbTestTypes": {
+      "diagnosis": "Existing earlier-test typing and frontend NodeNext import diagnostics, before the appended new regression; TS6 explicit-file invocation first needed --ignoreConfig. Attempts preserved privately. New database regression not executed.",
+      "passed": false
+    },
+    "provider": {
+      "executed": false
+    }
+  },
+  "claimId": "4be71052-6784-40c3-8d85-3b4b990f8221",
+  "independentQaPlan": "independent-qa-plan.md",
+  "parentApproval": false,
+  "patchSha256": "197976cb60596e4fe0db196d0ca97694cf0cc20ec9c00606b60329b9c4c53a4c",
+  "releaseApproved": false,
+  "sourceFilesDigest": "9f5413d05b5afddbf498971855ca69e2f660e6569f375e9feacf0bd474956e16",
+  "sourceFreezeSha256": "4f8c7ade41d2616ecbba50170d51f69d846a005989157e7c6b5bcf521c981058",
+  "status": "AUTHOR_STOP"
+}

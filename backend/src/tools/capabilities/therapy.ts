@@ -66,6 +66,8 @@ const administrationBody = {
         'Orario esatto HH:mm della dose prescritta; obbligatorio quando la fascia contiene più dosi',
     },
     measuredGlucose: { type: 'integer', minimum: 10, maximum: 1000 },
+    requestId: { type: 'string', pattern: '^[A-Za-z0-9_-]{8,128}$' },
+    expectedStato: { type: 'string', enum: ['da_erogare'] },
   },
 } as const;
 

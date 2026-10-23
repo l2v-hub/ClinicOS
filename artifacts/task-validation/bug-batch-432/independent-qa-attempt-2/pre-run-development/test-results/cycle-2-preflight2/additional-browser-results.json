@@ -1,0 +1,14 @@
+{
+  "results": [
+    {
+      "name": "catalog-available-real-name-search-retained",
+      "pass": true,
+      "searches": 2
+    },
+    {
+      "name": "catalog-malformed-real-name-search-retained",
+      "pass": true,
+      "searches": 2
+    }
+  ]
+}

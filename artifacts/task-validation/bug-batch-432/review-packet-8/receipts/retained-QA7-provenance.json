@@ -1,0 +1,61 @@
+{
+  "sourceSha": "ae12862e8ff9ce03f117fc646ecd11a4a8a8bb56",
+  "priorSourceSha": "4308210cc166440e546239c247ffdd26f51737ce",
+  "onlyChangedSource": [
+    "backend/src/routes/__tests__/therapy-slot-scope-contract.test.ts"
+  ],
+  "allProductionConfigFixturesOtherTestsIdentical": true,
+  "qa7OverallRemains": "FAILED VALIDATION",
+  "frontend1405": "RETAINED historical independent PASS, not freshly executed in QA8",
+  "backend1933": "RETAINED historical individual passes, prior global suite1FAIL5SKIP; not a fresh full-suite PASS",
+  "freshAffectedFileRequired": true,
+  "priorBackendLog": {
+    "path": "/workspace/.clinicos-cloud/483-independent-qa7-20261019/snapshot/artifacts/task-validation/bug-batch-432/qa7-runtime2/test-results/backend-unit.txt",
+    "sha256": "5ae90b654e87cdfd20eb03e1837f0f6e88e46148742fe01ec2d904dbcbef7ff4"
+  },
+  "otherChecks": {
+    "frontend-focused": {
+      "path": "/workspace/.clinicos-cloud/483-independent-qa7-20261019/frontend-focused-attempt1.json",
+      "sha256": "f764dd5e2539067949c3726195304046adaf0fdb8ae6e2dad2bf4d54f5a7d497",
+      "executedInQa8": false,
+      "sourceSha": "4308210cc166440e546239c247ffdd26f51737ce",
+      "productionSourceIdentityVerified": true
+    },
+    "backend-pure": {
+      "path": "/workspace/.clinicos-cloud/483-independent-qa7-20261019/backend-pure-attempt1.json",
+      "sha256": "170e97f3a4f0aa146348dd1f04f65475664a589220d30d865b4ad87073a71b5a",
+      "executedInQa8": false,
+      "sourceSha": "4308210cc166440e546239c247ffdd26f51737ce",
+      "productionSourceIdentityVerified": true
+    },
+    "frontend-types": {
+      "path": "/workspace/.clinicos-cloud/483-independent-qa7-20261019/frontend-types-attempt1.json",
+      "sha256": "7bc30cf4e7591b68a70294f3e4779892013c25a0a4d75d19c5fc0b8ea3ca02ee",
+      "executedInQa8": false,
+      "sourceSha": "4308210cc166440e546239c247ffdd26f51737ce",
+      "productionSourceIdentityVerified": true
+    },
+    "backend-types": {
+      "path": "/workspace/.clinicos-cloud/483-independent-qa7-20261019/backend-types-attempt1.json",
+      "sha256": "2b0f6ed99d9f5fc0aebaa7b610853b7e8b2f14c191d50cb2e478855a3d29b8ab",
+      "executedInQa8": false,
+      "sourceSha": "4308210cc166440e546239c247ffdd26f51737ce",
+      "productionSourceIdentityVerified": true
+    },
+    "frontend-build": {
+      "path": "/workspace/.clinicos-cloud/483-independent-qa7-20261019/frontend-build-attempt1.json",
+      "sha256": "fa414c53e0f5f0edc548571c59ac1b2e1a7fcd99e9789dfae17f4e604856f09e",
+      "executedInQa8": false,
+      "sourceSha": "4308210cc166440e546239c247ffdd26f51737ce",
+      "productionSourceIdentityVerified": true
+    },
+    "frontend-full": {
+      "path": "/workspace/.clinicos-cloud/483-independent-qa7-20261019/frontend-full-attempt1.json",
+      "sha256": "22727d620b2c8003984fcc6746b407a4a5fac6c914c9a5453778723c9436acf1",
+      "executedInQa8": false,
+      "sourceSha": "4308210cc166440e546239c247ffdd26f51737ce",
+      "productionSourceIdentityVerified": true
+    }
+  },
+  "qa7StopSha256": "b94eecd124ebd7dfc114e52c6fecaea0702aee431ecf475f4b3961039332412c"
+}
