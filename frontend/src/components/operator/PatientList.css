@@ -668,3 +668,48 @@ td.patient-roster__actions > button + button {
   height: auto;
   min-height: 32px;
 }
+
+/* Bed-first roster: optional columns change positions, so widths follow semantic headings. */
+.plist-list .patient-roster th:nth-child(n) {
+  width: auto;
+}
+.plist-list .patient-roster th.patient-roster__bed-heading {
+  width: 112px;
+}
+.plist-list .patient-roster th.patient-roster__name-heading {
+  width: 30%;
+}
+.plist-list .patient-roster th.patient-roster__action-heading {
+  width: 80px;
+}
+.plist-list .patient-roster:has(.patient-roster__delete) th.patient-roster__action-heading {
+  width: 136px;
+}
+
+.patient-list-incomplete {
+  margin: 12px 0;
+  border-top: 1px solid var(--border);
+}
+.patient-list-incomplete > summary {
+  min-height: 44px;
+  padding: 12px 4px;
+  cursor: pointer;
+}
+.patient-list-incomplete > summary:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+.patient-completion-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 8px;
+  padding: 8px 0;
+}
+.patient-completion-actions > button {
+  min-height: 44px;
+  white-space: normal;
+  text-align: left;
+}
+.patient-list-incomplete:not([open]) .patient-completion-actions {
+  display: none;
+}

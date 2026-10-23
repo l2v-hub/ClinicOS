@@ -1,0 +1,24 @@
+{
+  "reservationNonce": "214ab42d-1945-40a4-8db9-76794c778ee3",
+  "previousReport": {
+    "path": "/workspace/.clinicos-cloud/ux447-room-midnight-author-20261019/author-validation.json",
+    "sha256": "e4f612a1548f1a121e8361dbb175304ca02225e784f370e80c0a1911b3021e57",
+    "unchanged": true
+  },
+  "scope": ["backend/src/lib/__tests__/facility-time.test.ts"],
+  "change": "Renamed explicit-instant test accurately and added zero-argument facilityDate() tests with mocked Date for 2026-10-18T22:33Z (UTC Oct 18, Rome Oct 19) and 2026-12-31T23:30Z (Rome Jan 1, 2027).",
+  "test": {
+    "runner": "/workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs",
+    "command": "node --import tsx --test src/lib/__tests__/facility-time.test.ts src/rooms/__tests__/occupancy-model.test.ts src/routes/__tests__/room-read-model.test.ts",
+    "result": "PASS: 11 tests, 0 failures",
+    "gitDiffCheck": "PASS"
+  },
+  "unchangedRoomSourceSha256": {
+    "backend/src/routes/admin-rooms.ts": "c72cc59382d2d56e411997fc1747e11e486c07c34ffa224b61bbbba69a09aefe",
+    "backend/src/routes/patient-room-options.ts": "b4f50729c4261716f7d2f9dcd23e090236d64ae598c4c06f0b9bedabb59abb0a",
+    "backend/src/rooms/occupancy-service.ts": "e308e8e3768550c2fe0642ee7998a22b2cda5e62ee8727dc7f4011118486dabe",
+    "backend/src/lib/facility-time.ts": "d098c23cda32771043aa7d00ceba9398c8e484ecebcab053a27eaa0dd01523c3"
+  },
+  "changedTestSha256": "7254933743ee5abbc6531c00ff8c58de2a3f9e532f7e866bcb8e79aa58158486",
+  "limitations": ["No build, DB, browser, SQL, provider, or Git mutation was performed.", "Fresh independent actual browser and SQL QA remains required after root integration."]
+}

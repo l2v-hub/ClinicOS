@@ -1066,24 +1066,44 @@ export interface UscitaLog {
   firma?: string;
   operatore: string;
   note?: string;
+  psExit?: {
+    decision: 'pause' | 'continue';
+    departedAt: string;
+    actorId: string;
+    requestId: string;
+    requestHash: string;
+    returnedAt?: string;
+    returnActorId?: string;
+    returnActorName?: string;
+    returnRequestId?: string;
+    returnRequestHash?: string;
+  };
+}
+
+export interface TemporaryPsExit {
+  exitId: string;
+  decision: 'pause' | 'continue';
+  departedAt: string;
 }
 
 export interface Liberatoria {
-  data: string;
-  ora: string;
-  controParereMedico: boolean;
-  consapevoleRischi: boolean;
-  firmaPatient: string;
-  firmaTestimone: string;
-  operatore: string;
-  note: string;
-  compilatoAt: string;
+  // A temporary-exit log does not imply that the separate legal declaration was completed.
+  data?: string;
+  ora?: string;
+  controParereMedico?: boolean;
+  consapevoleRischi?: boolean;
+  firmaPatient?: string;
+  firmaTestimone?: string;
+  operatore?: string;
+  note?: string;
+  compilatoAt?: string;
   // Extended fields
   referenteNome?: string;
   referenteDataNascita?: string;
   referenteRapporto?: string;
   soloUscitaParenti?: boolean;
   usciteLog?: UscitaLog[];
+  temporaryPsExit?: TemporaryPsExit | null;
 }
 
 // ── Therapy Slot (Agenda) ────────────────────────────────────────────────────
@@ -1139,6 +1159,9 @@ export interface TherapySlotPatient {
   room: string;
   bed: string;
   administrations: TherapyAdministration[];
+  temporaryPsExit?: TemporaryPsExit | null;
+  /** Managed PS-exit metadata was malformed; this patient alone must not be acted on. */
+  temporaryPsExitUnverified?: boolean;
 }
 
 export interface TherapySlotSummary {

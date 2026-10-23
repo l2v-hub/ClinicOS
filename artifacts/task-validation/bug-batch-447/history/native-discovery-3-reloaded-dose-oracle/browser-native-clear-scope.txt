@@ -1,0 +1,47 @@
+Issue 447: Expected content /Erogata|Somministrata/: The input did not match the regular expression /Erogata|Somministrata/. Input:
+
+'Oggi · 17/10/2026\n' +
+  'Terapia di oggi\n' +
+  'Ore 08:00\n' +
+  'Somministrazioni delle 08:00\n' +
+  'Somministrazione del sabato 17 ottobre\n' +
+  'QA Prescription447\n' +
+  '1 compressa — 5 mg · orale · ore 08:00\n' +
+  '1
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: All clear-scope acceptance scenarios must pass; inspect per-issue real evidence. Clinical policy gates remain separate and unresolved.
+
+1 !== 0
+
+    at file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/qa-bug-batch-447-browser.mjs:1574:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Real browser acceptance failed
+
+1 !== 0
+
+    at file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/qa-bug-batch-447.mjs:256:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

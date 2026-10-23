@@ -1,0 +1,21 @@
+✔ chart groups organize intake and clinical work while legacy links keep their destination (1.848226ms)
+✔ discharge opens directly beside Documents and legacy links keep the same module (1.136655ms)
+✔ Agnos opens the separate therapy page for both roles without confusing the agenda (0.464842ms)
+✔ demographic write preview opens the page that displays the field being changed (1.371279ms)
+✔ HMI 1: 8 chart sections as in the prototype; every legacy tab opens the section that holds it (3.991528ms)
+✔ Prompt 10 AT-13: le sezioni negate dalla policy non sono offerte al ruolo (1.49106ms)
+✔ patient record exposes ONE labelled section rail and a controlled tab panel (1.773541ms)
+✔ top navigation follows the keyboard tab pattern with one focusable active tab (0.399439ms)
+✔ therapy sections reuse the canonical contextual navigation (0.415039ms)
+✔ 447 Today uses actual dose actions, shared diary acknowledgement and real daily readings, retaining diary and module state (0.743231ms)
+✔ overview is three columns on wide screens, two on tablet and one on phone (0.757026ms)
+✔ patient record applies one screen-only contract to cards, key-value rows and tables (0.294571ms)
+✔ patient record data contract keeps tablet overflow local and stacks key-value rows on phones (0.684552ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1103.102261

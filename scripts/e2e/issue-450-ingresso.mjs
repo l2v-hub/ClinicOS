@@ -1409,10 +1409,10 @@ try {
         .getByRole('button', { name: 'Pazienti', exact: true })
         .click();
       await page.getByRole('button', { name: /Filtra anagrafiche da completare/ }).click();
-      await page
-        .getByRole('button', { name: 'Apri cartella di Maria Sintetica', exact: true })
-        .last()
-        .click();
+      const completionDisclosure = page.locator('details.patient-list-incomplete');
+      if (!(await completionDisclosure.evaluate((element) => element.open)))
+        await completionDisclosure.locator('summary').click();
+      await page.getByRole('button', { name: /Completa anagrafica · Sintetica Maria/ }).click();
       await page
         .getByRole('heading', { name: /Sintetica/ })
         .first()
@@ -1610,12 +1610,53 @@ try {
       await page.waitForFunction(
         () => document.querySelectorAll('.patient-roster tbody tr[aria-label]').length === 30,
       );
-      const card = page.getByRole('region', { name: 'Anagrafiche in bozza', exact: true });
-      assert.equal(await card.getByRole('button').count(), 1);
-      assert.match(await card.innerText(), /30/);
-      await card.getByRole('button').click();
-      assert.equal(await card.getByRole('button').getAttribute('aria-pressed'), 'true');
-      assert.equal(await page.locator('.patient-roster tbody tr[aria-label]').count(), 30);
+      const list = page.getByRole('region', { name: 'Elenco pazienti', exact: true });
+      const incompleteFilter = list.locator('.plist-toolbar').getByRole('button', {
+        name: /^(Filtra anagrafiche da completare|Mostra tutti i pazienti)$/,
+      });
+      const incompleteSummary = list.locator('details.patient-list-incomplete');
+      const rosterRows = list.locator('.patient-roster tbody tr[aria-label]');
+      const expectedIncompleteLabels = Array.from(
+        { length: 30 },
+        (_, index) => `Apri cartella di Persona${String(index).padStart(2, '0')} SintesiCoda`,
+      );
+      const assertIncompleteRoster = async () => {
+        assert.deepEqual(
+          await rosterRows.evaluateAll((rows) =>
+            rows.map((row) => row.getAttribute('aria-label')).sort(),
+          ),
+          expectedIncompleteLabels,
+          'The roster contains all thirty exact seeded identities, without substitutions',
+        );
+      };
+      assert.equal(await incompleteFilter.count(), 1, 'One bounded incomplete-identity filter');
+      assert.equal(await incompleteFilter.getAttribute('aria-pressed'), 'false');
+      assert.equal(
+        await incompleteSummary.count(),
+        1,
+        'One aggregate incomplete-identity disclosure',
+      );
+      assert.equal(await incompleteSummary.evaluate((element) => element.open), false);
+      assert.match(await incompleteSummary.locator('summary').innerText(), /30 pazienti/);
+      assert.match(
+        await incompleteSummary.locator('summary').innerText(),
+        /\(tra 30 caricati(?:, elenco parziale)?\)/,
+      );
+      assert.equal(
+        await incompleteSummary.getByRole('button', { includeHidden: true }).count(),
+        30,
+      );
+      assert.equal(await incompleteSummary.locator('button:visible').count(), 0);
+      await assertIncompleteRoster();
+      await incompleteFilter.click();
+      assert.equal(await incompleteFilter.getAttribute('aria-pressed'), 'true');
+      await assertIncompleteRoster();
+      await incompleteFilter.click();
+      assert.equal(await incompleteFilter.getAttribute('aria-pressed'), 'false');
+      await assertIncompleteRoster();
+      await incompleteFilter.click();
+      assert.equal(await incompleteFilter.getAttribute('aria-pressed'), 'true');
+      await assertIncompleteRoster();
       await page.screenshot({
         path: path.join(OUT, 'evidence', 'thirty-incomplete-bounded-filter.png'),
       });
@@ -1624,11 +1665,21 @@ try {
         () => document.querySelectorAll('.patient-roster tbody tr[aria-label]').length === 1,
       );
       assert.equal(
-        await card.count(),
+        await incompleteFilter.count(),
         0,
-        'Complete-only subset hides incomplete summary and still displays its complete patient',
+        'Complete-only search escapes the active incomplete filter and hides its control',
       );
-      assert.match(await page.locator('.patient-roster tbody').innerText(), /Manuele/);
+      assert.equal(
+        await incompleteSummary.count(),
+        0,
+        'Complete-only subset hides the aggregate incomplete-identity disclosure',
+      );
+      assert.deepEqual(
+        await rosterRows.evaluateAll((rows) => rows.map((row) => row.getAttribute('aria-label'))),
+        ['Apri cartella di Manuele Sintetico'],
+        'Complete-only search retains the exact previously persisted complete patient',
+      );
+      assert.match(await list.locator('.patient-roster tbody').innerText(), /Manuele/);
       await page.screenshot({
         path: path.join(OUT, 'evidence', 'zero-incomplete-summary-absent.png'),
       });

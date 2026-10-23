@@ -106,7 +106,7 @@ export const assessmentPatientTab = (type: AssessmentType): TabId =>
   type === 'gds15' ? 'gds' : type;
 
 export function tabLabel(id: TabId): string | undefined {
-  if (id === 'panoramica') return 'Panoramica';
+  if (id === 'panoramica') return 'Oggi';
   if (id === 'moduli') return 'Moduli';
   if (id === 'sezioni-narrative') return 'Sezioni cliniche';
   id = resolvePatientTab(id);
@@ -167,7 +167,7 @@ const MODULE_TABS: TabId[] = [
 ];
 
 export const CHART_SECTIONS: ChartSectionDef[] = [
-  { id: 'panoramica', label: 'Panoramica', tabs: ['panoramica', 'diario'] },
+  { id: 'panoramica', label: 'Oggi', tabs: ['panoramica', 'diario'] },
   { id: 'ingresso', label: 'Dati di ingresso', tabs: ['profilo', 'contatti', 'presa-in-carico'] },
   {
     id: 'clinica',

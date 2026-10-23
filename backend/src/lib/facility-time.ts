@@ -17,3 +17,7 @@ export function facilityClock(now: Date): { date: string; minutes: number } {
     minutes: Number(parts.hour) * 60 + Number(parts.minute),
   };
 }
+
+export function facilityDate(now: Date = new Date()): string {
+  return facilityClock(now).date;
+}

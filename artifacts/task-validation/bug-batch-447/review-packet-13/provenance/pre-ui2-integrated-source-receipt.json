@@ -1,0 +1,372 @@
+{
+  "at": "2026-10-21T21:55:25.357Z",
+  "sourceSha": "655fdc0ffd4e066e5c86bc8aea384f904c361255",
+  "parent": "17a127c432f39e094f2746dc33c38bcb234ce719",
+  "files": [
+    {
+      "cohort": "ui",
+      "path": "frontend/src/components/admin/AdminAttentionList.css",
+      "beforeSha256": "2d9d89b3016be1a09b9f9b5665ae0713ec4f7207d9f8cce612e1bdbbd3dd6487",
+      "afterSha256": "517b653c5236e6a7c9f9b54888d8396488a2944a5ab9f58963b3066cec735631",
+      "bytes": 2047,
+      "authorSealSha256": "6291be3c910cc4c1e8238697861cb0f841ae68cdcf190f2c80652d045f5d4c44"
+    },
+    {
+      "cohort": "ui",
+      "path": "frontend/src/components/operator/ParameterReadingForm.css",
+      "beforeSha256": "3367036500d2be273d11f0c93df6c26626d6f74360e1bf721196c008c3d11998",
+      "afterSha256": "ff80c55768c90c0baf43b3b975036f5ebb210d5bc3556efc43d6f20e307678ee",
+      "bytes": 1918,
+      "authorSealSha256": "6291be3c910cc4c1e8238697861cb0f841ae68cdcf190f2c80652d045f5d4c44"
+    },
+    {
+      "cohort": "ui",
+      "path": "frontend/src/components/operator/PatientRecordData.css",
+      "beforeSha256": "6316c7ccc8b654ce90bd7e27fe9f240a6d58e649b6d58c21c59b50c57fc8ff7b",
+      "afterSha256": "f508e8cfb95fad213bc99d61cf0c20b14ae45ad5ae2c32dcdfd7aee5d1272f1e",
+      "bytes": 18049,
+      "authorSealSha256": "6291be3c910cc4c1e8238697861cb0f841ae68cdcf190f2c80652d045f5d4c44"
+    },
+    {
+      "cohort": "ui",
+      "path": "frontend/src/components/operator/TherapyGiroRows.tsx",
+      "beforeSha256": "52375e1aacd27b5f78fdf0ce0d6e011672bcd6e7b619be605a486e1cfdc9e254",
+      "afterSha256": "e2a70b10ae4a888c1b92eaa77a7b2928fafbe90f4a26ff7266c65dc9bf2c5a3d",
+      "bytes": 21581,
+      "authorSealSha256": "6291be3c910cc4c1e8238697861cb0f841ae68cdcf190f2c80652d045f5d4c44"
+    },
+    {
+      "cohort": "ui",
+      "path": "frontend/src/components/operator/TherapyPatientAllergies.tsx",
+      "beforeSha256": "c1a837f0c87307a0587b5ee473a4df538194ad56627b18dbcde4d2d5d5459471",
+      "afterSha256": "96ccd01f9a5f535f8f924a4f5d690d0341af53ad54e2bd9b25fa8e3811274631",
+      "bytes": 3821,
+      "authorSealSha256": "6291be3c910cc4c1e8238697861cb0f841ae68cdcf190f2c80652d045f5d4c44"
+    },
+    {
+      "cohort": "ui",
+      "path": "frontend/src/components/operator/__tests__/claude1UiFindings.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "ef1ec78cb41947e2bec6e2eed960d423dd3f4182738a0d8176ef07a903883d4a",
+      "bytes": 9612,
+      "authorSealSha256": "6291be3c910cc4c1e8238697861cb0f841ae68cdcf190f2c80652d045f5d4c44"
+    },
+    {
+      "cohort": "ui",
+      "path": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "beforeSha256": "52599d46b5094dc4c7e4f9f6cfecfce64d303c5092783c5d93e22e8adfee2320",
+      "afterSha256": "7e7c4eea2b40e411e8f97aa80e76fcd88963eafc88f82fc9db1d4778cba9a226",
+      "bytes": 46707,
+      "authorSealSha256": "6291be3c910cc4c1e8238697861cb0f841ae68cdcf190f2c80652d045f5d4c44"
+    },
+    {
+      "cohort": "ui",
+      "path": "frontend/src/components/shared/PatientIdentity.tsx",
+      "beforeSha256": "4303a8e175b3bc1d64b3a8e009784b4b7f3d9f65166225fd5115b95db393cfca",
+      "afterSha256": "4bcd2207c7def4752d3bdffabe7e023d6fe9fcadb1a43f79971fe3b00d5cde9f",
+      "bytes": 2575,
+      "authorSealSha256": "6291be3c910cc4c1e8238697861cb0f841ae68cdcf190f2c80652d045f5d4c44"
+    },
+    {
+      "cohort": "ui",
+      "path": "frontend/src/lib/__tests__/parameterRound451.test.ts",
+      "beforeSha256": "917ad656bea5f10e3040ddf1699939809794bb3715d7b98f45c269a1d815855b",
+      "afterSha256": "0802a545341119753907ae1f5ed6bce659a0b19bc4c578f1f7d157af0f3f9ee6",
+      "bytes": 4102,
+      "authorSealSha256": "6291be3c910cc4c1e8238697861cb0f841ae68cdcf190f2c80652d045f5d4c44"
+    },
+    {
+      "cohort": "ui",
+      "path": "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts",
+      "beforeSha256": "93feab5b4ab908123307e916738275e0fcc99b95410c297927b5fc3812d30985",
+      "afterSha256": "2069db89976059accf8640fbfe8332ef0633c45bdc1ad610ce1c1548cbe26e6c",
+      "bytes": 6584,
+      "authorSealSha256": "6291be3c910cc4c1e8238697861cb0f841ae68cdcf190f2c80652d045f5d4c44"
+    },
+    {
+      "cohort": "ui",
+      "path": "frontend/src/lib/__tests__/therapyEntry454.test.ts",
+      "beforeSha256": "691677b81c96676e370c77ea20a10755de48943632cd53b5901520514b3831ce",
+      "afterSha256": "2a0cac6c2367bb5f15ab5b7b4e913ccad6e06667e552d7fb3d730f333c9bc69e",
+      "bytes": 4841,
+      "authorSealSha256": "6291be3c910cc4c1e8238697861cb0f841ae68cdcf190f2c80652d045f5d4c44"
+    },
+    {
+      "cohort": "ui",
+      "path": "frontend/src/lib/parameterRound.ts",
+      "beforeSha256": "6c5d808be09813aafcf20c36d84bdc2de62b363d19d0bdfcca488e8595e97c94",
+      "afterSha256": "6b782026059189707fff60d8352546acd0406b12d7c734fd6c00cb4964ecef3f",
+      "bytes": 1869,
+      "authorSealSha256": "6291be3c910cc4c1e8238697861cb0f841ae68cdcf190f2c80652d045f5d4c44"
+    },
+    {
+      "cohort": "ui",
+      "path": "frontend/src/lib/therapySlotPage.ts",
+      "beforeSha256": "da5230eef01965fb2a21b31516110df19b0d4ee52abbf8b73d1a53c57175522e",
+      "afterSha256": "752230a5f4b3fc9c96782d91958f0289af60fe43f3bf0ce34e7c8553cd224989",
+      "bytes": 15241,
+      "authorSealSha256": "6291be3c910cc4c1e8238697861cb0f841ae68cdcf190f2c80652d045f5d4c44"
+    },
+    {
+      "cohort": "ui",
+      "path": "frontend/src/types.ts",
+      "beforeSha256": "4a59b66d5c2a4fa5fa26eb93b0d417b5ff81437fffbbd81e59d2ad566cd92155",
+      "afterSha256": "284213a8871dbf2c6159430e77e1d51213bdaa672f57dd5751413c13a7cd37fe",
+      "bytes": 37318,
+      "authorSealSha256": "6291be3c910cc4c1e8238697861cb0f841ae68cdcf190f2c80652d045f5d4c44"
+    },
+    {
+      "cohort": "react",
+      "path": "e2e/qa497-Claude1-react-state.mjs",
+      "beforeSha256": null,
+      "afterSha256": "f8231511615517446245307e8f593986caec4e82498a0bac68071d0ad0e9b61e",
+      "bytes": 2539,
+      "authorSealSha256": "f05d0e5d4369daa5e87ba992075c335526ac4a0501b5eafad851e5fb64bee22b"
+    },
+    {
+      "cohort": "react",
+      "path": "frontend/src/components/operator/News2Chip.tsx",
+      "beforeSha256": "0588ccf7b1fd9a733b4243aa17bfc578d537ace86f635d868cd24dd5aed341e2",
+      "afterSha256": "0a35fc1ef41bde0725a3cd434090ff85152e20be31f3f6e8e0cccc91051e95fd",
+      "bytes": 17753,
+      "authorSealSha256": "f05d0e5d4369daa5e87ba992075c335526ac4a0501b5eafad851e5fb64bee22b"
+    },
+    {
+      "cohort": "react",
+      "path": "frontend/src/components/operator/PatientRoster.tsx",
+      "beforeSha256": "482eb628428d522e24e44ea5302a4d02a3eaa4a1bd66775f0c847eee2bdfca10",
+      "afterSha256": "601bd30f59d8c63c9cc42f853b557fa465c71574d3db4a962dc82e49929960c2",
+      "bytes": 24613,
+      "authorSealSha256": "f05d0e5d4369daa5e87ba992075c335526ac4a0501b5eafad851e5fb64bee22b"
+    },
+    {
+      "cohort": "react",
+      "path": "frontend/src/components/operator/PatientToday.tsx",
+      "beforeSha256": "bfc360f4f5d47426bd5d756ea4ec481b4bc510a976fc58004171908ca309a4c6",
+      "afterSha256": "d866503945e006ce23c5f0bbc644a2df21cfc5f56632deeacbecc1b0e3ee6f75",
+      "bytes": 10233,
+      "authorSealSha256": "f05d0e5d4369daa5e87ba992075c335526ac4a0501b5eafad851e5fb64bee22b"
+    },
+    {
+      "cohort": "react",
+      "path": "frontend/src/components/operator/VitalsOverview.tsx",
+      "beforeSha256": "00da1d5136c72022222d04657142b1c7859310f2596c4b25dea3d915800a9c49",
+      "afterSha256": "5c6b0d1379b116110eab7781d0ec05f458f19831d53e271defb7309abce93bf5",
+      "bytes": 6234,
+      "authorSealSha256": "f05d0e5d4369daa5e87ba992075c335526ac4a0501b5eafad851e5fb64bee22b"
+    },
+    {
+      "cohort": "react",
+      "path": "frontend/src/components/operator/__tests__/claude1ReactRoster.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "865f4085bf091d899ff3783ee4fad6d0b52ce93aed0b3ae0618cd1b04a1e6199",
+      "bytes": 2716,
+      "authorSealSha256": "f05d0e5d4369daa5e87ba992075c335526ac4a0501b5eafad851e5fb64bee22b"
+    },
+    {
+      "cohort": "react",
+      "path": "frontend/src/components/operator/cartella/PatientTherapySlotDetail.tsx",
+      "beforeSha256": "6f2cacbb79c1046c4728d20a53692f69812fd21daf0a3495f62a5dc390a0e880",
+      "afterSha256": "3adf3c8c192f1ffa59f62c54299e00e547b8e268476b4cb556f8035ee321af91",
+      "bytes": 15325,
+      "authorSealSha256": "f05d0e5d4369daa5e87ba992075c335526ac4a0501b5eafad851e5fb64bee22b"
+    },
+    {
+      "cohort": "react",
+      "path": "frontend/src/components/operator/cartella/TherapyDrugDosePanel.tsx",
+      "beforeSha256": "e463b41f4c911265f92a29ff3166a592576eabc335353ea228a4effb283752e8",
+      "afterSha256": "e076761793f84dc0db0fe05b3960e383788c306f37caeaae0d5a5a997e79cd49",
+      "bytes": 17938,
+      "authorSealSha256": "f05d0e5d4369daa5e87ba992075c335526ac4a0501b5eafad851e5fb64bee22b"
+    },
+    {
+      "cohort": "react",
+      "path": "frontend/src/lib/__tests__/claude1ReactNews2.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "27ee4f5f394374540548595f76c23335a9311c16a6d02f4148247d6fc17635dc",
+      "bytes": 10039,
+      "authorSealSha256": "f05d0e5d4369daa5e87ba992075c335526ac4a0501b5eafad851e5fb64bee22b"
+    },
+    {
+      "cohort": "react",
+      "path": "frontend/src/lib/news2History.ts",
+      "beforeSha256": "dad28f3756284819f6e1bcc74f40fa664b1f0d7732dd59f57d5b1e7f7d374c85",
+      "afterSha256": "3b3e2c8eb3761f84a5da4b295c99f8df9480f2a20f1736773ab31fa3cea9be98",
+      "bytes": 11603,
+      "authorSealSha256": "f05d0e5d4369daa5e87ba992075c335526ac4a0501b5eafad851e5fb64bee22b"
+    },
+    {
+      "cohort": "react",
+      "path": "frontend/src/lib/operatorSession.ts",
+      "beforeSha256": "7d30d547d00efa1be91871f3e25667cf155666ef916cd053e17a3e22411e5df2",
+      "afterSha256": "5c246d1eea6d26d6fbfc26b469112e8fc77366ed9ca41a76834909a1ea7a3d36",
+      "bytes": 2273,
+      "authorSealSha256": "f05d0e5d4369daa5e87ba992075c335526ac4a0501b5eafad851e5fb64bee22b"
+    },
+    {
+      "cohort": "ps",
+      "path": "frontend/src/components/operator/InvioPSModal.tsx",
+      "beforeSha256": "2c901fed69fb40b6fd6227f04116650620729b804c48563081d378321a483a1b",
+      "afterSha256": "f2a240b080aeaf218a7d15200980a80131e2124646ce17f65e2dd21826c6ad06",
+      "bytes": 36003,
+      "authorSealSha256": "1c6d5a0fe5100fbd52521cd082078539803ee4016e5668481b55671a6d9476f5"
+    },
+    {
+      "cohort": "ps",
+      "path": "frontend/src/components/operator/__tests__/claude1PsFollowup.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "e61a4ce6de01648dc814c46f0738a45d625223328a5fd0cf42cad7deaaee94be",
+      "bytes": 3832,
+      "authorSealSha256": "1c6d5a0fe5100fbd52521cd082078539803ee4016e5668481b55671a6d9476f5"
+    },
+    {
+      "cohort": "ps",
+      "path": "frontend/src/lib/__tests__/emergencyTransferContext.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "396a99ff51346a4675e02f9d50719008807445f8b0d52fa232f4671ac61c10ab",
+      "bytes": 9989,
+      "authorSealSha256": "1c6d5a0fe5100fbd52521cd082078539803ee4016e5668481b55671a6d9476f5"
+    },
+    {
+      "cohort": "ps",
+      "path": "frontend/src/lib/__tests__/invioPSPrintLayout.test.ts",
+      "beforeSha256": "2ea2c4d7923b03a27ec0ec9f4ddfa4947d621f0b1ffeea0d7ecddfcb50dddea6",
+      "afterSha256": "d152e08d52a25fa3710061eca3654d72db0f2ee25b6a78e3fd7ef1a848b062bc",
+      "bytes": 6627,
+      "authorSealSha256": "1c6d5a0fe5100fbd52521cd082078539803ee4016e5668481b55671a6d9476f5"
+    },
+    {
+      "cohort": "ps",
+      "path": "frontend/src/lib/emergencyTransferContext.ts",
+      "beforeSha256": "7610836dc4900de795db0792b960bd19b05cb4fa745ff24b1c346a5c842213bd",
+      "afterSha256": "f080e123e567d65167272165ebb7ed12a1e6e42f24749d344e4bc316dd22dcba",
+      "bytes": 14687,
+      "authorSealSha256": "1c6d5a0fe5100fbd52521cd082078539803ee4016e5668481b55671a6d9476f5"
+    },
+    {
+      "cohort": "backend",
+      "path": "backend/src/ai/upload/confirm-service.ts",
+      "beforeSha256": "e69dc9dc04af1f04abb4eb42ecb4ad0672dc00bbaf85d4d71a560ffb6b2ead98",
+      "afterSha256": "ecc894d42caafd754de8a548328063420dd7cf5537f05a6888cc82de48c0ff0d",
+      "bytes": 17350,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    },
+    {
+      "cohort": "backend",
+      "path": "backend/src/ai/voice/write-services.ts",
+      "beforeSha256": "2380d6a634c5253987d21bb440e6b141ffef4dfeb353a9d919874045fceca1cb",
+      "afterSha256": "e5134fc16dccd42c7104ded291e660e7a2267706930dc7e912111d4e48028da5",
+      "bytes": 6823,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    },
+    {
+      "cohort": "backend",
+      "path": "backend/src/assessments/access.ts",
+      "beforeSha256": "b3ec72db94b5766369c361c3343ea34f585383164299483a0d38eb54bc56d3a3",
+      "afterSha256": "711a9b7d8a4f5a0277bb214d4b273e5688795bfe6fcf25fd33cb6f3c268cb24d",
+      "bytes": 7617,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    },
+    {
+      "cohort": "backend",
+      "path": "backend/src/assessments/attestations.ts",
+      "beforeSha256": "0fadac61aa4d79a063bcfe9d98cba3f73b4c48ecfb812e1a7af6edc2cebbdd91",
+      "afterSha256": "57aa5c446e5d2937f4b35f3bbacc24faeb198c68f6441d8a6ef2fc3390ddcfe6",
+      "bytes": 7612,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    },
+    {
+      "cohort": "backend",
+      "path": "backend/src/assessments/history.ts",
+      "beforeSha256": "379759fc7179ebe8e38cae97d041cb3ee2a89b082005c2de33a243e1ee02e172",
+      "afterSha256": "78ae727de7155220ad79b86f56bef611cf869f4c1b2a9b8581b5e06328e2a569",
+      "bytes": 4815,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    },
+    {
+      "cohort": "backend",
+      "path": "backend/src/patients/__tests__/temporary-ps-followup.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "205db622497005fbf5fa054eb909d274d305dd1a3615ffb613a5c81697d1d585",
+      "bytes": 6166,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    },
+    {
+      "cohort": "backend",
+      "path": "backend/src/patients/parameters-update.ts",
+      "beforeSha256": "1f123f60b5d333bc76f4894d1a264204648e26165be1353e0dfb7af37f85c8b3",
+      "afterSha256": "cd1aa5b74d2001d47910502551bf1327948f2f41e929ba2d8b47027c638aca64",
+      "bytes": 6415,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    },
+    {
+      "cohort": "backend",
+      "path": "backend/src/patients/temporary-ps-exits.ts",
+      "beforeSha256": "53afc3bd2439f0642389070713e8cfac131e0c9d13e1e71ceee441fb66bb174c",
+      "afterSha256": "17baffa6335cd9c4c3cec7dd60fd6ec2081dd0705fd7d326a63deae26f567455",
+      "bytes": 12615,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    },
+    {
+      "cohort": "backend",
+      "path": "backend/src/patients/temporary-ps-query.ts",
+      "beforeSha256": null,
+      "afterSha256": "d03287a8a69f990b022f8403fc0edc3e08c8543ae515232cbabafc45f044853a",
+      "bytes": 1965,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    },
+    {
+      "cohort": "backend",
+      "path": "backend/src/routes/patients.ts",
+      "beforeSha256": "57b7707783af44c7ca2c039b29f07de33a50481c72ee40724820809bcc16a5f6",
+      "afterSha256": "20a23641e5191c6a83f44622447a6d36406c276fd1bc4dbcbc1d1cd7ff309edf",
+      "bytes": 42369,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    },
+    {
+      "cohort": "backend",
+      "path": "backend/src/routes/therapy.ts",
+      "beforeSha256": "3afd94a7554bcdd947c101205e9e607fa46e5ab53cf00fdd9ba73f0445b91750",
+      "afterSha256": "1e7b9706564f8c3ac22eed863f8c092e1ab24bfe53abb5d5fde9fcf2405684ed",
+      "bytes": 13140,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    },
+    {
+      "cohort": "backend",
+      "path": "backend/src/therapies/due-therapy-query.ts",
+      "beforeSha256": "348a137c72410ee48b96068285cc75e90b46c40dc8e9f5053bba8844fb870af9",
+      "afterSha256": "34313249b99faa1f4cfecaef2e521b0d9ba67ec5bb363d28b2e68706b049d21f",
+      "bytes": 11325,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    },
+    {
+      "cohort": "backend",
+      "path": "backend/src/therapies/therapy-slots.ts",
+      "beforeSha256": "7ff9223c0c1b972c9b20c9955f96f22fc7b0725991e006c2b64468ff0b517ad8",
+      "afterSha256": "28c6d4a73255d904e894e3db50cadb94e275db046e641af4d83fdb107b786bb7",
+      "bytes": 26564,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    },
+    {
+      "cohort": "backend",
+      "path": "backend/src/tools/errors.ts",
+      "beforeSha256": "ecbcabbd9cab5cf97fe348ced0a6fc7876326afe5ad77c1d0d6af646e0d6b3e1",
+      "afterSha256": "70ae3abbbb7fecbf6b8938c62157f85eda847d4d21a4e8dbafc505e8d2dcc8a6",
+      "bytes": 4505,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    },
+    {
+      "cohort": "backend",
+      "path": "scripts/e2e/qa497-Claude1-concurrency.mjs",
+      "beforeSha256": null,
+      "afterSha256": "4f597d2c9981d4778555bcf0c8f8db13614a79dc008e54733ba1c7394a750383",
+      "bytes": 14439,
+      "authorSealSha256": "1d86672f12d5eac6b765b3c392190d10c11b057941ce5c70ff087082db0c4555"
+    }
+  ],
+  "total": 45,
+  "independentIntegrationQa": "UNRUN",
+  "providerDeployment": "UNRUN",
+  "rootSolePublisher": true,
+  "remoteClinicalBranchUnchanged": true
+}

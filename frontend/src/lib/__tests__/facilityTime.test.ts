@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import {
   FACILITY_TIME_ZONE,
   facilityLocalMinute,
+  facilityLocalDate,
   formatFacilityLocalMinute,
 } from '../facilityTime.js';
 
@@ -33,4 +34,31 @@ test('diary display treats canonical values as facility wall-clock rather than b
   assert.equal(formatFacilityLocalMinute('2026-08-30T09:15:00Z'), '30/08/2026 11:15');
   assert.equal(formatFacilityLocalMinute(''), '—');
   assert.throws(() => formatFacilityLocalMinute('not-a-date'), /Data non valida/);
+});
+
+
+test('clinical day boundaries include facility midnight, year rollover and both DST transitions', () => {
+  const cases = [
+    ['2026-10-18T22:30:00Z', '2026-10-19', '00:30'],
+    ['2026-12-31T23:30:00Z', '2027-01-01', '00:30'],
+    ['2026-06-30T22:15:00Z', '2026-07-01', '00:15'],
+    ['2026-03-29T00:30:00Z', '2026-03-29', '01:30'],
+    ['2026-03-29T01:30:00Z', '2026-03-29', '03:30'],
+    ['2026-10-25T00:30:00Z', '2026-10-25', '02:30'],
+    ['2026-10-25T01:30:00Z', '2026-10-25', '02:30'],
+  ];
+  const previous = process.env.TZ;
+  try {
+    for (const deviceZone of ['UTC', 'America/Los_Angeles', 'Asia/Tokyo']) {
+      process.env.TZ = deviceZone;
+      for (const [instant, day, time] of cases) {
+        const date = new Date(instant);
+        assert.equal(facilityLocalDate(date), day, `${deviceZone}: ${instant}`);
+        assert.equal(facilityLocalMinute(date), `${day}T${time}`);
+      }
+    }
+  } finally {
+    if (previous === undefined) delete process.env.TZ;
+    else process.env.TZ = previous;
+  }
 });

@@ -1,0 +1,101 @@
+{
+  "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "targetPatientId": "cmvipz4zm00011gp67bygcqh9",
+  "status": "PASS",
+  "actualSource503": true,
+  "injected": 2,
+  "failedContextManualWarning": true,
+  "printEnabled": true,
+  "all12000CharactersRetained": true,
+  "actualPrintCall": 1,
+  "actualPdfGenerated": true,
+  "authorizedExact2000Actionable": true,
+  "authorized2001Blocked": true,
+  "authorized12000Blocked": true,
+  "explicitDecisionAndConfirmation": true,
+  "clinicalBefore": {
+    "patient": {
+      "id": "cmvipz4zm00011gp67bygcqh9",
+      "medicalRecordNumber": "QA13-negative-6d0c55e3-f930-45e9-aadd-b4b731637afb",
+      "firstName": "Synthetic",
+      "lastName": "QA Route486",
+      "dateOfBirth": "1970-01-01T00:00:00.000Z",
+      "sex": null,
+      "codiceFiscale": null,
+      "email": null,
+      "phone": null,
+      "address": null,
+      "emergencyContactName": null,
+      "emergencyContactPhone": null,
+      "registeredById": "SIM-NURSE-1",
+      "createdAt": "2026-10-21T23:04:43.522Z",
+      "updatedAt": "2026-10-21T23:04:43.522Z"
+    },
+    "cartella": {
+      "id": "cmvipz4zq00021gp6a9xsn4aq",
+      "patientId": "cmvipz4zm00011gp67bygcqh9",
+      "data": {
+        "allergie": [],
+        "anamnesi": {},
+        "diagnosi": [],
+        "liberatoria": {
+          "usciteLog": []
+        },
+        "statoRicovero": "ricoverato",
+        "allergieStatus": "assenti",
+        "parametriVitali": [],
+        "indicatoriRischio": []
+      },
+      "createdAt": "2026-10-21T23:04:43.522Z",
+      "updatedAt": "2026-10-21T23:04:43.522Z"
+    },
+    "therapies": 0,
+    "administrations": 0,
+    "readings": 0,
+    "diary": 0
+  },
+  "clinicalAfter": {
+    "patient": {
+      "id": "cmvipz4zm00011gp67bygcqh9",
+      "medicalRecordNumber": "QA13-negative-6d0c55e3-f930-45e9-aadd-b4b731637afb",
+      "firstName": "Synthetic",
+      "lastName": "QA Route486",
+      "dateOfBirth": "1970-01-01T00:00:00.000Z",
+      "sex": null,
+      "codiceFiscale": null,
+      "email": null,
+      "phone": null,
+      "address": null,
+      "emergencyContactName": null,
+      "emergencyContactPhone": null,
+      "registeredById": "SIM-NURSE-1",
+      "createdAt": "2026-10-21T23:04:43.522Z",
+      "updatedAt": "2026-10-21T23:04:43.522Z"
+    },
+    "cartella": {
+      "id": "cmvipz4zq00021gp6a9xsn4aq",
+      "patientId": "cmvipz4zm00011gp67bygcqh9",
+      "data": {
+        "allergie": [],
+        "anamnesi": {},
+        "diagnosi": [],
+        "liberatoria": {
+          "usciteLog": []
+        },
+        "statoRicovero": "ricoverato",
+        "allergieStatus": "assenti",
+        "parametriVitali": [],
+        "indicatoriRischio": []
+      },
+      "createdAt": "2026-10-21T23:04:43.522Z",
+      "updatedAt": "2026-10-21T23:04:43.522Z"
+    },
+    "therapies": 0,
+    "administrations": 0,
+    "readings": 0,
+    "diary": 0
+  },
+  "zeroClinicalMutations": true,
+  "mutationRequests": [],
+  "errors": []
+}

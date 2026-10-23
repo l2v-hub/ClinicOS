@@ -1,0 +1,17 @@
+✔ scale form hides fixed quantity, keeps exact schedule and renders prescription preview (34.024503ms)
+✔ saved scale round trips independently of commercial strength and weekday settings (2.539554ms)
+✔ glucose administration requires measurement and never posts a selected dose (2.050308ms)
+✔ modern round renders glucose control for writable scale dose and none for read-only (7.552666ms)
+✔ pump scale: editor labels follow the unit and administration shows rate plus extra doses (10.785852ms)
+✔ quick schedules preserve explicit fractional dose and equal manual payload (4.568479ms)
+✔ inclusive civil duration handles DST, leap/month/year boundaries and invalid dates (0.925493ms)
+✔ sentence renders the actual payload schedule dose unit route and dates (1.55029ms)
+✔ structured single ingredient strength is prefilled, ambiguous packages stay unconfirmed (4.431973ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 909.703048

@@ -1,0 +1,106 @@
+.admin-attention {
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  background: var(--surface, white);
+  padding: 16px;
+}
+.admin-attention__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+.admin-attention__heading h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+.admin-attention__heading p,
+.admin-attention__content p {
+  margin: 4px 0;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+.admin-attention__list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+.admin-attention__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--divider);
+  padding: 12px 0 12px 12px;
+  border-left: 3px solid var(--amber);
+}
+.admin-attention__row--critical {
+  border-left-color: var(--red);
+}
+.admin-attention__row--scheduled {
+  border-left-color: var(--blue);
+}
+.admin-attention__content {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.admin-attention__content h3 {
+  font-size: 0.95rem;
+  margin: 0;
+  font-weight: 500;
+}
+.admin-attention__row button {
+  flex-shrink: 0;
+}
+.admin-attention__status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin: 8px 0;
+  font-size: 0.875rem;
+}
+.admin-ward-summary {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+}
+.admin-ward-summary h2 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+.admin-ward-summary__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+}
+.admin-ward-summary__list li {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+.admin-ward-summary__occupancy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--divider);
+}
+@media (max-width: 600px) {
+  .admin-attention {
+    padding: 12px;
+  }
+  .admin-attention__row {
+    flex-wrap: wrap;
+  }
+  .admin-attention__row button {
+    min-height: 44px;
+  }
+}

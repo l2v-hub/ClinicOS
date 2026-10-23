@@ -1,0 +1,22 @@
+{
+  "sourceSha": "2d59ae6917e5a35d18127e1337c2b1f8f1131ced",
+  "baseSha": "1bcc12ffb31d47a46e9113a7e54c6f72fb846191",
+  "actualEarlierE2eSource": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "testOnlyFiles": {
+    "frontend/src/components/operator/__tests__/operationalLists452.test.ts": {
+      "sha256": "0ddacd5f194e1e9e3ba3e3d8a21ea12acb6a8cc16f3c369f6d407a5bc4b7b057",
+      "bytes": 10174,
+      "blob": "551f103217e73931dd643f4207f224b215c3acfb"
+    },
+    "frontend/src/lib/__tests__/therapyPages.test.ts": {
+      "sha256": "656150a3a348777f0def67a581283d79716fc927d4795d243404135b152f9af5",
+      "bytes": 10520,
+      "blob": "24be425e1c45f958db7b130f24101623ce845ed0"
+    }
+  },
+  "allOtherTrackedNonArtifactFilesByteIdenticalToEarlierE2eSource": true,
+  "earlierEightE2eReusedWithOriginalSourceAttribution": true,
+  "freshE2eOnTestOnlyCommit": false,
+  "authorSealSha256": "ba99dc224a45c0e215426a238ca5f10631fac11095c8f815744ffcf73d945121",
+  "independentQaSealSha256": "e111db87802b2dbbecacfe49eac5cb1c646c81be5247bdb489eaec5577acadb5"
+}

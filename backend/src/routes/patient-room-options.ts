@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { requireOperator } from '../ai/auth.js';
 import { prisma } from '../lib/prisma.js';
+import { facilityDate } from '../lib/facility-time.js';
 import { requirePatientScope } from '../patients/access.js';
 import { toPatientRoomOptions } from './patient-room-option-model.js';
 
@@ -12,7 +13,7 @@ router.use((_req, res, next) => {
 });
 router.use(requireOperator);
 
-function activeAssignmentFilter(from = new Date().toISOString().slice(0, 10)) {
+function activeAssignmentFilter(from = facilityDate()) {
   return {
     startDate: { lte: from },
     OR: [{ endDate: null }, { endDate: { gte: from } }],

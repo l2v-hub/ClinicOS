@@ -1,0 +1,265 @@
+{
+  "allPublishedApplicationMediaFreshFromSingleQa4Run": true,
+  "files": {
+    "evidence/discovery-status.json": {
+      "sha256": "967016c189fbbbd5b6dce034d5dbf3d8e4a5bf57126c4d9c465d5013165c34dc",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-447-role-negative-trace-privacy.json": {
+      "sha256": "7a4b422a44e84a35953660727ecdad8d81d09e897a8ff3cc5a72f100b88db7a8",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-447-role-negative-trace.zip": {
+      "sha256": "c6fc5247c778731b041f21ff3e398c1125a265640d447285ba3703a2c42a2532",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-447-role-negative.png": {
+      "sha256": "216565ff484a012a0ef9077d4850cd1683c4af087fcaf2cc8fbe1bc0328e2c08",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-447-role-negative.webm": {
+      "sha256": "42bdabb5fb445d940ce44c4931e715b7927fe7821b0fa70aa8222c490caa9782",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-447-trace-privacy.json": {
+      "sha256": "30d927f6fc4c468bdd9d56104eed4d2123bcb7acfe0cd3013789df0084badf6b",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-447-trace.zip": {
+      "sha256": "b5948917cc6f9d7dd4673dcafeb980ab6951126129514bdb1e4bb15c06350bca",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-447.png": {
+      "sha256": "fdee99f8ba941548dd71c06f4d9bc85483aef680511612a84dcfa2b4bec841b6",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-447.webm": {
+      "sha256": "e9ba02753f38dbee66a8b2e88dcb682bfe3517dbbf6d57c14b727afc701c4e68",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-451-touch-trace-privacy.json": {
+      "sha256": "c23a9ab598cda3380bdfe6ea0cb8b204939e4f69e58f2f9da77a8013c45f4000",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-451-touch-trace.zip": {
+      "sha256": "fa82308ab59330886529eb07dbbb124d552d18719f553f178d80b4862cdb4065",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-451-touch.png": {
+      "sha256": "34d4dc721394e911a98d7e6b3b24903ef574cf570ac15126c1d636a820408d91",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-451-touch.webm": {
+      "sha256": "4fa162419770ae1465cb523ea69eb40d19b76613eb8a2a8a74fcf8861924b43d",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-451-trace-privacy.json": {
+      "sha256": "8eadd14211b4ef0a07fe8b8083e9dd307c90949f8313ecc3ef4c14d3105aa407",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-451-trace.zip": {
+      "sha256": "f849a23230d87938e367376138bba40b26eff9ed6829cc2ab4c730c61de4fd80",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-451.png": {
+      "sha256": "cd5e67a54145520e339affc82d266291f210c0eac470ff6f4dd3030339f8dd4c",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-451.webm": {
+      "sha256": "1af9c881a5191aeed708a3229b6a7e743e5d976a47ebce567f384892d2812ad1",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-452-empty-agenda-pending.png": {
+      "sha256": "1dd1c0c7158b0c7943f533b11ab2983fdad7775a5c36bf28085819455218a72d",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-452-news2-partial-failure.png": {
+      "sha256": "0c6a8929586a02b2e177f6272285658b3123b97f287482798c7b06212a9bd288",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-452-trace-privacy.json": {
+      "sha256": "3943702f4f37891ddf32b8964bfe126679148038367ce2e369e344fda05412b9",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-452-trace.zip": {
+      "sha256": "a33560c9c4327f5508b4e45445a7d91f8f5788adc52d35aa44c96de6e2c5d048",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-452.png": {
+      "sha256": "640f260c6bb8f1d18d1917ed7b3a6e047de7e6a4632e1458b9bc0d62af569bc0",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-452.webm": {
+      "sha256": "fd5259cf8a3f9c3687fd60da5dc1fa80ef327a9bc80d8a065162106009d399fd",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-453-fresh-allergy-warning.png": {
+      "sha256": "e516ce9be3677a2c26a6070fd7a8f422f4a88c619824721c6e5321b9def9ec3a",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-453-trace-privacy.json": {
+      "sha256": "179612a9553a7307842532aa541abf03c4d2071518df93508102d0560aec245c",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-453-trace.zip": {
+      "sha256": "5a37ddc65ee452fe5f37be648bc650b4af71bd57382f5d4fc3b91e87b80a0d60",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-453.png": {
+      "sha256": "0df735addfa42d193f1fcb23b16b0d77619246aa5fb68eadf4ba6102d7296047",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-453.webm": {
+      "sha256": "483e51d1b6abba0ea4f9b9dff6d063f865ca945d76bb17b40e08c2b87f929719",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-454-trace-privacy.json": {
+      "sha256": "a687dfe103f3907e0aedbdefa3ad482dca5d621aa2be2e6d229b5be9feb9634d",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-454-trace.zip": {
+      "sha256": "f3f809eae2c70ec509ab380b641315e928f606f5317b8db1938a2f95a1b921e5",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-454.png": {
+      "sha256": "be8a8eaaf071891e4bb0c17cb6c43f15482a6d364a22f213c53aef1530073d81",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-454.webm": {
+      "sha256": "5b98f201fff39b5acc6f7169920c61e6586f46a688a0b67976aaf5bfd54e937a",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-456-trace-privacy.json": {
+      "sha256": "8f75ccbe5eefbded6711eda87fdbfb5358ffd25eaef74785e61419ad0b98879f",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-456-trace.zip": {
+      "sha256": "32049764dcb8a7ed9b89c3822307e028a00ddc5fbd474829c53d0b58da885e4f",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-456.png": {
+      "sha256": "ef8f85bed00b5eccc4446c5b7c770e2cbf0b0ce906fe6fd7888885146ef7742f",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-456.webm": {
+      "sha256": "89f94cee46c22d669ad40c99216e7e79006af24063b3a64b607bb33a8dd45e8a",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-457-paused.png": {
+      "sha256": "7fa25d63bab5e5eecbb0155042b487b130b33c07ee5ee449948847bec522f4f1",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-457-print.pdf": {
+      "sha256": "9802ebe5a774d2d63bf0c3a24dea8ce29bb03d7f0d4abe3234b074404d8585aa",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-457-trace-privacy.json": {
+      "sha256": "a53a3143814e0d6bd1384161ccc21814036d2233063ec47d6adda695b966f86e",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-457-trace.zip": {
+      "sha256": "e409691fa96b0784080c136ded4d9e5622054243019d23f32f457a928fac9868",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-457.png": {
+      "sha256": "7f1d50576e056b07cd8fb8b91ee71bc9f331a3f3af6cd70533c1224f5f279252",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/issue-457.webm": {
+      "sha256": "4dcfc656d9180e5797e7bfaf1b95c320020bbb310f0980a8716fdaf77401c4d7",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "evidence/results.json": {
+      "sha256": "4054d0292ef0c4fedfb05d47b2ab6c9dc3cd164dec1432c7fda23d49ca81b503",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "test-results/backend.local.log": {
+      "sha256": "403c0ce435a1e2d921a5afb6587e6c6f31d37590306c02edf8f1c14c3a442e5d",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "test-results/browser-native-clear-scope.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "test-results/database-provenance.json": {
+      "sha256": "f68bc86f31a5f387b4ef9cdf915cebed0a159aebced77c2bab846f4c85a2fbb5",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "test-results/frontend.local.log": {
+      "sha256": "37d8dd34cbf0eaa665b8d77ad966cfb2bb29be2a5890b23ab856fd9a7a3290a2",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "test-results/native-adapter-failure.json": {
+      "sha256": "33fe1d189a1ec72a2598f57e0626f59c652587ba15faf9756982aebb93e6573a",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": false
+    },
+    "test-results/native-adapter-result.json": {
+      "sha256": "13213151da7afa50b7aba700994ae2918d17c050134a2f4289012e9d916427ce",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "test-results/postgres-native-emulator.log": {
+      "sha256": "a3839f2c8146abd9f25789691cf216b8109ab8d1554e7b9a029f460c354119fe",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "test-results/stack-result.json": {
+      "sha256": "0ac3ab8033a516f72c88b69878145d8d2d1b37c2f82f8a5d060f3238f824208a",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    },
+    "test-results/temporary-ps-database-tests.txt": {
+      "sha256": "aacf946ca5e400a10b54830b4a5b3e13dddb19fb6219132bc6fd37a211dab223",
+      "matchesCurrentCanonical": true,
+      "changedSinceQa3": true
+    }
+  }
+}

@@ -56,13 +56,14 @@ test('AC2: le nuove route stanno dietro lo stesso gate del diario', async () => 
   assert.ok(source.indexOf("'/:patientId/diary/with-therapy'") > gate);
 });
 
-test('AC2: la creazione valida tutto prima di toccare il database', async () => {
-  // Composition moved verbatim from the route to the shared write service (Tool Layer phase 1).
+test('AC2: la creazione valida prima di risolvere autore e chiamare il servizio transazionale', async () => {
+  // Route-less input may only reach the exact-replay lookup; strict create validation remains in
+  // the shared helper when no already-persisted same-patient pair exists.
   const source = await readFile(writeServiceUrl, 'utf8');
   const block = source.split('export async function createPatientDiaryEntryWithTherapy(')[1] ?? '';
   const route = (await readFile(routeUrl, 'utf8')).split("'/:patientId/diary/with-therapy'")[1];
   assert.match(route ?? '', /createPatientDiaryEntryWithTherapy\(patientId, req\.body/);
-  const validation = block.indexOf('prepareDiaryTherapyInput(');
+  const validation = block.indexOf('prepareDiaryTherapyReplayInput(');
   assert.ok(validation > 0);
   assert.ok(block.indexOf('parseDiaryCreateBody(body.entry)') < validation);
   assert.ok(validation < block.indexOf('authoritativeDiaryAuthor(actor)'));
@@ -89,7 +90,12 @@ test('AC2: terapia non valida → errore di validazione, senza database', () => 
   assert.throws(
     () =>
       service.prepareDiaryTherapyInput(
-        { farmacoNome: 'Ramipril', dataInizio: '2026-09-30', schedules: [{ time: '25:00' }] },
+        {
+          farmacoNome: 'Ramipril',
+          dataInizio: '2026-09-30',
+          viaSomministrazione: 'orale',
+          schedules: [{ time: '25:00' }],
+        },
         'op',
       ),
     /HH:MM/,
@@ -101,6 +107,7 @@ test('distinct same-band times are accepted without losing schedules', () => {
     {
       farmacoNome: 'Ramipril',
       dataInizio: '2026-09-30',
+      viaSomministrazione: 'orale',
       schedules: [
         {
           time: '08:00',
@@ -129,6 +136,7 @@ test('AC2: operatoreInseritore è sempre quello del server', () => {
     {
       farmacoNome: 'Ramipril',
       dataInizio: '2026-09-30',
+      viaSomministrazione: 'orale',
       operatoreInseritore: 'Falso',
       schedules: [
         {
@@ -184,7 +192,11 @@ test('Audit: solo nomi di campi, mai valori né chiavi arbitrarie', () => {
 // ── Correzioni QA: mai inventare ────────────────────────────────────────────────────────────
 
 const unit = { quantityNumerator: 1, quantityDenominator: 1, administrationUnit: 'compressa' };
-const baseTherapy = { farmacoNome: 'Ramipril', dataInizio: '2026-09-30' };
+const baseTherapy = {
+  farmacoNome: 'Ramipril',
+  dataInizio: '2026-09-30',
+  viaSomministrazione: 'orale',
+};
 const codeOf = (fn: () => unknown): string | undefined => {
   try {
     fn();
@@ -206,6 +218,65 @@ test('schedule_required: nessun orario né fascia esplicita → 400, mai la matt
   assert.equal(
     codeOf(() => service.prepareDiaryTherapyInput({ ...baseTherapy, fasceMattina: false }, 'op')),
     'schedule_required',
+  );
+});
+
+test('via_required: a new diary therapy never gets an implicit oral route', () => {
+  const { viaSomministrazione: _route, ...withoutRoute } = baseTherapy;
+  assert.throws(
+    () => service.prepareDiaryTherapyInput(withoutRoute, 'op'),
+    /Indica la via di somministrazione/,
+  );
+  assert.throws(
+    () =>
+      service.prepareDiaryTherapyInput({ ...baseTherapy, viaSomministrazione: '  ' }, 'op'),
+    /Indica la via di somministrazione/,
+  );
+});
+
+test('replay-only preparation retains a missing legacy route without weakening new-create validation', () => {
+  const { viaSomministrazione: _route, ...legacyInput } = baseTherapy;
+  for (const route of [undefined, null, '']) {
+    const replayInput = service.prepareDiaryTherapyReplayInput(
+      { ...legacyInput, viaSomministrazione: route, schedules: [{ ...unit, time: '08:00' }] },
+      'op',
+    );
+    assert.equal(replayInput.viaSomministrazione, undefined);
+  }
+  assert.throws(
+    () =>
+      service.prepareDiaryTherapyInput(
+        { ...legacyInput, schedules: [{ ...unit, time: '08:00' }] },
+        'op',
+      ),
+    /Indica la via di somministrazione/,
+  );
+  assert.throws(
+    () =>
+      service.prepareDiaryTherapyReplayInput(
+        { ...legacyInput, schedules: [{ ...unit, time: '25:00' }] },
+        'op',
+      ),
+    /HH:MM/,
+  );
+  for (const route of [123, {}, [], '  ', false, 0]) {
+    assert.throws(() =>
+      service.prepareDiaryTherapyReplayInput(
+        {
+          ...legacyInput,
+          viaSomministrazione: route,
+          schedules: [{ ...unit, time: '08:00' }],
+        },
+        'op',
+      ),
+    );
+  }
+  assert.equal(
+    service.prepareDiaryTherapyReplayInput(
+      { ...baseTherapy, viaSomministrazione: 'SC', schedules: [{ ...unit, time: '08:00' }] },
+      'op',
+    ).viaSomministrazione,
+    'SC',
   );
 });
 
@@ -401,7 +472,12 @@ test('schedule_required per tipo: periodica vuole orari, una_tantum data+ora, al
   }
   // Senza schedules: al bisogno e una tantum non ricevono la mattina di default.
   const prn = service.prepareDiaryTherapyInput(
-    { farmacoNome: 'Paracetamolo', dataInizio: '2026-09-30', tipo: 'al_bisogno' },
+    {
+      farmacoNome: 'Paracetamolo',
+      dataInizio: '2026-09-30',
+      viaSomministrazione: 'orale',
+      tipo: 'al_bisogno',
+    },
     'op',
   );
   assert.deepEqual(prn.schedules, []);
@@ -455,6 +531,28 @@ test('replay: stesso contenuto → uguale; contenuto o campi chiave diversi → 
     },
   } as never;
   assert.equal(service.replayMatches(saved, entry, therapy), true);
+  const { viaSomministrazione: _route, ...legacyRouteLessReplay } = therapy;
+  assert.equal(service.replayMatches(saved, entry, legacyRouteLessReplay), true);
+  for (const route of [null, '']) {
+    assert.equal(
+      service.replayMatches(
+        saved,
+        entry,
+        { ...legacyRouteLessReplay, viaSomministrazione: route } as never,
+      ),
+      true,
+    );
+  }
+  for (const route of [123, {}, [], '  ', false, 0]) {
+    assert.equal(
+      service.replayMatches(
+        saved,
+        entry,
+        { ...legacyRouteLessReplay, viaSomministrazione: route } as never,
+      ),
+      false,
+    );
+  }
   // Stessa normalizzazione del salvataggio: '' = null, tutti i giorni = null.
   assert.equal(
     service.replayMatches(saved, entry, { ...therapy, note: '', giorniSettimana: '1,2,3,4,5,6,7' }),

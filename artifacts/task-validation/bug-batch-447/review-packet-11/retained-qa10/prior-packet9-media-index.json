@@ -1,0 +1,114 @@
+[
+  {
+    "file": "evidence/media/milo-explicit-route-preview.png",
+    "bytes": 89903,
+    "sha256": "c0f4ee92e78136683f2c9f1d96c3a865fc63b121d29b7790e0ee47afd17dba49",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-2/output/milo-ui/milo-explicit-route-preview.png",
+    "qa5MediaIndexMatch": true
+  },
+  {
+    "file": "evidence/media/milo-missing-route-blocked.png",
+    "bytes": 98508,
+    "sha256": "0ccc476d065bf26544b7119fe1c321785ee13d84f51f66248f0d3cb0b152224a",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-2/output/milo-ui/milo-missing-route-blocked.png",
+    "qa5MediaIndexMatch": true
+  },
+  {
+    "file": "evidence/media/operator-agenda-route-reload.png",
+    "bytes": 157806,
+    "sha256": "00fe0935aa63b61f32c219300a6ce9ea0eb30aca89c519ef3f4bdb93c6abb34f",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-5/output/recorded-lifecycle/operator-positive/actual-route-reload.png",
+    "qa5MediaIndexMatch": true
+  },
+  {
+    "file": "evidence/media/admin-agenda-route-reload.png",
+    "bytes": 172221,
+    "sha256": "2934679c20c397d71e2f7fcda195f6bba31a88cc741eef13bace4be7bd9881fb",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-5/output/recorded-lifecycle/admin-positive/actual-route-reload.png",
+    "qa5MediaIndexMatch": true
+  },
+  {
+    "file": "evidence/media/operator-old-session-response-blocked.png",
+    "bytes": 157845,
+    "sha256": "8e9d2598dff2a24488339bb62e838ca4b2fb1e369a17208ab1174e81366a93b3",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-5/output/recorded-lifecycle/lifecycle-negatives/old-session-response-cannot-repopulate.png",
+    "qa5MediaIndexMatch": true
+  },
+  {
+    "file": "evidence/media/ward-week-real-pagination.png",
+    "bytes": 61498,
+    "sha256": "95b84df627a82b63bbfb881a3dc0f6f2349d214d8c25f4bbc71d6a51a065cc47",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-5/output/recorded-matrix/ward-week/ward-week-actual.png",
+    "qa5MediaIndexMatch": true
+  },
+  {
+    "file": "evidence/media/operator-lifecycle-flow.webm",
+    "bytes": 1070145,
+    "sha256": "1a5e9e15271ecf60ac36e3f403c628b2361854250db0573054ef66b832006e87",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-5/output/recorded-lifecycle/operator-positive/flow.webm",
+    "qa5MediaIndexMatch": true
+  },
+  {
+    "file": "evidence/media/milo-route-flow.webm",
+    "bytes": 1339977,
+    "sha256": "3d1a60ccdaa377cd93228a9970b8ca434ba48193aa82a324f90413f2b37e8cf4",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-2/output/milo-ui/video/page@a54b28c07da3f14932236dfa458b66c2.webm",
+    "qa5MediaIndexMatch": true
+  },
+  {
+    "file": "evidence/media/qa4-canonical-issue-447.png",
+    "bytes": 115649,
+    "sha256": "7bcf997bb0af3d010b25215188828544d565f5653c6262952bf266ae752c69c2",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-447.png",
+    "qa4CanonicalIssue": 447,
+    "screenshotVisuallyInspected": true
+  },
+  {
+    "file": "evidence/media/qa4-canonical-issue-451.png",
+    "bytes": 150661,
+    "sha256": "4b76b6adb2cbf22b36e14df93060bbc5e5271b853f64ddf1848a940930729afc",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-451.png",
+    "qa4CanonicalIssue": 451,
+    "screenshotVisuallyInspected": true
+  },
+  {
+    "file": "evidence/media/qa4-canonical-issue-452.png",
+    "bytes": 128760,
+    "sha256": "1cc37c6874c90b6061202933d1f42b13fb7e2f5654928cb96bd05e493b18971a",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-452.png",
+    "qa4CanonicalIssue": 452,
+    "screenshotVisuallyInspected": true
+  },
+  {
+    "file": "evidence/media/qa4-canonical-issue-453.png",
+    "bytes": 107967,
+    "sha256": "0aee9c68c433d8e9429074ce9fbd190abc430529524b9396c980783aca52a557",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-453.png",
+    "qa4CanonicalIssue": 453,
+    "screenshotVisuallyInspected": true
+  },
+  {
+    "file": "evidence/media/qa4-canonical-issue-454.png",
+    "bytes": 108231,
+    "sha256": "c5f66b3acd21a22f2d62868e8c951269d4fac18a0bff3dc9bf1cb6c36d004609",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-454.png",
+    "qa4CanonicalIssue": 454,
+    "screenshotVisuallyInspected": true
+  },
+  {
+    "file": "evidence/media/qa4-canonical-issue-456.png",
+    "bytes": 157594,
+    "sha256": "22d1ddd5d4dcbee91933a7d3d1f9172be8e03bce59540f6a7ad900eca676f5e3",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-456.png",
+    "qa4CanonicalIssue": 456,
+    "screenshotVisuallyInspected": true
+  },
+  {
+    "file": "evidence/media/qa4-canonical-issue-457.png",
+    "bytes": 206296,
+    "sha256": "b597c41dcc969f08e4322d2d0a858560accc9115edadaa613f37d34651c624f2",
+    "originalSource": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-457.png",
+    "qa4CanonicalIssue": 457,
+    "screenshotVisuallyInspected": true
+  }
+]

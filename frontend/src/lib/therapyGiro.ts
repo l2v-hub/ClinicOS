@@ -142,3 +142,33 @@ export function patientDrugTimes(
   }));
   return giroTimes(own);
 }
+
+/** Prefer a pending exact hour, then the current server band, then the first pending dose.
+ * Bands mirror the existing administration read model (05/11/14/18/22 boundaries).
+ * Selection changes presentation only; dose writes retain their authoritative server fascia.
+ */
+export function initialCurrentGiroTime(times: GiroTime[], nowTime: string): string | null {
+  const current = times.find((t) => t.ora.slice(0, 2) === nowTime.slice(0, 2) && t.pending > 0);
+  const match = /^(\d{2}):(\d{2})$/.exec(nowTime);
+  if (!match) return initialGiroTime(times);
+  const minutes = Number(match[1]) * 60 + Number(match[2]);
+  if (Number(match[1]) > 23 || Number(match[2]) > 59) return initialGiroTime(times);
+  const band =
+    minutes < 300 || minutes >= 1320
+      ? 'notte'
+      : minutes < 660
+        ? 'mattina'
+        : minutes < 840
+          ? 'pranzo'
+          : minutes < 1080
+            ? 'pomeriggio'
+            : 'sera';
+  const inBand = times.find(
+    (t) =>
+      t.pending > 0 &&
+      t.patients.some((patient) =>
+        patient.items.some((item) => item.a.status === 'pending' && item.fascia === band),
+      ),
+  );
+  return current?.ora ?? inBand?.ora ?? initialGiroTime(times);
+}

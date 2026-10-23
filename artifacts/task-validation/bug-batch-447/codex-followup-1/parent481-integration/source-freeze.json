@@ -1,0 +1,130 @@
+[
+  {
+    "path": "frontend/src/components/operator/PatientList.tsx",
+    "sha256": "ca765c4d94f04445ebf1639ea1fb96889562bcf70be06c9d4d5fd8c9db2836ef",
+    "gitBlob": "37d254bd3af862dae4ca604869f421447e47de76",
+    "inode": 673185,
+    "nlink": 1,
+    "matchesReviewedParent": false
+  },
+  {
+    "path": "frontend/src/components/shared/ConfirmDialog.tsx",
+    "sha256": "3d272bb960e1fd02348fac88340ef06a1795d31204c4220947c1c419f7313b6a",
+    "gitBlob": "7787feb34d0af5771ec3f6eaef6764c6bade1d5a",
+    "inode": 673455,
+    "nlink": 1,
+    "matchesReviewedParent": true
+  },
+  {
+    "path": "frontend/src/components/shared/DischargeImportModal.tsx",
+    "sha256": "d14adfd1e6100d11d403ee275dc665642b8a66909adbbc1c0eb35b35e2f03213",
+    "gitBlob": "1288b1564e6696b39008eceb8d9126828e268ec5",
+    "inode": 673464,
+    "nlink": 1,
+    "matchesReviewedParent": true
+  },
+  {
+    "path": "frontend/src/components/shared/import/ImportReviewWorkspace.tsx",
+    "sha256": "8984db556ba648086371042a07268bde011cf8a99cf8ccd87a3dcb15e36308f1",
+    "gitBlob": "c61833a7efa01d875cdc65f1256c3279b0e4ad7d",
+    "inode": 673544,
+    "nlink": 1,
+    "matchesReviewedParent": true
+  },
+  {
+    "path": "frontend/src/components/shared/intake/IntakeIndex.tsx",
+    "sha256": "f41693524c3a1968b273903360ffef2c584d40361a839a5c82f2d79a88b19008",
+    "gitBlob": "a925b2cfaa72f5e7b2293880347a5779321c4700",
+    "inode": 673570,
+    "nlink": 1,
+    "matchesReviewedParent": true
+  },
+  {
+    "path": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+    "sha256": "2b005f86cc7ba0bbd0ad7d8a3141206380b0483f3e013b709150d033b927e98e",
+    "gitBlob": "2bb8b657187479890f79404008bcefba27e658c6",
+    "inode": 673574,
+    "nlink": 1,
+    "matchesReviewedParent": true
+  },
+  {
+    "path": "frontend/src/components/shared/intake/StepAnagrafica.tsx",
+    "sha256": "b82d14fa0201a6459355df32fcf08db41379ebd55460a16baadab482705943cf",
+    "gitBlob": "0c7fc79e39046c6993336ab6a26904255299d960",
+    "inode": 673575,
+    "nlink": 1,
+    "matchesReviewedParent": true
+  },
+  {
+    "path": "frontend/src/components/shared/intake/__tests__/intakeMinimal450.test.ts",
+    "sha256": "ea8d34572533f1afb97f098979464fcc413f6951d11c8865a50773661d814510",
+    "gitBlob": "a017ff89c5ea50e9de277a9b33c7ee5b7913f838",
+    "inode": 675198,
+    "nlink": 1,
+    "matchesReviewedParent": true
+  },
+  {
+    "path": "frontend/src/components/shared/intake/__tests__/intakeSexReview.test.ts",
+    "sha256": "15f7e3f26a9e6c7f1e68ce0473bee8c33017af46106b19d984e7c542a3b68d84",
+    "gitBlob": "51120e9a9713cfeeaade728d6c20b6d6cea6ac76",
+    "inode": 713632,
+    "nlink": 1,
+    "matchesReviewedParent": true
+  },
+  {
+    "path": "frontend/src/components/shared/intake/intakeSexReview.ts",
+    "sha256": "63edc2080011c4e1f4175032d87df36a567f219c8146c57de1935c01a48dd347",
+    "gitBlob": "0175b52080dfe01038e002b7ae29f34980ee1766",
+    "inode": 713648,
+    "nlink": 1,
+    "matchesReviewedParent": true
+  },
+  {
+    "path": "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+    "sha256": "1db254de34924f5ce6e3c2644816e72f7c5720d7f9a7781dece50f7bb26c6827",
+    "gitBlob": "e63fba0429b628996a11e8d16b7bf03a46cd42de",
+    "inode": 673614,
+    "nlink": 1,
+    "matchesReviewedParent": true
+  },
+  {
+    "path": "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts",
+    "sha256": "70425b626a6a1b78dd10011836982f4452b548f41636cae2476e03fd7b7b112d",
+    "gitBlob": "593bde4e7e44b3351a9198ab0f339b877a8a1b33",
+    "inode": 673620,
+    "nlink": 1,
+    "matchesReviewedParent": true
+  },
+  {
+    "path": "frontend/src/lib/patientIncompleteSummary.test.ts",
+    "sha256": "e85c1b83899d51f102c87ef69e64c7fec726b2d34e626103d34fe5bce71f8dd5",
+    "gitBlob": "c59995eb8bc081cc0397336388b02de18a84c3d3",
+    "inode": 713649,
+    "nlink": 1,
+    "matchesReviewedParent": true
+  },
+  {
+    "path": "frontend/src/lib/patientIncompleteSummary.ts",
+    "sha256": "a2a4660619bbc712be7f4e508b62e2f22a8de55c26182114878cc0891bc6ebc4",
+    "gitBlob": "1460e776eb19cffed7c71764def32bbcdd2e25df",
+    "inode": 713650,
+    "nlink": 1,
+    "matchesReviewedParent": true
+  },
+  {
+    "path": "frontend/vercel.json",
+    "sha256": "b89dc0c3c647f9869a38a05cc18075eac041983f29d7d577473329ddea1e46c4",
+    "gitBlob": "4193ff6be6b050c5ce142507fbaed356fbdac010",
+    "inode": 673965,
+    "nlink": 1,
+    "matchesReviewedParent": true
+  },
+  {
+    "path": "scripts/e2e/issue-450-ingresso.mjs",
+    "sha256": "c889d4489d3fd7ae07d8a18595be7f0e52a60215d63ee1f3ad86030c30c97112",
+    "gitBlob": "c655ddb04215b4893f650a94040676eecaeb54e4",
+    "inode": 675200,
+    "nlink": 1,
+    "matchesReviewedParent": false
+  }
+]

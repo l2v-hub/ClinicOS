@@ -1,0 +1,1 @@
+Actual native-adapter attempt exited1 before browser startup: PostgreSQL client reported Connection terminated unexpectedly. No new browser evidence was produced. Owned container removal verified by docker inspect returning No such object. Subsequent correction requires TCP and actual SQL/version readiness; not an application acceptance pass.

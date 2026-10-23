@@ -1,0 +1,50 @@
+Issue 457: Issue 457: no unexpected console, page or HTTP errors
++ actual - expected
+
++ [
++   {
++     kind: 'http',
++     method: 'GET',
++     path: '/patients/cmvcb203i0005cop9pyfenjkl/intake-review',
++     status: 500
++   },
++   {
++     kind: 'console',
++     message: 'Failed to load resource: the server responded with a status of 500 (Internal Server Error
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: All seven approved acceptance scenarios must pass; inspect per-issue evidence and explicit residual gates.
+
+1 !== 0
+
+    at file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/qa-bug-batch-447-browser.mjs:2621:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Real browser acceptance failed
+
+1 !== 0
+
+    at file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/qa-bug-batch-447.mjs:287:12
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

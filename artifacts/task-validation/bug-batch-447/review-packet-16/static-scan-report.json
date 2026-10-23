@@ -1,0 +1,14 @@
+{
+  "status": "PASS_STATIC_CANDIDATE_SCAN",
+  "filesScanned": 51,
+  "credentialPatternMatches": {
+    "credentialed_uri": 0,
+    "bearer_value": 0,
+    "credential_assignment": 0,
+    "authorization_header_value": 0
+  },
+  "noCredentialLiteralMatches": true,
+  "rawPrivateTraceIncluded": false,
+  "ownedProcessOrEnvironmentSnapshotIncluded": false,
+  "historicalEightClaimedAsFresh": false
+}

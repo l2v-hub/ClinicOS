@@ -1,0 +1,99 @@
+{
+  "status": "PARTIAL",
+  "qaGate": "FAILED VALIDATION",
+  "sourceSha": "b5229d8e5af936e6757843ec201a95c6ed0e9a0d",
+  "allEightVerified": false,
+  "all15Verified": false,
+  "fullSuites": {
+    "frontend": {
+      "tests": 1509,
+      "pass": 1502,
+      "fail": 7,
+      "skip": 0
+    },
+    "backend": {
+      "tests": 1960,
+      "pass": 1951,
+      "fail": 4,
+      "skip": 5
+    }
+  },
+  "buildsTypes": {
+    "backendTsc": true,
+    "frontendTscBuild": true,
+    "frontendProductionBuild": true,
+    "backendPrismaGeneration": "not repeated; existing schema-identical generated client used; backend tsc executed"
+  },
+  "canonicalUx": {
+    "passScenarios": [
+      447,
+      451,
+      453,
+      454,
+      456,
+      457
+    ],
+    "452": "original required dosaggio fixture omission; focused retry reached hidden/out-of-viewport Giro control, no product failure proven",
+    "486": "PARTIAL; actual form/HTTP/shared/tool checks pass, intake/legacy/import/Milo harness failures remain"
+  },
+  "recordedOutcomes": {
+    "sqlSummary": "PASS9/4/4/1",
+    "pagination2": "PASS9 distinct exact summary",
+    "dueQuery": "PASS only unrecorded control, ACL intersection",
+    "deniedWrites": "PASS18 HTTP409; complete rows and receipt count unchanged",
+    "actualColdAppAgendaBothRoles": "PASS outcomes/operator/timestamp/reason checked with real pagination, screenshot before reload",
+    "fullRoleScenarios": "FAILED harness reload continuation synchronization; no finished all-role PASS",
+    "patientCalendarDayWeekReload": "PASS",
+    "dashboardReload": "PASS",
+    "giro": "UNVERIFIED; hidden controls selector",
+    "individualDrugDetails": "UNVERIFIED; wrong newly changed prescription-detail mount used by private harness",
+    "wardWeek": "UNVERIFIED; hidden controls selector"
+  },
+  "parent": {
+    "originalSevenBrowser": "UNRUN",
+    "F1Diagnostic": "actual explicit refusal->given correction/reload/replay one SQL row/receipt observed in attempt5; diagnostic identity qualification retained",
+    "actualAppAgenda": "operator cold/reload/day/week/month/return/real continuation/mobile phase passed; admin incomplete at Giro; fault/lifecycle phases UNRUN",
+    "backendNew483Regression": "PASS actual DB in full suite"
+  },
+  "integrity": {
+    "sourceSha": "b5229d8e5af936e6757843ec201a95c6ed0e9a0d",
+    "sourceFiles": 5803,
+    "oldProofFiles": 10885,
+    "sourceDelta": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "oldProofDelta": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "gitBlobsUnchanged": true,
+    "gitStatusUnchanged": true,
+    "headExact": true,
+    "unchanged": true
+  },
+  "cleanup": {
+    "ownedRuntimeProcesses": [],
+    "ownedContainers": [],
+    "reservedListenersReadback": "State Recv-Q Send-Q Local Address:Port Peer Address:Port\n",
+    "lockAvailable": true,
+    "baseline5432ContainerReadOnlyReadback": "9000f70d4ee95b9e3bde723796daa050081db4274d20c97888413479232949ad true",
+    "baselineNeverTargeted": true,
+    "automaticQueueControllerTerminated": true,
+    "queued7NeverLaunched": true,
+    "queued10CancelledBeforeRuntime": true,
+    "timestamp": "2026-10-18T23:33:15.721295+00:00",
+    "complete": true
+  },
+  "mediaIndex": "media-index.json",
+  "attemptLedger": "attempt-ledger.json",
+  "notApproved": [
+    "issue closure",
+    "PR approval",
+    "merge",
+    "deployment",
+    "all-eight or all15 clinical acceptance"
+  ]
+}

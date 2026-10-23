@@ -1,0 +1,7 @@
+{
+  "status": "passed",
+  "browser": "passed",
+  "databaseTests": "passed",
+  "syntheticOnly": true,
+  "databaseMode": "native-postgresql16"
+}

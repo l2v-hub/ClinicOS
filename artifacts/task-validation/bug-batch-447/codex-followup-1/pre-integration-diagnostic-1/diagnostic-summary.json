@@ -1,0 +1,74 @@
+{
+  "kind": "pre-integration-diagnostic-not-final-acceptance",
+  "sourceSha": "6835a47bf7b76783531ef712df5e9bbc0f8ce152",
+  "independentStopSha256": "8ea965fd33f1b35f3408ab7b2e4cc80b4712dfb98076c456987940d7e621e185",
+  "independentReportSha256": "5941820e452d2ec8aba0be22f75a32085f0b2b4f70834b463008eb9adee49af5",
+  "canonical": {
+    "pass": 1,
+    "fail": 6,
+    "executed": 7
+  },
+  "focusedPassed": 6,
+  "sourceFilesUnchanged": 5796,
+  "oldProofFilesUnchanged": 9909,
+  "cleanupVerified": true,
+  "parent483IntegratedAtExecution": false,
+  "actualAllEightFinalQa": false,
+  "media": [
+    {
+      "path": "screenshots/issue447-before-bed-fix.png",
+      "sha256": "b2f705e5c3e91d9dc1d49e5127a50e2fc5809d6d2c5870fe8d21bbe680451239",
+      "bytes": 115189,
+      "sourceRun": "run3",
+      "crc": "PASS",
+      "rootDecodedAndViewed": true,
+      "syntheticOnly": true
+    },
+    {
+      "path": "screenshots/issue451-preliminary-pass.png",
+      "sha256": "9e183317473b74884ecd15f27e0ffc2031519ea10524307f8dacd33fafb235e1",
+      "bytes": 152213,
+      "sourceRun": "run3",
+      "crc": "PASS",
+      "rootDecodedAndViewed": true,
+      "syntheticOnly": true
+    },
+    {
+      "path": "screenshots/issue454-before-day-fix.png",
+      "sha256": "31831e8f5b735c8cd939bd6bd1af366069559eaa2104e8d7cf2f29367e20d03c",
+      "bytes": 47767,
+      "sourceRun": "run3",
+      "crc": "PASS",
+      "rootDecodedAndViewed": true,
+      "syntheticOnly": true
+    },
+    {
+      "path": "screenshots/issue456-before-bed-fix.png",
+      "sha256": "5df358c34f0027bd649d1cc47f5a48e0aa2778e57ea4a1b3bea3cfb70a09ca6a",
+      "bytes": 146476,
+      "sourceRun": "run3",
+      "crc": "PASS",
+      "rootDecodedAndViewed": true,
+      "syntheticOnly": true
+    },
+    {
+      "path": "screenshots/issue453-positive-five-actions.png",
+      "sha256": "bc190741d7febb1c4d71beee3aa117f6c6713aa3f9ebd1e2f4e538a636aac711",
+      "bytes": 74946,
+      "sourceRun": "run6",
+      "crc": "PASS",
+      "rootDecodedAndViewed": true,
+      "syntheticOnly": true
+    },
+    {
+      "path": "screenshots/issue486-explicit-route-reloaded.png",
+      "sha256": "967f8187587e07f13401350d6f8b83b6d62dd42c35b8eb7f40069ecf8b41aaae",
+      "bytes": 68291,
+      "sourceRun": "run6",
+      "crc": "PASS",
+      "rootDecodedAndViewed": true,
+      "syntheticOnly": true
+    }
+  ],
+  "rawLogsOrTracesPublished": false
+}

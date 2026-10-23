@@ -1,0 +1,43 @@
+{
+  "kind": "append-only-root-cause-correction",
+  "sealedOriginalReportSha256": "3f40a6afb5d36ee753e2d8852cca3053606f2599657c7783a632d3941cc3cb5a",
+  "originalStopSha256": "bec50b2a516ddd620040cfb79a50a9cc16551b2d3253e74a4688ebd39501a750",
+  "actualTraceSha256": "594b6a19831bd6ba133b17c5100d79ba68e2faa74ad58bfac774f4af47d1dc43",
+  "sourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+  "actualProductFailureConfirmed": true,
+  "priorWrapperDiagnosisIncorrect": true,
+  "actualCause": "doseMode fixed from current classic mapper is absent from BINDABLE_THERAPY_KEYS; bindableTherapy returns null before correct flat draft matcher. No nested-preview unwrapping fix is justified.",
+  "evidence": [
+    {
+      "action": "message",
+      "responseErrorCode": null,
+      "directRowExists": true,
+      "nestedPreviewExists": false,
+      "actualTherapyKeys": [],
+      "doseMode": null
+    },
+    {
+      "action": "edit",
+      "responseErrorCode": "preview_mismatch",
+      "directRowExists": true,
+      "nestedPreviewExists": false,
+      "actualTherapyKeys": [
+        "farmacoNome",
+        "drugPackageRef",
+        "dataInizio",
+        "viaSomministrazione",
+        "tipo",
+        "stato",
+        "doseMode",
+        "commercialStrengthValue",
+        "commercialStrengthUnit",
+        "allowedFractions",
+        "schedules",
+        "giorniSettimana"
+      ],
+      "doseMode": "fixed"
+    }
+  ],
+  "allOriginalProofsUntouched": true,
+  "clinicalRerun": false
+}

@@ -73,9 +73,19 @@ test('therapy sections reuse the canonical contextual navigation', () => {
   assert.match(appStyles, /@media \(max-width: 768px\)[\s\S]*?\.tf-subtabs \.top-nav--level3/);
 });
 
-test('HMI 1 Panoramica: parameter and NEWS2 tiles from the real readings, then the diary', () => {
+test('447 Today uses actual dose actions, shared diary acknowledgement and real daily readings, retaining diary and module state', () => {
   assert.doesNotMatch(patientDetail, /className="cr-quick-stats"/);
-  assert.match(patientDetail, /<News2Chip\s+variant="overview"/);
+  assert.match(patientDetail, /<PatientToday[\s\S]*patientId=\{paziente\.id\}/);
+  const today = readFileSync(
+    new URL('../../components/operator/PatientToday.tsx', import.meta.url),
+    'utf8',
+  );
+  assert.match(today, /readPatientCalendarTherapies\(patientId/);
+  assert.match(today, /<PatientTherapySlotDetail/);
+  assert.match(today, /postDiaryAck\(patientId, row\.sourceId\)/);
+  assert.match(today, /postUrgencyAck\(/);
+  assert.match(today, /loadTodayReadings\(/);
+  assert.match(today, /todayReadings\(current\?\.readings/);
   // Il vecchio quadro operativo leggeva dati legacy (parametriVitali, farmaci) in contrasto con
   // tessere e terapia: non è più nella cartella.
   assert.doesNotMatch(patientDetail, /function renderRiepilogo/);

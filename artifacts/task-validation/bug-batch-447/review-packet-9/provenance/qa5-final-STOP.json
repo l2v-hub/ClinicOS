@@ -1,0 +1,21 @@
+{
+  "status": "STOP",
+  "at": "2026-10-21T17:21:34.570825+00:00",
+  "owner": "/root/uxqa5_20261021",
+  "sourceSha": "b76eb6baf5e87dcdb9b89a580ef48baf26e1bb7a",
+  "qaNonce": "1d18e822-6631-4608-bc52-a120aff2ccaf",
+  "grantNonce": "83def427-95c7-4769-b60f-7219ba571d02",
+  "ownedRuntimeStopped": true,
+  "portsFree": [
+    55432,
+    3447,
+    5447,
+    8432
+  ],
+  "flockFree": true,
+  "baseline5432Untouched": true,
+  "noQueuedJobs": true,
+  "resourceHandbackReady": true,
+  "report": "/workspace/.clinicos-cloud/ux447-independent-qa5-20261019/continuation-20261021-5/report.json",
+  "reportSha256": "741c8574063d97cb720adf80b07fec68c58ea259f3fd515afec11adf89bdf4e4"
+}

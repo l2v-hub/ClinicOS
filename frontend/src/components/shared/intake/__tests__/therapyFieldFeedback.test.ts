@@ -26,6 +26,7 @@ function completeForm(): TherapyFormValue {
   return {
     ...emptyTherapyForm(),
     farmacoNome: 'Farmaco sintetico',
+    viaSomministrazione: 'orale',
     dataInizio: '2026-09-23',
     commercialStrengthValue: '25',
     giorniSettimana: [1, 3, 5],
@@ -158,6 +159,7 @@ test('invalid drug, dates, route, strength, weekdays and each dose field have de
   };
   const markup = formMarkup(bad);
   const issues = therapyInputDiagnostics(therapyFormToInput(bad));
+  assert.equal(issues.filter((issue) => issue.field === 'viaSomministrazione').length, 1);
   const ids = issues.map(({ field, scheduleIndex }) =>
     assertInlineError(markup, field, scheduleIndex),
   );

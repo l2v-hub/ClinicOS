@@ -1,0 +1,119 @@
+{
+  "reservationNonce": "24b7e936-6966-4715-af31-bc591ffabd45",
+  "baseSha": "84402577c0ae313e57dcdb22c1a8102ae16d6b46",
+  "sourceBefore": {
+    "role": "source",
+    "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/import-happy-path.mjs",
+    "bytes": 15489,
+    "sha256": "86e3e82fa191799bf2a95a1c2e8de320b226bddb247a16cd3141becb41f6c23c",
+    "inode": 672946,
+    "device": 27,
+    "links": 1,
+    "mode": "0o600"
+  },
+  "sourceAfter": {
+    "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/import-happy-path.mjs",
+    "bytes": 16886,
+    "sha256": "f728aa6066a3b4d4c984e3023eb405981cb0b7a3cf42c8d87a9de118881292b5",
+    "inode": 672946,
+    "device": 27,
+    "links": 1,
+    "mode": "0o600"
+  },
+  "protectedEvidence": [
+    {
+      "role": "contract",
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/artifacts/task-validation/bug-batch-447/codex-followup-6/task-contract.md",
+      "bytes": 4027,
+      "sha256": "a2cd89ab805c0677f16f6797007ad1c3f157b913f3f96ade2eae3242eb6bb43f",
+      "inode": 917594,
+      "device": 27,
+      "links": 1,
+      "mode": "0o600",
+      "postEditUnchanged": true
+    },
+    {
+      "role": "packet9-contract",
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/artifacts/task-validation/bug-batch-447/review-packet-9/contract.md",
+      "bytes": 4263,
+      "sha256": "c2bfa9e1cfc58d95a44bdc2472753aae01a39274482235e82ad769ded1584cce",
+      "inode": 917577,
+      "device": 27,
+      "links": 1,
+      "mode": "0o600",
+      "postEditUnchanged": true
+    },
+    {
+      "role": "qa4-sealed-report",
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/artifacts/task-validation/bug-batch-447/review-packet-9/provenance/qa4-final-review-report.json",
+      "bytes": 6790,
+      "sha256": "8264196c688d077a5cf885c4944d55ea08b9a6f709e9c8cda3cd678b756dc130",
+      "inode": 917587,
+      "device": 27,
+      "links": 1,
+      "mode": "0o600",
+      "postEditUnchanged": true
+    },
+    {
+      "role": "qa4-final-seal",
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/artifacts/task-validation/bug-batch-447/independent-qa-attempt-4/final-seal.json",
+      "bytes": 27671,
+      "sha256": "5a083758b79971988f026575aa164b8e2e52e3db3a014ba122cda39092be6818",
+      "inode": 845933,
+      "device": 27,
+      "links": 1,
+      "mode": "0o600",
+      "postEditUnchanged": true
+    },
+    {
+      "role": "qa5-sealed-report",
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/artifacts/task-validation/bug-batch-447/review-packet-9/provenance/qa5-final-report.json",
+      "bytes": 6349,
+      "sha256": "741c8574063d97cb720adf80b07fec68c58ea259f3fd515afec11adf89bdf4e4",
+      "inode": 917585,
+      "device": 27,
+      "links": 1,
+      "mode": "0o600",
+      "postEditUnchanged": true
+    },
+    {
+      "role": "qa5-sealed-stop",
+      "path": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/artifacts/task-validation/bug-batch-447/review-packet-9/provenance/qa5-final-STOP.json",
+      "bytes": 668,
+      "sha256": "91c1406115f709e0d8ff9bbfcb60793c1e310298a663da259067cb87035dddc0",
+      "inode": 917586,
+      "device": 27,
+      "links": 1,
+      "mode": "0o600",
+      "postEditUnchanged": true
+    },
+    {
+      "role": "native-failure-log",
+      "path": "/workspace/.clinicos-cloud/codex-after-claude-20261018/497-browser-native-39645185680-failure-private.log",
+      "bytes": 4075,
+      "sha256": "a0d66f2ffa247e3e2cb6f4a96fe3c6565184120aeea28329db7bb4663e2ccbd3",
+      "inode": 410491,
+      "device": 27,
+      "links": 1,
+      "mode": "0o600",
+      "postEditUnchanged": true
+    }
+  ],
+  "nativeRun": {
+    "runId": "39645185680",
+    "jobId": "119386669520",
+    "privateLog": "/workspace/.clinicos-cloud/codex-after-claude-20261018/497-browser-native-39645185680-failure-private.log",
+    "sha256": "a0d66f2ffa247e3e2cb6f4a96fe3c6565184120aeea28329db7bb4663e2ccbd3",
+    "preserved": true
+  },
+  "unitTestInput": {
+    "path": "/workspace/clinicos-review-handoff/agent-team/tests/unit/e2e-import-journey.test.mjs",
+    "bytes": 4082,
+    "sha256": "47daffeedb2b9a29938f08e83cf4fe52f61da69ecf2ca98419a961dd82a72441",
+    "inode": 574362,
+    "device": 27,
+    "links": 1,
+    "origin": "/workspace/clinicos-review-handoff/agent-team",
+    "testExecutedBy": "node --test with cwd=/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447; test reads e2e and frontend inputs from the source worktree by relative path"
+  }
+}

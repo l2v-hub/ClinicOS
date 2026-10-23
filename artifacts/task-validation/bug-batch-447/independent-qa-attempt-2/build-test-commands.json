@@ -1,0 +1,43 @@
+[
+  {
+    "command": [
+      "npm",
+      "test"
+    ],
+    "cwd": "frontend",
+    "exit": 0,
+    "seconds": 53.94
+  },
+  {
+    "command": [
+      "npx",
+      "tsc",
+      "--noEmit"
+    ],
+    "cwd": "frontend",
+    "exit": 0,
+    "seconds": 0.85
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "frontend",
+    "exit": 0,
+    "seconds": 63.63
+  },
+  {
+    "command": [
+      "npx",
+      "tsc",
+      "--noEmit",
+      "-p",
+      "tsconfig.json"
+    ],
+    "cwd": "backend",
+    "exit": 0,
+    "seconds": 16.24
+  }
+]

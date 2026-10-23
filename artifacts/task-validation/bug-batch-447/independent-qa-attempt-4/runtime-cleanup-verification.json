@@ -1,0 +1,11 @@
+{
+  "port": 55447,
+  "parentPublicTablesBefore": 0,
+  "parentPublicTablesAfter": 0,
+  "allMarkedChildResetAndRemovalAssertionsPass": true,
+  "containerAbsentAfterLifecycle": true,
+  "cleanupErrors": [],
+  "developer5432NeverAccessed": true,
+  "actualBrowserExit": 0,
+  "canonicalInvocations": 1
+}

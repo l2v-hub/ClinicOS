@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "head": "ccea0be90b906e71c3a32581097781e9623b6cef",
+  "bytesOutside453ScenarioIdentical": true,
+  "originalHarnessUnchanged": true,
+  "negativeCountedUiActions": 4,
+  "positiveCountedUiActions": 5,
+  "routeUsesAccessibleControl": true,
+  "defaultQuantityAssertedAndNotEdited": true,
+  "noPageEvaluateOrApiAssignmentInCountedBlocks": true,
+  "worktreeStatus": [
+    "?? artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/",
+    "?? e2e/qa-bug-batch-447-route486-browser.mjs"
+  ]
+}

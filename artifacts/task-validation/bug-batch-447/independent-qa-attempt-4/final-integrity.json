@@ -1,0 +1,18 @@
+{
+  "head": "ef801dd4707fb0a599f8a8a833cbbf64fe6600b2",
+  "sourcePathsUnchanged": 94,
+  "contractsUnchanged": 27,
+  "allOther93SourceAndOld26ContractsIdenticalToQa3": true,
+  "authorHistoricalArtifactsResolved": 2038,
+  "historicalSealedFilesUnchanged": {
+    "independent-qa-attempt-2": 806,
+    "independent-qa-attempt-3": 262
+  },
+  "overwrittenCanonicalProofReferencesVerified": 52,
+  "currentCanonicalHashesVerified": 202,
+  "legacyPathsUnchanged": 25,
+  "noProductSourceFixOrGitGithubMutation": true,
+  "actualQa4CanonicalInvocations": 1,
+  "localAllFivePhasesPass": true,
+  "externalReviewedMainGateRetained": true
+}

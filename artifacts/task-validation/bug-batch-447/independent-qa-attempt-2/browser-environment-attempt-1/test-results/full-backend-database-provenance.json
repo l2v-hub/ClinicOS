@@ -1,0 +1,13 @@
+{
+  "mode": "native-postgresql16",
+  "syntheticOnly": true,
+  "version": 160015,
+  "host": "127.0.0.1",
+  "port": 55447,
+  "parentDatabase": "clinicos_test",
+  "ownedDatabase": "clinicos_qa_batch447_0f77e4ac5a2069b3aca949dc62250a9e",
+  "parentNeverMigrated": true,
+  "ownershipMarkerInstalled": true,
+  "cleanupOwnershipVerified": true,
+  "ownedDatabaseRemoved": true
+}

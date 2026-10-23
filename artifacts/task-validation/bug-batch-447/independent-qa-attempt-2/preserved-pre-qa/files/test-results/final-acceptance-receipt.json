@@ -1,0 +1,185 @@
+{
+  "status": "IMPLEMENTED_NOT_VERIFIED",
+  "independentQa": "PENDING",
+  "sourceCount": 92,
+  "frozenDocuments": 20,
+  "browserFingerprint": "deccb111eec6d4d4d7658acfd478abd573791b3e741b0c510821cfce14464aad",
+  "browserScenarios": [
+    {
+      "issue": 456,
+      "status": "PASS_SCENARIO",
+      "clinicalGate": null,
+      "expectedFaults": []
+    },
+    {
+      "issue": 447,
+      "status": "PASS_SCENARIO",
+      "clinicalGate": null,
+      "expectedFaults": []
+    },
+    {
+      "issue": 451,
+      "status": "PASS_SCENARIO",
+      "clinicalGate": null,
+      "expectedFaults": [
+        {
+          "kind": "http",
+          "status": 400,
+          "method": "POST",
+          "path": "/patients/cmvc9r93t0007q4p9qhiyb4gf/parameter-readings"
+        },
+        {
+          "kind": "console",
+          "path": "/patients/cmvc9r93t0007q4p9qhiyb4gf/parameter-readings",
+          "message": "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+        },
+        {
+          "kind": "http",
+          "status": 503,
+          "method": "POST",
+          "path": "/patients/cmvc9r93z0009q4p9fci6gl02/parameter-readings"
+        },
+        {
+          "kind": "console",
+          "path": "/patients/cmvc9r93z0009q4p9fci6gl02/parameter-readings",
+          "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+        }
+      ]
+    },
+    {
+      "issue": 452,
+      "status": "PASS_SCENARIO",
+      "clinicalGate": null,
+      "expectedFaults": [
+        {
+          "kind": "http",
+          "status": 503,
+          "method": "GET",
+          "path": "/therapy-slots/page"
+        },
+        {
+          "kind": "console",
+          "path": "/therapy-slots/page",
+          "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+        },
+        {
+          "kind": "http",
+          "status": 503,
+          "method": "GET",
+          "path": "/patients/cmvc9su5w003uq4p9jhmnhcqx/parameter-readings"
+        },
+        {
+          "kind": "console",
+          "path": "/patients/cmvc9su5w003uq4p9jhmnhcqx/parameter-readings",
+          "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+        }
+      ]
+    },
+    {
+      "issue": 453,
+      "status": "PASS_SCENARIO",
+      "clinicalGate": null,
+      "expectedFaults": [
+        {
+          "kind": "http",
+          "status": 503,
+          "method": "GET",
+          "path": "/patients/cmvc9r93h0005q4p994itzpau/cartella"
+        },
+        {
+          "kind": "console",
+          "path": "/patients/cmvc9r93h0005q4p994itzpau/cartella",
+          "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+        },
+        {
+          "kind": "http",
+          "status": 503,
+          "method": "POST",
+          "path": "/patients/cmvc9r93h0005q4p994itzpau/therapies"
+        },
+        {
+          "kind": "console",
+          "path": "/patients/cmvc9r93h0005q4p994itzpau/therapies",
+          "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+        }
+      ]
+    },
+    {
+      "issue": 454,
+      "status": "PASS_SCENARIO",
+      "clinicalGate": null,
+      "expectedFaults": []
+    },
+    {
+      "issue": 457,
+      "status": "PASS_SCENARIO",
+      "clinicalGate": null,
+      "expectedFaults": [
+        {
+          "kind": "http",
+          "status": 503,
+          "method": "PUT",
+          "path": "/patients/cmvc9r93h0005q4p994itzpau/cartella"
+        },
+        {
+          "kind": "console",
+          "path": "/patients/cmvc9r93h0005q4p994itzpau/cartella",
+          "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+        }
+      ]
+    }
+  ],
+  "sourceStable": true,
+  "clinicalResidualGates": [],
+  "intakeChecksPassed": 19,
+  "privacyArchivesPassed": 21,
+  "nativeCleanup": {
+    "mode": "native-adapter-emulated-with-owned-postgres16",
+    "port": 55447,
+    "parent": "clinicos_test",
+    "version": 160015,
+    "sqlReadyAttempts": 1,
+    "wrapperExit": 0,
+    "parentPublicTablesBefore": 0,
+    "parentPublicTablesAfter": 0,
+    "parentUntouched": true,
+    "ownedDatabaseRemoved": true,
+    "ownershipVerified": true
+  },
+  "outsideScopeDirtyPaths": [],
+  "changedSourcePaths": [
+    "e2e/qa-bug-batch-447-browser.mjs",
+    "frontend/src/App.tsx",
+    "frontend/src/components/operator/OperatorAgenda.tsx",
+    "frontend/src/components/operator/PatientList.css",
+    "frontend/src/components/operator/PatientList.tsx",
+    "frontend/src/components/operator/PatientRoster.tsx",
+    "frontend/src/components/operator/TherapySlotModal.tsx",
+    "frontend/src/components/operator/__tests__/operationalLists452.test.ts",
+    "frontend/src/lib/__tests__/therapyAgendaDateGuard.test.ts",
+    "scripts/e2e/issue-450-ingresso.mjs"
+  ],
+  "evidenceSha256": {
+    "issue-447.png": "5efafbb67fbf33057428113433317f9e5648272e54370af6038f75ddd8dc3c7f",
+    "issue-447-trace.zip": "ac63fa0c3369afe302b1414f3d4089be2030de604443c10dbfce22748374e66c",
+    "issue-447.webm": "30ef86d3dce59dc70fa7607309ebc9f888f0341c98eba52f12b8b5be82ee9373",
+    "issue-451.png": "f6ff8338402e88bb98488ac14cc738d81a9b7e9fac979399361bad2cbd25b83f",
+    "issue-451-trace.zip": "4a60aeb977f62483338692b5243475898690ef80b6d65093fb80d26d1ba7e658",
+    "issue-451.webm": "754f193b90e794202c56f45d315cf3b9af28b26983d52759de5542a4f9cd0059",
+    "issue-452.png": "678ec635dc2461a951b0c7391029d87eafeb9141f3740fe32b44f4ae5c498b46",
+    "issue-452-trace.zip": "3ffd4540d8c6cd992cb509a964d7564eaf529536f15ad4f537f763c821dd48c3",
+    "issue-452.webm": "e758dc5ecbe7b6e9a3e27a0a253c63c5ff779d441d9fe4948ebc6b291d23acc8",
+    "issue-453.png": "fdff2d49ce817eafe62bc4b3b17e6b661d0aab8802aab47bc51688e1a0b31ccd",
+    "issue-453-trace.zip": "713d37e8f08285fe68009a1e37be81d6030112af63765a9aa1a1e5c63496c18f",
+    "issue-453.webm": "cf73fb7172de45bbf836a196126fb7b6b88a25ba206034ebf12f3ecf9b2eee70",
+    "issue-454.png": "63a933089dc61903f4c6c1f70c5104ce526ef5b3ffbba9ff200bda3c99741bca",
+    "issue-454-trace.zip": "7aa60fdc9d697e7d13f63264a6aacabd70f89bc7f74b14f4bbc64c99d1e457e9",
+    "issue-454.webm": "44e6d8c7fd40d8ccb492007737d4fd0a1b9835d2792cc8bd381f0073f63a6703",
+    "issue-456.png": "c6d5b0c7c380767b0e78ed447870e8946a28876c122c42deac267aa14c9ccd9e",
+    "issue-456-trace.zip": "b7ecaa03ec1556bcc9666269949bdaa4f066f56e0a0c2fc84d93fe17b46b5aa8",
+    "issue-456.webm": "c11e1f3742479cc87afdcdd984ab5562d0d8a2a305b185eec961d837632e5562",
+    "issue-457.png": "6dc3083c15d4c59d529dcab64c691c943c96eaae7ae188d8a1f1a597687106a4",
+    "issue-457-trace.zip": "5092fcda57a42018a33d10ee14f9eef108f97473ec35f7b2f9e3ebe52ee67659",
+    "issue-457.webm": "7ace3ec64f67e64278092a16f8ead6f85ce75d16514cecb3b2f084103fe3c3a3"
+  }
+}

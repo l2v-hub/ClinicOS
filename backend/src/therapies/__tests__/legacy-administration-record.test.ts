@@ -12,6 +12,7 @@ import {
 } from '../administration-record.js';
 import { TherapyWriteInputError, TherapyNotFoundError } from '../therapy-write.js';
 import { prisma } from '../../lib/prisma.js';
+import { TemporaryPsExitError } from '../../patients/temporary-ps-exits.js';
 
 before(() =>
   mock.method(net.Socket.prototype, 'connect', () => {
@@ -86,18 +87,48 @@ function fixture(rows: Row[], prescription = { ...therapy }) {
     queries: [] as any[],
     creates: 0,
     updates: [] as string[],
+    // Existing access flag models prescription visibility and replay's patient-scope lookup.
     access: true,
+    patientLockAccess: true,
+    cartellaData: null as unknown,
+    events: [] as string[],
   };
   const tx = {
+    $queryRaw: async (query: Prisma.Sql) => {
+      assert.equal(
+        query.sql.replace(/\s+/g, ' ').trim(),
+        'UPDATE "Patient" p SET "updatedAt" = p."updatedAt" WHERE p.id = ? AND p."registeredById" = ? RETURNING p.id',
+      );
+      assert.deepEqual(query.values, [therapy.patientId, actor.id]);
+      state.events.push('patient-lock');
+      return state.patientLockAccess ? [{ id: therapy.patientId }] : [];
+    },
+    cartella: {
+      findUnique: async (input: any) => {
+        assert.deepEqual(input, { where: { patientId: therapy.patientId }, select: { data: true } });
+        state.events.push('ps-exit');
+        return state.cartellaData === null ? null : { data: state.cartellaData };
+      },
+    },
     patientTherapy: {
       findFirst: async ({ where }: any) => {
+        state.events.push('therapy');
         assert.equal(where.id, therapy.id);
         assert.equal(where.patientId, therapy.patientId);
         assert.equal(where.patient.registeredById, actor.id);
         return state.access ? prescription : null;
       },
     },
-    patient: { findFirst: async () => (state.access ? { id: therapy.patientId } : null) },
+    patient: {
+      findFirst: async (input: any) => {
+        assert.deepEqual(input, {
+          where: { id: therapy.patientId, registeredById: actor.id },
+          select: { id: true },
+        });
+        state.events.push('patient-scope');
+        return state.access ? { id: therapy.patientId } : null;
+      },
+    },
     medicationAdministration: {
       findMany: async ({ where }: any) => {
         state.queries.push(where);
@@ -475,4 +506,51 @@ test('keyed one-off refusal with omitted expected state rejects without receipt'
     assert.deepEqual(f.state.updates, []);
     assert.deepEqual(f.state.receipts, []);
   }
+});
+
+test('both writers serialize the scoped patient; confirm checks no-current-PS admission', async () => {
+  for (const endpoint of endpoints) {
+    const f = fixture([]);
+    const result = await endpoint({ ...body, motivo: 'rifiutata_paziente' }, actor, f.tx);
+    assert.equal(
+      result.stato,
+      endpoint === confirmTherapyAdministration ? 'erogata' : 'non_erogata',
+    );
+    assert.deepEqual(
+      f.state.events,
+      endpoint === confirmTherapyAdministration
+        ? ['patient-lock', 'therapy', 'ps-exit']
+        : ['patient-lock', 'therapy'],
+    );
+    assert.equal(f.state.creates, 1);
+  }
+});
+
+test('scoped patient lock denial stops both writers before clinical reads or writes', async () => {
+  for (const endpoint of endpoints) {
+    const f = fixture([]);
+    f.state.patientLockAccess = false;
+    await denied(f, endpoint, {}, TemporaryPsExitError);
+    assert.deepEqual(f.state.events, ['patient-lock']);
+    assert.deepEqual(f.state.queries, []);
+  }
+});
+
+test('actual PS pause admission blocks confirmation without changing legacy refusal', async () => {
+  const f = fixture([record({ stato: 'non_erogata' })]);
+  const exit = {
+    exitId: 'synthetic-exit',
+    decision: 'pause',
+    departedAt: '2033-04-06T08:00:00Z',
+  };
+  f.state.cartellaData = {
+    liberatoria: {
+      temporaryPsExit: exit,
+      usciteLog: [
+        { id: exit.exitId, psExit: { decision: exit.decision, departedAt: exit.departedAt } },
+      ],
+    },
+  };
+  await denied(f, confirmTherapyAdministration, {}, TemporaryPsExitError);
+  assert.deepEqual(f.state.events, ['patient-lock', 'therapy', 'ps-exit']);
 });

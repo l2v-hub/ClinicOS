@@ -4,7 +4,6 @@ import type { PatientParametersPageItem } from '../../lib/patientParametersPage'
 import { parsePatientLocation, patientIdentityName } from '../../lib/patientIdentity';
 import { PARAMETER_FIELDS } from '../../lib/patientParameterReadings';
 import { whenLabel } from '../../lib/parameterPad';
-import { LazyNews2 } from './LazyNews2';
 
 interface Props {
   item: PatientParametersPageItem;
@@ -57,7 +56,11 @@ export function ParameterPatientPick({
           </span>
         </span>
       </button>
-      <LazyNews2 patientId={patient.id} patientName={name} compact />
+      {(cartella.readingCount ?? 0) > 0 && (
+        <span className="par-pick__completed" aria-label="Rilevazione completata oggi">
+          ✓
+        </span>
+      )}
     </li>
   );
 }

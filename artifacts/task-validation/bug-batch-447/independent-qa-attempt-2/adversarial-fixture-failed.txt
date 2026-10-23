@@ -1,0 +1,37 @@
+✔ independent PS parser rejects implicit decisions, unconfirmed commands and extra authority fields (2.461604ms)
+✔ independent protected exit survives ordinary omission; null/delete/forgery cannot resume or alter history (1.057396ms)
+✔ independent adapter conflict predicate retries only explicit PostgreSQL transaction conflicts (0.23074ms)
+✔ independent actual NEWS2 loader reaches an older complete observation beyond 25 partial pages (36.416356ms)
+✔ independent actual NEWS2 loader rejects repeated cursor, duplicate observation, wrong patient and malformed completeness (1.846889ms)
+✔ independent actual roster loader retains good patient score when another source fails (5.496905ms)
+✖ independent actual next-patient loader skips unknown/completed pages and cancels on changed current selection (20.054377ms)
+✔ independent actual chart queue preserves verified PS snapshot across failed following save (0.866088ms)
+✔ independent actual allergy acknowledgement changes with patient/product/context and permits explicit warning confirmation (0.369455ms)
+✔ independent emergency model excludes future/cross-patient triggers and refused/unconfirmed doses; duration stays civil across DST (3.930877ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1114.386101
+
+✖ failing tests:
+
+test at artifacts/task-validation/bug-batch-447/independent-qa-attempt-2/adversarial-probes.test.ts:2:6631
+✖ independent actual next-patient loader skips unknown/completed pages and cancels on changed current selection (20.054377ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'unknown' !== 'next'
+  
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/artifacts/task-validation/bug-batch-447/independent-qa-attempt-2/adversarial-probes.test.ts:61:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'unknown',
+    expected: 'next',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

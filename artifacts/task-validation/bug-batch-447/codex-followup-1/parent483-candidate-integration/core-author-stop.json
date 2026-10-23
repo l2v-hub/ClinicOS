@@ -1,0 +1,42 @@
+{
+  "status": "STOP",
+  "stoppedAt": "2026-10-18T22:51:24.511545+00:00",
+  "rootReservationNonce": "084b15f9-9424-4f4b-acf9-db247b8ddcfa",
+  "authorNonce": "5c9767f3-7ea7-4026-99c7-5302bb477c67",
+  "sourceFrozen": true,
+  "scopeFiles": 46,
+  "authoredPaths": [
+    "backend/src/therapies/administration-record.ts",
+    "backend/src/therapies/therapy-slots.ts",
+    "frontend/src/App.tsx",
+    "frontend/src/components/operator/OperatorAgenda.tsx",
+    "frontend/src/components/operator/TherapyRoundsPage.tsx",
+    "frontend/src/components/operator/cartella/TherapyDrugDosePanel.tsx",
+    "frontend/src/lib/__tests__/therapyEntry454.test.ts",
+    "frontend/src/lib/__tests__/facilityTime.test.ts",
+    "e2e/qa-bug-batch-447-integrated-browser.mjs"
+  ],
+  "gitMutations": false,
+  "databaseOrBrowserRun": false,
+  "parentApproved": false,
+  "actualIntegratedEightQa": false,
+  "sourceFreezeSha256": "4d76d8f3b3096e7244b036af2bca41f6606de542c48c5f7c8b0943aea1ed1df0",
+  "tests": {
+    "frontend": 82,
+    "backend": 14,
+    "pass": 96,
+    "fail": 0,
+    "skip": 0
+  },
+  "verificationRunnerInvocations": 7,
+  "initialFailedAttempts": 2,
+  "unrun": [
+    "full suites/builds",
+    "actual browser/SQL eight issues",
+    "actual route callers/replay/discharge",
+    "new actualClaude483 finding repair",
+    "external reviews/native6/release"
+  ],
+  "handoff": "author-handoff.md",
+  "qaPlan": "integrated-eight-independent-qa-plan.md"
+}

@@ -15,6 +15,12 @@ import { scheduleDoseLabel, type ScheduleInput } from '../lib/therapy-dose.js';
 import { patientScopeWhere } from '../patients/patient-scope.js';
 import { facilityToday } from '../patients/parameter-reading-input.js';
 import {
+  serializeTemporaryPsPatient,
+  assertTemporaryPsAdministrationAllowed,
+} from '../patients/temporary-ps-exits.js';
+import { patientIsInOperatorScope } from '../patients/patient-scope.js';
+import { isConcurrentWriteConflict } from './administration-record.js';
+import {
   TherapyNotDueError,
   TherapyNotFoundError,
   TherapyWriteInputError,
@@ -145,92 +151,105 @@ export async function recordPrnAdministration(
     });
     if (!existing) return null;
     if (!sameDose(existing, input)) throw new PrnIdempotencyConflictError();
+    if (!(await patientIsInOperatorScope(input.patientId, actor, prisma)))
+      throw new TherapyNotFoundError();
     return { record: prnDto(existing), replayed: true };
   };
   const earlier = await replay();
   if (earlier) return earlier;
 
-  const at = now();
-  const date = facilityToday(at);
-  try {
-    const row = await prisma.$transaction(
-      async (tx) => {
-        const therapy = await tx.patientTherapy.findFirst({
-          where: { id: input.therapyId, patientId: input.patientId, ...scopeWhere(actor) },
-          select: {
-            tipo: true,
-            doseMode: true,
-            stato: true,
-            dataInizio: true,
-            dataFine: true,
-            farmacoNome: true,
-            dosaggio: true,
-            viaSomministrazione: true,
-            commercialStrengthValue: true,
-            commercialStrengthUnit: true,
-            schedules: {
-              take: 1,
-              orderBy: { time: 'asc' },
-              select: {
-                fascia: true,
-                time: true,
-                quantityNumerator: true,
-                quantityDenominator: true,
-                administrationUnit: true,
+  for (let attempt = 0; ; attempt++) {
+    try {
+      const row = await prisma.$transaction(
+        async (tx) => {
+          await serializeTemporaryPsPatient(tx, input.patientId, actor);
+          const at = now();
+          const date = facilityToday(at);
+          const therapy = await tx.patientTherapy.findFirst({
+            where: { id: input.therapyId, patientId: input.patientId, ...scopeWhere(actor) },
+            select: {
+              tipo: true,
+              doseMode: true,
+              stato: true,
+              dataInizio: true,
+              dataFine: true,
+              farmacoNome: true,
+              dosaggio: true,
+              viaSomministrazione: true,
+              commercialStrengthValue: true,
+              commercialStrengthUnit: true,
+              schedules: {
+                take: 1,
+                orderBy: { time: 'asc' },
+                select: {
+                  fascia: true,
+                  time: true,
+                  quantityNumerator: true,
+                  quantityDenominator: true,
+                  administrationUnit: true,
+                },
               },
             },
-          },
-        });
-        if (!therapy) throw new TherapyNotFoundError();
-        if (
-          therapy.tipo !== 'al_bisogno' ||
-          therapy.doseMode === 'glucose_scale' ||
-          therapy.stato !== 'attiva' ||
-          therapy.dataInizio > date ||
-          (therapy.dataFine !== null && therapy.dataFine < date)
-        ) {
-          throw new TherapyNotDueError('Terapia al bisogno non attiva oggi');
+          });
+          if (!therapy) throw new TherapyNotFoundError();
+          await assertTemporaryPsAdministrationAllowed(tx, input.patientId);
+          if (
+            therapy.tipo !== 'al_bisogno' ||
+            therapy.doseMode === 'glucose_scale' ||
+            therapy.stato !== 'attiva' ||
+            therapy.dataInizio > date ||
+            (therapy.dataFine !== null && therapy.dataFine < date)
+          ) {
+            throw new TherapyNotDueError('Terapia al bisogno non attiva oggi');
+          }
+          const schedule = therapy.schedules[0] as ScheduleInput | undefined;
+          const dose =
+            (schedule &&
+              scheduleDoseLabel(
+                schedule,
+                therapy.commercialStrengthValue,
+                therapy.commercialStrengthUnit,
+              )) ||
+            therapy.dosaggio ||
+            '';
+          return tx.prnAdministration.create({
+            data: {
+              therapyId: input.therapyId,
+              patientId: input.patientId,
+              farmacoNome: therapy.farmacoNome,
+              farmacoDose: dose,
+              farmacoVia: therapy.viaSomministrazione || 'orale',
+              date,
+              administeredAt: at,
+              indicazione: input.indicazione,
+              note: input.note ?? null,
+              operatoreId: actor.id,
+              operatoreNome: actor.name || actor.id,
+              requestId: input.requestId,
+            },
+          });
+        },
+        { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+      );
+      return { record: prnDto(row), replayed: false };
+    } catch (error) {
+      // Two concurrent submits with the same key: the loser replays the winner's record.
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        (error.code === 'P2002' || isConcurrentWriteConflict(error))
+      ) {
+        const winner = await replay();
+        if (winner) return winner;
+        if (isConcurrentWriteConflict(error)) {
+          if (attempt < 2) continue;
+          throw new TherapyWriteInputError(
+            'Conflitto concorrente: ricaricare e riprovare la stessa richiesta.',
+            409,
+          );
         }
-        const schedule = therapy.schedules[0] as ScheduleInput | undefined;
-        const dose =
-          (schedule &&
-            scheduleDoseLabel(
-              schedule,
-              therapy.commercialStrengthValue,
-              therapy.commercialStrengthUnit,
-            )) ||
-          therapy.dosaggio ||
-          '';
-        return tx.prnAdministration.create({
-          data: {
-            therapyId: input.therapyId,
-            patientId: input.patientId,
-            farmacoNome: therapy.farmacoNome,
-            farmacoDose: dose,
-            farmacoVia: therapy.viaSomministrazione || 'orale',
-            date,
-            administeredAt: at,
-            indicazione: input.indicazione,
-            note: input.note ?? null,
-            operatoreId: actor.id,
-            operatoreNome: actor.name || actor.id,
-            requestId: input.requestId,
-          },
-        });
-      },
-      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
-    );
-    return { record: prnDto(row), replayed: false };
-  } catch (error) {
-    // Two concurrent submits with the same key: the loser replays the winner's record.
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      (error.code === 'P2002' || error.code === 'P2034')
-    ) {
-      const winner = await replay();
-      if (winner) return winner;
+      }
+      throw error;
     }
-    throw error;
   }
 }
 

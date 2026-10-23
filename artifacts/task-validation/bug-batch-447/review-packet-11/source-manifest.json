@@ -1,0 +1,35 @@
+{
+  "testedSourceSha": "f394e3a77925e96a2b54e63485fb45ad44678f54",
+  "mergeParents": [
+    "74b260cdbcf36b1f7395477f4e35d07aba7fcf90",
+    "4983de2bdb6ea571053f03a508c919d27ff1771b"
+  ],
+  "retainedImportUiSourceSha": "74b260cdbcf36b1f7395477f4e35d07aba7fcf90",
+  "sourceFiles": {
+    "backend/src/routes/__tests__/therapy-authoritative-write.test.ts": {
+      "sha256": "086ce8aa74a0eabe4c96c3438b87d6c799ac566f99e9249f4dfe35eacfcc0893",
+      "bytes": 69747
+    },
+    "backend/src/therapies/__tests__/legacy-administration-record.test.ts": {
+      "sha256": "e75fecda204cecca92ad154dbf7f950259828fd0df443f050e09e0a67d3dfb97",
+      "bytes": 20094
+    },
+    "backend/src/therapies/administration-record.ts": {
+      "sha256": "8f4e5d068f723ce18aeee3bf6a337fa3e502e21c98a1eb460aa8792273eda825",
+      "bytes": 12358
+    }
+  },
+  "frontendPrismaDependencyScriptsUnchangedFromImportQa": true,
+  "actualCombinedTests": {
+    "pure": 30,
+    "httpPostgres": 19,
+    "temporaryPsDatabase": 2,
+    "totalTests": 51,
+    "pass": 51,
+    "fail": 0,
+    "skipped": 0,
+    "typesPass": true,
+    "actualRowLockInterleavings": 4
+  },
+  "publicationChanges": "artifacts/task-validation only"
+}

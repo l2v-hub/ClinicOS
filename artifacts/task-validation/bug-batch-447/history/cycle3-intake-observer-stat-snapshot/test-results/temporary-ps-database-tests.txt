@@ -1,0 +1,40 @@
+✔ confirmed pain retains original JSON/presence and never exposes other patients or pending drafts (290.734359ms)
+✔ count limit admits exactly100 and returns a distinct error at101 while preserving therapies (89.607612ms)
+✔ UTF-8 JSON byte limit includes quotes and overflow never materializes pain in therapy projection (215.052821ms)
+✔ repeatable snapshot survives historical reconciliation between budget and pain read (107.364337ms)
+✖ intake review restarts its read-only snapshot after an actual concurrent Patient row version (2558.053231ms)
+✔ only declared transaction conflicts retry, with three fresh RepeatableRead attempts at most (2.571314ms)
+✔ pause/continue and return persist; retries preserve exact history and valid dose receipts (633.161995ms)
+PS_INTERLEAVING {"kind":"scheduled","initialChart":false,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"prn","initialChart":false,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"scheduled","initialChart":true,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"prn","initialChart":true,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+✔ real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts (597.785126ms)
+✔ raw PostgreSQL serialization conflicts retry narrowly while unrelated query errors remain errors (2.131514ms)
+✔ exit decisions are explicit, confirmed and never accept client actor/time or mixed commands (3.018138ms)
+✔ managed hold requires matching immutable history; unknown/corrupt context is never permission to dose (1.372881ms)
+✔ ordinary writes retain managed history and active hold; explicit forge/erase/change is rejected (1.000856ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 11
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15131.477109
+
+✖ failing tests:
+
+test at backend/src/intake/__tests__/patient-review-db.test.ts:1:7862
+✖ intake review restarts its read-only snapshot after an actual concurrent Patient row version (2558.053231ms)
+  AssertionError [ERR_ASSERTION]: The actual scoped reader must wait on this exact owned writer PID
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend/src/intake/__tests__/patient-review-db.test.ts:341:14)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

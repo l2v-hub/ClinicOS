@@ -1,0 +1,16 @@
+✔ compact identity hides repeated missing prose but preserves accessible disambiguation (12.203373ms)
+✔ patient roster leads with bed, hides globally empty optional columns and aggregates incomplete identity once (9.07169ms)
+✔ roster keeps the NEWS2 column and a single loading status until absence has been verified (7.038385ms)
+✔ agenda without appointments retains morning and evening pending therapy doses while omitting empty half-hour slots (22.004467ms)
+✔ slot modal retains pause, explicit absence, glucose protocol, completed history and other patients (7.26448ms)
+✔ weekly and monthly views never repeat one-day therapy data across calendar cells (1.255074ms)
+✔ opening a calendar day loads that exact therapy date and carries it into mutations (1.159959ms)
+✔ changing the agenda date or view closes any therapy modal before its date can change (0.635494ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 976.3914

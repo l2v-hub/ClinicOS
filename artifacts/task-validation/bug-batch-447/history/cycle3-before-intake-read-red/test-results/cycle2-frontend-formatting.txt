@@ -1,0 +1,22 @@
+frontend/src/App.tsx 1329ms
+frontend/src/types.ts 136ms
+frontend/src/lib/temporaryPsExit.ts 20ms
+frontend/src/lib/therapySlotPage.ts 77ms (unchanged)
+frontend/src/lib/cartellaWriteQueue.ts 23ms (unchanged)
+frontend/src/lib/__tests__/cartellaWriteQueue.test.ts 33ms
+frontend/src/lib/__tests__/therapyPages.test.ts 101ms
+frontend/src/components/operator/PatientToday.tsx 72ms (unchanged)
+frontend/src/components/operator/TherapyGiroRows.tsx 71ms
+frontend/src/components/operator/OperatorAgenda.tsx 212ms
+frontend/src/components/operator/InvioPSModal.tsx 188ms
+frontend/src/components/operator/PatientDetail.tsx 673ms
+frontend/src/components/operator/cartella/DimissioneTab.tsx 278ms
+frontend/src/components/operator/cartella/TherapyDrugDosePanel.tsx 103ms
+frontend/src/components/operator/__tests__/invioPS.test.ts 167ms
+e2e/qa-bug-batch-447.mjs 102ms
+e2e/qa-bug-batch-447-browser.mjs 684ms
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

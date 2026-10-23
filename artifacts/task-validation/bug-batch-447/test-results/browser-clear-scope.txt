@@ -1,0 +1,38 @@
+Issue 447: Dati di ingresso: first meaningful BUTTON top=205, required <=160
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: All clear-scope acceptance scenarios must pass; inspect per-issue real evidence. Clinical policy gates remain separate and unresolved.
+
+1 !== 0
+
+    at file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/qa-bug-batch-447-browser.mjs:1434:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Real browser acceptance failed
+
+1 !== 0
+
+    at file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/qa-bug-batch-447.mjs:180:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

@@ -1,0 +1,30 @@
+✔ pause/continue and return persist; retries preserve exact history and valid dose receipts (683.093623ms)
+✖ real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts (161.780285ms)
+✔ exit decisions are explicit, confirmed and never accept client actor/time or mixed commands (4.011765ms)
+✔ managed hold requires matching immutable history; unknown/corrupt context is never permission to dose (2.350381ms)
+✔ ordinary writes retain managed history and active hold; explicit forge/erase/change is rejected (3.223477ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11727.898585
+
+✖ failing tests:
+
+test at backend/src/patients/__tests__/temporary-ps-exits-db.test.ts:1:4530
+✖ real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts (161.780285ms)
+  AssertionError [ERR_ASSERTION]: {"kind":"scheduled","chart":false,"name":"PrismaClientKnownRequestError","code":"P2010","message":"\nInvalid `prisma.$queryRaw()` invocation:\n\n\nRaw query failed. Code: `40001`. Message: `could not serialize access due to concurrent update`","meta":{"driverAdapterError":{"name":"DriverAdapterError","cause":{"originalCode":"40001","originalMessage":"could not serialize access due to concurrent update","kind":"TransactionWriteConflict"}}}}
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend/src/patients/__tests__/temporary-ps-exits-db.test.ts:177:9)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

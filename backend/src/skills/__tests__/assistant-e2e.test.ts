@@ -200,10 +200,12 @@ test('C — Doctor sensitive write: preview → no write → explicit confirmati
   const therapy = {
     farmacoNome: row.farmacoNome,
     dataInizio: row.dataInizio || today,
+    viaSomministrazione: row.viaSomministrazione,
     tipo: 'periodica',
     stato: 'attiva',
     commercialStrengthValue: '1000',
     commercialStrengthUnit: 'mg',
+    doseMode: 'fixed',
     schedules: [
       {
         time: '08:00',
@@ -269,6 +271,7 @@ test('C — Doctor sensitive write: preview → no write → explicit confirmati
   });
   assert.equal(bound.body.preview.therapyBound, true);
   assert.equal(bound.body.preview.values.Dosaggio, '1000 mg');
+  assert.equal(bound.body.preview.values.Via, row.viaSomministrazione);
   assert.match(bound.body.preview.values.Orari, /08:00 \(1 compressa\), 20:00 \(1 compressa\)/);
   assert.equal(
     (await confirm(doctor, altered, ctx(ids.doc))).body.error.code,
@@ -284,6 +287,7 @@ test('C — Doctor sensitive write: preview → no write → explicit confirmati
     include: { schedules: true },
   });
   assert.match(created!.farmacoNome, /paracetamolo/i);
+  assert.equal(created!.viaSomministrazione, row.viaSomministrazione);
   assert.equal(created!.schedules.length, 2);
   assert.equal(created!.operatoreInseritore, 'Medico 1', 'the professional who confirmed');
   const entry = await prisma.patientDiaryEntry.findUnique({

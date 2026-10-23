@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-21T23:06:53.388627+00:00",
+  "original": "/workspace/ClinicOS/.git/objects/pack/pack-a618081afd9a19ff0a026a0a7b3f5e953819da36.pack",
+  "bytes": 1012396418,
+  "sha256": "fa016ee44e76f4fd39e4c74b72ef196c2833b89db9cb102debada0eac723b81b",
+  "regularOriginalPathRestored": true,
+  "gitPackVerified": true,
+  "refsUnchangedByRestore": true,
+  "freeBytes": 1268006912,
+  "temporaryDuplicateRetained": "/tmp/clinicos-root-git-pack-runtime-20261021/pack-a618081afd9a19ff0a026a0a7b3f5e953819da36.pack",
+  "historyOrProofDeleted": false
+}

@@ -1,0 +1,13 @@
+{
+  "mode": "native-adapter-emulated-with-owned-postgres16",
+  "port": 55447,
+  "parent": "clinicos_test",
+  "version": 160015,
+  "sqlReadyAttempts": 1,
+  "wrapperExit": 0,
+  "parentPublicTablesBefore": 0,
+  "parentPublicTablesAfter": 0,
+  "parentUntouched": true,
+  "ownedDatabaseRemoved": true,
+  "ownershipVerified": true
+}

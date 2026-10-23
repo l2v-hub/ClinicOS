@@ -1,0 +1,14 @@
+✔ patient list exposes the canonical fiscal identity and never shows MRN (1.423119ms)
+✔ 452 roster leads with bed and preserves native accessible actions while optional empty columns disappear (16.64224ms)
+✔ tablet and mobile use a compact two-to-one-column card grid (0.357763ms)
+✔ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance (1.424852ms)
+✔ new-patient wizard keeps required identity visible and progressively discloses optional data (0.547665ms)
+✔ patient intake uses a compact responsive layout without reducing touch targets (1.213686ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 864.033864

@@ -1,0 +1,190 @@
+[
+  {
+    "attempt": 1,
+    "label": "fresh types/build/full frontend suite",
+    "runnerResultPresent": true,
+    "runnerOk": false,
+    "runnerCode": 1,
+    "freezePath": "executed-harness-freeze-attempt1.json",
+    "frozenFiles": {
+      "e2e/qa-bug-batch-447.mjs": "162f9a5e7ed3967afbbfc36bdf87b73fec7119981bb097051edce1f6caf9c127",
+      "e2e/qa-bug-batch-447-integrated-browser.mjs": "d1b53accdaa468c57aefb51e2e70f2db0806bb0b7fc75d928856fb44d6d4740f"
+    },
+    "classification": "EXECUTED_WITH_RECORDED_FAILURES",
+    "databaseCleanup": {
+      "mode": "owned-docker-postgresql16",
+      "ownedDatabaseRemoved": null,
+      "cleanupOwnershipVerified": null,
+      "cleanupErrors": []
+    },
+    "databaseProvenance": "attempt1/test-results/database-provenance.json"
+  },
+  {
+    "attempt": 2,
+    "label": "fresh full backend suite + canonical integrated seven",
+    "runnerResultPresent": true,
+    "runnerOk": false,
+    "runnerCode": 1,
+    "freezePath": "executed-harness-freeze-attempt2.json",
+    "frozenFiles": {
+      "e2e/qa-bug-batch-447.mjs": "47cea03c1a6ce6ad6d25a81bb28e2c9077bbd18cc045e945205123048197673c",
+      "e2e/qa-bug-batch-447-integrated-browser.mjs": "d1b53accdaa468c57aefb51e2e70f2db0806bb0b7fc75d928856fb44d6d4740f"
+    },
+    "classification": "EXECUTED_WITH_RECORDED_FAILURES",
+    "databaseCleanup": {
+      "mode": "owned-docker-postgresql16",
+      "ownedDatabaseRemoved": true,
+      "cleanupOwnershipVerified": true,
+      "cleanupErrors": []
+    },
+    "databaseProvenance": "attempt2/test-results/database-provenance.json"
+  },
+  {
+    "attempt": 3,
+    "label": "new recorded outcomes setup guard",
+    "runnerResultPresent": true,
+    "runnerOk": false,
+    "runnerCode": 1,
+    "freezePath": "executed-harness-freeze-attempt3.json",
+    "frozenFiles": {
+      "e2e/private-stack-attempt3.mjs": "6a3826d8520003161083adc3df050c4d6ad111fccae13908f91f7a84aa71df6a",
+      "e2e/private-recorded-outcomes.mjs": "2dbf4103e4486acb05ddaf01ac0c7709a5112f23e3a7db5022699dbb12e081a4"
+    },
+    "classification": "SETUP_GUARD_FAILED_NO_CLINICAL_EXECUTION",
+    "databaseCleanup": {
+      "mode": "owned-docker-postgresql16",
+      "ownedDatabaseRemoved": null,
+      "cleanupOwnershipVerified": null,
+      "cleanupErrors": []
+    },
+    "databaseProvenance": "attempt3/test-results/database-provenance.json"
+  },
+  {
+    "attempt": 4,
+    "label": "dedicated486 browser/HTTP/shared/intake/diary/tool/import/Milo",
+    "runnerResultPresent": true,
+    "runnerOk": false,
+    "runnerCode": 1,
+    "freezePath": "executed-harness-freeze-attempt4.json",
+    "frozenFiles": {
+      "e2e/private-stack-attempt4.mjs": "9d8b86cb9d44f0a19343b37520bef231926ffb052433e2320786232a19accce1",
+      "e2e/private-route486.mjs": "ba08318978da12a22a8cfcad3b5b90a9f83f150f2aaaa915619a676ec699140e"
+    },
+    "classification": "EXECUTED_WITH_RECORDED_FAILURES",
+    "databaseCleanup": {
+      "mode": "owned-docker-postgresql16",
+      "ownedDatabaseRemoved": true,
+      "cleanupOwnershipVerified": true,
+      "cleanupErrors": []
+    },
+    "databaseProvenance": "attempt4/test-results/database-provenance.json"
+  },
+  {
+    "attempt": 5,
+    "label": "parent F1/F2 clinical (private harness identity diagnostic)",
+    "runnerResultPresent": true,
+    "runnerOk": false,
+    "runnerCode": 1,
+    "freezePath": "executed-harness-freeze-attempt5.json",
+    "frozenFiles": {
+      "e2e/private-stack-attempt5.mjs": "e3b837fb386d6294b0370c5525cec4e9c558ecf05fcfd139d0ea3eded5a0d108",
+      "artifacts/task-validation/bug-batch-432/codex-followup-2/clinical-browser.mjs": "b1cc367aac4ba1e6e2c58396d1831337eaa5bef279c264dd1a5fccbb92e80454"
+    },
+    "classification": "DIAGNOSTIC_ONLY_PRIVATE_HARNESS_MUTATED_AFTER_MODULE_LOAD",
+    "actualLoadedIdentity": "attempt5/private-harness-identity-diagnostic.json",
+    "databaseCleanup": {
+      "mode": "owned-docker-postgresql16",
+      "ownedDatabaseRemoved": true,
+      "cleanupOwnershipVerified": true,
+      "cleanupErrors": []
+    },
+    "databaseProvenance": "attempt5/test-results/database-provenance.json"
+  },
+  {
+    "attempt": 6,
+    "label": "actual App Agenda parent roles/lifecycle (launcher cancellation race)",
+    "runnerResultPresent": true,
+    "runnerOk": false,
+    "runnerCode": 1,
+    "freezePath": "executed-harness-freeze-attempt6.json",
+    "frozenFiles": {
+      "e2e/private-stack-attempt6.mjs": "9562e83dedefd0df4a5177652115b0379a694db4d03e9403a0dd37a0a5be475c",
+      "artifacts/task-validation/bug-batch-432/codex-followup-2/agenda-verification-browser.mjs": "707b98a5ef1e60b66174a5bf102b7b41a0328ea33f071eca5052d2ffbc5ae60c"
+    },
+    "classification": "PARTIAL_ACTUAL_BROWSER_LAUNCHER_INTERRUPTED",
+    "cancellationRaceDisclosed": true,
+    "databaseCleanup": {
+      "mode": "owned-docker-postgresql16",
+      "ownedDatabaseRemoved": true,
+      "cleanupOwnershipVerified": true,
+      "cleanupErrors": []
+    },
+    "databaseProvenance": "attempt6/test-results/database-provenance.json"
+  },
+  {
+    "attempt": 7,
+    "label": "parent original seven NOT LAUNCHED",
+    "runnerResultPresent": false,
+    "runnerOk": null,
+    "runnerCode": null,
+    "freezePath": "executed-harness-freeze-attempt7.json",
+    "frozenFiles": {
+      "e2e/private-stack-attempt7.mjs": "6f23fe3386b0dae472deac6419809ee18c878d62e6770dd6429225b14af33f5b",
+      "e2e/private-parent-browser.mjs": "3f2a3206c5ffdc878c22a98fe0eee04bacfe33094de490ad929660d7e2e8e475"
+    },
+    "classification": "UNRUN"
+  },
+  {
+    "attempt": 8,
+    "label": "recorded outcomes SQL/HTTP/browser",
+    "runnerResultPresent": true,
+    "runnerOk": false,
+    "runnerCode": 1,
+    "freezePath": "executed-harness-freeze-attempt8.json",
+    "frozenFiles": {
+      "e2e/private-stack-attempt8.mjs": "4474865189e313544bf10a8157cfad29f41a2127264fdcc06374c7405a2a81cc",
+      "e2e/private-recorded-outcomes.mjs": "2dbf4103e4486acb05ddaf01ac0c7709a5112f23e3a7db5022699dbb12e081a4"
+    },
+    "classification": "EXECUTED_WITH_RECORDED_FAILURES",
+    "databaseCleanup": {
+      "mode": "owned-docker-postgresql16",
+      "ownedDatabaseRemoved": true,
+      "cleanupOwnershipVerified": true,
+      "cleanupErrors": []
+    },
+    "databaseProvenance": "attempt8/test-results/database-provenance.json"
+  },
+  {
+    "attempt": 9,
+    "label": "focused452 required-dose fixture correction",
+    "runnerResultPresent": true,
+    "runnerOk": false,
+    "runnerCode": 1,
+    "freezePath": "executed-harness-freeze-attempt9.json",
+    "frozenFiles": {
+      "e2e/private-stack-attempt9.mjs": "c5e1cec21d4fab0195b7894961fcc2d76b94a2a2e66a5acc78a37baf620d2b65",
+      "e2e/private-focused452-browser.mjs": "6b0e912d129a02f46ab81b61e9eab3d80640a76f7ae620d4447e36c83e92e459"
+    },
+    "classification": "EXECUTED_WITH_RECORDED_FAILURES",
+    "databaseCleanup": {
+      "mode": "owned-docker-postgresql16",
+      "ownedDatabaseRemoved": true,
+      "cleanupOwnershipVerified": true,
+      "cleanupErrors": []
+    },
+    "databaseProvenance": "attempt9/test-results/database-provenance.json"
+  },
+  {
+    "attempt": 10,
+    "label": "recorded reload retry CANCELLED BEFORE RUNTIME",
+    "runnerResultPresent": true,
+    "runnerOk": false,
+    "runnerCode": 1,
+    "freezePath": "executed-harness-freeze-attempt10.json",
+    "frozenFiles": {
+      "e2e/private-stack-attempt10.mjs": "499f65728be0b7983612e3570f34b7ad33fcaec28570dbe5d5bea81ac0751aea",
+      "e2e/private-recorded-retry10.mjs": "ee65b6b5114b996b0062c9d36b3b94db7580b5d71313a654b6dcf042768529c6"
+    },
+    "classification": "CANCELLED_BEFORE_RUNTIME"
+  }
+]

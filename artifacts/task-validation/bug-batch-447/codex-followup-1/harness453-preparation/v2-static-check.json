@@ -1,0 +1,21 @@
+{
+  "result": "PASS",
+  "head": "ccea0be90b906e71c3a32581097781e9623b6cef",
+  "originalHarnessSha256": "f0cc1ef82e21761bfb104128c1087b5c7498442d509d06d44870baf26fbca50a",
+  "preparedV1Sha256": "da96ad3af26a98f600bc7d0782a58c77fd61e1e1d9626c95e190604194ac7dc0",
+  "preparedV2Sha256": "971c8e507eaec83f7e44869bc661f59544601aff1030086f5000e4967ed58651",
+  "contractSha256": "89ce49e2b394e67925223d89194eb0b3b5df08817b246b99e82138fb0b3d486a",
+  "bytesOutside453ScenarioIdentical": true,
+  "blankRouteAssertionsBeforeBothCountedFlows": true,
+  "negativeCountedUiActions": 4,
+  "positiveCountedUiActions": 5,
+  "positiveIdsSnapshottedBeforeCountedActions": true,
+  "exactlyOneNewPositiveAicRowRequired": true,
+  "positiveSchedulesOrderedByTime": true,
+  "noPageEvaluationOrApiAssignmentInCountedBlocks": true,
+  "browserExecuted": false,
+  "worktreeStatus": [
+    "?? artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/",
+    "?? e2e/qa-bug-batch-447-route486-browser.mjs"
+  ]
+}

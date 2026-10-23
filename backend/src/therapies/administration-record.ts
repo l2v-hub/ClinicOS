@@ -19,6 +19,10 @@ import {
   TherapyNotFoundError,
 } from './therapy-write.js';
 import { patientIsInOperatorScope } from '../patients/patient-scope.js';
+import {
+  serializeTemporaryPsPatient,
+  assertTemporaryPsAdministrationAllowed,
+} from '../patients/temporary-ps-exits.js';
 import { recordedOneTimeOutcome } from './slot-scheduling.js';
 
 /** The slot already holds an `erogata` record: it can be neither re-confirmed nor downgraded. */
@@ -76,8 +80,23 @@ async function existingSlotRecord(
 }
 
 export function isConcurrentWriteConflict(error: unknown): boolean {
-  return Boolean(
-    error && typeof error === 'object' && (error as { code?: string }).code === 'P2034',
+  if (!error || typeof error !== 'object') return false;
+  const candidate = error as {
+    code?: string;
+    meta?: {
+      driverAdapterError?: {
+        cause?: { originalCode?: string; kind?: string };
+      };
+    };
+  };
+  if (candidate.code === 'P2034') return true;
+  // Prisma7 reports serialization failures of raw row-lock writes as P2010 plus the
+  // PostgreSQL adapter's original SQLSTATE, rather than the ORM write's P2034.
+  const cause = candidate.meta?.driverAdapterError?.cause;
+  return (
+    candidate.code === 'P2010' &&
+    cause?.kind === 'TransactionWriteConflict' &&
+    ['40001', '40P01'].includes(cause.originalCode ?? '')
   );
 }
 
@@ -92,6 +111,7 @@ export async function confirmTherapyAdministration(
     return (await recordTherapyAdministrationResult(body, actor, { notAdministered: false }))
       .record;
   const write = async (tx: Prisma.TransactionClient) => {
+    await serializeTemporaryPsPatient(tx, input.patientId, actor);
     const authoritative = await resolveAuthoritativeTherapy(tx, input, actor);
     const {
       therapyId,
@@ -117,6 +137,7 @@ export async function confirmTherapyAdministration(
       singleDayDose,
     });
     if (existing?.stato === 'erogata') throw new TherapyAlreadyAdministeredError();
+    await assertTemporaryPsAdministrationAllowed(tx, input.patientId);
     if (input.expectedStato === 'non_erogata' && existing?.stato !== 'non_erogata')
       throw new TherapyWriteInputError(
         'La dose rifiutata non è più disponibile: rileggi il registro.',
@@ -183,6 +204,7 @@ export async function recordTherapyNotAdministered(
   if (!transaction && input.requestId)
     return (await recordTherapyAdministrationResult(body, actor, { notAdministered: true })).record;
   const write = async (tx: Prisma.TransactionClient) => {
+    await serializeTemporaryPsPatient(tx, input.patientId, actor);
     const authoritative = await resolveAuthoritativeTherapy(tx, input, actor, {
       requireDoseMeasurement: false,
     });
@@ -315,7 +337,7 @@ export async function recordTherapyAdministrationResult(
     } catch (error) {
       const code =
         error && typeof error === 'object' ? (error as { code?: string }).code : undefined;
-      if (attempt >= 2 || !['P2034', 'P2002'].includes(code ?? '')) throw error;
+      if (attempt >= 2 || (!isConcurrentWriteConflict(error) && code !== 'P2002')) throw error;
     }
   }
 }

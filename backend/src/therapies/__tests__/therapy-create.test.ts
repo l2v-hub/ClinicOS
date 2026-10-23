@@ -4,8 +4,23 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createTherapyInTx } from '../therapy-create.js';
+import { createTherapyInTx, validateTherapyCreateInput } from '../therapy-create.js';
 import { prisma } from '../../lib/prisma.js';
+
+test('new therapy create requires an explicit route and accepts a supplied route unchanged', () => {
+  const base = { farmacoNome: 'Farmaco sintetico', dataInizio: '2026-10-18' };
+  assert.throws(
+    () => validateTherapyCreateInput(base),
+    (error: Error) => error.message === 'Indica la via di somministrazione',
+  );
+  assert.throws(
+    () => validateTherapyCreateInput({ ...base, viaSomministrazione: '  ' }),
+    (error: Error) => error.message === 'Indica la via di somministrazione',
+  );
+  assert.doesNotThrow(() =>
+    validateTherapyCreateInput({ ...base, viaSomministrazione: 'SC' }),
+  );
+});
 
 test('createTherapyInTx: creates therapy with schedules and derives dosaggio + fasceMattina', async () => {
   // Create a minimal patient row for the FK constraint.

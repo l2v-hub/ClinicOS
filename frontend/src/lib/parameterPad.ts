@@ -2,7 +2,7 @@
 // Il valore salvato resta quello di sempre: la pressione è un solo campo "sistolica/diastolica".
 import type { ParameterValues, PatientParameterReading } from './patientParameterReadings';
 import { facilityLocalMinute } from './facilityTime';
-import { readingRecencyText } from './readingRecency';
+import { readingRecencyText, readingRecency } from './readingRecency';
 
 export type PadField = 'fr' | 'spo2' | 'pas' | 'pad' | 'fc' | 'temperatura' | 'dtx';
 
@@ -150,4 +150,17 @@ export function previousText(
       : 'Nessuna rilevazione precedente';
   const shown = key === 'o2' ? (item.value === 'si' ? 'con O2' : 'in aria') : item.value;
   return `Prima: ${shown} · ${readingRecencyText(item.measuredAt, now)}`;
+}
+
+/** Compact placeholder only when a real previous observation exists; absence is not repeated. */
+export function previousPlaceholder(
+  state: Parameters<typeof previousText>[0],
+  key: PreviousKey,
+  now: Date = new Date(),
+): string {
+  if (state.status !== 'ready' || !state.values[key]) return '';
+  const item = state.values[key]!;
+  const recency = readingRecency(item.measuredAt, now);
+  const age = recency.elapsed.replace(/\bore?\b/, 'h').replace(/\bminut[oi]\b/, 'min');
+  return `${item.value} · ${recency.valid ? age || recency.absolute : 'data da verificare'}`;
 }

@@ -1,0 +1,12 @@
+{
+  "status": "STOPPED \u2014 AUTHOR HANDOFF",
+  "role": "implementation author, not independent QA",
+  "sourceStable": true,
+  "manifest": {
+    "sha256": "1a17a557b04f41c1798c4e4729d11b4d96a600ba8fd8acc48eb22119462e4f86",
+    "bytes": 833,
+    "inode": 917604
+  },
+  "nextOwner": "root controller; dedicated independent QA",
+  "sourceEditsFinished": true
+}

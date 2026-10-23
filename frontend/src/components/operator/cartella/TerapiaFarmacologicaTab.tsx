@@ -4,7 +4,16 @@
 // • Nuova terapia: la stessa maschera di registrazione usata dalla popup dello slot.
 // I vecchi collegamenti (attivi, programmazione, giornaliere, sospese) atterrano sulle nuove viste;
 // la vista scelta resta nell'URL (ricarica e Indietro la riaprono).
-import { lazy, Suspense, useState, useEffect, useCallback, useRef, useId } from 'react';
+import {
+  lazy,
+  Suspense,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  useRef,
+  useId,
+} from 'react';
 import { AccessibleDialogSurface } from '../../shared/AccessibleDialogSurface';
 import { therapyFormAtCalendarSlot } from '../../../lib/therapyCalendarCreate';
 import { createSubmissionKey } from '../../../lib/submissionKey';
@@ -26,7 +35,15 @@ import {
 } from '../../../lib/patientTabSnapshots';
 import { readCompletePatientTherapies } from '../../../lib/patientTherapyCalendarRead';
 import { completeTherapySnapshot } from '../../../lib/therapyCompleteness';
-import { operatorHeaders } from '../../../lib/operatorSession';
+import { getCurrentOperator, operatorHeaders } from '../../../lib/operatorSession';
+import { readGiroAllergies } from '../../../lib/therapyAllergyRead';
+import { deriveAllergySummary } from '../../../lib/allergyStatusModel';
+import {
+  prescriptionAllergyAcknowledged,
+  prescriptionAllergyScope,
+  prescriptionAllergyWarning,
+  type PrescriptionAllergyContext,
+} from './therapyQuickSchedule';
 import { useCan } from '../../../lib/capabilities';
 import { rememberTherapyView } from '../../../lib/patientTargetHash';
 import {
@@ -72,22 +89,50 @@ interface Props {
    * nuovo `requestId` riapplica lo stesso bersaglio.
    */
   therapyTarget?: TherapyTarget & { requestId: number };
+  /** Current chart allergy revision; invalidates acknowledgement without losing the draft. */
+  allergyRevision?: string;
 }
 
 type TherapyForm = TherapyFormValue;
 type CalendarFocus = { requestId: number; date?: string; time?: string };
+
+export async function completeAllergyReadForSave<T>(
+  read: Promise<T>,
+  isCurrent: () => boolean,
+  onSuperseded: (message: string) => void,
+  continueWithFreshContext: (value: T) => void,
+): Promise<boolean> {
+  const value = await read;
+  if (!isCurrent()) {
+    onSuperseded(
+      'La lettura delle allergie è stata aggiornata durante il salvataggio. Verifica e salva di nuovo.',
+    );
+    return false;
+  }
+  continueWithFreshContext(value);
+  return true;
+}
 
 export function TerapiaFarmacologicaTab({
   paziente,
   operatoreNome,
   focusTherapyId,
   therapyTarget,
+  allergyRevision = '',
 }: Props) {
   // La GUI nasconde la prescrizione se il ruolo non la consente (il backend la rifiuta comunque):
   // l'infermiere somministra dal calendario, il medico modifica / sospende dalla prescrizione.
   const canCreateTherapy = useCan('therapy.create');
   const canUpdateTherapy = useCan('therapy.update');
   const canDeleteTherapy = useCan('therapy.delete');
+  const canReadAllergies = useCan('clinical_record.get');
+  const operator = getCurrentOperator();
+  const allergyReadKey = JSON.stringify([
+    paziente.id,
+    operator?.id ?? '',
+    operator?.role ?? '',
+    allergyRevision,
+  ]);
 
   const [view, setView] = useState<TherapyView>(
     () => therapyLanding(therapyTarget?.subView, { canCreate: canCreateTherapy }).view,
@@ -131,6 +176,27 @@ export function TerapiaFarmacologicaTab({
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState<TherapyForm>(emptyTherapyForm());
   const [saving, setSaving] = useState(false);
+  const [allergyRead, setAllergyRead] = useState<{
+    key: string;
+    context: PrescriptionAllergyContext;
+  } | null>(null);
+  const [allergyAcknowledgement, setAllergyAcknowledgement] = useState<string | null>(null);
+  const allergySequence = useRef(0);
+  const allergySaveController = useRef<AbortController | null>(null);
+  const allergyContext: PrescriptionAllergyContext = !canReadAllergies
+    ? { phase: 'unavailable' }
+    : allergyRead?.key === allergyReadKey
+      ? allergyRead.context
+      : { phase: 'loading' };
+  const allergyScope = prescriptionAllergyScope(paziente.id, allergyReadKey, form, allergyContext);
+  // Updated at commit before browser events: older reads cannot save for a new selection.
+  const currentSelection = useRef('');
+  const selection = prescriptionAllergyScope(paziente.id, allergyReadKey, form, {
+    phase: 'loading',
+  });
+  useLayoutEffect(() => {
+    currentSelection.current = selection;
+  }, [selection]);
   const therapyLoadSequence = useRef(0);
   const therapyReadController = useRef<AbortController | null>(null);
   const activePatientId = useRef(paziente.id);
@@ -139,6 +205,48 @@ export function TerapiaFarmacologicaTab({
   useEffect(() => {
     activePatientId.current = paziente.id;
   }, [paziente.id]);
+
+  useEffect(() => {
+    if (!showForm || !canReadAllergies) return;
+    let mounted = true;
+    let controller: AbortController | undefined;
+    let timeout: number | undefined;
+    const refresh = () => {
+      if (!mounted) return;
+      controller?.abort();
+      window.clearTimeout(timeout);
+      controller = new AbortController();
+      const signal = controller.signal;
+      const sequence = ++allergySequence.current;
+      setAllergyRead({ key: allergyReadKey, context: { phase: 'loading' } });
+      // A new source read (including focus/reload) requires a fresh acknowledgement.
+      setAllergyAcknowledgement(null);
+      const readController = controller;
+      const readTimeout = window.setTimeout(() => readController.abort(), 10000);
+      timeout = readTimeout;
+      void readGiroAllergies(paziente.id, signal)
+        .then(
+          (snapshot) => {
+            if (mounted && !signal.aborted && sequence === allergySequence.current)
+              setAllergyRead({ key: allergyReadKey, context: { phase: 'ready', snapshot } });
+          },
+          () => {
+            if (mounted && sequence === allergySequence.current)
+              setAllergyRead({ key: allergyReadKey, context: { phase: 'error' } });
+          },
+        )
+        .finally(() => window.clearTimeout(readTimeout));
+    };
+    queueMicrotask(refresh);
+    window.addEventListener('focus', refresh);
+    return () => {
+      mounted = false;
+      controller?.abort();
+      allergySaveController.current?.abort();
+      window.clearTimeout(timeout);
+      window.removeEventListener('focus', refresh);
+    };
+  }, [showForm, canReadAllergies, paziente.id, allergyReadKey]);
 
   // ── Loaders ──────────────────────────────────────────────────────────────────
 
@@ -212,7 +320,14 @@ export function TerapiaFarmacologicaTab({
         setLoading(false);
       }
     }
-  }, [paziente.id]);
+  }, [
+    paziente.id,
+    setLoading,
+    setTherapyLoadError,
+    setTherapies,
+    setInventoryPatientId,
+    setTherapySummary,
+  ]);
 
   useEffect(() => {
     void (async () => {
@@ -271,6 +386,7 @@ export function TerapiaFarmacologicaTab({
   const resetSaveFeedback = () => {
     setSaveAttempted(false);
     setSaveError('');
+    setAllergyAcknowledgement(null);
   };
 
   function openAdd() {
@@ -339,10 +455,53 @@ export function TerapiaFarmacologicaTab({
     }
     const payload = formToPayload(form, paziente.id, operatoreNome);
     const editing = editId;
+    const requestedSelection = selection;
     try {
       setSaving(true);
       setError('');
       setSaveError('');
+      // Always reread immediately before writing; a chart edited elsewhere invalidates the
+      // old acknowledgement. This read carries no cached chart and changes no therapy payload.
+      let freshContext: PrescriptionAllergyContext = { phase: 'unavailable' };
+      if (canReadAllergies) {
+        const controller = new AbortController();
+        allergySaveController.current?.abort();
+        allergySaveController.current = controller;
+        const sequence = ++allergySequence.current;
+        const timeout = window.setTimeout(() => controller.abort(), 10000);
+        const freshRead = readGiroAllergies(paziente.id, controller.signal).then(
+          (snapshot): PrescriptionAllergyContext => ({ phase: 'ready', snapshot }),
+          (): PrescriptionAllergyContext => ({ phase: 'error' }),
+        );
+        try {
+          const current = await completeAllergyReadForSave(
+            freshRead,
+            () =>
+              sequence === allergySequence.current &&
+              requestedSelection === currentSelection.current,
+            setSaveError,
+            (context) => {
+              freshContext = context;
+            },
+          );
+          if (!current) return;
+        } finally {
+          window.clearTimeout(timeout);
+        }
+        if (requestedSelection !== currentSelection.current) {
+          return;
+        }
+      }
+      if (requestedSelection !== currentSelection.current) return;
+      setAllergyRead({ key: allergyReadKey, context: freshContext });
+      const freshScope = prescriptionAllergyScope(paziente.id, allergyReadKey, form, freshContext);
+      if (!prescriptionAllergyAcknowledged(freshContext, freshScope, allergyAcknowledgement)) {
+        setAllergyAcknowledgement(null);
+        setSaveError(
+          'Verifica il contesto allergie aggiornato e conferma l’avviso prima di salvare.',
+        );
+        return;
+      }
       const url = editing
         ? `${API_URL}/patients/${paziente.id}/therapies/${editing}`
         : `${API_URL}/patients/${paziente.id}/therapies`;
@@ -712,10 +871,81 @@ export function TerapiaFarmacologicaTab({
       </header>
       <TherapyFormFields
         value={form}
-        onChange={setForm}
+        onChange={(next) => {
+          if (saving) return;
+          setAllergyAcknowledgement(null);
+          setForm(next);
+        }}
         operatoreNome={operatoreNome}
         issues={formIssues}
+        creation={editId === null}
       />
+      <section
+        className="therapy-form__section"
+        aria-label="Verifica allergie"
+        data-testid="therapy-allergy-warning"
+        style={
+          prescriptionAllergyWarning(allergyContext)
+            ? { borderLeft: '3px solid var(--amber)' }
+            : undefined
+        }
+      >
+        <strong>
+          Allergie:{' '}
+          {allergyContext.phase === 'ready'
+            ? deriveAllergySummary(allergyContext.snapshot.items, allergyContext.snapshot.status)
+                .label
+            : allergyContext.phase === 'loading'
+              ? 'lettura in corso…'
+              : 'dato non disponibile'}
+        </strong>
+        {allergyContext.phase === 'ready' && allergyContext.snapshot.items.length > 0 && (
+          <ul>
+            {allergyContext.snapshot.items.map((item, index) => (
+              <li key={index}>
+                <strong>{item.allergene}</strong> · Gravità: {item.gravita ?? 'non documentata'}
+                {item.reazione && <> · Reazione: {item.reazione}</>}
+                {item.note && <> · Note: {item.note}</>}
+              </li>
+            ))}
+          </ul>
+        )}
+        {prescriptionAllergyWarning(allergyContext) && (
+          <>
+            <p>
+              Verifica la compatibilità del farmaco selezionato con il contesto allergie. Questo
+              avviso non attesta una specifica interazione o controindicazione.
+            </p>
+            {allergyContext.phase !== 'ready' && allergyContext.phase !== 'loading' && (
+              <p>
+                La cartella non è disponibile: verifica manualmente le allergie prima di confermare.
+              </p>
+            )}
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                minHeight: 44,
+                textTransform: 'none',
+                letterSpacing: 0,
+              }}
+            >
+              <input
+                type="checkbox"
+                style={{ width: 20, height: 20, flexShrink: 0 }}
+                data-testid="therapy-allergy-acknowledge"
+                disabled={saving || allergyContext.phase === 'loading' || !form.farmacoNome.trim()}
+                checked={allergyAcknowledgement === allergyScope}
+                onChange={(event) =>
+                  setAllergyAcknowledgement(event.target.checked ? allergyScope : null)
+                }
+              />
+              Ho verificato le allergie e la compatibilità con il farmaco selezionato.
+            </label>
+          </>
+        )}
+      </section>
       {(formIssues.length > 0 || saveError) && (
         <p className="therapy-form__error" role="alert" data-testid="therapy-save-error">
           {formIssues.length ? therapyIssuesSummary(formIssues) : saveError}

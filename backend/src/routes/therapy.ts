@@ -1,4 +1,6 @@
 import { Router, type Response } from 'express';
+import { prisma } from '../lib/prisma.js';
+import { TemporaryPsExitError, readTemporaryPsExit } from '../patients/temporary-ps-exits.js';
 import { requireOperator, type AuthedRequest, type Operator } from '../ai/auth.js';
 import {
   buildTherapySlotPage,
@@ -11,7 +13,7 @@ import {
   TherapyNotFoundError,
   TherapyWriteInputError,
 } from '../therapies/therapy-write.js';
-import { hasFacilityPatientScope } from '../patients/patient-scope.js';
+import { hasFacilityPatientScope, patientIsInOperatorScope } from '../patients/patient-scope.js';
 import {
   parseTherapySlotPageQuery,
   TherapySlotPageInputError,
@@ -103,6 +105,10 @@ router.get('/', async (req, res) => {
     const date = parseIsoCalendarDate(req.query.date, 'date');
     res.status(200).json(await buildTherapySlots(date, patientAccess(req as AuthedRequest)));
   } catch (error) {
+    if (error instanceof TemporaryPsExitError) {
+      res.status(error.status).json({ error: error.message, code: error.code });
+      return;
+    }
     if (error instanceof AppointmentListInputError) {
       res.status(400).json({ error: error.message });
       return;
@@ -252,8 +258,20 @@ router.get('/prn', async (req, res) => {
       typeof req.query.date === 'string' && req.query.date
         ? parseIsoCalendarDate(req.query.date, 'date')
         : facilityToday();
-    res.status(200).json({ date, items: await listPrnAdministrations(patientId, date, actor) });
+    if (!(await patientIsInOperatorScope(patientId, actor, prisma))) {
+      res.status(404).json({ error: 'Paziente non trovato' });
+      return;
+    }
+    const [items, temporaryPsExit] = await Promise.all([
+      listPrnAdministrations(patientId, date, actor),
+      readTemporaryPsExit(prisma, patientId),
+    ]);
+    res.status(200).json({ date, items, temporaryPsExit });
   } catch (error) {
+    if (error instanceof TemporaryPsExitError) {
+      res.status(error.status).json({ error: error.message, code: error.code });
+      return;
+    }
     if (error instanceof AppointmentListInputError) {
       res.status(400).json({ error: error.message });
       return;

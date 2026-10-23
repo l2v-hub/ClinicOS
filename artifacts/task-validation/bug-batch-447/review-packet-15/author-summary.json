@@ -1,0 +1,20 @@
+{
+  "status": "AUTHOR_TARGETED_TEST_PASS_PENDING_ROOT_MUTATION_QA_AND_PUBLICATION",
+  "reservationNonce": "b9f3abcb-027a-4986-8f84-c79b5a62de13",
+  "canonicalStateCommit": "352a67fe70d0af59dde176fc8e7c33de2fc05904",
+  "sourceBase": "a3dedfd67193bb3bb26482ab630053766352c48b",
+  "onlyChangedSourcePath": "backend/src/routes/__tests__/patient-route-scope-contract.test.ts",
+  "resultSha256": "ec08d68ff7aa322db96b5d03c0dcc4115dad9459c080ab40148ca80e10a9f1f3",
+  "testCommand": "env -i PATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/usr/bin:/bin node --import tsx --test /tmp/clinicos-497-native-backend-fixture14/backend/src/routes/__tests__/patient-route-scope-contract.test.ts",
+  "testWorkdir": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend",
+  "testResult": "2 passed, 0 failed, 0 skipped",
+  "nodeVersion": "v24.19.0",
+  "environment": "env -i PATH only; no DATABASE_URL or credentials",
+  "scopeProof": "726-file regular-file before/after inventory comparison; exactly reserved target file differs",
+  "baselineTargetSha256": "087829ea24d02fd898937918636118bddf96f95865e4abaa4c0da5e2b8e8742a",
+  "diffSha256": "57b917fa38e075c5fe84f2e18b5b242f2795719e0f5d5342189afced020d1a2f",
+  "actualNative": "prior native backend test failure preserved; replacement six native checks pending",
+  "independentMutationQA": "pending root",
+  "fullBackendRuntimeDiagnostic": "separate snapshot in progress; untouched",
+  "GitHub/provider/canonicalWrites": "none"
+}

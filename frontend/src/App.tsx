@@ -1,3 +1,4 @@
+import { facilityLocalDate } from './lib/facilityTime';
 import type {
   AgendaTherapyIdentity,
   AgendaTherapyVerificationFeed,
@@ -47,6 +48,11 @@ import {
 } from './lib/cartellaWriteQueue';
 import { clearCachedGet, invalidateCachedGet } from './lib/cachedFetch';
 import { recordAdministration } from './lib/therapyAdministrationWrite';
+import {
+  saveTemporaryPsExit,
+  TEMPORARY_PS_EXIT_CHANGED,
+  type TemporaryPsExitCommand,
+} from './lib/temporaryPsExit';
 import { clearSessionCache, sessionCacheEpoch } from './lib/sessionCache';
 import { prefetchPatientListSnapshot } from './components/operator/usePatientListPage';
 import { prefetchPatientParametersSnapshot } from './lib/patientParametersPrefetch';
@@ -573,7 +579,7 @@ export default function App() {
   });
   const notesQueryRef = useRef<NotesMailboxQuery>({ box: 'all', q: '' });
   const notesPageInfoRef = useRef<NotesPageInfo>({ hasMore: false, nextCursor: null });
-  const therapyDateRef = useRef(localIsoDate());
+  const therapyDateRef = useRef(facilityLocalDate());
   const appointmentRangeRef = useRef<AppointmentRangeRequest>({
     from: localIsoDate(),
     to: localIsoDate(),
@@ -728,7 +734,7 @@ export default function App() {
     rosterKey,
   ]);
   // Giorno del giro caricato: la pagina Terapia riparte da qui quando viene rimontata.
-  const [therapyDate, setTherapyDate] = useState(localIsoDate);
+  const [therapyDate, setTherapyDate] = useState(facilityLocalDate);
   const [loadingTherapySlots, setLoadingTherapySlots] = useState(true);
   const [loadingMoreTherapySlots, setLoadingMoreTherapySlots] = useState(false);
   const [therapyLoadError, setTherapyLoadError] = useState<string | null>(null);
@@ -2908,6 +2914,40 @@ export default function App() {
     }
   }
 
+  async function updateTemporaryPsExit(
+    patientId: string,
+    command: TemporaryPsExitCommand,
+  ): Promise<CartellaPaziente> {
+    const epoch = sessionEpochRef.current;
+    const initial =
+      cartelle.find((record) => record.pazienteId === patientId) ??
+      createDefaultCartella(patientId);
+    const confirmed = await cartellaWrites.current.enqueueMutation(
+      `${epoch}:${patientId}`,
+      initial,
+      async () => {
+        if (epoch !== sessionEpochRef.current)
+          throw new Error('Sessione cambiata. Riapri la cartella.');
+        const result = await saveTemporaryPsExit(patientId, command);
+        if (epoch !== sessionEpochRef.current)
+          throw new Error('Sessione cambiata. Riapri la cartella.');
+        return { ...createDefaultCartella(patientId), ...result };
+      },
+    );
+    if (epoch !== sessionEpochRef.current)
+      throw new Error('Sessione cambiata. Riapri la cartella.');
+    setCartelle((previous) => {
+      if (epoch !== sessionEpochRef.current) return previous;
+      return previous.some((record) => record.pazienteId === patientId)
+        ? previous.map((record) => (record.pazienteId === patientId ? confirmed : record))
+        : [...previous, confirmed];
+    });
+    invalidateCachedGet(`${API_URL}/therapy-slots`);
+    void loadTherapySlots(therapyDateRef.current);
+    window.dispatchEvent(new CustomEvent(TEMPORARY_PS_EXIT_CHANGED, { detail: { patientId } }));
+    return confirmed;
+  }
+
   async function updateCartella(
     pazienteId: string,
     updates: Partial<CartellaPaziente>,
@@ -2922,6 +2962,7 @@ export default function App() {
     // Optimistic update
     const applyUpdate = () =>
       setCartelle((prev) => {
+        if (documentSaveEpoch !== sessionEpochRef.current) return prev;
         const idx = prev.findIndex((c) => c.pazienteId === pazienteId);
         return idx >= 0
           ? prev.map((c, i) => (i === idx ? mergeCartellaPatch(c, existing, updates) : c))
@@ -2950,13 +2991,33 @@ export default function App() {
               saveError =
                 'Lo storico Tinetti è di sola lettura. I campi inseriti sono conservati; ricarica lo storico prima di riprovare.';
           }
-          return response.ok && documentSaveEpoch === sessionEpochRef.current;
+          if (!response.ok || documentSaveEpoch !== sessionEpochRef.current) return false;
+          const verified = await response.json().catch(() => null);
+          if (documentSaveEpoch !== sessionEpochRef.current) return false;
+          if (
+            verified?.patientId !== pazienteId ||
+            !verified.data ||
+            typeof verified.data !== 'object' ||
+            Array.isArray(verified.data)
+          )
+            return false;
+          const confirmed = {
+            ...createDefaultCartella(pazienteId),
+            ...verified.data,
+            pazienteId,
+          } as CartellaPaziente;
+          setCartelle((previous) => {
+            if (documentSaveEpoch !== sessionEpochRef.current) return previous;
+            return previous.some((record) => record.pazienteId === pazienteId)
+              ? previous.map((record) => (record.pazienteId === pazienteId ? confirmed : record))
+              : [...previous, confirmed];
+          });
+          return confirmed;
         },
         mergeCartellaPatch,
       );
       if (documentSaveEpoch !== sessionEpochRef.current) return false;
       if (ok) {
-        if (options?.optimistic === false) applyUpdate();
         showToast('Dati salvati correttamente');
         return true;
       }
@@ -2978,7 +3039,7 @@ export default function App() {
     bedId?: string,
   ): Promise<{ ok: boolean; lettoLabel?: string }> {
     try {
-      const today = localIsoDate();
+      const today = facilityLocalDate();
       const assignRes = await fetch(
         `${API_URL}/patients/${pazienteId}/room-assignments?scope=active`,
         {
@@ -3891,6 +3952,7 @@ export default function App() {
                             assessmentDraftStore={assessmentDraftStore}
                             onAcknowledgeConsegna={acknowledgeConsegna}
                             onUpdateCartella={updateCartella}
+                            onTemporaryPsExit={updateTemporaryPsExit}
                             onUpdatePaziente={updatePaziente}
                             onAssignCamera={syncCameraAssignment}
                             operatoreNome={utente.nome}

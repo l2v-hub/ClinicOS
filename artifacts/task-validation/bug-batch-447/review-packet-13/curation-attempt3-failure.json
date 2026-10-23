@@ -1,0 +1,5 @@
+{
+  "status": "FAILED_MANIFEST_PATH_LOOKUP_PRESERVED",
+  "problem": "Manifest generator used issue-447.trace.zip while the packet uses the canonical issue-447-trace.zip path. It stopped before writing the evidence manifest. Corrected manifest hashes the exact copied filenames.",
+  "sourceOrPriorProofChanged": false
+}

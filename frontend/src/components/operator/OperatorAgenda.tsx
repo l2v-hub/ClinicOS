@@ -27,6 +27,7 @@ import './OperatorAgendaHmi.css';
 import '../shared/AgendaInline.css';
 import { TherapySlotModal } from './TherapySlotModal';
 import { useCan } from '../../lib/capabilities';
+import { useCanAdministerTherapy } from '../../lib/therapyPermissions';
 import {
   canOpenOperatorAppointment,
   firstOperatorAppointmentSlot,
@@ -50,6 +51,7 @@ interface OperatorAgendaProps {
   onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;
   onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
   therapySlots?: TherapyReadGroup[];
+  therapyDate?: string;
   loadingTherapySlots?: boolean;
   therapyLoadError?: string | null;
   therapyLoadMoreError?: string | null;
@@ -130,9 +132,10 @@ export function OperatorAgenda({
   onRetryAppointments,
   onLoadAppointments,
   onSelectPaziente,
-  therapySlots: therapyGroups,
-  loadingTherapySlots = false,
-  therapyLoadError = null,
+  therapySlots: providedTherapySlots,
+  therapyDate,
+  loadingTherapySlots: providedTherapyLoading = false,
+  therapyLoadError: providedTherapyError = null,
   therapyLoadMoreError = null,
   therapyPageInfo,
   loadingMoreTherapySlots = false,
@@ -145,16 +148,31 @@ export function OperatorAgenda({
 }: OperatorAgendaProps) {
   // Creazione appuntamenti: la GUI la nasconde se il ruolo non la consente (il backend decide).
   const canCreateAppointment = useCan('appointments.create');
+  const canReadTherapies = useCan('administration.list_slots');
+  const canAdministerTherapies = useCanAdministerTherapy();
   const now = useRecencyClock();
   const [view, setView] = useState<ViewMode>('giornaliero');
   const [refDate, setRefDate] = useState(new Date());
   const [filtroStato, setFiltroStato] = useState<FiltroStatoAppuntamento>('tutti');
   const [aptForm, setAptForm] = useState<{ data: string; ora: string } | null>(null);
   const [selectedAptId, setSelectedAptId] = useState<string | null>(null);
-  const therapySlots = therapyGroups?.filter(isScheduledTherapySlot);
   const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);
   const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const therapyDateMatches = therapyDate === undefined || therapyDate === isoDate(refDate);
+  const showTherapies = canReadTherapies && view === 'giornaliero';
+  const loadingTherapySlots =
+    showTherapies &&
+    (providedTherapyLoading || (!therapyDateMatches && Boolean(onLoadTherapySlots)));
+  const therapyLoadError = showTherapies && therapyDateMatches ? providedTherapyError : null;
+  const therapySlots =
+    showTherapies && therapyDateMatches && !providedTherapyLoading && !providedTherapyError
+      ? providedTherapySlots?.filter(isScheduledTherapySlot)
+      : undefined;
+
+  useEffect(() => {
+    if (canReadTherapies && view === 'giornaliero') onLoadTherapySlots?.(isoDate(refDate));
+  }, [canReadTherapies, onLoadTherapySlots, refDate, view]);
 
   useEffect(() => {
     // A denied session must not resurrect a pending creation when permission returns.
@@ -203,7 +221,6 @@ export function OperatorAgenda({
         next = new Date(d);
         next.setMonth(d.getMonth() + delta);
       }
-      if (view === 'giornaliero') onLoadTherapySlots?.(isoDate(next));
       return next;
     });
   }
@@ -211,21 +228,18 @@ export function OperatorAgenda({
   function changeView(next: ViewMode) {
     setSelectedTherapySlotId(null);
     setView(next);
-    if (next === 'giornaliero') onLoadTherapySlots?.(isoDate(refDate));
   }
 
   function openDay(date: Date) {
     setSelectedTherapySlotId(null);
     setRefDate(date);
     setView('giornaliero');
-    onLoadTherapySlots?.(isoDate(date));
   }
 
   function goToday() {
     const today = new Date();
     setSelectedTherapySlotId(null);
     setRefDate(today);
-    if (view === 'giornaliero') onLoadTherapySlots?.(isoDate(today));
   }
 
   function titleLabel(): string {
@@ -382,11 +396,13 @@ export function OperatorAgenda({
       />
 
       {/* ── Appointment status filter chips ── */}
-      <AgendaStatoFilterRow
-        filtro={filtroStato}
-        onChange={setFiltroStato}
-        appuntamenti={rangeApts}
-      />
+      {rangeApts.length > 0 && (
+        <AgendaStatoFilterRow
+          filtro={filtroStato}
+          onChange={setFiltroStato}
+          appuntamenti={rangeApts}
+        />
+      )}
 
       {/* Nella vista giornaliera ogni evento espone già lo stato: la legenda duplicava i badge.
           Resta utile nelle viste aggregate, dove gli stati sono rappresentati da indicatori compatti. */}
@@ -415,23 +431,27 @@ export function OperatorAgenda({
           </button>
         </div>
       )}
-      {!loadingTherapySlots && !therapyLoadError && therapyPageInfo?.hasMore && (
-        <div className="empty-state-card" role="status" aria-live="polite">
-          <strong>Visualizzazione parziale</strong>
-          <span>
-            Totali esatti; dettagli caricati per {therapyPageInfo.loadedTherapies} terapie.
-          </span>
-          {therapyLoadMoreError && <span role="alert">{therapyLoadMoreError}</span>}
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={onLoadMoreTherapySlots}
-            disabled={loadingMoreTherapySlots}
-          >
-            {loadingMoreTherapySlots ? 'Caricamento…' : 'Carica altre terapie'}
-          </button>
-        </div>
-      )}
+      {showTherapies &&
+        therapyDateMatches &&
+        !loadingTherapySlots &&
+        !therapyLoadError &&
+        therapyPageInfo?.hasMore && (
+          <div className="empty-state-card" role="status" aria-live="polite">
+            <strong>Visualizzazione parziale</strong>
+            <span>
+              Totali esatti; dettagli caricati per {therapyPageInfo.loadedTherapies} terapie.
+            </span>
+            {therapyLoadMoreError && <span role="alert">{therapyLoadMoreError}</span>}
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={onLoadMoreTherapySlots}
+              disabled={loadingMoreTherapySlots}
+            >
+              {loadingMoreTherapySlots ? 'Caricamento…' : 'Carica altre terapie'}
+            </button>
+          </div>
+        )}
 
       {/* ── DAILY VIEW ── */}
       {!loadingAppuntamenti && !appointmentLoadError && view === 'giornaliero' && (
@@ -460,127 +480,133 @@ export function OperatorAgenda({
             {todayApts.length === 0 && 'Nessun appuntamento in questa giornata. '}
             {newAptHint}
           </p>
-          <div className="agt-day-wrap">
-            {TIME_SLOTS.map((ora) => {
-              const tSlot = therapySlotsMap.get(ora);
-              // La fascia resta "occupata" anche se il filtro nasconde l'appuntamento: solo
-              // uno slot davvero libero puo' aprire il form di creazione.
-              const slotApt = todayAptByOra.get(ora);
-              const apt = slotApt && matchStato(slotApt, filtroStato) ? slotApt : undefined;
-              const isHour = ora.endsWith(':00');
-              const isSelected = apt?.id === selectedAptId;
-              const canCreateSlot = canOpenOperatorAppointment(
-                canCreateAppointment,
-                todayStr,
-                ora,
-                !!slotApt,
-                now,
-              );
+          {(todayApts.length > 0 || (therapySlots?.length ?? 0) > 0) && (
+            <div className="agt-day-wrap">
+              {TIME_SLOTS.filter((ora) => todayApts.length > 0 || therapySlotsMap.has(ora)).map(
+                (ora) => {
+                  const tSlot = therapySlotsMap.get(ora);
+                  // La fascia resta "occupata" anche se il filtro nasconde l'appuntamento: solo
+                  // uno slot davvero libero puo' aprire il form di creazione.
+                  const slotApt = todayAptByOra.get(ora);
+                  const apt = slotApt && matchStato(slotApt, filtroStato) ? slotApt : undefined;
+                  const isHour = ora.endsWith(':00');
+                  const isSelected = apt?.id === selectedAptId;
+                  const canCreateSlot = canOpenOperatorAppointment(
+                    canCreateAppointment,
+                    todayStr,
+                    ora,
+                    !!slotApt,
+                    now,
+                  );
 
-              return (
-                <div key={ora}>
-                  {/* Therapy slot card */}
-                  {tSlot && (
-                    <TherapySlotCard
-                      slot={tSlot}
-                      onClick={() => setSelectedTherapySlotId(tSlot.id)}
-                    />
-                  )}
+                  return (
+                    <div key={ora}>
+                      {/* Therapy slot card */}
+                      {tSlot && (
+                        <TherapySlotCard
+                          slot={tSlot}
+                          onClick={() => setSelectedTherapySlotId(tSlot.id)}
+                        />
+                      )}
 
-                  {/* Regular time slot */}
-                  <div
-                    className={`agt-slot${isHour ? ' agt-slot--hour' : ' agt-slot--half'}${slotApt ? ' agt-slot--occ' : canCreateSlot ? ' agt-slot--free' : ' agt-slot--unavailable'}`}
-                    role={canCreateSlot ? 'button' : undefined}
-                    tabIndex={canCreateSlot ? 0 : undefined}
-                    aria-label={canCreateSlot ? `Crea appuntamento alle ${ora}` : undefined}
-                    onClick={() => {
-                      if (apt) setSelectedAptId(isSelected ? null : apt.id);
-                      else if (canCreateSlot) openCreation(todayStr, ora);
-                    }}
-                    onKeyDown={(event) => {
-                      if (canCreateSlot && (event.key === 'Enter' || event.key === ' ')) {
-                        event.preventDefault();
-                        openCreation(todayStr, ora);
-                      }
-                    }}
-                  >
-                    <span className="agt-slot__time">{ora}</span>
-                    {apt ? (
-                      <div
-                        className={`agt-apt-card agt-apt-card--${apt.stato}${isSelected ? ' selected' : ''}`}
-                      >
-                        <div className="agt-apt-card__row">
-                          <span className="agt-apt-card__title">
-                            {TIPO_LABEL[apt.tipoIntervento] ?? apt.tipoIntervento}
-                          </span>
-                          <span className="agt-apt-card__detail">
-                            {onSelectPaziente && apt.pazienteNome ? (
-                              <button
-                                className="link-btn agt-apt-card__patient"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  onSelectPaziente(
-                                    apt.pazienteNome!,
-                                    apt.pazienteId ?? undefined,
-                                    appointmentLanding(apt),
-                                  );
-                                }}
-                              >
-                                {apt.pazienteNome}
-                              </button>
-                            ) : (
-                              <span className="agt-apt-card__patient">
-                                {apt.pazienteNome ?? '—'}
+                      {/* Regular time slot */}
+                      {todayApts.length > 0 && (
+                        <div
+                          className={`agt-slot${isHour ? ' agt-slot--hour' : ' agt-slot--half'}${slotApt ? ' agt-slot--occ' : canCreateSlot ? ' agt-slot--free' : ' agt-slot--unavailable'}`}
+                          role={canCreateSlot ? 'button' : undefined}
+                          tabIndex={canCreateSlot ? 0 : undefined}
+                          aria-label={canCreateSlot ? `Crea appuntamento alle ${ora}` : undefined}
+                          onClick={() => {
+                            if (apt) setSelectedAptId(isSelected ? null : apt.id);
+                            else if (canCreateSlot) openCreation(todayStr, ora);
+                          }}
+                          onKeyDown={(event) => {
+                            if (canCreateSlot && (event.key === 'Enter' || event.key === ' ')) {
+                              event.preventDefault();
+                              openCreation(todayStr, ora);
+                            }
+                          }}
+                        >
+                          <span className="agt-slot__time">{ora}</span>
+                          {apt ? (
+                            <div
+                              className={`agt-apt-card agt-apt-card--${apt.stato}${isSelected ? ' selected' : ''}`}
+                            >
+                              <div className="agt-apt-card__row">
+                                <span className="agt-apt-card__title">
+                                  {TIPO_LABEL[apt.tipoIntervento] ?? apt.tipoIntervento}
+                                </span>
+                                <span className="agt-apt-card__detail">
+                                  {onSelectPaziente && apt.pazienteNome ? (
+                                    <button
+                                      className="link-btn agt-apt-card__patient"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        onSelectPaziente(
+                                          apt.pazienteNome!,
+                                          apt.pazienteId ?? undefined,
+                                          appointmentLanding(apt),
+                                        );
+                                      }}
+                                    >
+                                      {apt.pazienteNome}
+                                    </button>
+                                  ) : (
+                                    <span className="agt-apt-card__patient">
+                                      {apt.pazienteNome ?? '—'}
+                                    </span>
+                                  )}
+                                  <span className="agt-meta-sep">·</span>
+                                  <span>{apt.durata ?? 30} min</span>
+                                </span>
+                                <div className="agt-apt-card__badges">
+                                  {apt.priorita === 'urgente' && (
+                                    <span className="agt-badge agt-badge--urgent">Urgente</span>
+                                  )}
+                                  <span className={`agt-badge agt-badge--${apt.stato}`}>
+                                    {STATO_LABEL[apt.stato]}
+                                  </span>
+                                </div>
+                              </div>
+                              {/* Nota sempre visibile (tablet: niente tocco per leggerla). */}
+                              {apt.note && (
+                                <p className="agt-apt-card__note agt-note-inline">{apt.note}</p>
+                              )}
+                              {isSelected && (
+                                <AppuntamentoActions
+                                  apt={apt}
+                                  confirmDeleteId={confirmDeleteId}
+                                  onEdit={setEditingApt}
+                                  onAskDelete={setConfirmDeleteId}
+                                  onDelete={onDeleteAppuntamento}
+                                />
+                              )}
+                            </div>
+                          ) : slotApt || !canCreateSlot ? null : (
+                            <div className="agt-free-slot">
+                              <span className="agt-free-slot__plus">
+                                <IcoPlus />
                               </span>
-                            )}
-                            <span className="agt-meta-sep">·</span>
-                            <span>{apt.durata ?? 30} min</span>
-                          </span>
-                          <div className="agt-apt-card__badges">
-                            {apt.priorita === 'urgente' && (
-                              <span className="agt-badge agt-badge--urgent">Urgente</span>
-                            )}
-                            <span className={`agt-badge agt-badge--${apt.stato}`}>
-                              {STATO_LABEL[apt.stato]}
-                            </span>
-                          </div>
+                              <span className="agt-free-slot__label">Disponibile</span>
+                            </div>
+                          )}
                         </div>
-                        {/* Nota sempre visibile (tablet: niente tocco per leggerla). */}
-                        {apt.note && (
-                          <p className="agt-apt-card__note agt-note-inline">{apt.note}</p>
-                        )}
-                        {isSelected && (
-                          <AppuntamentoActions
-                            apt={apt}
-                            confirmDeleteId={confirmDeleteId}
-                            onEdit={setEditingApt}
-                            onAskDelete={setConfirmDeleteId}
-                            onDelete={onDeleteAppuntamento}
-                          />
-                        )}
-                      </div>
-                    ) : slotApt || !canCreateSlot ? null : (
-                      <div className="agt-free-slot">
-                        <span className="agt-free-slot__plus">
-                          <IcoPlus />
-                        </span>
-                        <span className="agt-free-slot__label">Disponibile</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+                      )}
+                    </div>
+                  );
+                },
+              )}
 
-            {/* Therapy slots outside regular time range (sera 20:00, notte 22:00) */}
-            {therapySlots
-              ?.filter((ts) => !TIME_SLOTS.includes(ts.ora))
-              .map((ts) => (
-                <div key={ts.id} style={{ padding: '0 0 0 52px' }}>
-                  <TherapySlotCard slot={ts} onClick={() => setSelectedTherapySlotId(ts.id)} />
-                </div>
-              ))}
-          </div>
+              {/* Therapy slots outside regular time range (sera 20:00, notte 22:00) */}
+              {therapySlots
+                ?.filter((ts) => !TIME_SLOTS.includes(ts.ora))
+                .map((ts) => (
+                  <div key={ts.id} style={{ padding: '0 0 0 52px' }}>
+                    <TherapySlotCard slot={ts} onClick={() => setSelectedTherapySlotId(ts.id)} />
+                  </div>
+                ))}
+            </div>
+          )}
         </section>
       )}
 
@@ -805,6 +831,7 @@ export function OperatorAgenda({
           onClose={() => setSelectedTherapySlotId(null)}
           onConfirm={onConfirmTherapy}
           onNotAdministered={onNotAdministeredTherapy}
+          readOnly={!canAdministerTherapies}
           detailsPartial={therapyPageInfo?.hasMore}
           loadingMore={loadingMoreTherapySlots}
           loadMoreError={therapyLoadMoreError}

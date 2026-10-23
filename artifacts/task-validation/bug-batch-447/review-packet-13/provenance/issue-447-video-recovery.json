@@ -1,0 +1,18 @@
+{
+  "status": "FINALIZED_ORIGINAL_RECOVERED_PENDING_FFPROBE",
+  "issue": 447,
+  "sourceRecorder": "/workspace/.clinicos-cloud/497-Claude1-followup-20261021/integrated-browser-qa13/attempt6-initial-location/seven/video-local/page@40b97028076172a6a7d2c98a4c795c57.webm",
+  "videoUuid": "page@40b97028076172a6a7d2c98a4c795c57",
+  "trace": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/private-raw/issue-447-trace.zip",
+  "matchingTraceEntries": [
+    "trace.trace",
+    "trace.network"
+  ],
+  "originalSha256": "caff8f775471cbb70c4fedcc1aea327da3f34c30bc03e569ca62faead3b8f9fc",
+  "candidate": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-447-finalized-original.webm",
+  "candidateSha256": "caff8f775471cbb70c4fedcc1aea327da3f34c30bc03e569ca62faead3b8f9fc",
+  "candidateBytes": 1455486,
+  "incompleteCopyRetained": "/tmp/clinicos-qa497-browser13-20261021/attempt6/seven/issue-447.webm",
+  "incompleteCopyPublishable": false,
+  "sameCaptureNoReplayRemuxOrReconstruction": true
+}

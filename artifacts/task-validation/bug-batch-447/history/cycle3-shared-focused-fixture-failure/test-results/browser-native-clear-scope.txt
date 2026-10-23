@@ -1,0 +1,45 @@
+Issue 456: Expected content /1\/1 occupati/: The input did not match the regular expression /1\/1 occupati/. Input:
+
+'Letti: 1/2 occupati · 1 liberi\nGestisci letti'
+
+Issue 451: Expected content /Rilevazione salvata/: locator.innerText: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('.parameter-single-entry__success')
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: All seven approved acceptance scenarios must pass; inspect per-issue evidence and explicit residual gates.
+
+2 !== 0
+
+    at file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/qa-bug-batch-447-browser.mjs:2621:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 2,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Real browser acceptance failed
+
+1 !== 0
+
+    at file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/e2e/qa-bug-batch-447.mjs:288:12
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

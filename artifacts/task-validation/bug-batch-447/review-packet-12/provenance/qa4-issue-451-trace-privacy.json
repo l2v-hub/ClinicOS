@@ -1,0 +1,37 @@
+{
+  "policy": "exact synthetic session values only; no event or outcome removal",
+  "zipValidation": "CRC and residual signed-token scan passed",
+  "archives": [
+    {
+      "path": "/workspace/.clinicos-cloud/ux447-independent-qa4-20261019/attempt2/canonical-seven/issue-451-trace.zip",
+      "originalSha256": "8f6623fe379b0b39daf577fbd17c9bff8a92bc98a6bc70c9ed87b4cbf7be56be",
+      "sanitizedSha256": "69c8d4facf34caf7d6efa1e9d3a5257e46cf5afcadd6a75a0705117caf53a5fe",
+      "sessionsRedacted": 3,
+      "entries": [
+        {
+          "entry": "trace.trace",
+          "replacements": 2
+        },
+        {
+          "entry": "trace.network",
+          "replacements": 68
+        },
+        {
+          "entry": "resources/4448a7df3474df62bf33a87f3a1b13e9120cba03.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/814f252a158c91667daba6f8c50a1b43ad9b1b7c.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/0c556a264c3454753415c6cc61850a223a5218a2.json",
+          "replacements": 1
+        }
+      ],
+      "tokensRemaining": 0,
+      "changed": true,
+      "originalRetainedPrivateOutsideRepository": true
+    }
+  ]
+}

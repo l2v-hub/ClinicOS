@@ -1,0 +1,37 @@
+backend/src/patients/cartella-update.ts 234ms
+backend/src/routes/patients.ts 275ms
+backend/src/routes/therapy.ts 74ms
+backend/src/therapies/administration-record.ts 64ms
+backend/src/therapies/due-therapy-query.ts 25ms (unchanged)
+backend/src/therapies/prn-administration.ts 31ms
+backend/src/therapies/therapy-slots.ts 93ms
+e2e/qa-bug-batch-447-browser.mjs 397ms (unchanged)
+e2e/qa-bug-batch-447.mjs 50ms (unchanged)
+frontend/src/App.tsx 812ms (unchanged)
+frontend/src/components/operator/InvioPSModal.tsx 110ms (unchanged)
+frontend/src/components/operator/News2Chip.tsx 61ms
+frontend/src/components/operator/OperatorAgenda.tsx 159ms (unchanged)
+frontend/src/components/operator/PatientDetail.tsx 415ms (unchanged)
+frontend/src/components/operator/PatientRoster.tsx 43ms
+frontend/src/components/operator/PatientToday.tsx 24ms (unchanged)
+frontend/src/components/operator/TherapyGiroRows.tsx 45ms (unchanged)
+frontend/src/components/operator/__tests__/invioPS.test.ts 106ms (unchanged)
+frontend/src/components/operator/__tests__/operationalLists452.test.ts 16ms
+frontend/src/components/operator/cartella/DimissioneTab.tsx 225ms (unchanged)
+frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx 168ms
+frontend/src/components/operator/cartella/TherapyDrugDosePanel.tsx 64ms (unchanged)
+frontend/src/components/operator/cartella/__tests__/therapyQuickSchedule453.test.ts 47ms
+frontend/src/components/operator/cartella/therapyQuickSchedule.ts 30ms
+frontend/src/components/operator/sections/TherapyEditor.tsx 7ms (unchanged)
+frontend/src/lib/__tests__/cartellaWriteQueue.test.ts 30ms (unchanged)
+frontend/src/lib/__tests__/news2History.test.ts 49ms
+frontend/src/lib/__tests__/patientListIdentityGuard.test.ts 21ms
+frontend/src/lib/__tests__/therapyPages.test.ts 37ms (unchanged)
+frontend/src/lib/cartellaWriteQueue.ts 16ms (unchanged)
+frontend/src/lib/news2History.ts 29ms
+frontend/src/lib/therapySlotPage.ts 24ms (unchanged)
+frontend/src/types.ts 104ms (unchanged)
+backend/src/patients/__tests__/temporary-ps-exits-db.test.ts 30ms
+backend/src/patients/__tests__/temporary-ps-exits.test.ts 8ms
+backend/src/patients/temporary-ps-exits.ts 54ms
+frontend/src/lib/temporaryPsExit.ts 20ms (unchanged)

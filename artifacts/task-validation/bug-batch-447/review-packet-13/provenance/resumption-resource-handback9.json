@@ -1,0 +1,98 @@
+{
+  "nonce": "47bc6c28-d8d4-49a6-b50b-853ff8db7035",
+  "status": "HANDBACK",
+  "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "results": [
+    {
+      "label": "migration",
+      "code": 0,
+      "timedOut": false,
+      "floorHit": false,
+      "stdoutSha256": "62f2dcb588c6c238222ce2536554153355596cbf1de4dd32163202a55a0286bb",
+      "stderrSha256": "e40df379b3ca806791529144da53b048cf1a232201fdfc817692665ba9ad0093",
+      "at": "2026-10-21T23:04:42.820Z",
+      "freeBytes": 1675395072
+    },
+    {
+      "label": "minimal-fixture",
+      "code": 0,
+      "timedOut": false,
+      "floorHit": false,
+      "stdoutSha256": "ca09a416f5e5c187acae0f4cdbdabf0b6fcfd5ae04e504074129d52e07b2bddd",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "at": "2026-10-21T23:04:53.572Z",
+      "freeBytes": 1675395072
+    },
+    {
+      "label": "negative-roster",
+      "code": 0,
+      "timedOut": false,
+      "floorHit": false,
+      "stdoutSha256": "34c19759782ad0ba6c8f2bee23c97d75e08550911207d63b51010b07c73d44e2",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "at": "2026-10-21T23:05:04.858Z",
+      "freeBytes": 1675395072
+    },
+    {
+      "label": "ps-readonly",
+      "code": 0,
+      "timedOut": false,
+      "floorHit": false,
+      "stdoutSha256": "423b0a945a73ecb5ab748c7c796af9328a4639bf6921af982e71ad00924f46e9",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "at": "2026-10-21T23:05:21.145Z",
+      "freeBytes": 1675378688
+    }
+  ],
+  "ownedContainerRemoved": true,
+  "ownedNetworkRemoved": true,
+  "servicesRemoved": true,
+  "baselineBefore": {
+    "id": "9000f70d4ee95b9e3bde723796daa050081db4274d20c97888413479232949ad",
+    "image": "sha256:81bd698b4594e751a3269e4dcd3e03a4a0ec0daf7b72e7aa1abd43cce9887542",
+    "startedAt": "2026-10-18T03:32:34.629052269Z",
+    "running": true,
+    "health": "healthy",
+    "ports": {
+      "5432/tcp": [
+        {
+          "HostIp": "0.0.0.0",
+          "HostPort": "5432"
+        },
+        {
+          "HostIp": "::",
+          "HostPort": "5432"
+        }
+      ]
+    }
+  },
+  "baselineAfter": {
+    "id": "9000f70d4ee95b9e3bde723796daa050081db4274d20c97888413479232949ad",
+    "image": "sha256:81bd698b4594e751a3269e4dcd3e03a4a0ec0daf7b72e7aa1abd43cce9887542",
+    "startedAt": "2026-10-18T03:32:34.629052269Z",
+    "running": true,
+    "health": "healthy",
+    "ports": {
+      "5432/tcp": [
+        {
+          "HostIp": "0.0.0.0",
+          "HostPort": "5432"
+        },
+        {
+          "HostIp": "::",
+          "HostPort": "5432"
+        }
+      ]
+    }
+  },
+  "baselineUnchanged": true,
+  "portsReleased": [
+    55432,
+    3447,
+    5447,
+    8432
+  ],
+  "freeBytes": 2280431616,
+  "externalProviderCalls": 0,
+  "at": "2026-10-21T23:05:22.109Z"
+}

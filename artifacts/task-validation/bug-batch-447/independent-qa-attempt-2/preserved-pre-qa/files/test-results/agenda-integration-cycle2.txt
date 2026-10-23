@@ -1,0 +1,13 @@
+✔ compact identity hides repeated missing prose but preserves accessible disambiguation (7.869513ms)
+✔ patient roster leads with bed, hides globally empty optional columns and aggregates incomplete identity once (6.465469ms)
+✔ roster keeps the NEWS2 column and a single loading status until absence has been verified (2.902535ms)
+✔ agenda without appointments retains morning and evening pending therapy doses while omitting empty half-hour slots (17.466942ms)
+✔ slot modal retains pause, explicit absence, glucose protocol, completed history and other patients (6.804838ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1056.758988

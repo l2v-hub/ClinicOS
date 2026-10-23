@@ -1,0 +1,21 @@
+✔ exact production reset preserves ownership, zero connections and migrations in native mode (15.505087ms)
+✔ foreign exact database marker refuses DROP in native (2.275774ms)
+✔ exact production reset preserves ownership, zero connections and migrations in Docker mode (0.485644ms)
+✔ foreign exact database marker refuses DROP in Docker (1.099564ms)
+✔ foreign Docker label refuses even marker query and DROP (0.919196ms)
+✔ unsafe database identifier refuses before SQL (2.024775ms)
+✔ open child connections refuse DROP within unchanged bounded wait (2.772512ms)
+✔ closing workers are awaited and only exact child is recreated (1.724137ms)
+✔ recreation failure never starts migrations or reports a successful reset (0.758127ms)
+✔ ownership refusal still closes control connection and independently stops only owned container (6.785266ms)
+✔ control close failure still verifies and stops owned container, never falsely passes (0.864162ms)
+✔ foreign container label is never stopped even after successful child cleanup (2.193634ms)
+✔ failed child creation never drops a replacement database while control connection is closed (0.495002ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1364.752892

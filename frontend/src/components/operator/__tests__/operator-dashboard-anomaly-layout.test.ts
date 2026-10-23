@@ -45,13 +45,18 @@ test('dashboard anomaly worklist is bounded by patients and lists every drug of 
   assert.doesNotMatch(notificationDetails, /altri farmaci/);
 });
 
-test('operator and admin reuse the same bounded notification details', () => {
+test('operator keeps bounded notification details and supervisor preserves every drug in its actionable list', () => {
   assert.match(notificationDetails, /p\.voci\.map\(/);
   assert.match(notificationDetails, /\{v\.dose\} · \{v\.via\}/);
   assert.match(notificationDetails, /className="anomalie-reparto__farmaci-lista"/);
-  assert.match(adminDashboard, /<DashboardNotificationCenter/);
-  assert.match(adminDashboard, /buildDashboardNotificationSections/);
-  assert.match(adminDashboard, /therapyNav: 'terapie'/);
+  assert.match(adminDashboard, /<AdminAttentionList/);
+  assert.match(adminDashboard, /patient\.esito\.anomalie\.map/);
+  assert.match(adminDashboard, /farmacoNome: anomaly\.farmacoNome/);
+  assert.match(
+    adminDashboard,
+    /anomalyTherapyId\(anomalie, patient\.patientId, anomaly\.farmacoNome\)/,
+  );
+  assert.doesNotMatch(adminDashboard, /anomalie\.pazienti\.slice/);
   assert.doesNotMatch(adminDashboard, /somministrazioni\.ritardi\.slice/);
   assert.doesNotMatch(adminDashboard, /className="coverage-alert"/);
 });

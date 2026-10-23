@@ -18,6 +18,7 @@ import {
   type GiroTime,
 } from '../../lib/therapyGiro';
 import { doseStatus } from '../../lib/therapyDoseStatus';
+import { birthDateValue, formatBirthDate } from '../../lib/patientDemographics';
 import { IcoCheck } from '../../icons';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { GlucoseAdministrationControl } from './cartella/GlucoseAdministrationControl';
@@ -86,12 +87,55 @@ export function TherapyGiroRows({
   // Somministrazione in attesa della conferma esplicita (ruoli «con conferma»).
   const [pendingConfirm, setPendingConfirm] = useState<{
     key: string;
+    context: string;
     info: TherapyActionInfo;
     label: string;
   } | null>(null);
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
+  const [expandedContext, setExpandedContext] = useState<string | null>(null);
   const [selectedMotivo, setSelectedMotivo] = useState<MotivoNonErogazione | null>(null);
   const [noteText, setNoteText] = useState('');
+  const actionContext = `${date}|${time.ora}`;
+  const latestActions = useRef(
+    new Map<string, { context: string; pending: boolean; unverified: boolean; paused: boolean }>(),
+  );
+  const currentActions = new Map<
+    string,
+    { context: string; pending: boolean; unverified: boolean; paused: boolean }
+  >();
+  for (const group of time.patients) {
+    for (const item of group.items) {
+      const key = `${group.patient.patientId}|${item.a.therapyId}|${item.fascia}|${item.a.scheduledTime}`;
+      currentActions.set(key, {
+        context: actionContext,
+        pending: item.a.status === 'pending',
+        unverified: group.patient.temporaryPsExitUnverified === true,
+        paused: group.patient.temporaryPsExit?.decision === 'pause',
+      });
+    }
+  }
+  // Refresh synchronously on every render so callbacks retained by an open panel/modal
+  // consult current patient props instead of the render that created the callback.
+  latestActions.current = currentActions;
+  function actionAllowed(key: string, expectedContext: string | null, kind: 'administer' | 'refusal') {
+    const latest = latestActions.current.get(key);
+    return Boolean(
+      latest &&
+        latest.context === expectedContext &&
+        latest.pending &&
+        !latest.unverified &&
+        (kind === 'refusal' || !latest.paused),
+    );
+  }
+  const refusalBlocked = Boolean(
+    expandedKey && !actionAllowed(expandedKey, expandedContext, 'refusal'),
+  );
+  const pendingConfirmBlocked = Boolean(
+    pendingConfirm && !actionAllowed(pendingConfirm.key, pendingConfirm.context, 'administer'),
+  );
+  const pendingConfirmMessage = pendingConfirm
+    ? `${pendingConfirm.label}, ore ${pendingConfirm.info.ora}. Il tuo ruolo registra la somministrazione con conferma esplicita.${pendingConfirmBlocked ? ' Stato uscita PS da verificare o paziente non più disponibile; conferma non disponibile.' : ''}`
+    : '';
   // Gli invii in corso valgono solo per lo stato dell'ora su cui sono partiti: ogni nuovo stato
   // (conferma, errore con ricarica, cambio data) libera i pulsanti, così un farmaco tornato
   // "da erogare" dopo un errore non resta bloccato su "Invio…".
@@ -125,14 +169,21 @@ export function TherapyGiroRows({
   }
   function closeReasons() {
     setExpandedKey(null);
+    setExpandedContext(null);
     setSelectedMotivo(null);
     setNoteText('');
   }
-  function administer(key: string, info: TherapyActionInfo, confirmed: boolean) {
-    if (pendingKeys.has(key)) return;
+  function administer(
+    key: string,
+    info: TherapyActionInfo,
+    confirmed: boolean,
+    expectedContext: string,
+  ): boolean {
+    if (!actionAllowed(key, expectedContext, 'administer') || pendingKeys.has(key)) return false;
     setSending({ time, keys: new Set(pendingKeys).add(key) });
     onConfirm?.(info, { confirmed });
     focusRow(key);
+    return true;
   }
   function buildInfo(p: TherapySlotPatient, item: GiroItem): TherapyActionInfo {
     return {
@@ -159,13 +210,32 @@ export function TherapyGiroRows({
 
   if (groups.length === 0) {
     return (
-      <p className="giro-empty">
-        {detailsPartial
-          ? 'Nessun dettaglio corrispondente è ancora caricato.'
-          : filtro === 'tutte'
-            ? 'Nessuna somministrazione a quest’ora.'
-            : 'Nessuna somministrazione con questo stato.'}
-      </p>
+      <>
+        {refusalBlocked && (
+          <p role="status">Stato uscita PS da verificare o paziente non più disponibile. Conferma non disponibile.</p>
+        )}
+        <p className="giro-empty">
+          {detailsPartial
+            ? 'Nessun dettaglio corrispondente è ancora caricato.'
+            : filtro === 'tutte'
+              ? 'Nessuna somministrazione a quest’ora.'
+              : 'Nessuna somministrazione con questo stato.'}
+        </p>
+        <ConfirmDialog
+          open={pendingConfirm !== null}
+          title="Confermi la somministrazione?"
+          message={pendingConfirmMessage}
+          confirmLabel="Conferma somministrazione"
+          tone="primary"
+          confirmDisabled={pendingConfirmBlocked}
+          onConfirm={() => {
+            if (!pendingConfirm) return;
+            const { key, info } = pendingConfirm;
+            if (administer(key, info, true, pendingConfirm.context)) setPendingConfirm(null);
+          }}
+          onCancel={() => setPendingConfirm(null)}
+        />
+      </>
     );
   }
 
@@ -177,10 +247,20 @@ export function TherapyGiroRows({
         className="giro-patients"
         aria-label={`Somministrazioni delle ${time.ora}`}
       >
+        {refusalBlocked && (
+          <p role="status">Stato uscita PS da verificare o paziente non più disponibile. Conferma non disponibile.</p>
+        )}
         {groups.map(({ p, items }) => {
           const identity = { ...p, id: p.patientId };
           const name = patientIdentityName(identity);
+          const location = parsePatientLocation(p.location);
+          const hasVisibleBed = location?.status === 'assigned' && !!location.bed;
+          const needsFallbackIdentity = !identity.codiceFiscale?.trim() && !hasVisibleBed;
+          const fallbackIdentity = birthDateValue(identity.dateOfBirth)
+            ? `Nato/a il ${formatBirthDate(identity.dateOfBirth)}`
+            : `Identificativo ${identity.id}`;
           const allDone = items.every((item) => item.a.status !== 'pending');
+          const psExitUnverified = p.temporaryPsExitUnverified === true;
           return (
             <li
               key={p.patientId}
@@ -198,8 +278,13 @@ export function TherapyGiroRows({
                   <div className="giro-row__who">
                     <span className="giro-row__name">{name}</span>
                     <span className="giro-row__cap">
-                      {roomLabel(p)} · {patientIdentifier(identity)}
+                      {location?.status === 'assigned' ? roomLabel(p) : ''}
+                      {identity.codiceFiscale?.trim() ? ` · CF ${identity.codiceFiscale}` : ''}
+                      {needsFallbackIdentity ? ` · ${fallbackIdentity}` : ''}
                     </span>
+                    {!needsFallbackIdentity && (
+                      <span className="ds-sr-only">{fallbackIdentity}</span>
+                    )}
                   </div>
                 </div>
               )}
@@ -209,6 +294,17 @@ export function TherapyGiroRows({
                   patientName={name}
                   contextKey={`${date}:${time.ora}`}
                 />
+              )}
+              {p.temporaryPsExit?.decision === 'pause' && (
+                <p role="status">
+                  Somministrazioni in pausa durante l’uscita PS. Registra il rientro prima di
+                  erogare.
+                </p>
+              )}
+              {psExitUnverified && (
+                <p role="status">
+                  Stato uscita PS da verificare. Verifica i dati prima di procedere.
+                </p>
               )}
               <ul className="giro-drugs" aria-label={`Farmaci di ${name} delle ${time.ora}`}>
                 {items.map((item) => {
@@ -275,12 +371,18 @@ export function TherapyGiroRows({
                             <button
                               type="button"
                               className="ds-btn ds-btn--secondary"
-                              aria-label={`Non erogata: ${actionTarget}`}
+                              aria-label={
+                                psExitUnverified
+                                  ? `Stato uscita PS da verificare. Non erogata: ${actionTarget}`
+                                  : `Non erogata: ${actionTarget}`
+                              }
+                              disabled={psExitUnverified}
                               aria-expanded={expanded}
                               onClick={() => {
                                 if (expanded) closeReasons();
                                 else {
                                   setExpandedKey(key);
+                                  setExpandedContext(actionContext);
                                   setSelectedMotivo(null);
                                   setNoteText('');
                                 }
@@ -288,22 +390,42 @@ export function TherapyGiroRows({
                             >
                               Non somm.
                             </button>
-                            {a.doseMode === 'glucose_scale' ? (
+                            {psExitUnverified ? (
+                              <button
+                                type="button"
+                                className="ds-btn ds-btn--primary"
+                                disabled
+                                aria-label={`Stato uscita PS da verificare: ${actionTarget}`}
+                              >
+                                Stato uscita PS da verificare
+                              </button>
+                            ) : p.temporaryPsExit?.decision === 'pause' ? (
+                              <button
+                                type="button"
+                                className="ds-btn ds-btn--primary"
+                                disabled
+                                aria-label={`Somministrazione in pausa per uscita PS: ${actionTarget}`}
+                              >
+                                In pausa per uscita PS
+                              </button>
+                            ) : a.doseMode === 'glucose_scale' ? (
                               <GlucoseAdministrationControl
                                 key={`${key}|${date}|${a.scheduledTime}`}
                                 protocol={a.doseProtocol}
                                 target={actionTarget}
                                 sending={isSending}
                                 onConfirm={(measuredGlucose, _units, doseText) => {
+                                  if (!actionAllowed(key, actionContext, 'administer')) return;
                                   if (expanded) closeReasons();
                                   const info = { ...buildInfo(p, item), measuredGlucose };
                                   if (requiresConfirmation)
                                     setPendingConfirm({
                                       key,
+                                      context: actionContext,
                                       info,
                                       label: `${actionTarget} · glicemia ${measuredGlucose} mg/dL · ${doseText}`,
                                     });
-                                  else administer(key, info, true);
+                                  else administer(key, info, true, actionContext);
                                 }}
                               />
                             ) : (
@@ -316,14 +438,16 @@ export function TherapyGiroRows({
                                   if (pendingKeys.has(key)) return;
                                   if (expanded) closeReasons();
                                   if (requiresConfirmation) {
+                                    if (!actionAllowed(key, actionContext, 'administer')) return;
                                     setPendingConfirm({
                                       key,
+                                      context: actionContext,
                                       info: buildInfo(p, item),
                                       label: actionTarget,
                                     });
                                     return;
                                   }
-                                  administer(key, buildInfo(p, item), false);
+                                  administer(key, buildInfo(p, item), false, actionContext);
                                 }}
                               >
                                 <IcoCheck />
@@ -340,6 +464,9 @@ export function TherapyGiroRows({
                           role="group"
                           aria-label={`Motivo della mancata somministrazione delle ${time.ora}: ${actionTarget}`}
                         >
+                          {refusalBlocked && expandedKey === key && (
+                            <p role="status">Stato uscita PS da verificare o paziente non più disponibile. Conferma non disponibile.</p>
+                          )}
                           <div className="giro-reasons">
                             {MOTIVI.map((m) => (
                               <button
@@ -381,9 +508,12 @@ export function TherapyGiroRows({
                               className="ds-btn ds-btn--primary"
                               aria-label={`Conferma non erogata: ${actionTarget}`}
                               disabled={
-                                !selectedMotivo || (selectedMotivo === 'altro' && !noteText.trim())
+                                !selectedMotivo ||
+                                (selectedMotivo === 'altro' && !noteText.trim()) ||
+                                !actionAllowed(key, expandedContext, 'refusal')
                               }
                               onClick={() => {
+                                if (!actionAllowed(key, expandedContext, 'refusal')) return;
                                 if (!selectedMotivo) return;
                                 if (selectedMotivo === 'altro' && !noteText.trim()) return;
                                 // Scegliere il motivo e premere «Conferma» è già la conferma esplicita.
@@ -410,18 +540,14 @@ export function TherapyGiroRows({
       <ConfirmDialog
         open={pendingConfirm !== null}
         title="Confermi la somministrazione?"
-        message={
-          pendingConfirm
-            ? `${pendingConfirm.label}, ore ${pendingConfirm.info.ora}. Il tuo ruolo registra la somministrazione con conferma esplicita.`
-            : ''
-        }
+        message={pendingConfirmMessage}
         confirmLabel="Conferma somministrazione"
         tone="primary"
+        confirmDisabled={pendingConfirmBlocked}
         onConfirm={() => {
           if (!pendingConfirm) return;
-          const { key, info } = pendingConfirm;
-          setPendingConfirm(null);
-          administer(key, info, true);
+          const { key, info, context } = pendingConfirm;
+          if (administer(key, info, true, context)) setPendingConfirm(null);
         }}
         onCancel={() => setPendingConfirm(null)}
       />

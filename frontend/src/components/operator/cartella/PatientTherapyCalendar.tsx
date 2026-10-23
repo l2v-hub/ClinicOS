@@ -353,6 +353,7 @@ export function PatientTherapyCalendar({
             ) : null;
           })}
           <TherapyCalendarGrid
+            contextKey={patientId}
             days={visibleDays}
             cells={cells}
             selected={open}

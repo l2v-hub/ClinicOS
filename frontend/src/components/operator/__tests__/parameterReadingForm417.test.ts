@@ -55,12 +55,13 @@ test('417 both workspaces use exactly the shared field order, full ACVPU options
   for (const html of [chart, ward]) {
     assert.match(html, /Confusione di nuova insorgenza/);
     assert.match(html, /Risponde alla voce/);
-    assert.match(html, /Prima: …/);
+    assert.doesNotMatch(html, /Prima: …|Nessuna rilevazione precedente/);
+    assert.match(html, /placeholder=""/);
     assert.doesNotMatch(html, /value="(?:120|80|98)"/);
     assert.match(html, /NEWS2 usa i sette parametri/);
   }
 });
-test('417 numeric raw text is never maxlength-truncated and keypad starts inactive', () => {
+test('417 numeric raw text is never maxlength-truncated and desktop has no software keypad', () => {
   const html = form({ values: { fc: '1'.repeat(50), pa: '120/80/70' } });
   const input = html.match(/<input[^>]+aria-label="Nuova rilevazione FC"[^>]*>/)?.[0];
   assert.ok(input);
@@ -69,8 +70,9 @@ test('417 numeric raw text is never maxlength-truncated and keypad starts inacti
   assert.match(html, /value="80\/70"/);
   assert.equal(
     (html.match(/class="ds-btn ds-btn--secondary" disabled="" aria-label=/g) ?? []).length,
-    12,
+    0,
   );
+  assert.doesNotMatch(html, /aria-label="Tastierino numerico"/);
 });
 test('417 uncertain saves lock fields but retain enabled explicit retry and error/history guidance', () => {
   const html = form({

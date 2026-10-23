@@ -4,6 +4,7 @@ import { assessmentId, bodyObject, parseInstant } from './input.js';
 import {
   assessmentNotFound,
   assessmentTransaction,
+  assessmentReadTransaction,
   lockAssessment,
   lockPatient,
   readAssessmentRow,
@@ -128,96 +129,92 @@ export async function listAttestations(
     throw invalid();
   const limit = Number(query.limit ?? 25);
   if (limit < 1 || limit > 100 || !Number.isInteger(limit)) throw invalid();
-  return assessmentTransaction(
-    async (tx) => {
-      await lockPatient(tx, patientId, actor);
-      const row = await readAssessmentRow(tx, patientId, id, actor),
-        hash = finalForAttestation(row);
-      const binding = { patientId, id, hash, actorId: actor.id, role: actor.role.toLowerCase() };
-      let position: { id: string; createdAt: string } | undefined;
-      if (query.cursor !== undefined)
-        try {
-          if (
-            typeof query.cursor !== 'string' ||
-            query.cursor.length > 1024 ||
-            !/^[\w-]+$/.test(query.cursor)
-          )
-            throw invalid();
-          const raw = JSON.parse(Buffer.from(query.cursor, 'base64url').toString('utf8'));
-          if (raw.v !== 1 || JSON.stringify(raw.binding) !== JSON.stringify(binding))
-            throw invalid();
-          position = { id: assessmentId(raw.id), createdAt: parseInstant(raw.createdAt) };
-          if (
-            !(await tx.patientAssessmentAttestation.findFirst({
-              where: {
-                assessmentId: id,
-                snapshotSha256: hash,
-                id: position.id,
-                createdAt: new Date(position.createdAt),
-              },
-              select: { id: true },
-            }))
-          )
-            throw invalid();
-        } catch {
+  return assessmentReadTransaction(async (tx) => {
+    await lockPatient(tx, patientId, actor);
+    const row = await readAssessmentRow(tx, patientId, id, actor),
+      hash = finalForAttestation(row);
+    const binding = { patientId, id, hash, actorId: actor.id, role: actor.role.toLowerCase() };
+    let position: { id: string; createdAt: string } | undefined;
+    if (query.cursor !== undefined)
+      try {
+        if (
+          typeof query.cursor !== 'string' ||
+          query.cursor.length > 1024 ||
+          !/^[\w-]+$/.test(query.cursor)
+        )
           throw invalid();
-        }
-      const where = { assessmentId: id, snapshotSha256: hash };
-      const [events, counts, mine, person] = await Promise.all([
-        tx.patientAssessmentAttestation.findMany({
-          where: {
-            ...where,
-            ...(position
-              ? {
-                  OR: [
-                    { createdAt: { lt: new Date(position.createdAt) } },
-                    { createdAt: new Date(position.createdAt), id: { lt: position.id } },
-                  ],
-                }
-              : {}),
-          },
-          orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
-          take: limit + 1,
-        }),
-        tx.patientAssessmentAttestation.groupBy({ by: ['kind'], where, _count: { _all: true } }),
-        tx.patientAssessmentAttestation.findMany({
-          where: { ...where, actorOperatorId: actor.id },
-          select: { kind: true },
-          take: 2,
-        }),
-        registeredActor(tx, actor),
-      ]);
-      const items = events.slice(0, limit).map(dto),
-        hasMore = events.length > limit,
-        last = items.at(-1);
-      return {
-        assessmentId: id,
-        snapshotSha256: hash,
-        correctedById: row.corrections[0]?.id ?? null,
-        items,
-        counts: {
-          physiotherapist_confirmation:
-            counts.find((c) => c.kind === 'physiotherapist_confirmation')?._count._all ?? 0,
-          operator_acknowledgement:
-            counts.find((c) => c.kind === 'operator_acknowledgement')?._count._all ?? 0,
+        const raw = JSON.parse(Buffer.from(query.cursor, 'base64url').toString('utf8'));
+        if (raw.v !== 1 || JSON.stringify(raw.binding) !== JSON.stringify(binding)) throw invalid();
+        position = { id: assessmentId(raw.id), createdAt: parseInstant(raw.createdAt) };
+        if (
+          !(await tx.patientAssessmentAttestation.findFirst({
+            where: {
+              assessmentId: id,
+              snapshotSha256: hash,
+              id: position.id,
+              createdAt: new Date(position.createdAt),
+            },
+            select: { id: true },
+          }))
+        )
+          throw invalid();
+      } catch {
+        throw invalid();
+      }
+    const where = { assessmentId: id, snapshotSha256: hash };
+    const [events, counts, mine, person] = await Promise.all([
+      tx.patientAssessmentAttestation.findMany({
+        where: {
+          ...where,
+          ...(position
+            ? {
+                OR: [
+                  { createdAt: { lt: new Date(position.createdAt) } },
+                  { createdAt: new Date(position.createdAt), id: { lt: position.id } },
+                ],
+              }
+            : {}),
         },
-        me: {
-          registeredQualification: person.qualification,
-          allowedKinds: eligible(person.qualification),
-          attestedKinds: mine.map((item) => item.kind as AttestationKind),
-        },
-        pageInfo: {
-          loadedCount: items.length,
-          hasMore,
-          nextCursor:
-            hasMore && last
-              ? Buffer.from(
-                  JSON.stringify({ v: 1, binding, id: last.id, createdAt: last.createdAt }),
-                ).toString('base64url')
-              : null,
-        },
-      };
-    },
-    { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead },
-  );
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        take: limit + 1,
+      }),
+      tx.patientAssessmentAttestation.groupBy({ by: ['kind'], where, _count: { _all: true } }),
+      tx.patientAssessmentAttestation.findMany({
+        where: { ...where, actorOperatorId: actor.id },
+        select: { kind: true },
+        take: 2,
+      }),
+      registeredActor(tx, actor),
+    ]);
+    const items = events.slice(0, limit).map(dto),
+      hasMore = events.length > limit,
+      last = items.at(-1);
+    return {
+      assessmentId: id,
+      snapshotSha256: hash,
+      correctedById: row.corrections[0]?.id ?? null,
+      items,
+      counts: {
+        physiotherapist_confirmation:
+          counts.find((c) => c.kind === 'physiotherapist_confirmation')?._count._all ?? 0,
+        operator_acknowledgement:
+          counts.find((c) => c.kind === 'operator_acknowledgement')?._count._all ?? 0,
+      },
+      me: {
+        registeredQualification: person.qualification,
+        allowedKinds: eligible(person.qualification),
+        attestedKinds: mine.map((item) => item.kind as AttestationKind),
+      },
+      pageInfo: {
+        loadedCount: items.length,
+        hasMore,
+        nextCursor:
+          hasMore && last
+            ? Buffer.from(
+                JSON.stringify({ v: 1, binding, id: last.id, createdAt: last.createdAt }),
+              ).toString('base64url')
+            : null,
+      },
+    };
+  });
 }

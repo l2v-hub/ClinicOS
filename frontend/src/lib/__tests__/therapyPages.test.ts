@@ -97,7 +97,7 @@ test('therapy page loader carries every server filter on the first page', async 
   assert.match(requested, /data=2030-01-02/);
 });
 
-test('therapy plan and emergency print require every page, never a manual partial plan', async () => {
+test('therapy plan requires every page while emergency print preserves manual source warnings', async () => {
   const [tab, emergencyPrint] = await Promise.all([
     readFile(therapyTabUrl, 'utf8'),
     readFile(emergencyPrintUrl, 'utf8'),
@@ -109,9 +109,21 @@ test('therapy plan and emergency print require every page, never a manual partia
   assert.match(tab, /completeTherapySnapshot/);
   assert.match(tab, /Vedi tutti i farmaci nel piano terapeutico/);
   assert.match(tab, /setTherapies\(\[\]\);[\s\S]*setTherapySummary\(null\);/);
-  assert.match(emergencyPrint, /loadAllTherapyPages\(paziente\.id, 'attiva'\)/);
-  assert.match(emergencyPrint, /disabled=\{loading \|\| Boolean\(fetchError\)\}/);
-  assert.match(emergencyPrint, /La stampa è bloccata/);
+  assert.match(
+    emergencyPrint,
+    /loadEmergencyTransferSources\(paziente\.id, controller\.signal, new Date\(\), \{[\s\S]*?allowed:/,
+  );
+  assert.match(emergencyPrint, /data-ps-source=\{source\} data-ps-source-state=\{status\.state\}/);
+  assert.match(emergencyPrint, /emergencySourceMessage\(status\)/);
+  assert.match(emergencyPrint, /La stampa è[\s\S]*verifica e completa a mano le sezioni indicate/);
+  assert.match(
+    emergencyPrint,
+    /onClick=\{\(\) => \{\s*if \(!printBlocked\) window\.print\(\);\s*\}\}[\s\S]{0,80}data-invio-ps-print/,
+  );
+  assert.match(emergencyPrint, /disabled=\{printBlocked\}/);
+  assert.match(emergencyPrint, /const printBlocked = !reason\.trim\(\);/);
+  assert.match(emergencyPrint, /data-invio-ps-reason-print/);
+  assert.match(emergencyPrint, /Motivo da completare prima della stampa/);
 });
 
 test('therapy failures are announced and never rendered as empty clinical results', async () => {

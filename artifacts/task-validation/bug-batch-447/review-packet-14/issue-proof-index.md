@@ -1,0 +1,8 @@
+- #447: ../evidence/claude1-followup12/issue-447.png ; issue-447-trace.zip ; issue-447.webm (actual source bb12eb738817bf1c64ed08844f162ea4ccf7e473, byte-preserved).
+- #451: ../evidence/claude1-followup12/issue-451.png ; issue-451-trace.zip ; issue-451.webm (actual source bb12eb738817bf1c64ed08844f162ea4ccf7e473, byte-preserved).
+- #452: ../evidence/claude1-followup12/issue-452.png ; issue-452-trace.zip ; issue-452.webm (actual source bb12eb738817bf1c64ed08844f162ea4ccf7e473, byte-preserved).
+- #453: ../evidence/claude1-followup12/issue-453.png ; issue-453-trace.zip ; issue-453.webm (actual source bb12eb738817bf1c64ed08844f162ea4ccf7e473, byte-preserved).
+- #454: ../evidence/claude1-followup12/issue-454.png ; issue-454-trace.zip ; issue-454.webm (actual source bb12eb738817bf1c64ed08844f162ea4ccf7e473, byte-preserved).
+- #456: ../evidence/claude1-followup12/issue-456.png ; issue-456-trace.zip ; issue-456.webm (actual source bb12eb738817bf1c64ed08844f162ea4ccf7e473, byte-preserved).
+- #457: ../evidence/claude1-followup12/issue-457.png ; issue-457-trace.zip ; issue-457.webm (actual source bb12eb738817bf1c64ed08844f162ea4ccf7e473, byte-preserved).
+- #486: ../evidence/claude1-followup12/issue-486.png ; issue-486-trace.zip ; issue-486.webm (actual source bb12eb738817bf1c64ed08844f162ea4ccf7e473, byte-preserved).

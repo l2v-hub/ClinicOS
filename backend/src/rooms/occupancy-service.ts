@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
+import { facilityDate } from '../lib/facility-time.js';
 import {
   type FacilityOccupancy,
   type FacilityOccupancyRow,
@@ -7,7 +8,7 @@ import {
 } from './occupancy-model.js';
 
 export async function getFacilityOccupancy(
-  today = new Date().toISOString().slice(0, 10),
+  today = facilityDate(),
 ): Promise<FacilityOccupancy> {
   const rows = await prisma.$queryRaw<FacilityOccupancyRow[]>(Prisma.sql`
     WITH bed_state AS (

@@ -551,6 +551,7 @@ const BINDABLE_THERAPY_KEYS = new Set([
   'commercialStrengthValue',
   'commercialStrengthUnit',
   'allowedFractions',
+  'doseMode',
   'viaSomministrazione',
   'tipo',
   'stato',
@@ -572,6 +573,8 @@ const BINDABLE_THERAPY_KEYS = new Set([
  */
 export function bindableTherapy(therapy: Record<string, unknown>): Record<string, unknown> | null {
   if (Object.keys(therapy).some((key) => !BINDABLE_THERAPY_KEYS.has(key))) return null;
+  if (Object.prototype.hasOwnProperty.call(therapy, 'doseMode') && therapy.doseMode !== 'fixed')
+    return null;
   if (therapy.stato !== undefined && therapy.stato !== 'attiva') return null;
   if (therapy.drugPackageRef !== undefined && therapy.drugPackageRef !== null && therapy.drugPackageRef !== '')
     return null;

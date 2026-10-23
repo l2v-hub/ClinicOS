@@ -441,21 +441,7 @@ export function PatientList({
           )}
         </section>
       )}
-      {canIntake && incompletePatients.length > 0 && (
-        <section className="plist-card" aria-label="Anagrafiche in bozza">
-          <h2>Anagrafiche da completare</h2>
-          <p>Pazienti già registrati con dati anagrafici da verificare.</p>
-          <button
-            type="button"
-            className="ds-chip"
-            aria-pressed={incompleteOnly}
-            onClick={() => setIncompleteOnly((active) => !active)}
-          >
-            {incompleteOnly ? 'Mostra tutti i pazienti' : 'Filtra anagrafiche da completare'}
-            <span className="ds-chip__count">{incompletePatients.length}</span>
-          </button>
-        </section>
-      )}
+
       <section className="plist-card plist-list" aria-label="Elenco pazienti">
         <div className="plist-toolbar">
           <div className="search-wrap plist-search">
@@ -514,6 +500,16 @@ export function PatientList({
                   )}
               </button>
             ))}
+            {canIntake && incompletePatients.length > 0 && (
+              <button
+                type="button"
+                className="ds-chip"
+                aria-pressed={incompleteOnly}
+                onClick={() => setIncompleteOnly((active) => !active)}
+              >
+                {incompleteOnly ? 'Mostra tutti i pazienti' : 'Filtra anagrafiche da completare'}
+              </button>
+            )}
             <button
               type="button"
               className="ds-chip"
@@ -529,21 +525,6 @@ export function PatientList({
             </button>
           </div>
         </div>
-        <PatientRegimeControls
-          regime={regime}
-          onChange={setRegime}
-          view={vista}
-          count={filtrati.length}
-          loaded={pazienti.length}
-          hasMore={hasMore}
-          unverified={
-            summaryLoading ||
-            Boolean(summaryError) ||
-            contiVista.in_carico === null ||
-            contiVista.dimessi === null
-          }
-          loading={summaryLoading}
-        />
         {segnale && (
           <p className="plist-note plist-note--signal" role="status" data-list-signal={segnale}>
             Filtro attivo: <strong>{LIST_SIGNAL_LABEL[segnale]}</strong> ({filtrati.length} fra i
@@ -563,6 +544,22 @@ export function PatientList({
         )}
         {showFilters && (
           <div className="plist-filters" id="plist-filters">
+            <PatientRegimeControls
+              regime={regime}
+              onChange={setRegime}
+              view={vista}
+              count={filtrati.length}
+              loaded={pazienti.length}
+              hasMore={hasMore}
+              unverified={
+                summaryLoading ||
+                Boolean(summaryError) ||
+                contiVista.in_carico === null ||
+                contiVista.dimessi === null
+              }
+              loading={summaryLoading}
+            />
+
             <div className="filter-chips" role="group" aria-label="Filtra pazienti per sesso">
               {(['tutti', 'M', 'F'] as const).map((s) => (
                 <button
@@ -620,6 +617,7 @@ export function PatientList({
               localSortActive={Boolean(localSort)}
               serverCriterion={rosterOrder.order.criterion}
               patients={rosterPatients}
+              completionPatients={canIntake ? filterIncompletePatients(rosterPatients) : []}
               sort={sort}
               onSortChange={setSort}
               hasMore={hasMore}

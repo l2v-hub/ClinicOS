@@ -1,0 +1,53 @@
+{
+  "baseSha": "0d4f889578a34b85aed2cdcf264ea1bd5db07743",
+  "mergeHead": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
+  "expectedParents": [
+    "0d4f889578a34b85aed2cdcf264ea1bd5db07743",
+    "6d2cc7919a86e3896426a7281f28f3406d8418e4"
+  ],
+  "oldArtifactsChecked": 9107,
+  "changedOldIndexArtifacts": [],
+  "changedOldWorkingArtifacts": [],
+  "newIndexedArtifacts": 777,
+  "plan1Sha256": "46b4c566e37e81c55f578a6d9e0d7ea289f917723bb6934ced36aa8c650a8c05",
+  "plan2Sha256": "dc8b43b782dbcd86dd10586c5fc8c0a3cd43f6321672072e7d7598b41e26bab4",
+  "sourcePaths": [
+    "frontend/src/components/operator/PatientList.tsx",
+    "frontend/src/components/shared/ConfirmDialog.tsx",
+    "frontend/src/components/shared/DischargeImportModal.tsx",
+    "frontend/src/components/shared/import/ImportReviewWorkspace.tsx",
+    "frontend/src/components/shared/intake/IntakeIndex.tsx",
+    "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+    "frontend/src/components/shared/intake/StepAnagrafica.tsx",
+    "frontend/src/components/shared/intake/__tests__/intakeMinimal450.test.ts",
+    "frontend/src/components/shared/intake/__tests__/intakeSexReview.test.ts",
+    "frontend/src/components/shared/intake/intakeSexReview.ts",
+    "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+    "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts",
+    "frontend/src/lib/patientIncompleteSummary.test.ts",
+    "frontend/src/lib/patientIncompleteSummary.ts",
+    "frontend/vercel.json",
+    "scripts/e2e/issue-450-ingresso.mjs"
+  ],
+  "actualStagedSourcePaths": [
+    "frontend/src/components/operator/PatientList.tsx",
+    "frontend/src/components/shared/ConfirmDialog.tsx",
+    "frontend/src/components/shared/DischargeImportModal.tsx",
+    "frontend/src/components/shared/import/ImportReviewWorkspace.tsx",
+    "frontend/src/components/shared/intake/IntakeIndex.tsx",
+    "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+    "frontend/src/components/shared/intake/StepAnagrafica.tsx",
+    "frontend/src/components/shared/intake/__tests__/intakeMinimal450.test.ts",
+    "frontend/src/components/shared/intake/__tests__/intakeSexReview.test.ts",
+    "frontend/src/components/shared/intake/intakeSexReview.ts",
+    "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+    "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts",
+    "frontend/src/lib/patientIncompleteSummary.test.ts",
+    "frontend/src/lib/patientIncompleteSummary.ts",
+    "frontend/vercel.json",
+    "scripts/e2e/issue-450-ingresso.mjs"
+  ],
+  "unmerged": "",
+  "sourceHarnessStopped": true,
+  "parent483Imported": false
+}

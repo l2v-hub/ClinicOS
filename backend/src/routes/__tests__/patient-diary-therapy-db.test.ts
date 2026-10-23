@@ -233,6 +233,10 @@ test('AC2: terapia non valida, voce non valida o conflitto di fascia → 400 sen
   (suspension.entry as Record<string, unknown>).content = `Sospendere ${drug('suspension')} 5 mg`;
   const noSchedule = body(`${marker}-invalid-5`, drug('noschedule'));
   delete (noSchedule.therapy as Record<string, unknown>).schedules;
+  const noRoute = body(`${marker}-invalid-12`, drug('noroute'));
+  delete (noRoute.therapy as Record<string, unknown>).viaSomministrazione;
+  const blankRoute = body(`${marker}-invalid-13`, drug('blankroute'));
+  (blankRoute.therapy as Record<string, unknown>).viaSomministrazione = '  ';
   const noUnit = body(`${marker}-invalid-6`, drug('nounit'));
   (noUnit.therapy as Record<string, unknown>).schedules = [
     { time: '08:00', quantityNumerator: 1, quantityDenominator: 1 },
@@ -275,6 +279,8 @@ test('AC2: terapia non valida, voce non valida o conflitto di fascia → 400 sen
     [modified, 'intent_not_prescription'],
     [periodicEmpty, 'schedule_required'],
     [oneShotNoTime, 'schedule_required'],
+    [noRoute, undefined],
+    [blankRoute, undefined],
   ];
   for (const [payload, code] of expectedCodes) {
     const res = await post(`${patientAId}/diary/with-therapy`, operatorAId, payload);
@@ -400,6 +406,70 @@ test('AC3: doppio POST in parallelo con lo stesso requestId → una sola terapia
     }),
     1,
   );
+});
+
+test('AC486: exact legacy replay without route is read-only; missing-route new and cross-patient requests fail closed', async () => {
+  const requestId = `${marker}-legacy-route-replay`;
+  const original = body(requestId, drug('legacy-route-replay'));
+  const createdResponse = await post(`${patientAId}/diary/with-therapy`, operatorAId, original);
+  assert.equal(createdResponse.status, 201, await createdResponse.clone().text());
+  const created = (await createdResponse.json()) as {
+    entry: { id: string };
+    therapy: { id: string; viaSomministrazione: string };
+  };
+  assert.equal(created.therapy.viaSomministrazione, 'orale');
+
+  const routeLessReplay = body(requestId, drug('legacy-route-replay'));
+  delete (routeLessReplay.therapy as Record<string, unknown>).viaSomministrazione;
+  const beforeReplay = await counts(patientAId);
+  const replayResponse = await post(
+    `${patientAId}/diary/with-therapy`,
+    operatorAId,
+    routeLessReplay,
+  );
+  assert.equal(replayResponse.status, 200, await replayResponse.clone().text());
+  const replay = (await replayResponse.json()) as typeof created;
+  assert.equal(replay.entry.id, created.entry.id);
+  assert.equal(replay.therapy.id, created.therapy.id);
+  assert.deepEqual(await counts(patientAId), beforeReplay);
+
+  const changedLegacyReplay = body(requestId, drug('legacy-route-replay'));
+  delete (changedLegacyReplay.therapy as Record<string, unknown>).viaSomministrazione;
+  (changedLegacyReplay.entry as Record<string, unknown>).content = 'Contenuto diverso';
+  const conflict = await post(
+    `${patientAId}/diary/with-therapy`,
+    operatorAId,
+    changedLegacyReplay,
+  );
+  assert.equal(conflict.status, 409);
+  assert.equal(((await conflict.json()) as { code: string }).code, 'request_id_reused');
+  assert.deepEqual(await counts(patientAId), beforeReplay);
+
+  const crossPatient = body(requestId, drug('legacy-route-replay'));
+  delete (crossPatient.therapy as Record<string, unknown>).viaSomministrazione;
+  const beforePatientB = await counts(patientBId);
+  const isolated = await post(
+    `${patientBId}/diary/with-therapy`,
+    operatorBId,
+    crossPatient,
+  );
+  assert.equal(isolated.status, 400, await isolated.clone().text());
+  assert.deepEqual(await counts(patientBId), beforePatientB);
+  const isolatedBody = await isolated.text();
+  assert.doesNotMatch(isolatedBody, new RegExp(created.entry.id));
+  assert.doesNotMatch(isolatedBody, new RegExp(created.therapy.id));
+
+  const explicitRouteRequest = `${marker}-explicit-route`;
+  const explicitRoute = body(explicitRouteRequest, drug('explicit-route'));
+  (explicitRoute.therapy as Record<string, unknown>).viaSomministrazione = 'IM';
+  const explicitResponse = await post(
+    `${patientAId}/diary/with-therapy`,
+    operatorAId,
+    explicitRoute,
+  );
+  assert.equal(explicitResponse.status, 201, await explicitResponse.clone().text());
+  const explicit = (await explicitResponse.json()) as { therapy: { viaSomministrazione: string } };
+  assert.equal(explicit.therapy.viaSomministrazione, 'IM');
 });
 
 test('AC3: se la voce di diario fallisce non resta nessuna terapia (transazione atomica)', async () => {

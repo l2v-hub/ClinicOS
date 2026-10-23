@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { facilityClock } from '../facility-time.js';
+import { facilityClock, facilityDate } from '../facility-time.js';
 import {
   dayKey,
   collectTherapiesDue,
@@ -76,4 +76,25 @@ test('nighttime therapy and handover signals compare local clinical times consis
     ),
     true,
   );
+});
+
+test('facilityDate converts explicit instants to the Rome calendar date across seasons, year boundaries, and DST', () => {
+  assert.equal(facilityDate(new Date('2026-10-18T22:33:00Z')), '2026-10-19');
+  assert.equal(facilityDate(new Date('2026-01-01T00:30:00Z')), '2026-01-01');
+  assert.equal(facilityDate(new Date('2026-12-31T23:30:00Z')), '2027-01-01');
+  assert.equal(facilityDate(new Date('2026-07-31T22:30:00Z')), '2026-08-01');
+  assert.equal(facilityDate(new Date('2026-03-29T00:30:00Z')), '2026-03-29');
+  assert.equal(facilityDate(new Date('2026-10-25T00:30:00Z')), '2026-10-25');
+});
+
+test('facilityDate with no argument uses the facility date at Rome midnight before UTC', (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: Date.UTC(2026, 9, 18, 22, 33) });
+  assert.equal(new Date().toISOString().slice(0, 10), '2026-10-18');
+  assert.equal(facilityDate(), '2026-10-19');
+});
+
+test('facilityDate with no argument follows the Rome year boundary', (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: Date.UTC(2026, 11, 31, 23, 30) });
+  assert.equal(new Date().toISOString().slice(0, 10), '2026-12-31');
+  assert.equal(facilityDate(), '2027-01-01');
 });

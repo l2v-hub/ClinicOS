@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "files": {
+    "remove-patient-row-lock.log": "837739c420a3a72b480fef1729784aea2d6c44ddef95de0793e6e071d411a491",
+    "results.json": "3764ebc334daa160a17cf2deb3aa90359effae7828c0ceac102f512b23b7aa90",
+    "source-binding-failure1.json": "a7e4c51e03c6a8d47a66df046c6351a3bd2babe5b92f21a2c17482262671f73f",
+    "remove-role-scope-condition.log": "d43224c1ea3027bde3dfed437586a2bc2c64a930f0b6031cb1c8cd44380d3014",
+    "remove-role-scope-condition.patch": "fa3dd8b4037c1822669634d9ba9e476d3e832fc38b377b72c11b2d387606f883",
+    "mutation-source-proof.json": "b8255c63133abfb6dbc462dfb07c4f4abc378c1618fa224b7f8e2a39bbc77b98",
+    "baseline.log": "02dc4006cbfe9c2af0b8ff5c9c467f81f93d699acd0e5fe9f73980c21e95ce67",
+    "remove-registeredby-predicate.log": "c1d32a6cbedcdda7c5e4bbf854b4fd94d2a626c90df7f1295d09d516180413a1",
+    "source-proof.json": "5a159fbbe7c41be897bfe6d2fe6d1c8c9114a78de6c97a098c4dc6fd929d6374",
+    "root-eol-amendment-canonical.json": "d1ffd75bf18403b2fb9510ce6cc2f48b7620ca4b1885c7676194dd4e004e74ef",
+    "remove-missing-patient-rejection.log": "ccdbe311a8ceb1d42f3b983226bac5d6c16c5e3fec530a48e98058836534903e",
+    "run.py": "91d4849338b7da278dcb21c77b13a109824c81b6937085dc551c66dbac7047b8",
+    "remove-registeredby-predicate.patch": "42ee921f56e7ea365351980e579ee81fc2ba149c952c7abbe05e561aa2fbc793",
+    "move-missing-rejection-after-cartella.log": "81690d929aa5caf7ae24173a266fe98a459d31656b5660ff11d5c67a06bb1e8d",
+    "report.json": "ab951726a4d271470374280628851dd2e2e90182964529847360cd65fd2e06b3",
+    "remove-missing-patient-rejection.patch": "a87982e163a986859a2a20e582f79c30db52d3f7b8cf62bdcfd544844b2a2e2d",
+    "change-registeredby-binding.log": "30dce9d2490e520ecebb3d22d53e60de68f9f90e348655f68360432e60008df0",
+    "remove-patient-row-lock.patch": "62e2697d4509fb3f9e873342f451e31ce21a3d07fc5740854e083ae11a93062d",
+    "root-eol-scope-amendment.json": "76e39ce26c5a6d8270fd2af3abae42aebbb7e287c250c2836122235e70309624",
+    "move-missing-rejection-after-cartella.patch": "46eb9ef05964905e0af556827413e14ddcfd50b082d127f7676e2e7b0066f6bc",
+    "remove-patient-id-binding.log": "465cd8516ffd1f320f1aa7e24b46404f604e995409564b785f882eb831c8b308",
+    "report.md": "1e0db28e0273dde09f9241c43ddfe85b23cfa20f7df5de4ab418db0b70122413",
+    "remove-patient-id-binding.patch": "eef7d70a834d4140a3715dcd0443831042b776674cf34252ad5e759a674db1ab",
+    "change-registeredby-binding.patch": "a0c1157102e8ca48127f61ec2212aaf8cf3396803db50de2437a77077c7818b3",
+    "task-contract.md": "9c7336838ae8dc00c4e93e0051ccd2298d568fd8d0976510f8fa020e208e1eaa",
+    "reservation.json": "3cabae474d8e3f9a2843c2edce3071713698b3b035a95776e6455e35fdd0f1fb"
+  }
+}

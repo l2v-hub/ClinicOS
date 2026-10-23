@@ -1,0 +1,20 @@
+{
+  "decision": "LocalQA4accepted; BLOCKEDactualreviewedparentmain432/450; no UXPR/release/closure",
+  "implementationRound": 4,
+  "sourcePaths": 94,
+  "contracts": 27,
+  "qa4ReportSha256": "8f2497589c431266d9c3ec4f72388c3460ca1212ef53d1004aaab13e7195aed3",
+  "qa4SealSha256": "5a083758b79971988f026575aa164b8e2e52e3db3a014ba122cda39092be6818",
+  "qa4ArtifactHashesVerified": 97,
+  "freshUxPass": 7,
+  "freshFocusedDbPass": 12,
+  "inheritedQa3SourceBound": {
+    "frontendPass": 1480,
+    "backendPass": 1942,
+    "existingOptInSkipped": 5,
+    "intakePass": 19
+  },
+  "rootReviewed": "FullQA3+QA4reports,exact6sourcechanges sincecheckpoint,94source/27contract hashes,all97QA4artifacthashes,actual452/457PNG; sourceprivacy scanned by freshQA4",
+  "preExistingVisualLimitation": "Long synthetic room badge overflow in unchanged baselineCSS documented in QA4; no newregression or fifthfix",
+  "noFifthCycleOrMaxApproval": true
+}

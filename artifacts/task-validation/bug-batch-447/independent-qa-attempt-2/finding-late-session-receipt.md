@@ -1,0 +1,11 @@
+# Certain correctness/security finding: late ordinary chart receipt crosses session epoch
+
+Severity: high (clinical state isolation). Source `frontend/src/App.tsx:2948` checks `documentSaveEpoch` before `await response.json()`, but `setCartelle` at2962 installs the parsed server snapshot without an epoch check after that await. The later outer guard at2971 returns false after the state mutation has already happened.
+
+Reproduction: `node --import tsx artifacts/task-validation/bug-batch-447/independent-qa-attempt-2/late-session-receipt.mjs`.
+
+This independent test parses current App.tsx with TypeScript AST, extracts the exact `updateCartella` production function, transpiles only TypeScript syntax, and executes that source against the real `CartellaWriteQueue`, `mergeCartellaPatch`, `cartellaWriteData` and `createDefaultCartella`. It does not implement another save algorithm. Only fetch timing and the React setter boundary are controlled: headers arrive in epoch1, `response.json()` stays pending, logout/new epoch2 clears all chart state, then the old valid synthetic receipt body resolves. The exact production function inserts the old patient into the empty new-session state and returns false. The JSON proof records source/function SHA256, actual epoch transitions and observed state writes. Assertion fails1!==0. No real patient or actual account is involved.
+
+Artifacts: `late-session-receipt.mjs`, `late-session-receipt.txt`, `late-session-receipt-result.json`. The RED reproduction and hashes must remain immutable. This invalidates the current candidate even if all ordinary browser scenarios pass; those scenarios do not time a session change between response headers and JSON completion.
+
+Remediation belongs to the implementer in a root-reserved next implementation round: revalidate session after asynchronous body parsing and before installing/returning a snapshot (and make the state-updater boundary robust against a later session change). Preserve existing exact patient receipt verification, queue state, uncertain retry and no-cross-session writes; add a regression against the actual App save path. No source fix was made by QA. Complete applicable remaining independent browser/security evidence on the sealed current candidate, then hand off the failure.

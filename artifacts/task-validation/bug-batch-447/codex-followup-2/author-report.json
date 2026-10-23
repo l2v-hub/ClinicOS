@@ -1,0 +1,60 @@
+{
+  "status": "IMPLEMENTED \u2014 NOT VERIFIED",
+  "baseSha": "b5229d8e5af936e6757843ec201a95c6ed0e9a0d",
+  "changedFiles": [
+    "frontend/src/components/operator/__tests__/operationalLists452.test.ts",
+    "frontend/src/components/operator/__tests__/patientTherapySlotAndForm.test.ts",
+    "frontend/src/components/shared/intake/__tests__/therapyFieldFeedback.test.ts",
+    "backend/src/routes/__tests__/patient-clinical-scope.test.ts",
+    "backend/src/routes/__tests__/therapy-slot-scope-contract.test.ts",
+    "backend/src/skills/__tests__/assistant-e2e.test.ts",
+    "backend/src/tools/__tests__/therapy.test.ts",
+    "e2e/qa-bug-batch-447-integrated-browser.mjs"
+  ],
+  "summary": [
+    "Applied the two reviewed fixture proposals (3 frontend tests and 4 backend tests) with the supplied SHA-256 values retained in the private author report.",
+    "Updated only the issue 452 browser fixture to preserve unknown legacy dose as dosaggio empty string and open the actual native collapsed Giro controls through the visible summary before use.",
+    "All eight changed paths are within the authorized test/harness scope. Previous independent QA STOP and old-proof checksums are unchanged."
+  ],
+  "checks": [
+    {
+      "name": "frontend full suite",
+      "result": "PASS",
+      "tests": 1509,
+      "passed": 1509,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "frontend TypeScript check",
+      "result": "PASS"
+    },
+    {
+      "name": "frontend production build",
+      "result": "PASS",
+      "note": "Vite emitted its existing large-chunk and plugin timing warnings."
+    },
+    {
+      "name": "backend pure therapy scope contract",
+      "result": "PASS",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "integrated browser harness syntax",
+      "result": "PASS",
+      "note": "node --check only; no browser or clinical scenario executed."
+    }
+  ],
+  "notRun": [
+    "Database-backed backend suites; no database runtime was started.",
+    "Integrated browser scenarios, including issue 452; independent QA must run them."
+  ],
+  "limitations": [
+    "This author validation does not resolve the prior partial/failed integrated QA verdict.",
+    "Fresh independent QA is required for database-backed suites, issue 452 and remaining clinical scenarios before any acceptance or closure claim."
+  ],
+  "oldProofsUnchanged": true
+}

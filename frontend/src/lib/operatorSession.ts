@@ -12,8 +12,15 @@ export interface CurrentOperator {
 }
 
 let currentOperator: CurrentOperator | null = null;
+let operatorSessionEpoch = 0;
+
+/** Changes on every login/logout/operator switch, even for the same identity. */
+export function getOperatorSessionEpoch(): number {
+  return operatorSessionEpoch;
+}
 
 export function setCurrentOperator(op: CurrentOperator | null): void {
+  operatorSessionEpoch += 1;
   currentOperator = op;
 }
 

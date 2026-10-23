@@ -1,0 +1,29 @@
+{
+  "kind": "private-publication13-candidate3",
+  "status": "READY_FOR_INDEPENDENT_PUBLICATION_QA",
+  "testedSourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "publicationSha": null,
+  "attempt6SevenScenarioPass": 7,
+  "attempt6SevenScenarioExpected": 7,
+  "attempt8Issue486Pass": 10,
+  "attempt8Issue486Expected": 10,
+  "copiedMediaFiles": 24,
+  "copiedEvidenceFilesManifestCount": 86,
+  "finalizedOriginalIssue447Video": true,
+  "issue447TruncatedVideoUsed": false,
+  "allEightCandidateVideosFfprobePass": true,
+  "negative503Probe": {
+    "actual503Observed": true,
+    "samePatientUnknownThenVerified": true,
+    "recoveryHttp200": true,
+    "attempt": 9
+  },
+  "qaHandoffComplete": true,
+  "releaseReady": false,
+  "rootIndependentReviewRequired": true,
+  "attempt5PartialFailurePreserved": true,
+  "curationFailuresPreserved": 4,
+  "sourceOrGitProviderDatabaseClinicalRuntimeChanges": false,
+  "psReadonly": "PASS_SOURCE_503_PRINT_PDF_REASON_LIMITS_ZERO_MUTATIONS",
+  "resumptionBrowserExecuted": false
+}

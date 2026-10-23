@@ -1,0 +1,3 @@
+# Environment refusal before browser startup
+
+This attempt did not start PostgreSQL or the application/browser. The wrapper refused an occupied container name immediately after preceding owned docker stop --rm; subsequent read-only docker listing confirmed its automatic removal. The copied evidence/test-results trees are the prior canonical snapshot, not fresh QA evidence for this attempt. Only browser-lifecycle.txt, browser-command.json and native-adapter-failure.json describe this invocation. Never count copied prior browser results as new QA. All previous author media was independently preserved under preserved-pre-qa/files before any run.

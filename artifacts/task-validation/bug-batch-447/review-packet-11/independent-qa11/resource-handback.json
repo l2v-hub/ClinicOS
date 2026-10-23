@@ -1,0 +1,37 @@
+{
+  "qaNonce": "e9e6115d-9f5b-4a0f-82fa-a5e0858d31c3",
+  "clinicalGrantNonce": "1e13ebab-a3a9-4b07-b91e-71735b43f938",
+  "sourceSha": "f394e3a77925e96a2b54e63485fb45ad44678f54",
+  "portsFree": {
+    "3447": true,
+    "5447": true,
+    "8432": true,
+    "55432": true
+  },
+  "flockFree": true,
+  "ownedContainerRemoved": true,
+  "ownedNetworkRemoved": true,
+  "remainingOwnedProcesses": [],
+  "baseline": {
+    "id": "9000f70d4ee95b9e3bde723796daa050081db4274d20c97888413479232949ad",
+    "image": "sha256:81bd698b4594e751a3269e4dcd3e03a4a0ec0daf7b72e7aa1abd43cce9887542",
+    "startedAt": "2026-10-18T03:32:34.629052269Z",
+    "running": true,
+    "health": "healthy",
+    "ports": {
+      "5432/tcp": [
+        {
+          "HostIp": "0.0.0.0",
+          "HostPort": "5432"
+        },
+        {
+          "HostIp": "::",
+          "HostPort": "5432"
+        }
+      ]
+    }
+  },
+  "baselineUnchanged": true,
+  "freeBytes": 2959335424,
+  "at": "2026-10-21T19:16:43.050Z"
+}

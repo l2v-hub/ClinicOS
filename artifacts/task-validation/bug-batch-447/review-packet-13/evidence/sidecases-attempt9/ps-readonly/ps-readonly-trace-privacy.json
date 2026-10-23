@@ -1,0 +1,25 @@
+{
+  "policy": "exact synthetic session values only; no event or outcome removal",
+  "zipValidation": "CRC and residual signed-token scan passed",
+  "archives": [
+    {
+      "path": "/tmp/clinicos-qa497-browser13-20261021/attempt9/ps-readonly/ps-readonly-trace.zip",
+      "originalSha256": "0fc033965dc372fe1961626f2ff5d94dfb5dd711c9c898db15d516b73b768de8",
+      "sanitizedSha256": "05f8b0212518ca1bcb4a649e7176b255a8e966e97f0d37fbc115e04e892db51b",
+      "sessionsRedacted": 1,
+      "entries": [
+        {
+          "entry": "trace.network",
+          "replacements": 36
+        },
+        {
+          "entry": "resources/1cdd5f1934a3fb82bbb2ffbd08def2e78422f062.json",
+          "replacements": 1
+        }
+      ],
+      "tokensRemaining": 0,
+      "changed": true,
+      "originalRetainedPrivateOutsideRepository": true
+    }
+  ]
+}

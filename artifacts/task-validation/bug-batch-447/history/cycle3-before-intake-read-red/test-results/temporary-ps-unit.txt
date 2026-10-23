@@ -1,0 +1,11 @@
+✔ exit decisions are explicit, confirmed and never accept client actor/time or mixed commands (5.439799ms)
+✔ managed hold requires matching immutable history; unknown/corrupt context is never permission to dose (1.777787ms)
+✔ ordinary writes retain managed history and active hold; explicit forge/erase/change is rejected (1.524644ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 689.056087

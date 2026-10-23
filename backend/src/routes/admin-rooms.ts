@@ -1,4 +1,5 @@
 import { prisma } from '../lib/prisma.js';
+import { facilityDate } from '../lib/facility-time.js';
 import { Router, type NextFunction, type Request, type Response } from 'express';
 import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js';
 import { requirePatientScope } from '../patients/access.js';
@@ -69,7 +70,7 @@ patientAssignmentRouter.use('/:patientId/room-assignments', (req, res, next) => 
 // `from` di default e' oggi ("assegnazioni attive"). Chi verifica la disponibilita' per un
 // intervallo arbitrario deve invece usare `assignmentOverlapFilter`, che applica anche il limite
 // superiore sulla data iniziale e impedisce di materializzare assegnazioni future non pertinenti.
-function activeAssignmentFilter(from = new Date().toISOString().slice(0, 10)) {
+function activeAssignmentFilter(from = facilityDate()) {
   return {
     startDate: { lte: from },
     OR: [{ endDate: null }, { endDate: { gte: from } }],

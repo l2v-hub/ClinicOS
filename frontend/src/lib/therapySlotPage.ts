@@ -8,6 +8,7 @@ import type {
   TherapySlotPatient,
 } from '../types';
 import { parsePatientLocation } from './patientIdentity';
+import { parseTemporaryPsExit } from './temporaryPsExit';
 import { parseRosterMetadata, rosterQuery, type RosterPageOptions } from './rosterOrder';
 
 const FASCE = new Set(['mattina', 'pranzo', 'pomeriggio', 'sera', 'notte']);
@@ -57,6 +58,15 @@ function parsePatient(value: unknown): TherapySlotPatient {
   ) {
     throw new Error('invalid therapy patient fields');
   }
+  if (
+    row.temporaryPsExitUnverified !== undefined &&
+    typeof row.temporaryPsExitUnverified !== 'boolean'
+  ) {
+    throw new Error('invalid temporary PS-exit verification state');
+  }
+  if (row.temporaryPsExitUnverified === true && row.temporaryPsExit !== null) {
+    throw new Error('unverified temporary PS exit must not carry a decision');
+  }
   return {
     patientId: row.patientId,
     firstName: row.firstName,
@@ -67,6 +77,10 @@ function parsePatient(value: unknown): TherapySlotPatient {
     room: typeof row.room === 'string' ? row.room : 'Non assegnato',
     bed: typeof row.bed === 'string' ? row.bed : 'Non assegnato',
     administrations: row.administrations.map(parseAdministration),
+    temporaryPsExit: parseTemporaryPsExit(row.temporaryPsExit),
+    ...(row.temporaryPsExitUnverified === undefined
+      ? {}
+      : { temporaryPsExitUnverified: row.temporaryPsExitUnverified }),
   };
 }
 

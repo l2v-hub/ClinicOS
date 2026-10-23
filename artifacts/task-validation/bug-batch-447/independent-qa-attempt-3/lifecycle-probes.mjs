@@ -1,0 +1,38 @@
+import assert from 'node:assert/strict';
+import {test} from 'node:test';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {createRequire} from 'node:module';
+import path from 'node:path';
+const require=createRequire(path.resolve('frontend/package.json')),ts=require('typescript');
+const source=readFileSync('e2e/qa-bug-batch-447.mjs','utf8'),ast=ts.createSourceFile('runner.mjs',source,ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+let functions={};function walk(n){if(ts.isFunctionDeclaration(n)&&['verifyOwnedDatabase','waitForOwnedConnectionsToClose'].includes(n.name?.text))functions[n.name.text]=n.getText(ast);ts.forEachChild(n,walk)}walk(ast);assert.equal(Object.keys(functions).length,2);
+const resetStart=source.indexOf('    const target = new URL(env.DATABASE_URL);'),resetEnd=source.indexOf("    service('backend'",resetStart);assert(resetStart>0&&resetEnd>resetStart);const exactReset=source.slice(resetStart,resetEnd);
+const receipts=[];
+function fixture({nativeMode=true,name=nativeMode?'clinicos_qa_batch447_'+ 'a'.repeat(32):'clinicos_qa_batch447',marker=true,label=true,connections=[0],failCreate=false}={}){
+ const owner='b'.repeat(32),queries=[],runs=[],writes=[];let checks=0,now=0;
+ const db={async query(sql,args){queries.push({sql,args});if(sql.startsWith('SELECT shobj'))return{rows:[{marker:marker?`clinicos-qa-batch447:${owner}`:'foreign'}]};if(sql.startsWith('SELECT count'))return{rows:[{count:connections[Math.min(checks++,connections.length-1)]}]};if(sql.startsWith('CREATE DATABASE')&&failCreate)throw new Error('creation refused');return{rows:[]}}};
+ const vars={assert,nativeDatabase:name,nativeMode,nativeOwner:owner,ownedContainer:!nativeMode,container:'owned',nativeClient:db,spawnSync:()=>({status:0,stdout:label?owner:'foreign'}),Date:{now:()=>now+=550},setTimeout:fn=>{fn();return 1},Promise};
+ const funcs=new Function(...Object.keys(vars),Object.values(functions).join('\n')+';return {verifyOwnedDatabase,waitForOwnedConnectionsToClose};')(...Object.values(vars));
+ const env={DATABASE_URL:`postgresql://127.0.0.1:55447/${name}`},databaseReceipt={};
+ const runReset=new Function(...Object.keys(vars),'env','nativeTarget','databaseReceipt','run','writeFileSync','path','out','prismaCli','process',Object.values(functions).join('\n')+`;return(async()=>{let nativeDatabaseCreated=true;${exactReset};return {nativeDatabaseCreated,databaseReceipt};})();`);
+ return {queries,runs,writes,funcs,async reset(){return runReset(...Object.values(vars),env,new URL('postgresql://127.0.0.1:55447/clinicos_test'),databaseReceipt,(...a)=>runs.push(a),(...a)=>writes.push(a),path,'/qa-only','prisma-cli',{execPath:'node'})}};
+}
+for(const nativeMode of [true,false]){
+ test(`exact production reset preserves ownership, zero connections and migrations in ${nativeMode?'native':'Docker'} mode`,async()=>{const f=fixture({nativeMode});const r=await f.reset();assert.equal(r.nativeDatabaseCreated,true);assert.equal(f.queries.filter(q=>q.sql.startsWith('DROP')).length,1);assert(!f.queries.some(q=>q.sql.includes('FORCE')||q.sql.includes('pg_terminate')));assert.equal(f.runs.length,1);assert.deepEqual(f.runs[0][1],['prisma-cli','migrate','deploy','--config','prisma.config.ts']);assert.equal(r.databaseReceipt.browserFixtureIsolation.migrationsReapplied,true);assert.equal(r.databaseReceipt.browserFixtureIsolation.connectionsBeforeDrop,0);receipts.push({nativeMode,case:'positive',queryCount:f.queries.length});});
+ test(`foreign exact database marker refuses DROP in ${nativeMode?'native':'Docker'}`,async()=>{const f=fixture({nativeMode,marker:false});await assert.rejects(f.reset(),/ownership changed/);assert(!f.queries.some(q=>q.sql.startsWith('DROP')));});
+}
+test('foreign Docker label refuses even marker query and DROP',async()=>{const f=fixture({nativeMode:false,label:false});await assert.rejects(f.reset(),/ownership changed/);assert.equal(f.queries.length,0);});
+test('unsafe database identifier refuses before SQL',async()=>{const f=fixture({name:'clinicos_test'});await assert.rejects(f.funcs.verifyOwnedDatabase());assert.equal(f.queries.length,0);});
+test('open child connections refuse DROP within unchanged bounded wait',async()=>{const f=fixture({connections:[1]});await assert.rejects(f.reset(),/connections did not close/);assert(!f.queries.some(q=>q.sql.startsWith('DROP')));assert(f.queries.length<10);});
+test('closing workers are awaited and only exact child is recreated',async()=>{const f=fixture({connections:[2,1,0]});await f.reset();assert.equal(f.queries.filter(q=>q.sql.startsWith('SELECT count')).length,3);assert.equal(f.queries.filter(q=>q.sql.startsWith('DROP')).length,1);});
+test('recreation failure never starts migrations or reports a successful reset',async()=>{const f=fixture({failCreate:true});await assert.rejects(f.reset(),/creation refused/);assert.equal(f.runs.length,0);assert.equal(f.writes.length,0);});
+const cleanupStart=source.indexOf('  const cleanupErrors = [];'),cleanupExact=source.slice(cleanupStart,source.lastIndexOf('\n}'));
+assert(cleanupStart>0);const AsyncFunction=Object.getPrototypeOf(async function(){}).constructor;
+async function cleanupFixture({marker=true,containerLabel=true,endFails=false,created=true,ownedContainer=true}={}){const calls=[],written=[];const vars={nativeClient:{async query(sql){calls.push(sql);return{rowCount:0}},async end(){calls.push('end');if(endFails)throw Object.assign(new Error('fixture end failure'),{code:'fixture_end'})}},nativeDatabaseCreated:created,verifyOwnedDatabase:async()=>{calls.push('verify');if(!marker)throw new Error('foreign marker')},waitForOwnedConnectionsToClose:async()=>calls.push('wait'),nativeDatabase:'clinicos_qa_batch447_'+ 'a'.repeat(32),databaseReceipt:{},ownedContainer,spawnSync:(_command,args)=>{calls.push(args[0]);return {status:0,stdout:containerLabel?'owned':'foreign'}},container:'fixture',nativeOwner:'owned',writeFileSync:(_path,data)=>written.push(JSON.parse(data)),path,out:'/qa-only',databaseOnly:true,databaseTestsPassed:true,browserPassed:false};let error;try{await new AsyncFunction(...Object.keys(vars),cleanupExact)(...Object.values(vars))}catch(e){error=e}return{calls,written,error}};
+test('ownership refusal still closes control connection and independently stops only owned container',async()=>{const f=await cleanupFixture({marker:false});assert(f.error);assert.deepEqual(f.calls,['verify','end','inspect','stop']);assert.equal(f.written.at(-1).status,'failed');});
+test('control close failure still verifies and stops owned container, never falsely passes',async()=>{const f=await cleanupFixture({endFails:true});assert(f.error);assert(f.calls.includes('stop'));assert.equal(f.written.at(-1).status,'failed');});
+test('foreign container label is never stopped even after successful child cleanup',async()=>{const f=await cleanupFixture({containerLabel:false});assert(f.error);assert(!f.calls.includes('stop'));assert.equal(f.written.at(-1).status,'failed');});
+test('failed child creation never drops a replacement database while control connection is closed',async()=>{const f=await cleanupFixture({created:false,ownedContainer:false});assert(!f.error);assert.deepEqual(f.calls,['end']);assert.equal(f.written.at(-1).status,'passed');});
+
+process.on('exit',()=>writeFileSync(new URL('./lifecycle-production-extraction.json',import.meta.url),JSON.stringify({productionRunnerSha256:createHash('sha256').update(source).digest('hex'),helperHashes:Object.fromEntries(Object.entries(functions).map(([k,v])=>[k,createHash('sha256').update(v).digest('hex')])),exactResetSha256:createHash('sha256').update(exactReset).digest('hex'),syntheticTransportOnly:true,receipts},null,2)+'\n'));
