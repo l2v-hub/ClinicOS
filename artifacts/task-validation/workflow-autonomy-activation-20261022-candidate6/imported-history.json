@@ -1,0 +1,2303 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "blocked",
+      "nonce": "b8e19ccc-b9fd-4e3e-84bc-9fe9462bf61a",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "dad757447d1ba0a7d9b0436b41e50cd4c4f20280",
+      "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+      "evidence": "lineage/author1-report.md",
+      "reason": "517 author tests passed; held before independent QA when actual sync exposed additional scope; immutable proof retained"
+    },
+    {
+      "round": 2,
+      "status": "failed",
+      "nonce": "85786314-5242-4020-b821-db00c2b40b61",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "2e4a635ad5f34bb6f886342d15eaed63674d3dae",
+      "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+      "evidence": "lineage/qa2-report.md",
+      "reason": "Independent QA2 reproduced F1/F2 despite528 focusedPASS; failed original proofs retained",
+      "independentQaSealSha256": "58b274424fc6f336a3244c9eb87e4fbbc079275e629a1c9695e3192ecf45112c"
+    },
+    {
+      "round": 3,
+      "status": "failed",
+      "nonce": "c7ddc739-ee71-49b6-bd1c-a3e8d6e2a6f2",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "93b0c72877bd58c2dd3769d0942d737ef9f96ac0",
+      "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+      "evidence": "standalone-release-probe1/report.md",
+      "reason": "Initially QA3 588+23 and six real native checks passed; later independent original native call-chain probe reproduced S1/R1, therefore overall attempt failed before Claude/adoption/activation",
+      "initialQa3SealSha256": "d9ad31f41c6654abba35f9d5bc747e5932814a8653a2be0b27e2de4d44c94693",
+      "failedDiagnosticSealSha256": "bce487135e880b82cadc25266428209d041bb491c71ce6fb26aa4a91002bbcbd",
+      "previousPublicationSha": "9a6cc35c32d91e3ae2aae2debc6fdcff089cd90f"
+    },
+    {
+      "round": 4,
+      "status": "passed",
+      "nonce": "1c075aa7-d2a3-4760-985f-08d32550d573",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "cb2d095926282918777b9dd73a37ef7d90bb7b2f",
+      "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+      "evidence": "independent-qa4/report.md",
+      "reason": "Actual frozen native automatic ownership/context fix independently verified; explicit supported paths retained, activation pending",
+      "independentQaNonce": "4789a5de-7784-459b-9b75-4234572aad9b",
+      "independentQaSealSha256": "b7003de2e30f34f99b5ae330bc44f73fca25a9dec07b90e9cea0ace3b20c5cc6"
+    },
+    {
+      "round": 5,
+      "status": "failed",
+      "nonce": "4b48cff3-a6d4-4727-99b8-e1cb237d0405",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "67c53efe45e2d5e2ffca228d3bf6639029bb27c5",
+      "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+      "evidence": "independent-qa5/report.md",
+      "reason": "Private5 completed actual715author tests but independentQA found3 genuine integration gaps; neverpublished/adopted; allfailedproofs retained",
+      "independentQaNonce": "7d9f3883-a737-4a89-9b3d-623242a15227",
+      "independentQaSealSha256": "655122adbf8d401c4fee77706cb33b31aebab40c48562e3d04118e817e863e9a"
+    },
+    {
+      "round": 6,
+      "status": "passed",
+      "nonce": "43647508-76e7-40c3-85a4-4e88dcab8f4d",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "992496727d31761bbece1262603d20e8cda447d7",
+      "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+      "evidence": "independent-qa6/report.md",
+      "reason": "Five genuine Claude1findings and three actual independentQA5integrationgaps corrected and independently verified on frozen code6; later native/model/activation gates remain pending",
+      "independentQaNonce": "d9cc25d4-f392-4d93-a87c-4b163fd07f5b",
+      "independentQaSealSha256": "21af8377471b43c6c902287986c5995361e6ed0a829f1f661ee996ad7cf26f36"
+    }
+  ],
+  "reviews": [
+    {
+      "round": 1,
+      "status": "changes-requested",
+      "subjectSha": "ce7993a781bd2d378a1ca3ad2956b2c3606b4fe2"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "changes-requested",
+        "subject_sha": "ce7993a781bd2d378a1ca3ad2956b2c3606b4fe2",
+        "review_sha256": "03e1b147e4d5bb9655f1fb90c46163cd808bdec16a2852c657f502e838eaba8a"
+      }
+    ]
+  },
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"ce7993a781bd2d378a1ca3ad2956b2c3606b4fe2\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"Read-only review of PR #504 at ce7993a7 against controller base 2ee29895 (20 non-artifact files, +2209/-148). Evidence binding: the non-artifact diff between cb2d0959 and ce7993a7 is empty, so only artifacts differ after candidate 4. All native checks on the exact head are PASS (bug-pipeline-tests, gate, browser-e2e, archive-tests, frontend-tests, real-provider, secret-scan, windows-review-setup); configure-repository and verify-provider-access were skipped. I did not run any tests myself. What is sound: ownership lives only in durable controller state on the codex/bug-control branch. Labels, markers or PR/issue comments cannot forge it. automationPaused fails closed on any malformed handback. mergeIndependentEntities keeps the fresh remote operatorTakeover, and the rebase validators (pipeline save, comment-review-handoff save, release freshReleaseGuard) recheck ownership after a CAS conflict, so durable writes cannot overwrite a takeover. The automatic release path (workflow_run only) checks ownership at selection, at the initial load, inside every fresh guard and on record/publication; manual workflow_dispatch release stays operator-authorized. The issue-review communication recheck runs right before each write. Manual Claude claim/submit through the handoff CLI is unchanged because automatic defaults to false, so legitimate controller-owned claims and submits are not affected. Final Codex QA is now bound to sha, claudeRound and feedbackFingerprint, carries a nonce, and is re-gated on required checks, unresolved threads and PR identity. Legacy approved subjects that lack feedbackFingerprint will re-run the final QA once and temporarily lose approvedSha. That costs time but does not deadlock. Gaps that need changes: (1) the handback is an unauthenticated, unbound durable flag that can carry over into a later takeover; (2) the release gate never verifies the final Codex QA record, so the new requirement is enforced only by the controller's phase transition; (3) after recovery, a final QA that failed for infrastructure reasons is converted into a code-correction attempt; (4) pipeline paths publish to the PR branch after long-running QA without a fresh ownership check, contrary to the documented guarantee; (5) a takeover observed during a CAS aborts the whole run instead of skipping the subject. Human approval: this PR modifies trust-root paths (.claude/skills/... and agent-team/src/bug-pipeline/...). Under policy it needs an independent native human approval, and reviewDecision is currently empty. This verdict does not stand in for that approval.\",\n  \"findings\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \"agent-team/src/bug-pipeline/operator-ownership.mjs\",\n      \"line\": 11,\n      \"problem\": \"An explicit handback is recognised only by the shape operatorTakeover.automation = {enabled:true, mode:'new-unclaimed-only', protectedSubjects:[...]}. It has no actor, timestamp or nonce, is not bound to operatorTakeover.nonce, and validateState does not validate it. If an operator starts a new takeover (new nonce or subjects) while the automation block from an earlier handback is still in state, automation is not paused. Subjects that are not explicitly listed (for example scope the operator is about to touch) remain available to the controller, so the old handback is effectively replayed across takeovers.\",\n      \"requested_change\": \"Require automation.takeoverNonce === operatorTakeover.nonce, plus a recorded authorized actor and handedBackAt. Treat any mismatch or missing binding as paused. Validate the handback schema in validateState and make the operator tooling clear or replace the handback whenever a takeover is (re)activated.\",\n      \"test_expectation\": \"With operatorTakeover.active=true, nonce N2 and an automation block carrying takeoverNonce N1, or none: automationPaused returns true, runPipeline returns before intake, and selectAutoReleaseBatch returns null. With takeoverNonce N2 and a valid actor, automation resumes for new, unclaimed work only.\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"agent-team/src/bug-pipeline/release.mjs\",\n      \"line\": 200,\n      \"problem\": \"verifyReviewProof checks only the Claude review, ledger and report for the SHA. Neither releaseBatch nor recordDeployment checks that batch.codexFinalReview is verified for the same subjectSha, claudeRound === reviews.length and the current feedbackFingerprint. The new 'final independent Codex QA for every external channel' rule is enforced only by the controller setting phase=ready/approvedSha. Any other path that produces ready/approvedSha (legacy state, manual dispatch, internal mode, future code) can merge without that QA.\",\n      \"requested_change\": \"For external-review batches, have the release gate (selectAutoReleaseBatch, releaseBatch and recordDeployment) require codexFinalReview.status==='verified' with subjectSha===reviewedSha===batch.sha and claudeRound===batch.reviews.length. Otherwise fail closed, with a clear recovery message.\",\n      \"test_expectation\": \"releaseBatch with approvedSha===sha and a clean Claude approval, but codexFinalReview missing, stale (different sha or round) or not verified, refuses before any merge call. With a matching verified record it proceeds. Selection skips such batches.\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"agent-team/src/bug-pipeline/external-review.mjs\",\n      \"line\": 133,\n      \"problem\": \"Final QA re-runs only for a new sha, round or fingerprint, or for status 'waiting-checks'. If workspace.finalQa throws, status becomes 'failed' (line 178) and the batch is blocked. After an operator recovers it, the record still matches sha, round and fingerprint, so QA is not re-run. changed then becomes true (line 184) and the flow reserves an implementation attempt and asks Codex to 'correct' code because of an infrastructure failure, sending {codex:{status:'failed'}} as feedback. Status 'blocked' (identity or feedback race before QA) behaves the same when the fingerprint is unchanged. This burns the four-attempt budget, contrary to the module's own rule that non-code failures must not consume implementation attempts.\",\n      \"requested_change\": \"Treat 'failed' and 'blocked' final-QA records like 'waiting-checks': archive them to codexFinalReviewHistory and re-run final QA under a bounded retry counter. Only 'changes-requested' should lead to the correction path.\",\n      \"test_expectation\": \"With a published approved handoff and a prior codexFinalReview {status:'failed'} for the same sha, round and fingerprint, the step calls finalQa again and does not call reserveImplementation or workspace.execute. With status 'changes-requested', a correction is reserved.\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"agent-team/src/bug-pipeline/pipeline.mjs\",\n      \"line\": 516,\n      \"problem\": \"Internal-mode PR-feedback correction runs verify, then workspace.qa (long-running), then checkpoint, workspace.publish (push to the PR branch) and report (issue comments), with no save or fresh ownership read after the last save at line 511. The same pattern appears at line 583. If an operator takes over during QA, the controller still pushes a new commit to the operator-owned PR and comments on its issues; the CAS check fires only at the next save. This contradicts the docs added in this PR, which say every automatic entrypoint rechecks ownership before invoking models or releasing.\",\n      \"requested_change\": \"Before checkpoint/publish/report, persist a 'publishing' phase (as the external correction path already does) or call an explicit fresh-load ownership guard that throws review-operator-owned and makes the subject a skip. Apply the same treatment to lines 469-470 (publish/createDraft) and 583.\",\n      \"test_expectation\": \"With a takeover written to the store while workspace.qa is running, workspace.publish, gh.createDraft and gh.commentIssue are never called for that batch, and no blocked or status label is written.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"agent-team/src/bug-pipeline/pipeline.mjs\",\n      \"line\": 92,\n      \"problem\": \"A takeover observed during a CAS rebase throws a generic Error, which store.save wraps as state-rebase-invalid and which sets persistenceFailed. The external-review catch then rethrows 'External review reconciliation persistence failed' (line 358) and aborts the entire run. Other unowned subjects are not processed and the workflow goes red, instead of the documented 'ownership loss is a skip'.\",\n      \"requested_change\": \"Throw with code 'review-operator-owned' in the rebase validator, preserve that code through the store's error wrapping (or expose it on cause), and treat it as a skip of the current subject in the pipeline loops without setting persistenceFailed for other subjects.\",\n      \"test_expectation\": \"A store whose save triggers a 409 and returns a fresh state with operatorTakeover listing batch A: the run skips A, continues processing batch B, and exits successfully without blocking A.\"\n    }\n  ]\n}\n"
+  },
+  "sourceManifest": [
+    {
+      "path": ".claude/skills/clinicos/references/bug-delivery.md",
+      "blob": "ce8d3eb802d94ac400ff10ea704aa1654793fabc",
+      "mode": "100644",
+      "baseBlob": "42c425eeb5c0d182b31db4b7144a72648931e6a3",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "blob": "a7f66bee857f500136c98006dbe874ee3c07c8eb",
+      "mode": "100644",
+      "baseBlob": "92da9466f34bd68bf9768b3fbd0b68b1e8398974",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/contracts.mjs",
+      "blob": "4b2b261933bbbfe30fa43419edb885b766851709",
+      "mode": "100644",
+      "baseBlob": "31acc4c64edea4ab241346e334047f2ecb974724",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/external-review.mjs",
+      "blob": "541265d267819905400480f8f7ddec871a222c10",
+      "mode": "100644",
+      "baseBlob": "1bdb40777b970cef056b59f654a7fff9967295b1",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/github.mjs",
+      "blob": "53c99dc3b3028414c4ed372d0b0a5bde2f21732f",
+      "mode": "100644",
+      "baseBlob": "58831f6d36f29580975fb9052abb1836a54a72ac",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "blob": "f78abc8efe4c5c9f19960949bd0bdf2d6c67d255",
+      "mode": "100644",
+      "baseBlob": "b5150f1a0da7573ec3f5ec924cd61ccf62bf9fd2",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+      "blob": "b7eeccc3ea0a263240e287969c56807278c61f83",
+      "mode": "100644",
+      "baseBlob": "d537be36def6b2b20fc2ea55514e2f6bc186663f",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/operator-ownership.mjs",
+      "blob": "caf4873fa79b85f11348009452ed74cb255baab9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "blob": "939a42ba16110ed8791b2a84197a8f4577ef376b",
+      "mode": "100644",
+      "baseBlob": "9f4ce009cbd8f58336214eb6d7a6b41297419a3b",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/release.mjs",
+      "blob": "ab05479c705cf5fbb1628be1df013a7f4b5a0a6b",
+      "mode": "100644",
+      "baseBlob": "4f7d523e76bb64a6475841b1d8a9c6a2c54d8436",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "blob": "e74c9a383993ad54d6aa959f61f6530f72834c5e",
+      "mode": "100644",
+      "baseBlob": "8f87543ed92814ae71abbc2a1c9af8e6866247a6",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "blob": "66250188e68f128fec865ae87832dbc9181565b0",
+      "mode": "100644",
+      "baseBlob": "882553fb0bf75b13fa24e6f86b9617b62a3297a3",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/contracts.test.mjs",
+      "blob": "6a93fbcc35eb178f5f075d62b750329f62be445d",
+      "mode": "100644",
+      "baseBlob": "6407fdfc148d95abfa4e3677b0d3d079ed7ae99d",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "blob": "6565e140c795ab2d6523809bc5f7c42d79076926",
+      "mode": "100644",
+      "baseBlob": "d6b7c53e7e04f23eac95dc7b92cfe4d8da972bab",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "blob": "ef9c4974a2b8009efa243eccd0aba861721d0de5",
+      "mode": "100644",
+      "baseBlob": "585c4a9325b8283c6ad1ab17716e54c0a4e3671f",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      "blob": "0ba98cbe7d0ba24036705838b180b76ccf9b4ba2",
+      "mode": "100644",
+      "baseBlob": "cfc4da2ae8df4652947d8188c353c106e77a4d58",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+      "blob": "aa45667ed9898d46d6fe6a3ef3a0b1d3a9828a2f",
+      "mode": "100644",
+      "baseBlob": "ec0b9fb440321aac5e62e14d4ad54e0bfb12e0a0",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+      "blob": "c115e29fcd95dadc3288ef18171b12056aab4f7f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "blob": "316a3d9de0b0993e115e3a8d9508d88c6eff6ef4",
+      "mode": "100644",
+      "baseBlob": "498a8ddafff9a13b1dbfb940422c0d5937d4f430",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "blob": "a11e9a3a84017a16aedb76d5726d6a62cc7afccc",
+      "mode": "100644",
+      "baseBlob": "eba81812f23662f3427c1ea47336e63d5d026a07",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "blob": "aeb17d2a222f779537e31403f0f39b0826ecade4",
+      "mode": "100644",
+      "baseBlob": "472a374ec57c1aa3c770dcf5952cc576e819162b",
+      "baseMode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/analysis.md",
+      "blob": "65964b5c6fe3392eae107bcb9cac221aadb2be25",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/STOP.json",
+      "blob": "285c40850e9ca0d71a8fb7883483ac8d5e5b63f5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/diff-check.json",
+      "blob": "8c7101b55afc3798c7121cd6c83975353c78e678",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/execution-policy.json",
+      "blob": "0da7f5a76e7e0f1b5109e3efdc95c159eb1d94ec",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/focused-first-command.json",
+      "blob": "a765f3fb819e112f8ebe4e46f675f76040a085aa",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/focused-first.log",
+      "blob": "75be5691fb316df9e80526b6df59d96d4d689485",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/format-scope.json",
+      "blob": "5dfdce4c44bb6a554090afc3997c860d040e4760",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/format.log",
+      "blob": "3b65b9abccdff169a9f0f9a97a7c5e3cec6562e8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/observations-first.json",
+      "blob": "910de73ff6931041e25bde61089c64db48b0dc4a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/observations.json",
+      "blob": "910de73ff6931041e25bde61089c64db48b0dc4a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/original-reproductions-first-command.json",
+      "blob": "45bb03fd70f010abc2a43f03f0aa6a3c4f59f59d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/original-reproductions-first.log",
+      "blob": "970c6edd90a8e8866f6cecb900b4c3cc7dc73f15",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/original-reproductions-frozen-command.json",
+      "blob": "45bb03fd70f010abc2a43f03f0aa6a3c4f59f59d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/original-reproductions-frozen.log",
+      "blob": "d51e0ab50de9dc299316d2006a7e95196ccfa8e2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/original-reproductions-policy.json",
+      "blob": "eb5b8d83074d69c2ed43f51388a5636ef6b36b6e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/probes.mjs",
+      "blob": "a558d37db746691ba05fb5a3af52b30f5be35c74",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/read-receipts.json",
+      "blob": "512a05cf2a8a043b631722181af5d7f900e66286",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/release-fixture.mjs",
+      "blob": "534121e44b35ef1f2d77d144f02a3f5980fc50e9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/report.md",
+      "blob": "eb9c0687eb3805fd6eba8806d0ee828816ac3d86",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/reservation-read.json",
+      "blob": "b9a2f8d455132819cee3f81ec0d00fe0798d9cf1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/results.json",
+      "blob": "3262a33d78143925c9750a8202aba4cfefd04ea4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/seal.json",
+      "blob": "cc2599286b8493730fed46082985f11c96926e6b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/source-before.json",
+      "blob": "5c80996c08725fb1590f15749cea1004374c1ead",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/source-manifest.json",
+      "blob": "b2d339aa7aad7fb11ba1a26447ced3df6175457d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/source.patch",
+      "blob": "48de9a77412e8ea88a23214334e0b3f0de837ca4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/standalone-review-fixture.mjs",
+      "blob": "8982ea32a26a6efb9287c95bf5615c46287a6673",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/syntax.json",
+      "blob": "3fec91198b8f17719a1a0c840df40d964734e251",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/author4/test-results.json",
+      "blob": "837d333fbd5e2bdd5261df80288827dab67e1a64",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/implementation-plan.md",
+      "blob": "1f3fcdff9722890ea4474c942c736e9c506ca3c1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/imported-history.json",
+      "blob": "fab0df4e88ffa2e1441f80c4b9c0cb3547e3e35b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/STOP.json",
+      "blob": "cff5488dc02b56a56fd1a152942f10f4a3cc10d3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/additional8.log",
+      "blob": "0e163177c37c52c7b05423036995bc18b455aa80",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/additional8.mjs",
+      "blob": "2c8781f6a0ba171cc8395459ef77fc00ef9f00ab",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/candidate4-delta.diff",
+      "blob": "2a70a6fac20064e388471bf69db2934eb09cd0f8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/communication-fixture.mjs",
+      "blob": "14ae586e35c81793a5077aeaaf4a91445de302fc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/execution-policy.json",
+      "blob": "2527d33c6f8051dbb79074b8817ec13bc094193a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/finalize.py",
+      "blob": "32bdc7ef22988a057dec5ecd1d4966304864dcc6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/findings.json",
+      "blob": "fe51488c7066f6687ef680d6bfaa4f7768ef205c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/focused-command.json",
+      "blob": "d7255bf58262a37e5f20389732e6981d50bbc54b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/focused.log",
+      "blob": "ebf42935acbd6e8546cd254db509e2de532ec2c4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/handoff-command.json",
+      "blob": "eba9d1a48140e242ac309ff50989fc6db891712e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/handoff-fixture.mjs",
+      "blob": "8dbf28216596d7c39d7832001f817f75e6f1b901",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/handoff-probes.log",
+      "blob": "3ba92aeec61c960fa531508a572818dc6f07eaea",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/handoff-probes.mjs",
+      "blob": "57e8b3ca91f4e12d6ee8080a10069491cd4cc325",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/harness-history.json",
+      "blob": "70557b5ed29e1e961da60e008f336a6f59c5fd49",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/historical-subject-integrity.json",
+      "blob": "42cd0c5171656f1fad567a0d465e9de60f906afe",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/independent-source.diff",
+      "blob": "6d7a1ff35580aa9831be078e5156af305d2b2ec4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/new-command.json",
+      "blob": "ba6d0a50f202eb605049f23a08dfcd8f2a5c6cc7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/new-probes.log",
+      "blob": "be96524ac7c66b5516343b5ecc8d41b6b4a2ba11",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/new-probes.mjs",
+      "blob": "9c5838a378e37135bae85e601cd0fc9397cde23a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/observations.json",
+      "blob": "910de73ff6931041e25bde61089c64db48b0dc4a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/original-commands.json",
+      "blob": "2d675a9eadeec98ffae66321fabfc6ae5ae3f3c9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/original-s1-r1.log",
+      "blob": "8ab74b8cee9c0d932cccdeac176aba74f58e3d61",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/original-s1-r1.mjs",
+      "blob": "32e1e10bced7a32cc4dd1421e41c9f91e25daab2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/original15.log",
+      "blob": "0d913d0aed6501292a21cff794e5da88354cf44b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/original15.mjs",
+      "blob": "8edd58eae716e0be59f0a30b68ce25cadf787912",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/probe-results.json",
+      "blob": "0125dd9c261e8b9075dcb7ce381ea583807b935d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/release-fixture.mjs",
+      "blob": "3a02b0d273cbad50f12392657d51bb25b37a1f76",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/report.md",
+      "blob": "9446fe7c19299553b5814250a6abc9cb28542423",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/reservation.json",
+      "blob": "cfdef0fc2d94ddf8e5d0bdd9e4abeb023fe60fc2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/results.json",
+      "blob": "f44c2c77b202ac52c7cf45975d23e03f2525d073",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/run-focused.py",
+      "blob": "2928c11c22dd7cbfceb5ceff3750bef531361868",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/seal.json",
+      "blob": "1d6bf9aeba07e26ff0e233686c4130607c2a79ae",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/source-after.json",
+      "blob": "012cebba1b2174d59aa15eda87885ec3ac199715",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/source-before.json",
+      "blob": "04e077aa679b2dad8f457873aa9ce9df0bce2b3f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/standalone-review-fixture.mjs",
+      "blob": "9901fb358d8b5886938475ce6f5145f44f295397",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/syntax.json",
+      "blob": "7e99afad020ed855a9bba757a8638e7232736d82",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/task-contract.md",
+      "blob": "eccdeccdad5b30f70e7a82031b7517338c51bbf8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/validation-report.md",
+      "blob": "9446fe7c19299553b5814250a6abc9cb28542423",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/verify-final.py",
+      "blob": "5b41db73e4f95f73d137ff04b9ead68d8d094863",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/independent-qa4/verify-inputs.py",
+      "blob": "df4757795550ca4a5580457a6ce5b3ec1c5dfe9f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/author1-report.md",
+      "blob": "607f96d04f06650895d0fb19df278bb20f51eca2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/author1-seal.json",
+      "blob": "f79ef604128b1b45831cdfb5fb07b06db8fdd047",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/author2-report.md",
+      "blob": "6a0903b66b43950a40ddbbe313e4ab853fa18bdb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/author2-seal.json",
+      "blob": "da01d05ea1a9b951518c03a82cce85284738d9d0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/author3-report.md",
+      "blob": "0f85a414e8ee19352b2f2587207b5e6d776f490a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/author3-seal.json",
+      "blob": "485348a40394d1bcb2411c3994a832497f6faa17",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/candidate1-code-commit.json",
+      "blob": "ac7c335f7552b7881c0e358a5f7f935734fb4bb5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/candidate2-code-commit.json",
+      "blob": "a58d8d599102677eb58e36c9e418afb572947272",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/candidate3-code-commit.json",
+      "blob": "24dfe9e5b46904096b82e5a5ac2800926d384e7c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/candidate4-code-commit.json",
+      "blob": "1ea18319213607c69f2410d036f3e522947d9b81",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/previous-publication-reference.json",
+      "blob": "74dbab37aad28c5e054205d10844a4831e44ed25",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/qa2-report.md",
+      "blob": "b40112d24282680da6509f8a25f2348e75315ded",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/qa2-seal.json",
+      "blob": "7a2cdc72d7e1fb69b11e7b502564ec03349893c7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/qa3-report.md",
+      "blob": "da16ba36b993df7064fe491e63c8ebb8f101d780",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/qa3-seal.json",
+      "blob": "052da3f4a481c24a27afa888399f3f3a57acbc42",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/source3-actual-all-six-native-pass.json",
+      "blob": "8c5cb7f161e492eeb824bc54e84092b65de8da1e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/source3-manifest-export-schema-correction.json",
+      "blob": "2585dc680d453571eb1630748a1910e6099eadb3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/source3-manifest-initial-export-before-closed-adopt-schema.json",
+      "blob": "2ede1d80c9ab496508d78aaa6ba687bf7a143c67",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/source3-manifest.json",
+      "blob": "56f723e7feb3581f81cebf410679323ea7a17ce8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/source3-root-offline-publication-schema-verification-after-export-correction.json",
+      "blob": "b80ea8ea9175e28e38ce0d62f84f97475f66e2d7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/lineage/source3-root-offline-publication-schema-verification.json",
+      "blob": "b80ea8ea9175e28e38ce0d62f84f97475f66e2d7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/scope-amendment-1.md",
+      "blob": "6dc1b81ccc6349cc4c6d2887d4c4f5fe2b8fefae",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/scope-amendment-2.md",
+      "blob": "952b4643794a8d84e24fda4b018cf5220caa21a4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/scope-amendment-3.md",
+      "blob": "1135daaeba25ccea28ac1e6dce679061774651d6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/scope-amendment-4.md",
+      "blob": "b4c7333987701678d80d42d22010aefa9915a6ee",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/scope-amendment-5-docs.md",
+      "blob": "43739ecb1695083b138e89e85b5bc97378669074",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/scope-amendment-6.md",
+      "blob": "6f52dc07b7e226d089152e37c544993e823d8a2f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/scope-amendment-7.md",
+      "blob": "10b16a7a7e09112e816ac650457836df3bf67ae1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/source-manifest.json",
+      "blob": "ee4a4e01a22efefa243d5481fec8d443c1aab703",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/STOP.json",
+      "blob": "f64adbf9eb94df608cc68bc2bf7e8795914719c2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/command.json",
+      "blob": "9399151f5cc13583055203a6f0d1fe37bcf0d9b7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/finalize.py",
+      "blob": "5443e1fc144622614f4d2c1378c000f911051e45",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/findings.json",
+      "blob": "7839e648bb1e05a0df1529e19a4b68b2f5ac39c2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/first-command.json",
+      "blob": "af2a51c227bfd9a5658d87f22d1c198660cd9635",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/first-observations.json",
+      "blob": "3496d63089e58f8a22fc15bec426ac3849232a78",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/first-probes.log",
+      "blob": "8c08145035853fd37cbf57d773553a6e8630430e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/first-probes.mjs",
+      "blob": "1f844291dcfd0e50da0fddbffcc46e2e608f2382",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/first-standalone-review-fixture.mjs",
+      "blob": "9f10f329a06b160cb59c8efeea1240bbcf5b71c3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/observations.json",
+      "blob": "f980a018590d09e85ed399db17fde416cb04a4b0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/probes.log",
+      "blob": "79abab1ed2135a87f4208c71248b00f80601be8b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/probes.mjs",
+      "blob": "9d5b44d09b0f8097036913ca15c4f66072299814",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/read-receipts.json",
+      "blob": "d6f04ee0346960b2a15d6b1ba31a3ae162178a34",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/release-fixture.mjs",
+      "blob": "f6834c83c1efbb111acf9b84648af16b9a99f30e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/report.md",
+      "blob": "a4a265ef7006fa42b0d8cf967ae1b4c3cb301a1c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/reservation.json",
+      "blob": "77a3ae4d76fc282f54d1c71fba6e94d38f21d52f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/results.json",
+      "blob": "ed898f284c6c464a8636b52e2c372c98e7380c0a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/retest-reason.json",
+      "blob": "84ce8d5397a034be92781169935db2f8608c1ca0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/seal.json",
+      "blob": "c4d80f4e95e3dcdafb77444d7c01e57259d8925e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/source-after.json",
+      "blob": "98a5317b01403bc416cdb894543eb8efa201a5ff",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/standalone-review-fixture.mjs",
+      "blob": "6529ea79e69ea6fbaeec376efae1dfd7b4b5e527",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/task-contract.md",
+      "blob": "ac9a1b55df5a15efd54af8ba567a988bb8e6c9ea",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/standalone-release-probe1/validation-report.md",
+      "blob": "a4a265ef7006fa42b0d8cf967ae1b4c3cb301a1c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/task-contract.md",
+      "blob": "ec560238141af0f04557852fe89ced646ee6f465",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022-candidate4/validation-report.md",
+      "blob": "3f0d0da7a88cd72cc5d2f3777ada87900d4d938b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/analysis.md",
+      "blob": "b6f70610234fa9b44d3137fc134407e0942170f9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/STOP.json",
+      "blob": "f45f7875f7f2d01f1acf616e3f80965c23f75287",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/commands.json",
+      "blob": "fdce58a4cd17dad084f8e59f9e46b004fb933303",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/diff-check.json",
+      "blob": "ca473601ff608f968161f62c26adf8dd7b9d00e3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/focused-final.log",
+      "blob": "6552191a7c6a6d721f145de06d1b01a394af6a44",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/focused-first.log",
+      "blob": "1c80796ea7b76c618bcdff61c2dd118c12ccce2b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/focused-frozen.log",
+      "blob": "d1a39311fad20b06788990e3c1b30c97c32c12ec",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/focused-second.log",
+      "blob": "7e48ea377060a7e48d2a9491b56498a957472c48",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/format-repository-config.log",
+      "blob": "4209e7d8767a8299480441e2eca77062baed5951",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/format-scope.json",
+      "blob": "a946ca3cbe08015406abc40f72f5a4f6638b3fa7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/format.log",
+      "blob": "f48307ea8411a9e752b4b76c531f01de8ea0169d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/read-receipts.json",
+      "blob": "dd0fd718209f387f70ceb576507e89c3fbd8f0c0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/report.md",
+      "blob": "607f96d04f06650895d0fb19df278bb20f51eca2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/results.json",
+      "blob": "210d575c4d4753ae351068d72e6cb2c3f13a6d38",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/seal.json",
+      "blob": "f79ef604128b1b45831cdfb5fb07b06db8fdd047",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/source-manifest.json",
+      "blob": "2456dec58239fe2e3e755710cb5b6cdb52247b75",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/source.patch",
+      "blob": "12711b483329410b6ded8689fa3775916010dddd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/syntax.json",
+      "blob": "97acc9f55cb3415ef30a08e3b6db84bff98fb1df",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author/test-results.json",
+      "blob": "390c628076eb84da1deb951b2a79cbf456cd849b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/STOP.json",
+      "blob": "d161edd4a95d2b5d9083b42edc62f28622ce70c7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/binding-first-failure.json",
+      "blob": "6486754717baf752495ee99a6ff98223690e4199",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/binding-resolution.json",
+      "blob": "6e48555a5ab0c9fa10c543bb4ce9b6a65d888c63",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/commands.json",
+      "blob": "2c21a37982b68a50a474b3e43886ab515c9fb6e2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/focused-first.log",
+      "blob": "cf92ff32571cb03e75e833c692cc0fa018a42cc4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/focused-frozen.log",
+      "blob": "bedbf0b48b0e21a4c7567680517017c752c80bc0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/format-scope.json",
+      "blob": "4e41750d5bc5c198327f9bcc815b3bac96827430",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/format.log",
+      "blob": "bf95f22a73d090196d101c3c854bbabefb4135ba",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/inherited-core-proof.json",
+      "blob": "b3c60d951062380fd23ce43a8b270201f124bb68",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/initial-tooling-failure.json",
+      "blob": "4629fc05eecea0111edf004f885e481206dd6b4c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/read-receipts.json",
+      "blob": "be3bf52eff3b45908bbd519153e1fe691c14b48b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/report.md",
+      "blob": "6a0903b66b43950a40ddbbe313e4ab853fa18bdb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/results.json",
+      "blob": "d309a121d9763949e8122bbc0f4e0d3c3fff7118",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/seal.json",
+      "blob": "da01d05ea1a9b951518c03a82cce85284738d9d0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/source-before.json",
+      "blob": "db8787b7a9545d8e10a798fee937c3ff5ead4e11",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/source-manifest.json",
+      "blob": "2cf0ab23297305fb9f6e50d1909ac97ad45e7f33",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/source.patch",
+      "blob": "16ffce99ac1c09f0cc6ab8d7fa88ced49f175cb4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/syntax.json",
+      "blob": "0bf8065cf9c142bd403a6c12e60a3c3251cb75c8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author2/test-results.json",
+      "blob": "e586d85e812f66645b7603d6779dc60570da1940",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/STOP.json",
+      "blob": "7bfc619c36a8c135e72996a5b447a8b3914d73f8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/diff-check.json",
+      "blob": "95fe4b4afab81dc4be4c18940b32f5ea11bd5547",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/execution-policy.json",
+      "blob": "3d699a943910be12541068ff6781ea1e303792b8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/focused-first-command.json",
+      "blob": "93b6a094d149e9191f74a4b89ab26673756d53d7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/focused-first.log",
+      "blob": "be16098026abfa6718f6a84538735c9a6f7aef74",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/focused-frozen-command.json",
+      "blob": "cac1943d9dedefce8ab4fcad38538996e7bd212e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/focused-frozen.log",
+      "blob": "b5fa3cd813702532cd40902e90259926b0b025ff",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/focused-pre-byte-restoration.log",
+      "blob": "d0f9f188a2d42e570b7566c5ffe82490522d75e8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/format-scope.json",
+      "blob": "74a318c2fdd850e108f53a6fa82bf02a7bad26c6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/format.log",
+      "blob": "2d839124b73009079a4124e9d5da21c452a43ee3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/probe-results-first.json",
+      "blob": "fb09eb2ee816651f36216ee56995b4688bf2071a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/probe-results.json",
+      "blob": "fb09eb2ee816651f36216ee56995b4688bf2071a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/qa2-reproductions-command.json",
+      "blob": "cfbadee36cfe9bea5fa864176e7c5c8920f47387",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/qa2-reproductions-first.log",
+      "blob": "3a022d84f439a5bf316ca8748c50a7bb106af643",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/qa2-reproductions-frozen.log",
+      "blob": "f05c7ba96d488fe0ce20d450553e4147a66de9d7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/qa2-reproductions.mjs",
+      "blob": "a7836c1046bd191607aa4cfa55009d15047ed599",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/read-receipts.json",
+      "blob": "d621ff99890fca442dec5f474d09c89e8c347f44",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/report.md",
+      "blob": "0f85a414e8ee19352b2f2587207b5e6d776f490a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/reservation-read.json",
+      "blob": "067e8412df5505fdeeba3437a17b1246469029d3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/results.json",
+      "blob": "87039419d820aeddd5f7c1ec71fdbeada5d71e68",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/seal.json",
+      "blob": "485348a40394d1bcb2411c3994a832497f6faa17",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/source-before.json",
+      "blob": "bade3a94f315dad7250856930446fc0620b4978b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/source-manifest.json",
+      "blob": "e4ef47a27d535a0c87c9afbfa755badcbb1730aa",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/source.patch",
+      "blob": "ad6dbf03b247d0ea89cb082eb63857259bbf1eca",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/syntax.json",
+      "blob": "12d592f53c7cf42e8c349ec545796d1849a1dd1f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/author3/test-results.json",
+      "blob": "84ea7a119e6724819a048414fdc7b01d82f3fb40",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/candidate1-code-commit.json",
+      "blob": "ac7c335f7552b7881c0e358a5f7f935734fb4bb5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/candidate2-code-commit.json",
+      "blob": "a58d8d599102677eb58e36c9e418afb572947272",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/candidate3-code-commit.json",
+      "blob": "24dfe9e5b46904096b82e5a5ac2800926d384e7c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/docs-author/amendment5.patch",
+      "blob": "d1f02a4798adb76139ad794b41929374c3836c34",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/docs-author/report.md",
+      "blob": "abd99d1236951176104341a57178c70b271cb742",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/docs-author/seal.json",
+      "blob": "6dd9eead81fd405e7ab5ea7e7c923103234ec1fd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/docs-root-correction/results.json",
+      "blob": "878725d12896c71fceb65755615b0043393f0728",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/docs-root-correction/seal.json",
+      "blob": "b729f55bf2e90b95a6ecb6829921630aea2b8256",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/docs-root-correction/source.patch",
+      "blob": "25ebff6dd6a8a86e4aabec28c6b39b6ede47cab8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/implementation-plan.md",
+      "blob": "46eb5c5256f8fb55fec3296eaff23651001c5e8c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/imported-history.json",
+      "blob": "0d8f00ee127333e0763de014f29432dd92957210",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/STOP.json",
+      "blob": "8e62067d8bccbe1c1a7b954b0dd1714ea72f840c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/actual-shape-hash-verification.json",
+      "blob": "db3f572052255fe47571a827a542fb931294de28",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/execution-policy.json",
+      "blob": "eea30f593fb4326c13406579047cd2ca8e9e1c13",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/finalize-first-failure.json",
+      "blob": "10ba4abab1e0f269c29d0f282dcaf21c889c74e6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/finalize-first.mjs",
+      "blob": "da6c2e242dc4928c848dbb1e16865ccbd7a27224",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/finalize-second-failure.json",
+      "blob": "5faeedecb51bf6bdf4a0c460ad90a391af9a3c33",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/finalize-second.mjs",
+      "blob": "dd8009d8d3cde993cea9f069ced125165f21033c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/finalize.mjs",
+      "blob": "3483ed97af0a8c0b93ba552f75671022a8595ac1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/findings.json",
+      "blob": "473d062f62149f861c7bdd88ffd652b8df7814b1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/focused-command.json",
+      "blob": "b60b58e10e4a506b3e543b1460b0744331a729c6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/focused.log",
+      "blob": "3cd95f91bd729046c7bc02b038ff1eb38e62a311",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/harness-correction.json",
+      "blob": "ce172e25f0d120c8597a57cae66a6ea06cb06128",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/independent-source.diff",
+      "blob": "6420587961f3c0d465101fcdefb6cb5fe0c72f10",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probe-results-initial.json",
+      "blob": "343293c4e40368dfd9104ab38d6830119aa3aaec",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probe-results.json",
+      "blob": "2bd6e2ab90a6d41e057816714cd5c2aab8fcb87e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probes-command-initial.json",
+      "blob": "abbead5181ff55bf95b302485218f3fd461bc864",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probes-command.json",
+      "blob": "fdf5c46a46495806b399c4954cc89b2c4944bc69",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probes-initial.log",
+      "blob": "4ca40062ceec3e409e233293e861dcac34880b88",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probes-initial.mjs",
+      "blob": "84dbf956dcb16c7725e794f98e5d9464f91ba05f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probes.log",
+      "blob": "6030bfb0521af246b16ceb08c8caf8fef36a4ed6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/probes.mjs",
+      "blob": "ed6d578327ef87e9f839e5336a08bada2d2bfd6d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/report.md",
+      "blob": "b40112d24282680da6509f8a25f2348e75315ded",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/reservation.json",
+      "blob": "b292215101caef44f81143d315e8661928b2d4af",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/results.json",
+      "blob": "e536f552fba347dac36852408957508c0b99059f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/run-focused.py",
+      "blob": "cb2593b880c1c48ded9531253e85a99507628f27",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/seal.json",
+      "blob": "7a2cdc72d7e1fb69b11e7b502564ec03349893c7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/source-after.json",
+      "blob": "454720fb835d0647ca7b1c4e493ac5e0addd10e9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/source-before.json",
+      "blob": "f1165e060aae76ee8d84adc0d6ad38649db1d081",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/task-contract.md",
+      "blob": "6ef1212d5f5af2fa44d7647b3dd8a4e6d25f9550",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa/verify-inputs.py",
+      "blob": "0662b2082c606429a99ac200565d0837d8404ffd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/STOP.json",
+      "blob": "75e1f7d8e586a9d15c873022c465eebfcab229f2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/actual-shape-integrity.json",
+      "blob": "e1c9aec4494ab88239674e3f3bcedb2ad021a903",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/additional-command.json",
+      "blob": "87e0d3e70da268d5c88bef4689fcdb1902ef1bae",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/additional-probes.log",
+      "blob": "0f29d495d9cce9f870b3a4ce3a8945a667327b14",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/additional-probes.mjs",
+      "blob": "279ee0e4e013192c6cf690311d09b8172e1de100",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/candidate3-delta.diff",
+      "blob": "4264536e35e9826488e583b6ff2ec8cebdf5200c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/communication-fixture.mjs",
+      "blob": "b4005f70c795b54b5809bd98ff98c779fc736ec5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/execution-policy.json",
+      "blob": "43219518e776240528d92383b73e8a7edb92eb35",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/finalize.py",
+      "blob": "565ffb5c2db6c9c8ca3fee0e1f8c4fe0a008fa37",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/findings.json",
+      "blob": "fe51488c7066f6687ef680d6bfaa4f7768ef205c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/focused-command.json",
+      "blob": "9027756c4bebcd1ac0e7a4b04b34bd5db2ce21ea",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/focused.log",
+      "blob": "97c295ccc9f05b4d7d963a8971aaf9837b6b87db",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/harness-failure-history.json",
+      "blob": "aebd0802e9a8bb5241aa72ac4c4b0c651cc44087",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/independent-source.diff",
+      "blob": "73229ffeb407c8cd9589fb2573e26230288e3eff",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/probe-results.json",
+      "blob": "0125dd9c261e8b9075dcb7ce381ea583807b935d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/probes-command.json",
+      "blob": "d549c493640c67d27143e2425ab63ca3b360d465",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/probes.log",
+      "blob": "613a066c70770b44a388b620e6a7e9895dc28ac9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/probes.mjs",
+      "blob": "4dd07405f90260d51f7190d3b29f6ee0494db838",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/report.md",
+      "blob": "da16ba36b993df7064fe491e63c8ebb8f101d780",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/reservation.json",
+      "blob": "18dac7e29ec536a6a4cb5ae971ad0cf74e622c5a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/results.json",
+      "blob": "62f2cad62c647eba9b4e63d0f4102a3a001ae30c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/run-focused.py",
+      "blob": "a66d235f707edac89741a77911cfb93e05bb178b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/seal.json",
+      "blob": "052da3f4a481c24a27afa888399f3f3a57acbc42",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/source-after.json",
+      "blob": "fee2b29da9b364edf7579eecef2450d677070e3d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/source-before.json",
+      "blob": "032ae0064aa8f9b0fd496afb63cbcbd9ede71a0c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/syntax.json",
+      "blob": "ea929592172cee9560a580945555f03335fae44c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/task-contract.md",
+      "blob": "6dcde8e69d2bbe52439cb5fa7ef3c827ee707ef8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/validation-report.md",
+      "blob": "da16ba36b993df7064fe491e63c8ebb8f101d780",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/verify-final.py",
+      "blob": "ce070ebcea0174b44d4740e212433d529bb4476b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/independent-qa3/verify-inputs.py",
+      "blob": "4cac5edf15a995e8746cc4bd93194bba53190ca3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/record-author3-docs1-preflight-failure.json",
+      "blob": "8dfc3662ad7f782d5d3b9437805956ea7f88fb5c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/scope-amendment-1.md",
+      "blob": "6dc1b81ccc6349cc4c6d2887d4c4f5fe2b8fefae",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/scope-amendment-2.md",
+      "blob": "952b4643794a8d84e24fda4b018cf5220caa21a4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/scope-amendment-3.md",
+      "blob": "1135daaeba25ccea28ac1e6dce679061774651d6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/scope-amendment-4.md",
+      "blob": "b4c7333987701678d80d42d22010aefa9915a6ee",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/scope-amendment-5-docs.md",
+      "blob": "43739ecb1695083b138e89e85b5bc97378669074",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/source-manifest.json",
+      "blob": "3d89350c121c0d553c40887e2c3d26b635e47dd2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/task-contract.md",
+      "blob": "ec560238141af0f04557852fe89ced646ee6f465",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/workflow-autonomy-activation-20261022/validation-report.md",
+      "blob": "7dfe4c71a38a8b6bad4479519e31c2b7fbeb39fa",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "docs/codex-bug-workflow.md",
+      "blob": "0a9d19c0970c5a3161ed1f54bd8a2b31f154be86",
+      "mode": "100644",
+      "baseBlob": "8e7981e86a3003d6916649f67bde8f869cdbb3a4",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "analysis.md": "77bc68588af373b4f4c95da2c14dd36ee0fa55409977be144d5c1ac9fc88417e",
+    "author6/STOP.json": "26cf843bd97d56f3d8be4f3eb21e11536114228518158ff1708d82f8131a14a8",
+    "author6/actual-root-QA5-ack-comment.json": "58ac7aed3bfbfd748cab8ee7fbbf83b9811c0ca606d69834875f5adfa9d3c146",
+    "author6/actual-root-implementation6-communication.json": "fa96b8d3bac02e26cd812f80ab4d18d9bd539901785374bb24469961ab8848a6",
+    "author6/add-tests.py": "cefc3c9d5671fa4887aad2bdb505fb0f645241b4763441fba92bd1a46f59e1d5",
+    "author6/allowlist.json": "1f980a4eabaa8f5acf8c26a782e12369ae2e95661dcbf24dfd9fe41f34e80c47",
+    "author6/ambiguous-binding-pre-fix.json": "65d44c7f04d07f54f36b8a4b9332521af34d83f173514deb89120873d4d06cf1",
+    "author6/ambiguous-binding-pre-fix.log": "d25070ec66a57f43d7f7dcbaa84945f3c31ea19e75f1b09113dce3987b50470e",
+    "author6/diff-contracts.mjs.txt": "51336751c8579218ab1dd433692b725684560089fc5904d46902d708bf7e6ceb",
+    "author6/diff-external-review.mjs.txt": "0cf531f7b7292da83d608ab742a85b5eae96839ffcf690c5025c2ca5192ef88e",
+    "author6/diff-operator-ownership.mjs.txt": "86ce3d439a9492a69dec0f8e57948b513342876cab52a7323861b10389380c1a",
+    "author6/external-cas-observations.json": "f5d9881565a4d8014c1fa91843123061f83f756b42825db9f05a700e020c069e",
+    "author6/external-cas-probe.mjs": "01292f8f65e6ec631f7a47a408f09ee211c0855136d60a58147ef71c485bf81c",
+    "author6/failure-history.json": "f484a2925ffa7146a10ab9ebf0c26d06b7facec19a62c5d4cf05012d9328a752",
+    "author6/finalize.py": "8302159fee7104101664e535e55f51ed02d69a715d7ca456c39c6ac9f69162d2",
+    "author6/focused-final.json": "f598959b27e30568eca70467dab5c8ce0c0194bb3255dda2abedba31538cd317",
+    "author6/focused-final.log": "128be5e8df19727873a38812fd2daf158344112dab503b5150f8e2eba5e864b5",
+    "author6/focused-final2.json": "7ff6ca7a612379df7d6c14ff35888ec1c28d85f16a26d8af6c4c4ba0983f1fa8",
+    "author6/focused-final2.log": "ceec9df507922867540b7a10130f524695903219bdf2adbaa08719d12caeb1fa",
+    "author6/handoff-fixture.mjs": "fd523f67b3df1264389b6960fbb0ec328e6211aed842f4ced6efa4489deb77cd",
+    "author6/implement.py": "130b15a3db53496d10657cacb70cef1109a9efd4cac32de55aa0e09973e81921",
+    "author6/malformed-takeover-observations.json": "68aa9cdf6007722d331fc83ed1eb5b0125458319c4017ab4a99e4fba8149bd0d",
+    "author6/malformed-takeover-probe.mjs": "5fdc7a9f695b501e393f7cb707199a6f36f24029f3715df9c024945f9b0c1de3",
+    "author6/original-probes-final.json": "be2ae29e427cdfae02b8b46272709db609e4f5b835aca374206e7179ca091000",
+    "author6/original-probes-final.log": "6b9aa318e5c47e750b4a3ac7291572cba0557b767d7b175b108b4cab1bd33ced",
+    "author6/original-probes-final2.json": "781c8f7eff4bb2f2419f2b089d9983490d3775852e8c5cd9292efe90e6e61643",
+    "author6/original-probes-final2.log": "178ed30d77679c4b74be9e10ebe4eeb564c0ed1bc2eebd330b656a7588c56901",
+    "author6/original-probes-first.json": "b18445881cf8f52674f78e4cba60b62ee1a96f5f9bca6bea187672da1dcfe21d",
+    "author6/original-probes-first.log": "0cefba28b212e58e7f6f72dfd746198bdabf1e8f8d5a05e17e83fde367811310",
+    "author6/pipeline-fixture.mjs": "462f10fd5e1da08e047cfc4ac29755e8b213e8d8ae84ab3a9b0b6fb3917ed21a",
+    "author6/preflight.json": "d373644c170b9a17ee710dccf5d6402e01688e33c4a00d83917e00246edc3643",
+    "author6/probe-adaptation.json": "b3726ed4b5b56f5bf4ba3c5d64f2d11652dc7ff075803e77c7a2c5635943957d",
+    "author6/probe-adaptation.patch": "11addcbd38523523a39b7d29b6e1288a2112d495656b6d8be9ca66107d5621b5",
+    "author6/read-receipts.json": "2006f5d1e27f66da50326f5c6903982fcf6365adf3ebcb7903feb3660d083334",
+    "author6/recovery-budget-observations.json": "88fc1fc27248471bb58b5cf3e8aa96ded2fbe9003a76fadd1d8cbae22b8bc10c",
+    "author6/recovery-budget-probe.mjs": "bbd47061cf60c0b0c02a7d6712aa50fcc1799c06f278b9902930b4ca63608ebe",
+    "author6/recovery-route-observations.json": "dfeb69107c5ec01ca2b47e41d6a3f6c5e809b55edcc61d21bd1a255b935c9ccd",
+    "author6/recovery-route-probe.mjs": "bd48cd04cc98a885c2b9e7b4006b9085643efbf869dd112f36d21e6b6154f186",
+    "author6/report.md": "e14fdd298125dd26e7592d47991f2d1ca798d39d6aac72f0a9fb330444187b6d",
+    "author6/reservation.json": "d9c6974c79b899a9ce24478aeff980a9309844dd82a785ec5a304d0ddaefead0",
+    "author6/results.json": "bd66cedc6245c7ae9f4bd958b8e454253efe5c997e66eefecf345eb8c4cd90e8",
+    "author6/root-ack-started.json": "4dbe11b3c83fe772347ffaf44f1140d722f412343d9e4173ac4516fce9caffc0",
+    "author6/root-dashboard-update-intent.json": "1b9b9e4b349cd23f51ebc7efb2c9e11bfd70f73551020f5fc14f6a24e3465dd5",
+    "author6/run-tests.py": "79a0ed575c679c84b1cfef7039b03b2944953105288df6ea88f672de19fdd10d",
+    "author6/seal.json": "223bd8549a0bd78fc9c47e2d425f16473bc10b1d112be576ce742d6b2fdfe064",
+    "author6/source-after-all.json": "39b389c3c5448e893f99b49abd7d07b65d70d3b6e685e54571b9b47b343a1f6d",
+    "author6/source-manifest.json": "99e645dd9f27f04bea962bde96986199726982cacf830b85e8227c92b7efa369",
+    "author6/source-tested-first.json": "eb7539fa2d44ebde2bb297bed427ea118b8436419e5e5a55fbaae95326b3ee92",
+    "author6/source.patch": "f108916d1a9329312a68657ba4540f959a0d707d46e25bab9ad48279d9ff23ed",
+    "author6/syntax-final.json": "2b2530bfe02b3077cd534a68ff8a9aacbf4bc67bad2fbd8cf3db07b3890c3a59",
+    "author6/syntax-final.log": "bae5175e8dff011b0362fa03c3f8cfe9c27b6d28dfd4ec746d078584c8aacafb",
+    "author6/syntax.json": "2b2530bfe02b3077cd534a68ff8a9aacbf4bc67bad2fbd8cf3db07b3890c3a59",
+    "author6/syntax.log": "bae5175e8dff011b0362fa03c3f8cfe9c27b6d28dfd4ec746d078584c8aacafb",
+    "author6/task-contract.md": "69394660d8afc12783a6e248a24fef3c5df901bdb281a0de78a6963857cac1f2",
+    "author6/test-results.json": "bf778bf26395e1b389876e20b6999289516bc67c2c738cf2149918348ded14b4",
+    "implementation-plan.md": "e0e2be55bd05435d8e57b41079edbd55cb463e01fa1f442562bd8b0bd814ad30",
+    "independent-qa4/report.md": "363e9da701f0d57aba5673792786f64687f93861670e91797c1b3770791bd005",
+    "independent-qa5/STOP.json": "e4e9a5bdc6e96d5acf09d958002dbb07215ad598968f3dc5ca683dcdab551adc",
+    "independent-qa5/confirmed-external-cas-command.json": "ce59c5d9f87b0c751324e91bddbb1d1b7bd0bbb1dc92940a4e98a9b775cc76b8",
+    "independent-qa5/confirmed-external-cas-observations.json": "92ba952d7c8c0f673cb26e9140a84da3a7a475b12d6548cac2894293b6bf7bce",
+    "independent-qa5/confirmed-external-cas-probe.log": "7a802a89631fca353e48845b6467b50f633ee3f78cfc847316f4833b51e97fd3",
+    "independent-qa5/confirmed-external-cas-probe.mjs": "ee2574bc31b3b7ce6185e8deb7a5fcf9b59f2be9bf967d3edab5ad7e9098c6f6",
+    "independent-qa5/execution-policy.json": "425e6a6495a1b77e045838e682e14198df26c53e1362c7a2fd41eba5ef53c741",
+    "independent-qa5/external-cas-command.json": "7d11619b8dc8554f9f6efc6575b0262943c35ac54237016f3cd361839ab118b9",
+    "independent-qa5/external-cas-observations.json": "2da432154c94c45d66c9c4444e6730bfb4999f367bace9d0717fda7ee7e0247d",
+    "independent-qa5/external-cas-probe.log": "dd7dc8f0ace9625c5726249211d5d8760560dd407b44d8304ca1cbf85d04fcb4",
+    "independent-qa5/external-cas-probe.mjs": "3dbcc5a0beace7206f266ed12ab81534ca31ab6875b1c0290fa1a9ac6b536718",
+    "independent-qa5/finalize.py": "1cfd4c6a1b8c0e5384b44670d3b6a56cef1411e9b7b9b732d0dc8141c401ac80",
+    "independent-qa5/findings.json": "bdfb6ba603f3cbbd4a804276594cd76259c2ac44db4b1adbc26b704ccd0ac1d3",
+    "independent-qa5/first-external-cas-command.json": "2b700bd2cf3d62a8da06b57ca79e30b13fdb231af245a058fb34ae05a8fe9098",
+    "independent-qa5/first-external-cas-observations.json": "8788617d8872c316173e5c49291acb6f78b54b59a82d75af78972ead7d25eb1f",
+    "independent-qa5/first-external-cas-probe.log": "a78d7d27d8b64d9653c9ded8dacc7154112c0a809d1fa4925a815c54785aa4e6",
+    "independent-qa5/first-external-cas-probe.mjs": "14ae5a4f6ee591b4e7d12fc6d73182ce27490f36c6739352a86a71823b2e92f7",
+    "independent-qa5/focused-command.json": "b8d6be8bf6e696dddeb1daafe4ce8126875f2ec7da88d9c78a3f1f3afb814f0c",
+    "independent-qa5/focused.log": "622c6367e9989588755e8a571e88a48418fb37bdabee87871005691d96a66381",
+    "independent-qa5/handoff-fixture.mjs": "b7864e30b2e4866acf66eb45df051ee5201027be8785e41b5e30b00d33396955",
+    "independent-qa5/harness-failure-history.json": "4f4efe34fac247fdd08e295fe97c8dbe7cacb208a988be2b53b5b7f5532d60ec",
+    "independent-qa5/historical-subject-integrity.json": "519a7f3a9bab5c09defbec71a0d323aae4f2e8cc203ed07f91884e5a07b79746",
+    "independent-qa5/independent-source.diff": "a29689c0c5ad84878e65d0debfc4ad9dcbfdb8d65ef077cf2ea809b665a9acaf",
+    "independent-qa5/malformed-takeover-command.json": "e1b1f6eaf442429376a0f7500d6ba7e08742ac13ae1bccaaa56a65beda334e47",
+    "independent-qa5/malformed-takeover-observations.json": "b7848896a080964de52e74fcb47f57e3faeffef179c69f77fa8c953dc224671b",
+    "independent-qa5/malformed-takeover-probe.mjs": "c4ba8bb2f7a42b5cf8e352f6d251d7812682c8da9986e3bf722afd1df2e0b221",
+    "independent-qa5/malformed-takeover.log": "c4216b68199cef4f6ad7075d8b33d3d70850ea4e5831680e704773c73309816e",
+    "independent-qa5/pipeline-fixture.mjs": "4a70d767ccc8f0b8093be46f6d88bf6a9027df703e39a5561c67969528497392",
+    "independent-qa5/recovery-budget-command.json": "475eb3355270ac224deab23f57326c14fa12d14885a91dd4d27b0cbdf7679fe0",
+    "independent-qa5/recovery-budget-observations.json": "663668616327c6f0108efefa2e1c9a6346a66716bdb470167da87214b2c76e23",
+    "independent-qa5/recovery-budget-probe.mjs": "892e49b476dcd256f763c1b5e482afcda8adce700d424396b4b06563e6662ea8",
+    "independent-qa5/recovery-budget.log": "88dbdc45fefdcd2a6b7061d4015660015a36a6fa852fc50c4949119a6e183044",
+    "independent-qa5/recovery-route-command.json": "86144dacf7899db25b65742aabc0072904839d1e2ae07839e73b36942634cdad",
+    "independent-qa5/recovery-route-observations.json": "dfeb69107c5ec01ca2b47e41d6a3f6c5e809b55edcc61d21bd1a255b935c9ccd",
+    "independent-qa5/recovery-route-probe.mjs": "bd48cd04cc98a885c2b9e7b4006b9085643efbf869dd112f36d21e6b6154f186",
+    "independent-qa5/recovery-route.log": "ff730920107a62e9a1e0d3ab2aea1dac973a1b155a536f39cb36608704533e61",
+    "independent-qa5/report.md": "96b2348c795ce05162de819339b91c0758a0e16ecab5dd17157e7bb4c1111480",
+    "independent-qa5/reservation.json": "2b1dfb157c7b16e0d2208a666527e6c10b172faccf13cd9edec10253473fa303",
+    "independent-qa5/results.json": "f5bdef2b8dbf028e50600fe0da96ce810bc274300eb6ea3a51f50615ca93433a",
+    "independent-qa5/run-focused.py": "dbdd3e2dc7101e23f41a5b5e6c8a69c005eb9f51980e55d516537f0f4ee762c0",
+    "independent-qa5/seal.json": "655122adbf8d401c4fee77706cb33b31aebab40c48562e3d04118e817e863e9a",
+    "independent-qa5/source-after.json": "9f0cc9667b921fe7add58784a1faf2711265427afb9014a3ff3f999a987087b4",
+    "independent-qa5/source-before.json": "711c3fd5ab80a7a9287aee34fb6dca293da613a89f986a98ec2fa826700059e4",
+    "independent-qa5/task-contract.md": "aec68be5a401c5aeb4a6fc59dabb23b296a747509f0f9fb179565fe0faaa7b78",
+    "independent-qa5/validation-report.md": "96b2348c795ce05162de819339b91c0758a0e16ecab5dd17157e7bb4c1111480",
+    "independent-qa5/verify-inputs.py": "f78bf5f65e7252ccfe352007c879f65068b6516a3f092ca31453b3264db40f0d",
+    "independent-qa6/STOP.json": "d4a8dc4264bd9f57462d1a154a39a0d55559e470a4cf45515b72cd1afe948cb6",
+    "independent-qa6/execution-policy.json": "644bd12658eb14d4b0a2266143e5494646c3d112015477f552c7c266a42304df",
+    "independent-qa6/external-cas-observations.json": "f5d9881565a4d8014c1fa91843123061f83f756b42825db9f05a700e020c069e",
+    "independent-qa6/external-cas-probe.log": "32bcbd7a7a5a044d86cda953ad6c26951b921ab9ae692198b3f0a182ead938d1",
+    "independent-qa6/external-cas-probe.mjs": "47ae197bd712a7e962fe2ea600d7c1f6a621b7916e6c8eb1f86576439f4f2774",
+    "independent-qa6/external-fixture.mjs": "c13f819a2afd96d1204adc9f100e048f85fc76b32e31901524c79cd4536f402b",
+    "independent-qa6/finalize.py": "2ee69713181198b244354290cb35d61aeca142bd664d03500cc64e33b728a3cd",
+    "independent-qa6/findings.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "independent-qa6/focused-command.json": "c6e2fbeaf0ef5819c30a1ee872ba024b5a59ac0f178d43c1b419ec1947e20d14",
+    "independent-qa6/focused.log": "40ba3371bab88fd61d9ceb72fe6db349bb21337ea36260c37d8456118aa9b64b",
+    "independent-qa6/handoff-fixture.mjs": "1aec96249eceae4bd240a645bce880e3be3712965a84f68072cfc715b88d9335",
+    "independent-qa6/historical-subject-integrity.json": "519a7f3a9bab5c09defbec71a0d323aae4f2e8cc203ed07f91884e5a07b79746",
+    "independent-qa6/independent-source.diff": "7852d8938d6f482de8b712acce62cce95e7a1277e7a0ee13014af0957a5224de",
+    "independent-qa6/malformed-takeover-observations.json": "68aa9cdf6007722d331fc83ed1eb5b0125458319c4017ab4a99e4fba8149bd0d",
+    "independent-qa6/malformed-takeover-probe.log": "790cb140146fae176171780f6c5e4538306c01fe5eb7d42b4a78e6b070a6abc4",
+    "independent-qa6/malformed-takeover-probe.mjs": "61f01ee9c2728a43a83c8736bc65e5a4c544eb6891237de8c8f0a8fb0a44742b",
+    "independent-qa6/metadata-clarifications.json": "218ed1ce14143ee176bcc0502ee539f3818117c27f3017242c07d50969c351eb",
+    "independent-qa6/pipeline-fixture.mjs": "061d39fd19b85c78bfafc92f9642548a6a0e53550df91e0deb05d5e6c1bb9b1e",
+    "independent-qa6/recovery-budget-observations.json": "2baa4eec3464d288c5601e1eec6a6f3aad35cd630cfe81c7dd72e2e1d6f071e3",
+    "independent-qa6/recovery-budget-probe.log": "9af1e673fa50842fe79293f99cb5869747ffec5d08f4311b53da66cce4b80749",
+    "independent-qa6/recovery-budget-probe.mjs": "97a6b929e89ca5e2991431f828765c2e4895df06665d0e0263abdc5218880bbe",
+    "independent-qa6/recovery-route-observations.json": "dfeb69107c5ec01ca2b47e41d6a3f6c5e809b55edcc61d21bd1a255b935c9ccd",
+    "independent-qa6/recovery-route-probe.log": "cbc6c55277ee3946ce373563cdcc9931e5af8b7d75459c0492bfe0fed9b35315",
+    "independent-qa6/recovery-route-probe.mjs": "bd48cd04cc98a885c2b9e7b4006b9085643efbf869dd112f36d21e6b6154f186",
+    "independent-qa6/release-fixture.mjs": "3cda96436fced22ebc13e28f9365ed4185fae72ec181832a21778f5e6593a7d9",
+    "independent-qa6/replay-commands.json": "ce9a892de729a0c689a219448362eb931b73d16fad5f25a7bcf95065438a7b17",
+    "independent-qa6/report.md": "1e526d8d0bd2b20fa2a81c2ed7347a808f0e4561f7065db64b5e933ecc153ee0",
+    "independent-qa6/reservation.json": "da01a0ad3862320b913b8c06df2e4d9ab2c9900f5c53d45169c13bd2b4ac46b5",
+    "independent-qa6/residual-command.json": "d3b4a10efb4ec032d18d6dcd762d4f3b12f98b22438b41e7bcb6845c14f14f1c",
+    "independent-qa6/residual-probes.log": "29259ddb5d5779e501c0c802fb4d2a7ddeb5808c713474c1e8b1ab3b69c17a25",
+    "independent-qa6/residual-probes.mjs": "ee215d822cc95a39476cd88fd1336781f753f48c1240115826a1a8717202a2c1",
+    "independent-qa6/results.json": "44ca7775d0d7d48712ec5440fa0dd82809284c787fb21821cb4d24f1d1860dd6",
+    "independent-qa6/run-focused.py": "27adad08c23bb6c33fcdd444a54b6887a8f9d4c2d01da01c28e00b0d55b2646b",
+    "independent-qa6/seal.json": "21af8377471b43c6c902287986c5995361e6ed0a829f1f661ee996ad7cf26f36",
+    "independent-qa6/source-after.json": "31c65a50c1fdad30d408b06513109322596c2c19a6bea9be6d9a0292b9883cf0",
+    "independent-qa6/source-before.json": "71c945cd84b99afb4d3a3571bf38a29c499ceba00f1626367d1472f10f51d517",
+    "independent-qa6/syntax.json": "bbe13f85a12d5d8853b012e8985963945a8de64aaf990601e3c923bb3ea9514c",
+    "independent-qa6/task-contract.md": "113de8e6d7840dc65b8f3db5f5ab5cceb1b19e74b281889fe2f300e17ad93131",
+    "independent-qa6/validation-report.md": "1e526d8d0bd2b20fa2a81c2ed7347a808f0e4561f7065db64b5e933ecc153ee0",
+    "independent-qa6/verify-final.py": "5bf167f99f7bb624379b820b4c7bc0ee6b3f2ce795d62275bca3deccec3f5e14",
+    "independent-qa6/verify-inputs.py": "7f5b5e5ffb7363987d7b9a9c74ee875ad87fab7959acc683e1b87b83516fdc6d",
+    "lineage/actual-Claude-to-Codex-label-handoff.json": "81f7f9dfec1b985ac35ee6678ba89007b60845c0fec22214e93439a5ce9c7eb7",
+    "lineage/actual-Claude1-comment-changes-requested.json": "a35acb52ebb3ff3818b6c6643640e46fbb043644c907215826624611a1bb275f",
+    "lineage/actual-Claude1-terminal-subject.json": "923a2d21844c7cea802b4ad5f1268df13f5c60c598b65445252d95e01ad2195b",
+    "lineage/actual-all-six-native-pass.json": "0ccdb5bdb5802443a45c842f04aa3971496292ee8bc1c70dd482d0d15a76b0b2",
+    "lineage/author1-report.md": "f8c0dc6033a8d21e4f92d096843c154eb16c650bfae5fbc458fb01fdc9a4eb3e",
+    "lineage/author5-full-sealed-history.tar.gz": "bb5708d3ff23847476efd3c152a614eb53f4b215c34d56934bee0d97b16101dd",
+    "lineage/candidate6-code-commit.json": "63f6fb644cb457cb20e191cfe02614b60d7516912cf2461305ae6e1581129dc0",
+    "lineage/native-budget6-receipt.json": "4a0f99e6f89a2ebeda5a96604d0f5dad9eeae717d2d5752ea2714a84f381c245",
+    "lineage/previous-packets-preserved.json": "322d290afbd39679b73b8fe21e2ceb82cbb3ea7398f887f493c32e221a132734",
+    "lineage/private5-failed-preserved.json": "5e3d331d56de2418cfa403f63051c7d949b9cfa3d97b8feb8b84c1508f6a7d68",
+    "lineage/qa2-report.md": "91b3d65c99a46e03962d948019e312add47a60062b16b11dfe283e9462763510",
+    "lineage/source5-copy-preflight-correction.json": "6e6c95abbcafc5d2d58fdaf546d4cbfdf93929a8ef3598bc6711f8bfa0dff682",
+    "lineage/source5-snapshot-digest-label-correction.json": "4150bfedc1e04cd0fa6513d42375a23fe6d90f22b3d5fea7979299455087953e",
+    "source-manifest.json": "2ee7bcf97967ed39bf9f9ec7c0c86d0b323e551ebd6e4dd08af8c411913d8859",
+    "standalone-release-probe1/report.md": "ccef520dde3f6c090991d89ef12c6aa4b54fa4c69c61dd71c2a3e0514006c8e0",
+    "task-contract.md": "8027f2e048850b1273ef9ac486cafb99eb0a34438b8b8b3f5f9dfd87648b9dad",
+    "validation-report.md": "04de6dfc04b43d9af492f244b64dff9ef3d3ae8f02ece1ded2aa55ddb8fbb65b"
+  }
+}

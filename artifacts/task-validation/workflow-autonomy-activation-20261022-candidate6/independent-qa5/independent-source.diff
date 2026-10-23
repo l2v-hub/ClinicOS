@@ -1,0 +1,1427 @@
+--- candidate4/.claude/skills/clinicos/references/bug-delivery.md
++++ candidate5/.claude/skills/clinicos/references/bug-delivery.md
+@@ -292,3 +292,21 @@
+ un'esecuzione infrastrutturale fallita mantenendo il round consumato, anche sullo stesso SHA
+ senza review sostanziale: non autorizza contatori azzerati o duplicazione del tentativo. Per le
+ continuazioni oltre quattro applica la sezione 4 senza ripetere un'autorizzazione ancora valida.
++
++
++L'handback canonico `operatorTakeover.automation` richiede `enabled: true`,
++`mode: "new-unclaimed-only"`, `takeoverNonce` uguale al nonce non vuoto della presa in carico,
++`authorizedActor` non vuoto, `handedBackAt` come timestamp UTC ISO valido e `protectedSubjects`
++come elenco di identità `{collection, id}`. L'attore è un dato di audit registrato dal writer
++fidato dopo la verifica dei permessi, non una credenziale. Un nuovo takeover deve eliminare o
++sostituire il vecchio handback. Un grant ben formato ma riferito a un nonce precedente resta
++leggibile e sospende l'automazione; metadati malformati sono rifiutati dalla validazione.
++
++Per ogni approvazione esterna, anche senza canale commenti, il rilascio richiede una QA Codex
++`verified` sullo SHA fornito al rilascio, round Claude e fingerprint attuali. Una QA finale
++infrastrutturale fallita o interrotta conserva il record e può ripartire solo dopo il recupero
++esplicito di un eventuale blocco. Il registro separato `codexFinalQaInfrastructure.attempts`
++consente al massimo tre sessioni di inferenza prenotate per SHA/round/fingerprint: le attese dei
++check senza inferenza non consumano slot. Non consuma tentativi implementativi; soltanto un
++verdetto Codex con richieste di modifica avvia una correzione. Una sessione `running` non viene
++duplicata e l'esaurimento richiede recupero esplicito senza azzerare lo storico.
+--- candidate4/agent-team/src/bug-pipeline/contracts.mjs
++++ candidate5/agent-team/src/bug-pipeline/contracts.mjs
+@@ -1,5 +1,6 @@
+ import { attemptLimit, validateOperatorContinuations } from './attempt-budget.mjs';
+ import path from 'node:path';
++import { validAutomationHandback } from './operator-ownership.mjs';
+ import { createHash } from 'node:crypto';
+ import { validateAgainstSchema } from '../core/json-schema.mjs';
+ import { sanitizeText } from '../core/sanitize.mjs';
+@@ -206,6 +207,13 @@
+     state.batches.length > 1000
+   )
+     throw new Error('invalid durable pipeline state');
++  // Legacy takeovers without a handback stay valid and globally paused. A stale
++  // well-formed grant is also valid data, but cannot enable the new nonce.
++  if (
++    state.operatorTakeover?.automation !== undefined &&
++    !validAutomationHandback(state.operatorTakeover.automation)
++  )
++    throw new Error('invalid operator automation handback');
+   const issues = new Set();
+   for (const b of state.batches) {
+     if (
+--- candidate4/agent-team/src/bug-pipeline/external-review.mjs
++++ candidate5/agent-team/src/bug-pipeline/external-review.mjs
+@@ -67,6 +67,7 @@
+     await block(batch, reason);
+     await notify();
+   };
++  if (batch.phase === 'blocked') return notify();
+   if (batch.externalReview?.channel === 'github-comments') {
+     const receiver = createCommentReviewHandoff({
+       automatic: () => true,
+@@ -130,7 +131,7 @@
+         prior.subjectSha !== batch.sha ||
+         prior.claudeRound !== batch.reviews.length ||
+         prior.feedbackFingerprint !== fingerprint ||
+-        prior.status === 'waiting-checks'
++        ['waiting-checks', 'failed', 'blocked'].includes(prior.status)
+       ) {
+         if (prior) {
+           batch.codexFinalReviewHistory ??= [];
+@@ -169,19 +170,63 @@
+           await save();
+           return notify();
+         }
++        // Count durably reserved inference sessions, not identity/check polling.
++        // This allowance is independent of the implementation correction budget.
++        const infrastructure = (batch.codexFinalQaInfrastructure ??= { attempts: [] });
++        const matches = (entry) =>
++          entry.subjectSha === batch.sha &&
++          entry.claudeRound === batch.reviews.length &&
++          entry.feedbackFingerprint === fingerprint;
++        // A legacy failed session already represents one spent inference; do not
++        // silently erase that fact when introducing the separate retry ledger.
++        if (
++          prior?.status === 'failed' &&
++          matches(prior) &&
++          !infrastructure.attempts.some((entry) => entry.nonce === prior.nonce)
++        )
++          infrastructure.attempts.push({ ...prior, legacy: true });
++        if (infrastructure.attempts.filter(matches).length >= 3) {
++          batch.codexFinalReview.status = 'blocked';
++          batch.codexFinalReview.failureCode = 'final-qa-infrastructure-exhausted';
++          await save();
++          return blocked(
++            'Independent final QA infrastructure allowance exhausted; explicit recovery required',
++          );
++        }
++        const inference = {
++          nonce: batch.codexFinalReview.nonce,
++          subjectSha: batch.sha,
++          claudeRound: batch.reviews.length,
++          feedbackFingerprint: fingerprint,
++          reservedAt: new Date().toISOString(),
++          status: 'running',
++        };
++        infrastructure.attempts.push(inference);
++        await save();
+         try {
+           const qa = await workspace.finalQa(batch);
++          if (
++            !['verified', 'blocked', 'changes-requested'].includes(qa?.status) ||
++            typeof qa.summary !== 'string' ||
++            !qa.summary.trim()
++          )
++            throw new Error('Independent final QA returned no usable verdict');
+           batch.codexFinalReview.status =
+             qa.status === 'verified' ? 'verified' : 'changes-requested';
+           batch.codexFinalReview.summary = qa.summary;
++          inference.status = batch.codexFinalReview.status;
+         } catch (error) {
++          if (error?.code === 'review-operator-owned') throw error;
++          inference.status = 'failed';
+           batch.codexFinalReview.status = 'failed';
+           await save();
+           throw error;
+         }
+         await save();
+       }
+-      changed = batch.codexFinalReview.status !== 'verified';
++      if (!['verified', 'changes-requested'].includes(batch.codexFinalReview.status))
++        return blocked('Independent final QA is unavailable; explicit recovery required');
++      changed = batch.codexFinalReview.status === 'changes-requested';
+       const current = await gh.reviewFeedback(batch.pr.number);
+       if (
+         current.state !== 'OPEN' ||
+--- candidate4/agent-team/src/bug-pipeline/github.mjs
++++ candidate5/agent-team/src/bug-pipeline/github.mjs
+@@ -666,7 +666,7 @@
+       return state;
+     }
+ 
+-    async function save(state, { guard, rebaseIndependentSubjects } = {}) {
++    async function save(state, { guard, rebaseIndependentSubjects, checkFreshOwnership } = {}) {
+       if (!loaded) throw new Error('load durable state before saving (optimistic concurrency)');
+       if (state === null || typeof state !== 'object' || Array.isArray(state)) {
+         throw new TypeError('state must be a JSON object');
+@@ -676,6 +676,8 @@
+         typeof rebaseIndependentSubjects !== 'function'
+       )
+         throw new TypeError('Independent subject rebase requires a full state validator');
++      if (checkFreshOwnership !== undefined && typeof checkFreshOwnership !== 'function')
++        throw new TypeError('Fresh ownership check must be a function');
+       const expectedFileSHA = fileSHA,
+         originalBase = structuredClone(persistedBase);
+       // Freeze both intended data and its actual persisted base BEFORE any validator/guard await.
+@@ -728,10 +730,25 @@
+             throw stateError('state-cas-conflict', 'Durable state compare-and-swap conflict');
+           const fresh = await load();
+           const freshSHA = fileSHA; // A subsequent validator or guard load cannot promote this body.
++          // A known rejected409 permits observing the validated remote owner before
++          // an entity merge. This narrow hook cannot turn uncertain writes into skips.
++          if (checkFreshOwnership) {
++            try {
++              await checkFreshOwnership(structuredClone(fresh));
++            } catch (error) {
++              if (error?.code === 'review-operator-owned') throw error;
++              throw stateError(
++                'state-rebase-invalid',
++                'Fresh durable state failed ownership validation',
++                error,
++              );
++            }
++          }
+           candidate = mergeIndependentEntities(originalBase, intended, fresh);
+           try {
+             await rebaseIndependentSubjects(structuredClone(candidate));
+           } catch (error) {
++            if (error?.code === 'review-operator-owned') throw error;
+             throw stateError(
+               'state-rebase-invalid',
+               'Merged durable state failed full validation',
+@@ -750,7 +767,9 @@
+       }
+     }
+ 
+-    return { load, save };
++    // Fresh ownership observations never promote this writer's expected Contents
++    // SHA or base snapshot. A later save must still reconcile a real remote CAS.
++    return { load, save, observe: () => createStateStore().load() };
+   }
+ 
+   async function createDraft({ branch, title, body }) {
+--- candidate4/agent-team/src/bug-pipeline/operator-ownership.mjs
++++ candidate5/agent-team/src/bug-pipeline/operator-ownership.mjs
+@@ -8,14 +8,38 @@
+   typeof entry.id === 'string' &&
+   entry.id.length > 0;
+ 
++// Audit fields describe the authorized canonical handback; they never authenticate
++// a GitHub actor themselves. Only the trusted state writer may record this grant.
++export function validAutomationHandback(handback) {
++  return Boolean(
++    handback &&
++    typeof handback === 'object' &&
++    !Array.isArray(handback) &&
++    typeof handback.enabled === 'boolean' &&
++    handback.mode === 'new-unclaimed-only' &&
++    typeof handback.takeoverNonce === 'string' &&
++    handback.takeoverNonce.trim() &&
++    typeof handback.authorizedActor === 'string' &&
++    handback.authorizedActor.trim() &&
++    typeof handback.handedBackAt === 'string' &&
++    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(handback.handedBackAt) &&
++    Number.isFinite(Date.parse(handback.handedBackAt)) &&
++    new Date(handback.handedBackAt).toISOString().replace('.000Z', 'Z') ===
++      handback.handedBackAt.replace('.000Z', 'Z') &&
++    Array.isArray(handback.protectedSubjects) &&
++    handback.protectedSubjects.every(validIdentity),
++  );
++}
++
+ export function automationPaused(state) {
+   if (!state.operatorTakeover?.active) return false;
+   const handback = state.operatorTakeover.automation;
+   return !(
+-    handback?.enabled === true &&
+-    handback.mode === 'new-unclaimed-only' &&
+-    Array.isArray(handback.protectedSubjects) &&
+-    handback.protectedSubjects.every(validIdentity)
++    validAutomationHandback(handback) &&
++    handback.enabled === true &&
++    typeof state.operatorTakeover.nonce === 'string' &&
++    state.operatorTakeover.nonce.trim() &&
++    handback.takeoverNonce === state.operatorTakeover.nonce
+   );
+ }
+ 
+--- candidate4/agent-team/src/bug-pipeline/pipeline.mjs
++++ candidate5/agent-team/src/bug-pipeline/pipeline.mjs
+@@ -69,31 +69,97 @@
+   if (automationPaused(state)) return state;
+   let processingSubject = null;
+   let persistenceFailed = false;
++  const ownershipLost = () =>
++    Object.assign(new Error('Automatic ownership changed during state reconciliation'), {
++      code: 'review-operator-owned',
++    });
++  const assertOwnership = (observed) => {
++    if (
++      automationPaused(observed) ||
++      (processingSubject &&
++        operatorOwns(
++          observed,
++          processingSubject.collection,
++          observed[processingSubject.collection]?.find(
++            (item) => item.id === processingSubject.id,
++          ) ?? processingSubject,
++        ))
++    )
++      throw ownershipLost();
++  };
++  const freshOwnership = async () => {
++    const observed = validateState(
++      (await (store.observe ? store.observe() : store.load())) ?? {
++        schemaVersion: 1,
++        repository: repo,
++        batches: [],
++      },
++      repo,
++    );
++    if (observed.standaloneReviews) validateStandaloneState(observed);
++    assertOwnership(observed);
++  };
++  const recoverOwnership = async (error) => {
++    if (persistenceFailed || error?.code !== 'review-operator-owned') return false;
++    // Discard unsaved work only for the finite, observed ownership-loss code.
++    // Uncertain writes and genuine CAS/integrity failures still halt the pass.
++    state = validateState(await store.load(), repo);
++    if (state.standaloneReviews) validateStandaloneState(state);
++    return true;
++  };
++  const guarded = (target, methods) =>
++    new Proxy(target, {
++      get(object, key) {
++        const value = object[key];
++        if (!methods.includes(key) || typeof value !== 'function') return value;
++        return async (...args) => {
++          await freshOwnership();
++          return value.apply(object, args);
++        };
++      },
++    });
++  // Every asynchronous model/effect boundary re-reads ownership, including internal
++  // feedback/review correction paths and prebuilt workspace implementations.
++  workspace = guarded(workspace, [
++    'prepare',
++    'execute',
++    'verify',
++    'simplify',
++    'qa',
++    'finalQa',
++    'checkpoint',
++    'publish',
++    'review',
++    'issueEvidence',
++  ]);
++  gh = guarded(gh, [
++    'intake',
++    'discoverQueue',
++    'setIssueStatus',
++    'commentIssue',
++    'commentPR',
++    'createDraft',
++  ]);
+   const save = async (options) => {
+     try {
++      await freshOwnership();
+       if (state.standaloneReviews) validateStandaloneState(state);
+       state.updatedAt = new Date().toISOString();
+       return await store.save(state, {
+         ...options,
++        checkFreshOwnership: (fresh) => {
++          validateState(fresh, repo);
++          if (fresh.standaloneReviews) validateStandaloneState(fresh);
++          assertOwnership(fresh);
++        },
+         rebaseIndependentSubjects: (merged) => {
+           validateState(merged, repo);
+           if (merged.standaloneReviews) validateStandaloneState(merged);
+-          if (
+-            automationPaused(merged) ||
+-            (processingSubject &&
+-              operatorOwns(
+-                merged,
+-                processingSubject.collection,
+-                merged[processingSubject.collection]?.find(
+-                  (item) => item.id === processingSubject.id,
+-                ) ?? processingSubject,
+-              ))
+-          )
+-            throw new Error('Automatic ownership changed during state reconciliation');
++          assertOwnership(merged);
+         },
+       });
+     } catch (error) {
+-      persistenceFailed = true;
++      if (error?.code !== 'review-operator-owned') persistenceFailed = true;
+       throw error;
+     }
+   };
+@@ -154,7 +220,8 @@
+           }
+         } else {
+           subject.phase = 'blocked';
+-          subject.reason = 'Standalone identity, evidence or GitHub operation requires explicit recovery';
++          subject.reason =
++            'Standalone identity, evidence or GitHub operation requires explicit recovery';
+           subject.failureCode = code;
+           delete subject.failureOperation;
+           if (['projection', 'merge', 'mutation', 'read'].includes(error.operation))
+@@ -171,10 +238,12 @@
+   processingSubject = null;
+   if (automationPaused(state)) return state;
+   const report = async (batch, text) => {
++    await freshOwnership();
+     for (const n of batch.issues)
+       await gh.commentIssue(n, `<!-- codex-bug-pipeline:status -->\n${text}`);
+   };
+   const block = async (batch, reason) => {
++    await freshOwnership();
+     batch.phase = 'blocked';
+     batch.reason = reason;
+     await save();
+@@ -189,11 +258,19 @@
+   if (!event?.issue || !claimed.has(event.issue.number)) await gh.intake(event);
+   // Only the protected release confirmation job publishes deployed completion.
+   // It owns live demo credentials and retries durable pending publication without model work.
+-  for (const batch of state.batches) {
++  for (const id of state.batches.map((batch) => batch.id)) {
++    const batch = state.batches.find((batch) => batch.id === id);
+     if (operatorOwns(state, 'batches', batch) || batch.release?.status === 'deployed') continue;
++    processingSubject = { collection: 'batches', id };
+     const status = batch.phase === 'blocked' ? 'Bloccato' : 'In progress';
+-    for (const number of batch.issues) await gh.setIssueStatus(number, status);
++    try {
++      for (const number of batch.issues) await gh.setIssueStatus(number, status);
++    } catch (error) {
++      if (!(await recoverOwnership(error))) throw error;
++    }
+   }
++  processingSubject = null;
++  if (automationPaused(state)) return state;
+   const queue = await gh.discoverQueue({
+     normalize: true,
+     excludeIssues: [...claimed],
+@@ -270,6 +347,7 @@
+     state.pendingTriage.status = 'running';
+     await save();
+     assertSelectedUnclaimed();
++    await freshOwnership();
+     const plan = validatePlan(
+       await models.plan({
+         cwd: workspace.root,
+@@ -336,81 +414,85 @@
+         '<!-- codex-bug-pipeline:status -->\n**BLOCKED** — il triage richiede informazioni essenziali. Nessuna implementazione avviata.',
+       );
+   }
+-  for (const batch of state.batches) {
+-    if (operatorOwns(state, 'batches', batch)) continue;
++  for (const id of state.batches.map((batch) => batch.id)) {
++    const batch = state.batches.find((batch) => batch.id === id);
++    if (!batch || operatorOwns(state, 'batches', batch)) continue;
+     processingSubject = { collection: 'batches', id: batch.id };
+-    if (['merged', 'deployed'].includes(batch.release?.status)) continue;
+-    if (batch.phase === 'blocked') continue;
+-    if (reviewMode === 'external' && batch.externalReview?.status === 'running') continue;
+-    if (reviewMode === 'external' && batch.pr) {
+-      try {
+-        await externalReviewStep({
+-          repo,
+-          batch,
+-          gh,
+-          workspace,
+-          save,
+-          report,
+-          block,
+-        });
+-      } catch (error) {
+-        if (persistenceFailed)
+-          throw new Error('External review reconciliation persistence failed', {
+-            cause: error,
++    try {
++      if (['merged', 'deployed'].includes(batch.release?.status)) continue;
++      if (batch.phase === 'blocked') continue;
++      if (reviewMode === 'external' && batch.externalReview?.status === 'running') continue;
++      if (reviewMode === 'external' && batch.pr) {
++        try {
++          await externalReviewStep({
++            repo,
++            batch,
++            gh,
++            workspace,
++            save,
++            report,
++            block,
+           });
+-        batch.failureCode = controllerFailureCode(error);
++        } catch (error) {
++          if (await recoverOwnership(error)) continue;
++          if (persistenceFailed)
++            throw new Error('External review reconciliation persistence failed', {
++              cause: error,
++            });
++          batch.failureCode = controllerFailureCode(error);
++          await block(
++            batch,
++            'External review consistency or correction failed; inspect the existing batch',
++          );
++        }
++        continue;
++      }
++      if (
++        activeImplementation(batch) ||
++        batch.reviews.some((a) => a.status === 'running') ||
++        ['implementing', 'simplifying', 'validating', 'publishing', 'reviewing'].includes(
++          batch.phase,
++        )
++      ) {
+         await block(
+           batch,
+-          'External review consistency or correction failed; inspect the existing batch',
++          'Previous execution interrupted; operator recovery required on the existing batch',
+         );
+-      }
+-      continue;
+-    }
+-    if (
+-      activeImplementation(batch) ||
+-      batch.reviews.some((a) => a.status === 'running') ||
+-      ['implementing', 'simplifying', 'validating', 'publishing', 'reviewing'].includes(batch.phase)
+-    ) {
+-      await block(
+-        batch,
+-        'Previous execution interrupted; operator recovery required on the existing batch',
+-      );
+-      continue;
+-    }
+-    let feedback = null;
+-    if (batch.pr) {
+-      feedback = await gh.reviewFeedback(batch.pr.number);
+-      if (
+-        String(feedback.state).toUpperCase() !== 'OPEN' ||
+-        feedback.headRef !== batch.branch ||
+-        feedback.baseRef !== 'main' ||
+-        feedback.headIsFork ||
+-        feedback.headRepo !== repo ||
+-        feedback.head !== batch.sha
+-      ) {
+-        await block(batch, 'PR identity or head changed outside the controller');
+         continue;
+       }
+-      const fingerprint = feedbackFingerprint(feedback);
+-      if (
+-        ['ready', 'waiting-checks'].includes(batch.phase) &&
+-        fingerprint === batch.feedbackFingerprint &&
+-        batch.approvedSha === batch.sha
+-      ) {
+-        const checks = await gh.requiredChecks(batch.pr.number);
+-        batch.phase =
+-          checks.ok && !feedback.unresolved && !feedback.changesRequested
+-            ? 'ready'
+-            : 'waiting-checks';
+-        await save();
+-        continue;
+-      }
+-      if (batch.reviews.length >= attemptLimit(batch, 'reviews')) {
+-        await block(batch, 'Four-review limit reached; new comments cannot restart the budget');
+-        continue;
+-      }
+-    }
+-    try {
++      let feedback = null;
++      if (batch.pr) {
++        feedback = await gh.reviewFeedback(batch.pr.number);
++        if (
++          String(feedback.state).toUpperCase() !== 'OPEN' ||
++          feedback.headRef !== batch.branch ||
++          feedback.baseRef !== 'main' ||
++          feedback.headIsFork ||
++          feedback.headRepo !== repo ||
++          feedback.head !== batch.sha
++        ) {
++          await block(batch, 'PR identity or head changed outside the controller');
++          continue;
++        }
++        const fingerprint = feedbackFingerprint(feedback);
++        if (
++          ['ready', 'waiting-checks'].includes(batch.phase) &&
++          fingerprint === batch.feedbackFingerprint &&
++          batch.approvedSha === batch.sha
++        ) {
++          const checks = await gh.requiredChecks(batch.pr.number);
++          batch.phase =
++            checks.ok && !feedback.unresolved && !feedback.changesRequested
++              ? 'ready'
++              : 'waiting-checks';
++          await save();
++          continue;
++        }
++        if (batch.reviews.length >= attemptLimit(batch, 'reviews')) {
++          await block(batch, 'Four-review limit reached; new comments cannot restart the budget');
++          continue;
++        }
++      }
+       // Recheck every issue before any model/worktree mutation, after grouping and on restart.
+       for (const n of batch.issues) {
+         const live = await gh.viewIssue(n);
+@@ -451,7 +533,7 @@
+             passed = true;
+             break;
+           } catch (error) {
+-            if (persistenceFailed) throw error;
++            if (persistenceFailed || error?.code === 'review-operator-owned') throw error;
+             attempt.status = 'failed';
+             batch.lastFailure =
+               'Implementation or required verification failed; inspect current local test-results.';
+@@ -587,6 +669,7 @@
+         await save();
+       }
+     } catch (error) {
++      if (await recoverOwnership(error)) continue;
+       if (persistenceFailed) throw error;
+       batch.failureCode = controllerFailureCode(error);
+       for (const a of [...implementationAttempts(batch), ...batch.reviews])
+--- candidate4/agent-team/src/bug-pipeline/release.mjs
++++ candidate5/agent-team/src/bug-pipeline/release.mjs
+@@ -139,6 +139,7 @@
+           !batch.releaseBlock &&
+           batch.sha &&
+           batch.approvedSha === batch.sha &&
++          hasFinalCodexProof(batch, batch.sha) &&
+           (batch.release?.status !== 'deployed' || !publicationComplete(batch)),
+       )
+       .sort((a, b) => Math.min(...a.issues) - Math.min(...b.issues))[0] ?? null
+@@ -197,7 +198,30 @@
+   }
+ }
+ 
++function hasFinalCodexProof(batch, sha) {
++  // Both comment handoffs and the original external worker persist externalReview;
++  // the channel value is not an authorization switch.
++  if (!batch.externalReview) return true;
++  const proof = batch.codexFinalReview;
++  return Boolean(
++    proof?.status === 'verified' &&
++    proof.subjectSha === sha &&
++    sha === batch.sha &&
++    proof.claudeRound === batch.reviews.length &&
++    typeof batch.feedbackFingerprint === 'string' &&
++    batch.feedbackFingerprint.length > 0 &&
++    proof.feedbackFingerprint === batch.feedbackFingerprint &&
++    batch.externalReview.subjectSha === sha &&
++    batch.externalReview.feedbackFingerprint === batch.feedbackFingerprint,
++  );
++}
++function verifyFinalCodexProof(batch, sha) {
++  if (!hasFinalCodexProof(batch, sha))
++    fail('external review requires verified final Codex proof for this SHA, round and feedback');
++}
++
+ function verifyReviewProof(batch, sha) {
++  verifyFinalCodexProof(batch, sha);
+   const lastReview = batch.reviews.at(-1);
+   if (
+     !lastReview ||
+@@ -392,6 +416,7 @@
+     const current = state ? state.batches.find((item) => item.id === batchId) : batch;
+     if (state) assertAutomaticReleaseOwnership(state, current, automatic);
+     assertNoReleaseHold(current);
++    if (current) verifyFinalCodexProof(current, current.sha);
+     if (!current || releaseSubject(current) !== expected)
+       fail('verified release identity changed during asynchronous verification');
+     return { state, current };
+@@ -622,6 +647,7 @@
+   if (!batch) fail('batch is absent from durable state');
+   assertAutomaticReleaseOwnership(initial, batch, automatic);
+   assertNoReleaseHold(batch);
++  verifyFinalCodexProof(batch, reviewedSha);
+   assertSavedPolicy(batch, sourcePolicy);
+   let guard = freshReleaseGuard({ batch, store, repo, automatic });
+   const exact = sourcePolicy === DEMO_SOURCE_POLICIES.exact;
+--- candidate4/agent-team/tests/bug-pipeline/contracts.test.mjs
++++ candidate5/agent-team/tests/bug-pipeline/contracts.test.mjs
+@@ -257,3 +257,41 @@
+     /per-issue acceptance\/evidence coverage is incomplete/,
+   );
+ });
++
++test('Claude1 F1 canonical handback schema preserves legacy/stale grants but rejects malformed audit', () => {
++  const state = {
++    schemaVersion: 1,
++    repository: 'l2v-hub/ClinicOS',
++    batches: [],
++    operatorTakeover: { active: true, nonce: 'new' },
++  };
++  assert.equal(validateState(state, state.repository), state);
++  const valid = {
++    enabled: true,
++    mode: 'new-unclaimed-only',
++    takeoverNonce: 'old',
++    authorizedActor: 'maintainer',
++    handedBackAt: '2026-10-22T00:00:00Z',
++    protectedSubjects: [],
++  };
++  state.operatorTakeover.automation = valid;
++  assert.equal(
++    validateState(state, state.repository),
++    state,
++    'stale identity is valid data, but never grants authority',
++  );
++  for (const patch of [
++    { takeoverNonce: '' },
++    { authorizedActor: ' ' },
++    { handedBackAt: '2026-02-30T00:00:00Z' },
++    { handedBackAt: 'yesterday' },
++    { protectedSubjects: [{ collection: 'unknown', id: 'x' }] },
++    { enabled: 'true' },
++  ]) {
++    state.operatorTakeover.automation = { ...valid, ...patch };
++    assert.throws(
++      () => validateState(state, state.repository),
++      /invalid operator automation handback/,
++    );
++  }
++});
+--- candidate4/agent-team/tests/bug-pipeline/external-review.test.mjs
++++ candidate5/agent-team/tests/bug-pipeline/external-review.test.mjs
+@@ -940,3 +940,75 @@
+   assert.deepEqual(batch, before);
+   assert.deepEqual(log, []);
+ });
++
++test('Claude1 F3 recovered infrastructure failure retries only final QA and preserves code budget', async () => {
++  const { args, batch, log } = approvedExternalArgs();
++  const prior = {
++    status: 'failed',
++    subjectSha: batch.sha,
++    claudeRound: 1,
++    feedbackFingerprint: batch.externalReview.feedbackFingerprint,
++    nonce: 'prior-failed',
++    reservedAt: '2026-10-22T00:00:00Z',
++  };
++  batch.codexFinalReview = structuredClone(prior);
++  args.workspace.execute = async () => assert.fail('infrastructure retry must not implement');
++  await externalReviewStep(args);
++  assert.equal(log.filter((x) => x === 'qa').length, 1);
++  assert.equal(batch.phase, 'ready');
++  assert.equal(batch.implementation.length, 1);
++  assert.deepEqual(batch.codexFinalReviewHistory, [prior]);
++});
++
++test('Claude1 F3 final-QA inference retries are durably bounded independently of implementation', async () => {
++  const { args, batch, log } = approvedExternalArgs();
++  const before = structuredClone(batch.implementation);
++  let calls = 0;
++  args.workspace.finalQa = async () => {
++    calls++;
++    throw new Error('bounded infrastructure outage');
++  };
++  args.workspace.execute = async () => assert.fail('infrastructure never implements');
++  for (let n = 0; n < 3; n++) {
++    batch.phase = 'waiting-review'; // Explicit operator recovery, never an automatic unblock.
++    await assert.rejects(externalReviewStep(args), /bounded infrastructure outage/);
++    assert.equal(batch.codexFinalQaInfrastructure.attempts.length, n + 1);
++    assert.ok(batch.codexFinalQaInfrastructure.attempts.every((x) => x.status === 'failed'));
++  }
++  batch.phase = 'waiting-review';
++  await externalReviewStep(args);
++  assert.equal(calls, 3);
++  assert.equal(batch.codexFinalReview.failureCode, 'final-qa-infrastructure-exhausted');
++  assert.equal(batch.phase, 'blocked');
++  assert.deepEqual(batch.implementation, before);
++  const history = structuredClone(batch.codexFinalReviewHistory);
++  await externalReviewStep(args);
++  assert.equal(calls, 3);
++  assert.deepEqual(batch.codexFinalReviewHistory, history);
++  assert.equal(log.includes('correction'), false);
++});
++test('Claude1 F3 waiting checks and pre-inference identity polling spend no infrastructure inference slots', async () => {
++  const { args, batch, log } = approvedExternalArgs();
++  let waiting = true;
++  args.workspace.prepare = async () => {};
++  let checks = 0;
++  args.gh.requiredChecks = async () => ({ ok: ++checks % 2 === 1 || !waiting });
++  for (let n = 0; n < 5; n++) {
++    await externalReviewStep(args);
++    assert.equal(batch.codexFinalReview.status, 'waiting-checks');
++  }
++  assert.equal(batch.codexFinalQaInfrastructure, undefined);
++  assert.equal(log.includes('qa'), false);
++  waiting = false;
++  await externalReviewStep(args);
++  assert.equal(batch.phase, 'ready');
++  assert.equal(batch.codexFinalQaInfrastructure.attempts.length, 1);
++});
++test('Claude1 F3 unusable final QA verdict is infrastructure failure and never a code correction', async () => {
++  const { args, batch } = approvedExternalArgs();
++  args.workspace.finalQa = async () => ({ status: 'unavailable' });
++  args.workspace.execute = async () => assert.fail('unavailable verdict must not implement');
++  await assert.rejects(externalReviewStep(args), /no usable verdict/);
++  assert.equal(batch.codexFinalReview.status, 'failed');
++  assert.equal(batch.implementation.length, 1);
++});
+--- candidate4/agent-team/tests/bug-pipeline/github.test.mjs
++++ candidate5/agent-team/tests/bug-pipeline/github.test.mjs
+@@ -2264,3 +2264,97 @@
+   ])
+     await assert.rejects(gh.discoverQueue({ normalize: true, excludeIssues }), /Invalid excluded/);
+ });
++
++test('Claude1 F5 read-only observation never promotes a writer base or bypasses native409', async () => {
++  const f = stateBlobFixture(entityState());
++  const ours = await f.store.load();
++  ours.batches[0].local = 'pending';
++  const remote = entityState();
++  remote.batches[1].remote = 'preserved';
++  f.setRaw(Buffer.from(JSON.stringify(remote)));
++  assert.equal((await f.store.observe()).batches[1].remote, 'preserved');
++  await f.store.save(ours, { rebaseIndependentSubjects: entityValidator });
++  assert.equal(f.writes.length, 2, 'old writer SHA must receive native409 before rebase');
++  assert.notEqual(f.writes[0].sha, f.writes[1].sha);
++  const actual = await f.store.load();
++  assert.equal(actual.batches[1].remote, 'preserved');
++  assert.equal(actual.batches[0].local, 'pending');
++});
++
++test('Claude1 F5 native state store preserves finite ownership code instead of generic rebase error', async () => {
++  const f = stateBlobFixture(entityState());
++  const ours = await f.store.load();
++  ours.batches[0].local = true;
++  const remote = entityState();
++  remote.operatorTakeover = { active: true };
++  f.setRaw(Buffer.from(JSON.stringify(remote)));
++  await assert.rejects(
++    f.store.save(ours, {
++      rebaseIndependentSubjects: (state) => {
++        if (state.operatorTakeover)
++          throw Object.assign(new Error('observed ownership'), { code: 'review-operator-owned' });
++      },
++    }),
++    (error) => error.code === 'review-operator-owned',
++  );
++  assert.equal(f.writes.length, 1);
++  assert.deepEqual(await f.store.load(), remote);
++});
++
++test('Claude1 F5 fresh owner hook never forgives unowned same-entity conflicts or malformed canonical data', async () => {
++  for (const target of ['a', 'b', 'malformed']) {
++    const f = stateBlobFixture(entityState());
++    const ours = await f.store.load();
++    const index = target === 'b' ? 1 : 0;
++    ours.batches[index].local = 'pending';
++    const remote = entityState();
++    if (target === 'malformed') remote.batches = 'invalid';
++    else remote.batches[index].remote = 'canonical concurrent data';
++    f.setRaw(Buffer.from(JSON.stringify(remote)));
++    let ownershipChecks = 0;
++    await assert.rejects(
++      f.store.save(ours, {
++        checkFreshOwnership: (fresh) => {
++          ownershipChecks++;
++          entityValidator(fresh);
++        },
++        rebaseIndependentSubjects: entityValidator,
++      }),
++      (error) =>
++        error.code === (target === 'malformed' ? 'state-rebase-invalid' : 'state-rebase-conflict'),
++    );
++    assert.equal(ownershipChecks, 1);
++    assert.equal(f.writes.length, 1);
++    assert.deepEqual(await f.store.load(), remote);
++  }
++});
++
++test('Claude1 F5 fresh owner hook is never used after auth failures, definite rejection or uncertain writes', async () => {
++  for (const failure of [
++    { ok: false, code: 1, stderr: 'HTTP 403 Forbidden' },
++    { ok: false, code: 1, stderr: 'HTTP 502 Bad Gateway' },
++    { ok: false, code: 1, stderr: '', error: 'timeout' },
++  ]) {
++    const f = stateBlobFixture(entityState());
++    const store = createGitHub({
++      cwd: '/tmp',
++      repo: 'l2v-hub/ClinicOS',
++      run: async (call) => (call.args.includes('PUT') ? response({}, failure) : f.run(call)),
++    }).createStateStore();
++    const ours = await store.load();
++    ours.batches[0].local = true;
++    let ownershipChecks = 0;
++    await assert.rejects(
++      store.save(ours, {
++        rebaseIndependentSubjects: entityValidator,
++        checkFreshOwnership: () => {
++          ownershipChecks++;
++          throw Object.assign(new Error('not observed'), { code: 'review-operator-owned' });
++        },
++      }),
++      (error) => ['state-write-failed', 'state-write-uncertain'].includes(error.code),
++    );
++    assert.equal(ownershipChecks, 0);
++    assert.deepEqual(await store.load(), entityState());
++  }
++});
+--- candidate4/agent-team/tests/bug-pipeline/issue-review-sync.test.mjs
++++ candidate5/agent-team/tests/bug-pipeline/issue-review-sync.test.mjs
+@@ -79,7 +79,15 @@
+ });
+ const newOnly = (protectedSubjects = []) => ({
+   active: true,
+-  automation: { enabled: true, mode: 'new-unclaimed-only', protectedSubjects },
++  nonce: 'test-takeover',
++  automation: {
++    enabled: true,
++    mode: 'new-unclaimed-only',
++    protectedSubjects,
++    takeoverNonce: 'test-takeover',
++    authorizedActor: 'maintainer',
++    handedBackAt: '2026-10-22T00:00:00Z',
++  },
+ });
+ async function observedSync(state, publish) {
+   const before = JSON.stringify(state),
+@@ -203,21 +211,29 @@
+   assert.equal(result.batches[0].forwarded, 1);
+ });
+ 
+-test('malformed or disabled automation handback cannot silently enable owned synchronization', async () => {
++test('malformed handback is schema-rejected; absent and valid disabled grants remain paused', async () => {
+   for (const automation of [
+     undefined,
++    { ...newOnly().automation, enabled: false },
+     {},
+     { enabled: true, mode: 'all', protectedSubjects: [] },
+-    { enabled: false, mode: 'new-unclaimed-only', protectedSubjects: [] },
+   ]) {
+-    const { result, calls } = await observedSync({
++    const state = {
+       schemaVersion: 1,
+       repository: repo,
+       batches: [syncBatch()],
+-      operatorTakeover: { active: true, automation },
+-    });
+-    assert.deepEqual(calls, []);
+-    assert.equal(result.status, 'skipped');
++      operatorTakeover: { active: true, nonce: 'test-takeover', automation },
++    };
++    if (
++      automation !== undefined &&
++      (!automation.takeoverNonce || automation.mode !== 'new-unclaimed-only')
++    )
++      await assert.rejects(observedSync(state), /invalid operator automation handback/);
++    else {
++      const { result, calls } = await observedSync(state);
++      assert.deepEqual(calls, []);
++      assert.equal(result.status, 'skipped');
++    }
+   }
+ });
+ 
+--- candidate4/agent-team/tests/bug-pipeline/operator-ownership.test.mjs
++++ candidate5/agent-team/tests/bug-pipeline/operator-ownership.test.mjs
+@@ -9,9 +9,13 @@
+ 
+ const handback = () => ({
+   active: true,
++  nonce: 'test-takeover',
+   automation: {
+     enabled: true,
+     mode: 'new-unclaimed-only',
++    takeoverNonce: 'test-takeover',
++    authorizedActor: 'maintainer',
++    handedBackAt: '2026-10-22T00:00:00Z',
+     protectedSubjects: [],
+   },
+ });
+@@ -113,3 +117,26 @@
+   );
+   assert.equal(JSON.stringify(state), before);
+ });
++
++test('Claude1 F1 stale nonce and missing audit cannot replay an old handback', () => {
++  const takeover = {
++    active: true,
++    nonce: 'new-nonce',
++    automation: {
++      enabled: true,
++      mode: 'new-unclaimed-only',
++      protectedSubjects: [],
++      takeoverNonce: 'old-nonce',
++      authorizedActor: 'maintainer',
++      handedBackAt: '2026-10-22T00:00:00Z',
++    },
++  };
++  assert.equal(automationPaused({ operatorTakeover: takeover }), true);
++  takeover.automation.takeoverNonce = takeover.nonce;
++  assert.equal(automationPaused({ operatorTakeover: takeover }), false);
++  for (const field of ['takeoverNonce', 'authorizedActor', 'handedBackAt']) {
++    const invalid = structuredClone(takeover);
++    delete invalid.automation[field];
++    assert.equal(automationPaused({ operatorTakeover: invalid }), true);
++  }
++});
+--- candidate4/agent-team/tests/bug-pipeline/pipeline.test.mjs
++++ candidate5/agent-team/tests/bug-pipeline/pipeline.test.mjs
+@@ -907,7 +907,8 @@
+   const protectedGh = {
+     ...gh,
+     // Synthetic metadata exercises the genuine verifier; this is not a provider deployment.
+-    verifyProductionBackend: (input) => verifyProductionBackend({ ...input, reader: productionReader }),
++    verifyProductionBackend: (input) =>
++      verifyProductionBackend({ ...input, reader: productionReader }),
+     verifyDemoRelease: async () => proof,
+     reviewFeedback: async () =>
+       openFeedback(batch, {
+@@ -983,7 +984,15 @@
+ 
+ const takeoverHandback = (protectedSubjects = []) => ({
+   active: true,
+-  automation: { enabled: true, mode: 'new-unclaimed-only', protectedSubjects },
++  nonce: 'test-takeover',
++  automation: {
++    enabled: true,
++    mode: 'new-unclaimed-only',
++    protectedSubjects,
++    takeoverNonce: 'test-takeover',
++    authorizedActor: 'maintainer',
++    handedBackAt: '2026-10-22T00:00:00Z',
++  },
+ });
+ 
+ function ownedStandalone(number = 99, issues = [90]) {
+@@ -1178,7 +1187,8 @@
+     }
+     return save(value);
+   };
+-  await assert.rejects(h.run(), /Automatic ownership changed/);
++  const result = await h.run();
++  assert.deepEqual(result, remoteOwned);
+   assert.equal(h.counts.execute, 0);
+   assert.deepEqual(h.stateRef.value, remoteOwned);
+   assert.equal(remoteOwned.batches[0].implementation.length, 0);
+@@ -1220,3 +1230,162 @@
+     assert.equal(h.stateRef.value.batches.length, 0);
+   }
+ });
++
++test('Claude1 F4 takeover during QA prevents every later internal publication path', async () => {
++  for (const mode of ['initial', 'pr-feedback', 'review-correction']) {
++    const b = batchFor({ issues: [17], phase: 'waiting-checks' });
++    b.feedbackFingerprint = feedbackFingerprint(openFeedback(b));
++    const h = harness({
++      issues: [17],
++      queue: [],
++      initialState: mode === 'initial' ? blankState() : { ...blankState(), batches: [b] },
++      reviews:
++        mode === 'review-correction'
++          ? [{ verdict: 'changes-requested', summary: 'fix', findings: [{}] }]
++          : [],
++    });
++    if (mode === 'initial') h.gh.discoverQueue = async () => [17];
++    if (mode === 'pr-feedback')
++      h.gh.reviewFeedback = async () =>
++        openFeedback(b, { comments: [{ id: 1, body: 'Fix state', user: { login: 'human' } }] });
++    let observed = false,
++      frozen,
++      after = [];
++    h.workspace.qa = async () => {
++      frozen = clone(h.stateRef.value.batches[0]);
++      h.stateRef.value.operatorTakeover = { active: true, nonce: 'new-takeover' };
++      observed = true;
++      return { status: 'verified' };
++    };
++    for (const name of ['publish', 'checkpoint'])
++      h.workspace[name] = async () => {
++        if (observed) after.push(name);
++        return sha('b');
++      };
++    for (const name of ['commentIssue', 'commentPR', 'setIssueStatus', 'createDraft']) {
++      const old = h.gh[name];
++      h.gh[name] = async (...args) => {
++        if (observed) after.push(name);
++        return old(...args);
++      };
++    }
++    const result = await h.run();
++    assert.equal(observed, true, mode);
++    assert.deepEqual(after, [], mode);
++    assert.deepEqual(result.batches[0], frozen, mode);
++    assert.deepEqual(h.stateRef.value.batches[0], frozen, mode);
++  }
++});
++
++test('Claude1 F5 actual native409 partial handback skips A and completes B without overwriting A', async (t) => {
++  for (const mechanism of ['handback', 'subject'])
++    await t.test(mechanism, async () => {
++      const a = batchFor({ issues: [17], phase: 'waiting-checks' }),
++        b = batchFor({ issues: [18], phase: 'waiting-checks' });
++      b.pr = { number: 82, url: 'https://github.com/l2v-hub/ClinicOS/pull/82' };
++      for (const batch of [a, b])
++        batch.feedbackFingerprint = feedbackFingerprint(openFeedback(batch));
++      const h = harness({
++        issues: [17, 18],
++        queue: [],
++        initialState: { ...blankState(), batches: [a, b] },
++      });
++      let canonical = clone(h.stateRef.value),
++        injected = false,
++        frozenA,
++        puts = 0;
++      const { createHash } = await import('node:crypto');
++      const metadata = () => {
++        const bytes = Buffer.from(JSON.stringify(canonical));
++        return {
++          type: 'file',
++          encoding: 'base64',
++          size: bytes.length,
++          content: bytes.toString('base64'),
++          sha: createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex'),
++        };
++      };
++      const response = (value, extra = {}) => ({
++        ok: true,
++        code: 0,
++        stdout: JSON.stringify(value),
++        stderr: '',
++        ...extra,
++      });
++      const native = createGitHub({
++        cwd: '/tmp',
++        repo,
++        run: async ({ args, input }) => {
++          if (args[1].includes('/git/ref/heads/')) return response({ object: { sha: sha('a') } });
++          if (args.includes('PUT')) {
++            puts++;
++            const body = JSON.parse(input);
++            const intended = JSON.parse(Buffer.from(body.content, 'base64'));
++            if (!injected && intended.batches[0].reviews.some((r) => r.status === 'running')) {
++              injected = true;
++              if (mechanism === 'subject') {
++                canonical.batches[0].operatorCoordination = { active: true, owner: 'maintainer' };
++                canonical.batches[0].operatorNote = 'Remote owner data must survive exactly';
++              }
++              frozenA = clone(canonical.batches[0]);
++              canonical.operatorTakeover = {
++                active: true,
++                nonce: 'takeover-1',
++                automation: {
++                  enabled: true,
++                  mode: 'new-unclaimed-only',
++                  takeoverNonce: 'takeover-1',
++                  authorizedActor: 'maintainer',
++                  handedBackAt: '2026-10-22T00:00:00Z',
++                  protectedSubjects: [{ collection: 'batches', id: a.id }],
++                },
++              };
++            }
++            if (body.sha !== metadata().sha)
++              return response({}, { ok: false, code: 1, stderr: 'HTTP 409 conflict' });
++            canonical = intended;
++            return response({ content: { sha: metadata().sha } });
++          }
++          if (args[1].includes('/contents/.codex-bug-state.json')) return response(metadata());
++          assert.fail('unexpected native fixture request ' + args[1]);
++        },
++      }).createStateStore();
++      h.store.load = () => native.load();
++      h.store.observe = () => native.observe();
++      h.store.save = (...args) => native.save(...args);
++      h.gh.reviewFeedback = async (number) =>
++        openFeedback(canonical.batches.find((x) => x.pr.number === number));
++      h.gh.commentPR = async () => {};
++      h.gh.requiredChecks = async () => ({ ok: true });
++      const reviewed = [];
++      h.workspace.review = async (batch) => {
++        reviewed.push(batch.id);
++        return {
++          subject_sha: batch.sha,
++          verdict: 'approved',
++          summary: 'Synthetic approval',
++          findings: [],
++        };
++      };
++      const result = await h.run();
++      assert.equal(injected, true);
++      assert.ok(puts >= 2);
++      assert.deepEqual(canonical.batches[0], frozenA);
++      assert.deepEqual(result.batches[0], frozenA);
++      assert.deepEqual(reviewed, [b.id]);
++      assert.equal(result.batches[1].phase, 'ready');
++      assert.equal(
++        h.log.some((x) => x === 'gh.setIssueStatus:17:Bloccato'),
++        false,
++      );
++    });
++});
++
++test('Claude1 F1 stale canonical handback pauses before intake, selection or any mutation', async () => {
++  const state = { ...blankState(), operatorTakeover: takeoverHandback() };
++  state.operatorTakeover.nonce = 'next-takeover';
++  const h = harness({ initialState: state });
++  assert.deepEqual(await h.run(), state);
++  assert.deepEqual(h.log, ['store.load']);
++  assert.equal(h.counts.plan, 0);
++});
+--- candidate4/agent-team/tests/bug-pipeline/release.test.mjs
++++ candidate5/agent-team/tests/bug-pipeline/release.test.mjs
+@@ -2600,14 +2600,22 @@
+   await assert.rejects(releaseBatch(exactInput(f)), /rejected POST/);
+   const original = structuredClone(f.getSaved().batches[0]);
+   const old = original.exactDemoDispatches.preflight;
+-  offset = Math.max(Date.parse(old.intentAt), Date.parse(original.releaseBlock.at)) +
+-    DISPATCH_SETTLE_MS + 1 - Date.now();
++  offset =
++    Math.max(Date.parse(old.intentAt), Date.parse(original.releaseBlock.at)) +
++    DISPATCH_SETTLE_MS +
++    1 -
++    Date.now();
+   await recoverExactRelease({ ...recoveryInput(f), now: clock });
+   const noRunArchive = structuredClone(f.getSaved().batches[0].exactReleaseRecoveries[0]);
+-  const late = { id: 899, run_attempt: 1, head_sha: old.sha, head_branch: 'main',
++  const late = {
++    id: 899,
++    run_attempt: 1,
++    head_sha: old.sha,
++    head_branch: 'main',
+     repository: { full_name: f.state.repository },
+     head_repository: { full_name: f.state.repository },
+-    path: '.github/workflows/deploy-demo-exact-commit.yml', event: 'workflow_dispatch',
++    path: '.github/workflows/deploy-demo-exact-commit.yml',
++    event: 'workflow_dispatch',
+     display_title: `demo-exact preflight ${old.sha} ${old.dispatchId}`,
+     status: 'in_progress',
+     conclusion: null,
+@@ -2628,7 +2636,8 @@
+   const request = { ...recoveryInput(f), now: f.clock };
+   await assert.rejects(recoverExactRelease(request), /active old dispatch/);
+   assert.equal(f.getSaved().batches[0].exactReleaseRecoveries.length, 1);
+-  f.late.status = 'completed'; f.late.conclusion = 'success';
++  f.late.status = 'completed';
++  f.late.conclusion = 'success';
+   await recoverExactRelease(request);
+   let batch = f.getSaved().batches[0];
+   assert.deepEqual(batch.exactReleaseRecoveries[0], f.noRunArchive);
+@@ -2639,23 +2648,28 @@
+   assert.equal(proof[0].dispatchId, f.old.dispatchId);
+   assert.equal(proof[0].run.conclusion, 'success');
+   const exclusions = structuredClone(batch.exactDemoRecovery);
+-  const ensure = () => f.dispatcher.ensure({ operation: 'preflight',
+-    expectedSha: f.old.sha, progress: f.getSaved().batches[0].exactDemoDispatches?.preflight,
+-    excludedRunIds: exclusions.excludedRunIds,
+-    excludedDispatchIds: exclusions.excludedDispatchIds,
+-    excludedDispatches: exclusions.excludedDispatches,
+-    saveProgress: async (progress) => {
+-      const state = await f.store.load();
+-      state.batches[0].exactDemoDispatches.preflight = progress;
+-      await f.store.save(state);
+-    },
+-  });
++  const ensure = () =>
++    f.dispatcher.ensure({
++      operation: 'preflight',
++      expectedSha: f.old.sha,
++      progress: f.getSaved().batches[0].exactDemoDispatches?.preflight,
++      excludedRunIds: exclusions.excludedRunIds,
++      excludedDispatchIds: exclusions.excludedDispatchIds,
++      excludedDispatches: exclusions.excludedDispatches,
++      saveProgress: async (progress) => {
++        const state = await f.store.load();
++        state.batches[0].exactDemoDispatches.preflight = progress;
++        await f.store.save(state);
++      },
++    });
+   await ensure();
+   await ensure();
+   assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 1);
+   const artifact = f.reader.artifact;
+   f.reader.artifact = async (...args) => {
+-    const value = await artifact(...args); value.receipt.verifiedAt = '2020-01-01'; return value;
++    const value = await artifact(...args);
++    value.receipt.verifiedAt = '2020-01-01';
++    return value;
+   };
+   await assert.rejects(releaseBatch(exactInput(f)), /expired/);
+   f.reader.artifact = artifact;
+@@ -2693,7 +2707,8 @@
+   ])
+     await t.test(mode, async () => {
+       const f = await lateRetirementFixture();
+-      f.late.status = 'completed'; f.late.conclusion = 'success';
++      f.late.status = 'completed';
++      f.late.conclusion = 'success';
+       const before = structuredClone(f.getSaved().batches[0]);
+       if (mode === 'ambiguous') f.runs.push({ ...f.late, id: 898 });
+       if (mode === 'head repository') f.late.head_repository = { full_name: 'foreign/repo' };
+@@ -2718,13 +2733,17 @@
+         const save = f.store.save;
+         f.store.save = async (value, options) => {
+           reachedSave = true;
+-          if (mode === 'save active') { f.late.status = 'in_progress'; f.late.conclusion = null; }
++          if (mode === 'save active') {
++            f.late.status = 'in_progress';
++            f.late.conclusion = null;
++          }
+           if (mode === 'save conclusion') f.late.conclusion = 'failure';
+           if (mode === 'save disappeared') f.runs.length = 0;
+           if (mode === 'save duplicate') f.runs.push({ ...f.late, id: 898 });
+           if (mode === 'save main') f.setMain('e'.repeat(40));
+           if (mode === 'save block') f.getSaved().batches[0].releaseBlock.id = 'changed';
+-          if (mode === 'save authorization') f.github.authorizeReleaseRecovery = async () => 'foreign';
++          if (mode === 'save authorization')
++            f.github.authorizeReleaseRecovery = async () => 'foreign';
+           if (mode === 'save original no-run proof')
+             f.getSaved().batches[0].exactReleaseRecoveries[0].retirementProof.noRunProofs[0].originAt =
+               '2020-01-01T00:00:00.000Z';
+@@ -2744,7 +2763,8 @@
+   for (const mode of ['missing', 'identity', 'attempt', 'conclusion', 'detail drift'])
+     await t.test(mode, async () => {
+       const f = await lateRetirementFixture();
+-      f.late.status = 'completed'; f.late.conclusion = 'success';
++      f.late.status = 'completed';
++      f.late.conclusion = 'success';
+       await recoverExactRelease({ ...recoveryInput(f), now: f.clock });
+       const savedArchive = structuredClone(f.getSaved().batches[0].exactReleaseRecoveries[0]);
+       if (mode === 'missing') f.runs.length = 0;
+@@ -2785,9 +2805,12 @@
+ test('automatic release honors global pause, explicit subject handback and independent active operator holds', () => {
+   const f = fixture();
+   const before = JSON.stringify(f.batch);
+-  f.state.operatorTakeover = { active: true };
++  f.state.operatorTakeover = { active: true, nonce: 'test-takeover' };
+   assert.equal(selectAutoReleaseBatch(f.state), null);
+   f.state.operatorTakeover.automation = {
++    takeoverNonce: 'test-takeover',
++    authorizedActor: 'maintainer',
++    handedBackAt: '2026-10-22T00:00:00Z',
+     enabled: true,
+     mode: 'new-unclaimed-only',
+     protectedSubjects: [],
+@@ -2948,3 +2971,118 @@
+   assert.deepEqual(f.getSaved(), before);
+   assert.deepEqual(f.calls.slice(count), []);
+ });
++
++test('Claude1 F2 external release requires exact final Codex proof at selection and execution', async () => {
++  for (const channel of ['github-comments', 'legacy-worker']) {
++    for (const mismatch of [
++      'missing',
++      'failed',
++      'subjectSha',
++      'claudeRound',
++      'feedbackFingerprint',
++    ]) {
++      const f = fixture();
++      f.batch.externalReview = {
++        channel,
++        status: 'published',
++        subjectSha: sha,
++        feedbackFingerprint: f.batch.feedbackFingerprint,
++      };
++      const proof = {
++        status: 'verified',
++        subjectSha: sha,
++        claudeRound: 1,
++        feedbackFingerprint: f.batch.feedbackFingerprint,
++      };
++      if (mismatch !== 'missing')
++        f.batch.codexFinalReview = {
++          ...proof,
++          [mismatch === 'failed' ? 'status' : mismatch]: mismatch === 'claudeRound' ? 0 : 'stale',
++        };
++      assert.equal(selectAutoReleaseBatch(f.state), null, `${channel}:${mismatch}`);
++      await assert.rejects(
++        releaseBatch({
++          repo: f.state.repository,
++          github: f.github,
++          store: f.store,
++          batchId: f.batch.id,
++          reviewedSha: sha,
++          configured,
++          execute: true,
++        }),
++        /final Codex/i,
++      );
++      assert.equal(f.calls.filter(([name]) => ['merge', 'ready', 'save'].includes(name)).length, 0);
++    }
++  }
++});
++
++function bindExternalFinalProof(f) {
++  f.batch.externalReview = {
++    status: 'published',
++    subjectSha: sha,
++    feedbackFingerprint: f.batch.feedbackFingerprint,
++  };
++  f.batch.codexFinalReview = {
++    status: 'verified',
++    subjectSha: sha,
++    claudeRound: f.batch.reviews.length,
++    feedbackFingerprint: f.batch.feedbackFingerprint,
++  };
++}
++test('Claude1 F2 matching existing final proof merges with all prior gates; fresh proof drift refuses', async () => {
++  const f = fixture();
++  bindExternalFinalProof(f);
++  assert.equal(selectAutoReleaseBatch(f.state), f.batch);
++  const result = await releaseBatch({
++    repo: f.state.repository,
++    github: f.github,
++    store: f.store,
++    batchId: f.batch.id,
++    reviewedSha: sha,
++    configured,
++    execute: true,
++  });
++  assert.equal(result.status, 'merged');
++  assert.equal(f.calls.filter(([n]) => n === 'merge').length, 1);
++  const stale = fixture();
++  bindExternalFinalProof(stale);
++  const load = stale.store.load;
++  let reads = 0;
++  stale.store.load = async () => {
++    const state = await load();
++    if (++reads >= 2) state.batches[0].codexFinalReview.feedbackFingerprint = 'stale';
++    return state;
++  };
++  await assert.rejects(
++    releaseBatch({
++      repo: stale.state.repository,
++      github: stale.github,
++      store: stale.store,
++      batchId: stale.batch.id,
++      reviewedSha: sha,
++      configured,
++      execute: true,
++    }),
++    /final Codex/i,
++  );
++  assert.equal(stale.calls.filter(([n]) => ['merge', 'ready', 'save'].includes(n)).length, 0);
++});
++test('Claude1 F2 deployment recording cannot bypass missing final proof on an external candidate', async () => {
++  const f = fixture();
++  bindExternalFinalProof(f);
++  delete f.batch.codexFinalReview;
++  f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha };
++  await assert.rejects(
++    recordDeployment({
++      repo: f.state.repository,
++      github: f.github,
++      store: f.store,
++      batchId: f.batch.id,
++      mergeSha,
++      configured,
++    }),
++    /final Codex/i,
++  );
++  assert.equal(f.calls.length, 0);
++});
+--- candidate4/docs/codex-bug-workflow.md
++++ candidate5/docs/codex-bug-workflow.md
+@@ -205,3 +205,21 @@
+ promettere atomicità del provider.
+ 
+ Prompt completo da dare a Claude Max sul PC: [claude-local-review-prompt.md](claude-local-review-prompt.md).
++
++
++L'handback canonico `operatorTakeover.automation` richiede `enabled: true`,
++`mode: "new-unclaimed-only"`, `takeoverNonce` uguale al nonce non vuoto della presa in carico,
++`authorizedActor` non vuoto, `handedBackAt` come timestamp UTC ISO valido e `protectedSubjects`
++come elenco di identità `{collection, id}`. L'attore è un dato di audit registrato dal writer
++fidato dopo la verifica dei permessi, non una credenziale. Un nuovo takeover deve eliminare o
++sostituire il vecchio handback. Un grant ben formato ma riferito a un nonce precedente resta
++leggibile e sospende l'automazione; metadati malformati sono rifiutati dalla validazione.
++
++Per ogni approvazione esterna, anche senza canale commenti, il rilascio richiede una QA Codex
++`verified` sullo SHA fornito al rilascio, round Claude e fingerprint attuali. Una QA finale
++infrastrutturale fallita o interrotta conserva il record e può ripartire solo dopo il recupero
++esplicito di un eventuale blocco. Il registro separato `codexFinalQaInfrastructure.attempts`
++consente al massimo tre sessioni di inferenza prenotate per SHA/round/fingerprint: le attese dei
++check senza inferenza non consumano slot. Non consuma tentativi implementativi; soltanto un
++verdetto Codex con richieste di modifica avvia una correzione. Una sessione `running` non viene
++duplicata e l'esaurimento richiede recupero esplicito senza azzerare lo storico.

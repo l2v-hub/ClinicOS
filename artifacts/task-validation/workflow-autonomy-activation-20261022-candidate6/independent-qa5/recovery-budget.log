@@ -1,0 +1,32 @@
+TAP version 13
+# Subtest: typed recovery must count a retained legacy failed inference toward the three-session final-QA allowance
+not ok 1 - typed recovery must count a retained legacy failed inference toward the three-session final-QA allowance
+  ---
+  duration_ms: 45.626399
+  type: 'test'
+  location: '/tmp/clinicos-autonomy-activation-20261022/independent-qa5/recovery-budget-probe.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    One actual retained legacy failure leaves at most two new final-QA sessions in a total allowance of three
+    
+    3 !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 3
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/clinicos-autonomy-activation-20261022/independent-qa5/recovery-budget-probe.mjs:14:556)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 136.838406

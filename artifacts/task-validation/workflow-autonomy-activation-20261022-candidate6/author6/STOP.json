@@ -1,0 +1,8 @@
+{
+  "status": "STOP",
+  "reason": "Continuation6 three QA5 findings implemented and final source-bound validation complete. Await independent QA6; no approval/publication/activation claimed.",
+  "nonce": "43647508-76e7-40c3-85a4-4e88dcab8f4d",
+  "source": "/tmp/clinicos-autonomy-activation-20261022/source6",
+  "sourceEditsStopped": true,
+  "stoppedAt": "2026-10-23T00:44:07.777250+00:00"
+}

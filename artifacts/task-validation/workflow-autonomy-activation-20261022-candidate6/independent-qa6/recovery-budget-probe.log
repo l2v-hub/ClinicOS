@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: typed recovery must count a retained legacy failed inference toward the three-session final-QA allowance
+ok 1 - typed recovery must count a retained legacy failed inference toward the three-session final-QA allowance
+  ---
+  duration_ms: 32.121217
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 121.376874

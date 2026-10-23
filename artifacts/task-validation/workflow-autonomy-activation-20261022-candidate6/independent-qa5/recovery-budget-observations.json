@@ -1,0 +1,27 @@
+{
+  "legacyFailedSessionsRetained": 1,
+  "newQaCallbackInvocations": 3,
+  "totalIncludingRetainedLegacy": 4,
+  "newInfrastructureLedger": [
+    {
+      "status": "failed",
+      "nonce": "bafc40b2-9d88-4985-be04-449a7a74f365"
+    },
+    {
+      "status": "failed",
+      "nonce": "c53631ac-6368-49d4-b428-8e1b56928682"
+    },
+    {
+      "status": "failed",
+      "nonce": "861af8d4-74e1-43ac-8388-62177dd43e93"
+    }
+  ],
+  "qaHistoryCount": 3,
+  "implementationAttempts": 1,
+  "errors": [
+    "Synthetic final QA infrastructure failure",
+    "Synthetic final QA infrastructure failure",
+    "Synthetic final QA infrastructure failure"
+  ],
+  "actualProvidersOrModels": 0
+}

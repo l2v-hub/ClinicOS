@@ -1,0 +1,8 @@
+{
+  "takeoverActiveType": "string",
+  "automationPaused": false,
+  "intakeCalls": 1,
+  "queueCalls": 1,
+  "error": null,
+  "modelCalls": 0
+}

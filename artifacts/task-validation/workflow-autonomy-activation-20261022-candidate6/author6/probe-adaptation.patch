@@ -1,0 +1,87 @@
+--- independent-qa5/external-cas-probe.mjs
++++ author6/external-cas-probe.mjs
+@@ -4,8 +4,8 @@
+ import {readFile,writeFile} from 'node:fs/promises';
+ import {createHash} from 'node:crypto';
+ import {SourceTextModule,SyntheticModule,createContext} from 'node:vm';
+-import {createGitHub} from '../qa-source5/agent-team/src/bug-pipeline/github.mjs';
+-import {feedbackFingerprint,sha256} from '../qa-source5/agent-team/src/bug-pipeline/contracts.mjs';
++import {createGitHub} from '../source6/agent-team/src/bug-pipeline/github.mjs';
++import {feedbackFingerprint,sha256} from '../source6/agent-team/src/bug-pipeline/contracts.mjs';
+ const repo='l2v-hub/ClinicOS',sha='a'.repeat(40),clone=structuredClone;
+ function batch(n){const b={...batchFor({issues:[n],phase:'waiting-review',reviews:[{round:1,status:'approved',subjectSha:sha}]}),pr:{number:n+64,url:`https://github.com/${repo}/pull/${n+64}`}};const body=JSON.stringify({subject_sha:sha,verdict:'approved',summary:'Synthetic approved fixture',findings:[]});b.reviewLedger={rounds:[{round:1,subject_sha:sha,verdict:'approved',review_sha256:sha256(body)}]};b.reviewReports={'claude-review-1.json':body};b.externalReview={status:'published',subjectSha:sha,feedbackFingerprint:feedbackFingerprint(feedback(b))};return b}
+ function feedback(b){return{state:'OPEN',head:b.sha,headRef:b.branch,headRepo:repo,headIsFork:false,baseRef:'main',comments:[],unresolved:false,changesRequested:false}}
+@@ -16,6 +16,6 @@
+  const context=createContext({process:{env:{},argv:['node','/synthetic/probe.mjs'],cwd:()=>'/synthetic'},console,structuredClone,Buffer,setTimeout,clearTimeout,URL});const cache=new Map();
+  const synthetic=exports=>new SyntheticModule(Object.keys(exports),function(){for(const[k,v]of Object.entries(exports))this.setExport(k,v)},{context});
+  async function load(url){if(cache.has(url))return cache.get(url);const source=await readFile(new URL(url),'utf8');const m=new SourceTextModule(source,{context,identifier:url,initializeImportMeta:meta=>{meta.url=url}});cache.set(url,m);await m.link(async(spec,parent)=>{if(spec==='./external-review.mjs'&&parent.identifier.endsWith('/pipeline.mjs'))return load(new URL(spec,parent.identifier).href);if(spec==='./issue-review-communication.mjs')return synthetic({createIssueReviewCommunication:()=>({mirrorFeedback:async()=>{},publishState:async()=>{}})});if(spec==='./process.mjs')return synthetic({createRunner:()=>()=>assert.fail('no process')});return synthetic(await import(spec.startsWith('.')?new URL(spec,parent.identifier).href:spec))});return m}
+- const mod=await load(new URL('../qa-source5/agent-team/src/bug-pipeline/pipeline.mjs',import.meta.url).href);await mod.evaluate();let error,result;try{result=await mod.namespace.runPipeline({repo,event:{},gh,store,reviewMode:'external',models:{},workspace:{root:'/synthetic',prepare:async()=>{},finalQa:async b=>{qa.push(b.id);return{status:'verified',summary:'Synthetic final QA fixture'}}}})}catch(e){error=e}
++ const mod=await load(new URL('../source6/agent-team/src/bug-pipeline/pipeline.mjs',import.meta.url).href);await mod.evaluate();let error,result;try{result=await mod.namespace.runPipeline({repo,event:{},gh,store,reviewMode:'external',models:{},workspace:{root:'/synthetic',prepare:async()=>{},finalQa:async b=>{qa.push(b.id);return{status:'verified',summary:'Synthetic final QA fixture'}}}})}catch(e){error=e}
+  await writeFile(new URL('external-cas-observations.json',import.meta.url),JSON.stringify({injected,puts:puts.map(x=>({shaMatches:x.shaMatches,hasRemoteOwner:x.intendedA.operatorCoordination?.active===true,hasRemoteNote:Boolean(x.intendedA.remoteNote),localQaStatus:x.intendedA.codexFinalReview?.status??null})),qa,error:error?.message??null,errorCauses:(()=>{const a=[];for(let e=error;e;e=e.cause)a.push({message:e.message,code:e.code??null});return a})(),remoteAEqualsFrozen:JSON.stringify(canonical.batches[0])===JSON.stringify(frozenA),resultAEqualsFrozen:JSON.stringify(result?.batches[0])===JSON.stringify(frozenA),remoteA:canonical.batches[0],frozenA,rootTakeoverRetained:canonical.operatorTakeover?.active===true,phaseB:canonical.batches[1].phase},null,2)+'\n');assert.equal(injected,true);assert.ifError(error);assert.deepEqual(qa,['bug-batch-18']);assert.deepEqual(canonical.batches[0],frozenA,'External ownership skip must reload canonical A before subsequent B save');assert.equal(canonical.batches[1].phase,'ready');
+ });
+--- independent-qa5/recovery-budget-probe.mjs
++++ author6/recovery-budget-probe.mjs
+@@ -2,8 +2,8 @@
+ import assert from 'node:assert/strict';
+ import {writeFile} from 'node:fs/promises';
+ import {fixture} from './handoff-fixture.mjs';
+-import {externalReviewStep} from '../qa-source5/agent-team/src/bug-pipeline/external-review.mjs';
+-import {feedbackFingerprint,sha256} from '../qa-source5/agent-team/src/bug-pipeline/contracts.mjs';
++import {externalReviewStep} from '../source6/agent-team/src/bug-pipeline/external-review.mjs';
++import {feedbackFingerprint,sha256} from '../source6/agent-team/src/bug-pipeline/contracts.mjs';
+ test('typed recovery must count a retained legacy failed inference toward the three-session final-QA allowance',async()=>{
+  const f=fixture();f.setPermission('maintain');const b=f.remote.batches[0];const fp=feedbackFingerprint(await f.github.reviewFeedback(81));const report=JSON.stringify({subject_sha:b.sha,verdict:'approved',summary:'Synthetic valid approved review',findings:[]});b.reviews=[{round:1,status:'approved',subjectSha:b.sha}];b.reviewLedger={rounds:[{round:1,verdict:'approved',subject_sha:b.sha,review_sha256:sha256(report)}]};b.reviewReports={'claude-review-1.json':report};b.phase='blocked';b.failureCode='controller-invariant';b.externalReview={status:'published',subjectSha:b.sha,feedbackFingerprint:fp};b.codexFinalReview={status:'failed',subjectSha:b.sha,claudeRound:1,feedbackFingerprint:fp,nonce:'legacy-spent-session',reservedAt:'2026-10-17T00:00:00.000Z'};
+  const recover=async()=>{const c=f.remote.batches[0];return f.handoff.recover(81,{action:'release-qa-reservation',expectedSha:c.sha,token:c.codexFinalReview.nonce,reason:'Synthetic authorized QA recovery',authorizationRef:'test:trusted-host'})};await recover();let invocations=0;const errors=[];
+--- independent-qa5/malformed-takeover-probe.mjs
++++ author6/malformed-takeover-probe.mjs
+@@ -1,8 +1,8 @@
+ import test from 'node:test';
+ import assert from 'node:assert/strict';
+ import {writeFile} from 'node:fs/promises';
+-import {runPipeline} from '../qa-source5/agent-team/src/bug-pipeline/pipeline.mjs';
+-import {automationPaused} from '../qa-source5/agent-team/src/bug-pipeline/operator-ownership.mjs';
++import {runPipeline} from '../source6/agent-team/src/bug-pipeline/pipeline.mjs';
++import {automationPaused} from '../source6/agent-team/src/bug-pipeline/operator-ownership.mjs';
+ test('malformed takeover active type cannot grant new unclaimed intake even with otherwise bound handback',async()=>{
+  const state={schemaVersion:1,repository:'l2v-hub/ClinicOS',batches:[],operatorTakeover:{active:'true',nonce:'bound-N',automation:{enabled:true,mode:'new-unclaimed-only',takeoverNonce:'bound-N',authorizedActor:'maintainer',handedBackAt:'2026-10-23T00:00:00Z',protectedSubjects:[]}}};let intake=0,queue=0,error;try{await runPipeline({repo:state.repository,event:{},store:{load:async()=>structuredClone(state),observe:async()=>structuredClone(state),save:()=>assert.fail('no save')},gh:{intake:async()=>{intake++},discoverQueue:async()=>{queue++;return[]}},workspace:{},models:{}})}catch(e){error=e}
+  await writeFile(new URL('malformed-takeover-observations.json',import.meta.url),JSON.stringify({takeoverActiveType:typeof state.operatorTakeover.active,automationPaused:automationPaused(state),intakeCalls:intake,queueCalls:queue,error:error?.message??null,modelCalls:0},null,2)+'\n');assert.ok(error||intake===0,'Invalid takeover.active must reject or pause before automatic intake');
+--- independent-qa5/handoff-fixture.mjs
++++ author6/handoff-fixture.mjs
+@@ -1,13 +1,13 @@
+ import test from 'node:test';
+ import assert from 'node:assert/strict';
+ import { createHash } from 'node:crypto';
+-import { createGitHub } from '../qa-source5/agent-team/src/bug-pipeline/github.mjs';
+-import { feedbackFingerprint } from '../qa-source5/agent-team/src/bug-pipeline/contracts.mjs';
++import { createGitHub } from '../source6/agent-team/src/bug-pipeline/github.mjs';
++import { feedbackFingerprint } from '../source6/agent-team/src/bug-pipeline/contracts.mjs';
+ import {
+   COMMENT_REVIEW_MARKER,
+   createCommentReviewHandoff,
+   handoffFeedbackFingerprint,
+-} from '../qa-source5/agent-team/src/bug-pipeline/comment-review-handoff.mjs';
++} from '../source6/agent-team/src/bug-pipeline/comment-review-handoff.mjs';
+ 
+ const repo = 'l2v-hub/ClinicOS';
+ const sha = 'a'.repeat(40);
+--- independent-qa5/pipeline-fixture.mjs
++++ author6/pipeline-fixture.mjs
+@@ -1,14 +1,14 @@
+ import test from 'node:test';
+ import assert from 'node:assert/strict';
+-import { runPipeline } from '../qa-source5/agent-team/src/bug-pipeline/pipeline.mjs';
+-import { createGitHub } from '../qa-source5/agent-team/src/bug-pipeline/github.mjs';
++import { runPipeline } from '../source6/agent-team/src/bug-pipeline/pipeline.mjs';
++import { createGitHub } from '../source6/agent-team/src/bug-pipeline/github.mjs';
+ import {
+   recordDeployment,
+   releaseBatch,
+   selectAutoReleaseBatch,
+   publicationComplete,
+-} from '../qa-source5/agent-team/src/bug-pipeline/release.mjs';
+-import { feedbackFingerprint, planSchema, sha256 } from '../qa-source5/agent-team/src/bug-pipeline/contracts.mjs';
++} from '../source6/agent-team/src/bug-pipeline/release.mjs';
++import { feedbackFingerprint, planSchema, sha256 } from '../source6/agent-team/src/bug-pipeline/contracts.mjs';
+ 
+ const repo = 'l2v-hub/ClinicOS';
+ const sha = (letter) => letter.repeat(40);

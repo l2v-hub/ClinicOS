@@ -1,0 +1,10 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "/tmp/clinicos-autonomy-activation-20261022/independent-qa6/residual-probes.mjs"
+  ],
+  "exitCode": 0,
+  "seconds": 0.26545148697914556
+}

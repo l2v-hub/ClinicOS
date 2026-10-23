@@ -1,0 +1,10 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "/tmp/clinicos-autonomy-activation-20261022/independent-qa5/malformed-takeover-probe.mjs"
+  ],
+  "exitCode": 1,
+  "seconds": 0.2149638240225613
+}

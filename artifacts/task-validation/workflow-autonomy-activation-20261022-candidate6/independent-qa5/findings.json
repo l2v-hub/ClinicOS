@@ -1,0 +1,139 @@
+[
+  {
+    "id": "QA5-F5",
+    "severity": "medium",
+    "status": "CONFIRMED",
+    "source": "agent-team/src/bug-pipeline/external-review.mjs",
+    "line": 356,
+    "related": [
+      {
+        "source": "agent-team/src/bug-pipeline/pipeline.mjs",
+        "line": 427
+      },
+      {
+        "source": "agent-team/src/bug-pipeline/pipeline.mjs",
+        "line": 437
+      }
+    ],
+    "title": "External ownership skip is swallowed before pipeline canonical reload, so eligible B aborts on stale A",
+    "observed": {
+      "injected": true,
+      "puts": [
+        {
+          "shaMatches": false,
+          "hasRemoteOwner": false,
+          "hasRemoteNote": false,
+          "localQaStatus": "running"
+        },
+        {
+          "shaMatches": false,
+          "hasRemoteOwner": false,
+          "hasRemoteNote": false,
+          "localQaStatus": "running"
+        }
+      ],
+      "qa": [],
+      "error": "External review reconciliation persistence failed",
+      "errorCauses": [
+        {
+          "message": "External review reconciliation persistence failed",
+          "code": null
+        },
+        {
+          "message": "Durable state compare-and-swap conflict: concurrent changes to the same durable entity",
+          "code": "state-rebase-conflict"
+        }
+      ],
+      "remoteAEqualsFrozen": true,
+      "phaseB": "waiting-review",
+      "rootTakeoverRetained": true
+    },
+    "expected": "After actual known409 reveals new A ownership/data, caller reloads current canonical state, skips A and continues B without carrying unsaved local A into B save. Preserve writer SHA protection and do not turn real unowned conflicts/uncertain writes into skips.",
+    "evidence": [
+      "external-cas-probe.mjs",
+      "external-cas-probe.log",
+      "external-cas-observations.json",
+      "confirmed-external-cas-probe.log"
+    ]
+  },
+  {
+    "id": "QA5-F3",
+    "severity": "medium",
+    "status": "CONFIRMED",
+    "source": "agent-team/src/bug-pipeline/external-review.mjs",
+    "line": 183,
+    "related": [
+      {
+        "source": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+        "line": 576
+      },
+      {
+        "source": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+        "line": 577
+      }
+    ],
+    "title": "Supported typed QA recovery moves legacy spend into qaHistory, which new inference allowance does not count",
+    "observed": {
+      "legacyFailedSessionsRetained": 1,
+      "newQaCallbackInvocations": 3,
+      "totalIncludingRetainedLegacy": 4,
+      "newInfrastructureLedger": [
+        {
+          "status": "failed",
+          "nonce": "bafc40b2-9d88-4985-be04-449a7a74f365"
+        },
+        {
+          "status": "failed",
+          "nonce": "c53631ac-6368-49d4-b428-8e1b56928682"
+        },
+        {
+          "status": "failed",
+          "nonce": "861af8d4-74e1-43ac-8388-62177dd43e93"
+        }
+      ],
+      "qaHistoryCount": 3,
+      "implementationAttempts": 1,
+      "errors": [
+        "Synthetic final QA infrastructure failure",
+        "Synthetic final QA infrastructure failure",
+        "Synthetic final QA infrastructure failure"
+      ],
+      "actualProvidersOrModels": 0
+    },
+    "expected": "Count the retained same-identity legacy failed QA exactly once across actual supported recovery, leaving at most two new sessions in total allowance3. Preserve recovery history and implementation attempts.",
+    "evidence": [
+      "recovery-budget-probe.mjs",
+      "recovery-budget.log",
+      "recovery-budget-observations.json",
+      "recovery-route-probe.mjs"
+    ]
+  },
+  {
+    "id": "QA5-F1",
+    "severity": "medium",
+    "status": "CONFIRMED",
+    "source": "agent-team/src/bug-pipeline/operator-ownership.mjs",
+    "line": 35,
+    "related": [
+      {
+        "source": "agent-team/src/bug-pipeline/contracts.mjs",
+        "line": 213
+      }
+    ],
+    "title": "Malformed takeover.active type still grants automatic intake with an otherwise bound handback",
+    "observed": {
+      "takeoverActiveType": "string",
+      "automationPaused": false,
+      "intakeCalls": 1,
+      "queueCalls": 1,
+      "error": null,
+      "modelCalls": 0
+    },
+    "expected": "Malformed takeover binding/schema types must reject or remain paused before intake. Preserve a valid inactive takeover and valid fresh bound handback semantics; audit actor is not itself permission proof.",
+    "evidence": [
+      "malformed-takeover-probe.mjs",
+      "malformed-takeover.log",
+      "malformed-takeover-observations.json"
+    ]
+  }
+]

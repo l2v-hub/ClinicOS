@@ -1,0 +1,54 @@
+{
+  "injected": false,
+  "puts": [],
+  "qa": [],
+  "error": "Cannot read properties of undefined (reading 'execution')",
+  "remoteAEqualsFrozen": false,
+  "resultAEqualsFrozen": true,
+  "remoteA": {
+    "id": "bug-batch-17",
+    "branch": "codex/bug-batch-17",
+    "issues": [
+      17
+    ],
+    "phase": "waiting-review",
+    "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "pr": {
+      "number": 81,
+      "url": "https://github.com/l2v-hub/ClinicOS/pull/81"
+    },
+    "implementation": [
+      {
+        "round": 1,
+        "status": "passed"
+      }
+    ],
+    "reviews": [
+      {
+        "round": 1,
+        "status": "approved",
+        "subjectSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "reviewLedger": {
+      "rounds": [
+        {
+          "round": 1,
+          "subject_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "verdict": "approved",
+          "review_sha256": "196c0d788a84be94534881b4f92700ba98b37bae68ad168b37ea61abc90dd2d3"
+        }
+      ]
+    },
+    "reviewReports": {
+      "claude-review-1.json": "{\"subject_sha\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"verdict\":\"approved\",\"summary\":\"Synthetic approved fixture\",\"findings\":[]}"
+    },
+    "externalReview": {
+      "status": "published",
+      "subjectSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "feedbackFingerprint": "31f26216a249ad4ccdc6952b6e9d2703a15f951f3f9ce4371ce671e7e4bbd034"
+    }
+  },
+  "rootTakeoverRetained": false,
+  "phaseB": "waiting-review"
+}

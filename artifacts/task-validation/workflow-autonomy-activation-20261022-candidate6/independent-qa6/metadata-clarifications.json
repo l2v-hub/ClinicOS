@@ -1,0 +1,8 @@
+{
+  "contractUnchanged": true,
+  "actualPrivateParent": "67c53efe45e2d5e2ffca228d3bf6639029bb27c5",
+  "actualLivePublishedHead": "ce7993a781bd2d378a1ca3ad2956b2c3606b4fe2",
+  "actualDeltaComparedTo": "private source5",
+  "actualDeltaCount": 10,
+  "scope": "Inherited Current Behaviour prose accidentally calls private parent published and delta vs4; authoritative reservation/code binding and initial section correctly distinguish them. No source finding or permission change."
+}

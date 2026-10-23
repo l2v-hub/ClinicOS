@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "nonce": "43647508-76e7-40c3-85a4-4e88dcab8f4d",
+  "stateCommit": "2e7f8e8dcfdd14c58c02468ef688a6222a99f1e5",
+  "contractSha256": "69394660d8afc12783a6e248a24fef3c5df901bdb281a0de78a6963857cac1f2",
+  "snapshotRawSha256": "8ee2bd43b35137529e542ea926e8c06a5f9c7ca1d77d05bdcc6434378642e541",
+  "sourceFilesVerified": 138,
+  "immutableBaseline": "source5",
+  "qa5SealSha256": "655122adbf8d401c4fee77706cb33b31aebab40c48562e3d04118e817e863e9a",
+  "qa5FilesVerified": 44,
+  "legacyFailureInherited": "QA5 original1PASS3FAIL, actual source findings3; scripts/logs unchanged"
+}

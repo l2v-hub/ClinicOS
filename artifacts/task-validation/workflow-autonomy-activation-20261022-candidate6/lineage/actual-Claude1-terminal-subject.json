@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-22T23:48:35.097Z",
+  "stateSha": "01a676f3fc2281b16a1a86fb6ab4ce48366cd898",
+  "pr": 504,
+  "head": "ce7993a781bd2d378a1ca3ad2956b2c3606b4fe2",
+  "reviews": [
+    {
+      "round": 1,
+      "status": "changes-requested",
+      "subjectSha": "ce7993a781bd2d378a1ca3ad2956b2c3606b4fe2"
+    }
+  ],
+  "externalReview": {
+    "channel": "github-comments",
+    "status": "published",
+    "subjectSha": "ce7993a781bd2d378a1ca3ad2956b2c3606b4fe2",
+    "requestId": "8f2151a2-3e43-4117-9929-ef707244a407",
+    "requestedAt": "2026-10-22T23:34:14.381Z",
+    "requestedBy": "l2v-hub",
+    "owner": "l2v-hub",
+    "claimId": "9a98a5bd-7e80-4fdd-9ee6-e5ff45f5ca39",
+    "startedAt": "2026-10-22T23:39:08.506Z",
+    "feedbackFingerprint": "6b756c12b8008434eaf62c629d1bcb008dc17bce1a8b874dac8fdd72fa51cb7b",
+    "reportComment": 6353848644,
+    "reportBodySha256": "f4d87b533716ce163ea5fff27155dc1441617a40d2fcb85778d128bd2802807e",
+    "completedAt": "2026-10-22T23:47:58.335Z",
+    "feedbackChanged": false
+  },
+  "note": "Actual public report and durable source-bound imported history retained; native recovery tokens deliberately excluded."
+}
