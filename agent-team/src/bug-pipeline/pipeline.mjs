@@ -69,31 +69,97 @@ export async function runPipeline({
   if (automationPaused(state)) return state;
   let processingSubject = null;
   let persistenceFailed = false;
+  const ownershipLost = () =>
+    Object.assign(new Error('Automatic ownership changed during state reconciliation'), {
+      code: 'review-operator-owned',
+    });
+  const assertOwnership = (observed) => {
+    if (
+      automationPaused(observed) ||
+      (processingSubject &&
+        operatorOwns(
+          observed,
+          processingSubject.collection,
+          observed[processingSubject.collection]?.find(
+            (item) => item.id === processingSubject.id,
+          ) ?? processingSubject,
+        ))
+    )
+      throw ownershipLost();
+  };
+  const freshOwnership = async () => {
+    const observed = validateState(
+      (await (store.observe ? store.observe() : store.load())) ?? {
+        schemaVersion: 1,
+        repository: repo,
+        batches: [],
+      },
+      repo,
+    );
+    if (observed.standaloneReviews) validateStandaloneState(observed);
+    assertOwnership(observed);
+  };
+  const recoverOwnership = async (error) => {
+    if (persistenceFailed || error?.code !== 'review-operator-owned') return false;
+    // Discard unsaved work only for the finite, observed ownership-loss code.
+    // Uncertain writes and genuine CAS/integrity failures still halt the pass.
+    state = validateState(await store.load(), repo);
+    if (state.standaloneReviews) validateStandaloneState(state);
+    return true;
+  };
+  const guarded = (target, methods) =>
+    new Proxy(target, {
+      get(object, key) {
+        const value = object[key];
+        if (!methods.includes(key) || typeof value !== 'function') return value;
+        return async (...args) => {
+          await freshOwnership();
+          return value.apply(object, args);
+        };
+      },
+    });
+  // Every asynchronous model/effect boundary re-reads ownership, including internal
+  // feedback/review correction paths and prebuilt workspace implementations.
+  workspace = guarded(workspace, [
+    'prepare',
+    'execute',
+    'verify',
+    'simplify',
+    'qa',
+    'finalQa',
+    'checkpoint',
+    'publish',
+    'review',
+    'issueEvidence',
+  ]);
+  gh = guarded(gh, [
+    'intake',
+    'discoverQueue',
+    'setIssueStatus',
+    'commentIssue',
+    'commentPR',
+    'createDraft',
+  ]);
   const save = async (options) => {
     try {
+      await freshOwnership();
       if (state.standaloneReviews) validateStandaloneState(state);
       state.updatedAt = new Date().toISOString();
       return await store.save(state, {
         ...options,
+        checkFreshOwnership: (fresh) => {
+          validateState(fresh, repo);
+          if (fresh.standaloneReviews) validateStandaloneState(fresh);
+          assertOwnership(fresh);
+        },
         rebaseIndependentSubjects: (merged) => {
           validateState(merged, repo);
           if (merged.standaloneReviews) validateStandaloneState(merged);
-          if (
-            automationPaused(merged) ||
-            (processingSubject &&
-              operatorOwns(
-                merged,
-                processingSubject.collection,
-                merged[processingSubject.collection]?.find(
-                  (item) => item.id === processingSubject.id,
-                ) ?? processingSubject,
-              ))
-          )
-            throw new Error('Automatic ownership changed during state reconciliation');
+          assertOwnership(merged);
         },
       });
     } catch (error) {
-      persistenceFailed = true;
+      if (error?.code !== 'review-operator-owned') persistenceFailed = true;
       throw error;
     }
   };
@@ -154,7 +220,8 @@ export async function runPipeline({
           }
         } else {
           subject.phase = 'blocked';
-          subject.reason = 'Standalone identity, evidence or GitHub operation requires explicit recovery';
+          subject.reason =
+            'Standalone identity, evidence or GitHub operation requires explicit recovery';
           subject.failureCode = code;
           delete subject.failureOperation;
           if (['projection', 'merge', 'mutation', 'read'].includes(error.operation))
@@ -171,10 +238,12 @@ export async function runPipeline({
   processingSubject = null;
   if (automationPaused(state)) return state;
   const report = async (batch, text) => {
+    await freshOwnership();
     for (const n of batch.issues)
       await gh.commentIssue(n, `<!-- codex-bug-pipeline:status -->\n${text}`);
   };
   const block = async (batch, reason) => {
+    await freshOwnership();
     batch.phase = 'blocked';
     batch.reason = reason;
     await save();
@@ -189,11 +258,19 @@ export async function runPipeline({
   if (!event?.issue || !claimed.has(event.issue.number)) await gh.intake(event);
   // Only the protected release confirmation job publishes deployed completion.
   // It owns live demo credentials and retries durable pending publication without model work.
-  for (const batch of state.batches) {
+  for (const id of state.batches.map((batch) => batch.id)) {
+    const batch = state.batches.find((batch) => batch.id === id);
     if (operatorOwns(state, 'batches', batch) || batch.release?.status === 'deployed') continue;
+    processingSubject = { collection: 'batches', id };
     const status = batch.phase === 'blocked' ? 'Bloccato' : 'In progress';
-    for (const number of batch.issues) await gh.setIssueStatus(number, status);
+    try {
+      for (const number of batch.issues) await gh.setIssueStatus(number, status);
+    } catch (error) {
+      if (!(await recoverOwnership(error))) throw error;
+    }
   }
+  processingSubject = null;
+  if (automationPaused(state)) return state;
   const queue = await gh.discoverQueue({
     normalize: true,
     excludeIssues: [...claimed],
@@ -270,6 +347,7 @@ export async function runPipeline({
     state.pendingTriage.status = 'running';
     await save();
     assertSelectedUnclaimed();
+    await freshOwnership();
     const plan = validatePlan(
       await models.plan({
         cwd: workspace.root,
@@ -336,81 +414,85 @@ export async function runPipeline({
         '<!-- codex-bug-pipeline:status -->\n**BLOCKED** — il triage richiede informazioni essenziali. Nessuna implementazione avviata.',
       );
   }
-  for (const batch of state.batches) {
-    if (operatorOwns(state, 'batches', batch)) continue;
+  for (const id of state.batches.map((batch) => batch.id)) {
+    const batch = state.batches.find((batch) => batch.id === id);
+    if (!batch || operatorOwns(state, 'batches', batch)) continue;
     processingSubject = { collection: 'batches', id: batch.id };
-    if (['merged', 'deployed'].includes(batch.release?.status)) continue;
-    if (batch.phase === 'blocked') continue;
-    if (reviewMode === 'external' && batch.externalReview?.status === 'running') continue;
-    if (reviewMode === 'external' && batch.pr) {
-      try {
-        await externalReviewStep({
-          repo,
-          batch,
-          gh,
-          workspace,
-          save,
-          report,
-          block,
-        });
-      } catch (error) {
-        if (persistenceFailed)
-          throw new Error('External review reconciliation persistence failed', {
-            cause: error,
+    try {
+      if (['merged', 'deployed'].includes(batch.release?.status)) continue;
+      if (batch.phase === 'blocked') continue;
+      if (reviewMode === 'external' && batch.externalReview?.status === 'running') continue;
+      if (reviewMode === 'external' && batch.pr) {
+        try {
+          await externalReviewStep({
+            repo,
+            batch,
+            gh,
+            workspace,
+            save,
+            report,
+            block,
           });
-        batch.failureCode = controllerFailureCode(error);
+        } catch (error) {
+          if (await recoverOwnership(error)) continue;
+          if (persistenceFailed)
+            throw new Error('External review reconciliation persistence failed', {
+              cause: error,
+            });
+          batch.failureCode = controllerFailureCode(error);
+          await block(
+            batch,
+            'External review consistency or correction failed; inspect the existing batch',
+          );
+        }
+        continue;
+      }
+      if (
+        activeImplementation(batch) ||
+        batch.reviews.some((a) => a.status === 'running') ||
+        ['implementing', 'simplifying', 'validating', 'publishing', 'reviewing'].includes(
+          batch.phase,
+        )
+      ) {
         await block(
           batch,
-          'External review consistency or correction failed; inspect the existing batch',
+          'Previous execution interrupted; operator recovery required on the existing batch',
         );
-      }
-      continue;
-    }
-    if (
-      activeImplementation(batch) ||
-      batch.reviews.some((a) => a.status === 'running') ||
-      ['implementing', 'simplifying', 'validating', 'publishing', 'reviewing'].includes(batch.phase)
-    ) {
-      await block(
-        batch,
-        'Previous execution interrupted; operator recovery required on the existing batch',
-      );
-      continue;
-    }
-    let feedback = null;
-    if (batch.pr) {
-      feedback = await gh.reviewFeedback(batch.pr.number);
-      if (
-        String(feedback.state).toUpperCase() !== 'OPEN' ||
-        feedback.headRef !== batch.branch ||
-        feedback.baseRef !== 'main' ||
-        feedback.headIsFork ||
-        feedback.headRepo !== repo ||
-        feedback.head !== batch.sha
-      ) {
-        await block(batch, 'PR identity or head changed outside the controller');
         continue;
       }
-      const fingerprint = feedbackFingerprint(feedback);
-      if (
-        ['ready', 'waiting-checks'].includes(batch.phase) &&
-        fingerprint === batch.feedbackFingerprint &&
-        batch.approvedSha === batch.sha
-      ) {
-        const checks = await gh.requiredChecks(batch.pr.number);
-        batch.phase =
-          checks.ok && !feedback.unresolved && !feedback.changesRequested
-            ? 'ready'
-            : 'waiting-checks';
-        await save();
-        continue;
+      let feedback = null;
+      if (batch.pr) {
+        feedback = await gh.reviewFeedback(batch.pr.number);
+        if (
+          String(feedback.state).toUpperCase() !== 'OPEN' ||
+          feedback.headRef !== batch.branch ||
+          feedback.baseRef !== 'main' ||
+          feedback.headIsFork ||
+          feedback.headRepo !== repo ||
+          feedback.head !== batch.sha
+        ) {
+          await block(batch, 'PR identity or head changed outside the controller');
+          continue;
+        }
+        const fingerprint = feedbackFingerprint(feedback);
+        if (
+          ['ready', 'waiting-checks'].includes(batch.phase) &&
+          fingerprint === batch.feedbackFingerprint &&
+          batch.approvedSha === batch.sha
+        ) {
+          const checks = await gh.requiredChecks(batch.pr.number);
+          batch.phase =
+            checks.ok && !feedback.unresolved && !feedback.changesRequested
+              ? 'ready'
+              : 'waiting-checks';
+          await save();
+          continue;
+        }
+        if (batch.reviews.length >= attemptLimit(batch, 'reviews')) {
+          await block(batch, 'Four-review limit reached; new comments cannot restart the budget');
+          continue;
+        }
       }
-      if (batch.reviews.length >= attemptLimit(batch, 'reviews')) {
-        await block(batch, 'Four-review limit reached; new comments cannot restart the budget');
-        continue;
-      }
-    }
-    try {
       // Recheck every issue before any model/worktree mutation, after grouping and on restart.
       for (const n of batch.issues) {
         const live = await gh.viewIssue(n);
@@ -451,7 +533,7 @@ export async function runPipeline({
             passed = true;
             break;
           } catch (error) {
-            if (persistenceFailed) throw error;
+            if (persistenceFailed || error?.code === 'review-operator-owned') throw error;
             attempt.status = 'failed';
             batch.lastFailure =
               'Implementation or required verification failed; inspect current local test-results.';
@@ -587,6 +669,7 @@ export async function runPipeline({
         await save();
       }
     } catch (error) {
+      if (await recoverOwnership(error)) continue;
       if (persistenceFailed) throw error;
       batch.failureCode = controllerFailureCode(error);
       for (const a of [...implementationAttempts(batch), ...batch.reviews])

@@ -205,3 +205,21 @@ una transazione atomica con la PR; le verifiche ripetute riducono finestre di co
 promettere atomicità del provider.
 
 Prompt completo da dare a Claude Max sul PC: [claude-local-review-prompt.md](claude-local-review-prompt.md).
+
+
+L'handback canonico `operatorTakeover.automation` richiede `enabled: true`,
+`mode: "new-unclaimed-only"`, `takeoverNonce` uguale al nonce non vuoto della presa in carico,
+`authorizedActor` non vuoto, `handedBackAt` come timestamp UTC ISO valido e `protectedSubjects`
+come elenco di identità `{collection, id}`. L'attore è un dato di audit registrato dal writer
+fidato dopo la verifica dei permessi, non una credenziale. Un nuovo takeover deve eliminare o
+sostituire il vecchio handback. Un grant ben formato ma riferito a un nonce precedente resta
+leggibile e sospende l'automazione; metadati malformati sono rifiutati dalla validazione.
+
+Per ogni approvazione esterna, anche senza canale commenti, il rilascio richiede una QA Codex
+`verified` sullo SHA fornito al rilascio, round Claude e fingerprint attuali. Una QA finale
+infrastrutturale fallita o interrotta conserva il record e può ripartire solo dopo il recupero
+esplicito di un eventuale blocco. Il registro separato `codexFinalQaInfrastructure.attempts`
+consente al massimo tre sessioni di inferenza prenotate per SHA/round/fingerprint: le attese dei
+check senza inferenza non consumano slot. Non consuma tentativi implementativi; soltanto un
+verdetto Codex con richieste di modifica avvia una correzione. Una sessione `running` non viene
+duplicata e l'esaurimento richiede recupero esplicito senza azzerare lo storico.

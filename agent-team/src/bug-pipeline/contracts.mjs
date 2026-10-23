@@ -1,5 +1,6 @@
 import { attemptLimit, validateOperatorContinuations } from './attempt-budget.mjs';
 import path from 'node:path';
+import { validAutomationHandback } from './operator-ownership.mjs';
 import { createHash } from 'node:crypto';
 import { validateAgainstSchema } from '../core/json-schema.mjs';
 import { sanitizeText } from '../core/sanitize.mjs';
@@ -206,6 +207,13 @@ export function validateState(state, repo) {
     state.batches.length > 1000
   )
     throw new Error('invalid durable pipeline state');
+  // Legacy takeovers without a handback stay valid and globally paused. A stale
+  // well-formed grant is also valid data, but cannot enable the new nonce.
+  if (
+    state.operatorTakeover?.automation !== undefined &&
+    !validAutomationHandback(state.operatorTakeover.automation)
+  )
+    throw new Error('invalid operator automation handback');
   const issues = new Set();
   for (const b of state.batches) {
     if (

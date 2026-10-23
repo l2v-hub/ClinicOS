@@ -8,14 +8,38 @@ const validIdentity = (entry) =>
   typeof entry.id === 'string' &&
   entry.id.length > 0;
 
+// Audit fields describe the authorized canonical handback; they never authenticate
+// a GitHub actor themselves. Only the trusted state writer may record this grant.
+export function validAutomationHandback(handback) {
+  return Boolean(
+    handback &&
+    typeof handback === 'object' &&
+    !Array.isArray(handback) &&
+    typeof handback.enabled === 'boolean' &&
+    handback.mode === 'new-unclaimed-only' &&
+    typeof handback.takeoverNonce === 'string' &&
+    handback.takeoverNonce.trim() &&
+    typeof handback.authorizedActor === 'string' &&
+    handback.authorizedActor.trim() &&
+    typeof handback.handedBackAt === 'string' &&
+    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(handback.handedBackAt) &&
+    Number.isFinite(Date.parse(handback.handedBackAt)) &&
+    new Date(handback.handedBackAt).toISOString().replace('.000Z', 'Z') ===
+      handback.handedBackAt.replace('.000Z', 'Z') &&
+    Array.isArray(handback.protectedSubjects) &&
+    handback.protectedSubjects.every(validIdentity),
+  );
+}
+
 export function automationPaused(state) {
   if (!state.operatorTakeover?.active) return false;
   const handback = state.operatorTakeover.automation;
   return !(
-    handback?.enabled === true &&
-    handback.mode === 'new-unclaimed-only' &&
-    Array.isArray(handback.protectedSubjects) &&
-    handback.protectedSubjects.every(validIdentity)
+    validAutomationHandback(handback) &&
+    handback.enabled === true &&
+    typeof state.operatorTakeover.nonce === 'string' &&
+    state.operatorTakeover.nonce.trim() &&
+    handback.takeoverNonce === state.operatorTakeover.nonce
   );
 }
 

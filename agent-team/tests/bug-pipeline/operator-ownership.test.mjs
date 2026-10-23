@@ -9,9 +9,13 @@ import {
 
 const handback = () => ({
   active: true,
+  nonce: 'test-takeover',
   automation: {
     enabled: true,
     mode: 'new-unclaimed-only',
+    takeoverNonce: 'test-takeover',
+    authorizedActor: 'maintainer',
+    handedBackAt: '2026-10-22T00:00:00Z',
     protectedSubjects: [],
   },
 });
@@ -112,4 +116,27 @@ test('all collections retain terminal claimed issues and nonterminal exact scope
     ],
   );
   assert.equal(JSON.stringify(state), before);
+});
+
+test('Claude1 F1 stale nonce and missing audit cannot replay an old handback', () => {
+  const takeover = {
+    active: true,
+    nonce: 'new-nonce',
+    automation: {
+      enabled: true,
+      mode: 'new-unclaimed-only',
+      protectedSubjects: [],
+      takeoverNonce: 'old-nonce',
+      authorizedActor: 'maintainer',
+      handedBackAt: '2026-10-22T00:00:00Z',
+    },
+  };
+  assert.equal(automationPaused({ operatorTakeover: takeover }), true);
+  takeover.automation.takeoverNonce = takeover.nonce;
+  assert.equal(automationPaused({ operatorTakeover: takeover }), false);
+  for (const field of ['takeoverNonce', 'authorizedActor', 'handedBackAt']) {
+    const invalid = structuredClone(takeover);
+    delete invalid.automation[field];
+    assert.equal(automationPaused({ operatorTakeover: invalid }), true);
+  }
 });

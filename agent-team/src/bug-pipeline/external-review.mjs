@@ -67,6 +67,7 @@ async function runExternalReviewStep({
     await block(batch, reason);
     await notify();
   };
+  if (batch.phase === 'blocked') return notify();
   if (batch.externalReview?.channel === 'github-comments') {
     const receiver = createCommentReviewHandoff({
       automatic: () => true,
@@ -130,7 +131,7 @@ async function runExternalReviewStep({
         prior.subjectSha !== batch.sha ||
         prior.claudeRound !== batch.reviews.length ||
         prior.feedbackFingerprint !== fingerprint ||
-        prior.status === 'waiting-checks'
+        ['waiting-checks', 'failed', 'blocked'].includes(prior.status)
       ) {
         if (prior) {
           batch.codexFinalReviewHistory ??= [];
@@ -169,19 +170,63 @@ async function runExternalReviewStep({
           await save();
           return notify();
         }
+        // Count durably reserved inference sessions, not identity/check polling.
+        // This allowance is independent of the implementation correction budget.
+        const infrastructure = (batch.codexFinalQaInfrastructure ??= { attempts: [] });
+        const matches = (entry) =>
+          entry.subjectSha === batch.sha &&
+          entry.claudeRound === batch.reviews.length &&
+          entry.feedbackFingerprint === fingerprint;
+        // A legacy failed session already represents one spent inference; do not
+        // silently erase that fact when introducing the separate retry ledger.
+        if (
+          prior?.status === 'failed' &&
+          matches(prior) &&
+          !infrastructure.attempts.some((entry) => entry.nonce === prior.nonce)
+        )
+          infrastructure.attempts.push({ ...prior, legacy: true });
+        if (infrastructure.attempts.filter(matches).length >= 3) {
+          batch.codexFinalReview.status = 'blocked';
+          batch.codexFinalReview.failureCode = 'final-qa-infrastructure-exhausted';
+          await save();
+          return blocked(
+            'Independent final QA infrastructure allowance exhausted; explicit recovery required',
+          );
+        }
+        const inference = {
+          nonce: batch.codexFinalReview.nonce,
+          subjectSha: batch.sha,
+          claudeRound: batch.reviews.length,
+          feedbackFingerprint: fingerprint,
+          reservedAt: new Date().toISOString(),
+          status: 'running',
+        };
+        infrastructure.attempts.push(inference);
+        await save();
         try {
           const qa = await workspace.finalQa(batch);
+          if (
+            !['verified', 'blocked', 'changes-requested'].includes(qa?.status) ||
+            typeof qa.summary !== 'string' ||
+            !qa.summary.trim()
+          )
+            throw new Error('Independent final QA returned no usable verdict');
           batch.codexFinalReview.status =
             qa.status === 'verified' ? 'verified' : 'changes-requested';
           batch.codexFinalReview.summary = qa.summary;
+          inference.status = batch.codexFinalReview.status;
         } catch (error) {
+          if (error?.code === 'review-operator-owned') throw error;
+          inference.status = 'failed';
           batch.codexFinalReview.status = 'failed';
           await save();
           throw error;
         }
         await save();
       }
-      changed = batch.codexFinalReview.status !== 'verified';
+      if (!['verified', 'changes-requested'].includes(batch.codexFinalReview.status))
+        return blocked('Independent final QA is unavailable; explicit recovery required');
+      changed = batch.codexFinalReview.status === 'changes-requested';
       const current = await gh.reviewFeedback(batch.pr.number);
       if (
         current.state !== 'OPEN' ||

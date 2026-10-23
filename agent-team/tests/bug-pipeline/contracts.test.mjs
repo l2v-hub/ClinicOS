@@ -257,3 +257,41 @@ test('plan requires screenshot and Playwright trace evidence for each source iss
     /per-issue acceptance\/evidence coverage is incomplete/,
   );
 });
+
+test('Claude1 F1 canonical handback schema preserves legacy/stale grants but rejects malformed audit', () => {
+  const state = {
+    schemaVersion: 1,
+    repository: 'l2v-hub/ClinicOS',
+    batches: [],
+    operatorTakeover: { active: true, nonce: 'new' },
+  };
+  assert.equal(validateState(state, state.repository), state);
+  const valid = {
+    enabled: true,
+    mode: 'new-unclaimed-only',
+    takeoverNonce: 'old',
+    authorizedActor: 'maintainer',
+    handedBackAt: '2026-10-22T00:00:00Z',
+    protectedSubjects: [],
+  };
+  state.operatorTakeover.automation = valid;
+  assert.equal(
+    validateState(state, state.repository),
+    state,
+    'stale identity is valid data, but never grants authority',
+  );
+  for (const patch of [
+    { takeoverNonce: '' },
+    { authorizedActor: ' ' },
+    { handedBackAt: '2026-02-30T00:00:00Z' },
+    { handedBackAt: 'yesterday' },
+    { protectedSubjects: [{ collection: 'unknown', id: 'x' }] },
+    { enabled: 'true' },
+  ]) {
+    state.operatorTakeover.automation = { ...valid, ...patch };
+    assert.throws(
+      () => validateState(state, state.repository),
+      /invalid operator automation handback/,
+    );
+  }
+});

@@ -666,7 +666,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       return state;
     }
 
-    async function save(state, { guard, rebaseIndependentSubjects } = {}) {
+    async function save(state, { guard, rebaseIndependentSubjects, checkFreshOwnership } = {}) {
       if (!loaded) throw new Error('load durable state before saving (optimistic concurrency)');
       if (state === null || typeof state !== 'object' || Array.isArray(state)) {
         throw new TypeError('state must be a JSON object');
@@ -676,6 +676,8 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
         typeof rebaseIndependentSubjects !== 'function'
       )
         throw new TypeError('Independent subject rebase requires a full state validator');
+      if (checkFreshOwnership !== undefined && typeof checkFreshOwnership !== 'function')
+        throw new TypeError('Fresh ownership check must be a function');
       const expectedFileSHA = fileSHA,
         originalBase = structuredClone(persistedBase);
       // Freeze both intended data and its actual persisted base BEFORE any validator/guard await.
@@ -728,10 +730,25 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
             throw stateError('state-cas-conflict', 'Durable state compare-and-swap conflict');
           const fresh = await load();
           const freshSHA = fileSHA; // A subsequent validator or guard load cannot promote this body.
+          // A known rejected409 permits observing the validated remote owner before
+          // an entity merge. This narrow hook cannot turn uncertain writes into skips.
+          if (checkFreshOwnership) {
+            try {
+              await checkFreshOwnership(structuredClone(fresh));
+            } catch (error) {
+              if (error?.code === 'review-operator-owned') throw error;
+              throw stateError(
+                'state-rebase-invalid',
+                'Fresh durable state failed ownership validation',
+                error,
+              );
+            }
+          }
           candidate = mergeIndependentEntities(originalBase, intended, fresh);
           try {
             await rebaseIndependentSubjects(structuredClone(candidate));
           } catch (error) {
+            if (error?.code === 'review-operator-owned') throw error;
             throw stateError(
               'state-rebase-invalid',
               'Merged durable state failed full validation',
@@ -750,7 +767,9 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       }
     }
 
-    return { load, save };
+    // Fresh ownership observations never promote this writer's expected Contents
+    // SHA or base snapshot. A later save must still reconcile a real remote CAS.
+    return { load, save, observe: () => createStateStore().load() };
   }
 
   async function createDraft({ branch, title, body }) {

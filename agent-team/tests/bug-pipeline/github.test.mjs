@@ -2264,3 +2264,97 @@ test('malformed queue exclusions fail closed before any GitHub read or label wri
   ])
     await assert.rejects(gh.discoverQueue({ normalize: true, excludeIssues }), /Invalid excluded/);
 });
+
+test('Claude1 F5 read-only observation never promotes a writer base or bypasses native409', async () => {
+  const f = stateBlobFixture(entityState());
+  const ours = await f.store.load();
+  ours.batches[0].local = 'pending';
+  const remote = entityState();
+  remote.batches[1].remote = 'preserved';
+  f.setRaw(Buffer.from(JSON.stringify(remote)));
+  assert.equal((await f.store.observe()).batches[1].remote, 'preserved');
+  await f.store.save(ours, { rebaseIndependentSubjects: entityValidator });
+  assert.equal(f.writes.length, 2, 'old writer SHA must receive native409 before rebase');
+  assert.notEqual(f.writes[0].sha, f.writes[1].sha);
+  const actual = await f.store.load();
+  assert.equal(actual.batches[1].remote, 'preserved');
+  assert.equal(actual.batches[0].local, 'pending');
+});
+
+test('Claude1 F5 native state store preserves finite ownership code instead of generic rebase error', async () => {
+  const f = stateBlobFixture(entityState());
+  const ours = await f.store.load();
+  ours.batches[0].local = true;
+  const remote = entityState();
+  remote.operatorTakeover = { active: true };
+  f.setRaw(Buffer.from(JSON.stringify(remote)));
+  await assert.rejects(
+    f.store.save(ours, {
+      rebaseIndependentSubjects: (state) => {
+        if (state.operatorTakeover)
+          throw Object.assign(new Error('observed ownership'), { code: 'review-operator-owned' });
+      },
+    }),
+    (error) => error.code === 'review-operator-owned',
+  );
+  assert.equal(f.writes.length, 1);
+  assert.deepEqual(await f.store.load(), remote);
+});
+
+test('Claude1 F5 fresh owner hook never forgives unowned same-entity conflicts or malformed canonical data', async () => {
+  for (const target of ['a', 'b', 'malformed']) {
+    const f = stateBlobFixture(entityState());
+    const ours = await f.store.load();
+    const index = target === 'b' ? 1 : 0;
+    ours.batches[index].local = 'pending';
+    const remote = entityState();
+    if (target === 'malformed') remote.batches = 'invalid';
+    else remote.batches[index].remote = 'canonical concurrent data';
+    f.setRaw(Buffer.from(JSON.stringify(remote)));
+    let ownershipChecks = 0;
+    await assert.rejects(
+      f.store.save(ours, {
+        checkFreshOwnership: (fresh) => {
+          ownershipChecks++;
+          entityValidator(fresh);
+        },
+        rebaseIndependentSubjects: entityValidator,
+      }),
+      (error) =>
+        error.code === (target === 'malformed' ? 'state-rebase-invalid' : 'state-rebase-conflict'),
+    );
+    assert.equal(ownershipChecks, 1);
+    assert.equal(f.writes.length, 1);
+    assert.deepEqual(await f.store.load(), remote);
+  }
+});
+
+test('Claude1 F5 fresh owner hook is never used after auth failures, definite rejection or uncertain writes', async () => {
+  for (const failure of [
+    { ok: false, code: 1, stderr: 'HTTP 403 Forbidden' },
+    { ok: false, code: 1, stderr: 'HTTP 502 Bad Gateway' },
+    { ok: false, code: 1, stderr: '', error: 'timeout' },
+  ]) {
+    const f = stateBlobFixture(entityState());
+    const store = createGitHub({
+      cwd: '/tmp',
+      repo: 'l2v-hub/ClinicOS',
+      run: async (call) => (call.args.includes('PUT') ? response({}, failure) : f.run(call)),
+    }).createStateStore();
+    const ours = await store.load();
+    ours.batches[0].local = true;
+    let ownershipChecks = 0;
+    await assert.rejects(
+      store.save(ours, {
+        rebaseIndependentSubjects: entityValidator,
+        checkFreshOwnership: () => {
+          ownershipChecks++;
+          throw Object.assign(new Error('not observed'), { code: 'review-operator-owned' });
+        },
+      }),
+      (error) => ['state-write-failed', 'state-write-uncertain'].includes(error.code),
+    );
+    assert.equal(ownershipChecks, 0);
+    assert.deepEqual(await store.load(), entityState());
+  }
+});

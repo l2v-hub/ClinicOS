@@ -139,6 +139,7 @@ export function selectAutoReleaseBatch(state) {
           !batch.releaseBlock &&
           batch.sha &&
           batch.approvedSha === batch.sha &&
+          hasFinalCodexProof(batch, batch.sha) &&
           (batch.release?.status !== 'deployed' || !publicationComplete(batch)),
       )
       .sort((a, b) => Math.min(...a.issues) - Math.min(...b.issues))[0] ?? null
@@ -197,7 +198,30 @@ function validateIssuePullUrl(url, repo, number) {
   }
 }
 
+function hasFinalCodexProof(batch, sha) {
+  // Both comment handoffs and the original external worker persist externalReview;
+  // the channel value is not an authorization switch.
+  if (!batch.externalReview) return true;
+  const proof = batch.codexFinalReview;
+  return Boolean(
+    proof?.status === 'verified' &&
+    proof.subjectSha === sha &&
+    sha === batch.sha &&
+    proof.claudeRound === batch.reviews.length &&
+    typeof batch.feedbackFingerprint === 'string' &&
+    batch.feedbackFingerprint.length > 0 &&
+    proof.feedbackFingerprint === batch.feedbackFingerprint &&
+    batch.externalReview.subjectSha === sha &&
+    batch.externalReview.feedbackFingerprint === batch.feedbackFingerprint,
+  );
+}
+function verifyFinalCodexProof(batch, sha) {
+  if (!hasFinalCodexProof(batch, sha))
+    fail('external review requires verified final Codex proof for this SHA, round and feedback');
+}
+
 function verifyReviewProof(batch, sha) {
+  verifyFinalCodexProof(batch, sha);
   const lastReview = batch.reviews.at(-1);
   if (
     !lastReview ||
@@ -392,6 +416,7 @@ function freshReleaseGuard({ batch, store, repo, automatic = false }) {
     const current = state ? state.batches.find((item) => item.id === batchId) : batch;
     if (state) assertAutomaticReleaseOwnership(state, current, automatic);
     assertNoReleaseHold(current);
+    if (current) verifyFinalCodexProof(current, current.sha);
     if (!current || releaseSubject(current) !== expected)
       fail('verified release identity changed during asynchronous verification');
     return { state, current };
@@ -622,6 +647,7 @@ export async function releaseBatch({
   if (!batch) fail('batch is absent from durable state');
   assertAutomaticReleaseOwnership(initial, batch, automatic);
   assertNoReleaseHold(batch);
+  verifyFinalCodexProof(batch, reviewedSha);
   assertSavedPolicy(batch, sourcePolicy);
   let guard = freshReleaseGuard({ batch, store, repo, automatic });
   const exact = sourcePolicy === DEMO_SOURCE_POLICIES.exact;

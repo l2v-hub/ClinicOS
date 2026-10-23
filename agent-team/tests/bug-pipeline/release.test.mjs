@@ -2600,14 +2600,22 @@ async function lateRetirementFixture() {
   await assert.rejects(releaseBatch(exactInput(f)), /rejected POST/);
   const original = structuredClone(f.getSaved().batches[0]);
   const old = original.exactDemoDispatches.preflight;
-  offset = Math.max(Date.parse(old.intentAt), Date.parse(original.releaseBlock.at)) +
-    DISPATCH_SETTLE_MS + 1 - Date.now();
+  offset =
+    Math.max(Date.parse(old.intentAt), Date.parse(original.releaseBlock.at)) +
+    DISPATCH_SETTLE_MS +
+    1 -
+    Date.now();
   await recoverExactRelease({ ...recoveryInput(f), now: clock });
   const noRunArchive = structuredClone(f.getSaved().batches[0].exactReleaseRecoveries[0]);
-  const late = { id: 899, run_attempt: 1, head_sha: old.sha, head_branch: 'main',
+  const late = {
+    id: 899,
+    run_attempt: 1,
+    head_sha: old.sha,
+    head_branch: 'main',
     repository: { full_name: f.state.repository },
     head_repository: { full_name: f.state.repository },
-    path: '.github/workflows/deploy-demo-exact-commit.yml', event: 'workflow_dispatch',
+    path: '.github/workflows/deploy-demo-exact-commit.yml',
+    event: 'workflow_dispatch',
     display_title: `demo-exact preflight ${old.sha} ${old.dispatchId}`,
     status: 'in_progress',
     conclusion: null,
@@ -2628,7 +2636,8 @@ test('controller recovery absorbs a completed late no-run dispatch, permits exac
   const request = { ...recoveryInput(f), now: f.clock };
   await assert.rejects(recoverExactRelease(request), /active old dispatch/);
   assert.equal(f.getSaved().batches[0].exactReleaseRecoveries.length, 1);
-  f.late.status = 'completed'; f.late.conclusion = 'success';
+  f.late.status = 'completed';
+  f.late.conclusion = 'success';
   await recoverExactRelease(request);
   let batch = f.getSaved().batches[0];
   assert.deepEqual(batch.exactReleaseRecoveries[0], f.noRunArchive);
@@ -2639,23 +2648,28 @@ test('controller recovery absorbs a completed late no-run dispatch, permits exac
   assert.equal(proof[0].dispatchId, f.old.dispatchId);
   assert.equal(proof[0].run.conclusion, 'success');
   const exclusions = structuredClone(batch.exactDemoRecovery);
-  const ensure = () => f.dispatcher.ensure({ operation: 'preflight',
-    expectedSha: f.old.sha, progress: f.getSaved().batches[0].exactDemoDispatches?.preflight,
-    excludedRunIds: exclusions.excludedRunIds,
-    excludedDispatchIds: exclusions.excludedDispatchIds,
-    excludedDispatches: exclusions.excludedDispatches,
-    saveProgress: async (progress) => {
-      const state = await f.store.load();
-      state.batches[0].exactDemoDispatches.preflight = progress;
-      await f.store.save(state);
-    },
-  });
+  const ensure = () =>
+    f.dispatcher.ensure({
+      operation: 'preflight',
+      expectedSha: f.old.sha,
+      progress: f.getSaved().batches[0].exactDemoDispatches?.preflight,
+      excludedRunIds: exclusions.excludedRunIds,
+      excludedDispatchIds: exclusions.excludedDispatchIds,
+      excludedDispatches: exclusions.excludedDispatches,
+      saveProgress: async (progress) => {
+        const state = await f.store.load();
+        state.batches[0].exactDemoDispatches.preflight = progress;
+        await f.store.save(state);
+      },
+    });
   await ensure();
   await ensure();
   assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 1);
   const artifact = f.reader.artifact;
   f.reader.artifact = async (...args) => {
-    const value = await artifact(...args); value.receipt.verifiedAt = '2020-01-01'; return value;
+    const value = await artifact(...args);
+    value.receipt.verifiedAt = '2020-01-01';
+    return value;
   };
   await assert.rejects(releaseBatch(exactInput(f)), /expired/);
   f.reader.artifact = artifact;
@@ -2693,7 +2707,8 @@ test('late retirement controller refuses ambiguous, malformed, incomplete or cha
   ])
     await t.test(mode, async () => {
       const f = await lateRetirementFixture();
-      f.late.status = 'completed'; f.late.conclusion = 'success';
+      f.late.status = 'completed';
+      f.late.conclusion = 'success';
       const before = structuredClone(f.getSaved().batches[0]);
       if (mode === 'ambiguous') f.runs.push({ ...f.late, id: 898 });
       if (mode === 'head repository') f.late.head_repository = { full_name: 'foreign/repo' };
@@ -2718,13 +2733,17 @@ test('late retirement controller refuses ambiguous, malformed, incomplete or cha
         const save = f.store.save;
         f.store.save = async (value, options) => {
           reachedSave = true;
-          if (mode === 'save active') { f.late.status = 'in_progress'; f.late.conclusion = null; }
+          if (mode === 'save active') {
+            f.late.status = 'in_progress';
+            f.late.conclusion = null;
+          }
           if (mode === 'save conclusion') f.late.conclusion = 'failure';
           if (mode === 'save disappeared') f.runs.length = 0;
           if (mode === 'save duplicate') f.runs.push({ ...f.late, id: 898 });
           if (mode === 'save main') f.setMain('e'.repeat(40));
           if (mode === 'save block') f.getSaved().batches[0].releaseBlock.id = 'changed';
-          if (mode === 'save authorization') f.github.authorizeReleaseRecovery = async () => 'foreign';
+          if (mode === 'save authorization')
+            f.github.authorizeReleaseRecovery = async () => 'foreign';
           if (mode === 'save original no-run proof')
             f.getSaved().batches[0].exactReleaseRecoveries[0].retirementProof.noRunProofs[0].originAt =
               '2020-01-01T00:00:00.000Z';
@@ -2744,7 +2763,8 @@ test('known late run disappearance or proof drift blocks both later recovery and
   for (const mode of ['missing', 'identity', 'attempt', 'conclusion', 'detail drift'])
     await t.test(mode, async () => {
       const f = await lateRetirementFixture();
-      f.late.status = 'completed'; f.late.conclusion = 'success';
+      f.late.status = 'completed';
+      f.late.conclusion = 'success';
       await recoverExactRelease({ ...recoveryInput(f), now: f.clock });
       const savedArchive = structuredClone(f.getSaved().batches[0].exactReleaseRecoveries[0]);
       if (mode === 'missing') f.runs.length = 0;
@@ -2785,9 +2805,12 @@ test('recovery refuses orphan excluded dispatch descriptors even with no current
 test('automatic release honors global pause, explicit subject handback and independent active operator holds', () => {
   const f = fixture();
   const before = JSON.stringify(f.batch);
-  f.state.operatorTakeover = { active: true };
+  f.state.operatorTakeover = { active: true, nonce: 'test-takeover' };
   assert.equal(selectAutoReleaseBatch(f.state), null);
   f.state.operatorTakeover.automation = {
+    takeoverNonce: 'test-takeover',
+    authorizedActor: 'maintainer',
+    handedBackAt: '2026-10-22T00:00:00Z',
     enabled: true,
     mode: 'new-unclaimed-only',
     protectedSubjects: [],
@@ -2947,4 +2970,119 @@ test('automatic completion publication uses fresh ownership guards and retains p
   );
   assert.deepEqual(f.getSaved(), before);
   assert.deepEqual(f.calls.slice(count), []);
+});
+
+test('Claude1 F2 external release requires exact final Codex proof at selection and execution', async () => {
+  for (const channel of ['github-comments', 'legacy-worker']) {
+    for (const mismatch of [
+      'missing',
+      'failed',
+      'subjectSha',
+      'claudeRound',
+      'feedbackFingerprint',
+    ]) {
+      const f = fixture();
+      f.batch.externalReview = {
+        channel,
+        status: 'published',
+        subjectSha: sha,
+        feedbackFingerprint: f.batch.feedbackFingerprint,
+      };
+      const proof = {
+        status: 'verified',
+        subjectSha: sha,
+        claudeRound: 1,
+        feedbackFingerprint: f.batch.feedbackFingerprint,
+      };
+      if (mismatch !== 'missing')
+        f.batch.codexFinalReview = {
+          ...proof,
+          [mismatch === 'failed' ? 'status' : mismatch]: mismatch === 'claudeRound' ? 0 : 'stale',
+        };
+      assert.equal(selectAutoReleaseBatch(f.state), null, `${channel}:${mismatch}`);
+      await assert.rejects(
+        releaseBatch({
+          repo: f.state.repository,
+          github: f.github,
+          store: f.store,
+          batchId: f.batch.id,
+          reviewedSha: sha,
+          configured,
+          execute: true,
+        }),
+        /final Codex/i,
+      );
+      assert.equal(f.calls.filter(([name]) => ['merge', 'ready', 'save'].includes(name)).length, 0);
+    }
+  }
+});
+
+function bindExternalFinalProof(f) {
+  f.batch.externalReview = {
+    status: 'published',
+    subjectSha: sha,
+    feedbackFingerprint: f.batch.feedbackFingerprint,
+  };
+  f.batch.codexFinalReview = {
+    status: 'verified',
+    subjectSha: sha,
+    claudeRound: f.batch.reviews.length,
+    feedbackFingerprint: f.batch.feedbackFingerprint,
+  };
+}
+test('Claude1 F2 matching existing final proof merges with all prior gates; fresh proof drift refuses', async () => {
+  const f = fixture();
+  bindExternalFinalProof(f);
+  assert.equal(selectAutoReleaseBatch(f.state), f.batch);
+  const result = await releaseBatch({
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    reviewedSha: sha,
+    configured,
+    execute: true,
+  });
+  assert.equal(result.status, 'merged');
+  assert.equal(f.calls.filter(([n]) => n === 'merge').length, 1);
+  const stale = fixture();
+  bindExternalFinalProof(stale);
+  const load = stale.store.load;
+  let reads = 0;
+  stale.store.load = async () => {
+    const state = await load();
+    if (++reads >= 2) state.batches[0].codexFinalReview.feedbackFingerprint = 'stale';
+    return state;
+  };
+  await assert.rejects(
+    releaseBatch({
+      repo: stale.state.repository,
+      github: stale.github,
+      store: stale.store,
+      batchId: stale.batch.id,
+      reviewedSha: sha,
+      configured,
+      execute: true,
+    }),
+    /final Codex/i,
+  );
+  assert.equal(stale.calls.filter(([n]) => ['merge', 'ready', 'save'].includes(n)).length, 0);
+});
+test('Claude1 F2 deployment recording cannot bypass missing final proof on an external candidate', async () => {
+  const f = fixture();
+  bindExternalFinalProof(f);
+  delete f.batch.codexFinalReview;
+  f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha };
+  await assert.rejects(
+    recordDeployment({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      mergeSha,
+      configured,
+    }),
+    /final Codex/i,
+  );
+  assert.equal(f.calls.length, 0);
 });

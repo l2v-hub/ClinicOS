@@ -907,7 +907,8 @@ test('actual controller defers pending backend completion to protected confirmat
   const protectedGh = {
     ...gh,
     // Synthetic metadata exercises the genuine verifier; this is not a provider deployment.
-    verifyProductionBackend: (input) => verifyProductionBackend({ ...input, reader: productionReader }),
+    verifyProductionBackend: (input) =>
+      verifyProductionBackend({ ...input, reader: productionReader }),
     verifyDemoRelease: async () => proof,
     reviewFeedback: async () =>
       openFeedback(batch, {
@@ -983,7 +984,15 @@ test('actual controller defers pending backend completion to protected confirmat
 
 const takeoverHandback = (protectedSubjects = []) => ({
   active: true,
-  automation: { enabled: true, mode: 'new-unclaimed-only', protectedSubjects },
+  nonce: 'test-takeover',
+  automation: {
+    enabled: true,
+    mode: 'new-unclaimed-only',
+    protectedSubjects,
+    takeoverNonce: 'test-takeover',
+    authorizedActor: 'maintainer',
+    handedBackAt: '2026-10-22T00:00:00Z',
+  },
 });
 
 function ownedStandalone(number = 99, issues = [90]) {
@@ -1178,7 +1187,8 @@ test('CAS ownership acquired on the current batch rejects its pending reservatio
     }
     return save(value);
   };
-  await assert.rejects(h.run(), /Automatic ownership changed/);
+  const result = await h.run();
+  assert.deepEqual(result, remoteOwned);
   assert.equal(h.counts.execute, 0);
   assert.deepEqual(h.stateRef.value, remoteOwned);
   assert.equal(remoteOwned.batches[0].implementation.length, 0);
@@ -1219,4 +1229,163 @@ test('successful triage CAS handover prevents issue status writes before the lat
     assert.deepEqual(h.stateRef.value.manualBatches, [owner]);
     assert.equal(h.stateRef.value.batches.length, 0);
   }
+});
+
+test('Claude1 F4 takeover during QA prevents every later internal publication path', async () => {
+  for (const mode of ['initial', 'pr-feedback', 'review-correction']) {
+    const b = batchFor({ issues: [17], phase: 'waiting-checks' });
+    b.feedbackFingerprint = feedbackFingerprint(openFeedback(b));
+    const h = harness({
+      issues: [17],
+      queue: [],
+      initialState: mode === 'initial' ? blankState() : { ...blankState(), batches: [b] },
+      reviews:
+        mode === 'review-correction'
+          ? [{ verdict: 'changes-requested', summary: 'fix', findings: [{}] }]
+          : [],
+    });
+    if (mode === 'initial') h.gh.discoverQueue = async () => [17];
+    if (mode === 'pr-feedback')
+      h.gh.reviewFeedback = async () =>
+        openFeedback(b, { comments: [{ id: 1, body: 'Fix state', user: { login: 'human' } }] });
+    let observed = false,
+      frozen,
+      after = [];
+    h.workspace.qa = async () => {
+      frozen = clone(h.stateRef.value.batches[0]);
+      h.stateRef.value.operatorTakeover = { active: true, nonce: 'new-takeover' };
+      observed = true;
+      return { status: 'verified' };
+    };
+    for (const name of ['publish', 'checkpoint'])
+      h.workspace[name] = async () => {
+        if (observed) after.push(name);
+        return sha('b');
+      };
+    for (const name of ['commentIssue', 'commentPR', 'setIssueStatus', 'createDraft']) {
+      const old = h.gh[name];
+      h.gh[name] = async (...args) => {
+        if (observed) after.push(name);
+        return old(...args);
+      };
+    }
+    const result = await h.run();
+    assert.equal(observed, true, mode);
+    assert.deepEqual(after, [], mode);
+    assert.deepEqual(result.batches[0], frozen, mode);
+    assert.deepEqual(h.stateRef.value.batches[0], frozen, mode);
+  }
+});
+
+test('Claude1 F5 actual native409 partial handback skips A and completes B without overwriting A', async (t) => {
+  for (const mechanism of ['handback', 'subject'])
+    await t.test(mechanism, async () => {
+      const a = batchFor({ issues: [17], phase: 'waiting-checks' }),
+        b = batchFor({ issues: [18], phase: 'waiting-checks' });
+      b.pr = { number: 82, url: 'https://github.com/l2v-hub/ClinicOS/pull/82' };
+      for (const batch of [a, b])
+        batch.feedbackFingerprint = feedbackFingerprint(openFeedback(batch));
+      const h = harness({
+        issues: [17, 18],
+        queue: [],
+        initialState: { ...blankState(), batches: [a, b] },
+      });
+      let canonical = clone(h.stateRef.value),
+        injected = false,
+        frozenA,
+        puts = 0;
+      const { createHash } = await import('node:crypto');
+      const metadata = () => {
+        const bytes = Buffer.from(JSON.stringify(canonical));
+        return {
+          type: 'file',
+          encoding: 'base64',
+          size: bytes.length,
+          content: bytes.toString('base64'),
+          sha: createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex'),
+        };
+      };
+      const response = (value, extra = {}) => ({
+        ok: true,
+        code: 0,
+        stdout: JSON.stringify(value),
+        stderr: '',
+        ...extra,
+      });
+      const native = createGitHub({
+        cwd: '/tmp',
+        repo,
+        run: async ({ args, input }) => {
+          if (args[1].includes('/git/ref/heads/')) return response({ object: { sha: sha('a') } });
+          if (args.includes('PUT')) {
+            puts++;
+            const body = JSON.parse(input);
+            const intended = JSON.parse(Buffer.from(body.content, 'base64'));
+            if (!injected && intended.batches[0].reviews.some((r) => r.status === 'running')) {
+              injected = true;
+              if (mechanism === 'subject') {
+                canonical.batches[0].operatorCoordination = { active: true, owner: 'maintainer' };
+                canonical.batches[0].operatorNote = 'Remote owner data must survive exactly';
+              }
+              frozenA = clone(canonical.batches[0]);
+              canonical.operatorTakeover = {
+                active: true,
+                nonce: 'takeover-1',
+                automation: {
+                  enabled: true,
+                  mode: 'new-unclaimed-only',
+                  takeoverNonce: 'takeover-1',
+                  authorizedActor: 'maintainer',
+                  handedBackAt: '2026-10-22T00:00:00Z',
+                  protectedSubjects: [{ collection: 'batches', id: a.id }],
+                },
+              };
+            }
+            if (body.sha !== metadata().sha)
+              return response({}, { ok: false, code: 1, stderr: 'HTTP 409 conflict' });
+            canonical = intended;
+            return response({ content: { sha: metadata().sha } });
+          }
+          if (args[1].includes('/contents/.codex-bug-state.json')) return response(metadata());
+          assert.fail('unexpected native fixture request ' + args[1]);
+        },
+      }).createStateStore();
+      h.store.load = () => native.load();
+      h.store.observe = () => native.observe();
+      h.store.save = (...args) => native.save(...args);
+      h.gh.reviewFeedback = async (number) =>
+        openFeedback(canonical.batches.find((x) => x.pr.number === number));
+      h.gh.commentPR = async () => {};
+      h.gh.requiredChecks = async () => ({ ok: true });
+      const reviewed = [];
+      h.workspace.review = async (batch) => {
+        reviewed.push(batch.id);
+        return {
+          subject_sha: batch.sha,
+          verdict: 'approved',
+          summary: 'Synthetic approval',
+          findings: [],
+        };
+      };
+      const result = await h.run();
+      assert.equal(injected, true);
+      assert.ok(puts >= 2);
+      assert.deepEqual(canonical.batches[0], frozenA);
+      assert.deepEqual(result.batches[0], frozenA);
+      assert.deepEqual(reviewed, [b.id]);
+      assert.equal(result.batches[1].phase, 'ready');
+      assert.equal(
+        h.log.some((x) => x === 'gh.setIssueStatus:17:Bloccato'),
+        false,
+      );
+    });
+});
+
+test('Claude1 F1 stale canonical handback pauses before intake, selection or any mutation', async () => {
+  const state = { ...blankState(), operatorTakeover: takeoverHandback() };
+  state.operatorTakeover.nonce = 'next-takeover';
+  const h = harness({ initialState: state });
+  assert.deepEqual(await h.run(), state);
+  assert.deepEqual(h.log, ['store.load']);
+  assert.equal(h.counts.plan, 0);
 });

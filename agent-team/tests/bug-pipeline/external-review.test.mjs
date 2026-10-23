@@ -940,3 +940,75 @@ test('automatic external comment handoff inherits ownership context before nativ
   assert.deepEqual(batch, before);
   assert.deepEqual(log, []);
 });
+
+test('Claude1 F3 recovered infrastructure failure retries only final QA and preserves code budget', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  const prior = {
+    status: 'failed',
+    subjectSha: batch.sha,
+    claudeRound: 1,
+    feedbackFingerprint: batch.externalReview.feedbackFingerprint,
+    nonce: 'prior-failed',
+    reservedAt: '2026-10-22T00:00:00Z',
+  };
+  batch.codexFinalReview = structuredClone(prior);
+  args.workspace.execute = async () => assert.fail('infrastructure retry must not implement');
+  await externalReviewStep(args);
+  assert.equal(log.filter((x) => x === 'qa').length, 1);
+  assert.equal(batch.phase, 'ready');
+  assert.equal(batch.implementation.length, 1);
+  assert.deepEqual(batch.codexFinalReviewHistory, [prior]);
+});
+
+test('Claude1 F3 final-QA inference retries are durably bounded independently of implementation', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  const before = structuredClone(batch.implementation);
+  let calls = 0;
+  args.workspace.finalQa = async () => {
+    calls++;
+    throw new Error('bounded infrastructure outage');
+  };
+  args.workspace.execute = async () => assert.fail('infrastructure never implements');
+  for (let n = 0; n < 3; n++) {
+    batch.phase = 'waiting-review'; // Explicit operator recovery, never an automatic unblock.
+    await assert.rejects(externalReviewStep(args), /bounded infrastructure outage/);
+    assert.equal(batch.codexFinalQaInfrastructure.attempts.length, n + 1);
+    assert.ok(batch.codexFinalQaInfrastructure.attempts.every((x) => x.status === 'failed'));
+  }
+  batch.phase = 'waiting-review';
+  await externalReviewStep(args);
+  assert.equal(calls, 3);
+  assert.equal(batch.codexFinalReview.failureCode, 'final-qa-infrastructure-exhausted');
+  assert.equal(batch.phase, 'blocked');
+  assert.deepEqual(batch.implementation, before);
+  const history = structuredClone(batch.codexFinalReviewHistory);
+  await externalReviewStep(args);
+  assert.equal(calls, 3);
+  assert.deepEqual(batch.codexFinalReviewHistory, history);
+  assert.equal(log.includes('correction'), false);
+});
+test('Claude1 F3 waiting checks and pre-inference identity polling spend no infrastructure inference slots', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  let waiting = true;
+  args.workspace.prepare = async () => {};
+  let checks = 0;
+  args.gh.requiredChecks = async () => ({ ok: ++checks % 2 === 1 || !waiting });
+  for (let n = 0; n < 5; n++) {
+    await externalReviewStep(args);
+    assert.equal(batch.codexFinalReview.status, 'waiting-checks');
+  }
+  assert.equal(batch.codexFinalQaInfrastructure, undefined);
+  assert.equal(log.includes('qa'), false);
+  waiting = false;
+  await externalReviewStep(args);
+  assert.equal(batch.phase, 'ready');
+  assert.equal(batch.codexFinalQaInfrastructure.attempts.length, 1);
+});
+test('Claude1 F3 unusable final QA verdict is infrastructure failure and never a code correction', async () => {
+  const { args, batch } = approvedExternalArgs();
+  args.workspace.finalQa = async () => ({ status: 'unavailable' });
+  args.workspace.execute = async () => assert.fail('unavailable verdict must not implement');
+  await assert.rejects(externalReviewStep(args), /no usable verdict/);
+  assert.equal(batch.codexFinalReview.status, 'failed');
+  assert.equal(batch.implementation.length, 1);
+});

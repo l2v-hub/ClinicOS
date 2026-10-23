@@ -79,7 +79,15 @@ const syncBatch = (number = 17) => ({
 });
 const newOnly = (protectedSubjects = []) => ({
   active: true,
-  automation: { enabled: true, mode: 'new-unclaimed-only', protectedSubjects },
+  nonce: 'test-takeover',
+  automation: {
+    enabled: true,
+    mode: 'new-unclaimed-only',
+    protectedSubjects,
+    takeoverNonce: 'test-takeover',
+    authorizedActor: 'maintainer',
+    handedBackAt: '2026-10-22T00:00:00Z',
+  },
 });
 async function observedSync(state, publish) {
   const before = JSON.stringify(state),
@@ -203,21 +211,29 @@ test('finished coordination allows existing unowned sync without weakening feedb
   assert.equal(result.batches[0].forwarded, 1);
 });
 
-test('malformed or disabled automation handback cannot silently enable owned synchronization', async () => {
+test('malformed handback is schema-rejected; absent and valid disabled grants remain paused', async () => {
   for (const automation of [
     undefined,
+    { ...newOnly().automation, enabled: false },
     {},
     { enabled: true, mode: 'all', protectedSubjects: [] },
-    { enabled: false, mode: 'new-unclaimed-only', protectedSubjects: [] },
   ]) {
-    const { result, calls } = await observedSync({
+    const state = {
       schemaVersion: 1,
       repository: repo,
       batches: [syncBatch()],
-      operatorTakeover: { active: true, automation },
-    });
-    assert.deepEqual(calls, []);
-    assert.equal(result.status, 'skipped');
+      operatorTakeover: { active: true, nonce: 'test-takeover', automation },
+    };
+    if (
+      automation !== undefined &&
+      (!automation.takeoverNonce || automation.mode !== 'new-unclaimed-only')
+    )
+      await assert.rejects(observedSync(state), /invalid operator automation handback/);
+    else {
+      const { result, calls } = await observedSync(state);
+      assert.deepEqual(calls, []);
+      assert.equal(result.status, 'skipped');
+    }
   }
 });
 
