@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-23T18:52:55.811Z",
+  "evidenceKind": "actual-local-production-caller-test",
+  "test": "production stage caller integrates A and B with A->C frontier, then verifies, simplifies, verifies and runs fresh QA",
+  "status": "passed-all-test-assertions",
+  "sourceTestSha256": "de843d254d44b526f9fc2a278b3c0459c558d9ade79f97afe738345de094a63c",
+  "syntheticBoundaries": [
+    "model provider outputs",
+    "codex verification sandbox dispatch replaced with actual native Node fixture verification"
+  ],
+  "actualEffects": [
+    "createWorkspace",
+    "runImplementationStages",
+    "registered tiny Git worktrees",
+    "child commits",
+    "cherry-pick integration",
+    "JSON durable effects",
+    "native Node fixture tests",
+    "local bare-origin push"
+  ],
+  "maxParallel": 2,
+  "observedPeakActiveModelCalls": 2,
+  "sourceBaseSha": "88cbf7939311475e27f633d4accc08d8404410ae",
+  "finalSha": "6c07b47bb91d4fd17802a515870ff80ac570680a",
+  "events": [
+    {
+      "sequence": 1,
+      "event": "start:a"
+    },
+    {
+      "sequence": 2,
+      "event": "start:b"
+    },
+    {
+      "sequence": 3,
+      "event": "end:a"
+    },
+    {
+      "sequence": 4,
+      "event": "integrate"
+    },
+    {
+      "sequence": 5,
+      "event": "start:c"
+    },
+    {
+      "sequence": 6,
+      "event": "end:c"
+    },
+    {
+      "sequence": 7,
+      "event": "end:b"
+    },
+    {
+      "sequence": 8,
+      "event": "integrate"
+    },
+    {
+      "sequence": 9,
+      "event": "integrate"
+    },
+    {
+      "sequence": 10,
+      "event": "verify"
+    },
+    {
+      "sequence": 11,
+      "event": "simplify"
+    },
+    {
+      "sequence": 12,
+      "event": "verify"
+    },
+    {
+      "sequence": 13,
+      "event": "qa"
+    },
+    {
+      "sequence": 14,
+      "event": "publish"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "a",
+      "dependsOn": [],
+      "status": "implemented",
+      "provider": "codex",
+      "model": "synthetic-editor",
+      "startedAt": "2026-10-23T18:52:50.245Z",
+      "sourceIntegrationSha": "88cbf7939311475e27f633d4accc08d8404410ae",
+      "childSha": "c05f7c98a9aa175697800d6fd603f1dfa97904bb",
+      "integration": {
+        "nonce": "0f9762d3-891d-43b8-b7f2-874b39622397",
+        "status": "integrated",
+        "beforeSha": "88cbf7939311475e27f633d4accc08d8404410ae",
+        "childSha": "c05f7c98a9aa175697800d6fd603f1dfa97904bb",
+        "afterSha": "c05f7c98a9aa175697800d6fd603f1dfa97904bb"
+      },
+      "resultSummary": "Changed a"
+    },
+    {
+      "id": "b",
+      "dependsOn": [],
+      "status": "implemented",
+      "provider": "codex",
+      "model": "synthetic-editor",
+      "startedAt": "2026-10-23T18:52:50.396Z",
+      "sourceIntegrationSha": "88cbf7939311475e27f633d4accc08d8404410ae",
+      "childSha": "de5c2cb790a42acb48e0f7a73beb733ca4471770",
+      "integration": {
+        "nonce": "a1776447-65d1-42d5-babc-3b4cb5ac80f7",
+        "status": "integrated",
+        "beforeSha": "da9c39edb29ad2a12069468fde40663eeb37877b",
+        "childSha": "de5c2cb790a42acb48e0f7a73beb733ca4471770",
+        "afterSha": "81dd83bd651783982570dff09fd81fa6e5538706"
+      },
+      "resultSummary": "Changed b"
+    },
+    {
+      "id": "c",
+      "dependsOn": [
+        "a"
+      ],
+      "status": "implemented",
+      "provider": "codex",
+      "model": "synthetic-editor",
+      "startedAt": "2026-10-23T18:52:53.809Z",
+      "sourceIntegrationSha": "c05f7c98a9aa175697800d6fd603f1dfa97904bb",
+      "childSha": "da9c39edb29ad2a12069468fde40663eeb37877b",
+      "integration": {
+        "nonce": "3dd2589d-82c7-43b2-872b-f6b5098d1ef0",
+        "status": "integrated",
+        "beforeSha": "c05f7c98a9aa175697800d6fd603f1dfa97904bb",
+        "childSha": "da9c39edb29ad2a12069468fde40663eeb37877b",
+        "afterSha": "da9c39edb29ad2a12069468fde40663eeb37877b"
+      },
+      "resultSummary": "Changed c"
+    }
+  ],
+  "stageOutcomes": [
+    {
+      "step": "execute"
+    },
+    {
+      "step": "verify-before"
+    },
+    {
+      "step": "simplify"
+    },
+    {
+      "step": "verify-after"
+    },
+    {
+      "step": "qa"
+    },
+    {
+      "step": "checkpoint",
+      "sha": "6c07b47bb91d4fd17802a515870ff80ac570680a"
+    },
+    {
+      "step": "publish"
+    }
+  ],
+  "controllerProgressStatus": "completed",
+  "graphStatus": "completed",
+  "parentImplementationReservations": [
+    {
+      "round": 1,
+      "status": "running"
+    }
+  ],
+  "verification": [
+    {
+      "command": "node",
+      "args": [
+        "--test",
+        "fixture.test.mjs"
+      ],
+      "ok": true,
+      "output": "TAP version 13\n# Subtest: integrated accepted files\nok 1 - integrated accepted files\n  ---\n  duration_ms: 10.645067\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 128.956016\n"
+    }
+  ],
+  "assertions": {
+    "peakEqualsTwo": true,
+    "dependentCStartsBeforeBFinishes": true,
+    "allNodesIntegrated": true,
+    "integrationWorktreeClean": true,
+    "localPublishShaEqualsFinalSha": true
+  },
+  "integrationOrder": [
+    {
+      "sequence": 1,
+      "nodeId": "a",
+      "beforeSha": "88cbf7939311475e27f633d4accc08d8404410ae",
+      "childSha": "c05f7c98a9aa175697800d6fd603f1dfa97904bb",
+      "afterSha": "c05f7c98a9aa175697800d6fd603f1dfa97904bb",
+      "status": "integrated"
+    },
+    {
+      "sequence": 2,
+      "nodeId": "c",
+      "beforeSha": "c05f7c98a9aa175697800d6fd603f1dfa97904bb",
+      "childSha": "da9c39edb29ad2a12069468fde40663eeb37877b",
+      "afterSha": "da9c39edb29ad2a12069468fde40663eeb37877b",
+      "status": "integrated"
+    },
+    {
+      "sequence": 3,
+      "nodeId": "b",
+      "beforeSha": "da9c39edb29ad2a12069468fde40663eeb37877b",
+      "childSha": "de5c2cb790a42acb48e0f7a73beb733ca4471770",
+      "afterSha": "81dd83bd651783982570dff09fd81fa6e5538706",
+      "status": "integrated"
+    }
+  ],
+  "integrationOrderProvenance": "Derived from actual persisted exact beforeSha/afterSha chain; events retain original observed order.",
+  "finalTestOutcomes": {
+    "tests": 1,
+    "pass": 1,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "testLogSha256": "3aa824f21b25cfee8c5ac67a549e57b1d469cd1c18867f4403bf86efff2de155"
+}

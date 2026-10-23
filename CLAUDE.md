@@ -197,3 +197,33 @@ Sviluppo **in agent team**: il lead deve far certificare il diff da una sessione
 di riportare il risultato — chi ha scritto o coordinato il codice non lo certifica mai. Verdetti
 ammessi: **READY FOR QA**, **BLOCKED**, **FAILED VALIDATION** — mai "done". Il dettaglio della
 procedura sta nella skill `qa-gate`.
+
+## Agent skills
+
+### Issue tracker
+
+Codex and Claude share GitHub Issues in `l2v-hub/ClinicOS`.
+Read `docs/agents/issue-tracker.md` before using issue/spec/ticket skills.
+
+### Triage labels
+
+Matt Pocock's label integration is deferred by the user. Read
+`docs/agents/triage-labels.md`; installation alone must not change GitHub labels.
+
+### Domain docs
+
+Use the shared single-context glossary/ADR conventions in `docs/agents/domain.md`.
+
+### Installed Codex skills
+
+The 27 supported Matt Pocock skills v1.3.1 are installed as project Agent Skills
+under `.agents/skills/`, pinned with hashes and MIT attribution in
+`docs/agents/matt-pocock-skills.json`. They are editable copies with manual
+updates, not an auto-updating global plugin. Open Codex in this repository;
+a fresh session may be needed to reload the skill catalog. Preserve each
+skill's explicit-invocation metadata. Claude's existing plugin is not changed;
+both agents should read the same `docs/agents/` configuration.
+
+These skills complement the ClinicOS task contract, validation, exact-SHA peer
+review and deployed-resolution evidence gates above. A generic skill must not
+close a clinical issue on a local test, bypass ownership, or erase attempt history.

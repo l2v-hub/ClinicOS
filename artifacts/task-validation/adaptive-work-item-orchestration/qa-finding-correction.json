@@ -1,0 +1,9 @@
+{
+  "at": "2026-10-23T18:57:20.884534+00:00",
+  "finding": "AC6 max-turns documentation overstated native controller support",
+  "path": "docs/adaptive-work-items.md",
+  "oldSha256": "ca05f5d679ff82c697920a011ad02d312154fea3c874d1c7d9d45fd09d75c955",
+  "newSha256": "c6abec05dfb310807d90bb0b9b03c5d9dbc1d5d5d0cc39294e6305cc43fa18c8",
+  "sourceCodeChanged": false,
+  "status": "corrected, pending independent recheck"
+}

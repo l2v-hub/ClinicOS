@@ -1,0 +1,211 @@
+{
+  "syntax": [
+    {
+      "file": "agent-team/src/bug-pipeline/claude-executor.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/cli.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/models.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/operator-authorization.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/process.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/routing.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/work-item-workspace.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/work-items.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/workspace.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/adaptive-pipeline.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/claude-executor.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/work-item-models.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/work-item-workspace.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/work-items.test.mjs",
+      "exitCode": 0
+    }
+  ],
+  "sharedSkills": 27,
+  "pinnedFiles": 79,
+  "hashMismatches": [],
+  "secretHits": [],
+  "applicationFilesChanged": false,
+  "skillMetadata": [
+    {
+      "skill": "ask-matt",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "diagnosing-bugs",
+      "frontmatter": true,
+      "explicitInvocation": false
+    },
+    {
+      "skill": "grill-with-docs",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "triage",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "improve-codebase-architecture",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "setup-matt-pocock-skills",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "tdd",
+      "frontmatter": true,
+      "explicitInvocation": false
+    },
+    {
+      "skill": "to-spec",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "to-tickets",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "wayfinder",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "implement",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "implement-spec",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "prototype",
+      "frontmatter": true,
+      "explicitInvocation": false
+    },
+    {
+      "skill": "research",
+      "frontmatter": true,
+      "explicitInvocation": false
+    },
+    {
+      "skill": "domain-modeling",
+      "frontmatter": true,
+      "explicitInvocation": false
+    },
+    {
+      "skill": "codebase-design",
+      "frontmatter": true,
+      "explicitInvocation": false
+    },
+    {
+      "skill": "code-review",
+      "frontmatter": true,
+      "explicitInvocation": false
+    },
+    {
+      "skill": "pr",
+      "frontmatter": true,
+      "explicitInvocation": false
+    },
+    {
+      "skill": "retro",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "wizard",
+      "frontmatter": true,
+      "explicitInvocation": false
+    },
+    {
+      "skill": "grill-me",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "grilling",
+      "frontmatter": true,
+      "explicitInvocation": false
+    },
+    {
+      "skill": "handoff",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "teach",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "to-questionnaire",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "wait-what",
+      "frontmatter": true,
+      "explicitInvocation": true
+    },
+    {
+      "skill": "writing-for-agents",
+      "frontmatter": true,
+      "explicitInvocation": false
+    }
+  ],
+  "workflowYamlSyntax": "PASS"
+}

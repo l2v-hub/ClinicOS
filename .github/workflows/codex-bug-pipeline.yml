@@ -81,6 +81,9 @@ jobs:
           CODEX_PLANNER_MODEL: ${{ vars.CODEX_PLANNER_MODEL || 'gpt-6.1-sol' }}
           CODEX_EXECUTOR_MODEL: ${{ vars.CODEX_EXECUTOR_MODEL || 'auto' }}
           CODEX_SMALL_EXECUTOR_MODEL: ${{ vars.CODEX_SMALL_EXECUTOR_MODEL || 'gpt-6-luna' }}
+          # Only new intake gets bounded ticket graphs. Existing plans remain frozen.
+          CLINICOS_WORK_ITEM_DELEGATION: ${{ vars.CLINICOS_WORK_ITEM_DELEGATION || 'adaptive' }}
+          CLINICOS_WORK_ITEM_PARALLEL: ${{ vars.CLINICOS_WORK_ITEM_PARALLEL || '2' }}
           CODEX_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/codex
         run: node agent-team/src/bug-pipeline/cli.mjs
 

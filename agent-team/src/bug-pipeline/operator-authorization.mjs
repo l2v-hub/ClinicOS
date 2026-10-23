@@ -151,6 +151,9 @@ function validateObservationCheckpoint(subject) {
           entry.step === steps[index] && (entry.step !== 'checkpoint' || entry.sha === subject.sha),
       ) &&
       progress.planSha256 === historyDigest(subject.plan) &&
+      (!subject.workItems ||
+        (progress.workItemsSha256 === subject.workItems.specSha256 &&
+          progress.workItemsBindingSha256 === subject.workItems.bindingSha256)) &&
       progress.feedbackSha256 === historyDigest(progress.feedback ?? null) &&
       progress.checkpoint &&
       (!progress.pending || progress.pending === steps[progress.next]),
