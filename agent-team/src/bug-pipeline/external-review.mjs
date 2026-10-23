@@ -320,6 +320,9 @@ async function runExternalReviewStep({
         context: {
           phase: 'external-review-correction',
           round: attempt.round,
+          ...(resumingCorrection && batch.controllerProgress.implementationRound === undefined
+            ? {}
+            : { implementationRound: attempt.round }),
           feedback: resumingCorrection
             ? batch.controllerProgress.feedback
             : {
@@ -337,8 +340,7 @@ async function runExternalReviewStep({
       await save();
       await report(batch, await workspace.issueEvidence(batch));
     } catch (error) {
-      if (!['review-operator-owned', 'ownership-observation-failed'].includes(error?.code))
-        attempt.status = 'failed';
+      if (batch.controllerProgress?.status === 'failed') attempt.status = 'failed';
       throw error;
     }
   } else if (handoff?.status === 'requested' && handoff.subjectSha === batch.sha) {

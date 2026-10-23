@@ -3603,9 +3603,119 @@ test('F2 native new-merge callback refuses live feedback drift or replacement of
         configured,
         execute: true,
       }),
-      /feedback|proof changed/,
+      (e) => e.code === 'github-merge-rejected',
     );
     assert.equal(merges, 0);
-    assert.equal(f.getSaved().batches[0].release.status, 'merging');
+    assert.equal(f.getSaved().batches[0].release, undefined);
+    assert.equal(f.getSaved().batches[0].mergeHistory.at(-1).status, 'merging');
+    assert.equal(f.getSaved().batches[0].phase, 'blocked');
   }
 });
+
+for (const kind of ['feedback', 'draft', 'checks', 'HTTP405', 'graphql'])
+  test(`Author9 F1 known ${kind} rejection archives the exact proof without a native merge`, async () => {
+    const f = fixture(['docs/release.md']);
+    let nativeCalls = 0,
+      reservation;
+    f.github.mergePullRequest = async (_pr, _sha, { guard }) => {
+      reservation = structuredClone(f.getSaved().batches[0].release);
+      if (kind === 'feedback') f.feedback.unresolved = true;
+      if (kind === 'draft') f.feedback.isDraft = true;
+      if (kind === 'checks') f.github.requiredChecks = async () => ({ ok: false });
+      await guard();
+      nativeCalls++;
+      throw Object.assign(new Error('Finite native refusal'), {
+        code: 'github-write-rejected',
+        operation: 'merge',
+        httpStatus: kind === 'graphql' ? null : 405,
+        diagnostic: kind === 'graphql' ? 'graphql-merge-refusal' : 'http-status',
+      });
+    };
+    await assert.rejects(
+      releaseBatch({
+        repo: f.state.repository,
+        github: f.github,
+        store: f.store,
+        batchId: f.batch.id,
+        reviewedSha: sha,
+        configured,
+        execute: true,
+      }),
+      (e) => e.code === 'github-merge-rejected',
+    );
+    const b = f.getSaved().batches[0];
+    assert.equal(nativeCalls, ['HTTP405', 'graphql'].includes(kind) ? 1 : 0);
+    assert.equal(b.release, undefined);
+    assert.equal(b.phase, 'blocked');
+    assert.equal(b.failureCode, 'github-merge-rejected');
+    assert.equal(b.approvedSha, undefined);
+    assert.deepEqual(b.mergeHistory.at(-1), reservation);
+    assert.deepEqual(b.reviews, f.batch.reviews);
+  });
+
+for (const kind of [
+  'timeout',
+  'closed',
+  'merged',
+  'head-change',
+  'read-failure',
+  'guard-owner',
+  'catch-owner',
+  'save-owner',
+])
+  test(`Author9 F1 ${kind} cannot release the merge tombstone`, async () => {
+    const f = fixture(['docs/release.md']);
+    let frozen, reservation;
+    const own = () => {
+      f.getSaved().batches[0].operatorCoordination = { active: true };
+      frozen = structuredClone(f.getSaved().batches[0]);
+    };
+    const originalSave = f.store.save;
+    f.store.save = async (state, options) => {
+      if (kind === 'save-owner' && !state.batches[0].release) own();
+      await options?.guard?.();
+      return originalSave(state);
+    };
+    f.github.mergePullRequest = async (_pr, _sha, { guard }) => {
+      reservation = structuredClone(f.getSaved().batches[0].release);
+      if (kind === 'guard-owner') own();
+      await guard();
+      if (kind === 'timeout')
+        throw Object.assign(new Error('Timed out'), {
+          code: 'github-write-uncertain',
+          operation: 'merge',
+        });
+      if (kind === 'closed') f.feedback.state = 'CLOSED';
+      if (kind === 'merged') {
+        f.feedback.state = 'MERGED';
+        f.feedback.mergeCommitSha = mergeSha;
+      }
+      if (kind === 'head-change') f.feedback.head = 'e'.repeat(40);
+      if (kind === 'read-failure')
+        f.github.reviewFeedback = async () => {
+          throw new Error('Native read unavailable');
+        };
+      if (kind === 'catch-owner') own();
+      throw Object.assign(new Error('Refused'), {
+        code: 'github-write-rejected',
+        operation: 'merge',
+        httpStatus: 405,
+      });
+    };
+    await assert.rejects(
+      releaseBatch({
+        repo: f.state.repository,
+        github: f.github,
+        store: f.store,
+        batchId: f.batch.id,
+        reviewedSha: sha,
+        configured,
+        execute: true,
+        automatic: true,
+      }),
+    );
+    const b = f.getSaved().batches[0];
+    assert.deepEqual(b.release, reservation);
+    assert.equal(b.mergeHistory, undefined);
+    if (frozen) assert.deepEqual(b, frozen);
+  });

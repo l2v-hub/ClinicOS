@@ -1721,3 +1721,98 @@ test('Author7 F3 completed internal feedback stages resume only the unstarted pu
   assert.equal(h.counts.simplify, 1);
   assert.equal(current.controllerProgress.status, 'completed');
 });
+
+for (const code of ['model-execution-failed', 'model-result-invalid', undefined])
+  test(`Author9 F2 initial unknown ${code ?? 'throw'} keeps one running attempt without automatic inference retry`, async () => {
+    const h = harness({ issues: [17] });
+    let execute = 0;
+    h.workspace.execute = async () => {
+      execute++;
+      throw Object.assign(new Error('Unknown paid work'), code ? { code } : {});
+    };
+    await h.run();
+    const current = h.stateRef.value.batches[0];
+    assert.equal(execute, 1);
+    assert.equal(current.implementation.length, 1);
+    assert.equal(current.implementation[0].status, 'running');
+    assert.equal(current.controllerProgress.status, 'running');
+    assert.equal(current.phase, 'blocked');
+    await h.run();
+    assert.equal(execute, 1);
+    assert.equal(h.stateRef.value.batches[0].implementation.length, 1);
+  });
+
+for (const format of ['legacy', 'reserved', 'missing-reservation'])
+  test(`Author9 F2 ${format} internal observation resume retains exact paid-work identity`, async () => {
+    const { authorizeObservationResume, observationProgressDigest } =
+      await import('../../src/bug-pipeline/operator-authorization.mjs');
+    const b = batchFor({
+      issues: [17],
+      phase: 'blocked',
+      head: sha('b'),
+      reviews: [{ round: 1, status: 'approved', subjectSha: sha('b') }],
+    });
+    const feedback = openFeedback(b, { comments: [{ id: 9, body: 'Retained feedback' }] });
+    b.feedbackFingerprint = feedbackFingerprint(openFeedback(b));
+    if (format !== 'legacy') b.implementation.push({ round: 2, status: 'running' });
+    b.controllerProgress = {
+      schemaVersion: 1,
+      flow: 'pr-feedback',
+      round: format === 'missing-reservation' ? 3 : 2,
+      ...(format === 'legacy'
+        ? {}
+        : { implementationRound: format === 'missing-reservation' ? 3 : 2 }),
+      sourceSha: b.sha,
+      planSha256: sha256(JSON.stringify(b.plan)),
+      feedbackSha256: sha256(JSON.stringify(feedback)),
+      feedback,
+      status: 'interrupted',
+      next: 1,
+      completed: [{ step: 'execute' }],
+      checkpoint: { exact: 'retained' },
+    };
+    b.controllerInterruption = {
+      code: 'ownership-observation-failed',
+      beforeInvocation: true,
+      progressSha256: observationProgressDigest(b.controllerProgress),
+    };
+    const h = harness({
+      issues: [17],
+      queue: [],
+      initialState: { ...blankState(), batches: [b] },
+      feedback: ({ batch }) => ({ ...feedback, head: batch.sha }),
+    });
+    h.workspace.resume = async (_batch, checkpoint) => assert.equal(checkpoint.exact, 'retained');
+    h.workspace.captureCheckpoint = async () => ({ exact: 'retained' });
+    const before = clone(h.stateRef.value.batches[0].implementation);
+    await authorizeObservationResume({
+      state: h.stateRef.value,
+      subject: h.stateRef.value.batches[0],
+      actor: 'maintainer',
+      reference: 'test:author9-resume',
+      reason: 'Retain exact paid work',
+      verifier: async ({ binding }) => ({
+        provenance: 'user-session',
+        grantId: 'test:author9',
+        sourceRef: 'test:session',
+        consumptionNonce: `test:${format}`,
+        binding,
+      }),
+    });
+    await h.run();
+    const current = h.stateRef.value.batches[0];
+    assert.equal(h.counts.execute, 0, 'The completed paid executor is never replayed');
+    assert.equal(current.implementation.length, before.length);
+    if (format === 'missing-reservation') {
+      assert.equal(current.phase, 'blocked');
+      assert.deepEqual(current.implementation, before);
+      assert.equal(current.controllerProgress.status, 'interrupted');
+      assert.equal(h.counts.simplify, 0);
+    } else {
+      assert.equal(current.phase, 'ready');
+      assert.equal(current.controllerProgress.status, 'completed');
+      assert.equal(h.counts.simplify, 1);
+      if (format === 'legacy') assert.deepEqual(current.implementation, before);
+      else assert.equal(current.implementation[1].status, 'passed');
+    }
+  });

@@ -1,3 +1,5 @@
+import { knownFailedCorrection } from './workspace.mjs';
+import { captureReleaseReviewProof } from './release.mjs';
 import { operatorOwns } from './operator-ownership.mjs';
 import {
   authorizationBinding,
@@ -839,14 +841,36 @@ export function createCommentReviewHandoff({
           batch.externalReview.subjectSha === batch.sha &&
           ['changes-requested', 'blocked'].includes(batch.reviews.at(-1)?.status) &&
           batch.reviews.at(-1)?.subjectSha === batch.sha;
+        const progress = batch.controllerProgress;
+        const knownCorrection =
+          knownFailedCorrection(batch) && progress.failureCode === batch.failureCode;
         const allowance =
           batch.budgetExtensions?.length &&
-          negativeReview &&
+          !activeImplementation(batch) &&
+          !['running', 'interrupted'].includes(progress?.status) &&
+          ((negativeReview && (!progress || progress.status === 'completed')) || knownCorrection) &&
           spentAttempts(batch, 'implementation') < attemptLimit(batch, 'implementation') &&
           batch.reviews.length < attemptLimit(batch, 'reviews');
+        const archived = batch.mergeHistory?.at(-1);
+        let rejectedMerge = false;
+        if (
+          batch.failureCode === 'github-merge-rejected' &&
+          !batch.release &&
+          archived?.status === 'merging' &&
+          archived.reviewedSha === batch.sha &&
+          archived.prNumber === batch.pr.number &&
+          archived.reviewProof
+        ) {
+          const expected = captureReleaseReviewProof(
+            { ...batch, codexFinalReview: archived.reviewProof.finalCodexReview },
+            { repository: REPO },
+          );
+          rejectedMerge = JSON.stringify(expected) === JSON.stringify(archived.reviewProof);
+        }
         assert.ok(
           ['github-read-transient', 'github-transient-exhausted'].includes(batch.failureCode) ||
-            allowance,
+            allowance ||
+            rejectedMerge,
           'Resume requires transient recovery or unused audited correction and review allowances',
         );
       }

@@ -343,6 +343,36 @@ export async function runPipeline({
   if (!event?.issue || !claimed.has(event.issue.number)) await gh.intake(event);
   // Only the protected release confirmation job publishes deployed completion.
   // It owns live demo credentials and retries durable pending publication without model work.
+  const runCorrection = async (batch, context, retained = false) => {
+    const previous = batch.controllerProgress;
+    // Legacy observation-resume journals used review rounds, without a paid
+    // implementation reservation. Resume those exact retained stages as before.
+    const legacyResume = retained && previous.implementationRound === undefined;
+    const attempt = legacyResume
+      ? null
+      : retained
+        ? implementationAttempts(batch).find(
+            (entry) => entry.round === previous.implementationRound && entry.status === 'running',
+          )
+        : reserveImplementation(batch, () => new Date(now()));
+    if (!legacyResume && !attempt) throw new Error('Implementation reservation changed');
+    try {
+      await runImplementationStages({
+        batch,
+        workspace,
+        save,
+        context: {
+          ...context,
+          round: legacyResume ? previous.round : attempt.round,
+          ...(legacyResume ? {} : { implementationRound: attempt.round }),
+        },
+      });
+      if (attempt) attempt.status = 'passed';
+    } catch (error) {
+      if (attempt && batch.controllerProgress?.status === 'failed') attempt.status = 'failed';
+      throw error;
+    }
+  };
   for (const id of state.batches.map((batch) => batch.id)) {
     const batch = state.batches.find((batch) => batch.id === id);
     if (operatorOwns(state, 'batches', batch) || batch.release?.status === 'deployed') continue;
@@ -624,6 +654,9 @@ export async function runPipeline({
               context: {
                 phase: 'implementation',
                 round: attempt.round,
+                ...(resuming && batch.controllerProgress.implementationRound === undefined
+                  ? {}
+                  : { implementationRound: attempt.round }),
                 feedback: batch.lastFailure ?? null,
               },
             });
@@ -633,6 +666,7 @@ export async function runPipeline({
           } catch (error) {
             if (
               persistenceFailed ||
+              batch.controllerProgress?.status !== 'failed' ||
               resuming ||
               /^github-/.test(error?.code ?? '') ||
               [
@@ -643,7 +677,6 @@ export async function runPipeline({
             )
               throw error;
             attempt.status = 'failed';
-            if (batch.controllerProgress) batch.controllerProgress.status = 'failed';
             batch.lastFailure =
               'Implementation or required verification failed; inspect current local test-results.';
             batch.phase = 'planned';
@@ -677,32 +710,41 @@ export async function runPipeline({
       }
       // New PR feedback is handled once, in a new executor session, before the next review.
       if (feedback && feedbackFingerprint(feedback) !== batch.feedbackFingerprint) {
-        await runImplementationStages({
+        await runCorrection(
           batch,
-          workspace,
-          save,
-          context: {
+          {
             phase: 'pr-feedback',
-            round: batch.reviews.length + 1,
+            reviewRound: batch.reviews.length + 1,
             feedback:
               resuming && batch.controllerProgress.flow === 'pr-feedback'
                 ? batch.controllerProgress.feedback
                 : feedback,
           },
-        });
+          resuming && batch.controllerProgress.flow === 'pr-feedback',
+        );
         await report(batch, await workspace.issueEvidence(batch));
       }
-      if (resuming && batch.controllerProgress.flow === 'review-correction') {
-        await runImplementationStages({
+      if (
+        (resuming || batch.controllerProgress?.status === 'failed') &&
+        batch.controllerProgress.flow === 'review-correction'
+      ) {
+        const retained = batch.controllerProgress;
+        if (
+          !resuming &&
+          (retained.sourceSha !== batch.sha ||
+            retained.planSha256 !== sha256(JSON.stringify(batch.plan)) ||
+            retained.feedbackSha256 !== sha256(JSON.stringify(retained.feedback)))
+        )
+          throw new Error('Failed correction identity changed');
+        await runCorrection(
           batch,
-          workspace,
-          save,
-          context: {
+          {
             phase: 'review-correction',
-            round: batch.controllerProgress.round,
-            feedback: batch.controllerProgress.feedback,
+            reviewRound: retained.reviewRound ?? retained.round,
+            feedback: retained.feedback,
           },
-        });
+          resuming,
+        );
         batch.approvedSha = null;
         batch.phase = 'waiting-checks';
         await save();
@@ -749,15 +791,10 @@ export async function runPipeline({
           await block(batch, 'Claude review remains blocked or four-review limit reached');
           break;
         }
-        await runImplementationStages({
-          batch,
-          workspace,
-          save,
-          context: {
-            phase: 'review-correction',
-            round: attempt.round,
-            feedback: { claude: review, github: after },
-          },
+        await runCorrection(batch, {
+          phase: 'review-correction',
+          reviewRound: attempt.round,
+          feedback: { claude: review, github: after },
         });
         batch.approvedSha = null;
         await report(batch, await workspace.issueEvidence(batch));
@@ -775,7 +812,11 @@ export async function runPipeline({
       if (persistenceFailed) throw error;
       batch.failureCode = controllerFailureCode(error);
       for (const a of [...implementationAttempts(batch), ...batch.reviews])
-        if (a.status === 'running') a.status = 'failed';
+        if (
+          a.status === 'running' &&
+          !['running', 'interrupted'].includes(batch.controllerProgress?.status)
+        )
+          a.status = 'failed';
       try {
         await block(
           batch,

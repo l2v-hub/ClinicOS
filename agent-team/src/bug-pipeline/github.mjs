@@ -396,14 +396,20 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
 
   async function invoke(
     args,
-    { input, allowFailure = false, maxOutputBytes = 2 * 1024 * 1024, operation = 'read' } = {},
+    {
+      input,
+      allowFailure = false,
+      maxOutputBytes = 2 * 1024 * 1024,
+      operation = 'read',
+      timeoutMs = 30000,
+    } = {},
   ) {
     const result = await run({
       command: 'gh',
       args,
       cwd,
       ...(input === undefined ? {} : { input }),
-      timeoutMs: 30000,
+      timeoutMs,
       maxOutputBytes,
     });
     if (!result?.ok && !allowFailure) {
@@ -419,7 +425,10 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     if ((await guard()) === false) throw new Error('Issue mutation guard rejected the operation');
   }
 
-  async function api(path, { method, body, allowFailure = false, maxOutputBytes, guard } = {}) {
+  async function api(
+    path,
+    { method, body, allowFailure = false, maxOutputBytes, guard, timeoutMs } = {},
+  ) {
     const args = ['api', path];
     if (method) args.push('-X', method);
     if (body !== undefined) args.push('--input', '-');
@@ -429,6 +438,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       allowFailure,
       operation: githubApiOperation({ method, body }),
       ...(maxOutputBytes === undefined ? {} : { maxOutputBytes }),
+      ...(timeoutMs === undefined ? {} : { timeoutMs }),
     });
     if (!result.ok && allowFailure) return { ok: false, status: result.code, value: null, result };
     return {
@@ -627,12 +637,11 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       const refPath = `repos/${repo}/git/ref/heads/${STATE_BRANCH}`;
       const existing = await api(refPath, { allowFailure: true });
       if (existing.ok) return;
-      if (!notFound(existing)) throw new Error('Cannot inspect durable state branch');
+      if (!notFound(existing)) throw githubOperationError(existing.result, 'read');
       const main = await api(`repos/${repo}/git/ref/heads/main`, {
         allowFailure: true,
       });
-      if (!main.ok)
-        throw new Error('Cannot initialize durable state: main branch ref is unavailable');
+      if (!main.ok) throw githubOperationError(main.result, 'read');
       const sha = main.value?.object?.sha;
       if (typeof sha !== 'string' || !/^[a-f0-9]{40}$/i.test(sha)) {
         throw new Error('Cannot initialize durable state: main ref has an invalid commit SHA');
@@ -642,8 +651,9 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
         body: { ref: `refs/heads/${STATE_BRANCH}`, sha },
         allowFailure: true,
       });
-      if (!created.ok && !(await api(refPath, { allowFailure: true })).ok) {
-        throw new Error('Cannot initialize durable state branch');
+      if (!created.ok) {
+        const confirmed = await api(refPath, { allowFailure: true });
+        if (!confirmed.ok) throw githubOperationError(confirmed.result, 'read');
       }
     }
 
@@ -658,7 +668,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
         },
       );
       if (!response.ok) {
-        if (!notFound(response)) throw new Error('Cannot read durable bug pipeline state');
+        if (!notFound(response)) throw githubOperationError(response.result, 'read');
         loaded = true;
         fileSHA = null;
         persistedBase = null;
@@ -735,10 +745,15 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       return entries;
     }
 
-    function failedStateMutation(response) {
+    function failedStateMutation(response, refAttempted = true) {
       const result = response.result;
       const error = githubOperationError(result, 'mutation');
-      const uncertain = !!result?.error || error.httpStatus === null;
+      const uncertain =
+        refAttempted &&
+        (!!result?.error ||
+          error.httpStatus === null ||
+          error.httpStatus >= 500 ||
+          error.httpStatus === 408);
       return stateError(
         uncertain ? 'state-write-uncertain' : 'state-write-failed',
         'Durable state write failed; reconcile the persisted state before retrying',
@@ -746,13 +761,16 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       );
     }
 
-    // Only a confirmed ref update is durable. Failed/unknown object uploads never retry.
+    // Object creation cannot publish canonical state; only a confirmed ref update is durable.
+    // No mutation is retried after an unconfirmed transport result.
     async function stateMutation(path, body, { guard, allowRejection = false } = {}) {
+      const refAttempted = path.startsWith('git/refs/');
       let invoked = guard === undefined;
       let response;
       try {
         response = await api(`repos/${repo}/${path}`, {
-          method: path.startsWith('git/refs/') ? 'PATCH' : 'POST',
+          method: refAttempted ? 'PATCH' : 'POST',
+          ...(refAttempted ? {} : { timeoutMs: 120000 }),
           body,
           allowFailure: true,
           ...(guard === undefined
@@ -767,16 +785,18 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       } catch (error) {
         if (!invoked) throw error;
         throw stateError(
-          'state-write-uncertain',
-          'Durable state mutation result is unconfirmed; reconcile before retrying',
+          refAttempted ? 'state-write-uncertain' : 'state-write-failed',
+          refAttempted
+            ? 'Durable state mutation result is unconfirmed; reconcile before retrying'
+            : 'Durable state object creation failed before reference publication',
           error,
         );
       }
-      if (!response.ok && !allowRejection) throw failedStateMutation(response);
+      if (!response.ok && !allowRejection) throw failedStateMutation(response, refAttempted);
       return response;
     }
 
-    async function saveGitData(content, expectedSHA, guard, checkFreshOwnership) {
+    async function saveGitData(content, expectedSHA, parentSnapshot, guard, checkFreshOwnership) {
       const bytes = Buffer.from(content, 'base64'),
         blobSHA = gitBlobSHA(bytes);
       const parent = await stateReference();
@@ -794,66 +814,86 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
         target = entries.find((entry) => entry.path === STATE_PATH);
       if (target && (target.type !== 'blob' || !['100644', '100755'].includes(target.mode)))
         throw new Error('Durable state path is not a regular file');
-      const contents = await api(`repos/${repo}/contents/${STATE_PATH}?ref=${parent}`, {
-        allowFailure: true,
-        maxOutputBytes: STATE_OUTPUT_BYTES,
-      });
-      let parentState = null;
-      if (target) {
-        if (!contents.ok) throw githubOperationError(contents.result, 'read');
-        if (contents.value?.sha !== target.sha)
-          throw new Error('Durable state Contents does not match parent tree');
-        parentState = await decodeDurableState(contents.value);
-      } else if (contents.ok || githubOperationError(contents.result, 'read').httpStatus !== 404) {
-        if (!contents.ok) throw githubOperationError(contents.result, 'read');
-        throw new Error('Durable state absence does not match parent tree');
-      }
       if ((target?.sha ?? null) !== expectedSHA) return { conflict: true };
-      const blob = await stateMutation('git/blobs', {
-        content,
-        encoding: 'base64',
-      });
-      if (blob.value?.sha !== blobSHA)
-        throw stateError('state-write-uncertain', 'Durable state blob SHA was not confirmed');
-      const replacement = {
-        path: STATE_PATH,
-        mode: target?.mode ?? '100644',
-        type: 'blob',
-        sha: blobSHA,
-      };
-      const newTree = await stateMutation('git/trees', {
-        base_tree: treeSHA,
-        tree: [replacement],
-      });
-      const newEntries = rootTree(newTree.value);
-      const expectedEntries = [
-        ...entries.filter((entry) => entry.path !== STATE_PATH),
-        replacement,
-      ];
-      if (
-        !isDeepStrictEqual(
-          newEntries.slice().sort((a, b) => a.path.localeCompare(b.path)),
-          expectedEntries.sort((a, b) => a.path.localeCompare(b.path)),
+      // The writer's candidate base was pinned before all awaits. A concurrent
+      // load/validator cannot substitute its state for this matching blob identity.
+      const parentState = target ? structuredClone(parentSnapshot) : null;
+      if (target && !parentState) throw new Error('Pinned durable state base is unavailable');
+      if (!target) {
+        const contents = await api(`repos/${repo}/contents/${STATE_PATH}?ref=${parent}`, {
+          allowFailure: true,
+          maxOutputBytes: STATE_OUTPUT_BYTES,
+        });
+        if (contents.ok || githubOperationError(contents.result, 'read').httpStatus !== 404) {
+          if (!contents.ok) throw githubOperationError(contents.result, 'read');
+          throw new Error('Durable state absence does not match parent tree');
+        }
+      }
+      let next;
+      try {
+        const blob = await stateMutation('git/blobs', {
+          content,
+          encoding: 'base64',
+        });
+        if (blob.value?.sha !== blobSHA)
+          throw stateError('state-write-failed', 'Durable state blob SHA was not confirmed');
+        const replacement = {
+          path: STATE_PATH,
+          mode: target?.mode ?? '100644',
+          type: 'blob',
+          sha: blobSHA,
+        };
+        const newTree = await stateMutation('git/trees', {
+          base_tree: treeSHA,
+          tree: [replacement],
+        });
+        const newEntries = rootTree(newTree.value);
+        const expectedEntries = [
+          ...entries.filter((entry) => entry.path !== STATE_PATH),
+          replacement,
+        ];
+        if (
+          !isDeepStrictEqual(
+            newEntries.slice().sort((a, b) => a.path.localeCompare(b.path)),
+            expectedEntries.sort((a, b) => a.path.localeCompare(b.path)),
+          )
         )
-      )
-        throw new Error('Durable state tree changed unrelated entries');
-      const created = await stateMutation('git/commits', {
-        message: 'chore: update Codex bug pipeline state',
-        tree: newTree.value.sha,
-        parents: [parent],
-      });
-      const next = created.value;
-      if (
-        !validSHA(next?.sha) ||
-        next.tree?.sha !== newTree.value.sha ||
-        !Array.isArray(next.parents) ||
-        next.parents.length !== 1 ||
-        next.parents[0]?.sha !== parent
-      )
+          throw new Error('Durable state tree changed unrelated entries');
+        const created = await stateMutation('git/commits', {
+          message: 'chore: update Codex bug pipeline state',
+          tree: newTree.value.sha,
+          parents: [parent],
+        });
+        next = created.value;
+        if (
+          !validSHA(next?.sha) ||
+          next.tree?.sha !== newTree.value.sha ||
+          !Array.isArray(next.parents) ||
+          next.parents.length !== 1 ||
+          next.parents[0]?.sha !== parent
+        )
+          throw stateError(
+            'state-write-failed',
+            'Durable state commit parent or tree was not confirmed',
+          );
+      } catch (error) {
+        if (error?.code === 'state-write-failed') throw error;
         throw stateError(
-          'state-write-uncertain',
-          'Durable state commit parent or tree was not confirmed',
+          'state-write-failed',
+          'Durable state objects failed before reference publication',
+          error,
         );
+      }
+      // A positive exact-next read can confirm this write. Seeing the old parent
+      // cannot rule out a still-running server request applying later.
+      const confirmNext = async (failure) => {
+        try {
+          return (await stateReference()) === next.sha;
+        } catch (error) {
+          failure.proofError = error;
+          return false;
+        }
+      };
       const conflictSignal = stateError(
         'state-cas-conflict',
         'Durable state parent changed before ref update',
@@ -885,10 +925,14 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
         );
       } catch (error) {
         if (error === conflictSignal) return { conflict: true };
+        if (error?.code === 'state-write-uncertain' && (await confirmNext(error)))
+          return { sha: blobSHA };
         throw error;
       }
       if (!updated.ok) {
         const failure = failedStateMutation(updated);
+        if (failure.code === 'state-write-uncertain' && (await confirmNext(failure)))
+          return { sha: blobSHA };
         if (
           failure.code === 'state-write-failed' &&
           [409, 422].includes(failure.cause.httpStatus)
@@ -906,11 +950,13 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
         updated.value?.ref !== `refs/heads/${STATE_BRANCH}` ||
         updated.value.object?.type !== 'commit' ||
         updated.value.object.sha !== next.sha
-      )
-        throw stateError(
+      ) {
+        const failure = stateError(
           'state-write-uncertain',
           'Durable state reference update was not confirmed; reconcile before retrying',
         );
+        if (!(await confirmNext(failure))) throw failure;
+      }
       return { sha: blobSHA };
     }
 
@@ -935,7 +981,8 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
         'intended durable state',
       );
       let candidate = intended,
-        candidateSHA = expectedFileSHA;
+        candidateSHA = expectedFileSHA,
+        candidateBase = structuredClone(originalBase);
       try {
         if (rebaseIndependentSubjects) await rebaseIndependentSubjects(structuredClone(candidate));
         for (let retry = 0; ; retry++) {
@@ -948,7 +995,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
           await ensureBranch();
           const large = Buffer.byteLength(content, 'base64') > CONTENTS_STATE_BYTES;
           const gitResult = large
-            ? await saveGitData(content, candidateSHA, guard, checkFreshOwnership)
+            ? await saveGitData(content, candidateSHA, candidateBase, guard, checkFreshOwnership)
             : null;
           const response = large
             ? null
@@ -984,7 +1031,8 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
           if (!rebaseIndependentSubjects || retry >= 3)
             throw stateError('state-cas-conflict', 'Durable state compare-and-swap conflict');
           const fresh = await load();
-          const freshSHA = fileSHA; // A subsequent validator or guard load cannot promote this body.
+          const freshSHA = fileSHA,
+            freshBase = structuredClone(fresh); // Pin before any ownership/validator await.
           // A known rejected409 permits observing the validated remote owner before
           // an entity merge. This narrow hook cannot turn uncertain writes into skips.
           if (checkFreshOwnership) {
@@ -1013,6 +1061,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
           content = encodeState(candidate); // NEW merged body, including every remote reservation.
           synchronizeInPlace(state, candidate);
           candidateSHA = freshSHA;
+          candidateBase = freshBase;
         }
       } catch (error) {
         // A guard may load a newer revision. Never retry this old body against it.
@@ -1150,7 +1199,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     );
     if (!response.ok) {
       if (notFound(response)) return null;
-      throw new Error('Cannot read dashboard state');
+      throw githubOperationError(response.result, 'read');
     }
     return decodeDurableState(response.value);
   }

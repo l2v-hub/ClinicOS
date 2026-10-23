@@ -6,8 +6,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { deflateSync } from 'node:zlib';
 import { createRunner, childEnvironment } from '../../src/bug-pipeline/process.mjs';
-import { validateEvidence } from '../../src/bug-pipeline/workspace.mjs';
-import { createWorkspace } from '../../src/bug-pipeline/workspace.mjs';
+import {
+  runImplementationStages,
+  validateEvidence,
+  createWorkspace,
+} from '../../src/bug-pipeline/workspace.mjs';
+import { controllerFailureCode } from '../../src/bug-pipeline/github.mjs';
 import { crc32 } from '../../src/bug-pipeline/evidence.mjs';
 
 const FIXTURE_DIR = path.resolve(
@@ -15,6 +19,40 @@ const FIXTURE_DIR = path.resolve(
   '../../../artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude',
 );
 const safeGitRunner = createRunner({ env: { PATH: process.env.PATH }, runtimeRoot: os.tmpdir() });
+
+test('executor and simplifier blocked stage results retain the implementation failure code', async () => {
+  for (const blockedStep of ['execute', 'simplify']) {
+    const batch = { id: `blocked-${blockedStep}`, plan: { steps: [] }, phase: 'implementing' };
+    const called = [];
+    const workspace = {
+      execute: async () => {
+        called.push('execute');
+        return { status: blockedStep === 'execute' ? 'blocked' : 'implemented' };
+      },
+      verify: async () => called.push('verify'),
+      simplify: async () => {
+        called.push('simplify');
+        return { status: 'blocked' };
+      },
+      qa: async () => ({ status: 'verified' }),
+      checkpoint: async () => 'a'.repeat(40),
+      publish: async () => {},
+    };
+    await assert.rejects(
+      runImplementationStages({
+        batch,
+        workspace,
+        context: { phase: 'implementation', round: 1 },
+        save: async () => {},
+      }),
+      (error) => {
+        assert.equal(controllerFailureCode(error), 'implementation-blocked');
+        return true;
+      },
+    );
+    assert.equal(called.includes(blockedStep), true);
+  }
+});
 
 async function tempDir(t, prefix = 'clinicos-bug-pipeline-') {
   const directory = await mkdtemp(path.join(os.tmpdir(), prefix));
@@ -996,3 +1034,322 @@ test(
   { timeout: 10000 },
   (t) => author7RetainedWorktree(t, true),
 );
+
+for (const failure of ['execute', 'simplify', 'qa', 'verify-before', 'verify-after'])
+  test(`Author9 F2 definite ${failure} failure records the failed step and preserves its journal`, async () => {
+    const batch = {
+      id: 'journal',
+      plan: {},
+      sha: 'a'.repeat(40),
+      implementation: [{ round: 1, status: 'running' }],
+    };
+    let verified = 0;
+    const workspace = {
+      execute: async () => ({ status: failure === 'execute' ? 'blocked' : 'implemented' }),
+      simplify: async () => ({ status: failure === 'simplify' ? 'blocked' : 'implemented' }),
+      qa: async () => ({ status: failure === 'qa' ? 'blocked' : 'verified' }),
+      verify: async () => {
+        if (++verified === (failure === 'verify-after' ? 2 : 1) && failure.startsWith('verify'))
+          throw new Error('required verification failed or executed no tests');
+      },
+      checkpoint: async () => 'b'.repeat(40),
+      publish: async () => {},
+    };
+    const call = () =>
+      runImplementationStages({
+        batch,
+        workspace,
+        save: async () => {},
+        context: { phase: 'pr-feedback', round: 1, implementationRound: 1 },
+      });
+    await assert.rejects(call());
+    assert.equal(batch.controllerProgress.status, 'failed');
+    assert.equal(batch.controllerProgress.failedStep, failure);
+    const original = structuredClone(batch.controllerProgress);
+    batch.implementation[0].status = 'failed';
+    batch.implementation.push({ round: 2, status: 'running' });
+    workspace.execute = workspace.simplify = async () => ({ status: 'implemented' });
+    workspace.qa = async () => ({ status: 'verified' });
+    workspace.verify = async () => {};
+    await runImplementationStages({
+      batch,
+      workspace,
+      save: async () => {},
+      context: { phase: 'pr-feedback', round: 2, implementationRound: 2 },
+    });
+    assert.deepEqual(batch.controllerProgressHistory, [original]);
+    assert.equal(batch.controllerProgress.status, 'completed');
+  });
+
+for (const failure of [
+  'model-execution',
+  'model-result',
+  'arbitrary-execute',
+  'blocked-code-throw',
+  'malformed-result',
+  'before-stage',
+  'pending-save',
+  'post-stage-save',
+  'initial-capture',
+  'post-capture',
+  'checkpoint',
+  'publish',
+  'ownership-invalid',
+])
+  test(`Author9 F2 ${failure} retains a running unknown outcome and cannot invoke a second worker`, async () => {
+    const batch = { id: 'unknown', plan: {}, implementation: [{ round: 1, status: 'running' }] };
+    let execute = 0,
+      saves = 0,
+      captures = 0;
+    const fail = (code) => {
+      throw Object.assign(new Error('Unknown synthetic outcome'), code ? { code } : {});
+    };
+    const workspace = {
+      execute: async () => {
+        execute++;
+        if (failure === 'model-execution') fail('model-execution-failed');
+        if (failure === 'model-result') fail('model-result-invalid');
+        if (failure === 'arbitrary-execute') fail();
+        if (failure === 'blocked-code-throw') fail('implementation-blocked');
+        if (failure === 'ownership-invalid') fail('ownership-observation-invalid');
+        return failure === 'malformed-result' ? {} : { status: 'implemented' };
+      },
+      simplify: async () => ({ status: 'implemented' }),
+      verify: async () => {},
+      qa: async () => ({ status: 'verified' }),
+      checkpoint: async () => {
+        if (failure === 'checkpoint') fail();
+        return 'a'.repeat(40);
+      },
+      publish: async () => {
+        if (failure === 'publish') fail();
+      },
+      captureCheckpoint: async () => {
+        captures++;
+        if (
+          (failure === 'initial-capture' && captures === 1) ||
+          (failure === 'post-capture' && captures === 2)
+        )
+          fail();
+        return { exact: true };
+      },
+    };
+    const call = () =>
+      runImplementationStages({
+        batch,
+        workspace,
+        save: async () => {
+          saves++;
+          if (
+            (failure === 'pending-save' && saves === 1) ||
+            (failure === 'post-stage-save' && saves === 2)
+          )
+            fail('state-write-uncertain');
+        },
+        beforeStage: async () => {
+          if (failure === 'before-stage') fail();
+        },
+        context: { phase: 'external-review-correction', round: 1, implementationRound: 1 },
+      });
+    await assert.rejects(call());
+    assert.equal(batch.controllerProgress.status, 'running');
+    assert.equal(batch.controllerProgress.failedStep, undefined);
+    const calls = execute;
+    await assert.rejects(call(), /Unknown implementation outcome/);
+    assert.equal(execute, calls);
+  });
+
+for (const outcome of [
+  'exact',
+  'changed',
+  'missing',
+  'foreign',
+  'frozen',
+  'capture-failure',
+  'unknown',
+])
+  test(`Author9 F2 real failed correction worktree ${outcome} requires exact retained output before another paid call`, async (t) => {
+    const { reserveImplementation, historyDigest } =
+      await import('../../src/bug-pipeline/attempt-budget.mjs');
+    const { createCommentReviewHandoff } =
+      await import('../../src/bug-pipeline/comment-review-handoff.mjs');
+    const { root } = await gitFixture(t),
+      repo = 'l2v-hub/ClinicOS';
+    const plan = implementationPlan([17]);
+    plan.fileMap = [{ issue: 17, files: [...plan.scope] }];
+    plan.separationReason = '';
+    plan.verification.push({ command: 'npm', args: ['--prefix', 'frontend', 'run', 'build'] });
+    let batch = {
+      id: 'bug-batch-17',
+      branch: 'codex/bug-batch-17',
+      issues: [17],
+      plan,
+      phase: 'waiting-review',
+      implementation: [1, 2, 3].map((round) => ({ round, status: 'passed' })),
+      reviews: [],
+      pr: { number: 81, url: `https://github.com/${repo}/pull/81` },
+    };
+    let fixed = false,
+      paid = 0;
+    const cwd = path.join(root, 'agent-team/.worktrees', batch.id),
+      file = path.join(cwd, plan.scope[0]);
+    const workspace = createWorkspace({
+      root,
+      repo,
+      run: async (call) => {
+        if (call.command === 'codex') {
+          if (!fixed) return { ok: false, code: 1, stdout: '# tests 1\n# fail 1\n', stderr: '' };
+          await makeEvidence(cwd, plan);
+          return { ok: true, code: 0, stdout: '# tests 1\n# pass 1\n', stderr: '' };
+        }
+        return safeGitRunner(call);
+      },
+      models: {
+        execute: async () => {
+          paid++;
+          await writeFile(file, `export const filter = "owned correction ${paid}";\n`);
+          if (outcome === 'unknown')
+            throw Object.assign(new Error('Unconfirmed model outcome'), {
+              code: 'model-execution-failed',
+            });
+          return { status: 'implemented', summary: 'Synthetic implementation' };
+        },
+        simplify: async () => ({ status: 'implemented', summary: 'Synthetic simplification' }),
+        qa: async () => ({ status: 'verified', summary: 'Synthetic independent QA' }),
+      },
+    });
+    await workspace.prepare(batch);
+    batch.sha = batch.baseSha;
+    const capture = workspace.captureCheckpoint;
+    let captures = 0;
+    workspace.captureCheckpoint = async (b) => {
+      if (++captures === 3 && outcome === 'capture-failure')
+        throw new Error('Failed exact output capture');
+      return capture(b);
+    };
+    const first = reserveImplementation(batch);
+    await assert.rejects(
+      runImplementationStages({
+        batch,
+        workspace,
+        save: async () => {},
+        context: {
+          phase: 'pr-feedback',
+          round: first.round,
+          implementationRound: first.round,
+          feedback: { finding: 'Retain this exact finding' },
+        },
+      }),
+    );
+    batch.phase = 'blocked';
+    if (batch.controllerProgress.status !== 'failed') {
+      assert.ok(['capture-failure', 'unknown'].includes(outcome));
+      assert.equal(first.status, 'running');
+      assert.equal(batch.controllerProgress.status, 'running');
+      await assert.rejects(workspace.prepare(batch), /clean expected batch/);
+      await assert.rejects(
+        runImplementationStages({
+          batch,
+          workspace,
+          save: async () => {},
+          context: { phase: 'pr-feedback', round: first.round },
+        }),
+        /Unknown implementation outcome/,
+      );
+      assert.equal(paid, 1);
+      return;
+    }
+    assert.ok(!['capture-failure', 'unknown'].includes(outcome));
+    first.status = 'failed';
+    batch.failureCode = batch.controllerProgress.failureCode;
+    const retained = structuredClone(batch.controllerProgress);
+    assert.equal(retained.checkpoint.head, batch.sha);
+    assert.equal(retained.checkpoint.output[plan.scope[0]].sha256.length, 64);
+    let canonical = { schemaVersion: 1, repository: repo, batches: [structuredClone(batch)] };
+    const store = {
+      load: async () => structuredClone(canonical),
+      save: async (state, options) => {
+        await options?.guard?.();
+        canonical = structuredClone(state);
+      },
+    };
+    const github = {
+      createStateStore: () => store,
+      authorized: async () => true,
+      authorizedMaintainer: async () => true,
+      reviewFeedback: async () => ({
+        state: 'OPEN',
+        isDraft: false,
+        head: batch.sha,
+        headRef: batch.branch,
+        headRepo: repo,
+        headIsFork: false,
+        baseRef: 'main',
+      }),
+      viewIssue: async () => ({ state: 'open' }),
+    };
+    const handoff = createCommentReviewHandoff({
+      github,
+      cwd: root,
+      run: async () => ({ ok: true, stdout: JSON.stringify({ login: 'maintainer' }) }),
+      authorizationVerifier: async ({ binding }) => ({
+        provenance: 'user-session',
+        grantId: 'test:worktree',
+        sourceRef: 'test:session',
+        consumptionNonce: 'test:worktree-grant',
+        binding,
+      }),
+    });
+    const resume = () =>
+      handoff.recover(81, {
+        action: 'resume',
+        expectedSha: batch.sha,
+        token: historyDigest({ phase: 'blocked', failureCode: batch.failureCode }),
+        reason: 'Audited exact retained correction',
+      });
+    await assert.rejects(resume(), /allowances/);
+    await handoff.extendBudget(81, {
+      kind: 'implementation',
+      limit: 5,
+      authorizationRef: 'test:worktree',
+      reason: 'One new correction with exact retained output',
+    });
+    batch = await resume();
+    if (outcome === 'changed')
+      await writeFile(file, 'export const filter = "foreign modification";\n');
+    if (outcome === 'missing') await rm(cwd, { recursive: true, force: true });
+    if (outcome === 'foreign') await writeFile(path.join(cwd, 'foreign.ts'), 'foreign');
+    if (outcome === 'frozen')
+      await writeFile(
+        path.join(cwd, 'artifacts/task-validation', batch.id, 'implementation-plan.md'),
+        'changed frozen plan',
+      );
+    if (outcome !== 'exact') {
+      await assert.rejects(workspace.prepare(batch));
+      assert.equal(paid, 1);
+      assert.equal(batch.implementation.length, 4);
+      return;
+    }
+    await workspace.prepare(batch);
+    assert.equal(paid, 1);
+    fixed = true;
+    const next = reserveImplementation(batch);
+    await runImplementationStages({
+      batch,
+      workspace,
+      save: async () => {},
+      context: {
+        phase: 'pr-feedback',
+        round: next.round,
+        implementationRound: next.round,
+        feedback: retained.feedback,
+      },
+    });
+    next.status = 'passed';
+    assert.equal(paid, 2);
+    assert.equal(next.round, 5);
+    assert.deepEqual(batch.controllerProgressHistory, [retained]);
+    assert.equal(batch.controllerProgress.status, 'completed');
+    assert.equal(batch.implementation[3].status, 'failed');
+    assert.notEqual(batch.sha, retained.sourceSha);
+  });

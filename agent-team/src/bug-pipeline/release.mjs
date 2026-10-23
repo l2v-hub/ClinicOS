@@ -1099,7 +1099,7 @@ export async function releaseBatch({
     Object.assign(batch, saved);
     guard = freshReleaseGuard({ batch, store, repo, automatic });
   }
-  const mergeGuard = async () => {
+  const verifyMergeGuard = async () => {
     const verified = await guard();
     await verifyCurrentCandidate({
       batch: verified.current,
@@ -1118,9 +1118,57 @@ export async function releaseBatch({
       fail('final Codex proof changed before native merge');
     return fresh;
   };
-  const merge = await github.mergePullRequest(batch.pr.number, reviewedSha, {
-    guard: mergeGuard,
-  });
+  let preInvocationRejection;
+  const mergeGuard = async () => {
+    try {
+      return await verifyMergeGuard();
+    } catch (error) {
+      // The native adapter runs this callback immediately before invocation.
+      preInvocationRejection = error;
+      throw error;
+    }
+  };
+  let merge;
+  try {
+    merge = await github.mergePullRequest(batch.pr.number, reviewedSha, { guard: mergeGuard });
+  } catch (error) {
+    const rejected =
+      (preInvocationRejection !== undefined && error === preInvocationRejection) ||
+      (error?.code === 'github-write-rejected' &&
+        error.operation === 'merge' &&
+        ((error.httpStatus >= 400 && error.httpStatus < 500 && error.httpStatus !== 408) ||
+          error.diagnostic === 'graphql-merge-refusal'));
+    if (!rejected) throw error;
+    // OPEN is sufficient only after known non-invocation or definite refusal.
+    // In particular, an OPEN observation never releases a timed-out merge.
+    const feedback = await github.reviewFeedback(batch.pr.number);
+    if (
+      feedback.state !== 'OPEN' ||
+      feedback.number !== batch.pr.number ||
+      feedback.url !== batch.pr.url ||
+      feedback.head !== reviewedSha ||
+      feedback.headRef !== batch.branch ||
+      feedback.headRepo !== repo ||
+      feedback.headIsFork !== false ||
+      feedback.baseRef !== 'main'
+    )
+      throw error;
+    const { state, current } = await guard();
+    current.mergeHistory ??= [];
+    current.mergeHistory.push(structuredClone(current.release));
+    delete current.release;
+    current.phase = 'blocked';
+    current.failureCode = 'github-merge-rejected';
+    current.failureOperation = 'merge';
+    current.reason = 'Known merge rejection; exact-head open PR verified for explicit resume';
+    delete current.approvedSha;
+    await persistReleaseTransition({ state, batch: current, guard, store, repo, automatic });
+    throw Object.assign(new ReleaseGateError(current.reason), {
+      code: 'github-merge-rejected',
+      operation: 'merge',
+    });
+  }
+
   const { state, current } = await guard();
   current.release = {
     ...batch.release,

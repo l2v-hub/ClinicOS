@@ -63,7 +63,12 @@ test('dashboard state reads never initialize a branch, and source permission err
   assert.equal(await gh.readDashboardState(), null);
   assert.ok(calls.every((args) => !args.includes('-X')));
   forbidden = true;
-  await assert.rejects(gh.readDashboardState(), /Cannot read/);
+  await assert.rejects(gh.readDashboardState(), (error) => {
+    assert.equal(error.code, 'github-read-rejected');
+    assert.equal(error.httpStatus, 403);
+    assert.equal(error.diagnostic, 'http-status');
+    return true;
+  });
 });
 
 function response(value, { ok = true, code = 0, stderr = '' } = {}) {
@@ -680,7 +685,76 @@ test('durable state load distinguishes a missing file from authorization or tran
   }).createStateStore();
   assert.equal(await store.load(), null);
   for (failure of ['HTTP 403', 'network timeout'])
-    await assert.rejects(store.load(), /Cannot read durable bug pipeline state/);
+    await assert.rejects(store.load(), (error) => {
+      assert.equal(
+        error.code,
+        failure === 'HTTP 403' ? 'github-read-rejected' : 'github-read-failed',
+      );
+      assert.equal(error.httpStatus, failure === 'HTTP 403' ? 403 : null);
+      assert.equal(error.diagnostic, failure === 'HTTP 403' ? 'http-status' : 'unknown');
+      return true;
+    });
+});
+
+test('state read failures retain finite GitHub diagnostics across load, branch initialization, and dashboard reads', async () => {
+  const timeoutStore = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async ({ args }) => {
+      if (apiPath(args).includes('/git/ref/heads/'))
+        return response({ object: { sha: 'a'.repeat(40) } });
+      return {
+        ok: false,
+        code: 1,
+        error: 'output-limit',
+        stderr: 'private stderr must not escape',
+      };
+    },
+  }).createStateStore();
+  await assert.rejects(timeoutStore.load(), (error) => {
+    assert.equal(error.code, 'github-read-failed');
+    assert.equal(error.diagnostic, 'output-limit');
+    assert.equal(error.httpStatus, null);
+    assert.doesNotMatch(error.message, /private stderr/);
+    return true;
+  });
+
+  const branchStore = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async ({ args }) =>
+      apiPath(args).endsWith('/git/ref/heads/codex/bug-control')
+        ? response({}, { ok: false, code: 1, stderr: 'HTTP 404' })
+        : response({}, { ok: false, code: 1, stderr: 'HTTP 503 private stderr' }),
+  }).createStateStore();
+  await assert.rejects(branchStore.load(), (error) => {
+    assert.equal(error.code, 'github-read-transient');
+    assert.equal(error.diagnostic, 'http-status');
+    assert.equal(error.httpStatus, 503);
+    assert.doesNotMatch(error.message, /private stderr/);
+    return true;
+  });
+
+  const dashboard = createGitHub({
+    cwd: '/tmp',
+    repo: 'l2v-hub/ClinicOS',
+    run: async () => response({}, { ok: false, code: 1, stderr: 'HTTP 403 private stderr' }),
+  });
+  await assert.rejects(dashboard.readDashboardState(), (error) => {
+    assert.equal(error.code, 'github-read-rejected');
+    assert.equal(error.diagnostic, 'http-status');
+    assert.equal(error.httpStatus, 403);
+    assert.doesNotMatch(error.message, /private stderr/);
+    return true;
+  });
+  assert.equal(
+    await createGitHub({
+      cwd: '/tmp',
+      repo: 'l2v-hub/ClinicOS',
+      run: async () => response({}, { ok: false, code: 1, stderr: 'HTTP 404' }),
+    }).readDashboardState(),
+    null,
+  );
 });
 
 test('oversized durable state is rejected before any remote mutation', async () => {
@@ -1473,7 +1547,12 @@ test('large durable state loads from authenticated blob SHA and preserves file i
   await f.store.save({ ...state, reconciled: true });
   assert.equal(f.refWrites.length, 1);
   assert.equal(f.contentsWrites.length, 0);
-  assert.ok(f.calls.some((c) => c.path.endsWith('?ref=' + oldParent)));
+  assert.equal(
+    f.calls.filter((c) => c.path.includes('/git/blobs/')).length,
+    1,
+    'Pinned loaded parent avoids a second blob GET',
+  );
+  assert.ok(!f.calls.some((c) => c.path.endsWith('?ref=' + oldParent)));
   assert.notEqual(f.metadata.sha, oldSHA);
   assert.equal((await f.store.load()).reconciled, true);
 });
@@ -2767,7 +2846,9 @@ test('Author8 mutation failures at every object/ref stage are fatal without fall
               owners++;
             },
           }),
-          (e) => e.code === code,
+          (e) =>
+            e.code ===
+            (index < 3 ? 'state-write-failed' : label === '502' ? 'state-write-uncertain' : code),
         );
         assert.equal(f.head, parent);
         assert.equal(f.contentsWrites.length, 0);
@@ -2803,7 +2884,7 @@ test('Author8 ref409/422 require proven fresh change; auth/server errors cannot 
       } else {
         await assert.rejects(
           f.store.save(ours, { rebaseIndependentSubjects: entityValidator }),
-          (e) => e.code === 'state-write-failed',
+          (e) => e.code === (status === 502 ? 'state-write-uncertain' : 'state-write-failed'),
         );
         assert.equal(f.readState().batches[0].local, undefined);
         assert.equal(refAttempts8(f).length, 1);
@@ -2812,7 +2893,7 @@ test('Author8 ref409/422 require proven fresh change; auth/server errors cannot 
     });
 });
 
-test('Author8 an unknown ref outcome after an actual effect remains fatal and never triggers a second write or owner skip', async (t) => {
+test('Author9 positive exact-next read confirms formerly unknown ref outcomes without another write or owner skip', async (t) => {
   for (const kind of [
     'timeout-after-effect',
     'malformed-ref',
@@ -2847,15 +2928,12 @@ test('Author8 an unknown ref outcome after an actual effect remains fatal and ne
       }).createStateStore();
       await store.load();
       let owners = 0;
-      await assert.rejects(
-        store.save(ours, {
-          checkFreshOwnership: () => {
-            owners++;
-          },
-          rebaseIndependentSubjects: entityValidator,
-        }),
-        (e) => e.code === 'state-write-uncertain',
-      );
+      await store.save(ours, {
+        checkFreshOwnership: () => {
+          owners++;
+        },
+        rebaseIndependentSubjects: entityValidator,
+      });
       assert.notEqual(f.head, old);
       assert.equal(f.readState().batches[0].local, true);
       assert.equal(refAttempts8(f).length, 1);
@@ -2947,7 +3025,11 @@ test('Author8 malformed parent/blob/tree/commit metadata and target types cannot
           changed = true;
         }
       };
-      await assert.rejects(f.store.save(ours, { rebaseIndependentSubjects: entityValidator }));
+      await assert.rejects(
+        kind.startsWith('contents-')
+          ? f.store.load()
+          : f.store.save(ours, { rebaseIndependentSubjects: entityValidator }),
+      );
       assert.equal(changed, true);
       assert.equal(f.head, head);
       assert.equal(refAttempts8(f).length, 0);
@@ -2986,6 +3068,16 @@ test('Author8 large creation proves tree absence and positive HTTP404, while rea
           return response({}, { ok: false, code: 1, stderr: 'HTTP 404' });
         return response(stateContents({ spoof: true }));
       };
+      if (kind === 'target-missing-contents') {
+        await f.store.save(largeEntityState8());
+        assert.equal(
+          f.calls.filter((c) => c.path.includes('/contents/') && !c.path.includes('ref=codex'))
+            .length,
+          0,
+        );
+        assert.equal(refAttempts8(f).length, 1);
+        return; // The already authenticated matching parent does not consult this endpoint.
+      }
       await assert.rejects(f.store.save(largeEntityState8()));
       assert.equal(f.head, head);
       assert.equal(f.objectWrites.length, 0);
@@ -3047,7 +3139,10 @@ test('Author8 a hash-consistent new tree changing an unrelated entry still fails
     const bytes = Buffer.concat(chunks);
     value.sha = createHash('sha1').update(`tree ${bytes.length}\0`).update(bytes).digest('hex');
   };
-  await assert.rejects(f.store.save(ours), /changed unrelated entries/);
+  await assert.rejects(
+    f.store.save(ours),
+    (e) => e.code === 'state-write-failed' && /changed unrelated entries/.test(e.cause?.message),
+  );
   assert.equal(f.head, head);
   assert.equal(refAttempts8(f).length, 0);
   assert.equal(f.objectWrites.filter((c) => c.path.endsWith('/git/commits')).length, 0);
@@ -3075,3 +3170,113 @@ test('Author8 confirmed ref success tolerates subsequent forward progress and ke
   assert.equal(f.readState().batches[1].remote, 'after confirmed effect');
   assert.equal(f.refWrites.length, 2);
 });
+
+for (const kind of ['late-apply', 'different-commit', 'read-failure', 'bad-ref'])
+  test(`Author9 F3 uncertain ref ${kind} is never converted to failure or retried`, async () => {
+    const f = gitDataStateFixture(largeEntityState8()),
+      ours = await f.store.load(),
+      parent = f.head;
+    ours.batches[0].local = true;
+    let attempted = false,
+      next,
+      readsAfter = 0,
+      validations = 0;
+    f.before = (req) => {
+      if (req.method === 'PATCH') {
+        attempted = true;
+        next = req.body.sha;
+        return { ...response({}, { ok: false, code: 1 }), error: 'timeout' };
+      }
+      if (attempted && req.path.includes('/git/ref/')) {
+        readsAfter++;
+        if (kind === 'different-commit') f.advance({ ...f.readState(), remote: true });
+        if (kind === 'read-failure')
+          return { ...response({}, { ok: false, code: 1 }), error: 'output-limit' };
+        if (kind === 'bad-ref')
+          return response({ ref: 'refs/heads/main', object: { type: 'commit', sha: next } });
+      }
+    };
+    await assert.rejects(
+      f.store.save(ours, { rebaseIndependentSubjects: () => validations++ }),
+      (e) => e.code === 'state-write-uncertain',
+    );
+    assert.equal(readsAfter, 1);
+    assert.equal(f.calls.filter((r) => r.method === 'PATCH').length, 1);
+    assert.equal(validations, 1);
+    assert.equal(f.readState().batches[0].local, undefined);
+    if (kind === 'late-apply') {
+      assert.equal(f.head, parent);
+      f.head = next; // The timed-out request applies AFTER our parent read.
+      assert.equal(f.readState().batches[0].local, true);
+      assert.equal(f.calls.filter((r) => r.method === 'PATCH').length, 1);
+    }
+  });
+
+test('Author9 F3 matching parent snapshot remains pinned across shared loads and independent rebases', async () => {
+  const f = gitDataStateFixture(largeEntityState8()),
+    ours = await f.store.load();
+  ours.batches[0].local = 'ours';
+  const remote = f.readState();
+  remote.batches[1].remote = 'first';
+  f.advance(remote);
+  let validations = 0,
+    captured;
+  await f.store.save(ours, {
+    rebaseIndependentSubjects: async () => {
+      if (++validations === 2) {
+        const later = f.readState();
+        later.batches[1].remote = 'later';
+        f.advance(later);
+        await f.store.load(); // Must not promote this closure state into the earlier candidate base.
+      }
+    },
+    checkFreshOwnership: (state) => {
+      captured = structuredClone(state);
+    },
+  });
+  assert.equal(f.readState().batches[0].local, 'ours');
+  assert.equal(f.readState().batches[1].remote, 'later');
+  assert.equal(captured.batches[1].remote, 'later');
+  assert.equal(f.calls.filter((r) => r.method === 'PATCH').length, 1);
+  assert.equal(validations, 3);
+});
+
+test('Author9 F3 large object uploads use a finite120s bound while reads retain30s', async () => {
+  const f = gitDataStateFixture(largeEntityState8()),
+    ours = await f.store.load();
+  await f.store.save(ours);
+  for (const request of f.calls)
+    assert.equal(request.call.timeoutMs, request.method === 'POST' ? 120000 : 30000);
+});
+
+for (const kind of ['load-timeout', 'init-ref-timeout', 'init-ref-output-limit'])
+  test(`Author9 F4 ${kind} preserves bounded diagnostic without raw transport text`, async () => {
+    let refs = 0;
+    const gh = createGitHub({
+      repo: 'l2v-hub/ClinicOS',
+      run: async ({ args }) => {
+        const endpoint = args[1];
+        const error = kind.endsWith('output-limit') ? 'output-limit' : 'timeout';
+        const failure = {
+          ...response({}, { ok: false, code: 1, stderr: 'PRIVATE_TOKEN patient: secret' }),
+          error,
+        };
+        if (endpoint.includes('/contents/')) return failure;
+        if (kind === 'load-timeout') return response({ object: { sha: 'a'.repeat(40) } });
+        if (endpoint.endsWith('/git/ref/heads/main'))
+          return response({ object: { sha: 'a'.repeat(40) } });
+        if (args.includes('POST')) return response({}, { ok: false, code: 1, stderr: 'HTTP 422' });
+        return ++refs === 1 ? response({}, { ok: false, code: 1, stderr: 'HTTP 404' }) : failure;
+      },
+    });
+    await assert.rejects(gh.createStateStore().load(), (error) => {
+      assert.equal(error.diagnostic, kind.endsWith('output-limit') ? 'output-limit' : 'timeout');
+      assert.equal(error.httpStatus, null);
+      assert.equal(
+        error.code,
+        kind.endsWith('output-limit') ? 'github-read-failed' : 'github-read-transient',
+      );
+      assert.doesNotMatch(JSON.stringify(error), /PRIVATE_TOKEN|patient|secret/);
+      return true;
+    });
+  });

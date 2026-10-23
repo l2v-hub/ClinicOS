@@ -1190,3 +1190,67 @@ test('Author7 F3 completed modern final QA survives post-inference observation r
   assert.deepEqual(f.remote.batches[0].codexFinalReview, completed);
   assert.equal(f.remote.batches[0].codexFinalQaInfrastructure.attempts.length, 3);
 });
+
+for (const changed of ['none', 'source', 'plan', 'feedback', 'step-code', 'attempt', 'running'])
+  test(`Author9 F2 audited correction resume requires positive journal binding: ${changed}`, async () => {
+    const { historyDigest } = await import('../../src/bug-pipeline/attempt-budget.mjs');
+    const { sha256 } = await import('../../src/bug-pipeline/contracts.mjs');
+    const f = fixture();
+    f.setPermission('admin');
+    Object.assign(f.batch, {
+      phase: 'blocked',
+      failureCode: 'workspace-verification-failed',
+      implementation: [1, 2, 3, 4].map((round) => ({
+        round,
+        status: round === 4 ? 'failed' : 'passed',
+      })),
+      reviews: [{ round: 1, status: 'changes-requested', subjectSha: sha }],
+      externalReview: { status: 'published', subjectSha: sha },
+      controllerProgress: {
+        schemaVersion: 1,
+        status: 'failed',
+        flow: 'external-review-correction',
+        round: 4,
+        implementationRound: 4,
+        sourceSha: sha,
+        planSha256: sha256(JSON.stringify(f.batch.plan)),
+        feedback: { known: 'findings' },
+        feedbackSha256: sha256(JSON.stringify({ known: 'findings' })),
+        next: 1,
+        completed: [{ step: 'execute' }],
+        pending: 'verify-before',
+        failedStep: 'verify-before',
+        failureCode: 'workspace-verification-failed',
+      },
+    });
+    await f.handoff.extendBudget(81, {
+      kind: 'implementation',
+      limit: 5,
+      authorizationRef: 'test:author9',
+      reason: 'One bounded next attempt',
+    });
+    const b = f.remote.batches[0],
+      before = clone(b.implementation);
+    if (changed === 'source') b.controllerProgress.sourceSha = 'e'.repeat(40);
+    if (changed === 'plan') b.controllerProgress.planSha256 = 'f'.repeat(64);
+    if (changed === 'feedback') b.controllerProgress.feedback.known = 'changed';
+    if (changed === 'step-code') b.controllerProgress.failedStep = 'execute';
+    if (changed === 'attempt') b.controllerProgress.implementationRound = 3;
+    if (changed === 'running') b.controllerProgress.status = 'running';
+    const recover = () =>
+      f.handoff.recover(81, {
+        action: 'resume',
+        expectedSha: sha,
+        token: historyDigest({ phase: 'blocked', failureCode: b.failureCode }),
+        reason: 'Inspect bound known failure',
+      });
+    if (changed === 'none') {
+      const recovered = await recover();
+      assert.equal(recovered.phase, 'waiting-review');
+      assert.deepEqual(recovered.implementation, before);
+    } else {
+      const frozen = clone(f.remote);
+      await assert.rejects(recover(), /allowances/);
+      assert.deepEqual(f.remote, frozen);
+    }
+  });

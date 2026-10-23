@@ -1,3 +1,5 @@
+import { activeImplementation, implementationAttempts } from './attempt-budget.mjs';
+import { controllerFailureCode, stateError } from './github.mjs';
 import { validateObservationResume } from './operator-authorization.mjs';
 import { MAX_EVIDENCE_BYTES } from './evidence-limits.mjs';
 import { mkdir, readFile, writeFile, lstat, realpath, rm } from 'node:fs/promises';
@@ -46,6 +48,34 @@ export async function validateEvidence(cwd, plan) {
     entries.push({ issue: item.issue, files });
   }
   return entries;
+}
+
+// These fields are controller evidence, not a generic retry flag. Running/unknown
+// work and malformed/stale failed journals cannot authorize another correction.
+export function knownFailedCorrection(batch) {
+  const progress = batch.controllerProgress;
+  return Boolean(
+    progress?.status === 'failed' &&
+    ['pr-feedback', 'review-correction', 'external-review-correction'].includes(progress.flow) &&
+    ((['execute', 'simplify'].includes(progress.failedStep) &&
+      progress.failureCode === 'implementation-blocked') ||
+      (progress.failedStep === 'qa' && progress.failureCode === 'independent-qa-blocked') ||
+      (['verify-before', 'verify-after'].includes(progress.failedStep) &&
+        [
+          'workspace-verification-failed',
+          'workspace-evidence-invalid',
+          'workspace-scope-invalid',
+        ].includes(progress.failureCode))) &&
+    progress.sourceSha === batch.sha &&
+    progress.planSha256 === sha256(JSON.stringify(batch.plan)) &&
+    progress.feedbackSha256 === sha256(JSON.stringify(progress.feedback)) &&
+    !activeImplementation(batch) &&
+    !batch.reviews.some((entry) => entry.status === 'running') &&
+    (progress.implementationRound === undefined ||
+      (progress.round === progress.implementationRound &&
+        implementationAttempts(batch).at(-1)?.round === progress.implementationRound &&
+        implementationAttempts(batch).at(-1)?.status === 'failed')),
+  );
 }
 
 export function createWorkspace({ root, repo, run, models }) {
@@ -230,6 +260,18 @@ export function createWorkspace({ root, repo, run, models }) {
     },
     async prepare(batch) {
       const { cwd, packet } = coordinates(batch);
+      if (knownFailedCorrection(batch)) {
+        const checkpoint = batch.controllerProgress.checkpoint;
+        if (
+          !checkpoint ||
+          checkpoint.head !== batch.sha ||
+          JSON.stringify(await captureCheckpoint(batch)) !== JSON.stringify(checkpoint)
+        )
+          throw new Error(
+            'Exact failed correction checkpoint is missing or changed; no model replay',
+          );
+        return; // Retain only these exact owned dirty outputs; never clean or reconstruct them.
+      }
       await git(['fetch', 'origin', 'main']);
       const entries = (await git(['worktree', 'list', '--porcelain'])).split('\n\n');
       const registered = entries.find((e) => e.split('\n').includes(`worktree ${cwd}`));
@@ -476,10 +518,18 @@ export async function runImplementationStages({ batch, workspace, save, context,
   } else {
     if (progress?.status === 'running')
       throw new Error('Unknown implementation outcome requires explicit recovery');
+    if (progress?.status === 'failed') {
+      batch.controllerProgressHistory ??= [];
+      batch.controllerProgressHistory.push(structuredClone(progress));
+    }
     progress = batch.controllerProgress = {
       schemaVersion: 1,
       flow: context.phase,
       round: context.round,
+      ...(context.implementationRound === undefined
+        ? {}
+        : { implementationRound: context.implementationRound }),
+      ...(context.reviewRound === undefined ? {} : { reviewRound: context.reviewRound }),
       sourceSha: batch.sha ?? null,
       planSha256: sha256(JSON.stringify(batch.plan)),
       feedbackSha256: sha256(JSON.stringify(context.feedback ?? null)),
@@ -491,6 +541,15 @@ export async function runImplementationStages({ batch, workspace, save, context,
     if (typeof workspace.captureCheckpoint === 'function')
       progress.checkpoint = await workspace.captureCheckpoint(batch);
   }
+  if (
+    progress.implementationRound !== undefined &&
+    (progress.round !== progress.implementationRound ||
+      progress.implementationRound !== context.implementationRound ||
+      !implementationAttempts(batch).some(
+        (entry) => entry.round === progress.implementationRound && entry.status === 'running',
+      ))
+  )
+    throw new Error('Implementation reservation changed');
   for (let index = progress.next; index < steps.length; index++) {
     const step = steps[index];
     batch.phase =
@@ -504,21 +563,56 @@ export async function runImplementationStages({ batch, workspace, save, context,
     progress.pending = step;
     await save();
     await beforeStage?.(step);
-    let result;
-    if (step === 'execute') {
-      result = await workspace.execute(batch, context);
-      if (result?.status !== 'implemented') throw new Error('Executor blocked');
-    } else if (step === 'simplify') {
-      result = await workspace.simplify(batch);
-      if (result?.status !== 'implemented') throw new Error('Simplification blocked');
-    } else if (step === 'qa') {
-      result = await workspace.qa(batch);
-      if (result?.status !== 'verified') throw new Error('Independent QA blocked');
-    } else if (step === 'checkpoint') {
-      result = await workspace.checkpoint(batch);
-      batch.sha = result;
-    } else if (step === 'publish') await workspace.publish(batch);
-    else await workspace.verify(batch);
+    let result, definiteModelFailure;
+    try {
+      if (step === 'execute' || step === 'simplify' || step === 'qa') {
+        result =
+          step === 'execute'
+            ? await workspace.execute(batch, context)
+            : await workspace[step](batch);
+        const accepted = step === 'qa' ? 'verified' : 'implemented';
+        if (result?.status === 'blocked') {
+          definiteModelFailure = stateError(
+            step === 'qa' ? 'independent-qa-blocked' : 'implementation-blocked',
+            step === 'execute'
+              ? 'executor blocked'
+              : step === 'simplify'
+                ? 'simplification blocked'
+                : 'Independent QA blocked',
+          );
+          throw definiteModelFailure;
+        }
+        if (result?.status !== accepted)
+          throw stateError('model-result-invalid', 'Implementation stage result is unconfirmed');
+      } else if (step === 'checkpoint') {
+        result = await workspace.checkpoint(batch);
+        batch.sha = result;
+      } else if (step === 'publish') await workspace.publish(batch);
+      else await workspace.verify(batch);
+    } catch (error) {
+      // Only explicit blocked model results or definite verification validation
+      // failures end an attempt. Transport/model exceptions and all surrounding
+      // persistence/checkpoint/guard boundaries retain their running tombstone.
+      const code = controllerFailureCode(error);
+      const definite =
+        (definiteModelFailure !== undefined && error === definiteModelFailure) ||
+        (['verify-before', 'verify-after'].includes(step) &&
+          [
+            'workspace-verification-failed',
+            'workspace-evidence-invalid',
+            'workspace-scope-invalid',
+          ].includes(code));
+      if (definite) {
+        // Failure capture is itself a boundary: if it fails, keep running and
+        // require explicit recovery rather than treating unknown output as reusable.
+        if (typeof workspace.captureCheckpoint === 'function')
+          progress.checkpoint = await workspace.captureCheckpoint(batch);
+        progress.status = 'failed';
+        progress.failedStep = step;
+        progress.failureCode = code;
+      }
+      throw error;
+    }
     progress.completed.push({ step, ...(step === 'checkpoint' ? { sha: result } : {}) });
     progress.next = index + 1;
     delete progress.pending;
