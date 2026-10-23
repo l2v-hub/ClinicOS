@@ -1,0 +1,11 @@
+{
+  "status": "stopped",
+  "qaStatus": "verified",
+  "findings": [],
+  "sourceSha": "9d3bc489885cdf5b3363f510fce59c3be7d4a81d",
+  "nonce": "bbc89c97-f34b-4112-a0b9-5d17c597d8fd",
+  "at": "2026-10-23T09:26:48.092660+00:00",
+  "sourceEdits": false,
+  "liveOperations": false,
+  "remainingGatesOwnedBy": "root"
+}

@@ -1,0 +1,25 @@
+{
+  "nonce": "4312f0da-1a52-4f36-b78f-f99f4a096165",
+  "status": "running",
+  "reservedAt": "2026-10-23T08:29:05.021Z",
+  "reservedBeforeSession": true,
+  "parentAuthorNonce": "306e10be-29ce-4784-b4ff-97db849b5a45",
+  "agent": "/root/luna_diagnostics9",
+  "model": "gpt-6-luna",
+  "sourceHead": "689425d8836f14dfaa1c1cd1642def0cdbf30745",
+  "sourceSnapshot": "/tmp/clinicos-autonomy-activation-20261022/Luna-diagnostics9/source",
+  "scope": [
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/src/bug-pipeline/workspace.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/tests/bug-pipeline/workspace.test.mjs"
+  ],
+  "sourceFiles": 139,
+  "snapshotSha256": "18ed2197ced12cca3b233a584be09395375e4be8e6ffb2d04aa36f19e4768e3a",
+  "contractSha256": "31117f0343e10276502f0279f6b50de2729192ed5a4f6848cd06ad8e0c6ba28d",
+  "privateOutput": "/tmp/clinicos-autonomy-activation-20261022/Luna-diagnostics9",
+  "parentSourceEditsAllowed": false,
+  "liveActionsAllowed": false,
+  "stateCommit": "2adfa9d354d13ff6b00dc7a2a3af24d8c41efd6d",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/46af2343-d400-4f86-89c7-4a9e1b212b30/accepted.json"
+}

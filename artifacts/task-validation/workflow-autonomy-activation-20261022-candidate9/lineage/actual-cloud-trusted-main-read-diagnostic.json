@@ -1,0 +1,48 @@
+{
+  "at": "2026-10-23T08:40:22.070Z",
+  "completedAt": "2026-10-23T08:40:24.178Z",
+  "status": "read-success",
+  "statePresent": true,
+  "serializedBytes": 5348706,
+  "nativeReviews": 1,
+  "calls": [
+    {
+      "path": "repos/l2v-hub/ClinicOS/git/ref/heads/codex/bug-control",
+      "durationMs": 497,
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "httpStatus": null,
+      "stdoutBytes": 373,
+      "stderrBytes": 0,
+      "maxOutputBytes": 2097152,
+      "timeoutMs": 30000
+    },
+    {
+      "path": "repos/l2v-hub/ClinicOS/contents/.codex-bug-state.json?ref=codex%2Fbug-control",
+      "durationMs": 415,
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "httpStatus": null,
+      "stdoutBytes": 904,
+      "stderrBytes": 0,
+      "maxOutputBytes": 16777216,
+      "timeoutMs": 30000
+    },
+    {
+      "path": "repos/l2v-hub/ClinicOS/git/blobs/07c078e438b8c05e4882a3b8ba0c9b263f1128a1",
+      "durationMs": 1013,
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "httpStatus": null,
+      "stdoutBytes": 7369619,
+      "stderrBytes": 0,
+      "maxOutputBytes": 16777216,
+      "timeoutMs": 30000
+    }
+  ],
+  "readOnly": true,
+  "personalWindowsCauseStillUnproven": true
+}

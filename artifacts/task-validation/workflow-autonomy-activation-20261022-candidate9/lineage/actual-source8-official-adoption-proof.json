@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-23T07:56:30.861Z",
+  "status": "verified",
+  "actualOfficialAdoptExit": 0,
+  "head": "689425d8836f14dfaa1c1cd1642def0cdbf30745",
+  "stateSha": "80efce96c41b7e83c32eaf6e2027ee19bc19cf74",
+  "rawStateSha256": "f6cb6e7719ed7e7ed78e9509a5e4547a9302cb594304e1cc441c02bf284c14b2",
+  "rawStateBytes": 5337998,
+  "implementationCount": 8,
+  "nativeClaimedReviews": 1,
+  "adoptionImportedReviewCount": 1,
+  "actualImplementationStatuses": [
+    "blocked",
+    "failed",
+    "failed",
+    "passed",
+    "failed",
+    "passed",
+    "passed",
+    "passed"
+  ],
+  "old22SubjectsExact": true,
+  "automationOwnPropertyAbsent": true,
+  "currentExternalReviewStatus": null,
+  "explicitlyReviewedSource8GithubDependency": true,
+  "noClaimOrApprovalFabricated": true
+}

@@ -1,0 +1,20 @@
+{
+  "mode": "actual-readonly-all138-Git-vs-frozen-audit",
+  "mismatches": [
+    {
+      "path": "scripts/automation/setup-claude-review-windows.ps1",
+      "frozenBytes": 3083,
+      "gitBytes": 3038,
+      "frozenSha256": "716a6281632940c72fbb12650675e2fa96106e52056a281c2267244d89951f22",
+      "gitSha256": "4ce32c8cbdbb8c5c41478361615d0bdbc392d5163457580ef2be59a274a87dc6",
+      "onlyCRLFToLF": true,
+      "baselineSource6ExactSame": true,
+      "baseGitExactSame": true,
+      "changedCodePath": false,
+      "carriageReturns": 45,
+      "lineFeeds": 45
+    }
+  ],
+  "noSourceOrGitChange": true,
+  "rawChanged26BindingsStillExact": true
+}
