@@ -1,0 +1,13 @@
+{
+  "subject": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
+  "actualFrontendProductionBuild": true,
+  "actualVitePreview": true,
+  "nonrootBase": "/qa-clinicos/",
+  "actualOwnedBackend": true,
+  "actualOwnedPostgreSQL": true,
+  "actualUploadedSyntheticPdf": true,
+  "onlyExternalOcrExtractionFixture": true,
+  "geometryOnly": false,
+  "applicationSourceChanged": true,
+  "releaseVerified": false
+}

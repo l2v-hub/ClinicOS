@@ -1,0 +1,53 @@
+{
+  "text": "Riprendi bozza · Sintetica485 Short320",
+  "box": {
+    "x": 39,
+    "y": 508,
+    "width": 242,
+    "height": 60,
+    "right": 281,
+    "bottom": 568
+  },
+  "textRects": [
+    {
+      "x": 60.890625,
+      "y": 519,
+      "right": 169.34375,
+      "bottom": 536,
+      "width": 108.453125,
+      "height": 17
+    },
+    {
+      "x": 169.34375,
+      "y": 519,
+      "right": 172.875,
+      "bottom": 536,
+      "width": 3.53125,
+      "height": 17
+    },
+    {
+      "x": 172.875,
+      "y": 519,
+      "right": 259.09375,
+      "bottom": 536,
+      "width": 86.21875,
+      "height": 17
+    },
+    {
+      "x": 128.078125,
+      "y": 539,
+      "right": 191.90625,
+      "bottom": 556,
+      "width": 63.828125,
+      "height": 17
+    }
+  ],
+  "whiteSpace": "normal",
+  "height": "60px",
+  "minHeight": "44px",
+  "html": 320,
+  "body": 320,
+  "viewport": 320,
+  "hitSelf": true,
+  "textInside": true
+}

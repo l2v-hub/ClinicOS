@@ -1,0 +1,77 @@
+{
+  "pass": true,
+  "checks": 212,
+  "errors": [],
+  "layouts": 16,
+  "fieldInteractions": 26,
+  "sourceAudits": 17,
+  "real320ResumeHits": 2,
+  "sqlPersistencePaths": 3,
+  "raw320": [
+    {
+      "label": "mutable-320x568-before",
+      "fit": {
+        "visibleHeight": 177.875,
+        "visibleWidth": 233,
+        "visibleDarkPixels": 80
+      },
+      "zoom": {
+        "visibleHeight": 177.875,
+        "visibleWidth": 272,
+        "visibleDarkPixels": 352
+      }
+    },
+    {
+      "label": "mutable-320x568-return",
+      "fit": {
+        "visibleHeight": 177.875,
+        "visibleWidth": 233,
+        "visibleDarkPixels": 80
+      },
+      "zoom": {
+        "visibleHeight": 177.875,
+        "visibleWidth": 272,
+        "visibleDarkPixels": 352
+      }
+    },
+    {
+      "label": "readonly-320x568",
+      "fit": {
+        "visibleHeight": 145.875,
+        "visibleWidth": 233,
+        "visibleDarkPixels": 80
+      },
+      "zoom": {
+        "visibleHeight": 145.875,
+        "visibleWidth": 272,
+        "visibleDarkPixels": 352
+      }
+    },
+    {
+      "label": "short-editing-320x568-before",
+      "fit": {
+        "visibleHeight": 227.1875,
+        "visibleWidth": 235,
+        "visibleDarkPixels": 75
+      },
+      "zoom": {
+        "visibleHeight": 227.1875,
+        "visibleWidth": 274.21875,
+        "visibleDarkPixels": 321
+      }
+    },
+    {
+      "label": "short-editing-320x568-return",
+      "fit": {
+        "visibleHeight": 227.1875,
+        "visibleWidth": 235,
+        "visibleDarkPixels": 75
+      },
+      "zoom": {
+        "visibleHeight": 227.1875,
+        "visibleWidth": 274.21875,
+        "visibleDarkPixels": 321
+      }
+    }
+  ]
+}

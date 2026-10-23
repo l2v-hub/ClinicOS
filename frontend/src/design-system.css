@@ -92,6 +92,15 @@
   .patient-list-view .search-clear-btn:not(#ds) {
     position: static;
   }
+  /* Draft identities remain readable inside the card on narrow screens. */
+  .patient-list-view .plist-card > .ds-btn:not(#ds) {
+    max-width: 100%;
+    height: auto;
+    min-height: var(--ds-control-h);
+    padding-block: 8px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
   .patient-list-view .patient-signals button:not(#ds) {
     min-height: var(--ds-control-h);
     height: auto;

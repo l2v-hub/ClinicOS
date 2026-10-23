@@ -1,0 +1,1867 @@
+{
+  "pass": true,
+  "checks": [
+    {
+      "id": "actual pinned normal and bold fonts load with distinct text geometry",
+      "status": "PASS"
+    },
+    {
+      "id": "manual 1903 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 95.15,
+          "y": 51.6,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "P",
+          "className": "intake-page__savestate"
+        },
+        {
+          "x": 1807.85,
+          "y": 51.6,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "HEADER",
+          "className": "import-modal__head"
+        },
+        {
+          "x": 95.15,
+          "y": 825.6,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "ASIDE",
+          "className": "intake-index"
+        },
+        {
+          "x": 1807.85,
+          "y": 825.6,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "INPUT",
+          "className": "npm-input"
+        }
+      ]
+    },
+    {
+      "id": "manual 1903 sections fill body within padding",
+      "status": "PASS",
+      "actual": {
+        "bodyWidth": 1639,
+        "clientWidth": 1624,
+        "nativeScrollbar": 15,
+        "sectionsWidth": 1576,
+        "paddingLeft": 24,
+        "paddingRight": 24,
+        "leftGap": 24,
+        "rightGap": 39,
+        "fill": true
+      }
+    },
+    {
+      "id": "manual 1903 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 1903,
+        "height": 1032
+      }
+    },
+    {
+      "id": "manual 820 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 41,
+          "y": 59,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "HEADER",
+          "className": "import-modal__head"
+        },
+        {
+          "x": 779,
+          "y": 59,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "HEADER",
+          "className": "import-modal__head"
+        },
+        {
+          "x": 41,
+          "y": 944,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "SECTION",
+          "className": "npm-card npm-card--intake-section"
+        },
+        {
+          "x": 779,
+          "y": 944,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "SECTION",
+          "className": "ds-card intake-section"
+        }
+      ]
+    },
+    {
+      "id": "manual 820 sections fill body within padding",
+      "status": "PASS",
+      "actual": {
+        "bodyWidth": 820,
+        "clientWidth": 805,
+        "nativeScrollbar": 15,
+        "sectionsWidth": 757,
+        "paddingLeft": 24,
+        "paddingRight": 24,
+        "leftGap": 24,
+        "rightGap": 39,
+        "fill": true
+      }
+    },
+    {
+      "id": "manual 820 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 820,
+        "height": 1180
+      }
+    },
+    {
+      "id": "manual 390 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 19.5,
+          "y": 42.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "HEADER",
+          "className": "import-modal__head"
+        },
+        {
+          "x": 370.5,
+          "y": 42.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "BUTTON",
+          "className": "ds-icon-btn"
+        },
+        {
+          "x": 19.5,
+          "y": 675.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "import-modal__body intake-page__body"
+        },
+        {
+          "x": 370.5,
+          "y": 675.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "import-modal__body intake-page__body"
+        }
+      ]
+    },
+    {
+      "id": "manual 390 sections fill body within padding",
+      "status": "PASS",
+      "actual": {
+        "bodyWidth": 390,
+        "clientWidth": 375,
+        "nativeScrollbar": 15,
+        "sectionsWidth": 327,
+        "paddingLeft": 24,
+        "paddingRight": 24,
+        "leftGap": 24,
+        "rightGap": 39,
+        "fill": true
+      }
+    },
+    {
+      "id": "manual 390 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "manual actual saved draft survives browser reload and reopening; SQL readback",
+      "status": "PASS"
+    },
+    {
+      "id": "import-review 1903 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 95.15,
+          "y": 51.6,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "BUTTON",
+          "className": "btn-ghost"
+        },
+        {
+          "x": 1807.85,
+          "y": 51.6,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "HEADER",
+          "className": "import-modal__head"
+        },
+        {
+          "x": 95.15,
+          "y": 825.6,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "CANVAS",
+          "className": ""
+        },
+        {
+          "x": 1807.85,
+          "y": 825.6,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "P",
+          "className": "srev-source"
+        }
+      ]
+    },
+    {
+      "id": "import-review 1903 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 1903,
+        "height": 1032
+      }
+    },
+    {
+      "id": "review-1903x1032 native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "review-1903x1032 actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "review-1903x1032 real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "review-1903x1032 real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "review-1903x1032 real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "review-1903x1032 original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 608.453125,
+      "visibleDarkPixels": 11358
+    },
+    {
+      "id": "review-1903x1032 Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 608.453125,
+      "visibleDarkPixels": 11358
+    },
+    {
+      "id": "review-1903x1032 toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 608.453125,
+      "visibleDarkPixels": 11358
+    },
+    {
+      "id": "review-1903x1032 all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 608.453125,
+      "visibleDarkPixels": 11358
+    },
+    {
+      "id": "review-1903x1032 actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 608.453125,
+      "visibleDarkPixels": 11358
+    },
+    {
+      "id": "import-review 820 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 41,
+          "y": 59,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        },
+        {
+          "x": 779,
+          "y": 59,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        },
+        {
+          "x": 41,
+          "y": 944,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "document-pdf-preview__stage"
+        },
+        {
+          "x": 779,
+          "y": 944,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "SECTION",
+          "className": "srev-card srev-section"
+        }
+      ]
+    },
+    {
+      "id": "import-review 820 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 820,
+        "height": 1180
+      }
+    },
+    {
+      "id": "review-820x1180 native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "review-820x1180 actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "review-820x1180 real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "review-820x1180 real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "review-820x1180 real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "review-820x1180 original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 559,
+      "visibleDarkPixels": 1105
+    },
+    {
+      "id": "review-820x1180 Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 559,
+      "visibleDarkPixels": 1105
+    },
+    {
+      "id": "review-820x1180 toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 559,
+      "visibleDarkPixels": 1105
+    },
+    {
+      "id": "review-820x1180 all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 559,
+      "visibleDarkPixels": 1105
+    },
+    {
+      "id": "review-820x1180 actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 559,
+      "visibleDarkPixels": 1105
+    },
+    {
+      "id": "import-review 390 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 19.5,
+          "y": 42.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "BUTTON",
+          "className": "btn-ghost"
+        },
+        {
+          "x": 370.5,
+          "y": 42.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        },
+        {
+          "x": 19.5,
+          "y": 675.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "FOOTER",
+          "className": "import-session-footer"
+        },
+        {
+          "x": 370.5,
+          "y": 675.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        }
+      ]
+    },
+    {
+      "id": "import-review 390 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "review-390x844 native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "review-390x844 actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "review-390x844 real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "review-390x844 real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "review-390x844 real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "review-390x844 original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "review-390x844 Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "review-390x844 toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "review-390x844 all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "review-390x844 actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "short-mutable-review 390 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 19.5,
+          "y": 30,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "BUTTON",
+          "className": "btn-ghost"
+        },
+        {
+          "x": 370.5,
+          "y": 30,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        },
+        {
+          "x": 19.5,
+          "y": 480,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "FOOTER",
+          "className": "import-session-footer"
+        },
+        {
+          "x": 370.5,
+          "y": 480,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        }
+      ]
+    },
+    {
+      "id": "short-mutable-review 390 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 600
+      }
+    },
+    {
+      "id": "mutable-390x600-before native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-390x600-before actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-390x600-before real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-390x600-before real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-390x600-before real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-390x600-before original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "mutable-390x600-before Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "mutable-390x600-before toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "mutable-390x600-before all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "mutable-390x600-before actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "mutable-390x600-return native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-390x600-return actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-390x600-return real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-390x600-return real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-390x600-return real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-390x600-return original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "mutable-390x600-return Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "mutable-390x600-return toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "mutable-390x600-return all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "mutable-390x600-return actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "short-mutable-review 320 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 16,
+          "y": 28.400000000000002,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        },
+        {
+          "x": 304,
+          "y": 28.400000000000002,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        },
+        {
+          "x": 16,
+          "y": 454.40000000000003,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        },
+        {
+          "x": 304,
+          "y": 454.40000000000003,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        }
+      ]
+    },
+    {
+      "id": "short-mutable-review 320 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 568
+      }
+    },
+    {
+      "id": "mutable-320x568-before native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-320x568-before actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-320x568-before real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-320x568-before real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-320x568-before real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-320x568-before original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 177.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "mutable-320x568-before Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 177.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "mutable-320x568-before toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 177.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "mutable-320x568-before all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 177.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "mutable-320x568-before actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 177.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "mutable-320x568-return native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-320x568-return actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-320x568-return real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-320x568-return real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-320x568-return real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "mutable-320x568-return original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 177.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "mutable-320x568-return Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 177.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "mutable-320x568-return toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 177.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "mutable-320x568-return all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 177.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "mutable-320x568-return actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 177.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "320 long-name draft resume label readable, page width fits and actual button self-hits",
+      "status": "PASS",
+      "actual": {
+        "text": "Riprendi bozza · Sintetica485 Short320",
+        "box": {
+          "x": 39,
+          "y": 508,
+          "width": 242,
+          "height": 60,
+          "right": 281,
+          "bottom": 568
+        },
+        "textRects": [
+          {
+            "x": 60.890625,
+            "y": 519,
+            "right": 169.34375,
+            "bottom": 536,
+            "width": 108.453125,
+            "height": 17
+          },
+          {
+            "x": 169.34375,
+            "y": 519,
+            "right": 172.875,
+            "bottom": 536,
+            "width": 3.53125,
+            "height": 17
+          },
+          {
+            "x": 172.875,
+            "y": 519,
+            "right": 259.09375,
+            "bottom": 536,
+            "width": 86.21875,
+            "height": 17
+          },
+          {
+            "x": 128.078125,
+            "y": 539,
+            "right": 191.90625,
+            "bottom": 556,
+            "width": 63.828125,
+            "height": 17
+          }
+        ],
+        "whiteSpace": "normal",
+        "height": "60px",
+        "minHeight": "44px",
+        "html": 320,
+        "body": 320,
+        "viewport": 320,
+        "hitSelf": true,
+        "textInside": true
+      }
+    },
+    {
+      "id": "import actual saved draft survives browser reload and UI resume; SQL readback",
+      "status": "PASS"
+    },
+    {
+      "id": "import-editable-workspace 1903 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 95.15,
+          "y": 51.6,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "P",
+          "className": "intake-page__savestate"
+        },
+        {
+          "x": 1807.85,
+          "y": 51.6,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "HEADER",
+          "className": "import-modal__head"
+        },
+        {
+          "x": 95.15,
+          "y": 825.6,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "BUTTON",
+          "className": "link-btn"
+        },
+        {
+          "x": 1807.85,
+          "y": 825.6,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "CANVAS",
+          "className": ""
+        }
+      ]
+    },
+    {
+      "id": "import-editable-workspace 1903 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 1903,
+        "height": 1032
+      }
+    },
+    {
+      "id": "editing-1903x1032 native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-1903x1032 actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-1903x1032 real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-1903x1032 real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-1903x1032 real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-1903x1032 original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 682.21875,
+      "visibleDarkPixels": 6673
+    },
+    {
+      "id": "editing-1903x1032 Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 682.21875,
+      "visibleDarkPixels": 6673
+    },
+    {
+      "id": "editing-1903x1032 toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 682.21875,
+      "visibleDarkPixels": 6673
+    },
+    {
+      "id": "editing-1903x1032 all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 682.21875,
+      "visibleDarkPixels": 6673
+    },
+    {
+      "id": "editing-1903x1032 actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 682.21875,
+      "visibleDarkPixels": 6673
+    },
+    {
+      "id": "import-editable-workspace 820 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 41,
+          "y": 59,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "HEADER",
+          "className": "import-modal__head"
+        },
+        {
+          "x": 779,
+          "y": 59,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "HEADER",
+          "className": "import-modal__head"
+        },
+        {
+          "x": 41,
+          "y": 944,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "npm-card__body"
+        },
+        {
+          "x": 779,
+          "y": 944,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "document-pdf-preview__stage"
+        }
+      ]
+    },
+    {
+      "id": "import-editable-workspace 820 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 820,
+        "height": 1180
+      }
+    },
+    {
+      "id": "editing-820x1180 native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-820x1180 actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-820x1180 real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-820x1180 real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-820x1180 real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-820x1180 original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 460,
+      "visibleDarkPixels": 523
+    },
+    {
+      "id": "editing-820x1180 Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 460,
+      "visibleDarkPixels": 523
+    },
+    {
+      "id": "editing-820x1180 toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 460,
+      "visibleDarkPixels": 523
+    },
+    {
+      "id": "editing-820x1180 all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 460,
+      "visibleDarkPixels": 523
+    },
+    {
+      "id": "editing-820x1180 actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 460,
+      "visibleDarkPixels": 523
+    },
+    {
+      "id": "import-editable-workspace 390 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 19.5,
+          "y": 42.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "HEADER",
+          "className": "import-modal__head"
+        },
+        {
+          "x": 370.5,
+          "y": 42.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "BUTTON",
+          "className": "ds-icon-btn"
+        },
+        {
+          "x": 19.5,
+          "y": 675.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "document-pdf-preview__toolbar"
+        },
+        {
+          "x": 370.5,
+          "y": 675.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "document-pdf-preview__toolbar"
+        }
+      ]
+    },
+    {
+      "id": "import-editable-workspace 390 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "editing-390x844 native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-390x844 actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-390x844 real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-390x844 real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-390x844 real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "editing-390x844 original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "editing-390x844 Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "editing-390x844 toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "editing-390x844 all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "editing-390x844 actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "short-import-editing 390 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 19.5,
+          "y": 30,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "HEADER",
+          "className": "import-modal__head"
+        },
+        {
+          "x": 370.5,
+          "y": 30,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "BUTTON",
+          "className": "ds-icon-btn"
+        },
+        {
+          "x": 19.5,
+          "y": 480,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "document-pdf-preview__toolbar"
+        },
+        {
+          "x": 370.5,
+          "y": 480,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "document-pdf-preview__toolbar"
+        }
+      ]
+    },
+    {
+      "id": "short-import-editing 390 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 600
+      }
+    },
+    {
+      "id": "short-editing-390x600-before native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-390x600-before actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-390x600-before real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-390x600-before real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-390x600-before real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-390x600-before original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "short-editing-390x600-before Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "short-editing-390x600-before toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "short-editing-390x600-before all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "short-editing-390x600-before actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "short-editing-390x600-return native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-390x600-return actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-390x600-return real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-390x600-return real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-390x600-return real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-390x600-return original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "short-editing-390x600-return Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "short-editing-390x600-return toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "short-editing-390x600-return all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "short-editing-390x600-return actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1081
+    },
+    {
+      "id": "short-import-editing 320 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 16,
+          "y": 28.400000000000002,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "HEADER",
+          "className": "import-modal__head"
+        },
+        {
+          "x": 304,
+          "y": 28.400000000000002,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "HEADER",
+          "className": "import-modal__head"
+        },
+        {
+          "x": 16,
+          "y": 454.40000000000003,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "import-page-preview"
+        },
+        {
+          "x": 304,
+          "y": 454.40000000000003,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "import-page-preview"
+        }
+      ]
+    },
+    {
+      "id": "short-import-editing 320 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 568
+      }
+    },
+    {
+      "id": "short-editing-320x568-before native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-320x568-before actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-320x568-before real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-320x568-before real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-320x568-before real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-320x568-before original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 227.1875,
+      "visibleDarkPixels": 321
+    },
+    {
+      "id": "short-editing-320x568-before Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 227.1875,
+      "visibleDarkPixels": 321
+    },
+    {
+      "id": "short-editing-320x568-before toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 227.1875,
+      "visibleDarkPixels": 321
+    },
+    {
+      "id": "short-editing-320x568-before all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 227.1875,
+      "visibleDarkPixels": 321
+    },
+    {
+      "id": "short-editing-320x568-before actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 227.1875,
+      "visibleDarkPixels": 321
+    },
+    {
+      "id": "short-editing-320x568-return native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-320x568-return actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-320x568-return real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-320x568-return real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-320x568-return real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "short-editing-320x568-return original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 227.1875,
+      "visibleDarkPixels": 321
+    },
+    {
+      "id": "short-editing-320x568-return Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 227.1875,
+      "visibleDarkPixels": 321
+    },
+    {
+      "id": "short-editing-320x568-return toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 227.1875,
+      "visibleDarkPixels": 321
+    },
+    {
+      "id": "short-editing-320x568-return all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 227.1875,
+      "visibleDarkPixels": 321
+    },
+    {
+      "id": "short-editing-320x568-return actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 227.1875,
+      "visibleDarkPixels": 321
+    },
+    {
+      "id": "320 long-name draft resume label readable, page width fits and actual button self-hits",
+      "status": "PASS",
+      "actual": {
+        "text": "Riprendi bozza · Sintetica485 WorkspaceShort320",
+        "box": {
+          "x": 39,
+          "y": 508,
+          "width": 242,
+          "height": 60,
+          "right": 281,
+          "bottom": 568
+        },
+        "textRects": [
+          {
+            "x": 60.890625,
+            "y": 519,
+            "right": 169.34375,
+            "bottom": 536,
+            "width": 108.453125,
+            "height": 17
+          },
+          {
+            "x": 169.34375,
+            "y": 519,
+            "right": 172.875,
+            "bottom": 536,
+            "width": 3.53125,
+            "height": 17
+          },
+          {
+            "x": 172.875,
+            "y": 519,
+            "right": 259.09375,
+            "bottom": 536,
+            "width": 86.21875,
+            "height": 17
+          },
+          {
+            "x": 89.640625,
+            "y": 539,
+            "right": 230.359375,
+            "bottom": 556,
+            "width": 140.71875,
+            "height": 17
+          }
+        ],
+        "whiteSpace": "normal",
+        "height": "60px",
+        "minHeight": "44px",
+        "html": 320,
+        "body": 320,
+        "viewport": 320,
+        "hitSelf": true,
+        "textInside": true
+      }
+    },
+    {
+      "id": "post-import edits survive save/reload/UI resume and SQL readback",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-resumed-review 390 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 19.5,
+          "y": 42.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "BUTTON",
+          "className": "btn-ghost"
+        },
+        {
+          "x": 370.5,
+          "y": 42.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        },
+        {
+          "x": 19.5,
+          "y": 675.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "FOOTER",
+          "className": "import-session-footer"
+        },
+        {
+          "x": 370.5,
+          "y": 675.2,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        }
+      ]
+    },
+    {
+      "id": "readonly-resumed-review 390 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "readonly-390x844 native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-390x844 actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-390x844 real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-390x844 real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-390x844 real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-390x844 original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "readonly-390x844 Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "readonly-390x844 toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "readonly-390x844 all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "readonly-390x844 actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 320,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "readonly-resumed-review 390 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 19.5,
+          "y": 30,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "BUTTON",
+          "className": "btn-ghost"
+        },
+        {
+          "x": 370.5,
+          "y": 30,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        },
+        {
+          "x": 19.5,
+          "y": 480,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "FOOTER",
+          "className": "import-session-footer"
+        },
+        {
+          "x": 370.5,
+          "y": 480,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        }
+      ]
+    },
+    {
+      "id": "readonly-resumed-review 390 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 600
+      }
+    },
+    {
+      "id": "readonly-390x600 native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-390x600 actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-390x600 real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-390x600 real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-390x600 real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-390x600 original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "readonly-390x600 Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "readonly-390x600 toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "readonly-390x600 all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "readonly-390x600 actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 240,
+      "visibleDarkPixels": 1043
+    },
+    {
+      "id": "readonly-resumed-review 320 workspace surface points avoid application chrome",
+      "status": "PASS",
+      "chromeHits": [
+        {
+          "x": 16,
+          "y": 28.400000000000002,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        },
+        {
+          "x": 304,
+          "y": 28.400000000000002,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        },
+        {
+          "x": 16,
+          "y": 454.40000000000003,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        },
+        {
+          "x": 304,
+          "y": 454.40000000000003,
+          "insideViewport": true,
+          "insideWorkspace": true,
+          "appChrome": false,
+          "tag": "DIV",
+          "className": "modal-card import-modal import-session import-modal--review"
+        }
+      ]
+    },
+    {
+      "id": "readonly-resumed-review 320 exact viewport rectangle",
+      "status": "PASS",
+      "actual": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 568
+      }
+    },
+    {
+      "id": "readonly-320x568 native keyboard Tab reveals full Adatta control",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-320x568 actual minus activation reduces paper and Adatta restores it",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-320x568 real zoom increases rendered paper size",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-320x568 real stage supports internal pan",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-320x568 real Adatta restores fit",
+      "status": "PASS"
+    },
+    {
+      "id": "readonly-320x568 original meaningful visible height and actual ink",
+      "status": "PASS",
+      "visibleHeight": 145.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "readonly-320x568 Adatta all25/50/75 hitpoints self",
+      "status": "PASS",
+      "visibleHeight": 145.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "readonly-320x568 toolbar download no overlap",
+      "status": "PASS",
+      "visibleHeight": 145.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "readonly-320x568 all toolbar controls deliberately scrolled and painted reachable",
+      "status": "PASS",
+      "visibleHeight": 145.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "readonly-320x568 actual original PDF download",
+      "status": "PASS",
+      "visibleHeight": 145.875,
+      "visibleDarkPixels": 352
+    },
+    {
+      "id": "saved review retains expected readonly controls",
+      "status": "PASS"
+    }
+  ],
+  "errors": []
+}
