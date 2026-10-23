@@ -1,0 +1,35 @@
+{
+  "sha": "b835b87be88f7cb0023a246a67906c2ee8dd88db",
+  "node_id": "C_kwDOSt4Zr9oAKGI4MzViODdiZTg4ZjdjYjAwMjNhMjQ2YTY3OTA2YzJlZThkZDg4ZGI",
+  "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/commits/b835b87be88f7cb0023a246a67906c2ee8dd88db",
+  "html_url": "https://github.com/l2v-hub/ClinicOS/commit/b835b87be88f7cb0023a246a67906c2ee8dd88db",
+  "author": {
+    "name": "l2v-hub",
+    "email": "luca.lavia@gmail.com",
+    "date": "2026-10-23T06:30:31Z"
+  },
+  "committer": {
+    "name": "l2v-hub",
+    "email": "luca.lavia@gmail.com",
+    "date": "2026-10-23T06:30:31Z"
+  },
+  "tree": {
+    "sha": "4e62120584a249db2354ea379dac35e91a097000",
+    "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/4e62120584a249db2354ea379dac35e91a097000"
+  },
+  "message": "chore: verify Git Data transport without changing durable state",
+  "parents": [
+    {
+      "sha": "ad70fd84bc1d1e434b417275df3a0684964975c4",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/commits/ad70fd84bc1d1e434b417275df3a0684964975c4",
+      "html_url": "https://github.com/l2v-hub/ClinicOS/commit/ad70fd84bc1d1e434b417275df3a0684964975c4"
+    }
+  ],
+  "verification": {
+    "verified": false,
+    "reason": "unsigned",
+    "signature": null,
+    "payload": null,
+    "verified_at": null
+  }
+}

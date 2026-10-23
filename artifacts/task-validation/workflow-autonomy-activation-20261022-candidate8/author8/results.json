@@ -1,0 +1,414 @@
+{
+  "status": "IMPLEMENTED_AWAITING_INDEPENDENT_QA",
+  "attempt": 8,
+  "nonce": "a1c34605-ce9a-40d9-afc6-e3da114dc2ef",
+  "sourceFiles": 139,
+  "changedPaths": [
+    "docs/codex-bug-workflow.md",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "agent-team/src/bug-pipeline/github.mjs",
+    ".claude/skills/clinicos/references/bug-delivery.md",
+    "agent-team/tests/bug-pipeline/git-data-state-fixture.mjs"
+  ],
+  "finalIntegrated": {
+    "command": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--test",
+      "--test-reporter=tap",
+      "agent-team/tests/bug-pipeline/attempt-budget.test.mjs",
+      "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "agent-team/tests/bug-pipeline/contracts.test.mjs",
+      "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "agent-team/tests/bug-pipeline/github.test.mjs",
+      "agent-team/tests/bug-pipeline/models.test.mjs",
+      "agent-team/tests/bug-pipeline/operator-authorization.test.mjs",
+      "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+      "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "agent-team/tests/bug-pipeline/release.test.mjs",
+      "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      "agent-team/tests/bug-pipeline/workspace.test.mjs",
+      "agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs",
+      "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs"
+    ],
+    "cwd": "/tmp/clinicos-autonomy-activation-20261022/source8",
+    "environment": {
+      "PATH": "/usr/bin:/bin",
+      "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/author8/owned-tmp",
+      "LANG": "C.UTF-8",
+      "GIT_CONFIG_GLOBAL": "/dev/null",
+      "GIT_CONFIG_NOSYSTEM": "1",
+      "GIT_CONFIG_COUNT": "2",
+      "GIT_CONFIG_KEY_0": "core.hooksPath",
+      "GIT_CONFIG_VALUE_0": "/dev/null",
+      "GIT_CONFIG_KEY_1": "protocol.allow",
+      "GIT_CONFIG_VALUE_1": "never"
+    },
+    "exitCode": 0,
+    "seconds": 18.33661651611328,
+    "logSha256": "e34305a096aa85969499a64837bf12b16130a0ebdae63952e2c68ab5df52fdcb",
+    "summary": {
+      "tests": 932,
+      "pass": 932,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "log": "integrated-final.log"
+  },
+  "roles": {
+    "command": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--test",
+      "--test-reporter=tap",
+      "agent-team/tests/bug-pipeline/attempt-budget.test.mjs",
+      "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "agent-team/tests/bug-pipeline/operator-authorization.test.mjs",
+      "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+      "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "agent-team/tests/bug-pipeline/release.test.mjs",
+      "agent-team/tests/bug-pipeline/standalone-review.test.mjs"
+    ],
+    "cwd": "/tmp/clinicos-autonomy-activation-20261022/source8",
+    "environment": {
+      "PATH": "/usr/bin:/bin",
+      "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/author8/owned-tmp",
+      "LANG": "C.UTF-8",
+      "GIT_CONFIG_GLOBAL": "/dev/null",
+      "GIT_CONFIG_NOSYSTEM": "1",
+      "GIT_CONFIG_COUNT": "2",
+      "GIT_CONFIG_KEY_0": "core.hooksPath",
+      "GIT_CONFIG_VALUE_0": "/dev/null",
+      "GIT_CONFIG_KEY_1": "protocol.allow",
+      "GIT_CONFIG_VALUE_1": "never"
+    },
+    "exitCode": 0,
+    "seconds": 10.09834361076355,
+    "logSha256": "9d8ab6ddddf1b191549c59c2c9f02382e4f685b774f1b6171d20bd77781449d5",
+    "summary": {
+      "tests": 604,
+      "pass": 604,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "log": "roles-integrated-final.log"
+  },
+  "inheritedBoundariesIncludingHistoricalReplay": {
+    "command": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--test",
+      "--test-reporter=tap",
+      "--experimental-vm-modules",
+      "../author8/external-cas-probe.mjs",
+      "../author8/malformed-takeover-probe.mjs",
+      "../author8/recovery-budget-probe.mjs",
+      "../author8/recovery-route-probe.mjs",
+      "../author8/residual-probes.mjs",
+      "../author8/automatic-boundary-probes.mjs",
+      "../author8/novel-boundaries.mjs",
+      "../author8/historical-offline-replay.mjs"
+    ],
+    "cwd": "/tmp/clinicos-autonomy-activation-20261022/source8",
+    "environment": {
+      "PATH": "/usr/bin:/bin",
+      "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/author8/owned-tmp",
+      "LANG": "C.UTF-8",
+      "GIT_CONFIG_GLOBAL": "/dev/null",
+      "GIT_CONFIG_NOSYSTEM": "1",
+      "GIT_CONFIG_COUNT": "2",
+      "GIT_CONFIG_KEY_0": "core.hooksPath",
+      "GIT_CONFIG_VALUE_0": "/dev/null",
+      "GIT_CONFIG_KEY_1": "protocol.allow",
+      "GIT_CONFIG_VALUE_1": "never"
+    },
+    "exitCode": 0,
+    "seconds": 0.8037681579589844,
+    "logSha256": "f4f83ca9b73f6493206f82b47230ea4dfc597996208e232260874cf3f5599fda",
+    "summary": {
+      "tests": 30,
+      "pass": 30,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "log": "inherited-final.log"
+  },
+  "largeActualCallers": {
+    "command": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--test",
+      "--test-reporter=tap",
+      "--experimental-vm-modules",
+      "../author8/large-caller-probes.mjs"
+    ],
+    "cwd": "/tmp/clinicos-autonomy-activation-20261022/source8",
+    "environment": {
+      "PATH": "/usr/bin:/bin",
+      "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/author8/owned-tmp",
+      "LANG": "C.UTF-8",
+      "GIT_CONFIG_GLOBAL": "/dev/null",
+      "GIT_CONFIG_NOSYSTEM": "1",
+      "GIT_CONFIG_COUNT": "2",
+      "GIT_CONFIG_KEY_0": "core.hooksPath",
+      "GIT_CONFIG_VALUE_0": "/dev/null",
+      "GIT_CONFIG_KEY_1": "protocol.allow",
+      "GIT_CONFIG_VALUE_1": "never"
+    },
+    "exitCode": 0,
+    "seconds": 1.9754700660705566,
+    "logSha256": "995055e75dcd78be9af0dd2af74a163adfc365107da8d518445782a0fd50ae01",
+    "summary": {
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "log": "large-callers-final.log"
+  },
+  "distinctFinalFunctionalNodeTests": 963,
+  "offlineHistoricalFileReplayNodeTests": 1,
+  "distinctFinalNodeTestsIncludingOfflineHistoricalReplay": 964,
+  "newPublishedGithubTests": 127,
+  "githubTestsIncludedInIntegrated": 211,
+  "syntax": {
+    "status": "PASS",
+    "checked": 17,
+    "results": [
+      {
+        "path": "agent-team/src/bug-pipeline/attempt-budget.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/src/bug-pipeline/attempt-budget.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "555b457b375c4fe35b1e73f2081671e951748503adf598cf0312a5ce8d6e6094"
+      },
+      {
+        "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/src/bug-pipeline/comment-review-handoff.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "bb0c1828edfe3af1ed10887e10975d160166c6d3a0d061d73b3a70db590c6367"
+      },
+      {
+        "path": "agent-team/src/bug-pipeline/external-review.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/src/bug-pipeline/external-review.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "3b1e12f4befd3c1ab5925ce849aa81e1cac46ea785bd7418b5e3af3dc77978f3"
+      },
+      {
+        "path": "agent-team/src/bug-pipeline/github.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/src/bug-pipeline/github.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "3e907a5e2bef38dd2a43738bb06d49bda5dc9396e4051e3a9f9572da2387f4c0"
+      },
+      {
+        "path": "agent-team/src/bug-pipeline/operator-authorization.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/src/bug-pipeline/operator-authorization.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "a20c69a6c0c51bd799e97cdc53940b099979de728e033f25594af86fa8c019cf"
+      },
+      {
+        "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/src/bug-pipeline/pipeline.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "2b900a59d7c4ec709520c0f2ed07415f5befc9ba9c6c8d0e021b57385774c0d1"
+      },
+      {
+        "path": "agent-team/src/bug-pipeline/release.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/src/bug-pipeline/release.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "660c93ad36bb2666dd43da858c98b8d4a6a6b16c17cb5b0c75fdb8a52ce4eb07"
+      },
+      {
+        "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/src/bug-pipeline/standalone-review.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "878d3cb045d121ad6ebb108d7761564b11ce26f66f2f6c966e96b7604bc75f38"
+      },
+      {
+        "path": "agent-team/src/bug-pipeline/workspace.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/src/bug-pipeline/workspace.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "76297c07285a88c389a2b92704fdbdae1f2c482943df9ce9b20a7fe45254bfef"
+      },
+      {
+        "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "87b93a6bce828aff4d356869df44ae1ae4169da7c3af8b5993922475442d7902"
+      },
+      {
+        "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/tests/bug-pipeline/external-review.test.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "776f9f2181f8fa28cd92b670dde7e7489d358be6a1b777f7f07565b106179afd"
+      },
+      {
+        "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/tests/bug-pipeline/github.test.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "add673b1ab69613a8d1db00e503b66ff24553b1f2456a8b0faa18e48f517d814"
+      },
+      {
+        "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/tests/bug-pipeline/pipeline.test.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "87cfa463614743361e57a36ef429b70c6ac7e3f22c77fbe62b1b576f213d1e7c"
+      },
+      {
+        "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/tests/bug-pipeline/release.test.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "6a53aa9769fd677a39ca4b16a97084bb67a95cd5532aef80a89c4d8a766a60f9"
+      },
+      {
+        "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/tests/bug-pipeline/standalone-review.test.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "9b0ecba5d03b10d1ff83245a83b7831e4ebae6de1b6e6addc1b2b73dc356d522"
+      },
+      {
+        "path": "agent-team/tests/bug-pipeline/workspace.test.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/tests/bug-pipeline/workspace.test.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "7bdcd8b52861f55fe4696e3ed701bcf4b281b842442dda029e80797b89f20caa"
+      },
+      {
+        "path": "agent-team/tests/bug-pipeline/git-data-state-fixture.mjs",
+        "command": [
+          "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+          "--check",
+          "/tmp/clinicos-autonomy-activation-20261022/source8/agent-team/tests/bug-pipeline/git-data-state-fixture.mjs"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "sourceSha256": "595f325cd5ced7e5ffe18f7e080dc2f22ebba4a28dcaa48cced9b89592242134"
+      }
+    ]
+  },
+  "sourceManifestSha256": "a98b47ccc3c001ad0dd1f933aca6a09c29153c15114e21556931b40150cadab2",
+  "source8FinalRawSha256": "d0e44a29a11e0443b374f98061ee295190baacf05c47ffea25aa48f930ed7468",
+  "sourceFrozen": true,
+  "selfQaApproval": false,
+  "handoffComplete": false,
+  "sourcePublished": false,
+  "canonicalWritten": false,
+  "modelsInvoked": false,
+  "liveApiProviderClinicalEffects": false,
+  "GitWritesOutsideIsolatedSyntheticTests": false,
+  "rootOwnsRemainingGates": [
+    "independent QA8",
+    "actual native CI",
+    "actual source8 module Git Data probe",
+    "genuine Claude and final Codex review",
+    "publication/merge/activation"
+  ],
+  "limitations": [
+    "Contents HTTP400 exact cause remains unproven; threshold is transport selection.",
+    "force:false exact-parent protocol protects ordinary forward writers, not an absolute atomic CAS against external force-rewind/ABA after the final read.",
+    "Object uploads can remain unreachable after proven conflict; uncertain ref outcomes require reconciliation and never automatically retry."
+  ]
+}

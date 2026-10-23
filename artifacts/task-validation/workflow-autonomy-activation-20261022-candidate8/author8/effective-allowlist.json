@@ -1,0 +1,9 @@
+[
+  "agent-team/src/bug-pipeline/github.mjs",
+  "agent-team/tests/bug-pipeline/github.test.mjs",
+  "docs/codex-bug-workflow.md",
+  ".claude/skills/clinicos/references/bug-delivery.md",
+  "agent-team/tests/bug-pipeline/git-data-state-fixture.mjs",
+  "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+  "agent-team/tests/bug-pipeline/standalone-review.test.mjs"
+]

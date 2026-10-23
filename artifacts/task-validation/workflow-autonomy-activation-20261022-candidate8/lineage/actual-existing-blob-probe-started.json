@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-23T06:17:03.247Z",
+  "stateCommit": "3c247fd26bac7c8cc54ffd7bb03156b4743ac41a",
+  "existingGitBlob": "fc2479f5dccc7dd1529ac2371b4cf76c9baad906",
+  "stateRawSha256": "40d7676cbca3fc89204f481ee23905f8a6b6b71a3f74acb38a362f4b2f363ed7",
+  "stateBytes": 5256213,
+  "wireBodyBytes": 7008318,
+  "exactExistingBlobOnly": true,
+  "noRefsChanged": true,
+  "onceOnly": true,
+  "reason": "Actual previous Contents PUT HTTP400; upload exactly the already-committed content-addressed Git blob to distinguish transport capabilities without changing repository data."
+}
