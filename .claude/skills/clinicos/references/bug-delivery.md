@@ -109,6 +109,10 @@ percorso assoluto verificato. Usa solo cache/temp scrivibili e possedute dal pro
 sovrascrivere `HOME`. Distingui un rifiuto HTTP/API da errori locali di cache o filesystem e
 non attribuire una causa che i log non dimostrano.
 
+Per `.codex-bug-state.json`, scegli il trasporto sui byte della serializzazione esatta: `<= 1 MiB` usa Contents; `> 1 MiB` usa Git Data. È una soglia di trasporto, non una causa provata di un HTTP 400. Mantieni il limite esistente di 8 MiB sullo stato grezzo più tutte le prenotazioni dei risultati pendenti. Congela i byte proposti e lo SHA atteso del file prima delle attese. La scrittura Git Data deve usare il `base_tree` esatto del padre, preservare tutte le entry root valide non coinvolte (directory, symlink e gitlink inclusi), verificare il padre esatto e ricontrollare ownership, guardia e ref subito prima dell'aggiornamento non forzato (`force:false`).
+
+Consenti il rebase solo per un conflitto remoto dimostrato e solo se il chiamante lo abilita; limita a quattro i candidati totali. Scritture rifiutate o dall'esito incerto non autorizzano retry/fallback: tratta gli esiti ignoti come fatali e, prima di un recupero supervisionato, rileggi lo stato canonico corrente, inclusi commenti e label. Non cancellare history, inventare claim o risultati, né spendere budget di modello per mascherare un errore di trasporto. Un probe Git Data no-op prova soltanto il percorso dell'endpoint; non prova la QA della sorgente, la review peer, il deploy o l'autonomia completa.
+
 Serializza l'intero ciclo dello stack condiviso, dalla creazione del container a migrazioni,
 test, browser e teardown, non soltanto Playwright. Attendi una query/readiness funzionale.
 Cleanup soltanto delle risorse create e riconosciute, con limiti temporali e `finally`;

@@ -1,3 +1,4 @@
+import { gitDataStateFixture } from './git-data-state-fixture.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
@@ -1456,20 +1457,23 @@ function stateBlobFixture(state = { payload: '文'.repeat(375000) }) {
   return f;
 }
 
-test('large durable state loads from authenticated blob SHA and preserves Contents identity for CAS', async () => {
+test('large durable state loads from authenticated blob SHA and preserves file identity for Git Data CAS', async () => {
   const state = {
     schemaVersion: 1,
     repository: 'l2v-hub/ClinicOS',
     batches: [],
     payload: '文'.repeat(375000),
   };
-  const f = stateBlobFixture(state);
+  const f = gitDataStateFixture(state);
   assert.ok(f.metadata.size > 1024 * 1024);
-  const oldSHA = f.metadata.sha;
+  const oldSHA = f.metadata.sha,
+    oldParent = f.head;
   assert.deepEqual(await f.store.load(), state);
   assert.equal(f.calls.filter((c) => c.args[1].includes('/git/blobs/')).length, 1);
   await f.store.save({ ...state, reconciled: true });
-  assert.equal(f.writes[0].sha, oldSHA);
+  assert.equal(f.refWrites.length, 1);
+  assert.equal(f.contentsWrites.length, 0);
+  assert.ok(f.calls.some((c) => c.path.endsWith('?ref=' + oldParent)));
   assert.notEqual(f.metadata.sha, oldSHA);
   assert.equal((await f.store.load()).reconciled, true);
 });
@@ -1546,7 +1550,7 @@ test('explicit inline state metadata validates canonical base64, supplied size a
 });
 
 test('state save rejects >8MiB before any mutation/guard and exact8MiB remains reloadable', async () => {
-  const f = stateBlobFixture({});
+  const f = gitDataStateFixture({});
   await f.store.load();
   const priorCalls = f.calls.length;
   let guards = 0;
@@ -1808,7 +1812,7 @@ test('capacity counts simultaneous running reviews and Codex QA across every ent
   state.payload = 'x'.repeat(
     MAX_DURABLE_STATE_BYTES - overhead - 3 * RESULT_RESERVATION_BYTES - 512,
   );
-  const f = stateBlobFixture({});
+  const f = gitDataStateFixture({});
   await f.store.load();
   await f.store.save(state);
   const writes = f.writes.length,
@@ -2292,7 +2296,9 @@ test('Claude1 F5 native state store preserves finite ownership code instead of g
     f.store.save(ours, {
       rebaseIndependentSubjects: (state) => {
         if (state.operatorTakeover)
-          throw Object.assign(new Error('observed ownership'), { code: 'review-operator-owned' });
+          throw Object.assign(new Error('observed ownership'), {
+            code: 'review-operator-owned',
+          });
       },
     }),
     (error) => error.code === 'review-operator-owned',
@@ -2349,7 +2355,9 @@ test('Claude1 F5 fresh owner hook is never used after auth failures, definite re
         rebaseIndependentSubjects: entityValidator,
         checkFreshOwnership: () => {
           ownershipChecks++;
-          throw Object.assign(new Error('not observed'), { code: 'review-operator-owned' });
+          throw Object.assign(new Error('not observed'), {
+            code: 'review-operator-owned',
+          });
         },
       }),
       (error) => ['state-write-failed', 'state-write-uncertain'].includes(error.code),
@@ -2397,4 +2405,673 @@ test('Author7 F3 observer reads authenticated Contents without branch creation a
   assert.equal((await store.observe()).note, 'fresh owner');
   assert.equal(blobs, 2);
   assert.equal(calls.filter((c) => c.args[1].includes('/contents/')).length, 4);
+});
+
+// Semantic repository model: immutable objects, pinned reads, non-forced fast-forward.
+test('Author8 causal: large Contents rejection still permits exact-byte Git Data save and preserves unrelated tree modes', async () => {
+  const state = { ...entityState(), payload: '漢'.repeat(375000) },
+    f = gitDataStateFixture(state);
+  const intended = await f.store.load();
+  intended.batches[0].local = 'durably reserved';
+  const bytes = Buffer.from(JSON.stringify(intended)),
+    parent = f.head;
+  const sha = await f.store.save(intended, {
+    rebaseIndependentSubjects: entityValidator,
+  });
+  assert.deepEqual(f.readBytes(), bytes);
+  assert.equal(sha, stateContentsBytes(bytes).sha);
+  assert.notEqual(f.head, parent);
+  assert.deepEqual(
+    f.entries().filter((e) => e.path !== '.codex-bug-state.json'),
+    f.sentinels,
+  );
+  assert.equal(f.contentsWrites.length, 0, 'Large state selects Git Data before writing');
+  assert.equal(f.refWrites.length, 1);
+  assert.deepEqual(await f.store.load(), intended);
+});
+
+const largeEntityState8 = () => ({
+  ...entityState(),
+  payload: 'x'.repeat(1024 * 1024),
+});
+const stateBytes8 = (size) => ({
+  payload: 'x'.repeat(size - Buffer.byteLength(JSON.stringify({ payload: '' }))),
+});
+const refAttempts8 = (f) => f.calls.filter((c) => c.method === 'PATCH');
+
+test('Author8 threshold uses serialized UTF8 bytes, preserves small guards, and creates absent large files without rewriting sentinels', async (t) => {
+  for (const [label, state, options, large] of [
+    ['exact1MiB', stateBytes8(1024 * 1024), {}, false],
+    ['plus1byte', stateBytes8(1024 * 1024 + 1), {}, true],
+    ['unicode', { payload: '漢'.repeat(350000) }, {}, true],
+    ['executable-state', largeEntityState8(), { mode: '100755' }, true],
+    ['absent', largeEntityState8(), { absent: true }, true],
+  ])
+    await t.test(label, async () => {
+      const f = gitDataStateFixture({}, options),
+        base = await f.store.load();
+      assert.equal(base === null, options.absent === true);
+      let guards = 0;
+      const sha = await f.store.save(state, {
+        guard: () => {
+          guards++;
+        },
+      });
+      assert.equal(guards, 1);
+      assert.equal(f.contentsWrites.length, large ? 0 : 1);
+      assert.equal(f.refWrites.length, large ? 1 : 0);
+      assert.equal(sha, stateContents(state).sha);
+      assert.deepEqual(f.readBytes(), Buffer.from(JSON.stringify(state)));
+      assert.deepEqual(
+        f.entries().filter((e) => e.path !== '.codex-bug-state.json'),
+        f.sentinels,
+      );
+      assert.equal(
+        f.entries().find((e) => e.path === '.codex-bug-state.json').mode,
+        options.mode ?? '100644',
+      );
+    });
+});
+
+test('Author8 each await race keeps a frozen body, proves contention, and preserves independent remote progress', async (t) => {
+  const stages = [
+    'before-parent',
+    'after-parent-tree',
+    'after-blob',
+    'after-tree',
+    'after-commit',
+    'guard-load',
+    'ref422',
+  ];
+  for (const stage of stages)
+    await t.test(stage, async () => {
+      const initial = largeEntityState8(),
+        f = gitDataStateFixture(initial),
+        ours = await f.store.load();
+      const heldBatch = ours.batches[0],
+        heldAttempt = heldBatch.implementation[0];
+      heldAttempt.status = 'passed';
+      let raced = false,
+        validations = 0;
+      const remote = () => {
+        const state = f.readState();
+        state.batches[1].remote = stage;
+        state.manualBatches[0].reservation = 'preserved';
+        f.advance(state);
+        raced = true;
+      };
+      if (stage === 'before-parent') remote();
+      f.after = async (req) => {
+        if (raced) return;
+        if (
+          (stage === 'after-parent-tree' &&
+            req.path.includes('/git/trees/') &&
+            req.method === 'GET') ||
+          (stage === 'after-blob' && req.path.endsWith('/git/blobs')) ||
+          (stage === 'after-tree' && req.path.endsWith('/git/trees')) ||
+          (stage === 'after-commit' && req.path.endsWith('/git/commits'))
+        )
+          remote();
+      };
+      f.before = (req) => {
+        if (stage === 'ref422' && !raced && req.method === 'PATCH') remote();
+      };
+      await f.store.save(ours, {
+        rebaseIndependentSubjects: (state) => {
+          validations++;
+          entityValidator(state);
+        },
+        guard: async () => {
+          if (stage === 'guard-load' && !raced) {
+            remote();
+            await f.store.load();
+          }
+        },
+      });
+      assert.equal(raced, true);
+      assert.ok(validations >= 2);
+      assert.equal(f.readState().batches[0].implementation[0].status, 'passed');
+      assert.equal(f.readState().batches[1].remote, stage);
+      assert.equal(f.readState().manualBatches[0].reservation, 'preserved');
+      assert.equal(ours.batches[0], heldBatch);
+      assert.equal(heldBatch.implementation[0], heldAttempt);
+      assert.equal(f.contentsWrites.length, 0);
+      assert.equal(f.refWrites.length, stage === 'ref422' ? 2 : 1);
+      assert.deepEqual(
+        f.entries().filter((e) => e.path !== '.codex-bug-state.json'),
+        f.sentinels,
+      );
+    });
+});
+
+test('Author8 strict/same-entity/shared-field conflicts never persist stale bytes', async (t) => {
+  for (const kind of ['strict', 'same-entity', 'shared-root'])
+    await t.test(kind, async () => {
+      const f = gitDataStateFixture(largeEntityState8()),
+        ours = await f.store.load();
+      ours.batches[0].local = true;
+      const remote = f.readState();
+      if (kind === 'same-entity') remote.batches[0].remote = true;
+      else remote.batches[1].remote = true;
+      if (kind === 'shared-root') {
+        ours.shared = 'ours';
+        remote.shared = 'theirs';
+      }
+      f.advance(remote);
+      const head = f.head;
+      await assert.rejects(
+        f.store.save(ours, kind === 'strict' ? {} : { rebaseIndependentSubjects: entityValidator }),
+        (e) => e.code === (kind === 'strict' ? 'state-cas-conflict' : 'state-rebase-conflict'),
+      );
+      assert.equal(f.head, head);
+      assert.equal(refAttempts8(f).length, 0);
+      assert.deepEqual(f.readState(), remote);
+    });
+});
+
+test('Author8 final ownership and guard are checked after object awaits, with finite ownership failures and no authority grant', async (t) => {
+  for (const kind of [
+    'owner-hook',
+    'guard',
+    'false-guard',
+    'hook-invalid',
+    'missing-hooks-strict-CAS',
+  ])
+    await t.test(kind, async () => {
+      const f = gitDataStateFixture(largeEntityState8()),
+        ours = await f.store.load();
+      ours.batches[0].local = true;
+      const parent = f.head;
+      let checked = 0;
+      f.after = (req) => {
+        if (req.path.endsWith('/git/commits')) checked = 1;
+      };
+      const ownerError = Object.assign(new Error('Synthetic owner takeover'), {
+        code: 'review-operator-owned',
+      });
+      let options = {};
+      if (kind === 'owner-hook' || kind === 'hook-invalid')
+        options.checkFreshOwnership = (state) => {
+          assert.equal(checked, 1);
+          assert.equal(state.batches[0].local, undefined);
+          throw kind === 'owner-hook' ? ownerError : new Error('Invalid ownership schema');
+        };
+      else if (kind === 'guard')
+        options.guard = () => {
+          assert.equal(checked, 1);
+          throw ownerError;
+        };
+      else if (kind === 'false-guard') options.guard = () => false;
+      else
+        f.after = (req) => {
+          if (req.path.endsWith('/git/commits')) {
+            const remote = f.readState();
+            remote.batches[1].remote = true;
+            f.advance(remote);
+          }
+        };
+      await assert.rejects(f.store.save(ours, options), (e) =>
+        kind === 'hook-invalid'
+          ? e.code === 'state-rebase-invalid'
+          : kind === 'missing-hooks-strict-CAS'
+            ? e.code === 'state-cas-conflict'
+            : kind === 'false-guard'
+              ? /rejected/.test(e.message)
+              : e === ownerError,
+      );
+      assert.equal(refAttempts8(f).length, 0);
+      assert.equal(f.readState().batches[0].local, undefined);
+      if (kind !== 'missing-hooks-strict-CAS') assert.equal(f.head, parent);
+    });
+});
+
+test('Author8 alias mutation and same-store reload cannot promote frozen bytes or the remembered original file CAS', async () => {
+  const f = gitDataStateFixture(largeEntityState8()),
+    ours = await f.store.load();
+  ours.batches[0].verified = true;
+  const bytes = Buffer.from(JSON.stringify(ours)),
+    initial = f.head;
+  await f.store.save(ours, {
+    rebaseIndependentSubjects: () => {
+      ours.batches[0].unverified = true;
+    },
+    guard: async () => {
+      await f.store.load();
+      ours.payload = 'unverified replacement';
+    },
+  });
+  assert.deepEqual(f.readBytes(), bytes);
+  assert.notEqual(f.head, initial);
+  const g = gitDataStateFixture(largeEntityState8()),
+    stale = await g.store.load();
+  stale.batches[0].local = true;
+  await assert.rejects(
+    g.store.save(stale, {
+      guard: async () => {
+        const remote = g.readState();
+        remote.batches[1].remote = true;
+        g.advance(remote);
+        await g.store.load();
+      },
+    }),
+    (e) => e.code === 'state-cas-conflict',
+  );
+  assert.equal(refAttempts8(g).length, 0);
+  await assert.rejects(g.store.save(stale), (e) => e.code === 'state-cas-conflict');
+  assert.equal(
+    refAttempts8(g).length,
+    0,
+    'Failure restores original expected-file SHA despite guard load',
+  );
+});
+
+test('Author8 repeated independent conflicts have a shared four-candidate bound and preserve the latest remote state', async () => {
+  const f = gitDataStateFixture(largeEntityState8()),
+    ours = await f.store.load();
+  ours.batches[0].local = true;
+  let rounds = 0;
+  await assert.rejects(
+    f.store.save(ours, {
+      rebaseIndependentSubjects: entityValidator,
+      guard: () => {
+        const state = f.readState();
+        state.batches[1].remote = ++rounds;
+        f.advance(state);
+      },
+    }),
+    (e) => e.code === 'state-cas-conflict',
+  );
+  assert.equal(rounds, 4);
+  assert.equal(f.objectWrites.filter((c) => c.path.endsWith('/git/commits')).length, 4);
+  assert.equal(refAttempts8(f).length, 0);
+  assert.equal(f.readState().batches[1].remote, 4);
+  assert.equal(f.readState().batches[0].local, undefined);
+});
+
+test('Author8 rebase transport changes only with new validated bytes across the exact threshold', async (t) => {
+  for (const direction of ['small-to-large', 'large-to-small'])
+    await t.test(direction, async () => {
+      const initial = direction === 'small-to-large' ? entityState() : largeEntityState8();
+      const f = gitDataStateFixture(initial),
+        ours = await f.store.load();
+      ours.batches[0].local = true;
+      const remote = f.readState();
+      remote.batches[1].remote = true;
+      if (direction === 'small-to-large') remote.payload = 'x'.repeat(1024 * 1024);
+      else delete remote.payload;
+      f.advance(remote);
+      await f.store.save(ours, { rebaseIndependentSubjects: entityValidator });
+      assert.equal(f.readState().batches[0].local, true);
+      assert.equal(f.readState().batches[1].remote, true);
+      assert.equal(f.refWrites.length, direction === 'small-to-large' ? 1 : 0);
+      assert.equal(f.contentsWrites.length, direction === 'small-to-large' ? 1 : 1);
+    });
+});
+
+test('Author8 independent rebase rechecks reserved-result capacity before any second candidate mutation', async () => {
+  const initial = largeEntityState8();
+  initial.payload = 'x'.repeat(MAX_DURABLE_STATE_BYTES - 750000);
+  const f = gitDataStateFixture(initial),
+    ours = await f.store.load();
+  ours.batches[0].reviews = [{ status: 'running' }];
+  const remote = f.readState();
+  remote.batches[1].reviews = [{ status: 'running' }];
+  f.advance(remote);
+  const head = f.head;
+  await assert.rejects(
+    f.store.save(ours, { rebaseIndependentSubjects: entityValidator }),
+    (e) => e.code === 'state-capacity-exhausted',
+  );
+  assert.equal(f.head, head);
+  assert.equal(f.objectWrites.length, 0);
+  assert.equal(refAttempts8(f).length, 0);
+});
+
+test('Author8 mutation failures at every object/ref stage are fatal without fallback, hidden retries or postfailure ownership skips', async (t) => {
+  const stages = ['git/blobs', 'git/trees', 'git/commits', 'git/refs/heads/codex/bug-control'];
+  const failures = [
+    ['400', { stderr: 'HTTP 400' }, 'state-write-failed'],
+    ['401', { stderr: 'HTTP 401' }, 'state-write-failed'],
+    ['403', { stderr: 'HTTP 403' }, 'state-write-failed'],
+    ['409unchanged', { stderr: 'HTTP 409' }, 'state-write-failed'],
+    ['422unchanged', { stderr: 'HTTP 422' }, 'state-write-failed'],
+    ['502', { stderr: 'HTTP 502' }, 'state-write-failed'],
+    ['timeout', { error: 'timeout', stderr: '' }, 'state-write-uncertain'],
+    ['output-limit', { error: 'output-limit', stderr: '' }, 'state-write-uncertain'],
+    ['spawn-failed', { error: 'spawn-failed', stderr: '' }, 'state-write-uncertain'],
+    ['unknown', { stderr: '' }, 'state-write-uncertain'],
+    ['badJSON', { ok: true, code: 0, stdout: 'not JSON', stderr: '' }, 'state-write-uncertain'],
+    ['thrown', null, 'state-write-uncertain'],
+  ];
+  for (const [index, stage] of stages.entries())
+    for (const [label, failure, code] of failures)
+      await t.test(`${stage}:${label}`, async () => {
+        const f = gitDataStateFixture(largeEntityState8()),
+          ours = await f.store.load(),
+          parent = f.head;
+        ours.batches[0].local = true;
+        let owners = 0,
+          validations = 0;
+        f.before = (req) => {
+          if (req.method !== 'GET' && req.path.endsWith('/' + stage)) {
+            if (!failure) throw new Error('Synthetic transport exception');
+            return { ok: false, code: 1, stdout: '{}', ...failure };
+          }
+        };
+        await assert.rejects(
+          f.store.save(ours, {
+            rebaseIndependentSubjects: () => {
+              validations++;
+            },
+            checkFreshOwnership: () => {
+              owners++;
+            },
+          }),
+          (e) => e.code === code,
+        );
+        assert.equal(f.head, parent);
+        assert.equal(f.contentsWrites.length, 0);
+        assert.equal(validations, 1);
+        assert.equal(owners, index === 3 ? 1 : 0);
+        assert.equal(f.calls.filter((req) => req.method !== 'GET').length, index + 1);
+        assert.equal(f.readState().batches[0].local, undefined);
+      });
+});
+
+test('Author8 ref409/422 require proven fresh change; auth/server errors cannot gain a rebase even when the head changes', async (t) => {
+  for (const status of [409, 422, 400, 401, 403, 502])
+    await t.test(String(status), async () => {
+      const f = gitDataStateFixture(largeEntityState8()),
+        ours = await f.store.load();
+      ours.batches[0].local = true;
+      let failed = false;
+      f.before = (req) => {
+        if (req.method === 'PATCH' && !failed) {
+          failed = true;
+          const remote = f.readState();
+          remote.batches[1].remote = status;
+          f.advance(remote);
+          return response({}, { ok: false, code: 1, stderr: `HTTP ${status}` });
+        }
+      };
+      if ([409, 422].includes(status)) {
+        await f.store.save(ours, {
+          rebaseIndependentSubjects: entityValidator,
+        });
+        assert.equal(f.readState().batches[0].local, true);
+        assert.equal(refAttempts8(f).length, 2);
+      } else {
+        await assert.rejects(
+          f.store.save(ours, { rebaseIndependentSubjects: entityValidator }),
+          (e) => e.code === 'state-write-failed',
+        );
+        assert.equal(f.readState().batches[0].local, undefined);
+        assert.equal(refAttempts8(f).length, 1);
+      }
+      assert.equal(f.readState().batches[1].remote, status);
+    });
+});
+
+test('Author8 an unknown ref outcome after an actual effect remains fatal and never triggers a second write or owner skip', async (t) => {
+  for (const kind of [
+    'timeout-after-effect',
+    'malformed-ref',
+    'missing-ref-sha',
+    'changed-ref-type',
+  ])
+    await t.test(kind, async () => {
+      const f = gitDataStateFixture(largeEntityState8()),
+        ours = await f.store.load(),
+        old = f.head;
+      ours.batches[0].local = true;
+      const store = createGitHub({
+        cwd: '/tmp',
+        repo: 'l2v-hub/ClinicOS',
+        run: async (call) => {
+          const result = await f.run(call);
+          if (!call.args.includes('PATCH')) return result;
+          if (kind === 'timeout-after-effect')
+            return {
+              ok: false,
+              code: 1,
+              error: 'timeout',
+              stderr: '',
+              stdout: '',
+            };
+          const value = JSON.parse(result.stdout);
+          if (kind === 'malformed-ref') value.ref = 'refs/heads/main';
+          if (kind === 'missing-ref-sha') delete value.object.sha;
+          if (kind === 'changed-ref-type') value.object.type = 'tag';
+          return response(value);
+        },
+      }).createStateStore();
+      await store.load();
+      let owners = 0;
+      await assert.rejects(
+        store.save(ours, {
+          checkFreshOwnership: () => {
+            owners++;
+          },
+          rebaseIndependentSubjects: entityValidator,
+        }),
+        (e) => e.code === 'state-write-uncertain',
+      );
+      assert.notEqual(f.head, old);
+      assert.equal(f.readState().batches[0].local, true);
+      assert.equal(refAttempts8(f).length, 1);
+      assert.equal(owners, 1);
+      assert.equal(f.contentsWrites.length, 0);
+    });
+});
+
+test('Author8 malformed parent/blob/tree/commit metadata and target types cannot authorize a ref effect', async (t) => {
+  const variants = [
+    'ref-name',
+    'ref-type',
+    'ref-sha',
+    'parent-sha',
+    'parent-tree',
+    'parent-parents',
+    'tree-truncated',
+    'tree-duplicate',
+    'tree-path',
+    'tree-mode',
+    'tree-sha',
+    'contents-sha',
+    'contents-size',
+    'contents-encoding',
+    'blob-sha',
+    'new-tree-extra',
+    'new-tree-sha',
+    'new-commit-parent',
+    'new-commit-tree',
+    'new-commit-sha',
+  ];
+  for (const kind of variants)
+    await t.test(kind, async () => {
+      const f = gitDataStateFixture(largeEntityState8()),
+        ours = await f.store.load(),
+        head = f.head;
+      ours.batches[0].local = true;
+      let changed = false,
+        references = 0;
+      f.after = (req, value) => {
+        if (changed) return;
+        const ref = req.path.includes('/git/ref/') && ++references === 2,
+          parent = req.path.includes('/git/commits/') && req.method === 'GET';
+        const oldTree = req.path.includes('/git/trees/') && req.method === 'GET',
+          contents = req.path.includes('/contents/');
+        if (kind.startsWith('ref-') && ref) {
+          value[kind === 'ref-name' ? 'ref' : 'object'] =
+            kind === 'ref-name'
+              ? 'refs/heads/main'
+              : {
+                  ...value.object,
+                  [kind === 'ref-type' ? 'type' : 'sha']: kind === 'ref-type' ? 'tag' : 'invalid',
+                };
+          changed = true;
+        } else if (kind.startsWith('parent-') && parent) {
+          value[kind.slice(7)] =
+            kind === 'parent-sha'
+              ? 'a'.repeat(40)
+              : kind === 'parent-tree'
+                ? { sha: 'invalid' }
+                : [{ sha: 'invalid' }];
+          changed = true;
+        } else if (kind.startsWith('tree-') && oldTree) {
+          if (kind === 'tree-truncated') value.truncated = true;
+          else if (kind === 'tree-duplicate') value.tree.push(value.tree[0]);
+          else if (kind === 'tree-path') value.tree[0].path = 'nested/entry';
+          else if (kind === 'tree-mode') value.tree[0].mode = '999999';
+          else value.sha = 'f'.repeat(40);
+          changed = true;
+        } else if (kind.startsWith('contents-') && contents) {
+          value[kind.slice(9)] =
+            kind === 'contents-sha'
+              ? 'a'.repeat(40)
+              : kind === 'contents-size'
+                ? MAX_DURABLE_STATE_BYTES + 1
+                : 'utf8';
+          changed = true;
+        } else if (kind === 'blob-sha' && req.path.endsWith('/git/blobs')) {
+          value.sha = 'f'.repeat(40);
+          changed = true;
+        } else if (kind.startsWith('new-tree-') && req.path.endsWith('/git/trees')) {
+          if (kind === 'new-tree-extra') value.tree[0].sha = 'f'.repeat(40);
+          else value.sha = 'invalid';
+          changed = true;
+        } else if (kind.startsWith('new-commit-') && req.path.endsWith('/git/commits')) {
+          if (kind === 'new-commit-parent') value.parents = [{ sha: 'f'.repeat(40) }];
+          else if (kind === 'new-commit-tree') value.tree.sha = 'f'.repeat(40);
+          else value.sha = 'invalid';
+          changed = true;
+        }
+      };
+      await assert.rejects(f.store.save(ours, { rebaseIndependentSubjects: entityValidator }));
+      assert.equal(changed, true);
+      assert.equal(f.head, head);
+      assert.equal(refAttempts8(f).length, 0);
+    });
+  for (const mode of ['120000', '160000', '040000'])
+    await t.test(`target-mode:${mode}`, async () => {
+      const f = gitDataStateFixture(largeEntityState8(), { mode }),
+        ours = await f.store.load(),
+        head = f.head;
+      await assert.rejects(f.store.save(ours));
+      assert.equal(f.head, head);
+      assert.equal(f.objectWrites.length, 0);
+    });
+});
+
+test('Author8 large creation proves tree absence and positive HTTP404, while read/auth failures authorize no mutation', async (t) => {
+  for (const kind of [
+    'auth403',
+    'text404-with403',
+    'unknown-read',
+    'target-missing-contents',
+    'absence-mismatch',
+  ])
+    await t.test(kind, async () => {
+      const absent = kind !== 'target-missing-contents',
+        f = gitDataStateFixture({}, { absent });
+      await f.store.load();
+      const head = f.head;
+      f.before = (req) => {
+        if (!req.path.includes('/contents/') || req.path.includes('ref=codex')) return;
+        if (kind === 'auth403') return response({}, { ok: false, code: 1, stderr: 'HTTP 403' });
+        if (kind === 'text404-with403')
+          return response({}, { ok: false, code: 1, stderr: 'HTTP 403 denied path 404' });
+        if (kind === 'unknown-read') return response({}, { ok: false, code: 1, stderr: '' });
+        if (kind === 'target-missing-contents')
+          return response({}, { ok: false, code: 1, stderr: 'HTTP 404' });
+        return response(stateContents({ spoof: true }));
+      };
+      await assert.rejects(f.store.save(largeEntityState8()));
+      assert.equal(f.head, head);
+      assert.equal(f.objectWrites.length, 0);
+      assert.equal(refAttempts8(f).length, 0);
+    });
+});
+
+test('Author8 an unavailable conflict proof preserves the original definite ref rejection and never rebases', async (t) => {
+  for (const status of [409, 422])
+    await t.test(String(status), async () => {
+      const f = gitDataStateFixture(largeEntityState8()),
+        ours = await f.store.load(),
+        head = f.head;
+      let rejected = false,
+        owners = 0,
+        validations = 0;
+      f.before = (req) => {
+        if (req.method === 'PATCH') {
+          rejected = true;
+          return response({}, { ok: false, code: 1, stderr: `HTTP ${status}` });
+        }
+        if (rejected && req.path.includes('/git/ref/'))
+          return response({}, { ok: false, code: 1, stderr: 'HTTP 403' });
+      };
+      await assert.rejects(
+        f.store.save(ours, {
+          rebaseIndependentSubjects: () => {
+            validations++;
+          },
+          checkFreshOwnership: () => {
+            owners++;
+          },
+        }),
+        (e) =>
+          e.code === 'state-write-failed' &&
+          e.cause.httpStatus === status &&
+          e.proofError?.code === 'github-read-rejected',
+      );
+      assert.equal(f.head, head);
+      assert.equal(refAttempts8(f).length, 1);
+      assert.equal(owners, 1);
+      assert.equal(validations, 1);
+    });
+});
+
+test('Author8 a hash-consistent new tree changing an unrelated entry still fails before commit/ref publication', async () => {
+  const f = gitDataStateFixture(largeEntityState8()),
+    ours = await f.store.load(),
+    head = f.head;
+  f.after = (req, value) => {
+    if (!req.path.endsWith('/git/trees') || req.method !== 'POST') return;
+    value.tree.find((e) => e.path === 'README.md').sha = 'f'.repeat(40);
+    const chunks = value.tree.map((e) =>
+      Buffer.concat([
+        Buffer.from(`${e.mode.replace(/^0/, '')} ${e.path}\0`),
+        Buffer.from(e.sha, 'hex'),
+      ]),
+    );
+    const bytes = Buffer.concat(chunks);
+    value.sha = createHash('sha1').update(`tree ${bytes.length}\0`).update(bytes).digest('hex');
+  };
+  await assert.rejects(f.store.save(ours), /changed unrelated entries/);
+  assert.equal(f.head, head);
+  assert.equal(refAttempts8(f).length, 0);
+  assert.equal(f.objectWrites.filter((c) => c.path.endsWith('/git/commits')).length, 0);
+});
+
+test('Author8 confirmed ref success tolerates subsequent forward progress and keeps that new file CAS for the next explicit rebase', async () => {
+  const f = gitDataStateFixture(largeEntityState8()),
+    ours = await f.store.load();
+  ours.batches[0].local = 1;
+  let advanced = false;
+  f.after = (req) => {
+    if (req.method === 'PATCH' && !advanced) {
+      advanced = true;
+      const remote = f.readState();
+      remote.batches[1].remote = 'after confirmed effect';
+      f.advance(remote);
+    }
+  };
+  const savedSHA = await f.store.save(ours);
+  assert.equal(savedSHA, stateContents(ours).sha);
+  assert.equal(f.readState().batches[1].remote, 'after confirmed effect');
+  ours.batches[0].local = 2;
+  await f.store.save(ours, { rebaseIndependentSubjects: entityValidator });
+  assert.equal(f.readState().batches[0].local, 2);
+  assert.equal(f.readState().batches[1].remote, 'after confirmed effect');
+  assert.equal(f.refWrites.length, 2);
 });

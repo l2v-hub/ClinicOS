@@ -1,3 +1,4 @@
+import { gitDataStateFixture } from './git-data-state-fixture.mjs';
 import { captureReleaseReviewProof } from '../../src/bug-pipeline/release.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -1154,50 +1155,27 @@ test('an existing open merge reservation remains pending instead of racing its a
 });
 
 function realSharedStateStore(initial) {
-  let raw = Buffer.from(JSON.stringify(initial, null, 2) + '\n');
-  const oid = () => createHash('sha1').update(`blob ${raw.length}\0`).update(raw).digest('hex');
+  const fixture = gitDataStateFixture(initial);
   const stats = { writes: 0, conflicts: 0, puts: [] };
   const transport = createGitHub({
     cwd: '/tmp',
     repo,
     run: async (call) => {
-      const endpoint = call.args[1];
-      let value;
-      if (call.args.includes('PUT')) {
-        const body = JSON.parse(call.input);
-        stats.puts.push(body);
-        if (body.sha !== oid()) {
-          stats.conflicts++;
-          return { ok: false, code: 1, stderr: 'HTTP409 synthetic CAS conflict', stdout: '{}' };
-        }
-        raw = Buffer.from(body.content, 'base64');
-        stats.writes++;
-        value = { content: { sha: oid() } };
-      } else if (endpoint.includes('/git/ref/')) value = { object: { sha: '1'.repeat(40) } };
-      else if (endpoint.includes('/contents/'))
-        value = {
-          type: 'file',
-          sha: oid(),
-          size: raw.length,
-          encoding: raw.length > 1024 * 1024 ? 'none' : 'base64',
-          content: raw.length > 1024 * 1024 ? '' : raw.toString('base64'),
-        };
-      else if (endpoint.includes('/git/blobs/'))
-        value = {
-          sha: oid(),
-          size: raw.length,
-          encoding: 'base64',
-          content: raw.toString('base64'),
-        };
-      else assert.fail('Unexpected state-only endpoint ' + endpoint);
-      return { ok: true, stdout: JSON.stringify(value) };
+      const method = call.args.includes('-X') ? call.args[call.args.indexOf('-X') + 1] : 'GET';
+      if (method === 'PUT') stats.puts.push(JSON.parse(call.input));
+      const result = await fixture.run(call);
+      if (['PUT', 'PATCH'].includes(method)) {
+        if (result.ok) stats.writes++;
+        else if (/HTTP (409|422)\b/.test(result.stderr)) stats.conflicts++;
+      }
+      return result;
     },
   });
   return {
     createStateStore: transport.createStateStore,
     stats,
-    state: () => JSON.parse(raw),
-    bytes: () => raw.length,
+    state: fixture.readState,
+    bytes: () => fixture.readBytes().length,
   };
 }
 function actualController(f, durable, number = 81) {

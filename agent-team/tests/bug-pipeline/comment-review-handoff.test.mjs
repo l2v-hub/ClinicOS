@@ -1,3 +1,4 @@
+import { gitDataStateFixture } from './git-data-state-fixture.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -123,6 +124,12 @@ function fixture({
   const writes = [];
   const reported = [];
   let commentId = 200;
+  const stateTransport = blobState ? gitDataStateFixture(remote) : null;
+  if (stateTransport)
+    stateTransport.after = (request, value) => {
+      if (request.method === 'GET' && request.path.includes('/git/blobs/'))
+        value.content = value.content.match(/.{1,60}/g).join('\n');
+    };
   const apiRun = async (call) => {
     calls.push(clone(call));
     const endpoint = call.args[1];
@@ -130,6 +137,29 @@ function fixture({
     if (endpoint === 'user') return { ok: true, stdout: JSON.stringify({ login: actorName }) };
     if (/^repos\/l2v-hub\/ClinicOS\/collaborators\/[^/]+\/permission$/.test(endpoint))
       return { ok: true, stdout: JSON.stringify({ permission }) };
+    // Source packet recursive-tree/native API stubs remain independent of state Git objects.
+    if (
+      stateTransport &&
+      (endpoint.startsWith(`repos/${repo}/contents/.codex-bug-state.json`) ||
+        endpoint === `repos/${repo}/git/ref/heads/codex/bug-control` ||
+        endpoint === `repos/${repo}/git/refs/heads/codex/bug-control` ||
+        endpoint.startsWith(`repos/${repo}/git/blobs/`) ||
+        endpoint.startsWith(`repos/${repo}/git/commits/`) ||
+        ['blobs', 'trees', 'commits'].some((kind) => endpoint === `repos/${repo}/git/${kind}`) ||
+        (endpoint.startsWith(`repos/${repo}/git/trees/`) && !endpoint.includes('?')))
+    ) {
+      // Test-side external edits create a new immutable commit, never alter pinned history.
+      if (JSON.stringify(stateTransport.readState()) !== JSON.stringify(remote))
+        stateTransport.advance(remote);
+      const result = await stateTransport.run(call);
+      if (result.ok && ['PUT', 'PATCH'].includes(method)) {
+        writes.push({ endpoint, method, body: JSON.parse(call.input) });
+        const next = stateTransport.readState();
+        for (const key of Object.keys(remote)) delete remote[key];
+        Object.assign(remote, next);
+      }
+      return result;
+    }
     if (endpoint === `repos/${repo}/git/ref/heads/codex/bug-control`)
       return { ok: true, stdout: JSON.stringify({ object: { sha: 'branch-sha' } }) };
     if (endpoint.startsWith(`repos/${repo}/contents/.codex-bug-state.json`)) {
