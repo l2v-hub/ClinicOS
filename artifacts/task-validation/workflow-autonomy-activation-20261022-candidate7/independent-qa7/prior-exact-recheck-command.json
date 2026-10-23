@@ -1,0 +1,23 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "--experimental-vm-modules",
+    "/tmp/clinicos-autonomy-activation-20261022/independent-qa7/external-cas-probe.mjs",
+    "/tmp/clinicos-autonomy-activation-20261022/independent-qa7/malformed-takeover-probe.mjs",
+    "/tmp/clinicos-autonomy-activation-20261022/independent-qa7/recovery-budget-probe.mjs",
+    "/tmp/clinicos-autonomy-activation-20261022/independent-qa7/recovery-route-probe.mjs",
+    "/tmp/clinicos-autonomy-activation-20261022/independent-qa7/residual-exact-recheck.mjs"
+  ],
+  "exit": 1,
+  "summary": {
+    "tests": "10",
+    "pass": "9",
+    "fail": "1",
+    "cancelled": "0",
+    "skipped": "0",
+    "todo": "0"
+  },
+  "adaptation": "All original QA6 mjs imports qa-source6 to qa-source7 only; original assertions and fixtures unchanged"
+}

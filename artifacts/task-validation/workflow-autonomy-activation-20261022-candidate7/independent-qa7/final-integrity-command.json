@@ -1,0 +1,9 @@
+{
+  "command": [
+    "python",
+    "/tmp/clinicos-autonomy-activation-20261022/independent-qa7/verify-inputs.py"
+  ],
+  "exit": 0,
+  "stdout": "PASS:138 source Git blobs;18 attempt deltas;26 cumulative code paths;430 old packet blobs;5 seals;readonly support\n",
+  "stderr": ""
+}

@@ -1,0 +1,97 @@
+TAP version 13
+# Subtest: QA7 exact legacy origins survive current-pointer removal without invented nonce, time or fingerprint
+ok 1 - QA7 exact legacy origins survive current-pointer removal without invented nonce, time or fingerprint
+  ---
+  duration_ms: 4.84383
+  type: 'test'
+  ...
+# Subtest: QA7 completed modern records missing nonce or time are ambiguous at actual external step in every spent history
+ok 2 - QA7 completed modern records missing nonce or time are ambiguous at actual external step in every spent history
+  ---
+  duration_ms: 2.458247
+  type: 'test'
+  ...
+# Subtest: QA7 native recovery rejects stale token and missing verifier while an exact grant genuinely progresses
+ok 3 - QA7 native recovery rejects stale token and missing verifier while an exact grant genuinely progresses
+  ---
+  duration_ms: 21.081505
+  type: 'test'
+  ...
+# Subtest: QA7 newly introduced ambiguous spend after a trusted seal cannot inherit an old resolution or free allowance
+not ok 4 - QA7 newly introduced ambiguous spend after a trusted seal cannot inherit an old resolution or free allowance
+  ---
+  duration_ms: 3.781932
+  type: 'test'
+  location: '/tmp/clinicos-autonomy-activation-20261022/independent-qa7/novel-boundaries.mjs:40:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'failureCode')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/clinicos-autonomy-activation-20261022/independent-qa7/novel-boundaries.mjs:41:555)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: QA7 fresh store observation alone never initializes branch or establishes writer CAS authority
+ok 5 - QA7 fresh store observation alone never initializes branch or establishes writer CAS authority
+  ---
+  duration_ms: 1.263634
+  type: 'test'
+  ...
+# Subtest: QA7 changed authenticated blob is decoded, corrupt new content rejects, and observations retain old writer SHA
+ok 6 - QA7 changed authenticated blob is decoded, corrupt new content rejects, and observations retain old writer SHA
+  ---
+  duration_ms: 0.833166
+  type: 'test'
+  ...
+# Subtest: QA7 cached observation never bypasses fresh authorization failure and diagnostics exclude arbitrary stderr
+ok 7 - QA7 cached observation never bypasses fresh authorization failure and diagnostics exclude arbitrary stderr
+  ---
+  duration_ms: 0.975937
+  type: 'test'
+  ...
+# Subtest: QA7 authorized interruption immediately before simplify resumes only remaining operations and reaches ready
+ok 8 - QA7 authorized interruption immediately before simplify resumes only remaining operations and reaches ready
+  ---
+  duration_ms: 21.658404
+  type: 'test'
+  ...
+# Subtest: QA7 same authorized journal with changed retained output blocks without replaying execute or simplify
+ok 9 - QA7 same authorized journal with changed retained output blocks without replaying execute or simplify
+  ---
+  duration_ms: 18.149008
+  type: 'test'
+  ...
+# Subtest: QA7 internal new merge rejects missing final proof with zero native calls
+ok 10 - QA7 internal new merge rejects missing final proof with zero native calls
+  ---
+  duration_ms: 3.856646
+  type: 'test'
+  ...
+# Subtest: QA7 external new merge rejects missing final proof with zero native calls
+ok 11 - QA7 external new merge rejects missing final proof with zero native calls
+  ---
+  duration_ms: 1.705368
+  type: 'test'
+  ...
+# Subtest: QA7 release receipt freezes optional nonce/time and rejects changed stored proof while allowing archived mutable pointer
+ok 12 - QA7 release receipt freezes optional nonce/time and rejects changed stored proof while allowing archived mutable pointer
+  ---
+  duration_ms: 1.165248
+  type: 'test'
+  ...
+# Subtest: QA7 historical fixed cutoff refuses advanced caller cutoff before any authenticated read
+ok 13 - QA7 historical fixed cutoff refuses advanced caller cutoff before any authenticated read
+  ---
+  duration_ms: 0.307448
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 12
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 225.491281

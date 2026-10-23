@@ -1,0 +1,14 @@
+{
+  "kind": "final-quality-disposition-after-actual-freeze",
+  "at": "2026-10-23T05:17:52.833Z",
+  "root": "/root",
+  "sha256": "568cfd8032a621bd8e4a69c8d0c9d1873152995038cf9700a813481dc82a617c",
+  "path": "/tmp/clinicos-autonomy-activation-20261022/root-final-quality-applicability7.md",
+  "supersedesInternalRestorationProposalOnly": true,
+  "originalUserAfterClaudeQualityInvariantRetained": true,
+  "actualConfiguredMode": "external",
+  "sourceRemainsFrozen": true,
+  "noApprovalConferred": true,
+  "stateCommit": "70d34a419ca359fa111e07ca69c0a2bd9b85bcc2",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/21dafbc5-cc0e-4587-a4bc-e900b584bf8b/accepted.json"
+}

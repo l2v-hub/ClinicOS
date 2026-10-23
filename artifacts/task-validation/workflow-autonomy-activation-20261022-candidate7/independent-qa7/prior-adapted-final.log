@@ -1,0 +1,72 @@
+TAP version 13
+# (node:1964477) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: external automatic actual native409 ownership recovery preserves remote A exactly while B alone completes
+ok 1 - external automatic actual native409 ownership recovery preserves remote A exactly while B alone completes
+  ---
+  duration_ms: 50.664841
+  type: 'test'
+  ...
+# Subtest: malformed takeover active type cannot grant new unclaimed intake even with otherwise bound handback
+ok 2 - malformed takeover active type cannot grant new unclaimed intake even with otherwise bound handback
+  ---
+  duration_ms: 46.09775
+  type: 'test'
+  ...
+# Subtest: typed recovery must count a retained legacy failed inference toward the three-session final-QA allowance
+ok 3 - typed recovery must count a retained legacy failed inference toward the three-session final-QA allowance
+  ---
+  duration_ms: 48.649326
+  type: 'test'
+  ...
+# Subtest: supported typed QA-reservation recovery is distinct from ordinary resume after approved-Claude infrastructure failure
+ok 4 - supported typed QA-reservation recovery is distinct from ordinary resume after approved-Claude infrastructure failure
+  ---
+  duration_ms: 22.651069
+  type: 'test'
+  ...
+# Subtest: ambiguous typed spend blocks across every archive/ledger/current pointer without inference or correction
+ok 5 - ambiguous typed spend blocks across every archive/ledger/current pointer without inference or correction
+  ---
+  duration_ms: 15.179374
+  type: 'test'
+  ...
+# Subtest: two real intent nonces deduplicate across all histories and leave exactly one new inference slot
+ok 6 - two real intent nonces deduplicate across all histories and leave exactly one new inference slot
+  ---
+  duration_ms: 2.58202
+  type: 'test'
+  ...
+# Subtest: pre-inference check polling consumes no slot and genuine other identities cannot block new allowed work
+ok 7 - pre-inference check polling consumes no slot and genuine other identities cannot block new allowed work
+  ---
+  duration_ms: 0.639571
+  type: 'test'
+  ...
+# Subtest: fresh bound handback progresses unclaimed intake; stale and malformed bindings reject or pause before effects
+ok 8 - fresh bound handback progresses unclaimed intake; stale and malformed bindings reject or pause before effects
+  ---
+  duration_ms: 10.216865
+  type: 'test'
+  ...
+# Subtest: both external review channel variants require current final proof but never invent proof.reviewedSha
+ok 9 - both external review channel variants require current final proof but never invent proof.reviewedSha
+  ---
+  duration_ms: 33.35405
+  type: 'test'
+  ...
+# Subtest: final proof changing during remote evidence reads is refused by native fresh release guard before merge
+ok 10 - final proof changing during remote evidence reads is refused by native fresh release guard before merge
+  ---
+  duration_ms: 1.308932
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 457.334883

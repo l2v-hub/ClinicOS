@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "--experimental-vm-modules",
+    "/tmp/clinicos-autonomy-activation-20261022/independent-qa7/automatic-boundary-probes.mjs"
+  ],
+  "exit": 0,
+  "summary": {
+    "tests": "5",
+    "pass": "5",
+    "fail": "0",
+    "cancelled": "0",
+    "skipped": "0",
+    "todo": "0"
+  }
+}

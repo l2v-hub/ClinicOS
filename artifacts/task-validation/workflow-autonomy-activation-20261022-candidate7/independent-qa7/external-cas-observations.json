@@ -1,0 +1,286 @@
+{
+  "injected": true,
+  "puts": [
+    {
+      "shaMatches": false,
+      "hasRemoteOwner": false,
+      "hasRemoteNote": false,
+      "localQaStatus": "running"
+    },
+    {
+      "shaMatches": true,
+      "hasRemoteOwner": true,
+      "hasRemoteNote": true,
+      "localQaStatus": null
+    },
+    {
+      "shaMatches": true,
+      "hasRemoteOwner": true,
+      "hasRemoteNote": true,
+      "localQaStatus": null
+    },
+    {
+      "shaMatches": true,
+      "hasRemoteOwner": true,
+      "hasRemoteNote": true,
+      "localQaStatus": null
+    },
+    {
+      "shaMatches": true,
+      "hasRemoteOwner": true,
+      "hasRemoteNote": true,
+      "localQaStatus": null
+    }
+  ],
+  "qa": [
+    "bug-batch-18"
+  ],
+  "error": null,
+  "errorCauses": [],
+  "remoteAEqualsFrozen": true,
+  "resultAEqualsFrozen": true,
+  "remoteA": {
+    "id": "bug-batch-17",
+    "branch": "codex/bug-batch-17",
+    "issues": [
+      17
+    ],
+    "plan": {
+      "title": "Stabilize the patient list filter",
+      "feature": "Patient list",
+      "rationale": "The related reports share the same filter behavior.",
+      "execution": {
+        "difficulty": "low",
+        "mode": "delegate",
+        "reason": "Bounded, independently testable change."
+      },
+      "analysis": "Both issues describe the same feature regression with separate reproduction details.",
+      "issues": [
+        17
+      ],
+      "scope": [
+        "frontend/src/features/patients/filter.ts"
+      ],
+      "fileMap": [
+        {
+          "issue": 17,
+          "files": [
+            "frontend/src/features/patients/filter.ts"
+          ]
+        }
+      ],
+      "separationReason": "",
+      "acceptance": [
+        {
+          "issue": 17,
+          "criteria": [
+            "Issue #17 reproduces and is fixed"
+          ]
+        }
+      ],
+      "tasks": [
+        {
+          "title": "Fix and cover filter behavior",
+          "files": [
+            "frontend/src/features/patients/filter.ts"
+          ],
+          "steps": [
+            "Correct filter state handling",
+            "Add regression coverage"
+          ]
+        }
+      ],
+      "verification": [
+        {
+          "command": "node",
+          "args": [
+            "--test",
+            "frontend/src/features/patients/filter.test.mjs"
+          ]
+        },
+        {
+          "command": "npm",
+          "args": [
+            "--prefix",
+            "frontend",
+            "run",
+            "build"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "issue": 17,
+          "screenshot": "artifacts/task-validation/bug-batch-17/evidence/issue-17.png",
+          "trace": "artifacts/task-validation/bug-batch-17/evidence/issue-17-trace.zip",
+          "video": ""
+        }
+      ]
+    },
+    "phase": "waiting-review",
+    "implementation": [
+      {
+        "round": 1,
+        "status": "passed"
+      }
+    ],
+    "reviews": [
+      {
+        "round": 1,
+        "status": "approved",
+        "subjectSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "pr": {
+      "number": 81,
+      "url": "https://github.com/l2v-hub/ClinicOS/pull/81"
+    },
+    "reviewLedger": {
+      "rounds": [
+        {
+          "round": 1,
+          "subject_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "verdict": "approved",
+          "review_sha256": "196c0d788a84be94534881b4f92700ba98b37bae68ad168b37ea61abc90dd2d3"
+        }
+      ]
+    },
+    "reviewReports": {
+      "claude-review-1.json": "{\"subject_sha\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"verdict\":\"approved\",\"summary\":\"Synthetic approved fixture\",\"findings\":[]}"
+    },
+    "externalReview": {
+      "status": "published",
+      "subjectSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "feedbackFingerprint": "31f26216a249ad4ccdc6952b6e9d2703a15f951f3f9ce4371ce671e7e4bbd034"
+    },
+    "operatorCoordination": {
+      "active": true,
+      "owner": "maintainer"
+    },
+    "remoteNote": "Remote owner data must survive exactly"
+  },
+  "frozenA": {
+    "id": "bug-batch-17",
+    "branch": "codex/bug-batch-17",
+    "issues": [
+      17
+    ],
+    "plan": {
+      "title": "Stabilize the patient list filter",
+      "feature": "Patient list",
+      "rationale": "The related reports share the same filter behavior.",
+      "execution": {
+        "difficulty": "low",
+        "mode": "delegate",
+        "reason": "Bounded, independently testable change."
+      },
+      "analysis": "Both issues describe the same feature regression with separate reproduction details.",
+      "issues": [
+        17
+      ],
+      "scope": [
+        "frontend/src/features/patients/filter.ts"
+      ],
+      "fileMap": [
+        {
+          "issue": 17,
+          "files": [
+            "frontend/src/features/patients/filter.ts"
+          ]
+        }
+      ],
+      "separationReason": "",
+      "acceptance": [
+        {
+          "issue": 17,
+          "criteria": [
+            "Issue #17 reproduces and is fixed"
+          ]
+        }
+      ],
+      "tasks": [
+        {
+          "title": "Fix and cover filter behavior",
+          "files": [
+            "frontend/src/features/patients/filter.ts"
+          ],
+          "steps": [
+            "Correct filter state handling",
+            "Add regression coverage"
+          ]
+        }
+      ],
+      "verification": [
+        {
+          "command": "node",
+          "args": [
+            "--test",
+            "frontend/src/features/patients/filter.test.mjs"
+          ]
+        },
+        {
+          "command": "npm",
+          "args": [
+            "--prefix",
+            "frontend",
+            "run",
+            "build"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "issue": 17,
+          "screenshot": "artifacts/task-validation/bug-batch-17/evidence/issue-17.png",
+          "trace": "artifacts/task-validation/bug-batch-17/evidence/issue-17-trace.zip",
+          "video": ""
+        }
+      ]
+    },
+    "phase": "waiting-review",
+    "implementation": [
+      {
+        "round": 1,
+        "status": "passed"
+      }
+    ],
+    "reviews": [
+      {
+        "round": 1,
+        "status": "approved",
+        "subjectSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "pr": {
+      "number": 81,
+      "url": "https://github.com/l2v-hub/ClinicOS/pull/81"
+    },
+    "reviewLedger": {
+      "rounds": [
+        {
+          "round": 1,
+          "subject_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "verdict": "approved",
+          "review_sha256": "196c0d788a84be94534881b4f92700ba98b37bae68ad168b37ea61abc90dd2d3"
+        }
+      ]
+    },
+    "reviewReports": {
+      "claude-review-1.json": "{\"subject_sha\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"verdict\":\"approved\",\"summary\":\"Synthetic approved fixture\",\"findings\":[]}"
+    },
+    "externalReview": {
+      "status": "published",
+      "subjectSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "feedbackFingerprint": "31f26216a249ad4ccdc6952b6e9d2703a15f951f3f9ce4371ce671e7e4bbd034"
+    },
+    "operatorCoordination": {
+      "active": true,
+      "owner": "maintainer"
+    },
+    "remoteNote": "Remote owner data must survive exactly"
+  },
+  "rootTakeoverRetained": true,
+  "phaseB": "ready"
+}

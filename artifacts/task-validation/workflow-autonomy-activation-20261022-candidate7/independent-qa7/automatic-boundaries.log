@@ -1,0 +1,42 @@
+TAP version 13
+# (node:1964954) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Author7 F5 actual external draftReady call stops A on new ownership and still requests B
+ok 1 - Author7 F5 actual external draftReady call stops A on new ownership and still requests B
+  ---
+  duration_ms: 29.688132
+  type: 'test'
+  ...
+# Subtest: Author7 F4 external real failure then block ownership race preserves A and continues B
+ok 2 - Author7 F4 external real failure then block ownership race preserves A and continues B
+  ---
+  duration_ms: 23.308626
+  type: 'test'
+  ...
+# Subtest: Author7 F3 actual before final-QA observation interruption preserves correct spend and progresses with trusted recovery
+ok 3 - Author7 F3 actual before final-QA observation interruption preserves correct spend and progresses with trusted recovery
+  ---
+  duration_ms: 21.990778
+  type: 'test'
+  ...
+# Subtest: Author7 F3 actual after final-QA observation interruption preserves correct spend and progresses with trusted recovery
+ok 4 - Author7 F3 actual after final-QA observation interruption preserves correct spend and progresses with trusted recovery
+  ---
+  duration_ms: 16.126526
+  type: 'test'
+  ...
+# Subtest: Author7 F3 external correction resumes exact pending publish after checkpoint without reexecuting models
+ok 5 - Author7 F3 external correction resumes exact pending publish after checkpoint without reexecuting models
+  ---
+  duration_ms: 45.859271
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 263.776447

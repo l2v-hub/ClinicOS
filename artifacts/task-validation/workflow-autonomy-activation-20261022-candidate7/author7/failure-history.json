@@ -1,0 +1,220 @@
+{
+  "runs": [
+    {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-name-pattern=Author7 F3 completed internal",
+        "agent-team/tests/bug-pipeline/pipeline.test.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/source7",
+      "exitCode": 1,
+      "seconds": 0.17581486701965332,
+      "tests": 1,
+      "pass": 0,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "log": "completed-internal-diagnostic.log",
+      "logSha256": "5861c264f7d64c1d55a4e8422564fed7453322989a5e00ec79f9496fe6825760",
+      "classification": "Same retained source failure with explicit sanitized synthetic diagnostic; no additional finding or budget reset."
+    },
+    {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-name-pattern=Author7 F3 completed internal",
+        "agent-team/tests/bug-pipeline/pipeline.test.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/source7",
+      "exitCode": 1,
+      "seconds": 0.17323899269104004,
+      "tests": 1,
+      "pass": 0,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "log": "completed-internal.log",
+      "logSha256": "553e1873f2bc20ed74737308e2e31d5ac6dfd9e8957487df4952dc15c9b01293",
+      "classification": "Genuine same-F3 completed internal feedback boundary initially blocked on resumed source feedback identity; fixed finite completed-phase interruption and bound prior feedback context."
+    },
+    {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+        "agent-team/tests/bug-pipeline/external-review.test.mjs",
+        "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+        "agent-team/tests/bug-pipeline/attempt-budget.test.mjs",
+        "agent-team/tests/bug-pipeline/operator-authorization.test.mjs",
+        "agent-team/tests/bug-pipeline/github.test.mjs",
+        "agent-team/tests/bug-pipeline/workspace.test.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/source7",
+      "exitCode": 1,
+      "seconds": 7.884148836135864,
+      "tests": 208,
+      "pass": 202,
+      "fail": 6,
+      "cancelled": 0,
+      "skipped": 0,
+      "log": "core-first.log",
+      "logSha256": "28ffa28e777833095885f1f90fdd60ca1f6360cecb5f2a7a01940ed6a59260d8",
+      "classification": "202PASS6FAIL: one genuine integration regression (pre-model informational ownership guard removed; restored), one expected new finite diagnostic fixture value, four missing historical trace fixtures. Root later supplied exact read-only main2ee fixture; no source workaround."
+    },
+    {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "--experimental-vm-modules",
+        "../author7/external-cas-probe.mjs",
+        "../author7/malformed-takeover-probe.mjs",
+        "../author7/recovery-budget-probe.mjs",
+        "../author7/recovery-route-probe.mjs",
+        "../author7/residual-probes.mjs",
+        "../author7/automatic-boundary-probes.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/source7",
+      "exitCode": 1,
+      "seconds": 0.5053236484527588,
+      "tests": 15,
+      "pass": 14,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "log": "final-boundaries.log",
+      "logSha256": "c7a6586f842c8940b942d59844df85c092d5b97ca0cf73bf15e191bf17eaeaa1",
+      "classification": "14PASS1FAIL: reused QA6 native merge stub left PR OPEN after simulated success and ignored callback. Boundary now executes guard and reports MERGED; original assertions unchanged."
+    },
+    {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-name-pattern=Author7 F",
+        "agent-team/tests/bug-pipeline/external-review.test.mjs",
+        "agent-team/tests/bug-pipeline/pipeline.test.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/source7",
+      "exitCode": 1,
+      "seconds": 0.24086356163024902,
+      "tests": 3,
+      "pass": 0,
+      "fail": 3,
+      "cancelled": 0,
+      "skipped": 0,
+      "log": "initial-causal.log",
+      "logSha256": "2e6a59c18b20aea125a82f78356d92e10ea9e4d86a54164e98b94734ed0382bd",
+      "classification": "Three genuine causal pre-change failures (legacy4field, pre-execute read burn, failure-to-block ownership race)."
+    },
+    {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "agent-team/tests/bug-pipeline/attempt-budget.test.mjs",
+        "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+        "agent-team/tests/bug-pipeline/contracts.test.mjs",
+        "agent-team/tests/bug-pipeline/external-review.test.mjs",
+        "agent-team/tests/bug-pipeline/github.test.mjs",
+        "agent-team/tests/bug-pipeline/models.test.mjs",
+        "agent-team/tests/bug-pipeline/operator-authorization.test.mjs",
+        "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+        "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+        "agent-team/tests/bug-pipeline/release.test.mjs",
+        "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+        "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+        "agent-team/tests/bug-pipeline/workspace.test.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/source7",
+      "exitCode": 1,
+      "seconds": 10.352060556411743,
+      "tests": 779,
+      "pass": 778,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "log": "integrated-full.log",
+      "logSha256": "9187a84bf46b0555e131ab33e667fe6f68c1ca62c7d3cf778f00d1151bb52e09",
+      "classification": "778PASS1FAIL: pending backend test seeded legacy already-deployed receipt without finite cutover/new immutable proof. Updated only that modern-delivery fixture using actual exported captureReleaseReviewProof; legacy terminal fixtures unchanged."
+    },
+    {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-name-pattern=Author7 F3.*worktree",
+        "agent-team/tests/bug-pipeline/workspace.test.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/source7",
+      "exitCode": 1,
+      "seconds": 55.73861503601074,
+      "tests": 2,
+      "pass": 1,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "log": "lost-worktree.log",
+      "logSha256": "54b26b79ee1d01af1dd32743eb72d47613719ef953d92ae3690a1de9b21b7496",
+      "classification": "Genuine negative caught resumed-loop nontermination on lost output. Author-owned Node test leaf terminated SIGTERM after55.6s; no replayed inference. Resumed failures now exit to block; subsequent retained/lost cases2PASS."
+    },
+    {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-name-pattern=Author7 F1|Author7 F3|ownership loss in automatic",
+        "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+        "agent-team/tests/bug-pipeline/workspace.test.mjs",
+        "agent-team/tests/bug-pipeline/github.test.mjs",
+        "agent-team/tests/bug-pipeline/external-review.test.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/source7",
+      "exitCode": 1,
+      "seconds": 0.530625581741333,
+      "tests": 7,
+      "pass": 5,
+      "fail": 2,
+      "cancelled": 0,
+      "skipped": 0,
+      "log": "recovery-new.log",
+      "logSha256": "c39145aaf1de131d3993a801fa303e0e3050c02774ed2013eb9b3501b983eb1e",
+      "classification": "5PASS2FAIL: author fixture errors (block callback omitted batch argument causing circular reason, and test expected inference while explicitly blocked / hashed undefined pointer). Both retained and corrected at synthetic boundaries."
+    },
+    {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-name-pattern=Author7 F3 real retained",
+        "agent-team/tests/bug-pipeline/workspace.test.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/source7",
+      "exitCode": 1,
+      "seconds": 0.26996421813964844,
+      "tests": 1,
+      "pass": 0,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "log": "retained-progress.log",
+      "logSha256": "b1986b13c007a96c2567e3cab0c86585f3798f522fce8b127975e67505ddac83",
+      "classification": "Author integration fixture lacked required frontend-build verification in plan; corrected local test plan, no policy relaxation."
+    }
+  ],
+  "allNonzeroAuthorNodeRunsPreserved": true,
+  "bookkeeping": [
+    {
+      "receipt": "four-path-formatting-correction.json",
+      "classification": "Formatting selector included pre-child carryfield file; exact child baseline restored before serial integration. No semantic edit retained."
+    },
+    {
+      "classification": "Two read-only inspection commands initially used parent rather than source cwd and returned ENOENT; rerun with source7 prefix. No source/state mutation or test claim."
+    }
+  ],
+  "childFailures": "All Luna and F2 first causal/fixture failures remain under verified original child seals; not flattened into a fabricated clean history."
+}
