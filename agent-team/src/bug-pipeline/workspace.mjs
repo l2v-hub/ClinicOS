@@ -8,6 +8,9 @@ import { runBugReview } from '../../../scripts/quality-gate/claude-bug-review.mj
 import { relativeFile, editableFile, safeText, sha256 } from './contracts.mjs';
 import { validatePng, validateTrace } from './evidence.mjs';
 import { verificationArguments } from './verification.mjs';
+import { runWorkItems, validateWorkItems } from './work-items.mjs';
+import { createWorkItemWorkspace } from './work-item-workspace.mjs';
+import { selectWorkItemExecutor } from './routing.mjs';
 
 export async function regularFile(root, file) {
   relativeFile(file);
@@ -98,6 +101,11 @@ export function createWorkspace({ root, repo, run, models }) {
   const git = (args, cwd) => invoke('git', args, cwd);
   const packetFile = (batch, file) =>
     path.join(coordinates(batch).cwd, coordinates(batch).packet, file);
+  const childWorkspace = createWorkItemWorkspace({
+    root,
+    run,
+    parentWorkspace: { coordinates, assertScope },
+  });
   const recordExecution = async (batch, phase, round) => {
     const selection = models.executionFor?.(coordinates(batch).cwd);
     if (!selection) return;
@@ -303,6 +311,22 @@ export function createWorkspace({ root, repo, run, models }) {
           'triage-index.md': `# Issue grouping\n\nBatch: ${batch.id}\nBaseline: ${batch.baseSha}\nFeature: ${batch.plan.feature}\n\n${batch.plan.rationale}\n\n## Issue to affected files\n\n${JSON.stringify(batch.grouping?.fileMap ?? [], null, 2)}\n\n## Separation from overlapping groups\n\n${batch.grouping?.separationReason || 'No shared-file split declared.'}\n\nEvery source issue retains its own acceptance criteria, regression scenario and evidence in implementation-plan.md.\n`,
           'implementation-plan.md': `# Frozen implementation plan\n\nBranch: ${batch.branch}\nBaseline: ${batch.baseSha}\n\n${JSON.stringify({ ...batch.plan, ...batch.grouping }, null, 2)}\n`,
         };
+        if (batch.workItems) {
+          validateWorkItems(batch);
+          files['work-items-plan.json'] =
+            JSON.stringify(
+              {
+                spec: batch.workItems.spec,
+                specSha256: batch.workItems.specSha256,
+                planSha256: batch.workItems.planSha256,
+                bindingSha256: batch.workItems.bindingSha256,
+                sourceIssues: batch.workItems.sourceIssues,
+                policy: batch.workItems.policy,
+              },
+              null,
+              2,
+            ) + '\n';
+        }
         batch.packetHashes = {};
         for (const [file, content] of Object.entries(files)) {
           safeText(content);
@@ -322,6 +346,34 @@ export function createWorkspace({ root, repo, run, models }) {
       }
     },
     async execute(batch, options) {
+      if (batch.workItems && options.phase === 'implementation' && options.round === 1) {
+        validateWorkItems(batch);
+        const result = await runWorkItems({
+          batch,
+          workspace: childWorkspace,
+          models,
+          effects: options.effects,
+          context: options,
+          pool: await models.executionPool({ cwd: coordinates(batch).cwd }),
+          selectExecutor: selectWorkItemExecutor,
+        });
+        await writeFile(
+          packetFile(batch, 'work-items-history.json'),
+          JSON.stringify(batch.workItems.runs, null, 2) + '\n',
+        );
+        if (
+          batch.workItems.runs.some((entry) =>
+            entry.nodes.some((node) => node.integration?.status === 'conflict'),
+          )
+        )
+          throw Object.assign(
+            new Error(
+              'Retained child integration conflict requires explicit recovery; no model replay',
+            ),
+            { code: 'work-item-integration-conflict' },
+          );
+        return result;
+      }
       if (options.feedback) {
         const content = safeText(JSON.stringify(options.feedback, null, 2) + '\n');
         await writeFile(packetFile(batch, 'review-feedback.json'), content);
@@ -334,7 +386,11 @@ export function createWorkspace({ root, repo, run, models }) {
     },
     async simplify(batch) {
       try {
-        return await models.simplify({ ...coordinates(batch), plan: batch.plan });
+        return await models.simplify({
+          ...coordinates(batch),
+          plan: batch.plan,
+          ...(batch.workItems ? { forceSenior: true } : {}),
+        });
       } finally {
         await recordExecution(batch, 'simplify');
       }
@@ -489,7 +545,14 @@ export function createWorkspace({ root, repo, run, models }) {
 // A finite implementation journal records completed operations, never their replay.
 // Only a trusted explicit recovery can re-enter an interrupted attempt, and only
 // while its exact registered worktree/output checkpoint remains available.
-export async function runImplementationStages({ batch, workspace, save, context, beforeStage }) {
+export async function runImplementationStages({
+  batch,
+  workspace,
+  save,
+  context,
+  beforeStage,
+  effects,
+}) {
   const steps = [
     'execute',
     'verify-before',
@@ -500,6 +563,8 @@ export async function runImplementationStages({ batch, workspace, save, context,
     'publish',
   ];
   let progress = batch.controllerProgress;
+  const trustedResume = progress?.status === 'interrupted';
+  if (batch.workItems) validateWorkItems(batch);
   if (progress?.status === 'interrupted') {
     validateObservationResume(batch);
     if (
@@ -507,7 +572,10 @@ export async function runImplementationStages({ batch, workspace, save, context,
       progress.flow !== context.phase ||
       progress.round !== context.round ||
       progress.feedbackSha256 !== sha256(JSON.stringify(context.feedback ?? null)) ||
-      progress.planSha256 !== sha256(JSON.stringify(batch.plan))
+      progress.planSha256 !== sha256(JSON.stringify(batch.plan)) ||
+      (batch.workItems &&
+        (progress.workItemsSha256 !== batch.workItems.specSha256 ||
+          progress.workItemsBindingSha256 !== batch.workItems.bindingSha256))
     )
       throw new Error('Implementation recovery identity changed');
     if (typeof workspace.resume !== 'function')
@@ -532,6 +600,12 @@ export async function runImplementationStages({ batch, workspace, save, context,
       ...(context.reviewRound === undefined ? {} : { reviewRound: context.reviewRound }),
       sourceSha: batch.sha ?? null,
       planSha256: sha256(JSON.stringify(batch.plan)),
+      ...(batch.workItems
+        ? {
+            workItemsSha256: batch.workItems.specSha256,
+            workItemsBindingSha256: batch.workItems.bindingSha256,
+          }
+        : {}),
       feedbackSha256: sha256(JSON.stringify(context.feedback ?? null)),
       feedback: structuredClone(context.feedback ?? null),
       status: 'running',
@@ -568,7 +642,11 @@ export async function runImplementationStages({ batch, workspace, save, context,
       if (step === 'execute' || step === 'simplify' || step === 'qa') {
         result =
           step === 'execute'
-            ? await workspace.execute(batch, context)
+            ? await workspace.execute(batch, {
+                ...context,
+                ...(effects ? { effects } : {}),
+                ...(trustedResume && batch.workItems ? { resumeAuthorized: true } : {}),
+              })
             : await workspace[step](batch);
         const accepted = step === 'qa' ? 'verified' : 'implemented';
         if (result?.status === 'blocked') {

@@ -24,6 +24,28 @@ export const STANDALONE_INFRASTRUCTURE_FILES = Object.freeze(
   ].filter((file) => !requiresHumanReview(file)),
 );
 
+export function workItemConfiguration(env, args = []) {
+  const mode = args.includes('--adaptive-work-items')
+    ? 'adaptive'
+    : env.CLINICOS_WORK_ITEM_DELEGATION || 'off';
+  if (!['off', 'adaptive'].includes(mode)) throw new Error('Invalid work-item delegation mode');
+  const maxParallel = Number(env.CLINICOS_WORK_ITEM_PARALLEL || 2);
+  if (!Number.isSafeInteger(maxParallel) || maxParallel < 1 || maxParallel > 2)
+    throw new Error('Work-item parallel limit must be one or two');
+  return {
+    enabled: mode === 'adaptive',
+    maxParallel,
+    claudeExecution: {
+      enabled: mode === 'adaptive' && env.CLINICOS_CLAUDE_EXECUTOR_ENABLED === 'true',
+      hostedActions: env.GITHUB_ACTIONS === 'true',
+      executable: env.CLAUDE_CLI_PATH || '',
+      configDir: env.CLINICOS_CLAUDE_EXECUTOR_CONFIG_DIR || env.CLINICOS_CLAUDE_CONFIG_DIR || '',
+      model: env.CLINICOS_CLAUDE_EXECUTOR_MODEL || 'haiku',
+      timeoutMs: Number(env.CLINICOS_CLAUDE_EXECUTOR_TIMEOUT_MS || 600_000),
+    },
+  };
+}
+
 export async function doctor({ run, models, env = process.env, cwd }) {
   const codex = await models.preflight();
   const login = env.CODEX_API_KEY
@@ -76,6 +98,8 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
       env.CODEX_SMALL_EXECUTOR_MODEL || env.CLINICOS_SMALL_EXECUTOR_MODEL || 'gpt-6-luna',
     BUG_PIPELINE_REVIEW_MODE: env.BUG_PIPELINE_REVIEW_MODE || 'external',
   };
+  const workItems = workItemConfiguration(env, args);
+  env.CLINICOS_CLAUDE_EXECUTOR_CONFIG_DIR = workItems.claudeExecution.configDir;
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
   const diagnosticRoot = path.join(root, 'agent-team', '.runtime', 'bug-pipeline');
   // Outputs must be OUTSIDE both the source checkout and every model worktree.
@@ -89,6 +113,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
     delegateModel: env.CODEX_SMALL_EXECUTOR_MODEL,
     run,
     runtimeRoot,
+    claudeExecution: workItems.claudeExecution,
   });
   const report = await doctor({ run, models, env, cwd: root });
   if (args.includes('--doctor')) {
@@ -121,6 +146,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
       workspace,
       store,
       reviewMode: env.BUG_PIPELINE_REVIEW_MODE,
+      adaptiveWorkItems: { enabled: workItems.enabled, maxParallel: workItems.maxParallel },
       standaloneController: createStandaloneReview({ github: gh, run, cwd: root }),
       standaloneInfrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
     });

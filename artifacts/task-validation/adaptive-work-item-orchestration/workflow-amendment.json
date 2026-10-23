@@ -1,0 +1,9 @@
+{
+  "at": "2026-10-23T18:48:49.418899+00:00",
+  "acceptedBy": "root",
+  "additionalScope": [
+    ".github/workflows/codex-bug-pipeline.yml"
+  ],
+  "purpose": "Wire existing reviewed default-branch controller to adaptive mode for NEW intake only, without enabling any paused workflow or mutating live state. Keep local CLI defaultoff; allow repo var off rollback. Existing pending PR504 release gates unchanged.",
+  "authorization": "User explicitly requested native adaptive orchestration in existing controller, no new orchestrator"
+}

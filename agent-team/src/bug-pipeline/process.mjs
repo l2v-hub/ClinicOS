@@ -27,6 +27,7 @@ export function childEnvironment(mode, env, runtimeRoot) {
       if (env[key]) base[key] = env[key];
     if (
       mode === 'controller' ||
+      mode === 'claude-execution' ||
       (mode === 'review' && env.CLAUDE_REVIEW_AUTH_MODE === 'subscription-local')
     ) {
       for (const key of ['USERPROFILE', 'APPDATA']) if (env[key]) base[key] = env[key];
@@ -50,13 +51,18 @@ export function childEnvironment(mode, env, runtimeRoot) {
   } else {
     base.HOME = path.join(
       runtimeRoot,
-      mode === 'model' || mode === 'review' ? 'model-home' : 'verification-home',
+      ['model', 'review', 'claude-execution'].includes(mode) ? 'model-home' : 'verification-home',
     );
     base.CODEX_HOME =
       mode === 'model' && !env.CODEX_API_KEY && env.CODEX_HOME
         ? env.CODEX_HOME
         : path.join(base.HOME, '.codex');
     base.CLAUDE_CONFIG_DIR = path.join(base.HOME, '.claude');
+    if (mode === 'claude-execution') {
+      // The opt-in implementation profile is separate from the read-only reviewer.
+      // No API/OAuth, Codex, GitHub or deployment credential is inherited.
+      base.CLAUDE_CONFIG_DIR = env.CLINICOS_CLAUDE_EXECUTOR_CONFIG_DIR || '';
+    }
     if (mode === 'model' && env.CODEX_API_KEY) base.CODEX_API_KEY = env.CODEX_API_KEY;
     if (mode === 'review') {
       const localSubscription = env.CLAUDE_REVIEW_AUTH_MODE === 'subscription-local';
@@ -101,8 +107,26 @@ export function createRunner({ env = process.env, runtimeRoot }) {
     timeoutMs = 30_000,
     maxOutputBytes = 2 * 1024 * 1024,
     envMode = 'controller',
+    claudeConfigDir,
   }) => {
     const childEnv = childEnvironment(envMode, env, runtimeRoot);
+    if (
+      envMode === 'claude-execution' &&
+      (env.CLINICOS_CLAUDE_EXECUTOR_ENABLED !== 'true' ||
+        env.GITHUB_ACTIONS === 'true' ||
+        !path.isAbsolute(env.CLINICOS_CLAUDE_EXECUTOR_CONFIG_DIR || '') ||
+        !path.isAbsolute(env.CLAUDE_CLI_PATH || '') ||
+        command !== env.CLAUDE_CLI_PATH ||
+        !path.isAbsolute(claudeConfigDir || '') ||
+        path.resolve(claudeConfigDir) !== path.resolve(env.CLINICOS_CLAUDE_EXECUTOR_CONFIG_DIR))
+    )
+      return {
+        ok: false,
+        code: null,
+        error: 'local-claude-executor-profile-required',
+        stdout: '',
+        stderr: '',
+      };
     if (
       envMode === 'review' &&
       env.CLAUDE_REVIEW_AUTH_MODE === 'subscription-local' &&
@@ -130,6 +154,8 @@ export function createRunner({ env = process.env, runtimeRoot }) {
     }
     if (envMode !== 'controller') {
       for (const directory of [childEnv.HOME, childEnv.CODEX_HOME, childEnv.CLAUDE_CONFIG_DIR]) {
+        // Personal authentication is read in place by Claude; never create/copy its profile.
+        if (envMode === 'claude-execution' && directory === childEnv.CLAUDE_CONFIG_DIR) continue;
         await mkdir(directory, { recursive: true, mode: 0o700 });
       }
     }
