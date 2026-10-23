@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "role": "independent QA (not implementer)",
+  "batchId": "bug-batch-450",
+  "authorAttempt": 4,
+  "maxAuthorAttempts": 4,
+  "subjectSha": "111e672faf77b45280d8ef6ebb15268180b58376",
+  "verdict": "READY FOR CODEX QA",
+  "createdAt": "2026-10-17T18:04:45.158848+00:00",
+  "sourceFreezeSha256": "cd3f2c3054a941fd159bd69aad3235bb925afee61c00d91ab6a703e1a85ea6e3",
+  "sourceCount": 53,
+  "priorProofSnapshotSha256": "ca662ca2bab90d0dedca7f11773c8a5761919129b9cac9f3b6728ff07fb14cec",
+  "priorProofCount": 705,
+  "priorProofMismatches": [],
+  "sourceMismatches": [],
+  "qaReportSha256": "fffa3766818e0cd4410b295c12e5195098f5547a86a08c0138efc623cdc2d03f",
+  "evidenceHashesSha256": "fff86977f8513bfa62c6fc0f53ae6f8d859eff2573e843ac17c8ba1ff3a72b65",
+  "proofCount": 69,
+  "checks": {
+    "frontend": {
+      "passed": 1395,
+      "failed": 0,
+      "skipped": 0
+    },
+    "backend": {
+      "passed": 49,
+      "failed": 0,
+      "skipped": 0
+    },
+    "fullstack": {
+      "passed": 22,
+      "failed": 0,
+      "errors": []
+    },
+    "frontendBuildAndTypes": "PASS",
+    "independentCspMainAndWorkerControls": "PASS"
+  },
+  "actualClaudeApproval": false,
+  "hostedDeployVerified": false,
+  "clinicalReleaseHoldPreserved": true,
+  "noGitHubMutations": true,
+  "noSourceEdits": true
+}

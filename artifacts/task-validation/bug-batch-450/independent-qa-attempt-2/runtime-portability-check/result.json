@@ -1,0 +1,19 @@
+{
+  "pass": true,
+  "actualRunnerSha256": "c9394ec455e533cef59a2c6a6dd2a948984af16b73ba9002b2275821bb9a0c10",
+  "actualRunnerCodeExercised": true,
+  "cacheLaunchWithoutOverrideUsesEmptyOptions": true,
+  "explicitOverridesVerified": 3,
+  "scopeReceipt47WithoutGitDiff": true,
+  "scopeInvalidArrayDuplicateTraversalRejected": 3,
+  "gitCalls": [
+    {
+      "cmd": "git",
+      "args": [
+        "rev-parse",
+        "HEAD"
+      ]
+    }
+  ],
+  "limitation": "No hosted browser installation or actual GitHub Actions native execution is claimed by this isolated configuration probe. Final local browser uses explicit /usr/bin/chromium."
+}

@@ -39,13 +39,24 @@ function filled(value: unknown): boolean {
   return true;
 }
 
+function omitAuto(value: unknown): unknown {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return value;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { dataPresa, oraPresa, ...rest } = value as Record<string, unknown>;
+  return rest;
+}
+
 export function intakeProgress(
   data: Record<string, unknown>,
-  options: { moduleSelected?: boolean; proposalUncertain?: boolean } = {},
+  options: {
+    moduleSelected?: boolean;
+    proposalUncertain?: boolean;
+    allowMissingBirthDate?: boolean;
+  } = {},
 ): { sections: Record<IntakeSectionId, IntakeSectionStatus>; missing: IntakeMissingStep[] } {
   const anagrafica = (data.anagrafica ?? {}) as Record<string, unknown>;
   const accepted = (data._accepted ?? {}) as { demographics?: boolean; therapy?: boolean };
-  const demoErrors = Object.values(intakeDemographicErrors(anagrafica, true));
+  const demoErrors = Object.values(intakeDemographicErrors(anagrafica, true, options));
   const review = buildIntakeTherapyReview(data);
   const invalid = review.filter((row) => !row.excluded && row.issues.length > 0);
   const pendingProposals = Array.isArray(data._importProposals)
@@ -93,7 +104,9 @@ export function intakeProgress(
     anagrafica: anagraficaIssues.length
       ? { kind: 'issues', count: demoErrors.length }
       : { kind: 'done' },
-    ingresso: filled(data.ingresso) ? { kind: 'done' } : { kind: 'empty' },
+    // #450: data e ora di presa in carico si compilano da sole all'apertura; da sole non fanno una
+    // sezione completata.
+    ingresso: filled(omitAuto(data.ingresso)) ? { kind: 'done' } : { kind: 'empty' },
     allergie:
       filled(data.allergie) || filled(data.allergieStatus) ? { kind: 'done' } : { kind: 'empty' },
     terapia: terapiaIssues.length

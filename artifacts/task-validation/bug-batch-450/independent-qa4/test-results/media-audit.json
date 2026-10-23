@@ -1,0 +1,212 @@
+{
+  "png": [
+    {
+      "path": "csp/candidate.png",
+      "size": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "csp/original.png",
+      "size": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "runtime/evidence/issue450.png",
+      "size": [
+        1180,
+        820
+      ]
+    },
+    {
+      "path": "runtime/evidence/issue472-390.png",
+      "size": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "runtime/evidence/issue472-820.png",
+      "size": [
+        820,
+        1180
+      ]
+    },
+    {
+      "path": "runtime/evidence/issue472.png",
+      "size": [
+        1180,
+        820
+      ]
+    },
+    {
+      "path": "runtime/evidence/issue473-handoff-1180.png",
+      "size": [
+        1180,
+        820
+      ]
+    },
+    {
+      "path": "runtime/evidence/issue473-handoff-390.png",
+      "size": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "runtime/evidence/issue473-handoff-820.png",
+      "size": [
+        820,
+        1180
+      ]
+    },
+    {
+      "path": "runtime/evidence/issue473.png",
+      "size": [
+        1180,
+        820
+      ]
+    },
+    {
+      "path": "runtime/evidence/issue475.png",
+      "size": [
+        1180,
+        820
+      ]
+    },
+    {
+      "path": "runtime/evidence/issue476.png",
+      "size": [
+        1180,
+        820
+      ]
+    },
+    {
+      "path": "runtime/evidence/issue485-context-import-fullscreen-1903.png",
+      "size": [
+        1903,
+        1032
+      ]
+    },
+    {
+      "path": "runtime/evidence/manual-no-overlap-390.png",
+      "size": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "runtime/evidence/manual-no-overlap-820.png",
+      "size": [
+        820,
+        1180
+      ]
+    },
+    {
+      "path": "runtime/evidence/qa450-1-corrected-draft.png",
+      "size": [
+        1180,
+        820
+      ]
+    },
+    {
+      "path": "runtime/evidence/thirty-incomplete-bounded-filter.png",
+      "size": [
+        1180,
+        820
+      ]
+    },
+    {
+      "path": "runtime/evidence/unresolved-close-session-recovered.png",
+      "size": [
+        1180,
+        820
+      ]
+    },
+    {
+      "path": "runtime/evidence/zero-incomplete-summary-absent.png",
+      "size": [
+        1180,
+        820
+      ]
+    }
+  ],
+  "video": [
+    {
+      "path": "csp/video/page@94a5092a8451055207f205d4d79de574.webm",
+      "sha256": "b914093b57442d3739982ffdc54a537ea678ffc67773abad8fcd372a24de36a8",
+      "decodeErrors": 0
+    },
+    {
+      "path": "csp/video/page@c47a9d676cd8ab06b8680b11ca4e6a7a.webm",
+      "sha256": "22c2a7634f36de289f3861f93566096f0ac8c8f2c65783ce67286704d3a6b8cb",
+      "decodeErrors": 0
+    },
+    {
+      "path": "runtime/evidence/issue450.webm",
+      "sha256": "dd5ac83feec3cfeff7f0a77bc3fe98b8174ee9301739838ea79bb0095cdb121a",
+      "decodeErrors": 0
+    },
+    {
+      "path": "runtime/evidence/issue472.webm",
+      "sha256": "dd5ac83feec3cfeff7f0a77bc3fe98b8174ee9301739838ea79bb0095cdb121a",
+      "decodeErrors": 0
+    },
+    {
+      "path": "runtime/evidence/issue473.webm",
+      "sha256": "dd5ac83feec3cfeff7f0a77bc3fe98b8174ee9301739838ea79bb0095cdb121a",
+      "decodeErrors": 0
+    },
+    {
+      "path": "runtime/evidence/issue475.webm",
+      "sha256": "dd5ac83feec3cfeff7f0a77bc3fe98b8174ee9301739838ea79bb0095cdb121a",
+      "decodeErrors": 0
+    },
+    {
+      "path": "runtime/evidence/issue476.webm",
+      "sha256": "dd5ac83feec3cfeff7f0a77bc3fe98b8174ee9301739838ea79bb0095cdb121a",
+      "decodeErrors": 0
+    },
+    {
+      "path": "runtime/video/page@f231373b6fbe4a4c322c3b49bfc3ad1c.webm",
+      "sha256": "dd5ac83feec3cfeff7f0a77bc3fe98b8174ee9301739838ea79bb0095cdb121a",
+      "decodeErrors": 0
+    }
+  ],
+  "trace": [
+    {
+      "path": "csp/trace.zip",
+      "entries": 13,
+      "badEntry": null
+    },
+    {
+      "path": "runtime/evidence/issue450.zip",
+      "entries": 653,
+      "badEntry": null
+    },
+    {
+      "path": "runtime/evidence/issue472.zip",
+      "entries": 653,
+      "badEntry": null
+    },
+    {
+      "path": "runtime/evidence/issue473.zip",
+      "entries": 653,
+      "badEntry": null
+    },
+    {
+      "path": "runtime/evidence/issue475.zip",
+      "entries": 653,
+      "badEntry": null
+    },
+    {
+      "path": "runtime/evidence/issue476.zip",
+      "entries": 653,
+      "badEntry": null
+    }
+  ],
+  "redactionResiduals": []
+}

@@ -1,0 +1,17 @@
+✔ manual reopen and timeout retry reuse one draft; simultaneous initializers create only once (1.992211ms)
+✔ empty draft: identity missing, optional sections do not require confirmations (3.217787ms)
+✔ four identity fields alone: ready without contacts, clinical sections or confirmations (1.513155ms)
+✔ pending import proposal and uncertain decision block creation under Terapia (0.37286ms)
+✔ an invalid therapy row is a missing step that points to the field to correct (6.088369ms)
+✔ optional sections are done when filled; modules follow the selection (1.484042ms)
+✔ actual prescriptions still require explicit acceptance, deferred ones do not (1.112613ms)
+✔ each missing identity field blocks even when legacy confirmations are true (0.503318ms)
+✔ invalid supplied phone still blocks; omitted phone never does (0.331123ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 751.982362

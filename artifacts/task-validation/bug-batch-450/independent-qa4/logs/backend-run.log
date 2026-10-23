@@ -1,0 +1,17 @@
+ one entry per concise allergen otherwise (0.442017ms)
+✔ buildImportDraftData: blob allergiesText does NOT seed a false allergy row (2.189748ms)
+✔ buildImportDraftData: concise multi-allergen text → one row per allergen (0.823372ms)
+✔ buildImportDraftData: therapyText parsed into structured terapia rows (one per drug) (88.164936ms)
+✔ #473: validated CF derives only an unambiguous encoded sex (0.945304ms)
+✔ #473: missing imported sex is an editable derived field with retained source (10.183651ms)
+✔ #473: invalid CF cannot invent sex and contradictory explicit sex remains untouched (7.865629ms)
+✔ #473: unheaded medication source remains a review inventory, not an administration (18.32968ms)
+ℹ tests 49
+ℹ suites 0
+ℹ pass 49
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3719.910542
+

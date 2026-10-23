@@ -1,0 +1,20 @@
+✔ seedDraftFromImport: creates draft seeded from narrative (707.290629ms)
+✔ seedDraftFromImport: does NOT seed allergie when allergyStatus is explicitly_absent (123.354377ms)
+✔ seedDraftFromImport: throws when job has no _narrative (35.469984ms)
+✔ isPlausibleAllergenText: rejects a multi-section narrative blob, accepts concise text (0.532629ms)
+✔ deriveAllergens: [] for a blob; one entry per concise allergen otherwise (0.298576ms)
+✔ buildImportDraftData: blob allergiesText does NOT seed a false allergy row (0.784206ms)
+✔ buildImportDraftData: concise multi-allergen text → one row per allergen (0.690781ms)
+✔ buildImportDraftData: therapyText parsed into structured terapia rows (one per drug) (40.247784ms)
+✔ #473: validated CF derives only an unambiguous encoded sex (3.31478ms)
+✔ #473: missing imported sex is an editable derived field with retained source (2.808672ms)
+✔ #473: invalid CF cannot invent sex and contradictory explicit sex remains untouched (4.004959ms)
+✔ #473: unheaded medication source remains a review inventory, not an administration (10.189501ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11853.593482

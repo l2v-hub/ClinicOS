@@ -1,0 +1,22 @@
+✔ first handoff retains reviewed values after create-response loss and a retry (42.952945ms)
+✔ first handoff retains reviewed values after patch-precommit loss and a retry (1.717387ms)
+✔ first handoff retains reviewed values after patch-response loss and a retry (1.377427ms)
+✔ opening a pre-existing draft never reseeds it from an unrelated review (0.232849ms)
+✔ recovery preserves a concurrently edited draft and refuses a different source (1.437009ms)
+✔ effective demographics follows each explicit select/defer and preserves immutable source text (4.250272ms)
+✔ real review keeps untouched demographics current while retaining manual fields and section review (259.066669ms)
+✔ three letter identities remain distinct and compare requires an explicit source when several exist (57.974043ms)
+✔ legacy names remain labels and absent/unknown source identities never become the first original (53.961943ms)
+✔ 472 save-and-leave registers latest reviewed edits, preserves source and cleans up on unmount (55.628742ms)
+✔ QA450-1 registered close-save preserves unresolved/dirty review until corrected choices can be persisted (226.657388ms)
+✔ QA450-1 definitive unresolved409 discards rejected intent before the corrected same-hash review (96.594092ms)
+✔ uncertain network handoff preserves the frozen review until actual recovery (75.759237ms)
+✔ uncertain 503 handoff preserves the frozen review until actual recovery (71.119525ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2585.052178

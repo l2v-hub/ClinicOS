@@ -1,0 +1,51 @@
+[
+  {
+    "name": "frontend-tsc",
+    "cmd": "node",
+    "args": [
+      "node_modules/typescript/bin/tsc",
+      "--noEmit"
+    ],
+    "cwd": "frontend",
+    "start": "2026-10-17T09:27:09.133Z",
+    "end": "2026-10-17T09:27:09.200Z",
+    "exitCode": 1
+  },
+  {
+    "name": "frontend-build",
+    "cmd": "npm",
+    "args": [
+      "run",
+      "build"
+    ],
+    "cwd": "frontend",
+    "start": "2026-10-17T09:27:09.202Z",
+    "end": "2026-10-17T09:28:36.534Z",
+    "exitCode": 0
+  },
+  {
+    "name": "frontend-all",
+    "cmd": "npm",
+    "args": [
+      "test"
+    ],
+    "cwd": "frontend",
+    "start": "2026-10-17T09:28:36.536Z",
+    "end": "2026-10-17T09:29:27.393Z",
+    "exitCode": 0
+  },
+  {
+    "name": "backend-tsc",
+    "cmd": "node",
+    "args": [
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "-p",
+      "tsconfig.json"
+    ],
+    "cwd": "backend",
+    "start": "2026-10-17T09:29:27.395Z",
+    "end": "2026-10-17T09:29:42.748Z",
+    "exitCode": 0
+  }
+]

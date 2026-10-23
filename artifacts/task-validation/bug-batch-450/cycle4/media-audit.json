@@ -1,0 +1,115 @@
+{
+  "png": [
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/issue475.png",
+      "width": 1180,
+      "height": 820
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/zero-incomplete-summary-absent.png",
+      "width": 1180,
+      "height": 820
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/issue473.png",
+      "width": 1180,
+      "height": 820
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/issue473-handoff-1180.png",
+      "width": 1180,
+      "height": 820
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/unresolved-close-session-recovered.png",
+      "width": 1180,
+      "height": 820
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/issue473-handoff-820.png",
+      "width": 820,
+      "height": 1180
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/issue450.png",
+      "width": 1180,
+      "height": 820
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/thirty-incomplete-bounded-filter.png",
+      "width": 1180,
+      "height": 820
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/qa450-1-corrected-draft.png",
+      "width": 1180,
+      "height": 820
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/issue476.png",
+      "width": 1180,
+      "height": 820
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/issue472.png",
+      "width": 1180,
+      "height": 820
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/issue485-context-import-fullscreen-1903.png",
+      "width": 1903,
+      "height": 1032
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/issue472-390.png",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/manual-no-overlap-820.png",
+      "width": 820,
+      "height": 1180
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/issue473-handoff-390.png",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/issue472-820.png",
+      "width": 820,
+      "height": 1180
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/manual-no-overlap-390.png",
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "video": {
+    "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/issue450.webm",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "44.720000"
+      }
+    },
+    "allFramesDecodeExit": 0,
+    "decodeErrors": ""
+  },
+  "trace": {
+    "path": "artifacts/task-validation/bug-batch-450/cycle4/complete-runtime/evidence/issue450.zip",
+    "zipIntegrity": "PASS",
+    "jsonEventsParsed": 3924,
+    "sha256": "efc45f5b7c90341245e3f27c10c5f8aeb4140e73baa987419476b04aaea13efa"
+  },
+  "scope": "author actual media decode; fresh independent QA still required"
+}

@@ -1,0 +1,7 @@
+# Claude round2 root cause analysis
+1. Native confirm conflates save with leaving, and unresolved decision guard correctly refuses save. Keep guard; separate close-without-save and continue from optional eligible save. Existing in-app ConfirmDialog gains backward-compatible optional alternative action and disabled primary.
+2. Manual footer uses absolute responsive details list. Import requires visible incomplete steps; only import defaults open, manual stays closed until operator expands.
+3. Production decoder URL remains unchanged because worker and decoder reside together under built assets. Must exercise exact built output under nonroot base with actual JPX wasm before attributing deployed failure. No provider credentials or hosted authenticated trace available; document practical limits.
+4. Warning above roster duplicates unlimited rows. One memoized count and toggle filters existing roster with no duplicated patient buttons.
+5. Review component mutates sex from CF before handoff, bypassing backend provenance. Remove this frontend mutation; retain visible suggestion. Backend alone seeds missing sex and _derivedFields. Intake displays marker until operator confirms or edits sex, maintaining raw provenance and explicit contradictions.
+6. Old final manifest is historical author checkpoint, not latest evidence. Append historical index/source identity receipt and a fresh hash manifest without rewriting any old path.

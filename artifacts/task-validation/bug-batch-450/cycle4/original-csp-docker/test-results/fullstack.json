@@ -1,0 +1,7 @@
+{
+  "pass": false,
+  "checks": [],
+  "errors": [
+    "browserContext.newPage: Executable doesn't exist at /home/agent/.cache/ms-playwright/ffmpeg-1011/ffmpeg-linux\n╔═════════════════════════════════════════════════════════════════╗\n║ Video rendering requires ffmpeg binary.                         ║\n║ Downloading it will not affect any of the system-wide settings. ║\n║ Please run the following command:                               ║\n║                                                                 ║\n║     npx playwright install ffmpeg                               ║\n║                                                                 ║\n║ <3 Playwright Team                                              ║\n╚═════════════════════════════════════════════════════════════════╝\n    at /workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/scripts/e2e/issue-450-ingresso.mjs:527:24"
+  ]
+}

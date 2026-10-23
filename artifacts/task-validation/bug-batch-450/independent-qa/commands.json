@@ -1,0 +1,266 @@
+[
+  {
+    "name": "container-preflight",
+    "command": "docker",
+    "args": [
+      "container",
+      "inspect",
+      "clinicos-qa-batch450-independent"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450",
+    "started": "2026-10-17T09:02:11.555Z",
+    "finished": "2026-10-17T09:02:11.598Z",
+    "exitCode": 1,
+    "timedOut": false
+  },
+  {
+    "name": "container-create",
+    "command": "docker",
+    "args": [
+      "run",
+      "--detach",
+      "--rm",
+      "--name",
+      "clinicos-qa-batch450-independent",
+      "--label",
+      "clinicos.qa.owner=clinicos-qa-batch450-independent",
+      "--publish",
+      "127.0.0.1:55450:5432",
+      "--env",
+      "POSTGRES_HOST_AUTH_METHOD=trust",
+      "--env",
+      "POSTGRES_DB=clinicos_test",
+      "postgres:16-alpine"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450",
+    "started": "2026-10-17T09:02:11.600Z",
+    "finished": "2026-10-17T09:02:13.976Z",
+    "exitCode": 0,
+    "timedOut": false
+  },
+  {
+    "name": "database-ready",
+    "command": "docker",
+    "args": [
+      "exec",
+      "51493f76b48c7295ceffcd277dfa0bf36fb05657e71144a85d40b3f80bb7c4a4",
+      "pg_isready",
+      "-h",
+      "127.0.0.1",
+      "-U",
+      "postgres",
+      "-d",
+      "clinicos_test"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450",
+    "started": "2026-10-17T09:02:13.978Z",
+    "finished": "2026-10-17T09:02:14.079Z",
+    "exitCode": 2,
+    "timedOut": false
+  },
+  {
+    "name": "database-ready",
+    "command": "docker",
+    "args": [
+      "exec",
+      "51493f76b48c7295ceffcd277dfa0bf36fb05657e71144a85d40b3f80bb7c4a4",
+      "pg_isready",
+      "-h",
+      "127.0.0.1",
+      "-U",
+      "postgres",
+      "-d",
+      "clinicos_test"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450",
+    "started": "2026-10-17T09:02:14.330Z",
+    "finished": "2026-10-17T09:02:14.434Z",
+    "exitCode": 2,
+    "timedOut": false
+  },
+  {
+    "name": "database-ready",
+    "command": "docker",
+    "args": [
+      "exec",
+      "51493f76b48c7295ceffcd277dfa0bf36fb05657e71144a85d40b3f80bb7c4a4",
+      "pg_isready",
+      "-h",
+      "127.0.0.1",
+      "-U",
+      "postgres",
+      "-d",
+      "clinicos_test"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450",
+    "started": "2026-10-17T09:02:14.685Z",
+    "finished": "2026-10-17T09:02:14.801Z",
+    "exitCode": 2,
+    "timedOut": false
+  },
+  {
+    "name": "database-ready",
+    "command": "docker",
+    "args": [
+      "exec",
+      "51493f76b48c7295ceffcd277dfa0bf36fb05657e71144a85d40b3f80bb7c4a4",
+      "pg_isready",
+      "-h",
+      "127.0.0.1",
+      "-U",
+      "postgres",
+      "-d",
+      "clinicos_test"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450",
+    "started": "2026-10-17T09:02:15.052Z",
+    "finished": "2026-10-17T09:02:15.187Z",
+    "exitCode": 2,
+    "timedOut": false
+  },
+  {
+    "name": "database-ready",
+    "command": "docker",
+    "args": [
+      "exec",
+      "51493f76b48c7295ceffcd277dfa0bf36fb05657e71144a85d40b3f80bb7c4a4",
+      "pg_isready",
+      "-h",
+      "127.0.0.1",
+      "-U",
+      "postgres",
+      "-d",
+      "clinicos_test"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450",
+    "started": "2026-10-17T09:02:15.440Z",
+    "finished": "2026-10-17T09:02:15.568Z",
+    "exitCode": 2,
+    "timedOut": false
+  },
+  {
+    "name": "database-ready",
+    "command": "docker",
+    "args": [
+      "exec",
+      "51493f76b48c7295ceffcd277dfa0bf36fb05657e71144a85d40b3f80bb7c4a4",
+      "pg_isready",
+      "-h",
+      "127.0.0.1",
+      "-U",
+      "postgres",
+      "-d",
+      "clinicos_test"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450",
+    "started": "2026-10-17T09:02:15.819Z",
+    "finished": "2026-10-17T09:02:15.932Z",
+    "exitCode": 2,
+    "timedOut": false
+  },
+  {
+    "name": "database-ready",
+    "command": "docker",
+    "args": [
+      "exec",
+      "51493f76b48c7295ceffcd277dfa0bf36fb05657e71144a85d40b3f80bb7c4a4",
+      "pg_isready",
+      "-h",
+      "127.0.0.1",
+      "-U",
+      "postgres",
+      "-d",
+      "clinicos_test"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450",
+    "started": "2026-10-17T09:02:16.184Z",
+    "finished": "2026-10-17T09:02:16.296Z",
+    "exitCode": 0,
+    "timedOut": false
+  },
+  {
+    "name": "database-provenance",
+    "command": "docker",
+    "args": [
+      "exec",
+      "51493f76b48c7295ceffcd277dfa0bf36fb05657e71144a85d40b3f80bb7c4a4",
+      "psql",
+      "-U",
+      "postgres",
+      "-d",
+      "clinicos_test",
+      "-Atc",
+      "SELECT current_database(),current_setting('server_version_num'),1"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450",
+    "started": "2026-10-17T09:02:16.297Z",
+    "finished": "2026-10-17T09:02:16.399Z",
+    "exitCode": 0,
+    "timedOut": false
+  },
+  {
+    "name": "migration",
+    "command": "node",
+    "args": [
+      "node_modules/prisma/build/index.js",
+      "migrate",
+      "deploy",
+      "--config=prisma.config.ts"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450",
+    "started": "2026-10-17T09:02:16.400Z",
+    "finished": "2026-10-17T09:02:19.290Z",
+    "exitCode": 0,
+    "timedOut": false
+  },
+  {
+    "name": "backend-intake-focused",
+    "command": "node",
+    "args": [
+      "--import",
+      "tsx",
+      "--test",
+      "src/intake/__tests__/parse-discharge-therapy.test.ts",
+      "src/intake/__tests__/seed-draft-from-import.test.ts",
+      "src/intake/__tests__/confirm-draft-guards.test.ts",
+      "src/intake/__tests__/confirm-draft-therapy.test.ts",
+      "src/intake/__tests__/confirm-therapy-validation.test.ts",
+      "src/ai/__tests__/intake-confirm.test.ts"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend",
+    "started": "2026-10-17T09:02:19.291Z",
+    "finished": "2026-10-17T09:02:43.422Z",
+    "exitCode": 1,
+    "timedOut": false
+  },
+  {
+    "name": "container-cleanup-identity",
+    "command": "docker",
+    "args": [
+      "inspect",
+      "--format",
+      "{{ index .Config.Labels \"clinicos.qa.owner\" }}",
+      "51493f76b48c7295ceffcd277dfa0bf36fb05657e71144a85d40b3f80bb7c4a4"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450",
+    "started": "2026-10-17T09:02:43.429Z",
+    "finished": "2026-10-17T09:02:43.463Z",
+    "exitCode": 0,
+    "timedOut": false
+  },
+  {
+    "name": "container-cleanup",
+    "command": "docker",
+    "args": [
+      "stop",
+      "--time",
+      "2",
+      "51493f76b48c7295ceffcd277dfa0bf36fb05657e71144a85d40b3f80bb7c4a4"
+    ],
+    "cwd": "/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450",
+    "started": "2026-10-17T09:02:43.464Z",
+    "finished": "2026-10-17T09:02:43.812Z",
+    "exitCode": 0,
+    "timedOut": false
+  }
+]

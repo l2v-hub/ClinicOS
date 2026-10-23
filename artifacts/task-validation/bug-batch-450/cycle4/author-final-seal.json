@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "role": "author",
+  "attempt": 4,
+  "maxAttempts": 4,
+  "sourceFreezeSha256": "cd3f2c3054a941fd159bd69aad3235bb925afee61c00d91ab6a703e1a85ea6e3",
+  "authorProofHashesSha256": "c26cb5ebc5ec6c38237399dc867625afddcde3014a0c5c833bcc75d31330b778",
+  "validationReportSha256": "e8aef3f9c7ac50a01821c133a78d8071294f6d520240bccc354af4f01dfbd72b",
+  "status": "SOURCE_STOPPED_READY_FOR_FRESH_INDEPENDENT_QA",
+  "independentQaPending": true,
+  "externalReviewPending": true,
+  "deployVerified": false
+}

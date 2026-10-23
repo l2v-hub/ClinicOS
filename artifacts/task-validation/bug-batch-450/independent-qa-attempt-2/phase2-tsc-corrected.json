@@ -1,0 +1,34 @@
+[
+  {
+    "name": "frontend-tsc-corrected",
+    "cmd": "npm",
+    "args": [
+      "exec",
+      "--",
+      "tsc",
+      "--noEmit",
+      "-p",
+      "tsconfig.app.json"
+    ],
+    "cwd": "frontend",
+    "start": "2026-10-17T09:27:36.262Z",
+    "end": "2026-10-17T09:28:09.963Z",
+    "exitCode": 0
+  },
+  {
+    "name": "backend-tsc-corrected",
+    "cmd": "npm",
+    "args": [
+      "exec",
+      "--",
+      "tsc",
+      "--noEmit",
+      "-p",
+      "tsconfig.json"
+    ],
+    "cwd": "backend",
+    "start": "2026-10-17T09:28:09.967Z",
+    "end": "2026-10-17T09:28:30.075Z",
+    "exitCode": 0
+  }
+]

@@ -1,0 +1,4 @@
+{
+  "reason": "The first QA helper incorrectly forced ROLE_SIMULATOR_ENABLED=true on this legacy-header mocked-router fixture. Its source explicitly sets AUTH_MODE=demo and posts X-Operator-*; source auth requires signed simulator sessions when the simulator flag is true. This isolated recheck uses the existing demo-header fixture contract with the simulator disabled. Application auth and production configuration were not changed.",
+  "exitCode": 0
+}

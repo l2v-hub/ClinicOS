@@ -1,0 +1,24 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'http://127.0.0.1:5450/node_modules/pdfjs-dist/build/pdfjs-6.2.108/'
+- 'http://127.0.0.1:5450/assets/pdfjs-6.2.108/'
+
+    at file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/[eval1]:1:251
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:224:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:221:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'http://127.0.0.1:5450/node_modules/pdfjs-dist/build/pdfjs-6.2.108/',
+  expected: 'http://127.0.0.1:5450/assets/pdfjs-6.2.108/',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
