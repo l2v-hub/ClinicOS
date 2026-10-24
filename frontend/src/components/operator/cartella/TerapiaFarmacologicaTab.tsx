@@ -16,6 +16,12 @@ import {
 } from 'react';
 import { AccessibleDialogSurface } from '../../shared/AccessibleDialogSurface';
 import { therapyFormAtCalendarSlot } from '../../../lib/therapyCalendarCreate';
+import {
+  hydrateTherapyAdmissionDates,
+  pendingTherapyAdmissionDates,
+  therapyAdmissionCalendarDate,
+  type AutomaticTherapyDates,
+} from '../../../lib/therapyAdmissionDate';
 import { createSubmissionKey } from '../../../lib/submissionKey';
 import type { Paziente, PatientTherapyAPI } from '../../../types';
 import type { TherapyTarget, TherapyView } from '../../../lib/patientTarget';
@@ -91,6 +97,7 @@ interface Props {
   therapyTarget?: TherapyTarget & { requestId: number };
   /** Current chart allergy revision; invalidates acknowledgement without losing the draft. */
   allergyRevision?: string;
+  admissionDate?: string;
 }
 
 type TherapyForm = TherapyFormValue;
@@ -119,6 +126,7 @@ export function TerapiaFarmacologicaTab({
   focusTherapyId,
   therapyTarget,
   allergyRevision = '',
+  admissionDate,
 }: Props) {
   // La GUI nasconde la prescrizione se il ruolo non la consente (il backend la rifiuta comunque):
   // l'infermiere somministra dal calendario, il medico modifica / sospende dalla prescrizione.
@@ -174,7 +182,15 @@ export function TerapiaFarmacologicaTab({
   } | null>(null);
   const createDialogTitle = useId();
   const [editId, setEditId] = useState<string | null>(null);
-  const [form, setForm] = useState<TherapyForm>(emptyTherapyForm());
+  const [form, setForm] = useState<TherapyForm>(() => emptyTherapyForm(admissionDate));
+  const automaticDates = useRef<{ patientId: string; fields: AutomaticTherapyDates } | null>(null);
+  useEffect(() => {
+    const pending = automaticDates.current;
+    if (!pending || pending.patientId !== paziente.id || !showForm || editId || createSlot ||
+      !therapyAdmissionCalendarDate(admissionDate)) return;
+    automaticDates.current = null;
+    setForm((current) => hydrateTherapyAdmissionDates(current, admissionDate, pending.fields));
+  }, [admissionDate, paziente.id, showForm, editId, createSlot]);
   const [saving, setSaving] = useState(false);
   const [allergyRead, setAllergyRead] = useState<{
     key: string;
@@ -392,13 +408,16 @@ export function TerapiaFarmacologicaTab({
   function openAdd() {
     resetSaveFeedback();
     setEditId(null);
-    setForm(emptyTherapyForm());
+    const fields = pendingTherapyAdmissionDates(admissionDate);
+    automaticDates.current = fields ? { patientId: paziente.id, fields } : null;
+    setForm(emptyTherapyForm(admissionDate));
     setShowForm(true);
   }
   function openCalendarCreate(date: string, time: string) {
     if (!canCreateTherapy || saving) return;
-    const initialized = therapyFormAtCalendarSlot(emptyTherapyForm(), date, time);
+    const initialized = therapyFormAtCalendarSlot(emptyTherapyForm(admissionDate), date, time);
     if (!initialized) return;
+    automaticDates.current = null;
     resetSaveFeedback();
     setEditId(null);
     setForm(initialized);
@@ -407,6 +426,7 @@ export function TerapiaFarmacologicaTab({
   }
   const openEdit = (t: PatientTherapyAPI, exactTimesOnly = false) => {
     if (!canUpdateTherapy || saving || t.patientId !== paziente.id) return;
+    automaticDates.current = null;
     resetSaveFeedback();
     editFocusPending.current = true;
     setCreateSlot(null);
@@ -420,12 +440,13 @@ export function TerapiaFarmacologicaTab({
     openEdit(t, true);
   }
   function closeForm() {
+    automaticDates.current = null;
     editFocusPending.current = false;
     resetSaveFeedback();
     setShowForm(false);
     setCreateSlot(null);
     setEditId(null);
-    setForm(emptyTherapyForm());
+    setForm(emptyTherapyForm(admissionDate));
   }
   useEffect(() => {
     if (showForm && (editId ? !canUpdateTherapy : !canCreateTherapy)) closeForm();
@@ -871,6 +892,10 @@ export function TerapiaFarmacologicaTab({
       </header>
       <TherapyFormFields
         value={form}
+        onDateInput={(field) => {
+          const pending = automaticDates.current;
+          if (pending?.patientId === paziente.id) pending.fields[field] = false;
+        }}
         onChange={(next) => {
           if (saving) return;
           setAllergyAcknowledgement(null);

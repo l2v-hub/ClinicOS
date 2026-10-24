@@ -1,0 +1,59 @@
+{
+  "issue": 507,
+  "nonce": "cfb97ef5-c891-41d0-b096-2bcd649419bb",
+  "verdict": "READY FOR CODEX QA",
+  "sourceManifestSha256": "41a40741b5e848a4b73a55c3fda1f8b1f67b69514484985f0d2253e12b6f21ef",
+  "findings": [],
+  "tests": {
+    "frontend": {
+      "pass": 1572,
+      "fail": 0,
+      "skip": 0
+    },
+    "focused": {
+      "pass": 15,
+      "fail": 0,
+      "skip": 0
+    },
+    "typecheck": "PASS (corrected hoisted module path; initial invocation error preserved)",
+    "productionBuild": "PASS",
+    "browserSmoke": {
+      "pass": 26,
+      "fail": 0,
+      "timezones": [
+        "Europe/Rome",
+        "America/Los_Angeles"
+      ]
+    },
+    "originalUnchangedColdProbe": {
+      "pass": 2,
+      "fail": 0
+    },
+    "privateAdversarial": {
+      "pass": 8,
+      "fail": 0
+    },
+    "media": {
+      "pngDecoded": 20,
+      "traceCrcPassed": 6,
+      "webmFullyDecoded": 4
+    }
+  },
+  "phases": {
+    "0": "PASS",
+    "1": "PASS",
+    "2": "PASS",
+    "3": "PASS",
+    "4": "PASS",
+    "5": "PASS"
+  },
+  "sourceBeforeAfterMatch": true,
+  "qa1OriginalFailurePreserved": true,
+  "evidenceManifestSha256": "ca7646204a0d1ac7046b50c274f71697f65dd0722dc63d48a7a9db8777c5969a",
+  "limitations": [
+    "Synthetic actual PatientDetail/StepClinica hosts; full App auth/backend orchestration not mounted",
+    "No backend persistence/save or real data",
+    "Calendar/import browser workflows not run; unit/source precedence coverage"
+  ],
+  "reportSha256": "fe44f688a5e39a5c2689ee45723c1d70592d0c8490219844e02c4616e5dfdb80"
+}

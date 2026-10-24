@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { facilityLocalDate } from '../../../lib/facilityTime';
+import { therapyAdmissionDate, type TherapyDateField } from '../../../lib/therapyAdmissionDate';
 import { CampoFarmaco } from './CampoFarmaco';
 import { needsCommercialStrengthReview } from './drugPackageSelection';
 import {
@@ -68,10 +68,6 @@ export interface TherapyFormValue {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function todayStr(): string {
-  return facilityLocalDate();
-}
-
 // #241: ISO weekdays (1=Lun … 7=Dom) for the intermittent-posology selector.
 const WEEKDAYS: ReadonlyArray<{ n: number; l: string }> = [
   { n: 1, l: 'Lun' },
@@ -83,7 +79,8 @@ const WEEKDAYS: ReadonlyArray<{ n: number; l: string }> = [
   { n: 7, l: 'Dom' },
 ];
 
-export function emptyTherapyForm(): TherapyFormValue {
+export function emptyTherapyForm(admissionDate?: string): TherapyFormValue {
+  const startDate = therapyAdmissionDate(admissionDate);
   return {
     farmacoNome: '',
     drugPackageRef: null,
@@ -95,7 +92,7 @@ export function emptyTherapyForm(): TherapyFormValue {
     viaSomministrazione: '',
     tipo: 'periodica',
     stato: 'attiva',
-    dataInizio: todayStr(),
+    dataInizio: startDate,
     dataFine: '',
     schedules: [
       {
@@ -108,7 +105,7 @@ export function emptyTherapyForm(): TherapyFormValue {
     giorniSettimana: [],
     prescrittore: '',
     note: '',
-    dataSomministrazione: todayStr(),
+    dataSomministrazione: startDate,
     orarioSomministrazione: '',
     doseMode: 'fixed',
     glucoseScale: [],
@@ -118,6 +115,8 @@ export function emptyTherapyForm(): TherapyFormValue {
 interface TherapyFormFieldsProps {
   value: TherapyFormValue;
   onChange: (next: TherapyFormValue) => void;
+  /** Native input, including reselecting the current day, makes this date operator-owned. */
+  onDateInput?: (field: TherapyDateField) => void;
   operatoreNome?: string;
   issues?: readonly TherapyFieldIssue[];
   /** Il nome del farmaco viene da un testo libero (Diario), non dall'anagrafica. */
@@ -137,6 +136,7 @@ const THERAPY_TYPES = [
 export function TherapyFormFields({
   value,
   onChange,
+  onDateInput,
   issues,
   nomeDaTesto,
   prescriberSuggestions,
@@ -353,6 +353,7 @@ export function TherapyFormFields({
               className="form-input"
               type="date"
               value={value.dataInizio}
+              onInput={() => onDateInput?.('dataInizio')}
               onChange={(e) => update({ dataInizio: e.target.value })}
             />
             {feedback.error('dataInizio')}
@@ -383,6 +384,7 @@ export function TherapyFormFields({
                   className="form-input"
                   type="date"
                   value={value.dataSomministrazione}
+                  onInput={() => onDateInput?.('dataSomministrazione')}
                   onChange={(e) => update({ dataSomministrazione: e.target.value })}
                 />
                 {feedback.error('dataSomministrazione')}

@@ -23,6 +23,7 @@ type TherapyEditorProps = SectionProps<TherapyFormValue[]> & {
   /** Accesso diretto: sotto-vista, giorno e farmaco da aprire (nuovo requestId = riapplica). */
   therapyTarget?: TherapyTarget & { requestId: number };
   allergyRevision?: string;
+  admissionDate?: string;
 };
 
 export function TherapyEditor({
@@ -35,6 +36,7 @@ export function TherapyEditor({
   focusTherapyId,
   therapyTarget,
   allergyRevision,
+  admissionDate,
 }: TherapyEditorProps) {
   if (mode === 'patient-chart' && paziente) {
     return (
@@ -45,6 +47,7 @@ export function TherapyEditor({
           focusTherapyId={focusTherapyId}
           therapyTarget={therapyTarget}
           allergyRevision={allergyRevision}
+          admissionDate={admissionDate}
         />
       </Suspense>
     );
@@ -57,6 +60,7 @@ export function TherapyEditor({
         onChange={onChange}
         operatoreNome={operatoreNome}
         therapyCorrection={therapyCorrection}
+        admissionDate={admissionDate}
       />
     );
   }

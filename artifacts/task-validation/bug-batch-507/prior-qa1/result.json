@@ -1,0 +1,62 @@
+{
+  "issue": 507,
+  "nonce": "6592e6d1-eca2-4d1e-8bf0-81ad48b8765b",
+  "verdict": "FAILED VALIDATION",
+  "at": "2026-10-24T22:10:45.841605+00:00",
+  "branch": "codex/bug-batch-507",
+  "baseline": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+  "sourceManifestSha256": "474ede4ad65b449748fe9d3f2585f5bbb615823ed7c654dc899871803777a41b",
+  "sourceCount": 10,
+  "sourceHashesBeforeAfterMatch": true,
+  "findings": [
+    {
+      "id": "F507-1",
+      "severity": "P2",
+      "file": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "line": 179,
+      "title": "Untouched new-form fallback dates survive delayed admission hydration",
+      "actual": "2026-10-25",
+      "expected": "2026-09-15",
+      "reproducedTimezones": [
+        "Europe/Rome",
+        "America/Los_Angeles"
+      ],
+      "evidence": "cold-hydration-probe/results.json"
+    }
+  ],
+  "tests": {
+    "frontend": {
+      "passed": 1567,
+      "failed": 0,
+      "skipped": 0
+    },
+    "focusedIncludedInFrontend": {
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0
+    },
+    "build": "PASS",
+    "typecheck": "PASS",
+    "componentSmoke": "PASS in 2 timezones",
+    "productionHostProbe": "PASS in 2 timezones",
+    "coldHydrationProbe": {
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0
+    }
+  },
+  "phases": {
+    "contract": "PASS",
+    "diffReview": "FAIL",
+    "buildTests": "PASS",
+    "browser": "FAIL",
+    "security": "PASS"
+  },
+  "report": "/workspace/.clinicos-cloud/issues-506-507-20261024/qa-507/report.md",
+  "limits": [
+    "Synthetic localhost component/actual PatientDetail host tests, not full App authenticated database E2E",
+    "No backend persistence or real save performed",
+    "Imported/calendar payload preservation covered by unit tests",
+    "No GitHub/state/commit/deploy/closure writes or source edits"
+  ]
+}
