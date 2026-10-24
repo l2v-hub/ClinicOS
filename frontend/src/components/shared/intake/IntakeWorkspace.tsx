@@ -100,6 +100,7 @@ interface DraftData {
 
 interface IntakeWorkspaceProps {
   open: boolean;
+  presentation?: 'dialog' | 'page';
   onClose: () => void;
   /** #243: moduleTabId is the id of the module card selected in step 4 (Moduli), if any —
    * lets the caller navigate the newly created patient straight to that module's flow. */
@@ -120,6 +121,7 @@ interface IntakeWorkspaceProps {
 
 export function IntakeWorkspace({
   open,
+  presentation = 'dialog',
   onClose,
   onCreated,
   operatoreNome,
@@ -776,11 +778,11 @@ export function IntakeWorkspace({
       );
   }
 
-  async function saveAndClose(close = onClose) {
-    if (submittingRef.current) return;
+  async function saveAndClose(close = onClose): Promise<boolean> {
+    if (submittingRef.current) return false;
     if (!draftId || loading || error) {
       close();
-      return;
+      return true;
     }
     submittingRef.current = true;
     setSubmitting(true);
@@ -789,6 +791,7 @@ export function IntakeWorkspace({
       await persistDraft(data);
       setSaveState('saved');
       close();
+      return true;
     } catch (e) {
       setSaveState('error');
       const reason = draftRejectionReason(e);
@@ -796,6 +799,7 @@ export function IntakeWorkspace({
       setSubmitError(
         reason ? `Bozza non salvata: ${reason}` : 'Bozza non salvata. Riprova prima di chiudere.',
       );
+      return false;
     } finally {
       submittingRef.current = false;
       setSubmitting(false);
@@ -841,6 +845,11 @@ export function IntakeWorkspace({
 
   return (
     <AccessibleDialogSurface
+      presentation={presentation}
+      beforeNavigate={async () => {
+        if (saveState !== 'saving' && saveState !== 'error') return !submittingRef.current;
+        return saveAndClose(() => {});
+      }}
       labelledBy="patient-intake-dialog-title"
       onClose={() => void saveAndClose()}
       dismissible={!submitting}

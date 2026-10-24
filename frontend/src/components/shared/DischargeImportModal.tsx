@@ -27,6 +27,7 @@ import './import/ImportSession.css';
 
 interface Props {
   open: boolean;
+  presentation?: 'dialog' | 'page';
   initialDraftId?: string;
   onClose(): void;
   /** Paziente creato o aggiornato dall'import e, se scelto nel wizard, il modulo da aprire. */
@@ -50,6 +51,7 @@ function ImportSession({
   onImported,
   actor,
   initialDraftId,
+  presentation = 'dialog',
 }: Props & { actor: ImportActor }) {
   const title = useId();
   const [job, setJob] = useState<ImportJob | null>(null);
@@ -329,6 +331,7 @@ function ImportSession({
     return (
       <IntakeWorkspace
         open
+        presentation={presentation}
         onClose={onClose}
         onCreated={completed}
         operatorId={actor.operatorId}
@@ -340,6 +343,15 @@ function ImportSession({
     );
   return (
     <AccessibleDialogSurface
+      presentation={presentation}
+      beforeNavigate={async () => {
+        if (busy || pendingUpload) return false;
+        if (step === 'review' && !job?.review.draftId) {
+          requestClose();
+          return false;
+        }
+        return true;
+      }}
       labelledBy={title}
       onClose={requestClose}
       dismissible={!busy && !pendingUpload}

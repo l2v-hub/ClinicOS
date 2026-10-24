@@ -1,0 +1,17 @@
+{
+  "results": [
+    {
+      "name": "original-import-covers-shell",
+      "verdict": "PASS",
+      "errors": [],
+      "responses": [],
+      "requests": [
+        {
+          "path": "/ai/extraction/jobs",
+          "method": "POST"
+        }
+      ],
+      "patches": 0
+    }
+  ]
+}

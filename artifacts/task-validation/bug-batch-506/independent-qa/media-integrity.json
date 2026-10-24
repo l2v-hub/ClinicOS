@@ -1,0 +1,298 @@
+{
+  "videos": [
+    {
+      "scenario": "flow-1440",
+      "path": "evidence/video/page@c03804c97862d4f173b4038b8a7d88cc.webm",
+      "ffprobeExit": 0,
+      "decodeExit": 0,
+      "decodeErrors": "",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1280,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "11.760000"
+        }
+      },
+      "sha256": "b39821189253ae5cba0b13913a0dc949fa43c63bdb6e56b913c6100f5c45d4b9"
+    },
+    {
+      "scenario": "flow-1024",
+      "path": "evidence/video/page@5fe607a62d09c18788e9dfdb1b8358fc.webm",
+      "ffprobeExit": 0,
+      "decodeExit": 0,
+      "decodeErrors": "",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1024,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "11.680000"
+        }
+      },
+      "sha256": "61471b7b019e3d55904da1ff4d6b78e87509e7107f9d235056c8a64ab12c9b14"
+    },
+    {
+      "scenario": "flow-768",
+      "path": "evidence/video/page@aa524b2420ba120c5da1ae751398e39e.webm",
+      "ffprobeExit": 0,
+      "decodeExit": 0,
+      "decodeErrors": "",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 768,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "9.960000"
+        }
+      },
+      "sha256": "483dd579782a25c0c3d0b04596410521b7053ce43812b3e09a61b37aaf07a585"
+    },
+    {
+      "scenario": "flow-390",
+      "path": "evidence/video/page@96e4d283d019757ec9ccd879b613a9b6.webm",
+      "ffprobeExit": 0,
+      "decodeExit": 0,
+      "decodeErrors": "",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 390,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "13.080000"
+        }
+      },
+      "sha256": "b38d1829f2108a1265faf77b1cd8415164196b90b7d3f41c87bab026620164c1"
+    },
+    {
+      "scenario": "rejected-save-retains-draft",
+      "path": "evidence/video/page@27c8635785718aae4647ebbe080050cb.webm",
+      "ffprobeExit": 0,
+      "decodeExit": 0,
+      "decodeErrors": "",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1280,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "5.720000"
+        }
+      },
+      "sha256": "e0e74b58a9d2548cc525e6acf5131ecbfb0c5f21a8fd44a534655669d5aac8b4"
+    },
+    {
+      "scenario": "loading-navigation-cleanup",
+      "path": "evidence/video/page@3c41fa75c76f0294c6f9b0c3255df075.webm",
+      "ffprobeExit": 0,
+      "decodeExit": 0,
+      "decodeErrors": "",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1280,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "2.400000"
+        }
+      },
+      "sha256": "1c73eae65c471e6cdb6244b722f81c62927d8120ade564cf6cb4aa2ab16f0beb"
+    },
+    {
+      "scenario": "review-modal-blocks-background-navigation",
+      "path": "evidence/video/page@f2ffbe86aa4fd8fd961c9ae3c704517f.webm",
+      "ffprobeExit": 0,
+      "decodeExit": 0,
+      "decodeErrors": "",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1280,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "3.120000"
+        }
+      },
+      "sha256": "bdc8ac9a6473e133141501648ee519cfdde3de8c6dc534b60193b38d1f52a4ba"
+    },
+    {
+      "scenario": "resize-scroll-and-focus",
+      "path": "evidence/video/page@225f297625fdf7178da25daa059859c2.webm",
+      "ffprobeExit": 0,
+      "decodeExit": 0,
+      "decodeErrors": "",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1280,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "4.080000"
+        }
+      },
+      "sha256": "a5adb63338c75862dc1f858a300366ce94765ca49cd0b525c68477c19e05934d"
+    },
+    {
+      "scenario": "lazy-loading-navigation-cleanup",
+      "path": "evidence/video/page@18fbd1079b41a3fb5a0277bb5436b8fc.webm",
+      "ffprobeExit": 0,
+      "decodeExit": 0,
+      "decodeErrors": "",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1280,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "2.720000"
+        }
+      },
+      "sha256": "a15426f545a971e15e194fff26a41f1db0cd4960695b305d91fb5cebf959d013"
+    },
+    {
+      "scenario": "native-baseline-original-import-covers-shell",
+      "path": "evidence/video/page@791ed33aaab8bf181800658598815d77.webm",
+      "ffprobeExit": 0,
+      "decodeExit": 0,
+      "decodeErrors": "",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp8",
+            "width": 1280,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "13.080000"
+        }
+      },
+      "sha256": "e48df69ffa00bba6a7bfddf74e66e68c80eb62fe7b5285dfde2b13b2c7e31e3c"
+    }
+  ],
+  "traces": [
+    {
+      "path": "evidence/trace/cold-lazy-loading-navigation-cleanup.zip",
+      "members": 21,
+      "badMember": null,
+      "size": 273897,
+      "sha256": "6e2838d8a2aed6af4e0c5383b9ab0e80759b6f83b9309100cfb6011e7848cb41"
+    },
+    {
+      "path": "evidence/trace/issue506-1024.zip",
+      "members": 111,
+      "badMember": null,
+      "size": 4763241,
+      "sha256": "8a54be02a21ff8b0b8af6932d27d48e3b49ad4e32cd2629dd0f846308ccf89c6"
+    },
+    {
+      "path": "evidence/trace/issue506-1440.zip",
+      "members": 91,
+      "badMember": null,
+      "size": 3702521,
+      "sha256": "d1ac6007a6dab595eacbb9717675c3a9240b51fa543456f78836e5c1fc06ce0e"
+    },
+    {
+      "path": "evidence/trace/issue506-390.zip",
+      "members": 119,
+      "badMember": null,
+      "size": 3131635,
+      "sha256": "897eaee43e7d04b940e6a1a08d03325c0150f00f5197cd3f1de8cd651d8f1b83"
+    },
+    {
+      "path": "evidence/trace/issue506-768.zip",
+      "members": 119,
+      "badMember": null,
+      "size": 4167286,
+      "sha256": "adb8970b1a5e2c9942abda97c20fcc78f3abd708ba4562f924df0657f91a1f80"
+    },
+    {
+      "path": "evidence/trace/native-baseline-original-import-covers-shell.zip",
+      "members": 20,
+      "badMember": null,
+      "size": 260851,
+      "sha256": "0596da1d8c4d8022ff948eb1ccc71fdb91962e8645b77073e7daafc5c07dda1e"
+    },
+    {
+      "path": "evidence/trace/probe2-loading-navigation-cleanup.zip",
+      "members": 20,
+      "badMember": null,
+      "size": 259627,
+      "sha256": "e02994787f3a96491ebe51f062c3ca7261143e7a09b94aafd84aedbf807f2de4"
+    },
+    {
+      "path": "evidence/trace/probe2-rejected-save-retains-draft.zip",
+      "members": 64,
+      "badMember": null,
+      "size": 2956734,
+      "sha256": "36ef5299240468343a72939d41c74a4ab811d8113cc23dbf3bb52ede7de822f4"
+    },
+    {
+      "path": "evidence/trace/probe2-resize-scroll-and-focus.zip",
+      "members": 64,
+      "badMember": null,
+      "size": 2593045,
+      "sha256": "be0de891090b4b4eeb01d9cc40c349bbf6568ac2e390f7f668eea599b94e313a"
+    },
+    {
+      "path": "evidence/trace/probe2-review-modal-blocks-background-navigation.zip",
+      "members": 30,
+      "badMember": null,
+      "size": 915760,
+      "sha256": "98cf6e76e47280cfba965d2dd6825c4b782117c2c5f5c189d7ed1a503dc2d7f9"
+    }
+  ],
+  "allVideosDecode": true,
+  "allTracesIntact": true
+}
