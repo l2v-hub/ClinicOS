@@ -1,0 +1,771 @@
+TAP version 13
+# Subtest: external doctor requires no Claude credential or Claude subprocess
+ok 1 - external doctor requires no Claude credential or Claude subprocess
+  ---
+  duration_ms: 1.756336
+  type: 'test'
+  ...
+# Subtest: request waits for real checks, then makes the PR ready without executing Claude
+ok 2 - request waits for real checks, then makes the PR ready without executing Claude
+  ---
+  duration_ms: 2.279264
+  type: 'test'
+  ...
+# Subtest: external harness reserves remotely before inference, publishes hashed approval and Codex accepts the exact revision
+ok 3 - external harness reserves remotely before inference, publishes hashed approval and Codex accepts the exact revision
+  ---
+  duration_ms: 144.861094
+  type: 'test'
+  ...
+# Subtest: external publication failure is retryable without another model call; a CAS conflict prevents inference
+ok 4 - external publication failure is retryable without another model call; a CAS conflict prevents inference
+  ---
+  duration_ms: 186.604712
+  type: 'test'
+  ...
+# Subtest: Claude findings trigger fresh Codex correction, test/simplification/QA, new SHA and a new bounded request
+ok 5 - Claude findings trigger fresh Codex correction, test/simplification/QA, new SHA and a new bounded request
+  ---
+  duration_ms: 201.01923
+  type: 'test'
+  ...
+# Subtest: new human comments invalidate approval and exhausted review budgets block correction instead of starting round five
+ok 6 - new human comments invalidate approval and exhausted review budgets block correction instead of starting round five
+  ---
+  duration_ms: 147.771159
+  type: 'test'
+  ...
+# Subtest: human feedback arriving with review publication is retained rather than silently included in approval
+ok 7 - human feedback arriving with review publication is retained rather than silently included in approval
+  ---
+  duration_ms: 68.957236
+  type: 'test'
+  ...
+# Subtest: draft or foreign PRs and an exhausted external budget never start a model
+ok 8 - draft or foreign PRs and an exhausted external budget never start a model
+  ---
+  duration_ms: 41.284456
+  type: 'test'
+  ...
+# Subtest: closed source issues block the external harness and Codex before review or correction
+ok 9 - closed source issues block the external harness and Codex before review or correction
+  ---
+  duration_ms: 31.310902
+  type: 'test'
+  ...
+# Subtest: new cron records bounded failure codes and publishes failure state without exposing local output or retrying inference
+ok 10 - new cron records bounded failure codes and publishes failure state without exposing local output or retrying inference
+  ---
+  duration_ms: 53.101512
+  type: 'test'
+  ...
+# Subtest: failure classification accepts only fixed result codes and never copies arbitrary model output
+ok 11 - failure classification accepts only fixed result codes and never copies arbitrary model output
+  ---
+  duration_ms: 0.325981
+  type: 'test'
+  ...
+# Subtest: transient issue-notification failure does not waste or retry the reserved model call
+ok 12 - transient issue-notification failure does not waste or retry the reserved model call
+  ---
+  duration_ms: 64.892121
+  type: 'test'
+  ...
+# Subtest: issue notification outage after reserving a correction does not spend another implementation attempt or block real fixes
+ok 13 - issue notification outage after reserving a correction does not spend another implementation attempt or block real fixes
+  ---
+  duration_ms: 66.917202
+  type: 'test'
+  ...
+# Subtest: comment channel is preserved when requesting the next exact-SHA review
+ok 14 - comment channel is preserved when requesting the next exact-SHA review
+  ---
+  duration_ms: 0.488356
+  type: 'test'
+  ...
+# Subtest: Claude approval on comment channel requires a new independent Codex QA before readiness
+ok 15 - Claude approval on comment channel requires a new independent Codex QA before readiness
+  ---
+  duration_ms: 57.855191
+  type: 'test'
+  ...
+# Subtest: standard external approval requires one fresh durable SHA/round/feedback-bound final QA
+ok 16 - standard external approval requires one fresh durable SHA/round/feedback-bound final QA
+  ---
+  duration_ms: 1.807759
+  type: 'test'
+  ...
+# Subtest: pending native checks or unresolved feedback never invoke final QA or transfer approval
+ok 17 - pending native checks or unresolved feedback never invoke final QA or transfer approval
+  ---
+  duration_ms: 0.492338
+  type: 'test'
+  ...
+# Subtest: stale final QA bindings require a fresh session and retain previous evidence
+ok 18 - stale final QA bindings require a fresh session and retain previous evidence
+  ---
+  duration_ms: 0.672424
+  type: 'test'
+  ...
+# Subtest: running final QA ownership is not restarted even when its SHA is stale
+ok 19 - running final QA ownership is not restarted even when its SHA is stale
+  ---
+  duration_ms: 0.640192
+  type: 'test'
+  ...
+# Subtest: native checks or PR identity/feedback changing during final QA cannot become ready
+ok 20 - native checks or PR identity/feedback changing during final QA cannot become ready
+  ---
+  duration_ms: 1.066658
+  type: 'test'
+  ...
+# Subtest: final QA exception is recorded without hiding a model retry or granting approval
+ok 21 - final QA exception is recorded without hiding a model retry or granting approval
+  ---
+  duration_ms: 0.585945
+  type: 'test'
+  ...
+# Subtest: final QA findings use the existing consumed correction budget and new-SHA review request
+ok 22 - final QA findings use the existing consumed correction budget and new-SHA review request
+  ---
+  duration_ms: 0.591441
+  type: 'test'
+  ...
+# Subtest: native checks becoming pending before QA wait with no inference and resume after checks recover
+ok 23 - native checks becoming pending before QA wait with no inference and resume after checks recover
+  ---
+  duration_ms: 0.337646
+  type: 'test'
+  ...
+# Subtest: stale published handoff cannot invoke QA or transfer an otherwise valid old report
+ok 24 - stale published handoff cannot invoke QA or transfer an otherwise valid old report
+  ---
+  duration_ms: 0.124452
+  type: 'test'
+  ...
+# Subtest: final QA findings cannot renew exhausted implementation or review budgets
+ok 25 - final QA findings cannot renew exhausted implementation or review budgets
+  ---
+  duration_ms: 0.500463
+  type: 'test'
+  ...
+# Subtest: new feedback cannot start a correction while the prior final QA session remains running
+ok 26 - new feedback cannot start a correction while the prior final QA session remains running
+  ---
+  duration_ms: 0.205785
+  type: 'test'
+  ...
+# Subtest: automatic external review ownership loss skips without correction, status block or model effects
+ok 27 - automatic external review ownership loss skips without correction, status block or model effects
+  ---
+  duration_ms: 0.430852
+  type: 'test'
+  ...
+# Subtest: ownership loss in automatic informational publication is not swallowed before a correction model
+ok 28 - ownership loss in automatic informational publication is not swallowed before a correction model
+  ---
+  duration_ms: 0.333275
+  type: 'test'
+  ...
+# Subtest: requested/running/findings/approved/failed lifecycle is exclusive on every issue and preserves unrelated/lifecycle labels
+ok 29 - requested/running/findings/approved/failed lifecycle is exclusive on every issue and preserves unrelated/lifecycle labels
+  ---
+  duration_ms: 92.950462
+  type: 'test'
+  ...
+# Subtest: generated status arriving after a claim preserves actual feedback fingerprint while user, source and forged feedback remain substantive
+ok 30 - generated status arriving after a claim preserves actual feedback fingerprint while user, source and forged feedback remain substantive
+  ---
+  duration_ms: 16.997187
+  type: 'test'
+  ...
+# Subtest: every report chunk retains its leading identity and metadata marker with deterministic idempotence
+ok 31 - every report chunk retains its leading identity and metadata marker with deterministic idempotence
+  ---
+  duration_ms: 42.00069
+  type: 'test'
+  ...
+# Subtest: findings are present on each source issue and their report digest is verified; freeform approval is no proof
+ok 32 - findings are present on each source issue and their report digest is verified; freeform approval is no proof
+  ---
+  duration_ms: 11.73546
+  type: 'test'
+  ...
+# Subtest: every published structured verdict becomes Codex review ready while finished remains Claude reviewing
+ok 33 - every published structured verdict becomes Codex review ready while finished remains Claude reviewing
+  ---
+  duration_ms: 1.233802
+  type: 'test'
+  ...
+# Subtest: PR labels use the current PR issue inventory and stale SHA or authorization prevents PR writes
+ok 34 - PR labels use the current PR issue inventory and stale SHA or authorization prevents PR writes
+  ---
+  duration_ms: 16.475518
+  type: 'test'
+  ...
+# Subtest: authorized source comments reach old-worker PR context, get acknowledged once, and do not create feedback loops
+ok 35 - authorized source comments reach old-worker PR context, get acknowledged once, and do not create feedback loops
+  ---
+  duration_ms: 10.445792
+  type: 'test'
+  ...
+# Subtest: edited source feedback produces a new digest/receipt, deleted or concurrently edited feedback cannot be acknowledged
+ok 36 - edited source feedback produces a new digest/receipt, deleted or concurrently edited feedback cannot be acknowledged
+  ---
+  duration_ms: 9.544293
+  type: 'test'
+  ...
+# Subtest: historical plans and oversized comments before the current candidate never block or get forwarded; fresh edits do
+ok 37 - historical plans and oversized comments before the current candidate never block or get forwarded; fresh edits do
+  ---
+  duration_ms: 10.763529
+  type: 'test'
+  ...
+# Subtest: feedback baseline requires server receipt time and exact live SHA before writing anything
+ok 38 - feedback baseline requires server receipt time and exact live SHA before writing anything
+  ---
+  duration_ms: 4.258825
+  type: 'test'
+  ...
+# Subtest: future Git dates never hide fresh feedback and a skewed controller boundary falls back to server PR creation
+ok 39 - future Git dates never hide fresh feedback and a skewed controller boundary falls back to server PR creation
+  ---
+  duration_ms: 2.466632
+  type: 'test'
+  ...
+# Subtest: feedback during correction survives the new SHA handoff and earlier mirrors remain available without duplicate receipts
+ok 40 - feedback during correction survives the new SHA handoff and earlier mirrors remain available without duplicate receipts
+  ---
+  duration_ms: 44.399067
+  type: 'test'
+  ...
+# Subtest: feedback after an approved report forces existing Codex correction, fresh tests/QA/new SHA and a bounded ready handoff
+ok 41 - feedback after an approved report forces existing Codex correction, fresh tests/QA/new SHA and a bounded ready handoff
+  ---
+  duration_ms: 16.450486
+  type: 'test'
+  ...
+# Subtest: communication redacts secrets/session/contact/named clinical fields and quotes prompt injection as untrusted data
+ok 42 - communication redacts secrets/session/contact/named clinical fields and quotes prompt injection as untrusted data
+  ---
+  duration_ms: 3.380035
+  type: 'test'
+  ...
+# Subtest: fresh guard rejects PR SHA drift at a later await before any mutation
+ok 43 - fresh guard rejects PR SHA drift at a later await before any mutation
+  ---
+  duration_ms: 2.082632
+  type: 'test'
+  ...
+# Subtest: fresh guard rejects PR repository drift at a later await before any mutation
+ok 44 - fresh guard rejects PR repository drift at a later await before any mutation
+  ---
+  duration_ms: 1.274106
+  type: 'test'
+  ...
+# Subtest: fresh guard rejects fork drift at a later await before any mutation
+ok 45 - fresh guard rejects fork drift at a later await before any mutation
+  ---
+  duration_ms: 1.317384
+  type: 'test'
+  ...
+# Subtest: fresh guard rejects base drift at a later await before any mutation
+ok 46 - fresh guard rejects base drift at a later await before any mutation
+  ---
+  duration_ms: 1.502773
+  type: 'test'
+  ...
+# Subtest: fresh guard rejects branch drift at a later await before any mutation
+ok 47 - fresh guard rejects branch drift at a later await before any mutation
+  ---
+  duration_ms: 1.138316
+  type: 'test'
+  ...
+# Subtest: fresh guard rejects PR state drift at a later await before any mutation
+ok 48 - fresh guard rejects PR state drift at a later await before any mutation
+  ---
+  duration_ms: 2.138124
+  type: 'test'
+  ...
+# Subtest: fresh guard rejects source issue closed drift at a later await before any mutation
+ok 49 - fresh guard rejects source issue closed drift at a later await before any mutation
+  ---
+  duration_ms: 1.281956
+  type: 'test'
+  ...
+# Subtest: fresh guard rejects source issue becomes PR drift at a later await before any mutation
+ok 50 - fresh guard rejects source issue becomes PR drift at a later await before any mutation
+  ---
+  duration_ms: 1.178915
+  type: 'test'
+  ...
+# Subtest: fresh guard rejects cohort changed drift at a later await before any mutation
+ok 51 - fresh guard rejects cohort changed drift at a later await before any mutation
+  ---
+  duration_ms: 1.343541
+  type: 'test'
+  ...
+# Subtest: fresh guard rejects plan changed drift at a later await before any mutation
+ok 52 - fresh guard rejects plan changed drift at a later await before any mutation
+  ---
+  duration_ms: 1.739481
+  type: 'test'
+  ...
+# Subtest: fresh guard rejects review ledger changed drift at a later await before any mutation
+ok 53 - fresh guard rejects review ledger changed drift at a later await before any mutation
+  ---
+  duration_ms: 0.989987
+  type: 'test'
+  ...
+# Subtest: fresh guard rejects ownership changed drift at a later await before any mutation
+ok 54 - fresh guard rejects ownership changed drift at a later await before any mutation
+  ---
+  duration_ms: 1.088815
+  type: 'test'
+  ...
+# Subtest: fresh guard rejects release already deployed drift at a later await before any mutation
+ok 55 - fresh guard rejects release already deployed drift at a later await before any mutation
+  ---
+  duration_ms: 1.279941
+  type: 'test'
+  ...
+# Subtest: fresh guard rejects actor permission revoked drift at a later await before any mutation
+ok 56 - fresh guard rejects actor permission revoked drift at a later await before any mutation
+  ---
+  duration_ms: 3.267403
+  type: 'test'
+  ...
+# Subtest: drift between first label write and the next write stops all remaining cohort mutations
+ok 57 - drift between first label write and the next write stops all remaining cohort mutations
+  ---
+  duration_ms: 5.992586
+  type: 'test'
+  ...
+# Subtest: ownership and PR changes during the guard own network awaits are rechecked before a write
+ok 58 - ownership and PR changes during the guard own network awaits are rechecked before a write
+  ---
+  duration_ms: 115.453696
+  type: 'test'
+  ...
+# Subtest: ordinary PR mergeability metadata changes do not create a false identity failure
+ok 59 - ordinary PR mergeability metadata changes do not create a false identity failure
+  ---
+  duration_ms: 5.737123
+  type: 'test'
+  ...
+# Subtest: stale handoff, hashless approval, exhausted budget and invalid source sizes fail closed
+ok 60 - stale handoff, hashless approval, exhausted budget and invalid source sizes fail closed
+  ---
+  duration_ms: 11.988458
+  type: 'test'
+  ...
+# Subtest: old-worker failed-no-report state is projected with one spent attempt, without retry or durable writes
+ok 61 - old-worker failed-no-report state is projected with one spent attempt, without retry or durable writes
+  ---
+  duration_ms: 7.81945
+  type: 'test'
+  ...
+# Subtest: partial sync retries only idempotent labels a bounded number of times and never invokes inference
+ok 62 - partial sync retries only idempotent labels a bounded number of times and never invokes inference
+  ---
+  duration_ms: 105.620903
+  type: 'test'
+  ...
+# Subtest: workflow executes trusted main, requires existing PAT for real events, and has no issue-comment self trigger or model/state write command
+ok 63 - workflow executes trusted main, requires existing PAT for real events, and has no issue-comment self trigger or model/state write command
+  ---
+  duration_ms: 4.847735
+  type: 'test'
+  ...
+# Subtest: manual CLI rejects every untrusted branch/event/repository before constructing GitHub transport
+ok 64 - manual CLI rejects every untrusted branch/event/repository before constructing GitHub transport
+  ---
+  duration_ms: 1.011575
+  type: 'test'
+  ...
+# Subtest: QA1 role-revocation interleaving during the final cohort guard permits zero mutations
+ok 65 - QA1 role-revocation interleaving during the final cohort guard permits zero mutations
+  ---
+  duration_ms: 1.593879
+  type: 'test'
+  ...
+# Subtest: QA1 source-edit interleaving during the final cohort guard cannot publish the former digest
+ok 66 - QA1 source-edit interleaving during the final cohort guard cannot publish the former digest
+  ---
+  duration_ms: 1.892817
+  type: 'test'
+  ...
+# Subtest: source deletion or author revocation during cohort reads prevents the first mirror and receipt
+ok 67 - source deletion or author revocation during cohort reads prevents the first mirror and receipt
+  ---
+  duration_ms: 3.250731
+  type: 'test'
+  ...
+# Subtest: source-author authorization is checked after the actual source body read
+ok 68 - source-author authorization is checked after the actual source body read
+  ---
+  duration_ms: 10.356566
+  type: 'test'
+  ...
+# Subtest: publication rejects an expired or backwards-clock guard without retries or provider calls
+ok 69 - publication rejects an expired or backwards-clock guard without retries or provider calls
+  ---
+  duration_ms: 4.897382
+  type: 'test'
+  ...
+# Subtest: normal mirror/receipt/status publication survives final rechecks and remains idempotent without state writes
+ok 70 - normal mirror/receipt/status publication survives final rechecks and remains idempotent without state writes
+  ---
+  duration_ms: 9.854964
+  type: 'test'
+  ...
+# Subtest: running and awaiting-QA continuations never project a ready review label
+ok 71 - running and awaiting-QA continuations never project a ready review label
+  ---
+  duration_ms: 1.163122
+  type: 'test'
+  ...
+# Subtest: standalone communication projects exact collection PR-only and rejects collection drift
+ok 72 - standalone communication projects exact collection PR-only and rejects collection drift
+  ---
+  duration_ms: 3.307026
+  type: 'test'
+  ...
+# Subtest: standalone nonempty cohort is explicitly unsupported without transport
+ok 73 - standalone nonempty cohort is explicitly unsupported without transport
+  ---
+  duration_ms: 0.238552
+  type: 'test'
+  ...
+# Subtest: exact final approval is preserved during release hold and active continuation wins
+ok 74 - exact final approval is preserved during release hold and active continuation wins
+  ---
+  duration_ms: 2.734012
+  type: 'test'
+  ...
+# Subtest: static actual-comment approval remains no-op without a fabricated structured report
+ok 75 - static actual-comment approval remains no-op without a fabricated structured report
+  ---
+  duration_ms: 0.455795
+  type: 'test'
+  ...
+# Subtest: standalone final write guards reject head, canonical fingerprint and authorization drift
+ok 76 - standalone final write guards reject head, canonical fingerprint and authorization drift
+  ---
+  duration_ms: 7.015877
+  type: 'test'
+  ...
+# Subtest: closed standalone is a read-only skipped sync result
+ok 77 - closed standalone is a read-only skipped sync result
+  ---
+  duration_ms: 1.258563
+  type: 'test'
+  ...
+# Subtest: operator final-Codex provenance preserves exact approval without rewriting histories
+ok 78 - operator final-Codex provenance preserves exact approval without rewriting histories
+  ---
+  duration_ms: 0.39806
+  type: 'test'
+  ...
+# Subtest: automatic method calls reject currently owned subjects while default explicit authorized publication remains supported
+ok 79 - automatic method calls reject currently owned subjects while default explicit authorized publication remains supported
+  ---
+  duration_ms: 12.840335
+  type: 'test'
+  ...
+# Subtest: automatic last write guard rechecks takeover after its final authorization await
+ok 80 - automatic last write guard rechecks takeover after its final authorization await
+  ---
+  duration_ms: 2.622608
+  type: 'test'
+  ...
+# Subtest: automatic source feedback guard observes ownership acquired during provenance verification without forwarding or acknowledgment
+ok 81 - automatic source feedback guard observes ownership acquired during provenance verification without forwarding or acknowledgment
+  ---
+  duration_ms: 2.338497
+  type: 'test'
+  ...
+# Subtest: automatic communication distinguishes a newly acquired subject owner from generic fingerprint drift
+ok 82 - automatic communication distinguishes a newly acquired subject owner from generic fingerprint drift
+  ---
+  duration_ms: 1.151785
+  type: 'test'
+  ...
+# Subtest: per-method automatic mode works on prebuilt communication and does not leak into a later explicit call
+ok 83 - per-method automatic mode works on prebuilt communication and does not leak into a later explicit call
+  ---
+  duration_ms: 8.99767
+  type: 'test'
+  ...
+# Subtest: sync discovers standalone without processing, mirroring, saving or restarting it
+not ok 84 - sync discovers standalone without processing, mirroring, saving or restarting it
+  ---
+  duration_ms: 3.493463
+  type: 'test'
+  location: '/tmp/clinicos-autonomy-activation-20261022/source3/agent-team/tests/bug-pipeline/issue-review-sync.test.mjs:14:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      {
+    +   automatic: true,
+        collection: 'standaloneReviews'
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    collection: 'standaloneReviews'
+  actual:
+    collection: 'standaloneReviews'
+    automatic: true
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/clinicos-autonomy-activation-20261022/source3/agent-team/tests/bug-pipeline/issue-review-sync.test.mjs:32:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: sync rejects duplicate standalone identities before any projection
+ok 85 - sync rejects duplicate standalone identities before any projection
+  ---
+  duration_ms: 0.928319
+  type: 'test'
+  ...
+# Subtest: sync skips merged and deployed standalone subjects
+ok 86 - sync skips merged and deployed standalone subjects
+  ---
+  duration_ms: 0.337972
+  type: 'test'
+  ...
+# Subtest: active global takeover skips every eligible subject before any feedback mirror or projection
+ok 87 - active global takeover skips every eligible subject before any feedback mirror or projection
+  ---
+  duration_ms: 0.620597
+  type: 'test'
+  ...
+# Subtest: recognized new-only handback preserves protected subjects while ordinary unowned feedback still synchronizes
+ok 88 - recognized new-only handback preserves protected subjects while ordinary unowned feedback still synchronizes
+  ---
+  duration_ms: 0.760941
+  type: 'test'
+  ...
+# Subtest: takeover subject identities remain protected despite changed SHA and an explicit new-queue handback
+ok 89 - takeover subject identities remain protected despite changed SHA and an explicit new-queue handback
+  ---
+  duration_ms: 1.312289
+  type: 'test'
+  ...
+# Subtest: active subject coordination and unfinished release coordination independently prevent sync
+ok 90 - active subject coordination and unfinished release coordination independently prevent sync
+  ---
+  duration_ms: 0.640055
+  type: 'test'
+  ...
+# Subtest: finished coordination allows existing unowned sync without weakening feedback processing
+ok 91 - finished coordination allows existing unowned sync without weakening feedback processing
+  ---
+  duration_ms: 0.235207
+  type: 'test'
+  ...
+# Subtest: malformed or disabled automation handback cannot silently enable owned synchronization
+ok 92 - malformed or disabled automation handback cannot silently enable owned synchronization
+  ---
+  duration_ms: 0.753028
+  type: 'test'
+  ...
+# Subtest: released subjects remain omitted and closed unowned subjects retain their original disposition
+ok 93 - released subjects remain omitted and closed unowned subjects retain their original disposition
+  ---
+  duration_ms: 0.674402
+  type: 'test'
+  ...
+# Subtest: unowned projection failure remains partial and never publishes private error text
+ok 94 - unowned projection failure remains partial and never publishes private error text
+  ---
+  duration_ms: 0.685931
+  type: 'test'
+  ...
+# Subtest: actual communication reload observing global takeover skips sync before any projection effects
+ok 95 - actual communication reload observing global takeover skips sync before any projection effects
+  ---
+  duration_ms: 1.281029
+  type: 'test'
+  ...
+# Subtest: sync opts both methods into automatic guards and skips a late ownership error without blocked-state writes
+ok 96 - sync opts both methods into automatic guards and skips a late ownership error without blocked-state writes
+  ---
+  duration_ms: 0.272442
+  type: 'test'
+  ...
+# Subtest: merged and deployed batches remain terminal and never restart implementation
+ok 97 - merged and deployed batches remain terminal and never restart implementation
+  ---
+  duration_ms: 21.400664
+  type: 'test'
+  ...
+# Subtest: all grouped issues are claimed after remote reservation and before triage; readiness never marks them resolved
+ok 98 - all grouped issues are claimed after remote reservation and before triage; readiness never marks them resolved
+  ---
+  duration_ms: 6.073143
+  type: 'test'
+  ...
+# Subtest: successive label wake-ups collect related issues durably before one plan, worktree and PR
+ok 99 - successive label wake-ups collect related issues durably before one plan, worktree and PR
+  ---
+  duration_ms: 2.874211
+  type: 'test'
+  ...
+# Subtest: collection clears revoked entries and is bounded even if queue membership keeps changing
+ok 100 - collection clears revoked entries and is bounded even if queue membership keeps changing
+  ---
+  duration_ms: 4.311235
+  type: 'test'
+  ...
+# Subtest: a new issue cannot duplicate an occupied file scope or reset the existing budget
+ok 101 - a new issue cannot duplicate an occupied file scope or reset the existing budget
+  ---
+  duration_ms: 4.596213
+  type: 'test'
+  ...
+# Subtest: unjustified separate plans touching the same file fail before any worktree or executor
+ok 102 - unjustified separate plans touching the same file fail before any worktree or executor
+  ---
+  duration_ms: 1.336319
+  type: 'test'
+  ...
+# Subtest: revoked or externally owned issues cannot enter collection or be claimed after the window
+ok 103 - revoked or externally owned issues cannot enter collection or be claimed after the window
+  ---
+  duration_ms: 1.472423
+  type: 'test'
+  ...
+# Subtest: failed claim publication prevents triage and retains its remote claim without consuming implementation or review budgets
+ok 104 - failed claim publication prevents triage and retains its remote claim without consuming implementation or review budgets
+  ---
+  duration_ms: 1.68838
+  type: 'test'
+  ...
+# Subtest: unchanged unresolved human review waits without spending another Claude attempt
+ok 105 - unchanged unresolved human review waits without spending another Claude attempt
+  ---
+  duration_ms: 1.611209
+  type: 'test'
+  ...
+# Subtest: successful grouped flow hydrates every issue, validates, simplifies, revalidates, publishes draft before Claude, and posts evidence to each source issue
+ok 106 - successful grouped flow hydrates every issue, validates, simplifies, revalidates, publishes draft before Claude, and posts evidence to each source issue
+  ---
+  duration_ms: 1.691793
+  type: 'test'
+  ...
+# Subtest: failed independent QA prevents PR publication and consumes the existing implementation budget
+ok 107 - failed independent QA prevents PR publication and consumes the existing implementation budget
+  ---
+  duration_ms: 2.276369
+  type: 'test'
+  ...
+# Subtest: four implementation failures exhaust the budget, and a rerun cannot reset or exceed it
+ok 108 - four implementation failures exhaust the budget, and a rerun cannot reset or exceed it
+  ---
+  duration_ms: 1.936501
+  type: 'test'
+  ...
+# Subtest: four changes-requested Claude reviews run no fifth round and retain each correction in the same budget
+ok 109 - four changes-requested Claude reviews run no fifth round and retain each correction in the same budget
+  ---
+  duration_ms: 4.892261
+  type: 'test'
+  ...
+# Subtest: later PR comments cannot restart an exhausted Claude review budget
+ok 110 - later PR comments cannot restart an exhausted Claude review budget
+  ---
+  duration_ms: 0.765494
+  type: 'test'
+  ...
+# Subtest: a new comment on an approved ready PR triggers correction, revalidation and a review of the new head
+ok 111 - a new comment on an approved ready PR triggers correction, revalidation and a review of the new head
+  ---
+  duration_ms: 3.306689
+  type: 'test'
+  ...
+# Subtest: external PR head or fork identity blocks before any executor or review model call
+ok 112 - external PR head or fork identity blocks before any executor or review model call
+  ---
+  duration_ms: 1.28682
+  type: 'test'
+  ...
+# Subtest: pending required checks remain waiting and can become ready without resetting review or implementation budgets
+ok 113 - pending required checks remain waiting and can become ready without resetting review or implementation budgets
+  ---
+  duration_ms: 3.187704
+  type: 'test'
+  ...
+# Subtest: interrupted running work is blocked for operator recovery without restarting a model
+ok 114 - interrupted running work is blocked for operator recovery without restarting a model
+  ---
+  duration_ms: 0.469256
+  type: 'test'
+  ...
+# Subtest: remote compare-and-swap failure while reserving an implementation attempt prevents executor invocation
+ok 115 - remote compare-and-swap failure while reserving an implementation attempt prevents executor invocation
+  ---
+  duration_ms: 0.869928
+  type: 'test'
+  ...
+# Subtest: actual controller defers pending backend completion to protected confirmation and retries without models, merge or deploy
+ok 116 - actual controller defers pending backend completion to protected confirmation and retries without models, merge or deploy
+  ---
+  duration_ms: 37.836493
+  type: 'test'
+  ...
+# Subtest: active takeover pauses before intake or any state/status/model mutation
+ok 117 - active takeover pauses before intake or any state/status/model mutation
+  ---
+  duration_ms: 0.631808
+  type: 'test'
+  ...
+# Subtest: explicit new-only handback processes a new issue without touching protected batch/manual/standalone subjects
+ok 118 - explicit new-only handback processes a new issue without touching protected batch/manual/standalone subjects
+  ---
+  duration_ms: 17.171278
+  type: 'test'
+  ...
+# Subtest: manual and standalone frozen scope occupancy blocks an overlapping new plan without changing owners
+ok 119 - manual and standalone frozen scope occupancy blocks an overlapping new plan without changing owners
+  ---
+  duration_ms: 4.318164
+  type: 'test'
+  ...
+# Subtest: claimed terminal manual issue is excluded before intake and queue normalization
+ok 120 - claimed terminal manual issue is excluded before intake and queue normalization
+  ---
+  duration_ms: 0.344338
+  type: 'test'
+  ...
+# Subtest: a CAS-reconciled takeover stops before the next model and never diagnoses or restarts the old claim
+ok 121 - a CAS-reconciled takeover stops before the next model and never diagnoses or restarts the old claim
+  ---
+  duration_ms: 0.45952
+  type: 'test'
+  ...
+# Subtest: CAS ownership acquired on the current batch rejects its pending reservation before execution
+ok 122 - CAS ownership acquired on the current batch rejects its pending reservation before execution
+  ---
+  duration_ms: 2.978504
+  type: 'test'
+  ...
+# Subtest: successful triage CAS handover prevents issue status writes before the later model boundary
+ok 123 - successful triage CAS handover prevents issue status writes before the later model boundary
+  ---
+  duration_ms: 2.722282
+  type: 'test'
+  ...
+1..123
+# tests 123
+# suites 0
+# pass 122
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1204.634278

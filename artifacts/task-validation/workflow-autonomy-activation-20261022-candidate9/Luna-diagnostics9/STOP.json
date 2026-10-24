@@ -1,0 +1,15 @@
+{
+  "status": "implemented-awaiting-parent-integration",
+  "findings": ["F4", "F5"],
+  "sourceFiles": 139,
+  "changedPaths": [
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/src/bug-pipeline/workspace.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/tests/bug-pipeline/workspace.test.mjs"
+  ],
+  "allChangesAllowed": true,
+  "finalFocusedSuite": {"passed": 233, "failed": 0},
+  "pending": "Parent integration and review.",
+  "independentQAClaim": false
+}

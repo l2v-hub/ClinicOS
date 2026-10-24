@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-23T06:17:05.540Z",
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "stdout": {
+    "sha": "fc2479f5dccc7dd1529ac2371b4cf76c9baad906",
+    "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/fc2479f5dccc7dd1529ac2371b4cf76c9baad906"
+  },
+  "stderr": "",
+  "stateCommit": "3c247fd26bac7c8cc54ffd7bb03156b4743ac41a",
+  "existingGitBlob": "fc2479f5dccc7dd1529ac2371b4cf76c9baad906",
+  "noRefsChanged": true,
+  "readbackRef": "3c247fd26bac7c8cc54ffd7bb03156b4743ac41a"
+}

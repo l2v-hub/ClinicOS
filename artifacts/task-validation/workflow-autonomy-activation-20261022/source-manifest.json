@@ -1,0 +1,114 @@
+[
+  {
+    "path": ".claude/skills/clinicos/references/bug-delivery.md",
+    "blob": "18687f0f524fe737aaba7d6f45cd50f98e686d3e",
+    "mode": "100644",
+    "baseBlob": "42c425eeb5c0d182b31db4b7144a72648931e6a3",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/external-review.mjs",
+    "blob": "d1488a64ad38a25486bd52a10dd2a5422f0ab899",
+    "mode": "100644",
+    "baseBlob": "1bdb40777b970cef056b59f654a7fff9967295b1",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/github.mjs",
+    "blob": "c375d8ac525b767508a0aa2630e08e53db37c770",
+    "mode": "100644",
+    "baseBlob": "58831f6d36f29580975fb9052abb1836a54a72ac",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+    "blob": "f78abc8efe4c5c9f19960949bd0bdf2d6c67d255",
+    "mode": "100644",
+    "baseBlob": "b5150f1a0da7573ec3f5ec924cd61ccf62bf9fd2",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+    "blob": "b7eeccc3ea0a263240e287969c56807278c61f83",
+    "mode": "100644",
+    "baseBlob": "d537be36def6b2b20fc2ea55514e2f6bc186663f",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/operator-ownership.mjs",
+    "blob": "3ca76515f06a5488abbd9343c9a1a0e6667be479",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+    "blob": "ec973657ce02e2f9c9d767f6a6ab2e0db54ee7c3",
+    "mode": "100644",
+    "baseBlob": "9f4ce009cbd8f58336214eb6d7a6b41297419a3b",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/release.mjs",
+    "blob": "fde7e371fccaf57966d5a6a7dae559f5f8c78f62",
+    "mode": "100644",
+    "baseBlob": "4f7d523e76bb64a6475841b1d8a9c6a2c54d8436",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "blob": "ee70c7d6574e1c09c37c3cbcf2cbf63a546282a7",
+    "mode": "100644",
+    "baseBlob": "d6b7c53e7e04f23eac95dc7b92cfe4d8da972bab",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+    "blob": "a0780abdf0b2d8d981bd261f5e7b7326f7098641",
+    "mode": "100644",
+    "baseBlob": "585c4a9325b8283c6ad1ab17716e54c0a4e3671f",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+    "blob": "0ba98cbe7d0ba24036705838b180b76ccf9b4ba2",
+    "mode": "100644",
+    "baseBlob": "cfc4da2ae8df4652947d8188c353c106e77a4d58",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+    "blob": "c7b5b6962d6169613110e9b0889ece315e0d2ac5",
+    "mode": "100644",
+    "baseBlob": "ec0b9fb440321aac5e62e14d4ad54e0bfb12e0a0",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+    "blob": "47b6504c56775557273859f173cf4552c535973a",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "blob": "5fd4238c792f51df6ac2e0ef86c59c92a6952184",
+    "mode": "100644",
+    "baseBlob": "498a8ddafff9a13b1dbfb940422c0d5937d4f430",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+    "blob": "ffdc2c9e0b15b23c492717e45c85dc8122e3c734",
+    "mode": "100644",
+    "baseBlob": "eba81812f23662f3427c1ea47336e63d5d026a07",
+    "baseMode": "100644"
+  },
+  {
+    "path": "docs/codex-bug-workflow.md",
+    "blob": "653d3c83b04ded7e17f058476a20ca3d13a80a4f",
+    "mode": "100644",
+    "baseBlob": "8e7981e86a3003d6916649f67bde8f869cdbb3a4",
+    "baseMode": "100644"
+  }
+]

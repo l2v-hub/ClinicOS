@@ -1,0 +1,14 @@
+{
+  "status": "FAILED VALIDATION",
+  "sourceSha": "67c53efe45e2d5e2ffca228d3bf6639029bb27c5",
+  "nonce": "7d9f3883-a737-4a89-9b3d-623242a15227",
+  "at": "2026-10-23T00:23:57.328904+00:00",
+  "findings": [
+    "QA5-F5",
+    "QA5-F3",
+    "QA5-F1"
+  ],
+  "sourceEdits": false,
+  "liveOperations": false,
+  "rootCorrectionRequired": true
+}

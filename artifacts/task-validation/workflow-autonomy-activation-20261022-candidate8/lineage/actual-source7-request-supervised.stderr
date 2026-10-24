@@ -1,0 +1,17 @@
+file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/github.mjs:107
+  return Object.assign(new Error(message, cause ? { cause } : undefined), {
+                       ^
+
+Error: Durable state write failed; reconcile the persisted state before retrying
+    at stateError (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/github.mjs:107:24)
+    at Object.save (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/github.mjs:715:19)
+    at async save (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/comment-review-handoff.mjs:107:5)
+    at async Object.request (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/comment-review-handoff.mjs:248:5)
+    at async operation (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/standalone-review.mjs:326:14)
+    at async perform (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/review-handoff-cli.mjs:143:15)
+    at async Object.operation (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/standalone-review.mjs:326:14)
+    at async file:///tmp/clinicos-autonomy-activation-20261022/publication7/actual-handoff3/supervised-read-recovery1/request-actual-loader.mjs:1:268 {
+  code: 'state-write-failed'
+}
+
+Node.js v22.23.4

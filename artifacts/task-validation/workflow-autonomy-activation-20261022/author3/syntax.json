@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "actualChangedFilesChecked": 8,
+  "files": [
+    {
+      "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/external-review.mjs",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "status": "STOP",
+  "reason": "Author4 native ownership fixes and byte-bound validation complete. Awaiting independent QA4; no self-approval, publication or live continuation.",
+  "nonce": "1c075aa7-d2a3-4760-985f-08d32550d573",
+  "source": "/tmp/clinicos-autonomy-activation-20261022/source4",
+  "sourceEditsStopped": true
+}

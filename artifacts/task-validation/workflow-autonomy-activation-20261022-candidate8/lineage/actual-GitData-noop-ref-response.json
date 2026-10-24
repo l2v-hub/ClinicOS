@@ -1,0 +1,10 @@
+{
+  "ref": "refs/heads/codex/bug-control",
+  "node_id": "REF_kwDOSt4Zr7xyZWZzL2hlYWRzL2NvZGV4L2J1Zy1jb250cm9s",
+  "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/refs/heads/codex/bug-control",
+  "object": {
+    "sha": "b835b87be88f7cb0023a246a67906c2ee8dd88db",
+    "type": "commit",
+    "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/commits/b835b87be88f7cb0023a246a67906c2ee8dd88db"
+  }
+}

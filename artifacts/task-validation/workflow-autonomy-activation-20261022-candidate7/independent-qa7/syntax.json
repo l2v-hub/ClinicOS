@@ -1,0 +1,82 @@
+[
+  {
+    "path": "agent-team/src/bug-pipeline/attempt-budget.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/external-review.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/github.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/operator-authorization.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/release.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/workspace.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/workspace.test.mjs",
+    "exit": 0,
+    "output": ""
+  }
+]

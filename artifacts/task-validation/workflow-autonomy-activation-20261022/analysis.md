@@ -1,0 +1,9 @@
+# Analysis
+
+Issue labels and GitHub comments already wake the trusted controller. Operator takeover, introduced to preserve existing release work, was not honored by every automatic entrypoint. The standard external-review path could also bypass fresh final Codex QA.
+
+Candidate1 introduced shared ownership protection and final QA for all external channels. A genuine baseline sync run then timed out at 10 minutes after forwarding old comments; its summary is not a successful activation. Candidate2 protected sync preselection, but independent QA reproduced two races: a successful CAS observed a new manual owner before status projection; internal communication reloaded takeover yet still wrote. Candidate3 guards each observed CAS before projection and fresh internal communication loads under an explicit automatic opt-in. Explicit authorized SHA-bound read-only handoffs retain their supported path.
+
+The native state/history, old issue claims and occupied scopes are retained. Handback permits only new, unclaimed work and retains protected subject identities across SHA changes. Automatic release selection uses the same ownership predicate; provider, exact deployment, native checks and human/source policy are unchanged. The portable ClinicOS skill describes these gates. Codex adaptive implementation and a separately running authenticated Claude Max reviewer remain the actual baseline; no optional Claude implementation adapter or remote PC control is claimed.
+
+Live evidence is kept separate from source tests: the prior sync attempt failed; OpenAI metadata returned HTTP200 without inference; automatic release is configured. Actual native checks, genuine Claude review, fresh final Codex review, merge, handback and authentic-event activation remain pending at this publication. Railway access is an independent unresolved deployment prerequisite and is not retried unchanged here.

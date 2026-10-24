@@ -1,0 +1,571 @@
+{
+  "status": "verified",
+  "sourceSha": "0f3833480fda5a056e91fa9922552d4f91bca346",
+  "nonce": "06bcaa0f-316b-4372-871a-118be6c53e11",
+  "findings": [],
+  "verifiedAt": "2026-10-23T07:17:11.209032+00:00",
+  "sourceFrozen": true,
+  "sourceFiles": 139,
+  "deltaPaths": [
+    ".claude/skills/clinicos/references/bug-delivery.md",
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "agent-team/tests/bug-pipeline/git-data-state-fixture.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "docs/codex-bug-workflow.md"
+  ],
+  "cumulativeCodePaths": 27,
+  "oldPublicPacketBlobsUnchanged": 560,
+  "sourceBeforeAfterExact": true,
+  "gitBindings": {
+    "sourceSha": "0f3833480fda5a056e91fa9922552d4f91bca346",
+    "sourceFiles": 139,
+    "frozenManifest": {
+      "sha256": "18ed2197ced12cca3b233a584be09395375e4be8e6ffb2d04aa36f19e4768e3a",
+      "bytes": 21947
+    },
+    "rawGitMismatches": [
+      {
+        "path": "scripts/automation/setup-claude-review-windows.ps1",
+        "onlyKnownUnchangedCRLF": true,
+        "git": {
+          "bytes": 3038,
+          "sha256": "4ce32c8cbdbb8c5c41478361615d0bdbc392d5163457580ef2be59a274a87dc6"
+        }
+      }
+    ],
+    "changedDelta": [
+      ".claude/skills/clinicos/references/bug-delivery.md",
+      "agent-team/src/bug-pipeline/github.mjs",
+      "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "agent-team/tests/bug-pipeline/git-data-state-fixture.mjs",
+      "agent-team/tests/bug-pipeline/github.test.mjs",
+      "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "docs/codex-bug-workflow.md"
+    ],
+    "cumulativeChangedCode": 27,
+    "changedCodeRawExact": true,
+    "oldPacketBlobs": 560,
+    "allOldPacketBlobsUnchanged": true,
+    "seals": [
+      {
+        "directory": "author8",
+        "seal": {
+          "sha256": "fb17f46d2119c7b390de9b21b620551e75e16c56bfa5f03557428f95188f271f",
+          "bytes": 16516
+        },
+        "verifiedFiles": 111
+      },
+      {
+        "directory": "Luna-state-transport-docs8",
+        "seal": {
+          "sha256": "dbec905fa604de01b9c79a2dfab108452d7baf962ba961690c4f2b38018de433",
+          "bytes": 1196
+        },
+        "verifiedFiles": 8
+      },
+      {
+        "directory": "author7",
+        "seal": {
+          "sha256": "503fde3be20837fc5c6f37e859874c11a5f181082b2a7c56e5337cd536ee6b4f",
+          "bytes": 17685
+        },
+        "verifiedFiles": 121
+      },
+      {
+        "directory": "independent-qa7",
+        "seal": {
+          "sha256": "50f24812e098940624178e2509f902b61319219e443f72eca99c3e61937c2f83",
+          "bytes": 11016
+        },
+        "verifiedFiles": 74
+      }
+    ],
+    "links": {
+      "node_modules": "/workspace/ClinicOS/node_modules",
+      "artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude": "/tmp/clinicos-autonomy-activation-20261022/test-support7"
+    },
+    "supportExact": true,
+    "gitOperations": "show/diff/ls-tree read only"
+  },
+  "sealsRechecked": [
+    {
+      "directory": "author",
+      "seal": {
+        "sha256": "6b2fb75324dc5a76d4fa6655013b9d345d2ed5c322e65041f49587a70e147b22",
+        "bytes": 2462
+      },
+      "verifiedFiles": 17
+    },
+    {
+      "directory": "author2",
+      "seal": {
+        "sha256": "9ce02b5722a168333d77caefdcf4147dd130bffa3f4f5aba150310c49f510f1f",
+        "bytes": 2617
+      },
+      "verifiedFiles": 18
+    },
+    {
+      "directory": "author3",
+      "seal": {
+        "sha256": "fd1a0bb7d16ecfccc28c0d0a75ee5cbb973979121254577ad7143fdc6ffd696b",
+        "bytes": 3641
+      },
+      "verifiedFiles": 25
+    },
+    {
+      "directory": "author4",
+      "seal": {
+        "sha256": "f286dc996932af42ef6472424f8770fd90cd62513c413f3cb90b1b599776fd42",
+        "bytes": 3814
+      },
+      "verifiedFiles": 26
+    },
+    {
+      "directory": "author5",
+      "seal": {
+        "sha256": "010ea8de91eeaa9bed0618688e6e7dc1dbaec90676e83a934689d912b18da948",
+        "bytes": 9128
+      },
+      "verifiedFiles": 62
+    },
+    {
+      "directory": "author6",
+      "seal": {
+        "sha256": "223bd8549a0bd78fc9c47e2d425f16473bc10b1d112be576ce742d6b2fdfe064",
+        "bytes": 7828
+      },
+      "verifiedFiles": 53
+    },
+    {
+      "directory": "author7",
+      "seal": {
+        "sha256": "503fde3be20837fc5c6f37e859874c11a5f181082b2a7c56e5337cd536ee6b4f",
+        "bytes": 17685
+      },
+      "verifiedFiles": 121
+    },
+    {
+      "directory": "author8",
+      "seal": {
+        "sha256": "fb17f46d2119c7b390de9b21b620551e75e16c56bfa5f03557428f95188f271f",
+        "bytes": 16516
+      },
+      "verifiedFiles": 111
+    },
+    {
+      "directory": "independent-qa",
+      "seal": {
+        "sha256": "58b274424fc6f336a3244c9eb87e4fbbc079275e629a1c9695e3192ecf45112c",
+        "bytes": 4260
+      },
+      "verifiedFiles": 29
+    },
+    {
+      "directory": "independent-qa3",
+      "seal": {
+        "sha256": "d9ad31f41c6654abba35f9d5bc747e5932814a8653a2be0b27e2de4d44c94693",
+        "bytes": 4215
+      },
+      "verifiedFiles": 29
+    },
+    {
+      "directory": "independent-qa4",
+      "seal": {
+        "sha256": "b7003de2e30f34f99b5ae330bc44f73fca25a9dec07b90e9cea0ace3b20c5cc6",
+        "bytes": 5739
+      },
+      "verifiedFiles": 40
+    },
+    {
+      "directory": "independent-qa5",
+      "seal": {
+        "sha256": "655122adbf8d401c4fee77706cb33b31aebab40c48562e3d04118e817e863e9a",
+        "bytes": 6531
+      },
+      "verifiedFiles": 44
+    },
+    {
+      "directory": "independent-qa6",
+      "seal": {
+        "sha256": "21af8377471b43c6c902287986c5995361e6ed0a829f1f661ee996ad7cf26f36",
+        "bytes": 5863
+      },
+      "verifiedFiles": 40
+    },
+    {
+      "directory": "independent-qa7",
+      "seal": {
+        "sha256": "50f24812e098940624178e2509f902b61319219e443f72eca99c3e61937c2f83",
+        "bytes": 11016
+      },
+      "verifiedFiles": 74
+    },
+    {
+      "directory": "Luna-state-transport-docs8",
+      "seal": {
+        "sha256": "dbec905fa604de01b9c79a2dfab108452d7baf962ba961690c4f2b38018de433",
+        "bytes": 1196
+      },
+      "verifiedFiles": 8
+    }
+  ],
+  "tests": {
+    "distinctFunctional": 944,
+    "integrated15Suites": 932,
+    "independentTransportBoundaries": 10,
+    "actualPipelineBoundaries": 2,
+    "syntax": 17,
+    "separatelyClassifiedOfflineCanonicalValidationCommands": 1,
+    "skipped": 0,
+    "failedFinal": 0,
+    "duplicateRunsExcluded": true
+  },
+  "commands": {
+    "integrated": {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "agent-team/tests/bug-pipeline/attempt-budget.test.mjs",
+        "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+        "agent-team/tests/bug-pipeline/contracts.test.mjs",
+        "agent-team/tests/bug-pipeline/external-review.test.mjs",
+        "agent-team/tests/bug-pipeline/github.test.mjs",
+        "agent-team/tests/bug-pipeline/models.test.mjs",
+        "agent-team/tests/bug-pipeline/operator-authorization.test.mjs",
+        "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+        "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+        "agent-team/tests/bug-pipeline/release.test.mjs",
+        "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+        "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+        "agent-team/tests/bug-pipeline/workspace.test.mjs",
+        "agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs",
+        "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/qa-source8",
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/independent-qa8/tmp",
+        "LANG": "C.UTF-8",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_COUNT": "2",
+        "GIT_CONFIG_KEY_0": "core.hooksPath",
+        "GIT_CONFIG_VALUE_0": "/dev/null",
+        "GIT_CONFIG_KEY_1": "protocol.allow",
+        "GIT_CONFIG_VALUE_1": "never"
+      },
+      "exitCode": 0,
+      "seconds": 15.461978435516357,
+      "logSha256": "75dcd103b043d3d4e0a6a5dcc857a3d3effd3e7d04e1f43bcdb0821fd514cfb6",
+      "summary": {
+        "tests": 932,
+        "pass": 932,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    "boundaries": {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "../independent-qa8/boundaries.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/qa-source8",
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/independent-qa8/tmp",
+        "LANG": "C.UTF-8",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_COUNT": "2",
+        "GIT_CONFIG_KEY_0": "core.hooksPath",
+        "GIT_CONFIG_VALUE_0": "/dev/null",
+        "GIT_CONFIG_KEY_1": "protocol.allow",
+        "GIT_CONFIG_VALUE_1": "never"
+      },
+      "exitCode": 0,
+      "seconds": 0.8892459869384766,
+      "logSha256": "19302b9faa73070d30f9e6b87afc1626f85db62e4601a3ba8655a2b77d705692",
+      "summary": {
+        "tests": 10,
+        "pass": 10,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    "callers": {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "--experimental-vm-modules",
+        "../independent-qa8/callers.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/qa-source8",
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/independent-qa8/tmp",
+        "LANG": "C.UTF-8",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_COUNT": "2",
+        "GIT_CONFIG_KEY_0": "core.hooksPath",
+        "GIT_CONFIG_VALUE_0": "/dev/null",
+        "GIT_CONFIG_KEY_1": "protocol.allow",
+        "GIT_CONFIG_VALUE_1": "never"
+      },
+      "exitCode": 1,
+      "seconds": 0.7384829521179199,
+      "logSha256": "e6b0eb5a0600abee5e4d9d2fa7963a680948ea8c16dec2afcad03949ef1d55f3",
+      "summary": {
+        "tests": 2,
+        "pass": 1,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    "callers-corrected": {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "--experimental-vm-modules",
+        "../independent-qa8/callers.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/qa-source8",
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/independent-qa8/tmp",
+        "LANG": "C.UTF-8",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_COUNT": "2",
+        "GIT_CONFIG_KEY_0": "core.hooksPath",
+        "GIT_CONFIG_VALUE_0": "/dev/null",
+        "GIT_CONFIG_KEY_1": "protocol.allow",
+        "GIT_CONFIG_VALUE_1": "never"
+      },
+      "exitCode": 0,
+      "seconds": 0.8066020011901855,
+      "logSha256": "e0adf84f409bdaee0a1e0bebb521e05481015e25e809f37bb3f729531f817a06",
+      "summary": {
+        "tests": 2,
+        "pass": 2,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    "canonical": {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "../independent-qa8/canonical.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/qa-source8",
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/independent-qa8/tmp",
+        "LANG": "C.UTF-8",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_COUNT": "2",
+        "GIT_CONFIG_KEY_0": "core.hooksPath",
+        "GIT_CONFIG_VALUE_0": "/dev/null",
+        "GIT_CONFIG_KEY_1": "protocol.allow",
+        "GIT_CONFIG_VALUE_1": "never"
+      },
+      "exitCode": 0,
+      "seconds": 0.7156214714050293,
+      "logSha256": "2d538c2d23a8ee94e2546e73daa3140217deabd23c27e98c7930c1b2b77be948",
+      "summary": {}
+    },
+    "verification": {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "../independent-qa8/verification.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/qa-source8",
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/independent-qa8/tmp",
+        "LANG": "C.UTF-8",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_COUNT": "2",
+        "GIT_CONFIG_KEY_0": "core.hooksPath",
+        "GIT_CONFIG_VALUE_0": "/dev/null",
+        "GIT_CONFIG_KEY_1": "protocol.allow",
+        "GIT_CONFIG_VALUE_1": "never"
+      },
+      "exitCode": 1,
+      "seconds": 1.1497738361358643,
+      "logSha256": "99184727986fd32f52be08d55139158dfc2c1032a22f2265cb142cb4db78408e",
+      "summary": {}
+    },
+    "verification-corrected": {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "../independent-qa8/verification.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/qa-source8",
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/independent-qa8/tmp",
+        "LANG": "C.UTF-8",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_COUNT": "2",
+        "GIT_CONFIG_KEY_0": "core.hooksPath",
+        "GIT_CONFIG_VALUE_0": "/dev/null",
+        "GIT_CONFIG_KEY_1": "protocol.allow",
+        "GIT_CONFIG_VALUE_1": "never"
+      },
+      "exitCode": 1,
+      "seconds": 1.0751543045043945,
+      "logSha256": "2db3c3092ebec2faff22e6cf92a5089d39ca9a1e4152dcfd457aefa7d2da0962",
+      "summary": {}
+    },
+    "verification-final": {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "../independent-qa8/verification.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/qa-source8",
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/independent-qa8/tmp",
+        "LANG": "C.UTF-8",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_COUNT": "2",
+        "GIT_CONFIG_KEY_0": "core.hooksPath",
+        "GIT_CONFIG_VALUE_0": "/dev/null",
+        "GIT_CONFIG_KEY_1": "protocol.allow",
+        "GIT_CONFIG_VALUE_1": "never"
+      },
+      "exitCode": 0,
+      "seconds": 1.6841719150543213,
+      "logSha256": "32b9488b13b91f483476e370b74edd16eb1d9e58d17a8e20ca306993b0a7194b",
+      "summary": {}
+    }
+  },
+  "ownInitialFailures": [
+    {
+      "label": "callers",
+      "class": "private assertion expectation",
+      "tests": 2,
+      "pass": 1,
+      "fail": 1,
+      "reason": "Expected top-level state-write-uncertain, but actual caller intentionally wraps the cause. Original test/log retained. Corrected uses production controllerFailureCode and unchanged no-inference/no-ref/exact-state assertions.",
+      "corrected": "callers-corrected"
+    },
+    {
+      "label": "verification",
+      "class": "private AST comparator formatting artifact",
+      "reason": "TS printer retains multiline/trailing-comma formatting in the causal save options. Original script/log retained; semantic AST structure and literal tokens compare instead."
+    },
+    {
+      "label": "verification-corrected",
+      "class": "private AST comparator source text inclusion",
+      "reason": "SourceFile.text carries full formatting; excluded that one nonsemantic property. Original second script/log retained; final structural AST comparison includes node kinds, identifier/literal text and all children."
+    }
+  ],
+  "canonical": {
+    "sourceSha": "0f3833480fda5a056e91fa9922552d4f91bca346",
+    "transportReceiptSha256": "0c972ffae0ea404f32b3fcdd1967d24fb66071cf2fab0637e0c396b9badff58c",
+    "stateCommit": "ffa418a7058c22626acfa23ad6de486173980913",
+    "rawCanonicalCopied": false,
+    "rows": [
+      {
+        "name": "before.json",
+        "bytes": 5266584,
+        "sha256": "f62f46ddc2868de9700db91c090d47c9e5603fc2d05e7fac5b26f4fcd84ba5b4",
+        "validators": [
+          "validateState",
+          "validateOperatorContinuations",
+          "validateStandaloneState"
+        ],
+        "valid": true,
+        "counts": {
+          "batches": 4,
+          "manualBatches": 7,
+          "standaloneReviews": 12
+        },
+        "old22Exact": true,
+        "nativeImplementationCount": 7,
+        "nativeImplementationSha256": "1ef39e651a586658decffdee0878faf3fa5a6214c66149e3a92ef8cb65addf04",
+        "nativeReviewsCount": 1,
+        "nativeReviewsSha256": "27026c3509883a5bd2191307156b150eef003a0f45bc4e9db03ea348f5d23c0c",
+        "nativeLedgerSha256": "68d556146573c8cab99e62dec17b97559e6eae8b6edcc64fca77277fce58d35a",
+        "externalClaimOwnProperty": false,
+        "globalAutomationOwnProperty": false
+      },
+      {
+        "name": "proposed.json",
+        "bytes": 5280442,
+        "sha256": "843c6b4bf66bb3fe70dffdf72fb549f6b904f9b989c27174cd74cc71ea2796d6",
+        "validators": [
+          "validateState",
+          "validateOperatorContinuations",
+          "validateStandaloneState"
+        ],
+        "valid": true,
+        "counts": {
+          "batches": 4,
+          "manualBatches": 7,
+          "standaloneReviews": 12
+        },
+        "old22Exact": true,
+        "nativeImplementationCount": 7,
+        "nativeImplementationSha256": "1ef39e651a586658decffdee0878faf3fa5a6214c66149e3a92ef8cb65addf04",
+        "nativeReviewsCount": 1,
+        "nativeReviewsSha256": "27026c3509883a5bd2191307156b150eef003a0f45bc4e9db03ea348f5d23c0c",
+        "nativeLedgerSha256": "68d556146573c8cab99e62dec17b97559e6eae8b6edcc64fca77277fce58d35a",
+        "externalClaimOwnProperty": false,
+        "globalAutomationOwnProperty": false
+      }
+    ]
+  },
+  "assertionPreservation": [
+    {
+      "name": "comment-review-handoff.test.mjs",
+      "testCalls": 24,
+      "allOriginalAssertionsPreserved": true,
+      "sha256": "ea6682c0d32cbfd64fe055c7e86e664c663d1ac72902c84393c4e5c5fd6a599c"
+    },
+    {
+      "name": "standalone-review.test.mjs",
+      "testCalls": 68,
+      "allOriginalAssertionsPreserved": true,
+      "sha256": "24588d23604a3dee8b599ef04b0bc30f418984fd933e559d15647a9a9a7acee6"
+    }
+  ],
+  "causalOriginalAssertionsSemanticallyExact": true,
+  "limitations": [
+    "Offline synthetic protocol tests and recorded canonical validation only. No actual GitHub module write performed by QA8.",
+    "Ref force:false protects ordinary forward writers; no atomic guarantee against external forced rewind/ABA after the final ref read.",
+    "New Git objects alone are not durable reservations. Unknown outcomes require reconciliation; no fallback or model retry tested as success.",
+    "Actual source8 live module probe, publication, six new native CI checks, genuine Claude review, final Codex gate, protected merge and event activation remain root-owned future gates.",
+    "No clinical completion claim; original23 clinical issues/Railway remain separately deferred."
+  ],
+  "scope": {
+    "sourceEdits": false,
+    "network": false,
+    "models": false,
+    "subagents": false,
+    "canonicalWrites": false,
+    "realRepositoryGitWrites": false,
+    "temporarySyntheticGitFixtures": "Inherited applicable tests only; private TMPDIR and Git configuration."
+  }
+}

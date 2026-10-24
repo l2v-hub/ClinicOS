@@ -1,0 +1,7 @@
+# Root accepts author9 implementation plan
+
+Accepted 2026-10-23T08:38:57.915Z after reading plan SHA256 cd3ae9d68ef555e0b0fcc8ab9d287fdc6e1e504ed54295c203c54c43a169a9fc. Original reservation/14-path scope remains immutable; prior accepted effective15-path amendment is bound separately. All139 parent source files still match frozen8. Child152-file seal 8d1ca950e6938d40fc6940fceba5ffd3b2b2567c055307f7f8312864e96c9f0e verified before integration.
+
+Proceed under existing author reservation only. Preserve exact ownership, unknown paid-work running tombstones, all history and allowances. Archive merge reservations only after positively established known non-invocation/rejection AND fresh exact OPEN identity/ownership. An uncertain ref read still seeing parent never proves failure; only exact created next commit can resolve success. Pre-ref object errors mean canonical write not applied, not no server effects. No automatic mutation/inference retries. Scope and plan tests are accepted.
+
+Root delivers frozen four-file Luna F4/F5 patch next. Child partial gap: ensureBranch final init GET still discards typed diagnostics; complete that read branch and load-timeout coverage in parent without changing child evidence. Child results.findings identifies implemented F4/F5, not independent QA. Parent must verify integration receipt before overlapping edits. All prior seals frozen; no real providers/GitHub/canonical/merge/deploy actions. Root retains independent QA/native CI/peer/final/release gates.

@@ -1,0 +1,12 @@
+{
+  "kind": "F2-applicable-internal-mode-and-finite-read-pause",
+  "at": "2026-10-23T05:11:58.500Z",
+  "root": "/root",
+  "sha256": "86d1dec08170b02f8bd559efb0a9f6de4d173004bfb4e409153c5ee9b50dcaf2",
+  "path": "/tmp/clinicos-autonomy-activation-20261022/root-policy-clarifications7.md",
+  "originalContractsUnchanged": true,
+  "noSourceScopeExpansion": true,
+  "noApprovalConferred": true,
+  "stateCommit": "e5c56ec2d5e98dab4973ce02ccfd4ba76707ea0d",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/dd4ba736-7d6f-4064-8b1b-b4bea2cf6cc7/accepted.json"
+}

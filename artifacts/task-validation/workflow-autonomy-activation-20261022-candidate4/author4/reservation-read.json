@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "nonce": "1c075aa7-d2a3-4760-985f-08d32550d573",
+  "source4ExactCopyOfCombined3": true,
+  "diagnosticFailedSealVerified": "bce487135e880b82cadc25266428209d041bb491c71ce6fb26aa4a91002bbcbd",
+  "contractBindingsVerified": true,
+  "publishedGitParent": "9a6cc35c32d91e3ae2aae2debc6fdcff089cd90f"
+}

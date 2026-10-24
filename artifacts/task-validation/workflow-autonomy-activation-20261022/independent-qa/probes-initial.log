@@ -1,0 +1,194 @@
+TAP version 13
+# Subtest: actual22 subjects: global pause returns before every controller intake/status/model/save
+ok 1 - actual22 subjects: global pause returns before every controller intake/status/model/save
+  ---
+  duration_ms: 289.106538
+  type: 'test'
+  ...
+# Subtest: actual22 subjects: recognized protected handback keeps all entities and claims while skipping intake455
+not ok 2 - actual22 subjects: recognized protected handback keeps all entities and claims while skipping intake455
+  ---
+  duration_ms: 111.083169
+  type: 'test'
+  location: '/tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:27:1'
+  failureType: 'testCodeFailure'
+  error: 'Continuation authorization belongs to this exact durable entity'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    validateOperatorContinuations (file:///tmp/clinicos-autonomy-activation-20261022/qa-source/agent-team/src/bug-pipeline/attempt-budget.mjs:146:16)
+    validateState (file:///tmp/clinicos-autonomy-activation-20261022/qa-source/agent-team/src/bug-pipeline/contracts.mjs:285:3)
+    runPipeline (file:///tmp/clinicos-autonomy-activation-20261022/qa-source/agent-team/src/bug-pipeline/pipeline.mjs:64:15)
+    async file:///tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:27:287
+    async observe (file:///tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:23:37)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: actual22 subjects: sync global pause performs no communication/save
+not ok 3 - actual22 subjects: sync global pause performs no communication/save
+  ---
+  duration_ms: 146.875456
+  type: 'test'
+  location: '/tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:28:34'
+  failureType: 'testCodeFailure'
+  error: 'Continuation authorization belongs to this exact durable entity'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    validateOperatorContinuations (file:///tmp/clinicos-autonomy-activation-20261022/qa-source/agent-team/src/bug-pipeline/attempt-budget.mjs:146:16)
+    validateState (file:///tmp/clinicos-autonomy-activation-20261022/qa-source/agent-team/src/bug-pipeline/contracts.mjs:285:3)
+    syncIssueReviews (file:///tmp/clinicos-autonomy-activation-20261022/qa-source/agent-team/src/bug-pipeline/issue-review-sync.mjs:19:3)
+    async file:///tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:28:299
+    async observe (file:///tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:23:37)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: actual22 subjects: sync recognized handback performs no communication/save
+not ok 4 - actual22 subjects: sync recognized handback performs no communication/save
+  ---
+  duration_ms: 125.791681
+  type: 'test'
+  location: '/tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:28:34'
+  failureType: 'testCodeFailure'
+  error: 'Continuation authorization belongs to this exact durable entity'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    validateOperatorContinuations (file:///tmp/clinicos-autonomy-activation-20261022/qa-source/agent-team/src/bug-pipeline/attempt-budget.mjs:146:16)
+    validateState (file:///tmp/clinicos-autonomy-activation-20261022/qa-source/agent-team/src/bug-pipeline/contracts.mjs:285:3)
+    syncIssueReviews (file:///tmp/clinicos-autonomy-activation-20261022/qa-source/agent-team/src/bug-pipeline/issue-review-sync.mjs:19:3)
+    async file:///tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:28:299
+    async observe (file:///tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:23:37)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: actual protected subjects coexist with one new unowned sync without modifying old22
+not ok 5 - actual protected subjects coexist with one new unowned sync without modifying old22
+  ---
+  duration_ms: 88.150048
+  type: 'test'
+  location: '/tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:29:1'
+  failureType: 'testCodeFailure'
+  error: 'Continuation authorization belongs to this exact durable entity'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    validateOperatorContinuations (file:///tmp/clinicos-autonomy-activation-20261022/qa-source/agent-team/src/bug-pipeline/attempt-budget.mjs:146:16)
+    validateState (file:///tmp/clinicos-autonomy-activation-20261022/qa-source/agent-team/src/bug-pipeline/contracts.mjs:285:3)
+    syncIssueReviews (file:///tmp/clinicos-autonomy-activation-20261022/qa-source/agent-team/src/bug-pipeline/issue-review-sync.mjs:19:3)
+    async file:///tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:29:268
+    async observe (file:///tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:23:37)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: actual protected subjects cannot auto-release while a new ready unowned batch remains selectable
+ok 6 - actual protected subjects cannot auto-release while a new ready unowned batch remains selectable
+  ---
+  duration_ms: 483.741038
+  type: 'test'
+  ...
+# Subtest: actual claimed issue IDs are filtered by real discovery before any authorization or label normalization
+ok 7 - actual claimed issue IDs are filtered by real discovery before any authorization or label normalization
+  ---
+  duration_ms: 22.724956
+  type: 'test'
+  ...
+# Subtest: F1: successful CAS rebase adding a durable owner must prevent later labels as well as inference
+not ok 8 - F1: successful CAS rebase adding a durable owner must prevent later labels as well as inference
+  ---
+  duration_ms: 4.496752
+  type: 'test'
+  location: '/tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:32:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Observed labels on an issue already owned in the successful fresh CAS state
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    file:///tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:32:1334
+    async observe (file:///tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:23:37)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: F2: actual communication must not write after its fresh state loads observe a new global takeover
+not ok 9 - F2: actual communication must not write after its fresh state loads observe a new global takeover
+  ---
+  duration_ms: 21.17201
+  type: 'test'
+  location: '/tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:33:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Observed GitHub projection after fresh state reads already exposed the active global pause
+    
+    3 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 3
+  operator: 'strictEqual'
+  stack: |-
+    file:///tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:33:1867
+    async observe (file:///tmp/clinicos-autonomy-activation-20261022/independent-qa/probes.mjs:23:37)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: default cron approval requires a durable exact SHA round fingerprint reservation and reuses only verified result
+ok 10 - default cron approval requires a durable exact SHA round fingerprint reservation and reuses only verified result
+  ---
+  duration_ms: 5.058252
+  type: 'test'
+  ...
+# Subtest: pending native check after prepare consumes no QA inference and cannot transfer approval
+ok 11 - pending native check after prepare consumes no QA inference and cannot transfer approval
+  ---
+  duration_ms: 1.798036
+  type: 'test'
+  ...
+# Subtest: current independent QA cannot approve a PR whose source changes during that session
+ok 12 - current independent QA cannot approve a PR whose source changes during that session
+  ---
+  duration_ms: 1.830598
+  type: 'test'
+  ...
+# Subtest: running QA with a stale round stays frozen and cannot start correction or another QA
+ok 13 - running QA with a stale round stays frozen and cannot start correction or another QA
+  ---
+  duration_ms: 1.244307
+  type: 'test'
+  ...
+# Subtest: failed final QA followed by exhausted correction budget preserves the spent record without model retry
+ok 14 - failed final QA followed by exhausted correction budget preserves the spent record without model retry
+  ---
+  duration_ms: 2.349537
+  type: 'test'
+  ...
+# Subtest: old verified QA fingerprint cannot be reused after source feedback changes
+ok 15 - old verified QA fingerprint cannot be reused after source feedback changes
+  ---
+  duration_ms: 2.281927
+  type: 'test'
+  ...
+1..15
+# tests 15
+# suites 0
+# pass 9
+# fail 6
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1704.621476

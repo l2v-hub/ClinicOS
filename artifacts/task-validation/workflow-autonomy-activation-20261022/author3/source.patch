@@ -1,0 +1,486 @@
+--- a/agent-team/src/bug-pipeline/pipeline.mjs
++++ b/agent-team/src/bug-pipeline/pipeline.mjs
+@@ -194,6 +194,10 @@
+     if (!eligibleIssue(issue)) continue;
+     selected.push(issue);
+   }
++  const assertSelectedUnclaimed = () => {
++    if (automationPaused(state) || selected.some((issue) => claimedIssues(state).has(issue.number)))
++      throw new Error('Selected issue acquired another durable owner before triage');
++  };
+   if (state.pendingTriage) {
+     if (state.pendingTriage.status !== 'claiming')
+       throw new Error('Interrupted triage requires operator recovery; no automatic model restart');
+@@ -215,6 +219,7 @@
+         changedAt: timestamp,
+       };
+       await save();
++      assertSelectedUnclaimed();
+     }
+     const collection = state.triageQueue;
+     if (
+@@ -227,6 +232,7 @@
+     await save();
+   }
+   if (selected.length) {
++    assertSelectedUnclaimed();
+     // Recheck authorization and live labels after collection, before taking ownership.
+     const authorized = new Set(
+       (await gh.discoverQueue()).map((item) => (typeof item === 'number' ? item : item.number)),
+@@ -242,14 +248,17 @@
+       };
+       await save();
+     }
+-    for (const issue of selected) await gh.setIssueStatus(issue.number, 'In progress');
++    assertSelectedUnclaimed();
++    for (const issue of selected) {
++      assertSelectedUnclaimed();
++      await gh.setIssueStatus(issue.number, 'In progress');
++    }
+     for (const issue of selected)
+       if (!eligibleIssue(await gh.viewIssue(issue.number)))
+         throw new Error('Selected issue authorization or ownership changed before triage');
+     state.pendingTriage.status = 'running';
+     await save();
+-    if (selected.some((issue) => claimedIssues(state).has(issue.number)))
+-      throw new Error('Selected issue acquired another durable owner before triage');
++    assertSelectedUnclaimed();
+     const plan = validatePlan(
+       await models.plan({
+         cwd: workspace.root,
+--- a/agent-team/src/bug-pipeline/external-review.mjs
++++ b/agent-team/src/bug-pipeline/external-review.mjs
+@@ -42,7 +42,7 @@
+   return report;
+ }
+ 
+-export async function externalReviewStep({
++async function runExternalReviewStep({
+   repo,
+   batch,
+   gh,
+@@ -59,7 +59,10 @@
+   const observedAt = new Date().toISOString();
+   // Informational publication is recoverable by the sibling. It must not consume
+   // an implementation attempt that was reserved for a real code correction.
+-  const notify = () => communication.publishState(batch).catch(() => {});
++  const notify = () =>
++    communication.publishState(batch, { automatic: true }).catch((error) => {
++      if (error?.code === 'review-operator-owned') throw error;
++    });
+   const blocked = async (reason) => {
+     await block(batch, reason);
+     await notify();
+@@ -86,7 +89,7 @@
+     return blocked('Interrupted Codex correction requires explicit recovery');
+   // The real PR mirror also reaches an older installed Max worker, without changing
+   // the PR feedback fingerprint format or treating issue text as approval.
+-  await communication.mirrorFeedback(batch);
++  await communication.mirrorFeedback(batch, { automatic: true });
+   const feedback = await gh.reviewFeedback(batch.pr.number);
+   if (
+     feedback.state !== 'OPEN' ||
+@@ -297,3 +300,14 @@
+     `PR ${batch.pr.url}: **Ready for review** su \`${batch.sha}\`. In attesa del cron Claude Code; review utilizzate ${batch.reviews.length}/${attemptLimit(batch, 'reviews')}. Commenti e richieste di modifica torneranno a Codex tramite GitHub.`,
+   );
+ }
++
++// Ownership loss is a skip, never permission to block, relabel or correct that subject.
++export async function externalReviewStep(options) {
++  try {
++    return await runExternalReviewStep(options);
++  } catch (error) {
++    if (error?.code === 'review-operator-owned')
++      return { status: 'skipped', reason: 'operator-owned' };
++    throw error;
++  }
++}
+--- a/agent-team/tests/bug-pipeline/pipeline.test.mjs
++++ b/agent-team/tests/bug-pipeline/pipeline.test.mjs
+@@ -1183,3 +1183,40 @@
+   assert.deepEqual(h.stateRef.value, remoteOwned);
+   assert.equal(remoteOwned.batches[0].implementation.length, 0);
+ });
++
++test('successful triage CAS handover prevents issue status writes before the later model boundary', async () => {
++  for (const boundary of ['queue', 'claiming']) {
++    const h = harness({
++      issues: [17],
++      initialState: { ...blankState(), operatorTakeover: takeoverHandback() },
++    });
++    const owner = {
++      id: 'manual-race',
++      issues: [17],
++      implementation: [],
++      reviews: [],
++      operatorCoordination: { active: true },
++    };
++    const save = h.store.save;
++    let injected = false;
++    h.store.save = async (value, options) => {
++      const target =
++        boundary === 'queue'
++          ? Boolean(value.triageQueue)
++          : value.pendingTriage?.status === 'claiming';
++      if (!injected && target) {
++        injected = true;
++        const merged = clone(value);
++        merged.manualBatches = [clone(owner)];
++        await options.rebaseIndependentSubjects(merged);
++        Object.assign(value, clone(merged));
++      }
++      return save(value);
++    };
++    await assert.rejects(h.run(), /another durable owner/);
++    assert.equal(h.counts.plan, 0);
++    assert.equal(h.log.filter((x) => x.startsWith('gh.setIssueStatus:17:')).length, 0);
++    assert.deepEqual(h.stateRef.value.manualBatches, [owner]);
++    assert.equal(h.stateRef.value.batches.length, 0);
++  }
++});
+--- a/agent-team/tests/bug-pipeline/external-review.test.mjs
++++ b/agent-team/tests/bug-pipeline/external-review.test.mjs
+@@ -873,3 +873,42 @@
+   assert.equal(log.includes('qa'), false);
+   assert.equal(batch.codexFinalReview.status, 'running');
+ });
++
++test('automatic external review ownership loss skips without correction, status block or model effects', async () => {
++  const { args, batch, log } = approvedExternalArgs();
++  const before = structuredClone(batch);
++  args.communication = {
++    mirrorFeedback: async (_, options) => {
++      assert.deepEqual(options, { automatic: true });
++      throw Object.assign(new Error('synthetic handover'), { code: 'review-operator-owned' });
++    },
++    publishState: async () => assert.fail('no retry publication'),
++  };
++  args.block = async () => assert.fail('new owner cannot receive generic blocked state');
++  const result = await externalReviewStep(args);
++  assert.deepEqual(result, { status: 'skipped', reason: 'operator-owned' });
++  assert.deepEqual(batch, before);
++  assert.deepEqual(log, []);
++});
++
++test('ownership loss in automatic informational publication is not swallowed before a correction model', async () => {
++  const { args, batch, log } = approvedExternalArgs();
++  batch.externalReview.feedbackChanged = true;
++  args.communication = {
++    mirrorFeedback: async (_, options) => assert.equal(options.automatic, true),
++    publishState: async (_, options) => {
++      assert.equal(options.automatic, true);
++      throw Object.assign(new Error('synthetic handover'), { code: 'review-operator-owned' });
++    },
++  };
++  args.workspace.execute = async () => assert.fail('model cannot start after observed handover');
++  args.block = async () => assert.fail('no block to new operator owner');
++  const result = await externalReviewStep(args);
++  assert.deepEqual(result, { status: 'skipped', reason: 'operator-owned' });
++  assert.equal(log.includes('qa'), false);
++  assert.equal(
++    batch.implementation.at(-1).status,
++    'running',
++    'already reserved claim is preserved, not relabelled failed',
++  );
++});
+--- a/agent-team/src/bug-pipeline/issue-review-sync.mjs
++++ b/agent-team/src/bug-pipeline/issue-review-sync.mjs
+@@ -38,10 +38,17 @@
+       continue;
+     }
+     try {
+-      const feedback = collection === 'batches' ? await communication.mirrorFeedback(batch) : {};
+-      const projection = await communication.publishState(batch, { collection });
++      const feedback =
++        collection === 'batches'
++          ? await communication.mirrorFeedback(batch, { automatic: true })
++          : {};
++      const projection = await communication.publishState(batch, { collection, automatic: true });
+       results.push({ id: batch.id, status: 'synced', ...feedback, ...projection });
+     } catch (error) {
++      if (error?.code === 'review-operator-owned') {
++        results.push({ id: batch.id, status: 'skipped', reason: 'operator-owned' });
++        continue;
++      }
+       if (error?.code === 'review-subject-closed') {
+         results.push({ id: batch.id, status: 'skipped', reason: 'closed' });
+         continue;
+--- a/agent-team/tests/bug-pipeline/issue-review-sync.test.mjs
++++ b/agent-team/tests/bug-pipeline/issue-review-sync.test.mjs
+@@ -1,5 +1,6 @@
+ import test from 'node:test';
+ import assert from 'node:assert/strict';
++import { createIssueReviewCommunication } from '../../src/bug-pipeline/issue-review-communication.mjs';
+ import { syncIssueReviews } from '../../src/bug-pipeline/issue-review-sync.mjs';
+ const repo = 'l2v-hub/ClinicOS';
+ const standalone = () => ({
+@@ -28,7 +29,7 @@
+     },
+   });
+   assert.equal(calls.length, 1);
+-  assert.deepEqual(calls[0].options, { collection: 'standaloneReviews' });
++  assert.deepEqual(calls[0].options, { collection: 'standaloneReviews', automatic: true });
+   assert.equal(result.batches[0].label, 'codex-review-ready');
+   assert.deepEqual(state, before);
+ });
+@@ -255,3 +256,59 @@
+   assert.deepEqual(result.batches, [{ id: 'bug-batch-17', status: 'blocked' }]);
+   assert.ok(!JSON.stringify(result).includes('private provider'));
+ });
++
++test('actual communication reload observing global takeover skips sync before any projection effects', async () => {
++  const subject = {
++    ...syncBatch(),
++    pr: { number: 117, url: `https://github.com/${repo}/pull/117` },
++  };
++  const state = { schemaVersion: 1, repository: repo, batches: [subject] };
++  let reads = 0;
++  const github = {
++    createStateStore: () => ({
++      load: async () => {
++        if (++reads === 2) state.operatorTakeover = { active: true };
++        return structuredClone(state);
++      },
++      save: () => assert.fail('no canonical mutation'),
++    }),
++    authorized: async () => true,
++  };
++  const communication = createIssueReviewCommunication({
++    github,
++    cwd: '/synthetic',
++    run: async () => assert.fail('no GitHub effect after observed takeover'),
++  });
++  const result = await syncIssueReviews({ github, communication });
++  assert.equal(reads, 2);
++  assert.equal(result.status, 'skipped');
++  assert.deepEqual(result.batches, [
++    { id: subject.id, status: 'skipped', reason: 'operator-owned' },
++  ]);
++  assert.deepEqual(state.batches, [subject]);
++});
++
++test('sync opts both methods into automatic guards and skips a late ownership error without blocked-state writes', async () => {
++  const subject = syncBatch();
++  const state = { schemaVersion: 1, repository: repo, batches: [subject] };
++  const before = JSON.stringify(state),
++    calls = [];
++  const result = await syncIssueReviews({
++    github: { createStateStore: () => ({ load: async () => state }) },
++    communication: {
++      mirrorFeedback: async (_, options) => {
++        assert.deepEqual(options, { automatic: true });
++        calls.push('mirror');
++        return {};
++      },
++      publishState: async (_, options) => {
++        assert.deepEqual(options, { collection: 'batches', automatic: true });
++        calls.push('publish');
++        throw Object.assign(new Error('synthetic owner'), { code: 'review-operator-owned' });
++      },
++    },
++  });
++  assert.deepEqual(calls, ['mirror', 'publish']);
++  assert.equal(result.batches[0].reason, 'operator-owned');
++  assert.equal(JSON.stringify(state), before);
++});
+--- a/agent-team/src/bug-pipeline/issue-review-communication.mjs
++++ b/agent-team/src/bug-pipeline/issue-review-communication.mjs
+@@ -1,3 +1,4 @@
++import { operatorOwns } from './operator-ownership.mjs';
+ import { githubOperationError } from './github.mjs';
+ import { attemptLimit, spentAttempts, activeImplementation } from './attempt-budget.mjs';
+ import assert from 'node:assert/strict';
+@@ -244,6 +245,7 @@
+   const store = github.createStateStore(); // Read only: this module never calls save().
+   let actor;
+   const collections = new WeakMap();
++  const automaticSubjects = new WeakSet();
+ 
+   async function invoke(args, input) {
+     const result = await run({
+@@ -280,26 +282,32 @@
+     }
+     return actor;
+   }
+-  async function subject(expected, collection = collections.get(expected)) {
+-    const stateSubject = async () => {
+-      const state = await store.load();
+-      validateState(state, repo);
+-      const matches = ['batches', 'standaloneReviews'].flatMap((key) =>
+-        (state[key] ?? []).filter((item) => item.id === expected.id || item.pr?.number === expected.pr.number)
+-          .map((item) => ({ key, item })));
+-      assert.equal(matches.length, 1, 'Duplicate or missing durable review subject');
+-      const { key, item: current } = matches[0];
+-      assert.ok(!collection || key === collection, 'Durable review collection changed');
+-      assert.ok(
+-        current && fingerprint(current) === fingerprint(expected),
+-        'Durable review subject changed',
+-      );
+-      assert.ok(
+-        !['merged', 'deployed'].includes(current.release?.status),
+-        'Released issue cohort is not writable',
+-      );
+-    };
+-    await stateSubject();
++  async function stateSubject(expected, collection = collections.get(expected)) {
++    const state = await store.load();
++    validateState(state, repo);
++    const matches = ['batches', 'standaloneReviews'].flatMap((key) =>
++      (state[key] ?? [])
++        .filter((item) => item.id === expected.id || item.pr?.number === expected.pr.number)
++        .map((item) => ({ key, item })),
++    );
++    assert.equal(matches.length, 1, 'Duplicate or missing durable review subject');
++    const { key, item: current } = matches[0];
++    if (automaticSubjects.has(expected) && operatorOwns(state, key, current))
++      throw Object.assign(new Error('Automatic issue-review subject is operator-owned'), {
++        code: 'review-operator-owned',
++      });
++    assert.ok(!collection || key === collection, 'Durable review collection changed');
++    assert.ok(
++      current && fingerprint(current) === fingerprint(expected),
++      'Durable review subject changed',
++    );
++    assert.ok(
++      !['merged', 'deployed'].includes(current.release?.status),
++      'Released issue cohort is not writable',
++    );
++  }
++  async function subject(expected) {
++    await stateSubject(expected);
+     assert.equal(
+       expected.pr.url,
+       `https://github.com/${repo}/pull/${expected.pr.number}`,
+@@ -344,7 +352,7 @@
+       'Review PR changed during cohort verification',
+     );
+     // Changes during the preceding network awaits cannot reuse the old ownership proof.
+-    await stateSubject();
++    await stateSubject(expected);
+     return { issues, pr, prIssue };
+   }
+   async function write(expected, endpoint, method, body, sourceGuard, retry = 0) {
+@@ -358,6 +366,9 @@
+     // atomic transaction. Recheck the policies that preceded the cohort awaits.
+     if (sourceGuard) await sourceGuard();
+     assert.ok(await github.authorized(await identity()), 'Issue-review actor lost authorization');
++    // The last observed state must still permit this automatic write. Other GitHub
++    // resources may change afterwards; this is not an atomic cross-resource transaction.
++    await stateSubject(expected);
+     const age = clock() - started;
+     assert.ok(
+       Number.isFinite(age) && age >= 0 && age <= COMMUNICATION_GUARD_MAX_AGE_MS,
+@@ -434,10 +445,12 @@
+     assert.fail('Review label projection did not converge');
+   }
+ 
+-  async function publishState(batch, { collection = 'batches' } = {}) {
++  async function publishState(batch, { collection = 'batches', automatic = false } = {}) {
++    assert.equal(typeof automatic, 'boolean');
+     assert.ok(['batches', 'standaloneReviews'].includes(collection));
+     const expected = clone(batch);
+     collections.set(expected, collection);
++    if (automatic) automaticSubjects.add(expected);
+     const projection = reviewProjection(expected, readReport);
+     if (collection === 'standaloneReviews' && expected.issues.length)
+       return { outcome: 'unsupported-standalone-issues', status: 'unsupported' };
+@@ -457,9 +470,11 @@
+     return { label: projection.label, outcome: projection.outcome, comments };
+   }
+ 
+-  async function mirrorFeedback(batch) {
++  async function mirrorFeedback(batch, { automatic = false } = {}) {
++    assert.equal(typeof automatic, 'boolean');
+     const expected = clone(batch);
+     collections.set(expected, 'batches');
++    if (automatic) automaticSubjects.add(expected);
+     const { issues, pr } = await subject(expected);
+     if (!activeImplementation(expected) && expected.externalReview?.structuredReview === false &&
+         preservedApproval(expected, readReport))
+--- a/agent-team/tests/bug-pipeline/issue-review-communication.test.mjs
++++ b/agent-team/tests/bug-pipeline/issue-review-communication.test.mjs
+@@ -1087,3 +1087,84 @@
+ test('operator final-Codex provenance preserves exact approval without rewriting histories',()=>{
+  const f=communicationFixture();report(f,'approved');const b=f.batch;b.approvedSha=sha;b.externalReview.reportComment=42;b.externalReview.reportBodySha256='d'.repeat(64);b.operatorFinalReviews=[{status:'verified',subjectSha:sha,verdict:'approved',findings:0,actualClaudeCommentId:42,actualClaudeCommentSha256:'d'.repeat(64),reportSha256:'e'.repeat(64),sealSha256:'f'.repeat(64)}];const before=clone(b);assert.equal(reviewProjection(b,externalReport).skip,true);assert.deepEqual(b,before);
+ });
++
++test('automatic method calls reject currently owned subjects while default explicit authorized publication remains supported', async () => {
++  for (const method of ['mirrorFeedback', 'publishState']) {
++    const f = communicationFixture();
++    f.state().operatorTakeover = { active: true };
++    const before = JSON.stringify(f.state());
++    await assert.rejects(
++      f.communication[method](f.batch, { automatic: true }),
++      (error) => error.code === 'review-operator-owned',
++    );
++    assert.deepEqual(f.writes, []);
++    assert.deepEqual(f.calls, []);
++    assert.equal(JSON.stringify(f.state()), before);
++  }
++  const explicit = communicationFixture();
++  explicit.state().operatorTakeover = { active: true };
++  await explicit.communication.publishState(explicit.batch);
++  assert.ok(
++    explicit.writes.length > 0,
++    'trusted explicit caller retains existing authenticated SHA guards',
++  );
++});
++
++test('automatic last write guard rechecks takeover after its final authorization await', async () => {
++  const f = communicationFixture();
++  let authorizations = 0;
++  f.github.authorized = async () => {
++    if (++authorizations === 3) f.state().operatorTakeover = { active: true };
++    return true;
++  };
++  await assert.rejects(
++    f.communication.publishState(f.batch, { automatic: true }),
++    (error) => error.code === 'review-operator-owned',
++  );
++  assert.deepEqual(f.writes, []);
++  assert.ok(f.reads() >= 3);
++});
++
++test('automatic source feedback guard observes ownership acquired during provenance verification without forwarding or acknowledgment', async () => {
++  const f = communicationFixture();
++  const source = f.source(17, 'Synthetic actionable regression');
++  let provenanceReads = 0;
++  f.hook(async (call) => {
++    if (call.args[1].endsWith(`/issues/comments/${source.id}`) && ++provenanceReads === 2)
++      f.state().operatorTakeover = { active: true };
++  });
++  await assert.rejects(
++    f.communication.mirrorFeedback(f.batch, { automatic: true }),
++    (error) => error.code === 'review-operator-owned',
++  );
++  assert.equal(provenanceReads, 2);
++  assert.deepEqual(f.writes, []);
++});
++
++test('automatic communication distinguishes a newly acquired subject owner from generic fingerprint drift', async () => {
++  const f = communicationFixture();
++  let nativeReads = 0;
++  f.hook(async (call) => {
++    if (call.args[1].endsWith('/pulls/81') && ++nativeReads === 2)
++      f.state().batches[0].operatorCoordination = { active: true };
++  });
++  await assert.rejects(
++    f.communication.publishState(f.batch, { automatic: true }),
++    (error) => error.code === 'review-operator-owned',
++  );
++  assert.deepEqual(f.writes, []);
++});
++
++test('per-method automatic mode works on prebuilt communication and does not leak into a later explicit call', async () => {
++  const f = communicationFixture();
++  await f.communication.publishState(f.batch, { automatic: true });
++  const previousWrites = f.writes.length;
++  f.state().operatorTakeover = { active: true };
++  f.issues.get(17).labels = f.issues
++    .get(17)
++    .labels.filter((label) => label.name !== 'claude-review-ready');
++  await f.communication.publishState(f.batch);
++  assert.ok(f.writes.length > previousWrites);
++  for (const automatic of ['true', 1, null])
++    await assert.rejects(f.communication.publishState(f.batch, { automatic }), /boolean/);
++});

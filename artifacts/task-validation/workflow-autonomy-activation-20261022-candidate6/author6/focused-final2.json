@@ -1,0 +1,21 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+    "agent-team/tests/bug-pipeline/contracts.test.mjs",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs"
+  ],
+  "cwd": "/tmp/clinicos-autonomy-activation-20261022/source6",
+  "exitCode": 0,
+  "seconds": 12.886014461517334
+}

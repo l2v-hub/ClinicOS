@@ -1,0 +1,27 @@
+{
+  "legacyFailedSessionsRetained": 1,
+  "newQaCallbackInvocations": 2,
+  "totalIncludingRetainedLegacy": 3,
+  "newInfrastructureLedger": [
+    {
+      "status": "failed",
+      "nonce": "legacy-spent-session"
+    },
+    {
+      "status": "failed",
+      "nonce": "00d2d23a-628f-47b8-9a85-ee39c53ea673"
+    },
+    {
+      "status": "failed",
+      "nonce": "69cea226-83d0-434c-b04a-cd503427cc17"
+    }
+  ],
+  "qaHistoryCount": 3,
+  "implementationAttempts": 1,
+  "errors": [
+    "Synthetic final QA infrastructure failure",
+    "Synthetic final QA infrastructure failure",
+    "Budget blocked: Independent final QA infrastructure allowance exhausted; explicit recovery required"
+  ],
+  "actualProvidersOrModels": 0
+}

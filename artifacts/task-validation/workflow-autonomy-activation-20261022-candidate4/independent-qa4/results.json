@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "status": "verified",
+  "qaVerdict": "READY FOR CODEX QA",
+  "sourceSha": "cb2d095926282918777b9dd73a37ef7d90bb7b2f",
+  "gitParent": "9a6cc35c32d91e3ae2aae2debc6fdcff089cd90f",
+  "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+  "reservationNonce": "4789a5de-7784-459b-9b75-4234572aad9b",
+  "independent": true,
+  "findings": [],
+  "focusedTests": {
+    "tests": 689,
+    "pass": 689,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "focusedFiles": [
+    "operator-ownership",
+    "pipeline",
+    "external-review",
+    "release",
+    "github",
+    "issue-review-sync",
+    "issue-review-communication",
+    "standalone-review",
+    "standalone-review-contracts",
+    "comment-review-handoff"
+  ],
+  "probeGroups": {
+    "original15": {
+      "tests": 15,
+      "pass": 15,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "additional8": {
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "original-s1-r1": {
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "new-probes": {
+      "tests": 6,
+      "pass": 6,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "handoff-probes": {
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "novelOfflineProbes": {
+    "tests": 33,
+    "pass": 33,
+    "fail": 0,
+    "skip": 0
+  },
+  "syntax": {
+    "files": 18,
+    "pass": 18,
+    "fail": 0
+  },
+  "integrity": {
+    "sourceSha": "cb2d095926282918777b9dd73a37ef7d90bb7b2f",
+    "immutableSourceAndHistoricalPacketFilesChecked": 420,
+    "frozenSourceFiles": 138,
+    "gitBlobBindings": 20,
+    "historicalPublicPacketFiles": 144,
+    "oldSubjectHashes": 22,
+    "syntaxFiles": 18,
+    "previousSealsUnchanged": true,
+    "sourceEdits": false
+  },
+  "originalFindingsRetested": {
+    "F1": "PASS unchanged QA2 original assertion",
+    "F2": "PASS unchanged QA2 original assertion",
+    "S1": "PASS original actual pipeline/native controller reproduction",
+    "R1": "PASS original exact-source VM automatic workflow_run/native callback reproduction"
+  },
+  "inherited": {
+    "author4SixFileTests": 538,
+    "author4OriginalReproductions": 2,
+    "author4Syntax": 9,
+    "source3Qa": "588+23 PASS within earlier scope; later S1/R1 diagnosticFAILED retained",
+    "source3ActualNative": "6 PASS on9a6cc35c only; not candidate4 native approval",
+    "clinicalE2E": "unchanged/not rerun"
+  },
+  "harnessFailures": [],
+  "harnessReadDiscovery": "An absent guessed manifest path was corrected by reading the actual named manifest; no test failure or source edit",
+  "security": {
+    "status": "PASS",
+    "ownership": "Observed fresh automatic context retained through native read/save/live/publication/merge/dispatch/completion guards; explicit paths separate",
+    "asyncIsolation": "Concurrent explicit/automatic and exception tests pass on prebuilt native controller",
+    "authorization": "Explicit unauthorized/stale requests still rejected; current authorized Max/root/manual paths retained",
+    "history": "22 old subject hashes/typed budgets/history and144 previously published packet files unchanged; uncertain intent/running reservation tombstones retained",
+    "secretsPhi": "No source secret/PHI additions; synthetic fixtures and whitelisted runner environment; no actual credential access",
+    "dependenciesConfig": "Built-in AsyncLocalStorage only; no new package, workflow, sandbox, clinical schema or provider setting changes"
+  },
+  "visual": {
+    "status": "N/A",
+    "reason": "Explicit bounded control-plane QA4 contract; browser prohibited; no runtime UI change"
+  },
+  "sourceEdits": false,
+  "actualNetwork": false,
+  "liveWrites": false,
+  "realProviderOrModelCalls": 0,
+  "pending": [
+    "native required CI on new actual published SHA",
+    "genuine Claude review",
+    "fresh final Codex source review",
+    "native independent human trust-root approval and normal protected merge",
+    "explicit automation handback/activation and actual event proof",
+    "personal worker readiness",
+    "later verified deployment and issue closure"
+  ],
+  "proofStop": "Independent source/harness/proof only"
+}

@@ -1,0 +1,22 @@
+{
+  "nonce": "bbc89c97-f34b-4112-a0b9-5d17c597d8fd",
+  "status": "running",
+  "reservedAt": "2026-10-23T09:14:28.281Z",
+  "reservedBeforeSession": true,
+  "agent": "/root/independent_qa9",
+  "model": "gpt-6.1-sol",
+  "sourceSha": "9d3bc489885cdf5b3363f510fce59c3be7d4a81d",
+  "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+  "gitParent": "689425d8836f14dfaa1c1cd1642def0cdbf30745",
+  "source": "/tmp/clinicos-autonomy-activation-20261022/qa-source9",
+  "output": "/tmp/clinicos-autonomy-activation-20261022/independent-qa9",
+  "contractSha256": "cee2743a9c5be011c127cb0cc19203e1638613a58edf15abc48753c83613419e",
+  "sourceManifestRawSha256": "ab2e4ba0b2317b4938959ce6c0b9c818424b359132a4ddcd037c112efb9e5467",
+  "author9SealSha256": "b53ba18670ca685012c07a59a947b7567a53002b833b440b7851347b7317624a",
+  "oldPublicPacketFiles": 634,
+  "priorNativeClaimedReviewCount": 1,
+  "sourceEditsAllowed": false,
+  "liveOperationsAllowed": false,
+  "stateCommit": "664e441d72142164b91047386f8fae257308fb74",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/13a005ba-8e86-4d53-b2e6-7437f4a1da0b/accepted.json"
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "S1",
+    "automaticChain": "runPipeline -> finalizeStandaloneSubject -> native standalone controller.publishState -> current -> handoff.load",
+    "newGlobalTakeover": true,
+    "labels": [
+      "claude-review-ready"
+    ],
+    "pipelineError": null,
+    "models": 0
+  },
+  {
+    "id": "R1",
+    "automaticChain": "main workflow_run -> selectAutoReleaseBatch -> releaseBatch -> freshReleaseGuard",
+    "storeReads": 9,
+    "selectionSawTakeover": false,
+    "laterReadsSawTakeover": true,
+    "merges": [
+      [
+        "merge",
+        9,
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ]
+    ],
+    "mainResult": 0,
+    "error": null,
+    "sourceBytesUnmodified": true,
+    "sideEffectImportsInjected": [
+      "github",
+      "process",
+      "fs/promises"
+    ]
+  }
+]

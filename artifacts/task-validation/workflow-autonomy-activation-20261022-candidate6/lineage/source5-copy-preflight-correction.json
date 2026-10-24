@@ -1,0 +1,9 @@
+{
+  "at": "2026-10-22T23:53:49.136457+00:00",
+  "initialExpandedDuplicateFiles": 26289,
+  "correctFrozenSourceFiles": 138,
+  "cause": "copytree followed source4 dependency links and copied test dependency files; caught before author reservation/session or source edits",
+  "removedOnlyNewRootOwnedExpandedDuplicate": "/tmp/clinicos-autonomy-activation-20261022/source5-expanded-copy-preflight",
+  "originalSource4AndUserWorkspacesUntouched": true,
+  "initialPreflightManifestPreserved": "/tmp/clinicos-autonomy-activation-20261022/source5-expanded-copy-preflight-manifest.json"
+}

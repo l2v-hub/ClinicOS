@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "status": "FAILED VALIDATION",
+  "sourceSha": "2e4a635ad5f34bb6f886342d15eaed63674d3dae",
+  "nonce": "7c4e8a68-edc9-4b9c-8d8c-8aa49b67dea9",
+  "createdAt": "2026-10-22T22:05:34.242Z",
+  "files": {
+    "STOP.json": {
+      "sha256": "9d5841e40d772dd90accbe61f9f7523f086cbb149cebb0768815d36ea3fd57b5",
+      "bytes": 312
+    },
+    "actual-shape-hash-verification.json": {
+      "sha256": "20e50183014ad2de29e3e9b28e8245d4fd1c0c44bd40d7ac50e77be2624610b0",
+      "bytes": 4593
+    },
+    "execution-policy.json": {
+      "sha256": "9593686de9bc90bc9d969eb66b5bc3274b18d1fb85a0a9ac0074069143c41a7a",
+      "bytes": 1217
+    },
+    "finalize-first-failure.json": {
+      "sha256": "7b10b61e6442ffde059063081af5369947316759e08c594fcaa849cc42087fdd",
+      "bytes": 195
+    },
+    "finalize-first.mjs": {
+      "sha256": "04131361422b420df31871b6d80a2d7e5fc66df43f5882109da9751430868fc9",
+      "bytes": 11583
+    },
+    "finalize-second-failure.json": {
+      "sha256": "b75864bc5216459f838a039995d5d7baf7db891c403884bb8f89445090348fd9",
+      "bytes": 251
+    },
+    "finalize-second.mjs": {
+      "sha256": "02cfebaaa7e7252b182f794efefb30c0b0fe121b1e4786fab410aad02ed8b18e",
+      "bytes": 11568
+    },
+    "finalize.mjs": {
+      "sha256": "273fba52a228ce55ec7a8a40bd5b67bbc46cfb7848825cb5d46f3ad5ef6aea89",
+      "bytes": 11633
+    },
+    "findings.json": {
+      "sha256": "d67b2dda18cde2fe9337c4bd86a82134c68f6bcf76deaa62199aca4521a43913",
+      "bytes": 2304
+    },
+    "focused-command.json": {
+      "sha256": "140521b0e2ac480f1e216d2be2f2a07035ba6358b739d6cfe5a063bf335764a2",
+      "bytes": 200
+    },
+    "focused.log": {
+      "sha256": "4c7c9fd30cb616682d502cb932a1920ad003667e690fcf091cafef4aa5ee0120",
+      "bytes": 94575
+    },
+    "harness-correction.json": {
+      "sha256": "f5fb4132dee74776b72ab2a6c745911181bcf1a36d35209c9a48272c18deb3ce",
+      "bytes": 382
+    },
+    "independent-source.diff": {
+      "sha256": "1f5adef354e48e7edc4afc8d47ee9005b8aec42d56902e7fd00d9e80c72969f0",
+      "bytes": 76369
+    },
+    "probe-results-initial.json": {
+      "sha256": "74088d259e10e632c1a1fed1c0c49343ec258c1291090df6513267a2c5ffdf22",
+      "bytes": 1938
+    },
+    "probe-results.json": {
+      "sha256": "051eeba81a9cbb98f1ef4d81158cf0cb28e1bbd747df14c5aee64cb0704d74a4",
+      "bytes": 1618
+    },
+    "probes-command-initial.json": {
+      "sha256": "eb30580200936c24987d983056559037c42451efd57fdb409516d51927f9e345",
+      "bytes": 118
+    },
+    "probes-command.json": {
+      "sha256": "321756b1df084912afdb574dc581331d2bb3880a788b20b6f27120dad906e3fe",
+      "bytes": 119
+    },
+    "probes-initial.log": {
+      "sha256": "a9738cdb9985c44fb1d2d08b59a4a1d55c0d7efe5b8d2a9090ee7e547fd73fde",
+      "bytes": 9431
+    },
+    "probes-initial.mjs": {
+      "sha256": "b9d27dd470d54a7c47876ae0147f73171635533d3c2da7ebe5114e381c8c9fd3",
+      "bytes": 14410
+    },
+    "probes.log": {
+      "sha256": "61fdc93b4c5e7006e9e65a2f05ec9f63853048250f9132c126693a5c1fdd87c3",
+      "bytes": 5277
+    },
+    "probes.mjs": {
+      "sha256": "2d97e33e403c0f1fe7b241c66caedf5b746c8bd4ab1e34a2ee1e4415783ac68a",
+      "bytes": 14540
+    },
+    "report.md": {
+      "sha256": "91b3d65c99a46e03962d948019e312add47a60062b16b11dfe283e9462763510",
+      "bytes": 8633
+    },
+    "reservation.json": {
+      "sha256": "2a4aee29f638cc0af87583dfd64abbbf984bae7d1dd064b14bb1fd67c7a53d0a",
+      "bytes": 996
+    },
+    "results.json": {
+      "sha256": "f2363ab8bd5135a327b2784e7445093b4fb3df630cfddb9c70e739b610b846df",
+      "bytes": 1898
+    },
+    "run-focused.py": {
+      "sha256": "6a99d53a28f6975f214c6ec621cc2470c481d6d9f3ed90148191554da84f1f02",
+      "bytes": 1501
+    },
+    "source-after.json": {
+      "sha256": "ff555f5e02ed390ed9d7237bca4bd7990ea3bfe4cf4801f5aaffb5e255bfbf65",
+      "bytes": 792
+    },
+    "source-before.json": {
+      "sha256": "f278ccfb9c9c96252ef551c06d4938cb0ce0103efa3d6a11ed89925be6311bc7",
+      "bytes": 110403
+    },
+    "task-contract.md": {
+      "sha256": "ae6a34a25abd301ac928f12416a866a839030f5ff167e3367624e215cb38b8a3",
+      "bytes": 4572
+    },
+    "verify-inputs.py": {
+      "sha256": "e7ee04d21adac3d38fe440d77a8baab68f382afcfc2d54b4bf4bcf04286ed535",
+      "bytes": 2856
+    }
+  }
+}

@@ -1,0 +1,100 @@
+TAP version 13
+# Subtest: actual22 subjects: global pause returns before every controller intake/status/model/save
+ok 1 - actual22 subjects: global pause returns before every controller intake/status/model/save
+  ---
+  duration_ms: 444.514213
+  type: 'test'
+  ...
+# Subtest: actual22 subjects: recognized protected handback keeps all entities and claims while skipping intake455
+ok 2 - actual22 subjects: recognized protected handback keeps all entities and claims while skipping intake455
+  ---
+  duration_ms: 229.578357
+  type: 'test'
+  ...
+# Subtest: actual22 subjects: sync global pause performs no communication/save
+ok 3 - actual22 subjects: sync global pause performs no communication/save
+  ---
+  duration_ms: 128.222153
+  type: 'test'
+  ...
+# Subtest: actual22 subjects: sync recognized handback performs no communication/save
+ok 4 - actual22 subjects: sync recognized handback performs no communication/save
+  ---
+  duration_ms: 131.072194
+  type: 'test'
+  ...
+# Subtest: actual protected subjects coexist with one new unowned sync without modifying old22
+ok 5 - actual protected subjects coexist with one new unowned sync without modifying old22
+  ---
+  duration_ms: 596.505681
+  type: 'test'
+  ...
+# Subtest: actual protected subjects cannot auto-release while a new ready unowned batch remains selectable
+ok 6 - actual protected subjects cannot auto-release while a new ready unowned batch remains selectable
+  ---
+  duration_ms: 573.893739
+  type: 'test'
+  ...
+# Subtest: actual claimed issue IDs are filtered by real discovery before any authorization or label normalization
+ok 7 - actual claimed issue IDs are filtered by real discovery before any authorization or label normalization
+  ---
+  duration_ms: 63.114204
+  type: 'test'
+  ...
+# Subtest: F1: successful CAS rebase adding a durable owner must prevent later labels as well as inference
+ok 8 - F1: successful CAS rebase adding a durable owner must prevent later labels as well as inference
+  ---
+  duration_ms: 3.62358
+  type: 'test'
+  ...
+# Subtest: F2: actual communication must not write after its fresh state loads observe a new global takeover
+ok 9 - F2: actual communication must not write after its fresh state loads observe a new global takeover
+  ---
+  duration_ms: 3.549348
+  type: 'test'
+  ...
+# Subtest: default cron approval requires a durable exact SHA round fingerprint reservation and reuses only verified result
+ok 10 - default cron approval requires a durable exact SHA round fingerprint reservation and reuses only verified result
+  ---
+  duration_ms: 5.911828
+  type: 'test'
+  ...
+# Subtest: pending native check after prepare consumes no QA inference and cannot transfer approval
+ok 11 - pending native check after prepare consumes no QA inference and cannot transfer approval
+  ---
+  duration_ms: 2.36384
+  type: 'test'
+  ...
+# Subtest: current independent QA cannot approve a PR whose source changes during that session
+ok 12 - current independent QA cannot approve a PR whose source changes during that session
+  ---
+  duration_ms: 2.164943
+  type: 'test'
+  ...
+# Subtest: running QA with a stale round stays frozen and cannot start correction or another QA
+ok 13 - running QA with a stale round stays frozen and cannot start correction or another QA
+  ---
+  duration_ms: 1.927997
+  type: 'test'
+  ...
+# Subtest: failed final QA followed by exhausted correction budget preserves the spent record without model retry
+ok 14 - failed final QA followed by exhausted correction budget preserves the spent record without model retry
+  ---
+  duration_ms: 5.356554
+  type: 'test'
+  ...
+# Subtest: old verified QA fingerprint cannot be reused after source feedback changes
+ok 15 - old verified QA fingerprint cannot be reused after source feedback changes
+  ---
+  duration_ms: 1.919628
+  type: 'test'
+  ...
+1..15
+# tests 15
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2463.199415

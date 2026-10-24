@@ -1,0 +1,33 @@
+{
+  "authorNonce": "a1c34605-ce9a-40d9-afc6-e3da114dc2ef",
+  "at": "2026-10-23T06:54:03.635Z",
+  "reservedBeforeAdditionalEdits": true,
+  "proposalSha256": "87077c38d3e2967bda795dfc77499b8053c32bfe795a014fe1d802015dc937d8",
+  "acceptanceSha256": "4595c4e644c2bc81e032dd3332b91a4a750295e9f9d8e245918ceb01e4dd5c01",
+  "effectiveAllowlistSha256": "82daebf2af8978bdcc4ef32b67fa7ca85e5cda6e3d7692ae6f267d22f1af167a",
+  "addedPaths": [
+    "agent-team/tests/bug-pipeline/git-data-state-fixture.mjs",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs"
+  ],
+  "effectiveScope": [
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "docs/codex-bug-workflow.md",
+    ".claude/skills/clinicos/references/bug-delivery.md",
+    "agent-team/tests/bug-pipeline/git-data-state-fixture.mjs",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs"
+  ],
+  "originalSourceFiles": 138,
+  "expectedFinalSourceFiles": 139,
+  "preservedOriginalAssertions": true,
+  "actualPriorRoles": {
+    "tests": 604,
+    "pass": 602,
+    "fail": 2
+  },
+  "reason": "Real new large-state protocol reaches two Contents-only test fixtures; preserve functional tests via one pure shared semanticserver, no production fallback.",
+  "stateCommit": "6e9b9ff91a19271a03fd06da1a9864eb2d10e367",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/d70aa0fd-2451-46ba-968c-d03692061815/accepted.json"
+}

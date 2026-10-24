@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-23T06:17:45.136095+00:00",
+  "rootObservationHandlingCorrection": "The one-shot read-only observer was mistakenly re-invoked for second failure and reused first observation paths/template. Saved second raw observations separately, restored first metadata from pre-existing recovery preflight and exact original private bytes from immutable native Git state with matching SHA256. Raw official command exits/traces never overwritten. Second template read-boundary corrected explicitly in a separate receipt.",
+  "originalPrivateStateSha256": "2e126c4b34315b07416b1be3400801db5430e1c06a392b6fab58eef04187f94b",
+  "restorationSourceCommit": "974a13a461cdaff9450bc36c65c0f98e6e1d6aae",
+  "secondObservationStateCommit": "3c247fd26bac7c8cc54ffd7bb03156b4743ac41a",
+  "originalTemplateKept": "supervised-read-recovery1/actual-second-readback-original-generic-template.json"
+}

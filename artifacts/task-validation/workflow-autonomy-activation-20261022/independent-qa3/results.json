@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "status": "verified",
+  "qaVerdict": "READY FOR CODEX QA",
+  "independent": true,
+  "sourceSha": "93b0c72877bd58c2dd3769d0942d737ef9f96ac0",
+  "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+  "reservationNonce": "1eeadf43-476a-4dc3-bf9c-50ecf62aed94",
+  "findings": [],
+  "focusedTests": {
+    "tests": 588,
+    "pass": 588,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "originalQa2NovelProbes": {
+    "tests": 15,
+    "pass": 15,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "additionalNovelProbes": {
+    "tests": 8,
+    "pass": 8,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "novelOfflineProbes": {
+    "tests": 23,
+    "pass": 23,
+    "fail": 0,
+    "skipped": 0
+  },
+  "syntax": {
+    "files": 14,
+    "pass": 14,
+    "fail": 0
+  },
+  "integrity": {
+    "sourceSha": "93b0c72877bd58c2dd3769d0942d737ef9f96ac0",
+    "immutableFilesReverified": 822,
+    "historicalSnapshots": {
+      "baseline": {
+        "files": 135,
+        "allHashesMatch": true
+      },
+      "source": {
+        "files": 137,
+        "allHashesMatch": true
+      },
+      "source2": {
+        "files": 137,
+        "allHashesMatch": true
+      },
+      "source3": {
+        "files": 137,
+        "allHashesMatch": true
+      }
+    },
+    "qaAndCombinedFiles": 276,
+    "oldSubjectHashes": 22,
+    "sourceEdits": false,
+    "syntaxFiles": 14
+  },
+  "inherited": {
+    "author1FocusedPass": 517,
+    "author2SyncPass": 11,
+    "author3ImpactedPass": 123,
+    "author3OriginalReproductionsPass": 2,
+    "author3SyntaxPass": 8,
+    "clinicalE2E": "unchanged; inherited, not rerun",
+    "previousQa2": "FAILED VALIDATION retained; original528PASS/13of15 novelPASS, F1/F2 and four harness failures preserved in immutable packet"
+  },
+  "harnessFailures": [
+    {
+      "stage": "initial input verifier",
+      "cause": "Documentation seal uses list of before/after source bindings rather than files object",
+      "correctedInQaOnly": true,
+      "sourceFailure": false,
+      "evidence": "harness-failure-history.json"
+    }
+  ],
+  "visual": {
+    "status": "N/A",
+    "reason": "Explicit independent QA3 contract: control-plane-only changes, browser prohibited; no runtime UI/clinical change"
+  },
+  "security": {
+    "status": "PASS",
+    "secrets": "No secrets or clinical payloads introduced in changed source or generated logs; child environment whitelist excludes real credentials",
+    "authorization": "Automatic fresh-state ownership gates and explicit authorized SHA-bound path separately tested",
+    "injection": "No new dynamic commands/dependencies/endpoints; all side-effect transports injected for QA",
+    "budgets": "Exact22 old subject hashes and typed budgets/history preserved; exhausted/running/stale QA probes pass",
+    "configuration": "No environment policy, workflow gates, sandbox or provider settings weakened"
+  },
+  "liveOperations": false,
+  "sourceEdits": false,
+  "realProviderOrModelCalls": 0,
+  "pending": [
+    "complete-repository native CI on actual published candidate",
+    "genuine Claude review",
+    "fresh final Codex source gate",
+    "required human/protected merge",
+    "actual automation activation and real event probe",
+    "personal worker readiness",
+    "deploy and issue closure"
+  ],
+  "proofStop": "QA source/harness/proof only; root handles subsequent actual gates"
+}

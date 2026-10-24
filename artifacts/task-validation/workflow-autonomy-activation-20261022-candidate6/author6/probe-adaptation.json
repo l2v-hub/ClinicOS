@@ -1,0 +1,32 @@
+{
+  "external-cas-probe.mjs": {
+    "originalSha256": "3dbcc5a0beace7206f266ed12ab81534ca31ab6875b1c0290fa1a9ac6b536718",
+    "adaptedSha256": "01292f8f65e6ec631f7a47a408f09ee211c0855136d60a58147ef71c485bf81c",
+    "adaptation": "Only relative production import prefix ../qa-source5/ -> ../source6/; every assertion unchanged"
+  },
+  "recovery-budget-probe.mjs": {
+    "originalSha256": "892e49b476dcd256f763c1b5e482afcda8adce700d424396b4b06563e6662ea8",
+    "adaptedSha256": "bbd47061cf60c0b0c02a7d6712aa50fcc1799c06f278b9902930b4ca63608ebe",
+    "adaptation": "Only relative production import prefix ../qa-source5/ -> ../source6/; every assertion unchanged"
+  },
+  "malformed-takeover-probe.mjs": {
+    "originalSha256": "c4ba8bb2f7a42b5cf8e352f6d251d7812682c8da9986e3bf722afd1df2e0b221",
+    "adaptedSha256": "5fdc7a9f695b501e393f7cb707199a6f36f24029f3715df9c024945f9b0c1de3",
+    "adaptation": "Only relative production import prefix ../qa-source5/ -> ../source6/; every assertion unchanged"
+  },
+  "recovery-route-probe.mjs": {
+    "originalSha256": "bd48cd04cc98a885c2b9e7b4006b9085643efbf869dd112f36d21e6b6154f186",
+    "adaptedSha256": "bd48cd04cc98a885c2b9e7b4006b9085643efbf869dd112f36d21e6b6154f186",
+    "adaptation": "Only relative production import prefix ../qa-source5/ -> ../source6/; every assertion unchanged"
+  },
+  "handoff-fixture.mjs": {
+    "originalSha256": "b7864e30b2e4866acf66eb45df051ee5201027be8785e41b5e30b00d33396955",
+    "adaptedSha256": "fd523f67b3df1264389b6960fbb0ec328e6211aed842f4ced6efa4489deb77cd",
+    "adaptation": "Only relative production import prefix ../qa-source5/ -> ../source6/; every assertion unchanged"
+  },
+  "pipeline-fixture.mjs": {
+    "originalSha256": "4a70d767ccc8f0b8093be46f6d88bf6a9027df703e39a5561c67969528497392",
+    "adaptedSha256": "462f10fd5e1da08e047cfc4ac29755e8b213e8d8ae84ab3a9b0b6fb3917ed21a",
+    "adaptation": "Only relative production import prefix ../qa-source5/ -> ../source6/; every assertion unchanged"
+  }
+}

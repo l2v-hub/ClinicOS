@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "--test-name-pattern=QA6-F3 ambiguous spent",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs"
+  ],
+  "cwd": "/tmp/clinicos-autonomy-activation-20261022/source6",
+  "exitCode": 1,
+  "seconds": 0.8358550071716309
+}

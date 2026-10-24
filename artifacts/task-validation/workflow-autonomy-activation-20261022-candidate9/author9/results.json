@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "status": "IMPLEMENTED_AWAITING_INDEPENDENT_QA",
+  "nonce": "306e10be-29ce-4784-b4ff-97db849b5a45",
+  "sourceFrozen": true,
+  "sourceFiles": 139,
+  "changedPaths": [
+    ".claude/skills/clinicos/references/bug-delivery.md",
+    "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+    "agent-team/src/bug-pipeline/external-review.mjs",
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/src/bug-pipeline/pipeline.mjs",
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/src/bug-pipeline/workspace.mjs",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/tests/bug-pipeline/workspace.test.mjs",
+    "docs/codex-bug-workflow.md"
+  ],
+  "effectiveAllowedPaths": [
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/src/bug-pipeline/workspace.mjs",
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+    "agent-team/src/bug-pipeline/external-review.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/tests/bug-pipeline/workspace.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "docs/codex-bug-workflow.md",
+    ".claude/skills/clinicos/references/bug-delivery.md",
+    "agent-team/src/bug-pipeline/pipeline.mjs"
+  ],
+  "source9FinalRawSha256": "2174bfd919fae8c29b375ad826616a61279a6481684b05a21a30e803ada9c94b",
+  "sourceManifestSha256": "46850a166bdf2dfd8656f5776ac776617e5768e53e258cdc370f4f972549807d",
+  "distinctFinalFunctionalNodeTests": 1009,
+  "counting": {
+    "cumulative15Suites": 994,
+    "additionalActualFlowAndInheritedTransportTests": 15,
+    "privateFinalRawTests": 26,
+    "causalOverlapTestsNotAdded": 11,
+    "child233TestsAreSubsetsNotAdded": 233,
+    "syntaxChecks": 17,
+    "zeroSkips": true,
+    "zeroFailuresFinal": true
+  },
+  "manifestFormat": "source-manifest.json all139BeforeAfter maps relative path to before/after {sha256,bytes}; source9-final.json is exact final plain map.",
+  "failureHistory": "failure-history.json",
+  "testIdentities": "test-identities.json",
+  "finalCommands": [
+    "integrated-final.json",
+    "private-final.json",
+    "syntax-command.json"
+  ],
+  "allFinalCommandSourceSnapshotsMatch": true,
+  "preservation": "preservation-verification.json",
+  "planAcceptances": [
+    "root-plan-acceptance.json",
+    "root-pipeline-scope-amendment.json",
+    "root-internal-accounting-amendment.json",
+    "root-failed-worktree-amendment.json"
+  ],
+  "childIntegration": "child-integration-verified.json",
+  "noLiveActions": true,
+  "noGitWritesOutsideIsolatedFixtures": true,
+  "nativeHistoryPreserved": {
+    "implementationEntries": 8,
+    "actualNativeReviews": 1,
+    "attempt9ReservedByRoot": true,
+    "staticClaudeReport": 6360608335,
+    "staticReportIsNotNativeClaim": true
+  },
+  "remainingRootGates": [
+    "independent QA9",
+    "actual native CI",
+    "actual frozen source9 module proof",
+    "genuine peer review",
+    "final review",
+    "fresh handback absence proof immediately before eventual merge",
+    "finite historical11 cutover",
+    "protected source merge and event activation"
+  ],
+  "knownLimits": [
+    "An uncertain ref still at parent can apply later; no automatic retry.",
+    "Missing/changed retained hosted worktrees cannot be reconstructed or replayed.",
+    "External force-rewind ABA after final ref read remains outside nonforced ordinary-forward-writer guarantee.",
+    "Read cause on personal Windows remains unproven; finite diagnostics do not infer credentials."
+  ],
+  "selfApproval": false,
+  "handoffComplete": false
+}

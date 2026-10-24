@@ -1,0 +1,12 @@
+{
+  "files": {
+    "results.json": {
+      "sha256": "1db74ae078f19801c8d48b6f3471ea0159397d668110059c3e04ea273d3cce1b",
+      "bytes": 377
+    },
+    "source.patch": {
+      "sha256": "ebdcfe175114d281b072f3cd31aa8c6295182c271c2445304d4737330806dd79",
+      "bytes": 1712
+    }
+  }
+}

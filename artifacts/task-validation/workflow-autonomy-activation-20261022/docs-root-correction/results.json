@@ -1,0 +1,9 @@
+{
+  "nonce": "d00330c1-c916-452a-89bf-ac00f6bc3ee6",
+  "status": "editorial-correction-frozen",
+  "before": "4294c3c75d222f9e75609ed4a28233e35c7ddcd84382234cdc42da2b03e5f910",
+  "after": "997e5f8fc4b0f7454f21673f7181ddb0ee536e9d16b3c04b82b94203a1433a17",
+  "path": ".claude/skills/clinicos/references/bug-delivery.md",
+  "testsRerun": 0,
+  "originalLunaChildPreserved": true
+}

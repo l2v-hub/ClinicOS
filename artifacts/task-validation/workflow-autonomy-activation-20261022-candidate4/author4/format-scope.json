@@ -1,0 +1,52 @@
+{
+  "changedPathsOnly": [
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "agent-team/src/bug-pipeline/standalone-review.mjs",
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/src/bug-pipeline/pipeline.mjs",
+    "agent-team/src/bug-pipeline/external-review.mjs",
+    "agent-team/src/bug-pipeline/comment-review-handoff.mjs"
+  ],
+  "repositoryConfig": "/workspace/ClinicOS/.prettierrc.json",
+  "restored": [
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "unrelatedFormattingBlocksRestored": 59
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "unrelatedFormattingBlocksRestored": 10
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "unrelatedFormattingBlocksRestored": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "unrelatedFormattingBlocksRestored": 11
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "unrelatedFormattingBlocksRestored": 14
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/release.mjs",
+      "unrelatedFormattingBlocksRestored": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "unrelatedFormattingBlocksRestored": 1
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/external-review.mjs",
+      "unrelatedFormattingBlocksRestored": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "unrelatedFormattingBlocksRestored": 21
+    }
+  ]
+}

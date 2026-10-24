@@ -1,0 +1,25 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "--experimental-vm-modules",
+    "--test",
+    "--test-reporter=tap",
+    "/tmp/clinicos-autonomy-activation-20261022/standalone-release-probe1/probes.mjs"
+  ],
+  "exitCode": 1,
+  "seconds": 0.31634046498220414,
+  "environment": {
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/standalone-release-probe1/owned-tmp",
+    "LANG": "C.UTF-8",
+    "GIT_CONFIG_GLOBAL": "/dev/null",
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "GIT_CONFIG_COUNT": "2",
+    "GIT_CONFIG_KEY_0": "core.hooksPath",
+    "GIT_CONFIG_VALUE_0": "/dev/null",
+    "GIT_CONFIG_KEY_1": "protocol.allow",
+    "GIT_CONFIG_VALUE_1": "never"
+  },
+  "sourceEdits": false,
+  "vmPurpose": "Exact original release source bytes with injected transport/process/filesystem modules; actual workflow_run main branch, selector and release guards unchanged"
+}

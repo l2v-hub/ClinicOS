@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-23T07:17:57.699Z",
+  "status": "verified",
+  "nonce": "02004653-f303-4a39-a5d2-5c98e0ecacc1",
+  "sourceSha": "0f3833480fda5a056e91fa9922552d4f91bca346",
+  "qaSealSha256": "bdc1be22dde68e064d9e7fbf0a5b4714e15e28bb9c24c74704fe90c37e2b6540",
+  "actualNewModuleExecuted": true,
+  "actualAuthenticatedGitData": true,
+  "actualRemoteGitReadback": true,
+  "parent": "12ea08f151ffdae826f0658d39a8fc095156e945",
+  "commit": "8d9aae8b566c1c1ed8e210ef36d0006604bf6549",
+  "blob": "206e7d0f58dc3cd698dd98326379076efcfb2b77",
+  "stateBytes": 5281006,
+  "stateSha256": "b0d25b9cb59bbf9db4dd42154e29543fdc36018c26781baefbc55c2f2f84ef1d",
+  "all23SubjectDigestsUnchanged": true,
+  "onlyRootProbeMetadataAndUpdatedAtChanged": true,
+  "automationOwnPropertyAbsent": true,
+  "force": false,
+  "operations": [
+    "POST repos/l2v-hub/ClinicOS/git/blobs",
+    "POST repos/l2v-hub/ClinicOS/git/trees",
+    "POST repos/l2v-hub/ClinicOS/git/commits",
+    "PATCH repos/l2v-hub/ClinicOS/git/refs/heads/codex/bug-control"
+  ],
+  "capacity": {
+    "size": 5281007,
+    "pending": 0
+  },
+  "noNativeReviewOrApproval": true,
+  "noDeploymentOrIssueClosure": true
+}

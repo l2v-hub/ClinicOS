@@ -1,0 +1,41 @@
+{
+  "at": "2026-10-23T07:27:54.422086+00:00",
+  "head": "689425d8836f14dfaa1c1cd1642def0cdbf30745",
+  "run": 39916970708,
+  "archiveSha256": "1f23da2a54f999cd239aa365d03d0be98cd6d3a603095111f778267f33500061",
+  "archiveBytes": 247866,
+  "tapMembers": [
+    {
+      "member": "2_bug-pipeline-tests.txt",
+      "sha256": "1f00ba80ba12753eb764717306fab5625e9a1b6d798e9ee7eb49d6869d778a7a",
+      "tapBlocks": [
+        {
+          "tests": 1511,
+          "pass": 1508,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 3,
+          "todo": 0
+        }
+      ]
+    },
+    {
+      "member": "3_windows-review-setup.txt",
+      "sha256": "afae8f9894dba863126336da55dd70549a8ca473ad439869bfe45a2bc644b131",
+      "tapBlocks": [
+        {
+          "tests": 10,
+          "pass": 10,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      ]
+    }
+  ],
+  "nativeLinuxWindowsAndActualSandboxHttpSqlPassed": true,
+  "metadataReceipt": "actual-bug-pipeline-run-metadata.json",
+  "extractorCorrection": "First exploratory parser assumed numeric prefixes0/1 and rejected before writing proof; original actual archive unchanged. This proof matches actual title-based members.",
+  "noProviderInferenceOrClinicalDeploymentClaimed": true
+}

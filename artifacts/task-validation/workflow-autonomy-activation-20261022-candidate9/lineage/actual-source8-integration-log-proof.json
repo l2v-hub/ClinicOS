@@ -1,0 +1,102 @@
+{
+  "at": "2026-10-23T07:49:53.226105+00:00",
+  "head": "689425d8836f14dfaa1c1cd1642def0cdbf30745",
+  "run": 39916970712,
+  "archiveBytes": 711611,
+  "archiveSha256": "d3d7723484df443c36652cc16f5872eff92b951ea164de33d71b7037c82283c3",
+  "members": [
+    {
+      "member": "0_real-provider.txt",
+      "sha256": "f7be03eb9616accc8ef957ab9642b5e680a23dadd977d37b973b24fc5b1eca6a",
+      "tapBlocks": []
+    },
+    {
+      "member": "1_browser-e2e.txt",
+      "sha256": "aeabf20e8885db942eec6d6b2a16f880efe9176607c057a35abd031f85d4e612",
+      "tapBlocks": []
+    },
+    {
+      "member": "2_gate.txt",
+      "sha256": "c27c8d98274a55bdf6efbf303f8381d38c09b7e9f8a43db136c2204d94128ea5",
+      "tapBlocks": [
+        {
+          "tests": 6,
+          "pass": 6,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        {
+          "tests": 1873,
+          "pass": 1868,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 5,
+          "todo": 0
+        },
+        {
+          "tests": 51,
+          "pass": 51,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      ]
+    },
+    {
+      "member": "3_archive-tests.txt",
+      "sha256": "851e4ba33c1fa80acdceb1cf44555a65d22ede751f36867a05347b9d968698c5",
+      "tapBlocks": [
+        {
+          "tests": 6,
+          "pass": 6,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      ]
+    },
+    {
+      "member": "4_frontend-tests.txt",
+      "sha256": "73ba989b1d77b0880b0135931287cd2c3c14c5e8004506b0b493a2ea71a813ac",
+      "tapBlocks": [
+        {
+          "tests": 1377,
+          "pass": 1377,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      ]
+    },
+    {
+      "member": "5_secret-scan.txt",
+      "sha256": "009af62da8ece64df41f267a208253bd04c686fba69c2c2802984722b5bc911b",
+      "tapBlocks": []
+    }
+  ],
+  "browser": [
+    {
+      "viewport": "desktop",
+      "created": true,
+      "consoleErrors": 0,
+      "httpFailures": 0
+    },
+    {
+      "viewport": "tablet",
+      "created": true,
+      "consoleErrors": 0,
+      "httpFailures": 0
+    }
+  ],
+  "actualDesktopTabletStepsPassed": true,
+  "artifactReceipt": "actual-integration-archive-receipt.json",
+  "allNativeIntegrationJobsPassed": true,
+  "extractorCorrection": "Two exploratory parsers assumed quoted JSON counters or arrays and stopped before writing a proof. Actual browser summaries use plain key=value fields, inspected before this exact extractor. Original archive unchanged.",
+  "clinicalOnlineAcceptanceClaimed": false,
+  "noProviderInferenceInferredFromGatedStep": true
+}

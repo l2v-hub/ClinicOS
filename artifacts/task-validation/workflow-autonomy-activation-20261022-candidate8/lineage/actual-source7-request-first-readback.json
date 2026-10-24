@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-23T06:03:44.476Z",
+  "head": "57d25ed04f1e4faddc232ef77d190d3bc339a643",
+  "stateSha": "974a13a461cdaff9450bc36c65c0f98e6e1d6aae",
+  "stateRawSha256": "2e126c4b34315b07416b1be3400801db5430e1c06a392b6fab58eef04187f94b",
+  "phase": "waiting-review",
+  "implementationCount": 7,
+  "reviewCount": 1,
+  "externalStatus": null,
+  "externalRequestHead": null,
+  "currentHeadRequests": [],
+  "labels": [
+    "codex-review-fixes"
+  ],
+  "failureBoundary": "Official standalone verify readPinned during actual packet inspection, before handoff.request invocation per stack; no request replay performed.",
+  "canonicalRootReservation": {
+    "nonce": "12fc60c0-24f9-4172-bd75-ee13593c6391",
+    "status": "execution-reserved",
+    "reservedAt": "2026-10-23T05:54:16.694Z",
+    "reservedBeforeOperation": true,
+    "pr": 504,
+    "head": "57d25ed04f1e4faddc232ef77d190d3bc339a643",
+    "source": "9a6ca8768c1d422460faeb684eb699d4e9289484",
+    "manifestRawSha256": "f054618439e768361e1260bc6510dda3290249538a76e4e1715f19ddd827504e",
+    "trustedMain": "453ade1a06cd79e1924de523c5fd2cdec51f4fd4",
+    "contractSha256": "af20943b4d9c88853a7045a3f7a4fb9c143f3bf574692b5755a28063e196c24c",
+    "privateOutput": "/tmp/clinicos-autonomy-activation-20261022/publication7/actual-handoff3",
+    "rootCanonicalWritesPaused": true,
+    "legacyReviewCount": 1,
+    "implementationCandidates": 7,
+    "actualNativeAllSixPass": true,
+    "transportAdapterSha256": "97959037e5b5862cb68f77897005c3ad9e45da54819bcbfb663d9aafdac7def7",
+    "transport": "actual managed authenticated API; real native REST projection, no synthetic statuses"
+  }
+}

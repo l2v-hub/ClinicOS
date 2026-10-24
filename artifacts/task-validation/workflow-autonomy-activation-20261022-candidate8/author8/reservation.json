@@ -1,0 +1,40 @@
+{
+  "nonce": "a1c34605-ce9a-40d9-afc6-e3da114dc2ef",
+  "status": "running-analysis-only",
+  "reservedAt": "2026-10-23T06:26:18.374Z",
+  "reservedBeforeSession": true,
+  "attempt": 8,
+  "subjectPr": 504,
+  "sourceHead": "57d25ed04f1e4faddc232ef77d190d3bc339a643",
+  "gitParent": "57d25ed04f1e4faddc232ef77d190d3bc339a643",
+  "agent": "/root/large_state8_author",
+  "model": "gpt-6.1-sol",
+  "contractSha256": "ab912175fb957e25ea2cc81be31c708e6696c7f0f76c36d0decafda2a0700e19",
+  "scope": [
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "docs/codex-bug-workflow.md",
+    ".claude/skills/clinicos/references/bug-delivery.md"
+  ],
+  "snapshotSha256": "dd7cf2a872f032a4df322f9225d52f7b21ae227cfa5133c44b08b47f0046ce2f",
+  "snapshotDigestEncoding": "sha256-of-raw-UTF8-json-bytes",
+  "sourceSnapshot": "/tmp/clinicos-autonomy-activation-20261022/source8",
+  "baseline": "/tmp/clinicos-autonomy-activation-20261022/source7",
+  "privateOutput": "/tmp/clinicos-autonomy-activation-20261022/author8",
+  "dependencyLink": {
+    "path": "node_modules",
+    "target": "/workspace/ClinicOS/node_modules"
+  },
+  "testSupportLink": {
+    "path": "artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude",
+    "target": "/tmp/clinicos-autonomy-activation-20261022/test-support7"
+  },
+  "priorNativeImplementationEntries": 7,
+  "priorActualNativeReviews": 1,
+  "actualContentsWriteRejection": 400,
+  "actualSameBlobGitDataAccepted": true,
+  "noLiveActions": true,
+  "sourceEditsRequireRootPlanAcceptance": true,
+  "stateCommit": "b8a4f5ddf6fe4a50cbd8e8dbaab88b7c6f00f388",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/3fc14bb8-1437-4f91-aa6a-b2b07ddcd46f/accepted.json"
+}

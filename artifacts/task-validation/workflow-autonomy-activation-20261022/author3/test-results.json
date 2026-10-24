@@ -1,0 +1,46 @@
+{
+  "status": "PASS_AUTHOR_VALIDATION",
+  "actualFocused": {
+    "tests": 123,
+    "pass": 123,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "actualOriginalQa2Reproductions": {
+    "tests": 2,
+    "pass": 2,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "originalProbeCopiedWithSource3ImportsOnly": true,
+  "qa2SealedInputsUnchanged": true,
+  "focusedFiles": [
+    "pipeline",
+    "external-review",
+    "issue-review-sync",
+    "issue-review-communication"
+  ],
+  "actualSyntax": {
+    "passed": 8,
+    "failed": 0
+  },
+  "initialFocusedFailure": {
+    "log": "focused-first.log",
+    "tests": 123,
+    "passed": 122,
+    "failed": 1,
+    "cause": "Existing strict mock asserted the old publishState options object; automatic:true is now explicitly required. Updated that assertion, without relaxing any source guard."
+  },
+  "originalQa2ProductFailuresPreserved": [
+    "F1:one status write/model0 after successful new-owner CAS",
+    "F2:three projection writes after11 ownership reads"
+  ],
+  "qa2VerdictRemainsFailed": true,
+  "all528PriorTestsRerun": false,
+  "rootIndependentCombinedQaPending": true,
+  "paidModelsOrLiveCalls": 0
+}

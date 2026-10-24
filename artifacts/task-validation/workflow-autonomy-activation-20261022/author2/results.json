@@ -1,0 +1,52 @@
+{
+  "status": "IMPLEMENTED_AWAITING_INDEPENDENT_QA",
+  "attempt": 2,
+  "nonce": "85786314-5242-4020-b821-db00c2b40b61",
+  "model": "gpt-6.1-sol",
+  "source": "/tmp/clinicos-autonomy-activation-20261022/source2",
+  "changedPathsThisAttempt": [
+    "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs"
+  ],
+  "cumulativeChangedPaths": 12,
+  "actualSyncTests": {
+    "tests": 11,
+    "pass": 11,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "actualSyntax": {
+    "passed": 2,
+    "failed": 0
+  },
+  "inheritedCoreTests": 517,
+  "inheritedCoreSyntax": 10,
+  "coreTestsRerun": false,
+  "source1AuthorSealVerified": true,
+  "source1AndAuthor1Immutable": true,
+  "sharedHelperAndTenCoreFilesUnchanged": true,
+  "outsideScopeUnchanged": true,
+  "sourceManifestSha256": "d7f9d6c151572e31e2c95564aab07c0d4520179bb6b6631f3423e242ecd531f7",
+  "sourceTestFailures": [],
+  "preflightFailuresPreserved": [
+    "initial-tooling-failure.json",
+    "binding-first-failure.json"
+  ],
+  "actualPriorActivation": {
+    "runId": 39858249394,
+    "status": "CANCELLED",
+    "deadlineMinutes": 10,
+    "treatedAsFailure": true,
+    "preciseStallCauseProven": false,
+    "rootReportedForwardedComments": 23
+  },
+  "independentQaClaimed": false,
+  "nativeOrModelApprovalClaimed": false,
+  "liveActivationClaimed": false,
+  "paidModelCalls": 0,
+  "networkOrProviderCalls": 0,
+  "gitOrCanonicalMutations": 0,
+  "clinicalRuntimeOrBrowser": false
+}

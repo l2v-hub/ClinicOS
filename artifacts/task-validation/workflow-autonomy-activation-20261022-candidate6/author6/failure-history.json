@@ -1,0 +1,25 @@
+[
+  {
+    "classification": "inherited genuine independent QA5 source findings",
+    "status": "PRESERVED_IMMUTABLE",
+    "filesVerified": 44,
+    "sealSha256": "655122adbf8d401c4fee77706cb33b31aebab40c48562e3d04118e817e863e9a",
+    "originalOutcome": "715 scoped testsPASS; novel1PASS3FAIL; three confirmed medium findings; initial external fixture omission preserved separately in QA5",
+    "evidence": "../independent-qa5/findings.json and original probe logs; all sealed bytes verified unchanged"
+  },
+  {
+    "classification": "additional same-cause F3 omitted-binding causal regression",
+    "evidence": "ambiguous-binding-pre-fix.log",
+    "counts": {
+      "tests": 1,
+      "pass": 0,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "exitCode": 1,
+    "harnessError": false,
+    "detail": "First implementation safely blocked missing nonce but treated omitted subjectSha as nonmatching; actual final QA became ready. Same table extended to missing subjectSha/Claude-round/feedback/timestamp; final implementation requires affirmative known differing identity to ignore a spent record, otherwise blocks ambiguous history. Final724 suite passes all five omitted-field cases."
+  }
+]

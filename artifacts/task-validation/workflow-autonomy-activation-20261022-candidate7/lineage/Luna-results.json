@@ -1,0 +1,30 @@
+{
+  "status": "implemented-awaiting-senior-integration",
+  "scope": "private shadow only; source6/source7 untouched",
+  "changedPaths": [
+    "agent-team/src/bug-pipeline/pipeline.mjs",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs"
+  ],
+  "testCommands": [
+    {
+      "command": "/tmp/clinicos-node22-native12/node_modules/node/bin/node --test --test-name-pattern=F5 draftReady proxy tests/bug-pipeline/pipeline.test.mjs",
+      "exitCode": 0,
+      "summary": "1 pass, 0 fail"
+    },
+    {
+      "command": "/tmp/clinicos-node22-native12/node_modules/node/bin/node --test tests/bug-pipeline/pipeline.test.mjs",
+      "exitCode": 0,
+      "summary": "35 pass, 0 fail (33 top-level; nested TAP subtests included)"
+    }
+  ],
+  "causalPreFix": {
+    "command": "same focused test after removing only draftReady from guard list",
+    "exitCode": 1,
+    "failure": "assertion owned draft must not call the real draftReady effect; expected 0, actual 1"
+  },
+  "harnessCorrections": [
+    "Initial direct external-review fixture blocked during issue-review communication because default synthetic GitHub responses were incomplete; replaced it with a documented injected reviewFeedback seam that triggers the real runPipeline Proxy method. No assertion was weakened."
+  ],
+  "testSeam": "The test calls actual exported runPipeline and its actual freshOwnership Proxy. Its injected reviewFeedback boundary invokes this.draftReady to reach the Proxy method. This proves guard behavior; the actual external-review.mjs callsite at line 388 still requires senior verification.",
+  "preFixLog": "causal-prefixed-failure.log"
+}

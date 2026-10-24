@@ -1,0 +1,24 @@
+{
+  "nonce": "bf4b8134-f696-48c9-bac7-0f789402c98a",
+  "status": "running",
+  "reservedAt": "2026-10-23T06:35:43.663Z",
+  "reservedBeforeSession": true,
+  "parentAuthorNonce": "a1c34605-ce9a-40d9-afc6-e3da114dc2ef",
+  "parentAttempt": 8,
+  "agent": "/root/Luna_docs8",
+  "model": "gpt-6-luna",
+  "contractSha256": "1c673368a58b09325104b0686bc484a021f764151cb039583f09de7e9899fdaa",
+  "acceptedPlanSha256": "f1f869b94aae671867afbf8b8bc7f6255386d5cee1c344e8d6226c5371e0e02e",
+  "rootAcceptanceSha256": "89ca0fc53b444ef3ab0d8dd27579b97846949e0131922c3083c64ef06327f342",
+  "scope": [
+    "docs/codex-bug-workflow.md",
+    ".claude/skills/clinicos/references/bug-delivery.md"
+  ],
+  "snapshotSha256": "1c59b6f5142b1d5661a847d27ffac7ec8ebe02c6730c69e45321332906598813",
+  "privateOutput": "/tmp/clinicos-autonomy-activation-20261022/Luna-state-transport-docs8",
+  "sourceSnapshot": "/tmp/clinicos-autonomy-activation-20261022/source8",
+  "noSourceOrLiveActions": true,
+  "testsRun": 0,
+  "stateCommit": "ec4d39335a6bf85a401943a9d70694c614534121",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/289f0f2d-804e-4f23-932f-620641fcd18d/accepted.json"
+}

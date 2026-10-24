@@ -1,0 +1,17 @@
+{
+  "status": "IMPLEMENTED_AWAITING_INDEPENDENT_QA",
+  "nonce": "306e10be-29ce-4784-b4ff-97db849b5a45",
+  "sourceFrozen": true,
+  "sourceFiles": 139,
+  "allowedChangedPaths": 13,
+  "distinctFinalFunctionalNodeTests": 1009,
+  "causalOverlapTestsNotAdded": 11,
+  "syntaxChecks": 17,
+  "source9FinalRawSha256": "2174bfd919fae8c29b375ad826616a61279a6481684b05a21a30e803ada9c94b",
+  "sourceManifestSha256": "46850a166bdf2dfd8656f5776ac776617e5768e53e258cdc370f4f972549807d",
+  "at": "2026-10-23T09:12:34.180333+00:00",
+  "awaiting": "Root independent QA9/native/source9 module proof/peer/final/protected merge and activation gates",
+  "handoffComplete": false,
+  "selfApproval": false,
+  "noFurtherAuthorWrites": true
+}

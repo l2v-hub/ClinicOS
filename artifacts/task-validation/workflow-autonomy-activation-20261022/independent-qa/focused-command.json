@@ -1,0 +1,12 @@
+{
+  "exitCode": 0,
+  "elapsedSeconds": 3.3837336619617417,
+  "testFiles": [
+    "operator-ownership",
+    "pipeline",
+    "external-review",
+    "release",
+    "github",
+    "issue-review-sync"
+  ]
+}

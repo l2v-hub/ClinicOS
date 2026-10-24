@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: malformed takeover active type cannot grant new unclaimed intake even with otherwise bound handback
+ok 1 - malformed takeover active type cannot grant new unclaimed intake even with otherwise bound handback
+  ---
+  duration_ms: 9.660756
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 114.136534
