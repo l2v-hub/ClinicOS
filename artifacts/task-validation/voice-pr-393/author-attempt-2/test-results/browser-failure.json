@@ -1,0 +1,8 @@
+{
+  "checks": [],
+  "errors": [
+    "Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED"
+  ],
+  "httpErrors": [],
+  "failure": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Assistente AI' }) to be visible\u001b[22m\n"
+}

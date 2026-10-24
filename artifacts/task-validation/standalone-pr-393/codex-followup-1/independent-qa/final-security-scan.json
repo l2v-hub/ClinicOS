@@ -1,0 +1,643 @@
+{
+  "sourceFiles": [
+    {
+      "path": ".ai-architecture/phase-5-voice/REALTIME_RECONCILIATION.md",
+      "sha256": "503bbb49fdfc70df6c82ed5e7babed67fa799a9abf1206e5a56aac691ec51449",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": ".ai-architecture/phase-9-production/PRODUCTION_RUNBOOK.md",
+      "sha256": "599d25dcf29ec3fb035693b7d73b97b7686c9f6de41c806cf8f30817329ba882",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": ".ai-architecture/phase-9-production/PROVIDER_CAPABILITY_MATRIX.json",
+      "sha256": "213f49f80e5dba25bb559fa7557650f7b7bc5c93830eb2ac0b3e88dc34a91d88",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-393/codex-followup-1/harness/qa-voice-pr-393-browser.mjs",
+      "sha256": "b70790f0674e0896d5f5050d5f66c3e32de53b0f84d663382965d37b9bb100c9",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-393/codex-followup-1/harness/qa-voice-pr-393.mjs",
+      "sha256": "d77ae1bc3e2d6c8853a9be1fdd0bee6a4922c11a5924b8b1536466a04d373e47",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 1,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 1,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "backend/src/skills/http.ts",
+      "sha256": "f21c5b9163c66ae4c21537e5de06871c889352ed351a7baf241b4495206f59e7",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "backend/src/voice/__tests__/realtime-client.test.ts",
+      "sha256": "08bda1ea4ea73e72c8c74370c78af9ad2faeff141f3cc9c280e1c8c6ccd0c3ec",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "backend/src/voice/__tests__/voice-e2e.test.ts",
+      "sha256": "f08175527448fab5de810a776ac9a8f75867610be03ed325468b8a2f294ca665",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "backend/src/voice/stt.ts",
+      "sha256": "dd008aa72ebe9b6ebad91788a471ded38bbc4879d885fd1b00f7a708fccd59c7",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/api/app.py",
+      "sha256": "1cb98b5d7c846fd53c7ec33fc35a2025f195b647cb5d225cb949217f01cc9c76",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/provider_registry.py",
+      "sha256": "1e6041dbb550f42dce1a6a79982cdb9a0ecea3f4dd7e09d06657e0a1e9841a9c",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/validation.py",
+      "sha256": "6191fc8864b379b311bbc694f353d1ccc36f88b664828bda3ca14e7bfc7374eb",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/voice/azure_realtime.py",
+      "sha256": "f2a42b652b8bc8c95cfc18bf3622af458cc6786e3485a44352d9a3f03a9d4757",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/voice/realtime.py",
+      "sha256": "f9b3e19ddd6e519356ff0261c21bfd38647ba3b3d3605c63b0e83a28220bdbbc",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_voice_realtime.py",
+      "sha256": "96cae042aab58ed1e0e24bd6cc240c60d7bf5adb4d243165c2b0a891b5646dae",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "frontend/src/components/assistant/AssistantMode.css",
+      "sha256": "8d7048e23958b13f7ef57ff6b144117b77e1ff0736a7b2e3dfea6094ff051b8a",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "frontend/src/components/assistant/AssistantMode.tsx",
+      "sha256": "92264efd65ad8d2a26e116665d709d9bbb3bd29f8008158cab4b49e11bc3b153",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/VoicePanel.tsx",
+      "sha256": "30ca126cb03cb27a2b236c061cd7eb816ec09a961310fc235b08340ae9ccb44a",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/__tests__/realtime.test.ts",
+      "sha256": "754b1b09693fcc8816836a72aa90f817e24d935156b41ce1a113623d04fb5659",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/__tests__/voice.test.ts",
+      "sha256": "666535f4e267d59d8e250d2f6bd5889573bce02cbcada45528a268c349ccab8c",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/audioSession.ts",
+      "sha256": "f5236fbaefd9727168e9498d5eff4433d331c4ff37a06a192ad0f4390288eee9",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/realtimeTransport.ts",
+      "sha256": "8bbb28b6859726aba645713e8494b79de851b1cbd51604d6b0af80a590cc8731",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/useVoiceCapture.ts",
+      "sha256": "894a9d93c33900430e633bdd5f3f17dc7a3d918896afebc6808cc61e4ec4aca2",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/useVoiceChannel.ts",
+      "sha256": "9558eda3ee0f7678aa48e4edda52f1d1750ef2f993049b7deb95b092e0b40f50",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/voiceApi.ts",
+      "sha256": "e477ab017f970e9f05e8dd9d0a3428b3cf7cbf37d1acaba456afc0d1a53479f3",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      },
+      "expectedDsnSourceTemplates": 0,
+      "classification": "Only literal synthetic runtime URL construction templates permitted, never evaluated DSNs"
+    }
+  ],
+  "logs": [
+    {
+      "file": "logs/backend-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/frontend-app-types.result.json",
+      "sha256": "0cc19fe0ba79309516b629f59fd62c72440ea12246507be478436ee199fcc2a6",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/frontend-focused.log",
+      "sha256": "9c6db8e1de937e9c9bc4d5784360f8f1589d81ca9770d0c22850fa1709bc8180",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/diff-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/frontend-app-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/diff-check.result.json",
+      "sha256": "5d97fa3be4cc80f1dc675ba01aa3f36b0256ee725ac75d0ef417141540abe714",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/runtime-full.log",
+      "sha256": "e5557f26b06b1dd555d8e730794f26d40eb6279356b9fe34ba1cac094f9e36a9",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/frontend-security.log",
+      "sha256": "b679b8ea416a2930ebffbb48b0939a04f018d33dbe841713e0c3441a9cb37b39",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/frontend-focused.result.json",
+      "sha256": "67bc1005a14fa31f5d1031b9dc4223794f7bf029c68b950155243fd26f8238b5",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/integrated-run.log",
+      "sha256": "525aeb5ffe6c99d3130e633445433db78e6428da85dd6b81152fc49b75c7dfb9",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/frontend-node-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/frontend-security.result.json",
+      "sha256": "fbec9bb9932974b9cb1c5b2fb9bdf38675e52bb1f032a85b3369161d5b57fd5b",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/backend-assets.json",
+      "sha256": "d31208cde6904ac32c03b0191f2387060cdb03c3d3f49f25b7e1bf699a5522fa",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/independent-cache-probe.log",
+      "sha256": "3edf6110ff08cdd12fca1d6783fb6155c0f4e56658f2e99bf100937a124ca8ff",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/frontend-build.result.json",
+      "sha256": "6a880d2bb906ed298d147d6c06ccf09f370cc6c06c9d92cdede442f53da4c53e",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/backend-build.result.json",
+      "sha256": "0e5fe168111f3110dc297ca14566c4ae6be1140d8c18a91e19c97757510b0482",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/independent-runtime-probe.log",
+      "sha256": "3405dec8eb4d5b4bf26659d25ac2c33b74be703241909b62d3d0321bc5f470b5",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/runtime-full.result.json",
+      "sha256": "a5a418299c6d84f1f09aefed2f44193ccf954421af99477a939d4baf043fb2e2",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/contract-validation.log",
+      "sha256": "5a84999a364626ad3b680c0d03ddd54de1398e07d4cb1ac099719d984368038e",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/frontend-build.log",
+      "sha256": "41f68a22a4f1310c9c6ac0d346bfe5096f059d6ce0c43fe624f3229c60636889",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/evidence-validation.log",
+      "sha256": "124eb333d79b35a50687839b291ccfe811b7f632857607a575d870a403531140",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "logs/frontend-node-types.result.json",
+      "sha256": "6f503c1940dc8e6b76fea36b2aa07829df3153e7b2c6af0c0c79ccb75dc5abfc",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "runtime-1/logs/backend-server.log",
+      "sha256": "9f8b182cfe4f3f376c69095557f91f2f1035d96c20c43e215e560bdc654c711a",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "runtime-1/logs/migrate.log",
+      "sha256": "7f543bddcdae202e8b09aa5139e928362ada8aab3d6463adf7e66f4123f6ead3",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "runtime-1/logs/seed-assistant.log",
+      "sha256": "049026d47722dfcd61d384f3a58f1220fdc34a8eb73bea31a29033c8a2ab99ba",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "runtime-1/logs/backend-voice.log",
+      "sha256": "6c2c25aeb7e9b70d390c24de7bad7c66a45023837822f98e522c7dc423adaa9c",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    },
+    {
+      "file": "runtime-1/logs/frontend-server.log",
+      "sha256": "4dba94f9fb33103b644af8b90c0f191d618e2a8dd0d54833296b3e2ad11ecf1c",
+      "scan": {
+        "privateKey": 0,
+        "postgresDsn": 0,
+        "apiKeyLike": 0,
+        "jwtLike": 0,
+        "demoSession": 0
+      }
+    }
+  ],
+  "rawTrace": {
+    "path": "private/trace-original.zip",
+    "sha256": "b164bc1c4857f5fee6de7e54266353120b3a5908d38ee7dcef5dbc008bb5b413",
+    "members": 704,
+    "crc": "PASS",
+    "scan": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 98
+    },
+    "classification": "PRIVATE raw evidence; only synthetic demo-session values present; never publish"
+  },
+  "realPhi": "No real PHI source; owned synthetic seed and fixture transcript only"
+}

@@ -1,0 +1,10 @@
+✔ realtime client forwards bearer/SDP but returns only bounded allowlisted answer (224.351504ms)
+✔ status probes cache by runtime and credential, deduplicate, expire and isolate returned values (81.449531ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 945.55496

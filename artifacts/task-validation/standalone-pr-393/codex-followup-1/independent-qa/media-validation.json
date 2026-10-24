@@ -1,0 +1,313 @@
+{
+  "media": [
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/01-partial-display-only.png",
+      "bytes": 107768,
+      "sha256": "767546b653f136c9a469714cd17be8ae65df2001bba12d96e58ea86eee1afce9",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/02-final-operator-review.png",
+      "bytes": 96284,
+      "sha256": "276cc67bf50f603ffe1f93f78a7ae25949692cde812c0f86d4e13c0b83d755d2",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/03-preview-zero-write.png",
+      "bytes": 89756,
+      "sha256": "895d8cce72d7e3cfb6176274e8fb3bb77c794395b3377d03ec34aefd6cbdb188",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/04-confirmed-one-write.png",
+      "bytes": 93608,
+      "sha256": "c646c3a38ae0a3d45be267e2a32df96d4c3c2d7b75e1fdf2fee6e6e3d71c7b03",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/05-cancelled-partial.png",
+      "bytes": 98827,
+      "sha256": "b5c3f700a58b05232f6afad9262647cffb96e7a60f48395719a402b66bf4ad0a",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/05a-pending-negotiation-microphone-live.png",
+      "bytes": 106358,
+      "sha256": "b43790b254f6c655aea19d396ca94400308f67a9ef170246d955699fb3ad24af",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/05b-pending-negotiation-cancelled.png",
+      "bytes": 98804,
+      "sha256": "9934abc4069a147cc7f0dee9f112b31342772112d756482c8cb6be23ab82f4f3",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/06-provider-failure-text-fallback.png",
+      "bytes": 98755,
+      "sha256": "562411d04ae11396636606bcfbb5a72de842ad1565b04ffe58ad5d78194c557c",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/07-text-assistant-after-failure.png",
+      "bytes": 107864,
+      "sha256": "8085857891b8970bbe9709b6e1187ac3f664b968aae5f32f9356d2d71ec6d96c",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/08-disconnected-release.png",
+      "bytes": 106891,
+      "sha256": "495ab338402f75a9607cc4f9d88c594440d3def9e2a2447428007224fbe72b8d",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/08b-stale-resume-preserves-new-capture.png",
+      "bytes": 104859,
+      "sha256": "1cb0f795030984ebb839eba2b4cc6a3aa9641d0fc3185eb8288860e4d895ff8a",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/09-resident-change-discard.png",
+      "bytes": 103757,
+      "sha256": "992d1a36662efba794fc81ec6d54bc637229a91424ef18ee1d35c317941814f9",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/10-hidden-pending-permission.png",
+      "bytes": 104165,
+      "sha256": "12e4e3e3ee014115cd04266ae584d381eb3ade0554c892dbb1399e680f5bc749",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/11-unmounted-no-capture.png",
+      "bytes": 86645,
+      "sha256": "fc95e9eb97d5c8276a5ca203e75869d71d1b45f4b844231b19cf1833055ebc6c",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/12-reload-persisted-readback.png",
+      "bytes": 103496,
+      "sha256": "70acedbef324ecb052f97ddfab54d588c5cf1daf7d25dc126a1ad90440e3352c",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/13-early-listening-input_audio_buffer_commit_buffer_too_small.png",
+      "bytes": 106861,
+      "sha256": "f4172962dd56514e2eced6aaa1284485d83d3f8ed51d97a94580a9bfd72962f1",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/13-early-listening-input_audio_buffer_commit_empty.png",
+      "bytes": 106871,
+      "sha256": "ecaa8ad2108075834c1ca0f01fb1377640175b66b689a0ffab69fd6c5c852135",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/13-early-transcript_partial-input_audio_buffer_commit_buffer_too_small.png",
+      "bytes": 106886,
+      "sha256": "c08d83988f24597d197e4e3e13ca6dbf67d9be14e9bd912085694a96447278e4",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/13-early-transcript_partial-input_audio_buffer_commit_empty.png",
+      "bytes": 106886,
+      "sha256": "c08d83988f24597d197e4e3e13ca6dbf67d9be14e9bd912085694a96447278e4",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/14-empty-committed-idle.png",
+      "bytes": 106913,
+      "sha256": "ea59b11639d40f36162af1a79fa451a2466e43a723f93d0b45624b794647ff06",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/screenshots/15-retry-after-buffer-errors.png",
+      "bytes": 104857,
+      "sha256": "8482637c7173c7ff1b585e7bea8f891b80a9b31ee3ea1e30f3297217c1522b85",
+      "decode": "PASS"
+    },
+    {
+      "kind": "independent",
+      "path": "/workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/runtime-1/video/page@4747a33d3f44ed68517c8e6533f0020f.webm",
+      "bytes": 2408648,
+      "sha256": "2d2b864283a3231bdb77a20c0064a1a03be9122862857b98b467fac59aa67786",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/01-partial-display-only.png",
+      "bytes": 108146,
+      "sha256": "33c8344276f164f346abb6bfb4d42d284d4a468911cdb8bff5d20c5b0850f403",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/02-final-operator-review.png",
+      "bytes": 96662,
+      "sha256": "bd476fdd23536ad65b959a4733136390b0e7efe0213bff18c22d5778c136ead3",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/03-preview-zero-write.png",
+      "bytes": 89816,
+      "sha256": "32967c4223e36ba966bdd30ed0eaf83fbc73a5534d582ca9a4cbb4361548f780",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/04-confirmed-one-write.png",
+      "bytes": 103669,
+      "sha256": "12894040619ddb4d31e67508a6bfc5b742425cd3d88c40538c8715117dd82430",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/05-cancelled-partial.png",
+      "bytes": 98889,
+      "sha256": "67ee39de14a270b20de59bd121fcd656cbf9b709c6f2caebdb5f909bca530a3d",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/05a-pending-negotiation-microphone-live.png",
+      "bytes": 106378,
+      "sha256": "3c6b8b04223b55e37444ccf1d54e9aa6808f12dbb9817d880f1781ba897d32c5",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/05b-pending-negotiation-cancelled.png",
+      "bytes": 98868,
+      "sha256": "fa58fd2db737b384b5e5480a1d30e336f60eff4623828a9847d1524cf1cad645",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/06-provider-failure-text-fallback.png",
+      "bytes": 98819,
+      "sha256": "7e9e10a0c04cb7f3ca48971337769a28afc9f4780fb56dd3edd8abc107a0206a",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/07-text-assistant-after-failure.png",
+      "bytes": 107799,
+      "sha256": "ba1d467bb652d3a0b92482eb6e3bb22cafae641d8ce6cbbec7f027ac3ac431e1",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/08-disconnected-release.png",
+      "bytes": 106810,
+      "sha256": "dd48b11889278a2fa50e2dee3b79b0499f57091887a306fd1827bfa38a20798d",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/08b-stale-resume-preserves-new-capture.png",
+      "bytes": 104793,
+      "sha256": "7fec8a384b82482bd24d7824419f8c07a3db6e241ed247c18d19e583a54b8505",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/09-resident-change-discard.png",
+      "bytes": 103685,
+      "sha256": "2ebfd4953d3c9a249995ecba4533c216fb11322d55c20038eafb03109acb43b1",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/10-hidden-pending-permission.png",
+      "bytes": 104098,
+      "sha256": "304c1955c2bb84bbd3f8435da706e9f45646c4a808109e50d665631558b968b1",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/11-unmounted-no-capture.png",
+      "bytes": 86834,
+      "sha256": "14aca7cf4fd754bf13b3ec20e200edc869d5411c5f02674d07bd433148986191",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/12-reload-persisted-readback.png",
+      "bytes": 103474,
+      "sha256": "28ca83c554da09ed98047cb3cb7e4c221f609fa02ecbd54d9ebdf8845591bcf1",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/13-early-listening-input_audio_buffer_commit_buffer_too_small.png",
+      "bytes": 106811,
+      "sha256": "4bc4cb9377279d29cbd736a1d40853af0dd4b4acdacf301c5a1494d32d6b14a7",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/13-early-listening-input_audio_buffer_commit_empty.png",
+      "bytes": 106809,
+      "sha256": "23e1bca45c2cf7e93b28ca9c76ca6ed246f9392231e2709df213ac2c4082913e",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/13-early-transcript_partial-input_audio_buffer_commit_buffer_too_small.png",
+      "bytes": 106811,
+      "sha256": "4bc4cb9377279d29cbd736a1d40853af0dd4b4acdacf301c5a1494d32d6b14a7",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/13-early-transcript_partial-input_audio_buffer_commit_empty.png",
+      "bytes": 106811,
+      "sha256": "4bc4cb9377279d29cbd736a1d40853af0dd4b4acdacf301c5a1494d32d6b14a7",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/14-empty-committed-idle.png",
+      "bytes": 106836,
+      "sha256": "d839f693445a797def04f40606cc96131951886e1f6ca69288f5cf675c3c336f",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/screenshots/15-retry-after-buffer-errors.png",
+      "bytes": 104791,
+      "sha256": "feb25edebf540be6d9bdba9cddc6bc4f031cdd3c0131fccd6a61cbfed78969b9",
+      "decode": "PASS"
+    },
+    {
+      "kind": "author-read-only",
+      "path": "/workspace/clinicos-voice-393/artifacts/task-validation/standalone-pr-393/codex-followup-1/author-runtime-1/video/page@d1401c5df80df7b2b895e5ea5d55dbde.webm",
+      "bytes": 2349961,
+      "sha256": "aa72096edf47aa8bfffdb81c93ee47404d1ad82fdf5ba1d8b188be2e87b4f84c",
+      "decode": "PASS"
+    }
+  ],
+  "decoded": 44
+}

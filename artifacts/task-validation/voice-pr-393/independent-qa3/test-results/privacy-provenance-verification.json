@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "preSanitizeReceiptCapturedBeforeFirstAudit": true,
+  "allTransformationBeforeHashesAgreeWithPristineManifest": true,
+  "redactedArtifacts": 1,
+  "traceBytes": 3937515,
+  "traceUnder25MiB": true,
+  "traceEvents": 728,
+  "screencastFramesResolved": 151,
+  "traceCrc": "PASS",
+  "standalonePngsDecoded": 2,
+  "embeddedImagesDecoded": 149,
+  "fullVideosDecoded": 1,
+  "credentialPatternFindings": 0
+}

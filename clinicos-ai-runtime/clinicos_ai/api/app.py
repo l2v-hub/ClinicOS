@@ -16,6 +16,7 @@ import base64
 import hmac
 import logging
 import os
+import json
 import time
 import uuid
 
@@ -333,7 +334,35 @@ MAX_STT_AUDIO_BYTES = 2_000_000
 @app.get("/v1/voice/stt-status")
 def voice_stt_status(authorization: str | None = Header(default=None)):
     _auth(authorization)
-    return stt_status()
+    from ..voice.realtime import realtime_status
+    return {**stt_status(), "realtime": realtime_status()}
+
+
+@app.post("/v1/voice/realtime-call")
+async def voice_realtime_call(request: Request, authorization: str | None = Header(default=None)):
+    _auth(authorization)
+    from ..voice.realtime import MAX_SDP_BYTES, negotiate, validate_sdp
+    # Bound the actual streamed body, including requests without a Content-Length header.
+    raw = bytearray()
+    async for chunk in request.stream():
+        if len(raw) + len(chunk) > MAX_SDP_BYTES + 4096:
+            raise HTTPException(413, "SDP troppo grande")
+        raw.extend(chunk)
+    try:
+        body = json.loads(raw)
+        offer = validate_sdp(body.get("sdp") if isinstance(body, dict) else None)
+    except (ValueError, UnicodeDecodeError):
+        raise HTTPException(400, {"kind": "invalid_sdp", "message": "JSON non valido"})
+    except SttError as ex:
+        raise HTTPException(ex.status, {"kind": ex.kind, "message": str(ex)})
+    try:
+        return await negotiate(offer)
+    except SttError as ex:
+        _log.warning("stt realtime outcome=%s", ex.kind)
+        raise HTTPException(ex.status, {"kind": ex.kind, "message": str(ex)})
+    except Exception:
+        _log.warning("stt realtime outcome=provider_error")
+        raise HTTPException(502, {"kind": "provider_error", "message": "Errore STT realtime"})
 
 
 @app.post("/v1/voice/transcribe")

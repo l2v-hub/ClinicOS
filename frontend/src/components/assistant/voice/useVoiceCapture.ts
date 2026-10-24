@@ -1,9 +1,11 @@
 // Phase 5 — microphone capture for ONE utterance (push-to-talk).
 //
-// getUserMedia → AudioContext → frame tap → local VAD (vad.ts) → 16 kHz WAV (wav.ts).
+// getUserMedia → [optional realtime transport connects on the same stream] → AudioContext → frame
+// tap → local VAD (vad.ts) → end of turn (16 kHz WAV for the server transport, commit for realtime).
 // The mic is opened only by an explicit user gesture and is released as soon as the utterance ends,
 // is discarded, is cancelled, the tab is hidden or the component unmounts. Frames are analysed in
-// memory; nothing is stored, nothing is sent until the VAD has a finished utterance.
+// memory; nothing is stored. Explicit realtime mode streams while listening; server mode uploads
+// only a finished utterance. In either mode silence is never committed to the Assistant.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createVoiceStartGate } from '../../shared/agnos/voiceStartGate';
@@ -11,13 +13,14 @@ import { createVad, type Vad, type VadConfig } from './vad';
 import { utteranceToWav } from './wav';
 
 export type CaptureEvent =
+  | { type: 'listening' }
   | { type: 'speech_start' }
   | { type: 'utterance'; wav: Uint8Array; speechMs: number; capped: boolean }
   | { type: 'discarded'; reason: 'no_speech' | 'too_short' }
   | { type: 'interrupted'; reason: string }
   | {
       type: 'error';
-      code: 'mic_denied' | 'mic_missing' | 'mic_unsupported' | 'mic_error';
+      code: 'mic_denied' | 'mic_missing' | 'mic_unsupported' | 'mic_error' | string;
       message: string;
     };
 
@@ -52,6 +55,9 @@ interface Capture {
 
 export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
   const capture = useRef<Capture | null>(null);
+  const lifecycle = useRef(0);
+  /** Mic stream between getUserMedia and «listening» (realtime connecting): cancel must stop it. */
+  const pendingStream = useRef<MediaStream | null>(null);
   // A start is pending while the permission prompt is open: cancel / unmount / a newer start must
   // stop the stream the browser hands back later (QA H1) — the mic never opens behind the UI.
   const gate = useRef(createVoiceStartGate());
@@ -64,9 +70,14 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
   }, [onEvent]);
 
   const release = useCallback(() => {
+    lifecycle.current += 1;
     gate.current.cancel();
+    pendingStream.current?.getTracks().forEach((track) => track.stop());
+    pendingStream.current = null;
     const current = capture.current;
     capture.current = null;
+    setActive(false);
+    setLevel(0);
     if (!current) return;
     current.processor.onaudioprocess = null;
     try {
@@ -76,15 +87,18 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
     }
     current.stream.getTracks().forEach((track) => track.stop());
     void current.context.close().catch(() => undefined);
-    setActive(false);
-    setLevel(0);
   }, []);
 
   const start = useCallback(
-    async (config: VadConfig) => {
-      if (capture.current) return;
+    /**
+     * `beforeListen` runs with the open mic stream before the VAD starts (e.g. connect the realtime
+     * transport): «LISTENING» is announced only when audio actually goes somewhere useful.
+     */
+    async (config: VadConfig, beforeListen?: (stream: MediaStream) => Promise<void>) => {
+      if (capture.current || document.visibilityState === 'hidden') return;
       const token = gate.current.begin();
       if (token === null) return; // a start is already pending
+      const generation = ++lifecycle.current;
       if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
         gate.current.cancel();
         handler.current({
@@ -114,48 +128,93 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
         handler.current({ type: 'error', ...mapped });
         return;
       }
+      if (!gate.current.isCurrent(token)) {
+        stream.getTracks().forEach((track) => track.stop());
+        return;
+      }
+      if (beforeListen) {
+        pendingStream.current = stream;
+        setActive(true);
+        try {
+          await beforeListen(stream);
+          if (pendingStream.current === stream) pendingStream.current = null;
+        } catch (error) {
+          if (pendingStream.current === stream) pendingStream.current = null;
+          stream.getTracks().forEach((track) => track.stop());
+          if (!gate.current.complete(token)) return; // cancelled while connecting
+          setActive(false);
+          const code =
+            error && typeof error === 'object' && 'code' in error
+              ? String(error.code)
+              : 'transport_error';
+          handler.current({
+            type: 'error',
+            code,
+            message:
+              error instanceof Error ? error.message : 'Trascrizione realtime non disponibile',
+          });
+          return;
+        }
+      }
       if (!gate.current.complete(token)) {
         stream.getTracks().forEach((track) => track.stop());
         return;
       }
-      const context = new AudioContext();
-      const source = context.createMediaStreamSource(stream);
-      const processor = context.createScriptProcessor(FRAME_SIZE, 1, 1);
-      const mute = context.createGain();
-      mute.gain.value = 0; // the tap must reach the destination to run, but stays silent
-      source.connect(processor);
-      processor.connect(mute);
-      mute.connect(context.destination);
-      const vad = createVad(context.sampleRate, config);
-      capture.current = { stream, context, processor, vad };
-      setActive(true);
-      let frames = 0;
-      processor.onaudioprocess = (audio) => {
-        if (capture.current?.processor !== processor) return;
-        const frame = new Float32Array(audio.inputBuffer.getChannelData(0)); // copy: buffer is reused
-        const event = vad.push(frame);
-        frames += 1;
-        if (frames % 3 === 0) {
-          const { db } = vad.level();
-          setLevel(Math.max(0, Math.min(1, (db + 60) / 50)));
-        }
-        if (!event) return;
-        if (event.type === 'speech_start') {
-          handler.current(event);
-          return;
-        }
-        const rate = context.sampleRate;
-        release();
-        if (event.type === 'utterance')
-          handler.current({
-            type: 'utterance',
-            wav: utteranceToWav(event.samples, rate),
-            speechMs: event.speechMs,
-            capped: event.capped,
-          });
-        else handler.current(event);
-      };
-      if (context.state === 'suspended') await context.resume().catch(() => undefined);
+      let context: AudioContext | null = null;
+      try {
+        const audioContext = new AudioContext();
+        context = audioContext;
+        const source = audioContext.createMediaStreamSource(stream);
+        const processor = audioContext.createScriptProcessor(FRAME_SIZE, 1, 1);
+        const mute = audioContext.createGain();
+        mute.gain.value = 0; // the tap must reach the destination to run, but stays silent
+        source.connect(processor);
+        processor.connect(mute);
+        mute.connect(audioContext.destination);
+        const vad = createVad(audioContext.sampleRate, config);
+        capture.current = { stream, context: audioContext, processor, vad };
+        setActive(true);
+        handler.current({ type: 'listening' });
+        let frames = 0;
+        processor.onaudioprocess = (audio) => {
+          if (capture.current?.processor !== processor) return;
+          const frame = new Float32Array(audio.inputBuffer.getChannelData(0)); // copy: buffer is reused
+          const event = vad.push(frame);
+          frames += 1;
+          if (frames % 3 === 0) {
+            const { db } = vad.level();
+            setLevel(Math.max(0, Math.min(1, (db + 60) / 50)));
+          }
+          if (!event) return;
+          if (event.type === 'speech_start') {
+            handler.current(event);
+            return;
+          }
+          const rate = audioContext.sampleRate;
+          release();
+          if (event.type === 'utterance')
+            handler.current({
+              type: 'utterance',
+              wav: utteranceToWav(event.samples, rate),
+              speechMs: event.speechMs,
+              capped: event.capped,
+            });
+          else handler.current(event);
+        };
+        if (audioContext.state === 'suspended') await audioContext.resume();
+      } catch {
+        // A cancelled/resumed old AudioContext must not release a newer capture.
+        const stillCurrent = lifecycle.current === generation;
+        if (stillCurrent) release();
+        stream.getTracks().forEach((track) => track.stop());
+        if (context && context.state !== 'closed') void context.close().catch(() => undefined);
+        if (!stillCurrent) return;
+        handler.current({
+          type: 'error',
+          code: 'mic_error',
+          message: 'Microfono non disponibile: scrivi il messaggio.',
+        });
+      }
     },
     [release],
   );
@@ -183,7 +242,7 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
   // Interruption: tab hidden / app backgrounded → stop listening, nothing is sent.
   useEffect(() => {
     const onVisibility = () => {
-      if (document.visibilityState === 'hidden' && capture.current) {
+      if (document.visibilityState === 'hidden') {
         release();
         handler.current({
           type: 'interrupted',

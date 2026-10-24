@@ -1,0 +1,26 @@
+test_authenticated_real_route_explicit_opt_in_is_fail_closed (__main__.IndependentBoundaries.test_authenticated_real_route_explicit_opt_in_is_fail_closed) ... /workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/domain/contracts.py:36: UserWarning: Field name "schema" in "CreateJobRequest" shadows an attribute in parent "BaseModel"
+  class CreateJobRequest(BaseModel):
+/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/api/app.py:88: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/workspace/.venvs/clinicos-ai/lib/python3.12/site-packages/fastapi/applications.py:4745: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)  # ty: ignore[deprecated]
+stt realtime outcome=not_configured
+Executing <Task finished name='Task-2' coro=<IndependentBoundaries.test_authenticated_real_route_explicit_opt_in_is_fail_closed() done, defined at /workspace/.clinicos-cloud/pr393-followup-independent-qa-20261018/qa-runtime-probe.py:17> result=None created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.402 seconds
+ok
+test_matrix_is_generated_truthfully (__main__.IndependentBoundaries.test_matrix_is_generated_truthfully) ... ok
+test_real_exhausted_token_budget_prevents_provider_http (__main__.IndependentBoundaries.test_real_exhausted_token_budget_prevents_provider_http) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.413s
+
+OK

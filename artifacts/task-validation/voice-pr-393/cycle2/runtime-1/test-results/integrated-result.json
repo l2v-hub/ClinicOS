@@ -1,0 +1,217 @@
+{
+  "mode": "synthetic-provider-transport-real-app-and-owned-postgres16",
+  "parentDatabaseUsed": false,
+  "developmentDatabaseUsed": false,
+  "realProviderProof": false,
+  "checks": [
+    {
+      "name": "partial exact visible value",
+      "status": "PASS"
+    },
+    {
+      "name": "partial has no submission control",
+      "status": "PASS"
+    },
+    {
+      "name": "partial triggers no assistant request",
+      "status": "PASS"
+    },
+    {
+      "name": "final transcript exact value",
+      "status": "PASS"
+    },
+    {
+      "name": "one negotiation and no file/provider fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "one local end-of-turn commit",
+      "status": "PASS"
+    },
+    {
+      "name": "final releases microphone tracks",
+      "status": "PASS"
+    },
+    {
+      "name": "final alone performs no clinical write",
+      "status": "PASS"
+    },
+    {
+      "name": "final submission enters existing policy preview",
+      "status": "PASS"
+    },
+    {
+      "name": "preview persists no clinical write",
+      "status": "PASS"
+    },
+    {
+      "name": "explicit UI confirmation completes",
+      "status": "PASS"
+    },
+    {
+      "name": "exactly one persisted reading",
+      "status": "PASS"
+    },
+    {
+      "name": "persisted values retain literal blood pressure",
+      "status": "PASS"
+    },
+    {
+      "name": "cancel partial closes microphone and peer",
+      "status": "PASS"
+    },
+    {
+      "name": "cancel never submits or uploads",
+      "status": "PASS"
+    },
+    {
+      "name": "late permission stream stopped after cancellation",
+      "status": "PASS"
+    },
+    {
+      "name": "permission denied offers text fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "provider failure releases tracks without silent file fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "text Assistant works after realtime failure",
+      "status": "PASS"
+    },
+    {
+      "name": "only explicit confirmation changed clinical database",
+      "status": "PASS"
+    },
+    {
+      "name": "early input_audio_buffer_commit_empty in LISTENING leaves recoverable ERROR and closed peer",
+      "status": "PASS"
+    },
+    {
+      "name": "early input_audio_buffer_commit_empty in LISTENING exposes retry and text fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "early input_audio_buffer_commit_empty in LISTENING never submits, uploads or writes",
+      "status": "PASS"
+    },
+    {
+      "name": "early input_audio_buffer_commit_buffer_too_small in LISTENING leaves recoverable ERROR and closed peer",
+      "status": "PASS"
+    },
+    {
+      "name": "early input_audio_buffer_commit_buffer_too_small in LISTENING exposes retry and text fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "early input_audio_buffer_commit_buffer_too_small in LISTENING never submits, uploads or writes",
+      "status": "PASS"
+    },
+    {
+      "name": "early input_audio_buffer_commit_empty in TRANSCRIPT_PARTIAL leaves recoverable ERROR and closed peer",
+      "status": "PASS"
+    },
+    {
+      "name": "early input_audio_buffer_commit_empty in TRANSCRIPT_PARTIAL exposes retry and text fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "early input_audio_buffer_commit_empty in TRANSCRIPT_PARTIAL never submits, uploads or writes",
+      "status": "PASS"
+    },
+    {
+      "name": "early input_audio_buffer_commit_buffer_too_small in TRANSCRIPT_PARTIAL leaves recoverable ERROR and closed peer",
+      "status": "PASS"
+    },
+    {
+      "name": "early input_audio_buffer_commit_buffer_too_small in TRANSCRIPT_PARTIAL exposes retry and text fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "early input_audio_buffer_commit_buffer_too_small in TRANSCRIPT_PARTIAL never submits, uploads or writes",
+      "status": "PASS"
+    },
+    {
+      "name": "empty buffer after actual commit recovers to IDLE without an invented transcript",
+      "status": "PASS"
+    },
+    {
+      "name": "empty committed turn has no submit control or clinical write",
+      "status": "PASS"
+    },
+    {
+      "name": "new capture works after early and committed buffer errors",
+      "status": "PASS"
+    },
+    {
+      "name": "disconnect releases mic and shows safe fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "old AudioContext rejection cannot cancel a newer pending microphone capture",
+      "status": "PASS"
+    },
+    {
+      "name": "resident change discards partial and closes peer",
+      "status": "PASS"
+    },
+    {
+      "name": "resident change never submits stale transcript",
+      "status": "PASS"
+    },
+    {
+      "name": "hidden tab cancels pending permission and stops late stream",
+      "status": "PASS"
+    },
+    {
+      "name": "unmount releases late permission stream without background capture",
+      "status": "PASS"
+    },
+    {
+      "name": "lifecycle interruptions never write or upload",
+      "status": "PASS"
+    },
+    {
+      "name": "all provider sessions closed",
+      "status": "PASS"
+    },
+    {
+      "name": "after reload authorized readback completes",
+      "status": "PASS"
+    },
+    {
+      "name": "after reload visible persisted blood pressure is exact",
+      "status": "PASS"
+    },
+    {
+      "name": "reload/readback creates no second clinical write",
+      "status": "PASS"
+    },
+    {
+      "name": "no page or console errors",
+      "status": "PASS"
+    },
+    {
+      "name": "no unexpected HTTP errors",
+      "status": "PASS"
+    }
+  ],
+  "consoleErrors": [],
+  "httpErrors": [],
+  "expectedErrors": [
+    {
+      "kind": "controlled-provider-503",
+      "status": 503
+    },
+    {
+      "kind": "controlled-provider-503",
+      "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+    }
+  ],
+  "browser": "system Chromium",
+  "transcription": "synthetic transport fixture, real microphone/VAD/app/authz/database",
+  "status": "PASS",
+  "databaseOwnershipVerified": true,
+  "ownedContainerRemoved": true
+}

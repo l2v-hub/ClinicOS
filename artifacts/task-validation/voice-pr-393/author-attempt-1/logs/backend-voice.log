@@ -1,0 +1,25 @@
+✔ realtime client forwards bearer/SDP but returns only bounded allowlisted answer (77.863035ms)
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ runtime STT client: bearer + base64 body, typed errors, missing config (448.466811ms)
+✔ VAD parameters are configurable per environment (1.508903ms)
+✔ QA M3: ordinary words after «per» are never turned into residents (1.920299ms)
+✔ spoken blood pressure «120 su 80» is read literally as 120/80 (no other rewriting) (3.54167ms)
+✔ voice status: capability-driven availability + VAD config (59.91996ms)
+✔ transcribe: auth, capability gate and audio validation before any provider call (90.173566ms)
+✔ transcribe: transcript returned verbatim; audit has no text, no audio (11.710753ms)
+✔ I/J — provider failure and silence: typed error or empty, never an invented command (43.764056ms)
+✔ B/K — voice transcript → preview, zero write; spoken «conferma» never confirms; one write (190.963085ms)
+✔ realtime SDP route: identity, capability, feature-off, byte bounds, allowlist and safe audit (51.511355ms)
+✔ STT cost guard: per-operator utterance rate limit → 429, provider not called (49.712776ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15088.981721

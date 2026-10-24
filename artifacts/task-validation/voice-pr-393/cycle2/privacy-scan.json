@@ -1,0 +1,34 @@
+{
+  "scope": "owned voice task artifacts only",
+  "checkedFiles": 33,
+  "realPatientDataUsed": false,
+  "transientSyntheticBearerRedaction": true,
+  "changes": [
+    {
+      "file": "runtime-1/trace/trace.zip",
+      "beforeSha256": "78b80c5a66020d49797bbcd572bc2c22fd3dd92f78aca0b4fa1aa02d17d7be83",
+      "afterSha256": "ed058efc5374a0f0a9d3b27bfe42766366f705446a9322611eebbc1e744573b3",
+      "redactedMembers": [
+        {
+          "member": "trace.network",
+          "redactions": 95,
+          "beforeSha256": "42538b53c9bb19807d9c0046423c60343327450636cc0609c5ffada4c08d52d8",
+          "afterSha256": "ae1618766ad8b0a3157dcccb04c7d025880289a20c45e9a27c1dd993d2d922d8"
+        },
+        {
+          "member": "resources/74f9b3e5d22500f54c61170e11a082e5fd057656.json",
+          "redactions": 1,
+          "beforeSha256": "d547e7e62cbf3d3f34f60360728834a4f30cbd56ae5294fa6cea65d090b1d0c9",
+          "afterSha256": "f35fbcf9c0750ee0017925a028823b4dc27b5c65a5f272183188c4565ee6db77"
+        },
+        {
+          "member": "resources/df680887575d232253c0a93ba5a53982d5c65340.json",
+          "redactions": 1,
+          "beforeSha256": "ce6e099ea4481008a68bc464e6457d469ab3e02557bdcc805685445539fd79e0",
+          "afterSha256": "068433568672ce188ed50f3a30274715b6ee623efa825fee750a3a6c9ce7be90"
+        }
+      ],
+      "note": "Only transient synthetic bearer/QA DSN redaction; trace event IDs retained; member names remain resource identifiers, not a claim of unchanged payload digests."
+    }
+  ]
+}

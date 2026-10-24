@@ -64,9 +64,21 @@ def validate_ai_config(env: Mapping[str, str]) -> tuple[list[str], list[str]]:
                 warnings.append(f"STT_MODEL '{stt[1]}' deprecato dal provider: non usarlo come baseline")
     realtime = stt_realtime(env)
     if realtime["enabled"]:
-        # Live transcription is not implemented in this version: never pretend it is.
-        errors.append("STT_REALTIME_ENABLED=true ma la trascrizione realtime non è implementata "
-                      "(push-to-talk usa STT_MODEL)")
+        entry = provider_entry(stt[0]) if stt else None
+        if entry is None or not entry.realtime_module:
+            errors.append("STT_REALTIME_ENABLED=true ma la trascrizione realtime non è implementata "
+                          "per il provider STT configurato (push-to-talk usa STT_MODEL)")
+        elif not realtime["model"]:
+            errors.append("STT_REALTIME_MODEL mancante per il realtime abilitato")
+        else:
+            from importlib import import_module
+            from ..voice.stt import SttError
+            try:
+                adapter = import_module(entry.realtime_module)
+                if adapter.realtime_config(env, model=realtime["model"]) is None:
+                    errors.append("configurazione STT realtime incompleta")
+            except SttError:
+                errors.append("configurazione STT realtime non valida")
     try:
         if int((env.get("AI_DAILY_TOKEN_BUDGET") or "0").strip()) < 0:
             errors.append("AI_DAILY_TOKEN_BUDGET negativo")

@@ -1,0 +1,96 @@
+{
+  "baseSha": "d6bb325b1e767c9554e64da433c3f91b0217ee8a",
+  "sourceDigest": "0e239c1633a11c33397d28a1263935e7278f1ec204858246056141acf3cb38af",
+  "files": [
+    {
+      "path": ".ai-architecture/phase-5-voice/REALTIME_RECONCILIATION.md",
+      "sha256": "503bbb49fdfc70df6c82ed5e7babed67fa799a9abf1206e5a56aac691ec51449",
+      "state": "present"
+    },
+    {
+      "path": ".ai-architecture/phase-9-production/PRODUCTION_RUNBOOK.md",
+      "sha256": "599d25dcf29ec3fb035693b7d73b97b7686c9f6de41c806cf8f30817329ba882",
+      "state": "present"
+    },
+    {
+      "path": ".ai-architecture/phase-9-production/PROVIDER_CAPABILITY_MATRIX.json",
+      "sha256": "213f49f80e5dba25bb559fa7557650f7b7bc5c93830eb2ac0b3e88dc34a91d88",
+      "state": "present"
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-393/codex-followup-1/harness/qa-voice-pr-393-browser.mjs",
+      "sha256": "b70790f0674e0896d5f5050d5f66c3e32de53b0f84d663382965d37b9bb100c9",
+      "state": "present"
+    },
+    {
+      "path": "artifacts/task-validation/standalone-pr-393/codex-followup-1/harness/qa-voice-pr-393.mjs",
+      "sha256": "d77ae1bc3e2d6c8853a9be1fdd0bee6a4922c11a5924b8b1536466a04d373e47",
+      "state": "present"
+    },
+    {
+      "path": "backend/src/skills/http.ts",
+      "sha256": "f21c5b9163c66ae4c21537e5de06871c889352ed351a7baf241b4495206f59e7",
+      "state": "present"
+    },
+    {
+      "path": "backend/src/voice/__tests__/realtime-client.test.ts",
+      "sha256": "08bda1ea4ea73e72c8c74370c78af9ad2faeff141f3cc9c280e1c8c6ccd0c3ec",
+      "state": "present"
+    },
+    {
+      "path": "backend/src/voice/__tests__/voice-e2e.test.ts",
+      "sha256": "f08175527448fab5de810a776ac9a8f75867610be03ed325468b8a2f294ca665",
+      "state": "present"
+    },
+    {
+      "path": "backend/src/voice/stt.ts",
+      "sha256": "dd008aa72ebe9b6ebad91788a471ded38bbc4879d885fd1b00f7a708fccd59c7",
+      "state": "present"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/provider_registry.py",
+      "sha256": "1e6041dbb550f42dce1a6a79982cdb9a0ecea3f4dd7e09d06657e0a1e9841a9c",
+      "state": "present"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/voice/azure_realtime.py",
+      "sha256": "f2a42b652b8bc8c95cfc18bf3622af458cc6786e3485a44352d9a3f03a9d4757",
+      "state": "present"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/voice/realtime.py",
+      "sha256": "f9b3e19ddd6e519356ff0261c21bfd38647ba3b3d3605c63b0e83a28220bdbbc",
+      "state": "present"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_voice_realtime.py",
+      "sha256": "96cae042aab58ed1e0e24bd6cc240c60d7bf5adb4d243165c2b0a891b5646dae",
+      "state": "present"
+    },
+    {
+      "path": "e2e/qa-voice-pr-393-browser.mjs",
+      "sha256": null,
+      "state": "deleted"
+    },
+    {
+      "path": "e2e/qa-voice-pr-393.mjs",
+      "sha256": null,
+      "state": "deleted"
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/VoicePanel.tsx",
+      "sha256": "30ca126cb03cb27a2b236c061cd7eb816ec09a961310fc235b08340ae9ccb44a",
+      "state": "present"
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/useVoiceCapture.ts",
+      "sha256": "894a9d93c33900430e633bdd5f3f17dc7a3d918896afebc6808cc61e4ec4aca2",
+      "state": "present"
+    }
+  ],
+  "qaSession": "fresh independent dedicated session",
+  "checkedOutMain": "d1324cb3dd9ac2a9eafdc7eb3d88abc399da7f55",
+  "sourceDigestAlgorithm": "SHA256 of UTF-8 JSON.stringify(files), compact separators",
+  "sourceBoundExecution": "Full runtime/backend/browser/compilers rerun against this unchanged stopped source",
+  "verifiedAt": "2026-10-18T17:16:55.003130+00:00"
+}

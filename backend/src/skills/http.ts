@@ -37,7 +37,8 @@ import {
   SttUnavailableError,
   createRuntimeSttProvider,
   looksLikeWav,
-  runtimeSttAvailable,
+  runtimeSttStatus,
+  voiceTransport,
   voiceChannelEnabled,
 } from '../voice/stt.js';
 import { voiceVadConfig } from '../voice/vad-config.js';
@@ -300,10 +301,21 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
     const identity = requireIdentity(req, res);
     if (!identity) return;
     const channelEnabled = voiceChannelEnabled();
+    // A disabled channel never even probes its shared runtime.
+    const stt = channelEnabled && !deps.stt ? await runtimeSttStatus() : null;
+    const transport = stt ? voiceTransport(stt) : 'server';
     res.status(200).json({
       voiceAllowed: voiceAllowed(req),
       channelEnabled,
-      sttConfigured: channelEnabled && (Boolean(deps.stt) || (await runtimeSttAvailable())),
+      sttConfigured:
+        channelEnabled &&
+        (Boolean(deps.stt) ||
+          (transport === 'webrtc' ? stt?.realtime.available === true : stt?.available === true)),
+      transport,
+      realtime: {
+        enabled: stt?.realtime.enabled ?? false,
+        configured: stt?.realtime.available ?? false,
+      },
       locale: 'it-IT',
       maxUtteranceBytes: MAX_UTTERANCE_BYTES,
       vad: voiceVadConfig(),
@@ -311,38 +323,153 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
   });
 
   /** Capability + per-environment switch BEFORE the body is buffered (no 2 MB for nothing). */
-  function voiceGate(req: AuthedRequest, res: Response, next: () => void) {
-    const identity = requireIdentity(req, res);
-    if (!identity) return;
-    const refuse = (status: number, code: string, error: string, outcome: AiAuditOutcome) => {
-      recordAuditEvent({
-        requestId: `voice-${randomUUID()}`,
-        operatorId: identity.operatorId,
-        operatorRole: identity.appRole ?? identity.role,
-        patientId: null,
-        actionType: 'voice:transcribe',
-        kind: 'read',
-        channel: 'voce',
-        fields: [`code:${code === 'voice_denied' ? 'capability_denied' : code}`],
-        outcome,
-      });
-      res.status(status).json({ error, code });
+  function voiceGate(actionType: 'voice:session' | 'voice:transcribe') {
+    return (req: AuthedRequest, res: Response, next: () => void) => {
+      const identity = requireIdentity(req, res);
+      if (!identity) return;
+      const refuse = (status: number, code: string, error: string, outcome: AiAuditOutcome) => {
+        recordAuditEvent({
+          requestId: `voice-${randomUUID()}`,
+          operatorId: identity.operatorId,
+          operatorRole: identity.appRole ?? identity.role,
+          patientId: null,
+          actionType,
+          kind: 'read',
+          channel: 'voce',
+          fields: [`code:${code === 'voice_denied' ? 'capability_denied' : code}`],
+          outcome,
+        });
+        res.status(status).json({ error, code });
+      };
+      if (!voiceAllowed(req)) {
+        refuse(403, 'voice_denied', 'Canale vocale non consentito al tuo ruolo', 'denied');
+        return;
+      }
+      if (!voiceChannelEnabled()) {
+        refuse(503, 'voice_disabled', 'Canale vocale non attivo in questo ambiente', 'error');
+        return;
+      }
+      next();
     };
-    if (!voiceAllowed(req)) {
-      refuse(403, 'voice_denied', 'Canale vocale non consentito al tuo ruolo', 'denied');
-      return;
-    }
-    if (!voiceChannelEnabled()) {
-      refuse(503, 'voice_disabled', 'Canale vocale non attivo in questo ambiente', 'error');
-      return;
-    }
-    next();
   }
+
+  // Admission only: an established provider session needs authoritative runtime termination.
+  // The runtime refuses realtime adapters without that capability; this Set guards negotiations.
+  const realtimeNegotiations = new Set<string>();
+  router.post(
+    '/voice/realtime-call',
+    voiceTranscribeRateLimit,
+    voiceGate('voice:session'),
+    express.text({ type: 'application/sdp', limit: 64_000 }),
+    async (req: AuthedRequest, res: Response) => {
+      const identity = requireIdentity(req, res);
+      if (!identity) return;
+      const offer = typeof req.body === 'string' ? req.body : '';
+      if (
+        !req.is('application/sdp') ||
+        !offer.startsWith('v=0') ||
+        offer.includes('\0') ||
+        Buffer.byteLength(offer) > 64_000
+      ) {
+        res.status(400).json({ error: 'Offerta WebRTC non valida', code: 'invalid_sdp' });
+        return;
+      }
+      const provider = deps.stt ?? createRuntimeSttProvider();
+      const requestId = `voice-${randomUUID()}`;
+      const refuse = (status: number, code: string) => {
+        recordAuditEvent({
+          requestId,
+          operatorId: identity.operatorId,
+          operatorRole: identity.appRole ?? identity.role,
+          patientId: null,
+          actionType: 'voice:session',
+          kind: 'read',
+          channel: 'voce',
+          fields: [`code:${code}`],
+          outcome: 'error',
+        });
+        res.status(status).json({ error: 'Trascrizione realtime non disponibile', code });
+      };
+      const pinnedServer =
+        (process.env.VOICE_STT_TRANSPORT || '').trim().toLowerCase() === 'server';
+      const status = !deps.stt && !pinnedServer ? await runtimeSttStatus() : null;
+      // The caller may disconnect while configuration is being probed, before listeners attach.
+      if (req.aborted || res.destroyed) return;
+      if (
+        pinnedServer ||
+        !provider.negotiateRealtimeCall ||
+        (!deps.stt &&
+          (!status || voiceTransport(status) !== 'webrtc' || !status.realtime.available))
+      ) {
+        refuse(409, 'transport_unsupported');
+        return;
+      }
+      if (realtimeNegotiations.has(identity.operatorId)) {
+        refuse(409, 'session_busy');
+        return;
+      }
+      realtimeNegotiations.add(identity.operatorId);
+      const controller = new AbortController();
+      const disconnected = () => {
+        if (!res.writableEnded) controller.abort();
+      };
+      req.once('aborted', disconnected);
+      res.once('close', disconnected);
+      try {
+        const answer = await provider.negotiateRealtimeCall(offer, {
+          requestId,
+          signal: controller.signal,
+        });
+        if (controller.signal.aborted) return;
+        recordAuditEvent({
+          requestId,
+          operatorId: identity.operatorId,
+          operatorRole: identity.appRole ?? identity.role,
+          patientId: null,
+          actionType: 'voice:session',
+          kind: 'read',
+          channel: 'voce',
+          fields: ['transport:webrtc'],
+          outcome: 'ok',
+        });
+        // Enforce the same allowlist even for injected test/provider implementations.
+        res.status(200).json({
+          sdp: answer.sdp,
+          model: answer.model,
+          deployment: answer.deployment,
+          expiresAt: answer.expiresAt,
+          transport: 'webrtc',
+        });
+      } catch (error) {
+        if (controller.signal.aborted) return;
+        const e =
+          error instanceof SttUnavailableError
+            ? error
+            : new SttUnavailableError('stt_provider_error', 'Errore STT realtime', 502);
+        recordAuditEvent({
+          requestId,
+          operatorId: identity.operatorId,
+          operatorRole: identity.appRole ?? identity.role,
+          patientId: null,
+          actionType: 'voice:session',
+          kind: 'read',
+          channel: 'voce',
+          fields: [`code:${e.code}`],
+          outcome: 'error',
+        });
+        res.status(e.status).json({ error: 'Trascrizione realtime non disponibile', code: e.code });
+      } finally {
+        realtimeNegotiations.delete(identity.operatorId);
+        req.removeListener('aborted', disconnected);
+        res.removeListener('close', disconnected);
+      }
+    },
+  );
 
   router.post(
     '/voice/transcribe',
     voiceTranscribeRateLimit,
-    voiceGate,
+    voiceGate('voice:transcribe'),
     express.raw({ type: [...STT_MIME_TYPES], limit: MAX_UTTERANCE_BYTES }),
     async (req: AuthedRequest, res: Response) => {
       const identity = requireIdentity(req, res);
@@ -439,7 +566,9 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
   });
 
   // Phase 7: Attention Inbox, ack/seen, shift briefing (read-only; actions reuse existing skills).
-  const proactiveDeps = proactive ?? { listWorkflows: (id: string) => deps.store.listByOperator?.(id) ?? [] };
+  const proactiveDeps = proactive ?? {
+    listWorkflows: (id: string) => deps.store.listByOperator?.(id) ?? [],
+  };
   registerProactiveRoutes(router, proactiveDeps);
   // Phase 8: role copilot home + resident round (presentation over the same skills / policy / scope).
   registerCopilotRoutes(router, {

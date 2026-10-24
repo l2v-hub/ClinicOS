@@ -1,0 +1,1802 @@
+diff --git a/.ai-architecture/phase-5-voice/REALTIME_RECONCILIATION.md b/.ai-architecture/phase-5-voice/REALTIME_RECONCILIATION.md
+index 218778bf..8f6e1bcd 100644
+--- a/.ai-architecture/phase-5-voice/REALTIME_RECONCILIATION.md
++++ b/.ai-architecture/phase-5-voice/REALTIME_RECONCILIATION.md
+@@ -6,9 +6,9 @@ model, environment switch, endpoint or deployed resource is changed by this sour
+ 
+ Realtime WebRTC is a separate optional transport. It requires existing
+ `STT_REALTIME_ENABLED=true`, an explicit `STT_REALTIME_MODEL`, and a registry provider with a
+-realtime adapter. This reconciliation implements the Azure adapter only; the current default
++realtime adapter. This reconciliation implements an **unverified** Azure adapter only; the current default
+ OpenAI file-transcription configuration continues unchanged and does not silently become Azure.
+-Enabling realtime for an unsupported provider fails validation. All environments retain voice
++Enabling realtime for an unsupported provider fails validation. The Azure dispatcher also refuses negotiation even with explicit opt-in: authoritative provider-side session duration/termination is not yet implemented and verified. Configuration alone cannot activate paid media. All environments retain voice
+ OFF unless their existing, authorized `VOICE_CHANNEL_ENABLED=true` explicitly opts in.
+ `AI_ENABLED=false` also refuses the voice channel and runtime realtime dispatcher.
+ 
+@@ -42,10 +42,38 @@ preview/readback and typed Assistant paths are preserved.
+ 
+ ## Validation boundaries
+ 
+-`flock /tmp/clinicos-browser-qa.lock node e2e/qa-voice-pr-393.mjs --out artifacts/task-validation/voice-pr-393/<fresh-run>` runs only with an owned synthetic PostgreSQL16 container on a dedicated
++`flock /tmp/clinicos-browser-qa.lock node artifacts/task-validation/standalone-pr-393/codex-followup-1/harness/qa-voice-pr-393.mjs --out artifacts/task-validation/standalone-pr-393/codex-followup-1/<fresh-run>` runs only with an owned synthetic PostgreSQL16 container on a dedicated
+ loopback port and a single browser-stack lock. It never reads the caller's database URL. It
+ exercises real UI, mic/VAD, backend identity/policy, preview, confirmation and persisted values;
+ its WebRTC/provider transcript is a deliberately labelled fixture, not Azure transcription.
+ Python tests separately exercise real ASGI auth/body limits and the adapter HTTP boundary.
+ The task packet records failures, actual run counts, screenshots/video/trace, source identity,
+ independent QA and the still-separate real-provider verification requirement.
++
++
++## Realtime admission and activation boundary
++
++Realtime remains default OFF and **implemented, unverified / activation blocked** for Azure.
++The generated capability matrix therefore reports Azure realtime as false. Before any future
++`STT_REALTIME_ENABLED=true` activation, a supported adapter must enforce a maximum **60 second**
++provider media session on the server, including browser disconnect, and an authorized synthetic-audio
++provider smoke must record exact source/model, redacted status/response shape and a successful final
++transcription. This task makes no provider call and supplies no such proof.
++
++The 60 second client-secret `expires_after` request restricts grant reuse; it does **not** end an
++established session. The adapter explicitly declares server duration enforcement false, so the
++runtime denies negotiation without provider HTTP. Do not enable that capability based on a mock.
++The backend separately rejects an explicit server transport pin and concurrent pending negotiations
++by the same operator; that admission guard is not a live-session concurrency cap. Any future enabled
++adapter must enforce session lifetime and operator live-session ownership authoritatively.
++
++The runtime checks the existing hard daily token budget before negotiation. An admitted supported
++adapter negotiation is counted in `cost.calls` and charged an estimated 60-second audio ceiling from
++configured pricing, including uncertain failures; unknown pricing increments `unpricedCalls`.
++These values are conservative admission estimates, never measured audio usage. Existing USD soft
++limits remain alerts, not billing caps. All counters/admission locks are per process; distributed
++session accounting must be established before a multi-replica activation.
++
++Runtime configuration status uses a bounded 60-second backend cache partitioned by normalized URL
++and credential identity. The local server transport pin is always checked freshly on negotiation.
++Historical evidence is preserved unchanged; the follow-up harness writes fresh directories only.
+diff --git a/.ai-architecture/phase-9-production/PRODUCTION_RUNBOOK.md b/.ai-architecture/phase-9-production/PRODUCTION_RUNBOOK.md
+index aa443d80..7bdb2fd3 100644
+--- a/.ai-architecture/phase-9-production/PRODUCTION_RUNBOOK.md
++++ b/.ai-architecture/phase-9-production/PRODUCTION_RUNBOOK.md
+@@ -134,6 +134,6 @@ never changes.
+ | Switch STT              | `STT_PROVIDER` / `STT_MODEL`                                                                                                                                                                                                     |
+ | Disable all AI          | backend service `AI_ENABLED=false` (and/or runtime `AI_ENABLED=false`)                                                                                                                                                           |
+ | Disable voice           | backend `VOICE_CHANNEL_ENABLED=false`                                                                                                                                                                                            |
+-| Enable realtime STT     | only after it is implemented, tested and costed: `STT_REALTIME_ENABLED=true` (only an implemented registry adapter with complete configuration; current OpenAI realtime remains unsupported)                                                                                                                         |
+-| Cost check              | `/v1/runtime/ai-health` → `cost` (estimated USD today/month, soft limits), runtime log `ai-budget soft limit exceeded`, backend `clinicos_ai_tokens_total`, `clinicos_ai_estimated_usd_total`, `clinicos_ai_audio_seconds_total` |
++| Enable realtime STT     | **BLOCKED / unverified** for Azure; keep `STT_REALTIME_ENABLED=false`. Before any activation: supported authoritative server media termination at max **60 seconds**, operator live-session ownership and authorized synthetic-audio provider smoke with redacted source/model/status/shape/final transcript success. Grant `expires_after=60` is not session termination. Current OpenAI realtime remains unsupported.                                                                                                                         |
++| Cost check              | `/v1/runtime/ai-health` → `cost` (estimated USD today/month, soft limits), runtime log `ai-budget soft limit exceeded`; realtime admitted negotiations count conservative duration-ceiling estimates in `cost.calls` (unpriced calls remain explicit), not measured media spend; backend `clinicos_ai_tokens_total`, `clinicos_ai_estimated_usd_total`, `clinicos_ai_audio_seconds_total` |
+ | Real smoke              | `railway run --project bddf5d1b-ee83-4362-8238-a79721f795e5 --service clinicos-ai-runtime --environment production -- python -m tools.openai_smoke --out smoke.json` (from `clinicos-ai-runtime/`)                               |
+diff --git a/.ai-architecture/phase-9-production/PROVIDER_CAPABILITY_MATRIX.json b/.ai-architecture/phase-9-production/PROVIDER_CAPABILITY_MATRIX.json
+index 2d2dd77b..32337bae 100644
+--- a/.ai-architecture/phase-9-production/PROVIDER_CAPABILITY_MATRIX.json
++++ b/.ai-architecture/phase-9-production/PROVIDER_CAPABILITY_MATRIX.json
+@@ -79,7 +79,7 @@
+         "tool_calling": true,
+         "streaming": true,
+         "stt": true,
+-        "realtime": true,
++        "realtime": false,
+         "usage_metadata": true,
+         "cancellation": false,
+         "timeout": true,
+diff --git a/backend/src/skills/http.ts b/backend/src/skills/http.ts
+index b0b11f8d..da7af720 100644
+--- a/backend/src/skills/http.ts
++++ b/backend/src/skills/http.ts
+@@ -323,38 +323,43 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
+   });
+ 
+   /** Capability + per-environment switch BEFORE the body is buffered (no 2 MB for nothing). */
+-  function voiceGate(req: AuthedRequest, res: Response, next: () => void) {
+-    const identity = requireIdentity(req, res);
+-    if (!identity) return;
+-    const refuse = (status: number, code: string, error: string, outcome: AiAuditOutcome) => {
+-      recordAuditEvent({
+-        requestId: `voice-${randomUUID()}`,
+-        operatorId: identity.operatorId,
+-        operatorRole: identity.appRole ?? identity.role,
+-        patientId: null,
+-        actionType: 'voice:transcribe',
+-        kind: 'read',
+-        channel: 'voce',
+-        fields: [`code:${code === 'voice_denied' ? 'capability_denied' : code}`],
+-        outcome,
+-      });
+-      res.status(status).json({ error, code });
++  function voiceGate(actionType: 'voice:session' | 'voice:transcribe') {
++    return (req: AuthedRequest, res: Response, next: () => void) => {
++      const identity = requireIdentity(req, res);
++      if (!identity) return;
++      const refuse = (status: number, code: string, error: string, outcome: AiAuditOutcome) => {
++        recordAuditEvent({
++          requestId: `voice-${randomUUID()}`,
++          operatorId: identity.operatorId,
++          operatorRole: identity.appRole ?? identity.role,
++          patientId: null,
++          actionType,
++          kind: 'read',
++          channel: 'voce',
++          fields: [`code:${code === 'voice_denied' ? 'capability_denied' : code}`],
++          outcome,
++        });
++        res.status(status).json({ error, code });
++      };
++      if (!voiceAllowed(req)) {
++        refuse(403, 'voice_denied', 'Canale vocale non consentito al tuo ruolo', 'denied');
++        return;
++      }
++      if (!voiceChannelEnabled()) {
++        refuse(503, 'voice_disabled', 'Canale vocale non attivo in questo ambiente', 'error');
++        return;
++      }
++      next();
+     };
+-    if (!voiceAllowed(req)) {
+-      refuse(403, 'voice_denied', 'Canale vocale non consentito al tuo ruolo', 'denied');
+-      return;
+-    }
+-    if (!voiceChannelEnabled()) {
+-      refuse(503, 'voice_disabled', 'Canale vocale non attivo in questo ambiente', 'error');
+-      return;
+-    }
+-    next();
+   }
+ 
++  // Admission only: an established provider session needs authoritative runtime termination.
++  // The runtime refuses realtime adapters without that capability; this Set guards negotiations.
++  const realtimeNegotiations = new Set<string>();
+   router.post(
+     '/voice/realtime-call',
+     voiceTranscribeRateLimit,
+-    voiceGate,
++    voiceGate('voice:session'),
+     express.text({ type: 'application/sdp', limit: 64_000 }),
+     async (req: AuthedRequest, res: Response) => {
+       const identity = requireIdentity(req, res);
+@@ -370,19 +375,46 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
+         return;
+       }
+       const provider = deps.stt ?? createRuntimeSttProvider();
+-      if (!provider.negotiateRealtimeCall) {
+-        res
+-          .status(409)
+-          .json({ error: 'Trascrizione realtime non disponibile', code: 'transport_unsupported' });
++      const requestId = `voice-${randomUUID()}`;
++      const refuse = (status: number, code: string) => {
++        recordAuditEvent({
++          requestId,
++          operatorId: identity.operatorId,
++          operatorRole: identity.appRole ?? identity.role,
++          patientId: null,
++          actionType: 'voice:session',
++          kind: 'read',
++          channel: 'voce',
++          fields: [`code:${code}`],
++          outcome: 'error',
++        });
++        res.status(status).json({ error: 'Trascrizione realtime non disponibile', code });
++      };
++      const pinnedServer =
++        (process.env.VOICE_STT_TRANSPORT || '').trim().toLowerCase() === 'server';
++      const status = !deps.stt && !pinnedServer ? await runtimeSttStatus() : null;
++      // The caller may disconnect while configuration is being probed, before listeners attach.
++      if (req.aborted || res.destroyed) return;
++      if (
++        pinnedServer ||
++        !provider.negotiateRealtimeCall ||
++        (!deps.stt &&
++          (!status || voiceTransport(status) !== 'webrtc' || !status.realtime.available))
++      ) {
++        refuse(409, 'transport_unsupported');
++        return;
++      }
++      if (realtimeNegotiations.has(identity.operatorId)) {
++        refuse(409, 'session_busy');
+         return;
+       }
++      realtimeNegotiations.add(identity.operatorId);
+       const controller = new AbortController();
+       const disconnected = () => {
+         if (!res.writableEnded) controller.abort();
+       };
+       req.once('aborted', disconnected);
+       res.once('close', disconnected);
+-      const requestId = `voice-${randomUUID()}`;
+       try {
+         const answer = await provider.negotiateRealtimeCall(offer, {
+           requestId,
+@@ -401,15 +433,13 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
+           outcome: 'ok',
+         });
+         // Enforce the same allowlist even for injected test/provider implementations.
+-        res
+-          .status(200)
+-          .json({
+-            sdp: answer.sdp,
+-            model: answer.model,
+-            deployment: answer.deployment,
+-            expiresAt: answer.expiresAt,
+-            transport: 'webrtc',
+-          });
++        res.status(200).json({
++          sdp: answer.sdp,
++          model: answer.model,
++          deployment: answer.deployment,
++          expiresAt: answer.expiresAt,
++          transport: 'webrtc',
++        });
+       } catch (error) {
+         if (controller.signal.aborted) return;
+         const e =
+@@ -429,6 +459,7 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
+         });
+         res.status(e.status).json({ error: 'Trascrizione realtime non disponibile', code: e.code });
+       } finally {
++        realtimeNegotiations.delete(identity.operatorId);
+         req.removeListener('aborted', disconnected);
+         res.removeListener('close', disconnected);
+       }
+@@ -438,7 +469,7 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
+   router.post(
+     '/voice/transcribe',
+     voiceTranscribeRateLimit,
+-    voiceGate,
++    voiceGate('voice:transcribe'),
+     express.raw({ type: [...STT_MIME_TYPES], limit: MAX_UTTERANCE_BYTES }),
+     async (req: AuthedRequest, res: Response) => {
+       const identity = requireIdentity(req, res);
+diff --git a/backend/src/voice/__tests__/realtime-client.test.ts b/backend/src/voice/__tests__/realtime-client.test.ts
+index 5fddab04..5debc022 100644
+--- a/backend/src/voice/__tests__/realtime-client.test.ts
++++ b/backend/src/voice/__tests__/realtime-client.test.ts
+@@ -50,17 +50,17 @@ test('realtime client forwards bearer/SDP but returns only bounded allowlisted a
+       );
+     }
+     reply = { available: true, realtime: { enabled: false, available: false, transports: [] } };
+-    const disabled = await runtimeSttStatus(env);
++    const disabled = await runtimeSttStatus({ ...env, AI_RUNTIME_SERVICE_TOKEN: 'disabled' });
+     assert.equal(voiceTransport(disabled, {}), 'server');
+     reply = {
+       available: true,
+       realtime: { enabled: true, available: true, model: 'live', transports: ['webrtc'] },
+     };
+-    const enabled = await runtimeSttStatus(env);
++    const enabled = await runtimeSttStatus({ ...env, AI_RUNTIME_SERVICE_TOKEN: 'enabled' });
+     assert.equal(voiceTransport(enabled, {}), 'webrtc');
+     assert.equal(voiceTransport(enabled, { VOICE_STT_TRANSPORT: 'server' }), 'server');
+     reply = { available: true, realtime: { enabled: true, available: false, transports: [] } };
+-    const unsupported = await runtimeSttStatus(env);
++    const unsupported = await runtimeSttStatus({ ...env, AI_RUNTIME_SERVICE_TOKEN: 'unsupported' });
+     assert.equal(
+       voiceTransport(unsupported, {}),
+       'webrtc',
+@@ -75,3 +75,65 @@ test('realtime client forwards bearer/SDP but returns only bounded allowlisted a
+     SttUnavailableError,
+   );
+ });
++
++test('status probes cache by runtime and credential, deduplicate, expire and isolate returned values', async () => {
++  let requests = 0;
++  let valid = true;
++  const server = http.createServer((_req, res) => {
++    requests++;
++    res.setHeader('Content-Type', 'application/json');
++    res.end(
++      valid
++        ? JSON.stringify({
++            available: true,
++            realtime: { enabled: true, available: true, transports: ['webrtc'] },
++          })
++        : 'not json',
++    );
++  });
++  const other = http.createServer((_req, res) => {
++    requests++;
++    res.end('{"available":false}');
++  });
++  await Promise.all([
++    new Promise<void>((r) => server.listen(0, '127.0.0.1', r)),
++    new Promise<void>((r) => other.listen(0, '127.0.0.1', r)),
++  ]);
++  const env = {
++    AI_RUNTIME_URL: `http://127.0.0.1:${(server.address() as any).port}`,
++    AI_RUNTIME_SERVICE_TOKEN: 'synthetic-cache',
++  };
++  try {
++    const [first, second] = await Promise.all([
++      runtimeSttStatus(env, 1000),
++      runtimeSttStatus(env, 1000),
++    ]);
++    assert.equal(requests, 1);
++    first.realtime.available = false;
++    assert.equal(second.realtime.available, true);
++    assert.equal(
++      (await runtimeSttStatus({ ...env, AI_RUNTIME_URL: `${env.AI_RUNTIME_URL}/` }, 2000)).realtime
++        .available,
++      true,
++    );
++    assert.equal(requests, 1, 'trailing slash normalizes to the same runtime');
++    await runtimeSttStatus({ ...env, AI_RUNTIME_SERVICE_TOKEN: 'rotated' }, 2000);
++    assert.equal(requests, 2, 'rotated credential cannot inherit old authentication');
++    await runtimeSttStatus(
++      { ...env, AI_RUNTIME_URL: `http://127.0.0.1:${(other.address() as any).port}` },
++      2000,
++    );
++    assert.equal(requests, 3, 'another runtime has its own status');
++    await runtimeSttStatus(env, 61001);
++    assert.equal(requests, 4, 'TTL expiration refreshes status with a deterministic clock');
++    valid = false;
++    assert.equal((await runtimeSttStatus(env, 121002)).available, false);
++    await runtimeSttStatus({}, 121002);
++    assert.equal(requests, 5, 'missing configuration never probes');
++  } finally {
++    await Promise.all([
++      new Promise<void>((r) => server.close(() => r())),
++      new Promise<void>((r) => other.close(() => r())),
++    ]);
++  }
++});
+diff --git a/backend/src/voice/__tests__/voice-e2e.test.ts b/backend/src/voice/__tests__/voice-e2e.test.ts
+index 5b0e4767..a80c3ee1 100644
+--- a/backend/src/voice/__tests__/voice-e2e.test.ts
++++ b/backend/src/voice/__tests__/voice-e2e.test.ts
+@@ -419,32 +419,79 @@ test('B/K — voice transcript → preview, zero write; spoken «conferma» neve
+ test('realtime SDP route: identity, capability, feature-off, byte bounds, allowlist and safe audit', async () => {
+   const doctor = await login(base, 'SIM-DOCTOR-1');
+   let count = 0;
+-  setSttProvider({ ...scripted('unchanged batch'), async negotiateRealtimeCall(offer) {
+-    count += 1;
+-    assert.equal(offer, 'v=0\r\nsynthetic-offer');
+-    return { sdp: 'v=0\r\nsynthetic-answer', model: 'synthetic-live', deployment: 'synthetic-live', expiresAt: 123,
+-      transport: 'webrtc', token: 'must-not-escape' } as any;
+-  } });
++  setSttProvider({
++    ...scripted('unchanged batch'),
++    async negotiateRealtimeCall(offer) {
++      count += 1;
++      assert.equal(offer, 'v=0\r\nsynthetic-offer');
++      return {
++        sdp: 'v=0\r\nsynthetic-answer',
++        model: 'synthetic-live',
++        deployment: 'synthetic-live',
++        expiresAt: 123,
++        transport: 'webrtc',
++        token: 'must-not-escape',
++      } as any;
++    },
++  });
+   const send = async (session: Session | null, text: string, mime = 'application/sdp') => {
+-    const response = await fetch(`${base}/skills/voice/realtime-call`, { method: 'POST',
+-      headers: { 'Content-Type': mime, ...(session ? { Authorization: `Bearer ${session.token}` } : {}) }, body: text });
+-    return { status: response.status, body: await response.json() as any };
++    const response = await fetch(`${base}/skills/voice/realtime-call`, {
++      method: 'POST',
++      headers: {
++        'Content-Type': mime,
++        ...(session ? { Authorization: `Bearer ${session.token}` } : {}),
++      },
++      body: text,
++    });
++    return { status: response.status, body: (await response.json()) as any };
+   };
+   assert.equal((await send(null, 'v=0')).status, 401);
++  const deniedAt = new Date();
+   assert.equal((await send(admin, 'v=0')).status, 403);
++  assert.ok(
++    await waitForAudit({
++      operatorId: admin.identityId,
++      actionType: 'voice:session',
++      outcome: 'denied',
++      createdAt: { gte: deniedAt },
++    }),
++  );
+   assert.equal((await send(doctor, 'v=0', 'text/plain')).status, 400);
+   assert.equal((await send(doctor, 'invalid')).status, 400);
+   assert.equal((await send(doctor, 'v=0' + 'é'.repeat(32000))).status, 413);
++  const disabledAt = new Date();
+   process.env.VOICE_CHANNEL_ENABLED = 'false';
+-  try { assert.equal((await send(doctor, 'v=0')).status, 503); }
+-  finally { process.env.VOICE_CHANNEL_ENABLED = 'true'; }
++  try {
++    assert.equal((await send(doctor, 'v=0')).status, 503);
++  } finally {
++    process.env.VOICE_CHANNEL_ENABLED = 'true';
++  }
++  assert.ok(
++    await waitForAudit({
++      operatorId: doctor.identityId,
++      actionType: 'voice:session',
++      outcome: 'error',
++      fields: { has: 'code:voice_disabled' },
++      createdAt: { gte: disabledAt },
++    }),
++  );
+   assert.equal(count, 0, 'unauthorized, disabled and invalid SDP never reaches provider');
+   const success = await send(doctor, 'v=0\r\nsynthetic-offer');
+   assert.equal(success.status, 200);
+   assert.equal(success.body.sdp, 'v=0\r\nsynthetic-answer');
+   assert.equal(count, 1);
+-  assert.deepEqual(Object.keys(success.body).sort(), ['deployment', 'expiresAt', 'model', 'sdp', 'transport']);
+-  const audit = await waitForAudit({ operatorId: doctor.identityId, actionType: 'voice:session', outcome: 'ok' });
++  assert.deepEqual(Object.keys(success.body).sort(), [
++    'deployment',
++    'expiresAt',
++    'model',
++    'sdp',
++    'transport',
++  ]);
++  const audit = await waitForAudit({
++    operatorId: doctor.identityId,
++    actionType: 'voice:session',
++    outcome: 'ok',
++  });
+   assert.ok(audit);
+   assert.deepEqual(audit.fields, ['transport:webrtc']);
+   assert.ok(!JSON.stringify(audit).includes('synthetic-offer'));
+@@ -452,6 +499,165 @@ test('realtime SDP route: identity, capability, feature-off, byte bounds, allowl
+   assert.equal((await send(doctor, 'v=0')).status, 409);
+ });
+ 
++test('realtime pinned server refuses runtime-enabled sessions, with persisted session audit and zero negotiation', async () => {
++  const doctor = await login(base, 'SIM-DOCTOR-1');
++  let negotiations = 0;
++  const runtime = http.createServer((req, res) => {
++    if (req.url === '/v1/voice/realtime-call') negotiations++;
++    res.setHeader('Content-Type', 'application/json');
++    res.end(
++      JSON.stringify({
++        available: true,
++        realtime: { enabled: true, available: true, transports: ['webrtc'] },
++      }),
++    );
++  });
++  await new Promise<void>((r) => runtime.listen(0, '127.0.0.1', r));
++  const keys = ['AI_RUNTIME_URL', 'AI_RUNTIME_SERVICE_TOKEN', 'VOICE_STT_TRANSPORT'] as const;
++  const prior = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
++  setSttProvider(null);
++  try {
++    process.env.AI_RUNTIME_URL = `http://127.0.0.1:${(runtime.address() as any).port}`;
++    process.env.AI_RUNTIME_SERVICE_TOKEN = 'synthetic-transport-pin';
++    // Warm an enabled cache first: changing the local pin must still refuse immediately.
++    const { runtimeSttStatus } = await import('../stt.js');
++    assert.equal((await runtimeSttStatus()).realtime.available, true);
++    process.env.VOICE_STT_TRANSPORT = 'server';
++    const started = new Date();
++    const response = await fetch(`${base}/skills/voice/realtime-call`, {
++      method: 'POST',
++      headers: {
++        Authorization: `Bearer ${doctor.token}`,
++        'Content-Type': 'application/sdp',
++      },
++      body: 'v=0',
++    });
++    assert.equal(response.status, 409);
++    assert.equal(((await response.json()) as any).code, 'transport_unsupported');
++    assert.equal(negotiations, 0);
++    assert.ok(
++      await waitForAudit({
++        operatorId: doctor.identityId,
++        actionType: 'voice:session',
++        fields: { has: 'code:transport_unsupported' },
++        createdAt: { gte: started },
++      }),
++    );
++  } finally {
++    for (const key of keys) {
++      if (prior[key] === undefined) delete process.env[key];
++      else process.env[key] = prior[key];
++    }
++    await new Promise<void>((r) => runtime.close(() => r()));
++  }
++});
++
++test('realtime cancellation during a pending status probe never creates a provider session', async () => {
++  const doctor = await login(base, 'SIM-DOCTOR-1');
++  let entered!: () => void;
++  const started = new Promise<void>((r) => {
++    entered = r;
++  });
++  let finish!: () => void;
++  const pending = new Promise<void>((r) => {
++    finish = r;
++  });
++  let negotiations = 0;
++  const runtime = http.createServer(async (req, res) => {
++    if (req.url === '/v1/voice/realtime-call') negotiations++;
++    entered();
++    await pending;
++    res.setHeader('Content-Type', 'application/json');
++    res.end(
++      JSON.stringify({
++        available: true,
++        realtime: { enabled: true, available: true, transports: ['webrtc'] },
++      }),
++    );
++  });
++  await new Promise<void>((r) => runtime.listen(0, '127.0.0.1', r));
++  const priorUrl = process.env.AI_RUNTIME_URL,
++    priorToken = process.env.AI_RUNTIME_SERVICE_TOKEN;
++  setSttProvider(null);
++  try {
++    process.env.AI_RUNTIME_URL = `http://127.0.0.1:${(runtime.address() as any).port}`;
++    process.env.AI_RUNTIME_SERVICE_TOKEN = 'synthetic-delayed-status';
++    const controller = new AbortController();
++    const request = fetch(`${base}/skills/voice/realtime-call`, {
++      method: 'POST',
++      signal: controller.signal,
++      headers: { Authorization: `Bearer ${doctor.token}`, 'Content-Type': 'application/sdp' },
++      body: 'v=0',
++    });
++    await started;
++    controller.abort();
++    await assert.rejects(request, { name: 'AbortError' });
++    finish();
++    // Shares and awaits the pending status probe, then returns through the actual app.
++    const status = await call(base, doctor, 'GET', '/skills/voice/status');
++    assert.equal(status.status, 200);
++    assert.equal(negotiations, 0);
++  } finally {
++    finish();
++    if (priorUrl === undefined) delete process.env.AI_RUNTIME_URL;
++    else process.env.AI_RUNTIME_URL = priorUrl;
++    if (priorToken === undefined) delete process.env.AI_RUNTIME_SERVICE_TOKEN;
++    else process.env.AI_RUNTIME_SERVICE_TOKEN = priorToken;
++    await new Promise<void>((r) => runtime.close(() => r()));
++  }
++});
++
++test('realtime admission serializes one operator, isolates operators and releases after completion/failure', async () => {
++  const doctor = await login(base, 'SIM-DOCTOR-1');
++  let entered!: () => void;
++  const started = new Promise<void>((r) => {
++    entered = r;
++  });
++  let finish!: () => void;
++  const pending = new Promise<void>((r) => {
++    finish = r;
++  });
++  let fail = false;
++  setSttProvider({
++    ...scripted('batch'),
++    async negotiateRealtimeCall(offer) {
++      if (offer.includes('held')) {
++        entered();
++        await pending;
++      }
++      if (fail) throw new SttUnavailableError('stt_unavailable', 'synthetic', 503);
++      return {
++        sdp: 'v=0',
++        model: 'synthetic',
++        deployment: 'synthetic',
++        expiresAt: null,
++        transport: 'webrtc',
++      };
++    },
++  });
++  const send = (who: Session, body = 'v=0') =>
++    fetch(`${base}/skills/voice/realtime-call`, {
++      method: 'POST',
++      headers: { Authorization: `Bearer ${who.token}`, 'Content-Type': 'application/sdp' },
++      body,
++    });
++  const first = send(doctor, 'v=0 held');
++  await started;
++  try {
++    const busy = await send(doctor);
++    assert.equal(busy.status, 409);
++    assert.equal(((await busy.json()) as any).code, 'session_busy');
++    assert.equal((await send(nurse)).status, 200, 'another operator is independent');
++  } finally {
++    finish();
++  }
++  assert.equal((await first).status, 200);
++  fail = true;
++  assert.equal((await send(doctor)).status, 503);
++  fail = false;
++  assert.equal((await send(doctor)).status, 200, 'failed negotiation releases admission');
++});
++
+ test('STT cost guard: per-operator utterance rate limit → 429, provider not called', async () => {
+   let providerCalls = 0;
+   setSttProvider({
+diff --git a/backend/src/voice/stt.ts b/backend/src/voice/stt.ts
+index 58572251..09ab0d72 100644
+--- a/backend/src/voice/stt.ts
++++ b/backend/src/voice/stt.ts
+@@ -8,6 +8,7 @@
+ // provider credentials and the model choice (AI_STT_MODEL, e.g. google:gemini-3.5-flash-lite).
+ // Audio lives only in memory for the duration of the request; it is never stored or logged.
+ 
++import { createHash } from 'node:crypto';
+ import { classifyAiFailure, correlationHeaders, recordAiCall } from '../lib/observability.js';
+ import { aiEnabled } from '../lib/ai-flags.js';
+ import type { AiCallMeta } from '../lib/observability.js';
+@@ -301,15 +302,33 @@ async function boundedRuntimeJson(response: Response): Promise<Record<string, un
+   }
+ }
+ 
+-/** Configuration availability only; never creates a session or claims provider readiness.
+- * No cross-environment cache: changing the runtime/credential cannot reuse another backend's status.
+- */
++const STATUS_TTL_MS = 60_000;
++const statusCache = new Map<string, { until: number; result: Promise<RuntimeSttStatus> }>();
++
++/** Configuration only. Partition probes by runtime URL and credential identity, never logging keys. */
+ export async function runtimeSttStatus(
+   env: NodeJS.ProcessEnv = process.env,
++  now = Date.now(),
+ ): Promise<RuntimeSttStatus> {
+-  const base = env.AI_RUNTIME_URL?.replace(/\/$/, '');
++  let base: string;
++  try {
++    base = new URL(env.AI_RUNTIME_URL?.trim() || '').href.replace(/\/+$/, '');
++  } catch {
++    return NO_STT;
++  }
+   const token = env.AI_RUNTIME_SERVICE_TOKEN;
+   if (!base || !token) return NO_STT;
++  const key = `${base}:${createHash('sha256').update(token).digest('hex')}`;
++  const cached = statusCache.get(key);
++  if (cached && cached.until > now) return structuredClone(await cached.result);
++  for (const [existing, entry] of statusCache) if (entry.until <= now) statusCache.delete(existing);
++  if (statusCache.size >= 64) statusCache.delete(statusCache.keys().next().value!);
++  const result = probeRuntimeSttStatus(base, token);
++  statusCache.set(key, { until: now + STATUS_TTL_MS, result });
++  return structuredClone(await result);
++}
++
++async function probeRuntimeSttStatus(base: string, token: string): Promise<RuntimeSttStatus> {
+   try {
+     const response = await fetch(`${base}/v1/voice/stt-status`, {
+       headers: { Authorization: `Bearer ${token}`, ...correlationHeaders() },
+diff --git a/clinicos-ai-runtime/clinicos_ai/models/provider_registry.py b/clinicos-ai-runtime/clinicos_ai/models/provider_registry.py
+index 0f952f85..a4e10126 100644
+--- a/clinicos-ai-runtime/clinicos_ai/models/provider_registry.py
++++ b/clinicos-ai-runtime/clinicos_ai/models/provider_registry.py
+@@ -85,7 +85,8 @@ PROVIDERS: dict[str, ProviderEntry] = {
+         capabilities=_caps("azure"),
+         description="Azure OpenAI (deployment name = model id)",
+         required_env=("AZURE_OPENAI_ENDPOINT",),
+-        traits={"usage_metadata": True, "cancellation": False, "timeout": True, "model_discovery": False, "realtime": True, "sdk": "agno + http (structured)"},
++        # Adapter implemented, but provider protocol and authoritative session termination unverified.
++        traits={"usage_metadata": True, "cancellation": False, "timeout": True, "model_discovery": False, "realtime": False, "sdk": "agno + http (structured)"},
+     ),
+     "google": ProviderEntry(
+         "google", "clinicos_ai.models.providers.google", ("GOOGLE_API_KEY", "GEMINI_API_KEY"),
+diff --git a/clinicos-ai-runtime/clinicos_ai/voice/azure_realtime.py b/clinicos-ai-runtime/clinicos_ai/voice/azure_realtime.py
+index 334b09a1..47a19a2b 100644
+--- a/clinicos-ai-runtime/clinicos_ai/voice/azure_realtime.py
++++ b/clinicos-ai-runtime/clinicos_ai/voice/azure_realtime.py
+@@ -17,6 +17,11 @@ from urllib.parse import urlsplit
+ from .stt import SttError
+ 
+ MAX_RESPONSE_BYTES = 96_000
++# Grant expiry is not a media deadline. No supported, verified server termination contract
++# exists for this adapter yet, so the dispatcher refuses activation (including explicit opt-in).
++SERVER_SESSION_DURATION_ENFORCED = False
++MAX_SESSION_SECONDS = 60
++CLIENT_SECRET_SECONDS = 60
+ 
+ 
+ @dataclass(frozen=True)
+@@ -86,7 +91,8 @@ def negotiate_call(cfg: RealtimeConfig, offer: str, timeout: float = 12.0) -> di
+     deadline = time.monotonic() + timeout
+     remaining = lambda: max(0.05, deadline - time.monotonic())
+     req = urllib.request.Request(f"{cfg.endpoint}/openai/v1/realtime/client_secrets", method="POST",
+-                                 data=json.dumps({"session": session_config(cfg)}).encode(),
++                                 data=json.dumps({"session": session_config(cfg),
++                                                  "expires_after": {"anchor": "created_at", "seconds": CLIENT_SECRET_SECONDS}}).encode(),
+                                  headers={"api-key": cfg.api_key, "Content-Type": "application/json"})
+     try:
+         grant = json.loads(_http(req, min(5.0, remaining())).decode("utf-8"))
+diff --git a/clinicos-ai-runtime/clinicos_ai/voice/realtime.py b/clinicos-ai-runtime/clinicos_ai/voice/realtime.py
+index 4d3f6446..774b2430 100644
+--- a/clinicos-ai-runtime/clinicos_ai/voice/realtime.py
++++ b/clinicos-ai-runtime/clinicos_ai/voice/realtime.py
+@@ -28,7 +28,8 @@ def realtime_status(env: Mapping[str, str] | None = None) -> dict[str, Any]:
+     if available:
+         try:
+             adapter = importlib.import_module(entry.realtime_module)
+-            available = adapter.realtime_config(e, model=config["model"]) is not None
++            available = (adapter.realtime_config(e, model=config["model"]) is not None
++                         and getattr(adapter, "SERVER_SESSION_DURATION_ENFORCED", False) is True)
+         except SttError:
+             available = False
+     return {**config, "available": bool(available),
+@@ -45,8 +46,15 @@ def validate_sdp(value: object) -> str:
+ 
+ async def negotiate(offer: str) -> dict[str, Any]:
+     from ..models.provider_registry import provider_entry
++    from ..models.contract import BUDGET
++    from ..models.errors import RuntimeError_
++    from ..models.cost import COSTS, estimate_usd
+ 
+     validate_sdp(offer)
++    try:
++        BUDGET.check(os.environ)
++    except RuntimeError_ as ex:
++        raise SttError("budget_exceeded", "Budget AI esaurito", 503) from ex
+     current = realtime_status()
+     if not current["available"]:
+         raise SttError("not_configured", "STT realtime non configurato o disattivato", 503)
+@@ -57,4 +65,11 @@ async def negotiate(offer: str) -> dict[str, Any]:
+     if config is None:
+         raise SttError("not_configured", "STT realtime non configurato", 503)
+     # The adapter bounds response sizes and checks the remaining negotiation timeout.
++    # Count admitted negotiations conservatively, including failures that might create a session.
++    # This is an estimate at the authoritative adapter's duration ceiling, never measured audio.
++    ceiling = getattr(adapter, "MAX_SESSION_SECONDS", None)
++    if not isinstance(ceiling, int) or isinstance(ceiling, bool) or not 1 <= ceiling <= 60:
++        raise SttError("not_configured", "Limite sessione STT non verificato", 503)
++    estimate = estimate_usd(current["provider"], current["model"], {"audioSeconds": ceiling}, os.environ)
++    COSTS.add(estimate, os.environ)
+     return await asyncio.to_thread(adapter.negotiate_call, config, offer)
+diff --git a/clinicos-ai-runtime/tests/test_voice_realtime.py b/clinicos-ai-runtime/tests/test_voice_realtime.py
+index aa011b1b..dce3d7ae 100644
+--- a/clinicos-ai-runtime/tests/test_voice_realtime.py
++++ b/clinicos-ai-runtime/tests/test_voice_realtime.py
+@@ -20,7 +20,9 @@ class ConfigurationTests(unittest.TestCase):
+         self.assertFalse(realtime.realtime_status({})["available"])
+         self.assertEqual(stt.stt_model(ENV), ("azure", "file-transcribe"))
+         self.assertEqual(stt.stt_model({"AI_STT_MODEL": "google:explicit"}), ("google", "explicit"))
+-        self.assertTrue(realtime.realtime_status(ENV)["available"])
++        self.assertFalse(realtime.realtime_status(ENV)["available"], "unverified duration enforcement blocks real activation")
++        with mock.patch.object(azure, "SERVER_SESSION_DURATION_ENFORCED", True):
++            self.assertTrue(realtime.realtime_status(ENV)["available"])
+         self.assertEqual(stt.stt_realtime(ENV), {"enabled": True, "model": "live-configured"})
+         for extra in ({"AI_ENABLED": "false"}, {"STT_REALTIME_ENABLED": "false"},
+                       {"STT_REALTIME_MODEL": ""}, {"STT_PROVIDER": "openai"}, {"AZURE_OPENAI_API_KEY": ""}):
+@@ -67,6 +69,7 @@ class AzureNegotiationTests(unittest.TestCase):
+         self.assertEqual(calls[0].headers["Api-key"], "synthetic-secret")
+         self.assertEqual(calls[1].headers["Authorization"], "Bearer synthetic-ephemeral")
+         self.assertEqual(json.loads(calls[0].data)["session"]["audio"]["input"]["transcription"]["model"], "live-configured")
++        self.assertEqual(json.loads(calls[0].data)["expires_after"], {"anchor": "created_at", "seconds": 60})
+         self.assertNotIn("synthetic-ephemeral", json.dumps(result))
+         self.assertNotIn("synthetic-secret", json.dumps(result))
+         self.assertEqual(set(result), {"sdp", "model", "deployment", "expiresAt", "transport"})
+@@ -112,12 +115,41 @@ class DispatcherTests(unittest.IsolatedAsyncioTestCase):
+                 call.assert_not_called()
+ 
+     async def test_registry_dispatch_is_separate_from_batch_model(self):
+-        with mock.patch.dict(os.environ, ENV, clear=True), mock.patch.object(azure, "negotiate_call", return_value={"sdp": "v=0\r\nanswer"}) as call:
++        with mock.patch.dict(os.environ, ENV, clear=True), mock.patch.object(azure, "SERVER_SESSION_DURATION_ENFORCED", True), mock.patch.object(azure, "negotiate_call", return_value={"sdp": "v=0\r\nanswer"}) as call:
+             result = await realtime.negotiate("v=0\r\noffer")
+         self.assertEqual(result["sdp"], "v=0\r\nanswer")
+         self.assertEqual(call.call_args.args[0].model, "live-configured")
+         self.assertEqual(stt.stt_model(ENV)[1], "file-transcribe")
+ 
++    async def test_unverified_session_duration_is_fail_closed_even_with_opt_in(self):
++        with mock.patch.dict(os.environ, ENV, clear=True), mock.patch.object(azure, "_http") as http:
++            with self.assertRaises(stt.SttError) as caught:
++                await realtime.negotiate("v=0")
++            self.assertEqual(caught.exception.status, 503)
++            http.assert_not_called()
++
++    async def test_budget_refusal_precedes_provider_http_and_supported_sessions_are_counted(self):
++        from clinicos_ai.models.contract import BUDGET
++        from clinicos_ai.models.cost import COSTS
++        from clinicos_ai.models.errors import RuntimeError_, ErrorKind
++        with mock.patch.dict(os.environ, ENV, clear=True), mock.patch.object(BUDGET, "check", side_effect=RuntimeError_(ErrorKind.BUDGET_EXCEEDED, "exhausted")), mock.patch.object(azure, "_http") as http:
++            with self.assertRaises(stt.SttError) as caught:
++                await realtime.negotiate("v=0")
++            self.assertEqual((caught.exception.kind, caught.exception.status), ("budget_exceeded", 503))
++            http.assert_not_called()
++        # This fixture explicitly declares authoritative duration support; Azure does not.
++        env = {**ENV, "AI_PRICING_JSON": json.dumps({"azure:live-configured": {"audio_per_minute": 0.2}})}
++        before = COSTS.snapshot(env)
++        with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(azure, "SERVER_SESSION_DURATION_ENFORCED", True), mock.patch.object(azure, "negotiate_call", return_value={"sdp": "v=0"}):
++            await realtime.negotiate("v=0")
++        after = COSTS.snapshot(env)
++        self.assertEqual(after["calls"], before["calls"] + 1)
++        self.assertAlmostEqual(after["estimatedUsdToday"] - before["estimatedUsdToday"], 0.2)
++        before = COSTS.snapshot(ENV)
++        with mock.patch.dict(os.environ, ENV, clear=True), mock.patch.object(azure, "SERVER_SESSION_DURATION_ENFORCED", True), mock.patch.object(azure, "negotiate_call", return_value={"sdp": "v=0"}):
++            await realtime.negotiate("v=0")
++        self.assertEqual(COSTS.snapshot(ENV)["unpricedCalls"], before["unpricedCalls"] + 1)
++
+     async def test_real_asgi_auth_actual_stream_limit_and_safe_response(self):
+         import asyncio
+         from clinicos_ai.api import app as runtime
+@@ -187,6 +219,12 @@ class DispatcherTests(unittest.IsolatedAsyncioTestCase):
+                 self.assertEqual(ok_status, 200)
+                 self.assertEqual(json.loads(ok_body)["sdp"], "v=0\r\nanswer")
+                 call.assert_awaited_once_with("v=0\r\noffer")
++            from clinicos_ai.models.errors import RuntimeError_, ErrorKind
++            with mock.patch.object(runtime.BUDGET, "check", side_effect=RuntimeError_(ErrorKind.BUDGET_EXCEEDED, "exhausted")), mock.patch.object(azure, "_http") as http:
++                budget_status, budget_body = await request("/v1/voice/realtime-call", b'{"sdp":"v=0"}', headers)
++                self.assertEqual(budget_status, 503)
++                self.assertEqual(json.loads(budget_body)["detail"]["kind"], "budget_exceeded")
++                http.assert_not_called()
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/e2e/qa-voice-pr-393-browser.mjs b/e2e/qa-voice-pr-393-browser.mjs
+deleted file mode 100644
+index d3ae77a7..00000000
+--- a/e2e/qa-voice-pr-393-browser.mjs
++++ /dev/null
+@@ -1,608 +0,0 @@
+-// Real ClinicOS UI/backend/database; only WebRTC provider transcription is a labelled fixture.
+-import assert from 'node:assert/strict';
+-import { chromium } from 'playwright';
+-import path from 'node:path';
+-import { createHash } from 'node:crypto';
+-import { readFileSync, writeFileSync } from 'node:fs';
+-
+-export async function runVoiceBrowser({
+-  front,
+-  api,
+-  out,
+-  sql,
+-  setProviderFailure,
+-  fontRoot = path.join(out, 'font-assets'),
+-}) {
+-  const checks = [],
+-    errors = [],
+-    httpErrors = [],
+-    expectedErrors = [];
+-  let expectedProviderFailure = false;
+-  const check = (name, value) => {
+-    assert.ok(value, name);
+-    checks.push({ name, status: 'PASS' });
+-  };
+-  const browser = await chromium.launch({
+-    executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || '/usr/bin/chromium',
+-    args: [
+-      '--use-fake-device-for-media-stream',
+-      '--use-fake-ui-for-media-stream',
+-      `--use-file-for-fake-audio-capture=${path.resolve('scripts/voice/fixtures/vitals-120-80.wav')}%noloop`,
+-    ],
+-  });
+-  const context = await browser.newContext({
+-    viewport: { width: 1280, height: 900 },
+-    recordVideo: { dir: path.join(out, 'video') },
+-    hasTouch: true,
+-  });
+-  const manifest = JSON.parse(readFileSync(path.join(fontRoot, 'manifest.json'), 'utf8'));
+-  const fonts = new Map();
+-  for (const [name, record] of Object.entries(manifest.files)) {
+-    assert.equal(path.basename(record.path), record.path);
+-    const data = readFileSync(path.join(fontRoot, record.path));
+-    assert.equal(createHash('sha256').update(data).digest('hex'), record.sha256);
+-    assert.equal(data.subarray(0, 4).toString(), 'wOF2');
+-    fonts.set(name, data);
+-  }
+-  const css = [...fonts.keys()]
+-    .map(
+-      (name) =>
+-        `@font-face{font-family:'${name.startsWith('inter-') ? 'Inter' : 'JetBrains Mono'}';font-style:normal;font-weight:${/-(\d+)-normal/.exec(name)[1]};font-display:swap;src:url(https://fonts.gstatic.com/clinicos-qa/${name}) format('woff2');}`,
+-    )
+-    .join('\n');
+-  await context.route('https://fonts.googleapis.com/**', (r) =>
+-    r.fulfill({ status: 200, contentType: 'text/css', body: css }),
+-  );
+-  await context.route('https://fonts.gstatic.com/clinicos-qa/**', (r) => {
+-    const font = fonts.get(new URL(r.request().url()).pathname.split('/').at(-1));
+-    assert.ok(font);
+-    return r.fulfill({ status: 200, contentType: 'font/woff2', body: font });
+-  });
+-  await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
+-  const page = await context.newPage();
+-  page.on('pageerror', (e) => errors.push(e.message));
+-  page.on('console', (m) => {
+-    if (m.type() !== 'error') return;
+-    if (expectedProviderFailure && /Failed to load resource.*503/.test(m.text()))
+-      expectedErrors.push({ kind: 'controlled-provider-503', message: m.text() });
+-    else errors.push(m.text());
+-  });
+-  const traffic = { sessions: 0, uploads: 0, converse: 0 };
+-  page.on('request', (r) => {
+-    if (r.url().endsWith('/voice/realtime-call')) traffic.sessions++;
+-    if (r.url().endsWith('/voice/transcribe')) traffic.uploads++;
+-    if (r.url().endsWith('/skills/converse')) traffic.converse++;
+-  });
+-  page.on('response', (r) => {
+-    if (r.status() < 400) return;
+-    if (expectedProviderFailure && r.url().endsWith('/voice/realtime-call') && r.status() === 503)
+-      expectedErrors.push({ kind: 'controlled-provider-503', status: 503 });
+-    else httpErrors.push({ path: new URL(r.url()).pathname, status: r.status() });
+-  });
+-  await page.addInitScript(() => {
+-    localStorage.setItem('clinicos.assistant.voiceFeedback', 'off');
+-    window.__voiceQA = {
+-      transcript: 'Registra pressione 120 su 80 per questo ospite.',
+-      sessions: [],
+-      streams: [],
+-      delayPermission: false,
+-      denyPermission: false,
+-    };
+-    const NativeAudioContext = window.AudioContext;
+-    window.AudioContext = class extends NativeAudioContext {
+-      constructor(...args) {
+-        super(...args);
+-        this.holdResume = window.__voiceQA.holdNextResume;
+-        window.__voiceQA.holdNextResume = false;
+-      }
+-      get state() {
+-        return super.state === 'closed' ? 'closed' : this.holdResume ? 'suspended' : super.state;
+-      }
+-      resume() {
+-        if (!this.holdResume) return super.resume();
+-        return new Promise((_resolve, reject) => {
+-          window.__voiceQA.rejectHeldResume = () =>
+-            reject(new Error('synthetic delayed old resume failure'));
+-        });
+-      }
+-    };
+-    const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+-    navigator.mediaDevices.getUserMedia = async (constraints) => {
+-      if (window.__voiceQA.denyPermission)
+-        throw new DOMException('Synthetic denied', 'NotAllowedError');
+-      if (window.__voiceQA.delayPermission) await new Promise((r) => setTimeout(r, 700));
+-      const stream = await original(constraints);
+-      window.__voiceQA.streams.push(stream);
+-      return stream;
+-    };
+-    class Channel extends EventTarget {
+-      readyState = 'connecting';
+-      constructor(peer) {
+-        super();
+-        this.peer = peer;
+-        this.commits = 0;
+-      }
+-      send(raw) {
+-        const event = JSON.parse(raw);
+-        if (event.type !== 'input_audio_buffer.commit') return;
+-        this.commits++;
+-        this.peer.timers.push(
+-          setTimeout(
+-            () =>
+-              this.dispatchEvent(
+-                new MessageEvent('message', {
+-                  data: JSON.stringify(
+-                    window.__voiceQA.emptyAfterCommit
+-                      ? { type: 'error', error: { code: 'input_audio_buffer_commit_empty' } }
+-                      : {
+-                          type: 'conversation.item.input_audio_transcription.completed',
+-                          item_id: 'synthetic-turn',
+-                          transcript: window.__voiceQA.transcript,
+-                        },
+-                  ),
+-                }),
+-              ),
+-            100,
+-          ),
+-        );
+-      }
+-      close() {
+-        this.readyState = 'closed';
+-      }
+-    }
+-    window.RTCPeerConnection = class extends EventTarget {
+-      connectionState = 'new';
+-      constructor() {
+-        super();
+-        this.channel = new Channel(this);
+-        this.timers = [];
+-        this.closed = false;
+-        window.__voiceQA.sessions.push(this);
+-      }
+-      addTrack() {}
+-      createDataChannel() {
+-        return this.channel;
+-      }
+-      async createOffer() {
+-        return { type: 'offer', sdp: 'v=0\r\nsynthetic-offer' };
+-      }
+-      async setLocalDescription() {}
+-      async setRemoteDescription() {
+-        this.connectionState = 'connected';
+-        this.channel.readyState = 'open';
+-        this.channel.dispatchEvent(new Event('open'));
+-        this.timers.push(
+-          setTimeout(
+-            () =>
+-              this.channel.dispatchEvent(
+-                new MessageEvent('message', {
+-                  data: JSON.stringify({
+-                    type: 'conversation.item.input_audio_transcription.delta',
+-                    item_id: 'synthetic-turn',
+-                    delta: 'Registra pressione',
+-                  }),
+-                }),
+-              ),
+-            450,
+-          ),
+-        );
+-      }
+-      close() {
+-        this.closed = true;
+-        this.connectionState = 'closed';
+-        this.timers.forEach(clearTimeout);
+-      }
+-    };
+-  });
+-  const shot = async (name) => {
+-    await page.screenshot({ path: path.join(out, 'screenshots', `${name}.png`), fullPage: true });
+-  };
+-  const state = async (value) =>
+-    page.waitForFunction(
+-      (v) => document.querySelector('[data-testid="am-voice"]')?.getAttribute('data-state') === v,
+-      value,
+-      { timeout: 20_000 },
+-    );
+-  const noTracks = async () =>
+-    page.waitForFunction(() =>
+-      window.__voiceQA.streams.every((s) => s.getTracks().every((t) => t.readyState === 'ended')),
+-    );
+-  try {
+-    await page.goto(front);
+-    await page
+-      .getByRole('button', { name: /Infermiere 1/ })
+-      .first()
+-      .click();
+-    await page.getByTestId('assistant-entry').click();
+-    await page.getByRole('dialog', { name: 'Milo · assistente clinico AI' }).waitFor();
+-    await page.getByRole('button', { name: 'Cambia ospite' }).click();
+-    await page.getByLabel('Cerca ospite').fill('Galli');
+-    await page.locator('.am-picker__item', { hasText: 'Galli Nora' }).first().click();
+-    await page.getByTestId('am-resident-name').getByText('Galli Nora').waitFor();
+-    await page.getByTestId('am-mic').waitFor();
+-    const patient = (
+-      await sql.query('SELECT id FROM "Patient" WHERE "medicalRecordNumber"=$1', [
+-        'DEMO-P4-Nora-Galli',
+-      ])
+-    ).rows[0];
+-    assert.ok(patient);
+-    const readings = async () =>
+-      (
+-        await sql.query(
+-          'SELECT count(*)::int n FROM "PatientParameterReading" WHERE "patientId"=$1',
+-          [patient.id],
+-        )
+-      ).rows[0].n;
+-    const before = await readings();
+-    await page.getByTestId('am-mic').click();
+-    await state('TRANSCRIPT_PARTIAL');
+-    check(
+-      'partial exact visible value',
+-      (await page.getByTestId('am-voice-partial').isVisible()) &&
+-        (await page.getByTestId('am-voice-partial').innerText()).includes('Registra pressione'),
+-    );
+-    check(
+-      'partial has no submission control',
+-      (await page.getByTestId('am-voice-send').count()) === 0,
+-    );
+-    check('partial triggers no assistant request', traffic.converse === 0);
+-    await shot('01-partial-display-only');
+-    await state('TRANSCRIPT_READY');
+-    check(
+-      'final transcript exact value',
+-      (await page.getByTestId('am-voice-transcript').inputValue()) ===
+-        'Registra pressione 120 su 80 per questo ospite.',
+-    );
+-    check(
+-      'one negotiation and no file/provider fallback',
+-      traffic.sessions === 1 && traffic.uploads === 0,
+-    );
+-    check(
+-      'one local end-of-turn commit',
+-      await page.evaluate(() => window.__voiceQA.sessions[0].channel.commits === 1),
+-    );
+-    await noTracks();
+-    check('final releases microphone tracks', true);
+-    check(
+-      'final alone performs no clinical write',
+-      (await readings()) === before && traffic.converse === 0,
+-    );
+-    await shot('02-final-operator-review');
+-    const previewResponse = page.waitForResponse(
+-      (r) => r.url().endsWith('/skills/converse') && r.request().method() === 'POST',
+-    );
+-    await page.getByTestId('am-voice-send').click();
+-    const preview = await (await previewResponse).json();
+-    check(
+-      'final submission enters existing policy preview',
+-      preview.status === 'NEEDS_CONFIRMATION' && preview.preview?.values?.Pressione === '120/80',
+-    );
+-    check('preview persists no clinical write', (await readings()) === before);
+-    await page.getByTestId('am-preview').waitFor();
+-    await shot('03-preview-zero-write');
+-    const confirmResponse = page.waitForResponse(
+-      (r) => r.url().endsWith('/skills/converse') && r.request().method() === 'POST',
+-    );
+-    await page.getByTestId('am-confirm').click();
+-    const confirmed = await (await confirmResponse).json();
+-    check('explicit UI confirmation completes', confirmed.status === 'COMPLETED');
+-    check('exactly one persisted reading', (await readings()) === before + 1);
+-    const stored = (
+-      await sql.query(
+-        'SELECT values FROM "PatientParameterReading" WHERE "patientId"=$1 ORDER BY "createdAt" DESC LIMIT 1',
+-        [patient.id],
+-      )
+-    ).rows[0].values;
+-    check('persisted values retain literal blood pressure', stored.pa === '120/80');
+-    await page.getByTestId('am-result').waitFor();
+-    await shot('04-confirmed-one-write');
+-    const submitted = traffic.converse;
+-    await page.getByTestId('am-mic').click();
+-    await state('TRANSCRIPT_PARTIAL');
+-    await page.getByTestId('am-voice-cancel').click();
+-    await state('CANCELLED');
+-    await noTracks();
+-    check(
+-      'cancel partial closes microphone and peer',
+-      await page.evaluate(() => window.__voiceQA.sessions.at(-1).closed),
+-    );
+-    check(
+-      'cancel never submits or uploads',
+-      traffic.converse === submitted && traffic.uploads === 0,
+-    );
+-    await shot('05-cancelled-partial');
+-    await page.evaluate(() => {
+-      window.__voiceQA.delayPermission = true;
+-    });
+-    await page.getByTestId('am-mic').click();
+-    await state('REQUESTING_PERMISSION');
+-    await page.getByTestId('am-voice-cancel').click();
+-    await state('CANCELLED');
+-    await page.waitForFunction(() => window.__voiceQA.streams.length >= 3);
+-    await noTracks();
+-    check('late permission stream stopped after cancellation', true);
+-    await page.evaluate(() => {
+-      window.__voiceQA.delayPermission = false;
+-      window.__voiceQA.denyPermission = true;
+-    });
+-    await page.getByTestId('am-mic').click();
+-    await state('ERROR');
+-    check(
+-      'permission denied offers text fallback',
+-      (await page.getByTestId('am-voice-notice').innerText()).includes('negato'),
+-    );
+-    await page.evaluate(() => {
+-      window.__voiceQA.denyPermission = false;
+-    });
+-    expectedProviderFailure = true;
+-    setProviderFailure(true);
+-    const failureResponse = page.waitForResponse(
+-      (r) => r.url().endsWith('/voice/realtime-call') && r.status() === 503,
+-    );
+-    await page.getByTestId('am-mic').click();
+-    await failureResponse;
+-    await state('ERROR');
+-    await noTracks();
+-    check('provider failure releases tracks without silent file fallback', traffic.uploads === 0);
+-    await shot('06-provider-failure-text-fallback');
+-    await page.getByTestId('am-voice-fallback').click();
+-    const textResponse = page.waitForResponse(
+-      (r) => r.url().endsWith('/skills/converse') && r.request().method() === 'POST',
+-    );
+-    await page.getByLabel('Messaggio per l’assistente').fill('Dimmi tutto su questo ospite');
+-    await page.getByLabel('Messaggio per l’assistente').press('Enter');
+-    const text = await (await textResponse).json();
+-    check('text Assistant works after realtime failure', text.status === 'COMPLETED');
+-    check(
+-      'only explicit confirmation changed clinical database',
+-      (await readings()) === before + 1,
+-    );
+-    await page.getByTestId('am-result').scrollIntoViewIfNeeded();
+-    await shot('07-text-assistant-after-failure');
+-    expectedProviderFailure = false;
+-    setProviderFailure(false);
+-    const beforeEdges = traffic.converse;
+-    // Regression for independent QA1: an empty-buffer error before commit cannot leave
+-    // LISTENING/PARTIAL displayed after capture shutdown. Exercise the real hook, not reducer copies.
+-    for (const phase of ['LISTENING', 'TRANSCRIPT_PARTIAL']) {
+-      for (const code of [
+-        'input_audio_buffer_commit_empty',
+-        'input_audio_buffer_commit_buffer_too_small',
+-      ]) {
+-        await page.getByTestId('am-mic').click();
+-        await state(phase);
+-        await page.evaluate(
+-          ({ phase, code }) => {
+-            const shown = document
+-              .querySelector('[data-testid="am-voice"]')
+-              ?.getAttribute('data-state');
+-            if (shown !== phase)
+-              throw new Error(`Fixture phase changed before injection: ${shown}`);
+-            const peer = window.__voiceQA.sessions.at(-1);
+-            if (peer.channel.commits !== 0)
+-              throw new Error('Early error fixture must precede commit');
+-            peer.channel.dispatchEvent(
+-              new MessageEvent('message', {
+-                data: JSON.stringify({ type: 'error', error: { code } }),
+-              }),
+-            );
+-          },
+-          { phase, code },
+-        );
+-        await state('ERROR');
+-        await noTracks();
+-        check(
+-          `early ${code} in ${phase} leaves recoverable ERROR and closed peer`,
+-          await page.evaluate(() => window.__voiceQA.sessions.at(-1).closed),
+-        );
+-        check(
+-          `early ${code} in ${phase} exposes retry and text fallback`,
+-          (await page.getByTestId('am-mic').isEnabled()) &&
+-            (await page.getByTestId('am-voice-fallback').isVisible()) &&
+-            (await page.getByTestId('am-mic').getAttribute('aria-pressed')) === 'false',
+-        );
+-        check(
+-          `early ${code} in ${phase} never submits, uploads or writes`,
+-          traffic.converse === beforeEdges &&
+-            traffic.uploads === 0 &&
+-            (await readings()) === before + 1,
+-        );
+-        await shot(`13-early-${phase.toLowerCase()}-${code}`);
+-      }
+-    }
+-    await page.evaluate(() => {
+-      window.__voiceQA.emptyAfterCommit = true;
+-    });
+-    await page.getByTestId('am-mic').click();
+-    await state('IDLE');
+-    await noTracks();
+-    check(
+-      'empty buffer after actual commit recovers to IDLE without an invented transcript',
+-      await page.evaluate(
+-        () =>
+-          window.__voiceQA.sessions.at(-1).closed &&
+-          window.__voiceQA.sessions.at(-1).channel.commits === 1,
+-      ),
+-    );
+-    check(
+-      'empty committed turn has no submit control or clinical write',
+-      (await page.getByTestId('am-voice-send').count()) === 0 &&
+-        traffic.converse === beforeEdges &&
+-        (await readings()) === before + 1,
+-    );
+-    await shot('14-empty-committed-idle');
+-    await page.evaluate(() => {
+-      window.__voiceQA.emptyAfterCommit = false;
+-    });
+-    await page.getByTestId('am-mic').click();
+-    await state('TRANSCRIPT_READY');
+-    check(
+-      'new capture works after early and committed buffer errors',
+-      (await page.getByTestId('am-voice-transcript').inputValue()) ===
+-        'Registra pressione 120 su 80 per questo ospite.',
+-    );
+-    await page.getByTestId('am-voice-discard').click();
+-    await state('CANCELLED');
+-    await noTracks();
+-    await shot('15-retry-after-buffer-errors');
+-
+-    await page.getByTestId('am-mic').click();
+-    await state('TRANSCRIPT_PARTIAL');
+-    await page.evaluate(() => {
+-      const peer = window.__voiceQA.sessions.at(-1);
+-      peer.connectionState = 'failed';
+-      peer.dispatchEvent(new Event('connectionstatechange'));
+-    });
+-    await state('ERROR');
+-    await noTracks();
+-    check(
+-      'disconnect releases mic and shows safe fallback',
+-      (await page.getByTestId('am-voice-notice').innerText()).includes('interrotta'),
+-    );
+-    await shot('08-disconnected-release');
+-    await page.evaluate(() => {
+-      window.__voiceQA.holdNextResume = true;
+-    });
+-    await page.getByTestId('am-mic').click();
+-    await state('LISTENING');
+-    await page.getByTestId('am-voice-cancel').click();
+-    await state('CANCELLED');
+-    await page.evaluate(() => {
+-      window.__voiceQA.delayPermission = true;
+-    });
+-    await page.getByTestId('am-mic').click();
+-    await state('REQUESTING_PERMISSION');
+-    await page.evaluate(() => {
+-      window.__voiceQA.rejectHeldResume();
+-    });
+-    await state('LISTENING');
+-    check('old AudioContext rejection cannot cancel a newer pending microphone capture', true);
+-    await page.getByTestId('am-voice-cancel').click();
+-    await state('CANCELLED');
+-    await noTracks();
+-    await page.evaluate(() => {
+-      window.__voiceQA.delayPermission = false;
+-    });
+-    await shot('08b-stale-resume-preserves-new-capture');
+-
+-    await page.getByTestId('am-mic').click();
+-    await state('TRANSCRIPT_PARTIAL');
+-    await page.getByRole('button', { name: 'Cambia ospite' }).click();
+-    await page.getByLabel('Cerca ospite').fill('Conti');
+-    await page.locator('.am-picker__item', { hasText: 'Conti Nino' }).first().click();
+-    await state('CANCELLED');
+-    await noTracks();
+-    check(
+-      'resident change discards partial and closes peer',
+-      await page.evaluate(() => window.__voiceQA.sessions.at(-1).closed),
+-    );
+-    check(
+-      'resident change never submits stale transcript',
+-      traffic.converse === beforeEdges &&
+-        (await page.getByTestId('am-voice-transcript').count()) === 0,
+-    );
+-    await shot('09-resident-change-discard');
+-
+-    await page.evaluate(() => {
+-      window.__voiceQA.delayPermission = true;
+-      window.__voiceQA.hidden = false;
+-      Object.defineProperty(document, 'visibilityState', {
+-        configurable: true,
+-        get: () => (window.__voiceQA.hidden ? 'hidden' : 'visible'),
+-      });
+-    });
+-    const streamCount = await page.evaluate(() => window.__voiceQA.streams.length);
+-    await page.getByTestId('am-mic').click();
+-    await state('REQUESTING_PERMISSION');
+-    await page.evaluate(() => {
+-      window.__voiceQA.hidden = true;
+-      document.dispatchEvent(new Event('visibilitychange'));
+-    });
+-    await state('CANCELLED');
+-    await page.waitForFunction((count) => window.__voiceQA.streams.length > count, streamCount);
+-    await noTracks();
+-    check('hidden tab cancels pending permission and stops late stream', true);
+-    await page.evaluate(() => {
+-      window.__voiceQA.hidden = false;
+-    });
+-    await shot('10-hidden-pending-permission');
+-
+-    const streamsBeforeUnmount = await page.evaluate(() => window.__voiceQA.streams.length);
+-    await page.getByTestId('am-mic').click();
+-    await state('REQUESTING_PERMISSION');
+-    await page.getByRole('button', { name: /Torna all.applicazione/ }).click();
+-    await page
+-      .getByRole('dialog', { name: 'Milo · assistente clinico AI' })
+-      .waitFor({ state: 'detached' });
+-    await page.waitForFunction(
+-      (count) => window.__voiceQA.streams.length > count,
+-      streamsBeforeUnmount,
+-    );
+-    await noTracks();
+-    check('unmount releases late permission stream without background capture', true);
+-    check(
+-      'lifecycle interruptions never write or upload',
+-      (await readings()) === before + 1 &&
+-        traffic.uploads === 0 &&
+-        traffic.converse === beforeEdges,
+-    );
+-    await shot('11-unmounted-no-capture');
+-    check(
+-      'all provider sessions closed',
+-      await page.evaluate(() => window.__voiceQA.sessions.every((s) => s.closed)),
+-    );
+-    await page.reload();
+-    await page
+-      .getByRole('button', { name: /Infermiere 1/ })
+-      .first()
+-      .click();
+-    await page.getByTestId('assistant-entry').click();
+-    await page.getByRole('dialog', { name: 'Milo · assistente clinico AI' }).waitFor();
+-    await page.getByRole('button', { name: 'Cambia ospite' }).click();
+-    await page.getByLabel('Cerca ospite').fill('Galli');
+-    await page.locator('.am-picker__item', { hasText: 'Galli Nora' }).first().click();
+-    const readbackResponse = page.waitForResponse(
+-      (r) => r.url().endsWith('/skills/converse') && r.request().method() === 'POST',
+-    );
+-    await page
+-      .getByLabel('Messaggio per l’assistente')
+-      .fill('Mostrami i parametri recenti di questo ospite');
+-    await page.getByLabel('Messaggio per l’assistente').press('Enter');
+-    const readback = await (await readbackResponse).json();
+-    check(
+-      'after reload authorized readback completes',
+-      readback.status === 'COMPLETED' && readback.skillId === 'vitals.recent',
+-    );
+-    await page.getByTestId('am-result').waitFor();
+-    check(
+-      'after reload visible persisted blood pressure is exact',
+-      (await page.getByTestId('am-result').innerText()).includes('120/80'),
+-    );
+-    check('reload/readback creates no second clinical write', (await readings()) === before + 1);
+-    await page.getByTestId('am-result').scrollIntoViewIfNeeded();
+-    await shot('12-reload-persisted-readback');
+-    check('no page or console errors', errors.length === 0);
+-    check('no unexpected HTTP errors', httpErrors.length === 0);
+-    return {
+-      checks,
+-      consoleErrors: errors,
+-      httpErrors,
+-      expectedErrors,
+-      realProviderProof: false,
+-      browser: 'system Chromium',
+-      transcription: 'synthetic transport fixture, real microphone/VAD/app/authz/database',
+-    };
+-  } catch (error) {
+-    await shot('failure').catch(() => {});
+-    writeFileSync(
+-      path.join(out, 'test-results', 'browser-failure.json'),
+-      JSON.stringify({ checks, errors, httpErrors, failure: error.message }, null, 2),
+-    );
+-    throw error;
+-  } finally {
+-    setProviderFailure(false);
+-    await context.tracing.stop({ path: path.join(out, 'trace', 'trace.zip') });
+-    await context.close();
+-    await browser.close();
+-  }
+-}
+diff --git a/e2e/qa-voice-pr-393.mjs b/e2e/qa-voice-pr-393.mjs
+deleted file mode 100644
+index e6f70015..00000000
+--- a/e2e/qa-voice-pr-393.mjs
++++ /dev/null
+@@ -1,318 +0,0 @@
+-#!/usr/bin/env node
+-// Synthetic-only integrated voice validation. Run under the global browser stack lock:
+-// flock /tmp/clinicos-browser-qa.lock node e2e/qa-voice-pr-393.mjs
+-// Owns a disposable labelled PostgreSQL16 container; never reads a caller DATABASE_URL.
+-import assert from 'node:assert/strict';
+-import { randomBytes } from 'node:crypto';
+-import { spawn, spawnSync } from 'node:child_process';
+-import { createServer } from 'node:http';
+-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+-import path from 'node:path';
+-import pg from 'pg';
+-
+-const root = process.cwd();
+-const packet = path.resolve('artifacts/task-validation/voice-pr-393');
+-const args = process.argv.slice(2);
+-assert.ok(args.length === 0 || args.length === 2 && args[0] === '--out', 'Only --out <fresh-packet-subdirectory> is supported');
+-const out = args.length ? path.resolve(args[1]) : packet;
+-assert.ok(out === packet || out.startsWith(`${packet}${path.sep}`), 'QA output stays inside the owned task packet');
+-assert.ok(!existsSync(path.join(out, 'test-results', 'integrated-result.json')), 'Archive prior evidence or choose a fresh --out directory before rerunning');
+-for (const directory of ['logs', 'test-results', 'screenshots', 'trace', 'video']) mkdirSync(path.join(out, directory), { recursive: true });
+-const owner = randomBytes(16).toString('hex'),
+-  secret = randomBytes(24).toString('hex');
+-const container = `clinicos-qa-voice393-${owner.slice(0, 8)}`;
+-const port = 55493,
+-  apiPort = 3093,
+-  frontPort = 5393,
+-  runtimePort = 8093;
+-const url = `postgresql://postgres:${secret}@127.0.0.1:${port}/clinicos_test`;
+-const children = [];
+-let containerId, client, runtime;
+-const proof = {
+-  mode: 'synthetic-provider-transport-real-app-and-owned-postgres16',
+-  parentDatabaseUsed: false,
+-  developmentDatabaseUsed: false,
+-  realProviderProof: false,
+-  checks: [],
+-};
+-const clean = (text) =>
+-  String(text)
+-    .replaceAll(url, '[OWNED_QA_DATABASE]')
+-    .replaceAll(secret, '[OWNED_QA_SECRET]')
+-    .replace(/sim\.[A-Za-z0-9._-]+/g, 'sim.[SYNTHETIC_SESSION]');
+-const keys = [
+-  'PATH',
+-  'HOME',
+-  'LANG',
+-  'LC_ALL',
+-  'TMPDIR',
+-  'TZ',
+-  'HTTPS_PROXY',
+-  'HTTP_PROXY',
+-  'ALL_PROXY',
+-  'NO_PROXY',
+-  'NODE_EXTRA_CA_CERTS',
+-  'SSL_CERT_FILE',
+-  'SSL_CERT_DIR',
+-  'REQUESTS_CA_BUNDLE',
+-  'CURL_CA_BUNDLE',
+-  'npm_config_cafile',
+-];
+-const safe = Object.fromEntries(keys.filter((k) => process.env[k]).map((k) => [k, process.env[k]]));
+-const env = {
+-  ...safe,
+-  DATABASE_URL: url,
+-  NODE_ENV: 'test',
+-  AUTH_MODE: 'demo',
+-  AI_ENABLED: 'true',
+-  VOICE_CHANNEL_ENABLED: 'true',
+-  ROLE_SIMULATOR_ENABLED: 'true',
+-  AI_WORKER_INLINE: 'false',
+-  SKILLS_INTERPRETER: 'deterministic',
+-  AI_PROVIDER: 'mock',
+-  AI_RUNTIME_URL: `http://127.0.0.1:${runtimePort}`,
+-  AI_RUNTIME_SERVICE_TOKEN: secret,
+-  FRONTEND_URL: `http://127.0.0.1:${frontPort}`,
+-  VITE_API_URL: `http://127.0.0.1:${apiPort}`,
+-  PORT: String(apiPort),
+-  PLAYWRIGHT_BROWSERS_PATH: '/workspace/.cache/clinicos-batch447-playwright',
+-};
+-async function run(name, command, args) {
+-  const child = spawn(command, args, { env, cwd: root, stdio: ['ignore', 'pipe', 'pipe'] });
+-  let logs = '';
+-  child.stdout.on('data', (b) => (logs += b));
+-  child.stderr.on('data', (b) => (logs += b));
+-  const code = await new Promise((r, j) => {
+-    child.once('error', j);
+-    child.once('close', r);
+-  });
+-  writeFileSync(path.join(out, 'logs', `${name}.log`), clean(logs));
+-  assert.equal(code, 0, `${name} failed; see sanitized log`);
+-}
+-function start(name, command, args) {
+-  const child = spawn(command, args, { env, cwd: root, stdio: ['ignore', 'pipe', 'pipe'] });
+-  let logs = '';
+-  child.stdout.on('data', (b) => (logs += b));
+-  child.stderr.on('data', (b) => (logs += b));
+-  children.push({ child, name, logs: () => logs });
+-  return child;
+-}
+-async function readiness(url) {
+-  let last;
+-  for (let i = 0; i < 120; i++) {
+-    try {
+-      const r = await fetch(url, { signal: AbortSignal.timeout(1500) });
+-      if (r.ok) return;
+-    } catch (e) {
+-      last = e;
+-    }
+-    await new Promise((r) => setTimeout(r, 250));
+-  }
+-  throw new Error(`Loopback readiness failed ${new URL(url).port}: ${last?.name ?? 'HTTP'}`);
+-}
+-try {
+-  // Do not touch a resource on an occupied port, including the shared development stack.
+-  for (const p of [port, apiPort, frontPort, runtimePort])
+-    await new Promise((resolve, reject) => {
+-      const s = createServer();
+-      s.once('error', () => reject(new Error(`QA port occupied: ${p}`)));
+-      s.listen(p, '127.0.0.1', () => s.close(resolve));
+-    });
+-  const created = spawnSync(
+-    'docker',
+-    [
+-      'run',
+-      '--rm',
+-      '-d',
+-      '--name',
+-      container,
+-      '--label',
+-      'clinicos.qa.task=voice393',
+-      '--label',
+-      `clinicos.qa.owner=${owner}`,
+-      '-p',
+-      `127.0.0.1:${port}:5432`,
+-      '-e',
+-      `POSTGRES_PASSWORD=${secret}`,
+-      '-e',
+-      'POSTGRES_DB=clinicos_test',
+-      'postgres:16',
+-    ],
+-    { encoding: 'utf8' },
+-  );
+-  assert.equal(created.status, 0, 'owned container must start');
+-  containerId = created.stdout.trim();
+-  for (let i = 0; i < 90; i++) {
+-    const c = new pg.Client({ connectionString: url });
+-    c.on('error', () => {});
+-    try {
+-      await c.connect();
+-      await c.query('SELECT 1');
+-      client = c;
+-      break;
+-    } catch {
+-      await c.end().catch(() => {});
+-      await new Promise((r) => setTimeout(r, 300));
+-    }
+-  }
+-  assert.ok(client, 'actual SQL readiness');
+-  const before = await client.query(
+-    "SELECT count(*)::int n FROM pg_tables WHERE schemaname='public'",
+-  );
+-  assert.equal(before.rows[0].n, 0);
+-  await client.query(`COMMENT ON DATABASE clinicos_test IS 'clinicos.qa.voice393.${owner}'`);
+-  await run('migrate', process.execPath, [
+-    'node_modules/prisma/build/index.js',
+-    'migrate',
+-    'deploy',
+-    '--schema',
+-    'prisma/schema.prisma',
+-  ]);
+-  await run('backend-voice', process.execPath, [
+-    '--import',
+-    'tsx',
+-    '--test',
+-    '--test-concurrency=1',
+-    'backend/src/voice/__tests__/voice-e2e.test.ts',
+-    'backend/src/voice/__tests__/realtime-client.test.ts',
+-  ]);
+-  await run('seed-assistant', process.execPath, [
+-    '--import',
+-    'tsx',
+-    'scripts/assistant/seed-assistant-demo.mts',
+-  ]);
+-  let providerFailure = false;
+-  runtime = createServer(async (req, res) => {
+-    if (req.headers.authorization !== `Bearer ${secret}`) {
+-      res.writeHead(401);
+-      res.end();
+-      return;
+-    }
+-    if (req.url === '/v1/voice/stt-status') {
+-      res.setHeader('Content-Type', 'application/json');
+-      res.end(
+-        JSON.stringify({
+-          available: true,
+-          realtime: {
+-            enabled: true,
+-            available: true,
+-            model: 'synthetic-live',
+-            transports: ['webrtc'],
+-          },
+-        }),
+-      );
+-      return;
+-    }
+-    if (req.url === '/v1/voice/realtime-call') {
+-      let bytes = 0;
+-      for await (const c of req) {
+-        bytes += c.length;
+-        if (bytes > 70000) {
+-          res.writeHead(413);
+-          res.end();
+-          return;
+-        }
+-      }
+-      res.writeHead(providerFailure ? 503 : 200, { 'Content-Type': 'application/json' });
+-      res.end(
+-        JSON.stringify(
+-          providerFailure
+-            ? { detail: { kind: 'unavailable', message: 'synthetic failure' } }
+-            : {
+-                sdp: 'v=0\r\nsynthetic-answer',
+-                model: 'synthetic-live',
+-                deployment: 'synthetic-live',
+-                expiresAt: 123,
+-              },
+-        ),
+-      );
+-      return;
+-    }
+-    res.writeHead(404);
+-    res.end();
+-  });
+-  await new Promise((resolve) => runtime.listen(runtimePort, '127.0.0.1', resolve));
+-  start('backend-server', process.execPath, ['--import', 'tsx', 'backend/src/server.ts']);
+-  start('frontend-server', process.execPath, [
+-    'node_modules/vite/bin/vite.js',
+-    '--host',
+-    '127.0.0.1',
+-    '--port',
+-    String(frontPort),
+-    '--strictPort',
+-    '--config',
+-    'frontend/vite.config.ts',
+-    'frontend',
+-  ]);
+-  await readiness(`http://127.0.0.1:${apiPort}/health`);
+-  await readiness(`http://127.0.0.1:${frontPort}`);
+-  process.env.PLAYWRIGHT_BROWSERS_PATH = env.PLAYWRIGHT_BROWSERS_PATH;
+-  const { runVoiceBrowser } = await import('./qa-voice-pr-393-browser.mjs');
+-  const browserProof = await runVoiceBrowser({
+-    front: `http://127.0.0.1:${frontPort}`,
+-    api: `http://127.0.0.1:${apiPort}`,
+-    out,
+-    fontRoot: path.join(packet, 'font-assets'),
+-    sql: client,
+-    setProviderFailure: (value) => {
+-      providerFailure = value;
+-    },
+-  });
+-  Object.assign(proof, browserProof);
+-  proof.status = 'PASS';
+-} catch (error) {
+-  proof.status = 'FAILED';
+-  proof.failure = clean(error.message);
+-  proof.failureStack = clean(error.stack);
+-  throw error;
+-} finally {
+-  for (const c of children.reverse()) {
+-    c.child.kill('SIGTERM');
+-    await Promise.race([
+-      new Promise((r) => c.child.once('close', r)),
+-      new Promise((r) => setTimeout(r, 5000)),
+-    ]);
+-    if (c.child.exitCode === null) c.child.kill('SIGKILL');
+-    writeFileSync(path.join(out, 'logs', `${c.name}.log`), clean(c.logs()));
+-  }
+-  if (runtime) await new Promise((r) => runtime.close(r));
+-  if (client) {
+-    const marker = await client.query(
+-      "SELECT shobj_description(oid,'pg_database') marker FROM pg_database WHERE datname=current_database()",
+-    );
+-    assert.equal(marker.rows[0].marker, `clinicos.qa.voice393.${owner}`);
+-    await client.end();
+-    proof.databaseOwnershipVerified = true;
+-  }
+-  if (containerId) {
+-    const check = spawnSync(
+-      'docker',
+-      ['inspect', '--format', '{{index .Config.Labels "clinicos.qa.owner"}}', containerId],
+-      { encoding: 'utf8' },
+-    );
+-    assert.equal(check.stdout.trim(), owner, 'cleanup must verify owner');
+-    assert.equal(
+-      spawnSync('docker', ['stop', '--time', '3', containerId], { stdio: 'ignore' }).status,
+-      0,
+-    );
+-    for (let i = 0; i < 30; i++) {
+-      proof.ownedContainerRemoved =
+-        spawnSync('docker', ['inspect', containerId], { stdio: 'ignore' }).status !== 0;
+-      if (proof.ownedContainerRemoved) break;
+-      await new Promise((r) => setTimeout(r, 100));
+-    }
+-    assert.equal(proof.ownedContainerRemoved, true);
+-  }
+-  writeFileSync(
+-    path.join(out, 'test-results', 'integrated-result.json'),
+-    JSON.stringify(proof, null, 2) + '\n',
+-  );
+-  console.log(
+-    JSON.stringify({
+-      status: proof.status,
+-      checks: proof.checks?.length,
+-      ownedContainerRemoved: proof.ownedContainerRemoved,
+-      realProviderProof: false,
+-    }),
+-  );
+-}
+diff --git a/frontend/src/components/assistant/voice/VoicePanel.tsx b/frontend/src/components/assistant/voice/VoicePanel.tsx
+index 0dfdb07d..d3a8239d 100644
+--- a/frontend/src/components/assistant/voice/VoicePanel.tsx
++++ b/frontend/src/components/assistant/voice/VoicePanel.tsx
+@@ -71,7 +71,7 @@ export function VoicePanel({ voice, busy }: { voice: VoiceChannel; busy: boolean
+       data-state={audio.state}
+     >
+       <div className="am-voice__bar">
+-        <span className={`am-voice__dot${listening ? ' is-live' : ''}`} aria-hidden="true" />
++        <span className={`am-voice__dot${voice.micActive ? ' is-live' : ''}`} aria-hidden="true" />
+         <strong className="am-voice__state" role="status" data-testid="am-voice-state">
+           {AUDIO_STATE_LABELS[audio.state]}
+         </strong>
+diff --git a/frontend/src/components/assistant/voice/useVoiceCapture.ts b/frontend/src/components/assistant/voice/useVoiceCapture.ts
+index a895ee85..07c8e163 100644
+--- a/frontend/src/components/assistant/voice/useVoiceCapture.ts
++++ b/frontend/src/components/assistant/voice/useVoiceCapture.ts
+@@ -76,6 +76,8 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
+     pendingStream.current = null;
+     const current = capture.current;
+     capture.current = null;
++    setActive(false);
++    setLevel(0);
+     if (!current) return;
+     current.processor.onaudioprocess = null;
+     try {
+@@ -85,8 +87,6 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
+     }
+     current.stream.getTracks().forEach((track) => track.stop());
+     void current.context.close().catch(() => undefined);
+-    setActive(false);
+-    setLevel(0);
+   }, []);
+ 
+   const start = useCallback(
+@@ -134,6 +134,7 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
+       }
+       if (beforeListen) {
+         pendingStream.current = stream;
++        setActive(true);
+         try {
+           await beforeListen(stream);
+           if (pendingStream.current === stream) pendingStream.current = null;
+@@ -141,6 +142,7 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
+           if (pendingStream.current === stream) pendingStream.current = null;
+           stream.getTracks().forEach((track) => track.stop());
+           if (!gate.current.complete(token)) return; // cancelled while connecting
++          setActive(false);
+           const code =
+             error && typeof error === 'object' && 'code' in error
+               ? String(error.code)

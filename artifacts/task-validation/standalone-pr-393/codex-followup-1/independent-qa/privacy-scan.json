@@ -1,0 +1,227 @@
+{
+  "independentTrace": {
+    "zipBytes": 27626455,
+    "sha256": "781d544110d334aef3abecbe8e7a8fb1f5f6a74c7776fbafe1ea2aa03435a74c",
+    "memberCount": 704,
+    "crc": "PASS",
+    "scan": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "decodedZipJpegFrames": 637,
+    "decodedZipPng": 0,
+    "format": "byte-split sanitized Playwright ZIP",
+    "parts": [
+      {
+        "file": "trace.zip.part-01",
+        "bytes": 16777216,
+        "sha256": "dc56eb7411a8f0cc6a2a79436174f385f29983e7f6e8322b1e402a71bbdc281a"
+      },
+      {
+        "file": "trace.zip.part-02",
+        "bytes": 10849239,
+        "sha256": "a8a97a4bdeb483679fc031ffb33d8f9091fa7293ff1f585f580408bcc7ecab53"
+      }
+    ],
+    "syntheticSessionRedactions": 98,
+    "rawSha256": "b164bc1c4857f5fee6de7e54266353120b3a5908d38ee7dcef5dbc008bb5b413",
+    "rawRetainedPrivate": true
+  },
+  "authorTrace": {
+    "zipBytes": 30532935,
+    "sha256": "2b4be01235d80796ba8d4f1455a44cef2eab7049b790bf5610ed73c4b247f7e7",
+    "memberCount": 737,
+    "crc": "PASS",
+    "scan": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "decodedZipJpegFrames": 670,
+    "decodedZipPng": 0
+  },
+  "logs": {
+    "runtime-1/logs/backend-server.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "runtime-1/logs/migrate.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "runtime-1/logs/seed-assistant.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "runtime-1/logs/backend-voice.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "runtime-1/logs/frontend-server.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/backend-build.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/frontend-app-types.result.json": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/frontend-focused.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/diff-check.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/frontend-app-types.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/diff-check.result.json": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/runtime-full.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/frontend-security.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/frontend-focused.result.json": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/integrated-run.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/frontend-node-types.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/frontend-security.result.json": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/frontend-build.result.json": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/backend-build.result.json": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/independent-runtime-probe.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/runtime-full.result.json": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/contract-validation.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/frontend-build.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/evidence-validation.log": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    },
+    "logs/frontend-node-types.result.json": {
+      "privateKey": 0,
+      "postgresDsn": 0,
+      "apiKeyLike": 0,
+      "jwtLike": 0,
+      "demoSession": 0
+    }
+  },
+  "logFindings": [],
+  "phi": "Synthetic seed-only owned DB. Visual inspection pending/live and persisted result screenshots; no real PHI source was used."
+}

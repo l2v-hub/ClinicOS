@@ -416,6 +416,248 @@ test('B/K — voice transcript → preview, zero write; spoken «conferma» neve
   assert.equal(bad.status, 400);
 });
 
+test('realtime SDP route: identity, capability, feature-off, byte bounds, allowlist and safe audit', async () => {
+  const doctor = await login(base, 'SIM-DOCTOR-1');
+  let count = 0;
+  setSttProvider({
+    ...scripted('unchanged batch'),
+    async negotiateRealtimeCall(offer) {
+      count += 1;
+      assert.equal(offer, 'v=0\r\nsynthetic-offer');
+      return {
+        sdp: 'v=0\r\nsynthetic-answer',
+        model: 'synthetic-live',
+        deployment: 'synthetic-live',
+        expiresAt: 123,
+        transport: 'webrtc',
+        token: 'must-not-escape',
+      } as any;
+    },
+  });
+  const send = async (session: Session | null, text: string, mime = 'application/sdp') => {
+    const response = await fetch(`${base}/skills/voice/realtime-call`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': mime,
+        ...(session ? { Authorization: `Bearer ${session.token}` } : {}),
+      },
+      body: text,
+    });
+    return { status: response.status, body: (await response.json()) as any };
+  };
+  assert.equal((await send(null, 'v=0')).status, 401);
+  const deniedAt = new Date();
+  assert.equal((await send(admin, 'v=0')).status, 403);
+  assert.ok(
+    await waitForAudit({
+      operatorId: admin.identityId,
+      actionType: 'voice:session',
+      outcome: 'denied',
+      createdAt: { gte: deniedAt },
+    }),
+  );
+  assert.equal((await send(doctor, 'v=0', 'text/plain')).status, 400);
+  assert.equal((await send(doctor, 'invalid')).status, 400);
+  assert.equal((await send(doctor, 'v=0' + 'é'.repeat(32000))).status, 413);
+  const disabledAt = new Date();
+  process.env.VOICE_CHANNEL_ENABLED = 'false';
+  try {
+    assert.equal((await send(doctor, 'v=0')).status, 503);
+  } finally {
+    process.env.VOICE_CHANNEL_ENABLED = 'true';
+  }
+  assert.ok(
+    await waitForAudit({
+      operatorId: doctor.identityId,
+      actionType: 'voice:session',
+      outcome: 'error',
+      fields: { has: 'code:voice_disabled' },
+      createdAt: { gte: disabledAt },
+    }),
+  );
+  assert.equal(count, 0, 'unauthorized, disabled and invalid SDP never reaches provider');
+  const success = await send(doctor, 'v=0\r\nsynthetic-offer');
+  assert.equal(success.status, 200);
+  assert.equal(success.body.sdp, 'v=0\r\nsynthetic-answer');
+  assert.equal(count, 1);
+  assert.deepEqual(Object.keys(success.body).sort(), [
+    'deployment',
+    'expiresAt',
+    'model',
+    'sdp',
+    'transport',
+  ]);
+  const audit = await waitForAudit({
+    operatorId: doctor.identityId,
+    actionType: 'voice:session',
+    outcome: 'ok',
+  });
+  assert.ok(audit);
+  assert.deepEqual(audit.fields, ['transport:webrtc']);
+  assert.ok(!JSON.stringify(audit).includes('synthetic-offer'));
+  setSttProvider(scripted('unchanged batch'));
+  assert.equal((await send(doctor, 'v=0')).status, 409);
+});
+
+test('realtime pinned server refuses runtime-enabled sessions, with persisted session audit and zero negotiation', async () => {
+  const doctor = await login(base, 'SIM-DOCTOR-1');
+  let negotiations = 0;
+  const runtime = http.createServer((req, res) => {
+    if (req.url === '/v1/voice/realtime-call') negotiations++;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(
+      JSON.stringify({
+        available: true,
+        realtime: { enabled: true, available: true, transports: ['webrtc'] },
+      }),
+    );
+  });
+  await new Promise<void>((r) => runtime.listen(0, '127.0.0.1', r));
+  const keys = ['AI_RUNTIME_URL', 'AI_RUNTIME_SERVICE_TOKEN', 'VOICE_STT_TRANSPORT'] as const;
+  const prior = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
+  setSttProvider(null);
+  try {
+    process.env.AI_RUNTIME_URL = `http://127.0.0.1:${(runtime.address() as any).port}`;
+    process.env.AI_RUNTIME_SERVICE_TOKEN = 'synthetic-transport-pin';
+    // Warm an enabled cache first: changing the local pin must still refuse immediately.
+    const { runtimeSttStatus } = await import('../stt.js');
+    assert.equal((await runtimeSttStatus()).realtime.available, true);
+    process.env.VOICE_STT_TRANSPORT = 'server';
+    const started = new Date();
+    const response = await fetch(`${base}/skills/voice/realtime-call`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${doctor.token}`,
+        'Content-Type': 'application/sdp',
+      },
+      body: 'v=0',
+    });
+    assert.equal(response.status, 409);
+    assert.equal(((await response.json()) as any).code, 'transport_unsupported');
+    assert.equal(negotiations, 0);
+    assert.ok(
+      await waitForAudit({
+        operatorId: doctor.identityId,
+        actionType: 'voice:session',
+        fields: { has: 'code:transport_unsupported' },
+        createdAt: { gte: started },
+      }),
+    );
+  } finally {
+    for (const key of keys) {
+      if (prior[key] === undefined) delete process.env[key];
+      else process.env[key] = prior[key];
+    }
+    await new Promise<void>((r) => runtime.close(() => r()));
+  }
+});
+
+test('realtime cancellation during a pending status probe never creates a provider session', async () => {
+  const doctor = await login(base, 'SIM-DOCTOR-1');
+  let entered!: () => void;
+  const started = new Promise<void>((r) => {
+    entered = r;
+  });
+  let finish!: () => void;
+  const pending = new Promise<void>((r) => {
+    finish = r;
+  });
+  let negotiations = 0;
+  const runtime = http.createServer(async (req, res) => {
+    if (req.url === '/v1/voice/realtime-call') negotiations++;
+    entered();
+    await pending;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(
+      JSON.stringify({
+        available: true,
+        realtime: { enabled: true, available: true, transports: ['webrtc'] },
+      }),
+    );
+  });
+  await new Promise<void>((r) => runtime.listen(0, '127.0.0.1', r));
+  const priorUrl = process.env.AI_RUNTIME_URL,
+    priorToken = process.env.AI_RUNTIME_SERVICE_TOKEN;
+  setSttProvider(null);
+  try {
+    process.env.AI_RUNTIME_URL = `http://127.0.0.1:${(runtime.address() as any).port}`;
+    process.env.AI_RUNTIME_SERVICE_TOKEN = 'synthetic-delayed-status';
+    const controller = new AbortController();
+    const request = fetch(`${base}/skills/voice/realtime-call`, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: { Authorization: `Bearer ${doctor.token}`, 'Content-Type': 'application/sdp' },
+      body: 'v=0',
+    });
+    await started;
+    controller.abort();
+    await assert.rejects(request, { name: 'AbortError' });
+    finish();
+    // Shares and awaits the pending status probe, then returns through the actual app.
+    const status = await call(base, doctor, 'GET', '/skills/voice/status');
+    assert.equal(status.status, 200);
+    assert.equal(negotiations, 0);
+  } finally {
+    finish();
+    if (priorUrl === undefined) delete process.env.AI_RUNTIME_URL;
+    else process.env.AI_RUNTIME_URL = priorUrl;
+    if (priorToken === undefined) delete process.env.AI_RUNTIME_SERVICE_TOKEN;
+    else process.env.AI_RUNTIME_SERVICE_TOKEN = priorToken;
+    await new Promise<void>((r) => runtime.close(() => r()));
+  }
+});
+
+test('realtime admission serializes one operator, isolates operators and releases after completion/failure', async () => {
+  const doctor = await login(base, 'SIM-DOCTOR-1');
+  let entered!: () => void;
+  const started = new Promise<void>((r) => {
+    entered = r;
+  });
+  let finish!: () => void;
+  const pending = new Promise<void>((r) => {
+    finish = r;
+  });
+  let fail = false;
+  setSttProvider({
+    ...scripted('batch'),
+    async negotiateRealtimeCall(offer) {
+      if (offer.includes('held')) {
+        entered();
+        await pending;
+      }
+      if (fail) throw new SttUnavailableError('stt_unavailable', 'synthetic', 503);
+      return {
+        sdp: 'v=0',
+        model: 'synthetic',
+        deployment: 'synthetic',
+        expiresAt: null,
+        transport: 'webrtc',
+      };
+    },
+  });
+  const send = (who: Session, body = 'v=0') =>
+    fetch(`${base}/skills/voice/realtime-call`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${who.token}`, 'Content-Type': 'application/sdp' },
+      body,
+    });
+  const first = send(doctor, 'v=0 held');
+  await started;
+  try {
+    const busy = await send(doctor);
+    assert.equal(busy.status, 409);
+    assert.equal(((await busy.json()) as any).code, 'session_busy');
+    assert.equal((await send(nurse)).status, 200, 'another operator is independent');
+  } finally {
+    finish();
+  }
+  assert.equal((await first).status, 200);
+  fail = true;
+  assert.equal((await send(doctor)).status, 503);
+  fail = false;
+  assert.equal((await send(doctor)).status, 200, 'failed negotiation releases admission');
+});
+
 test('STT cost guard: per-operator utterance rate limit → 429, provider not called', async () => {
   let providerCalls = 0;
   setSttProvider({
