@@ -17,6 +17,21 @@ const REPO = 'l2v-hub/ClinicOS';
 const clone = (value) => structuredClone(value);
 const channel = (batch) => batch.externalReview?.channel === 'github-comments';
 
+function ownershipChanged() {
+  return Object.assign(new Error('Owned claim snapshot changed'), {
+    code: 'review-ownership-changed',
+  });
+}
+function assertExpectedClaim(batch, expectedClaim, login) {
+  try {
+    assert.deepEqual(batch, expectedClaim);
+    assert.equal(expectedClaim.externalReview?.status, 'comment-running');
+    assert.equal(expectedClaim.externalReview?.owner, login);
+  } catch {
+    throw ownershipChanged();
+  }
+}
+
 export function handoffFeedbackFingerprint(feedback, owner, publisher = owner) {
   return feedbackFingerprint({
     ...feedback,
@@ -100,6 +115,15 @@ export function createCommentReviewHandoff({
     assert.ok(batch && batch.sha, 'PR has no controller-owned implementation/evidence packet');
     return { state, batch };
   }
+  async function liveForClaim(batch, expectedClaim) {
+    try {
+      return await live(batch);
+    } catch (error) {
+      if (expectedClaim !== undefined && error?.code === 'ERR_ASSERTION')
+        throw ownershipChanged();
+      throw error;
+    }
+  }
   async function save(state, batch, login, { guard, recoveryHead } = {}) {
     if (subjectAdapter) subjectAdapter.validate(state);
     const expected = JSON.stringify(batch);
@@ -134,10 +158,18 @@ export function createCommentReviewHandoff({
     assert.ok(Array.isArray(tree.tree));
     return new Set(tree.tree.filter((item) => item.type === 'blob').map((item) => item.path));
   }
-  async function message(batch, payload) {
+  async function message(batch, payload, { expectedClaim } = {}) {
+    payload = clone(payload);
     const body = `${COMMENT_REVIEW_MARKER}\n${JSON.stringify(payload, null, 2)}`;
     assert.ok(body.length <= 60000, 'Review comment exceeds GitHub bound');
-    await live(batch);
+    const claimGuard = async () => {
+      if (expectedClaim === undefined) return;
+      const login = await actor();
+      await liveForClaim(batch, expectedClaim);
+      const current = (await load(batch.pr.number)).batch;
+      assertExpectedClaim(current, expectedClaim, login);
+    };
+    await liveForClaim(batch, expectedClaim);
     const issue = await github.viewIssue(batch.pr.number);
     if (
       !issue.comments.some(
@@ -145,11 +177,15 @@ export function createCommentReviewHandoff({
       )
     ) {
       const current = (await load(batch.pr.number)).batch;
-      assert.deepEqual(current, batch, 'Durable handoff changed before comment');
-      await live(batch);
+      if (expectedClaim !== undefined) assertExpectedClaim(current, expectedClaim, payload.actor);
+      else assert.deepEqual(current, batch, 'Durable handoff changed before comment');
+      await liveForClaim(batch, expectedClaim);
       assert.ok(await github.authorized(payload.actor), 'Comment actor lost authorization');
+      // Reload AFTER live/auth awaits, immediately before the irreversible effect.
+      // A same-actor replacement claim on the same SHA must not receive this result.
+      await claimGuard();
       await github.commentPR(batch.pr.number, body);
-    }
+    } else await claimGuard();
   }
   async function requestNotice(batch, login) {
     assert.equal(batch.externalReview?.status, 'comment-requested');
@@ -283,17 +319,20 @@ export function createCommentReviewHandoff({
     await save(state, batch, login); // CAS reservation BEFORE the local Claude starts its review.
     return clone(batch);
   }
-  async function submit(pr, review) {
+  async function submit(pr, review, { expectedClaim } = {}) {
+    const expected = expectedClaim === undefined ? undefined : clone(expectedClaim);
+    const report = clone(review);
     const login = await actor(),
       { batch } = await load(pr);
+    if (expected !== undefined) assertExpectedClaim(batch, expected, login);
     assert.ok(
       channel(batch) &&
         batch.externalReview.status === 'comment-running' &&
         batch.externalReview.owner === login,
       'No owned review reservation',
     );
-    await live(batch);
-    validateReview(review, batch.sha, await tracked(batch));
+    await liveForClaim(batch, expected);
+    validateReview(report, batch.sha, await tracked(batch));
     await message(batch, {
       kind: 'report',
       actor: login,
@@ -302,8 +341,8 @@ export function createCommentReviewHandoff({
       request_id: batch.externalReview.requestId,
       claim_id: batch.externalReview.claimId,
       round: batch.reviews.length,
-      report: review,
-    });
+      report,
+    }, { expectedClaim: expected });
     return { status: 'submitted', pr, sha: batch.sha, round: batch.reviews.length };
   }
   // A provider failure may spend only the exact reservation this worker acquired.
@@ -316,7 +355,7 @@ export function createCommentReviewHandoff({
       'claude-invalid-json', 'claude-missing-structured-report', 'review-validation-failed',
     ].includes(failureCode), 'Unknown provider failure');
     const login = await actor(), { state, batch } = await load(pr);
-    assert.deepEqual(batch, claimed, 'Owned claim snapshot changed');
+    assertExpectedClaim(batch, claimed, login);
     assert.ok(channel(batch) && batch.externalReview.status === 'comment-running');
     assert.equal(batch.externalReview.owner, login, 'Claim belongs to another actor');
     assert.ok(batch.externalReview.claimId && batch.externalReview.requestId);

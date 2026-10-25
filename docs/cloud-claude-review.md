@@ -38,6 +38,10 @@ A valid structured report is submitted and reconciled through the native handoff
 onto source issues (or the standalone PR), then explicitly dispatches `codex-bug-pipeline.yml`
 on `main`. That controller owns corrections and independent final QA. Claude approval never
 merges, closes or deploys. This change does not enable disabled Codex workflows.
+Cloud publication passes the original full native claim snapshot to `submit` and checks it
+again after the final live/auth guards immediately before posting. A replacement request,
+claim, round, owner or frozen context yields `ownership-changed`; the stale result cannot
+consume the replacement reservation, even when its actor and SHA match. Both histories remain.
 
 A model failure settles only this worker's unchanged, owned, live claim as failed. The round
 stays spent, the exact claim snapshot digest and previous reservation are retained, and no

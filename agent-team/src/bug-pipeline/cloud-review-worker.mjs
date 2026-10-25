@@ -353,6 +353,14 @@ export async function processCloudReview({
   // Bind the already prepared data to the actual native reservation, even across a request race.
   let review,
     failureCode = 'review-validation-failed';
+  const ownershipChanged = () => ({
+    status: 'ownership-changed',
+    pr: subject.pr.number,
+    sha: claimed.sha,
+    round: claimed.reviews.length,
+    blockedSubjects,
+    providerExecuted: true,
+  });
   try {
     assert.equal(claimed.sha, subject.sha);
     assert.equal(claimed.baseSha, subject.baseSha);
@@ -380,7 +388,13 @@ export async function processCloudReview({
       source.tracked,
     );
   } catch {
-    const failed = await controller.failOwnedClaim(subject.pr.number, claimed, failureCode);
+    let failed;
+    try {
+      failed = await controller.failOwnedClaim(subject.pr.number, claimed, failureCode);
+    } catch (error) {
+      if (error?.code === 'review-ownership-changed') return ownershipChanged();
+      throw error;
+    }
     if (collection === 'standaloneReviews') await standalone.publishState(failed);
     else await communication.publishState(failed);
     return {
@@ -393,7 +407,12 @@ export async function processCloudReview({
     };
   }
   // Publication uncertainty must NEVER convert a genuine/possibly posted report into failure.
-  await controller.submit(subject.pr.number, review);
+  try {
+    await controller.submit(subject.pr.number, review, { expectedClaim: claimed });
+  } catch (error) {
+    if (error?.code === 'review-ownership-changed') return ownershipChanged();
+    throw error;
+  }
   const published = await controller.reconcilePR(subject.pr.number);
   assert.equal(published.externalReview.status, 'published');
   if (collection === 'standaloneReviews') await standalone.publishState(published);

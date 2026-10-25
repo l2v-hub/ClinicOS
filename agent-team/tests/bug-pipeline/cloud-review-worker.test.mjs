@@ -88,9 +88,11 @@ function fixture() {
         subject.reviews.push({ round: 1, subjectSha: sha, status: 'running' });
         return clone(subject);
       },
-      submit: async (_pr, review) => {
+      submit: async (_pr, review, { expectedClaim }) => {
         calls.push('submit');
         assert.deepEqual(review, approved);
+        assert.deepEqual(expectedClaim, subject);
+        assert.equal(expectedClaim.externalReview.status, 'comment-running');
       },
       reconcilePR: async () => {
         calls.push('reconcile');

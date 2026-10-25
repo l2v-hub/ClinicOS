@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { createGitHub } from '../../src/bug-pipeline/github.mjs';
 import { feedbackFingerprint } from '../../src/bug-pipeline/contracts.mjs';
+import { processCloudReview } from '../../src/bug-pipeline/cloud-review-worker.mjs';
 import {
   COMMENT_REVIEW_MARKER,
   createCommentReviewHandoff,
@@ -778,4 +779,85 @@ test('owned failure refuses to discard a genuine report already posted for its u
   const published = await f.handoff.reconcilePR(81);
   assert.equal(published.externalReview.status, 'published');
   assert.equal(published.reviews[0].status, 'approved');
+});
+
+test('cloud stale inference cannot publish under a same-actor same-SHA replacement native claim', async () => {
+  const f = fixture();
+  f.remote.batches[0].baseSha = 'b'.repeat(40);
+  await f.handoff.request(81);
+  let original, replacement;
+  const result = await processCloudReview({
+    github: f.github, handoff: f.handoff, standalone: {}, cwd: '/synthetic/worktree', env: {},
+    retrieve: async () => ({ packet: { subject_sha: sha }, tracked: new Set(['src/feature.ts']) }),
+    probe: async () => {}, communication: { publishState: async () => assert.fail('No stale projection') },
+    wake: async () => assert.fail('No stale controller wake'),
+    run: async () => {
+      original = clone(f.remote.batches[0]);
+      await f.handoff.failOwnedClaim(81, original, 'claude-timeout');
+      await f.handoff.request(81, { recoverFailed: true, authorizationRef: 'test:session' });
+      replacement = await f.handoff.claim(81);
+      return { ok: true, stdout: JSON.stringify({ structured_output: validApproved() }) };
+    },
+  });
+  assert.equal(result.status, 'ownership-changed');
+  assert.equal(result.round, 1);
+  assert.notEqual(original.externalReview.claimId, replacement.externalReview.claimId);
+  assert.deepEqual(f.remote.batches[0], replacement);
+  assert.deepEqual(replacement.reviews.map((item) => item.status), ['failed', 'running']);
+  assert.deepEqual(replacement.reviewLedger.rounds.map((item) => item.verdict), ['failed', 'running']);
+  assert.equal(f.pr.comments.filter((item) => item.body.includes('"kind": "report"')).length, 0);
+  assert.equal(f.reported.length, 0);
+});
+
+test('expected native submission rejects changed actor/head/request/claim/round/source/history body without publication', async () => {
+  for (const mutation of ['actor', 'head', 'request', 'claim', 'round', 'source', 'body', 'null']) {
+    const f = fixture(), expected = await requestedClaimed(f);
+    if (mutation === 'actor') f.setActor('another-authorized-user');
+    if (mutation === 'head') f.feedback.head = 'd'.repeat(40);
+    if (mutation === 'request') f.remote.batches[0].externalReview.requestId = 'replacement-request';
+    if (mutation === 'claim') f.remote.batches[0].externalReview.claimId = 'replacement-claim';
+    if (mutation === 'round') {
+      f.remote.batches[0].reviews.push({ round: 2, status: 'running', subjectSha: sha });
+      f.remote.batches[0].reviewLedger.rounds.push({ round: 2, verdict: 'running', subject_sha: sha });
+    }
+    if (mutation === 'source') f.remote.batches[0].baseSha = 'd'.repeat(40);
+    if (mutation === 'body') f.remote.batches[0].plan.analysis = 'Changed frozen review context.';
+    const preserved = clone(f.remote);
+    await assert.rejects(f.handoff.submit(81, validApproved(), {
+      expectedClaim: mutation === 'null' ? null : expected,
+    }), (error) => error.code === 'review-ownership-changed', mutation);
+    assert.deepEqual(f.remote, preserved);
+    assert.equal(f.pr.comments.filter((item) => item.body.includes('"kind": "report"')).length, 0);
+  }
+});
+
+test('expected claim is checked again after final native live/auth awaits immediately before publication', async () => {
+  const f = fixture(), expected = await requestedClaimed(f);
+  let sourceReads = 0, mutated = false;
+  f.onViewIssue((number) => {
+    if (number === 17 && ++sourceReads === 3) {
+      mutated = true;
+      f.remote.batches[0].externalReview.claimId = 'changed-inside-final-live-guard';
+    }
+  });
+  await assert.rejects(f.handoff.submit(81, validApproved(), { expectedClaim: expected }),
+    (error) => error.code === 'review-ownership-changed');
+  assert.equal(mutated, true);
+  assert.equal(f.remote.batches[0].externalReview.claimId, 'changed-inside-final-live-guard');
+  assert.equal(f.remote.batches[0].reviews[0].status, 'running');
+  assert.equal(f.pr.comments.filter((item) => item.body.includes('"kind": "report"')).length, 0);
+});
+
+test('expected native publication uses immutable validated body and claim copies across caller mutation', async () => {
+  const f = fixture(), expected = await requestedClaimed(f), review = validApproved();
+  const originalClaim = clone(expected);
+  f.onViewIssue(() => {
+    expected.externalReview.claimId = 'caller-mutated-alias';
+    review.summary = 'Caller-mutated body must never be published.';
+  });
+  await f.handoff.submit(81, review, { expectedClaim: expected });
+  const posted = JSON.parse(f.pr.comments.at(-1).body.split('\n').slice(1).join('\n'));
+  assert.deepEqual(posted.report, validApproved());
+  assert.equal(posted.claim_id, originalClaim.externalReview.claimId);
+  assert.equal(posted.round, originalClaim.reviews.length);
 });
