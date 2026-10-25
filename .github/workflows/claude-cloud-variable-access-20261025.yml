@@ -1,0 +1,40 @@
+name: Qualify hosted reviewer variable access 20261025
+permissions:
+  contents: read
+jobs:
+  inspect-access:
+    if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/codex/claude-cloud-variable-access-20261025'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 3
+    steps:
+    - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      with:
+        node-version: 22
+    - name: Inspect only finite access metadata
+      env:
+        GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+      run: 'node --input-type=module <<''READ_ONLY_ACCESS''
+
+        import assert from ''node:assert/strict'';
+
+        assert.equal(process.env.GITHUB_REPOSITORY,''l2v-hub/ClinicOS'');
+
+        assert.equal(process.env.GITHUB_REF,''refs/heads/codex/claude-cloud-variable-access-20261025'');
+
+        assert.equal(process.env.GITHUB_EVENT_NAME,''push'');
+
+        const proof={type:''hosted-variable-access'',runId:/^[0-9]{1,20}$/.test(process.env.GITHUB_RUN_ID??'''')?process.env.GITHUB_RUN_ID:null,tokenPresent:Boolean(process.env.GH_TOKEN),providerCalls:0,apiWrites:0,actorHttpStatus:null,actorMatchesExpected:false,variableHttpStatus:null,variableState:''unreadable'',transportError:false,parseError:false};
+
+        const read=async suffix=>{let r;try{r=await fetch(''https://api.github.com/''+suffix,{headers:{Authorization:''Bearer ''+process.env.GH_TOKEN,Accept:''application/vnd.github+json''},redirect:''error'',signal:AbortSignal.timeout(20000)});}catch{proof.transportError=true;return null;}let body;try{body=await r.json();}catch{proof.parseError=true;return{status:r.status,body:null};}return{status:r.status,body};};
+
+        if(proof.tokenPresent){const actor=await read(''user'');if(actor){proof.actorHttpStatus=actor.status;proof.actorMatchesExpected=actor.status===200&&actor.body?.login===''l2v-hub'';}const variable=await read(''repos/l2v-hub/ClinicOS/actions/variables/CLAUDE_CLOUD_REVIEW_ENABLED'');if(variable){proof.variableHttpStatus=variable.status;proof.variableState=variable.status===404?''absent'':variable.status===200&&variable.body?.name===''CLAUDE_CLOUD_REVIEW_ENABLED''?(variable.body.value===''true''?''true'':variable.body.value===''false''?''false'':''other''):''unreadable'';}}
+
+        console.log(JSON.stringify(proof));
+
+        READ_ONLY_ACCESS
+
+        '
+'on':
+  push:
+    branches:
+    - codex/claude-cloud-variable-access-20261025
