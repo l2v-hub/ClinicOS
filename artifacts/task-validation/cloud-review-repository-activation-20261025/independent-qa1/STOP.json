@@ -1,0 +1,11 @@
+{
+  "status": "STOP-sealed",
+  "nonce": "3112f519-172c-408c-a10c-b3b291da7a58",
+  "decision": "READY FOR CODEX QA",
+  "sourceHashes": {
+    ".github/workflows/claude-cloud-review.yml": "440d65be34c642e63e6017fd59bd92a9f8e11ecfb63eaf65dc1ec15d77812365",
+    "agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs": "8f1a9cb971eaa70359c1ad1552a648e62864294cbcd9f8f237918dd30fcea371"
+  },
+  "authorFrozenUnchanged": true,
+  "operationalActivationProven": false
+}
