@@ -10,9 +10,9 @@ jobs:
     if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/codex/claude-cloud-bootstrap-20261025'
     concurrency:
       group: clinicos-claude-cloud-review-${{ github.repository }}
-      cancel-in-progress: 'false'
+      cancel-in-progress: false
     runs-on: ubuntu-22.04
-    timeout-minutes: '8'
+    timeout-minutes: 8
     steps:
     - name: Initialize bounded receipt before checkout or installation
       shell: bash
