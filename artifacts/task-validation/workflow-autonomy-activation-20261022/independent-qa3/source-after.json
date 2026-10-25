@@ -1,0 +1,26 @@
+{
+  "sourceSha": "93b0c72877bd58c2dd3769d0942d737ef9f96ac0",
+  "immutableFilesReverified": 822,
+  "historicalSnapshots": {
+    "baseline": {
+      "files": 135,
+      "allHashesMatch": true
+    },
+    "source": {
+      "files": 137,
+      "allHashesMatch": true
+    },
+    "source2": {
+      "files": 137,
+      "allHashesMatch": true
+    },
+    "source3": {
+      "files": 137,
+      "allHashesMatch": true
+    }
+  },
+  "qaAndCombinedFiles": 276,
+  "oldSubjectHashes": 22,
+  "sourceEdits": false,
+  "syntaxFiles": 14
+}

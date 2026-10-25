@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "status": "implemented-awaiting-senior-integration",
+  "sealedAt": "2026-10-23T03:05:02.301263+00:00",
+  "reservationNonce": "8e2bf318-0c42-4e55-97e8-6aa23cbaf8df",
+  "files": {
+    "task-contract.md": {
+      "sha256": "4f4cb0ce69c53ad3238497786c67a5a7984c7ad7259e16f6c075c3ba16cbe0dc",
+      "bytes": 6013
+    },
+    "reservation.json": {
+      "sha256": "977c5fbe92a9bc41ddf809873403a2c3a1d9d139dc2f27fc08348a4f65e9c19c",
+      "bytes": 1169
+    },
+    "baseline-manifest.json": {
+      "sha256": "85baabc0ce4cddd7f6296b5832f31c5ea983937062c63cf9bac44b0d7906a326",
+      "bytes": 21777
+    },
+    "patch.diff": {
+      "sha256": "bd49d807f64767f3b03da832c382af4b5232293df078fd035601ac7b4eb2708a",
+      "bytes": 52629
+    },
+    "source-delta.json": {
+      "sha256": "005bfbf0dd0c0d614569cd5d0930c388397b589603b56f6bfbe0e1ef0d0eeaf8",
+      "bytes": 1640
+    },
+    "results.json": {
+      "sha256": "578e041ca3e14c6b0e9d49614323b9626bcfe9943c46c7d37f989840b217489f",
+      "bytes": 1549
+    },
+    "report.md": {
+      "sha256": "a00e7dd2bf3929e8dcea1e7891c5f1726813dd3ee1104b8e91c103f931921c75",
+      "bytes": 5426
+    },
+    "commands.json": {
+      "sha256": "3a985f1d6850e0094e73b4b042d63809c4d2e77ab70a368a20eced59f98ab318",
+      "bytes": 6164
+    },
+    "STOP.json": {
+      "sha256": "6d7aa50153e48fc7d50503d9e21fccf7f05021ab063054826253a8ded8da29e9",
+      "bytes": 397
+    },
+    "shadow-snapshot.tar.gz": {
+      "sha256": "ff53b546e1d7d2079db8333bf68d49ff09db604bbd1af0afadab063a93b53d93",
+      "bytes": 514011
+    },
+    "first-failure-harness.txt": {
+      "sha256": "b6082c528976cab9f66fb32589e45f85dc27bbf55372c84cfb182151c86445eb",
+      "bytes": 1550
+    },
+    "historical-offline-replay.mjs": {
+      "sha256": "1c910a4626ecf32e4ee6aa876092b350dabc8f9414061dca65b674c62937a733",
+      "bytes": 3020
+    },
+    "historical-offline-replay-results.json": {
+      "sha256": "ef67ebbcbc12fb755c4a6413dc537d77fcafffbc04c95300ad338fe22e3d6f88",
+      "bytes": 3220
+    },
+    "affected-fifth.log": {
+      "sha256": "ae1c88f9ae360c6c9537abe56417b6dafe4664b8d2bdb6ab2d4906703c1f3495",
+      "bytes": 97098
+    },
+    "affected-final.log": {
+      "sha256": "7fe4062970e357182c5afd1868b6215b0ea1d013c59278df95703ba6fde00b86",
+      "bytes": 97162
+    },
+    "affected-first.log": {
+      "sha256": "50f028ae0392ef314accff33cb03462daacc15670872da1e2c99ac1c0b830efb",
+      "bytes": 153576
+    },
+    "affected-fourth.log": {
+      "sha256": "7e16bbd33bb75cb02ec927cf426a8d2a1e0f38f9241e1420578b04a5978f2f3b",
+      "bytes": 110651
+    },
+    "affected-second.log": {
+      "sha256": "1d73e4783cfcec4489e17c40fd6364b3c164ca8c2ea65412d5b8c71729e0a197",
+      "bytes": 120094
+    },
+    "affected-seventh.log": {
+      "sha256": "7cf0459b96a8a966398dadc04afa5b494809abd0ae7d82fe940cab530659ff2e",
+      "bytes": 96575
+    },
+    "affected-sixth.log": {
+      "sha256": "083ccac4aba97090f35b5602b365e60476d0b6606befb05309a5ecc2aa4e2461",
+      "bytes": 97367
+    },
+    "affected-third.log": {
+      "sha256": "982aa0ce05d9df22fb897bd9e552270d7bfdbf4935b642c63b35fb2e2447f305",
+      "bytes": 92534
+    },
+    "f2-boundaries.log": {
+      "sha256": "cc4f48383bf94b56118ee22371edc83b2f8013abc6f5094001fc229f3caffbc1",
+      "bytes": 5681
+    },
+    "first-failures.log": {
+      "sha256": "ff98b538e344d583f61cf6a21b9373a40254c66932e92f2c82faa07c213e4886",
+      "bytes": 1928
+    },
+    "historical-offline-replay.log": {
+      "sha256": "1f043cf687c40fb2e4c4902bd1e331cae6f438177beaf76cfba1a81512dbaff3",
+      "bytes": 57
+    },
+    "regression-after.log": {
+      "sha256": "0e5911df1b5c4d8b000e984182138df0c6a2548787b8faad75e65d6a3e3b6516",
+      "bytes": 1338
+    },
+    "standalone-positive-first-failure.log": {
+      "sha256": "49406fa04f2fa8142273643392e0586ddc8815878379a3d1486a9b7e2eebaa3a",
+      "bytes": 2399
+    },
+    "baseline/agent-team/src/bug-pipeline/release.mjs": {
+      "sha256": "3853501a7792b95149f0196b46b040c9a80a30cd110373ca7f9bb6042005f16e",
+      "bytes": 52341
+    },
+    "baseline/agent-team/src/bug-pipeline/standalone-review.mjs": {
+      "sha256": "aaa6894e3e0c374e567d5b7dc806f18db3a49ede47bde906b1cb45bf256a93c4",
+      "bytes": 44379
+    },
+    "baseline/agent-team/tests/bug-pipeline/release.test.mjs": {
+      "sha256": "db3ff7e79810c5d32e31295235fbad54fd60c0f4d2876faa204f1d6ecc5c27dc",
+      "bytes": 104216
+    },
+    "baseline/agent-team/tests/bug-pipeline/standalone-review.test.mjs": {
+      "sha256": "421bc323f67c1614bab5f872299a4f92a68ac04f02e2baf398decc44338e5bc2",
+      "bytes": 100389
+    }
+  },
+  "excluded": [
+    "seal.json (self)",
+    "shadow/ expanded archive source",
+    "fixtures/ ephemeral test workspaces",
+    "shadow/node_modules declared existing symlink",
+    "edit.py/update-tests.py/finalize-evidence.py tool scratch scripts"
+  ]
+}

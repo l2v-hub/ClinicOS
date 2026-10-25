@@ -1,0 +1,7 @@
+# Scope amendment7: shared automatic comment-handoff caller, candidate4
+
+Candidate4 author correctly reported before editing an adjacent real automatic caller: external-review.mjs constructs createCommentReviewHandoff before issue-review communication. The explicit default must remain available for authorized local/root CLI calls, so this automatic caller must opt into the same newly guarded native path; relying on later communication or CAS alone would retain a mode-propagation gap. Extend current attempt4 by exactly two existing paths before edits:
+- agent-team/src/bug-pipeline/external-review.mjs
+- agent-team/tests/bug-pipeline/external-review.test.mjs
+
+No new attempt, budget reset, role change or source publication. Preserve initial source4 reservation/contract and prior proofs; this supplement is recorded separately and does not overwrite the original contract digest. All original restrictions and expectations remain. Built-in per-invocation async context is acceptable only if minimal, scoped to the real native controller operation, never cached as owner authority, and regression-tested for prebuilt controllers, concurrent/default explicit calls, exceptions and no context leakage. Every fresh observed guard still uses current durable ownership; ambient context alone is not permission. Exact original S1/R1 safety reproductions and explicit authorized SHA-bound readonly/manual-release compatibility remain mandatory. Actual changed subset of12allowedpaths, not forced changes to all.

@@ -1,0 +1,19 @@
+--- a/agent-team/src/bug-pipeline/contracts.mjs
++++ b/agent-team/src/bug-pipeline/contracts.mjs
+@@ -1,6 +1,6 @@
+ import { attemptLimit, validateOperatorContinuations } from './attempt-budget.mjs';
+ import path from 'node:path';
+-import { validAutomationHandback } from './operator-ownership.mjs';
++import { validAutomationHandback, validOperatorTakeover } from './operator-ownership.mjs';
+ import { createHash } from 'node:crypto';
+ import { validateAgainstSchema } from '../core/json-schema.mjs';
+ import { sanitizeText } from '../core/sanitize.mjs';
+@@ -214,6 +214,8 @@
+     !validAutomationHandback(state.operatorTakeover.automation)
+   )
+     throw new Error('invalid operator automation handback');
++  if (state.operatorTakeover !== undefined && !validOperatorTakeover(state.operatorTakeover))
++    throw new Error('invalid operator takeover');
+   const issues = new Set();
+   for (const b of state.batches) {
+     if (

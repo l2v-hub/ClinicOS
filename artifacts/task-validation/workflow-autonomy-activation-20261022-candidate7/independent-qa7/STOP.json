@@ -1,0 +1,12 @@
+{
+  "status": "STOP_VERIFIED_SOURCE_AND_QA_FROZEN",
+  "at": "2026-10-23T05:33:32.364501Z",
+  "reservationNonce": "9059fe6f-c550-4ac2-adcf-7e8566225f04",
+  "sourceSha": "9a6ca8768c1d422460faeb684eb699d4e9289484",
+  "findings": 0,
+  "sourceEdits": false,
+  "liveApprovalClaimed": false,
+  "resultsSha256": "77f3f3681277d99a9829eb9b7ec2b91ee6666e8e3f06dea89afd029e2af69431",
+  "reportSha256": "e67a85f1fd73cbdab429d65a1a3a3bbf619c1beee3a55a0936926c473713c0d7",
+  "rootOwnsRemainingGates": true
+}

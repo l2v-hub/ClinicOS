@@ -1,0 +1,23 @@
+file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/github.mjs:107
+  return Object.assign(new Error(message, cause ? { cause } : undefined), {
+                       ^
+
+Error: GitHub operation failed
+    at stateError (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/github.mjs:107:24)
+    at githubOperationError (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/github.mjs:141:5)
+    at invoke (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/github.mjs:405:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async api (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/github.mjs:422:20)
+    at async Object.readFileAtRevision (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/github.mjs:1127:18)
+    at async verify (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/standalone-review.mjs:431:24)
+    at async file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/standalone-review.mjs:783:7
+    at async operation (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/standalone-review.mjs:326:14)
+    at async perform (file:///tmp/clinicos-trusted-main453ade-20261022/agent-team/src/bug-pipeline/review-handoff-cli.mjs:143:15) {
+  code: 'github-read-failed',
+  operation: 'read',
+  httpStatus: null,
+  retryable: false,
+  diagnostic: 'unknown'
+}
+
+Node.js v22.23.4

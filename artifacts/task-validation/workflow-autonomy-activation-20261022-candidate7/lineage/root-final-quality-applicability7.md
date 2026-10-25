@@ -1,0 +1,9 @@
+# Root final quality disposition7
+
+Actual timing correction: user resumed at05UTC after a pause. Source7 had already been sealed and stopped at03:17, and the F2 child at03:05, before root's05:11 internal-mode compatibility clarification. None of those frozen source/report/seal bytes may be changed retroactively. The05:11 clarification is preserved as an unapplied proposal, not a fulfilled historical requirement.
+
+After checking the actual selected profile (BUG_PIPELINE_REVIEW_MODE=external in the Actions workflow) and the user's explicit Codex-after-Claude quality requirement, root retains the original accepted all-new-merge final-Codex invariant of implementation7. The internal test path's earlier readiness without post-Claude final QA is intentionally insufficient for automatic merge; docs explicitly say that additional proof is required. It is not the operational configured workflow and no internal final-QA adapter or API-billing fallback is claimed. Root withdraws ONLY the proposed restoration of weaker internal automatic release eligibility. No internal receipt kind or postfreeze source edit is required. Independent QA must verify the configured external workflow's full progress and both modes' missing-proof rejection, not expect absent finalQA to authorize a new merge.
+
+The prior clarification's finite pre-invocation read-failure handling remains accepted: original diagnostic retained, no false transient classification or automatic retry, same owned operation and no model replay; auth/integrity/uncertain writes remain fatal. Historical pinned ancestry and all native/source/human/provider/hold controls stay unchanged.
+
+Original contracts,03UTC implementation results, both root clarification records and actual sealed failures remain auditable. This disposition confers no source/model/human approval or merge/activation; independent QA7 and all actual new-head gates are still required.

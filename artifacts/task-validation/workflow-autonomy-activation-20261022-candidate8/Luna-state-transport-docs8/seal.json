@@ -1,0 +1,38 @@
+{
+  "nonce": "bf4b8134-f696-48c9-bac7-0f789402c98a",
+  "status": "implemented-awaiting-parent-integration",
+  "files": {
+    "STOP": {
+      "sha256": "bb7d8a6fb655437da645f7a5ab285f08827b34b6223f4d663f5bac69fbc89e4e",
+      "bytes": 234
+    },
+    "read-receipts.json": {
+      "sha256": "f50548b2331ebdf34e08503d6857e84b4a5189960ff367e48210244f6926a339",
+      "bytes": 902
+    },
+    "report.md": {
+      "sha256": "17c869dc4198410dfdcf026401b2c6af4c0af553e2324eef7f60b4b69281864a",
+      "bytes": 1293
+    },
+    "reservation.json": {
+      "sha256": "59845b27688398ba9cf205f10eed5e7aa812d0a1b20063268bdd9c56f5b9458d",
+      "bytes": 1163
+    },
+    "results.json": {
+      "sha256": "01935f8e17030b1674fdbce862393e40d46a7cc2d89f299becca2691e0db7c77",
+      "bytes": 914
+    },
+    "source-before.json": {
+      "sha256": "d7732f27958100e1277dca8e7243de492c5000a2aa3ca7d5a454200b7210e6ed",
+      "bytes": 307
+    },
+    "task-contract.md": {
+      "sha256": "1c673368a58b09325104b0686bc484a021f764151cb039583f09de7e9899fdaa",
+      "bytes": 3721
+    },
+    "two-file.diff": {
+      "sha256": "b996a119609cb725cd18965482174ab7210d4cfd963a1a4e2a7af0e677b5211d",
+      "bytes": 3570
+    }
+  }
+}

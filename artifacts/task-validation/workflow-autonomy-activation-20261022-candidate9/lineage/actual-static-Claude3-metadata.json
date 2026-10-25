@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-23T08:21:48.462Z",
+  "comment": 6360608335,
+  "url": "https://github.com/l2v-hub/ClinicOS/pull/504#issuecomment-6360608335",
+  "author": "l2v-hub",
+  "bodySha256": "207edae08560e2c721db22903f384bb1fd81823e91a8729cee17f990e23e2ca9",
+  "subjectSha": "689425d8836f14dfaa1c1cd1642def0cdbf30745",
+  "verdict": "changes-requested",
+  "findings": 5,
+  "medium": 2,
+  "low": 3,
+  "nativeClaimAbsentExplicitlyReported": true,
+  "nativeReviewRoundNotFabricated": true,
+  "reportedCliFailure": "github-read-failed without HTTP status while reading about5.34MB ledger; exact local cause still unproven",
+  "actualReportCreatedAt": "2026-10-23T08:17:26Z"
+}

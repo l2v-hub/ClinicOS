@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-23T05:50:05.867021+00:00",
+  "head": "57d25ed04f1e4faddc232ef77d190d3bc339a643",
+  "actualRun": 39906730912,
+  "privateArchiveSha256": "46980d6149fd82f55dfaf7c11a893f43a9e72a1921b580ecb6ae8a70681cf7c5",
+  "linux": {
+    "entry": "bug-pipeline-tests/6_Test queue, sessions, evidence, budgets and release guards.txt",
+    "logSha256": "715cbefc9620b3f5eae7fde1a1e12c3e37f3e00bac8054b5a893340c3223a78e",
+    "tap": {
+      "tests": 1384,
+      "suites": 0,
+      "pass": 1381,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 3,
+      "todo": 0,
+      "duration_ms": 29404.380392
+    }
+  },
+  "windows": {
+    "entry": "windows-review-setup/4_Verify Windows review setup and native scheduler definitions.txt",
+    "logSha256": "93ce0ff9ae7a5e65066b84e4f610bfb1af830ded686586db70e8e99cca4c339a",
+    "tap": {
+      "tests": 10,
+      "suites": 0,
+      "pass": 10,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 15741.2151
+    }
+  },
+  "actualSandbox": {
+    "isolatedRunnerOk": true,
+    "isolatedRunnerCode": 0,
+    "directCliCode": 0,
+    "logSha256": "7134626d0bf666ca5b6e75d87d0636570d27da4559b6d124ea84957133e264b6"
+  },
+  "actualServices": {
+    "code": 0,
+    "observedSummary": "Isolated HTTP, PostgreSQL and migrations: PASS; actual Chromium DOM/save/reload: PASS; external TCP/UDP/proxy and outside writes: DENIED",
+    "logSha256": "b5deacdae5dc9557270f94d90154041a7a966adb02fcb8dbcabf5c9862b3fc79"
+  },
+  "scope": "Actual GitHub-hosted sandbox/service readiness, not Claude Max authentication, not deployment or clinical bug acceptance."
+}

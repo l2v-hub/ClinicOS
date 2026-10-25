@@ -109,6 +109,10 @@ percorso assoluto verificato. Usa solo cache/temp scrivibili e possedute dal pro
 sovrascrivere `HOME`. Distingui un rifiuto HTTP/API da errori locali di cache o filesystem e
 non attribuire una causa che i log non dimostrano.
 
+Per `.codex-bug-state.json`, scegli il trasporto sui byte della serializzazione esatta: `<= 1 MiB` usa Contents; `> 1 MiB` usa Git Data. È una soglia di trasporto, non una causa provata di un HTTP 400. Mantieni il limite esistente di 8 MiB sullo stato grezzo più tutte le prenotazioni dei risultati pendenti. Congela i byte proposti e lo SHA atteso del file prima delle attese. La scrittura Git Data deve usare il `base_tree` esatto del padre, preservare tutte le entry root valide non coinvolte (directory, symlink e gitlink inclusi), verificare il padre esatto e ricontrollare ownership, guardia e ref subito prima dell'aggiornamento non forzato (`force:false`).
+
+Consenti il rebase solo per un conflitto remoto dimostrato e solo se il chiamante lo abilita; limita a quattro i candidati totali. Scritture rifiutate o dall'esito incerto non autorizzano retry/fallback: tratta gli esiti ignoti come fatali e, prima di un recupero supervisionato, rileggi lo stato canonico corrente, inclusi commenti e label. Non cancellare history, inventare claim o risultati, né spendere budget di modello per mascherare un errore di trasporto. Un probe Git Data no-op prova soltanto il percorso dell'endpoint; non prova la QA della sorgente, la review peer, il deploy o l'autonomia completa.
+
 Serializza l'intero ciclo dello stack condiviso, dalla creazione del container a migrazioni,
 test, browser e teardown, non soltanto Playwright. Attendi una query/readiness funzionale.
 Cleanup soltanto delle risorse create e riconosciute, con limiti temporali e `finally`;
@@ -191,15 +195,33 @@ un'esecuzione o approvazione. Una modifica dopo il report richiede nuova validaz
 sullo SHA aggiornato. L'approvazione dello SHA corrente in attesa di release resta valida se
 non è cambiato il codice/configurazione e non è arrivato feedback che la invalida.
 
+Se un operatore prende in carico un gruppo attivo, sospendi l'automazione finché il controller
+non registra un handback esplicito e supportato, limitato a lavoro nuovo e non assegnato. La
+presa in carico conserva history, report, tentativi e identità dei soggetti protetti; mantiene
+occupati gli scope già assegnati e non li rende disponibili a un secondo worker. Ogni entrypoint
+automatico ricontrolla la proprietà osservata prima di proiettare stato, invocare modelli o
+rilasciare. L'handoff Claude in sola lettura resta un percorso distinto: deve essere autorizzato
+esplicitamente e legato allo SHA esatto.
+
 Codex legge tutti i commenti/review/thread pertinenti, documenta ogni finding e la sua
 risoluzione, corregge, testa, semplifica, passa il gate e pubblica il nuovo SHA verificato.
 Solo allora richiede il round successivo. Un'approvazione sul vecchio SHA non approva il nuovo.
+Dopo ogni review proveniente da un canale esterno, Codex esegue una QA finale indipendente sullo
+SHA corrente; l’handoff non sostituisce questa verifica.
 Un report assente, fallito, obsoleto o senza evidenza non è approvazione; non rilanciare uno
 SHA fallito invariato e non dichiarare la causa di un errore se i log non la provano.
 Al budget effettivamente esaurito usa solo un'allowance verificata e prenotata oppure lascia
 bloccato il gruppo. Nessun round consente di promettere codice «perfetto».
 
 ## 8. Stato, dashboard, merge e rilascio
+
+Quando si parla di attivazione, distinguere label e metadati dall'inferenza effettiva, dalla
+review di un modello e dall'abilitazione dei workflow. Verificare, revisionare e testare il codice corrente prima di attivare i workflow; poi
+provare un evento reale prima di dichiarare l’avvio automatico verificato. Deploy e chiusura delle issue
+sono passaggi successivi e distinti. Una configurazione o un test con adapter simulato non prova
+una chiamata reale. Il runner Actions non fornisce una sessione Claude Max: la review Max deve
+essere eseguita sull'host autenticato supportato. Non instradare Max tramite Anthropic API né
+eseguire Claude Max dentro Actions.
 
 Dopo la presa in carico durevole imposta `In progress`; per impedimenti reali usa `Bloccato`
 con causa verificata e condizione di sblocco. Il controller mantiene stato e contatori;
@@ -274,3 +296,85 @@ una review Claude pulita. La richiesta esplicita dell'utente autorizza il recupe
 un'esecuzione infrastrutturale fallita mantenendo il round consumato, anche sullo stesso SHA
 senza review sostanziale: non autorizza contatori azzerati o duplicazione del tentativo. Per le
 continuazioni oltre quattro applica la sezione 4 senza ripetere un'autorizzazione ancora valida.
+
+L'handback canonico `operatorTakeover.automation` richiede `enabled: true`,
+`mode: "new-unclaimed-only"`, `takeoverNonce` uguale al nonce non vuoto della presa in carico,
+`authorizedActor` non vuoto, `handedBackAt` come timestamp UTC ISO valido e `protectedSubjects`
+come elenco di identità `{collection, id}`. L'attore è un dato di audit registrato dal writer
+fidato dopo la verifica dei permessi, non una credenziale. Un nuovo takeover deve eliminare o
+sostituire il vecchio handback. Un grant ben formato ma riferito a un nonce precedente resta
+leggibile e sospende l'automazione; metadati malformati sono rifiutati dalla validazione.
+
+Per ogni approvazione esterna, anche senza canale commenti, il rilascio richiede una QA Codex
+`verified` sullo SHA fornito al rilascio, round Claude e fingerprint attuali. Una QA finale
+infrastrutturale fallita o interrotta conserva il record e può ripartire solo dopo il recupero
+esplicito di un eventuale blocco. Il registro separato `codexFinalQaInfrastructure.attempts`
+consente al massimo tre sessioni di inferenza prenotate per SHA/round/fingerprint: le attese dei
+check senza inferenza non consumano slot. Non consuma tentativi implementativi; soltanto un
+verdetto Codex con richieste di modifica avvia una correzione. Una sessione `running` non viene
+duplicata e l'esaurimento richiede recupero esplicito senza azzerare lo storico.
+
+Il campo `operatorTakeover.active`, quando presente, deve essere booleano: anche valori falsy
+come `0` o stringa vuota sono metadati invalidi e fermano l'automazione. `false` è un takeover
+inattivo; l'assenza del campo nei vecchi record di audit del budget resta valida. Una perdita di
+ownership esterna propaga il codice tipizzato fino a Codex, che ricarica lo stato canonico e
+scarta le modifiche locali del soggetto prima di lavorare sul successivo.
+
+Il limite della QA finale conta le sessioni per nonce attraverso il record corrente, `qaHistory`,
+`codexFinalReviewHistory` e il registro infrastrutturale: una copia archiviata dal recupero non
+cancella la spesa né la conta due volte. Le attese dei check e i blocchi di identità prima della
+QA, privi di intento di inferenza, non consumano slot. Uno storico di sessioni spese ambiguo
+ferma i ritentativi e non diventa una richiesta di modifica al codice. Il recupero specializzato
+`release-qa-reservation` mantiene la propria autorizzazione verificata dall'host fidato; queste
+correzioni non concedono un verificatore predefinito né modificano le regole di `resume`.
+
+Il vecchio record finale composto esattamente da `subjectSha`, `claudeRound`, `status` e
+`summary`, con verdetto completato valido, conta una sessione già spesa per quel SHA/round.
+Il contenuto originale resta identico; `legacyOrigins` registra separatamente la provenienza,
+senza inventare nonce, timestamp o fingerprint. Record moderni incompleti restano ambigui.
+`recover --action recover-final-qa` richiede un grant esterno consumato sull'identità e sulla
+cronologia esatte. Se lo storico è ambiguo, lo sigilla come allowance già esaurita; non concede
+un tentativo gratuito. `extend-final-qa` aggiunge una sola sessione per grant verificato in
+`finalQaAllowances`, separatamente dai budget implementazione/review. Una QA moderna già
+`verified` sull'attuale SHA/round/fingerprint viene riutilizzata se è fallita solo la pubblicazione:
+non si ripete l'inferenza completata. Le sessioni vive o con esito incerto mantengono le protezioni
+di lease e recupero esplicito esistenti.
+
+Un errore di osservazione GitHub prima dell'effetto può sospendere l'operazione corrente senza
+trasformarla in un fallimento del codice. Il journal `controllerProgress` conserva i sette passi
+execute, verifica, semplificazione, verifica, QA, checkpoint e push; il passo completato non viene
+rieseguito. `controllerInterruption` conserva il codice/diagnostico finito originale, senza stderr
+privato. Anche un errore di trasporto non classificato può essere sospeso, ma non viene chiamato
+transitorio né ritentato automaticamente. Autenticazione rifiutata, stato/hash/schema invalidi e
+scritture incerte restano errori fatali; non aprono quattro nuovi tentativi implementativi.
+
+`recover --action resume-observation` per una PR esistente richiede il token
+`controllerInterruption.progressSha256` e un'autorizzazione verificata dall'host. Prima della PR,
+lo stesso host canonico può usare `authorizeObservationResume` con il soggetto iniziale esatto
+e salvare tramite CAS. Nessun verifier è configurato automaticamente dalla CLI. La ripresa
+verifica il worktree registrato, branch, HEAD, baseline, piano/packet congelati, scope e digest
+esatto di ogni output del controller. Non accetta file sporchi generici e non reinstalla o resetta.
+Se un nuovo runner Actions ha perso il worktree, la ripresa si ferma: questa funzione non rende
+persistenti i worktree remoti e non ripete modelli già eseguiti o dal risultato incerto.
+
+Ogni nuovo merge deve conservare la prova Codex finale legata a SHA/round/fingerprint nella
+ricevuta di rilascio. Dopo il merge, il completamento usa la ricevuta congelata e l'identità
+GitHub `MERGED`, senza dipendere dal puntatore mutabile della QA. I soli merge storici già
+appartenenti al main fisso `2ee298957c3e1733b01a4b4aca4b48b890032f69` possono usare un
+cutover finito registrato dal writer fidato dopo verifica dei veri merge e dell'ancestry.
+Quel cutover non autorizza nuovi merge, non inventa QA storiche e non rimuove hold, native
+review, controlli provider o protezioni della sorgente. Prima del rollout il coordinatore deve
+registrare una prova fresca dell'assenza di vecchi handback globali: non viene migrata una
+struttura ipotetica né allentata la validazione stretta del takeover.
+
+Il worker Actions usa il canale `external`: la readiness del percorso interno di test, priva di
+una QA finale legata alla review Claude attuale, non concede da sola un nuovo merge automatico.
+Anche quel rilascio deve prima ottenere la prova finale richiesta dal gate.
+
+Il writer riusa lo stato padre già caricato soltanto quando lo SHA del blob coincide con quello atteso: lo snapshot del padre di ogni candidato è congelato prima delle attese, anche dopo un rebase indipendente. Gli upload degli oggetti Git Data hanno un timeout finito di120 secondi. Un errore prima di qualsiasi PATCH del ref è `state-write-failed`: questa scrittura canonica non è stata applicata, pur potendo lasciare oggetti orfani; non autorizza retry automatici o nuove inferenze. Dopo un PATCH incerto, una sola lettura autenticata può confermare il successo soltanto se il ref punta all'esatto nuovo commit già verificato. Un ref ancora sul padre non esclude un'applicazione tardiva: l'esito resta incerto, senza retry.
+
+Una prenotazione batch `merging` viene archiviata interamente in `mergeHistory` soltanto dopo una guardia rifiutata prima dell'invocazione o un rifiuto nativo definitivo, insieme a una nuova prova OPEN sullo stesso PR/head e a ownership fresca al salvataggio. Il batch diventa `blocked` con `github-merge-rejected`; `recover --action resume` ricontrolla l'identità e lo riporta alla review, senza recuperare l'approvazione precedente. Timeout, letture non disponibili, head cambiato e PR chiuso mantengono la prenotazione per la riconciliazione esatta. Il vecchio `reviewProof` e tutte le history restano immutati.
+
+Il journal delle implementazioni distingue un risultato effettivamente fallito da un esito ignoto. Risultati `blocked` di executor/simplifier/QA e fallimenti definitivi della verifica producono `status: failed`, `failedStep` e un codice finito. Le nuove correzioni interne prenotano un tentativo di implementazione prima dell'inferenza, mantenendo separato il numero della review; una nuova correzione conserva il journal fallito completo in `controllerProgressHistory`. Dopo allowance autenticata e resume, la correzione interna usa il feedback conservato prima della review successiva. Errori del modello senza risultato certo, persistenza, checkpoint, guardie e crash conservano il tentativo `running`: nessuna nuova inferenza automatica. Il recupero osservazionale dei vecchi journal senza prenotazione interna conserva i passi completati e non inventa tentativi storici; i nuovi journal richiedono la loro prenotazione esatta.
+
+Il riuso del worktree dopo un fallimento certo richiede il checkpoint esatto acquisito prima di marcare il tentativo `failed`: branch registrato, HEAD, base, output, piano e packet congelato devono coincidere. Modifiche estranee, file mancanti o un worktree perso su un runner hosted bloccano il recupero senza pulizia, ricostruzione o nuova inferenza. Un errore durante la cattura conserva `running`.

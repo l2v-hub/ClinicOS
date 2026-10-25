@@ -1,0 +1,9 @@
+{
+  "at": "2026-10-23T07:18:20.470257+00:00",
+  "boundary": "private evidence preparation before any Git publication/ref/canonical effects",
+  "exitCode": 1,
+  "cause": "Root helper assumed child STOP.json; sealed child uses its actual recorded completion artifact instead. No child evidence changed. Partial private packet preserved unchanged.",
+  "partial": "/tmp/clinicos-autonomy-activation-20261022/publication8-private-preparation-first-missing-child-STOP",
+  "canonicalPublicationReservationCreated": false,
+  "sourceBranchPushed": false
+}

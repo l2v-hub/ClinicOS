@@ -1,0 +1,60 @@
+[
+  {
+    "id": "S1",
+    "automaticChain": "runPipeline -> finalizeStandaloneSubject -> native standalone controller.publishState -> current -> handoff.load",
+    "newGlobalTakeover": true,
+    "nativeStoreReads": [
+      {
+        "operatorTakeoverActive": false
+      },
+      {
+        "operatorTakeoverActive": false
+      },
+      {
+        "operatorTakeoverActive": false
+      },
+      {
+        "operatorTakeoverActive": false
+      },
+      {
+        "operatorTakeoverActive": false
+      },
+      {
+        "operatorTakeoverActive": true
+      },
+      {
+        "operatorTakeoverActive": true
+      }
+    ],
+    "labels": [],
+    "pipelineError": null,
+    "models": 0
+  },
+  {
+    "id": "R1",
+    "automaticChain": "main workflow_run -> selectAutoReleaseBatch -> releaseBatch -> freshReleaseGuard",
+    "storeReads": 2,
+    "readStates": [
+      {
+        "read": 1,
+        "operatorTakeoverActive": false
+      },
+      {
+        "read": 2,
+        "operatorTakeoverActive": true
+      }
+    ],
+    "adapterGuardChecked": false,
+    "selectionSawTakeover": false,
+    "laterReadsSawTakeover": true,
+    "merges": [],
+    "mainResult": null,
+    "error": "Automatic release subject is operator-owned",
+    "sourceBytesUnmodified": true,
+    "sideEffectImportsInjected": [
+      "github",
+      "process",
+      "fs/promises"
+    ]
+  }
+]

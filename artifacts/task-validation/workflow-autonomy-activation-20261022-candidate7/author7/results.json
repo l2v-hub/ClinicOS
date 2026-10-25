@@ -1,0 +1,131 @@
+{
+  "status": "IMPLEMENTED_AWAITING_INDEPENDENT_QA",
+  "attempt": 7,
+  "nonce": "c0dd45a8-235f-4774-aa7c-fceab1eaab38",
+  "sourceHead": "c172b1341e6f10d13c2407fd60fd9e92c1f93d74",
+  "gitParent": "c172b1341e6f10d13c2407fd60fd9e92c1f93d74",
+  "sourceFiles": 138,
+  "attemptDeltaPaths": 18,
+  "allowedPaths": 28,
+  "cumulativePaths": 26,
+  "finalIntegrated": {
+    "command": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--test",
+      "--test-reporter=tap",
+      "agent-team/tests/bug-pipeline/attempt-budget.test.mjs",
+      "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "agent-team/tests/bug-pipeline/contracts.test.mjs",
+      "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "agent-team/tests/bug-pipeline/github.test.mjs",
+      "agent-team/tests/bug-pipeline/models.test.mjs",
+      "agent-team/tests/bug-pipeline/operator-authorization.test.mjs",
+      "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+      "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "agent-team/tests/bug-pipeline/release.test.mjs",
+      "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      "agent-team/tests/bug-pipeline/workspace.test.mjs"
+    ],
+    "cwd": "/tmp/clinicos-autonomy-activation-20261022/source7",
+    "exitCode": 0,
+    "seconds": 9.633483171463013,
+    "tests": 781,
+    "pass": 781,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "log": "final-integrated-781.log",
+    "logSha256": "1ac9f47853a3f021088584144298090c08e5618e16e74ef3c616699f8f83ddae"
+  },
+  "finalPrivateBoundaries": {
+    "command": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--test",
+      "--test-reporter=tap",
+      "--experimental-vm-modules",
+      "../author7/external-cas-probe.mjs",
+      "../author7/malformed-takeover-probe.mjs",
+      "../author7/recovery-budget-probe.mjs",
+      "../author7/recovery-route-probe.mjs",
+      "../author7/residual-probes.mjs",
+      "../author7/automatic-boundary-probes.mjs"
+    ],
+    "cwd": "/tmp/clinicos-autonomy-activation-20261022/source7",
+    "exitCode": 0,
+    "seconds": 0.9454960823059082,
+    "tests": 15,
+    "pass": 15,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "log": "final-boundaries-781.log",
+    "logSha256": "64a6b63e307175296683f7dd39edb123c40a37684c070119769ba4ef5a80bbd7"
+  },
+  "distinctFinalNodeTests": 796,
+  "syntaxFiles": 16,
+  "historicalOfflineReplay": {
+    "command": {
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "../author7/historical-offline-replay.mjs"
+      ],
+      "cwd": "/tmp/clinicos-autonomy-activation-20261022/source7",
+      "exitCode": 0,
+      "seconds": 0.17597603797912598,
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "log": "final-historical-replay.log",
+      "logSha256": "d9ea37bed58d82d45cbbd944b0d13c37afb8f525b419e5062c29a4373c3a5a76"
+    },
+    "entries": 11,
+    "standaloneTerminalChecks": 10,
+    "liveAuthorityClaimed": false
+  },
+  "sourceManifestSha256": "d73ff41c73d9cf1ac6e4fc2f15639d57079a11d2cff7a8ba48eb0c9e17a0d95b",
+  "priorSealsVerified": {
+    "author6": {
+      "sealSha256": "223bd8549a0bd78fc9c47e2d425f16473bc10b1d112be576ce742d6b2fdfe064",
+      "filesVerified": 53
+    },
+    "independent-qa6": {
+      "sealSha256": "21af8377471b43c6c902287986c5995361e6ed0a829f1f661ee996ad7cf26f36",
+      "filesVerified": 40
+    },
+    "luna-draftReady7": {
+      "sealSha256": "f18ae6e38b26c30a3945b3e54dff466c0e6cea7811df0bdbc258e337280560f7",
+      "filesVerified": 148
+    },
+    "release-proof7-child": {
+      "sealSha256": "07d2f63586847a73757caabdc1ac324bb59e7483a4c152dd7d0efdb40c6510d7",
+      "filesVerified": 30
+    }
+  },
+  "sourceFrozen": true,
+  "selfQaApproval": false,
+  "sourcePublished": false,
+  "canonicalWritten": false,
+  "modelsInvoked": false,
+  "liveApiProviderClinicalEffects": false,
+  "findingsImplemented": [
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5"
+  ],
+  "F6": "Recorded actual absence plus strict schema retained; root must refresh authenticated absence immediately before merge/rollout.",
+  "limitations": [
+    "No persistent remote worktree artifact service: a lost Actions VM worktree fails closed without replay.",
+    "Standalone CLI has no default authorization verifier; trusted exact host grants remain required for each recovery/one-unit extension.",
+    "No remote cause inferred from peer local github-read-failed: root actual 5.17MB read succeeded; limits unchanged.",
+    "Historical cutover draft/replay is not authorization: root must freshly reverify real MERGED/head/merge/ancestry and preserve exact old subject JSON before rollout.",
+    "Native6 implementation prefix and actualClaude1 remain unchanged. Static report2 was never a native claimed review.",
+    "Fresh independent QA, actual peer/final/native/protected merge/provider/activation gates remain root responsibilities."
+  ]
+}

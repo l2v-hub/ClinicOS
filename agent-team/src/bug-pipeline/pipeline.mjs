@@ -1,14 +1,32 @@
 import {
+  automationPaused,
+  operatorOwns,
+  claimedIssues,
+  occupiedSubjects,
+} from './operator-ownership.mjs';
+import {
   attemptLimit,
   implementationAttempts,
   activeImplementation,
   reserveImplementation,
   spentAttempts,
 } from './attempt-budget.mjs';
-import { planSchema, validatePlan, validateState, feedbackFingerprint } from './contracts.mjs';
+import {
+  planSchema,
+  validatePlan,
+  validateState,
+  feedbackFingerprint,
+  sha256,
+} from './contracts.mjs';
+import { observationProgressDigest, validateObservationResume } from './operator-authorization.mjs';
+import { runImplementationStages } from './workspace.mjs';
 import { externalReviewStep } from './external-review.mjs';
 import { validateStandaloneState, finalizeStandaloneSubject } from './standalone-review.mjs';
-import { controllerFailureCode, isRetryableGitHubFailure, recordTransientGitHubFailure } from './github.mjs';
+import {
+  controllerFailureCode,
+  isRetryableGitHubFailure,
+  recordTransientGitHubFailure,
+} from './github.mjs';
 
 function eligibleIssue(issue) {
   const labels = (issue.labels ?? []).map((l) => (typeof l === 'string' ? l : l.name));
@@ -51,45 +69,214 @@ export async function runPipeline({
   if (!['internal', 'external'].includes(reviewMode)) throw new Error('Unknown review mode');
   if (!Number.isSafeInteger(triageWindowMs) || triageWindowMs < 0 || triageWindowMs > 600_000)
     throw new Error('Invalid triage collection window');
-  await gh.intake(event);
   let state = validateState(
     (await store.load()) ?? { schemaVersion: 1, repository: repo, batches: [] },
     repo,
   );
+  // Ownership must be loaded before intake can normalize labels or touch old subjects.
+  if (automationPaused(state)) return state;
+  let processingSubject = null;
   let persistenceFailed = false;
+  const ownershipLost = () =>
+    Object.assign(new Error('Automatic ownership changed during state reconciliation'), {
+      code: 'review-operator-owned',
+    });
+  const assertOwnership = (observed) => {
+    if (
+      automationPaused(observed) ||
+      (processingSubject &&
+        operatorOwns(
+          observed,
+          processingSubject.collection,
+          observed[processingSubject.collection]?.find(
+            (item) => item.id === processingSubject.id,
+          ) ?? processingSubject,
+        ))
+    )
+      throw ownershipLost();
+  };
+  const freshOwnership = async () => {
+    let raw;
+    try {
+      raw = await (store.observe ? store.observe() : store.load());
+    } catch (error) {
+      if (isRetryableGitHubFailure(error) || error?.code === 'github-read-failed')
+        throw Object.assign(new Error('Fresh ownership observation unavailable before operation'), {
+          code: 'ownership-observation-failed',
+          beforeInvocation: true,
+          cause: error,
+        });
+      if (error?.code === 'github-read-rejected') throw error;
+      throw Object.assign(new Error('Fresh ownership state could not be validated'), {
+        code: 'ownership-observation-invalid',
+        cause: error,
+      });
+    }
+    let observed;
+    try {
+      observed = validateState(raw ?? { schemaVersion: 1, repository: repo, batches: [] }, repo);
+      if (observed.standaloneReviews) validateStandaloneState(observed);
+    } catch (error) {
+      throw Object.assign(new Error('Fresh ownership state could not be validated'), {
+        code: 'ownership-observation-invalid',
+        cause: error,
+      });
+    }
+    assertOwnership(observed);
+  };
+  const recoverOwnership = async (error) => {
+    if (persistenceFailed || error?.code !== 'review-operator-owned') return false;
+    // Discard unsaved work only for the finite, observed ownership-loss code.
+    // Uncertain writes and genuine CAS/integrity failures still halt the pass.
+    state = validateState(await store.load(), repo);
+    if (state.standaloneReviews) validateStandaloneState(state);
+    return true;
+  };
+  const pauseObservation = async (batch, error) => {
+    if (persistenceFailed || error?.code !== 'ownership-observation-failed') return false;
+    const progress = batch.controllerProgress;
+    if (
+      progress?.status === 'running' ||
+      (progress?.status === 'completed' &&
+        (implementationAttempts(batch).some(
+          (item) => item.round === progress.round && item.status === 'running',
+        ) ||
+          (!batch.pr && progress.flow === 'implementation') ||
+          ['implementing', 'validating', 'simplifying', 'publishing'].includes(batch.phase)))
+    )
+      progress.status = 'interrupted';
+    if (
+      batch.codexFinalReview?.status === 'running' &&
+      !batch.codexFinalQaInfrastructure?.attempts?.some(
+        (item) => item.nonce === batch.codexFinalReview.nonce,
+      )
+    ) {
+      batch.codexFinalReview.status = 'blocked';
+      batch.codexFinalReview.invocation = {
+        status: 'not-started',
+        boundary: 'ownership-observation',
+        nonce: batch.codexFinalReview.nonce,
+      };
+    }
+    batch.controllerInterruption = {
+      schemaVersion: 1,
+      code: 'ownership-observation-failed',
+      beforeInvocation: true,
+      transport: {
+        code: controllerFailureCode(error.cause),
+        diagnostic: [
+          'unknown',
+          'spawn-failed',
+          'output-limit',
+          'timeout',
+          'rate-limit',
+          'http-status',
+        ].includes(error.cause?.diagnostic)
+          ? error.cause.diagnostic
+          : 'unknown',
+        httpStatus: Number.isSafeInteger(error.cause?.httpStatus) ? error.cause.httpStatus : null,
+        operation: 'read',
+      },
+      subjectSha: batch.sha ?? null,
+      progressSha256: progress ? observationProgressDigest(progress) : sha256(JSON.stringify(null)),
+      at: new Date(now()).toISOString(),
+    };
+    batch.failureCode = controllerFailureCode(error.cause);
+    batch.phase = 'blocked';
+    delete batch.approvedSha;
+    // If persistence remains unavailable this throws, retaining the last genuine
+    // reservation. No durable diagnostic or completed operation is fabricated.
+    await save();
+    return true;
+  };
+  const guarded = (target, methods) =>
+    new Proxy(target, {
+      get(object, key) {
+        const value = object[key];
+        if (!methods.includes(key) || typeof value !== 'function') return value;
+        return async (...args) => {
+          await freshOwnership();
+          return value.apply(object, args);
+        };
+      },
+    });
+  // Every asynchronous model/effect boundary re-reads ownership, including internal
+  // feedback/review correction paths and prebuilt workspace implementations.
+  workspace = guarded(workspace, [
+    'prepare',
+    'resume',
+    'execute',
+    'verify',
+    'simplify',
+    'qa',
+    'finalQa',
+    'checkpoint',
+    'publish',
+    'review',
+    'issueEvidence',
+  ]);
+  gh = guarded(gh, [
+    'intake',
+    'discoverQueue',
+    'setIssueStatus',
+    'commentIssue',
+    'commentPR',
+    'createDraft',
+    'draftReady',
+  ]);
   const save = async (options) => {
     try {
+      await freshOwnership();
       if (state.standaloneReviews) validateStandaloneState(state);
       state.updatedAt = new Date().toISOString();
       return await store.save(state, {
         ...options,
+        checkFreshOwnership: (fresh) => {
+          validateState(fresh, repo);
+          if (fresh.standaloneReviews) validateStandaloneState(fresh);
+          assertOwnership(fresh);
+        },
         rebaseIndependentSubjects: (merged) => {
           validateState(merged, repo);
           if (merged.standaloneReviews) validateStandaloneState(merged);
+          assertOwnership(merged);
         },
       });
     } catch (error) {
-      persistenceFailed = true;
+      if (!['review-operator-owned', 'ownership-observation-failed'].includes(error?.code))
+        persistenceFailed = true;
       throw error;
     }
   };
   if (state.standaloneReviews?.length) {
     validateStandaloneState(state);
-    if (!standaloneController)
-      throw new Error('Standalone subjects require their trusted controller');
     // Snapshot identities, never object references: a failed CAS reload replaces all
     // canonical objects. Later subjects must resolve against the refreshed state.
     const subjectIds = state.standaloneReviews.map((subject) => subject.id);
     for (const id of subjectIds) {
       let subject = state.standaloneReviews.find((item) => item.id === id);
-      if (!subject || subject.release?.status === 'merged' ||
-        (subject.phase === 'blocked' && subject.release?.status !== 'merging')) continue;
+      if (
+        !subject ||
+        operatorOwns(state, 'standaloneReviews', subject) ||
+        subject.release?.status === 'merged' ||
+        (subject.phase === 'blocked' && subject.release?.status !== 'merging')
+      )
+        continue;
       const transient = subject.lastTransientFailure;
       if (transient?.subjectSha === subject.sha && transient.nextRetryAt > now()) continue;
+      if (!standaloneController)
+        throw new Error('Standalone subjects require their trusted controller');
+      processingSubject = { collection: 'standaloneReviews', id };
       try {
         await finalizeStandaloneSubject({
-          subject, controller: standaloneController, github: gh, workspace, save,
-          infrastructureFiles: standaloneInfrastructureFiles, now: () => new Date(now()),
+          automatic: true,
+          subject,
+          controller: standaloneController,
+          github: gh,
+          workspace,
+          save,
+          infrastructureFiles: standaloneInfrastructureFiles,
+          now: () => new Date(now()),
         });
         if (subject.lastTransientFailure) {
           delete subject.lastTransientFailure;
@@ -102,7 +289,12 @@ export async function runPipeline({
         state = validateState(await store.load(), repo);
         if (state.standaloneReviews) validateStandaloneState(state);
         subject = state.standaloneReviews?.find((item) => item.id === id);
-        if (!subject) continue;
+        if (
+          error?.code === 'review-operator-owned' ||
+          !subject ||
+          operatorOwns(state, 'standaloneReviews', subject)
+        )
+          continue;
         const code = controllerFailureCode(error);
         if (isRetryableGitHubFailure(error)) {
           if (recordTransientGitHubFailure(subject, now())) {
@@ -113,7 +305,8 @@ export async function runPipeline({
           }
         } else {
           subject.phase = 'blocked';
-          subject.reason = 'Standalone identity, evidence or GitHub operation requires explicit recovery';
+          subject.reason =
+            'Standalone identity, evidence or GitHub operation requires explicit recovery';
           subject.failureCode = code;
           delete subject.failureOperation;
           if (['projection', 'merge', 'mutation', 'read'].includes(error.operation))
@@ -127,11 +320,15 @@ export async function runPipeline({
     }
   }
 
+  processingSubject = null;
+  if (automationPaused(state)) return state;
   const report = async (batch, text) => {
+    await freshOwnership();
     for (const n of batch.issues)
       await gh.commentIssue(n, `<!-- codex-bug-pipeline:status -->\n${text}`);
   };
   const block = async (batch, reason) => {
+    await freshOwnership();
     batch.phase = 'blocked';
     batch.reason = reason;
     await save();
@@ -141,15 +338,58 @@ export async function runPipeline({
       `**BLOCKED** — ${reason}. Budget sviluppo ${spentAttempts(batch, 'implementation')}/${attemptLimit(batch, 'implementation')}, review ${batch.reviews.length}/${attemptLimit(batch, 'reviews')}. Il budget non viene azzerato da nuovi comandi.`,
     );
   };
-  const claimed = new Set(state.batches.flatMap((b) => b.issues));
+  const claimed = claimedIssues(state);
+  // A command targeting an already owned issue cannot even normalize its labels.
+  if (!event?.issue || !claimed.has(event.issue.number)) await gh.intake(event);
   // Only the protected release confirmation job publishes deployed completion.
   // It owns live demo credentials and retries durable pending publication without model work.
-  for (const batch of state.batches) {
-    if (batch.release?.status === 'deployed') continue;
+  const runCorrection = async (batch, context, retained = false) => {
+    const previous = batch.controllerProgress;
+    // Legacy observation-resume journals used review rounds, without a paid
+    // implementation reservation. Resume those exact retained stages as before.
+    const legacyResume = retained && previous.implementationRound === undefined;
+    const attempt = legacyResume
+      ? null
+      : retained
+        ? implementationAttempts(batch).find(
+            (entry) => entry.round === previous.implementationRound && entry.status === 'running',
+          )
+        : reserveImplementation(batch, () => new Date(now()));
+    if (!legacyResume && !attempt) throw new Error('Implementation reservation changed');
+    try {
+      await runImplementationStages({
+        batch,
+        workspace,
+        save,
+        context: {
+          ...context,
+          round: legacyResume ? previous.round : attempt.round,
+          ...(legacyResume ? {} : { implementationRound: attempt.round }),
+        },
+      });
+      if (attempt) attempt.status = 'passed';
+    } catch (error) {
+      if (attempt && batch.controllerProgress?.status === 'failed') attempt.status = 'failed';
+      throw error;
+    }
+  };
+  for (const id of state.batches.map((batch) => batch.id)) {
+    const batch = state.batches.find((batch) => batch.id === id);
+    if (operatorOwns(state, 'batches', batch) || batch.release?.status === 'deployed') continue;
+    processingSubject = { collection: 'batches', id };
     const status = batch.phase === 'blocked' ? 'Bloccato' : 'In progress';
-    for (const number of batch.issues) await gh.setIssueStatus(number, status);
+    try {
+      for (const number of batch.issues) await gh.setIssueStatus(number, status);
+    } catch (error) {
+      if (!(await recoverOwnership(error))) throw error;
+    }
   }
-  const queue = await gh.discoverQueue({ normalize: true });
+  processingSubject = null;
+  if (automationPaused(state)) return state;
+  const queue = await gh.discoverQueue({
+    normalize: true,
+    excludeIssues: [...claimed],
+  });
   let selected = [];
   for (const item of queue) {
     const issue = await gh.viewIssue(typeof item === 'number' ? item : item.number);
@@ -157,6 +397,10 @@ export async function runPipeline({
     if (!eligibleIssue(issue)) continue;
     selected.push(issue);
   }
+  const assertSelectedUnclaimed = () => {
+    if (automationPaused(state) || selected.some((issue) => claimedIssues(state).has(issue.number)))
+      throw new Error('Selected issue acquired another durable owner before triage');
+  };
   if (state.pendingTriage) {
     if (state.pendingTriage.status !== 'claiming')
       throw new Error('Interrupted triage requires operator recovery; no automatic model restart');
@@ -178,6 +422,7 @@ export async function runPipeline({
         changedAt: timestamp,
       };
       await save();
+      assertSelectedUnclaimed();
     }
     const collection = state.triageQueue;
     if (
@@ -190,6 +435,7 @@ export async function runPipeline({
     await save();
   }
   if (selected.length) {
+    assertSelectedUnclaimed();
     // Recheck authorization and live labels after collection, before taking ownership.
     const authorized = new Set(
       (await gh.discoverQueue()).map((item) => (typeof item === 'number' ? item : item.number)),
@@ -199,43 +445,43 @@ export async function runPipeline({
         throw new Error('Selected issue authorization or ownership changed before claim');
     if (!state.pendingTriage) {
       delete state.triageQueue;
-      state.pendingTriage = { issues: selected.map((i) => i.number), status: 'claiming' };
+      state.pendingTriage = {
+        issues: selected.map((i) => i.number),
+        status: 'claiming',
+      };
       await save();
     }
-    for (const issue of selected) await gh.setIssueStatus(issue.number, 'In progress');
+    assertSelectedUnclaimed();
+    for (const issue of selected) {
+      assertSelectedUnclaimed();
+      await gh.setIssueStatus(issue.number, 'In progress');
+    }
     for (const issue of selected)
       if (!eligibleIssue(await gh.viewIssue(issue.number)))
         throw new Error('Selected issue authorization or ownership changed before triage');
     state.pendingTriage.status = 'running';
     await save();
+    assertSelectedUnclaimed();
+    await freshOwnership();
     const plan = validatePlan(
       await models.plan({
         cwd: workspace.root,
         issues: selected,
         scopeSchema: planSchema,
         packet: {
-          activeBatches: state.batches
-            .filter((batch) => batch.release?.status !== 'deployed')
-            .map((batch) => ({
-              id: batch.id,
-              issues: batch.issues,
-              feature: batch.plan?.feature ?? '',
-              scope: batch.plan?.scope ?? [],
-            })),
+          activeBatches: occupiedSubjects(state),
         },
       }),
       selected,
     );
-    const existingBatches = [...state.batches];
+    const existingBatches = occupiedSubjects(state);
     for (const group of plan.groups) {
       const id = `bug-batch-${Math.min(...group.issues)}`;
       // Older installed external-review workers validate plan with a closed schema.
       // Keep the frozen plan wire format compatible and store new grouping alongside it.
       const { fileMap, separationReason, ...frozenPlan } = group;
-      const overlaps = existingBatches.filter(
-        (batch) =>
-          batch.release?.status !== 'deployed' &&
-          batch.plan?.scope.some((file) => group.scope.includes(file)),
+      const overlaps = existingBatches.filter((batch) =>
+        batch.scope.some((file) => group.scope.includes(file)),
       );
       state.batches.push({
         id,
@@ -283,110 +529,153 @@ export async function runPipeline({
         '<!-- codex-bug-pipeline:status -->\n**BLOCKED** — il triage richiede informazioni essenziali. Nessuna implementazione avviata.',
       );
   }
-  for (const batch of state.batches) {
-    if (['merged', 'deployed'].includes(batch.release?.status)) continue;
-    if (batch.phase === 'blocked') continue;
-    if (reviewMode === 'external' && batch.externalReview?.status === 'running') continue;
-    if (reviewMode === 'external' && batch.pr) {
-      try {
-        await externalReviewStep({ repo, batch, gh, workspace, save, report, block });
-      } catch (error) {
-        if (persistenceFailed)
-          throw new Error('External review reconciliation persistence failed', { cause: error });
-        batch.failureCode = controllerFailureCode(error);
+  for (const id of state.batches.map((batch) => batch.id)) {
+    const batch = state.batches.find((batch) => batch.id === id);
+    if (!batch || operatorOwns(state, 'batches', batch)) continue;
+    processingSubject = { collection: 'batches', id: batch.id };
+    try {
+      if (['merging', 'merged', 'deployed'].includes(batch.release?.status)) continue;
+      if (batch.phase === 'blocked') continue;
+      if (reviewMode === 'external' && batch.externalReview?.status === 'running') continue;
+      if (reviewMode === 'external' && batch.pr) {
+        try {
+          await externalReviewStep({
+            repo,
+            batch,
+            gh,
+            workspace,
+            save,
+            report,
+            block,
+          });
+        } catch (error) {
+          if (await recoverOwnership(error)) continue;
+          try {
+            if (await pauseObservation(batch, error)) continue;
+          } catch (pauseError) {
+            if (await recoverOwnership(pauseError)) continue;
+            throw pauseError;
+          }
+          if (persistenceFailed)
+            throw new Error('External review reconciliation persistence failed', {
+              cause: error,
+            });
+          batch.failureCode = controllerFailureCode(error);
+          try {
+            await block(
+              batch,
+              'External review consistency or correction failed; inspect the existing batch',
+            );
+          } catch (blockingError) {
+            if (await recoverOwnership(blockingError)) continue;
+            throw blockingError;
+          }
+        }
+        continue;
+      }
+      const resuming =
+        batch.controllerProgress?.status === 'interrupted' &&
+        Boolean(batch.controllerProgress.resumeAuthorization);
+      if (resuming) validateObservationResume(batch);
+      if (
+        !resuming &&
+        (activeImplementation(batch) ||
+          batch.reviews.some((a) => a.status === 'running') ||
+          ['implementing', 'simplifying', 'validating', 'publishing', 'reviewing'].includes(
+            batch.phase,
+          ))
+      ) {
         await block(
           batch,
-          'External review consistency or correction failed; inspect the existing batch',
+          'Previous execution interrupted; operator recovery required on the existing batch',
         );
-      }
-      continue;
-    }
-    if (
-      activeImplementation(batch) ||
-      batch.reviews.some((a) => a.status === 'running') ||
-      ['implementing', 'simplifying', 'validating', 'publishing', 'reviewing'].includes(batch.phase)
-    ) {
-      await block(
-        batch,
-        'Previous execution interrupted; operator recovery required on the existing batch',
-      );
-      continue;
-    }
-    let feedback = null;
-    if (batch.pr) {
-      feedback = await gh.reviewFeedback(batch.pr.number);
-      if (
-        String(feedback.state).toUpperCase() !== 'OPEN' ||
-        feedback.headRef !== batch.branch ||
-        feedback.baseRef !== 'main' ||
-        feedback.headIsFork ||
-        feedback.headRepo !== repo ||
-        feedback.head !== batch.sha
-      ) {
-        await block(batch, 'PR identity or head changed outside the controller');
         continue;
       }
-      const fingerprint = feedbackFingerprint(feedback);
-      if (
-        ['ready', 'waiting-checks'].includes(batch.phase) &&
-        fingerprint === batch.feedbackFingerprint &&
-        batch.approvedSha === batch.sha
-      ) {
-        const checks = await gh.requiredChecks(batch.pr.number);
-        batch.phase =
-          checks.ok && !feedback.unresolved && !feedback.changesRequested
-            ? 'ready'
-            : 'waiting-checks';
-        await save();
-        continue;
+      let feedback = null;
+      if (batch.pr) {
+        feedback = await gh.reviewFeedback(batch.pr.number);
+        if (
+          String(feedback.state).toUpperCase() !== 'OPEN' ||
+          feedback.headRef !== batch.branch ||
+          feedback.baseRef !== 'main' ||
+          feedback.headIsFork ||
+          feedback.headRepo !== repo ||
+          feedback.head !== batch.sha
+        ) {
+          await block(batch, 'PR identity or head changed outside the controller');
+          continue;
+        }
+        const fingerprint = feedbackFingerprint(feedback);
+        if (
+          ['ready', 'waiting-checks'].includes(batch.phase) &&
+          fingerprint === batch.feedbackFingerprint &&
+          batch.approvedSha === batch.sha
+        ) {
+          const checks = await gh.requiredChecks(batch.pr.number);
+          batch.phase =
+            checks.ok && !feedback.unresolved && !feedback.changesRequested
+              ? 'ready'
+              : 'waiting-checks';
+          await save();
+          continue;
+        }
+        if (batch.reviews.length >= attemptLimit(batch, 'reviews')) {
+          await block(batch, 'Four-review limit reached; new comments cannot restart the budget');
+          continue;
+        }
       }
-      if (batch.reviews.length >= attemptLimit(batch, 'reviews')) {
-        await block(batch, 'Four-review limit reached; new comments cannot restart the budget');
-        continue;
-      }
-    }
-    try {
       // Recheck every issue before any model/worktree mutation, after grouping and on restart.
       for (const n of batch.issues) {
         const live = await gh.viewIssue(n);
         if (!eligibleIssue(live))
           throw new Error('source issue is no longer authorized, open or available');
       }
-      await workspace.prepare(batch);
+      if (!resuming) await workspace.prepare(batch);
       await report(
         batch,
         `Codex ha raggruppato ${batch.issues.map((n) => `#${n}`).join(', ')}. Feature: ${batch.plan.feature.slice(0, 500)}. Motivo: ${batch.plan.rationale.slice(0, 2000)}\n\nMappa issue/file: ${JSON.stringify(batch.grouping?.fileMap ?? []).slice(0, 8000)}\n\nWorktree e piano: \`${batch.branch}\`. Esecutore configurato separatamente; Claude interviene nella review finale.`,
       );
-      if (!batch.sha) {
+      if (!batch.sha || (resuming && batch.controllerProgress.flow === 'implementation')) {
         let passed = false;
-        while (spentAttempts(batch, 'implementation') < attemptLimit(batch, 'implementation')) {
-          const attempt = reserveImplementation(batch, () => new Date(now()));
-          batch.phase = 'implementing';
-          await save();
+        while (
+          (resuming && batch.controllerProgress.flow === 'implementation') ||
+          spentAttempts(batch, 'implementation') < attemptLimit(batch, 'implementation')
+        ) {
+          const attempt =
+            (resuming &&
+              batch.controllerProgress.flow === 'implementation' &&
+              implementationAttempts(batch)[batch.controllerProgress.round - 1]) ||
+            reserveImplementation(batch, () => new Date(now()));
           try {
-            const outcome = await workspace.execute(batch, {
-              phase: 'implementation',
-              round: attempt.round,
-              feedback: batch.lastFailure ?? null,
+            await runImplementationStages({
+              batch,
+              workspace,
+              save,
+              context: {
+                phase: 'implementation',
+                round: attempt.round,
+                ...(resuming && batch.controllerProgress.implementationRound === undefined
+                  ? {}
+                  : { implementationRound: attempt.round }),
+                feedback: batch.lastFailure ?? null,
+              },
             });
-            if (outcome.status !== 'implemented') throw new Error('executor blocked');
-            batch.phase = 'validating';
-            await save();
-            await workspace.verify(batch);
-            batch.phase = 'simplifying';
-            await save();
-            if ((await workspace.simplify(batch)).status !== 'implemented')
-              throw new Error('simplification blocked');
-            batch.phase = 'validating';
-            await save();
-            await workspace.verify(batch);
-            if ((await workspace.qa(batch)).status !== 'verified')
-              throw new Error('independent Codex QA blocked');
             attempt.status = 'passed';
             passed = true;
             break;
           } catch (error) {
-            if (persistenceFailed) throw error;
+            if (
+              persistenceFailed ||
+              batch.controllerProgress?.status !== 'failed' ||
+              resuming ||
+              /^github-/.test(error?.code ?? '') ||
+              [
+                'review-operator-owned',
+                'ownership-observation-failed',
+                'ownership-observation-invalid',
+              ].includes(error?.code)
+            )
+              throw error;
             attempt.status = 'failed';
             batch.lastFailure =
               'Implementation or required verification failed; inspect current local test-results.';
@@ -395,13 +684,9 @@ export async function runPipeline({
           }
         }
         if (!passed) {
-          await block(batch, 'Four implementation attempts exhausted');
+          await block(batch, 'Implementation allowance exhausted');
           continue;
         }
-        batch.phase = 'publishing';
-        await save();
-        batch.sha = await workspace.checkpoint(batch);
-        await workspace.publish(batch);
         batch.pr = await gh.createDraft({
           branch: batch.branch,
           title: batch.plan.title,
@@ -412,35 +697,57 @@ export async function runPipeline({
         await report(batch, await workspace.issueEvidence(batch));
       }
       if (reviewMode === 'external') {
-        await externalReviewStep({ repo, batch, gh, workspace, save, report, block });
+        await externalReviewStep({
+          repo,
+          batch,
+          gh,
+          workspace,
+          save,
+          report,
+          block,
+        });
         continue;
       }
       // New PR feedback is handled once, in a new executor session, before the next review.
       if (feedback && feedbackFingerprint(feedback) !== batch.feedbackFingerprint) {
-        batch.phase = 'implementing';
-        await save();
+        await runCorrection(
+          batch,
+          {
+            phase: 'pr-feedback',
+            reviewRound: batch.reviews.length + 1,
+            feedback:
+              resuming && batch.controllerProgress.flow === 'pr-feedback'
+                ? batch.controllerProgress.feedback
+                : feedback,
+          },
+          resuming && batch.controllerProgress.flow === 'pr-feedback',
+        );
+        await report(batch, await workspace.issueEvidence(batch));
+      }
+      if (
+        (resuming || batch.controllerProgress?.status === 'failed') &&
+        batch.controllerProgress.flow === 'review-correction'
+      ) {
+        const retained = batch.controllerProgress;
         if (
-          (
-            await workspace.execute(batch, {
-              phase: 'pr-feedback',
-              round: batch.reviews.length + 1,
-              feedback,
-            })
-          ).status !== 'implemented'
+          !resuming &&
+          (retained.sourceSha !== batch.sha ||
+            retained.planSha256 !== sha256(JSON.stringify(batch.plan)) ||
+            retained.feedbackSha256 !== sha256(JSON.stringify(retained.feedback)))
         )
-          throw new Error('PR feedback correction blocked');
-        batch.phase = 'validating';
+          throw new Error('Failed correction identity changed');
+        await runCorrection(
+          batch,
+          {
+            phase: 'review-correction',
+            reviewRound: retained.reviewRound ?? retained.round,
+            feedback: retained.feedback,
+          },
+          resuming,
+        );
+        batch.approvedSha = null;
+        batch.phase = 'waiting-checks';
         await save();
-        await workspace.verify(batch);
-        if ((await workspace.simplify(batch)).status !== 'implemented')
-          throw new Error('simplification blocked');
-        batch.phase = 'validating';
-        await save();
-        await workspace.verify(batch);
-        if ((await workspace.qa(batch)).status !== 'verified')
-          throw new Error('independent Codex QA blocked');
-        batch.sha = await workspace.checkpoint(batch);
-        await workspace.publish(batch);
         await report(batch, await workspace.issueEvidence(batch));
       }
       while (batch.reviews.length < attemptLimit(batch, 'reviews')) {
@@ -484,44 +791,41 @@ export async function runPipeline({
           await block(batch, 'Claude review remains blocked or four-review limit reached');
           break;
         }
-        batch.phase = 'implementing';
-        await save();
-        if (
-          (
-            await workspace.execute(batch, {
-              phase: 'review-correction',
-              round: attempt.round,
-              feedback: { claude: review, github: after },
-            })
-          ).status !== 'implemented'
-        )
-          throw new Error('review correction blocked');
-        batch.phase = 'validating';
-        await save();
-        await workspace.verify(batch);
-        if ((await workspace.simplify(batch)).status !== 'implemented')
-          throw new Error('simplification blocked');
-        batch.phase = 'validating';
-        await save();
-        await workspace.verify(batch);
-        if ((await workspace.qa(batch)).status !== 'verified')
-          throw new Error('independent Codex QA blocked');
-        batch.sha = await workspace.checkpoint(batch);
-        await workspace.publish(batch);
+        await runCorrection(batch, {
+          phase: 'review-correction',
+          reviewRound: attempt.round,
+          feedback: { claude: review, github: after },
+        });
         batch.approvedSha = null;
         await report(batch, await workspace.issueEvidence(batch));
         batch.phase = 'waiting-checks';
         await save();
       }
     } catch (error) {
+      if (await recoverOwnership(error)) continue;
+      try {
+        if (await pauseObservation(batch, error)) continue;
+      } catch (pauseError) {
+        if (await recoverOwnership(pauseError)) continue;
+        throw pauseError;
+      }
       if (persistenceFailed) throw error;
       batch.failureCode = controllerFailureCode(error);
       for (const a of [...implementationAttempts(batch), ...batch.reviews])
-        if (a.status === 'running') a.status = 'failed';
-      await block(
-        batch,
-        'Execution, evidence, authentication or remote consistency check failed; inspect sanitized controller diagnostics',
-      );
+        if (
+          a.status === 'running' &&
+          !['running', 'interrupted'].includes(batch.controllerProgress?.status)
+        )
+          a.status = 'failed';
+      try {
+        await block(
+          batch,
+          'Execution, evidence, authentication or remote consistency check failed; inspect sanitized controller diagnostics',
+        );
+      } catch (blockingError) {
+        if (await recoverOwnership(blockingError)) continue;
+        throw blockingError;
+      }
     }
   }
   return state;

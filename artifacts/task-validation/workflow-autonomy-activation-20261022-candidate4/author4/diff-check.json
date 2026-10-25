@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "sourceTrailingWhitespaceViolations": 0,
+  "actualChangedPaths": 9,
+  "allowedPaths": 12,
+  "outsideActualDeltaUnchanged": true,
+  "cumulativeSourcePaths": 20,
+  "cumulativeCodeAndTests": 18,
+  "inheritedDocs": 2,
+  "publishedOld144PacketFiles": "Not part of the private138-file source snapshot; root preserves them in Git publication. No author Git edit/read claim."
+}

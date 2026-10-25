@@ -1,3 +1,6 @@
+import { activeImplementation, implementationAttempts } from './attempt-budget.mjs';
+import { controllerFailureCode, stateError } from './github.mjs';
+import { validateObservationResume } from './operator-authorization.mjs';
 import { MAX_EVIDENCE_BYTES } from './evidence-limits.mjs';
 import { mkdir, readFile, writeFile, lstat, realpath, rm } from 'node:fs/promises';
 import path from 'node:path';
@@ -8,6 +11,12 @@ import { verificationArguments } from './verification.mjs';
 
 export async function regularFile(root, file) {
   relativeFile(file);
+  let parent = root;
+  for (const segment of file.split('/').slice(0, -1)) {
+    parent = path.join(parent, segment);
+    if ((await lstat(parent)).isSymbolicLink())
+      throw new Error('file must be a contained regular file');
+  }
   const target = path.resolve(root, file);
   const info = await lstat(target);
   if (
@@ -19,32 +28,68 @@ export async function regularFile(root, file) {
   return { target, info };
 }
 export async function validateEvidence(cwd, plan) {
-  const entries = [];
-  for (const item of plan.evidence) {
-    const files = {};
-    for (const kind of ['screenshot', 'trace', 'video']) {
-      if (!item[kind] && kind === 'video') continue;
-      const { target, info } = await regularFile(cwd, item[kind]);
-      if (info.size < 16 || info.size > MAX_EVIDENCE_BYTES)
-        throw new Error('evidence is empty or exceeds GitHub size budget');
-      const bytes = await readFile(target);
-      if (bytes.length !== info.size || bytes.length > MAX_EVIDENCE_BYTES)
-        throw new Error('evidence size changed during collection');
-      if (kind === 'screenshot') validatePng(bytes);
-      if (kind === 'trace') validateTrace(bytes);
-      if (
-        kind === 'video' &&
-        !(
-          bytes.subarray(0, 4).equals(Buffer.from([26, 69, 223, 163])) ||
-          bytes.subarray(4, 8).toString() === 'ftyp'
+  try {
+    const entries = [];
+    for (const item of plan.evidence) {
+      const files = {};
+      for (const kind of ['screenshot', 'trace', 'video']) {
+        if (!item[kind] && kind === 'video') continue;
+        const { target, info } = await regularFile(cwd, item[kind]);
+        if (info.size < 16 || info.size > MAX_EVIDENCE_BYTES)
+          throw new Error('evidence is empty or exceeds GitHub size budget');
+        const bytes = await readFile(target);
+        if (bytes.length !== info.size || bytes.length > MAX_EVIDENCE_BYTES)
+          throw new Error('evidence size changed during collection');
+        if (kind === 'screenshot') validatePng(bytes);
+        if (kind === 'trace') validateTrace(bytes);
+        if (
+          kind === 'video' &&
+          !(
+            bytes.subarray(0, 4).equals(Buffer.from([26, 69, 223, 163])) ||
+            bytes.subarray(4, 8).toString() === 'ftyp'
+          )
         )
-      )
-        throw new Error('invalid video evidence');
-      files[kind] = { path: item[kind], sha256: sha256(bytes), bytes: info.size };
+          throw new Error('invalid video evidence');
+        files[kind] = { path: item[kind], sha256: sha256(bytes), bytes: info.size };
+      }
+      entries.push({ issue: item.issue, files });
     }
-    entries.push({ issue: item.issue, files });
+    return entries;
+  } catch (error) {
+    throw stateError('workspace-evidence-invalid', error.message, error);
   }
-  return entries;
+}
+
+// These fields are controller evidence, not a generic retry flag. Running/unknown
+// work and malformed/stale failed journals cannot authorize another correction.
+export function knownFailedCorrection(batch) {
+  const progress = batch.controllerProgress;
+  return Boolean(
+    progress?.status === 'failed' &&
+    ['pr-feedback', 'review-correction', 'external-review-correction'].includes(progress.flow) &&
+    ((['execute', 'simplify'].includes(progress.failedStep) &&
+      progress.failureCode === 'implementation-blocked') ||
+      (progress.failedStep === 'qa' && progress.failureCode === 'independent-qa-blocked') ||
+      (['verify-before', 'verify-after'].includes(progress.failedStep) &&
+        [
+          'workspace-verification-failed',
+          'workspace-evidence-invalid',
+          'workspace-scope-invalid',
+        ].includes(progress.failureCode)) ||
+      (progress.failedStep === 'revision' &&
+        progress.failureCode === 'implementation-revision-unchanged') ||
+      (progress.failedStep === 'recovery' &&
+        progress.failureCode === 'implementation-recovery-settled')) &&
+    progress.sourceSha === batch.sha &&
+    progress.planSha256 === sha256(JSON.stringify(batch.plan)) &&
+    progress.feedbackSha256 === sha256(JSON.stringify(progress.feedback)) &&
+    !activeImplementation(batch) &&
+    !batch.reviews.some((entry) => entry.status === 'running') &&
+    (progress.implementationRound === undefined ||
+      (progress.round === progress.implementationRound &&
+        implementationAttempts(batch).at(-1)?.round === progress.implementationRound &&
+        implementationAttempts(batch).at(-1)?.status === 'failed')),
+  );
 }
 
 export function createWorkspace({ root, repo, run, models }) {
@@ -61,7 +106,7 @@ export function createWorkspace({ root, repo, run, models }) {
       timeoutMs: command === 'npm' ? 10 * 60_000 : 30_000,
       maxOutputBytes: 2 * 1024 * 1024,
     });
-    if (!result.ok) throw new Error(`${command} operation failed`);
+    if (!result.ok) throw stateError('controller-execution-failed', `${command} operation failed`);
     return result.stdout.trim();
   };
   const git = (args, cwd) => invoke('git', args, cwd);
@@ -79,42 +124,53 @@ export function createWorkspace({ root, repo, run, models }) {
   };
   const status = (cwd) => git(['status', '--porcelain', '--untracked-files=all'], cwd);
   async function assertScope(batch) {
-    const { cwd, packet } = coordinates(batch);
-    const changed = (await git(['diff', '--name-only', batch.baseSha], cwd))
-      .split('\n')
-      .filter(Boolean);
-    const untracked = (await git(['ls-files', '--others', '--exclude-standard'], cwd))
-      .split('\n')
-      .filter(Boolean);
-    for (const file of new Set([...changed, ...untracked])) {
-      relativeFile(file);
-      if (file.startsWith(packet + '/')) {
-        if (
-          ['task-contract.md', 'implementation-plan.md', 'analysis.md'].includes(
-            file.slice(packet.length + 1),
+    try {
+      const { cwd, packet } = coordinates(batch);
+      const changed = (await git(['diff', '--name-only', batch.baseSha], cwd))
+        .split('\n')
+        .filter(Boolean);
+      const untracked = (await git(['ls-files', '--others', '--exclude-standard'], cwd))
+        .split('\n')
+        .filter(Boolean);
+      for (const file of new Set([...changed, ...untracked])) {
+        relativeFile(file);
+        if (file.startsWith(packet + '/')) {
+          if (
+            ['task-contract.md', 'implementation-plan.md', 'analysis.md'].includes(
+              file.slice(packet.length + 1),
+            )
           )
+            continue;
+        } else {
+          editableFile(file);
+          if (!batch.plan.scope.includes(file))
+            throw new Error('executor edited outside accepted file scope');
+        }
+        const fileInfo = await lstat(path.join(cwd, file)).catch((e) =>
+          e.code === 'ENOENT' ? null : Promise.reject(e),
+        );
+        if (
+          fileInfo?.isSymbolicLink() ||
+          (fileInfo &&
+            !(await realpath(path.join(cwd, file))).startsWith((await realpath(cwd)) + path.sep))
         )
-          continue;
-      } else {
-        editableFile(file);
-        if (!batch.plan.scope.includes(file))
-          throw new Error('executor edited outside accepted file scope');
+          throw stateError(
+            file.startsWith(packet + '/evidence')
+              ? 'workspace-evidence-invalid'
+              : 'workspace-scope-invalid',
+            'symlink implementation/evidence is not publishable',
+          );
       }
-      const fileInfo = await lstat(path.join(cwd, file)).catch((e) =>
-        e.code === 'ENOENT' ? null : Promise.reject(e),
-      );
-      if (
-        fileInfo?.isSymbolicLink() ||
-        (fileInfo &&
-          !(await realpath(path.join(cwd, file))).startsWith((await realpath(cwd)) + path.sep))
-      )
-        throw new Error('symlink implementation/evidence is not publishable');
-    }
-    const expected = batch.packetHashes;
-    for (const [file, digest] of Object.entries(expected)) {
-      const { target } = await regularFile(cwd, `${packet}/${file}`);
-      if (sha256(await readFile(target)) !== digest)
-        throw new Error('executor changed the frozen contract or plan');
+      const expected = batch.packetHashes;
+      for (const [file, digest] of Object.entries(expected)) {
+        const { target } = await regularFile(cwd, `${packet}/${file}`);
+        if (sha256(await readFile(target)) !== digest)
+          throw new Error('executor changed the frozen contract or plan');
+      }
+    } catch (error) {
+      if (error.code === 'workspace-evidence-invalid') throw error;
+      if (error.code === 'controller-execution-failed') throw error;
+      throw stateError('workspace-scope-invalid', error.message, error);
     }
   }
   async function verify(batch) {
@@ -125,7 +181,8 @@ export function createWorkspace({ root, repo, run, models }) {
     const prior = await lstat(evidenceDir).catch((e) =>
       e.code === 'ENOENT' ? null : Promise.reject(e),
     );
-    if (prior?.isSymbolicLink()) throw new Error('evidence directory must not be a symlink');
+    if (prior?.isSymbolicLink())
+      throw stateError('workspace-evidence-invalid', 'evidence directory must not be a symlink');
     await rm(evidenceDir, { recursive: true, force: true });
     await mkdir(evidenceDir, { recursive: true });
     const results = [];
@@ -169,10 +226,137 @@ export function createWorkspace({ root, repo, run, models }) {
       JSON.stringify(batch.evidence, null, 2) + '\n',
     );
   }
+  async function captureCheckpoint(batch) {
+    const { cwd } = coordinates(batch);
+    const entries = (await git(['worktree', 'list', '--porcelain'])).split('\n\n');
+    const registered = entries.find((e) => e.split('\n').includes(`worktree ${cwd}`));
+    if (!registered?.split('\n').includes(`branch refs/heads/${batch.branch}`))
+      throw new Error('Controller checkpoint requires the registered owned worktree');
+    if ((await realpath(cwd)) !== cwd || (await lstat(cwd)).isSymbolicLink())
+      throw new Error('Controller worktree identity changed');
+    await assertScope(batch);
+    const files = [
+      ...new Set(
+        [
+          ...(await git(['diff', '--name-only', batch.baseSha], cwd)).split('\n'),
+          ...(await git(['ls-files', '--others', '--exclude-standard'], cwd)).split('\n'),
+        ].filter(Boolean),
+      ),
+    ].sort();
+    const output = {};
+    for (const file of files) {
+      relativeFile(file);
+      const info = await lstat(path.join(cwd, file)).catch((e) =>
+        e.code === 'ENOENT' ? null : Promise.reject(e),
+      );
+      if (!info) {
+        output[file] = null;
+        continue;
+      }
+      const { target } = await regularFile(cwd, file);
+      output[file] = {
+        sha256: sha256(await readFile(target)),
+        bytes: info.size,
+        executable: Boolean(info.mode & 0o111),
+      };
+    }
+    return {
+      schemaVersion: 1,
+      cwd,
+      branch: batch.branch,
+      head: await git(['rev-parse', 'HEAD'], cwd),
+      baseSha: batch.baseSha,
+      planSha256: sha256(JSON.stringify(batch.plan)),
+      packetHashes: structuredClone(batch.packetHashes),
+      output,
+    };
+  }
   return {
     root,
+    captureCheckpoint,
+    async inspectRecoveryCheckpoint(batch, { sourceSha, checkpointSha }) {
+      const { cwd } = coordinates(batch);
+      const checkpoint = await captureCheckpoint(batch);
+      const archiveRef = `refs/clinicos/checkpoint-recovery/${batch.id}/${checkpointSha}`;
+      if (
+        !/^[a-f0-9]{40}$/.test(sourceSha) ||
+        !/^[a-f0-9]{40}$/.test(checkpointSha) ||
+        (await git(['rev-parse', `${checkpointSha}^`], cwd)) !== sourceSha ||
+        (await status(cwd))
+      )
+        throw new Error('Recovery requires the exact clean owned checkpoint and source parent');
+      if (checkpoint.head !== checkpointSha) {
+        if (
+          checkpoint.head !== sourceSha ||
+          (await git(['rev-parse', '--verify', archiveRef], cwd)) !== checkpointSha
+        )
+          throw new Error('Recovery local checkpoint identity changed');
+      }
+      return { checkpoint, archiveRef, sourceSha, checkpointSha };
+    },
+    async restoreRecoveryRevision(batch, proof, targetSha) {
+      if (![proof.sourceSha, proof.checkpointSha].includes(targetSha))
+        throw new Error('Recovery target is outside the exact checkpoint/source pair');
+      const current = await this.inspectRecoveryCheckpoint(batch, proof);
+      if (JSON.stringify(current) !== JSON.stringify(proof))
+        throw new Error('Recovery checkpoint output changed');
+      const { cwd } = coordinates(batch);
+      // Keep the abandoned commit reachable; reset --keep refuses dirty collisions.
+      // A repeated action after a failed state save can verify this same archive.
+      const retained = await git(['for-each-ref', '--format=%(objectname)', proof.archiveRef], cwd);
+      if (retained && retained !== proof.checkpointSha)
+        throw new Error('Recovery archive identity changed');
+      if (!retained)
+        await git(
+          [
+            '-c',
+            'core.hooksPath=/dev/null',
+            'update-ref',
+            proof.archiveRef,
+            proof.checkpointSha,
+            '0'.repeat(40),
+          ],
+          cwd,
+        );
+      if (proof.checkpoint.head !== targetSha)
+        await git(['-c', 'core.hooksPath=/dev/null', 'reset', '--keep', targetSha], cwd);
+      const restored = await captureCheckpoint(batch);
+      if (restored.head !== targetSha || (await status(cwd)))
+        throw new Error('Recovery did not restore the exact clean owned source');
+      return restored;
+    },
+    async resume(batch, checkpoint) {
+      if (
+        !checkpoint ||
+        checkpoint.schemaVersion !== 1 ||
+        JSON.stringify(await captureCheckpoint(batch)) !== JSON.stringify(checkpoint)
+      )
+        throw new Error(
+          'Exact retained controller checkpoint is missing or changed; no model replay',
+        );
+    },
     async prepare(batch) {
       const { cwd, packet } = coordinates(batch);
+      if (knownFailedCorrection(batch)) {
+        const checkpoint = batch.controllerProgress.checkpoint;
+        if (!checkpoint) {
+          // Invalid outputs cannot be retained. A maintainer must restore a clean,
+          // exact owned revision before an independently authorized fresh attempt.
+          await assertScope(batch);
+          if ((await git(['rev-parse', 'HEAD'], cwd)) !== batch.sha || (await status(cwd)))
+            throw new Error('Invalid correction output requires a clean exact owned revision');
+          return;
+        }
+        if (
+          !checkpoint ||
+          checkpoint.head !== batch.sha ||
+          JSON.stringify(await captureCheckpoint(batch)) !== JSON.stringify(checkpoint)
+        )
+          throw new Error(
+            'Exact failed correction checkpoint is missing or changed; no model replay',
+          );
+        return; // Retain only these exact owned dirty outputs; never clean or reconstruct them.
+      }
       await git(['fetch', 'origin', 'main']);
       const entries = (await git(['worktree', 'list', '--porcelain'])).split('\n\n');
       const registered = entries.find((e) => e.split('\n').includes(`worktree ${cwd}`));
@@ -385,4 +569,166 @@ export function createWorkspace({ root, repo, run, models }) {
     reviewBody: (b, r) =>
       `<!-- codex-bug-pipeline:review -->\nClaude review ${b.reviews.length}/4 on \`${r.subject_sha}\`: **${r.verdict}**.\n\n${r.summary}\n\n${r.findings.map((f) => `- ${f.file}:${f.line} (${f.severity}): ${f.problem}\n  Correction: ${f.requested_change}\n  Verification: ${f.test_expectation}`).join('\n')}`,
   };
+}
+
+// A finite implementation journal records completed operations, never their replay.
+// Only a trusted explicit recovery can re-enter an interrupted attempt, and only
+// while its exact registered worktree/output checkpoint remains available.
+export async function runImplementationStages({ batch, workspace, save, context, beforeStage }) {
+  const steps = [
+    'execute',
+    'verify-before',
+    'simplify',
+    'verify-after',
+    'qa',
+    'checkpoint',
+    'publish',
+  ];
+  const capture = async (progress, allowInvalid = false) => {
+    if (typeof workspace.captureCheckpoint !== 'function') return;
+    try {
+      progress.checkpoint = await workspace.captureCheckpoint(batch);
+    } catch (error) {
+      if (
+        !allowInvalid ||
+        !['workspace-scope-invalid', 'workspace-evidence-invalid'].includes(
+          controllerFailureCode(error),
+        )
+      )
+        throw error;
+      // Verification, immediately after each writing model stage, settles this
+      // known validation failure. Never retain a stale valid checkpoint for it.
+      delete progress.checkpoint;
+    }
+  };
+  let progress = batch.controllerProgress;
+  if (progress?.status === 'interrupted') {
+    validateObservationResume(batch);
+    if (
+      !progress.resumeAuthorization ||
+      progress.flow !== context.phase ||
+      progress.round !== context.round ||
+      progress.feedbackSha256 !== sha256(JSON.stringify(context.feedback ?? null)) ||
+      progress.planSha256 !== sha256(JSON.stringify(batch.plan))
+    )
+      throw new Error('Implementation recovery identity changed');
+    if (typeof workspace.resume !== 'function')
+      throw new Error('Retained controller worktree verifier unavailable');
+    await workspace.resume(batch, progress.checkpoint);
+    progress.status = 'running';
+    delete progress.resumeAuthorization;
+  } else {
+    if (progress?.status === 'running')
+      throw new Error('Unknown implementation outcome requires explicit recovery');
+    if (progress?.status === 'failed') {
+      batch.controllerProgressHistory ??= [];
+      batch.controllerProgressHistory.push(structuredClone(progress));
+    }
+    progress = batch.controllerProgress = {
+      schemaVersion: 1,
+      flow: context.phase,
+      round: context.round,
+      ...(context.implementationRound === undefined
+        ? {}
+        : { implementationRound: context.implementationRound }),
+      ...(context.reviewRound === undefined ? {} : { reviewRound: context.reviewRound }),
+      sourceSha: batch.sha ?? null,
+      planSha256: sha256(JSON.stringify(batch.plan)),
+      feedbackSha256: sha256(JSON.stringify(context.feedback ?? null)),
+      feedback: structuredClone(context.feedback ?? null),
+      status: 'running',
+      next: 0,
+      completed: [],
+    };
+    await capture(progress, true);
+  }
+  if (
+    progress.implementationRound !== undefined &&
+    (progress.round !== progress.implementationRound ||
+      progress.implementationRound !== context.implementationRound ||
+      !implementationAttempts(batch).some(
+        (entry) => entry.round === progress.implementationRound && entry.status === 'running',
+      ))
+  )
+    throw new Error('Implementation reservation changed');
+  for (let index = progress.next; index < steps.length; index++) {
+    const step = steps[index];
+    batch.phase =
+      step === 'execute'
+        ? 'implementing'
+        : step === 'simplify'
+          ? 'simplifying'
+          : ['checkpoint', 'publish'].includes(step)
+            ? 'publishing'
+            : 'validating';
+    progress.pending = step;
+    await save();
+    await beforeStage?.(step);
+    let result, definiteModelFailure;
+    try {
+      if (step === 'execute' || step === 'simplify' || step === 'qa') {
+        result =
+          step === 'execute'
+            ? await workspace.execute(batch, context)
+            : await workspace[step](batch);
+        const accepted = step === 'qa' ? 'verified' : 'implemented';
+        if (result?.status === 'blocked') {
+          definiteModelFailure = stateError(
+            step === 'qa' ? 'independent-qa-blocked' : 'implementation-blocked',
+            step === 'execute'
+              ? 'executor blocked'
+              : step === 'simplify'
+                ? 'simplification blocked'
+                : 'Independent QA blocked',
+          );
+          throw definiteModelFailure;
+        }
+        if (result?.status !== accepted)
+          throw stateError('model-result-invalid', 'Implementation stage result is unconfirmed');
+      } else if (step === 'checkpoint') {
+        result = await workspace.checkpoint(batch);
+        batch.sha = result;
+      } else if (step === 'publish') await workspace.publish(batch);
+      else await workspace.verify(batch);
+    } catch (error) {
+      // Only explicit blocked model results or definite verification validation
+      // failures end an attempt. Transport/model exceptions and all surrounding
+      // persistence/checkpoint/guard boundaries retain their running tombstone.
+      const code = controllerFailureCode(error);
+      const definite =
+        (definiteModelFailure !== undefined && error === definiteModelFailure) ||
+        (['verify-before', 'verify-after'].includes(step) &&
+          [
+            'workspace-verification-failed',
+            'workspace-evidence-invalid',
+            'workspace-scope-invalid',
+          ].includes(code));
+      if (definite) {
+        // Failure capture is itself a boundary: if it fails, keep running and
+        // require explicit recovery rather than treating unknown output as reusable.
+        if (['workspace-scope-invalid', 'workspace-evidence-invalid'].includes(code))
+          delete progress.checkpoint;
+        else await capture(progress, true);
+        progress.status = 'failed';
+        progress.failedStep = step;
+        progress.failureCode = code;
+        const attempt =
+          batch.implementation &&
+          implementationAttempts(batch).find(
+            (entry) => entry.round === (progress.implementationRound ?? progress.round),
+          );
+        if (attempt?.status === 'running') attempt.status = 'failed';
+        await save();
+      }
+      throw error;
+    }
+    progress.completed.push({ step, ...(step === 'checkpoint' ? { sha: result } : {}) });
+    progress.next = index + 1;
+    delete progress.pending;
+    await capture(progress, ['execute', 'simplify'].includes(step));
+    await save();
+  }
+  progress.status = 'completed';
+  delete progress.resumeAuthorization;
+  await save();
 }

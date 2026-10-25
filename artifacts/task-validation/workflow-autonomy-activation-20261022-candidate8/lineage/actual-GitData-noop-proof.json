@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-23T06:30:38.403Z",
+  "status": "verified",
+  "nonce": "e77e3311-90d8-4974-a4f1-7c511b6a1b0b",
+  "source": "actual authenticated GitHub Git Data API and actual remote Git readback",
+  "parent": "ad70fd84bc1d1e434b417275df3a0684964975c4",
+  "commit": "b835b87be88f7cb0023a246a67906c2ee8dd88db",
+  "tree": "4e62120584a249db2354ea379dac35e91a097000",
+  "existingBlob": "2d56a2b9c86c2ab5624266c6dad6a5e10ceb08dd",
+  "stateBytes": 5261907,
+  "stateSha256": "e0c2853fc7789820e7aa4abfc05d1bc5d4852ef3d7edf967aaa81202c83f9b4c",
+  "exactTreeUnchanged": true,
+  "exactStateBytesUnchanged": true,
+  "actual23SubjectDigestsUnchanged": true,
+  "force": false,
+  "newNativeReviewOrApproval": false,
+  "noDeploymentOrIssueClosure": true
+}

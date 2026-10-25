@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-23T08:03:10.341Z",
+  "stateSha": "759260f3ba0a8e4dc3b185ab5c6bfceeb3c0e445",
+  "pr": 504,
+  "head": "689425d8836f14dfaa1c1cd1642def0cdbf30745",
+  "requestId": "a7d5b7e7-c51e-46b4-8e5a-d64faa70ef08",
+  "commentId": 6360358823,
+  "url": "https://github.com/l2v-hub/ClinicOS/pull/504#issuecomment-6360358823",
+  "bodySha256": "6bb682f3ba23131d2f8bb0e94c84d93419bd989df120c298071ec8e8e61ac59c",
+  "actualExternalReview": {
+    "channel": "github-comments",
+    "status": "comment-requested",
+    "subjectSha": "689425d8836f14dfaa1c1cd1642def0cdbf30745",
+    "requestId": "a7d5b7e7-c51e-46b4-8e5a-d64faa70ef08",
+    "requestedAt": "2026-10-23T08:01:50.907Z",
+    "requestedBy": "l2v-hub"
+  },
+  "actualLabels": [
+    "claude-review-ready"
+  ],
+  "allSixNativePass": true,
+  "eightImplementationAttemptsPreserved": true,
+  "claimNotFabricated": true
+}

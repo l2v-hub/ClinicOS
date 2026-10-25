@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "status": "verified",
+  "qaVerdict": "READY FOR CODEX QA",
+  "sourceSha": "992496727d31761bbece1262603d20e8cda447d7",
+  "gitParent": "67c53efe45e2d5e2ffca228d3bf6639029bb27c5",
+  "livePublishedHead": "ce7993a781bd2d378a1ca3ad2956b2c3606b4fe2",
+  "reservationNonce": "d9cc25d4-f392-4d93-a87c-4b163fd07f5b",
+  "independent": true,
+  "findings": [],
+  "focusedTests": {
+    "tests": 724,
+    "pass": 724,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "focusedFiles": [
+    "contracts",
+    "operator-ownership",
+    "pipeline",
+    "external-review",
+    "release",
+    "github",
+    "issue-review-sync",
+    "issue-review-communication",
+    "standalone-review",
+    "standalone-review-contracts",
+    "comment-review-handoff"
+  ],
+  "originalQa5Probes": {
+    "external-cas-probe": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "recovery-route-probe": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "recovery-budget-probe": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "malformed-takeover-probe": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "residualProbes": {
+    "tests": 6,
+    "pass": 6,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "distinctFinalNovelTests": {
+    "tests": 10,
+    "pass": 10,
+    "fail": 0,
+    "skipped": 0
+  },
+  "independentSyntax": {
+    "files": 8,
+    "pass": 8,
+    "fail": 0
+  },
+  "harnessFailures": [],
+  "adaptation": "Four original QA5 probes/fixtures copied with only production import prefix qa-source5 to qa-source6; exact safety assertions retained",
+  "integrity": {
+    "sourceSha": "992496727d31761bbece1262603d20e8cda447d7",
+    "filesChecked": 545,
+    "snapshotFiles": 138,
+    "boundCurrentPaths": 22,
+    "actualDeltaPaths": 10,
+    "historicalPublicPacketFiles": 269,
+    "oldSubjectHashes": 22,
+    "author6AndQa5SealsUnchanged": true,
+    "sourceEdits": false,
+    "independentSyntaxPass": 8
+  },
+  "metadataClarifications": {
+    "contractUnchanged": true,
+    "actualPrivateParent": "67c53efe45e2d5e2ffca228d3bf6639029bb27c5",
+    "actualLivePublishedHead": "ce7993a781bd2d378a1ca3ad2956b2c3606b4fe2",
+    "actualDeltaComparedTo": "private source5",
+    "actualDeltaCount": 10,
+    "scope": "Inherited Current Behaviour prose accidentally calls private parent published and delta vs4; authoritative reservation/code binding and initial section correctly distinguish them. No source finding or permission change."
+  },
+  "authenticClaude1": {
+    "id": 6353848644,
+    "bodySha256": "f4d87b533716ce163ea5fff27155dc1441617a40d2fcb85778d128bd2802807e",
+    "findings": 5,
+    "subjectSha": "ce7993a781bd2d378a1ca3ad2956b2c3606b4fe2"
+  },
+  "originalFindingResolution": {
+    "Claude1-F1": "PASS schema/helper nonce binding and malformed types, stale pause and positive bound intake; audit actor is not authentication",
+    "Claude1-F2": "PASS native release selection/entry/fresh guards/deployment affected tests and new external channel proof/current binding checks; no invented proof.reviewedSha",
+    "Claude1-F3": "PASS distinct3-session inference intent allowance, native actual typed recovery and nonce-dedup/archive ambiguity; no implementation budget burn",
+    "Claude1-F4": "PASS fresh model/GitHub/workspace boundaries across initial/internal correction paths; native tests and retained tombstones",
+    "Claude1-F5": "PASS native internal and external409 propagation/reload; A exact bytes preserved and B ready; writer SHA protection intact",
+    "QA5-F1": "PASS original malformed-active reproduction rejects before intake; inactive/audit and fresh bound positive cases pass",
+    "QA5-F3": "PASS original native typed recovery permits exactly2 new sessions plus1 retained legacy; histories preserved, missing/type ambiguity blocks",
+    "QA5-F5": "PASS original actual external409 reproduction returns normally with onlyB finalQa and no stale localA leakage"
+  },
+  "inheritedAuthor6": {
+    "final11SuitePass": 724,
+    "originalQa5ReproductionsPass": 4,
+    "syntaxPass": 8,
+    "earlierFailure": "Same-cause omitted subjectSha history regression FAIL retained in sealed author6; no QA6 failure"
+  },
+  "security": {
+    "status": "PASS",
+    "scope": "Observed automatic ownership, authorization, exact SHA/proof bindings, finite budgets/history and source/provider gates within bounded control-plane changes",
+    "secretPhi": "No secret/clinical payload added or actual credential access; synthetic transport/model fixtures only",
+    "configuration": "No install, workflow/provider/sandbox relaxation; existing privileged explicit path remains separately authorized",
+    "crossResourceAtomicityClaimed": false
+  },
+  "visual": "N/A explicit control-plane contract; unchanged clinical E2E not rerun",
+  "sourceEdits": false,
+  "realNetwork": false,
+  "liveWrites": false,
+  "realModelOrProviderCalls": 0,
+  "pending": [
+    "actual source6 publication and full required native CI on exact new head",
+    "genuine Claude2",
+    "fresh final Codex source review",
+    "native independent human trust-root approval and protected ordinary merge",
+    "explicit bound handback and genuine event proof",
+    "personal worker readiness",
+    "later provider deployment and23 issue closure"
+  ],
+  "proofStop": "Independent source/harness/proof only; root owns subsequent live gates"
+}

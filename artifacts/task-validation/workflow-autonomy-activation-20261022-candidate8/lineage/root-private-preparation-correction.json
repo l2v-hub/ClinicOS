@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-23T06:35:42.600062+00:00",
+  "code": "ENOENT",
+  "path": "Luna-state-transport-docs8/task-contract.md",
+  "stage": "private output preparation before canonical transaction, author plan acceptance JSON not written, no source/model/API state effects",
+  "fix": "Create private output directory before writing contract; all source8 snapshot bindings rechecked by rerun",
+  "permissionOrSourceFailure": false
+}

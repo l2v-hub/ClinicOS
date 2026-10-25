@@ -1,0 +1,9 @@
+{
+  "status": "STOP_SOURCE_FROZEN_AWAITING_INDEPENDENT_QA",
+  "nonce": "c0dd45a8-235f-4774-aa7c-fceab1eaab38",
+  "attempt": 7,
+  "sourceManifestSha256": "d73ff41c73d9cf1ac6e4fc2f15639d57079a11d2cff7a8ba48eb0c9e17a0d95b",
+  "resultsSha256": "6d0392e257400f77fc2508e47eca01dd7ea800b62832f880d9364b8ac9351016",
+  "sourceEditsAfterStop": false,
+  "approvalClaimed": false
+}

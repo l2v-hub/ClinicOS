@@ -1,9 +1,15 @@
 import {
   attemptLimit,
+  finalQaAccounting,
+  finalQaLimit,
   activeImplementation,
+  implementationAttempts,
   reserveImplementation,
   spentAttempts,
 } from './attempt-budget.mjs';
+import { validateObservationResume } from './operator-authorization.mjs';
+import { stateError } from './github.mjs';
+import { runImplementationStages } from './workspace.mjs';
 import { feedbackFingerprint, sha256 } from './contracts.mjs';
 import { createIssueReviewCommunication } from './issue-review-communication.mjs';
 import { createCommentReviewHandoff } from './comment-review-handoff.mjs';
@@ -42,7 +48,7 @@ export function externalReport(batch) {
   return report;
 }
 
-export async function externalReviewStep({
+async function runExternalReviewStep({
   repo,
   batch,
   gh,
@@ -50,18 +56,33 @@ export async function externalReviewStep({
   save,
   report,
   block,
-  communication = createIssueReviewCommunication({ github: gh, repo, readReport: externalReport }),
+  communication = createIssueReviewCommunication({
+    github: gh,
+    repo,
+    readReport: externalReport,
+  }),
 }) {
   const observedAt = new Date().toISOString();
+  const resumingCorrection =
+    batch.controllerProgress?.status === 'interrupted' &&
+    batch.controllerProgress?.resumeAuthorization &&
+    batch.controllerProgress.flow === 'external-review-correction';
+  if (resumingCorrection) validateObservationResume(batch);
+  const reviewSubjectSha = resumingCorrection ? batch.controllerProgress.sourceSha : batch.sha;
   // Informational publication is recoverable by the sibling. It must not consume
   // an implementation attempt that was reserved for a real code correction.
-  const notify = () => communication.publishState(batch).catch(() => {});
+  const notify = () =>
+    communication.publishState(batch, { automatic: true }).catch((error) => {
+      if (error?.code === 'review-operator-owned') throw error;
+    });
   const blocked = async (reason) => {
     await block(batch, reason);
     await notify();
   };
+  if (batch.phase === 'blocked') return notify();
   if (batch.externalReview?.channel === 'github-comments') {
     const receiver = createCommentReviewHandoff({
+      automatic: () => true,
       github: gh,
       cwd: process.cwd(),
       run: createRunner({
@@ -76,17 +97,18 @@ export async function externalReviewStep({
       return block(batch, 'Source issue was closed or cancelled during external review');
   }
   if (
-    ['implementing', 'validating', 'simplifying', 'publishing'].includes(batch.phase) ||
-    activeImplementation(batch)
+    !batch.controllerProgress?.resumeAuthorization &&
+    (['implementing', 'validating', 'simplifying', 'publishing'].includes(batch.phase) ||
+      activeImplementation(batch))
   )
     return blocked('Interrupted Codex correction requires explicit recovery');
   // The real PR mirror also reaches an older installed Max worker, without changing
   // the PR feedback fingerprint format or treating issue text as approval.
-  await communication.mirrorFeedback(batch);
+  await communication.mirrorFeedback(batch, { automatic: true });
   const feedback = await gh.reviewFeedback(batch.pr.number);
   if (
     feedback.state !== 'OPEN' ||
-    feedback.head !== batch.sha ||
+    feedback.head !== reviewSubjectSha ||
     feedback.headRef !== batch.branch ||
     feedback.headRepo !== repo ||
     feedback.headIsFork ||
@@ -97,31 +119,166 @@ export async function externalReviewStep({
   const handoff = batch.externalReview;
   if (handoff?.status === 'finished') return notify(); // Publication is retried by the external harness.
   if (handoff?.status === 'published') {
-    const verdict = externalReport(batch);
+    // A running final session remains owned even if new feedback arrives.
+    if (batch.codexFinalReview?.status === 'running')
+      return blocked('Interrupted independent Codex review requires recovery');
+    if (handoff.subjectSha !== reviewSubjectSha)
+      return blocked('External review handoff SHA changed');
+    const verdict = externalReport(
+      resumingCorrection ? { ...batch, sha: reviewSubjectSha } : batch,
+    );
     if (verdict.verdict === 'blocked')
       return blocked('External Claude reviewer blocked the change');
     let changed = handoff.feedbackChanged || fingerprint !== handoff.feedbackFingerprint;
-    if (verdict.verdict === 'approved' && !changed && handoff.channel === 'github-comments') {
+    if (verdict.verdict === 'approved' && !changed) {
+      if (
+        feedback.unresolved ||
+        feedback.changesRequested ||
+        !(await gh.requiredChecks(batch.pr.number)).ok
+      ) {
+        batch.phase = 'waiting-checks';
+        batch.approvedSha = null;
+        await save();
+        return notify();
+      }
       const prior = batch.codexFinalReview;
-      if (!prior || prior.subjectSha !== batch.sha || prior.claudeRound !== batch.reviews.length) {
+      if (
+        !prior ||
+        prior.subjectSha !== batch.sha ||
+        prior.claudeRound !== batch.reviews.length ||
+        prior.feedbackFingerprint !== fingerprint ||
+        ['waiting-checks', 'failed', 'blocked'].includes(prior.status)
+      ) {
+        if (prior) {
+          batch.codexFinalReviewHistory ??= [];
+          batch.codexFinalReviewHistory.push(prior);
+        }
         batch.codexFinalReview = {
           subjectSha: batch.sha,
           claudeRound: batch.reviews.length,
+          feedbackFingerprint: fingerprint,
           status: 'running',
+          reservedAt: new Date().toISOString(),
+          nonce: randomUUID(),
         };
+        batch.approvedSha = null;
         await save();
         await workspace.prepare(batch);
-        const qa = await workspace.finalQa(batch);
-        batch.codexFinalReview.status = qa.status === 'verified' ? 'verified' : 'changes-requested';
-        batch.codexFinalReview.summary = qa.summary;
+        const beforeQa = await gh.reviewFeedback(batch.pr.number);
+        if (
+          beforeQa.head !== batch.sha ||
+          beforeQa.state !== 'OPEN' ||
+          beforeQa.headRef !== batch.branch ||
+          beforeQa.headRepo !== repo ||
+          beforeQa.headIsFork ||
+          beforeQa.baseRef !== 'main' ||
+          feedbackFingerprint(beforeQa) !== fingerprint ||
+          beforeQa.unresolved ||
+          beforeQa.changesRequested
+        ) {
+          batch.codexFinalReview.status = 'blocked';
+          await save();
+          return blocked('PR identity or feedback changed before independent Codex review');
+        }
+        if (!(await gh.requiredChecks(batch.pr.number)).ok) {
+          batch.codexFinalReview.status = 'waiting-checks';
+          batch.phase = 'waiting-checks';
+          await save();
+          return notify();
+        }
+        // Count durably reserved inference sessions, not identity/check polling.
+        // This allowance is independent of the implementation correction budget.
+        const binding = {
+          subjectSha: batch.sha,
+          claudeRound: batch.reviews.length,
+          feedbackFingerprint: fingerprint,
+        };
+        const { infrastructure, spent, ambiguous } = finalQaAccounting(batch, prior, binding, {
+          recordOrigins: true,
+        });
+        if (ambiguous) {
+          batch.codexFinalReview.status = 'blocked';
+          batch.codexFinalReview.failureCode = 'final-qa-infrastructure-history-ambiguous';
+          await save();
+          return blocked(
+            'Independent final QA inference history is ambiguous; explicit recovery required',
+          );
+        }
+        if (spent >= finalQaLimit(batch, binding)) {
+          batch.codexFinalReview.status = 'blocked';
+          batch.codexFinalReview.failureCode = 'final-qa-infrastructure-exhausted';
+          await save();
+          return blocked(
+            'Independent final QA infrastructure allowance exhausted; explicit recovery required',
+          );
+        }
+        const inference = {
+          nonce: batch.codexFinalReview.nonce,
+          subjectSha: batch.sha,
+          claudeRound: batch.reviews.length,
+          feedbackFingerprint: fingerprint,
+          reservedAt: new Date().toISOString(),
+          status: 'running',
+        };
+        infrastructure.attempts.push(inference);
+        await save();
+        try {
+          const qa = await workspace.finalQa(batch);
+          if (
+            !['verified', 'blocked', 'changes-requested'].includes(qa?.status) ||
+            typeof qa.summary !== 'string' ||
+            !qa.summary.trim()
+          )
+            throw new Error('Independent final QA returned no usable verdict');
+          batch.codexFinalReview.status =
+            qa.status === 'verified' ? 'verified' : 'changes-requested';
+          batch.codexFinalReview.summary = qa.summary;
+          inference.status = batch.codexFinalReview.status;
+        } catch (error) {
+          if (error?.code === 'review-operator-owned') throw error;
+          if (error?.code === 'ownership-observation-failed' && error.beforeInvocation === true) {
+            inference.status = 'not-started';
+            inference.invocation = {
+              status: 'not-started',
+              boundary: 'ownership-observation',
+              nonce: inference.nonce,
+            };
+            batch.codexFinalReview.status = 'blocked';
+            batch.codexFinalReview.invocation = structuredClone(inference.invocation);
+            await save();
+            throw error;
+          }
+          inference.status = 'failed';
+          batch.codexFinalReview.status = 'failed';
+          await save();
+          throw error;
+        }
         await save();
       }
-      if (batch.codexFinalReview.status === 'running')
-        return blocked('Interrupted independent Codex review requires recovery');
-      changed = batch.codexFinalReview.status !== 'verified';
-      if (!changed) {
-        const current = await gh.reviewFeedback(batch.pr.number);
-        changed = current.head !== batch.sha || feedbackFingerprint(current) !== fingerprint;
+      if (!['verified', 'changes-requested'].includes(batch.codexFinalReview.status))
+        return blocked('Independent final QA is unavailable; explicit recovery required');
+      changed = batch.codexFinalReview.status === 'changes-requested';
+      const current = await gh.reviewFeedback(batch.pr.number);
+      if (
+        current.state !== 'OPEN' ||
+        current.head !== batch.sha ||
+        current.headRef !== batch.branch ||
+        current.headRepo !== repo ||
+        current.headIsFork ||
+        current.baseRef !== 'main'
+      )
+        return blocked('PR identity changed during independent Codex review');
+      if (
+        feedbackFingerprint(current) !== fingerprint ||
+        current.unresolved ||
+        current.changesRequested
+      )
+        return blocked('PR feedback changed during independent Codex review');
+      if (!(await gh.requiredChecks(batch.pr.number)).ok) {
+        batch.phase = 'waiting-checks';
+        batch.approvedSha = null;
+        await save();
+        return notify();
       }
     }
     if (verdict.verdict === 'approved' && !changed) {
@@ -138,56 +295,63 @@ export async function externalReviewStep({
     }
     if (batch.reviews.length >= attemptLimit(batch, 'reviews'))
       return blocked('Four external Claude review attempts exhausted');
-    if (spentAttempts(batch, 'implementation') >= attemptLimit(batch, 'implementation'))
+    if (
+      !batch.controllerProgress?.resumeAuthorization &&
+      spentAttempts(batch, 'implementation') >= attemptLimit(batch, 'implementation')
+    )
       return blocked('Four implementation/validation attempts exhausted');
-    await workspace.prepare(batch);
-    const attempt = reserveImplementation(batch);
-    batch.phase = 'implementing';
+    if (!batch.controllerProgress?.resumeAuthorization) await workspace.prepare(batch);
+    const attempt =
+      (batch.controllerProgress?.resumeAuthorization &&
+        implementationAttempts(batch).find(
+          (item) => item.round === batch.controllerProgress.round && item.status === 'running',
+        )) ||
+      reserveImplementation(batch);
     batch.approvedSha = null;
     batch.issueFeedbackSince ??= observedAt;
-    await save();
-    await notify();
     try {
-      if (
-        (
-          await workspace.execute(batch, {
-            phase: 'external-review-correction',
-            round: attempt.round,
-            feedback: {
-              claude: verdict,
-              github: feedback,
-              ...(batch.codexFinalReview ? { codex: batch.codexFinalReview } : {}),
-            },
-          })
-        ).status !== 'implemented'
-      )
-        throw new Error('Correction blocked');
-      batch.phase = 'validating';
-      await save();
-      await workspace.verify(batch);
-      batch.phase = 'simplifying';
-      await save();
-      if ((await workspace.simplify(batch)).status !== 'implemented')
-        throw new Error('Simplification blocked');
-      batch.phase = 'validating';
-      await save();
-      await workspace.verify(batch);
-      if ((await workspace.qa(batch)).status !== 'verified')
-        throw new Error('Independent QA blocked');
-      batch.phase = 'publishing';
-      await save();
-      const previous = batch.sha;
-      batch.sha = await workspace.checkpoint(batch);
-      if (batch.sha === previous)
-        throw new Error('Correction did not produce a new reviewed revision');
-      await workspace.publish(batch);
+      const previous = reviewSubjectSha;
+      await runImplementationStages({
+        batch,
+        workspace,
+        save,
+        beforeStage: async (step) => {
+          if (step === 'execute') await notify();
+        },
+        context: {
+          phase: 'external-review-correction',
+          round: attempt.round,
+          ...(resumingCorrection && batch.controllerProgress.implementationRound === undefined
+            ? {}
+            : { implementationRound: attempt.round }),
+          feedback: resumingCorrection
+            ? batch.controllerProgress.feedback
+            : {
+                claude: verdict,
+                github: feedback,
+                ...(batch.codexFinalReview ? { codex: batch.codexFinalReview } : {}),
+              },
+        },
+      });
+      if (batch.sha === previous) {
+        const progress = batch.controllerProgress;
+        progress.status = 'failed';
+        progress.failedStep = 'revision';
+        progress.failureCode = 'implementation-revision-unchanged';
+        attempt.status = 'failed';
+        await save();
+        throw stateError(
+          'implementation-revision-unchanged',
+          'Correction did not produce a new reviewed revision',
+        );
+      }
       attempt.status = 'passed';
       batch.externalReview = null;
       batch.phase = 'waiting-checks';
       await save();
       await report(batch, await workspace.issueEvidence(batch));
     } catch (error) {
-      attempt.status = 'failed';
+      if (batch.controllerProgress?.status === 'failed') attempt.status = 'failed';
       throw error;
     }
   } else if (handoff?.status === 'requested' && handoff.subjectSha === batch.sha) {
@@ -219,4 +383,11 @@ export async function externalReviewStep({
     batch,
     `PR ${batch.pr.url}: **Ready for review** su \`${batch.sha}\`. In attesa del cron Claude Code; review utilizzate ${batch.reviews.length}/${attemptLimit(batch, 'reviews')}. Commenti e richieste di modifica torneranno a Codex tramite GitHub.`,
   );
+}
+
+// Preserve the finite ownership-loss classification until the controller reloads
+// canonical state. Returning a skip here would leave unsaved subject edits in its
+// writer snapshot and leak them into the next independent subject's save.
+export async function externalReviewStep(options) {
+  return runExternalReviewStep(options);
 }

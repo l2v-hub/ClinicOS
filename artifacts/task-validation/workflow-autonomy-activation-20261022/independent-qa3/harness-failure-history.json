@@ -1,0 +1,1 @@
+{"initialInputVerifierFailure":{"cause":"Docs child seal files is a list of before/after bindings, unlike author seals files object; corrected QA verifier to honor both formats","sourceEdit":false,"testAssertionsChanged":false},"originalQa2Failures":"Preserved immutable QA2 seal and every one of29 sealed records, including four harness failures and F1/F2 source findings"}

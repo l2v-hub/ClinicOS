@@ -1,0 +1,69 @@
+{
+  "status": "IMPLEMENTED_AWAITING_INDEPENDENT_QA",
+  "attempt": 3,
+  "nonce": "c7ddc739-ee71-49b6-bd1c-a3e8d6e2a6f2",
+  "model": "gpt-6.1-sol",
+  "source": "/tmp/clinicos-autonomy-activation-20261022/source3",
+  "changedPaths": [
+    "agent-team/src/bug-pipeline/pipeline.mjs",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+    "agent-team/src/bug-pipeline/external-review.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs"
+  ],
+  "cumulativePaths": 14,
+  "actualFocusedTests": {
+    "tests": 123,
+    "pass": 123,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "actualOriginalQa2Reproductions": {
+    "tests": 2,
+    "pass": 2,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "actualSyntax": {
+    "passed": 8,
+    "failed": 0
+  },
+  "source2AndPreviousEvidenceImmutable": true,
+  "qa2FailedVerdictPreserved": true,
+  "initialAuthorFailuresPreserved": [
+    {
+      "log": "focused-first.log",
+      "tests": 123,
+      "passed": 122,
+      "failed": 1,
+      "kind": "existing options expectation updated for explicit automatic mode"
+    }
+  ],
+  "F1AuthorObservation": {
+    "ownedStatusWrites": 0,
+    "modelsInvoked": 0
+  },
+  "F2AuthorObservation": {
+    "stateReads": 2,
+    "projectionWrites": 0,
+    "resultStatus": "skipped"
+  },
+  "explicitDefaultAuthenticatedCallerCompatibilityTested": true,
+  "automaticPerMethodOptInTested": true,
+  "crossResourceAtomicityClaimed": false,
+  "sharedHelperReleaseGithubNormalizerCronUnchanged": true,
+  "sourceManifestSha256": "0dd2333526a6d9cee4ac72fea4cde621056408c354b302e8b7d72e2eb2b15e2b",
+  "independentQaClaimed": false,
+  "actualModelOrNativeApprovalClaimed": false,
+  "liveActivationOrClinicalDeliveryClaimed": false,
+  "paidModelCalls": 0,
+  "liveApiOrProviderCalls": 0,
+  "canonicalOrUserRepositoryGitMutations": 0
+}

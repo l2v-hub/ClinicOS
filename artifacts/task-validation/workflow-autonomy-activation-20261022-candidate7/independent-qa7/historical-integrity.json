@@ -1,0 +1,157 @@
+{
+  "protectedSubjects": [
+    {
+      "collection": "batches",
+      "id": "bug-batch-450",
+      "sha256": "3f82a4337ea5652839555af0826ac8ba539097d4e6878e278d9bb2fcba4aba7e",
+      "unchanged": true
+    },
+    {
+      "collection": "batches",
+      "id": "bug-batch-432",
+      "sha256": "7b53f7d86d82dd09a28f76fe9d9bcceb18c53d6b4ce85141976859e0f1f569c9",
+      "unchanged": true
+    },
+    {
+      "collection": "batches",
+      "id": "bug-batch-485",
+      "sha256": "1223e374b608377bfdbdd3ee318d94cfa04e9d65c2ffeaf5466b48eb20177336",
+      "unchanged": true
+    },
+    {
+      "collection": "batches",
+      "id": "bug-batch-447",
+      "sha256": "ec4c312e33efd108b587d459d81527037b83c351335c4c05dff8a4c711a82723",
+      "unchanged": true
+    },
+    {
+      "collection": "manualBatches",
+      "id": "tracking-455",
+      "sha256": "9d703e7ec677523958ea36594f3da0ec892615b313b12dd07da3448be3165101",
+      "unchanged": true
+    },
+    {
+      "collection": "manualBatches",
+      "id": "maintenance-470",
+      "sha256": "96d2c226bf08c70323032da49d625d022973ba00f5ce25bee00106e4d2901db8",
+      "unchanged": true
+    },
+    {
+      "collection": "manualBatches",
+      "id": "demo-release-guard",
+      "sha256": "83fe62e67088ef13d70155167899746b6d22ebd065d027f9e6fd553ff03708bf",
+      "unchanged": true
+    },
+    {
+      "collection": "manualBatches",
+      "id": "demo-source-configuration",
+      "sha256": "7795fd3efc78c2d2e8cede8ea880e9aee2cff4a01c997de3b8baf881daf8c01b",
+      "unchanged": true
+    },
+    {
+      "collection": "manualBatches",
+      "id": "issue-review-communication",
+      "sha256": "56252e0f871ed7e0d6b13c25c2817a7c4fd710f55eb8388c25644b7cae77f37b",
+      "unchanged": true
+    },
+    {
+      "collection": "manualBatches",
+      "id": "ci-note-isolation",
+      "sha256": "7e6f827a89ad66416cac76457835e30c244292c088f55456d5b056f64fb33d08",
+      "unchanged": true
+    },
+    {
+      "collection": "manualBatches",
+      "id": "standalone-pr-review-adapter",
+      "sha256": "309db70c2dc5bb09c15817b8b3e7887dbb8e339639d82eb382b48979a33909e7",
+      "unchanged": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-393",
+      "sha256": "efc7a18b6f9fe6a96771fa202229b4461eace8bb8e5ecb5693e79317c185c3bb",
+      "unchanged": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-491",
+      "sha256": "84260b0cde0b23065ab012becb9ab1bb45f24fc79fed29a4a1150f9083e42fb2",
+      "unchanged": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-494",
+      "sha256": "deb0bf0deaf4402b079ec9787b6ae90a6aaca26c16cdb643762c2bf83a60f5ff",
+      "unchanged": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-495",
+      "sha256": "40bdcad524e8f25302f7ce3459ea06904481a64c6fbc12baf7d250d5a5895f80",
+      "unchanged": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-496",
+      "sha256": "769269f066296e5fe66a26a7a60be0738eb85a60af0847c91014ebe628610d45",
+      "unchanged": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-498",
+      "sha256": "718aea2963be1bef16a8d4fb1b7d91ea5c548bb94c184e3baa88472f82d046c8",
+      "unchanged": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-499",
+      "sha256": "14b1ca8d49db100dbb458cd30ff25bf3a820327d7be9212d60f1ee809636f824",
+      "unchanged": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-500",
+      "sha256": "bad8925ab4a3797f7804d0d1551248e3bca523d391330dc0558a0a2022268058",
+      "unchanged": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-501",
+      "sha256": "b2afe8e7fee81e750e3a61b3a4314d8bb01d81ed9f01db37f27ff7a9a05a29b4",
+      "unchanged": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-502",
+      "sha256": "f6d409c104e265f036368b83f5eb702c52ac8b08af4b8c46046d868fbd942b86",
+      "unchanged": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-503",
+      "sha256": "3218efcd6d95b0864c456d215b2aac6960a951256b2231945594dfa452433f29",
+      "unchanged": true
+    }
+  ],
+  "nativePrefix": {
+    "implementationCount": 6,
+    "statuses": [
+      "blocked",
+      "failed",
+      "failed",
+      "passed",
+      "failed",
+      "passed"
+    ],
+    "implementationSha256": "b2083856e61d9015091e3e1c4c1cb311d3ba65ddbbbc92a1a3fa7298690df59b",
+    "claimedReviews": 1,
+    "reviewStatuses": [
+      "changes-requested"
+    ],
+    "reviewsSha256": "27026c3509883a5bd2191307156b150eef003a0f45bc4e9db03ea348f5d23c0c",
+    "ledgerSha256": "68d556146573c8cab99e62dec17b97559e6eae8b6edcc64fca77277fce58d35a",
+    "beforeAfterExact": true,
+    "unclaimedRequestRetained": true
+  },
+  "rawCanonicalCopied": false
+}

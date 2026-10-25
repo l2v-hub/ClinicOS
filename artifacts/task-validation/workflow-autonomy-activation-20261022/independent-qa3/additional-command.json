@@ -1,0 +1,11 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "/tmp/clinicos-autonomy-activation-20261022/independent-qa3/additional-probes.mjs"
+  ],
+  "exitCode": 0,
+  "seconds": 0.2732779609505087,
+  "fixture": "Only exported synthetic communication fixture prefix copied; no product implementation changed"
+}

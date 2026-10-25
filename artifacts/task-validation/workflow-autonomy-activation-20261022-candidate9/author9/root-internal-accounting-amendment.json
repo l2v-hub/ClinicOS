@@ -1,0 +1,13 @@
+{
+  "nonce": "306e10be-29ce-4784-b4ff-97db849b5a45",
+  "amendment": {
+    "at": "2026-10-23T08:42:22.789Z",
+    "acceptanceSha256": "c7a623ac323011d84b2d31a9e21c0ef9c6c41e8efbfa2128c105c0acb55001ce",
+    "beforeAccountingEdits": true,
+    "existingScopeOnly": true,
+    "preserveLegacyObservationResume": true,
+    "noHistoricalReclassification": true
+  },
+  "stateCommit": "4f2a9bfd563a9388b19905ea8d842233b6bb2019",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/7061ca64-68ef-478b-89c2-8127176ca5a1/accepted.json"
+}

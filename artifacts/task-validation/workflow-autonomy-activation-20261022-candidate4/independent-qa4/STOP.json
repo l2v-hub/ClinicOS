@@ -1,0 +1,11 @@
+{
+  "status": "READY FOR CODEX QA",
+  "sourceValidation": "verified",
+  "sourceSha": "cb2d095926282918777b9dd73a37ef7d90bb7b2f",
+  "nonce": "4789a5de-7784-459b-9b75-4234572aad9b",
+  "at": "2026-10-22T23:06:22.505396+00:00",
+  "findings": [],
+  "sourceEdits": false,
+  "liveOperations": false,
+  "laterNativeReviewAndActivationPending": true
+}

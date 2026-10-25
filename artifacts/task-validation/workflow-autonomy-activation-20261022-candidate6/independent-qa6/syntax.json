@@ -1,0 +1,42 @@
+[
+  {
+    "path": "agent-team/src/bug-pipeline/contracts.mjs",
+    "exitCode": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/external-review.mjs",
+    "exitCode": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/operator-ownership.mjs",
+    "exitCode": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "exitCode": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/contracts.test.mjs",
+    "exitCode": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "exitCode": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+    "exitCode": 0,
+    "output": ""
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "exitCode": 0,
+    "output": ""
+  }
+]

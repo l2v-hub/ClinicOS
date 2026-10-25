@@ -1,0 +1,82 @@
+[
+  {
+    "name": "actual-global-pause",
+    "status": "PASS"
+  },
+  {
+    "name": "actual-handback-pipeline",
+    "status": "PASS"
+  },
+  {
+    "name": "actual-sync-true",
+    "status": "PASS"
+  },
+  {
+    "name": "actual-sync-false",
+    "status": "PASS"
+  },
+  {
+    "name": "actual-sync-new-subject",
+    "status": "PASS"
+  },
+  {
+    "name": "actual-release-selection",
+    "status": "PASS"
+  },
+  {
+    "name": "actual-pre-normalization",
+    "status": "PASS"
+  },
+  {
+    "name": "F1-observed-details",
+    "status": "OBSERVED",
+    "statusWritesAfterFreshOwner": [
+      {
+        "n": 900017,
+        "status": "In progress"
+      }
+    ],
+    "error": "Selected issue acquired another durable owner before triage"
+  },
+  {
+    "name": "F1-triage-owner-CAS",
+    "status": "FAIL",
+    "error": "Observed labels on an issue already owned in the successful fresh CAS state\n\n1 !== 0\n"
+  },
+  {
+    "name": "F2-observed-details",
+    "status": "OBSERVED",
+    "stateReads": 11,
+    "projectedWrites": 3,
+    "resultStatus": "synced"
+  },
+  {
+    "name": "F2-sync-takeover-read",
+    "status": "FAIL",
+    "error": "Observed GitHub projection after fresh state reads already exposed the active global pause\n\n3 !== 0\n"
+  },
+  {
+    "name": "default-final-QA",
+    "status": "PASS"
+  },
+  {
+    "name": "pending-native-before-QA",
+    "status": "PASS"
+  },
+  {
+    "name": "post-QA-head-change",
+    "status": "PASS"
+  },
+  {
+    "name": "running-QA-owned",
+    "status": "PASS"
+  },
+  {
+    "name": "failed-QA-budget",
+    "status": "PASS"
+  },
+  {
+    "name": "stale-QA-feedback",
+    "status": "PASS"
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "status": "STOP",
+  "reason": "Author implementation and focused validation complete. Source frozen for independent QA; no self-approval or live continuation.",
+  "nonce": "b8e19ccc-b9fd-4e3e-84bc-9fe9462bf61a",
+  "source": "/tmp/clinicos-autonomy-activation-20261022/source",
+  "sourceEditsStopped": true
+}

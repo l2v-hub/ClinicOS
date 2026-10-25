@@ -1,0 +1,19 @@
+{
+  "nonce": "7c4e8a68-edc9-4b9c-8d8c-8aa49b67dea9",
+  "status": "running",
+  "reservedAt": "2026-10-22T21:53:55.949Z",
+  "reservedBeforeSession": true,
+  "agent": "/root/activation_followup_qa",
+  "model": "gpt-6.1-sol",
+  "sourceSha": "2e4a635ad5f34bb6f886342d15eaed63674d3dae",
+  "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+  "source": "/tmp/clinicos-autonomy-activation-20261022/qa-source",
+  "output": "/tmp/clinicos-autonomy-activation-20261022/independent-qa",
+  "contractSha256": "ae6a34a25abd301ac928f12416a866a839030f5ff167e3367624e215cb38b8a3",
+  "author1SealSha256": "6b2fb75324dc5a76d4fa6655013b9d345d2ed5c322e65041f49587a70e147b22",
+  "author2SealSha256": "9ce02b5722a168333d77caefdcf4147dd130bffa3f4f5aba150310c49f510f1f",
+  "sourceEditsAllowed": false,
+  "liveOperationsAllowed": false,
+  "stateCommit": "322188af709388f6f0cd67581ce4c48aaa3ef445",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/388fa3a7-44d0-49e9-a2f2-aa659d70c861/accepted.json"
+}

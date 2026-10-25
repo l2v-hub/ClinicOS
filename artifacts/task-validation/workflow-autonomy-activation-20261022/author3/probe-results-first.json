@@ -1,0 +1,23 @@
+[
+  {
+    "name": "F1-observed-details",
+    "status": "OBSERVED",
+    "statusWritesAfterFreshOwner": [],
+    "error": "Selected issue acquired another durable owner before triage"
+  },
+  {
+    "name": "F1-triage-owner-CAS",
+    "status": "PASS"
+  },
+  {
+    "name": "F2-observed-details",
+    "status": "OBSERVED",
+    "stateReads": 2,
+    "projectedWrites": 0,
+    "resultStatus": "skipped"
+  },
+  {
+    "name": "F2-sync-takeover-read",
+    "status": "PASS"
+  }
+]

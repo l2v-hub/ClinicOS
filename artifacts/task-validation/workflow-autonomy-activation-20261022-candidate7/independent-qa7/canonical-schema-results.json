@@ -1,0 +1,41 @@
+{
+  "transportReceiptSha256": "ce3a3787764d4c580fb99ed5ba89d081276ee182cb90d18c950e3af8455ae283",
+  "stateCommit": "d57fe4e9b868922cc90cad4e84c6b885ca7d5b54",
+  "results": [
+    {
+      "name": "before.json",
+      "sha256": "acfcbf6564c3d62e1b2ba04d8b9035cdee5f845adf74af21b430df55605cd321",
+      "bytes": 5189982,
+      "validators": [
+        "validateState",
+        "validateOperatorContinuations",
+        "validateStandaloneState"
+      ],
+      "valid": true,
+      "counts": {
+        "batches": 4,
+        "manualBatches": 7,
+        "standaloneReviews": 12
+      },
+      "globalAutomationOwnProperty": false
+    },
+    {
+      "name": "proposed.json",
+      "sha256": "8aa1fee92d6da5ab8d438e7f67136f7715cc2bc95d8e81e8272ed2c5e25530cf",
+      "bytes": 5195600,
+      "validators": [
+        "validateState",
+        "validateOperatorContinuations",
+        "validateStandaloneState"
+      ],
+      "valid": true,
+      "counts": {
+        "batches": 4,
+        "manualBatches": 7,
+        "standaloneReviews": 12
+      },
+      "globalAutomationOwnProperty": false
+    }
+  ],
+  "rawCanonicalCopied": false
+}

@@ -1,0 +1,13 @@
+{
+  "nonce": "e77e3311-90d8-4974-a4f1-7c511b6a1b0b",
+  "status": "execution-reserved",
+  "reservedAt": "2026-10-23T06:30:23.297Z",
+  "reservedBeforeOperation": true,
+  "actor": "l2v-hub",
+  "repository": "l2v-hub/ClinicOS",
+  "branch": "codex/bug-control",
+  "scope": "Actual GitData protocol with exactly unchanged tree/state, one normal force:false commit/ref update. No source, subject, budget, model, review, label, deploy or closure transition.",
+  "noContentOrSubjectChanges": true,
+  "stateCommit": "ad70fd84bc1d1e434b417275df3a0684964975c4",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/93873acb-615e-4193-8a46-ad3a083a0e04/accepted.json"
+}

@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-23T07:46:51.252Z",
+  "head": "689425d8836f14dfaa1c1cd1642def0cdbf30745",
+  "run": 39916970712,
+  "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/39916970712",
+  "privateArchive": "/tmp/clinicos-autonomy-activation-20261022/publication8/actual-integration-private-fullrunlogs-39916970712.zip",
+  "bytes": 711611,
+  "sha256": "d3d7723484df443c36652cc16f5872eff92b951ea164de33d71b7037c82283c3",
+  "actualBrowserScreenshotArtifact": {
+    "id": 12487275132,
+    "name": "ai-import-e2e-screenshots",
+    "bytes": 13253167,
+    "digest": "sha256:f0429d637658b5ebda9d9cf93505f282a985a0d07f2a9437767dd5823c54bae7",
+    "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/39916970712/artifacts/12487275132"
+  },
+  "actualBrowserScreenshotsAndMockCallStepsPassed": true,
+  "clinicalOnlineAcceptanceClaimed": false
+}

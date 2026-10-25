@@ -1,0 +1,54 @@
+--- a/agent-team/src/bug-pipeline/pipeline.mjs
++++ b/agent-team/src/bug-pipeline/pipeline.mjs
+@@ -139,6 +139,7 @@
+     'commentIssue',
+     'commentPR',
+     'createDraft',
++    'draftReady',
+   ]);
+   const save = async (options) => {
+     try {
+--- a/agent-team/tests/bug-pipeline/pipeline.test.mjs
++++ b/agent-team/tests/bug-pipeline/pipeline.test.mjs
+@@ -1408,6 +1408,41 @@
+   }
+ });
+ 
++test('F5 draftReady proxy rechecks takeover before its GitHub effect', async () => {
++  const make = () => {
++    const batch = batchFor({ issues: [17], phase: 'waiting-review' });
++    const h = harness({ issues: [17], queue: [], initialState: { ...blankState(), batches: [batch] } });
++    let calls = 0;
++    h.gh.draftReady = async () => {
++      calls += 1;
++      h.log.push('gh.draftReady');
++    };
++    return { h, batch, calls: () => calls };
++  };
++
++  const taken = make();
++  let owned;
++  taken.h.gh.reviewFeedback = async function () {
++    taken.h.stateRef.value.batches[0].operatorCoordination = { active: true };
++    taken.h.stateRef.value.batches[0].remoteNote = 'preserve operator data';
++    taken.h.stateRef.value.operatorTakeover = takeoverHandback([
++      { collection: 'batches', id: taken.batch.id },
++    ]);
++    owned = clone(taken.h.stateRef.value.batches[0]);
++    return this.draftReady(taken.batch.pr.number);
++  };
++  await taken.h.run().catch(() => {});
++  assert.equal(taken.calls(), 0, 'owned draft must not call the real draftReady effect');
++  assert.deepEqual(taken.h.stateRef.value.batches[0], owned);
++
++  const free = make();
++  free.h.gh.reviewFeedback = async function () {
++    return this.draftReady(free.batch.pr.number);
++  };
++  await free.h.run();
++  assert.equal(free.calls(), 1, 'unowned eligible draft still reaches draftReady');
++});
++
+ test('QA6-F5 external ownership exception refreshes canonical A before independent B disposition', async () => {
+   const a = batchFor({ issues: [17], phase: 'waiting-review' }),
+     b = batchFor({ issues: [18], phase: 'waiting-review' });

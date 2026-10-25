@@ -1,0 +1,22 @@
+--- a/.claude/skills/clinicos/references/bug-delivery.md
++++ b/.claude/skills/clinicos/references/bug-delivery.md
+@@ -203,7 +203,7 @@
+ risoluzione, corregge, testa, semplifica, passa il gate e pubblica il nuovo SHA verificato.
+ Solo allora richiede il round successivo. Un'approvazione sul vecchio SHA non approva il nuovo.
+ Dopo ogni review proveniente da un canale esterno, Codex esegue una QA finale indipendente sullo
+-SHA corrente; il handoff non sostituisce questa verifica.
++SHA corrente; l’handoff non sostituisce questa verifica.
+ Un report assente, fallito, obsoleto o senza evidenza non è approvazione; non rilanciare uno
+ SHA fallito invariato e non dichiarare la causa di un errore se i log non la provano.
+ Al budget effettivamente esaurito usa solo un'allowance verificata e prenotata oppure lascia
+@@ -212,8 +212,8 @@
+ ## 8. Stato, dashboard, merge e rilascio
+ 
+ Quando si parla di attivazione, distinguere label e metadati dall'inferenza effettiva, dalla
+-review di un modello e dall'abilitazione dei workflow. Verificare il codice corrente, attivarlo,
+-revisionarlo e provarlo prima di dichiarare abilitato il workflow; deploy e chiusura delle issue
++review di un modello e dall'abilitazione dei workflow. Verificare, revisionare e testare il codice corrente prima di attivare i workflow; poi
++provare un evento reale prima di dichiarare l’avvio automatico verificato. Deploy e chiusura delle issue
+ sono passaggi successivi e distinti. Una configurazione o un test con adapter simulato non prova
+ una chiamata reale. Il runner Actions non fornisce una sessione Claude Max: la review Max deve
+ essere eseguita sull'host autenticato supportato. Non instradare Max tramite Anthropic API né

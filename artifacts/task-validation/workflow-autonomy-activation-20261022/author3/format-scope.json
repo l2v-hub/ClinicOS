@@ -1,0 +1,37 @@
+{
+  "repositoryConfig": "/workspace/ClinicOS/.prettierrc.json",
+  "records": [
+    {
+      "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "baselineWhitespaceOnlyBlocksRestored": 2
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "baselineWhitespaceOnlyBlocksRestored": 1
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "baselineWhitespaceOnlyBlocksRestored": 4
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      "baselineWhitespaceOnlyBlocksRestored": 4
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/external-review.mjs",
+      "baselineWhitespaceOnlyBlocksRestored": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "baselineWhitespaceOnlyBlocksRestored": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+      "baselineWhitespaceOnlyBlocksRestored": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+      "baselineWhitespaceOnlyBlocksRestored": 0
+    }
+  ]
+}

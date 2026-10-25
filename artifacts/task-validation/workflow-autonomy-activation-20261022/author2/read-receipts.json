@@ -1,0 +1,14 @@
+{
+  "nonce": "85786314-5242-4020-b821-db00c2b40b61",
+  "stateCommit": "3be833348c1e87d809631fdfce30cbf38c018780",
+  "source2ReservationSha256": "cf8f30d96cffc1ba820bea183c7405a55e26780a285d94ec54f2a818894f597b",
+  "source2Contract": "../scope-amendment-3.md",
+  "source2ContractSha256": "def8c1ddc4385479b1d55c7482f79e9f90e643e2817cdb13436dcedb9e9e3c41",
+  "generalTaskContractSha256": "8027f2e048850b1273ef9ac486cafb99eb0a34438b8b8b3f5f9dfd87648b9dad",
+  "previousAuthorSealSha256": "6b2fb75324dc5a76d4fa6655013b9d345d2ed5c322e65041f49587a70e147b22",
+  "previousAuthorAllSealedFilesVerifiedExact": true,
+  "source1AllSnapshotFilesUnchanged": true,
+  "source2OnlyTwoReservedPathsChanged": true,
+  "allTenCoreFilesVerifiedExact": true,
+  "providerOrGitOrCredentialOperations": false
+}

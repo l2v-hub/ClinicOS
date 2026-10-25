@@ -118,6 +118,7 @@ export async function main({
               action: option('--action'),
               expectedSha: option('--sha'),
               token: option('--token'),
+              round: options.includes('--round') ? Number(option('--round')) : undefined,
               reason: option('--reason'),
               forceLive: options.includes('--force-live'),
               authorizationRef: options.includes('--authorization') ? option('--authorization') : undefined,
@@ -204,6 +205,15 @@ export async function main({
         codexFinalReview: batch.codexFinalReview,
         release: batch.release,
         recoveryTokens: {
+          implementation:
+            (batch.controllerProgress?.status === 'running' ||
+              (batch.controllerProgress?.status === 'failed' &&
+                batch.controllerProgress.failureCode === 'implementation-recovery-settled'))
+              ? {
+                  token: historyDigest(batch.controllerProgress),
+                  round: batch.controllerProgress.round,
+                }
+              : null,
           qa: batch.codexFinalReview
             ? (batch.codexFinalReview.nonce ?? historyDigest(batch.codexFinalReview))
             : null,

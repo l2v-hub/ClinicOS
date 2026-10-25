@@ -1,0 +1,8 @@
+{
+  "nonce": "8e2bf318-0c42-4e55-97e8-6aa23cbaf8df",
+  "status": "implemented-and-senior-integrated-awaiting-independent-qa",
+  "sealSha256": "07d2f63586847a73757caabdc1ac324bb59e7483a4c152dd7d0efdb40c6510d7",
+  "actualSealedAt": "2026-10-23T03:05:02.301263+00:00",
+  "stateCommit": "7f5f1269959019eb7e81151250b68b8eebb7ccc6",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/ae9dbc70-32d7-4da3-9435-247ac857398a/accepted.json"
+}

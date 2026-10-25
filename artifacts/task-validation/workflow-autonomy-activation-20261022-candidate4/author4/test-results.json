@@ -1,0 +1,41 @@
+{
+  "status": "PASS_AUTHOR_VALIDATION",
+  "actualFocusedTests": {
+    "tests": 538,
+    "pass": 538,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "actualOriginalReproductions": {
+    "tests": 2,
+    "pass": 2,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "focusedSuites": [
+    "release",
+    "pipeline",
+    "standalone-review",
+    "standalone-review-contracts",
+    "comment-review-handoff",
+    "external-review"
+  ],
+  "suiteRuns": 1,
+  "originalSafetyAssertionsUnchanged": true,
+  "syntheticBoundaryOnly": true,
+  "syntaxActual": {
+    "passed": 9,
+    "failed": 0
+  },
+  "authorFailures": [],
+  "priorDiagnosticFailuresPreserved": [
+    "S1 original0PASS/1FAIL labelwrite after observedtakeover",
+    "R1 original0PASS/1FAIL merge after observedtakeover"
+  ],
+  "priorQa3ScopeRemains588Plus23Pass": true,
+  "liveProviderOrModelCalls": 0
+}

@@ -1,0 +1,22 @@
+{
+  "nonce": "f0f45ff3-4ba5-4f43-b3ad-d4ea571494ec",
+  "canonicalStateCommit": "5ca53346ea16e9df8d45f4ae08a054bcb992379e",
+  "files": [
+    {
+      "path": ".claude/skills/clinicos/references/bug-delivery.md",
+      "beforeSha256": "0797ccd937514b039d9e7dbc365afbdca5fb1b4fd53d37ef5e55067eddddc815",
+      "afterSha256": "4294c3c75d222f9e75609ed4a28233e35c7ddcd84382234cdc42da2b03e5f910",
+      "beforeBytes": 19497,
+      "afterBytes": 20878
+    },
+    {
+      "path": "docs/codex-bug-workflow.md",
+      "beforeSha256": "3ee42b3bc227985b1bb953ec5c32c8b7aa60cb6f347ff3375235e9779116d618",
+      "afterSha256": "371d25d4a2a459512afe05c3c1fb54bc27b92e7fe30736228e5a80f875f026c2",
+      "beforeBytes": 27565,
+      "afterBytes": 28853
+    }
+  ],
+  "reportSha256": "e6f93632212ed925a72e993280d15708ac38a439029063bbc435ab9b99a675bc",
+  "patchSha256": "b6018d559c4122d09b34b1debf2d25f447ebfe07c677de4d4f956983f5747cff"
+}

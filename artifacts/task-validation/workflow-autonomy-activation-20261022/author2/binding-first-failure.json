@@ -1,0 +1,9 @@
+{
+  "status": "STOP_BINDING_MISMATCH_BEFORE_SOURCE_EDITS",
+  "expectedContractSha256": "def8c1ddc4385479b1d55c7482f79e9f90e643e2817cdb13436dcedb9e9e3c41",
+  "actualContractSha256": "8027f2e048850b1273ef9ac486cafb99eb0a34438b8b8b3f5f9dfd87648b9dad",
+  "tenCoreSource1Source2FilesVerifiedExact": true,
+  "author1SealVerifiedExact": true,
+  "source2Edits": false,
+  "nonce": "85786314-5242-4020-b821-db00c2b40b61"
+}

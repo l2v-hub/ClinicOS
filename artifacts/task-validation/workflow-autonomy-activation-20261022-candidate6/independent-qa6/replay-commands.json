@@ -1,0 +1,50 @@
+[
+  {
+    "command": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--experimental-vm-modules",
+      "--test",
+      "--test-reporter=tap",
+      "/tmp/clinicos-autonomy-activation-20261022/independent-qa6/external-cas-probe.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.265467613004148,
+    "adaptation": "Only production source import prefix qa-source5 to qa-source6; safety assertions unchanged"
+  },
+  {
+    "command": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--experimental-vm-modules",
+      "--test",
+      "--test-reporter=tap",
+      "/tmp/clinicos-autonomy-activation-20261022/independent-qa6/recovery-route-probe.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.2149969030288048,
+    "adaptation": "Only production source import prefix qa-source5 to qa-source6; safety assertions unchanged"
+  },
+  {
+    "command": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--experimental-vm-modules",
+      "--test",
+      "--test-reporter=tap",
+      "/tmp/clinicos-autonomy-activation-20261022/independent-qa6/recovery-budget-probe.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.2167840320034884,
+    "adaptation": "Only production source import prefix qa-source5 to qa-source6; safety assertions unchanged"
+  },
+  {
+    "command": [
+      "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+      "--experimental-vm-modules",
+      "--test",
+      "--test-reporter=tap",
+      "/tmp/clinicos-autonomy-activation-20261022/independent-qa6/malformed-takeover-probe.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.21463431202573702,
+    "adaptation": "Only production source import prefix qa-source5 to qa-source6; safety assertions unchanged"
+  }
+]

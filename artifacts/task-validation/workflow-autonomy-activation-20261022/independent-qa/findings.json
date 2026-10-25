@@ -1,0 +1,47 @@
+[
+  {
+    "id": "F1",
+    "severity": "high",
+    "source": "agent-team/src/bug-pipeline/pipeline.mjs",
+    "line": 245,
+    "relatedGuardLine": 252,
+    "title": "A successful triage CAS rebase can add a durable owner before the controller labels its issue",
+    "reproduction": "A fully injected store.save merges a new active manual owner for900017 during the first triage-queue save and successfully applies the real rebase callback. The fresh state is synchronized in place. Pipeline then writes In progress to900017 and only later throws at claimedIssues before planning.",
+    "observed": {
+      "ownedIssueStatusWrites": 1,
+      "modelsInvoked": 0,
+      "error": "Selected issue acquired another durable owner before triage"
+    },
+    "requiredBehavior": "Reapply canonical claimed/ownership guards after observed rebase and before any status/claim publication; preserve the new owner and stop without labeling or model work.",
+    "evidence": [
+      "probes.mjs",
+      "probes.log",
+      "probe-results.json"
+    ]
+  },
+  {
+    "id": "F2",
+    "severity": "high",
+    "source": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+    "line": 41,
+    "selectionGuardLine": 36,
+    "freshGuardContext": {
+      "source": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "line": 285
+    },
+    "title": "Sync continues automatic projection after fresh communication reads observe a global takeover",
+    "reproduction": "Actual sync plus actual createIssueReviewCommunication use a fully injected transport. Initial subject is unowned; the second state load records active operatorTakeover. Subject fingerprints remain unchanged. Communication repeatedly reloads that now-paused state but checks only subject identity, then performs labels/comments.",
+    "observed": {
+      "stateReads": 11,
+      "gitHubProjectionWrites": 3,
+      "resultStatus": "synced",
+      "modelsInvoked": 0
+    },
+    "requiredBehavior": "Automatic sync/external communication must reapply current ownership at fresh publication guards, while explicit root-requested read-only Claude handoff remains supported. Initial selection alone cannot authorize later writes after an observed takeover.",
+    "evidence": [
+      "probes.mjs",
+      "probes.log",
+      "probe-results.json"
+    ]
+  }
+]

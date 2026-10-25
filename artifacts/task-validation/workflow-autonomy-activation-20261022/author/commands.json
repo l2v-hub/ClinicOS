@@ -1,0 +1,10 @@
+{
+  "node": "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+  "focusedTests": "node --test agent-team/tests/bug-pipeline/operator-ownership.test.mjs agent-team/tests/bug-pipeline/pipeline.test.mjs agent-team/tests/bug-pipeline/external-review.test.mjs agent-team/tests/bug-pipeline/release.test.mjs agent-team/tests/bug-pipeline/github.test.mjs",
+  "cwd": "/tmp/clinicos-autonomy-activation-20261022/source",
+  "syntax": "node --check on all10 changed MJS files",
+  "formatter": "Existing local Prettier with /workspace/ClinicOS/.prettierrc.json; baseline-only whitespace changes subsequently restored. No package installation.",
+  "static": "Python read/hash/diff of baseline/current exact source allowlist; local Git show read of reserved canonical ownership shapes only.",
+  "providerOrPaidModelCalls": 0,
+  "rootGitOrCanonicalMutations": 0
+}

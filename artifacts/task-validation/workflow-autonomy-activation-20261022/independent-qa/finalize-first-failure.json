@@ -1,0 +1,5 @@
+{
+  "scope": "QA finalizer only",
+  "failure": "SyntaxError: Unexpected identifier $ before execution; doubled backslash did not escape template delimiter",
+  "sourceOrAssertionChanged": false
+}

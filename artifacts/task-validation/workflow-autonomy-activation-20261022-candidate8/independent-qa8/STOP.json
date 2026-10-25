@@ -1,0 +1,11 @@
+{
+  "status": "verified",
+  "stoppedAt": "2026-10-23T07:17:11.209032+00:00",
+  "sourceSha": "0f3833480fda5a056e91fa9922552d4f91bca346",
+  "nonce": "06bcaa0f-316b-4372-871a-118be6c53e11",
+  "findings": [],
+  "sourceFrozen": true,
+  "filesFrozenAfterSeal": true,
+  "liveOperationsPerformed": false,
+  "rootFutureGatesRetained": true
+}

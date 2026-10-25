@@ -7,6 +7,11 @@ import {
 } from '../../src/bug-pipeline/demo-deployment.mjs';
 import { createGitHub } from '../../src/bug-pipeline/github.mjs';
 import {
+  captureReleaseReviewProof,
+  verifyMergedReleaseProof,
+  verifyHistoricalReleaseAncestry,
+  readReleaseMergeReceipt,
+  RELEASE_PROOF_CUTOFF,
   releaseBatch,
   selectAutoReleaseBatch,
   publicationComplete,
@@ -97,6 +102,14 @@ function fixture(scope = ['frontend/src/Patient.jsx']) {
     },
     feedbackFingerprint: feedbackFingerprint(feedback),
   };
+  batch.codexFinalReview = {
+    status: 'verified',
+    subjectSha: sha,
+    claudeRound: 1,
+    feedbackFingerprint: batch.feedbackFingerprint,
+    nonce: 'fixture-qa',
+    reservedAt: '2026-10-22T00:00:00Z',
+  };
   const state = {
     schemaVersion: 1,
     repository: 'l2v-hub/ClinicOS',
@@ -129,6 +142,8 @@ function fixture(scope = ['frontend/src/Patient.jsx']) {
     },
     async mergePullRequest(number, subject) {
       calls.push(['merge', number, subject]);
+      feedback.state = 'MERGED';
+      feedback.mergeCommitSha = mergeSha;
       return { mergeSha, reviewedSha: subject };
     },
     async commentIssue(number, body) {
@@ -152,6 +167,18 @@ function fixture(scope = ['frontend/src/Patient.jsx']) {
     store,
     calls,
     getSaved: () => saved,
+  };
+}
+
+function recordedRelease(f, release) {
+  f.feedback.state = 'MERGED';
+  f.feedback.mergeCommitSha = mergeSha;
+  return {
+    prNumber: f.batch.pr.number,
+    ...(f.batch.codexFinalReview
+      ? { reviewProof: captureReleaseReviewProof(f.batch, { repository: f.state.repository }) }
+      : {}),
+    ...release,
   };
 }
 
@@ -288,13 +315,13 @@ test('release blocks changed evidence digest before mutation', async () => {
 
 test('verified deployment records true links then marks the issue resolved', async () => {
   const f = fixture();
-  f.batch.release = {
+  f.batch.release = recordedRelease(f, {
     status: 'merged',
     reviewedSha: sha,
     mergeSha,
     prNumber: 9,
     deployments: { frontend: true, backend: false },
-  };
+  });
   f.store.load = async () => structuredClone(f.state);
   f.store.save = async (value) => {
     f.state.batches[0] = structuredClone(value.batches[0]);
@@ -317,7 +344,7 @@ test('verified deployment records true links then marks the issue resolved', asy
 
 test('completion comment failure never closes an issue and terminal publication retries without model work', async () => {
   const f = fixture();
-  f.batch.release = {
+  f.batch.release = recordedRelease(f, {
     status: 'deployed',
     reviewedSha: sha,
     mergeSha,
@@ -327,7 +354,7 @@ test('completion comment failure never closes an issue and terminal publication 
       mergeSha,
       vercelUrl: 'https://clinicos-eosin.vercel.app',
     },
-  };
+  });
   const post = f.github.commentIssue;
   f.github.commentIssue = async () => {
     throw new Error('POST unavailable');
@@ -407,7 +434,7 @@ test('backend merge requires actual trusted demo preflight, not production crede
 
 test('production-only successful URL cannot record deployment or close backend issues', async () => {
   const f = backendFixture();
-  f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha };
+  f.batch.release = recordedRelease(f, { status: 'merged', mergeSha, reviewedSha: sha });
   f.github.verifyDemoRelease = async () => {
     throw new Error('No live exact-SHA demo proof');
   };
@@ -431,7 +458,7 @@ test('production-only successful URL cannot record deployment or close backend i
 
 test('verified demo receipt is durable and rechecked before backend issue closure', async () => {
   const f = backendFixture();
-  f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha };
+  f.batch.release = recordedRelease(f, { status: 'merged', mergeSha, reviewedSha: sha });
   const result = await recordDeployment({
     repo: f.state.repository,
     github: f.github,
@@ -451,7 +478,7 @@ test('verified demo receipt is durable and rechecked before backend issue closur
 
 test('legacy backend deployment without demo proof cannot publish completion', async () => {
   const f = backendFixture();
-  f.batch.release = {
+  f.batch.release = recordedRelease(f, {
     status: 'deployed',
     mergeSha,
     reviewedSha: sha,
@@ -461,7 +488,7 @@ test('legacy backend deployment without demo proof cannot publish completion', a
       reviewedSha: sha,
       railwayRunUrl: railwayUrl,
     },
-  };
+  });
   await assert.rejects(
     publishDeploymentCompletion({ batch: f.batch, github: f.github }),
     /demo deployment receipt/,
@@ -490,7 +517,7 @@ test('durable release hold blocks automatic choice, direct merge and recording',
     }),
     /releaseHold/,
   );
-  f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha };
+  f.batch.release = recordedRelease(f, { status: 'merged', mergeSha, reviewedSha: sha });
   await assert.rejects(
     recordDeployment({
       repo: f.state.repository,
@@ -536,7 +563,7 @@ test('hold applied during remote premerge preflight blocks final merge without r
 
 test('hold applied during live proof verification blocks deployment record and closure', async () => {
   const f = backendFixture();
-  f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha };
+  f.batch.release = recordedRelease(f, { status: 'merged', mergeSha, reviewedSha: sha });
   f.github.verifyDemoRelease = async () => {
     f.batch.releaseHold = true;
     return f.proof;
@@ -560,7 +587,7 @@ test('hold applied during live proof verification blocks deployment record and c
 
 test('hold added while posting completion comment prevents the final issue closure', async () => {
   const f = backendFixture();
-  f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha };
+  f.batch.release = recordedRelease(f, { status: 'merged', mergeSha, reviewedSha: sha });
   f.github.commentIssue = async () => {
     const current = f.getSaved();
     current.batches[0].releaseHold = true;
@@ -591,7 +618,7 @@ function realPublicationFixture({
   failGuardRead = false,
 } = {}) {
   const f = fixture();
-  f.batch.release = {
+  f.batch.release = recordedRelease(f, {
     status: 'deployed',
     reviewedSha: sha,
     mergeSha,
@@ -601,7 +628,7 @@ function realPublicationFixture({
       mergeSha,
       vercelUrl: 'https://clinicos-eosin.vercel.app',
     },
-  };
+  });
   const requests = [],
     comments = [],
     labels = new Set(['bug', 'customer-label', 'In progress']);
@@ -864,7 +891,7 @@ test('failed actual close leaves only truthful deployment facts; retry reuses th
 
 test('publication recovery selects only pending matching releases and rejects changed published identity', async () => {
   const f = fixture();
-  f.batch.release = { status: 'merged', mergeSha, reviewedSha: sha };
+  f.batch.release = recordedRelease(f, { status: 'merged', mergeSha, reviewedSha: sha });
   await recordDeployment({
     repo: f.state.repository,
     github: f.github,
@@ -883,7 +910,7 @@ test('publication recovery selects only pending matching releases and rejects ch
 
 test('already deployed recovery retains full exact review/evidence checks and never merges again', async () => {
   const f = fixture();
-  f.batch.release = {
+  f.batch.release = recordedRelease(f, {
     status: 'deployed',
     mergeSha,
     reviewedSha: sha,
@@ -893,7 +920,7 @@ test('already deployed recovery retains full exact review/evidence checks and ne
       reviewedSha: sha,
       vercelUrl: 'https://clinicos-eosin.vercel.app',
     },
-  };
+  });
   f.feedback.state = 'MERGED';
   f.feedback.mergeCommitSha = mergeSha;
   f.github.viewIssue = async (number) => ({
@@ -1072,7 +1099,11 @@ function releaseBoundaryFixture(window, change) {
         f.feedback.isDraft = false;
         inject('ready-response');
       }
-      if (args[0] === 'pr' && args[1] === 'merge') inject('merge-response');
+      if (args[0] === 'pr' && args[1] === 'merge') {
+        f.feedback.state = 'MERGED';
+        f.feedback.mergeCommitSha = mergeSha;
+        inject('merge-response');
+      }
       if (args[0] === 'api' && /\/pulls\/9$/.test(args[1]))
         return {
           ok: true,
@@ -1151,7 +1182,7 @@ test('full verified subject remains frozen at actual merge, record and recovery 
         const target = ['record-proof', 'publication-proof'].includes(window)
           ? 'live-proof'
           : ['merged-recovery', 'deployed-recovery'].includes(window)
-            ? 'checks-1'
+            ? 'feedback-1'
             : window;
         const f = releaseBoundaryFixture(target, change);
         const input = {
@@ -1165,13 +1196,17 @@ test('full verified subject remains frozen at actual merge, record and recovery 
           f.feedback.state = 'MERGED';
           f.feedback.mergeCommitSha = mergeSha;
         }
-        if (['record-proof', 'deployed-recovery', 'publication-proof'].includes(window))
-          f.batch.release = {
+        if (
+          ['record-proof', 'merged-recovery', 'deployed-recovery', 'publication-proof'].includes(
+            window,
+          )
+        )
+          f.batch.release = recordedRelease(f, {
             status: 'merged',
             reviewedSha: sha,
             mergeSha,
             prNumber: 9,
-          };
+          });
         if (['deployed-recovery', 'publication-proof'].includes(window)) {
           f.batch.release.status = 'deployed';
           f.batch.release.deployment = {
@@ -1217,7 +1252,7 @@ test('full verified subject remains frozen at actual merge, record and recovery 
         );
         assert.equal(
           f.calls.some(([kind]) => kind === 'save'),
-          false,
+          window === 'merge-response',
         );
         assert.equal(f.getSaved().batches[0].implementation.length, 1);
         assert.equal(f.getSaved().batches[0].reviews.length, 1);
@@ -1251,6 +1286,7 @@ test('draft conversion and merged recovery preserve the unchanged verified PR an
     else {
       f.feedback.state = 'MERGED';
       f.feedback.mergeCommitSha = mergeSha;
+      f.batch.release = recordedRelease(f, { status: 'merged', reviewedSha: sha, mergeSha });
     }
     const result = await releaseBatch({
       repo: f.state.repository,
@@ -1304,13 +1340,13 @@ test('persisted transition identity is captured before save awaits, including pr
           f.feedback.state = 'MERGED';
           f.feedback.mergeCommitSha = mergeSha;
         }
-        if (mode === 'record' || mode === 'publication')
-          f.batch.release = {
+        if (mode === 'merged-recovery' || mode === 'record' || mode === 'publication')
+          f.batch.release = recordedRelease(f, {
             status: 'merged',
             mergeSha,
             reviewedSha: sha,
             prNumber: 9,
-          };
+          });
         if (mode === 'publication') {
           f.batch.release.status = 'deployed';
           f.batch.release.deployment = {
@@ -2358,7 +2394,13 @@ test('actual record controller waits absent→running→success without blocking
         name: 'deploy',
         status: 'completed',
         conclusion: 'success',
-        steps: [{ name: 'Deploy to Railway', status: 'completed', conclusion: 'success' }],
+        steps: [
+          {
+            name: 'Deploy to Railway',
+            status: 'completed',
+            conclusion: 'success',
+          },
+        ],
       };
       const reader = {
         getJson: async (route) =>
@@ -2462,7 +2504,12 @@ test('rejected POST, pre-POST main movement and uncertain acknowledgement retire
         offset += ms;
       };
       f.github.verifyExactRecoveryRuns = (input) =>
-        verifyRetiredExactDispatches({ ...input, reader: f.reader, now: clock, delay });
+        verifyRetiredExactDispatches({
+          ...input,
+          reader: f.reader,
+          now: clock,
+          delay,
+        });
       const poster = createExactDispatchPoster({
         cwd: '/tmp',
         run: async () => {
@@ -2570,27 +2617,50 @@ async function lateRetirementFixture() {
     await options.guard?.();
     return save(value);
   };
-  f.github.verifyExactRecoveryRuns = (input) => verifyRetiredExactDispatches({
-    ...input, reader: f.reader, now: clock, delay: async (ms) => { offset += ms; },
+  f.github.verifyExactRecoveryRuns = (input) =>
+    verifyRetiredExactDispatches({
+      ...input,
+      reader: f.reader,
+      now: clock,
+      delay: async (ms) => {
+        offset += ms;
+      },
+    });
+  const rejected = createExactDemoDispatcher({
+    reader: f.reader,
+    postDispatch: async () => {
+      throw Error('synthetic rejected POST');
+    },
   });
-  const rejected = createExactDemoDispatcher({ reader: f.reader,
-    postDispatch: async () => { throw Error('synthetic rejected POST'); } });
   f.github.ensureExactDemoRun = (input) => rejected.ensure(input);
   await assert.rejects(releaseBatch(exactInput(f)), /rejected POST/);
   const original = structuredClone(f.getSaved().batches[0]);
   const old = original.exactDemoDispatches.preflight;
-  offset = Math.max(Date.parse(old.intentAt), Date.parse(original.releaseBlock.at)) +
-    DISPATCH_SETTLE_MS + 1 - Date.now();
+  offset =
+    Math.max(Date.parse(old.intentAt), Date.parse(original.releaseBlock.at)) +
+    DISPATCH_SETTLE_MS +
+    1 -
+    Date.now();
   await recoverExactRelease({ ...recoveryInput(f), now: clock });
   const noRunArchive = structuredClone(f.getSaved().batches[0].exactReleaseRecoveries[0]);
-  const late = { id: 899, run_attempt: 1, head_sha: old.sha, head_branch: 'main',
+  const late = {
+    id: 899,
+    run_attempt: 1,
+    head_sha: old.sha,
+    head_branch: 'main',
     repository: { full_name: f.state.repository },
     head_repository: { full_name: f.state.repository },
-    path: '.github/workflows/deploy-demo-exact-commit.yml', event: 'workflow_dispatch',
+    path: '.github/workflows/deploy-demo-exact-commit.yml',
+    event: 'workflow_dispatch',
     display_title: `demo-exact preflight ${old.sha} ${old.dispatchId}`,
-    status: 'in_progress', conclusion: null };
+    status: 'in_progress',
+    conclusion: null,
+  };
   f.runs.push(late);
-  const dispatcher = createExactDemoDispatcher({ reader: f.reader, postDispatch: f.post });
+  const dispatcher = createExactDemoDispatcher({
+    reader: f.reader,
+    postDispatch: f.post,
+  });
   f.github.ensureExactDemoRun = (input) => dispatcher.ensure(input);
   await assert.rejects(releaseBatch(exactInput(f)), /late excluded/);
   assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 0);
@@ -2602,7 +2672,8 @@ test('controller recovery absorbs a completed late no-run dispatch, permits exac
   const request = { ...recoveryInput(f), now: f.clock };
   await assert.rejects(recoverExactRelease(request), /active old dispatch/);
   assert.equal(f.getSaved().batches[0].exactReleaseRecoveries.length, 1);
-  f.late.status = 'completed'; f.late.conclusion = 'success';
+  f.late.status = 'completed';
+  f.late.conclusion = 'success';
   await recoverExactRelease(request);
   let batch = f.getSaved().batches[0];
   assert.deepEqual(batch.exactReleaseRecoveries[0], f.noRunArchive);
@@ -2613,23 +2684,28 @@ test('controller recovery absorbs a completed late no-run dispatch, permits exac
   assert.equal(proof[0].dispatchId, f.old.dispatchId);
   assert.equal(proof[0].run.conclusion, 'success');
   const exclusions = structuredClone(batch.exactDemoRecovery);
-  const ensure = () => f.dispatcher.ensure({ operation: 'preflight',
-    expectedSha: f.old.sha, progress: f.getSaved().batches[0].exactDemoDispatches?.preflight,
-    excludedRunIds: exclusions.excludedRunIds,
-    excludedDispatchIds: exclusions.excludedDispatchIds,
-    excludedDispatches: exclusions.excludedDispatches,
-    saveProgress: async (progress) => {
-      const state = await f.store.load();
-      state.batches[0].exactDemoDispatches.preflight = progress;
-      await f.store.save(state);
-    },
-  });
+  const ensure = () =>
+    f.dispatcher.ensure({
+      operation: 'preflight',
+      expectedSha: f.old.sha,
+      progress: f.getSaved().batches[0].exactDemoDispatches?.preflight,
+      excludedRunIds: exclusions.excludedRunIds,
+      excludedDispatchIds: exclusions.excludedDispatchIds,
+      excludedDispatches: exclusions.excludedDispatches,
+      saveProgress: async (progress) => {
+        const state = await f.store.load();
+        state.batches[0].exactDemoDispatches.preflight = progress;
+        await f.store.save(state);
+      },
+    });
   await ensure();
   await ensure();
   assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 1);
   const artifact = f.reader.artifact;
   f.reader.artifact = async (...args) => {
-    const value = await artifact(...args); value.receipt.verifiedAt = '2020-01-01'; return value;
+    const value = await artifact(...args);
+    value.receipt.verifiedAt = '2020-01-01';
+    return value;
   };
   await assert.rejects(releaseBatch(exactInput(f)), /expired/);
   f.reader.artifact = artifact;
@@ -2644,13 +2720,31 @@ test('controller recovery absorbs a completed late no-run dispatch, permits exac
 });
 
 test('late retirement controller refuses ambiguous, malformed, incomplete or changed proofs at actual recovery save', async (t) => {
-  for (const mode of ['ambiguous', 'head repository', 'repository', 'SHA', 'workflow', 'event',
-    'branch', 'attempt', 'conclusion', 'incomplete', 'detail drift', 'save active',
-    'save conclusion', 'save disappeared', 'save duplicate', 'save main', 'save block',
-    'save authorization', 'save original no-run proof'])
+  for (const mode of [
+    'ambiguous',
+    'head repository',
+    'repository',
+    'SHA',
+    'workflow',
+    'event',
+    'branch',
+    'attempt',
+    'conclusion',
+    'incomplete',
+    'detail drift',
+    'save active',
+    'save conclusion',
+    'save disappeared',
+    'save duplicate',
+    'save main',
+    'save block',
+    'save authorization',
+    'save original no-run proof',
+  ])
     await t.test(mode, async () => {
       const f = await lateRetirementFixture();
-      f.late.status = 'completed'; f.late.conclusion = 'success';
+      f.late.status = 'completed';
+      f.late.conclusion = 'success';
       const before = structuredClone(f.getSaved().batches[0]);
       if (mode === 'ambiguous') f.runs.push({ ...f.late, id: 898 });
       if (mode === 'head repository') f.late.head_repository = { full_name: 'foreign/repo' };
@@ -2675,13 +2769,17 @@ test('late retirement controller refuses ambiguous, malformed, incomplete or cha
         const save = f.store.save;
         f.store.save = async (value, options) => {
           reachedSave = true;
-          if (mode === 'save active') { f.late.status = 'in_progress'; f.late.conclusion = null; }
+          if (mode === 'save active') {
+            f.late.status = 'in_progress';
+            f.late.conclusion = null;
+          }
           if (mode === 'save conclusion') f.late.conclusion = 'failure';
           if (mode === 'save disappeared') f.runs.length = 0;
           if (mode === 'save duplicate') f.runs.push({ ...f.late, id: 898 });
           if (mode === 'save main') f.setMain('e'.repeat(40));
           if (mode === 'save block') f.getSaved().batches[0].releaseBlock.id = 'changed';
-          if (mode === 'save authorization') f.github.authorizeReleaseRecovery = async () => 'foreign';
+          if (mode === 'save authorization')
+            f.github.authorizeReleaseRecovery = async () => 'foreign';
           if (mode === 'save original no-run proof')
             f.getSaved().batches[0].exactReleaseRecoveries[0].retirementProof.noRunProofs[0].originAt =
               '2020-01-01T00:00:00.000Z';
@@ -2701,7 +2799,8 @@ test('known late run disappearance or proof drift blocks both later recovery and
   for (const mode of ['missing', 'identity', 'attempt', 'conclusion', 'detail drift'])
     await t.test(mode, async () => {
       const f = await lateRetirementFixture();
-      f.late.status = 'completed'; f.late.conclusion = 'success';
+      f.late.status = 'completed';
+      f.late.conclusion = 'success';
       await recoverExactRelease({ ...recoveryInput(f), now: f.clock });
       const savedArchive = structuredClone(f.getSaved().batches[0].exactReleaseRecoveries[0]);
       if (mode === 'missing') f.runs.length = 0;
@@ -2731,8 +2830,892 @@ test('recovery refuses orphan excluded dispatch descriptors even with no current
   assert.equal(batch.exactDemoRecovery.excludedDispatches.length, 1);
   batch.exactReleaseRecoveries = [];
   const before = structuredClone(batch);
-  await assert.rejects(recoverExactRelease({ ...recoveryInput(f), now: f.clock }),
-    /excluded dispatch missing archived identity/);
+  await assert.rejects(
+    recoverExactRelease({ ...recoveryInput(f), now: f.clock }),
+    /excluded dispatch missing archived identity/,
+  );
   assert.deepEqual(f.getSaved().batches[0], before);
   assert.equal(f.calls.filter((c) => c[0] === 'dispatch').length, 0);
 });
+
+test('automatic release honors global pause, explicit subject handback and independent active operator holds', () => {
+  const f = fixture();
+  const before = JSON.stringify(f.batch);
+  f.state.operatorTakeover = { active: true, nonce: 'test-takeover' };
+  assert.equal(selectAutoReleaseBatch(f.state), null);
+  f.state.operatorTakeover.automation = {
+    takeoverNonce: 'test-takeover',
+    authorizedActor: 'maintainer',
+    handedBackAt: '2026-10-22T00:00:00Z',
+    enabled: true,
+    mode: 'new-unclaimed-only',
+    protectedSubjects: [],
+  };
+  assert.equal(selectAutoReleaseBatch(f.state), f.batch);
+  f.state.operatorTakeover.subjects = [
+    { collection: 'batches', id: f.batch.id, sha: 'historical-sha' },
+  ];
+  assert.equal(selectAutoReleaseBatch(f.state), null);
+  delete f.state.operatorTakeover.subjects;
+  f.state.operatorTakeover.automation.protectedSubjects.push({
+    collection: 'batches',
+    id: f.batch.id,
+  });
+  assert.equal(selectAutoReleaseBatch(f.state), null);
+  f.state.operatorTakeover.automation.protectedSubjects = [];
+  f.batch.operatorCoordination = {
+    active: true,
+    finishedAt: 'historical-but-still-active',
+  };
+  assert.equal(selectAutoReleaseBatch(f.state), null);
+  delete f.batch.operatorCoordination;
+  f.batch.operatorReleaseCoordination = { stage: 'awaiting-provider-proof' };
+  assert.equal(selectAutoReleaseBatch(f.state), null);
+  delete f.batch.operatorReleaseCoordination;
+  assert.equal(JSON.stringify(f.batch), before);
+});
+
+test('automatic release rechecks ownership on native fresh loads instead of relying on initial selection', async () => {
+  for (const ownership of ['global', 'subject']) {
+    const f = fixture();
+    const load = f.store.load;
+    let reads = 0;
+    f.store.load = async () => {
+      const state = await load();
+      if (++reads >= 2) {
+        if (ownership === 'global') state.operatorTakeover = { active: true };
+        else state.batches[0].operatorCoordination = { active: true };
+      }
+      return state;
+    };
+    await assert.rejects(
+      releaseBatch({
+        repo: f.state.repository,
+        github: f.github,
+        store: f.store,
+        batchId: f.batch.id,
+        reviewedSha: sha,
+        configured,
+        execute: true,
+        automatic: true,
+      }),
+      (error) => error.code === 'release-operator-owned',
+    );
+    assert.equal(
+      f.calls.filter(([name]) => ['merge', 'save', 'ready', 'status', 'comment'].includes(name))
+        .length,
+      0,
+    );
+    assert.ok(reads >= 2);
+    assert.equal(f.getSaved().batches[0].phase, 'ready');
+  }
+});
+
+test('automatic release preserves an existing merge reservation without racing its owner', async () => {
+  const f = fixture();
+  const reservation = {
+    status: 'merging',
+    nonce: 'synthetic-live-reservation',
+    reviewedSha: sha,
+    reservedAt: '2026-10-22T00:00:00Z',
+  };
+  f.batch.release = structuredClone(reservation);
+  let callbackChecked = false;
+  f.github.mergePullRequest = async (_, __, options) => {
+    f.getSaved().operatorTakeover = { active: true };
+    callbackChecked = true;
+    await options.guard();
+    assert.fail('native merge cannot proceed after observed handover');
+  };
+  await assert.rejects(
+    releaseBatch({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      reviewedSha: sha,
+      configured,
+      execute: true,
+      automatic: true,
+    }),
+    /existing merge reservation/,
+  );
+  assert.equal(callbackChecked, false);
+  assert.deepEqual(f.getSaved().batches[0].release, reservation);
+  assert.equal(
+    f.calls.filter(([name]) => ['merge', 'save', 'status', 'comment'].includes(name)).length,
+    0,
+  );
+});
+
+test('automatic release rejection does not leak into separately authorized explicit maintainer release', async () => {
+  const f = fixture();
+  f.state.operatorTakeover = { active: true };
+  const args = {
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    reviewedSha: sha,
+    configured,
+    execute: true,
+  };
+  await assert.rejects(
+    releaseBatch({ ...args, automatic: true }),
+    (error) => error.code === 'release-operator-owned',
+  );
+  assert.equal(f.calls.length, 0);
+  const result = await releaseBatch(args);
+  assert.equal(result.status, 'merged');
+  assert.equal(f.calls.filter(([name]) => name === 'merge').length, 1);
+  assert.equal(f.getSaved().operatorTakeover.active, true);
+});
+
+test('automatic completion publication uses fresh ownership guards and retains pending deployment facts without issue writes', async () => {
+  const f = fixture();
+  await releaseBatch({
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    reviewedSha: sha,
+    configured,
+    execute: true,
+  });
+  const batch = f.getSaved().batches[0];
+  batch.release.status = 'deployed';
+  batch.release.deployment = {
+    status: 'deployed',
+    reviewedSha: sha,
+    mergeSha,
+    vercelUrl: 'https://clinicos-eosin.vercel.app',
+  };
+  batch.release.publication = { status: 'pending' };
+  f.getSaved().operatorTakeover = { active: true };
+  const before = structuredClone(f.getSaved()),
+    count = f.calls.length;
+  await assert.rejects(
+    publishDeploymentCompletion({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batch,
+      automatic: true,
+    }),
+    (error) => error.code === 'release-operator-owned',
+  );
+  assert.deepEqual(f.getSaved(), before);
+  assert.deepEqual(f.calls.slice(count), []);
+});
+
+test('Claude1 F2 external release requires exact final Codex proof at selection and execution', async () => {
+  for (const channel of ['github-comments', 'legacy-worker']) {
+    for (const mismatch of [
+      'missing',
+      'failed',
+      'subjectSha',
+      'claudeRound',
+      'feedbackFingerprint',
+    ]) {
+      const f = fixture();
+      f.batch.externalReview = {
+        channel,
+        status: 'published',
+        subjectSha: sha,
+        feedbackFingerprint: f.batch.feedbackFingerprint,
+      };
+      const proof = {
+        status: 'verified',
+        subjectSha: sha,
+        claudeRound: 1,
+        feedbackFingerprint: f.batch.feedbackFingerprint,
+      };
+      delete f.batch.codexFinalReview;
+      if (mismatch !== 'missing')
+        f.batch.codexFinalReview = {
+          ...proof,
+          [mismatch === 'failed' ? 'status' : mismatch]: mismatch === 'claudeRound' ? 0 : 'stale',
+        };
+      assert.equal(selectAutoReleaseBatch(f.state), null, `${channel}:${mismatch}`);
+      await assert.rejects(
+        releaseBatch({
+          repo: f.state.repository,
+          github: f.github,
+          store: f.store,
+          batchId: f.batch.id,
+          reviewedSha: sha,
+          configured,
+          execute: true,
+        }),
+        /final Codex/i,
+      );
+      assert.equal(f.calls.filter(([name]) => ['merge', 'ready', 'save'].includes(name)).length, 0);
+    }
+  }
+});
+
+function bindExternalFinalProof(f) {
+  f.batch.externalReview = {
+    status: 'published',
+    subjectSha: sha,
+    feedbackFingerprint: f.batch.feedbackFingerprint,
+  };
+  f.batch.codexFinalReview = {
+    status: 'verified',
+    subjectSha: sha,
+    claudeRound: f.batch.reviews.length,
+    feedbackFingerprint: f.batch.feedbackFingerprint,
+  };
+}
+test('Claude1 F2 matching existing final proof merges with all prior gates; fresh proof drift refuses', async () => {
+  const f = fixture();
+  bindExternalFinalProof(f);
+  assert.equal(selectAutoReleaseBatch(f.state), f.batch);
+  const result = await releaseBatch({
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    reviewedSha: sha,
+    configured,
+    execute: true,
+  });
+  assert.equal(result.status, 'merged');
+  assert.equal(f.calls.filter(([n]) => n === 'merge').length, 1);
+  const stale = fixture();
+  bindExternalFinalProof(stale);
+  const load = stale.store.load;
+  let reads = 0;
+  stale.store.load = async () => {
+    const state = await load();
+    if (++reads >= 2) state.batches[0].codexFinalReview.feedbackFingerprint = 'stale';
+    return state;
+  };
+  await assert.rejects(
+    releaseBatch({
+      repo: stale.state.repository,
+      github: stale.github,
+      store: stale.store,
+      batchId: stale.batch.id,
+      reviewedSha: sha,
+      configured,
+      execute: true,
+    }),
+    /final Codex/i,
+  );
+  assert.equal(stale.calls.filter(([n]) => ['merge', 'ready', 'save'].includes(n)).length, 0);
+});
+test('Claude1 F2 deployment recording cannot bypass missing final proof on an external candidate', async () => {
+  const f = fixture();
+  bindExternalFinalProof(f);
+  delete f.batch.codexFinalReview;
+  f.batch.release = recordedRelease(f, { status: 'merged', mergeSha, reviewedSha: sha });
+  await assert.rejects(
+    recordDeployment({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      mergeSha,
+      configured,
+    }),
+    /final Codex|historical release cutover/i,
+  );
+  assert.equal(f.calls.length, 0);
+});
+
+test('F2 regression: immutable modern merge proof survives removed final-QA pointer through publication', async () => {
+  const f = fixture(['docs/release.md']);
+  bindExternalFinalProof(f);
+  await releaseBatch({
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    reviewedSha: sha,
+    configured,
+    execute: true,
+  });
+  const merged = f.getSaved().batches[0];
+  delete merged.codexFinalReview;
+  f.feedback.state = 'MERGED';
+  f.feedback.mergeCommitSha = mergeSha;
+  assert.equal(selectAutoReleaseBatch(f.getSaved())?.id, f.batch.id);
+  const result = await recordDeployment({
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    mergeSha,
+  });
+  assert.equal(result.status, 'not-required');
+  assert.equal(publicationComplete(f.getSaved().batches[0]), true);
+});
+
+test('F2 regression: internal new merge also requires modern final Codex proof', async () => {
+  const f = fixture(['docs/release.md']);
+  delete f.batch.codexFinalReview;
+  await assert.rejects(
+    releaseBatch({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      reviewedSha: sha,
+      configured,
+      execute: true,
+    }),
+    /final Codex/i,
+  );
+  assert.equal(f.calls.filter(([name]) => name === 'merge').length, 0);
+});
+
+function historicalFixture(status = 'merged') {
+  const f = fixture(['docs/release.md']);
+  f.batch.codexFinalReview = {
+    subjectSha: sha,
+    claudeRound: 1,
+    status: 'verified',
+    summary: 'Original legacy QA',
+  };
+  f.batch.release = {
+    status,
+    reviewedSha: sha,
+    mergeSha,
+    prNumber: 9,
+    ...(status === 'deployed'
+      ? { deployment: { status: 'not-required', reviewedSha: sha, mergeSha } }
+      : {}),
+  };
+  f.feedback.state = 'MERGED';
+  f.feedback.mergeCommitSha = mergeSha;
+  const originalRelease = structuredClone(f.batch.release);
+  const native = {
+    repository: f.state.repository,
+    number: 9,
+    state: 'closed',
+    merged: true,
+    mergedAt: '2026-10-18T00:00:00Z',
+    mergeSha,
+    reviewedSha: sha,
+    baseRef: 'main',
+    headRef: f.batch.branch,
+    headRepository: f.state.repository,
+    url: f.batch.pr.url,
+  };
+  const ancestry = { ancestor: mergeSha, descendant: RELEASE_PROOF_CUTOFF };
+  f.state.releaseProofCutover = {
+    schemaVersion: 1,
+    repository: f.state.repository,
+    mainSha: RELEASE_PROOF_CUTOFF,
+    stateCommit: 'd'.repeat(40),
+    actor: 'historical-root',
+    recordedAt: '2026-10-22T00:00:00Z',
+    authorizationRef: 'test:audited-finite-cutover',
+    entries: [
+      {
+        collection: 'batches',
+        id: f.batch.id,
+        pr: 9,
+        reviewedSha: sha,
+        mergeSha,
+        originalRelease,
+        releaseSha256: sha256(JSON.stringify(originalRelease)),
+        mergedReceiptSha256: sha256(JSON.stringify(native)),
+        ancestryReceiptSha256: sha256(JSON.stringify(ancestry)),
+      },
+    ],
+  };
+  f.github.readReleaseMergeReceipt = async () => structuredClone(native);
+  f.github.verifyHistoricalReleaseAncestry = async () => structuredClone(ancestry);
+  return { ...f, native, ancestry, originalRelease };
+}
+
+test('F2 finite historical merged and deployed batches publish with original QA and exact audited native proof', async () => {
+  for (const status of ['merged', 'deployed']) {
+    const f = historicalFixture(status);
+    const originalQa = JSON.stringify(f.batch.codexFinalReview);
+    const cutover = JSON.stringify(f.state.releaseProofCutover);
+    assert.equal(selectAutoReleaseBatch(f.state)?.id, f.batch.id);
+    if (status === 'merged') {
+      const result = await releaseBatch({
+        repo: f.state.repository,
+        github: f.github,
+        store: f.store,
+        batchId: f.batch.id,
+        reviewedSha: sha,
+        execute: true,
+        configured,
+      });
+      assert.equal(result.alreadyMerged, true);
+    }
+    await recordDeployment({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      mergeSha,
+    });
+    assert.equal(publicationComplete(f.getSaved().batches[0]), true);
+    assert.equal(JSON.stringify(f.getSaved().batches[0].codexFinalReview), originalQa);
+    assert.equal(JSON.stringify(f.getSaved().releaseProofCutover), cutover);
+    assert.equal(f.calls.filter(([name]) => name === 'merge').length, 0);
+  }
+});
+
+test('F2 historical cutover rejects identity, original-release, native and ancestry mismatches before publication', async (t) => {
+  for (const [name, mutate] of [
+    [
+      'advanced cutoff',
+      (f) => {
+        f.state.releaseProofCutover.mainSha = 'e'.repeat(40);
+      },
+    ],
+    [
+      'wrong collection',
+      (f) => {
+        f.state.releaseProofCutover.entries[0].collection = 'standaloneReviews';
+      },
+    ],
+    [
+      'duplicate entry',
+      (f) => {
+        f.state.releaseProofCutover.entries.push(
+          structuredClone(f.state.releaseProofCutover.entries[0]),
+        );
+      },
+    ],
+    [
+      'wrong reviewed SHA',
+      (f) => {
+        f.state.releaseProofCutover.entries[0].reviewedSha = 'e'.repeat(40);
+      },
+    ],
+    [
+      'changed original release',
+      (f) => {
+        f.state.releaseProofCutover.entries[0].originalRelease.prNumber = 10;
+      },
+    ],
+    [
+      'changed current release',
+      (f) => {
+        f.batch.release.prNumber = 10;
+      },
+    ],
+    [
+      'OPEN native feedback',
+      (f) => {
+        f.feedback.state = 'OPEN';
+      },
+    ],
+    [
+      'wrong merge head',
+      (f) => {
+        f.feedback.head = 'e'.repeat(40);
+      },
+    ],
+    [
+      'wrong native merged receipt',
+      (f) => {
+        f.native.merged = false;
+      },
+    ],
+    [
+      'wrong native exact SHA',
+      (f) => {
+        f.native.reviewedSha = 'e'.repeat(40);
+      },
+    ],
+    [
+      'wrong ancestry',
+      (f) => {
+        f.ancestry.ancestor = 'e'.repeat(40);
+      },
+    ],
+    [
+      'wrong ancestry digest',
+      (f) => {
+        f.state.releaseProofCutover.entries[0].ancestryReceiptSha256 = 'e'.repeat(64);
+      },
+    ],
+    [
+      'reader absent',
+      (f) => {
+        delete f.github.readReleaseMergeReceipt;
+      },
+    ],
+  ])
+    await t.test(name, async () => {
+      const f = historicalFixture();
+      mutate(f);
+      await assert.rejects(
+        recordDeployment({
+          repo: f.state.repository,
+          github: f.github,
+          store: f.store,
+          batchId: f.batch.id,
+          mergeSha,
+        }),
+        /cutover|identity|original|receipt|ancestor|readers|recorded release/,
+      );
+      assert.equal(
+        f.calls.filter(([name]) => ['merge', 'comment', 'status', 'save'].includes(name)).length,
+        0,
+      );
+    });
+});
+
+test('F2 finite cutover never authorizes OPEN or newly requested merges', async () => {
+  const f = historicalFixture();
+  delete f.batch.release;
+  delete f.batch.codexFinalReview;
+  f.feedback.state = 'OPEN';
+  f.feedback.mergeCommitSha = null;
+  assert.equal(selectAutoReleaseBatch(f.state), null);
+  await assert.rejects(
+    releaseBatch({
+      repo: f.state.repository,
+      github: f.github,
+      store: f.store,
+      batchId: f.batch.id,
+      reviewedSha: sha,
+      configured,
+      execute: true,
+    }),
+    /final Codex/,
+  );
+  assert.equal(f.calls.filter(([name]) => ['merge', 'save'].includes(name)).length, 0);
+});
+
+test('F2 pinned historical ancestry authenticates fixed commits while current main advances', async () => {
+  const paths = [];
+  const result = {
+    base_commit: { sha: mergeSha },
+    merge_base_commit: { sha: mergeSha },
+    status: 'ahead',
+    ahead_by: 2,
+    behind_by: 0,
+    commits: [{ sha: RELEASE_PROOF_CUTOFF }],
+  };
+  const reader = {
+    getJson: async (route) => {
+      paths.push(route);
+      if (route === 'commits/main') return { sha: 'e'.repeat(40) };
+      if (route === `commits/${RELEASE_PROOF_CUTOFF}`) return { sha: RELEASE_PROOF_CUTOFF };
+      if (route === `compare/${mergeSha}...${RELEASE_PROOF_CUTOFF}`) return structuredClone(result);
+      assert.fail(`unexpected route ${route}`);
+    },
+  };
+  assert.deepEqual(await verifyHistoricalReleaseAncestry({ reader, originalMergeSha: mergeSha }), {
+    ancestor: mergeSha,
+    descendant: RELEASE_PROOF_CUTOFF,
+  });
+  assert.equal(paths.includes('commits/main'), false);
+  for (const mutate of [
+    (p) => {
+      p.base_commit.sha = sha;
+    },
+    (p) => {
+      p.merge_base_commit.sha = sha;
+    },
+    (p) => {
+      p.commits[0].sha = sha;
+    },
+    (p) => {
+      p.status = 'diverged';
+    },
+    (p) => {
+      p.behind_by = 1;
+    },
+  ]) {
+    const bad = structuredClone(result);
+    mutate(bad);
+    await assert.rejects(
+      verifyHistoricalReleaseAncestry({
+        originalMergeSha: mergeSha,
+        reader: {
+          getJson: async (route) =>
+            route.startsWith('commits/') ? { sha: RELEASE_PROOF_CUTOFF } : bad,
+        },
+      }),
+      /ancestor/,
+    );
+  }
+  await assert.rejects(
+    verifyHistoricalReleaseAncestry({
+      reader,
+      originalMergeSha: mergeSha,
+      cutoffSha: 'e'.repeat(40),
+    }),
+    /fixed historical/,
+  );
+});
+
+test('F2 native historical receipt uses actual authenticated pull response and root canonical key order', async () => {
+  const f = historicalFixture();
+  const pr = {
+    number: 9,
+    state: 'closed',
+    merged: true,
+    merged_at: f.native.mergedAt,
+    merge_commit_sha: mergeSha,
+    html_url: f.native.url,
+    head: { sha, ref: f.batch.branch, repo: { full_name: f.state.repository, fork: false } },
+    base: { ref: 'main', repo: { full_name: f.state.repository } },
+  };
+  const reader = {
+    getJson: async (route) => {
+      assert.equal(route, 'pulls/9');
+      return structuredClone(pr);
+    },
+  };
+  const actual = await readReleaseMergeReceipt({
+    reader,
+    repository: f.state.repository,
+    number: 9,
+  });
+  assert.equal(JSON.stringify(actual), JSON.stringify(f.native));
+  pr.head.repo.fork = true;
+  await assert.rejects(
+    readReleaseMergeReceipt({ reader, repository: f.state.repository, number: 9 }),
+    /repository identity/,
+  );
+});
+
+test('F2 modern reservation recovers confirmed merge without its mutable final-QA pointer', async () => {
+  const f = fixture(['docs/release.md']);
+  const proof = captureReleaseReviewProof(f.batch, { repository: f.state.repository });
+  f.batch.release = {
+    status: 'merging',
+    reviewedSha: sha,
+    prNumber: 9,
+    nonce: 'reserved-merge',
+    reservedAt: '2026-10-22T00:00:00Z',
+    reviewProof: proof,
+  };
+  delete f.batch.codexFinalReview;
+  f.feedback.state = 'MERGED';
+  f.feedback.mergeCommitSha = mergeSha;
+  const result = await releaseBatch({
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    reviewedSha: sha,
+    configured,
+    execute: true,
+  });
+  assert.equal(result.alreadyMerged, true);
+  assert.deepEqual(f.getSaved().batches[0].release.reviewProof, proof);
+  assert.equal(f.calls.filter(([name]) => name === 'merge').length, 0);
+});
+
+test('F2 modern receipt rejects tampering and native exact identity drift despite a verified current pointer', async () => {
+  for (const mutate of [
+    (f) => {
+      f.batch.release.reviewProof.finalCodexReview.subjectSha = 'e'.repeat(40);
+    },
+    (f) => {
+      f.batch.release.reviewProof.reviewIdentitySha256 = 'e'.repeat(64);
+    },
+    (f) => {
+      f.feedback.head = 'e'.repeat(40);
+    },
+    (f) => {
+      f.feedback.mergeCommitSha = 'e'.repeat(40);
+    },
+    (f) => {
+      f.feedback.state = 'OPEN';
+    },
+  ]) {
+    const f = fixture(['docs/release.md']);
+    f.batch.release = recordedRelease(f, { status: 'merged', reviewedSha: sha, mergeSha });
+    mutate(f);
+    await assert.rejects(
+      recordDeployment({
+        repo: f.state.repository,
+        github: f.github,
+        store: f.store,
+        batchId: f.batch.id,
+        mergeSha,
+      }),
+      /proof|receipt|Codex/,
+    );
+    assert.equal(
+      f.calls.filter(([name]) => ['save', 'comment', 'status'].includes(name)).length,
+      0,
+    );
+  }
+});
+
+test('F2 changed postmerge QA pointer and later PR comments do not replace the frozen review receipt', async () => {
+  const f = fixture(['docs/release.md']);
+  bindExternalFinalProof(f);
+  await releaseBatch({
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    reviewedSha: sha,
+    configured,
+    execute: true,
+  });
+  const receipt = structuredClone(f.getSaved().batches[0].release.reviewProof);
+  f.getSaved().batches[0].codexFinalReview = {
+    status: 'blocked',
+    subjectSha: 'e'.repeat(40),
+    claudeRound: 99,
+  };
+  f.feedback.comments.push({ id: 900, body: 'Postmerge observation' });
+  assert.equal(selectAutoReleaseBatch(f.getSaved())?.id, f.batch.id);
+  await recordDeployment({
+    repo: f.state.repository,
+    github: f.github,
+    store: f.store,
+    batchId: f.batch.id,
+    mergeSha,
+  });
+  assert.equal(publicationComplete(f.getSaved().batches[0]), true);
+  assert.deepEqual(f.getSaved().batches[0].release.reviewProof, receipt);
+});
+
+test('F2 native new-merge callback refuses live feedback drift or replacement of the reserved exact QA record', async () => {
+  for (const kind of ['feedback', 'qa-record']) {
+    const f = fixture(['docs/release.md']);
+    let merges = 0;
+    f.github.mergePullRequest = async (_pr, _sha, { guard }) => {
+      assert.equal(f.getSaved().batches[0].release.status, 'merging');
+      if (kind === 'feedback')
+        f.feedback.comments.push({ id: 901, body: 'New feedback before merge' });
+      else f.getSaved().batches[0].codexFinalReview.nonce = 'replacement-qa';
+      await guard();
+      merges++;
+      return { mergeSha };
+    };
+    await assert.rejects(
+      releaseBatch({
+        repo: f.state.repository,
+        github: f.github,
+        store: f.store,
+        batchId: f.batch.id,
+        reviewedSha: sha,
+        configured,
+        execute: true,
+      }),
+      (e) => e.code === 'github-merge-rejected',
+    );
+    assert.equal(merges, 0);
+    assert.equal(f.getSaved().batches[0].release, undefined);
+    assert.equal(f.getSaved().batches[0].mergeHistory.at(-1).status, 'merging');
+    assert.equal(f.getSaved().batches[0].phase, 'blocked');
+  }
+});
+
+for (const kind of ['feedback', 'draft', 'checks', 'HTTP405', 'graphql'])
+  test(`Author9 F1 known ${kind} rejection archives the exact proof without a native merge`, async () => {
+    const f = fixture(['docs/release.md']);
+    let nativeCalls = 0,
+      reservation;
+    f.github.mergePullRequest = async (_pr, _sha, { guard }) => {
+      reservation = structuredClone(f.getSaved().batches[0].release);
+      if (kind === 'feedback') f.feedback.unresolved = true;
+      if (kind === 'draft') f.feedback.isDraft = true;
+      if (kind === 'checks') f.github.requiredChecks = async () => ({ ok: false });
+      await guard();
+      nativeCalls++;
+      throw Object.assign(new Error('Finite native refusal'), {
+        code: 'github-write-rejected',
+        operation: 'merge',
+        httpStatus: kind === 'graphql' ? null : 405,
+        diagnostic: kind === 'graphql' ? 'graphql-merge-refusal' : 'http-status',
+      });
+    };
+    await assert.rejects(
+      releaseBatch({
+        repo: f.state.repository,
+        github: f.github,
+        store: f.store,
+        batchId: f.batch.id,
+        reviewedSha: sha,
+        configured,
+        execute: true,
+      }),
+      (e) => e.code === 'github-merge-rejected',
+    );
+    const b = f.getSaved().batches[0];
+    assert.equal(nativeCalls, ['HTTP405', 'graphql'].includes(kind) ? 1 : 0);
+    assert.equal(b.release, undefined);
+    assert.equal(b.phase, 'blocked');
+    assert.equal(b.failureCode, 'github-merge-rejected');
+    assert.equal(b.approvedSha, undefined);
+    assert.deepEqual(b.mergeHistory.at(-1), reservation);
+    assert.deepEqual(b.reviews, f.batch.reviews);
+  });
+
+for (const kind of [
+  'timeout',
+  'closed',
+  'merged',
+  'head-change',
+  'read-failure',
+  'guard-owner',
+  'catch-owner',
+  'save-owner',
+])
+  test(`Author9 F1 ${kind} cannot release the merge tombstone`, async () => {
+    const f = fixture(['docs/release.md']);
+    let frozen, reservation;
+    const own = () => {
+      f.getSaved().batches[0].operatorCoordination = { active: true };
+      frozen = structuredClone(f.getSaved().batches[0]);
+    };
+    const originalSave = f.store.save;
+    f.store.save = async (state, options) => {
+      if (kind === 'save-owner' && !state.batches[0].release) own();
+      await options?.guard?.();
+      return originalSave(state);
+    };
+    f.github.mergePullRequest = async (_pr, _sha, { guard }) => {
+      reservation = structuredClone(f.getSaved().batches[0].release);
+      if (kind === 'guard-owner') own();
+      await guard();
+      if (kind === 'timeout')
+        throw Object.assign(new Error('Timed out'), {
+          code: 'github-write-uncertain',
+          operation: 'merge',
+        });
+      if (kind === 'closed') f.feedback.state = 'CLOSED';
+      if (kind === 'merged') {
+        f.feedback.state = 'MERGED';
+        f.feedback.mergeCommitSha = mergeSha;
+      }
+      if (kind === 'head-change') f.feedback.head = 'e'.repeat(40);
+      if (kind === 'read-failure')
+        f.github.reviewFeedback = async () => {
+          throw new Error('Native read unavailable');
+        };
+      if (kind === 'catch-owner') own();
+      throw Object.assign(new Error('Refused'), {
+        code: 'github-write-rejected',
+        operation: 'merge',
+        httpStatus: 405,
+      });
+    };
+    await assert.rejects(
+      releaseBatch({
+        repo: f.state.repository,
+        github: f.github,
+        store: f.store,
+        batchId: f.batch.id,
+        reviewedSha: sha,
+        configured,
+        execute: true,
+        automatic: true,
+      }),
+    );
+    const b = f.getSaved().batches[0];
+    assert.deepEqual(b.release, reservation);
+    assert.equal(b.mergeHistory, undefined);
+    if (frozen) assert.deepEqual(b, frozen);
+  });

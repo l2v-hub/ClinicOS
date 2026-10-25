@@ -1,0 +1,8 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "/tmp/clinicos-autonomy-activation-20261022/independent-qa7/historical-offline-replay.mjs"
+  ],
+  "exit": 0,
+  "summary": {}
+}

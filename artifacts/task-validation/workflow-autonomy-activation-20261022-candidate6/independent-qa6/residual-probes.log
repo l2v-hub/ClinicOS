@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: ambiguous typed spend blocks across every archive/ledger/current pointer without inference or correction
+ok 1 - ambiguous typed spend blocks across every archive/ledger/current pointer without inference or correction
+  ---
+  duration_ms: 11.301201
+  type: 'test'
+  ...
+# Subtest: two real intent nonces deduplicate across all histories and leave exactly one new inference slot
+ok 2 - two real intent nonces deduplicate across all histories and leave exactly one new inference slot
+  ---
+  duration_ms: 2.981195
+  type: 'test'
+  ...
+# Subtest: pre-inference check polling consumes no slot and genuine other identities cannot block new allowed work
+ok 3 - pre-inference check polling consumes no slot and genuine other identities cannot block new allowed work
+  ---
+  duration_ms: 1.691246
+  type: 'test'
+  ...
+# Subtest: fresh bound handback progresses unclaimed intake; stale and malformed bindings reject or pause before effects
+ok 4 - fresh bound handback progresses unclaimed intake; stale and malformed bindings reject or pause before effects
+  ---
+  duration_ms: 6.045616
+  type: 'test'
+  ...
+# Subtest: both external review channel variants require current final proof but never invent proof.reviewedSha
+ok 5 - both external review channel variants require current final proof but never invent proof.reviewedSha
+  ---
+  duration_ms: 18.408933
+  type: 'test'
+  ...
+# Subtest: final proof changing during remote evidence reads is refused by native fresh release guard before merge
+ok 6 - final proof changing during remote evidence reads is refused by native fresh release guard before merge
+  ---
+  duration_ms: 1.760445
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 169.032846

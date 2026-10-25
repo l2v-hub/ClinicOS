@@ -1,0 +1,17 @@
+{
+  "status": "IMPLEMENTED_AWAITING_INDEPENDENT_QA",
+  "nonce": "a1c34605-ce9a-40d9-afc6-e3da114dc2ef",
+  "sourceFrozen": true,
+  "sourceFiles": 139,
+  "allowedChangedPaths": 7,
+  "distinctFinalFunctionalNodeTests": 963,
+  "separateOfflineHistoricalReplayTests": 1,
+  "syntaxChecks": 17,
+  "source8FinalRawSha256": "d0e44a29a11e0443b374f98061ee295190baacf05c47ffea25aa48f930ed7468",
+  "sourceManifestSha256": "a98b47ccc3c001ad0dd1f933aca6a09c29153c15114e21556931b40150cadab2",
+  "at": "2026-10-23T07:02:01.701040+00:00",
+  "awaiting": "Root independent QA8/native/source8 module live probe/peer/final gates",
+  "handoffComplete": false,
+  "selfApproval": false,
+  "noFurtherAuthorWrites": true
+}
