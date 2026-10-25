@@ -1,0 +1,86 @@
+{
+  "algorithm": "sha256",
+  "sealedFiles": [
+    {
+      "path": "STOP.json",
+      "sha256": "85ce08966ea7db4ffb29657643149878e9b1568c13139a139b7b7ffce144bab6",
+      "bytes": 533
+    },
+    {
+      "path": "edited/docs/cloud-claude-review.md",
+      "sha256": "a50423aad13a1815ab84b669e2ee9010bb6434c0b2c4e5237e004f247d886801",
+      "bytes": 7071
+    },
+    {
+      "path": "edited/skill/bug-delivery.md",
+      "sha256": "42c2473545a1cb7690d686e9bdfa5ab64be3dfa79bcdfdc0846aa4e6d4f73b40",
+      "bytes": 32430
+    },
+    {
+      "path": "report.md",
+      "sha256": "c41367c71d23262974f75fccd39fd324f36f8b2523b43fb42fcda27506544f37",
+      "bytes": 3255
+    },
+    {
+      "path": "reservation.json",
+      "sha256": "b57f28cb3b60e74143b652f25fd4522a0f63ddffec5338cada71610634668c16",
+      "bytes": 921
+    },
+    {
+      "path": "source/baseline/docs/cloud-claude-review.md",
+      "sha256": "1c2e9ae507f0efc7943b9f4efb8775a8533876719ca7a3e056da5850d38c6979",
+      "bytes": 6864
+    },
+    {
+      "path": "source/baseline/skill/bug-delivery.md",
+      "sha256": "70bd5de7fb8169fdce3c98e07047f8754080beac04dad875860526584bea761d",
+      "bytes": 31760
+    },
+    {
+      "path": "source/evidence/activation/actual-Claude1-comment.json",
+      "sha256": "a54585cb836174994ed7b764a57addd09fac369f44cb1e08eeb5f0a0e6722a2d",
+      "bytes": 6030
+    },
+    {
+      "path": "source/evidence/activation/actual-activation-context.json",
+      "sha256": "1c6541c8e87719c042885aae4bceb89c2eaae3331b908e05f734ad7f72f334e5",
+      "bytes": 102
+    },
+    {
+      "path": "source/evidence/activation/artifact-metadata.json",
+      "sha256": "a6f3eb2da1265204edca8eb2221581cf1cb11922d8c2b87869e4567f16e036f7",
+      "bytes": 217
+    },
+    {
+      "path": "source/evidence/activation/verified-native-success.json",
+      "sha256": "809cd4d09c430d72b876f0247d0e6dcac41cb15b012d828d5c4f9689cfe5f727",
+      "bytes": 988
+    },
+    {
+      "path": "source/evidence/claude-cloud-review.yml",
+      "sha256": "440d65be34c642e63e6017fd59bd92a9f8e11ecfb63eaf65dc1ec15d77812365",
+      "bytes": 3400
+    },
+    {
+      "path": "source/evidence/cloud-review-worker.mjs",
+      "sha256": "2456492ae734a32a4b813f2c82a93fcf4add80fb0c3df2f50ff7e2a31f00107b",
+      "bytes": 26798
+    },
+    {
+      "path": "source-manifest.json",
+      "sha256": "6ae573f69ea3707dcd76263d6b29f019542bc0666f7a3139bdb0c3f3b5f97517",
+      "bytes": 1454
+    },
+    {
+      "path": "source.patch",
+      "sha256": "b07dfe8392fe91c65406f5e070057c3eab5741c6c4c8780c0ea5e7e5744f8ad1",
+      "bytes": 4897
+    },
+    {
+      "path": "task-contract.md",
+      "sha256": "c1f917ee59c92d8392501a46edbd57a5099b41b7645781215ed4c539e09f72da",
+      "bytes": 2182
+    }
+  ],
+  "fileCount": 16
+}

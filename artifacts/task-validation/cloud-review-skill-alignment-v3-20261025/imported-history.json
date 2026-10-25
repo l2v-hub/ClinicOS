@@ -1,0 +1,271 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "nonce": "9bd58f9a-f8fb-4ffa-8449-8ffaaa9e1761",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "b31c8755a06ff016ad26d40b44baf5d61c029045",
+      "baseSha": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+      "evidence": "independent-qa1/report.md",
+      "reason": "Actual reserved bounded documentationimplementation; newindependentQAverifiedexactlytwohostpolicyparagraphs",
+      "independentQaNonce": "a27701c8-ec51-432c-9af5-70d9f38c02f8",
+      "independentQaSealSha256": "644ac5f6ab8ba601f6c4e8be6918fa5f8ce81c7e994e0f292de8ada17da6e5eb"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "nonce": "eb35309b-2997-4e0b-afcd-b12cab590da7",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "6226c2f9ce9f2989261f69b724361a4cdef46f22",
+      "baseSha": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+      "evidence": "independent-qa2/report.md",
+      "reason": "OneactualsharedDoccorrection: PR513Claude1finding+sameportablePR511semantics; actualparentmanualround3, noreset",
+      "independentQaNonce": "3cc18b1a-a030-444c-96f3-5c77de655d84",
+      "independentQaSealSha256": "ad0113b4c24efee3b42b8b5064464f18b3c1f43878c47a1aa45720c0a5036df3"
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "sourceManifest": [
+    {
+      "path": ".claude/skills/clinicos/references/bug-delivery.md",
+      "blob": "6faad1f29811df08aab4360a310e1579ecad19c1",
+      "mode": "100644",
+      "baseBlob": "7a0b0e23fc100031a7d9909fefc2e478fce9cf52",
+      "baseMode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/analysis.md",
+      "blob": "a5109c7300764dfb20429ea1a8d77face93c76ca",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/author/STOP.json",
+      "blob": "40b32a2d521a6a3b15d37e2621723875c9f04d7f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/author/report.md",
+      "blob": "56218b898998f8b14432706cdd576536fcabe3a3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/author/source-freeze.json",
+      "blob": "583d453a6d91e7354a7f5979b041f48d10d55bdc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/implementation-plan.md",
+      "blob": "11a4ffd35d55e7dc3204d26fb8cb7c8ac319486d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/imported-history.json",
+      "blob": "3c68864368781ac3dd83fb013a722cd9cfc86228",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/independent-qa1/STOP.json",
+      "blob": "dea23ad3032699bd2d6bc0fe25748acae612d46c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/independent-qa1/report.md",
+      "blob": "9deaaeef67556745051e9b968bd4d6a4984b801d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/independent-qa1/result.json",
+      "blob": "0b6610eb5928ef059f78e1829d5645670c71ac9e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/independent-qa1/seal.json",
+      "blob": "b05a7ad2b47da5fd7d037d5ff16424cfae858657",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/source-manifest.json",
+      "blob": "9ed5e7f55e329a269e06a6943f46388c948f31f1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/task-contract.md",
+      "blob": "9798c2b67492c1876799a85ff2b8ae9615de25c7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/validation-report.md",
+      "blob": "339929253be2bb23ed3aa588f942895993684218",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/actual-profile-receipt.json",
+      "blob": "880f6801f5e3c2241a62fa07c4d1036315f23593",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/author2/STOP.json",
+      "blob": "b719f1e282b6c40842254a868e70ce12cb2c3c00",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/author2/report.md",
+      "blob": "a9e9f044da28d8e01931d5b6467cc758792d045a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/author2/seal.json",
+      "blob": "ddf6d35ccdba006ae292c3c1f418e022f132b368",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/author2/source-manifest.json",
+      "blob": "ee7305bfa9fe45ac2247860a0fdfa3f182bd2fbe",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/author2/source.patch",
+      "blob": "cfdcb0cdcb201551bb5d726cb4e0b4e3c1dbe8f3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/implementation-plan.md",
+      "blob": "efd1706e91e91396a36a0395773681c9aa6cf0c2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/imported-history.json",
+      "blob": "bdfb82fe9f9d8a4fd809ad41de04e799ea8ef981",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/independent-qa1/report.md",
+      "blob": "9deaaeef67556745051e9b968bd4d6a4984b801d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/independent-qa2/STOP.json",
+      "blob": "f919a829beffff9f9e7f0057f077c9282ea4e79e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/independent-qa2/report.md",
+      "blob": "06d8a2f5ba31d2f7722bed76572c02448120aba4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/independent-qa2/result.json",
+      "blob": "2e1147d0e79cc66a0e81da456943a40fcb8f97c2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/independent-qa2/seal.json",
+      "blob": "bedc4d79fbf26cbad7309aefd5028954cda1b279",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/publication-topology.md",
+      "blob": "855634e4ad8885581ff9d6b5e190d66b70a6ad9c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/source-manifest.json",
+      "blob": "745936264c5102b54e72a635ed0cca144fb0b7cf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/task-contract.md",
+      "blob": "0e0c3b14efb01f6335133fe1af19885742b5ea9f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/validation-report.md",
+      "blob": "6dcf906391d41cefaec1d6280d8cbd38f8728c2c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "actual-profile-receipt.json": "badb1a18ef6d7302776f5ac26db3b0d07a6a188e4e95088051286385c64e74d1",
+    "analysis.md": "efc23aa2098dfa38df955bab877b2a1c5b85d7500cad7c8d1596ee707bbc3a63",
+    "author2/STOP.json": "85ce08966ea7db4ffb29657643149878e9b1568c13139a139b7b7ffce144bab6",
+    "author2/report.md": "c41367c71d23262974f75fccd39fd324f36f8b2523b43fb42fcda27506544f37",
+    "author2/seal.json": "ac46fef5c50d0c947d227fa7e1ac51d7488befb05b41e2c1ffd9a220ee64cf57",
+    "author2/source-manifest.json": "6ae573f69ea3707dcd76263d6b29f019542bc0666f7a3139bdb0c3f3b5f97517",
+    "author2/source.patch": "b07dfe8392fe91c65406f5e070057c3eab5741c6c4c8780c0ea5e7e5744f8ad1",
+    "implementation-plan.md": "2aa8e8de2d33218f2418e3c095dd213e3eb7580281b1986377a27cccc25d1166",
+    "independent-qa1/report.md": "81003cffed6a4e46f16b68a68e9d1454cd8d87ead242fd759747dfb8c88ca776",
+    "independent-qa2/STOP.json": "c693ff573ddd2be06e4b727038f180987f60196574e9df0bd2e76934e294e53b",
+    "independent-qa2/report.md": "a9072ba98d151d6b09acdf9766160aa8cd2c75503d33a718cfa26ab41cdbfca7",
+    "independent-qa2/result.json": "2ecd749521ebe39e21a5a9d79aa3b29987b3869f59d943aa086802842f8cded5",
+    "independent-qa2/seal.json": "ad0113b4c24efee3b42b8b5064464f18b3c1f43878c47a1aa45720c0a5036df3",
+    "publication-topology.md": "283c8c473f6816d6266088af5562e4c4291ac1f6a9fd790aeac1f42e18462c7b",
+    "source-manifest.json": "349599f1157fb18d50af67236af4871e8b196c21d09c6ac91ad166adcf9cab92",
+    "task-contract.md": "bc4df60e9e454b25ab92515b5fa2ada80da136960eb94809b83459e1b1de348d",
+    "validation-report.md": "da7bc9ea86483feb13a2827a34ef7b21e9d3f9bcd7fcee5ef5992a01c0e49d0d"
+  }
+}
