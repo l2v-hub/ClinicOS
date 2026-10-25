@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "verdict": "READY FOR CODEX QA",
+  "nonce": "30377597-f7bf-4513-8c4a-3935e9938505",
+  "code": "8591ab31abf9eeab4b92d6c10a32bfee9d191483",
+  "baseSha": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+  "tree": "87fd25aa64cc2539648b0922ee2752b54efe252b",
+  "scope": "CLI worker model ID normalization only",
+  "findings": [
+    {
+      "severity": "informational",
+      "blocking": false,
+      "description": "Author report test breakdown says 30 worker + 4 runner; actual independently verified breakdown is 28 worker + 6 runner, total 34 unchanged. Frozen author packet preserved."
+    }
+  ],
+  "targeted": {
+    "repository": {
+      "tests": 34,
+      "pass": 34,
+      "fail": 0,
+      "skipped": 0
+    },
+    "workerTests": 28,
+    "processRunnerTests": 6,
+    "independent": {
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "skipped": 0
+    },
+    "totalPassed": 38,
+    "baselineRegressionSensitivity": {
+      "tests": 4,
+      "pass": 0,
+      "fail": 4,
+      "skipped": 0
+    },
+    "independentCases": {
+      "validIds": 10,
+      "invalidIds": 22,
+      "capacityRejects": 16,
+      "nativeAccepted": 1,
+      "nativeRejected": 5
+    },
+    "formatPassed": true
+  },
+  "sourceFiles": [
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "sha256": "ee331b4cc10e24d957982f7a942b13a7b58c481a5dda418e32bb421fe043f4dd",
+      "bytes": 26951,
+      "baselineSha256": "2456492ae734a32a4b813f2c82a93fcf4add80fb0c3df2f50ff7e2a31f00107b"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "sha256": "fee5c174a884741a4c3ee894b819546959762c8561a74b370fee66d199a23353",
+      "bytes": 33623,
+      "baselineSha256": "e2ef6fd1ab784888a6fe8d2e73b005ea0ebffa9a93814234ee4a8f5c1411fd0e"
+    }
+  ],
+  "closureFilesVerified": 33,
+  "onlyQualifiedModelProfileChanged": true,
+  "capacityGuardsUnchanged": true,
+  "publicationTopology": "Separate postmerge compatibility fix PR; Doc PR 511 reserved for permanent cloud smoke; counters and budgets retained",
+  "authorManifestSha256": "0a6be99714a23618567f46d51edc19ad26106c327d00f238b298c7b996ed9bc6",
+  "authorStopSha256": "f87424a34234598eaa2d4c4eba317ded33ab3e9f5fd12c60815cdf95eceb67cd",
+  "capturedDiagnosticSha256": "168a3992c50fa77e65cabeecaa14e6502b2d5e02993c3f74a800d3bcfe92dc6a",
+  "authority": {
+    "realProviderCalls": 0,
+    "realAuthCalls": 0,
+    "installs": 0,
+    "sourceWrites": 0,
+    "gitWrites": 0,
+    "apiWrites": 0,
+    "stateWrites": 0,
+    "publicationWrites": 0,
+    "realQualificationClaim": false,
+    "activationClaim": false
+  },
+  "limitations": [
+    "Focused tests only; unchanged full suite delegated to native CI.",
+    "Synthetic transport/native fake CLI checks do not qualify a real provider."
+  ]
+}

@@ -1,0 +1,19 @@
+# Independent model ID fix QA
+
+Verdict: READY FOR CODEX QA. No blocking code findings.
+
+Code `8591ab31abf9eeab4b92d6c10a32bfee9d191483` is an exact two-file child of actual main `e431990b8e28830972f7f5ab36379e3b1023b9cc`; its tree is `87fd25aa64cc2539648b0922ee2752b54efe252b`. Both published Git blobs match the sealed author's replacement bytes. Author round 2 nonce `503fa11e-0afc-4c3c-95d8-1dd9e9e844f1`, parent `d6d23302e999a435c1b4d912ed563e42ab33c60e`, is preserved. The author parent differs from main only in documentation and its task packet; all 33 frozen runtime/test/read closure files match main. Every worker byte outside qualifiedModelProfile and every capacity guard inside it remain identical.
+
+The Root assignment and publication code.json establish a separate postmerge compatibility PR. The frozen author's PR 511 follow-up wording is historical; documentation PR 511 remains reserved for the first permanent cloud smoke. No counter or budget was changed.
+
+The actual captured run 40227632386 record has SHA-256 `168a3992c50fa77e65cabeecaa14e6502b2d5e02993c3f74a800d3bcfe92dc6a`. Independent native child-process replay returned the recorded modelUsage `claude-opus-5-5[1m]`, context 1000000, output 128000; the genuine probe returned canonical `claude-opus-5-5`, and a second native fake inference received exactly `claude-opus-5-5[1m]`. Fake children independently checked private HOME/cwd, OAuth-only provider credentials, and absence of synthetic controller/API credentials. Five native invalid envelope variants failed qualification. These are synthetic fixture checks; no real provider qualification, activation, review claim or publication occurred.
+
+Validation under Node v22.23.4: 34/34 targeted repository tests passed (28 worker + 6 process runner), plus 4/4 independently authored QA tests. The QA cases exercise 10 valid ID variants, 22 unsafe/malformed IDs including newline/CRLF/Unicode line separators and token-shaped identifiers, 16 context/output rejection boundaries, alias ambiguity, the 1M clamp, 64K native overhead, static packet and complete-input capacity rejection. The original four added regressions independently failed 4/4 against exact main baseline worker bytes. Prettier check passed using frozen repository configuration. Existing native claim, feedback, ownership, report, recovery and credential isolation tests passed.
+
+Nonblocking evidence correction: the sealed author report describes 30 worker + 4 runner tests. The actual total 34 is correct; independently counted distribution is 28 + 6. The sealed author packet was not edited.
+
+The full unchanged 1606-test suite was not repeated; native CI remains responsible for its required checks. This is CLI worker/config review; screenshots and app E2E do not apply. No installation, source worktree, Git, API, live authentication, provider, durable-state or publication writes were performed. All QA outputs and temporary files are under this QA directory.
+
+Source SHA-256: worker `ee331b4cc10e24d957982f7a942b13a7b58c481a5dda418e32bb421fe043f4dd` (26951 bytes); tests `fee5c174a884741a4c3ee894b819546959762c8561a74b370fee66d199a23353` (33623 bytes). Full provenance and evidence are in provenance-validation.json, logs/, independent-case-counts.json and fixture/qa-model-id.test.mjs.
+
+Reproduce targeted tests from fixture/: `TMPDIR=../tmp PATH=/tmp/clinicos-node22-native12/node_modules/node/bin:$PATH /tmp/clinicos-node22-native12/node_modules/node/bin/node --test agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs agent-team/tests/unit/process-runner.test.mjs`. Reproduce independent checks with the same environment and `--test qa-model-id.test.mjs`. Use the absolute private TMPDIR from reservation output when running from another cwd. STOP seals this packet; no further QA edits follow.

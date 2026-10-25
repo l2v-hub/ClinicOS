@@ -1,0 +1,3 @@
+# Plan
+
+Reproduce actualtaggedmetadata againstoldmain; changeonlyqualifiedModelProfile andfourmeaningfulregressions; independentsecurity/nativefakeproviderQA; allnewheadnativeCI; genuineClaudecloudreviewandnewfinalCodex; normalprotectedmerge; actualprofilethenpermanentworkeractivation. DocumentationPR511remainsaseparatesubjectforthefirstpermanentcloudreview.
