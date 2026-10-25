@@ -1,4 +1,4 @@
-import { knownFailedCorrection } from './workspace.mjs';
+import { knownFailedCorrection, createWorkspace } from './workspace.mjs';
 import { captureReleaseReviewProof } from './release.mjs';
 import { operatorOwns } from './operator-ownership.mjs';
 import {
@@ -6,6 +6,7 @@ import {
   consumeOperatorAuthorization,
   authorizeObservationResume,
   settleImplementationAttempt,
+  implementationCheckpointRecovery,
 } from './operator-authorization.mjs';
 import {
   attemptLimit,
@@ -53,6 +54,7 @@ export function createCommentReviewHandoff({
   nonce = randomUUID,
   subjectAdapter,
   authorizationVerifier,
+  workspace,
   operationTimeouts = {},
   automatic = () => false,
 }) {
@@ -656,6 +658,72 @@ export function createCommentReviewHandoff({
       });
       batch.recoveryHistory.pop(); // Shared authorizer's receipt is recorded below once.
       nextFailureCode = batch.failureCode;
+    } else if (action === 'reconcile-implementation-checkpoint') {
+      assert.ok(!subjectAdapter, 'Checkpoint reconciliation requires a native controller journal');
+      const identity = implementationCheckpointRecovery(batch, { round, progressSha256: token });
+      assert.ok(
+        [identity.sourceSha, identity.checkpointSha].includes(recoveryHead),
+        'Checkpoint publication outcome is not authoritatively observed',
+      );
+      const ownedWorkspace =
+        workspace ?? createWorkspace({ root: cwd, repo: REPO, run, models: {} });
+      const proof = await ownedWorkspace.inspectRecoveryCheckpoint(batch, identity);
+      previous = {
+        progress: clone(batch.controllerProgress),
+        externalReview: clone(batch.externalReview),
+        local: proof,
+        observedHead: recoveryHead,
+      };
+      recoveryAuthorization = await authorization(state, batch, login, action, authorizationRef, {
+        budget: {
+          kind: 'controller-checkpoint-reconciliation',
+          ...identity,
+          observedHead: recoveryHead,
+          localSha256: historyDigest(proof),
+        },
+      });
+      assert.deepEqual(
+        authorizationBinding({
+          state,
+          subject: batch,
+          actor: login,
+          action,
+          budget: recoveryAuthorization.binding.budget,
+        }),
+        recoveryAuthorization.binding,
+        'Checkpoint recovery history changed during authorization',
+      );
+      implementationCheckpointRecovery(batch, { round, progressSha256: token });
+      await recoveryLive(batch, recoveryHead);
+      assert.ok(await github.authorizedMaintainer(login), 'Maintainer authorization revoked');
+      if (recoveryHead === identity.sourceSha) {
+        await ownedWorkspace.restoreRecoveryRevision(batch, proof, identity.sourceSha);
+        batch.sha = identity.sourceSha;
+        nextFailureCode = batch.failureCode;
+        batch.phase = 'blocked';
+      } else {
+        // Native observation confirms publication. Never republish or correct
+        // the old review; the next controller step requests review of this SHA.
+        assert.deepEqual(
+          await ownedWorkspace.inspectRecoveryCheckpoint(batch, identity),
+          proof,
+          'Published checkpoint changed during authorization',
+        );
+        await ownedWorkspace.restoreRecoveryRevision(batch, proof, identity.checkpointSha);
+        batch.externalReview = null;
+        batch.controllerProgress.status = 'completed';
+        if (batch.controllerProgress.next === 6)
+          batch.controllerProgress.completed.push({ step: 'publish', observedHead: recoveryHead });
+        batch.controllerProgress.next = 7;
+        delete batch.controllerProgress.pending;
+        batch.phase = 'waiting-checks';
+      }
+      batch.controllerProgress.checkpointRecovery = {
+        outcome: recoveryHead === identity.sourceSha ? 'source-restored' : 'publication-observed',
+        ...identity,
+        observedHead: recoveryHead,
+        localSha256: historyDigest(proof),
+      };
     } else if (action === 'resume-observation') {
       assert.equal(
         token,

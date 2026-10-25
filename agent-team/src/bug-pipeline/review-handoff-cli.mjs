@@ -206,7 +206,9 @@ export async function main({
         release: batch.release,
         recoveryTokens: {
           implementation:
-            batch.controllerProgress?.status === 'running'
+            (batch.controllerProgress?.status === 'running' ||
+              (batch.controllerProgress?.status === 'failed' &&
+                batch.controllerProgress.failureCode === 'implementation-recovery-settled'))
               ? {
                   token: historyDigest(batch.controllerProgress),
                   round: batch.controllerProgress.round,

@@ -134,6 +134,58 @@ export function observationProgressDigest(progress) {
   return historyDigest(copy);
 }
 
+export function implementationCheckpointRecovery(subject, { round, progressSha256 }) {
+  const progress = subject.controllerProgress;
+  const attempt = implementationAttempts(subject).at(-1);
+  const steps = [
+    'execute',
+    'verify-before',
+    'simplify',
+    'verify-after',
+    'qa',
+    'checkpoint',
+    'publish',
+  ];
+  assert.ok(
+    progress?.status === 'failed' &&
+      progress.schemaVersion === 1 &&
+      subject.phase === 'blocked' &&
+      subject.failureCode === 'implementation-recovery-settled' &&
+      !subject.release &&
+      subject.codexFinalReview?.status !== 'running' &&
+      progress.failedStep === 'recovery' &&
+      progress.failureCode === 'implementation-recovery-settled' &&
+      !progress.checkpointRecovery &&
+      ['pr-feedback', 'review-correction', 'external-review-correction'].includes(progress.flow) &&
+      Number.isSafeInteger(round) &&
+      round > 0 &&
+      round <= 32 &&
+      progress.round === round &&
+      (progress.implementationRound ?? round) === round &&
+      attempt?.round === round &&
+      attempt.status === 'failed' &&
+      !implementationAttempts(subject).some((item) =>
+        ['running', 'implemented-awaiting-independent-qa'].includes(item.status),
+      ) &&
+      !subject.reviews.some((item) => item.status === 'running') &&
+      [6, 7].includes(progress.next) &&
+      progress.completed?.length === progress.next &&
+      progress.completed.every((entry, index) => entry.step === steps[index]) &&
+      progress.completed[5].sha === subject.sha &&
+      (!progress.pending || progress.pending === steps[progress.next]) &&
+      /^[a-f0-9]{40}$/.test(progress.sourceSha ?? '') &&
+      progress.sourceSha !== subject.sha &&
+      subject.externalReview?.status === 'published' &&
+      progress.sourceSha === subject.externalReview.subjectSha &&
+      progress.sourceSha === subject.reviews.at(-1)?.subjectSha &&
+      progress.planSha256 === historyDigest(subject.plan) &&
+      progress.feedbackSha256 === historyDigest(progress.feedback ?? null),
+    'Exact settled post-checkpoint correction required',
+  );
+  assert.equal(progressSha256, historyDigest(progress), 'Implementation progress changed');
+  return { sourceSha: progress.sourceSha, checkpointSha: subject.sha, round, progressSha256 };
+}
+
 // Settlement records an operator's decision about an ambiguous paid attempt. It
 // grants no invocation, checkpoint reuse, review approval, or budget extension.
 export async function settleImplementationAttempt({

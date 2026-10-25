@@ -274,6 +274,57 @@ export function createWorkspace({ root, repo, run, models }) {
   return {
     root,
     captureCheckpoint,
+    async inspectRecoveryCheckpoint(batch, { sourceSha, checkpointSha }) {
+      const { cwd } = coordinates(batch);
+      const checkpoint = await captureCheckpoint(batch);
+      const archiveRef = `refs/clinicos/checkpoint-recovery/${batch.id}/${checkpointSha}`;
+      if (
+        !/^[a-f0-9]{40}$/.test(sourceSha) ||
+        !/^[a-f0-9]{40}$/.test(checkpointSha) ||
+        (await git(['rev-parse', `${checkpointSha}^`], cwd)) !== sourceSha ||
+        (await status(cwd))
+      )
+        throw new Error('Recovery requires the exact clean owned checkpoint and source parent');
+      if (checkpoint.head !== checkpointSha) {
+        if (
+          checkpoint.head !== sourceSha ||
+          (await git(['rev-parse', '--verify', archiveRef], cwd)) !== checkpointSha
+        )
+          throw new Error('Recovery local checkpoint identity changed');
+      }
+      return { checkpoint, archiveRef, sourceSha, checkpointSha };
+    },
+    async restoreRecoveryRevision(batch, proof, targetSha) {
+      if (![proof.sourceSha, proof.checkpointSha].includes(targetSha))
+        throw new Error('Recovery target is outside the exact checkpoint/source pair');
+      const current = await this.inspectRecoveryCheckpoint(batch, proof);
+      if (JSON.stringify(current) !== JSON.stringify(proof))
+        throw new Error('Recovery checkpoint output changed');
+      const { cwd } = coordinates(batch);
+      // Keep the abandoned commit reachable; reset --keep refuses dirty collisions.
+      // A repeated action after a failed state save can verify this same archive.
+      const retained = await git(['for-each-ref', '--format=%(objectname)', proof.archiveRef], cwd);
+      if (retained && retained !== proof.checkpointSha)
+        throw new Error('Recovery archive identity changed');
+      if (!retained)
+        await git(
+          [
+            '-c',
+            'core.hooksPath=/dev/null',
+            'update-ref',
+            proof.archiveRef,
+            proof.checkpointSha,
+            '0'.repeat(40),
+          ],
+          cwd,
+        );
+      if (proof.checkpoint.head !== targetSha)
+        await git(['-c', 'core.hooksPath=/dev/null', 'reset', '--keep', targetSha], cwd);
+      const restored = await captureCheckpoint(batch);
+      if (restored.head !== targetSha || (await status(cwd)))
+        throw new Error('Recovery did not restore the exact clean owned source');
+      return restored;
+    },
     async resume(batch, checkpoint) {
       if (
         !checkpoint ||
