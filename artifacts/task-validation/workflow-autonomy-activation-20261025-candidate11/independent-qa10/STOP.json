@@ -1,0 +1,7 @@
+{
+  "status": "STOPPED_AND_FROZEN",
+  "verdict": "FAILED VALIDATION",
+  "reservationNonce": "80644daf-045d-4c21-ae12-170af552b2c8",
+  "reason": "Independent QA complete; candidate1 failure F1 requires bounded repair and new reservation/QA. Do not mutate this evidence.",
+  "timestamp": "2026-10-25T14:37:34.251903+00:00"
+}

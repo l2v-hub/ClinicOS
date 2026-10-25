@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: QA2 exact reconciliation rejects missing-source
+ok 1 - QA2 exact reconciliation rejects missing-source
+  ---
+  duration_ms: 4174.614791
+  type: 'test'
+  ...
+# Subtest: QA2 exact reconciliation rejects missing-checkpoint-stage
+ok 2 - QA2 exact reconciliation rejects missing-checkpoint-stage
+  ---
+  duration_ms: 1508.62296
+  type: 'test'
+  ...
+# Subtest: QA2 exact reconciliation rejects missing-native-head
+ok 3 - QA2 exact reconciliation rejects missing-native-head
+  ---
+  duration_ms: 1758.585885
+  type: 'test'
+  ...
+# Subtest: QA2 exact reconciliation rejects wrong-capability-binding
+ok 4 - QA2 exact reconciliation rejects wrong-capability-binding
+  ---
+  duration_ms: 1425.677698
+  type: 'test'
+  ...
+# Subtest: QA2 exact reconciliation rejects wrong-capability-history
+ok 5 - QA2 exact reconciliation rejects wrong-capability-history
+  ---
+  duration_ms: 2052.5647
+  type: 'test'
+  ...
+# Subtest: QA2 exact reconciliation rejects native-change-at-save
+ok 6 - QA2 exact reconciliation rejects native-change-at-save
+  ---
+  duration_ms: 933.837934
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12163.496613

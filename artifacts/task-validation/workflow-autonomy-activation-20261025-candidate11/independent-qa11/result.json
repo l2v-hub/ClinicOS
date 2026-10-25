@@ -1,0 +1,57 @@
+{
+  "verdict": "READY FOR CODEX QA",
+  "verdictCode": "READYFORCODEXQA",
+  "reservationNonce": "5afe07cc-f0c5-498b-99d1-f9d5c8d9605e",
+  "sourceManifestSha256": "32a6baf67a0e994fe8fe95c49438ead8f99c17021c16f31b87e083dd6b5ff552",
+  "baseSha": "26a4137814f47c78d590f1b4dfe928d480e92909",
+  "sourceUnchanged": true,
+  "qa1EvidenceUnchanged": true,
+  "findings": [],
+  "phases": {
+    "0": "PASS",
+    "1": "PASS",
+    "2": "PASS",
+    "3": "PASS",
+    "4": "PASS",
+    "5": "PASS"
+  },
+  "testCounts": {
+    "checkpoint-recovery.log": {
+      "tests": 15,
+      "pass": 15,
+      "fail": 0,
+      "skipped": 0
+    },
+    "focused-tests.log": {
+      "tests": 150,
+      "pass": 150,
+      "fail": 0,
+      "skipped": 0
+    },
+    "pipeline-suite.log": {
+      "tests": 1553,
+      "pass": 1550,
+      "fail": 0,
+      "skipped": 3
+    },
+    "qa1-unchanged-probes.log": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "skipped": 0
+    },
+    "independent-probes.log": {
+      "tests": 6,
+      "pass": 6,
+      "fail": 0,
+      "skipped": 0
+    }
+  },
+  "operationalGate": {
+    "run": "40202235777",
+    "status": "FAILED",
+    "separateFromLocalQA": true
+  },
+  "activationApproved": false,
+  "mergeApproved": false
+}

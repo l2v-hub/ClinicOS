@@ -1,0 +1,820 @@
+TAP version 13
+# Subtest: failed round recovery is explicit, preserves the spent round, ledger, release hold, and reserves round two
+ok 1 - failed round recovery is explicit, preserves the spent round, ledger, release hold, and reserves round two
+  ---
+  duration_ms: 27.849289
+  type: 'test'
+  ...
+# Subtest: recovery does not reset a substantive attempt and requires a new SHA
+ok 2 - recovery does not reset a substantive attempt and requires a new SHA
+  ---
+  duration_ms: 2.650131
+  type: 'test'
+  ...
+# Subtest: only one concurrent claimant wins the durable compare-and-swap
+ok 3 - only one concurrent claimant wins the durable compare-and-swap
+  ---
+  duration_ms: 14.102477
+  type: 'test'
+  ...
+# Subtest: active workers, repeated claims, exhausted budgets and changed review subjects cannot be taken over
+ok 4 - active workers, repeated claims, exhausted budgets and changed review subjects cannot be taken over
+  ---
+  duration_ms: 22.036326
+  type: 'test'
+  ...
+# Subtest: unauthorized actors and authorization revoked inside the CAS guard cannot claim
+ok 5 - unauthorized actors and authorization revoked inside the CAS guard cannot claim
+  ---
+  duration_ms: 7.762369
+  type: 'test'
+  ...
+# Subtest: report submit accepts no implicit approval and rejects stale, replayed, invalid, unsafe, and untracked reports
+ok 6 - report submit accepts no implicit approval and rejects stale, replayed, invalid, unsafe, and untracked reports
+  ---
+  duration_ms: 16.94037
+  type: 'test'
+  ...
+# Subtest: edited report comments and reviewer revocation prevent importing a report
+ok 7 - edited report comments and reviewer revocation prevent importing a report
+  ---
+  duration_ms: 22.642335
+  type: 'test'
+  ...
+# Subtest: valid exact-SHA report imports a hashed ledger and publishes a same-SHA server review idempotently
+ok 8 - valid exact-SHA report imports a hashed ledger and publishes a same-SHA server review idempotently
+  ---
+  duration_ms: 13.049733
+  type: 'test'
+  ...
+# Subtest: finished import retries interrupted server publication without spending another review round
+ok 9 - finished import retries interrupted server publication without spending another review round
+  ---
+  duration_ms: 13.207985
+  type: 'test'
+  ...
+# Subtest: feedback fingerprint excludes only own protocol comments, includes others, and records unrelated feedback changes
+ok 10 - feedback fingerprint excludes only own protocol comments, includes others, and records unrelated feedback changes
+  ---
+  duration_ms: 16.894501
+  type: 'test'
+  ...
+# Subtest: own request, report, and published review comments do not create feedback changes
+ok 11 - own request, report, and published review comments do not create feedback changes
+  ---
+  duration_ms: 8.540203
+  type: 'test'
+  ...
+# Subtest: a distinct authorized controller publishes the owner report without inventing new feedback
+ok 12 - a distinct authorized controller publishes the owner report without inventing new feedback
+  ---
+  duration_ms: 7.928442
+  type: 'test'
+  ...
+# Subtest: audited allowances plus explicit recovery resume exhausted normal corrections without changing historical attempts
+ok 13 - audited allowances plus explicit recovery resume exhausted normal corrections without changing historical attempts
+  ---
+  duration_ms: 17.047113
+  type: 'test'
+  ...
+# Subtest: maintainer permission and a free-text instruction cannot extend budgets without an external verifier
+ok 14 - maintainer permission and a free-text instruction cannot extend budgets without an external verifier
+  ---
+  duration_ms: 1.565305
+  type: 'test'
+  ...
+# Subtest: wrapped large Git blob state supports actual handoff request/reconcile/load and rejects stale CAS without losing history
+ok 15 - wrapped large Git blob state supports actual handoff request/reconcile/load and rejects stale CAS without losing history
+  ---
+  duration_ms: 944.471704
+  type: 'test'
+  ...
+# Subtest: default compatibility2 spends3/4 without extensions and same-account external verifier authorizes only the next5
+ok 16 - default compatibility2 spends3/4 without extensions and same-account external verifier authorizes only the next5
+  ---
+  duration_ms: 9.459975
+  type: 'test'
+  ...
+# Subtest: background normal waiting reconciliation never repairs notices across accounts or transient reads
+ok 17 - background normal waiting reconciliation never repairs notices across accounts or transient reads
+  ---
+  duration_ms: 5.599136
+  type: 'test'
+  ...
+# Subtest: automatic native handoff reload rejects global or subject ownership without reinterpreting it as a failed review
+ok 18 - automatic native handoff reload rejects global or subject ownership without reinterpreting it as a failed review
+  ---
+  duration_ms: 30.30256
+  type: 'test'
+  ...
+# Subtest: automatic handoff persistence observes a takeover during native source checks before CAS/comment effects
+ok 19 - automatic handoff persistence observes a takeover during native source checks before CAS/comment effects
+  ---
+  duration_ms: 6.069673
+  type: 'test'
+  ...
+# Subtest: QA6-F3 actual authorized typed QA recovery retains one legacy spend and permits only two new sessions
+ok 20 - QA6-F3 actual authorized typed QA recovery retains one legacy spend and permits only two new sessions
+  ---
+  duration_ms: 31.093145
+  type: 'test'
+  ...
+# Subtest: Author7 F1 exhausted allowance requires exact trusted one-unit grant and actually runs only one additional QA
+ok 21 - Author7 F1 exhausted allowance requires exact trusted one-unit grant and actually runs only one additional QA
+  ---
+  duration_ms: 22.659622
+  type: 'test'
+  ...
+# Subtest: Author7 F1 malformed modern history is not legacy; trusted recovery seals spent allowance before one-unit extension
+ok 22 - Author7 F1 malformed modern history is not legacy; trusted recovery seals spent allowance before one-unit extension
+  ---
+  duration_ms: 12.267207
+  type: 'test'
+  ...
+# Subtest: Author7 F1 blocked pre-QA recovery actually progresses and no default verifier grants it
+ok 23 - Author7 F1 blocked pre-QA recovery actually progresses and no default verifier grants it
+  ---
+  duration_ms: 5.861452
+  type: 'test'
+  ...
+# Subtest: Author7 F3 completed modern final QA survives post-inference observation recovery without another inference even at exhausted allowance
+ok 24 - Author7 F3 completed modern final QA survives post-inference observation recovery without another inference even at exhausted allowance
+  ---
+  duration_ms: 4.596349
+  type: 'test'
+  ...
+# Subtest: Author9 F2 audited correction resume requires positive journal binding: none
+ok 25 - Author9 F2 audited correction resume requires positive journal binding: none
+  ---
+  duration_ms: 5.770257
+  type: 'test'
+  ...
+# Subtest: Author9 F2 audited correction resume requires positive journal binding: source
+ok 26 - Author9 F2 audited correction resume requires positive journal binding: source
+  ---
+  duration_ms: 2.68588
+  type: 'test'
+  ...
+# Subtest: Author9 F2 audited correction resume requires positive journal binding: plan
+ok 27 - Author9 F2 audited correction resume requires positive journal binding: plan
+  ---
+  duration_ms: 5.654873
+  type: 'test'
+  ...
+# Subtest: Author9 F2 audited correction resume requires positive journal binding: feedback
+ok 28 - Author9 F2 audited correction resume requires positive journal binding: feedback
+  ---
+  duration_ms: 5.099269
+  type: 'test'
+  ...
+# Subtest: Author9 F2 audited correction resume requires positive journal binding: step-code
+ok 29 - Author9 F2 audited correction resume requires positive journal binding: step-code
+  ---
+  duration_ms: 3.777375
+  type: 'test'
+  ...
+# Subtest: Author9 F2 audited correction resume requires positive journal binding: attempt
+ok 30 - Author9 F2 audited correction resume requires positive journal binding: attempt
+  ---
+  duration_ms: 2.416875
+  type: 'test'
+  ...
+# Subtest: Author9 F2 audited correction resume requires positive journal binding: running
+ok 31 - Author9 F2 audited correction resume requires positive journal binding: running
+  ---
+  duration_ms: 2.505981
+  type: 'test'
+  ...
+# Subtest: Claude504 maintainer recovery settles exact progress once and still requires audited correction allowance
+ok 32 - Claude504 maintainer recovery settles exact progress once and still requires audited correction allowance
+  ---
+  duration_ms: 7.956987
+  type: 'test'
+  ...
+# Subtest: Claude504 workspace-scope-invalid correction requires a new audited allowance before explicit resume
+ok 33 - Claude504 workspace-scope-invalid correction requires a new audited allowance before explicit resume
+  ---
+  duration_ms: 4.527042
+  type: 'test'
+  ...
+# Subtest: Claude504 workspace-evidence-invalid correction requires a new audited allowance before explicit resume
+ok 34 - Claude504 workspace-evidence-invalid correction requires a new audited allowance before explicit resume
+  ---
+  duration_ms: 4.23389
+  type: 'test'
+  ...
+# Subtest: Claude504 implementation-revision-unchanged correction requires a new audited allowance before explicit resume
+ok 35 - Claude504 implementation-revision-unchanged correction requires a new audited allowance before explicit resume
+  ---
+  duration_ms: 3.641581
+  type: 'test'
+  ...
+# Subtest: external doctor requires no Claude credential or Claude subprocess
+ok 36 - external doctor requires no Claude credential or Claude subprocess
+  ---
+  duration_ms: 2.119623
+  type: 'test'
+  ...
+# Subtest: request waits for real checks, then makes the PR ready without executing Claude
+ok 37 - request waits for real checks, then makes the PR ready without executing Claude
+  ---
+  duration_ms: 2.903328
+  type: 'test'
+  ...
+# Subtest: external harness reserves remotely before inference, publishes hashed approval and Codex accepts the exact revision
+ok 38 - external harness reserves remotely before inference, publishes hashed approval and Codex accepts the exact revision
+  ---
+  duration_ms: 101.212264
+  type: 'test'
+  ...
+# Subtest: external publication failure is retryable without another model call; a CAS conflict prevents inference
+ok 39 - external publication failure is retryable without another model call; a CAS conflict prevents inference
+  ---
+  duration_ms: 180.379537
+  type: 'test'
+  ...
+# Subtest: Claude findings trigger fresh Codex correction, test/simplification/QA, new SHA and a new bounded request
+ok 40 - Claude findings trigger fresh Codex correction, test/simplification/QA, new SHA and a new bounded request
+  ---
+  duration_ms: 99.465931
+  type: 'test'
+  ...
+# Subtest: new human comments invalidate approval and exhausted review budgets block correction instead of starting round five
+ok 41 - new human comments invalidate approval and exhausted review budgets block correction instead of starting round five
+  ---
+  duration_ms: 81.313495
+  type: 'test'
+  ...
+# Subtest: human feedback arriving with review publication is retained rather than silently included in approval
+ok 42 - human feedback arriving with review publication is retained rather than silently included in approval
+  ---
+  duration_ms: 148.52781
+  type: 'test'
+  ...
+# Subtest: draft or foreign PRs and an exhausted external budget never start a model
+ok 43 - draft or foreign PRs and an exhausted external budget never start a model
+  ---
+  duration_ms: 58.395467
+  type: 'test'
+  ...
+# Subtest: closed source issues block the external harness and Codex before review or correction
+ok 44 - closed source issues block the external harness and Codex before review or correction
+  ---
+  duration_ms: 55.239358
+  type: 'test'
+  ...
+# Subtest: new cron records bounded failure codes and publishes failure state without exposing local output or retrying inference
+ok 45 - new cron records bounded failure codes and publishes failure state without exposing local output or retrying inference
+  ---
+  duration_ms: 92.742868
+  type: 'test'
+  ...
+# Subtest: failure classification accepts only fixed result codes and never copies arbitrary model output
+ok 46 - failure classification accepts only fixed result codes and never copies arbitrary model output
+  ---
+  duration_ms: 1.09678
+  type: 'test'
+  ...
+# Subtest: transient issue-notification failure does not waste or retry the reserved model call
+ok 47 - transient issue-notification failure does not waste or retry the reserved model call
+  ---
+  duration_ms: 82.160098
+  type: 'test'
+  ...
+# Subtest: issue notification outage after reserving a correction does not spend another implementation attempt or block real fixes
+ok 48 - issue notification outage after reserving a correction does not spend another implementation attempt or block real fixes
+  ---
+  duration_ms: 84.70395
+  type: 'test'
+  ...
+# Subtest: comment channel is preserved when requesting the next exact-SHA review
+ok 49 - comment channel is preserved when requesting the next exact-SHA review
+  ---
+  duration_ms: 0.727438
+  type: 'test'
+  ...
+# Subtest: Claude approval on comment channel requires a new independent Codex QA before readiness
+ok 50 - Claude approval on comment channel requires a new independent Codex QA before readiness
+  ---
+  duration_ms: 88.933861
+  type: 'test'
+  ...
+# Subtest: standard external approval requires one fresh durable SHA/round/feedback-bound final QA
+ok 51 - standard external approval requires one fresh durable SHA/round/feedback-bound final QA
+  ---
+  duration_ms: 3.144879
+  type: 'test'
+  ...
+# Subtest: pending native checks or unresolved feedback never invoke final QA or transfer approval
+ok 52 - pending native checks or unresolved feedback never invoke final QA or transfer approval
+  ---
+  duration_ms: 1.191231
+  type: 'test'
+  ...
+# Subtest: stale final QA bindings require a fresh session and retain previous evidence
+ok 53 - stale final QA bindings require a fresh session and retain previous evidence
+  ---
+  duration_ms: 3.320528
+  type: 'test'
+  ...
+# Subtest: running final QA ownership is not restarted even when its SHA is stale
+ok 54 - running final QA ownership is not restarted even when its SHA is stale
+  ---
+  duration_ms: 0.751892
+  type: 'test'
+  ...
+# Subtest: native checks or PR identity/feedback changing during final QA cannot become ready
+ok 55 - native checks or PR identity/feedback changing during final QA cannot become ready
+  ---
+  duration_ms: 2.31653
+  type: 'test'
+  ...
+# Subtest: final QA exception is recorded without hiding a model retry or granting approval
+ok 56 - final QA exception is recorded without hiding a model retry or granting approval
+  ---
+  duration_ms: 0.457731
+  type: 'test'
+  ...
+# Subtest: final QA findings use the existing consumed correction budget and new-SHA review request
+ok 57 - final QA findings use the existing consumed correction budget and new-SHA review request
+  ---
+  duration_ms: 2.115914
+  type: 'test'
+  ...
+# Subtest: native checks becoming pending before QA wait with no inference and resume after checks recover
+ok 58 - native checks becoming pending before QA wait with no inference and resume after checks recover
+  ---
+  duration_ms: 0.582089
+  type: 'test'
+  ...
+# Subtest: stale published handoff cannot invoke QA or transfer an otherwise valid old report
+ok 59 - stale published handoff cannot invoke QA or transfer an otherwise valid old report
+  ---
+  duration_ms: 0.184401
+  type: 'test'
+  ...
+# Subtest: final QA findings cannot renew exhausted implementation or review budgets
+ok 60 - final QA findings cannot renew exhausted implementation or review budgets
+  ---
+  duration_ms: 1.225022
+  type: 'test'
+  ...
+# Subtest: new feedback cannot start a correction while the prior final QA session remains running
+ok 61 - new feedback cannot start a correction while the prior final QA session remains running
+  ---
+  duration_ms: 0.45367
+  type: 'test'
+  ...
+# Subtest: automatic external review ownership loss skips without correction, status block or model effects
+ok 62 - automatic external review ownership loss skips without correction, status block or model effects
+  ---
+  duration_ms: 1.236877
+  type: 'test'
+  ...
+# Subtest: ownership loss in automatic informational publication is not swallowed before a correction model
+ok 63 - ownership loss in automatic informational publication is not swallowed before a correction model
+  ---
+  duration_ms: 2.289896
+  type: 'test'
+  ...
+# Subtest: automatic external comment handoff inherits ownership context before native reconciliation or model work
+ok 64 - automatic external comment handoff inherits ownership context before native reconciliation or model work
+  ---
+  duration_ms: 1.844427
+  type: 'test'
+  ...
+# Subtest: Claude1 F3 recovered infrastructure failure retries only final QA and preserves code budget
+ok 65 - Claude1 F3 recovered infrastructure failure retries only final QA and preserves code budget
+  ---
+  duration_ms: 1.241791
+  type: 'test'
+  ...
+# Subtest: Claude1 F3 final-QA inference retries are durably bounded independently of implementation
+ok 66 - Claude1 F3 final-QA inference retries are durably bounded independently of implementation
+  ---
+  duration_ms: 3.096423
+  type: 'test'
+  ...
+# Subtest: Claude1 F3 waiting checks and pre-inference identity polling spend no infrastructure inference slots
+ok 67 - Claude1 F3 waiting checks and pre-inference identity polling spend no infrastructure inference slots
+  ---
+  duration_ms: 1.015312
+  type: 'test'
+  ...
+# Subtest: Claude1 F3 unusable final QA verdict is infrastructure failure and never a code correction
+ok 68 - Claude1 F3 unusable final QA verdict is infrastructure failure and never a code correction
+  ---
+  duration_ms: 1.056957
+  type: 'test'
+  ...
+# Subtest: QA6-F3 duplicate legacy intents across ledger and recovery histories count once, preserving originals
+ok 69 - QA6-F3 duplicate legacy intents across ledger and recovery histories count once, preserving originals
+  ---
+  duration_ms: 1.126445
+  type: 'test'
+  ...
+# Subtest: QA6-F3 other identities and waiting/pre-QA blocked metadata never consume inference allowance
+ok 70 - QA6-F3 other identities and waiting/pre-QA blocked metadata never consume inference allowance
+  ---
+  duration_ms: 0.980786
+  type: 'test'
+  ...
+# Subtest: QA6-F3 ambiguous spent legacy intent cannot trigger inference or implementation retry
+ok 71 - QA6-F3 ambiguous spent legacy intent cannot trigger inference or implementation retry
+  ---
+  duration_ms: 3.947737
+  type: 'test'
+  ...
+# Subtest: QA6-F5 typed ownership loss inside correction preserves the already reserved running tombstone
+ok 72 - QA6-F5 typed ownership loss inside correction preserves the already reserved running tombstone
+  ---
+  duration_ms: 5.238858
+  type: 'test'
+  ...
+# Subtest: Author7 F1 exact original legacy verified QA is one spent session, not an unrecoverable ambiguity
+ok 73 - Author7 F1 exact original legacy verified QA is one spent session, not an unrecoverable ambiguity
+  ---
+  duration_ms: 3.109401
+  type: 'test'
+  ...
+# Subtest: Claude504 unchanged correction head settles the completed journal and consumes its attempt
+ok 74 - Claude504 unchanged correction head settles the completed journal and consumes its attempt
+  ---
+  duration_ms: 130.15435
+  type: 'test'
+  ...
+# Subtest: free text and mutable receipt JSON cannot substitute for trusted external verifier
+ok 75 - free text and mutable receipt JSON cannot substitute for trusted external verifier
+  ---
+  duration_ms: 8.019709
+  type: 'test'
+  ...
+# Subtest: verified external user session permits same-account round5 with one-use exact binding
+ok 76 - verified external user session permits same-account round5 with one-use exact binding
+  ---
+  duration_ms: 3.294555
+  type: 'test'
+  ...
+# Subtest: wrong owner, history, action, head, budget and reservation are rejected at verifier boundary
+ok 77 - wrong owner, history, action, head, budget and reservation are rejected at verifier boundary
+  ---
+  duration_ms: 9.114292
+  type: 'test'
+  ...
+# Subtest: only canonical manual issue owner can receive absent-PR authorization
+ok 78 - only canonical manual issue owner can receive absent-PR authorization
+  ---
+  duration_ms: 1.094839
+  type: 'test'
+  ...
+# Subtest: Claude504 exact authorized settlement fails the running journal and attempt once without a new allowance
+ok 79 - Claude504 exact authorized settlement fails the running journal and attempt once without a new allowance
+  ---
+  duration_ms: 3.913832
+  type: 'test'
+  ...
+# Subtest: Claude504 settlement refuses absent auth, changed digest/round/history, wrong binding and replay
+ok 80 - Claude504 settlement refuses absent auth, changed digest/round/history, wrong binding and replay
+  ---
+  duration_ms: 6.632997
+  type: 'test'
+  ...
+# Subtest: executor and simplifier blocked stage results retain the implementation failure code
+ok 81 - executor and simplifier blocked stage results retain the implementation failure code
+  ---
+  duration_ms: 4.781002
+  type: 'test'
+  ...
+# Subtest: child environment isolates verification, executor, reviewer, and controller credentials
+ok 82 - child environment isolates verification, executor, reviewer, and controller credentials
+  ---
+  duration_ms: 1.288
+  type: 'test'
+  ...
+# Subtest: local Codex login directory is available only to Codex model authentication
+ok 83 - local Codex login directory is available only to Codex model authentication
+  ---
+  duration_ms: 0.499627
+  type: 'test'
+  ...
+# Subtest: createRunner subprocess receives only the role credential and a demo localhost database
+ok 84 - createRunner subprocess receives only the role credential and a demo localhost database
+  ---
+  duration_ms: 185.124374
+  type: 'test'
+  ...
+# Subtest: fresh CLI configuration directories are private and survive repeated isolated launches
+ok 85 - fresh CLI configuration directories are private and survive repeated isolated launches
+  ---
+  duration_ms: 331.041704
+  type: 'test'
+  ...
+# Subtest: createRunner reports child exit failure and output overflow as failures
+ok 86 - createRunner reports child exit failure and output overflow as failures
+  ---
+  duration_ms: 94.260873
+  type: 'test'
+  ...
+# Subtest: createRunner timeout terminates the subprocess group, including a child process
+ok 87 - createRunner timeout terminates the subprocess group, including a child process
+  ---
+  duration_ms: 1517.248062
+  type: 'test'
+  ...
+# Subtest: validateEvidence accepts a valid synthetic PNG and a recorded Playwright trace and records content digests
+ok 88 - validateEvidence accepts a valid synthetic PNG and a recorded Playwright trace and records content digests
+  ---
+  duration_ms: 24.291088
+  type: 'test'
+  ...
+# Subtest: validateEvidence rejects missing files, wrong headers, path traversal, and symlinks outside the packet
+ok 89 - validateEvidence rejects missing files, wrong headers, path traversal, and symlinks outside the packet
+  ---
+  duration_ms: 22.19395
+  type: 'test'
+  ...
+# Subtest: validateEvidence rejects PNG signature filler and PNG/trace checksum corruption
+ok 90 - validateEvidence rejects PNG signature filler and PNG/trace checksum corruption
+  ---
+  duration_ms: 24.563036
+  type: 'test'
+  ...
+# Subtest: real Git workspace prepares the exact batch branch, freezes its task packet, and regenerates evidence after clearing stale files
+ok 91 - real Git workspace prepares the exact batch branch, freezes its task packet, and regenerates evidence after clearing stale files
+  ---
+  duration_ms: 208.345858
+  type: 'test'
+  ...
+# Subtest: real Git workspace rejects changes outside the accepted source-file scope
+ok 92 - real Git workspace rejects changes outside the accepted source-file scope
+  ---
+  duration_ms: 126.942872
+  type: 'test'
+  ...
+# Subtest: only verification receives the absolute trusted browser cache while HOME and credential boundaries remain isolated
+ok 93 - only verification receives the absolute trusted browser cache while HOME and credential boundaries remain isolated
+  ---
+  duration_ms: 0.659289
+  type: 'test'
+  ...
+# Subtest: actual verification subprocess sees the trusted shared cache independently of isolated HOME
+ok 94 - actual verification subprocess sees the trusted shared cache independently of isolated HOME
+  ---
+  duration_ms: 48.895391
+  type: 'test'
+  ...
+# Subtest: trusted browser installation, controller and native sandbox service proof share the explicit cache before credentials
+ok 95 - trusted browser installation, controller and native sandbox service proof share the explicit cache before credentials
+  ---
+  duration_ms: 2.888478
+  type: 'test'
+  ...
+# Subtest: post-Claude independent final QA leaves a real reviewed worktree clean for a correction
+ok 96 - post-Claude independent final QA leaves a real reviewed worktree clean for a correction
+  ---
+  duration_ms: 172.058773
+  type: 'test'
+  ...
+# Subtest: standalone final QA creates an exact detached source checkout without installing or executing PR code
+ok 97 - standalone final QA creates an exact detached source checkout without installing or executing PR code
+  ---
+  duration_ms: 131.171378
+  type: 'test'
+  ...
+# Subtest: evidence collector accepts valid trace at 32MiB and rejects a byte above it before ZIP parsing
+ok 98 - evidence collector accepts valid trace at 32MiB and rejects a byte above it before ZIP parsing
+  ---
+  duration_ms: 1870.959145
+  type: 'test'
+  ...
+# Subtest: Author7 F3 retained controller checkpoint accepts exact dirty output and rejects changed, unknown, frozen or lost output
+ok 99 - Author7 F3 retained controller checkpoint accepts exact dirty output and rejects changed, unknown, frozen or lost output
+  ---
+  duration_ms: 396.656022
+  type: 'test'
+  ...
+# Subtest: Author7 F3 real retained worktree resumes the same attempt after execute without replaying its paid model
+ok 100 - Author7 F3 real retained worktree resumes the same attempt after execute without replaying its paid model
+  ---
+  duration_ms: 809.549675
+  type: 'test'
+  ...
+# Subtest: Author7 F3 lost Actions worktree fails closed after authorized recovery without replaying a completed model
+ok 101 - Author7 F3 lost Actions worktree fails closed after authorized recovery without replaying a completed model
+  ---
+  duration_ms: 248.631246
+  type: 'test'
+  ...
+# Subtest: Author9 F2 definite execute failure records the failed step and preserves its journal
+ok 102 - Author9 F2 definite execute failure records the failed step and preserves its journal
+  ---
+  duration_ms: 0.80726
+  type: 'test'
+  ...
+# Subtest: Author9 F2 definite simplify failure records the failed step and preserves its journal
+ok 103 - Author9 F2 definite simplify failure records the failed step and preserves its journal
+  ---
+  duration_ms: 0.363341
+  type: 'test'
+  ...
+# Subtest: Author9 F2 definite qa failure records the failed step and preserves its journal
+ok 104 - Author9 F2 definite qa failure records the failed step and preserves its journal
+  ---
+  duration_ms: 0.343258
+  type: 'test'
+  ...
+# Subtest: Author9 F2 definite verify-before failure records the failed step and preserves its journal
+ok 105 - Author9 F2 definite verify-before failure records the failed step and preserves its journal
+  ---
+  duration_ms: 0.203541
+  type: 'test'
+  ...
+# Subtest: Author9 F2 definite verify-after failure records the failed step and preserves its journal
+ok 106 - Author9 F2 definite verify-after failure records the failed step and preserves its journal
+  ---
+  duration_ms: 0.19271
+  type: 'test'
+  ...
+# Subtest: Author9 F2 model-execution retains a running unknown outcome and cannot invoke a second worker
+ok 107 - Author9 F2 model-execution retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.511664
+  type: 'test'
+  ...
+# Subtest: Author9 F2 model-result retains a running unknown outcome and cannot invoke a second worker
+ok 108 - Author9 F2 model-result retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.128949
+  type: 'test'
+  ...
+# Subtest: Author9 F2 arbitrary-execute retains a running unknown outcome and cannot invoke a second worker
+ok 109 - Author9 F2 arbitrary-execute retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.106139
+  type: 'test'
+  ...
+# Subtest: Author9 F2 blocked-code-throw retains a running unknown outcome and cannot invoke a second worker
+ok 110 - Author9 F2 blocked-code-throw retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.092474
+  type: 'test'
+  ...
+# Subtest: Author9 F2 malformed-result retains a running unknown outcome and cannot invoke a second worker
+ok 111 - Author9 F2 malformed-result retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.092379
+  type: 'test'
+  ...
+# Subtest: Author9 F2 before-stage retains a running unknown outcome and cannot invoke a second worker
+ok 112 - Author9 F2 before-stage retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.146515
+  type: 'test'
+  ...
+# Subtest: Author9 F2 pending-save retains a running unknown outcome and cannot invoke a second worker
+ok 113 - Author9 F2 pending-save retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.639102
+  type: 'test'
+  ...
+# Subtest: Author9 F2 post-stage-save retains a running unknown outcome and cannot invoke a second worker
+ok 114 - Author9 F2 post-stage-save retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.172771
+  type: 'test'
+  ...
+# Subtest: Author9 F2 initial-capture retains a running unknown outcome and cannot invoke a second worker
+ok 115 - Author9 F2 initial-capture retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.623484
+  type: 'test'
+  ...
+# Subtest: Author9 F2 post-capture retains a running unknown outcome and cannot invoke a second worker
+ok 116 - Author9 F2 post-capture retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.283244
+  type: 'test'
+  ...
+# Subtest: Author9 F2 checkpoint retains a running unknown outcome and cannot invoke a second worker
+ok 117 - Author9 F2 checkpoint retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.328221
+  type: 'test'
+  ...
+# Subtest: Author9 F2 publish retains a running unknown outcome and cannot invoke a second worker
+ok 118 - Author9 F2 publish retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.394532
+  type: 'test'
+  ...
+# Subtest: Author9 F2 ownership-invalid retains a running unknown outcome and cannot invoke a second worker
+ok 119 - Author9 F2 ownership-invalid retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.163406
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree exact requires exact retained output before another paid call
+ok 120 - Author9 F2 real failed correction worktree exact requires exact retained output before another paid call
+  ---
+  duration_ms: 944.379907
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree changed requires exact retained output before another paid call
+ok 121 - Author9 F2 real failed correction worktree changed requires exact retained output before another paid call
+  ---
+  duration_ms: 334.938399
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree missing requires exact retained output before another paid call
+ok 122 - Author9 F2 real failed correction worktree missing requires exact retained output before another paid call
+  ---
+  duration_ms: 289.282184
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree foreign requires exact retained output before another paid call
+ok 123 - Author9 F2 real failed correction worktree foreign requires exact retained output before another paid call
+  ---
+  duration_ms: 262.341514
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree frozen requires exact retained output before another paid call
+ok 124 - Author9 F2 real failed correction worktree frozen requires exact retained output before another paid call
+  ---
+  duration_ms: 264.587576
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree capture-failure requires exact retained output before another paid call
+ok 125 - Author9 F2 real failed correction worktree capture-failure requires exact retained output before another paid call
+  ---
+  duration_ms: 242.021899
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree unknown requires exact retained output before another paid call
+ok 126 - Author9 F2 real failed correction worktree unknown requires exact retained output before another paid call
+  ---
+  duration_ms: 212.376417
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree scope-invalid requires exact retained output before another paid call
+ok 127 - Author9 F2 real failed correction worktree scope-invalid requires exact retained output before another paid call
+  ---
+  duration_ms: 776.381458
+  type: 'test'
+  ...
+# Subtest: Claude504 real outside-scope failure consumes initial attempts inside the native retry budget
+ok 128 - Claude504 real outside-scope failure consumes initial attempts inside the native retry budget
+  ---
+  duration_ms: 766.55028
+  type: 'test'
+  ...
+# Subtest: Claude504 real symlink failure consumes initial attempts inside the native retry budget
+ok 129 - Claude504 real symlink failure consumes initial attempts inside the native retry budget
+  ---
+  duration_ms: 869.370383
+  type: 'test'
+  ...
+# Subtest: Claude504 real frozen-contract failure consumes initial attempts inside the native retry budget
+ok 130 - Claude504 real frozen-contract failure consumes initial attempts inside the native retry budget
+  ---
+  duration_ms: 692.206298
+  type: 'test'
+  ...
+# Subtest: Claude504 real empty evidence is a typed definite validation failure
+ok 131 - Claude504 real empty evidence is a typed definite validation failure
+  ---
+  duration_ms: 202.244227
+  type: 'test'
+  ...
+# Subtest: Claude504 real oversize evidence is a typed definite validation failure
+ok 132 - Claude504 real oversize evidence is a typed definite validation failure
+  ---
+  duration_ms: 204.361238
+  type: 'test'
+  ...
+# Subtest: Claude504 real noncontained evidence is a typed definite validation failure
+ok 133 - Claude504 real noncontained evidence is a typed definite validation failure
+  ---
+  duration_ms: 215.221981
+  type: 'test'
+  ...
+# Subtest: Claude504 real video evidence is a typed definite validation failure
+ok 134 - Claude504 real video evidence is a typed definite validation failure
+  ---
+  duration_ms: 226.333841
+  type: 'test'
+  ...
+# Subtest: Claude504 real symlink-directory evidence is a typed definite validation failure
+ok 135 - Claude504 real symlink-directory evidence is a typed definite validation failure
+  ---
+  duration_ms: 193.45494
+  type: 'test'
+  ...
+1..135
+# tests 135
+# suites 0
+# pass 135
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13210.660664
