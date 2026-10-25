@@ -1,0 +1,32 @@
+name: Inspect hosted review activation context 20261025
+'on':
+  push:
+    branches:
+    - codex/claude-cloud-variable-context-20261025
+permissions:
+  contents: read
+jobs:
+  inspect-context:
+    if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/codex/claude-cloud-variable-context-20261025'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 3
+    steps:
+    - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      with:
+        node-version: 22
+    - name: Print finite activation state only
+      env:
+        ACTIVATION_STATE: ${{ vars.CLAUDE_CLOUD_REVIEW_ENABLED == '' && 'unset' || vars.CLAUDE_CLOUD_REVIEW_ENABLED == 'true' && 'true' || vars.CLAUDE_CLOUD_REVIEW_ENABLED == 'false' && 'false' || 'other' }}
+      run: 'node --input-type=module <<''FINITE_CONTEXT''
+
+        import assert from ''node:assert/strict'';
+
+        const state=process.env.ACTIVATION_STATE;
+
+        assert.ok([''unset'',''true'',''false'',''other''].includes(state));
+
+        console.log(JSON.stringify({type:''hosted-activation-context'',state,providerCalls:0,apiWrites:0}));
+
+        FINITE_CONTEXT
+
+        '
