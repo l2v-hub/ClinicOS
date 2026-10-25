@@ -355,6 +355,127 @@ test('probe qualifies only one explicit Opus profile, ignoring internal models a
     assert.throws(() => qualifiedModelProfile(usage));
 });
 
+test('numeric Opus version/date IDs normalize an exact optional 1M tag before inference', () => {
+  for (const model of [
+    'claude-opus-4-7',
+    'claude-opus-4-20250514',
+    'claude-opus-4-1-20250805',
+    'claude-opus-5-5',
+  ]) {
+    for (const suffix of ['', '[1m]']) {
+      const resolved = qualifiedModelProfile({ [`${model}${suffix}`]: profile });
+      assert.deepEqual(resolved, { ...profile, model });
+      const prepared = prepareCloudInference({
+        packet: { subject_sha: sha },
+        sha,
+        profile: { ...profile, model: `${model}${suffix}` },
+      });
+      assert.equal(prepared.capacity.model, model);
+      assert.equal(prepared.args[prepared.args.indexOf('--model') + 1], `${model}[1m]`);
+    }
+  }
+});
+
+test('base and tagged Opus aliases remain ambiguous and malformed IDs never qualify', () => {
+  for (const modelUsage of [
+    { [profile.model]: profile, [`${profile.model}[1m]`]: profile },
+    { 'claude-opus-5-5[1m]': profile, 'claude-opus-4-7[1m]': profile },
+  ])
+    assert.throws(() => qualifiedModelProfile(modelUsage), /unique resolved Opus/);
+  for (const model of [
+    'claude-opus-5-5[200k]',
+    'claude-opus-5-5[1m][1m]',
+    'claude-opus-5-5[1M]',
+    'claude-opus-5-5[1m]-extra',
+    'claude-opus-5-5\n',
+    'claude-opus-5-5[1m]\n',
+    'claude-opus-5-5/extra',
+    'claude-opus-sk-ant-oat-token',
+    'claude-opus-sk-ant-oat01-synthetic',
+  ])
+    assert.throws(() => qualifiedModelProfile({ [model]: profile }), /unique resolved Opus/);
+});
+
+test('tagged profiles retain explicit context/output bounds and the 1M inference clamp', () => {
+  const model = 'claude-opus-5-5[1m]',
+    observed = { contextWindow: 1000000, maxOutputTokens: 128000 };
+  for (const contextWindow of [1000000, 1048576, 2000000])
+    assert.deepEqual(qualifiedModelProfile({ [model]: { ...observed, contextWindow } }), {
+      model: 'claude-opus-5-5',
+      ...observed,
+    });
+  for (const contextWindow of [200000, 999999, 2000001, 1000000.5, undefined])
+    assert.throws(() => qualifiedModelProfile({ [model]: { ...observed, contextWindow } }));
+  for (const maxOutputTokens of [0, -1, 1000000, 1000001, 128000.5, undefined])
+    assert.throws(() => qualifiedModelProfile({ [model]: { ...observed, maxOutputTokens } }));
+  const clamped = qualifiedModelProfile({
+    [model]: { contextWindow: 2000000, maxOutputTokens: 1000000 },
+  });
+  assert.throws(
+    () => prepareCloudInference({ packet: {}, sha, profile: clamped }),
+    /Qualified output capacity/,
+  );
+  assert.throws(
+    () =>
+      prepareCloudInference({
+        packet: { source: 'x'.repeat(40000) },
+        sha,
+        profile: { model, contextWindow: 1000000, maxOutputTokens: 900000 },
+      }),
+    /qualified context capacity/,
+  );
+});
+
+test('actual tagged modelUsage response shape passes the genuine probe before one native claim', async () => {
+  const f = fixture(),
+    observed = { contextWindow: 1000000, maxOutputTokens: 128000 };
+  assert.deepEqual(qualifiedModelProfile({ 'claude-opus-5-5[1m]': observed }), {
+    model: 'claude-opus-5-5',
+    ...observed,
+  });
+  f.options.probe = probeCloudClaude;
+  f.options.run = async (call) => {
+    assert.equal(call.command, 'claude');
+    assert.equal(call.envMode, 'review');
+    if (call.args.includes('--version')) {
+      f.calls.push('version');
+      return { ok: true, stdout: '2.1.301 (Claude Code)' };
+    }
+    const isProbe = call.input.startsWith('Authentication probe only.');
+    f.calls.push(isProbe ? 'probe' : 'model');
+    assert.equal(
+      call.args[call.args.indexOf('--model') + 1],
+      isProbe ? 'opus[1m]' : 'claude-opus-5-5[1m]',
+    );
+    return {
+      ok: true,
+      stdout: JSON.stringify({
+        type: 'result',
+        subtype: 'success',
+        is_error: false,
+        structured_output: isProbe ? { status: 'ok' } : approved,
+        modelUsage: { 'claude-opus-5-5[1m]': observed },
+      }),
+    };
+  };
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'published');
+  assert.deepEqual(f.calls, [
+    'retrieve',
+    'version',
+    'probe',
+    'claim',
+    'model',
+    'submit',
+    'reconcile',
+    'project',
+    'wake',
+  ]);
+  assert.equal(result.capacity.model, 'claude-opus-5-5');
+  assert.equal(result.capacity.contextWindow, observed.contextWindow);
+  assert.equal(result.capacity.maxOutputTokens, observed.maxOutputTokens);
+});
+
 test('a real successful probe envelope without context metadata still refuses qualification', async () => {
   const env = {
     CLAUDE_REVIEW_AUTH_MODE: 'subscription',

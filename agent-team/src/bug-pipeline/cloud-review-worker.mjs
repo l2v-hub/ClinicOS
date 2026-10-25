@@ -263,9 +263,10 @@ export function cloudClaudeArgs(schema, model = CLOUD_CLAUDE_MODEL) {
 }
 export function qualifiedModelProfile(modelUsage) {
   assert.ok(modelUsage && typeof modelUsage === 'object' && !Array.isArray(modelUsage));
-  const entries = Object.entries(modelUsage).filter(([key]) =>
-    /^claude-opus-[a-z0-9-]+$/.test(key),
+  const entries = Object.entries(modelUsage).filter(
+    ([key]) => /^claude-opus-[0-9]+(?:-[0-9]+){1,3}(?:\[1m\])?$/.exec(key)?.[0] === key,
   );
+  // Count entries before stripping the context tag: aliases still make the probe ambiguous.
   assert.equal(entries.length, 1, 'A unique resolved Opus probe model is required');
   const [key, usage] = entries[0];
   assert.ok(key.length <= 96);
@@ -282,7 +283,7 @@ export function qualifiedModelProfile(modelUsage) {
     'Qualified output capacity is required',
   );
   return {
-    model: key,
+    model: key.replace(/\[1m\]$/, ''),
     contextWindow: Math.min(usage.contextWindow, 1000000),
     maxOutputTokens: usage.maxOutputTokens,
   };
