@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "nonce": "b5903280-392e-4013-8af5-2f6df465c7c5",
+  "sealedAt": "2026-10-25T14:39:53.686415+00:00",
+  "verdict": "FAILED VALIDATION",
+  "sourceManifestSha256": "2769a945e26e064ed80aec7396a7ed4f4d25eae0f9362bb51e6534e9f9d0b200",
+  "sourceMatchesReservation": true,
+  "files": {
+    "STOP.json": "8440b0bf0c3817108fbba871b7f15a23df1f398fa7995c17f8ab42779f1db7d2",
+    "claim-race-probe-node22.log": "6cbfdbe4eab35efacd00d4595ad50bb3fecfe570721127ee5df22f7cdeda9140",
+    "claim-race-probe.log": "6cbfdbe4eab35efacd00d4595ad50bb3fecfe570721127ee5df22f7cdeda9140",
+    "claim-race-probe.mjs": "be8ef34b5368791a52542e9ad0be653d5b90b3435d4fe98652c63bb66047af92",
+    "focused-node22.log": "a7e8a2ae1e7ddc8fdeb148d6568b4676e6b535ee01c9a4c81bb3f593c2bcbb75",
+    "native-fixture.mjs": "2789fd33f78f9eea3b5942b80ec756c7566d5ee14986664776a414279cb31fc7",
+    "report.md": "49c2ccead1b56e5c2d99c65f23ddb6aa157171fdb845f1492dfdf41db650e87f",
+    "reservation.json": "16db2a3567fe40d2c9fc5b63bd5c235b4994aa66b8e4350b44d743cc4326d620",
+    "result.json": "e0bc7444eacfd4705f0b2b078187f16860d92077a4880496cd132674411242a1",
+    "source-after.json": "b56716e8085cf3eef376dafb75846694c957ec6891187e86c8a45de28ba40ad2",
+    "source-before.json": "867846310c13fc6b2a75f2b3112fbc621574e5763495e7e2106b1af06cd090e5"
+  }
+}

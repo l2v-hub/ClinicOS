@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "nonce": "39759edd-9ecc-4354-83fc-fecf1f3f8964",
+  "stoppedAt": "2026-10-25T15:50:03.279067+00:00",
+  "status": "STOPPED",
+  "verdict": "READY FOR CODEX QA",
+  "wholeActivation": "UNVERIFIED",
+  "reason": "Independent code gate passed; actual hosted authentication failed; frozen QA2 complete",
+  "furtherWritesAllowed": false,
+  "sourceUnchanged": true
+}

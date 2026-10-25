@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "reservationNonce": "b5903280-392e-4013-8af5-2f6df465c7c5",
+  "reviewedAt": "2026-10-25T14:39:53.686415+00:00",
+  "verdict": "FAILED VALIDATION",
+  "scope": "Independent code-component QA of frozen nine-file delta against 715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+  "sourceUnchanged": true,
+  "phases": {
+    "0_contract": "PASS",
+    "1_diff_review": "FAIL",
+    "2_build_tests": "FAIL: 110 focused tests pass; independent protocol invariant fails",
+    "3_ui_evidence": "PASS: contract classifies internal configuration; no UI change, no browser authorized",
+    "4_security": "FAIL: exact native request/claim publication binding",
+    "5_report": "PASS"
+  },
+  "tests": {
+    "runtime": "Node v22.23.4",
+    "focused": {
+      "passed": 110,
+      "failed": 0,
+      "log": "focused-node22.log"
+    },
+    "independentAdversarial": {
+      "reproduced": true,
+      "expectedInvariantPassed": false,
+      "log": "claim-race-probe-node22.log"
+    },
+    "fullBugPipeline": "DEFERRED after concrete failed frozen-source invariant; root explicitly requested no broadening and a sealed failure for repair"
+  },
+  "findings": [
+    {
+      "id": "QA1-01",
+      "severity": "high",
+      "category": "protocol correctness / request authorization binding",
+      "location": "agent-team/src/bug-pipeline/cloud-review-worker.mjs:396",
+      "relatedLocation": "agent-team/src/bug-pipeline/comment-review-handoff.mjs:287",
+      "title": "Completed inference can be submitted under a replacement native claim",
+      "trigger": "While round 1 inference is outstanding, an explicitly authorized operator settles and replaces its claim on the same SHA and actor.",
+      "observed": "Original inference publishes as replacement request nonce-3 / claim nonce-4 / round 2, although it started under request nonce-1 / claim nonce-2 / round 1.",
+      "expected": "Submit must atomically require the exact original claim, request, round and subject snapshot, and reject replacement reservations without publication or failure of the replacement claim.",
+      "proof": "claim-race-probe-node22.log",
+      "remediation": "Extend native submit with an expected reservation/snapshot and verify that binding in all publication guards; pass the original claimed snapshot from the cloud worker. Add replacement-claim-during-inference regression coverage for both native subject types."
+    }
+  ],
+  "actualHostedAuthentication": {
+    "status": "FAILED",
+    "runId": "40202235777",
+    "tokenPresent": true,
+    "providerAuthenticated": false,
+    "issueClaimsMade": 0,
+    "retryPerformedByQA": false
+  },
+  "wholeActivation": "UNVERIFIED / authentication qualification gate unpassed",
+  "realProviderCallsByQA": 0,
+  "realNativeWritesByQA": 0,
+  "genuineClaudeReviewProduced": false
+}
