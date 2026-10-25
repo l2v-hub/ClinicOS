@@ -1,58 +1,36 @@
-name: Qualify Claude Max cloud authentication
+name: Inspect Claude cloud credential format without values
 on:
   push:
     branches: [codex/claude-cloud-auth-probe-20261025]
 permissions:
   contents: read
-concurrency:
-  group: clinicos-claude-cloud-auth-probe-20261025
-  cancel-in-progress: false
 jobs:
-  authenticate:
+  inspect:
     if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/codex/claude-cloud-auth-probe-20261025'
     runs-on: ubuntu-22.04
-    timeout-minutes: 6
+    timeout-minutes: 3
     steps:
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
-        with:
-          node-version: 22
-      - name: Install pinned official CLI before loading credentials
-        run: npm install --prefix "$RUNNER_TEMP/claude-auth-tools" --no-audit --no-fund --no-save @anthropic-ai/claude-code@2.1.301
-      - name: Verify Max token with one isolated real call
+      - name: Inspect only credential shape metadata
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         run: |
           node --input-type=module <<'JS'
-          import {spawn} from 'node:child_process';
-          import {mkdtemp, mkdir, writeFile} from 'node:fs/promises';
-          import path from 'node:path';
-          const root=await mkdtemp(path.join(process.env.RUNNER_TEMP,'clinicos-max-auth-'));
-          await mkdir(path.join(root,'home'),{mode:0o700});
-          await mkdir(path.join(root,'work'),{mode:0o700});
-          const proof={schemaVersion:1,observedAt:new Date().toISOString(),repository:process.env.GITHUB_REPOSITORY,workflowSha:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,runAttempt:process.env.GITHUB_RUN_ATTEMPT,cliVersion:'2.1.301',authMode:'subscription-oauth-only',tokenPresent:Boolean(process.env.CLAUDE_CODE_OAUTH_TOKEN),apiFallbackAllowed:false,issueClaimsMade:0,credentialValuesPublished:false,providerAuthenticated:false};
-          let code='subscription-oauth-required';
-          if(proof.tokenPresent){
-           const env={PATH:process.env.PATH,HOME:path.join(root,'home'),CLAUDE_CONFIG_DIR:path.join(root,'home','.claude'),CLAUDE_CODE_OAUTH_TOKEN:process.env.CLAUDE_CODE_OAUTH_TOKEN,DISABLE_AUTOUPDATER:'1',CI:'true',LANG:'C.UTF-8'};
-           const args=['--print','--output-format','json','--tools','','--permission-mode','plan','--restricted','--setting-sources','','--strict-mcp-config','--mcp-config','{"mcpServers":{}}','--no-session-persistence','--max-turns','1','--model','sonnet','Return exactly CLOUD_MAX_OK.'];
-           const r=await new Promise(resolve=>{let stdout='',stderr='',failure=null,bytes=0;const child=spawn(path.join(process.env.RUNNER_TEMP,'claude-auth-tools/node_modules/.bin/claude'),args,{cwd:path.join(root,'work'),env,stdio:['ignore','pipe','pipe']});const timer=setTimeout(()=>{failure='claude-timeout';child.kill('SIGTERM')},90000);for(const[name,stream]of[['stdout',child.stdout],['stderr',child.stderr]])stream.on('data',b=>{bytes+=b.length;if(bytes>1048576){failure='claude-output-limit';child.kill('SIGTERM');return;}if(name==='stdout')stdout+=b;else stderr+=b;});child.on('error',()=>{failure='claude-spawn-failed'});child.on('close',exit=>{clearTimeout(timer);resolve({exit,stdout,stderr,failure})});});
-           if(r.failure)code=r.failure;else {
-            let e;try{e=JSON.parse(r.stdout)}catch{}
-            if(r.exit===0&&e&&!e.is_error&&e.result?.trim()==='CLOUD_MAX_OK'){proof.providerAuthenticated=true;code='subscription-authenticated';}
-            else if(/authentication_error|invalid oauth|oauth token|unauthorized|failed to authenticate/i.test(r.stdout+' '+r.stderr))code='claude-authentication-error';
-            else if(/rate_limit|usage limit|limit reached/i.test(r.stdout+' '+r.stderr))code='claude-rate-limit';
-            else code=r.exit===0?'claude-unexpected-response':'claude-nonzero-exit';
-           }
-          }
-          proof.code=code;
-          await writeFile(path.join(process.env.RUNNER_TEMP,'claude-cloud-auth-proof.json'),JSON.stringify(proof,null,2)+'\n',{mode:0o600});
-          console.log(JSON.stringify(proof));
-          if(!proof.providerAuthenticated)process.exitCode=1;
+          import {writeFileSync} from 'node:fs';
+          const raw=process.env.CLAUDE_CODE_OAUTH_TOKEN||'';
+          const trimmed=raw.trim();
+          const single=/^sk-ant-oat01-[A-Za-z0-9_-]+$/;
+          let candidate=trimmed;
+          if((candidate.startsWith('"')&&candidate.endsWith('"'))||(candidate.startsWith("'")&&candidate.endsWith("'")))candidate=candidate.slice(1,-1).trim();
+          if(candidate.startsWith('```')&&candidate.endsWith('```'))candidate=candidate.slice(3,-3).trim();
+          if(candidate.startsWith('`')&&candidate.endsWith('`'))candidate=candidate.slice(1,-1).trim();
+          const assignment=/^(?:export[ \t]+)?CLAUDE_CODE_OAUTH_TOKEN=(?:"(sk-ant-oat01-[A-Za-z0-9_-]+)"|'(sk-ant-oat01-[A-Za-z0-9_-]+)'|(sk-ant-oat01-[A-Za-z0-9_-]+))$/;
+          const m=assignment.exec(candidate);if(m)candidate=m[1]||m[2]||m[3];
+          const p={schemaVersion:1,runId:process.env.GITHUB_RUN_ID,workflowSha:process.env.GITHUB_SHA,observedAt:new Date().toISOString(),tokenPresent:Boolean(raw),plainOAuthShape:single.test(raw),trimmedOAuthShape:single.test(trimmed),apiKeyInsteadOfOAuth:/^sk-ant-api/.test(trimmed),copyWrapperRecoverable:raw!==candidate&&single.test(candidate),unrecognizedFormat:Boolean(raw)&&!single.test(candidate)&&!/^sk-ant-api/.test(trimmed),providerCalled:false,credentialValuesPublished:false};
+          writeFileSync(process.env.RUNNER_TEMP+'/claude-auth-format.json',JSON.stringify(p,null,2)+'\n',{mode:0o600});console.log(JSON.stringify(p));
           JS
-      - name: Preserve sanitized authentication result
-        if: always()
+      - name: Preserve nonsecret format flags
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: claude-cloud-auth-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/claude-cloud-auth-proof.json
-          if-no-files-found: warn
+          name: claude-cloud-auth-format-${{ github.run_id }}
+          path: ${{ runner.temp }}/claude-auth-format.json
           retention-days: 14
