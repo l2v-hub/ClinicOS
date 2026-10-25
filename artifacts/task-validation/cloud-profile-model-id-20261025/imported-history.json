@@ -1,0 +1,53 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "nonce": "503fa11e-0afc-4c3c-95d8-1dd9e9e844f1",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "8591ab31abf9eeab4b92d6c10a32bfee9d191483",
+      "baseSha": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+      "evidence": "independent-qa1/report.md",
+      "reason": "Actualparentmanualtaskround2 afterLunadocsround1 preservedinPR511; firstimplementationofpostmergecompatibilityfollowup, noreset/historydiscard",
+      "independentQaNonce": "30377597-f7bf-4513-8c4a-3935e9938505",
+      "independentQaSealSha256": "8f1a62620f80542a8f5da8996acc4c8bb9ecf50d224588c6635781733f6f4875"
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "sourceManifest": [
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "blob": "df7c0ff208121f011bb8dbd6fe75f5db93d5d89f",
+      "mode": "100644",
+      "baseBlob": "b1045645644a81aaf8314b6e4990f3b392a9e8a0",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "blob": "5be4e8f0537e80213110b88e3f96e2c453c86d08",
+      "mode": "100644",
+      "baseBlob": "3aa52fd3c9040e39c1446deddf6ea97e9fa3ea8b",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "actual-profile-observation.json": "168a3992c50fa77e65cabeecaa14e6502b2d5e02993c3f74a800d3bcfe92dc6a",
+    "analysis.md": "30129ba13f85348004f34a8436f65696b9d2a2f1b2430096a55d9e0110b811c5",
+    "author/STOP.json": "f87424a34234598eaa2d4c4eba317ded33ab3e9f5fd12c60815cdf95eceb67cd",
+    "author/report.md": "2ff6c1425dd5a9907507d1fc34e5d325b961e3a5de96c177d50c909cccd99b84",
+    "author/source-manifest.json": "0a6be99714a23618567f46d51edc19ad26106c327d00f238b298c7b996ed9bc6",
+    "author/source.patch": "dc627d815fd88441924d6cf49211a910c8f7413b75f872a3bd31bf21a40615f7",
+    "implementation-plan.md": "07276c323ccf25f0625c65b2153a4819d575a76f83835a6d8a860b0f5b14f978",
+    "independent-qa1/STOP.json": "52e57c006c0d6464da4783dae852b1dd572d478b07700a4da91f22f5b4b16760",
+    "independent-qa1/report.md": "8b5048e80c15faf184a134c6a4789b93f2d6b84ca1cdc38f9acd5c4ecc28ec4d",
+    "independent-qa1/result.json": "bd139dd3d4bb731984bedf0faa39fb36407f7ce024f225132723fa933a520fdd",
+    "independent-qa1/seal.json": "8f1a62620f80542a8f5da8996acc4c8bb9ecf50d224588c6635781733f6f4875",
+    "publication-topology.md": "542cafe991dccc8c01edf21a6382ac64476baa67851e74eb9ecda4faf836cc51",
+    "source-manifest.json": "ed390580c13fdf898d6c83bfb64f5b988e762a36f40b5cd609187971ac17e51e",
+    "task-contract.md": "1cc76e0a22549947e6635f0daebd67c6057dc1e5f513b11b7f4fa832670acfc9",
+    "validation-report.md": "69f085fb69d8d51959a115d758f6217e83fdd76b9d7d4dc79ae7b1508e3ae469"
+  }
+}

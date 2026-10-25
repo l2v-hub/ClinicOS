@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "status": "STOP",
+  "verdict": "READY FOR CODEX QA",
+  "nonce": "30377597-f7bf-4513-8c4a-3935e9938505",
+  "code": "8591ab31abf9eeab4b92d6c10a32bfee9d191483",
+  "sealedAt": "2026-10-25T20:08:37.811411+00:00",
+  "seal": {
+    "path": "seal.json",
+    "sha256": "8f1a62620f80542a8f5da8996acc4c8bb9ecf50d224588c6635781733f6f4875",
+    "bytes": 16511
+  },
+  "result": {
+    "path": "result.json",
+    "sha256": "bd139dd3d4bb731984bedf0faa39fb36407f7ce024f225132723fa933a520fdd",
+    "bytes": 2790
+  },
+  "report": {
+    "path": "report.md",
+    "sha256": "8b5048e80c15faf184a134c6a4789b93f2d6b84ca1cdc38f9acd5c4ecc28ec4d",
+    "bytes": 3813
+  },
+  "instruction": "No further QA writes. Root publication and activation are separate authorized steps."
+}

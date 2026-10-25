@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "type": "cloud-profile-diagnostic",
+  "sourceMain": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+  "runId": "40227632386",
+  "runAttempt": "1",
+  "qualified": false,
+  "reviewClaims": 0,
+  "variableWrites": 0,
+  "inferenceCalls": 1,
+  "versionQualified": true,
+  "processOk": true,
+  "exitCode": 0,
+  "processFailure": null,
+  "failureCode": null,
+  "envelopeParsed": true,
+  "isError": false,
+  "structuredOutputPresent": true,
+  "structuredStatusOk": true,
+  "models": [
+    {
+      "model": "claude-opus-5-5[1m]",
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000
+    }
+  ],
+  "hints": {
+    "authRejected": false,
+    "rateLimited": false,
+    "unsupportedModel": false,
+    "unsupportedArgument": false,
+    "unavailable1MContext": false,
+    "permissionOrScope": true
+  },
+  "assertionFailed": true
+}

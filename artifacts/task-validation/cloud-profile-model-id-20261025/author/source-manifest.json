@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "type": "source-freeze",
+  "task": "cloud-review-skill-alignment-20261025",
+  "nonce": "503fa11e-0afc-4c3c-95d8-1dd9e9e844f1",
+  "round": 2,
+  "parent": "d6d23302e999a435c1b4d912ed563e42ab33c60e",
+  "mainBase": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+  "pullRequest": 511,
+  "authorDirectory": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/model-id-fix-author",
+  "files": [
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "baselineSha256": "2456492ae734a32a4b813f2c82a93fcf4add80fb0c3df2f50ff7e2a31f00107b",
+      "sha256": "ee331b4cc10e24d957982f7a942b13a7b58c481a5dda418e32bb421fe043f4dd",
+      "bytes": 26951,
+      "baselineGitBlob": "b1045645644a81aaf8314b6e4990f3b392a9e8a0",
+      "gitBlob": "df7c0ff208121f011bb8dbd6fe75f5db93d5d89f"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "baselineSha256": "e2ef6fd1ab784888a6fe8d2e73b005ea0ebffa9a93814234ee4a8f5c1411fd0e",
+      "sha256": "fee5c174a884741a4c3ee894b819546959762c8561a74b370fee66d199a23353",
+      "bytes": 33623,
+      "baselineGitBlob": "3aa52fd3c9040e39c1446deddf6ea97e9fa3ea8b",
+      "gitBlob": "5be4e8f0537e80213110b88e3f96e2c453c86d08"
+    }
+  ],
+  "artifacts": {
+    "reservation.json": "37b1227e4e804fa906c90c2a0019c4c39444dfe1f48b5cecce0c8ba7b971fc82",
+    "task-contract.md": "1cc76e0a22549947e6635f0daebd67c6057dc1e5f513b11b7f4fa832670acfc9",
+    "source.patch": "dc627d815fd88441924d6cf49211a910c8f7413b75f872a3bd31bf21a40615f7",
+    "scope-validation.json": "bcb2808ced6748546014eae398397b617f357170da8e93face0088a2f585eb08",
+    "fixture-closure.json": "4ba60a9c986830dbb32352a4b75289498e4ce4cba2b8099bdee7d9d5c33e6e79",
+    "frozen-prettierrc.json": "aa4fb8d80e2084c1d070dbc8e53c47f33b14e17c6c0c62f422d064ec2e4a2a5c",
+    "report.md": "2ff6c1425dd5a9907507d1fc34e5d325b961e3a5de96c177d50c909cccd99b84",
+    "logs/baseline-regressions.tap": "01638e008400f8f6328f98100c16bf006b399cf31b9cdb9eb9037e8e01369569",
+    "logs/final-format-check.txt": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "logs/final-targeted-tests.tap": "1da1a0ced0a4e191e6a1d6ade20daf0b8515e7dc9dabf95864f9335ac9a17e4f",
+    "logs/format-check-without-repo-config.txt": "4b8b88427a1579d90ec29cbdcd1cc98fc1fc82ee219d386dd337656056e205f9",
+    "logs/format-write.txt": "2f3ba189a4cb41daa051ea5f49135116f1001007bcbf2ccfd4b63eddc7692c75",
+    "logs/patch-dry-run.txt": "17d8b67f11e08f806ff4e2274edf3dbac4fc581c43986e173f30371c54f891a0",
+    "logs/targeted-tests.tap": "327c7a750b38d659730c37ecdc0054a2d87c05828c5bb98da5ed744753d9a4d5"
+  },
+  "capturedDiagnostic": {
+    "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/cloud-profile-diagnostic-publication4/actual-diagnostic-result.json",
+    "sha256": "168a3992c50fa77e65cabeecaa14e6502b2d5e02993c3f74a800d3bcfe92dc6a",
+    "runId": "40227632386"
+  },
+  "verification": {
+    "targetedTests": 34,
+    "passed": 34,
+    "failed": 0,
+    "baselineRegressionsFailedAsExpected": 4,
+    "formatPassed": true,
+    "patchDryRunPassed": true,
+    "allOtherWorkerBytesUnchanged": true
+  },
+  "nodeVersion": "v22.23.4",
+  "prettierVersion": "3.9.5",
+  "authority": {
+    "realProviderCalls": 0,
+    "installs": 0,
+    "externalWrites": 0,
+    "readyForIndependentQA": true
+  }
+}
