@@ -1,0 +1,34 @@
+{
+  "files": [
+    {
+      "path": "docs/cloud-claude-review.md",
+      "baseHead": "e26f4cdf2060b5e3cdac64ca9d60d56cd22e8db4",
+      "baseBlob": "32867115a3f2e654534e29985bad7de55006846a",
+      "baselineHash": "1c2e9ae507f0efc7943b9f4efb8775a8533876719ca7a3e056da5850d38c6979",
+      "newHash": "a50423aad13a1815ab84b669e2ee9010bb6434c0b2c4e5237e004f247d886801",
+      "baselineCopy": "source/baseline/docs/cloud-claude-review.md",
+      "newCopy": "edited/docs/cloud-claude-review.md"
+    },
+    {
+      "path": ".claude/skills/clinicos/references/bug-delivery.md",
+      "baseHead": "d6d23302e999a435c1b4d912ed563e42ab33c60e",
+      "baseBlob": "e9d0d5c48934377249e78fcbe372c0b4f16680aa",
+      "baselineHash": "70bd5de7fb8169fdce3c98e07047f8754080beac04dad875860526584bea761d",
+      "newHash": "42c2473545a1cb7690d686e9bdfa5ab64be3dfa79bcdfdc0846aa4e6d4f73b40",
+      "baselineCopy": "source/baseline/skill/bug-delivery.md",
+      "newCopy": "edited/skill/bug-delivery.md"
+    }
+  ],
+  "supportingSources": [
+    {
+      "path": "source/evidence/claude-cloud-review.yml",
+      "sourceHead": "e26f4cdf2060b5e3cdac64ca9d60d56cd22e8db4",
+      "sha256": "440d65be34c642e63e6017fd59bd92a9f8e11ecfb63eaf65dc1ec15d77812365"
+    },
+    {
+      "path": "source/evidence/cloud-review-worker.mjs",
+      "sourceHead": "e26f4cdf2060b5e3cdac64ca9d60d56cd22e8db4",
+      "sha256": "2456492ae734a32a4b813f2c82a93fcf4add80fb0c3df2f50ff7e2a31f00107b"
+    }
+  ]
+}

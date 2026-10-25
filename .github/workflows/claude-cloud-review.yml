@@ -22,9 +22,10 @@ permissions:
 
 jobs:
   review:
+    # Missing configuration enables repository-approved reviews; explicit false is the emergency stop. Unknown values fail closed.
     if: >-
       github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/main' &&
-      (vars.CLAUDE_CLOUD_REVIEW_ENABLED == 'true' ||
+      (vars.CLAUDE_CLOUD_REVIEW_ENABLED == '' || vars.CLAUDE_CLOUD_REVIEW_ENABLED == 'true' ||
        (github.event_name == 'workflow_dispatch' && inputs.mode == 'probe')) &&
       ((github.event_name == 'issues' && github.event.label.name == 'claude-review-ready') ||
        (github.event_name == 'pull_request_target' && github.event.label.name == 'claude-review-ready') ||

@@ -1,0 +1,25 @@
+{
+  "status": "READY FOR CODEX QA",
+  "nonce": "3112f519-172c-408c-a10c-b3b291da7a58",
+  "authorNonce": "da7db716-2be9-4e3f-88fa-61a3534815d1",
+  "baseline": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+  "findings": [],
+  "sourceHashes": {
+    ".github/workflows/claude-cloud-review.yml": "440d65be34c642e63e6017fd59bd92a9f8e11ecfb63eaf65dc1ec15d77812365",
+    "agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs": "8f1a9cb971eaa70359c1ad1552a648e62864294cbcd9f8f237918dd30fcea371"
+  },
+  "checks": {
+    "green": 0,
+    "red": 1,
+    "actionlint": 0,
+    "independent": 0
+  },
+  "independentCases": 263,
+  "authorReservationHashesUnchanged": true,
+  "workflowRecoveredExactlyToBaseline": true,
+  "uiEvidence": "N/A: no UI or clinical source changes",
+  "providerCalls": 0,
+  "apiWrites": 0,
+  "sourceWrites": 0,
+  "operationalActivationProven": false
+}

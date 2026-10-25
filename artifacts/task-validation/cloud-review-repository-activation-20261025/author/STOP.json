@@ -1,0 +1,18 @@
+{
+  "status": "STOP-sealed",
+  "nonce": "da7db716-2be9-4e3f-88fa-61a3534815d1",
+  "round": 1,
+  "baseline": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+  "sourcePaths": [
+    ".github/workflows/claude-cloud-review.yml",
+    "agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs"
+  ],
+  "providerCalls": 0,
+  "checks": {
+    "baselineFocusedTest": "RED",
+    "candidateFocusedTest": "GREEN (3 passed)",
+    "actionlint": "passed",
+    "nodeSyntax": "passed"
+  },
+  "operationalActivationProven": false
+}

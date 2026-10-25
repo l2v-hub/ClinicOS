@@ -17,9 +17,11 @@ The probe explicitly requests `opus[1m]` and requires one resolved Opus model en
 `modelUsage.contextWindow` and `maxOutputTokens` metadata. Internal model entries cannot qualify
 the review model. Missing, ambiguous or smaller-context profiles fail before a claim. Reviews pin
 the resolved safe Opus ID with `[1m]`, and the qualified context is capped at 1,000,000 tokens.
-Review jobs remain disabled until repository variable `CLAUDE_CLOUD_REVIEW_ENABLED` is `true`.
-Probe dispatch remains available while that variable is unset/false. Enable review only after
-the actual hosted probe passes, preventing repeated attempts with an invalid credential.
+An unset or empty `CLAUDE_CLOUD_REVIEW_ENABLED` variable, or `true`, enables queued review jobs;
+`false` or any other value disables them. No variable needs to be created: merging this reviewed
+workflow on `main` may activate queued reviews by default. Probe dispatch remains available when
+reviews are disabled. Dispatch `mode=probe` on `main` and verify its real `probe-passed` receipt,
+qualified model profile, and a successful review event before declaring activation operational.
 
 Review mode is triggered by `claude-review-ready` label events, the native request comment,
 manual dispatch or a ten-minute scheduled catchup. Labels/comments only wake the worker.

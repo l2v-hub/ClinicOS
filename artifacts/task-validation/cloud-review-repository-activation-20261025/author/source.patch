@@ -1,0 +1,104 @@
+--- a/.github/workflows/claude-cloud-review.yml
++++ b/.github/workflows/claude-cloud-review.yml
+@@ -22,9 +22,10 @@
+ 
+ jobs:
+   review:
++    # Missing configuration enables repository-approved reviews; explicit false is the emergency stop. Unknown values fail closed.
+     if: >-
+       github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/main' &&
+-      (vars.CLAUDE_CLOUD_REVIEW_ENABLED == 'true' ||
++      (vars.CLAUDE_CLOUD_REVIEW_ENABLED == '' || vars.CLAUDE_CLOUD_REVIEW_ENABLED == 'true' ||
+        (github.event_name == 'workflow_dispatch' && inputs.mode == 'probe')) &&
+       ((github.event_name == 'issues' && github.event.label.name == 'claude-review-ready') ||
+        (github.event_name == 'pull_request_target' && github.event.label.name == 'claude-review-ready') ||
+--- /dev/null
++++ b/agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs
+@@ -0,0 +1,87 @@
++import assert from 'node:assert/strict';
++import { readFile } from 'node:fs/promises';
++import test from 'node:test';
++
++const workflow = await readFile(new URL('../../../.github/workflows/claude-cloud-review.yml', import.meta.url), 'utf8');
++const marker = "      github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/main' &&\n";
++const gateStart = workflow.indexOf(marker);
++assert.notEqual(gateStart, -1, 'repository and trusted ref guard must remain in the job gate');
++const activationStart = gateStart + marker.length;
++const activationEnd = workflow.indexOf(' &&\n      ((github.event_name', activationStart);
++assert.notEqual(activationEnd, -1, 'activation clause must remain before the original event gate');
++const clause = workflow.slice(activationStart, activationEnd).trim();
++
++function tokenize(source) {
++  const tokens = source.match(/\s*(?:\(|\)|==|&&|\|\||'[^']*'|[A-Za-z_][A-Za-z0-9_.]*)/gy);
++  assert.ok(tokens, 'activation expression must use supported syntax');
++  const normalized = tokens.map((token) => token.trim());
++  assert.equal(normalized.join(''), source.replace(/\s+/g, ''), 'reject unsupported expression syntax');
++  return normalized;
++}
++function evaluate(source, context) {
++  const tokens = tokenize(source);
++  let index = 0;
++  function primary() {
++    if (tokens[index] === '(') {
++      index++;
++      const value = orExpression();
++      assert.equal(tokens[index++], ')', 'balanced activation parentheses');
++      return value;
++    }
++    const name = tokens[index++];
++    assert.ok(name && /^[A-Za-z_][A-Za-z0-9_.]*$/.test(name), 'expected known identifier');
++    assert.ok(Object.hasOwn(context, name), `unknown activation identifier ${name}`);
++    const left = context[name];
++    assert.equal(tokens[index++], '==', 'activation uses only equality comparisons');
++    const literal = tokens[index++];
++    assert.ok(literal?.startsWith("'") && literal.endsWith("'"), 'expected quoted string');
++    // GitHub Actions string comparisons, including equality, ignore case.
++    return String(left).toLowerCase() === literal.slice(1, -1).toLowerCase();
++  }
++  function andExpression() {
++    let value = primary();
++    while (tokens[index] === '&&') { index++; const rhs = primary(); value = value && rhs; }
++    return value;
++  }
++  function orExpression() {
++    let value = andExpression();
++    while (tokens[index] === '||') { index++; const rhs = andExpression(); value = value || rhs; }
++    return value;
++  }
++  const value = orExpression();
++  assert.equal(index, tokens.length, 'unexpected trailing activation syntax');
++  return value;
++}
++
++const activation = (setting, event = 'issues', mode = 'review') => evaluate(clause, {
++  'vars.CLAUDE_CLOUD_REVIEW_ENABLED': setting,
++  'github.event_name': event,
++  'inputs.mode': mode,
++});
++
++test('unset and true enable eligible reviews; false and malformed settings fail closed', () => {
++  for (const setting of ['', 'true', 'TRUE']) assert.equal(activation(setting), true, `${setting} should enable`);
++  for (const setting of ['false', 'FALSE', 'tru', ' true', 'yes']) {
++    assert.equal(activation(setting), false, `${setting} must remain disabled`);
++    // Both scheduled and manually dispatched review work are blocked by the same actual gate.
++    assert.equal(activation(setting, 'schedule'), false);
++    assert.equal(activation(setting, 'workflow_dispatch', 'review'), false);
++  }
++});
++
++test('authentication probe dispatch bypass is preserved for every activation setting', () => {
++  for (const setting of ['', 'true', 'false', 'FALSE', 'invalid']) {
++    assert.equal(activation(setting, 'workflow_dispatch', 'probe'), true);
++  }
++});
++
++test('the repository, trusted ref, eligible event filters and protected checkout remain intact', () => {
++  assert.ok(workflow.includes("github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/main'"));
++  assert.ok(workflow.includes("github.event.label.name == 'claude-review-ready'"));
++  assert.ok(workflow.includes("startsWith(github.event.comment.body, '<!-- clinicos-review-handoff:v1 -->')"));
++  assert.ok(workflow.includes("contains(github.event.comment.body, '\"kind\": \"request\"')"));
++  assert.ok(workflow.includes('github.event_name == \'workflow_dispatch\' || github.event_name == \'schedule\')'));
++  assert.ok(workflow.includes('ref: refs/heads/main'));
++  assert.ok(workflow.includes('persist-credentials: false'));
++  assert.match(workflow, /permissions:\n  contents: read/);
++});

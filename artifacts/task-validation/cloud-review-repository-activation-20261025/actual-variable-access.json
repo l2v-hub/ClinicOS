@@ -1,0 +1,13 @@
+{
+  "type": "hosted-variable-access",
+  "runId": "40231242954",
+  "tokenPresent": true,
+  "providerCalls": 0,
+  "apiWrites": 0,
+  "actorHttpStatus": 200,
+  "actorMatchesExpected": true,
+  "variableHttpStatus": 403,
+  "variableState": "unreadable",
+  "transportError": false,
+  "parseError": false
+}

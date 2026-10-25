@@ -1,0 +1,6 @@
+# Baseline workflow copied from e431990b8e28830972f7f5ab36379e3b1023b9cc
+e1bec27ba5fe1263817fc06f42e22aeae99203897a775747c01f7c912093cda4  baseline-workflow.yml
+# Candidate files
+440d65be34c642e63e6017fd59bd92a9f8e11ecfb63eaf65dc1ec15d77812365  source/.github/workflows/claude-cloud-review.yml
+8f1a9cb971eaa70359c1ad1552a648e62864294cbcd9f8f237918dd30fcea371  source/agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs
+092aa251008bd6b4a74d5427c43c7e3eb4cc9638dcf81b9ac09d016b350469c8  source.patch

@@ -1,0 +1,53 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "nonce": "da7db716-2be9-4e3f-88fa-61a3534815d1",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "8d98709bb18e7e8bf44eef4e1720aa6050e86599",
+      "baseSha": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+      "evidence": "independent-qa1/report.md",
+      "reason": "Actualboundedrepositoryactivationimplementation, prior512history separateunchanged; noreset",
+      "independentQaNonce": "3112f519-172c-408c-a10c-b3b291da7a58",
+      "independentQaSealSha256": "17b792728ebbd5099f281fb20993b0d667ba327e719c409e6370a41179345f24"
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/claude-cloud-review.yml",
+      "blob": "78cfc11cedd79fc2558f8150399464b3d9135769",
+      "mode": "100644",
+      "baseBlob": "2cec3c15f2eb15196c2464f29d542a4db3a36fa6",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs",
+      "blob": "3a2ec499b4ea40f41044cd8769869659ff8e4344",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "actual-activation-context.json": "1c6541c8e87719c042885aae4bceb89c2eaae3331b908e05f734ad7f72f334e5",
+    "actual-variable-access.json": "d4fb82865db3d66fcec24db128a967d7661791574ffec878b34d0772ef00abb4",
+    "analysis.md": "1ba719e4e8fa66aa1b0cbc77c4304e0b67b8fc20e0ab3c86d5d3b89f56142054",
+    "author/STOP.json": "9f368e59696944c3561acd921e68bf341ed25a7573306af8531d8c7ad610f068",
+    "author/report.md": "e26b44f4eafc68ec7797c0224f4c08330c886278b9f25651dc30541e199a70f3",
+    "author/source-manifest.sha256": "2089ccbe67c023d58dd1903a77c3ea44476537b60cd3cb84fe8db7c054fd986e",
+    "author/source.patch": "092aa251008bd6b4a74d5427c43c7e3eb4cc9638dcf81b9ac09d016b350469c8",
+    "implementation-plan.md": "673142fce8b84ebddd6b40c2931ffca1309ea37c25b9ce5043ee5c7f8c69d5d5",
+    "independent-qa1/STOP.json": "44d48c98ec8b0016fae9b6c67c5c0ad80e5c8137d41ca860285e591260ea3f8d",
+    "independent-qa1/report.md": "e16a17cc8c73d729031acf67917ae6fa52e18c98e462e99a849780703d71dcd6",
+    "independent-qa1/result.json": "e5184eaff8077b23b27eac4942e31385c8e6e45c5ccb2b3b15381d5852a631e7",
+    "independent-qa1/seal.json": "17b792728ebbd5099f281fb20993b0d667ba327e719c409e6370a41179345f24",
+    "source-manifest.json": "43c901ea02594c69e37c2c83fa01af040f168fd6c5bf2ed1e64796bbd85b2ace",
+    "task-contract.md": "45851ee415d6cb9e61e177fda8d4e0625fda3ad23182fb93cdcd5f4f1bd0ab7c",
+    "validation-report.md": "72556521224150ee9695232a5fc46214b784e096b28a4bd8ea426c7b5e35eb2f"
+  }
+}
