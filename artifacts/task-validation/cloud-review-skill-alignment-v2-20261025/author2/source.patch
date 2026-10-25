@@ -1,0 +1,60 @@
+--- a/docs/cloud-claude-review.md
++++ b/docs/cloud-claude-review.md
+@@ -17,9 +17,11 @@
+ `modelUsage.contextWindow` and `maxOutputTokens` metadata. Internal model entries cannot qualify
+ the review model. Missing, ambiguous or smaller-context profiles fail before a claim. Reviews pin
+ the resolved safe Opus ID with `[1m]`, and the qualified context is capped at 1,000,000 tokens.
+-Review jobs remain disabled until repository variable `CLAUDE_CLOUD_REVIEW_ENABLED` is `true`.
+-Probe dispatch remains available while that variable is unset/false. Enable review only after
+-the actual hosted probe passes, preventing repeated attempts with an invalid credential.
++An unset or empty `CLAUDE_CLOUD_REVIEW_ENABLED` variable, or `true`, enables queued review jobs;
++`false` or any other value disables them. No variable needs to be created: merging this reviewed
++workflow on `main` may activate queued reviews by default. Probe dispatch remains available when
++reviews are disabled. Dispatch `mode=probe` on `main` and verify its real `probe-passed` receipt,
++qualified model profile, and a successful review event before declaring activation operational.
+ 
+ Review mode is triggered by `claude-review-ready` label events, the native request comment,
+ manual dispatch or a ten-minute scheduled catchup. Labels/comments only wake the worker.
+--- a/.claude/skills/clinicos/references/bug-delivery.md
++++ b/.claude/skills/clinicos/references/bug-delivery.md
+@@ -179,12 +179,15 @@
+ report strutturato di Claude; il modello read-only non scrive direttamente tramite strumenti
+ vietati. Claude Max può operare in una sessione autenticata su un host supportato oppure, se
+ configurato, tramite il worker GitHub-hosted fidato su `main` con `CLAUDE_CODE_OAUTH_TOKEN`
+-(autenticazione OAuth dell’abbonamento). Per il worker hosted, esegui prima il dispatch `probe`
+-e richiedi una ricevuta `probe-passed` che confermi autenticazione reale e profilo modello
+-supportato; abilita `CLAUDE_CLOUD_REVIEW_ENABLED=true` solo dopo tale esito positivo. La probe
+-qualifica autenticazione e profilo di quel percorso, non l’abilitazione dei workflow Codex. Non
+-assumere una sessione GUI locale ereditata, non usare fatturazione Anthropic API come fallback
+-e non aggiungere una chiave API.
++(autenticazione OAuth dell’abbonamento). Per il worker hosted, `CLAUDE_CLOUD_REVIEW_ENABLED`
++assente/vuota o `true` abilita le review in coda; `false` o un valore non valido le disabilita,
++mentre il dispatch `probe` resta disponibile. Non è necessario creare la variabile: il merge su
++`main` del workflow revisionato può attivare le review per impostazione predefinita. Esegui il
++dispatch `probe` su `main` e verifica ricevuta reale `probe-passed`, profilo modello supportato
++e un evento di review riuscito prima di dichiarare operativa l’attivazione. La probe qualifica
++autenticazione e profilo di quel percorso, non l’abilitazione dei workflow Codex. Non assumere
++una sessione GUI locale ereditata, non usare fatturazione Anthropic API come fallback e non
++aggiungere una chiave API.
+ 
+ Usa i contratti correnti di `externalReview`, sincronizzazione commenti e skill di review.
+ Le label `claude-review-ready`, `claude-reviewing`, `codex-review-fixes`, `review-blocked`,
+@@ -227,10 +230,14 @@
+ sono passaggi successivi e distinti. Una configurazione o un test con adapter simulato non prova
+ una chiamata reale. Il runner Actions non eredita una sessione Claude Max interattiva locale: il percorso hosted usa il worker
+ fidato descritto in `docs/cloud-claude-review.md`, con OAuth dell’abbonamento tramite
+-`CLAUDE_CODE_OAUTH_TOKEN`. Prima di abilitare `CLAUDE_CLOUD_REVIEW_ENABLED=true`, verifica la
+-probe reale e il profilo modello supportato. Se non si usa quel percorso, la review può avvenire
+-su un host supportato con sessione Max autenticata e profilo verificato. Nessuno dei due
+-percorsi usa Anthropic API a pagamento o richiede una chiave API aggiuntiva.
++`CLAUDE_CODE_OAUTH_TOKEN`. `CLAUDE_CLOUD_REVIEW_ENABLED` assente/vuota o `true` abilita le
++review in coda; `false` o un valore non valido le disabilita, mentre il dispatch `probe` resta
++disponibile. Non è necessario creare la variabile: il merge su `main` del workflow revisionato
++può attivare le review per impostazione predefinita. Esegui il dispatch `probe` su `main` e
++verifica la ricevuta reale `probe-passed`, il profilo modello supportato e un evento di review
++riuscito prima di dichiarare operativa l’attivazione. Se non si usa quel percorso, la review può
++avvenire su un host supportato con sessione Max autenticata e profilo verificato. Nessuno dei
++due percorsi usa Anthropic API a pagamento o richiede una chiave API aggiuntiva.
+ 
+ Dopo la presa in carico durevole imposta `In progress`; per impedimenti reali usa `Bloccato`
+ con causa verificata e condizione di sblocco. Il controller mantiene stato e contatori;
