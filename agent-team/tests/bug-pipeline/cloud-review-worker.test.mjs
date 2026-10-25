@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, rm, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { createRunner } from '../../src/bug-pipeline/process.mjs';
@@ -10,12 +10,15 @@ import {
   probeCloudClaude,
   createReviewSourceReader,
   cloudClaudeArgs,
+  prepareCloudInference,
+  qualifiedModelProfile,
 } from '../../src/bug-pipeline/cloud-review-worker.mjs';
 
 const repo = 'l2v-hub/ClinicOS',
   sha = 'a'.repeat(40),
   base = 'b'.repeat(40);
 const clone = (value) => structuredClone(value);
+const profile = { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 };
 const approved = {
   subject_sha: sha,
   verdict: 'approved',
@@ -24,7 +27,7 @@ const approved = {
 };
 const envelope = (structured_output) => ({
   ok: true,
-  stdout: JSON.stringify({ structured_output }),
+  stdout: JSON.stringify({ structured_output, modelUsage: { [profile.model]: profile } }),
 });
 const plan = {
   title: 'Synthetic review',
@@ -79,6 +82,7 @@ function fixture() {
     },
     probe: async () => {
       calls.push('probe');
+      return { profile };
     },
     handoff: {
       claim: async () => {
@@ -166,13 +170,13 @@ test('missing/invalid subscription credentials and stale source stop before nati
   const f = fixture();
   f.options.probe = probeCloudClaude;
   f.options.env.CLAUDE_CODE_OAUTH_TOKEN = '';
-  await assert.rejects(processCloudReview(f.options), /credential missing/);
+  assert.equal((await processCloudReview(f.options)).status, 'capability-blocked');
   assert.deepEqual(f.calls, ['retrieve']);
   const g = fixture();
   g.options.probe = async () => {
     throw new Error('Synthetic auth rejection');
   };
-  await assert.rejects(processCloudReview(g.options), /auth rejection/);
+  assert.equal((await processCloudReview(g.options)).status, 'capability-blocked');
   assert.deepEqual(g.calls, ['retrieve']);
   const h = fixture();
   h.options.retrieve = async () => {
@@ -190,7 +194,7 @@ test('native CAS loser never invokes review inference', async () => {
   await assert.rejects(processCloudReview(f.options), /CAS conflict/);
   assert.deepEqual(f.calls, ['retrieve', 'probe', 'claim-conflict']);
 });
-test('invalid report spends only its own claim as failure, without submit, retry or wake', async () => {
+test('invalid report spends its own claim, notifies recovery and never retries automatically', async () => {
   const f = fixture();
   f.options.run = async () => envelope({ ...approved, subject_sha: base });
   const result = await processCloudReview(f.options);
@@ -201,6 +205,7 @@ test('invalid report spends only its own claim as failure, without submit, retry
     'claim',
     'fail:review-validation-failed',
     'project',
+    'wake',
   ]);
   assert.equal(f.subject.reviews[0].status, 'failed');
   assert.equal((await processCloudReview(f.options)).status, 'empty');
@@ -211,7 +216,13 @@ test('uncertain publication preserves genuine findings and the existing running 
     f.calls.push('submit-uncertain');
     throw new Error('POST outcome unknown');
   };
-  await assert.rejects(processCloudReview(f.options), /outcome unknown/);
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'publication-uncertain');
+  assert.deepEqual(result.report, approved);
+  assert.equal(
+    result.reportSha256,
+    createHash('sha256').update(JSON.stringify(approved)).digest('hex'),
+  );
   assert.equal(f.subject.reviews[0].status, 'running');
   assert.ok(!f.calls.some((call) => call.startsWith('fail:')));
   assert.equal((await processCloudReview(f.options)).status, 'empty');
@@ -255,6 +266,205 @@ test('real auth probe requires a real successful structured inference and qualif
     /probe failed/,
   );
   assert.equal(cloudClaudeArgs({}).includes('--bare'), false);
+});
+
+test('probe qualifies only one explicit Opus profile, ignoring internal models and clamping the known context maximum', () => {
+  assert.deepEqual(
+    qualifiedModelProfile({
+      'claude-haiku-4-5': { contextWindow: 999999999, maxOutputTokens: 64000 },
+      [profile.model]: { contextWindow: 1048576, maxOutputTokens: 64000 },
+    }),
+    profile,
+  );
+  for (const usage of [
+    undefined,
+    {},
+    { [profile.model]: {} },
+    { [profile.model]: { ...profile, contextWindow: 200000 } },
+    { [profile.model]: { ...profile, maxOutputTokens: undefined } },
+    { [profile.model]: profile, 'claude-opus-4-6': profile },
+    { 'claude-opus-4-7;echo': profile },
+  ])
+    assert.throws(() => qualifiedModelProfile(usage));
+});
+
+test('a real successful probe envelope without context metadata still refuses qualification', async () => {
+  const env = {
+    CLAUDE_REVIEW_AUTH_MODE: 'subscription',
+    CLAUDE_CODE_OAUTH_TOKEN: 'synthetic-oauth',
+  };
+  const run = async (call) =>
+    call.args.includes('--version')
+      ? { ok: true, stdout: '2.1.301 (Claude Code)' }
+      : { ok: true, stdout: JSON.stringify({ structured_output: { status: 'ok' } }) };
+  await assert.rejects(probeCloudClaude({ env, run, cwd: '/empty' }));
+});
+
+test('missing/small/ambiguous probe context and oversized complete inputs never claim or invoke review', async () => {
+  for (const missing of [
+    undefined,
+    {},
+    { ...profile, contextWindow: 200000 },
+    { ...profile, maxOutputTokens: undefined },
+  ]) {
+    const f = fixture();
+    f.options.probe = async () => ({ profile: missing });
+    const result = await processCloudReview(f.options);
+    assert.equal(result.status, 'capability-blocked');
+    assert.equal(f.subject.reviews.length, 0);
+    assert.ok(!f.calls.includes('claim') && !f.calls.includes('model'));
+  }
+  const f = fixture();
+  f.options.retrieve = async () => ({
+    packet: { source: 'x'.repeat(701 * 1024) },
+    tracked: new Set(),
+  });
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'queue-blocked');
+  assert.equal(result.blockedSubjects[0].status, 'capacity-unavailable');
+  assert.equal(f.subject.reviews.length, 0);
+  assert.ok(!f.calls.includes('claim') && !f.calls.includes('model'));
+});
+
+test('the exact serialized Unicode/escaped prompt and schema fit the qualified profile before its pinned model call', async () => {
+  const f = fixture(),
+    packet = { source: '漢字😀\\\n"\t'.repeat(1000) };
+  const prepared = prepareCloudInference({ packet, sha, profile });
+  assert.equal(prepared.capacity.inputBytes, Buffer.byteLength(prepared.input));
+  assert.equal(
+    prepared.capacity.schemaBytes,
+    Buffer.byteLength(prepared.args[prepared.args.indexOf('--json-schema') + 1]),
+  );
+  assert.equal(
+    prepared.capacity.requiredTokensUpperBound,
+    prepared.capacity.inputBytes + prepared.capacity.schemaBytes + 65536 + profile.maxOutputTokens,
+  );
+  assert.equal(prepared.args[prepared.args.indexOf('--model') + 1], `${profile.model}[1m]`);
+  assert.ok(cloudClaudeArgs({}).includes('opus[1m]'));
+  f.options.retrieve = async () => ({ packet, tracked: new Set(['src/file.mjs']) });
+  const baseRun = f.options.run;
+  f.options.run = async (call) => {
+    assert.equal(call.input, prepared.input);
+    assert.deepEqual(call.args, prepared.args);
+    return baseRun(call);
+  };
+  assert.equal((await processCloudReview(f.options)).status, 'published');
+  const crowded = fixture();
+  crowded.options.probe = async () => ({ profile: { ...profile, maxOutputTokens: 900000 } });
+  crowded.options.retrieve = async () => ({
+    packet: { source: 'x'.repeat(40000) },
+    tracked: new Set(),
+  });
+  assert.equal((await processCloudReview(crowded.options)).status, 'queue-blocked');
+  assert.equal(crowded.subject.reviews.length, 0);
+});
+
+test('every publication stage retains the full sanitized valid report and digest without retrying or failing a claim', async () => {
+  for (const stage of ['submit', 'reconcile', 'projection']) {
+    const f = fixture();
+    if (stage === 'submit')
+      f.options.handoff.submit = async () => {
+        throw new Error('Unknown POST');
+      };
+    if (stage === 'reconcile')
+      f.options.handoff.reconcilePR = async () => {
+        throw new Error('Partial publication');
+      };
+    if (stage === 'projection')
+      f.options.communication.publishState = async () => {
+        throw new Error('Projection unavailable');
+      };
+    const result = await processCloudReview(f.options);
+    assert.equal(result.status, 'publication-uncertain');
+    assert.equal(result.publicationStage, stage);
+    assert.deepEqual(result.report, approved);
+    assert.equal(
+      result.reportSha256,
+      createHash('sha256').update(JSON.stringify(result.report)).digest('hex'),
+    );
+    assert.ok(!f.calls.some((call) => call.startsWith('fail:')));
+    assert.equal((await processCloudReview(f.options)).status, 'empty');
+  }
+});
+
+test('retained ownership-change report is sanitized and hashed without exposing clinical/contact fields', async () => {
+  const f = fixture();
+  f.options.run = async () =>
+    envelope({
+      ...approved,
+      summary: 'Review fixture patientName=Alice Example; contact operator@example.invalid',
+    });
+  f.options.handoff.submit = async () => {
+    throw Object.assign(new Error('Changed claim'), { code: 'review-ownership-changed' });
+  };
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'ownership-changed');
+  assert.ok(result.report.summary.includes('[REDACTED_'));
+  assert.ok(!JSON.stringify(result).includes('Alice Example'));
+  assert.ok(!JSON.stringify(result).includes('operator@example.invalid'));
+  assert.equal(
+    result.reportSha256,
+    createHash('sha256').update(JSON.stringify(result.report)).digest('hex'),
+  );
+  assert.ok(!f.calls.some((call) => call.startsWith('fail:')));
+});
+
+test('a post-claim timeout spends one round, notifies recovery and never mints a retry', async () => {
+  const f = fixture();
+  f.options.run = async () => ({
+    ok: false,
+    error: 'timeout',
+    stdout: 'UNTRUSTED_PROVIDER_OUTPUT',
+  });
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'provider-failed');
+  assert.equal(result.failureCode, 'claude-timeout');
+  assert.equal(result.recoveryNotified, true);
+  assert.equal(f.subject.reviews.length, 1);
+  assert.equal(f.subject.reviews[0].status, 'failed');
+  assert.equal(result.report, undefined);
+  assert.ok(!JSON.stringify(result).includes('UNTRUSTED_PROVIDER_OUTPUT'));
+  const count = f.calls.length;
+  assert.equal((await processCloudReview(f.options)).status, 'empty');
+  assert.equal(f.calls.length, count);
+});
+
+test('workflow token is read-only and the precredential CLI installation uses the complete committed integrity lock', async () => {
+  const workflow = await readFile(
+    new URL('../../../.github/workflows/claude-cloud-review.yml', import.meta.url),
+    'utf8',
+  );
+  assert.equal(workflow.split('permissions:\n')[1].split('\njobs:')[0].trim(), 'contents: read');
+  assert.ok(workflow.includes('npm ci --prefix "$RUNNER_TEMP/claude-cloud-tools"'));
+  assert.ok(workflow.includes('scripts/automation/claude-cloud-tools/package-lock.json'));
+  assert.ok(!workflow.includes('npm install'));
+  assert.ok(workflow.indexOf('npm ci') < workflow.indexOf('CLAUDE_CODE_OAUTH_TOKEN:'));
+  const packageJSON = JSON.parse(
+    await readFile(
+      new URL('../../../scripts/automation/claude-cloud-tools/package.json', import.meta.url),
+      'utf8',
+    ),
+  );
+  const lock = JSON.parse(
+    await readFile(
+      new URL('../../../scripts/automation/claude-cloud-tools/package-lock.json', import.meta.url),
+      'utf8',
+    ),
+  );
+  assert.deepEqual(lock.packages[''].dependencies, packageJSON.dependencies);
+  assert.equal(lock.packages['node_modules/@anthropic-ai/claude-code'].version, '2.1.301');
+  assert.equal(
+    lock.packages['node_modules/@anthropic-ai/claude-code-linux-x64'].version,
+    '2.1.301',
+  );
+  for (const [name, dependency] of Object.entries(lock.packages)) {
+    if (!name) continue;
+    assert.equal(dependency.version, '2.1.301');
+    assert.match(dependency.integrity, /^sha512-[A-Za-z0-9+/]+=*$/);
+    assert.ok(
+      dependency.resolved.startsWith('https://registry.npmjs.org/@anthropic-ai/claude-code'),
+    );
+  }
 });
 
 function sourceFixture() {

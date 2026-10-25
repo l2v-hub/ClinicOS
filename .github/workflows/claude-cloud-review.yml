@@ -18,11 +18,7 @@ on:
     - cron: '*/10 * * * *'
 
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
-  checks: read
-  actions: write
+  contents: read
 
 jobs:
   review:
@@ -52,9 +48,10 @@ jobs:
       # Install outside the checkout, before credentials enter any step environment.
       # No repository install scripts, PR checkout or reviewed code execution.
       - name: Install qualified Claude CLI
-        run: >-
-          npm install --prefix "$RUNNER_TEMP/claude-cloud-tools"
-          --no-audit --no-fund --no-save @anthropic-ai/claude-code@2.1.301
+        run: |
+          mkdir -p "$RUNNER_TEMP/claude-cloud-tools"
+          cp scripts/automation/claude-cloud-tools/package.json scripts/automation/claude-cloud-tools/package-lock.json "$RUNNER_TEMP/claude-cloud-tools/"
+          npm ci --prefix "$RUNNER_TEMP/claude-cloud-tools" --no-audit --no-fund
       - name: Probe subscription and process native review request
         env:
           CLAUDE_CLI_PATH: ${{ runner.temp }}/claude-cloud-tools/node_modules/.bin/claude

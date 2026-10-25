@@ -789,7 +789,7 @@ test('cloud stale inference cannot publish under a same-actor same-SHA replaceme
   const result = await processCloudReview({
     github: f.github, handoff: f.handoff, standalone: {}, cwd: '/synthetic/worktree', env: {},
     retrieve: async () => ({ packet: { subject_sha: sha }, tracked: new Set(['src/feature.ts']) }),
-    probe: async () => {}, communication: { publishState: async () => assert.fail('No stale projection') },
+    probe: async () => ({ profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } }), communication: { publishState: async () => assert.fail('No stale projection') },
     wake: async () => assert.fail('No stale controller wake'),
     run: async () => {
       original = clone(f.remote.batches[0]);
@@ -801,6 +801,8 @@ test('cloud stale inference cannot publish under a same-actor same-SHA replaceme
   });
   assert.equal(result.status, 'ownership-changed');
   assert.equal(result.round, 1);
+  assert.deepEqual(result.report, validApproved());
+  assert.equal(result.reportSha256, createHash('sha256').update(JSON.stringify(validApproved())).digest('hex'));
   assert.notEqual(original.externalReview.claimId, replacement.externalReview.claimId);
   assert.deepEqual(f.remote.batches[0], replacement);
   assert.deepEqual(replacement.reviews.map((item) => item.status), ['failed', 'running']);
@@ -860,4 +862,40 @@ test('expected native publication uses immutable validated body and claim copies
   assert.deepEqual(posted.report, validApproved());
   assert.equal(posted.claim_id, originalClaim.externalReview.claimId);
   assert.equal(posted.round, originalClaim.reviews.length);
+});
+
+test('cloud genuine report survives benign controller observations during inference', async () => {
+  const f = fixture();
+  f.remote.batches[0].baseSha = 'b'.repeat(40);
+  await f.handoff.request(81);
+  const result = await processCloudReview({
+    github: f.github, handoff: f.handoff, standalone: {}, cwd: '/synthetic/worktree', env: {},
+    retrieve: async () => ({ packet: { subject_sha: sha }, tracked: new Set(['src/feature.ts']) }),
+    probe: async () => ({ profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } }),
+    communication: { publishState: async () => {} }, wake: async () => {},
+    run: async () => {
+      const batch = f.remote.batches[0];
+      batch.checkObservation = { passed: true, observedAt: '2026-10-25T00:00:00.000Z' };
+      batch.externalReview.lastObservedAt = '2026-10-25T00:00:00.000Z';
+      batch.reviews.at(-1).observedAt = '2026-10-25T00:00:00.000Z';
+      batch.reviewLedger.rounds.at(-1).observedAt = '2026-10-25T00:00:00.000Z';
+      return { ok: true, stdout: JSON.stringify({ structured_output: validApproved() }) };
+    },
+  });
+  assert.equal(result.status, 'published');
+  assert.deepEqual(result.report, validApproved());
+  assert.equal(f.remote.batches[0].checkObservation.passed, true);
+  assert.equal(f.remote.batches[0].reviews.at(-1).observedAt, '2026-10-25T00:00:00.000Z');
+  assert.equal(f.remote.batches[0].externalReview.status, 'published');
+  assert.equal(f.reported.length, 1);
+});
+
+test('owned failure accepts benign observations while preserving them and the spent reservation history', async () => {
+  const f = fixture(), expected = await requestedClaimed(f);
+  f.remote.batches[0].checkObservation = { passed: true };
+  const failed = await f.handoff.failOwnedClaim(81, expected, 'claude-overloaded');
+  assert.deepEqual(failed.checkObservation, { passed: true });
+  assert.equal(failed.reviews.length, 1);
+  assert.equal(failed.reviews[0].status, 'failed');
+  assert.equal(failed.recoveryHistory.at(-1).token, expected.externalReview.claimId);
 });

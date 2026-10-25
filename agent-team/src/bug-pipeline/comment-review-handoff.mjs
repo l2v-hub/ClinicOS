@@ -23,8 +23,26 @@ function ownershipChanged() {
   });
 }
 function assertExpectedClaim(batch, expectedClaim, login) {
+  const identity = (subject) => ({
+    pr: subject.pr?.number, sha: subject.sha, baseSha: subject.baseSha,
+    branch: subject.branch, baseRef: subject.baseRef ?? 'main', issues: subject.issues,
+    plan: subject.plan ?? null, grouping: subject.grouping ?? null,
+    packet: subject.packet ?? null, sourceManifest: subject.sourceManifest ?? null,
+    preservedPackets: subject.preservedPackets ?? null,
+    implementationOwner: activeImplementation(subject) ?? null,
+    handoff: Object.fromEntries(['channel', 'status', 'owner', 'claimId', 'requestId', 'subjectSha']
+      .map((key) => [key, subject.externalReview?.[key]])),
+    reviews: subject.reviews.map(({ round, status, subjectSha }) => ({ round, status, subjectSha })),
+    ledger: subject.reviewLedger ? {
+      schema_version: subject.reviewLedger.schema_version,
+      max_rounds: subject.reviewLedger.max_rounds,
+      rounds: subject.reviewLedger.rounds.map(({ round, verdict, subject_sha, review_sha256 }) =>
+        ({ round, verdict, subject_sha, review_sha256 })),
+    } : null,
+    reviewReports: subject.reviewReports ?? null,
+  });
   try {
-    assert.deepEqual(batch, expectedClaim);
+    assert.deepEqual(identity(batch), identity(expectedClaim));
     assert.equal(expectedClaim.externalReview?.status, 'comment-running');
     assert.equal(expectedClaim.externalReview?.owner, login);
   } catch {

@@ -391,7 +391,7 @@ test('cloud standalone stale result preserves old failed round and replacement n
   const result = await processCloudReview({
     github: f.github, handoff: {}, standalone: f.controller, cwd: '/trusted', env: {},
     retrieve: async () => ({ packet: { subject_sha: f.manifest.sha }, tracked: new Set([f.manifest.sourceManifest[0].path]) }),
-    probe: async () => {}, communication: { publishState: async () => assert.fail('No stale projection') },
+    probe: async () => ({ profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } }), communication: { publishState: async () => assert.fail('No stale projection') },
     wake: async () => assert.fail('No stale wake'),
     run: async () => {
       original = structuredClone(f.remote().standaloneReviews[0]);
@@ -402,6 +402,8 @@ test('cloud standalone stale result preserves old failed round and replacement n
     },
   });
   assert.equal(result.status, 'ownership-changed');
+  assert.deepEqual(result.report, report());
+  assert.equal(result.reportSha256, sha256(JSON.stringify(report())));
   assert.notEqual(original.externalReview.claimId, replacement.externalReview.claimId);
   assert.deepEqual(f.remote().standaloneReviews[0], replacement);
   assert.deepEqual(replacement.reviews.map((item) => item.status), ['failed', 'running']);
@@ -412,11 +414,13 @@ test('cloud standalone stale result preserves old failed round and replacement n
 
 test('standalone submit forwards full expected claim and permits the unchanged native reservation', async () => {
   const f = fixture(), expected = await claimed(f);
+  f.remote().standaloneReviews[0].checkObservation = { passed: true };
   await f.controller.submit(81, report(), { expectedClaim: expected });
   const published = await f.controller.reconcilePR(81);
   assert.equal(published.externalReview.status, 'published');
   assert.equal(published.reviews.length, 1);
   assert.equal(published.reviews[0].status, 'approved');
+  assert.deepEqual(published.checkObservation, { passed: true });
 });
 
 test('standalone simultaneous claims use one durable reservation and no fifth review is inferred', async () => {
