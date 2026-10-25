@@ -1,0 +1,306 @@
+# One-off post-merge operator activation. Do not merge into main.
+# An unresolved expected merge SHA makes this a preparation template, not publishable.
+name: Operator Claude activation after PR510 20261025
+
+on:
+  push:
+    branches: [codex/claude-cloud-bootstrap-20261025]
+
+permissions:
+  contents: read
+
+jobs:
+  qualify-and-enable-after-merge:
+    if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/codex/claude-cloud-bootstrap-20261025'
+    concurrency:
+      group: clinicos-claude-cloud-review-${{ github.repository }}
+      cancel-in-progress: false
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - name: Initialize bounded receipt before checkout or installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          node -e 'require("node:fs").writeFileSync(process.env.RUNNER_TEMP+"/claude-cloud-activation-receipt.json", JSON.stringify({status:"activation-not-started",claimed:false,expectedMainSha:"e431990b8e28830972f7f5ab36379e3b1023b9cc",reviewedHeadSha:"ba91cdf4bb5411469d6615c7504d1dc359aa5024"})+"\n", {mode:0o600})'
+      - name: Checkout exact normally merged main source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: e431990b8e28830972f7f5ab36379e3b1023b9cc
+          path: frozen-main
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Materialize fixed reviewed operator files from this workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/claude-activation"
+          cat > "$RUNNER_TEMP/claude-activation/activation.mjs" <<'FIXED_ACTIVATION_WRAPPER'
+          #!/usr/bin/env node
+          // One-off operator activation only; no native queue, claims, reviews or dispatch.
+          import assert from 'node:assert/strict';
+          import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+          import os from 'node:os';
+          import path from 'node:path';
+          import { fileURLToPath, pathToFileURL } from 'node:url';
+
+          export const EXPECTED_MAIN_SHA = 'e431990b8e28830972f7f5ab36379e3b1023b9cc';
+          export const FIXED = Object.freeze({
+            repository: 'l2v-hub/ClinicOS',
+            ref: 'refs/heads/codex/claude-cloud-bootstrap-20261025',
+            expectedMainSha: EXPECTED_MAIN_SHA,
+            reviewedHeadSha: 'ba91cdf4bb5411469d6615c7504d1dc359aa5024',
+            mergedPR: 510,
+            variable: 'CLAUDE_CLOUD_REVIEW_ENABLED',
+          });
+          const endpoint = `repos/${FIXED.repository}`;
+
+          export function assertOperatorEnvironment(env, expectedMainSha = EXPECTED_MAIN_SHA) {
+            assert.match(expectedMainSha, /^[a-f0-9]{40}$/, 'Exact actual merge SHA required');
+            assert.equal(env.GITHUB_REPOSITORY, FIXED.repository);
+            assert.equal(env.GITHUB_ACTIONS, 'true');
+            assert.equal(env.GITHUB_EVENT_NAME, 'push');
+            assert.equal(env.GITHUB_REF, FIXED.ref);
+            assert.ok(env.GH_TOKEN?.trim(), 'Actions bot token required');
+            assert.ok(env.CLAUDE_CODE_OAUTH_TOKEN?.trim(), 'Subscription OAuth required');
+          }
+
+          export function parseGitHubResponse(result) {
+            assert.equal(result.error ?? null, null, 'GitHub transport uncertain');
+            const match = /^HTTP\/[\d.]+ ([1-5]\d\d)[^\r\n]*\r?\n[\s\S]*?\r?\n\r?\n([\s\S]*)$/.exec(result.stdout);
+            assert.ok(match, 'Explicit HTTP status required');
+            const status = Number(match[1]);
+            assert.equal(result.ok, status >= 200 && status < 300, 'Inconsistent GitHub status');
+            return { status, body: match[2].trim() ? JSON.parse(match[2]) : null };
+          }
+
+          export async function activate({ run, cwd, env, source, expectedMainSha = EXPECTED_MAIN_SHA, probe }) {
+            const audit = {
+              status: 'activation-not-started', stage: 'operator-gate',
+              expectedMainSha, reviewedHeadSha: FIXED.reviewedHeadSha,
+              inferenceOutcome: 'not-started', variableWriteAttempted: false, variableOutcome: 'unchanged',
+              claimed: false,
+            };
+            const api = async (suffix, method = 'GET', body) => parseGitHubResponse(await run({
+              command: 'gh', args: ['api', `${endpoint}/${suffix}`, '--include',
+                ...(method === 'GET' ? [] : ['-X', method]),
+                ...(body === undefined ? [] : ['--input', '-'])],
+              ...(body === undefined ? {} : { input: JSON.stringify(body) }),
+              cwd, envMode: 'controller', timeoutMs: 30000, maxOutputBytes: 64000,
+            }));
+            const mergedMain = async () => {
+              const main = await api('git/ref/heads/main');
+              assert.equal(main.status, 200);
+              assert.equal(main.body.ref, 'refs/heads/main');
+              assert.equal(main.body.object?.type, 'commit');
+              assert.equal(main.body.object?.sha, expectedMainSha, 'Main advanced or differs');
+              const pr = await api('pulls/510');
+              assert.equal(pr.status, 200);
+              assert.equal(pr.body.number, 510);
+              assert.equal(pr.body.state, 'closed');
+              assert.equal(pr.body.merged, true);
+              assert.equal(pr.body.merge_commit_sha, expectedMainSha);
+              assert.equal(pr.body.head?.sha, FIXED.reviewedHeadSha);
+              assert.equal(pr.body.head?.repo?.full_name, FIXED.repository);
+              assert.equal(pr.body.head?.repo?.fork, false);
+              assert.equal(pr.body.base?.ref, 'main');
+              assert.equal(pr.body.base?.repo?.full_name, FIXED.repository);
+              audit.mergedMainVerified = true;
+            };
+            try {
+              assertOperatorEnvironment(env, expectedMainSha);
+              audit.stage = 'merged-main-preprobe';
+              await mergedMain();
+              audit.stage = 'genuine-subscription-probe';
+              audit.inferenceOutcome = 'unknown';
+              const qualification = await (probe ?? source.probeCloudClaude)({ env, run, cwd });
+              assert.equal(qualification.status, 'probe-passed');
+              assert.equal(qualification.providerExecuted, true);
+              assert.equal(qualification.claimed, false);
+              const profile = source.qualifiedModelProfile({ [qualification.profile?.model]: qualification.profile });
+              audit.probe = { status: 'probe-passed', providerExecuted: true, claimed: false, profile };
+              audit.inferenceOutcome = 'qualified';
+              audit.stage = 'variable-read';
+              const existing = await api(`actions/variables/${FIXED.variable}`);
+              assert.ok([200, 404].includes(existing.status), 'Variable read permission or transport failed');
+              if (existing.status === 200) {
+                assert.equal(existing.body.name, FIXED.variable);
+                assert.equal(typeof existing.body.value, 'string');
+              }
+              audit.stage = 'merged-main-final-guard';
+              await mergedMain(); // Recheck after the genuine inference, immediately before write.
+              if (existing.status === 404 || existing.body.value !== 'true') {
+                audit.stage = 'variable-write';
+                audit.variableWriteAttempted = true;
+                audit.variableOutcome = 'unknown';
+                const changed = existing.status === 404
+                  ? await api('actions/variables', 'POST', { name: FIXED.variable, value: 'true' })
+                  : await api(`actions/variables/${FIXED.variable}`, 'PATCH', { name: FIXED.variable, value: 'true' });
+                assert.equal(changed.status, existing.status === 404 ? 201 : 204);
+              }
+              audit.stage = 'variable-readback';
+              const confirmed = await api(`actions/variables/${FIXED.variable}`);
+              assert.equal(confirmed.status, 200);
+              assert.equal(confirmed.body.name, FIXED.variable);
+              assert.equal(confirmed.body.value, 'true');
+              audit.variableOutcome = 'enabled-readback-verified';
+              audit.status = 'activated';
+              audit.stage = 'complete';
+            } catch {
+              // Raw errors, provider output, source and credential values never enter receipts.
+              // Uncertain writes are preserved for inspection, never rolled back or retried.
+              audit.status = 'activation-blocked-or-uncertain';
+            }
+            return audit;
+          }
+
+          export async function loadProbeSource(root) {
+            const worker = await import(pathToFileURL(path.join(root, 'agent-team/src/bug-pipeline/cloud-review-worker.mjs')).href);
+            const processModule = await import(pathToFileURL(path.join(root, 'agent-team/src/bug-pipeline/process.mjs')).href);
+            return { probeCloudClaude: worker.probeCloudClaude, qualifiedModelProfile: worker.qualifiedModelProfile, createRunner: processModule.createRunner };
+          }
+
+          export async function main({ sourceRoot, env = process.env }) {
+            assertOperatorEnvironment(env);
+            const source = await loadProbeSource(sourceRoot);
+            const runtime = await mkdtemp(path.join(os.tmpdir(), 'clinicos-operator-activation-'));
+            const cwd = path.join(runtime, 'empty');
+            await mkdir(cwd, { mode: 0o700 });
+            const isolatedEnv = Object.fromEntries(['PATH', 'HOME', 'CLAUDE_CLI_PATH', 'GH_TOKEN', 'CLAUDE_CODE_OAUTH_TOKEN']
+              .filter((key) => env[key] !== undefined).map((key) => [key, env[key]]));
+            isolatedEnv.CLAUDE_REVIEW_AUTH_MODE = 'subscription';
+            const run = source.createRunner({ env: isolatedEnv, runtimeRoot: runtime });
+            try {
+              return await activate({ run, cwd, env: { ...isolatedEnv,
+                GITHUB_REPOSITORY: env.GITHUB_REPOSITORY, GITHUB_ACTIONS: env.GITHUB_ACTIONS,
+                GITHUB_EVENT_NAME: env.GITHUB_EVENT_NAME, GITHUB_REF: env.GITHUB_REF }, source });
+            } finally {
+              await rm(runtime, { recursive: true, force: true });
+            }
+          }
+
+          if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+            let result;
+            try {
+              assert.equal(process.argv.length, 3);
+              result = await main({ sourceRoot: path.resolve(process.argv[2]) });
+            } catch {
+              result = { status: 'activation-blocked-or-uncertain', stage: 'bootstrap-setup', claimed: false,
+                inferenceOutcome: 'not-started-or-unknown', variableOutcome: 'inspect-before-recovery' };
+            }
+            await writeFile(path.join(process.env.RUNNER_TEMP, 'claude-cloud-activation-receipt.json'),
+              JSON.stringify({ operator: FIXED, result }, null, 2) + '\n', { mode: 0o600 });
+            console.log(JSON.stringify({ status: result.status, stage: result.stage, claimed: false }));
+            if (result.status !== 'activated') process.exitCode = 1;
+          }
+          FIXED_ACTIVATION_WRAPPER
+          cat > "$RUNNER_TEMP/claude-activation/sourcehashmanifest.json" <<'FIXED_SOURCE_MANIFEST'
+          {
+            "code": "2ad07687af6f15b0c551e765875d5dbfc474e5c2",
+            "base": "32b9946adcb3744c5f549600acf6fea6140bcfb9",
+            "tree": "8affa560f351febed47b85978c2bcdfd15c1b3b5",
+            "parents": [
+              "df9b51aec0d30bc8b1d0f7ca3c35a1640b2e9c71",
+              "32b9946adcb3744c5f549600acf6fea6140bcfb9"
+            ],
+            "sourceManifest": {
+              ".github/workflows/claude-cloud-review.yml": "e1bec27ba5fe1263817fc06f42e22aeae99203897a775747c01f7c912093cda4",
+              "agent-team/src/bug-pipeline/cloud-review-worker.mjs": "2456492ae734a32a4b813f2c82a93fcf4add80fb0c3df2f50ff7e2a31f00107b",
+              "agent-team/src/bug-pipeline/comment-review-handoff.mjs": "c9ba132c5744b11a4bbb4fcdc58e4b928e0c89c5a736d0b80758db5bbd9cc604",
+              "agent-team/src/bug-pipeline/standalone-review.mjs": "0665d6803eca2099884b22e283bcdd9aa60069e1bc282c66b7a23faad6448af6",
+              "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs": "e2ef6fd1ab784888a6fe8d2e73b005ea0ebffa9a93814234ee4a8f5c1411fd0e",
+              "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs": "36395defccd7421912cbe5de57a13c2d3a89d24fc252380f339fd36687ba11e3",
+              "agent-team/tests/bug-pipeline/standalone-review.test.mjs": "279f60503ef3fc60aaf647b37ecc9e77fbb9ae14091b02a621858d344bd81605",
+              "docs/cloud-claude-review.md": "1c2e9ae507f0efc7943b9f4efb8775a8533876719ca7a3e056da5850d38c6979",
+              "scripts/automation/claude-cloud-tools/package-lock.json": "70cf34a9a534c37fbcfa1580cd2da69c749bbaafac97f07f3be8bcf63aefea11",
+              "scripts/automation/claude-cloud-tools/package.json": "545379c90727ef75e5d7278d8484e36a24f7cc034edd92a56a69b049c7326f59",
+              "scripts/quality-gate/claude-bug-review.mjs": "fa5982c31c10a2e9020141990c218a817b2247e0e9ed46a89a5c1f765827263b"
+            },
+            "integrationNonce": "aecf42b7-ead6-4f9c-bfb0-d544632b9d0d",
+            "at": "2026-10-25T18:09:56.787334+00:00"
+          }
+          FIXED_SOURCE_MANIFEST
+          cat > "$RUNNER_TEMP/claude-activation/execution-closure.json" <<'FIXED_EXECUTION_CLOSURE'
+          {
+            "sourceSha": "ba91cdf4bb5411469d6615c7504d1dc359aa5024",
+            "files": {
+              "agent-team/src/adapters/process-runner.mjs": "8bade29dd5161b5d8daf0038165a4138eabd34a4bf7e771f7f04d98177e541ae",
+              "agent-team/src/bug-pipeline/attempt-budget.mjs": "555b457b375c4fe35b1e73f2081671e951748503adf598cf0312a5ce8d6e6094",
+              "agent-team/src/bug-pipeline/claude-review-cron.mjs": "5d54688f8187d3fbffa2a1106b52343b3a223b53366119d4b2f7f8c8d49e9d03",
+              "agent-team/src/bug-pipeline/cloud-review-worker.mjs": "2456492ae734a32a4b813f2c82a93fcf4add80fb0c3df2f50ff7e2a31f00107b",
+              "agent-team/src/bug-pipeline/comment-review-handoff.mjs": "c9ba132c5744b11a4bbb4fcdc58e4b928e0c89c5a736d0b80758db5bbd9cc604",
+              "agent-team/src/bug-pipeline/contracts.mjs": "084599442394406bd89ee5ae7c4a25417c48da47adbfbc281dc533ad511d1482",
+              "agent-team/src/bug-pipeline/demo-deployment.mjs": "873f90f8885652f0533b1a5983f9f15fb61b5b578103bcbdc6ee7f9f0cd850cf",
+              "agent-team/src/bug-pipeline/evidence-limits.mjs": "78ddc3908b941ef895aeef8e6416b68e1e110d0852b57f0f331b42fe127d237b",
+              "agent-team/src/bug-pipeline/evidence.mjs": "9ddfd51b9fa2bff9e4a626a11301457afa5ff3ed52b612205329c214af293d1b",
+              "agent-team/src/bug-pipeline/exact-demo-dispatch.mjs": "41967d487d283eda67a2052904c8116dc2fc04c5bb8df5cc575d039eed9bb673",
+              "agent-team/src/bug-pipeline/exact-demo-recovery.mjs": "9ec8ef543bca46fb0cfd88540aaf66de77d5b81dc9d9706286c3920bfa3673bd",
+              "agent-team/src/bug-pipeline/external-review.mjs": "abd2e1fc05fe9d6dd616a28e2a0413b9ebb5a463bc4586ef24507b1320be299b",
+              "agent-team/src/bug-pipeline/github.mjs": "7909a91bd172e067bd4e5d7afc963991dd89d9999c771c6873551834b965b26b",
+              "agent-team/src/bug-pipeline/issue-review-communication.mjs": "44a1caf63b8bf114a1bbc8a7d6915e1c0f11282cc1e9574caa9de2c8f466a7b9",
+              "agent-team/src/bug-pipeline/operator-authorization.mjs": "c2fba194bbc10e8bf8dbef6cc4a6a5c1f827480865284c83bf0da7e2b5c471e3",
+              "agent-team/src/bug-pipeline/operator-ownership.mjs": "15fafef81826c7d7424ce903b73dab8a9ea8d6a19954b62c02c68fd0a117b77d",
+              "agent-team/src/bug-pipeline/process.mjs": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf",
+              "agent-team/src/bug-pipeline/release.mjs": "774fab99bf5c7c88c74c42a894d08e217c1859fee97be918e144b78ecd5ee2c1",
+              "agent-team/src/bug-pipeline/review-policy.mjs": "500124168a97311d658e89f02fd64d88d1d00e562e17c2abf53c7d515d6cf080",
+              "agent-team/src/bug-pipeline/routing.mjs": "9c89cf5f3dcde5ff7423efd8110cb07b12a5a5077bba82c8d8ef5f60d053400c",
+              "agent-team/src/bug-pipeline/standalone-review.mjs": "0665d6803eca2099884b22e283bcdd9aa60069e1bc282c66b7a23faad6448af6",
+              "agent-team/src/bug-pipeline/verification.mjs": "4eb9a32abb129d74ee7694fbfac443f00da9ab2bdd10a6106d2423cb50a41b64",
+              "agent-team/src/bug-pipeline/workspace.mjs": "0ea132835f2d32a339711c12c234ef860ccff4921a5512f7976896c10e574a2c",
+              "agent-team/src/core/json-schema.mjs": "ff1be260e9ba0450e8cbbe9079302ce538a652a35e479c90e4233bddb0198661",
+              "agent-team/src/core/sanitize.mjs": "1a4d2b9565663b3ed5a593cdecf7cbadbd6f9cd6ef296a4b8c1c426b08ca042b",
+              "scripts/automation/configure-demo-source.mjs": "3bac135aaecfe5c95b48f38f613f27a0326d8ebb905a4753cb5ecc0d1513264b",
+              "scripts/quality-gate/claude-bug-review.mjs": "fa5982c31c10a2e9020141990c218a817b2247e0e9ed46a89a5c1f765827263b",
+              "scripts/quality-gate/review-bug-setup.mjs": "e959277f3bb82a0a8f206025b19b15375678743017be62ec032e3a5aa5f485a0"
+            }
+          }
+          FIXED_EXECUTION_CLOSURE
+      - name: Verify merged source and install official locked CLI before credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          [ "$(git -C frozen-main rev-parse HEAD)" = "e431990b8e28830972f7f5ab36379e3b1023b9cc" ]
+          git -C frozen-main diff --exit-code
+          node --input-type=module <<'VERIFY_SOURCE'
+          import assert from 'node:assert/strict';
+          import { readFile, lstat } from 'node:fs/promises';
+          import { createHash } from 'node:crypto';
+          import path from 'node:path';
+          const root = path.join(process.env.GITHUB_WORKSPACE, 'frozen-main');
+          const packet = path.join(process.env.RUNNER_TEMP, 'claude-activation');
+          const freeze = JSON.parse(await readFile(path.join(packet, 'sourcehashmanifest.json')));
+          const closure = JSON.parse(await readFile(path.join(packet, 'execution-closure.json')));
+          assert.equal(freeze.code, '2ad07687af6f15b0c551e765875d5dbfc474e5c2');
+          assert.equal(closure.sourceSha, 'ba91cdf4bb5411469d6615c7504d1dc359aa5024');
+          assert.equal(Object.keys(freeze.sourceManifest).length, 11);
+          assert.equal(Object.keys(closure.files).length, 28);
+          for (const [file, digest] of Object.entries({ ...freeze.sourceManifest, ...closure.files })) {
+            assert.ok(!path.isAbsolute(file) && !file.split('/').includes('..'));
+            const target = path.join(root, file);
+            assert.ok((await lstat(target)).isFile(), 'Source must be a regular file');
+            assert.equal(createHash('sha256').update(await readFile(target)).digest('hex'), digest, file);
+          }
+          console.log(JSON.stringify({ status: 'merged-source-qualified', changedSourceFiles: 11, executableClosureFiles: 28 }));
+          VERIFY_SOURCE
+          mkdir -p "$RUNNER_TEMP/claude-cloud-tools"
+          cp frozen-main/scripts/automation/claude-cloud-tools/package.json frozen-main/scripts/automation/claude-cloud-tools/package-lock.json "$RUNNER_TEMP/claude-cloud-tools/"
+          npm ci --prefix "$RUNNER_TEMP/claude-cloud-tools" --no-audit --no-fund
+      - name: Genuine probe then merged-main guards and variable write with readback
+        shell: bash
+        env:
+          CLAUDE_CLI_PATH: ${{ runner.temp }}/claude-cloud-tools/node_modules/.bin/claude
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+        run: |
+          set -euo pipefail
+          node "$RUNNER_TEMP/claude-activation/activation.mjs" "$GITHUB_WORKSPACE/frozen-main"
+      - name: Upload sanitized activation receipt on every outcome
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: claude-cloud-activation-receipt-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/claude-cloud-activation-receipt.json
+          if-no-files-found: error
+          retention-days: 14
