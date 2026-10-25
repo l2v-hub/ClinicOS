@@ -1,0 +1,8 @@
+{
+  "baseCommit": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+  "targetPath": ".claude/skills/clinicos/references/bug-delivery.md",
+  "baseGitBlob": "7a0b0e23fc100031a7d9909fefc2e478fce9cf52",
+  "baseSha256": "8eec94a195a1ada58771d3312c12ace933e08e8d1e3c1e53d87a2e63b816c5f2",
+  "replacementSha256": "70bd5de7fb8169fdce3c98e07047f8754080beac04dad875860526584bea761d",
+  "patchSha256": "a5b79c3d340f1681dbebed9bacaf17d45e23585b1f9ba0809744dc32e0f565ff"
+}

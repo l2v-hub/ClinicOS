@@ -1,0 +1,29 @@
+{
+  "state": "sealed",
+  "nonce": "a27701c8-ec51-432c-9af5-70d9f38c02f8",
+  "task": "independent-cloud-review-skill-doc-qa",
+  "verdict": "READY FOR CODEX QA",
+  "sourceCode": "b31c8755a06ff016ad26d40b44baf5d61c029045",
+  "baseSha": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+  "sourceSha256": "70bd5de7fb8169fdce3c98e07047f8754080beac04dad875860526584bea761d",
+  "verification": [
+    "author STOP sealed artifacts matched on initial and final checks",
+    "patch has exactly two hunks and was applied in memory to frozen base; output bytes match",
+    "trusted main workflow/docs/worker references checked at base",
+    "policy and credential/PHI checks passed; no substantive findings"
+  ],
+  "sealedArtifacts": {
+    "report.md": {
+      "sha256": "81003cffed6a4e46f16b68a68e9d1454cd8d87ead242fd759747dfb8c88ca776",
+      "bytes": 2036
+    },
+    "reservation.json": {
+      "sha256": "36ae9d52ea4c489b5b77ecdaa3684f075f9e9d05e87f702cfc0069abbfd820a7",
+      "bytes": 676
+    },
+    "result.json": {
+      "sha256": "e19e99c0d4285ed1950d2ad7546d502019f153cbdfa03f8bf77ad1aeb3c33de6",
+      "bytes": 1513
+    }
+  }
+}
