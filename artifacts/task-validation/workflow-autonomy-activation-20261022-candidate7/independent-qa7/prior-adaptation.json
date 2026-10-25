@@ -1,0 +1,28 @@
+{
+  "originalFiles": {
+    "residual-probes.mjs": "Import prefix only; all assertions unchanged",
+    "release-fixture.mjs": "Original exact copy preserved as prior-release-fixture-exact.mjs; working fixture only executes native guard and returns actual MERGED+mergeSha after successful synthetic merge.",
+    "external-fixture.mjs": "Import prefix only; all assertions unchanged",
+    "handoff-fixture.mjs": "Import prefix only; all assertions unchanged",
+    "pipeline-fixture.mjs": "Import prefix only; all assertions unchanged",
+    "malformed-takeover-probe.mjs": "Import prefix only; all assertions unchanged",
+    "recovery-budget-probe.mjs": "Import prefix only; all assertions unchanged",
+    "recovery-route-probe.mjs": "Import prefix only; all assertions unchanged",
+    "external-cas-probe.mjs": "Import prefix only; all assertions unchanged"
+  },
+  "firstExactRun": {
+    "tests": 10,
+    "pass": 9,
+    "fail": 1,
+    "error": "postmerge native MERGED receipt identity changed",
+    "classification": "Old synthetic merge stub ignored callback and retained OPEN after success. New native receipt gate correctly refuses."
+  },
+  "sameCauseRecheck": "prior-exact-recheck.log",
+  "adaptedFinal": {
+    "tests": 10,
+    "pass": 10,
+    "fail": 0,
+    "log": "prior-adapted-final.log"
+  },
+  "firstLogHandling": "The first TAP file was accidentally overwritten by the adapted run helper using the same output name. The original tool transcript preserves that first9PASS1FAIL run; this receipt records its exact failure. Recheck with original exact fixture independently reproduced the same rejection and full TAP is preserved. No source change or relaxed assertion."
+}

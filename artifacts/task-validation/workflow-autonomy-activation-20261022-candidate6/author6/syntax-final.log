@@ -1,0 +1,15 @@
+agent-team/tests/bug-pipeline/pipeline.test.mjs
+
+agent-team/tests/bug-pipeline/operator-ownership.test.mjs
+
+agent-team/tests/bug-pipeline/external-review.test.mjs
+
+agent-team/tests/bug-pipeline/contracts.test.mjs
+
+agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs
+
+agent-team/src/bug-pipeline/operator-ownership.mjs
+
+agent-team/src/bug-pipeline/external-review.mjs
+
+agent-team/src/bug-pipeline/contracts.mjs

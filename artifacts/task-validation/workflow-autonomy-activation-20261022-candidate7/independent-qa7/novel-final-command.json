@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "/tmp/clinicos-autonomy-activation-20261022/independent-qa7/novel-boundaries.mjs"
+  ],
+  "exit": 0,
+  "summary": {
+    "tests": "14",
+    "pass": "14",
+    "fail": "0",
+    "cancelled": "0",
+    "skipped": "0",
+    "todo": "0"
+  }
+}

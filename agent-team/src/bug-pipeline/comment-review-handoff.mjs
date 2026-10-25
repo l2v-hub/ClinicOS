@@ -1,6 +1,19 @@
-import { authorizationBinding, consumeOperatorAuthorization } from './operator-authorization.mjs';
+import { knownFailedCorrection, createWorkspace } from './workspace.mjs';
+import { captureReleaseReviewProof } from './release.mjs';
+import { operatorOwns } from './operator-ownership.mjs';
+import {
+  authorizationBinding,
+  consumeOperatorAuthorization,
+  authorizeObservationResume,
+  settleImplementationAttempt,
+  implementationCheckpointRecovery,
+} from './operator-authorization.mjs';
 import {
   attemptLimit,
+  finalQaIdentity,
+  finalQaAccounting,
+  finalQaLimit,
+  finalQaHistoryDigest,
   historyDigest,
   implementationAttempts,
   activeImplementation,
@@ -112,11 +125,16 @@ export function createCommentReviewHandoff({
   nonce = randomUUID,
   subjectAdapter,
   authorizationVerifier,
+  workspace,
   operationTimeouts = {},
+  automatic = () => false,
 }) {
+  assert.equal(typeof automatic, 'function');
   const store = github.createStateStore();
-  const timeouts = Object.freeze({ ...operationTimeouts,
-    merge: Math.max(MERGE_RESERVATION_LEASE_MS, operationTimeouts.merge ?? 0) });
+  const timeouts = Object.freeze({
+    ...operationTimeouts,
+    merge: Math.max(MERGE_RESERVATION_LEASE_MS, operationTimeouts.merge ?? 0),
+  });
   async function api(endpoint) {
     const result = await run({
       command: 'gh',
@@ -138,6 +156,7 @@ export function createCommentReviewHandoff({
     return login;
   }
   async function live(batch) {
+    if (automatic()) await load(batch.pr.number);
     if (subjectAdapter) await subjectAdapter.live(batch);
     const feedback = await github.reviewFeedback(batch.pr.number);
     assert.ok(
@@ -169,6 +188,15 @@ export function createCommentReviewHandoff({
         : [...state.batches, ...(includeManual ? (state.manualBatches ?? []) : [])]
     ).find((item) => item.pr?.number === pr);
     assert.ok(batch && batch.sha, 'PR has no controller-owned implementation/evidence packet');
+    if (automatic()) {
+      const collection = ['batches', 'manualBatches', 'standaloneReviews'].find((key) =>
+        (state[key] ?? []).some((item) => item.id === batch.id),
+      );
+      if (operatorOwns(state, collection, batch))
+        throw Object.assign(new Error('Automatic review subject is operator-owned'), {
+          code: 'review-operator-owned',
+        });
+    }
     return { state, batch };
   }
   async function liveForClaim(batch, expectedClaim) {
@@ -187,6 +215,18 @@ export function createCommentReviewHandoff({
     await store.save(state, {
       rebaseIndependentSubjects: async (merged) => {
         validateState(merged, REPO);
+        if (automatic()) {
+          const current = ['batches', 'manualBatches', 'standaloneReviews'].flatMap((collection) =>
+            (merged[collection] ?? [])
+              .filter((item) => item.id === batch.id)
+              .map((item) => ({ collection, item })),
+          );
+          assert.equal(current.length, 1, 'Automatic handoff owner changed');
+          if (operatorOwns(merged, current[0].collection, current[0].item))
+            throw Object.assign(new Error('Automatic review subject is operator-owned'), {
+              code: 'review-operator-owned',
+            });
+        }
         if (merged.standaloneReviews) {
           const { validateStandaloneState } = await import('./standalone-review.mjs');
           validateStandaloneState(merged);
@@ -204,6 +244,7 @@ export function createCommentReviewHandoff({
           await subjectAdapter.reservationGuard(batch);
         assert.equal(JSON.stringify(batch), expected, 'Handoff subject mutated');
         assert.ok(await github.authorized(login), 'Handoff actor lost authorization');
+        if (automatic()) await load(batch.pr.number);
         if (finalGuard) await finalGuard();
         assert.ok(performance.now() - started <= 60000, 'Handoff guard expired');
       },
@@ -238,6 +279,7 @@ export function createCommentReviewHandoff({
       else assert.deepEqual(current, batch, 'Durable handoff changed before comment');
       await liveForClaim(batch, expectedClaim);
       assert.ok(await github.authorized(payload.actor), 'Comment actor lost authorization');
+      if (automatic()) await load(batch.pr.number);
       // Reload AFTER live/auth awaits, immediately before the irreversible effect.
       // A same-actor replacement claim on the same SHA must not receive this result.
       await claimGuard();
@@ -249,30 +291,65 @@ export function createCommentReviewHandoff({
     const owner = batch.externalReview.requestedBy ?? batch.reviewHandoffHistory?.at(-1)?.actor;
     assert.equal(owner, login, 'Request notice belongs to another actor');
     await message(batch, {
-      kind: 'request', actor: owner, pr: batch.pr.number, subject_sha: batch.sha,
-      request_id: batch.externalReview.requestId, next_round: batch.reviews.length + 1,
-      action: 'Claude: claim through the trusted handoff CLI before reviewing; publish exact-SHA structured findings, then hand control to Codex.',
+      kind: 'request',
+      actor: owner,
+      pr: batch.pr.number,
+      subject_sha: batch.sha,
+      request_id: batch.externalReview.requestId,
+      next_round: batch.reviews.length + 1,
+      action:
+        'Claude: claim through the trusted handoff CLI before reviewing; publish exact-SHA structured findings, then hand control to Codex.',
     });
   }
   async function authorization(state, batch, login, action, reference, details = {}) {
-    return consumeOperatorAuthorization({ verifier: authorizationVerifier, reference, state,
-      binding: authorizationBinding({ state, subject: batch, actor: login, action, ...details }) });
+    return consumeOperatorAuthorization({
+      verifier: authorizationVerifier,
+      reference,
+      state,
+      binding: authorizationBinding({ state, subject: batch, actor: login, action, ...details }),
+    });
   }
-  async function releaseLease(state, batch, login, kind, previous, token, forceLive, authorizationRef) {
+  async function releaseLease(
+    state,
+    batch,
+    login,
+    kind,
+    previous,
+    token,
+    forceLive,
+    authorizationRef,
+  ) {
     const timestamp = previous.reservedAt ?? previous.startedAt;
-    const start = typeof timestamp === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(timestamp)
-      ? Date.parse(timestamp) : NaN;
-    const validStart = Number.isFinite(start) &&
-      [new Date(start).toISOString(), new Date(start).toISOString().replace('.000Z', 'Z')].includes(timestamp);
+    const start =
+      typeof timestamp === 'string' &&
+      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(timestamp)
+        ? Date.parse(timestamp)
+        : NaN;
+    const validStart =
+      Number.isFinite(start) &&
+      [new Date(start).toISOString(), new Date(start).toISOString().replace('.000Z', 'Z')].includes(
+        timestamp,
+      );
     const timeout = timeouts[kind];
     const clock = now().getTime();
-    const expired = validStart && Number.isFinite(clock) &&
-      Number.isSafeInteger(timeout) && timeout > 0 && clock >= start + timeout;
+    const expired =
+      validStart &&
+      Number.isFinite(clock) &&
+      Number.isSafeInteger(timeout) &&
+      timeout > 0 &&
+      clock >= start + timeout;
     const live = previous.status !== 'failed' && !expired;
-    if (live) assert.equal(forceLive, true, 'Live or undated reservation requires authorized force');
+    if (live)
+      assert.equal(forceLive, true, 'Live or undated reservation requires authorized force');
     // Each QA retry and every ownership release consumes an external capability.
-    return authorization(state, batch, login, live ? 'force-live-recovery' : 'release-reservation',
-      authorizationRef, { reservation: { kind, token, previous: historyDigest(previous), forceLive: live } });
+    return authorization(
+      state,
+      batch,
+      login,
+      live ? 'force-live-recovery' : 'release-reservation',
+      authorizationRef,
+      { reservation: { kind, token, previous: historyDigest(previous), forceLive: live } },
+    );
   }
   async function request(pr, { recoverFailed = false, authorizationRef } = {}) {
     const login = await actor(),
@@ -315,8 +392,12 @@ export function createCommentReviewHandoff({
         'New code revision required after a substantive review',
       );
     const recoveryAuthorization = recoverFailed
-      ? await authorization(state, batch, login, 'retry-failed-review', authorizationRef,
-          { reservation: { requestId: batch.externalReview?.requestId ?? null, round: batch.reviews.length } })
+      ? await authorization(state, batch, login, 'retry-failed-review', authorizationRef, {
+          reservation: {
+            requestId: batch.externalReview?.requestId ?? null,
+            round: batch.reviews.length,
+          },
+        })
       : undefined;
     batch.reviewHandoffHistory ??= [];
     batch.reviewHandoffHistory.push({
@@ -485,6 +566,7 @@ export function createCommentReviewHandoff({
     return clone(batch);
   }
   async function reconcile(batch, persist, { repairNotice = false } = {}) {
+    if (automatic()) await load(batch.pr.number);
     if (!channel(batch)) return false;
     if (batch.externalReview.status === 'comment-requested') {
       if (repairNotice) await requestNotice(batch, await actor());
@@ -613,10 +695,14 @@ export function createCommentReviewHandoff({
       { state, batch } = await load(pr);
     let persisted = false;
     try {
-      await reconcile(batch, async (options) => {
-        await save(state, batch, login, options);
-        persisted = true;
-      }, { repairNotice: true });
+      await reconcile(
+        batch,
+        async (options) => {
+          await save(state, batch, login, options);
+          persisted = true;
+        },
+        { repairNotice: true },
+      );
     } catch (error) {
       if (persisted)
         Object.assign(error, { persisted: true, projection: 'report-publication-failed', pr });
@@ -627,8 +713,10 @@ export function createCommentReviewHandoff({
   async function recoveryLive(batch, expectedHead) {
     const feedback = await github.reviewFeedback(batch.pr.number);
     assert.ok(
-      (feedback.state === 'OPEN' || (feedback.state === 'MERGED' &&
-        batch.release?.status === 'merged' && feedback.mergeCommitSha === batch.release.mergeSha)) &&
+      (feedback.state === 'OPEN' ||
+        (feedback.state === 'MERGED' &&
+          batch.release?.status === 'merged' &&
+          feedback.mergeCommitSha === batch.release.mergeSha)) &&
         !feedback.isDraft &&
         feedback.headRef === batch.branch &&
         feedback.headRepo === REPO &&
@@ -666,8 +754,9 @@ export function createCommentReviewHandoff({
     const previousLimit = attemptLimit(batch, kind);
     assert.equal(limit, previousLimit + 1, 'Extend one attempt at a time');
     assert.ok(limit <= 32, 'Explicit storage policy required beyond 32 attempts');
-    const approved = await authorization(state, batch, login, 'extend-budget', authorizationRef,
-      { budget: { kind, previousLimit, limit } });
+    const approved = await authorization(state, batch, login, 'extend-budget', authorizationRef, {
+      budget: { kind, previousLimit, limit },
+    });
     batch.budgetExtensions ??= [];
     batch.budgetExtensions.push({
       entityId: batch.id,
@@ -695,7 +784,10 @@ export function createCommentReviewHandoff({
     });
     return clone(batch);
   }
-  async function recover(pr, { action, expectedSha, token, reason, forceLive = false, authorizationRef }) {
+  async function recover(
+    pr,
+    { action, expectedSha, token, reason, round, forceLive = false, authorizationRef },
+  ) {
     const login = await maintainer(),
       { state, batch } = await load(pr, { includeManual: true });
     assert.equal(expectedSha, batch.sha, 'Recovery must name the durable subject SHA');
@@ -704,12 +796,23 @@ export function createCommentReviewHandoff({
     let recoveryHead;
     let recoveryAuthorization;
     let previous;
+    let nextFailureCode;
+    let reuseFinalQa = false;
     if (action !== 'release-merge-reservation') recoveryHead = await recoveryLive(batch);
     if (action === 'abandon-claim') {
       previous = clone(batch.externalReview);
       assert.equal(previous?.status, 'comment-running');
       assert.equal(token, previous.claimId, 'Recovery claim changed');
-      recoveryAuthorization = await releaseLease(state, batch, login, 'claim', previous, token, forceLive, authorizationRef);
+      recoveryAuthorization = await releaseLease(
+        state,
+        batch,
+        login,
+        'claim',
+        previous,
+        token,
+        forceLive,
+        authorizationRef,
+      );
       assert.equal(batch.reviews.at(-1)?.status, 'running');
       assert.equal(batch.reviewLedger?.rounds.at(-1)?.verdict, 'running');
       batch.reviews.at(-1).status = 'failed';
@@ -717,11 +820,224 @@ export function createCommentReviewHandoff({
       batch.externalReview = { ...previous, status: 'failed', abandonedAt: now().toISOString() };
       delete batch.externalReview.claimId;
       batch.phase = 'blocked';
+    } else if (action === 'settle-implementation') {
+      assert.ok(!subjectAdapter, 'Implementation settlement requires a native controller journal');
+      previous = clone(batch.controllerProgress);
+      recoveryAuthorization = await settleImplementationAttempt({
+        state,
+        subject: batch,
+        actor: login,
+        reference: authorizationRef,
+        verifier: authorizationVerifier,
+        reason,
+        progressSha256: token,
+        round,
+        now,
+      });
+      batch.recoveryHistory.pop(); // Shared authorizer's receipt is recorded below once.
+      nextFailureCode = batch.failureCode;
+    } else if (action === 'reconcile-implementation-checkpoint') {
+      assert.ok(!subjectAdapter, 'Checkpoint reconciliation requires a native controller journal');
+      const identity = implementationCheckpointRecovery(batch, { round, progressSha256: token });
+      assert.ok(
+        [identity.sourceSha, identity.checkpointSha].includes(recoveryHead),
+        'Checkpoint publication outcome is not authoritatively observed',
+      );
+      const ownedWorkspace =
+        workspace ?? createWorkspace({ root: cwd, repo: REPO, run, models: {} });
+      const proof = await ownedWorkspace.inspectRecoveryCheckpoint(batch, identity);
+      previous = {
+        progress: clone(batch.controllerProgress),
+        externalReview: clone(batch.externalReview),
+        local: proof,
+        observedHead: recoveryHead,
+      };
+      recoveryAuthorization = await authorization(state, batch, login, action, authorizationRef, {
+        budget: {
+          kind: 'controller-checkpoint-reconciliation',
+          ...identity,
+          observedHead: recoveryHead,
+          localSha256: historyDigest(proof),
+        },
+      });
+      assert.deepEqual(
+        authorizationBinding({
+          state,
+          subject: batch,
+          actor: login,
+          action,
+          budget: recoveryAuthorization.binding.budget,
+        }),
+        recoveryAuthorization.binding,
+        'Checkpoint recovery history changed during authorization',
+      );
+      implementationCheckpointRecovery(batch, { round, progressSha256: token });
+      await recoveryLive(batch, recoveryHead);
+      assert.ok(await github.authorizedMaintainer(login), 'Maintainer authorization revoked');
+      if (recoveryHead === identity.sourceSha) {
+        await ownedWorkspace.restoreRecoveryRevision(batch, proof, identity.sourceSha);
+        batch.sha = identity.sourceSha;
+        nextFailureCode = batch.failureCode;
+        batch.phase = 'blocked';
+      } else {
+        // Native observation confirms publication. Never republish or correct
+        // the old review; the next controller step requests review of this SHA.
+        assert.deepEqual(
+          await ownedWorkspace.inspectRecoveryCheckpoint(batch, identity),
+          proof,
+          'Published checkpoint changed during authorization',
+        );
+        await ownedWorkspace.restoreRecoveryRevision(batch, proof, identity.checkpointSha);
+        batch.externalReview = null;
+        batch.controllerProgress.status = 'completed';
+        if (batch.controllerProgress.next === 6)
+          batch.controllerProgress.completed.push({ step: 'publish', observedHead: recoveryHead });
+        batch.controllerProgress.next = 7;
+        delete batch.controllerProgress.pending;
+        batch.phase = 'waiting-checks';
+      }
+      batch.controllerProgress.checkpointRecovery = {
+        outcome: recoveryHead === identity.sourceSha ? 'source-restored' : 'publication-observed',
+        ...identity,
+        observedHead: recoveryHead,
+        localSha256: historyDigest(proof),
+      };
+    } else if (action === 'resume-observation') {
+      assert.equal(
+        token,
+        batch.controllerInterruption?.progressSha256,
+        'Observation checkpoint changed',
+      );
+      previous = clone(batch.controllerInterruption);
+      recoveryAuthorization = await authorizeObservationResume({
+        state,
+        subject: batch,
+        actor: login,
+        reference: authorizationRef,
+        verifier: authorizationVerifier,
+        reason,
+        now,
+      });
+      // The shared authorizer records the durable exact-history receipt once.
+      batch.recoveryHistory.pop();
+    } else if (['recover-final-qa', 'extend-final-qa'].includes(action)) {
+      previous = clone(batch.codexFinalReview ?? null);
+      assert.equal(
+        token,
+        previous?.nonce ?? historyDigest(previous),
+        'Final QA recovery identity changed',
+      );
+      assert.ok(
+        previous?.status !== 'running',
+        'Release an owned QA lease through its existing safeguarded recovery first',
+      );
+      const feedback = await live(batch),
+        identity = finalQaIdentity(batch, feedbackFingerprint(feedback));
+      const accounting = finalQaAccounting(batch, previous, identity),
+        limit = finalQaLimit(batch, identity);
+      const digest = finalQaHistoryDigest(batch);
+      if (action === 'extend-final-qa') {
+        assert.ok(!accounting.ambiguous, 'Recover ambiguous QA history first');
+        assert.ok(accounting.spent >= limit, 'Final QA allowance is not exhausted');
+        assert.ok(limit < 32, 'Explicit storage policy required beyond 32 final-QA sessions');
+        const budget = {
+          kind: 'final-qa',
+          identity,
+          previousLimit: limit,
+          limit: limit + 1,
+          historyDigest: digest,
+        };
+        recoveryAuthorization = await authorization(state, batch, login, action, authorizationRef, {
+          budget,
+        });
+        batch.finalQaAllowances ??= [];
+        batch.finalQaAllowances.push({
+          identity,
+          previousLimit: limit,
+          limit: limit + 1,
+          historyDigest: digest,
+          actor: login,
+          at: now().toISOString(),
+          reason,
+          nonce: nonce(),
+          authorizationRef,
+          budget,
+          authorization: recoveryAuthorization,
+        });
+        batch.phase = 'waiting-review';
+      } else if (accounting.ambiguous) {
+        const budget = {
+          kind: 'final-qa-history',
+          identity,
+          limit,
+          historyDigest: digest,
+          ambiguousDigests: accounting.ambiguousDigests,
+          knownKeys: accounting.keys,
+        };
+        recoveryAuthorization = await authorization(state, batch, login, action, authorizationRef, {
+          budget,
+        });
+        batch.finalQaHistoryResolutions ??= [];
+        batch.finalQaHistoryResolutions.push({
+          identity,
+          sealedLimit: limit,
+          historyDigest: digest,
+          ambiguousDigests: accounting.ambiguousDigests,
+          knownKeys: accounting.keys,
+          actor: login,
+          at: now().toISOString(),
+          reason,
+          nonce: nonce(),
+          authorizationRef,
+          budget,
+          authorization: recoveryAuthorization,
+        });
+        batch.phase = 'blocked';
+        nextFailureCode = 'final-qa-infrastructure-exhausted';
+      } else {
+        reuseFinalQa =
+          previous?.status === 'verified' &&
+          previous.subjectSha === identity.subjectSha &&
+          previous.claudeRound === identity.claudeRound &&
+          previous.feedbackFingerprint === identity.feedbackFingerprint &&
+          typeof previous.nonce === 'string' &&
+          previous.nonce.trim() &&
+          Number.isFinite(Date.parse(previous.reservedAt));
+        assert.ok(
+          reuseFinalQa || accounting.spent < limit,
+          'Final QA allowance exhausted; extend exactly one unit',
+        );
+        recoveryAuthorization = await authorization(state, batch, login, action, authorizationRef, {
+          budget: {
+            kind: 'final-qa-recovery',
+            identity,
+            historyDigest: digest,
+            ...(reuseFinalQa ? { reuseVerified: true } : {}),
+          },
+        });
+        batch.phase = 'waiting-review';
+      }
+      if (!reuseFinalQa) {
+        if (previous) {
+          batch.qaHistory ??= [];
+          batch.qaHistory.push(previous);
+        }
+        delete batch.codexFinalReview;
+      }
     } else if (action === 'release-qa-reservation') {
       previous = clone(batch.codexFinalReview);
       assert.ok(['running', 'failed'].includes(previous?.status));
       assert.equal(token, previous.nonce ?? historyDigest(previous), 'Recovery QA changed');
-      recoveryAuthorization = await releaseLease(state, batch, login, 'qa', previous, token, forceLive, authorizationRef);
+      recoveryAuthorization = await releaseLease(
+        state,
+        batch,
+        login,
+        'qa',
+        previous,
+        token,
+        forceLive,
+        authorizationRef,
+      );
       batch.qaHistory ??= [];
       batch.qaHistory.push(previous);
       delete batch.codexFinalReview;
@@ -731,7 +1047,16 @@ export function createCommentReviewHandoff({
       assert.equal(previous?.status, 'merging');
       assert.equal(token, previous.nonce ?? historyDigest(previous), 'Recovery merge changed');
       assert.ok(!previous.recoveryReleasedAt, 'Merge reservation recovery already consumed');
-      recoveryAuthorization = await releaseLease(state, batch, login, 'merge', previous, token, forceLive, authorizationRef);
+      recoveryAuthorization = await releaseLease(
+        state,
+        batch,
+        login,
+        'merge',
+        previous,
+        token,
+        forceLive,
+        authorizationRef,
+      );
       const feedback = await github.reviewFeedback(batch.pr.number);
       assert.equal(feedback.head, batch.sha, 'Recovery head changed');
       if (feedback.state === 'MERGED') {
@@ -741,7 +1066,11 @@ export function createCommentReviewHandoff({
         assert.equal(feedback.state, 'OPEN', 'Merge outcome cannot be reconciled');
         // A tombstone remains eligible for exact-head receipt reconciliation. Remote
         // merge can commit after this CAS, so deleting the reservation is unsafe.
-        batch.release = { ...previous, recoveryReleasedAt: now().toISOString(), outcome: 'uncertain' };
+        batch.release = {
+          ...previous,
+          recoveryReleasedAt: now().toISOString(),
+          outcome: 'uncertain',
+        };
         batch.phase = 'blocked';
         batch.reason = 'Merge outcome pending exact-head receipt reconciliation';
       }
@@ -758,27 +1087,53 @@ export function createCommentReviewHandoff({
         const projectionFailure =
           ['github-write-uncertain', 'github-write-rejected'].includes(batch.failureCode) &&
           batch.failureOperation === 'projection';
-        const rejectedMerge = batch.failureCode === 'github-merge-rejected' && !batch.release &&
+        const rejectedMerge =
+          batch.failureCode === 'github-merge-rejected' &&
+          !batch.release &&
           batch.mergeHistory?.at(-1)?.status === 'merging';
-        assert.ok(['github-read-transient', 'github-transient-exhausted'].includes(batch.failureCode) ||
-          projectionFailure || rejectedMerge,
-          'Standalone resume requires an explicit retryable failure');
+        assert.ok(
+          ['github-read-transient', 'github-transient-exhausted'].includes(batch.failureCode) ||
+            projectionFailure ||
+            rejectedMerge,
+          'Standalone resume requires an explicit retryable failure',
+        );
         await subjectAdapter.recoveryVerify(batch);
-      }
-      else {
+      } else {
         const negativeReview =
           batch.externalReview?.status === 'published' &&
           batch.externalReview.subjectSha === batch.sha &&
           ['changes-requested', 'blocked'].includes(batch.reviews.at(-1)?.status) &&
           batch.reviews.at(-1)?.subjectSha === batch.sha;
+        const progress = batch.controllerProgress;
+        const knownCorrection =
+          knownFailedCorrection(batch) && progress.failureCode === batch.failureCode;
         const allowance =
           batch.budgetExtensions?.length &&
-          negativeReview &&
+          !activeImplementation(batch) &&
+          !['running', 'interrupted'].includes(progress?.status) &&
+          ((negativeReview && (!progress || progress.status === 'completed')) || knownCorrection) &&
           spentAttempts(batch, 'implementation') < attemptLimit(batch, 'implementation') &&
           batch.reviews.length < attemptLimit(batch, 'reviews');
+        const archived = batch.mergeHistory?.at(-1);
+        let rejectedMerge = false;
+        if (
+          batch.failureCode === 'github-merge-rejected' &&
+          !batch.release &&
+          archived?.status === 'merging' &&
+          archived.reviewedSha === batch.sha &&
+          archived.prNumber === batch.pr.number &&
+          archived.reviewProof
+        ) {
+          const expected = captureReleaseReviewProof(
+            { ...batch, codexFinalReview: archived.reviewProof.finalCodexReview },
+            { repository: REPO },
+          );
+          rejectedMerge = JSON.stringify(expected) === JSON.stringify(archived.reviewProof);
+        }
         assert.ok(
           ['github-read-transient', 'github-transient-exhausted'].includes(batch.failureCode) ||
-            allowance,
+            allowance ||
+            rejectedMerge,
           'Resume requires transient recovery or unused audited correction and review allowances',
         );
       }
@@ -800,14 +1155,19 @@ export function createCommentReviewHandoff({
       observedHead: recoveryHead,
       token,
       previous,
-      ...(recoveryAuthorization ? { authorization: recoveryAuthorization,
-        forceLive: recoveryAuthorization.binding.reservation?.forceLive ?? false } : {}),
+      ...(recoveryAuthorization
+        ? {
+            authorization: recoveryAuthorization,
+            forceLive: recoveryAuthorization.binding.reservation?.forceLive ?? false,
+          }
+        : {}),
       consumedReviews: batch.reviews.length,
       consumedImplementation: spentAttempts(batch, 'implementation'),
     });
     delete batch.approvedSha;
     delete batch.failureCode;
     delete batch.failureOperation;
+    if (nextFailureCode) batch.failureCode = nextFailureCode;
     if (action === 'resume') delete batch.lastTransientFailure;
     if (batch.release?.recoveryReleasedAt && batch.release.status === 'merging')
       batch.failureCode = 'github-write-uncertain';

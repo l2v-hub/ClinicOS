@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "actualSyncTests": {
+    "tests": 11,
+    "pass": 11,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "logs": [
+    "focused-first.log",
+    "focused-frozen.log"
+  ],
+  "sourceTestFailures": [],
+  "syntaxActual": {
+    "passed": 2,
+    "failed": 0
+  },
+  "inheritedUnchangedCore": {
+    "tests": 517,
+    "syntax": 10,
+    "proof": "inherited-core-proof.json",
+    "rerun": false
+  },
+  "preflightObservationsPreserved": [
+    "initial-tooling-failure.json",
+    "binding-first-failure.json",
+    "binding-resolution.json"
+  ],
+  "paidModelsOrLiveApiCalls": 0
+}

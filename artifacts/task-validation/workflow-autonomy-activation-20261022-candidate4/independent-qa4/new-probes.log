@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: concurrent prebuilt automatic protected subject and explicit handoff remain isolated across await and exception
+ok 1 - concurrent prebuilt automatic protected subject and explicit handoff remain isolated across await and exception
+  ---
+  duration_ms: 29.1032
+  type: 'test'
+  ...
+# Subtest: ordinary unowned automatic pipeline uses native prebuilt controller and continues publication with zero models
+ok 2 - ordinary unowned automatic pipeline uses native prebuilt controller and continues publication with zero models
+  ---
+  duration_ms: 14.797976
+  type: 'test'
+  ...
+# Subtest: automatic standalone final authorization observes new subject ownership and explicit stale PR remains rejected
+ok 3 - automatic standalone final authorization observes new subject ownership and explicit stale PR remains rejected
+  ---
+  duration_ms: 14.595888
+  type: 'test'
+  ...
+# Subtest: automatic release late callback preserves true prior merge reservation without block, save or side effects
+ok 4 - automatic release late callback preserves true prior merge reservation without block, save or side effects
+  ---
+  duration_ms: 8.136854
+  type: 'test'
+  ...
+# Subtest: automatic exact dispatch guard preserves uncertain intent without converting ownership abort into durable release block
+ok 5 - automatic exact dispatch guard preserves uncertain intent without converting ownership abort into durable release block
+  ---
+  duration_ms: 1.820187
+  type: 'test'
+  ...
+# Subtest: automatic rejection is invocation-local; explicit authorized release still rejects stale SHA then allows current revision
+ok 6 - automatic rejection is invocation-local; explicit authorized release still rejects stale SHA then allows current revision
+  ---
+  duration_ms: 4.322814
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 232.971822

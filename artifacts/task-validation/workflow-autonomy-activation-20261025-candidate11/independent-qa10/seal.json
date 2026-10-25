@@ -1,0 +1,17 @@
+{
+  "reservationNonce": "80644daf-045d-4c21-ae12-170af552b2c8",
+  "sourceManifestSha256": "49badfa2a8bd6ec8e2817239bb69d87c788ec2a0d932bda87e5cf22a862e7f08",
+  "verdict": "FAILED VALIDATION",
+  "files": {
+    "reservation.json": "51806b4fe0387fd905185b9b800fc328f4cca8fe68528a7ea17d6ef5253b2d30",
+    "source-before.json": "8323b8c3b5aa2020de5eb69ff2995aa48f22b7160c9b06eeffac51c6e19571ee",
+    "source-after.json": "8323b8c3b5aa2020de5eb69ff2995aa48f22b7160c9b06eeffac51c6e19571ee",
+    "focused-tests.log": "bae8ff05c2caa5f46fb273fd4fafa88393cd6eda16546cb183181352fe0aeed8",
+    "pipeline-suite.log": "558cb54d312199a6cd2d0d57372018ece07938153b1c33f433f3b17ee375fc1f",
+    "independent-probes.test.mjs": "f2eea21b27fbaf9769b24cdf7748319956af9dfc674383c20121c4286acfdd72",
+    "independent-probes.log": "d2a15a23e6e84a5e0d84bd7700ee46fe39f00074422b76789eec0ebb31416bb4",
+    "report.md": "140e5526c11f9f847c5ec74609792e80b495d749b754b2d23c545ed3aa64c4ae",
+    "result.json": "31ac11d2ac452fdbfba6c3fd58268a112de555602466164de992053d0b01b128",
+    "STOP.json": "2add531dcdf9a66c2a9d5acba1025bcc980f4b7f012d0d0eb4cfde7bfd8a7f4f"
+  }
+}

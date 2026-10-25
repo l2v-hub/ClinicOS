@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "--experimental-vm-modules",
+    "--test",
+    "--test-reporter=tap",
+    "/tmp/clinicos-autonomy-activation-20261022/independent-qa5/external-cas-probe.mjs"
+  ],
+  "exitCode": 1,
+  "seconds": 0.2146995600196533,
+  "actualModules": "Exact original pipeline and external-review bytes; native createGitHub state store. Only communication projections/process factory are injected boundary noops; no replacement state/controller logic."
+}

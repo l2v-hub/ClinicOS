@@ -1,0 +1,4 @@
+{
+  "initialDiscoveryReadError": "Expectedly named combined4-source-manifest.json absent; actual source4-frozen-snapshot-manifest.json found via directory listing. No test failed, no source edit.",
+  "priorFailures": "QA2 and later standalone/release diagnostic retained with verified seals"
+}

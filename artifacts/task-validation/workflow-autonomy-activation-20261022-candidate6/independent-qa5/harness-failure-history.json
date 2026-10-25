@@ -1,0 +1,9 @@
+[
+  {
+    "stage": "first external CAS probe",
+    "classification": "QA fixture failure before any save/CAS/model",
+    "error": "Missing plan in manually assembled batch: validation read plan.execution",
+    "proof": "first-external-cas-*",
+    "correction": "Use existing full synthetic batchFor fixture; same safety assertions and source bytes retained"
+  }
+]

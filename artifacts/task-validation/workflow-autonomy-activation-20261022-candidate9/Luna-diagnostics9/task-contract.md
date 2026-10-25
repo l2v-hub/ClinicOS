@@ -1,0 +1,25 @@
+# Task Contract
+
+## Impact Classification
+Small bounded implementation child ofauthor9 on2low genuineClaude3findings, modelLuna chosen byuser adaptivecost preference. Canonicalnonce BEFORE invocation. Parent senior handlesmerge/state-machine/transport and will integrate your sealedpatch before changing samefiles. You work ONLY isolatedcopy, never source9.
+
+## Current Behaviour
+PR504published689425d8836f14dfaa1c1cd1642def0cdbf30745, frozen8 code0f3833480fda5a056e91fa9922552d4f91bca346. Native8to9budgetrealCLI0 consumed once,8attemptprefix and1actualnativeClaude1 unchanged. ClaudeSTATIC3 report6360608335 (notnativeclaimedround3) requests5changes. Your two are F4 low: generic Error in createStateStore.load/ensureBranch/readDashboardState erases finite githubOperationError diagnostic/httpStatus (timeout/outputlimit/spawn/http). F5 low: workspace runImplementationStages uses capitalized Executor blocked/Simplification blocked whilecontrollerFailureCode maps lowercaseoldmessages, producingwronggenericcode. Parent F1/F2/F3 are OUT OF YOUR SCOPE. Sourcecopy139files exactrootbaseline,2declaredreadonlylinks: node_modules=/workspace/ClinicOS/node_modules and artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude ->/tmp/clinicos-autonomy-activation-20261022/test-support7.
+
+## Expected Behaviour
+Read relevant code + actualreport first. Implement ONLY finite typedread-error propagation in those3readpaths (including actualmain/branchread path if needed), retaining originalpositive404 initialization/dashboard semantics and no newretry/auth/ownership policy. Use existing githubOperationError(response.result,'read') orcause withsanitizedexistingmessage, no rawstderr/tokens inerror. ForF5 use smallestcorrecttypedcode orrestoreexact originalmessages (avoidunnecessarynewdependencies). Actual controllerFailureCode on realstageblocked result mustreturn implementation-blocked. Parent will centrally alter genuinefailedprogress handling; don'tpreemptthat state-machine work.
+
+## Acceptance Criteria
+New meaningfulregressions show originalbaseline fails claimeddiagnostic/mapping and fixedcasepasses, assertions not mirrors. Atleastload timeout/outputlimit finitecode+diagnostic no rawstderr; ensureBranch rejection anddashboard rejectedread preservehttpStatus/diagnostic andactual404 cases unchanged; actualexecute-blocked andsimplify-blocked runImplementationStages error maps implementation-blocked. Typed readclassification maylegitimately changeformerlygeneric expectations: discloseexactadaptations, preservefirstlogs/assertions and no broadwaiver. No blanket .catch orretry. Zero otherproductionbehavior changes. Fourexactallowedpaths only and139files unchangedoutsideallowlist. Test sourcebefore andafter always preserved; allfirstfailures/logs retained notoverwritten. No rawcanonical orrecoverytoken copied.
+
+## Scope
+Read /tmp/clinicos-autonomy-activation-20261022/Luna-diagnostics9/source andfrozen /tmp/clinicos-autonomy-activation-20261022/source8, actualreport /tmp/clinicos-autonomy-activation-20261022/publication8/peer-followup/actual-new-static-report8.json andparentcontract read-only. Write ONLY /tmp/clinicos-autonomy-activation-20261022/Luna-diagnostics9 outputs and4allowedpaths under/tmp/clinicos-autonomy-activation-20261022/Luna-diagnostics9/source: agent-team/src/bug-pipeline/github.mjs, agent-team/src/bug-pipeline/workspace.mjs, agent-team/tests/bug-pipeline/github.test.mjs, agent-team/tests/bug-pipeline/workspace.test.mjs. No edits tosource9, source8, qa-source8, sealedoldoutputs/dependencies/testsupport/globalrepo/worktrees, no newfiles under source. No docs, sourcepolicy/schema/budget/capacity/transport/merge/progress-state changes; parent owns those. No network/Gitwrites/CLIproviders/credentials/clinicalDB/GitHub/canonical/deploy/issueclosure/subagents. Node22 /tmp/clinicos-node22-native12/node_modules/node/bin/node. KeepTMP/Git config privateoutput; don't repurposeHOME/CODEX_HOME.
+
+## Test Plan
+You mayimplement immediately after analysis within this sufficientlyspecifiedsmallscope. Use causal originalbaseline run and focused Github/workspace tests; inherited largeGitDatafixtures puresemantic existing, do not duplicate registration. No broad cumulativeallhistory suite: parent laterintegrates andrunsjointsuite, independentQA9 follows. SyntaxcheckonlychangedJSfiles. Count distincttests honestly, no duplicatepasses acrossreruns. Preserve alloriginallogs/commands/statuses.
+
+## Evidence Plan
+Canonicalreservation/readreceipts beforefreshsession. report.md/results.json withstatusimplemented-awaiting-parent-integration, findings[], exact4before/after/diff, actualtests/causalfailures/limitations. STOP.json + seal.json files:{relativeName:{sha256,bytes}} excludingseal; source-before/aftermanifest all139 baseline bindings. Full outputfrozen afterSTOP. Root/parentverifyseal+patch+integration; your outputisnot independentQA/nativeCI/peerapproval/merge/deploy. No model/genuinehuman/nativeclaim fabrication.
+
+## Gate Status
+READY FOR BOUNDED IMPLEMENTATION

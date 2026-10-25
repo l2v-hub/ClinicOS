@@ -1,0 +1,29 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs"
+  ],
+  "cwd": "/tmp/clinicos-autonomy-activation-20261022/qa-source",
+  "environment": {
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "/tmp/clinicos-autonomy-activation-20261022/independent-qa/owned-tmp",
+    "LANG": "C.UTF-8",
+    "GIT_CONFIG_GLOBAL": "/dev/null",
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "GIT_CONFIG_COUNT": "2",
+    "GIT_CONFIG_KEY_0": "core.hooksPath",
+    "GIT_CONFIG_VALUE_0": "/dev/null",
+    "GIT_CONFIG_KEY_1": "protocol.allow",
+    "GIT_CONFIG_VALUE_1": "never"
+  },
+  "homeOrCodexHomeModified": false,
+  "authority": "Parent explicitly permits only suite-owned disposable synthetic Git fixtures; no real repository/user/canonical Git or network. All provider/GitHub/model side effects injected.",
+  "sourceEdits": false
+}

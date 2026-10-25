@@ -1,0 +1,29 @@
+{
+  "sourceReservation": {
+    "nonce": "b8e19ccc-b9fd-4e3e-84bc-9fe9462bf61a",
+    "stateCommit": "547374fe06b49d5d8db5436ec39f4f07e44030e8",
+    "sha256": "db8f7fbf97124cbee4cfcc30e03eac7dcd3ee943456b66a219a901a07cb62b5d"
+  },
+  "scope2Reservation": {
+    "sha256": "1ac88e4c4433c410b61b25b65893b8227651018718be17859a2dab527341eb1c",
+    "stateCommit": "f8d4269b9062de23253bd350f05f89bae3ed92ce"
+  },
+  "contractSha256": "8027f2e048850b1273ef9ac486cafb99eb0a34438b8b8b3f5f9dfd87648b9dad",
+  "baselineManifestSha256": "8bd6f1d321716d224aebc3c830aaa58bef983811ba13ce835b2e7833d161de4f",
+  "scopeAmendments": [
+    {
+      "file": "scope-amendment-1.md",
+      "sha256": "75abf03868282b5513e293be4f4dd47266e90f4aee5aa149cfc96317e58b31a6"
+    },
+    {
+      "file": "scope-amendment-2.md",
+      "sha256": "e912089cf19c0a1053a8aa631111638bcccbd80721eb5cb2c35c37713d04027b"
+    }
+  ],
+  "sourceBeforeManifest": "../source-baseline.json",
+  "sourceAfterManifest": "source-manifest.json",
+  "baselineAllFilesUnchanged": true,
+  "sourceOutsideTenAllowedPathsUnchanged": true,
+  "ownershipMetadataRead": "Only actual reserved canonical ownership shapes inspected; no credential or patient data read/copied.",
+  "liveCalls": 0
+}

@@ -1,0 +1,56 @@
+{
+  "status": "IMPLEMENTED_AWAITING_INDEPENDENT_QA",
+  "author": "/root/adaptive_qa",
+  "model": "gpt-6.1-sol",
+  "attempt": 1,
+  "nonce": "b8e19ccc-b9fd-4e3e-84bc-9fe9462bf61a",
+  "changedPaths": [
+    "agent-team/src/bug-pipeline/operator-ownership.mjs",
+    "agent-team/src/bug-pipeline/pipeline.mjs",
+    "agent-team/src/bug-pipeline/external-review.mjs",
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs"
+  ],
+  "focusedTests": {
+    "tests": 517,
+    "pass": 517,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "syntax": {
+    "passed": 10,
+    "failed": 0
+  },
+  "initialFailuresPreserved": [
+    {
+      "log": "focused-first.log",
+      "tests": 512,
+      "passed": 511,
+      "failed": 1,
+      "cause": "Synthetic manual fixture omitted required history arrays; fixture corrected without production validation change."
+    }
+  ],
+  "sourceManifestSha256": "1ab049351a0cd25313d4646b43afe068f87f3fe3ca3d2aada0646f7d1281dc47",
+  "baselineUnchanged": true,
+  "outsideScopeUnchanged": true,
+  "claudeCronUnchanged": true,
+  "manualReleaseGatesUnchanged": true,
+  "budgetsReset": false,
+  "nativeApprovalClaimed": false,
+  "independentQaClaimed": false,
+  "sourceIntegrated": false,
+  "rootGitWrites": 0,
+  "canonicalWrites": 0,
+  "paidModelCalls": 0,
+  "liveApiOrProviderCalls": 0,
+  "clinicalE2ERerun": false,
+  "browserRun": false,
+  "actualActivationOrDeliveryClaimed": false
+}

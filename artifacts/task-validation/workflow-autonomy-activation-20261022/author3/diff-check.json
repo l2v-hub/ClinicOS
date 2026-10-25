@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "sourceTrailingWhitespaceViolations": 0,
+  "source2Unchanged": true,
+  "outsideEightPathsUnchanged": true,
+  "helperReleaseGithubNormalizerAndCronUnchanged": true,
+  "unrelatedCommunicationPolicyPrefixBytePreserved": true
+}

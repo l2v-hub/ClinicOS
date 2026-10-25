@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "status": "FAILED VALIDATION",
+  "sourceSha": "2e4a635ad5f34bb6f886342d15eaed63674d3dae",
+  "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+  "reservationNonce": "7c4e8a68-edc9-4b9c-8d8c-8aa49b67dea9",
+  "independent": true,
+  "focusedTests": {
+    "tests": 528,
+    "pass": 528,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "novelOfflineProbes": {
+    "tests": 15,
+    "pass": 13,
+    "fail": 2,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "initialProbeRun": {
+    "tests": 15,
+    "pass": 9,
+    "fail": 6,
+    "sourceFindings": 2,
+    "qaHarnessFailures": 4,
+    "preserved": true
+  },
+  "actualCanonicalShape": {
+    "subjects": 22,
+    "globalPause": "PASS",
+    "recognizedHandback": "PASS",
+    "unownedCoexistence": "PASS",
+    "oldObjectHashesAndBudgetsPreserved": "PASS",
+    "projectionInputMatches": true
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "high",
+      "source": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "line": 245
+    },
+    {
+      "id": "F2",
+      "severity": "high",
+      "source": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+      "line": 41
+    }
+  ],
+  "inherited": {
+    "author1FocusedTests": 517,
+    "author2SyncTests": 11,
+    "authorSyntaxFiles": 12,
+    "clinicalE2E": "unchanged/inherited/not rerun",
+    "actualNativeCandidateWorkflow": "not executed",
+    "actualFirstSync": "cancelled at10minute deadline despite summary; failed activation retained"
+  },
+  "visual": {
+    "status": "N/A",
+    "reason": "Explicit control-plane-only QA contract; no UI/backend/clinical feature change; no browser permitted"
+  },
+  "noSourceEdits": true,
+  "noModelOrProviderInvocations": true,
+  "noNetwork": true,
+  "noCredentialAccess": true,
+  "noActualCanonicalWrites": true,
+  "syntheticFixtureGitOnly": true,
+  "noLiveActivationOrReleaseClaim": true
+}

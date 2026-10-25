@@ -1,0 +1,385 @@
+{
+  "sha": "4e62120584a249db2354ea379dac35e91a097000",
+  "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/4e62120584a249db2354ea379dac35e91a097000",
+  "tree": [
+    {
+      "path": ".ai-architecture",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e96c708428afc961891715ba8143381650849597",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/e96c708428afc961891715ba8143381650849597"
+    },
+    {
+      "path": ".claude",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "263a99e4dbfe4498b06432f68ebbb28a28cdacce",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/263a99e4dbfe4498b06432f68ebbb28a28cdacce"
+    },
+    {
+      "path": ".codex-bug-state.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2d56a2b9c86c2ab5624266c6dad6a5e10ceb08dd",
+      "size": 5261907,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/2d56a2b9c86c2ab5624266c6dad6a5e10ceb08dd"
+    },
+    {
+      "path": ".gitattributes",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eb71fd76b1398084da05bacbe48cca6af7c68516",
+      "size": 710,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/eb71fd76b1398084da05bacbe48cca6af7c68516"
+    },
+    {
+      "path": ".github",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6c71103c63222d79b4997e760f16bb9705e89b2e",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/6c71103c63222d79b4997e760f16bb9705e89b2e"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "12eea81374a831d3f3de8f4fcc8fba4e0ba2a497",
+      "size": 859,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/12eea81374a831d3f3de8f4fcc8fba4e0ba2a497"
+    },
+    {
+      "path": ".husky",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0ebd40652be4585810e310f9870e6c349b79cf42",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/0ebd40652be4585810e310f9870e6c349b79cf42"
+    },
+    {
+      "path": ".mcp.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c3851785f0ef51b6ffd144205a8c30372aec44b1",
+      "size": 624,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/c3851785f0ef51b6ffd144205a8c30372aec44b1"
+    },
+    {
+      "path": ".openclode",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0214d7a5011c661c6f76f8a3900bb6bc08dd65b3",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/0214d7a5011c661c6f76f8a3900bb6bc08dd65b3"
+    },
+    {
+      "path": ".prettierignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0e3d346754acde24dd53e073df319a29c6ad1150",
+      "size": 366,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/0e3d346754acde24dd53e073df319a29c6ad1150"
+    },
+    {
+      "path": ".prettierrc.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "93418b37fad40718988c8bc8449ca6fe305ca4c2",
+      "size": 127,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/93418b37fad40718988c8bc8449ca6fe305ca4c2"
+    },
+    {
+      "path": ".railwayignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2250b9be4d65047fcc347812379458d494da8789",
+      "size": 613,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/2250b9be4d65047fcc347812379458d494da8789"
+    },
+    {
+      "path": ".specify",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "36b158e82157ea5fcde369d40db85cdee7b20f29",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/36b158e82157ea5fcde369d40db85cdee7b20f29"
+    },
+    {
+      "path": ".vercelignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c8a7e54ed3e156b527aacd50ca53b88fb25faa",
+      "size": 405,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/d5c8a7e54ed3e156b527aacd50ca53b88fb25faa"
+    },
+    {
+      "path": "CLAUDE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3cc1f31f715efde1bf63efaafc70bcf632e65bed",
+      "size": 11315,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/3cc1f31f715efde1bf63efaafc70bcf632e65bed"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3ef97991974bd9285e6b0b8215b2e3d1175fe994",
+      "size": 6118,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/3ef97991974bd9285e6b0b8215b2e3d1175fe994"
+    },
+    {
+      "path": "REQ-015.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e79d040211081da5a33283d0c725b63768bac73d",
+      "size": 18979,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/e79d040211081da5a33283d0c725b63768bac73d"
+    },
+    {
+      "path": "agent-team",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "bcb4be74d3aad5930ceda117f82d79ebae5c683b",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/bcb4be74d3aad5930ceda117f82d79ebae5c683b"
+    },
+    {
+      "path": "artifacts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "93c4fa649e7718ffdce7d4e54cc497cb6b290722",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/93c4fa649e7718ffdce7d4e54cc497cb6b290722"
+    },
+    {
+      "path": "backend",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "818ebcb1b132c66e48cd647da4a53e44128fe70d",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/818ebcb1b132c66e48cd647da4a53e44128fe70d"
+    },
+    {
+      "path": "clinicos-ai-runtime",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0ba7b3f297d2463eb07442b7140315d2eb2e0b34",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/0ba7b3f297d2463eb07442b7140315d2eb2e0b34"
+    },
+    {
+      "path": "create_clinicos_ai_import_requirements.ps1",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1d5017a988fc1781dca938c1fe90bf28b7ebacf8",
+      "size": 15315,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/1d5017a988fc1781dca938c1fe90bf28b7ebacf8"
+    },
+    {
+      "path": "design-tokens.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d54920e05193ae1a290d9c243ff07895eaba3f0",
+      "size": 5700,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/9d54920e05193ae1a290d9c243ff07895eaba3f0"
+    },
+    {
+      "path": "design_handoff_restyle",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ac888b61ba135424e436e11c1b252c33c92d8ef5",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/ac888b61ba135424e436e11c1b252c33c92d8ef5"
+    },
+    {
+      "path": "docker-compose.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "72a6cb7e627bd0537927c4bfaf29f80f9ab8aa07",
+      "size": 508,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/72a6cb7e627bd0537927c4bfaf29f80f9ab8aa07"
+    },
+    {
+      "path": "docs",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b7b840f7954d2f62984f43bd7eb682fe0599e4b6",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/b7b840f7954d2f62984f43bd7eb682fe0599e4b6"
+    },
+    {
+      "path": "e2e",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "5a4a6775938ea64d9bcab290a5ca6a92d3c91674",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/5a4a6775938ea64d9bcab290a5ca6a92d3c91674"
+    },
+    {
+      "path": "eslint.config.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "973e2735707d8ea00586bd38df761afab85965fb",
+      "size": 598,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/973e2735707d8ea00586bd38df761afab85965fb"
+    },
+    {
+      "path": "frontend",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2e79dfcc23ef1c2fb468c29b047d916af32151a8",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/2e79dfcc23ef1c2fb468c29b047d916af32151a8"
+    },
+    {
+      "path": "index.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3c77a3d4f290f6811230447e296a0c80de016d2e",
+      "size": 360,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/3c77a3d4f290f6811230447e296a0c80de016d2e"
+    },
+    {
+      "path": "package-lock.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3f9cbd93ae2b38d42ca257660d70815bedcc8b3a",
+      "size": 268150,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/3f9cbd93ae2b38d42ca257660d70815bedcc8b3a"
+    },
+    {
+      "path": "package.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "059755f142b9f0b859cb714a3338cb5203fd59f2",
+      "size": 3216,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/059755f142b9f0b859cb714a3338cb5203fd59f2"
+    },
+    {
+      "path": "prisma.config.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cfd7c183c2f27c163e0c1e1d2f6b33fa0d59b611",
+      "size": 195,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/cfd7c183c2f27c163e0c1e1d2f6b33fa0d59b611"
+    },
+    {
+      "path": "prisma",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "59830ff4545df46888f372437fddb8b035125d0b",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/59830ff4545df46888f372437fddb8b035125d0b"
+    },
+    {
+      "path": "public",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "8bbb5ee6c07004e372ddd3fd49ee75964c2c9e75",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/8bbb5ee6c07004e372ddd3fd49ee75964c2c9e75"
+    },
+    {
+      "path": "qa-evidence",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "546a3b3627d83c684c45fdb6f10fecfe3483faf2",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/546a3b3627d83c684c45fdb6f10fecfe3483faf2"
+    },
+    {
+      "path": "railway.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c9bbc1abc6e01a92b29606ddbb3ae65cbaf353b5",
+      "size": 422,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/c9bbc1abc6e01a92b29606ddbb3ae65cbaf353b5"
+    },
+    {
+      "path": "requirements",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ad6b6634a24f5364921a822a4a7e7b91f1accd9d",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/ad6b6634a24f5364921a822a4a7e7b91f1accd9d"
+    },
+    {
+      "path": "run-claude-queue.ps1",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "98fc0403675dbf9973f292fd1fb643b90704571e",
+      "size": 1092,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/98fc0403675dbf9973f292fd1fb643b90704571e"
+    },
+    {
+      "path": "scripts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "adc2a2949ccb0f53e17a8fc946f69a99dde291a1",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/adc2a2949ccb0f53e17a8fc946f69a99dde291a1"
+    },
+    {
+      "path": "specs",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0b3c20688b14776b2ff770b6c6630c10e38ccc75",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/0b3c20688b14776b2ff770b6c6630c10e38ccc75"
+    },
+    {
+      "path": "src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d893676f90c840349328a8f2aa3fd0da90062248",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/d893676f90c840349328a8f2aa3fd0da90062248"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "da283158dca5ee307ef8fe5cc6835471c2c6c00b",
+      "size": 675,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/da283158dca5ee307ef8fe5cc6835471c2c6c00b"
+    },
+    {
+      "path": "start-clinicos-swarm.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c580bd2e3f0764f83ece56a79675912f9c376d55",
+      "size": 979,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/c580bd2e3f0764f83ece56a79675912f9c376d55"
+    },
+    {
+      "path": "tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "aea93510459061cf4a5d4e25f36ec0f73e873cef",
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/trees/aea93510459061cf4a5d4e25f36ec0f73e873cef"
+    },
+    {
+      "path": "tsconfig.app.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7f42e5f7cd2e79c7b5a25b753e56b1bcf94e1381",
+      "size": 617,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/7f42e5f7cd2e79c7b5a25b753e56b1bcf94e1381"
+    },
+    {
+      "path": "tsconfig.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d32ff682003e0ff5d8a6e6bb3663d4c35a45b116",
+      "size": 107,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/d32ff682003e0ff5d8a6e6bb3663d4c35a45b116"
+    },
+    {
+      "path": "tsconfig.node.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d3c52ea64c6cd6bad118474410f5322f48e257a6",
+      "size": 591,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/d3c52ea64c6cd6bad118474410f5322f48e257a6"
+    },
+    {
+      "path": "vite.config.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "51444b8e8cae44d1ad1331d472d80d2e2098c6a4",
+      "size": 278,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/51444b8e8cae44d1ad1331d472d80d2e2098c6a4"
+    },
+    {
+      "path": "wsl",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/l2v-hub/ClinicOS/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    }
+  ],
+  "truncated": false
+}

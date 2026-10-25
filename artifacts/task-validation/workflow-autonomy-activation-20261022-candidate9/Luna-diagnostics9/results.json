@@ -1,0 +1,69 @@
+{
+  "status": "implemented-awaiting-parent-integration",
+  "findings": ["F4", "F5"],
+  "sourceFiles": 139,
+  "changedPaths": [
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/src/bug-pipeline/workspace.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/tests/bug-pipeline/workspace.test.mjs"
+  ],
+  "sourceManifestCheck": {
+    "allChangesAllowed": true,
+    "sourceFileCount": 139
+  },
+  "baselineCausalRun": {
+    "command": "/tmp/clinicos-node22-native12/node_modules/node/bin/node --test --test-name-pattern='state read failures retain finite|executor and simplifier blocked stage results' agent-team/tests/bug-pipeline/github.test.mjs agent-team/tests/bug-pipeline/workspace.test.mjs",
+    "selectedTests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {"finding": "F4", "observed": "error.code was undefined", "expected": "github-read-failed"},
+      {"finding": "F5", "observed": "controller-execution-failed", "expected": "implementation-blocked"}
+    ],
+    "log": "baseline-first-failure.log"
+  },
+  "finalTests": {
+    "command": "/tmp/clinicos-node22-native12/node_modules/node/bin/node --test agent-team/tests/bug-pipeline/github.test.mjs agent-team/tests/bug-pipeline/workspace.test.mjs",
+    "distinctTests": 233,
+    "passed": 233,
+    "failed": 0,
+    "skipped": 0,
+    "log": "focused-tests.log",
+    "repeatRunsNotDoubleCounted": true
+  },
+  "syntaxChecks": {
+    "nodeVersion": "22.x via /tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "changedProductionModules": 2,
+    "passed": 2,
+    "log": "syntax-check.log"
+  },
+  "fileBindings": {
+    "agent-team/src/bug-pipeline/github.mjs": {
+      "before": {"sha256": "3e907a5e2bef38dd2a43738bb06d49bda5dc9396e4051e3a9f9572da2387f4c0", "bytes": 59025},
+      "after": {"sha256": "717723b30d694114343c8db5ad2e921178962da840f313c4d68aba32f85c2ee9", "bytes": 58978}
+    },
+    "agent-team/src/bug-pipeline/workspace.mjs": {
+      "before": {"sha256": "76297c07285a88c389a2b92704fdbdae1f2c482943df9ce9b20a7fe45254bfef", "bytes": 23539},
+      "after": {"sha256": "b9c1b812c62e059773ce7cf9e02ece6c7ef62ec43f47624f3f86135dfcf422b0", "bytes": 23539}
+    },
+    "agent-team/tests/bug-pipeline/github.test.mjs": {
+      "before": {"sha256": "add673b1ab69613a8d1db00e503b66ff24553b1f2456a8b0faa18e48f517d814", "bytes": 110323},
+      "after": {"sha256": "5d213b379c798e035fb706f4623e50b92a10cf3b17e34c27b3b9e46fdaa79a8e", "bytes": 112873}
+    },
+    "agent-team/tests/bug-pipeline/workspace.test.mjs": {
+      "before": {"sha256": "7bdcd8b52861f55fe4696e3ed701bcf4b281b842442dda029e80797b89f20caa", "bytes": 37899},
+      "after": {"sha256": "2334d396223143f932e40449f1950fa1fc6db013f943ed8dab63069782688d79", "bytes": 39084}
+    }
+  },
+  "readReceipts": {
+    "reservationNonce": "4312f0da-1a52-4f36-b78f-f99f4a096165",
+    "taskContract": "/tmp/clinicos-autonomy-activation-20261022/Luna-diagnostics9/task-contract.md",
+    "allowlist": "/tmp/clinicos-autonomy-activation-20261022/Luna-diagnostics9/allowlist.json",
+    "staticReport": "/tmp/clinicos-autonomy-activation-20261022/publication8/peer-followup/actual-new-static-report8.json"
+  },
+  "limits": [
+    "Awaiting parent integration and review.",
+    "No independent QA, native CI, peer approval, merge, or deployment claim."
+  ]
+}

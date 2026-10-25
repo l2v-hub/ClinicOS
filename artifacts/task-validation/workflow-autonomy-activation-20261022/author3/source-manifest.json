@@ -1,0 +1,133 @@
+{
+  "source": "/tmp/clinicos-autonomy-activation-20261022/source3",
+  "attempt": 3,
+  "previousCodeSha": "2e4a635ad5f34bb6f886342d15eaed63674d3dae",
+  "attemptBaseline": "/tmp/clinicos-autonomy-activation-20261022/source2",
+  "attemptDeltaPaths": [
+    "agent-team/src/bug-pipeline/pipeline.mjs",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+    "agent-team/src/bug-pipeline/external-review.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+    "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs"
+  ],
+  "cumulativePaths": 14,
+  "priorCandidatesAndEvidenceUnchanged": true,
+  "outsideAttemptScopeUnchanged": true,
+  "files": [
+    {
+      "path": "agent-team/src/bug-pipeline/operator-ownership.mjs",
+      "sha256": "cbefcd2039d7e47fbffc1d467be547b9cec2c8df1ff1eb9b11d9db13de8d8225",
+      "bytes": 2239,
+      "mode": "0o600",
+      "source2Sha256": "cbefcd2039d7e47fbffc1d467be547b9cec2c8df1ff1eb9b11d9db13de8d8225",
+      "changedInAttempt3": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "sha256": "9b5ae267c96ee27094e931f1d201bcf1f7e99fc751b0a520bd5de4e3eeea502b",
+      "bytes": 23627,
+      "mode": "0o664",
+      "source2Sha256": "9aa35cf44727ef7142c8bb3a878a8cd4f866521b1ecd19f754cdff7b72491e3d",
+      "changedInAttempt3": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/external-review.mjs",
+      "sha256": "b673e52a4d971c1716dcf26ba1b5eac39932917b4b0029192738f5f06e69398a",
+      "bytes": 11638,
+      "mode": "0o664",
+      "source2Sha256": "055ff3169755962f2d679a29d58478de213d0276203410e2e2dc7cb9c866d3d1",
+      "changedInAttempt3": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/release.mjs",
+      "sha256": "4da1d537bb8b72b95790c7676ef289db8e87abd5c509b1c09571fe194ac9545c",
+      "bytes": 49700,
+      "mode": "0o664",
+      "source2Sha256": "4da1d537bb8b72b95790c7676ef289db8e87abd5c509b1c09571fe194ac9545c",
+      "changedInAttempt3": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+      "sha256": "e2136df1037762194974f22a195240021ea07f7da84070fab229626375ef31c7",
+      "bytes": 3580,
+      "mode": "0o600",
+      "source2Sha256": "e2136df1037762194974f22a195240021ea07f7da84070fab229626375ef31c7",
+      "changedInAttempt3": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "sha256": "dfca9cf3678f054b5429d6c577824a7338b3d476b19bc12b3beabb0aa79f59e9",
+      "bytes": 41792,
+      "mode": "0o664",
+      "source2Sha256": "6a687ee62c31f2f916b178973ea55567f74805df30e20a8fc53053a1b8d15584",
+      "changedInAttempt3": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "sha256": "be602c4fa1d961cb1bb505442bdedf321fbbc35cd869b07cf5758b88f821859a",
+      "bytes": 32016,
+      "mode": "0o664",
+      "source2Sha256": "6c98fc9ccd2864b41859d4a968fe9accb92e31c06113ad8c0a3b2f043fd53e1e",
+      "changedInAttempt3": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "sha256": "6a3758008a487fb04c19a77bd42fd2058acdf0ca5cfe39754618bc2ab22da5a1",
+      "bytes": 96414,
+      "mode": "0o664",
+      "source2Sha256": "6a3758008a487fb04c19a77bd42fd2058acdf0ca5cfe39754618bc2ab22da5a1",
+      "changedInAttempt3": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/github.mjs",
+      "sha256": "c1c90264665033751f06723d3492c1b9ba33ae4ea15d4ec3c942e246b4385895",
+      "bytes": 47116,
+      "mode": "0o664",
+      "source2Sha256": "c1c90264665033751f06723d3492c1b9ba33ae4ea15d4ec3c942e246b4385895",
+      "changedInAttempt3": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "sha256": "fe1bb34ffc4ab8ce575df9a9fc5766cf6e269052107bded284959dffdbcb9d85",
+      "bytes": 78896,
+      "mode": "0o664",
+      "source2Sha256": "fe1bb34ffc4ab8ce575df9a9fc5766cf6e269052107bded284959dffdbcb9d85",
+      "changedInAttempt3": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+      "sha256": "1d98e29b111875ae90d902a684c9b7ebcdf126455e4e1a3281d3f1a7a2671cba",
+      "bytes": 3968,
+      "mode": "0o664",
+      "source2Sha256": "7c3b18079d2923cec8faad6e5fdd4800d5dc0f785318c5e39c93741602cc70bc",
+      "changedInAttempt3": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+      "sha256": "a8e3722d6d1ca745adb4d677cd4ee5f30a20c1cbffa1dd900d3a6fc8b56f58b0",
+      "bytes": 11122,
+      "mode": "0o664",
+      "source2Sha256": "a1dd05d70f00618c904da69e6a96e5434d217cf984c7a99aadcc0bc97b53cf3b",
+      "changedInAttempt3": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "sha256": "44a1caf63b8bf114a1bbc8a7d6915e1c0f11282cc1e9574caa9de2c8f466a7b9",
+      "bytes": 26331,
+      "mode": "0o664",
+      "source2Sha256": "4ea152b9de933d8d79047ba356e3acfa458bf2eb7dcb6712c51b845895c711d6",
+      "changedInAttempt3": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      "sha256": "8867f01e01e5b6a960f4ecfc8d4c975eb4a639bfac699fa03ad494c658be18d4",
+      "bytes": 48099,
+      "mode": "0o664",
+      "source2Sha256": "c8214954e8d74a22cc69833ac2bdee0b2d33fa515def3ce52f2cbbe65e8c0bc7",
+      "changedInAttempt3": true
+    }
+  ]
+}

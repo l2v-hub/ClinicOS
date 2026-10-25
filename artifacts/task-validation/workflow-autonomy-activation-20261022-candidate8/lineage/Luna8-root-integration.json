@@ -1,0 +1,39 @@
+{
+  "nonce": "bf4b8134-f696-48c9-bac7-0f789402c98a",
+  "delivery": {
+    "sealSha256": "dbec905fa604de01b9c79a2dfab108452d7baf962ba961690c4f2b38018de433",
+    "sealedFiles": 8,
+    "childAfter": {
+      "docs/codex-bug-workflow.md": {
+        "sha256": "efaf5fdcb886385a65067f6d11e4da6f2d54478837b04a2ce1965d76e03951cd",
+        "bytes": 35844
+      },
+      ".claude/skills/clinicos/references/bug-delivery.md": {
+        "sha256": "aad4b0eb3640ff09ffdeda8f55b88c48b7cb09b263db8224c6efc2b08ffb0592",
+        "bytes": 28210
+      }
+    },
+    "integratedAfter": {
+      "docs/codex-bug-workflow.md": {
+        "sha256": "21f2f0d667673ce38392bfee1355b70859d44e602afefa828d5bf2e3d55d0458",
+        "bytes": 35919
+      },
+      ".claude/skills/clinicos/references/bug-delivery.md": {
+        "sha256": "aad4b0eb3640ff09ffdeda8f55b88c48b7cb09b263db8224c6efc2b08ffb0592",
+        "bytes": 28210
+      }
+    },
+    "rootClarification": {
+      "path": "docs/codex-bug-workflow.md",
+      "beforeSha256": "efaf5fdcb886385a65067f6d11e4da6f2d54478837b04a2ce1965d76e03951cd",
+      "afterSha256": "21f2f0d667673ce38392bfee1355b70859d44e602afefa828d5bf2e3d55d0458",
+      "sentenceOnly": true,
+      "reason": "Clarify old blanket CAS-stop text against existing explicit bounded rebase"
+    },
+    "testsRun": 0,
+    "childSealPreserved": true,
+    "source7Unchanged": true
+  },
+  "stateCommit": "1a2453fbc4bd68a1fe9d42d43faf825ea547a051",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/2629cfc9-4d5f-46b7-be49-07ae5bc01241/accepted.json"
+}

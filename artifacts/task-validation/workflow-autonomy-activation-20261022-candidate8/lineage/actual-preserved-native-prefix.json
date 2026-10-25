@@ -1,0 +1,121 @@
+{
+  "canonicalState": "b8a4f5ddf6fe4a50cbd8e8dbaab88b7c6f00f388",
+  "nativeSubjectSha256": "2941a2e2d3b38be55fb22778e22f5b1234e15d5bff66e120b65f6d1e5d9328b6",
+  "implementation": [
+    {
+      "round": 1,
+      "status": "blocked",
+      "nonce": "b8e19ccc-b9fd-4e3e-84bc-9fe9462bf61a",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "dad757447d1ba0a7d9b0436b41e50cd4c4f20280",
+      "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+      "evidence": "lineage/author1-report.md",
+      "reason": "517 author tests passed; held before independent QA when actual sync exposed additional scope; immutable proof retained"
+    },
+    {
+      "round": 2,
+      "status": "failed",
+      "nonce": "85786314-5242-4020-b821-db00c2b40b61",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "2e4a635ad5f34bb6f886342d15eaed63674d3dae",
+      "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+      "evidence": "lineage/qa2-report.md",
+      "reason": "Independent QA2 reproduced F1/F2 despite528 focusedPASS; failed original proofs retained",
+      "independentQaSealSha256": "58b274424fc6f336a3244c9eb87e4fbbc079275e629a1c9695e3192ecf45112c"
+    },
+    {
+      "round": 3,
+      "status": "failed",
+      "nonce": "c7ddc739-ee71-49b6-bd1c-a3e8d6e2a6f2",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "93b0c72877bd58c2dd3769d0942d737ef9f96ac0",
+      "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+      "evidence": "standalone-release-probe1/report.md",
+      "reason": "Initially QA3 588+23 and six real native checks passed; later independent original native call-chain probe reproduced S1/R1, therefore overall attempt failed before Claude/adoption/activation",
+      "initialQa3SealSha256": "d9ad31f41c6654abba35f9d5bc747e5932814a8653a2be0b27e2de4d44c94693",
+      "failedDiagnosticSealSha256": "bce487135e880b82cadc25266428209d041bb491c71ce6fb26aa4a91002bbcbd",
+      "previousPublicationSha": "9a6cc35c32d91e3ae2aae2debc6fdcff089cd90f"
+    },
+    {
+      "round": 4,
+      "status": "passed",
+      "nonce": "1c075aa7-d2a3-4760-985f-08d32550d573",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "cb2d095926282918777b9dd73a37ef7d90bb7b2f",
+      "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+      "evidence": "independent-qa4/report.md",
+      "reason": "Actual frozen native automatic ownership/context fix independently verified; explicit supported paths retained, activation pending",
+      "independentQaNonce": "4789a5de-7784-459b-9b75-4234572aad9b",
+      "independentQaSealSha256": "b7003de2e30f34f99b5ae330bc44f73fca25a9dec07b90e9cea0ace3b20c5cc6"
+    },
+    {
+      "round": 5,
+      "status": "failed",
+      "nonce": "4b48cff3-a6d4-4727-99b8-e1cb237d0405",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "67c53efe45e2d5e2ffca228d3bf6639029bb27c5",
+      "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+      "evidence": "independent-qa5/report.md",
+      "reason": "Private5 completed actual715author tests but independentQA found3 genuine integration gaps; neverpublished/adopted; allfailedproofs retained",
+      "independentQaNonce": "7d9f3883-a737-4a89-9b3d-623242a15227",
+      "independentQaSealSha256": "655122adbf8d401c4fee77706cb33b31aebab40c48562e3d04118e817e863e9a"
+    },
+    {
+      "round": 6,
+      "status": "passed",
+      "nonce": "43647508-76e7-40c3-85a4-4e88dcab8f4d",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "992496727d31761bbece1262603d20e8cda447d7",
+      "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+      "evidence": "independent-qa6/report.md",
+      "reason": "Five genuine Claude1findings and three actual independentQA5integrationgaps corrected and independently verified on frozen code6; later native/model/activation gates remain pending",
+      "independentQaNonce": "d9cc25d4-f392-4d93-a87c-4b163fd07f5b",
+      "independentQaSealSha256": "21af8377471b43c6c902287986c5995361e6ed0a829f1f661ee996ad7cf26f36"
+    },
+    {
+      "round": 7,
+      "status": "passed",
+      "nonce": "c0dd45a8-235f-4774-aa7c-fceab1eaab38",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "9a6ca8768c1d422460faeb684eb699d4e9289484",
+      "baseSha": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+      "evidence": "independent-qa7/report.md",
+      "reason": "Six genuine static source-bound Claude findings addressed and independently verified on frozen implementation7; actual new-head CI/model/source/live gates remain pending",
+      "independentQaNonce": "9059fe6f-c550-4ac2-adcf-7e8566225f04",
+      "independentQaSealSha256": "50f24812e098940624178e2509f902b61319219e443f72eca99c3e61937c2f83"
+    }
+  ],
+  "reviews": [
+    {
+      "round": 1,
+      "status": "changes-requested",
+      "subjectSha": "ce7993a781bd2d378a1ca3ad2956b2c3606b4fe2"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "changes-requested",
+        "subject_sha": "ce7993a781bd2d378a1ca3ad2956b2c3606b4fe2",
+        "review_sha256": "03e1b147e4d5bb9655f1fb90c46163cd808bdec16a2852c657f502e838eaba8a"
+      }
+    ]
+  },
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"ce7993a781bd2d378a1ca3ad2956b2c3606b4fe2\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"Read-only review of PR #504 at ce7993a7 against controller base 2ee29895 (20 non-artifact files, +2209/-148). Evidence binding: the non-artifact diff between cb2d0959 and ce7993a7 is empty, so only artifacts differ after candidate 4. All native checks on the exact head are PASS (bug-pipeline-tests, gate, browser-e2e, archive-tests, frontend-tests, real-provider, secret-scan, windows-review-setup); configure-repository and verify-provider-access were skipped. I did not run any tests myself. What is sound: ownership lives only in durable controller state on the codex/bug-control branch. Labels, markers or PR/issue comments cannot forge it. automationPaused fails closed on any malformed handback. mergeIndependentEntities keeps the fresh remote operatorTakeover, and the rebase validators (pipeline save, comment-review-handoff save, release freshReleaseGuard) recheck ownership after a CAS conflict, so durable writes cannot overwrite a takeover. The automatic release path (workflow_run only) checks ownership at selection, at the initial load, inside every fresh guard and on record/publication; manual workflow_dispatch release stays operator-authorized. The issue-review communication recheck runs right before each write. Manual Claude claim/submit through the handoff CLI is unchanged because automatic defaults to false, so legitimate controller-owned claims and submits are not affected. Final Codex QA is now bound to sha, claudeRound and feedbackFingerprint, carries a nonce, and is re-gated on required checks, unresolved threads and PR identity. Legacy approved subjects that lack feedbackFingerprint will re-run the final QA once and temporarily lose approvedSha. That costs time but does not deadlock. Gaps that need changes: (1) the handback is an unauthenticated, unbound durable flag that can carry over into a later takeover; (2) the release gate never verifies the final Codex QA record, so the new requirement is enforced only by the controller's phase transition; (3) after recovery, a final QA that failed for infrastructure reasons is converted into a code-correction attempt; (4) pipeline paths publish to the PR branch after long-running QA without a fresh ownership check, contrary to the documented guarantee; (5) a takeover observed during a CAS aborts the whole run instead of skipping the subject. Human approval: this PR modifies trust-root paths (.claude/skills/... and agent-team/src/bug-pipeline/...). Under policy it needs an independent native human approval, and reviewDecision is currently empty. This verdict does not stand in for that approval.\",\n  \"findings\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \"agent-team/src/bug-pipeline/operator-ownership.mjs\",\n      \"line\": 11,\n      \"problem\": \"An explicit handback is recognised only by the shape operatorTakeover.automation = {enabled:true, mode:'new-unclaimed-only', protectedSubjects:[...]}. It has no actor, timestamp or nonce, is not bound to operatorTakeover.nonce, and validateState does not validate it. If an operator starts a new takeover (new nonce or subjects) while the automation block from an earlier handback is still in state, automation is not paused. Subjects that are not explicitly listed (for example scope the operator is about to touch) remain available to the controller, so the old handback is effectively replayed across takeovers.\",\n      \"requested_change\": \"Require automation.takeoverNonce === operatorTakeover.nonce, plus a recorded authorized actor and handedBackAt. Treat any mismatch or missing binding as paused. Validate the handback schema in validateState and make the operator tooling clear or replace the handback whenever a takeover is (re)activated.\",\n      \"test_expectation\": \"With operatorTakeover.active=true, nonce N2 and an automation block carrying takeoverNonce N1, or none: automationPaused returns true, runPipeline returns before intake, and selectAutoReleaseBatch returns null. With takeoverNonce N2 and a valid actor, automation resumes for new, unclaimed work only.\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"agent-team/src/bug-pipeline/release.mjs\",\n      \"line\": 200,\n      \"problem\": \"verifyReviewProof checks only the Claude review, ledger and report for the SHA. Neither releaseBatch nor recordDeployment checks that batch.codexFinalReview is verified for the same subjectSha, claudeRound === reviews.length and the current feedbackFingerprint. The new 'final independent Codex QA for every external channel' rule is enforced only by the controller setting phase=ready/approvedSha. Any other path that produces ready/approvedSha (legacy state, manual dispatch, internal mode, future code) can merge without that QA.\",\n      \"requested_change\": \"For external-review batches, have the release gate (selectAutoReleaseBatch, releaseBatch and recordDeployment) require codexFinalReview.status==='verified' with subjectSha===reviewedSha===batch.sha and claudeRound===batch.reviews.length. Otherwise fail closed, with a clear recovery message.\",\n      \"test_expectation\": \"releaseBatch with approvedSha===sha and a clean Claude approval, but codexFinalReview missing, stale (different sha or round) or not verified, refuses before any merge call. With a matching verified record it proceeds. Selection skips such batches.\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"agent-team/src/bug-pipeline/external-review.mjs\",\n      \"line\": 133,\n      \"problem\": \"Final QA re-runs only for a new sha, round or fingerprint, or for status 'waiting-checks'. If workspace.finalQa throws, status becomes 'failed' (line 178) and the batch is blocked. After an operator recovers it, the record still matches sha, round and fingerprint, so QA is not re-run. changed then becomes true (line 184) and the flow reserves an implementation attempt and asks Codex to 'correct' code because of an infrastructure failure, sending {codex:{status:'failed'}} as feedback. Status 'blocked' (identity or feedback race before QA) behaves the same when the fingerprint is unchanged. This burns the four-attempt budget, contrary to the module's own rule that non-code failures must not consume implementation attempts.\",\n      \"requested_change\": \"Treat 'failed' and 'blocked' final-QA records like 'waiting-checks': archive them to codexFinalReviewHistory and re-run final QA under a bounded retry counter. Only 'changes-requested' should lead to the correction path.\",\n      \"test_expectation\": \"With a published approved handoff and a prior codexFinalReview {status:'failed'} for the same sha, round and fingerprint, the step calls finalQa again and does not call reserveImplementation or workspace.execute. With status 'changes-requested', a correction is reserved.\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"agent-team/src/bug-pipeline/pipeline.mjs\",\n      \"line\": 516,\n      \"problem\": \"Internal-mode PR-feedback correction runs verify, then workspace.qa (long-running), then checkpoint, workspace.publish (push to the PR branch) and report (issue comments), with no save or fresh ownership read after the last save at line 511. The same pattern appears at line 583. If an operator takes over during QA, the controller still pushes a new commit to the operator-owned PR and comments on its issues; the CAS check fires only at the next save. This contradicts the docs added in this PR, which say every automatic entrypoint rechecks ownership before invoking models or releasing.\",\n      \"requested_change\": \"Before checkpoint/publish/report, persist a 'publishing' phase (as the external correction path already does) or call an explicit fresh-load ownership guard that throws review-operator-owned and makes the subject a skip. Apply the same treatment to lines 469-470 (publish/createDraft) and 583.\",\n      \"test_expectation\": \"With a takeover written to the store while workspace.qa is running, workspace.publish, gh.createDraft and gh.commentIssue are never called for that batch, and no blocked or status label is written.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"agent-team/src/bug-pipeline/pipeline.mjs\",\n      \"line\": 92,\n      \"problem\": \"A takeover observed during a CAS rebase throws a generic Error, which store.save wraps as state-rebase-invalid and which sets persistenceFailed. The external-review catch then rethrows 'External review reconciliation persistence failed' (line 358) and aborts the entire run. Other unowned subjects are not processed and the workflow goes red, instead of the documented 'ownership loss is a skip'.\",\n      \"requested_change\": \"Throw with code 'review-operator-owned' in the rebase validator, preserve that code through the store's error wrapping (or expose it on cause), and treat it as a skip of the current subject in the pipeline loops without setting persistenceFailed for other subjects.\",\n      \"test_expectation\": \"A store whose save triggers a 409 and returns a fresh state with operatorTakeover listing batch A: the run skips A, continues processing batch B, and exits successfully without blocking A.\"\n    }\n  ]\n}\n"
+  },
+  "previousPublishedHead": "57d25ed04f1e4faddc232ef77d190d3bc339a643",
+  "oldArtifactFiles": 560,
+  "currentRequestAbsent": true,
+  "staticPeerFeedback2StillDistinctFromNativeReview1": true
+}

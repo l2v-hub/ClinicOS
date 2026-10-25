@@ -1,0 +1,7 @@
+# Validation report — implementation6
+
+Frozen code `992496727d31761bbece1262603d20e8cda447d7`, parent `67c53efe45e2d5e2ffca228d3bf6639029bb27c5`, base `2ee298957c3e1733b01a4b4aca4b48b890032f69`; 22 current source/test/documentation paths and all269historical packet files bound unchanged. Fresh independent QA6 result verified with zero actionable findings; exact counts, commands, first failures, fixture corrections and source/oldpacket integrity are sealed under independent-qa6/. Author5 causal five-regression failures remain in its full sealed archive; actual independentQA5 three failed integration probes are retained; author6 exact replay and additional causal ambiguous-history regression and final corrected results remain in author6/.
+
+The four implementation entries remain native immutable history and the actual claimed Claude1changes-requested review is imported exactly. This record does not reclassify candidate4test successes as failures or erase the later findings. Current implementation allowance6 was genuinely extended before author6session; source/role/nativehuman/provider policies are unchanged.
+
+Control-plane change: clinical/UI screenshots are not applicable; actual native browser CI remains a separate required check. New-head six native checks, actual Claude2, fresh final Codex, protected merge and live activation are pending at publication. No deployment, clinical issue closure, native human approval or automatic trust-root eligibility is claimed.

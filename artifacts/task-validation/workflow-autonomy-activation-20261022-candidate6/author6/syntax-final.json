@@ -1,0 +1,78 @@
+{
+  "passed": 8,
+  "failed": 0,
+  "checks": [
+    {
+      "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--check",
+        "/tmp/clinicos-autonomy-activation-20261022/source6/agent-team/tests/bug-pipeline/pipeline.test.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--check",
+        "/tmp/clinicos-autonomy-activation-20261022/source6/agent-team/tests/bug-pipeline/operator-ownership.test.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--check",
+        "/tmp/clinicos-autonomy-activation-20261022/source6/agent-team/tests/bug-pipeline/external-review.test.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/contracts.test.mjs",
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--check",
+        "/tmp/clinicos-autonomy-activation-20261022/source6/agent-team/tests/bug-pipeline/contracts.test.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--check",
+        "/tmp/clinicos-autonomy-activation-20261022/source6/agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/operator-ownership.mjs",
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--check",
+        "/tmp/clinicos-autonomy-activation-20261022/source6/agent-team/src/bug-pipeline/operator-ownership.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/external-review.mjs",
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--check",
+        "/tmp/clinicos-autonomy-activation-20261022/source6/agent-team/src/bug-pipeline/external-review.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/contracts.mjs",
+      "command": [
+        "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+        "--check",
+        "/tmp/clinicos-autonomy-activation-20261022/source6/agent-team/src/bug-pipeline/contracts.mjs"
+      ],
+      "exitCode": 0
+    }
+  ]
+}

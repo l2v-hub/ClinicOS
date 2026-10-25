@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "runId": "40208616713",
+  "workflowSha": "4b94324b525ced7a460cbdee8446f1e47b91088e",
+  "observedAt": "2026-10-25T15:47:40.943Z",
+  "tokenPresent": true,
+  "plainOAuthShape": false,
+  "trimmedOAuthShape": false,
+  "apiKeyInsteadOfOAuth": false,
+  "copyWrapperRecoverable": false,
+  "unrecognizedFormat": true,
+  "providerCalled": false,
+  "credentialValuesPublished": false
+}

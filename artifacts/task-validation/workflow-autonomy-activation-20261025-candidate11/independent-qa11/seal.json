@@ -1,0 +1,23 @@
+{
+  "reservationNonce": "5afe07cc-f0c5-498b-99d1-f9d5c8d9605e",
+  "sourceManifestSha256": "32a6baf67a0e994fe8fe95c49438ead8f99c17021c16f31b87e083dd6b5ff552",
+  "verdict": "READY FOR CODEX QA",
+  "files": {
+    "STOP.json": "0b9390e07bd605757ed515d80979e14497c4b0ba9976e1a94f13c99228c18940",
+    "checkpoint-recovery.log": "5047e2e3e0327d73a43725326b40beacacb35184c308317317381c392fc674e7",
+    "contract-validation.log": "fefb7247d2a46c9d3e604ee5db3a638b7c84819165f3067de5ba521262287e9c",
+    "diff-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "focused-tests.log": "6a9206adf4c22fdd3e9762876794dcc485b4ad3d099911a54e84e7a7c66e4056",
+    "independent-probes.log": "25ff75a672fc8aa813f36b7451383076b2362f01a47d76f806e7777d18aa10f0",
+    "independent-probes.test.mjs": "a2ff4783804e963a640b0d2f3d0a97643e35f09c77cb5c13961878a83e50a27d",
+    "pipeline-suite.log": "de3bf8130deb979d49ccbb7c121e1c94346ede13e53b59c00a2746ffaac6885b",
+    "qa1-seal-verification.json": "921b6ae2d17383045a82b94f47b9a1cf8990f7d0ddf91c2c881a6dc3917b2cd0",
+    "qa1-unchanged-probes.log": "92a1b079a819582941d81e1fa4c8a0f6aa92b89f2b5c76792a4a4083c6677c71",
+    "report.md": "35f62e4cfdab2d7ede55b8a2d114e68ea328c3404fd38f59269ea5d4150dc5de",
+    "reservation.json": "9eb9faf5fad79eca342f491413a128dcbc334947abbfdbb0d62ee492d49f28da",
+    "result.json": "708d84057464040fca39bf76b7a01950e42abaf8b8120115e057003c09348e6b",
+    "source-after.json": "187a7871d17ba1e9c43bf6425b6ba50516b3cae33d3feb75026785a572bf7faf",
+    "source-before.json": "187a7871d17ba1e9c43bf6425b6ba50516b3cae33d3feb75026785a572bf7faf",
+    "validation-report.md": "35f62e4cfdab2d7ede55b8a2d114e68ea328c3404fd38f59269ea5d4150dc5de"
+  }
+}

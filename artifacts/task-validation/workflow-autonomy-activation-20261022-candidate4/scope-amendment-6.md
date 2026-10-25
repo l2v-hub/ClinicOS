@@ -1,0 +1,21 @@
+# Scope amendment6: candidate4, confirmed standalone/release ownership gaps
+
+Independent post-QA3 diagnostic is FAILED VALIDATION on immutable candidate3 (seal bce487135e880b82cadc25266428209d041bb491c71ce6fb26aa4a91002bbcbd). S1 actual automatic pipeline→finalizeStandaloneSubject→native publishState/current/handoff.load observes new globaltakeover twice yet writes claude-review-ready. R1 actual workflow_run main in an isolated original-byte VM selects unowned then9 fresh native reads observe takeover; native guarded merge still executes once. Two expected-safety assertions fail, no harness failures. These are actual findings, not a hypothetical reason to pause. QA3's588+23PASS/zero findings remains frozen true for its scope; overall candidate3 is now failed later diagnostic. Its published source/144packetfiles and six genuinely successful native checks are preserved, but no Claude approval or activation is claimed and no request was issued.
+
+Candidate4 fixes these observed automatic paths, retaining explicit authorized read-only Claude CLI handoff, claims/reviews and explicit maintainer release semantics. Use explicit supported automatic context at the real trusted callers and carry it through relevant fresh state/guard/publication/merge boundaries. A prebuilt real controller cannot silently discard automatic context. Newly observed ownership must stop before automatic writes/model/provider/merge and must not be swallowed into owned state mutations/blocks. Handle ownership change as honest skip/abort; uncertain previous mutations retain genuine tombstones and recovery gates. No impossible atomic cross-resource claim. Keep source/native/human/provider/exact deployment protections, all real histories and default4/typed continuations. No Max/API role change or weaker credentials/sandbox. Do not add source changes to manufacture a passing proof.
+
+Exactly ten editable paths, actual subset only; all present in baseline. Add another only with root amendment before edits:
+- agent-team/src/bug-pipeline/cli.mjs
+- agent-team/src/bug-pipeline/pipeline.mjs
+- agent-team/tests/bug-pipeline/pipeline.test.mjs
+- agent-team/src/bug-pipeline/standalone-review.mjs
+- agent-team/tests/bug-pipeline/standalone-review.test.mjs
+- agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs
+- agent-team/src/bug-pipeline/comment-review-handoff.mjs
+- agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs
+- agent-team/src/bug-pipeline/release.mjs
+- agent-team/tests/bug-pipeline/release.test.mjs
+
+Author6.1 in separate source4 copy of combined3 (138files); outputauthor4. Baseline combined3/source1/2/3/docs child1/rootcorrection/QA2/QA3/new diagnostic immutable. Git code parent will be published9a6cc35c32d91e3ae2aae2debc6fdcff089cd90f, not an erased/rebased earlier commit. Existing public144packetfiles retained in actual Git tree. Author may not edit Git/source metadata/old artifacts. Root handles new packet/native manifest reflecting all historical source artifacts and four implementation attempts after actual QA4. No author Git/network/provider/model/secret/DB/browser/install/subagents; only injected synthetic original function tests with existing deps. Never repurpose HOME/home/CODEX_HOME; syntheticGit only ownedtemp, globalconfig/hooks/networkdisabled.
+
+Meaningful regressions include exact original S1/R1 safety expectations and real call chains; automatic new owner/globalpause/protected subject across fresh loads and CAS; any actual prior merge reservation retained safely; explicit current-SHA authorized root readonly/Maxclaim stillallowed; explicit maintainer release remainsgated andallowed; unauthorized/stale paths stillreject; no per-call context leakage, no swallowed error into owned block/model/correction, unrelated unowned work continues, old subjects/budgets exact. Relevant release/pipeline/standalone/contracts/handoff/externalreview suites once, syntax actualchangedfiles and exact allowlist/sourcebefore/after/sourcepatch. Preserve FAIL outputs; freeze then independentQA4 before publication. Do not rerun unchanged clinical E2E; actual full native CI on new source remains mandatory after root publication. No actual approval/activation/deploy/closure claim.

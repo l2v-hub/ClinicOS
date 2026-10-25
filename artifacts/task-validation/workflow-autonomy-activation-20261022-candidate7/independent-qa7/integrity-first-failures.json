@@ -1,0 +1,15 @@
+[
+  {
+    "operation": "strict all138 raw Git equality",
+    "exit": 1,
+    "file": "scripts/automation/setup-claude-review-windows.ps1",
+    "classification": "Known unchanged baseline checkout CRLF difference only; first verifier preserved as verify-inputs-first.py. Exact45CRLF substitution; Git parent/base blob unchanged and frozen source6 bytes equal. All26 changed code bindings raw exact."
+  },
+  {
+    "operation": "old protected subject digest comparison",
+    "exit": 1,
+    "actual": "1c1468f6af649e95fb91442b4eb36efb431d3ab3accb2ea00ea40fafd30e7d46",
+    "expected": "3f82a4337ea5652839555af0826ac8ba539097d4e6878e278d9bb2fcba4aba7e",
+    "classification": "QA7 harness used JSON.stringify insertion order instead of original QA6 Python sorted-key ASCII serialization. Original same serialization confirms all22 exact; before/proposed objects additionally deep-equal. Failing harness retained as check-history-first.mjs."
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-23T02:50:05.214Z",
+  "kind": "root-owned-readonly-existing-native-test-fixture",
+  "sourceMain": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+  "originalPath": "artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip",
+  "sha256": "008d36bda06472a22c86244c8e06bdad0bde622bce35f637058c13cd977545eb",
+  "bytes": 175354,
+  "privateCopy": "/tmp/clinicos-autonomy-activation-20261022/test-support7/trace.zip",
+  "declaredSourceSymlink": {
+    "path": "artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude",
+    "target": "/tmp/clinicos-autonomy-activation-20261022/test-support7"
+  },
+  "copyMode": "0444",
+  "regularSourceFilesRemain": 138,
+  "allowedProductionSourceScopeRemains": 28,
+  "notNewValidationEvidence": true,
+  "noSourceGitChange": true,
+  "noOriginalFixtureWrite": true,
+  "firstMissingFixtureFailuresPreserved": true,
+  "stateCommit": "dfd6359e3690472e02751f5bd9f30a9bb6923d99",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/f846499b-9f06-4e27-b28c-b2cd11128365/accepted.json"
+}

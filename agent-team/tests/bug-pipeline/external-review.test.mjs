@@ -10,10 +10,13 @@ import {
   claudeFailureCode,
 } from '../../src/bug-pipeline/claude-review-cron.mjs';
 import { runProcess } from '../../src/adapters/process-runner.mjs';
-import { feedbackFingerprint } from '../../src/bug-pipeline/contracts.mjs';
+import { feedbackFingerprint, sha256 } from '../../src/bug-pipeline/contracts.mjs';
 import { doctor } from '../../src/bug-pipeline/cli.mjs';
 
-const communication = { publishState: async () => {}, mirrorFeedback: async () => {} };
+const communication = {
+  publishState: async () => {},
+  mirrorFeedback: async () => {},
+};
 const externalReviewStep = (args) => actualExternalReviewStep({ communication, ...args });
 const reviewExternalBatch = (args) => actualReviewExternalBatch({ communication, ...args });
 
@@ -227,7 +230,13 @@ test('external harness reserves remotely before inference, publishes hashed appr
     repo,
     batch: f.batch,
     gh: f.github,
-    workspace: {},
+    workspace: {
+      prepare: async () => {},
+      finalQa: async () => ({
+        status: 'verified',
+        summary: 'Fresh independent QA',
+      }),
+    },
     save: async () => {},
     report: async () => {},
     block: async () => assert.fail('approval blocked'),
@@ -298,7 +307,10 @@ test('new human comments invalidate approval and exhausted review budgets block 
     comments: [{ id: 99, body: 'Please fix this edge case' }],
   });
   const last = f.batch.reviews[0];
-  f.batch.reviews = Array.from({ length: 4 }, (_, index) => ({ ...last, round: index + 1 }));
+  f.batch.reviews = Array.from({ length: 4 }, (_, index) => ({
+    ...last,
+    round: index + 1,
+  }));
   const content = f.batch.reviewReports['claude-review-1.json'];
   f.batch.reviewReports['claude-review-4.json'] = content;
   f.batch.reviewLedger.rounds = Array.from({ length: 4 }, (_, index) => ({
@@ -335,10 +347,16 @@ test('human feedback arriving with review publication is retained rather than si
 
 test('draft or foreign PRs and an exhausted external budget never start a model', async (t) => {
   const f = await workerFixture(t);
-  f.github.reviewFeedback = async () => ({ ...feedback(f.batch), isDraft: true });
+  f.github.reviewFeedback = async () => ({
+    ...feedback(f.batch),
+    isDraft: true,
+  });
   await assert.rejects(reviewExternalBatch(f));
   assert.equal(f.calls(), 0);
-  f.github.reviewFeedback = async () => ({ ...feedback(f.batch), headRepo: 'attacker/fork' });
+  f.github.reviewFeedback = async () => ({
+    ...feedback(f.batch),
+    headRepo: 'attacker/fork',
+  });
   await assert.rejects(reviewExternalBatch(f));
   assert.equal(f.calls(), 0);
   f.github.reviewFeedback = async () => feedback(f.batch);
@@ -420,15 +438,24 @@ test('failure classification accepts only fixed result codes and never copies ar
     [{ ok: true, stdout: 'not json' }, 'claude-invalid-json'],
     [{ ok: true, stdout: '{"subtype":"error_max_turns"}' }, 'claude-turn-limit'],
     [
-      { ok: true, stdout: '{"is_error":true,"error":{"type":"authentication_error"}}' },
+      {
+        ok: true,
+        stdout: '{"is_error":true,"error":{"type":"authentication_error"}}',
+      },
       'claude-authentication-error',
     ],
     [
-      { ok: true, stdout: '{"is_error":true,"error":{"type":"rate_limit_error"}}' },
+      {
+        ok: true,
+        stdout: '{"is_error":true,"error":{"type":"rate_limit_error"}}',
+      },
       'claude-rate-limit',
     ],
     [
-      { ok: true, stdout: '{"is_error":true,"error":{"type":"overloaded_error"}}' },
+      {
+        ok: true,
+        stdout: '{"is_error":true,"error":{"type":"overloaded_error"}}',
+      },
       'claude-overloaded',
     ],
     [
@@ -528,12 +555,20 @@ test('Claude approval on comment channel requires a new independent Codex QA bef
   const args = {
     repo,
     batch,
-    gh: { ...fixture.github, createStateStore: () => ({}) },
+    gh: {
+      ...fixture.github,
+      createStateStore: () => ({
+        load: async () => ({ schemaVersion: 1, repository: repo, batches: [batch] }),
+      }),
+    },
     workspace: {
       prepare: async () => calls.push('prepare'),
       finalQa: async () => {
         calls.push('codex-qa');
-        return { status: 'verified', summary: 'Independent synthetic review PASS' };
+        return {
+          status: 'verified',
+          summary: 'Independent synthetic review PASS',
+        };
       },
     },
     save: async () => calls.push('save'),
@@ -555,4 +590,591 @@ test('Claude approval on comment channel requires a new independent Codex QA bef
     1,
     'same immutable approval must not spend another QA session',
   );
+});
+
+function approvedExternalArgs() {
+  const batch = batchFixture();
+  const raw = JSON.stringify({
+    subject_sha: batch.sha,
+    verdict: 'approved',
+    summary: 'Synthetic review',
+    findings: [],
+  });
+  batch.reviews = [{ round: 1, status: 'approved', subjectSha: batch.sha }];
+  batch.reviewReports = { 'claude-review-1.json': raw };
+  batch.reviewLedger = {
+    rounds: [
+      {
+        round: 1,
+        verdict: 'approved',
+        subject_sha: batch.sha,
+        review_sha256: sha256(raw),
+      },
+    ],
+  };
+  batch.externalReview = {
+    status: 'published',
+    subjectSha: batch.sha,
+    feedbackFingerprint: feedbackFingerprint(feedback(batch)),
+    feedbackChanged: false,
+  };
+  const log = [];
+  const args = {
+    repo,
+    batch,
+    gh: {
+      viewIssue: async () => ({ state: 'open' }),
+      reviewFeedback: async () => feedback(batch),
+      requiredChecks: async () => ({ ok: true }),
+    },
+    workspace: {
+      prepare: async () => log.push('prepare'),
+      finalQa: async () => {
+        assert.equal(batch.codexFinalReview.status, 'running');
+        assert.equal(
+          batch.codexFinalReview.feedbackFingerprint,
+          batch.externalReview.feedbackFingerprint,
+        );
+        assert.ok(log.includes('save:running'), 'durable reservation must precede fresh inference');
+        log.push('qa');
+        return { status: 'verified', summary: 'Independent final QA' };
+      },
+    },
+    save: async () => log.push(`save:${batch.codexFinalReview?.status}`),
+    report: async () => {},
+    block: async (_, reason) => {
+      batch.phase = 'blocked';
+      batch.reason = reason;
+      batch.approvedSha = null;
+      log.push('blocked');
+    },
+  };
+  return { args, batch, log };
+}
+
+test('standard external approval requires one fresh durable SHA/round/feedback-bound final QA', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  await externalReviewStep(args);
+  assert.equal(batch.phase, 'ready');
+  assert.equal(batch.codexFinalReview.subjectSha, batch.sha);
+  assert.equal(batch.codexFinalReview.claudeRound, 1);
+  assert.match(batch.codexFinalReview.nonce, /^[a-f0-9-]{36}$/);
+  await externalReviewStep(args);
+  assert.equal(log.filter((x) => x === 'qa').length, 1);
+});
+
+test('pending native checks or unresolved feedback never invoke final QA or transfer approval', async () => {
+  for (const kind of ['checks', 'unresolved', 'changesRequested']) {
+    const { args, batch, log } = approvedExternalArgs();
+    if (kind === 'checks') args.gh.requiredChecks = async () => ({ ok: false });
+    else {
+      const f = { ...feedback(batch), [kind]: true };
+      batch.externalReview.feedbackFingerprint = feedbackFingerprint(f);
+      args.gh.reviewFeedback = async () => f;
+    }
+    await externalReviewStep(args);
+    assert.equal(batch.phase, 'waiting-checks');
+    assert.equal(batch.codexFinalReview, undefined);
+    assert.equal(log.includes('qa'), false);
+    assert.notEqual(batch.approvedSha, batch.sha);
+  }
+});
+
+test('stale final QA bindings require a fresh session and retain previous evidence', async () => {
+  for (const stale of [
+    { subjectSha: 'b'.repeat(40) },
+    { claudeRound: 0 },
+    { feedbackFingerprint: 'old-feedback' },
+  ]) {
+    const { args, batch, log } = approvedExternalArgs();
+    const old = {
+      status: 'verified',
+      subjectSha: batch.sha,
+      claudeRound: 1,
+      feedbackFingerprint: batch.externalReview.feedbackFingerprint,
+      summary: 'Old QA',
+      ...stale,
+    };
+    batch.codexFinalReview = structuredClone(old);
+    await externalReviewStep(args);
+    assert.equal(log.filter((x) => x === 'qa').length, 1);
+    assert.deepEqual(batch.codexFinalReviewHistory, [old]);
+    assert.equal(batch.phase, 'ready');
+  }
+});
+
+test('running final QA ownership is not restarted even when its SHA is stale', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  const running = {
+    status: 'running',
+    subjectSha: 'b'.repeat(40),
+    claudeRound: 1,
+  };
+  batch.codexFinalReview = structuredClone(running);
+  await externalReviewStep(args);
+  assert.deepEqual(batch.codexFinalReview, running);
+  assert.equal(log.includes('qa'), false);
+  assert.equal(batch.phase, 'blocked');
+});
+
+test('native checks or PR identity/feedback changing during final QA cannot become ready', async () => {
+  for (const kind of ['checks', 'head', 'baseRef', 'headRepo', 'headIsFork', 'comments']) {
+    const { args, batch, log } = approvedExternalArgs();
+    let changed = false;
+    const qa = args.workspace.finalQa;
+    args.workspace.finalQa = async () => {
+      const result = await qa();
+      changed = true;
+      return result;
+    };
+    args.gh.requiredChecks = async () => ({
+      ok: !changed || kind !== 'checks',
+    });
+    args.gh.reviewFeedback = async () => ({
+      ...feedback(batch),
+      ...(changed
+        ? {
+            head: kind === 'head' ? 'b'.repeat(40) : batch.sha,
+            baseRef: kind === 'baseRef' ? 'other' : 'main',
+            headRepo: kind === 'headRepo' ? 'foreign/repo' : repo,
+            headIsFork: kind === 'headIsFork',
+            comments:
+              kind === 'comments'
+                ? [
+                    {
+                      id: 1,
+                      body: 'new actionable feedback',
+                      user: { login: 'human' },
+                    },
+                  ]
+                : [],
+          }
+        : {}),
+    });
+    await externalReviewStep(args);
+    assert.equal(log.filter((x) => x === 'qa').length, 1);
+    assert.notEqual(batch.approvedSha, batch.sha);
+    assert.equal(batch.phase, kind === 'checks' ? 'waiting-checks' : 'blocked');
+  }
+});
+
+test('final QA exception is recorded without hiding a model retry or granting approval', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  args.workspace.finalQa = async () => {
+    log.push('qa');
+    throw new Error('synthetic model failure');
+  };
+  await assert.rejects(externalReviewStep(args), /synthetic model failure/);
+  assert.equal(batch.codexFinalReview.status, 'failed');
+  assert.equal(log.filter((x) => x === 'qa').length, 1);
+  assert.notEqual(batch.approvedSha, batch.sha);
+  assert.equal(batch.implementation.length, 1);
+});
+
+test('final QA findings use the existing consumed correction budget and new-SHA review request', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  args.workspace.finalQa = async () => ({
+    status: 'blocked',
+    summary: 'Correct regression first',
+  });
+  args.workspace.execute = async (_, options) => {
+    assert.equal(options.phase, 'external-review-correction');
+    assert.equal(options.feedback.codex.status, 'changes-requested');
+    log.push('correction');
+    return { status: 'implemented' };
+  };
+  args.workspace.verify = async () => {};
+  args.workspace.simplify = async () => ({ status: 'implemented' });
+  args.workspace.qa = async () => ({ status: 'verified' });
+  args.workspace.checkpoint = async () => 'b'.repeat(40);
+  args.workspace.publish = async () => {};
+  args.workspace.issueEvidence = async () => 'Synthetic evidence';
+  await externalReviewStep(args);
+  assert.equal(batch.implementation.length, 2);
+  assert.equal(batch.implementation[1].status, 'passed');
+  assert.equal(batch.reviews.length, 1);
+  assert.equal(batch.externalReview.status, 'requested');
+  assert.equal(batch.externalReview.subjectSha, 'b'.repeat(40));
+  assert.notEqual(batch.approvedSha, batch.sha);
+});
+
+test('native checks becoming pending before QA wait with no inference and resume after checks recover', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  let pending = false;
+  args.workspace.prepare = async () => {
+    pending = true;
+  };
+  args.gh.requiredChecks = async () => ({ ok: !pending });
+  await externalReviewStep(args);
+  assert.equal(batch.phase, 'waiting-checks');
+  assert.equal(batch.codexFinalReview.status, 'waiting-checks');
+  assert.equal(log.includes('qa'), false);
+  pending = false;
+  args.workspace.prepare = async () => {};
+  await externalReviewStep(args);
+  assert.equal(batch.phase, 'ready');
+  assert.equal(log.filter((x) => x === 'qa').length, 1);
+  assert.equal(batch.codexFinalReviewHistory[0].status, 'waiting-checks');
+});
+
+test('stale published handoff cannot invoke QA or transfer an otherwise valid old report', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  batch.externalReview.subjectSha = 'c'.repeat(40);
+  await externalReviewStep(args);
+  assert.equal(batch.phase, 'blocked');
+  assert.equal(log.includes('qa'), false);
+  assert.notEqual(batch.approvedSha, batch.sha);
+});
+
+test('final QA findings cannot renew exhausted implementation or review budgets', async () => {
+  for (const exhausted of ['implementation', 'reviews']) {
+    const { args, batch, log } = approvedExternalArgs();
+    if (exhausted === 'implementation')
+      batch.implementation = [1, 2, 3, 4].map((round) => ({
+        round,
+        status: 'passed',
+      }));
+    else {
+      const report = batch.reviewReports['claude-review-1.json'];
+      batch.reviews = [1, 2, 3, 4].map((round) => ({
+        round,
+        status: 'approved',
+        subjectSha: batch.sha,
+      }));
+      batch.reviewReports['claude-review-4.json'] = report;
+      batch.reviewLedger.rounds = [1, 2, 3, 4].map((round) => ({
+        round,
+        verdict: 'approved',
+        subject_sha: batch.sha,
+        review_sha256: sha256(report),
+      }));
+    }
+    const history = structuredClone(batch[exhausted]);
+    args.workspace.finalQa = async () => ({
+      status: 'blocked',
+      summary: 'Concrete finding',
+    });
+    args.workspace.execute = async () => assert.fail('exhausted correction cannot execute');
+    await externalReviewStep(args);
+    assert.equal(batch.phase, 'blocked');
+    assert.deepEqual(batch[exhausted], history);
+    assert.notEqual(batch.approvedSha, batch.sha);
+  }
+});
+
+test('new feedback cannot start a correction while the prior final QA session remains running', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  batch.codexFinalReview = {
+    status: 'running',
+    subjectSha: batch.sha,
+    claudeRound: 1,
+  };
+  batch.externalReview.feedbackChanged = true;
+  args.workspace.execute = async () =>
+    assert.fail('live QA ownership prevents concurrent correction');
+  await externalReviewStep(args);
+  assert.equal(batch.phase, 'blocked');
+  assert.equal(batch.implementation.length, 1);
+  assert.equal(log.includes('qa'), false);
+  assert.equal(batch.codexFinalReview.status, 'running');
+});
+
+test('automatic external review ownership loss skips without correction, status block or model effects', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  const before = structuredClone(batch);
+  args.communication = {
+    mirrorFeedback: async (_, options) => {
+      assert.deepEqual(options, { automatic: true });
+      throw Object.assign(new Error('synthetic handover'), { code: 'review-operator-owned' });
+    },
+    publishState: async () => assert.fail('no retry publication'),
+  };
+  args.block = async () => assert.fail('new owner cannot receive generic blocked state');
+  await assert.rejects(externalReviewStep(args), (error) => error.code === 'review-operator-owned');
+  assert.deepEqual(batch, before);
+  assert.deepEqual(log, []);
+});
+
+test('ownership loss in automatic informational publication is not swallowed before a correction model', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  batch.externalReview.feedbackChanged = true;
+  args.communication = {
+    mirrorFeedback: async (_, options) => assert.equal(options.automatic, true),
+    publishState: async (_, options) => {
+      assert.equal(options.automatic, true);
+      throw Object.assign(new Error('synthetic handover'), { code: 'review-operator-owned' });
+    },
+  };
+  args.workspace.execute = async () => assert.fail('model cannot start after observed handover');
+  args.block = async () => assert.fail('no block to new operator owner');
+  await assert.rejects(externalReviewStep(args), (error) => error.code === 'review-operator-owned');
+  assert.equal(log.includes('qa'), false);
+  assert.equal(
+    batch.implementation.at(-1).status,
+    'running',
+    'already reserved claim is preserved, not relabelled failed',
+  );
+});
+
+test('automatic external comment handoff inherits ownership context before native reconciliation or model work', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  batch.externalReview.channel = 'github-comments';
+  args.gh.createStateStore = () => ({
+    load: async () => ({
+      schemaVersion: 1,
+      repository: repo,
+      batches: [batch],
+      operatorTakeover: { active: true },
+    }),
+  });
+  args.communication = {
+    mirrorFeedback: async () => assert.fail('no later publication'),
+    publishState: async () => assert.fail('no later publication'),
+  };
+  args.block = async () => assert.fail('owner cannot receive generic blocked state');
+  const before = structuredClone(batch);
+  await assert.rejects(externalReviewStep(args), (error) => error.code === 'review-operator-owned');
+  assert.deepEqual(batch, before);
+  assert.deepEqual(log, []);
+});
+
+test('Claude1 F3 recovered infrastructure failure retries only final QA and preserves code budget', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  const prior = {
+    status: 'failed',
+    subjectSha: batch.sha,
+    claudeRound: 1,
+    feedbackFingerprint: batch.externalReview.feedbackFingerprint,
+    nonce: 'prior-failed',
+    reservedAt: '2026-10-22T00:00:00Z',
+  };
+  batch.codexFinalReview = structuredClone(prior);
+  args.workspace.execute = async () => assert.fail('infrastructure retry must not implement');
+  await externalReviewStep(args);
+  assert.equal(log.filter((x) => x === 'qa').length, 1);
+  assert.equal(batch.phase, 'ready');
+  assert.equal(batch.implementation.length, 1);
+  assert.deepEqual(batch.codexFinalReviewHistory, [prior]);
+});
+
+test('Claude1 F3 final-QA inference retries are durably bounded independently of implementation', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  const before = structuredClone(batch.implementation);
+  let calls = 0;
+  args.workspace.finalQa = async () => {
+    calls++;
+    throw new Error('bounded infrastructure outage');
+  };
+  args.workspace.execute = async () => assert.fail('infrastructure never implements');
+  for (let n = 0; n < 3; n++) {
+    batch.phase = 'waiting-review'; // Explicit operator recovery, never an automatic unblock.
+    await assert.rejects(externalReviewStep(args), /bounded infrastructure outage/);
+    assert.equal(batch.codexFinalQaInfrastructure.attempts.length, n + 1);
+    assert.ok(batch.codexFinalQaInfrastructure.attempts.every((x) => x.status === 'failed'));
+  }
+  batch.phase = 'waiting-review';
+  await externalReviewStep(args);
+  assert.equal(calls, 3);
+  assert.equal(batch.codexFinalReview.failureCode, 'final-qa-infrastructure-exhausted');
+  assert.equal(batch.phase, 'blocked');
+  assert.deepEqual(batch.implementation, before);
+  const history = structuredClone(batch.codexFinalReviewHistory);
+  await externalReviewStep(args);
+  assert.equal(calls, 3);
+  assert.deepEqual(batch.codexFinalReviewHistory, history);
+  assert.equal(log.includes('correction'), false);
+});
+test('Claude1 F3 waiting checks and pre-inference identity polling spend no infrastructure inference slots', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  let waiting = true;
+  args.workspace.prepare = async () => {};
+  let checks = 0;
+  args.gh.requiredChecks = async () => ({ ok: ++checks % 2 === 1 || !waiting });
+  for (let n = 0; n < 5; n++) {
+    await externalReviewStep(args);
+    assert.equal(batch.codexFinalReview.status, 'waiting-checks');
+  }
+  assert.equal(batch.codexFinalQaInfrastructure, undefined);
+  assert.equal(log.includes('qa'), false);
+  waiting = false;
+  await externalReviewStep(args);
+  assert.equal(batch.phase, 'ready');
+  assert.equal(batch.codexFinalQaInfrastructure.attempts.length, 1);
+});
+test('Claude1 F3 unusable final QA verdict is infrastructure failure and never a code correction', async () => {
+  const { args, batch } = approvedExternalArgs();
+  args.workspace.finalQa = async () => ({ status: 'unavailable' });
+  args.workspace.execute = async () => assert.fail('unavailable verdict must not implement');
+  await assert.rejects(externalReviewStep(args), /no usable verdict/);
+  assert.equal(batch.codexFinalReview.status, 'failed');
+  assert.equal(batch.implementation.length, 1);
+});
+
+const qaIntent = (batch, nonce, status = 'failed') => ({
+  status,
+  nonce,
+  subjectSha: batch.sha,
+  claudeRound: batch.reviews.length,
+  feedbackFingerprint: batch.externalReview.feedbackFingerprint,
+  reservedAt: '2026-10-17T00:00:00.000Z',
+});
+test('QA6-F3 duplicate legacy intents across ledger and recovery histories count once, preserving originals', async () => {
+  const { args, batch } = approvedExternalArgs();
+  const legacy = qaIntent(batch, 'one-legacy-session');
+  batch.qaHistory = [structuredClone(legacy)];
+  batch.codexFinalReviewHistory = [structuredClone(legacy)];
+  batch.codexFinalQaInfrastructure = {
+    attempts: [structuredClone(legacy), structuredClone(legacy)],
+  };
+  const originalQaHistory = structuredClone(batch.qaHistory),
+    originalLedger = structuredClone(batch.codexFinalQaInfrastructure.attempts);
+  let calls = 0;
+  args.workspace.finalQa = async () => {
+    calls++;
+    throw new Error('synthetic infrastructure failure');
+  };
+  args.workspace.execute = async () => assert.fail('infrastructure is not a code correction');
+  for (let i = 0; i < 2; i++) {
+    batch.phase = 'waiting-review';
+    await assert.rejects(externalReviewStep(args), /synthetic infrastructure failure/);
+  }
+  batch.phase = 'waiting-review';
+  await externalReviewStep(args);
+  assert.equal(calls, 2);
+  assert.equal(batch.codexFinalReview.failureCode, 'final-qa-infrastructure-exhausted');
+  assert.deepEqual(batch.qaHistory, originalQaHistory);
+  assert.deepEqual(batch.codexFinalQaInfrastructure.attempts.slice(0, 2), originalLedger);
+  assert.deepEqual(batch.codexFinalReviewHistory[0], legacy);
+  assert.equal(new Set(batch.codexFinalQaInfrastructure.attempts.map((x) => x.nonce)).size, 3);
+  assert.equal(batch.implementation.length, 1);
+});
+test('QA6-F3 other identities and waiting/pre-QA blocked metadata never consume inference allowance', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  const metadata = ['waiting-checks', 'blocked'].map((status) =>
+    qaIntent(batch, 'metadata-' + status, status),
+  );
+  const other = [
+    { subjectSha: 'b'.repeat(40) },
+    { claudeRound: 9 },
+    { feedbackFingerprint: 'other-feedback' },
+  ].map((patch, i) => ({ ...qaIntent(batch, 'other-' + i), ...patch }));
+  batch.qaHistory = [...metadata, ...other];
+  batch.codexFinalReviewHistory = structuredClone(batch.qaHistory);
+  batch.codexFinalQaInfrastructure = { attempts: structuredClone(metadata) };
+  const original = structuredClone(batch.qaHistory);
+  await externalReviewStep(args);
+  assert.equal(batch.phase, 'ready');
+  assert.equal(log.filter((x) => x === 'qa').length, 1);
+  assert.deepEqual(batch.qaHistory, original);
+  assert.equal(
+    batch.codexFinalQaInfrastructure.attempts.filter((x) => x.status === 'verified').length,
+    1,
+  );
+});
+test('QA6-F3 ambiguous spent legacy intent cannot trigger inference or implementation retry', async () => {
+  for (const missing of [
+    'nonce',
+    'subjectSha',
+    'claudeRound',
+    'feedbackFingerprint',
+    'reservedAt',
+  ]) {
+    const { args, batch, log } = approvedExternalArgs();
+    const ambiguous = qaIntent(batch, 'missing');
+    delete ambiguous[missing];
+    batch.qaHistory = [structuredClone(ambiguous)];
+    args.workspace.execute = async () =>
+      assert.fail('ambiguous legacy intent is not a code finding');
+    await externalReviewStep(args);
+    assert.equal(batch.phase, 'blocked', missing);
+    assert.equal(batch.codexFinalReview.failureCode, 'final-qa-infrastructure-history-ambiguous');
+    assert.deepEqual(batch.qaHistory, [ambiguous]);
+    assert.equal(log.includes('qa'), false);
+    assert.equal(batch.implementation.length, 1);
+  }
+});
+
+test('QA6-F5 typed ownership loss inside correction preserves the already reserved running tombstone', async () => {
+  const { args, batch } = approvedExternalArgs();
+  batch.externalReview.feedbackChanged = true;
+  args.workspace.prepare = async () => {};
+  args.workspace.execute = async () => {
+    throw Object.assign(new Error('observed owner'), { code: 'review-operator-owned' });
+  };
+  args.block = async () => assert.fail('no operator block');
+  await assert.rejects(externalReviewStep(args), (error) => error.code === 'review-operator-owned');
+  assert.equal(batch.implementation.at(-1).status, 'running');
+});
+
+test('Author7 F1 exact original legacy verified QA is one spent session, not an unrecoverable ambiguity', async () => {
+  const { args, batch, log } = approvedExternalArgs();
+  const old = {
+    subjectSha: batch.sha,
+    claudeRound: 1,
+    status: 'verified',
+    summary: 'Original main independent QA',
+  };
+  batch.codexFinalReview = structuredClone(old);
+  await externalReviewStep(args);
+  assert.equal(batch.phase, 'ready');
+  assert.equal(log.filter((x) => x === 'qa').length, 1);
+  assert.deepEqual(batch.codexFinalReviewHistory[0], old);
+  assert.equal(batch.codexFinalQaInfrastructure.legacyOrigins.length, 1);
+  assert.deepEqual(batch.codexFinalQaInfrastructure.legacyOrigins[0].original, old);
+});
+
+test('Claude504 unchanged correction head settles the completed journal and consumes its attempt', async (t) => {
+  const { knownFailedCorrection } = await import('../../src/bug-pipeline/workspace.mjs');
+  const { controllerFailureCode } = await import('../../src/bug-pipeline/github.mjs');
+  const f = await workerFixture(t, { verdict: 'changes-requested' });
+  await reviewExternalBatch(f);
+  let paid = 0;
+  const reviewedSha = f.batch.sha;
+  const snapshots = [];
+  const args = {
+    repo,
+    batch: f.batch,
+    gh: f.github,
+    workspace: {
+      prepare: async () => {},
+      execute: async () => {
+        paid++;
+        return { status: 'implemented' };
+      },
+      verify: async () => {},
+      simplify: async () => ({ status: 'implemented' }),
+      qa: async () => ({ status: 'verified' }),
+      checkpoint: async () => reviewedSha,
+      publish: async () => {},
+      captureCheckpoint: async () => ({ head: reviewedSha }),
+      issueEvidence: async () => '',
+    },
+    save: async () => snapshots.push(structuredClone(f.batch)),
+    report: async () => {},
+    block: async (batch) => {
+      batch.phase = 'blocked';
+    },
+  };
+  await assert.rejects(
+    externalReviewStep(args),
+    (error) => controllerFailureCode(error) === 'implementation-revision-unchanged',
+  );
+  const progress = f.batch.controllerProgress;
+  assert.equal(progress.status, 'failed');
+  assert.equal(progress.failureCode, 'implementation-revision-unchanged');
+  assert.equal(progress.completed.length, 7);
+  assert.equal(progress.next, 7);
+  assert.equal(f.batch.implementation.at(-1).status, 'failed');
+  assert.ok(knownFailedCorrection(f.batch));
+  assert.ok(
+    snapshots.some(
+      (batch) =>
+        batch.controllerProgress?.status === 'failed' &&
+        batch.implementation.at(-1).status === 'failed',
+    ),
+  );
+  f.batch.phase = 'blocked';
+  f.batch.failureCode = progress.failureCode;
+  await externalReviewStep(args);
+  assert.equal(paid, 1, 'A blocked definite failure cannot silently invoke another correction');
 });

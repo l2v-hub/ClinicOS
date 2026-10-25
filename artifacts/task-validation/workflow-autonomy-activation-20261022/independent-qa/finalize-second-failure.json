@@ -1,0 +1,5 @@
+{
+  "scope": "QA finalizer only",
+  "failure": "Hash serialization mismatch: initial Node JSON.stringify did not match supplied Python sorted ASCII canonical hashes; all22 match with supplied canonical encoding",
+  "sourceOrAssertionChanged": false
+}

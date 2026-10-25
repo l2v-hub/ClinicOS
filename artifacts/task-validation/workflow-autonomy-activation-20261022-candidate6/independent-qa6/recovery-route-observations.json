@@ -1,0 +1,8 @@
+{
+  "ordinaryResumeError": "Resume requires transient recovery or unused audited correction and review allowances",
+  "typedQaRecoveryPhase": "waiting-review",
+  "failedRecordRetainedInQaHistory": true,
+  "hostVerifierRequired": true,
+  "defaultStandaloneCliVerifierClaimed": false,
+  "modelsExecuted": 0
+}

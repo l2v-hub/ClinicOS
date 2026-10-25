@@ -1,0 +1,37 @@
+{
+  "nonce": "4312f0da-1a52-4f36-b78f-f99f4a096165",
+  "delivery": {
+    "sealSha256": "8d1ca950e6938d40fc6940fceba5ffd3b2b2567c055307f7f8312864e96c9f0e",
+    "sealedFiles": 152,
+    "changedPaths": [
+      "agent-team/src/bug-pipeline/github.mjs",
+      "agent-team/src/bug-pipeline/workspace.mjs",
+      "agent-team/tests/bug-pipeline/github.test.mjs",
+      "agent-team/tests/bug-pipeline/workspace.test.mjs"
+    ],
+    "integratedBindings": {
+      "agent-team/src/bug-pipeline/github.mjs": {
+        "sha256": "717723b30d694114343c8db5ad2e921178962da840f313c4d68aba32f85c2ee9",
+        "bytes": 58978
+      },
+      "agent-team/src/bug-pipeline/workspace.mjs": {
+        "sha256": "b9c1b812c62e059773ce7cf9e02ece6c7ef62ec43f47624f3f86135dfcf422b0",
+        "bytes": 23539
+      },
+      "agent-team/tests/bug-pipeline/github.test.mjs": {
+        "sha256": "5d213b379c798e035fb706f4623e50b92a10cf3b17e34c27b3b9e46fdaa79a8e",
+        "bytes": 112873
+      },
+      "agent-team/tests/bug-pipeline/workspace.test.mjs": {
+        "sha256": "2334d396223143f932e40449f1950fa1fc6db013f943ed8dab63069782688d79",
+        "bytes": 39084
+      }
+    },
+    "distinctChildTests": 233,
+    "childSealPreserved": true,
+    "parentReviewStillRequired": true
+  },
+  "planAcceptanceStateCommit": "4af238746ead7543a174582da37573c3dcd37ca5",
+  "stateCommit": "ef9805a8f2ef87e80e6d613ac7f09d48715be154",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/496b3052-12a7-4339-a7db-e1d7d8c59547/accepted.json"
+}

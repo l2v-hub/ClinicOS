@@ -1,0 +1,48 @@
+{
+  "sourceFindings": [],
+  "nonzeroRuns": [
+    {
+      "record": "integrity-first-failures.json",
+      "kind": "2 metadata/harness checks"
+    },
+    {
+      "record": "prior-adaptation.json",
+      "kind": "Original10QA6 first run9PASS1FAIL and exact recheck9PASS1FAIL; native stub receipt mismatch"
+    },
+    {
+      "record": "novel-first.log",
+      "tests": 13,
+      "pass": 11,
+      "fail": 2,
+      "kind": "QA7 fixture used default write permission rather than maintain; correctly refused before recovery"
+    },
+    {
+      "record": "novel-second.log",
+      "tests": 13,
+      "pass": 11,
+      "fail": 2,
+      "kind": "Changing actor name did not change fixture permission; same correct maintainer rejection"
+    },
+    {
+      "record": "novel-third.log",
+      "tests": 13,
+      "pass": 12,
+      "fail": 1,
+      "kind": "QA7 fixture tried to inspect final-QA pointer while ambiguous recovery intentionally remained blocked; corrected scenario to obtain actual one-unit grant first"
+    },
+    {
+      "record": "novel-fourth.log",
+      "tests": 13,
+      "pass": 12,
+      "fail": 1,
+      "kind": "QA7 helper hashed undefined removed pointer rather than canonical null; fixture helper corrected"
+    }
+  ],
+  "finalNodeRuns": {
+    "focused-command.json": 805,
+    "prior-adapted-final-command.json": 10,
+    "automatic-boundaries-command.json": 5,
+    "novel-final-command.json": 14
+  },
+  "priorAuthorFailureHistory": "All121 author7 sealed files and author6/QA6/both implementation child seals verified; no inherited failure log discarded or rewritten."
+}

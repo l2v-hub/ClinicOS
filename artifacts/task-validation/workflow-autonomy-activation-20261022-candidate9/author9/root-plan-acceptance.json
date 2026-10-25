@@ -1,0 +1,13 @@
+{
+  "nonce": "306e10be-29ce-4784-b4ff-97db849b5a45",
+  "acceptance": {
+    "at": "2026-10-23T08:38:58.904Z",
+    "planSha256": "cd3ae9d68ef555e0b0fcc8ab9d287fdc6e1e504ed54295c203c54c43a169a9fc",
+    "acceptanceSha256": "8acdd69038027284e9d46480511e0c5005558803238bb859fd908b200e8208eb",
+    "effectiveScopeSha256": "57184606e5c98cd222ae4927a833722e145f34fc1d2a233b476c44357593798e",
+    "LunaSealSha256": "8d1ca950e6938d40fc6940fceba5ffd3b2b2567c055307f7f8312864e96c9f0e",
+    "beforeParentEdits": true
+  },
+  "stateCommit": "4af238746ead7543a174582da37573c3dcd37ca5",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/ef242d41-865d-4a44-9362-4208e36f5c1b/accepted.json"
+}

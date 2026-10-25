@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-23T08:30:32.040Z",
+  "authorNonce": "306e10be-29ce-4784-b4ff-97db849b5a45",
+  "rootActor": "codex-cloud-root",
+  "originalScopeSha256": "0738a18e67d59514b1fa8a3ea7f2f94ccd11ac3e6eb2ecfdeb2f502c5ba944e5",
+  "effectiveScopeSha256": "57184606e5c98cd222ae4927a833722e145f34fc1d2a233b476c44357593798e",
+  "acceptanceSha256": "a21ff202406bb8c0fe669ff8b5bd3460221b62457ca588ac9a9295a0e576570d",
+  "addedPath": "agent-team/src/bug-pipeline/pipeline.mjs",
+  "beforeAnySourceEdits": true,
+  "planImplementationStillNotAccepted": true,
+  "stateCommit": "47f0722fd8e956a06e4afb4de7951d270e468dc7",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/4d197c96-4606-4478-9d3f-63826dfdb096/accepted.json"
+}

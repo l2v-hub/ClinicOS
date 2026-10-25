@@ -1,0 +1,13 @@
+{
+  "repositoryConfig": "/workspace/ClinicOS/.prettierrc.json",
+  "files": [
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+      "baselineWhitespaceOnlyBlocksRestored": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+      "baselineWhitespaceOnlyBlocksRestored": 0
+    }
+  ]
+}

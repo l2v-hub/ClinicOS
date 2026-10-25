@@ -1,0 +1,13 @@
+{
+  "status": "FAILED VALIDATION",
+  "stoppedAt": "2026-10-22T22:05:34.231Z",
+  "sourceSha": "2e4a635ad5f34bb6f886342d15eaed63674d3dae",
+  "nonce": "7c4e8a68-edc9-4b9c-8d8c-8aa49b67dea9",
+  "findings": [
+    "F1",
+    "F2"
+  ],
+  "sourceEdits": false,
+  "liveOperations": false,
+  "rootFollowupRequired": true
+}

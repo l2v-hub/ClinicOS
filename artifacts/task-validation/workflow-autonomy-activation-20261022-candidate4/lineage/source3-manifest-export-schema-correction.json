@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-22T22:40:17.695089+00:00",
+  "nonce": "9e422142-c730-42e5-a333-7da6a49f7520",
+  "operation": "local-native-adoption-export-schema-correction",
+  "oldManifestSha256": "cbf0bf067be933a34f2ef39851a98b99b975aec39efffa4f0c92cf2258039fc0",
+  "newManifestSha256": "82a2114fa0f66a0a02e637476d0d4444c09c02bf12066a0c885c375db8eb789f",
+  "preservedOriginal": "/tmp/clinicos-autonomy-activation-20261022/publication/manifest-initial-export-before-closed-adopt-schema.json",
+  "sourceOrPacketChanged": false,
+  "actualReviewsAdded": 0,
+  "oldAndNewHistoryEquivalent": true,
+  "requiredNativeClosedKeys": 15,
+  "noAdoptOrRequestExecuted": true
+}

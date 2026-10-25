@@ -1,0 +1,742 @@
+--- candidate5/.claude/skills/clinicos/references/bug-delivery.md
++++ candidate6/.claude/skills/clinicos/references/bug-delivery.md
+@@ -310,3 +310,17 @@
+ check senza inferenza non consumano slot. Non consuma tentativi implementativi; soltanto un
+ verdetto Codex con richieste di modifica avvia una correzione. Una sessione `running` non viene
+ duplicata e l'esaurimento richiede recupero esplicito senza azzerare lo storico.
++
++Il campo `operatorTakeover.active`, quando presente, deve essere booleano: anche valori falsy
++come `0` o stringa vuota sono metadati invalidi e fermano l'automazione. `false` è un takeover
++inattivo; l'assenza del campo nei vecchi record di audit del budget resta valida. Una perdita di
++ownership esterna propaga il codice tipizzato fino a Codex, che ricarica lo stato canonico e
++scarta le modifiche locali del soggetto prima di lavorare sul successivo.
++
++Il limite della QA finale conta le sessioni per nonce attraverso il record corrente, `qaHistory`,
++`codexFinalReviewHistory` e il registro infrastrutturale: una copia archiviata dal recupero non
++cancella la spesa né la conta due volte. Le attese dei check e i blocchi di identità prima della
++QA, privi di intento di inferenza, non consumano slot. Uno storico di sessioni spese ambiguo
++ferma i ritentativi e non diventa una richiesta di modifica al codice. Il recupero specializzato
++`release-qa-reservation` mantiene la propria autorizzazione verificata dall'host fidato; queste
++correzioni non concedono un verificatore predefinito né modificano le regole di `resume`.
+--- candidate5/agent-team/src/bug-pipeline/contracts.mjs
++++ candidate6/agent-team/src/bug-pipeline/contracts.mjs
+@@ -1,6 +1,6 @@
+ import { attemptLimit, validateOperatorContinuations } from './attempt-budget.mjs';
+ import path from 'node:path';
+-import { validAutomationHandback } from './operator-ownership.mjs';
++import { validAutomationHandback, validOperatorTakeover } from './operator-ownership.mjs';
+ import { createHash } from 'node:crypto';
+ import { validateAgainstSchema } from '../core/json-schema.mjs';
+ import { sanitizeText } from '../core/sanitize.mjs';
+@@ -214,6 +214,8 @@
+     !validAutomationHandback(state.operatorTakeover.automation)
+   )
+     throw new Error('invalid operator automation handback');
++  if (state.operatorTakeover !== undefined && !validOperatorTakeover(state.operatorTakeover))
++    throw new Error('invalid operator takeover');
+   const issues = new Set();
+   for (const b of state.batches) {
+     if (
+--- candidate5/agent-team/src/bug-pipeline/external-review.mjs
++++ candidate6/agent-team/src/bug-pipeline/external-review.mjs
+@@ -40,6 +40,63 @@
+   )
+     throw new Error('Invalid external review report');
+   return report;
++}
++
++// Recovery moves final-QA records between collections. Count the original intent,
++// not its current pointer or the number of archived copies. Originals stay untouched.
++function finalQaSpend(batch, prior, binding) {
++  const infrastructure = (batch.codexFinalQaInfrastructure ??= { attempts: [] });
++  if (
++    !Array.isArray(infrastructure.attempts) ||
++    (batch.qaHistory !== undefined && !Array.isArray(batch.qaHistory)) ||
++    (batch.codexFinalReviewHistory !== undefined && !Array.isArray(batch.codexFinalReviewHistory))
++  )
++    return { infrastructure, ambiguous: true };
++  const seen = new Set();
++  let ambiguous = false;
++  const spentStatus = (status) =>
++    ['running', 'failed', 'verified', 'changes-requested'].includes(status);
++  const differentIdentity = (entry) =>
++    (typeof entry.subjectSha === 'string' &&
++      /^[a-f0-9]{40}$/.test(entry.subjectSha) &&
++      entry.subjectSha !== binding.subjectSha) ||
++    (Number.isSafeInteger(entry.claudeRound) && entry.claudeRound !== binding.claudeRound) ||
++    (typeof entry.feedbackFingerprint === 'string' &&
++      entry.feedbackFingerprint.trim() &&
++      entry.feedbackFingerprint !== binding.feedbackFingerprint);
++  const include = (entry, origin, archived) => {
++    if (['waiting-checks', 'blocked'].includes(entry?.status)) return;
++    if (archived && !spentStatus(entry?.status)) return;
++    if (entry && differentIdentity(entry)) return;
++    if (
++      !entry ||
++      !spentStatus(entry.status) ||
++      !Object.keys(binding).every((key) => entry[key] === binding[key]) ||
++      typeof entry.nonce !== 'string' ||
++      !entry.nonce.trim() ||
++      typeof entry.reservedAt !== 'string' ||
++      !Number.isFinite(Date.parse(entry.reservedAt))
++    ) {
++      ambiguous = true;
++      return;
++    }
++    if (seen.has(entry.nonce)) return;
++    seen.add(entry.nonce);
++    if (archived)
++      infrastructure.attempts.push({
++        ...structuredClone(entry),
++        legacy: true,
++        importedFrom: origin,
++      });
++  };
++  for (const entry of infrastructure.attempts) include(entry, 'infrastructure', false);
++  for (const [origin, entries] of [
++    ['current', prior ? [prior] : []],
++    ['qaHistory', batch.qaHistory ?? []],
++    ['codexFinalReviewHistory', batch.codexFinalReviewHistory ?? []],
++  ])
++    for (const entry of entries) include(entry, origin, true);
++  return { infrastructure, spent: seen.size, ambiguous };
+ }
+ 
+ async function runExternalReviewStep({
+@@ -172,20 +229,21 @@
+         }
+         // Count durably reserved inference sessions, not identity/check polling.
+         // This allowance is independent of the implementation correction budget.
+-        const infrastructure = (batch.codexFinalQaInfrastructure ??= { attempts: [] });
+-        const matches = (entry) =>
+-          entry.subjectSha === batch.sha &&
+-          entry.claudeRound === batch.reviews.length &&
+-          entry.feedbackFingerprint === fingerprint;
+-        // A legacy failed session already represents one spent inference; do not
+-        // silently erase that fact when introducing the separate retry ledger.
+-        if (
+-          prior?.status === 'failed' &&
+-          matches(prior) &&
+-          !infrastructure.attempts.some((entry) => entry.nonce === prior.nonce)
+-        )
+-          infrastructure.attempts.push({ ...prior, legacy: true });
+-        if (infrastructure.attempts.filter(matches).length >= 3) {
++        const binding = {
++          subjectSha: batch.sha,
++          claudeRound: batch.reviews.length,
++          feedbackFingerprint: fingerprint,
++        };
++        const { infrastructure, spent, ambiguous } = finalQaSpend(batch, prior, binding);
++        if (ambiguous) {
++          batch.codexFinalReview.status = 'blocked';
++          batch.codexFinalReview.failureCode = 'final-qa-infrastructure-history-ambiguous';
++          await save();
++          return blocked(
++            'Independent final QA inference history is ambiguous; explicit recovery required',
++          );
++        }
++        if (spent >= 3) {
+           batch.codexFinalReview.status = 'blocked';
+           batch.codexFinalReview.failureCode = 'final-qa-infrastructure-exhausted';
+           await save();
+@@ -313,7 +371,7 @@
+       await save();
+       await report(batch, await workspace.issueEvidence(batch));
+     } catch (error) {
+-      attempt.status = 'failed';
++      if (error?.code !== 'review-operator-owned') attempt.status = 'failed';
+       throw error;
+     }
+   } else if (handoff?.status === 'requested' && handoff.subjectSha === batch.sha) {
+@@ -347,13 +405,9 @@
+   );
+ }
+ 
+-// Ownership loss is a skip, never permission to block, relabel or correct that subject.
++// Preserve the finite ownership-loss classification until the controller reloads
++// canonical state. Returning a skip here would leave unsaved subject edits in its
++// writer snapshot and leak them into the next independent subject's save.
+ export async function externalReviewStep(options) {
+-  try {
+-    return await runExternalReviewStep(options);
+-  } catch (error) {
+-    if (error?.code === 'review-operator-owned')
+-      return { status: 'skipped', reason: 'operator-owned' };
+-    throw error;
+-  }
++  return runExternalReviewStep(options);
+ }
+--- candidate5/agent-team/src/bug-pipeline/operator-ownership.mjs
++++ candidate6/agent-team/src/bug-pipeline/operator-ownership.mjs
+@@ -31,9 +31,25 @@
+   );
+ }
+ 
++export function validOperatorTakeover(takeover) {
++  return Boolean(
++    takeover &&
++    typeof takeover === 'object' &&
++    !Array.isArray(takeover) &&
++    (!Object.hasOwn(takeover, 'active') || typeof takeover.active === 'boolean') &&
++    (takeover.nonce === undefined ||
++      (typeof takeover.nonce === 'string' && takeover.nonce.trim())) &&
++    (takeover.automation === undefined || validAutomationHandback(takeover.automation)),
++  );
++}
++
+ export function automationPaused(state) {
+-  if (!state.operatorTakeover?.active) return false;
+-  const handback = state.operatorTakeover.automation;
++  const takeover = state.operatorTakeover;
++  if (takeover === undefined) return false;
++  if (!validOperatorTakeover(takeover)) return true;
++  // Older budget-audit records without active are not an active takeover.
++  if (takeover.active !== true) return false;
++  const handback = takeover.automation;
+   return !(
+     validAutomationHandback(handback) &&
+     handback.enabled === true &&
+--- candidate5/agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs
++++ candidate6/agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs
+@@ -2,6 +2,7 @@
+ import assert from 'node:assert/strict';
+ import { createHash } from 'node:crypto';
+ import { createGitHub } from '../../src/bug-pipeline/github.mjs';
++import { externalReviewStep } from '../../src/bug-pipeline/external-review.mjs';
+ import { feedbackFingerprint } from '../../src/bug-pipeline/contracts.mjs';
+ import {
+   COMMENT_REVIEW_MARKER,
+@@ -92,8 +93,12 @@
+         }
+       : { externalReview: { status: 'requested', subjectSha: sha } }),
+   };
+-  const remote = { schemaVersion: 1, repository: repo, batches: [batch],
+-    ...(blobState ? { retainedHistory: 'x'.repeat(1024 * 1024 + 128) } : {}) };
++  const remote = {
++    schemaVersion: 1,
++    repository: repo,
++    batches: [batch],
++    ...(blobState ? { retainedHistory: 'x'.repeat(1024 * 1024 + 128) } : {}),
++  };
+   let actorName = actor;
+   let permission = 'write';
+   let revokeOnTree = false;
+@@ -157,8 +162,18 @@
+       const oid = gitBlobSHA(bytes);
+       assert.equal(endpoint, `repos/${repo}/git/blobs/${oid}`);
+       assert.equal(call.maxOutputBytes, 16 * 1024 * 1024);
+-      return { ok: true, stdout: JSON.stringify({ sha: oid, size: bytes.length, encoding: 'base64',
+-        content: bytes.toString('base64').match(/.{1,60}/g).join('\n') }) };
++      return {
++        ok: true,
++        stdout: JSON.stringify({
++          sha: oid,
++          size: bytes.length,
++          encoding: 'base64',
++          content: bytes
++            .toString('base64')
++            .match(/.{1,60}/g)
++            .join('\n'),
++        }),
++      };
+     }
+     if (endpoint.startsWith(`repos/${repo}/git/trees/`)) {
+       if (revokeOnTree) permission = 'read';
+@@ -200,7 +215,8 @@
+     const body = `<!-- clinicos-claude-cron:${number}:${head}:${currentRound} -->\nClaude report ${report.verdict}`;
+     feedback.comments.push({ id: ++commentId, author: actorName, body });
+   };
+-  let nonceValue = 0, authorizationNonce = 0;
++  let nonceValue = 0,
++    authorizationNonce = 0;
+   const handoff = createCommentReviewHandoff({
+     github,
+     run: apiRun,
+@@ -208,10 +224,15 @@
+     cwd: '/synthetic/worktree',
+     now: () => new Date('2026-10-17T00:00:00.000Z'),
+     nonce: () => `nonce-${++nonceValue}`,
+-    authorizationVerifier: authorizationVerifier ? async ({ binding }) => ({
+-      provenance: 'user-session', grantId: 'synthetic-session', sourceRef: 'test:session',
+-      consumptionNonce: `grant-${++authorizationNonce}`, binding,
+-    }) : undefined,
++    authorizationVerifier: authorizationVerifier
++      ? async ({ binding }) => ({
++          provenance: 'user-session',
++          grantId: 'synthetic-session',
++          sourceRef: 'test:session',
++          consumptionNonce: `grant-${++authorizationNonce}`,
++          binding,
++        })
++      : undefined,
+   });
+   return {
+     batch,
+@@ -260,7 +281,10 @@
+   const oldHold = clone(f.batch.releaseHold);
+   await assert.rejects(f.handoff.request(81), /Explicit failed-execution recovery required/);
+   assert.deepEqual(f.remote.batches[0], f.batch);
+-  const requested = await f.handoff.request(81, { recoverFailed: true, authorizationRef: 'test:session' });
++  const requested = await f.handoff.request(81, {
++    recoverFailed: true,
++    authorizationRef: 'test:session',
++  });
+   assert.equal(requested.reviews.length, 1);
+   assert.equal(requested.reviews[0].status, 'failed');
+   assert.deepEqual(requested.reviewLedger, oldLedger);
+@@ -658,8 +682,15 @@
+   const f = fixture({ authorizationVerifier: false });
+   f.setPermission('admin');
+   const before = clone(f.remote);
+-  await assert.rejects(f.handoff.extendBudget(81, { kind: 'implementation', limit: 5,
+-    authorizationRef: 'I authorize myself', reason: 'Synthetic instruction' }), /verifier unavailable/);
++  await assert.rejects(
++    f.handoff.extendBudget(81, {
++      kind: 'implementation',
++      limit: 5,
++      authorizationRef: 'I authorize myself',
++      reason: 'Synthetic instruction',
++    }),
++    /verifier unavailable/,
++  );
+   assert.deepEqual(f.remote, before);
+ });
+ 
+@@ -691,25 +722,46 @@
+ });
+ 
+ test('default compatibility2 spends3/4 without extensions and same-account external verifier authorizes only the next5', async () => {
+-  const { reserveImplementation, implementationAttempts, historyDigest, validateOperatorContinuations } =
+-    await import('../../src/bug-pipeline/attempt-budget.mjs');
++  const {
++    reserveImplementation,
++    implementationAttempts,
++    historyDigest,
++    validateOperatorContinuations,
++  } = await import('../../src/bug-pipeline/attempt-budget.mjs');
+   const f = fixture();
+   f.setPermission('admin');
+-  f.remote.operatorTakeover = { nonce: 'takeover-scope', continuePastFourPreserveHistory: true,
+-    subjects: [{ collection: 'batches', id: f.batch.id, pr: 81 }] };
+-  f.batch.operatorContinuations = [{ kind: 'explicit-operator-compatibility-continuation',
+-    round: 2, status: 'passed', owner: 'review-bot', nonce: 'reservation2', startedAt: '2026-10-18T00:00:00Z',
+-    reason: 'Observed scope authorization', authorizationRef: 'takeover-scope',
+-    contractSha256: 'c'.repeat(64), preservedEntityDigest: 'd'.repeat(64),
+-    preservedLegacyImplementationDigest: historyDigest(f.batch.implementation),
+-    preservedLegacyReviewsDigest: historyDigest(f.batch.reviews) }];
++  f.remote.operatorTakeover = {
++    nonce: 'takeover-scope',
++    continuePastFourPreserveHistory: true,
++    subjects: [{ collection: 'batches', id: f.batch.id, pr: 81 }],
++  };
++  f.batch.operatorContinuations = [
++    {
++      kind: 'explicit-operator-compatibility-continuation',
++      round: 2,
++      status: 'passed',
++      owner: 'review-bot',
++      nonce: 'reservation2',
++      startedAt: '2026-10-18T00:00:00Z',
++      reason: 'Observed scope authorization',
++      authorizationRef: 'takeover-scope',
++      contractSha256: 'c'.repeat(64),
++      preservedEntityDigest: 'd'.repeat(64),
++      preservedLegacyImplementationDigest: historyDigest(f.batch.implementation),
++      preservedLegacyReviewsDigest: historyDigest(f.batch.reviews),
++    },
++  ];
+   const prefix = clone(implementationAttempts(f.batch));
+   reserveImplementation(f.batch).status = 'passed';
+   reserveImplementation(f.batch).status = 'passed';
+   validateOperatorContinuations(f.remote);
+   assert.throws(() => reserveImplementation(f.batch), /allowance exhausted/);
+-  const extended = await f.handoff.extendBudget(81, { kind: 'implementation', limit: 5,
+-    authorizationRef: 'test:external-session-action5', reason: 'Actual scoped session verifier fixture' });
++  const extended = await f.handoff.extendBudget(81, {
++    kind: 'implementation',
++    limit: 5,
++    authorizationRef: 'test:external-session-action5',
++    reason: 'Actual scoped session verifier fixture',
++  });
+   assert.equal(extended.budgetExtensions.length, 1);
+   assert.equal(extended.budgetExtensions[0].authorization.provenance, 'user-session');
+   assert.equal(extended.budgetExtensions[0].authorization.binding.actor, 'review-bot');
+@@ -723,11 +775,24 @@
+ test('background normal waiting reconciliation never repairs notices across accounts or transient reads', async () => {
+   const f = fixture();
+   await f.handoff.request(81);
+-  const previous = clone(f.remote.batches[0]), callCount = f.calls.length, notices = f.pr.comments.length;
++  const previous = clone(f.remote.batches[0]),
++    callCount = f.calls.length,
++    notices = f.pr.comments.length;
+   f.setActor('another-authorized-user');
+-  f.github.viewIssue = async () => { throw Object.assign(new Error('Synthetic notice 503'), { code: 'github-read-transient' }); };
+-  assert.equal(await f.handoff.reconcile(previous, async () => assert.fail('Waiting phase must remain unchanged')), false);
+-  assert.equal(f.calls.length, callCount, 'No actor or notice API in the background reconciliation');
++  f.github.viewIssue = async () => {
++    throw Object.assign(new Error('Synthetic notice 503'), { code: 'github-read-transient' });
++  };
++  assert.equal(
++    await f.handoff.reconcile(previous, async () =>
++      assert.fail('Waiting phase must remain unchanged'),
++    ),
++    false,
++  );
++  assert.equal(
++    f.calls.length,
++    callCount,
++    'No actor or notice API in the background reconciliation',
++  );
+   assert.equal(f.pr.comments.length, notices);
+   assert.deepEqual(f.remote.batches[0], previous);
+ });
+@@ -761,3 +826,87 @@
+   assert.equal(f.writes.length, 0);
+   assert.equal(f.pr.comments.length, 0);
+ });
++
++test('QA6-F3 actual authorized typed QA recovery retains one legacy spend and permits only two new sessions', async () => {
++  const f = fixture();
++  f.setPermission('maintain');
++  const b = f.remote.batches[0];
++  const fingerprint = feedbackFingerprint(await f.github.reviewFeedback(81));
++  const report = JSON.stringify({
++    subject_sha: b.sha,
++    verdict: 'approved',
++    summary: 'Synthetic approved review',
++    findings: [],
++  });
++  b.reviews = [{ round: 1, status: 'approved', subjectSha: b.sha }];
++  b.reviewLedger = {
++    rounds: [
++      {
++        round: 1,
++        verdict: 'approved',
++        subject_sha: b.sha,
++        review_sha256: createHash('sha256').update(report).digest('hex'),
++      },
++    ],
++  };
++  b.reviewReports = { 'claude-review-1.json': report };
++  b.phase = 'blocked';
++  b.failureCode = 'controller-invariant';
++  b.externalReview = { status: 'published', subjectSha: b.sha, feedbackFingerprint: fingerprint };
++  const legacy = {
++    status: 'failed',
++    subjectSha: b.sha,
++    claudeRound: 1,
++    feedbackFingerprint: fingerprint,
++    nonce: 'legacy-spent',
++    reservedAt: '2026-10-17T00:00:00.000Z',
++  };
++  b.codexFinalReview = structuredClone(legacy);
++  const recover = async () => {
++    const current = f.remote.batches[0];
++    return f.handoff.recover(81, {
++      action: 'release-qa-reservation',
++      expectedSha: current.sha,
++      token: current.codexFinalReview.nonce,
++      reason: 'Synthetic authorized infrastructure recovery',
++      authorizationRef: 'test:trusted-host',
++    });
++  };
++  await recover();
++  let calls = 0;
++  for (let i = 0; i < 3; i++) {
++    const current = structuredClone(f.remote.batches[0]);
++    const args = {
++      repo,
++      batch: current,
++      gh: f.github,
++      communication: { mirrorFeedback: async () => {}, publishState: async () => {} },
++      workspace: {
++        prepare: async () => {},
++        execute: async () => assert.fail('no implementation'),
++        finalQa: async () => {
++          calls++;
++          throw new Error('synthetic infrastructure failure');
++        },
++      },
++      save: async () => {
++        const store = f.github.createStateStore();
++        const state = await store.load();
++        state.batches[0] = structuredClone(current);
++        await store.save(state);
++      },
++      block: async () => {},
++      report: async () => {},
++    };
++    if (i < 2) await assert.rejects(externalReviewStep(args), /synthetic infrastructure failure/);
++    else await externalReviewStep(args);
++    if (i < 2) await recover();
++  }
++  const final = f.remote.batches[0];
++  assert.equal(calls, 2);
++  assert.equal(final.implementation.length, 1);
++  assert.deepEqual(final.qaHistory[0], legacy);
++  assert.equal(final.qaHistory.length, 3);
++  assert.equal(new Set(final.codexFinalQaInfrastructure.attempts.map((x) => x.nonce)).size, 3);
++  assert.equal(final.codexFinalReview.failureCode, 'final-qa-infrastructure-exhausted');
++});
+--- candidate5/agent-team/tests/bug-pipeline/contracts.test.mjs
++++ candidate6/agent-team/tests/bug-pipeline/contracts.test.mjs
+@@ -295,3 +295,19 @@
+     );
+   }
+ });
++
++test('QA6-F1 explicit active must be boolean while inactive and legacy audit absence stay valid', () => {
++  const state = { schemaVersion: 1, repository: 'l2v-hub/ClinicOS', batches: [] };
++  for (const active of ['true', 'false', '', 0, 1, null, undefined, [], {}]) {
++    state.operatorTakeover = { active };
++    assert.throws(() => validateState(state, state.repository), /invalid operator takeover/);
++  }
++  for (const takeover of [null, false, 0, '', [], 'true']) {
++    state.operatorTakeover = takeover;
++    assert.throws(() => validateState(state, state.repository), /invalid operator takeover/);
++  }
++  for (const takeover of [{ active: false }, { nonce: 'legacy-budget-audit' }, { active: true }]) {
++    state.operatorTakeover = takeover;
++    assert.equal(validateState(state, state.repository), state);
++  }
++});
+--- candidate5/agent-team/tests/bug-pipeline/external-review.test.mjs
++++ candidate6/agent-team/tests/bug-pipeline/external-review.test.mjs
+@@ -890,8 +890,7 @@
+     publishState: async () => assert.fail('no retry publication'),
+   };
+   args.block = async () => assert.fail('new owner cannot receive generic blocked state');
+-  const result = await externalReviewStep(args);
+-  assert.deepEqual(result, { status: 'skipped', reason: 'operator-owned' });
++  await assert.rejects(externalReviewStep(args), (error) => error.code === 'review-operator-owned');
+   assert.deepEqual(batch, before);
+   assert.deepEqual(log, []);
+ });
+@@ -908,8 +907,7 @@
+   };
+   args.workspace.execute = async () => assert.fail('model cannot start after observed handover');
+   args.block = async () => assert.fail('no block to new operator owner');
+-  const result = await externalReviewStep(args);
+-  assert.deepEqual(result, { status: 'skipped', reason: 'operator-owned' });
++  await assert.rejects(externalReviewStep(args), (error) => error.code === 'review-operator-owned');
+   assert.equal(log.includes('qa'), false);
+   assert.equal(
+     batch.implementation.at(-1).status,
+@@ -935,8 +933,7 @@
+   };
+   args.block = async () => assert.fail('owner cannot receive generic blocked state');
+   const before = structuredClone(batch);
+-  const result = await externalReviewStep(args);
+-  assert.deepEqual(result, { status: 'skipped', reason: 'operator-owned' });
++  await assert.rejects(externalReviewStep(args), (error) => error.code === 'review-operator-owned');
+   assert.deepEqual(batch, before);
+   assert.deepEqual(log, []);
+ });
+@@ -1012,3 +1009,99 @@
+   assert.equal(batch.codexFinalReview.status, 'failed');
+   assert.equal(batch.implementation.length, 1);
+ });
++
++const qaIntent = (batch, nonce, status = 'failed') => ({
++  status,
++  nonce,
++  subjectSha: batch.sha,
++  claudeRound: batch.reviews.length,
++  feedbackFingerprint: batch.externalReview.feedbackFingerprint,
++  reservedAt: '2026-10-17T00:00:00.000Z',
++});
++test('QA6-F3 duplicate legacy intents across ledger and recovery histories count once, preserving originals', async () => {
++  const { args, batch } = approvedExternalArgs();
++  const legacy = qaIntent(batch, 'one-legacy-session');
++  batch.qaHistory = [structuredClone(legacy)];
++  batch.codexFinalReviewHistory = [structuredClone(legacy)];
++  batch.codexFinalQaInfrastructure = {
++    attempts: [structuredClone(legacy), structuredClone(legacy)],
++  };
++  const originalQaHistory = structuredClone(batch.qaHistory),
++    originalLedger = structuredClone(batch.codexFinalQaInfrastructure.attempts);
++  let calls = 0;
++  args.workspace.finalQa = async () => {
++    calls++;
++    throw new Error('synthetic infrastructure failure');
++  };
++  args.workspace.execute = async () => assert.fail('infrastructure is not a code correction');
++  for (let i = 0; i < 2; i++) {
++    batch.phase = 'waiting-review';
++    await assert.rejects(externalReviewStep(args), /synthetic infrastructure failure/);
++  }
++  batch.phase = 'waiting-review';
++  await externalReviewStep(args);
++  assert.equal(calls, 2);
++  assert.equal(batch.codexFinalReview.failureCode, 'final-qa-infrastructure-exhausted');
++  assert.deepEqual(batch.qaHistory, originalQaHistory);
++  assert.deepEqual(batch.codexFinalQaInfrastructure.attempts.slice(0, 2), originalLedger);
++  assert.deepEqual(batch.codexFinalReviewHistory[0], legacy);
++  assert.equal(new Set(batch.codexFinalQaInfrastructure.attempts.map((x) => x.nonce)).size, 3);
++  assert.equal(batch.implementation.length, 1);
++});
++test('QA6-F3 other identities and waiting/pre-QA blocked metadata never consume inference allowance', async () => {
++  const { args, batch, log } = approvedExternalArgs();
++  const metadata = ['waiting-checks', 'blocked'].map((status) =>
++    qaIntent(batch, 'metadata-' + status, status),
++  );
++  const other = [
++    { subjectSha: 'b'.repeat(40) },
++    { claudeRound: 9 },
++    { feedbackFingerprint: 'other-feedback' },
++  ].map((patch, i) => ({ ...qaIntent(batch, 'other-' + i), ...patch }));
++  batch.qaHistory = [...metadata, ...other];
++  batch.codexFinalReviewHistory = structuredClone(batch.qaHistory);
++  batch.codexFinalQaInfrastructure = { attempts: structuredClone(metadata) };
++  const original = structuredClone(batch.qaHistory);
++  await externalReviewStep(args);
++  assert.equal(batch.phase, 'ready');
++  assert.equal(log.filter((x) => x === 'qa').length, 1);
++  assert.deepEqual(batch.qaHistory, original);
++  assert.equal(
++    batch.codexFinalQaInfrastructure.attempts.filter((x) => x.status === 'verified').length,
++    1,
++  );
++});
++test('QA6-F3 ambiguous spent legacy intent cannot trigger inference or implementation retry', async () => {
++  for (const missing of [
++    'nonce',
++    'subjectSha',
++    'claudeRound',
++    'feedbackFingerprint',
++    'reservedAt',
++  ]) {
++    const { args, batch, log } = approvedExternalArgs();
++    const ambiguous = qaIntent(batch, 'missing');
++    delete ambiguous[missing];
++    batch.qaHistory = [structuredClone(ambiguous)];
++    args.workspace.execute = async () =>
++      assert.fail('ambiguous legacy intent is not a code finding');
++    await externalReviewStep(args);
++    assert.equal(batch.phase, 'blocked', missing);
++    assert.equal(batch.codexFinalReview.failureCode, 'final-qa-infrastructure-history-ambiguous');
++    assert.deepEqual(batch.qaHistory, [ambiguous]);
++    assert.equal(log.includes('qa'), false);
++    assert.equal(batch.implementation.length, 1);
++  }
++});
++
++test('QA6-F5 typed ownership loss inside correction preserves the already reserved running tombstone', async () => {
++  const { args, batch } = approvedExternalArgs();
++  batch.externalReview.feedbackChanged = true;
++  args.workspace.prepare = async () => {};
++  args.workspace.execute = async () => {
++    throw Object.assign(new Error('observed owner'), { code: 'review-operator-owned' });
++  };
++  args.block = async () => assert.fail('no operator block');
++  await assert.rejects(externalReviewStep(args), (error) => error.code === 'review-operator-owned');
++  assert.equal(batch.implementation.at(-1).status, 'running');
++});
+--- candidate5/agent-team/tests/bug-pipeline/operator-ownership.test.mjs
++++ candidate6/agent-team/tests/bug-pipeline/operator-ownership.test.mjs
+@@ -140,3 +140,19 @@
+     assert.equal(automationPaused({ operatorTakeover: invalid }), true);
+   }
+ });
++
++test('QA6-F1 malformed takeover and active types fail closed even without schema validation', () => {
++  for (const active of ['true', 'false', '', 0, 1, null, undefined, [], {}]) {
++    const takeover = handback();
++    takeover.active = active;
++    assert.equal(automationPaused({ operatorTakeover: takeover }), true);
++    assert.equal(operatorOwns({ operatorTakeover: takeover }, 'batches', { id: 'new' }), true);
++  }
++  for (const takeover of [null, false, 0, '', [], 'true'])
++    assert.equal(automationPaused({ operatorTakeover: takeover }), true);
++  const inactive = handback();
++  inactive.active = false;
++  assert.equal(automationPaused({ operatorTakeover: inactive }), false);
++  assert.equal(automationPaused({ operatorTakeover: { nonce: 'legacy-budget-audit' } }), false);
++  assert.equal(automationPaused({ operatorTakeover: { active: true } }), true);
++});
+--- candidate5/agent-team/tests/bug-pipeline/pipeline.test.mjs
++++ candidate6/agent-team/tests/bug-pipeline/pipeline.test.mjs
+@@ -1389,3 +1389,63 @@
+   assert.deepEqual(h.log, ['store.load']);
+   assert.equal(h.counts.plan, 0);
+ });
++
++test('QA6-F1 invalid active types never reach intake or discovery; legitimate inactive/audit states do', async () => {
++  for (const active of ['true', 'false', '', 0, 1, null, [], {}]) {
++    const takeover = takeoverHandback();
++    takeover.active = active;
++    const h = harness({ initialState: { ...blankState(), operatorTakeover: takeover }, queue: [] });
++    await assert.rejects(h.run(), /invalid operator takeover/);
++    assert.deepEqual(h.log, ['store.load']);
++    assert.equal(h.counts.plan, 0);
++  }
++  for (const takeover of [{ active: false }, { nonce: 'legacy-budget-audit' }]) {
++    const h = harness({ initialState: { ...blankState(), operatorTakeover: takeover }, queue: [] });
++    await h.run();
++    assert.ok(h.log.includes('gh.intake'));
++    assert.ok(h.log.includes('gh.discoverQueue'));
++    assert.equal(h.counts.plan, 0);
++  }
++});
++
++test('QA6-F5 external ownership exception refreshes canonical A before independent B disposition', async () => {
++  const a = batchFor({ issues: [17], phase: 'waiting-review' }),
++    b = batchFor({ issues: [18], phase: 'waiting-review' });
++  a.externalReview = { status: 'published', subjectSha: a.sha };
++  b.externalReview = { status: 'published', subjectSha: b.sha };
++  const h = harness({
++    issues: [17, 18],
++    queue: [],
++    initialState: { ...blankState(), batches: [a, b] },
++  });
++  h.gh.createStateStore = () => h.store;
++  let frozenA, afterOwnership;
++  h.gh.viewIssue = async (number) => {
++    if (number === 17) {
++      h.stateRef.value.batches[0].operatorCoordination = { active: true };
++      h.stateRef.value.batches[0].remoteNote = 'preserve operator data';
++      h.stateRef.value.operatorTakeover = takeoverHandback([{ collection: 'batches', id: a.id }]);
++      frozenA = clone(h.stateRef.value.batches[0]);
++      afterOwnership = h.log.length;
++      throw Object.assign(new Error('observed ownership loss'), { code: 'review-operator-owned' });
++    }
++    assert.equal(number, 18);
++    return { state: 'closed' };
++  };
++  const result = await h.run({ action: 'test' }, 'external');
++  assert.deepEqual(result.batches[0], frozenA);
++  assert.deepEqual(h.stateRef.value.batches[0], frozenA);
++  assert.equal(
++    result.batches[1].phase,
++    'blocked',
++    'closed B is independently reconciled rather than aborted',
++  );
++  assert.match(result.batches[1].reason, /Source issue was closed/);
++  assert.equal(
++    h.log
++      .slice(afterOwnership)
++      .some((x) => x.startsWith('gh.commentIssue:17') || x.startsWith('gh.setIssueStatus:17:')),
++    false,
++  );
++  assert.equal(h.counts.execute, 0);
++});
+--- candidate5/docs/codex-bug-workflow.md
++++ candidate6/docs/codex-bug-workflow.md
+@@ -223,3 +223,17 @@
+ check senza inferenza non consumano slot. Non consuma tentativi implementativi; soltanto un
+ verdetto Codex con richieste di modifica avvia una correzione. Una sessione `running` non viene
+ duplicata e l'esaurimento richiede recupero esplicito senza azzerare lo storico.
++
++Il campo `operatorTakeover.active`, quando presente, deve essere booleano: anche valori falsy
++come `0` o stringa vuota sono metadati invalidi e fermano l'automazione. `false` è un takeover
++inattivo; l'assenza del campo nei vecchi record di audit del budget resta valida. Una perdita di
++ownership esterna propaga il codice tipizzato fino a Codex, che ricarica lo stato canonico e
++scarta le modifiche locali del soggetto prima di lavorare sul successivo.
++
++Il limite della QA finale conta le sessioni per nonce attraverso il record corrente, `qaHistory`,
++`codexFinalReviewHistory` e il registro infrastrutturale: una copia archiviata dal recupero non
++cancella la spesa né la conta due volte. Le attese dei check e i blocchi di identità prima della
++QA, privi di intento di inferenza, non consumano slot. Uno storico di sessioni spese ambiguo
++ferma i ritentativi e non diventa una richiesta di modifica al codice. Il recupero specializzato
++`release-qa-reservation` mantiene la propria autorizzazione verificata dall'host fidato; queste
++correzioni non concedono un verificatore predefinito né modificano le regole di `resume`.

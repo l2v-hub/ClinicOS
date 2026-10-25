@@ -1,0 +1,48 @@
+{
+  "verdict": "FAILED VALIDATION",
+  "reservationNonce": "80644daf-045d-4c21-ae12-170af552b2c8",
+  "sourceHashesMatchedBeforeAndAfter": true,
+  "phases": {
+    "0": "PASS",
+    "1": "FAIL",
+    "2": "PASS",
+    "3": "PASS",
+    "4": "PASS",
+    "5": "PASS"
+  },
+  "finding": {
+    "id": "F1",
+    "severity": "medium",
+    "summary": "Exact settlement after real post-checkpoint capture failure remains unrecoverable even with allowance and fresh native head observation",
+    "locations": [
+      "agent-team/src/bug-pipeline/workspace.mjs:83",
+      "agent-team/src/bug-pipeline/workspace.mjs:677",
+      "agent-team/src/bug-pipeline/comment-review-handoff.mjs:862",
+      "agent-team/src/bug-pipeline/operator-authorization.mjs:205"
+    ],
+    "evidence": "independent-probes.log"
+  },
+  "tests": {
+    "focused": {
+      "tests": 135,
+      "passed": 135,
+      "failed": 0
+    },
+    "full": {
+      "tests": 1538,
+      "passed": 1535,
+      "failed": 0,
+      "skipped": 3
+    },
+    "independentProbes": {
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "containsPositiveBugReproducer": true
+    }
+  },
+  "operationalGates": "Hosted activation and authentication pending; no activation claim",
+  "sourceWrites": false,
+  "canonicalWrites": false,
+  "externalCalls": false
+}

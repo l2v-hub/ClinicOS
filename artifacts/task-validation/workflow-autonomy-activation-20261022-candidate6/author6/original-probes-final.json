@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "--experimental-vm-modules",
+    "/tmp/clinicos-autonomy-activation-20261022/author6/external-cas-probe.mjs",
+    "/tmp/clinicos-autonomy-activation-20261022/author6/recovery-budget-probe.mjs",
+    "/tmp/clinicos-autonomy-activation-20261022/author6/malformed-takeover-probe.mjs",
+    "/tmp/clinicos-autonomy-activation-20261022/author6/recovery-route-probe.mjs"
+  ],
+  "cwd": "/tmp/clinicos-autonomy-activation-20261022/source6",
+  "exitCode": 0,
+  "seconds": 0.3765692710876465
+}

@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "actualFilesChecked": 2,
+  "inheritedCoreFilesCheckedPreviously": 10,
+  "files": [
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

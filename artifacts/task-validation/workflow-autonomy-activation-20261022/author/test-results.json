@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "node": "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+  "focusedTestFiles": [
+    "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs"
+  ],
+  "final": {
+    "tests": 517,
+    "pass": 517,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "finalLog": "focused-frozen.log",
+  "initialFailure": {
+    "log": "focused-first.log",
+    "tests": 512,
+    "passed": 511,
+    "failed": 1,
+    "cause": "New synthetic manual scope fixture omitted required implementation/reviews arrays; actual state validator correctly rejected it before exercising overlap.",
+    "correction": "Fixture arrays supplied; no production relaxation."
+  },
+  "subsequentRuns": [
+    {
+      "log": "focused-second.log",
+      "tests": 515,
+      "passed": 515,
+      "failed": 0
+    },
+    {
+      "log": "focused-final.log",
+      "tests": 517,
+      "passed": 517,
+      "failed": 0
+    }
+  ],
+  "finalRerunReason": "Repository formatter config applied and unrelated whitespace-only baseline blocks restored before final source-byte freeze.",
+  "syntaxFiles": 10,
+  "paidModelsOrProviderCalls": 0,
+  "clinicalE2ERerun": false
+}

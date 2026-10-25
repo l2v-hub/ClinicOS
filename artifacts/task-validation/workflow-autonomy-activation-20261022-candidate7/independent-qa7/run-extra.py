@@ -1,0 +1,5 @@
+from pathlib import Path
+import subprocess,json,os,re
+q=Path('/tmp/clinicos-autonomy-activation-20261022/independent-qa7');env=os.environ.copy();env.update(TMPDIR=str(q/'owned-tmp'),GIT_CONFIG_GLOBAL=str(q/'owned-gitconfig'),GIT_CONFIG_NOSYSTEM='1');node='/tmp/clinicos-node22-native12/node_modules/node/bin/node'
+for name,options in [('automatic-boundaries',['--test','--test-reporter=tap','--experimental-vm-modules',str(q/'automatic-boundary-probes.mjs')]),('historical-replay',[str(q/'historical-offline-replay.mjs')])]:
+ cmd=[node,*options];p=subprocess.run(cmd,cwd=q.parent/'qa-source7',env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT);(q/(name+'.log')).write_bytes(p.stdout);out={'command':cmd,'exit':p.returncode,'summary':dict(re.findall(r'^# (tests|pass|fail|cancelled|skipped|todo) (\d+)$',p.stdout.decode(),re.M))};(q/(name+'-command.json')).write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out));print(p.stdout.decode()[-1000:])

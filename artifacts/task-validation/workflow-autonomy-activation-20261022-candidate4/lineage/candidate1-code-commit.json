@@ -1,0 +1,93 @@
+{
+  "base": "2ee298957c3e1733b01a4b4aca4b48b890032f69",
+  "codeSha": "dad757447d1ba0a7d9b0436b41e50cd4c4f20280",
+  "tree": "2f74d8d5138ee4c7117245459648ffb762ce939f",
+  "changedPaths": [
+    "agent-team/src/bug-pipeline/external-review.mjs",
+    "agent-team/src/bug-pipeline/github.mjs",
+    "agent-team/src/bug-pipeline/operator-ownership.mjs",
+    "agent-team/src/bug-pipeline/pipeline.mjs",
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/github.test.mjs",
+    "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs"
+  ],
+  "bindings": [
+    {
+      "path": "agent-team/src/bug-pipeline/operator-ownership.mjs",
+      "blob": "3ca76515f06a5488abbd9343c9a1a0e6667be479",
+      "sha256": "cbefcd2039d7e47fbffc1d467be547b9cec2c8df1ff1eb9b11d9db13de8d8225",
+      "bytes": 2239,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "blob": "9586a242cc56de577250f8a62bc22a7863cc923d",
+      "sha256": "9aa35cf44727ef7142c8bb3a878a8cd4f866521b1ecd19f754cdff7b72491e3d",
+      "bytes": 23380,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/external-review.mjs",
+      "blob": "10ee55d34326bfdccefbf057f4b46f2dbeb15e35",
+      "sha256": "055ff3169755962f2d679a29d58478de213d0276203410e2e2dc7cb9c866d3d1",
+      "bytes": 11169,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/release.mjs",
+      "blob": "fde7e371fccaf57966d5a6a7dae559f5f8c78f62",
+      "sha256": "4da1d537bb8b72b95790c7676ef289db8e87abd5c509b1c09571fe194ac9545c",
+      "bytes": 49700,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+      "blob": "47b6504c56775557273859f173cf4552c535973a",
+      "sha256": "e2136df1037762194974f22a195240021ea07f7da84070fab229626375ef31c7",
+      "bytes": 3580,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "blob": "da9c0ecc769297b01da80c95d9be07ef0141aa9d",
+      "sha256": "6a687ee62c31f2f916b178973ea55567f74805df30e20a8fc53053a1b8d15584",
+      "bytes": 40490,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "blob": "11914dffc6745d77aa04a8f565b5f04ca0b1adfa",
+      "sha256": "6c98fc9ccd2864b41859d4a968fe9accb92e31c06113ad8c0a3b2f043fd53e1e",
+      "bytes": 30210,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "blob": "ffdc2c9e0b15b23c492717e45c85dc8122e3c734",
+      "sha256": "6a3758008a487fb04c19a77bd42fd2058acdf0ca5cfe39754618bc2ab22da5a1",
+      "bytes": 96414,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/github.mjs",
+      "blob": "c375d8ac525b767508a0aa2630e08e53db37c770",
+      "sha256": "c1c90264665033751f06723d3492c1b9ba33ae4ea15d4ec3c942e246b4385895",
+      "bytes": 47116,
+      "mode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "blob": "a0780abdf0b2d8d981bd261f5e7b7326f7098641",
+      "sha256": "fe1bb34ffc4ab8ce575df9a9fc5766cf6e269052107bded284959dffdbcb9d85",
+      "bytes": 78896,
+      "mode": "100644"
+    }
+  ],
+  "authorSealSha256": "6b2fb75324dc5a76d4fa6655013b9d345d2ed5c322e65041f49587a70e147b22",
+  "focusedTests": 517,
+  "independentQaPerformed": false,
+  "disposition": "held-before-independent-QA: real baseline sync activation exposed additional ownership gap; preserve candidate1, add separately reserved candidate2"
+}

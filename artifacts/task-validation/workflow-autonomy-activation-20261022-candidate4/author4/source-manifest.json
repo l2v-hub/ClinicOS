@@ -1,0 +1,200 @@
+{
+  "source": "/tmp/clinicos-autonomy-activation-20261022/source4",
+  "attempt": 4,
+  "baseline": "/tmp/clinicos-autonomy-activation-20261022/combined3",
+  "publishedGitParent": "9a6cc35c32d91e3ae2aae2debc6fdcff089cd90f",
+  "privatePreviousCode": "93b0c72877bd58c2dd3769d0942d737ef9f96ac0",
+  "allowedPaths": [
+    "agent-team/src/bug-pipeline/cli.mjs",
+    "agent-team/src/bug-pipeline/pipeline.mjs",
+    "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+    "agent-team/src/bug-pipeline/standalone-review.mjs",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs",
+    "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/src/bug-pipeline/external-review.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs"
+  ],
+  "attemptDeltaPaths": [
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/tests/bug-pipeline/external-review.test.mjs",
+    "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "agent-team/src/bug-pipeline/standalone-review.mjs",
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/src/bug-pipeline/pipeline.mjs",
+    "agent-team/src/bug-pipeline/external-review.mjs",
+    "agent-team/src/bug-pipeline/comment-review-handoff.mjs"
+  ],
+  "cumulativePaths": 20,
+  "cumulativeCodeAndTests": 18,
+  "inheritedDocs": 2,
+  "baselineFiles": 138,
+  "outsideAttemptScopeUnchanged": true,
+  "combined3Immutable": true,
+  "files": [
+    {
+      "path": "docs/codex-bug-workflow.md",
+      "sha256": "371d25d4a2a459512afe05c3c1fb54bc27b92e7fe30736228e5a80f875f026c2",
+      "bytes": 28853,
+      "mode": "0o600",
+      "combined3Sha256": "371d25d4a2a459512afe05c3c1fb54bc27b92e7fe30736228e5a80f875f026c2",
+      "changedInAttempt4": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/operator-ownership.test.mjs",
+      "sha256": "e2136df1037762194974f22a195240021ea07f7da84070fab229626375ef31c7",
+      "bytes": 3580,
+      "mode": "0o600",
+      "combined3Sha256": "e2136df1037762194974f22a195240021ea07f7da84070fab229626375ef31c7",
+      "changedInAttempt4": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "sha256": "421bc323f67c1614bab5f872299a4f92a68ac04f02e2baf398decc44338e5bc2",
+      "bytes": 100389,
+      "mode": "0o664",
+      "combined3Sha256": "e682eb2f2dfa406997514a627bf1965e608d4e34d2d4c1c354f60c1e70962759",
+      "changedInAttempt4": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "sha256": "b59ddc56bd4bf143baf9b9724ca84b92632d27123df1775cc97d3ab9fbb04968",
+      "bytes": 100513,
+      "mode": "0o664",
+      "combined3Sha256": "6a3758008a487fb04c19a77bd42fd2058acdf0ca5cfe39754618bc2ab22da5a1",
+      "changedInAttempt4": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "sha256": "dfca9cf3678f054b5429d6c577824a7338b3d476b19bc12b3beabb0aa79f59e9",
+      "bytes": 41792,
+      "mode": "0o664",
+      "combined3Sha256": "dfca9cf3678f054b5429d6c577824a7338b3d476b19bc12b3beabb0aa79f59e9",
+      "changedInAttempt4": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-sync.test.mjs",
+      "sha256": "a8e3722d6d1ca745adb4d677cd4ee5f30a20c1cbffa1dd900d3a6fc8b56f58b0",
+      "bytes": 11122,
+      "mode": "0o664",
+      "combined3Sha256": "a8e3722d6d1ca745adb4d677cd4ee5f30a20c1cbffa1dd900d3a6fc8b56f58b0",
+      "changedInAttempt4": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/issue-review-communication.test.mjs",
+      "sha256": "8867f01e01e5b6a960f4ecfc8d4c975eb4a639bfac699fa03ad494c658be18d4",
+      "bytes": 48099,
+      "mode": "0o664",
+      "combined3Sha256": "8867f01e01e5b6a960f4ecfc8d4c975eb4a639bfac699fa03ad494c658be18d4",
+      "changedInAttempt4": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "sha256": "fe1bb34ffc4ab8ce575df9a9fc5766cf6e269052107bded284959dffdbcb9d85",
+      "bytes": 78896,
+      "mode": "0o664",
+      "combined3Sha256": "fe1bb34ffc4ab8ce575df9a9fc5766cf6e269052107bded284959dffdbcb9d85",
+      "changedInAttempt4": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "sha256": "2b58e72fec3907212da5e4be7bbf164c70b2b84c686ae8442a5f62828f513363",
+      "bytes": 33039,
+      "mode": "0o664",
+      "combined3Sha256": "be602c4fa1d961cb1bb505442bdedf321fbbc35cd869b07cf5758b88f821859a",
+      "changedInAttempt4": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "sha256": "fe759e50cf2f31926998883dafe2c3fce93447494671ae8f727243e7f6c43bc1",
+      "bytes": 30616,
+      "mode": "0o664",
+      "combined3Sha256": "0f633e111d73455839b181caebd5c2d133bfc7d1d45aa83dab9a51cbbfa7000c",
+      "changedInAttempt4": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/operator-ownership.mjs",
+      "sha256": "cbefcd2039d7e47fbffc1d467be547b9cec2c8df1ff1eb9b11d9db13de8d8225",
+      "bytes": 2239,
+      "mode": "0o600",
+      "combined3Sha256": "cbefcd2039d7e47fbffc1d467be547b9cec2c8df1ff1eb9b11d9db13de8d8225",
+      "changedInAttempt4": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "sha256": "bcf8b373ca682b7a2b7a8ea7218eb5846df5610b13f9bd78094ef1410a990d80",
+      "bytes": 44105,
+      "mode": "0o664",
+      "combined3Sha256": "03f17e353d33ee0bc2199752f784447a75ad4457a213f699d7d3d0d878b4afaa",
+      "changedInAttempt4": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/release.mjs",
+      "sha256": "b50bfec4a0af33b7aec6075799f295c0724cd074c4e63fa6fa4f78bc7fb17ec9",
+      "bytes": 51248,
+      "mode": "0o664",
+      "combined3Sha256": "4da1d537bb8b72b95790c7676ef289db8e87abd5c509b1c09571fe194ac9545c",
+      "changedInAttempt4": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "sha256": "86d1da5954d7f357794570a7a2c6dc480b910138f6a9dfd8ac49b810d3861947",
+      "bytes": 23797,
+      "mode": "0o664",
+      "combined3Sha256": "9b5ae267c96ee27094e931f1d201bcf1f7e99fc751b0a520bd5de4e3eeea502b",
+      "changedInAttempt4": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-sync.mjs",
+      "sha256": "1d98e29b111875ae90d902a684c9b7ebcdf126455e4e1a3281d3f1a7a2671cba",
+      "bytes": 3968,
+      "mode": "0o664",
+      "combined3Sha256": "1d98e29b111875ae90d902a684c9b7ebcdf126455e4e1a3281d3f1a7a2671cba",
+      "changedInAttempt4": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "sha256": "44a1caf63b8bf114a1bbc8a7d6915e1c0f11282cc1e9574caa9de2c8f466a7b9",
+      "bytes": 26331,
+      "mode": "0o664",
+      "combined3Sha256": "44a1caf63b8bf114a1bbc8a7d6915e1c0f11282cc1e9574caa9de2c8f466a7b9",
+      "changedInAttempt4": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/github.mjs",
+      "sha256": "c1c90264665033751f06723d3492c1b9ba33ae4ea15d4ec3c942e246b4385895",
+      "bytes": 47116,
+      "mode": "0o664",
+      "combined3Sha256": "c1c90264665033751f06723d3492c1b9ba33ae4ea15d4ec3c942e246b4385895",
+      "changedInAttempt4": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/external-review.mjs",
+      "sha256": "af7853b4e4f4cce914675575cb0c4e28bc7ddfa6ba877b5da697c650b2f918d0",
+      "bytes": 11667,
+      "mode": "0o664",
+      "combined3Sha256": "b673e52a4d971c1716dcf26ba1b5eac39932917b4b0029192738f5f06e69398a",
+      "changedInAttempt4": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "sha256": "e7980d70b337e07fa09bc0c8e4b426b334cf192489c0b973e1dea8297003e804",
+      "bytes": 28413,
+      "mode": "0o664",
+      "combined3Sha256": "b02d66ff94d65ddab6e4e51c884ca568eff857c9db907a4cd23ce4826bcef687",
+      "changedInAttempt4": true
+    },
+    {
+      "path": ".claude/skills/clinicos/references/bug-delivery.md",
+      "sha256": "997e5f8fc4b0f7454f21673f7181ddb0ee536e9d16b3c04b82b94203a1433a17",
+      "bytes": 20934,
+      "mode": "0o600",
+      "combined3Sha256": "997e5f8fc4b0f7454f21673f7181ddb0ee536e9d16b3c04b82b94203a1433a17",
+      "changedInAttempt4": false
+    }
+  ]
+}

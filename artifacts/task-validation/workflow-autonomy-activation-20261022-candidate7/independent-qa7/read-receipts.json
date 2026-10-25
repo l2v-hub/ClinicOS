@@ -1,0 +1,82 @@
+{
+  "inputs": {
+    "author7/report.md": {
+      "sha256": "3cf727847e6cc8ab9e6c3e5a2ffe52300afa8f726fe74d443a86c2cf80366f24",
+      "bytes": 8002
+    },
+    "author7/results.json": {
+      "sha256": "6d0392e257400f77fc2508e47eca01dd7ea800b62832f880d9364b8ac9351016",
+      "bytes": 5117
+    },
+    "author7/failure-history.json": {
+      "sha256": "b95229cd6534f38c0085438babdd4191ccf48638280b40bc1168f612615d9100",
+      "bytes": 9717
+    },
+    "author7/source.patch": {
+      "sha256": "896c659206a9082d21b58e3420fc5ddecd5d2c7740f831f01f22d154eabf9804",
+      "bytes": 217676
+    },
+    "author7/F2-child-integration.json": {
+      "sha256": "5cd8279e92d9a0e09e0fcc38c3abe2fd95e9c01e4de70452dee472931b918259",
+      "bytes": 1362
+    },
+    "luna-draftReady7/report.md": {
+      "sha256": "582b66cebc74585439627d61c440350977af63ff04ce1f7a2ec88f48628208a0",
+      "bytes": 1584
+    },
+    "luna-draftReady7/results.json": {
+      "sha256": "a18dd7c01b90eb2b810384123b7b42b26d8d39512aca2bfbf2ca0cbd86169300",
+      "bytes": 1623
+    },
+    "release-proof7-child/report.md": {
+      "sha256": "a00e7dd2bf3929e8dcea1e7891c5f1726813dd3ee1104b8e91c103f931921c75",
+      "bytes": 5426
+    },
+    "release-proof7-child/results.json": {
+      "sha256": "578e041ca3e14c6b0e9d49614323b9626bcfe9943c46c7d37f989840b217489f",
+      "bytes": 1549
+    },
+    "peer-static-review2/actual-comment.json": {
+      "sha256": "0dbf502f1ddf6d3c52720805d6605ed8146688d02d7423d4255be671ffbe3a9d",
+      "bytes": 14256
+    },
+    "root-final-quality-applicability7.md": {
+      "sha256": "568cfd8032a621bd8e4a69c8d0c9d1873152995038cf9700a813481dc82a617c",
+      "bytes": 1921
+    },
+    "root-source7-existing-checkout-normalization-proof.json": {
+      "sha256": "4cc38d68cb381e993c680efb337e7c2e1bb27130101c97d116e5ab46be893df7",
+      "bytes": 646
+    },
+    "source7-readonly-test-support-receipt.json": {
+      "sha256": "25ce072a725fde726734b04680aa3a2cbd7c5c06b58f8993a59ab61accdb5167",
+      "bytes": 1068
+    },
+    "independent-qa6/results.json": {
+      "sha256": "44ca7775d0d7d48712ec5440fa0dd82809284c787fb21821cb4d24f1d1860dd6",
+      "bytes": 5641
+    },
+    "independent-qa6/residual-probes.mjs": {
+      "sha256": "ee215d822cc95a39476cd88fd1336781f753f48c1240115826a1a8717202a2c1",
+      "bytes": 6562
+    },
+    "historical-cutover7/actual-readonly-historical-merge-inventory.json": {
+      "sha256": "aa625bb1f18b291bb7a32e3a5efe88b603f9411ebda862156eab5754e5e96680",
+      "bytes": 21881
+    },
+    "historical-cutover7/draft-finite-cutover-not-yet-authorized-or-written.json": {
+      "sha256": "ed8db5b8f309ccc412b531b865f923a02b65474d0848298dcc043bc976913fac",
+      "bytes": 10429
+    }
+  },
+  "actualStaticPeerBodySha256": "6faf10fc34a2b90d886c576ecd60f1ea14f84ef55fdcbe655d3b7b8b1d909db6",
+  "sourceReview": "Reviewed all nine changed production files and affected callers: actual runPipeline -> guarded workspace/effect/save; externalReviewStep; workspace journal/capture/resume; native store observe/CAS; trusted recovery/grants; release select/premerge/reservation/callback/postmerge/deployment/publication; standalone finalQA/finalize/merge; strict ownership and validators; production CLI/default authorization and external Actions mode. Inspected affected native test bodies and retained failures.",
+  "inheritedScope": {
+    "authorDistinctFinal": 796,
+    "authorSyntax": 16,
+    "lunaTests": 35,
+    "releaseChildTests": 481,
+    "childrenOverlap": true,
+    "countsNotAdded": true
+  }
+}

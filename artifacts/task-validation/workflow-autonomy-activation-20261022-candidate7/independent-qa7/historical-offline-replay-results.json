@@ -1,0 +1,98 @@
+{
+  "liveAuthorityClaimed": false,
+  "note": "Offline replay of root-recorded evidence; not a fresh authenticated GitHub read or cutover authorization.",
+  "inputs": {
+    "/tmp/clinicos-autonomy-activation-20261022/historical-cutover7/actual-readonly-historical-merge-inventory.json": "aa625bb1f18b291bb7a32e3a5efe88b603f9411ebda862156eab5754e5e96680",
+    "/tmp/clinicos-autonomy-activation-20261022/historical-cutover7/draft-finite-cutover-not-yet-authorized-or-written.json": "ed8db5b8f309ccc412b531b865f923a02b65474d0848298dcc043bc976913fac"
+  },
+  "results": [
+    {
+      "collection": "manualBatches",
+      "id": "standalone-pr-review-adapter",
+      "pr": 492,
+      "proof": "accepted-offline-recorded-actual-receipt-replay",
+      "originalReleaseUnchanged": true,
+      "terminalChecked": false
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-491",
+      "pr": 491,
+      "proof": "accepted-offline-recorded-actual-receipt-replay",
+      "originalReleaseUnchanged": true,
+      "terminalChecked": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-494",
+      "pr": 494,
+      "proof": "accepted-offline-recorded-actual-receipt-replay",
+      "originalReleaseUnchanged": true,
+      "terminalChecked": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-495",
+      "pr": 495,
+      "proof": "accepted-offline-recorded-actual-receipt-replay",
+      "originalReleaseUnchanged": true,
+      "terminalChecked": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-496",
+      "pr": 496,
+      "proof": "accepted-offline-recorded-actual-receipt-replay",
+      "originalReleaseUnchanged": true,
+      "terminalChecked": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-498",
+      "pr": 498,
+      "proof": "accepted-offline-recorded-actual-receipt-replay",
+      "originalReleaseUnchanged": true,
+      "terminalChecked": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-499",
+      "pr": 499,
+      "proof": "accepted-offline-recorded-actual-receipt-replay",
+      "originalReleaseUnchanged": true,
+      "terminalChecked": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-500",
+      "pr": 500,
+      "proof": "accepted-offline-recorded-actual-receipt-replay",
+      "originalReleaseUnchanged": true,
+      "terminalChecked": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-501",
+      "pr": 501,
+      "proof": "accepted-offline-recorded-actual-receipt-replay",
+      "originalReleaseUnchanged": true,
+      "terminalChecked": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-502",
+      "pr": 502,
+      "proof": "accepted-offline-recorded-actual-receipt-replay",
+      "originalReleaseUnchanged": true,
+      "terminalChecked": true
+    },
+    {
+      "collection": "standaloneReviews",
+      "id": "standalone-pr-503",
+      "pr": 503,
+      "proof": "accepted-offline-recorded-actual-receipt-replay",
+      "originalReleaseUnchanged": true,
+      "terminalChecked": true
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-23T02:05:41.270842+00:00",
+  "originalHelperSha256": "47c94baaa7dcd15b12a911cd499f97699e43e5c80f8ee1ec4cc0c0d6c95d4082",
+  "actualInitialExit": 1,
+  "cause": "Root generated process.test.mjs test path which is absent from the138file baseline; caught by scope existence assertion before author reservation/invocation, source edits or tests.",
+  "correction": "Use existing models.test.mjs for runner-related tests; all138sourcebytes unchanged. Reuse only root-owned unreserved preparation directories, no history/user files deleted.",
+  "initialSnapshotRawSha256": "cdb846a71a767cded8ef951d31917faf63a53edafb294e015446dcef447da59f"
+}

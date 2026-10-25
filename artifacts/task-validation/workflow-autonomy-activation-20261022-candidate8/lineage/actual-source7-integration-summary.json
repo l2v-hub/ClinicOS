@@ -1,0 +1,117 @@
+{
+  "head": "57d25ed04f1e4faddc232ef77d190d3bc339a643",
+  "run": 39906730933,
+  "selectedActualLogSummaries": [
+    {
+      "entry": "browser-e2e/13_Browser happy-path screenshots.txt",
+      "logSha256": "d0bd630dfa9380e8c90a3ebaf2fadcdeca22ae3da48d618c3e557dad8b19faac",
+      "sanitizedSummary": [
+        "req020-desktop: UI-after-reload OK \u2014 detail shows 'Paziente nega allergie'",
+        "req020-desktop: created=true consoleErrors=0 httpFailures=0",
+        "req020-tablet: UI-after-reload OK \u2014 detail shows 'Allergie assenti (verificato)'",
+        "req020-tablet: created=true consoleErrors=0 httpFailures=0"
+      ],
+      "tapRuns": []
+    },
+    {
+      "entry": "gate/12_Backend unit tests.txt",
+      "logSha256": "5d1415db18a041c4d7867ee9976d2a29d2ebba8c5b09c473db7e67f2e21fe3cb",
+      "sanitizedSummary": [
+        "# tests 1873",
+        "# pass 1868",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 5",
+        "# tests 51",
+        "# pass 51",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0"
+      ],
+      "tapRuns": [
+        {
+          "tests": 1873,
+          "suites": 18,
+          "pass": 1868,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 5,
+          "todo": 0,
+          "duration_ms": 362290.241524
+        },
+        {
+          "tests": 51,
+          "suites": 0,
+          "pass": 51,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0,
+          "duration_ms": 112115.229173
+        }
+      ]
+    },
+    {
+      "entry": "gate/13_Import E2E (API, deterministic).txt",
+      "logSha256": "2e2844ab7d12507a77a83b5dae6b839ec53c196a3b669153a696983f8277e12c",
+      "sanitizedSummary": [
+        "REQ-020 import-e2e: HAPPY PATH + FAILURE PATHS PASS (mock, synthetic)"
+      ],
+      "tapRuns": []
+    },
+    {
+      "entry": "frontend-tests/5_Frontend unit and regression tests.txt",
+      "logSha256": "d6751dc1d41270b1277d13e1537d1a75850076810917b43582a3478c9d31dc0b",
+      "sanitizedSummary": [
+        "# tests 1377",
+        "# pass 1377",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0"
+      ],
+      "tapRuns": [
+        {
+          "tests": 1377,
+          "suites": 0,
+          "pass": 1377,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0,
+          "duration_ms": 51990.459665
+        }
+      ]
+    },
+    {
+      "entry": "archive-tests/8_Original document archive and intake rollback regression.txt",
+      "logSha256": "0fa429a791e4cf8d93d94f1fceaa36516700b838089e5962f7016b82354a1548",
+      "sanitizedSummary": [
+        "# tests 6",
+        "# pass 6",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0"
+      ],
+      "tapRuns": [
+        {
+          "tests": 6,
+          "suites": 0,
+          "pass": 6,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0,
+          "duration_ms": 11389.415329
+        }
+      ]
+    }
+  ],
+  "actualArchiveSha256": "c043df29f5ed6e518de58cca921dfb0c9b3938d5a5a0cd5c84d5e52249e2521d",
+  "clinicalOnlineAcceptanceClaimed": false,
+  "rootSummaryCorrection": {
+    "at": "2026-10-23T05:58:25.700209+00:00",
+    "initialSummarySha256": "8aeb61fa29c3850e1be55896100693c88df61cea93e744d69613ffb35ecdd3f5",
+    "reason": "Initial extraction exposed only the last TAP block per step. Retained original summary separately; all actual blocks now listed with no aggregate duplicate counting. Raw actual log archive unchanged.",
+    "assertionsOrSourceChanged": false
+  }
+}

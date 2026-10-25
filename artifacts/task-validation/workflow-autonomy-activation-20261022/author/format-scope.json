@@ -1,0 +1,39 @@
+{
+  "repositoryConfig": "/workspace/ClinicOS/.prettierrc.json",
+  "initialDefaultFormatterCorrectedBeforeFreeze": true,
+  "purpose": "Restore formatter-only baseline regions to keep the patch scoped to behavior changes and new regression cases.",
+  "files": [
+    {
+      "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "unrelatedWhitespaceBlocksRestored": 2
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/external-review.mjs",
+      "unrelatedWhitespaceBlocksRestored": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/release.mjs",
+      "unrelatedWhitespaceBlocksRestored": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "unrelatedWhitespaceBlocksRestored": 1
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/external-review.test.mjs",
+      "unrelatedWhitespaceBlocksRestored": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/release.test.mjs",
+      "unrelatedWhitespaceBlocksRestored": 10
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/github.mjs",
+      "unrelatedWhitespaceBlocksRestored": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/github.test.mjs",
+      "unrelatedWhitespaceBlocksRestored": 0
+    }
+  ]
+}

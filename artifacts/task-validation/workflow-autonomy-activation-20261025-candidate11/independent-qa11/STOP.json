@@ -1,0 +1,7 @@
+{
+  "status": "STOPPED_AND_FROZEN",
+  "verdict": "READY FOR CODEX QA",
+  "reservationNonce": "5afe07cc-f0c5-498b-99d1-f9d5c8d9605e",
+  "timestamp": "2026-10-25T15:49:58.925719+00:00",
+  "reason": "Independent QA2 complete; evidence frozen. Local QA only; hosted qualification and genuine review remain external gates."
+}

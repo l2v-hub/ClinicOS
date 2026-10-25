@@ -1,0 +1,8 @@
+{
+  "phase": "before source edits",
+  "kind": "Python evidence bookkeeping SyntaxError",
+  "message": "Extra closing parenthesis in source-before dictionary key; parser refused script before execution.",
+  "sourceOrEvidenceInputsChanged": false,
+  "correction": "Single extra parenthesis removed. Integrity checks then exposed actual contract digest mismatch.",
+  "sourceTestsFailed": false
+}

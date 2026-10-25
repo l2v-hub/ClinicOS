@@ -1,0 +1,71 @@
+{
+  "inputs": {
+    "author6/task-contract.md": {
+      "sha256": "69394660d8afc12783a6e248a24fef3c5df901bdb281a0de78a6963857cac1f2",
+      "bytes": 8697
+    },
+    "author6/allowlist.json": {
+      "sha256": "1f980a4eabaa8f5acf8c26a782e12369ae2e95661dcbf24dfd9fe41f34e80c47",
+      "bytes": 590
+    },
+    "author6/reservation.json": {
+      "sha256": "d9c6974c79b899a9ce24478aeff980a9309844dd82a785ec5a304d0ddaefead0",
+      "bytes": 2032
+    },
+    "source6-before.json": {
+      "sha256": "8ee2bd43b35137529e542ea926e8c06a5f9c7ca1d77d05bdcc6434378642e541",
+      "bytes": 21777
+    },
+    "author5/seal.json": {
+      "sha256": "010ea8de91eeaa9bed0618688e6e7dc1dbaec90676e83a934689d912b18da948",
+      "bytes": 9128
+    },
+    "author5/source-manifest.json": {
+      "sha256": "4ec43065ca45ac32a402484da03da2a55e0aabc5dfa695045fb7486c546a9391",
+      "bytes": 9733
+    },
+    "independent-qa5/seal.json": {
+      "sha256": "655122adbf8d401c4fee77706cb33b31aebab40c48562e3d04118e817e863e9a",
+      "bytes": 6531
+    },
+    "independent-qa5/report.md": {
+      "sha256": "96b2348c795ce05162de819339b91c0758a0e16ecab5dd17157e7bb4c1111480",
+      "bytes": 6417
+    },
+    "independent-qa5/findings.json": {
+      "sha256": "bdfb6ba603f3cbbd4a804276594cd76259c2ac44db4b1adbc26b704ccd0ac1d3",
+      "bytes": 4526
+    },
+    "independent-qa5/external-cas-probe.mjs": {
+      "sha256": "3dbcc5a0beace7206f266ed12ab81534ca31ab6875b1c0290fa1a9ac6b536718",
+      "bytes": 5879
+    },
+    "independent-qa5/recovery-budget-probe.mjs": {
+      "sha256": "892e49b476dcd256f763c1b5e482afcda8adce700d424396b4b06563e6662ea8",
+      "bytes": 2939
+    },
+    "independent-qa5/malformed-takeover-probe.mjs": {
+      "sha256": "c4ba8bb2f7a42b5cf8e352f6d251d7812682c8da9986e3bf722afd1df2e0b221",
+      "bytes": 1404
+    },
+    "independent-qa5/recovery-route-probe.mjs": {
+      "sha256": "bd48cd04cc98a885c2b9e7b4006b9085643efbf869dd112f36d21e6b6154f186",
+      "bytes": 1868
+    },
+    "independent-qa5/handoff-fixture.mjs": {
+      "sha256": "b7864e30b2e4866acf66eb45df051ee5201027be8785e41b5e30b00d33396955",
+      "bytes": 8657
+    },
+    "independent-qa5/pipeline-fixture.mjs": {
+      "sha256": "4a70d767ccc8f0b8093be46f6d88bf6a9027df703e39a5561c67969528497392",
+      "bytes": 10377
+    }
+  },
+  "nonce": "43647508-76e7-40c3-85a4-4e88dcab8f4d",
+  "stateCommit": "2e7f8e8dcfdd14c58c02468ef688a6222a99f1e5",
+  "immutableBaselineFilesVerified": 138,
+  "qa5SealedFilesVerified": 44,
+  "author5SealedFilesVerified": 62,
+  "probeAdaptation": "Only production import prefix ../qa-source5/ to ../source6/; original assertions and fixture logic unchanged. probe-adaptation.patch retained.",
+  "historicalPublicPacketProof": "Inherited from sealed QA5 historical integrity receipt; no duplicate live/Git audit or writes performed."
+}

@@ -1,0 +1,30 @@
+{
+  "status": "implemented-awaiting-parent-integration",
+  "findings": [],
+  "changedPaths": [
+    "docs/codex-bug-workflow.md",
+    ".claude/skills/clinicos/references/bug-delivery.md"
+  ],
+  "testsRun": 0,
+  "manualDiffReviewed": true,
+  "before": {
+    "docs/codex-bug-workflow.md": {
+      "sha256": "17fd592ba036a65cb6fa433a0eb53ca3493ca28d69b1bd83c4c0dd832c0e731b",
+      "bytes": 34847
+    },
+    ".claude/skills/clinicos/references/bug-delivery.md": {
+      "sha256": "b2d3b28c33612d78821c0820ac9cca577106cf6f679fb74022d098dff297e858",
+      "bytes": 26928
+    }
+  },
+  "after": {
+    "docs/codex-bug-workflow.md": {
+      "sha256": "efaf5fdcb886385a65067f6d11e4da6f2d54478837b04a2ce1965d76e03951cd",
+      "bytes": 35844
+    },
+    ".claude/skills/clinicos/references/bug-delivery.md": {
+      "sha256": "aad4b0eb3640ff09ffdeda8f55b88c48b7cb09b263db8224c6efc2b08ffb0592",
+      "bytes": 28210
+    }
+  }
+}

@@ -1,0 +1,100 @@
+[
+  {
+    "id": "S1",
+    "automaticChain": "runPipeline -> finalizeStandaloneSubject -> native standalone controller.publishState -> current -> handoff.load",
+    "newGlobalTakeover": true,
+    "nativeStoreReads": [
+      {
+        "operatorTakeoverActive": false
+      },
+      {
+        "operatorTakeoverActive": false
+      },
+      {
+        "operatorTakeoverActive": false
+      },
+      {
+        "operatorTakeoverActive": false
+      },
+      {
+        "operatorTakeoverActive": false
+      },
+      {
+        "operatorTakeoverActive": true
+      },
+      {
+        "operatorTakeoverActive": true
+      }
+    ],
+    "labels": [
+      "claude-review-ready"
+    ],
+    "pipelineError": null,
+    "models": 0
+  },
+  {
+    "id": "R1",
+    "automaticChain": "main workflow_run -> selectAutoReleaseBatch -> releaseBatch -> freshReleaseGuard",
+    "storeReads": 10,
+    "readStates": [
+      {
+        "read": 1,
+        "operatorTakeoverActive": false
+      },
+      {
+        "read": 2,
+        "operatorTakeoverActive": true
+      },
+      {
+        "read": 3,
+        "operatorTakeoverActive": true
+      },
+      {
+        "read": 4,
+        "operatorTakeoverActive": true
+      },
+      {
+        "read": 5,
+        "operatorTakeoverActive": true
+      },
+      {
+        "read": 6,
+        "operatorTakeoverActive": true
+      },
+      {
+        "read": 7,
+        "operatorTakeoverActive": true
+      },
+      {
+        "read": 8,
+        "operatorTakeoverActive": true
+      },
+      {
+        "read": 9,
+        "operatorTakeoverActive": true
+      },
+      {
+        "read": 10,
+        "operatorTakeoverActive": true
+      }
+    ],
+    "adapterGuardChecked": true,
+    "selectionSawTakeover": false,
+    "laterReadsSawTakeover": true,
+    "merges": [
+      [
+        "merge",
+        9,
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ]
+    ],
+    "mainResult": 0,
+    "error": null,
+    "sourceBytesUnmodified": true,
+    "sideEffectImportsInjected": [
+      "github",
+      "process",
+      "fs/promises"
+    ]
+  }
+]

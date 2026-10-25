@@ -1,0 +1,44 @@
+{
+  "status": "implemented-awaiting-senior-integration",
+  "recordedAt": "2026-10-23T03:05:02.301263+00:00",
+  "reservationNonce": "8e2bf318-0c42-4e55-97e8-6aa23cbaf8df",
+  "canonicalReservationCommit": "3717a8950b77abea91ee674a8cc82a1cc4e87e1e",
+  "nodeVersion": "v22.23.4",
+  "baselineFilesVerified": 138,
+  "changedPaths": [
+    "agent-team/src/bug-pipeline/release.mjs",
+    "agent-team/src/bug-pipeline/standalone-review.mjs",
+    "agent-team/tests/bug-pipeline/release.test.mjs",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs"
+  ],
+  "causalBefore": {
+    "tests": 2,
+    "pass": 0,
+    "fail": 2,
+    "exit": 1
+  },
+  "finalAffected": {
+    "tests": 481,
+    "pass": 481,
+    "fail": 0,
+    "exit": 0,
+    "log": "affected-final.log"
+  },
+  "historicalRecordedEvidenceOfflineReplay": {
+    "entries": 11,
+    "accepted": 11,
+    "standaloneTerminalChecks": 10,
+    "freshGitHubAuthentication": false
+  },
+  "sharedSourceEdited": false,
+  "newDependencies": false,
+  "approvalClaimed": false,
+  "publicationPerformed": false,
+  "liveCutoverWritten": false,
+  "patchSha256": "bd49d807f64767f3b03da832c382af4b5232293df078fd035601ac7b4eb2708a",
+  "limitations": [
+    "Offline synthetic boundary tests and replay only; actual native CI, peer/final review, protected merge, deployment and cutover authorization remain root gates.",
+    "Existing open merge reservation remains a tombstone; only an exact native MERGED observation reconciles it.",
+    "Senior owns integration and pipeline skip of normal merging tombstones."
+  ]
+}
