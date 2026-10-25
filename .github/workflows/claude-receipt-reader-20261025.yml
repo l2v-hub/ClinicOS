@@ -1,0 +1,83 @@
+name: Read bounded native Claude receipt evidence 20261025
+'on':
+  push:
+    branches:
+    - codex/claude-receipt-reader-20261025
+permissions:
+  actions: read
+jobs:
+  read-fixed-receipt:
+    if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/codex/claude-receipt-reader-20261025'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 4
+    steps:
+    - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      with:
+        node-version: 22
+    - name: Materialize fixed finite reader
+      shell: bash
+      run: |
+        set -euo pipefail
+        mkdir -p "$RUNNER_TEMP/cloud-evidence"
+        cat > "$RUNNER_TEMP/cloud-evidence/reader.mjs" <<'FIXED_RECEIPT_FILE_0'
+        import assert from 'node:assert/strict';
+        import {createHash} from 'node:crypto';
+        export function finiteReceipt(value, binding) {
+          assert.ok(Number.isSafeInteger(binding.runId) && binding.runId > 0);
+          assert.equal(value.providerExecuted, true);
+          if (binding.kind === 'probe') {
+            assert.equal(value.status, 'probe-passed');
+            assert.equal(value.claimed, false);
+            const p=value.profile;
+            assert.ok(typeof p?.model === 'string' && p.model.length<=96 && /^claude-opus-[0-9]+(?:-[0-9]+){1,3}$/.exec(p.model)?.[0] === p.model);
+            assert.ok(Number.isSafeInteger(p.contextWindow)&&p.contextWindow===1000000);
+            assert.ok(Number.isSafeInteger(p.maxOutputTokens)&&p.maxOutputTokens>0&&p.maxOutputTokens<p.contextWindow);
+            return {type:'hosted-receipt-evidence',kind:'probe',runId:binding.runId,status:'probe-passed',providerExecuted:true,model:p.model,contextWindow:p.contextWindow,maxOutputTokens:p.maxOutputTokens};
+          }
+          assert.equal(binding.kind,'review');
+          assert.ok(Number.isSafeInteger(binding.pr)&&binding.pr>0);
+          assert.ok(Number.isSafeInteger(binding.round)&&binding.round>0);
+          assert.ok(typeof binding.sha==='string'&&/^[a-f0-9]{40}$/.exec(binding.sha)?.[0]===binding.sha);
+          assert.ok(typeof binding.reportSha256==='string'&&/^[a-f0-9]{64}$/.exec(binding.reportSha256)?.[0]===binding.reportSha256);
+          assert.equal(value.status,'published');
+          assert.equal(value.pr,binding.pr);
+          assert.equal(value.sha,binding.sha);
+          assert.equal(value.round,binding.round);
+          assert.equal(value.reportSha256,binding.reportSha256);
+          assert.equal(createHash('sha256').update(JSON.stringify(value.report)).digest('hex'),binding.reportSha256);
+          assert.equal(value.report.subject_sha,binding.sha);
+          assert.ok(['approved','changes-requested'].includes(value.verdict));
+          assert.equal(value.report.verdict,value.verdict);
+          assert.ok(Array.isArray(value.report.findings)&&value.report.findings.length<=1000);
+          return {type:'hosted-receipt-evidence',kind:'review',runId:binding.runId,status:'published',pr:binding.pr,sha:binding.sha,round:binding.round,providerExecuted:true,verdict:value.verdict,findings:value.report.findings.length,reportSha256:binding.reportSha256};
+        }
+        FIXED_RECEIPT_FILE_0
+        cat > "$RUNNER_TEMP/cloud-evidence/binding.json" <<'FIXED_RECEIPT_FILE_1'
+        {
+          "kind": "probe",
+          "runId": 40232898341
+        }
+        FIXED_RECEIPT_FILE_1
+    - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      with:
+        github-token: ${{ github.token }}
+        repository: l2v-hub/ClinicOS
+        run-id: 40232898341
+        name: claude-cloud-review-receipt-40232898341
+        path: ${{ runner.temp }}/cloud-evidence/artifact
+    - name: Validate and print finite receipt evidence
+      shell: bash
+      run: |
+        node --input-type=module <<'VALIDATE_FINITE_RECEIPT'
+        import {readFile,readdir,lstat} from 'node:fs/promises';
+        import assert from 'node:assert/strict';
+        import {pathToFileURL} from 'node:url';
+        try {
+         const root=process.env.RUNNER_TEMP+'/cloud-evidence',dir=root+'/artifact';
+         const entries=await readdir(dir,{withFileTypes:true});
+         assert.equal(entries.length,1);assert.equal(entries[0].name,'claude-cloud-review-receipt.json');assert.equal(entries[0].isFile(),true);
+         const file=dir+'/'+entries[0].name,stat=await lstat(file);assert(!stat.isSymbolicLink());assert(stat.size>0&&stat.size<=1024*1024);
+         const {finiteReceipt}=await import(pathToFileURL(root+'/reader.mjs').href);
+         console.log(JSON.stringify(finiteReceipt(JSON.parse(await readFile(file,'utf8')),JSON.parse(await readFile(root+'/binding.json','utf8')))));
+        } catch {console.error('Receipt evidence did not match its fixed binding');process.exitCode=1;}
+        VALIDATE_FINITE_RECEIPT
