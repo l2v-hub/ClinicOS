@@ -1,0 +1,74 @@
+{
+  "nonce": "bf43c9b5-ae06-4d22-8fcb-d88b8e6feffb",
+  "verdict": "READY FOR CODEX QA",
+  "findings": [],
+  "sourceCode": "2ad07687af6f15b0c551e765875d5dbfc474e5c2",
+  "sourceTree": "8affa560f351febed47b85978c2bcdfd15c1b3b5",
+  "parents": [
+    "df9b51aec0d30bc8b1d0f7ca3c35a1640b2e9c71",
+    "32b9946adcb3744c5f549600acf6fea6140bcfb9"
+  ],
+  "phases": {
+    "0": "PASS",
+    "1": "PASS",
+    "2": "PASS",
+    "3": "N/A UI; PASS source-only native runtime",
+    "4": "PASS",
+    "5": "PASS"
+  },
+  "independentSuiteTests": {
+    "focused": {
+      "tests": 159,
+      "pass": 159,
+      "fail": 0,
+      "skipped": 0
+    },
+    "ownership-recovery": {
+      "tests": 27,
+      "pass": 27,
+      "fail": 0,
+      "skipped": 0
+    }
+  },
+  "independentProbeCases": {
+    "independent-preclaim-probe": 31,
+    "independent-retention-capacity-probe": 22,
+    "late-source-cas-probe": 1,
+    "source-reader-native-probe": 3,
+    "returned-transition-probe": 2,
+    "combined-boundary-probe": 8
+  },
+  "independentSuiteTotal": 186,
+  "independentProbeTotal": 67,
+  "authorFocused": {
+    "total": 161,
+    "pass": 161,
+    "fail": 0
+  },
+  "authorFull": {
+    "total": 1609,
+    "pass": 1606,
+    "fail": 0,
+    "skip": 3,
+    "independentlyRerun": false
+  },
+  "sourceManifestSha256": "0d6e7ae3e32dee5e675ec2636d3fe03bcfbacf8dafb0efea3b45462bf725afaf",
+  "freezeChecks": {
+    "integratedSourceMatchesFreeze": true,
+    "sourceAndIndexUnchanged": true,
+    "protectedEvidenceUnchanged": true,
+    "originalSourceUnchanged": true,
+    "originalSourceMatchesAuthor4": true,
+    "qa4FrozenSourceAndRootLockMatches": true,
+    "priorQA123EvidenceMatchesQa4Freeze": true,
+    "allQa4SealedFilesMatch": true
+  },
+  "qa4ReportSha256": "06f50fcf3713021efc898062458809e1a950b1e9570d5eef1727aea781040f8f",
+  "realProviderExecuted": false,
+  "authenticationRetried": false,
+  "realGithubApiMutated": false,
+  "gitMutated": false,
+  "sourceEdited": false,
+  "activationVerified": false,
+  "report": "report.md"
+}

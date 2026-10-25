@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "nonce": "fe7976fa-c9a0-49f1-be6c-6bccfb76203b",
+  "verdict": "FAILED VALIDATION",
+  "findingCount": 1,
+  "findings": [
+    {
+      "id": "QA3-01",
+      "severity": "medium",
+      "file": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "line": 469,
+      "problem": "Prepared original specification is not compared with the semantic subject returned by native claim; a preclaim same-SHA/request plan change publishes an old-packet review under the new specification.",
+      "reproduction": "preclaim-binding-probe.mjs",
+      "observedStatus": "published",
+      "observedModelCalls": 1,
+      "observedReportComments": 1
+    }
+  ],
+  "sourceManifestSha256": "cd99231c42f05e2538752dd8ed096c4c8551fb935e7b739a9181fd6a5adadad1",
+  "sourceMatchesReservation": true,
+  "sourceUnchanged": true,
+  "priorQaUnchanged": true,
+  "rootLockUnchanged": true,
+  "focused": {
+    "total": 126,
+    "passed": 126,
+    "failed": 0,
+    "skipped": 0
+  },
+  "fullSuite": {
+    "runs": 1,
+    "total": 1257,
+    "passed": 1254,
+    "failed": 0,
+    "skipped": 3
+  },
+  "independentPassScenarioGroups": 22,
+  "independentRegressionFailure": "preclaim-binding-probe.log",
+  "realProviderExecuted": false,
+  "realGithubMutated": false,
+  "actualHostedAuthentication": "FAILED",
+  "activation": "UNVERIFIED",
+  "phases": {
+    "0": "PASS",
+    "1": "FAIL",
+    "2": "FAIL",
+    "3": "PASS",
+    "4": "FAIL",
+    "5": "PASS"
+  },
+  "report": "report.md",
+  "recordedAt": "2026-10-25T17:00:59.644329+00:00"
+}

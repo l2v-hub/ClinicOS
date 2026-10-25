@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "nonce": "fe7976fa-c9a0-49f1-be6c-6bccfb76203b",
+  "sealedAt": "2026-10-25T17:00:59.644329+00:00",
+  "verdict": "FAILED VALIDATION",
+  "sourceManifestSha256": "cd99231c42f05e2538752dd8ed096c4c8551fb935e7b739a9181fd6a5adadad1",
+  "sourceMatchesReservation": true,
+  "files": {
+    "STOP.json": "c46861636023d1bb2430819bfd39306daaeefe4edb4ac8df00667a7b82821b4a",
+    "contract.log": "188f6966285df33aa55ee68da1beed673a6a70ef2ebe316af4c5570b71f530bc",
+    "focused-node22.log": "64a58770f714528394d42e894dca790d434c94d85946a255e6c0366c28894122",
+    "full-bug-pipeline-node22.log": "b64037c4166ffa46f6c89bbe012ff04da0e4227c2e61c5219f66dc2cb25aa3ed",
+    "independent-probe.log": "40711aee36906d246dd6f744d254e76268abf6099b59871473ef7c72a74c1a3c",
+    "independent-probe.mjs": "7915a9e6d9abb4703b978973c1488879f56b33cfced0fb738205da44f6444de1",
+    "preclaim-binding-probe.log": "74dfa03b995ffcc76fb98f1a509a16c60e890d4f3f042c3d8cc80736abe7a2f2",
+    "preclaim-binding-probe.mjs": "1c6030b709e76cdd1597983bca743135c2d655e91cda7f1a72469b3eeaa66fbe",
+    "report.md": "b3274ca805ae5f3f8a447241f6631d75bd289ad3b9290db2e9e7445e1dcf1d19",
+    "reservation.json": "6f7b86f5f91ab72a9d4b316c36a3f586d6420f733d280e98fabbe3b5bccd533e",
+    "result.json": "81b65105bf076d3d0d5270e2452424bbb9135a9e3e02822adb3a5aadff1f313f",
+    "source-after.json": "2f2a9ab96c57fca7ec1058e41f6b1fc0a4a43079f52e4c317470926f04897c43",
+    "source-before.json": "2f2a9ab96c57fca7ec1058e41f6b1fc0a4a43079f52e4c317470926f04897c43",
+    "static-security-verification.json": "97db8394b03b7c482204e60895d5d71c59623aa8a858bbbcd14cb79a42691bc6"
+  }
+}

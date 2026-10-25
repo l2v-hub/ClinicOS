@@ -1,0 +1,10 @@
+{
+  "status": "SEALED_STOPPED",
+  "verdict": "READY FOR CODEX QA",
+  "nonce": "bf43c9b5-ae06-4d22-8fcb-d88b8e6feffb",
+  "sourceCode": "2ad07687af6f15b0c551e765875d5dbfc474e5c2",
+  "sourceManifestSha256": "0d6e7ae3e32dee5e675ec2636d3fe03bcfbacf8dafb0efea3b45462bf725afaf",
+  "reportSha256": "081327a98b5caa268e1eab3d2da6731faafb397cbe28acd3cd46bb9dfdf726e6",
+  "resultSha256": "8f7b513df534d5cc7743de6dc01831bbff855e00b4827cf13600aeda6e07a5ea",
+  "noFurtherEdits": true
+}

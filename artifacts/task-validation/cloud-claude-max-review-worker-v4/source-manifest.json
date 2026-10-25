@@ -1,0 +1,212 @@
+[
+  {
+    "path": ".github/workflows/claude-cloud-review.yml",
+    "blob": "2cec3c15f2eb15196c2464f29d542a4db3a36fa6",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+    "blob": "b1045645644a81aaf8314b6e4990f3b392a9e8a0",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+    "blob": "1aecac72761dd714724623ff3386b2529e51ec46",
+    "mode": "100644",
+    "baseBlob": "f203d2bb5646e988a1f191a513b45c69f8a12916",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+    "blob": "f33f41c1a38c19e70d7160790b9e550011b4b513",
+    "mode": "100644",
+    "baseBlob": "f6552446fd07dfdbe4b38e17cbe8aef196f9de28",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+    "blob": "3aa52fd3c9040e39c1446deddf6ea97e9fa3ea8b",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+    "blob": "90b2385457dc583042aab26f6cee7689c5856a3f",
+    "mode": "100644",
+    "baseBlob": "f8ea1c362906a0ea76fc98a33d106b832ccb882f",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "blob": "d0da9f1505542b8a42a2a094964b2658b299eba2",
+    "mode": "100644",
+    "baseBlob": "755bb6c440554c88354b876d8b2c7a3f5bbcfbe1",
+    "baseMode": "100644"
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/actual-authentication-result.json",
+    "blob": "e8db8a885b3bbbcb17dc7f4c5f20a3c3ac410c37",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/actual-format-result.json",
+    "blob": "63292ed99f5843d72bb4b74745f5c9012b9fc7b3",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/analysis.md",
+    "blob": "7782c76c0488d5cf0191c5b870d2be9c77ba7b3b",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/implementation-plan.md",
+    "blob": "122caa9e28d6e74cb26064648610204233e498b2",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/imported-history.json",
+    "blob": "592cac8164b308022aaf6b7807f9715d0d914dff",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa1/STOP.json",
+    "blob": "ba5ed678f6792a2f5fb5be3b309a61933b3fbe8e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa1/claim-race-probe-node22.log",
+    "blob": "9ce64749da35f7ba28837d3d2bda15953674f5d3",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa1/focused-node22.log",
+    "blob": "a677461a79e048c99a707affe7cb8632b2f8fc6b",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa1/report.md",
+    "blob": "c74c2df1279d54ecfcdd0fefa926002d943ba213",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa1/result.json",
+    "blob": "0196f2770caa7c0e86fb40a5f71bcbc7fcf9d1fe",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa1/seal.json",
+    "blob": "994fd79219beb78ef57a4c8c9c77af9e47706272",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa2/STOP.json",
+    "blob": "5b4a155688e6d4f204a9df58fa1e8b9ad5afa9b6",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa2/focused-node22.log",
+    "blob": "8717de0b65102adb00df3f797e9c775e8b0717bb",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa2/report.md",
+    "blob": "2b321d5cfd2f8dc2f61bbb494f3cc3a27d730869",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa2/result.json",
+    "blob": "a32977913d0f055805b40bf5c44d4a8d337eafa4",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa2/seal.json",
+    "blob": "b706df7cba56ee5836257428dce17160d65193e3",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/source-manifest.json",
+    "blob": "8527588a02c04da3609206f20d50de633b8db8eb",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/task-contract.md",
+    "blob": "e65a090b984ef5e485d3ba63397f033702f37531",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-claude-max-review-worker/validation-report.md",
+    "blob": "1439e770c373ea7e1419c7410e7d35b02198164b",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "docs/cloud-claude-review.md",
+    "blob": "32867115a3f2e654534e29985bad7de55006846a",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "scripts/automation/claude-cloud-tools/package-lock.json",
+    "blob": "6c6d0480b3d68d1749c1069f8af7303cb77c6789",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "scripts/automation/claude-cloud-tools/package.json",
+    "blob": "22e14325cb0ab01278feb5d2f253e7772f693be2",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "scripts/quality-gate/claude-bug-review.mjs",
+    "blob": "fe1bf08d106c11aef44731a4d1cef708fe661aa8",
+    "mode": "100644",
+    "baseBlob": "9524356fb52bae39cde92de27daeb14c370db090",
+    "baseMode": "100644"
+  }
+]
