@@ -1,0 +1,9 @@
+{
+  "status": "STOP",
+  "reason": "Independent read-only QA complete; sealed verified result returned to parent.",
+  "nonce": "b9aa0d18-a257-445c-9e7f-46dc0e52d66c",
+  "authorNonce": "02733f1f-b304-4cc0-a33d-b917223816db",
+  "subjectSha": "d981ee054a9a16b920cae474a50540f88f9b73de",
+  "completedAt": "2026-10-25T23:22:15.096305+00:00",
+  "testsRerun": false
+}
