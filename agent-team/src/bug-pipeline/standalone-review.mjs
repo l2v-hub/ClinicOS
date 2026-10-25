@@ -788,6 +788,7 @@ export function createStandaloneReview({ github, run, cwd, now = () => new Date(
     request: (...args) => gated('request', ...args),
     claim: (...args) => gated('claim', ...args),
     submit: (...args) => gated('submit', ...args),
+    failOwnedClaim: (...args) => operation(() => handoff.failOwnedClaim(...args)),
     reconcilePR: (...args) => gated('reconcilePR', ...args),
     recover: (...args) => operation(() => handoff.recover(...args)),
     extendBudget: (...args) => operation(() => handoff.extendBudget(...args)),

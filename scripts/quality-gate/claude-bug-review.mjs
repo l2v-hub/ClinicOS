@@ -10,7 +10,7 @@ import { sanitizeText } from '../../agent-team/src/core/sanitize.mjs';
 import { validateAgainstSchema } from '../../agent-team/src/core/json-schema.mjs';
 
 export const MAX_REVIEW_ROUNDS = 4;
-const schema = {
+export const reviewSchema = {
   type: 'object',
   additionalProperties: false,
   required: ['subject_sha', 'verdict', 'summary', 'findings'],
@@ -36,6 +36,7 @@ const schema = {
     },
   },
 };
+const schema = reviewSchema;
 export function validateReview(review, sha, tracked) {
   validateAgainstSchema(review, schema);
   if (

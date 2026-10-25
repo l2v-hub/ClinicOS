@@ -364,6 +364,24 @@ test('CAS claim reserves before analysis, retains imported history, and exclusiv
   assert.equal(f.published.length, 1);
 });
 
+test('cloud provider failure settles only its native standalone claim and projects blocked without refunding history', async () => {
+  const f = fixture();
+  const subject = await claimed(f);
+  const snapshot = structuredClone(subject);
+  const failed = await f.controller.failOwnedClaim(81, snapshot, 'claude-rate-limit');
+  assert.equal(failed.reviews.length, snapshot.reviews.length);
+  assert.equal(failed.reviews.at(-1).status, 'failed');
+  assert.equal(failed.reviewLedger.rounds.at(-1).verdict, 'failed');
+  assert.deepEqual(failed.implementation, snapshot.implementation);
+  assert.deepEqual(failed.packet, snapshot.packet);
+  assert.deepEqual(failed.sourceManifest, snapshot.sourceManifest);
+  assert.deepEqual(failed.recoveryHistory.at(-1).previous, snapshot.externalReview);
+  await f.controller.publishState(failed);
+  assert.deepEqual(f.labels, ['review-blocked']);
+  await assert.rejects(f.controller.claim(81));
+  assert.equal(f.published.length, 0);
+});
+
 test('standalone simultaneous claims use one durable reservation and no fifth review is inferred', async () => {
   const f = fixture();
   await f.controller.adopt(f.manifest);

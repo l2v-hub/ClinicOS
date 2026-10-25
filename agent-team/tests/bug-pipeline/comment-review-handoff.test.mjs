@@ -723,3 +723,59 @@ test('background normal waiting reconciliation never repairs notices across acco
   assert.equal(f.pr.comments.length, notices);
   assert.deepEqual(f.remote.batches[0], previous);
 });
+
+test('owned provider failure spends its exact claim and preserves immutable history without recovery authorization', async () => {
+  const f = fixture({ authorizationVerifier: false });
+  const claimed = await requestedClaimed(f);
+  const failed = await f.handoff.failOwnedClaim(81, claimed, 'claude-timeout');
+  assert.equal(failed.phase, 'blocked');
+  assert.equal(failed.reviews.length, 1);
+  assert.equal(failed.reviews[0].status, 'failed');
+  assert.equal(failed.reviewLedger.rounds[0].verdict, 'failed');
+  assert.deepEqual(failed.implementation, claimed.implementation);
+  assert.equal(failed.externalReview.claimId, claimed.externalReview.claimId);
+  assert.equal(failed.externalReview.failureCode, 'claude-timeout');
+  assert.deepEqual(failed.recoveryHistory.at(-1).previous, claimed.externalReview);
+  assert.match(failed.recoveryHistory.at(-1).claimSnapshotSha256, /^[a-f0-9]{64}$/);
+  assert.equal(failed.recoveryHistory.at(-1).consumedReviews, 1);
+  assert.equal(f.pr.comments.filter((comment) => comment.body.includes('"kind": "report"')).length, 0);
+  await assert.rejects(f.handoff.failOwnedClaim(81, claimed, 'claude-timeout'), /snapshot changed/);
+  await assert.rejects(f.handoff.claim(81), /not available/);
+});
+
+test('provider failure rejects changed owner, live SHA, snapshot and nonfinite failure code', async () => {
+  for (const mutation of ['owner', 'sha', 'snapshot', 'code']) {
+    const f = fixture(), claimed = await requestedClaimed(f);
+    const before = clone(f.remote);
+    if (mutation === 'owner') f.setActor('another-authorized-user');
+    if (mutation === 'sha') f.feedback.head = 'd'.repeat(40);
+    if (mutation === 'snapshot') claimed.externalReview.claimId = 'not-this-claim';
+    await assert.rejects(f.handoff.failOwnedClaim(81, claimed,
+      mutation === 'code' ? 'secret-provider-output' : 'claude-nonzero-exit'));
+    assert.deepEqual(f.remote, before);
+  }
+});
+
+test('provider failure CAS cannot overwrite a competing report or changed durable claim', async () => {
+  const f = fixture(), claimed = await requestedClaimed(f);
+  let changed = false;
+  f.onViewIssue(() => {
+    if (changed) return;
+    changed = true;
+    f.remote.batches[0].externalReview.claimId = 'competing-reservation';
+  });
+  await assert.rejects(f.handoff.failOwnedClaim(81, claimed, 'claude-timeout'));
+  assert.equal(f.remote.batches[0].externalReview.claimId, 'competing-reservation');
+  assert.equal(f.remote.batches[0].reviews[0].status, 'running');
+});
+
+test('owned failure refuses to discard a genuine report already posted for its unchanged reservation', async () => {
+  const f = fixture(), claimed = await requestedClaimed(f);
+  await f.handoff.submit(81, validApproved());
+  const previous = clone(f.remote);
+  await assert.rejects(f.handoff.failOwnedClaim(81, claimed, 'claude-timeout'), /report already exists/);
+  assert.deepEqual(f.remote, previous);
+  const published = await f.handoff.reconcilePR(81);
+  assert.equal(published.externalReview.status, 'published');
+  assert.equal(published.reviews[0].status, 'approved');
+});

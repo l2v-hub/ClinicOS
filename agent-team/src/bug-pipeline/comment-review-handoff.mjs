@@ -306,6 +306,61 @@ export function createCommentReviewHandoff({
     });
     return { status: 'submitted', pr, sha: batch.sha, round: batch.reviews.length };
   }
+  // A provider failure may spend only the exact reservation this worker acquired.
+  // This is not recovery: it never releases ownership, refunds a round or retries.
+  async function failOwnedClaim(pr, claimed, failureCode) {
+    assert.ok([
+      'claude-timeout', 'claude-output-limit', 'claude-nonzero-exit',
+      'claude-spawn-failed', 'claude-authentication-error', 'claude-rate-limit',
+      'claude-overloaded', 'claude-turn-limit', 'claude-execution-error',
+      'claude-invalid-json', 'claude-missing-structured-report', 'review-validation-failed',
+    ].includes(failureCode), 'Unknown provider failure');
+    const login = await actor(), { state, batch } = await load(pr);
+    assert.deepEqual(batch, claimed, 'Owned claim snapshot changed');
+    assert.ok(channel(batch) && batch.externalReview.status === 'comment-running');
+    assert.equal(batch.externalReview.owner, login, 'Claim belongs to another actor');
+    assert.ok(batch.externalReview.claimId && batch.externalReview.requestId);
+    assert.equal(batch.externalReview.subjectSha, batch.sha);
+    assert.equal(batch.reviews.at(-1)?.subjectSha, batch.sha);
+    assert.equal(batch.reviews.at(-1)?.status, 'running');
+    assert.equal(batch.reviewLedger?.rounds.at(-1)?.subject_sha, batch.sha);
+    assert.equal(batch.reviewLedger?.rounds.at(-1)?.verdict, 'running');
+    const noReport = async () => {
+      const issue = await github.viewIssue(pr);
+      for (const comment of issue.comments) {
+        if ((comment.user?.login ?? comment.author) !== login ||
+          !String(comment.body).startsWith(COMMENT_REVIEW_MARKER + '\n')) continue;
+        let value;
+        try { value = JSON.parse(comment.body.slice(COMMENT_REVIEW_MARKER.length + 1)); }
+        catch { continue; }
+        assert.ok(!(value.kind === 'report' && value.pr === pr && value.actor === login &&
+          value.subject_sha === claimed.sha && value.request_id === claimed.externalReview.requestId &&
+          value.claim_id === claimed.externalReview.claimId && value.round === claimed.reviews.length),
+        'A report already exists for this claim; reconcile instead');
+      }
+    };
+    await noReport();
+    await live(batch);
+    const previous = clone(batch.externalReview);
+    batch.reviews.at(-1).status = 'failed';
+    batch.reviewLedger.rounds.at(-1).verdict = 'failed';
+    Object.assign(batch.externalReview, {
+      status: 'failed', failureCode, failedAt: now().toISOString(),
+    });
+    batch.recoveryHistory ??= [];
+    batch.recoveryHistory.push({
+      action: 'owned-provider-failure', actor: login, at: now().toISOString(),
+      subjectSha: batch.sha, token: previous.claimId,
+      claimSnapshotSha256: sha256(JSON.stringify(claimed)), previous,
+      consumedReviews: batch.reviews.length,
+      consumedImplementation: spentAttempts(batch, 'implementation'),
+    });
+    batch.phase = 'blocked';
+    batch.reason = 'Claude execution failed; its reserved attempt remains spent';
+    delete batch.approvedSha;
+    await save(state, batch, login, { guard: noReport });
+    return clone(batch);
+  }
   async function reconcile(batch, persist, { repairNotice = false } = {}) {
     if (!channel(batch)) return false;
     if (batch.externalReview.status === 'comment-requested') {
@@ -641,5 +696,5 @@ export function createCommentReviewHandoff({
     });
     return clone(batch);
   }
-  return { request, claim, submit, reconcile, reconcilePR, load, actor, recover, extendBudget };
+  return { request, claim, submit, failOwnedClaim, reconcile, reconcilePR, load, actor, recover, extendBudget };
 }
