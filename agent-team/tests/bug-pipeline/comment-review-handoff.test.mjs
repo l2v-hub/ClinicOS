@@ -788,7 +788,7 @@ test('cloud stale inference cannot publish under a same-actor same-SHA replaceme
   let original, replacement;
   const result = await processCloudReview({
     github: f.github, handoff: f.handoff, standalone: {}, cwd: '/synthetic/worktree', env: {},
-    retrieve: async () => ({ packet: { subject_sha: sha }, tracked: new Set(['src/feature.ts']) }),
+    retrieve: async () => ({ packet: { subject_sha: sha, feedback: await f.github.reviewFeedback(81) }, tracked: new Set(['src/feature.ts']) }),
     probe: async () => ({ profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } }), communication: { publishState: async () => assert.fail('No stale projection') },
     wake: async () => assert.fail('No stale controller wake'),
     run: async () => {
@@ -870,7 +870,7 @@ test('cloud genuine report survives benign controller observations during infere
   await f.handoff.request(81);
   const result = await processCloudReview({
     github: f.github, handoff: f.handoff, standalone: {}, cwd: '/synthetic/worktree', env: {},
-    retrieve: async () => ({ packet: { subject_sha: sha }, tracked: new Set(['src/feature.ts']) }),
+    retrieve: async () => ({ packet: { subject_sha: sha, feedback: await f.github.reviewFeedback(81) }, tracked: new Set(['src/feature.ts']) }),
     probe: async () => ({ profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } }),
     communication: { publishState: async () => {} }, wake: async () => {},
     run: async () => {
@@ -898,4 +898,116 @@ test('owned failure accepts benign observations while preserving them and the sp
   assert.equal(failed.reviews.length, 1);
   assert.equal(failed.reviews[0].status, 'failed');
   assert.equal(failed.recoveryHistory.at(-1).token, expected.externalReview.claimId);
+});
+
+test('preclaim source or actual GitHub feedback drift spends no review round and invokes no model', async () => {
+  for (const mutation of ['plan-during-probe', 'plan-during-retrieval', 'shared-state-alias', 'comment', 'review', 'edited-comment', 'actor']) {
+    const f = fixture();
+    f.remote.batches[0].baseSha = 'b'.repeat(40);
+    f.feedback.comments.push({ id: 901, author: 'human', body: 'Original review feedback.' });
+    await f.handoff.request(81);
+    const request = f.remote.batches[0].externalReview.requestId;
+    if (mutation === 'shared-state-alias') f.github.createStateStore = () => ({ load: async () => f.remote });
+    let modelCalls = 0;
+    const changePlan = () => { f.remote.batches[0].plan.acceptance[0].criteria[0] = 'Require a new server authorization check.'; };
+    const result = await processCloudReview({
+      github: f.github, handoff: f.handoff, standalone: {}, cwd: '/synthetic', env: {},
+      retrieve: async (subject) => {
+        const packet = { subject_sha: sha, plan: subject.plan, feedback: await f.github.reviewFeedback(81) };
+        if (mutation === 'plan-during-retrieval') changePlan();
+        return { packet, tracked: new Set(['src/feature.ts']) };
+      },
+      probe: async () => {
+        if (['plan-during-probe', 'shared-state-alias'].includes(mutation)) changePlan();
+        if (mutation === 'comment') f.feedback.comments.push({ id: 902, author: 'human', body: 'New requirement during authentication.' });
+        if (mutation === 'review') f.feedback.changesRequested = true;
+        if (mutation === 'edited-comment') f.feedback.comments[0].body = 'Revised human feedback.';
+        if (mutation === 'actor') f.setActor('another-authorized-user');
+        return { profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } };
+      },
+      communication: { publishState: async () => assert.fail('No projection') },
+      wake: async () => assert.fail('No recovery of another worker'),
+      run: async () => { modelCalls++; return { ok: true, stdout: JSON.stringify({ structured_output: validApproved() }) }; },
+    });
+    assert.equal(result.status, 'preclaim-source-changed', mutation);
+    assert.equal(result.claimed, false);
+    assert.equal(modelCalls, 0);
+    assert.equal(f.remote.batches[0].reviews.length, 0);
+    assert.equal(f.remote.batches[0].reviewLedger, undefined);
+    assert.equal(f.remote.batches[0].externalReview.status, 'comment-requested');
+    assert.equal(f.remote.batches[0].externalReview.requestId, request);
+    assert.equal(f.pr.comments.filter((item) => item.body.includes('"kind": "report"')).length, 0);
+  }
+});
+
+test('native pending claim binds all prepared semantics and clones caller aliases before its first await', async () => {
+  for (const mutation of ['plan', 'packet', 'source', 'history', 'implementation-owner', 'request', 'alias']) {
+    const f = fixture();
+    const expected = await f.handoff.request(81);
+    const fingerprint = handoffFeedbackFingerprint(await f.github.reviewFeedback(81), 'review-bot');
+    const change = () => {
+      const subject = f.remote.batches[0];
+      if (mutation === 'plan' || mutation === 'alias') subject.plan.analysis = 'Changed source specification.';
+      if (mutation === 'packet') subject.packet = { path: 'artifacts/task-validation/other', files: {} };
+      if (mutation === 'source') subject.sourceManifest = [{ path: 'src/other.ts' }];
+      if (mutation === 'history') subject.reviewReports = { 'claude-review-1.json': 'Changed prior report' };
+      if (mutation === 'implementation-owner') subject.implementation.push({ round: 2, status: 'running' });
+      if (mutation === 'request') subject.externalReview.requestId = 'replacement-request';
+    };
+    let pending = expected;
+    if (mutation === 'alias') {
+      pending = f.remote.batches[0];
+      const authorized = f.github.authorized;
+      f.github.authorized = async (...args) => { change(); return authorized(...args); };
+    } else change();
+    const writes = f.writes.length;
+    await assert.rejects(f.handoff.claim(81, { expectedSubject: pending,
+      expectedFeedbackFingerprint: fingerprint, expectedActor: 'review-bot' }),
+      (error) => error.code === 'preclaim-source-changed', mutation);
+    assert.equal(f.writes.length, writes);
+    assert.equal(f.remote.batches[0].reviews.length, 0);
+    assert.equal(f.remote.batches[0].externalReview.status, 'comment-requested');
+  }
+});
+
+test('native final CAS guard rejects feedback or same-subject drift introduced during prerequisites', async () => {
+  for (const mutation of ['feedback', 'subject']) {
+    const f = fixture(), expected = await f.handoff.request(81);
+    const fingerprint = handoffFeedbackFingerprint(await f.github.reviewFeedback(81), 'review-bot');
+    f.github.requiredChecks = async () => {
+      if (mutation === 'feedback') f.feedback.comments.push({ id: 999, author: 'human', body: 'Changed in the native guard.' });
+      else f.remote.batches[0].plan.analysis = 'Changed while native checks awaited.';
+      return { ok: true };
+    };
+    const writes = f.writes.length;
+    await assert.rejects(f.handoff.claim(81, { expectedSubject: expected,
+      expectedFeedbackFingerprint: fingerprint }), (error) => error.code === 'preclaim-source-changed');
+    assert.equal(f.writes.length, writes);
+    assert.equal(f.remote.batches[0].reviews.length, 0);
+    assert.equal(f.remote.batches[0].externalReview.status, 'comment-requested');
+  }
+});
+
+test('preclaim benign observations and own protocol comments remain eligible; later human feedback is flagged on import', async () => {
+  const f = fixture();
+  f.remote.batches[0].baseSha = 'b'.repeat(40);
+  await f.handoff.request(81);
+  const result = await processCloudReview({
+    github: f.github, handoff: f.handoff, standalone: {}, cwd: '/synthetic', env: {},
+    retrieve: async (subject) => ({ packet: { subject_sha: sha, plan: subject.plan, feedback: await f.github.reviewFeedback(81) }, tracked: new Set(['src/feature.ts']) }),
+    probe: async () => {
+      f.remote.batches[0].checkObservation = { passed: true };
+      f.pr.comments.push({ id: 999, user: { login: 'review-bot' }, body: COMMENT_REVIEW_MARKER + '\n' + JSON.stringify({ kind: 'request', observed: true }) });
+      return { profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } };
+    },
+    communication: { publishState: async () => {} }, wake: async () => {},
+    run: async () => {
+      f.feedback.comments.push({ id: 1000, author: 'human', body: 'Feedback after the legitimate native claim.' });
+      return { ok: true, stdout: JSON.stringify({ structured_output: validApproved() }) };
+    },
+  });
+  assert.equal(result.status, 'published');
+  assert.equal(f.remote.batches[0].reviews.length, 1);
+  assert.equal(f.remote.batches[0].checkObservation.passed, true);
+  assert.equal(f.remote.batches[0].externalReview.feedbackChanged, true);
 });

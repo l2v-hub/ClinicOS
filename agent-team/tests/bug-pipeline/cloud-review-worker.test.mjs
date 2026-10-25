@@ -18,6 +18,13 @@ const repo = 'l2v-hub/ClinicOS',
   sha = 'a'.repeat(40),
   base = 'b'.repeat(40);
 const clone = (value) => structuredClone(value);
+const feedback = {
+  number: 81,
+  head: sha,
+  comments: [],
+  unresolved: false,
+  changesRequested: false,
+};
 const profile = { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 };
 const approved = {
   subject_sha: sha,
@@ -78,18 +85,32 @@ function fixture() {
     github: { createStateStore: () => ({ load: async () => clone(state) }) },
     retrieve: async () => {
       calls.push('retrieve');
-      return { packet: { subject_sha: sha }, tracked: new Set(['src/file.mjs']) };
+      return {
+        packet: { subject_sha: sha, feedback: clone(feedback) },
+        tracked: new Set(['src/file.mjs']),
+      };
     },
     probe: async () => {
       calls.push('probe');
       return { profile };
     },
     handoff: {
-      claim: async () => {
+      actor: async () => 'review-bot',
+      claim: async (_pr, { expectedSubject, expectedFeedbackFingerprint, expectedActor }) => {
         calls.push('claim');
+        assert.deepEqual(expectedSubject, subject);
+        assert.equal(expectedActor, 'review-bot');
         subject.phase = 'reviewing';
         subject.externalReview.status = 'comment-running';
+        subject.externalReview.owner = expectedActor;
+        subject.externalReview.claimId = 'claim-1';
+        subject.externalReview.feedbackFingerprint = expectedFeedbackFingerprint;
         subject.reviews.push({ round: 1, subjectSha: sha, status: 'running' });
+        subject.reviewLedger = {
+          schema_version: 1,
+          max_rounds: 4,
+          rounds: [{ round: 1, subject_sha: sha, verdict: 'running' }],
+        };
         return clone(subject);
       },
       submit: async (_pr, review, { expectedClaim }) => {
@@ -193,6 +214,52 @@ test('native CAS loser never invokes review inference', async () => {
   };
   await assert.rejects(processCloudReview(f.options), /CAS conflict/);
   assert.deepEqual(f.calls, ['retrieve', 'probe', 'claim-conflict']);
+});
+
+test('original source and packet snapshots cannot be rewritten through reader aliases during qualification', async () => {
+  const f = fixture();
+  let alias;
+  const original = f.subject.plan.analysis;
+  f.options.retrieve = async (subject) => {
+    alias = { plan: subject.plan, feedback: clone(feedback) };
+    return { packet: alias, tracked: new Set(['src/file.mjs']) };
+  };
+  f.options.probe = async () => {
+    alias.plan.analysis = 'Mutated asynchronous reader alias.';
+    alias.feedback.comments.push({
+      id: 9,
+      author: 'human',
+      body: 'Local alias is not live GitHub feedback.',
+    });
+    return { profile };
+  };
+  const run = f.options.run;
+  f.options.run = async (call) => {
+    assert.ok(call.input.includes(original));
+    assert.ok(!call.input.includes('Mutated asynchronous reader alias'));
+    assert.ok(!call.input.includes('Local alias is not live GitHub feedback'));
+    return run(call);
+  };
+  assert.equal((await processCloudReview(f.options)).status, 'published');
+});
+
+test('an unexpected returned claim transition cannot authorize inference using an older specification', async () => {
+  const f = fixture(),
+    claim = f.options.handoff.claim;
+  f.options.handoff.claim = async (...args) => {
+    const returned = await claim(...args);
+    returned.plan.analysis = 'Unexpected native claim source revision.';
+    return returned;
+  };
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'preclaim-source-changed');
+  assert.equal(
+    result.claimed,
+    true,
+    'Unexpected native reservation is preserved for authorized recovery',
+  );
+  assert.ok(!f.calls.includes('model') && !f.calls.includes('submit'));
+  assert.ok(!f.calls.some((call) => call.startsWith('fail:')));
 });
 test('invalid report spends its own claim, notifies recovery and never retries automatically', async () => {
   const f = fixture();
@@ -316,7 +383,7 @@ test('missing/small/ambiguous probe context and oversized complete inputs never 
   }
   const f = fixture();
   f.options.retrieve = async () => ({
-    packet: { source: 'x'.repeat(701 * 1024) },
+    packet: { source: 'x'.repeat(701 * 1024), feedback: clone(feedback) },
     tracked: new Set(),
   });
   const result = await processCloudReview(f.options);
@@ -328,7 +395,7 @@ test('missing/small/ambiguous probe context and oversized complete inputs never 
 
 test('the exact serialized Unicode/escaped prompt and schema fit the qualified profile before its pinned model call', async () => {
   const f = fixture(),
-    packet = { source: '漢字😀\\\n"\t'.repeat(1000) };
+    packet = { source: '漢字😀\\\n"\t'.repeat(1000), feedback: clone(feedback) };
   const prepared = prepareCloudInference({ packet, sha, profile });
   assert.equal(prepared.capacity.inputBytes, Buffer.byteLength(prepared.input));
   assert.equal(
@@ -352,7 +419,7 @@ test('the exact serialized Unicode/escaped prompt and schema fit the qualified p
   const crowded = fixture();
   crowded.options.probe = async () => ({ profile: { ...profile, maxOutputTokens: 900000 } });
   crowded.options.retrieve = async () => ({
-    packet: { source: 'x'.repeat(40000) },
+    packet: { source: 'x'.repeat(40000), feedback: clone(feedback) },
     tracked: new Set(),
   });
   assert.equal((await processCloudReview(crowded.options)).status, 'queue-blocked');
@@ -610,7 +677,10 @@ test('unsupported first candidate never starves a later eligible native review',
   f.state.batches.unshift(blocked);
   f.options.retrieve = async (subject) => {
     if (subject.pr.number === 82) throw new Error('Synthetic oversized historical baseline');
-    return { packet: { subject_sha: sha }, tracked: new Set(['src/file.mjs']) };
+    return {
+      packet: { subject_sha: sha, feedback: clone(feedback) },
+      tracked: new Set(['src/file.mjs']),
+    };
   };
   const result = await processCloudReview(f.options);
   assert.equal(result.status, 'published');

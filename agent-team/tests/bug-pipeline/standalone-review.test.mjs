@@ -390,7 +390,7 @@ test('cloud standalone stale result preserves old failed round and replacement n
   let original, replacement;
   const result = await processCloudReview({
     github: f.github, handoff: {}, standalone: f.controller, cwd: '/trusted', env: {},
-    retrieve: async () => ({ packet: { subject_sha: f.manifest.sha }, tracked: new Set([f.manifest.sourceManifest[0].path]) }),
+    retrieve: async () => ({ packet: { subject_sha: f.manifest.sha, feedback: await f.github.reviewFeedback(81) }, tracked: new Set([f.manifest.sourceManifest[0].path]) }),
     probe: async () => ({ profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } }), communication: { publishState: async () => assert.fail('No stale projection') },
     wake: async () => assert.fail('No stale wake'),
     run: async () => {
@@ -421,6 +421,53 @@ test('standalone submit forwards full expected claim and permits the unchanged n
   assert.equal(published.reviews.length, 1);
   assert.equal(published.reviews[0].status, 'approved');
   assert.deepEqual(published.checkObservation, { passed: true });
+});
+
+test('standalone cloud preclaim spec or feedback drift preserves its pending request without inference', async () => {
+  for (const mutation of ['plan', 'feedback']) {
+    const f = fixture();
+    await f.controller.adopt(f.manifest);
+    await f.controller.request(81);
+    f.remote().standaloneReviews[0].plan = { acceptance: ['Original frozen specification.'] };
+    const request = f.remote().standaloneReviews[0].externalReview.requestId;
+    let modelCalls = 0;
+    const result = await processCloudReview({
+      github: f.github, handoff: {}, standalone: f.controller, cwd: '/trusted', env: {},
+      retrieve: async (subject) => ({ packet: { subject_sha: subject.sha, plan: subject.plan,
+        feedback: await f.github.reviewFeedback(81) }, tracked: new Set([f.manifest.sourceManifest[0].path]) }),
+      probe: async () => {
+        if (mutation === 'plan') f.remote().standaloneReviews[0].plan.acceptance[0] = 'New independent authorization acceptance.';
+        else f.feedback.comments.push({ id: 999, author: 'human', body: 'New feedback before claim.' });
+        return { profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } };
+      },
+      communication: { publishState: async () => assert.fail('No projection') },
+      wake: async () => assert.fail('No other-owner recovery'),
+      run: async () => { modelCalls++; return { ok: true, stdout: JSON.stringify({ structured_output: report() }) }; },
+    });
+    assert.equal(result.status, 'preclaim-source-changed');
+    assert.equal(result.claimed, false);
+    assert.equal(modelCalls, 0);
+    assert.equal(f.remote().standaloneReviews[0].reviews.length, 0);
+    assert.equal(f.remote().standaloneReviews[0].externalReview.status, 'comment-requested');
+    assert.equal(f.remote().standaloneReviews[0].externalReview.requestId, request);
+    assert.equal(f.comments.filter((item) => item.body.includes('"kind": "report"')).length, 0);
+  }
+});
+
+test('standalone optional claim snapshot is copied before gated asynchronous verification', async () => {
+  const f = fixture();
+  await f.controller.adopt(f.manifest);
+  await f.controller.request(81);
+  const expected = f.remote().standaloneReviews[0];
+  expected.plan = { acceptance: ['Original specification.'] };
+  let changed = false;
+  f.checksHook(async () => {
+    if (!changed) { changed = true; expected.plan.acceptance[0] = 'Aliased specification changed during checks.'; }
+  });
+  await assert.rejects(f.controller.claim(81, { expectedSubject: expected }),
+    (error) => error.code === 'preclaim-source-changed');
+  assert.equal(f.remote().standaloneReviews[0].reviews.length, 0);
+  assert.equal(f.remote().standaloneReviews[0].externalReview.status, 'comment-requested');
 });
 
 test('standalone simultaneous claims use one durable reservation and no fifth review is inferred', async () => {

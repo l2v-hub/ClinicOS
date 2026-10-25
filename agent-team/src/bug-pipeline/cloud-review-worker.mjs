@@ -9,7 +9,12 @@ import { fileURLToPath } from 'node:url';
 import { createRunner } from './process.mjs';
 import { createGitHub } from './github.mjs';
 import { validateState } from './contracts.mjs';
-import { createCommentReviewHandoff, COMMENT_REVIEW_MARKER } from './comment-review-handoff.mjs';
+import {
+  createCommentReviewHandoff,
+  COMMENT_REVIEW_MARKER,
+  handoffFeedbackFingerprint,
+  assertClaimTransition,
+} from './comment-review-handoff.mjs';
 import { createStandaloneReview, validateStandaloneState } from './standalone-review.mjs';
 import {
   createIssueReviewCommunication,
@@ -397,15 +402,30 @@ export async function processCloudReview({
       !['merged', 'deployed'].includes(subject.release?.status),
   );
   if (!candidates.length) return { status: 'empty', providerExecuted: false };
-  let candidate, source, qualification, prepared;
+  let candidate,
+    source,
+    qualification,
+    prepared,
+    expectedSubject,
+    expectedFeedbackFingerprint,
+    reviewActor;
   const blockedSubjects = [];
   for (const item of candidates) {
+    // Keep the original authorization/specification separate from every async
+    // reader, provider callback and mutable durable-state or packet alias.
+    expectedSubject = structuredClone(item.subject);
     try {
-      source = await retrieve(item.subject); // No round spent by unsupported/stale source.
+      const retrieved = await retrieve(structuredClone(expectedSubject));
+      source = { packet: structuredClone(retrieved.packet), tracked: new Set(retrieved.tracked) };
+      const controller = item.collection === 'batches' ? handoff : standalone;
+      reviewActor = await controller.actor();
+      assert.equal(source.packet.feedback.number, expectedSubject.pr.number);
+      assert.equal(source.packet.feedback.head, expectedSubject.sha);
+      expectedFeedbackFingerprint = handoffFeedbackFingerprint(source.packet.feedback, reviewActor);
     } catch {
       blockedSubjects.push({
         pr: item.subject.pr.number,
-        sha: item.subject.sha,
+        sha: expectedSubject.sha,
         status: 'source-unavailable',
       });
       continue;
@@ -427,7 +447,7 @@ export async function processCloudReview({
     try {
       prepared = prepareCloudInference({
         packet: source.packet,
-        sha: item.subject.sha,
+        sha: expectedSubject.sha,
         profile: qualification.profile,
       });
     } catch {
@@ -438,7 +458,7 @@ export async function processCloudReview({
       });
       continue;
     }
-    candidate = item;
+    candidate = { ...item, subject: expectedSubject };
     break;
   }
   if (!candidate)
@@ -450,7 +470,43 @@ export async function processCloudReview({
     };
   const { collection, subject } = candidate,
     controller = collection === 'batches' ? handoff : standalone;
-  const claimed = await controller.claim(subject.pr.number); // Native SHA/check/budget/ownership CAS.
+  let claimed;
+  const preclaimChanged = (reserved = false) => ({
+    status: 'preclaim-source-changed',
+    pr: subject.pr.number,
+    sha: subject.sha,
+    claimed: reserved,
+    providerExecuted: Boolean(qualification),
+    blockedSubjects,
+  });
+  try {
+    claimed = await controller.claim(subject.pr.number, {
+      expectedSubject,
+      expectedFeedbackFingerprint,
+      expectedActor: reviewActor,
+    });
+  } catch (error) {
+    if (
+      [
+        'preclaim-source-changed',
+        'ERR_ASSERTION',
+        'state-cas-conflict',
+        'state-rebase-conflict',
+      ].includes(error?.code)
+    )
+      return preclaimChanged();
+    throw error;
+  }
+  try {
+    assertClaimTransition(expectedSubject, claimed, {
+      actor: reviewActor,
+      expectedFeedbackFingerprint,
+    });
+  } catch {
+    // An unexpected native transition never authorizes old prompt inference or
+    // failure of somebody else's reservation. Keep it for authorized recovery.
+    return preclaimChanged(true);
+  }
   // Bind the already prepared data to the actual native reservation, even across a request race.
   let review,
     failureCode = 'review-validation-failed';
@@ -466,9 +522,6 @@ export async function processCloudReview({
     ...retainedReport(),
   });
   try {
-    assert.equal(claimed.sha, subject.sha);
-    assert.equal(claimed.baseSha, subject.baseSha);
-    assert.equal(claimed.externalReview.requestId, subject.externalReview.requestId);
     const result = await run({
       command: 'claude',
       args: prepared.args,

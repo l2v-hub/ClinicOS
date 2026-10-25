@@ -22,8 +22,8 @@ function ownershipChanged() {
     code: 'review-ownership-changed',
   });
 }
-function assertExpectedClaim(batch, expectedClaim, login) {
-  const identity = (subject) => ({
+export function reviewSubjectIdentity(subject) {
+  return {
     pr: subject.pr?.number, sha: subject.sha, baseSha: subject.baseSha,
     branch: subject.branch, baseRef: subject.baseRef ?? 'main', issues: subject.issues,
     plan: subject.plan ?? null, grouping: subject.grouping ?? null,
@@ -40,14 +40,52 @@ function assertExpectedClaim(batch, expectedClaim, login) {
         ({ round, verdict, subject_sha, review_sha256 })),
     } : null,
     reviewReports: subject.reviewReports ?? null,
-  });
+  };
+}
+function assertExpectedClaim(batch, expectedClaim, login) {
   try {
-    assert.deepEqual(identity(batch), identity(expectedClaim));
+    assert.deepEqual(reviewSubjectIdentity(batch), reviewSubjectIdentity(expectedClaim));
     assert.equal(expectedClaim.externalReview?.status, 'comment-running');
     assert.equal(expectedClaim.externalReview?.owner, login);
   } catch {
     throw ownershipChanged();
   }
+}
+function sourceChanged() {
+  return Object.assign(new Error('Prepared review source changed'), { code: 'preclaim-source-changed' });
+}
+function assertExpectedSubject(batch, expectedSubject) {
+  try {
+    assert.deepEqual(reviewSubjectIdentity(batch), reviewSubjectIdentity(expectedSubject));
+    assert.equal(expectedSubject.externalReview?.status, 'comment-requested');
+  } catch { throw sourceChanged(); }
+}
+
+// Defense in depth: only the native pending -> running reservation may differ
+// from the immutable subject that supplied the prepared inference packet.
+export function assertClaimTransition(expectedSubject, claimed, { actor, expectedFeedbackFingerprint }) {
+  const round = expectedSubject.reviews.length + 1, pending = clone(claimed);
+  assert.equal(claimed.phase, 'reviewing');
+  assert.equal(claimed.externalReview.status, 'comment-running');
+  assert.equal(claimed.externalReview.owner, actor);
+  assert.ok(typeof claimed.externalReview.claimId === 'string' && claimed.externalReview.claimId);
+  assert.equal(claimed.externalReview.feedbackFingerprint, expectedFeedbackFingerprint);
+  assert.equal(claimed.reviews.length, round);
+  assert.deepEqual(claimed.reviews.at(-1), { round, status: 'running', subjectSha: expectedSubject.sha });
+  assert.equal(claimed.reviewLedger.rounds.length, round);
+  assert.deepEqual(claimed.reviewLedger.rounds.at(-1), { round, verdict: 'running', subject_sha: expectedSubject.sha });
+  pending.reviews = pending.reviews.slice(0, -1);
+  pending.reviewLedger.rounds = pending.reviewLedger.rounds.slice(0, -1);
+  if (!expectedSubject.reviewLedger) {
+    assert.equal(claimed.reviewLedger.schema_version, 1);
+    assert.equal(claimed.reviewLedger.max_rounds, 4);
+    delete pending.reviewLedger;
+  }
+  for (const key of ['status', 'owner', 'claimId']) {
+    if (expectedSubject.externalReview[key] === undefined) delete pending.externalReview[key];
+    else pending.externalReview[key] = expectedSubject.externalReview[key];
+  }
+  assertExpectedSubject(pending, expectedSubject);
 }
 
 export function handoffFeedbackFingerprint(feedback, owner, publisher = owner) {
@@ -142,7 +180,7 @@ export function createCommentReviewHandoff({
       throw error;
     }
   }
-  async function save(state, batch, login, { guard, recoveryHead } = {}) {
+  async function save(state, batch, login, { guard, recoveryHead, finalGuard } = {}) {
     if (subjectAdapter) subjectAdapter.validate(state);
     const expected = JSON.stringify(batch);
     state.updatedAt = now().toISOString();
@@ -166,6 +204,7 @@ export function createCommentReviewHandoff({
           await subjectAdapter.reservationGuard(batch);
         assert.equal(JSON.stringify(batch), expected, 'Handoff subject mutated');
         assert.ok(await github.authorized(login), 'Handoff actor lost authorization');
+        if (finalGuard) await finalGuard();
         assert.ok(performance.now() - started <= 60000, 'Handoff guard expired');
       },
     });
@@ -308,14 +347,30 @@ export function createCommentReviewHandoff({
     }
     return clone(batch);
   }
-  async function claim(pr) {
+  async function claim(pr, { expectedSubject, expectedFeedbackFingerprint, expectedActor } = {}) {
+    const expected = expectedSubject === undefined ? undefined : clone(expectedSubject);
+    if (expectedFeedbackFingerprint !== undefined) assert.match(expectedFeedbackFingerprint, /^[a-f0-9]{64}$/);
     const login = await actor(),
       { state, batch } = await load(pr);
+    if (expected !== undefined) assertExpectedSubject(batch, expected);
+    if (expectedActor !== undefined && expectedActor !== login) throw sourceChanged();
     assert.ok(
       channel(batch) && batch.externalReview.status === 'comment-requested',
       'Review is not available',
     );
-    const feedback = await live(batch);
+    const boundLive = async () => {
+      let feedback;
+      try { feedback = await live(batch); }
+      catch (error) {
+        if ((expected !== undefined || expectedFeedbackFingerprint !== undefined) && error?.code === 'ERR_ASSERTION')
+          throw sourceChanged();
+        throw error;
+      }
+      if (expectedFeedbackFingerprint !== undefined &&
+        handoffFeedbackFingerprint(feedback, login) !== expectedFeedbackFingerprint) throw sourceChanged();
+      return feedback;
+    };
+    const feedback = await boundLive();
     assert.ok(!activeImplementation(batch), 'Operator continuation owns this subject');
     assert.ok(
       batch.reviews.length < attemptLimit(batch, 'reviews') && (await github.requiredChecks(pr)).ok,
@@ -334,7 +389,18 @@ export function createCommentReviewHandoff({
       feedbackFingerprint: handoffFeedbackFingerprint(feedback, login),
     });
     batch.phase = 'reviewing';
-    await save(state, batch, login); // CAS reservation BEFORE the local Claude starts its review.
+    try {
+      await save(state, batch, login, {
+        finalGuard: expected === undefined && expectedFeedbackFingerprint === undefined ? undefined : async () => {
+          if (expected !== undefined) assertExpectedSubject((await load(pr)).batch, expected);
+          await boundLive();
+        },
+      });
+    } catch (error) {
+      if (expected !== undefined && ['state-cas-conflict', 'state-rebase-conflict'].includes(error?.code))
+        throw sourceChanged();
+      throw error;
+    } // CAS reservation BEFORE the local Claude starts its review.
     return clone(batch);
   }
   async function submit(pr, review, { expectedClaim } = {}) {

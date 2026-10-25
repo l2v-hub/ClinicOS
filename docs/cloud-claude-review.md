@@ -27,6 +27,15 @@ Authority comes exclusively from a canonical batch or adopted standalone subject
 GitHub-comments handoff is `comment-requested`. Human PRs and manual batches are never adopted.
 The native claim checks live SHA, ownership, checks and remaining budget, then reserves one
 round through CAS before review inference. Existing reports, failures and ledger history remain.
+The cloud worker copies the original subject before asynchronous source retrieval, then copies
+the resulting packet. Before the probe it resolves the authorized native actor and fingerprints
+the packet's actual GitHub feedback with the native protocol-comment filter. Native claim accepts
+that original semantic subject and fingerprint, checks them before reserving, then rechecks the
+pending subject and fresh feedback in its final CAS guard. Same-SHA specification/history or
+feedback drift yields `preclaim-source-changed`, keeps the pending request and spends no round.
+The returned claim must also match precisely the legitimate one-round reservation transition
+from the original source before review inference. Benign observations and filtered own protocol
+comments remain eligible; feedback arriving after claim is flagged during native report import.
 
 The source reader fetches fixed-repository GitHub API data for the durable base/head SHAs.
 Complete bounded tree inventories prove the source delta even when GitHub caps comparison files
