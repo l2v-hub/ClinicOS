@@ -71,6 +71,8 @@ const FAILURE_CODES = new Set([
   'workspace-scope-invalid',
   'independent-qa-blocked',
   'implementation-blocked',
+  'implementation-revision-unchanged',
+  'implementation-recovery-settled',
   'controller-execution-failed',
 ]);
 export function controllerFailureCode(error) {

@@ -5,6 +5,7 @@ import {
   authorizationBinding,
   consumeOperatorAuthorization,
   authorizeObservationResume,
+  settleImplementationAttempt,
 } from './operator-authorization.mjs';
 import {
   attemptLimit,
@@ -605,7 +606,7 @@ export function createCommentReviewHandoff({
   }
   async function recover(
     pr,
-    { action, expectedSha, token, reason, forceLive = false, authorizationRef },
+    { action, expectedSha, token, reason, round, forceLive = false, authorizationRef },
   ) {
     const login = await maintainer(),
       { state, batch } = await load(pr, { includeManual: true });
@@ -639,6 +640,22 @@ export function createCommentReviewHandoff({
       batch.externalReview = { ...previous, status: 'failed', abandonedAt: now().toISOString() };
       delete batch.externalReview.claimId;
       batch.phase = 'blocked';
+    } else if (action === 'settle-implementation') {
+      assert.ok(!subjectAdapter, 'Implementation settlement requires a native controller journal');
+      previous = clone(batch.controllerProgress);
+      recoveryAuthorization = await settleImplementationAttempt({
+        state,
+        subject: batch,
+        actor: login,
+        reference: authorizationRef,
+        verifier: authorizationVerifier,
+        reason,
+        progressSha256: token,
+        round,
+        now,
+      });
+      batch.recoveryHistory.pop(); // Shared authorizer's receipt is recorded below once.
+      nextFailureCode = batch.failureCode;
     } else if (action === 'resume-observation') {
       assert.equal(
         token,

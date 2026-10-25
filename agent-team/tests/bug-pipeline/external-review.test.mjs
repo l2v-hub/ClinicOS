@@ -1122,3 +1122,59 @@ test('Author7 F1 exact original legacy verified QA is one spent session, not an 
   assert.equal(batch.codexFinalQaInfrastructure.legacyOrigins.length, 1);
   assert.deepEqual(batch.codexFinalQaInfrastructure.legacyOrigins[0].original, old);
 });
+
+test('Claude504 unchanged correction head settles the completed journal and consumes its attempt', async (t) => {
+  const { knownFailedCorrection } = await import('../../src/bug-pipeline/workspace.mjs');
+  const { controllerFailureCode } = await import('../../src/bug-pipeline/github.mjs');
+  const f = await workerFixture(t, { verdict: 'changes-requested' });
+  await reviewExternalBatch(f);
+  let paid = 0;
+  const reviewedSha = f.batch.sha;
+  const snapshots = [];
+  const args = {
+    repo,
+    batch: f.batch,
+    gh: f.github,
+    workspace: {
+      prepare: async () => {},
+      execute: async () => {
+        paid++;
+        return { status: 'implemented' };
+      },
+      verify: async () => {},
+      simplify: async () => ({ status: 'implemented' }),
+      qa: async () => ({ status: 'verified' }),
+      checkpoint: async () => reviewedSha,
+      publish: async () => {},
+      captureCheckpoint: async () => ({ head: reviewedSha }),
+      issueEvidence: async () => '',
+    },
+    save: async () => snapshots.push(structuredClone(f.batch)),
+    report: async () => {},
+    block: async (batch) => {
+      batch.phase = 'blocked';
+    },
+  };
+  await assert.rejects(
+    externalReviewStep(args),
+    (error) => controllerFailureCode(error) === 'implementation-revision-unchanged',
+  );
+  const progress = f.batch.controllerProgress;
+  assert.equal(progress.status, 'failed');
+  assert.equal(progress.failureCode, 'implementation-revision-unchanged');
+  assert.equal(progress.completed.length, 7);
+  assert.equal(progress.next, 7);
+  assert.equal(f.batch.implementation.at(-1).status, 'failed');
+  assert.ok(knownFailedCorrection(f.batch));
+  assert.ok(
+    snapshots.some(
+      (batch) =>
+        batch.controllerProgress?.status === 'failed' &&
+        batch.implementation.at(-1).status === 'failed',
+    ),
+  );
+  f.batch.phase = 'blocked';
+  f.batch.failureCode = progress.failureCode;
+  await externalReviewStep(args);
+  assert.equal(paid, 1, 'A blocked definite failure cannot silently invoke another correction');
+});

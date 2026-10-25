@@ -1254,3 +1254,118 @@ for (const changed of ['none', 'source', 'plan', 'feedback', 'step-code', 'attem
       assert.deepEqual(f.remote, frozen);
     }
   });
+
+test('Claude504 maintainer recovery settles exact progress once and still requires audited correction allowance', async () => {
+  const { historyDigest, attemptLimit } = await import('../../src/bug-pipeline/attempt-budget.mjs');
+  const f = fixture();
+  f.setPermission('admin');
+  const b = f.batch;
+  b.implementation = [1, 2, 3, 4].map((round) => ({
+    round,
+    status: round === 4 ? 'running' : 'failed',
+  }));
+  b.phase = 'blocked';
+  b.controllerProgress = {
+    schemaVersion: 1,
+    status: 'running',
+    flow: 'external-review-correction',
+    round: 4,
+    implementationRound: 4,
+    sourceSha: sha,
+    planSha256: historyDigest(b.plan),
+    feedback: null,
+    feedbackSha256: historyDigest(null),
+    next: 1,
+    completed: [{ step: 'execute' }],
+    pending: 'verify-before',
+    checkpoint: { stale: true },
+  };
+  const previous = clone(b.controllerProgress);
+  const opts = {
+    action: 'settle-implementation',
+    expectedSha: sha,
+    round: 4,
+    token: historyDigest(previous),
+    reason: 'Exact audited running attempt settlement',
+    authorizationRef: 'test:settle-controller',
+  };
+  await assert.rejects(f.handoff.recover(81, { ...opts, round: 3 }));
+  await f.handoff.recover(81, opts);
+  const current = f.remote.batches[0];
+  assert.equal(current.controllerProgress.status, 'failed');
+  assert.equal(current.implementation[3].status, 'failed');
+  assert.equal(current.recoveryHistory.length, 1);
+  assert.deepEqual(current.recoveryHistory[0].previous, previous);
+  assert.equal(current.recoveryHistory[0].authorization.binding.budget.round, 4);
+  assert.equal(current.failureCode, 'implementation-recovery-settled');
+  assert.equal(attemptLimit(current, 'implementation'), 4);
+  await assert.rejects(f.handoff.recover(81, opts));
+  const resume = () =>
+    f.handoff.recover(81, {
+      action: 'resume',
+      expectedSha: sha,
+      token: historyDigest({ phase: 'blocked', failureCode: current.failureCode }),
+      reason: 'Fresh correction only after allowance',
+    });
+  await assert.rejects(resume(), /allowances/);
+  await f.handoff.extendBudget(81, {
+    kind: 'implementation',
+    limit: 5,
+    authorizationRef: 'test:fresh-correction',
+    reason: 'One fresh correction after settlement',
+  });
+  const recovered = await resume();
+  assert.equal(recovered.phase, 'waiting-review');
+  assert.equal(recovered.implementation.length, 4);
+  assert.deepEqual(recovered.controllerProgress.completed, previous.completed);
+});
+
+for (const failureCode of [
+  'workspace-scope-invalid',
+  'workspace-evidence-invalid',
+  'implementation-revision-unchanged',
+]) {
+  test(`Claude504 ${failureCode} correction requires a new audited allowance before explicit resume`, async () => {
+    const { historyDigest } = await import('../../src/bug-pipeline/attempt-budget.mjs');
+    const f = fixture();
+    f.setPermission('admin');
+    const b = f.batch;
+    b.implementation = [1, 2, 3, 4].map((round) => ({ round, status: 'failed' }));
+    b.phase = 'blocked';
+    b.failureCode = failureCode;
+    b.controllerProgress = {
+      schemaVersion: 1,
+      status: 'failed',
+      flow: 'external-review-correction',
+      round: 4,
+      implementationRound: 4,
+      sourceSha: sha,
+      planSha256: historyDigest(b.plan),
+      feedback: null,
+      feedbackSha256: historyDigest(null),
+      failureCode,
+      failedStep:
+        failureCode === 'implementation-revision-unchanged' ? 'revision' : 'verify-before',
+      next: 1,
+      completed: [{ step: 'execute' }],
+    };
+    const resume = () =>
+      f.handoff.recover(81, {
+        action: 'resume',
+        expectedSha: sha,
+        token: historyDigest({ phase: 'blocked', failureCode }),
+        reason: 'Explicit fresh correction',
+      });
+    await assert.rejects(resume(), /allowances/);
+    await f.handoff.extendBudget(81, {
+      kind: 'implementation',
+      limit: 5,
+      authorizationRef: 'test:correction-allowance',
+      reason: 'One correction allowance',
+    });
+    const recovered = await resume();
+    assert.equal(recovered.phase, 'waiting-review');
+    assert.equal(recovered.implementation.length, 4);
+    assert.equal(recovered.controllerProgress.status, 'failed');
+  });
+}

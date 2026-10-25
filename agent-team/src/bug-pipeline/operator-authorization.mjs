@@ -34,14 +34,19 @@ export function authorizationBinding({
   const pr = subject.pr?.number ?? null;
   const reviewIssue =
     pr === null
-      ? (subject.reviewIssue ?? (action === 'resume-observation' ? subject.issues?.[0] : undefined))
+      ? (subject.reviewIssue ??
+        (['resume-observation', 'settle-implementation'].includes(action)
+          ? subject.issues?.[0]
+          : undefined))
       : null;
   if (pr === null) {
     assert.ok(
       collection === 'manualBatches' ||
         (collection === 'batches' &&
-          action === 'resume-observation' &&
-          subject.controllerProgress?.status === 'interrupted'),
+          ((action === 'resume-observation' &&
+            subject.controllerProgress?.status === 'interrupted') ||
+            (action === 'settle-implementation' &&
+              subject.controllerProgress?.status === 'running'))),
       'Issue-only authorization needs a manual owner or exact interrupted initial work',
     );
     assert.ok(
@@ -127,6 +132,99 @@ export function observationProgressDigest(progress) {
   const copy = structuredClone(progress);
   delete copy.resumeAuthorization;
   return historyDigest(copy);
+}
+
+// Settlement records an operator's decision about an ambiguous paid attempt. It
+// grants no invocation, checkpoint reuse, review approval, or budget extension.
+export async function settleImplementationAttempt({
+  state,
+  subject,
+  actor,
+  reference,
+  verifier,
+  reason,
+  progressSha256,
+  round,
+  now = () => new Date(),
+}) {
+  const progress = subject.controllerProgress;
+  const attempts = implementationAttempts(subject);
+  const attempt = attempts.at(-1);
+  const steps = [
+    'execute',
+    'verify-before',
+    'simplify',
+    'verify-after',
+    'qa',
+    'checkpoint',
+    'publish',
+  ];
+  assert.ok(
+    progress?.schemaVersion === 1 &&
+      progress.status === 'running' &&
+      ['implementation', 'pr-feedback', 'review-correction', 'external-review-correction'].includes(
+        progress.flow,
+      ) &&
+      Number.isSafeInteger(round) &&
+      round > 0 &&
+      round <= 32 &&
+      progress.round === round &&
+      (progress.implementationRound ?? round) === round &&
+      attempt?.round === round &&
+      attempt.status === 'running' &&
+      attempts.filter((item) => item.status === 'running').length === 1 &&
+      !subject.reviews.some((item) => item.status === 'running') &&
+      Number.isSafeInteger(progress.next) &&
+      progress.next >= 0 &&
+      progress.next <= steps.length &&
+      Array.isArray(progress.completed) &&
+      progress.completed.length === progress.next &&
+      progress.completed.every((entry, index) => entry.step === steps[index]) &&
+      (!progress.pending || progress.pending === steps[progress.next]) &&
+      progress.planSha256 === historyDigest(subject.plan) &&
+      progress.feedbackSha256 === historyDigest(progress.feedback ?? null),
+    'Exact running implementation journal and latest attempt required',
+  );
+  assert.equal(progressSha256, historyDigest(progress), 'Implementation progress changed');
+  assert.ok(typeof actor === 'string' && actor.trim() && actor.length <= 200);
+  assert.ok(typeof reason === 'string' && reason.trim() && reason.length <= 1000);
+  const budget = { kind: 'controller-settlement', round, progressSha256 };
+  const binding = authorizationBinding({
+    state,
+    subject,
+    actor,
+    action: 'settle-implementation',
+    budget,
+  });
+  const authorization = await consumeOperatorAuthorization({ verifier, reference, binding, state });
+  assert.deepEqual(
+    authorizationBinding({ state, subject, actor, action: 'settle-implementation', budget }),
+    binding,
+    'Implementation changed during authorization',
+  );
+  const previous = structuredClone(progress);
+  progress.status = 'failed';
+  progress.failedStep = 'recovery';
+  progress.failureCode = 'implementation-recovery-settled';
+  delete progress.checkpoint;
+  delete progress.resumeAuthorization;
+  attempt.status = 'failed';
+  subject.phase = 'blocked';
+  subject.failureCode = progress.failureCode;
+  delete subject.approvedSha;
+  subject.recoveryHistory ??= [];
+  subject.recoveryHistory.push({
+    action: 'settle-implementation',
+    actor,
+    reason,
+    at: now().toISOString(),
+    subjectSha: subject.sha ?? null,
+    round,
+    progressSha256,
+    previous,
+    authorization,
+  });
+  return authorization;
 }
 function validateObservationCheckpoint(subject) {
   const progress = subject.controllerProgress,

@@ -8,6 +8,7 @@ import {
   spentAttempts,
 } from './attempt-budget.mjs';
 import { validateObservationResume } from './operator-authorization.mjs';
+import { stateError } from './github.mjs';
 import { runImplementationStages } from './workspace.mjs';
 import { feedbackFingerprint, sha256 } from './contracts.mjs';
 import { createIssueReviewCommunication } from './issue-review-communication.mjs';
@@ -332,8 +333,18 @@ async function runExternalReviewStep({
               },
         },
       });
-      if (batch.sha === previous)
-        throw new Error('Correction did not produce a new reviewed revision');
+      if (batch.sha === previous) {
+        const progress = batch.controllerProgress;
+        progress.status = 'failed';
+        progress.failedStep = 'revision';
+        progress.failureCode = 'implementation-revision-unchanged';
+        attempt.status = 'failed';
+        await save();
+        throw stateError(
+          'implementation-revision-unchanged',
+          'Correction did not produce a new reviewed revision',
+        );
+      }
       attempt.status = 'passed';
       batch.externalReview = null;
       batch.phase = 'waiting-checks';

@@ -11,6 +11,12 @@ import { verificationArguments } from './verification.mjs';
 
 export async function regularFile(root, file) {
   relativeFile(file);
+  let parent = root;
+  for (const segment of file.split('/').slice(0, -1)) {
+    parent = path.join(parent, segment);
+    if ((await lstat(parent)).isSymbolicLink())
+      throw new Error('file must be a contained regular file');
+  }
   const target = path.resolve(root, file);
   const info = await lstat(target);
   if (
@@ -22,32 +28,36 @@ export async function regularFile(root, file) {
   return { target, info };
 }
 export async function validateEvidence(cwd, plan) {
-  const entries = [];
-  for (const item of plan.evidence) {
-    const files = {};
-    for (const kind of ['screenshot', 'trace', 'video']) {
-      if (!item[kind] && kind === 'video') continue;
-      const { target, info } = await regularFile(cwd, item[kind]);
-      if (info.size < 16 || info.size > MAX_EVIDENCE_BYTES)
-        throw new Error('evidence is empty or exceeds GitHub size budget');
-      const bytes = await readFile(target);
-      if (bytes.length !== info.size || bytes.length > MAX_EVIDENCE_BYTES)
-        throw new Error('evidence size changed during collection');
-      if (kind === 'screenshot') validatePng(bytes);
-      if (kind === 'trace') validateTrace(bytes);
-      if (
-        kind === 'video' &&
-        !(
-          bytes.subarray(0, 4).equals(Buffer.from([26, 69, 223, 163])) ||
-          bytes.subarray(4, 8).toString() === 'ftyp'
+  try {
+    const entries = [];
+    for (const item of plan.evidence) {
+      const files = {};
+      for (const kind of ['screenshot', 'trace', 'video']) {
+        if (!item[kind] && kind === 'video') continue;
+        const { target, info } = await regularFile(cwd, item[kind]);
+        if (info.size < 16 || info.size > MAX_EVIDENCE_BYTES)
+          throw new Error('evidence is empty or exceeds GitHub size budget');
+        const bytes = await readFile(target);
+        if (bytes.length !== info.size || bytes.length > MAX_EVIDENCE_BYTES)
+          throw new Error('evidence size changed during collection');
+        if (kind === 'screenshot') validatePng(bytes);
+        if (kind === 'trace') validateTrace(bytes);
+        if (
+          kind === 'video' &&
+          !(
+            bytes.subarray(0, 4).equals(Buffer.from([26, 69, 223, 163])) ||
+            bytes.subarray(4, 8).toString() === 'ftyp'
+          )
         )
-      )
-        throw new Error('invalid video evidence');
-      files[kind] = { path: item[kind], sha256: sha256(bytes), bytes: info.size };
+          throw new Error('invalid video evidence');
+        files[kind] = { path: item[kind], sha256: sha256(bytes), bytes: info.size };
+      }
+      entries.push({ issue: item.issue, files });
     }
-    entries.push({ issue: item.issue, files });
+    return entries;
+  } catch (error) {
+    throw stateError('workspace-evidence-invalid', error.message, error);
   }
-  return entries;
 }
 
 // These fields are controller evidence, not a generic retry flag. Running/unknown
@@ -65,7 +75,11 @@ export function knownFailedCorrection(batch) {
           'workspace-verification-failed',
           'workspace-evidence-invalid',
           'workspace-scope-invalid',
-        ].includes(progress.failureCode))) &&
+        ].includes(progress.failureCode)) ||
+      (progress.failedStep === 'revision' &&
+        progress.failureCode === 'implementation-revision-unchanged') ||
+      (progress.failedStep === 'recovery' &&
+        progress.failureCode === 'implementation-recovery-settled')) &&
     progress.sourceSha === batch.sha &&
     progress.planSha256 === sha256(JSON.stringify(batch.plan)) &&
     progress.feedbackSha256 === sha256(JSON.stringify(progress.feedback)) &&
@@ -92,7 +106,7 @@ export function createWorkspace({ root, repo, run, models }) {
       timeoutMs: command === 'npm' ? 10 * 60_000 : 30_000,
       maxOutputBytes: 2 * 1024 * 1024,
     });
-    if (!result.ok) throw new Error(`${command} operation failed`);
+    if (!result.ok) throw stateError('controller-execution-failed', `${command} operation failed`);
     return result.stdout.trim();
   };
   const git = (args, cwd) => invoke('git', args, cwd);
@@ -110,42 +124,53 @@ export function createWorkspace({ root, repo, run, models }) {
   };
   const status = (cwd) => git(['status', '--porcelain', '--untracked-files=all'], cwd);
   async function assertScope(batch) {
-    const { cwd, packet } = coordinates(batch);
-    const changed = (await git(['diff', '--name-only', batch.baseSha], cwd))
-      .split('\n')
-      .filter(Boolean);
-    const untracked = (await git(['ls-files', '--others', '--exclude-standard'], cwd))
-      .split('\n')
-      .filter(Boolean);
-    for (const file of new Set([...changed, ...untracked])) {
-      relativeFile(file);
-      if (file.startsWith(packet + '/')) {
-        if (
-          ['task-contract.md', 'implementation-plan.md', 'analysis.md'].includes(
-            file.slice(packet.length + 1),
+    try {
+      const { cwd, packet } = coordinates(batch);
+      const changed = (await git(['diff', '--name-only', batch.baseSha], cwd))
+        .split('\n')
+        .filter(Boolean);
+      const untracked = (await git(['ls-files', '--others', '--exclude-standard'], cwd))
+        .split('\n')
+        .filter(Boolean);
+      for (const file of new Set([...changed, ...untracked])) {
+        relativeFile(file);
+        if (file.startsWith(packet + '/')) {
+          if (
+            ['task-contract.md', 'implementation-plan.md', 'analysis.md'].includes(
+              file.slice(packet.length + 1),
+            )
           )
+            continue;
+        } else {
+          editableFile(file);
+          if (!batch.plan.scope.includes(file))
+            throw new Error('executor edited outside accepted file scope');
+        }
+        const fileInfo = await lstat(path.join(cwd, file)).catch((e) =>
+          e.code === 'ENOENT' ? null : Promise.reject(e),
+        );
+        if (
+          fileInfo?.isSymbolicLink() ||
+          (fileInfo &&
+            !(await realpath(path.join(cwd, file))).startsWith((await realpath(cwd)) + path.sep))
         )
-          continue;
-      } else {
-        editableFile(file);
-        if (!batch.plan.scope.includes(file))
-          throw new Error('executor edited outside accepted file scope');
+          throw stateError(
+            file.startsWith(packet + '/evidence')
+              ? 'workspace-evidence-invalid'
+              : 'workspace-scope-invalid',
+            'symlink implementation/evidence is not publishable',
+          );
       }
-      const fileInfo = await lstat(path.join(cwd, file)).catch((e) =>
-        e.code === 'ENOENT' ? null : Promise.reject(e),
-      );
-      if (
-        fileInfo?.isSymbolicLink() ||
-        (fileInfo &&
-          !(await realpath(path.join(cwd, file))).startsWith((await realpath(cwd)) + path.sep))
-      )
-        throw new Error('symlink implementation/evidence is not publishable');
-    }
-    const expected = batch.packetHashes;
-    for (const [file, digest] of Object.entries(expected)) {
-      const { target } = await regularFile(cwd, `${packet}/${file}`);
-      if (sha256(await readFile(target)) !== digest)
-        throw new Error('executor changed the frozen contract or plan');
+      const expected = batch.packetHashes;
+      for (const [file, digest] of Object.entries(expected)) {
+        const { target } = await regularFile(cwd, `${packet}/${file}`);
+        if (sha256(await readFile(target)) !== digest)
+          throw new Error('executor changed the frozen contract or plan');
+      }
+    } catch (error) {
+      if (error.code === 'workspace-evidence-invalid') throw error;
+      if (error.code === 'controller-execution-failed') throw error;
+      throw stateError('workspace-scope-invalid', error.message, error);
     }
   }
   async function verify(batch) {
@@ -156,7 +181,8 @@ export function createWorkspace({ root, repo, run, models }) {
     const prior = await lstat(evidenceDir).catch((e) =>
       e.code === 'ENOENT' ? null : Promise.reject(e),
     );
-    if (prior?.isSymbolicLink()) throw new Error('evidence directory must not be a symlink');
+    if (prior?.isSymbolicLink())
+      throw stateError('workspace-evidence-invalid', 'evidence directory must not be a symlink');
     await rm(evidenceDir, { recursive: true, force: true });
     await mkdir(evidenceDir, { recursive: true });
     const results = [];
@@ -262,6 +288,14 @@ export function createWorkspace({ root, repo, run, models }) {
       const { cwd, packet } = coordinates(batch);
       if (knownFailedCorrection(batch)) {
         const checkpoint = batch.controllerProgress.checkpoint;
+        if (!checkpoint) {
+          // Invalid outputs cannot be retained. A maintainer must restore a clean,
+          // exact owned revision before an independently authorized fresh attempt.
+          await assertScope(batch);
+          if ((await git(['rev-parse', 'HEAD'], cwd)) !== batch.sha || (await status(cwd)))
+            throw new Error('Invalid correction output requires a clean exact owned revision');
+          return;
+        }
         if (
           !checkpoint ||
           checkpoint.head !== batch.sha ||
@@ -499,6 +533,23 @@ export async function runImplementationStages({ batch, workspace, save, context,
     'checkpoint',
     'publish',
   ];
+  const capture = async (progress, allowInvalid = false) => {
+    if (typeof workspace.captureCheckpoint !== 'function') return;
+    try {
+      progress.checkpoint = await workspace.captureCheckpoint(batch);
+    } catch (error) {
+      if (
+        !allowInvalid ||
+        !['workspace-scope-invalid', 'workspace-evidence-invalid'].includes(
+          controllerFailureCode(error),
+        )
+      )
+        throw error;
+      // Verification, immediately after each writing model stage, settles this
+      // known validation failure. Never retain a stale valid checkpoint for it.
+      delete progress.checkpoint;
+    }
+  };
   let progress = batch.controllerProgress;
   if (progress?.status === 'interrupted') {
     validateObservationResume(batch);
@@ -538,8 +589,7 @@ export async function runImplementationStages({ batch, workspace, save, context,
       next: 0,
       completed: [],
     };
-    if (typeof workspace.captureCheckpoint === 'function')
-      progress.checkpoint = await workspace.captureCheckpoint(batch);
+    await capture(progress, true);
   }
   if (
     progress.implementationRound !== undefined &&
@@ -605,19 +655,26 @@ export async function runImplementationStages({ batch, workspace, save, context,
       if (definite) {
         // Failure capture is itself a boundary: if it fails, keep running and
         // require explicit recovery rather than treating unknown output as reusable.
-        if (typeof workspace.captureCheckpoint === 'function')
-          progress.checkpoint = await workspace.captureCheckpoint(batch);
+        if (['workspace-scope-invalid', 'workspace-evidence-invalid'].includes(code))
+          delete progress.checkpoint;
+        else await capture(progress, true);
         progress.status = 'failed';
         progress.failedStep = step;
         progress.failureCode = code;
+        const attempt =
+          batch.implementation &&
+          implementationAttempts(batch).find(
+            (entry) => entry.round === (progress.implementationRound ?? progress.round),
+          );
+        if (attempt?.status === 'running') attempt.status = 'failed';
+        await save();
       }
       throw error;
     }
     progress.completed.push({ step, ...(step === 'checkpoint' ? { sha: result } : {}) });
     progress.next = index + 1;
     delete progress.pending;
-    if (typeof workspace.captureCheckpoint === 'function')
-      progress.checkpoint = await workspace.captureCheckpoint(batch);
+    await capture(progress, ['execute', 'simplify'].includes(step));
     await save();
   }
   progress.status = 'completed';

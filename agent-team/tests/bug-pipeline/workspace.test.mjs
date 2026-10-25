@@ -1167,6 +1167,7 @@ for (const outcome of [
   'frozen',
   'capture-failure',
   'unknown',
+  'scope-invalid',
 ])
   test(`Author9 F2 real failed correction worktree ${outcome} requires exact retained output before another paid call`, async (t) => {
     const { reserveImplementation, historyDigest } =
@@ -1208,6 +1209,8 @@ for (const outcome of [
         execute: async () => {
           paid++;
           await writeFile(file, `export const filter = "owned correction ${paid}";\n`);
+          if (outcome === 'scope-invalid' && paid === 1)
+            await writeFile(path.join(cwd, 'foreign.ts'), 'outside accepted scope');
           if (outcome === 'unknown')
             throw Object.assign(new Error('Unconfirmed model outcome'), {
               code: 'model-execution-failed',
@@ -1220,6 +1223,7 @@ for (const outcome of [
     });
     await workspace.prepare(batch);
     batch.sha = batch.baseSha;
+    if (outcome === 'scope-invalid') batch.sha = await workspace.checkpoint(batch);
     const capture = workspace.captureCheckpoint;
     let captures = 0;
     workspace.captureCheckpoint = async (b) => {
@@ -1263,8 +1267,14 @@ for (const outcome of [
     first.status = 'failed';
     batch.failureCode = batch.controllerProgress.failureCode;
     const retained = structuredClone(batch.controllerProgress);
-    assert.equal(retained.checkpoint.head, batch.sha);
-    assert.equal(retained.checkpoint.output[plan.scope[0]].sha256.length, 64);
+    if (outcome === 'scope-invalid') {
+      assert.equal(retained.checkpoint, undefined);
+      assert.equal(retained.failedStep, 'verify-before');
+      assert.equal(retained.failureCode, 'workspace-scope-invalid');
+    } else {
+      assert.equal(retained.checkpoint.head, batch.sha);
+      assert.equal(retained.checkpoint.output[plan.scope[0]].sha256.length, 64);
+    }
     let canonical = { schemaVersion: 1, repository: repo, batches: [structuredClone(batch)] };
     const store = {
       load: async () => structuredClone(canonical),
@@ -1324,7 +1334,14 @@ for (const outcome of [
         path.join(cwd, 'artifacts/task-validation', batch.id, 'implementation-plan.md'),
         'changed frozen plan',
       );
-    if (outcome !== 'exact') {
+    if (outcome === 'scope-invalid') {
+      await assert.rejects(workspace.prepare(batch), /outside accepted/);
+      assert.equal(paid, 1, 'An allowance never makes invalid output reusable');
+      await rm(path.join(cwd, 'foreign.ts'));
+      await git(cwd, 'restore', '--', plan.scope[0]);
+      await rm(path.join(cwd, 'artifacts/task-validation', batch.id, 'review-feedback.json'));
+    }
+    if (!['exact', 'scope-invalid'].includes(outcome)) {
       await assert.rejects(workspace.prepare(batch));
       assert.equal(paid, 1);
       assert.equal(batch.implementation.length, 4);
@@ -1353,3 +1370,205 @@ for (const outcome of [
     assert.equal(batch.implementation[3].status, 'failed');
     assert.notEqual(batch.sha, retained.sourceSha);
   });
+
+for (const invalid of ['outside-scope', 'symlink', 'frozen-contract']) {
+  test(`Claude504 real ${invalid} failure consumes initial attempts inside the native retry budget`, async (t) => {
+    const { runPipeline } = await import('../../src/bug-pipeline/pipeline.mjs');
+    const { root } = await gitFixture(t),
+      plan = implementationPlan([17]);
+    const repo = 'l2v-hub/ClinicOS';
+    plan.verification.push({ command: 'npm', args: ['--prefix', 'frontend', 'run', 'build'] });
+    let remote = {
+      schemaVersion: 1,
+      repository: repo,
+      batches: [
+        {
+          id: 'bug-batch-17',
+          branch: 'codex/bug-batch-17',
+          issues: [17],
+          plan,
+          phase: 'planned',
+          implementation: [],
+          reviews: [],
+          sha: null,
+          pr: null,
+        },
+      ],
+    };
+    let paid = 0,
+      frozen;
+    const snapshots = [];
+    const workspace = createWorkspace({
+      root,
+      repo,
+      run: async (call) => {
+        if (call.command !== 'codex') return safeGitRunner(call);
+        await makeEvidence(call.cwd, plan);
+        return { ok: true, code: 0, stdout: '# tests 1\n# pass 1\n', stderr: '' };
+      },
+      models: {
+        execute: async ({ cwd }) => {
+          paid++;
+          const file = path.join(cwd, plan.scope[0]);
+          const contract = path.join(
+            cwd,
+            'artifacts/task-validation/bug-batch-17/task-contract.md',
+          );
+          if (paid === 1) {
+            if (invalid === 'outside-scope')
+              await writeFile(path.join(cwd, 'foreign.ts'), 'foreign');
+            if (invalid === 'symlink') {
+              await rm(file);
+              await symlink(path.join(root, 'README.md'), file);
+            }
+            if (invalid === 'frozen-contract') {
+              frozen = await readFile(contract);
+              await writeFile(contract, 'changed frozen contract');
+            }
+          } else {
+            if (invalid === 'outside-scope') await rm(path.join(cwd, 'foreign.ts'));
+            if (invalid === 'symlink') await rm(file);
+            if (invalid === 'frozen-contract') await writeFile(contract, frozen);
+            await writeFile(file, 'export const filter = "fixed";\n');
+          }
+          return { status: 'implemented' };
+        },
+        simplify: async () => ({ status: 'implemented' }),
+        qa: async () => ({ status: 'verified', summary: 'Synthetic QA' }),
+      },
+    });
+    const gh = {
+      intake: async () => {},
+      discoverQueue: async () => [],
+      setIssueStatus: async () => {},
+      commentIssue: async () => {},
+      commentPR: async () => {},
+      viewIssue: async (number) => ({ number, state: 'open', labels: ['bug', 'codex-run'] }),
+      createDraft: async () => ({ number: 81, url: `https://github.com/${repo}/pull/81` }),
+      requiredChecks: async () => ({ ok: true }),
+      reviewFeedback: async () => ({
+        state: 'OPEN',
+        head: remote.batches[0].sha,
+        headRef: remote.batches[0].branch,
+        headRepo: repo,
+        headIsFork: false,
+        baseRef: 'main',
+        comments: [],
+        unresolved: false,
+        changesRequested: false,
+      }),
+    };
+    const store = {
+      load: async () => structuredClone(remote),
+      save: async (state) => {
+        remote = structuredClone(state);
+        snapshots.push(structuredClone(state.batches[0]));
+      },
+    };
+    workspace.review = async (batch) => ({
+      subject_sha: batch.sha,
+      verdict: 'approved',
+      summary: 'Synthetic independent review',
+      findings: [],
+    });
+    await runPipeline({ repo, event: {}, gh, workspace, models: {}, store });
+    const batch = remote.batches[0];
+    assert.equal(paid, 2);
+    assert.deepEqual(
+      batch.implementation.map((entry) => entry.status),
+      ['failed', 'passed'],
+    );
+    const failure = batch.controllerProgressHistory[0];
+    assert.equal(failure.status, 'failed');
+    assert.equal(failure.failedStep, 'verify-before');
+    assert.equal(failure.failureCode, 'workspace-scope-invalid');
+    assert.equal(
+      failure.checkpoint,
+      undefined,
+      'Invalid output never becomes a resumable checkpoint',
+    );
+    assert.ok(
+      snapshots.some(
+        (item) =>
+          item.controllerProgress?.status === 'failed' &&
+          item.implementation[0].status === 'failed',
+      ),
+      'Failure is durably saved before retry',
+    );
+    assert.equal(batch.controllerProgress.status, 'completed');
+    assert.equal(batch.phase, 'ready');
+  });
+}
+
+for (const invalid of ['empty', 'oversize', 'noncontained', 'video', 'symlink-directory']) {
+  test(`Claude504 real ${invalid} evidence is a typed definite validation failure`, async (t) => {
+    const { root } = await gitFixture(t),
+      plan = implementationPlan([17]);
+    const { MAX_EVIDENCE_BYTES } = await import('../../src/bug-pipeline/evidence-limits.mjs');
+    const { open } = await import('node:fs/promises');
+    const batch = {
+      id: 'bug-batch-17',
+      branch: 'codex/bug-batch-17',
+      issues: [17],
+      plan,
+      implementation: [{ round: 1, status: 'running' }],
+      reviews: [],
+    };
+    const cwd = path.join(root, 'agent-team/.worktrees', batch.id);
+    const workspace = createWorkspace({
+      root,
+      repo: 'l2v-hub/ClinicOS',
+      models: {
+        execute: async () => {
+          if (invalid === 'symlink-directory') {
+            const outside = await tempDir(t);
+            await symlink(
+              outside,
+              path.join(cwd, 'artifacts/task-validation', batch.id, 'evidence'),
+            );
+          }
+          return { status: 'implemented' };
+        },
+      },
+      run: async (call) => {
+        if (call.command !== 'codex') return safeGitRunner(call);
+        await makeEvidence(cwd, plan);
+        const screenshot = path.join(cwd, plan.evidence[0].screenshot);
+        if (invalid === 'empty') await writeFile(screenshot, '');
+        if (invalid === 'oversize') {
+          const handle = await open(screenshot, 'w');
+          await handle.truncate(MAX_EVIDENCE_BYTES + 1);
+          await handle.close();
+        }
+        if (invalid === 'noncontained') {
+          const outside = await tempDir(t);
+          await makeEvidence(outside, plan);
+          await rm(screenshot);
+          await symlink(path.join(outside, plan.evidence[0].screenshot), screenshot);
+        }
+        if (invalid === 'video') {
+          plan.evidence[0].video = plan.evidence[0].screenshot.replace('.png', '.webm');
+          await writeFile(path.join(cwd, plan.evidence[0].video), Buffer.alloc(32));
+        }
+        return { ok: true, code: 0, stdout: '# tests 1\n# pass 1\n', stderr: '' };
+      },
+    });
+    if (invalid === 'video')
+      plan.evidence[0].video = plan.evidence[0].screenshot.replace('.png', '.webm');
+    await workspace.prepare(batch);
+    await assert.rejects(
+      runImplementationStages({
+        batch,
+        workspace,
+        save: async () => {},
+        context: { phase: 'implementation', round: 1, implementationRound: 1 },
+      }),
+      (error) => error.code === 'workspace-evidence-invalid',
+    );
+    assert.equal(batch.controllerProgress.status, 'failed');
+    assert.equal(batch.controllerProgress.failedStep, 'verify-before');
+    assert.equal(batch.controllerProgress.failureCode, 'workspace-evidence-invalid');
+    assert.equal(batch.implementation[0].status, 'failed');
+    assert.equal(batch.controllerProgress.checkpoint, undefined);
+  });
+}
