@@ -1,0 +1,317 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "nonce": "63298673-dab9-4083-b65f-6e930ee3e604",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "65832e2c00861f9b2e2fbd9873f196373d60a7a2",
+      "baseSha": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+      "evidence": "independent-qa1/report.md",
+      "reason": "Actual independently reserved child attempt 1; FAILED independent QA, preserved unchanged",
+      "independentQaNonce": "b5903280-392e-4013-8af5-2f6df465c7c5",
+      "independentQaSealSha256": "2a58a46ae81da07a168237fbbf81600a0429e9f2c20fb507ff75ef8ca0624a65"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "nonce": "5f4c166d-91f7-4c93-a701-337cf77ceddc",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "33a6081b021487336b4508ea9e4468d32085f392",
+      "baseSha": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+      "evidence": "independent-qa2/report.md",
+      "reason": "Actual independently reserved child attempt 2; New independent QA2 verified frozen bytes; hosted auth and activation remain separate failed/unverified gates",
+      "independentQaNonce": "39759edd-9ecc-4354-83fc-fecf1f3f8964",
+      "independentQaSealSha256": "04d88598b770dd3741956f108c54485cbe129abfa1ee656591cb47921927009f"
+    },
+    {
+      "round": 3,
+      "status": "failed",
+      "nonce": "741771cd-2431-4219-abc2-d5b9974204b8",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "4738b0cc9c33380e2d8b9c7a6ca165f06f29ab4c",
+      "baseSha": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+      "evidence": "independent-qa3/report.md",
+      "reason": "Actual reserved author3 FAILED independentQA3 preclaim specification drift; source and failure preserved",
+      "independentQaNonce": "fe7976fa-c9a0-49f1-be6c-6bccfb76203b",
+      "independentQaSealSha256": "beec6a933509eb8460d393f05e8ee376200a1799ad9e76b682a55dfd3c51345c"
+    },
+    {
+      "round": 4,
+      "status": "passed",
+      "nonce": "74371be7-80dc-4621-ad78-43eb48d0533e",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "2ad07687af6f15b0c551e765875d5dbfc474e5c2",
+      "baseSha": "32b9946adcb3744c5f549600acf6fea6140bcfb9",
+      "evidence": "integration-qa5/report.md",
+      "reason": "Actual author4 passed independentQA4; deterministic integration with genuinely reviewed controller504 passed NEW independentintegrationQA5. Source4 remains df9b51a; no additional model implementation round",
+      "independentQaNonce": "bf43c9b5-ae06-4d22-8fcb-d88b8e6feffb",
+      "independentQaSealSha256": "2659bb50d9f66ae5cbb930637c5e675291a483b10ccb0e7763fef23be237b965"
+    }
+  ],
+  "reviews": [
+    {
+      "round": 1,
+      "status": "changes-requested",
+      "subjectSha": "9ac823307f981da33e96eab33cc18d6ce139ed93"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "changes-requested",
+        "subject_sha": "9ac823307f981da33e96eab33cc18d6ce139ed93",
+        "review_sha256": "59d0ec054571e52bf8b521656c638c279f0d66fe48f956a3852b099558c9b9d7"
+      }
+    ]
+  },
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"9ac823307f981da33e96eab33cc18d6ce139ed93\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"Round 1, read-only static review of the source delta 715a4b9e..9ac82330: workflow, cloud-review-worker.mjs, comment-review-handoff.mjs, standalone-review.mjs, claude-bug-review.mjs and docs. I read the tests by name only and ran nothing. This is a trust-root PR (.github/ and agent-team/src/): it still needs an independent native human approval, and this review is not that approval.\\n\\nWhat holds. The workflow only runs on refs/heads/main and checks out trusted main with persist-credentials false; it never checks out the pull_request_target head. Labels and comments only wake the worker. Authority comes from durable comment-requested subjects, and the native claim CAS checks SHA, ownership, checks and budget. Reviewed code is fetched as GitHub API blobs, checked against the git object hashes, and never written to disk or executed.\\n\\nThe Claude child (process.mjs envMode 'review') gets an isolated HOME and CLAUDE_CONFIG_DIR, an empty cwd, no tools, no MCP, no setting sources and plan mode. Its only credential is CLAUDE_CODE_OAUTH_TOKEN: GH_TOKEN, the API keys and the Codex keys are not passed. A real probe runs before every claim, so a bad credential or unsupported CLI flag never spends a round. Model output is schema-constrained and re-validated: tracked file paths, verdict and findings consistent, secret patterns rejected. Publication re-checks the claim right before the comment, so a stale result cannot consume a replacement reservation.\\n\\nCapability limits, which are not defects: any source file over 160 KiB, binary sources, and PRs with more than 80 changed source files are 'source-unavailable' and stay with the local reviewer. App.tsx-sized changes will usually fall into this. Activation is not verified: the PR states that the hosted probe rejected the existing secret.\\n\\nResidual risk: PR, issue and evidence text is untrusted input to a model whose approval feeds the gates. Prompt injection can bias a verdict, but it cannot act. Codex final QA, required checks and human approval for the trust root remain the mitigation.\\n\\nFindings: 2 medium, 1 low.\",\n  \"findings\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \"agent-team/src/bug-pipeline/cloud-review-worker.mjs\",\n      \"line\": 393,\n      \"problem\": \"Every model failure after the claim is settled with failOwnedClaim. That spends the review round (limit 4), sets the batch to phase 'blocked' and deletes approvedSha, and an operator has to recover it. This includes transient and capacity failures such as claude-rate-limit, claude-overloaded, claude-timeout and claude-spawn-failed. Two cases are likely in practice. (1) The packet bound is in bytes, not tokens (MAX_PACKET 1.2 MiB at :24). A packet near that size (about 300k+ tokens of JSON-escaped source) can exceed the model context, so the same subject fails deterministically after the claim on every recovery and retry, and each one burns a round. (2) The Claude Max subscription is shared with interactive use, so a usage-window limit can hit during the 20-minute review even though the 1-minute probe just passed. Either way, a reviewable PR loses rounds to infrastructure, not to code quality.\",\n      \"requested_change\": \"Estimate input tokens (or cap the packet well below the model context) and treat an oversized packet as 'source-unavailable' before the claim. For transient provider codes (rate-limit, overloaded, spawn-failed, timeout, authentication-error), do not spend the round or block the batch. Either release the claim back to comment-requested with a bounded per-SHA retry counter and backoff, or leave it running for the next scheduled worker to re-claim. Keep the spend-and-block path for deterministic invalid output only.\",\n      \"test_expectation\": \"A packet whose estimated tokens exceed the cap is reported as source-unavailable with no claim and no round change. A claude-rate-limit result after the claim leaves reviews.length and the batch phase unchanged and is retried on the next run, up to the bound. claude-invalid-json still spends exactly one round and blocks.\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"agent-team/src/bug-pipeline/cloud-review-worker.mjs\",\n      \"line\": 413,\n      \"problem\": \"assertExpectedClaim (comment-review-handoff.mjs:25) compares the whole durable batch deep-equal to the claim-time snapshot. Any write to that batch during the up-to-20-minute review returns ownership-changed: Codex controller check or label observations, issue projection, or a reconcile by the local reviewer. That covers both the submit path (:413) and the failure path (:395). The completed review is then dropped. It is not posted, not in the receipt (the receipt only has status, pr, sha and round), and not stored anywhere. Meanwhile the claim stays comment-running with its round spent until manual recovery. This contradicts docs/cloud-claude-review.md ('Publication errors never discard findings'). The local CLI path, which does not pass expectedClaim, is unaffected.\",\n      \"requested_change\": \"Bind the guard to the claim identity fields: pr, sha, baseSha, externalReview.{status, owner, claimId, requestId, subjectSha}, reviews.length and the last round's status. Do not deep-compare the whole batch. On a genuine ownership change, keep the validated report: put the sanitized report JSON in the uploaded receipt artifact, or post it as a clearly non-native marked comment for reconciliation. Never let it vanish.\",\n      \"test_expectation\": \"A concurrent unrelated batch field update (for example a check observation) during the review still publishes the report. A replacement claim (new claimId or round) yields ownership-changed, posts nothing native, and the receipt contains the full validated report and its digest.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \".github/workflows/claude-cloud-review.yml\",\n      \"line\": 20,\n      \"problem\": \"The job grants GITHUB_TOKEN contents, issues, pull-requests and actions write, but nothing uses GITHUB_TOKEN. Checkout has persist-credentials false, all gh calls use GH_TOKEN (CLINICOS_BOT_TOKEN), and upload-artifact uses the runtime token. These permissions only widen what a compromised step could do with GITHUB_TOKEN. Separately, the CLI is installed with 'npm install @anthropic-ai/claude-code@2.1.301' (:56) with no lockfile or integrity pin. Only the top-level version is fixed, and the installed code later runs with CLAUDE_CODE_OAUTH_TOKEN in its environment.\",\n      \"requested_change\": \"Set the job permissions to 'contents: read' (or {}) since GH_TOKEN carries the needed scopes. Install the CLI from a committed lockfile (npm ci against a small tools package-lock) or verify the tarball integrity hash before use.\",\n      \"test_expectation\": \"A workflow lint or static test asserts the job permissions are read-only and the CLI install uses a lockfile or integrity pin. The probe still passes with the reduced permissions.\"\n    }\n  ]\n}\n"
+  },
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/claude-cloud-review.yml",
+      "blob": "2cec3c15f2eb15196c2464f29d542a4db3a36fa6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "blob": "b1045645644a81aaf8314b6e4990f3b392a9e8a0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "blob": "1aecac72761dd714724623ff3386b2529e51ec46",
+      "mode": "100644",
+      "baseBlob": "f203d2bb5646e988a1f191a513b45c69f8a12916",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "blob": "f33f41c1a38c19e70d7160790b9e550011b4b513",
+      "mode": "100644",
+      "baseBlob": "f6552446fd07dfdbe4b38e17cbe8aef196f9de28",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "blob": "3aa52fd3c9040e39c1446deddf6ea97e9fa3ea8b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "blob": "90b2385457dc583042aab26f6cee7689c5856a3f",
+      "mode": "100644",
+      "baseBlob": "f8ea1c362906a0ea76fc98a33d106b832ccb882f",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "blob": "d0da9f1505542b8a42a2a094964b2658b299eba2",
+      "mode": "100644",
+      "baseBlob": "755bb6c440554c88354b876d8b2c7a3f5bbcfbe1",
+      "baseMode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/actual-authentication-result.json",
+      "blob": "e8db8a885b3bbbcb17dc7f4c5f20a3c3ac410c37",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/actual-format-result.json",
+      "blob": "63292ed99f5843d72bb4b74745f5c9012b9fc7b3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/analysis.md",
+      "blob": "7782c76c0488d5cf0191c5b870d2be9c77ba7b3b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/implementation-plan.md",
+      "blob": "122caa9e28d6e74cb26064648610204233e498b2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/imported-history.json",
+      "blob": "592cac8164b308022aaf6b7807f9715d0d914dff",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa1/STOP.json",
+      "blob": "ba5ed678f6792a2f5fb5be3b309a61933b3fbe8e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa1/claim-race-probe-node22.log",
+      "blob": "9ce64749da35f7ba28837d3d2bda15953674f5d3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa1/focused-node22.log",
+      "blob": "a677461a79e048c99a707affe7cb8632b2f8fc6b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa1/report.md",
+      "blob": "c74c2df1279d54ecfcdd0fefa926002d943ba213",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa1/result.json",
+      "blob": "0196f2770caa7c0e86fb40a5f71bcbc7fcf9d1fe",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa1/seal.json",
+      "blob": "994fd79219beb78ef57a4c8c9c77af9e47706272",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa2/STOP.json",
+      "blob": "5b4a155688e6d4f204a9df58fa1e8b9ad5afa9b6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa2/focused-node22.log",
+      "blob": "8717de0b65102adb00df3f797e9c775e8b0717bb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa2/report.md",
+      "blob": "2b321d5cfd2f8dc2f61bbb494f3cc3a27d730869",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa2/result.json",
+      "blob": "a32977913d0f055805b40bf5c44d4a8d337eafa4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/independent-qa2/seal.json",
+      "blob": "b706df7cba56ee5836257428dce17160d65193e3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/source-manifest.json",
+      "blob": "8527588a02c04da3609206f20d50de633b8db8eb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/task-contract.md",
+      "blob": "e65a090b984ef5e485d3ba63397f033702f37531",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-claude-max-review-worker/validation-report.md",
+      "blob": "1439e770c373ea7e1419c7410e7d35b02198164b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "docs/cloud-claude-review.md",
+      "blob": "32867115a3f2e654534e29985bad7de55006846a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/claude-cloud-tools/package-lock.json",
+      "blob": "6c6d0480b3d68d1749c1069f8af7303cb77c6789",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/claude-cloud-tools/package.json",
+      "blob": "22e14325cb0ab01278feb5d2f253e7772f693be2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.mjs",
+      "blob": "fe1bf08d106c11aef44731a4d1cef708fe661aa8",
+      "mode": "100644",
+      "baseBlob": "9524356fb52bae39cde92de27daeb14c370db090",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "actual-authentication-result.json": "8d20613ea24e7c54cf25c456e955952612687a934b3698f0d6bf2fe8ff88d9f6",
+    "actual-format-result.json": "f3d2acb5961296d4e19a05eba48d387902b3bdee68b689827ecc4e72c5a19b85",
+    "analysis.md": "6ad6916ec2d49cacb79c99d56a12b807a09e4a1ca2c9cdc670ee6ab9c8dde61c",
+    "claude-review1-amendment.md": "195465c0413fbcfecbef15ca27accaf9869070744c442a2ff593ae45afb8afe3",
+    "implementation-plan.md": "2eff4fb933d4c17ca1b81eb22dcecb2291d6e8c1cad55d274ff6f1587ffbc2a9",
+    "independent-qa1/report.md": "49c2ccead1b56e5c2d99c65f23ddb6aa157171fdb845f1492dfdf41db650e87f",
+    "independent-qa2/report.md": "3c0b5eb16fa01faa589b277441981ef7eca7ca5a2168805c656a5a292063ac11",
+    "independent-qa3/STOP.json": "c46861636023d1bb2430819bfd39306daaeefe4edb4ac8df00667a7b82821b4a",
+    "independent-qa3/report.md": "b3274ca805ae5f3f8a447241f6631d75bd289ad3b9290db2e9e7445e1dcf1d19",
+    "independent-qa3/result.json": "81b65105bf076d3d0d5270e2452424bbb9135a9e3e02822adb3a5aadff1f313f",
+    "independent-qa3/seal.json": "beec6a933509eb8460d393f05e8ee376200a1799ad9e76b682a55dfd3c51345c",
+    "independent-qa4/STOP.json": "fe3c90223d569c1a9223fb44b3cda981a7f05893f95ee82dc36bc60b8df93191",
+    "independent-qa4/report.md": "06f50fcf3713021efc898062458809e1a950b1e9570d5eef1727aea781040f8f",
+    "independent-qa4/result.json": "66d90a33b9845d67ccc898764609fda34e4c2271ea79577d769063f87a0b6d7c",
+    "independent-qa4/seal.json": "ccaa47a2ddb55c71dc625355b278062aac95b99ea9e785f404008251a443510d",
+    "integration-author-report.md": "2bfdfdf5b310296f7e9a30cbb12109a35f5caee03288d3b33b1684eeb21926c3",
+    "integration-qa5/STOP.json": "fad0e2c1e4337ac6c87e111e5e342a7a62e75e20334471dfea733522a7ea0191",
+    "integration-qa5/report.md": "081327a98b5caa268e1eab3d2da6731faafb397cbe28acd3cd46bb9dfdf726e6",
+    "integration-qa5/result.json": "8f7b513df534d5cc7743de6dc01831bbff855e00b4827cf13600aeda6e07a5ea",
+    "integration-qa5/seal.json": "2659bb50d9f66ae5cbb930637c5e675291a483b10ccb0e7763fef23be237b965",
+    "integration-source-freeze.json": "15c3b6de653db4d40d43dc2cacdd2c3ed0d3074a5d4e098f889ece36214bf03c",
+    "locked-cli-qualification.json": "18e2f021fb4ef7eb9dff1a5d76e2c4c54a26e41ea55382a5ccf3974fcb98a487",
+    "source-manifest.json": "6231384d60b246ecee6d768f0cff7c16e39cda734d5297ed33213b338016bfa5",
+    "task-contract.md": "dcf8b76f02c7a3758e1da763ad182dd8a1da37e30cf7a44f892a19a0eee0ae32",
+    "validation-report.md": "9a80b7c9c5e58b3962390ef220752e1e07c738ece48771675f1419362eb8b2dc"
+  }
+}

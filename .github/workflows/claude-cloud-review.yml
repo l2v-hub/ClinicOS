@@ -1,0 +1,73 @@
+name: Claude cloud review
+
+on:
+  issues:
+    types: [labeled]
+  pull_request_target:
+    types: [labeled]
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Subscription authentication probe or native queued review
+        type: choice
+        options: [probe, review]
+        default: probe
+  schedule:
+    - cron: '*/10 * * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    if: >-
+      github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/main' &&
+      (vars.CLAUDE_CLOUD_REVIEW_ENABLED == 'true' ||
+       (github.event_name == 'workflow_dispatch' && inputs.mode == 'probe')) &&
+      ((github.event_name == 'issues' && github.event.label.name == 'claude-review-ready') ||
+       (github.event_name == 'pull_request_target' && github.event.label.name == 'claude-review-ready') ||
+       (github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '<!-- clinicos-review-handoff:v1 -->') && contains(github.event.comment.body, '"kind": "request"')) ||
+       github.event_name == 'workflow_dispatch' || github.event_name == 'schedule')
+    concurrency:
+      group: clinicos-claude-cloud-review-${{ github.repository }}
+      cancel-in-progress: false
+    runs-on: ubuntu-22.04
+    timeout-minutes: 35
+    steps:
+      # pull_request_target is privileged: never use its head/ref/SHA for checkout.
+      - name: Checkout trusted main
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: refs/heads/main
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      # Install outside the checkout, before credentials enter any step environment.
+      # No repository install scripts, PR checkout or reviewed code execution.
+      - name: Install qualified Claude CLI
+        run: |
+          mkdir -p "$RUNNER_TEMP/claude-cloud-tools"
+          cp scripts/automation/claude-cloud-tools/package.json scripts/automation/claude-cloud-tools/package-lock.json "$RUNNER_TEMP/claude-cloud-tools/"
+          npm ci --prefix "$RUNNER_TEMP/claude-cloud-tools" --no-audit --no-fund
+      - name: Probe subscription and process native review request
+        env:
+          CLAUDE_CLI_PATH: ${{ runner.temp }}/claude-cloud-tools/node_modules/.bin/claude
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          CLAUDE_REVIEW_AUTH_MODE: subscription
+          # PAT events and explicit dispatch wake Codex; never forwarded to Claude.
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+          CLOUD_REVIEW_MODE: ${{ inputs.mode || 'review' }}
+        run: >-
+          node agent-team/src/bug-pipeline/cloud-review-worker.mjs "--${CLOUD_REVIEW_MODE}"
+          > "$RUNNER_TEMP/claude-cloud-review-receipt.json"
+      - name: Upload finite sanitized receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: claude-cloud-review-receipt-${{ github.run_id }}
+          path: ${{ runner.temp }}/claude-cloud-review-receipt.json
+          if-no-files-found: ignore
+          retention-days: 14

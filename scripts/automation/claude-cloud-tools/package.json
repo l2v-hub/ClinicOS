@@ -1,0 +1,9 @@
+{
+  "name": "clinicos-claude-cloud-tools",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Isolated pinned Claude CLI installation for trusted cloud review runners",
+  "dependencies": {
+    "@anthropic-ai/claude-code": "2.1.301"
+  }
+}

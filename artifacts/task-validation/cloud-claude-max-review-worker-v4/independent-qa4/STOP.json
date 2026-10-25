@@ -1,0 +1,9 @@
+{
+  "nonce": "0b09d6e7-82bd-48a8-afed-2bdea9d6043c",
+  "status": "SEALED_READY_FOR_CODEX_QA",
+  "verdict": "READY FOR CODEX QA",
+  "activationVerified": false,
+  "writesLimitedTo": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/cloud-qa4",
+  "sourceManifestSha256": "6e63324f25e2047bc57877d520d4fd0227345c6f8cda69a7c3584cb15ab691fe",
+  "noFurtherWorkAuthorizedUnderThisReservation": true
+}

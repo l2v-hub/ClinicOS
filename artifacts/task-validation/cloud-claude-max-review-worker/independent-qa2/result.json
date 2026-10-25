@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "nonce": "39759edd-9ecc-4354-83fc-fecf1f3f8964",
+  "verdict": "READY FOR CODEX QA",
+  "codeGate": "PASS",
+  "wholeActivation": "UNVERIFIED",
+  "hostedAuthentication": {
+    "status": "FAILED",
+    "runId": "40202235777",
+    "tokenPresent": true,
+    "providerAuthenticated": false,
+    "retried": false
+  },
+  "findings": [],
+  "phases": {
+    "0": "PASS",
+    "1": "PASS",
+    "2": "PASS",
+    "3": "PASS",
+    "4": "PASS",
+    "5": "PASS"
+  },
+  "tests": {
+    "focused": {
+      "total": 116,
+      "pass": 116,
+      "fail": 0,
+      "skip": 0
+    },
+    "full": {
+      "total": 1247,
+      "pass": 1244,
+      "fail": 0,
+      "skip": 3,
+      "runs": 1
+    },
+    "independentProbeGroups": 12
+  },
+  "sourceManifestSha256": "b95aa4c7a9c716bd69e2a4edbcbb62de0142664fc659b772bdc5c4a665461da3",
+  "sourceMatchesReservation": true,
+  "fixtureGitObjectByteIdentical": true,
+  "realProviderExecuted": false,
+  "realGithubMutated": false,
+  "sealedAt": "2026-10-25T15:50:03.279067+00:00"
+}

@@ -1,0 +1,13 @@
+{
+  "packageHashes": {
+    "package.json": "545379c90727ef75e5d7278d8484e36a24f7cc034edd92a56a69b049c7326f59",
+    "package-lock.json": "70cf34a9a534c37fbcfa1580cd2da69c749bbaafac97f07f3be8bcf63aefea11"
+  },
+  "installExit": 0,
+  "providerCredentialsPassed": false,
+  "githubCredentialsPassed": false,
+  "providerCalls": 0,
+  "githubMutations": 0,
+  "versionExit": 0,
+  "version": "2.1.301 (Claude Code)"
+}

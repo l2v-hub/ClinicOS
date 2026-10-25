@@ -858,8 +858,9 @@ export function createStandaloneReview({
   return {
     ...handoff,
     request: (...args) => gated('request', ...args),
-    claim: (...args) => gated('claim', ...args),
+    claim: (pr, options) => gated('claim', pr, options === undefined ? undefined : clone(options)),
     submit: (...args) => gated('submit', ...args),
+    failOwnedClaim: (...args) => operation(() => handoff.failOwnedClaim(...args)),
     reconcilePR: (...args) => gated('reconcilePR', ...args),
     recover: (...args) => operation(() => handoff.recover(...args)),
     extendBudget: (...args) => operation(() => handoff.extendBudget(...args)),
