@@ -1,0 +1,432 @@
+name: Read fixed clinical safe source artifact
+'on':
+  push:
+    branches:
+      - codex/clinical-safe-source-reader-20261026
+permissions:
+  actions: read
+jobs:
+  read-fixed-artifact:
+    if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/codex/clinical-safe-source-reader-20261026' && github.run_attempt == 1
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          github-token: ${{ github.token }}
+          repository: l2v-hub/ClinicOS
+          run-id: 40414527536
+          name: clinical-recovery-safe-artifacts-40414527536
+          path: ${{ runner.temp }}/input-artifact
+      - name: Materialize fixed trusted reader
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/guarded-source-reader"
+          if [ -e "$root" ] || [ -L "$root" ]; then exit 1; fi
+          install -d -m 700 "$root"
+          cat > "$root/reader.mjs" <<'FIXED_READER'
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {lstat,readdir,readFile,realpath} from 'node:fs/promises';
+          import path from 'node:path';
+          import {fileURLToPath} from 'node:url';
+          import {gzipSync} from 'node:zlib';
+          import {sanitizeText} from './sanitize.mjs';
+          const hash=b=>createHash('sha256').update(b).digest('hex');
+          const MAX_FILE=256*1024,MAX_ROUND=2*1024*1024,MAX_SOURCE=8*1024*1024,MAX_PAYLOAD=16*1024*1024;
+          const knownCredentialKey = `["']?(?:OPENAI_API_KEY|ANTHROPIC_API_KEY|CLAUDE_CODE_OAUTH_TOKEN|CODEX_ACCESS_TOKEN|DATABASE_URL|GITHUB_TOKEN|GH_TOKEN)["']?`;
+          const secretPattern = new RegExp(`-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|(?:${knownCredentialKey}\\s*(?::\\s*[^=;\\n]+)?=\\s*(?:['"][^'"\\r\\n]+['"]|[^\\s;]+)|${knownCredentialKey}\\s*:\\s*['"][^'"\\r\\n]+['"])|(?:password|secret|api[_-]?key|access[_-]?token)\\s*[:=]\\s*['"][A-Za-z0-9_+./=-]{12,}['"]|(?:postgres(?:ql)?|https?):\\/\\/[^\\s/@]+:[^\\s/@]+@`, 'i');
+          
+          function text(bytes,max=MAX_FILE){assert(bytes.length<=max);const content=new TextDecoder('utf-8',{fatal:true}).decode(bytes);assert(!/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(content));const whitespaceOnly=content.replace(/[ \t]+(\r?\n)/g,'$1').replace(/[ \t]+$/,'');assert.equal(sanitizeText(content),whitespaceOnly);assert(!secretPattern.test(content));return content;}
+          function relative(file){assert(typeof file==='string'&&file.length>0&&file.length<500&&!file.startsWith('/')&&!file.includes('\\'));assert(file.split('/').every(p=>p&&p!=='.'&&p!=='..'));return file;}
+          function sourceName(file){relative(file);assert(!/(?:^|\/)(?:home|\.git|\.env[^/]*|credentials?|secrets?|tokens?)(?:\/|\.|$)/i.test(file));assert(/\.(?:[cm]?[jt]sx?|py|css|scss|html|sql|prisma)$/.test(file));return file;}
+          async function inventory(root){assert.equal(await realpath(root),path.resolve(root));assert(!(await lstat(root)).isSymbolicLink());const files=[],dirs=[];let total=0;async function walk(rel=''){for(const name of await readdir(path.join(root,rel))){const f=relative(rel?rel+'/'+name:name),p=path.join(root,f),s=await lstat(p);assert(!s.isSymbolicLink());assert.equal((await realpath(p)).startsWith(path.resolve(root)+path.sep),true);if(s.isDirectory()){dirs.push(f);await walk(f);}else{assert(s.isFile()&&s.size<=3*1024*1024);files.push(f);total+=s.size;assert(files.length<=160&&total<=24*1024*1024);}}}await walk();return{files,dirs};}
+          async function regular(root,file,max){relative(file);const p=path.join(root,file),s=await lstat(p);assert(s.isFile()&&!s.isSymbolicLink()&&s.size<=max);assert((await realpath(p)).startsWith(path.resolve(root)+path.sep));return readFile(p);}
+          const sorted=a=>[...a].sort();
+          function keys(value,names){assert(value&&typeof value==='object'&&!Array.isArray(value));assert.deepEqual(Object.keys(value).sort(),names.sort());}
+          export async function validateArtifact(root,binding){
+           assert.equal(binding?.schemaVersion,1);assert.equal(binding.repository,'l2v-hub/ClinicOS');assert.equal(binding.readOnly,true);assert.equal(binding.sourceOnlyNoPatientDocuments,true);assert.equal(binding.rounds.length,4);assert(Number.isSafeInteger(binding.runId)&&Number.isSafeInteger(binding.artifactId));assert.match(binding.expectedArchiveSha256,/^[a-f0-9]{64}$/);
+           const tree=await inventory(root),expected=new Set(),snapshots=[];let total=0;
+           for(const r of binding.rounds){assert(/^bug-batch-(506|507)$/.test(r.batchId));assert(Number.isSafeInteger(r.round)&&r.round>0);assert.match(r.checkpointSha256,/^[a-f0-9]{64}$/);const base=`failed-code/${r.batchId}/round-${r.round}-verify-before-${r.checkpointSha256}`;expected.add(base+'/manifest.json');expected.add(base+'/source.patch');for(const[f,id]of Object.entries(r.output)){sourceName(f);assert(r.scope.includes(f));if(id!==null)expected.add(base+'/files/'+f);}snapshots.push({r,base});}
+           for(const f of tree.files)assert(f==='diagnostic.json'||f.startsWith('verification/')||expected.has(f));for(const d of tree.dirs)assert(d==='verification'||d.startsWith('verification/')||[...expected].some(f=>f.startsWith(d+'/')));for(const f of expected)assert(tree.files.includes(f),'Missing canonical source file');
+           const collected=[];
+           for(const{r,base}of snapshots){const m=JSON.parse((await regular(root,base+'/manifest.json',65536)).toString('utf8'));keys(m,['schemaVersion','kind','completeness','batchId','sourceSha','baseSha','failedStep','failureCode','round','feedbackSha256','planSha256','checkpointSha256','files','deletedFiles','verification']);assert.equal(m.schemaVersion,1);assert.equal(m.kind,'partial-failed-code-retention');assert.equal(m.completeness,'allowed-source-and-sanitized-verification-metadata-only');assert.equal(m.failedStep,'verify-before');assert.equal(m.failureCode,'workspace-verification-failed');for(const k of['batchId','round','sourceSha','baseSha','planSha256','feedbackSha256','checkpointSha256'])assert.deepEqual(m[k],r[k]);assert(Array.isArray(m.files)&&m.files.length<=20);const alive=Object.entries(r.output).filter(([,v])=>v!==null).map(([f])=>f),dead=Object.entries(r.output).filter(([,v])=>v===null).map(([f])=>f);assert.deepEqual(sorted(m.files.map(f=>f.file)),sorted(alive));assert.equal(new Set(m.files.map(f=>f.file)).size,m.files.length);assert.deepEqual(sorted(m.deletedFiles),sorted(dead));
+            if(m.verification!==null){assert(Array.isArray(m.verification)&&m.verification.length<=12);for(const v of m.verification){keys(v,['index','command','argsSha256','exitCode','ok','stdoutSanitizedCapturedBytes','stderrSanitizedCapturedBytes','stdoutSanitizedSha256','stderrSanitizedSha256']);assert(Number.isSafeInteger(v.index)&&v.index>=0&&v.index<12);assert(['npm','node'].includes(v.command));assert(typeof v.ok==='boolean');assert(v.exitCode===null||(Number.isSafeInteger(v.exitCode)&&v.exitCode>=0&&v.exitCode<=255));for(const k of['argsSha256','stdoutSanitizedSha256','stderrSanitizedSha256'])assert.match(v[k],/^[a-f0-9]{64}$/);for(const k of['stdoutSanitizedCapturedBytes','stderrSanitizedCapturedBytes'])assert(Number.isSafeInteger(v[k])&&v[k]>=0&&v[k]<=2*1024*1024);}}
+            let bytes=0;const files=[];for(const f of m.files){keys(f,['file','bytes','sha256','mode']);sourceName(f.file);const wanted=r.output[f.file];assert(wanted);assert.equal(f.bytes,wanted.bytes);assert.equal(f.sha256,wanted.sha256);assert(Number.isSafeInteger(f.mode)&&f.mode>=0&&f.mode<=0o777);assert.equal(Boolean(f.mode&0o111),wanted.executable);const raw=await regular(root,base+'/files/'+f.file,MAX_FILE);assert.equal(raw.length,f.bytes);assert.equal(hash(raw),f.sha256);text(raw);bytes+=raw.length;files.push({path:f.file,sha256:f.sha256,bytes:raw.length,mode:f.mode,base64:raw.toString('base64')});}
+            const patch=await regular(root,base+'/source.patch',MAX_ROUND);text(patch,MAX_ROUND);bytes+=patch.length;assert(bytes<=MAX_ROUND);total+=bytes;assert(total<=MAX_SOURCE);collected.push({batchId:r.batchId,round:r.round,manifest:m,files,sourcePatchSha256:hash(patch),sourcePatchBytes:patch.length});
+           }
+           const payload={type:'clinical-safe-source-payload-v1',runId:binding.runId,artifactId:binding.artifactId,expectedArchiveSha256:binding.expectedArchiveSha256,rounds:collected},raw=Buffer.from(JSON.stringify(payload));assert(raw.length<=MAX_PAYLOAD);return{payload,raw,payloadSha256:hash(raw)};
+          }
+          export function streamPayload(raw,binding){const zipped=gzipSync(raw,{mtime:0}),chunks=[];for(let i=0;i<zipped.length;i+=6144)chunks.push(zipped.subarray(i,i+6144).toString('base64'));return[JSON.stringify({type:'clinical-safe-source-stream-v1',runId:binding.runId,artifactId:binding.artifactId,expectedArchiveSha256:binding.expectedArchiveSha256,payloadSha256:hash(raw),payloadBytes:raw.length,gzipSha256:hash(zipped),gzipBytes:zipped.length,chunkCount:chunks.length}),...chunks.map((data,index)=>JSON.stringify({type:'clinical-safe-source-chunk-v1',index,data}))].join('\n')+'\n';}
+          if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){try{const binding=JSON.parse(await readFile(process.argv[3],'utf8'));const{raw}=await validateArtifact(process.argv[2],binding);process.stdout.write(streamPayload(raw,binding));}catch{process.stderr.write('guard-refused\n');process.exitCode=1;}}
+          FIXED_READER
+          cat > "$root/sanitize.mjs" <<'FIXED_SANITIZE'
+          const RULES = [
+            // Header-style credentials: swallow the optional auth scheme so the token value never survives.
+            [
+              /((?:authorization|cookie|set-cookie)\s*[:=]\s*)((?:bearer|basic|token)\s+)?([^\s,;]+)/gi,
+              '$1[REDACTED]',
+            ],
+            [/\b(?:sk|ghp|github_pat|gho|xoxb|xoxp)[_-][A-Za-z0-9_-]+\b/g, '[REDACTED_TOKEN]'],
+            [
+              /\b(?:OPENAI_API_KEY|ANTHROPIC_API_KEY|CLAUDE_CODE_OAUTH_TOKEN|CODEX_ACCESS_TOKEN|DATABASE_URL|GITHUB_TOKEN|GH_TOKEN)=([^\s]+)/g,
+              (match) => `${match.split('=')[0]}=[REDACTED]`,
+            ],
+            [
+              /\b(?:patientId|patient_id|operatorId|operator_id)=([A-Za-z0-9_-]+)/gi,
+              (match) => `${match.split('=')[0]}=[REDACTED]`,
+            ],
+          ];
+          
+          export function sanitizeText(text = '') {
+            const redacted = RULES.reduce(
+              (value, [pattern, replacement]) => value.replace(pattern, replacement),
+              String(text),
+            );
+            // Deterministic hygiene: captured evidence must pass `git diff --check` (no trailing whitespace).
+            return redacted.replace(/[ \t]+(\r?\n)/g, '$1').replace(/[ \t]+$/, '');
+          }
+          FIXED_SANITIZE
+          cat > "$root/binding.json" <<'FIXED_BINDING'
+          {
+            "schemaVersion": 1,
+            "repository": "l2v-hub/ClinicOS",
+            "runId": 40414527536,
+            "operatorSha": "45d11600b347d000436b8f9f64fcb20a56ef4fb5",
+            "artifactId": 12694889702,
+            "artifactName": "clinical-recovery-safe-artifacts-40414527536",
+            "expectedArchiveSha256": "6eabb0bdaf6f8ad9825ee13b214e1f2ca4997c95d0e344b0f75a153b7faf55cf",
+            "operatorBranch": "codex/clinical-safe-source-reader-20261026",
+            "rounds": [
+              {
+                "batchId": "bug-batch-506",
+                "round": 4,
+                "sourceSha": "5737fc3ae01dc5b8b5b01124daeac1e805fc288f",
+                "baseSha": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+                "planSha256": "b61cde2e31231a0948b07408c99daeb1b246e023329d492f8eeaaca0e9f103e1",
+                "feedbackSha256": "7812b731781ea305edd5450945714467ef5cb0693931825990f93720e5ce49f3",
+                "checkpointSha256": "a4f1e8ad6e564fbc1f681a45e7561fab8d4750ad9d8167bd311ed5cc12e21d45",
+                "scope": [
+                  "e2e/issue506-workspace.mjs",
+                  "frontend/e2e/issue506-workspace.html",
+                  "frontend/e2e/issue506-workspace.tsx",
+                  "frontend/src/components/operator/NewPatientFlow.tsx",
+                  "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+                  "frontend/src/components/shared/DialogLoading.tsx",
+                  "frontend/src/components/shared/DischargeImportModal.tsx",
+                  "frontend/src/components/shared/PatientWorkspaceSurface.css",
+                  "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+                  "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+                  "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+                  "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts"
+                ],
+                "output": {
+                  "e2e/issue506-workspace.mjs": {
+                    "sha256": "94c2a4ad53d955224bc7c14b17bc9421ba797d81ee89a695685bb5ff23415366",
+                    "bytes": 9276,
+                    "executable": false
+                  },
+                  "frontend/e2e/issue506-workspace.html": {
+                    "sha256": "678b56ef7bdd63ecaddf6f17e9770cac3a78ef1a033dfa9daa08552c1e159c05",
+                    "bytes": 272,
+                    "executable": false
+                  },
+                  "frontend/e2e/issue506-workspace.tsx": {
+                    "sha256": "4fc31c5319186440b5b9db661589a444d9960b96bb431d2c69136a0fd22fc975",
+                    "bytes": 2560,
+                    "executable": false
+                  },
+                  "frontend/src/components/operator/NewPatientFlow.tsx": {
+                    "sha256": "ff7f753defce63604e4449d9094cc97519e7349768bdfd0a830464a41023c895",
+                    "bytes": 3887,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/AccessibleDialogSurface.tsx": {
+                    "sha256": "87edd5305aeef4509c72ffcbf6f681fd210b6c1bea665352c3c888f602c02cac",
+                    "bytes": 3914,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/DialogLoading.tsx": {
+                    "sha256": "8ba39e9daa138a1dbd7e64b7b57f414d3a77ad94565e6c0877f5291e9f5ee6f4",
+                    "bytes": 624,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/DischargeImportModal.tsx": {
+                    "sha256": "bcbe05e02a906d6f288fda29c596c67f4e3d6f79b797108ff359cf8b8ea6bbdd",
+                    "bytes": 18007,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/PatientWorkspaceSurface.css": {
+                    "sha256": "b3acc70438a8ffda9e36558534e77ea025f7acd7453ec06348dcb889e1d2b395",
+                    "bytes": 504,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/PatientWorkspaceSurface.tsx": {
+                    "sha256": "5e7eec08822940ff38af6d6e1bdc082438c08827dec8f2b795cf237ef8baf0b9",
+                    "bytes": 4768,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts": {
+                    "sha256": "038b80019589d2ad4fb4c23850ba763b9c20abdb8e53beccd445e3f6a938fc41",
+                    "bytes": 975,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/intake/IntakeWorkspace.tsx": {
+                    "sha256": "cfa4948074e135db2522fc3ae833afc683f566fe9b8a7855324256f95afce86c",
+                    "bytes": 49817,
+                    "executable": false
+                  },
+                  "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts": {
+                    "sha256": "875319eb92fd41cb1b2e274ca697485d0fed88777c296b7e7b6833415b22cbde",
+                    "bytes": 2903,
+                    "executable": false
+                  }
+                }
+              },
+              {
+                "batchId": "bug-batch-506",
+                "round": 5,
+                "sourceSha": "5737fc3ae01dc5b8b5b01124daeac1e805fc288f",
+                "baseSha": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+                "planSha256": "b61cde2e31231a0948b07408c99daeb1b246e023329d492f8eeaaca0e9f103e1",
+                "feedbackSha256": "7812b731781ea305edd5450945714467ef5cb0693931825990f93720e5ce49f3",
+                "checkpointSha256": "07a92733a8afce473579d169c869b07ded5b29077e549727fd161a4317b2a777",
+                "scope": [
+                  "e2e/issue506-workspace.mjs",
+                  "frontend/e2e/issue506-workspace.html",
+                  "frontend/e2e/issue506-workspace.tsx",
+                  "frontend/src/components/operator/NewPatientFlow.tsx",
+                  "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+                  "frontend/src/components/shared/DialogLoading.tsx",
+                  "frontend/src/components/shared/DischargeImportModal.tsx",
+                  "frontend/src/components/shared/PatientWorkspaceSurface.css",
+                  "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+                  "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+                  "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+                  "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts"
+                ],
+                "output": {
+                  "e2e/issue506-workspace.mjs": {
+                    "sha256": "94c2a4ad53d955224bc7c14b17bc9421ba797d81ee89a695685bb5ff23415366",
+                    "bytes": 9276,
+                    "executable": false
+                  },
+                  "frontend/e2e/issue506-workspace.html": {
+                    "sha256": "678b56ef7bdd63ecaddf6f17e9770cac3a78ef1a033dfa9daa08552c1e159c05",
+                    "bytes": 272,
+                    "executable": false
+                  },
+                  "frontend/e2e/issue506-workspace.tsx": {
+                    "sha256": "4fc31c5319186440b5b9db661589a444d9960b96bb431d2c69136a0fd22fc975",
+                    "bytes": 2560,
+                    "executable": false
+                  },
+                  "frontend/src/components/operator/NewPatientFlow.tsx": {
+                    "sha256": "ff7f753defce63604e4449d9094cc97519e7349768bdfd0a830464a41023c895",
+                    "bytes": 3887,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/AccessibleDialogSurface.tsx": {
+                    "sha256": "87edd5305aeef4509c72ffcbf6f681fd210b6c1bea665352c3c888f602c02cac",
+                    "bytes": 3914,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/DialogLoading.tsx": {
+                    "sha256": "8ba39e9daa138a1dbd7e64b7b57f414d3a77ad94565e6c0877f5291e9f5ee6f4",
+                    "bytes": 624,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/DischargeImportModal.tsx": {
+                    "sha256": "4afce9b3d1c0d3f86346c1812b82b52cda2d1c2987de7625d0f48a682d5edbb1",
+                    "bytes": 18089,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/PatientWorkspaceSurface.css": {
+                    "sha256": "b3acc70438a8ffda9e36558534e77ea025f7acd7453ec06348dcb889e1d2b395",
+                    "bytes": 504,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/PatientWorkspaceSurface.tsx": {
+                    "sha256": "27ff12f6020ef24cc897b03570c3fc4d95156d7584e3f0d70e618b805235084d",
+                    "bytes": 4901,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts": {
+                    "sha256": "038b80019589d2ad4fb4c23850ba763b9c20abdb8e53beccd445e3f6a938fc41",
+                    "bytes": 975,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/intake/IntakeWorkspace.tsx": {
+                    "sha256": "61c45c249842c4cf4795bd34d251ff83e8d13895d75a3757e7b61bf5a5cf31e0",
+                    "bytes": 49811,
+                    "executable": false
+                  },
+                  "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts": {
+                    "sha256": "875319eb92fd41cb1b2e274ca697485d0fed88777c296b7e7b6833415b22cbde",
+                    "bytes": 2903,
+                    "executable": false
+                  }
+                }
+              },
+              {
+                "batchId": "bug-batch-507",
+                "round": 5,
+                "sourceSha": "fc42859d7c73f9c90d9d49d8cdafe2d752893de7",
+                "baseSha": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+                "planSha256": "b5eba17f7bd1eb658f555127ce2a1ae08930dfa25916f67e79df903e15f40cd2",
+                "feedbackSha256": "f914aad992972f0f0d7fe07228c9d79f3c142963e42553fe29d3f3c6063e0eb4",
+                "checkpointSha256": "d500df1347841320f2ccd87e98c77e0099f573d9197f556e1e709f1670dc20d2",
+                "scope": [
+                  "e2e/issue507-smoke.mjs",
+                  "e2e/issue507/entry.tsx",
+                  "frontend/src/components/operator/PatientDetail.tsx",
+                  "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+                  "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+                  "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts",
+                  "frontend/src/components/operator/sections/TherapyEditor.tsx",
+                  "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx",
+                  "frontend/src/components/shared/intake/StepClinica.tsx",
+                  "frontend/src/lib/therapyAdmissionDate.ts"
+                ],
+                "output": {
+                  "e2e/issue507-smoke.mjs": {
+                    "sha256": "f5e5d2eb2a4c3fddd2dd0fc7f24cf1725e7f4a95172c5a43b3f785e067ca3a92",
+                    "bytes": 14472,
+                    "executable": false
+                  },
+                  "e2e/issue507/entry.tsx": {
+                    "sha256": "696b0e60fa0d4283cb8ff6a298af8e31861c967532bed6a22248e8f3595dfeb2",
+                    "bytes": 3874,
+                    "executable": false
+                  },
+                  "frontend/src/components/operator/PatientDetail.tsx": {
+                    "sha256": "fb73b4e253f767d6344e57d61c38b8b64222a47a5f2215d4c8a9f1251c8e0dbb",
+                    "bytes": 121197,
+                    "executable": false
+                  },
+                  "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx": {
+                    "sha256": "2b271ce8b317449ebec4990599800a1dd24c3f1b6fc9cea4a7155f29efa5a8da",
+                    "bytes": 47928,
+                    "executable": false
+                  },
+                  "frontend/src/components/operator/cartella/TherapyFormFields.tsx": {
+                    "sha256": "9a0fd94088795f18a87da49720130fbf348a57625c8a667c6b604cb24732cd34",
+                    "bytes": 24487,
+                    "executable": false
+                  },
+                  "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts": {
+                    "sha256": "f94c9e9519e5ff21f2d50fb9066766a66e153fc854f58f0700529de777656569",
+                    "bytes": 8757,
+                    "executable": false
+                  },
+                  "frontend/src/components/operator/sections/TherapyEditor.tsx": {
+                    "sha256": "541279cfc05dace84f7a74c1671b9287689ee6cdbeb94dfc1830d06f0f025ed8",
+                    "bytes": 2303,
+                    "executable": false
+                  },
+                  "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx": {
+                    "sha256": "20f0d70fec15ef9045091f58febb4e01f79fed4165080dd751d8537c6038c23b",
+                    "bytes": 7352,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/intake/StepClinica.tsx": {
+                    "sha256": "ef2ec3c049afbc40bd257f387394ebcff423ffd18a0afab9588e2f1369dc6caa",
+                    "bytes": 10445,
+                    "executable": false
+                  },
+                  "frontend/src/lib/therapyAdmissionDate.ts": {
+                    "sha256": "d24e633ff1d8760e5554f56d54180e5212c9f0b5855e4929dafe078dc8154c5f",
+                    "bytes": 2288,
+                    "executable": false
+                  }
+                }
+              },
+              {
+                "batchId": "bug-batch-507",
+                "round": 6,
+                "sourceSha": "fc42859d7c73f9c90d9d49d8cdafe2d752893de7",
+                "baseSha": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+                "planSha256": "b5eba17f7bd1eb658f555127ce2a1ae08930dfa25916f67e79df903e15f40cd2",
+                "feedbackSha256": "ebcf4c07b038d3c9a05ab22b8d5ddc7e684dd16383055433c4491b61b599e74b",
+                "checkpointSha256": "c85d2fed633ff29fe9df05abd14155c3992f3638d6d9ce61421ea3b8d54562f4",
+                "scope": [
+                  "e2e/issue507-smoke.mjs",
+                  "e2e/issue507/entry.tsx",
+                  "frontend/src/components/operator/PatientDetail.tsx",
+                  "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+                  "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+                  "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts",
+                  "frontend/src/components/operator/sections/TherapyEditor.tsx",
+                  "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx",
+                  "frontend/src/components/shared/intake/StepClinica.tsx",
+                  "frontend/src/lib/therapyAdmissionDate.ts"
+                ],
+                "output": {
+                  "e2e/issue507-smoke.mjs": {
+                    "sha256": "f5e5d2eb2a4c3fddd2dd0fc7f24cf1725e7f4a95172c5a43b3f785e067ca3a92",
+                    "bytes": 14472,
+                    "executable": false
+                  },
+                  "e2e/issue507/entry.tsx": {
+                    "sha256": "696b0e60fa0d4283cb8ff6a298af8e31861c967532bed6a22248e8f3595dfeb2",
+                    "bytes": 3874,
+                    "executable": false
+                  },
+                  "frontend/src/components/operator/PatientDetail.tsx": {
+                    "sha256": "fb73b4e253f767d6344e57d61c38b8b64222a47a5f2215d4c8a9f1251c8e0dbb",
+                    "bytes": 121197,
+                    "executable": false
+                  },
+                  "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx": {
+                    "sha256": "2b271ce8b317449ebec4990599800a1dd24c3f1b6fc9cea4a7155f29efa5a8da",
+                    "bytes": 47928,
+                    "executable": false
+                  },
+                  "frontend/src/components/operator/cartella/TherapyFormFields.tsx": {
+                    "sha256": "9a0fd94088795f18a87da49720130fbf348a57625c8a667c6b604cb24732cd34",
+                    "bytes": 24487,
+                    "executable": false
+                  },
+                  "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts": {
+                    "sha256": "640574fb2a46e04d8414984d0a48810a9571c3d26c927bd8431128075b4c3ef1",
+                    "bytes": 9852,
+                    "executable": false
+                  },
+                  "frontend/src/components/operator/sections/TherapyEditor.tsx": {
+                    "sha256": "541279cfc05dace84f7a74c1671b9287689ee6cdbeb94dfc1830d06f0f025ed8",
+                    "bytes": 2303,
+                    "executable": false
+                  },
+                  "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx": {
+                    "sha256": "0b34a7ec2fde96368daab9dc519102117d980274bbae1f349acd012061fa56b4",
+                    "bytes": 7432,
+                    "executable": false
+                  },
+                  "frontend/src/components/shared/intake/StepClinica.tsx": {
+                    "sha256": "ef2ec3c049afbc40bd257f387394ebcff423ffd18a0afab9588e2f1369dc6caa",
+                    "bytes": 10445,
+                    "executable": false
+                  },
+                  "frontend/src/lib/therapyAdmissionDate.ts": {
+                    "sha256": "d24e633ff1d8760e5554f56d54180e5212c9f0b5855e4929dafe078dc8154c5f",
+                    "bytes": 2288,
+                    "executable": false
+                  }
+                }
+              }
+            ],
+            "maximumSourceBytes": 8388608,
+            "maximumPayloadBytes": 16777216,
+            "readOnly": true,
+            "sourceOnlyNoPatientDocuments": true
+          }
+          FIXED_BINDING
+      - name: Validate and emit bounded source payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          node "$RUNNER_TEMP/guarded-source-reader/reader.mjs" "$RUNNER_TEMP/input-artifact" "$RUNNER_TEMP/guarded-source-reader/binding.json"
