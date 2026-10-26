@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "source": "3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b",
+  "synthetic": true,
+  "onlineValidation": false,
+  "surface": "page.setContent from generated local HTML; reload and rehydration from disk asserted; no application persistence claim",
+  "assertedFixtures": 16,
+  "passedFixtures": 16,
+  "failedFixtures": 0,
+  "memoryTransitions": 54,
+  "consoleErrors": 0,
+  "httpErrors": 0,
+  "externalRequests": 0,
+  "video": "not required: internal-only runner change",
+  "screenshot": "screenshots/result.png",
+  "trace": "trace/trace.zip"
+}

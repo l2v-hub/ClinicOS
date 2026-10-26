@@ -1,0 +1,13 @@
+{
+  "synthetic": true,
+  "ok": true,
+  "stdoutBytes": 2097152,
+  "stdoutCapturedBytes": 32768,
+  "observed": [
+    {
+      "visibleBytes": 32768,
+      "backingBytes": 77120
+    }
+  ],
+  "contractPassed": false
+}

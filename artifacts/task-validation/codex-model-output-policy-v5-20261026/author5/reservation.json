@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-26T07:53:28.411Z",
+  "nonce": "497769ef-a2b3-4253-895d-f5a0266b6220",
+  "executor": "root-codex-director",
+  "maximumMechanicalRevisions": 1,
+  "used": 0,
+  "providerCalls": 0,
+  "status": "reserved-before-mechanical-source5-reorganization",
+  "sourceParent": "752a053e3a94d785e577236923e1dbbf6f27365e",
+  "trustedMain": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "nativeImplementationLimit": 5,
+  "nativeBudgetGrantNonce": "b9f1ecda-664b-4664-a4af-a15597409ef7",
+  "scope": "Mechanical only: restore large standalone-review.test.mjs exact995/895 bytes; move two source4 appended tests/assertions into small standalone new test with minimal exact-copied fixture. No production runtime/validator/bound changes. Actual native reader capacity RED→GREEN, freshQA5 and6newheadCI beforepeer.",
+  "stateCommit": "6165780cecc181dae236763c0a8c3a77d868b0e2",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/5f1de850-4e5d-45e5-9e44-ce93a4c04a5e/accepted.json"
+}

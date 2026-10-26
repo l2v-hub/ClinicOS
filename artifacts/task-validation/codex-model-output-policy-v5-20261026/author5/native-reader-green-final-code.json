@@ -1,0 +1,26 @@
+{
+  "offlineNativeReaderFixture": true,
+  "noLiveGithubVerificationClaim": true,
+  "sourceSha": "c3711b74a71b60923e5ac75cc57d80fa3d2958e8",
+  "baseSha": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "actualImmutableGitObjects": true,
+  "providerCalls": 0,
+  "extraSyntheticFeedbackHeadroomBytes": 32768,
+  "blobReads": 37,
+  "accepted": true,
+  "packetBytes": 651443,
+  "packetSha256": "f8b5da476dcd5846481fb153582af98b82b7c8ec8e9ed518459eeb8a7f6e4420",
+  "sourceFiles": 15,
+  "evidenceInventoryCount": 373,
+  "evidenceTextCount": 11,
+  "omittedEvidenceTextCount": 0,
+  "capacity": {
+    "model": "claude-opus-4-7",
+    "contextWindow": 1000000,
+    "maxOutputTokens": 128000,
+    "inputBytes": 652069,
+    "schemaBytes": 716,
+    "nativeOverheadTokens": 65536,
+    "requiredTokensUpperBound": 846321
+  }
+}

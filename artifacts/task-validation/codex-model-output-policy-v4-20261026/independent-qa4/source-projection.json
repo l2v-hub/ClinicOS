@@ -1,0 +1,128 @@
+{
+  "code": "88b9a33d4a879b85bbf8b543fd474b390461d304",
+  "parent": "895e6bd54461fcc6a00be4117e4792bde6fc4e07",
+  "trustedMain": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "tree": "e3d193d097540a27e6c592ae9a23cc571c292de1",
+  "files": [
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "gitBlobSha1": "b42cd83de4b6442451a7437926271e70b761b712",
+      "rawSha256": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed",
+      "bytes": 7392,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "gitBlobSha1": "3ab67169e44fa898f1b2f3fe8269907bb62bd8ae",
+      "rawSha256": "b9bb543eb127e35c7e123af83e0ffda2c934bfc9c2cefafe82f9edd0a145f22b",
+      "bytes": 27848,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/models.mjs",
+      "gitBlobSha1": "9fbf4ef5003599e27bebeb1ff2a54dd55febaab9",
+      "rawSha256": "57af56be98574342f296f773d7ebf1b3155de1bf3557d37e606974ffe46fcd38",
+      "bytes": 21630,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/process.mjs",
+      "gitBlobSha1": "9e11b3a620e3b1fb7c9cf2ee2783e865e93c5f51",
+      "rawSha256": "078765e34f5941de29f801e68b5d8ab438a05d86c6d7331177bbea105d956f6d",
+      "bytes": 9348,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/review-validation-diagnostic.mjs",
+      "gitBlobSha1": "47fd29e6cd7bd58c0db879b0911f1240c8672ac3",
+      "rawSha256": "c4a3d6cd6d1a0b0ef67a22cfc6941fa2c9b9cdaa964357860d103271e9a7e58b",
+      "bytes": 4608,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "gitBlobSha1": "3fed5fd8a434f035c5c4f97770e924798d5b9704",
+      "rawSha256": "ceef3f9e4bfce8ffe545688e9af7ed1d15e90bc681a6b1290486c456e173917d",
+      "bytes": 46039,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "gitBlobSha1": "9d48a4d3e9ff6dc80fab9efe9793f73bd6c70148",
+      "rawSha256": "1ff13bd96f218a219be8d86fe1015c8e9418f0ec9b55fec81cd313197cd8001c",
+      "bytes": 36627,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/models.test.mjs",
+      "gitBlobSha1": "cc23e403463bca3f606f66d33f89698f8daa2384",
+      "rawSha256": "7214b96a5e82420fa9e7e412a84cb4f3f17adbb33c03820a0f266bca10a18ce8",
+      "bytes": 17334,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/process-output.test.mjs",
+      "gitBlobSha1": "e62e33a0b21f015bd362930f1503349a110bd637",
+      "rawSha256": "96bc65bc79dc398fc6d021c0ca95573790a3085d23970212037d47f409ea5553",
+      "bytes": 8549,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/review-validation-diagnostic.test.mjs",
+      "gitBlobSha1": "3753bfdb97132f53e84feaa9f5262aa6da6c6e6c",
+      "rawSha256": "01e77e175d77d42554d15aaaf95b42ff45bd293735dc8f3ab4200058584209cf",
+      "bytes": 7469,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/routing.test.mjs",
+      "gitBlobSha1": "d2d1290e1fb70498a109490acec362497218f0c7",
+      "rawSha256": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd",
+      "bytes": 6829,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "gitBlobSha1": "4d0aa7324d076bf0a2dd7bf0ec84af9224b2f334",
+      "rawSha256": "26f0d48a6eeadb714ec415877f5dd9a51735f1bb5e576a7a88a1e8c68ad3eb2e",
+      "bytes": 117478,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    },
+    {
+      "path": "docs/cloud-claude-review.md",
+      "gitBlobSha1": "01a1db5803063d738625ddf1fea9413230a10a94",
+      "rawSha256": "649717fddf093153e54f95e8cc4a27cb91fa8afb563f68741baf30a4cf22de1b",
+      "bytes": 9690,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.mjs",
+      "gitBlobSha1": "e10296976b8c29c59291a96c985995b24e7d7627",
+      "rawSha256": "0050f0e980ad9901852b5e2f12138d5738969e025131343e11f0a8a8485a3b0a",
+      "bytes": 15991,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.test.mjs",
+      "gitBlobSha1": "bba489a21e74fb75c2107d3e8513f5284e59adcd",
+      "rawSha256": "9590c0681563897222bd88c8861c0a66b3458c4256571e2d772f67108fd2c83f",
+      "bytes": 12327,
+      "gitObjectVerified": true,
+      "snapshotByteExact": true
+    }
+  ]
+}

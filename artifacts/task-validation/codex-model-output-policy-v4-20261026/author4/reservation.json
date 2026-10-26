@@ -1,0 +1,23 @@
+{
+  "nonce": "96c30272-a025-47de-bd41-1dd8cd076ee9",
+  "at": "2026-10-26T06:42:30.095Z",
+  "model": "gpt-6.1-sol",
+  "maximumSessions": 1,
+  "used": 0,
+  "status": "reserved-before-new-source4-author-session",
+  "sourcePr": 514,
+  "sourceParent": "895e6bd54461fcc6a00be4117e4792bde6fc4e07",
+  "trustedMain": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "scope": "NEW PR514 source revision4: explicit generation verdict/findings contract + supported schema hygiene + permanent finite validation diagnostics using proven actual4category, keep unchanged strict native validator/outcome. No raw/providertext logging, schema relaxation, response normalization, sourcehistory reset, provider/GHA/canonical/sourceRepo mutations. Genuine new peer/freshQA+6CI+NEWfinal stillrequired.",
+  "actualEvidence": {
+    "runId": 40279159071,
+    "claimId": "64d19ebb-d082-4cb2-bf2f-873b76a6ffec",
+    "category": "contradiction",
+    "verdict": "approved",
+    "findingCount": 3,
+    "notApproval": true
+  },
+  "privateOutput": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/permanent-review-semantic-author4",
+  "stateCommit": "fefa00a38b16be7c7ca9120e0cb478d9d0686aa4",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/bfad70c3-a4d1-4394-8952-d4759fd4604b/accepted.json"
+}

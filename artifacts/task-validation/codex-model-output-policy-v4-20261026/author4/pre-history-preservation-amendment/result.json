@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "status": "implementation-ready-for-independent-qa",
+  "sourcePr": 514,
+  "sourceParent": "895e6bd54461fcc6a00be4117e4792bde6fc4e07",
+  "trustedMain": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "canonicalReservationState": "fefa00a38b16be7c7ca9120e0cb478d9d0686aa4",
+  "nonce": "96c30272-a025-47de-bd41-1dd8cd076ee9",
+  "authorSessions": 1,
+  "snapshot": "/tmp/clinicos-permanent-semantic-author4",
+  "changedFiles": [
+    "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+    "agent-team/src/bug-pipeline/review-validation-diagnostic.mjs",
+    "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+    "agent-team/tests/bug-pipeline/review-validation-diagnostic.test.mjs",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+    "docs/cloud-claude-review.md",
+    "scripts/quality-gate/claude-bug-review.mjs",
+    "scripts/quality-gate/claude-bug-review.test.mjs"
+  ],
+  "source3SixFilesByteExact": true,
+  "nativeValidateReviewFunctionByteExact": true,
+  "targeted": {
+    "tests": 204,
+    "pass": 204,
+    "fail": 0
+  },
+  "native": {
+    "tests": 1688,
+    "pass": 1685,
+    "fail": 0,
+    "skipped": 3,
+    "exitCode": 0
+  },
+  "newTests": 20,
+  "providerCalls": 0,
+  "remoteCalls": 0,
+  "repositoryMutations": 0,
+  "canonicalMutations": 0,
+  "approval": false,
+  "mergeAuthorized": false,
+  "at": "2026-10-26T06:59:27.621886+00:00",
+  "requiredNext": [
+    "Independent QA of frozen source4",
+    "Coordinator composition into existing PR 514 new head",
+    "All six current-head CI checks and authenticated exact SHA/hash mapping",
+    "Authorized native budget extension and genuine peer review five",
+    "Fresh final Codex review after valid peer approval"
+  ],
+  "realBlockers": []
+}

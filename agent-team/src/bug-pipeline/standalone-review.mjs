@@ -612,6 +612,7 @@ export function createStandaloneReview({
         'operatorContinuations',
         'operatorCoordination',
         'recoveryHistory',
+        'reviewHandoffHistory',
         'qaHistory',
         'codexFinalReviewHistory',
         'codexFinalQaInfrastructure',

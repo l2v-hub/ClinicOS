@@ -1,0 +1,14 @@
+25ca2caab31d32113c643dcd8533b0ad6a5a717598c6f8b6a0898d933fd47e61  ./STOP
+e398a5176949856110f0f037c7ead53610d72df9f10ba49fdb26dc80c8ee58c5  ./docs/task-contract.md
+83db197801aba28ee053ea42808f22d6aa616a07ba3af7b274311b962af34d6a  ./findings.md
+f0fe7f3266b372d56200fefe79a6e8c05b884ac45336f72f26fa5f36960dc333  ./local-scope-amendment-before-session.json
+8023e42a718e9b71435fbba64f613cb578f8134b9646ffeed6717b322ae1cd79  ./logs/full-relevant-correction-final.tap
+40dc53ae772fcbfef651e0d182b3f3771f43ddaace054bfc83b2348735a1c837  ./logs/full-relevant-correction-initial-flake.tap
+5f346f782a7cf8ab6225fd78caf614a16593a785ac46ea4f55d39b6eb660fa86  ./logs/initial-red-models.log
+c422999b8e588b167d7a2ed96d5c743d4b5f60d6d5f358a7f8015ad88b3c8633  ./logs/red-backing-regression.log
+6253cb8da11a6c254533a06aa3d2491ebd61fd099e164657e7c3399dfeb3d5ac  ./logs/targeted-correction-final.tap
+c54cc81a1487e1a80468aa956f4745ca68eeb6d599d3fe98b736314d0a8d8f25  ./logs/task-contract-validation.log
+e553ea784072041d47e68c4149fd4237efabf8344a2fbf57f3ee49fb3602e311  ./reservation.json
+80bf9c51e9fb28816b4fc9edebe7336ebc2a9623e1a65f9b47cbf118e63e771c  ./result.json
+b6348b70b05bd18d971487897df57badf7c87034de0c5272fa2b5e23c00cc560  ./source-hashes.json
+f6c39334d8d59f6e9cab4d4151f8da06da5d83a167cb59c039a54aa58ca5f2b5  ./validation-report.md

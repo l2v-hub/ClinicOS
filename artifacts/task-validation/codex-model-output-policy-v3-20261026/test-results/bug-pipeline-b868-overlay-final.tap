@@ -1,0 +1,2285 @@
+TAP version 13
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/src/bug-pipeline/standalone-review.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/attempt-budget.test.mjs
+not ok 1 - agent-team/tests/bug-pipeline/attempt-budget.test.mjs
+  ---
+  duration_ms: 131.122241
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/attempt-budget.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/src/bug-pipeline/workspace.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs
+not ok 2 - agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs
+  ---
+  duration_ms: 136.286665
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/fs/promises:639
+#   return new FileHandle(await PromisePrototypeThen(
+#                         ^
+# Error: ENOENT: no such file or directory, open '/tmp/clinicos-codex-output-policy-author3/exact-base/.github/workflows/claude-cloud-review.yml'
+#     at async open (node:internal/fs/promises:639:25)
+#     at async readFile (node:internal/fs/promises:1252:14)
+#     at async file:///tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs:5:18 {
+#   errno: -2,
+#   code: 'ENOENT',
+#   syscall: 'open',
+#   path: '/tmp/clinicos-codex-output-policy-author3/exact-base/.github/workflows/claude-cloud-review.yml'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs
+not ok 3 - agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs
+  ---
+  duration_ms: 102.804556
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/src/bug-pipeline/cloud-review-worker.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs
+not ok 4 - agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs
+  ---
+  duration_ms: 111.681646
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/src/bug-pipeline/cloud-review-worker.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs
+not ok 5 - agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs
+  ---
+  duration_ms: 101.320076
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: new triage requires a complete issue/file map and rejects unjustified shared-file splits
+ok 6 - new triage requires a complete issue/file map and rejects unjustified shared-file splits
+  ---
+  duration_ms: 10.079811
+  type: 'test'
+  ...
+# Subtest: legacy grouping remains frozen and queue windows reject corrupt durable metadata
+ok 7 - legacy grouping remains frozen and queue windows reject corrupt durable metadata
+  ---
+  duration_ms: 2.613373
+  type: 'test'
+  ...
+# Subtest: plan accounts for every selected issue exactly once and permits explicit blocked items
+ok 8 - plan accounts for every selected issue exactly once and permits explicit blocked items
+  ---
+  duration_ms: 0.744155
+  type: 'test'
+  ...
+# Subtest: plan rejects duplicated, missing, and unselected issue coverage
+ok 9 - plan rejects duplicated, missing, and unselected issue coverage
+  ---
+  duration_ms: 0.908424
+  type: 'test'
+  ...
+# Subtest: plan rejects task files outside the declared editable scope
+ok 10 - plan rejects task files outside the declared editable scope
+  ---
+  duration_ms: 0.451029
+  type: 'test'
+  ...
+# Subtest: editable paths reject credentials, automation control files, and path traversal
+ok 11 - editable paths reject credentials, automation control files, and path traversal
+  ---
+  duration_ms: 0.464845
+  type: 'test'
+  ...
+# Subtest: new plans require execution assessment while existing frozen state remains byte-for-byte unchanged
+ok 12 - new plans require execution assessment while existing frozen state remains byte-for-byte unchanged
+  ---
+  duration_ms: 1.575388
+  type: 'test'
+  ...
+# Subtest: plan requires screenshot and Playwright trace evidence for each source issue
+ok 13 - plan requires screenshot and Playwright trace evidence for each source issue
+  ---
+  duration_ms: 1.815866
+  type: 'test'
+  ...
+# Subtest: Claude1 F1 canonical handback schema preserves legacy/stale grants but rejects malformed audit
+ok 14 - Claude1 F1 canonical handback schema preserves legacy/stale grants but rejects malformed audit
+  ---
+  duration_ms: 1.577238
+  type: 'test'
+  ...
+# Subtest: QA6-F1 explicit active must be boolean while inactive and legacy audit absence stay valid
+ok 15 - QA6-F1 explicit active must be boolean while inactive and legacy audit absence stay valid
+  ---
+  duration_ms: 1.103949
+  type: 'test'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/automation/install-claude-review-cron.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/cron-install.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/automation/install-claude-review-cron.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/cron-install.test.mjs
+not ok 7 - agent-team/tests/bug-pipeline/cron-install.test.mjs
+  ---
+  duration_ms: 66.370039
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/cron-install.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: authorized codex-run issues are visible before bug-label normalization without exposing payloads
+ok 17 - authorized codex-run issues are visible before bug-label normalization without exposing payloads
+  ---
+  duration_ms: 2.287388
+  type: 'test'
+  ...
+# Subtest: collection window is visible as queued aggregation, without claiming or exposing issue data
+ok 18 - collection window is visible as queued aggregation, without claiming or exposing issue data
+  ---
+  duration_ms: 0.287861
+  type: 'test'
+  ...
+# Subtest: snapshot distinguishes the authorized queue, triage, external QA and waiting issues without exposing source payloads
+ok 19 - snapshot distinguishes the authorized queue, triage, external QA and waiting issues without exposing source payloads
+  ---
+  duration_ms: 1.212314
+  type: 'test'
+  ...
+# Subtest: dashboard loader is read-only and propagates a source failure instead of returning an empty queue
+ok 20 - dashboard loader is read-only and propagates a source failure instead of returning an empty queue
+  ---
+  duration_ms: 0.815146
+  type: 'test'
+  ...
+# Subtest: local dashboard blocks foreign Host/Origin, cross-site reads, mutations and path traversal
+ok 21 - local dashboard blocks foreign Host/Origin, cross-site reads, mutations and path traversal
+  ---
+  duration_ms: 35.911121
+  type: 'test'
+  ...
+# Subtest: refresh failure preserves the previous snapshot, reports staleness and never leaks provider diagnostics
+ok 22 - refresh failure preserves the previous snapshot, reports staleness and never leaks provider diagnostics
+  ---
+  duration_ms: 5.499526
+  type: 'test'
+  ...
+# Subtest: dashboard displays six spent implementations and active continuation instead of a ready review label
+ok 23 - dashboard displays six spent implementations and active continuation instead of a ready review label
+  ---
+  duration_ms: 4.966297
+  type: 'test'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/src/bug-pipeline/demo-deployment.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/automation/configure-demo-source.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/demo-deployment.test.mjs
+not ok 9 - agent-team/tests/bug-pipeline/demo-deployment.test.mjs
+  ---
+  duration_ms: 90.839384
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/demo-deployment.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: demo deployment is isolated to the fixed-main exact-commit workflow
+not ok 25 - demo deployment is isolated to the fixed-main exact-commit workflow
+  ---
+  duration_ms: 5.020882
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/demo-workflow-policy.test.mjs:42:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/tmp/clinicos-codex-output-policy-author3/exact-base/.github/workflows/deploy-backend.yml'"
+  code: 'ENOENT'
+  stack: |-
+    async open (node:internal/fs/promises:639:25)
+    async readFile (node:internal/fs/promises:1252:14)
+    async TestContext.<anonymous> (file:///tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/demo-workflow-policy.test.mjs:43:19)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/src/bug-pipeline/demo-deployment.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/automation/configure-demo-source.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs
+not ok 11 - agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs
+  ---
+  duration_ms: 80.189166
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: descendant recovery authenticates both compare endpoints and rereads current main
+ok 27 - descendant recovery authenticates both compare endpoints and rereads current main
+  ---
+  duration_ms: 2.76697
+  type: 'test'
+  ...
+# Subtest: recovery archives exact old progress and deployment facts without changing review or attempt histories
+ok 28 - recovery archives exact old progress and deployment facts without changing review or attempt histories
+  ---
+  duration_ms: 1.227594
+  type: 'test'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/src/bug-pipeline/claude-review-cron.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/external-review.test.mjs
+not ok 13 - agent-team/tests/bug-pipeline/external-review.test.mjs
+  ---
+  duration_ms: 74.807134
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/external-review.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: issue lifecycle uses additive managed labels and closes resolved issues as completed, with retry after a failed close
+ok 30 - issue lifecycle uses additive managed labels and closes resolved issues as completed, with retry after a failed close
+  ---
+  duration_ms: 6.142589
+  type: 'test'
+  ...
+# Subtest: dashboard state reads never initialize a branch, and source permission errors are not treated as an empty queue
+ok 31 - dashboard state reads never initialize a branch, and source permission errors are not treated as an empty queue
+  ---
+  duration_ms: 0.97802
+  type: 'test'
+  ...
+# Subtest: a maintainer labeling with the same User identity as the controller PAT is authorized
+ok 32 - a maintainer labeling with the same User identity as the controller PAT is authorized
+  ---
+  duration_ms: 2.774851
+  type: 'test'
+  ...
+# Subtest: scheduled normalization recovers codex-run without bug only after authorization and never mutates dashboard reads
+ok 33 - scheduled normalization recovers codex-run without bug only after authorization and never mutates dashboard reads
+  ---
+  duration_ms: 2.166979
+  type: 'test'
+  ...
+# Subtest: bot and missing actor types cannot self-authorize even if permission lookup would grant admin
+ok 34 - bot and missing actor types cannot self-authorize even if permission lookup would grant admin
+  ---
+  duration_ms: 1.064981
+  type: 'test'
+  ...
+# Subtest: bot label fallback rejects non-human command metadata and old human commands
+ok 35 - bot label fallback rejects non-human command metadata and old human commands
+  ---
+  duration_ms: 1.262779
+  type: 'test'
+  ...
+# Subtest: authorized accepts only write-capable collaborators
+ok 36 - authorized accepts only write-capable collaborators
+  ---
+  duration_ms: 0.693956
+  type: 'test'
+  ...
+# Subtest: intake requires exact command and authorized actor before adding all queue labels
+ok 37 - intake requires exact command and authorized actor before adding all queue labels
+  ---
+  duration_ms: 0.879334
+  type: 'test'
+  ...
+# Subtest: intake refuses unauthorized actors, near-match commands, and pull requests
+ok 38 - intake refuses unauthorized actors, near-match commands, and pull requests
+  ---
+  duration_ms: 0.647529
+  type: 'test'
+  ...
+# Subtest: scheduled queue accepts only an authorized explicit codex-run event and skips blocked issues
+ok 39 - scheduled queue accepts only an authorized explicit codex-run event and skips blocked issues
+  ---
+  duration_ms: 1.532926
+  type: 'test'
+  ...
+# Subtest: durable state initializes only its branch from main and uses returned Contents SHA
+ok 40 - durable state initializes only its branch from main and uses returned Contents SHA
+  ---
+  duration_ms: 1.998787
+  type: 'test'
+  ...
+# Subtest: failed state CAS keeps the remembered SHA and never retries without it
+ok 41 - failed state CAS keeps the remembered SHA and never retries without it
+  ---
+  duration_ms: 2.92756
+  type: 'test'
+  ...
+# Subtest: durable state over 1 MiB loads from one blob read pinned to the Contents SHA
+ok 42 - durable state over 1 MiB loads from one blob read pinned to the Contents SHA
+  ---
+  duration_ms: 106.144657
+  type: 'test'
+  ...
+# Subtest: small valid inline durable state does not read a Git blob
+ok 43 - small valid inline durable state does not read a Git blob
+  ---
+  duration_ms: 2.706157
+  type: 'test'
+  ...
+# Subtest: dashboard state reads use the same pinned blob fallback without branch initialization
+ok 44 - dashboard state reads use the same pinned blob fallback without branch initialization
+  ---
+  duration_ms: 0.973076
+  type: 'test'
+  ...
+# Subtest: durable state rejects corrupt encoding, size, SHA, UTF-8, and oversized payloads
+    # Subtest: noncanonical base64
+    ok 1 - noncanonical base64
+      ---
+      duration_ms: 0.646349
+      type: 'test'
+      ...
+    # Subtest: declared size mismatch
+    ok 2 - declared size mismatch
+      ---
+      duration_ms: 4.527752
+      type: 'test'
+      ...
+    # Subtest: SHA mismatch
+    ok 3 - SHA mismatch
+      ---
+      duration_ms: 0.352196
+      type: 'test'
+      ...
+    # Subtest: invalid UTF-8
+    ok 4 - invalid UTF-8
+      ---
+      duration_ms: 0.395374
+      type: 'test'
+      ...
+    # Subtest: oversized metadata
+    ok 5 - oversized metadata
+      ---
+      duration_ms: 0.275649
+      type: 'test'
+      ...
+    1..5
+ok 45 - durable state rejects corrupt encoding, size, SHA, UTF-8, and oversized payloads
+  ---
+  duration_ms: 7.298917
+  type: 'test'
+  ...
+# Subtest: durable state blob fallback rejects unpinned or malformed data without treating it as empty
+    # Subtest: different SHA
+    ok 1 - different SHA
+      ---
+      duration_ms: 0.708784
+      type: 'test'
+      ...
+    # Subtest: different size
+    ok 2 - different size
+      ---
+      duration_ms: 0.326689
+      type: 'test'
+      ...
+    # Subtest: invalid base64
+    ok 3 - invalid base64
+      ---
+      duration_ms: 0.424118
+      type: 'test'
+      ...
+    1..3
+ok 46 - durable state blob fallback rejects unpinned or malformed data without treating it as empty
+  ---
+  duration_ms: 2.111533
+  type: 'test'
+  ...
+# Subtest: durable state load distinguishes a missing file from authorization or transport failures
+ok 47 - durable state load distinguishes a missing file from authorization or transport failures
+  ---
+  duration_ms: 1.763147
+  type: 'test'
+  ...
+# Subtest: state read failures retain finite GitHub diagnostics across load, branch initialization, and dashboard reads
+ok 48 - state read failures retain finite GitHub diagnostics across load, branch initialization, and dashboard reads
+  ---
+  duration_ms: 1.796434
+  type: 'test'
+  ...
+# Subtest: oversized durable state is rejected before any remote mutation
+ok 49 - oversized durable state is rejected before any remote mutation
+  ---
+  duration_ms: 102.373346
+  type: 'test'
+  ...
+# Subtest: review feedback binds to PR head, tracks current reviews, unresolved threads and human comments
+ok 50 - review feedback binds to PR head, tracks current reviews, unresolved threads and human comments
+  ---
+  duration_ms: 1.618697
+  type: 'test'
+  ...
+# Subtest: review feedback fails closed when more than 100 review threads are returned
+ok 51 - review feedback fails closed when more than 100 review threads are returned
+  ---
+  duration_ms: 0.633868
+  type: 'test'
+  ...
+# Subtest: a commented review cannot clear an earlier request for changes; explicit approval can
+ok 52 - a commented review cannot clear an earlier request for changes; explicit approval can
+  ---
+  duration_ms: 1.024152
+  type: 'test'
+  ...
+# Subtest: review feedback identifies a merged PR from the real REST state and merge flag
+ok 53 - review feedback identifies a merged PR from the real REST state and merge flag
+  ---
+  duration_ms: 0.476282
+  type: 'test'
+  ...
+# Subtest: required checks fail closed when absent and pass only when all reported checks succeed
+ok 54 - required checks fail closed when absent and pass only when all reported checks succeed
+  ---
+  duration_ms: 1.40173
+  type: 'test'
+  ...
+# Subtest: real status adapter rechecks the optional guard after every preceding awaited API boundary
+    # Subtest: {"after":"label-inspection"}
+    ok 1 - {"after":"label-inspection"}
+      ---
+      duration_ms: 2.207196
+      type: 'test'
+      ...
+    # Subtest: {"after":"label-inspection","labelExists":false}
+    ok 2 - {"after":"label-inspection","labelExists":false}
+      ---
+      duration_ms: 0.896137
+      type: 'test'
+      ...
+    # Subtest: {"after":"label-creation","labelExists":false}
+    ok 3 - {"after":"label-creation","labelExists":false}
+      ---
+      duration_ms: 0.744406
+      type: 'test'
+      ...
+    # Subtest: {"after":"label-retry","labelExists":false,"creationConflict":true}
+    ok 4 - {"after":"label-retry","labelExists":false,"creationConflict":true}
+      ---
+      duration_ms: 0.534314
+      type: 'test'
+      ...
+    # Subtest: {"after":"issue-label-post"}
+    ok 5 - {"after":"issue-label-post"}
+      ---
+      duration_ms: 0.480004
+      type: 'test'
+      ...
+    # Subtest: {"after":"delete-progress"}
+    ok 6 - {"after":"delete-progress"}
+      ---
+      duration_ms: 0.601954
+      type: 'test'
+      ...
+    # Subtest: {"after":"delete-blocked"}
+    ok 7 - {"after":"delete-blocked"}
+      ---
+      duration_ms: 0.420736
+      type: 'test'
+      ...
+    1..7
+ok 55 - real status adapter rechecks the optional guard after every preceding awaited API boundary
+  ---
+  duration_ms: 6.802335
+  type: 'test'
+  ...
+# Subtest: cached lifecycle status still checks a fresh guard and preserves unguarded callers
+ok 56 - cached lifecycle status still checks a fresh guard and preserves unguarded callers
+  ---
+  duration_ms: 0.637591
+  type: 'test'
+  ...
+# Subtest: actual comment request accepts the optional fresh guard, rejects errors/false/invalid guards, and keeps default callers
+ok 57 - actual comment request accepts the optional fresh guard, rejects errors/false/invalid guards, and keeps default callers
+  ---
+  duration_ms: 1.267723
+  type: 'test'
+  ...
+# Subtest: a hold arriving after an already-sent close cannot undo that request, but blocks later cached calls
+ok 58 - a hold arriving after an already-sent close cannot undo that request, but blocks later cached calls
+  ---
+  duration_ms: 0.530474
+  type: 'test'
+  ...
+# Subtest: a partial guarded lifecycle update invalidates an older cached status before reconciliation
+    # Subtest: hold
+    ok 1 - hold
+      ---
+      duration_ms: 0.701575
+      type: 'test'
+      ...
+    # Subtest: close503
+    ok 2 - close503
+      ---
+      duration_ms: 0.566753
+      type: 'test'
+      ...
+    1..2
+ok 59 - a partial guarded lifecycle update invalidates an older cached status before reconciliation
+  ---
+  duration_ms: 1.691312
+  type: 'test'
+  ...
+# Subtest: actual ready and merge transports reject a fresh guard before emitting commands
+ok 60 - actual ready and merge transports reject a fresh guard before emitting commands
+  ---
+  duration_ms: 0.796704
+  type: 'test'
+  ...
+# Subtest: guard rereads cannot promote an old snapshot to a newer Contents CAS revision
+    # Subtest: branch-await: other batch
+    ok 1 - branch-await: other batch
+      ---
+      duration_ms: 1.622174
+      type: 'test'
+      ...
+    # Subtest: branch-await: manualBatches
+    ok 2 - branch-await: manualBatches
+      ---
+      duration_ms: 0.616442
+      type: 'test'
+      ...
+    # Subtest: branch-await: root field
+    ok 3 - branch-await: root field
+      ---
+      duration_ms: 0.856561
+      type: 'test'
+      ...
+    # Subtest: guard-await: other batch
+    ok 4 - guard-await: other batch
+      ---
+      duration_ms: 0.365045
+      type: 'test'
+      ...
+    # Subtest: guard-await: manualBatches
+    ok 5 - guard-await: manualBatches
+      ---
+      duration_ms: 0.561907
+      type: 'test'
+      ...
+    # Subtest: guard-await: root field
+    ok 6 - guard-await: root field
+      ---
+      duration_ms: 0.776325
+      type: 'test'
+      ...
+    1..6
+ok 61 - guard rereads cannot promote an old snapshot to a newer Contents CAS revision
+  ---
+  duration_ms: 6.058262
+  type: 'test'
+  ...
+# Subtest: actual durable PUT waits for a final release guard after branch inspection
+ok 62 - actual durable PUT waits for a final release guard after branch inspection
+  ---
+  duration_ms: 0.470338
+  type: 'test'
+  ...
+# Subtest: failed guarded CAS cannot retry an old state body against the revision read by its guard
+ok 63 - failed guarded CAS cannot retry an old state body against the revision read by its guard
+  ---
+  duration_ms: 3.527399
+  type: 'test'
+  ...
+# Subtest: optional release guards reject explicitly invalid values at all actual transports
+ok 64 - optional release guards reject explicitly invalid values at all actual transports
+  ---
+  duration_ms: 1.677013
+  type: 'test'
+  ...
+# Subtest: durable save serializes its body before any branch await can mutate the supplied object
+ok 65 - durable save serializes its body before any branch await can mutate the supplied object
+  ---
+  duration_ms: 0.521647
+  type: 'test'
+  ...
+# Subtest: large durable state loads from authenticated blob SHA and preserves file identity for Git Data CAS
+ok 66 - large durable state loads from authenticated blob SHA and preserves file identity for Git Data CAS
+  ---
+  duration_ms: 150.98047
+  type: 'test'
+  ...
+# Subtest: read-only dashboard uses the same large-state blob decoder without branch initialization or writes
+ok 67 - read-only dashboard uses the same large-state blob decoder without branch initialization or writes
+  ---
+  duration_ms: 35.443554
+  type: 'test'
+  ...
+# Subtest: durable state rejects invalid blob metadata, bytes and digest before authorizing any save
+ok 68 - durable state rejects invalid blob metadata, bytes and digest before authorizing any save
+  ---
+  duration_ms: 2.762559
+  type: 'test'
+  ...
+# Subtest: explicit inline state metadata validates canonical base64, supplied size and UTF8 without requiring blob I/O
+ok 69 - explicit inline state metadata validates canonical base64, supplied size and UTF8 without requiring blob I/O
+  ---
+  duration_ms: 0.486224
+  type: 'test'
+  ...
+# Subtest: state save rejects >8MiB before any mutation/guard and exact8MiB remains reloadable
+ok 70 - state save rejects >8MiB before any mutation/guard and exact8MiB remains reloadable
+  ---
+  duration_ms: 787.231522
+  type: 'test'
+  ...
+# Subtest: blob-loaded state CAS failure retains the original metadata SHA and never retries without it
+ok 71 - blob-loaded state CAS failure retains the original metadata SHA and never retries without it
+  ---
+  duration_ms: 51.920916
+  type: 'test'
+  ...
+# Subtest: explicit disjoint rebase saves a NEW validated body and preserves nested caller object/array references
+ok 72 - explicit disjoint rebase saves a NEW validated body and preserves nested caller object/array references
+  ---
+  duration_ms: 4.198611
+  type: 'test'
+  ...
+# Subtest: strict default still rejects disjoint409 and opt-in rejects same entity, conflicting root fields and invalid merged state
+ok 73 - strict default still rejects disjoint409 and opt-in rejects same entity, conflicting root fields and invalid merged state
+  ---
+  duration_ms: 7.039094
+  type: 'test'
+  ...
+# Subtest: rebase reruns authorization guard and refuses nonce/subject changes instead of replaying stale authority
+ok 74 - rebase reruns authorization guard and refuses nonce/subject changes instead of replaying stale authority
+  ---
+  duration_ms: 2.520181
+  type: 'test'
+  ...
+# Subtest: rebase uses fresh serialized snapshots even when guards reload a third disjoint state, with bounded retries
+ok 75 - rebase uses fresh serialized snapshots even when guards reload a third disjoint state, with bounded retries
+  ---
+  duration_ms: 3.289643
+  type: 'test'
+  ...
+# Subtest: capacity counts simultaneous running reviews and Codex QA across every entity collection before any PUT or guard
+ok 76 - capacity counts simultaneous running reviews and Codex QA across every entity collection before any PUT or guard
+  ---
+  duration_ms: 388.980948
+  type: 'test'
+  ...
+# Subtest: diagnostics expose only owned bounded codes and preserve known cause chains
+ok 77 - diagnostics expose only owned bounded codes and preserve known cause chains
+  ---
+  duration_ms: 0.288113
+  type: 'test'
+  ...
+# Subtest: F5 state writes distinguish confirmed409, definite502 and uncertain timeout without blind retry
+ok 78 - F5 state writes distinguish confirmed409, definite502 and uncertain timeout without blind retry
+  ---
+  duration_ms: 0.789103
+  type: 'test'
+  ...
+# Subtest: F1/F3 native human approval requires current head, nonauthor User and enforced stale-dismissal protection
+ok 79 - F1/F3 native human approval requires current head, nonauthor User and enforced stale-dismissal protection
+  ---
+  duration_ms: 1.057641
+  type: 'test'
+  ...
+# Subtest: GitHub failure semantics distinguish positive status evidence, default POST and merge uncertainty without raw diagnostics
+ok 80 - GitHub failure semantics distinguish positive status evidence, default POST and merge uncertainty without raw diagnostics
+  ---
+  duration_ms: 2.250411
+  type: 'test'
+  ...
+# Subtest: strict integrated decoder rejects JSON scalars/arrays and oversized raw wrapping without permitting a save
+ok 81 - strict integrated decoder rejects JSON scalars/arrays and oversized raw wrapping without permitting a save
+  ---
+  duration_ms: 297.71993
+  type: 'test'
+  ...
+# Subtest: evidence blobs accept the exact 32MiB ceiling with bounded base64 JSON transport
+ok 82 - evidence blobs accept the exact 32MiB ceiling with bounded base64 JSON transport
+  ---
+  duration_ms: 1134.269769
+  type: 'test'
+  ...
+# Subtest: evidence blob ceiling, declared sizes, canonical base64 and object digest fail closed
+ok 83 - evidence blob ceiling, declared sizes, canonical base64 and object digest fail closed
+  ---
+  duration_ms: 4.896907
+  type: 'test'
+  ...
+# Subtest: recovery authorization requires actual authenticated owner/admin and fixed manual main workflow identity
+ok 84 - recovery authorization requires actual authenticated owner/admin and fixed manual main workflow identity
+  ---
+  duration_ms: 14.22302
+  type: 'test'
+  ...
+# Subtest: queue exclusions prevent normalization and authorization reads on claimed issues while new missed events recover
+ok 85 - queue exclusions prevent normalization and authorization reads on claimed issues while new missed events recover
+  ---
+  duration_ms: 0.729854
+  type: 'test'
+  ...
+# Subtest: malformed queue exclusions fail closed before any GitHub read or label write
+ok 86 - malformed queue exclusions fail closed before any GitHub read or label write
+  ---
+  duration_ms: 0.506872
+  type: 'test'
+  ...
+# Subtest: Claude1 F5 read-only observation never promotes a writer base or bypasses native409
+ok 87 - Claude1 F5 read-only observation never promotes a writer base or bypasses native409
+  ---
+  duration_ms: 1.54793
+  type: 'test'
+  ...
+# Subtest: Claude1 F5 native state store preserves finite ownership code instead of generic rebase error
+ok 88 - Claude1 F5 native state store preserves finite ownership code instead of generic rebase error
+  ---
+  duration_ms: 1.003182
+  type: 'test'
+  ...
+# Subtest: Claude1 F5 fresh owner hook never forgives unowned same-entity conflicts or malformed canonical data
+ok 89 - Claude1 F5 fresh owner hook never forgives unowned same-entity conflicts or malformed canonical data
+  ---
+  duration_ms: 7.593491
+  type: 'test'
+  ...
+# Subtest: Claude1 F5 fresh owner hook is never used after auth failures, definite rejection or uncertain writes
+ok 90 - Claude1 F5 fresh owner hook is never used after auth failures, definite rejection or uncertain writes
+  ---
+  duration_ms: 2.035682
+  type: 'test'
+  ...
+# Subtest: Author7 F3 observer reads authenticated Contents without branch creation and caches only unchanged identity
+ok 91 - Author7 F3 observer reads authenticated Contents without branch creation and caches only unchanged identity
+  ---
+  duration_ms: 63.452044
+  type: 'test'
+  ...
+# Subtest: Author8 causal: large Contents rejection still permits exact-byte Git Data save and preserves unrelated tree modes
+ok 92 - Author8 causal: large Contents rejection still permits exact-byte Git Data save and preserves unrelated tree modes
+  ---
+  duration_ms: 74.950477
+  type: 'test'
+  ...
+# Subtest: Author8 threshold uses serialized UTF8 bytes, preserves small guards, and creates absent large files without rewriting sentinels
+    # Subtest: exact1MiB
+    ok 1 - exact1MiB
+      ---
+      duration_ms: 31.758236
+      type: 'test'
+      ...
+    # Subtest: plus1byte
+    ok 2 - plus1byte
+      ---
+      duration_ms: 28.473804
+      type: 'test'
+      ...
+    # Subtest: unicode
+    ok 3 - unicode
+      ---
+      duration_ms: 41.123802
+      type: 'test'
+      ...
+    # Subtest: executable-state
+    ok 4 - executable-state
+      ---
+      duration_ms: 40.758884
+      type: 'test'
+      ...
+    # Subtest: absent
+    ok 5 - absent
+      ---
+      duration_ms: 26.101034
+      type: 'test'
+      ...
+    1..5
+ok 93 - Author8 threshold uses serialized UTF8 bytes, preserves small guards, and creates absent large files without rewriting sentinels
+  ---
+  duration_ms: 169.181067
+  type: 'test'
+  ...
+# Subtest: Author8 each await race keeps a frozen body, proves contention, and preserves independent remote progress
+    # Subtest: before-parent
+    ok 1 - before-parent
+      ---
+      duration_ms: 81.76455
+      type: 'test'
+      ...
+    # Subtest: after-parent-tree
+    ok 2 - after-parent-tree
+      ---
+      duration_ms: 98.908736
+      type: 'test'
+      ...
+    # Subtest: after-blob
+    ok 3 - after-blob
+      ---
+      duration_ms: 93.830228
+      type: 'test'
+      ...
+    # Subtest: after-tree
+    ok 4 - after-tree
+      ---
+      duration_ms: 93.796761
+      type: 'test'
+      ...
+    # Subtest: after-commit
+    ok 5 - after-commit
+      ---
+      duration_ms: 88.105615
+      type: 'test'
+      ...
+    # Subtest: guard-load
+    ok 6 - guard-load
+      ---
+      duration_ms: 92.929883
+      type: 'test'
+      ...
+    # Subtest: ref422
+    ok 7 - ref422
+      ---
+      duration_ms: 84.030398
+      type: 'test'
+      ...
+    1..7
+ok 94 - Author8 each await race keeps a frozen body, proves contention, and preserves independent remote progress
+  ---
+  duration_ms: 634.301426
+  type: 'test'
+  ...
+# Subtest: Author8 strict/same-entity/shared-field conflicts never persist stale bytes
+    # Subtest: strict
+    ok 1 - strict
+      ---
+      duration_ms: 43.15707
+      type: 'test'
+      ...
+    # Subtest: same-entity
+    ok 2 - same-entity
+      ---
+      duration_ms: 50.347283
+      type: 'test'
+      ...
+    # Subtest: shared-root
+    ok 3 - shared-root
+      ---
+      duration_ms: 53.455296
+      type: 'test'
+      ...
+    1..3
+ok 95 - Author8 strict/same-entity/shared-field conflicts never persist stale bytes
+  ---
+  duration_ms: 147.534007
+  type: 'test'
+  ...
+# Subtest: Author8 final ownership and guard are checked after object awaits, with finite ownership failures and no authority grant
+    # Subtest: owner-hook
+    ok 1 - owner-hook
+      ---
+      duration_ms: 36.666098
+      type: 'test'
+      ...
+    # Subtest: guard
+    ok 2 - guard
+      ---
+      duration_ms: 45.939711
+      type: 'test'
+      ...
+    # Subtest: false-guard
+    ok 3 - false-guard
+      ---
+      duration_ms: 37.712434
+      type: 'test'
+      ...
+    # Subtest: hook-invalid
+    ok 4 - hook-invalid
+      ---
+      duration_ms: 49.041874
+      type: 'test'
+      ...
+    # Subtest: missing-hooks-strict-CAS
+    ok 5 - missing-hooks-strict-CAS
+      ---
+      duration_ms: 52.157153
+      type: 'test'
+      ...
+    1..5
+ok 96 - Author8 final ownership and guard are checked after object awaits, with finite ownership failures and no authority grant
+  ---
+  duration_ms: 222.240003
+  type: 'test'
+  ...
+# Subtest: Author8 alias mutation and same-store reload cannot promote frozen bytes or the remembered original file CAS
+ok 97 - Author8 alias mutation and same-store reload cannot promote frozen bytes or the remembered original file CAS
+  ---
+  duration_ms: 130.343017
+  type: 'test'
+  ...
+# Subtest: Author8 repeated independent conflicts have a shared four-candidate bound and preserve the latest remote state
+ok 98 - Author8 repeated independent conflicts have a shared four-candidate bound and preserve the latest remote state
+  ---
+  duration_ms: 174.252281
+  type: 'test'
+  ...
+# Subtest: Author8 rebase transport changes only with new validated bytes across the exact threshold
+    # Subtest: small-to-large
+    ok 1 - small-to-large
+      ---
+      duration_ms: 45.11697
+      type: 'test'
+      ...
+    # Subtest: large-to-small
+    ok 2 - large-to-small
+      ---
+      duration_ms: 34.598122
+      type: 'test'
+      ...
+    1..2
+ok 99 - Author8 rebase transport changes only with new validated bytes across the exact threshold
+  ---
+  duration_ms: 80.745174
+  type: 'test'
+  ...
+# Subtest: Author8 independent rebase rechecks reserved-result capacity before any second candidate mutation
+ok 100 - Author8 independent rebase rechecks reserved-result capacity before any second candidate mutation
+  ---
+  duration_ms: 541.369959
+  type: 'test'
+  ...
+# Subtest: Author8 mutation failures at every object/ref stage are fatal without fallback, hidden retries or postfailure ownership skips
+    # Subtest: git/blobs:400
+    ok 1 - git/blobs:400
+      ---
+      duration_ms: 44.115911
+      type: 'test'
+      ...
+    # Subtest: git/blobs:401
+    ok 2 - git/blobs:401
+      ---
+      duration_ms: 40.117803
+      type: 'test'
+      ...
+    # Subtest: git/blobs:403
+    ok 3 - git/blobs:403
+      ---
+      duration_ms: 36.29929
+      type: 'test'
+      ...
+    # Subtest: git/blobs:409unchanged
+    ok 4 - git/blobs:409unchanged
+      ---
+      duration_ms: 41.009648
+      type: 'test'
+      ...
+    # Subtest: git/blobs:422unchanged
+    ok 5 - git/blobs:422unchanged
+      ---
+      duration_ms: 38.481289
+      type: 'test'
+      ...
+    # Subtest: git/blobs:502
+    ok 6 - git/blobs:502
+      ---
+      duration_ms: 40.682115
+      type: 'test'
+      ...
+    # Subtest: git/blobs:timeout
+    ok 7 - git/blobs:timeout
+      ---
+      duration_ms: 106.973656
+      type: 'test'
+      ...
+    # Subtest: git/blobs:output-limit
+    ok 8 - git/blobs:output-limit
+      ---
+      duration_ms: 45.234191
+      type: 'test'
+      ...
+    # Subtest: git/blobs:spawn-failed
+    ok 9 - git/blobs:spawn-failed
+      ---
+      duration_ms: 41.151788
+      type: 'test'
+      ...
+    # Subtest: git/blobs:unknown
+    ok 10 - git/blobs:unknown
+      ---
+      duration_ms: 47.246773
+      type: 'test'
+      ...
+    # Subtest: git/blobs:badJSON
+    ok 11 - git/blobs:badJSON
+      ---
+      duration_ms: 43.510336
+      type: 'test'
+      ...
+    # Subtest: git/blobs:thrown
+    ok 12 - git/blobs:thrown
+      ---
+      duration_ms: 40.191343
+      type: 'test'
+      ...
+    # Subtest: git/trees:400
+    ok 13 - git/trees:400
+      ---
+      duration_ms: 40.14769
+      type: 'test'
+      ...
+    # Subtest: git/trees:401
+    ok 14 - git/trees:401
+      ---
+      duration_ms: 43.571219
+      type: 'test'
+      ...
+    # Subtest: git/trees:403
+    ok 15 - git/trees:403
+      ---
+      duration_ms: 40.131956
+      type: 'test'
+      ...
+    # Subtest: git/trees:409unchanged
+    ok 16 - git/trees:409unchanged
+      ---
+      duration_ms: 44.382415
+      type: 'test'
+      ...
+    # Subtest: git/trees:422unchanged
+    ok 17 - git/trees:422unchanged
+      ---
+      duration_ms: 43.024447
+      type: 'test'
+      ...
+    # Subtest: git/trees:502
+    ok 18 - git/trees:502
+      ---
+      duration_ms: 48.0212
+      type: 'test'
+      ...
+    # Subtest: git/trees:timeout
+    ok 19 - git/trees:timeout
+      ---
+      duration_ms: 52.247889
+      type: 'test'
+      ...
+    # Subtest: git/trees:output-limit
+    ok 20 - git/trees:output-limit
+      ---
+      duration_ms: 46.006495
+      type: 'test'
+      ...
+    # Subtest: git/trees:spawn-failed
+    ok 21 - git/trees:spawn-failed
+      ---
+      duration_ms: 47.375736
+      type: 'test'
+      ...
+    # Subtest: git/trees:unknown
+    ok 22 - git/trees:unknown
+      ---
+      duration_ms: 52.75411
+      type: 'test'
+      ...
+    # Subtest: git/trees:badJSON
+    ok 23 - git/trees:badJSON
+      ---
+      duration_ms: 51.554166
+      type: 'test'
+      ...
+    # Subtest: git/trees:thrown
+    ok 24 - git/trees:thrown
+      ---
+      duration_ms: 39.686265
+      type: 'test'
+      ...
+    # Subtest: git/commits:400
+    ok 25 - git/commits:400
+      ---
+      duration_ms: 43.162365
+      type: 'test'
+      ...
+    # Subtest: git/commits:401
+    ok 26 - git/commits:401
+      ---
+      duration_ms: 35.894046
+      type: 'test'
+      ...
+    # Subtest: git/commits:403
+    ok 27 - git/commits:403
+      ---
+      duration_ms: 42.36679
+      type: 'test'
+      ...
+    # Subtest: git/commits:409unchanged
+    ok 28 - git/commits:409unchanged
+      ---
+      duration_ms: 48.520927
+      type: 'test'
+      ...
+    # Subtest: git/commits:422unchanged
+    ok 29 - git/commits:422unchanged
+      ---
+      duration_ms: 41.08056
+      type: 'test'
+      ...
+    # Subtest: git/commits:502
+    ok 30 - git/commits:502
+      ---
+      duration_ms: 41.761338
+      type: 'test'
+      ...
+    # Subtest: git/commits:timeout
+    ok 31 - git/commits:timeout
+      ---
+      duration_ms: 88.218415
+      type: 'test'
+      ...
+    # Subtest: git/commits:output-limit
+    ok 32 - git/commits:output-limit
+      ---
+      duration_ms: 61.221338
+      type: 'test'
+      ...
+    # Subtest: git/commits:spawn-failed
+    ok 33 - git/commits:spawn-failed
+      ---
+      duration_ms: 54.262245
+      type: 'test'
+      ...
+    # Subtest: git/commits:unknown
+    ok 34 - git/commits:unknown
+      ---
+      duration_ms: 50.936363
+      type: 'test'
+      ...
+    # Subtest: git/commits:badJSON
+    ok 35 - git/commits:badJSON
+      ---
+      duration_ms: 54.143345
+      type: 'test'
+      ...
+    # Subtest: git/commits:thrown
+    ok 36 - git/commits:thrown
+      ---
+      duration_ms: 42.329936
+      type: 'test'
+      ...
+    # Subtest: git/refs/heads/codex/bug-control:400
+    ok 37 - git/refs/heads/codex/bug-control:400
+      ---
+      duration_ms: 53.389126
+      type: 'test'
+      ...
+    # Subtest: git/refs/heads/codex/bug-control:401
+    ok 38 - git/refs/heads/codex/bug-control:401
+      ---
+      duration_ms: 46.706965
+      type: 'test'
+      ...
+    # Subtest: git/refs/heads/codex/bug-control:403
+    ok 39 - git/refs/heads/codex/bug-control:403
+      ---
+      duration_ms: 48.243712
+      type: 'test'
+      ...
+    # Subtest: git/refs/heads/codex/bug-control:409unchanged
+    ok 40 - git/refs/heads/codex/bug-control:409unchanged
+      ---
+      duration_ms: 39.098604
+      type: 'test'
+      ...
+    # Subtest: git/refs/heads/codex/bug-control:422unchanged
+    ok 41 - git/refs/heads/codex/bug-control:422unchanged
+      ---
+      duration_ms: 92.069446
+      type: 'test'
+      ...
+    # Subtest: git/refs/heads/codex/bug-control:502
+    ok 42 - git/refs/heads/codex/bug-control:502
+      ---
+      duration_ms: 76.490009
+      type: 'test'
+      ...
+    # Subtest: git/refs/heads/codex/bug-control:timeout
+    ok 43 - git/refs/heads/codex/bug-control:timeout
+      ---
+      duration_ms: 46.275222
+      type: 'test'
+      ...
+    # Subtest: git/refs/heads/codex/bug-control:output-limit
+    ok 44 - git/refs/heads/codex/bug-control:output-limit
+      ---
+      duration_ms: 51.25204
+      type: 'test'
+      ...
+    # Subtest: git/refs/heads/codex/bug-control:spawn-failed
+    ok 45 - git/refs/heads/codex/bug-control:spawn-failed
+      ---
+      duration_ms: 45.760692
+      type: 'test'
+      ...
+    # Subtest: git/refs/heads/codex/bug-control:unknown
+    ok 46 - git/refs/heads/codex/bug-control:unknown
+      ---
+      duration_ms: 54.621414
+      type: 'test'
+      ...
+    # Subtest: git/refs/heads/codex/bug-control:badJSON
+    ok 47 - git/refs/heads/codex/bug-control:badJSON
+      ---
+      duration_ms: 43.882598
+      type: 'test'
+      ...
+    # Subtest: git/refs/heads/codex/bug-control:thrown
+    ok 48 - git/refs/heads/codex/bug-control:thrown
+      ---
+      duration_ms: 46.774928
+      type: 'test'
+      ...
+    1..48
+ok 101 - Author8 mutation failures at every object/ref stage are fatal without fallback, hidden retries or postfailure ownership skips
+  ---
+  duration_ms: 2373.26912
+  type: 'test'
+  ...
+# Subtest: Author8 ref409/422 require proven fresh change; auth/server errors cannot gain a rebase even when the head changes
+    # Subtest: 409
+    ok 1 - 409
+      ---
+      duration_ms: 83.886868
+      type: 'test'
+      ...
+    # Subtest: 422
+    ok 2 - 422
+      ---
+      duration_ms: 102.422368
+      type: 'test'
+      ...
+    # Subtest: 400
+    ok 3 - 400
+      ---
+      duration_ms: 59.434439
+      type: 'test'
+      ...
+    # Subtest: 401
+    ok 4 - 401
+      ---
+      duration_ms: 51.875146
+      type: 'test'
+      ...
+    # Subtest: 403
+    ok 5 - 403
+      ---
+      duration_ms: 46.331333
+      type: 'test'
+      ...
+    # Subtest: 502
+    ok 6 - 502
+      ---
+      duration_ms: 58.258739
+      type: 'test'
+      ...
+    1..6
+ok 102 - Author8 ref409/422 require proven fresh change; auth/server errors cannot gain a rebase even when the head changes
+  ---
+  duration_ms: 403.681288
+  type: 'test'
+  ...
+# Subtest: Author9 positive exact-next read confirms formerly unknown ref outcomes without another write or owner skip
+    # Subtest: timeout-after-effect
+    ok 1 - timeout-after-effect
+      ---
+      duration_ms: 56.862521
+      type: 'test'
+      ...
+    # Subtest: malformed-ref
+    ok 2 - malformed-ref
+      ---
+      duration_ms: 66.34618
+      type: 'test'
+      ...
+    # Subtest: missing-ref-sha
+    ok 3 - missing-ref-sha
+      ---
+      duration_ms: 55.340588
+      type: 'test'
+      ...
+    # Subtest: changed-ref-type
+    ok 4 - changed-ref-type
+      ---
+      duration_ms: 63.263791
+      type: 'test'
+      ...
+    1..4
+ok 103 - Author9 positive exact-next read confirms formerly unknown ref outcomes without another write or owner skip
+  ---
+  duration_ms: 242.6485
+  type: 'test'
+  ...
+# Subtest: Author8 malformed parent/blob/tree/commit metadata and target types cannot authorize a ref effect
+    # Subtest: ref-name
+    ok 1 - ref-name
+      ---
+      duration_ms: 32.186773
+      type: 'test'
+      ...
+    # Subtest: ref-type
+    ok 2 - ref-type
+      ---
+      duration_ms: 30.254424
+      type: 'test'
+      ...
+    # Subtest: ref-sha
+    ok 3 - ref-sha
+      ---
+      duration_ms: 35.792529
+      type: 'test'
+      ...
+    # Subtest: parent-sha
+    ok 4 - parent-sha
+      ---
+      duration_ms: 28.577634
+      type: 'test'
+      ...
+    # Subtest: parent-tree
+    ok 5 - parent-tree
+      ---
+      duration_ms: 31.464661
+      type: 'test'
+      ...
+    # Subtest: parent-parents
+    ok 6 - parent-parents
+      ---
+      duration_ms: 31.016046
+      type: 'test'
+      ...
+    # Subtest: tree-truncated
+    ok 7 - tree-truncated
+      ---
+      duration_ms: 27.221994
+      type: 'test'
+      ...
+    # Subtest: tree-duplicate
+    ok 8 - tree-duplicate
+      ---
+      duration_ms: 37.671779
+      type: 'test'
+      ...
+    # Subtest: tree-path
+    ok 9 - tree-path
+      ---
+      duration_ms: 42.685926
+      type: 'test'
+      ...
+    # Subtest: tree-mode
+    ok 10 - tree-mode
+      ---
+      duration_ms: 26.849576
+      type: 'test'
+      ...
+    # Subtest: tree-sha
+    ok 11 - tree-sha
+      ---
+      duration_ms: 29.98285
+      type: 'test'
+      ...
+    # Subtest: contents-sha
+    ok 12 - contents-sha
+      ---
+      duration_ms: 23.273449
+      type: 'test'
+      ...
+    # Subtest: contents-size
+    ok 13 - contents-size
+      ---
+      duration_ms: 19.787179
+      type: 'test'
+      ...
+    # Subtest: contents-encoding
+    ok 14 - contents-encoding
+      ---
+      duration_ms: 18.917705
+      type: 'test'
+      ...
+    # Subtest: blob-sha
+    ok 15 - blob-sha
+      ---
+      duration_ms: 40.899477
+      type: 'test'
+      ...
+    # Subtest: new-tree-extra
+    ok 16 - new-tree-extra
+      ---
+      duration_ms: 51.606633
+      type: 'test'
+      ...
+    # Subtest: new-tree-sha
+    ok 17 - new-tree-sha
+      ---
+      duration_ms: 35.263596
+      type: 'test'
+      ...
+    # Subtest: new-commit-parent
+    ok 18 - new-commit-parent
+      ---
+      duration_ms: 39.539906
+      type: 'test'
+      ...
+    # Subtest: new-commit-tree
+    ok 19 - new-commit-tree
+      ---
+      duration_ms: 36.567688
+      type: 'test'
+      ...
+    # Subtest: new-commit-sha
+    ok 20 - new-commit-sha
+      ---
+      duration_ms: 39.042609
+      type: 'test'
+      ...
+    # Subtest: target-mode:120000
+    ok 21 - target-mode:120000
+      ---
+      duration_ms: 42.221156
+      type: 'test'
+      ...
+    # Subtest: target-mode:160000
+    ok 22 - target-mode:160000
+      ---
+      duration_ms: 42.777754
+      type: 'test'
+      ...
+    # Subtest: target-mode:040000
+    ok 23 - target-mode:040000
+      ---
+      duration_ms: 30.2066
+      type: 'test'
+      ...
+    1..23
+ok 104 - Author8 malformed parent/blob/tree/commit metadata and target types cannot authorize a ref effect
+  ---
+  duration_ms: 776.828013
+  type: 'test'
+  ...
+# Subtest: Author8 large creation proves tree absence and positive HTTP404, while read/auth failures authorize no mutation
+    # Subtest: auth403
+    ok 1 - auth403
+      ---
+      duration_ms: 10.166773
+      type: 'test'
+      ...
+    # Subtest: text404-with403
+    ok 2 - text404-with403
+      ---
+      duration_ms: 8.600301
+      type: 'test'
+      ...
+    # Subtest: unknown-read
+    ok 3 - unknown-read
+      ---
+      duration_ms: 9.297137
+      type: 'test'
+      ...
+    # Subtest: target-missing-contents
+    ok 4 - target-missing-contents
+      ---
+      duration_ms: 18.417762
+      type: 'test'
+      ...
+    # Subtest: absence-mismatch
+    ok 5 - absence-mismatch
+      ---
+      duration_ms: 7.007338
+      type: 'test'
+      ...
+    1..5
+ok 105 - Author8 large creation proves tree absence and positive HTTP404, while read/auth failures authorize no mutation
+  ---
+  duration_ms: 54.120706
+  type: 'test'
+  ...
+# Subtest: Author8 an unavailable conflict proof preserves the original definite ref rejection and never rebases
+    # Subtest: 409
+    ok 1 - 409
+      ---
+      duration_ms: 40.886405
+      type: 'test'
+      ...
+    # Subtest: 422
+    ok 2 - 422
+      ---
+      duration_ms: 47.417255
+      type: 'test'
+      ...
+    1..2
+ok 106 - Author8 an unavailable conflict proof preserves the original definite ref rejection and never rebases
+  ---
+  duration_ms: 88.795601
+  type: 'test'
+  ...
+# Subtest: Author8 a hash-consistent new tree changing an unrelated entry still fails before commit/ref publication
+ok 107 - Author8 a hash-consistent new tree changing an unrelated entry still fails before commit/ref publication
+  ---
+  duration_ms: 38.817568
+  type: 'test'
+  ...
+# Subtest: Author8 confirmed ref success tolerates subsequent forward progress and keeps that new file CAS for the next explicit rebase
+ok 108 - Author8 confirmed ref success tolerates subsequent forward progress and keeps that new file CAS for the next explicit rebase
+  ---
+  duration_ms: 106.018612
+  type: 'test'
+  ...
+# Subtest: Author9 F3 uncertain ref late-apply is never converted to failure or retried
+ok 109 - Author9 F3 uncertain ref late-apply is never converted to failure or retried
+  ---
+  duration_ms: 45.247164
+  type: 'test'
+  ...
+# Subtest: Author9 F3 uncertain ref different-commit is never converted to failure or retried
+ok 110 - Author9 F3 uncertain ref different-commit is never converted to failure or retried
+  ---
+  duration_ms: 49.994164
+  type: 'test'
+  ...
+# Subtest: Author9 F3 uncertain ref read-failure is never converted to failure or retried
+ok 111 - Author9 F3 uncertain ref read-failure is never converted to failure or retried
+  ---
+  duration_ms: 52.180298
+  type: 'test'
+  ...
+# Subtest: Author9 F3 uncertain ref bad-ref is never converted to failure or retried
+ok 112 - Author9 F3 uncertain ref bad-ref is never converted to failure or retried
+  ---
+  duration_ms: 47.951633
+  type: 'test'
+  ...
+# Subtest: Author9 F3 matching parent snapshot remains pinned across shared loads and independent rebases
+ok 113 - Author9 F3 matching parent snapshot remains pinned across shared loads and independent rebases
+  ---
+  duration_ms: 139.476652
+  type: 'test'
+  ...
+# Subtest: Author9 F3 large object uploads use a finite120s bound while reads retain30s
+ok 114 - Author9 F3 large object uploads use a finite120s bound while reads retain30s
+  ---
+  duration_ms: 46.237762
+  type: 'test'
+  ...
+# Subtest: Author9 F4 load-timeout preserves bounded diagnostic without raw transport text
+ok 115 - Author9 F4 load-timeout preserves bounded diagnostic without raw transport text
+  ---
+  duration_ms: 1.196595
+  type: 'test'
+  ...
+# Subtest: Author9 F4 init-ref-timeout preserves bounded diagnostic without raw transport text
+ok 116 - Author9 F4 init-ref-timeout preserves bounded diagnostic without raw transport text
+  ---
+  duration_ms: 0.90555
+  type: 'test'
+  ...
+# Subtest: Author9 F4 init-ref-output-limit preserves bounded diagnostic without raw transport text
+ok 117 - Author9 F4 init-ref-output-limit preserves bounded diagnostic without raw transport text
+  ---
+  duration_ms: 0.435578
+  type: 'test'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/src/bug-pipeline/workspace.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/issue-review-communication.test.mjs
+not ok 15 - agent-team/tests/bug-pipeline/issue-review-communication.test.mjs
+  ---
+  duration_ms: 80.828457
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/issue-review-communication.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/src/bug-pipeline/workspace.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/issue-review-sync.test.mjs
+not ok 16 - agent-team/tests/bug-pipeline/issue-review-sync.test.mjs
+  ---
+  duration_ms: 139.693772
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/issue-review-sync.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: independent Codex QA uses a fresh read-only analyst session and cannot return implementation status
+ok 120 - independent Codex QA uses a fresh read-only analyst session and cannot return implementation status
+  ---
+  duration_ms: 27.671551
+  type: 'test'
+  ...
+# Subtest: plan, implementation and simplification use distinct bounded Codex sessions and models
+ok 121 - plan, implementation and simplification use distinct bounded Codex sessions and models
+  ---
+  duration_ms: 23.490913
+  type: 'test'
+  ...
+# Subtest: missing model IDs fail explicitly before starting Codex
+ok 122 - missing model IDs fail explicitly before starting Codex
+  ---
+  duration_ms: 2.903796
+  type: 'test'
+  ...
+# Subtest: missing, invalid and symlink output fail closed
+ok 123 - missing, invalid and symlink output fail closed
+  ---
+  duration_ms: 19.107141
+  type: 'test'
+  ...
+# Subtest: Codex failure is surfaced and does not parse stale output
+ok 124 - Codex failure is surfaced and does not parse stale output
+  ---
+  duration_ms: 13.742771
+  type: 'test'
+  ...
+# Subtest: model worktree cannot contain the runtime output directory
+ok 125 - model worktree cannot contain the runtime output directory
+  ---
+  duration_ms: 16.475973
+  type: 'test'
+  ...
+# Subtest: preflight probes CLI support without invoking a model or reading credentials
+ok 126 - preflight probes CLI support without invoking a model or reading credentials
+  ---
+  duration_ms: 2.176206
+  type: 'test'
+  ...
+# Subtest: standalone independent QA treats repository instructions as data and forbids PR code execution
+ok 127 - standalone independent QA treats repository instructions as data and forbids PR code execution
+  ---
+  duration_ms: 4.336104
+  type: 'test'
+  ...
+# Subtest: multi-megabyte JSON progress does not prevent reading a separate valid structured result
+ok 128 - multi-megabyte JSON progress does not prevent reading a separate valid structured result
+  ---
+  duration_ms: 123.574429
+  type: 'test'
+  ...
+# Subtest: model failure diagnostics use finite enums and omit raw output
+ok 129 - model failure diagnostics use finite enums and omit raw output
+  ---
+  duration_ms: 4.218165
+  type: 'test'
+  ...
+# Subtest: failure classifier checks retained stdout and stderr without copying their text
+ok 130 - failure classifier checks retained stdout and stderr without copying their text
+  ---
+  duration_ms: 34.165944
+  type: 'test'
+  ...
+# Subtest: finite capacity metadata preserves delegate cooldown without exposing raw output
+ok 131 - finite capacity metadata preserves delegate cooldown without exposing raw output
+  ---
+  duration_ms: 12.48094
+  type: 'test'
+  ...
+# Subtest: missing runner byte counters remain unknown in finite diagnostics
+ok 132 - missing runner byte counters remain unknown in finite diagnostics
+  ---
+  duration_ms: 6.882122
+  type: 'test'
+  ...
+# Subtest: classifier ignores provider words inside progress and source/tool output
+ok 133 - classifier ignores provider words inside progress and source/tool output
+  ---
+  duration_ms: 10.294784
+  type: 'test'
+  ...
+# Subtest: free text and mutable receipt JSON cannot substitute for trusted external verifier
+ok 134 - free text and mutable receipt JSON cannot substitute for trusted external verifier
+  ---
+  duration_ms: 4.593997
+  type: 'test'
+  ...
+# Subtest: verified external user session permits same-account round5 with one-use exact binding
+ok 135 - verified external user session permits same-account round5 with one-use exact binding
+  ---
+  duration_ms: 3.288953
+  type: 'test'
+  ...
+# Subtest: wrong owner, history, action, head, budget and reservation are rejected at verifier boundary
+ok 136 - wrong owner, history, action, head, budget and reservation are rejected at verifier boundary
+  ---
+  duration_ms: 5.948809
+  type: 'test'
+  ...
+# Subtest: only canonical manual issue owner can receive absent-PR authorization
+ok 137 - only canonical manual issue owner can receive absent-PR authorization
+  ---
+  duration_ms: 1.218981
+  type: 'test'
+  ...
+# Subtest: Claude504 exact authorized settlement fails the running journal and attempt once without a new allowance
+ok 138 - Claude504 exact authorized settlement fails the running journal and attempt once without a new allowance
+  ---
+  duration_ms: 2.682412
+  type: 'test'
+  ...
+# Subtest: Claude504 settlement refuses absent auth, changed digest/round/history, wrong binding and replay
+ok 139 - Claude504 settlement refuses absent auth, changed digest/round/history, wrong binding and replay
+  ---
+  duration_ms: 3.498325
+  type: 'test'
+  ...
+# Subtest: active takeover is paused until exact explicit handback; no default or malformed substitute
+ok 140 - active takeover is paused until exact explicit handback; no default or malformed substitute
+  ---
+  duration_ms: 1.949436
+  type: 'test'
+  ...
+# Subtest: subject identity protections are a union and never keyed by mutable SHA
+ok 141 - subject identity protections are a union and never keyed by mutable SHA
+  ---
+  duration_ms: 0.670613
+  type: 'test'
+  ...
+# Subtest: non-finished operator release ownership is retained independently of handback
+ok 142 - non-finished operator release ownership is retained independently of handback
+  ---
+  duration_ms: 0.312205
+  type: 'test'
+  ...
+# Subtest: all collections retain terminal claimed issues and nonterminal exact scope occupancy without mutation
+ok 143 - all collections retain terminal claimed issues and nonterminal exact scope occupancy without mutation
+  ---
+  duration_ms: 1.437944
+  type: 'test'
+  ...
+# Subtest: Claude1 F1 stale nonce and missing audit cannot replay an old handback
+ok 144 - Claude1 F1 stale nonce and missing audit cannot replay an old handback
+  ---
+  duration_ms: 0.341665
+  type: 'test'
+  ...
+# Subtest: QA6-F1 malformed takeover and active types fail closed even without schema validation
+ok 145 - QA6-F1 malformed takeover and active types fail closed even without schema validation
+  ---
+  duration_ms: 0.322203
+  type: 'test'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/src/bug-pipeline/workspace.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/pipeline.test.mjs
+not ok 20 - agent-team/tests/bug-pipeline/pipeline.test.mjs
+  ---
+  duration_ms: 105.118897
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/pipeline.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: tail capture owns a bounded backing allocation and preserves byte semantics
+ok 147 - tail capture owns a bounded backing allocation and preserves byte semantics
+  ---
+  duration_ms: 8.571757
+  type: 'test'
+  ...
+# Subtest: synthetic model child permits separate progress and structured-result channels above 64 KiB
+ok 148 - synthetic model child permits separate progress and structured-result channels above 64 KiB
+  ---
+  duration_ms: 101.877955
+  type: 'test'
+  ...
+# Subtest: synthetic runner fails on independent total and stderr limits
+ok 149 - synthetic runner fails on independent total and stderr limits
+  ---
+  duration_ms: 182.131312
+  type: 'test'
+  ...
+# Subtest: stdout can be counted and tail-captured without contributing to the fatal byte limit
+ok 150 - stdout can be counted and tail-captured without contributing to the fatal byte limit
+  ---
+  duration_ms: 94.865582
+  type: 'test'
+  ...
+# Subtest: runner option validation rejects unbounded or invalid limits
+ok 151 - runner option validation rejects unbounded or invalid limits
+  ---
+  duration_ms: 4.486082
+  type: 'test'
+  ...
+# Subtest: timed out process groups terminate surviving descendants
+ok 152 - timed out process groups terminate surviving descendants
+  ---
+  duration_ms: 2417.287212
+  type: 'test'
+  ...
+# Subtest: non-fatal model stdout does not disable the process timeout
+ok 153 - non-fatal model stdout does not disable the process timeout
+  ---
+  duration_ms: 268.338818
+  type: 'test'
+  ...
+# Subtest: runner defaults retain the existing combined ceiling and prefix capture
+ok 154 - runner defaults retain the existing combined ceiling and prefix capture
+  ---
+  duration_ms: 149.00038
+  type: 'test'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/src/bug-pipeline/demo-deployment.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/automation/configure-demo-source.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/release.test.mjs
+not ok 22 - agent-team/tests/bug-pipeline/release.test.mjs
+  ---
+  duration_ms: 89.03641
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/release.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/configure-bug-repository.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/repository-settings.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/configure-bug-repository.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/repository-settings.test.mjs
+not ok 23 - agent-team/tests/bug-pipeline/repository-settings.test.mjs
+  ---
+  duration_ms: 121.222
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/repository-settings.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: auto routes difficulty/direct requests to senior and only bounded work to a delegate
+ok 157 - auto routes difficulty/direct requests to senior and only bounded work to a delegate
+  ---
+  duration_ms: 2.818596
+  type: 'test'
+  ...
+# Subtest: fixed 6.1-Sol override runs implementation and simplification entirely with senior
+ok 158 - fixed 6.1-Sol override runs implementation and simplification entirely with senior
+  ---
+  duration_ms: 29.954807
+  type: 'test'
+  ...
+# Subtest: actual overlapping sessions divert bounded work to senior without starting a second delegate
+ok 159 - actual overlapping sessions divert bounded work to senior without starting a second delegate
+  ---
+  duration_ms: 18.847126
+  type: 'test'
+  ...
+# Subtest: capacity errors consume their call and influence only a later requested attempt
+ok 160 - capacity errors consume their call and influence only a later requested attempt
+  ---
+  duration_ms: 14.31215
+  type: 'test'
+  ...
+# Subtest: automatic high-difficulty and legacy execution use the senior model in real CLI arguments
+ok 161 - automatic high-difficulty and legacy execution use the senior model in real CLI arguments
+  ---
+  duration_ms: 15.312839
+  type: 'test'
+  ...
+# Subtest: incidental line numbers in diagnostics do not invent provider capacity pressure
+ok 162 - incidental line numbers in diagnostics do not invent provider capacity pressure
+  ---
+  duration_ms: 11.354038
+  type: 'test'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/review-bug-setup.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/setup-review.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/review-bug-setup.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/setup-review.test.mjs
+not ok 25 - agent-team/tests/bug-pipeline/setup-review.test.mjs
+  ---
+  duration_ms: 75.792263
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/setup-review.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/src/bug-pipeline/standalone-review.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs
+not ok 26 - agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs
+  ---
+  duration_ms: 90.535843
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/src/bug-pipeline/cloud-review-worker.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/standalone-review.test.mjs
+not ok 27 - agent-team/tests/bug-pipeline/standalone-review.test.mjs
+  ---
+  duration_ms: 178.296242
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/standalone-review.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: external subscription mode reuses only the explicit local config and excludes every token/API fallback
+ok 166 - external subscription mode reuses only the explicit local config and excludes every token/API fallback
+  ---
+  duration_ms: 68.201642
+  type: 'test'
+  ...
+# Subtest: Max OAuth is confined to the reviewer and excludes separately billed API authentication
+ok 167 - Max OAuth is confined to the reviewer and excludes separately billed API authentication
+  ---
+  duration_ms: 0.461615
+  type: 'test'
+  ...
+# Subtest: subscription mode fails closed with only an API key and recognizes a legacy OAuth secret
+ok 168 - subscription mode fails closed with only an API key and recognizes a legacy OAuth secret
+  ---
+  duration_ms: 0.305159
+  type: 'test'
+  ...
+# Subtest: actual reviewer subprocess has OAuth only, including when both credentials exist
+ok 169 - actual reviewer subprocess has OAuth only, including when both credentials exist
+  ---
+  duration_ms: 42.725733
+  type: 'test'
+  ...
+# Subtest: missing Max OAuth prevents launching a reviewer even with cached API authentication
+ok 170 - missing Max OAuth prevents launching a reviewer even with cached API authentication
+  ---
+  duration_ms: 5.551032
+  type: 'test'
+  ...
+# Subtest: captured diagnostics redact OAuth and GitHub token forms and arbitrary OAuth assignments
+ok 171 - captured diagnostics redact OAuth and GitHub token forms and arbitrary OAuth assignments
+  ---
+  duration_ms: 0.669768
+  type: 'test'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/automation/install-claude-review-windows.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/windows-review.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/automation/install-claude-review-windows.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/windows-review.test.mjs
+not ok 29 - agent-team/tests/bug-pipeline/windows-review.test.mjs
+  ---
+  duration_ms: 57.073574
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/windows-review.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: irrelevant label jobs are filtered before entering the serialized controller concurrency group
+not ok 173 - irrelevant label jobs are filtered before entering the serialized controller concurrency group
+  ---
+  duration_ms: 4.364955
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/workflow-intake.test.mjs:5:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/tmp/clinicos-codex-output-policy-author3/exact-base/.github/workflows/codex-bug-pipeline.yml'"
+  code: 'ENOENT'
+  stack: |-
+    async open (node:internal/fs/promises:639:25)
+    async readFile (node:internal/fs/promises:1252:14)
+    async TestContext.<anonymous> (file:///tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/workflow-intake.test.mjs:6:20)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs' imported from /tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/src/bug-pipeline/workspace.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///tmp/clinicos-codex-output-policy-author3/exact-base/scripts/quality-gate/claude-bug-review.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: agent-team/tests/bug-pipeline/workspace.test.mjs
+not ok 31 - agent-team/tests/bug-pipeline/workspace.test.mjs
+  ---
+  duration_ms: 60.845717
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author3/exact-base/agent-team/tests/bug-pipeline/workspace.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..174
+# tests 307
+# suites 0
+# pass 286
+# fail 21
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10555.500093

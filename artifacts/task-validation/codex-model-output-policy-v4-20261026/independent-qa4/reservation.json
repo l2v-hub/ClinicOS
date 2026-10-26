@@ -1,0 +1,22 @@
+{
+  "nonce": "7f147816-563d-424c-96e9-69a0f2909985",
+  "at": "2026-10-26T07:23:19.879Z",
+  "model": "gpt-6-sol",
+  "maximumAdditionalSessions": 1,
+  "used": 0,
+  "status": "reserved-before-bounded-independent-qa-completion",
+  "scope": "NEW independent read-only QA actor reconcile interrupted QA25 actual PASS artifacts with own source15/authorseal identities and bounded meaningful proof, then report/seal/verdict. No source/provider/GHA/remote/canonical mutation or broad unrelated suite. Same immutable88b9 source; previous incomplete session preserved.",
+  "sourceCode": "88b9a33d4a879b85bbf8b543fd474b390461d304",
+  "amendmentHistory": [
+    {
+      "at": "2026-10-26T07:23:39.741Z",
+      "previousModel": "gpt-6.1-sol",
+      "previousScope": "Same independent QA actor complete interrupted source4 review and report/seal only; inspect existing 25 actual PASS tests and unchanged15 source projection. No new source edits/provider/GHA/remote/canonical actions or broad test expansion absent concrete finding.",
+      "reason": "Actual prior independent QA actor failed midturn at model capacity; no completion invocation yet. Use available capable alternative per user delegation/load policy."
+    }
+  ],
+  "reasoningEffort": "high",
+  "privateOutput": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/permanent-review-semantic-qa4-completion",
+  "stateCommit": "0b850942ce09debe928c8002f1e453d11219716c",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/1228c6e8-f73c-49fb-9781-82614c654c56/accepted.json"
+}

@@ -1,0 +1,75 @@
+TAP version 13
+# Subtest: independent Codex QA uses a fresh read-only analyst session and cannot return implementation status
+ok 1 - independent Codex QA uses a fresh read-only analyst session and cannot return implementation status
+  ---
+  duration_ms: 21.260278
+  type: 'test'
+  ...
+# Subtest: plan, implementation and simplification use distinct bounded Codex sessions and models
+ok 2 - plan, implementation and simplification use distinct bounded Codex sessions and models
+  ---
+  duration_ms: 18.041486
+  type: 'test'
+  ...
+# Subtest: missing model IDs fail explicitly before starting Codex
+ok 3 - missing model IDs fail explicitly before starting Codex
+  ---
+  duration_ms: 2.449091
+  type: 'test'
+  ...
+# Subtest: missing, invalid and symlink output fail closed
+ok 4 - missing, invalid and symlink output fail closed
+  ---
+  duration_ms: 6.456281
+  type: 'test'
+  ...
+# Subtest: Codex failure is surfaced and does not parse stale output
+ok 5 - Codex failure is surfaced and does not parse stale output
+  ---
+  duration_ms: 4.618674
+  type: 'test'
+  ...
+# Subtest: model worktree cannot contain the runtime output directory
+ok 6 - model worktree cannot contain the runtime output directory
+  ---
+  duration_ms: 4.80179
+  type: 'test'
+  ...
+# Subtest: preflight probes CLI support without invoking a model or reading credentials
+ok 7 - preflight probes CLI support without invoking a model or reading credentials
+  ---
+  duration_ms: 7.971358
+  type: 'test'
+  ...
+# Subtest: standalone independent QA treats repository instructions as data and forbids PR code execution
+ok 8 - standalone independent QA treats repository instructions as data and forbids PR code execution
+  ---
+  duration_ms: 4.611883
+  type: 'test'
+  ...
+# Subtest: large JSON progress does not prevent reading a separate valid structured result
+not ok 9 - large JSON progress does not prevent reading a separate valid structured result
+  ---
+  duration_ms: 55.294949
+  type: 'test'
+  location: '/tmp/clinicos-codex-output-policy-author/agent-team/tests/bug-pipeline/models.test.mjs:293:1'
+  failureType: 'testCodeFailure'
+  error: 'Codex execute session failed: output-limit'
+  code: 'model-execution-failed'
+  stack: |-
+    invoke (file:///tmp/clinicos-codex-output-policy-author/agent-team/src/bug-pipeline/models.mjs:294:11)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async implementation (file:///tmp/clinicos-codex-output-policy-author/agent-team/src/bug-pipeline/models.mjs:222:14)
+    async TestContext.<anonymous> (file:///tmp/clinicos-codex-output-policy-author/agent-team/tests/bug-pipeline/models.test.mjs:304:20)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 8
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 224.758205

@@ -1,0 +1,14 @@
+{
+  "parent": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+  "candidate": "31b11f09331249a93468bf00d8cc3d1313004a72",
+  "changed": [
+    "agent-team/src/bug-pipeline/models.mjs",
+    "agent-team/src/bug-pipeline/process.mjs",
+    "agent-team/tests/bug-pipeline/models.test.mjs",
+    "agent-team/tests/bug-pipeline/process-output.test.mjs"
+  ],
+  "baseToCandidateEntries": 123,
+  "expectedOldPacketFiles": 117,
+  "runtimeFiles": 6,
+  "frontendChanged": false
+}

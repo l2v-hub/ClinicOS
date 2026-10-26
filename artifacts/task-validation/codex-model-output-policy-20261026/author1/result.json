@@ -1,0 +1,21 @@
+{
+  "status": "IMPLEMENTED — NOT VERIFIED",
+  "reservationNonce": "255080bc-bede-4c29-aef7-d893a01f220f",
+  "baseline": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "task": "codex-model-output-policy-20261026",
+  "tests": {
+    "command": "Node 22 node --test agent-team/tests/bug-pipeline/process-output.test.mjs agent-team/tests/bug-pipeline/models.test.mjs",
+    "passed": 16,
+    "failed": 0,
+    "providerCalls": 0
+  },
+  "redGreen": {
+    "baseline": "80 KiB JSON progress plus valid typed result fails at output-limit",
+    "patched": "same synthetic scenario succeeds and returns typed result"
+  },
+  "limitations": [
+    "Original clinical failure 40249337703 exact cause remains unknown",
+    "Independent QA, real Claude review and native CI are pending",
+    "imported-history.json requires coordinator import from genuine reservation and Git-bound source manifest"
+  ]
+}

@@ -1,0 +1,3 @@
+IMPLEMENTED — NOT VERIFIED
+
+The scoped local correction and tests are complete. Do not treat QA1 as passing: its FAILED VALIDATION record for candidate 38b37e3 is preserved. A fresh independent QA run must validate the exact corrected source hashes before any verified or publication claim.

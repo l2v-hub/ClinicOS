@@ -1,0 +1,62 @@
+[
+  {
+    "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-author3/artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/agent-team-full-b868-context-final.tap",
+    "sha256": "6794b801398af444819de43cbe38503d4582adf1e782bae6d89a2b3f20a6d936",
+    "isIndependentQaRun": false
+  },
+  {
+    "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-author3/artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/agent-team-full-qa2-context-final.tap",
+    "sha256": "3a07d9024f013fc889b460f7405fd535f734df0f1ddc7f1b5d3bd721b54fa4bd",
+    "isIndependentQaRun": false
+  },
+  {
+    "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-author3/artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/baseline-red.tap",
+    "sha256": "a8c67e8108e120d6f8266ca7053f35e4ecf3818927d3b79433549fdeb8d459b8",
+    "isIndependentQaRun": false
+  },
+  {
+    "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-author3/artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/bug-pipeline-b868-complete-context-final.tap",
+    "sha256": "136ae3cb430f10198ac89c9d5fa5c305e1c6d78b80f86c1032220efc97d0e2d2",
+    "isIndependentQaRun": false
+  },
+  {
+    "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-author3/artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/bug-pipeline-b868-context-fixtures-final.tap",
+    "sha256": "05785ae293a5ae82bdb1b0181959859775b542e704ee6564347338f3af89795d",
+    "isIndependentQaRun": false
+  },
+  {
+    "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-author3/artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/bug-pipeline-b868-overlay-final.tap",
+    "sha256": "f0a6afd64e3f09acb25989681cc5e73dba1c337b598e8325b7e78d3e3d18c112",
+    "isIndependentQaRun": false
+  },
+  {
+    "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-author3/artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/bug-pipeline-full-final.tap",
+    "sha256": "d05d3533c6bda9539b6286af7d51fee828573711e0dc6c31d46910770a87130c",
+    "isIndependentQaRun": false
+  },
+  {
+    "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-author3/artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/bug-pipeline-full.tap",
+    "sha256": "52f543d40582ff98658f9280d3fd084d7a997df02f8fb1100a3ddf88931f6cee",
+    "isIndependentQaRun": false
+  },
+  {
+    "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-author3/artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/models-process-output-final.tap",
+    "sha256": "9d2f22bb944a6abacca23f9b764f722d13eadfaef77386e66b8007b799d43a2a",
+    "isIndependentQaRun": false
+  },
+  {
+    "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-author3/artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/models-process-output.tap",
+    "sha256": "f7967b649ba4892bfa2bbf035104233aabf562827a8c058ce78d4bf63db59a40",
+    "isIndependentQaRun": false
+  },
+  {
+    "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-author3/artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/qa2-exact-full-command-final.tap",
+    "sha256": "6780d3d3938d05026401790d4ae72986a2ad455851423d2e8ceb297da68a24e8",
+    "isIndependentQaRun": false
+  },
+  {
+    "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-author3/artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/routing.tap",
+    "sha256": "51642e444fc00aa4cf974166e76f828107962d8c7a26ff1af8b54df3b77871ea",
+    "isIndependentQaRun": false
+  }
+]

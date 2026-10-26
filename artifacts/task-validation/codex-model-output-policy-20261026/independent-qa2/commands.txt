@@ -1,0 +1,17 @@
+All commands local. No provider or external API calls. Node path: /tmp/clinicos-node22-native12/node_modules/node/bin/node (v22.23.4).
+Snapshot: copied read-only QA1 fixtures and baseline to owned /tmp/clinicos-output-policy-qa2; overlaid each of six files using git -C /workspace/ClinicOS show 3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b:<path> and compared every SHA-256 against reservation.
+git -C /workspace/ClinicOS diff 995e2ff6d14a96b5d67e0d14d708f4a95c4c816f 3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b
+git -C /workspace/ClinicOS diff --check 995e2ff6d14a96b5d67e0d14d708f4a95c4c816f 3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b
+node scripts/quality-gate/validate-task-contract.js <QA2 output>
+TMPDIR=/tmp/clinicos-output-policy-qa2 node --test --test-concurrency=1 agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs scripts/automation/protect-demo-secret.test.mjs
+TMPDIR=/tmp/clinicos-output-policy-qa2 node --test agent-team/tests/bug-pipeline/models.test.mjs agent-team/tests/bug-pipeline/process-output.test.mjs agent-team/tests/bug-pipeline/routing.test.mjs
+TMPDIR=/tmp/clinicos-output-policy-qa2 node /tmp/clinicos-output-policy-qa2/independent.mjs
+node /tmp/clinicos-output-policy-qa2/memory-extra.mjs
+node /tmp/clinicos-output-policy-qa2/classifier-extra.mjs
+node /tmp/clinicos-output-policy-qa2/browser-evidence.mjs
+node --check agent-team/src/bug-pipeline/process.mjs
+node --check agent-team/src/bug-pipeline/models.mjs
+node --check agent-team/src/bug-pipeline/cli.mjs
+unzip -t <QA2 output>/trace/trace.zip
+Screenshot inspected using view_image.
+Every executed command exited 0. Full suite 1666 tests /1663 PASS /0 FAIL /3 Windows SKIP. Focused 26 PASS. Independent 16 PASS. Allocation matrix 54 transitions PASS; real runner PASS; four adversarial next-selection cases PASS. Browser PASS.

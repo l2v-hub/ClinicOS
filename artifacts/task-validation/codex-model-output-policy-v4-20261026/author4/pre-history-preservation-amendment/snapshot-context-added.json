@@ -1,0 +1,378 @@
+{
+  "source": "895e6bd54461fcc6a00be4117e4792bde6fc4e07",
+  "files": [
+    {
+      "path": ".claude/skills/bug-final-review/SKILL.md",
+      "sourceGitBlobSha1": "eb79e215d07e5c69f2cc971ab4dddac49de4837e",
+      "rawSha256": "cbe3064a2673c32c776a71fd1109c197ace6fd7d7067730338124357143b65c5",
+      "bytes": 2306
+    },
+    {
+      "path": ".claude/skills/claude-home-cleanup/SKILL.md",
+      "sourceGitBlobSha1": "7920e3cc12e7a073e5b0ea472a9c1d347937ed70",
+      "rawSha256": "9ad355ebd981f7e46e54cff82063b0e2d7cc087de0e77530715762ab60b22cae",
+      "bytes": 5638
+    },
+    {
+      "path": ".claude/skills/deploy-frontend/SKILL.md",
+      "sourceGitBlobSha1": "953f8fc2bc8a3bad9d1e6f02d325b42263620266",
+      "rawSha256": "e855457be9254a465f38e67f47dd28d2dc6316b35346fd0d1e485621d2c36f4e",
+      "bytes": 1814
+    },
+    {
+      "path": ".claude/skills/new-clinical-tab/SKILL.md",
+      "sourceGitBlobSha1": "dfd7165b8cc347564050ab29ae5980c87f3adb04",
+      "rawSha256": "9b53e623c1caeaf08df54b7f78e3aee3bf30b9867ad17766037f0b4bb8e44367",
+      "bytes": 2323
+    },
+    {
+      "path": ".claude/skills/parallel-evidence-remediation/SKILL.md",
+      "sourceGitBlobSha1": "a57eda534c2ac1a105168cf88d604e654fd744fc",
+      "rawSha256": "61cdfd618f0ff3111257473e4b5b470182e7a03e32c17397d0ced68d516eec85",
+      "bytes": 7201
+    },
+    {
+      "path": ".claude/skills/playwright-evidence/SKILL.md",
+      "sourceGitBlobSha1": "bff2a65b149b396cfb430bedc3cd4b96e2b6e3a6",
+      "rawSha256": "29bd1d29c9404655e6638d0f8bca864e51f6964f1b6f6a554c2f3df18811bb7c",
+      "bytes": 2534
+    },
+    {
+      "path": ".claude/skills/process-requirement/SKILL.md",
+      "sourceGitBlobSha1": "4cc95463576ebe84327b44c762683b49cf01bf75",
+      "rawSha256": "d25eaa0325eef705c1196f456652f7a5524288302a1b9e7946133489443e8e72",
+      "bytes": 9729
+    },
+    {
+      "path": ".claude/skills/run-clinicos/SKILL.md",
+      "sourceGitBlobSha1": "896242651792fba954739e44757ad5d0491ebb75",
+      "rawSha256": "ff4ec545274241c534de539f89130bae33290eafa21b61d71140483ca68c9105",
+      "bytes": 6575
+    },
+    {
+      "path": ".claude/skills/run-clinicos/driver.mjs",
+      "sourceGitBlobSha1": "cc686cb8c20b3c07003b2c0203cb55e7a30dcd5c",
+      "rawSha256": "7f0b63952cab694fbb393e58f54967631c3bd4e394a5c7eef00b0e9a53862ca2",
+      "bytes": 4039
+    },
+    {
+      "path": ".claude/skills/run-clinicos/measure-detail.mjs",
+      "sourceGitBlobSha1": "acba7db2af7d60aa58447488101dda177c53af92",
+      "rawSha256": "7a0f9fb3b20951f1c1cd31dab588f42e94c03f6b8ad358a13394f417ba9f3d18",
+      "bytes": 1579
+    },
+    {
+      "path": ".claude/skills/run-clinicos/measure.mjs",
+      "sourceGitBlobSha1": "50cb693f8e51e5ee525b98c72a8855a7b8743704",
+      "rawSha256": "c29597357b0df362173119873c926ad2ad6b36eb10f9d7f9d1fd352a8fcde100",
+      "bytes": 2144
+    },
+    {
+      "path": ".claude/skills/run-clinicos/overflow.mjs",
+      "sourceGitBlobSha1": "46105fdc9a380dfc8e77e449bf3c6b8d6df9ba80",
+      "rawSha256": "5e1e1887afc58522f0839fdb5fcfdf2042b1f5cf58e584577b62bb87b71d57ee",
+      "bytes": 1402
+    },
+    {
+      "path": ".claude/skills/run-clinicos/req036-api-check.mjs",
+      "sourceGitBlobSha1": "a74ac427c15273dbf0b37b62d79adce1953249e3",
+      "rawSha256": "d5dbe647ff57c9b0f86b2d824a28748af330edd9f44ababf30c961fc98c47691",
+      "bytes": 3297
+    },
+    {
+      "path": ".claude/skills/run-clinicos/req036-evidence.mjs",
+      "sourceGitBlobSha1": "85c9f2c26ca35fb6db1f5cdf527d8e5a3711973f",
+      "rawSha256": "d99b6ddfa83f78ec75d80edd4e2bae63311ec03e71329e7ff7e5cc80b4147152",
+      "bytes": 3960
+    },
+    {
+      "path": ".claude/skills/run-clinicos/req039-gateway-check.mjs",
+      "sourceGitBlobSha1": "acf9240ce83b725bf5016e3e8d5c90bc71f9ec52",
+      "rawSha256": "861209f5aa4445c26bf3f663fcd52a3a6a821eb97b43981cb11fa20a1c83c506",
+      "bytes": 4852
+    },
+    {
+      "path": ".claude/skills/run-clinicos/req040-assistant-check.mjs",
+      "sourceGitBlobSha1": "45595fd05295f419b7da47fe597936bdd6cad02f",
+      "rawSha256": "880fa70740ad35f23e1785e4502aad1e7726752724bb26bee0932039d30f565e",
+      "bytes": 4172
+    },
+    {
+      "path": ".claude/skills/run-clinicos/req040-panel-evidence.mjs",
+      "sourceGitBlobSha1": "de4a986d2d5dbdf61278174673ee5da8142846b8",
+      "rawSha256": "50d479b03991447cec12af70248fb2caa2845ccf889bda1597bb8b31a1c44283",
+      "bytes": 2966
+    },
+    {
+      "path": ".claude/skills/run-clinicos/review-shot.mjs",
+      "sourceGitBlobSha1": "7a327f2fc113c009bf2bd0027323523c011a0c1b",
+      "rawSha256": "9cd7e51372e7a23d73f6039939fbab41a3b38375925837606a3ad9d4bfec35d2",
+      "bytes": 1979
+    },
+    {
+      "path": ".claude/skills/run-clinicos/screenshot-operatore.png",
+      "sourceGitBlobSha1": "6b61fa2fef8c6c31e2227f229ec2dd1538dd7aa5",
+      "rawSha256": "0e86aefeca9302679e34832be145c1c53dc1aad90ae63cba4a2e74a0674862c5",
+      "bytes": 85997
+    },
+    {
+      "path": ".claude/skills/run-clinicos/shot-dettaglio.png",
+      "sourceGitBlobSha1": "c836094e7ff5af96033b188fd3a7dc1d1e892adb",
+      "rawSha256": "a80b87b53e535edab34311ba51293ce4e108491bcbcbf6fc1ea11148d6965c99",
+      "bytes": 78888
+    },
+    {
+      "path": ".claude/skills/run-clinicos/shot-pazienti.png",
+      "sourceGitBlobSha1": "5eaa27c59bcbd8ab615164279f4343809475e3b5",
+      "rawSha256": "f105f1d5b0fae21ffcbce7551312af2d77f9120d3f81ed39830fb6cc32942a5f",
+      "bytes": 124246
+    },
+    {
+      "path": ".claude/skills/speckit-analyze/SKILL.md",
+      "sourceGitBlobSha1": "b66d3c7a2d7d9c83d1dceaf5943d0716b2465722",
+      "rawSha256": "96baddf86638fe6c8968b42e7671368d56b38596770be54524a4face3621269f",
+      "bytes": 11078
+    },
+    {
+      "path": ".claude/skills/speckit-checklist/SKILL.md",
+      "sourceGitBlobSha1": "6578f376418a1d1b0753b86d2aec898a3a8aeb47",
+      "rawSha256": "7850b2499431a882975fd9df65d802b502de24d6fe41fa0f147aa81d9006c586",
+      "bytes": 20415
+    },
+    {
+      "path": ".claude/skills/speckit-clarify/SKILL.md",
+      "sourceGitBlobSha1": "0c0e778521c4f85c470ade46dfe7c1a120347bf6",
+      "rawSha256": "746b2d93864c96180aa6cefedfae2121aebccdb224aa39e2ed9f204a26d85764",
+      "bytes": 14869
+    },
+    {
+      "path": ".claude/skills/speckit-constitution/SKILL.md",
+      "sourceGitBlobSha1": "11c64cac05f55c31515ed966a04ede7a2307be5e",
+      "rawSha256": "b880745e32ccb7a562a564ec82a96ca602f7d2af890c5c7ac858b509de211a05",
+      "bytes": 8698
+    },
+    {
+      "path": ".claude/skills/speckit-git-commit/SKILL.md",
+      "sourceGitBlobSha1": "a76dc20945272de4c3d25ec775f781c22f3d1032",
+      "rawSha256": "2bdb85b684e2f853f52672b722efda480f2e0f752e5bfd745b0d4591a5a7585a",
+      "bytes": 1955
+    },
+    {
+      "path": ".claude/skills/speckit-git-feature/SKILL.md",
+      "sourceGitBlobSha1": "610b406ae8d107b305731f50e1b255874624a51b",
+      "rawSha256": "7aa86c26b14573da65bb4f57ea21b67aafd62db03137d55d97c269e3be1ed27a",
+      "bytes": 3455
+    },
+    {
+      "path": ".claude/skills/speckit-git-initialize/SKILL.md",
+      "sourceGitBlobSha1": "47b5c1a50c641329030a43cc74e0e11ca8496728",
+      "rawSha256": "0f5dd75165230b2c32ff9e3bc6ec59aac3f97d7b88a29c69b9786f8825f2e72a",
+      "bytes": 1763
+    },
+    {
+      "path": ".claude/skills/speckit-git-remote/SKILL.md",
+      "sourceGitBlobSha1": "403954714b5e4f777956397905feae06983baef3",
+      "rawSha256": "ba0e9305eef46c9ef42d713c37653a32d98da7876fe6c49cc6321a3c7758f585",
+      "bytes": 1578
+    },
+    {
+      "path": ".claude/skills/speckit-git-validate/SKILL.md",
+      "sourceGitBlobSha1": "b1e9a8118d915b421d2617af0d3a8be5a199e4cb",
+      "rawSha256": "e18df9149b0d59adffff09ce08492f462df0469f8a993bef71e6bdba2e5af05b",
+      "bytes": 1967
+    },
+    {
+      "path": ".claude/skills/speckit-implement/SKILL.md",
+      "sourceGitBlobSha1": "69bea0d0118aee63f158b65972f4c96f49224ac6",
+      "rawSha256": "c00332e26e6a1fd9409ba9ba650f948ff531ca8cb8116f641e06bee41ec5174a",
+      "bytes": 11091
+    },
+    {
+      "path": ".claude/skills/speckit-plan/SKILL.md",
+      "sourceGitBlobSha1": "b71f21fdd9db98dcfeffc4be38dff1e8e7b3d278",
+      "rawSha256": "965aee4472dc88f90cc7181de841b6ddaf1b60da6d80b1208c2294a28685cbe5",
+      "bytes": 6600
+    },
+    {
+      "path": ".claude/skills/speckit-specify/SKILL.md",
+      "sourceGitBlobSha1": "b2395eecc1033b10102a27d1bd1496818a5fe54b",
+      "rawSha256": "12007b88516e93d4fd9cd96b9e4fbde9c1c3b8a13ddcd5afceda3e2d7810c407",
+      "bytes": 16509
+    },
+    {
+      "path": ".claude/skills/speckit-tasks/SKILL.md",
+      "sourceGitBlobSha1": "a6d105db1612d6cb7ded6e7a55073c9465c44801",
+      "rawSha256": "3378b3c3e47964c6d4fd6e1ed41ca6cdcbbd9ea1fbaad3885030a5dfc2e4677b",
+      "bytes": 9831
+    },
+    {
+      "path": ".claude/skills/speckit-taskstoissues/SKILL.md",
+      "sourceGitBlobSha1": "3cdf4e40952355fd12e81ff5454765901a9d5469",
+      "rawSha256": "0660f6890618883d2e6de2e882216c5d1c1defac1a2a16f79ca5fd3890d796f5",
+      "bytes": 4466
+    },
+    {
+      "path": ".claude/skills/spedire-modifica/SKILL.md",
+      "sourceGitBlobSha1": "1643123176c647b77f1547495ac3eba3b38757d8",
+      "rawSha256": "f62214d19c62ce271e0214d6722d3c480c74f54d6afc06982ae2dd793cd61e44",
+      "bytes": 5599
+    },
+    {
+      "path": ".github/workflows/activate-assistant-llm.yml",
+      "sourceGitBlobSha1": "1e795b66a014d1786575a37dd0eb4d629f70f07c",
+      "rawSha256": "72d46284ba5a1fd9c85cacebdba221f0f0978af8333870e87c042d7a2fd03deb",
+      "bytes": 1888
+    },
+    {
+      "path": ".github/workflows/ai-import-e2e.yml",
+      "sourceGitBlobSha1": "b1d02e8715a37df4e8e6d700e1f1a68a36596538",
+      "rawSha256": "533cd1e5ceb92f1b7120ad5bb7fbc0ffaddf823e8adbbf2c869725b19d9f86a7",
+      "bytes": 11503
+    },
+    {
+      "path": ".github/workflows/ai-runtime-tests.yml",
+      "sourceGitBlobSha1": "6ec7c3d736b987d82ec86a2eba6d40ff8320a791",
+      "rawSha256": "09a277f1018d94a117225b2ae943c8bf8e1b3b82c7afa4145dcde746d01d50fc",
+      "bytes": 1266
+    },
+    {
+      "path": ".github/workflows/azure-static-web-apps-orange-hill-02285750f.yml.disabled",
+      "sourceGitBlobSha1": "72f18b9bf290e73f4a7d36bfac1c42aabffc216f",
+      "rawSha256": "9bcaab2b94bb269d8e28fa0301633981b981eb3fa4bee3d46d39f8ca896e624c",
+      "bytes": 1376
+    },
+    {
+      "path": ".github/workflows/bug-pipeline-tests.yml",
+      "sourceGitBlobSha1": "f08b8aa6b4a0386bfc8c9f4009e5533cc0b6e4e7",
+      "rawSha256": "ee99dadf18b78104743ec263fd624b395bea84619c627d2767d8da74f6fe51a9",
+      "bytes": 13476
+    },
+    {
+      "path": ".github/workflows/claude-cloud-review.yml",
+      "sourceGitBlobSha1": "78cfc11cedd79fc2558f8150399464b3d9135769",
+      "rawSha256": "440d65be34c642e63e6017fd59bd92a9f8e11ecfb63eaf65dc1ec15d77812365",
+      "bytes": 3400
+    },
+    {
+      "path": ".github/workflows/codex-bug-pipeline.yml",
+      "sourceGitBlobSha1": "3dbad7899b05dd6dd964b70b91edf1da5b7da1a8",
+      "rawSha256": "265542dafb39489a2a64d87eec8b580306ad577392049227cc7fb88bae722315",
+      "bytes": 4020
+    },
+    {
+      "path": ".github/workflows/codex-bug-release.yml",
+      "sourceGitBlobSha1": "7e7ed3ee29aa8764f9b3002bf3b143f443f9285e",
+      "rawSha256": "4236b484b4000b0017b99becdf7297b84bf02f6d397fc856d0dc8e13a579c8c8",
+      "bytes": 8790
+    },
+    {
+      "path": ".github/workflows/codex-issue-review-sync.yml",
+      "sourceGitBlobSha1": "c8bc36f857c47979c607cca4fb6d49f0050de614",
+      "rawSha256": "f482c40f8f64991a6df91a0b1154a4bb1c51903fc948f4202f18749c8105cb34",
+      "bytes": 1182
+    },
+    {
+      "path": ".github/workflows/configure-demo-source.yml",
+      "sourceGitBlobSha1": "44073c12df8c178f4ee6fd50cdaa5b3e1eb7af26",
+      "rawSha256": "34319447165b115b20c82e9b0c10393bbf189b8352867873ea3fb7948cb97875",
+      "bytes": 2276
+    },
+    {
+      "path": ".github/workflows/deploy-backend.yml",
+      "sourceGitBlobSha1": "2b301856e10c2f65f9172ea6cbbc480724e3883c",
+      "rawSha256": "32fc288e0695ac27f25c06774d152cc7c75452083f740fbe7b11c10748edcf9b",
+      "bytes": 2124
+    },
+    {
+      "path": ".github/workflows/deploy-demo-exact-commit.yml",
+      "sourceGitBlobSha1": "75b3d02cca51b72f97519c477a9868203fb3acb7",
+      "rawSha256": "4caf8d8c4d1bb7d596fc31fde9bb4a083c52d7235365cffb3b508d64fc87172d",
+      "bytes": 4451
+    },
+    {
+      "path": ".github/workflows/deploy-runtime.yml",
+      "sourceGitBlobSha1": "a8a5f649794a14037d7c1b4bfa19dedd9a093811",
+      "rawSha256": "1d0acd74d7bbb425ff672a9bf1193f4b784dfc3189009902af16278db3e5bf8a",
+      "bytes": 1584
+    },
+    {
+      "path": ".github/workflows/deploy-vercel.yml.disabled",
+      "sourceGitBlobSha1": "3548cfc60b025c98bf905110522ece6ff12e49cc",
+      "rawSha256": "125547cee32659e9f7f37f4541e99e7040c565d12edf8f29a21994f352adb484",
+      "bytes": 1249
+    },
+    {
+      "path": ".github/workflows/frontend-secret-scan.yml",
+      "sourceGitBlobSha1": "ef45a71a953dea61cbac1c33474e074f20c589c0",
+      "rawSha256": "36a8e530392f4a3dad28cb4112913edd3a9d50d3012fe8677fdeb463166b5cb9",
+      "bytes": 1268
+    },
+    {
+      "path": ".github/workflows/inspect-demo-bearer-readiness.yml",
+      "sourceGitBlobSha1": "0500649c57cadfd75e0504dd32818ac2d8810575",
+      "rawSha256": "5d31e7aba6a9147244e36b4cad953f2155ab344ca2ee0797657daa76872266fb",
+      "bytes": 1391
+    },
+    {
+      "path": ".github/workflows/inspect-demo-source-topology.yml",
+      "sourceGitBlobSha1": "e37b846fce9310644d6a8f00b576bbd2ba271278",
+      "rawSha256": "d12b84e4eba6c2eac2ab843b4c63bb46bdaecf9f0b47a0847666fd22fe3151b2",
+      "bytes": 1786
+    },
+    {
+      "path": ".github/workflows/inspect-demo-storage.yml",
+      "sourceGitBlobSha1": "d16243b4dcda0f5c13ba7e192aa3161788d6f68b",
+      "rawSha256": "d0d7e71f76860370e89e8c8ff2f2100a340e9e3311bb4ca4b00c3d6e980557b7",
+      "bytes": 4303
+    },
+    {
+      "path": ".github/workflows/protect-demo-secret.yml",
+      "sourceGitBlobSha1": "3f691d3ad87e7e663c851c76ae71859cc45a406c",
+      "rawSha256": "ed56dbc4402058e75d6bb5c940cef53131793882b3834cf37dcd1567d87cb5e7",
+      "bytes": 6937
+    },
+    {
+      "path": ".github/workflows/railway-set-var.yml",
+      "sourceGitBlobSha1": "5ad6d9d0e3f1814fb1805678a87d6c4e9169b33a",
+      "rawSha256": "86ebce31d030c61d8b420e5ba0efed398794b5798e180f72ed2e0ca53147489e",
+      "bytes": 1788
+    },
+    {
+      "path": ".github/workflows/recover-demo-topology-receipt.yml",
+      "sourceGitBlobSha1": "c9ce37dba1f5c73e97645bc97bd58ca8663af5f0",
+      "rawSha256": "12429291df307ed11bfb13c73ca11dc3bea1b22f96cf1ec22adb30564f3de930",
+      "bytes": 1613
+    },
+    {
+      "path": ".github/workflows/set-runtime-azure.yml",
+      "sourceGitBlobSha1": "08d7239aab736e43cb4e9698fcbeb24ef8625985",
+      "rawSha256": "24aabe1f758a42078802f0877c0f985497eee325dd86fd44662f6c5e57c8baf4",
+      "bytes": 1934
+    },
+    {
+      "path": ".github/workflows/set-runtime-model.yml",
+      "sourceGitBlobSha1": "c52c026f8ad085e92c995d6f27c0f2bd06f32035",
+      "rawSha256": "ad6fd885f07de130f2164fdcbfe64f855030922a1d4a08ca69c05231ee7a9dc6",
+      "bytes": 1411
+    },
+    {
+      "path": "docs/cloud-claude-review.md",
+      "sourceGitBlobSha1": "7b26e0839fabb5c812d2d8d7a969b31d622e7bb7",
+      "rawSha256": "a50423aad13a1815ab84b669e2ee9010bb6434c0b2c4e5237e004f247d886801",
+      "bytes": 7071
+    },
+    {
+      "path": "docs/codex-bug-workflow.md",
+      "sourceGitBlobSha1": "6d472173ad73afc763f34da1a2cbb427fe711100",
+      "rawSha256": "3c5c1cfe5961d23792c91410ef8276800d0ad492793c4fbd156d9b454b964224",
+      "bytes": 38607
+    },
+    {
+      "path": "docs/standalone-pr-review.md",
+      "sourceGitBlobSha1": "9b42496a4a43192bf11cc17c2eb5516a823120ce",
+      "rawSha256": "271def56cd267e89e22a95ebacb2e71907cc6edb08eb59e09ed3399686d2e885",
+      "bytes": 28074
+    }
+  ],
+  "reason": "Tracked test fixtures absent in initial selected context, discovered by targeted workflow read ENOENT; no production behavior change."
+}

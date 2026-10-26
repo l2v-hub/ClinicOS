@@ -1,0 +1,23 @@
+{
+  "nonce": "e224a4fd-aebb-4679-af5e-7d1d6eb061e5",
+  "status": "reserved-before-independent-qa",
+  "at": "2026-10-26T03:36:56.149Z",
+  "model": "gpt-6.1-sol",
+  "maximumSessions": 1,
+  "used": 0,
+  "code": "31b11f09331249a93468bf00d8cc3d1313004a72",
+  "base": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "parent": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+  "sourceHashes": {
+    "agent-team/src/bug-pipeline/cli.mjs": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed",
+    "agent-team/src/bug-pipeline/models.mjs": "57af56be98574342f296f773d7ebf1b3155de1bf3557d37e606974ffe46fcd38",
+    "agent-team/src/bug-pipeline/process.mjs": "078765e34f5941de29f801e68b5d8ab438a05d86c6d7331177bbea105d956f6d",
+    "agent-team/tests/bug-pipeline/models.test.mjs": "7214b96a5e82420fa9e7e412a84cb4f3f17adbb33c03820a0f266bca10a18ce8",
+    "agent-team/tests/bug-pipeline/process-output.test.mjs": "96bc65bc79dc398fc6d021c0ca95573790a3085d23970212037d47f409ea5553",
+    "agent-team/tests/bug-pipeline/routing.test.mjs": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd"
+  },
+  "output": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-qa3",
+  "scope": "NEW5phase independent QA of source3 approvednonfatalmodelstdout, defaultcaps/inventory, anchoredstatusclassification, real3MiBtyped-success/legacystderrtimeouttypednegatives and sourceSHA1/SHA256identity. Priorpeer1BLOCKED and allhistorypreserved; finalhead/CI/publication separatelycoordinatorboundbeforepeer2.",
+  "stateCommit": "5993433361c47a422398a10432c77e1e462ff9da",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/2a3dd0c5-31c2-4a73-9c20-de0623cce19c/accepted.json"
+}

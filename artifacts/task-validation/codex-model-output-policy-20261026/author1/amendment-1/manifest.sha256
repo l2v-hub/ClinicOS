@@ -1,0 +1,13 @@
+43c3f16b715349b8c474e1d3d6d2efddecd5904efa54f687e707a643aa90d67a  agent-team/src/bug-pipeline/process.mjs
+1cd2bf6c650264a976c938caf36c498fe67eae2812dcf06adbfc61b36afac122  agent-team/src/bug-pipeline/models.mjs
+a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed  agent-team/src/bug-pipeline/cli.mjs
+71159e884f0b688afb06854163a041289a9b0ae8a408e13b381b43d303a40996  agent-team/tests/bug-pipeline/models.test.mjs
+dadde17c49a95901cfab8cbcd55c82ee0deceffa7d91cef4cd27d8833bb28b16  agent-team/tests/bug-pipeline/process-output.test.mjs
+e398a5176949856110f0f037c7ead53610d72df9f10ba49fdb26dc80c8ee58c5  artifacts/task-validation/codex-model-output-policy-20261026/task-contract.md
+50671cd0ff018347bc44a34965a9d9e6f2febb2f82896bef1723e962fb7c8b4e  artifacts/task-validation/codex-model-output-policy-20261026/analysis.md
+24feb245425325ab7cfe7d407451dda7b9c7268e7b63582194cc40a0e5c82a0b  artifacts/task-validation/codex-model-output-policy-20261026/implementation-plan.md
+d350293d9d30130d20f1946c6f885a46ab20f0d4078e58e14de8316740321521  artifacts/task-validation/codex-model-output-policy-20261026/test-plan.md
+572e8606f9dcede6afea4a6343de6debb4ead5f47c1e547fb340bf05611b4468  artifacts/task-validation/codex-model-output-policy-20261026/validation-report.md
+4850da303207c287cfdc54b63d1ea27457b80cddc9da58539502d6a50ba68434  artifacts/task-validation/codex-model-output-policy-20261026/imported-history.json
+5f346f782a7cf8ab6225fd78caf614a16593a785ac46ea4f55d39b6eb660fa86  artifacts/task-validation/codex-model-output-policy-20261026/logs/red-models.log
+5f8e1932a3e104903a846ec396d208e2dacbe2781ea2e3a6c368e208bb1d0f6f  artifacts/task-validation/codex-model-output-policy-20261026/logs/green-targeted.log

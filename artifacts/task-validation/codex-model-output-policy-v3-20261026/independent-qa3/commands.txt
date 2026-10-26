@@ -1,0 +1,11 @@
+cwd=/tmp/clinicos-output-policy-qa3/snapshot
+/tmp/clinicos-node22-native12/node_modules/node/bin/node --test --test-concurrency=1 agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs scripts/automation/protect-demo-secret.test.mjs
+
+owned scripts, each run with /tmp/clinicos-node22-native12/node_modules/node/bin/node:
+independent.mjs
+memory-extra.mjs
+classifier-extra.mjs
+policy-extra.mjs
+browser-evidence.mjs
+
+Read-only git show/rev-parse/ls-tree/diff/grep frozen objects; python setup.py validates copy + overlays6; python prepare-tests.py prepares independent fixtures; python finalize.py asserts results and seals. No fetch/push/checkout/provider/API/npm/build command.

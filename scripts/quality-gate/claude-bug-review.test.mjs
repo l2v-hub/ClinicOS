@@ -278,3 +278,26 @@ test('an explicitly audited effective allowance permits round5 and preserves his
       files[round - 1],
     );
 });
+
+test('local review uses the same trusted generation contract with frozen SHA and read-only rules', async (t) => {
+  const { reviewGenerationContract } = await import('./claude-bug-review.mjs');
+  assert.equal(typeof reviewGenerationContract, 'string');
+  for (const rule of [
+    /approved/,
+    /zero/,
+    /low/i,
+    /changes-requested/,
+    /100/,
+    /trimmed/,
+    /tracked relative/,
+    /secret/i,
+    /Never suppress/,
+  ])
+    assert.match(reviewGenerationContract, rule);
+  const f = await fixture(t, { verdict: 'approved' });
+  await f.review();
+  const call = f.calls.find((value) => value.args[0] === '--print');
+  assert.ok(call.input.includes(reviewGenerationContract));
+  assert.ok(call.input.includes(f.git('rev-parse', 'HEAD')));
+  assert.match(call.input, /Never run commands, write files/);
+});

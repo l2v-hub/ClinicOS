@@ -1,0 +1,323 @@
+{
+  "verdict": "READY FOR CODEX QA",
+  "at": "2026-10-26T08:07:02.167Z",
+  "qaNonce": "bcc77a37-78af-4fdf-9d5e-d1abf9ecd429",
+  "sourceCode": "c3711b74a71b60923e5ac75cc57d80fa3d2958e8",
+  "sourceParent": "752a053e3a94d785e577236923e1dbbf6f27365e",
+  "trustedMain": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "authorNonce": "497769ef-a2b3-4253-895d-f5a0266b6220",
+  "authorSealSha256": "e95354fed3c572cb21593943bc60cff4fc450fced023e1acc8ab0e9a9aacdcc7",
+  "sourceProjectionSha256": "827e81791ea90a6841494c91ae6078a6cda3f97154838adba016949ad0aa3ca0",
+  "sourceProjection": [
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "gitBlobSha1": "b42cd83de4b6442451a7437926271e70b761b712",
+      "rawSha256": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "gitBlobSha1": "3ab67169e44fa898f1b2f3fe8269907bb62bd8ae",
+      "rawSha256": "b9bb543eb127e35c7e123af83e0ffda2c934bfc9c2cefafe82f9edd0a145f22b"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/models.mjs",
+      "gitBlobSha1": "9fbf4ef5003599e27bebeb1ff2a54dd55febaab9",
+      "rawSha256": "57af56be98574342f296f773d7ebf1b3155de1bf3557d37e606974ffe46fcd38"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/process.mjs",
+      "gitBlobSha1": "9e11b3a620e3b1fb7c9cf2ee2783e865e93c5f51",
+      "rawSha256": "078765e34f5941de29f801e68b5d8ab438a05d86c6d7331177bbea105d956f6d"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/review-validation-diagnostic.mjs",
+      "gitBlobSha1": "47fd29e6cd7bd58c0db879b0911f1240c8672ac3",
+      "rawSha256": "c4a3d6cd6d1a0b0ef67a22cfc6941fa2c9b9cdaa964357860d103271e9a7e58b"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "gitBlobSha1": "3fed5fd8a434f035c5c4f97770e924798d5b9704",
+      "rawSha256": "ceef3f9e4bfce8ffe545688e9af7ed1d15e90bc681a6b1290486c456e173917d"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "gitBlobSha1": "9d48a4d3e9ff6dc80fab9efe9793f73bd6c70148",
+      "rawSha256": "1ff13bd96f218a219be8d86fe1015c8e9418f0ec9b55fec81cd313197cd8001c"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/models.test.mjs",
+      "gitBlobSha1": "cc23e403463bca3f606f66d33f89698f8daa2384",
+      "rawSha256": "7214b96a5e82420fa9e7e412a84cb4f3f17adbb33c03820a0f266bca10a18ce8"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/process-output.test.mjs",
+      "gitBlobSha1": "e62e33a0b21f015bd362930f1503349a110bd637",
+      "rawSha256": "96bc65bc79dc398fc6d021c0ca95573790a3085d23970212037d47f409ea5553"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/review-validation-diagnostic.test.mjs",
+      "gitBlobSha1": "3753bfdb97132f53e84feaa9f5262aa6da6c6e6c",
+      "rawSha256": "01e77e175d77d42554d15aaaf95b42ff45bd293735dc8f3ab4200058584209cf"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/routing.test.mjs",
+      "gitBlobSha1": "d2d1290e1fb70498a109490acec362497218f0c7",
+      "rawSha256": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review-semantic-history.test.mjs",
+      "gitBlobSha1": "7971cafe61f3d02fc4d1da4abc5e30c1c5d732c8",
+      "rawSha256": "b60a158014bfb7ce273ff30eeea3b1b81fa22d3c7598126e1700e071869902e2"
+    },
+    {
+      "path": "docs/cloud-claude-review.md",
+      "gitBlobSha1": "01a1db5803063d738625ddf1fea9413230a10a94",
+      "rawSha256": "649717fddf093153e54f95e8cc4a27cb91fa8afb563f68741baf30a4cf22de1b"
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.mjs",
+      "gitBlobSha1": "e10296976b8c29c59291a96c985995b24e7d7627",
+      "rawSha256": "0050f0e980ad9901852b5e2f12138d5738969e025131343e11f0a8a8485a3b0a"
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.test.mjs",
+      "gitBlobSha1": "bba489a21e74fb75c2107d3e8513f5284e59adcd",
+      "rawSha256": "9590c0681563897222bd88c8861c0a66b3458c4256571e2d772f67108fd2c83f"
+    }
+  ],
+  "checks": {
+    "reservationReceiptAccepted": true,
+    "authorSealMatchesReservation": true,
+    "sourceCodeAndParentMatch": true,
+    "all15GitObjectsAndSnapshotBytesMatch": true,
+    "authorAndCandidateProjectionEqual": true,
+    "authorProjectionSealBindingMatches": true,
+    "authorResultSealBindingMatches": true,
+    "authorManifestSealBindingMatches": true,
+    "artifactManifestFullyMatches": true,
+    "correctedPairIsOnlyProjectionCorrection": true,
+    "priorBlockedQaAndFailureBytesPreserved": true,
+    "nativeTestEvidenceIdentitiesMatchManifest": true,
+    "offlineReaderProofIsExplicitlyNotLiveGithub": true,
+    "noPeerApprovalClaim": true
+  },
+  "projectionRows": [
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "declaredGitBlobSha1": "b42cd83de4b6442451a7437926271e70b761b712",
+      "actualGitBlobSha1": "b42cd83de4b6442451a7437926271e70b761b712",
+      "declaredRawSha256": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed",
+      "actualRawSha256": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed",
+      "snapshotRawSha256": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed",
+      "matches": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "declaredGitBlobSha1": "3ab67169e44fa898f1b2f3fe8269907bb62bd8ae",
+      "actualGitBlobSha1": "3ab67169e44fa898f1b2f3fe8269907bb62bd8ae",
+      "declaredRawSha256": "b9bb543eb127e35c7e123af83e0ffda2c934bfc9c2cefafe82f9edd0a145f22b",
+      "actualRawSha256": "b9bb543eb127e35c7e123af83e0ffda2c934bfc9c2cefafe82f9edd0a145f22b",
+      "snapshotRawSha256": "b9bb543eb127e35c7e123af83e0ffda2c934bfc9c2cefafe82f9edd0a145f22b",
+      "matches": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/models.mjs",
+      "declaredGitBlobSha1": "9fbf4ef5003599e27bebeb1ff2a54dd55febaab9",
+      "actualGitBlobSha1": "9fbf4ef5003599e27bebeb1ff2a54dd55febaab9",
+      "declaredRawSha256": "57af56be98574342f296f773d7ebf1b3155de1bf3557d37e606974ffe46fcd38",
+      "actualRawSha256": "57af56be98574342f296f773d7ebf1b3155de1bf3557d37e606974ffe46fcd38",
+      "snapshotRawSha256": "57af56be98574342f296f773d7ebf1b3155de1bf3557d37e606974ffe46fcd38",
+      "matches": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/process.mjs",
+      "declaredGitBlobSha1": "9e11b3a620e3b1fb7c9cf2ee2783e865e93c5f51",
+      "actualGitBlobSha1": "9e11b3a620e3b1fb7c9cf2ee2783e865e93c5f51",
+      "declaredRawSha256": "078765e34f5941de29f801e68b5d8ab438a05d86c6d7331177bbea105d956f6d",
+      "actualRawSha256": "078765e34f5941de29f801e68b5d8ab438a05d86c6d7331177bbea105d956f6d",
+      "snapshotRawSha256": "078765e34f5941de29f801e68b5d8ab438a05d86c6d7331177bbea105d956f6d",
+      "matches": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/review-validation-diagnostic.mjs",
+      "declaredGitBlobSha1": "47fd29e6cd7bd58c0db879b0911f1240c8672ac3",
+      "actualGitBlobSha1": "47fd29e6cd7bd58c0db879b0911f1240c8672ac3",
+      "declaredRawSha256": "c4a3d6cd6d1a0b0ef67a22cfc6941fa2c9b9cdaa964357860d103271e9a7e58b",
+      "actualRawSha256": "c4a3d6cd6d1a0b0ef67a22cfc6941fa2c9b9cdaa964357860d103271e9a7e58b",
+      "snapshotRawSha256": "c4a3d6cd6d1a0b0ef67a22cfc6941fa2c9b9cdaa964357860d103271e9a7e58b",
+      "matches": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "declaredGitBlobSha1": "3fed5fd8a434f035c5c4f97770e924798d5b9704",
+      "actualGitBlobSha1": "3fed5fd8a434f035c5c4f97770e924798d5b9704",
+      "declaredRawSha256": "ceef3f9e4bfce8ffe545688e9af7ed1d15e90bc681a6b1290486c456e173917d",
+      "actualRawSha256": "ceef3f9e4bfce8ffe545688e9af7ed1d15e90bc681a6b1290486c456e173917d",
+      "snapshotRawSha256": "ceef3f9e4bfce8ffe545688e9af7ed1d15e90bc681a6b1290486c456e173917d",
+      "matches": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "declaredGitBlobSha1": "9d48a4d3e9ff6dc80fab9efe9793f73bd6c70148",
+      "actualGitBlobSha1": "9d48a4d3e9ff6dc80fab9efe9793f73bd6c70148",
+      "declaredRawSha256": "1ff13bd96f218a219be8d86fe1015c8e9418f0ec9b55fec81cd313197cd8001c",
+      "actualRawSha256": "1ff13bd96f218a219be8d86fe1015c8e9418f0ec9b55fec81cd313197cd8001c",
+      "snapshotRawSha256": "1ff13bd96f218a219be8d86fe1015c8e9418f0ec9b55fec81cd313197cd8001c",
+      "matches": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/models.test.mjs",
+      "declaredGitBlobSha1": "cc23e403463bca3f606f66d33f89698f8daa2384",
+      "actualGitBlobSha1": "cc23e403463bca3f606f66d33f89698f8daa2384",
+      "declaredRawSha256": "7214b96a5e82420fa9e7e412a84cb4f3f17adbb33c03820a0f266bca10a18ce8",
+      "actualRawSha256": "7214b96a5e82420fa9e7e412a84cb4f3f17adbb33c03820a0f266bca10a18ce8",
+      "snapshotRawSha256": "7214b96a5e82420fa9e7e412a84cb4f3f17adbb33c03820a0f266bca10a18ce8",
+      "matches": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/process-output.test.mjs",
+      "declaredGitBlobSha1": "e62e33a0b21f015bd362930f1503349a110bd637",
+      "actualGitBlobSha1": "e62e33a0b21f015bd362930f1503349a110bd637",
+      "declaredRawSha256": "96bc65bc79dc398fc6d021c0ca95573790a3085d23970212037d47f409ea5553",
+      "actualRawSha256": "96bc65bc79dc398fc6d021c0ca95573790a3085d23970212037d47f409ea5553",
+      "snapshotRawSha256": "96bc65bc79dc398fc6d021c0ca95573790a3085d23970212037d47f409ea5553",
+      "matches": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/review-validation-diagnostic.test.mjs",
+      "declaredGitBlobSha1": "3753bfdb97132f53e84feaa9f5262aa6da6c6e6c",
+      "actualGitBlobSha1": "3753bfdb97132f53e84feaa9f5262aa6da6c6e6c",
+      "declaredRawSha256": "01e77e175d77d42554d15aaaf95b42ff45bd293735dc8f3ab4200058584209cf",
+      "actualRawSha256": "01e77e175d77d42554d15aaaf95b42ff45bd293735dc8f3ab4200058584209cf",
+      "snapshotRawSha256": "01e77e175d77d42554d15aaaf95b42ff45bd293735dc8f3ab4200058584209cf",
+      "matches": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/routing.test.mjs",
+      "declaredGitBlobSha1": "d2d1290e1fb70498a109490acec362497218f0c7",
+      "actualGitBlobSha1": "d2d1290e1fb70498a109490acec362497218f0c7",
+      "declaredRawSha256": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd",
+      "actualRawSha256": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd",
+      "snapshotRawSha256": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd",
+      "matches": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review-semantic-history.test.mjs",
+      "declaredGitBlobSha1": "7971cafe61f3d02fc4d1da4abc5e30c1c5d732c8",
+      "actualGitBlobSha1": "7971cafe61f3d02fc4d1da4abc5e30c1c5d732c8",
+      "declaredRawSha256": "b60a158014bfb7ce273ff30eeea3b1b81fa22d3c7598126e1700e071869902e2",
+      "actualRawSha256": "b60a158014bfb7ce273ff30eeea3b1b81fa22d3c7598126e1700e071869902e2",
+      "snapshotRawSha256": "b60a158014bfb7ce273ff30eeea3b1b81fa22d3c7598126e1700e071869902e2",
+      "matches": true
+    },
+    {
+      "path": "docs/cloud-claude-review.md",
+      "declaredGitBlobSha1": "01a1db5803063d738625ddf1fea9413230a10a94",
+      "actualGitBlobSha1": "01a1db5803063d738625ddf1fea9413230a10a94",
+      "declaredRawSha256": "649717fddf093153e54f95e8cc4a27cb91fa8afb563f68741baf30a4cf22de1b",
+      "actualRawSha256": "649717fddf093153e54f95e8cc4a27cb91fa8afb563f68741baf30a4cf22de1b",
+      "snapshotRawSha256": "649717fddf093153e54f95e8cc4a27cb91fa8afb563f68741baf30a4cf22de1b",
+      "matches": true
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.mjs",
+      "declaredGitBlobSha1": "e10296976b8c29c59291a96c985995b24e7d7627",
+      "actualGitBlobSha1": "e10296976b8c29c59291a96c985995b24e7d7627",
+      "declaredRawSha256": "0050f0e980ad9901852b5e2f12138d5738969e025131343e11f0a8a8485a3b0a",
+      "actualRawSha256": "0050f0e980ad9901852b5e2f12138d5738969e025131343e11f0a8a8485a3b0a",
+      "snapshotRawSha256": "0050f0e980ad9901852b5e2f12138d5738969e025131343e11f0a8a8485a3b0a",
+      "matches": true
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.test.mjs",
+      "declaredGitBlobSha1": "bba489a21e74fb75c2107d3e8513f5284e59adcd",
+      "actualGitBlobSha1": "bba489a21e74fb75c2107d3e8513f5284e59adcd",
+      "declaredRawSha256": "9590c0681563897222bd88c8861c0a66b3458c4256571e2d772f67108fd2c83f",
+      "actualRawSha256": "9590c0681563897222bd88c8861c0a66b3458c4256571e2d772f67108fd2c83f",
+      "snapshotRawSha256": "9590c0681563897222bd88c8861c0a66b3458c4256571e2d772f67108fd2c83f",
+      "matches": true
+    }
+  ],
+  "testProofIdentities": [
+    {
+      "identity": "qa5Focused2of2",
+      "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/source-review-capacity-qa5/focused-tests.tap",
+      "sha256": "e8a28498788bcbe92bf4028910868cd16f279c0aeee7ddbbf0e1cc4312aa7ebb",
+      "bytes": 655,
+      "manifestBound": null
+    },
+    {
+      "identity": "authorMovedNativeTests2of2",
+      "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/source-review-capacity-author5/moved-native-tests-final.tap",
+      "sha256": "33017311df83f6c0587e9134ddb73b32fd1a7e07355aa645ce869885cb762bff",
+      "bytes": 656,
+      "manifestBound": true
+    },
+    {
+      "identity": "authorFullNativeSuite1686of1689",
+      "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/source-review-capacity-author5/native-full-final.tap",
+      "sha256": "8cfde718bd47c7142eb679eb5bc0487d4bdd8106634f8a5e4e58fa2a6b6ba9a7",
+      "bytes": 340378,
+      "manifestBound": true
+    },
+    {
+      "identity": "authorTargetedNativeSuite",
+      "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/source-review-capacity-author5/targeted.tap",
+      "sha256": "87314cff9f869cb4372a0b7e051e5484390f95e63490c7a9baffd4307651be40",
+      "bytes": 33701,
+      "manifestBound": true
+    },
+    {
+      "identity": "authorOfflineNativeReaderProof",
+      "path": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/source-review-capacity-author5/native-reader-green-final-code.json",
+      "sha256": "27bbb1aa02c27085e0cb96bbcb6cf638644dee177873fd214081974ccca3cb92",
+      "bytes": 807,
+      "manifestBound": true
+    }
+  ],
+  "authorProofSummary": {
+    "total": 1689,
+    "pass": 1686,
+    "fail": 0,
+    "skip": 3,
+    "movedPass": 2,
+    "nativeReader": {
+      "offlineNativeReaderFixture": true,
+      "noLiveGithubVerificationClaim": true,
+      "sourceSha": "c3711b74a71b60923e5ac75cc57d80fa3d2958e8",
+      "baseSha": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+      "actualImmutableGitObjects": true,
+      "providerCalls": 0,
+      "extraSyntheticFeedbackHeadroomBytes": 32768,
+      "blobReads": 37,
+      "accepted": true,
+      "packetBytes": 651443,
+      "packetSha256": "f8b5da476dcd5846481fb153582af98b82b7c8ec8e9ed518459eeb8a7f6e4420",
+      "sourceFiles": 15,
+      "evidenceInventoryCount": 373,
+      "evidenceTextCount": 11,
+      "omittedEvidenceTextCount": 0,
+      "capacity": {
+        "model": "claude-opus-4-7",
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "inputBytes": 652069,
+        "schemaBytes": 716,
+        "nativeOverheadTokens": 65536,
+        "requiredTokensUpperBound": 846321
+      }
+    }
+  },
+  "priorQa5": {
+    "verdict": "BLOCKED",
+    "sealSha256": "da1b9259549ef7f21070bf92f3ae602e6470bd698faad94be2307c87dc5a7937",
+    "stalePair": "Candidate projection metadata is stale for agent-team/tests/bug-pipeline/standalone-review-semantic-history.test.mjs: declares blob a3df7a28502c20d63c26dd1bd0e1a359eb3e576e / raw SHA-256 a70c4f325c1f2f0d43e514b591768c6b3161f8e131e4791d7cc513e0cef566dd, actual candidate blob is 7971cafe61f3d02fc4d1da4abc5e30c1c5d732c8 / raw SHA-256 b60a158014bfb7ce273ff30eeea3b1b81fa22d3c7598126e1700e071869902e2."
+  },
+  "manifestErrors": [],
+  "projectionMismatches": [],
+  "providerCalls": 0,
+  "sourceOrForeignCheckoutModified": false,
+  "mechanicalOnly": true,
+  "noPeerApproval": true,
+  "claimBoundary": "Ready for Codex QA means this bounded metadata QA is clear. It does not assert peer approval, current metadata-head CI, final acceptance, merge, or clinical resolution."
+}

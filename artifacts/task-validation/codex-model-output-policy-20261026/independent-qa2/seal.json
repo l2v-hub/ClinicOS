@@ -1,0 +1,19 @@
+{
+  "status": "STOPPED",
+  "sealedAt": "2026-10-26T01:35:18.881906+00:00",
+  "verdict": "READY FOR CODEX QA",
+  "code": "3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b",
+  "qaNonce": "e26aaa1a-0d6a-4cea-a582-ab66a5a9cdda",
+  "stateCommit": "592892e55d314fdb355b8b4986a53701360d80c8",
+  "manifestSha256": "6b8bee76637990f861604ffe62398caac2d5dd2de7d1de2b4d126fe04f389d4e",
+  "artifacts": 29,
+  "sourceHashes": {
+    "agent-team/src/bug-pipeline/cli.mjs": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed",
+    "agent-team/src/bug-pipeline/models.mjs": "1cd2bf6c650264a976c938caf36c498fe67eae2812dcf06adbfc61b36afac122",
+    "agent-team/src/bug-pipeline/process.mjs": "71d02a1482ae0665df66d4c73b4b66c6c04c1bff2994869b8a8b408059f210e5",
+    "agent-team/tests/bug-pipeline/models.test.mjs": "71159e884f0b688afb06854163a041289a9b0ae8a408e13b381b43d303a40996",
+    "agent-team/tests/bug-pipeline/process-output.test.mjs": "de04a700d080ae2341bbd7d6061b98ce59590e646c821b1395986d558395725b",
+    "agent-team/tests/bug-pipeline/routing.test.mjs": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd"
+  },
+  "notes": "Independent source QA2 only. No source edits, provider/API/network or shared Git writes. Publication/history and final remote gates pending."
+}

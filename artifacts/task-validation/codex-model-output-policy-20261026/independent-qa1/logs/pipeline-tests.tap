@@ -1,0 +1,1279 @@
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/attempt-budget.test.mjs (107.448312ms)
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs (132.573928ms)
+✔ unset and true enable eligible reviews; false and malformed settings fail closed (3.256781ms)
+✔ authentication probe dispatch bypass is preserved for every activation setting (0.459316ms)
+✔ the repository, trusted ref, eligible event filters and protected checkout remain intact (0.478747ms)
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs (78.278497ms)
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs (128.598267ms)
+✔ new triage requires a complete issue/file map and rejects unjustified shared-file splits (11.842216ms)
+✔ legacy grouping remains frozen and queue windows reject corrupt durable metadata (4.367173ms)
+✔ plan accounts for every selected issue exactly once and permits explicit blocked items (0.760458ms)
+✔ plan rejects duplicated, missing, and unselected issue coverage (2.297727ms)
+✔ plan rejects task files outside the declared editable scope (0.459864ms)
+✔ editable paths reject credentials, automation control files, and path traversal (0.506414ms)
+✔ new plans require execution assessment while existing frozen state remains byte-for-byte unchanged (5.010849ms)
+✔ plan requires screenshot and Playwright trace evidence for each source issue (0.981139ms)
+✔ Claude1 F1 canonical handback schema preserves legacy/stale grants but rejects malformed audit (3.41515ms)
+✔ QA6-F1 explicit active must be boolean while inactive and legacy audit absence stay valid (0.827568ms)
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/install-claude-review-cron.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/cron-install.test.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/install-claude-review-cron.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/cron-install.test.mjs (61.040768ms)
+✔ authorized codex-run issues are visible before bug-label normalization without exposing payloads (2.578335ms)
+✔ collection window is visible as queued aggregation, without claiming or exposing issue data (0.323505ms)
+✔ snapshot distinguishes the authorized queue, triage, external QA and waiting issues without exposing source payloads (1.241807ms)
+✔ dashboard loader is read-only and propagates a source failure instead of returning an empty queue (0.910432ms)
+✔ local dashboard blocks foreign Host/Origin, cross-site reads, mutations and path traversal (38.558247ms)
+✔ refresh failure preserves the previous snapshot, reports staleness and never leaks provider diagnostics (8.910405ms)
+✔ dashboard displays six spent implementations and active continuation instead of a ready review label (8.601453ms)
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/demo-deployment.test.mjs (151.235237ms)
+✔ demo deployment is isolated to the fixed-main exact-commit workflow (13.519106ms)
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs (92.779871ms)
+✔ descendant recovery authenticates both compare endpoints and rereads current main (3.818886ms)
+✔ recovery archives exact old progress and deployment facts without changing review or attempt histories (2.594935ms)
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/external-review.test.mjs (104.177413ms)
+✔ issue lifecycle uses additive managed labels and closes resolved issues as completed, with retry after a failed close (6.841683ms)
+✔ dashboard state reads never initialize a branch, and source permission errors are not treated as an empty queue (1.050844ms)
+✔ a maintainer labeling with the same User identity as the controller PAT is authorized (1.524213ms)
+✔ scheduled normalization recovers codex-run without bug only after authorization and never mutates dashboard reads (1.912663ms)
+✔ bot and missing actor types cannot self-authorize even if permission lookup would grant admin (0.880458ms)
+✔ bot label fallback rejects non-human command metadata and old human commands (1.53229ms)
+✔ authorized accepts only write-capable collaborators (0.505754ms)
+✔ intake requires exact command and authorized actor before adding all queue labels (1.256968ms)
+✔ intake refuses unauthorized actors, near-match commands, and pull requests (0.678355ms)
+✔ scheduled queue accepts only an authorized explicit codex-run event and skips blocked issues (1.402787ms)
+✔ durable state initializes only its branch from main and uses returned Contents SHA (2.815926ms)
+✔ failed state CAS keeps the remembered SHA and never retries without it (2.198946ms)
+✔ durable state over 1 MiB loads from one blob read pinned to the Contents SHA (59.096815ms)
+✔ small valid inline durable state does not read a Git blob (0.870637ms)
+✔ dashboard state reads use the same pinned blob fallback without branch initialization (1.143294ms)
+▶ durable state rejects corrupt encoding, size, SHA, UTF-8, and oversized payloads
+  ✔ noncanonical base64 (0.352234ms)
+  ✔ declared size mismatch (0.256563ms)
+  ✔ SHA mismatch (0.220914ms)
+  ✔ invalid UTF-8 (0.378466ms)
+  ✔ oversized metadata (0.669612ms)
+✔ durable state rejects corrupt encoding, size, SHA, UTF-8, and oversized payloads (2.9683ms)
+▶ durable state blob fallback rejects unpinned or malformed data without treating it as empty
+  ✔ different SHA (0.370854ms)
+  ✔ different size (0.223793ms)
+  ✔ invalid base64 (0.171864ms)
+✔ durable state blob fallback rejects unpinned or malformed data without treating it as empty (1.427897ms)
+✔ durable state load distinguishes a missing file from authorization or transport failures (0.591284ms)
+✔ state read failures retain finite GitHub diagnostics across load, branch initialization, and dashboard reads (0.686646ms)
+✔ oversized durable state is rejected before any remote mutation (125.558714ms)
+✔ review feedback binds to PR head, tracks current reviews, unresolved threads and human comments (2.164041ms)
+✔ review feedback fails closed when more than 100 review threads are returned (0.512877ms)
+✔ a commented review cannot clear an earlier request for changes; explicit approval can (6.549486ms)
+✔ review feedback identifies a merged PR from the real REST state and merge flag (0.72677ms)
+✔ required checks fail closed when absent and pass only when all reported checks succeed (1.111322ms)
+▶ real status adapter rechecks the optional guard after every preceding awaited API boundary
+  ✔ {"after":"label-inspection"} (2.665063ms)
+  ✔ {"after":"label-inspection","labelExists":false} (0.889784ms)
+  ✔ {"after":"label-creation","labelExists":false} (0.550364ms)
+  ✔ {"after":"label-retry","labelExists":false,"creationConflict":true} (0.530777ms)
+  ✔ {"after":"issue-label-post"} (0.774385ms)
+  ✔ {"after":"delete-progress"} (0.849353ms)
+  ✔ {"after":"delete-blocked"} (0.524898ms)
+✔ real status adapter rechecks the optional guard after every preceding awaited API boundary (8.245287ms)
+✔ cached lifecycle status still checks a fresh guard and preserves unguarded callers (0.546507ms)
+✔ actual comment request accepts the optional fresh guard, rejects errors/false/invalid guards, and keeps default callers (1.241044ms)
+✔ a hold arriving after an already-sent close cannot undo that request, but blocks later cached calls (0.715469ms)
+▶ a partial guarded lifecycle update invalidates an older cached status before reconciliation
+  ✔ hold (1.377503ms)
+  ✔ close503 (0.895313ms)
+✔ a partial guarded lifecycle update invalidates an older cached status before reconciliation (2.717783ms)
+✔ actual ready and merge transports reject a fresh guard before emitting commands (0.653438ms)
+▶ guard rereads cannot promote an old snapshot to a newer Contents CAS revision
+  ✔ branch-await: other batch (1.331256ms)
+  ✔ branch-await: manualBatches (0.561597ms)
+  ✔ branch-await: root field (1.284642ms)
+  ✔ guard-await: other batch (0.438619ms)
+  ✔ guard-await: manualBatches (0.460714ms)
+  ✔ guard-await: root field (0.815838ms)
+✔ guard rereads cannot promote an old snapshot to a newer Contents CAS revision (6.217053ms)
+✔ actual durable PUT waits for a final release guard after branch inspection (0.580108ms)
+✔ failed guarded CAS cannot retry an old state body against the revision read by its guard (0.970244ms)
+✔ optional release guards reject explicitly invalid values at all actual transports (1.021399ms)
+✔ durable save serializes its body before any branch await can mutate the supplied object (0.478915ms)
+✔ large durable state loads from authenticated blob SHA and preserves file identity for Git Data CAS (122.843713ms)
+✔ read-only dashboard uses the same large-state blob decoder without branch initialization or writes (49.22548ms)
+✔ durable state rejects invalid blob metadata, bytes and digest before authorizing any save (7.765074ms)
+✔ explicit inline state metadata validates canonical base64, supplied size and UTF8 without requiring blob I/O (0.786029ms)
+✔ state save rejects >8MiB before any mutation/guard and exact8MiB remains reloadable (1087.861795ms)
+✔ blob-loaded state CAS failure retains the original metadata SHA and never retries without it (114.514181ms)
+✔ explicit disjoint rebase saves a NEW validated body and preserves nested caller object/array references (12.548452ms)
+✔ strict default still rejects disjoint409 and opt-in rejects same entity, conflicting root fields and invalid merged state (8.692721ms)
+✔ rebase reruns authorization guard and refuses nonce/subject changes instead of replaying stale authority (4.51861ms)
+✔ rebase uses fresh serialized snapshots even when guards reload a third disjoint state, with bounded retries (8.403842ms)
+✔ capacity counts simultaneous running reviews and Codex QA across every entity collection before any PUT or guard (698.073846ms)
+✔ diagnostics expose only owned bounded codes and preserve known cause chains (1.303819ms)
+✔ F5 state writes distinguish confirmed409, definite502 and uncertain timeout without blind retry (2.218497ms)
+✔ F1/F3 native human approval requires current head, nonauthor User and enforced stale-dismissal protection (2.95895ms)
+✔ GitHub failure semantics distinguish positive status evidence, default POST and merge uncertainty without raw diagnostics (2.915519ms)
+✔ strict integrated decoder rejects JSON scalars/arrays and oversized raw wrapping without permitting a save (242.539924ms)
+✔ evidence blobs accept the exact 32MiB ceiling with bounded base64 JSON transport (1798.152ms)
+✔ evidence blob ceiling, declared sizes, canonical base64 and object digest fail closed (10.475505ms)
+✔ recovery authorization requires actual authenticated owner/admin and fixed manual main workflow identity (2.936318ms)
+✔ queue exclusions prevent normalization and authorization reads on claimed issues while new missed events recover (2.583857ms)
+✔ malformed queue exclusions fail closed before any GitHub read or label write (0.590794ms)
+✔ Claude1 F5 read-only observation never promotes a writer base or bypasses native409 (3.708808ms)
+✔ Claude1 F5 native state store preserves finite ownership code instead of generic rebase error (2.02072ms)
+✔ Claude1 F5 fresh owner hook never forgives unowned same-entity conflicts or malformed canonical data (22.868188ms)
+✔ Claude1 F5 fresh owner hook is never used after auth failures, definite rejection or uncertain writes (7.525993ms)
+✔ Author7 F3 observer reads authenticated Contents without branch creation and caches only unchanged identity (53.645377ms)
+✔ Author8 causal: large Contents rejection still permits exact-byte Git Data save and preserves unrelated tree modes (67.59228ms)
+▶ Author8 threshold uses serialized UTF8 bytes, preserves small guards, and creates absent large files without rewriting sentinels
+  ✔ exact1MiB (29.919974ms)
+  ✔ plus1byte (52.048629ms)
+  ✔ unicode (33.374745ms)
+  ✔ executable-state (26.224625ms)
+  ✔ absent (33.78399ms)
+✔ Author8 threshold uses serialized UTF8 bytes, preserves small guards, and creates absent large files without rewriting sentinels (176.74917ms)
+▶ Author8 each await race keeps a frozen body, proves contention, and preserves independent remote progress
+  ✔ before-parent (83.484888ms)
+  ✔ after-parent-tree (69.534038ms)
+  ✔ after-blob (88.665538ms)
+  ✔ after-tree (68.712214ms)
+  ✔ after-commit (72.063768ms)
+  ✔ guard-load (90.63667ms)
+  ✔ ref422 (76.330389ms)
+✔ Author8 each await race keeps a frozen body, proves contention, and preserves independent remote progress (551.193007ms)
+▶ Author8 strict/same-entity/shared-field conflicts never persist stale bytes
+  ✔ strict (29.171312ms)
+  ✔ same-entity (51.114735ms)
+  ✔ shared-root (39.379725ms)
+✔ Author8 strict/same-entity/shared-field conflicts never persist stale bytes (120.517534ms)
+▶ Author8 final ownership and guard are checked after object awaits, with finite ownership failures and no authority grant
+  ✔ owner-hook (57.293704ms)
+  ✔ guard (32.554643ms)
+  ✔ false-guard (28.607232ms)
+  ✔ hook-invalid (34.920606ms)
+  ✔ missing-hooks-strict-CAS (41.456738ms)
+✔ Author8 final ownership and guard are checked after object awaits, with finite ownership failures and no authority grant (195.836258ms)
+✔ Author8 alias mutation and same-store reload cannot promote frozen bytes or the remembered original file CAS (112.885845ms)
+✔ Author8 repeated independent conflicts have a shared four-candidate bound and preserve the latest remote state (144.688379ms)
+▶ Author8 rebase transport changes only with new validated bytes across the exact threshold
+  ✔ small-to-large (35.626042ms)
+  ✔ large-to-small (27.309817ms)
+✔ Author8 rebase transport changes only with new validated bytes across the exact threshold (63.417274ms)
+✔ Author8 independent rebase rechecks reserved-result capacity before any second candidate mutation (351.394835ms)
+▶ Author8 mutation failures at every object/ref stage are fatal without fallback, hidden retries or postfailure ownership skips
+  ✔ git/blobs:400 (35.068997ms)
+  ✔ git/blobs:401 (42.8496ms)
+  ✔ git/blobs:403 (29.583317ms)
+  ✔ git/blobs:409unchanged (40.742533ms)
+  ✔ git/blobs:422unchanged (45.10141ms)
+  ✔ git/blobs:502 (36.471877ms)
+  ✔ git/blobs:timeout (30.520157ms)
+  ✔ git/blobs:output-limit (45.789285ms)
+  ✔ git/blobs:spawn-failed (34.656101ms)
+  ✔ git/blobs:unknown (37.322504ms)
+  ✔ git/blobs:badJSON (37.82695ms)
+  ✔ git/blobs:thrown (35.389776ms)
+  ✔ git/trees:400 (35.267822ms)
+  ✔ git/trees:401 (36.903108ms)
+  ✔ git/trees:403 (63.812835ms)
+  ✔ git/trees:409unchanged (34.203023ms)
+  ✔ git/trees:422unchanged (60.995585ms)
+  ✔ git/trees:502 (30.398735ms)
+  ✔ git/trees:timeout (39.828784ms)
+  ✔ git/trees:output-limit (46.480476ms)
+  ✔ git/trees:spawn-failed (55.268241ms)
+  ✔ git/trees:unknown (53.415796ms)
+  ✔ git/trees:badJSON (55.961981ms)
+  ✔ git/trees:thrown (50.490151ms)
+  ✔ git/commits:400 (45.991223ms)
+  ✔ git/commits:401 (44.612567ms)
+  ✔ git/commits:403 (54.39391ms)
+  ✔ git/commits:409unchanged (63.28645ms)
+  ✔ git/commits:422unchanged (51.590585ms)
+  ✔ git/commits:502 (43.107111ms)
+  ✔ git/commits:timeout (68.937758ms)
+  ✔ git/commits:output-limit (47.674415ms)
+  ✔ git/commits:spawn-failed (57.133172ms)
+  ✔ git/commits:unknown (50.417291ms)
+  ✔ git/commits:badJSON (62.353003ms)
+  ✔ git/commits:thrown (50.702807ms)
+  ✔ git/refs/heads/codex/bug-control:400 (52.199274ms)
+  ✔ git/refs/heads/codex/bug-control:401 (55.504963ms)
+  ✔ git/refs/heads/codex/bug-control:403 (50.961876ms)
+  ✔ git/refs/heads/codex/bug-control:409unchanged (55.336489ms)
+  ✔ git/refs/heads/codex/bug-control:422unchanged (67.136435ms)
+  ✔ git/refs/heads/codex/bug-control:502 (60.877835ms)
+  ✔ git/refs/heads/codex/bug-control:timeout (42.357357ms)
+  ✔ git/refs/heads/codex/bug-control:output-limit (51.962719ms)
+  ✔ git/refs/heads/codex/bug-control:spawn-failed (60.050417ms)
+  ✔ git/refs/heads/codex/bug-control:unknown (57.572037ms)
+  ✔ git/refs/heads/codex/bug-control:badJSON (51.739588ms)
+  ✔ git/refs/heads/codex/bug-control:thrown (126.827112ms)
+✔ Author8 mutation failures at every object/ref stage are fatal without fallback, hidden retries or postfailure ownership skips (2398.814607ms)
+▶ Author8 ref409/422 require proven fresh change; auth/server errors cannot gain a rebase even when the head changes
+  ✔ 409 (367.387456ms)
+  ✔ 422 (208.582761ms)
+  ✔ 400 (76.525844ms)
+  ✔ 401 (138.457176ms)
+  ✔ 403 (90.498378ms)
+  ✔ 502 (90.787161ms)
+✔ Author8 ref409/422 require proven fresh change; auth/server errors cannot gain a rebase even when the head changes (977.987382ms)
+▶ Author9 positive exact-next read confirms formerly unknown ref outcomes without another write or owner skip
+  ✔ timeout-after-effect (92.359324ms)
+  ✔ malformed-ref (73.264986ms)
+  ✔ missing-ref-sha (95.683722ms)
+  ✔ changed-ref-type (108.741177ms)
+✔ Author9 positive exact-next read confirms formerly unknown ref outcomes without another write or owner skip (371.806115ms)
+▶ Author8 malformed parent/blob/tree/commit metadata and target types cannot authorize a ref effect
+  ✔ ref-name (36.592276ms)
+  ✔ ref-type (32.405492ms)
+  ✔ ref-sha (33.27276ms)
+  ✔ parent-sha (40.708657ms)
+  ✔ parent-tree (50.646626ms)
+  ✔ parent-parents (35.231762ms)
+  ✔ tree-truncated (29.773177ms)
+  ✔ tree-duplicate (27.606493ms)
+  ✔ tree-path (30.703766ms)
+  ✔ tree-mode (53.442524ms)
+  ✔ tree-sha (34.01886ms)
+  ✔ contents-sha (33.979244ms)
+  ✔ contents-size (32.228642ms)
+  ✔ contents-encoding (18.543798ms)
+  ✔ blob-sha (37.079784ms)
+  ✔ new-tree-extra (41.739956ms)
+  ✔ new-tree-sha (31.309082ms)
+  ✔ new-commit-parent (44.063606ms)
+  ✔ new-commit-tree (37.496626ms)
+  ✔ new-commit-sha (53.205033ms)
+  ✔ target-mode:120000 (35.295881ms)
+  ✔ target-mode:160000 (26.615723ms)
+  ✔ target-mode:040000 (31.465598ms)
+✔ Author8 malformed parent/blob/tree/commit metadata and target types cannot authorize a ref effect (832.703408ms)
+▶ Author8 large creation proves tree absence and positive HTTP404, while read/auth failures authorize no mutation
+  ✔ auth403 (13.716544ms)
+  ✔ text404-with403 (8.859636ms)
+  ✔ unknown-read (10.218123ms)
+  ✔ target-missing-contents (29.78663ms)
+  ✔ absence-mismatch (7.964883ms)
+✔ Author8 large creation proves tree absence and positive HTTP404, while read/auth failures authorize no mutation (72.757754ms)
+▶ Author8 an unavailable conflict proof preserves the original definite ref rejection and never rebases
+  ✔ 409 (79.38764ms)
+  ✔ 422 (34.098791ms)
+✔ Author8 an unavailable conflict proof preserves the original definite ref rejection and never rebases (114.309713ms)
+✔ Author8 a hash-consistent new tree changing an unrelated entry still fails before commit/ref publication (32.214816ms)
+✔ Author8 confirmed ref success tolerates subsequent forward progress and keeps that new file CAS for the next explicit rebase (268.578962ms)
+✔ Author9 F3 uncertain ref late-apply is never converted to failure or retried (36.715801ms)
+✔ Author9 F3 uncertain ref different-commit is never converted to failure or retried (55.605612ms)
+✔ Author9 F3 uncertain ref read-failure is never converted to failure or retried (37.632146ms)
+✔ Author9 F3 uncertain ref bad-ref is never converted to failure or retried (40.835429ms)
+✔ Author9 F3 matching parent snapshot remains pinned across shared loads and independent rebases (119.584778ms)
+✔ Author9 F3 large object uploads use a finite120s bound while reads retain30s (37.200826ms)
+✔ Author9 F4 load-timeout preserves bounded diagnostic without raw transport text (0.812978ms)
+✔ Author9 F4 init-ref-timeout preserves bounded diagnostic without raw transport text (0.566845ms)
+✔ Author9 F4 init-ref-output-limit preserves bounded diagnostic without raw transport text (0.280308ms)
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/issue-review-communication.test.mjs (108.76713ms)
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/issue-review-sync.test.mjs (106.472329ms)
+✔ independent Codex QA uses a fresh read-only analyst session and cannot return implementation status (22.912301ms)
+✔ plan, implementation and simplification use distinct bounded Codex sessions and models (21.603164ms)
+✔ missing model IDs fail explicitly before starting Codex (2.269123ms)
+✔ missing, invalid and symlink output fail closed (33.148871ms)
+✔ Codex failure is surfaced and does not parse stale output (7.716834ms)
+✔ model worktree cannot contain the runtime output directory (3.06746ms)
+✔ preflight probes CLI support without invoking a model or reading credentials (2.297689ms)
+✔ standalone independent QA treats repository instructions as data and forbids PR code execution (7.393028ms)
+✔ large JSON progress does not prevent reading a separate valid structured result (94.861627ms)
+✔ model failure diagnostics use finite enums and omit raw output (4.179838ms)
+✔ failure classifier checks retained stdout and stderr without copying their text (16.621475ms)
+✔ finite capacity metadata preserves delegate cooldown without exposing raw output (4.290757ms)
+✔ missing runner byte counters remain unknown in finite diagnostics (2.607807ms)
+✔ classifier ignores provider words inside progress and source/tool output (3.635052ms)
+✔ free text and mutable receipt JSON cannot substitute for trusted external verifier (5.446352ms)
+✔ verified external user session permits same-account round5 with one-use exact binding (5.286591ms)
+✔ wrong owner, history, action, head, budget and reservation are rejected at verifier boundary (4.571551ms)
+✔ only canonical manual issue owner can receive absent-PR authorization (1.05625ms)
+✔ Claude504 exact authorized settlement fails the running journal and attempt once without a new allowance (2.627692ms)
+✔ Claude504 settlement refuses absent auth, changed digest/round/history, wrong binding and replay (2.124234ms)
+✔ active takeover is paused until exact explicit handback; no default or malformed substitute (1.78423ms)
+✔ subject identity protections are a union and never keyed by mutable SHA (0.590031ms)
+✔ non-finished operator release ownership is retained independently of handback (0.407853ms)
+✔ all collections retain terminal claimed issues and nonterminal exact scope occupancy without mutation (5.791555ms)
+✔ Claude1 F1 stale nonce and missing audit cannot replay an old handback (0.412428ms)
+✔ QA6-F1 malformed takeover and active types fail closed even without schema validation (0.35146ms)
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/pipeline.test.mjs (99.173314ms)
+✔ synthetic model child permits separate progress and structured-result channels above 64 KiB (110.14901ms)
+✔ synthetic runner fails on independent total and stderr limits (141.746073ms)
+✔ runner option validation rejects unbounded or invalid limits (4.663509ms)
+✔ timed out process groups terminate surviving descendants (2434.775948ms)
+✔ runner defaults retain the existing combined ceiling and prefix capture (53.438351ms)
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/release.test.mjs (99.098824ms)
+✔ repository settings reject mismatched or malformed revisions before using credentials (4.060152ms)
+✔ non-admin callers and every failed read preflight cannot mutate settings (3.877853ms)
+✔ configuration adds all six cumulative exact-main Actions gates and preserves default permissions (8.060328ms)
+✔ adding missing gates preserves existing human reviews, strict checks, bypass actors and default permissions (1.090208ms)
+✔ fully configured rules preserve all controls without issuing writes (0.9381ms)
+✔ ambiguous managed targets fail before any mutation (2.053654ms)
+▶ a wrong managed or cumulative app binding for ANY mandatory check blocks ALL mutations
+  ✔ managed: bug-pipeline-tests (0.803348ms)
+  ✔ effective: bug-pipeline-tests (0.659737ms)
+  ✔ classic: bug-pipeline-tests (0.594595ms)
+  ✔ managed: secret-scan (0.348766ms)
+  ✔ effective: secret-scan (0.389863ms)
+  ✔ classic: secret-scan (0.301032ms)
+  ✔ managed: frontend-tests (0.292972ms)
+  ✔ effective: frontend-tests (0.29363ms)
+  ✔ classic: frontend-tests (0.455327ms)
+  ✔ managed: archive-tests (0.654417ms)
+  ✔ effective: archive-tests (0.593541ms)
+  ✔ classic: archive-tests (0.461123ms)
+  ✔ managed: gate (0.464327ms)
+  ✔ effective: gate (0.408393ms)
+  ✔ classic: gate (0.310329ms)
+  ✔ managed: browser-e2e (0.544824ms)
+  ✔ effective: browser-e2e (0.479757ms)
+  ✔ classic: browser-e2e (0.484264ms)
+✔ a wrong managed or cumulative app binding for ANY mandatory check blocks ALL mutations (12.239463ms)
+▶ effective verification checks EVERY mandatory check instead of accepting only bug-pipeline-tests
+  ✔ bug-pipeline-tests (1.624028ms)
+  ✔ secret-scan (1.476695ms)
+  ✔ frontend-tests (1.318171ms)
+  ✔ archive-tests (1.005771ms)
+  ✔ gate (0.822919ms)
+  ✔ browser-e2e (0.903888ms)
+✔ effective verification checks EVERY mandatory check instead of accepting only bug-pipeline-tests (8.904461ms)
+✔ mandatory check jobs are emitted by existing unrestricted pull-request workflows (35.944678ms)
+✔ wrong required app binding on a later effective-rules page blocks every mutation (1.414562ms)
+▶ demo restriction rejects every untrusted dispatch context before any credential request
+  ✔ {"restrictDemoEnvironment":false} (0.905646ms)
+  ✔ {} (0.176851ms)
+  ✔ {"configureRepository":true} (0.115613ms)
+  ✔ {} (0.093105ms)
+  ✔ {"actualSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"} (0.118568ms)
+  ✔ {"workflowSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"} (0.108091ms)
+  ✔ {"expectedSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n","actualSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"} (0.114624ms)
+  ✔ {"expectedSha":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"} (0.186499ms)
+  ✔ {"actor":"../outside"} (0.250514ms)
+  ✔ {"actor":"l2v-hub\n"} (0.521379ms)
+  ✔ {"actor":"l2v-hub\n","triggeringActor":"l2v-hub\n"} (0.140504ms)
+  ✔ {"triggeringActor":"another-admin"} (0.163368ms)
+  ✔ {"eventName":"pull_request"} (0.134309ms)
+  ✔ {"repository":"other/ClinicOS"} (0.105119ms)
+  ✔ {"workflowRef":"l2v-hub/ClinicOS/.github/workflows/other.yml@refs/heads/main"} (0.136552ms)
+  ✔ {"ref":"refs/tags/main","workflowRef":"l2v-hub/ClinicOS/.github/workflows/bug-pipeline-tests.yml@refs/tags/main"} (0.088558ms)
+  ✔ {"ref":"refs/heads/main\n","workflowRef":"l2v-hub/ClinicOS/.github/workflows/bug-pipeline-tests.yml@refs/heads/main\n"} (0.078501ms)
+✔ demo restriction rejects every untrusted dispatch context before any credential request (4.670176ms)
+▶ demo administrator identity, repository, exact environment ID/name and every preflight read fail closed
+  ✔ 0 (0.592876ms)
+  ✔ 1 (0.231729ms)
+  ✔ 2 (0.27642ms)
+  ✔ 3 (0.164647ms)
+  ✔ 4 (0.383167ms)
+  ✔ 5 (0.696203ms)
+  ✔ 6 (0.961568ms)
+  ✔ 7 (0.22462ms)
+  ✔ 8 (0.207154ms)
+  ✔ 9 (0.158627ms)
+  ✔ 10 (0.145889ms)
+  ✔ 11 (0.207432ms)
+  ✔ 12 (0.538269ms)
+  ✔ 13 (0.631444ms)
+  ✔ 14 (0.754052ms)
+  ✔ 15 (0.429063ms)
+✔ demo administrator identity, repository, exact environment ID/name and every preflight read fail closed (9.187096ms)
+✔ demo restriction changes only the fixed environment, verifies exact main and is idempotent (1.835341ms)
+✔ demo restriction preserves reviewers, self-review, timer, bypass and custom protections (1.806272ms)
+✔ an exact null policy bootstraps before actual policy inventory and verifies preservation immediately (1.025794ms)
+✔ pre-existing main policy and protected-branches modes converge without duplicate policies (1.070138ms)
+✔ conflicting, duplicate, wildcard, tag and malformed policies are never deleted or mutated (10.41459ms)
+✔ conflicting policies discovered after null-policy enablement stop without another write (6.270833ms)
+✔ null-policy post-enable inventory 404 and failed immediate readback stop after one PUT (1.053813ms)
+✔ pagination is complete for policy, protection and secret inventories and has a fixed upper bound (11.443001ms)
+✔ readback detects changed identity, controls, custom rules and non-main policies (6.099179ms)
+✔ failed mutations are attempted once and stop later writes without a blind retry (0.951641ms)
+✔ secret reports distinguish repository exposure from environment restriction and never emit values (4.828055ms)
+✔ demo CLI never reflects provider errors or credentials and performs no real network calls (68.07641ms)
+✔ demo CLI diagnostics classify denied reads and attempted writes without reflecting provider data (990.98205ms)
+✔ demo CLI null-policy failures count the bootstrap PUT and stop after readback or inventory conflict (295.969006ms)
+✔ demo workflow selects one explicit mode before the bot credential and stays in existing native CI (12.165715ms)
+✔ actual credential-free workflow validation executes both modes and rejects ambiguous or stale dispatches (493.310357ms)
+✔ auto routes difficulty/direct requests to senior and only bounded work to a delegate (4.18347ms)
+✔ fixed 6.1-Sol override runs implementation and simplification entirely with senior (28.842101ms)
+✔ actual overlapping sessions divert bounded work to senior without starting a second delegate (16.451791ms)
+✖ capacity errors consume their call and influence only a later requested attempt (5.414329ms)
+✔ automatic high-difficulty and legacy execution use the senior model in real CLI arguments (10.926553ms)
+✖ incidental line numbers in diagnostics do not invent provider capacity pressure (5.065569ms)
+✔ setup review reserves remotely before inference and reuses only exact-SHA approval (284.07483ms)
+✔ CAS failure, non-admin actor, stale head and interrupted budget prevent inference (279.419212ms)
+✔ a head change during review preserves the spent attempt and cannot publish approval (140.396185ms)
+✔ new source changes cannot exceed four total remote setup review attempts (458.434032ms)
+✔ tampered saved approval evidence cannot trigger another review or publish approval (228.067819ms)
+✔ a failed review publication is recovered without another model attempt (199.952888ms)
+✔ restoring durable review state cannot overwrite a symlink target (82.211657ms)
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs (100.51426ms)
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/standalone-review.test.mjs (86.558752ms)
+✔ external subscription mode reuses only the explicit local config and excludes every token/API fallback (67.311884ms)
+✔ Max OAuth is confined to the reviewer and excludes separately billed API authentication (0.503414ms)
+✔ subscription mode fails closed with only an API key and recognizes a legacy OAuth secret (0.243373ms)
+✔ actual reviewer subprocess has OAuth only, including when both credentials exist (47.582369ms)
+✔ missing Max OAuth prevents launching a reviewer even with cached API authentication (4.833828ms)
+✔ captured diagnostics redact OAuth and GitHub token forms and arbitrary OAuth assignments (0.52271ms)
+node:internal/modules/esm/resolve:271
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/install-claude-review-windows.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/windows-review.test.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/install-claude-review-windows.mjs'
+}
+
+Node.js v24.19.0
+✖ agent-team/tests/bug-pipeline/windows-review.test.mjs (67.477032ms)
+✔ irrelevant label jobs are filtered before entering the serialized controller concurrency group (6.480274ms)
+✔ executor and simplifier blocked stage results retain the implementation failure code (3.856443ms)
+✔ child environment isolates verification, executor, reviewer, and controller credentials (0.869749ms)
+✔ local Codex login directory is available only to Codex model authentication (0.38501ms)
+✔ createRunner subprocess receives only the role credential and a demo localhost database (313.992797ms)
+✔ fresh CLI configuration directories are private and survive repeated isolated launches (473.500349ms)
+✔ createRunner reports child exit failure and output overflow as failures (213.589652ms)
+✔ createRunner timeout terminates the subprocess group, including a child process (1520.877864ms)
+✖ validateEvidence accepts a valid synthetic PNG and a recorded Playwright trace and records content digests (6.185313ms)
+✖ validateEvidence rejects missing files, wrong headers, path traversal, and symlinks outside the packet (5.712401ms)
+✖ validateEvidence rejects PNG signature filler and PNG/trace checksum corruption (3.423729ms)
+✖ real Git workspace prepares the exact batch branch, freezes its task packet, and regenerates evidence after clearing stale files (181.549915ms)
+✔ real Git workspace rejects changes outside the accepted source-file scope (127.250137ms)
+✔ only verification receives the absolute trusted browser cache while HOME and credential boundaries remain isolated (0.940538ms)
+✔ actual verification subprocess sees the trusted shared cache independently of isolated HOME (58.101486ms)
+✔ trusted browser installation, controller and native sandbox service proof share the explicit cache before credentials (2.299784ms)
+✔ post-Claude independent final QA leaves a real reviewed worktree clean for a correction (213.29733ms)
+✔ standalone final QA creates an exact detached source checkout without installing or executing PR code (145.528826ms)
+✔ evidence collector accepts valid trace at 32MiB and rejects a byte above it before ZIP parsing (3477.370596ms)
+✔ Author7 F3 retained controller checkpoint accepts exact dirty output and rejects changed, unknown, frozen or lost output (331.408989ms)
+✖ Author7 F3 real retained worktree resumes the same attempt after execute without replaying its paid model (15.606023ms)
+✖ Author7 F3 lost Actions worktree fails closed after authorized recovery without replaying a completed model (2.360642ms)
+✔ Author9 F2 definite execute failure records the failed step and preserves its journal (1.451737ms)
+✔ Author9 F2 definite simplify failure records the failed step and preserves its journal (1.572177ms)
+✔ Author9 F2 definite qa failure records the failed step and preserves its journal (1.066163ms)
+✔ Author9 F2 definite verify-before failure records the failed step and preserves its journal (0.444431ms)
+✔ Author9 F2 definite verify-after failure records the failed step and preserves its journal (0.759236ms)
+✔ Author9 F2 model-execution retains a running unknown outcome and cannot invoke a second worker (0.710043ms)
+✔ Author9 F2 model-result retains a running unknown outcome and cannot invoke a second worker (0.314488ms)
+✔ Author9 F2 arbitrary-execute retains a running unknown outcome and cannot invoke a second worker (0.37653ms)
+✔ Author9 F2 blocked-code-throw retains a running unknown outcome and cannot invoke a second worker (0.362162ms)
+✔ Author9 F2 malformed-result retains a running unknown outcome and cannot invoke a second worker (0.336724ms)
+✔ Author9 F2 before-stage retains a running unknown outcome and cannot invoke a second worker (0.172351ms)
+✔ Author9 F2 pending-save retains a running unknown outcome and cannot invoke a second worker (0.118619ms)
+✔ Author9 F2 post-stage-save retains a running unknown outcome and cannot invoke a second worker (0.134594ms)
+✔ Author9 F2 initial-capture retains a running unknown outcome and cannot invoke a second worker (1.631126ms)
+✔ Author9 F2 post-capture retains a running unknown outcome and cannot invoke a second worker (0.471537ms)
+✔ Author9 F2 checkpoint retains a running unknown outcome and cannot invoke a second worker (0.627977ms)
+✔ Author9 F2 publish retains a running unknown outcome and cannot invoke a second worker (0.649311ms)
+✔ Author9 F2 ownership-invalid retains a running unknown outcome and cannot invoke a second worker (2.014996ms)
+✖ Author9 F2 real failed correction worktree exact requires exact retained output before another paid call (3.455863ms)
+✖ Author9 F2 real failed correction worktree changed requires exact retained output before another paid call (1.240705ms)
+✖ Author9 F2 real failed correction worktree missing requires exact retained output before another paid call (2.151298ms)
+✖ Author9 F2 real failed correction worktree foreign requires exact retained output before another paid call (2.304689ms)
+✖ Author9 F2 real failed correction worktree frozen requires exact retained output before another paid call (3.903287ms)
+✖ Author9 F2 real failed correction worktree capture-failure requires exact retained output before another paid call (3.091486ms)
+✖ Author9 F2 real failed correction worktree unknown requires exact retained output before another paid call (3.092265ms)
+✖ Author9 F2 real failed correction worktree scope-invalid requires exact retained output before another paid call (3.260883ms)
+✖ Claude504 real outside-scope failure consumes initial attempts inside the native retry budget (4.336951ms)
+✖ Claude504 real symlink failure consumes initial attempts inside the native retry budget (1.928737ms)
+✖ Claude504 real frozen-contract failure consumes initial attempts inside the native retry budget (1.639514ms)
+✖ Claude504 real empty evidence is a typed definite validation failure (465.535251ms)
+✖ Claude504 real oversize evidence is a typed definite validation failure (243.716402ms)
+✖ Claude504 real noncontained evidence is a typed definite validation failure (253.553662ms)
+✖ Claude504 real video evidence is a typed definite validation failure (211.771359ms)
+✔ Claude504 real symlink-directory evidence is a typed definite validation failure (164.179044ms)
+ℹ tests 450
+ℹ suites 0
+ℹ pass 412
+ℹ fail 38
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12891.009736
+
+✖ failing tests:
+
+test at agent-team/tests/bug-pipeline/attempt-budget.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/attempt-budget.test.mjs (107.448312ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs (132.573928ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs (78.278497ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs (128.598267ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/cron-install.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/cron-install.test.mjs (61.040768ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/demo-deployment.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/demo-deployment.test.mjs (151.235237ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/exact-demo-dispatch.test.mjs (92.779871ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/external-review.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/external-review.test.mjs (104.177413ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/issue-review-communication.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/issue-review-communication.test.mjs (108.76713ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/issue-review-sync.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/issue-review-sync.test.mjs (106.472329ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/pipeline.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/pipeline.test.mjs (99.173314ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/release.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/release.test.mjs (99.098824ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/routing.test.mjs:122:1
+✖ capacity errors consume their call and influence only a later requested attempt (5.414329ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /model_capacity_exceeded/. Input:
+  
+  'Error: Codex execute session failed'
+  
+      at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/routing.test.mjs:141:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: Codex execute session failed
+        at invoke (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/models.mjs:384:29)
+        at async implementation (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/models.mjs:289:14)
+        at async waitForActual (node:assert:646:5)
+        at async strict.rejects (node:assert:769:25)
+        at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/routing.test.mjs:141:3)
+        at async Test.run (node:internal/test_runner/test:1389:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:960:7),
+    expected: /model_capacity_exceeded/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/routing.test.mjs:170:1
+✖ incidental line numbers in diagnostics do not invent provider capacity pressure (5.065569ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /fixture line 503/. Input:
+  
+  'Error: Codex execute session failed'
+  
+      at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/routing.test.mjs:184:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: Codex execute session failed
+        at invoke (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/models.mjs:384:29)
+        at async implementation (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/models.mjs:289:14)
+        at async waitForActual (node:assert:646:5)
+        at async strict.rejects (node:assert:769:25)
+        at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/routing.test.mjs:184:3)
+        at async Test.run (node:internal/test_runner/test:1389:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:960:7),
+    expected: /fixture line 503/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs (100.51426ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/standalone-review.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/standalone-review.test.mjs (86.558752ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/windows-review.test.mjs:1:1
+✖ agent-team/tests/bug-pipeline/windows-review.test.mjs (67.477032ms)
+  'test failed'
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:357:1
+✖ validateEvidence accepts a valid synthetic PNG and a recorded Playwright trace and records content digests (6.185313ms)
+  Error: ENOENT: no such file or directory, open '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+      at async open (node:internal/fs/promises:697:25)
+      at async readFile (node:internal/fs/promises:1348:14)
+      at async makeEvidence (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:352:29)
+      at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:360:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:370:1
+✖ validateEvidence rejects missing files, wrong headers, path traversal, and symlinks outside the packet (5.712401ms)
+  Error: ENOENT: no such file or directory, open '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+      at async open (node:internal/fs/promises:697:25)
+      at async readFile (node:internal/fs/promises:1348:14)
+      at async makeEvidence (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:352:29)
+      at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:373:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:400:1
+✖ validateEvidence rejects PNG signature filler and PNG/trace checksum corruption (3.423729ms)
+  Error: ENOENT: no such file or directory, open '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+      at async open (node:internal/fs/promises:697:25)
+      at async readFile (node:internal/fs/promises:1348:14)
+      at async makeEvidence (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:352:29)
+      at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:403:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:491:1
+✖ real Git workspace prepares the exact batch branch, freezes its task packet, and regenerates evidence after clearing stale files (181.549915ms)
+  Error: ENOENT: no such file or directory, open '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+      at async open (node:internal/fs/promises:697:25)
+      at async readFile (node:internal/fs/promises:1348:14)
+      at async makeEvidence (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:352:29)
+      at async run (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:507:7)
+      at async Object.verify (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/workspace.mjs:191:22)
+      at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:537:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1027:1
+✖ Author7 F3 real retained worktree resumes the same attempt after execute without replaying its paid model (15.606023ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+      at #resolve (node:internal/modules/esm/loader:683:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+      at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+      at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1032:1
+✖ Author7 F3 lost Actions worktree fails closed after authorized recovery without replaying a completed model (2.360642ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+      at #resolve (node:internal/modules/esm/loader:683:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+      at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+      at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1172:3
+✖ Author9 F2 real failed correction worktree exact requires exact retained output before another paid call (3.455863ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+      at #resolve (node:internal/modules/esm/loader:683:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+      at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+      at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1172:3
+✖ Author9 F2 real failed correction worktree changed requires exact retained output before another paid call (1.240705ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+      at #resolve (node:internal/modules/esm/loader:683:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+      at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+      at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1172:3
+✖ Author9 F2 real failed correction worktree missing requires exact retained output before another paid call (2.151298ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+      at #resolve (node:internal/modules/esm/loader:683:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+      at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+      at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1172:3
+✖ Author9 F2 real failed correction worktree foreign requires exact retained output before another paid call (2.304689ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+      at #resolve (node:internal/modules/esm/loader:683:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+      at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+      at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1172:3
+✖ Author9 F2 real failed correction worktree frozen requires exact retained output before another paid call (3.903287ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+      at #resolve (node:internal/modules/esm/loader:683:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+      at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+      at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1172:3
+✖ Author9 F2 real failed correction worktree capture-failure requires exact retained output before another paid call (3.091486ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+      at #resolve (node:internal/modules/esm/loader:683:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+      at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+      at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1172:3
+✖ Author9 F2 real failed correction worktree unknown requires exact retained output before another paid call (3.092265ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+      at #resolve (node:internal/modules/esm/loader:683:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+      at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+      at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1172:3
+✖ Author9 F2 real failed correction worktree scope-invalid requires exact retained output before another paid call (3.260883ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+      at #resolve (node:internal/modules/esm/loader:683:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+      at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+      at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1375:3
+✖ Claude504 real outside-scope failure consumes initial attempts inside the native retry budget (4.336951ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+      at #resolve (node:internal/modules/esm/loader:683:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+      at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+      at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1375:3
+✖ Claude504 real symlink failure consumes initial attempts inside the native retry budget (1.928737ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+      at #resolve (node:internal/modules/esm/loader:683:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+      at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+      at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1375:3
+✖ Claude504 real frozen-contract failure consumes initial attempts inside the native retry budget (1.639514ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs' imported from /tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/demo-deployment.mjs
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+      at #resolve (node:internal/modules/esm/loader:683:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+      at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)
+      at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///tmp/clinicos-output-policy-qa1/snapshot/scripts/automation/configure-demo-source.mjs'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1504:3
+✖ Claude504 real empty evidence is a typed definite validation failure (465.535251ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  Error: ENOENT: no such file or directory, open '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+      at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:1559:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: ENOENT: no such file or directory, open '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+        at async open (node:internal/fs/promises:697:25)
+        at async readFile (node:internal/fs/promises:1348:14)
+        at async makeEvidence (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:352:29)
+        at async run (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:1535:9)
+        at async Object.verify (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/workspace.mjs:191:22)
+        at async runImplementationStages (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/workspace.mjs:692:12)
+        at async waitForActual (node:assert:646:5)
+        at async strict.rejects (node:assert:769:25)
+        at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:1559:5)
+        at async Test.run (node:internal/test_runner/test:1389:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1504:3
+✖ Claude504 real oversize evidence is a typed definite validation failure (243.716402ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  Error: ENOENT: no such file or directory, open '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+      at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:1559:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: ENOENT: no such file or directory, open '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+        at async open (node:internal/fs/promises:697:25)
+        at async readFile (node:internal/fs/promises:1348:14)
+        at async makeEvidence (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:352:29)
+        at async run (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:1535:9)
+        at async Object.verify (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/workspace.mjs:191:22)
+        at async runImplementationStages (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/workspace.mjs:692:12)
+        at async waitForActual (node:assert:646:5)
+        at async strict.rejects (node:assert:769:25)
+        at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:1559:5)
+        at async Test.run (node:internal/test_runner/test:1389:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1504:3
+✖ Claude504 real noncontained evidence is a typed definite validation failure (253.553662ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  Error: ENOENT: no such file or directory, open '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+      at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:1559:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: ENOENT: no such file or directory, open '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+        at async open (node:internal/fs/promises:697:25)
+        at async readFile (node:internal/fs/promises:1348:14)
+        at async makeEvidence (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:352:29)
+        at async run (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:1535:9)
+        at async Object.verify (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/workspace.mjs:191:22)
+        at async runImplementationStages (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/workspace.mjs:692:12)
+        at async waitForActual (node:assert:646:5)
+        at async strict.rejects (node:assert:769:25)
+        at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:1559:5)
+        at async Test.run (node:internal/test_runner/test:1389:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at agent-team/tests/bug-pipeline/workspace.test.mjs:1504:3
+✖ Claude504 real video evidence is a typed definite validation failure (211.771359ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  Error: ENOENT: no such file or directory, open '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+      at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:1559:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: ENOENT: no such file or directory, open '/tmp/clinicos-output-policy-qa1/snapshot/artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip'
+        at async open (node:internal/fs/promises:697:25)
+        at async readFile (node:internal/fs/promises:1348:14)
+        at async makeEvidence (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:352:29)
+        at async run (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:1535:9)
+        at async Object.verify (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/workspace.mjs:191:22)
+        at async runImplementationStages (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/src/bug-pipeline/workspace.mjs:692:12)
+        at async waitForActual (node:assert:646:5)
+        at async strict.rejects (node:assert:769:25)
+        at async TestContext.<anonymous> (file:///tmp/clinicos-output-policy-qa1/snapshot/agent-team/tests/bug-pipeline/workspace.test.mjs:1559:5)
+        at async Test.run (node:internal/test_runner/test:1389:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }

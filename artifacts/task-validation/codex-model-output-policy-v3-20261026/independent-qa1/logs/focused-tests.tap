@@ -1,0 +1,27 @@
+✔ independent Codex QA uses a fresh read-only analyst session and cannot return implementation status (44.331368ms)
+✔ plan, implementation and simplification use distinct bounded Codex sessions and models (22.467741ms)
+✔ missing model IDs fail explicitly before starting Codex (2.415006ms)
+✔ missing, invalid and symlink output fail closed (20.218218ms)
+✔ Codex failure is surfaced and does not parse stale output (7.277749ms)
+✔ model worktree cannot contain the runtime output directory (4.018114ms)
+✔ preflight probes CLI support without invoking a model or reading credentials (4.2156ms)
+✔ standalone independent QA treats repository instructions as data and forbids PR code execution (5.710405ms)
+✔ large JSON progress does not prevent reading a separate valid structured result (96.83071ms)
+✔ model failure diagnostics use finite enums and omit raw output (4.935046ms)
+✔ failure classifier checks retained stdout and stderr without copying their text (17.542613ms)
+✔ finite capacity metadata preserves delegate cooldown without exposing raw output (11.239926ms)
+✔ missing runner byte counters remain unknown in finite diagnostics (3.121504ms)
+✔ classifier ignores provider words inside progress and source/tool output (4.982053ms)
+✔ synthetic model child permits separate progress and structured-result channels above 64 KiB (112.3255ms)
+✔ synthetic runner fails on independent total and stderr limits (147.340992ms)
+✔ runner option validation rejects unbounded or invalid limits (5.425128ms)
+✔ timed out process groups terminate surviving descendants (2429.935283ms)
+✔ runner defaults retain the existing combined ceiling and prefix capture (71.748333ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2915.329944

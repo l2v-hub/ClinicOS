@@ -1,0 +1,139 @@
+{
+  "status": "PASS",
+  "synthetic": true,
+  "providerCalls": 0,
+  "code": "31b11f09331249a93468bf00d8cc3d1313004a72",
+  "results": [
+    {
+      "name": "nonfatal stdout plus stderr exact bound and owned tails",
+      "status": "PASS",
+      "stdoutBytes": 3145754,
+      "stderrBytes": 65536,
+      "capturedBytes": 65536,
+      "allocs": [
+        {
+          "length": 32768,
+          "backing": 32768,
+          "offset": 0,
+          "discardedReachable": false
+        },
+        {
+          "length": 32768,
+          "backing": 32768,
+          "offset": 0,
+          "discardedReachable": false
+        }
+      ]
+    },
+    {
+      "name": "nonfatal stdout retains fatal 64KiB stderr",
+      "status": "PASS",
+      "runnerError": "stderr-limit",
+      "stderrBytes": 65537
+    },
+    {
+      "name": "continuous stdout timeout kills descendant process group",
+      "status": "PASS",
+      "runnerError": "timeout",
+      "stdoutBytes": 3735552,
+      "descendantMarkerAbsent": true
+    },
+    {
+      "name": "controller default rejects >2MiB output",
+      "status": "PASS",
+      "runnerError": "output-limit"
+    },
+    {
+      "name": "model-only flag not implied by envMode",
+      "status": "PASS",
+      "runnerError": "output-limit"
+    },
+    {
+      "name": "real-child typed-result failure matrix",
+      "status": "PASS",
+      "cases": [
+        "missing",
+        "malformed",
+        "oversize",
+        "symlink",
+        "schema"
+      ],
+      "rejected": 5
+    },
+    {
+      "name": "bare numeric statuses do not cause classification or next-selection cooldown",
+      "status": "PASS",
+      "cases": [
+        {
+          "n": 401,
+          "category": "other",
+          "nextSelection": "delegate"
+        },
+        {
+          "n": 403,
+          "category": "other",
+          "nextSelection": "delegate"
+        },
+        {
+          "n": 402,
+          "category": "other",
+          "nextSelection": "delegate"
+        },
+        {
+          "n": 429,
+          "category": "other",
+          "nextSelection": "delegate"
+        },
+        {
+          "n": 502,
+          "category": "other",
+          "nextSelection": "delegate"
+        },
+        {
+          "n": 503,
+          "category": "other",
+          "nextSelection": "delegate"
+        },
+        {
+          "n": 504,
+          "category": "other",
+          "nextSelection": "delegate"
+        }
+      ]
+    },
+    {
+      "name": "anchored HTTP status matrix preserves categories",
+      "status": "PASS",
+      "cases": [
+        {
+          "text": "HTTP 401",
+          "category": "auth"
+        },
+        {
+          "text": "HTTP/2 403",
+          "category": "auth"
+        },
+        {
+          "text": "status_code=402",
+          "category": "quota"
+        },
+        {
+          "text": "status-code:429",
+          "category": "rate"
+        },
+        {
+          "text": "HTTP 502",
+          "category": "network"
+        },
+        {
+          "text": "HTTP/2 503",
+          "category": "network"
+        },
+        {
+          "text": "status 504",
+          "category": "network"
+        }
+      ]
+    }
+  ]
+}

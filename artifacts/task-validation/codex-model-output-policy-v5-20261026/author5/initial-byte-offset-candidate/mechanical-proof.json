@@ -1,0 +1,11 @@
+{
+  "restoredLargeFileSha256": "279f60503ef3fc60aaf647b37ecc9e77fbb9ae14091b02a621858d344bd81605",
+  "oldSource4FileBytes": 117478,
+  "newSmallFileBytes": 17192,
+  "appendedTwoTestsSha256": "c6c712017d4d1903f39e5cac4ba0e468da34d30dcac026215b198c0124203c9c",
+  "newSmallContainsExactPriorTests": true,
+  "fixtureCopiedByteExact": true,
+  "claimedCopiedByteExact": true,
+  "revisionCopiedByteExact": true,
+  "noProductionChange": true
+}

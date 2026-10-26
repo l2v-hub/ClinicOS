@@ -24,6 +24,83 @@ const QA_SCHEMA = {
 const MAX_RESULT_BYTES = 256 * 1024;
 const MAX_PROMPT_BYTES = 512 * 1024;
 const EXEC_TIMEOUT_MS = 30 * 60 * 1000;
+const CAPTURE_BYTES_PER_STREAM = 32 * 1024;
+const STDERR_LIMIT_BYTES = 64 * 1024;
+const MODEL_OPERATIONS = new Set(['plan', 'execute', 'simplify', 'qa']);
+const RUNNER_ERRORS = new Set(['output-limit', 'stderr-limit', 'timeout', 'spawn-failed']);
+const FAILURE_CATEGORIES = new Set([
+  'output-limit',
+  'stderr-limit',
+  'timeout',
+  'spawn',
+  'auth',
+  'quota',
+  'model',
+  'schema',
+  'rate',
+  'network',
+  'other',
+]);
+
+function terminalStdoutText(stdout) {
+  const messages = [];
+  for (const line of String(stdout ?? '').split(/\r?\n/)) {
+    try {
+      const event = JSON.parse(line);
+      if (!['error', 'turn.failed'].includes(event?.type)) continue;
+      if (typeof event.message === 'string') messages.push(event.message);
+      if (typeof event.error === 'string') messages.push(event.error);
+      if (typeof event.error?.message === 'string') messages.push(event.error.message);
+    } catch {
+      // Progress and non-JSON output are not terminal failure evidence.
+    }
+  }
+  return messages.join('\n');
+}
+
+function failureCategory({ runnerError, result, error }) {
+  if (runnerError === 'spawn-failed') return 'spawn';
+  if (runnerError && FAILURE_CATEGORIES.has(runnerError)) return runnerError;
+  if (error) return 'schema';
+  if (result?.ok) return null;
+  const text = `${terminalStdoutText(result?.stdout)}\n${result?.stderr ?? ''}`.toLowerCase();
+  const hasStatus = (codes) =>
+    new RegExp(
+      `(?:http(?:/[0-9.]+)?\\s+|status(?:[_ -]code)?["']?[\\s:=]+)(?:${codes})\\b`,
+      'i',
+    ).test(text);
+  if (
+    /invalid_api_key|authentication_error|unauthorized|forbidden|login required/.test(text) ||
+    hasStatus('401|403')
+  )
+    return 'auth';
+  if (
+    /insufficient_quota|quota_exceeded|billing_hard_limit|payment_required/.test(text) ||
+    hasStatus('402')
+  )
+    return 'quota';
+  if (/rate_limit_exceeded|too many requests/.test(text) || hasStatus('429')) return 'rate';
+  if (/model_not_found|model_capacity_exceeded|overloaded_error|unsupported_model/.test(text))
+    return 'model';
+  if (/schema_validation|invalid_json|structured output invalid/.test(text)) return 'schema';
+  if (
+    /network_error|connection refused|connect_timeout|dns lookup/.test(text) ||
+    hasStatus('502|503|504')
+  )
+    return 'network';
+  return 'other';
+}
+
+function finiteCount(value) {
+  return Number.isSafeInteger(value) && value >= 0 ? value : null;
+}
+
+function isModelCapacityFailure(result) {
+  const text = `${terminalStdoutText(result?.stdout)}\n${result?.stderr ?? ''}`;
+  return /rate_limit_exceeded|model_capacity_exceeded|overloaded_error|(?:http(?:\/[0-9.]+)?\s+|status(?:[_ -]code)?["']?[\s:=]+)(?:429|503)\b/i.test(
+    text,
+  );
+}
 
 function requiredModel(model, name) {
   if (typeof model !== 'string' || !model.trim()) {
@@ -190,8 +267,11 @@ export function createModels({
   run,
   runtimeRoot,
   now = Date.now,
+  onDiagnostic,
 }) {
   if (typeof run !== 'function') throw new TypeError('run must be a process runner');
+  if (onDiagnostic !== undefined && typeof onDiagnostic !== 'function')
+    throw new TypeError('onDiagnostic must be a function');
   if (typeof runtimeRoot !== 'string' || !path.isAbsolute(runtimeRoot)) {
     throw new Error('runtimeRoot must be an absolute path outside the worktree');
   }
@@ -229,9 +309,7 @@ export function createModels({
       if (
         executorModel === 'auto' &&
         selection.model !== plannerModel &&
-        /rate_limit_exceeded|model_capacity_exceeded|overloaded_error|(?:http(?:\/[0-9.]+)?\s+|status(?:[_ -]code)?["']?[\s:=]+)(?:429|503)\b/i.test(
-          error.message,
-        )
+        error.modelCapacityFailure === true
       )
         capacityUntil.set(selection.model, now() + 60_000);
       throw error;
@@ -283,21 +361,51 @@ export function createModels({
         cwd,
         input,
         timeoutMs: EXEC_TIMEOUT_MS,
-        maxOutputBytes: 64 * 1024,
+        maxOutputBytes: STDERR_LIMIT_BYTES,
+        maxCapturedBytesPerStream: CAPTURE_BYTES_PER_STREAM,
+        captureTail: true,
+        maxStderrBytes: STDERR_LIMIT_BYTES,
+        limitStdout: false,
         envMode: 'model',
       });
+      const emit = (error = null, resultError = null) => {
+        if (!onDiagnostic) return;
+        const runnerError = RUNNER_ERRORS.has(result?.error) ? result.error : null;
+        const category = failureCategory({
+          runnerError,
+          result,
+          error: resultError,
+        });
+        const diagnostic = {
+          operation: MODEL_OPERATIONS.has(operation) ? operation : 'execute',
+          runnerError,
+          exitCode: Number.isSafeInteger(result?.code) ? result.code : null,
+          failureCategory:
+            category === null ? null : FAILURE_CATEGORIES.has(category) ? category : 'other',
+          stdoutBytes: finiteCount(result?.stdoutBytes),
+          stderrBytes: finiteCount(result?.stderrBytes),
+          stdoutCapturedBytes: finiteCount(result?.stdoutCapturedBytes),
+          stderrCapturedBytes: finiteCount(result?.stderrCapturedBytes),
+        };
+        try {
+          onDiagnostic(diagnostic);
+        } catch {
+          /* diagnostics cannot change model outcomes */
+        }
+      };
       if (!result?.ok) {
-        const diagnostic = safeSummary(
-          result?.stderr || result?.error || 'Codex model session failed',
-        );
-        throw Object.assign(
-          new Error(`Codex ${operation} session failed: ${diagnostic || 'no diagnostic'}`),
-          { code: 'model-execution-failed' },
-        );
+        emit();
+        throw Object.assign(new Error(`Codex ${operation} session failed`), {
+          code: 'model-execution-failed',
+          modelCapacityFailure: isModelCapacityFailure(result),
+        });
       }
       try {
-        return await readStructuredOutput(outputPath, runtime, schema);
+        const structured = await readStructuredOutput(outputPath, runtime, schema);
+        emit();
+        return structured;
       } catch (error) {
+        emit(null, error);
         throw Object.assign(error, { code: 'model-result-invalid' });
       }
     } finally {

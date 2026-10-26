@@ -1,0 +1,2209 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "nonce": "255080bc-bede-4c29-aef7-d893a01f220f",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "38b37e3322176bd9836d228d4c4ce63bf66fced2",
+      "baseSha": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+      "evidence": "independent-qa1/report.md",
+      "reason": "Genuine author1 passed focused tests but new independent QA1 FAILED backing-memory bound and two raw-error routing assertions. All failures and source candidate retained.",
+      "independentQaNonce": "26a7189c-6330-45ec-b019-ca73be5f13f6",
+      "independentQaSealSha256": "62f9c0ce6862cbd0a00536ca42799a995a6c9042f7e36a4b749627cdc006d70f"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "nonce": "711849b2-b278-48aa-98d4-3f5ba42780ef",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b",
+      "baseSha": "38b37e3322176bd9836d228d4c4ce63bf66fced2",
+      "evidence": "independent-qa2/report.md",
+      "reason": "Genuine separately reserved bounded correction; new independent QA2 verifies six source files, full1663PASS/0FAIL/3WindowsSKIP and owned backing allocations. Earlier author2 flaky test run retained.",
+      "independentQaNonce": "e26aaa1a-0d6a-4cea-a582-ab66a5a9cdda",
+      "independentQaSealSha256": "569200428bade2358d7dfa462aef6e80668b16fcff0b09fde186ce03060ed9d9"
+    },
+    {
+      "round": 3,
+      "status": "passed",
+      "nonce": "d25ba2ca-b40f-483a-b6e8-53f7e1d17db6",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "31b11f09331249a93468bf00d8cc3d1313004a72",
+      "baseSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+      "evidence": "independent-qa3/report.md",
+      "reason": "Actual author3 corrects real peer1 feedback; NEW independent QA3 verifies model stdout streaming, owned retention, legacy caps, status classification and native1665PASS0FAIL3SKIP. All previous failures and peer BLOCKED retained.",
+      "independentQaNonce": "e224a4fd-aebb-4679-af5e-7d1d6eb061e5",
+      "independentQaSealSha256": "fba8d69b6878594a267e3348645677fd31f132a782beb2de331a09f8ec6b4841"
+    },
+    {
+      "round": 4,
+      "status": "passed",
+      "nonce": "96c30272-a025-47de-bd41-1dd8cd076ee9",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "88b9a33d4a879b85bbf8b543fd474b390461d304",
+      "baseSha": "895e6bd54461fcc6a00be4117e4792bde6fc4e07",
+      "evidence": "independent-qa4/report.md",
+      "reason": "Actual source4 aligns generation with strict native semantics, adds finite diagnostic metadata and preserves consumed handoff history. NEW independent QA4 completion verifies unchanged15source projection after original QA25PASS/model-capacity interruption. All earlier failures preserved.",
+      "independentQaNonce": "7f147816-563d-424c-96e9-69a0f2909985",
+      "independentQaSealSha256": "7c9b88960854d38fbae4f842cef4122ab906d413ecffe82f946dc231577937b4"
+    }
+  ],
+  "reviews": [
+    {
+      "round": 1,
+      "status": "blocked",
+      "subjectSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176"
+    },
+    {
+      "round": 2,
+      "status": "failed",
+      "subjectSha": "895e6bd54461fcc6a00be4117e4792bde6fc4e07"
+    },
+    {
+      "round": 3,
+      "status": "failed",
+      "subjectSha": "895e6bd54461fcc6a00be4117e4792bde6fc4e07"
+    },
+    {
+      "round": 4,
+      "status": "failed",
+      "subjectSha": "895e6bd54461fcc6a00be4117e4792bde6fc4e07"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "blocked",
+        "subject_sha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+        "review_sha256": "e87f2a727e28974ce6b4dee639cd7492acbc1d63b41a832368475c226d969320"
+      },
+      {
+        "round": 2,
+        "verdict": "failed",
+        "subject_sha": "895e6bd54461fcc6a00be4117e4792bde6fc4e07"
+      },
+      {
+        "round": 3,
+        "verdict": "failed",
+        "subject_sha": "895e6bd54461fcc6a00be4117e4792bde6fc4e07"
+      },
+      {
+        "round": 4,
+        "verdict": "failed",
+        "subject_sha": "895e6bd54461fcc6a00be4117e4792bde6fc4e07"
+      }
+    ]
+  },
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"b868e72ceb2d2e29fdaf077b3d7144c34481e176\",\n  \"verdict\": \"blocked\",\n  \"summary\": \"I reviewed the six changed files as source data and did not run anything. The design matches the task contract: AC4 holds on source review. It raises the model total-output cap to 2 MiB, keeps a 32 KiB tail per stream, and makes stderr fatal above 64 KiB. Callers that leave out the new options keep the old combined cap with prefix capture. The CLI flags, the 30-minute timeout, the 256 KiB typed-result limit and the schema, path and symlink checks are unchanged. Diagnostics carry only fixed categories and numeric counts, and thrown errors no longer include raw stderr. The capacity cooldown is kept through a boolean `modelCapacityFailure` marker. QA1's backing-buffer finding is fixed: `appendCapture` now allocates an owned buffer no larger than the limit. QA1's outdated routing assertions are corrected. I found no blocking correctness or security defect in the code.\\n\\nThe verdict is blocked because the evidence is incomplete and is not tied to this exact SHA:\\n(1) The only passing QA (QA2) is sealed against commit 3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b, not the subject b868e72ceb2d2e29fdaf077b3d7144c34481e176. Its source hashes are SHA-256, while the supplied blob IDs are Git SHA-1, so I cannot confirm from the evidence that the subject's source files match what QA2 tested.\\n(2) The validation report marks all six native CI checks as PENDING (bug-pipeline-tests, secret-scan, frontend-tests, archive-tests, gate, browser-e2e). No exact-head results were supplied.\\n(3) The independent Claude review and the final Codex gate are recorded as PENDING.\\n\\nI also list smaller issues: diagnostic classification can be wrong, the new limit check can throw for existing callers, and the 2 MiB fatal cap could cut off long sessions.\",\n  \"findings\": [\n    {\n      \"severity\": \"high\",\n      \"file\": \"artifacts/task-validation/codex-model-output-policy-20261026/validation-report.md\",\n      \"line\": 1,\n      \"problem\": \"The acceptance evidence does not cover the frozen subject SHA. QA2's READY verdict and seal name code 3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b, while the subject is b868e72ceb2d2e29fdaf077b3d7144c34481e176. The seal's sourceHashes are SHA-256 and the change set gives Git SHA-1 blob IDs, so the supplied data cannot show that the subject's six source/test files match what QA2 tested. The same report says the six required native checks (bug-pipeline-tests, secret-scan, frontend-tests, archive-tests, gate, browser-e2e), the Claude peer review and the final Codex gate are PENDING. AC1–AC3 therefore rest only on synthetic local runs of a different commit.\",\n      \"requested_change\": \"Add evidence tied to b868e72c: successful exact-head results for all six required native checks, plus a manifest that maps each changed file's subject Git blob SHA to the SHA-256 hashes in the QA2 seal, or a fresh QA run against this SHA.\",\n      \"test_expectation\": \"The bug-pipeline-tests check on head b868e72c runs agent-team/tests/bug-pipeline/*.test.mjs and passes, including process-output.test.mjs and the new models.test.mjs and routing.test.mjs cases. The other five required checks are also green on the same head.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"agent-team/src/bug-pipeline/models.mjs\",\n      \"line\": 68,\n      \"problem\": \"`failureCategory` applies broad numeric patterns to all retained stderr: `\\\\b401\\\\b` and `\\\\b403\\\\b` map to auth, `\\\\b402\\\\b` to quota, `\\\\b429\\\\b` to rate, and `\\\\b50[234]\\\\b` to network. Stderr can hold arbitrary tool or source output, so text like 'fixture line 401' or 'port 5030… 503 bytes' gets the wrong category. The base code already fixed this exact false positive for capacity detection; see the 'incidental line numbers' routing test and the anchored regex in isModelCapacityFailure.\",\n      \"requested_change\": \"Anchor the numeric status patterns the same way as the capacity regex, e.g. `(?:http(?:/[0-9.]+)?\\\\s+|status(?:[_ -]code)?[\\\"']?[\\\\s:=]+)(?:401|403)`, or apply them only to terminal JSON events.\",\n      \"test_expectation\": \"A failing run whose stderr is 'validation failed at fixture line 401' (or 503) gets failureCategory 'other', not 'auth' or 'network'.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"agent-team/src/bug-pipeline/process.mjs\",\n      \"line\": 135,\n      \"problem\": \"`createRunner` now calls `validateLimit(maxOutputBytes)` for every caller, and it throws a RangeError when maxOutputBytes is above 64 MiB or not a safe integer. Before this change any value was accepted. Any existing caller outside the diff (verification, controller or review runs) that passes a larger or non-integer limit now gets a rejected promise instead of a result object. That breaks the contract's claim that non-model runner defaults are unchanged, and the supplied files do not show the other call sites.\",\n      \"requested_change\": \"Confirm that every existing createRunner caller passes a value within the new bound. Otherwise, apply the strict check only to the new options (maxCapturedBytesPerStream and maxStderrBytes).\",\n      \"test_expectation\": \"A repository-wide test or grep of `maxOutputBytes:` call sites shows that all of them are integers ≤ 64 MiB. Existing controller and verification runner tests pass unchanged.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"agent-team/src/bug-pipeline/models.mjs\",\n      \"line\": 27,\n      \"problem\": \"The model session's total stdout+stderr cap is still fatal, now at 2 MiB (RUNNER_OUTPUT_BYTES). Codex `--json` emits events that include command output and runs for up to 30 minutes. A legitimate long implementation session can therefore still be killed with output-limit before its separate typed-result file is read, which is the same failure this PR fixes, only at a higher threshold. The output is already tail-captured, so the total cap no longer protects memory.\",\n      \"requested_change\": \"Either document why 2 MiB is enough for the worst-case 30-minute workspace-write session, or make stdout volume non-fatal for model sessions and keep only the fatal stderr cap, the timeout and the bounded tail capture.\",\n      \"test_expectation\": \"A synthetic child emits more than 2 MiB of JSON progress on stdout, then writes a valid typed result. The test asserts the documented outcome: success if stdout becomes non-fatal, or an explicit output-limit with category 'output-limit' if the cap is kept on purpose.\"\n    }\n  ]\n}\n"
+  },
+  "sourceManifest": [
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "blob": "b42cd83de4b6442451a7437926271e70b761b712",
+      "mode": "100644",
+      "baseBlob": "49f6863999ec35956ab5075e2261156788cb3116",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "blob": "3ab67169e44fa898f1b2f3fe8269907bb62bd8ae",
+      "mode": "100644",
+      "baseBlob": "df7c0ff208121f011bb8dbd6fe75f5db93d5d89f",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/models.mjs",
+      "blob": "9fbf4ef5003599e27bebeb1ff2a54dd55febaab9",
+      "mode": "100644",
+      "baseBlob": "afeaedc93a27018fb668e3258e29f870b82852f9",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/process.mjs",
+      "blob": "9e11b3a620e3b1fb7c9cf2ee2783e865e93c5f51",
+      "mode": "100644",
+      "baseBlob": "a814921e49f21b54ebf3dfc42226d421d53a269d",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/review-validation-diagnostic.mjs",
+      "blob": "47fd29e6cd7bd58c0db879b0911f1240c8672ac3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "blob": "3fed5fd8a434f035c5c4f97770e924798d5b9704",
+      "mode": "100644",
+      "baseBlob": "f33f41c1a38c19e70d7160790b9e550011b4b513",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "blob": "9d48a4d3e9ff6dc80fab9efe9793f73bd6c70148",
+      "mode": "100644",
+      "baseBlob": "5be4e8f0537e80213110b88e3f96e2c453c86d08",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/models.test.mjs",
+      "blob": "cc23e403463bca3f606f66d33f89698f8daa2384",
+      "mode": "100644",
+      "baseBlob": "20d1de14d876ecc3f4f14810eb90cfcec6b0f406",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/process-output.test.mjs",
+      "blob": "e62e33a0b21f015bd362930f1503349a110bd637",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/review-validation-diagnostic.test.mjs",
+      "blob": "3753bfdb97132f53e84feaa9f5262aa6da6c6e6c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/routing.test.mjs",
+      "blob": "d2d1290e1fb70498a109490acec362497218f0c7",
+      "mode": "100644",
+      "baseBlob": "f90c16f6ee37e4c785c378186d21b95ed4bd0f66",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "blob": "4d0aa7324d076bf0a2dd7bf0ec84af9224b2f334",
+      "mode": "100644",
+      "baseBlob": "d0da9f1505542b8a42a2a094964b2658b299eba2",
+      "baseMode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/analysis.md",
+      "blob": "48d401210f40bd6502ae3525a62e05653ac27fa2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/amendment-hashes.sha256",
+      "blob": "bc26e7fd907cf7cef146302a2a761c9b23c5c291",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/manifest.sha256",
+      "blob": "ef253339f813a880e6d91b70ec2cbac49836b034",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/analysis.md",
+      "blob": "2ce8967ed0e65dcd7fa80876d7106f79ae7199db",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/implementation-plan.md",
+      "blob": "a5b3cbdf0389a88abc37e592c37c1d0915b6d278",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/imported-history.json",
+      "blob": "542900d8c7715373238ad554df75a58d6f249795",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/logs/green-targeted.log",
+      "blob": "2ad849be7c8aa3390968c1807db18fa716ea130c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/logs/red-models.log",
+      "blob": "e9d8b9894a11749e3c043d61ecc92c444566c0a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/task-contract.md",
+      "blob": "952b0a1bb2551e36f31d6efeb1a9bd963aa5b028",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/test-plan.md",
+      "blob": "0b91d34f69990e7b364bf253ad13a5b85a5ba002",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/validation-report.md",
+      "blob": "7f4fc61e5ddb6c474aae6a9d404f70ff5c48f011",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/result.json",
+      "blob": "26854f84bd2b774861012285936ab2c1337a70b3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/seal.json",
+      "blob": "fc1c4fa501be0a10f3ccb29181616fb0e12ab1cc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/manifest.sha256",
+      "blob": "a65c4883f3b73f09f4bb29a6b13fc1883a6dd4f1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/analysis.md",
+      "blob": "a5144d0efab31406e64b6f3ea62dfa8bf5b48995",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/implementation-plan.md",
+      "blob": "a5b3cbdf0389a88abc37e592c37c1d0915b6d278",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/imported-history.json",
+      "blob": "542900d8c7715373238ad554df75a58d6f249795",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/logs/green-targeted.log",
+      "blob": "cce4ca897a6744098c077038a312657e65431ce9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/logs/red-models.log",
+      "blob": "e9d8b9894a11749e3c043d61ecc92c444566c0a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/task-contract.md",
+      "blob": "952b0a1bb2551e36f31d6efeb1a9bd963aa5b028",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/test-plan.md",
+      "blob": "1cdaadf90ac8b653b2dc402e6201b5b1e7232594",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/validation-report.md",
+      "blob": "d1527b54213c5a42314b673aa3a0a26b22f532be",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/reservation.json",
+      "blob": "ac701e87b6970acd5538aaeada095b41671a6c29",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/result.json",
+      "blob": "dd8cad68e01368253e49edd4844f6b47d590048e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/result.sha256",
+      "blob": "7a2c57511d471fc6dd70a22033cbb6dbf52fc4c5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/seal.json",
+      "blob": "bcc89e7b533f1be6c4cb3ec316412658cf366f6e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/STOP",
+      "blob": "f65e50c618cafd225ec9f88cea8b20915abc58fc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/docs/task-contract.md",
+      "blob": "952b0a1bb2551e36f31d6efeb1a9bd963aa5b028",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/findings.md",
+      "blob": "a133a92f3f24d2efbb8fd70f9ee431bef8eaa5a7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/local-scope-amendment-before-session.json",
+      "blob": "dd73ae98ff11d7e4a5e177f2f3f520c6c3c81e87",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/logs/full-relevant-correction-final.tap",
+      "blob": "176624d909b7f2a588652ae8a75d150d953f4243",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/logs/full-relevant-correction-initial-flake.tap",
+      "blob": "dde93d59e013c6eec3a33644fe5d9fbffc340cef",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/logs/initial-red-models.log",
+      "blob": "e9d8b9894a11749e3c043d61ecc92c444566c0a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/logs/red-backing-regression.log",
+      "blob": "dff061b82506d41ca0d72825f229fbb58faa5f2f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/logs/targeted-correction-final.tap",
+      "blob": "f299af5fdd22616da9d4d567d0f1166b025735df",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/logs/task-contract-validation.log",
+      "blob": "0e17b332d9f8a3e97ab26d152044c6ab8585b871",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/manifest.sha256",
+      "blob": "75367ea75288efa8287fc09c0c5b7097af54e97a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/reservation.json",
+      "blob": "743d3468fa914ce2a466f8fe9067a5469b925652",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/result.json",
+      "blob": "17f3658adce53d8dcb89ece113e6775c2003a30b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/seal.json",
+      "blob": "4d5a1d6c0b2f5f786786d905480f7ed5738d8596",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/source-hashes.json",
+      "blob": "587d5ea74a9eeb186484a815dff11c7c982ba8ba",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/validation-report.md",
+      "blob": "ce366a993eac0cad49f3294849fdb734beabd061",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/implementation-plan.md",
+      "blob": "a5b3cbdf0389a88abc37e592c37c1d0915b6d278",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/imported-history.json",
+      "blob": "56f5e09d25daaeb2b061f962f5b58359d9ffa81a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/browser-evidence.mjs",
+      "blob": "bf4e2471d5b379446326b6916e04713d50249209",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/complete.diff",
+      "blob": "cce6cee4c8f8e31b94db14f1685b5d2f382f2edb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/findings.md",
+      "blob": "543650b5fdea82a1bad3778e4211483adeaecdf5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/independent.mjs",
+      "blob": "402a44c542b7c3953c1c37e001e15893ca84e159",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/contract.log",
+      "blob": "e1e9283e89b6a87d7f84e324f13d431e9ce267a8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/focused-tests.tap",
+      "blob": "975a7384bc8043f7ddabef0fcf066a1a960f7207",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/independent.log",
+      "blob": "8ed238b3c8d7bc2d4114cf5b95738382d9e6dac8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/pipeline-tests-complete.tap",
+      "blob": "675eb0a0bc9f30f8b5766cab2af250e7dbed7b06",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/pipeline-tests.tap",
+      "blob": "8b9a2e13014701d671cd2c6ffa79be5fb310cc58",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/playwright-file-navigation-attempt.log",
+      "blob": "28b1785e33f36b8dfdd57941de252d9de35c3f4e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/playwright-video-attempt.log",
+      "blob": "f40a8cf0ae58a87a2b8ea6386604010debfc022a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/playwright.log",
+      "blob": "43d9fe85135fc55211d0e9da626274960db8ab07",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/manifest.sha256",
+      "blob": "236aa92d79bf1ceaa3386e91689dad3a9a657eb7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/playwright-report/index.html",
+      "blob": "7839d82098a70d9921ff9b218b9256cc86507efc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/report.md",
+      "blob": "69263f013d7427d7e574d763d4f420b8949d144a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/reservation.json",
+      "blob": "227572bc9103fbbe30f04ec4c490eb6b264cb507",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/result.json",
+      "blob": "2d5d55cb1b3d9189b19e28c25462e52aa081d3e0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/screenshots/result.png",
+      "blob": "554ce6bb7ada0e6ac0d069ee365b09728deb7a24",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/seal.json",
+      "blob": "556fa719a684753ee9a798dd4eb3980f0d745e5d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/source-hashes.json",
+      "blob": "b5bbdf2d8b6b9a2a66ef0650d090c246c88c230a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/task-contract.md",
+      "blob": "02c169cb88757b3be75b208e92ace689f2fe3944",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/test-results/artifact-validation.json",
+      "blob": "12be894ee30cbd4191d448e5ebc0b4d38c2116b2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/test-results/independent.json",
+      "blob": "8ed238b3c8d7bc2d4114cf5b95738382d9e6dac8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/test-results/playwright.json",
+      "blob": "9e47d933b01408be5facd7ef5b1e363fde5bd904",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/test-results/privacy-scan.json",
+      "blob": "08ee2826c8635bac6c23b40dcc72b3f9ba89d088",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/test-results/real-runner-backing.json",
+      "blob": "2d81fb1288dadaff4a8e923cb8c9cb55c5dec14e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/trace/trace.zip",
+      "blob": "5a3ec9c2f90b9622d1d0652c58051e81bd4fb723",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/validation-report.md",
+      "blob": "69263f013d7427d7e574d763d4f420b8949d144a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/artifact-manifest.json",
+      "blob": "16d25b13480e7715c153f8a6ad9b3116d6deeb8f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/commands.txt",
+      "blob": "64796ca27ec4a30b586aa55591cdc75c1e314ba8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/complete.diff",
+      "blob": "f96e095ef009bfc58dfab968bf9dff21c508bfbf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/evidence-scripts/browser-evidence.mjs",
+      "blob": "4fdb901361efd14634ca0f80e4fa3c51925632d0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/evidence-scripts/classifier-extra.mjs",
+      "blob": "67b1672cc168afb10e6598522831555a0cf88f9a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/evidence-scripts/independent.mjs",
+      "blob": "07017afe72d1778be459eb2ea0b9a070590f9357",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/evidence-scripts/memory-extra.mjs",
+      "blob": "974200baeeff5ece80894d62f0968c9b2795a648",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/findings.md",
+      "blob": "2bec88d3f91d2d385925e783c93c4d0318e1d23e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/classifier-extra.log",
+      "blob": "169379561528455937074ad567258e3707239556",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/contract.log",
+      "blob": "554f061ff712400066b3adf09cd39b077f5fc582",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/diff-check.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/focused-tests.tap",
+      "blob": "604289fbaa0a49b0b5a1352341bdfb7c538a2c11",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/independent.log",
+      "blob": "d0b7274721c1aef71d151a2566f0082ee8d3fe08",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/memory-extra.log",
+      "blob": "75ebe63aab968e574fe9e4d4e0db8a5c4765e25a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/pipeline-tests-complete.tap",
+      "blob": "39bf6ee7ff673c48f46821142e26c65ddb1cb2bd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/playwright.log",
+      "blob": "03250c1fe693171db85756d8d6f1da0742e52785",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/playwright-report/index.html",
+      "blob": "b8c4f1efc4826f8fe99b26472533d4fda8936d1c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/report.md",
+      "blob": "48b7912abf596323b26424e6031322c75897e06c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/reservation-PREPARED-NOT-COMMITTED.json",
+      "blob": "58bfe135a8f2563369264f3ccf9c373ba5ecfd39",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/reservation.json",
+      "blob": "1281b013b6179fd591a7465c006829d4615fa629",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/result.json",
+      "blob": "c0da0477849241d4f9a38e127405fbaff6548cce",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/screenshots/result.png",
+      "blob": "8417701d5cadd14c0168a95942e28cf0ad172642",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/seal.json",
+      "blob": "534a8c393ccf4ea305884229f09366edb8910109",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/source-hashes-after.json",
+      "blob": "55bb46e45b4dc0e47227bf0f3ffdf16ca3f01228",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/source-hashes-before.json",
+      "blob": "273aef99e1957a24f7aa1b07ddb4dc01a1c43c35",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/task-contract.md",
+      "blob": "902b8589db0debbaeacee55252bd383fa18e40c8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/test-results/classifier-extra.json",
+      "blob": "169379561528455937074ad567258e3707239556",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/test-results/independent.json",
+      "blob": "d0b7274721c1aef71d151a2566f0082ee8d3fe08",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/test-results/memory-extra.json",
+      "blob": "75ebe63aab968e574fe9e4d4e0db8a5c4765e25a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/test-results/playwright.json",
+      "blob": "03250c1fe693171db85756d8d6f1da0742e52785",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/trace/trace.zip",
+      "blob": "29ac8f58872f23cd4b1bba8af189d2e72be7f454",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/validation-report.md",
+      "blob": "48b7912abf596323b26424e6031322c75897e06c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/logs/full-relevant-correction-final.tap",
+      "blob": "176624d909b7f2a588652ae8a75d150d953f4243",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/logs/full-relevant.tap",
+      "blob": "dde93d59e013c6eec3a33644fe5d9fbffc340cef",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/logs/green-correction-targeted-final.tap",
+      "blob": "f299af5fdd22616da9d4d567d0f1166b025735df",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/logs/green-correction-targeted.tap",
+      "blob": "6fd017f95e3ab7311f84498b3f0b973e2cc34af4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/logs/green-targeted.log",
+      "blob": "2ad849be7c8aa3390968c1807db18fa716ea130c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/logs/red-models.log",
+      "blob": "e9d8b9894a11749e3c043d61ecc92c444566c0a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/preserved-pre-provider-config-match.json",
+      "blob": "8ecdc55cd7249df6f4d8248e0f32a8366528cb97",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/preserved-pre-provider-probe.json",
+      "blob": "0cb403e49420b481f62510f1856eebf64f8fe8d1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/qualification-proof.json",
+      "blob": "557991943caa46bfcf67a4b7fb2848762270f475",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/source-manifest.json",
+      "blob": "7f4470c83adaf4628cdf472c16c7a0e72b034672",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/task-contract.md",
+      "blob": "952b0a1bb2551e36f31d6efeb1a9bd963aa5b028",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/test-plan.md",
+      "blob": "0b91d34f69990e7b364bf253ad13a5b85a5ba002",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/validation-report.md",
+      "blob": "7677ec96b96a6787374a042c66ab4c7241a43c03",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/STOP.md",
+      "blob": "c809e6b72231b1def8a02d43589e764e1fed9c65",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/analysis.md",
+      "blob": "c15e02d26ef82ece9897518931df5d8a60462d16",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/STOP.md",
+      "blob": "c809e6b72231b1def8a02d43589e764e1fed9c65",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/analysis.md",
+      "blob": "b6b4beba939e5139fd1c3f226d2c99e5dc60f541",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/implementation-plan.md",
+      "blob": "6518b6a298f4fe9468a4f9e3f00c2efded32aed6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/result.json",
+      "blob": "26d2839deb83712daed4115bd6229cbb895d6eb1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/seal.json",
+      "blob": "0c377294ee80ddabcf11f3b6e3ee76025d090165",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/source-hashes.json",
+      "blob": "7e5ff8faa7227e79136fcd8beef1416855714fb9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/source-inventory.md",
+      "blob": "78351990861f731c6ce417c7c71fee7924641cda",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/task-contract.md",
+      "blob": "143dd066267bf02527a4586e04f3d1aedb7dc898",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/test-plan.md",
+      "blob": "f2c7c796a51a0a6b31c0d39aa85ad677c3c06e48",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/test-results/agent-team-full-b868-context-final.tap",
+      "blob": "2a282e974be477a2b3bbdfc078f9b9967c2d347e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/test-results/agent-team-full-qa2-context-final.tap",
+      "blob": "2b45d305bd479469e90994a345a3850eddb56dbd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/test-results/baseline-red.tap",
+      "blob": "3bb473b4ce6930dd77ca8faf8c1fb5df60dc65dd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/test-results/bug-pipeline-b868-complete-context-final.tap",
+      "blob": "38e38ca7e23ae85eaeb564355942d3e17b9bc0b5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/test-results/bug-pipeline-b868-context-fixtures-final.tap",
+      "blob": "6d1d044f8e22852d7c7c488a53a077a3d97cc6cc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/test-results/bug-pipeline-b868-overlay-final.tap",
+      "blob": "feed0a4c85823db712f00406a4eaa347aea38d31",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/test-results/bug-pipeline-full-final.tap",
+      "blob": "e217b43541d684f90d3ec9fb90f56b085f63c884",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/test-results/bug-pipeline-full.tap",
+      "blob": "0175947feb1a8ec1066ec5b050cc6ba21f9cd463",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/test-results/models-process-output-final.tap",
+      "blob": "029f6507bc57421787ed9aa9e5af252d403e7d9c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/test-results/models-process-output.tap",
+      "blob": "b6df9dc6c1b3cd9e6217ea86b8052999021774db",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/test-results/qa2-exact-full-command-final.tap",
+      "blob": "a9572a5913996dab8503660f6a6b6c2980334d7a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/test-results/routing.tap",
+      "blob": "400990b9d42044383041dca813e6f982366e0eb3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/author3/validation-report.md",
+      "blob": "0bd4197d0c171d8f4dba4f40c09f4c88e50b5577",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/claude-review-1.json",
+      "blob": "7b9224e788cafae232bb38da0b33ce47a462723e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/implementation-plan.md",
+      "blob": "6518b6a298f4fe9468a4f9e3f00c2efded32aed6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/imported-history.json",
+      "blob": "1be8432358c3ddb1c50d475fe20805f8ae527e81",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/browser-evidence.mjs",
+      "blob": "bf4e2471d5b379446326b6916e04713d50249209",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/complete.diff",
+      "blob": "cce6cee4c8f8e31b94db14f1685b5d2f382f2edb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/findings.md",
+      "blob": "543650b5fdea82a1bad3778e4211483adeaecdf5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/independent.mjs",
+      "blob": "402a44c542b7c3953c1c37e001e15893ca84e159",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/logs/contract.log",
+      "blob": "e1e9283e89b6a87d7f84e324f13d431e9ce267a8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/logs/focused-tests.tap",
+      "blob": "975a7384bc8043f7ddabef0fcf066a1a960f7207",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/logs/independent.log",
+      "blob": "8ed238b3c8d7bc2d4114cf5b95738382d9e6dac8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/logs/pipeline-tests-complete.tap",
+      "blob": "675eb0a0bc9f30f8b5766cab2af250e7dbed7b06",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/logs/pipeline-tests.tap",
+      "blob": "8b9a2e13014701d671cd2c6ffa79be5fb310cc58",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/logs/playwright-file-navigation-attempt.log",
+      "blob": "28b1785e33f36b8dfdd57941de252d9de35c3f4e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/logs/playwright-video-attempt.log",
+      "blob": "f40a8cf0ae58a87a2b8ea6386604010debfc022a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/logs/playwright.log",
+      "blob": "43d9fe85135fc55211d0e9da626274960db8ab07",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/manifest.sha256",
+      "blob": "236aa92d79bf1ceaa3386e91689dad3a9a657eb7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/playwright-report/index.html",
+      "blob": "7839d82098a70d9921ff9b218b9256cc86507efc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/report.md",
+      "blob": "69263f013d7427d7e574d763d4f420b8949d144a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/reservation.json",
+      "blob": "227572bc9103fbbe30f04ec4c490eb6b264cb507",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/result.json",
+      "blob": "2d5d55cb1b3d9189b19e28c25462e52aa081d3e0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/screenshots/result.png",
+      "blob": "554ce6bb7ada0e6ac0d069ee365b09728deb7a24",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/seal.json",
+      "blob": "556fa719a684753ee9a798dd4eb3980f0d745e5d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/source-hashes.json",
+      "blob": "b5bbdf2d8b6b9a2a66ef0650d090c246c88c230a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/task-contract.md",
+      "blob": "02c169cb88757b3be75b208e92ace689f2fe3944",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/test-results/artifact-validation.json",
+      "blob": "12be894ee30cbd4191d448e5ebc0b4d38c2116b2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/test-results/independent.json",
+      "blob": "8ed238b3c8d7bc2d4114cf5b95738382d9e6dac8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/test-results/playwright.json",
+      "blob": "9e47d933b01408be5facd7ef5b1e363fde5bd904",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/test-results/privacy-scan.json",
+      "blob": "08ee2826c8635bac6c23b40dcc72b3f9ba89d088",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/test-results/real-runner-backing.json",
+      "blob": "2d81fb1288dadaff4a8e923cb8c9cb55c5dec14e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/trace/trace.zip",
+      "blob": "5a3ec9c2f90b9622d1d0652c58051e81bd4fb723",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa1/validation-report.md",
+      "blob": "69263f013d7427d7e574d763d4f420b8949d144a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/artifact-manifest.json",
+      "blob": "16d25b13480e7715c153f8a6ad9b3116d6deeb8f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/commands.txt",
+      "blob": "64796ca27ec4a30b586aa55591cdc75c1e314ba8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/complete.diff",
+      "blob": "f96e095ef009bfc58dfab968bf9dff21c508bfbf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/evidence-scripts/browser-evidence.mjs",
+      "blob": "4fdb901361efd14634ca0f80e4fa3c51925632d0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/evidence-scripts/classifier-extra.mjs",
+      "blob": "67b1672cc168afb10e6598522831555a0cf88f9a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/evidence-scripts/independent.mjs",
+      "blob": "07017afe72d1778be459eb2ea0b9a070590f9357",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/evidence-scripts/memory-extra.mjs",
+      "blob": "974200baeeff5ece80894d62f0968c9b2795a648",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/findings.md",
+      "blob": "2bec88d3f91d2d385925e783c93c4d0318e1d23e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/logs/classifier-extra.log",
+      "blob": "169379561528455937074ad567258e3707239556",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/logs/contract.log",
+      "blob": "554f061ff712400066b3adf09cd39b077f5fc582",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/logs/diff-check.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/logs/focused-tests.tap",
+      "blob": "604289fbaa0a49b0b5a1352341bdfb7c538a2c11",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/logs/independent.log",
+      "blob": "d0b7274721c1aef71d151a2566f0082ee8d3fe08",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/logs/memory-extra.log",
+      "blob": "75ebe63aab968e574fe9e4d4e0db8a5c4765e25a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/logs/pipeline-tests-complete.tap",
+      "blob": "39bf6ee7ff673c48f46821142e26c65ddb1cb2bd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/logs/playwright.log",
+      "blob": "03250c1fe693171db85756d8d6f1da0742e52785",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/playwright-report/index.html",
+      "blob": "b8c4f1efc4826f8fe99b26472533d4fda8936d1c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/report.md",
+      "blob": "48b7912abf596323b26424e6031322c75897e06c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/reservation-PREPARED-NOT-COMMITTED.json",
+      "blob": "58bfe135a8f2563369264f3ccf9c373ba5ecfd39",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/reservation.json",
+      "blob": "1281b013b6179fd591a7465c006829d4615fa629",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/result.json",
+      "blob": "c0da0477849241d4f9a38e127405fbaff6548cce",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/screenshots/result.png",
+      "blob": "8417701d5cadd14c0168a95942e28cf0ad172642",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/seal.json",
+      "blob": "534a8c393ccf4ea305884229f09366edb8910109",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/source-hashes-after.json",
+      "blob": "55bb46e45b4dc0e47227bf0f3ffdf16ca3f01228",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/source-hashes-before.json",
+      "blob": "273aef99e1957a24f7aa1b07ddb4dc01a1c43c35",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/task-contract.md",
+      "blob": "902b8589db0debbaeacee55252bd383fa18e40c8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/test-results/classifier-extra.json",
+      "blob": "169379561528455937074ad567258e3707239556",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/test-results/independent.json",
+      "blob": "d0b7274721c1aef71d151a2566f0082ee8d3fe08",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/test-results/memory-extra.json",
+      "blob": "75ebe63aab968e574fe9e4d4e0db8a5c4765e25a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/test-results/playwright.json",
+      "blob": "03250c1fe693171db85756d8d6f1da0742e52785",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/trace/trace.zip",
+      "blob": "29ac8f58872f23cd4b1bba8af189d2e72be7f454",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa2/validation-report.md",
+      "blob": "48b7912abf596323b26424e6031322c75897e06c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/STOP",
+      "blob": "ad7059cf9c8cdcad2fc36d43cd7c08454277ccc2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/artifact-manifest.json",
+      "blob": "a0e3d269a1a637d6bbd5e132f411baea099f25d1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/author-history-references.json",
+      "blob": "bc902fff7d88a75afd79e514c3bbeddd1b046e36",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/commands.txt",
+      "blob": "991f727362287265036da9a4caa9aca19d375ee7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/complete.diff",
+      "blob": "7ddc3152fc72bfea2e7a55876ec15e4c34fe0b70",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/context-validation.json",
+      "blob": "f0d4a115cf2e563a28e21003a322dead90af8e2d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/evidence-scripts/browser-evidence.mjs",
+      "blob": "9f3de3c85ffba7dd62c1d40714b105723edea583",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/evidence-scripts/browser-file-navigation-attempt.mjs",
+      "blob": "9acd696af276951c9f5b49ae42786daada0dac87",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/evidence-scripts/classifier-extra.mjs",
+      "blob": "05e1fdd4bf8477606872ab2f194f262c2d30f90f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/evidence-scripts/finalize.py",
+      "blob": "cf21c6acd6a5aaa512be711054052bae98a1a2fe",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/evidence-scripts/independent.mjs",
+      "blob": "761f66fe2836d3a1c1f9a5eaab765b4a9499e107",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/evidence-scripts/memory-extra.mjs",
+      "blob": "187bbe37b7b7e62c717ffee48288cf4b02693139",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/evidence-scripts/policy-extra.mjs",
+      "blob": "fbdc4e649665cbb9de18a1490e07365dac7e5104",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/evidence-scripts/prepare-tests.py",
+      "blob": "990e4a00409a8147ace758c6feccf2817bbe9065",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/evidence-scripts/setup.py",
+      "blob": "1c247d6e16e20bc14a8b427a1c1bfa0181a62c37",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/findings.md",
+      "blob": "2be66410e4857785474aa6afded4a4c20500c3d7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/logs/classifier-extra.log",
+      "blob": "169379561528455937074ad567258e3707239556",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/logs/independent.log",
+      "blob": "1b81526af737ea0036c5974c1c2c7a5f0e75c91e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/logs/memory-extra.log",
+      "blob": "3e955a7df5f2519f8921c443a2e3090ad20f68fa",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/logs/native-exact.tap",
+      "blob": "798dada8b47ebaa6ded137df5fb28672cae5b7c2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/logs/playwright-file-navigation-blocked.log",
+      "blob": "d04c3a629ee0642095e685ca4a13ec6f981caab2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/logs/playwright.log",
+      "blob": "e5073cad42606c99f7d1acab8f9193b23de2c578",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/logs/policy-extra.log",
+      "blob": "2c71829893aff5c0be49968ef8bfae9c3845f030",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/logs/tracked-runner-inventory.txt",
+      "blob": "bc38a3473b88bb9821a3a8bc80470c7af46985e6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/playwright-report/index.html",
+      "blob": "10f5f7ffa1e578b1ecaad2326ee7837726a7516e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/preserved-history-verification.json",
+      "blob": "fc4d65280ffaf0a67a6a065f5c487d233435bbc9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/report.md",
+      "blob": "61e3d82ec04a362bb3ca26b939ad62fbbb0f9c5f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/reservation.json",
+      "blob": "3689686c7eba5d58742a3d3431028919ba80380f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/result.json",
+      "blob": "c35a5aec8ae147373c242b1dc14aefaf3449dde1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/round3.diff",
+      "blob": "ee3442c77496843c2d894554a510d561ef6c40ad",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/scope-verification.json",
+      "blob": "167f7835a4e58557609f387f75cc804b2faedcad",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/screenshots/result.png",
+      "blob": "09d33133fefb8698be7e6037978679661f489aff",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/seal.json",
+      "blob": "f849d4875d7d695dbd69b916a85d69c13a63a48f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/source-hashes-after.json",
+      "blob": "67a659a4978a128b0a9fa782cac3e777e3203bbc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/source-hashes-before.json",
+      "blob": "67a659a4978a128b0a9fa782cac3e777e3203bbc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/source-inventory.md",
+      "blob": "3d1fa3100bebc04d43b3444656aeb09689b1a9c7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/task-contract.md",
+      "blob": "acf1c4c068196ba9c0be23a8be757c456c6ac2d6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/test-results/classifier-extra.json",
+      "blob": "169379561528455937074ad567258e3707239556",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/test-results/independent.json",
+      "blob": "1b81526af737ea0036c5974c1c2c7a5f0e75c91e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/test-results/memory-extra.json",
+      "blob": "3e955a7df5f2519f8921c443a2e3090ad20f68fa",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/test-results/playwright.json",
+      "blob": "e5073cad42606c99f7d1acab8f9193b23de2c578",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/test-results/policy-extra.json",
+      "blob": "2c71829893aff5c0be49968ef8bfae9c3845f030",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/test-results/privacy-scan.json",
+      "blob": "78b32e95e7c05d8ec5a0a41da61949b0bb41b26e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/trace/trace.zip",
+      "blob": "bbd140c4bdfef059eb469f33fe0f878564e26b07",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/independent-qa3/validation-report.md",
+      "blob": "61e3d82ec04a362bb3ca26b939ad62fbbb0f9c5f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/prior-canonical-history.json",
+      "blob": "1bc8c9f75ac678663498c6a77e78995d4881c207",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/result.json",
+      "blob": "26d2839deb83712daed4115bd6229cbb895d6eb1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/seal.json",
+      "blob": "0c377294ee80ddabcf11f3b6e3ee76025d090165",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/source-hashes.json",
+      "blob": "7e5ff8faa7227e79136fcd8beef1416855714fb9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/source-identity.json",
+      "blob": "f43a5b6994c14e2e789850eda85bea8ae620981e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/source-inventory.md",
+      "blob": "78351990861f731c6ce417c7c71fee7924641cda",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/task-contract.md",
+      "blob": "143dd066267bf02527a4586e04f3d1aedb7dc898",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/test-plan.md",
+      "blob": "f2c7c796a51a0a6b31c0d39aa85ad677c3c06e48",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/agent-team-full-b868-context-final.tap",
+      "blob": "2a282e974be477a2b3bbdfc078f9b9967c2d347e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/agent-team-full-qa2-context-final.tap",
+      "blob": "2b45d305bd479469e90994a345a3850eddb56dbd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/baseline-red.tap",
+      "blob": "3bb473b4ce6930dd77ca8faf8c1fb5df60dc65dd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/bug-pipeline-b868-complete-context-final.tap",
+      "blob": "38e38ca7e23ae85eaeb564355942d3e17b9bc0b5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/bug-pipeline-b868-context-fixtures-final.tap",
+      "blob": "6d1d044f8e22852d7c7c488a53a077a3d97cc6cc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/bug-pipeline-b868-overlay-final.tap",
+      "blob": "feed0a4c85823db712f00406a4eaa347aea38d31",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/bug-pipeline-full-final.tap",
+      "blob": "e217b43541d684f90d3ec9fb90f56b085f63c884",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/bug-pipeline-full.tap",
+      "blob": "0175947feb1a8ec1066ec5b050cc6ba21f9cd463",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/models-process-output-final.tap",
+      "blob": "029f6507bc57421787ed9aa9e5af252d403e7d9c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/models-process-output.tap",
+      "blob": "b6df9dc6c1b3cd9e6217ea86b8052999021774db",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/qa2-exact-full-command-final.tap",
+      "blob": "a9572a5913996dab8503660f6a6b6c2980334d7a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/test-results/routing.tap",
+      "blob": "400990b9d42044383041dca813e6f982366e0eb3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-v3-20261026/validation-report.md",
+      "blob": "503985ac8b911b9625e0a3957338653cfdc1525d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "docs/cloud-claude-review.md",
+      "blob": "01a1db5803063d738625ddf1fea9413230a10a94",
+      "mode": "100644",
+      "baseBlob": "7b26e0839fabb5c812d2d8d7a969b31d622e7bb7",
+      "baseMode": "100644"
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.mjs",
+      "blob": "e10296976b8c29c59291a96c985995b24e7d7627",
+      "mode": "100644",
+      "baseBlob": "fe1bf08d106c11aef44731a4d1cef708fe661aa8",
+      "baseMode": "100644"
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.test.mjs",
+      "blob": "bba489a21e74fb75c2107d3e8513f5284e59adcd",
+      "mode": "100644",
+      "baseBlob": "41c7c3de7147d677b9615fa30cd43960e7339f13",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "actual-native4-finite-diagnostic.json": "1d43ceec4619d387f4864303c7fa1c232189d9a33ee4f3871330c9096a8835ad",
+    "analysis.md": "35ef17d24dc62e2ff22b786c2a4416cde96834bc212154414b1af6f93208aef5",
+    "author4/analysis.md": "de017756e1ff6bf735f0817948ee75c492fed54151825b20110942a7d6372c9e",
+    "author4/artifact-manifest.json": "694ca4c3d2c019d2c70e75c075ac20036da48ea79ee8cbf6d4687abb4efbc208",
+    "author4/commands.json": "b20651cdb15e3880363d8dfe3f8bd4c4fdbc21a9291811121fa92203533304db",
+    "author4/dashboard-before-semantic4.md": "df24fce660814118e04cbc999504b4d412448ce22d2cbe5649da954adce8706b",
+    "author4/dashboard-updated-semantic4.json": "37f81832c4279001ea95180fc73bea7ac853a82eef855f6e8ce4ec2221f0b24b",
+    "author4/history-amendment-canonical.json": "7b267cf9f831555225bb932eb74e5f7138837cac8cb0725fa032d056ce8bca49",
+    "author4/history-preservation-red.tap": "69e0c59d407cfbce721fee787b089c9d310aede3342fec7298a15ac8dbae2274",
+    "author4/history-preservation-targeted-green.tap": "f2046372cc68192fdc26ee9ad0128a2a0e95302cb80867f972c0e7d19436d74a",
+    "author4/implementation-plan.md": "3f43d27263dde2304cda7634e516af71c2049e22c827743502ef41432f89fdc8",
+    "author4/native-full-complete-context.tap": "f7092d338805e60c3b9b9f4fe5529fa28cc4afeee9c5b0b7daf55cf268393f69",
+    "author4/native-full-history-preservation-final.tap": "201bc795b39340a5bf978db6525be292b74547548179b1f80e7d00aa502f647c",
+    "author4/native-full.tap": "26554796b753f77f194008c084bd07a4b7072b915c11310df54b6e723b484ecf",
+    "author4/pre-history-preservation-amendment/analysis.md": "d386f1b6159b8887ab23b4338592d631a5585b900f0df2b6ee07453fc3fc1bd9",
+    "author4/pre-history-preservation-amendment/artifact-manifest.json": "f6948cf484e6289d0db34fcb42abfc5a50d6b39dea2a1a55edf06e504821ffff",
+    "author4/pre-history-preservation-amendment/commands.json": "f5d3b5374b7070d6e5eb59e859887048981f06265342dc3b39bde37f7e55b9cf",
+    "author4/pre-history-preservation-amendment/dashboard-before-semantic4.md": "df24fce660814118e04cbc999504b4d412448ce22d2cbe5649da954adce8706b",
+    "author4/pre-history-preservation-amendment/dashboard-updated-semantic4.json": "37f81832c4279001ea95180fc73bea7ac853a82eef855f6e8ce4ec2221f0b24b",
+    "author4/pre-history-preservation-amendment/implementation-plan.md": "71e368ce3ba534444eb99515cd2e19c49036a78958e4b4ad839f9cb75d7c9330",
+    "author4/pre-history-preservation-amendment/native-full-complete-context.tap": "f7092d338805e60c3b9b9f4fe5529fa28cc4afeee9c5b0b7daf55cf268393f69",
+    "author4/pre-history-preservation-amendment/native-full.tap": "26554796b753f77f194008c084bd07a4b7072b915c11310df54b6e723b484ecf",
+    "author4/pre-history-preservation-amendment/preservation-audit.json": "5853e1790b29d604996f145e78c2dc1b262f9c55c0e3e0d6de87dd339bb1427d",
+    "author4/pre-history-preservation-amendment/reservation.json": "53cbfb867c4c515789aa8e011d5ef5102a9bddd6677c1e3827fd1340160c78df",
+    "author4/pre-history-preservation-amendment/result.json": "7fff95bf792fee7a70c84d91eb490684f6cd2e963a444e099c2985e7a5661101",
+    "author4/pre-history-preservation-amendment/seal.json": "4378363ec83a63cf45a80d88c571afcc2c8e43abd52d4342533633c3f00bf082",
+    "author4/pre-history-preservation-amendment/snapshot-after.json": "f70906edb19342f28212da435023ae8bab5705b4b8ac23272c49bc0564230b41",
+    "author4/pre-history-preservation-amendment/snapshot-before.json": "a3b8faf0f827188df945e93a8ed93ce5c381437dcb609899886e32528e2bdb55",
+    "author4/pre-history-preservation-amendment/snapshot-context-added.json": "fd68acd7e6dcc1de27f1f451b218cce1dcb9aa326f584023f3415000288056ac",
+    "author4/pre-history-preservation-amendment/snapshot-context-evidence-added.json": "223e6cbcd7d72fa87561556abcb2442c4d4365523c7174f9631e3af3c42573a1",
+    "author4/pre-history-preservation-amendment/source-before-after.json": "bfdb7e6a350a8d082df55805387aa076e6b4ded1c36f78509930de06ae048ab6",
+    "author4/pre-history-preservation-amendment/source/agent-team/src/bug-pipeline/cloud-review-worker.mjs": "b9bb543eb127e35c7e123af83e0ffda2c934bfc9c2cefafe82f9edd0a145f22b",
+    "author4/pre-history-preservation-amendment/source/agent-team/src/bug-pipeline/review-validation-diagnostic.mjs": "c4a3d6cd6d1a0b0ef67a22cfc6941fa2c9b9cdaa964357860d103271e9a7e58b",
+    "author4/pre-history-preservation-amendment/source/agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs": "1ff13bd96f218a219be8d86fe1015c8e9418f0ec9b55fec81cd313197cd8001c",
+    "author4/pre-history-preservation-amendment/source/agent-team/tests/bug-pipeline/review-validation-diagnostic.test.mjs": "01e77e175d77d42554d15aaaf95b42ff45bd293735dc8f3ab4200058584209cf",
+    "author4/pre-history-preservation-amendment/source/agent-team/tests/bug-pipeline/standalone-review.test.mjs": "f3fc3676ba87b2ef87baaad1c2c073721f3d23d1e8bee33f02b82c4bfca8ac58",
+    "author4/pre-history-preservation-amendment/source/docs/cloud-claude-review.md": "22a62d33f139c6c084079e7734d10518d47e2ad51256c10f01523bc51082848f",
+    "author4/pre-history-preservation-amendment/source/scripts/quality-gate/claude-bug-review.mjs": "0050f0e980ad9901852b5e2f12138d5738969e025131343e11f0a8a8485a3b0a",
+    "author4/pre-history-preservation-amendment/source/scripts/quality-gate/claude-bug-review.test.mjs": "9590c0681563897222bd88c8861c0a66b3458c4256571e2d772f67108fd2c83f",
+    "author4/pre-history-preservation-amendment/source4.patch": "a6050389f1f7cc21ff132bc0147112a994d4fa7a8e895c28319c36267cdb77c2",
+    "author4/pre-history-preservation-amendment/targeted-final.tap": "87d7850753a4c2d3e64f60dc56dd8e693f1fe060f1b92b31ce46fd96b32b6c1e",
+    "author4/pre-history-preservation-amendment/targeted-green-complete-context.tap": "056570fb2413d4a5b1cbad99d61d6828b566da1d539e6174d9ca2a63c9327901",
+    "author4/pre-history-preservation-amendment/targeted-green-initial.tap": "bd1bcf0a9d3454c9fc12783777c66d019e38ff65007e46cad952633a6a839958",
+    "author4/pre-history-preservation-amendment/targeted-green.tap": "b5943a7f8df05bec0eb8ddf45899c05b2e2c457bb171bd4edf03ecc9fcee172d",
+    "author4/pre-history-preservation-amendment/targeted-red.tap": "7664e339028f9c0ed23e5b50c17fbc19273a8e2fa5f0a6bf7c4dd9045da258ea",
+    "author4/pre-history-preservation-amendment/task-contract.md": "afc86b61a5d9f150b4833d17f59618833e82932abfe2fa27a5a9e6c11c26a1a6",
+    "author4/pre-history-preservation-amendment/test-history.json": "bf922e1398c99fb9406e61d886348ad59f22fb20ee0b02011d2060e2917746a7",
+    "author4/pre-history-preservation-amendment/validation-report.md": "0fa5ef0d5e62eb5e053c3b180cd63fb1e1827fd666e8e53437cb20c787995eda",
+    "author4/reservation.json": "53cbfb867c4c515789aa8e011d5ef5102a9bddd6677c1e3827fd1340160c78df",
+    "author4/result.json": "61a5b38c6653bc9e1a112ed7ce13fa1bddde7bea0bea57b72aad91b9830245f7",
+    "author4/seal.json": "b247b733b721edf42979bb0db3857dd0e4b3eae530cfb8f59c89b13dbdc6759d",
+    "author4/snapshot-after.json": "fcd7c0433b7c74c8d45a7e79e7c3871c0dc82caa69bb7cd0c1864e12db2b8a56",
+    "author4/snapshot-before.json": "a3b8faf0f827188df945e93a8ed93ce5c381437dcb609899886e32528e2bdb55",
+    "author4/snapshot-context-added.json": "fd68acd7e6dcc1de27f1f451b218cce1dcb9aa326f584023f3415000288056ac",
+    "author4/snapshot-context-evidence-added.json": "223e6cbcd7d72fa87561556abcb2442c4d4365523c7174f9631e3af3c42573a1",
+    "author4/source-before-after.json": "4de535bba3d28400c09172427c68c03e40be8ef761e9145203081d9f00340ea6",
+    "author4/source/agent-team/src/bug-pipeline/cloud-review-worker.mjs": "b9bb543eb127e35c7e123af83e0ffda2c934bfc9c2cefafe82f9edd0a145f22b",
+    "author4/source/agent-team/src/bug-pipeline/review-validation-diagnostic.mjs": "c4a3d6cd6d1a0b0ef67a22cfc6941fa2c9b9cdaa964357860d103271e9a7e58b",
+    "author4/source/agent-team/src/bug-pipeline/standalone-review.mjs": "ceef3f9e4bfce8ffe545688e9af7ed1d15e90bc681a6b1290486c456e173917d",
+    "author4/source/agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs": "1ff13bd96f218a219be8d86fe1015c8e9418f0ec9b55fec81cd313197cd8001c",
+    "author4/source/agent-team/tests/bug-pipeline/review-validation-diagnostic.test.mjs": "01e77e175d77d42554d15aaaf95b42ff45bd293735dc8f3ab4200058584209cf",
+    "author4/source/agent-team/tests/bug-pipeline/standalone-review.test.mjs": "26f0d48a6eeadb714ec415877f5dd9a51735f1bb5e576a7a88a1e8c68ad3eb2e",
+    "author4/source/docs/cloud-claude-review.md": "649717fddf093153e54f95e8cc4a27cb91fa8afb563f68741baf30a4cf22de1b",
+    "author4/source/scripts/quality-gate/claude-bug-review.mjs": "0050f0e980ad9901852b5e2f12138d5738969e025131343e11f0a8a8485a3b0a",
+    "author4/source/scripts/quality-gate/claude-bug-review.test.mjs": "9590c0681563897222bd88c8861c0a66b3458c4256571e2d772f67108fd2c83f",
+    "author4/source4.patch": "b64b013465ec642c78ca2fb2ac29c4d3bc4a6ac5b2aa657751bf0ac0c8cdf98c",
+    "author4/targeted-final.tap": "87d7850753a4c2d3e64f60dc56dd8e693f1fe060f1b92b31ce46fd96b32b6c1e",
+    "author4/targeted-green-complete-context.tap": "056570fb2413d4a5b1cbad99d61d6828b566da1d539e6174d9ca2a63c9327901",
+    "author4/targeted-green-initial.tap": "bd1bcf0a9d3454c9fc12783777c66d019e38ff65007e46cad952633a6a839958",
+    "author4/targeted-green.tap": "b5943a7f8df05bec0eb8ddf45899c05b2e2c457bb171bd4edf03ecc9fcee172d",
+    "author4/targeted-red.tap": "7664e339028f9c0ed23e5b50c17fbc19273a8e2fa5f0a6bf7c4dd9045da258ea",
+    "author4/task-contract.md": "277504293cf64cf6b1ecaaecd42bf2039f31d548fa15a8f6218a5b2f34f62529",
+    "author4/test-history.json": "edbb3fab874a1224e411c910ae93f92d8668f264acc24988af14e079ef0b142a",
+    "author4/validation-report.md": "04b792ada5ac366d2ac4a2062a6c663cc3c20ba0a2cc8eaa6f2e16a6bd87a4f7",
+    "implementation-plan.md": "8550fc0686228ce69e4d9572c60b7205ab864a4eed478de6b82bf03b5e22a44d",
+    "independent-qa1/report.md": "59f6b921f68fd23a94221b1d587641209dc8c5791a6eae6d44540cbefba339da",
+    "independent-qa2/report.md": "fae1ffecdf8f4d3c3cc904137bd3b181ff2143080eaa53b47d0b9a175460e9da",
+    "independent-qa3/report.md": "2070cac85996e441ed18790e604ade62acf89800e68504c1beb2cb4d114a6657",
+    "independent-qa4-interrupted/audit.py": "fbce7bd1ed4f4512d2bdd803cc4f30afc7f1f7caa794339b2bc89b3078d08291",
+    "independent-qa4-interrupted/completion-reservation.json": "9ece60102862f1bde3fb27b1a12969cf754851c6f3769e677c60eee415233d14",
+    "independent-qa4-interrupted/independent-final.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "independent-qa4-interrupted/independent-final.tap": "43c53f83e7f70743afa1a837491c39deb46ea0d4427398ff83dc535e95edaa8b",
+    "independent-qa4-interrupted/independent-initial.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "independent-qa4-interrupted/independent-initial.tap": "e6d8e53ba3f4e2cd8b970c986f6ed6b7fc505cf9586c0c03b2364b2f52dcdcd8",
+    "independent-qa4-interrupted/independent.test.mjs": "0591f48b8352683d086239949b0291bec0a16e1353ef5bc612ede4fa74761a75",
+    "independent-qa4-interrupted/integrity-before.json": "22403f2ee57c823ccccdaa14dc1c43fd63a243185f0b71827895a491c4e557ec",
+    "independent-qa4-interrupted/native-transport-fixture.mjs": "aa194d4baa716156c144ef10851c736a9e18ae986b84c0889ee2f033d2521912",
+    "independent-qa4-interrupted/prepare-harness.py": "8e9cebc1453137079f92f1d2e410564756af11907e069f7f57ab2ca724888df0",
+    "independent-qa4-interrupted/reservation.json": "05bd9a33e980e2511ffc7d2c0da2bc663ef8d72e4b3af6cdf6b239003c30f324",
+    "independent-qa4/artifact-manifest.json": "8893c7223cb5b55fb06f2a27e0c467d509d4882e80e564a6f4e5720c4b798640",
+    "independent-qa4/independent-replay.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "independent-qa4/independent-replay.tap": "c1f00ff701d617762a7b4080d5402c52fbb56cb9e433e5c47d47f265ff346cf7",
+    "independent-qa4/integrity.json": "cc41ff963be325f9d0c7c41f291767e6a828372545e06fff0771e086d524978f",
+    "independent-qa4/report.md": "d8da2763fd464939de7f2a0a4cc51d9cdd3d2c1e7ef5de82556a62b50a30fefd",
+    "independent-qa4/reservation.json": "9207ab6aa7c98d86d2e9f1a488de58283fbc1452b26e535dfc3d9b2d8eb3b25a",
+    "independent-qa4/result.json": "032886479158e7cb4fa3ee62ddea050f1b0277c648b1474d96bba1896cde4a72",
+    "independent-qa4/seal.json": "7c9b88960854d38fbae4f842cef4122ab906d413ecffe82f946dc231577937b4",
+    "independent-qa4/source-projection.json": "f3d4e8911f67c0cbf3e90abe20af0fff3a34d585b279d9db0a12cc7c9d5e3d22",
+    "independent-qa4/verify.py": "71f4f98fecd3e3b9c8c191710b7acdcdcb906298de3f3db68c335cafb8a88e77",
+    "official-workflow-restored-active.json": "bbf48183decc54a45510e2947ac1014de460fa1eaed81789cd140ad70bd53d52",
+    "task-contract.md": "ebd8ff7673606c57c4206c0da125dbc423a0f6f2395b9c6bf14b6b69de9cded3",
+    "validation-report.md": "52803c88478003a5095113c31b7b959c68778a41ba7cee08568e9e9d345189e2"
+  }
+}

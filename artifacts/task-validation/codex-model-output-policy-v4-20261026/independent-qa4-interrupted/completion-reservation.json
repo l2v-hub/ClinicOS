@@ -1,0 +1,12 @@
+{
+  "nonce": "7f147816-563d-424c-96e9-69a0f2909985",
+  "at": "2026-10-26T07:23:19.879Z",
+  "model": "gpt-6.1-sol",
+  "maximumAdditionalSessions": 1,
+  "used": 0,
+  "status": "reserved-before-bounded-independent-qa-completion",
+  "scope": "Same independent QA actor complete interrupted source4 review and report/seal only; inspect existing 25 actual PASS tests and unchanged15 source projection. No new source edits/provider/GHA/remote/canonical actions or broad test expansion absent concrete finding.",
+  "sourceCode": "88b9a33d4a879b85bbf8b543fd474b390461d304",
+  "stateCommit": "d92a76622d4f508dd97d282c9c1f76d7a2956520",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/0ef3e785-5a49-47b6-9eff-c9be9f043885/accepted.json"
+}

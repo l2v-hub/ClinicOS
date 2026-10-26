@@ -81,3 +81,35 @@ projected with a Codex wake request for authorized recovery. The worker never re
 attempt, reclaims a running reservation, mints a retry grant or automatically replays the SHA.
 This differs from a capacity/capability rejection proven before invocation, which claims nothing.
 Inspect the finite receipt and native comments/state; do not reset claims or budgets to rerun.
+
+Cloud and local review prompts share the trusted `reviewGenerationContract` beside `reviewSchema`.
+Approval requires empty findings and supported acceptance criteria and evidence. Every actionable
+finding, including low severity, forbids approval; never drop or relabel findings to obtain it.
+`changes-requested` requires at least one finding. `blocked` may have zero or more findings, so
+empty findings alone never imply approval. Text must be nonempty, locations must refer to exact
+tracked relative paths and positive lines, and sensitive values or shapes must not be reproduced.
+Schema patterns check nonempty text; descriptions guide generation. The unchanged native
+`validateReview` remains authoritative for verdict consistency, the 100-finding bound, positive
+lines, tracked locations, exact SHA and unsafe content. The schema alone does not enforce those
+cross-field and contextual rules.
+
+Each claimed inference yields a bounded `validationDiagnostic` in its result and a metadata-only
+workflow stderr record, including when the runner throws or later controller work fails.
+The workflow stdout receipt remains one JSON document. Categories are `schema`, `stale-or-shape`,
+`contradiction`, `location`, `fields`, `unsafe`, `envelope-json`, `post-communication`, `valid` or
+`other`. Booleans identify parsing, schema, native semantic and communication stages; a separate
+whitelisted native Claude failure still governs execution failure. `valid` describes the report
+validation stages and does not authorize approval, publication, another attempt or merge.
+`runnerThrew` and `diagnosticFailed` expose finite observation failures without exception text.
+Only fixed enums, flags, counts, safe exit codes and hashes enter diagnostics. The
+`capturedSanitizedStdoutStringBytes` / `capturedSanitizedStdoutSha256` and stderr equivalents
+identify captured, already sanitized strings, never raw provider bytes. No report, finding text,
+file path or stream content is included in the diagnostic. Diagnostic delivery failures cannot
+replace native outcomes or controller exceptions. Existing validated-report retention on success,
+ownership changes and uncertain publication remains unchanged. Invalid output is never repaired,
+normalized into approval, persisted as a report or replayed automatically.
+
+Revision adoption also preserves the previous `reviewHandoffHistory` byte for byte alongside
+existing recovery and budget histories. Archived failed-request recovery authorizations and their
+consumed nonces survive a new-head adoption; this creates no request, grant or extra attempt and
+never refunds failed rounds.

@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-26T08:05:00.436Z",
+  "authorNonce": "497769ef-a2b3-4253-895d-f5a0266b6220",
+  "sourceCode": "c3711b74a71b60923e5ac75cc57d80fa3d2958e8",
+  "sourceProjectionSha256": "827e81791ea90a6841494c91ae6078a6cda3f97154838adba016949ad0aa3ca0",
+  "artifactManifestSha256": "b9effddf6f7dfeafb952c05552b4ca8c2923f23483e15e7f6f36a82cec819dc8",
+  "resultSha256": "bfcd5120ddf6e9682ab61944a386007428eaf7de13d372999efc5e56fe61d50e",
+  "priorSealSha256": "a3e34e6984da97e4c26c4897a9c539b49f41c015839b7b91f092321a43657a79",
+  "metadataCorrectionHistory": [
+    {
+      "at": "2026-10-26T08:05:00.436Z",
+      "reason": "Independent QA5 identified stale projection from failed initial byte-offset candidate. Code/runtime/tests/results unchanged; correct exact Git/raw hash pair in metadata only.",
+      "sourceCode": "c3711b74a71b60923e5ac75cc57d80fa3d2958e8",
+      "oldAuthorSealSha256": "a3e34e6984da97e4c26c4897a9c539b49f41c015839b7b91f092321a43657a79",
+      "oldCandidateSha256": "660ce07db923c8b6344b2c2889512a2b79b2227a60bae967d441d9709b7c8e7f",
+      "qa5SealSha256": "da1b9259549ef7f21070bf92f3ae602e6470bd698faad94be2307c87dc5a7937",
+      "previousProjection": {
+        "path": "agent-team/tests/bug-pipeline/standalone-review-semantic-history.test.mjs",
+        "gitBlobSha1": "a3df7a28502c20d63c26dd1bd0e1a359eb3e576e",
+        "rawSha256": "a70c4f325c1f2f0d43e514b591768c6b3161f8e131e4791d7cc513e0cef566dd"
+      },
+      "correctedProjection": {
+        "path": "agent-team/tests/bug-pipeline/standalone-review-semantic-history.test.mjs",
+        "gitBlobSha1": "7971cafe61f3d02fc4d1da4abc5e30c1c5d732c8",
+        "rawSha256": "b60a158014bfb7ce273ff30eeea3b1b81fa22d3c7598126e1700e071869902e2"
+      }
+    }
+  ],
+  "mechanicalOnly": true,
+  "noPeerApproval": true
+}

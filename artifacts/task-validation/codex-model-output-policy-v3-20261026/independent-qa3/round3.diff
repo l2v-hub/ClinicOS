@@ -1,0 +1,213 @@
+diff --git a/agent-team/src/bug-pipeline/models.mjs b/agent-team/src/bug-pipeline/models.mjs
+index fb415a13e..9fbf4ef50 100644
+--- a/agent-team/src/bug-pipeline/models.mjs
++++ b/agent-team/src/bug-pipeline/models.mjs
+@@ -24,7 +24,6 @@ const QA_SCHEMA = {
+ const MAX_RESULT_BYTES = 256 * 1024;
+ const MAX_PROMPT_BYTES = 512 * 1024;
+ const EXEC_TIMEOUT_MS = 30 * 60 * 1000;
+-const RUNNER_OUTPUT_BYTES = 2 * 1024 * 1024;
+ const CAPTURE_BYTES_PER_STREAM = 32 * 1024;
+ const STDERR_LIMIT_BYTES = 64 * 1024;
+ const MODEL_OPERATIONS = new Set(['plan', 'execute', 'simplify', 'qa']);
+@@ -65,15 +64,29 @@ function failureCategory({ runnerError, result, error }) {
+   if (error) return 'schema';
+   if (result?.ok) return null;
+   const text = `${terminalStdoutText(result?.stdout)}\n${result?.stderr ?? ''}`.toLowerCase();
+-  if (/invalid_api_key|authentication_error|unauthorized|forbidden|\b401\b|\b403\b|login required/.test(text))
++  const hasStatus = (codes) =>
++    new RegExp(
++      `(?:http(?:/[0-9.]+)?\\s+|status(?:[_ -]code)?["']?[\\s:=]+)(?:${codes})\\b`,
++      'i',
++    ).test(text);
++  if (
++    /invalid_api_key|authentication_error|unauthorized|forbidden|login required/.test(text) ||
++    hasStatus('401|403')
++  )
+     return 'auth';
+-  if (/insufficient_quota|quota_exceeded|billing_hard_limit|payment_required|\b402\b/.test(text))
++  if (
++    /insufficient_quota|quota_exceeded|billing_hard_limit|payment_required/.test(text) ||
++    hasStatus('402')
++  )
+     return 'quota';
+-  if (/rate_limit_exceeded|too many requests|\b429\b/.test(text)) return 'rate';
++  if (/rate_limit_exceeded|too many requests/.test(text) || hasStatus('429')) return 'rate';
+   if (/model_not_found|model_capacity_exceeded|overloaded_error|unsupported_model/.test(text))
+     return 'model';
+   if (/schema_validation|invalid_json|structured output invalid/.test(text)) return 'schema';
+-  if (/network_error|connection refused|connect_timeout|dns lookup|\b50[234]\b/.test(text))
++  if (
++    /network_error|connection refused|connect_timeout|dns lookup/.test(text) ||
++    hasStatus('502|503|504')
++  )
+     return 'network';
+   return 'other';
+ }
+@@ -348,10 +361,11 @@ export function createModels({
+         cwd,
+         input,
+         timeoutMs: EXEC_TIMEOUT_MS,
+-        maxOutputBytes: RUNNER_OUTPUT_BYTES,
++        maxOutputBytes: STDERR_LIMIT_BYTES,
+         maxCapturedBytesPerStream: CAPTURE_BYTES_PER_STREAM,
+         captureTail: true,
+         maxStderrBytes: STDERR_LIMIT_BYTES,
++        limitStdout: false,
+         envMode: 'model',
+       });
+       const emit = (error = null, resultError = null) => {
+diff --git a/agent-team/src/bug-pipeline/process.mjs b/agent-team/src/bug-pipeline/process.mjs
+index 81cfe2994..9e11b3a62 100644
+--- a/agent-team/src/bug-pipeline/process.mjs
++++ b/agent-team/src/bug-pipeline/process.mjs
+@@ -127,14 +127,19 @@ export function createRunner({ env = process.env, runtimeRoot }) {
+     maxCapturedBytesPerStream,
+     maxStderrBytes,
+     captureTail = false,
++    limitStdout = true,
+     envMode = 'controller',
+   }) => {
+     validateLimit(maxOutputBytes, 'maxOutputBytes');
+     const legacyCapture =
+-      maxCapturedBytesPerStream === undefined && maxStderrBytes === undefined && !captureTail;
++      maxCapturedBytesPerStream === undefined &&
++      maxStderrBytes === undefined &&
++      !captureTail &&
++      limitStdout;
+     maxCapturedBytesPerStream ??= maxOutputBytes;
+     validateLimit(maxCapturedBytesPerStream, 'maxCapturedBytesPerStream', { allowZero: true });
+     if (typeof captureTail !== 'boolean') throw new TypeError('captureTail must be a boolean');
++    if (typeof limitStdout !== 'boolean') throw new TypeError('limitStdout must be a boolean');
+     if (maxStderrBytes !== undefined) validateLimit(maxStderrBytes, 'maxStderrBytes');
+     const childEnv = childEnvironment(envMode, env, runtimeRoot);
+     if (
+@@ -210,7 +215,8 @@ export function createRunner({ env = process.env, runtimeRoot }) {
+       const data = (kind, chunk) => {
+         if (kind === 'out') stdoutBytes = Math.min(Number.MAX_SAFE_INTEGER, stdoutBytes + chunk.length);
+         else stderrBytes = Math.min(Number.MAX_SAFE_INTEGER, stderrBytes + chunk.length);
+-        if (stdoutBytes + stderrBytes > maxOutputBytes && legacyCapture) {
++        const limitedBytes = limitStdout ? stdoutBytes + stderrBytes : stderrBytes;
++        if (limitedBytes > maxOutputBytes && legacyCapture) {
+           fail('output-limit');
+           return;
+         }
+@@ -219,7 +225,7 @@ export function createRunner({ env = process.env, runtimeRoot }) {
+           stderr = appendCapture(stderr, chunk, maxCapturedBytesPerStream, captureTail);
+           if (maxStderrBytes !== undefined && stderrBytes > maxStderrBytes) fail('stderr-limit');
+         }
+-        if (stdoutBytes + stderrBytes > maxOutputBytes) fail('output-limit');
++        if (limitedBytes > maxOutputBytes) fail('output-limit');
+       };
+       child.stdout.on('data', (c) => data('out', c));
+       child.stderr.on('data', (c) => data('err', c));
+diff --git a/agent-team/tests/bug-pipeline/models.test.mjs b/agent-team/tests/bug-pipeline/models.test.mjs
+index 9d3cf397b..cc23e4034 100644
+--- a/agent-team/tests/bug-pipeline/models.test.mjs
++++ b/agent-team/tests/bug-pipeline/models.test.mjs
+@@ -294,18 +294,28 @@ test('standalone independent QA treats repository instructions as data and forbi
+   assert.doesNotMatch(calls[0].input, /controller has independently executed/);
+ });
+ 
+-test('large JSON progress does not prevent reading a separate valid structured result', async (t) => {
++test('multi-megabyte JSON progress does not prevent reading a separate valid structured result', async (t) => {
+   const { cwd, runtimeRoot } = await fixture(t);
++  const diagnostics = [];
+   const { createRunner } = await import('../../src/bug-pipeline/process.mjs');
+   const cli = path.join(runtimeRoot, 'synthetic-codex.mjs');
+   await writeFile(cli, `
+     const output = process.argv[process.argv.indexOf('--output-last-message') + 1];
+-    process.stdout.write(JSON.stringify({type:'progress', text:'x'.repeat(80 * 1024)}) + '\\n');
++    process.stdout.write(JSON.stringify({type:'progress', text:'OLD-OUTPUT-MARKER' + 'x'.repeat(3 * 1024 * 1024)}) + '\\n');
+     await import('node:fs/promises').then(({writeFile}) => writeFile(output, JSON.stringify(${JSON.stringify(IMPLEMENTED)}), {flag:'wx', mode:0o600}));
+   `);
+   const run = createRunner({ runtimeRoot, env: { PATH: process.env.PATH, CODEX_CLI_PATH: cli } });
+-  const models = createModels({ plannerModel: 'planner', executorModel: 'executor', runtimeRoot, run });
++  const models = createModels({
++    plannerModel: 'planner',
++    executorModel: 'executor',
++    runtimeRoot,
++    run,
++    onDiagnostic: (entry) => diagnostics.push(entry),
++  });
+   assert.deepEqual(await models.execute({ cwd, packet: {}, plan: {}, phase: 'implementation', round: 1 }), IMPLEMENTED);
++  assert.ok(diagnostics[0].stdoutBytes > 2 * 1024 * 1024);
++  assert.ok(diagnostics[0].stdoutCapturedBytes <= 32 * 1024);
++  assert.equal(diagnostics[0].stderrBytes, 0);
+ });
+ 
+ test('model failure diagnostics use finite enums and omit raw output', async (t) => {
+@@ -345,6 +355,11 @@ test('failure classifier checks retained stdout and stderr without copying their
+     ['stderr', 'structured output invalid', 'schema'],
+     ['stdout', JSON.stringify({ type: 'error', message: 'rate_limit_exceeded' }), 'rate'],
+     ['stderr', 'connection refused', 'network'],
++    ['stderr', 'fixture line 401', 'other'],
++    ['stderr', 'fixture line 503', 'other'],
++    ['stderr', 'HTTP 401 Unauthorized', 'auth'],
++    ['stderr', 'status_code=429', 'rate'],
++    ['stderr', 'HTTP/2 503 unavailable', 'network'],
+     ['stdout', 'opaque private text', 'other'],
+   ]) {
+     const diagnostics = [];
+diff --git a/agent-team/tests/bug-pipeline/process-output.test.mjs b/agent-team/tests/bug-pipeline/process-output.test.mjs
+index 039e5b441..e62e33a0b 100644
+--- a/agent-team/tests/bug-pipeline/process-output.test.mjs
++++ b/agent-team/tests/bug-pipeline/process-output.test.mjs
+@@ -80,6 +80,24 @@ test('synthetic runner fails on independent total and stderr limits', async (t)
+   assert.equal(Buffer.byteLength(err.stderr) <= 1024, true);
+ });
+ 
++test('stdout can be counted and tail-captured without contributing to the fatal byte limit', async (t) => {
++  const { root, runtimeRoot } = await fixture(t);
++  const script = await childScript(
++    root,
++    `process.stdout.write('OLD-OUTPUT-MARKER' + 'x'.repeat(3 * 1024 * 1024));`,
++  );
++  const result = await runner(runtimeRoot, script)({
++    command: 'codex', cwd: root, envMode: 'model', timeoutMs: 5000,
++    maxOutputBytes: 64 * 1024, maxCapturedBytesPerStream: 32 * 1024,
++    captureTail: true, maxStderrBytes: 64 * 1024, limitStdout: false,
++  });
++  assert.equal(result.ok, true);
++  assert.equal(result.stdoutBytes, 3 * 1024 * 1024 + Buffer.byteLength('OLD-OUTPUT-MARKER'));
++  assert.equal(result.stdoutCapturedBytes, 32 * 1024);
++  assert.equal(Buffer.byteLength(result.stdout), 32 * 1024);
++  assert.equal(result.stdout.includes('OLD-OUTPUT-MARKER'), false);
++});
++
+ test('runner option validation rejects unbounded or invalid limits', async (t) => {
+   const { root, runtimeRoot } = await fixture(t);
+   const script = await childScript(root, 'process.exit(0);');
+@@ -87,6 +105,12 @@ test('runner option validation rejects unbounded or invalid limits', async (t) =
+   for (const value of [-1, 1.5, Number.MAX_SAFE_INTEGER + 1, Infinity]) {
+     await assert.rejects(() => run({ command: 'codex', cwd: root, envMode: 'model', maxCapturedBytesPerStream: value }), /invalid.*limit/i);
+   }
++  for (const value of ['false', 0, 1, null]) {
++    await assert.rejects(
++      () => run({ command: 'codex', cwd: root, envMode: 'model', limitStdout: value }),
++      /limitStdout must be a boolean/,
++    );
++  }
+ });
+ 
+ 
+@@ -107,6 +131,19 @@ test('timed out process groups terminate surviving descendants', async (t) => {
+   await assert.rejects(() => import('node:fs/promises').then(({ stat }) => stat(marker)), { code: 'ENOENT' });
+ });
+ 
++test('non-fatal model stdout does not disable the process timeout', async (t) => {
++  const { root, runtimeRoot } = await fixture(t);
++  const script = await childScript(root, `setInterval(() => process.stdout.write('x'.repeat(8192)), 10);`);
++  const result = await runner(runtimeRoot, script)({
++    command: 'codex', cwd: root, envMode: 'model', timeoutMs: 250,
++    maxOutputBytes: 64 * 1024, maxCapturedBytesPerStream: 32 * 1024,
++    captureTail: true, maxStderrBytes: 64 * 1024, limitStdout: false,
++  });
++  assert.equal(result.error, 'timeout');
++  assert.ok(result.stdoutBytes > 64 * 1024);
++  assert.equal(result.stdoutCapturedBytes, 32 * 1024);
++});
++
+ test('runner defaults retain the existing combined ceiling and prefix capture', async (t) => {
+   const { root, runtimeRoot } = await fixture(t);
+   const script = await childScript(root, `process.stdout.write('a'.repeat(6)); process.stdout.write('b'.repeat(6));`);

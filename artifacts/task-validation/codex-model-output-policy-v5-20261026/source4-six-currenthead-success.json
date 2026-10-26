@@ -1,0 +1,60 @@
+{
+  "at": "2026-10-26T07:52:07.401Z",
+  "head": "752a053e3a94d785e577236923e1dbbf6f27365e",
+  "checks": [
+    {
+      "name": "bug-pipeline-tests",
+      "id": 121450400891,
+      "headSha": "752a053e3a94d785e577236923e1dbbf6f27365e",
+      "appId": 15368,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/40285917377/job/121450400891"
+    },
+    {
+      "name": "secret-scan",
+      "id": 121449415318,
+      "headSha": "752a053e3a94d785e577236923e1dbbf6f27365e",
+      "appId": 15368,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/40285917315/job/121449415318"
+    },
+    {
+      "name": "frontend-tests",
+      "id": 121450143517,
+      "headSha": "752a053e3a94d785e577236923e1dbbf6f27365e",
+      "appId": 15368,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/40285917315/job/121450143517"
+    },
+    {
+      "name": "archive-tests",
+      "id": 121450143352,
+      "headSha": "752a053e3a94d785e577236923e1dbbf6f27365e",
+      "appId": 15368,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/40285917315/job/121450143352"
+    },
+    {
+      "name": "gate",
+      "id": 121450143311,
+      "headSha": "752a053e3a94d785e577236923e1dbbf6f27365e",
+      "appId": 15368,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/40285917315/job/121450143311"
+    },
+    {
+      "name": "browser-e2e",
+      "id": 121454948442,
+      "headSha": "752a053e3a94d785e577236923e1dbbf6f27365e",
+      "appId": 15368,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/40285917315/job/121454948442"
+    }
+  ]
+}
