@@ -1,0 +1,82 @@
+{
+  "algorithm": "sha256",
+  "reservationNonce": "02733f1f-b304-4cc0-a33d-b917223816db",
+  "baselineHead": "d981ee054a9a16b920cae474a50540f88f9b73de",
+  "files": [
+    {
+      "path": "STOP.json",
+      "sha256": "abbb84f33d22af272a62fdf193468d8aa8f33efbe1ce7c74d0051539b145c617",
+      "bytes": 417
+    },
+    {
+      "path": "actual-Claude1-comment.json",
+      "sha256": "3880448faf111d2a30b92ab0acbdd0973f628f34e559941d3fa37e2c58e1c0e8",
+      "bytes": 7862
+    },
+    {
+      "path": "context/claude-cloud-review.yml",
+      "sha256": "440d65be34c642e63e6017fd59bd92a9f8e11ecfb63eaf65dc1ec15d77812365",
+      "bytes": 3400
+    },
+    {
+      "path": "context/cloud-claude-review.md",
+      "sha256": "a50423aad13a1815ab84b669e2ee9010bb6434c0b2c4e5237e004f247d886801",
+      "bytes": 7071
+    },
+    {
+      "path": "context/main-rules.json",
+      "sha256": "8c9fa4bb3075bc4578444eb584e5eee0f64d5cd1af5966aa8310446e6de91c4e",
+      "bytes": 873
+    },
+    {
+      "path": "context/merged-513.json",
+      "sha256": "37fb1b1bd65fed408ed558d45babc19773a98f944c3cadc462ce092f3a99c435",
+      "bytes": 21329
+    },
+    {
+      "path": "context/native-before-private.json",
+      "sha256": "14d2ab8fc126e59adaef6af44045cbd77e1463cac40eacfad8f590d93dd772ba",
+      "bytes": 19702
+    },
+    {
+      "path": "context/preview-511.json",
+      "sha256": "731f2d1587576fa1543d224ee15ea433efe8311105712991b8c07fc22f1e4480",
+      "bytes": 19674
+    },
+    {
+      "path": "context/six-checks-d981.json",
+      "sha256": "9dae071fd3e3b691226cdda92feb9e2b7f32d428ea2b6c8ab23296f77b2661d1",
+      "bytes": 65203
+    },
+    {
+      "path": "edited/bug-delivery.md",
+      "sha256": "b9b2ab88fdea5a026af7826912f237c5d4a40f0aaef7ced22c70f73c91406f24",
+      "bytes": 32091
+    },
+    {
+      "path": "report.md",
+      "sha256": "20f1b474e9005c60ae41abb2f2f4ea85e275fcf934bbefb738eae3f1ccaf671c",
+      "bytes": 2068
+    },
+    {
+      "path": "reservation.json",
+      "sha256": "c499691116266c108c0a742adebd087620e5fb554a8bcf3612a1d5473f6d5678",
+      "bytes": 836
+    },
+    {
+      "path": "source/bug-delivery.md",
+      "sha256": "42c2473545a1cb7690d686e9bdfa5ab64be3dfa79bcdfdc0846aa4e6d4f73b40",
+      "bytes": 32430
+    },
+    {
+      "path": "source-manifest.json",
+      "sha256": "205df5aced52c372f2438dfea04ac575fd428eabad66d01ae2f79828b1a9400f",
+      "bytes": 300
+    },
+    {
+      "path": "source.patch",
+      "sha256": "4e977a19974e0a79bfda7eaf38560eaa51bbe7095d97e16a89b70726d0ec134f",
+      "bytes": 3063
+    }
+  ]
+}

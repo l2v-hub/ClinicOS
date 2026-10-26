@@ -1,0 +1,17 @@
+{
+  "status": "complete",
+  "reservationNonce": "eb35309b-2997-4e0b-afcd-b12cab590da7",
+  "actualSharedAuthorCall": true,
+  "pr513ImplementationRound": 2,
+  "pr511ImplementationRound": 2,
+  "parentManualTaskRound": 3,
+  "scope": [
+    "docs/cloud-claude-review.md",
+    ".claude/skills/clinicos/references/bug-delivery.md"
+  ],
+  "outputFrozen": true,
+  "downstreamIndependentQARequired": true,
+  "publishedOrMerged": false,
+  "deployOrIssueClosureClaimed": false,
+  "note": "No output modifications should follow the final seal."
+}

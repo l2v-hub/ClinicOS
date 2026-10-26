@@ -1,0 +1,8 @@
+{
+  "nonce": "3cc18b1a-a030-444c-96f3-5c77de655d84",
+  "status": "STOP",
+  "verdict": "READY FOR CODEX QA",
+  "at": "2026-10-25T21:34:03.894489+00:00",
+  "sourceFreezeUnchanged": true,
+  "writesConfinedTo": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/docs-alignment-qa1"
+}

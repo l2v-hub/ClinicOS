@@ -177,8 +177,19 @@ PASS attraverso cambi funzionali.
 Il controller rende lo SHA esatto pronto alla review. Claude fa soltanto review finale;
 Codex implementa le correzioni. Il worker/cron autorizzato pubblica su GitHub lo stato e il
 report strutturato di Claude; il modello read-only non scrive direttamente tramite strumenti
-vietati. Con Claude Max si usa la sessione locale già autenticata, non si presume che Max
-copra Anthropic API o che un merge aggiorni automaticamente un vecchio worker installato.
+vietati. Claude Max può operare in una sessione autenticata su un host supportato oppure, se
+configurato, tramite il worker GitHub-hosted fidato su `main` con `CLAUDE_CODE_OAUTH_TOKEN`
+(autenticazione OAuth dell’abbonamento). Per il worker hosted, `CLAUDE_CLOUD_REVIEW_ENABLED`
+assente/vuota o `true` abilita le review in coda; `false` o un valore non valido le disabilita,
+mentre il dispatch `probe` resta disponibile. I confronti GitHub Actions ignorano maiuscole e
+minuscole: `TRUE`/`True` abilitano e `FALSE`/`False` disabilitano. Non è necessario
+creare la variabile: il merge su
+`main` del workflow revisionato può attivare le review per impostazione predefinita. Esegui il
+dispatch `probe` su `main` e verifica ricevuta reale `probe-passed`, profilo modello supportato
+e un evento di review riuscito prima di dichiarare operativa l’attivazione. La probe qualifica
+autenticazione e profilo di quel percorso, non l’abilitazione dei workflow Codex. Non assumere
+una sessione GUI locale ereditata, non usare fatturazione Anthropic API come fallback e non
+aggiungere una chiave API.
 
 Usa i contratti correnti di `externalReview`, sincronizzazione commenti e skill di review.
 Le label `claude-review-ready`, `claude-reviewing`, `codex-review-fixes`, `review-blocked`,
@@ -219,9 +230,12 @@ Quando si parla di attivazione, distinguere label e metadati dall'inferenza effe
 review di un modello e dall'abilitazione dei workflow. Verificare, revisionare e testare il codice corrente prima di attivare i workflow; poi
 provare un evento reale prima di dichiarare l’avvio automatico verificato. Deploy e chiusura delle issue
 sono passaggi successivi e distinti. Una configurazione o un test con adapter simulato non prova
-una chiamata reale. Il runner Actions non fornisce una sessione Claude Max: la review Max deve
-essere eseguita sull'host autenticato supportato. Non instradare Max tramite Anthropic API né
-eseguire Claude Max dentro Actions.
+una chiamata reale. Per il percorso hosted, il runner Actions usa il worker fidato descritto in
+`docs/cloud-claude-review.md` e l’OAuth dell’abbonamento tramite `CLAUDE_CODE_OAUTH_TOKEN`;
+attivazione, probe e verifica operativa sono descritti nella sezione 7 e in quella guida. Se non
+si usa il percorso hosted, la review può avvenire su un host supportato con sessione Max
+autenticata e profilo verificato. Nessuno dei due percorsi usa Anthropic API a pagamento o
+richiede una chiave API aggiuntiva.
 
 Dopo la presa in carico durevole imposta `In progress`; per impedimenti reali usa `Bloccato`
 con causa verificata e condizione di sblocco. Il controller mantiene stato e contatori;

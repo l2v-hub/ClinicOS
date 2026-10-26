@@ -1,0 +1,24 @@
+{
+  "state": "sealed",
+  "nonce": "a27701c8-ec51-432c-9af5-70d9f38c02f8",
+  "sha256": "e3a43730c41efbbabdf93995fca9a9e5f6fa42790b34aac7d8eaedb5e20814ad",
+  "bytes": 1121,
+  "artifacts": {
+    "STOP.json": {
+      "sha256": "e3a43730c41efbbabdf93995fca9a9e5f6fa42790b34aac7d8eaedb5e20814ad",
+      "bytes": 1121
+    },
+    "report.md": {
+      "sha256": "81003cffed6a4e46f16b68a68e9d1454cd8d87ead242fd759747dfb8c88ca776",
+      "bytes": 2036
+    },
+    "reservation.json": {
+      "sha256": "36ae9d52ea4c489b5b77ecdaa3684f075f9e9d05e87f702cfc0069abbfd820a7",
+      "bytes": 676
+    },
+    "result.json": {
+      "sha256": "e19e99c0d4285ed1950d2ad7546d502019f153cbdfa03f8bf77ad1aeb3c33de6",
+      "bytes": 1513
+    }
+  }
+}

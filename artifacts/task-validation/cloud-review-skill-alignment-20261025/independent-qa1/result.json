@@ -1,0 +1,46 @@
+{
+  "verdict": "READY FOR CODEX QA",
+  "nonce": "a27701c8-ec51-432c-9af5-70d9f38c02f8",
+  "code": "b31c8755a06ff016ad26d40b44baf5d61c029045",
+  "baseSha": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+  "sourceSha256": "70bd5de7fb8169fdce3c98e07047f8754080beac04dad875860526584bea761d",
+  "checks": [
+    {
+      "name": "author STOP artifact hashes unchanged",
+      "result": "PASS"
+    },
+    {
+      "name": "source commit/base/blob/path lineage matches frozen metadata",
+      "result": "PASS"
+    },
+    {
+      "name": "exactly two intended patch hunks; patch applies in memory to base and reproduces output bytes",
+      "result": "PASS",
+      "hunks": 2
+    },
+    {
+      "name": "trusted main workflow and cloud review docs agree on OAuth probe, supported model profile, enablement gate, and no API billing fallback",
+      "result": "PASS"
+    },
+    {
+      "name": "native authority and unrelated trust/security/release gates preserved",
+      "result": "PASS"
+    },
+    {
+      "name": "no secret or PHI-like value found in replacement",
+      "result": "PASS"
+    },
+    {
+      "name": "current cloud activation/profile not claimed as already proved",
+      "result": "PASS"
+    },
+    {
+      "name": "tests and full application E2E",
+      "result": "NOT RUN",
+      "reason": "reversible documentation-only change; outside QA contract"
+    }
+  ],
+  "limitations": [
+    "Documentation QA only; does not establish a successful live cloud review activation or full end-to-end cloud flow."
+  ]
+}

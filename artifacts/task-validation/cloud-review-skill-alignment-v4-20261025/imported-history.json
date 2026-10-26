@@ -1,0 +1,438 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "nonce": "9bd58f9a-f8fb-4ffa-8449-8ffaaa9e1761",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "b31c8755a06ff016ad26d40b44baf5d61c029045",
+      "baseSha": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+      "evidence": "independent-qa1/report.md",
+      "reason": "Actual reserved bounded documentationimplementation; newindependentQAverifiedexactlytwohostpolicyparagraphs",
+      "independentQaNonce": "a27701c8-ec51-432c-9af5-70d9f38c02f8",
+      "independentQaSealSha256": "644ac5f6ab8ba601f6c4e8be6918fa5f8ce81c7e994e0f292de8ada17da6e5eb"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "nonce": "eb35309b-2997-4e0b-afcd-b12cab590da7",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "6226c2f9ce9f2989261f69b724361a4cdef46f22",
+      "baseSha": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+      "evidence": "independent-qa2/report.md",
+      "reason": "OneactualsharedDoccorrection: PR513Claude1finding+sameportablePR511semantics; actualparentmanualround3, noreset",
+      "independentQaNonce": "3cc18b1a-a030-444c-96f3-5c77de655d84",
+      "independentQaSealSha256": "ad0113b4c24efee3b42b8b5064464f18b3c1f43878c47a1aa45720c0a5036df3"
+    },
+    {
+      "round": 3,
+      "status": "passed",
+      "nonce": "02733f1f-b304-4cc0-a33d-b917223816db",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "89720b56bbc1b8588fb7fe5164632aeee0773a90",
+      "baseSha": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+      "evidence": "independent-qa3/report.md",
+      "reason": "Actual hosted Claude511 BLOCKED round1 corrected by one reserved author3 and new independent QA; all histories preserved",
+      "independentQaNonce": "b9aa0d18-a257-445c-9e7f-46dc0e52d66c",
+      "independentQaSealSha256": "8904a606616b85cfc9d5ca735952b1d183a50a4657770ccc9bf70e8f22ce760d"
+    }
+  ],
+  "reviews": [
+    {
+      "round": 1,
+      "status": "blocked",
+      "subjectSha": "d981ee054a9a16b920cae474a50540f88f9b73de"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "blocked",
+        "subject_sha": "d981ee054a9a16b920cae474a50540f88f9b73de",
+        "review_sha256": "35f253cc27e12146404e394fceb54fd034df2a94bdec363d224752c1a58779ef"
+      }
+    ]
+  },
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"d981ee054a9a16b920cae474a50540f88f9b73de\",\n  \"verdict\": \"blocked\",\n  \"summary\": \"This PR changes documentation only, in one file: `.claude/skills/clinicos/references/bug-delivery.md`. It replaces the two old passages that said Claude Max review needed a local session and could not run in Actions. The new text describes the hosted OAuth worker and says the activation variable turns reviews on when it is absent, empty or `true`, and off when it is `false` or invalid. The rest of the file reads as unchanged. The existing safeguards stay in place: no Anthropic API fallback, a real probe and review event required before activation counts as operational, labels are not approval, and the trust-root, ownership and budget rules.\\n\\nI cannot approve it. The key acceptance criterion is that the new text matches the actual workflow expressions and probe contract. The workflow, the worker and `docs/cloud-claude-review.md` were not supplied. The only support for that match is the author/QA reports, which say it was checked. The inventory lists the hashed packet files (source manifest, seals, imported history) but does not include their contents. There is no evidence of native CI passing on head d981ee0. This file is under `.claude/`, which requires an approving human native review on the current SHA, and none is shown. The validation report itself says \\\"IMPLEMENTED \u2014 NOT VERIFIED\\\".\\n\\nI found no security regression or credential/PHI exposure in the diff. The concerns below are about verification and keeping the docs consistent.\",\n  \"findings\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \".claude/skills/clinicos/references/bug-delivery.md\",\n      \"line\": 190,\n      \"problem\": \"The new statement that the variable \\\"absent/empty or `true` enables queued reviews; `false` or invalid disables them, while the `probe` dispatch stays available\\\" cannot be checked against the source. The workflow file, the worker and `docs/cloud-claude-review.md` were not supplied; the only support is the author/QA reports' claims. Native CI results on head d981ee0 and the required approving human review for this `.claude/` trust-root change are also missing. The packet's own validation report says IMPLEMENTED \u2014 NOT VERIFIED.\",\n      \"requested_change\": \"Provide for review the exact workflow activation/probe expressions and the worker probe contract at the commit being cited. Also provide passing results for all required native checks on d981ee054a9a16b920cae474a50540f88f9b73de and the record of the native human review required for the trust root.\",\n      \"test_expectation\": \"A reviewer can compare the workflow `if:` expressions line by line with both new paragraphs (unset, empty, true, false, invalid, and probe bypass) and sees every required check passing on the exact head.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \".claude/skills/clinicos/references/bug-delivery.md\",\n      \"line\": 242,\n      \"problem\": \"Section 8 now points operators to `docs/cloud-claude-review.md` as the authoritative hosted path. By the amendment's own account, that document at base and on main still wrongly says jobs stay disabled until the variable is `true`; the fix lives in sibling PR513. If this PR merges first, the skill and the doc it cites contradict each other on whether hosted reviews are on by default.\",\n      \"requested_change\": \"Merge PR513 first, or record that ordering dependency in the PR or controller so this skill does not land on a main whose referenced doc says the opposite.\",\n      \"test_expectation\": \"On main after merge, the activation semantics in `docs/cloud-claude-review.md` and in both bug-delivery.md paragraphs match.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \".claude/skills/clinicos/references/bug-delivery.md\",\n      \"line\": 242,\n      \"problem\": \"Section 7 and section 8 now carry nearly identical activation paragraphs: the variable semantics, the probe staying available, no need to create the variable, merge enabling reviews by default, and the probe/profile/event proof. The playbook itself asks authors to remove duplication they introduce. Two copies of the activation rules will drift on the next semantic change, as happened with the operator README that triggered this fix.\",\n      \"requested_change\": \"Keep the full activation semantics in one section only, and have the other section point to it or to `docs/cloud-claude-review.md`. Do not change any other policy text.\",\n      \"test_expectation\": \"The activation semantics appear in exactly one place in the skill, and the other section refers to it without restating different values.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \".claude/skills/clinicos/references/bug-delivery.md\",\n      \"line\": 193,\n      \"problem\": \"\\\"`false` o un valore non valido le disabilita\\\" implies that any value other than the exact strings `true` or empty is invalid. The QA report notes that GitHub Actions string comparisons ignore case, so values such as `TRUE` or `False` behave like the canonical ones. An operator could read `TRUE` as invalid, so as disabling reviews, when it actually enables them.\",\n      \"requested_change\": \"Say that comparison ignores case, or define \\\"valore non valido\\\" as any value other than empty or true/false in any case, so the wording matches the real expression.\",\n      \"test_expectation\": \"The documented truth table matches how the workflow treats `TRUE`, `True`, `FALSE` and `false`.\"\n    }\n  ]\n}\n"
+  },
+  "sourceManifest": [
+    {
+      "path": ".claude/skills/clinicos/references/bug-delivery.md",
+      "blob": "7ceb610265132ce2ce1fec3f29ee1824bc39e137",
+      "mode": "100644",
+      "baseBlob": "7a0b0e23fc100031a7d9909fefc2e478fce9cf52",
+      "baseMode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/analysis.md",
+      "blob": "a5109c7300764dfb20429ea1a8d77face93c76ca",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/author/STOP.json",
+      "blob": "40b32a2d521a6a3b15d37e2621723875c9f04d7f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/author/report.md",
+      "blob": "56218b898998f8b14432706cdd576536fcabe3a3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/author/source-freeze.json",
+      "blob": "583d453a6d91e7354a7f5979b041f48d10d55bdc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/implementation-plan.md",
+      "blob": "11a4ffd35d55e7dc3204d26fb8cb7c8ac319486d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/imported-history.json",
+      "blob": "3c68864368781ac3dd83fb013a722cd9cfc86228",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/independent-qa1/STOP.json",
+      "blob": "dea23ad3032699bd2d6bc0fe25748acae612d46c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/independent-qa1/report.md",
+      "blob": "9deaaeef67556745051e9b968bd4d6a4984b801d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/independent-qa1/result.json",
+      "blob": "0b6610eb5928ef059f78e1829d5645670c71ac9e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/independent-qa1/seal.json",
+      "blob": "b05a7ad2b47da5fd7d037d5ff16424cfae858657",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/source-manifest.json",
+      "blob": "9ed5e7f55e329a269e06a6943f46388c948f31f1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/task-contract.md",
+      "blob": "9798c2b67492c1876799a85ff2b8ae9615de25c7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-20261025/validation-report.md",
+      "blob": "339929253be2bb23ed3aa588f942895993684218",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/actual-profile-receipt.json",
+      "blob": "880f6801f5e3c2241a62fa07c4d1036315f23593",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/author2/STOP.json",
+      "blob": "b719f1e282b6c40842254a868e70ce12cb2c3c00",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/author2/report.md",
+      "blob": "a9e9f044da28d8e01931d5b6467cc758792d045a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/author2/seal.json",
+      "blob": "ddf6d35ccdba006ae292c3c1f418e022f132b368",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/author2/source-manifest.json",
+      "blob": "ee7305bfa9fe45ac2247860a0fdfa3f182bd2fbe",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/author2/source.patch",
+      "blob": "cfdcb0cdcb201551bb5d726cb4e0b4e3c1dbe8f3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/implementation-plan.md",
+      "blob": "efd1706e91e91396a36a0395773681c9aa6cf0c2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/imported-history.json",
+      "blob": "bdfb82fe9f9d8a4fd809ad41de04e799ea8ef981",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/independent-qa1/report.md",
+      "blob": "9deaaeef67556745051e9b968bd4d6a4984b801d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/independent-qa2/STOP.json",
+      "blob": "f919a829beffff9f9e7f0057f077c9282ea4e79e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/independent-qa2/report.md",
+      "blob": "06d8a2f5ba31d2f7722bed76572c02448120aba4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/independent-qa2/result.json",
+      "blob": "2e1147d0e79cc66a0e81da456943a40fcb8f97c2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/independent-qa2/seal.json",
+      "blob": "bedc4d79fbf26cbad7309aefd5028954cda1b279",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/publication-topology.md",
+      "blob": "855634e4ad8885581ff9d6b5e190d66b70a6ad9c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/source-manifest.json",
+      "blob": "745936264c5102b54e72a635ed0cca144fb0b7cf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/task-contract.md",
+      "blob": "0e0c3b14efb01f6335133fe1af19885742b5ea9f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v2-20261025/validation-report.md",
+      "blob": "6dcf906391d41cefaec1d6280d8cbd38f8728c2c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/actual-profile-receipt.json",
+      "blob": "880f6801f5e3c2241a62fa07c4d1036315f23593",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/analysis.md",
+      "blob": "cbc82ad09547753af7aa27832bc08b5f73e95728",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/author2/STOP.json",
+      "blob": "b719f1e282b6c40842254a868e70ce12cb2c3c00",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/author2/report.md",
+      "blob": "a9e9f044da28d8e01931d5b6467cc758792d045a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/author2/seal.json",
+      "blob": "ddf6d35ccdba006ae292c3c1f418e022f132b368",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/author2/source-manifest.json",
+      "blob": "ee7305bfa9fe45ac2247860a0fdfa3f182bd2fbe",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/author2/source.patch",
+      "blob": "cfdcb0cdcb201551bb5d726cb4e0b4e3c1dbe8f3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/implementation-plan.md",
+      "blob": "efd1706e91e91396a36a0395773681c9aa6cf0c2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/imported-history.json",
+      "blob": "036267efd8e92d9767f81e74ac3fadfa1d1e328a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/independent-qa1/report.md",
+      "blob": "9deaaeef67556745051e9b968bd4d6a4984b801d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/independent-qa2/STOP.json",
+      "blob": "f919a829beffff9f9e7f0057f077c9282ea4e79e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/independent-qa2/report.md",
+      "blob": "06d8a2f5ba31d2f7722bed76572c02448120aba4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/independent-qa2/result.json",
+      "blob": "2e1147d0e79cc66a0e81da456943a40fcb8f97c2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/independent-qa2/seal.json",
+      "blob": "bedc4d79fbf26cbad7309aefd5028954cda1b279",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/publication-topology.md",
+      "blob": "855634e4ad8885581ff9d6b5e190d66b70a6ad9c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/source-manifest.json",
+      "blob": "3740e9881fe58b75aa4417d3269d967af5ae4942",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/task-contract.md",
+      "blob": "0e0c3b14efb01f6335133fe1af19885742b5ea9f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-skill-alignment-v3-20261025/validation-report.md",
+      "blob": "6dcf906391d41cefaec1d6280d8cbd38f8728c2c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "actual-profile-receipt.json": "badb1a18ef6d7302776f5ac26db3b0d07a6a188e4e95088051286385c64e74d1",
+    "analysis.md": "7e02aaf3999ee5e1d5e579edc3b01facad6f9f7c6d1da6ed88d5e458ad666eb8",
+    "author2/STOP.json": "85ce08966ea7db4ffb29657643149878e9b1568c13139a139b7b7ffce144bab6",
+    "author2/report.md": "c41367c71d23262974f75fccd39fd324f36f8b2523b43fb42fcda27506544f37",
+    "author2/seal.json": "ac46fef5c50d0c947d227fa7e1ac51d7488befb05b41e2c1ffd9a220ee64cf57",
+    "author2/source-manifest.json": "6ae573f69ea3707dcd76263d6b29f019542bc0666f7a3139bdb0c3f3b5f97517",
+    "author2/source.patch": "b07dfe8392fe91c65406f5e070057c3eab5741c6c4c8780c0ea5e7e5744f8ad1",
+    "author3/STOP.json": "abbb84f33d22af272a62fdf193468d8aa8f33efbe1ce7c74d0051539b145c617",
+    "author3/report.md": "20f1b474e9005c60ae41abb2f2f4ea85e275fcf934bbefb738eae3f1ccaf671c",
+    "author3/seal.json": "7f2e45c22a77dafc88502580087e39929ad9be6cc97df266292ec02ee599add6",
+    "author3/source-manifest.json": "205df5aced52c372f2438dfea04ac575fd428eabad66d01ae2f79828b1a9400f",
+    "author3/source.patch": "4e977a19974e0a79bfda7eaf38560eaa51bbe7095d97e16a89b70726d0ec134f",
+    "implementation-plan.md": "2aa8e8de2d33218f2418e3c095dd213e3eb7580281b1986377a27cccc25d1166",
+    "independent-qa1/report.md": "81003cffed6a4e46f16b68a68e9d1454cd8d87ead242fd759747dfb8c88ca776",
+    "independent-qa2/STOP.json": "c693ff573ddd2be06e4b727038f180987f60196574e9df0bd2e76934e294e53b",
+    "independent-qa2/report.md": "a9072ba98d151d6b09acdf9766160aa8cd2c75503d33a718cfa26ab41cdbfca7",
+    "independent-qa2/result.json": "2ecd749521ebe39e21a5a9d79aa3b29987b3869f59d943aa086802842f8cded5",
+    "independent-qa2/seal.json": "ad0113b4c24efee3b42b8b5064464f18b3c1f43878c47a1aa45720c0a5036df3",
+    "independent-qa3/STOP.json": "9dd6b9d0c438a90211e049a8f478902dc99b9fde62f4ed48fc3b68b83c0d15b2",
+    "independent-qa3/report.md": "d52d42efafa8915aa4dffe9cf8423be2b0834f9fcc935e69b34c8d7d61a0631d",
+    "independent-qa3/result.json": "e8da03863dab1fa5f5f164327c8b5dee4efd21bbb3ccb1893aaab598bc15f2ba",
+    "independent-qa3/seal.json": "8904a606616b85cfc9d5ca735952b1d183a50a4657770ccc9bf70e8f22ce760d",
+    "publication-topology.md": "283c8c473f6816d6266088af5562e4c4291ac1f6a9fd790aeac1f42e18462c7b",
+    "source-manifest.json": "3ff18da54f9f59c31bc93178e056971939bde82de1a49ba03f09d09e12891a14",
+    "task-contract.md": "c6fb67344a4f43440ebf401b52f246f839c48f8fa10b7d4c6f40d97db4826989",
+    "validation-report.md": "6237f8c4205724f2bc14a51009c78246131da692dcedbe280a81c08f753405fb"
+  }
+}
