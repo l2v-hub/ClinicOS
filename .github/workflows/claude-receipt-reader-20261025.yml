@@ -54,16 +54,20 @@ jobs:
         FIXED_RECEIPT_FILE_0
         cat > "$RUNNER_TEMP/cloud-evidence/binding.json" <<'FIXED_RECEIPT_FILE_1'
         {
-          "kind": "probe",
-          "runId": 40232898341
+          "kind": "review",
+          "runId": 40247340045,
+          "pr": 511,
+          "sha": "590c2f91537d2163dcfeb490377f32edd6ec8031",
+          "round": 3,
+          "reportSha256": "6bcbaa5f3afaa8458409fd443b5863f11d460fa7459d9e69fc20f0a7a202f724"
         }
         FIXED_RECEIPT_FILE_1
     - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
       with:
         github-token: ${{ github.token }}
         repository: l2v-hub/ClinicOS
-        run-id: 40232898341
-        name: claude-cloud-review-receipt-40232898341
+        run-id: 40247340045
+        name: claude-cloud-review-receipt-40247340045
         path: ${{ runner.temp }}/cloud-evidence/artifact
     - name: Validate and print finite receipt evidence
       shell: bash
