@@ -1,0 +1,85 @@
+name: Qualify isolated Codex execution
+on:
+  push:
+    branches: [codex/codex-execution-qualification2-20261026]
+permissions:
+  contents: read
+concurrency:
+  group: clinicos-codex-execution-qualification2-20261026
+  cancel-in-progress: false
+jobs:
+  qualify:
+    if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/codex/codex-execution-qualification2-20261026'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 6
+    steps:
+      - name: Checkout frozen trusted runner only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 995e2ff6d14a96b5d67e0d14d708f4a95c4c816f
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /agent-team/src/bug-pipeline/process.mjs
+            /agent-team/src/bug-pipeline/routing.mjs
+            /agent-team/src/core/sanitize.mjs
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Install pinned official CLI before loading credentials
+        run: npm install --prefix "$RUNNER_TEMP/codex-qualification-tools" --no-audit --no-fund --no-save @openai/codex@0.159.2
+      - name: Verify exact pinned CLI before loading credentials
+        run: test "$("$RUNNER_TEMP/codex-qualification-tools/node_modules/.bin/codex" --version)" = 'codex-cli 0.159.2'
+      - name: Run one isolated read-only structured-output qualification
+        env:
+          CODEX_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CODEX_PLANNER_MODEL: ${{ vars.CODEX_PLANNER_MODEL || 'gpt-6.1-sol' }}
+          CODEX_EXECUTOR_MODEL: ${{ vars.CODEX_EXECUTOR_MODEL || 'auto' }}
+          CODEX_SMALL_EXECUTOR_MODEL: ${{ vars.CODEX_SMALL_EXECUTOR_MODEL || 'gpt-6-luna' }}
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {mkdtemp, mkdir, writeFile, readFile} from 'node:fs/promises';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          import {createRunner} from './agent-team/src/bug-pipeline/process.mjs';
+          import {selectExecutor} from './agent-team/src/bug-pipeline/routing.mjs';
+          
+          const root=await mkdtemp(path.join(process.env.RUNNER_TEMP,'clinicos-codex-qualification-'));
+          const cwd=path.join(root,'empty-work'), runtime=path.join(root,'runtime');
+          await mkdir(cwd,{mode:0o700});
+          await mkdir(runtime,{mode:0o700});
+          execFileSync('git',['init','--quiet',cwd],{env:{PATH:process.env.PATH},stdio:'ignore'});
+          const schemaPath=path.join(runtime,'schema.json'),outputPath=path.join(runtime,'result.json');
+          await writeFile(schemaPath,JSON.stringify({type:'object',properties:{status:{type:'string',enum:['ok']}},required:['status'],additionalProperties:false})+'\n',{flag:'wx',mode:0o600});
+          const routing={plannerModel:process.env.CODEX_PLANNER_MODEL||'gpt-6.1-sol',executorModel:process.env.CODEX_EXECUTOR_MODEL||'auto',delegateModel:process.env.CODEX_SMALL_EXECUTOR_MODEL||'gpt-6-luna'};
+          const selected=selectExecutor({...routing,plan:{execution:{difficulty:'medium',mode:'direct',reason:'Existing 506 plan'}},round:2});
+          const selected507=selectExecutor({...routing,plan:{execution:{difficulty:'medium',mode:'delegate',reason:'Existing 507 plan'}},round:3});
+          assert.equal(selected.model,selected507.model);
+          const model=selected.model;
+          assert.match(model,/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,79}$/);
+          const cli=path.join(process.env.RUNNER_TEMP,'codex-qualification-tools/node_modules/.bin/codex');
+          const run=createRunner({env:{PATH:process.env.PATH,CODEX_CLI_PATH:cli,CODEX_API_KEY:process.env.CODEX_API_KEY},runtimeRoot:runtime});
+          const args=['exec','--output-schema',schemaPath,'--output-last-message',outputPath,'--json','--ephemeral','--ignore-user-config','--model',model,'--sandbox','read-only','--cd',cwd,'-c','shell_environment_policy.inherit="none"','-c',`shell_environment_policy.set.PATH=${JSON.stringify(process.env.PATH)}`,'-'];
+          const result=await run({command:'codex',args,cwd,input:'This is a single authentication and structured-output qualification. Do not use tools, inspect files, access services, or modify anything. Return exactly the object {"status":"ok"}.',timeoutMs:120000,maxOutputBytes:65536,envMode:'model'});
+          const text=result.stdout+'\n'+result.stderr;
+          const rules=[['configuration',/error loading config|reserved built-in provider|invalid configuration/i],['insufficient-quota',/insufficient_quota|exceeded your current quota|billing[_ -]hard[_ -]limit|credit balance|billing details/i],['authentication',/invalid_api_key|incorrect api key|authentication_error|not logged in|missing authentication|missing[^\n]{0,40}api key|no api key|api key[^\n]{0,40}(missing|not set|not found|required)|unauthorized|401\b/i],['model-not-found',/model_not_found|model[^\n]{0,80}does not exist|do not have access to.{0,60}model/i],['unsupported-model',/unsupported_model|not supported[^\n]{0,60}(model|codex)|(model|codex)[^\n]{0,60}not supported/i],['schema',/invalid_json_schema|invalid schema|schema[^\n]{0,60}(invalid|unsupported)/i],['rate-limit',/rate_limit|rate limit|429\b/i],['network',/ENOTFOUND|ECONNRESET|ETIMEDOUT|error sending request|network error/i]];
+          let failure=result.error || rules.find(([,re])=>re.test(text))?.[0] || (result.ok?'none':'other');
+          if(!['timeout','output-limit','spawn-failed','none','other',...rules.map(([name])=>name)].includes(failure))failure='other';
+          let typedOutputOk=false;
+          try {const raw=await readFile(outputPath,'utf8');if(Buffer.byteLength(raw)<=1024){const parsed=JSON.parse(raw);typedOutputOk=parsed?.status==='ok'&&Object.keys(parsed).length===1;}} catch {}
+          const digest=value=>createHash('sha256').update(value).digest('hex');
+          const proof={schemaVersion:1,observedAt:new Date().toISOString(),repository:process.env.GITHUB_REPOSITORY,workflowSha:process.env.GITHUB_SHA,sourceMain:'995e2ff6d14a96b5d67e0d14d708f4a95c4c816f',runId:process.env.GITHUB_RUN_ID,runAttempt:process.env.GITHUB_RUN_ATTEMPT,reservationNonce:'d82348c6-9462-4783-948d-6716580f4053',cliVersion:'0.159.2',cliVersionMatch:true,model,selectionReason506:selected.reason,selectionReason507:selected507.reason,maximumCLIInvocations:1,cliInvocationsUsed:1,httpRetryPolicy:'unchanged-trusted-cli-defaults',timeoutMs:120000,maxOutputBytes:65536,exitCode:result.code,error:result.error||null,failure,typedOutputOk,providerQualified:result.ok&&typedOutputOk,retainedSanitizedStdoutBytes:Buffer.byteLength(result.stdout),retainedSanitizedStderrBytes:Buffer.byteLength(result.stderr),retainedSanitizedStdoutSha256:digest(result.stdout),retainedSanitizedStderrSha256:digest(result.stderr),clinicalSourceProvided:false,clinicalAttemptsReplayed:0};
+          await writeFile(path.join(process.env.RUNNER_TEMP,'codex-qualification-proof.json'),JSON.stringify(proof,null,2)+'\n',{flag:'wx',mode:0o600});
+          console.log(JSON.stringify(proof));
+          if(!proof.providerQualified)process.exitCode=1;
+          JS
+      - name: Preserve finite diagnostic proof
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: codex-execution-qualification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/codex-qualification-proof.json
+          if-no-files-found: warn
+          retention-days: 14
