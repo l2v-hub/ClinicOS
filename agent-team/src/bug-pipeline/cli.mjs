@@ -26,6 +26,26 @@ export const STANDALONE_INFRASTRUCTURE_FILES = Object.freeze(
   ].filter((file) => !requiresHumanReview(file)),
 );
 
+export async function exportKnownFailedOutputs({ state, workspace, outputRoot }) {
+    const exports = [];
+    for (const batch of (state?.batches ?? []).filter((b) =>
+      b.controllerProgress?.status === 'failed' &&
+      ['verify-before', 'verify-after'].includes(b.controllerProgress.failedStep) &&
+      b.controllerProgress.failureCode === 'workspace-verification-failed')) {
+      try {
+        const manifest = await exportFailedCode({ batch, workspace, outputRoot });
+        exports.push({ batchId: batch.id, status: 'local-export-created',
+          checkpointSha256: manifest.checkpointSha256, files: manifest.files.length });
+      } catch (error) {
+        const status = /already exists/.test(error.message) ? 'local-export-already-exists'
+          : /Exact failed verification required/.test(error.message) ? 'flow-not-eligible'
+            : 'guard-refused-or-output-unavailable';
+        exports.push({ batchId: batch.id, status });
+      }
+    }
+    return exports;
+}
+
 export async function retainFailedOutputsAfterControllerError({ observe, exportFailures }) {
   try {
     const state = await observe();
@@ -34,6 +54,21 @@ export async function retainFailedOutputsAfterControllerError({ observe, exportF
     return { failedOutputExports: [{ status: 'retention-failed',
       failureCode: controllerFailureCode(error) }] };
   }
+}
+
+export async function writeBlockedControllerDiagnostic({ diagnosticRoot, error, observe,
+  exportFailures, modelDiagnostics = [], verificationDiagnostics = [] }) {
+  const { failedOutputExports } = await retainFailedOutputsAfterControllerError({ observe, exportFailures });
+  const diagnostic = {
+    status: 'blocked-controller',
+    failureCode: controllerFailureCode(error),
+    failedOutputExports,
+    modelDiagnostics,
+    verificationDiagnostics: verificationDiagnostics.slice(-64),
+    reason: 'Inspect GitHub permissions, durable state and pending triage; no automatic budget reset.',
+  };
+  await writeFile(path.join(diagnosticRoot, 'diagnostic.json'), JSON.stringify(diagnostic, null, 2) + '\n');
+  return diagnostic;
 }
 
 export async function doctor({ run, models, env = process.env, cwd }) {
@@ -131,25 +166,9 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
   const gh = createGitHub({ cwd: root, repo, run });
   const store = gh.createStateStore();
   const workspace = createWorkspace({ root, repo, run, models });
-  const exportKnownFailures = async (state) => {
-    const exports = [];
-    for (const batch of (state?.batches ?? []).filter((b) =>
-      b.controllerProgress?.status === 'failed' &&
-      ['verify-before', 'verify-after'].includes(b.controllerProgress.failedStep) &&
-      b.controllerProgress.failureCode === 'workspace-verification-failed')) {
-      try {
-        const manifest = await exportFailedCode({ batch, workspace, outputRoot: failedOutputRoot });
-        exports.push({ batchId: batch.id, status: 'local-export-created',
-          checkpointSha256: manifest.checkpointSha256, files: manifest.files.length });
-      } catch (error) {
-        const status = /already exists/.test(error.message) ? 'local-export-already-exists'
-          : /Exact failed verification required/.test(error.message) ? 'flow-not-eligible'
-            : 'guard-refused-or-output-unavailable';
-        exports.push({ batchId: batch.id, status });
-      }
-    }
-    return exports;
-  };
+  const exportKnownFailures = (state) => exportKnownFailedOutputs({
+    state, workspace, outputRoot: failedOutputRoot,
+  });
   const writeVerificationDiagnostic = async () => {
     const entries = workspace.verificationDiagnostics();
     if (!entries.length) return;
@@ -208,27 +227,13 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
   } catch (error) {
     // A controller exception may follow a persisted FAILED attempt. Observe the
     // canonical state read-only; export guards still require the exact owned output.
-    const { failedOutputExports } = await retainFailedOutputsAfterControllerError({
-      observe: typeof store.observe === 'function' ? () => store.observe()
-        : () => { throw new Error('durable observation unavailable'); },
+    await writeBlockedControllerDiagnostic({
+      diagnosticRoot, error,
+      observe: typeof store.observe === 'function' ? () => store.observe() : undefined,
       exportFailures: exportKnownFailures,
+      modelDiagnostics,
+      verificationDiagnostics: workspace.verificationDiagnostics(),
     });
-    await writeFile(
-      path.join(diagnosticRoot, 'diagnostic.json'),
-      JSON.stringify(
-        {
-          status: 'blocked-controller',
-          failureCode: controllerFailureCode(error),
-          failedOutputExports,
-          modelDiagnostics,
-          verificationDiagnostics: workspace.verificationDiagnostics().slice(-64),
-          reason:
-            'Inspect GitHub permissions, durable state and pending triage; no automatic budget reset.',
-        },
-        null,
-        2,
-      ) + '\n',
-    );
     console.error(
       'Pipeline blocked: GitHub permissions, durable state, triage or execution failed. No budget reset.',
     );

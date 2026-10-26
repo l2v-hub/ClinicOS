@@ -7,6 +7,7 @@ import { lstat, mkdir, readFile, realpath, rename, rm, writeFile } from 'node:fs
 import { editableFile, relativeFile, sha256 } from './contracts.mjs';
 import { regularFile, knownFailedCorrection, safeVerificationText } from './workspace.mjs';
 import { sanitizeText } from '../core/sanitize.mjs';
+import { activeImplementation, implementationAttempts } from './attempt-budget.mjs';
 
 const exec = promisify(execFile);
 const MAX_FILES = 20;
@@ -73,7 +74,12 @@ export async function exportFailedCode({ batch, workspace, outputRoot }) {
     progress.flow === 'implementation' &&
     ['verify-before', 'verify-after'].includes(progress.failedStep) &&
     progress.failureCode === 'workspace-verification-failed' &&
-    progress.sourceSha === undefined && batch.sha == null &&
+    progress.sourceSha === null && batch.sha === null && batch.pr == null &&
+    progress.planSha256 === sha256(JSON.stringify(batch.plan)) &&
+    progress.feedbackSha256 === sha256(JSON.stringify(progress.feedback ?? null)) &&
+    implementationAttempts(batch).at(-1)?.status === 'failed' &&
+    implementationAttempts(batch).at(-1)?.round === (progress.implementationRound ?? progress.round) &&
+    !activeImplementation(batch) &&
     !batch.reviews?.some((entry) => entry.status === 'running');
   assert.ok((knownFailedCorrection(batch) || initialVerificationFailure) &&
     ['verify-before', 'verify-after'].includes(progress.failedStep) &&
@@ -84,6 +90,7 @@ export async function exportFailedCode({ batch, workspace, outputRoot }) {
   assert.ok(checkpoint?.schemaVersion === 1 && checkpoint.head === sourceSha &&
     /^[a-f0-9]{40}$/.test(sourceSha) && /^[a-f0-9]{40}$/.test(checkpoint.baseSha) &&
     checkpoint.baseSha === batch.baseSha &&
+    (!initialVerificationFailure || checkpoint.head === batch.baseSha) &&
     checkpoint.planSha256 === sha256(JSON.stringify(batch.plan)), 'Exact failed checkpoint required');
   assert.deepEqual(await workspace.captureCheckpoint(batch), checkpoint, 'Failed output checkpoint changed');
   const cwd = checkpoint.cwd;

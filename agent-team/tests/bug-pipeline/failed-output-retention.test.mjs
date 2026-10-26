@@ -12,7 +12,7 @@ import { exportFailedCode } from '../../src/bug-pipeline/failed-output-export.mj
 import { archiveUnavailableFailedOutput } from '../../src/bug-pipeline/operator-authorization.mjs';
 import { historyDigest } from '../../src/bug-pipeline/attempt-budget.mjs';
 import { sha256 } from '../../src/bug-pipeline/contracts.mjs';
-import { retainFailedOutputsAfterControllerError } from '../../src/bug-pipeline/cli.mjs';
+import { retainFailedOutputsAfterControllerError, writeBlockedControllerDiagnostic, exportKnownFailedOutputs } from '../../src/bug-pipeline/cli.mjs';
 const execFile = promisify(execFileCallback);
 
 test('partial exit zero still schedules diagnostic and failed code artifact upload', async () => {
@@ -174,16 +174,23 @@ test('guarded failed code export retains only exact allowed source, bounded patc
 
 test('first implementation verification failure retains the exact checkpoint and rejects duplicate export distinctly', async (t) => {
   const f = await exportFixture(t);
-  const sourceSha = f.batch.sha;
+  const sourceSha = f.batch.baseSha;
   f.batch.sha = null;
+  f.batch.pr = null;
   f.batch.controllerProgress.flow = 'implementation';
-  delete f.batch.controllerProgress.sourceSha;
+  f.batch.controllerProgress.sourceSha = null;
   f.checkpoint.head = sourceSha;
   f.batch.controllerProgress.checkpoint = f.checkpoint;
-  const manifest = await exportFailedCode(f);
+  const state = { batches: [f.batch] };
+  const summary = await exportKnownFailedOutputs({ state, workspace: f.workspace, outputRoot: f.outputRoot });
+  assert.equal(summary[0].status, 'local-export-created');
+  const retained = path.join(f.outputRoot, f.batch.id, `round-1-verify-before-${summary[0].checkpointSha256}`);
+  const manifest = JSON.parse(await readFile(path.join(retained, 'manifest.json'), 'utf8'));
   assert.equal(manifest.sourceSha, sourceSha);
   assert.equal(manifest.baseSha, f.batch.baseSha);
-  await assert.rejects(exportFailedCode(f), /already exists/);
+  const duplicate = await exportKnownFailedOutputs({ state, workspace: f.workspace, outputRoot: f.outputRoot });
+  assert.equal(duplicate[0].status, 'local-export-already-exists');
+  assert.deepEqual(await readdir(path.join(f.outputRoot, f.batch.id)), [`round-1-verify-before-${manifest.checkpointSha256}`]);
 });
 
 test('controller throw path exports observed failed state and returns explicit observe failure markers', async () => {
@@ -316,5 +323,49 @@ test('native archive rejects unknown/running/stale and malformed checkpoint proo
       evidence, progressSha256, checkpointSha256, reason: 'Unavailable' }));
     assert.equal(calls, 0);
     assert.equal(batch.recoveryHistory, undefined);
+  }
+});
+
+test('persisted failed verification followed by pipeline throw writes the actual blocked diagnostic and guarded code', async (t) => {
+  const f = await exportFixture(t);
+  const diagnosticRoot = path.join(f.root, 'blocked-diagnostic');
+  await mkdir(diagnosticRoot);
+  let persisted, observed = 0;
+  const original = new Error('required verification failed or executed no tests');
+  const runPipeline = async () => { persisted = { batches: [f.batch] }; throw original; };
+  try { await runPipeline(); assert.fail('pipeline fixture must throw'); }
+  catch (error) {
+    assert.equal(error, original);
+    await writeBlockedControllerDiagnostic({ diagnosticRoot, error,
+      observe: async () => { observed++; return persisted; },
+      exportFailures: state => exportKnownFailedOutputs({ state, workspace: f.workspace, outputRoot: f.outputRoot }),
+    });
+    assert.equal(error, original);
+  }
+  const diagnostic = JSON.parse(await readFile(path.join(diagnosticRoot, 'diagnostic.json'), 'utf8'));
+  assert.equal(observed, 1);
+  assert.equal(diagnostic.status, 'blocked-controller');
+  assert.equal(diagnostic.failedOutputExports[0].status, 'local-export-created');
+  const retained = path.join(f.outputRoot, f.batch.id, `round-1-verify-before-${diagnostic.failedOutputExports[0].checkpointSha256}`);
+  assert.equal(await readFile(path.join(retained, 'files/src/feature.ts'), 'utf8'), 'export const answer = 2;\n');
+});
+
+test('missing or throwing observation writes an explicit marker in actual diagnostic JSON', async (t) => {
+  const f = await exportFixture(t);
+  for (const [kind, observe] of [['missing', undefined], ['throwing', async () => { throw new Error('synthetic private observation detail'); }]]) {
+    const diagnosticRoot = path.join(f.root, kind);
+    await mkdir(diagnosticRoot);
+    let exports = 0;
+    const error = new Error('controller fixture failure');
+    await writeBlockedControllerDiagnostic({ diagnosticRoot, error, observe,
+      exportFailures: async () => { exports++; return []; },
+    });
+    const text = await readFile(path.join(diagnosticRoot, 'diagnostic.json'), 'utf8');
+    const diagnostic = JSON.parse(text);
+    assert.equal(diagnostic.status, 'blocked-controller');
+    assert.equal(diagnostic.failedOutputExports[0].status, 'retention-failed');
+    assert.equal(typeof diagnostic.failedOutputExports[0].failureCode, 'string');
+    assert.equal(exports, 0);
+    assert.equal(text.includes('synthetic private observation detail'), false);
   }
 });
