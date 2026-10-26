@@ -15,8 +15,13 @@ function validateLimit(value, name, { allowZero = false } = {}) {
 function appendCapture(previous, chunk, limit, tail) {
   if (limit === 0) return Buffer.alloc(0);
   if (tail) {
-    const combined = Buffer.concat([previous, chunk]);
-    return combined.length > limit ? combined.subarray(combined.length - limit) : combined;
+    const retainedLength = Math.min(limit, previous.length + chunk.length);
+    const retained = Buffer.alloc(retainedLength);
+    const chunkLength = Math.min(chunk.length, retainedLength);
+    const previousLength = retainedLength - chunkLength;
+    if (previousLength) previous.copy(retained, 0, previous.length - previousLength);
+    if (chunkLength) chunk.copy(retained, previousLength, chunk.length - chunkLength);
+    return retained;
   }
   const remaining = Math.max(0, limit - previous.length);
   return remaining ? Buffer.concat([previous, chunk.subarray(0, remaining)]) : previous;
