@@ -9,9 +9,9 @@
   "operatorSha": "b3f12af905e20a9ed7babdceee3c31386c332a10",
   "runId": "40260746637",
   "runAttempt": "1",
-  "stage": "native-packet-verified-before-handoff",
+  "stage": "single-native-review-request-intent",
   "prCreatesUsed": 0,
-  "reviewRequestsUsed": 0,
+  "reviewRequestsUsed": 1,
   "mergeCalls": 0,
   "providerCalls": 0,
   "prNumber": 514,
@@ -61,5 +61,5 @@
     }
   ],
   "nativePacketVerified": true,
-  "observedAt": "2026-10-26T02:49:58.484Z"
+  "observedAt": "2026-10-26T02:50:02.060Z"
 }
