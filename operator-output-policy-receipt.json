@@ -9,10 +9,13 @@
   "operatorSha": "d41e0bbbe6b76dafa25a57e0604c51c11ce905c9",
   "runId": "40257353325",
   "runAttempt": "1",
-  "stage": "single-pr-create-intent",
+  "stage": "actual-pr-created-and-root-protected",
   "prCreatesUsed": 1,
   "reviewRequestsUsed": 0,
   "mergeCalls": 0,
   "providerCalls": 0,
-  "observedAt": "2026-10-26T02:05:41.858Z"
+  "prCreateConfirmed": true,
+  "prNumber": 514,
+  "prUrl": "https://github.com/l2v-hub/ClinicOS/pull/514",
+  "observedAt": "2026-10-26T02:05:55.554Z"
 }
