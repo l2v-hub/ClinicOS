@@ -1,0 +1,10 @@
+{
+  "status": "pending-coordinator-import",
+  "reason": "The author snapshot has no canonical controller attempt record or Git-bound source manifest. Coordinator must import the genuine reserved author attempt and exact source manifest before publication.",
+  "implementation": [],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "sourceManifest": [],
+  "packetFiles": {}
+}

@@ -1,0 +1,8 @@
+Author2 pre-fix source-extracted regression, run before changing appendCapture:
+
+  tail visible length: 32768 bytes
+  tail backing allocation: 98304 bytes
+  assertion: backing allocation <= 32768 bytes
+  result: FAIL (expected RED)
+
+The independent QA1 direct real-runner observation was 77120 backing bytes for the 32768-byte capture after a 2 MiB child stream. QA1 evidence remains sealed and unchanged.

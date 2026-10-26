@@ -1,0 +1,16 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at file:///workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-qa1/playwright-report/index.html
+Call log:
+[2m  - navigating to "file:///workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-qa1/playwright-report/index.html", waiting until "load"[22m
+
+    at /tmp/clinicos-output-policy-qa1/browser-evidence.mjs:22:12 {
+  log: [
+    '  - navigating to "file:///workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-qa1/playwright-report/index.html", waiting until "load"'
+  ],
+  name: 'Error'
+}
+
+Node.js v24.19.0

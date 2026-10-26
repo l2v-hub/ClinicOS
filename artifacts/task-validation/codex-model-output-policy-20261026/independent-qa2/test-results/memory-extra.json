@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "synthetic": true,
+  "providerCalls": 0,
+  "transitions": 54,
+  "discardedMarkerReachableFromRetainedBacking": false,
+  "realRunner": {
+    "stdoutBytes": 2097152,
+    "stderrBytes": 32768,
+    "capturedBytes": 65536,
+    "observations": [
+      {
+        "visible": 32768,
+        "backing": 32768,
+        "offset": 0
+      },
+      {
+        "visible": 32768,
+        "backing": 32768,
+        "offset": 0
+      }
+    ]
+  }
+}

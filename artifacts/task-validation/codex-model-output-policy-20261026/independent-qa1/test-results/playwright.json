@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "source": "38b37e3322176bd9836d228d4c4ce63bf66fced2",
+  "synthetic": true,
+  "onlineValidation": false,
+  "surface": "page.setContent from generated local HTML; reloaded and rehydrated static report; no application persistence claim",
+  "assertedFixtures": 16,
+  "passedFixtures": 15,
+  "failedFixtures": 1,
+  "consoleErrors": 0,
+  "httpErrors": 0,
+  "externalRequests": 0,
+  "video": "not required: internal runner change; optional attempt lacked ffmpeg",
+  "screenshot": "screenshots/result.png",
+  "trace": "trace/trace.zip"
+}

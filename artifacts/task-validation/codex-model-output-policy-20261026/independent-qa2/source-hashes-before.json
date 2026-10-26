@@ -1,0 +1,8 @@
+{
+  "agent-team/src/bug-pipeline/cli.mjs": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed",
+  "agent-team/src/bug-pipeline/models.mjs": "1cd2bf6c650264a976c938caf36c498fe67eae2812dcf06adbfc61b36afac122",
+  "agent-team/src/bug-pipeline/process.mjs": "71d02a1482ae0665df66d4c73b4b66c6c04c1bff2994869b8a8b408059f210e5",
+  "agent-team/tests/bug-pipeline/models.test.mjs": "71159e884f0b688afb06854163a041289a9b0ae8a408e13b381b43d303a40996",
+  "agent-team/tests/bug-pipeline/process-output.test.mjs": "de04a700d080ae2341bbd7d6061b98ce59590e646c821b1395986d558395725b",
+  "agent-team/tests/bug-pipeline/routing.test.mjs": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd"
+}
