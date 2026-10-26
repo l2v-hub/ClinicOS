@@ -345,7 +345,8 @@ function revision(f, { rewriteCopy = false, rewriteOld = false, removeOld = fals
   return next;
 }
 
-ST native controller fixtures; these reports are never external approvals.
+
+// TEST native controller fixtures; these reports are never external approvals.
 test('cloud semantic diagnostics preserve actual native standalone failure and publication outcomes', async () => {
   const marker = 'TEST_MODEL_TEXT_MUST_NEVER_ENTER_DIAGNOSTICS';
   for (const kind of ['contradiction', 'approved', 'changes-requested', 'blocked']) {
